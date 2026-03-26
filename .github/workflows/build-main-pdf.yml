@@ -1,0 +1,59 @@
+name: Build main.pdf
+
+on:
+  workflow_call:
+    inputs:
+      artifact_name:
+        description: Uploaded artifact name
+        required: false
+        type: string
+        default: main-pdf
+      fetch_depth:
+        description: Checkout history depth
+        required: false
+        type: number
+        default: 1
+      require_main_ancestor:
+        description: Fail if the checked out revision is not on origin/main
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build-main-pdf:
+    name: Build main.pdf
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/xu-cheng/texlive-full:latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: ${{ inputs.fetch_depth }}
+
+      - name: Ensure release ref points to main
+        if: ${{ inputs.require_main_ancestor }}
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch origin main --depth=1
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main
+
+      - name: Build main.pdf
+        run: |
+          if locale -a | grep -Eiq '^en_US\.utf-?8$'; then
+            export LANG=en_US.UTF-8
+            export LC_ALL=en_US.UTF-8
+          fi
+
+          latexmk -pdfxe -interaction=nonstopmode -halt-on-error -file-line-error main.tex
+
+      - name: Upload main.pdf artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.pdf
+          if-no-files-found: error
