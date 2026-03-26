@@ -1,0 +1,64 @@
+\begin{theorem}[素数寄存器的精度--最坏模长--平方时间下界]\label{thm:conclusion-prime-register-worst-modulus-mixing-lower-bound}
+令 \(B_m(\varepsilon)>1\) 为固定窗口尺度 \(m\) 与碰撞预算 \(\varepsilon\) 所对应的容量阈值，并定义
+\[
+k^\ast(m;\varepsilon):=\min\left\{k\ge 1:\ p_k^\#:=\prod_{i=1}^k p_i\ge B_m(\varepsilon)\right\}.
+\]
+对任意有限素集 \(P\subset\mathbb P\)，考虑离散寄存器
+\[
+G_P:=\prod_{p\in P}\ZZ/p\ZZ,
+\qquad
+|G_P|=\prod_{p\in P}p,
+\]
+并假设其满足体积覆盖约束 \(|G_P|\ge B_m(\varepsilon)\)。
+令
+\[
+L(P):=\max P,
+\qquad
+L_{\min}(m;\varepsilon):=\min\left\{L(P):\ \prod_{p\in P}p\ge B_m(\varepsilon)\right\}.
+\]
+则
+\[
+L_{\min}(m;\varepsilon)=p_{k^\ast(m;\varepsilon)}.
+\]
+进一步，令 \(W_P\) 为 \(G_P\) 上的惰性简单随机游走（每步以正概率对某一坐标加 \(\pm1\)，并以正概率保持不动），其谱隙 \(\Delta(W_P)\) 满足
+\[
+\Delta(W_P)\ \lesssim\ \frac{1}{L(P)^2},
+\]
+从而松弛时间 \(\tau_{\mathrm{rel}}(W_P):=\Delta(W_P)^{-1}\) 满足
+\[
+\tau_{\mathrm{rel}}(W_P)\ \gtrsim\ L(P)^2\ \ge\ L_{\min}(m;\varepsilon)^2\ =\ p_{k^\ast(m;\varepsilon)}^2.
+\]
+\end{theorem}
+
+\begin{proof}
+先证最小最坏模长结论。
+对任意整数 \(L\ge 2\) 定义
+\[
+L^\#:=\prod_{p\le L}p.
+\]
+若 \(P\subseteq\{p:\ p\le L\}\)，则 \(\prod_{p\in P}p\le L^\#\)。
+因此若存在 \(P\) 使 \(\prod_{p\in P}p\ge B_m(\varepsilon)\)，并令 \(L=L(P)\)，则必有 \(L^\#\ge B_m(\varepsilon)\)。
+反之若 \(L^\#\ge B_m(\varepsilon)\)，取 \(P=\{p:\ p\le L\}\) 即满足约束。
+故
+\[
+L_{\min}(m;\varepsilon)=\min\{L:\ L^\#\ge B_m(\varepsilon)\}.
+\]
+注意 \(L^\#\) 仅在 \(L\) 取素数处跳变，故该最小值必为某个素数 \(p_k\)，并且等价于
+\(
+\prod_{i=1}^k p_i=p_k^\#\ge B_m(\varepsilon)
+\) 的最小 \(k\)，即 \(L_{\min}(m;\varepsilon)=p_{k^\ast(m;\varepsilon)}\)。
+
+再证平方时间下界。
+对循环群 \(\ZZ/p\ZZ\) 的惰性简单随机游走，其非平凡特征值由 \(\cos(2\pi j/p)\) 控制，从而谱隙满足
+\(
+\Delta\lesssim 1-\cos(2\pi/p)\asymp p^{-2}
+\)。
+对直积群 \(G_P\) 的坐标更新链，谱隙由最慢坐标（即最大模长 \(L(P)\)）控制，因此
+\(
+\Delta(W_P)\lesssim L(P)^{-2}
+\)，从而 \(\tau_{\mathrm{rel}}(W_P)\gtrsim L(P)^2\)。
+代入 \(L(P)\ge L_{\min}(m;\varepsilon)\) 得结论。证毕。
+\end{proof}
+
+\endinput
+

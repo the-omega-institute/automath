@@ -1,0 +1,59 @@
+\begin{theorem}[有界切片门电路族的一致语义等价不可判定]\label{thm:conclusion-bounded-slice-family-equivalence-undecidable}
+固定预算层 \(B\ge 0\)，并设有界切片 \(\mathbf{PW}^{\ast}_{\le B}\) 非平凡：存在
+\(
+u,v\in\mathbf{PW}^{\ast}_{\le B}
+\)
+满足 \(u\not\equiv v\)。
+称\textbf{门电路族}为全定义可计算函数
+\[
+G:\NN\to \mathbf{PW}^{\ast}_{\le B},\qquad m\mapsto G(m).
+\]
+对两族 \(G,H\) 定义\textbf{一致语义等价}
+\[
+G\equiv_{\forall}H\quad:\Longleftrightarrow\quad \forall m\in\NN,\ G(m)\equiv H(m).
+\]
+则判定问题“输入 \((G,H)\)，判断 \(G\equiv_{\forall}H\) 是否成立”不可判定。
+\end{theorem}
+\begin{proof}
+对任意图灵机实例 \((M,x)\)，定义族
+\[
+G_{M,x}(m):=
+\begin{cases}
+u,& \text{若 \(M(x)\) 在不超过 \(m\) 步内停机},\\
+v,& \text{否则},
+\end{cases}
+\qquad
+H(m):=v.
+\]
+谓词“在不超过 \(m\) 步内停机”可由有限步模拟判定，故 \(G_{M,x}\) 为全定义可计算族，且值域包含于 \(\{u,v\}\subset\mathbf{PW}^{\ast}_{\le B}\)。
+并且
+\[
+G_{M,x}\equiv_{\forall}H
+\quad\Longleftrightarrow\quad
+\forall m,\ G_{M,x}(m)\equiv v
+\quad\Longleftrightarrow\quad
+M(x)\ \text{不停机},
+\]
+其中最后一步利用：若 \(M(x)\) 停机，则存在 \(m\) 使 \(G_{M,x}(m)=u\not\equiv v\)。
+因此若一致语义等价可判定，则非停机集合可判定，与停机问题不可判定性矛盾。证毕。
+\end{proof}
+
+\begin{corollary}[一致语义等价不具备可计算的有限截断见证界]\label{cor:conclusion-no-computable-uniform-truncation-witness}
+在定理 \ref{thm:conclusion-bounded-slice-family-equivalence-undecidable} 的设定下，不存在全定义可计算泛函
+\[
+\kappa:\bigl(\mathbf{PW}^{\ast}_{\le B}\bigr)^{\NN}\times \bigl(\mathbf{PW}^{\ast}_{\le B}\bigr)^{\NN}\to \NN
+\]
+使得对任意两族 \(G,H\) 恒有：
+\[
+\Bigl(\forall m\le \kappa(G,H),\ G(m)\equiv H(m)\Bigr)
+\ \Longrightarrow\
+\Bigl(\forall m,\ G(m)\equiv H(m)\Bigr).
+\]
+\end{corollary}
+\begin{proof}
+若此类 \(\kappa\) 存在，则给定 \((G,H)\) 可先计算 \(N:=\kappa(G,H)\)，再逐点判定有限多项 \(m\le N\) 的语义等价性，从而判定 \(G\equiv_{\forall}H\)。
+这与定理 \ref{thm:conclusion-bounded-slice-family-equivalence-undecidable} 矛盾。证毕。
+\end{proof}
+
+\endinput
+

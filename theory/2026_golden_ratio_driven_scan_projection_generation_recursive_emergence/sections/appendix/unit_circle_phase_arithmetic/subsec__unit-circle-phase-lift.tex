@@ -1,0 +1,152 @@
+\subsection{单位圆面积相位压缩的无参实现：Cayley 紧化与扇形面积坐标}\label{subsec:unit-circle-phase-lift}
+对任意角变量 \(\vartheta\in(-\pi,\pi)\)，其对应的单位圆扇形面积为 \(\vartheta/2\)，整圆面积为 \(\pi\)，故扇形面积占比为 \(\vartheta/(2\pi)\in(-\tfrac12,\tfrac12)\)。
+由此对实轴 \(x\in\RR\) 定义\textbf{面积相位坐标}（无参紧化）
+\begin{equation}\label{eq:unit-circle-phase-upsilon}
+\boxed{\ \upsilon(x):=\frac{1}{\pi}\arctan(x)\in\Bigl(-\tfrac12,\tfrac12\Bigr)\ }.
+\end{equation}
+并令
+\begin{equation}\label{eq:unit-circle-phase-vartheta}
+\boxed{\ \vartheta(x):=2\pi\,\upsilon(x)=2\arctan(x)\in(-\pi,\pi)\ }.
+\end{equation}
+则 \(\upsilon(x)=\vartheta(x)/(2\pi)\) 可解释为“从 \(0\) 到 \(x\) 的扇形面积占比（带符号）”。
+
+\paragraph{单位圆嵌入（Cayley 形式）}
+定义
+\begin{equation}\label{eq:unit-circle-cayley-embed}
+\boxed{\ \iota(x):=e^{\mathrm{i}\vartheta(x)}=e^{2\mathrm{i}\arctan(x)}=\frac{1+\mathrm{i}x}{1-\mathrm{i}x}\in\TT\ }.
+\end{equation}
+它给出一个从 \(\RR\) 到 \(\TT\setminus\{-1\}\) 的解析同胚，并满足基点归一化 \(\iota(0)=1\)。
+当 \(x\to\pm\infty\) 时 \(\vartheta(x)\to\pm\pi\) 且 \(\iota(x)\to-1\)，从而把“无穷远”统一压到单位圆边界的单点。
+若以 \(\widehat{\RR}:=\RR\cup\{\infty\}\) 作一维射影紧化并约定 \(\iota(\infty):=-1\)，则 \(\iota:\widehat{\RR}\to\TT\) 成为同胚；在此意义下，“无界变量”被无参压缩为单位圆上的一个边界端点。
+上述 Möbius 同胚与边界延拓属于标准复分析事实（参见 \cite{Ahlfors1979ComplexAnalysis}）。
+其显式反投影为
+\begin{equation}\label{eq:unit-circle-phase-inverse}
+\boxed{\ \upsilon^{-1}(u)=\tan(\pi u),\qquad x=\tan\!\Bigl(\frac{\vartheta}{2}\Bigr)=\tan(\pi u),\qquad
+x=\mathrm{i}\,\frac{1-w}{1+w}=-\mathrm{i}\,\frac{w-1}{w+1}\ (w\in\TT,\ w\neq-1)\ }.
+\end{equation}
+
+\paragraph{Cauchy 权重的推前均匀化（单位圆 Haar 测度的拉回）}
+由 \(\vartheta(x)=2\arctan(x)\) 直接计算得
+\[
+\frac{\dd\vartheta}{\dd x}=\frac{2}{1+x^{2}},
+\qquad\Longrightarrow\qquad
+\boxed{\ \frac{\dd\vartheta}{2\pi}=\dd\upsilon=\frac{1}{\pi}\frac{\dd x}{1+x^{2}}\ }.
+\]
+因此，以 Cauchy 权重 \(\frac{1}{\pi(1+x^{2})}\) 加权的实轴积分与单位圆上的均匀圆周平均严格等价；“近零加权、远端抑制”并非外加规则，而是紧化门的 Jacobian 所唯一诱导的结构性结论。
+
+\begin{corollary}[Cayley--Haar 兼容性强制 Cauchy 权重（唯一归一化）]\label{cor:unit-circle-cayley-haar-forces-cauchy}
+令标准 Cayley 变换（实轴 \(\leftrightarrow\) 单位圆）为
+\[
+\mathcal{C}(x):=\frac{x-\mathrm{i}}{x+\mathrm{i}},
+\qquad
+\mathcal{C}^{-1}(y)=\mathrm{i}\,\frac{1+y}{1-y},
+\]
+并令 \(\iota\) 为 \eqref{eq:unit-circle-cayley-embed} 的相位嵌入。
+则 \(\mathcal{C}(x)=-\iota(x)\)，从而 Cayley 搬运与本附录的相位门在 Möbius 同值意义下为同一坐标系统（仅差单位圆上的固定旋转）。
+特别地，单位圆归一化 Haar 测度 \(\dd\vartheta/(2\pi)\) 在该坐标下的回拉必为
+\[
+\dd\mu(x)=\frac{1}{\pi(1+x^{2})}\,\dd x,
+\]
+并且在“保持 Haar 归一化且把 \(\infty\) 压到单点”的纪律下，该概率权重由 Jacobian 唯一确定。
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:unit-circle-cayley-embed}，
+\[
+\iota(x)=\frac{1+\mathrm{i}x}{1-\mathrm{i}x}
+\quad\Longrightarrow\quad
+-\iota(x)=\frac{-1-\mathrm{i}x}{1-\mathrm{i}x}
+=\frac{x-\mathrm{i}}{x+\mathrm{i}}=\mathcal{C}(x),
+\]
+故两坐标仅差一个旋转因子 \(-1\)。
+Haar 回拉公式即为 Jacobian 计算 \(\dd\vartheta/(2\pi)=\dd x/(\pi(1+x^2))\)，从而得到所示权重。
+唯一性来自于：给定 Haar 归一化与 \(\mathcal{C}\)（或 \(\iota\)）作为射影紧化上的 Möbius 同胚，其回拉测度由变换公式唯一决定。证毕。
+\end{proof}
+
+\paragraph{实轴上的相位相加：射影紧化上的 Möbius 群律（溢出免疫）}
+记射影紧化 \(\overline{\RR}:=\RR\cup\{\infty\}\)，并把 \(\iota\) 按极限 \(x\to\infty\) 延拓为 \(\iota(\infty):=-1\)。
+\begin{proposition}[半角切线参数的 Möbius 群律]\label{prop:unit-circle-phase-mobius-law}
+在 \(\overline{\RR}\) 上定义二元运算
+\begin{equation}\label{eq:unit-circle-phase-mobius-law}
+\boxed{\;
+x\oplus y:=
+\begin{cases}
+\dfrac{x+y}{1-xy}, & x,y\in\RR,\ 1-xy\neq 0,\\[6pt]
+\infty, & x,y\in\RR,\ 1-xy=0,
+\end{cases}
+}
+\end{equation}
+并按连续延拓规定
+\(
+x\oplus \infty=\infty\oplus x:=-\frac{1}{x}
+\)
+（约定 \(1/0=\infty,\ 1/\infty=0\)）。
+则 \((\overline{\RR},\oplus)\) 为交换群，零元为 \(0\)、逆元为 \(x\mapsto -x\)，且 \(\iota:(\overline{\RR},\oplus)\to(\TT,\cdot)\) 为群同态：
+\begin{equation}\label{eq:unit-circle-phase-mobius-hom}
+\boxed{\ \iota(x\oplus y)=\iota(x)\cdot\iota(y)\ }.
+\end{equation}
+特别地，\(\infty\) 在该群中是合法边界元素并满足
+\begin{equation}\label{eq:unit-circle-phase-inversion-as-translation}
+\boxed{\ x\oplus\infty=-\frac1x\ },
+\end{equation}
+从而“反演”可被内化为一次与边界元素的群运算。
+\end{proposition}
+\begin{proof}
+对 \(x\in\RR\) 记 \(\vartheta(x)=2\arctan(x)\)。
+由三角恒等式
+\(
+\tan\!\bigl(\frac{\alpha+\beta}{2}\bigr)=\frac{\tan(\alpha/2)+\tan(\beta/2)}{1-\tan(\alpha/2)\tan(\beta/2)}
+\)
+并取 \(\alpha=\vartheta(x),\beta=\vartheta(y)\)，得到当 \(x,y\in\RR\) 且 \(1-xy\neq 0\) 时
+\(
+\tan\!\bigl((\vartheta(x)+\vartheta(y))/2\bigr)=\frac{x+y}{1-xy}
+\)，即 \eqref{eq:unit-circle-phase-mobius-law}。
+当 \(1-xy=0\) 时 \((\vartheta(x)+\vartheta(y))/2\) 命中 \(\pm\pi/2\) 的主值，因此对应 \(x\oplus y=\infty\)。
+对含 \(\infty\) 的情形按 \(y\to\infty\) 极限延拓即得 \(x\oplus\infty=-1/x\) 及 \(\infty\oplus\infty=0\)。
+最后由
+\(
+\iota(x)=e^{\mathrm{i}\vartheta(x)}
+\)
+可知
+\(
+\iota(x)\iota(y)=e^{\mathrm{i}(\vartheta(x)+\vartheta(y))}=e^{\mathrm{i}\vartheta(x\oplus y)}=\iota(x\oplus y)
+\)，得到 \eqref{eq:unit-circle-phase-mobius-hom}；交换律与结合律由单位圆乘法的交换/结合性传递。证毕。
+\end{proof}
+
+\begin{corollary}[Möbius 群律下的 Cayley--\(\arctan\) 刚性]\label{cor:unit-circle-phase-cayley-arctan-rigidity}
+令 \(\overline{\RR}=\RR\cup\{\infty\}\) 配备 \eqref{eq:unit-circle-phase-mobius-law} 的群运算 \(\oplus\) 与其连续延拓。
+则满足 \(\phi(0)=1\)、\(\phi(\infty)=-1\) 的连续群同构
+\[
+\phi:(\overline{\RR},\oplus)\longrightarrow (\TT,\cdot)
+\]
+唯一存在，且必为 \(\phi=\iota\)。
+等价地，满足 \(\upsilon(0)=0\)、\(\upsilon(\infty)=\tfrac12\) 的连续群同构
+\[
+\upsilon:(\overline{\RR},\oplus)\longrightarrow \RR/\ZZ
+\]
+唯一存在，并由 \eqref{eq:unit-circle-phase-upsilon} 给出：\(\upsilon(x)=\pi^{-1}\arctan(x)\)。
+\end{corollary}
+\begin{proof}
+命题 \ref{prop:unit-circle-phase-mobius-law} 已给出 \(\iota:(\overline{\RR},\oplus)\to(\TT,\cdot)\) 的连续群同态，并且由 \eqref{eq:unit-circle-cayley-embed} 的显式反演可知其为同胚，从而是群同构。
+\par
+设 \(\phi\) 为任意满足 \(\phi(0)=1\)、\(\phi(\infty)=-1\) 的连续群同构。
+则 \(\alpha:=\phi\circ\iota^{-1}:(\TT,\cdot)\to(\TT,\cdot)\) 为连续群自同构，且 \(\alpha(1)=1\)、\(\alpha(-1)=-1\)。
+紧连通交换群 \(\TT\) 的连续群自同构只能为 \(z\mapsto z\) 或 \(z\mapsto \overline{z}=z^{-1}\)。
+又由 \(\alpha(-1)=-1\) 排除平移型可能性，并由 \(\phi(\infty)=-1\) 与 \(\iota(\infty)=-1\) 的归一化，得到 \(\alpha=\mathrm{id}_{\TT}\)，从而 \(\phi=\iota\)。
+\par
+取覆盖映射 \(\TT\to \RR/\ZZ\) 的角坐标 \(\vartheta/(2\pi)\)，并结合 \(\iota(x)=e^{2\mathrm{i}\arctan(x)}\)，得到唯一的 \(\upsilon(x)=\pi^{-1}\arctan(x)\)。证毕。
+\end{proof}
+
+\begin{remark}[completion 的半角相位项与相位算术坐标同一]\label{rem:unit-circle-phase-completion-half-angle}
+若完成化/单位圆扭曲通道满足严格相位--幅度分离（命题 \ref{prop:completion-endpoint-jet-diffusion}），即对 \(u=e^{it}\) 有
+\(
+P(it)=\frac{it}{2}+g(S(t)),\ S(t)=2\cos(t/2)
+\)，
+则以半角切线参数 \(x=\tan(t/2)\)（式 \eqref{eq:unit-circle-phase-inverse}）重写得到
+\[
+\boxed{\;
+P\!\bigl(it(x)\bigr)
+=\mathrm{i}\arctan(x)\ +\ g\!\left(\frac{2}{\sqrt{1+x^2}}\right)\;},
+\qquad t(x)=2\arctan(x).
+\]
+因此 completion 所强制出现的“半角相位项” \(\frac{it}{2}\) 与相位算术变量严格同一（\(\frac{it}{2}=\mathrm{i}\arctan x\)）；而幅度仅经由不变量 \((1+x^2)^{-1/2}\) 进入。
+\end{remark}

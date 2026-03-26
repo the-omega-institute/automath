@@ -1,0 +1,277 @@
+\paragraph{“时间化”的纤维均匀化：幂等 Markov 反射子生成的显式连续半群与指数证书}
+固定分辨率 \(m\)。令折叠读出为 \(\Fold_m:\Omega_m\to X_m\)，推前（可见读出）为 \(P_m:=(\Fold_m)_\ast\)，纤维均匀提升（最大熵提升）为 \(Q_m\)，并令纤维反射子
+\[
+K_m:=Q_m\circ P_m
+\]
+如定理 \ref{thm:pom-fiber-reflector} 所定义；其等价地是“按折叠纤维作算术平均”的条件期望接口（命题 \ref{prop:pom-Km-bistochastic}），并满足谱二分 \(\mathrm{spec}(K_m)\subset\{0,1\}\)（推论 \ref{cor:pom-Km-spectrum}）。
+本段把“纤维内信息遗忘”外置为连续时间参数 \(t\ge 0\)，并给出其与指数尺度 \(\log\mathrm{Ind}(E_m)\)（命题 \ref{prop:fold-condexp-index-maxfiber}）之间的可审计闭合。
+\par
+
+\begin{theorem}[纤维均匀化的显式连续时间半群]\label{thm:xi-fiber-uniformization-markov-semigroup-explicit}
+令生成元 \(L_m:=K_m-I\)（\(I\) 为恒等算子）。
+则
+\[
+S_m(t):=\exp\!\bigl(t(K_m-I)\bigr)\qquad (t\ge 0)
+\]
+定义一族强连续 Markov 半群（在有限维空间上等价于一致连续），并具有闭式表达
+\[
+\boxed{\;
+S_m(t)=e^{-t}I+(1-e^{-t})K_m,\qquad t\ge 0.
+\;}
+\]
+特别地，\(S_m(0)=I\)，且当 \(t\to\infty\) 时 \(S_m(t)\to K_m\)（算子范数意义下）。
+\end{theorem}
+\begin{proof}
+由 \(K_m^2=K_m\)（定理 \ref{thm:pom-fiber-reflector}）可得
+\(
+\exp(tK_m)=I+(e^{t}-1)K_m
+\)。
+于是
+\[
+\exp\!\bigl(t(K_m-I)\bigr)
+=e^{-t}\exp(tK_m)
+=e^{-t}I+(1-e^{-t})K_m.
+\]
+半群律与强连续性在有限维线性算子指数下直接成立。
+由于 \(K_m\) 与 \(I\) 均保持非负性与总质量（命题 \ref{prop:pom-Km-bistochastic}），故 \(S_m(t)\) 亦为 Markov 算子。证毕。
+\end{proof}
+
+\begin{proposition}[谱二分给出的精确收敛率与分辨率无关的时间常数]\label{prop:xi-fiber-uniformization-spectral-decay-equals-exp}
+对任意向量 \(v\)（分布或可观测量），令
+\[
+v_{\mathrm{im}}:=K_m v,\qquad v_{\ker}:=(I-K_m)v.
+\]
+则对一切 \(t\ge 0\) 有严格分解
+\[
+\boxed{\;
+S_m(t)v=v_{\mathrm{im}}+e^{-t}v_{\ker}.
+\;}
+\]
+因此“偏离纤维均匀”的全部分量以精确速率 \(e^{-t}\) 衰减；该时间常数为 \(1\)，与分辨率 \(m\) 无关。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:xi-fiber-uniformization-markov-semigroup-explicit}，
+\(
+S_m(t)=e^{-t}I+(1-e^{-t})K_m
+\)。
+代入并整理得
+\(
+S_m(t)v=K_mv+e^{-t}(I-K_m)v
+\)，即所示分解。
+谱二分 \(\mathrm{spec}(K_m)\subset\{0,1\}\)（推论 \ref{cor:pom-Km-spectrum}）表明该分解对应于像/核方向的特征分解。证毕。
+\end{proof}
+
+\begin{proposition}[时间--指数统一上界：相对熵缺口的显式指数衰减与指数封顶]\label{prop:xi-fiber-uniformization-kl-gap-exp-decay-index-cap}
+对任意 \(\mu\in\Delta(\Omega_m)\)，记极限纤维均匀态 \(\mu_\infty:=K_m\mu\)，并令
+\[
+\mu_t:=S_m(t)\mu=e^{-t}\mu+(1-e^{-t})\mu_\infty.
+\]
+则相对熵缺口满足严格指数衰减不等式
+\[
+\boxed{\;
+D_{\mathrm{KL}}(\mu_t\|\mu_\infty)\le e^{-t}\,D_{\mathrm{KL}}(\mu\|\mu_\infty).\;}
+\]
+并且存在由 Jones/Pimsner--Popa 指数控制的统一封顶：
+\[
+\boxed{\;
+D_{\mathrm{KL}}(\mu_t\|\mu_\infty)\le e^{-t}\log\mathrm{Ind}(E_m).\;}
+\]
+\end{proposition}
+\begin{proof}
+第一式由相对熵对第一变量的凸性给出：
+因 \(\mu_t=e^{-t}\mu+(1-e^{-t})\mu_\infty\)，有
+\(
+D_{\mathrm{KL}}(\mu_t\|\mu_\infty)\le e^{-t}D_{\mathrm{KL}}(\mu\|\mu_\infty)
+\)。
+\par
+第二式由
+\(
+D_{\mathrm{KL}}(\mu\|\mu_\infty)\le D_\infty(\mu\|\mu_\infty)
+\)
+（Rényi 相对熵的单调性）与 Pimsner--Popa 型支配给出：对每个原子 \(a\in\Omega_m\)，若其所在纤维大小为 \(d_m(\Fold_m(a))\)，则
+\(
+\mu(a)\le d_m(\Fold_m(a))\,\mu_\infty(a)\le D_m\,\mu_\infty(a)
+\)
+（其中 \(D_m:=\max_x d_m(x)\)）。
+故 \(D_\infty(\mu\|\mu_\infty)\le \log D_m\)。
+再由 \(\mathrm{Ind}(E_m)=D_m\)（命题 \ref{prop:fold-condexp-index-maxfiber}）得
+\(
+D_{\mathrm{KL}}(\mu\|\mu_\infty)\le \log\mathrm{Ind}(E_m)
+\)。
+与第一式合并即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[Stokes--Stein 变分对偶与纤维均匀化残差的边界证书]\label{prop:xi-fiber-uniformization-stokes-stein-duality-boundary-certificate}
+沿用本段记号，令 \(\mu\in\Delta(\Omega_m)\)、\(\mu_\infty:=K_m\mu\)，并定义密度比
+\[
+r:=\frac{\dd\mu}{\dd\mu_\infty},\qquad g:=r-1.
+\]
+则对 \(\mu_\infty(a)>0\) 的原子 \(a\in\Omega_m\) 有 \(r(a)=\mu(a)/\mu_\infty(a)\)，并且 \(E_m r=\mathbf 1\)（故 \(E_m g=0\)）。
+令
+\[
+\mathcal H^0:=L^2(\Omega_m,\mu_\infty),
+\]
+并令 \(\mathcal H^1\) 为如下纤维内反对称流空间：
+\[
+\mathcal H^1:=\Bigl\{J:\Omega_m\times\Omega_m\to\RR:\ J(a,b)=-J(b,a),\ J(a,b)=0\ \text{若}\ \Fold_m(a)\neq \Fold_m(b)\Bigr\},
+\]
+配以内积
+\[
+\langle J,K\rangle_{\mathcal H^1}
+:=\frac12\sum_{x\in X_m}\frac{\mu_\infty(x)}{d_m(x)}
+\sum_{a,b\in F_x}J(a,b)K(a,b),
+\qquad F_x:=\Fold_m^{-1}(x),\ \mu_\infty(x):=\sum_{a\in F_x}\mu_\infty(a).
+\]
+定义纤维内“外微分” \(\partial_m:\mathcal H^0\to\mathcal H^1\) 为
+\[
+(\partial_m f)(a,b):=
+\frac{f(b)-f(a)}{\sqrt{d_m(\Fold_m(a))}}
+\qquad(a,b\in F_x\ \text{同一纤维}),
+\]
+并令 \(\delta_m:\mathcal H^1\to\mathcal H^0\) 为其 Hilbert 空间伴随的负号（即对任意 \(f\in\mathcal H^0\)、\(J\in\mathcal H^1\)）
+\[
+\langle \partial_m f, J\rangle_{\mathcal H^1}=-\langle f,\delta_m J\rangle_{L^2(\mu_\infty)}.
+\]
+则：
+\begin{enumerate}
+  \item \(\ker(\partial_m)=L^2(X_m,\mu_\infty)\)（纤维常值函数空间），从而 \(\mathrm{Im}(\delta_m)=(\ker\partial_m)^\perp\)。
+  \item 对任意满足 \(E_m g=0\) 的 \(g\in\mathcal H^0\)，成立精确对偶恒等式
+  \[
+  \boxed{\;
+  \|g\|_{L^2(\mu_\infty)}^2
+  =\sup_{J\in\mathcal H^1}\Bigl(2\,\Re\langle g,\delta_m J\rangle_{L^2(\mu_\infty)}-\|J\|_{\mathcal H^1}^2\Bigr)
+  =\inf_{\substack{f\in\mathcal H^0\\ \delta_m\partial_m f=g}}\ \|\partial_m f\|_{\mathcal H^1}^2\; }.
+  \]
+  \item 在本段的 \(g=r-1\) 情形下，有 \(\chi^2(\mu\mid \mu_\infty)=\|r-1\|_{L^2(\mu_\infty)}^2\)，并且进一步满足边界证书形式
+  \[
+  \boxed{\;
+  D_{\mathrm{KL}}(\mu\|\mu_\infty)
+  \le
+  \sup_{J\in\mathcal H^1}\Bigl(2\,\Re\,\EE_{\mu}\!\bigl[\delta_m J\bigr]-\|J\|_{\mathcal H^1}^2\Bigr).\;}
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+第 (1) 条由定义直接得到：\(\partial_m f=0\) 当且仅当 \(f\) 在每条纤维 \(F_x\) 上常值，即 \(f\) 仅依赖于 \(x=\Fold_m(a)\)。
+由 \(\delta_m=-\partial_m^\ast\) 得 \(\mathrm{Im}(\delta_m)=\mathrm{Im}(\partial_m^\ast)=(\ker\partial_m)^\perp\)。
+\par
+对第 (2) 条，Hilbert 空间中的恒等式
+\(
+\|g\|^2=\sup_{h}(2\Re\langle g,h\rangle-\|h\|^2)
+\)
+应用到闭子空间 \(\mathrm{Im}(\delta_m)=(\ker\partial_m)^\perp\) 即得第一等号；
+第二等号为最小范数解的标准表述：在 \((\ker\partial_m)^\perp\) 上算子 \(\delta_m\partial_m\) 为正自伴随且可逆，故 \(g\) 的最小能解由 \(f=(\delta_m\partial_m)^{-1}g\) 给出。
+\par
+对第 (3) 条，因 \(E_m r=\mathbf 1\) 有 \(\EE_{\mu_\infty}[g]=0\)，故
+\(
+\chi^2(\mu\mid\mu_\infty)=\EE_{\mu_\infty}[g^2]=\|g\|_{L^2(\mu_\infty)}^2
+\)。
+再由基本不等式 \(\log t\le t-1\)（\(t>0\)）得
+\[
+D_{\mathrm{KL}}(\mu\|\mu_\infty)
+=\EE_{\mu_\infty}[r\log r]
+\le \EE_{\mu_\infty}[r(r-1)]
+=\EE_{\mu_\infty}[(r-1)^2]
+=\|g\|_{L^2(\mu_\infty)}^2.
+\]
+另一方面，由定义 \(\langle \mathbf 1,\delta_m J\rangle_{L^2(\mu_\infty)}=-\langle \partial_m\mathbf 1,J\rangle_{\mathcal H^1}=0\)，故 \(\EE_{\mu_\infty}[\delta_m J]=0\)，从而
+\[
+\langle g,\delta_m J\rangle_{L^2(\mu_\infty)}
+=\EE_{\mu_\infty}\bigl[(r-1)\delta_m J\bigr]
+=\EE_\mu[\delta_m J]-\EE_{\mu_\infty}[\delta_m J]
+=\EE_\mu[\delta_m J].
+\]
+将其代入第 (2) 条的第一等号并与 \(D_{\mathrm{KL}}\le \|g\|_2^2\) 合并，即得所示边界证书上界。证毕。
+\end{proof}
+
+\begin{remark}[与 Jones 基本构造交换子模型的一致性]\label{rem:xi-fiber-uniformization-stokes-stein-jones-commutator}
+在纤维均匀参考态取为 \(\mu_\infty=\mathrm{Unif}(\Omega_m)\) 的情形，上述 \(\partial_m\) 的纤维差分结构可等价实现为基本构造中的索引加权交换子
+\(
+\mathrm{Ind}_{\mathrm W}(E_m)^{1/2}[e_m,M_f]
+\)
+（命题 \ref{prop:op-algebra-fold-index-weighted-commutator-energy}）；
+从而本命题的对偶上界可被理解为“不可见 \(L^2\) 残差 \(\leftrightarrow\) 交换子能量”的强对偶证书化表述。
+\end{remark}
+
+\begin{corollary}[Moment 语义下的缺口线性放大与随机性成本]\label{cor:xi-momq-gap-linear-amplification-randomness-cost}
+设某一去耦/去链接接口的指数缺口为 \(\Gamma\ge 0\)（附录 \ref{subsubsec:op-algebra-jones-scalar-twirl-cost-renyi-flatness}），并在 \(\mathrm{MOM}_q\) 的 \(q\)-重并置语义下形成放大缺口 \(\Gamma^{(q)}\)。
+则在张量化/并置语义下有线性律
+\[
+\boxed{\;\Gamma^{(q)}=q\,\Gamma.\;}
+\]
+并且若要求把泄漏压到 \(\varepsilon\)（以条件互信息或等价指标刻画），则任何使用外加随机寄存器 \(R\) 的机制必须满足
+\[
+\boxed{\;H(R)\ge \Gamma^{(q)}-\varepsilon=q\Gamma-\varepsilon.\;}
+\]
+\end{corollary}
+\begin{proof}[证明思路]
+指数缺口在张量化下严格可加（对数指数的乘法性），故 \(\Gamma^{(q)}=q\Gamma\)。
+随机性成本下界由最优去链接曲线的强对偶不等式给出（定理 \ref{thm:op-algebra-optimal-delinking-curve}），并将缺口替换为 \(\Gamma^{(q)}\) 即得。
+\end{proof}
+
+\begin{corollary}[双时间强逆：固定随机预算下的双线性泄漏下界]\label{cor:xi-momq-strong-converse-bilinear-leakage}
+在推论 \ref{cor:xi-momq-gap-linear-amplification-randomness-cost} 的设定下，若每期允许的随机性预算受限为 \(H(R)\le h\)，并将放大接口串接 \(n\) 期，则任意机制的泄漏满足强逆下界
+\[
+\boxed{\;
+\mathrm{Leak}_n\ \ge\ n\max\{q\Gamma-h,\,0\}. \;}
+\]
+\end{corollary}
+\begin{proof}[证明思路]
+将 \(q\)-放大后的缺口 \(\Gamma^{(q)}=q\Gamma\) 代入多期强逆定理（定理 \ref{thm:op-algebra-multi-round-strong-converse-linear-leakage}）即得。
+\end{proof}
+
+\begin{proposition}[稳定层不变性与时间正交分解：纤维混合时间对可见压缩完全不可见]\label{prop:xi-fiber-mixing-time-invisible-on-stable-compression}
+令 \(P_m,Q_m,K_m\) 如上，并取任一线性算子 \(T:\Delta(\Omega_m)\to\Delta(\Omega_m)\)。
+对任意 \(t\ge 0\) 定义“纤维时间正则化”
+\[
+T^{(t)}:=S_m(t)\,T\,S_m(t).
+\]
+则其稳定层压缩（可见算子）严格与 \(t\) 无关：
+\[
+\boxed{\;
+P_m\,T^{(t)}\,Q_m\ =\ P_m\,T\,Q_m.\;}
+\]
+\end{proposition}
+\begin{proof}
+由 \(P_mQ_m=\mathrm{id}\) 与 \(K_m=Q_mP_m\) 得 \(P_mK_m=P_m\)、\(K_mQ_m=Q_m\)（亦见 \S\ref{subsubsec:xi-fixed-slice-audit-chain}）。
+又由定理 \ref{thm:xi-fiber-uniformization-markov-semigroup-explicit} 的闭式，
+\(
+S_m(t)=e^{-t}I+(1-e^{-t})K_m
+\)，
+从而
+\[
+P_mS_m(t)=e^{-t}P_m+(1-e^{-t})P_mK_m=P_m,
+\qquad
+S_m(t)Q_m=e^{-t}Q_m+(1-e^{-t})K_mQ_m=Q_m.
+\]
+于是
+\(
+P_mT^{(t)}Q_m=P_mS_m(t)TS_m(t)Q_m=P_mTQ_m
+\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[Rényi 阶无关的时间--指数证书在 \texorpdfstring{$q$}{q}-放大下保持]\label{cor:xi-renyi-flatness-under-momq-amplification}
+设 \(E\) 为有限指数条件期望。
+对任意 \(\alpha\in[1,\infty]\) 令 \(D_\alpha\) 为（sandwiched）Rényi 相对熵，并记
+\(
+L_\alpha(\rho):=D_\alpha(\rho\|\rho\circ E)
+\)。
+则最坏损失满足统一极值公式
+\[
+\sup_{\rho}L_\alpha(\rho)=\log\mathrm{Ind}(E)
+\qquad(\forall\,\alpha\in[1,\infty])
+\]
+（推论 \ref{cor:op-algebra-renyi-flatness-sup-equals-log-index}）。
+在 \(\mathrm{MOM}_q\) 的并置语义下，指数尺度按 \(q\) 线性放大，从而对全部 Rényi 阶同步得到
+\[
+\boxed{\;
+\sup_{\rho}D_\alpha(\rho\|\rho\circ E^{(q)})=q\log\mathrm{Ind}(E),
+\qquad \forall\,\alpha\in[1,\infty].\;}
+\]
+\end{corollary}
+
+\paragraph{可复算核对（示例）}
+表 \ref{tab:fold_markov_projection_tv_decomposition} 与表 \ref{tab:fold_pinsker_residual_bridge} 给出在 \(m=12\) 的有限维实例上，对纤维反射子 \(K_m\) 的 TV 分解一致性与 Pinsker 桥接的可复算核对。
+\input{sections/generated/tab_fold_markov_projection_tv_decomposition}
+\input{sections/generated/tab_fold_pinsker_residual_bridge}

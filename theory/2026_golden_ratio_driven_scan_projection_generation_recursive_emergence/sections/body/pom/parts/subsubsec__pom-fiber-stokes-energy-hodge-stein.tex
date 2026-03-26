@@ -1,0 +1,104 @@
+\subsubsection{纤维立方复形上的离散斯托克斯能量审计与张量化 Hodge--Stein 分解}\label{subsubsec:pom-fiber-stokes-energy-hodge-stein}
+在纤维重构图 \(\mathcal F_x\) 的 Cartesian 分解与立方面计数闭式（定理 \ref{thm:pom-fiber-reconstruction-cartesian-product}、定理 \ref{thm:pom-fibcube-fvector-closed}）基础上，
+本节抽取两条与实现细节解耦的可核验接口：
+其一是离散外微分的能量恒等式及其抽样复杂度，
+其二是 Cartesian 乘积图上的 Hodge--Stein 结构张量化与谱隙极小化原则。
+
+\begin{theorem}[离散外微分能量的边界审计恒等式与抽样复杂度]\label{thm:pom-cubical-stokes-energy-sampling}
+令 \(X\) 为有限立方体复形，\((C^\bullet(X;\RR),d)\) 为其胞腔余链复形。
+对任意 \(\omega\in C^{k-1}(X;\RR)\)（\(k\ge 1\)），按定义
+\[
+(d\omega)(\sigma)
+:=\sum_{\tau\subset\partial\sigma}\operatorname{sgn}(\tau,\sigma)\,\omega(\tau),
+\qquad \sigma\in C_k(X),
+\]
+并记
+\(
+\int_{\partial\sigma}\omega:=(d\omega)(\sigma)
+\)。
+则有严格恒等式
+\[
+\|d\omega\|_{\ell^2(C_k(X))}^2
+=\sum_{\sigma\in C_k(X)}\Bigl(\int_{\partial\sigma}\omega\Bigr)^2.
+\]
+进一步，若对所有 \((k{-}1)\)-胞腔 \(\tau\) 有 \(|\omega(\tau)|\le 1\)，则对任意 \(k\)-胞腔 \(\sigma\) 有
+\[
+|(d\omega)(\sigma)|\le 2k,
+\qquad
+0\le (d\omega(\sigma))^2\le 4k^2.
+\]
+对均匀随机抽取的 \(k\)-胞腔 \(\sigma_1,\dots,\sigma_M\)，令
+\[
+\widehat\mu_k:=\frac1M\sum_{j=1}^M(d\omega(\sigma_j))^2,\qquad
+\mu_k:=\frac{1}{|C_k(X)|}\sum_{\sigma\in C_k(X)}(d\omega(\sigma))^2.
+\]
+则对任意 \(\varepsilon>0\) 有 Hoeffding 集中界
+\[
+\mathbb P\bigl(|\widehat\mu_k-\mu_k|\ge\varepsilon\bigr)
+\le
+2\exp\!\Bigl(-\frac{2M\varepsilon^2}{(4k^2)^2}\Bigr),
+\]
+从而若取
+\[
+M\ \ge\ \frac{8k^4}{\varepsilon^2}\log\frac{2}{\delta},
+\]
+则误差概率不超过 \(\delta\)。
+\end{theorem}
+
+\begin{proof}
+第一式仅是 \(\int_{\partial\sigma}\omega=(d\omega)(\sigma)\) 的记号改写。
+对上界：\(k\)-立方体的定向 \((k{-}1)\)-面个数为 \(2k\)，故
+\(
+|(d\omega)(\sigma)|\le \sum_{\tau\subset\partial\sigma}|\omega(\tau)|\le 2k
+\)。
+集中界由 \((d\omega(\sigma))^2\in[0,4k^2]\) 的有界性对独立抽样直接应用 Hoeffding 不等式得到。证毕。
+\end{proof}
+
+\begin{remark}[Fibonacci cube 与纤维重构图的计数闭式接口]\label{rem:pom-fiber-stokes-energy-sampling-count-interface}
+当 \(X\) 取为由 Fibonacci cube \(\Gamma_n\)（定义 \ref{def:pom-fibonacci-cube}）或纤维重构图 \(\mathcal F_x\simeq \prod_i\Gamma_{\ell_i}\) 的立方面结构诱导的立方体复形时，
+\(|C_k(X)|\) 可由 \(\Gamma_n\) 的 \(k\)-立方体计数 \(C(n,k)\)（定理 \ref{thm:pom-fibcube-fvector-closed}）与乘积因子化 \(F_x(u)=\prod_i C_{\ell_i}(u)\)（推论 \ref{cor:pom-fiber-fpoly-factorization}）完全给出，
+从而定理 \ref{thm:pom-cubical-stokes-energy-sampling} 的抽样复杂度可在给定分量长度 \((\ell_i)\) 后显式评估。
+\end{remark}
+
+\begin{theorem}[图上的 Hodge--Stein 对偶与 Cartesian 张量化]\label{thm:pom-fiber-hodge-stein-tensorization-gap}
+令 \(G=(V,E)\) 为有限无向图。
+赋予顶点权 \(\pi\)（\(\pi(v)>0\)、\(\sum_v\pi(v)=1\)）与边电导 \(c\)（对无向边 \(uv\) 取 \(c_{uv}=c_{vu}>0\)）。
+令 \(C_1^{\mathrm{as}}(G)\) 表示反对称边函数空间。
+定义差分 \(d:C_0(G)\to C_1^{\mathrm{as}}(G)\) 为 \((df)(u\to v)=f(v)-f(u)\)，并令 \(\delta:C_1^{\mathrm{as}}(G)\to C_0(G)\) 为其关于内积 \(\langle\cdot,\cdot\rangle_\pi\)、\(\langle\cdot,\cdot\rangle_c\) 的伴随。
+则对任意 \(f\in C_0(G)\)、\(J\in C_1^{\mathrm{as}}(G)\) 有离散 Stokes 对偶关系
+\[
+\langle f,\delta J\rangle_\pi=-\langle df,J\rangle_c.
+\]
+记 \(\Delta:=\delta d\) 为 \(0\)-形式 Laplace 算子。
+若纤维重构图满足 Cartesian 分解
+\[
+\mathcal F_x\ \cong\ \prod_{i=1}^r \Gamma_{\ell_i}
+\]
+并取积权重 \(\pi=\bigotimes_i\pi_i\) 与单位电导，则：
+\begin{enumerate}
+  \item Laplace 算子为 Kronecker 和
+  \[
+  \Delta_{\mathcal F_x}
+  =\sum_{i=1}^r I\otimes\cdots\otimes \Delta_{\Gamma_{\ell_i}}\otimes\cdots\otimes I.
+  \]
+  \item 对任意满足 \(\langle g,1\rangle_\pi=0\) 的 \(g\in C_0(\mathcal F_x)\)，Poisson 方程 \(\Delta u=g\) 在条件 \(\langle u,1\rangle_\pi=0\) 下有唯一解；
+  且在约束 \(\delta J=g\) 的所有流中，最小能量解为 \(J^\star=-du\)，并满足
+  \[
+  \langle du,du\rangle_c=\langle g,u\rangle_\pi.
+  \]
+  \item 若以 \(\lambda_1(\cdot)\) 表示 \(\Delta\) 的最小正特征值，则谱隙满足极小化原则
+  \[
+  \lambda_1(\mathcal F_x)=\min_{1\le i\le r}\lambda_1(\Gamma_{\ell_i}).
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Stokes 对偶由伴随定义直接给出。
+对 Cartesian 乘积图，差分与散度在各坐标方向分离，逐坐标检验即可得到 Kronecker 和分解。
+Poisson 方程的唯一性来自 \(\Delta\) 在均值零子空间上的正定性；能量最小化为带线性约束的严格凸二次型问题，其 Euler--Lagrange 方程即 \(J=-du\)、\(\Delta u=g\)，并由对偶关系导出能量恒等式。
+谱隙结论由 Kronecker 和的谱为各分量谱的和得到：取仅一分量处于第一特征模、其余分量为常数给出上界；任意非零模态至少在一分量上非平凡给出下界，从而得到最小化公式。证毕。
+\end{proof}
+
+\endinput
+

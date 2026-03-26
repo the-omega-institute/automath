@@ -1,0 +1,151 @@
+\subsubsection{可寻址性与分辨率的同时严格化：零点语境下的否定性判据与端点压缩律}\label{subsubsec:xi-addressability-resolution-law}
+本段在 \S\ref{subsec:xi-pw-type-safety-null} 的 unitary-slice 可见域约束与“地址先于取值”语义（定义 \ref{def:xi-visible-read-null}、定义 \ref{def:multi_axis_address}）下，同时严格化两组对象：
+\begin{enumerate}
+  \item \textbf{分辨率/清晰度：}以可核验读出前缀（dyadic 柱过滤）作为精度尺度，并以端点紧化的几何压缩给出“扫描越久越清晰”的定量律；
+  \item \textbf{可寻址性（addressability）：}以“给定有限前缀是否能形成单值可核验读出”为定义性标准，给出“零点互为地址”在结构上的否定性判据与其唯一可成立的正向版本（共享前缀柱事件）。
+\end{enumerate}
+其中关键观点为：在本文协议中，“地址”并非零点之间的内生指针，而是读出纤维与端点几何所诱导的前缀过滤；零点之间可成立的仅是“在给定前缀深度下的同柱不可分辨”，而非确定性互寻址。
+
+\paragraph{记号与自然间距尺度}
+令 \(\rho=\beta+\mathrm{i}\gamma\) 为 \(\zeta(s)\) 的非平凡零点，并以 \(\gamma>0\) 递增排列为 \(\gamma_1\le\gamma_2\le\cdots\)（按重数计）。记计数函数
+\[
+N_\zeta(T):=\#\{\rho:\ 0<\Im(\rho)\le T\}.
+\]
+其主项满足黎曼--冯\,曼戈尔特量级
+\[
+N_\zeta(T)=\frac{T}{2\pi}\log\!\Bigl(\frac{T}{2\pi}\Bigr)-\frac{T}{2\pi}+O(\log T),
+\qquad(T\to\infty).
+\]
+由此导出经典高度坐标 \(t\)-尺度下的“自然分辨率”（平均相邻间距）
+\[
+\Delta_t(T)\asymp \frac{1}{N_\zeta'(T)}\sim \frac{2\pi}{\log(T/2\pi)}\qquad(T\to\infty),
+\]
+它仅作为后续“可寻址精度口径”的参考尺度：本文的读出协议并不把 \(\Delta_t\) 本身视为地址，而把地址落实为紧化坐标上的前缀柱事件。
+
+\paragraph{否定性判据 I：有限生成机制与计数阶不相容}
+所谓“一个零点可作为另一个零点的地址”的最强版本，是把高零点集合压缩为有限结构数据所生成的有限并（例如有限条严格等差竖线晶格），从而单个零点即可在同一竖线簇中确定无限多个后继零点。
+\begin{proposition}[有限生成可寻址性的计数障碍]\label{prop:xi-addressability-counting-obstruction}
+任意由单尺度 Dirichlet 化有限机制所生成的零/极点集合，在任意固定竖直条带内的高度计数至多为 \(O(T)\)。
+因此，任何把 \(\zeta\) 的非平凡零点在临界带内压缩为有限条等差竖线簇的“有限生成可寻址性”设想，都与 \(N_\zeta(T)\asymp T\log T\) 的计数增长结构性不相容。
+\end{proposition}
+\begin{proof}
+该结论是正文中“单尺度 Dirichlet 化的严格虚周期 \(\Rightarrow\) 梳齿晶格 \(\Rightarrow\) 线性计数上界”的直接应用，见命题 \ref{prop:single-scale-dirichlet-imag-period} 与推论 \ref{cor:single-scale-dirichlet-lattice}；而 \(N_\zeta(T)\) 的计数阶在注 \ref{rem:single-scale-dirichlet-obstruction} 已被用于给出密度阶障碍。证毕。
+\end{proof}
+
+\paragraph{否定性判据 II（模型层）：远距“地址影响”衰减}
+若把零点局部统计在单位平均间距归一化后与正弦核（或更一般的 \(\operatorname{Sine}_\beta\)）极限过程类比，则单点条件（Palm）仅对局部邻域提供排斥约束，而对远距窗口的影响随距离衰减；在此范式下，所谓“零点互为地址”不可能表现为跨窗口的确定性寻址机制。
+\begin{remark}[解释性叙述（非推理前提）：混合/刚性范式下的地址影响半径]\label{rem:xi-addressability-palm-decay}
+将零点按平均间距归一化后（即在高度 \(T\) 附近以 \(\Delta_t(T)\) 作尺度单位），Montgomery 的对相关猜想把二点相关主型刻画为正弦核型
+\[
+1-\Bigl(\frac{\sin(\pi u)}{\pi u}\Bigr)^2
+\]
+（参见 \cite{Montgomery1973PairCorrelation} 的对相关公式与其 GUE 型强化表述）。
+\par
+在该极限模型的标准实现之一——行列式点过程 \(\operatorname{Sine}_2\)（核
+\(
+K(x,y)=\frac{\sin(\pi(x-y))}{\pi(x-y)}
+\)
+）中，给定原点处存在一点的 Palm 条件过程仍为行列式过程，其一阶条件强度满足闭式恒等式（例如 \cite[Chapter~4]{HoughKrishnapurPeresVirag2009GAFDPP}）
+\[
+\rho_{\mathrm{Palm}}(x)=1-|K(x,0)|^2
+=1-\Bigl(\frac{\sin(\pi x)}{\pi x}\Bigr)^2,
+\]
+并且当 \(|x|\to\infty\) 时具有确定渐近
+\[
+\rho_{\mathrm{Palm}}(x)=1-\frac{1}{\pi^2x^2}+O(x^{-4}).
+\]
+因此，在混合/刚性极限范式下，单点条件对远距窗口的影响以 \(x^{-2}\) 量级衰减：它最多提供局部排斥所诱导的有限邻域约束，而不可能形成跨尺度、可递归生成的“地址前缀”。
+与零点过程的极限收敛框架可参见 \cite{AriasDeReynaRodgers2024ConvergencePointsZetaZeros}，而 \(\operatorname{Sine}_\beta\) 的刚性现象参见 \cite{ChhaibiNajnudel2018RigiditySineBeta}。
+\end{remark}
+
+\paragraph{Jensen 缺陷作为“前缀读出”对象}
+圆盘化完成化函数 \(F_\zeta\) 与 Jensen 缺陷 \(D_\zeta(\varrho)\) 在附录 \S\ref{subsec:unit-disk-jensen-defect} 已定义并证明：
+\[
+D_{\zeta}(\varrho)
+  :=
+\frac{1}{2\pi}\int_{0}^{2\pi}\log\bigl|F_{\zeta}(\varrho e^{\mathrm{i}\theta})\bigr|\,\dd\theta
+-\log|F_{\zeta}(0)|,
+\qquad 0<\varrho<1,
+\]
+并且 Jensen 求和式给出
+\[
+D_{\zeta}(\varrho)=\sum_{|a_k|<\varrho}\log\!\Bigl(\frac{\varrho}{|a_k|}\Bigr)\ge 0,
+\qquad
+D_{\zeta}(\varrho)=0\ \Longleftrightarrow\ F_\zeta\ \text{在}\ |w|<\varrho\ \text{内无零点},
+\]
+从而 RH 等价于“对所有 \(\varrho\in(0,1)\) 有 \(D_\zeta(\varrho)=0\)”（推论 \ref{cor:app-rh-iff-jensen-defect-zero}）。
+因此 \(\varrho\uparrow 1\) 的半径扫描在严格意义上构成一族\textbf{可核验前缀读出}：它用有限圆周平均把盘内零点信息压缩为一维前缀剖面。
+
+\paragraph{端点压缩与高高度信息的窄角窗定位}
+由命题 \ref{prop:app-jensen-defect-upperhalf-circle-average} 的显式参数化，令
+\[
+t(\varrho,\theta):=\mathcal{C}^{-1}(\varrho e^{\mathrm{i}\theta})\in\mathbb{H},
+\qquad
+\Im\,t(\varrho,\theta)=\frac{1-\varrho^2}{1+\varrho^2+2\varrho\cos\theta},
+\]
+并且当 \(\varrho\uparrow 1\) 时，高虚部采样被迫集中于端点 \(\theta\approx\pi\)（即 \(w\approx-1\)），见推论 \ref{cor:app-jensen-endpoint-localization}。
+
+\begin{theorem}[端点角宽--高度的分辨率交换律]\label{thm:xi-endpoint-angle-height-exchange}
+令 \(\eta:=1-\varrho\in(0,1)\) 与 \(\varepsilon:=\pi-\theta\)。
+记
+\[
+T(\eta,\varepsilon):=\Im\,t(\varrho,\theta)=\frac{1-\varrho^2}{1+\varrho^2+2\varrho\cos\theta}.
+\]
+当 \(\eta\downarrow 0\) 且 \(\varepsilon\downarrow 0\) 时，有一致渐近
+\[
+T(\eta,\varepsilon)=\frac{2\eta}{\eta^2+\varepsilon^2}\,(1+o(1)).
+\]
+因此在固定半径分辨率 \(\eta\) 下，要在 Jensen 圆周平均中“触及”高度 \(T\) 的信息，端点角窗必须满足
+\[
+\varepsilon \ \lesssim\ \sqrt{\frac{2\eta}{T}}
+\qquad (T\gg \eta^{-1}).
+\]
+\end{theorem}
+\begin{proof}
+由 \(\varrho=1-\eta\) 与 \(\theta=\pi-\varepsilon\)，有
+\(
+1-\varrho^2=1-(1-\eta)^2=2\eta-\eta^2
+\)
+与
+\(
+\cos\theta=\cos(\pi-\varepsilon)=-\cos\varepsilon=-(1-\varepsilon^2/2+O(\varepsilon^4)).
+\)
+代入 \(\Im\,t(\varrho,\theta)\) 的闭式并对 \(\eta,\varepsilon\) 作一致展开，得分母
+\[
+1+\varrho^2+2\varrho\cos\theta
+=(1-\varrho)^2+\varrho\varepsilon^2+O(\varepsilon^4+\eta\varepsilon^2)
+=\eta^2+\varepsilon^2+o(\eta^2+\varepsilon^2),
+\]
+从而
+\(
+T(\eta,\varepsilon)=\frac{2\eta+o(\eta)}{\eta^2+\varepsilon^2+o(\eta^2+\varepsilon^2)}
+=\frac{2\eta}{\eta^2+\varepsilon^2}(1+o(1))
+\)。
+最后一式由对不等式 \(T(\eta,\varepsilon)\gtrsim 2\eta/(\eta^2+\varepsilon^2)\) 的整理得到。证毕。
+\end{proof}
+
+\paragraph{紧化坐标下的二次分辨率压缩}
+取相位盒紧化 \(u=\upsilon(t)=\pi^{-1}\arctan t\)（定义 \ref{def:unit-circle-phase-precision-potential} 与 \S\ref{subsec:unit-circle-phase-precision-ledger}），则
+\(
+\upsilon'(t)=\bigl(\pi(1+t^2)\bigr)^{-1}\sim (\pi t^2)^{-1}
+\)（\(t\to\infty\)）。
+\begin{corollary}[紧化坐标的二次分辨率压缩律]\label{cor:xi-compactified-spacing-quadratic}
+在高度 \(T\) 附近，相邻零点在紧化坐标 \(u\) 中的典型间距满足
+\[
+\Delta_u(T)\sim \Delta_t(T)\cdot \upsilon'(T)\sim \frac{2}{T^2\log(T/2\pi)}
+\qquad(T\to\infty).
+\]
+因此，要在 \(u\)-坐标上实现单零点级分辨，所需分辨率量级为 \(T^{-2}\log(T)^{-1}\)，对应 dyadic 深度门槛为 \(2\log_2 T+\log_2\log T+O(1)\)（与定理 \ref{thm:xi-phase-prefix-collision-lower-bound} 同阶）。
+\end{corollary}
+\begin{proof}
+由 \(\Delta_u\approx \upsilon'(T)\Delta_t(T)\) 与 \(\upsilon'(T)\sim 1/(\pi T^2)\) 代入 \(\Delta_t(T)\sim 2\pi/\log(T/2\pi)\) 得首式；dyadic 深度换算由取 \(-\log_2\Delta_u(T)\) 立得。证毕。
+\end{proof}
+
+\paragraph{关于“零点互为地址”的可检验回答}
+\begin{enumerate}
+  \item 若将“地址”理解为有限规则下的确定性生成（或有限晶格拼合），则由命题 \ref{prop:xi-addressability-counting-obstruction} 的计数障碍结构性排除。
+  \item 若在统计极限范式下把“地址”理解为跨窗口的条件分布显著收缩，则在混合/刚性模型中单点影响半径有限且随距离衰减（注 \ref{rem:xi-addressability-palm-decay}），不能形成可递归的远距寻址。
+  \item 在本文协议语义中可成立且可核验的正向内容是：\textbf{端点压缩分辨率律}（定理 \ref{thm:xi-endpoint-angle-height-exchange}）与\textbf{紧化坐标二次压缩}（推论 \ref{cor:xi-compactified-spacing-quadratic}），以及“共享前缀柱事件”意义下的可见聚类（见 \S\ref{subsubsec:xi-phase-prefix-resolution-law}）。
+\end{enumerate}
+
+\endinput

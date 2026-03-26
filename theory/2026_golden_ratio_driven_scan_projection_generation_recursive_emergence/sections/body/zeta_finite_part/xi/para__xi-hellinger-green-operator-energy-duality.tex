@@ -1,0 +1,77 @@
+% (User input window)
+%
+% 本文件给出 Hellinger 核的 Green 算子刻画与点源能量/电势对偶。
+
+\begin{proposition}[Hellinger 核的 Green 算子刻画：\texorpdfstring{$\cosh^{2}(\pi\sqrt{-\partial^{2}})$}{cosh^2(pi sqrt(-d^2))} 的无限阶椭圆性]\label{prop:xi-hellinger-green-operator-cosh2}
+令连续卷积核
+\(
+A(\Delta)=\frac{|\Delta|}{2\sinh(|\Delta|/2)}
+\)
+并沿用命题 \ref{prop:xi-hellinger-kernel-fourier-sech2} 的 Fourier 乘子
+\[
+\widehat A(\xi)=\frac{\pi^2}{\cosh^2(\pi\xi)}.
+\]
+定义无限阶算子
+\[
+\mathcal L:=\frac{1}{\pi^2}\cosh^{2}\!\bigl(\pi\sqrt{-\partial_s^{2}}\bigr)
+\quad\Longleftrightarrow\quad
+\widehat{(\mathcal L f)}(\xi)=\frac{\cosh^{2}(\pi\xi)}{\pi^2}\,\widehat f(\xi).
+\]
+则在温和分布意义下严格有
+\[
+\boxed{\;\mathcal L(A)=\delta_0\;},
+\]
+亦即 \(A\) 为 \(\mathcal L^{-1}\) 的 Green 核。
+并且 \(\cosh^{2}(\pi\xi)\sim \tfrac14 e^{2\pi|\xi|}\)（\(|\xi|\to\infty\)）给出高频端的指数放大律，是后续可逆性预算指数爆炸的解析来源。
+\end{proposition}
+\begin{proof}
+由 Fourier 乘子定义，
+\[
+\widehat{(\mathcal L A)}(\xi)
+=\frac{\cosh^{2}(\pi\xi)}{\pi^2}\,\widehat A(\xi)
+=\frac{\cosh^{2}(\pi\xi)}{\pi^2}\cdot\frac{\pi^2}{\cosh^{2}(\pi\xi)}
+=1.
+\]
+由于 \(\widehat{\delta_0}\equiv 1\)，故 \(\mathcal L(A)=\delta_0\)（\(\mathcal S'(\RR)\) 中）。证毕。
+\end{proof}
+
+\begin{proposition}[点荷—电势对偶：\texorpdfstring{$G$}{G} 与 \texorpdfstring{$G^{-1}$}{G^{-1}} 分别是能量与 Dirichlet-to-Neumann 矩阵]\label{prop:xi-hellinger-charge-potential-duality-dtn}
+取两两不同的深度点 \(\{s_j\}_{j=1}^\kappa\subset\RR\)，并令 \(G\in\RR^{\kappa\times\kappa}\) 为 Hellinger--Gram 矩阵
+\[
+G_{ij}=A(s_i-s_j).
+\]
+对任意荷载 \(c\in\RR^\kappa\)，定义势函数
+\[
+u_c(s):=\sum_{j=1}^{\kappa}c_j\,A(s-s_j).
+\]
+则在命题 \ref{prop:xi-hellinger-green-operator-cosh2} 的 Green 结构下，
+\[
+\mathcal L u_c=\sum_{j=1}^{\kappa}c_j\,\delta_{s_j}
+\]
+（分布意义），并且能量严格满足
+\[
+\boxed{\;
+\langle u_c,\mathcal L u_c\rangle
+=\sum_{i=1}^{\kappa}c_i\,u_c(s_i)
+=c^{\mathsf T}G\,c\;}
+\]
+其中 \(\langle\cdot,\cdot\rangle\) 为 \(\mathcal S'(\RR)\times\mathcal S(\RR)\) 的自然配对。
+反之，若给定结点电势 \(v\in\RR^\kappa\)（\(v_i=u(s_i)\)），则唯一荷载为 \(c=G^{-1}v\)，且对应能量为
+\[
+\boxed{\;v^{\mathsf T}G^{-1}v\;}
+\]
+从而 \(G\) 与 \(G^{-1}\) 分别刻画“点源能量”与“点集 Dirichlet-to-Neumann”映射。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:xi-hellinger-green-operator-cosh2} 的平移不变性，\(\mathcal L(A(\cdot-s_j))=\delta_{s_j}\)，线性叠加得到 \(\mathcal L u_c=\sum_j c_j\delta_{s_j}\)。
+故
+\[
+\langle u_c,\mathcal L u_c\rangle
+=\sum_{i=1}^{\kappa}c_i\,u_c(s_i)
+=\sum_{i,j=1}^{\kappa}c_i c_j\,A(s_i-s_j)
+=c^{\mathsf T}G\,c.
+\]
+若 \(v_i=u(s_i)\)，则 \(v=Gc\)；因 \(G\succ0\)（点集两两不同且核严格正定），解唯一且 \(c=G^{-1}v\)。
+代回能量等式得到 \(c^{\mathsf T}G c=v^{\mathsf T}G^{-1}v\)。证毕。
+\end{proof}
+

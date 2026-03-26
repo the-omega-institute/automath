@@ -1,0 +1,141 @@
+\subsection{容量主序、InfoNCE 完全统计与三重复杂度分离}\label{subsec:conclusion-capacity-majorization-infonce-complexity-separation}
+前面的容量链已经分别给出了连续容量曲线的整数节点反演、Bayes 最优 InfoNCE 梯对纤维谱的有限完备编译，以及全反演阈值
+\[
+B_m^{\mathrm{full}}=\left\lceil \log_2 M_m\right\rceil
+\]
+的闭式。把这三条链并置之后，还可进一步抽出两个正文中尚未单独写出的终态事实。其一，连续容量曲线对纤维谱的偏好并不是模糊的“越均匀越容易反演”，而恰由 Hardy--Littlewood--P\'olya 主序完全控制；其二，固定分辨率下的容量曲线、有序纤维权重谱与完整 Bayes--InfoNCE 数值塔已经构成同一对象的三种完全等价坐标。于是，在 window-\(6\) 上，全局反演预算、线性可实现性与统计可审计性便被强制拆成三种互不塌缩的复杂度。
+
+\begin{theorem}[固定总质量下连续容量曲线的 Schur--Hardy 判别]\label{thm:conclusion-capacity-majorization-schur-hardness}
+设
+\[
+\mathbf d=(d_1,\dots,d_N),
+\qquad
+\mathbf e=(e_1,\dots,e_N)
+\]
+为按非增序排列的正整数向量，并满足
+\[
+\sum_{i=1}^N d_i=\sum_{i=1}^N e_i=S.
+\]
+定义连续容量曲线
+\[
+C_{\mathbf d}(u):=\sum_{i=1}^N \min(d_i,u),
+\qquad
+C_{\mathbf e}(u):=\sum_{i=1}^N \min(e_i,u)
+\qquad (u\ge 0).
+\]
+则
+\[
+\mathbf d\succcurlyeq \mathbf e
+\quad\Longleftrightarrow\quad
+C_{\mathbf d}(u)\le C_{\mathbf e}(u)
+\qquad (\forall\,u\ge 0),
+\]
+其中 \(\succcurlyeq\) 表示 Hardy--Littlewood--P\'olya 意义下的主序。因而，在总质量与可见类型数固定时，纤维谱越集中，任意预算下的连续容量越小，折叠越难反演。
+\end{theorem}
+\begin{proof}
+由恒等式
+\[
+\min(t,u)=t-(t-u)_+
+\]
+可得
+\[
+C_{\mathbf d}(u)
+=
+S-\sum_{i=1}^N(d_i-u)_+,
+\qquad
+C_{\mathbf e}(u)
+=
+S-\sum_{i=1}^N(e_i-u)_+.
+\]
+由于两向量总和相同，故
+\[
+C_{\mathbf d}(u)\le C_{\mathbf e}(u)
+\iff
+\sum_{i=1}^N(d_i-u)_+\ge \sum_{i=1}^N(e_i-u)_+.
+\]
+而右侧正是主序的经典积分尾函数判别。故题述两条件等价。证毕。
+\end{proof}
+
+\begin{corollary}[固定总质量下容量曲线的 Schur 极值谱]\label{cor:conclusion-capacity-majorization-extremizers}
+在所有满足 \(d_i\ge 1\)、\(\sum_i d_i=S\)、长度为 \(N\) 的纤维谱中，均匀谱
+\[
+\left(\frac{S}{N},\dots,\frac{S}{N}\right)
+\]
+在主序中最小，因而使连续容量曲线逐点最大；而极端集中谱
+\[
+(S-N+1,1,\dots,1)
+\]
+在主序中最大，因而使连续容量曲线逐点最小。于是，“最难反演”的有限模型并不是启发式概念，而是一个严格的 Schur 极值对象。
+\end{corollary}
+\begin{proof}
+均匀谱是给定总和下主序最小元，而 \((S-N+1,1,\dots,1)\) 是主序最大元。结论随定理 \ref{thm:conclusion-capacity-majorization-schur-hardness} 立即成立。证毕。
+\end{proof}
+
+\begin{theorem}[连续容量曲线、有序纤维谱与 Bayes--InfoNCE 数值塔的完全等价]\label{thm:conclusion-capacity-ordered-spectrum-infonce-equivalence}
+固定分辨率 \(m\)，记 \(N:=|X_m|\)，并令
+\[
+w_i:=\frac{d_i}{|\Omega_m|}
+\qquad (1\le i\le N)
+\]
+为按非增序排列的纤维权重。则下列三类数据彼此完全等价：
+\[
+\textup{(i)}\ \mathcal C_m^{\mathrm{cont}}(u)\ \text{对全部 }u\ge 0,
+\qquad
+\textup{(ii)}\ (w_1,\dots,w_N),
+\qquad
+\textup{(iii)}\ \{L_{K,m}^{\star}\}_{K=2}^{N},
+\]
+其中 \(L_{K,m}^{\star}\) 表示 fixed-resolution 的全部 Bayes 最优 InfoNCE 数值。
+
+更强地，在开单纯形
+\[
+U_N:=\{(w_1,\dots,w_N):\ w_1>\cdots>w_N>0,\ \sum_{i=1}^{N}w_i=1\}
+\]
+上，少于 \(N-1\) 个 Bayes 最优 InfoNCE 标量不可能给出对有序纤维谱的连续单射恢复；而完整族 \(\{L_{K,m}^{\star}\}_{K=2}^{N}\) 足以唯一恢复之。
+\end{theorem}
+\begin{proof}
+\textup{(i)}\(\Rightarrow\)\textup{(ii)}：由连续容量曲线的整数节点反演定理，\(\mathcal C_m^{\mathrm{cont}}\) 唯一决定全部尾计数与精确直方图，因而唯一决定多重度多重集 \(\{d_i\}_{i=1}^{N}\)。再按非增序排列，即得有序权重谱 \((w_i)\)。
+
+\textup{(ii)}\(\Rightarrow\)\textup{(i)}：显然有
+\[
+\mathcal C_m^{\mathrm{cont}}(u)=\sum_{i=1}^{N}\min(|\Omega_m|w_i,u),
+\]
+故有序权重谱唯一决定整条容量曲线。
+
+\textup{(ii)}\(\Leftrightarrow\)\textup{(iii)}：Bayes--InfoNCE 的 Hausdorff--Prony 编译链已经给出：完整数值族 \(\{L_{K,m}^{\star}\}_{K=2}^{N}\) 可唯一恢复有序纤维权重谱，反之有序谱当然唯一决定全部 Bayes 最优值。并且在开单纯形 \(U_N\) 上，少于 \(N-1\) 个此类标量时不存在连续单射恢复，这正是 fixed-resolution Bayes--InfoNCE 最小连续测量数的结论。故三类数据完全等价。证毕。
+\end{proof}
+
+\begin{corollary}[window-\texorpdfstring{$6$}{6} 的三重复杂度严格分离]\label{cor:conclusion-window6-inversion-linear-statistical-triple-separation}
+对二进制区间折叠 \(\Fold_6^{\mathrm{bin}}\)，同时成立：
+\[
+B_{\mathrm{full}}^{\mathrm{bin}}(6)=2,
+\]
+\[
+\text{不存在任何线性映射 }L:\mathbf F_2^6\to \mathbf F_2^k
+\text{ 使其陪集划分等于 }\Fold_6^{\mathrm{bin}}\text{ 的纤维划分},
+\]
+\[
+\text{在 }U_{21}\subset \mathbf R^{21}\text{ 上，少于 }20=|X_6|-1
+\text{ 个 Bayes 最优 InfoNCE 标量不可能连续单射恢复有序纤维谱}.
+\]
+因此，“两比特即可全局反演”既不意味着纤维来自线性 syndrome，也不意味着纤维定律可由少数标量连续审计。window-\(6\) 上至少并存三种互不塌缩的复杂度：实例反演复杂度、线性表示复杂度与统计审计复杂度。
+\end{corollary}
+\begin{proof}
+window-\(6\) 的二进直方图为
+\[
+2:8,\qquad 3:4,\qquad 4:9,
+\]
+故最大纤维大小为 \(4\)，从而由全反演阈值闭式得到
+\[
+B_{\mathrm{full}}^{\mathrm{bin}}(6)=\left\lceil\log_2 4\right\rceil=2.
+\]
+
+另一方面，window-\(6\) 的纤维大小同时取 \(2,3,4\) 三值，故不可能来自任何有限阿贝尔群上的线性陪集划分；否则所有纤维大小都必须相等。这正是 window-\(6\) 的线性 factorization 障碍。
+
+最后，由定理 \ref{thm:conclusion-capacity-ordered-spectrum-infonce-equivalence}，在 \(N=|X_6|=21\) 时，少于 \(N-1=20\) 个 Bayes 最优 InfoNCE 标量不可能在开单纯形 \(U_{21}\) 上给出连续单射恢复。三条结论合并即得所述三重分离。证毕。
+\end{proof}
+
+\paragraph{统一读法}
+这条链把 capacity、majorization 与 InfoNCE 的关系压到了一个更高的完备层：连续容量曲线不只是若干正矩的代换写法，而本身就构成有序纤维谱的一个 Schur--Hardy 完全坐标；而完整 Bayes--InfoNCE 塔又与这条容量曲线严格等价。于是，在固定有限窗口上，“可逆性最好/最坏”的模型不再依赖经验判断，而由主序精确给出；在最小窗口 \(m=6\) 上，反演预算、线性实现与统计审计更被拉成三条互不塌缩的资源轴。就本文整体语言而言，这说明预言机容量并不是附属于纤维谱的次级统计量，而是连接几何多重度、信息论预算与 Bayes 审计塔的中心对象。
+
+\endinput

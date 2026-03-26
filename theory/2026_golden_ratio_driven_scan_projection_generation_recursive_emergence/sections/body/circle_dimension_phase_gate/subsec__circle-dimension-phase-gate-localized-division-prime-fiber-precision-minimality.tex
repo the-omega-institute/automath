@@ -1,0 +1,528 @@
+\subsection{局部化除法的素数纤维、实现层生成极小性与精度势编码下界}\label{subsec:cdim-localized-division-prime-fiber-precision-minimality}
+本小节在定义 \ref{def:circle-dimension}--\ref{def:half-circle-dimension} 与 \S\ref{subsec:cdim-profinite-fiber-localization-rational-winding} 的口径下，给出一组可直接复用的闭式结论：局部化除法的对偶结构、同构刚性、素数纤维实现层生成极小性、相位压缩的编码下界、零圆维对象的有限精度实现代价，以及向更广算术对象类的全局化猜想。
+
+\begin{theorem}[局部化除法强制生成素数纤维且不增圆维]\label{thm:cdim-localized-division-prime-fiber-no-growth}
+设 \(r\in\NN\)、\(N\in\NN_{\ge 1}\)，并记
+\[
+A_{N,r}:=\ZZ[1/N]^r.
+\]
+定义 \(r\)-维 \(N\)-solenoid
+\[
+\Sigma_{N,r}
+:=
+\varprojlim\!\Bigl(
+\TT^r\xleftarrow{\times N}\TT^r\xleftarrow{\times N}\TT^r\xleftarrow{\times N}\cdots
+\Bigr),
+\qquad
+\TT^r:=(\RR/\ZZ)^r.
+\]
+则有：
+\begin{enumerate}
+  \item \(\widehat{A_{N,r}}\cong \Sigma_{N,r}\)；
+  \item 存在自然短正合列
+  \[
+  0\longrightarrow \ZZ_N^{\,r}
+  \longrightarrow \Sigma_{N,r}
+  \xrightarrow{\ \pi_0\ }
+  \TT^r
+  \longrightarrow 0,
+  \]
+  其中 \(\pi_0\) 为第 \(0\) 坐标投影，\(\ZZ_N:=\varprojlim_k \ZZ/N^k\ZZ\)；
+  \item \(\ZZ_N\cong\prod_{p\mid N}\ZZ_p\)，故
+  \[
+  \ker(\pi_0)\cong \prod_{p\mid N}\ZZ_p^{\,r}.
+  \]
+\end{enumerate}
+从而
+\[
+\cdim^\ast(A_{N,r})=r,\qquad \cdim^\ast(\ker\pi_0)=0.
+\]
+即局部化所新增者是零圆维的 profinite 素数纤维，而非新的连续圆因子。
+\end{theorem}
+
+\begin{proof}
+\(A_{N,r}\) 可写为直极限
+\[
+A_{N,r}\cong \varinjlim\bigl(\ZZ^r\xrightarrow{\times N}\ZZ^r\xrightarrow{\times N}\cdots\bigr).
+\]
+Pontryagin 对偶把直极限送到逆极限，且 \(\widehat{\ZZ^r}\cong \TT^r\)，故
+\[
+\widehat{A_{N,r}}
+\cong
+\varprojlim\bigl(\TT^r\xleftarrow{\times N}\TT^r\xleftarrow{\times N}\cdots\bigr)
+=\Sigma_{N,r}.
+\]
+得 (1)。
+
+对 (2)，\(\pi_0\) 显然连续满射。
+若 \((t_k)_{k\ge 0}\in\Sigma_{N,r}\) 且 \(t_0=0\)，则每个 \(t_k\) 是 \(N^k\)-torsion 点，可写作
+\(
+t_k=a_k/N^k\ (\mathrm{mod}\ \ZZ^r)
+\)；
+兼容条件 \(t_{k-1}=Nt_k\) 等价于
+\(
+a_{k+1}\equiv a_k\ (\mathrm{mod}\ N^k)
+\)。
+故 \(\ker(\pi_0)\cong\varprojlim_k(\ZZ/N^k\ZZ)^r=\ZZ_N^r\)。
+
+对 (3)，由 CRT：
+\[
+\ZZ/N^k\ZZ
+\cong
+\prod_{p\mid N}\ZZ/p^{k\nu_p(N)}\ZZ.
+\]
+取逆极限得 \(\ZZ_N\cong\prod_{p\mid N}\ZZ_p\)。
+
+最后，\((\Sigma_{N,r})^0\) 的商 \(\Sigma_{N,r}/\ker(\pi_0)\cong\TT^r\)，且核全不连通，故 \((\Sigma_{N,r})^0\cong \TT^r\)，于是 \(\cdim^\ast(A_{N,r})=r\) 且纤维圆维为 \(0\)。证毕。
+\end{proof}
+
+\begin{proposition}[\(\Sigma_{N,r}\) 的同构刚性：圆维与素数支撑完全决定]\label{prop:cdim-solenoid-rigidity-rank-prime-support}
+若存在紧交换群同构
+\[
+\Sigma_{N,r}\cong \Sigma_{M,s},
+\]
+则必有 \(r=s\)，且
+\[
+\{p:\ p\mid N\}=\{p:\ p\mid M\}.
+\]
+\end{proposition}
+
+\begin{proof}
+对偶化得
+\[
+\ZZ[1/N]^r\cong \ZZ[1/M]^s.
+\]
+张量 \(\QQ\) 后取维数，得 \(r=s\)。
+
+对素数 \(p\)，性质“乘 \(p\) 映射满射”在群同构下不变。
+而在 \(\ZZ[1/N]\) 上该性质当且仅当 \(p\mid N\)：
+若 \(p\mid N\)，则 \(1/p\in\ZZ[1/N]\)，满射成立；
+若 \(p\nmid N\)，则方程 \(px=1\) 无解。
+故两边素数支撑一致。证毕。
+\end{proof}
+
+\input{defprop__cdim-multiprime-divisible-spectrum}
+\input{thm__cdim-mobius-inversion-localization-multiset-classification}
+\input{prop__cdim-higher-spectrum-not-determined-by-marginals}
+
+\paragraph{有限素支撑局部化的偏序刚性}
+在有限素数集情形，局部化群不仅由圆维与素数支撑在同构意义下决定，而且其可嵌入关系本身就恢复素数支撑偏序。
+这一步把前述“圆因子不变、素数账本变化”的双层结构提升为严格的范畴论刚性。
+
+\begin{theorem}[有限素支撑局部化的偏序嵌入判别]\label{thm:cdim-localized-gs-embedding-order}
+设 \(S,T\) 为有限素数集，并记
+\[
+G_S:=\ZZ[S^{-1}],\qquad G_T:=\ZZ[T^{-1}]
+\]
+为加法群。
+则下列命题等价：
+\begin{enumerate}
+  \item 存在群单射 \(G_S\hookrightarrow G_T\)；
+  \item \(S\subseteq T\)。
+\end{enumerate}
+等价地，若记
+\[
+\Sigma_S:=\widehat{G_S},\qquad \Sigma_T:=\widehat{G_T},
+\]
+并令 \(\pi_S:\Sigma_S\twoheadrightarrow\TT\)、\(\pi_T:\Sigma_T\twoheadrightarrow\TT\) 为由 \(\ZZ\hookrightarrow G_S,G_T\) 对偶得到的典范圆因子，则下列命题等价：
+\begin{enumerate}
+  \item 存在连续满射 \(f:\Sigma_T\twoheadrightarrow \Sigma_S\) 使 \(\pi_S\circ f=\pi_T\)；
+  \item \(S\subseteq T\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+若 \(S\subseteq T\)，则 \(G_S\subseteq G_T\subseteq\QQ\) 为自然包含，从而存在群单射 \(G_S\hookrightarrow G_T\)。
+
+反之，设 \(\phi:G_S\to G_T\) 为单射。
+由于 \(G_S\subseteq\QQ\) 为秩 \(1\) 无挠群，\(\phi\) 由 \(\phi(1)\) 唯一决定，且 \(\phi(1)\neq 0\)。
+对任意 \(p\in S\) 与 \(n\ge 1\)，由 \(p^n\cdot p^{-n}=1\) 得
+\[
+p^n\phi(p^{-n})=\phi(1),
+\qquad\text{故}\qquad
+\phi(p^{-n})=\frac{\phi(1)}{p^n}.
+\]
+将 \(\phi(1)\) 写成
+\[
+\phi(1)=a\prod_{q\in T}q^{-m_q}\in G_T,
+\qquad a\in\ZZ.
+\]
+若存在 \(p\in S\setminus T\)，则对充分大的 \(n\)（例如 \(n>v_p(a)\)）,
+\[
+\frac{\phi(1)}{p^n}=a\,p^{-n}\prod_{q\in T}q^{-m_q}
+\]
+在既约分母中仍含有素因子 \(p\)，因而不属于 \(G_T\)，矛盾。
+故必有 \(S\subseteq T\)。
+
+对偶命题由 Pontryagin 对偶的反变等价立即得到：离散群单射对偶为紧群满射，而圆因子相容性正对应于保留典范嵌入 \(\ZZ\hookrightarrow G_S\) 所诱导的投影。
+\end{proof}
+
+\begin{corollary}[有限素支撑局部化的对偶完全分类]\label{cor:cdim-localized-gs-dual-complete-classification}
+对任意有限素数集 \(S,T\)，有
+\[
+\Sigma_S\cong \Sigma_T
+\qquad\Longleftrightarrow\qquad
+S=T.
+\]
+并且对每个有限 \(S\)，皆有
+\[
+\cdim^\ast(G_S)=1,
+\qquad
+\ker(\pi_S)\cong \prod_{p\in S}\ZZ_p.
+\]
+因此，连续相位主分量在全部 \(G_S\) 上保持不变，而对象的完整分类由素数账本核的素数支撑承担。
+\end{corollary}
+\begin{proof}
+若 \(\Sigma_S\cong \Sigma_T\)，则由对偶化得到 \(G_S\cong G_T\)。
+于是定理 \ref{thm:cdim-localized-gs-embedding-order} 同时应用于两个方向，推出 \(S\subseteq T\) 与 \(T\subseteq S\)，故 \(S=T\)。
+反向显然。
+
+再取 \(N:=\prod_{p\in S}p\)，则 \(G_S=\ZZ[1/N]\)。
+由定理 \ref{thm:cdim-localized-division-prime-fiber-no-growth}（取 \(r=1\)）得
+\[
+\cdim^\ast(G_S)=1,
+\qquad
+\ker(\pi_S)\cong \prod_{p\mid N}\ZZ_p=\prod_{p\in S}\ZZ_p.
+\]
+于是圆因子数固定为 \(1\)，而素数账本核精确记录 \(S\)。
+\end{proof}
+
+\begin{theorem}[素数纤维实现层极限压缩：procyclic 与最小生成元数]\label{thm:cdim-zn-procyclic-and-min-generators}
+设 \(N\ge 2\)。
+则：
+\begin{enumerate}
+  \item \(\ZZ_N\) 为 procyclic，且 \(g=(1\bmod N^k)_{k\ge 1}\) 的闭包生成全体 \(\ZZ_N\)；
+  \item \(\ZZ_N^r\) 的最小拓扑生成元数恰为 \(r\)，即
+  \[
+  \pcdim(\ZZ_N^r)=r.
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+在每个有限商 \(\ZZ/N^k\ZZ\) 中，\(1\bmod N^k\) 生成全群，故 \(\langle g\rangle\) 在每级投影都满，进而在逆极限拓扑下稠密，得 (1)。
+
+对 (2)，上界由标准基 \(e_1,\dots,e_r\) 给出。
+下界由连续满射
+\[
+\ZZ_N^r\twoheadrightarrow (\ZZ/N\ZZ)^r
+\]
+给出；右端有限交换群的最小生成元数为 \(r\)，故左端任意拓扑生成集基数至少 \(r\)。
+合并得等号。证毕。
+\end{proof}
+
+\begin{theorem}[相位编码的 Diophantine 分辨下界与外置寄存器阈值]\label{thm:cdim-phase-diophantine-resolution-lower-bound}
+取 \(\alpha\in\RR\setminus\QQ\)，定义相位编码
+\[
+\pi_\alpha:\ZZ\to \TT,\qquad \pi_\alpha(n):=e^{2\pi i\alpha n}.
+\]
+记到最近整数距离
+\[
+\|x\|_{\RR/\ZZ}:=\min_{k\in\ZZ}|x-k|,
+\qquad
+\delta_N(\alpha):=\min_{1\le |k|\le N}\|k\alpha\|_{\RR/\ZZ}.
+\]
+设 \((p_j/q_j)_{j\ge 0}\) 为 \(\alpha\) 的连分数收敛分数（\(q_j\) 为收敛分母）。
+若 \(q_j\le N<q_{j+1}\)，则有夹逼（参见 \cite{Cassels1957}）
+\[
+\frac{1}{q_{j+1}+q_j}\ <\ \delta_N(\alpha)\ \le\ \frac{1}{q_{j+1}}.
+\]
+从而对任意误差容忍 \(\varepsilon>0\)，若要求存在仅依赖观测相位 \(\pi_\alpha(n)\) 的解码器在所有 \(|n|\le N\) 上唯一恢复 \(n\)，则必须满足
+\[
+\varepsilon\ <\ \frac12\,\delta_{2N}(\alpha)
+\ \le\ \frac{1}{2q_{j+1}}
+\ \le\ \frac{1}{2N}.
+\]
+反之，当 \(N\) 超过 \(1/\varepsilon\) 的尺度时，必存在不同的 \(|n|,|m|\le N\) 使得 \(\pi_\alpha(n)\) 与 \(\pi_\alpha(m)\) 在 \(\varepsilon\) 误差内不可消歧。
+在保持审计可逆性的实现层口径下，任何此类碰撞都必须由外置寄存器区分，而其最紧致的尺度可取为模 \(q_{j+1}\) 的离散标签。
+\end{theorem}
+\begin{proof}
+对 \(n\neq m\)，有
+\[
+|\pi_\alpha(n)-\pi_\alpha(m)|
+=\left|e^{2\pi i\alpha n}-e^{2\pi i\alpha m}\right|
+=2\left|\sin\!\bigl(\pi\alpha(n-m)\bigr)\right|
+=2\left|\sin\!\bigl(\pi\| (n-m)\alpha\|_{\RR/\ZZ}\bigr)\right|.
+\]
+令 \(k=n-m\)，则 \(|k|\le 2N\)。
+若存在 \(|k|\le 2N\) 使 \(\|(k\alpha)\|_{\RR/\ZZ}\le 2\varepsilon\)，则上式给出两点相位在 \(O(\varepsilon)\) 量级内不可消歧；
+因此“对所有 \(|n|\le N\) 唯一恢复”强制
+\(
+2\varepsilon<\delta_{2N}(\alpha)
+\)。
+这给出所述必要条件。
+\par
+连分数理论给出：当 \(q_j\le N<q_{j+1}\) 时，\(\|q_j\alpha\|_{\RR/\ZZ}\) 实现了 \(\delta_N(\alpha)\)，并且满足
+\[
+\frac{1}{q_{j+1}+q_j}<\|q_j\alpha\|_{\RR/\ZZ}\le \frac{1}{q_{j+1}}.
+\]
+代入即得夹逼与由此推出的 \(\varepsilon\) 下界链。
+\par
+当 \(N\gg 1/\varepsilon\) 时，上述必要条件失败，故存在碰撞对。
+为保持可逆性，必须引入外置离散标签把碰撞类分开；而收敛分母 \(q_{j+1}\) 给出区分这些近邻的自然标度（其在 \(\ZZ\) 上诱导模 \(q_{j+1}\) 的粗粒化坐标），从而得到所述寄存器阈值表述。证毕。
+\end{proof}
+
+\begin{theorem}[单位圆坐标门的 Möbius 刚性：由反演内禀化唯一刻画 Cayley/Arctan]\label{thm:cdim-mobius-cayley-arctan-rigidity}
+记 \(\widehat{\RR}:=\RR\cup\{\infty\}\) 为实射影直线。
+设 Möbius 变换
+\[
+\iota(x)=\frac{ax+b}{cx+d},
+\qquad
+ad-bc\neq 0,
+\]
+满足：
+\begin{enumerate}
+  \item \(\iota(\widehat{\RR})\subseteq \TT\)（将实边界送入单位圆）；
+  \item 反演内禀化：对一切 \(x\in\widehat{\RR}\setminus\{0,\infty\}\) 有
+  \[
+  \iota(-1/x)=-\iota(x).
+  \]
+\end{enumerate}
+则存在 \(\theta\in\RR\) 使得
+\[
+\iota(x)=e^{i\theta}\,\frac{x-i}{x+i}.
+\]
+因此若以相位坐标 \(u(x):=\frac{1}{2\pi}\arg(\iota(x))\) 作为单位圆门的实轴参数，则
+\[
+u(x)=\frac{1}{\pi}\arctan(x)+\textup{常数},
+\]
+从而与本节采用的 \(u(x)=\frac1\pi\arctan x\) 规范一致，且在上述两条结构公理下唯一到全局旋转。
+\end{theorem}
+
+\begin{proof}
+任一把 \(\widehat{\RR}\) 双射到 \(\TT\) 的 Möbius 变换可写为
+\[
+\iota(x)=e^{i\theta}\,\frac{x-z_0}{x-\overline{z_0}},
+\qquad z_0\in\mathbb H,
+\]
+其中 \(\mathbb H\) 为上半平面。
+将反演条件代入并对任意实 \(x\neq 0\) 化简：
+\[
+\frac{-1/x-z_0}{-1/x-\overline{z_0}}
+=-\frac{x-z_0}{x-\overline{z_0}}
+\quad\Longleftrightarrow\quad
+(1+x z_0)(x-\overline{z_0})=-(1+x\overline{z_0})(x-z_0).
+\]
+写 \(z_0=a+ib\)（\(b>0\)）并展开，上式等价于关于 \(x\) 的恒等式
+\[
+a\,x^2+x\bigl(1-(a^2+b^2)\bigr)-a=0\qquad(\forall x\in\RR).
+\]
+故系数全为零，得到 \(a=0\) 且 \(a^2+b^2=1\)，从而 \(z_0=i\)。
+代回即得 \(\iota(x)=e^{i\theta}\frac{x-i}{x+i}\)。
+最后由 \(\arg\frac{x-i}{x+i}=2\arctan(x)\)（取连续支）得到相位坐标的 \(\arctan\) 形式。证毕。
+\end{proof}
+
+\begin{theorem}[精度势的编码极小性：相位前缀重建的 \(\delta\)-一致码长下界]\label{thm:cdim-precision-potential-delta-coding-optimality}
+令
+\[
+u(x):=\upsilon(x)=\frac1\pi\arctan x,\qquad
+\mathcal P(x):=\log\pi+\log(1+x^2).
+\]
+固定 \(\delta\in(0,\tfrac12)\)。
+在相位前缀协议中，设编码/解码对 \((E,D)\) 满足：
+\begin{enumerate}
+  \item \(E:\RR\to\{0,1\}^\ast\) 的像为前缀码；
+  \item 每个码字 \(w\) 对应 dyadic 柱区间 \(I_w\subset(-\tfrac12,\tfrac12)\)，\(|I_w|=2^{-|w|}\)；
+  \item 对所有 \(x\in\RR\)，若 \(w=E(x)\) 则 \(u(x)\in I_w\) 且 \(|D(w)-x|\le\delta\)。
+\end{enumerate}
+记 \(\ell(x):=|E(x)|\)。
+则存在常数 \(C_1,C_2\)（仅依赖协议规范）使：
+\[
+\ell(x)\ \ge\
+\frac{1}{\log 2}\!\left(\mathcal P(x)+\log\frac1\delta\right)-C_1,
+\]
+且存在一组显式前缀构造满足
+\[
+\ell(x)\ \le\
+\frac{1}{\log 2}\!\left(\mathcal P(x)+\log\frac1\delta\right)+C_2.
+\]
+\end{theorem}
+
+\begin{proof}
+由 \(u'(x)=1/(\pi(1+x^2))\)。
+对任意码字 \(w\) 与其重建中心 \(x_w:=D(w)\)，\(\delta\)-一致性要求与 \(w\) 关联的 \(u\)-区间宽度至多与
+\(
+u(x_w+\delta)-u(x_w-\delta)
+\)
+同阶，故
+\[
+2^{-|w|}
+\lesssim
+\frac{\delta}{\pi(1+x_w^2)}.
+\]
+又 \(|x-x_w|\le\delta\) 且 \(\delta<1/2\)，得到
+\[
+1+x_w^2\asymp 1+x^2
+\]
+（常数仅与 \(\delta\) 上界有关）。
+于是
+\[
+2^{-\ell(x)}
+\lesssim
+\frac{\delta}{\pi(1+x^2)}.
+\]
+取 \(-\log_2\) 即得下界。
+
+上界由构造给出：对每个 \(x\) 取
+\[
+m(x):=\left\lceil \log_2\!\frac{c\,\pi(1+x^2)}{\delta}\right\rceil
+\]
+（\(c\) 为绝对常数），并取包含 \(u(x)\) 的 dyadic 区间 \(I\)（长度 \(2^{-m(x)}\)）对应码字。
+由 \((u^{-1})'(u)=\pi(1+(u^{-1}(u))^2)\) 与均值估计可使重建误差 \(\le\delta\)。
+对 dyadic 区间族应用标准前缀赋码（Kraft--Fano）得到长度 \(\ell(x)=m(x)+O(1)\)，即上界。证毕。
+\end{proof}
+
+\begin{theorem}[零圆维对象的相位实现代价：有限精度下的必需预算]\label{thm:cdim-zero-dimension-finite-phase-implementation-budget}
+设 \(F\) 为有限交换群（或有限集合），\(|F|=M\)，并记 \(\cdim(F)=0\)。
+考虑 \(k\) 条相位通道 \(\TT^k\)，每通道做 \(Q\)-等分量化，故可见输出数至多 \(Q^k\)。
+若存在编码 \(e:F\hookrightarrow \TT^k\) 与解码器使量化后仍零误差区分全部元素，则必有
+\[
+Q^k\ge M,
+\qquad
+k\log Q\ge \log M.
+\]
+因此 \(\cdim(F)=0\) 不排除实现层 \(\log|F|\) 级精度预算；该预算应归入寄存器/账本复杂度，而非连续圆维增量。
+\end{theorem}
+
+\begin{proof}
+量化后的可见状态数不超过 \(Q^k\)。
+零误差可逆要求不同输入对应不同量化输出，故 \(M\le Q^k\)。
+取对数即得。证毕。
+\end{proof}
+
+\begin{theorem}[自由秩的 Gödel 素数编码位长下界]\label{thm:cdim-godel-prime-bitlength-lowerbound}
+令 \(r\ge 1\)，并设 \(\Gamma:\ZZ^{r}\hookrightarrow \QQ_{>0}\) 为单射群同态。
+将任意 \(q\in\QQ_{>0}\) 写为既约分数 \(q=a/b\)（\(a,b\in\NN_{>0}\)、\(\gcd(a,b)=1\)），定义其二进位长为
+\[
+\mathcal L_2(q):=\log_2\max\{a,b\}.
+\]
+则存在绝对常数 \(c>0\)，使得对任意整数 \(M\ge 1\) 成立
+\[
+\max_{\|x\|_\infty\le M}\ \mathcal L_2\bigl(\Gamma(x)\bigr)\ \ge\ c\,M\,r\,\log(r+1).
+\]
+并且该数量级可达：取前 \(r\) 个素数 \(p_1<\cdots<p_r\) 并令
+\[
+\Gamma_0(x):=\prod_{i=1}^r p_i^{x_i},
+\]
+则
+\[
+\max_{\|x\|_\infty\le M}\ \mathcal L_2\bigl(\Gamma_0(x)\bigr)
+=
+\Theta\!\bigl(M\,r\,\log(r+1)\bigr).
+\]
+\end{theorem}
+\begin{proof}
+由唯一分解定理，\(\QQ_{>0}\) 的乘法群同构于自由阿贝尔群
+\[
+\QQ_{>0}\ \cong\ \bigoplus_{p\ \mathrm{prime}}\ZZ,\qquad
+q\longmapsto (v_p(q))_{p},
+\]
+其中 \(v_p\) 为 \(p\)-进赋值且每个 \(q\) 仅有有限多坐标非零。
+令 \(V:=v\circ\Gamma:\ZZ^r\to\ZZ^{(\mathbb P)}\)。
+由于 \(\Gamma\) 单射，\(V\) 亦单射；并且 \(V(\ZZ^r)\) 落在某个有限坐标子格 \(\ZZ^{S}\) 中（\(S\subset\mathbb P\) 有限），于是可取 \(r\) 个素数 \(p_1,\dots,p_r\in S\) 使得限制到这些坐标的矩阵
+\[
+A\in\ZZ^{r\times r},\qquad A_{ij}:=v_{p_i}(\Gamma(e_j)),
+\]
+满足 \(\det A\neq 0\)，从而 \(|\det A|\ge 1\)。
+\par
+对 \(x\in\ZZ^r\) 记 \(y:=Ax\in\ZZ^r\)。
+由素因子支撑分离，存在某个与 \(p_1,\dots,p_r\) 互素的 \(u(x)\in\QQ_{>0}\) 使
+\[
+\Gamma(x)=\left(\prod_{i=1}^r p_i^{y_i}\right)\cdot u(x),
+\]
+且该分解在既约分数层面不发生约简，故
+\[
+\mathcal L_2\bigl(\Gamma(x)\bigr)
+\ge
+\mathcal L_2\!\left(\prod_{i=1}^r p_i^{y_i}\right).
+\]
+写 \(q(y):=\prod_{i=1}^r p_i^{y_i}=a(y)/b(y)\) 为既约分数，其中
+\[
+\log_2 a(y)=\sum_{i=1}^r \max(y_i,0)\log_2 p_i,\qquad
+\log_2 b(y)=\sum_{i=1}^r \max(-y_i,0)\log_2 p_i.
+\]
+于是
+\[
+\mathcal L_2\bigl(q(y)\bigr)
+=\max\{\log_2 a(y),\log_2 b(y)\}
+\ge
+\frac12\sum_{i=1}^r |y_i|\,\log_2 p_i.
+\]
+\par
+令 \(D:=\operatorname{diag}(\log_2 p_1,\dots,\log_2 p_r)\)，并记立方体 \(C_M:=[-M,M]^r\subset\RR^r\)。
+若对所有整数点 \(x\in\ZZ^r\cap C_M\) 都有 \(\mathcal L_2(\Gamma(x))\le L\)，则由上式得
+\[
+\|DAx\|_1=\sum_{i=1}^r |(DAx)_i|\le 2L
+\qquad(\forall x\in \ZZ^r\cap C_M),
+\]
+从而 \(DA(C_M)\subseteq B_1(2L):=\{z\in\RR^r:\ \|z\|_1\le 2L\}\)。
+体积比较给出
+\[
+|\det(DA)|\,(2M)^r
+=
+\operatorname{vol}\bigl(DA(C_M)\bigr)
+\le
+\operatorname{vol}\bigl(B_1(2L)\bigr)
+=
+\frac{(4L)^r}{r!}.
+\]
+注意 \(|\det(DA)|=|\det A|\prod_{i=1}^r\log_2 p_i\ge \prod_{i=1}^r\log_2 p_i\)，故
+\[
+(2M)^r\prod_{i=1}^r\log_2 p_i\ \le\ \frac{(4L)^r}{r!},
+\qquad
+L\ \ge\ \frac{M}{2}\,(r!)^{1/r}\left(\prod_{i=1}^r\log_2 p_i\right)^{1/r}.
+\]
+由 Stirling 估计 \((r!)^{1/r}\ge r/e\)，并且对任意 \(r\) 个互异素数有
+将 \(\{p_i\}\) 依大小重排为 \(p_{(1)}<\cdots<p_{(r)}\)。由互异性有 \(p_{(j)}\ge j+1\)，从而 \(\log p_{(j)}\ge \log(j+1)\)。
+当 \(r\ge 4\) 时，对所有 \(j\in[\lceil\sqrt r\rceil,r]\) 有 \(\log(j+1)\ge \tfrac12\log(r+1)\)，故
+\[
+\left(\prod_{i=1}^r\log p_i\right)^{1/r}
+\ge
+\left(\prod_{j=\lceil\sqrt r\rceil}^{r}\log p_{(j)}\right)^{1/r}
+\ge
+\left(\tfrac12\log(r+1)\right)^{1-\frac{1}{\sqrt r}}
+\ge
+\tfrac14\log(r+1).
+\]
+将有限个小 \(r\) 的情形吸收到常数中，存在绝对常数 \(c_0>0\) 使
+\(
+(\prod_{i=1}^r\log p_i)^{1/r}\ge c_0\log(r+1)
+\)
+对所有 \(r\ge 1\) 成立。
+结合 \(\log_2 p=(\log p)/\log 2\) 与上式即得存在绝对常数 \(c>0\) 使 \(L\ge cMr\log(r+1)\)。
+这等价于 \(\max_{\|x\|_\infty\le M}\mathcal L_2(\Gamma(x))\ge cMr\log(r+1)\)。
+\par
+最后，对可达性构造 \(\Gamma_0(x)=\prod_{i=1}^r p_i^{x_i}\)，取 \(x=(M,\dots,M)\) 得
+\[
+\mathcal L_2(\Gamma_0(x))
+=
+\log_2\prod_{i=1}^r p_i^{M}
+=
+M\sum_{i=1}^r \log_2 p_i.
+\]
+由 Chebyshev 函数 \(\vartheta\) 的标准估计（等价于素数定理）可知 \(\sum_{i=1}^r \log p_i=\Theta(r\log r)\)，从而上式为 \(\Theta(Mr\log(r+1))\)；
+而 \(\|x\|_\infty\le M\) 下的最大值同阶，得到所述可达性。证毕。
+\end{proof}
+
+\begin{remark}[圆维的位长倍率含义]\label{rem:cdim-godel-prime-bitlength-multiplier}
+对有限生成阿贝尔群 \(A\cong \ZZ^r\oplus T\)，由定义 \ref{def:circle-dimension} 与命题 \ref{prop:circle-dimension-laws} 有 \(\cdim(A)=r\)。
+定理 \ref{thm:cdim-godel-prime-bitlength-lowerbound} 表明：即便允许任意精巧的素数混编，单射 Gödel 外置在最大位长上仍必须承受 \(\cdim(A)\log(\cdim(A)+1)\) 的不可规避放大。
+\end{remark}
+
+\begin{conjecture}[Adelic 型圆维分解原则]\label{conj:cdim-adelic-circle-dimension-decomposition}
+对任意实现层可审计的离散加法对象 \(A\)（例如由有限生成 \(\ZZ\)-模经有限次局部化/完成化生成的对象类），其对偶紧群 \(\widehat A\) 存在自然短正合列
+\[
+0\longrightarrow K_A\longrightarrow \widehat A\longrightarrow \TT^{\cdim^\ast(A)}\longrightarrow 0,
+\]
+其中 \(K_A\) 全不连通，且其 Sylow-\(p\) 分解与 \(A\) 的 \(p\)-方向局部化/完成化支撑一一对应。
+在该口径下，素数谱是“圆维压缩保持信息守恒”的不可消去纤维账本，并与 prime-register/CRT 外置机制同型。
+\end{conjecture}
+
+\begin{remark}[可检验推进方向]\label{rem:cdim-adelic-decomposition-auditable-interface}
+在有限次局部化的有限秩无挠交换群子类中，可先把 \(K_A\) 的可计算不变量显式化为：
+\[
+\operatorname{Supp}(K_A),\qquad \pcdim(K_A),\qquad \text{以及与分位 CRT 预算的定量映射},
+\]
+从而形成可复核的输出接口并与现有外置寄存器审计链直接拼接。
+\end{remark}
+
+\endinput

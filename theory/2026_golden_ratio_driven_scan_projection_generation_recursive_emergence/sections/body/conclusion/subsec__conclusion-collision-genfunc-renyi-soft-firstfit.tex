@@ -1,0 +1,219 @@
+\subsection{归一化碰撞矩生成函数、Rényi 熵密度与退火 soft first-fit：停机的概率与解析二值化}\label{subsec:conclusion-collision-genfunc-renyi-soft-firstfit}
+本小节将两类互补的“停机二值读出”并置：
+其一是附录统一电路族在碰撞矩层面的解析半径与输出 Rényi 熵密度塌缩；
+其二是 soft first-fit 在可计算退火预算下对硬 first-fit 的高可靠逼近，从而在接受概率上产生可放大的间隙归约。
+最后提出一个关于调度最终周期性与分布语义等价可判定性的锋面猜想。
+
+\begin{theorem}[归一化碰撞矩生成函数的收敛半径刻画停机]\label{thm:conclusion-collision-genfunc-radius-halting}
+固定整数 \(q\ge 2\)。
+对布尔电路 \(C:\{0,1\}^m\to\{0,1\}^m\) 定义 \(q\)-碰撞矩
+\[
+S_q(C):=\sum_{y\in\{0,1\}^m}\card{C^{-1}(y)}^q.
+\]
+沿用定理 \ref{thm:fold-computability-uniform-circuit-first-collision-time} 给出的统一电路生成器 \(G_{M,x}\) 及其输出
+\(
+C_t:\{0,1\}^{m(t)}\to\{0,1\}^{m(t)}
+\)
+（其中 \(m(t)=t+1\)）。
+定义归一化碰撞矩
+\[
+a_q(t):=\frac{S_q(C_t)}{2^{m(t)}},
+\]
+以及幂级数
+\[
+F_q(z):=\sum_{t\ge 0}a_q(t)\,z^{m(t)}
+=\sum_{t\ge 0}\frac{S_q(C_t)}{2^{t+1}}\,z^{t+1}.
+\]
+记其收敛半径为 \(R_q(M,x)\)。
+则
+\[
+R_q(M,x)=
+\begin{cases}
+1,&M(x)\ \text{不停机},\\[2pt]
+2^{-(q-1)},&M(x)\ \text{停机}.
+\end{cases}
+\]
+特别地，\(\{(M,x):R_q(M,x)<1\}\) 与停机问题 many-one 等价，因而为 \(\Sigma^0_1\)-完备。
+\end{theorem}
+\begin{proof}
+若 \(M(x)\) 不停机，则定理 \ref{thm:fold-computability-uniform-circuit-first-collision-time} 给出对所有 \(t\) 有 \(C_t=\mathrm{id}\)。
+于是 \(\card{C_t^{-1}(y)}\equiv 1\)，从而 \(S_q(C_t)=2^{m(t)}\)、\(a_q(t)=1\)，并得
+\[
+F_q(z)=\sum_{t\ge 0}z^{t+1}=\frac{z}{1-z},
+\]
+故 \(R_q(M,x)=1\)。
+
+若 \(M(x)\) 在恰好 \(T\) 步停机，则对所有 \(t\ge T\) 有 \(C_t(w)\equiv 0^{m(t)}\)。
+于是 \(C_t\) 仅在一个输出点处有大小 \(2^{m(t)}\) 的纤维，故
+\[
+S_q(C_t)=\bigl(2^{m(t)}\bigr)^q=2^{qm(t)},\qquad a_q(t)=2^{(q-1)m(t)}.
+\]
+因此 \(F_q\) 的尾部为几何级数
+\[
+\sum_{t\ge T}2^{(q-1)(t+1)}z^{t+1}
+=\sum_{t\ge T}\bigl(2^{q-1}z\bigr)^{t+1},
+\]
+其收敛当且仅当 \(|2^{q-1}z|<1\)，故 \(R_q(M,x)=2^{-(q-1)}\)。
+
+当 \(q\ge 2\) 时 \(2^{-(q-1)}<1\)，从而 \(R_q(M,x)<1\iff M(x)\) 停机。
+由定理 \ref{thm:fold-computability-uniform-circuit-first-collision-time} 的有效构造，\((M,x)\mapsto G_{M,x}\) 为可计算变换，故上述谓词与停机问题 many-one 等价，\(\Sigma^0_1\)-完备性成立。证毕。
+\end{proof}
+
+\begin{corollary}[输出 Rényi 熵密度的塌缩判定等价于停机]\label{cor:conclusion-circuit-output-renyi-density-halting}
+沿用定理 \ref{thm:conclusion-collision-genfunc-radius-halting} 的电路族 \(C_t\)。
+在均匀输入下定义输出分布
+\[
+\mu_{C_t}(y):=\frac{\card{C_t^{-1}(y)}}{2^{m(t)}},\qquad y\in\{0,1\}^{m(t)}.
+\]
+并对 \(q\ge 2\) 定义 Rényi 熵（bits）
+\[
+H_q(\mu):=\frac{1}{1-q}\log_2\!\left(\sum_y \mu(y)^q\right).
+\]
+令
+\[
+h_q(M,x):=\limsup_{t\to\infty}\frac{1}{m(t)}H_q(\mu_{C_t}).
+\]
+则
+\[
+h_q(M,x)=
+\begin{cases}
+1,&M(x)\ \text{不停机},\\[2pt]
+0,&M(x)\ \text{停机}.
+\end{cases}
+\]
+特别地，\(\{(M,x):h_q(M,x)<\frac12\}\) 为 \(\Sigma^0_1\)-完备。
+\end{corollary}
+\begin{proof}
+若 \(M(x)\) 不停机，则 \(C_t=\mathrm{id}\)，故 \(\mu_{C_t}\) 为 \(\{0,1\}^{m(t)}\) 上的均匀分布，从而
+\(
+H_q(\mu_{C_t})=\log_2 2^{m(t)}=m(t)
+\)
+并得 \(h_q(M,x)=1\)。
+
+若 \(M(x)\) 停机，则存在 \(T\) 使对所有 \(t\ge T\) 有 \(C_t\) 为常值映射，故 \(\mu_{C_t}\) 为单点质量并满足 \(H_q(\mu_{C_t})=0\)，从而 \(h_q(M,x)=0\)。
+
+因此 \(h_q(M,x)<\tfrac12\iff M(x)\) 停机，\(\Sigma^0_1\)-完备性由停机问题的完备性立即推出。证毕。
+\end{proof}
+
+\begin{theorem}[可计算退火预算下 soft first-fit 的概率间隙式停机归约]\label{thm:conclusion-annealed-soft-firstfit-gap-halting}
+取任意常数 \(\varepsilon\in(0,\frac12)\)。
+则存在一个有效变换，将任意图灵机 \(M\) 与输入 \(x\) 映为一段仅含 prime-core first-fit 读出骨架的投影词/门序列 \(\mathcal W_{M,x}\)，并给出一条可计算退火调度 \((u_t)_{t\ge 1}\subset(0,1)\) 满足 \(\sum_{t\ge 1}u_t\le\varepsilon\)，使得在以第 \(t\) 次读出使用温度 \(u_t\) 的 soft first-fit 语义下，\(\mathcal W_{M,x}\) 的接受概率 \(P_{\mathrm{acc}}(M,x)\) 满足
+\[
+P_{\mathrm{acc}}(M,x)=
+\begin{cases}
+0,&M(x)\ \text{不停机},\\[2pt]
+\ge 1-\varepsilon,&M(x)\ \text{停机}.
+\end{cases}
+\]
+因此谓词 \(\{(M,x):P_{\mathrm{acc}}(M,x)\ge \tfrac12\}\) 为 \(\Sigma^0_1\)-完备。
+并且不存在统一可计算加性近似器：若存在算法对任意 \((M,x)\) 输出 \(\widehat P\) 且满足 \(|\widehat P-P_{\mathrm{acc}}(M,x)|<\tfrac12-\varepsilon\)，则可判定停机问题。
+\end{theorem}
+\begin{proof}
+由 FRACTRAN 的图灵完备性 \cite{Conway1987FRACTRAN} 及小节 \ref{subsec:pom-fractran} 中 prime-register 编译（定义 \ref{def:pom-fractran}、命题 \ref{prop:pom-fractran-prime-translation}），对每个 \((M,x)\) 可有效构造一段硬 first-fit 控制流 \(\mathcal P_{M,x}\)，其在硬语义下接受当且仅当 \(M(x)\) 停机。
+
+对 \(\mathcal P_{M,x}\) 做陷阱增广：在每个可达状态 \(r\) 下，除硬 first-fit 必选的最小索引 \(i^\ast(r)\) 外，为每个 \(i>i^\ast(r)\) 添加一条同触发条件的陷阱指令，使其一旦被选中即进入不可接受的吸收拒绝态。
+该改写不改变硬 first-fit 的轨迹，但保证任何偏离事件（选中 \(i\neq i^\ast(r_t)\)）都不可能导致接受。
+
+取任意可计算调度 \((u_t)\) 满足 \(\sum_{t\ge 1}u_t\le\varepsilon\)（例如 \(u_t=\varepsilon\,2^{-t}\)）。
+记 \(E_t\) 为第 \(t\) 步偏离硬 first-fit 的事件（同定理 \ref{thm:pom-fractran-soft-firstfit-annealed-budget}）。
+由定理 \ref{thm:pom-fractran-soft-firstfit-annealed-budget}，偏离事件的并概率满足
+\[
+\Pr\Bigl(\bigcup_{t\ge 1}E_t\Bigr)\le \sum_{t\ge 1}u_t\le \varepsilon,
+\]
+从而“全程不偏离”事件概率至少为 \(1-\varepsilon\)。
+
+若 \(M(x)\) 不停机，则硬轨迹永不接受；陷阱保证偏离亦不接受，故 \(P_{\mathrm{acc}}(M,x)=0\)。
+若 \(M(x)\) 停机，则硬轨迹在有限时刻接受；在“全程不偏离”事件上软轨迹与硬轨迹一致并接受，故 \(P_{\mathrm{acc}}(M,x)\ge 1-\varepsilon\)。
+于是 \(P_{\mathrm{acc}}(M,x)\ge \tfrac12\iff M(x)\) 停机（因 \(\varepsilon<1/2\)），\(\Sigma^0_1\)-完备性成立。
+
+最后，若存在误差 \(<\tfrac12-\varepsilon\) 的统一加性近似器，则由输出 \(\widehat P\) 可区分 \(0\) 与 \(\ge 1-\varepsilon\)，从而判定停机问题，矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[可求和温度预算下 soft first-fit 的偏离几乎处处仅发生有限次]\label{thm:conclusion-soft-firstfit-summable-budget-finite-deviation}
+沿用定理 \ref{thm:pom-fractran-soft-firstfit-annealed-budget} 的记号。记
+\[
+N_\infty:=\sum_{t\ge 1}\mathbf 1_{E_t}\in\NN\cup\{\infty\}
+\]
+为 soft first-fit 轨道相对硬 first-fit 的总偏离次数。则：
+\begin{enumerate}
+\normalfont
+  \item 若
+  \[
+  \sum_{t\ge 1}u_t<\infty,
+  \]
+  则
+  \[
+  N_\infty<\infty
+  \qquad\text{a.s.};
+  \]
+  \item 更强地，总偏离次数满足
+  \[
+  \mathbb E[N_\infty]\le \sum_{t\ge 1}u_t,
+  \qquad
+  \Pr(N_\infty\ge r)\le \frac{1}{r}\sum_{t\ge 1}u_t
+  \qquad(r\ge 1);
+  \]
+  \item 对幂律退火 \(u_t=ct^{-p}\)（\(c>0,\ p>1\)），有
+  \[
+  \mathbb E[N_\infty]\le c\,\zeta(p),
+  \qquad
+  N_\infty<\infty\quad\text{a.s.}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-fractran-soft-firstfit-annealed-budget}，对每个 \(t\ge 1\) 都有
+\[
+\Pr(E_t)\le u_t.
+\]
+因此
+\[
+\sum_{t\ge 1}\Pr(E_t)\le \sum_{t\ge 1}u_t.
+\]
+若右端有限，则第一类 Borel--Cantelli 引理给出
+\[
+\Pr(E_t\ \mathrm{i.o.})=0,
+\]
+即仅有有限多个 \(E_t\) 发生，从而 \(N_\infty<\infty\) 几乎处处成立。
+
+再由 Tonelli 定理，
+\[
+\mathbb E[N_\infty]
+=
+\sum_{t\ge 1}\Pr(E_t)
+\le
+\sum_{t\ge 1}u_t,
+\]
+得到第二条第一式；随后由 Markov 不等式，
+\[
+\Pr(N_\infty\ge r)\le \frac{\mathbb E[N_\infty]}{r}
+\le
+\frac{1}{r}\sum_{t\ge 1}u_t
+\qquad (r\ge 1),
+\]
+得到第二条第二式。
+
+若 \(u_t=ct^{-p}\) 且 \(p>1\)，则
+\[
+\sum_{t\ge 1}u_t=c\sum_{t\ge 1}t^{-p}=c\,\zeta(p)<\infty.
+\]
+将其代入前两步即得第三条。证毕。
+\end{proof}
+
+\begin{conjecture}[最终周期调度是 soft 序门分布语义可判定性的锋面]\label{conj:conclusion-eventually-periodic-schedule-frontier}
+记 \(\mathsf{Sched}\) 为所有可计算调度 \(u:\NN\to(0,1)\) 的集合。
+对固定有限态骨架 \(\mathcal S\)，令 \((\mu_t^{u,\mathcal S})_{t\ge 0}\) 表示由 \((\mathcal S,u)\) 诱导的时间非齐次马尔可夫语义（例如每一步调用 soft 序门 \(\mathrm{PROJ}_{u_t}\)）。
+猜想：
+\begin{enumerate}
+\normalfont
+  \item 若 \(u\) 最终周期（存在 \(T,p\) 使 \(u_{t+p}=u_t\) 对所有 \(t\ge T\) 成立），则对任意两骨架 \(\mathcal S_1,\mathcal S_2\)，“分布语义等价”
+  \[
+  \forall t\ge 0,\ \mu_t^{u,\mathcal S_1}=\mu_t^{u,\mathcal S_2}
+  \]
+  是可判定问题（作为定理 \ref{thm:conclusion-fixed-temp-soft-order-probabilistic-finite-state-decidable} 的周期化推广）。
+  \item 若允许一般可计算但非最终周期的 \(u\)，则存在固定有限态骨架对 \((\mathcal S_1,\mathcal S_2)\) 使上述等价性判定在算术层级意义下达到 \(\Pi^0_1\)-完备。
+\end{enumerate}
+\end{conjecture}
+
+\endinput
+

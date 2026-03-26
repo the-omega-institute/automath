@@ -1,0 +1,474 @@
+\subsection{Riemann--Siegel--Gabcke 层级的零点区间证书：零点轨迹与递归误差控制}\label{subsec:cdim-rs-gabcke-zero-recursion}
+在 unitary slice 的离线核验语义中，零点不是地址对象：其指称必须由共终端细化链在逆极限意义下实现（命题 \ref{prop:cdim-certificate-inverse-limit-addressing}，注 \ref{rem:cdim-zero-not-address}）。
+因此，“核验零点”应被表述为一类可编译的证书对象：给出随精度索引递增而嵌套收缩的根区间族，并提供确定性规则将该证书链与真实零点对齐。
+\par
+经典 Riemann--Siegel 公式及 Gabcke 的高阶余项展开为 Hardy 实值化函数
+\begin{equation}\label{eq:cdim-hardyzeta-def}
+Z_{\zeta}(t):=e^{\mathrm{i}\theta_{\mathrm{RS}}(t)}\zeta\!\left(\tfrac12+\mathrm{i}t\right)\in\RR,\qquad t\in\RR,
+\end{equation}
+提供一族以截断阶 \(K\in\NN\cup\{0\}\) 参数化的显式近似 \(Z_{\zeta,K}\)（其主体为有限和并带有 \(t^{-1/4}\) 型的渐近余项；见 \cite{Titchmarsh1986RiemannZeta,Gabcke1979RiemannSiegelRemainder}，以及快速求值背景 \cite{Hiary2011FastZeta}）。
+为把该层级直接接入本章的“有限数据证书 + 确定性离线验证器”口径，下述结果仅假设存在可计算的误差上界与一阶导数误差上界。
+\par
+对每个 \(K\ge 0\)，假设存在常数 \(A_K,B_K>0\) 与阈值 \(T_0(K)>0\)，使得对所有 \(t\ge T_0(K)\) 成立
+\begin{align}
+\abs{Z_{\zeta}(t)-Z_{\zeta,K}(t)}
+&\le A_K\,t^{-1/4-(K+1)/2},\label{eq:cdim-rs-gabcke-error0}\\
+\abs{Z_{\zeta}'(t)-Z_{\zeta,K}'(t)}
+&\le B_K\,t^{-3/4-(K+1)/2}.\label{eq:cdim-rs-gabcke-error1}
+\end{align}
+在 Riemann--Siegel--Gabcke 层级中，上述界可由余项展开的显式控制给出，并具有“主阶 \(t^{-1/4}\) 且每增加一项提升 \(t^{-1/2}\) 阶”的结构。
+\par
+为便于后续把层级差分 \(\Delta_{K+1}:=Z_{\zeta,K+1}-Z_{\zeta,K}\) 显式化，记一类标准形
+\begin{equation}\label{eq:cdim-rs-gabcke-delta}
+\Delta_{K+1}(t)=t^{-1/4}\frac{C_{K+1}\!\bigl(z_{\mathrm{RS}}(t)\bigr)}{t^{(K+1)/2}},
+\end{equation}
+其中 \(z_{\mathrm{RS}}(t)\in[0,1]\) 为由 \(\sqrt{t/(2\pi)}\) 的小数部分构造的相位参数，而 \(C_{K+1}\) 为显式系数函数（其具体封装方式依实现而定；本节仅使用其有界性输入）。
+
+\begin{theorem}[层级截断诱导的单零点稳定性与递归步长界]\label{thm:cdim-rs-gabcke-local-zero-stability}
+设 \(\gamma>0\) 满足 \(Z_{\zeta}(\gamma)=0\) 且 \(Z_{\zeta}'(\gamma)\neq 0\)。
+取 \(\rho>0\)，令 \(I:=[\gamma-\rho,\gamma+\rho]\)，并假设
+\begin{equation}\label{eq:cdim-rs-gabcke-local-slope}
+\inf_{t\in I}\abs{Z_{\zeta}'(t)}\ge m>0.
+\end{equation}
+固定 \(K\ge 0\)，并假设 \(I\subseteq[T_0(K+1),\infty)\) 且
+\begin{equation}\label{eq:cdim-rs-gabcke-local-smallness}
+A_K(\gamma-\rho)^{-1/4-(K+1)/2}\le \frac{m\rho}{4},
+\qquad
+B_K(\gamma-\rho)^{-3/4-(K+1)/2}\le \frac{m}{4}.
+\end{equation}
+则成立：
+\begin{enumerate}
+  \item \(Z_{\zeta,K}\) 在 \(I\) 内存在唯一零点 \(\gamma^{(K)}\)，且该零点为单零点。
+  \item \(\gamma^{(K)}\) 对真零点 \(\gamma\) 具有显式误差界
+  \begin{equation}\label{eq:cdim-rs-gabcke-zero-location-bound}
+  \abs{\gamma^{(K)}-\gamma}\le \frac{A_K}{m}\,(\gamma-\rho)^{-1/4-(K+1)/2}.
+  \end{equation}
+  \item 令 \(\gamma^{(K+1)}\) 为 \(Z_{\zeta,K+1}\) 在 \(I\) 内的唯一零点，并记 \(\Delta_{K+1}=Z_{\zeta,K+1}-Z_{\zeta,K}\)。
+  则存在 \(\xi_K\) 介于 \(\gamma^{(K)}\) 与 \(\gamma^{(K+1)}\) 之间，使得递归恒等式
+  \begin{equation}\label{eq:cdim-rs-gabcke-zero-recursion-identity}
+  \gamma^{(K+1)}-\gamma^{(K)}=-\frac{\Delta_{K+1}\!\bigl(\gamma^{(K)}\bigr)}{Z_{\zeta,K+1}'(\xi_K)}
+  \end{equation}
+  成立。
+  若进一步对 \(K{+}1\) 亦有
+  \begin{equation}\label{eq:cdim-rs-gabcke-local-smallness-kp1}
+  B_{K+1}(\gamma-\rho)^{-3/4-(K+2)/2}\le \frac{m}{4},
+  \end{equation}
+  则得到显式步长界
+  \begin{equation}\label{eq:cdim-rs-gabcke-zero-step-bound}
+  \abs{\gamma^{(K+1)}-\gamma^{(K)}}\le \frac{2}{m}\,\sup_{t\in I}\abs{\Delta_{K+1}(t)}.
+  \end{equation}
+  在标准形 \eqref{eq:cdim-rs-gabcke-delta} 下，进一步有
+  \begin{equation}\label{eq:cdim-rs-gabcke-zero-step-bound-Ck}
+  \sup_{t\in I}\abs{\Delta_{K+1}(t)}
+  \le \Bigl(\sup_{z\in[0,1]}\abs{C_{K+1}(z)}\Bigr)\,(\gamma-\rho)^{-1/4-(K+1)/2}.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:cdim-rs-gabcke-local-slope} 知 \(Z_{\zeta}'\) 在 \(I\) 上处处非零且连续，故其符号在 \(I\) 上恒定，从而 \(Z_{\zeta}\) 在 \(I\) 上严格单调。
+取端点 \(a=\gamma-\rho\)、\(b=\gamma+\rho\)，由中值定理，
+\[
+\abs{Z_{\zeta}(a)}=\abs{Z_{\zeta}(a)-Z_{\zeta}(\gamma)}\ge m\rho,
+\qquad
+\abs{Z_{\zeta}(b)}\ge m\rho,
+\]
+且由于严格单调并穿越 \(0\)，\(Z_{\zeta}(a)\) 与 \(Z_{\zeta}(b)\) 异号。
+\par
+由 \eqref{eq:cdim-rs-gabcke-error0} 与 \(a,b\ge \gamma-\rho\) 得
+\[
+\abs{Z_{\zeta,K}(a)-Z_{\zeta}(a)}
+\le A_K(\gamma-\rho)^{-1/4-(K+1)/2}\le \frac{m\rho}{4},
+\]
+故 \(Z_{\zeta,K}(a)\) 与 \(Z_{\zeta}(a)\) 同号；同理 \(Z_{\zeta,K}(b)\) 与 \(Z_{\zeta}(b)\) 同号，从而 \(Z_{\zeta,K}(a)\) 与 \(Z_{\zeta,K}(b)\) 异号。
+因此 \(Z_{\zeta,K}\) 在 \(I\) 内至少存在一零点。
+\par
+再由 \eqref{eq:cdim-rs-gabcke-error1} 及 \eqref{eq:cdim-rs-gabcke-local-smallness}，对任意 \(t\in I\) 有
+\[
+\abs{Z_{\zeta,K}'(t)}
+\ge \abs{Z_{\zeta}'(t)}-\abs{Z_{\zeta}'(t)-Z_{\zeta,K}'(t)}
+\ge m-\frac{m}{4}=\frac{3m}{4}>0.
+\]
+故 \(Z_{\zeta,K}\) 在 \(I\) 上严格单调，其零点唯一，且为单零点。
+\par
+令该唯一零点为 \(\gamma^{(K)}\)。
+由 \(Z_{\zeta,K}(\gamma^{(K)})=0\) 与 \eqref{eq:cdim-rs-gabcke-error0} 得
+\[
+\abs{Z_{\zeta}(\gamma^{(K)})}
+=\abs{Z_{\zeta}(\gamma^{(K)})-Z_{\zeta,K}(\gamma^{(K)})}
+\le A_K(\gamma-\rho)^{-1/4-(K+1)/2}.
+\]
+再对 \(Z_{\zeta}\) 在 \(\gamma\) 与 \(\gamma^{(K)}\) 之间应用中值定理：
+存在 \(\eta\) 介于二者之间使 \(Z_{\zeta}(\gamma^{(K)})-Z_{\zeta}(\gamma)=Z_{\zeta}'(\eta)(\gamma^{(K)}-\gamma)\)。
+由 \(\abs{Z_{\zeta}'(\eta)}\ge m\) 得到 \eqref{eq:cdim-rs-gabcke-zero-location-bound}。
+\par
+最后，注意到 \(\Delta_{K+1}=Z_{\zeta,K+1}-Z_{\zeta,K}\) 且 \(Z_{\zeta,K}(\gamma^{(K)})=0\)，故
+\(
+Z_{\zeta,K+1}(\gamma^{(K)})=\Delta_{K+1}(\gamma^{(K)})
+\)。
+令 \(\gamma^{(K+1)}\) 为 \(Z_{\zeta,K+1}\) 在 \(I\) 内唯一零点，则对 \(Z_{\zeta,K+1}\) 在区间 \([\gamma^{(K)},\gamma^{(K+1)}]\) 应用中值定理，存在 \(\xi_K\) 介于二者之间，使
+\[
+0-Z_{\zeta,K+1}(\gamma^{(K)})
+=Z_{\zeta,K+1}'(\xi_K)\bigl(\gamma^{(K+1)}-\gamma^{(K)}\bigr),
+\]
+即得 \eqref{eq:cdim-rs-gabcke-zero-recursion-identity}。
+若 \eqref{eq:cdim-rs-gabcke-local-smallness-kp1} 成立，则同上可得 \(\abs{Z_{\zeta,K+1}'(\xi_K)}\ge 3m/4\ge m/2\)，遂推出 \eqref{eq:cdim-rs-gabcke-zero-step-bound}。
+\eqref{eq:cdim-rs-gabcke-zero-step-bound-Ck} 由 \eqref{eq:cdim-rs-gabcke-delta} 与 \(t\ge \gamma-\rho\) 直接得出。证毕。
+\end{proof}
+
+\begin{corollary}[紧化相位坐标中的二次增益：零点区间的额外压缩]\label{cor:cdim-rs-gabcke-compactified-quadratic-gain}
+在定理 \ref{thm:cdim-rs-gabcke-local-zero-stability} 的假设下，令紧化相位坐标
+\[
+u(t):=\upsilon(t)=\frac{1}{\pi}\arctan t\in\Bigl(-\frac12,\frac12\Bigr),
+\qquad
+u'(t)=\frac{1}{\pi(1+t^2)}.
+\]
+则
+\begin{equation}\label{eq:cdim-rs-gabcke-compactified-zero-bound}
+\abs{u(\gamma^{(K)})-u(\gamma)}
+\le \frac{1}{\pi\bigl(1+(\gamma-\rho)^2\bigr)}\,\abs{\gamma^{(K)}-\gamma}
+\le \frac{A_K}{m\pi\bigl(1+(\gamma-\rho)^2\bigr)}\,(\gamma-\rho)^{-1/4-(K+1)/2}.
+\end{equation}
+特别地，当 \(\gamma\to\infty\) 且 \(\rho=o(\gamma)\) 时，
+\begin{equation}\label{eq:cdim-rs-gabcke-compactified-asymptotic}
+\abs{u(\gamma^{(K)})-u(\gamma)}
+\ll \frac{A_K}{m\pi}\,\gamma^{-9/4-(K+1)/2}.
+\end{equation}
+\end{corollary}
+\begin{proof}
+由均值定理，存在 \(\xi\) 介于 \(\gamma\) 与 \(\gamma^{(K)}\) 之间，使
+\(
+\abs{u(\gamma^{(K)})-u(\gamma)}=\abs{u'(\xi)}\,\abs{\gamma^{(K)}-\gamma}
+\)。
+由于 \(\xi\in I\)，故 \(\abs{u'(\xi)}\le 1/(\pi(1+(\gamma-\rho)^2))\)，代入 \eqref{eq:cdim-rs-gabcke-zero-location-bound} 即得 \eqref{eq:cdim-rs-gabcke-compactified-zero-bound}。
+而当 \(\gamma\to\infty\) 且 \(\rho=o(\gamma)\) 时，\((1+(\gamma-\rho)^2)^{-1}\asymp \gamma^{-2}\)，遂得 \eqref{eq:cdim-rs-gabcke-compactified-asymptotic}。证毕。
+\end{proof}
+
+\begin{proposition}[序号推进与精度推进的近似可交换性]\label{prop:cdim-rs-gabcke-recursions-almost-commute}
+设 \(\{\gamma_n\}_{n\ge 1}\) 为 \(Z_{\zeta}\) 的正单零点序列，且对每个 \(n\) 与固定阶 \(K\) 存在区间 \(I_n\) 满足定理 \ref{thm:cdim-rs-gabcke-local-zero-stability} 的局部非退化条件，使得 \(Z_{\zeta,K}\) 在 \(I_n\) 内存在唯一零点，记为 \(\gamma_n^{(K)}\)。
+\par
+定义两类递归算子：
+\begin{enumerate}
+  \item 序号推进：\(\mathcal A_K:\gamma_n^{(K)}\mapsto \gamma_{n+1}^{(K)}\)；
+  \item 精度推进：\(\mathcal R_n:\gamma_n^{(K)}\mapsto \gamma_n^{(K+1)}\)。
+\end{enumerate}
+则交换子满足
+\begin{equation}\label{eq:cdim-rs-gabcke-commutator-bound}
+\Bigl|
+\bigl(\mathcal A_{K+1}\circ\mathcal R_n\bigr)(\gamma_n^{(K)})
+-\bigl(\mathcal R_{n+1}\circ\mathcal A_K\bigr)(\gamma_n^{(K)})
+\Bigr|
+\le
+\abs{\gamma_{n+1}^{(K+1)}-\gamma_{n+1}^{(K)}}
+\;+\;
+\abs{\gamma_{n}^{(K+1)}-\gamma_{n}^{(K)}}.
+\end{equation}
+若对 \(I_n\) 与 \(I_{n+1}\) 的导数下界分别为 \(m_n,m_{n+1}\)，并且层级差分 \(\Delta_{K+1}\) 在相应区间上满足定理 \ref{thm:cdim-rs-gabcke-local-zero-stability} 的步长界条件，则进一步有
+\begin{equation}\label{eq:cdim-rs-gabcke-commutator-stepbound}
+\Bigl|
+\bigl(\mathcal A_{K+1}\circ\mathcal R_n\bigr)(\gamma_n^{(K)})
+-\bigl(\mathcal R_{n+1}\circ\mathcal A_K\bigr)(\gamma_n^{(K)})
+\Bigr|
+\le
+\frac{2}{m_{n+1}}\sup_{t\in I_{n+1}}\abs{\Delta_{K+1}(t)}
+\;+\;
+\frac{2}{m_{n}}\sup_{t\in I_{n}}\abs{\Delta_{K+1}(t)}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+由定义，
+\[
+\bigl(\mathcal A_{K+1}\circ\mathcal R_n\bigr)(\gamma_n^{(K)})=\gamma_{n+1}^{(K+1)},
+\qquad
+\bigl(\mathcal R_{n+1}\circ\mathcal A_K\bigr)(\gamma_n^{(K)})=\gamma_{n+1}^{(K)},
+\]
+且 \(\mathcal R_n(\gamma_n^{(K)})=\gamma_n^{(K+1)}\)。
+于是左侧即为
+\(
+\abs{\gamma_{n+1}^{(K+1)}-\gamma_{n+1}^{(K)}-(\gamma_n^{(K+1)}-\gamma_n^{(K)})}
+\)，
+由三角不等式得到 \eqref{eq:cdim-rs-gabcke-commutator-bound}。
+\eqref{eq:cdim-rs-gabcke-commutator-stepbound} 由定理 \ref{thm:cdim-rs-gabcke-local-zero-stability} 的步长界 \eqref{eq:cdim-rs-gabcke-zero-step-bound} 分别应用于 \(I_n\) 与 \(I_{n+1}\) 得出。证毕。
+\end{proof}
+
+\begin{theorem}[层级余项阶与二进制认证精度的增益律]\label{thm:cdim-rs-gabcke-bit-gain}
+保持定理 \ref{thm:cdim-rs-gabcke-local-zero-stability} 的设定，并设 \(\gamma\asymp T\to\infty\)。
+对目标误差 \(\varepsilon\in(0,\rho)\)，若满足
+\begin{equation}\label{eq:cdim-rs-gabcke-target-eps}
+\frac{A_K}{m}\,T^{-1/4-(K+1)/2}\le \varepsilon,
+\end{equation}
+则 \(\abs{\gamma^{(K)}-\gamma}\le \varepsilon\)。
+取 \(\varepsilon=2^{-J}\)（以 \(J\) 个二进制位计量零点位置的认证精度），则 \eqref{eq:cdim-rs-gabcke-target-eps} 等价于
+\begin{equation}\label{eq:cdim-rs-gabcke-bit-bound}
+J\ \le\ \Bigl(\frac14+\frac{K+1}{2}\Bigr)\log_2 T\ -\ \log_2\!\Bigl(\frac{A_K}{m}\Bigr).
+\end{equation}
+因此在 \(A_K\) 的增长受控（例如 \(K\) 固定或温和增长）时，\(K\mapsto K+1\) 的主项增益为
+\[
+J(T,K+1)-J(T,K)=\frac12\log_2 T+O(1),
+\]
+即每增加一阶余项可在高度 \(T\) 处带来约 \((\tfrac12\log_2 T)\) 位的认证精度提升。
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:cdim-rs-gabcke-zero-location-bound}（取 \(\rho=o(T)\) 并吸收入常数）得
+\(
+\abs{\gamma^{(K)}-\gamma}\le (A_K/m)\,T^{-1/4-(K+1)/2}
+\)。
+若右侧不超过 \(\varepsilon\) 则结论成立，从而得到 \eqref{eq:cdim-rs-gabcke-target-eps}。
+取 \(\varepsilon=2^{-J}\) 并取二进制对数即得 \eqref{eq:cdim-rs-gabcke-bit-bound}；对 \(K\) 作差分得到主项增益。证毕。
+\end{proof}
+
+\paragraph{对数尺度分解与均方尾项预算：主和壳层的近正交递归}
+Riemann--Siegel 主和在结构上由长度 \(N_0\asymp \sqrt{T}\) 的 Dirichlet 多项式承载；在区间均方口径下，将该主和按对数尺度拆分为几何壳层可得到一组可独立引用的近正交递归与尾项预算下界。
+
+\begin{theorem}[对数尺度壳层的伪鞅正交递归]\label{thm:cdim-rs-logscale-pseudomartingale-orthogonal-recursion}
+设 \(T\ge 3\)，令 \(N_0:=\lfloor T^{1/2}\rfloor\)。
+固定 \(q>1\)，取整数 \(L\ge 1\)，并定义几何尺度链
+\[
+N_\ell:=\bigl\lfloor N_0 q^{-\ell}\bigr\rfloor\qquad(\ell=0,1,\dots,L).
+\]
+定义 Dirichlet 主和的对数尺度壳层差分
+\[
+S_\ell(t):=\sum_{n\le N_\ell}n^{-1/2-\mathrm{i}t},
+\qquad
+\delta_\ell(t):=\sum_{N_{\ell+1}<n\le N_\ell}n^{-1/2-\mathrm{i}t}
+\qquad(\ell<L),
+\]
+并在 \(L^2([T,2T])\) 上取内积 \(\langle f,g\rangle:=\int_T^{2T}f(t)\overline{g(t)}\,\dd t\) 与范数 \(\|f\|_2^2:=\langle f,f\rangle\)。
+则对每个 \(\ell<L\) 有：
+\begin{enumerate}
+  \item \textbf{（近正交差分）}
+  \[
+  \abs{\langle \delta_\ell,S_{\ell+1}\rangle}\ \ll_q\ N_{\ell+1}\log N_{\ell+1}.
+  \]
+  \item \textbf{（能量递推）}
+  \[
+  \|S_\ell\|_2^2
+  =\|S_{\ell+1}\|_2^2+\|\delta_\ell\|_2^2
+  +O_q\!\bigl(N_{\ell+1}\log N_{\ell+1}\bigr).
+  \]
+  \item \textbf{（全链望远镜）}
+  \[
+  \|S_0\|_2^2
+  =\sum_{\ell=0}^{L-1}\|\delta_\ell\|_2^2+\|S_L\|_2^2
+  +O_q\!\bigl(N_0\log N_0\bigr).
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+对正整数 \(m,n\) 记
+\[
+I_{m,n}:=\int_T^{2T}e^{\mathrm{i}t\log(m/n)}\,\dd t.
+\]
+若 \(m\neq n\)，则
+\[
+I_{m,n}=\frac{e^{\mathrm{i}2T\log(m/n)}-e^{\mathrm{i}T\log(m/n)}}{\mathrm{i}\log(m/n)},
+\qquad
+\abs{I_{m,n}}\le \frac{2}{\abs{\log(m/n)}}.
+\]
+并且对 \(m\neq n\) 有
+\begin{equation}\label{eq:cdim-rs-logscale-log-separation}
+\frac{1}{\abs{\log(m/n)}}\ \le\ \frac{\max\{m,n\}}{\abs{m-n}}.
+\end{equation}
+\par
+\textbf{（1）}由定义，
+\[
+\langle \delta_\ell,S_{\ell+1}\rangle
+=\sum_{N_{\ell+1}<n\le N_\ell}\ \sum_{m\le N_{\ell+1}}
+\frac{1}{\sqrt{mn}}\,I_{m,n}.
+\]
+由于 \(m\le N_{\ell+1}<n\)，由 \eqref{eq:cdim-rs-logscale-log-separation} 得
+\(
+\abs{I_{m,n}}\le 2\,n/(n-m)
+\)。
+于是
+\[
+\abs{\langle \delta_\ell,S_{\ell+1}\rangle}
+\le
+2\sum_{m\le N_{\ell+1}}\ \sum_{N_{\ell+1}<n\le N_\ell}
+\frac{1}{\sqrt{mn}}\frac{n}{n-m}.
+\]
+令 \(n=m+h\)（\(h\ge 1\)）。则对固定 \(m\) 内层和被
+\[
+\sum_{h\ge 1}\frac{1}{\sqrt{m(m+h)}}\frac{m+h}{h}
+\ll
+\sum_{1\le h\le m}\frac{1}{h}+\sum_{h>m}\frac{1}{\sqrt{mh}}
+\ll
+\log m+1
+\]
+所控制（隐含常数绝对）。对 \(m\le N_{\ell+1}\) 求和得
+\(
+\abs{\langle \delta_\ell,S_{\ell+1}\rangle}\ll N_{\ell+1}\log N_{\ell+1}
+\)，证明 (1)。
+\par
+\textbf{（2）}由恒等式 \(S_\ell=S_{\ell+1}+\delta_\ell\)，有
+\[
+\|S_\ell\|_2^2=\|S_{\ell+1}\|_2^2+\|\delta_\ell\|_2^2+2\Re\langle \delta_\ell,S_{\ell+1}\rangle,
+\]
+结合 (1) 得 (2)。
+\par
+\textbf{（3）}对 \(\ell=0,1,\dots,L-1\) 迭代 (2) 并求和，且
+\[
+\sum_{\ell=0}^{L-1}N_{\ell+1}\log N_{\ell+1}\ \ll_q\ N_0\log N_0
+\]
+（几何级数），即得 (3)。证毕。
+\end{proof}
+
+\begin{corollary}[对数尺度层的均方能量等分律]\label{cor:cdim-rs-logscale-energy-equipartition}
+在定理 \ref{thm:cdim-rs-logscale-pseudomartingale-orthogonal-recursion} 的记号下，对每个 \(\ell<L\) 有
+\begin{equation}\label{eq:cdim-rs-logscale-layer-energy}
+\|\delta_\ell\|_2^2
+=T\sum_{N_{\ell+1}<n\le N_\ell}\frac1n+O(N_\ell)
+=T\log\!\Bigl(\frac{N_\ell}{N_{\ell+1}}\Bigr)+O\!\Bigl(\frac{T}{N_{\ell+1}}+N_\ell\Bigr).
+\end{equation}
+特别地，当 \(\ell\) 固定且 \(T\to\infty\) 时，
+\[
+\|\delta_\ell\|_2^2=T\log q+o(T),
+\]
+从而各对数尺度壳层在主项上贡献同阶均方能量，并仅由比例 \(q\) 决定。
+\end{corollary}
+
+\begin{proof}
+展开平方并积分得
+\[
+\|\delta_\ell\|_2^2
+=\sum_{N_{\ell+1}<m,n\le N_\ell}\frac{1}{\sqrt{mn}}\,I_{m,n}
+=T\sum_{N_{\ell+1}<n\le N_\ell}\frac1n+\sum_{\substack{N_{\ell+1}<m,n\le N_\ell\\ m\neq n}}\frac{1}{\sqrt{mn}}\,I_{m,n}.
+\]
+对非对角项应用 Dirichlet 多项式的经典均方估计（Montgomery--Vaughan 型均值原理），得到
+\[
+\sum_{\substack{N_{\ell+1}<m,n\le N_\ell\\ m\neq n}}\frac{1}{\sqrt{mn}}\,I_{m,n}
+=O\!\left(\sum_{N_{\ell+1}<n\le N_\ell} n\cdot \frac{1}{n}\right)
+=O(N_\ell),
+\]
+从而得到 \eqref{eq:cdim-rs-logscale-layer-energy} 的第一式。
+再由调和和差估计
+\[
+\sum_{N_{\ell+1}<n\le N_\ell}\frac1n=\log\!\Bigl(\frac{N_\ell}{N_{\ell+1}}\Bigr)+O\!\Bigl(\frac{1}{N_{\ell+1}}\Bigr),
+\]
+代回即可得到 \eqref{eq:cdim-rs-logscale-layer-energy} 的第二式。
+最后当 \(T\to\infty\) 且 \(\ell\) 固定时，\(N_{\ell+1}\asymp T^{1/2}\) 从而 \(\frac{T}{N_{\ell+1}}+N_\ell=o(T)\)，并且 \(\log(N_\ell/N_{\ell+1})=\log q+o(1)\)，故 \(\|\delta_\ell\|_2^2=T\log q+o(T)\)。证毕。
+\end{proof}
+
+\begin{theorem}[误差预算的不可跳层性：壳层删去的线性均方成本]\label{thm:cdim-rs-logscale-no-skipping-budget}
+在定理 \ref{thm:cdim-rs-logscale-pseudomartingale-orthogonal-recursion} 的设定下，取任意集合 \(J\subseteq\{0,1,\dots,L-1\}\)，并定义删层误差
+\[
+E_J(t):=\sum_{\ell\in J}\delta_\ell(t).
+\]
+则存在仅依赖于 \(q\) 的常数 \(C>0\) 使得
+\begin{equation}\label{eq:cdim-rs-logscale-no-skipping-budget}
+\|E_J\|_2^2
+\ge
+T\sum_{\ell\in J}\ \sum_{N_{\ell+1}<n\le N_\ell}\frac1n
+\;-\;C\,N_0\log N_0.
+\end{equation}
+特别地，当 \(\min_{\ell\in J}N_{\ell+1}\to\infty\) 且 \(N_\ell/N_{\ell+1}\to q\)（\(\ell\in J\)）时，
+\[
+\|E_J\|_2^2\ \ge\ |J|\cdot T\log q-o(T|J|),
+\]
+从而任意跳过正比例对数尺度壳层的近似在均方意义下必然支付线性于跳层数的误差成本。
+\end{theorem}
+
+\begin{proof}
+展开得
+\[
+\|E_J\|_2^2
+=\sum_{\ell\in J}\|\delta_\ell\|_2^2
+  +2\Re\!\sum_{\substack{\ell_1,\ell_2\in J\\ \ell_1<\ell_2}}\langle \delta_{\ell_1},\delta_{\ell_2}\rangle.
+\]
+对交叉项分两类估计。
+\par
+\textbf{相邻壳层（\(\ell_2=\ell_1+1\)）.}
+此时 \(m\in(N_{\ell_2+1},N_{\ell_2}]\)、\(n\in(N_{\ell_1+1},N_{\ell_1}]\) 允许 \(\log(m/n)\) 接近 \(0\)。
+重复定理 \ref{thm:cdim-rs-logscale-pseudomartingale-orthogonal-recursion} 证明 (1) 的估计（把 \(S_{\ell+1}\) 改为 \(\delta_{\ell+1}\)）得到
+\[
+\abs{\langle \delta_\ell,\delta_{\ell+1}\rangle}\ \ll_q\ N_{\ell+1}\log N_{\ell+1}.
+\]
+\par
+\textbf{隔层壳层（\(\ell_2\ge \ell_1+2\)）.}
+此时 \(m\le N_{\ell_2}\le N_{\ell_1+2}\le N_{\ell_1+1}/q\)，而 \(n>N_{\ell_1+1}\)，故 \(n/m\ge q\) 从而 \(\abs{\log(m/n)}\ge \log q\)。
+于是 \(\abs{I_{m,n}}\le 2/\log q\)，并且
+\[
+\abs{\langle \delta_{\ell_1},\delta_{\ell_2}\rangle}
+\le \frac{2}{\log q}\left(\sum_{N_{\ell_1+1}<n\le N_{\ell_1}}n^{-1/2}\right)\left(\sum_{N_{\ell_2+1}<m\le N_{\ell_2}}m^{-1/2}\right)
+\ll_q \sqrt{N_{\ell_1}N_{\ell_2}}.
+\]
+\par
+将两类交叉项对所有 \(\ell_1<\ell_2\) 求和，并注意 \(\sum_{\ell\ge 0}N_\ell\log N_\ell\ll_q N_0\log N_0\) 且 \(\sum_{\ell_2\ge \ell_1+2}\sqrt{N_{\ell_1}N_{\ell_2}}\ll_q N_0\)（几何级数），得
+\[
+\sum_{\substack{\ell_1,\ell_2\in J\\ \ell_1<\ell_2}}\abs{\langle \delta_{\ell_1},\delta_{\ell_2}\rangle}
+\ll_q N_0\log N_0.
+\]
+因此
+\[
+\|E_J\|_2^2
+\ge \sum_{\ell\in J}\|\delta_\ell\|_2^2-O_q(N_0\log N_0).
+\]
+代入推论 \ref{cor:cdim-rs-logscale-energy-equipartition} 的 \eqref{eq:cdim-rs-logscale-layer-energy} 第一式，并用
+\(\sum_{\ell\in J}N_\ell\ll_q N_0\)
+吸收误差，即得 \eqref{eq:cdim-rs-logscale-no-skipping-budget}。
+若进一步 \(\min_{\ell\in J}N_{\ell+1}\to\infty\) 且 \(N_\ell/N_{\ell+1}\to q\)，则对每个 \(\ell\in J\) 有
+\(
+\sum_{N_{\ell+1}<n\le N_\ell}\frac1n=\log q+o(1)
+\)；
+将其代回 \eqref{eq:cdim-rs-logscale-no-skipping-budget} 并注意 \(N_0\log N_0=o(T|J|)\)（当 \(|J|\to\infty\)）即可得到最后一式。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$\sqrt{T}$}{sqrt(T)} 长度屏障：Dirichlet 主和的指数型上界与零点密度缺额]\label{thm:cdim-rs-dirichlet-sqrtT-length-barrier}
+设
+\[
+P_N(t):=\sum_{n\le N}a_n\,n^{-\mathrm{i}t}
+\]
+为 Dirichlet 多项式（\(a_n\in\CC\)，且 \(P_N\not\equiv 0\)）。
+将其视为整函数 \(F_N(z):=P_N(z)\)（\(z\in\CC\)）。
+则：
+\begin{enumerate}
+  \item \(F_N\) 为指数型整函数，且其指数类型不超过 \(\tau=\log N\)。
+  \item 令 \(Z_{F_N}(T)\) 表示 \(F_N\) 在实轴区间 \([-T,T]\) 上的实零点个数（按重数计）。
+  则存在与 \(N\) 与系数无关的常数使
+  \[
+  Z_{F_N}(T)\ \le\ \frac{2}{\pi}(\log N)\,T+o(T)\qquad(T\to\infty).
+  \]
+\end{enumerate}
+从而若希望以长度 \(N(T)\) 的 Dirichlet 主和在对称高度窗 \([-T,T]\) 上承载黎曼型零点密度主阶
+\(
+\widetilde N_\zeta(T)\asymp \frac{T}{\pi}\log T
+\)
+（例如作为临界线零点计数的目标量级），则必须满足
+\[
+\log N(T)\ \ge\ \frac12\log T+o(\log T),
+\qquad\text{等价地}\qquad
+N(T)\ \ge\ T^{1/2+o(1)}.
+\]
+\end{theorem}
+
+\begin{proof}
+\textbf{（1）}由 \(n^{-\mathrm{i}z}=e^{-\mathrm{i}z\log n}\)，对 \(z=x+\mathrm{i}y\) 有
+\[
+\abs{F_N(x+\mathrm{i}y)}
+\le \sum_{n\le N}\abs{a_n}\,e^{y\log n}
+\le e^{\abs{y}\log N}\sum_{n\le N}\abs{a_n},
+\]
+故 \(F_N\) 的指数类型不超过 \(\log N\)。
+\par
+\textbf{（2）}由于 \(F_N\) 为指数型且在实轴上有界（\(\abs{F_N(t)}\le \sum_{n\le N}\abs{a_n}\)），故 \(F_N\) 属 Cartwright 类整函数。
+对 Cartwright 类指数型整函数应用 Jensen--Cartwright 零点密度估计，得到其在 \([-T,T]\) 上实零点计数满足
+\(
+Z_{F_N}(T)\le \frac{2}{\pi}\tau\,T+o(T)
+\)（\(\tau\) 为指数类型），代入 \(\tau\le \log N\) 即得所示上界。
+\par
+最后，将该上界与目标零点密度 \(\widetilde N_\zeta(T)\asymp (T/\pi)\log T\) 对比，得到 \(\log N(T)\ge \frac12\log T+o(\log T)\)；取指数即得 \(N(T)\ge T^{1/2+o(1)}\)。证毕。
+\end{proof}
+
+\begin{conjecture}[高位零点的单侧层级收敛]\label{conj:cdim-rs-gabcke-one-sided-convergence}
+固定零点序号 \(n\) 并令 \(\gamma_n\to\infty\)。
+设 \(\gamma_n^{(K)}\) 为 \(Z_{\zeta,K}\) 在 \(\gamma_n\) 邻域内的唯一零点（当层级近似在该高度区间内有效时）。
+则存在随高度增长的可用层级范围 \(0\le K\le K_\star(\gamma_n)\)，使得对充分大的 \(\gamma_n\)，序列 \(K\mapsto \gamma_n^{(K)}\) 在 \(0\le K\le K_\star(\gamma_n)\) 上呈单调，且从同一侧逼近 \(\gamma_n\)：
+\[
+\exists\,\sigma_n\in\{+1,-1\},\ \forall\,0\le K<K_\star(\gamma_n),\qquad
+\sigma_n\bigl(\gamma_n^{(K+1)}-\gamma_n^{(K)}\bigr)>0,
+\quad
+\gamma_n^{(K)}\to\gamma_n.
+\]
+\end{conjecture}
+
+\endinput

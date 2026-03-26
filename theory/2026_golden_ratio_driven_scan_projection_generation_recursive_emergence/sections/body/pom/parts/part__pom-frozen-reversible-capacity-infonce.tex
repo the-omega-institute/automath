@@ -1,0 +1,375 @@
+\paragraph{冻结区中的可逆阈值与 Bayes--InfoNCE 的 Poisson 简化}
+定理 \ref{thm:pom-oracle-capacity-stieltjes-inversion-mellin} 与定理 \ref{thm:pom-infonce-fiber-spectrum-tomography} 表明，
+预言机容量曲线与 Bayes 最优 InfoNCE 总损失都足以重建整张纤维谱。
+在此基础上，还可把“纤维保持的可逆恢复预算”推广到任意宏观先验，
+并说明：一旦固定温度 escort 进入命题 \ref{prop:pom-escort-freezing-gap-threshold} 的冻结区，
+则可逆阈值的主导尺度退化为最大纤维多重度 \(M_m\)，
+而对比损失的主导尺度则退化为最大纤维达到者个数 \(N_m\)。
+
+\begin{theorem}[任意宏观先验下的最优纤维保持可逆容量闭式]\label{thm:pom-macroprior-fiberwise-reversible-capacity}
+固定分辨率 \(m\)，并令 \(\lambda_m\) 为 \(X_m\) 上任意概率分布。
+定义其在微态空间 \(\Omega_m\) 上、沿纤维均匀的提升
+\[
+\nu_{m,\lambda}(\omega)
+:=
+\frac{\lambda_m(\Fold_m(\omega))}{d_m(\Fold_m(\omega))}
+\qquad(\omega\in\Omega_m).
+\]
+对任意整数 \(L\ge 1\)，记 \([L]:=\{1,\dots,L\}\)。
+称一对映射
+\[
+\mathrm{enc}:\Omega_m\to [L],
+\qquad
+\mathrm{dec}:X_m\times [L]\to \Omega_m
+\]
+为纤维保持的可逆机制，若对所有 \((x,b)\in X_m\times [L]\) 都有
+\[
+\Fold_m(\mathrm{dec}(x,b))=x.
+\]
+定义最优成功率
+\[
+\mathrm{Succ}^{\mathrm{rev}}_{m,\lambda}(L)
+:=
+\sup_{\mathrm{enc},\mathrm{dec}}
+\PP_{\omega\sim \nu_{m,\lambda}}
+\Bigl[
+\mathrm{dec}\bigl(\Fold_m(\omega),\mathrm{enc}(\omega)\bigr)=\omega
+\Bigr].
+\]
+则成立严格闭式
+\[
+\boxed{\;
+\mathrm{Succ}^{\mathrm{rev}}_{m,\lambda}(L)
+=
+\sum_{x\in X_m}\lambda_m(x)\,
+\min\!\Bigl(1,\frac{L}{d_m(x)}\Bigr).
+\;}
+\]
+特别地，取 \(\lambda_m=w_m\) 与 \(L=2^B\) 时，
+\[
+\mathrm{Succ}^{\mathrm{rev}}_{m,w_m}(2^B)=\mathrm{Succ}_m(B),
+\]
+从而恢复定理 \ref{thm:pom-oracle-renyi-pressure-failure-bound} 与定理 \ref{thm:pom-oracle-capacity-stieltjes-inversion-mellin} 中的标准预言机成功率。
+\end{theorem}
+\begin{proof}
+固定 \(x\in X_m\)，并记纤维
+\[
+F_x:=\Fold_m^{-1}(x),
+\qquad |F_x|=d_m(x).
+\]
+由于 \(\mathrm{dec}\) 保持纤维，对任意码字 \(b\in[L]\)，\(\mathrm{dec}(x,b)\) 只能落在 \(F_x\) 内。
+因此在纤维 \(F_x\) 上至多只有 \(L\) 个微态能够被不同码字无歧义地区分；
+在 \(\nu_{m,\lambda}\) 的条件分布下，\(F_x\) 内部是均匀分布，故该纤维上的条件成功率满足
+\[
+\PP\Bigl[
+\mathrm{dec}\bigl(x,\mathrm{enc}(\omega)\bigr)=\omega
+\ \Big|\ \Fold_m(\omega)=x
+\Bigr]
+\le
+\min\!\Bigl(1,\frac{L}{d_m(x)}\Bigr).
+\]
+对 \(x\) 按 \(\lambda_m\) 加权并求和，即得全局上界
+\[
+\mathrm{Succ}^{\mathrm{rev}}_{m,\lambda}(L)
+\le
+\sum_{x\in X_m}\lambda_m(x)\,
+\min\!\Bigl(1,\frac{L}{d_m(x)}\Bigr).
+\]
+\par
+下面构造达到该上界的机制。
+对每个 \(x\in X_m\)，取子集 \(A_x\subseteq F_x\) 使
+\[
+|A_x|=\min(d_m(x),L),
+\]
+并取单射 \(\iota_x:A_x\hookrightarrow [L]\)。
+定义编码器：若 \(\omega\in A_x\)，令 \(\mathrm{enc}(\omega):=\iota_x(\omega)\)；
+若 \(\omega\in F_x\setminus A_x\)，则任取一个固定码字（例如 \(1\)）。
+解码器定义为：当 \(b\in \iota_x(A_x)\) 时，令 \(\mathrm{dec}(x,b):=\iota_x^{-1}(b)\)；
+其余码字在纤维 \(F_x\) 内任取固定输出即可。
+于是对于每个 \(x\)，恰有 \(|A_x|=\min(d_m(x),L)\) 个微态被正确恢复，
+故条件成功率正好等于
+\[
+\frac{|A_x|}{d_m(x)}=\min\!\Bigl(1,\frac{L}{d_m(x)}\Bigr).
+\]
+再对 \(\lambda_m\) 加权求和，即得所述闭式。证毕。
+\end{proof}
+
+\begin{theorem}[固定温度冻结区中的普适可逆阈值只由最大纤维尺度决定]\label{thm:pom-fixedq-frozen-universal-reversible-threshold}
+沿用定义 \ref{def:pom-max-fiber-entropy-rate} 与命题 \ref{prop:pom-escort-freezing-gap-threshold} 的记号。
+固定 \(q>0\)，并假设
+\[
+q\delta>\log\varphi-h_\ast.
+\]
+于是由命题 \ref{prop:pom-escort-freezing-gap-threshold}，
+\[
+\pi_{m,q}(\mathcal M_m)\longrightarrow 1,
+\qquad
+\pi_{m,q}(x):=\frac{d_m(x)^q}{S_q(m)}.
+\]
+若一列整数预算 \(L_m\ge 1\) 满足
+\[
+\frac{L_m}{M_m}\longrightarrow \lambda\in[0,\infty),
+\]
+则 escort 先验下的最优纤维保持可逆成功率满足
+\[
+\boxed{\;
+\mathrm{Succ}^{\mathrm{rev}}_{m,\pi_{m,q}}(L_m)
+\longrightarrow
+\min(1,\lambda).
+\;}
+\]
+特别地，上述极限在整个固定温度冻结区中与 \(q\) 的具体取值无关，只取决于最大纤维尺度 \(M_m\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-macroprior-fiberwise-reversible-capacity}，
+\[
+\mathrm{Succ}^{\mathrm{rev}}_{m,\pi_{m,q}}(L_m)
+=
+\sum_{x\in X_m}\pi_{m,q}(x)\,
+\min\!\Bigl(1,\frac{L_m}{d_m(x)}\Bigr).
+\]
+将求和分为 \(\mathcal M_m\) 与其补集。
+对 \(x\in\mathcal M_m\)，有 \(d_m(x)=M_m\)，故该部分恰为
+\[
+\pi_{m,q}(\mathcal M_m)\,
+\min\!\Bigl(1,\frac{L_m}{M_m}\Bigr).
+\]
+另一方面，若 \(x\notin\mathcal M_m\)，则 \(d_m(x)<M_m\)，从而
+\[
+0\le
+\min\!\Bigl(1,\frac{L_m}{d_m(x)}\Bigr)
+\le 1.
+\]
+因此得到夹逼
+\[
+\pi_{m,q}(\mathcal M_m)\,
+\min\!\Bigl(1,\frac{L_m}{M_m}\Bigr)
+\le
+\mathrm{Succ}^{\mathrm{rev}}_{m,\pi_{m,q}}(L_m)
+\le
+\pi_{m,q}(\mathcal M_m)\,
+\min\!\Bigl(1,\frac{L_m}{M_m}\Bigr)
+\ +\ \bigl(1-\pi_{m,q}(\mathcal M_m)\bigr).
+\]
+由 \(\pi_{m,q}(\mathcal M_m)\to 1\) 及 \(L_m/M_m\to \lambda\)，两端同时趋于 \(\min(1,\lambda)\)，故中项同趋于该极限。证毕。
+\end{proof}
+
+\begin{corollary}[固定温度冻结区中的最小码字预算与最小比特预算]\label{cor:pom-fixedq-frozen-minimal-reversible-budget}
+在定理 \ref{thm:pom-fixedq-frozen-universal-reversible-threshold} 的假设下，取任意目标成功率 \(s\in(0,1)\)，并定义最小码字预算
+\[
+L^\star_{m,q}(s)
+:=
+\min\Bigl\{L\in\NN_{>0}:\ \mathrm{Succ}^{\mathrm{rev}}_{m,\pi_{m,q}}(L)\ge s\Bigr\}.
+\]
+则有
+\[
+\boxed{\;
+\frac{L^\star_{m,q}(s)}{M_m}\longrightarrow s.
+\;}
+\]
+进一步，定义最小整数比特预算
+\[
+B^\star_{m,q}(s)
+:=
+\min\Bigl\{B\in\NN_{\ge 0}:\ \mathrm{Succ}^{\mathrm{rev}}_{m,\pi_{m,q}}(2^B)\ge s\Bigr\}.
+\]
+则
+\[
+\boxed{\;
+B^\star_{m,q}(s)
+=
+\left\lceil
+\log_2 M_m+\log_2 s+o(1)
+\right\rceil .
+\;}
+\]
+特别地，对完美恢复 \(s=1\) 有精确等式
+\[
+L^\star_{m,q}(1)=M_m,
+\qquad
+B^\star_{m,q}(1)=\left\lceil \log_2 M_m\right\rceil.
+\]
+若进一步 \(\alpha_\ast=\lim_{m\to\infty}\frac{1}{m}\log M_m\) 存在，则对任意固定 \(s\in(0,1]\) 都有
+\[
+\lim_{m\to\infty}\frac{B^\star_{m,q}(s)}{m}
+=
+\frac{\alpha_\ast}{\log 2}.
+\]
+\end{corollary}
+\begin{proof}
+先证码字预算。
+若存在子列仍满足
+\[
+\frac{L^\star_{m,q}(s)}{M_m}\longrightarrow \lambda<s,
+\]
+则由定理 \ref{thm:pom-fixedq-frozen-universal-reversible-threshold} 可得
+\[
+\mathrm{Succ}^{\mathrm{rev}}_{m,\pi_{m,q}}\bigl(L^\star_{m,q}(s)\bigr)\longrightarrow \lambda<s,
+\]
+与 \(L^\star_{m,q}(s)\) 的定义矛盾。
+故任意极限点都不小于 \(s\)。
+\par
+反过来，任取 \(\varepsilon>0\)，并设
+\[
+\widetilde L_m:=\Bigl\lceil (s+\varepsilon)M_m\Bigr\rceil.
+\]
+由定理 \ref{thm:pom-fixedq-frozen-universal-reversible-threshold}，
+\[
+\mathrm{Succ}^{\mathrm{rev}}_{m,\pi_{m,q}}(\widetilde L_m)\longrightarrow s+\varepsilon>s,
+\]
+从而对充分大 \(m\) 必有
+\[
+L^\star_{m,q}(s)\le \widetilde L_m.
+\]
+因此任意极限点都不大于 \(s+\varepsilon\)；
+令 \(\varepsilon\downarrow 0\) 即得
+\[
+\frac{L^\star_{m,q}(s)}{M_m}\to s.
+\]
+\par
+对比特预算，由单调性可知
+\[
+B^\star_{m,q}(s)=\left\lceil \log_2 L^\star_{m,q}(s)\right\rceil.
+\]
+再利用
+\[
+L^\star_{m,q}(s)=sM_m(1+o(1)),
+\]
+两端取 \(\log_2\) 即得
+\[
+\log_2 L^\star_{m,q}(s)=\log_2 M_m+\log_2 s+o(1),
+\]
+于是推出所示 ceiling 公式。
+\par
+对完美恢复 \(s=1\)，由定理 \ref{thm:pom-macroprior-fiberwise-reversible-capacity}，
+\[
+\mathrm{Succ}^{\mathrm{rev}}_{m,\pi_{m,q}}(L)=1
+\]
+当且仅当对所有 \(\pi_{m,q}(x)>0\) 的 \(x\) 都有 \(L\ge d_m(x)\)。
+由于 \(q>0\) 时 \(\pi_{m,q}(x)>0\) 对一切 \(x\in X_m\) 都成立，故必须且只需
+\[
+L\ge \max_{x\in X_m}d_m(x)=M_m.
+\]
+于是
+\[
+L^\star_{m,q}(1)=M_m,
+\qquad
+B^\star_{m,q}(1)=\lceil \log_2 M_m\rceil.
+\]
+最后，若 \(\frac1m\log M_m\to\alpha_\ast\)，则
+\[
+\frac{1}{m}B^\star_{m,q}(s)
+=
+\frac{\log_2 M_m}{m}+o(1)
+\to
+\frac{\alpha_\ast}{\log 2},
+\]
+因为 \(\log_2 s\) 与 ceiling 误差都只贡献 \(o(m)\)。证毕。
+\end{proof}
+
+\begin{theorem}[固定温度冻结区中的 Bayes--InfoNCE 普适 Poisson 极限]\label{thm:pom-fixedq-frozen-bayes-infonce-poisson}
+沿用定理 \ref{thm:pom-infonce-fiber-spectrum-tomography} 的记号，记
+\[
+\Psi_K(p):=\EE\bigl[\log(1+\mathrm{Binomial}(K-1,p))\bigr]
+\qquad(K\ge 2,\ p\in[0,1]).
+\]
+对任意宏观先验 \(\lambda_m\) 定义其对应的 Bayes--InfoNCE 值
+\[
+L_K^\star(m;\lambda_m)
+:=
+\sum_{x\in X_m}\lambda_m(x)\,\Psi_K\bigl(\lambda_m(x)\bigr).
+\]
+对 \(\lambda_m=\pi_{m,q}\) 而言，若 \(q>0\) 满足定理 \ref{thm:pom-fixedq-frozen-universal-reversible-threshold} 的冻结条件，
+并取整数序列 \(K_m\ge 2\) 使得
+\[
+\frac{K_m-1}{N_m}\longrightarrow \Lambda\in[0,\infty),
+\]
+则有极限
+\[
+\boxed{\;
+L_{K_m}^\star(m;\pi_{m,q})
+\longrightarrow
+\EE\bigl[\log(1+\mathrm{Poisson}(\Lambda))\bigr].
+\;}
+\]
+特别地，在固定温度冻结区内，Bayes--InfoNCE 的主导极限只取决于最大纤维达到者尺度 \(N_m\)，而与 \(q\) 的具体取值无关。
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:pom-infonce-partition-optimal-closed-form} 的证明本质上是一个条件 Bayes 风险计算；
+其中真正进入计算的只有“类别先验”及其在给定类别下的均匀条件分布。
+因此同一论证对任意宏观先验 \(\lambda_m\) 都给出最优值公式
+\[
+L_K^\star(m;\lambda_m)
+=
+\sum_{x\in X_m}\lambda_m(x)\,\Psi_K(\lambda_m(x)).
+\]
+下面取 \(\lambda_m=\pi_{m,q}\)。
+\par
+记
+\[
+p_m:=\pi_{m,q}(\mathcal M_m).
+\]
+由定理 \ref{thm:pom-fixedq-frozen-universal-reversible-threshold} 的假设知 \(p_m\to 1\)。
+又因 \(\pi_{m,q}(x)\propto d_m(x)^q\) 且对 \(x\in\mathcal M_m\) 有 \(d_m(x)=M_m\) 常数，
+故 \(\pi_{m,q}\) 在 \(\mathcal M_m\) 上的条件分布严格均匀，即
+\[
+\pi_{m,q}(x)=\frac{p_m}{N_m}
+\qquad (x\in\mathcal M_m).
+\]
+因此最大集合部分可写为
+\[
+\sum_{x\in\mathcal M_m}\pi_{m,q}(x)\,\Psi_{K_m}\bigl(\pi_{m,q}(x)\bigr)
+=
+p_m\,\Psi_{K_m}\!\Bigl(\frac{p_m}{N_m}\Bigr).
+\]
+若记
+\[
+J_m\sim \mathrm{Binomial}\!\Bigl(K_m-1,\frac{p_m}{N_m}\Bigr),
+\]
+则由 \((K_m-1)/N_m\to\Lambda\) 与 \(p_m\to 1\)，标准 Poisson 极限定理给出
+\[
+J_m\Longrightarrow \mathrm{Poisson}(\Lambda).
+\]
+又因 \(\log(1+j)\le j\)，故
+\[
+\Psi_{K_m}\!\Bigl(\frac{p_m}{N_m}\Bigr)
+=
+\EE[\log(1+J_m)]
+\le
+\EE[J_m]
+=
+\frac{(K_m-1)p_m}{N_m},
+\]
+右端有界并收敛到 \(\Lambda\)，从而 \(\{\log(1+J_m)\}\) 一致可积。
+于是分布收敛可提升为期望收敛：
+\[
+\Psi_{K_m}\!\Bigl(\frac{p_m}{N_m}\Bigr)
+\longrightarrow
+\EE\bigl[\log(1+\mathrm{Poisson}(\Lambda))\bigr].
+\]
+再与 \(p_m\to 1\) 合并，得到最大集合部分的极限正是所需右端。
+\par
+对补集部分，由 \(0\le \Psi_{K_m}(p)\le \log K_m\)（因为 \(0\le \mathrm{Binomial}(K_m-1,p)\le K_m-1\)）可得
+\[
+0\le
+\sum_{x\notin\mathcal M_m}\pi_{m,q}(x)\,\Psi_{K_m}(\pi_{m,q}(x))
+\le
+\bigl(1-p_m\bigr)\log K_m.
+\]
+又因 \(N_m\le |X_m|=F_{m+2}=\exp(O(m))\) 且 \((K_m-1)/N_m\to\Lambda\)，故 \(\log K_m=O(m)\)；
+同时 \(1-p_m\) 由命题 \ref{prop:pom-escort-freezing-gap-threshold} 指数衰减到 \(0\)。
+因此补集贡献趋于 \(0\)。
+\par
+综上，
+\[
+L_{K_m}^\star(m;\pi_{m,q})
+\longrightarrow
+\EE\bigl[\log(1+\mathrm{Poisson}(\Lambda))\bigr].
+\]
+证毕。
+\end{proof}
+
+这四条结果把“固定温度冻结”“预言机容量曲线”“Bayes--InfoNCE 层析”三条原本分散的链条压缩到同一组极端几何量上：
+可逆阈值只记住最大纤维尺度 \(M_m\)，而对比损失的 Poisson 极限只记住最大纤维达到者数 \(N_m\)。
+换言之，在固定温度冻结区内，完整纤维谱固然仍可由容量曲线或 InfoNCE 总损失完全重建，
+但其最主导的可逆恢复与对比学习门槛已经分别塌缩为“尺度”与“简并度”这两个极端账本量。

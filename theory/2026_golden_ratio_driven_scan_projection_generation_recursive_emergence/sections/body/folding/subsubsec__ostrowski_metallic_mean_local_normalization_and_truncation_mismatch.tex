@@ -1,0 +1,216 @@
+\subsubsection{金属平均族的局部规范化算法与截断误差的可审计统计}\label{subsubsec:ostrowski-metallic-local-normalization-truncation-mismatch}
+本小节在常数型 \(\alpha_A=[0;A,A,A,\dots]\)（\(A\in\NN_{\ge 1}\)）的 Ostrowski 系统中，把“取规范形再截断”的折叠机制落实为一组可计算的局部重写规则，并据此给出朴素截断与折叠感知截断之间的单位长度差异率及其大字母渐近。
+该结果提供了 \(\Fold_m^{(\alpha_A)}\) 的实现层可核验生成式，并把跨分辨率的规范选择差异编译为可审计的统计账本。
+
+\paragraph{两规则规范化：终止性、数值保持与规范性}
+对 \(\alpha_A\) 有 \(a_n\equiv A\)，其收敛分母递推为
+\[
+q_{-1}=0,\ q_0=1,\qquad q_{n+1}=Aq_n+q_{n-1}\quad(n\ge 0).
+\]
+为与定义 \ref{def:fold-alpha} 的取值公式 \(N_\alpha(\omega)=\sum_{n=1}^m \omega_n q_{n-1}\) 保持一致，对仅有限支撑的序列 \(\mathbf d=(d_n)_{n\ge 1}\in\NN^{(\NN)}\) 定义加权值
+\[
+V(\mathbf d):=\sum_{n\ge 1} d_n q_{n-1}\in\NN.
+\]
+
+\begin{theorem}[金属平均折叠的两规则规范化系统]\label{thm:ostrowski-metallic-two-rule-normalization}
+设 \(A\in\NN_{\ge 1}\)。在字母表 \(\{0,1,\dots,A+1\}\) 上考虑对有限支撑序列 \(\mathbf d\) 的如下局部改写（其中 \(i\) 为触发位置）：
+\begin{enumerate}
+  \item 若 \(i\ge 1\) 且 \(b\in\{1,\dots,A\}\)，并且
+  \(
+  (d_{i+2},d_{i+1},d_i)=(x,A,b)
+  \)，
+  则改写
+  \[
+  (x,A,b)\ \Longrightarrow\ (x+1,0,b-1).
+  \]
+  \item 若 \(i\ge 2\)，并且
+  \(
+  (d_{i+1},d_i,d_{i-1},d_{i-2})=(x,A+1,0,c)
+  \)，
+  则改写
+  \[
+  (x,A+1,0,c)\ \Longrightarrow\ (x+1,0,A-1,c+1).
+  \]
+\end{enumerate}
+对任意输入 \(\omega\in\Omega_m^{(\alpha_A)}=\{0,1,\dots,A\}^m\)（高位补零视作有限支撑序列），反复在任意可用位置应用上述改写，过程必在有限步终止于某一不可约序列 \(\mathbf d^{\mathrm{nf}}\)，并且：
+\begin{enumerate}
+  \item \(\mathbf d^{\mathrm{nf}}\) 仅取值于 \(\{0,1,\dots,A\}\)，且满足合法约束 \(\ d_n^{\mathrm{nf}}=A\Rightarrow d_{n-1}^{\mathrm{nf}}=0\ (n\ge 2)\)；
+  \item 数值保持：\(V(\mathbf d^{\mathrm{nf}})=V(\omega)\)；
+  \item \(\mathbf d^{\mathrm{nf}}=Z_{\alpha_A}\!\bigl(V(\omega)\bigr)\)，从而
+  \[
+  \Fold_m^{(\alpha_A)}(\omega)=\pi_m^{(\alpha_A)}\!\bigl(\mathbf d^{\mathrm{nf}}\bigr).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\textbf{数值不变性.}
+对第一条改写，利用 \(q_{i+1}=Aq_i+q_{i-1}\) 得
+\[
+xq_{i+1}+Aq_i+bq_{i-1}
+=xq_{i+1}+(q_{i+1}-q_{i-1})+bq_{i-1}
+=(x+1)q_{i+1}+(b-1)q_{i-1},
+\]
+与右侧权和一致。
+对第二条改写，记四元组处的权重分别为 \(q_i,q_{i-1},q_{i-2},q_{i-3}\)。
+该步等价于验证恒等式
+\[
+(A+1)q_{i-1}=q_i+(A-1)q_{i-2}+q_{i-3}.
+\]
+由递推 \(q_i=Aq_{i-1}+q_{i-2}\) 与 \(q_{i-1}=Aq_{i-2}+q_{i-3}\)，右端化为
+\[
+q_i+(A-1)q_{i-2}+q_{i-3}
+=Aq_{i-1}+q_{i-2}+(A-1)q_{i-2}+q_{i-3}
+=Aq_{i-1}+Aq_{i-2}+q_{i-3}
+=(A+1)q_{i-1},
+\]
+故恒等式成立。
+再加上同一高位 \(xq_i\) 与更低位 \(cq_{i-3}\) 的共同项即得该四元组改写的权和相等。
+因此每一步改写均保持 \(V(\mathbf d)\) 不变。
+\par
+\textbf{终止性.}
+固定总值 \(N:=V(\omega)\)。由于 \(q_n\to\infty\)，表示 \(N\) 的非负数字序列只能在有限多位上非零。
+在该有限集合上引入从高位到低位的字典序：两表示不同则比较其最大差异指标处的数字。
+在第一条改写中，最高受影响位为 \(i+2\)，其数字严格增加 \(x\mapsto x+1\)；
+在第二条改写中，最高受影响位为 \(i+1\)，其数字同样严格增加。
+因此每步改写使字典序严格上升；而在固定 \(N\) 的表示集合中不存在无限严格上升链，故过程必有限步终止。
+\par
+\textbf{不可约性推出合法性.}
+若不可约序列中出现数字 \(A+1\)，则由两规则的结构可知其低一位必须为 \(0\)，从而局部形态 \((A+1,0,\cdot)\) 必出现并触发第二条改写，矛盾。
+因此不可约序列各位均不超过 \(A\)。
+若仍存在某处 \(d_{n}=A\) 且 \(d_{n-1}>0\)，则第一条改写可用，亦矛盾。
+故不可约序列满足 \(d_n=A\Rightarrow d_{n-1}=0\)，即落入合法语法。
+\par
+\textbf{正确性.}
+不可约序列 \(\mathbf d^{\mathrm{nf}}\) 与 \(\omega\) 表示同一整数 \(N\)，且 \(\mathbf d^{\mathrm{nf}}\) 合法。
+由 Ostrowski 表示的唯一性（见 \cite{Ostrowski1922} 以及本节前述固定的规范性口径），合法表示必等于规范数字 \(Z_{\alpha_A}(N)\)。
+因此 \(\mathbf d^{\mathrm{nf}}=Z_{\alpha_A}(V(\omega))\)，并得到折叠等式。证毕。
+\end{proof}
+
+\paragraph{朴素截断与折叠感知截断：单位长度差异率与大字母主项}
+对 \(\omega\in\Omega_{m+k}^{(\alpha_A)}=\{0,\dots,A\}^{m+k}\) 定义朴素截断
+\[
+r_{m+k\to m}^{(\alpha_A)}(\omega):=\pi_{m+k\to m}^{(\alpha_A)}(\omega)=(\omega_1,\dots,\omega_m),
+\]
+以及折叠感知截断
+\[
+\widetilde r_{m+k\to m}^{(\alpha_A)}(\omega)
+:=\pi_{m+k\to m}^{(\alpha_A)}\!\left(\Fold_{m+k}^{(\alpha_A)}(\omega)\right).
+\]
+令其 Hamming 规范差为
+\[
+G^{(A)}_{m,k}(\omega)
+:=\#\Bigl\{1\le i\le m:\ \bigl(r_{m+k\to m}^{(\alpha_A)}(\omega)\bigr)_i\neq \bigl(\widetilde r_{m+k\to m}^{(\alpha_A)}(\omega)\bigr)_i\Bigr\}.
+\]
+
+\begin{theorem}[金属平均截断规范差的极限与步长不变性]\label{thm:ostrowski-metallic-truncation-mismatch-limit}
+在 \(\Omega_{m+k}^{(\alpha_A)}\) 上取乘积均匀测度。
+则对每个固定 \(A\ge 1\) 与固定 \(k\ge 1\)，极限
+\[
+g_A:=\lim_{m\to\infty}\frac{1}{m}\,\EE\!\left[G^{(A)}_{m,k}\right]
+\]
+存在，且与 \(k\) 无关。
+此外，当 \(A\to\infty\) 时存在常数 \(C>0\) 使
+\[
+\left|g_A-\frac{3A}{(A+1)^2}\right|\ \le\ \frac{C}{(A+1)^2},
+\]
+从而
+\(
+g_A=\frac{3}{A}+O(A^{-2})
+\)。
+\end{theorem}
+\begin{proof}
+把 \(\omega\) 视为截断自一条双侧独立均匀序列，并令 \(X_i\) 表示位置 \(i\) 是否发生失配的指示变量，则
+\(
+G^{(A)}_{m,k}=\sum_{i=1}^m X_i
+\)。
+由定理 \ref{thm:ostrowski-metallic-two-rule-normalization}，高位新增信息对低位的影响只能通过连续可触发模式向下传播；而每跨越一步继续传播都需要在相邻更高位再次遇到数字 \(A\)。
+在独立均匀模型下，某指定位取值为 \(A\) 的概率为 \((A+1)^{-1}\)，故传播长度具有几何型尾界。
+这意味着 \(X_i\) 对远处高位的依赖以指数小概率发生，从而形成具有指数衰减依赖的平移不变过程。
+于是存在常数使
+\[
+\EE\!\left[G^{(A)}_{m,k}\right]=\sum_{i=1}^m \EE[X_i]=m\,\EE[X_0]+O(1),
+\]
+其中 \(O(1)\) 为边界截断项。
+因此 \(m^{-1}\EE[G^{(A)}_{m,k}]\) 收敛到 \(g_A:=\EE[X_0]\)，并且由于传播尾界对 \(k\) 的改变只产生有界的端部差异，极限与 \(k\) 无关。
+\par
+最后讨论 \(A\to\infty\) 的主项。
+考虑局部缺陷事件
+\[
+D_i:=\{\omega_{i+1}=A,\ \omega_i>0\}.
+\]
+在独立均匀测度下
+\(
+\PP(D_i)=\frac{A}{(A+1)^2}.
+\)
+当 \(D_i\) 发生且其邻域不包含第二个高位 \(A\) 引发的连锁修正时，第一条规则在该三元组上触发一次并改变恰好三个位置 \((i,i+1,i+2)\) 的数字，因此在该“孤立缺陷”情形下对失配计数的局部贡献为 \(3\)。
+使这一三位贡献偏离 \(3\) 的情形要求在长度 \(O(1)\) 的窗口内出现至少两个取值为 \(A\) 的位置，从而其概率为 \(O((A+1)^{-2})\)。
+因此单位长度期望失配满足
+\(
+g_A=3\PP(D_0)+O((A+1)^{-2})
+\)，即所述估计。证毕。
+\end{proof}
+
+\begin{proposition}[传播长度的指数尾界与方差量级]\label{prop:ostrowski-metallic-propagation-tail-variance}
+在定理 \ref{thm:ostrowski-metallic-truncation-mismatch-limit} 的概率模型中，存在常数 \(\rho_A\in(0,1)\)、\(C_A<\infty\) 使得对一切 \(t\ge 0\),
+\[
+\PP(\mathsf L\ge t)\le C_A\,\rho_A^{t},
+\qquad\text{并可取}\quad
+\rho_A\le \frac{1}{A+1},
+\]
+其中 \(\mathsf L\) 表示高位新增信息在规范化过程中向低位影响的最大回传距离。
+从而对每个固定 \(A\) 与 \(k\)，有
+\[
+\Var\!\left(G^{(A)}_{m,k}\right)=\Theta(m)\qquad(m\to\infty),
+\]
+并且当 \(A\to\infty\) 时存在绝对常数 \(C\) 使
+\[
+\Var\!\left(G^{(A)}_{m,k}\right)\ \le\ C\,\frac{m}{A}.
+\]
+\end{proposition}
+\begin{proof}
+传播尾界来自定理 \ref{thm:ostrowski-metallic-two-rule-normalization} 所揭示的触发链结构：每向低位继续传播一步，需要一个新的高位取值 \(A\) 以维持可触发缺陷，故可由参数 \((A+1)^{-1}\) 的几何尾随机变量支配。
+\par
+令 \(X_i\) 为第 \(i\) 位失配指示变量，则 \(G^{(A)}_{m,k}=\sum_{i=1}^m X_i\)。
+指数尾界蕴含存在常数 \(c>0\) 使得协方差满足
+\(
+|\Cov(X_i,X_j)|\le C'e^{-c|i-j|}
+\)。
+因此
+\[
+\Var\!\left(G^{(A)}_{m,k}\right)
+=\sum_{i=1}^m\Var(X_i)+2\sum_{1\le i<j\le m}\Cov(X_i,X_j)
+=m\sigma_A^2+o(m),
+\]
+其中 \(\sigma_A^2:=\sum_{r\in\ZZ}\Cov(X_0,X_r)\in(0,\infty)\)。
+另一方面，当 \(A\to\infty\) 时由定理 \ref{thm:ostrowski-metallic-truncation-mismatch-limit} 得 \(\EE[X_0]=g_A=\Theta(A^{-1})\)，且 \(0\le X_0\le 1\) 给出 \(\Var(X_0)\le \EE[X_0]\)。
+结合指数衰减求和，得到 \(\sigma_A^2=O(g_A)\)，从而 \(\Var(G^{(A)}_{m,k})\le C m/A\)（\(A\) 足够大时）。证毕。
+\end{proof}
+
+\begin{conjecture}[大字母展开的二阶系数]\label{conj:ostrowski-metallic-ga-second-order}
+在定理 \ref{thm:ostrowski-metallic-truncation-mismatch-limit} 的记号下，当 \(A\to\infty\) 时存在渐近展开
+\[
+g_A=\frac{3}{A}-\frac{12}{A^2}+O\!\left(\frac{1}{A^3}\right),
+\]
+且二阶系数由最短“非孤立缺陷簇”对三位主贡献的系统性修正给出。
+\end{conjecture}
+
+\begin{conjecture}[金属平均族的零块记忆律与 \texorpdfstring{$\beta_A^{-2n}$}{betaA^{-2n}} 衰减模量]\label{conj:ostrowski-metallic-lucas-ostrowski-memory-law}
+对每个 \(A\in\NN_{\ge 1}\)，令 \(\beta_A>1\) 为方程 \(x^2-Ax-1=0\) 的 Pisot 根。
+令 \((U^{(A)}_n)_{n\ge 0}\) 为 Lucas--Fibonacci 型序列
+\[
+U^{(A)}_0=0,\qquad U^{(A)}_1=1,\qquad U^{(A)}_{n+2}=A U^{(A)}_{n+1}+U^{(A)}_{n}\quad(n\ge 0).
+\]
+设 \((g^{(A)}_t)_{t\in\ZZ}\) 为 \(\alpha_A=[0;A,A,A,\dots]\) 的折叠规范化所诱导的规范差指示过程（可参照猜想 \ref{conj:fold-gauge-anomaly-metallic-continuant-law} 的结构性刻画口径）。
+定义零块语境下的一步绝对误差极小化量 \(\mathcal E^{(A)}_n\) 与定理 \ref{thm:fold-gauge-anomaly-zero-block-minimax-abs-error} 同型。
+则存在仅依赖于 \(A\) 的整数修正 \(c(A)\) 与阈值 \(n_0(A)\) 使得当 \(n\ge n_0(A)\) 时成立闭式
+\[
+\boxed{\ \mathcal E^{(A)}_n=\frac{1}{4\,U^{(A)}_{n+c(A)}\,U^{(A)}_{n+c(A)+1}}\ }.
+\]
+并且误差指数衰减率满足
+\[
+\mathcal E^{(A)}_n=\Theta\!\bigl(\beta_A^{-2n}\bigr).
+\]
+在 \(A=1\) 时，\(\beta_A=\varphi\)、\(U^{(1)}_n=F_n\)，并可取 \(c(1)=3\)，从而退化为定理 \ref{thm:fold-gauge-anomaly-zero-block-minimax-abs-error} 的 Fibonacci 闭式。
+\end{conjecture}
+
+\endinput

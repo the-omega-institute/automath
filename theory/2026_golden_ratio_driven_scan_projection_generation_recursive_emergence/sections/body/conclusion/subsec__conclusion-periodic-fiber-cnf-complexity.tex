@@ -1,0 +1,526 @@
+\subsection{固定周期稳定类型的纤维约束复杂度与区间证书}\label{subsec:conclusion-periodic-fiber-cnf-complexity}
+本节把折叠纤维的组合格结构与经典约束可满足性/计数复杂度接口对齐。
+关键点在于：在一个固定的周期稳定类型上，纤维内部可嵌入指数规模的独立布尔自由度；
+该自由度既可承载 \(\mathrm{NP}\) 与 \(\#\mathrm{P}\) 难度的约束编译，也可由 Möbius 刚性给出完全离散的区间证书。
+
+\input{thm__conclusion-fold-inversecode-hilbert-recognizable}
+
+\paragraph{固定周期稳定类型}
+令 \(x^\star\in X_\infty\) 为周期词
+\[
+x^\star=(001)^\infty,
+\qquad
+x^\star\!\upharpoonright_{3n}\in X_{3n}\ (n\ge 1).
+\]
+
+\begin{theorem}[周期三稳定类型的纤维完全刻画与精确多重度]\label{thm:conclusion-period3-fiber-exact-multiplicity}
+取 \(n\ge 1\)，令 \(m:=3n\) 且 \(x:=x^\star\!\upharpoonright_{3n}\in X_{3n}\)。
+则对任意 \(\omega\in\Omega_{3n}\)，以下条件等价：
+\begin{enumerate}
+  \item \(\Fold_{3n}(\omega)=x\)；
+  \item 对每个 \(j\in\{1,\dots,n\}\)，三元块满足
+  \[
+  (\omega_{3j-2},\omega_{3j-1},\omega_{3j})\in\{001,\ 110\}.
+  \]
+\end{enumerate}
+因此
+\[
+d_{3n}(x):=\bigl|\Fold_{3n}^{-1}(x)\bigr|=2^n.
+\]
+\end{theorem}
+
+\begin{proof}
+记 \(v:=v_{3n}(x)\)，并沿用 \S\ref{subsubsec:fold-zeckendorf-mod-topbits} 中 \(M_{3n}=F_{3n+2}\)、\(T_{3n}=F_{3n+3}-2\) 的记号。
+\par
+\textbf{(2)\(\Rightarrow\)(1).}
+若 \((\omega_{3j-2},\omega_{3j-1},\omega_{3j})\in\{001,110\}\)，则每个块对加权值 \(N(\omega)\) 的贡献恒为
+\[
+\omega_{3j}F_{3j+1}+\omega_{3j-1}F_{3j}+\omega_{3j-2}F_{3j-1}=F_{3j+1},
+\]
+从而
+\[
+N(\omega)=\sum_{j=1}^{n}F_{3j+1}.
+\]
+另一方面，由 \(x_{3j}=1\)、\(x_{3j-1}=x_{3j-2}=0\) 可知
+\[
+v_{3n}(x)=\sum_{j=1}^{n}F_{3j+1}.
+\]
+故 \(N(\omega)=v\)，由定理 \ref{thm:fold-zeckendorf-mod-decomposition-unique}（唯一性）得 \(\Fold_{3n}(\omega)=x\)。
+\par
+\textbf{(1)\(\Rightarrow\)(2).}
+若 \(\Fold_{3n}(\omega)=x\)，则由定理 \ref{thm:fold-zeckendorf-mod-decomposition-unique}，存在 \(c\in\{0,1\}\) 使
+\[
+N(\omega)=v+c\,M_{3n}.
+\]
+又因 \(v\ge F_{3n+1}\)，故 \(v+M_{3n}>F_{3n+1}+F_{3n+2}-2=T_{3n}\)。
+而对任意 \(\omega\in\Omega_{3n}\) 有 \(0\le N(\omega)\le T_{3n}\)，于是必有 \(c=0\)，即 \(N(\omega)=v\)。
+\par
+考察最高三位 \((\omega_{3n-2},\omega_{3n-1},\omega_{3n})\)。
+由于
+\[
+v=\sum_{j=1}^n F_{3j+1}\ge F_{3n+1},
+\]
+若 \(\omega_{3n}=0\)，则若再有 \(\omega_{3n-1}=0\)，则
+\[
+N(\omega)\le \sum_{k=1}^{3n-2}F_{k+1}=F_{3n+1}-2<v,
+\]
+矛盾，故必有 \(\omega_{3n-1}=1\)。
+若 \(\omega_{3n-2}=0\)，则
+\[
+N(\omega)\le F_{3n}+\sum_{k=1}^{3n-3}F_{k+1}=2F_{3n}-2,
+\]
+而
+\[
+v\ge F_{3n+1}+F_{3n-2}=F_{3n}+F_{3n-1}+F_{3n-2}=2F_{3n},
+\]
+从而 \(N(\omega)<v\)，矛盾。
+因此 \(\omega_{3n-2}=1\)，最高三位为 \(110\)。
+若 \(\omega_{3n}=1\)，则剩余权重为
+\(
+v-F_{3n+1}=\sum_{j=1}^{n-1}F_{3j+1}
+\)
+并满足
+\[
+v-F_{3n+1}\le \sum_{k=1}^{3n-3}F_{k+1}=F_{3n}-2<F_{3n},
+\]
+因此不可能再取 \(\omega_{3n-1}=1\) 或 \(\omega_{3n-2}=1\)（否则将至少额外贡献 \(F_{3n}\) 或 \(F_{3n-1}\) 并导致 \(N(\omega)>v\)），故 \(\omega_{3n-1}=\omega_{3n-2}=0\)，三位为 \(001\)。
+\par
+两种情形下最高三位贡献均等于 \(F_{3n+1}\)，扣除后余下 \(3(n-1)\) 位的加权值等于 \(\sum_{j=1}^{n-1}F_{3j+1}\)，由同一论证归纳得到对每个 \(j\) 块均满足 \(\{001,110\}\) 约束。
+等价性得证。
+\par
+最后，块选择在每个 \(j\) 上独立且恰有两种可能，因此 \(d_{3n}(x)=2^n\)。
+\end{proof}
+
+\begin{remark}[周期三纤维的指数下界]\label{rem:conclusion-period3-fiber-exponent-lb}
+由定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity} 立即得到最大纤维的下界
+\(
+D_{3n}\ge d_{3n}(x)=2^n
+\)，从而
+\[
+\liminf_{m\to\infty}\frac{1}{m}\log_2 D_m\ \ge\ \frac13.
+\]
+最大纤维的精确渐近由定理 \ref{thm:pom-max-fiber} 给出（指数为 \(\tfrac12\log_2\varphi\)）。
+\end{remark}
+
+\begin{definition}[坐标打碎与 VC 维]\label{def:conclusion-vc-dim}
+给定集合 \(A\subseteq\{0,1\}^m\) 与坐标子集 \(S\subseteq\{1,\dots,m\}\)，记投影 \(\pi_S:\{0,1\}^m\to\{0,1\}^{S}\) 为抽取 \(S\) 上坐标。
+称 \(A\) 在 \(S\) 上\emph{打碎}，若 \(\pi_S(A)=\{0,1\}^{S}\)。
+定义
+\[
+\mathrm{VCdim}(A):=\max\{|S|:\ A\ \text{在}\ S\ \text{上打碎}\}.
+\]
+\end{definition}
+
+\begin{corollary}[周期纤维内的超立方结构与 VC 维线性下界]\label{cor:conclusion-period3-fiber-hypercube-vc}
+在定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity} 的设定下，令
+\[
+P_n:=\{2,5,\dots,3n-1\}\subseteq\{1,\dots,3n\}.
+\]
+则投影 \(\pi_{P_n}\) 在纤维 \(\Fold_{3n}^{-1}(x)\) 上为双射。
+因而该纤维在 \(P_n\) 上打碎，并满足
+\[
+\mathrm{VCdim}\bigl(\Fold_{3n}^{-1}(x)\bigr)\ge n=\frac{m}{3}.
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity}，每个块 \((\omega_{3j-2},\omega_{3j-1},\omega_{3j})\) 仅可能为 \(001\) 或 \(110\)，且两者在坐标 \(3j-1\) 上分别取 \(0\) 与 \(1\)。
+因此 \(j\)-块的选择与 \(\omega_{3j-1}\) 一一对应，拼接后得到 \(\pi_{P_n}\) 在纤维上的双射。
+打碎性与 VC 维下界由定义 \ref{def:conclusion-vc-dim} 直接推出。证毕。
+\end{proof}
+
+\begin{definition}[纤维约束可满足性与计数问题]\label{def:conclusion-fiber-cnf}
+定义判定问题 \(\textsc{FIBER-CNF}\) 如下：
+\begin{itemize}
+  \item 输入：三元组 \((m,x,\Psi)\)，其中 \(m\ge 1\)，\(x\in X_m\)，\(\Psi\) 为关于变量 \((\omega_1,\dots,\omega_m)\) 的 CNF 公式；
+  \item 问题：是否存在 \(\omega\in\Omega_m\) 使得 \(\Fold_m(\omega)=x\) 且 \(\Psi(\omega)=1\)。
+\end{itemize}
+定义计数问题 \(\#\textsc{FIBER-CNF}\)：
+\begin{itemize}
+  \item 输入：同上；
+  \item 输出：满足 \(\Fold_m(\omega)=x\) 且 \(\Psi(\omega)=1\) 的 \(\omega\in\Omega_m\) 的个数。
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[固定周期稳定类型上的纤维交叠可满足性为 \texorpdfstring{\(\mathrm{NP}\)}{NP}-完备]\label{thm:conclusion-fiber-cnf-npcomplete-periodic}
+存在固定的周期稳定类型 \(x^\star\in X_\infty\)（取 \(x^\star=(001)^\infty\)），使得 \(\text{\normalfont\textsc{FIBER-CNF}}\) 在如下受限实例族中仍为 \(\mathrm{NP}\)-完备：
+\[
+m=3n,\qquad x=x^\star\!\upharpoonright_{3n}.
+\]
+\end{theorem}
+
+\begin{proof}
+\(\textsc{FIBER-CNF}\in\mathrm{NP}\)：
+给定候选证书 \(\omega\in\Omega_m\)，可计算 \(N(\omega)\)（定义 \ref{def:fold-word}）并求其 Zeckendorf 规范形，从而在多项式时间内验证 \(\Fold_m(\omega)=x\)；同时 CNF 赋值核验亦为多项式时间，故属于 \(\mathrm{NP}\)。
+
+\(\mathrm{NP}\)-困难性：
+从 \(\textsc{3SAT}\) 作 Karp 归约。
+给定 \(n\) 变量 3CNF 公式 \(\varphi(y_1,\dots,y_n)\)，令 \(m:=3n\)，并对每个 \(j\in\{1,\dots,n\}\) 引入块变量
+\[
+t_j:=\omega_{3j},\qquad s_j:=\omega_{3j-1},\qquad r_j:=\omega_{3j-2}.
+\]
+构造 2CNF 约束
+\[
+B_n
+:=\bigwedge_{j=1}^{n}\Bigl[(t_j\vee s_j)\wedge(\neg t_j\vee\neg s_j)\wedge(\neg s_j\vee r_j)\wedge(s_j\vee\neg r_j)\Bigr],
+\]
+它等价于关系 \(t_j=\neg s_j\)、\(r_j=s_j\)，从而每块 \((t_j,s_j,r_j)\) 仅能取 \((1,0,0)\) 或 \((0,1,1)\)。
+将 \(\varphi\) 中每个正文字 \(y_j\) 替换为 \(s_j\)，每个负文字 \(\neg y_j\) 替换为 \(t_j\)，得到 3CNF 公式 \(\varphi^\sharp(\omega)\)。
+令
+\[
+\Psi(\omega):=B_n(\omega)\wedge \varphi^\sharp(\omega),
+\qquad
+x:=x^\star\!\upharpoonright_{3n}.
+\]
+
+由 \(B_n\) 的块约束知每个 \((r_j,s_j,t_j)\) 仅能取 \((0,0,1)\) 或 \((1,1,0)\)，即
+\(
+(\omega_{3j-2},\omega_{3j-1},\omega_{3j})\in\{001,110\}
+\)。
+由定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity}，这与 \(\Fold_{3n}(\omega)=x\) 等价，因此 \(\Fold_{3n}(\omega)=x\) 的全部约束已由 \(B_n\) 固定，且与 \(\varphi\) 无关。
+
+最后验证可满足性保持：
+若 \(\varphi\) 可满足，取任一满足赋值 \(y\)，令 \(s_j:=y_j\)、\(t_j:=\neg y_j\)、\(r_j:=y_j\) 得到 \(\omega\models B_n\) 且 \(\varphi^\sharp(\omega)=1\)，从而 \(\Psi(\omega)=1\)，并且 \(\Fold_{3n}(\omega)=x\)。
+反之，若存在 \(\omega\) 使 \(\Fold_{3n}(\omega)=x\) 且 \(\Psi(\omega)=1\)，则 \(\omega\models B_n\)，令 \(y_j:=s_j\) 得 \(\varphi(y)=\varphi^\sharp(\omega)=1\)。
+归约规模与构造均为多项式时间，故受限族为 \(\mathrm{NP}\)-完备。证毕。
+\end{proof}
+
+\begin{theorem}[固定周期纤维上的计数交叠为 \texorpdfstring{\(\#\mathrm{P}\)}{\#P}-完备且归约保持解数]\label{thm:conclusion-sharp-fiber-cnf-sharpPcomplete-parsimonious}
+对同一周期稳定类型 \(x^\star=(001)^\infty\)，计数问题 \(\#\text{\normalfont\textsc{FIBER-CNF}}\) 在受限实例族
+\[
+m=3n,\qquad x=x^\star\!\upharpoonright_{3n}
+\]
+上为 \(\#\mathrm{P}\)-完备；并且存在从 \(\#\text{\normalfont\textsc{3SAT}}\) 到该受限族的保解数（parsimonious）归约。
+\end{theorem}
+
+\begin{proof}
+\(\#\textsc{FIBER-CNF}\in\#\mathrm{P}\) 由“给定 \(\omega\) 可在多项式时间内核验 \(\Fold_m(\omega)=x\) 与 \(\Psi(\omega)=1\)”直接成立。
+\(\#\mathrm{P}\)-困难性与保解数性质沿用定理 \ref{thm:conclusion-fiber-cnf-npcomplete-periodic} 的归约：
+对任意 \(\varphi\) 构造 \(\Psi:=B_n\wedge\varphi^\sharp\)。
+约束 \(B_n\) 强制 \(t_j=\neg s_j\)、\(r_j=s_j\)，因此每个满足赋值 \(y\in\{0,1\}^n\) 唯一对应一个 \(\omega\in\Omega_{3n}\) 使 \(\Psi(\omega)=1\)（取 \(s_j=y_j\)、\(t_j=\neg y_j\)、\(r_j=y_j\)），反向亦唯一。
+并且由定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity}，\(\omega\models B_n\) 自动推出 \(\Fold_{3n}(\omega)=x^\star\!\upharpoonright_{3n}\)。
+故满足解数严格保持，从而得到 \(\#\mathrm{P}\)-完备。证毕。
+\end{proof}
+
+\paragraph{单标量谱量的常数精度 \(\mathrm{NP}\) 难度与单角色矩的 \(\#\mathrm{P}\) 读出}
+下面把定理 \ref{thm:conclusion-fiber-cnf-npcomplete-periodic}--\ref{thm:conclusion-sharp-fiber-cnf-sharpPcomplete-parsimonious} 的纤维内约束编译，压缩为两类仅依赖单一稳定类型 \(x=x^\star\!\upharpoonright_{3n}\) 的标量读出：一个为“测量--制备”条件期望的算子范数（常数精度），另一个为 \(\ZZ/2\ZZ\) 非平凡角色的单一矩（精确线性读出 \(\#\mathrm{SAT}\)）。
+
+\begin{definition}[固定周期纤维上的验证投影与接受率]\label{def:conclusion-periodic-fiber-verifier}
+取 \(m=3n\) 与 \(x=x^\star\!\upharpoonright_{3n}\)。
+令 \(\Pi_y:=\sum_{\omega:\ \Fold_m(\omega)=y}|\omega\rangle\langle\omega|\) 为纤维投影（见命题 \ref{prop:block-foldsat-trace-criterion} 的同型定义）。
+对任意关于 \(\Omega_m\) 的 CNF 公式 \(\Psi\)，令 \(D_\Psi\) 为对角投影：
+\[
+D_\Psi|\omega\rangle=|\omega\rangle
+\quad\Longleftrightarrow\quad
+\Psi(\omega)=1.
+\]
+并定义纤维条件接受率
+\[
+p_\Psi:=\frac{1}{d_m(x)}\Tr(\Pi_xD_\Psi)\in[0,1].
+\]
+\end{definition}
+
+\begin{theorem}[固定周期稳定类型上的常数阈值可满足性判别]\label{thm:conclusion-periodic-fiber-constant-threshold-np-hard}
+在定义 \ref{def:conclusion-periodic-fiber-verifier} 的设定下，定义“测量--制备”条件期望
+\[
+E_m(\rho):=\sum_{y\in X_m}\frac{\Tr(\Pi_y\rho)}{d_m(y)}\,\Pi_y,
+\]
+并对 \(x=x^\star\!\upharpoonright_{3n}\) 定义对角算符
+\[
+W_\Psi:=I+(2^{m}-1)D_\Psi.
+\]
+则
+\[
+\|E_m(W_\Psi)\|_{\infty}=1+(2^{m}-1)p_\Psi.
+\]
+并且存在常数阈值 \(\tau=\tfrac32\) 使得：对由定理 \ref{thm:conclusion-fiber-cnf-npcomplete-periodic} 的归约产生的 \(\Psi=B_n\wedge\varphi^\sharp\)，有
+\[
+\|E_m(W_\Psi)\|_{\infty}>\tau
+\quad\Longleftrightarrow\quad
+\varphi\ \text{可满足}.
+\]
+因此，SAT 可在多项式时间内归约为对单一固定稳定类型 \(x=x^\star\!\upharpoonright_{3n}\) 的一个算子范数标量的常数阈值判定；更进一步，任何以加性误差 \(<\tfrac14\) 近似 \(\|E_m(W_\Psi)\|_\infty\) 的多项式时间算法都将推出 \(\mathrm{P}=\mathrm{NP}\)。
+\end{theorem}
+
+\begin{proof}
+由 \(D_\Psi\) 的定义可知其支撑包含于纤维 \(x\)，故当 \(y\neq x\) 时 \(\Tr(\Pi_yD_\Psi)=0\)，而 \(\Tr(\Pi_yI)=d_m(y)\)。
+于是与定理 \ref{thm:block-foldsat-constant-precision-hardness} 的计算同型，得到
+\(
+E_m(W_\Psi)=I+(2^m-1)p_\Psi\,\Pi_x
+\)
+并从而 \(\|E_m(W_\Psi)\|_\infty=1+(2^m-1)p_\Psi\)。
+\par
+对 \(\Psi=B_n\wedge\varphi^\sharp\)，由定理 \ref{thm:conclusion-sharp-fiber-cnf-sharpPcomplete-parsimonious} 的保解数归约，\(\Tr(\Pi_xD_\Psi)=\#\mathrm{SAT}(\varphi)\)。
+若 \(\varphi\) 不可满足，则 \(p_\Psi=0\) 从而范数为 \(1\)；
+若 \(\varphi\) 可满足，则 \(p_\Psi\ge 1/d_m(x)\)。
+而由定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity}，\(d_m(x)=2^n\le 2^{3n}=2^m\)，故
+\(
+\|E_m(W_\Psi)\|_\infty\ge 2-2^{-m}>\tfrac32
+\)。
+阈值等价性与加性误差推论随之成立。证毕。
+\end{proof}
+
+\begin{proposition}[固定周期纤维上的单角色矩给出 \texorpdfstring{\(\#\mathrm{SAT}\)}{\#SAT} 的精确线性读出]\label{prop:conclusion-periodic-fiber-single-character-moment}
+取 \(G=\ZZ/2\ZZ\) 并令其非平凡角色 \(\chi\) 满足 \(\chi(0)=1,\chi(1)=-1\)。
+在定义 \ref{def:conclusion-periodic-fiber-verifier} 的设定下，定义提升标记 \(\ell_\Psi:\Fold_m^{-1}(x)\to G\)：
+\[
+\ell_\Psi(\omega)=1\ \Longleftrightarrow\ D_\Psi|\omega\rangle=|\omega\rangle,
+\qquad
+\ell_\Psi(\omega)=0\ \text{否则},
+\]
+并定义纤维内单角色矩
+\[
+\mu_\chi(x;\Psi):=\frac{1}{d_m(x)}\sum_{\omega:\ \Fold_m(\omega)=x}\chi(\ell_\Psi(\omega)).
+\]
+则有精确恒等式
+\[
+\mu_\chi(x;\Psi)=1-\frac{2\,\Tr(\Pi_xD_\Psi)}{d_m(x)}.
+\]
+对归约实例 \(\Psi=B_n\wedge\varphi^\sharp\)（其中 \(m=3n,\ x=x^\star\!\upharpoonright_{3n}\)），由 \(\Tr(\Pi_xD_\Psi)=\#\mathrm{SAT}(\varphi)\) 与 \(d_m(x)=2^n\) 得
+\[
+\mu_\chi(x;\Psi)=1-\frac{2\,\#\mathrm{SAT}(\varphi)}{2^n}.
+\]
+\end{proposition}
+
+\begin{proof}
+与命题 \ref{prop:block-foldsat-single-character-bias-sharp-sat} 的纤维求和恒等式同型：
+\(
+\sum_{\Fold_m(\omega)=x}\chi(\ell_\Psi(\omega))=d_m(x)-2\Tr(\Pi_xD_\Psi)
+\)。
+两侧除以 \(d_m(x)\) 即得第一式；第二式由定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity} 与保解数归约代入得到。证毕。
+\end{proof}
+
+\paragraph{多数与模计数门槛在单一周期三纤维上的完备性}
+以下将保解数归约的“计数保持”直接提升为多数阈值、奇偶性与模 \(p\) 非零性的完备性结论。
+
+\begin{definition}[固定周期三纤维上的多数与模计数判定]\label{def:conclusion-periodic-fiber-counting-thresholds}
+固定周期稳定类型 \(x^\star=(001)^\infty\)，并对每个 \(n\ge 1\) 令 \(m:=3n\)、\(x:=x^\star\!\upharpoonright_{3n}\)。
+对任意关于 \(\Omega_m\) 的 CNF 公式 \(\Psi\)，记纤维内满足计数
+\[
+N_x(\Psi):=\#\bigl\{\omega\in\Omega_m:\ \Fold_m(\omega)=x,\ \Psi(\omega)=1\bigr\}
+=\Tr(\Pi_xD_\Psi).
+\]
+定义如下三个受限判定问题（输入为 \(\langle n,\Psi\rangle\)）：
+\begin{enumerate}
+  \item \textsc{MAJ-FIBER-CNF}：判定 \(N_x(\Psi)>2^{n-1}\)；
+  \item \textsc{PAR-FIBER-CNF}：判定 \(N_x(\Psi)\equiv 1\ (\mathrm{mod}\ 2)\)；
+  \item 对固定素数 \(p\)，\textsc{MOD}\(_p\)\textsc{-FIBER-CNF}：判定 \(N_x(\Psi)\not\equiv 0\ (\mathrm{mod}\ p)\)。
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[固定周期三纤维上的多数判定为 \texorpdfstring{\(\mathrm{PP}\)}{PP}-完备]\label{thm:conclusion-periodic-fiber-majority-pp-complete}
+在定义 \ref{def:conclusion-periodic-fiber-counting-thresholds} 的设定下，
+{\normalfont\textsc{MAJ-FIBER-CNF}} 在多项式时间 many-one 归约下为 \(\mathrm{PP}\)-完备。
+\end{theorem}
+\begin{proof}
+\(\textsc{MAJ-FIBER-CNF}\in\mathrm{PP}\)：
+由定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity}，纤维 \(F_x=\Fold_{3n}^{-1}(x)\) 可被 \(n\) 个块选择比特均匀参数化，且 \(|F_x|=d_m(x)=2^n\)。
+因此可在概率多项式时间内均匀采样 \(\omega\in F_x\) 并核验 \(\Psi(\omega)\)；
+其接受概率为 \(N_x(\Psi)/2^n\)，故“接受概率 \(>\tfrac12\)”与 \(N_x(\Psi)>2^{n-1}\) 等价。
+\par
+\(\mathrm{PP}\)-困难性：
+由定理 \ref{thm:conclusion-sharp-fiber-cnf-sharpPcomplete-parsimonious} 的保解数构造，
+对任意 \(n\) 变元 3CNF \(\varphi\) 可在多项式时间内构造 \(\Psi=B_n\wedge\varphi^\sharp\) 使得
+\(
+N_x(\Psi)=\#\mathrm{SAT}(\varphi)
+\)
+且 \(d_m(x)=2^n\)。
+因而谓词 \(\#\mathrm{SAT}(\varphi)>2^{n-1}\) 等价于 \(N_x(\Psi)>2^{n-1}\)，从而把标准 \(\mathrm{PP}\)-完备问题 \(\textsc{MAJ-3SAT}\) many-one 归约到 \textsc{MAJ-FIBER-CNF}。
+证毕。
+\end{proof}
+
+\begin{corollary}[多数判定的多项式可解性蕴含 \texorpdfstring{\(\mathrm{P}=\mathrm{NP}\)}{P=NP}]\label{cor:conclusion-periodic-fiber-majority-p-implies-pnp}
+若 \(\text{\normalfont\textsc{MAJ-FIBER-CNF}}\in \mathrm{P}\)，则 \(\mathrm{P}=\mathrm{NP}\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-periodic-fiber-majority-pp-complete}，\textsc{MAJ-FIBER-CNF} 为 \(\mathrm{PP}\)-完备。
+若其属于 \(\mathrm{P}\)，则 \(\mathrm{PP}\subseteq \mathrm{P}\)，从而 \(\mathrm{PP}=\mathrm{P}\)。
+而 \(\mathrm{NP}\subseteq \mathrm{PP}\) 为标准包含关系，故 \(\mathrm{NP}\subseteq \mathrm{P}\)，即 \(\mathrm{P}=\mathrm{NP}\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[固定周期三纤维上的奇偶计数判定为 \texorpdfstring{\(\oplus\mathrm{P}\)}{⊕P}-完备]\label{thm:conclusion-periodic-fiber-parity-oplusP-complete}
+在定义 \ref{def:conclusion-periodic-fiber-counting-thresholds} 的设定下，
+{\normalfont\textsc{PAR-FIBER-CNF}} 在多项式时间 many-one 归约下为 \(\oplus\mathrm{P}\)-完备。
+\end{theorem}
+\begin{proof}
+\(\textsc{PAR-FIBER-CNF}\in\oplus\mathrm{P}\)：
+由定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity}，纤维 \(F_x\) 可由 \(n\) 个自由块选择比特参数化；
+令非确定机以这 \(n\) 比特枚举 \(\omega\in F_x\) 并在 \(\Psi(\omega)=1\) 时接受，则其接受路径数恰为 \(N_x(\Psi)\)，其奇偶性即为判定谓词。
+\par
+\(\oplus\mathrm{P}\)-困难性：
+同样利用定理 \ref{thm:conclusion-sharp-fiber-cnf-sharpPcomplete-parsimonious} 的保解数归约，
+将 \(\varphi\mapsto \Psi=B_n\wedge\varphi^\sharp\) 得到
+\(
+N_x(\Psi)=\#\mathrm{SAT}(\varphi)
+\)
+从而 \(\#\mathrm{SAT}(\varphi)\bmod 2\) 的判定 many-one 归约到 \textsc{PAR-FIBER-CNF}。
+由于 \(\oplus\textsc{3SAT}\)（等价地 \(\oplus\textsc{SAT}\)）为 \(\oplus\mathrm{P}\)-完备，结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[固定周期三纤维上的模 \texorpdfstring{\(p\)}{p} 计数判定为 \texorpdfstring{\(\mathrm{Mod}_p\mathrm{P}\)}{ModpP}-完备]\label{thm:conclusion-periodic-fiber-modp-modpP-complete}
+固定素数 \(p\)。
+在定义 \ref{def:conclusion-periodic-fiber-counting-thresholds} 的设定下，
+\(\text{\normalfont\textsc{MOD}}_p\text{\normalfont\textsc{-FIBER-CNF}}\) 在多项式时间 many-one 归约下为 \(\mathrm{Mod}_p\mathrm{P}\)-完备。
+\end{theorem}
+\begin{proof}
+成员性：以与定理 \ref{thm:conclusion-periodic-fiber-parity-oplusP-complete} 相同的 \(n\) 比特非确定枚举构造，
+接受路径数即为 \(N_x(\Psi)\)，故“接受路径数模 \(p\) 非零”属于 \(\mathrm{Mod}_p\mathrm{P}\)。
+\par
+困难性：由保解数归约仍有 \(N_x(\Psi)=\#\mathrm{SAT}(\varphi)\)，因此 \(\#\mathrm{SAT}(\varphi)\not\equiv 0\ (\mathrm{mod}\ p)\) many-one 归约到 \textsc{MOD}\(_p\)\textsc{-FIBER-CNF}。
+而 \(\textsc{MOD}_p\textsc{-SAT}\) 为 \(\mathrm{Mod}_p\mathrm{P}\)-完备，结论成立。证毕。
+\end{proof}
+
+\begin{proposition}[单一纤维角色偏置符号判定的 \texorpdfstring{\(\mathrm{PP}\)}{PP}-完备性]\label{prop:conclusion-periodic-fiber-sign-muchi-pp-complete}
+在命题 \ref{prop:conclusion-periodic-fiber-single-character-moment} 的设定下，定义判定问题
+\[
+\text{\normalfont\textsc{SIGN-}}\mu_\chi
+:=
+\bigl\{\langle n,\Psi\rangle:\ \mu_\chi(x^\star\!\upharpoonright_{3n};\Psi)<0\bigr\}.
+\]
+则 \(\text{\normalfont\textsc{SIGN-}}\mu_\chi\) 在多项式时间 many-one 归约下为 \(\mathrm{PP}\)-完备。
+\end{proposition}
+\begin{proof}
+由 \(\mu_\chi(x;\Psi)=1-\frac{2\,\Tr(\Pi_xD_\Psi)}{d_m(x)}\) 与 \(d_m(x)=2^n\) 得
+\[
+\mu_\chi(x^\star\!\upharpoonright_{3n};\Psi)<0
+\quad\Longleftrightarrow\quad
+\Tr(\Pi_xD_\Psi)>2^{n-1}
+\quad\Longleftrightarrow\quad
+\langle n,\Psi\rangle\in \textsc{MAJ-FIBER-CNF}.
+\]
+因此 \(\textsc{SIGN-}\mu_\chi\) 与 \textsc{MAJ-FIBER-CNF} 在多项式时间内等价，
+由定理 \ref{thm:conclusion-periodic-fiber-majority-pp-complete} 立即推出 \(\mathrm{PP}\)-完备性。证毕。
+\end{proof}
+
+\begin{proposition}[周期纤维内的秩 \texorpdfstring{\(n\)}{n} 布尔区间与 Möbius 证书]\label{prop:conclusion-periodic-fiber-boolean-interval-mobius}
+取 \(m=3n\) 与 \(x=x^\star\!\upharpoonright_{3n}\)，并令纤维格 \(\mathcal L_x\) 为定理 \ref{thm:pom-fiber-birkhoff-fence-ideal-lattice} 所赋予的分布式格结构。
+定义两端点微态 \(\omega^{\varnothing},\omega^{[n]}\in\Omega_{3n}\) 为逐块取值
+\[
+(t_j,s_j,r_j)=(1,0,0)\quad(\omega^{\varnothing}),
+\qquad
+(t_j,s_j,r_j)=(0,1,1)\quad(\omega^{[n]}).
+\]
+对任意 \(S\subseteq[n]\)，令 \(\omega^{S}\) 由逐块选择
+\[
+(t_j,s_j,r_j)=
+\begin{cases}
+(0,1,1),& j\in S,\\
+(1,0,0),& j\notin S.
+\end{cases}
+\]
+则集合
+\(
+\mathcal B_n:=\{\omega^{S}:S\subseteq[n]\}
+\)
+恰等于纤维 \(F_x=\Fold_{3n}^{-1}(x)\)，并构成格区间
+\[
+[\omega^{\varnothing},\omega^{[n]}]_{\mathcal L_x}=F_x=\mathcal B_n,
+\qquad
+\omega^{S}\preceq \omega^{T}\ \Longleftrightarrow\ S\subseteq T.
+\]
+因而该区间与布尔格 \((2^{[n]},\subseteq)\) 同构，且
+\[
+\mu_{\mathcal L_x}\!\bigl(\omega^{\varnothing},\omega^{[n]}\bigr)=(-1)^n\neq 0.
+\]
+\end{proposition}
+
+\begin{proof}
+对任意 \(S\subseteq[n]\)，由构造知 \((\omega^S_{3j-2},\omega^S_{3j-1},\omega^S_{3j})\in\{001,110\}\)。
+由定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity} 得 \(\omega^S\in F_x\)，即 \(\mathcal B_n\subseteq F_x\)。
+另一方面，由 \(|\mathcal B_n|=2^n\) 与定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity} 的精确多重度 \(d_{3n}(x)=|F_x|=2^n\)，可知 \(F_x=\mathcal B_n\)。
+
+在“单次逆代换开关可达性”偏序中，局部核 \(100\leftrightarrow 011\) 的一次开关恰将某一块从 \((1,0,0)\) 变为 \((0,1,1)\) 或反向变换；
+不同块的支撑不交，故这些开关彼此可交换，且可达性偏序在 \(\mathcal B_n\) 上退化为集合包含序。
+因此 \([\omega^{\varnothing},\omega^{[n]}]_{\mathcal L_x}\) 的底集恰为 \(\mathcal B_n\)，并与布尔格同构。
+最后由定理 \ref{thm:pom-fence-mobius-rigidity}（布尔区间 Möbius 非零且取值为 \((-1)^{\mathrm{rank}}\)）即得所示 Möbius 数。证毕。
+\end{proof}
+
+\begin{proposition}[单纤维均匀分布下的微观恢复上界]\label{prop:conclusion-single-fiber-decoding-bound}
+在定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity} 的设定下，令 \(\Omega\) 为纤维 \(F_x=\Fold_{3n}^{-1}(x)\) 上的均匀随机元（\(|F_x|=2^n\)）。
+对任意编码器 \(E:F_x\to\{0,1\}^L\) 与任意解码器 \(D:\{0,1\}^L\to F_x\)，均有
+\[
+\mathbb{P}\bigl[D(E(\Omega))=\Omega\bigr]\le 2^{L-n}.
+\]
+\end{proposition}
+
+\begin{proof}
+\(\mathrm{Im}(D)\subseteq F_x\) 的基数至多为 \(2^L\)。
+成功事件蕴含 \(\Omega\in\mathrm{Im}(D)\)，因此
+\[
+\mathbb{P}[D(E(\Omega))=\Omega]\le \mathbb{P}[\Omega\in\mathrm{Im}(D)]
+  =\frac{|\mathrm{Im}(D)|}{|F_x|}
+  \le \frac{2^L}{2^n}=2^{L-n}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[周期纤维的微观证据提取上界]\label{cor:conclusion-single-fiber-assignment-extraction-bound}
+在定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity} 与推论 \ref{cor:conclusion-period3-fiber-hypercube-vc} 的设定下，令
+\(
+B:=\pi_{P_n}(\Omega)\in\{0,1\}^n
+\)。
+对任意编码器 \(E:F_x\to\{0,1\}^L\) 与任意函数 \(g:\{0,1\}^L\to\{0,1\}^n\)，均有
+\[
+\mathbb{P}\bigl[g(E(\Omega))=B\bigr]\le 2^{L-n}.
+\]
+\end{corollary}
+
+\begin{proof}
+由推论 \ref{cor:conclusion-period3-fiber-hypercube-vc}，\(\pi_{P_n}:F_x\to\{0,1\}^n\) 为双射。
+因此对任意 \(g\)，复合 \(D:=\pi_{P_n}^{-1}\circ g:\{0,1\}^L\to F_x\) 良定义且满足
+\(
+g(E(\Omega))=B \Rightarrow D(E(\Omega))=\Omega
+\)。
+将命题 \ref{prop:conclusion-single-fiber-decoding-bound} 应用于该 \(D\) 即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[使折叠注入化所需的外置信息线性下界]\label{prop:conclusion-single-fiber-injectivization-sideinfo-lb}
+在定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity} 的设定下，令 \(R:\Omega_{3n}\to\{0,1\}^L\) 为任意函数，并要求映射
+\[
+\Omega_{3n}\ni\omega\longmapsto \bigl(\Fold_{3n}(\omega),R(\omega)\bigr)
+\]
+为单射。
+则必有 \(L\ge n\)。
+\end{proposition}
+
+\begin{proof}
+将单射条件限制到纤维 \(F_x=\Fold_{3n}^{-1}(x)\) 上仍为单射，故 \(R\) 在该纤维上的取值两两不同。
+由于 \(|F_x|=2^n\)，必有 \(2^L\ge 2^n\)，即 \(L\ge n\)。证毕。
+\end{proof}
+
+\begin{corollary}[折叠等价关系群胚代数中的指数级矩阵块]\label{cor:conclusion-single-fiber-wedderburn-big-block}
+在定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity} 的设定下，折叠等价关系群胚代数 \(\CC[\mathcal{R}_{3n}]\)（定义 \ref{def:fold-equivalence-groupoid-algebra}）的 Wedderburn 分解（命题 \ref{prop:fold-groupoid-wedderburn}）包含简单块
+\[
+M_{2^n}(\CC).
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity} 有 \(d_{3n}(x)=2^n\)。
+将其代入命题 \ref{prop:fold-groupoid-wedderburn} 的直和分解即可。证毕。
+\end{proof}
+
+\begin{proposition}[单一周期纤维内的不可压缩微态计数]\label{prop:conclusion-single-fiber-kolmogorov-incompressible}
+在定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity} 的设定下，记 \(K(\cdot\mid\cdot)\) 为前缀条件 Kolmogorov 复杂度。
+则对任意整数 \(t\ge 1\)，集合
+\[
+\mathcal I_t
+:=\Bigl\{\omega\in F_x:\ K(\omega\mid x,n)\ge n-t-O(1)\Bigr\}
+\]
+满足下界
+\[
+|\mathcal I_t|\ge 2^n-2^{n-t}.
+\]
+\end{proposition}
+
+\begin{proof}
+在给定条件 \((x,n)\) 下，长度小于 \(n-t-c\) 的前缀程序总数至多为 \(2^{n-t-c}-1\)，因此满足
+\(
+K(\omega\mid x,n)<n-t-c
+\)
+的 \(\omega\) 的数量至多为 \(2^{n-t-c}\)。
+取常数 \(c\) 吸收通用机差异与 \(O(1)\) 项，即得所示下界。证毕。
+\end{proof}
+
+\endinput

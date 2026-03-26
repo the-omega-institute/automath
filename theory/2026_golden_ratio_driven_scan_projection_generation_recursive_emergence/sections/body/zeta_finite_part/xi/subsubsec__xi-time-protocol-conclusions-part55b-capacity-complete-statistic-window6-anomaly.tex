@@ -1,0 +1,570 @@
+\paragraph{连续容量的完备统计量、分布导数与 window-\texorpdfstring{$6$}{6} 异常初始斜率}
+在前述有限矩刚性、Mellin--Stieltjes 反演与 window-\(6\) 的有限尺度闭式之后，还可把连续容量曲线、尾计数函数、纤维直方图、纤维经验测度与全矩谱收束为同一份完全可逆的数据。
+
+\begin{theorem}[连续容量曲线是纤维直方图与全矩谱的完备统计量]\label{thm:xi-capacity-tail-histogram-moment-complete-statistic}
+固定分辨率 \(m\)。记
+\[
+h_m(d):=\#\{x\in X_m:\ d_m(x)=d\}
+\qquad(d\in \ZZ_{\ge 1}),
+\]
+\[
+N_m(t):=\#\{x\in X_m:\ d_m(x)\ge t\},
+\qquad
+\mathcal C_m^{\mathrm{cont}}(T):=\sum_{x\in X_m}\min\bigl(d_m(x),T\bigr).
+\]
+则 \(\mathcal C_m^{\mathrm{cont}}\)、\(N_m\) 与 \(h_m\) 两两唯一决定。更具体地，
+\[
+\mathcal C_m^{\mathrm{cont}}(T)
+=
+\int_0^T N_m(t)\,\dd t
+=
+\sum_{d\ge 1}h_m(d)\min(d,T),
+\]
+并且
+\[
+\partial_T^+\mathcal C_m^{\mathrm{cont}}(t)=N_m(t)
+\qquad\text{对 Lebesgue--a.e.\ }t>0\text{ 成立},
+\]
+从而
+\[
+h_m(d)=N_m(d)-N_m(d+1)
+\qquad(d\ge 1),
+\]
+\[
+N_m(t)=\sum_{d\ge \lceil t\rceil}h_m(d)
+\qquad(t>0).
+\]
+此外，对任意 \(q>0\) 都有 Mellin--Stieltjes 公式
+\[
+S_q(m):=\sum_{x\in X_m}d_m(x)^q
+=
+q\int_0^\infty t^{q-1}N_m(t)\,\dd t.
+\]
+因此在固定 \(m\) 上，下列四类对象完全等价：
+\[
+\mathcal C_m^{\mathrm{cont}},
+\qquad
+N_m,
+\qquad
+h_m,
+\qquad
+\{S_q(m)\}_{q>0}.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-capacity-tail-equivalence}，
+\[
+\mathcal C_m^{\mathrm{cont}}(T)=\int_0^T N_m(t)\,\dd t.
+\]
+又因全部纤维大小 \(d_m(x)\) 都是正整数，\(N_m\) 是整数值右连续阶梯函数，其跳点恰为出现过的纤维尺寸。故
+\[
+\partial_T^+\mathcal C_m^{\mathrm{cont}}(t)=N_m(t)
+\qquad\text{对 a.e.\ }t>0\text{ 成立},
+\]
+并且由右连续性，\(N_m\) 由该 a.e.\ 导数唯一延拓回整个函数。
+
+若按纤维大小分层，则
+\[
+N_m(t)
+=
+\sum_{d\ge 1}\#\{x\in X_m:\ d_m(x)=d,\ d\ge t\}
+=
+\sum_{d\ge \lceil t\rceil}h_m(d),
+\]
+于是
+\[
+h_m(d)=N_m(d)-N_m(d+1).
+\]
+反向地，把同一分层代回容量定义即得
+\[
+\mathcal C_m^{\mathrm{cont}}(T)=\sum_{d\ge 1}h_m(d)\min(d,T).
+\]
+故 \(\mathcal C_m^{\mathrm{cont}}\)、\(N_m\) 与 \(h_m\) 彼此唯一决定。
+
+再由定理 \ref{thm:xi-time-part57b-capacity-moment-exact-mellin-stieltjes}，
+\[
+S_q(m)=q\int_0^\infty t^{q-1}N_m(t)\,\dd t
+\qquad(q>0),
+\]
+故任一对象 \(\mathcal C_m^{\mathrm{cont}}\)、\(N_m\)、\(h_m\) 都唯一决定全部正阶矩谱。
+
+最后说明矩谱反向决定直方图。设不同纤维大小为
+\[
+1\le \delta_{1,m}<\cdots<\delta_{s_m,m},
+\]
+其重数为 \(n_{j,m}\)。由于每个 \(\delta_{j,m}\ge 1\)，有
+\[
+\lim_{q\downarrow 0}S_q(m)
+=
+\sum_{j=1}^{s_m}n_{j,m}
+=
+|X_m|
+=
+S_0(m).
+\]
+因此从全谱 \(\{S_q(m)\}_{q>0}\) 可恢复 \(S_0(m)\)，而整数矩
+\[
+S_1(m),\dots,S_{2s_m-1}(m)
+\]
+本就包含在该全谱中。于是定理 \ref{thm:xi-fiber-spectrum-finite-moment-rigidity} 适用，并唯一恢复全部 \(\{(\delta_{j,m},n_{j,m})\}_{j=1}^{s_m}\)，从而唯一恢复 \(h_m\)。因此四类对象完全等价。证毕。
+\end{proof}
+
+\begin{theorem}[连续容量曲线等于推前分布与均匀层测度的截断重叠泛函]\label{thm:xi-capacity-overlap-functional-l1-identity}
+沿用定理 \ref{thm:xi-capacity-tail-histogram-moment-complete-statistic} 的记号，并定义
+\[
+\mu_m(x):=\frac{d_m(x)}{2^m},
+\qquad
+u_m(x):=\frac{1}{|X_m|}
+\qquad (x\in X_m),
+\]
+\[
+\tau_m(T):=\frac{T|X_m|}{2^m}
+\qquad (T\ge 0),
+\]
+以及
+\[
+\|f\|_{\ell^1(X_m)}:=\sum_{x\in X_m}|f(x)|.
+\]
+则对任意 \(T\ge 0\) 都有严格恒等式
+\[
+\boxed{\;
+\frac{\mathcal C_m^{\mathrm{cont}}(T)}{2^m}
+=
+\sum_{x\in X_m}\min\bigl(\mu_m(x),\tau_m(T)u_m(x)\bigr)
+=
+\frac{1+\tau_m(T)-\|\mu_m-\tau_m(T)u_m\|_{\ell^1(X_m)}}{2}.\;}
+\]
+特别地，若对 bin-fold 写
+\[
+C_m^{\mathrm{bin}}(B):=\mathcal C_m^{\mathrm{cont}}(2^B),
+\qquad
+\mathrm{Succ}_m^{\mathrm{bin}}(B):=\frac{C_m^{\mathrm{bin}}(B)}{2^m},
+\]
+则对任意整数 \(B\ge 0\) 都有
+\[
+\boxed{\;
+\mathrm{Succ}_m^{\mathrm{bin}}(B)
+=
+\frac{1+\tau_m(2^B)-\|\mu_m-\tau_m(2^B)u_m\|_{\ell^1(X_m)}}{2}.\;}
+\]
+\end{theorem}
+\begin{proof}
+由连续容量曲线的定义，
+\[
+\frac{\mathcal C_m^{\mathrm{cont}}(T)}{2^m}
+=
+\sum_{x\in X_m}\min\!\left(\frac{d_m(x)}{2^m},\frac{T}{2^m}\right)
+=
+\sum_{x\in X_m}\min\bigl(\mu_m(x),\tau_m(T)u_m(x)\bigr),
+\]
+因为对每个 \(x\in X_m\) 都有
+\[
+\tau_m(T)u_m(x)=\frac{T|X_m|}{2^m}\cdot\frac{1}{|X_m|}=\frac{T}{2^m}.
+\]
+再对每个 \(x\) 应用标量恒等式
+\[
+\min(a,b)=\frac{a+b-|a-b|}{2}
+\qquad(a,b\ge 0),
+\]
+并利用
+\[
+\sum_{x\in X_m}\mu_m(x)=1,
+\qquad
+\sum_{x\in X_m}u_m(x)=1,
+\]
+便得到
+\[
+\sum_{x\in X_m}\min\bigl(\mu_m(x),\tau_m(T)u_m(x)\bigr)
+=
+\frac{1+\tau_m(T)-\|\mu_m-\tau_m(T)u_m\|_{\ell^1(X_m)}}{2}.
+\]
+这就证明了第一条恒等式。取 \(T=2^B\) 并用
+\(
+\mathrm{Succ}_m^{\mathrm{bin}}(B)=2^{-m}\mathcal C_m^{\mathrm{cont}}(2^B)
+\)
+即可得到 dyadic 预算下的成功率公式。证毕。
+\end{proof}
+
+\begin{corollary}[有限支持纤维谱的 Hankel--Vandermonde 显式重构公式]\label{cor:xi-fiber-spectrum-hankel-vandermonde-explicit-recovery}
+固定分辨率 \(m\)。设纤维多重度只取 \(R\) 个不同值
+\[
+1\le a_1<\cdots<a_R,
+\]
+并记其重数为
+\[
+n_j:=\#\{x\in X_m:\ d_m(x)=a_j\}
+\qquad(1\le j\le R).
+\]
+则对一切整数 \(q\ge 0\) 都有
+\[
+S_q(m)=\sum_{j=1}^{R}n_j a_j^q.
+\]
+若记消去多项式
+\[
+P_m(X):=\prod_{j=1}^{R}(X-a_j)
+=
+X^R+b_{R-1}X^{R-1}+\cdots+b_0,
+\]
+则系数向量 \((b_0,\dots,b_{R-1})\) 是 Hankel 线性系统
+\[
+\sum_{\ell=0}^{R-1}b_\ell\,S_{\ell+i}(m)=-S_{R+i}(m)
+\qquad(0\le i\le R-1)
+\]
+的唯一解。求得根 \(\{a_j\}_{j=1}^{R}\) 后，重数向量 \((n_1,\dots,n_R)\) 再由 Vandermonde 系统
+\[
+S_q(m)=\sum_{j=1}^{R}n_j a_j^q
+\qquad(0\le q\le R-1)
+\]
+唯一恢复。
+
+因此，仅凭
+\[
+S_0(m),S_1(m),\dots,S_{2R-1}(m)
+\]
+便已足以唯一决定完整纤维直方图。
+\end{corollary}
+\begin{proof}
+这正是定理 \ref{thm:xi-fiber-spectrum-finite-moment-rigidity} 的坐标化重写；其中
+\[
+R=s_m,\qquad a_j=\delta_{j,m},\qquad n_j=n_{j,m}.
+\]
+为便于直接调用，这里把相应线性系统写成显式形式。
+
+由 \(P_m(a_j)=0\) 对每个 \(1\le j\le R\) 成立，故对任意 \(i\ge 0\) 有
+\[
+0=\sum_{j=1}^{R}n_j a_j^i P_m(a_j)
+=
+\sum_{j=1}^{R}n_j a_j^i
+\Bigl(a_j^R+\sum_{\ell=0}^{R-1}b_\ell a_j^\ell\Bigr).
+\]
+按 \(S_q(m)=\sum_j n_j a_j^q\) 整理即得
+\[
+S_{R+i}(m)+\sum_{\ell=0}^{R-1}b_\ell S_{\ell+i}(m)=0
+\qquad(i\ge 0),
+\]
+特别地，对 \(0\le i\le R-1\) 就得到所示 Hankel 线性系统。
+
+现证其解唯一。记
+\[
+H_m:=\bigl(S_{r+s}(m)\bigr)_{0\le r,s\le R-1}.
+\]
+对任意向量 \(u=(u_0,\dots,u_{R-1})^{\mathsf T}\)，有
+\[
+u^{\mathsf T}H_m u
+=
+\sum_{j=1}^{R}n_j\Bigl(\sum_{\ell=0}^{R-1}u_\ell a_j^\ell\Bigr)^2.
+\]
+若 \(u^{\mathsf T}H_m u=0\)，则右端各项皆为零，于是多项式
+\[
+Q(X):=\sum_{\ell=0}^{R-1}u_\ell X^\ell
+\]
+在 \(R\) 个互异点 \(a_1,\dots,a_R\) 上全为零。由于 \(\deg Q\le R-1\)，只能 \(Q\equiv 0\)，故 \(u=0\)。因此 \(H_m\) 正定，特别可逆，所以上述 Hankel 系统有唯一解。
+
+得到 \(P_m\) 后，其根集即为全部不同纤维大小 \(\{a_j\}_{j=1}^{R}\)。再把这些根代回
+\[
+S_q(m)=\sum_{j=1}^{R}n_j a_j^q
+\qquad(0\le q\le R-1),
+\]
+便得到一个 Vandermonde 线性系统。由于 \(a_j\) 两两不同，其系数矩阵可逆，从而 \((n_1,\dots,n_R)\) 唯一确定。证毕。
+\end{proof}
+
+\begin{theorem}[连续容量曲线的分布二阶导数恰为纤维多重度经验测度]\label{thm:xi-capacity-second-distribution-derivative-fiber-empirical-measure}
+沿用定理 \ref{thm:xi-capacity-tail-histogram-moment-complete-statistic} 的记号，并定义纤维多重度经验测度
+\[
+\nu_m:=\sum_{x\in X_m}\delta_{d_m(x)}
+=
+\sum_{d\ge 1}h_m(d)\,\delta_d.
+\]
+则在 \((0,\infty)\) 上按分布成立精确恒等式
+\[
+\boxed{\;
+-D_T^2\mathcal C_m^{\mathrm{cont}}=\nu_m.\;}
+\]
+等价地，\(\mathcal C_m^{\mathrm{cont}}\) 的折点支撑恰为全部出现过的纤维大小，而对任意整数 \(d\ge 1\) 都有
+\[
+\boxed{\;
+h_m(d)
+=
+\nu_m(\{d\})
+=
+N_m(d)-N_m(d+0)
+=
+\partial_T^{-}\mathcal C_m^{\mathrm{cont}}(d)-\partial_T^{+}\mathcal C_m^{\mathrm{cont}}(d).\;}
+\]
+因此，连续容量曲线不仅决定尾函数与全矩谱，而且已经完整且无损地决定了纤维多重度多重集本身。
+\end{theorem}
+\begin{proof}
+在 \((0,\infty)\) 上，
+\[
+N_m(T)=\sum_{x\in X_m}\mathbf 1_{\{T\le d_m(x)\}}
+\]
+是右连续阶梯函数。对任意固定 \(d>0\)，分布导数满足
+\[
+D_T\mathbf 1_{\{T\le d\}}=-\delta_d.
+\]
+故在分布意义下
+\[
+D_TN_m
+=
+\sum_{x\in X_m}D_T\mathbf 1_{\{T\le d_m(x)\}}
+=
+-\sum_{x\in X_m}\delta_{d_m(x)}
+=
+-\nu_m.
+\]
+
+另一方面，由定理 \ref{thm:xi-capacity-tail-histogram-moment-complete-statistic}，
+\[
+\mathcal C_m^{\mathrm{cont}}(T)=\int_0^T N_m(t)\,\dd t,
+\]
+从而
+\[
+D_T\mathcal C_m^{\mathrm{cont}}=N_m,
+\qquad
+D_T^2\mathcal C_m^{\mathrm{cont}}=D_TN_m=-\nu_m
+\]
+按分布成立，即得第一式。
+
+又因 \(N_m\) 在 \(T=d\) 处的向下跳跃恰等于
+\[
+N_m(d)-N_m(d+0)=\#\{x\in X_m:\ d_m(x)=d\}=h_m(d),
+\]
+而 \(\mathcal C_m^{\mathrm{cont}}\) 在该点的左右导数分别为
+\[
+\partial_T^{-}\mathcal C_m^{\mathrm{cont}}(d)=N_m(d),
+\qquad
+\partial_T^{+}\mathcal C_m^{\mathrm{cont}}(d)=N_m(d+0),
+\]
+遂得第二式。证毕。
+\end{proof}
+
+\begin{theorem}[矩谱对尾函数与连续容量曲线具有严格的 Mellin 反演公式]\label{thm:xi-capacity-moment-mellin-inversion-tail-capacity}
+沿用定理 \ref{thm:xi-capacity-tail-histogram-moment-complete-statistic} 的记号。对复数 \(s\in\CC\) 定义
+\[
+S_s(m):=\sum_{x\in X_m}d_m(x)^s
+=
+\sum_{d\ge 1}h_m(d)\,d^s,
+\]
+其中 \(d^s:=e^{s\log d}\) 取实对数支。则当 \(\Re s>0\) 时有
+\[
+\boxed{\;
+\frac{S_s(m)}{s}
+=
+\int_0^\infty T^{s-1}N_m(T)\,\dd T.\;}
+\]
+因此，对任意 \(c>0\) 与任意不是纤维大小跳点的 \(T>0\)，有 Mellin 反演公式
+\[
+\boxed{\;
+N_m(T)
+=
+\frac{1}{2\pi i}
+\int_{c-i\infty}^{c+i\infty}
+\frac{S_s(m)}{s}\,T^{-s}\,\dd s.\;}
+\]
+进一步，对任意 \(c>1\) 与任意 \(T>0\)，有
+\[
+\boxed{\;
+2^m-\mathcal C_m^{\mathrm{cont}}(T)
+=
+\frac{1}{2\pi i}
+\int_{c-i\infty}^{c+i\infty}
+\frac{S_s(m)}{s(s-1)}\,T^{1-s}\,\dd s.\;}
+\]
+等价地，
+\[
+\boxed{\;
+\mathcal C_m^{\mathrm{cont}}(T)
+=
+2^m+
+\frac{1}{2\pi i}
+\int_{c-i\infty}^{c+i\infty}
+\frac{S_s(m)}{s(1-s)}\,T^{1-s}\,\dd s.\;}
+\]
+因此，全体矩谱 \(\{S_s(m)\}_{\Re s>0}\) 不仅与尾函数等价，而且可通过显式解析核无损反演出连续容量曲线。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-capacity-tail-histogram-moment-complete-statistic} 的 Mellin--Stieltjes 公式，对 \(\Re s>0\) 有
+\[
+S_s(m)=s\int_0^\infty T^{s-1}N_m(T)\,\dd T.
+\]
+这就得到第一式。由于 \(N_m\) 有界、右连续且紧支撑，标准 Mellin 反演定理适用，从而在 \(N_m\) 的连续点 \(T\) 上，
+\[
+N_m(T)
+=
+\frac{1}{2\pi i}
+\int_{c-i\infty}^{c+i\infty}
+\frac{S_s(m)}{s}\,T^{-s}\,\dd s
+\qquad(c>0).
+\]
+
+另一方面，由
+\[
+\sum_{x\in X_m}d_m(x)=2^m
+\]
+与定理 \ref{thm:xi-capacity-tail-histogram-moment-complete-statistic} 中的
+\[
+\mathcal C_m^{\mathrm{cont}}(T)=\int_0^T N_m(t)\,\dd t
+\]
+可得
+\[
+2^m-\mathcal C_m^{\mathrm{cont}}(T)=\int_T^\infty N_m(t)\,\dd t.
+\]
+将上式中的 \(N_m(t)\) 代入其 Mellin 反演公式，并在 \(c>1\) 时交换积分次序，得到
+\[
+\begin{aligned}
+2^m-\mathcal C_m^{\mathrm{cont}}(T)
+&=
+\frac{1}{2\pi i}
+\int_{c-i\infty}^{c+i\infty}
+\frac{S_s(m)}{s}
+\left(\int_T^\infty t^{-s}\,\dd t\right)\dd s\\
+&=
+\frac{1}{2\pi i}
+\int_{c-i\infty}^{c+i\infty}
+\frac{S_s(m)}{s(s-1)}\,T^{1-s}\,\dd s,
+\end{aligned}
+\]
+因为当 \(\Re s>1\) 时，
+\[
+\int_T^\infty t^{-s}\,\dd t=\frac{T^{1-s}}{s-1}.
+\]
+这便得到第三式；最后一式只需利用
+\[
+\frac{1}{s(1-s)}=-\frac{1}{s(s-1)}
+\]
+改写即可。证毕。
+\end{proof}
+
+\begin{theorem}[连续容量曲线与全阶矩谱之间的 Mellin--Barnes 完备互逆]\label{thm:xi-capacity-moment-mellin-barnes-complete-inversion}
+沿用定理 \ref{thm:xi-capacity-moment-mellin-inversion-tail-capacity} 的记号。由于 \(X_m\) 有限，
+\[
+S_s(m):=\sum_{x\in X_m}d_m(x)^s
+\]
+在整个复平面上全纯。对任意满足 \(0<\Re s<1\) 的复数 \(s\)，有
+\[
+\boxed{\;
+S_s(m)
+=
+s(1-s)\int_0^\infty T^{s-2}\mathcal C_m^{\mathrm{cont}}(T)\,\dd T.\;}
+\]
+反之，对任意 \(c\in(0,1)\) 与任意 \(T>0\)，都有 Mellin--Barnes 反演公式
+\[
+\boxed{\;
+\mathcal C_m^{\mathrm{cont}}(T)
+=
+\frac{1}{2\pi i}
+\int_{c-i\infty}^{c+i\infty}
+\frac{S_s(m)}{s(1-s)}\,T^{1-s}\,\dd s.\;}
+\]
+因此，固定尺度上的连续容量曲线与全阶矩谱在 Mellin--Barnes 变换下完备可逆。
+\end{theorem}
+\begin{proof}
+先说明积分收敛性。由
+\[
+\mathcal C_m^{\mathrm{cont}}(T)=\sum_{x\in X_m}\min\bigl(d_m(x),T\bigr),
+\]
+当 \(T\downarrow 0\) 时有
+\(
+\mathcal C_m^{\mathrm{cont}}(T)=|X_m|\,T
+\)，而当 \(T\ge \max_x d_m(x)\) 时有
+\(
+\mathcal C_m^{\mathrm{cont}}(T)=2^m
+\)。
+因此
+\(
+T^{s-2}\mathcal C_m^{\mathrm{cont}}(T)
+\)
+在 \(0\) 附近如 \(T^{s-1}\)，在 \(\infty\) 附近如 \(T^{s-2}\)，故当 \(0<\Re s<1\) 时绝对可积。
+
+再由定理 \ref{thm:xi-capacity-tail-histogram-moment-complete-statistic}，
+\[
+\mathcal C_m^{\mathrm{cont}}(T)=\int_0^T N_m(t)\,\dd t.
+\]
+于是对 \(0<\Re s<1\)，可用 Fubini 定理交换积分次序，得到
+\[
+\begin{aligned}
+\int_0^\infty T^{s-2}\mathcal C_m^{\mathrm{cont}}(T)\,\dd T
+&=
+\int_0^\infty T^{s-2}\int_0^T N_m(t)\,\dd t\,\dd T\\
+&=
+\int_0^\infty N_m(t)\left(\int_t^\infty T^{s-2}\,\dd T\right)\dd t\\
+&=
+\frac{1}{1-s}\int_0^\infty t^{s-1}N_m(t)\,\dd t.
+\end{aligned}
+\]
+而定理 \ref{thm:xi-capacity-moment-mellin-inversion-tail-capacity} 已给出
+\[
+\frac{S_s(m)}{s}
+=
+\int_0^\infty t^{s-1}N_m(t)\,\dd t
+\qquad(\Re s>0),
+\]
+故立得
+\[
+\int_0^\infty T^{s-2}\mathcal C_m^{\mathrm{cont}}(T)\,\dd T
+=
+\frac{S_s(m)}{s(1-s)},
+\]
+也即第一条公式。
+
+最后，对函数
+\(
+T\mapsto \mathcal C_m^{\mathrm{cont}}(T)
+\)
+应用标准 Mellin 反演。由于它连续、分段线性、在 \(0\) 附近至多线性增长且在无穷远处有界，其 Mellin 变换
+\[
+\int_0^\infty T^{s-2}\mathcal C_m^{\mathrm{cont}}(T)\,\dd T
+\]
+恰在条带 \(0<\Re s<1\) 上全纯并满足反演条件。因此对任意 \(c\in(0,1)\) 与任意 \(T>0\)，
+\[
+\mathcal C_m^{\mathrm{cont}}(T)
+=
+\frac{1}{2\pi i}
+\int_{c-i\infty}^{c+i\infty}
+\left(\int_0^\infty u^{s-2}\mathcal C_m^{\mathrm{cont}}(u)\,\dd u\right)
+T^{1-s}\,\dd s.
+\]
+再把第一条公式代回，即得所示 Mellin--Barnes 反演式。证毕。
+\end{proof}
+
+\begin{theorem}[window-\texorpdfstring{$6$}{6} 异常签名维数等于容量曲线在 \texorpdfstring{$T=1$}{T=1} 的初始右导数]\label{thm:xi-window6-anomaly-rank-initial-capacity-right-derivative}
+沿用定理 \ref{thm:xi-foldbin-audited-even-center-collapse-abel-full-rank}、
+定理 \ref{thm:xi-capacity-tail-histogram-moment-complete-statistic}
+与命题 \ref{prop:xi-window6-complete-finite-scale-spectrum-closed-form} 的记号，则
+\[
+\dim_{\FF_2}\bigl(G_6^{\mathrm{bin}}\bigr)^{\mathrm{ab}}
+=
+N_6(1^+)
+=
+\partial_T^+\mathcal C_6^{\mathrm{cont}}(1)
+=
+21.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-foldbin-audited-even-center-collapse-abel-full-rank}，
+\[
+\bigl(G_6^{\mathrm{bin}}\bigr)^{\mathrm{ab}}\cong (\ZZ/2\ZZ)^{|X_6|},
+\]
+且 \(|X_6|=21\)，故
+\[
+\dim_{\FF_2}\bigl(G_6^{\mathrm{bin}}\bigr)^{\mathrm{ab}}=21.
+\]
+
+另一方面，命题 \ref{prop:xi-window6-complete-finite-scale-spectrum-closed-form} 已给出
+\[
+N_6(t)=21
+\qquad(0\le t\le 2).
+\]
+因此
+\[
+N_6(1^+)=21.
+\]
+再由定理 \ref{thm:xi-capacity-tail-histogram-moment-complete-statistic}，
+\[
+\partial_T^+\mathcal C_6^{\mathrm{cont}}(1)=N_6(1^+)=21.
+\]
+合并即得所述恒等式。证毕。
+\end{proof}
+
+\endinput

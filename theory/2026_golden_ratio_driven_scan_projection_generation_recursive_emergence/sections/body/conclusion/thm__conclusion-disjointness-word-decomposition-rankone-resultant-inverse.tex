@@ -1,0 +1,408 @@
+\paragraph{不交核的词分解、固定阶秩刚性与秩一消元闭式}
+以下结论给出两参数不交核的逐项幂闭式、固定时间阶的低秩刚性，以及秩一扰动的结果式--判别式恒等式；它们与前述 \(\operatorname{Sym}^q\)-例外谱的字迹机制在同一组 Fibonacci 张量恒等式下统一。
+
+\begin{theorem}[两参数不交核的逐项幂闭式与词分解]\label{thm:conclusion-disjointness-power-word-decomposition}
+令 \(q\ge 2\)，以 \(\mathcal P([q])\) 为指标集并对 \(U\subseteq[q]\) 记其指示向量为 \(u\in\{0,1\}^q\)。
+令
+\[
+\mathbf 1:= (1,\dots,1)^{\mathsf T}\in\RR^{2^q},\qquad
+J:=\mathbf 1\mathbf 1^{\mathsf T},\qquad
+D:=\bigl(\mathbf 1_{\{U\cap V=\varnothing\}}\bigr)_{U,V\subseteq[q]},
+\qquad
+d:=a-b,
+\]
+并定义两参数不交矩阵
+\[
+B^{(q)}(a,b):=d\,D+b\,J\in M_{2^q}(\RR).
+\]
+令 Fibonacci 数列满足 \(F_0=0,F_1=1\)，并记
+\(
+K:=\bigl(\begin{smallmatrix}1&1\\[2pt]1&0\end{smallmatrix}\bigr)
+\)。
+则对任意整数 \(m\ge 1\) 与任意 \(U,V\subseteq[q]\)，成立完全显式恒等式
+\begin{align}\label{eq:conclusion-disjointness-power-entrywise-closed-form}
+\bigl(B^{(q)}(a,b)^m\bigr)_{U,V}
+&=
+d^{m}\,F_{m+1}^{\,q-|U\cup V|}\,F_{m}^{\,|U\triangle V|}\,F_{m-1}^{\,|U\cap V|}
+\nonumber\\
+&\quad+\sum_{r=1}^{m} b^{r}d^{m-r}
+\sum_{\substack{n_0+\cdots+n_r=m-r\\ n_j\ge 0}}
+\Bigl(F_{n_0+2}^{\,q-|U|}F_{n_0+1}^{\,|U|}\Bigr)
+\Bigl(\prod_{j=1}^{r-1}F_{n_j+3}^{\,q}\Bigr)
+\Bigl(F_{n_r+2}^{\,q-|V|}F_{n_r+1}^{\,|V|}\Bigr).
+\end{align}
+\end{theorem}
+\begin{proof}
+注意到 \(D=K^{\otimes q}\)：在单坐标上，\(K_{11}=0\) 且其余三项为 \(1\)，从而
+\(
+\prod_{t=1}^{q}K_{u_t v_t}=\mathbf 1_{\{u\wedge v=0\}}=\mathbf 1_{\{U\cap V=\varnothing\}}
+\)。
+于是 \(D^m=(K^m)^{\otimes q}\)。
+又 \(K^m=\bigl(\begin{smallmatrix}F_{m+1}&F_m\\[2pt]F_m&F_{m-1}\end{smallmatrix}\bigr)\)，逐坐标相乘得到
+\[
+(D^m)_{U,V}=F_{m+1}^{\,q-|U\cup V|}\,F_{m}^{\,|U\triangle V|}\,F_{m-1}^{\,|U\cap V|}.
+\]
+\par
+另一方面，\(J=\mathbf 1\mathbf 1^{\mathsf T}\) 为秩一算子。
+对任意含 \(r\ge 1\) 个 \(J\) 的字
+\[
+W:=D^{n_0}J D^{n_1}J\cdots J D^{n_r},\qquad \sum_{j=0}^{r}n_j=m-r,
+\]
+利用 \(Jx=\mathbf 1(\mathbf 1^{\mathsf T}x)\) 与结合律可写成
+\[
+W=(D^{n_0}\mathbf 1)\Bigl(\prod_{j=1}^{r-1}\mathbf 1^{\mathsf T}D^{n_j}\mathbf 1\Bigr)(D^{n_r}\mathbf 1)^{\mathsf T}.
+\]
+再由
+\(
+K^n\binom11=\binom{F_{n+2}}{F_{n+1}}
+\)
+与
+\(
+\mathbf 1^{\mathsf T}K^n\mathbf 1=F_{n+3}
+\)
+得到
+\[
+(D^{n}\mathbf 1)_{U}=F_{n+2}^{\,q-|U|}F_{n+1}^{\,|U|},
+\qquad
+\mathbf 1^{\mathsf T}D^{n}\mathbf 1=F_{n+3}^{\,q}.
+\]
+将 \((dD+bJ)^m\) 按字展开并逐字代入上述评估，即得 \eqref{eq:conclusion-disjointness-power-entrywise-closed-form}。证毕。
+\end{proof}
+
+\begin{corollary}[层纤维分裂与交并信息的严格解耦]\label{cor:conclusion-disjointness-layer-fiber-decoupling}
+沿用定理 \ref{thm:conclusion-disjointness-power-word-decomposition} 的记号。
+对任意 \(m\ge 1\) 存在函数 \(\Gamma_m:\{0,\dots,q\}^2\to\RR\) 使得对所有 \(U,V\subseteq[q]\) 有
+\[
+\bigl(B^{(q)}(a,b)^m\bigr)_{U,V}
+=
+d^{m}\,F_{m+1}^{\,q-|U\cup V|}\,F_{m}^{\,|U\triangle V|}\,F_{m-1}^{\,|U\cap V|}
+\;+\;\Gamma_m(|U|,|V|).
+\]
+特别地，对任意固定 \((k,\ell)\)，在层块 \(\{U:|U|=k\}\times\{V:|V|=\ell\}\) 上，修正项 \(\Gamma_m(|U|,|V|)\) 为常数，从而该层块上的纤维部分为秩一常矩阵。
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:conclusion-disjointness-power-entrywise-closed-form} 的第二行，所有含 \(J\) 的贡献仅通过 \((D^{n}\mathbf 1)_U\) 与 \((D^{n}\mathbf 1)_V\) 进入，而它们分别仅依赖 \(|U|\) 与 \(|V|\)；故可并入 \(\Gamma_m(|U|,|V|)\)。证毕。
+\end{proof}
+
+\begin{theorem}[固定时间阶的 Krylov 低秩刚性]\label{thm:conclusion-disjointness-fixedm-krylov-lowrank}
+沿用定理 \ref{thm:conclusion-disjointness-power-word-decomposition} 的记号。
+对任意 \(m\ge 1\)，定义 Krylov 族
+\[
+u_r:=D^{r}\mathbf 1\in\RR^{2^q}\qquad (0\le r\le m-1),
+\qquad
+U_m:=[u_0,u_1,\cdots,u_{m-1}]\in\RR^{2^q\times m}.
+\]
+则存在显式 \(m\times m\) 矩阵 \(C_m(a,b;q)\) 使得
+\[
+B^{(q)}(a,b)^m=d^m D^m+U_m\,C_m(a,b;q)\,U_m^{\mathsf T},
+\]
+从而
+\[
+\rank\bigl(B^{(q)}(a,b)^m-d^mD^m\bigr)\le m.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-disjointness-power-word-decomposition} 的字展开，任一含 \(r\ge 1\) 个 \(J\) 的字均可写为
+\[
+(D^{n_0}\mathbf 1)\cdot \Bigl(\prod_{j=1}^{r-1}\mathbf 1^{\mathsf T}D^{n_j}\mathbf 1\Bigr)\cdot (D^{n_r}\mathbf 1)^{\mathsf T}.
+\]
+其中 \(n_0,n_r\in\{0,1,\dots,m-1\}\)，故其左右端点分别落在 \(\mathrm{span}\{u_0,\dots,u_{m-1}\}\) 内。
+因此所有含 \(J\) 的总贡献属于该 Krylov 子空间的左右张成之和，必可写作 \(U_m(\cdot)U_m^{\mathsf T}\) 形式；取系数矩阵为 \(C_m(a,b;q)\) 即得分解。
+秩界由 \(\rank(U_m\,C_m\,U_m^{\mathsf T})\le \rank(U_m)\le m\) 立即推出。证毕。
+\end{proof}
+
+\begin{theorem}[对称子空间的 Krylov 基与 Hankel 精确结构]\label{thm:conclusion-disjointness-krylov-hankel-symmetric-subspace}
+令 \(q\ge 2\)，并记
+\[
+\mathcal H_{\mathrm{sym}}
+:=\{f:\mathcal P([q])\to\RR:\ f(U)=f(V)\ \text{若}\ |U|=|V|\},
+\]
+则 \(\dim\mathcal H_{\mathrm{sym}}=q+1\)。
+沿用 \(D=K^{\otimes q}\) 与 \(\mathbf 1\) 的记号，向量族
+\[
+u_r:=D^r\mathbf 1\qquad(0\le r\le q)
+\]
+构成 \(\mathcal H_{\mathrm{sym}}\) 的一组基。
+并且其 Gram 矩阵满足精确 Hankel 结构
+\[
+\boxed{\;\langle u_r,u_s\rangle=\mathbf 1^{\mathsf T}D^{r+s}\mathbf 1=F_{r+s+3}^{\,q}\qquad(0\le r,s\le q).\;}
+\]
+因此 \(\bigl(F_{r+s+3}^{\,q}\bigr)_{0\le r,s\le q}\) 正定，且该 Hankel 行列式非零。
+\end{theorem}
+\begin{proof}
+由于 \(D\) 与 \(S_q\) 的自然置换作用交换，且 \(\mathbf 1\) 为 \(S_q\)-不变向量，故 \(u_r=D^r\mathbf 1\in\mathcal H_{\mathrm{sym}}\)，从而
+\(\mathrm{span}\{u_0,\dots,u_q\}\subseteq\mathcal H_{\mathrm{sym}}\)。
+另一方面，\(\mathcal H_{\mathrm{sym}}\) 可识别为 \(K\) 的对称幂表示空间，而 \(K\) 的两特征值互异，故其对称幂在该子空间上具有 \(q+1\) 个互异特征值；由此 Krylov 族 \(\{D^r\mathbf 1\}_{r=0}^{q}\) 线性无关并张成 \(\mathcal H_{\mathrm{sym}}\)。
+\par
+最后，
+\[
+\mathbf 1^{\mathsf T}D^{r+s}\mathbf 1=(\mathbf 1^{\mathsf T}K^{r+s}\mathbf 1)^{q}=F_{r+s+3}^{\,q},
+\]
+其中 \(\mathbf 1^{\mathsf T}K^{n}\mathbf 1=F_{n+3}\) 为标准恒等式。
+正定性由 \(\{u_r\}\) 的线性无关性推出。证毕。
+\end{proof}
+
+\begin{theorem}[固定 \texorpdfstring{$q$}{q} 时的对称 Krylov 扇区压缩]\label{thm:conclusion-disjointness-fixedq-symmetric-krylov-sector}
+沿用定理 \ref{thm:conclusion-disjointness-fixedm-krylov-lowrank} 与定理 \ref{thm:conclusion-disjointness-krylov-hankel-symmetric-subspace} 的记号，并记
+\[
+U_q:=[u_0,u_1,\cdots,u_q]\in\RR^{2^q\times(q+1)}.
+\]
+则对任意 \(m\ge 1\)，存在实矩阵
+\[
+\widetilde C_m(a,b;q)\in M_{q+1}(\RR)
+\]
+使得
+\[
+B^{(q)}(a,b)^m=d^m D^m+U_q\,\widetilde C_m(a,b;q)\,U_q^{\mathsf T}.
+\]
+从而
+\[
+\rank\bigl(B^{(q)}(a,b)^m-d^mD^m\bigr)\le q+1,
+\]
+并且对一切 \(x\in \mathcal H_{\mathrm{sym}}^\perp\) 都有
+\[
+\bigl(B^{(q)}(a,b)^m-d^mD^m\bigr)x=0.
+\]
+换言之，固定 \(q\) 时，全部非平凡时间依赖始终被压缩在 \((q+1)\)-维对称 Krylov 扇区 \(\mathcal H_{\mathrm{sym}}\) 内。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-disjointness-fixedm-krylov-lowrank}，存在 \(m\times m\) 矩阵 \(C_m(a,b;q)\) 使
+\[
+B^{(q)}(a,b)^m=d^m D^m+U_m\,C_m(a,b;q)\,U_m^{\mathsf T},
+\qquad
+U_m=[u_0,\dots,u_{m-1}].
+\]
+另一方面，定理 \ref{thm:conclusion-disjointness-krylov-hankel-symmetric-subspace} 已证明 \(u_0,\dots,u_q\) 构成 \(\mathcal H_{\mathrm{sym}}\) 的一组基，故对每个 \(r\ge q+1\)，向量 \(u_r\) 都是它们的线性组合。因此存在矩阵
+\[
+R_m\in \RR^{(q+1)\times m}
+\]
+使得
+\[
+U_m=U_qR_m.
+\]
+代回上式即可得到
+\[
+B^{(q)}(a,b)^m
+=
+d^m D^m+U_q\bigl(R_mC_m(a,b;q)R_m^{\mathsf T}\bigr)U_q^{\mathsf T}.
+\]
+取
+\[
+\widetilde C_m(a,b;q):=R_mC_m(a,b;q)R_m^{\mathsf T}
+\]
+便得所示分解。
+
+秩界由
+\[
+\rank\bigl(B^{(q)}(a,b)^m-d^mD^m\bigr)
+\le
+\rank(U_q)
+\le q+1
+\]
+立即得到。又由定理 \ref{thm:conclusion-disjointness-krylov-hankel-symmetric-subspace}，\(\operatorname{im}(U_q)=\mathcal H_{\mathrm{sym}}\)。若 \(x\in \mathcal H_{\mathrm{sym}}^\perp\)，则 \(U_q^{\mathsf T}x=0\)，从而
+\[
+\bigl(B^{(q)}(a,b)^m-d^mD^m\bigr)x
+=
+U_q\widetilde C_m(a,b;q)U_q^{\mathsf T}x
+=0.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[固定维 meromorphic 行列式证书控制全部例外谱]\label{cor:conclusion-disjointness-fixedq-meromorphic-determinant-certificate}
+沿用定理 \ref{thm:conclusion-disjointness-fixedq-symmetric-krylov-sector} 的记号。对任意
+\[
+\lambda\notin \Spec(d^mD^m),
+\]
+都有精确恒等式
+\[
+\det\!\bigl(\lambda I-B^{(q)}(a,b)^m\bigr)
+=
+\det\!\bigl(\lambda I-d^mD^m\bigr)
+\det\!\Bigl(
+I_{q+1}-\widetilde C_m(a,b;q)\,U_q^{\mathsf T}(\lambda I-d^mD^m)^{-1}U_q
+\Bigr).
+\]
+因此，\(B^{(q)}(a,b)^m\) 相对于背景算子 \(d^mD^m\) 的全部例外谱都由一个维数固定为 \(q+1\) 的 meromorphic determinant 完全控制。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-disjointness-fixedq-symmetric-krylov-sector}，
+\[
+B^{(q)}(a,b)^m=d^mD^m+U_q\,\widetilde C_m(a,b;q)\,U_q^{\mathsf T}.
+\]
+取
+\[
+A:=\lambda I-d^mD^m.
+\]
+由于 \(\lambda\notin \Spec(d^mD^m)\)，矩阵 \(A\) 可逆。对矩阵行列式引理
+\[
+\det(A-UCV^{\mathsf T})
+=
+\det(A)\det\!\bigl(I-CV^{\mathsf T}A^{-1}U\bigr)
+\]
+代入 \(U=V=U_q\)、\(C=\widetilde C_m(a,b;q)\)，便得所示公式。证毕。
+\end{proof}
+
+\begin{proposition}[秩一例外谱的 Cauchy 正交关系]\label{prop:conclusion-rankone-cauchy-orthogonality}
+设 \(t_0,\dots,t_q\) 两两不同、\(w_0,\dots,w_q>0\)，令
+\[
+D_0:=\mathrm{diag}(t_0,\dots,t_q),\qquad g:=(\sqrt{w_0},\dots,\sqrt{w_q})^{\mathsf T},
+\qquad A(b):=D_0+b\,gg^{\mathsf T}\quad(b>0).
+\]
+设 \(\{\lambda_j(b)\}_{j=0}^{q}\) 为 \(A(b)\) 的全部特征值（均为单根）。
+则对任意 \(j\) 有
+\[
+\sum_{i=0}^{q}\frac{w_i}{\lambda_j(b)-t_i}=\frac1b,
+\]
+并且对任意 \(j\ne k\) 有离散正交恒等式
+\[
+\sum_{i=0}^{q}\frac{w_i}{(\lambda_j(b)-t_i)(\lambda_k(b)-t_i)}=0.
+\]
+\end{proposition}
+\begin{proof}
+令 \(\lambda=\lambda_j(b)\) 并取 \(v^{(j)}:=(\lambda I-D_0)^{-1}g\)。
+则 \((A(b)-\lambda I)v^{(j)}=0\) 当且仅当
+\(
+b\,g^{\mathsf T}(\lambda I-D_0)^{-1}g=1
+\)，即第一式。
+由于 \(A(b)\) 为实对称矩阵，互异特征值对应的特征向量正交，从而
+\[
+0=\langle v^{(j)},v^{(k)}\rangle=\sum_{i=0}^{q}\frac{w_i}{(\lambda_j(b)-t_i)(\lambda_k(b)-t_i)}\qquad(j\ne k).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[秩一扰动的结果式--判别式闭式]\label{thm:conclusion-rankone-resultant-discriminant-closed-form}
+沿用命题 \ref{prop:conclusion-rankone-cauchy-orthogonality} 的记号，并置
+\[
+G(x):=\det(xI-D_0)=\prod_{i=0}^{q}(x-t_i),\qquad
+P_b(x):=\det(xI-A(b)),
+\qquad n:=q+1.
+\]
+则成立结果式的判别式闭式
+\[
+\boxed{\;
+\mathrm{Res}(P_b,G)=(-1)^{\frac{n(n-1)}2}\,b^{n}\Bigl(\prod_{i=0}^{q}w_i\Bigr)\mathrm{Disc}(G).\;}
+\]
+\end{theorem}
+\begin{proof}
+令 \(\lambda_0,\dots,\lambda_q\) 为 \(P_b\) 的根，并考虑 Cauchy 型矩阵
+\(
+C_{i,j}:=\frac{\sqrt{w_i}}{\lambda_j-t_i}
+\)。
+由命题 \ref{prop:conclusion-rankone-cauchy-orthogonality}，列向量 \((C_{i,j})_{i}\) 两两正交，故 \(C^{\mathsf T}C\) 为对角矩阵，从而
+\(
+\det(C)^2=\det(C^{\mathsf T}C)=\prod_{j=0}^{q}\|v^{(j)}\|_2^2
+\)。
+\par
+另一方面，Cauchy 行列式公式给出
+\[
+\det(C)=\Bigl(\prod_{i=0}^{q}\sqrt{w_i}\Bigr)\,
+\frac{\prod_{0\le i<k\le q}(t_k-t_i)\ \prod_{0\le j<\ell\le q}(\lambda_\ell-\lambda_j)}
+{\prod_{i,j}(\lambda_j-t_i)}.
+\]
+将其平方并代入
+\(
+\prod_{0\le j<\ell\le q}(\lambda_\ell-\lambda_j)^2=\mathrm{Disc}(P_b)
+\)、
+\(
+\prod_{0\le i<k\le q}(t_k-t_i)^2=\mathrm{Disc}(G)
+\)、
+\(
+\prod_{j=0}^{q}G(\lambda_j)=\mathrm{Res}(P_b,G)
+\)
+得到
+\[
+\det(C)^2=\Bigl(\prod_{i=0}^{q}w_i\Bigr)\frac{\mathrm{Disc}(G)\,\mathrm{Disc}(P_b)}{\mathrm{Res}(P_b,G)^2}.
+\]
+\par
+再由矩阵行列式引理 \(P_b(x)=G(x)\bigl(1-b\sum_i w_i/(x-t_i)\bigr)\)，可得对任意根 \(\lambda_j\)
+\[
+\|v^{(j)}\|_2^2=\sum_{i=0}^{q}\frac{w_i}{(\lambda_j-t_i)^2}=\frac{P_b'(\lambda_j)}{b\,G(\lambda_j)}.
+\]
+取 \(j\) 的连乘并用
+\(
+\prod_{j=0}^{q}P_b'(\lambda_j)=(-1)^{\frac{n(n-1)}2}\mathrm{Disc}(P_b)
+\)
+得
+\[
+\prod_{j=0}^{q}\|v^{(j)}\|_2^2
+=(-1)^{\frac{n(n-1)}2}\frac{\mathrm{Disc}(P_b)}{b^{n}\mathrm{Res}(P_b,G)}.
+\]
+与前一式比较并消去 \(\mathrm{Disc}(P_b)\) 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[谱速度--判别式恒等式]\label{cor:conclusion-rankone-eigenvalue-speed-discriminant-identity}
+沿用命题 \ref{prop:conclusion-rankone-cauchy-orthogonality} 的记号，视 \(b>0\) 为连续参数，则根分支 \(\lambda_j(b)\) 可取为解析函数并满足
+\[
+\prod_{j=0}^{q}\lambda_j'(b)=\frac{\bigl(\prod_{i=0}^{q}w_i\bigr)\mathrm{Disc}(G)}{\mathrm{Disc}(P_b)}.
+\]
+等价地，
+\[
+\mathrm{Disc}(P_b)=\frac{\bigl(\prod_{i=0}^{q}w_i\bigr)\mathrm{Disc}(G)}{\prod_{j=0}^{q}\lambda_j'(b)}.
+\]
+\end{corollary}
+\begin{proof}
+由对称矩阵微扰理论，
+\(
+\lambda_j'(b)=(g^{\mathsf T}u^{(j)})^2
+\)
+（\(u^{(j)}\) 为单位特征向量）。
+又 \(u^{(j)}=v^{(j)}/\|v^{(j)}\|_2\)，并由割线方程得 \(g^{\mathsf T}v^{(j)}=1/b\)，故
+\(
+\lambda_j'(b)=1/(b^2\|v^{(j)}\|_2^2)
+\)。
+对 \(j\) 连乘并代入定理 \ref{thm:conclusion-rankone-resultant-discriminant-closed-form} 中的 \(\mathrm{Res}(P_b,G)\) 表达式，即得所示恒等式。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$(T^{(q)})^{-m}$}{(T(q))^{-m}} 的逐项闭式]\label{thm:conclusion-softcore-inverse-power-entrywise}
+令 \(q\ge 2\)，并沿用 \eqref{eq:conclusion-disjointness-power-entrywise-closed-form} 之前的 \(D,J\) 记号。
+记软核矩阵 \(T^{(q)}\) 为
+\[
+T^{(q)}=\frac12(D+J),
+\qquad
+A:=2T^{(q)}=D+J,
+\qquad
+P:=e_{\varnothing}e_{\varnothing}^{\mathsf T},
+\]
+其中 \(e_{\varnothing}\) 表示空集 \(\varnothing\) 的标准基向量。
+则对任意整数 \(m\ge 1\) 成立
+\[
+\boxed{\;A^{-1}=D^{-1}-\frac12\,P\;}
+\]
+并且对任意 \(U,V\subseteq[q]\)，在约定 \(F_{-1}=1\)（并保留 \(F_0=0,F_1=1\)）下有完全展开闭式
+\begin{align*}
+\bigl(T^{(q)}{}^{-m}\bigr)_{U,V}
+&=
+2^{m}\,(D^{-m})_{U,V}
+\sum_{r=1}^{m}(-1)^{r}2^{m-r}
+\sum_{\substack{n_0+\cdots+n_r=m-r\\ n_j\ge 0}}
+\Bigl(\xi_{n_0}(U)\Bigr)\Bigl(\prod_{j=1}^{r-1}\eta_{n_j}\Bigr)\Bigl(\xi_{n_r}(V)\Bigr),
+\end{align*}
+其中
+\[
+(D^{-m})_{U,V}=(-1)^{mq+|U\triangle V|}
+F_{m-1}^{\,q-|U\cup V|}\,F_{m}^{\,|U\triangle V|}\,F_{m+1}^{\,|U\cap V|},
+\]
+\[
+\xi_n(U)=(-1)^{nq+|U|}\,F_{n-1}^{\,q-|U|}\,F_{n}^{\,|U|},
+\qquad
+\eta_n=(-1)^{nq}\,F_{n-1}^{\,q}.
+\]
+\end{theorem}
+\begin{proof}
+由 Sherman--Morrison 公式，
+\[
+(D+J)^{-1}=D^{-1}-\frac{D^{-1}\mathbf 1\mathbf 1^{\mathsf T}D^{-1}}{1+\mathbf 1^{\mathsf T}D^{-1}\mathbf 1}.
+\]
+对 \(D=K^{\otimes q}\) 有 \(K^{-1}(1,1)^{\mathsf T}=(1,0)^{\mathsf T}\)，从而 \(D^{-1}\mathbf 1=e_{\varnothing}\) 且 \(\mathbf 1^{\mathsf T}D^{-1}\mathbf 1=1\)，故 \(A^{-1}=D^{-1}-\frac12P\)。
+于是 \(A^{-m}=(D^{-1}-\tfrac12P)^m\) 可按字展开；每一字因 \(P\) 的秩一结构均可逐项收缩为端点矢量与中间标量的乘积，得到所示展开结构。
+\par
+最后，由 \(D^{-m}=(K^{-m})^{\otimes q}\) 及
+\(
+K^{-m}=(-1)^m\bigl(\begin{smallmatrix}F_{m-1}&-F_m\\[2pt]-F_m&F_{m+1}\end{smallmatrix}\bigr)
+\)
+逐坐标相乘即可得到 \((D^{-m})_{U,V}\)、\(\xi_n(U)\)、\(\eta_n\) 的闭式；再用 \(T^{(q)}{}^{-m}=2^{m}A^{-m}\) 完成。证毕。
+\end{proof}
+
+\endinput

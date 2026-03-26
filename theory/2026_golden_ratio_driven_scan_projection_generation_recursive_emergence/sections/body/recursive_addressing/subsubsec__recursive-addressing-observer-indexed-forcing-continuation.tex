@@ -1,0 +1,129 @@
+\paragraph{类型化读出偏函数与对象层值}
+前述 forcing 框架还可进一步压缩为一个状态化的类型读出偏函数。
+它的作用是把“地址是否已对象化”“局部截面是否存在”与“值类是否已在当前类型制度中唯一确定”三件事统一到同一个对象层接口上。
+
+\begin{definition}[类型化读出偏函数]\label{def:observer-indexed-typed-readout}
+对任意信息状态 \(p\) 与类型化地址 \(a\)，定义偏函数 \(\mathrm{Read}_p(a)\) 如下：
+\begin{enumerate}
+  \item 若 \(a\notin A(p)\)，则 \(\mathrm{Read}_p(a)\) 在对象层不定义；
+  \item 若 \(a\in A(p)\) 但 \(\Gamma_p(a)=\varnothing\)，则记
+  \[
+  \mathrm{Read}_p(a)=\mathsf{NULL};
+  \]
+  \item 若 \(a\in A(p)\) 且 \(\Gamma_p(a)\) 在当前类型制度下确定唯一可核验值类，则记该值类为 \(\mathrm{Read}_p(a)\)。
+\end{enumerate}
+当可见域进一步固定为 unitary slice 时，记相应特化为
+\[
+\mathrm{Read}_{\mathrm{US},p}(a).
+\]
+其跨状态的全局编译将在后续逆极限口径下组织为偏函数 \(\mathrm{Read}_{\mathrm{US}}\)，见定理 \ref{thm:recursive-addressing-readout-separatedness-null}。
+\end{definition}
+
+\begin{proposition}[\texorpdfstring{$\mathrm{Read}_{\mathrm{US}}$}{Read\_US} 的 forcing 判据]\label{prop:observer-indexed-readout-forcing-criterion}
+在当前类型纪律下，对任意状态 \(p\) 与类型化地址 \(a\)，有
+\[
+\mathrm{Read}_{\mathrm{US},p}(a)\neq \mathsf{NULL}
+\]
+当且仅当当前状态上存在协议允许、类型单值且可核验的局部截面。
+并且若 \(q\le p\) 且 \(\mathrm{Read}_{\mathrm{US},p}(a)\neq \mathsf{NULL}\)，则
+\[
+\mathrm{Read}_{\mathrm{US},q}(a)\neq \mathsf{NULL},
+\]
+且其对象层值类与 \(\mathrm{Read}_{\mathrm{US},p}(a)\) 一致。
+\end{proposition}
+
+\begin{proof}
+前半句由定义 \ref{def:observer-indexed-typed-readout} 直接给出。
+对后半句，由命题 \ref{prop:observer-indexed-forcing-monotonicity}，一旦某个读出命题在较粗状态上已可断言，则在任何细化状态上仍可断言。
+而定义 \ref{def:observer-indexed-typed-readout} 的第三条已把合法局部截面压缩为唯一可核验值类，因此细化只会增加证书支撑，不会改变对象层值类本身。
+故结论成立。
+\end{proof}
+
+\begin{corollary}[显式提升原则的 forcing 解释]\label{cor:observer-indexed-explicit-lifting}
+若某个复合表达式同时调用来自不同精度索引、不同可见域或不同证书层级的读出，而系统并未提供一个共同细化状态 \(q\le p\)，使这些读出能在同一类型化域中同时解释，则该表达式在状态 \(p\) 上不定义。
+\end{corollary}
+
+\begin{proof}
+复合表达式的对象层解释要求其各子项在同一可比较域中具有共同语义。
+若不存在共同细化把这些子项提升到同一类型层，则不存在统一的对象层评价函数，因而该表达式不能在 \(p\) 上被强制成立。
+这正是“混合精度的操作在类型层不定义”的 forcing 口径。
+\end{proof}
+
+\paragraph{值保持重写的对象层语义}
+一旦地址对象已经形成、局部截面已经存在并且对象层值类已被确定，后续的稳定算术便不再处理“是否存在对象”，而只处理“如何在同一对象层值类内选取规范表示”。
+相应地，值保持重写必须在对象层而非实现层被表述。
+
+\begin{definition}[值保持重写的对象层语义]\label{def:observer-indexed-value-preserving-rewrite}
+设 \(t\Rightarrow t'\) 是后续稳定算术中的一条重写规则。
+称该规则在对象层上\emph{值保持}，若对任意信息状态 \(p\) 与任意使两侧都可解释的地址--值环境 \(\eta\)，均有
+\[
+p\Vdash \operatorname{Val}_{p,\eta}(t)=\operatorname{Val}_{p,\eta}(t').
+\]
+其中 \(\operatorname{Val}_{p,\eta}(t)\) 表示项 \(t\) 在状态 \(p\) 与环境 \(\eta\) 下的对象层读出类。
+\end{definition}
+
+\begin{proposition}[值保持重写不创造对象层值]\label{prop:observer-indexed-value-preserving-no-creation}
+若一条重写规则在定义 \ref{def:observer-indexed-value-preserving-rewrite} 的意义下值保持，则它只能在已有对象层读出上改变表示，而不能从一个未定义项中创造出新的对象层值。
+\end{proposition}
+
+\begin{proof}
+若 \(t\) 在状态 \(p\) 上未定义，则 \(\operatorname{Val}_{p,\eta}(t)\) 不存在。
+此时若 \(t'\) 在 \(p\) 上已定义，则
+\[
+p\Vdash \operatorname{Val}_{p,\eta}(t)=\operatorname{Val}_{p,\eta}(t')
+\]
+无从成立，因此该规则不可能是对象层值保持的。
+反之，若两侧都已定义，则值保持只说明二者属于同一对象层值类，因而改变的是表示、规范形或证书接口，而不是值本身。
+\end{proof}
+
+\begin{corollary}[规范化不创造事实]\label{cor:observer-indexed-normalization-no-fact-creation}
+后续的规范化、重写与横截选择，其对象层作用只是把一个已定义值的不同表示压到统一规范形；它们不能替代地址对象化、证书建立或前缀细化，更不能越过 \(\mathsf{NULL}\) 直接生成数值事实。
+\end{corollary}
+
+\begin{proof}
+这是命题 \ref{prop:observer-indexed-value-preserving-no-creation} 的直接推论。
+\end{proof}
+
+\begin{proposition}[有限分辨率算术的对象层资格]\label{prop:observer-indexed-finite-resolution-object-eligibility}
+在分辨率 \(m\) 上，稳定算术只对已经通过对象化与非 \(\mathsf{NULL}\) 判据的读出类生效。
+更具体地说，若
+\[
+\omega\equiv_m\omega'
+\Longleftrightarrow
+\Fold_m(\omega)=\Fold_m(\omega')
+\]
+给出实现层的折叠同余，则对象层算术并不直接作用于原始微态 \(\omega\)，而作用于由当前状态所支撑的读出类，即实现层等价类经地址化与类型过滤之后的对象。
+\end{proposition}
+
+\begin{proof}
+折叠同余只说明不同微态在当前分辨率下不可区分；它本身既不构成对象层地址，也不自动给出可核验读出。
+只有当相应等价类在当前信息状态上被地址化、通过协议并获得局部截面时，它才上升为对象层对象。
+故稳定算术处理的不是原始微态，而是 forcing 已经承认的读出类。
+\end{proof}
+
+\begin{corollary}[第 \texorpdfstring{\ref{sec:emergent-arithmetic}}{7} 节的读法]\label{cor:observer-indexed-reading-of-emergent-arithmetic}
+第 \ref{sec:emergent-arithmetic} 节中的值保持重写、规范横截面与分辨率模结构，应理解为对那些已经在本节意义下完成对象化、并已获得非 \(\mathsf{NULL}\) 读出的地址--值对，构造其规范表示与值保持演算。
+更具体地说：
+\begin{enumerate}
+  \item 第 \ref{sec:emergent-arithmetic} 节并不是在无地址对象上直接施行算术；
+  \item 其中的“值保持”并不是实现层字符串恒等，而是对象层读出类恒等；
+  \item 其中的“模结构”也不是任意商，而是由分辨率折叠与可核验读出共同决定的对象层商结构。
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+由推论 \ref{cor:observer-indexed-nonnull-criterion}，对象层算术的合法输入首先必须是非 \(\mathsf{NULL}\) 的地址--值对；
+由命题 \ref{prop:observer-indexed-value-preserving-no-creation}，值保持重写只能在已定义对象上改变表示；
+再由命题 \ref{prop:observer-indexed-finite-resolution-object-eligibility}，有限分辨率下真正进入算术层的对象，是折叠同余经对象化与类型过滤之后的读出类。
+三者合并即得结论。
+\end{proof}
+
+\paragraph{本节收束}
+至此，第 \ref{sec:recursive-addressing} 节可压缩为一条统一逻辑链：
+先由地址生成把对象带入可指称域；
+再由前缀站点、局部截面与证书对象决定何者可读；
+再由 forcing 语义区分成立、失败与未决定；
+再由多轴前缀与显式提升把未决定命题推进到可断言；
+最后，只有在这一切都完成之后，稳定算术才获得其合法适用域。
+因此，第 \ref{sec:emergent-arithmetic} 节并不是从零开始引入一个外加层，而是本节对象层语义的代数化延续：
+本节回答“何时可以谈值”，而第 \ref{sec:emergent-arithmetic} 节回答“在已经可以谈值之后，如何进行值保持的规范化与算术化”。

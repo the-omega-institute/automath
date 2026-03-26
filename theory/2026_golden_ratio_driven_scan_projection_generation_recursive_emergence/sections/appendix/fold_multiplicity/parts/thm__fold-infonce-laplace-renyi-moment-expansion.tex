@@ -1,0 +1,222 @@
+\begin{theorem}[Bayes--InfoNCE 的 Laplace--Rényi 表示与离散矩谱有限展开]\label{thm:fold-infonce-laplace-renyi-moment-expansion}
+沿用定义 \ref{def:fold-pushforward-weight-wm} 的推前分布 \(w_m\)，并沿用定理 \ref{thm:fold-infonce-entropy-degeneration-second-order} 的采样机制：取 \(K\ge 2\)，先采样 \(X\sim w_m\)，再令
+\[
+J\mid X\sim \mathrm{Binomial}\bigl(K-1,\ w_m(X)\bigr),
+\qquad
+L_m^{K,\star}=\EE\bigl[\log(1+J)\bigr].
+\]
+定义 Rényi 幂和（碰撞矩谱）
+\[
+M_q(m):=\sum_{x\in X_m} w_m(x)^q=\EE_{X\sim w_m}\bigl[w_m(X)^{q-1}\bigr]\qquad(q\ge 1).
+\]
+则成立绝对收敛的积分表示
+\[
+L_m^{K,\star}
+=
+\int_{0}^{\infty}\frac{e^{-t}}{t}
+\Bigl(1-\EE\bigl[(1-(1-e^{-t})w_m(X))^{K-1}\bigr]\Bigr)\,\dd t.
+\]
+并且 \(L_m^{K,\star}\) 具有有限阶矩谱展开
+\[
+L_m^{K,\star}
+=
+\sum_{j=1}^{K-1}(-1)^{j-1}\binom{K-1}{j}\,\alpha_j\,M_{j+1}(m),
+\qquad
+\alpha_j:=\int_{0}^{\infty}\frac{e^{-t}(1-e^{-t})^j}{t}\,\dd t\in(0,\infty).
+\]
+\end{theorem}
+\begin{proof}
+对任意整数 \(n\ge 0\) 有恒等式
+\[
+\log(1+n)=\int_{0}^{\infty}\frac{e^{-t}-e^{-(1+n)t}}{t}\,\dd t
+=\int_{0}^{\infty}\frac{e^{-t}}{t}\bigl(1-e^{-nt}\bigr)\,\dd t.
+\]
+当 \(n\in\{0,1,\dots,K-1\}\) 时，上式右端由
+\(
+e^{-t}\min\{n,1/t\}
+\)
+一致控制，故可对随机变量 \(J\) 交换期望与积分，得到
+\[
+L_m^{K,\star}
+=
+\int_{0}^{\infty}\frac{e^{-t}}{t}\Bigl(1-\EE[e^{-tJ}]\Bigr)\,\dd t.
+\]
+对条件分布 \(J\mid X\sim\mathrm{Binomial}(K-1,w_m(X))\)，其 Laplace 变换为
+\[
+\EE\bigl[e^{-tJ}\mid X\bigr]
+=\bigl(1-w_m(X)+w_m(X)e^{-t}\bigr)^{K-1}
+=\bigl(1-(1-e^{-t})w_m(X)\bigr)^{K-1}.
+\]
+代回即得积分表示。
+\par
+再以二项式定理展开
+\[
+1-(1-cW)^{K-1}=\sum_{j=1}^{K-1}(-1)^{j-1}\binom{K-1}{j}c^j W^j,
+\qquad c=1-e^{-t},\ \ W=w_m(X),
+\]
+并注意 \(\EE[W^j]=\sum_x w_m(x)^{j+1}=M_{j+1}(m)\)。
+将该展开代入积分表示并逐项积分（有限和）得到所述矩谱展开。证毕。
+\end{proof}
+
+\begin{corollary}[对数系数闭式：Bayes--InfoNCE 作为“对数--矩谱”有限线性泛函]\label{cor:fold-infonce-alpha-log-closed-form}
+在定理 \ref{thm:fold-infonce-laplace-renyi-moment-expansion} 的记号下，对每个 \(j\ge 1\) 有完全显式的闭式
+\[
+\alpha_j
+=
+-\sum_{k=0}^{j}(-1)^k\binom{j}{k}\log(k+1)
+=
+-\sum_{k=1}^{j+1}(-1)^{k-1}\binom{j}{k-1}\log k.
+\]
+因此对任意整数 \(K\ge 2\)，\(L_m^{K,\star}\) 落在由 \(\{\log 2,\log 3,\dots,\log K\}\) 张成的 \(\QQ\)-线性空间中；
+其系数由有限阶矩谱 \(\{M_2(m),\dots,M_K(m)\}\) 代数确定。
+\end{corollary}
+\begin{proof}
+由定义
+\(
+\alpha_j=\int_{0}^{\infty}\frac{e^{-t}(1-e^{-t})^j}{t}\dd t
+\)。
+对 integrand 作二项式展开：
+\[
+e^{-t}(1-e^{-t})^j=\sum_{k=0}^{j}(-1)^k\binom{j}{k}e^{-(k+1)t}.
+\]
+并注意系数和为 \(\sum_{k=0}^{j}(-1)^k\binom{j}{k}=(1-1)^j=0\)。
+因此可用 Frullani 型恒等式：若 \(a_k>0\) 且 \(\sum_k c_k=0\)，则
+\[
+\int_{0}^{\infty}\frac{\sum_k c_k e^{-a_k t}}{t}\,\dd t=-\sum_k c_k\log a_k,
+\]
+从而得到
+\(
+\alpha_j=-\sum_{k=0}^{j}(-1)^k\binom{j}{k}\log(k+1)
+\)。
+第二个求和式仅为换元 \(k\mapsto k-1\)。
+最后一句由定理 \ref{thm:fold-infonce-laplace-renyi-moment-expansion} 的有限展开直接推出。证毕。
+\end{proof}
+
+\begin{proposition}[Bayes--InfoNCE 的幂和展开与通用差分系数]\label{prop:fold-infonce-bayes-infonce-power-sum-expansion}
+固定分辨率 \(m\) 并令 \(p_r:=M_r(m)=\sum_{x\in X_m}w_m(x)^r\)（\(r\ge 1\)）。
+对每个整数 \(r\ge 2\) 定义差分系数
+\[
+b_r:=\sum_{j=0}^{r-1}(-1)^{r-1-j}\binom{r-1}{j}\log(j+1).
+\]
+则对任意整数 \(K\ge 2\) 有幂和展开
+\[
+L_m^{K,\star}=\sum_{r=2}^{K}\binom{K-1}{r-1}\,b_r\,p_r.
+\]
+并且 \(b_r\) 具有积分表示
+\[
+b_r=(-1)^r\int_{0}^{\infty}\frac{e^{-t}(1-e^{-t})^{r-1}}{t}\,\dd t,
+\]
+从而 \(b_r\neq 0\) 且 \(\mathrm{sign}(b_r)=(-1)^r\)（\(r\ge 2\)）。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:fold-infonce-laplace-renyi-moment-expansion} 的有限展开，令 \(r=j+1\) 得
+\[
+L_m^{K,\star}
+=\sum_{r=2}^{K}(-1)^{r-2}\binom{K-1}{r-1}\,\alpha_{r-1}\,p_r.
+\]
+定义 \(b_r:=(-1)^r\alpha_{r-1}\)（注意 \(r-2\equiv r\pmod 2\)），即得所示幂和展开。
+由推论 \ref{cor:fold-infonce-alpha-log-closed-form} 可知
+\(
+\alpha_{r-1}=-\sum_{j=0}^{r-1}(-1)^j\binom{r-1}{j}\log(j+1)
+\)，从而得到 \(b_r\) 的差分闭式。
+积分表示由 \(\alpha_{r-1}\) 的积分定义与 \(b_r=(-1)^r\alpha_{r-1}\) 得到。
+由于被积函数严格正，\(\alpha_{r-1}>0\) 且 \(\mathrm{sign}(b_r)=(-1)^r\)。证毕。
+\end{proof}
+
+\begin{corollary}[损失塔对幂和的三角反演]\label{cor:fold-infonce-loss-tower-triangular-inversion-power-sums}
+在命题 \ref{prop:fold-infonce-bayes-infonce-power-sum-expansion} 的记号下，对每个整数 \(q\ge 2\) 有递推反演
+\[
+p_q
+=\frac{1}{b_q}\left(
+L_m^{q,\star}-\sum_{k=2}^{q-1}\binom{q-1}{k-1}\,b_k\,p_k
+\right).
+\]
+因此对任意 \(Q\ge 2\)，有限前缀 \(\{L_m^{2,\star},\dots,L_m^{Q,\star}\}\) 唯一确定 \(\{p_2,\dots,p_Q\}\)。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:fold-infonce-bayes-infonce-power-sum-expansion} 在 \(K=q\) 的特例，
+\(
+L_m^{q,\star}=\sum_{k=2}^{q}\binom{q-1}{k-1}b_k p_k
+\)。
+注意对角系数 \(\binom{q-1}{q-1}b_q=b_q\neq 0\)，移项即得递推式。证毕。
+\end{proof}
+
+\input{sections/appendix/fold_multiplicity/parts/thm__fold-infonce-loss-spectrum-identifiability}
+\begin{corollary}[等价形式：差分算子表示与前差分系数]\label{cor:fold-infonce-triangular-inversion-collision-spectrum}
+沿用命题 \ref{prop:fold-infonce-bayes-infonce-power-sum-expansion} 的记号，并令
+\[
+f(j):=\log(1+j),\qquad (\Delta f)(j):=f(j+1)-f(j)
+\quad(j\in\ZZ_{\ge 0}).
+\]
+则对任意整数 \(n\ge 1\)（即取 \(K=n+1\)），有严格三角表示
+\[
+L_m^{n+1,\star}
+=\sum_{t=1}^{n}\binom{n}{t}\,(\Delta^t f)(0)\,M_{t+1}(m),
+\qquad
+(\Delta^t f)(0)=\sum_{j=0}^{t}(-1)^{t-j}\binom{t}{j}\log(1+j)=b_{t+1}.
+\]
+并且最高阶系数非退化：\((\Delta^{n}f)(0)=(-1)^{n+1}\alpha_n\neq 0\)。
+因此得到显式递归反演：对每个 \(n\ge 1\)，
+\[
+M_{n+1}(m)
+=\frac{1}{(\Delta^{n}f)(0)}
+\left(
+L_m^{n+1,\star}-\sum_{t=1}^{n-1}\binom{n}{t}\,(\Delta^{t}f)(0)\,M_{t+1}(m)
+\right).
+\]
+从而有限序列 \(\{L_m^{2,\star},\dots,L_m^{Q+1,\star}\}\) 唯一确定 \(\{M_2(m),\dots,M_{Q+1}(m)\}\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:fold-infonce-laplace-renyi-moment-expansion}，
+\[
+L_m^{n+1,\star}
+=\sum_{j=1}^{n}(-1)^{j-1}\binom{n}{j}\,\alpha_j\,M_{j+1}(m).
+\]
+另一方面由推论 \ref{cor:fold-infonce-alpha-log-closed-form} 与 \((\Delta^j f)(0)=\sum_{k=0}^{j}(-1)^{j-k}\binom{j}{k}\log(1+k)\) 得
+\(
+(-1)^{j-1}\alpha_j=(\Delta^j f)(0)
+\)，代回即得三角表示。
+又由定理 \ref{thm:fold-infonce-laplace-renyi-moment-expansion} 的积分定义知 \(\alpha_n>0\)，故 \((\Delta^n f)(0)=(-1)^{n+1}\alpha_n\neq 0\)，从而可按 \(n\) 递归解出 \(M_{n+1}(m)\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[学习相变边界的不可判定性：停机问题嵌入 Bayes--InfoNCE 速率]\label{thm:fold-infonce-rate-undecidable}
+固定 \(\alpha\in(0,1)\)，并令 \(K_m:=2^{\alpha m}\)。
+考虑判定问题：输入为一个一致可计算的映射族 \(f_m:\Omega_m=\{0,1\}^m\to Y_m\)（\(m\ge 1\)），其诱导推前分布记为 \(w_m^{(f)}\)，并令 \(L_{m}^{K,\star}(f)\) 表示以 \(w_m^{(f)}\) 代替 \(w_m\) 后、按定理 \ref{thm:fold-infonce-laplace-renyi-moment-expansion} 所定义的 Bayes 最优 InfoNCE 损失。
+判定是否成立
+\[
+\lim_{m\to\infty}\frac{1}{m}L_{m}^{K_m,\star}(f)=0.
+\]
+则该判定问题不可判定；更强地，该问题的真值集合既非递归可枚举，亦非其补集递归可枚举。
+\end{theorem}
+\begin{proof}
+给定任意图灵机 \(M\) 与输入 \(x\)，对每个 \(m\) 先模拟 \(M(x)\) 运行 \(m\) 步。
+若在 \(m\) 步内停机，则令 \(f_m\) 为恒等映射 \(f_m(\omega)=\omega\)（取 \(Y_m=\Omega_m\)）；
+若在 \(m\) 步内不停机，则令 \(f_m\) 为常值映射（取 \(Y_m=\{\ast\}\) 且 \(f_m(\omega)=\ast\)）。
+该构造对每个 \(m\) 仅需有限步模拟，故 \(m\mapsto f_m\) 一致可计算。
+\par
+若 \(M(x)\) 永不停机，则对一切 \(m\)，推前分布退化为 \(w_m^{(f)}(\ast)=1\)，从而 \(J=K_m-1\) 几乎处处，故
+\[
+L_{m}^{K_m,\star}(f)=\log K_m=\alpha m\log 2,
+\qquad
+\lim_{m\to\infty}\frac{1}{m}L_{m}^{K_m,\star}(f)=\alpha\log 2>0.
+\]
+若 \(M(x)\) 在某个有限步数 \(T\) 内停机，则对所有 \(m\ge T\)，\(f_m\) 恒等，推前分布为均匀分布，故 \(w_m^{(f)}(X)=2^{-m}\) 几乎处处且
+\[
+J\sim\mathrm{Binomial}(K_m-1,2^{-m}),
+\qquad
+\EE[J]=(K_m-1)2^{-m}=2^{(\alpha-1)m}\to 0.
+\]
+由 \(0\le \log(1+J)\le J\) 得
+\(
+0\le L_{m}^{K_m,\star}(f)\le \EE[J]\to 0
+\)，从而
+\(
+\lim_{m\to\infty}m^{-1}L_{m}^{K_m,\star}(f)=0
+\)。
+因此上述极限判定与 \(M(x)\) 是否停机等价，故不可判定。
+最后一条“既非 r.e.\ 亦非 co-r.e.” 由停机集合及其补集均非递归可枚举的经典结论导出。证毕。
+\end{proof}
+
+\input{sections/appendix/fold_multiplicity/parts/prop__fold-infonce-boundary-functional-uncomputable}
+

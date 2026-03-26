@@ -1,0 +1,271 @@
+\subsubsection{真实输入的逐位和层：三状态 \texorpdfstring{$1$}{1}-step SFT、七分圆谱与代数型信息损失}\label{app:real-input-digitwise-sum-layer}
+
+本小节在进入 $40$ 状态真实输入同步核之前，先把“真实输入”在\emph{逐位和}层面的约束与统计结构完全显式化。
+核心点是：两条黄金均值输入的逐位和并非任意的 $\{0,1,2\}$-序列，而落在一个三符号 $1$-step SFT 上；并且在产品 Parry 驱动下，该因子过程不仅是隐藏马尔可夫，而且\emph{严格退化}为一阶马尔可夫链，从而使信息损失率出现纯代数闭式。
+
+\paragraph{逐位和因子与像移位}
+令 $X\subset\{0,1\}^{\ZZ}$ 为黄金均值（Zeckendorf）移位：禁止相邻子词 $11$。定义逐位和因子
+\[
+\Sigma_{\mathrm{sum}}:X\times X\to\{0,1,2\}^{\ZZ},\qquad
+(\Sigma_{\mathrm{sum}}(x,y))_k:=x_k+y_k.
+\]
+记其像为
+\[
+Y_{\mathrm{sum}}:=\Sigma_{\mathrm{sum}}(X\times X)\subset \{0,1,2\}^{\ZZ}.
+\]
+
+\begin{proposition}[语言刻画：三状态 $1$-step SFT]\label{prop:real-input-digitwise-sum-sft}
+像移位 $Y_{\mathrm{sum}}$ 恰为禁词集合
+\[
+\mathcal{F}_{\mathrm{sum}}=\{12,\,21,\,22\}
+\]
+的三符号 $1$-step SFT。等价地，允许转移满足
+\[
+0\to 0,1,2;\qquad 1\to 0,1;\qquad 2\to 0,
+\]
+从而符号 $2$ 必被 $0$ 在两侧隔离。
+在符号序 $(0,1,2)$ 下，其邻接矩阵可取为
+\[
+A_{\mathrm{sum}}=
+\begin{pmatrix}
+1&1&1\\
+1&1&0\\
+1&0&0
+\end{pmatrix},
+\qquad
+\zeta_{Y_{\mathrm{sum}}}(z)=\frac{1}{\det(I-zA_{\mathrm{sum}})}=\frac{1}{1-2z-z^2+z^3}.
+\]
+\end{proposition}
+
+\begin{proof}
+若 $d=\Sigma_{\mathrm{sum}}(x,y)$，则：
+\begin{itemize}
+  \item 若 $d_k=2$，则 $(x_k,y_k)=(1,1)$。黄金均值约束强制 $x_{k\pm 1}=y_{k\pm 1}=0$，故 $d_{k\pm 1}=0$，从而禁用子词 $21,22$。
+  \item 若 $d_k=1$，则 $(x_k,y_k)\in\{(1,0),(0,1)\}$。无论是哪一种，下一位不可能同时出现两条 $1$，故 $d_{k+1}\neq 2$，从而禁用子词 $12$。
+\end{itemize}
+因此 $Y_{\mathrm{sum}}\subseteq \mathrm{SFT}(\mathcal{F}_{\mathrm{sum}})$。
+
+反过来，取任意 $d\in\{0,1,2\}^{\ZZ}$ 避免 $\mathcal{F}_{\mathrm{sum}}$。令
+\[
+d_k=0\Rightarrow (x_k,y_k):=(0,0),\qquad
+d_k=2\Rightarrow (x_k,y_k):=(1,1).
+\]
+由于 $d$ 禁用 $21,22$，故 $d_k=2$ 蕴含 $d_{k\pm1}=0$，从而上述赋值不会在任一坐标产生相邻 $11$。
+对 $d_k=1$ 的位置，按每条由 $1$ 组成的极大连通段（可为双边无限段）任选一个二染色并令其在两条坐标间交替分配 $1$（例如按索引奇偶在 $(1,0)$ 与 $(0,1)$ 间交替），则每个坐标上的 $1$ 仍被 $0$ 隔开，故 $x,y\in X$，且逐位和满足 $x_k+y_k=d_k$。
+因此 $\mathrm{SFT}(\mathcal{F}_{\mathrm{sum}})\subseteq Y_{\mathrm{sum}}$，从而二者相等。
+行列式表达式是 SFT 的标准 $\zeta$--行列式公式（参见 \cite{LindMarcus1995,BrinStuck2002}）。证毕。
+\end{proof}
+
+\begin{proposition}[第七分圆谱与拓扑熵闭式]\label{prop:real-input-digitwise-sum-cyclotomic-spectrum}
+矩阵 $A_{\mathrm{sum}}$ 的特征多项式为
+\[
+\chi_{A_{\mathrm{sum}}}(\lambda)=\lambda^3-2\lambda^2-\lambda+1.
+\]
+其三个特征值可写成
+\[
+\lambda_k=1+2\cos\!\left(\frac{2\pi k}{7}\right),\qquad k=1,2,3.
+\]
+因此 Perron 根为
+\[
+\rho(A_{\mathrm{sum}})=1+2\cos\!\left(\frac{2\pi}{7}\right)\approx 2.2469796037,
+\]
+并给出拓扑熵
+\[
+h_{\mathrm{top}}(Y_{\mathrm{sum}})=\log \rho(A_{\mathrm{sum}})=\log\!\left(1+2\cos\frac{2\pi}{7}\right).
+\]
+\end{proposition}
+
+\begin{proof}
+特征多项式由直接计算得出。
+令 $\zeta_7=e^{2\pi i/7}$，并记 $t:=\zeta_7+\zeta_7^{-1}=2\cos(2\pi/7)$。
+由 $(X-\zeta_7)(X-\zeta_7^{-1})=X^2-tX+1$ 与 $\zeta_7^7=1$ 的消元可得 $t$ 满足三次方程
+\(
+t^3+t^2-2t-1=0
+\)
+（对应 $\mathbb{Q}(\zeta_7)^+$ 的生成元多项式）。
+令 $\lambda:=1+t$，则代入并化简得到
+\(
+\lambda^3-2\lambda^2-\lambda+1=0
+\)。
+对共轭嵌入 $t\mapsto 2\cos(2\pi k/7)$（$k=1,2,3$）同样成立，从而得到三根表达式。
+最后由 Perron--Frobenius 定理与命题 \ref{prop:real-input-digitwise-sum-sft} 得出熵公式。证毕。
+\end{proof}
+
+\begin{corollary}[逐位和层的指数简并度（纯拓扑计数）]\label{cor:real-input-digitwise-sum-topological-degeneracy}
+长度为 $n$ 的真实输入块数满足
+\[
+|\mathcal{L}_n(X\times X)|=\Theta(\varphi^{2n}),
+\]
+而逐位和像语言满足
+\[
+|\mathcal{L}_n(Y_{\mathrm{sum}})|=\Theta(\rho(A_{\mathrm{sum}})^n).
+\]
+因此“平均前像数”的指数增长率为
+\[
+\Delta h_{\mathrm{top}}
+=h_{\mathrm{top}}(X\times X)-h_{\mathrm{top}}(Y_{\mathrm{sum}})
+=\log(\varphi^2)-\log\!\left(1+2\cos\frac{2\pi}{7}\right).
+\]
+\end{corollary}
+
+\begin{proof}
+对黄金均值 shift 有 $h_{\mathrm{top}}(X)=\log\varphi$，故 $h_{\mathrm{top}}(X\times X)=2\log\varphi=\log(\varphi^2)$。
+另一方面由命题 \ref{prop:real-input-digitwise-sum-cyclotomic-spectrum} 有 $h_{\mathrm{top}}(Y_{\mathrm{sum}})=\log\rho(A_{\mathrm{sum}})$。
+而对任意混合 SFT，语言增长率由其 Perron 根控制：$|\mathcal{L}_n|=\Theta(\rho^n)$。
+将指数主项相除并取对数即得结论。证毕。
+\end{proof}
+
+\paragraph{产品 Parry 驱动下的精确一阶马尔可夫性与信息损失率}
+令 $\mu$ 为 $X$ 上 Parry（最大熵）测度，并取产品测度 $\mu\times\mu$ 作用于 $X\times X$。
+令 $\nu:=(\Sigma_{\mathrm{sum}})_\ast(\mu\times\mu)$ 为推前测度，并记随机过程
+\[
+D_k:=\bigl(\Sigma_{\mathrm{sum}}(x,y)\bigr)_k\in\{0,1,2\}.
+\]
+
+\begin{proposition}[推前过程的精确一阶马尔可夫性]\label{prop:real-input-digitwise-sum-parry-markov}
+在 $\nu$ 下，过程 $(D_k)_{k\in\ZZ}$ 严格为一阶马尔可夫链，其转移矩阵为
+\[
+T_{\mathrm{sum}}=
+\begin{pmatrix}
+\varphi^{-2} & 2\varphi^{-3} & \varphi^{-4}\\
+\varphi^{-1} & \varphi^{-2} & 0\\
+1 & 0 & 0
+\end{pmatrix}.
+\]
+其平稳分布为
+\[
+\pi_0=\left(\frac{\varphi^2}{\varphi^2+1}\right)^{\!2},\qquad
+\pi_1=\frac{2\varphi^2}{(\varphi^2+1)^2},\qquad
+\pi_2=\frac{1}{(\varphi^2+1)^2}.
+\]
+\end{proposition}
+
+\begin{proof}
+黄金均值 Parry 链在单边坐标上的转移满足
+\[
+\mathbb{P}(0\to 0)=\varphi^{-1},\qquad
+\mathbb{P}(0\to 1)=\varphi^{-2},\qquad
+\mathbb{P}(1\to 0)=1,
+\]
+且两条输入链在产品测度下独立。
+
+对任意 $k$，条件在 $D_k$：
+\begin{itemize}
+  \item 若 $D_k=0$，则 $(x_k,y_k)=(0,0)$ 唯一确定；下一步两条链独立地从 $0$ 转移，因此
+  \[
+  \mathbb{P}(D_{k+1}=0\mid D_k=0)=\varphi^{-2},\quad
+  \mathbb{P}(D_{k+1}=1\mid D_k=0)=2\varphi^{-3},\quad
+  \mathbb{P}(D_{k+1}=2\mid D_k=0)=\varphi^{-4}.
+  \]
+  \item 若 $D_k=2$，则 $(x_k,y_k)=(1,1)$ 唯一确定；下一步两条链均强制到 $0$，故 $\mathbb{P}(D_{k+1}=0\mid D_k=2)=1$。
+  \item 若 $D_k=1$，则 $(x_k,y_k)\in\{(1,0),(0,1)\}$。两种情形下，下一步恰有一条链从 $0$ 转移，且分布相同，从而
+  \[
+  \mathbb{P}(D_{k+1}=0\mid D_k=1)=\varphi^{-1},\qquad
+  \mathbb{P}(D_{k+1}=1\mid D_k=1)=\varphi^{-2},\qquad
+  \mathbb{P}(D_{k+1}=2\mid D_k=1)=0.
+  \]
+\end{itemize}
+因此 $(D_k)$ 为一阶马尔可夫链且转移矩阵如题。
+
+平稳分布可由 $\pi=\pi T_{\mathrm{sum}}$ 解得；亦可用独立性直接写出：
+记 $p:=\mathbb{P}_\mu(x_k=1)=1/(\varphi^2+1)$（见注 \ref{prop:parry-measure-golden} 的平稳分布），则
+\(
+\pi_2=p^2,\ \pi_1=2p(1-p),\ \pi_0=(1-p)^2
+\)，化简即得所示闭式。证毕。
+\end{proof}
+
+\begin{proposition}[信息损失率的闭式（bit/step）：出现纯代数常数]\label{prop:real-input-digitwise-sum-information-loss-rate}
+以 bit 为单位记熵率。则
+\[
+h_\nu(D)=\log_2(\varphi^2)-\frac{\sqrt5-1}{5}
+=\log_2(\varphi^2)-\frac{2}{5\varphi}.
+\]
+因此逐位和因子 $\Sigma_{\mathrm{sum}}$ 在产品 Parry 输入下的条件熵率（信息损失率）为
+\[
+h_{\mu\times\mu}(X\times X\mid D)
+=h_{\mu\times\mu}(X\times X)-h_\nu(D)
+=\frac{\sqrt5-1}{5}\ \text{bits/step}.
+\]
+\end{proposition}
+
+\begin{proof}
+由命题 \ref{prop:real-input-digitwise-sum-parry-markov}，$h_\nu(D)=H(D_{k+1}\mid D_k)$，可写为
+\[
+h_\nu(D)=\sum_{i\in\{0,1,2\}}\pi_i\cdot H\!\left(T_{\mathrm{sum}}(i,\cdot)\right),
+\]
+其中 $H$ 为 Shannon 熵（以 $\log_2$ 计）。
+注意 $T_{\mathrm{sum}}(2,\cdot)$ 为确定分布，故其贡献为 $0$。
+
+对 $i=1$，有
+\(
+H(T_{\mathrm{sum}}(1,\cdot))=-(\varphi^{-1}\log_2\varphi^{-1}+\varphi^{-2}\log_2\varphi^{-2})
+=(\varphi^{-1}+2\varphi^{-2})\log_2\varphi
+\)。
+对 $i=0$，有
+\[
+H(T_{\mathrm{sum}}(0,\cdot))
+=-\Bigl(\varphi^{-2}\log_2\varphi^{-2}+2\varphi^{-3}\log_2(2\varphi^{-3})+\varphi^{-4}\log_2\varphi^{-4}\Bigr)
+\]
+\[
+=\bigl(2\varphi^{-2}+6\varphi^{-3}+4\varphi^{-4}\bigr)\log_2\varphi-2\varphi^{-3}.
+\]
+将其代入 $h_\nu(D)=\pi_0H(T_{\mathrm{sum}}(0,\cdot))+\pi_1H(T_{\mathrm{sum}}(1,\cdot))$，
+并用 $\varphi^2=\varphi+1$ 与
+\(
+(\varphi^2+1)^2=(\varphi+2)^2=5\varphi^2
+\)
+化简，得到
+\[
+h_\nu(D)=2\log_2\varphi-\frac{2}{5\varphi}
+=\log_2(\varphi^2)-\frac{2}{5\varphi}.
+\]
+最后由 $\varphi=(1+\sqrt5)/2$ 可知 $2/\varphi=\sqrt5-1$，从而得到等价形式
+\(
+h_\nu(D)=\log_2(\varphi^2)-(\sqrt5-1)/5
+\)。
+
+另一方面，$\mu$ 为 $X$ 的最大熵测度，故 $h_\mu(X)=h_{\mathrm{top}}(X)=\log_2\varphi$，从而
+\(
+h_{\mu\times\mu}(X\times X)=2\log_2\varphi=\log_2(\varphi^2)
+\)。
+因子映射 $\Sigma_{\mathrm{sum}}$ 为确定性，故条件熵率满足
+\(
+h_{\mu\times\mu}(X\times X\mid D)=h_{\mu\times\mu}(X\times X)-h_\nu(D)
+\)，代入即得所示代数常数。证毕。
+\end{proof}
+
+\paragraph{真实输入不降低在线归一化的最小延迟：\texorpdfstring{$\delta_{\min}=3$}{delta=3} 的保持}
+定义真实输入加法（Zeckendorf 和）为
+\[
+\mathrm{Add}:X\times X\to X,\qquad
+\mathrm{Add}(x,y):=\Fold_\infty\!\bigl(\Sigma_{\mathrm{sum}}(x,y)\bigr).
+\]
+文献与正文已给出：$\Fold_\infty$ 在全域 $\{0,1,2\}^{\ZZ}$ 上存在延迟 $3$ 的单趟在线实现（定理 \ref{thm:online-delay-fold}），且其最小性满足 $\delta_{\min}(\Fold_\infty)=3$（命题 \ref{prop:pom-delay-min}）。
+这里关心的问题是：真实输入约束 $d=\Sigma_{\mathrm{sum}}(x,y)\in Y_{\mathrm{sum}}$ 是否可能把最小延迟进一步压低。
+
+\begin{proposition}[延迟刚性：真实输入加法仍需三步前视]\label{prop:real-input-add-delay-rigidity}
+\[
+\delta_{\min}(\mathrm{Add})=3.
+\]
+\end{proposition}
+
+\begin{proof}
+上界 $\delta_{\min}(\mathrm{Add})\le 3$ 由 $\Fold_\infty$ 的延迟 $3$ 在线实现对其子域 $Y_{\mathrm{sum}}$ 的直接限制给出。
+
+为证下界，考虑同步核的确定性 Mealy 转导器表示（定理 \ref{thm:online-delay-fold}；状态集 $Q$，边按 $d/e$ 标记）。在同步核中有两条出边
+\[
+010\xrightarrow{0/0}100,\qquad
+010\xrightarrow{2/1}0\overline{1}2.
+\]
+在真实输入约束下，记忆态 $m=(x_{k-1},y_{k-1})=00$ 时，下一步允许输入 $(x_k,y_k)=(0,0)$（给出 $d=0$）与 $(x_k,y_k)=(1,1)$（给出 $d=2$）。
+并且状态 $(010,00)$ 在 $40$ 状态真实输入核中可达：例如由路径
+\[
+(000,00)\xrightarrow{d/e=1/0}(001,01)\xrightarrow{d/e=0/0}(010,00)
+\]
+到达（每一步对应一个满足黄金均值约束的输入对）。
+因此从同一可达状态 $(010,00)$ 出发，存在两条真实输入允许的出边，其输出位 $e$ 分别为 $0$ 与 $1$。
+
+这意味着：在共享相同过去（到达同一内部状态）的前提下，仅改变“向前第 $3$ 位”处的逐位和符号 $d\in\{0,2\}$，即可迫使归一化输出在相应时间坐标上发生翻转。
+因此任何 $\delta\le 2$ 的单趟在线算法都无法对所有真实输入一致决定输出位，故 $\delta_{\min}(\mathrm{Add})\ge 3$。
+结合上界得等号成立。证毕。
+\end{proof}

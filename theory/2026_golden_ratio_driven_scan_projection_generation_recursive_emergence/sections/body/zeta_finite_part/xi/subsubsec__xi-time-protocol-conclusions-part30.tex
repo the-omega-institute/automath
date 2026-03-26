@@ -1,0 +1,578 @@
+\subsubsection{负谱体积势、伸缩平移与两态退化：Pick--Poisson 不变量、Hankel 同源病态与可复算 DP 核}
+本段把 Pick--Poisson 负谱体积势的完备不变量、统一伸缩下的 \(\log m\) 平移化、Hankel/Toeplitz 两类反演的同源病态，以及 window-\(6\)/bin-fold 侧的离散选择、两态闭式化与尾谱驱动的精确反演门槛，组织为一组可直接引用的条目；其证明入口均可由本文既有定理/命题精确定位。
+
+\begin{conclusion}[负谱行列式的完备不变量：Poisson 权重与伪双曲 Vandermonde 的乘积极限]\label{con:xi-terminal-negative-spectrum-det-invariant}
+设点状缺陷由有限 Blaschke 零点多重集 \(\{a_j\}_{j=1}^{\kappa}\subset\mathbb{D}\) 给出，并令 \(\mathsf P\) 为相应 Pick--Poisson Gram 矩阵 \eqref{eq:xi-pick-poisson-gram}。
+令伪双曲距离
+\[
+\rho(a,b):=\left|\frac{a-b}{1-\overline b\,a}\right|\qquad(a,b\in\mathbb{D}).
+\]
+则行列式具有闭式分解
+\[
+\boxed{\;
+\det\mathsf P
+=
+\Bigl(\prod_{j=1}^{\kappa}\frac{1-|a_j|^2}{|1+a_j|^2}\Bigr)
+\Bigl(\prod_{1\le j<k\le\kappa}\rho(a_j,a_k)^2\Bigr)\; }.
+\]
+并且当 Toeplitz 主子矩阵 \(\mathbf{T}_N\) 进入稳定显影区间、其负特征值（按重数）为 \(\{\lambda_j^{-}(\mathbf{T}_N)\}_{j=1}^{\kappa}\) 时，有严格乘积极限
+\[
+\boxed{\;
+\lim_{N\to\infty}\ \prod_{j=1}^{\kappa}\bigl(-\lambda_j^{-}(\mathbf{T}_N)\bigr)=\det\mathsf P\; }.
+\]
+该不变量对贴边（\(|a_j|\uparrow 1\)）与碰撞（\(\rho(a_j,a_k)\downarrow 0\)）同时敏感，因而在半经典意义下完整编码点状缺陷几何。
+\end{conclusion}
+\begin{proof}[证明要点]
+见命题 \ref{prop:xi-pick-poisson-det-factorization}。
+\end{proof}
+
+\begin{conclusion}[统一伸缩的协变律：显影复杂度发生 \texorpdfstring{$\log m$}{log m} 平移]\label{con:xi-terminal-visibility-complexity-logm-translation}
+沿用上一条结论的有限缺陷设定，并令 \(\phi_m(w):=\mathcal{C}(m\,\mathcal{C}^{-1}(w))\)（\(m>0\)，固定端点 \(-1\)）为统一伸缩。
+令 \(a_j(m):=\phi_m(a_j)\)，并令 \(\mathsf P(m)\) 为由 \(\{a_j(m)\}\) 通过 \eqref{eq:xi-pick-poisson-gram} 生成的 Pick--Poisson Gram 矩阵。
+定义边界熵势、边界体积势与显影复杂度
+\[
+S_{\partial}:=-\log\det\mathsf P,
+\qquad
+V_{\partial}:=\log\mathrm{tr}(\mathsf P),
+\qquad
+\mathscr{C}_{\partial}:=S_{\partial}+(\kappa-1)V_{\partial},
+\]
+并以同式定义 \(S_{\partial}(m),V_{\partial}(m),\mathscr{C}_{\partial}(m)\)。
+则对一切 \(m>0\) 成立严格协变律
+\[
+\boxed{\;
+\mathscr{C}_{\partial}(m)=\mathscr{C}_{\partial}(1)+\log m\; }.
+\]
+因此尺度参数在 \(\mathscr{C}_{\partial}\) 上被线性化为加法坐标；该平移化与 Witt 伸缩在 Koenigs 深度坐标 \(y\) 上的平移恒等式 \(y(ms)=y(s)+\log m\)（定理 \ref{thm:koenigs-linearization-witt-dilation}）在机制上对齐。
+\end{conclusion}
+\begin{proof}[证明要点]
+由命题 \ref{prop:xi-pick-poisson-det-scaling-law}，\(\rho\) 在 \(\phi_m\) 下不变且 \(P_{\phi_m(a)}(-1)=m^{-1}P_a(-1)\)，从而 \(\det\mathsf P(m)=m^{-\kappa}\det\mathsf P\) 且 \(\mathrm{tr}(\mathsf P(m))=m^{-1}\mathrm{tr}(\mathsf P)\)。
+代入 \(\mathscr{C}_{\partial}=S_{\partial}+(\kappa-1)V_{\partial}\) 即得结论；详见推论 \ref{cor:xi-toeplitz-visibility-complexity-anomaly}。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part30__pick-poisson-homothetic-spectrum-ledger-chain}
+
+\begin{conclusion}[负谱体积势的静电学刻画：\texorpdfstring{$-\log\det\mathsf P$}{-log det P} 等价于上半平面 Dirichlet Green 镜像能量]\label{con:xi-terminal-pick-poisson-green-mirror-energy}
+在上半平面坐标 \(z_j=\mathcal{C}^{-1}(a_j)\in\mathbb{H}\) 下，令
+\(
+t_j:=-1/z_j\in\mathbb{H}
+\)。
+则端点 Poisson 权重与伪双曲距离满足
+\[
+P_{a_j}(-1)=\Im(t_j),
+\qquad
+\rho(a_j,a_k)=\left|\frac{t_j-t_k}{t_j-\overline t_k}\right|.
+\]
+定义上半平面 Dirichlet Green 函数
+\[
+G_{\mathbb{H}}(t,s):=\log\left|\frac{t-\overline s}{t-s}\right|.
+\]
+则广义缺陷熵（负谱体积势）
+\(
+S_{\mathrm{gen}}:=-\log\det\mathsf P
+\)
+具有严格等价式
+\[
+\boxed{\;
+S_{\mathrm{gen}}
+=\sum_{j=1}^{\kappa}\bigl(-\log\Im(t_j)\bigr)
++2\sum_{1\le j<k\le\kappa}G_{\mathbb{H}}(t_j,t_k)\; }.
+\]
+并且若缺陷多重集分解为不交并 \(A\sqcup B\)，则交叉能满足恒等式
+\[
+\boxed{\;
+-\log\det\mathsf P(A\cup B)
+=-\log\det\mathsf P(A)-\log\det\mathsf P(B)
++2\sum_{a\in A}\sum_{b\in B}\bigl(-\log\rho(a,b)\bigr)\; }.
+\]
+从而推出次乘法律 \(\det\mathsf P(A\cup B)\le \det\mathsf P(A)\det\mathsf P(B)\)，且交叉项完全由伪双曲分离度控制。
+\end{conclusion}
+\begin{proof}[证明要点]
+像荷镜像能量表示见命题 \ref{prop:xi-pick-poisson-image-charge-green-energy}；
+并集交叉互能恒等式与次乘性见命题 \ref{prop:xi-pick-poisson-union-submultiplicativity-cross-energy}。
+\end{proof}
+
+\begin{conclusion}[Schur 补链式外部化记账：逐点加入的新增能量等于条件通量损失]\label{con:xi-terminal-pick-poisson-schur-ledger}
+对固定点序 \(1,\dots,\kappa\)，记 \(\mathsf P^{(m)}\) 为前 \(m\) 个点诱导的主子矩阵，并定义 Schur 补（条件通量）
+\[
+\pi_m
+:=\mathsf P_{mm}-\mathsf P_{m,1:m-1}\,(\mathsf P^{(m-1)})^{-1}\,\mathsf P_{1:m-1,m},
+\qquad
+m=1,\dots,\kappa.
+\]
+则有严格分解
+\[
+\boxed{\;
+\det\mathsf P=\prod_{m=1}^{\kappa}\pi_m,
+\qquad
+S_{\mathrm{gen}}=-\sum_{m=1}^{\kappa}\log\pi_m\; }.
+\]
+并且每一 \(\pi_m\) 满足 \(0<\pi_m\le \mathsf P_{mm}=P_{a_m}(-1)\)。
+因此负谱体积势具有逐步记账结构：第 \(m\) 个缺陷的新增代价精确等于其在既有缺陷张成空间上的条件通量损失，并被端点自能显式上界控制。
+\end{conclusion}
+\begin{proof}[证明要点]
+见命题 \ref{prop:xi-pick-poisson-schur-flux-ledger}。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part30__schur-ledger-subprobability-gap}
+
+\begin{conclusion}[谱裕度与病态封口：\texorpdfstring{$\lambda_{\min}(\mathsf P)$}{lambda_min(P)} 与条件数在贴边/碰撞极限下同步塌缩]\label{con:xi-terminal-pick-poisson-conditioning-collapse}
+对扫描谱点集诱导的 Pick--Poisson 矩阵 \(\mathsf P(t)\)（命题 \ref{prop:xi-scan-toeplitz-conditioning-by-separation}），记端点权重 \(p_j(t):=P_{a_j(t)}(-1)\) 与伪双曲距离 \(\rho_{jk}(t):=\rho(a_j(t),a_k(t))\)。
+则其最小特征值满足显式夹逼：一方面
+\[
+\boxed{\;
+\lambda_{\min}(\mathsf P(t))
+\ \ge\
+\frac{\Bigl(\prod_{j=1}^{\kappa}p_j(t)\Bigr)\Bigl(\prod_{1\le j<k\le\kappa}\rho_{jk}(t)^2\Bigr)}
+{\Bigl(\sum_{j=1}^{\kappa}p_j(t)\Bigr)^{\kappa-1}}\; } ;
+\]
+另一方面令 \(p_{\max}(t):=\max_j p_j(t)\)、\(\rho_{\min}(t):=\min_{j<k}\rho_{jk}(t)\)，则有二次上界
+\[
+\boxed{\;
+\lambda_{\min}(\mathsf P(t))\ \le\ p_{\max}(t)\,\rho_{\min}(t)^2\; }.
+\]
+再由 \(\lambda_{\max}(\mathsf P)\le \mathrm{tr}(\mathsf P)\) 与推论 \ref{cor:xi-pick-poisson-gap-lower-bound} 的下界，可得条件数封口
+\[
+\boxed{\;
+\kappa(\mathsf P)
+:=\frac{\lambda_{\max}(\mathsf P)}{\lambda_{\min}(\mathsf P)}
+\ \le\
+\frac{\bigl(\mathrm{tr}\,\mathsf P\bigr)^{\kappa}}
+{\Bigl(\prod_{j}P_{a_j}(-1)\Bigr)\Bigl(\prod_{j<k}\rho(a_j,a_k)^2\Bigr)}\; }.
+\]
+因此当 \(\rho_{\min}(t)\downarrow 0\)（碰撞）或 \(p_j(t)\downarrow 0\)（贴边）时，Pick/Toeplitz 侧的谱裕度必按至少二次速率塌缩，形成可审计的病态证书。
+\end{conclusion}
+\begin{proof}[证明要点]
+上下界见命题 \ref{prop:xi-scan-toeplitz-conditioning-by-separation}；
+条件数分式封口见推论 \ref{cor:xi-pick-poisson-condition-number-certificate}（并用 \(\det\mathsf P\) 的闭式分解）。
+\end{proof}
+
+\begin{conclusion}[Hankel--Toeplitz 病态同源：两类反演的最小稳定性常数共享 Vandermonde 平方律]\label{con:xi-terminal-hankel-toeplitz-common-illconditioning}
+在有限原子矩口径 \(\mu=\sum_{j=1}^{\kappa}w_j\delta_{a_j}\) 下，记 \(b_j:=a_j^{-1}\in(0,1)\)、\(\widetilde w_j:=w_j b_j\)，并令 Hankel 主块 \(\mathsf H_{\kappa-1}:=(\mu_{p+q})_{0\le p,q\le \kappa-1}\)。
+则有行列式闭式
+\[
+\boxed{\;
+\det \mathsf H_{\kappa-1}
+=\left(\prod_{j=1}^{\kappa}\widetilde w_j\right)
+\left(\prod_{1\le j<k\le \kappa}(b_k-b_j)^2\right)\; }.
+\]
+因此任意基于 Hankel 反演（Prony/Pad\'e/Hankel 核空间法）的误差放大因子不可能在 \(b\)-碰撞极限保持一致有界，至少按 \(\prod_{j<k}|b_k-b_j|^{-2}\) 发散。
+该 Vandermonde 平方律与
+\(
+\det\mathsf P=(\prod_j P_{a_j}(-1))(\prod_{j<k}\rho(a_j,a_k)^2)
+\)
+在退化机制上同型，表明“矩证书通道（Toeplitz/Pick）”与“层析反演通道（Hankel/Vandermonde）”在碰撞参数上发生同源病态，并可由行列式闭式给出统一的下界型稳定性护栏。
+\end{conclusion}
+\begin{proof}[证明要点]
+Hankel 行列式的 Vandermonde 分解与病态发散见命题 \ref{prop:xi-depth-hankel-determinant-vandermonde-square}；
+Pick--Poisson 的同型乘积律见命题 \ref{prop:xi-pick-poisson-det-factorization}。
+\end{proof}
+
+\input{thm__xi-prony-moment-map-jacobian-delta4}
+\input{cor__xi-hankel-vs-prony-square-gap}
+\input{thm__xi-nonarchimedean-prony-hensel-newton-inversion}
+
+\input{con__xi-terminal-hankel-rigidity-ideal-nonarchimedean}
+
+\input{thm__xi-hankel-determinantal-radical-eq-rigidity}
+\input{prop__xi-unweighted-rigidity-quartic-ideal-pordering}
+\input{cor__xi-pom-minreal-vs-spectral-budget-separation}
+\input{conj__xi-nonarchimedean-minimizer-skeleton-uniqueness}
+
+\begin{conclusion}[Toeplitz--PSD 证书的最小失败定位：等价于 CMV 反射谱前缀越界]\label{con:xi-terminal-toeplitz-psd-failure-cmv-prefix}
+令 \(\mathbf{T}_m\) 为由视界 Carath\'eodory 矩 \((c_n)\) 生成的 Toeplitz 主子矩阵，并令 \((\alpha_n)_{n\ge 0}\) 为相应 Schur 算法给出的反射系数（Verblunsky 参数）。
+则 Toeplitz--PSD 层级的失效可由最小越界反射系数精确定位：存在最小 \(m^\ast\ge 1\) 使
+\[
+\boxed{\ |\alpha_{m^\ast-1}|\ge 1\ },
+\]
+且该 \(m^\ast\) 等价刻画“最小 PSD 失败阶”（在更低阶 \(m<m^\ast\) 时仍保持 \(\mathbf{T}_m\succeq 0\)）。
+因此否证器出现的位置被压缩为可审计的最小前缀指标，而不依赖全局数值谱排序。
+\end{conclusion}
+\begin{proof}[证明要点]
+见定理 \ref{thm:xi-toeplitz-det-verblunsky}（Toeplitz 行列式反射乘积分解与最小失败索引）及其后随的讨论。
+\end{proof}
+
+\begin{conclusion}[Chebyshev--Frobenius 的整系数 \texorpdfstring{$\delta_p$}{delta_p}-结构：Adams 倍角成为 Frobenius-lift]\label{con:xi-terminal-chebyshev-frobenius-pderivation}
+在边界坐标 \(S=2\cos(\theta/2)\) 下，幂映射 \(w\mapsto w^{m}\) 等价于 \(S\mapsto C_m(S)\)（Chebyshev--Adams 多项式）。
+对素数 \(p\) 定义差额多项式
+\[
+\Delta_p(S):=\frac{C_p(S)-S^p}{p}\in\ZZ[S],
+\]
+并对任意 \(f\in\ZZ[S]\) 定义
+\[
+\delta_p(f):=\frac{f(C_p(S))-\bigl(f(S)\bigr)^p}{p}.
+\]
+则有整系数闭包与 Frobenius-lift 恒等式
+\[
+\boxed{\ \delta_p(f)\in\ZZ[S],\qquad f(C_p(S))=\bigl(f(S)\bigr)^p+p\,\delta_p(f)\ },
+\]
+并且模 \(p\) 层面严格退化为 \(f(C_p(S))\equiv f(S)^p\pmod p\)。
+因此倍角/幂半群的完成化作用可被提升为 \(p\)-进同余护栏的代数源头。
+\end{conclusion}
+\begin{proof}[证明要点]
+见定义 \ref{def:chebyshev-frobenius-pderivation} 与命题 \ref{prop:chebyshev-frobenius-pderivation-integrality}。
+\end{proof}
+
+\begin{conclusion}[Witt 伸缩的 Koenigs 线性化：\texorpdfstring{$s\mapsto ms$}{s->ms} 在深度线 \texorpdfstring{$y$}{y} 上严格平移]\label{con:xi-terminal-witt-koenigs-logm-translation}
+在 Dirichlet--Abel 接口 \(z=\lambda^{-s}\) 下，Witt 伸缩 \(s\mapsto ms\) 与幂替换 \(z\mapsto z^m\) 严格等价。
+定义无参深度坐标
+\[
+y(s):=\log\!\bigl(s\log\lambda\bigr)=\log\!\bigl(-\log(\lambda^{-s})\bigr),
+\]
+则对任意整数 \(m\ge 1\) 有严格恒等式
+\[
+\boxed{\ y(ms)=y(s)+\log m\ }.
+\]
+因此 Witt 伸缩在 \(y\)-坐标中被完全对角化为平移半群；相应 Witt 算子在深度线 \(y\) 上成为由离散测度 \(\nu=\sum_{m\ge 1}\frac{1}{m}\delta_{\log m}\) 生成的平移叠加算子。
+\end{conclusion}
+\begin{proof}[证明要点]
+见定理 \ref{thm:koenigs-linearization-witt-dilation} 与推论 \ref{cor:witt-depth-line-convolution}。
+\end{proof}
+
+\begin{conclusion}[window-\texorpdfstring{$6$}{6} 的局域 uplift 选择律：\texorpdfstring{$SO(10)$}{SO(10)} 分支为唯一保局域的顶层候选]\label{con:xi-terminal-window6-local-uplift-so10-unique}
+在保持稳定类型标签 \(F_6\) 不变且由 \(\mathrm{Aut}(Q_6)\) 实现的强局域 uplift 口径下，除平凡位移外仅允许 \(\delta=\pm 34\)（推论 \ref{cor:terminal-window6-local-uplift-admissibility}）。
+另一方面，window-\(6\) uplift 的尾部三分支集合为 \(\{21,34,55\}=\{F_8,F_9,F_{10}\}\)，并与 \((SU(5),SO(10),E_6)\) 的顶层 Zeckendorf 项分别对齐为 \((F_8,F_9,F_{10})\)（定理 \ref{thm:terminal-window6-tail-three-branch}）。
+因此在附加施加“uplift 必须局域可实现且标签不变”的协议约束时，\(\delta=34\) 分支（\(F_9\)）是唯一与局域性相容的顶层补全；其余两支的顶层对齐只能通过非局域机制外置实现。
+\end{conclusion}
+\begin{proof}[证明要点]
+局域可实现性与 \(\delta=\pm 34\) 的唯一性见推论 \ref{cor:terminal-window6-local-uplift-admissibility}；
+三分支与 Zeckendorf--GUT 顶层项对齐见定理 \ref{thm:terminal-window6-tail-three-branch}（并与家族数锁定律 \ref{thm:terminal-family-uplift-lock} 的 \(F_9\) 选中一致）。
+\end{proof}
+
+\begin{conclusion}[bin-fold 推前分布的末位充分化：全变差塌缩与单参数指数倾斜]\label{con:xi-terminal-foldbin-lastbit-sufficient-statistic}
+令 \(\mu_m(w):=d_m^{\mathrm{bin}}(w)/2^m\) 为 bin-fold 在 \(X_m\) 上的推前分布，并令末位指示 \(\ell(w):=w_m\in\{0,1\}\)。
+将 \(X_m\) 按末位分块并令 \(\overline\mu_m\) 为块内均匀化近似，则存在绝对常数 \(C>0\) 使
+\[
+\boxed{\ D_{\mathrm{TV}}(\mu_m,\overline\mu_m)\ \le\ C\left(\frac{\varphi}{2}\right)^{m}\ }.
+\]
+并且存在 \(\beta_m\in\RR\) 使 \(\overline\mu_m\) 可写成稳定层均匀分布 \(u_m\) 的指数倾斜
+\[
+\overline\mu_m(w)=Z_m^{-1}u_m(w)e^{-\beta_m\ell(w)},
+\qquad
+\beta_m\to\log\varphi.
+\]
+因此末位 \(\ell(w)\) 在指数精度上成为充分统计量，bin-fold 输出分布在信息几何意义下被压缩为单参数指数族。
+\end{conclusion}
+\begin{proof}[证明要点]
+见命题 \ref{prop:fold-bin-lastbit-sufficient-tv}。
+\end{proof}
+
+\begin{conclusion}[escort 温度族与散度谱的二态闭式化：温度间 KL 的 Bernoulli 退化与 Rényi 熵率塌缩]\label{con:xi-terminal-foldbin-escort-divergence-two-state-closure}
+对 \(q\ge 0\) 定义 escort 分布 \(\pi_{m,q}(w)\propto (d_m^{\mathrm{bin}}(w))^{q}\)，并令
+\(
+\theta(q):=\lim_{m\to\infty}\mathbb{P}_{\pi_{m,q}}(w_m=1)
+=\frac{1}{1+\varphi^{q+1}}
+\)。
+则对任意 \(p,q\ge 0\)，温度间 KL 极限存在且严格退化为一维 Bernoulli KL：
+\[
+\boxed{\;
+\lim_{m\to\infty}D_{\mathrm{KL}}(\pi_{m,q}\Vert\pi_{m,p})
+=\theta(q)\log\!\frac{\theta(q)}{\theta(p)}+(1-\theta(q))\log\!\frac{1-\theta(q)}{1-\theta(p)}\; }.
+\]
+同时，bin-fold 推前分布 \(\mu_m\) 相对稳定层均匀基线的 Rényi 散度极限对每个 \(\alpha>0\) 存在且给出闭式表达，并具有 \(O((\varphi/2)^m)\) 的指数收敛（定理 \ref{thm:fold-bin-renyi-divergence-limit}）。
+并且 Rényi 熵密度满足统一塌缩：对一切 \(q>0\) 有
+\[
+\boxed{\ \lim_{m\to\infty}\frac{1}{m}H_q(\mu_m)=\log\varphi\ },
+\]
+从而“多温度/多散度/多分形”结构在极限中被制度性压缩为末位 Bernoulli 参数 \(\theta(q)\) 的一维谱。
+\end{conclusion}
+\begin{proof}[证明要点]
+Bernoulli KL 退化见命题 \ref{prop:fold-bin-escort-escort-kl}；
+Rényi 散度极限见定理 \ref{thm:fold-bin-renyi-divergence-limit}；
+Rényi 熵率塌缩见定理 \ref{thm:fold-bin-renyi-rate-collapse}。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part30b-escort-fisher-logistic-geometry}
+
+\begin{conclusion}[bin-fold 纤维多重度的线性时间可计算性：Fibonacci-digit DP 给出可复算审计核]\label{con:xi-terminal-foldbin-digit-dp-linear-time}
+给定 \(m\ge 1\) 与 \(w\in X_m\)，令 \(K=K(m)\)、\(V=V_m(w)\)、\(\mathrm{slack}:=2^m-1-V\)，并将 \(\mathrm{slack}\) 写为合法 Zeckendorf 位串 \(Z(\mathrm{slack})=(b_1,\dots,b_K)\)。
+则 \(d_m^{\mathrm{bin}}(w)\) 可由状态
+\(
+\mathrm{DP}(k,\mathrm{prev},\mathrm{tight})
+\)
+的 digit DP 在 \(O(K-m)=O(m)\) 时间内精确计算；转移中仅需施加有限冲突约束（无相邻 \(11\)）、紧性约束与末位约束 \(w_m=1\Rightarrow c_{m+1}=0\)。
+因此 bin-fold 的纤维多重度不仅具有可审计的渐近律，同时具备线性复杂度的精确计算内核，为大窗口的完全确定性复算提供算法闭合。
+\end{conclusion}
+\begin{proof}[证明要点]
+见命题 \ref{prop:fold-bin-digit-dp}。
+\end{proof}
+
+\begin{proposition}[bin-fold 纤维计数的壁穿越表示：尾部谱 \texorpdfstring{$\Rightarrow$}{=>} 椭圆平均二值跳跃]\label{prop:xi-foldbin-fiber-wallcrossing-representation}
+固定 \(m\ge 1\)。
+对每个末位 \(b\in\{0,1\}\)，存在一个有限集合 \(\mathcal{S}_{m,b}\subset\NN_{\ge 1}\)（称为该末位约束下的\emph{尾部权重谱}）使得对任意 \(w\in X_m\) 满足 \(w_m=b\)，令
+\[
+\mathrm{slack}(w):=2^m-1-V_m(w)\in\NN_{\ge 0},
+\]
+则 bin-fold 纤维基数满足
+\[
+d_m^{\mathrm{bin}}(w)
+\;=\;
+1+\#\{s\in\mathcal{S}_{m,b}:\ s\le \mathrm{slack}(w)\}.
+\]
+并且存在有理测试函数 \(f_{m,b}\in\CC(w)\)，使对任意 \(w\in X_m\) 满足 \(w_m=b\) 都有
+\[
+\boxed{\;
+d_m^{\mathrm{bin}}(w)
+\;=\;
+1+\mathcal{L}_{e^{2(\mathrm{slack}(w)+1/2)}}\!\left(f_{m,b}\right)\; },
+\]
+其中 \(\mathcal{L}_L\) 为定理 \ref{thm:xi-singular-ring-ellipse-wallcrossing-rational} 的奇异环椭圆平均。
+\end{proposition}
+\begin{proof}
+尾部谱的存在性与第一式来自命题 \ref{prop:fold-bin-digit-dp}：digit DP 计数可视为在固定有限约束下枚举“尾部权重和”不超过 \(\mathrm{slack}(w)\) 的可行解个数，并与零尾部（恒存在）相加得到纤维基数。
+\par
+令 \(\mathcal{A}_{m,b}:=\{e^s:\ s\in\mathcal{S}_{m,b}\}\subset(1,\infty)\)，并对每个 \(a=e^s\in\mathcal{A}_{m,b}\) 赋权 \(c_a:=1\)。
+由定理 \ref{thm:xi-singular-ring-ellipse-wallcrossing-rational} 的留数壁穿越构造（命题 \ref{prop:xi-singular-ring-ellipse-wallcrossing-atomic-measure} 所刻画的径向原子测度口径），存在有理函数 \(f_{m,b}\in\CC(w)\) 使得对一切 \(r>1\) 且 \(r\notin\mathcal{A}_{m,b}\) 有
+\[
+\mathcal{L}_{r^2}(f_{m,b})=\#\{a\in\mathcal{A}_{m,b}:\ a<r\}.
+\]
+取 \(r=e^{\mathrm{slack}(w)+1/2}\)（从而 \(r\notin \mathcal{A}_{m,b}\)），则右端等于 \(\#\{s\in\mathcal{S}_{m,b}: s\le \mathrm{slack}(w)\}\)，代回即得所示公式。证毕。
+\end{proof}
+
+\begin{corollary}[离散差分恢复尾部权重谱]\label{cor:xi-foldbin-tail-spectrum-discrete-difference}
+在命题 \ref{prop:xi-foldbin-fiber-wallcrossing-representation} 的设定下，固定 \(m\) 与 \(b\in\{0,1\}\)，定义计数函数
+\[
+d_{m,b}(R):=\#\{s\in\mathcal{S}_{m,b}:\ s\le R\}\qquad(R\in\NN_{\ge 0}),
+\]
+并约定 \(d_{m,b}(-1)=0\)。
+则对所有 \(R\ge 0\) 有
+\[
+d_{m,b}(R)-d_{m,b}(R-1)=\mathbf{1}_{\{R\in\mathcal{S}_{m,b}\}},
+\]
+从而 \(\mathcal{S}_{m,b}\) 可由单个计数函数 \(d_{m,b}\) 完全重构。
+\end{corollary}
+\begin{proof}
+由定义，差分恰为计数在 \(R\) 处新增的点数，即 \(\#\{s\in\mathcal{S}_{m,b}:\ s=R\}\in\{0,1\}\)。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part30c-foldbin-tail-inversion-advice}
+
+\begin{conjecture}[dyadic--Fibonacci 归一化尾部谱的奇异连续极限]\label{conj:xi-foldbin-tail-spectrum-singular-limit}
+固定末位 \(b\in\{0,1\}\)，并以命题 \ref{prop:xi-foldbin-fiber-wallcrossing-representation} 的尾部权重谱 \(\mathcal{S}_{m,b}\) 为基础，定义归一化点集
+\[
+\widetilde{\mathcal{S}}_{m,b}:=\left\{\frac{s}{2^m}:\ s\in\mathcal{S}_{m,b}\right\}\subset[0,1],
+\]
+以及对应的经验分布函数
+\[
+F_{m,b}(t):=\frac{1}{|\mathcal{S}_{m,b}|}\#\left\{s\in\mathcal{S}_{m,b}:\ \frac{s}{2^m}\le t\right\}\qquad(t\in[0,1]).
+\]
+猜想存在非平凡极限分布函数 \(F_b\) 与稠密子集 \(T\subset[0,1]\)，使得对每个 \(t\in T\) 有 \(F_{m,b}(t)\to F_b(t)\)，并且 \(F_b\) 严格递增但奇异连续（Lebesgue a.e. 导数为 \(0\)）。
+此外，\(F_b\) 的多重分形标度由 dyadic--Fibonacci 比率 \(\log_\varphi 2\) 控制，并与本文中由压力函数/反演核诱导的谱对象保持一致性接口。
+\end{conjecture}
+
+\paragraph{\texorpdfstring{$q$}{q}-复制软核传递矩阵的整系数结构：多尺度转级数、补集自对偶反演与 Smith 形刚性}
+沿用命题 \ref{prop:pom-multiplicity-composition-replica-softcore-transfer} 的状态空间 \(U_q=\{0,1\}^q\) 与软核传递矩阵 \(T^{(q)}\)（\(T^{(q)}_{u,v}=2^{-\mathbf{1}_{\{u\wedge v\neq 0\}}}\)），并记增长常数
+\(
+\lambda_q:=2\,\rho(T^{(q)})
+\)。
+将 \(U_q\) 与子集幂集 \(\mathcal P([q])\) 通过指示向量识别，并令 \(|u|\) 表示 Hamming 权。
+再令 \(D^{(q)}:=K^{\otimes q}\)（定理 \ref{thm:pom-replica-softcore-tensor-eigenbasis}），则
+\(
+T^{(q)}=\frac12(\mathbf{1}\mathbf{1}^{\mathsf T}+D^{(q)})
+\)，从而
+\[
+B^{(q)}:=2T^{(q)}=\mathbf{1}\mathbf{1}^{\mathsf T}+D^{(q)}\in \mathrm{M}_{2^q}(\ZZ).
+\]
+
+\input{subsubsec__xi-time-protocol-conclusions-part30a}
+
+\begin{conclusion}[\texorpdfstring{$\lambda_q$}{lambda_q} 的多尺度转级数：整数系数与 Fibonacci 比率半群]\label{con:xi-terminal-replica-softcore-lambdaq-multiscale-transseries}
+令 Fibonacci 数列满足 \(F_{n+2}=F_{n+1}+F_n\) 且 \(F_1=F_2=1\)，并对 \(k\ge 2\) 定义
+\[
+r_k:=\frac{F_{k+2}}{2^{k}}\in(0,1).
+\]
+则当 \(q\to\infty\) 时，\(\lambda_q\) 存在一个由乘法半群 \(\langle r_2,r_3,r_4,\dots\rangle\) 支撑的多尺度渐近展开；其前若干主导项可取为
+\[
+\begin{aligned}
+\lambda_q
+&=2^{q}
++\Big(\frac{3}{2}\Big)^{q}
++\Big(\frac{5}{4}\Big)^{q}
+-\Big(\frac{9}{8}\Big)^{q}
++1
+-3\Big(\frac{15}{16}\Big)^{q}
++2\Big(\frac{27}{32}\Big)^{q}
++\Big(\frac{13}{16}\Big)^{q}\\
+&\quad
+-2\Big(\frac{25}{32}\Big)^{q}
+-4\Big(\frac{3}{4}\Big)^{q}
++10\Big(\frac{45}{64}\Big)^{q}
++O\!\Big(\Big(\frac{21}{32}\Big)^{q}\Big).
+\end{aligned}
+\]
+其中各底数均可写为 \(2\cdot \prod_{i=1}^m r_{k_i}\) 的形式，且对应系数为整数（由固定点方程 \(A_q(\rho(q))=1\) 的 Lagrange 反演所诱导的组合计数给出）。
+\end{conclusion}
+\begin{proof}[证明要点]
+由定义 \ref{def:pom-multiplicity-real-q-pressure} 的方程 \(A_q(\rho)=\sum_{k\ge 1}F_{k+2}^q\rho^k=1\)。
+作换元 \(\rho=2^{-q}y\) 得
+\(
+1=y+\sum_{k\ge 2}r_k^q\,y^k
+\)
+且 \(y\to 1\)。
+对该隐式方程应用 Lagrange 反演并在 \(\lambda_q=\rho^{-1}=2^q/y\) 上作展开即可得到所示多尺度项；
+系数的整性由反演公式中的树形组合系数保证。
+\end{proof}
+
+\begin{conclusion}[\texorpdfstring{$B^{(q)}$}{B^(q)} 的补集自对偶反演：与 \texorpdfstring{$D^{(q)}$}{D^(q)} 的共轭逆仅差一秩修正]\label{con:xi-terminal-disjointness-bq-complement-selfdual-inverse-rankone}
+令 \(C\) 为补集置换矩阵（\((Ce_u)=e_{[q]\setminus u}\)），令 \(S=\mathrm{diag}(({-1})^{|u|})\)，并记 \(E_{\varnothing,\varnothing}\) 为在 \((\varnothing,\varnothing)\) 处为 \(1\)、其余为 \(0\) 的矩阵。
+则对一切 \(q\ge 2\) 成立严格恒等式
+\[
+\boxed{\;
+\bigl(B^{(q)}\bigr)^{-1}
+=(-1)^{q}\,C^{\mathsf T}S\,D^{(q)}\,S C\;-\;\frac12\,E_{\varnothing,\varnothing}\; }.
+\]
+从而
+\(
+\bigl(B^{(q)}\bigr)^{-1}+\frac12E_{\varnothing,\varnothing}\in \mathrm{M}_{2^q}(\ZZ)
+\)，且该整矩阵与 \((-1)^qD^{(q)}\) 共轭等谱；
+而 \(\bigl(B^{(q)}\bigr)^{-1}\) 本身则为该共轭像的单秩负扰动。
+\end{conclusion}
+\begin{proof}
+将 \(U_q\) 与 \(\mathcal P([q])\) 识别，并记 \(D^{(q)}_{u,v}=\mathbf{1}_{\{u\wedge v=0\}}\)。
+直接计算可得对一切 \(u,v\subseteq[q]\) 有
+\[
+\bigl(D^{(q)}\bigr)^{-1}_{u,v}
+=(-1)^{|u\cap v|}\,\mathbf{1}_{\{u\cup v=[q]\}}.
+\]
+事实上，
+\[
+\sum_{w\subseteq[q]}D^{(q)}_{u,w}\,(-1)^{|w\cap v|}\mathbf{1}_{\{w\cup v=[q]\}}
+=\sum_{t\subseteq v\setminus u}(-1)^{|t|}
+=(1-1)^{|v\setminus u|}
+=\mathbf{1}_{\{u=v\}},
+\]
+从而 \(D^{(q)}\bigl(D^{(q)}\bigr)^{-1}=I\)。
+另一方面，若 \(u\cup v=[q]\)，则 \(|u|+|v|=q+|u\cap v|\)，故
+\[
+\bigl(C^{\mathsf T}S\,D^{(q)}\,S C\bigr)_{u,v}
+=(-1)^{|u|+|v|}\,D^{(q)}_{[q]\setminus u,[q]\setminus v}
+=(-1)^{q+|u\cap v|}\mathbf{1}_{\{u\cup v=[q]\}},
+\]
+从而 \(((-1)^q C^{\mathsf T}S D^{(q)} S C)=\bigl(D^{(q)}\bigr)^{-1}\)。
+最后对 \(B^{(q)}=D^{(q)}+\mathbf{1}\mathbf{1}^{\mathsf T}\) 应用 Sherman--Morrison 公式并用
+\(
+\bigl(D^{(q)}\bigr)^{-1}\mathbf{1}=e_{\varnothing}
+\)
+与
+\(
+\mathbf{1}^{\mathsf T}\bigl(D^{(q)}\bigr)^{-1}\mathbf{1}=1
+\)
+即得
+\(
+\bigl(B^{(q)}\bigr)^{-1}
+=\bigl(D^{(q)}\bigr)^{-1}-\frac12E_{\varnothing,\varnothing}
+\)，从而结论成立。
+\end{proof}
+
+\begin{conclusion}[Smith 标准形的刚性：余核恒为 \texorpdfstring{$\mathbb Z/2\mathbb Z$}{Z/2Z}，且唯一可解障碍为 \texorpdfstring{$b_{\varnothing}$}{b_empty} 的奇偶性]\label{con:xi-terminal-disjointness-bq-smith-snf-coker-parity}
+对任意 \(q\ge 2\)，整数矩阵 \(B^{(q)}\) 的 Smith 标准形为
+\[
+\mathrm{SNF}(B^{(q)})=\mathrm{diag}(1,\dots,1,2),
+\]
+从而 \(\det B^{(q)}=2\) 且
+\(
+\mathrm{coker}(B^{(q)}:\ZZ^{2^q}\to\ZZ^{2^q})\cong \ZZ/2\ZZ
+\)。
+等价地，对任意 \(b\in\ZZ^{2^q}\)，丢番图方程
+\[
+B^{(q)}x=b,\qquad x\in\ZZ^{2^q},
+\]
+有解当且仅当 \(b_{\varnothing}\) 为偶数；且在此条件下解空间为一个满秩格的陪集。
+\end{conclusion}
+\begin{proof}
+由结论 \ref{con:xi-terminal-disjointness-bq-complement-selfdual-inverse-rankone}，
+\(
+\bigl(B^{(q)}\bigr)^{-1}=\mathsf M-\frac12E_{\varnothing,\varnothing}
+\)
+其中 \(\mathsf M\in \mathrm{M}_{2^q}(\ZZ)\)。
+因此若 \(x=\bigl(B^{(q)}\bigr)^{-1}b\)，则除 \(\varnothing\)-坐标外各分量自动为整数，而
+\(
+x_{\varnothing}=\mathsf M_{\varnothing,\bullet}b-\frac12 b_{\varnothing}
+\)
+为整数当且仅当 \(b_{\varnothing}\) 为偶数；这给出丢番图可解性的充要条件，并推出余核为 \(\ZZ/2\ZZ\)。
+另一方面，\(\det\!\bigl(D^{(q)}\bigr)=1\)（\(q\ge 2\)）且
+\(
+\det(B^{(q)})=\det(D^{(q)})\bigl(1+\mathbf{1}^{\mathsf T}(D^{(q)})^{-1}\mathbf{1}\bigr)=2
+\)
+（由 Sherman--Morrison 行列式公式）。
+结合 \(\gcd\) 的 \(1\times 1\) 余子式为 \(1\) 且 \(|\det(B^{(q)})|=2\)，得到 \(\mathrm{SNF}(B^{(q)})=\mathrm{diag}(1,\dots,1,2)\)。
+\end{proof}
+
+\begin{conclusion}[伴随矩阵的稀疏闭式：所有余子式仅取 \texorpdfstring{$\{0,\pm 2\}$}{\{0,±2\}} 与唯一的 \texorpdfstring{$-1$}{-1}]\label{con:xi-terminal-disjointness-bq-adjugate-sparse-minors}
+记 \(\mathrm{adj}(B^{(q)})\) 为伴随矩阵。
+则对 \(q\ge 2\)，其条目满足完全稀疏闭式：
+\[
+\mathrm{adj}(B^{(q)})_{\varnothing,\varnothing}=-1,
+\qquad
+\mathrm{adj}(B^{(q)})_{u,v}=
+\begin{cases}
+2(-1)^{|u\cap v|},&u\cup v=[q],\\
+0,&\text{其余情形}.
+\end{cases}
+\]
+因此，所有 \((2^q-1)\times(2^q-1)\) 余子式除上述覆盖情形外全部消失，且非零者在绝对值意义下至多为 \(2\)。
+\end{conclusion}
+\begin{proof}
+由结论 \ref{con:xi-terminal-disjointness-bq-smith-snf-coker-parity} 有 \(\det(B^{(q)})=2\)。
+再由结论 \ref{con:xi-terminal-disjointness-bq-complement-selfdual-inverse-rankone} 得到
+\[
+\bigl(B^{(q)}\bigr)^{-1}_{\varnothing,\varnothing}=-\frac12,
+\qquad
+\bigl(B^{(q)}\bigr)^{-1}_{u,v}=(-1)^{|u\cap v|}\mathbf{1}_{\{u\cup v=[q]\}}\quad((u,v)\neq(\varnothing,\varnothing)).
+\]
+于是 \(\mathrm{adj}(B^{(q)})=\det(B^{(q)})\bigl(B^{(q)}\bigr)^{-1}=2\bigl(B^{(q)}\bigr)^{-1}\)，逐项即得所示闭式。
+\end{proof}
+
+\begin{conclusion}[例外谱平方和的纯整闭式：\texorpdfstring{$4^{q-1}+\frac12 3^q+\frac14F_{2q+2}$}{4^(q-1)+1/2 3^q+1/4 F_{2q+2}}]\label{con:xi-terminal-replica-softcore-exceptional-spectrum-square-sum}
+令 \(\{\lambda_i^{(q)}\}_{i=0}^{q}\) 表示 \(T^{(q)}\) 的 \(q+1\) 个例外本征值（亦即 \(S_q\)-对称降维矩阵 \(A^{(q)}\) 的谱，命题 \ref{prop:pom-multiplicity-composition-sq-symmetry-reduction}）。
+则对一切 \(q\ge 1\)，成立严格恒等式
+\[
+\boxed{\;
+\sum_{i=0}^{q}\big(\lambda_i^{(q)}\big)^2
+=4^{q-1}
+\;+\;\frac12\,3^{q}
+\;+\;\frac14\,F_{2q+2}\; }.
+\]
+该恒等式给出一个谱--组合桥：例外谱的二阶幂和在代数上塌缩为仅含 \(4^q\)、\(3^q\) 与 Fibonacci 指标 \(2q+2\) 的整系数表达。
+\end{conclusion}
+\begin{proof}
+由于 \(T^{(q)}\) 对称，
+\(
+\Tr\!\bigl((T^{(q)})^2\bigr)=\sum_{u,v\in U_q}(T^{(q)}_{u,v})^2
+\)。
+其中 \(T^{(q)}_{u,v}=1\) 当且仅当 \(u\wedge v=0\)；逐坐标计数得该类对数为 \(3^q\)，其余为 \(4^q-3^q\)。
+因此
+\[
+\Tr\!\bigl((T^{(q)})^2\bigr)
+=3^q+\frac14(4^q-3^q)
+=4^{q-1}+\frac34\,3^q.
+\]
+另一方面，由定理 \ref{thm:pom-replica-softcore-characteristic-factorization}，固定谱簇
+\(
+\{\frac{(-1)^j\varphi^{q-2j}}{2}\}_{j=0}^{q}
+\)
+在 \(T^{(q)}\) 中的重数为 \(\binom{q}{j}-1\)。
+故其平方和贡献为
+\[
+\frac14\sum_{j=0}^{q}\bigl(\binom{q}{j}-1\bigr)\varphi^{2(q-2j)}
+=\frac14\Bigl(\sum_{j=0}^{q}\binom{q}{j}\varphi^{2(q-2j)}-\sum_{j=0}^{q}\varphi^{2(q-2j)}\Bigr).
+\]
+利用恒等式 \(\varphi^2+\varphi^{-2}=3\) 得
+\(
+\sum_{j=0}^{q}\binom{q}{j}\varphi^{2(q-2j)}=(\varphi^2+\varphi^{-2})^q=3^q
+\)；
+又由等比求和与 \(\varphi^4-1=\sqrt5\,\varphi^2\) 得
+\(
+\sum_{j=0}^{q}\varphi^{2(q-2j)}=F_{2q+2}
+\)。
+因此固定谱簇的平方和为 \(\frac14(3^q-F_{2q+2})\)。
+从 \(\Tr((T^{(q)})^2)=\sum_i(\lambda_i^{(q)})^2+\)（固定谱簇平方和）得出
+\[
+\sum_{i=0}^{q}\big(\lambda_i^{(q)}\big)^2
+=\Bigl(4^{q-1}+\frac34\,3^q\Bigr)-\frac14(3^q-F_{2q+2})
+=4^{q-1}+\frac12\,3^q+\frac14\,F_{2q+2},
+\]
+证毕。
+\end{proof}
+
+\endinput

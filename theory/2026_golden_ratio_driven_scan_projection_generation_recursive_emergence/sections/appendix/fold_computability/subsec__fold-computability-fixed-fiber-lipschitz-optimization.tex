@@ -1,0 +1,101 @@
+\paragraph{固定纤维上的常数-Lipschitz 优化困难性}
+沿用定义 \ref{def:fold-fibre-3sat} 的固定稳定型 \(x^\star_{3n}\) 及定理 \ref{thm:fold-fibre-3sat-np-complete} 的三元块坐标
+\[
+(a_i,b_i,c_i):=(\omega_{3i},\omega_{3i-1},\omega_{3i-2})\qquad(1\le i\le n).
+\]
+在纤维 \(\Fold_{3n}^{-1}(x^\star_{3n})\) 上定义归一化距离
+\[
+d_F(\omega,\omega'):=\frac{1}{3}\,d_H(\omega,\omega').
+\]
+
+\begin{theorem}[固定 Fold 纤维上的 Lipschitz 满足数优化]\label{thm:fold-fixed-fiber-lipschitz-optimization}
+设 \(\Phi(y_1,\dots,y_n)\) 为任意 \(3\)-CNF 公式，并定义
+\[
+f_\Phi:\Fold_{3n}^{-1}(x^\star_{3n})\to\NN
+\]
+为由纤维点诱导赋值的满足子句数：
+\[
+f_\Phi(\omega):=\#\{\,C\in\mathrm{Clauses}(\Phi):\ C\bigl(b_1(\omega),\dots,b_n(\omega)\bigr)=1\,\}.
+\]
+记
+\[
+\Delta(\Phi):=\max_{1\le i\le n}\#\{\text{变量 }y_i\text{ 在 }\Phi\text{ 中出现的次数}\}.
+\]
+则成立：
+\begin{enumerate}
+  \item
+  \[
+  \max_{\omega\in \Fold_{3n}^{-1}(x^\star_{3n})} f_\Phi(\omega)=|\mathrm{Clauses}(\Phi)|
+  \quad\Longleftrightarrow\quad
+  \Phi\ \text{可满足}.
+  \]
+  \item 函数 \(f_\Phi\) 关于距离 \(d_F\) 是 \(\Delta(\Phi)\)-Lipschitz，即对任意
+  \(
+  \omega,\omega'\in \Fold_{3n}^{-1}(x^\star_{3n})
+  \)
+  有
+  \[
+  |f_\Phi(\omega)-f_\Phi(\omega')|
+  \le
+  \Delta(\Phi)\,d_F(\omega,\omega').
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-fibre-3sat-np-complete} 的证明，在纤维 \(\Fold_{3n}^{-1}(x^\star_{3n})\) 上每个三元块只能取
+\[
+(a_i,b_i,c_i)\in\{(1,0,0),(0,1,1)\},
+\]
+从而映射
+\[
+\omega\longmapsto b(\omega):=(b_1(\omega),\dots,b_n(\omega))
+\]
+给出该固定纤维与 \(\{0,1\}^n\) 的双射。
+因此 \(f_\Phi(\omega)\) 恰为赋值 \(b(\omega)\) 对 \(\Phi\) 所满足的子句数。
+第一条遂立即成立：最大满足数达到全部子句数，当且仅当存在某个 \(\omega\) 使相应赋值满足 \(\Phi\)。
+
+对第二条，若 \(b_i(\omega)\neq b_i(\omega')\)，则对应三元块必在
+\((1,0,0)\) 与 \((0,1,1)\) 之间切换，恰好改变 \(3\) 个比特。
+故
+\[
+d_F(\omega,\omega')=\frac13 d_H(\omega,\omega')=d_H\bigl(b(\omega),b(\omega')\bigr).
+\]
+在赋值空间 \(\{0,1\}^n\) 上，翻转单个变量 \(y_i\) 至多改变 \(\Delta(\Phi)\) 个子句的真值；
+沿一条汉明最短路径逐变量翻转并累加，即得
+\[
+|f_\Phi(\omega)-f_\Phi(\omega')|
+\le
+\Delta(\Phi)\,d_H\bigl(b(\omega),b(\omega')\bigr)
+=
+\Delta(\Phi)\,d_F(\omega,\omega').
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[有界出现次数子族上的常数-Lipschitz NP 完备性]\label{cor:fold-fixed-fiber-constant-lipschitz-optimization-np-complete}
+设 \(\mathfrak F\) 是任一变量出现次数一致有界的 \(3\)-CNF 族：存在常数 \(\Delta\ge 1\) 使对每个 \(\Phi\in\mathfrak F\) 均有 \(\Delta(\Phi)\le \Delta\)。
+若该族的可满足性判定是 NP 完备的，则判定问题
+\[
+\Phi\in\mathfrak F
+\longmapsto
+\left[
+\max_{\omega\in\Fold_{3n}^{-1}(x^\star_{3n})}f_\Phi(\omega)=|\mathrm{Clauses}(\Phi)|
+\right]
+\]
+亦为 NP 完备；并且对应目标函数族 \(\{f_\Phi\}_{\Phi\in\mathfrak F}\) 在固定纤维上统一为 \(\Delta\)-Lipschitz。
+\end{corollary}
+\begin{proof}
+NP-hardness 由定理 \ref{thm:fold-fixed-fiber-lipschitz-optimization} 第一条立即得到。
+该判定属于 NP：见证可取一条纤维点 \(\omega\in\Fold_{3n}^{-1}(x^\star_{3n})\)，并在多项式时间内同时核验
+\(
+\Fold_{3n}(\omega)=x^\star_{3n}
+\)
+与
+\(
+f_\Phi(\omega)=|\mathrm{Clauses}(\Phi)|
+\)。
+Lipschitz 常数的一致有界性则由同一定理第二条与 \(\Delta(\Phi)\le \Delta\) 给出。
+证毕。
+\end{proof}
+
+\endinput

@@ -1,0 +1,64 @@
+\begin{theorem}[信息账本下的侧信息长度下界与等号机制]\label{thm:pom-fiber-ledger-prefix-sideinfo-length}
+固定分辨率 \(m\ge 1\)，令 \(\Omega_m=\{0,1\}^m\)、\(X_m\) 为稳定语言，并令 \(X=\Fold_m(\omega)\)。
+取任意分布 \(\mu\in\Delta(\Omega_m)\)，记其推前为 \(\pi:=P_m\mu\in\Delta(X_m)\)，并令 \(\mu^e:=Q_m\pi\) 为纤维均匀提升（\S\ref{subsec:pom-information-ledger}）。
+固定整数 \(M\ge 2\) 并令 \([M]=\{0,1,\dots,M-1\}\)。
+\par
+设 \(R:\Omega_m\to[M]^{\ast}\) 使映射
+\[
+\omega\longmapsto \bigl(\Fold_m(\omega),R(\omega)\bigr)
+\]
+为单射，并且对每个 \(x\in X_m\)，集合
+\(
+\{R(\omega):\omega\in\Fold_m^{-1}(x)\}
+\)
+为前缀自由。
+记 \(\mathsf L(R(\omega))\) 为码字长度（以 \(M\)-进位计），并令 \(\mathsf L(R):=\mathsf L(R(\omega))\)。
+则有下界链
+\[
+\boxed{\;
+\EE[\mathsf L(R)]
+\ \ge\
+\frac{H(\mu)-H(\pi)}{\log M}
+\ =\
+\frac{\EE_{\pi}[\log d_m(X)]-D_{\mathrm{KL}}(\mu\|\mu^e)}{\log M}
+\ \ge\
+\frac{H(\mu)-H(\pi)-D_{\mathrm{KL}}(\mu\|\mu^e)}{\log M}.
+\;}
+\]
+并且当 \(\mu=\mu^e\)（等价于 \(D_{\mathrm{KL}}(\mu\|\mu^e)=0\)）时，存在逐纤维编号的前缀方案满足
+\[
+\EE[\mathsf L(R)]\ \le\ \EE_{\pi}[\log_M d_m(X)] + 1.
+\]
+特别地，若 \(\mu=\mu_{\boldsymbol p}\) 为定理 \ref{thm:pom-fiber-full-posterior-uniformization-product-source} 中的全纤维后验均匀化乘积源，则 \(\mu=\mu^e\)，从而上述下界与上界在常数项内匹配。
+\end{theorem}
+\begin{proof}
+由于 \(\omega\mapsto(X,R(\omega))\) 为确定性函数且单射，\(\omega\) 亦为 \((X,R)\) 的确定性函数，故
+\[
+H(\mu)=H(X,R)=H(\pi)+H(R\mid X).
+\]
+对每个固定 \(x\)，前缀自由码满足 Kraft 不等式，从而（Shannon 编码下界）
+\[
+\EE[\mathsf L(R)\mid X=x]\ \ge\ \frac{H(R\mid X=x)}{\log M}.
+\]
+对 \(X\) 取期望得
+\[
+\EE[\mathsf L(R)]\ \ge\ \frac{H(R\mid X)}{\log M}
+\ =\ \frac{H(\mu)-H(\pi)}{\log M}.
+\]
+由定理 \ref{thm:pom-kl-ledger}，\(H(\mu)-H(\pi)=\EE_{\pi}[\log d_m(X)]-D_{\mathrm{KL}}(\mu\|\mu^e)\)，代回得到第二个等号；第三个不等式由 \(D_{\mathrm{KL}}(\mu\|\mu^e)\ge 0\) 立得。
+\par
+若 \(\mu=\mu^e\)，则对每个 \(x\) 有 \(\omega\mid(X=x)\) 在 \(\Fold_m^{-1}(x)\) 上均匀，故
+\(
+H(R\mid X=x)=H(\omega\mid X=x)=\log d_m(x)
+\)；
+此时下界化为 \(\EE_{\pi}[\log_M d_m(X)]\)。
+另一方面，对每个 \(x\) 在纤维 \(\Fold_m^{-1}(x)\) 上取一条编号 \(\iota_x:\Fold_m^{-1}(x)\to\{0,1,\dots,d_m(x)-1\}\)，并用 \(M\)-进制 Shannon 码（或等价的标准前缀整型码）对 \(\iota_x(\omega)\) 编码，
+可使
+\(
+\EE[\mathsf L(R)\mid X=x]\le \log_M d_m(x)+1
+\)；
+取期望即得所示上界。
+最后一条由定理 \ref{thm:pom-fiber-full-posterior-uniformization-product-source} 的条件均匀性蕴含 \(\mu=\mu^e\) 得到。证毕。
+\end{proof}
+
+\endinput

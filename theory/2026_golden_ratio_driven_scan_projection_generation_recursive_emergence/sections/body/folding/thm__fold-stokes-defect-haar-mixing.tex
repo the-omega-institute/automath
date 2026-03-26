@@ -1,0 +1,130 @@
+\begin{theorem}[离散广义 Stokes 缺陷的谱混合与 Haar 极限]\label{thm:fold-stokes-defect-haar-mixing}
+其证明通过字符扭曲的转移算子给出可核验的谱半径收缩机制，参见 \cite{Internal2026FoldGeneralizedStokesDefectHaarMixing} 的同一口径。
+固定 \(m\ge 1\)，并令 \(\omega\) 在 \(\Omega_n=\{0,1\}^n\) 上服从均匀分布（\(n\ge m\)）。
+记 \(D_{n\to m}\) 为定义 \ref{def:fold-global-stokes-defect} 的全局交换缺陷随机变量。
+令 \(\mathsf H_m\le (\ZZ/2)^m\) 为由下列可达投影增量生成的子群：
+\[
+\mathsf H_m
+:=
+\Bigl\langle\ \pi_{j\to m}\bigl(\kappa_{j+1\to j}(\eta)\bigr)\ :\ j\ge m,\ \eta\in\Omega_{j+1}\ \Bigr\rangle.
+\]
+设满足如下两条可核验假设：
+\begin{enumerate}
+  \item 由 \(\Fold_\infty\) 的有限状态在线实现，对两条路径（先截断后折叠 vs.\ 先折叠后投影）作同步直积并附加 \((\ZZ/2)^m\)-值增量读出后，得到一有限状态系统；在 Bernoulli\((1/2)\) 驱动下，其隐藏状态 Markov 链在可达分量上原始（不可约且非周期）。
+  \item 对任意非平凡字符 \(\chi\in\widehat{\mathsf H_m}\setminus\{1\}\)，存在一条闭合回路使该回路的总增量 \(g\in\mathsf H_m\) 满足 \(\chi(g)\neq 1\)。
+\end{enumerate}
+则存在常数 \(C_m>0\)、\(0<\eta_m<1\) 使对一切 \(n\ge m\) 有
+\[
+\bigl\|\mathcal L(D_{n\to m})-\mathrm{Haar}(\mathsf H_m)\bigr\|_{\mathrm{TV}}
+\ \le\ C_m\,\eta_m^{\,n-m},
+\]
+其中 \(\mathrm{Haar}(\mathsf H_m)\) 为 \(\mathsf H_m\) 上均匀分布。
+\end{theorem}
+
+\begin{proof}
+将定理 \ref{thm:fold-discrete-stokes-defect} 的异或分解视为一条群扩张上的可加观测量。
+由 \(\Fold_\infty\) 的有限状态在线实现（常数延迟），对固定 \(m\) 把两条路径的计算过程作同步直积，并在每一步输出投影增量
+\(
+g_t\in(\ZZ/2)^m
+\)；
+于是得到有限状态集合 \(\mathcal Q_m\) 与确定性更新
+\[
+s_{t+1}=\delta(s_t,a_t),\qquad g_t=\psi(s_t,a_t)\in(\ZZ/2)^m,
+\]
+其中输入 \(a_t\in\{0,1\}\) 在均匀基线下独立同分布。
+在该表示下，\(D_{n\to m}\) 与累积异或
+\(
+G_n:=g_0\oplus\cdots\oplus g_{n-m-1}
+\)
+相差至多有限步的端点修正；该修正可吸收进常数因子 \(C_m\)，故只需证 \(G_n\) 的混合结论。
+令 \(\mathsf H_m=\langle\psi(s,a)\rangle\) 为可达增量像生成的子群，则 \(G_n\in\mathsf H_m\) 恒成立。
+\par
+对任意字符 \(\chi\in\widehat{\mathsf H_m}\) 定义扭曲转移矩阵
+\[
+(P_\chi)_{s,s'}:=\sum_{\substack{a\in\{0,1\}\\ \delta(s,a)=s'}}\frac12\,\chi(\psi(s,a)).
+\]
+当 \(\chi=1\) 时，\(P_1\) 即隐藏状态链的转移矩阵；按假设 (1) 它原始且谱半径为 \(1\)。
+对一般 \(\chi\)，逐项估计给出 \(|(P_\chi)_{s,s'}|\le (P_1)_{s,s'}\)，从而 \(\rho(P_\chi)\le 1\)。
+若对某个非平凡 \(\chi\) 仍有 \(\rho(P_\chi)=1\)，则沿所有贡献到主特征空间的闭合回路必须发生相位完全对齐，
+等价于任意闭合回路总增量 \(g\) 均满足 \(\chi(g)=1\)；这与假设 (2) 矛盾。
+故对一切 \(\chi\neq 1\) 必有 \(\rho(P_\chi)<1\)，并令 \(\eta_m:=\max_{\chi\neq 1}\rho(P_\chi)\in(0,1)\)。
+\par
+记 \(\widehat\mu_n(\chi):=\EE[\chi(G_n)]\) 为 \(G_n\) 的 Fourier 系数。
+由增量表示与 \(P_\chi\) 的定义可得
+\(
+\widehat\mu_n(\chi)=\mathbf u_\chi^{\mathsf T}P_\chi^{\,n-m}\mathbf v
+\)
+其中 \(\mathbf u_\chi,\mathbf v\) 仅由初态与读出约定决定。
+因此当 \(\chi\neq 1\) 时有指数衰减 \(|\widehat\mu_n(\chi)|\le C_m\,\eta_m^{\,n-m}\)（把向量范数吸收进 \(C_m\)）。
+而 \(\mathrm{Haar}(\mathsf H_m)\) 在非平凡字符上的 Fourier 系数为 \(0\)。
+对有限阿贝尔群，Fourier 反演与 Parseval 不等式把总变差距离控制在非平凡 Fourier 系数的上界之内，从而得到所示指数收敛。
+将有限步端点修正吸收回 \(D_{n\to m}\) 的分布即可。证毕。
+\end{proof}
+
+\begin{corollary}[多尺度缺陷的奇偶可观测量极化与二项式噪声极限]\label{cor:fold-stokes-defect-parity-polarization}
+在定理 \ref{thm:fold-stokes-defect-haar-mixing} 的假设下，任取 \(u\in(\ZZ/2)^m\)，定义 parity 可观测量
+\[
+\chi_u(v):=(-1)^{\langle u,v\rangle},\qquad v\in(\ZZ/2)^m.
+\]
+则存在 \(C_m>0\)、\(0<\eta_m<1\) 使得对所有 \(n\ge m\) 有
+\[
+\Bigl|\EE\bigl[\chi_u(D_{n\to m})\bigr]-\ind_{\{u\in \mathsf H_m^\perp\}}\Bigr|
+\le C_m\,\eta_m^{\,n-m},
+\]
+其中 \(\mathsf H_m^\perp:=\{u:\ \chi_u|_{\mathsf H_m}\equiv 1\}\)。
+特别地，若 \(\mathsf H_m=(\ZZ/2)^m\)，则对一切 \(u\neq 0\) 有 \(\EE[\chi_u(D_{n\to m})]=O(\eta_m^{\,n-m})\)，并且 \(D_{n\to m}\) 收敛到 \((\ZZ/2)^m\) 上的均匀分布；从而其汉明重量满足
+\[
+|D_{n\to m}|\ \xrightarrow[]{\mathrm{law}}\ \mathrm{Binomial}\!\left(m,\tfrac12\right).
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:fold-stokes-defect-haar-mixing} 的总变差收敛，对任意 \(\{\pm1\}\)-值函数（此处为 \(\chi_u\)）有
+\[
+\bigl|\EE[\chi_u(D_{n\to m})]-\EE_{\mathrm{Haar}(\mathsf H_m)}[\chi_u]\bigr|
+\le 2\bigl\|\mathcal L(D_{n\to m})-\mathrm{Haar}(\mathsf H_m)\bigr\|_{\mathrm{TV}}
+\le 2C_m\,\eta_m^{\,n-m}.
+\]
+而 \(\EE_{\mathrm{Haar}(\mathsf H_m)}[\chi_u]=1\) 当且仅当 \(\chi_u\) 在 \(\mathsf H_m\) 上平凡，等价于 \(u\in\mathsf H_m^\perp\)；否则该期望为 \(0\)。
+若 \(\mathsf H_m=(\ZZ/2)^m\)，则除 \(u=0\) 外皆为非平凡字符，从而得到指数衰减。
+最后，均匀分布下各坐标独立且取值为 \(1\) 的概率为 \(1/2\)，故汉明重量极限分布为二项式分布。证毕。
+\end{proof}
+
+\begin{conjecture}[黄金分支折叠缺陷的全生成性与统一谱隙]\label{conj:fold-stokes-defect-full-generation-uniform-gap}
+在黄金分支折叠体系下，对任意 \(m\ge 1\)，令 \(\mathsf H_m\) 为定理 \ref{thm:fold-stokes-defect-haar-mixing} 中的可达投影增量生成子群。
+猜想：
+\begin{enumerate}
+  \item \(\mathsf H_m=(\ZZ/2)^m\) 对所有 \(m\ge 1\) 成立。
+  \item 存在与 \(m\) 无关的常数 \(0<\eta<1\) 使得定理 \ref{thm:fold-stokes-defect-haar-mixing} 的收敛率可取 \(\eta_m\le \eta\)。
+\end{enumerate}
+\end{conjecture}
+
+\begin{remark}[可审计核验接口]\label{rem:fold-stokes-defect-haar-mixing-audit-script}
+脚本 \texttt{scripts/exp\_fold\_stokes\_defect\_haar\_mixing\_audit.py} 对若干有限 \(m\) 在均匀基线下抽样计算 \(D_{n\to m}\) 的经验 Fourier 系数与其支持所生成的 \(\mathbb{F}_2\)-秩，
+从而为猜想 \ref{conj:fold-stokes-defect-full-generation-uniform-gap} 提供可复核的有限窗审计证据。
+\end{remark}
+
+\begin{conjecture}[折叠规范群值曲率的非交换 Stokes 提升]\label{conj:fold-noncommutative-stokes-lift-gauge}
+对每个 \(m\ge 1\)，令折叠规范群
+\[
+\mathcal G_m:=\Aut(\Fold_m)=\{\sigma\in\mathrm{Sym}(\Omega_m):\ \Fold_m\circ\sigma=\Fold_m\}
+\]
+（等价于在每个稳定纤维 \(\Fold_m^{-1}(x)\) 上作任意置换的直积群）。
+猜想存在一族由值保持的局部重写所诱导的群值“面曲率元”
+\[
+\mathfrak C_{m+1\to m}:\Omega_{m+1}\to \mathcal G_m,
+\]
+以及一族与截断兼容的投影同态 \(\mathrm{proj}_{k\to m}:\mathcal G_k\to \mathcal G_m\)，使得对任意 \(n>m\) 与任意 \(\omega\in\Omega_n\)，两条降分辨率路径（先截断后折叠与先折叠后投影）在纤维层面的差异可由按尺度递增的有序乘积表示为
+\[
+\mathfrak H_{n\to m}(\omega)
+=\prod_{k=m}^{n-1}\mathrm{proj}_{k\to m}\!\left(\mathfrak C_{k+1\to k}\!\bigl(r_{n\to k+1}(\omega)\bigr)\right)
+\in \mathcal G_m,
+\]
+并且在一个自然的交换化读出下退化为定理 \ref{thm:fold-discrete-stokes-defect} 的异或分解：
+存在群同态 \(\mathrm{ab}_m:\mathcal G_m\to(\ZZ/2)^m\) 使对一切 \(n>m\) 与 \(\omega\in\Omega_n\) 有
+\[
+\mathrm{ab}_m\!\bigl(\mathfrak H_{n\to m}(\omega)\bigr)=D_{n\to m}(\omega).
+\]
+该提升若成立，将把 \(\{0,1\}^m\) 层面的交换缺陷 \(D_{n\to m}\) 提升为折叠纤维对称层面的群值 holonomy，从而在非交换意义下以局部面元的有序积刻画全局障碍。
+\end{conjecture}
+

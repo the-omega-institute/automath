@@ -1,0 +1,336 @@
+\subsection{prime-log 校准、边界流与 RH 的算子化接口}\label{subsec:conclusion-prime-log-calibration-rh-boundary-current}
+在定理 \ref{thm:conclusion-zg-full-local-dimension-spectrum-every-cylinder} 的 \(0<\alpha<\infty\) 分支中，本文已经证明每个非空地址 cylinder 内都可实现任意给定的有限局部维数。若把该正维尾部进一步组织为逐步配平的 prime-log 校准序列，则局部维数构造不仅给出点态几何，还会导出一条与 RH 算子路线相容的边界流。其基本对象不是未经中心化的素数计数，也不是单纯的合同扭曲模态，而是零 Lyapunov 的居中 prime-log 势。下面把这一接口压缩为六条可独立调用的结论。
+
+\begin{theorem}[prime-log 维数校准尾部的零 Lyapunov 归一化]\label{thm:conclusion-prime-log-zero-lyapunov-calibration}
+固定 \(0<\alpha<\infty\)，记
+\[
+c:=2\alpha\log B.
+\]
+舍去有限初始段并重编号后，可把定理 \ref{thm:conclusion-zg-full-local-dimension-spectrum-every-cylinder} 中的正维校准尾部写成一列 \((y_j)_{j\ge 1}\subset\{0,1\}\)，其对应权重
+\[
+w_j:=\log p_{2j}
+\qquad (j\ge 1)
+\]
+满足 \(w_1\ge c\)，并且存在递归亏损量 \((\delta_j)_{j\ge 0}\) 由
+\[
+\delta_0:=0,
+\qquad
+y_{j+1}:=
+\begin{cases}
+0,& \delta_j+c\le w_{j+1},\\[4pt]
+1,& \delta_j+c>w_{j+1},
+\end{cases}
+\]
+\[
+\delta_{j+1}:=\delta_j+c-y_{j+1}w_{j+1}
+\]
+给出。若再记
+\[
+S_j:=\sum_{i=1}^{j}y_i w_i=cj-\delta_j,
+\qquad
+M_j(\alpha):=\exp(S_j-cj),
+\]
+则对一切 \(j\ge 0\) 都有
+\[
+0\le \delta_j\le w_{j+1},
+\qquad
+cj-w_{j+1}\le S_j\le cj,
+\qquad
+e^{-w_{j+1}}\le M_j(\alpha)\le 1.
+\]
+并且
+\[
+\lim_{j\to\infty}\frac1j\log M_j(\alpha)=0.
+\]
+\end{theorem}
+\begin{proof}
+在定理 \ref{thm:conclusion-zg-full-local-dimension-spectrum-every-cylinder} 的证明中，有限前缀只对柱质量分子贡献 \(O(1)\) 项，因而不影响局部维数极限与后续渐近式；故可先舍去有限多项并重编号。由于 \(w_j=\log p_{2j}\to\infty\)，可令重编号后的首项满足 \(w_1\ge c\)。
+
+现证递归不等式。基步 \(j=0\) 时，
+\[
+0=\delta_0\le w_1.
+\]
+设 \(0\le \delta_j\le w_{j+1}\) 已成立。若 \(\delta_j+c\le w_{j+1}\)，则按定义 \(y_{j+1}=0\)，从而
+\[
+\delta_{j+1}=\delta_j+c\le w_{j+1}\le w_{j+2}.
+\]
+若 \(\delta_j+c>w_{j+1}\)，则 \(y_{j+1}=1\)，于是
+\[
+0<\delta_{j+1}=\delta_j+c-w_{j+1}\le c\le w_1\le w_{j+2},
+\]
+其中最后一步用到 \(w_j\) 的单调性。故对一切 \(j\) 都有
+\[
+0\le \delta_j\le w_{j+1}.
+\]
+由 \(S_j=cj-\delta_j\) 立得
+\[
+cj-w_{j+1}\le S_j\le cj.
+\]
+再由
+\[
+\log M_j(\alpha)=S_j-cj=-\delta_j
+\]
+得到
+\[
+-w_{j+1}\le \log M_j(\alpha)\le 0,
+\qquad
+e^{-w_{j+1}}\le M_j(\alpha)\le 1.
+\]
+最后，由素数定理
+\[
+w_{j+1}=\log p_{2(j+1)}=o(j),
+\]
+故
+\[
+-\frac{w_{j+1}}{j}
+\le
+\frac{1}{j}\log M_j(\alpha)
+\le 0,
+\]
+夹逼即得极限为零。证毕。
+\end{proof}
+
+\begin{theorem}[prime-log 校准素数集的稀疏律]\label{thm:conclusion-prime-log-sparse-prime-law}
+沿用定理 \ref{thm:conclusion-prime-log-zero-lyapunov-calibration} 的记号，定义
+\[
+A(j):=\sum_{i\le j}y_i,
+\qquad
+\mathcal P_\alpha:=\{p_{2j}:y_j=1\},
+\qquad
+\pi_\alpha(x):=\#\{p\in\mathcal P_\alpha:\ p\le x\}.
+\]
+则当 \(j\to\infty\) 时，
+\[
+A(j)=\frac{cj}{\log j}+O\!\left(\frac{j\log\log j}{(\log j)^2}\right),
+\]
+并且当 \(x\to\infty\) 时，
+\[
+\pi_\alpha(x)=\frac{c}{2}\frac{x}{(\log x)^2}
++O\!\left(\frac{x\log\log x}{(\log x)^3}\right).
+\]
+\end{theorem}
+\begin{proof}
+先证粗界 \(A(j)=O(j/\log j)\)。对充分大的 \(j\)，若 \(i\ge j^{1/2}\)，则由素数定理
+\[
+w_i=\log p_{2i}\ge \frac12\log j.
+\]
+而定理 \ref{thm:conclusion-prime-log-zero-lyapunov-calibration} 给出 \(S_j\le cj\)，故区间 \([j^{1/2},j]\) 中被选中的指标数至多为 \(2cj/\log j\)。再加上前 \(j^{1/2}\) 项，便得
+\[
+A(j)=O\!\left(\frac{j}{\log j}\right).
+\]
+
+再作 Abel 求和：
+\[
+S_j=A(j)w_j-\sum_{i=1}^{j-1}A(i)\bigl(w_{i+1}-w_i\bigr).
+\]
+由素数定理的标准展开，
+\[
+w_j=\log p_{2j}=\log j+O(\log\log j),
+\qquad
+w_{i+1}-w_i=O\!\left(\frac1i\right).
+\]
+结合粗界，
+\[
+\sum_{i<j}A(i)\bigl(w_{i+1}-w_i\bigr)
+=
+O\!\left(\sum_{2\le i<j}\frac{1}{\log i}\right)
+=
+O\!\left(\frac{j}{\log j}\right).
+\]
+另一方面，由定理 \ref{thm:conclusion-prime-log-zero-lyapunov-calibration},
+\[
+S_j=cj+O(w_{j+1})=cj+O(\log j).
+\]
+故
+\[
+A(j)w_j=cj+O\!\left(\frac{j}{\log j}\right).
+\]
+除以
+\(
+w_j=\log j+O(\log\log j)
+\)
+后得到
+\[
+A(j)=\frac{cj}{\log j}
++O\!\left(\frac{j\log\log j}{(\log j)^2}\right).
+\]
+
+对 \(\pi_\alpha(x)\)，取唯一整数 \(j=j(x)\) 使
+\[
+p_{2j}\le x<p_{2j+2}.
+\]
+则 \(\pi_\alpha(x)=A(j)+O(1)\)。再由
+\[
+p_{2j}=2j\log j+O(j\log\log j)
+\]
+反演得
+\[
+j=\frac{x}{2\log x}
++O\!\left(\frac{x\log\log x}{(\log x)^2}\right).
+\]
+把该式代回 \(A(j)\) 即得所示 \(\pi_\alpha(x)\) 渐近式。证毕。
+\end{proof}
+
+\begin{theorem}[prime-log 校准边界流的对数级奇性]\label{thm:conclusion-prime-log-boundary-current}
+沿用定理 \ref{thm:conclusion-prime-log-sparse-prime-law} 的记号，定义加权计数函数
+\[
+\vartheta_\alpha(x):=\sum_{\substack{p\le x\\ p\in\mathcal P_\alpha}}\log p,
+\]
+以及 Dirichlet--Mellin 边界流
+\[
+\Psi_\alpha(s):=\sum_{p\in\mathcal P_\alpha}\frac{\log p}{p^s}
+\qquad (\Re s>1).
+\]
+则当 \(x\to\infty\) 时，
+\[
+\vartheta_\alpha(x)=\frac{c}{2}\frac{x}{\log x}
++O\!\left(\frac{x\log\log x}{(\log x)^2}\right),
+\]
+并且当 \(\sigma\downarrow1\) 时，
+\[
+\Psi_\alpha(\sigma)=\frac{c}{2}\log\frac{1}{\sigma-1}+O(1).
+\]
+\end{theorem}
+\begin{proof}
+若 \(x=p_{2j}\)，则由定义
+\[
+\vartheta_\alpha(x)=S_j.
+\]
+定理 \ref{thm:conclusion-prime-log-zero-lyapunov-calibration} 给出
+\[
+S_j=cj+O(\log j).
+\]
+再用
+\[
+j=\frac{x}{2\log x}
++O\!\left(\frac{x\log\log x}{(\log x)^2}\right)
+\]
+即可得到
+\[
+\vartheta_\alpha(x)=\frac{c}{2}\frac{x}{\log x}
++O\!\left(\frac{x\log\log x}{(\log x)^2}\right)
+\]
+在 \(x=p_{2j}\) 上成立。一般 \(x\) 只与最近的偶索引素数相差一个 \(O(\log x)\) 的权重项，故同一渐近式对全体 \(x\) 仍成立。
+
+对第二式，用 Stieltjes 分部积分得
+\[
+\Psi_\alpha(\sigma)
+=
+\sigma\int_{2^-}^{\infty}\vartheta_\alpha(x)x^{-\sigma-1}\,\dd x
+\qquad (\sigma>1).
+\]
+代入上式主项后得到
+\[
+\Psi_\alpha(\sigma)
+=
+\frac{c\sigma}{2}\int_2^\infty \frac{x^{-\sigma}}{x\log x}\,\dd x
++
+O\!\left(
+\int_2^\infty \frac{x^{-\sigma}\log\log x}{x(\log x)^2}\,\dd x
+\right).
+\]
+令 \(x=e^u\)，则主项化为
+\[
+\frac{c\sigma}{2}\int_{\log 2}^{\infty}\frac{e^{-(\sigma-1)u}}{u}\,\dd u
+=
+\frac{c}{2}\log\frac{1}{\sigma-1}+O(1),
+\]
+这是指数积分的标准边界展开。误差项同样变成
+\[
+O\!\left(\int_{\log 2}^{\infty}e^{-(\sigma-1)u}\frac{\log u}{u^2}\,\dd u\right)=O(1),
+\]
+故结论成立。证毕。
+\end{proof}
+
+\noindent
+定理 \ref{thm:conclusion-prime-log-boundary-current} 表明，prime-log 校准产生的是位于简单极点机制下一层的对数边界流。与定理 \ref{thm:xi-zg-abel-residue-log-density} 中的 Abel 型简单极点相比，这里只保留了一个 \(\log(\sigma-1)^{-1}\) 级边界奇性。因而若要把该对象提升为 RH 路线中的显式公式输入，就必须再施以一次 Abel--Mellin 或对数导数提升；未经提升的原始 Euler 乘积只能停留在正则层。
+
+\begin{corollary}[未经加权的 Euler 乘积不承担 RH 主极点]\label{cor:conclusion-prime-log-unweighted-euler-regular}
+定义
+\[
+E_\alpha(s):=\prod_{p\in\mathcal P_\alpha}(1-p^{-s})^{-1}.
+\]
+则 \(\sum_{p\in\mathcal P_\alpha}p^{-1}<\infty\)，从而 \(E_\alpha(s)\) 在 \(\Re s\ge 1\) 的邻域内绝对收敛。特别地，\(E_\alpha\) 在 \(s=1\) 附近解析，不能承担 RH 显式公式中的主极点角色。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-prime-log-sparse-prime-law},
+\[
+\pi_\alpha(x)\ll \frac{x}{(\log x)^2}.
+\]
+对倒数和作部分求和，
+\[
+\sum_{\substack{p\le x\\ p\in\mathcal P_\alpha}}\frac1p
+=
+\frac{\pi_\alpha(x)}{x}
++
+\int_2^x \frac{\pi_\alpha(u)}{u^2}\,\dd u
+\ll
+\frac1{(\log x)^2}
++
+\int_2^\infty \frac{\dd u}{u(\log u)^2}
+<\infty.
+\]
+于是 \(\sum_{p\in\mathcal P_\alpha}p^{-1}<\infty\)。对一切 \(\Re s\ge 1\) 有 \(|p^{-s}|\le p^{-1}\)，故 Euler 乘积在该邻域内绝对收敛并解析。证毕。
+\end{proof}
+
+\begin{theorem}[prime-log 边界流强制 prime-register 的可数无限可见秩]\label{thm:conclusion-prime-log-infinite-rank-register}
+设 \(\mathfrak T_\alpha\) 为一条 prime-register 候选算子路线，并假定其素数端响应在 \(\Re s>1\) 上精确恢复定理 \ref{thm:conclusion-prime-log-boundary-current} 的 \(\Psi_\alpha(s)\)。则 \(\mathfrak T_\alpha\) 不可能经由任何有限可见 prime-register 因子
+\[
+\pi_{S\to S_0}:\Sigma_S\to \Sigma_{S_0},
+\qquad S_0\Subset S,
+\]
+闭合；等价地，任何精确的 prime-register 实现都必须保留可数无穷多个素数方向。
+另一方面，附录 \ref{app:pom-projective-pressure-operator} 的整数 moment-kernel \(\widetilde A_q\) 与其谱半径 \(r_q\) 只能作为该对象在整数压力节点上的有限维阴影，而不是本体实现。
+\end{theorem}
+\begin{proof}
+若 \(\mathfrak T_\alpha\) 经由某个有限可见因子 \(\Sigma_{S_0}\) 闭合，则其素数端响应只能依赖有限集合 \(S_0\) 中的 prime coordinates。对校准尾部而言，这意味着相应的 Dirichlet--Mellin 读出至多是有限和
+\[
+\sum_{p\in \mathcal P_\alpha\cap S_0} c_p\,p^{-s},
+\]
+因而在 \(s=1\) 附近解析。
+但定理 \ref{thm:conclusion-prime-log-boundary-current} 已给出
+\[
+\Psi_\alpha(\sigma)=\frac{c}{2}\log\frac{1}{\sigma-1}+O(1)
+\qquad (\sigma\downarrow 1),
+\]
+其在 \(s=1\) 处具有真实对数奇性，矛盾。故精确实现不可能因子化为任何有限可见 prime-register。
+
+再由推论 \ref{cor:xi-time-part60e-infinite-solenoid-finite-visible-factorization}，无穷 prime-register solenoid 的任意有限可见家族都必经由某个有限 \(S_0\) 因子化；因此若要精确承载 \(\Psi_\alpha\) 的边界奇性，就必须保留可数无穷多个素数方向。
+这也与定理 \ref{thm:xi-time-part9n1d-prime-register-output-rank-threshold} 一致：任何有限 prime-register 截面至多只能输出有限多个实相位方向，因而只能充当有限阴影而非精确本体。
+
+最后，由定理 \ref{thm:pom-projective-operator-degenerates-to-moment-kernel} 与注 \ref{rem:pom-projective-pressure-route}，整数 \(q\) 处的 moment-kernel \(\widetilde A_q\) 只是连续射影压力曲线在离散节点上的有限维退化；它们可以充当可计算截面，但不能取代承载边界奇性的无穷维 prime-register 本体。证毕。
+\end{proof}
+
+\begin{corollary}[模计数扭曲核不足以替代 centered prime-log 势]\label{cor:conclusion-prime-log-modular-twist-insufficient}
+仅由模计数/Dirichlet 扭曲驱动的候选核不能承担定理 \ref{thm:conclusion-prime-log-boundary-current} 的边界流角色。缺失变量并非新的同余通道，而是居中 prime-log 势
+\[
+\psi_\alpha(j):=y_j\log p_{2j}-c.
+\]
+\end{corollary}
+\begin{proof}
+定理 \ref{thm:xi-real-input-40-collision-minimal-modulus-two-witness} 已给出模 \(2\) 即出现
+\[
+\theta_2>\frac12,
+\]
+而定理 \ref{thm:xi-output-potential-dirichlet-fourier-radius-barrier} 进一步说明：一旦某个 \(\theta_m>\frac12\)，对应 Dirichlet 扭曲 Fourier 级数的统一平方根解析窗便必然破裂。故模计数扭曲核本身记录的是合同模态的谱半径障碍。
+
+相反，定理 \ref{thm:conclusion-prime-log-boundary-current} 表明 prime-log 校准尾部产生的是
+\[
+\Psi_\alpha(\sigma)=\frac{c}{2}\log\frac{1}{\sigma-1}+O(1),
+\]
+即由无穷 prime tail 累积而成的对数边界流。两者所控制的对象并不相同：前者是有限模扭曲的解析半径障碍，后者是居中 prime-log 势的 Abel--Mellin 边界电流。故若要接通 RH 的算子化路线，所缺失的变量只能是 \(\psi_\alpha\)，而不能再由模计数扭曲代替。证毕。
+\end{proof}
+
+\begin{conjecture}[prime-log canonical system 猜想]\label{conj:conclusion-prime-log-canonical-system}
+存在一个定义在可数 prime-register 差额空间上的自伴 canonical system / de Branges 型算子 \(\mathcal H_\alpha\)，使得：
+\begin{enumerate}
+  \item 其散射行列式或扰动行列式的对数导数在 \(\Re s>1\) 上恢复 \(\Psi_\alpha(s)\)；
+  \item 经过一次 Abel--Mellin 提升后，得到 RH 路线所需的素数端生成函数；
+  \item 其临界线条件与定理 \ref{thm:conclusion-prime-log-zero-lyapunov-calibration} 的零 Lyapunov 归一化等价。
+\end{enumerate}
+\end{conjecture}
+
+\noindent
+推论 \ref{cor:xi-prime-log-weighted-hypercube-heat-trace-euler} 已经给出未经中心化的 prime-log 权所对应的 Euler 型热迹；本小节则说明，与 RH 边界机制相容的对象并不是该未中心化 Euler 因子本身，而是其 centered 版本所诱导的对数边界流。结合附录 \ref{app:pom-projective-pressure-operator} 的实参数压力提升、定理 \ref{thm:xi-debranges-canonical-extreme-zk} 的 de Branges 逆谱路线以及推论 \ref{cor:xi-time-part60e-infinite-solenoid-finite-visible-factorization} 的有限可见因子化障碍，可以把有限矩核、有限 prime shadow 与真正的算子本体严格区分开来：前两者给出离散锚点与可计算截面，后者若存在，则只能是 centered prime-log 势在可数 prime-register 上的无穷维谱实现。
+
+\endinput

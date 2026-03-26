@@ -1,0 +1,61 @@
+\begin{definition}[有界切片上的规范代表选择（Pareto 前沿截面）]\label{def:pom-cost-canonical-representative}
+在命题 \ref{prop:pom-cost-optimization-decidable} 的设定下，固定一个总序 \(\triangleleft\) 用于对有界切片 \(\mathbf{PW}^{\ast}_{\le}\) 内的接口正规形（或其确定性编码）排序。
+对任一语义等价类 \([w]\subseteq \mathbf{PW}^{\ast}_{\le}\)，记其 \(\mathcal{C}\)-帕累托前沿对应的实现集合为
+\[
+\mathrm{Front}_{\mathcal C}([w])
+:=
+\left\{\,w'\in [w]\ :\ \mathcal{C}(w')\ \text{在}\ \mathcal{C}([w])\ \text{中为帕累托极小}\,\right\}.
+\]
+定义\textbf{规范代表}选择为
+\[
+\boxed{\;
+\mathrm{Can}_{\mathcal C}([w])
+:=
+\min_{\triangleleft}\,\mathrm{Front}_{\mathcal C}([w])\; }.
+\]
+\end{definition}
+
+\begin{corollary}[规范代表函子：可计算截面与实现无关的最优性]\label{cor:pom-cost-canonical-representative-functor}
+在命题 \ref{prop:pom-cost-optimization-decidable} 的有界切片口径下，\(\mathrm{Can}_{\mathcal C}\) 良定义且可计算，并满足：
+\begin{enumerate}
+  \item \textbf{（实现无关）}若 \(w\simeq w'\)，则 \(\mathrm{Can}_{\mathcal C}([w])=\mathrm{Can}_{\mathcal C}([w'])\)；
+  \item \textbf{（帕累托最优）}\(\mathcal{C}\bigl(\mathrm{Can}_{\mathcal C}([w])\bigr)\) 为 \(\mathcal{C}([w])\) 的帕累托极小元；
+  \item \textbf{（截面）}\(\mathrm{Can}_{\mathcal C}\) 给出自然投影 \(\mathbf{PW}^{\ast}_{\le}\twoheadrightarrow \mathbf{PW}^{\ast}_{\le}/\!\!\simeq\) 的一个可复现截面；把商集视为离散群胚时，它可等价表述为一条截面函子
+  \[
+  \mathrm{Can}_{\mathcal C}:\ \mathbf{PW}^{\ast}_{\le}/\!\!\simeq\ \longrightarrow\ \mathbf{PW}^{\ast}_{\le}.
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-cost-optimization-decidable}，\(\mathrm{Front}_{\mathcal C}([w])\) 为有限集且可由有限枚举计算得到；因此在固定总序 \(\triangleleft\) 下其最小元存在且可计算，从而 \(\mathrm{Can}_{\mathcal C}\) 良定义。
+条目 (1) 由 \([w]\) 仅依赖于 \(2\)-同构类的定义直接推出；条目 (2) 由 \(\mathrm{Can}_{\mathcal C}([w])\in \mathrm{Front}_{\mathcal C}([w])\) 得到；条目 (3) 为 \(\mathrm{Can}_{\mathcal C}\) 的定义性表述。
+\end{proof}
+
+\begin{corollary}[零温端的稳定比较：谱占优最终由热带化代价决定]\label{cor:pom-zero-temp-stable-selection}
+在定义 \ref{def:pom-proj-tropical-cost} 的设定下，取有限个候选边势 \(\{E_i\}_{i=1}^N\) 并记
+\[
+\rho_i(u):=\rho\!\bigl(M_{E_i}(u)\bigr),\qquad
+c_i:=c_{\mathrm{trop}}(E_i)\qquad(1\le i\le N).
+\]
+令 \(c_\ast:=\min_i c_i\) 且 \(I_\ast:=\{i:\ c_i=c_\ast\}\)。
+则存在 \(u_0\in(0,1)\) 使得对所有 \(u\in(0,u_0)\) 有
+\[
+\operatorname*{arg\,max}_{1\le i\le N}\ \rho_i(u)\ =\ I_\ast.
+\]
+换言之，零温极限中“谱占优候选”的集合最终且仅由最小平均回路能量的热带化代价锁定（命题 \ref{prop:pom-proj-tropical-minmean}）。
+\end{corollary}
+\begin{proof}
+对任意 \(i\)，由定义 \ref{def:pom-proj-tropical-cost} 的极限 \(c_i=\lim_{u\downarrow 0}\frac{\log\rho_i(u)}{\log u}\) 的存在性，给定 \(\varepsilon>0\) 存在 \(u_i(\varepsilon)\in(0,1)\) 使得当 \(u\in(0,u_i(\varepsilon))\) 时
+\[
+(c_i+\varepsilon)\log u\ \le\ \log\rho_i(u)\ \le\ (c_i-\varepsilon)\log u,
+\]
+其中利用 \(\log u<0\) 并将误差项吸收进 \(\varepsilon\) 的符号方向即可得到同型夹逼。
+取 \(\varepsilon>0\) 使得对任意 \(j\notin I_\ast\) 都有 \(c_\ast+\varepsilon<c_j-\varepsilon\)，并令 \(u_0:=\min_i u_i(\varepsilon)\)。
+则当 \(u\in(0,u_0)\) 且 \(i\in I_\ast,j\notin I_\ast\) 时，
+\[
+\log\rho_i(u)\ \ge\ (c_\ast-\varepsilon)\log u\ >\ (c_j-\varepsilon)\log u\ \ge\ \log\rho_j(u),
+\]
+从而 \(\rho_i(u)>\rho_j(u)\)，即 \(\operatorname*{arg\,max}_i \rho_i(u)=I_\ast\)。
+证毕。
+\end{proof}
+

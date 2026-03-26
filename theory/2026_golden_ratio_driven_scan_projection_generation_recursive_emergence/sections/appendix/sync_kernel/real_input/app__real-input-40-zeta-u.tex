@@ -1,0 +1,592 @@
+\subsubsection{真实输入核的一参数加权 zeta(z,u)（输出位势）}\label{app:real-input-40-zeta-u}
+只对输出位势 $\varphi_e=e$ 加权，令 $u=e^{\theta_e}$，记相应的加权矩阵为 $M(u)$，并定义
+\[
+\zeta(z,u)=\frac{1}{\Delta(z,u)},\qquad \Delta(z,u):=\det(I-zM(u)).
+\]
+在真实输入 40 状态核上，$\Delta(z,u)$ 仍可压缩为低阶多项式并显式因子化：
+\[
+\begin{aligned}
+\Delta(z,u)&=(1-uz^2)\Bigl(
+1-z-6uz^2+2uz^3+(9u^2-u)z^4\\
+&\qquad +(u-3u^2)z^5-(u^3+2u^2)z^6\\
+&\qquad +(4u^3-3u^2)z^7+(u^3-u^4)z^8
+\Bigr).
+\end{aligned}
+\]
+其中因子 $1-uz^2$ 并非“偶然代数分解”：它对应一个可在 primitive（Big-Witt）层面被\textbf{精确剥离}的原子分量（等价地给出显式谱支 \(\pm\sqrt u\)），并由此给出 Abel 有限部常数的精确位移。
+
+\begin{proposition}[因子 \texorpdfstring{$(1-uz^2)$}{(1-uz^2)} 的原子 Witt 分量与有限部常数的精确剥离]\label{prop:atomic-2-orbit-split-logM}
+对加权矩阵族 \(M(u)\) 定义
+\(
+\zeta(z,u)=\det(I-zM(u))^{-1}
+\)
+并令 \(P(z,u)=\sum_{n\ge 1}p_n(u)z^n\) 为其 primitive 生成函数（由 Witt/Möbius 变换给出，见 \S\ref{app:witt-weighted}）：
+\[
+P(z,u)=\sum_{m\ge 1}\frac{\mu(m)}{m}\log\zeta(z^m,u^m).
+\]
+若 \(\Delta(z,u)=\det(I-zM(u))\) 显式分解为
+\(
+\Delta(z,u)=(1-uz^2)\,F(z,u)
+\)，并定义 \(\zeta_{\mathrm{core}}(z,u):=F(z,u)^{-1}\) 及其 primitive 生成函数 \(P_{\mathrm{core}}(z,u)\)，则有精确“原子剥离”
+\[
+\boxed{\ P(z,u)=u z^2+P_{\mathrm{core}}(z,u)\ }.
+\]
+特别地取 \(u=1\) 得未加权 primitive 生成函数的分解
+\[
+P(z)=z^2+P_{\mathrm{core}}(z),
+\]
+其中 \(P(z)=\sum_{n\ge 1}p_n z^n\) 的系数 \(p_n\) 与表 \ref{tab:sync-kernel-A-compare} 一致。
+
+此外，脚本也可在“\((x,y)\) 分支层”把所有满足 \((|\tau|,E)=(2,1)\) 的两步回路逐项列出以作审计：
+
+\input{sections/generated/eq_real_input_40_atomic_2cycle_states}
+
+进一步，定义“去掉原子 Witt 分量后的核心部分”
+\[
+P_{\mathrm{core}}(z):=P(z)-z^2.
+\]
+则在 $z\to z_\star=\lambda^{-1}$ 时
+\[
+P_{\mathrm{core}}(z)=-\log(1-\lambda z)+\log\mathfrak{M}_{\mathrm{core}}+o(1),
+\]
+并满足常数的精确分解
+\[
+\boxed{\ \log\mathfrak{M}=\log\mathfrak{M}_{\mathrm{core}}+z_\star^2\ }.
+\]
+在本核上 $z_\star=\varphi^{-2}$，故
+\[
+z_\star^2=\varphi^{-4}=\frac{7-3\sqrt5}{2}\approx 0.145898033750315.
+\]
+因此由上文数值 $\log\mathfrak{M}\approx -0.254312661901716$ 可得
+\[
+\log\mathfrak{M}_{\mathrm{core}}\approx -0.400210695652031,
+\qquad
+\mathsf{M}_{\mathrm{core}}:=\gamma+\log\mathfrak{M}_{\mathrm{core}}\approx 0.177004969249501.
+\]
+\end{proposition}
+
+\begin{remark}[可剥离的单独 Euler 因子]\label{rem:real-input-40-single-euler}
+因子 $(1-uz^2)^{-1}$ 对应一个可剥离的原子 Witt 分量，其 primitive 坐标满足
+\[
+p^{\mathrm{cycle}}_2(u)=u,\qquad p^{\mathrm{cycle}}_n(u)=0\ (n\neq 2),
+\]
+从而在 ghost 层给出
+\[
+a^{\mathrm{cycle}}_n(u)=
+\begin{cases}
+2u^{n/2},& n\ \text{为偶数},\\
+0,& n\ \text{为奇数}.
+\end{cases}
+\]
+该“单独 Euler 因子”可从总体 $\zeta(z,u)$ 中完全剥离，剩余部分由 $F(z,u)$ 的 primitive 谱承担。
+\end{remark}
+
+\input{thm__killo-real-input-40-atomic-witt-dirichlet-comb}
+
+\begin{proposition}[primitive 轨道手术：可剥离 Euler 因子的精确常数修正]\label{prop:primitive-orbit-surgery}
+设某个加权 SFT/有限矩阵族的 \(\zeta\)-函数在形式幂级数环中分解为
+\[
+\zeta(z,u)=\frac{1}{(1-u^{E}z^{\ell})^{m}}\cdot \zeta_{\mathrm{core}}(z,u),
+\qquad m\in\ZZ_{\ge 1},\ \ell\ge 1,\ E\ge 0,
+\]
+并且因子 \(1-u^{E}z^{\ell}\) 在主极点 \(z=z_\star(u)\) 处解析且不为零（从而主增长率 \(\lambda(u)=z_\star(u)^{-1}\) 由 \(\zeta_{\mathrm{core}}\) 的极点决定）。
+则：
+\begin{enumerate}
+  \item Euler 乘积中恰有 \(m\) 条 primitive 轨道满足 \((|\tau|,E(\tau))=(\ell,E)\)；
+  \item primitive 生成函数满足精确“手术”分解
+  \[
+  P(z,u)=P_{\mathrm{core}}(z,u)+m\,u^{E}z^{\ell},
+  \]
+  其中 \(P(z,u)=\sum_{n\ge 1}p_n(u)z^n\) 且 \(P_{\mathrm{core}}\) 对应 \(\zeta_{\mathrm{core}}\) 的 primitive 系列；
+  \item 若定义 Abel 有限部常数（固定 \(u>0\)）
+  \[
+  \log\mathfrak{M}(u):=\sum_{n\ge 1}\left(\frac{p_n(u)}{\lambda(u)^n}-\frac{1}{n}\right),
+  \]
+  则满足精确常数修正
+  \[
+  \boxed{\ \log\mathfrak{M}(u)=\log\mathfrak{M}_{\mathrm{core}}(u)+m\,u^{E}\,z_\star(u)^{\ell}\ }.
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+把分解式取对数得
+\(
+\log\zeta(z,u)=m\sum_{k\ge 1}\frac{u^{kE}}{k}z^{k\ell}+\log\zeta_{\mathrm{core}}(z,u)
+\)。
+与 Witt 分解 \(\log\zeta=\sum_{r\ge 1}\frac{1}{r}P(z^{r},u^{r})\) 比较系数，可知 primitive 系列在 \((\ell,E)\) 处仅增加 \(m\) 个原子，即
+\(
+P(z,u)=P_{\mathrm{core}}(z,u)+m u^{E}z^{\ell}
+\)，从而 Euler 乘积中 \((\ell,E)\) 的 primitive 轨道数为 \(m\)。
+最后将 \(P\) 的变化代入 \(\log\mathfrak{M}(u)\) 的级数定义，常数项只在 \(n=\ell\) 处增量为 \(m u^{E}/\lambda(u)^{\ell}=m u^{E}z_\star(u)^{\ell}\)，即得所示恒等式。
+\end{proof}
+
+\begin{corollary}[因子 \texorpdfstring{$(1-uz^2)$}{(1-uz^2)} 的谱含义：\texorpdfstring{$\pm\sqrt u$}{±sqrt(u)}]\label{cor:real-input-40-factor-sqrtu-eigs}
+若对某个加权矩阵族 \(M(u)\) 有
+\(
+\Delta(z,u)=\det(I-zM(u))=(1-uz^2)F(z,u)
+\)
+且 \(u>0\)，则 \(M(u)\) 的谱中必包含两条显式特征值
+\[
+\boxed{\ \lambda_\pm(u)=\pm\sqrt u\ }.
+\]
+因此对任意 \(n\ge 1\) 有一个完全显式的迹贡献
+\[
+\mathrm{Tr}(M(u)^n)
+=\bigl(\sqrt u\bigr)^n+\bigl(-\sqrt u\bigr)^n+\text{\rm(其余谱项)}
+=
+\begin{cases}
+2u^{n/2}+\cdots,& n\ \text{偶},\\
+0+\cdots,& n\ \text{奇}.
+\end{cases}
+\]
+\end{corollary}
+\begin{proof}
+由
+\(
+\det(I-zM(u))=\prod_i(1-z\nu_i(u))
+\)
+（\(\nu_i(u)\) 为 \(M(u)\) 的特征值，按重数计），可知 \(1-uz^2\) 必可分解为
+\((1-z\sqrt u)(1+z\sqrt u)\)，从而 \(\pm\sqrt u\) 必为 \(M(u)\) 的两条特征值。迹公式由特征值幂和给出。证毕。
+\end{proof}
+
+\paragraph{次谱近简并与显式分支的第三尺度}
+因子 \((1-uz^2)\) 给出两条显式特征值 \(\lambda_\pm(u)=\pm\sqrt u\)（推论 \ref{cor:real-input-40-factor-sqrtu-eigs}）。
+它们不会成为 Perron 主根（命题 \ref{prop:real-input-40-pressure-freezing} 给出 \(\lambda(u)\sim c\sqrt u\) 且 \(c>1\)），
+并且在本核的 \(u\to+\infty\) 饱和端点，次谱主导并\emph{不}来自 \(\sqrt u\) 分支，而来自 \(F\)-块内部的“镜像 Perron 分支”：
+
+\begin{proposition}[镜像 Perron 分支与次谱近简并]\label{prop:real-input-40-output-mirror-branch}
+沿命题 \ref{prop:real-input-40-pressure-freezing} 的记号，令 \(G(\lambda,u)=\lambda^8F(\lambda^{-1},u)\)。
+则当 \(u\to+\infty\) 时，除 Perron 分支外，方程 \(G(\lambda,u)=0\) 还存在一条负实分支 \(\lambda_{\mathrm{mir}}(u)<0\)，并且两支组成一对严格的 Puiseux jet：
+\[
+\boxed{\ \lambda_1(u)=c\sqrt u+d+\frac{e}{\sqrt u}+\frac{f}{u}+O\!\left(u^{-3/2}\right)\ },
+\qquad
+\boxed{\ \lambda_{\mathrm{mir}}(u)=-c\sqrt u+d-\frac{e}{\sqrt u}+\frac{f}{u}+O\!\left(u^{-3/2}\right)\ }.
+\]
+因此最大非主模特征值满足
+\[
+\boxed{\ \Lambda_2(u)=|\lambda_{\mathrm{mir}}(u)|\sim c\sqrt u\ },
+\qquad\text{从而}\qquad
+\boxed{\ \lim_{u\to+\infty}\frac{\Lambda_2(u)}{\lambda_1(u)}=1\ }.
+\]
+并且相对谱隙具有显式主阶
+\[
+\boxed{\ 1-\frac{\Lambda_2(u)}{\lambda_1(u)}=\frac{2d}{c}\,u^{-1/2}+O(u^{-1})\ }.
+\]
+另一方面，显式分支满足严格次级尺度
+\[
+\boxed{\ \frac{\sqrt u}{\lambda_1(u)}\longrightarrow \frac{1}{c}\in(0,1)\qquad(u\to+\infty)\ }.
+\]
+\end{proposition}
+\begin{proof}
+对 \(u\to+\infty\) 作缩放 \(\lambda=\sqrt u\,x\)。由命题 \ref{prop:real-input-40-pressure-freezing} 的推导可知：极限主方程可写成 \(y=x^2\) 的四次方程
+\(
+y^4-6y^3+9y^2-y-1=0
+\)，其最大正根为 \(y_{\max}=c^2\)。
+因此在饱和端点 \(u\to+\infty\) 处，方程 \(G(\lambda,u)=0\) 必产生两条互为符号翻转的主尺度分支
+\(
+\lambda\approx \pm\sqrt{y_{\max}}\,\sqrt u=\pm c\sqrt u
+\)。
+其中正分支为 Perron 根（由非负性与 Perron--Frobenius 唯一性），负分支即为 \(\lambda_{\mathrm{mir}}(u)\)，并给出所示近简并结论。
+对更高阶项，令 \(t:=u^{-1/2}\to 0^+\)，并作 Laurent/Puiseux 形式
+\(\lambda_1(t)=c\,t^{-1}+d+e\,t+f\,t^2+\cdots\)、\(\lambda_{\mathrm{mir}}(t)=-c\,t^{-1}+d-e\,t+f\,t^2+\cdots\)，代回 \(G(\lambda,t^{-2})=0\) 逐阶比较系数即可解出 \(d,e,f\)（见脚本 \texttt{scripts/exp\_real\_input\_40\_output\_potential\_puiseux\_asymptotics.py}）。证毕。
+\end{proof}
+
+\begin{remark}[含义：混合时间的饱和端点发散由镜像分支驱动]\label{rem:real-input-40-output-mirror-mixing}
+命题 \ref{prop:real-input-40-output-mirror-branch} 表明：当 \(u\to+\infty\) 时，次谱比 \(\Lambda_2(u)/\lambda_1(u)\to 1\)，并且
+\(
+1-\Lambda_2(u)/\lambda_1(u)=\Theta(u^{-1/2})
+\)。
+因此任何由谱隙比控制的混合尺度
+\(
+\tau_{\mathrm{mix}}(u)\asymp 1/\bigl(-\log(\Lambda_2(u)/\lambda_1(u))\bigr)
+\)
+都会随 \(u\) 以 \(\sqrt u\) 量级发散；其主导机制来自 \(F\)-块的镜像分支，而非显式 \(\sqrt u\) 分支。
+后者仍提供一个独立的、可追踪的第三尺度候选 \(\sqrt u/\lambda_1(u)\to 1/c\)，可用于分离“近简并慢模”之外的剩余谱层。
+\end{remark}
+
+\begin{proof}
+由
+\(
+\zeta(z,u)=\Delta(z,u)^{-1}=(1-uz^2)^{-1}\zeta_{\mathrm{core}}(z,u)
+\)
+取对数得
+\[
+\log\zeta(z,u)=-\log(1-uz^2)+\log\zeta_{\mathrm{core}}(z,u)
+=\sum_{k\ge 1}\frac{u^k}{k}z^{2k}+\log\zeta_{\mathrm{core}}(z,u).
+\]
+另一方面，由 Witt 分解 \(\log\zeta=\sum_{r\ge 1}\frac{1}{r}P(z^{r},u^{r})\)（见 \S\ref{app:witt-weighted}），并对 \(\zeta_{\mathrm{core}}\) 同理。比较可知原子项 \(\sum_{k\ge 1}\frac{u^k}{k}z^{2k}\) 恰对应 \(P(z,u)\) 中的 \(u z^2\)，从而得到
+\(
+P(z,u)=u z^2+P_{\mathrm{core}}(z,u)
+\)。
+取 \(u=1\) 即得 \(P(z)=z^2+P_{\mathrm{core}}(z)\)。
+最后，由 Abel 有限部常数的级数定义，加入解析项 \(z^2\) 只会在常数项上产生增量 \(z_\star^2=\lambda^{-2}\)，故
+\(
+\log\mathfrak{M}=\log\mathfrak{M}_{\mathrm{core}}+z_\star^2
+\)。
+\end{proof}
+
+\begin{proposition}[输出压力的冻结端点与 \texorpdfstring{$\sqrt u$}{sqrt(u)} 标度]\label{prop:real-input-40-pressure-freezing}
+令 $u=e^{\theta}$，记
+\[
+\lambda(u):=\rho(M(u)),\qquad P(\theta):=\log\lambda(e^{\theta}).
+\]
+把 $\Delta(z,u)=(1-uz^2)F(z,u)$ 中的 $F$ 写为 $\lambda$-多项式
+\[
+\begin{aligned}
+G(\lambda,u)
+&:=\lambda^8\,F(\lambda^{-1},u)\\
+&=\lambda^8-\lambda^7-6u\lambda^6+2u\lambda^5+(9u^2-u)\lambda^4\\
+&\qquad +(u-3u^2)\lambda^3-(u^3+2u^2)\lambda^2\\
+&\qquad +(4u^3-3u^2)\lambda+(u^3-u^4).
+\end{aligned}
+\]
+则 $\lambda(u)$ 为 $G(\lambda,u)=0$ 的最大正实根，并且：
+\begin{enumerate}
+  \item \textbf{$u\to 0$（$\theta\to-\infty$）冻结：}有 $\lambda(u)\to 1$，并且在 $u=0$ 的正规微扰给出
+  \[
+  \lambda(u)=1+4u-5u^2-115u^3+2317u^4+O(u^5),
+  \]
+  从而
+  \(
+  P(\theta)=4e^{\theta}+O(e^{2\theta})
+  \)。
+  \item \textbf{$u\to\infty$（$\theta\to+\infty$）饱和：}存在常数 $c>0$ 与代数常数 $d,e,f\in\RR$ 使得
+  \[
+  \lambda(u)=c\sqrt u+d+\frac{e}{\sqrt u}+\frac{f}{u}+O\!\left(u^{-3/2}\right),
+  \]
+  其中 $y:=c^2$ 为四次方程
+  \[
+  y^4-6y^3+9y^2-y-1=0
+  \]
+  的最大正根；并且
+  \[
+  d=\frac{y^3-2y^2+3y-4}{8y^3-36y^2+36y-2}\Bigg|_{y=c^2}.
+  \]
+  数值上 $c\approx 1.89635299351377,\ d\approx 0.807943317323508$，
+  并且 $e\approx -0.245317935748073,\ f\approx 0.511186364773580$
+  （由脚本 \texttt{scripts/exp\_real\_input\_40\_output\_potential\_puiseux\_asymptotics.py} 逐阶比较系数导出），从而
+  \[
+  P(\theta)=\frac{\theta}{2}+\log c+\frac{d}{c}e^{-\theta/2}
+  +\Bigl(\frac{e}{c}-\frac{d^2}{2c^2}\Bigr)e^{-\theta}+O(e^{-3\theta/2}).
+  \]
+\end{enumerate}
+因此
+\[
+\lim_{\theta\to-\infty}P'(\theta)=0,\qquad \lim_{\theta\to+\infty}P'(\theta)=\frac12,
+\]
+即输出 $1$ 的典型密度在极端偏置下冻结在区间 $[0,\tfrac12]$。
+\end{proposition}
+
+\input{sections/generated/eq_real_input_40_output_potential_zero_temp_ground_sft}
+
+\input{cor__real-input-40-ground-entropy}
+\input{thm__killo-real-input-40-zero-temp-ground-sft-parry-closed-form}
+
+\begin{corollary}[饱和端点的组合证书：\texorpdfstring{$\alpha_{\max}$}{alpha_max} 为最大平均能量密度]\label{cor:real-input-40-alpha-max}
+对一般有限状态加权（边势取 \(\varphi_e=e\in\{0,1\}\)），记每条有向回路 \(\gamma\) 的平均能量密度为
+\[
+\bar e(\gamma):=\frac{1}{|\gamma|}\sum_{e\in\gamma} e.
+\]
+则存在极限
+\[
+\alpha_{\max}:=\lim_{\theta\to+\infty}P'(\theta)=\max_{\gamma}\bar e(\gamma),
+\]
+并且该最大值可由最大平均回路权（Karp 型算法）在多项式时间内求出。
+在真实输入 40 状态核的输出位势加权中，命题 \ref{prop:real-input-40-pressure-freezing} 已给出
+\(\lim_{\theta\to+\infty}P'(\theta)=1/2\)，因此该核的极端饱和密度为
+\[
+\boxed{\ \alpha_{\max}=\frac12\ }.
+\]
+\end{corollary}
+
+\begin{proposition}[输出位势的局部累积量闭式：\texorpdfstring{$P^{(k)}(0)\in\mathbb Q(\sqrt5)$}{P(k)(0) in Q(sqrt5)}]\label{prop:real-input-40-output-cumulants-closed}
+在输出位势 \(\varphi_e=e\) 的一参数加权下，令 \(u=e^\theta\) 并记压力
+\(
+P(\theta)=\log\lambda(e^\theta)
+\)
+（记号同命题 \ref{prop:real-input-40-pressure-freezing}）。
+则 \(\theta=0\) 处的各阶导数（累积量密度）均落在二次数域 \(\mathbb Q(\sqrt5)\) 中；特别地，前四阶满足表 \ref{tab:real_input_40_output_potential_cumulants_closed} 的闭式表达。
+\end{proposition}
+\begin{remark}[CLT/Edgeworth 的可审计输入常数]\label{rem:real-input-40-output-cumulants-clt}
+由 \(P''(0)>0\) 可得周期点/primitive 轨道在输出计数方向上的中心极限定理；并且由 \(P^{(3)}(0),P^{(4)}(0)\) 可给出 Edgeworth 型的一阶修正系数（与附录 \ref{app:pressure-analytic} 的处理同型）。
+表 \ref{tab:real_input_40_output_potential_cumulants_closed} 的闭式由脚本 \texttt{scripts/exp\_real\_input\_40\_output\_potential\_cumulants\_closed.py} 从 \(G(\lambda,u)=0\) 的隐式级数求解一键导出，并可用数值差分在 \(\theta=0\) 附近核验。
+\end{remark}
+\input{sections/generated/tab_real_input_40_output_potential_cumulants_closed}
+
+\begin{proposition}[输出 $1$ 计数模 $m$ 的 Dirichlet 扭曲谱：平方根误差的系统性失效]\label{prop:real-input-40-output-dirichlet-nonrh}
+固定整数 \(m\ge 2\)。令 \(\omega_m:=e^{2\pi i/m}\)，并对每个 \(1\le j\le m-1\) 定义复权矩阵
+\[
+M(\omega_m^j):=M(u)\big|_{u=\omega_m^j},
+\qquad
+\rho_{m,j}:=\rho\!\bigl(M(\omega_m^j)\bigr).
+\]
+等价地，由 \(\Delta(z,u)=\det(I-zM(u))\) 有
+\[
+\rho_{m,j}=\frac{1}{\min\{|z|:\Delta(z,\omega_m^j)=0\}}.
+\]
+令 \(\lambda:=\rho(M(1))=\varphi^2\)，并记相应的“误差指数”
+\[
+\theta_{m,j}:=\frac{\log \rho_{m,j}}{\log \lambda},
+\qquad
+\rho_m:=\max_{1\le j\le m-1}\rho_{m,j},\quad
+\theta_m:=\max_{1\le j\le m-1}\theta_{m,j}.
+\]
+则输出 \(1\) 的计数模 \(m\) 的非平凡 Fourier 分量（在 periodic/primitive 两个层面）均以 \(O(\rho_m^n)\) 的指数率衰减；并且在本核上存在明确的 \(m\) 使得
+\[
+\theta_m>\frac12,
+\]
+从而对应的 Dirichlet/扭曲误差不具备“RH 形”的平方根指数。
+\end{proposition}
+\begin{proof}
+对 periodic 层，\(a_n(u)=\Tr(M(u)^n)\) 满足
+\(
+a_n(\omega_m^j)=\sum_{\gamma:\,|\gamma|=n}\omega_m^{jE(\gamma)}
+\)
+为能量 \(E(\gamma)\bmod m\) 的 Fourier 分量。由谱半径与矩阵幂有界性，存在常数 \(C_{m,j}>0\) 使得
+\(
+|a_n(\omega_m^j)|\le C_{m,j}\,\rho_{m,j}^n
+\)
+对所有 \(n\ge 1\) 成立。
+primitive 层由 Witt/Möbius 反演
+\(
+p_n(u)=\frac1n\sum_{d\mid n}\mu(d)a_{n/d}(u^d)
+\)
+得到同阶指数上界，因此最坏模态由 \(\rho_m\) 控制。
+最后，脚本 \texttt{scripts/exp\_real\_input\_40\_output\_potential\_dirichlet\_twists.py} 用 \(\Delta(z,u)=(1-uz^2)F(z,u)\) 的显式闭式在 \(u=\omega_m^j\) 处直接求根并取最小模根，给出表 \ref{tab:real_input_40_output_potential_dirichlet_twists} 的数值证书；其中例如 \(m=2\) 已满足 \(\theta_2>1/2\)。证毕。
+\end{proof}
+
+\input{thm__killo-real-input-40-dirichlet-threshold-core-origin}
+
+\begin{corollary}[偶阶累积量控制大模数扭曲：\texorpdfstring{$\rho_{m,1}/\lambda$}{rho/lambda} 的 \(m^{-2},m^{-4}\) 渐近]\label{cor:real-input-40-output-dirichlet-cumulant-bridge}
+令 \(\kappa_2:=P''(0)\)、\(\kappa_4:=P^{(4)}(0)\) 为输出位势压力 \(P(\theta)=\log\lambda(e^\theta)\) 在 \(0\) 处的偶阶累积量（表 \ref{tab:real_input_40_output_potential_cumulants_closed}）。
+当 \(m\to\infty\) 时，取 \(u=\omega_m=e^{2\pi i/m}\) 有
+\[
+\log\frac{\rho_{m,1}}{\lambda}
+\;=\;
+\Re\bigl(P(i\,2\pi/m)-P(0)\bigr)
+\;=\;
+-\frac{\kappa_2}{2}\Bigl(\frac{2\pi}{m}\Bigr)^2
++\frac{\kappa_4}{24}\Bigl(\frac{2\pi}{m}\Bigr)^4
++O(m^{-6}),
+\]
+从而
+\[
+\frac{\rho_{m,1}}{\lambda}
+=\exp\!\Bigl(
+-\frac{\kappa_2}{2}\Bigl(\frac{2\pi}{m}\Bigr)^2
++\frac{\kappa_4}{24}\Bigl(\frac{2\pi}{m}\Bigr)^4
++O(m^{-6})
+\Bigr).
+\]
+\end{corollary}
+\begin{proof}
+由于主特征值 \(\lambda(u)\) 在 \(u=1\) 处为单根，故在 \(u\) 的复邻域内存在解析特征值分支，并可定义解析压力 \(P(\theta)=\log\lambda(e^\theta)\)。
+令 \(\theta=i t\) 且 \(t\) 足够小，则
+\(
+\log|\lambda(e^{it})|=\Re P(it)
+\)
+并由 Taylor 展开得到
+\(
+\Re(P(it)-P(0))=-\kappa_2 t^2/2+\kappa_4 t^4/24+O(t^6)
+\)
+（奇阶项在 \(t\in\RR\) 上贡献纯虚部，故实部只由偶阶项控制）。
+取 \(t=2\pi/m\) 即得结论。证毕。
+\end{proof}
+
+\input{sections/generated/tab_real_input_40_output_potential_dirichlet_twists}
+
+\begin{remark}[四阶累积预测的误差证书与经验阶次（可审计）]\label{rem:real-input-40-dirichlet-cumulant-error-order}
+表 \ref{tab:real_input_40_output_potential_dirichlet_twists} 记录了单位根扭曲 \(u=\omega_m^j\) 下的最坏谱半径比值 \(\rho_m/\lambda\) 与 \(j=1\) 通道的四阶累积预测（“pred.”列）。
+在表中列出的核验点上 \(j_{\mathrm{worst}}=1\)，因此实测最坏比值恰为 \(j=1\) 通道：\(\rho_m/\lambda=\rho_{m,1}/\lambda\)。
+\par
+\noindent 记四阶预测的绝对误差为
+\[
+\varepsilon_m^{(4)}:=\left\lvert\frac{\rho_m}{\lambda}-\Bigl(\frac{\rho_{m,1}}{\lambda}\Bigr)_{\mathrm{pred}}\right\rvert.
+\]
+则由表中数字可直接读出
+\[
+\varepsilon_{5}^{(4)}\approx 1.08\times 10^{-6},\qquad
+\varepsilon_{10}^{(4)}\approx 2.78\times 10^{-8},\qquad
+\varepsilon_{20}^{(4)}\approx 6.21\times 10^{-10}.
+\]
+对上述三点做对数拟合，在该可审计窗口内得到经验阶次
+\[
+\varepsilon_m^{(4)}\ \approx\ C\,m^{-5.38}.
+\]
+该拟合与推论 \ref{cor:real-input-40-output-dirichlet-cumulant-bridge} 的 \(O(m^{-6})\) 余项一致（在小 \(m\) 区间上可出现有效阶次略低于 \(6\) 的过渡行为）。
+\par
+\noindent 若只保留二阶项（高斯近似）
+\[
+\Bigl(\frac{\rho_{m,1}}{\lambda}\Bigr)^{(2)}
+:=\exp\!\Bigl(
+-\frac{\kappa_2}{2}\Bigl(\frac{2\pi}{m}\Bigr)^2
+\Bigr),
+\]
+并定义相应误差 \(\varepsilon_m^{(2)}:=\left\lvert\frac{\rho_m}{\lambda}-\Bigl(\frac{\rho_{m,1}}{\lambda}\Bigr)^{(2)}\right\rvert\)，则在 \(m=5,10,20\) 上分别约为
+\[
+\varepsilon_{5}^{(2)}\approx 5.67\times 10^{-4},\qquad
+\varepsilon_{10}^{(2)}\approx 3.66\times 10^{-5},\qquad
+\varepsilon_{20}^{(2)}\approx 2.30\times 10^{-6},
+\]
+并经验上接近 \(m^{-4}\) 的衰减。
+因此在该窗口内，四阶修正相对二阶近似把误差进一步压缩了约 \(5.3\times10^2\)、\(1.3\times10^3\)、\(3.7\times10^3\) 倍（对应 \(m=5,10,20\)）。
+\par
+\noindent 另外，表中 \(j_{\mathrm{worst}}\) 恒为 \(1\) 提示了一个可复用的算法规则：做大模数扫描时可优先只计算 \(j=1\) 通道（并用少量抽样核验其是否仍为最坏模态），从而把“全扫 \(j\)”降阶为“预测 + 少量校验”的可审计流程。
+\end{remark}
+
+\begin{remark}[权重激活的零特征分支]\label{rem:real-input-40-zero-activation}
+在 $\Delta(z,u)=(1-uz^2)F(z,u)$ 中，$F$ 的最高次项系数为 $(u^3-u^4)z^8=u^3(1-u)z^8$。因此当 $u=1$ 时该项消失，$F$ 的次数由 $8$ 降为 $7$；而当 $u\neq 1$ 时次数恢复为 $8$。这意味着：无权核中有一条零特征方向在权重扭曲下被“激活”为非零特征分支，且该分支在 $u\to 1$ 时退化回 $0$。
+\end{remark}
+
+\begin{proposition}[激活分支的临界指数：\texorpdfstring{$\lambda_{\mathrm{act}}(u)\sim u-1$}{lambda_act(u) ~ u-1}]\label{prop:real-input-40-activated-branch-linear}
+沿用命题 \ref{prop:real-input-40-pressure-freezing} 的多项式
+\[
+G(\lambda,u)=\lambda^8\,F(\lambda^{-1},u).
+\]
+则在 \(u=1\) 处存在唯一（简单）的小特征值分支 \(\lambda_{\mathrm{act}}(u)\) 满足
+\[
+G(\lambda_{\mathrm{act}}(u),u)=0,\qquad \lambda_{\mathrm{act}}(1)=0,
+\]
+并且其在 \(u\to 1\) 时具有线性渐近
+\[
+\boxed{\ \lambda_{\mathrm{act}}(u)=(u-1)+O\!\bigl((u-1)^2\bigr)\ }.
+\]
+因此该分支的临界指数为 \(1\)：\(\lambda_{\mathrm{act}}(u)=\Theta(u-1)\)。
+\end{proposition}
+\begin{proof}
+由 \(G(\lambda,u)\) 的显式形式（式 \eqref{prop:real-input-40-pressure-freezing} 中给出），其常数项为
+\(
+G(0,u)=u^3-u^4=u^3(1-u)
+\)，因此 \(G(0,1)=0\)，即 \(u=1\) 时 \(\lambda=0\) 为根。
+同时 \(G\) 的一次项系数为 \((4u^3-3u^2)\lambda\)，故
+\(
+\partial_\lambda G(0,1)=4-3=1\neq 0
+\)，从而 \(\lambda=0\) 在 \(u=1\) 处为简单根。
+由隐函数定理，存在解析函数 \(\lambda_{\mathrm{act}}(u)\) 满足 \(G(\lambda_{\mathrm{act}}(u),u)=0\) 且 \(\lambda_{\mathrm{act}}(1)=0\)，并且
+\[
+\lambda_{\mathrm{act}}'(1)=-\frac{\partial_u G(0,1)}{\partial_\lambda G(0,1)}.
+\]
+又 \(\partial_u G(0,u)=\frac{d}{du}(u^3-u^4)=3u^2-4u^3\)，故 \(\partial_u G(0,1)=-1\)。因此 \(\lambda'_{\mathrm{act}}(1)=1\)，从而
+\(
+\lambda_{\mathrm{act}}(u)=(u-1)+O((u-1)^2)
+\)。
+证毕。
+\end{proof}
+
+\input{sections/generated/eq_real_input_40_output_potential_activated_branch_series}
+\input{thm__killo-real-input-40-activated-branch-simple-pole}
+
+\begin{remark}[算法选择律：先剥离 \texorpdfstring{$\lambda_{\mathrm{act}}$}{lambda_act}，再消元/求根]\label{rem:real-input-40-deflate-activated-branch}
+激活分支 \(\lambda_{\mathrm{act}}(u)\) 在 \(u\approx 1\) 时满足 \(\lambda_{\mathrm{act}}(u)=\Theta(u-1)\)（命题 \ref{prop:real-input-40-activated-branch-linear}），并具有高阶 Taylor 展开（注 \ref{rem:real-input-40-activated-branch-series}）。
+数值上这意味着：当 \(u\) 接近 \(1\) 时，代数曲线 \(G(\lambda,u)=0\) 的根尺度出现强分离——一条根趋于 \(0\)，其余根保持 \(O(1)\) 量级——从而在对多项式做求根/消元时引入明显的尺度失配与系数取消。
+\par
+\noindent 因此在任何涉及 \(u\approx 1\) 的消元或数值求根任务（例如在 \(u\) 的复邻域内追踪谱分支、或对 \(\Delta(z,u)\) 的根做稳定计算）中，建议先对激活分支做一次\emph{显式剥离（deflation）}：
+\begin{itemize}
+  \item 用注 \ref{rem:real-input-40-activated-branch-series} 的展开在给定 \(u\) 处评估 \(\lambda_{\mathrm{act}}(u)\)（二次项系数为 \(0\)，截断到六阶即可显著稳定数值尺度）；
+  \item 在 \(\lambda\)-变量上将 \(G(\lambda,u)\) 视为一元多项式并做一次因子剥离
+  \(
+  G(\lambda,u)=(\lambda-\lambda_{\mathrm{act}}(u))\,\widetilde G(\lambda,u)
+  \)
+  （数值实现上可用合成除法或伴随矩阵的 deflation）；
+  \item 在 \(\widetilde G\) 上再做后续的求根、resultant 或分支追踪。
+\end{itemize}
+剥离后可显著减弱 \(u\to 1\) 时的病态尺度，使后续计算回到常规多项式问题的条件数水平；这也把“该展开可用于分支剥离”的提示凝练为一条可复用的算法选择律：\textbf{先剥离激活分支，再做消元/求根}。
+\end{remark}
+
+\begin{corollary}[端点大偏差代价]\label{cor:real-input-40-rate-endpoints}
+设 $I(\alpha)$ 为输出位势 $\varphi_e=e$ 的（归一化）大偏差速率函数（以 $P(\theta)$ 的 Legendre 形式定义）。则端点满足
+\[
+I(0)=P(0)=\log\lambda(1)=\log(\varphi^2)\approx 0.962423650119207,
+\]
+\[
+I(1/2)=P(0)-\log c=\log\!\left(\frac{\varphi^2}{c}\right)\approx 0.322491085601762.
+\]
+\end{corollary}
+
+\input{sections/generated/eq_real_input_40_output_potential_ldp_algebraic_param}
+\input{thm__killo-real-input-40-endpoint-logcusp-groundstate}
+
+\begin{proposition}[极端偏置的有限部常数极限]\label{prop:real-input-40-logM-infty}
+令 $z_\star(u)=\lambda(u)^{-1}$，并定义
+\[
+b:=\lim_{u\to\infty}u\,z_\star(u)^2=\frac{1}{c^2}.
+\]
+则 $b$ 为方程
+\[
+1-6b+9b^2-b^3-b^4=0
+\]
+在区间 \((0,1)\) 内的最小正根，数值为 $b\approx 0.27807480214113$。记
+\[
+C(u):=\lim_{z\to z_\star(u)}(1-\lambda(u)z)\,\zeta(z,u),
+\]
+则存在极限
+\[
+C_\infty:=\lim_{u\to\infty}C(u)=\frac{1}{2b(1-b)(6-18b+3b^2+4b^3)}\approx 1.89745149363.
+\]
+此外 Abel 有限部常数满足极限
+\[
+\log\mathfrak{M}_\infty:=\lim_{u\to\infty}\log\mathfrak{M}(u),
+\]
+并具有快速收敛的 Möbius--Euler 表达式
+\[
+\log\mathfrak{M}_\infty
+=\log C_\infty
+-\sum_{m\ge 2}\frac{\mu(m)}{m}\log\Bigl[(1-b^m)\bigl(1-6b^m+9b^{2m}-b^{3m}-b^{4m}\bigr)\Bigr].
+\]
+数值上
+\[
+\log\mathfrak{M}_\infty\approx 0.282290255262,\qquad
+\mathfrak{M}_\infty\approx 1.32616359009.
+\]
+\end{proposition}
+该闭式对象的主极点给出输出位势下的一维压力曲线 $P(\theta_e)=\log\rho(M(e^{\theta_e}))$，并可直接用于谱分支切换/相变检查（因式 $1-uz^2$ 对应一条可追踪的谱分支）。
+
+\input{sections/generated/eq_real_input_40_output_potential_spectral_collision_identities}
+\begin{corollary}[同步核参数族的整数级共振点提供代数校准：正参数域内存在精确 \texorpdfstring{$\lambda=\pm1$}{lambda=±1} 的孤立点（230）]\label{cor:real-input-40-integer-resonance-calibration}
+沿用特征分解 \(\Delta(z,u)=(1-uz^2)Q(z,u)\)。
+由上式在 \(z=\pm1\) 处的因子分解，
+\[
+Q(1,u)=-u(u-4)(u-1)(u+1),\qquad Q(-1,u)=-(u-1)^2(u^2+6u-2),
+\]
+可知在正参数域内除去结构性退化点 \(u=1\) 外，存在两枚完全代数的校准点
+\[
+u_+=4,\qquad u_-=-3+\sqrt{11},
+\]
+使得 \(z=1\)（对应 \(\lambda=1\)）与 \(z=-1\)（对应 \(\lambda=-1\)）分别成为 \(\Delta(\cdot,u_\pm)\) 的零点。
+因此这两点为退化根隔离、谱支碰撞与数值消元流程提供了天然的代数锚定：若实现无法在该两点邻域复现 \(\pm1\) 的精确贴边，则其谱计算或消元链条必存在结构性误差。
+\end{corollary}
+\begin{proof}
+由因子分解立得 \(Q(1,4)=0\) 与 \(Q(-1,-3+\sqrt{11})=0\)。
+当 \(u\neq 1\) 时，\(\Delta(\pm 1,u)=(1-u)Q(\pm 1,u)\)，故 \(\Delta(1,4)=0\) 且 \(\Delta(-1,-3+\sqrt{11})=0\)。
+按定义 \(\Delta(z,u)=\det(I-zM(u))\)，故 \(z=\pm1\) 为零点当且仅当 \(M(u)\) 具有本征值 \(\lambda=1/z=\pm1\)。证毕。
+\end{proof}
+\input{sections/generated/tab_real_input_40_output_potential_spectral_collision_roots}
+
+\begin{remark}[正实退化点的相图区间与实参数半径]\label{rem:real-input-40-output-potential-degeneracy-phase}
+由命题 \ref{prop:real-input-40-output-spectral-collisions} 与表 \ref{tab:real_input_40_output_potential_spectral_collision_roots}，在 \(u>0\) 上除去 \(u=1\) 外，\(Q(z,u)\) 出现重根当且仅当
+\[
+u\in\{0.008460\ldots,\ 0.745534\ldots,\ 0.932837\ldots,\ 1.054796\ldots,\ 2.090392\ldots,\ 15.522820\ldots\}.
+\]
+因此正实 \(u\)-轴被这些点与 \(u=1\) 划分为若干开区间；在每个区间内，实谱支的排序与次模态类型保持不变（不会发生谱支碰撞或交换），可作为“避开负实慢模态”的参数分段骨架。
+\par
+同时，距离 \(u=1\) 最近的退化点为
+\[
+u=1.054796\ldots\quad\text{与}\quad u=0.932837\ldots,
+\]
+因而围绕 \(u=1\) 的实参数“无退化半径”上界为
+\[
+R_u^{\mathrm{real}}\le \min(1.054796\ldots-1,\,1-0.932837\ldots)=0.054796\ldots\,.
+\]
+该界给出在实 \(u\) 轴上做局部拟合/展开时的保守解析域尺度。
+\par
+进一步以 \(\theta=\log u\) 参数化，并记
+\[
+\theta_0:=\min\{\log(1.054796\ldots),\,-\log(0.932837\ldots)\}
+=0.0533477827\ldots.
+\]
+则当 \(|\theta|<\theta_0\) 时有 \(u=e^\theta\in(0.932837\ldots,\,1.054796\ldots)\)，
+从而沿实参数方向不会跨越正实退化点。
+该常数因此可作为以 \(\theta=0\) 为基点的局部拟合/展开在实参数方向上的统一保守阈值（例如用于 CLT/Edgeworth/中偏差喷射的可审计有效域封口）。
+\end{remark}
+
+数值核验与复现见脚本 \texttt{scripts/exp\_sync\_kernel\_real\_input\_40\_zeta\_u.py}；谱支碰撞与退化点的代数审计（结式/不可约多项式 $D(u)$/根表）见脚本 \texttt{scripts/exp\_real\_input\_40\_output\_potential\_spectral\_collisions.py}。

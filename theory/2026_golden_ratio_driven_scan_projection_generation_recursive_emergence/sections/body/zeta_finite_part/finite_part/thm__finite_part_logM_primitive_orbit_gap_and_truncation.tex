@@ -1,0 +1,115 @@
+\begin{theorem}[消去 Möbius 和式：Abel 有限部常数的 primitive-orbit 闭式]\label{thm:finite-part-logM-primitive-orbit-closed-form}
+设 \(A\) 为原始非负矩阵，Perron 根为 \(\rho=\rho(A)>1\)，并记
+\[
+\zeta_A(z):=\det(I-zA)^{-1},\qquad z_\star:=\rho^{-1},\qquad
+C(A):=\lim_{z\to z_\star}(1-\rho z)\,\zeta_A(z).
+\]
+令 \(\log\mathfrak{M}(A)\) 为 Abel/Hadamard 有限部常数（定义 \ref{def:abel-finite-part} 在常矩阵族上的特例），即
+\[
+\log\mathfrak{M}(A)
+=\log C(A)+\sum_{k\ge 2}\frac{\mu(k)}{k}\log \zeta_A(z_\star^{k}).
+\]
+令 \(p_n(A)\) 为 \(A\) 的 primitive 轨道计数（满足
+\(\mathrm{Tr}(A^m)=\sum_{n\mid m} n\,p_n(A)\)，见 \S\ref{subsec:zeta-syntax-zeta}）。
+则有严格恒等式
+\[
+\boxed{\;
+\log\mathfrak{M}(A)
+=\log C(A)+\sum_{n\ge 1}p_n(A)\Bigl(\rho^{-n}+\log(1-\rho^{-n})\Bigr)\; }.
+\]
+\end{theorem}
+\begin{proof}
+由标准 Euler 乘积推导（由 \(\mathrm{Tr}(A^m)=\sum_{n\mid m}n\,p_n(A)\) 代入 \(\log\zeta_A\) 的指数定义），有
+\[
+\log\zeta_A(z)
+=\sum_{m\ge 1}\frac{\mathrm{Tr}(A^m)}{m}z^m
+=\sum_{n\ge 1}p_n(A)\sum_{j\ge 1}\frac{z^{nj}}{j}
+=-\sum_{n\ge 1}p_n(A)\log(1-z^n),
+\]
+从而 \(\zeta_A(z)=\prod_{n\ge 1}(1-z^n)^{-p_n(A)}\)。
+代入 \(z=z_\star^k\) 并交换求和得到
+\[
+\sum_{k\ge 2}\frac{\mu(k)}{k}\log\zeta_A(z_\star^k)
+=-\sum_{n\ge 1}p_n(A)\sum_{k\ge 2}\frac{\mu(k)}{k}\log\!\bigl(1-(z_\star^n)^k\bigr).
+\]
+令 \(x:=z_\star^n=\rho^{-n}\in(0,1)\)。
+利用恒等式
+\[
+\sum_{k\ge 1}\frac{\mu(k)}{k}\log(1-x^k)=-x\qquad(|x|<1),
+\]
+可得
+\(
+\sum_{k\ge 2}\frac{\mu(k)}{k}\log(1-x^k)=-x-\log(1-x)
+\)。
+代回并与 \(\log\mathfrak{M}(A)\) 的定义合并即得所示闭式。证毕。
+\end{proof}
+
+\begin{corollary}[常数层“primitive 缺口”严格为正]\label{cor:finite-part-logM-gap-positive}
+在定理 \ref{thm:finite-part-logM-primitive-orbit-closed-form} 的设定下，定义
+\[
+\mathsf{Gap}(A):=\log C(A)-\log\mathfrak{M}(A).
+\]
+则 \(\mathsf{Gap}(A)>0\)，并且具有完全正项展开
+\[
+\boxed{\;
+\mathsf{Gap}(A)=\sum_{n\ge 1}p_n(A)\,\psi(\rho^{-n}),
+\qquad
+\psi(x):=-x-\log(1-x)=\sum_{m\ge 2}\frac{x^{m}}{m}\ (0<x<1)\; }.
+\]
+因此亦可写为绝对收敛的双重级数
+\[
+\mathsf{Gap}(A)=\sum_{m\ge 2}\frac{1}{m}\sum_{n\ge 1}p_n(A)\,\rho^{-mn}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:finite-part-logM-primitive-orbit-closed-form}，
+\[
+\mathsf{Gap}(A)
+=-\sum_{n\ge 1}p_n(A)\Bigl(\rho^{-n}+\log(1-\rho^{-n})\Bigr)
+=\sum_{n\ge 1}p_n(A)\,\psi(\rho^{-n}).
+\]
+对 \(x\in(0,1)\) 有 \(\log(1-x)<-x\)，故 \(\psi(x)=-x-\log(1-x)>0\)，从而 \(\mathsf{Gap}(A)>0\)。
+展开式 \(\psi(x)=\sum_{m\ge 2}x^m/m\) 由 \(-\log(1-x)=\sum_{m\ge 1}x^m/m\) 直接得到；
+由于各项非负且 \(\rho>1\)，交换求和合法并给出双重级数表达。证毕。
+\end{proof}
+
+\begin{proposition}[primitive 缺口的可控截断与显式误差界]\label{prop:finite-part-logM-gap-truncation-bounds}
+在推论 \ref{cor:finite-part-logM-gap-positive} 的记号下，对任意 \(x\in(0,1)\) 有不等式
+\[
+\frac{x^2}{2}\ \le\ \psi(x)\ \le\ \frac{x^2}{2(1-x)}.
+\]
+因此
+\[
+\frac12\sum_{n\ge 1}p_n(A)\,\rho^{-2n}
+\ \le\ \mathsf{Gap}(A)\ \le\
+\frac12\sum_{n\ge 1}p_n(A)\,\frac{\rho^{-2n}}{1-\rho^{-n}}.
+\]
+并且对任意截断阶 \(N\ge 1\)，令
+\[
+\mathsf{Gap}_{\le N}(A):=\sum_{n=1}^{N}p_n(A)\,\psi(\rho^{-n}),
+\qquad
+R_N(A):=\mathsf{Gap}(A)-\mathsf{Gap}_{\le N}(A),
+\]
+则余项满足
+\[
+\frac12\sum_{n>N}p_n(A)\,\rho^{-2n}
+\ \le\ R_N(A)\ \le\
+\frac{1}{2(1-\rho^{-(N+1)})}\sum_{n>N}p_n(A)\,\rho^{-2n}.
+\]
+\end{proposition}
+\begin{proof}
+下界由 \(\psi(x)=\sum_{m\ge 2}x^m/m\ge x^2/2\) 得到。
+上界由 \(1/m\le 1/2\)（\(m\ge 2\)）给出
+\(
+\psi(x)\le \sum_{m\ge 2}x^m/2=x^2/(2(1-x))
+\)。
+代入 \(\mathsf{Gap}(A)=\sum_n p_n(A)\psi(\rho^{-n})\) 即得第一组界。
+\par
+对余项，逐项应用同一上、下界并注意对 \(n>N\) 有
+\(
+1-\rho^{-n}\ge 1-\rho^{-(N+1)}
+\)
+即可得到所示不等式。证毕。
+\end{proof}
+
+\endinput

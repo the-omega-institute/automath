@@ -1,0 +1,302 @@
+\subsubsection{多层均匀提升的账本望远镜：高阶 Beck--Chevalley 缺陷与偏差概率界}\label{subsubsec:pom-bc-high-order-ledger}
+在两层情形，定理 \ref{thm:pom-bc-amgm-defect-identity} 将复合均匀提升的非函子性精确表述为一类 AM--GM 缺陷的相对熵账本。
+对一般满射塔，这一缺陷可以沿层级望远镜分解为局部缺陷之和，从而给出零缺陷的刚性判据与可计算的偏差概率上界。
+
+\begin{theorem}[多层均匀提升的 Beck--Chevalley 账本望远镜分解]\label{thm:pom-bc-high-order-ledger-decomposition}
+设
+\[
+X_0 \xrightarrow{f_1} X_1 \xrightarrow{f_2} \cdots \xrightarrow{f_k} X_k
+\]
+为有限集合之间的满射链，记复合 \(f_{1:i}:=f_i\circ\cdots\circ f_1:X_0\twoheadrightarrow X_i\)，以及纤维基数
+\[
+d_h(y):=\lvert h^{-1}(y)\rvert.
+\]
+给定顶层分布 \(\nu\in\Delta(X_k)\)，定义两种提升到 \(X_0\) 的分布
+\[
+\mu_{\mathrm{seq}}:=L_{f_1}L_{f_2}\cdots L_{f_k}\nu,\qquad
+\mu_{\mathrm{tot}}:=L_{f_{1:k}}\nu.
+\]
+并对每一层 \(i=1,\dots,k-1\) 定义局部 AM--GM 缺陷函数
+\[
+\alpha_i(x_{i+1})
+:=
+\log\frac{
+\frac{1}{d_{f_{i+1}}(x_{i+1})}\sum\limits_{x_i\in f_{i+1}^{-1}(x_{i+1})} d_{f_{1:i}}(x_i)
+}{
+\exp\!\Bigl(\frac{1}{d_{f_{i+1}}(x_{i+1})}\sum\limits_{x_i\in f_{i+1}^{-1}(x_{i+1})}\log d_{f_{1:i}}(x_i)\Bigr)
+}
+\ \ge\ 0.
+\]
+令 \(\nu^{(i)}:=(L_{f_{i+1}}\cdots L_{f_k})\nu\in\Delta(X_i)\)（其中 \(\nu^{(k)}=\nu\)）。
+则成立精确分解
+\[
+\boxed{\;
+D_{\mathrm{KL}}\!\bigl(\mu_{\mathrm{seq}}\|\mu_{\mathrm{tot}}\bigr)
+=
+\sum_{i=1}^{k-1}\ \EE_{X_{i+1}\sim \nu^{(i+1)}}\!\bigl[\alpha_i(X_{i+1})\bigr].
+\;}
+\]
+\end{theorem}
+\begin{proof}
+对任意 \(x_0\in X_0\) 递推定义 \(x_i=f_i(x_{i-1})\)。
+由均匀提升展开得
+\[
+\mu_{\mathrm{seq}}(x_0)=\frac{\nu(x_k)}{\prod_{i=1}^{k}d_{f_i}(x_i)},
+\qquad
+\mu_{\mathrm{tot}}(x_0)=\frac{\nu(x_k)}{d_{f_{1:k}}(x_k)}.
+\]
+因此
+\[
+\log\frac{\mu_{\mathrm{seq}}(x_0)}{\mu_{\mathrm{tot}}(x_0)}
+=
+\log d_{f_{1:k}}(x_k)-\sum_{i=1}^{k}\log d_{f_i}(x_i).
+\]
+对 \(X_0\sim \mu_{\mathrm{seq}}\) 取期望并注意在 \(\mu_{\mathrm{seq}}\) 下 \(X_i\) 的边际分布恰为 \(\nu^{(i)}\)，得到
+\begin{equation}\label{eq:pom-bc-high-order-ledger-kl-expand}
+D_{\mathrm{KL}}(\mu_{\mathrm{seq}}\|\mu_{\mathrm{tot}})
+=\EE_{X_k\sim\nu}\!\bigl[\log d_{f_{1:k}}(X_k)\bigr]
+-\sum_{i=1}^{k}\EE_{X_i\sim\nu^{(i)}}\!\bigl[\log d_{f_i}(X_i)\bigr].
+\end{equation}
+\par
+对每个 \(i=1,\dots,k-1\) 与每个 \(x_{i+1}\in X_{i+1}\)，由纤维计数恒等式
+\(
+d_{f_{1:i+1}}(x_{i+1})=\sum_{x_i\in f_{i+1}^{-1}(x_{i+1})}d_{f_{1:i}}(x_i)
+\)
+可写
+\[
+\alpha_i(x_{i+1})
+=\log d_{f_{1:i+1}}(x_{i+1})-\log d_{f_{i+1}}(x_{i+1})
+-\EE\!\left[\log d_{f_{1:i}}(X_i)\,\middle|\,X_{i+1}=x_{i+1}\right],
+\]
+其中条件期望对应于 \(X_i\mid X_{i+1}=x_{i+1}\) 在 \(f_{i+1}^{-1}(x_{i+1})\) 上的均匀分布（即由 \(L_{f_{i+1}}\) 给出的条件律）。
+对 \(X_{i+1}\sim \nu^{(i+1)}\) 取期望并用塔性质得递推恒等式
+\begin{equation}\label{eq:pom-bc-high-order-ledger-telescope-step}
+\EE_{\nu^{(i+1)}}\!\bigl[\log d_{f_{1:i+1}}(X_{i+1})\bigr]
+=\EE_{\nu^{(i+1)}}\!\bigl[\alpha_i(X_{i+1})\bigr]
++\EE_{\nu^{(i+1)}}\!\bigl[\log d_{f_{i+1}}(X_{i+1})\bigr]
++\EE_{\nu^{(i)}}\!\bigl[\log d_{f_{1:i}}(X_i)\bigr].
+\end{equation}
+\par
+将 \eqref{eq:pom-bc-high-order-ledger-telescope-step} 对 \(i=1,\dots,k-1\) 求和，右端第三项望远镜抵消得到
+\[
+\EE_{\nu}\!\bigl[\log d_{f_{1:k}}(X_k)\bigr]
+-\sum_{i=1}^{k}\EE_{\nu^{(i)}}\!\bigl[\log d_{f_i}(X_i)\bigr]
+=\sum_{i=1}^{k-1}\EE_{\nu^{(i+1)}}\!\bigl[\alpha_i(X_{i+1})\bigr].
+\]
+与 \eqref{eq:pom-bc-high-order-ledger-kl-expand} 合并即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[零缺陷的层级刚性与括号化不变性]\label{cor:pom-bc-zero-defect-rigidity-parenthesization}
+在定理 \ref{thm:pom-bc-high-order-ledger-decomposition} 的设定下：
+\begin{enumerate}
+  \item \(D_{\mathrm{KL}}(\mu_{\mathrm{seq}}\|\mu_{\mathrm{tot}})=0\) 当且仅当对每个 \(i=1,\dots,k-1\) 有
+  \[
+  \alpha_i(X_{i+1})=0\quad \nu^{(i+1)}\text{-几乎处处}.
+  \]
+  \item 若 \(\nu\) 在 \(X_k\) 上具满支撑，则上式等价于：对每个 \(i=1,\dots,k-1\) 与每个 \(x_{i+1}\in X_{i+1}\)，整数族
+  \(
+  \{d_{f_{1:i}}(x_i):x_i\in f_{i+1}^{-1}(x_{i+1})\}
+  \)
+  在该纤维内处处相等。
+  \item 在上述等价条件成立时，对复合 \(f_{1:k}\) 的任意括号化（将 \((f_1,\dots,f_k)\) 分块后取分块复合并逐块作均匀提升）所得的 \(X_0\) 上分布均相同，且与 \(\mu_{\mathrm{seq}}=\mu_{\mathrm{tot}}\) 一致。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-bc-high-order-ledger-decomposition}，\(D_{\mathrm{KL}}(\mu_{\mathrm{seq}}\|\mu_{\mathrm{tot}})\) 是非负项之和，故为零当且仅当各项期望为零，从而得到 (1)。
+\par
+对 (2)，固定 \(i\) 与 \(x_{i+1}\)。
+\(\alpha_i(x_{i+1})\) 是对纤维 \(f_{i+1}^{-1}(x_{i+1})\) 上整数列 \(d_{f_{1:i}}\) 的 AM--GM 缺陷，取等当且仅当该整数列处处相等；满支撑使“\(\nu^{(i+1)}\)-几乎处处”为“处处”。
+\par
+对 (3)，由 (2) 对每个相邻对 \((f_{1:i},f_{i+1})\) 得到两层均匀提升的严格函子性 \(L_{f_{1:i}}L_{f_{i+1}}=L_{f_{1:i+1}}\)（见推论 \ref{cor:pom-bc-functoriality-criterion} 的等价判据）。
+因此任意括号化中出现的每一次“先提升后合并”都可逐步替换为“先合并后提升”，最终得到同一分布 \(L_{f_{1:k}}\nu\)，从而与顺序提升 \(\mu_{\mathrm{seq}}\) 一致。证毕。
+\end{proof}
+
+\begin{theorem}[全链偏差概率上界：一次账本推出多层刚性]\label{thm:pom-bc-chain-deviation-probability-bound}
+沿用定理 \ref{thm:pom-bc-high-order-ledger-decomposition} 的记号，并令随机链 \((X_0,\dots,X_k)\) 由 \(\mu_{\mathrm{seq}}\) 生成（即 \(X_k\sim\nu\)，且 \(X_i\mid X_{i+1}\) 在 \(f_{i+1}^{-1}(X_{i+1})\) 上均匀，\(i=0,\dots,k-1\)）。
+对每一层 \(i=1,\dots,k-1\) 定义纤维均值
+\[
+\overline d_i(x_{i+1})
+:=
+\frac1{d_{f_{i+1}}(x_{i+1})}\sum_{x_i\in f_{i+1}^{-1}(x_{i+1})} d_{f_{1:i}}(x_i)
+=\frac{d_{f_{1:i+1}}(x_{i+1})}{d_{f_{i+1}}(x_{i+1})},
+\]
+以及随机相对偏差
+\[
+\Delta_i:=\frac{d_{f_{1:i}}(X_i)}{\overline d_i(X_{i+1})}-1.
+\]
+对任意 \(\delta\in(0,1)\) 令
+\[
+c_+(\delta):=\delta-\log(1+\delta),\qquad
+c_-(\delta):=-\delta-\log(1-\delta),
+\]
+则有全链两侧偏差界
+\[
+\boxed{\;
+\PP\!\left(\max_{1\le i\le k-1} |\Delta_i|>\delta\right)
+\le
+\left(\frac{1}{c_+(\delta)}+\frac{1}{c_-(\delta)}\right)
+D_{\mathrm{KL}}(\mu_{\mathrm{seq}}\|\mu_{\mathrm{tot}}).
+\;}
+\]
+\end{theorem}
+\begin{proof}
+固定 \(i\in\{1,\dots,k-1\}\) 并条件于 \(X_{i+1}=x_{i+1}\)。
+记纤维 \(f_{i+1}^{-1}(x_{i+1})=\{x_i^{(1)},\dots,x_i^{(n)}\}\)（其中 \(n=d_{f_{i+1}}(x_{i+1})\)），并置
+\[
+a_j:=\frac{d_{f_{1:i}}(x_i^{(j)})}{\overline d_i(x_{i+1})}\ >0,
+\qquad
+\frac1n\sum_{j=1}^{n}a_j=1.
+\]
+在条件分布 \(X_i\mid X_{i+1}=x_{i+1}\) 下，\(a:=a_J\) 等价于对 \(\{a_j\}\) 的均匀抽样。
+由恒等式 \(\EE[a]=1\) 得
+\[
+\alpha_i(x_{i+1})
+=\log\frac{\frac1n\sum_j a_j}{\exp(\frac1n\sum_j\log a_j)}
+=-\EE[\log a]
+=\EE[a-1-\log a].
+\]
+注意函数 \(\varphi(t):=t-1-\log t\) 在 \((0,\infty)\) 上非负，且在 \(t\ge 1\) 与 \(t\le 1\) 上分别单调递增与递减。
+因此在事件 \(\{a\ge 1+\delta\}\) 上有
+\(
+\varphi(a)\ge \varphi(1+\delta)=c_+(\delta)
+\)，在事件 \(\{a\le 1-\delta\}\) 上有
+\(
+\varphi(a)\ge \varphi(1-\delta)=c_-(\delta)
+\)。
+于是
+\[
+\PP(\Delta_i>\delta\mid X_{i+1}=x_{i+1})
+=\PP(a\ge 1+\delta)
+\le \frac{\EE[\varphi(a)]}{c_+(\delta)}
+=\frac{\alpha_i(x_{i+1})}{c_+(\delta)},
+\]
+\[
+\PP(\Delta_i<-\delta\mid X_{i+1}=x_{i+1})
+=\PP(a\le 1-\delta)
+\le \frac{\alpha_i(x_{i+1})}{c_-(\delta)}.
+\]
+对 \(X_{i+1}\sim\nu^{(i+1)}\) 取期望并相加得
+\[
+\PP(|\Delta_i|>\delta)
+\le
+\left(\frac{1}{c_+(\delta)}+\frac{1}{c_-(\delta)}\right)\EE_{\nu^{(i+1)}}[\alpha_i(X_{i+1})].
+\]
+再对 \(i=1,\dots,k-1\) 作并集上界并应用定理 \ref{thm:pom-bc-high-order-ledger-decomposition} 的总缺陷分解，得到所示不等式。证毕。
+\end{proof}
+
+\begin{theorem}[链式 Beck--Chevalley 缺陷等于逐层 escort 曲率的总和]\label{thm:pom-bc-chain-defect-equals-escort-curvature-sum}
+设
+\[
+X_0\xrightarrow{f_1}X_1\xrightarrow{f_2}\cdots\xrightarrow{f_k}X_k
+\]
+为有限集合上的满射链。
+对 \(1\le i\le k\) 记
+\[
+h_i:=f_i\circ\cdots\circ f_1:X_0\twoheadrightarrow X_i.
+\]
+给定 \(\nu\in\Delta(X_k)\)，并对 \(1\le i\le k-1\) 定义
+\[
+\nu^{(i+1)}:=L_{f_{i+2}}\cdots L_{f_k}\nu\in\Delta(X_{i+1}),
+\]
+其中当 \(i=k-1\) 时空乘积按恒等算子解释。
+再对 \(z\in X_{i+1}\) 定义局部缺陷
+\[
+\alpha_i(z)
+:=
+\log\frac{
+\frac1{d_{f_{i+1}}(z)}
+\sum\limits_{y\in f_{i+1}^{-1}(z)} d_{h_i}(y)
+}{
+\exp\!\Bigl(
+\frac1{d_{f_{i+1}}(z)}
+\sum\limits_{y\in f_{i+1}^{-1}(z)} \log d_{h_i}(y)
+\Bigr)
+},
+\]
+并定义 \(f_{i+1}^{-1}(z)\) 上的 escort 族
+\[
+p_{i,z,t}(y)
+:=
+\frac{d_{h_i}(y)^t}
+{\sum\limits_{y'\in f_{i+1}^{-1}(z)}d_{h_i}(y')^t}
+\qquad
+(0\le t\le 1).
+\]
+则成立精确恒等式
+\[
+\boxed{\;
+D_{\mathrm{KL}}\!\bigl(L_{f_1}\cdots L_{f_k}\nu\,\|\,L_{h_k}\nu\bigr)
+=
+\sum_{i=1}^{k-1}
+\int_{X_{i+1}}
+\int_0^1
+(1-t)\,
+\mathrm{Var}_{Y\sim p_{i,z,t}}\!\bigl(\log d_{h_i}(Y)\bigr)\,
+\dd t\,
+\dd \nu^{(i+1)}(z).
+\;}
+\]
+因此下列命题等价：
+\begin{enumerate}
+  \item 全链严格可交换，即
+  \[
+  L_{f_1}\cdots L_{f_k}\nu=L_{h_k}\nu.
+  \]
+  \item 上式右端为 \(0\)。
+  \item 对每个 \(1\le i\le k-1\)，函数 \(d_{h_i}\) 在 \(f_{i+1}\)-纤维上于
+  \(\nu^{(i+1)}\)-几乎处处为常数。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-bc-high-order-ledger-decomposition}，
+\[
+D_{\mathrm{KL}}\!\bigl(L_{f_1}\cdots L_{f_k}\nu\,\|\,L_{h_k}\nu\bigr)
+=
+\sum_{i=1}^{k-1}
+\int_{X_{i+1}}\alpha_i(z)\,\dd \nu^{(i+1)}(z).
+\]
+另一方面，对每个固定 \(i\)，将命题
+\ref{prop:pom-bc-amgm-defect-escort-variance-energy}
+应用于满射对
+\[
+h_i:X_0\twoheadrightarrow X_i,
+\qquad
+f_{i+1}:X_i\twoheadrightarrow X_{i+1},
+\]
+便得到对每个 \(z\in X_{i+1}\) 都有
+\[
+\alpha_i(z)
+=
+\int_0^1
+(1-t)\,
+\mathrm{Var}_{Y\sim p_{i,z,t}}\!\bigl(\log d_{h_i}(Y)\bigr)\,
+\dd t.
+\]
+将此式代回前述账本分解，即得所示逐层 escort 曲率积分公式。
+
+再证等价性。被积核
+\[
+(1-t)\,
+\mathrm{Var}_{Y\sim p_{i,z,t}}\!\bigl(\log d_{h_i}(Y)\bigr)
+\]
+对每个 \(i,z,t\) 都非负，故右端为零当且仅当对每个 \(i\)，上述方差在
+\(\nu^{(i+1)}\otimes \mathbf 1_{[0,1]}(t)\dd t\)-几乎处处为零。
+对固定的 \(i,z\)，由于纤维 \(f_{i+1}^{-1}(z)\) 有限且 escort 权重
+\(p_{i,z,t}(y)\) 关于 \(t\in[0,1]\) 连续变化，函数
+\[
+t\longmapsto \mathrm{Var}_{Y\sim p_{i,z,t}}\!\bigl(\log d_{h_i}(Y)\bigr)
+\]
+在 \([0,1]\) 上连续。
+因此它若几乎处处为零，便必处处为零；特别在 \(t=0\) 时，\(p_{i,z,0}\) 是该纤维上的均匀分布，从而方差为零当且仅当 \(\log d_{h_i}\) 在纤维 \(f_{i+1}^{-1}(z)\) 上处处相等，亦即 \(d_{h_i}\) 在该纤维上为常数。
+因此第二条与第三条等价。
+
+最后，由定理 \ref{thm:pom-bc-high-order-ledger-decomposition} 可知
+\[
+L_{f_1}\cdots L_{f_k}\nu=L_{h_k}\nu
+\quad\Longleftrightarrow\quad
+D_{\mathrm{KL}}\!\bigl(L_{f_1}\cdots L_{f_k}\nu\,\|\,L_{h_k}\nu\bigr)=0,
+\]
+从而第一条与第二条等价，结论遂得。证毕。
+\end{proof}
+
+\endinput

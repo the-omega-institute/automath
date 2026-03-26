@@ -1,0 +1,192 @@
+% (User input window)
+
+\paragraph{跨接口终端结论：黄金均值有限体积的再生分解、谱律的强余项与 Toeplitz 证书的数值/预算鲁棒性}
+本段把 Fibonacci 立方（黄金均值 SFT）的有限体积组合结构、混合边界离散谱律的强余项界、
+以及视界 Toeplitz--PSD 证书的数值鲁棒性与信息预算阈值，压缩为可独立引用的结论条目。
+证明仅指向相应已完成的定理/命题/推论，不再重复推导细节。
+
+\begin{conclusion}[黄金均值有限体积的严格 DLR--再生分解：任意 \(k\)-点函数在“被迫零”分割下完全独立]\label{con:xi-terminal-golden-mean-dlr-regeneration-factorization}
+在 Fibonacci 立方图 \(\Gamma_n\) 上取均匀计数，并记合法词集合 \(X_n:=V(\Gamma_n)\)（定义 \ref{def:pom-fibonacci-cube}）。
+对任意指标集 \(S=\{i_1<\cdots<i_k\}\subseteq\{1,\dots,n\}\)，若存在 \(j\) 使 \(i_{j+1}-i_j=1\)，则约束不可行且
+\[
+\#\{v\in X_n:\ v_{i_j}=1\ \forall j\}=0.
+\]
+若满足间隔条件 \(i_{j+1}-i_j\ge 2\)，则存在严格乘积分解
+\[
+\#\{v\in X_n:\ v_{i_j}=1\ \forall j\}
+=F_{i_1}\Bigl(\prod_{j=1}^{k-1}F_{i_{j+1}-i_j-1}\Bigr)F_{n-i_k+1},
+\qquad |X_n|=F_{n+2}.
+\]
+因此在有限体积 Gibbs/DLR 口径下，条件事件 \(\{v_{i_j}=1\}\) 在每个 \(i_j\) 两侧强制邻位为 \(0\)，并把系统分裂为 \(k+1\) 段互不相交的自由区间；
+在该条件下，各自由区间上的配置严格独立，且每段均为相应长度黄金均值 SFT 的均匀分布。
+\end{conclusion}
+\begin{proof}[证明]
+见定理 \ref{thm:pom-fibcube-kpoint-count}；其中“邻位被迫为 \(0\)”与自由段分裂正是乘积分解的结构来源，从而条件独立性亦随之成立。证毕。
+\end{proof}
+
+\begin{conclusion}[有限体积 \texorpdfstring{$\Rightarrow$}{=>} Parry 体相的指数速率：误差由次特征值 \texorpdfstring{$-\varphi^{-2}$}{-phi^{-2}} 单独锁定]\label{con:xi-terminal-unif-xn-to-parry-exp-rate}
+令 \(\nu_{\mathrm{Parry}}\) 为黄金均值 SFT 的 Parry 最大熵平衡态（定理 \ref{thm:pom-parry-limit-chain-explicit}），其两态 Markov 转移矩阵的唯一非平凡特征值为 \(\lambda_2=-\varphi^{-2}\)。
+对均匀合法词 \(U_n:=\mathrm{Unif}(X_n)\)，取任意固定块长 \(k\ge 1\)。
+则存在常数 \(C_k\) 使对任意位置 \(t\) 与
+\(
+d:=\min\{t-1,\ n-t-k+1\}
+\)
+均成立指数型体相收敛界：
+\[
+\sup_{a_1\cdots a_k\in X_k}\Bigl|
+U_n(X_t\cdots X_{t+k-1}=a_1\cdots a_k)-\nu_{\mathrm{Parry}}([a_1\cdots a_k])
+\Bigr|
+\le C_k\,\varphi^{-2d}.
+\]
+因此有限体积到体相的相关长度与边界影响衰减率由同一代数常数 \(\varphi^{-2}=|\lambda_2|\) 完全锁定。
+\end{conclusion}
+\begin{proof}[证明]
+局部统计收敛到 Parry 测度见命题 \ref{prop:pom-unif-xn-local-limit-parry}。
+将块柱集计数写为黄金均值邻接矩阵 \(A\) 的幂矩阵元的乘积，并对左右补全段分别施行 Perron--Frobenius 分解，可把误差项精确压缩到次模态的贡献；
+由于 \(A\) 的次特征值为 \(-\varphi^{-1}\)，故归一化后误差在距离边界 \(d\) 的意义下按 \((|\varphi^{-1}|/\varphi)^d=\varphi^{-2d}\) 衰减。
+把有限个合法块的常数并入 \(C_k\) 即得所示上界。证毕。
+\end{proof}
+
+\begin{conclusion}[纤维立方几何的边数与平均度闭式：平均度线性系数精确为 \texorpdfstring{$\frac{2}{5}(3-\varphi)$}{(2/5)(3-phi)}]\label{con:xi-terminal-fibcube-edge-avg-degree-closed}
+Fibonacci 立方 \(\Gamma_n\) 的边数与顶点数满足闭式
+\[
+|E(\Gamma_n)|=\frac{nF_{n+1}+2(n+1)F_n}{5},
+\qquad
+|V(\Gamma_n)|=F_{n+2},
+\]
+从而平均度
+\[
+\overline{\deg}(\Gamma_n)
+=\frac{2|E(\Gamma_n)|}{|V(\Gamma_n)|}
+=\frac{2}{5}\left(
+n\frac{F_{n+1}}{F_{n+2}}+2(n+1)\frac{F_n}{F_{n+2}}
+\right)
+\sim \frac{2}{5}(3-\varphi)\,n.
+\]
+进一步，若纤维重构图 \(\mathcal F_x\) 具有 Cartesian 分解
+\(
+\mathcal F_x\cong\prod_{i=1}^r\Gamma_{\ell_i}
+\)
+（定理 \ref{thm:pom-fiber-reconstruction-cartesian-product}），则有边数与平均度的完全闭式
+\[
+|E(\mathcal F_x)|
+=\sum_{i=1}^r |E(\Gamma_{\ell_i})|\prod_{j\ne i}|V(\Gamma_{\ell_j})|,
+\qquad
+\overline{\deg}(\mathcal F_x)=\sum_{i=1}^r \overline{\deg}(\Gamma_{\ell_i}).
+\]
+因此纤维的“局部可开关性”规模在体相极限中严格线性定标，并由同一 \(\frac{2}{5}(3-\varphi)\) 系数锚定（对长分量贡献可加）。
+\end{conclusion}
+\begin{proof}[证明]
+\(\Gamma_n\) 的边数闭式与平均度公式见推论 \ref{cor:pom-fibcube-edge-closed-form}。
+纤维的 Cartesian 分解见定理 \ref{thm:pom-fiber-reconstruction-cartesian-product}。
+对 Cartesian 乘积图，边集按“选择一个因子中的一条边并固定其余因子顶点”分解，遂得边数公式；平均度可由
+\(
+2|E|/|V|
+\)
+与顶点数乘法性推出可加性。证毕。
+\end{proof}
+
+\begin{conclusion}[离散 Weyl 定律的强版本：计数函数的全区间误差严格不超过 \(1\)，故 Kolmogorov 距离为 \(O(1/k)\)]\label{con:xi-terminal-discrete-weyl-strong-remainder}
+对谱参数 \(\mu\in(0,4)\) 令 \(\theta(\mu)=\arccos(1-\mu/2)\in(0,\pi)\)，并定义计数函数
+\(
+N_k(\mu)=\#\{p\le k:\mu_p\le\mu\}
+\)。
+则存在完全显式反函数型公式
+\[
+N_k(\mu)=\Bigl\lfloor \frac{2k+1}{2\pi}\theta(\mu)+\frac12\Bigr\rfloor,
+\qquad
+\Bigl|N_k(\mu)-\frac{2k+1}{2\pi}\theta(\mu)\Bigr|\le 1
+\quad(\forall\mu\in(0,4)).
+\]
+因此经验分布函数 \(F_k(\mu):=N_k(\mu)/k\) 在全区间上以 \(O(1/k)\) 精度一致逼近极限分布函数 \(F(\mu)=\theta(\mu)/\pi\)。
+\end{conclusion}
+\begin{proof}[证明]
+见推论 \ref{cor:pom-Lk-discrete-weyl}。证毕。
+\end{proof}
+
+\begin{conclusion}[边界谱律是体相谱律的严格二次倾斜：\texorpdfstring{$\dd\rho(\mu)=\frac{\mu(4-\mu)}{2}\,\dd\nu(\mu)$}{d rho=(mu(4-mu)/2)d nu}]\label{con:xi-terminal-boundary-bulk-spectral-quadratic-tilt}
+设 \(\nu\) 为体相极限测度，\(\rho\) 为边界极限测度。
+则二者满足精确 Radon--Nikodym 关系
+\[
+\dd\rho(\mu)=\frac{\mu(4-\mu)}{2}\,\dd\nu(\mu),
+\qquad
+\int f(\mu)\,\dd\rho(\mu)=\frac12\int \mu(4-\mu)\,f(\mu)\,\dd\nu(\mu).
+\]
+因此边界谱统计的全部可积泛函可在体相测度下以一次加权换测精确计算。
+\end{conclusion}
+\begin{proof}[证明]
+见推论 \ref{cor:pom-Lk-boundary-bulk-radon-nikodym}。证毕。
+\end{proof}
+
+\begin{conclusion}[Toeplitz--PSD 的数值可证书鲁棒性：谱裕度与系数误差给出完全显式的可行域]\label{con:xi-terminal-toeplitz-psd-numerical-robustness}
+设 \(\mathbf{T}_N=(c_{j-k})_{0\le j,k\le N}\) 为 Toeplitz 截断矩阵，\(\widehat{\mathbf{T}}_N=(\widehat c_{j-k})\) 为任意 Hermitian 近似。
+若存在可审计谱裕度 \(\lambda_{\min}(\widehat{\mathbf{T}}_N)\ge\eta>0\) 且截断误差满足
+\(
+\|\widehat{\mathbf{T}}_N-\mathbf{T}_N\|_{\mathrm{op}}\le \eta/2
+\)，
+则必有 \(\mathbf{T}_N\succeq 0\)。
+并且若系数逐项误差满足 \(\max_{0\le n\le N}|\widehat c_n-c_n|\le\varepsilon\)，则
+\[
+\|\widehat{\mathbf{T}}_N-\mathbf{T}_N\|_{\mathrm{op}}
+\le\sum_{k=-N}^{N}|\widehat c_k-c_k|
+\le (2N+1)\varepsilon.
+\]
+因此有限阶 Toeplitz--PSD 核验可被约化为“计算 \(\widehat{\mathbf{T}}_N\) 的最小特征值并给出可审计误差界”的数值—代数混合证书链。
+\end{conclusion}
+\begin{proof}[证明]
+见定理 \ref{thm:xi-spectral-margin-finite-psd-certificate}。证毕。
+\end{proof}
+
+\begin{theorem}[Toeplitz--PSD 的鲁棒共终端审计：误差封口与谱裕度向下传播]\label{thm:xi-toeplitz-psd-robust-cofinal-audit}
+沿用 Toeplitz 主子矩阵 \(\mathbf{T}_N=(c_{j-k})_{0\le j,k\le N}\) 的记号。
+令 \(\{N_k\}_{k\ge 1}\) 为任意共终端严格递增子序列。
+假设对每个 \(k\) 给出一对审计输入 \((\widehat{\mathbf{T}}_{N_k},\varepsilon_k)\)，并存在 \(\eta_k>0\) 使
+\[
+\lambda_{\min}(\widehat{\mathbf{T}}_{N_k})\ge \eta_k,
+\qquad
+\|\widehat{\mathbf{T}}_{N_k}-\mathbf{T}_{N_k}\|_{\mathrm{op}}\le \varepsilon_k\le \eta_k/2.
+\]
+则成立：
+\begin{enumerate}
+  \item 对所有 \(N\ge 0\) 均有 \(\mathbf{T}_N\succeq 0\)；
+  \item 对任意 \(k\) 与任意 \(0\le N\le N_k\)，有谱裕度下界
+  \[
+  \boxed{\ \lambda_{\min}(\mathbf{T}_N)\ \ge\ \eta_k/2\ }.
+  \]
+  特别地，若 \(\inf_k\eta_k>0\)，则存在统一下界 \(\lambda_{\min}(\mathbf{T}_N)\ge \frac12\inf_k\eta_k\) 对一切 \(N\) 成立。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-spectral-margin-finite-psd-certificate} 的封口规则，对每个 \(k\) 有 \(\mathbf{T}_{N_k}\succeq 0\)。
+再由定理 \ref{thm:xi-toeplitz-psd-cofinal-sparsification} 的共终端稀疏化等价性，推出对所有 \(N\ge 0\) 均有 \(\mathbf{T}_N\succeq 0\)。
+\par
+对谱裕度传播：由 Weyl 扰动界，
+\[
+\lambda_{\min}(\mathbf{T}_{N_k})
+\ge
+\lambda_{\min}(\widehat{\mathbf{T}}_{N_k})-\|\widehat{\mathbf{T}}_{N_k}-\mathbf{T}_{N_k}\|_{\mathrm{op}}
+\ge
+\eta_k-\varepsilon_k
+\ge
+\eta_k/2.
+\]
+而当 \(N\le N_k\) 时，\(\mathbf{T}_N\) 为 \(\mathbf{T}_{N_k}\) 的左上主子矩阵，故由 Cauchy 交错定理
+\(
+\lambda_{\min}(\mathbf{T}_N)\ge \lambda_{\min}(\mathbf{T}_{N_k})
+\)。
+合并即得所示下界。证毕。
+\end{proof}
+
+\begin{conclusion}[单原子负缺陷的可否证阈值是 \texorpdfstring{$1/(N+1)$}{1/(N+1)} 级且为锐界：视界阶数的最小信息预算被精确锁定]\label{con:xi-terminal-toeplitz-negative-atom-threshold-sharp}
+在视界 Toeplitz 证书口径下，考虑背景正测度与单原子负缺陷 \(\varepsilon\,\delta_{\xi_0}\) 的对抗。
+存在密度下界 \(m_0\) 与上界 \(M_0\) 使得：
+\begin{enumerate}
+  \item 若 \(\varepsilon\le m_0/(N+1)\)，则对一切 \(x\in\CC^{N+1}\) 有 \(x^\ast \mathbf{T}_N x\ge 0\)，从而 \(\mathbf{T}_N\succeq 0\)（负缺陷被背景完全吸收，视界不可否证）。
+  \item 若 \(\varepsilon> M_0/(N+1)\)，则存在显式方向 \(u_k=\xi_0^{-k}\) 使 \(u^\ast\mathbf{T}_N u<0\)，从而 \(\mathbf{T}_N\not\succeq 0\)（负缺陷在第 \(N\) 级必被检测）。
+\end{enumerate}
+因此单原子缺陷的可否证性阈值在阶数上为严格的 \(1/(N+1)\) 量级并且为锐界：若要强制区分 \(\varepsilon\) 级缺陷，必需 \(N\gtrsim \varepsilon^{-1}\) 的视界阶数预算。
+\end{conclusion}
+\begin{proof}[证明]
+见命题 \ref{prop:discussion-toeplitz-negative-atom-threshold}。证毕。
+\end{proof}
+

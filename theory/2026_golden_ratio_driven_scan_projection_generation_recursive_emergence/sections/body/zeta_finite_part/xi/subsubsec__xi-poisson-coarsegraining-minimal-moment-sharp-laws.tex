@@ -1,0 +1,460 @@
+\paragraph{Poisson--Cauchy 粗粒化在最小矩假设下的锐系数与双参数刚性}
+本段在命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form}、命题 \ref{prop:xi-poisson-kl-dissipation-fractional-fisher} 的二阶展开与熵耗散框架内，进一步将所需矩条件压缩到最小可用层级，并把双参数对象与缺陷测度共动场
+\eqref{eq:xi-offcritical-defect-measure-nu}--\eqref{eq:xi-offcritical-comoving-poisson-field}
+统一到同一套可审计常数律。
+
+
+\begin{theorem}[\texorpdfstring{$L^1$}{L1} 锐常数的二阶矩闭合]\label{thm:xi-poisson-tv-sharp-constant-second-moment-only}
+设 \(\tilde\nu\) 为 \(\RR\) 上概率测度，\(\bar\gamma:=\int \gamma\,\dd\tilde\nu(\gamma)\)，\(\sigma^2:=\int(\gamma-\bar\gamma)^2\,\dd\tilde\nu(\gamma)\in(0,\infty)\)。
+定义
+\[
+P_t(x):=\frac{1}{\pi}\frac{t}{x^2+t^2},\qquad
+\tilde h_t:=P_t*\tilde\nu,\qquad
+\tilde g_t(x):=P_t(x-\bar\gamma).
+\]
+若仅假设二阶矩有限，则
+\begin{equation}\label{eq:xi-poisson-tv-sharp-second-moment-only}
+\boxed{\;
+\lim_{t\to\infty}\frac{t^2}{\sigma^2}\,\|\tilde h_t-\tilde g_t\|_{L^1(\RR)}
+=\frac{3\sqrt3}{4\pi}\; }.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+由平移不变性可取 \(\bar\gamma=0\)。令 \(G(y):=\frac{1}{\pi(1+y^2)}\)，\(H_t(y):=t\tilde h_t(ty)=\EE[G(y-\Delta/t)]\)，其中 \(\Delta\sim\tilde\nu\)、\(\EE\Delta=0\)、\(\EE\Delta^2=\sigma^2\)。
+对任意 \(\varepsilon\in(0,1)\)，把期望分解为 \(|\Delta|\le \varepsilon t\) 与 \(|\Delta|>\varepsilon t\)。
+在截断区上，对 \(G(y-a)\) 作二阶展开并保留三阶余项，
+\[
+G(y-a)=G(y)-aG'(y)+\frac{a^2}{2}G''(y)+R(y,a),\qquad
+\|R(\cdot,a)\|_1\le \frac{|a|^3}{6}\|G'''\|_1,
+\]
+再用 \(|\Delta|^3\mathbf 1_{|\Delta|\le \varepsilon t}\le \varepsilon t\,\Delta^2\) 得
+\[
+\left\|H_t-G-\frac{\sigma^2}{2t^2}G''\right\|_1
+\le C\frac{\varepsilon\sigma^2}{t^2}
++2\,\PP(|\Delta|>\varepsilon t).
+\]
+二阶矩有限蕴含 \((\varepsilon t)^2\PP(|\Delta|>\varepsilon t)\to0\)，故先令 \(t\to\infty\) 再令 \(\varepsilon\downarrow0\)，得到
+\[
+\lim_{t\to\infty}\frac{t^2}{\sigma^2}\|H_t-G\|_1=\left\|\frac12G''\right\|_1.
+\]
+直接计算 \(G''(y)=\frac{2}{\pi}\frac{3y^2-1}{(1+y^2)^3}\) 即得
+\[
+\left\|\frac12G''\right\|_1
+=\frac{1}{\pi}\int_{\RR}\frac{|3y^2-1|}{(1+y^2)^3}\,\dd y
+=\frac{3\sqrt3}{4\pi}.
+\]
+由 \(\|\tilde h_t-\tilde g_t\|_1=\|H_t-G\|_1\) 得结论。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$D_{\mathrm{KL}}$}{KL} 锐常数的二阶矩闭合]\label{thm:xi-poisson-kl-sharp-second-moment-only}
+在定理 \ref{thm:xi-poisson-tv-sharp-constant-second-moment-only} 的设定下，仅由 \(\sigma^2<\infty\) 可得
+\begin{equation}\label{eq:xi-poisson-kl-sharp-second-moment-only}
+\boxed{\;
+\lim_{t\to\infty}\frac{t^4}{\sigma^4}\,
+D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_t)
+=\frac18\; }.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+沿用尺度变量记号，令 \(\delta_t(y):=H_t(y)/G(y)-1\)。由
+\[
+G(y-a)-G(y)+aG'(y)
+=a^2\int_0^1(1-s)\,G''(y-sa)\,\dd s
+\]
+和 \(\EE\Delta=0\) 得
+\[
+H_t(y)-G(y)
+=\E\!\left[\frac{\Delta^2}{t^2}\int_0^1(1-s)G''\!\left(y-\frac{s\Delta}{t}\right)\dd s\right].
+\]
+由于 \(\|G''/G\|_\infty<\infty\)，有 \(\|\delta_t\|_\infty\lesssim \sigma^2/t^2\to0\)。
+于是
+\[
+D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_t)
+=\int_{\RR}G\,\Phi(\delta_t)\,\dd y,\qquad
+\Phi(u):=(1+u)\log(1+u)
+=\frac{u^2}{2}+O(|u|^3).
+\]
+只需验证
+\[
+\left\|\delta_t-\frac{\sigma^2}{t^2}U_2\right\|_{L^2(G\dd y)}
+=o\!\left(\frac{\sigma^2}{t^2}\right),\qquad
+U_2(y):=\frac12\frac{G''(y)}{G(y)}=\frac{3y^2-1}{(1+y^2)^2},
+\]
+其证明与上一条同样采用截断 \(|\Delta|\le \varepsilon t\) 与尾部 \(|\Delta|>\varepsilon t\) 分解，尾部仍由
+\((\varepsilon t)^2\PP(|\Delta|>\varepsilon t)\to0\) 控制。故
+\[
+\int_{\RR}G\,\delta_t^2\,\dd y
+=\frac{\sigma^4}{t^4}\int_{\RR}G\,U_2^2\,\dd y+o(t^{-4}),
+\qquad
+\int_{\RR}G\,U_2^2\,\dd y=\frac14.
+\]
+代回即得 \eqref{eq:xi-poisson-kl-sharp-second-moment-only}。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$D_{\mathrm{KL}}$}{KL} 的六阶系数：由 \texorpdfstring{$(\mu_3,\mu_4)$}{(mu3,mu4)} 显式控制]\label{thm:xi-poisson-kl-sixth-order-mu3-mu4}
+在定理 \ref{thm:xi-poisson-tv-sharp-constant-second-moment-only} 的设定下，若
+\[
+\mu_3:=\int(\gamma-\bar\gamma)^3\,\dd\tilde\nu(\gamma),\qquad
+\mu_4:=\int(\gamma-\bar\gamma)^4\,\dd\tilde\nu(\gamma)
+\]
+有限且余项可交换到积分号内，则
+\begin{equation}\label{eq:xi-poisson-kl-sixth-order-mu3-mu4}
+\boxed{\;
+D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_t)
+=\frac{\sigma^4}{8t^4}
++\frac{1}{t^6}\left(
+\frac{\sigma^6}{64}
+-\frac{\sigma^2\mu_4}{8}
++\frac{3\mu_3^2}{32}
+\right)
++o(t^{-6})\; }.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+结论与定理 \ref{thm:xi-cauchy-poisson-kl-sharp-asymptotics} 的结构相同，但此处把系数来源显式写为中心矩。
+在 \(\bar\gamma=0\)、\(x=ty\) 下，
+\[
+\delta_t(y)
+=\frac{\sigma^2}{t^2}U_2(y)
++\frac{\mu_3}{t^3}V_3(y)
++\frac{\mu_4}{t^4}W_4(y)
++o(t^{-4}),
+\]
+\[
+U_2(y)=\frac{3y^2-1}{(1+y^2)^2},\quad
+V_3(y)=\frac{4y(y^2-1)}{(1+y^2)^3},\quad
+W_4(y)=\frac{5y^4-10y^2+1}{(1+y^2)^4}.
+\]
+将
+\(
+\Phi(u)=\frac12u^2-\frac16u^3+O(u^4)
+\)
+代入 \(D_{\mathrm{KL}}=\int G\Phi(\delta_t)\)，并用奇偶性
+\(\int G\,U_2V_3=0\) 消去 \(t^{-5}\) 项。再代入标准积分
+\[
+\int G\,U_2^2=\frac14,\qquad
+\int G\,V_3^2=\frac{3}{16},\qquad
+\int G\,U_2W_4=-\frac18,\qquad
+\int G\,U_2^3=-\frac{3}{32},
+\]
+即得 \eqref{eq:xi-poisson-kl-sixth-order-mu3-mu4}。
+\end{proof}
+
+\begin{proposition}[任意 \texorpdfstring{$f$}{f}-散度的六阶两项展开]\label{prop:xi-poisson-fdiv-sixth-order-mu3-mu4}
+在定理 \ref{thm:xi-poisson-kl-sixth-order-mu3-mu4} 的设定下，令 \(f\in C^3((0,\infty))\) 为凸函数，满足 \(f(1)=f'(1)=0\)。定义
+\[
+D_f(\tilde h_t\mid \tilde g_t):=
+\int_{\RR}\tilde g_t(x)\,
+f\!\left(\frac{\tilde h_t(x)}{\tilde g_t(x)}\right)\dd x.
+\]
+则当 \(t\to\infty\) 有
+\begin{equation}\label{eq:xi-poisson-fdiv-sixth-order}
+\boxed{\;
+D_f(\tilde h_t\mid \tilde g_t)
+=\frac{f''(1)}{8}\frac{\sigma^4}{t^4}
++\frac{1}{t^6}\left[
+f''(1)\!\left(\frac{3\mu_3^2}{32}-\frac{\sigma^2\mu_4}{8}\right)
+-\frac{f'''(1)}{64}\sigma^6
+\right]
++o(t^{-6})\; }.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+把
+\[
+f(1+u)=\frac{f''(1)}{2}u^2+\frac{f'''(1)}{6}u^3+O(u^4)
+\]
+代入 \(D_f=\int \tilde g_t\,f(1+\delta_t)\)，并使用定理 \ref{thm:xi-poisson-kl-sixth-order-mu3-mu4} 证明中的
+\(\delta_t\) 展开与同一组奇偶消去、同一组有理积分常数，即得结论。
+\end{proof}
+
+\begin{theorem}[双参数 Poisson--Cauchy 混合的 \texorpdfstring{$D_{\mathrm{KL}}$}{KL} 锐二阶二次型]\label{thm:xi-poisson-two-parameter-kl-sharp-quadratic}
+令 \((\Gamma,\Delta)\) 为实随机向量，满足
+\[
+\bar\gamma:=\E\Gamma,\qquad
+\bar\delta:=\E\Delta,\qquad
+\Var(\Gamma),\Var(\Delta),\Cov(\Gamma,\Delta)<\infty.
+\]
+定义
+\[
+h_t(x):=\E\!\left[P_{t+\Delta}(x-\Gamma)\right],\qquad
+g_t(x):=P_{t+\bar\delta}(x-\bar\gamma),\qquad t>0.
+\]
+则有锐极限
+\begin{equation}\label{eq:xi-poisson-two-parameter-kl-sharp-quadratic}
+\boxed{\;
+\lim_{t\to\infty}(t+\bar\delta)^4\,D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{(\Var(\Gamma)-\Var(\Delta))^2}{8}
++\frac{\Cov(\Gamma,\Delta)^2}{2}\; }.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+该结论与定理 \ref{thm:xi-cauchy-poisson-two-channel-orthogonal-leading} 的主项完全一致。
+令 \(T:=t+\bar\delta\)，\(U:=\Gamma-\bar\gamma\)，\(V:=\Delta-\bar\delta\)。
+二元二阶展开给出
+\[
+\frac{h_t(Ty)}{g_t(Ty)}-1
+=\frac{1}{T^2}\Bigl((\Var\Gamma-\Var\Delta)\,u(y)+\Cov(\Gamma,\Delta)\,w(y)\Bigr)+o(T^{-2}),
+\]
+其中
+\[
+u(y)=\frac{3y^2-1}{(1+y^2)^2}\ \text{为偶函数},\qquad
+w(y)=\frac{2y(y^2-3)}{(1+y^2)^2}\ \text{为奇函数}.
+\]
+再用
+\(
+D_{\mathrm{KL}}=\frac12\int G\delta_t^2+o(T^{-4})
+\)
+与
+\[
+\int_{\RR}G\,u^2\,\dd y=\frac14,\qquad
+\int_{\RR}G\,w^2\,\dd y=1,\qquad
+\int_{\RR}G\,u\,w\,\dd y=0,
+\]
+即可得到 \eqref{eq:xi-poisson-two-parameter-kl-sharp-quadratic}。
+\end{proof}
+
+\begin{theorem}[双参数超四次衰减的刚性与六阶主项]\label{thm:xi-poisson-two-parameter-sixth-rigidity-complex-third}
+在定理 \ref{thm:xi-poisson-two-parameter-kl-sharp-quadratic} 的设定下，记
+\[
+A:=\Gamma-\bar\gamma,\qquad
+B:=\Delta-\bar\delta,\qquad
+Z:=A+\mathrm{i}B.
+\]
+若满足二阶各向同性消失条件
+\[
+\Var(A)=\Var(B),\qquad \Cov(A,B)=0,
+\]
+并假设三阶混合矩有限，则有：
+\begin{align}
+\lim_{t\to\infty}(t+\bar\delta)^4D_{\mathrm{KL}}(h_t\mid g_t)=0
+&\Longleftrightarrow
+\Var(A)=\Var(B),\ \Cov(A,B)=0,\label{eq:xi-two-param-rigidity-iff}\\
+D_{\mathrm{KL}}(h_t\mid g_t)
+&=\frac{3}{32}\frac{\left|\E[Z^3]\right|^2}{(t+\bar\delta)^6}
++o(t^{-6}).\label{eq:xi-two-param-sixth-leading-complex-third}
+\end{align}
+\end{theorem}
+
+\begin{proof}
+等价性 \eqref{eq:xi-two-param-rigidity-iff} 由
+\eqref{eq:xi-poisson-two-parameter-kl-sharp-quadratic}
+立即给出。
+
+在该条件下，\(T^{-2}\) 主项抵消，三阶项给出六阶主导：
+\[
+\delta_t(y):=\frac{h_t(Ty)}{g_t(Ty)}-1
+=\frac{1}{T^3}\bigl[\alpha\,p(y)+\beta\,q(y)\bigr]+o(T^{-3}),
+\]
+其中
+\[
+p(y)=\frac{24y(y^2-1)}{(1+y^2)^3}\ \text{为奇函数},\qquad
+q(y)=\frac{6(y^4-6y^2+1)}{(1+y^2)^3}\ \text{为偶函数},
+\]
+\[
+\alpha=\frac{\E[A^3]-3\E[AB^2]}{6}=\frac{\Re\,\E[Z^3]}{6},\qquad
+\beta=\frac{3\E[A^2B]-\E[B^3]}{6}=\frac{\Im\,\E[Z^3]}{6}.
+\]
+因此 \(\alpha^2+\beta^2=\frac{|\E[Z^3]|^2}{36}\)。
+再用
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac12\int_{\RR}G(y)\,\delta_t(y)^2\,\dd y+o(T^{-6}),
+\]
+以及
+\[
+\int_{\RR}G\,p^2\,\dd y=\int_{\RR}G\,q^2\,\dd y=\frac{27}{4},\qquad
+\int_{\RR}G\,pq\,\dd y=0,
+\]
+得到
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{1}{2T^6}\cdot\frac{27}{4}\,(\alpha^2+\beta^2)+o(T^{-6})
+=\frac{3}{32}\frac{|\E[Z^3]|^2}{T^6}+o(T^{-6}).
+\]
+即 \eqref{eq:xi-two-param-sixth-leading-complex-third}。
+\end{proof}
+
+\begin{proposition}[Poisson--Cauchy 导数比的傅里叶二项式正规形]\label{prop:xi-poisson-cauchy-derivative-ratio-fourier-binomials}
+令 \(P_T(X):=\pi^{-1}\frac{T}{X^2+T^2}\)，并置
+\[
+\theta:=\arctan\!\Bigl(\frac{X}{T}\Bigr)\in\Bigl(-\frac{\pi}{2},\frac{\pi}{2}\Bigr),
+\qquad
+\mathcal S_m(\theta):=\sum_{k=1}^{m}\binom{m-1}{k-1}e^{-2\mathrm{i}k\theta}\quad(m\ge 1).
+\]
+则对任意整数 \(m\ge 1\) 点态恒有
+\begin{equation}\label{eq:xi-poisson-cauchy-derivative-ratio-fourier-binomials}
+\boxed{\;
+T^{m}\frac{\partial_X^{m}P_T(X)}{P_T(X)}
+=2^{-(m-1)}\,\Re\!\Bigl((-\mathrm{i})^{m}m!\,\mathcal S_m(\theta)\Bigr)\; }.
+\end{equation}
+并且具有正交范数闭式
+\begin{equation}\label{eq:xi-poisson-cauchy-binomial-parseval-norms}
+\frac{1}{\pi}\int_{-\pi/2}^{\pi/2}\bigl|\mathcal S_m(\theta)\bigr|^2\,\dd\theta=\binom{2m-2}{m-1},
+\qquad
+\frac{1}{\pi}\int_{-\pi/2}^{\pi/2}\bigl(\Re\mathcal S_m(\theta)\bigr)^2\,\dd\theta=\frac12\binom{2m-2}{m-1}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+由分解式
+\[
+P_T(X)=\frac{1}{2\pi}\Bigl(\frac{1}{T-\mathrm{i}X}+\frac{1}{T+\mathrm{i}X}\Bigr)
+\]
+可得
+\[
+\partial_X^mP_T(X)=\frac{m!}{2\pi}\Bigl((-\mathrm{i})^{m}(T-\mathrm{i}X)^{-(m+1)}+\mathrm{i}^{m}(T+\mathrm{i}X)^{-(m+1)}\Bigr).
+\]
+在 \(\theta\) 变量下 \(T\pm \mathrm{i}X=T\sec\theta\,e^{\pm \mathrm{i}\theta}\) 且 \(P_T(X)=\frac{1}{\pi T}\cos^2\theta\)，从而
+\[
+T^{m}\frac{\partial_X^{m}P_T(X)}{P_T(X)}
+=2^{-(m-1)}\Re\!\Bigl((-\mathrm{i})^{m}m!\,e^{-2\mathrm{i}\theta}\bigl(e^{-2\mathrm{i}\theta}+1\bigr)^{m-1}\Bigr).
+\]
+对 \((e^{-2\mathrm{i}\theta}+1)^{m-1}\) 作二项展开即得 \eqref{eq:xi-poisson-cauchy-derivative-ratio-fourier-binomials}。
+式 \eqref{eq:xi-poisson-cauchy-binomial-parseval-norms} 由指数基的正交性与恒等式
+\(
+\sum_{k=0}^{m-1}\binom{m-1}{k}^2=\binom{2m-2}{m-1}
+\)
+立得。证毕。
+\end{proof}
+
+\begin{theorem}[最小非零复矩支配的高阶相对熵谱指纹]\label{thm:xi-poisson-two-parameter-minimal-complex-moment-kl}
+仍在定理 \ref{thm:xi-poisson-two-parameter-kl-sharp-quadratic} 的设定下，记
+\[
+T:=t+\bar\delta,\qquad X:=x-\bar\gamma,\qquad
+Z:=A+\mathrm{i}B,\qquad M_k:=\E[Z^k]\ (k\in\mathbb N).
+\]
+设存在整数 \(m\ge 2\) 使得
+\[
+\E|Z|^{m+1}<\infty,
+\qquad
+M_1=\cdots=M_{m-1}=0,
+\qquad
+M_m\neq 0.
+\]
+则存在锐极限
+\begin{equation}\label{eq:xi-two-parameter-minimal-complex-moment-kl}
+\boxed{\;
+\lim_{t\to\infty} (t+\bar\delta)^{2m}\,D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{\binom{2m-2}{m-1}}{4^{m}}\;|M_m|^2\; }.
+\end{equation}
+\end{theorem}
+\begin{proof}
+令 \(y:=X/T=\tan\theta\)，\(\theta\in(-\pi/2,\pi/2)\)。由
+\(
+g_t(x)\,\dd x=\pi^{-1}\dd\theta
+\)
+且
+\[
+P_T(X)=\frac{1}{2\pi}\Bigl(\frac{1}{T-\mathrm{i}X}+\frac{1}{T+\mathrm{i}X}\Bigr),
+\]
+可将
+\(
+P_{T+B}(X-A)
+\)
+写为
+\[
+P_{T+B}(X-A)
+=\frac{1}{2\pi}\Bigl(\frac{1}{(T-\mathrm{i}X)+(B+\mathrm{i}A)}+\frac{1}{(T+\mathrm{i}X)+(B-\mathrm{i}A)}\Bigr).
+\]
+在 \(|Z|/T\) 小的区域按几何级数展开并取期望，利用 \(B+\mathrm{i}A=\mathrm{i}\overline{Z}\)、\(B-\mathrm{i}A=-\mathrm{i}Z\)，并结合假设 \(M_1=\cdots=M_{m-1}=0\)，可得密度比
+\(
+\delta_t:=h_t/g_t-1
+\)
+在 \(\theta\) 变量下的主项为
+\begin{equation}\label{eq:xi-two-parameter-minimal-complex-moment-delta}
+\delta_t(\theta)
+=T^{-m}\,2^{-(m-1)}\,
+\Re\!\Bigl(\mathrm{i}^{m}M_m\,\mathcal S_m(\theta)\Bigr)
++O(T^{-(m+1)}),
+\end{equation}
+其中 \(\mathcal S_m\) 如命题 \ref{prop:xi-poisson-cauchy-derivative-ratio-fourier-binomials} 所定义。
+由于 \(\int g_t\delta_t\,\dd x=0\) 且 \(\delta_t=O(T^{-m})\)，展开
+\(
+(1+u)\log(1+u)=u+\frac12u^2+O(u^3)
+\)
+得
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)=\frac12\int_{\RR} g_t\,\delta_t^2\,\dd x+o(T^{-2m}).
+\]
+将 \eqref{eq:xi-two-parameter-minimal-complex-moment-delta} 代入并用
+\(
+g_t\,\dd x=\pi^{-1}\dd\theta
+\)，再用 \(\mathcal S_m\) 仅含非零频率从而
+\(
+\int (\Re F)^2=\frac12\int |F|^2
+\)，结合 \eqref{eq:xi-poisson-cauchy-binomial-parseval-norms}，得到
+\[
+\frac12\int g_t\,\delta_t^2\,\dd x
+=\frac12\cdot T^{-2m}\cdot 2^{-2(m-1)}\cdot \frac12\cdot |M_m|^2\binom{2m-2}{m-1}
++o(T^{-2m}),
+\]
+即为 \eqref{eq:xi-two-parameter-minimal-complex-moment-kl}。证毕。
+\end{proof}
+
+\begin{corollary}[超 \texorpdfstring{$2m$}{2m} 衰减的刚性]\label{cor:xi-two-parameter-minimal-complex-moment-rigidity}
+在定理 \ref{thm:xi-poisson-two-parameter-minimal-complex-moment-kl} 的条件下，若进一步满足
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)=o\!\bigl((t+\bar\delta)^{-2m}\bigr)\qquad(t\to\infty),
+\]
+则必有 \(M_m=\E[Z^m]=0\)。
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:xi-two-parameter-minimal-complex-moment-kl} 的极限式直接推出。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$f$}{f}-散度与 Fisher 耗散的统一谱指纹]\label{cor:xi-two-parameter-minimal-complex-moment-fdiv-fisher}
+在定理 \ref{thm:xi-poisson-two-parameter-minimal-complex-moment-kl} 的条件下，
+令 \(f\in C^3\) 且满足 \(f(1)=f'(1)=0\)、\(f''(1)>0\)，并定义
+\[
+D_f(h_t\mid g_t):=\int_{\RR} g_t(x)\,f\!\left(\frac{h_t(x)}{g_t(x)}\right)\dd x.
+\]
+则有
+\[
+\lim_{t\to\infty}(t+\bar\delta)^{2m}D_f(h_t\mid g_t)
+=f''(1)\,\frac{\binom{2m-2}{m-1}}{4^{m}}\,|M_m|^2.
+\]
+此外，若定义
+\(
+I_1(t):=-\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\mid g_t)
+\)，则
+\[
+\lim_{t\to\infty}(t+\bar\delta)^{2m+1}I_1(t)
+=2m\,\frac{\binom{2m-2}{m-1}}{4^{m}}\,|M_m|^2.
+\]
+\end{corollary}
+\begin{proof}
+由 \(\delta_t=O(T^{-m})\) 与 \(f(1+u)=\frac{f''(1)}{2}u^2+O(u^3)\) 得
+\(
+D_f(h_t\mid g_t)=\frac{f''(1)}{2}\int g_t\delta_t^2\,\dd x+o(T^{-2m})
+\)。
+而 KL 情形满足 \(f''(1)=1\)，其主项由定理 \ref{thm:xi-poisson-two-parameter-minimal-complex-moment-kl} 给出，从而得到第一条极限式。
+第二条极限式由
+\(
+D_{\mathrm{KL}}(h_t\mid g_t)\sim C\,T^{-2m}
+\)
+对 \(t\) 求导得到
+\(
+I_1(t)\sim 2m\,C\,T^{-(2m+1)}
+\)。
+证毕。
+\end{proof}
+
+\begin{remark}[与缺陷测度—共动 Poisson 场的融合]\label{rem:xi-poisson-two-parameter-defect-measure-fusion}
+把 \eqref{eq:xi-offcritical-defect-measure-nu} 归一化为概率测度，并以其随机样本定义 \((\Gamma,\Delta)\) 时，
+\eqref{eq:xi-poisson-two-parameter-kl-sharp-quadratic}
+与 \eqref{eq:xi-two-parameter-minimal-complex-moment-kl}
+分别给出二阶可见不变量与更高阶的谱指纹证书。
+其中二阶项为
+\[
+\frac{(\Var\Gamma-\Var\Delta)^2}{8}
++\frac{\Cov(\Gamma,\Delta)^2}{2}
+\]
+而在 \(M_2=\E[Z^2]=0\) 的退化情形下，高阶主导阶次与锐常数由最小非零复矩 \(M_m\) 决定，并由 \eqref{eq:xi-two-parameter-minimal-complex-moment-kl} 与推论 \ref{cor:xi-two-parameter-minimal-complex-moment-fdiv-fisher} 统一刻画。
+\end{remark}
+
+\endinput

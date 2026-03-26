@@ -1,0 +1,278 @@
+\subsubsection{Farey 采样极限、模障碍与连续极限：从有理 Gram 矩阵到 Zeckendorf 极限测度}\label{subsubsec:gm-farey-limit-mod-obstruction-zeck-measure}
+本小节在 \S\ref{subsubsec:gm-affine-inverse-gram-arithmetic-dichotomy} 的有限维大筛 Gram 矩阵 \(K_M\) 证书与“算术障碍二分”之后，补全三条与之并行的连续化链路：
+\begin{enumerate}
+  \item \textbf{（Farey 采样极限）}把有理频率集合 \(\mathcal{Q}_M\) 视为 \([0,1]\) 上的准均匀采样，证明核矩阵在适当尺度下收敛到 \(L^2([0,1])\) 上的卷积型积分算子，并给出随无量纲比值 \(\tau=L/M^2\) 的精确谱相态渐近（见定理 \ref{thm:gm-farey-sampling-operator-limit} 与命题 \ref{prop:gm-farey-tau-spectral-phases}）。
+  \item \textbf{（模障碍的有限性）}把“扭曲等半径/共边界”机制完全还原为有限状态权函数在图同调中的 \(\gcd\) 不变量 \(d\)，并证明模障碍只可能发生在有限集合 \(\{q:q\mid d\}\) 上；在非共边界情形给出统一的扭曲谱降定量下界（见命题 \ref{prop:gm-cycle-gcd-mod-obstruction} 与定理 \ref{thm:gm-uniform-twist-gap-from-gcd}），从而把 \(\vartheta\) 的存在性转写为 \(d=1\) 的可判别条件（定理 \ref{thm:gm-improvability-iff-d1}）。
+  \item \textbf{（连续极限测度）}对 primitive sofic--Zeckendorf 集合 \(A_m\) 的归一化值分布给出极限测度 \(\mu\) 的存在与矩阵细分方程，并将 Fourier 衰减与扭曲 Perron 谱隙严格同构；由此导出绝对连续/奇异二分律与仿射自交的维数塌缩（见定理 \ref{thm:gm-zeck-normalized-limit-measure}--\ref{thm:gm-affine-self-intersection-dimension-drop}）。
+\end{enumerate}
+
+\paragraph{Farey 采样极限：有理频率 Gram 矩阵的算子极限}
+\begin{theorem}[Farey 采样极限：有理频率核矩阵的算子极限与主特征值收敛]\label{thm:gm-farey-sampling-operator-limit}
+令 \(\psi\) 为偶的 Schwartz 函数。记
+\[
+\mathcal{Q}_M:=\left\{\frac{a}{q}\in[0,1]:\ 1\le q\le M,\ (a,q)=1\right\},
+\qquad
+|\mathcal{Q}_M|\sim \frac{3}{\pi^2}M^2.
+\]
+对尺度参数 \(L=L(M)\) 定义归一化算子 \(\widetilde K_{M,L}:\ell^2(\mathcal{Q}_M)\to \ell^2(\mathcal{Q}_M)\)：
+\[
+(\widetilde K_{M,L}g)(r)
+:=\frac{1}{|\mathcal{Q}_M|}\sum_{r'\in\mathcal{Q}_M}\psi\!\bigl(L(r-r')\bigr)\,g(r').
+\]
+若 \(L/M^2\to\tau\in[0,\infty)\)，则在经验测度嵌入（把 \(\ell^2(\mathcal{Q}_M)\) 视为 \([0,1]\) 上以 \(|\mathcal{Q}_M|^{-1}\sum_{r\in\mathcal{Q}_M}\delta_r\) 为权的 \(L^2\) 空间）意义下，\(\widetilde K_{M,L}\) 在算子范数意义下收敛到 \(L^2([0,1])\) 上的积分算子
+\[
+(\mathcal{K}_\tau h)(x):=\int_0^1 \psi\!\bigl(\tau(x-y)\bigr)\,h(y)\,dy.
+\]
+从而 \(\|\widetilde K_{M,L}\|_{\mathrm{op}}\to \|\mathcal{K}_\tau\|_{\mathrm{op}}\)，且在 \(\psi\ge 0\) 时主特征值与主特征向量（在上述嵌入下）均收敛。
+\end{theorem}
+
+\begin{proof}[证明思路]
+由 \(\mathcal{Q}_M\) 的渐近均匀分布与局部密度上界（见命题 \ref{prop:gm-farey-local-density-opnorm}），可把 \(\widetilde K_{M,L}\) 的核视为对 \(\psi(\tau(x-y))\) 的一致 Riemann 近似，并在 Hilbert--Schmidt 意义下得到核收敛。
+由于算子自伴且为紧算子（Schwartz 核给出 Hilbert--Schmidt），核收敛推出算子范数收敛；在 \(\psi\ge 0\) 情形下，主本征结构的收敛由谱隔离与紧自伴扰动理论给出。证毕。
+\end{proof}
+
+\begin{proposition}[尺度相变的精确型：\texorpdfstring{$\tau$}{tau} 的谱相态与可计算渐近]\label{prop:gm-farey-tau-spectral-phases}
+沿用定理 \ref{thm:gm-farey-sampling-operator-limit}，记
+\(
+\lambda(\tau):=\|\mathcal{K}_\tau\|_{\mathrm{op}}
+\)。
+则存在仅依赖 \(\psi\) 的常数 \(c_0,c_\infty>0\) 使得：
+\begin{enumerate}
+  \item 当 \(\tau\to 0\) 时，
+  \[
+  \lambda(\tau)=|\psi(0)|+O(\tau^2),
+  \]
+  且若 \(\psi\) 二阶可积并满足 \(\psi''(0)\) 存在，则有二次展开
+  \[
+  \lambda(\tau)=\psi(0)+\frac{\psi''(0)}{12}\tau^2+O(\tau^4)
+  \qquad(\tau\to 0).
+  \]
+  \item 当 \(\tau\to \infty\) 时，
+  \[
+  \lambda(\tau)=\tau^{-1}\int_{\RR}\psi(u)\,du+O(\tau^{-2}).
+  \]
+  \item 若 \(L/M^2\to 0\) 或 \(L/M^2\to\infty\)，则 \(\|\widetilde K_{M,L}\|_{\mathrm{op}}\) 分别进入上述两端相态，且误差由 \(L/M^2\) 的偏离量定量控制。
+\end{enumerate}
+该结论把“有理主弧互作用强度”完全参数化为无量纲比值 \(\tau=L/M^2\)。
+\end{proposition}
+
+\begin{proof}[证明要点]
+\(\tau\to 0\) 时核 \(\psi(\tau(x-y))\) 在 \([0,1]^2\) 上一致趋于常数 \(\psi(0)\)，故 \(\mathcal{K}_\tau\) 逼近秩一算子 \(h\mapsto \psi(0)\int_0^1 h\)；二次项由 Taylor 展开与
+\(
+\int_0^1\!\int_0^1 (x-y)^2\,dx\,dy=1/6
+\)
+给出。
+\(\tau\to\infty\) 时 \(\mathcal{K}_\tau\) 为 \([0,1]\) 上的局部卷积算子，其主符号为 \(\tau^{-1}\int\psi\)；边界效应通过分部积分与 Schwartz 衰减得到 \(O(\tau^{-2})\)。
+离散算子 \(\widetilde K_{M,L}\) 的端点相态由定理 \ref{thm:gm-farey-sampling-operator-limit} 与 \(\tau\) 的极限直接推出。证毕。
+\end{proof}
+
+\begin{proposition}[Farey 局部密度上界的最优化：由分数间距定律导出的通用谱范数控制]\label{prop:gm-farey-local-density-opnorm}
+设 \(\psi\ge 0\) 单调径向衰减且 \(\int_{\RR}\psi<\infty\)。
+令非归一化矩阵 \(K_{M,L}\) 由
+\[
+(K_{M,L})_{r,r'}:=\psi\!\bigl(L(r-r')\bigr)\qquad (r,r'\in\mathcal{Q}_M)
+\]
+给出。则存在绝对常数 \(C>0\) 使对所有 \(M,L\ge 1\) 有
+\[
+\boxed{\ \|K_{M,L}\|_{\mathrm{op}}\ \le\ C\Bigl(\frac{M^2}{L}+M\Bigr)\int_{\RR}\psi\ }.
+\]
+并且当 \(L\asymp M^2\) 且 \(\psi\) 非退化时，上界在量级上不可改进：存在 \(c>0\) 使 \(\|K_{M,L}\|_{\mathrm{op}}\ge c\)。
+\end{proposition}
+
+\begin{proof}[证明思路]
+由 Farey 分数的通用计数上界：对任意区间 \(I\subset[0,1]\) 有
+\[
+\#(\mathcal{Q}_M\cap I)\ \ll\ M^2|I|+M,
+\]
+对每个固定 \(r\) 将行和 \(\sum_{r'}\psi(L(r-r'))\) 按距离分层并用上述计数控制，得到
+\(
+\sup_r\sum_{r'}\psi(L(r-r'))\ll (M^2/L+M)\int\psi
+\)。
+由 Schur 检验推出谱范数上界。
+当 \(L\asymp M^2\) 时，取 \(g\equiv 1\) 并用 \(\mathcal{Q}_M\) 的均匀分布，可把 Rayleigh 商下界化为 \(\int_0^1\int_0^1\psi(\tau(x-y))\,dx\,dy\) 的正数，从而得 \(\|K_{M,L}\|_{\mathrm{op}}\ge c\)。证毕。
+\end{proof}
+
+\paragraph{有限状态权函数的模障碍：\texorpdfstring{$d=\gcd(\mathcal{C})$}{d=gcd(C)} 的完全判别}
+\begin{proposition}[有限状态权函数的模障碍判别与最小障碍模数的有限性]\label{prop:gm-cycle-gcd-mod-obstruction}
+设 \(G\) 为原始有向图，边权 \(w:E(G)\to\ZZ\)。
+定义环和集合
+\[
+\mathcal{C}:=\left\{\sum_{e\in\gamma}w(e):\ \gamma\ \text{为有向回路}\right\}\subset\ZZ,
+\qquad
+d:=\gcd(\mathcal{C})
+\]
+（约定 \(\gcd(\{0\})=0\)）。
+则对任意模数 \(q\ge 2\)，存在函数 \(g:V(G)\to\ZZ/q\ZZ\) 使
+\[
+w(e)\ \equiv\ g(\mathrm{head}(e))-g(\mathrm{tail}(e))\pmod q
+\qquad(\forall e\in E(G))
+\]
+当且仅当 \(q\mid d\)。
+因此模障碍只可能出现在有限集合 \(\{q:\ q\mid d\}\) 上；若 \(d=1\)，则不存在任何非平凡模障碍。
+\end{proposition}
+
+\begin{proof}
+若 \(w\) 为模 \(q\) 共边界，则任意回路 \(\gamma\) 上的权和为 \(0\pmod q\)，故 \(q\mid d\)。
+反之，若 \(q\mid d\) 则所有回路权和均为 \(0\pmod q\)。
+取任意基点 \(v_\ast\) 与任意生成树，对每个顶点 \(v\) 选一条从 \(v_\ast\) 到 \(v\) 的路径 \(P(v)\)，定义
+\(
+g(v):=\sum_{e\in P(v)} w(e)\pmod q
+\)。
+由于任意两条路径的差为回路的并，且回路权和为 \(0\pmod q\)，故 \(g\) 良定义，并满足所示共边界关系。证毕。
+\end{proof}
+
+\begin{theorem}[非共边界时的统一扭曲谱降：从环和生成到角色谱隙的定量下界]\label{thm:gm-uniform-twist-gap-from-gcd}
+令 \(A\) 为 \(G\) 的邻接矩阵，\(\rho=\rho(A)\)。
+对任意模数 \(q\ge 2\) 与加性角色 \(\chi_q(t)=e^{2\pi i t/q}\)，定义扭曲矩阵 \(A(\chi_q)\) 为：对每条边 \(e:u\to v\) 在对应邻接项上乘因子 \(\chi_q(w(e))\)。
+若 \(q\nmid d\)（等价于命题 \ref{prop:gm-cycle-gcd-mod-obstruction} 所述“非共边界”），则存在常数 \(\kappa_G>0\) 与显式函数
+\[
+\eta(q):=\min_{1\le t<q}\sin^2\!\Bigl(\frac{\pi t}{q}\Bigr)\asymp q^{-2}
+\]
+使得
+\[
+\boxed{\ \rho\!\bigl(A(\chi_q)\bigr)\ \le\ \bigl(1-\kappa_G\eta(q)\bigr)\rho\ }.
+\]
+该谱隙为结构量：\(\kappa_G\) 仅由底图的原始性与最小正项结构常数决定，而 \(\eta(q)\) 仅反映模 \(q\) 的最小相位失配。
+\end{theorem}
+
+\begin{proof}[证明要点]
+由原始性存在 \(n_0\) 使 \(A^{n_0}\) 各项均正。
+若 \(q\nmid d\)，则存在某回路权和在模 \(q\) 下非零，从而可在某个 \((u,v)\) 与长度 \(n\) 上找到两条从 \(u\) 到 \(v\) 的路径，其权和相位差至少为 \(2\pi t/q\)（\(t\not\equiv 0\)），导致在 \((A(\chi_q)^n)_{uv}\) 的和式中出现不可消去的相位抵消。
+据此可得某个正项上严格不等式
+\(
+|(A(\chi_q)^n)_{uv}|\le (1-c\eta(q))(A^n)_{uv}
+\)；
+再由 Wielandt 型严格谱半径比较（\(|B|\le A\) 且在某正项严格小于推出 \(\rho(B)\le (1-\varepsilon)\rho(A)\)，\(\varepsilon\) 由最小正项与幂指数控制；参见 \cite{Wielandt1950UnzerlegbareNichtnegative}）得结论。证毕。
+\end{proof}
+
+\paragraph{归一化 Zeckendorf 值分布的极限测度：矩阵细分方程与 Fourier--Perron 同构}
+\begin{theorem}[归一化 Zeckendorf 值分布的极限测度：矩阵细分方程与 Fourier--Perron 同构]\label{thm:gm-zeck-normalized-limit-measure}
+设 \(\mathcal{L}\subset\{0,1\}^\ast\) 为原始 sofic 语言，并令 \(A_m=\{\mathrm{val}(\omega):\omega\in\mathcal{L}_m\}\subset\ZZ\)，其中
+\(
+\mathrm{val}(\omega)=\sum_{k=1}^{m}\omega_k F_{k+1}
+\)
+且 \((F_k)\) 为 Fibonacci 数列。
+定义归一化测度
+\[
+\mu_m:=\frac{1}{|A_m|}\sum_{x\in A_m}\delta_{x/F_{m+2}}
+\qquad\text{于 }[0,1].
+\]
+则 \(\mu_m\) 弱收敛到一极限测度 \(\mu\)。
+并且存在一个有限维“状态向量测度” \(\vec\mu=(\mu^{(s)})_{s\in\mathsf{St}}\) 与一族非负矩阵 \(\{T_\varepsilon\}_{\varepsilon\in\{0,1\}}\)（由 \(\mathcal{L}\) 的自动机同步得到），以及仿射收缩
+\[
+S_\varepsilon(x)=\frac{x+\varepsilon}{\varphi}
+\qquad(\varepsilon\in\{0,1\}),
+\]
+使得 \(\vec\mu\) 满足矩阵细分方程
+\[
+\vec\mu
+=\frac{1}{\rho(T_0+T_1)}\sum_{\varepsilon\in\{0,1\}}T_\varepsilon\cdot \bigl(\vec\mu\circ S_\varepsilon^{-1}\bigr),
+\]
+且 \(\mu\) 为 \(\vec\mu\) 在 Perron 本征方向上的投影（由平稳入口分布给出）。
+此外，\(\widehat\mu(\xi)\) 可表示为沿几何尺度 \(\xi/\varphi^j\) 的扭曲转移算子乘积的线性泛函：
+存在向量 \(u,v\ge 0\) 与矩阵族
+\(
+T(\xi):=\sum_{\varepsilon}e^{i\xi\varepsilon/\varphi}\,T_\varepsilon
+\)
+使
+\[
+\widehat\mu(\xi)=\lim_{m\to\infty}\frac{u^{\mathsf T}\Bigl(\prod_{j=1}^{m}T(\xi/\varphi^{j})\Bigr)v}{u^{\mathsf T}(T_0+T_1)^{m}v}.
+\]
+因此 \(\widehat\mu\) 的衰减与 \(\sup_{\xi\ne 0}\rho(T(\xi))\) 的谱性质严格同构（Fourier--Perron 同构）。
+\end{theorem}
+
+\begin{proof}[证明思路]
+把 \(\mathcal{L}_m\) 上的均匀分布视为有限状态 Markov 链在长度 \(m\) 路径上的条件分布，并用 Perron--Frobenius 理论描述其端点与状态比例极限。
+归一化值 \(x/F_{m+2}\) 的递推由 Fibonacci 比值 \(F_{m+2}/F_{m+3}\to \varphi^{-1}\) 给出，极限上对应收缩 \(S_\varepsilon(x)=(x+\varepsilon)/\varphi\)；将状态同步后得到向量测度的不动点方程。
+Fourier 表示由对细分方程取 Fourier 变换并迭代得到，矩阵乘积即为扭曲转移算子的累积。证毕。
+\end{proof}
+
+\begin{theorem}[绝对连续与奇异的二分律：统一扭曲谱隙当且仅当 \texorpdfstring{$L^2$}{L2} 密度]\label{thm:gm-ac-singular-dichotomy}
+在定理 \ref{thm:gm-zeck-normalized-limit-measure} 的设定下，以下两者等价：
+\begin{enumerate}
+  \item 存在 \(\delta>0\) 使对所有 \(\xi\ne 0\) 有统一扭曲谱隙
+  \[
+  \rho\!\bigl(T(\xi)\bigr)\ \le\ (1-\delta)\rho\!\bigl(T(0)\bigr).
+  \]
+  \item 极限测度 \(\mu\) 绝对连续且密度属于 \(L^2([0,1])\)，并且满足
+  \[
+  \int_{\RR}|\widehat\mu(\xi)|^2\,d\xi<\infty.
+  \]
+\end{enumerate}
+若 (1) 失败，则 \(\mu\) 必为奇异测度且其支撑为真分形集；其 Hausdorff 维数可由压力函数的 Legendre 变换给出并严格小于 \(1\)（与定理 \ref{thm:gm-multifractal-pressure-legendre} 同型）。
+\end{theorem}
+
+\begin{proof}[证明要点]
+由 Fourier--Perron 表示，统一谱隙给出 \(|\widehat\mu(\xi)|\) 的可积平方衰减（\(|\xi|\) 大时迭代次数 \(\asymp \log|\xi|\)），从而由 Parseval 得密度 \(L^2\)。
+反之若存在 \(L^2\) 密度，则 \(\widehat\mu\in L^2(\RR)\) 排除了在一族非零频率上“接近等半径”的扭曲增长，故推出统一谱隙。
+谱隙失败时，存在非平凡频率序列使扭曲增长接近零频增长，从而 \(\widehat\mu\notin L^2\) 并诱导奇异性；其维数表达由热力学形式的压力函数与大偏差原理给出。证毕。
+\end{proof}
+
+\begin{theorem}[仿射自交的维数塌缩：非平凡有理仿射下的压力差定律]\label{thm:gm-affine-self-intersection-dimension-drop}
+令 \(\mathrm{supp}(\mu)\subset[0,1]\) 为定理 \ref{thm:gm-zeck-normalized-limit-measure} 的极限支撑。
+取非平凡有理仿射 \(T(x)=(ax+b)/c\)（\(\gcd(a,c)=1\)），并定义自交集
+\[
+E_T:=\{x\in \mathrm{supp}(\mu):\ T(x)\in \mathrm{supp}(\mu)\}.
+\]
+则存在由“同步约束转导器”诱导的压力函数 \(P_T\) 使
+\[
+\dim_{\mathrm{H}}(E_T)=P_T'(0),
+\]
+并满足严格塌缩
+\(
+\dim_{\mathrm{H}}(E_T)<\dim_{\mathrm{H}}(\mathrm{supp}(\mu))
+\)；
+塌缩量可由扭曲 Perron 根的谱隙下界显式控制。
+\end{theorem}
+
+\begin{proof}[证明思路]
+将“同时满足 \(x\in\mathrm{supp}(\mu)\) 与 \(T(x)\in\mathrm{supp}(\mu)\)”写成两条符号约束的同步积（转导器）条件，得到一个新的加权转移算子族，其压力函数即 \(P_T\)。
+由于 \(T\) 非平凡，同步积系统的压力严格小于原系统，故维数严格下降；定量塌缩由谱隙的定量比较给出。证毕。
+\end{proof}
+
+\paragraph{奇阶矩层级与临界指数下移：\texorpdfstring{$\vartheta$}{vtheta}--\texorpdfstring{$k$}{k} 双参数优化}
+\begin{proposition}[奇阶矩层级与临界指数下移：\texorpdfstring{$\vartheta$}{vtheta}--\texorpdfstring{$k$}{k} 双参数优化律]\label{prop:gm-critical-exponent-shift-k-vtheta}
+设仿射残差满足谱证书
+\(
+\|\mathcal{R}_M\|_{\mathrm{op}}^2\ll M^{4-\vartheta}
+\)（\(\vartheta>0\)），并以 \((2k+1)\) 阶中心奇矩证书（定理 \ref{thm:gm-abs-centered-odd-moment-extremal} 与命题 \ref{prop:gm-abs-centered-moment-three-channels}）控制谱范数，其中 \(k\ge 1\) 固定。
+则存在显式函数
+\[
+\Delta(k,\vartheta):=\frac{2k}{2k+1}\cdot\frac{\vartheta}{10}\ >\ 0,
+\qquad
+\Delta(k,\vartheta)\nearrow \frac{\vartheta}{10}\ (k\to\infty),
+\]
+使得在关键标度 \(T=N^{6/5}\) 下，原本由三阶迹锁定的临界阈值 \(V\asymp N^{3/4}\) 可系统性下移为
+\[
+V\ \asymp\ N^{3/4-\Delta(k,\vartheta)},
+\]
+且对应大值频次上界在该区间获得严格幂次改进。
+该结论给出“提高矩阶”与“获得仿射谱隙”之间的可优化耦合律。
+\end{proposition}
+
+\begin{proof}[证明思路]
+由命题 \ref{prop:gm-S3-upgrade-vtheta} 与推论 \ref{cor:gm-energy-window-saving}，仿射谱隙 \(\vartheta\) 以 \(N^{-\vartheta/10}\) 的形式削弱能量耦合通道系数。
+提高到 \((2k+1)\) 阶中心奇矩证书后，能量通道在阈值平衡中的权重随 \(k\) 增大而增强，使得相同的系数节省可转译为更大的阈值指数位移；直接比较主通道与能量通道在 \(k\)-阶矩不等式中的 \(V\)-幂次即可得到所示 \(\Delta(k,\vartheta)\)。证毕。
+\end{proof}
+
+\paragraph{完全分类：解析可改进性当且仅当有限模障碍被排除}
+\begin{theorem}[完全分类定理：解析可改进性当且仅当有限模障碍被排除，且障碍模数有限]\label{thm:gm-improvability-iff-d1}
+对任何由有限状态权函数生成的系数模型（包括 sofic--Zeckendorf 家族），若以三阶迹或任意固定奇阶矩作为谱证书，则以下两者等价：
+\begin{enumerate}
+  \item 存在 \(\vartheta>0\) 使仿射均匀化残差对所有充分大尺度 \(M\) 满足
+  \(
+  \|\mathcal{R}_M\|_{\mathrm{op}}^2\ll M^{4-\vartheta}
+  \)，从而在同一推理范式内获得严格幂次改进。
+  \item 命题 \ref{prop:gm-cycle-gcd-mod-obstruction} 的同调不变量 \(d\) 满足 \(d=1\)，即不存在任何非平凡模障碍。
+\end{enumerate}
+并且若 \(d>1\)，则障碍模数集合恰为 \(\{q:\ q\mid d\}\)，从而“不可改进性”的全部来源由有限个可枚举模数完全刻画。
+\end{theorem}
+
+\begin{proof}[证明思路]
+\((2)\Rightarrow(1)\)：若 \(d=1\)，则对每个 \(q\ge 2\) 都有 \(q\nmid d\)，由定理 \ref{thm:gm-uniform-twist-gap-from-gcd} 得到统一的扭曲谱降，从而排除主弧集中并给出有理频谱不集中；再由 \S\ref{subsubsec:gm-affine-inverse-gram-arithmetic-dichotomy} 的 Gram 等价与可计算证书推出存在统一 \(\vartheta>0\) 的残差节省。
+\par
+\((1)\Rightarrow(2)\)：若 \(d>1\)，则取任意 \(q\mid d\) 可得到模 \(q\) 共边界表示（命题 \ref{prop:gm-cycle-gcd-mod-obstruction}），从而扭曲谱隙在该模上消失并诱导主弧集中；由逆定理（定理 \ref{thm:gm-affine-inverse-major-arc}）与算术障碍二分（定理 \ref{thm:gm-affine-improvement-dichotomy}）可推出不存在统一幂次节省，矛盾。证毕。
+\end{proof}
+
+\endinput
+

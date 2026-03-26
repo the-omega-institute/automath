@@ -1,0 +1,689 @@
+\frac{\|C_c-\overline C_c\,\mathbf{1}\mathbf{1}^{\top}\|_F}{|\overline C_c|}.
+$$
+该量是无量纲且可审计的：它直接度量“尾部切片偏离 rank-$0$ 常数矩阵”的相对强度，并比仅报告 $\mathrm{sd}(c)$ 更一致（已做尺度归一）。由二级摘要输出可复现得到 \(\eta_{\mathrm{tail}}\approx 0.433880\)。
+\end{remark}
+
+\begin{remark}[尾部近标量化与有理尾律迹象]\label{rem:arity-335-rational-tail}
+令 $\overline C_c:=\frac19\sum_{a,b}C^{(3,3,5)}_{a,b,c}$。由二级摘要输出可得
+\[
+\overline C_2\approx -0.035674,\qquad
+\overline C_3\approx -0.058700,\qquad
+\overline C_4\approx -0.071472,
+\]
+并且 $\max\mathrm{dev}(c)$ 在 $c=3,4$ 已降到 $10^{-3}$ 量级，故尾部切片接近标量矩阵。数值上它们分别接近
+\(
+-(1/28),\ -(1/17),\ -(1/14)
+\)
+的简单倒数（相对误差约 $10^{-3}$），指向存在可检验的“有理尾律”数值刚性。
+\end{remark}
+
+\begin{remark}[碰撞稀少但主导慢模与常数各向异性（near-resonant cocycle 诊断）]\label{cor:arity-335-rare-collision-dominant}
+在真实输入 40 状态核的三势压力 $P(\theta_e,\theta_-,\theta_2)=\log\rho(M_\theta)$ 下，碰撞触发 $\varphi_2=\mathbf{1}_{\{d=2\}}$ 的典型密度为
+\[
+\partial_{\theta_2}P(0)=\frac{3-\sqrt5}{10}\approx 0.076393,
+\]
+即在最大熵基准附近碰撞事件密度较低（见上文关于 $\nabla P(0)$ 的闭式）。
+但对 \(((3,3,5))\) 的 Dirichlet--Mertens 分层（第三轴为 $c=N_2(\gamma)\bmod 5$），可复现输出同时显示：
+\begin{itemize}
+  \item \textbf{慢模主导：}最坏扭曲谱半径由纯碰撞扭曲达到（注记 \ref{prop:arity-335-collision-dominant}），其衰减尺度由注记 \ref{cor:arity-335-collision-mixing-scale} 给出；
+  \item \textbf{常数各向异性：}聚合漂移向量 $S_c=\sum_{a,b}C^{(3,3,5)}_{a,b,c}$ 在 $c$ 轴上呈强非均匀分配（注记 \ref{cor:arity-335-collision-residue-drift} 与二级摘要输出）。
+\end{itemize}
+因此尽管碰撞事件的典型密度较低，它仍能同时决定最坏等分布误差的指数尺度与常数级漂移的主要方向；其组合学表征可归结为“近共边界/近旋转因子”的可检验信号：稀少事件携带相干相位，使得其 \(\ZZ/5\)-cocycle 同时控制常数项偏置与最坏扭曲慢模。
+\end{remark}
+
+\begin{remark}[\texorpdfstring{$\ZZ/5$}{Z/5} 轴的傅里叶压缩特征量（精确恒等分解）]\label{prop:arity-335-fourier-fingerprint}
+对每个固定的 $(a,b)$，令 $f_{a,b}(c):=C^{(3,3,5)}_{a,b,c}$（$c\in\ZZ/5$），并记 $\omega_5=e^{2\pi i/5}$。定义离散傅里叶系数
+\[
+\widehat f_{a,b}(j):=\frac15\sum_{c=0}^{4} f_{a,b}(c)\,\omega_5^{-jc},
+\qquad j\in\{0,1,2,3,4\}.
+\]
+则对所有 $c$ 有恒等分解
+\[
+f_{a,b}(c)
+=\widehat f_{a,b}(0)
++2\Re\bigl(\widehat f_{a,b}(1)\,\omega_5^{c}\bigr)
++2\Re\bigl(\widehat f_{a,b}(2)\,\omega_5^{2c}\bigr),
+\]
+从而五张切片在 $c$ 轴上的全部信息可被等价地压缩为三张矩阵：均值矩阵 $\widehat f(0)$ 与两张复矩阵 $\widehat f(1),\widehat f(2)$。该分解与其数值（含 $\|\widehat f(1)\|_\infty,\|\widehat f(2)\|_\infty$）由同一脚本输出并可审计复核。
+\end{remark}
+
+\begin{theorem}[角色分解 \texorpdfstring{$\Rightarrow$}{=>} 低秩机制：\texorpdfstring{$((3,3,5))$}{(3,3,5)} 的秩一外积分解与 Parseval 能量恒等式]\label{thm:arity-335-character-energy}
+把中心化常数张量定义为
+\[
+\widetilde C_{a,b,c}:=C^{(3,3,5)}_{a,b,c}-\frac{\mathsf{M}}{45},
+\qquad
+\mathsf{M}:=\sum_{a=0}^2\sum_{b=0}^2\sum_{c=0}^4 C^{(3,3,5)}_{a,b,c}.
+\]
+将其展平为矩阵 \(\widetilde T\in\CC^{5\times 9}\)，行指标为 \(c\in\ZZ/5\)，列指标为扁平化后的 \((a,b)\in(\ZZ/3)^2\)。
+对每个非平凡角色索引 \(j=(j_1,j_2,j_3)\in(\ZZ/3)^2\times(\ZZ/5)\setminus\{(0,0,0)\}\)，令
+\[
+(v_{j_3})_c:=\omega_5^{-j_3 c}\in\CC^{5},
+\qquad
+(w_{j_1,j_2})_{(a,b)}:=\omega_3^{-j_1 a}\omega_3^{-j_2 b}\in\CC^{9},
+\]
+并定义未归一化的三维离散傅里叶系数
+\[
+\widehat{\widetilde C}(j)
+:=
+\sum_{a=0}^2\sum_{b=0}^2\sum_{c=0}^4
+\widetilde C_{a,b,c}\,\omega_3^{j_1 a}\omega_3^{j_2 b}\omega_5^{j_3 c}.
+\]
+则成立严格分解
+\[
+\boxed{\;
+\widetilde T
+\ =\ 
+\frac{1}{45}\sum_{j\neq(0,0,0)}
+\widehat{\widetilde C}(j)\,v_{j_3}\,w_{j_1,j_2}^{\mathsf T}\; }.
+\]
+并且由角色正交性得到 Parseval 恒等式
+\[
+\boxed{\;
+\|\widetilde T\|_F^2
+:=
+\sum_{a,b,c}|\widetilde C_{a,b,c}|^2
+:=
+\frac{1}{45}\sum_{j\neq(0,0,0)}\bigl|\widehat{\widetilde C}(j)\bigr|^2\; }.
+\]
+\end{theorem}
+\begin{proof}
+由有限阿贝尔群 \(G=(\ZZ/3)^2\times(\ZZ/5)\) 上的离散 Fourier 反演与角色正交性（Parseval）直接得到分解与范数恒等式。证毕。
+\end{proof}
+
+\begin{remark}[可审计诊断：角色能量头部占比 \texorpdfstring{$\Rightarrow$}{=>} 低秩可压缩]\label{rem:arity-335-character-energy-diagnostic}
+定理 \ref{thm:arity-335-character-energy} 表明：每个角色 \(j\) 在展平矩阵上只贡献一个秩一外积模态，且其 Frobenius 能量恰为 \(|\widehat{\widetilde C}(j)|^2/45\)。
+给定 \(\varepsilon\in(0,1)\)，若存在角色集合 \(J\subset G\setminus\{0\}\) 使得 \(\sum_{j\in J}|\widehat{\widetilde C}(j)|^2\ge (1-\varepsilon)\sum_{j\ne 0}|\widehat{\widetilde C}(j)|^2\)，则由定理 \ref{thm:arity-335-character-energy} 可将 \(\widetilde T\) 以至多 \(|J|\) 个秩一模态近似，且剩余 Frobenius 能量占比不超过 \(\varepsilon\)。
+脚本 \texttt{scripts/exp\_arity\_335\_character\_energy.py} 输出中心化张量的角色能量头部表（并以 Parseval 误差作一致性核验）：
+\input{sections/generated/tab_arity_335_character_energy_head}
+\end{remark}
+
+\begin{remark}[偏置能量的 Parseval 守恒式（强一致性检验）]\label{rem:arity-335-parseval-bias}
+令 \(G:=\ZZ/5\)。
+对任意实向量 \(x=(x_c)_{c\in G}\)，记其去均值部分为
+\[
+x_c^\circ:=x_c-\frac{1}{|G|}\sum_{c'\in G}x_{c'},
+\]
+并定义离散傅里叶系数
+\[
+\widehat x(j):=\sum_{c\in G}x_c^\circ\,\omega_5^{-jc}\qquad(j\in G).
+\]
+则由有限阿贝尔群角色的正交关系（Plancherel）有 Parseval 恒等式
+\[
+\sum_{c\in G}\bigl|x_c^\circ\bigr|^2
+:=\frac{1}{|G|}\sum_{j\in G}\bigl|\widehat x(j)\bigr|^2
+:=\frac{1}{|G|}\sum_{j\in G\setminus\{0\}}\bigl|\widehat x(j)\bigr|^2,
+\]
+其中最后一步使用了 \(\widehat x(0)=\sum_c x_c^\circ=0\)。
+\par
+把 \(x\) 取为聚合漂移 \(S_c=\sum_{a,b}C^{(3,3,5)}_{a,b,c}\)（见二级摘要的数值输出），则该恒等式给出一个单标量的强一致性检验：既可在 \(c\)-空间直接计算左边，也可在非平凡频率（纯第三轴扭曲）空间用 \(\widehat S(1),\widehat S(2)\) 计算右边；两者必须一致。
+\par
+对 \(G=\ZZ/5\) 上的实向量 \(S\)，由自对偶对称（推论 \ref{cor:arity-335-cosine-only}）有共轭配对 \(\widehat S(5-j)=\overline{\widehat S(j)}\)（\(j=1,2\)）。因此非平凡频率的 Fourier 能量集中在共轭对 \(j=\pm 1\) 与 \(j=\pm 2\) 上。对 \(x=S\)，二级摘要给出具体的 Fourier 系数幅值：
+\[
+|\widehat S(1)|=|\widehat S(4)|\approx 0.474832655609,\qquad |\widehat S(2)|=|\widehat S(3)|\approx 0.371177729542.
+\]
+由 Parseval 恒等式，共轭对 \(j=\pm 1\) 的能量占比为 \(2|\widehat S(1)|^2/\sum_{j\neq 0}|\widehat S(j)|^2\approx 0.6207\)，共轭对 \(j=\pm 2\) 的能量占比为 \(2|\widehat S(2)|^2/\sum_{j\neq 0}|\widehat S(j)|^2\approx 0.3793\)。因此``常数张量低秩/可压缩''的机制为：在 \(G=\ZZ/5\) 的 Fourier 分解中，非平凡频率的能量由两个共轭对主导，其中对 \(j=\pm 1\) 贡献约 \(62.07\%\)，对 \(j=\pm 2\) 贡献约 \(37.93\%\)，两者合计占 \(100\%\)；这一严格的群论分解与 Parseval 守恒式形成可审计的一致性检验。
+\end{remark}
+
+\begin{corollary}[自对偶强制的余弦模态：聚合漂移 \(S_c\) 的偶性]\label{cor:arity-335-cosine-only}
+沿用推论 \ref{cor:arity-335-collision-residue-drift} 的聚合漂移向量 \(S_c\)（\(c\in\ZZ/5\)）。
+若第三轴扭曲仅依赖于输出位/碰撞触发（从而满足附录 \ref{app:witt-weighted} 中的自对偶对称，并在一维角色通道上满足命题 \ref{prop:kernel-self-dual-character} 的表示级函数方程），则非平凡频率的 Fourier 系数满足共轭配对
+\[
+\widehat S(5-j)=\overline{\widehat S(j)}\qquad(j=1,2),
+\]
+从而 \(S_c\) 必为偶函数：
+\[
+\boxed{\;
+S_c=S_{-c}\qquad(c\in\ZZ/5)\; }.
+\]
+等价地，在实 Fourier 模态分解中，\(S_c\) 的正弦模态系数必须为零，仅剩余弦模态。
+\end{corollary}
+\begin{proof}
+对循环群 \(\ZZ/5\)，非平凡角色成对满足 \(\chi^{-1}=\overline{\chi}\)。
+由命题 \ref{prop:kernel-self-dual-character}，扭曲通道在 \(\chi\) 与 \(\chi^{-1}\) 间被函数方程绑定；在单位根上取值时两通道常数项/有限部输出互为复共轭。
+因此 \(\widehat S(5-j)=\overline{\widehat S(j)}\)。将 inverse DFT 写成余弦/正弦基底即得 \(S_c=S_{-c}\)。证毕。
+\end{proof}
+
+\begin{remark}[\texorpdfstring{$c$}{c} 轴强度的精确标尺：全局 \texorpdfstring{$c$}{c}-方差的 Parseval 恒等式]\label{thm:arity-335-c-variance-identity}
+对每个固定的 \((a,b)\) 定义 \(c\)-均值
+\[
+\overline C_{a,b}:=\frac{1}{5}\sum_{c=0}^{4}C^{(3,3,5)}_{a,b,c}
+=\widehat f_{a,b}(0),
+\]
+并定义全局的 \(c\)-方差（第三轴能量）
+\[
+V_c:=\sum_{a=0}^{2}\sum_{b=0}^{2}\sum_{c=0}^{4}\Bigl(C^{(3,3,5)}_{a,b,c}-\overline C_{a,b}\Bigr)^2.
+\]
+则由上式的两谐波恒等分解与 \(\ZZ/5\) 上的 Parseval 恒等式，有精确恒等式
+\[
+\boxed{\ 
+V_c
+=10\Bigl(\|\widehat f(1)\|_F^2+\|\widehat f(2)\|_F^2\Bigr)
+\ }.
+\]
+其中 \(\|\cdot\|_F\) 为 \(3\times 3\) 矩阵的 Frobenius 范数（在 \((a,b)\) 上逐项平方求和后开方）。
+\par
+该恒等式把“第三轴强度”的常数级漂移从视觉/最坏谱口径，提升为一个\textbf{完全由常数张量本身定义、且可精确审计}的标量；并且它与两谐波矩阵 \(\widehat f(1),\widehat f(2)\)（亦可记为 \(A^{(1)},A^{(2)}\)）严格等价。
+\end{remark}
+
+\begin{remark}[低秩可压缩：\texorpdfstring{$((3,3,5))$}{(3,3,5)} 张量的三模近似特征量]\label{prop:arity-335-low-rank}
+把常数张量 $C^{(3,3,5)}_{a,b,c}$ 视为实矩阵 $T\in\RR^{5\times 9}$（行指标为 $c\in\{0,1,2,3,4\}$，列指标为扁平化后的 $(a,b)\in(\ZZ/3)^2$）。令其奇异值为 $s_1\ge \cdots\ge s_5$。二级摘要输出显示
+\[
+\frac{s_1^2}{\sum s_i^2}\approx 0.935619,\qquad
+\frac{s_1^2+s_2^2}{\sum s_i^2}\approx 0.986715,\qquad
+\frac{s_1^2+s_2^2+s_3^2}{\sum s_i^2}\approx 0.999866,
+\]
+因此仅用前三个奇异模态即可捕获接近全部 Frobenius 能量，整个 $45$ 项张量在常数级分辨率下可被极低维近似稳定表征（可作为新的核特征不变量）。
+\end{remark}
+
+\begin{remark}[低秩压缩与 Hankel 最小实现的同源性]\label{rem:arity-335-low-rank-vs-hankel}
+把前三奇异模态的剩余能量定义为
+\[
+\varepsilon_{\mathrm{extra}}
+:=1-\frac{s_1^2+s_2^2+s_3^2}{\sum_i s_i^2}\approx 1.34\times 10^{-4}.
+\]
+这一“超结构残差”并非仅是数值上“好看统计”：在窗口层的碰撞核 \(A_2\) 中，碰撞序列的 Hankel 秩恰为 \(3\)，并且三态 realization 为最小（定理 \ref{thm:pom-s2-rank-exact}）。
+因此当 \(((3,3,5))\) 的第三轴慢变量由碰撞 cocycle 主导时，常数张量在 \(c\)-轴上的有效自由度自然被压缩到极低维子空间；\(\varepsilon_{\mathrm{extra}}\) 可被视为“超出三态碰撞 realization 之外”的剩余耦合信息量的无量纲度量。
+\end{remark}
+
+\begin{proposition}[二次律常数的闭式锁定与 \texorpdfstring{$p^{-4}$}{p^{-4}} 修正]\label{prop:arity-collision-quadratic-closed}
+令 \(u=e^{z}\) 并定义压力函数
+$$
+P_\xi(z):=\log\rho\bigl(A_\xi(e^{z})\bigr)\qquad(z\ \text{在 }0\text{ 的邻域}).
+$$
+则 \(P_\xi\) 在 \(z=0\) 处解析，且偶阶导数具有闭式（见表 \ref{tab:arity_pure_collision_cubic_asymp_coeffs}）：
+$$
+P_\xi''(0)=\frac{6\sqrt5-5}{125}\approx 0.06733126292,
+\qquad
+P_\xi^{(4)}(0)=\frac{7+24\sqrt5}{3125}\approx 0.01941300207.
+$$
+因此当取单位根扭曲 \(u=e^{i\alpha}\) 且 \(\alpha\to 0\) 时，
+$$
+\log\frac{\rho\bigl(A_\xi(e^{i\alpha})\bigr)}{\rho\bigl(A_\xi(1)\bigr)}
+=-\frac{P_\xi''(0)}{2}\alpha^2+\frac{P_\xi^{(4)}(0)}{24}\alpha^4-\frac{P_\xi^{(6)}(0)}{6!}\alpha^6+\frac{P_\xi^{(8)}(0)}{8!}\alpha^8+O(\alpha^{10}),
+$$
+从而对奇素数 \(p\) 取 \(\alpha=2\pi/p\) 得到更强的渐近（包含 \(p^{-4}\) 修正）：
+$$
+\frac{\rho_{3,3,p}}{\lambda}
+\approx
+\exp\!\left(
+-\kappa_\infty\left(\frac{2\pi}{p}\right)^2+\frac{P_\xi^{(4)}(0)}{24}\left(\frac{2\pi}{p}\right)^4
+\right),
+\qquad
+\kappa_\infty:=\frac{P_\xi''(0)}{2}=\frac{6\sqrt5-5}{250}.
+$$
+\end{proposition}
+\input{sections/generated/tab_arity_pure_collision_cubic_asymp_coeffs}
+\begin{proof}
+对四态骨架纯碰撞扭曲矩阵 \(A_\xi(u)\)（\(u\in\CC\)），其特征多项式可分解为
+$$
+\det(\lambda I-A_\xi(u))=(\lambda+1)\bigl(\lambda^3-2\lambda^2-(u+1)\lambda+u\bigr).
+$$
+在 \(u=1\) 处 Perron 根为 \(\rho(A_\xi(1))=\varphi^2\)，且对应的三次方程根为单根；故由隐函数定理，Perron 分支在 \(u=1\) 的邻域解析延拓。
+令 \(u=e^z\) 得 \(\rho(A_\xi(e^z))\) 与 \(P_\xi(z)\) 在 \(z=0\) 的邻域解析。
+对三次方程作 \(z\) 的级数代入并逐阶匹配可得 \(P_\xi^{(2k)}(0)\) 的代数闭式；表 \ref{tab:arity_pure_collision_cubic_asymp_coeffs} 给出前几阶的可复现输出。
+对 \(z=i\alpha\) 取实部并按 Taylor 展开即得单位根扭曲的展开式与 \(p^{-4}\) 修正。证毕。
+\end{proof}
+
+\begin{remark}[纯碰撞通道的 near-1 pole：扩散律、四阶外推与样本外素数点]\label{rem:arity-335-near-coboundary-scaling}
+在 \(((3,3,p))\) 的第三轴取纯碰撞扭曲（\(\xi=\mathbf{1}_{\{d=2\}}\)）时，
+最慢模态在 \(p\to\infty\) 极限中必然进入 near-coboundary 小角 regime：
+令
+\(
+r_p:=\rho_{3,3,p}/\lambda
+\)
+与 \(\alpha:=2\pi/p\)，则由压力展开（命题 \ref{prop:arity-collision-quadratic-closed}）有
+\[
+\log r_p=-\kappa_\infty\,\alpha^2+\beta\,\alpha^4+O(\alpha^6),
+\qquad
+\kappa_\infty=\frac{\sigma_\xi^2}{2}\approx 0.03366563146,
+\quad
+\beta=\frac{P_\xi^{(4)}(0)}{24}\approx 8.088750861\times 10^{-4}.
+\]
+因此最直接、最稳定的四阶外推是
+\[
+\boxed{\ r_p\ \approx\ \exp(-\kappa_\infty\alpha^2+\beta\alpha^4)\ }.
+\]
+把该 near-1 pole 映回 \(s\)-平面（\(z=\lambda^{-s}\)）时，对应的主极点实部为
+\[
+s_p:=\frac{\log\rho_{3,3,p}}{\log\lambda}
+\;=\;
+1+\frac{\log r_p}{\log\lambda},
+\]
+即以 \(p^{-2}\) 的扩散律速度从 \(1\) 的左侧逼近。
+\par
+作为样本外（out-of-sample）的数值锚点（亦可视作“外推预测的必检点”），纯三次方程通道给出（表 \ref{tab:arity_pure_collision_cubic_primes}）：
+\[
+\begin{aligned}
+p=17:&\ r_p\approx 0.995427056029,\quad \Re(s_p)\approx 0.995237615093,\\
+p=19:&\ r_p\approx 0.996334946425,\quad \Re(s_p)\approx 0.996184854416,\\
+p=23:&\ r_p\approx 0.997495286896,\quad \Re(s_p)\approx 0.997394229511,\\
+p=29:&\ r_p\approx 0.998422700625,\quad \Re(s_p)\approx 0.998359823534,\\
+p=31:&\ r_p\approx 0.998619324725,\quad \Re(s_p)\approx 0.998564427126.
+\end{aligned}
+\]
+以上常数与素数点可由最小闭环脚本 \path{scripts/exp_arity_pure_collision_near1_pole_closed_loop.py} 一键复算并导出 JSON（便于审计与回归）。
+\end{remark}
+\input{sections/generated/tab_arity_pure_collision_cubic_primes}
+
+\begin{remark}[单位圆扭曲的偶性与无三次项]\label{lem:unit-circle-evenness}
+设 $M_\theta$ 为一个实矩阵族，且其条目关于 $e^{\mathrm{i}\theta}$ 实解析，并满足
+\[
+M_{-\theta}=\overline{M_\theta}\qquad(\theta\in\RR).
+\]
+记 $\rho(\theta):=\rho(M_\theta)$ 为谱半径，并设在 $\theta=0$ 附近存在简单的主特征值分支 $\Lambda(\theta)$（$\Lambda(0)>0$）。
+则 \(\rho(\theta)=\rho(-\theta)\) 且 \(\rho\) 在 \(0\) 的邻域为实解析偶函数；因此 \(\log(\rho(\theta)/\rho(0))\) 的 Taylor 展开只含偶次项，特别地
+\[
+\log\frac{\rho(\theta)}{\rho(0)}=-c_2\theta^2+c_4\theta^4+O(\theta^6),
+\qquad \theta\to 0.
+\]
+\end{remark}
+
+\begin{remark}[小角扭曲的二次律：$\kappa$ 的方差密度刻画]\label{prop:arity-335-kappa-variance}
+取碰撞 cocycle \(\xi=\mathbf{1}_{\{d=2\}}\)（沿边取值 \(0/1\)），并令三轴扭曲中第三轴取 \(N_2(\gamma)\bmod p\)。
+对 \(\theta\in\RR\) 定义纯碰撞扭曲矩阵
+$$
+M_\theta:=M(1,1,e^{\mathrm{i}\theta})\qquad(\text{仅对 }\xi\text{ 施加相位}).
+$$
+记 \(\Lambda(\theta)\) 为 \(M_\theta\) 的主特征值分支（\(\Lambda(0)=\lambda\)）。
+由于本系统为有限维原始非负矩阵的解析扰动，\(\Lambda(\theta)\) 在 \(\theta=0\) 的邻域解析（参见一般的有限维谱扰动理论）。
+则存在常数 \(\mu_\xi\in\RR\) 与 \(\sigma_\xi^2\ge 0\) 使得
+$$
+\log\frac{\Lambda(\theta)}{\lambda}
+=
+\mathrm{i}\mu_\xi\,\theta-\frac{\sigma_\xi^2}{2}\theta^2+O(\theta^3),
+\qquad \theta\to 0,
+$$
+从而
+$$
+\log\frac{|\Lambda(\theta)|}{\lambda}
+=
+-\frac{\sigma_\xi^2}{2}\theta^2+O(\theta^4).
+$$
+特别地，当 \(\theta=2\pi/p\) 时（\(p\) 为奇素数）有
+$$
+1-\frac{\rho_{3,3,p}}{\lambda}
+=
+\frac{\sigma_\xi^2}{2}\left(\frac{2\pi}{p}\right)^2
++
+O\!\left(p^{-4}\right),
+$$
+其中 \(\rho_{3,3,p}\) 为 \( ((3,3,p))\) 的最坏扭曲谱半径（且在可复现输出中由纯碰撞扭曲达到）。
+因此二次律常数的本体为
+$$
+\kappa_\infty:=\lim_{p\to\infty}\frac{1-\rho_{3,3,p}/\lambda}{(2\pi/p)^2}
+=\frac{\sigma_\xi^2}{2}.
+$$
+并且 \(\sigma_\xi^2\) 可由实参倾斜压力
+\(
+P(t):=\log\rho(M(1,1,e^t))
+\)
+给出：\(\sigma_\xi^2=P''(0)\)（与命题 \ref{prop:kernel-clt-ldp} 的有限状态 Markov 压力导数口径一致）。
+\end{remark}
+
+\begin{remark}[\texorpdfstring{$\kappa_\infty$}{kappa} 的变分/Poisson 方程表达（可计算）]\label{rem:arity-335-kappa-poisson}
+注记 \ref{prop:arity-335-kappa-variance} 给出 \(\kappa_\infty=\sigma_\xi^2/2\) 的“压力二阶导数”口径。
+同一常数亦可被刻画为一个严格凸的最小能量问题，并因此可由一把线性代数直接求出。
+\par
+令 \(A:=M(1,1,1)\) 为无扭曲核的非负邻接矩阵（把整数条目视为平行边计数），\(\lambda=\rho(A)\) 为 Perron 根。
+取左右 Perron 向量 \(r,\ell>0\) 并归一化 \(\ell^\top r=1\)。
+由 Parry 归一化得到马尔可夫核与平衡分布
+$$
+P_{ij}:=\frac{A_{ij}r_j}{\lambda r_i},\qquad \pi_i:=\ell_i r_i.
+$$
+对边 cocycle \(\xi\in\{0,1\}\)（此处为碰撞 cocycle \(\xi=\mathbf{1}_{\{d=2\}}\)），令边均值为
+$$
+\mu:=\sum_{i,j}\pi_iP_{ij}\,\mathbb{E}[\xi(i\to j)\mid i\to j],
+$$
+其中条件期望按“平行边的均匀选择”定义。
+对任意顶点函数 \(f:V\to\RR\) 定义残差能量泛函
+$$
+\mathcal{E}(f):=\sum_{i,j}\pi_iP_{ij}\,\mathbb{E}\Big[(\xi(i\to j)-\mu+f(j)-f(i))^2\ \big|\ i\to j\Big].
+$$
+则有效方差密度满足变分表达
+$$
+\boxed{\ \sigma_\xi^2=\inf_f\mathcal{E}(f)\ },
+$$
+并且极小点 \(f_\star\)（在规约条件 \(\sum_i\pi_if_i=0\) 下唯一）满足 Poisson 方程
+$$
+\boxed{\ (I-P)f=b,\qquad b_i:=\sum_jP_{ij}\,\mathbb{E}[\xi(i\to j)-\mu\mid i\to j]\ }.
+$$
+因此 \(\kappa_\infty=\sigma_\xi^2/2\) 不仅可由 \(\sigma_\xi^2=P''(0)\) 估计，也可通过求解 \((I-P)f=b\) 精确抽取。
+脚本 \texttt{scripts/exp\_arity\_335\_kappa\_poisson.py} 给出该计算的可复现实现，并与压力差分的 \(\sigma_\xi^2\) 逐项对照（两者一致到 \(10^{-9}\) 量级），同时给出 \(p=5\) 的离散角对照：
+\input{sections/generated/eq_arity_335_kappa_poisson}
+\end{remark}
+
+\begin{remark}[偶性强化的二次律与 Richardson 外推估计器]\label{rem:arity-335-richardson-kappa}
+由引理 \ref{lem:unit-circle-evenness}，$\log(\rho(\theta)/\lambda)$ 的展开不含奇次项，因此存在常数 $c_4\in\RR$ 使得
+\[
+1-\frac{\rho(\theta)}{\lambda}
+=\kappa_\infty\,\theta^2+c_4\,\theta^4+O(\theta^6),
+\qquad \theta\to 0.
+\]
+另一方面，若采用“对数压力”口径写作
+\[
+\log\frac{\rho(\theta)}{\lambda}
+=-\kappa_\infty\,\theta^2+\beta\,\theta^4+O(\theta^6),
+\]
+则两种系数满足确定关系
+\[
+\boxed{\ c_4=-(\beta+\kappa_\infty^2/2)\ }.
+\]
+对纯碰撞三次压力族（命题 \ref{prop:arity-collision-quadratic-closed}，表 \ref{tab:arity_pure_collision_cubic_asymp_coeffs}）该关系给出闭式数值
+\(
+c_4\approx -1.3755624569\times 10^{-3}<0
+\)，
+可用于将“拟合的四阶修正”与理论常数对齐，避免把 \(\log r\) 的四阶系数与 \(1-r\) 的四阶系数混用。
+对奇素数 $p$ 令 $\theta_p:=2\pi/p$，并记
+\[
+A(p):=\frac{1-\rho_{3,3,p}/\lambda}{(2\pi/p)^2},
+\]
+则
+\[
+A(p)=\kappa_\infty+\frac{c_4(2\pi)^2}{p^2}+O(p^{-4}).
+\]
+因此可用两个模数 $(p,q)$ 做 Richardson 外推消去 $p^{-2}$ 项，得到改良估计器
+\[
+\widehat\kappa(p,q)
+:=\frac{A(p)\,p^2-A(q)\,q^2}{p^2-q^2}
+=\kappa_\infty+O(p^{-4})+O(q^{-4}).
+\]
+若 $\widehat\kappa(5,7)$ 与 $\widehat\kappa(7,11)$（或 $\widehat\kappa(7,13)$）出现显著不一致，
+则可把 $p=5$ 识别为“特异共振模数”，而非普通的渐近点。
+\par
+进一步地，在真实输入 $40$ 状态核的纯碰撞轴上，数值上出现 \(c_4<0\)，从而
+\(A(p)=\kappa_p\) 以 \(p^{-2}\) 漂移从下逼近 \(\kappa_\infty\)。
+脚本 \texttt{scripts/exp\_arity\_335\_n2\_poisson\_richardson\_validate.py} 将 Poisson 抽取、
+\(c_4\) 反推与 Richardson 外推连成最小闭环，并在 \(p\ge 17\) 上做真值核验（四阶修正误差降到 \(10^{-7}\) 量级）：
+\input{sections/generated/tab_real_input_40_arity_335_n2_poisson_richardson_validate}
+\end{remark}
+
+\begin{remark}[最坏角色方向的协方差判据：\texorpdfstring{$t^\top\Sigma t$}{t^T Sigma t} 的最小化]\label{prop:arity-335-worst-direction-cov}
+把三轴 Dirichlet 分层的三条一步可加量记为向量 cocycle
+\(
+\Xi:=(\chi,\nu,\xi)\in\RR^3
+\)
+（本节 \(((3,3,5))\) 取 \(\xi=\mathbf{1}_{\{d=2\}}\)）。
+对实参倾斜 \(\theta\in\RR^3\) 定义正权矩阵 \(M(e^{\theta_1},e^{\theta_2},e^{\theta_3})\) 并令
+\(
+P(\theta):=\log\rho(M(e^{\theta_1},e^{\theta_2},e^{\theta_3}))
+\)。
+则 Hessian
+\[
+\Sigma:=\nabla^2 P(0)
+\]
+是 \(\Xi\) 在平衡态下的渐近协方差矩阵；并且对单位圆小角扭曲 \(t\in\RR^3\) 有标准二次型展开
+\[
+\log\frac{\rho(M(e^{\mathrm{i}t_1},e^{\mathrm{i}t_2},e^{\mathrm{i}t_3}))}{\lambda}
+=
+-\frac12\,t^\top\Sigma\,t
++O(|t|^3),
+\qquad t\to 0,
+\]
+其中 \(\lambda=\rho(M(1,1,1))\)。
+因此对有限模数 \(((m_1,m_2,m_3))\) 的角色集合（离散角 \(t(j)=(2\pi j_1/m_1,2\pi j_2/m_2,2\pi j_3/m_3)\)），使扭曲谱半径最大的“最坏角色方向”在小角 regime 下趋向于最小化 \(t(j)^\top\Sigma t(j)\) 的方向。
+\end{remark}
+
+\begin{remark}[可复现核验：\(((3,3,5))\) 的最坏角色由协方差预测]\label{rem:arity-335-worst-direction-cov-check}
+脚本 \texttt{scripts/exp\_real\_input\_40\_covariance\_predict\_worst\_character.py} 用有限差分计算 \(\Sigma=\nabla^2P(0)\)，并在 \(((3,3,5))\) 的离散角色集合上比较
+\(
+j\mapsto t(j)^\top\Sigma t(j)
+\)
+的最小点与实际扫描的最坏角色索引。输出见表 \ref{tab:real_input_40_covariance_worst_character}：预测的最坏索引为 \((0,0,1)\)，与实际最坏索引 \((0,0,\pm1)\) 一致。
+\end{remark}
+
+\input{sections/generated/tab_real_input_40_covariance_worst_character}
+
+\input{rem__arity-335-selection-law-gp-sigma33}
+
+\begin{remark}[大模数极限律：最坏扭曲亏损的缩放极限]\label{thm:arity-335-limit-law}
+对每个奇素数 \(p\)，定义最坏扭曲亏损的缩放量
+$$
+D(p)
+:=
+\left(1-\frac{\rho_{3,3,p}}{\lambda}\right)\left(\frac{p}{2\pi}\right)^2
+=\kappa_p.
+$$
+则在注记 \ref{prop:arity-335-kappa-variance} 的假设与记号下，
+$$
+\lim_{p\to\infty}D(p)=\kappa_\infty=\frac{\sigma_\xi^2}{2},
+$$
+并且 \(D(p)=\kappa_\infty+O(p^{-2})\)。
+\end{remark}
+
+\begin{corollary}[阿贝尔模轴一致谱隙的否定性结论：固定核]\label{cor:arity-335-abelian-uniform-gap-nogo}
+沿用注记 \ref{thm:arity-335-limit-law} 的记号，并设 \(\kappa_\infty>0\)。
+则
+\[
+\frac{\rho_{3,3,p}}{\lambda}
+=
+1-\kappa_\infty\left(\frac{2\pi}{p}\right)^2+O(p^{-4})
+\xrightarrow[p\to\infty]{}1.
+\]
+因此对任意常数 \(c\in(0,1)\)，存在奇素数 \(p\) 使 \(\rho_{3,3,p}/\lambda>c\)；
+特别地取 \(c=\lambda^{-1/2}\) 得：在固定有限核与固定局部 cocycle 下，不可能对所有模数 \(p\) 同时满足核版 GRH 的平方根界
+\[
+\rho_{3,3,p}\ \le\ \sqrt{\lambda}
+\qquad(\text{更不可能有 }\ \rho_{3,3,p}\le \lambda^{1/2-\varepsilon}\ \text{的统一改进}).
+\]
+换言之，阿贝尔 profinite 轴更像“扩散显微镜”：near-1 pole 不是偶然噪声，而是小角频率在固定步长下的机制性二次退化。
+\end{corollary}
+\begin{proof}
+由上式极限与 \(\lambda^{-1/2}<1\) 直接推出。
+\end{proof}
+
+\begin{remark}[扩散标度：混合时间 \texorpdfstring{$\tau_{\mathrm{mix}}(p)$}{tau_mix(p)} 为 \texorpdfstring{$O(p^2)$}{O(p^2)}]\label{cor:arity-335-diffusive-mixing}
+设 $\rho_{3,3,p}$ 为 $((3,3,p))$ 体系的最坏扭曲谱半径，$\lambda=\rho(M)$。
+定义对应的主相关长度尺度
+\[
+\tau_{\mathrm{mix}}(p):=\frac{1}{-\log(\rho_{3,3,p}/\lambda)}.
+\]
+则当 $p\to\infty$ 时有扩散型标度渐近
+\[
+\tau_{\mathrm{mix}}(p)=\frac{p^2}{4\pi^2\,\kappa_\infty}+O(1)
+\qquad\left(\kappa_\infty=\frac{\sigma_\xi^2}{2}\right).
+\]
+因此若希望把同余类偏置误差压到相对阈值 $\delta\in(0,1)$（即令 $(\rho_{3,3,p}/\lambda)^n\lesssim \delta$），则所需长度满足
+\[
+n_{\mathrm{mix}}(p,\delta)
+\sim
+\tau_{\mathrm{mix}}(p)\,\log\frac{1}{\delta}
+\sim
+\frac{p^2}{4\pi^2\,\kappa_\infty}\log\frac{1}{\delta}.
+\]
+\end{remark}
+
+\begin{remark}[可复现对照：\texorpdfstring{$D(p)$}{D(p)} 的收敛与 near-coboundary 上界]\label{rem:arity-335-limit-law-table}
+脚本 \texttt{scripts/exp\_arity\_335\_n2\_limit\_law\_table.py} 读取谱扫描输出（表 \ref{tab:real_input_40_arity_335_n2_selection_law_primes}）并生成 \(D(p)\) 表，同时以方差极限 \(\kappa_\infty=\sigma_\xi^2/2\) 与证书上界 \(\varepsilon/2,\varepsilon_\pi^{(2)}/2\) 作对照。输出见表 \ref{tab:real_input_40_arity_335_n2_limit_law}。
+\end{remark}
+
+\input{sections/generated/tab_real_input_40_arity_335_n2_limit_law}
+
+\begin{remark}[near-coboundary \texorpdfstring{$\Rightarrow$}{->} 小偏差：带 \texorpdfstring{$4\sin^2(\pi/p)$}{4 sin^2} 的缩放上界]\label{cor:arity-335-eps-trig-bound}
+在注 \ref{rem:arity-335-eps-bound} 的分解 \(\xi=\delta h+r\) 下，有 \(\sigma_\xi^2=\sigma_r^2\le \varepsilon_\pi^{(2)}\)。
+因此对最小非平凡角 \(\theta=2\pi/p\)（即 \(\omega_p=e^{2\pi i/p}\)）有
+$$
+1-\frac{\rho_{3,3,p}}{\lambda}
+=
+\frac{\sigma_\xi^2}{2}\left(\frac{2\pi}{p}\right)^2+O(p^{-4})
+\ \le\
+\frac{\varepsilon_\pi^{(2)}}{2}\left(\frac{2\pi}{p}\right)^2+O(p^{-4}).
+$$
+等价地，用 \(|1-\omega_p|^2=4\sin^2(\pi/p)\) 写成
+$$
+1-\frac{\rho_{3,3,p}}{\lambda}
+\le
+\frac{\varepsilon_\pi^{(2)}}{2}\,|1-\omega_p|^2\ +\ O(p^{-4}),
+$$
+从而在 \(p\to\infty\) 的缩放意义下得到 \(\kappa_\infty\le \varepsilon_\pi^{(2)}/2\)。
+\end{remark}
+
+\begin{remark}[小角主曲线与普适塌缩：二次主项 \texorpdfstring{$+$}{+} 四次修正]\label{prop:arity-335-master-curve}
+令 \(\rho(\theta):=\rho(M(1,1,e^{\mathrm{i}\theta}))\) 为纯碰撞扭曲的谱半径函数，并记
+\(
+F(\theta):=1-\rho(\theta)/\lambda
+\)。
+则在 \(\theta\to 0\) 时有
+$$
+\log\frac{\rho(\theta)}{\lambda}
+=
+-\frac{\sigma_\xi^2}{2}\theta^2
+\;+\;
+\frac{P^{(4)}(0)}{24}\theta^4
+\;+\;
+O(\theta^6),
+$$
+其中 \(P(t):=\log\rho(M(1,1,e^{t}))\) 为实参倾斜压力。
+因此存在 \(\theta_0>0\) 使得对 \(0<\theta\le \theta_0\) 有普适塌缩
+$$
+\frac{F(\theta)}{\kappa_\infty\,\theta^2}=1+O(\theta^2),
+\qquad
+\kappa_\infty=\sigma_\xi^2/2.
+$$
+\end{remark}
+
+\begin{remark}[可复现核验：离散角色点 \texorpdfstring{$\theta=2\pi/p$}{theta=2pi/p} 的主曲线对照]\label{rem:arity-335-master-curve-check}
+脚本 \texttt{scripts/exp\_arity\_335\_n2\_master\_curve.py} 用实参差分估计 \(P''(0),P^{(4)}(0)\)，并在离散角色角 \(\theta=2\pi/p\) 上对照 \(\rho(\theta)/\lambda\) 与四阶修正预测。输出见表 \ref{tab:real_input_40_arity_335_n2_master_curve}。
+\end{remark}
+
+\input{sections/generated/tab_real_input_40_arity_335_n2_master_curve}
+
+\begin{remark}[谐波能量特征量 \texorpdfstring{$\mathcal{E}_1$}{E1}：把“低秩可压缩”表述为可解释结构量]\label{rem:arity-335-harmonic-energy}
+对固定的 \((a,b)\)，函数 \(c\mapsto C^{(3,3,5)}_{a,b,c}\) 在 \(\ZZ/5\) 上具有有限傅里叶展开；
+由于实值性，非零谐波对只需 \(j=1,2\) 两个复模即可完整编码（注记 \ref{prop:arity-335-fourier-fingerprint}）。
+因此“沿 \(c\) 轴的主要变化是否集中在第一谐波”可用无量纲特征量
+$$
+\mathcal{E}_1
+:=\frac{\|A^{(1)}\|_F^2}{\|A^{(1)}\|_F^2+\|A^{(2)}\|_F^2}
+$$
+量化，其中 \(A^{(1)},A^{(2)}\) 为二级摘要输出中给出的 \(j=1,2\) 谐波复矩阵。
+\(\mathcal{E}_1\) 越大，表示能量越集中在最低谐波，系统越接近“近旋转/near-coboundary”的低频结构；这与小角二次律（注记 \ref{prop:arity-335-kappa-variance}）和张量低秩可压缩现象（注记 \ref{prop:arity-335-low-rank}）在机制上同源。
+\end{remark}
+
+\begin{remark}[碰撞 cocycle 的共边界缺陷证书：best \texorpdfstring{$\ZZ/5$}{Z/5} 着色]\label{rem:arity-335-best-5-coloring}
+把 40 状态图的每条边赋 cocycle $\xi=\mathbf{1}_{\{d=2\}}\in\ZZ/5$。若存在 $h:V\to\ZZ/5$ 使得 $h(v)-h(u)\equiv \xi(u\to v)\pmod 5$ 在全部边上成立，则第三轴扭曲可由共轭消去，因而不会降低谱半径（$\rho/\lambda=1$）。二级摘要输出给出一个可复现的“best found” 着色缺陷 $\varepsilon$（不一致边比例），作为“near-coboundary” 的组合学证书；其值与谱缺口 $1-\rho_{3,3,5}/\lambda$ 应在机制上相关。
+\end{remark}
+
+\begin{remark}[近共边界缺陷的组合测度与谱测度同阶]\label{rem:arity-335-eps-vs-gap}
+令谱缺口
+$$
+\delta_{\mathrm{spec}}:=1-\frac{\rho_{3,3,5}}{\lambda}.
+$$
+二级摘要输出同时给出 best found 的共边界缺陷证书 \(\varepsilon\lesssim 0.066667\)（\(|E|=90\)）与谱缺口
+\(
+\delta_{\mathrm{spec}}\approx 0.049379
+\)，并满足
+$$
+\delta_{\mathrm{spec}}<\varepsilon.
+$$
+该同阶锁定支持如下机制解释：\(\varepsilon\) 度量“少量缺陷边”对 cocycle 共边界性的破缺，而 \(\delta_{\mathrm{spec}}\) 度量同一破缺在 Perron--Frobenius 主模态上的指数效应；因此 \(((3,3,5))\) 的慢模主要来自少数破缺边诱导的相干相位阻塞，而非来自复杂的多维耦合。
+
+进一步地，一个自然的可证伪猜想是存在仅依赖于图的粗结构常数 \(C>0\)（例如最大出度与最小正权重的比较常数），使得
+$$
+1-\frac{\rho(\omega_5)}{\rho(1)}\ \le\ C\,\varepsilon,
+$$
+其中 \(\rho(\omega_5)\) 表示沿第三轴（碰撞 cocycle）施加非平凡 \(\ZZ/5\) 角色时的最坏谱半径（即 \(\rho_{3,3,5}\)），而 \(\rho(1)=\lambda\)。该想法可在下述更一般的“缺陷 $\Rightarrow$ 谱隙”猜想中统一表述。
+\end{remark}
+
+\input{cor__arity-335-eps-eff-inversion}
+
+\begin{conjecture}[共边界缺陷 $\Rightarrow$ 谱隙（定量 GRH 证书）]\label{conj:coboundary-defect-gap}
+设 $M$ 为原始非负核，$\chi$ 为单位根角色扭曲，记
+$$
+\lambda:=\rho(M),\qquad \rho_\chi:=\rho(M_\chi).
+$$
+令 \(\varepsilon\) 为最小共边界缺陷：在所有赋值 \(f:V\to U(1)\) 中，使
+\(
+\chi(e)=f(t(e))\overline{f(s(e))}
+\)
+成立的边比例最大化，其余比例即为 \(\varepsilon\)；并令 \(\varepsilon_\pi\) 为以无扭曲 PF 平衡边测度加权的对应缺陷。则存在只依赖于图的结构常数 \(c>0\) 使
+$$
+1-\frac{\rho_\chi}{\lambda}\ \ge\ c\,\varepsilon^2
+\qquad(\text{或 }c\,\varepsilon_\pi^2),
+$$
+并且反向成立：若 \(1-\rho_\chi/\lambda\le \delta\)，则存在某个 \(f\) 使共边界缺陷满足 \(\varepsilon\lesssim \sqrt{\delta}\)（或 \(\varepsilon_\pi\lesssim \sqrt{\delta}\)）。因此“近共边界”与“小谱隙”在定量上等价，成为核版 GRH 的可审计证书接口。
+\end{conjecture}
+
+\begin{remark}[证明路线图：从能量泛函到离散 Poincar\'e 不等式]\label{rem:coboundary-defect-proof}
+把 $M$ 归一化到 PF 平衡测度下的 Markov/transfer 算子，并把扭曲看作边上的相位扰动。由谱半径的变分表述，可将 $1-\rho_\chi/\lambda$ 写为某个“能量下降”泛函的极小值；而共边界缺陷提供一个离散 Poincar\'e/cheeger 型下界，迫使能量至少下降 \(\gtrsim \varepsilon^2\)。反向方向来自“近最大向量”的相位一致性：若谱隙极小，则存在 $g$ 使得相位在大多数边上可由梯度吸收，从而得到 \(\varepsilon\lesssim \sqrt{\delta}\)。
+\end{remark}
+
+\begin{remark}[从“最佳着色”得到的可证明上界：\texorpdfstring{$\kappa_\infty\le \varepsilon_\pi^{(2)}/2$}{kappa <= eps/2}]\label{rem:arity-335-eps-bound}
+令 \(\xi=\mathbf{1}_{\{d=2\}}\in\{0,1\}\) 为碰撞 cocycle，并取一个着色 \(h:V\to\ZZ/5\)。
+把边残差定义为
+$$
+r(e):=\xi(e)-\bigl(h(v)-h(u)\bigr)\quad\in\ZZ/5,
+$$
+并取其在 \(\{-2,-1,0,1,2\}\) 的最小整数提升（仍记为 \(r(e)\in\ZZ\)）。
+则有分解 \(\xi=\delta h+r\)，其中共边界项 \(\delta h\) 在轨道和上望远镜消去；因此渐近方差密度满足
+$$
+\sigma_\xi^2=\sigma_r^2\le \mathbb{E}_\pi[r(e)^2]=:\varepsilon_\pi^{(2)},
+$$
+其中 \(\pi\) 为无扭曲系统的 PF 平衡边测度。
+结合注记 \ref{prop:arity-335-kappa-variance} 的 \(\kappa_\infty=\sigma_\xi^2/2\)，得到可证明上界
+$$
+\kappa_\infty\ \le\ \varepsilon_\pi^{(2)}/2.
+$$
+二级摘要输出已同时给出 \(\varepsilon\)（均匀边比例缺陷）与 \(\varepsilon_\pi^{(2)}\)（平衡态二次缺陷），从而把“near-coboundary 证书”升级为对二次律常数的可审计上界。
+\end{remark}
+
+\begin{remark}[对照：第三维取 \texorpdfstring{$N_e\bmod 5$}{Ne mod 5} 的版本]\label{rem:arity-335-ne-mod5}
+若把第三维改为输出计数 $N_e(\gamma)\bmod 5$，则得到另一个同型的 $((3,3,5))$ 常数张量（主项系数同为 $1/45$），其输出片段为
+\verb|\input{sections/generated/tab_real_input_40_arity_dirichlet_mertens_335}|
+（脚本默认第三维为 \texttt{Ne}）。该版本更偏“输出端”的同余分层；而本文主线采用 $N_2\bmod 5$ 以直接锁定碰撞触发机制。
+\end{remark}
+
+\paragraph{\texorpdfstring{$((5,5,5))$}{(5,5,5)}：更高模数的三维 Dirichlet--Mertens 常数张量（全表）}
+为进一步提高同余分层的分辨率，可把三条观测量同时提升到模 $5$：
+$$
+(a,b,c)=\bigl(\chi(\gamma)\bmod 5,\ N_-(\gamma)\bmod 5,\ N_e(\gamma)\bmod 5\bigr)\in(\ZZ/5)^3.
+$$
+对应的 $5\times 5\times 5$ 常数张量（共 $125$ 个数）、以及最坏扭曲谱半径比 $\rho_{5,5,5}/\lambda$ 与达到最坏的角色索引，均由脚本
+\texttt{scripts/exp\_sync\_kernel\_real\_input\_40\_arity\_3d.py}
+直接生成并输出为可 \verb|\input| 的 \LaTeX\ 片段：
+\input{sections/generated/tab_real_input_40_arity_dirichlet_mertens_555}
+
+\begin{remark}[纯碰撞慢模的普适性与混合变慢]\label{cor:arity-555-collision-universal}
+在 $((5,5,5))$ 的可复现输出中，最坏扭曲角色仍为 $(0,0,1),(0,0,4)$，且
+\[
+\rho_{5,5,5}/\lambda\approx 0.962814> \rho_{3,3,5}/\lambda\approx 0.950621.
+\]
+与 $((3,3,3))$ 的最坏角色 $(1,2,2),(2,1,1)$ 及 $\rho_{3,3,3}/\lambda\approx 0.936686$ 对照可见：
+提升第三维模数后，最慢模态稳定地退化为\textbf{纯碰撞扭曲}，同时 $\rho/\lambda$ 更接近 $1$，表明混合变慢、相关长度增加。
+\end{remark}
+
+\begin{remark}[常数张量的交互阶特征量：ANOVA/Hoeffding 正交分解]\label{rem:dirichlet-mertens-anova-fingerprint}
+对任意三维 Dirichlet--Mertens 常数张量 \(C_{a,b,c}\)（其中 \(a=\chi\bmod m_1\)，\(b=N_-\bmod m_2\)，\(c\) 为第三轴同余坐标），令
+$$
+\widetilde C_{a,b,c}:=C_{a,b,c}-\frac{\mathsf{M}}{|G|},
+\qquad
+G=(\ZZ/m_1)\times(\ZZ/m_2)\times(\ZZ/m_3).
+$$
+在 \(G\) 的均匀内积下，对 \(\widetilde C\) 作标准 Hoeffding/ANOVA 正交分解
+$$
+\widetilde C
+=C^{(A)}+C^{(B)}+C^{(C)}+C^{(AB)}+C^{(AC)}+C^{(BC)}+C^{(ABC)},
+$$
+其中每个分量在其相应边际上取零和，并两两正交。
+定义三体交互阶参数与“\(\chi\)--第三轴锁定指数”
+$$
+S_{ABC}:=\frac{\|C^{(ABC)}\|_2^2}{\|\widetilde C\|_2^2}\in[0,1],
+\qquad
+L_{A\leftrightarrow C}:=\frac{\|C^{(AC)}\|_2^2+\|C^{(ABC)}\|_2^2}{\|\widetilde C\|_2^2}\in[0,1],
+$$
+其中 \(A\) 固定为 \(\chi\) 轴，而 \(C\) 表示第三轴（在不同张量中可取 \(N_e\bmod m_3\) 或 \(N_2\bmod m_3\)）。
+表 \ref{tab:real_input_40_dirichlet_mertens_tensor_anova} 与图 \ref{fig:real_input_40_dirichlet_mertens_tensor_anova_scatter} 给出已生成的交互阶诊断与对应的最坏扭曲比值/最坏角色：
+\input{sections/generated/tab_real_input_40_dirichlet_mertens_tensor_anova}
+\input{sections/generated/fig_real_input_40_dirichlet_mertens_tensor_anova_scatter}
+\par
+在该核的可复现样本中，\(((3,3,5))\) 的第三轴从 \(N_e\bmod 5\) 改为 \(N_2\bmod 5\) 会显著压低 \(S_{ABC}\) 与 \(L_{A\leftrightarrow C}\)；
+与此同时，其最坏角色保持为纯第三轴 \((0,0,1),(0,0,4)\)，从而把慢模机制隔离到碰撞同余变量上。
+这为“常数级漂移张量的交互阶结构”与“最坏扭曲慢模的几何方向”之间建立了一个可核验的桥接特征量。
+\end{remark}
+
+\paragraph{为何称为“真正的 arity 维度素数谱”}
+上述输出同时给出三层可审计结构：
+\begin{itemize}
+  \item primitive 轨道作为“素数类对象”，满足 $p_n\sim \lambda^n/n$；
+\item $\chi(\gamma)$ 作为 arity-charge，把二元碰撞的可见/不可见分配编码成可加电荷；
+  \item Dirichlet--Mertens 常数张量（例如 \(((2,2,2))\)、\(((3,2,2))\)、\(((3,3,3))\)、\(((3,3,5))\)）给出同余类的常数漂移（Abel/Hadamard 有限部），而 $\rho/\lambda$ 给出同余类趋于等分布的指数误差。
+\end{itemize}

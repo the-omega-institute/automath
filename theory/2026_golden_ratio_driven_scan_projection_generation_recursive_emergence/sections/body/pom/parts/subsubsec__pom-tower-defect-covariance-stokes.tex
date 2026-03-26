@@ -1,0 +1,128 @@
+\subsubsection{迭代纤维平均的塔缺陷：协方差律与 Pinsker 型可控界}\label{subsubsec:pom-tower-defect-covariance-pinsker}
+在均匀提升的 Beck--Chevalley 曲率结构之外，另一类可计算的非函子性来源于“迭代纤维平均”与“单次纤维平均”之间的偏差。
+该偏差可被组织为一个局部的塔缺陷泛函，并在每一外层纤维上具有精确的协方差表达式；从而得到由全变差与相对熵控制的稳定上界。
+
+\begin{definition}[纤维均匀推前与塔缺陷]\label{def:pom-fiber-average-tower-defect}
+设 \(g:Y\twoheadrightarrow Z\)、\(h:Z\twoheadrightarrow W\) 为有限集上的满射。
+对任意函数 \(\psi:Y\to\RR\) 定义纤维均匀推前（条件平均）
+\[
+(\mathsf A_g\psi)(z):=\frac{1}{d_g(z)}\sum_{y\in g^{-1}(z)}\psi(y),
+\qquad
+(\mathsf A_h\varphi)(w):=\frac{1}{d_h(w)}\sum_{z\in h^{-1}(w)}\varphi(z).
+\]
+并定义塔缺陷泛函
+\[
+\mathfrak T_{g,h}(\psi)(w):=(\mathsf A_h\mathsf A_g\psi)(w)-(\mathsf A_{h\circ g}\psi)(w),
+\qquad w\in W,
+\]
+其中 \((\mathsf A_{h\circ g}\psi)(w)\) 表示在 \((h\circ g)^{-1}(w)\subseteq Y\) 上对 \(\psi\) 的均匀平均。
+\end{definition}
+
+\begin{theorem}[塔缺陷的协方差表达式]\label{thm:pom-tower-defect-covariance-law}
+在定义 \ref{def:pom-fiber-average-tower-defect} 的设定下，固定任意 \(w\in W\)，令随机变量 \(Z\) 在 \(h^{-1}(w)\) 上服从均匀分布，并记
+\[
+N:=d_g(Z),
+\qquad
+\Psi:=(\mathsf A_g\psi)(Z).
+\]
+则有严格恒等式
+\[
+\boxed{\;
+\mathfrak T_{g,h}(\psi)(w)=\EE[\Psi]-\frac{\EE[N\Psi]}{\EE[N]}
+=-\frac{\Cov(N,\Psi)}{\EE[N]}\; } .
+\]
+\end{theorem}
+\begin{proof}
+由定义可写
+\[
+(\mathsf A_h\mathsf A_g\psi)(w)=\frac{1}{d_h(w)}\sum_{z\in h^{-1}(w)}(\mathsf A_g\psi)(z)=\EE[\Psi].
+\]
+另一方面，
+\[
+(\mathsf A_{h\circ g}\psi)(w)
+=\frac{1}{d_{h\circ g}(w)}\sum_{y\in (h\circ g)^{-1}(w)}\psi(y)
+=\frac{1}{\sum_{z\in h^{-1}(w)}d_g(z)}\sum_{z\in h^{-1}(w)}d_g(z)\,(\mathsf A_g\psi)(z)
+=\frac{\EE[N\Psi]}{\EE[N]}.
+\]
+两式相减得到首个恒等式；再用
+\(
+\EE[N\Psi]-\EE[N]\EE[\Psi]=\Cov(N,\Psi)
+\)
+即得协方差形式。证毕。
+\end{proof}
+
+\begin{corollary}[Pinsker 型塔缺陷上界]\label{cor:pom-tower-defect-pinsker-bound}
+沿用定理 \ref{thm:pom-tower-defect-covariance-law} 的记号。
+对每个 \(w\in W\) 在 \(h^{-1}(w)\) 上定义两种概率分布
+\[
+u_w(z):=\frac1{d_h(w)},
+\qquad
+\alpha_w(z):=\frac{d_g(z)}{\sum_{z'\in h^{-1}(w)}d_g(z')}.
+\]
+则
+\[
+\boxed{\;
+\mathfrak T_{g,h}(\psi)(w)=\EE_{u_w}[\Psi]-\EE_{\alpha_w}[\Psi]\;}
+\]
+并且满足估计
+\[
+|\mathfrak T_{g,h}(\psi)(w)|
+\le \mathrm{osc}_{h^{-1}(w)}(\Psi)\cdot \mathrm{TV}(u_w,\alpha_w)
+\le \mathrm{osc}_{h^{-1}(w)}(\Psi)\cdot \sqrt{\frac12\,D_{\mathrm{KL}}(\alpha_w\|u_w)},
+\]
+其中
+\(
+\mathrm{osc}_{h^{-1}(w)}(\Psi):=\max_{z\in h^{-1}(w)}\Psi(z)-\min_{z\in h^{-1}(w)}\Psi(z)
+\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-tower-defect-covariance-law} 的表达式
+\(
+\mathfrak T_{g,h}(\psi)(w)=\EE[\Psi]-\EE[N\Psi]/\EE[N]
+\)，注意 \(\EE_{u_w}[\Psi]=\EE[\Psi]\) 且
+\[
+\EE_{\alpha_w}[\Psi]
+=\sum_{z\in h^{-1}(w)}\frac{d_g(z)}{\sum_{z'}d_g(z')}\,(\mathsf A_g\psi)(z)
+=\frac{\EE[N\Psi]}{\EE[N]},
+\]
+从而得到第一式。
+其余两条不等式分别来自
+\(
+|\EE_P[F]-\EE_Q[F]|\le \mathrm{osc}(F)\,\mathrm{TV}(P,Q)
+\)
+与 Pinsker 不等式
+\(
+\mathrm{TV}(P,Q)\le \sqrt{D_{\mathrm{KL}}(P\|Q)/2}
+\)。
+证毕。
+\end{proof}
+
+\begin{remark}[与 Stokes 缺陷的同型性]\label{rem:pom-tower-defect-stokes-analogy}
+塔缺陷以“权重扭结”刻画了推前复合的失败：均匀平均与尺寸偏置平均之间的差异由 \(\alpha_w\) 相对于 \(u_w\) 的偏离度量化。
+这种结构与角流形纤维积分中外微分与推前不交换时出现的边界项同型（命题 \ref{prop:cdim-stokes-fiber-integration-defect}），二者皆把复合失败压缩为可局部化的缺陷通量。
+\end{remark}
+
+\begin{conjecture}[三阶严格化障碍与“边界的边界”泛函]\label{conj:pom-third-obstruction-strictification}
+令 \(\mathbf{Surj}\) 为有限集合与满射所成的 \(2\)-范畴骨架（以交换方块为 \(2\)-态射），并以定理 \ref{thm:pom-bc-defect-multiplicative-2cocycle} 的均匀提升伪函子 \(\mathcal L\) 为背景。
+对可复合三元组
+\(
+X\xrightarrow{f}Y\xrightarrow{g}Z\xrightarrow{h}W
+\)
+定义函数
+\[
+\Xi_{f,g,h}(w):=\mathfrak T_{g,h}\bigl(\log d_f\bigr)(w),
+\qquad w\in W,
+\]
+其中 \(\mathfrak T_{g,h}\) 为定义 \ref{def:pom-fiber-average-tower-defect} 的塔缺陷。
+则存在一个自然的三阶上同调类
+\[
+[\Xi]\in H^3(\mathbf{Surj};\RR),
+\]
+满足如下严格化判据：
+\begin{enumerate}
+  \item 若 \([\Xi]=0\)，则存在一组自然的“重整化严格化”选择，使得 \(\mathcal L\) 在 \(2\)-等价意义下可替换为严格函子，且复合外置的残差可完全吸收为链边界项；
+  \item 若 \([\Xi]\neq 0\)，则任何严格化都必然引入不可消去的缺陷通量，其最小量由 \([\Xi]\) 与基本 \(3\)-循环的配对给出，并与圆维相对上同调中的 Stokes 缺陷生成元相容。
+\end{enumerate}
+\end{conjecture}
+
+\endinput

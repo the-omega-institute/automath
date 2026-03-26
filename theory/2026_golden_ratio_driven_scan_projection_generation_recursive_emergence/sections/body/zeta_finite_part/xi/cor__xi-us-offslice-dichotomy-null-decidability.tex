@@ -1,0 +1,36 @@
+
+\begin{corollary}[“第四寄存器二歧性”的严格化：离切片零点断言在体系内只有两种可证伪形态]\label{cor:xi-fourth-register-dichotomy}
+在 unitary slice 可见域锁定 \(X_{\mathrm{vis}}=\mathsf{Phase}\)（定义 \ref{def:xi-visible-read-null}）、\(\mathbf{PW}\) 闭包类型安全（定理 \ref{thm:xi-offset-null-type-safety}）与“无未记录连续轴”原则（定理 \ref{thm:xi-pw-no-continuous-hair}）下，任何声称存在离切片零点（即需要 \(|u|\neq 1\) 的径向自由度；等价地在圆盘化变量中需要 \(|w|<1\) 的盘内信息）的断言，在协议语义中只能以如下二者之一出现：
+\begin{enumerate}
+  \item \textbf{显式外延模式轴：}在地址多轴前缀中加入径向记录
+  \[
+  \varrho(u):=\log|u|
+  \]
+  （或任意与之等价的“扩展保存”外延，使扩展读出达到单射化；见备注 \ref{rem:xi-soundness-vs-completeness} 与命题 \ref{prop:xi-null-three-way}），从而把域外自由度对象化为可审计输出；
+  \item \textbf{有限失败见证：}输出一份离线可核验的失败见证，证明该断言在既定闭包/可见域制度下不可类型化，其读出必退化为 \(\mathsf{NULL}\)。
+\end{enumerate}
+并且不存在第三条路径：任何试图以“与相位 \(\theta\) 解耦的额外连续坐标寄存器”绕过 \(\mathsf{NULL}\) 的方案，要么在闭包中被拒绝并读出为 \(\mathsf{NULL}\)，要么在因子意义下等价于上述唯一径向外延 \(\varrho(u)\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-offset-null-type-safety}，在 unitary slice 制度中一切离切片对象在闭包内不可寻址，读出按定义退化为 \(\mathsf{NULL}\)。
+若希望在不改变可见域锁定的同时减少 \(\mathsf{NULL}\)，唯一合法途径是按“扩展保存”外置被压扁的自由度：把 \(u=re^{i\theta}\) 拆为相位与径向两部分，并将径向作为模式轴显式记录（备注 \ref{rem:xi-soundness-vs-completeness}）。
+而任何不显式记录却试图引入新的连续坐标的策略，与“无未记录连续轴”原则（定理 \ref{thm:xi-pw-no-continuous-hair}）矛盾；其语义后果只能是类型拒绝并读出为 \(\mathsf{NULL}\)。
+因此，在体系内可证伪的离切片断言只能落入“显式径向外延”或“有限失败见证”两类，且不存在第三条可绕过路径。证毕。
+\end{proof}
+
+\begin{corollary}[unitary-slice 协议下的判定性闭合：\texorpdfstring{$\mathsf{NULL}$}{NULL} 的补集亦具有限证书]\label{cor:xi-unitary-slice-decidable}
+在定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable} 的设定下，对任意被编译到 unitary-slice 审计接口的查询/对象 \(q\)，若其全局读出为 \(\mathsf{NULL}\)，则存在一份有限失败见证 \(\mathrm{Wit}(q)\)，其类型必落入下列三类之一并可由确定性验证器离线复核：
+\begin{enumerate}
+  \item \textbf{闭包/域外拒绝见证：}证明 \(q\) 的解释需要 \(|u|\neq 1\) 的径向模式或其它被协议禁止的自由度（定义 \ref{def:xi-visible-read-null}）；
+  \item \textbf{Čech 二阶粘合障碍见证：}给出并核验前缀站点上的 \(H^2\) 障碍类 \([\alpha]\neq 0\)，从而推出地址纤维为空（命题 \ref{prop:null-as-h2-obstruction}）；
+  \item \textbf{硬阈值资源不足见证：}给出 prime-register 模积阈值或端点分辨率阈值的违背证书，从而排除任何使读出单值可核验的合法外置（定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable} 第 (3) 类）。
+\end{enumerate}
+因此，“可寻址性谓词”（读出是否为 \(\mathsf{NULL}\)）在该闭包制度下同时具有正向与负向的有限证书：存在地址/证书则可核对，存在失败见证则可核对；从而该谓词在该制度意义下为可判定对象。
+\end{corollary}
+\begin{proof}
+三类失败见证的存在性与分类由定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable} 直接给出；其“有限性/可离线复核”来自该定理所引用的每一类证书都被组织为有限的组合对象（有限前缀、有限同调代表或有限阈值不等式链），并且验证仅依赖代数/组合核验而不需要访问不可见纤维。
+另一方面，若读出不为 \(\mathsf{NULL}\)，则按定义 \ref{def:xi-visible-read-null} 的读出约定必伴随一份落在可见域内的可核对地址/证书前缀；该核验在闭包接口中为确定性过程。
+合并两方向即得“正/负两侧均有有限证书”，故可判定性成立。证毕。
+\end{proof}
+
+\endinput

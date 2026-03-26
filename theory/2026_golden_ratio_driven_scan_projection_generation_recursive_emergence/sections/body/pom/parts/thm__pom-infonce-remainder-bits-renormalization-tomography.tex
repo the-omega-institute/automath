@@ -1,0 +1,392 @@
+\begin{theorem}[余项 \texorpdfstring{$B$}{B} 比特的二阶重整化恒等式与 InfoNCE 缩放律]\label{thm:pom-infonce-remainder-bits-second-order-renormalization}
+沿用推论 \ref{cor:pom-infonce-fold-ledger-remainder-bits} 的 \(g_B(\omega)=(X,R_B)\) 与纤维占用数 \(d_{m,B}(x,r)\)。
+定义余项分区的二阶碰撞和与其归一化版本
+\[
+S_{2,B}(m):=\sum_{x\in X_m}\sum_{r\in\{0,1\}^B} d_{m,B}(x,r)^2,
+\qquad
+M_{2,B}(m):=\frac{S_{2,B}(m)}{4^m}=\sum_{x,r}\Bigl(\frac{d_{m,B}(x,r)}{2^m}\Bigr)^2.
+\]
+对每个 \(x\in X_m\) 作 Euclid 分解
+\[
+d_m(x)=2^B q_x+s_x,\qquad q_x=\Big\lfloor\frac{d_m(x)}{2^B}\Big\rfloor,\quad s_x=d_m(x)\bmod 2^B\in\{0,\dots,2^B-1\}.
+\]
+则有精确恒等式
+\[
+\boxed{\;
+S_{2,B}(m)=2^{-B}S_2(m)-2^{-B}\sum_{x\in X_m}s_x^2+\sum_{x\in X_m}s_x\;}
+\]
+并因此得到二阶碰撞的重整化渐近
+\[
+M_{2,B}(m)=2^{-B}M_2(m)+O\!\left(\frac{2^B|X_m|}{4^m}\right),
+\qquad
+\frac{M_{2,B}(m)}{M_2(m)}\longrightarrow 2^{-B},
+\]
+其中 \(M_2(m)=S_2(m)/4^m\)。
+\par
+进一步，对固定整数 \(K\ge 2\) 定义余项分区的 Bayes 最优 InfoNCE 值
+\(
+L_{K,B}^\star(m):=\inf_s L_{K,B}(s)
+\)
+（见推论 \ref{cor:pom-infonce-fold-ledger-remainder-bits}）。
+则当 \(m\to\infty\) 时有
+\[
+L_{K,B}^\star(m)
+=2^{-B}(K-1)\log 2\cdot M_2(m)\bigl(1+o(1)\bigr),
+\qquad
+\frac{L_{K,B}^\star(m)}{L_{K}^\star(m)}\longrightarrow 2^{-B},
+\]
+其中 \(L_K^\star(m)\) 为定理 \ref{thm:pom-bayes-infonce-second-collision-dominance} 的 Bayes 最优值。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:pom-infonce-fold-ledger-remainder-bits}，对每个固定 \(x\)，模 \(2^B\) 的占用数满足：恰有 \(s_x\) 个余类取值为 \(q_x+1\)，其余 \(2^B-s_x\) 个余类取值为 \(q_x\)。
+因此
+\[
+\sum_{r}d_{m,B}(x,r)^2
+=s_x(q_x+1)^2+(2^B-s_x)q_x^2
+=2^Bq_x^2+2s_xq_x+s_x.
+\]
+另一方面，
+\(
+d_m(x)^2=(2^Bq_x+s_x)^2=2^{2B}q_x^2+2^{B+1}q_xs_x+s_x^2
+\)，
+从而逐点恒等式
+\[
+2^{-B}d_m(x)^2-2^{-B}s_x^2+s_x
+=2^Bq_x^2+2s_xq_x+s_x
+=\sum_{r}d_{m,B}(x,r)^2
+\]
+成立。对 \(x\) 求和得到所示的 \(S_{2,B}\) 重整化恒等式。
+\par
+记修正项
+\(
+\Delta_B(m):=\sum_x\bigl(s_x-2^{-B}s_x^2\bigr)
+\)。
+由于 \(0\le s_x<2^B\)，并且函数 \(s\mapsto s-2^{-B}s^2\) 在区间 \([0,2^B]\) 上有界（例如绝对值 \(O(2^B)\)），故
+\(
+|\Delta_B(m)|=O(2^B|X_m|)
+\)。
+两边除以 \(4^m\) 即得
+\(
+M_{2,B}(m)=2^{-B}M_2(m)+O(2^B|X_m|/4^m)
+\)。
+又因 \(|X_m|=F_{m+2}=\Theta(\varphi^m)\) 且 \(M_2(m)=\Theta((r_2/4)^m)\)（其中 \(r_2>\varphi\)，见例如推论 \ref{cor:pom-s2-asymptotic} 的数值与谱证书），故误差项相对 \(M_2(m)\) 衰减至零，从而 \(M_{2,B}(m)/M_2(m)\to 2^{-B}\)。
+\par
+最后，对分区 \(g_B\) 重复定理 \ref{thm:pom-bayes-infonce-second-collision-dominance} 的二项近似论证，可得
+\(
+L_{K,B}^\star(m)=(K-1)\log 2\cdot M_{2,B}(m)\bigl(1+o(1)\bigr)
+\)；
+与 \(M_{2,B}(m)\sim 2^{-B}M_2(m)\) 合并即得所示缩放律与比值收敛。证毕。
+\end{proof}
+
+\begin{corollary}[InfoNCE 的指数不变量与 \texorpdfstring{$r_2$}{r2} 的一致可识别性]\label{cor:pom-infonce-exponential-invariant-r2-identifiability}
+在定理 \ref{thm:pom-infonce-remainder-bits-second-order-renormalization} 的设定下，对任意固定整数 \(K\ge 2\)、\(B\ge 0\)，极限存在且
+\[
+\lim_{m\to\infty}\bigl(L_{K,B}^\star(m)\bigr)^{1/m}=\frac{r_2}{4}.
+\]
+并且 \(r_2\) 可由任意一组固定 \((K,B)\) 的 Bayes 最优 InfoNCE 序列一致反演：
+\[
+\boxed{\;
+r_2
+=4\lim_{m\to\infty}\left(\frac{2^B\,L_{K,B}^\star(m)}{(K-1)\log 2}\right)^{1/m}\; }.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-infonce-remainder-bits-second-order-renormalization}，
+\(
+L_{K,B}^\star(m)
+=2^{-B}(K-1)\log 2\cdot M_2(m)\,(1+o(1))
+\)。
+对两边取 \(m\)-次根并用 \(M_2(m)=S_2(m)/4^m=\Theta((r_2/4)^m)\) 得到第一式；
+第二式为同一渐近的等价重排。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$B$}{B}-比特侧信息的全 Rényi 压缩律与指数不变性]\label{thm:pom-remainder-bits-all-renyi-compression-law}
+沿用推论 \ref{cor:pom-infonce-fold-ledger-remainder-bits} 的记号，定义
+\[
+S_{q,B}(m):=\sum_{x\in X_m}\sum_{r\in\{0,1\}^B} d_{m,B}(x,r)^q,
+\qquad
+M_{q,B}(m):=\frac{S_{q,B}(m)}{2^{qm}}
+\qquad(q\ge 1).
+\]
+则对每个固定的整数 \(q\ge 1\) 与 \(B\ge 0\)，都有精确两边界
+\[
+\boxed{
+2^{-B(q-1)}\,S_q(m)\le S_{q,B}(m)\le S_q(m),
+}
+\]
+\[
+\boxed{
+2^{-B(q-1)}\,M_q(m)\le M_{q,B}(m)\le M_q(m).
+}
+\]
+进一步，若
+\[
+d_{\min}(m):=\min_{x\in X_m}d_m(x)\xrightarrow[m\to\infty]{}\infty,
+\]
+且 \(q\ge 2\)，则有更精细展开
+\[
+S_{q,B}(m)=2^{-B(q-1)}S_q(m)+O_q\!\bigl(S_{q-1}(m)\bigr),
+\]
+从而
+\[
+\frac{M_{q,B}(m)}{M_q(m)}\longrightarrow 2^{-B(q-1)}.
+\]
+特别地，只要原始矩谱满足
+\[
+S_q(m)=\Theta(r_q^m),
+\]
+则对任意固定 \(B\) 都保持同一指数主率：
+\[
+\boxed{
+\lim_{m\to\infty}M_{q,B}(m)^{1/m}
+=
+\lim_{m\to\infty}M_q(m)^{1/m}
+=
+\frac{r_q}{2^q}.
+}
+\]
+\end{theorem}
+\begin{proof}
+固定 \(x\in X_m\)，记
+\[
+d:=d_m(x),
+\qquad
+M:=2^B,
+\qquad
+n_r:=d_{m,B}(x,r)\quad(r\in\{0,1\}^B).
+\]
+则 \(\sum_r n_r=d\)。由 Jensen 不等式，
+\[
+\frac1M\sum_r n_r^q\ge \left(\frac1M\sum_r n_r\right)^q=\left(\frac{d}{M}\right)^q,
+\]
+故
+\[
+\sum_r n_r^q\ge M^{1-q}d^q=2^{-B(q-1)}d^q.
+\]
+另一方面，函数 \(t\mapsto t^q\) 在 \([0,\infty)\) 上凸，故固定总和 \(d\) 时 \(\sum_r n_r^q\) 的最大值由最集中分配给出，从而
+\[
+\sum_r n_r^q\le d^q.
+\]
+对 \(x\) 求和即得
+\[
+2^{-B(q-1)}S_q(m)\le S_{q,B}(m)\le S_q(m),
+\]
+再除以 \(2^{qm}\) 即得 \(M_{q,B}\) 的两边界。
+
+若 \(q=1\)，则
+\[
+S_{1,B}(m)=\sum_{x,r}d_{m,B}(x,r)=\sum_x d_m(x)=S_1(m),
+\]
+故一切结论都平凡成立。下设 \(q\ge 2\)。
+
+现证明精细展开。由推论 \ref{cor:pom-infonce-fold-ledger-remainder-bits}，对每个固定 \(x\)，占用数 \(d_{m,B}(x,r)\) 仅取
+\[
+\left\lfloor \frac{d}{2^B}\right\rfloor
+\quad\text{与}\quad
+\left\lceil \frac{d}{2^B}\right\rceil
+\]
+两值，因而统一满足
+\[
+d_{m,B}(x,r)=2^{-B}d+O(1),
+\]
+其中隐含常数仅依赖于固定的 \(B\)。于是
+\[
+\sum_r d_{m,B}(x,r)^q
+=
+\sum_r\Bigl(2^{-B}d+O(1)\Bigr)^q
+=
+2^{-B(q-1)}d^q+O_q(d^{q-1}),
+\]
+其中最后一步用到桶数 \(2^B\) 固定。对 \(x\) 求和得到
+\[
+S_{q,B}(m)=2^{-B(q-1)}S_q(m)+O_q\!\bigl(S_{q-1}(m)\bigr).
+\]
+又由 \(d_m(x)\ge d_{\min}(m)\) 可得
+\[
+d_m(x)^{q-1}\le \frac{d_m(x)^q}{d_{\min}(m)},
+\]
+从而
+\[
+S_{q-1}(m)\le \frac{S_q(m)}{d_{\min}(m)}=o\!\bigl(S_q(m)\bigr).
+\]
+代回即得
+\[
+\frac{S_{q,B}(m)}{S_q(m)}\longrightarrow 2^{-B(q-1)},
+\qquad
+\frac{M_{q,B}(m)}{M_q(m)}\longrightarrow 2^{-B(q-1)}.
+\]
+
+最后，若 \(S_q(m)=\Theta(r_q^m)\)，则
+\[
+M_q(m)=\frac{S_q(m)}{2^{qm}}=\Theta\!\left(\left(\frac{r_q}{2^q}\right)^m\right).
+\]
+再由
+\[
+2^{-B(q-1)}M_q(m)\le M_{q,B}(m)\le M_q(m)
+\]
+夹逼可知，固定常数倍缩放不改变 \(m\)-次根极限，故
+\[
+\lim_{m\to\infty}M_{q,B}(m)^{1/m}
+=
+\lim_{m\to\infty}M_q(m)^{1/m}
+=
+\frac{r_q}{2^q}.
+\]
+证毕。
+\end{proof}
+
+\paragraph{InfoNCE 的有限分辨率层析重建}
+\begin{theorem}[由 Bayes 最优 InfoNCE 总损失重建纤维谱]\label{thm:pom-infonce-fiber-spectrum-tomography}
+固定分辨率 \(m\)，令 \(N:=|X_m|\)，并以 \(w_m(x)=d_m(x)/2^m\) 记折叠推前分布。
+对每个 \(K\ge 2\) 记
+\(
+L_K^\star(m):=\inf_s L_K(s)
+\)
+为定理 \ref{thm:pom-infonce-partition-optimal-closed-form} 在 \(g=\Fold_m\) 下的 Bayes 最优值。
+则多重集 \(\{w_m(x)\}_{x\in X_m}\)（等价地，\(\{d_m(x)\}_{x\in X_m}\)）可由有限数据 \(\{L_K^\star(m)\}_{K=2}^{N}\) 唯一重建。
+\par
+更具体地，令
+\[
+\Psi_K(p):=\EE\bigl[\log(1+J)\bigr],\qquad J\sim\mathrm{Binomial}(K-1,p),
+\]
+并令 \(\Phi_K(p):=p\,\Psi_K(p)\)。
+则 \(\Phi_K\) 是次数 \(K\) 的多项式且 \(\Phi_K(0)=\Phi_K'(0)=0\)，从而存在常数 \(\{\beta_{K,q}\}_{2\le q\le K}\) 使得
+\[
+\Phi_K(p)=\sum_{q=2}^{K}\beta_{K,q}\,p^q.
+\]
+定义幂和矩
+\(
+M_q(m):=\sum_{x\in X_m}w_m(x)^q
+\)。
+则
+\[
+L_K^\star(m)=\sum_{q=2}^{K}\beta_{K,q}\,M_q(m)\qquad(2\le K\le N),
+\]
+并且系数矩阵 \((\beta_{K,q})_{2\le K\le N,\,2\le q\le K}\) 为上三角且对角元
+\[
+\beta_{K,K}
+=\sum_{j=0}^{K-1}(-1)^{K-1-j}\binom{K-1}{j}\log(1+j)
+=\Delta^{K-1}\bigl(\log(1+\cdot)\bigr)(0)\ \neq\ 0,
+\]
+因此可由上三角回代从 \(\{L_K^\star(m)\}_{K=2}^{N}\) 解出 \(\{M_q(m)\}_{q=2}^{N}\)。
+由 Newton 恒等式可进一步从幂和 \(\{M_q\}_{q=1}^{N}\)（其中 \(M_1=1\)）恢复多项式
+\[
+P_m(t):=\prod_{x\in X_m}\bigl(t-w_m(x)\bigr),
+\]
+从而以根的多重集形式重建 \(\{w_m(x)\}\)，并经 \(d_m(x)=2^m w_m(x)\) 重建纤维谱。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-infonce-partition-optimal-closed-form} 在 \(g=\Fold_m\) 下，
+\[
+L_K^\star(m)=\sum_{x\in X_m}w_m(x)\,\Psi_K\!\bigl(w_m(x)\bigr)
+=\sum_{x\in X_m}\Phi_K\!\bigl(w_m(x)\bigr).
+\]
+由于 \(\Psi_K\) 是二项分布在有限支持 \(\{0,\dots,K-1\}\) 上的期望，且其概率质量函数是 \(p\) 的多项式，故 \(\Psi_K\) 为次数 \(K-1\) 的多项式并满足 \(\Psi_K(0)=0\)；
+于是 \(\Phi_K(p)=p\Psi_K(p)\) 为次数 \(K\) 的多项式且在 \(0\) 处至少二重零点，从而存在 \(\beta_{K,q}\) 使 \(\Phi_K(p)=\sum_{q=2}^{K}\beta_{K,q}p^q\)。
+代回 \(p=w_m(x)\) 并对 \(x\) 求和得到
+\(
+L_K^\star(m)=\sum_{q=2}^{K}\beta_{K,q}M_q(m)
+\)。
+\par
+为说明可逆性，注意 \(\beta_{K,K}\) 为 \(\Phi_K\) 的最高次系数，即 \(\Psi_K\) 中 \(p^{K-1}\) 的系数。
+由
+\[
+\Psi_K(p)=\sum_{j=0}^{K-1}\log(1+j)\binom{K-1}{j}p^{j}(1-p)^{K-1-j}
+\]
+展开 \((1-p)^{K-1-j}\) 并收集 \(p^{K-1}\) 项，即得所示交错和表达式，它等于 \(\log(1+\cdot)\) 在 \(0\) 处的 \((K-1)\) 阶前向差分 \(\Delta^{K-1}(\log(1+\cdot))(0)\)。
+由于 \(\log(1+\cdot)\) 非多项式，故其所有高阶差分均不恒为零，因而 \(\beta_{K,K}\neq 0\)。
+于是 \(\{L_K^\star(m)\}_{K=2}^{N}\) 与 \(\{M_q(m)\}_{q=2}^{N}\) 之间给出上三角、对角非零的线性系统，可由回代唯一解出 \(\{M_q(m)\}_{q=2}^{N}\)。
+\par
+最后，已知幂和 \(M_1,\dots,M_N\) 可由 Newton 恒等式恢复 \(P_m\) 的初等对称系数，从而恢复根的多重集 \(\{w_m(x)\}\)；再由 \(d_m(x)=2^m w_m(x)\) 得到纤维谱。证毕。
+\end{proof}
+
+\begin{theorem}[有限分辨率 InfoNCE 层析的最小测量数]\label{thm:pom-infonce-fiber-spectrum-tomography-minimality}
+固定分辨率 \(m\)，记
+\[
+X_m=\{x_1,\dots,x_N\},
+\qquad
+N:=|X_m|,
+\qquad
+w_i:=w_m(x_i)=\frac{d_m(x_i)}{2^m}.
+\]
+考虑严格有序单纯形
+\[
+\Delta_N^\downarrow
+:=
+\Bigl\{
+(w_1,\dots,w_N)\in\RR^N:\ 
+w_1>\cdots>w_N>0,\ \sum_{i=1}^N w_i=1
+\Bigr\}.
+\]
+对每个 \(2\le K\le N\)，定义
+\[
+L_K^\star(w):=\sum_{i=1}^{N}w_i\,\Psi_K(w_i),
+\qquad
+\Psi_K(p):=\EE\bigl[\log(1+\mathrm{Binomial}(K-1,p))\bigr].
+\]
+则在任意非空开集 \(U\subset \Delta_N^\downarrow\) 上，坐标族
+\[
+\bigl(L_2^\star,\dots,L_N^\star\bigr)
+\]
+构成恢复纤维谱的最小完备层析系统。更具体地：
+\begin{enumerate}
+  \item 由 \(\{L_K^\star\}_{K=2}^{N}\) 可唯一恢复 \(U\) 上每一点所对应的有序纤维谱；
+  \item 若只保留少于 \(N-1\) 个 Bayes 最优 InfoNCE 标量，则不存在任何在 \(U\) 上连续单射的恢复映射。
+\end{enumerate}
+因此，\(N-1=|X_m|-1\) 个 Bayes 最优 InfoNCE 数值既是充分的，也是泛型意义下必要的最小测量数。
+\end{theorem}
+\begin{proof}
+第 \(1\) 条正是定理 \ref{thm:pom-infonce-fiber-spectrum-tomography} 的结论：由
+\[
+L_2^\star(m),\dots,L_N^\star(m)
+\]
+可先恢复
+\[
+M_2(m),\dots,M_N(m),
+\]
+再由 Newton 恒等式恢复多项式
+\[
+P_m(t)=\prod_{i=1}^{N}(t-w_i),
+\]
+从而恢复全部纤维谱。
+
+现证最小性。任取整数 \(r<N-1\)，并取
+\[
+2\le K_1<\cdots<K_r\le N.
+\]
+把相应的 InfoNCE 读数看作连续映射
+\[
+\mathcal L_r:U\to\RR^r,
+\qquad
+\mathcal L_r(w):=\bigl(L_{K_1}^\star(w),\dots,L_{K_r}^\star(w)\bigr).
+\]
+若存在某个这样的 \(\mathcal L_r\) 在 \(U\) 上连续单射，则利用坐标图
+\[
+\pi:U\to V\subset\RR^{N-1},
+\qquad
+\pi(w_1,\dots,w_N):=(w_1,\dots,w_{N-1}),
+\]
+可把 \(U\) 识别为 \(\RR^{N-1}\) 的一个开集 \(V\)。于是
+\[
+\widetilde{\mathcal L}_r:=\mathcal L_r\circ \pi^{-1}:V\to\RR^r
+\]
+也是连续单射。再与标准嵌入
+\[
+\iota:\RR^r\hookrightarrow\RR^{N-1},
+\qquad
+\iota(y)=(y,0,\dots,0),
+\]
+复合，得到连续单射
+\[
+\iota\circ \widetilde{\mathcal L}_r:V\to\RR^{N-1}.
+\]
+由 Brouwer 不变域定理，\((\iota\circ \widetilde{\mathcal L}_r)(V)\) 必为 \(\RR^{N-1}\) 中的开集；但该像包含于真线性子空间
+\[
+\iota(\RR^r)\subsetneq \RR^{N-1},
+\]
+不可能含有非空开集，矛盾。
+
+故当 \(r<N-1\) 时，任意由少于 \(N-1\) 个 InfoNCE 标量组成的连续读出都不可能在 \(U\) 上给出连续单射恢复。证毕。
+\end{proof}
+
+\endinput

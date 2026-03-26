@@ -1,0 +1,149 @@
+% Shift-commuting prime-register algorithms as polynomials.
+
+\begin{theorem}[移位可交换算法的多项式半环刻画]\label{thm:conclusion-shift-commuting-algorithms-polynomial}
+令 \(\mathcal P:=\NN^{(\NN)}\) 为由基向量 \(\{\mathbf e_t\}_{t\ge 1}\) 生成的自由交换幺半群（有限支撑）。
+记移位端同态 \(\mathrm{Sh}:\mathcal P\to\mathcal P\) 为
+\[
+(\mathrm{Sh}\,a)_t=
+\begin{cases}
+0,&t=1,\\
+a_{t-1},&t\ge 2,
+\end{cases}
+\]
+并定义
+\[
+\mathrm{End}_{\mathrm{Sh}}(\mathcal P):=\{\Phi:\mathcal P\to\mathcal P:\ \Phi\ \text{为幺半群同态且}\ \Phi\circ\mathrm{Sh}=\mathrm{Sh}\circ\Phi\}.
+\]
+在 \(\mathrm{End}_{\mathrm{Sh}}(\mathcal P)\) 上定义逐点加法 \((\Phi+\Psi)(x):=\Phi(x)+\Psi(x)\) 与乘法 \(\Phi\cdot\Psi:=\Phi\circ\Psi\)。
+则存在自然半环同构
+\[
+\Theta:\NN[z]\xrightarrow{\ \cong\ }\mathrm{End}_{\mathrm{Sh}}(\mathcal P),
+\]
+其对 \(f(z)=\sum_{j=0}^{d}a_j z^j\) 的像 \(\Theta(f)=:\Phi_f\) 由
+\[
+\Phi_f(\mathbf e_t)=\sum_{j=0}^{d}a_j\,\mathbf e_{t+j}\qquad(t\ge 1)
+\]
+唯一确定，并满足 \(\Phi_{f+g}=\Phi_f+\Phi_g\)、\(\Phi_{fg}=\Phi_f\circ\Phi_g\)。
+\end{theorem}
+\begin{proof}
+因 \(\mathcal P\) 自由，任意幺半群同态由 \(\Phi(\mathbf e_t)\) 唯一决定。
+交换关系 \(\Phi\circ\mathrm{Sh}=\mathrm{Sh}\circ\Phi\) 蕴含 \(\Phi(\mathbf e_t)=\mathrm{Sh}^{t-1}\Phi(\mathbf e_1)\)，故 \(\Phi\) 由 \(\Phi(\mathbf e_1)\) 唯一决定。
+而 \(\Phi(\mathbf e_1)\) 具有有限支撑，故可唯一写作 \(\sum_{j=0}^d a_j \mathbf e_{1+j}\)；以此定义 \(f(z)\) 与 \(\Phi_f\) 即得双射。
+逐点加法对应系数相加，复合对基向量的作用给出 Cauchy 乘积，从而得到半环同构。证毕。
+\end{proof}
+
+\input{thm__conclusion-multishift-commuting-algorithms-polynomial}
+\input{thm__conclusion-multishift-random-walk-profile}
+
+\begin{proposition}[Gödel 整数化与素数移位的乘法公式]\label{prop:conclusion-godel-integerization-prime-shift-polynomial}
+令 \(p_1<p_2<\cdots\) 为素数序列，并定义 Gödel 同构
+\[
+G:\mathcal P\to\NN_{\ge 1},\qquad
+G(a):=\prod_{t\ge 1}p_t^{a_t}.
+\]
+令 \(\mathrm{Sh}_{\mathbb P}:\NN_{\ge 1}\to\NN_{\ge 1}\) 为素数移位端同态
+\[
+\mathrm{Sh}_{\mathbb P}\!\left(\prod_{t\ge 1}p_t^{a_t}\right):=\prod_{t\ge 1}p_{t+1}^{a_t},
+\]
+并对 \(f(z)=\sum_{j=0}^d a_j z^j\in\NN[z]\) 令 \(\Phi_f=\Theta(f)\)（定理 \ref{thm:conclusion-shift-commuting-algorithms-polynomial}）。
+则对任意 \(a\in\mathcal P\) 成立
+\[
+G(\Phi_f(a))=\prod_{j=0}^{d}\mathrm{Sh}_{\mathbb P}^{\,j}\!\bigl(G(a)\bigr)^{a_j}.
+\]
+从而 \(F_f:=G\circ\Phi_f\circ G^{-1}:\NN_{\ge 1}\to\NN_{\ge 1}\) 满足
+\[
+F_{fg}=F_f\circ F_g,\qquad
+F_{f+g}=F_f\cdot F_g\quad(\text{逐点乘法}).
+\]
+\end{proposition}
+\begin{proof}
+令 \(a=(a_t)\)。
+由 \(\Phi_f(\mathbf e_t)=\sum_j a_j\mathbf e_{t+j}\) 得
+\(
+(\Phi_f(a))_k=\sum_{j=0}^{d}a_j\,a_{k-j}
+\)。
+故
+\[
+G(\Phi_f(a))
+=\prod_{k\ge 1}p_k^{\sum_j a_j a_{k-j}}
+=\prod_{j=0}^{d}\left(\prod_{t\ge 1}p_{t+j}^{a_t}\right)^{a_j}
+=\prod_{j=0}^{d}\mathrm{Sh}_{\mathbb P}^{\,j}\!\bigl(G(a)\bigr)^{a_j}.
+\]
+两条函子性由 \(\Phi_{fg}=\Phi_f\circ\Phi_g\)、\(\Phi_{f+g}=\Phi_f+\Phi_g\) 与 \(G(a+b)=G(a)G(b)\) 立得。证毕。
+\end{proof}
+
+\begin{proposition}[谱半径与总次数放大因子]\label{prop:conclusion-polynomial-algorithm-spectral-radius-mass}
+令 \(f(z)=\sum_{j=0}^d a_j z^j\in\NN[z]\) 且 \(f\neq 0\)，并令 \(S\) 为 \(\ell^2(\NN)\) 上的单侧移位算子 \(S\delta_t=\delta_{t+1}\)。
+则
+\[
+\rho\!\bigl(f(S)\bigr)=\max_{|z|\le 1}|f(z)|=f(1).
+\]
+并且对总次数泛函 \(\Omega(a):=\sum_{t\ge 1}a_t\)（\(a\in\mathcal P\)）有严格等式
+\[
+\Omega(\Phi_f(a))=f(1)\,\Omega(a),
+\]
+从而 \(\Omega(\Phi_f^{\,n}(a))=f(1)^n\Omega(a)\)。
+\end{proposition}
+\begin{proof}
+已知 \(\mathrm{spec}(S)=\overline{\mathbb D}\)。由谱映射定理，
+\(
+\mathrm{spec}(f(S))=f(\overline{\mathbb D})
+\)，故
+\(
+\rho(f(S))=\max_{|z|\le 1}|f(z)|
+\)。
+当 \(a_j\ge 0\) 时，\(|f(z)|\le \sum_j a_j|z|^j\le \sum_j a_j=f(1)\)，且在 \(z=1\) 取到，得结论。
+\par
+对 \(\Omega\)，由坐标卷积与求和换序得
+\[
+\Omega(\Phi_f(a))
+=\sum_k\sum_j a_j a_{k-j}
+=\sum_j a_j\sum_s a_s
+=f(1)\Omega(a).
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[高素数端的椭圆重整化指数]\label{prop:conclusion-prime-shift-ellipse-renormalization-exponent}
+令 \(f\in\NN[z]\) 非零并令 \(F_f:\NN_{\ge 1}\to\NN_{\ge 1}\) 如命题 \ref{prop:conclusion-godel-integerization-prime-shift-polynomial}。
+对 \(n\in\NN_{\ge 1}\) 记
+\[
+T(n):=\min\{t\ge 1:\ v_{p_t}(n)>0\},
+\]
+并设 \((n_k)\) 为一列整数满足 \(T(n_k)\to\infty\)。
+则对任意 \(s>0\) 有极限
+\[
+\lim_{k\to\infty}\frac{\log (F_f(n_k))}{\log n_k}=f(1),
+\qquad
+\lim_{k\to\infty}\frac{\log(n_k^{-s})}{\log(F_f(n_k)^{-s})}=\frac{1}{f(1)}.
+\]
+等价地，在定理 \ref{thm:conclusion-unit-circle-ellipse-prime-register-isomorphism} 的几何口径下，
+\[
+\lim_{k\to\infty}\frac{d(I,A_{F_f(n_k)})}{d(I,A_{n_k})}=f(1).
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:conclusion-godel-integerization-prime-shift-polynomial} 的乘法公式，\(\log F_f(n)=\sum_j a_j\log(\mathrm{Sh}_{\mathbb P}^{\,j}(n))\)。
+把 \(n=\prod_t p_t^{\alpha_t}\) 写成素数幂，得
+\[
+\log(\mathrm{Sh}_{\mathbb P}^{\,j}(n))=\sum_t \alpha_t\log p_{t+j},
+\qquad
+\log n=\sum_t \alpha_t\log p_t.
+\]
+对固定 \(j\) 且当 \(T(n)\to\infty\) 时，由素数定理可得
+\(
+\sup_{t\ge T(n)}\left|\frac{\log p_{t+j}}{\log p_t}-1\right|\to 0
+\)，从而
+\(
+\log(\mathrm{Sh}_{\mathbb P}^{\,j}(n))/\log n\to 1
+\)。
+代回并求和得到
+\(
+\log F_f(n)/\log n\to \sum_j a_j=f(1)
+\)。
+其余两式由 \(d(I,A_n)=|\log n|/\sqrt2\) 与 \(n^{-s}=\exp(-s\log n)\) 直接改写得到。证毕。
+\end{proof}
+
+\input{thm__conclusion-logp-weighted-tail-operator-norm}
+
+\endinput

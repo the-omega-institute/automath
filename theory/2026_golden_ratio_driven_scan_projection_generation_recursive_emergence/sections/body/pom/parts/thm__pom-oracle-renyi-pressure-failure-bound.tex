@@ -1,0 +1,340 @@
+\begin{theorem}[预言机可逆容量的 R\'enyi--压力失败上界]\label{thm:pom-oracle-renyi-pressure-failure-bound}
+固定分辨率 \(m\) 并记 \(\Omega_m=\{0,1\}^m\)。
+对预算 \(B\ge 0\)，令预言机可逆容量与成功率定义为
+\[
+C_m(B):=\sum_{x\in X_m}\min\bigl(d_m(x),2^B\bigr),
+\qquad
+\mathrm{Succ}_m(B):=\frac{C_m(B)}{2^m},
+\qquad
+\mathrm{Fail}_m(B):=1-\mathrm{Succ}_m(B).
+\]
+对任意 \(q>1\) 与任意 \(B\ge 0\) 成立 R\'enyi 型失败界
+\[
+\boxed{\;
+\mathrm{Fail}_m(B)\ \le\ 2^{-(q-1)B}\cdot \frac{S_q(m)}{2^m},
+\qquad
+S_q(m):=\sum_{x\in X_m}d_m(x)^q.\;}
+\]
+若进一步假设压力极限
+\(
+P_q=\lim_{m\to\infty}\frac{1}{m}\log S_q(m)
+\)
+存在，并取 \(B=\lfloor bm\rfloor\)，则
+\[
+\limsup_{m\to\infty}\frac{1}{m}\log \mathrm{Fail}_m(\lfloor bm\rfloor)
+\le
+P_q-\log 2-(q-1)b\log 2,
+\]
+从而误差指数满足
+\[
+\liminf_{m\to\infty}-\frac{1}{m}\log \mathrm{Fail}_m(\lfloor bm\rfloor)
+\ge
+\sup_{q>1}\Bigl((q-1)b\log 2-\bigl(P_q-\log 2\bigr)\Bigr).
+\]
+\end{theorem}
+
+\begin{proof}
+令 \(\pi_m(x):=d_m(x)/2^m\) 并记阈值 \(t:=2^B/2^m\)。
+由
+\(
+\mathrm{Succ}_m(B)=\sum_x \min(\pi_m(x),t)
+\)
+得到
+\(
+\mathrm{Fail}_m(B)=\sum_x (\pi_m(x)-t)_+
+\)。
+对任意 \(q>1\)，点态不等式 \((u-t)_+\le t^{1-q}u^q\)（\(u\ge 0\)）成立，故
+\[
+\mathrm{Fail}_m(B)
+=\sum_x (\pi_m(x)-t)_+
+\le t^{1-q}\sum_x \pi_m(x)^q.
+\]
+又
+\(
+\sum_x \pi_m(x)^q
+=2^{-mq}\sum_x d_m(x)^q
+=2^{-mq}S_q(m)
+\)
+并且
+\(
+t^{1-q}=(2^{B-m})^{1-q}=2^{-(q-1)B}2^{(q-1)m}
+\)，代回得
+\[
+\mathrm{Fail}_m(B)\le 2^{-(q-1)B}\cdot \frac{S_q(m)}{2^m}.
+\]
+取 \(B=\lfloor bm\rfloor\)，对数除以 \(m\) 并令 \(m\to\infty\) 得到压力形式的不等式；最后对 \(q\) 取上确界即得误差指数下界。
+证毕。
+\end{proof}
+
+\begin{theorem}[双重大偏差制度下预言机失败指数的对偶律：尾部率函数与矩谱的精确等价]\label{thm:pom-oracle-failure-exponent-duality-from-double-ldp}
+沿用定理 \ref{thm:pom-oracle-renyi-pressure-failure-bound} 的记号，并对每个 \(m\) 定义类型均匀测度 \(U_m=\mathrm{Unif}(X_m)\) 与纤维对数体积随机变量
+\[
+Y_m(x):=\frac1m\log d_m(x),\qquad x\in X_m.
+\]
+对 \(\alpha\in[0,1]\)（比特密度）定义预算 \(B_m:=\lfloor \alpha m\rfloor\) 与失败指数
+\[
+E(\alpha):=\lim_{m\to\infty}-\frac1m\log \mathrm{Fail}_m(B_m),
+\]
+若极限存在。
+假设关于 \((Y_m)_{m\ge 1}\) 的双重大偏差制度成立：在测度 \(w_m\) 与 \(U_m\) 下分别满足完全大偏差原理，且对应良好率函数为 \(I_w\) 与 \(I_U\)（见定理 \ref{thm:pom-ldp-uniform-and-wm-exact-spectrum} 的记号口径）。
+并假设实参数压力极限 \(\tau(q)=\lim_{m\to\infty}\frac1m\log S_q(m)\) 在 \(q>1\) 上存在（定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的热力学制度）。
+令 \(r_q:=\exp(\tau(q))\) 并记未归一化 \(q\)-阶投影熵率指纹
+\[
+h_q:=q\log 2-\log r_q\qquad(q>1).
+\]
+则对每个 \(\alpha\in[0,1]\) 极限 \(E(\alpha)\) 必存在，并且满足以下两种等价表述：
+\begin{enumerate}
+  \item 率函数上尾形式
+  \[
+  \boxed{\;
+  E(\alpha)=\inf_{\beta\ge \alpha\log 2} I_w(\beta)\;}
+  \]
+  其中若对充分大 \(m\) 有 \(2^{B_m}\ge \max_{x\in X_m} d_m(x)\)（从而 \(\mathrm{Fail}_m(B_m)=0\)），则约定右端取 \(+\infty\)；
+  \item 精确矩谱对偶形式
+  \[
+  \boxed{\;
+  E(\alpha)=\sup_{q>1}\Bigl[h_q-(q-1)(1-\alpha)\log 2\Bigr]_+\;}
+  \]
+  其中 \([t]_+:=\max(t,0)\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+令 \(\pi_m(x):=w_m(x)=d_m(x)/2^m\) 并记阈值 \(t_m:=2^{B_m}/2^m\)。
+由定理 \ref{thm:pom-oracle-renyi-pressure-failure-bound} 的推导已知
+\[
+\mathrm{Fail}_m(B_m)=\sum_{x\in X_m}\bigl(\pi_m(x)-t_m\bigr)_+.
+\]
+设 \(c:=\alpha\log 2\)。
+注意到
+\[
+\pi_m(x)=\exp\bigl(m(Y_m(x)-\log 2)\bigr),
+\qquad
+t_m=\exp\bigl(m(c-\log 2)+o(m)\bigr),
+\]
+故 \(\pi_m(x)>t_m\) 等价于 \(Y_m(x)>c+o(1)\)。
+\par
+先证 (1)。
+对任意 \(x\)，有 \((\pi_m(x)-t_m)_+\le \pi_m(x)\mathbf 1_{\{\pi_m(x)>t_m\}}\)，求和得到
+\[
+\mathrm{Fail}_m(B_m)\le \sum_x \pi_m(x)\mathbf 1_{\{Y_m(x)\ge c\}}=w_m(Y_m\ge c).
+\]
+反之，任取 \(\varepsilon>0\)。若 \(Y_m(x)\ge c+\varepsilon\)，则 \(\pi_m(x)/t_m\ge e^{m\varepsilon+o(m)}\)，从而对充分大 \(m\) 有
+\[
+\pi_m(x)-t_m=\pi_m(x)\Bigl(1-\frac{t_m}{\pi_m(x)}\Bigr)\ge \pi_m(x)\bigl(1-e^{-m\varepsilon}\bigr).
+\]
+于是
+\[
+\mathrm{Fail}_m(B_m)\ge (1-e^{-m\varepsilon})\,w_m(Y_m\ge c+\varepsilon).
+\]
+在 \(w_m\)-LDP 下，对闭集 \([c,\infty)\) 与开集 \((c+\varepsilon,\infty)\) 分别应用上、下界并令 \(\varepsilon\downarrow 0\)，得到
+\[
+\lim_{m\to\infty}-\frac1m\log \mathrm{Fail}_m(B_m)=\inf_{\beta\ge c} I_w(\beta),
+\]
+即 (1)。
+\par
+为证 (2)，记 \(t=q-1>0\) 并令
+\[
+\Lambda_w(t):=\lim_{m\to\infty}\frac1m\log \EE_{w_m}\!\left[e^{t m Y_m}\right].
+\]
+由命题 \ref{prop:pom-fiber-index-cgf} 与 \(\tau(q)=\lim_m \frac1m\log S_q(m)\) 可得
+\[
+\Lambda_w(t)=\tau(t+1)-\log 2=\tau(q)-\log 2.
+\]
+双重大偏差制度给出 \(I_w\) 与 \(\Lambda_w\) 的 Legendre--Fenchel 对偶关系，因而上尾变分可写为 Chernoff 对偶：
+\[
+\inf_{\beta\ge c}I_w(\beta)=\sup_{t\ge 0}\bigl(tc-\Lambda_w(t)\bigr)_+.
+\]
+将 \(t=q-1\) 与 \(\Lambda_w(t)=\tau(q)-\log 2\) 代入，并用 \(h_q=q\log 2-\tau(q)\) 化简，得到
+\[
+\inf_{\beta\ge c}I_w(\beta)
+=\sup_{q>1}\bigl((q-1)c-(\tau(q)-\log 2)\bigr)_+
+=\sup_{q>1}\Bigl[h_q-(q-1)(1-\alpha)\log 2\Bigr]_+,
+\]
+即 (2)。证毕。
+\end{proof}
+
+\begin{corollary}[比特尺度下的失败指数相变：\texorpdfstring{$\inf_{\gamma>\alpha}I(\gamma)$}{inf_{gamma>alpha} I(gamma)} 形式]\label{cor:pom-oracle-failure-exponent-bit-ldp}
+在定理 \ref{thm:pom-oracle-failure-exponent-duality-from-double-ldp} 的设定下，令
+\[
+\gamma_m(x):=\frac{1}{m}\log_2 d_m(x),
+\qquad x\in X_m,
+\]
+并令 \(X\sim w_m\)（即 \(w_m(x)=d_m(x)/2^m\)）。
+假设 \((\gamma_m(X))_{m\ge 1}\) 满足速度 \(m\) 的大偏差原理，良速率函数为 \(I_2\)（以 \(\log_2\) 为单位）。
+取 \(B_m=\lfloor \alpha m\rfloor\)（\(\alpha\ge 0\)），则最优 \(B_m\)-比特反演机制的失败概率满足指数律
+\[
+\boxed{\;
+\lim_{m\to\infty}-\frac{1}{m}\log_2 \mathrm{Fail}_m(B_m)
+\;=\;
+\inf_{\gamma>\alpha} I_2(\gamma)\; }.
+\]
+\end{corollary}
+\begin{proof}
+由 \(d_m(x)>2^{B_m}\iff \gamma_m(x)>\alpha+o(1)\)，并用定理 \ref{thm:pom-oracle-failure-exponent-duality-from-double-ldp} 的上、下界推导在 \(\log 2\) 单位下成立；将自然对数单位的速率函数 \(I_w\) 换为比特单位 \(I_2(\gamma)=I_w(\gamma\log 2)/\log 2\) 即得。证毕。
+\end{proof}
+
+\begin{theorem}[预言机成功指数的两测度竞争公式]\label{thm:pom-oracle-success-exponent-two-measure-competition}
+在定理 \ref{thm:pom-oracle-failure-exponent-duality-from-double-ldp} 的假设下，定义成功指数
+\[
+S(\alpha):=\lim_{m\to\infty}-\frac1m\log \mathrm{Succ}_m(\lfloor \alpha m\rfloor).
+\]
+则极限 \(S(\alpha)\) 对每个 \(\alpha\in[0,1]\) 必存在，并满足精确表达式
+\[
+\boxed{\;
+S(\alpha)
+=\min\Bigl\{
+\inf_{\beta\le \alpha\log 2} I_w(\beta),\
+(1-\alpha)\log 2-\log\varphi+\inf_{\beta\ge \alpha\log 2} I_U(\beta)
+\Bigr\}.}
+\]
+\end{theorem}
+\begin{proof}
+由定义分解
+\[
+\min(d_m(x),2^{B_m})=d_m(x)\mathbf 1_{\{d_m(x)\le 2^{B_m}\}}+2^{B_m}\mathbf 1_{\{d_m(x)>2^{B_m}\}}.
+\]
+两边对 \(x\in X_m\) 求和并除以 \(2^m\)，得到
+\[
+\mathrm{Succ}_m(B_m)
+=w_m(Y_m\le \alpha\log 2+o(1))
++2^{B_m-m}\,|X_m|\cdot U_m(Y_m>\alpha\log 2+o(1)).
+\]
+由 \(|X_m|=\exp(m\log\varphi+o(m))\)（命题 \ref{prop:pom-projection-entropy}）可将第二项写为
+\[
+\exp\!\bigl(-m\bigl((1-\alpha)\log 2-\log\varphi\bigr)+o(m)\bigr)\cdot U_m(Y_m>\alpha\log 2+o(1)).
+\]
+分别对 \(w_m(Y_m\le \alpha\log 2)\) 与 \(U_m(Y_m\ge \alpha\log 2)\) 应用两套 LDP 的闭/开集上、下界，得到两项的指数衰减率分别为
+\(
+\inf_{\beta\le \alpha\log 2}I_w(\beta)
+\)
+与
+\(
+(1-\alpha)\log 2-\log\varphi+\inf_{\beta\ge \alpha\log 2}I_U(\beta)
+\)。
+由于 \(\mathrm{Succ}_m(B_m)\) 为两项之和，指数主导项对应较小衰减率，故取二者最小值即得。证毕。
+\end{proof}
+
+\begin{corollary}[指数倾斜与速率函数的仿射关系]\label{cor:pom-oracle-Iw-Iu-affine-tilt}
+在定理 \ref{thm:pom-oracle-failure-exponent-duality-from-double-ldp} 的假设下，\(I_w\) 与 \(I_U\) 在有效域上满足
+\[
+\boxed{\;
+I_w(\beta)=I_U(\beta)-\beta+(\log 2-\log\varphi)\;}
+\]
+其中 \(\log|X_m|=m\log\varphi+o(m)\)。
+\end{corollary}
+\begin{proof}
+由指数倾斜恒等式 \(w_m(x)=\frac{|X_m|}{2^m}e^{mY_m(x)}U_m(x)\) 与
+\(
+\frac1m\log\EE_{U_m}[e^{mY_m}]=\log 2-\log\varphi+o(1)
+\)
+（见定理 \ref{thm:pom-oracle-tomography-completeness-f-Iu-Iw} 的证明要点），对倾斜测度的大偏差变换应用标准倾斜原理即得。证毕。
+\end{proof}
+
+\begin{theorem}[热力学共轭：最优矩阶的存在唯一性与失败指数的光滑结构]\label{thm:pom-oracle-failure-thermo-conjugacy-smooth}
+在定理 \ref{thm:pom-oracle-failure-exponent-duality-from-double-ldp} 的条件外，进一步假设 \(\tau\) 在 \((1,\infty)\) 上二阶可微且严格凸。
+定义临界比特率
+\[
+\alpha_c:=\frac{\tau'(1^+)}{\log 2},
+\qquad
+\alpha_{\max}:=\frac{1}{\log 2}\limsup_{m\to\infty}\frac1m\log D_m
+\quad\Bigl(D_m:=\max_{x\in X_m}d_m(x)\Bigr).
+\]
+则对每个 \(\alpha\in(\alpha_c,\alpha_{\max})\)：
+\begin{enumerate}
+  \item 定理 \ref{thm:pom-oracle-failure-exponent-duality-from-double-ldp}(2) 的上确界存在唯一极值点 \(q(\alpha)>1\)，并满足共轭方程
+  \[
+  \boxed{\;\tau'(q(\alpha))=\alpha\log 2.\;}
+  \]
+  \item 在该区间上有显式表示
+  \[
+  \boxed{\;
+  E(\alpha)=\log 2+(q(\alpha)-1)\alpha\log 2-\tau(q(\alpha))\;}
+  \]
+  并且 \(E\in C^2((\alpha_c,\alpha_{\max}))\) 且导数满足
+  \[
+  E'(\alpha)=(q(\alpha)-1)\log 2,
+  \qquad
+  E''(\alpha)=\frac{\log^2 2}{\tau''(q(\alpha))}>0.
+  \]
+\end{enumerate}
+因此 \(E(\alpha)\) 在超临界区间严格递增且严格凸。
+\end{theorem}
+\begin{proof}
+令
+\[
+F_\alpha(q):=\log 2+(q-1)\alpha\log 2-\tau(q)\qquad(q>1).
+\]
+则 \(F_\alpha''(q)=-\tau''(q)<0\)，故 \(F_\alpha\) 在 \((1,\infty)\) 上严格凹，从而极大点至多一个。
+其一阶驻点方程为 \(F_\alpha'(q)=\alpha\log 2-\tau'(q)=0\)，由严格凸性知 \(\tau'\) 严格递增，因此解唯一，记为 \(q(\alpha)\)。
+将其代回得到 \(E(\alpha)=\sup_{q>1}[F_\alpha(q)]_+=F_\alpha(q(\alpha))\)（在 \(\alpha\in(\alpha_c,\alpha_{\max})\) 上主值为正）。
+最后由包络定理与隐函数定理（\(q'(\alpha)=\log 2/\tau''(q(\alpha))\)）得到导数公式。证毕。
+\end{proof}
+
+\begin{theorem}[多重分形几何公式：失败指数是微态谱的上尾缺口]\label{thm:pom-oracle-failure-multifractal-geometry}
+在定理 \ref{thm:pom-oracle-failure-exponent-duality-from-double-ldp} 的制度下，令计数谱 \(f\) 满足
+\[
+f(\beta)=\log\varphi-I_U(\beta)
+\]
+（定理 \ref{thm:pom-ldp-uniform-and-wm-exact-spectrum} 的谱等号口径）。
+定义微态谱函数
+\[
+g(\beta):=\beta+f(\beta).
+\]
+则对所有 \(\alpha\in[0,1]\) 有几何表示
+\[
+\boxed{\;
+E(\alpha)=\log 2-\sup_{\beta\ge \alpha\log 2} g(\beta)\;}
+\]
+并且若 \(\sup_{\beta\ge \alpha\log 2}g(\beta)\) 在端点 \(\beta=\alpha\log 2\) 处取到，则进一步化简为
+\[
+E(\alpha)=\log 2-\bigl(\alpha\log 2+f(\alpha\log 2)\bigr).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-oracle-failure-exponent-duality-from-double-ldp}(1)，
+\(
+E(\alpha)=\inf_{\beta\ge c}I_w(\beta)
+\)
+其中 \(c=\alpha\log 2\)。
+由推论 \ref{cor:pom-oracle-Iw-Iu-affine-tilt} 与 \(f(\beta)=\log\varphi-I_U(\beta)\) 得
+\[
+I_w(\beta)=I_U(\beta)-\beta+(\log 2-\log\varphi)=\log 2-\beta-f(\beta)=\log 2-g(\beta).
+\]
+故
+\[
+E(\alpha)=\inf_{\beta\ge c}\bigl(\log 2-g(\beta)\bigr)=\log 2-\sup_{\beta\ge c}g(\beta),
+\]
+得第一式；端点化简为上确界在端点处达到时的直接推论。证毕。
+\end{proof}
+
+\begin{corollary}[指数可靠度的反演设计：给定目标失败指数的最小比特率]\label{cor:pom-oracle-failure-exponent-inverse-design}
+沿用定理 \ref{thm:pom-oracle-failure-multifractal-geometry} 的记号，定义单调函数
+\[
+G(c):=\sup_{\beta\ge c} g(\beta)\qquad(c\in\RR).
+\]
+则对任意 \(\alpha\in[0,1]\) 有 \(E(\alpha)=\log 2-G(\alpha\log 2)\)，且 \(G\) 非增。
+因此对任意目标指数 \(e\ge 0\)，令
+\[
+c_e:=\inf\bigl\{c:\ G(c)\le \log 2-e\bigr\},
+\qquad
+\alpha_e:=\frac{c_e}{\log 2},
+\]
+则成立严格等价
+\[
+E(\alpha)\ge e\quad\Longleftrightarrow\quad \alpha\ge \alpha_e.
+\]
+若进一步满足定理 \ref{thm:pom-oracle-failure-thermo-conjugacy-smooth} 的严格凸性条件，则指数--速率前沿可由 \(q>1\) 参数化为
+\[
+\alpha(q):=\frac{\tau'(q)}{\log 2},
+\qquad
+e(q):=\log 2+(q-1)\tau'(q)-\tau(q),
+\]
+并满足 \(E(\alpha(q))=e(q)\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-oracle-failure-multifractal-geometry} 直接得 \(E(\alpha)=\log 2-G(\alpha\log 2)\)。
+由 \(G\) 单调性，集合 \(\{\alpha:\ E(\alpha)\ge e\}\) 为闭半轴，端点即为所定义的 \(\alpha_e\)，从而得到等价式。
+严格凸性下的参数化由定理 \ref{thm:pom-oracle-failure-thermo-conjugacy-smooth} 的共轭关系 \(\tau'(q)=\alpha\log 2\) 与 \(E(\alpha)=\log 2+(q-1)\alpha\log 2-\tau(q)\) 直接代回得到。证毕。
+\end{proof}
+
+\endinput

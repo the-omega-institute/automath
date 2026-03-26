@@ -1,0 +1,337 @@
+\subsubsection{序贯判别与测度桥：似然比鞅、对称阈值 SPRT 与大偏差指数}\label{subsubsec:pom-golden-sequential-martingale-sprt-ldp}
+
+本段在命题 \ref{prop:pom-phi-logistic-posterior-grid} 的二相位模型上进一步抽取三条“可审计闭式链”：
+(i) 似然比的幂律 \(\Rightarrow\) 似然比鞅与对偶鞅；
+(ii) 对称阈值首次达 \(\Rightarrow\) 序贯最优判别（SPRT）之风险与期望样本量闭式；
+(iii) 偏置步进的 Cram\'er 大偏差 \(\Rightarrow\) 误差指数的三重同一化与 Esscher 去偏桥。
+
+\subsubsection{似然比鞅与对偶鞅}
+
+\begin{proposition}[黄金二相位隐藏位的似然比鞅与对偶鞅]\label{prop:pom-golden-likelihood-ratio-martingales}
+令 \(\varphi=\frac{1+\sqrt5}{2}\)。
+在二相位模型中令 \(B_i\in\{0,1\}\) 为隐藏位观测，并定义
+\[
+Y_i:=2B_i-1\in\{\pm 1\},\qquad
+K_n:=\sum_{i=1}^{n}Y_i,\qquad
+\mathcal{F}_n:=\sigma(B_1,\dots,B_n).
+\]
+设两相位假设 \(\theta_+\) 与 \(\theta_-\) 互补，使得在 \(\theta_+\) 下
+\(\mathbb{P}(B_i=1)=\varphi^{-1}\)，在 \(\theta_-\) 下
+\(\mathbb{P}(B_i=1)=\varphi^{-2}\)（且 \(B_i\) 条件独立同分布）。
+定义似然比
+\[
+L_n:=\frac{\mathbb{P}_{\theta_+}(B_1^n)}{\mathbb{P}_{\theta_-}(B_1^n)}.
+\]
+则 \(L_n\) 满足严格幂律
+\[
+\boxed{\;L_n=\varphi^{K_n}\;}
+\]
+并且 \((L_n)_{n\ge 0}\) 在 \(\mathbb{P}_{\theta_-}\) 下是非负鞅，\((L_n^{-1})_{n\ge 0}\) 在 \(\mathbb{P}_{\theta_+}\) 下是非负鞅。
+因此对任意有界停止时刻 \(\tau\) 有
+\[
+\boxed{\;\mathbb{E}_{\theta_-}[L_\tau]=1,\qquad \mathbb{E}_{\theta_+}[L_\tau^{-1}]=1.\;}
+\]
+\end{proposition}
+
+\begin{proof}
+由互补关系 \(\varphi^{-2}=1-\varphi^{-1}\)，单步似然比为
+\[
+\frac{\mathbb{P}_{\theta_+}(B_i=b)}{\mathbb{P}_{\theta_-}(B_i=b)}
+=\begin{cases}
+\varphi,& b=1,\\
+\varphi^{-1},& b=0,
+\end{cases}
+=\varphi^{2b-1}.
+\]
+由独立性，
+\(
+L_n=\prod_{i=1}^{n}\varphi^{2B_i-1}=\varphi^{K_n}
+\)。
+\par
+对 \(\mathbb{P}_{\theta_-}\) 下的鞅性，注意
+\(
+L_{n+1}=L_n\,\varphi^{Y_{n+1}}
+\)，且在 \(\theta_-\) 下 \(\mathbb{P}(Y_{n+1}=+1)=\varphi^{-2}\)、\(\mathbb{P}(Y_{n+1}=-1)=\varphi^{-1}\)，从而
+\[
+\mathbb{E}_{\theta_-}[\varphi^{Y_{n+1}}]
+=\varphi^{-2}\varphi+\varphi^{-1}\varphi^{-1}
+=\varphi^{-1}+\varphi^{-2}
+=1.
+\]
+故 \(\mathbb{E}_{\theta_-}[L_{n+1}\mid\mathcal{F}_n]=L_n\)。
+对偶鞅同理：在 \(\theta_+\) 下 \(\mathbb{E}_{\theta_+}[\varphi^{-Y_{n+1}}]=\varphi^{-1}\varphi^{-1}+\varphi^{-2}\varphi=1\)，故 \(\mathbb{E}_{\theta_+}[L_{n+1}^{-1}\mid\mathcal{F}_n]=L_n^{-1}\)。
+最后对有界停止时刻应用可选停即可得到期望恒等式。证毕。
+\end{proof}
+
+\subsubsection{对称阈值序贯判别：风险、期望样本量与后验量化}
+
+\begin{theorem}[对称阈值序贯判别的精确错误率：\texorpdfstring{$\varphi$}{phi}-logistic 常数]\label{thm:pom-sprt-symmetric-threshold-error}
+在命题 \ref{prop:pom-golden-likelihood-ratio-martingales} 的设定下，取整数阈值 \(T\ge 1\)，令
+\[
+\tau_T:=\inf\{n\ge 0:\ |K_n|=T\},\qquad
+\widehat\Theta_T:=\mathrm{sign}(K_{\tau_T})\in\{+,-\}.
+\]
+则该停止--判别规则等价于对称阈值的序贯似然比检验（SPRT）：
+\[
+\widehat\Theta_T=+\ \Longleftrightarrow\ L_{\tau_T}\ge \varphi^T,\qquad
+\widehat\Theta_T=-\ \Longleftrightarrow\ L_{\tau_T}\le \varphi^{-T}.
+\]
+并且在真相位为 \(\theta_+\) 时，错误概率具有完全闭式
+\[
+\boxed{\;
+\mathbb{P}_{\theta_+}(\widehat\Theta_T=-)=\frac{1}{1+\varphi^{T}},\qquad
+\mathbb{P}_{\theta_+}(\widehat\Theta_T=+)=\frac{\varphi^{T}}{1+\varphi^{T}}.\;}
+\]
+（对称地，在真相位为 \(\theta_-\) 时交换符号成立。）
+\end{theorem}
+
+\begin{proof}
+由 \(L_n=\varphi^{K_n}\)（命题 \ref{prop:pom-golden-likelihood-ratio-martingales}）可知事件 \(|K_n|=T\) 等价于 \(L_n\in\{\varphi^{T},\varphi^{-T}\}\)，并与 SPRT 的对称阈值完全一致。
+\par
+为求错误率，在 \(\theta_+\) 下用对偶鞅 \(L_n^{-1}\) 并对截断停止时刻 \(\tau_T\wedge N\) 应用可选停，再令 \(N\to\infty\)（此处 \(\tau_T\) 具有有限期望，见定理 \ref{thm:pom-sprt-symmetric-threshold-mean-time}），得到
+\[
+1=\mathbb{E}_{\theta_+}[L_{\tau_T}^{-1}]
+=\mathbb{P}_{\theta_+}(\widehat\Theta_T=+)\,\varphi^{-T}
+\mathbb{P}_{\theta_+}(\widehat\Theta_T=-)\,\varphi^{T}.
+\]
+令 \(e_T:=\mathbb{P}_{\theta_+}(\widehat\Theta_T=-)\)，并用 \(\mathbb{P}(\widehat\Theta_T=+)=1-e_T\)，解得
+\(
+e_T=(\varphi^{T}-1)/(\varphi^{2T}-1)=1/(1+\varphi^{T})
+\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[对称阈值序贯判别的精确期望样本量：漂移--吸收恒等式]\label{thm:pom-sprt-symmetric-threshold-mean-time}
+沿用定理 \ref{thm:pom-sprt-symmetric-threshold-error} 的设定，并令漂移
+\[
+\mu:=\mathbb{E}_{\theta_+}[Y_1]=\varphi^{-1}-\varphi^{-2}=\varphi^{-3}.
+\]
+则吸收时间的期望满足严格闭式
+\[
+\boxed{\;
+\mathbb{E}_{\theta_+}[\tau_T]
+=\varphi^{3}T\cdot\frac{\varphi^{T}-1}{\varphi^{T}+1}.\;}
+\]
+特别地 \(\mathbb{E}_{\theta_+}[\tau_T]\sim \varphi^{3}T\)，且相对误差为 \(O(\varphi^{-T})\)。
+\end{theorem}
+
+\begin{proof}
+令鞅 \(M_n:=K_n-\mu n\)。对截断停止时刻 \(\tau_T\wedge N\) 应用可选停并取期望得
+\(
+\mathbb{E}_{\theta_+}[K_{\tau_T\wedge N}]=\mu\,\mathbb{E}_{\theta_+}[\tau_T\wedge N]
+\)。
+令 \(N\to\infty\) 可得 \(\mathbb{E}_{\theta_+}[K_{\tau_T}]=\mu\,\mathbb{E}_{\theta_+}[\tau_T]\)。
+\par
+另一方面，\(K_{\tau_T}\in\{+T,-T\}\)，故
+\[
+\mathbb{E}_{\theta_+}[K_{\tau_T}]
+=T\cdot\mathbb{P}_{\theta_+}(\widehat\Theta_T=+)-T\cdot\mathbb{P}_{\theta_+}(\widehat\Theta_T=-)
+=T\cdot\frac{\varphi^{T}-1}{\varphi^{T}+1},
+\]
+其中最后一步由定理 \ref{thm:pom-sprt-symmetric-threshold-error} 的闭式错误率给出。
+除以 \(\mu=\varphi^{-3}\) 得到所示公式。
+相对误差由 \(\frac{\varphi^T-1}{\varphi^T+1}=1-\frac{2}{\varphi^T+1}=1-O(\varphi^{-T})\) 直接得到。证毕。
+\end{proof}
+
+\begin{corollary}[停止后验的整数可审计性：终止误差为确定常数]\label{cor:pom-sprt-stopping-posterior-constant}
+在等先验下，于停止时刻 \(\tau_T\) 的后验误差（最小后验概率）
+\[
+\varepsilon_T:=\min\{\mathbb{P}(\theta_+\mid B_1^{\tau_T}),\ \mathbb{P}(\theta_-\mid B_1^{\tau_T})\}
+\]
+几乎处处等于常数
+\[
+\boxed{\;\varepsilon_T=\frac{1}{1+\varphi^{T}}.\;}
+\]
+因此该序贯规则在后验意义下实现“精确 \(\varphi\)-分辨率量化”：误差水平与阈值 \(T\) 一一对应且无随机波动。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:pom-phi-logistic-posterior-grid}，
+\(
+\mathbb{P}(\theta_+\mid B_1^n)=\frac{1}{1+\varphi^{-K_n}}
+\)。
+在 \(n=\tau_T\) 时有 \(|K_{\tau_T}|=T\)，故两后验之一为 \((1+\varphi^{-T})^{-1}\)、另一为 \((1+\varphi^{T})^{-1}\)，其最小者恒为 \((1+\varphi^{T})^{-1}\)。证毕。
+\end{proof}
+
+\begin{proposition}[风险--复杂度前沿的参数化闭式与可逆性]\label{prop:pom-risk-complexity-frontier}
+令 \(R(T):=\varepsilon_T\) 与 \(N(T):=\mathbb{E}_{\theta_+}[\tau_T]\)。
+则
+\[
+\boxed{\;
+R(T)=\frac{1}{1+\varphi^{T}},\qquad
+N(T)=\varphi^{3}T\cdot\frac{1-\varphi^{-T}}{1+\varphi^{-T}}.\;}
+\]
+从而对任意目标风险 \(r\in(0,\tfrac12)\)，存在唯一整数
+\[
+T=\left\lceil\log_\varphi\!\left(\frac{1-r}{r}\right)\right\rceil
+\]
+使得 \(R(T)\le r<R(T-1)\)，并给出最优期望样本量的显式可审计上界
+\[
+\inf_{\text{序贯 Bayes 规则}:\ \varepsilon\le r}\ \mathbb{E}[\tau]
+\ \le\ N(T)
+=\varphi^{3}T\cdot\frac{\varphi^{T}-1}{\varphi^{T}+1}.
+\]
+\end{proposition}
+
+\begin{proof}
+前两式分别由推论 \ref{cor:pom-sprt-stopping-posterior-constant} 与定理 \ref{thm:pom-sprt-symmetric-threshold-mean-time} 给出。
+由于 \(R(T)\) 随 \(T\) 严格递减，且 \(R(T)\le r\) 等价于 \(\varphi^T\ge (1-r)/r\)，故最小整数阈值由上整给出。
+最后不等式只是说明：取本节的对称阈值 SPRT 作为候选规则即可达到风险 \(\le r\)，从而其期望停止时长给出 \(\inf\) 的上界。证毕。
+\end{proof}
+
+\subsubsection{大偏差率函数、指数常数同一化与 Esscher 去偏桥}
+
+\begin{theorem}[黄金漂移随机游走的大偏差率函数闭式]\label{thm:pom-golden-drift-walk-ldp-rate}
+在 \(\theta_+\) 下，随机变量 \(K_n/n\in[-1,1]\) 满足 Cram\'er 型大偏差原理，其率函数 \(I:[-1,1]\to[0,\infty]\)（以 bit 为单位）可写为完全闭式：
+\[
+\boxed{\;
+I(x)= -1+\frac{3-x}{2}\log_2\varphi+\frac{x}{2}\log_2\!\frac{1+x}{1-x}+\frac12\log_2(1-x^2),
+\qquad x\in(-1,1),\;}
+\]
+并以 \(I(\pm 1)=+\infty\) 连续延拓。
+其唯一零点为典型漂移 \(x=\mathbb{E}_{\theta_+}[Y_1]=\varphi^{-3}\)。
+\end{theorem}
+
+\begin{proof}
+令 \(u:=\frac{1+x}{2}\in(0,1)\)。事件 \(K_n/n\approx x\) 等价于步进 \(Y_i\) 中 \(+1\) 的频率近似为 \(u\)。
+对 \(\{\pm 1\}\) 变量的 Cram\'er 定理给出率函数为二点 KL：
+\[
+I(x)=u\log_2\frac{u}{p}+(1-u)\log_2\frac{1-u}{q},
+\qquad p=\varphi^{-1},\ q=\varphi^{-2}.
+\]
+展开并代入 \(p,q\) 的幂表达（\(\log_2 p=-\log_2\varphi\)、\(\log_2 q=-2\log_2\varphi\)）即可化简为所示闭式。
+唯一零点由 \(I(x)=0\iff u=p\iff x=2p-1=\varphi^{-3}\) 得到。证毕。
+\end{proof}
+
+\begin{corollary}[误差指数的三重同一化：Chernoff 常数 = 零漂移大偏差 = 半阶 Rényi 散度的一半]\label{cor:pom-error-exponent-triple-identity}
+令 \(P=\mathrm{Bern}(\varphi^{-1})\)、\(Q=\mathrm{Bern}(\varphi^{-2})\)。
+则最优指数常数满足严格同一化：
+\[
+\boxed{\;
+C_\varphi
+=I(0)
+=\frac12\,D_{1/2}(P\|Q)
+=\frac32\log_2\varphi-1.\;}
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:pom-golden-drift-walk-ldp-rate} 代入 \(x=0\) 得 \(I(0)=\frac32\log_2\varphi-1\)。
+由命题 \ref{prop:pom-complementary-golden-bernoulli-renyi-spectrum} 得
+\(
+D_{1/2}(P\|Q)=3\log_2\varphi-2
+\)，故 \(\frac12 D_{1/2}=\frac32\log_2\varphi-1\)。
+而该常数亦与定理 \ref{thm:pom-max-fiber-even-chernoff-exponent} 的 Chernoff 指数闭式一致（取极限参数 \(p=\varphi^{-1}\)）。证毕。
+\end{proof}
+
+\begin{proposition}[黄金对称化的 Esscher 变换：偏置步进的严格去偏与测度桥]\label{prop:pom-golden-esscher-symmetrization}
+在 \(\theta_+\) 下令 \(Y_i=2B_i-1\in\{\pm 1\}\) 且 \(\mathbb{P}_{\theta_+}(Y_i=+1)=\varphi^{-1}\)、\(\mathbb{P}_{\theta_+}(Y_i=-1)=\varphi^{-2}\)。
+定义归一化指数变换（\(n\) 步 Radon--Nikodym 导数）
+\[
+\boxed{\;
+\frac{d\mathbb{Q}}{d\mathbb{P}_{\theta_+}}\Big|_{\mathcal{F}_n}
+=\Big(\frac{\varphi^{3/2}}{2}\Big)^{n}\,\varphi^{-K_n/2}.\;}
+\]
+则在 \(\mathbb{Q}\) 下步进分布严格对称：
+\[
+\boxed{\;\mathbb{Q}(Y_i=+1)=\mathbb{Q}(Y_i=-1)=\tfrac12,\;}
+\]
+从而 \((K_n)\) 在 \(\mathbb{Q}\) 下为简单对称随机游走。
+\end{proposition}
+
+\begin{proof}
+该变换逐步分解为独立同分布的指数倾斜：对单步 \(Y\in\{\pm 1\}\)，取
+\(
+t=\tfrac12\log\varphi
+\)
+并令权重 \(e^{-tY}=\varphi^{-Y/2}\)。
+在 \(\theta_+\) 下归一化常数为
+\[
+M:=\mathbb{E}_{\theta_+}[\varphi^{-Y/2}]
+=\varphi^{-1}\varphi^{-1/2}+\varphi^{-2}\varphi^{1/2}
+=2\varphi^{-3/2}.
+\]
+故 \(n\) 步 RN 导数为 \(M^{-n}\varphi^{-K_n/2}=(\varphi^{3/2}/2)^n\varphi^{-K_n/2}\)。
+\par
+在 \(\mathbb{Q}\) 下，
+\[
+\mathbb{Q}(Y=+1)=\frac{\varphi^{-1}\varphi^{-1/2}}{M}
+=\frac{\varphi^{-3/2}}{2\varphi^{-3/2}}=\frac12,
+\qquad
+\mathbb{Q}(Y=-1)=\frac{\varphi^{-2}\varphi^{1/2}}{M}=\frac12.
+\]
+证毕。
+\end{proof}
+
+\subsubsection{有限尺度修正：\texorpdfstring{$p_k$}{p\_k} 的交替误差与熵谱振荡}
+
+\begin{proposition}[最大纤维分裂比的有限尺度修正：交替误差与 \texorpdfstring{$\varphi^{-2k}$}{phi^{-2k}} 收敛率]\label{prop:pom-max-fiber-split-ratio-finite-scale}
+设偶数稳定尺度 \(m=2k\) 的最大纤维分裂计数为 \((F_{k+1},F_k)\)（两相位互换），并令
+\[
+p_k:=\frac{F_{k+1}}{F_{k+2}},\qquad q_k:=\frac{F_k}{F_{k+2}}=1-p_k.
+\]
+则 \(p_k\to\varphi^{-1}\)、\(q_k\to\varphi^{-2}\)，且存在完全闭式（Binet 比值形式）
+\[
+\boxed{\;
+p_k=\varphi^{-1}\cdot\frac{1-(-\varphi^{-2})^{k+1}}{1-(-\varphi^{-2})^{k+2}},\qquad
+p_k-\varphi^{-1}
+=-\varphi^{-1}(1+\varphi^{-2})\cdot
+\frac{(-\varphi^{-2})^{k+1}}{1-(-\varphi^{-2})^{k+2}}\; }.
+\]
+从而误差呈严格交替并满足一致指数界（\(k\ge 1\)）：
+\[
+\boxed{\;
+\frac{\varphi^{-1}(1+\varphi^{-2})\,\varphi^{-2k-2}}{1+\varphi^{-2k-4}}
+\ \le\
+|p_k-\varphi^{-1}|
+\ \le\
+\frac{\varphi^{-1}(1+\varphi^{-2})\,\varphi^{-2k-2}}{1-\varphi^{-2k-4}}\; }.
+\]
+\end{proposition}
+
+\begin{proof}
+由 Binet 公式 \(F_n=(\varphi^n-\psi^n)/\sqrt5\)、\(\psi=-\varphi^{-1}\)，有
+\[
+\frac{F_{k+1}}{F_{k+2}}
+=\frac{\varphi^{k+1}-\psi^{k+1}}{\varphi^{k+2}-\psi^{k+2}}
+=\varphi^{-1}\cdot\frac{1-(\psi/\varphi)^{k+1}}{1-(\psi/\varphi)^{k+2}},
+\qquad \frac{\psi}{\varphi}=-\varphi^{-2},
+\]
+得第一式。将其减去 \(\varphi^{-1}\) 并通分即得第二式。
+最后注意 \(|(-\varphi^{-2})^{k+2}|=\varphi^{-2k-4}\) 且
+\(
+1-\varphi^{-2k-4}\le |1-(-\varphi^{-2})^{k+2}|\le 1+\varphi^{-2k-4}
+\)，
+代入绝对值表达即可得到上下界。证毕。
+\end{proof}
+
+\begin{proposition}[有限尺度熵谱的交替偏移：\texorpdfstring{$H_b(p_k)$}{Hb(pk)} 的首阶项闭式]\label{prop:pom-finite-scale-entropy-oscillation}
+令 \(H_b(p)\) 为二元熵（bits）。在命题 \ref{prop:pom-max-fiber-split-ratio-finite-scale} 的 \(p_k\) 上，有解析渐近展开
+\[
+\boxed{\;
+H_b(p_k)=H_b(\varphi^{-1})-\log_2\varphi\,(p_k-\varphi^{-1})+O(\varphi^{-4k})\; }.
+\]
+并且由于 \(p_k-\varphi^{-1}\) 交替振荡（命题 \ref{prop:pom-max-fiber-split-ratio-finite-scale}），
+\(
+H_b(p_k)-H_b(\varphi^{-1})
+\)
+亦呈交替振荡，其振幅主阶为 \(\asymp \varphi^{-2k}\)。
+\end{proposition}
+
+\begin{proof}
+二元熵导数为 \(H_b'(p)=\log_2\frac{1-p}{p}\)。在 \(p=\varphi^{-1}\) 处，
+\(
+H_b'(\varphi^{-1})=\log_2(\varphi^{-2}/\varphi^{-1})=-\log_2\varphi
+\)。
+对 \(H_b\) 在 \(\varphi^{-1}\) 处作 Taylor 展开得
+\[
+H_b(p_k)=H_b(\varphi^{-1})+H_b'(\varphi^{-1})(p_k-\varphi^{-1})+O\bigl((p_k-\varphi^{-1})^2\bigr).
+\]
+而由命题 \ref{prop:pom-max-fiber-split-ratio-finite-scale}，
+\(
+p_k-\varphi^{-1}=O(\varphi^{-2k})
+\)，故平方项为 \(O(\varphi^{-4k})\)。
+交替振荡性与主阶振幅由同一误差项的交替性与量级给出。证毕。
+\end{proof}
+
+\endinput

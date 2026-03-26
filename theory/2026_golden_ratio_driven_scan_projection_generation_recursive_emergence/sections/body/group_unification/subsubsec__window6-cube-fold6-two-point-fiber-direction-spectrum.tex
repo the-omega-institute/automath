@@ -1,0 +1,61 @@
+\paragraph{二点纤维的方向谱与几何可实现性}
+在 window-\(6\) 上，末位为 \(1\) 的稳定类型在 dyadic uplift-choice 下被强制塌缩为二点纤维（表 \ref{tab:fold6_bin_uplift_choice_collapse}），从而其纤维内几何与符号荷可由有限枚举精确分类。
+
+\begin{theorem}[window-\(6\) 的二点纤维方向谱与几何可实现性完全分类]\label{thm:terminal-foldbin6-two-point-fiber-direction-spectrum}
+沿用定理 \ref{thm:terminal-foldbin6-cube-edge-separation} 的记号。
+令 \(F_6:\Omega_6\to X_6\) 为标签函数，并对任意满足 \(|F_6^{-1}(w)|=2\) 的 \(w\in X_6\) 写其二点纤维为
+\[
+F_6^{-1}(w)=\{\omega_w^{(0)},\omega_w^{(1)}\}\subset\Omega_6,
+\]
+并定义其方向向量
+\[
+v(w):=\omega_w^{(0)}\oplus\omega_w^{(1)}\in\FF_2^6,
+\]
+其中 \(\oplus\) 为逐位异或。
+则成立：
+\begin{enumerate}
+\item \textbf{（三值方向谱）}对全部二点纤维，方向向量只取三值：
+\[
+\{v(w)\ :\ |F_6^{-1}(w)|=2\}=\{\texttt{100010},\ \texttt{100110},\ \texttt{111110}\}\subset\FF_2^6.
+\]
+\item \textbf{（精确分类）}上述三类互不相交且穷尽全部八条二点纤维（见表 \ref{tab:fold6_bin_uplift_choice_collapse} 的 \(w_6=1\) 行）：
+\[
+v(w)=\texttt{100010}\iff w\in\{\texttt{000001},\texttt{001001},\texttt{010101},\texttt{101001}\},
+\]
+\[
+v(w)=\texttt{100110}\iff w\in\{\texttt{000101},\texttt{100101}\},
+\]
+\[
+v(w)=\texttt{111110}\iff w\in\{\texttt{010001},\texttt{100001}\}.
+\]
+\item \textbf{（几何可实现性的判别）}令 \(\sigma_{\mathrm{geo}}\) 为 window-\(6\) 的唯一非平凡几何稳定子元（定理 \ref{thm:foldbin6-geo-stabilizer-z2}）。
+则其在任意二点纤维 \(F_6^{-1}(w)\) 上诱导的置换为换位当且仅当 \(v(w)=\texttt{100010}\)；若 \(v(w)\in\{\texttt{100110},\texttt{111110}\}\)，则 \(\sigma_{\mathrm{geo}}\) 在该纤维上逐点固定。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+表 \ref{tab:fold6_bin_uplift_choice_collapse} 给出：\(|F_6^{-1}(w)|=2\) 当且仅当 \(w_6=1\)，并列出此时的八个 \(w\)。
+对每个 \(w\) 将其二点纤维写为整数预像 \(n\in\{0,\dots,63\}\) 的二进制向量 \(\omega=\mathrm{bin}_6(n)\in\Omega_6\)，逐点计算异或 \(v(w)\) 即得仅出现三种方向向量并得到上述分类。
+另一方面，由 \(\sigma_{\mathrm{geo}}\) 的显式作用（定理 \ref{thm:foldbin6-geo-stabilizer-z2}）可知：
+它要么逐点固定，要么以固定方向 \(\texttt{100010}\) 在 \(\Omega_6\) 上作换位对合；
+因此在任意二点集合上，\(\sigma_{\mathrm{geo}}\) 若诱导非平凡换位，则该二点对的异或必等于 \(\texttt{100010}\)，反之若异或不等于 \(\texttt{100010}\)，则不可能将一点送到另一点，只能逐点固定。
+可复核核验脚本：\texttt{\detokenize{scripts/exp_foldbin6_two_point_fiber_direction_spectrum.py}}。证毕。
+\end{proof}
+
+\begin{corollary}[boundary 三轴中仅有一轴由几何稳定子选中]\label{cor:terminal-foldbin6-bdry-unique-geo-selected-axis}
+沿用定理 \ref{thm:terminal-foldbin6-two-point-fiber-direction-spectrum} 的记号，并记 window-\(6\) 的 boundary 扇区
+\(
+X_6^{\mathrm{bdry}}=\{\texttt{100001},\texttt{100101},\texttt{101001}\}
+\)
+（表 \ref{tab:fold6_boundary_sheet_pairs}）。
+则 \(\sigma_{\mathrm{geo}}\) 在 boundary 的三条二点纤维上诱导的置换中，恰有且仅有一条为非平凡换位，对应的 boundary 词唯一为 \(\texttt{101001}\)。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:terminal-foldbin6-two-point-fiber-direction-spectrum} 第 (3) 点，
+\(\sigma_{\mathrm{geo}}\) 在二点纤维上非平凡当且仅当 \(v(w)=\texttt{100010}\)。
+而由该定理第 (2) 点的精确分类，\(X_6^{\mathrm{bdry}}\) 中仅 \(\texttt{101001}\) 落在 \(v(w)=\texttt{100010}\) 的类中，其余两条 boundary 轴分别对应 \(v(w)=\texttt{111110}\) 与 \(v(w)=\texttt{100110}\)。
+故结论成立。证毕。
+\end{proof}
+
+\endinput

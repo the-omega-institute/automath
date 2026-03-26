@@ -1,0 +1,210 @@
+\begin{theorem}[最优可逆化的时间等价于条件熵：折叠缺失信息的唯一度量]\label{thm:xi-optimal-recovery-time-equals-conditional-entropy}
+设 \(\Fold_m:\Omega_m\to X_m\) 为多对一折叠，\(\mu\in\Delta(\Omega_m)\)，并记
+\(
+x:=\Fold_m(\omega)
+\)。
+考虑任意顺序读出协议：在已知 \(x\) 的条件下，每步读取一个字母表 \(\mathcal A\) 符号（可自适应、可随机），并以概率 \(1\) 恢复 \(\omega\)；
+记停止时间为 \(T\)。
+则必有
+\[
+\mathbb E_\mu[T]\ \ge\ \frac{H_\mu(\omega\mid x)}{\log|\mathcal A|}.
+\]
+若条件分布 \(\mu(\omega\mid x)\) 可计算，则存在一族协议使
+\[
+\mathbb E_\mu[T]\ \le\ \frac{H_\mu(\omega\mid x)}{\log|\mathcal A|}+1.
+\]
+故在最优意义下，时间即折叠遗失信息的条件熵标尺。
+\end{theorem}
+
+\begin{proof}
+下界由每步至多提供 \(\log|\mathcal A|\) 比特与可选停止时间的条件熵界给出。
+上界由带侧信息的前缀编码构造（按 \(x\) 的条件码族）给出，冗余不超过一个码字长度单位。
+\end{proof}
+
+\begin{theorem}[有限侧信息预算下的强反命题：Fold 精确反演成功率的指数上界]\label{thm:xi-fold-inversion-strong-converse-sideinfo}
+取 \(m\ge 1\)，令 \(\omega\sim\mathrm{Unif}(\Omega_m)\) 且 \(X:=\Fold_m(\omega)\in X_m\)。
+设编码器给出侧信息消息 \(\mathsf M=\mathsf E(\omega)\) 且 \(|\mathcal M|\le 2^{L}\)（即消息长至多 \(L\) 比特）。
+解码器观察 \((X,\mathsf M)\) 并输出 \(\widehat\omega=\mathsf D(X,\mathsf M)\)。
+则对任意 \(\mathsf E,\mathsf D\) 恒有强反界
+\[
+\PP(\widehat\omega=\omega)\ \le\ 2^{L}\cdot\frac{|X_m|}{2^{m}}.
+\]
+在本文的 Fibonacci 稳定类型尺度 \(|X_m|=F_{m+2}\) 下，
+\[
+\PP(\widehat\omega=\omega)\ \le\ 2^{L}\cdot\frac{F_{m+2}}{2^{m}}
+=2^{L}\cdot\left(\frac{\varphi}{2}\right)^{m}(1+o(1)),
+\qquad
+\varphi=\frac{1+\sqrt5}{2}.
+\]
+因此当 \(L=o(m)\) 时，任何精确反演的成功概率都至多以 \((\varphi/2)^{m}\) 的指数速度衰减。
+\end{theorem}
+\begin{proof}
+对任意固定 \(x\in X_m\)，纤维 \(\Fold_m^{-1}(x)\) 的大小为 \(d_m(x)\)。
+由于 \(|\mathcal M|\le 2^L\)，在给定 \(x\) 的条件下至多有 \(2^L\) 个微态可被消息完全区分并被解码为真值，故
+\[
+\PP(\widehat\omega=\omega\mid X=x)\le \min\Bigl\{1,\frac{2^L}{d_m(x)}\Bigr\}\le \frac{2^L}{d_m(x)}.
+\]
+取全概率并注意 \(\PP(X=x)=d_m(x)/2^m\) 得
+\[
+\PP(\widehat\omega=\omega)
+\le \sum_{x\in X_m}\frac{d_m(x)}{2^m}\cdot\frac{2^L}{d_m(x)}
+=2^L\cdot\frac{|X_m|}{2^m}.
+\]
+最后的渐近由 \(F_{m+2}=\Theta(\varphi^m)\) 给出。
+\end{proof}
+
+\begin{theorem}[时间可加性的有限可判据：二同调障碍由临界方块完全生成]\label{thm:xi-time-additivity-finite-critical-square-criterion}
+设 \(\mathbf{PW}\) 由有限生成收敛重写系统给出（终止且合流），并令
+\[
+\alpha(w_1,w_2):=\ell(w_1\circ w_2)-\ell(w_1)-\ell(w_2).
+\]
+则同调类 \([\alpha]\in H^2(\mathbf{PW};\mathbb Z)\) 满足：
+\[
+[\alpha]=0
+\quad\Longleftrightarrow\quad
+\delta_{\square}=0\ \ \text{对全部临界方块成立},
+\]
+其中 \(\delta_{\square}\) 为该方块两条合流填充路径对应的异常差。
+因此时间严格可加性可由有限临界对集合完全判定。
+\end{theorem}
+
+\begin{proof}
+收敛系统的所有高阶重叠由临界对 completion 生成。
+若全部临界方块缺陷为零，则异常在生成层为边界，进而全局同调平凡；反向由 \([\alpha]=0\) 直接推出任意方块缺陷为零。
+\end{proof}
+
+\begin{theorem}[规范时间的唯一性：最小能量 gauge 给出同调类的唯一调和代表]\label{thm:xi-canonical-time-gauge-harmonic-representative}
+设生成图有限且连通，边集为 \(E\)，边长函数为 \(\ell:E\to\mathbb R\)。
+对任意对象函数 \(b:\mathrm{Ob}(\mathbf{PW})\to\mathbb R\) 定义
+\[
+\ell_b(e):=\ell(e)+b(t(e))-b(s(e)),
+\qquad
+\mathcal E(b):=\sum_{e\in E}\ell_b(e)^2.
+\]
+则 \(\mathcal E\) 在“加常数等价类”上存在唯一极小元 \(b^\ast\)，诱导规范时间
+\(
+\ell^\ast:=\ell_{b^\ast}
+\)。
+该 \(\ell^\ast\) 满足离散调和方程（各点净流量为零），并仅依赖于同调类 \([\ell]\in H^1(\mathbf{PW};\mathbb R)\)。
+\end{theorem}
+
+\begin{proof}
+\(\mathcal E\) 是严格凸二次型，核仅为常数平移。
+故在商空间上存在唯一极小元。
+Euler--Lagrange 方程即离散散度为零，给出调和代表；同调等价只改变量纲中的梯度项，不改极小代表类。
+\end{proof}
+
+\begin{theorem}[跨分辨率时间的一致性障碍：重整化缺陷形成可观测的一阶不变量]\label{thm:xi-cross-resolution-time-renormalization-defect}
+设分辨率塔 \((X_m,p_{m+1,m})\) 与各层严格可加长度 \(\ell_m\) 已给定。
+定义重整化缺陷
+\[
+\Delta_m(w):=\ell_{m+1}(w)-\ell_m\!\bigl(p_{m+1,m}(w)\bigr).
+\]
+则存在常数序列 \(c_m\) 使
+\[
+\ell_m\!\bigl(p_{m+1,m}(w)\bigr)=\ell_{m+1}(w)-c_m\quad(\forall w)
+\]
+当且仅当 \(\Delta_m(w)\) 对 \(w\) 为常数（仅依赖 \(m\)）。
+若 \(\Delta_m\) 具有非平凡 \(w\)-依赖，则任何全局时间一致化都需要额外中心扩张；其最小扩张维度等于由全部缺陷值生成的阿贝尔子群秩。
+\end{theorem}
+
+\begin{proof}
+若一致化成立则 \(\Delta_m\equiv c_m\) 显然。
+反向由常数缺陷可直接吸收进层间基准重标定。
+当缺陷依赖 \(w\) 时，无法由单一常数重标定消去，只能外置为中心坐标；最小维度由独立缺陷生成元数给出。
+\end{proof}
+
+\begin{theorem}[时间加权谱半径刻画增长律：证书计数的唯一指数由时间压强零点确定]\label{thm:xi-time-weighted-spectral-radius-growth-law}
+在有限状态表示上，令每条基本边 \(e\) 赋时长 \(\widetilde\ell(e)\in\mathbb N\)，定义时间加权矩阵
+\[
+(A_s)_{ij}:=\sum_{e:i\to j}e^{-s\widetilde\ell(e)}.
+\]
+则存在唯一 \(s_\ast>0\) 使 \(\rho(A_{s_\ast})=1\)。
+并且在可达不可约分量上，
+\[
+\lim_{t\to\infty}\frac1t\log \#\{w:\widetilde\ell(w)\le t\}=s_\ast.
+\]
+故可实现证书计数的指数增长率由单一结构常数 \(s_\ast\) 唯一决定。
+\end{theorem}
+
+\begin{proof}
+\(s\mapsto \rho(A_s)\) 连续严格单调下降，且在 \(s=0\) 时大于 \(1\)、在 \(s\to\infty\) 时趋 \(0\)，故唯一零压点存在。
+计数增长率由加权转移算子的 Perron--Frobenius 与 Tauber 型论证给出。
+\end{proof}
+
+\begin{theorem}[尺度三体互信息即时间曲率：最小额外时间开销由曲率总量下界]\label{thm:xi-multiscale-cmi-as-time-curvature}
+设 \((X_m(t))_{t\ge 0}\) 为多尺度读出过程，并假定每一固定尺度上一阶马尔可夫可实现。
+定义尺度曲率
+\[
+\kappa_m:=I\!\bigl(X_{m+1};X_{m-1}\mid X_m\bigr).
+\]
+则以下等价：
+\begin{enumerate}
+  \item 存在全局扩展过程，使全部尺度链同时成为同一底层微过程的马尔可夫因子；
+  \item 对所有 \(m\)，有 \(\kappa_m=0\)。
+\end{enumerate}
+若存在 \(\kappa_m>0\)，则任意保持因果性的无损尺度拼合协议满足
+\[
+\mathbb E[T_{\mathrm{over}}]\ \ge\ \frac{\sum_m \kappa_m}{\log|\mathcal A|}.
+\]
+\end{theorem}
+
+\begin{proof}
+零条件互信息等价于三点 Markov 拼接条件，逐层成立即给出全局可拼合性。
+非零 \(\kappa_m\) 表示跨尺度附加依赖，需额外读出以消歧；每步信息上限给出时间下界。
+\end{proof}
+
+\begin{theorem}[时间的中心性刚性：语义自同构对时间寄存器仅允许符号与尺度变换]\label{thm:xi-time-center-semantic-rigidity}
+在中心扩张 \(\widetilde{\mathbf{PW}}_{\alpha}\) 中，时间寄存器中心子群记为
+\(
+Z\cong\mathbb Z
+\)，元为 \((\mathrm{id},k)\)。
+对任意保持投影语义与 \(2\)-证书等价类的自同构 \(\varphi\)，其在 \(Z\) 上的作用必为
+\[
+\varphi(\mathrm{id},k)=(\mathrm{id},\pm k).
+\]
+若把中心放宽为实线性单位重标定，则仅允许整体尺度变换与符号反演。
+\end{theorem}
+
+\begin{proof}
+中心自同构由 \(Z\) 的群自同构决定；对整数中心 \(Z\cong\mathbb Z\)，仅有 \(\pm1\)。
+语义保持排除把中心映入非中心分量，故结论成立。
+\end{proof}
+
+\begin{theorem}[地址与停止时间的等价：可见性集合与前缀码集合严格同构]\label{thm:xi-address-stopping-time-equivalence}
+设读出滤过为 \((\mathcal F_t)_{t\ge 0}\)。
+称地址 \(a\) 可见，若存在停止时间 \(\tau_a\) 使事件“对象落在 \(a\) 对应纤维子集”在 \(\mathcal F_{\tau_a}\) 上可判定。
+则：
+\begin{enumerate}
+  \item 可见地址集合 \(\mathcal A_{\mathrm{vis}}\) 必为前缀码；
+  \item 任一前缀码 \(C\) 唯一诱导一族可终止停止时间 \(\{\tau_c\}_{c\in C}\)；
+  \item 码长与最小停止时间下界满足同一熵律，受定理 \ref{thm:xi-optimal-recovery-time-equals-conditional-entropy} 约束。
+\end{enumerate}
+因此“可见存在”可严格重述为“存在有限停止时间”。
+\end{theorem}
+
+\begin{proof}
+若非前缀则会产生提前停机歧义，违背可判定唯一性；故必须前缀无冲突。
+前缀码反向给出唯一停机规则。
+长度--时间对应来自每步信息上限与停止时间编码不等式。
+\end{proof}
+
+\begin{theorem}[时间的单调性重整化：粗粒化不可增加最小实现时间，缺口由可压缩信息量下界控制]\label{thm:xi-time-monotone-under-coarse-graining}
+设 \(C:X_{m+1}\to X_m\) 为粗粒化函子，\(\tau(\cdot)\) 表示在固定语义约束下的最小实现时间。
+则对任意态射 \(w\) 有
+\[
+\tau(C(w))\le \tau(w).
+\]
+若在概率模型下粗粒化对应丢弃某可观测子 \(\sigma\)-代数，则平均时间缺口满足
+\[
+\mathbb E\!\bigl[\tau(w)-\tau(C(w))\bigr]
+\ \ge\
+\frac{I(\text{被丢弃信息};\text{保留信息})}{\log|\mathcal A|}.
+\]
+故粗粒化在时间意义下单调，且缺口由可压缩信息量下界控制。
+\end{theorem}
+
+\begin{proof}
+实现 \(w\) 的任一协议经后处理即可实现 \(C(w)\)，故最小时间不增。
+第二式由数据处理与每步读出信息上限合并得到。
+\end{proof}

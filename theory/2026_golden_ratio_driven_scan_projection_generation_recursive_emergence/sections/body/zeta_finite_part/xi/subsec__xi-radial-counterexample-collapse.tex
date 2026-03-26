@@ -1,0 +1,290 @@
+\subsubsection{反例崩塌：径向模式在 \texorpdfstring{$\mathbf{PW}$}{PW} 正规化闭包中不可类型化}\label{subsec:xi-radial-counterexample-collapse}
+本章的 \(\Xi_{\Delta,L}\) 机制把“临界线几何”内化为参数侧的 unitary slice：\(\Re(s)=\tfrac12\Longleftrightarrow |u_L(s)|=1\)（注 \ref{rem:xi-critical-line-unit-circle}），并在该切片上提供两类完全内部的审计/拒绝接口：
+\begin{enumerate}
+  \item \textbf{根区间检查器：}完成化压缩后，\(\Xi\)-RH 等价于 \(P_L(S)\) 的根全落在 \([-2,2]\)（命题 \ref{prop:xi-rh-interval-criterion}）。
+  \item \textbf{常数层 strictification 检查器：}在 \(\mathbf{PW}\) 的中心扩张口径下，异常签名只发生在有限部/常数层，并可由纯常数 counterterm 门 \(\mathrm{CT}_\eta\) 严格消去；且该 strictification 不改变任何指数级主尺度（定义 \ref{def:pom-finite-part-counterterm-gate}；命题 \ref{prop:pom-counterterm-anom-cancel}）。
+\end{enumerate}
+本小节构造一个“语法上可写、仍呈自对偶 completion 形态，但强制需要径向自由度”的伪 \(\Xi\) 对象，并展示其在上述两类检查器上同时崩塌：拒绝点并非来自“写不出来”，而来自“必须引入 \(|u|\neq 1\) 的径向模式”，从而在本文既定闭包内不可类型化（亦即读出为 \(\mathsf{NULL}\)，定理 \ref{thm:xi-offset-null-type-safety}）。
+
+\paragraph{构造：在完成化端植入越界根}
+沿自对偶 Dirichlet 截面（\S\ref{subsec:xi-from-self-dual}）令
+\[
+w=L^{-1/2},\qquad S_L(s)=L^{s-\tfrac12}+L^{\tfrac12-s}.
+\]
+在完成化表示下定义
+\[
+P_L(S):=\widehat\Delta\!\bigl(L^{-1/2},S\bigr)\in\RR[S],
+\qquad
+\Xi_{\Delta,L}(s)=P_L\!\bigl(S_L(s)\bigr)
+\]
+（命题 \ref{prop:xi-rh-interval-criterion}）。
+取任意实数 \(S_0>2\)，并在完成化端定义伪多项式与伪 \(\Xi\)：
+\[
+P^{\mathrm{fake}}_L(S):=P_L(S)\cdot (S-S_0),
+\qquad
+\Xi^{\mathrm{fake}}_{\Delta,L}(s):=P^{\mathrm{fake}}_L\!\bigl(S_L(s)\bigr)
+=\Xi_{\Delta,L}(s)\cdot\bigl(S_L(s)-S_0\bigr).
+\]
+由于 \(S_L(1-s)=S_L(s)\)，故该构造仍满足严格函数方程
+\[
+\Xi^{\mathrm{fake}}_{\Delta,L}(s)=\Xi^{\mathrm{fake}}_{\Delta,L}(1-s),
+\]
+即在形式上保持“自对偶 completion 形态”。
+
+\input{subsubsec__xi-radial-defect-index-counterterm-invariance}
+
+\paragraph{径向自由度的强制性：越界根 \texorpdfstring{$S_0>2$}{S0>2} 只能由离线点实现}
+令 \(y:=L^{s-\tfrac12}\)，则 \(S_L(s)=y+y^{-1}\)（命题 \ref{prop:xi-rh-interval-criterion} 的证明）。
+当 \(s=\tfrac12+it\) 时有 \(|y|=1\) 且 \(S_L(\tfrac12+it)\in[-2,2]\)。
+因此方程
+\(
+S_L(s)=S_0>2
+\)
+不可能在临界线上成立；任何满足 \(\Xi^{\mathrm{fake}}_{\Delta,L}(s)=0\) 且来源于因子 \((S_L(s)-S_0)\) 的零点都必须满足
+\[
+|y|\neq 1
+\quad\Longleftrightarrow\quad
+\Re(s)\neq\tfrac12
+\quad\Longleftrightarrow\quad
+|u_L(s)|\neq 1,
+\]
+从而强制进入非单位圆半径（径向）通道。
+
+\begin{proposition}[自对偶不排除离线零点；可寻址性才排除]\label{prop:xi-offcritical-constructible-but-null-or-extra-register}
+沿用上文记号，并取任意 \(S_0>2\) 构造
+\(
+\Xi^{\mathrm{fake}}_{\Delta,L}(s)=\Xi_{\Delta,L}(s)\bigl(S_L(s)-S_0\bigr)
+\)。
+则：
+\begin{enumerate}
+  \item \textbf{（自对偶外形保持）}
+  \(\Xi^{\mathrm{fake}}_{\Delta,L}\) 仍满足严格函数方程 \(\Xi^{\mathrm{fake}}_{\Delta,L}(s)=\Xi^{\mathrm{fake}}_{\Delta,L}(1-s)\)，因此“函数方程型结构”本身并不排除离线零点的出现。
+  \item \textbf{（离线零点机制显式可构造）}
+  因子 \((S_L(s)-S_0)\) 所诱导的零点必满足 \(|u_L(s)|\neq 1\)，即必落在 unitary slice 之外的径向通道。
+  \item \textbf{（unitary slice 语义下的结构性退化）}
+  在可见域约束 \(X_{\mathrm{vis}}=\mathsf{Phase}\) 与 \(\mathbf{PW}\) 闭包类型检查下，任何本质依赖 \(|u|\neq 1\) 的径向自由度对象均不可类型化，其读出按协议稳定退化为 \(\mathsf{NULL}\)（定理 \ref{thm:xi-offset-null-type-safety}；亦见定理 \ref{thm:xi-pw-no-continuous-hair}）。
+  \item \textbf{（第四寄存器/模式轴外延的强制性）}
+  若希望使上述离线零点事件在体系内变为可证书化的单值可核验读出，则必须外延地址/证书类型以显式携带径向参数 \(\varrho=\log|u|\)，即把单一相位寄存器扩张为 \((\theta,\varrho)\) 的双参模式轴；在寄存器语义中这等价于引入一个额外的连续寄存器（“第四寄存器”）。
+  该扩张不能由常数层 strictification 吸收（见下文对 \(\mathrm{CT}_\eta\) 的边界分析），并且在连续与局域可逆读出的审计口径下也不可能被压缩回单一圆周寄存器（定理 \ref{thm:radial-dimension-obstruction}）。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+第 (1) 条由 \(S_L(1-s)=S_L(s)\) 的不变性直接推出（见上文函数方程的推导）。
+第 (2) 条即本段对方程 \(S_L(s)=S_0>2\) 的分析所给出的 \(|u_L(s)|\neq 1\)。
+第 (3) 条是 unitary slice 可见域过滤与类型安全拒绝的直接应用（定理 \ref{thm:xi-offset-null-type-safety} 与定理 \ref{thm:xi-pw-no-continuous-hair}）。
+第 (4) 条由“径向依赖不可被纯常数门消去”的 strictification 约束与定理 \ref{thm:radial-dimension-obstruction}（径向自由度不可压缩为单一相位）合并得到。证毕。
+\end{proof}
+
+\paragraph{编译/归约：为何该伪对象“语法上可写”}
+上述构造仅在完成化端追加一个一次因子；在行列式接口中，这对应于对核对象追加一个与原核解耦的有限维块，使得整体行列式乘上该因子（命题 \ref{prop:xi-unitary-slice-spectral-crossing} 的 \(\det(I-zB(u))\) 口径）。
+在投影词侧，这一“解耦追加”属于独立轴并置的情形：一旦将该一次因子以某个独立块实现并纳入同一编译目标，则其词法仍落在既有生成元闭包中，并可由三生成元正规化器归约到接口正规形
+\[
+\mathrm{LIFT}_G\circ \mathrm{PROJ}_u\circ E_m
+\]
+并伴随异常签名输出（命题 \ref{prop:pom-three-gen-interface-normal-form} 与定义 \ref{def:pom-anom-signature}）。
+因此该模板的关键点不在“构造不可写”，而在后续类型检查的结构性拒绝。
+
+\paragraph{类型检查崩塌：根区间检查器——完成化端的立即拒绝}
+由于 \(P^{\mathrm{fake}}_L\) 含有根 \(S_0>2\)，其根集不包含于 \([-2,2]\)。
+因此根区间检查器（命题 \ref{prop:xi-rh-interval-criterion}）立即判定：
+\[
+\mathrm{Roots}\bigl(P^{\mathrm{fake}}_L\bigr)\not\subseteq [-2,2]
+\quad\Longrightarrow\quad
+\Xi^{\mathrm{fake}}_{\Delta,L}\ \text{不满足临界线性（存在离线零点）}.
+\]
+若将该拒绝写成工程化的 type-checker 输出，可取规范形式
+\begin{verbatim}
+TypeError[RootInterval]: root S0>2 detected; requires |u|!=1 (radial mode).
+\end{verbatim}
+其数学内容即为上式：越界根等价于强制进入 \(|u|\neq 1\) 的径向通道。
+
+\paragraph{类型检查崩塌：常数层 strictification 的边界——径向依赖不可被 \texorpdfstring{$\mathrm{CT}_\eta$}{CT} 吸收}
+在本文的中心扩张/strictification 口径中，\(\mathrm{CT}_\eta\) 被定义为\emph{纯常数}门：它保持所有扭曲通道 pole \(\rho_\chi(\theta)\) 不变，仅对有限部漂移 \(\log\mathfrak{M}_\chi(\theta)\) 做加性平移（定义 \ref{def:pom-finite-part-counterterm-gate}）。
+因此（命题 \ref{prop:pom-counterterm-anom-cancel}）所有可 strictify 的残差，必须在“有限部/常数层”闭合，且 strictification 不改变任何指数级主尺度。
+\begin{remark}[常数级异常的可规约性：有限部漂移向量的 \texorpdfstring{$\mathcal{A}_G$}{AG}-torsor 结构]\label{rem:xi-finite-part-drift-torsor}
+在有限阿贝尔 lift 群 \(G\) 的表示通道口径下（命题 \ref{prop:pom-counterterm-anom-cancel} 的记号），固定参数 \(\theta\) 并将非平凡扭曲通道的有限部常数记为 \(\mathfrak{M}_\chi(\theta)\)（\(\chi\neq\chi_0\)）。
+令
+\[
+\mathbf{m}(\theta):=\bigl(\log\mathfrak{M}_\chi(\theta)\bigr)_{\chi\in\widehat G\setminus\{\chi_0\}}
+\ \in\ \RR^{\widehat G\setminus\{\chi_0\}}\ \cong\ \mathcal{A}_G.
+\]
+则纯常数 counterterm 门 \(\mathrm{CT}_\eta\)（\(\eta\in\mathcal{A}_G\)）保持所有 pole 数据 \(\rho_\chi(\theta)\) 不变，仅作平移
+\[
+\mathbf{m}(\theta)\longmapsto \mathbf{m}(\theta)+\eta.
+\]
+因此在固定 pole 数据的前提下，允许的漂移向量族自然构成一个以 \(\mathcal{A}_G\) 为结构群的仿射纤维（torsor）。
+换言之，“异常”并非新的指数级障碍，而是常数层的可规约自由度；其全部信息等价于在该 torsor 上选取一条规范截面（亦即选择一种 strictification 规范）。
+\end{remark}
+
+\input{subsec__xi-radial-counterexample-collapse__stokes-curvature-obstruction}
+\par
+写 \(u=re^{i\theta}\) 并令径向参数 \(\varrho:=\log r\)。
+在 unitary slice（\(r=1\)）上，\(u=e^{i\theta}\in\TT\) 的相位亦可由一个无参实轴紧化门给出：存在双射
+\[
+x\in\RR\ \longleftrightarrow\ u=\iota(x):=\frac{1+\mathrm{i}x}{1-\mathrm{i}x}\in\TT\setminus\{-1\},
+\qquad
+\theta=\vartheta(x):=2\arctan(x),
+\]
+见附录 \ref{app:unit-circle-phase-gate}。因此在该切片上，“相位轴”可被等价读出为一条实轴坐标 \(x\)（无穷远点对应 \(u=-1\) 的边界极限）。
+径向模式 \(|u|\neq 1\) 即 \(\varrho\neq 0\)，其进入并非常数层扰动：它改变 \(u\) 的模长，从而把 unitary slice 上的 \(\theta\)-单参接口扩张为 \((\theta,\varrho)\)-双参对象（命题 \ref{prop:xi-unitary-slice-spectral-crossing}），并在一般情形下改变扭曲通道的 pole/指数主尺度（例如谱半径 \(\rho_\chi\) 的取值域不再局限于 \(|u|=1\) 的切片）。
+因此任何试图把“径向自由度”解释为可由 \(\mathrm{CT}_\eta\) 消去的残差，都会与“\(\mathrm{CT}_\eta\) 不改变 pole/主尺度”的定义性约束矛盾：该自由度不属于 \(\mathcal{A}_G\) 的常数层标签，而必须以额外参数/额外寄存器显式承载。
+可将该拒绝写成第二类工程化输出：
+\begin{verbatim}
+TypeError[Strictification]: residual depends on radial parameter (|u|!=1);
+no constant CT_eta cancels it without changing poles.
+\end{verbatim}
+
+从类型口径看，上述拒绝并非数值误差问题，而是精度类型不匹配：unitary slice 将接口固定为相位型（单参）可见域；离 slice 的对象要求引入径向自由度，从而将接口扩张为 \((\theta,\varrho)\)-双参类型。该扩张改变 pole/主尺度并不能被常数层消去，因而若不显式引入额外寄存器承载径向参数，则对象在既定闭包下不可类型化，其读出按协议退化为 \(\mathsf{NULL}\)。
+
+\begin{theorem}[局域可逆表示的维数阻碍：径向自由度不可压缩为单一相位]\label{thm:radial-dimension-obstruction}
+设 \(M=S^{1}\times\RR\) 为相位--径向参数空间，并赋予幂半群作用
+\[
+d\cdot(\theta,\varrho):=(d\theta,d\varrho)\qquad(d\ge 1).
+\]
+若存在连续映射 \(\Phi:M\to S^{1}\) 同时满足：
+\begin{enumerate}
+  \item \textbf{局域可逆读出：}对每个 \(x\in M\) 存在邻域 \(U\ni x\) 与连续读出 \(\Psi:\Phi(U)\to U\) 使 \(\Psi\circ(\Phi|_{U})=\mathrm{id}_{U}\)；
+  \item \textbf{幂相容：}\(\Phi(d\cdot x)=\Phi(x)^{d}\) 对一切 \(d\ge 1\) 与 \(x\in M\) 成立；
+\end{enumerate}
+则导出矛盾。
+因此，在保持连续性与局域可逆读出的审计口径下，\((\theta,\varrho)\) 的相位--径向状态不可能被压缩到单一圆周寄存器；任意闭合接口必须显式保留额外寄存器以承载径向自由度。
+\end{theorem}
+\begin{proof}
+由 (1)，映射 \(\Phi|_{U}:U\to \Phi(U)\) 具有连续右逆 \(\Psi\)，从而 \(\Phi|_{U}\) 为同胚（其逆为 \(\Psi|_{\Phi(U)}\)）。
+但 \(M=S^{1}\times\RR\) 为二维流形，故 \(U\) 同胚于平面开圆盘；而 \(S^{1}\) 的任一开子集同胚于开区间。
+开圆盘与开区间不可能同胚（例如去掉一点后前者仍连通而后者分裂为两段），矛盾。
+因此 (1) 已不可能成立，从而 (1)--(2) 不可同时满足。证毕。
+\end{proof}
+
+\paragraph{最小实现接口将“径向模式”显化为维数超界}
+若进一步把该伪对象编译为序列/核对象并接入“最小实现”接口，则径向模式的引入可被视为额外可见自由度。
+在本文框架中，这类“额外自由度是否必须以附加状态/寄存器承载”可由 Hankel 秩与最小 realization 维数给出硬证书（定理 \ref{thm:hankel-rank-minimal}、\ref{thm:pom-moment-hankel}；并参见注 \ref{rem:two_layer_bridge_package_completed_minH} 的二层桥包组织方式）。
+该路径为上述两类类型拒绝提供一个额外的、完全数值可审计的后端诊断端口。
+
+\paragraph{最小 \texorpdfstring{$(2\times2)$}{(2x2)} 自对偶桥接核的显式轴外零点与完全分类}
+前述反例通过“在完成化端追加越界根”展示了径向模式的强制性；
+作为互补，下面给出一个不依赖伪因子拼接、而是在\emph{最小可控自对偶核}上直接导出轴外零点的显式原型。
+该模型是附录 \S\ref{app:kernel-self-dual} 的自对偶正常形（命题 \ref{prop:self-dual-normal-form-1pmu}）在 \(\dim V_+=\dim V_-=1\) 的最小实例。
+
+\begin{theorem}[最小自对偶桥接核的零点全分类：显式非临界线零点塔]\label{thm:xi-2x2-selfdual-offcritical-template}
+取整数 \(a,b\in\ZZ\)，并令
+\[
+  B_0=\begin{pmatrix}a&-b\\-b&a\end{pmatrix},\qquad
+  \Pi=\begin{pmatrix}1&0\\0&-1\end{pmatrix},\qquad
+  B_1=\Pi^{-1}B_0\Pi=\begin{pmatrix}a&b\\b&a\end{pmatrix},
+\]
+定义
+\(
+B(u):=B_0+uB_1
+\)
+与
+\(
+\Delta(z,u):=\det(I-zB(u))
+\)。
+对任意 \(L>1\)，令完成化切片
+\[
+  \Xi_{\Delta,L}(s):=\Delta\!\bigl(L^{-s},\,L^{2s-1}\bigr).
+\]
+则：
+\begin{enumerate}
+  \item \textbf{（两通道因子分解）}
+  \[
+  \Delta(z,u)
+  =\Bigl(1-z\bigl((a-b)+(a+b)u\bigr)\Bigr)\,
+   \Bigl(1-z\bigl((a+b)+(a-b)u\bigr)\Bigr).
+  \]
+  \item \textbf{（二次方程化与对数晶格）}
+  令 \(r:=L^{s-\tfrac12}\)（从而 \(u=L^{2s-1}=r^{2}\)、\(L^{-s}=L^{-1/2}r^{-1}\)）。
+  则零点条件 \(\Xi_{\Delta,L}(s)=0\) 等价于以下两条二次方程之一成立：
+  \[
+  (a+b)r^2-\sqrt L\,r+(a-b)=0,
+  \qquad
+  (a-b)r^2-\sqrt L\,r+(a+b)=0.
+  \]
+  每个二次方程给出两个代数根 \(r\)，从而得到四族零点塔
+  \[
+  s=\frac12+\frac{\log r}{\log L},
+  \qquad
+  \log r=\log|r|+\mathrm{i}\bigl(\arg r+2\pi k\bigr),\quad k\in\ZZ,
+  \]
+  即虚部以周期 \(2\pi/\log L\) 作等差平移。
+  \item \textbf{（显式轴外零点判别）}
+  若 \(b\neq 0\)，则上述四族中至少存在一族满足 \(|r|\neq 1\)，从而对应零点满足 \(\Re(s)\neq\tfrac12\)。
+  更进一步，除去可能的对齐情形 \(L=4a^2\)（此时仅可能出现 \(r=\pm 1\) 的 slice 零点）外，所有代数根均满足 \(|r|\neq 1\)，故全部零点塔都离开临界线。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+直接计算得
+\[
+B(u)=\begin{pmatrix}a(1+u)&b(u-1)\\ b(u-1)&a(1+u)\end{pmatrix},
+\qquad
+I-zB(u)=
+\begin{pmatrix}1-za(1+u)&-zb(u-1)\\ -zb(u-1)&1-za(1+u)\end{pmatrix}.
+\]
+故
+\[
+\Delta(z,u)
+=\bigl(1-za(1+u)\bigr)^2-\bigl(zb(u-1)\bigr)^2
+=\Bigl(1-z\bigl((a-b)+(a+b)u\bigr)\Bigr)\Bigl(1-z\bigl((a+b)+(a-b)u\bigr)\Bigr),
+\]
+得到 (1)。
+对 (2)，代入 \(u=r^2\)、\(L^{-s}=L^{-1/2}r^{-1}\)，并分别令每个线性因子为零即可得到两条二次方程；
+零点塔的“对数晶格”表达来自 \(\log r\) 的多值性。
+\par
+对 (3)，先注意两条二次方程互为倒数变量变换：若 \(r\) 满足第一式，则 \(r^{-1}\) 满足第二式。
+若某个代数根满足 \(|r|=1\)，则 \(r^{-1}=\overline r\)，并由实系数性可知 \(r\) 同时满足两条二次方程。
+两式相减得 \(2b(r^2-1)=0\)，在 \(b\neq 0\) 下推出 \(r=\pm 1\)。
+将 \(r=\pm 1\) 代回任一二次方程得到 \(2a\mp\sqrt L=0\)，从而 \(L=4a^2\)；
+因此若 \(L\neq 4a^2\) 则不可能出现 \(|r|=1\) 的根，所有根均满足 \(|r|\neq 1\)。
+即便在对齐情形 \(L=4a^2\) 下出现 \(r=\pm 1\) 的 slice 根，另一同方程的伴随根满足
+\(
+|r|=\bigl|\frac{a-b}{a+b}\bigr|
+\)
+或其倒数（由根乘积公式 \(r_1r_2=(a-b)/(a+b)\) 等），在 \(b\neq 0\) 下不为 \(1\)，因而仍给出轴外零点塔。
+证毕。
+\end{proof}
+
+表 \ref{tab:xi-2x2-selfdual-offcritical-template} 给出一组固定参数的代数根与零点样本（由可复现流水线生成）。
+\input{sections/generated/tab_xi_2x2_selfdual_offcritical_template.tex}
+
+\begin{corollary}[最小自对偶桥接核的切片纯度充要条件]\label{cor:xi-2x2-selfdual-slice-purity-iff}
+在定理 \ref{thm:xi-2x2-selfdual-offcritical-template} 的设定下，进一步假设 \(a\neq 0\)。
+则 \(\Xi_{\Delta,L}\) 的全部零点满足 \(\Re(s)=\tfrac12\) 的充要条件为
+\[
+b=0\quad\text{且}\quad L\le 4a^2.
+\]
+若不满足该条件，则必存在满足 \(\Re(s)\neq\tfrac12\) 的零点塔。
+\end{corollary}
+
+\begin{proof}
+若 \(b\neq 0\)，则由定理 \ref{thm:xi-2x2-selfdual-offcritical-template} 第 (3) 条，必存在代数根满足 \(|r|\neq 1\)，从而对应零点塔满足 \(\Re(s)\neq\tfrac12\)，故不可能切片纯。
+\par
+现设 \(b=0\)。
+此时定理 \ref{thm:xi-2x2-selfdual-offcritical-template} 的两条二次方程同化为同一方程
+\[
+a r^2-\sqrt L\,r+a=0,
+\]
+其两根 \(r_1,r_2\) 满足 \(r_1r_2=1\)。
+因此“全部根满足 \(|r|=1\)”等价于判别式不正：
+\(
+L-4a^2\le 0
+\)。
+当 \(L<4a^2\) 时两根为共轭复根且乘积为 \(1\)，故 \(|r_1|=|r_2|=1\)；当 \(L=4a^2\) 时出现重根 \(r=\sqrt L/(2a)=\pm 1\)，仍满足 \(|r|=1\)。
+当 \(L>4a^2\) 时两根为互为倒数的实根且不为 \(\pm 1\)，故必有 \(|r|\neq 1\) 的根，从而产生 \(\Re(s)\neq\tfrac12\) 的零点塔。
+综上得到充要条件。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$(\rho,\theta)$}{(rho,theta)} 分裂与 unitary slice 投影遗忘]\label{cor:xi-2x2-selfdual-orthogonal-axis-projection-forget}
+在定理 \ref{thm:xi-2x2-selfdual-offcritical-template} 的显式模型中，参数
+\(
+u=L^{2s-1}
+\)
+的极分解 \(u=e^{\rho+\mathrm{i}\theta}\) 满足
+\[
+\rho=(2\Re(s)-1)\log L,\qquad \theta=2\Im(s)\log L\ (\mathrm{mod}\ 2\pi).
+\]
+因此 \(\Re(s)=\tfrac12\) 等价于 \(\rho=0\)（unitary slice）。
+对任意一条由 \(|r|\neq 1\) 生成的零点塔，\(\rho\) 是其不可消去的法向参数；将读出限制为纯相位轴（只保留 \(\theta\)）必然遗忘 \(\rho\)，从而在可核验寻址意义下需要模式轴外延或退化为 \(\mathsf{NULL}\)（与定理 \ref{thm:xi-offset-null-type-safety}、定理 \ref{thm:radial-dimension-obstruction} 的一般结论一致）。
+\end{corollary}

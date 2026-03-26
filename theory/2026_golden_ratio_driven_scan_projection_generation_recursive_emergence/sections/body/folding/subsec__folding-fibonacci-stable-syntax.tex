@@ -1,0 +1,89 @@
+\subsection{Fibonacci 权重与稳定语法集合}\label{subsec:folding-fibonacci-stable-syntax}
+
+令 Fibonacci 数列 $(F_k)_{k\ge1}$ 满足
+\[
+F_1=F_2=1,\quad F_{k+2}=F_{k+1}+F_k.
+\]
+定义长度 $m$ 的稳定类型集合
+\[
+X_m:=\{w\in\{0,1\}^m:\text{不含子词 }11\}.
+\]
+即 $X_m$ 为禁止相邻 $1$ 的二元语法（亦称“黄金均值约束”）。其计数满足
+\[
+|X_m|=F_{m+2},
+\]
+见 \cite{LindMarcus1995}。
+
+\begin{proposition}[末位分解与 Fibonacci 递推矩阵]\label{prop:folding-stable-syntax-terminal-recursion}
+对每个 $m\ge 1$，定义
+\[
+X_m^{(s)}:=\{w\in X_m:\ w_m=s\},\qquad s\in\{0,1\},
+\]
+并令计数向量
+\[
+v_m:=\begin{pmatrix}\card{X_m^{(1)}}\\[2pt]\card{X_m^{(0)}}\end{pmatrix}\in\ZZ_{\ge0}^{\,2}.
+\]
+则有严格递推
+\[
+v_{m+1}=N_\tau\,v_m,\qquad
+N_\tau:=\begin{pmatrix}0&1\\[2pt]1&1\end{pmatrix}.
+\]
+\end{proposition}
+\begin{proof}
+若 $w\in X_{m+1}$ 以 $1$ 结尾，则倒数第二位必为 $0$，故去掉末位得到 $X_m^{(0)}$ 中的唯一词；反之对任意 $u\in X_m^{(0)}$，拼接 $u1$ 仍不含子词 $11$。因此 $\card{X_{m+1}^{(1)}}=\card{X_m^{(0)}}$。
+\par
+另一方面，拼接末位 $0$ 不引入 $11$，故从任意 $u\in X_m$ 得到 $u0\in X_{m+1}^{(0)}$，并且该对应为双射，因而
+\[
+\card{X_{m+1}^{(0)}}=\card{X_m}=\card{X_m^{(0)}}+\card{X_m^{(1)}}.
+\]
+合并两式即得所述矩阵递推。
+\end{proof}
+
+\begin{theorem}[两态骨架与 Fibonacci 融合环的严格同构]\label{thm:folding-stable-syntax-fib-fusion-ring}
+记 \(\mathrm{Fib}\) 为 Fibonacci 融合范畴的 Grothendieck 环
+\[
+K_0(\mathrm{Fib})=\ZZ\langle \ind,\tau\rangle/(\tau^2=\ind+\tau),
+\]
+并在基 \((\ind,\tau)\) 下记“左乘 \(\tau\)”的融合矩阵为 \(N_\tau\)。
+则命题 \ref{prop:folding-stable-syntax-terminal-recursion} 中出现的矩阵 \(N_\tau\) 与该融合矩阵一致；并且对每个 \(m\ge 1\) 有
+\[
+\tau^{m+1}
+=\card{X_m^{(1)}}\,\ind+\card{X_m^{(0)}}\,\tau
+\qquad\text{于 }K_0(\mathrm{Fib}).
+\]
+\end{theorem}
+\begin{proof}
+由 \(\tau\cdot\ind=\tau\) 与 \(\tau\cdot\tau=\ind+\tau\)，在基 \((\ind,\tau)\) 下“左乘 \(\tau\)”的矩阵正是
+\(
+N_\tau=\begin{pmatrix}0&1\\[2pt]1&1\end{pmatrix}
+\)。
+从而 \(\tau^{m+2}= \tau\cdot \tau^{m+1}\) 的系数向量满足同一递推 \(v_{m+1}=N_\tau v_m\)。
+初值由 \(\tau^2=\ind+\tau\) 与 \(v_1=(\card{X_1^{(1)}},\card{X_1^{(0)}})^{\mathsf T}=(1,1)^{\mathsf T}\) 一致，故对一切 \(m\) 得到所述恒等式。
+\end{proof}
+
+\begin{corollary}[熵率与 Perron--Frobenius 维数的对数一致]\label{cor:folding-stable-syntax-entropy-logqdim}
+设 \(X_\infty\subset\{0,1\}^{\ZZ}\) 为禁止子词 \(11\) 的双边子移位，则其拓扑熵满足
+\[
+h_{\mathrm{top}}(X_\infty)=\log\varphi,
+\]
+其中 \(\varphi=\tfrac{1+\sqrt5}{2}\)。
+此外，矩阵 \(N_\tau\) 的 Perron--Frobenius 特征值为 \(\varphi\)；因此在任意实现该融合环的单位ary融合范畴中，\(\tau\) 的量子维数满足 \(d(\tau)=\varphi\)，并有
+\[
+h_{\mathrm{top}}(X_\infty)=\log d(\tau).
+\]
+\end{corollary}
+\begin{proof}
+第一式是黄金均值 SFT 的标准结果，亦可由 \(|X_m|=F_{m+2}\) 的渐近给出 \(\lim_{m\to\infty}\frac1m\log|X_m|=\log\varphi\)。
+第二部分由 \(N_\tau\) 的特征多项式 \(\lambda^2-\lambda-1\) 及单位ary融合范畴中量子维数向量为融合矩阵的 Perron--Frobenius 本征向量的事实推出。
+\end{proof}
+
+\begin{remark}[投影子控制的多通道融合与算符代数输入]\label{rem:folding-stable-syntax-noninvertible-links}
+定理 \ref{thm:folding-stable-syntax-fib-fusion-ring} 表明：稳定核的两态扩展骨架在 \(K_0\) 层面严格实现 Fibonacci 融合规则 \(\tau^2=\ind+\tau\)，其非可逆性由“同一输入可产生多种融合通道”的分解体现。
+该机制与非可逆对称的投影子控制融合结构相容 \cite{ZhangHuangWangYe2026NonInvertibleSymmetriesMixedAnomaliesTwistedBF}，并与“自对偶非可逆对象诱导 Temperley--Lieb 结构”的可积链构造一致 \cite{BlakeneyCorcoranDeLeeuwPozsgayVernier2025TemperleyLiebIntegrableModelsFusionCategories}。
+另一方面，折叠粗粒化所诱导的有限指数条件期望与基本构造在算符代数路线中提供了把该基环外部化为可计算双模数据的自然入口 \cite{EvansJones2025OperatorAlgebraicApproachFusionCategorySymmetryLattice}；本稿在小节 \ref{subsec:op-algebra-fold-watatani-index} 中给出对应的 Watatani 指标元与块分解闭式。
+\end{remark}
+
+\begin{conjecture}[折叠—限制重整化的 Fibonacci 普适吸引子]\label{conj:folding-fib-renormalization-attractor}
+在保持稳定核两态骨架（即 \(X_m\) 的末位扩展图与矩阵 \(N_\tau\)）不变的约束下，考虑由“尺度提升—再折叠—再限制”组合生成的重整化变换 \(\mathcal R\) 作用于一类局部粗粒化（例如有限指数条件期望或等价的局部势函数族）。
+猜想存在一条由 \(\tau^2=\ind+\tau\) 所锁定的 Fibonacci 固定点普适类，使得凡满足该两态骨架约束且无额外对称破缺的轨道均在适当归一化下收敛到该类；其极限缺陷数据可由 SymTFT 分解/融合通道投影子语言一致刻画 \cite{SchaferNamekiTiwariWarmanZhang2025SymTFTMixedStatesNonInvertible}。
+\end{conjecture}

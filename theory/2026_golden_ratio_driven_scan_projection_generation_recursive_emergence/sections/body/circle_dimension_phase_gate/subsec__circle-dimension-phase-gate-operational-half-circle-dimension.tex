@@ -1,0 +1,182 @@
+\subsection{操作型半圆维：以 dyadic 前缀读出刻画 \texorpdfstring{$\cdim_+$}{cdim+} 的缩放律}\label{subsec:cdim-operational-half-circle-dimension}
+定义 \ref{def:half-circle-dimension} 将半圆维 \(\cdim_+(M)\) 视为结构不变量：它由群完成 \(G(M)\) 的圆维决定，而与具体实现的编码选择无关。
+本小节给出一个与单位圆面积相位门直接对齐的操作型刻画：当只允许输出 dyadic 深度 \(b\) 的相位前缀时，\(\NN\) 的可单射读出规模遵循严格的 \(2^{b/2}\) 缩放律，从而在“前缀—可核验单射化”口径下给出 \(\cdim_+(\NN)=\tfrac12\) 的可检验译文；并进一步推广到 \(\NN^d\)。
+
+\paragraph{相位压缩与 dyadic 量化}
+沿用 \S\ref{subsec:cdim-phase-gate-compactification} 的相位坐标
+\(
+\upsilon(x)=\pi^{-1}\arctan(x)
+\)。
+将其限制到半轴 \(x\ge 0\) 得到单侧相位压缩
+\[
+u(x):=\upsilon(x)=\frac{1}{\pi}\arctan(x)\in\Bigl(0,\frac12\Bigr)\qquad(x\ge 0).
+\]
+对 dyadic 深度 \(b\in\NN\) 令 \(\delta:=2^{-b}\) 并定义量化读出
+\[
+Q_b(t):=\left\lfloor \frac{t}{\delta}\right\rfloor=\lfloor 2^b t\rfloor,
+\qquad
+q_b(n):=Q_b\bigl(u(n)\bigr)\qquad(n\in\NN).
+\]
+令
+\[
+N_{\max}(b):=\max\Bigl\{N\in\NN:\ q_b\ \text{在}\ \{0,1,\dots,N\}\ \text{上单射}\Bigr\}.
+\]
+
+\begin{theorem}[\texorpdfstring{$\arctan$}{arctan} 相位压缩对 \texorpdfstring{$\NN$}{N} 的操作型半圆维]\label{thm:cdim-operational-half-circle-dimension-N}
+存在显式常数使
+\[
+\frac{1}{\sqrt{\pi}}\,2^{b/2}\ \lesssim\ N_{\max}(b)\ \lesssim\ \frac{4}{\sqrt{\pi}}\,2^{b/2},
+\]
+从而
+\[
+\limsup_{b\to\infty}\frac{\log_2 N_{\max}(b)}{b}=\frac12.
+\]
+\end{theorem}
+\begin{proof}
+\textbf{下界.}
+由均值定理与 \(\arctan'(x)=1/(1+x^2)\) 的单调性，
+\[
+u(n+1)-u(n)
+=\frac{1}{\pi}\bigl(\arctan(n+1)-\arctan(n)\bigr)
+\ge \frac{1}{\pi(1+(n+1)^2)}.
+\]
+若 \(n\le N-1\) 且 \(\frac{1}{\pi(1+N^2)}\ge \delta\)，则对所有 \(n\le N-1\) 有
+\(
+u(n+1)-u(n)\ge \delta
+\)，从而 \(Q_b(u(n))\) 严格递增，\(q_b\) 在 \(\{0,\dots,N\}\) 上单射。
+该条件等价于
+\(
+N\le \sqrt{\frac{1}{\pi\delta}-1}
+\asymp 2^{b/2}/\sqrt{\pi}
+\)，给出 \(N_{\max}(b)\gtrsim 2^{b/2}/\sqrt{\pi}\)。
+\par
+\textbf{上界.}
+令 \(n:=\lfloor N/2\rfloor\)，则集合 \(\{n,n+1,\dots,N\}\) 至少含 \(m\ge N/2\) 个整数。
+若 \(q_b\) 在 \(\{0,\dots,N\}\) 上单射，则这 \(m\) 个相位值落在互异的量化桶中，故
+\[
+u(N)-u(n)\ge (m-1)\delta\ \ge\ \Bigl(\frac{N}{2}-1\Bigr)\delta.
+\]
+另一方面，由 \(\arctan'\) 单调递减，
+\[
+u(N)-u(n)=\frac{1}{\pi}\int_{n}^{N}\frac{\dd x}{1+x^2}
+\le \frac{1}{\pi}\cdot \frac{N-n}{1+n^2}
+\le \frac{1}{\pi}\cdot \frac{N}{n^2}
+\le \frac{4}{\pi N},
+\]
+其中最后一步在 \(N\) 足够大时由 \(n\ge N/2-1\) 给出。
+合并得
+\(
+(\frac{N}{2}-1)\delta\le 4/(\pi N)
+\)，从而 \(N\lesssim (4/\sqrt{\pi})2^{b/2}\)。
+指数结论随之成立。证毕。
+\end{proof}
+
+\begin{remark}[单侧读出容量与半圆维的一致性]\label{rem:cdim-operational-half-circle-dimension-meaning}
+定理 \ref{thm:cdim-operational-half-circle-dimension-N} 表明：在固定“单圆相位 + dyadic 前缀深度 \(b\)”的可见接口制度下，
+\(\NN\) 的可单射读出规模并非线性 \(2^b\) 而是平方根级 \(2^{b/2}\)。
+该平方根律与结构半圆维 \(\cdim_+(\NN)=\tfrac12\)（例 \ref{ex:circle-dimension-examples}）在缩放指数上严格对齐，
+并与端点紧化所诱导的二次分辨率标度相容（\S\ref{subsec:cdim-phase-prefix-quadratic-barrier}）。
+\end{remark}
+
+\begin{corollary}[\texorpdfstring{$\NN^d$}{N^d} 的操作型半圆维与结构半圆维一致]\label{cor:cdim-operational-half-circle-dimension-Nd}
+对 \(d\ge 1\)，令 \(u_d:\RR_{\ge 0}^d\to(0,\tfrac12)^d\) 由逐坐标施加 \(u\) 给出，
+并对每个坐标用同一深度 \(b\) 的量化 \(Q_b\)。
+定义
+\[
+N_{\max}^{(d)}(b)
+:=\max\Bigl\{N\in\NN:\ Q_b^{\otimes d}\circ u_d\ \text{在}\ \{0,1,\dots,N\}^d\ \text{上单射}\Bigr\}.
+\]
+则
+\[
+\limsup_{b\to\infty}\frac{\log_2 N_{\max}^{(d)}(b)}{b}=\frac{d}{2}.
+\]
+并且该指数与结构定义一致：\(\cdim_+(\NN^d)=\frac{d}{2}\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:cdim-operational-half-circle-dimension-N} 的一维注入界，逐坐标单射推出笛卡尔积上的单射；
+反向上界同理由单坐标的必要条件给出并取乘法计数。
+结构等式由 \(G(\NN^d)\cong \ZZ^d\) 且 \(\cdim(\ZZ^d)=d\)（例 \ref{ex:circle-dimension-examples}）与定义 \ref{def:half-circle-dimension} 直接推出。证毕。
+\end{proof}
+
+\begin{theorem}[超立方体上的离散 Stokes 反演常数与半圆维的直径刻画]\label{thm:cdim-plus-discrete-stokes-inversion-hypercube}
+令 \(Q_n\) 为 \(n\)-维超立方体的 \(1\)-骨架（顶点集 \(\{0,1\}^n\)，边为 Hamming 距离 \(1\)）。
+令 \(C^0(Q_n;\RR)\) 为顶点函数空间，\(C^1(Q_n;\RR)\) 为取向边上的 \(1\)-上链空间；
+令 \(d:C^0\to C^1\) 为离散微分 \((df)(u\to v)=f(v)-f(u)\)。
+对 \(\omega\in C^1\) 写 \(d\omega=0\) 表示其在每个 \(2\)-面（方形）上的环路和为零（离散闭性）。
+定义范数
+\[
+\|\omega\|_\infty:=\max_{e\in E(Q_n)}|\omega(e)|,\qquad
+\|f\|_{\infty,\!*}:=\inf_{c\in\RR}\max_{v\in V(Q_n)}|f(v)+c|.
+\]
+并定义最优常数
+\[
+\mathsf C_n:=
+\sup_{\substack{\omega\in C^1(Q_n;\RR)\\ d\omega=0,\ \omega\neq 0}}
+\ \inf_{\substack{f\in C^0(Q_n;\RR)\\ df=\omega}}
+\ \frac{\|f\|_{\infty,\!*}}{\|\omega\|_\infty}.
+\]
+则
+\[
+\mathsf C_n=\frac{n}{2}.
+\]
+并且该常数与结构半圆维一致：由 \(\cdim_+(\NN^n)=\frac{n}{2}\)（推论 \ref{cor:cdim-operational-half-circle-dimension-Nd}）可得
+\[
+\mathsf C_n=\cdim_+(\NN^n).
+\]
+\end{theorem}
+\begin{proof}
+\textbf{上界.}
+取基点 \(0=(0,\dots,0)\)。
+对满足 \(d\omega=0\) 的 \(\omega\)，定义
+\[
+f(v):=\sum_{e\in\gamma_{0\to v}}\omega(e),
+\]
+其中 \(\gamma_{0\to v}\) 为从 \(0\) 到 \(v\) 的任意边路径。
+由于 \(Q_n\) 的任意两条从 \(0\) 到 \(v\) 的路径可由有限次交换相邻坐标步的操作互达，而每一次交换对应一个方形 \(2\)-面的边界，
+\(d\omega=0\) 保证路径积分在该交换下不变，故 \(f(v)\) 与路径选择无关，定义良定。
+并且对任意边 \(u\sim v\)，取 \(\gamma_{0\to v}=\gamma_{0\to u}+(u\to v)\) 得
+\(
+f(v)-f(u)=\omega(u\to v)
+\)，即 \(df=\omega\)。
+\par
+对任意 \(u,v\)，沿最短路有
+\(
+|f(v)-f(u)|\le d_{\mathrm{Ham}}(u,v)\,\|\omega\|_\infty\le n\|\omega\|_\infty
+\)。
+故 \(f\) 的值域直径不超过 \(n\|\omega\|_\infty\)，将 \(f\) 平移至中点得到
+\(
+\|f\|_{\infty,\!*}\le \frac{n}{2}\|\omega\|_\infty
+\)，从而 \(\mathsf C_n\le n/2\)。
+\par
+\textbf{下界.}
+令
+\[
+h(v):=\sum_{i=1}^n v_i-\frac{n}{2},
+\qquad
+\omega_0:=dh.
+\]
+则 \(\|\omega_0\|_\infty=1\)。
+若 \(df=\omega_0\)，则 \(d(f-h)=0\)，而 \(Q_n\) 连通，故 \(f-h\) 为常数，从而
+\[
+\inf_{df=\omega_0}\|f\|_{\infty,\!*}=\|h\|_{\infty,\!*}=\frac{n}{2}.
+\]
+于是 \(\mathsf C_n\ge n/2\)。
+合并上下界得 \(\mathsf C_n=n/2\)。
+最后一式 \(\mathsf C_n=\cdim_+(\NN^n)\) 由推论 \ref{cor:cdim-operational-half-circle-dimension-Nd} 的结构恒等式直接给出。证毕。
+\end{proof}
+
+\begin{conjecture}[一般可消交换幺半群的结构--操作一致性]\label{conj:cdim-operational-half-circle-dimension-general-monoid}
+设 \(M\) 为有限生成、可消交换幺半群，且其 Grothendieck 完成 \(G(M)\) 为无挠有限秩群。
+则存在一个与 \(\cdim(G(M))\) 对齐的规范相位压缩嵌入
+\(
+\iota_M:M\hookrightarrow \TT^{\cdim(G(M))}
+\)
+及相应的 dyadic 深度量化族，使得由“量化后在自然增大族上保持单射”的最大规模所定义的操作型指数
+与结构半圆维一致：
+\[
+\limsup_{b\to\infty}\frac{\log_2 N_{\max,M}(b)}{b}=\cdim_+(M).
+\]
+\end{conjecture}
+
+\endinput
+

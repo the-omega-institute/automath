@@ -1,0 +1,388 @@
+\paragraph{Schur--方差谱学：由二阶能量提取非平凡通道包络与平方根门槛}
+定理 \ref{thm:pom-schur-variance-decomposition} 给出一个逐分辨率 \(m\) 的精确恒等式：循环型单项式
+\(\sigma\mapsto \mathcal C_\sigma(m)\) 的中心化方差恰等于所有非平凡 Schur 通道迹的平方和。
+本段把该恒等式推到指数尺度：方差的增长率与非平凡通道谱半径的包络在 \(\limsup\) 意义下严格一致，
+从而把 near-RH 的平方根门槛改写为一个完全内禀的“二阶集中”判别式，
+并据此给出无需逐通道谱分解的 prime-shadow 偏差上界。
+
+\paragraph{记号：方差能量与 Schur 包络半径}
+固定整数 \(q\ge 2\)，沿用定理 \ref{thm:pom-schur-cycle-index-tomography} 的 Schur 分解
+\(
+A_q\cong\bigoplus_{\lambda\vdash q}(B_{q,\lambda}\otimes I_{f^\lambda})
+\)
+与通道迹 \(T_{q,\lambda}(m)=\Tr(B_{q,\lambda}^{\,m})\)。
+令
+\[
+\overline{\mathcal C}(m):=\frac{1}{q!}\sum_{\sigma\in S_q}\mathcal{C}_\sigma(m),
+\qquad
+\mathcal V_q(m):=\frac{1}{q!}\sum_{\sigma\in S_q}\bigl|\mathcal{C}_\sigma(m)-\overline{\mathcal C}(m)\bigr|^2,
+\]
+并记非平凡 Schur 包络半径与平凡通道 Perron 根为
+\[
+\Lambda_q^{\mathrm{Schur}}
+:=\max_{\lambda\vdash q,\ \lambda\neq(q)}\rho(B_{q,\lambda}),
+\qquad
+\rho_q:=\rho(B_{q,(q)}).
+\]
+定义 near-RH 缺陷标量
+\[
+\Delta_q:=\log\!\Bigl(\frac{(\Lambda_q^{\mathrm{Schur}})^2}{\rho_q}\Bigr)\in[-\infty,\infty).
+\]
+
+\begin{theorem}[方差增长率的谱等式]\label{thm:pom-schur-variance-growth-rate-spectral-identity}
+在上述设定下，成立严格等式
+\[
+\boxed{\;
+\limsup_{m\to\infty}\frac{1}{m}\log \mathcal V_q(m)
+=
+2\max_{\lambda\vdash q,\ \lambda\neq(q)}\log\rho(B_{q,\lambda})
+=
+2\log\Lambda_q^{\mathrm{Schur}}\; }.
+\]
+从而包络半径可由方差指数率精确提取：
+\[
+\boxed{\;
+\Lambda_q^{\mathrm{Schur}}
+=\exp\!\left(\frac12\limsup_{m\to\infty}\frac{1}{m}\log \mathcal V_q(m)\right)\; } .
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-schur-variance-decomposition}，对每个 \(m\ge 1\) 有
+\[
+\mathcal V_q(m)=\sum_{\lambda\vdash q,\ \lambda\neq(q)}\left|\frac{T_{q,\lambda}(m)}{f^\lambda}\right|^2.
+\]
+对下界，任取 \(\lambda\neq(q)\) 得 \(\mathcal V_q(m)\ge |T_{q,\lambda}(m)/f^\lambda|^2\)，故
+\[
+\limsup_{m\to\infty}\frac{1}{m}\log \mathcal V_q(m)
+\ge
+2\limsup_{m\to\infty}\frac{1}{m}\log|T_{q,\lambda}(m)|
+=2\log\rho(B_{q,\lambda}),
+\]
+其中最后一步为定理 \ref{thm:pom-schur-channel-radius-character-sieve} 的证明中的一般引理（对任意有限维矩阵 \(B\)，有 \(\limsup_m m^{-1}\log|\Tr(B^m)|=\log\rho(B)\)）。
+对所有 \(\lambda\neq(q)\) 取最大得
+\[
+\limsup_{m\to\infty}\frac{1}{m}\log \mathcal V_q(m)\ \ge\ 2\log\Lambda_q^{\mathrm{Schur}}.
+\]
+对上界，注意对固定 \(q\) 仅有有限个分拆 \(\lambda\vdash q\)，并且对任意矩阵 \(B\) 有
+\(|\Tr(B^m)|\le (\dim B)\,\rho(B)^m\)。
+因此存在常数 \(C_q<\infty\) 使对所有 \(m\ge 1\) 有
+\[
+\mathcal V_q(m)
+\le
+\sum_{\lambda\neq(q)}\left(\frac{\dim(B_{q,\lambda})}{f^\lambda}\right)^2\rho(B_{q,\lambda})^{2m}
+\le
+C_q\cdot(\Lambda_q^{\mathrm{Schur}})^{2m}.
+\]
+两边取对数、除以 \(m\) 并取 \(\limsup\) 得
+\(
+\limsup_m m^{-1}\log\mathcal V_q(m)\le 2\log\Lambda_q^{\mathrm{Schur}}
+\)。
+合并上下界即得第一式；第二式为指数化重写。证毕。
+\end{proof}
+
+\begin{corollary}[平方根门槛的纯方差判别]\label{cor:pom-schur-near-rh-variance-concentration}
+在定理 \ref{thm:pom-schur-variance-growth-rate-spectral-identity} 的设定下，以下两命题等价：
+\begin{enumerate}
+  \item \textbf{（near-RH / 平方根界）}\(\Delta_q\le 0\)，即 \(\Lambda_q^{\mathrm{Schur}}\le \rho_q^{1/2}\)；
+  \item \textbf{（二阶集中）}方差能量满足指数上界
+  \[
+  \boxed{\;
+  \limsup_{m\to\infty}\frac{1}{m}\log \mathcal V_q(m)\ \le\ \log\rho_q\; }.
+  \]
+\end{enumerate}
+并且在严格裕度 \(\Delta_q\le-\delta<0\) 下，存在常数 \(C_q>0\) 使对所有 \(m\ge 1\) 有
+\[
+\boxed{\;
+\mathcal V_q(m)\ \le\ C_q\,\exp\!\bigl((\log\rho_q-\delta)m\bigr)\; } .
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-schur-variance-growth-rate-spectral-identity}，
+\(
+\limsup_m m^{-1}\log\mathcal V_q(m)=2\log\Lambda_q^{\mathrm{Schur}}
+\)。
+故 \(\Delta_q\le 0\) 等价于 \(2\log\Lambda_q^{\mathrm{Schur}}\le \log\rho_q\)，即所示二阶集中不等式。
+若进一步 \(\Delta_q\le-\delta\)，则 \((\Lambda_q^{\mathrm{Schur}})^{2}\le e^{-\delta}\rho_q\)。
+由定理 \ref{thm:pom-schur-variance-growth-rate-spectral-identity} 证明中的上界估计
+\(\mathcal V_q(m)\le C_q(\Lambda_q^{\mathrm{Schur}})^{2m}\)，立得所示定量衰减。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$L^p$}{Lp} 偏离强度的指数同一性：增长率仅由 \texorpdfstring{$\Lambda_q^{\mathrm{Schur}}$}{Lambda} 控制]\label{thm:pom-schur-envelope-lp-exponent-identity}
+在本段设定下，令中心化偏离
+\[
+F_m(\sigma):=\mathcal{C}_\sigma(m)-\overline{\mathcal C}(m)\qquad(\sigma\in S_q),
+\]
+并对 \(p\in[2,\infty)\) 定义
+\[
+\|F_m\|_p:=\left(\frac{1}{q!}\sum_{\sigma\in S_q}|F_m(\sigma)|^p\right)^{1/p},
+\qquad
+\|F_m\|_\infty:=\max_{\sigma\in S_q}|F_m(\sigma)|.
+\]
+则对所有 \(p\in[2,\infty]\) 成立指数同一性
+\[
+\boxed{\;
+\limsup_{m\to\infty}\frac{1}{m}\log \|F_m\|_p
+=\log \Lambda_q^{\mathrm{Schur}}\; } .
+\]
+\end{theorem}
+\begin{proof}
+由定义 \(\|F_m\|_2^2=\mathcal V_q(m)\)，故定理 \ref{thm:pom-schur-variance-growth-rate-spectral-identity} 给出
+\[
+\limsup_{m\to\infty}\frac{1}{m}\log\|F_m\|_2
+=\frac12\limsup_{m\to\infty}\frac{1}{m}\log\mathcal V_q(m)
+=\log\Lambda_q^{\mathrm{Schur}}.
+\]
+另一方面，在有限集 \(S_q\) 上对任意函数 \(f\) 与任意 \(p\in[2,\infty)\) 有范数比较
+\[
+\|f\|_2\le \|f\|_p\le (q!)^{\frac12-\frac1p}\|f\|_2,
+\qquad
+\|f\|_2\le \|f\|_\infty\le (q!)^{1/2}\|f\|_2,
+\]
+其中右侧不等式由 \(\|f\|_\infty\le \sqrt{q!}\|f\|_2\) 与有限维插值 \(\|f\|_p\le \|f\|_\infty^{1-2/p}\|f\|_2^{2/p}\) 得到。
+因此 \(\log\|F_m\|_p=\log\|F_m\|_2+O_{p,q}(1)\)，两边除以 \(m\) 后取 \(\limsup\) 得到对所有 \(p\in[2,\infty]\) 的结论。证毕。
+\end{proof}
+
+\begin{corollary}[near-RH 的范数等价判别：平方根门槛等价于任意 \texorpdfstring{$L^p$}{Lp} 偏离被压制到 \texorpdfstring{$\rho_q^{m/2}$}{rho^{m/2}}]\label{cor:pom-schur-near-rh-lp-suppression-equivalence}
+固定 \(q\ge 2\) 并沿用 \(\rho_q=\rho(B_{q,(q)})\) 与 \(\Lambda_q^{\mathrm{Schur}}\) 的定义。
+对任意固定 \(p\in[2,\infty]\)，以下两命题等价：
+\begin{enumerate}
+  \item \textbf{（near-RH / 平方根界）}\(\Lambda_q^{\mathrm{Schur}}\le \rho_q^{1/2}\)；
+  \item \textbf{（\texorpdfstring{$L^p$}{Lp} 偏离压制）}存在常数 \(C_{p,q}<\infty\)（与 \(m\) 无关）使对所有 \(m\ge 1\) 有
+  \[
+  \boxed{\;
+  \|F_m\|_p\ \le\ C_{p,q}\,\rho_q^{\,m/2}\; } .
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+\textbf{(1)\(\Rightarrow\)(2).}
+由定理 \ref{thm:pom-schur-variance-decomposition} 与 \(\mathcal V_q(m)=\|F_m\|_2^2\) 有
+\[
+\|F_m\|_2^2=\sum_{\lambda\vdash q,\ \lambda\neq(q)}\left|\frac{T_{q,\lambda}(m)}{f^\lambda}\right|^2.
+\]
+由一般界 \(|\Tr(B^m)|\le (\dim B)\rho(B)^m\) 得
+\[
+\|F_m\|_2^2\le
+\sum_{\lambda\neq(q)}\left(\frac{\dim(B_{q,\lambda})}{f^\lambda}\right)^2\rho(B_{q,\lambda})^{2m}
+\le
+C_q\cdot(\Lambda_q^{\mathrm{Schur}})^{2m},
+\]
+其中 \(C_q:=\sum_{\lambda\neq(q)}(\dim(B_{q,\lambda})/f^\lambda)^2<\infty\)。
+在 near-RH 下 \((\Lambda_q^{\mathrm{Schur}})^2\le \rho_q\)，故 \(\|F_m\|_2\le \sqrt{C_q}\,\rho_q^{m/2}\)。
+再由定理 \ref{thm:pom-schur-envelope-lp-exponent-identity} 证明中的范数比较 \(\|F_m\|_p\le (q!)^{1/2}\|F_m\|_2\)（对 \(p=\infty\)）与
+\(\|F_m\|_p\le (q!)^{1/2-1/p}\|F_m\|_2\)（对 \(p<\infty\)），得到所示 \(L^p\) 压制。
+\par
+\textbf{(2)\(\Rightarrow\)(1).}
+由 (2) 得
+\(
+\limsup_{m\to\infty}m^{-1}\log\|F_m\|_p\le \tfrac12\log\rho_q
+\)。
+再由定理 \ref{thm:pom-schur-envelope-lp-exponent-identity} 得左端等于 \(\log\Lambda_q^{\mathrm{Schur}}\)，故 \(\Lambda_q^{\mathrm{Schur}}\le \rho_q^{1/2}\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[由方差直接给出的通道 prime-shadow 偏差上界]\label{cor:pom-schur-chebotarev-deviation-from-variance}
+在定理 \ref{thm:pom-schur-chebotarev-prime-deviation} 的设定下，存在常数 \(C_q>0\) 使对所有 \(\lambda\vdash q\) 且 \(\lambda\neq(q)\) 与所有 \(N\ge 2\) 有
+\[
+\boxed{\;
+|\Pi_\lambda(N)|
+\ \le\
+C_q\,\frac{(\Lambda_q^{\mathrm{Schur}})^{N}}{N}
+\ =\
+C_q\,\frac{\exp\!\bigl(\tfrac12\,V_q\,N\bigr)}{N}\; } ,
+\qquad
+V_q:=\limsup_{m\to\infty}\frac{1}{m}\log\mathcal V_q(m).
+\]
+特别地，若满足 near-RH（等价于推论 \ref{cor:pom-schur-near-rh-variance-concentration} 的二阶集中），则
+\[
+\boxed{\;
+|\Pi_\lambda(N)|
+\ \le\
+C_q\,\frac{\rho_q^{\,N/2}}{N}\qquad(\forall\,\lambda\neq(q),\ \forall\,N\ge2)\; } .
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-schur-chebotarev-prime-deviation}，对每个 \(\lambda\neq(q)\) 存在 \(C_{q,\lambda}>0\) 使
+\(
+|\Pi_\lambda(N)|\le C_{q,\lambda}\rho(B_{q,\lambda})^N/N
+\)。
+取 \(C_q:=\max_{\lambda\neq(q)}C_{q,\lambda}\)（有限最大值）并注意 \(\rho(B_{q,\lambda})\le \Lambda_q^{\mathrm{Schur}}\)，得到第一条不等式。
+再由定理 \ref{thm:pom-schur-variance-growth-rate-spectral-identity} 得
+\(\Lambda_q^{\mathrm{Schur}}=\exp(\tfrac12 V_q)\)，从而得到第二条等式。
+near-RH 情形下 \(\Lambda_q^{\mathrm{Schur}}\le \rho_q^{1/2}\) 代回即得平方根门槛上界。证毕。
+\end{proof}
+
+\begin{corollary}[循环指标方差的指数优化律（在非退化主项支配下）]\label{cor:pom-schur-variance-exponent-partition-optimization}
+沿用定理 \ref{thm:pom-schur-channel-radius-character-sieve} 的记号并假设其非退化条件对全部非平凡通道 \(\lambda\neq(q)\) 成立。
+令 \(P(r)\) 与 \(L(\nu)=\sum_{r\ge1}c_r(\nu)P(r)\) 如 \eqref{eq:pom-sr-main-term-kappa} 后所定义，
+并令
+\[
+\mathcal N_q:=\Bigl\{\nu\vdash q:\ \exists\,\lambda\vdash q,\ \lambda\neq(q)\ \text{使}\ \chi^\lambda(\nu)\neq0\Bigr\}.
+\]
+则成立有限优化等式
+\[
+\boxed{\;
+\log\Lambda_q^{\mathrm{Schur}}=\max_{\nu\in\mathcal N_q}L(\nu)\;},
+\qquad
+\boxed{\;
+\limsup_{m\to\infty}\frac{1}{m}\log\mathcal V_q(m)=\max_{\nu\in\mathcal N_q}2L(\nu)\; } .
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-schur-channel-radius-character-sieve}，
+对每个 \(\lambda\neq(q)\) 有
+\(
+\log\rho(B_{q,\lambda})=\max_{\nu:\ \chi^\lambda(\nu)\neq0}L(\nu)
+\)。
+对所有 \(\lambda\neq(q)\) 取最大，等价于在所有“被某个非平凡特征标看见”的循环类型集合 \(\mathcal N_q\) 上取最大，得到
+\(
+\log\Lambda_q^{\mathrm{Schur}}=\max_{\nu\in\mathcal N_q}L(\nu)
+\)。
+再由定理 \ref{thm:pom-schur-variance-growth-rate-spectral-identity} 得
+\(
+\limsup_m m^{-1}\log\mathcal V_q(m)=2\log\Lambda_q^{\mathrm{Schur}}
+\)，合并即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[零温截距的方差读出：在 Perron 饱和下方差截距等于地态熵]\label{prop:pom-variance-intercept-equals-groundstate-entropy}
+假设定理 \ref{thm:pom-zero-temperature-two-term-expansion-maxfiber-entropy} 的零温两项展开成立，即
+\(
+P_q=q\alpha_\ast+h_\ast+o(1)
+\)
+（其中 \(P_q=\log\rho_q\)）。
+进一步假设存在无穷多 \(q\) 使得某个非平凡通道 \(\lambda\neq(q)\) 满足 \(\chi^\lambda((q))\neq 0\)，并且定理 \ref{thm:pom-schur-channel-radius-character-sieve} 的非退化条件在该通道上成立。
+则对这些 \(q\) 有 Perron 饱和
+\[
+\boxed{\;\Lambda_q^{\mathrm{Schur}}=\rho_q\;},
+\qquad
+\boxed{\;V_q=2P_q\;},
+\]
+并因此得到截距公式
+\[
+\boxed{\;
+\lim_{q\to\infty}\bigl(V_q-2q\alpha_\ast\bigr)=2h_\ast\; } .
+\]
+\end{proposition}
+\begin{proof}
+取满足假设的 \(q\) 与对应 \(\lambda\neq(q)\)。
+由于 \(\chi^\lambda((q))\neq 0\)，\(q\)-循环型 \((q)\) 属于 \(\mathrm{Supp}(\lambda)\)，从而定理 \ref{thm:pom-schur-channel-radius-character-sieve} 中的筛后压力满足
+\(
+\mathcal P_\lambda\ge L((q))=P_q
+\)。
+另一方面，由块分解
+\(
+A_q\cong\bigoplus_{\mu\vdash q}(B_{q,\mu}\otimes I_{f^\mu})
+\)
+可知 \(\rho(A_q)=\max_{\mu\vdash q}\rho(B_{q,\mu})\)。
+在 \(A_q\) 为 primitive 非负并与 \(S_q\) 作用对易的编译制度下，其 Perron 特征值由 \(S_q\)-不变正特征向量实现，从而落在平凡通道，故 \(\rho(A_q)=\rho_q\) 且对任意 \(\mu\) 有 \(\rho(B_{q,\mu})\le \rho_q\)。
+因此 \(\rho(B_{q,\lambda})\le \rho_q\)，并在非退化条件下得到
+\(\mathcal P_\lambda=\log\rho(B_{q,\lambda})\le P_q\)。
+于是 \(\mathcal P_\lambda=P_q\)，从而非退化条件推出
+\(
+\rho(B_{q,\lambda})=\exp(\mathcal P_\lambda)=e^{P_q}=\rho_q
+\)。
+这意味着 \(\Lambda_q^{\mathrm{Schur}}\ge \rho(B_{q,\lambda})=\rho_q\) 且 \(\Lambda_q^{\mathrm{Schur}}\le \rho_q\)，从而 \(\Lambda_q^{\mathrm{Schur}}=\rho_q\)。
+于是 \(V_q=2\log\Lambda_q^{\mathrm{Schur}}=2P_q\)（定理 \ref{thm:pom-schur-variance-growth-rate-spectral-identity}）。
+最后由 \(P_q=q\alpha_\ast+h_\ast+o(1)\) 得
+\(
+V_q-2q\alpha_\ast=2(P_q-q\alpha_\ast)=2h_\ast+o(1)
+\)，取极限即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[方差零化的谱刚性：非平凡通道半径必为零]\label{prop:pom-variance-vanishing-implies-nilpotent-channels}
+固定 \(q\ge 2\)。
+\begin{enumerate}
+  \item 若对某个 \(m\ge 1\) 有 \(\mathcal V_q(m)=0\)，则对所有 \(\lambda\vdash q\) 且 \(\lambda\neq(q)\) 成立 \(T_{q,\lambda}(m)=0\)。
+  \item 若存在 \(m_0\) 使对所有 \(m\ge m_0\) 有 \(\mathcal V_q(m)=0\)，则对所有 \(\lambda\neq(q)\) 有 \(\rho(B_{q,\lambda})=0\)；等价地 \(\Lambda_q^{\mathrm{Schur}}=0\) 且 \(V_q=-\infty\)。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+第 (1) 点由定理 \ref{thm:pom-schur-variance-decomposition} 的非负项和式立即推出：若 \(\sum_{\lambda\neq(q)}|T_{q,\lambda}(m)/f^\lambda|^2=0\)，则每项为零。
+\par
+第 (2) 点：由第 (1) 点，\(\Tr(B_{q,\lambda}^{\,m})=0\) 对所有 \(m\ge m_0\) 成立。
+设 \(B=B_{q,\lambda}\) 的特征值为 \(\{\mu_1,\dots,\mu_d\}\)（按代数重数计），则对 \(|t|\) 充分小有恒等式
+\[
+\sum_{m\ge 0}\Tr(B^{m})t^{m}=\sum_{j=1}^{d}\frac{1}{1-\mu_j t},
+\]
+其中左端为迹幂和的生成函数。
+若 \(\Tr(B^{m})=0\) 对所有 \(m\ge m_0\) 成立，则左端为有限多项式 \(\sum_{m=0}^{m_0-1}\Tr(B^{m})t^{m}\)，从而右端不能有极点；
+故必须对所有 \(j\) 有 \(\mu_j=0\)，即 \(\rho(B)=0\)。
+对所有 \(\lambda\neq(q)\) 应用即得 \(\Lambda_q^{\mathrm{Schur}}=0\)，再由定理 \ref{thm:pom-schur-variance-growth-rate-spectral-identity} 得 \(V_q=-\infty\)。证毕。
+\end{proof}
+
+\paragraph{双侧变分刻画：Schur 包络半径作为最优类函数探针的指数分辨率}
+为避免与共轭类记号 \(\mathrm{Cl}(\nu)\) 混淆，本段将“共轭不变函数”简称为类函数，并把其 Hilbert 空间记为 \(\mathcal H_q\)。
+
+\begin{definition}[类函数空间与中心化循环型单项式]\label{def:pom-class-functions-centered-cycle-monomials}
+令
+\[
+\mathcal H_q:=\bigl\{f:S_q\to\CC:\ f(\tau\sigma\tau^{-1})=f(\sigma)\ \ \forall\,\sigma,\tau\in S_q\bigr\},
+\qquad
+\langle f,g\rangle:=\frac{1}{q!}\sum_{\sigma\in S_q}f(\sigma)\overline{g(\sigma)}.
+\]
+并令中心化类函数
+\[
+\mathcal C_m(\sigma):=\mathcal C_\sigma(m)-\overline{\mathcal C}(m)\qquad(\sigma\in S_q),
+\]
+其中 \(\overline{\mathcal C}(m)=\frac{1}{q!}\sum_{\sigma}\mathcal C_\sigma(m)\)。
+\end{definition}
+
+\begin{theorem}[Schur 包络的变分刻画]\label{thm:pom-schur-envelope-variational-characterization}
+在定义 \ref{def:pom-class-functions-centered-cycle-monomials} 的设定下，对每个 \(\lambda\vdash q\) 且 \(\lambda\neq(q)\) 定义 Fourier 线性泛函
+\[
+\widehat{\mathcal C}_m(\lambda):=\sum_{\sigma\in S_q}\chi^\lambda(\sigma)\,\mathcal C_m(\sigma).
+\]
+则成立严格等式
+\[
+\boxed{\;
+\Lambda_q^{\mathrm{Schur}}
+=
+\sup_{\lambda\vdash q,\ \lambda\neq(q)}\ \limsup_{m\to\infty}\left|\frac{\widehat{\mathcal C}_m(\lambda)}{q!}\right|^{1/m}\;}
+\]
+并且同一数量亦可由类函数探针的最优指数分辨率给出：
+\[
+\boxed{\;
+\Lambda_q^{\mathrm{Schur}}
+=
+\limsup_{m\to\infty}\ \sup_{\substack{f\in\mathcal H_q\\ \langle f,1\rangle=0,\ \|f\|_2=1}}
+\left|\langle f,\mathcal C_m\rangle\right|^{1/m}\; } .
+\]
+\end{theorem}
+\begin{proof}
+对 \(\lambda\neq(q)\)，由定理 \ref{thm:pom-schur-cycle-index-tomography} 与中心化（平凡通道被消去）得
+\[
+T_{q,\lambda}(m)
+=\frac{f^\lambda}{q!}\sum_{\sigma\in S_q}\chi^\lambda(\sigma)\,\mathcal C_m(\sigma)
+=\frac{f^\lambda}{q!}\widehat{\mathcal C}_m(\lambda).
+\]
+因此
+\[
+\limsup_{m\to\infty}\left|\frac{\widehat{\mathcal C}_m(\lambda)}{q!}\right|^{1/m}
+=
+\limsup_{m\to\infty}\left|\frac{T_{q,\lambda}(m)}{f^\lambda}\right|^{1/m}
+=
+\rho(B_{q,\lambda}),
+\]
+其中最后一步同样由 \(\limsup_m m^{-1}\log|\Tr(B^m)|=\log\rho(B)\) 得到。
+对 \(\lambda\neq(q)\) 取上确界即得第一式。
+\par
+对第二式，注意由于 \(\mathcal C_m\in\mathcal H_q\) 且 \(\langle \mathcal C_m,1\rangle=0\)，有
+\[
+\sup_{\substack{f\in\mathcal H_q\\ \langle f,1\rangle=0,\ \|f\|_2=1}}
+|\langle f,\mathcal C_m\rangle|
+=\|\mathcal C_m\|_2
+=\sqrt{\mathcal V_q(m)},
+\]
+其中最后一步由 \(\|\mathcal C_m\|_2^2=\frac1{q!}\sum_\sigma|\mathcal C_m(\sigma)|^2=\mathcal V_q(m)\)。
+故
+\[
+\limsup_{m\to\infty}\ \sup_{f}\ |\langle f,\mathcal C_m\rangle|^{1/m}
+=\limsup_{m\to\infty}\ \mathcal V_q(m)^{1/(2m)}
+=\Lambda_q^{\mathrm{Schur}}
+\]
+其中最后一步由定理 \ref{thm:pom-schur-variance-growth-rate-spectral-identity}。
+证毕。
+\end{proof}
+
+\endinput
+

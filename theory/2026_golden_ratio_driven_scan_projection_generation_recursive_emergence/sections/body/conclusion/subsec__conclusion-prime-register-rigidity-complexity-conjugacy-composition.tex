@@ -1,0 +1,588 @@
+\subsection{prime-register 可逆化机制的刚性、位复杂度与合成闭包}\label{subsec:conclusion-prime-register-rigidity-complexity-conjugacy-composition}
+沿用定义 \ref{def:pom-prime-fiber} 与定义 \ref{def:pom-fold-prime-lift} 的记号，记
+\[
+\mathcal P=\NN^{(\mathbb P)},\qquad
+N(r)=\prod_{p\in\mathbb P}p^{r(p)},
+\]
+并以命题 \ref{prop:pom-fold-prime-lift-injective} 作为可逆化基底。
+下述命题组把时间寻址、整数化代价、策略变化与投影合成统一写成同一条可审计代数链。
+
+\input{para__conclusion-prime-register-fiber-normalized-half-circle-dimension}
+\input{para__conclusion-endpoint-horizon-arcsine-relative-entropy}
+
+\begin{theorem}[时间寻址 Gödel 证书的刚性与唯一性]\label{thm:conclusion-prime-time-addressed-godel-rigidity}
+令
+\[
+\mathcal A:=\NN^{(\NN)}=\left\{a=(a_t)_{t\ge 1}\mid a_t=0\ \text{仅除有限多个 }t\right\},
+\]
+并定义移位算子 \(\mathrm{sh}:\mathcal A\to\mathcal A\) 为
+\[
+(\mathrm{sh}(a))_1=0,\qquad (\mathrm{sh}(a))_{t+1}=a_t.
+\]
+设 \(\Gamma:\mathcal A\to\NN_{\ge 1}\) 满足存在两两不同素数列 \((q_t)_{t\ge 1}\) 使
+\[
+\Gamma(a)=\prod_{t\ge 1}q_t^{a_t}\qquad(a\in\mathcal A),
+\]
+并且存在乘法幺半群自同态 \(\Sigma:\NN_{\ge 1}\to\NN_{\ge 1}\) 使
+\[
+\Gamma(\mathrm{sh}(a))=\Sigma(\Gamma(a)),\qquad \forall a\in\mathcal A.
+\]
+则成立：
+\begin{enumerate}
+  \item 在由 \(\{q_t\}_{t\ge 1}\) 生成的子幺半群上，\(\Sigma\) 必满足
+  \[
+  \Sigma(q_t)=q_{t+1},\qquad
+  \Sigma\!\left(\prod_{t\ge 1}q_t^{\alpha_t}\right)=\prod_{t\ge 1}q_{t+1}^{\alpha_t}.
+  \]
+  \item 若进一步假设 \(\Sigma\) 是 \(\NN_{\ge 1}\) 的自同构，则存在唯一素数置换
+  \(\pi:\mathbb P\to\mathbb P\) 使
+  \[
+  \Sigma\!\left(\prod_{p\in\mathbb P}p^{\alpha(p)}\right)
+  =
+  \prod_{p\in\mathbb P}\pi(p)^{\alpha(p)},
+  \]
+  且在时间寻址轴上 \(\pi(q_t)=q_{t+1}\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+取 \(e_t\in\mathcal A\) 为第 \(t\) 位为 \(1\) 其余为 \(0\) 的序列。
+由移位相容性
+\[
+\Sigma(q_t)
+=\Sigma(\Gamma(e_t))
+=\Gamma(\mathrm{sh}(e_t))
+=\Gamma(e_{t+1})
+=q_{t+1},
+\]
+故第一式成立。
+对任意有限支撑指数列 \((\alpha_t)\)，由 \(\Sigma\) 乘法同态性质得
+\[
+\Sigma\!\left(\prod_{t\ge 1}q_t^{\alpha_t}\right)
+=\prod_{t\ge 1}\Sigma(q_t)^{\alpha_t}
+=\prod_{t\ge 1}q_{t+1}^{\alpha_t},
+\]
+即得第 (1) 条。
+
+若 \(\Sigma\) 为自同构，则由算术基本定理，\(\Sigma\) 在素数上的取值必须构成素数集的置换 \(\pi\)，并唯一决定 \(\Sigma\) 在整个 \(\NN_{\ge 1}\) 上的作用：
+\[
+\Sigma\!\left(\prod_{p}p^{\alpha(p)}\right)=\prod_p\pi(p)^{\alpha(p)}.
+\]
+结合上式 \(\Sigma(q_t)=q_{t+1}\) 即得 \(\pi(q_t)=q_{t+1}\)。
+唯一性由唯一分解直接推出。证毕。
+\end{proof}
+
+\begin{theorem}[prime-register 整数化的超线性位复杂度下界]\label{thm:conclusion-prime-integerization-superlinear-bitlength}
+固定确定性策略 \(\mathsf S\)，并沿用定义 \ref{def:pom-fold-prime-lift} 中的事件序列
+\((e_t(\omega))_{t=1}^{T_{m+1}^{\mathsf S}(\omega)}\) 与编码 \(\mathrm{code}(e_t)\in\NN_{\ge 1}\)。
+定义 Gödel 整数
+\[
+G_{\mathsf S}(\omega):=N\!\bigl(r_{\mathsf S}(\omega)\bigr)
+=\prod_{t=1}^{T_{m+1}^{\mathsf S}(\omega)}p_t^{\,\mathrm{code}(e_t(\omega))}.
+\]
+则对任意 \(\omega\) 有
+\[
+\log_2 G_{\mathsf S}(\omega)
+\ge
+\log_2\!\bigl((T_{m+1}^{\mathsf S}(\omega)+1)!\bigr)
+\ge
+\frac{(T_{m+1}^{\mathsf S}(\omega)+1)\log(T_{m+1}^{\mathsf S}(\omega)+1)-(T_{m+1}^{\mathsf S}(\omega)+1)+1}{\ln 2}.
+\]
+特别地，
+\[
+\log_2 G_{\mathsf S}(\omega)=\Omega\!\bigl(T_{m+1}^{\mathsf S}(\omega)\log T_{m+1}^{\mathsf S}(\omega)\bigr).
+\]
+在均匀基线 \(\omega\sim\mathrm{Unif}(\Omega_{m+1})\) 下，存在常数 \(C>0\) 使
+\[
+\EE[\log_2 G_{\mathsf S}(\omega)]
+\ge
+\frac{4}{27\ln 2}\,m\log m-Cm.
+\]
+\end{theorem}
+\begin{proof}
+由定义 \ref{def:pom-fold-prime-lift}，\(\mathrm{code}(e_t)\ge 1\)，故
+\[
+G_{\mathsf S}(\omega)\ge \prod_{t=1}^{T}p_t,\qquad T:=T_{m+1}^{\mathsf S}(\omega).
+\]
+又 \(p_t\ge t+1\)，于是
+\[
+G_{\mathsf S}(\omega)\ge \prod_{t=1}^{T}(t+1)=(T+1)!.
+\]
+取对数得第一不等式。
+再由
+\[
+\log (T+1)!
+=\sum_{k=1}^{T+1}\log k
+\ge
+\int_1^{T+1}\log x\,\mathrm dx
+=(T+1)\log(T+1)-(T+1)+1
+\]
+得到第二不等式，从而点态 \(\Omega(T\log T)\) 成立。
+
+令
+\[
+h(t):=(t+1)\log(t+1)-(t+1),\qquad t\ge 0.
+\]
+有 \(h''(t)=1/(t+1)>0\)，故 \(h\) 凸。
+由上界链与 Jensen 不等式，
+\[
+\EE[\log_2 G_{\mathsf S}]
+\ge
+\frac{1}{\ln 2}\,\EE[h(T)]
+\ge
+\frac{1}{\ln 2}\,h(\EE[T]).
+\]
+再由推论 \ref{cor:pom-prime-residual-linear-lb}，
+\[
+\liminf_{m\to\infty}\frac{\EE[T]}{m}\ge \frac{4}{27},
+\]
+代回即得
+\[
+\EE[\log_2 G_{\mathsf S}]
+\ge
+\frac{4}{27\ln 2}\,m\log m-Cm
+\]
+（某常数 \(C>0\)）。证毕。
+\end{proof}
+
+\begin{theorem}[全息—深度分离原理：低前缀信息与任意可计算时间深度可共存]\label{thm:conclusion-holography-logical-depth-separation}
+固定一台前缀自由通用机 \(U\)，并以 \(K(\cdot)\) 表示前缀 Kolmogorov 复杂度。
+令 \(g:\NN\to\NN\) 为任意全可计算、单调不减且无界的函数。
+则存在一个可计算无穷二进制序列 \(X\in\{0,1\}^{\NN}\)，以及一列前缀长度
+\[
+N_m:=\frac{m(m+1)}{2}\qquad(m\ge 1),
+\]
+使得对所有充分大的 \(m\) 同时成立：
+\begin{enumerate}
+  \item 存在常数 \(C_1>0\) 使
+  \[
+  K\!\bigl(X\upharpoonright N_m\bigr)\ \le\ C_1\log m;
+  \]
+  \item 令 \(K^t(\sigma)\) 为时间界 \(t\) 下的时间有界前缀复杂度，并定义 Bennett 型逻辑深度
+  \[
+  \mathrm{depth}_s(\sigma):=\min\{t:\ K^t(\sigma)\le K(\sigma)+s\}.
+  \]
+  则存在常数 \(C_2>0\) 使
+  \[
+  \mathrm{depth}_{C_2\log m}\!\bigl(X\upharpoonright N_m\bigr)\ >\ g(m).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+取常数 \(c\) 并令
+\[
+L(m):=\bigl\lceil 2\log_2 m\bigr\rceil+c.
+\]
+对每个 \(m\) 定义集合
+\[
+\mathcal S_m:=
+\Bigl\{
+\tau\in\{0,1\}^m:\ \exists\,p,\ |p|\le L(m)\ \text{且}\ U(p)\ \text{在}\ \le g(m)\ \text{步内输出}\ \tau
+\Bigr\}.
+\]
+由于 \(U\) 前缀自由，长度 \(\le L(m)\) 的程序数至多为 \(2^{L(m)}\)，故
+\(
+|\mathcal S_m|\le 2^{L(m)}\ll m^2
+\)。
+当 \(m\) 充分大时有 \(|\mathcal S_m|<2^m\)，从而 \(\{0,1\}^m\setminus \mathcal S_m\neq\varnothing\)。
+令
+\[
+B_m:=\min\nolimits_{\mathrm{lex}}\bigl(\{0,1\}^m\setminus \mathcal S_m\bigr)
+\]
+为字典序最小的缺失块。
+由于 \(g(m)\) 为可计算且时间界有限，可通过有限枚举全部 \(|p|\le L(m)\) 的程序并在步数 \(\le g(m)\) 内模拟判定 \(U(p)\) 的输出，从而 \(\mathcal S_m\) 与 \(B_m\) 均可计算。
+
+定义
+\[
+X:=B_1B_2B_3\cdots .
+\]
+于是 \(X\) 可计算。
+并且由给定 \(m\) 可逐块计算 \(B_1,\dots,B_m\) 并输出其拼接 \(X\upharpoonright N_m\)，故存在常数 \(C_1\) 使
+\(
+K(X\upharpoonright N_m)\le C_1\log m
+\)。
+
+设反之存在程序 \(p\) 满足
+\[
+|p|\le K(X\upharpoonright N_m)+C_2\log m,
+\qquad
+U(p)\ \text{在}\ \le g(m)\ \text{步内输出}\ X\upharpoonright N_m.
+\]
+构造程序 \(q\)：将 \(m\) 与 \(p\) 作为内嵌常量，模拟 \(U(p)\) 的输出并丢弃前 \(N_{m-1}\) 位，仅输出接下来的 \(m\) 位后停机。
+则 \(U(q)\) 在 \(\le g(m)\) 步内输出 \(B_m\)。
+并且 \(|q|\le |p|+O(\log m)\)。
+取 \(C_2\) 足够大，使得对充分大的 \(m\) 有 \(|q|\le L(m)\)，则 \(B_m\in\mathcal S_m\)，与 \(B_m\notin\mathcal S_m\) 矛盾。
+故上述 \(p\) 不存在，从而
+\(
+\mathrm{depth}_{C_2\log m}(X\upharpoonright N_m)>g(m)
+\)
+对充分大的 \(m\) 成立。证毕。
+\end{proof}
+
+\begin{corollary}[读取时间可独立于信息量设定：常数描述长度下的任意慢化]\label{cor:conclusion-holography-arbitrarily-slow-readout}
+固定同一通用机 \(U\) 及其时间计数 \(\mathrm{time}_U(p,n)\)。
+令 \(g:\NN\to\NN\) 为任意全可计算、单调不减函数。
+则存在一个可计算二元序列 \(X\in\{0,1\}^{\NN}\) 与常数 \(L<\infty\)，并存在无穷多的前缀长度 \(n\)，使得：
+\begin{enumerate}
+  \item 存在长度不超过 \(L\) 的程序 \(p_X\) 使 \(\forall n,\ U(p_X,n)=X\upharpoonright n\)；
+  \item 对上述无穷多个 \(n\)，任意满足 \(|p|\le L\) 且 \(U(p,n)=X\upharpoonright n\) 的程序都满足
+        \[
+        \mathrm{time}_U(p,n)\ >\ g(n).
+        \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-holography-logical-depth-separation} 的构造，给定任意全可计算单调不减无界函数 \(\widetilde g\)，都可得到可计算序列 \(X\) 与 \(N_m\) 使得
+\[
+K(X\upharpoonright N_m)=O(\log m),
+\qquad
+\mathrm{depth}_{O(\log m)}(X\upharpoonright N_m)>\widetilde g(m)
+\]
+对充分大的 \(m\) 成立。
+令 \(\widetilde g(m):=g(N_m)\)，则 \(\widetilde g\) 仍为全可计算、单调不减且无界函数。
+对相应构造的 \(X\)，取 \(p_X\) 为生成 \(X\) 的常数长度程序，并取 \(L\ge |p_X|\)。
+\par
+由 \(\mathrm{depth}_{s}(X\upharpoonright N_m)>\widetilde g(m)\) 的定义可知：对充分大的 \(m\)，任意在时间 \(\le g(N_m)\) 内输出 \(X\upharpoonright N_m\) 的程序 \(p\) 都必须满足
+\[
+|p|>K(X\upharpoonright N_m)+s.
+\]
+而 \(K(X\upharpoonright N_m)+s=O(\log m)\)，故可取 \(m\) 充分大使得右端严格大于 \(L\)。
+于是对这些 \(m\)，任何长度 \(\le L\) 的程序若输出 \(X\upharpoonright N_m\)，其运行时间必大于 \(g(N_m)\)。
+取无穷子列 \(n=N_m\) 即得所述结论。证毕。
+\end{proof}
+
+\begin{corollary}[信息饱和而时间可任意爆炸：以 \(N_m\) 为尺度的表述]\label{cor:conclusion-holography-logical-depth-separation-Nm}
+存在可计算序列 \(X\) 与无穷前缀长度列 \((N_m)\) 使
+\[
+K\!\bigl(X\upharpoonright N_m\bigr)=O(\log N_m),
+\]
+但对任意给定可计算无界单调函数 \(g\)，仍可使
+\[
+\mathrm{depth}_{O(\log N_m)}\!\bigl(X\upharpoonright N_m\bigr)\ \ge\ g(\sqrt{N_m})
+\]
+最终成立。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-holography-logical-depth-separation} 取 \(N_m=\frac{m(m+1)}2\asymp m^2\)，并以 \(\log m\asymp \log N_m\) 代入即可。证毕。
+\end{proof}
+
+\begin{remark}[低信息并不蕴含可快速识别]\label{rem:conclusion-low-information-not-fast-recognition}
+对定理 \ref{thm:conclusion-holography-logical-depth-separation} 的 \(X\) 与充分大的 \(m\)，不等式
+\(
+\mathrm{depth}_{C_2\log m}(X\upharpoonright N_m)>g(m)
+\)
+等价于断言：任意长度不超过 \(K(X\upharpoonright N_m)+C_2\log m\) 的程序若输出 \(X\upharpoonright N_m\)，其运行时间必超过 \(g(m)\)。
+因此，概念描述的对数级短性与相干输出的不可规避计算成本可在同一可计算对象中严格共存。
+\end{remark}
+
+\begin{theorem}[策略变化下 prime-register 证书系统的可计算共轭]\label{thm:conclusion-prime-strategy-computable-conjugacy}
+设 \(\mathsf S,\mathsf S'\) 为两种确定性策略，并定义
+\[
+\widetilde{\Fold}_m^{\mathsf S},\ \widetilde{\Fold}_m^{\mathsf S'}:\Omega_m\to X_m\times\mathcal P
+\]
+如定义 \ref{def:pom-fold-prime-lift}。
+令
+\[
+\mathcal I_m^{\mathsf S}:=\widetilde{\Fold}_m^{\mathsf S}(\Omega_m),\qquad
+\mathcal I_m^{\mathsf S'}:=\widetilde{\Fold}_m^{\mathsf S'}(\Omega_m),
+\]
+并以命题 \ref{prop:pom-fold-prime-lift-injective} 的逆过程记号定义
+\[
+\Psi_{\mathsf S\to\mathsf S'}
+:=
+\widetilde{\Fold}_m^{\mathsf S'}\circ
+\mathrm{UNLIFT}_m^{\mathsf S}
+:\mathcal I_m^{\mathsf S}\to\mathcal I_m^{\mathsf S'}.
+\]
+则：
+\begin{enumerate}
+  \item \(\Psi_{\mathsf S\to\mathsf S'}\) 为双射，且逆为 \(\Psi_{\mathsf S'\to\mathsf S}\)；
+  \item 若 \(\Psi_{\mathsf S\to\mathsf S'}(x,r)=(x',r')\)，则 \(x'=x\)；
+  \item 在 \(\Omega_m\) 上成立共轭关系
+  \[
+  \widetilde{\Fold}_m^{\mathsf S'}
+  =
+  \Psi_{\mathsf S\to\mathsf S'}\circ \widetilde{\Fold}_m^{\mathsf S}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+任取 \((x,r)\in \mathcal I_m^{\mathsf S}\)，令
+\[
+\omega:=\mathrm{UNLIFT}_m^{\mathsf S}(x,r).
+\]
+则
+\[
+\Psi_{\mathsf S\to\mathsf S'}(x,r)=\widetilde{\Fold}_m^{\mathsf S'}(\omega)\in \mathcal I_m^{\mathsf S'},
+\]
+故映射良定义。
+同理
+\[
+\Psi_{\mathsf S'\to\mathsf S}\circ\Psi_{\mathsf S\to\mathsf S'}(x,r)
+=
+\widetilde{\Fold}_m^{\mathsf S}\!\left(
+\mathrm{UNLIFT}_m^{\mathsf S'}\!\left(\widetilde{\Fold}_m^{\mathsf S'}(\omega)\right)
+\right)
+=
+\widetilde{\Fold}_m^{\mathsf S}(\omega)
+=(x,r),
+\]
+另一方向同理，故互逆，得第 (1) 条。
+
+由定义
+\[
+\widetilde{\Fold}_m^{\mathsf S'}(\omega)=\bigl(\Fold_m(\omega),\,r_{\mathsf S'}(\omega)\bigr),
+\]
+而 \((x,r)\in\mathcal I_m^{\mathsf S}\) 意味着 \(x=\Fold_m(\omega)\)，故 \(x'=x\)，得第 (2) 条。
+
+对任意 \(\omega\in\Omega_m\)，
+\[
+\Psi_{\mathsf S\to\mathsf S'}\!\bigl(\widetilde{\Fold}_m^{\mathsf S}(\omega)\bigr)
+=
+\widetilde{\Fold}_m^{\mathsf S'}\!\left(
+\mathrm{UNLIFT}_m^{\mathsf S}\!\left(\widetilde{\Fold}_m^{\mathsf S}(\omega)\right)
+\right)
+=
+\widetilde{\Fold}_m^{\mathsf S'}(\omega),
+\]
+即得第 (3) 条。证毕。
+\end{proof}
+
+\paragraph{并发因果结构的迹外置与层化素数支撑}\label{par:conclusion-trace-externalization-foata-godel}
+本节此前的 prime-register 证书以“时间寻址”的方式把事件流编码为素数轴序列；当外置目标仅要求区分由交换独立性所诱导的因果等价类时，事件序列的线性顺序并非本质信息。
+以下在迹幺半群口径下把“外置对象”由词提升为 Mazurkiewicz 迹，并证明在自然的层化平方自由约束类中，所需素数支撑规模精确等于因果高度。
+
+设 \(\Sigma\) 为有限原子事件字母表，\(I\subset\Sigma\times\Sigma\) 为对称且非自反的独立关系。
+定义迹幺半群
+\[
+\mathcal M(\Sigma,I):=\Sigma^\ast/{\equiv},
+\qquad
+ab\equiv ba\ \ \bigl((a,b)\in I\bigr).
+\]
+对 \(\tau\in\mathcal M(\Sigma,I)\)，记其依赖堆偏序（heap poset）为 \(H(\tau)\)，并记高度（最大链长度）为
+\[
+\operatorname{ht}(\tau):=\max\{\ell:\ \exists\ v_1\prec\cdots\prec v_\ell\ \text{为 }H(\tau)\text{ 中链}\}.
+\]
+记 \(\tau\) 的 Foata 正规形为
+\[
+\tau=C_1C_2\cdots C_h,
+\]
+其中每个 \(C_i\subset\Sigma\) 为 \(I\)-团（两两独立），且 \(h\) 为层数。
+
+\begin{theorem}[Foata--Gödel 层化编码与支撑最小性]\label{thm:conclusion-foata-godel-layer-encoding-min-support}
+取两组两两不交的素数族：
+字母素数 \(\{\pi(a):a\in\Sigma\}\subset\mathbb P\)（两两不同），以及层素数 \(\{q_i\}_{i\ge 1}\subset\mathbb P\)（两两不同且与 \(\pi(\Sigma)\) 不交）。
+对任意 \(\tau\in\mathcal M(\Sigma,I)\) 的 Foata 正规形 \(\tau=C_1\cdots C_h\)，定义 prime-register
+\(\mathrm{Enc}(\tau)\in\mathcal P\) 为
+\[
+\mathrm{Enc}(\tau)(q_i):=\prod_{a\in C_i}\pi(a)\quad(1\le i\le h),
+\qquad
+\mathrm{Enc}(\tau)(p):=0\ (p\notin\{q_1,\dots,q_h\}).
+\]
+则成立：
+\begin{enumerate}
+  \item \(\mathrm{Enc}:\mathcal M(\Sigma,I)\hookrightarrow\mathcal P\) 为单射；
+  \item 素数支撑规模满足
+  \[
+  \bigl|\operatorname{supp}(\mathrm{Enc}(\tau))\bigr|=h=\operatorname{ht}(\tau);
+  \]
+  \item 在如下“层化平方自由”编码类中支撑规模点态最小：
+  任意编码若以若干 \(I\)-团的有序乘积表示 \(\tau\)，并在每一层仅记录字母素数的平方自由乘积（允许更换层素数但保持一层一轴），则其所用层数必不小于 \(\operatorname{ht}(\tau)\)，且由上述 \(\mathrm{Enc}\) 达到该下界。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由构造，\(\mathrm{Enc}(\tau)\) 的非零坐标仅可能出现在 \(\{q_i\}\) 上，且每一层指数 \(\mathrm{Enc}(\tau)(q_i)\) 为字母素数集合 \(\pi(\Sigma)\) 上的平方自由整数。
+因此可由素因子集合唯一恢复每个 \(C_i\)，进而恢复序列 \((C_1,\dots,C_h)\)；Foata 正规形在 \(\mathcal M(\Sigma,I)\) 中唯一，故 \(\mathrm{Enc}\) 单射，得第 (1) 条。
+
+对第 (2) 条：Foata 正规形中每层非空，故 \(\mathrm{Enc}(\tau)(q_i)\ge 2\)，且 \(q_i\in\operatorname{supp}(\mathrm{Enc}(\tau))\) 当且仅当 \(1\le i\le h\)，从而 \(|\operatorname{supp}(\mathrm{Enc}(\tau))|=h\)。
+另一方面，令 \(H(\tau)\) 为依赖堆偏序。
+对任一点 \(v\in H(\tau)\) 定义层级
+\[
+\ell(v):=1+\max\{\ell(u):u\prec v\},
+\]
+若无前驱则 \(\ell(v)=1\)。
+同一层级的点两两不可比，因而对应字母两两独立并形成 \(I\)-团；按层级分组得到 \(\tau=C_1\cdots C_h\) 的 Foata 分解，其中 \(h=\max_v\ell(v)\)。
+而 \(\max_v\ell(v)\) 恰为偏序的最大链长度，故 \(h=\operatorname{ht}(\tau)\)。
+
+对第 (3) 条：任一“层化平方自由”表示把事件点集分割为若干层，每层对应于 \(H(\tau)\) 的一条反链。
+任一链在该分割中每层至多取一元素，故层数不小于最大链长度，即不小于 \(\operatorname{ht}(\tau)\)。
+由上述层级函数 \(\ell\) 可构造恰有 \(\operatorname{ht}(\tau)\) 层的分解，从而该下界可达；结合第 (2) 条可知 \(\mathrm{Enc}\) 达到点态最小。证毕。
+\end{proof}
+
+\begin{proposition}[因果高度的次可加性与稳定支撑率]\label{prop:conclusion-trace-height-subadditivity-stable-rate}
+函数 \(\operatorname{ht}:\mathcal M(\Sigma,I)\to\NN\) 满足
+\[
+\operatorname{ht}(\tau\sigma)\le \operatorname{ht}(\tau)+\operatorname{ht}(\sigma),
+\qquad
+\operatorname{ht}(\tau\sigma)\ge \max\{\operatorname{ht}(\tau),\operatorname{ht}(\sigma)\}.
+\]
+从而对任意固定 \(\tau\)，极限
+\[
+\lambda(\tau):=\lim_{n\to\infty}\frac{\operatorname{ht}(\tau^n)}{n}
+\]
+存在，且
+\(
+\lambda(\tau)=\inf_{n\ge 1}\operatorname{ht}(\tau^n)/n
+\)。
+\end{proposition}
+\begin{proof}
+取 Foata 正规形 \(\tau=C_1\cdots C_h\)、\(\sigma=D_1\cdots D_k\)。
+拼接给出 \(\tau\sigma\) 的一个由 \(h+k\) 个 \(I\)-团构成的表示，故其最小层数不超过 \(h+k\)。
+由定理 \ref{thm:conclusion-foata-godel-layer-encoding-min-support}(3)（最小层数等于高度）得 \(\operatorname{ht}(\tau\sigma)\le h+k\)。
+下界 \(\operatorname{ht}(\tau\sigma)\ge\operatorname{ht}(\tau)\) 由 \(H(\tau)\) 作为前缀子堆嵌入 \(H(\tau\sigma)\) 直接得到；对 \(\sigma\) 同理，得第二不等式。
+次可加性与 Fekete 引理推出极限存在且等于下确界。证毕。
+\end{proof}
+
+\begin{theorem}[策略无关的最小外置证书：迹类外置与回放不变性]\label{thm:conclusion-strategy-invariant-trace-externalization-minimality}
+设 \(\Omega\) 为对象空间，\(\mathrm{NF}:\Omega\twoheadrightarrow X\) 为规范化投影。
+设存在原子事件族 \(\{T_a\}_{a\in\Sigma}\) 与独立关系 \(I\) 使得：
+\begin{enumerate}
+  \item 对每个 \(\omega\in\Omega\)，存在词 \(w=a_1\cdots a_T\in\Sigma^\ast\) 使
+  \(
+  \omega=T_{a_T}\circ\cdots\circ T_{a_1}(\mathrm{NF}(\omega))
+  \)；
+  \item 若 \((a,b)\in I\)，则 \(T_a\circ T_b=T_b\circ T_a\)（在其共同可定义域上）；
+  \item 若 \(w,w'\) 为把 \(\mathrm{NF}(\omega)\) 送到 \(\omega\) 的两条事件词，则 \(w,w'\) 在 \(\mathcal M(\Sigma,I)\) 中代表同一迹，记为 \(\tau(\omega)\)（策略无关性）。
+\end{enumerate}
+取定理 \ref{thm:conclusion-foata-godel-layer-encoding-min-support} 的 \(\mathrm{Enc}\)，定义外置映射
+\[
+\Phi:\Omega\to X\times\mathcal P,
+\qquad
+\Phi(\omega):=\bigl(\mathrm{NF}(\omega),\mathrm{Enc}(\tau(\omega))\bigr).
+\]
+则 \(\Phi\) 为单射。
+并且在“层化平方自由且仅依赖 \(\tau(\omega)\)”的外置类中，\(\mathrm{Enc}\) 的支撑规模点态最小：对任意满足
+\(\omega\mapsto(\mathrm{NF}(\omega),c(\omega))\) 单射、且 \(c(\omega)\) 仅由 \(\tau(\omega)\) 决定并属于层化平方自由编码类的外置证书 \(c:\Omega\to\mathcal P\)，皆有
+\[
+\bigl|\operatorname{supp}(c(\omega))\bigr|\ \ge\ \operatorname{ht}(\tau(\omega))
+=\bigl|\operatorname{supp}(\mathrm{Enc}(\tau(\omega)))\bigr|.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-foata-godel-layer-encoding-min-support}(1)，从 \(\mathrm{Enc}(\tau(\omega))\) 可恢复 \(\tau(\omega)\) 的 Foata 正规形 \(C_1\cdots C_h\)。
+对每层取任意线性化并串接得到代表词 \(w\in\Sigma^\ast\)。
+由 (2)，同一迹的不同代表词仅差在交换相邻独立字母；对应变换可交换，故由 \(w\) 回放得到的对象仅依赖迹类而与代表词选择无关。
+于是从 \(\Phi(\omega)\) 可确定性重建 \(\omega\)，\(\Phi\) 单射。
+
+最小性：任一策略无关且层化平方自由的证书必对应于 \(\tau(\omega)\) 的某个由 \(I\)-团组成的层化表示。
+由定理 \ref{thm:conclusion-foata-godel-layer-encoding-min-support}(3)，其层数不小于 \(\operatorname{ht}(\tau(\omega))\)，而每层至少占用一个素数轴，故得到支撑下界；\(\mathrm{Enc}\) 达到该下界。证毕。
+\end{proof}
+
+\begin{theorem}[投影合成下的素数交错分配律]\label{thm:conclusion-prime-interleaving-composition-law}
+设 \(f:\Omega\to X\)、\(g:X\to Y\) 为两级投影。
+假设存在确定性策略 \(\mathsf S_f,\mathsf S_g\) 及寄存器读出
+\[
+\widetilde f^{\mathsf S_f}(\omega):=\bigl(f(\omega),r_f(\omega)\bigr)\in X\times\mathcal P,\qquad
+\widetilde g^{\mathsf S_g}(x):=\bigl(g(x),r_g(x)\bigr)\in Y\times\mathcal P,
+\]
+并且二者均在对象层单射且可由寄存器回放逆过程重建。
+定义交错嵌入 \(I_{\mathrm{odd}},I_{\mathrm{even}}:\mathcal P\to\mathcal P\)：
+\[
+I_{\mathrm{odd}}(r)(p_{2t-1})=r(p_t),\quad I_{\mathrm{odd}}(r)(p_{2t})=0,
+\]
+\[
+I_{\mathrm{even}}(r)(p_{2t})=r(p_t),\quad I_{\mathrm{even}}(r)(p_{2t-1})=0.
+\]
+令合成寄存器
+\[
+r_{g\circ f}(\omega)
+:=
+I_{\mathrm{even}}(r_f(\omega))
++
+I_{\mathrm{odd}}(r_g(f(\omega))),
+\]
+并定义
+\[
+\widetilde{(g\circ f)}^{\mathrm{mix}}(\omega)
+:=
+\bigl(g(f(\omega)),\,r_{g\circ f}(\omega)\bigr).
+\]
+则 \(\widetilde{(g\circ f)}^{\mathrm{mix}}\) 为单射，且可由 \((y,r_{g\circ f})\) 确定性重建 \(\omega\)。
+\end{theorem}
+\begin{proof}
+由定义，\(I_{\mathrm{odd}}(\mathcal P)\) 与 \(I_{\mathrm{even}}(\mathcal P)\) 支撑不交，故可从 \(r_{g\circ f}\) 唯一分离
+\[
+r_f^\sharp(p_t):=r_{g\circ f}(p_{2t}),\qquad
+r_g^\sharp(p_t):=r_{g\circ f}(p_{2t-1})\qquad (t\ge 1).
+\]
+先用 \((y,r_g^\sharp)\) 经 \(\widetilde g^{\mathsf S_g}\) 的逆过程恢复唯一 \(x\in X\)；
+再用 \((x,r_f^\sharp)\) 经 \(\widetilde f^{\mathsf S_f}\) 的逆过程恢复唯一 \(\omega\in\Omega\)。
+故 \((y,r_{g\circ f})\) 唯一决定 \(\omega\)，即 \(\widetilde{(g\circ f)}^{\mathrm{mix}}\) 单射且可回放。证毕。
+\end{proof}
+
+\paragraph{无界素支撑账本与有限加法寄存器障碍}
+前述 prime-register 外置把可逆账本放在可数素数轴上。还可进一步说明：只要乘法型整数系数流具有无界素支撑，这种可数寄存器便不是编码选择，而是由交换幺半群的秩障碍所强制出的自然通用账本。
+
+\begin{theorem}[无界素支撑乘法型算 \texorpdfstring{$\pi$}{pi} 数据的有限寄存器不可同态化]\label{thm:conclusion-unbounded-prime-support-no-finite-register-embedding}
+沿用本小节
+\[
+\mathcal P=\NN^{(\mathbb P)}
+\]
+的记号。设 \(M\subset\NN_{\ge 1}\) 为某条乘法型算 \(\pi\) 路线所产生的整数系数流的乘法子幺半群。若 \(M\) 具有无界素支撑，即存在无穷多个两两不同的素数
+\[
+p_1,p_2,\dots \in M,
+\]
+则不存在任何有限整数 \(k\) 以及幺半群单射
+\[
+\Phi:M\hookrightarrow (\NN^k,+).
+\]
+换言之，此类乘法账本不可能被有限个加法寄存器忠实压缩。
+
+另一方面，素数估值映射
+\[
+\upsilon:M\to\mathcal P,
+\qquad
+\upsilon(n):=(v_p(n))_{p\in\mathbb P},
+\]
+给出一个忠实幺半群表示；因此可数素数估值账本正是此类数据的自然通用寄存器。
+\end{theorem}
+\begin{proof}
+由 \(p_1,p_2,\dots\in M\) 且 \(M\) 对乘法封闭，映射
+\[
+\iota:\bigoplus_{j\ge 1}\NN e_j\longrightarrow M,
+\qquad
+e_j\longmapsto p_j,
+\]
+定义一个幺半群同态。由于算术基本定理保证素因子分解唯一，\(\iota\) 实际上是单射。
+
+若存在有限 \(k\) 与单射幺半群同态
+\[
+\Phi:M\hookrightarrow(\NN^k,+),
+\]
+则复合得到单射
+\[
+\Phi\circ\iota:\bigoplus_{j\ge 1}\NN e_j\hookrightarrow (\NN^k,+).
+\]
+对这两个可消去交换幺半群取 Grothendieck 群完成，得到群同态
+\[
+\widehat{\Phi\circ\iota}:\bigoplus_{j\ge 1}\ZZ e_j\longrightarrow \ZZ^k.
+\]
+该群同态仍为单射：若
+\[
+\widehat{\Phi\circ\iota}(u-v)=0
+\qquad
+(u,v\in \bigoplus_{j\ge 1}\NN e_j),
+\]
+则 \((\Phi\circ\iota)(u)=(\Phi\circ\iota)(v)\) 于 \(\NN^k\) 中成立，由单射性推出 \(u=v\)。
+然而左端是可数无限秩自由阿贝尔群，右端仅有秩 \(k\)，不可能存在这种群单射，矛盾。
+故任何有限寄存器单射同态都不存在。
+
+另一方面，对任意 \(m,n\in M\) 与任意素数 \(p\)，都有
+\[
+v_p(mn)=v_p(m)+v_p(n),
+\]
+且仅有限多个 \(v_p(n)\) 非零，故 \(\upsilon\) 的确取值于 \(\mathcal P\) 并满足
+\[
+\upsilon(mn)=\upsilon(m)+\upsilon(n).
+\]
+再由算术基本定理，\(\upsilon(n)\) 唯一决定 \(n\)，故 \(\upsilon\) 为忠实幺半群表示。证毕。
+\end{proof}
+
+\input{thm__conclusion-wallis-product-ledger-cmv-threshold}
+\input{thm__conclusion-prime-adjunction-budget-phase-linearization}
+\input{thm__conclusion-fixed-resolution-prime-barrier-postprocessing-neutrality}
+\input{thm__conclusion-image-layer-resolution-memory-externality}
+
+\noindent
+因此，prime-register 机制之所以必须以可数素数轴出现，并非因为某种编码习惯，而是因为一旦乘法账本具有无界素支撑，就不存在任何有限维加法寄存器能够在保真意义下吸收其全部算术状态；Wallis 型乘积只是在最极端意义上把这一障碍推到 \(\NN_{\times}\) 本身。进一步，fixed-\(m\) 的 fold/time 界面即使再接任意有限状态后处理，也既不能降低 exact reversibilization 的侧信息阈值，也不能凭空生成精确的素性识别能力，而固定深度 CMV 证书同样不能统一检出全部持久缺陷。就信息结构而言，可由有限容量/Wedderburn 数据完全呈现的 bulk 常数，与必须保留在可数素数估值账本及无上界认证塔中的 arithmetic side-data，确实构成两类不可互相压缩的对象。
+
+\endinput

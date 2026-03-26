@@ -1,0 +1,257 @@
+\paragraph{Clark 密度下 Jensen 缺陷的反熵桥与离线证书化}
+在既有 Jensen 缺陷账本与 Poisson--KL 耗散链之间，以下给出一条 Schur--Carath\'eodory 专化的精确桥接：
+先把 Jensen 缺陷分解为反向相对熵与严格负项之和，再把反向相对熵压缩为 Fourier 能量与有限 Toeplitz 数据的可计算上界。
+
+\begin{theorem}[Clark--Jensen 反熵分解恒等式]\label{thm:xi-time-part9d-clark-jensen-reversekl-identity}
+设 \(f\) 为单位圆盘 \(\mathbb D\) 上的 Schur 函数，满足 \(f(0)=0\)。定义
+\[
+F(z):=1-f(z),\qquad
+C(z):=\frac{1+f(z)}{1-f(z)}.
+\]
+则 \(C\) 为 Carath\'eodory 函数，\(\Re C(z)>0\)；并存在唯一概率测度 \(\mu\) 于 \(\TT\) 使 \(C\) 满足 Herglotz 表示。
+对任意 \(0<r<1\)，记
+\[
+p_r(\theta):=\Re C(re^{i\theta}),\qquad
+m(\dd\theta):=\frac{\dd\theta}{2\pi}.
+\]
+则 \(p_r>0\)、\(\int_{\TT}p_r\,\dd m=1\)，且 Jensen 缺陷
+\[
+D_F(r):=\int_{\TT}\log|F(re^{i\theta})|\,\dd m(\theta)-\log|F(0)|
+\]
+满足精确恒等式
+\begin{equation}\label{eq:xi-time-part9d-clark-jensen-identity}
+\boxed{\;
+D_F(r)
+=\frac12\,D_{\mathrm{KL}}\!\bigl(m\mid p_rm\bigr)
++\frac12\int_{\TT}\log\!\bigl(1-|f(re^{i\theta})|^2\bigr)\,\dd m(\theta)\;}
+\end{equation}
+其中
+\[
+D_{\mathrm{KL}}\!\bigl(m\mid p_rm\bigr)
+:=\int_{\TT}\log\!\frac{1}{p_r(\theta)}\,\dd m(\theta).
+\]
+特别地，
+\begin{equation}\label{eq:xi-time-part9d-clark-jensen-upper-bridge}
+0\le D_F(r)\le \frac12\,D_{\mathrm{KL}}\!\bigl(m\mid p_rm\bigr),\qquad 0<r<1.
+\end{equation}
+\end{theorem}
+\begin{proof}
+由 \(\Re C(z)>0\) 立得 \(p_r(\theta)>0\)。
+又 \(\Re C\) 为调和函数，圆周平均等于中心值，故
+\[
+\int_{\TT}p_r(\theta)\,\dd m(\theta)=\Re C(0)=1.
+\]
+由代数恒等式
+\[
+\Re\frac{1+f}{1-f}=\frac{1-|f|^2}{|1-f|^2}
+\]
+可得
+\[
+p_r(\theta)=\frac{1-|f(re^{i\theta})|^2}{|1-f(re^{i\theta})|^2}.
+\]
+取对数并整理：
+\[
+\log|1-f(re^{i\theta})|
+=\frac12\log\!\bigl(1-|f(re^{i\theta})|^2\bigr)-\frac12\log p_r(\theta).
+\]
+对 \(\theta\) 以 \(m\) 平均，并利用 \(f(0)=0\Rightarrow F(0)=1\Rightarrow \log|F(0)|=0\)，即得
+\eqref{eq:xi-time-part9d-clark-jensen-identity}。
+
+又 \(0<r<1\) 时 \(f(re^{i\theta})\) 在紧圆周上满足 \(|f|<1\)，故
+\(
+\log(1-|f|^2)\le 0
+\)。
+结合 Jensen 不等式给出的 \(D_F(r)\ge0\)，得到
+\eqref{eq:xi-time-part9d-clark-jensen-upper-bridge}。
+\end{proof}
+
+\begin{theorem}[反向 KL 的显式 \texorpdfstring{$L^2$}{L2} 控制与 Fourier 能量恒等式]\label{thm:xi-time-part9d-reversekl-l2-fourier}
+设 \(C\) 为 Carath\'eodory 函数且 \(C(0)=1\)，写作
+\[
+C(z)=1+2\sum_{n\ge1}c_n z^n.
+\]
+记
+\[
+p_r(\theta):=\Re C(re^{i\theta}),\qquad 0<r<1.
+\]
+则：
+\begin{enumerate}
+  \item 对一切 \(\theta\) 有一致下界
+  \[
+  p_r(\theta)\ge a_r:=\frac{1-r}{1+r}.
+  \]
+  \item 反向相对熵满足显式上界
+  \[
+  D_{\mathrm{KL}}\!\bigl(m\mid p_rm\bigr)
+  \le \frac{1}{2a_r^2}\,\|p_r-1\|_{L^2(m)}^2.
+  \]
+  \item Fourier 能量恒等式
+  \[
+  \|p_r-1\|_{L^2(m)}^2
+  =2\sum_{n\ge1}|c_n|^2r^{2n}.
+  \]
+\end{enumerate}
+从而
+\begin{equation}\label{eq:xi-time-part9d-reversekl-fourier-explicit}
+D_{\mathrm{KL}}\!\bigl(m\mid p_rm\bigr)
+\le \left(\frac{1+r}{1-r}\right)^2\sum_{n\ge1}|c_n|^2r^{2n}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+由 Herglotz 表示可写 \(p_r=P_r*\mu\)，其中 \(\mu\) 为概率测度。Poisson 核最小值为 \((1-r)/(1+r)\)，故 \(p_r\ge a_r\)。
+
+令 \(\phi(x):=-\log x\)。在区间 \([a_r,\infty)\) 上有 \(\phi''(x)=1/x^2\le 1/a_r^2\)。
+围绕 \(x=1\) 作二阶 Taylor 估计，得对任意 \(x\ge a_r\),
+\[
+-\log x\le (1-x)+\frac{(x-1)^2}{2a_r^2}.
+\]
+取 \(x=p_r(\theta)\) 并积分，利用 \(\int_{\TT}p_r\,\dd m=1\)，得到
+\[
+D_{\mathrm{KL}}(m\mid p_rm)=\int_{\TT}-\log p_r\,\dd m
+\le \frac{1}{2a_r^2}\int_{\TT}(p_r-1)^2\,\dd m.
+\]
+即第二条。
+
+再由
+\[
+p_r(\theta)
+=1+\sum_{n\ge1}\bigl(c_nr^n e^{in\theta}+\overline{c_n}r^n e^{-in\theta}\bigr),
+\]
+其 Fourier 系数为 \(a_n=c_nr^n\)（\(n\ge1\)）与 \(a_{-n}=\overline{c_n}r^n\)。
+Parseval 恒等式给出
+\[
+\|p_r-1\|_{L^2(m)}^2
+=\sum_{n\ne0}|a_n|^2
+=2\sum_{n\ge1}|c_n|^2r^{2n}.
+\]
+合并即得 \eqref{eq:xi-time-part9d-reversekl-fourier-explicit}。
+\end{proof}
+
+\begin{corollary}[Jensen 缺陷的 Carath\'eodory 系数上界证书]\label{cor:xi-time-part9d-jensen-defect-coefficient-certificate}
+在定理 \ref{thm:xi-time-part9d-clark-jensen-reversekl-identity} 的设定下，
+令
+\[
+\frac{1+f(z)}{1-f(z)}=1+2\sum_{n\ge1}c_n z^n.
+\]
+则对任意 \(0<r<1\) 有
+\begin{equation}\label{eq:xi-time-part9d-jensen-defect-coefficient-certificate}
+D_{1-f}(r)
+\le \frac12\left(\frac{1+r}{1-r}\right)^2\sum_{n\ge1}|c_n|^2r^{2n}.
+\end{equation}
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:xi-time-part9d-clark-jensen-upper-bridge} 与
+\eqref{eq:xi-time-part9d-reversekl-fourier-explicit} 直接代入即得。
+\end{proof}
+
+\begin{theorem}[有限 Toeplitz 数据的反熵/缺陷上界与误差预算]\label{thm:xi-time-part9d-finite-toeplitz-certificate}
+沿用定理 \ref{thm:xi-time-part9d-reversekl-l2-fourier} 的记号，并令
+\[
+E_N(r):=\sum_{n=1}^{N}|c_n|^2r^{2n}\qquad(N\ge1).
+\]
+则对任意 \(0<r<1\) 有有限数据上界
+\begin{equation}\label{eq:xi-time-part9d-finite-toeplitz-certificate-main}
+D_{1-f}(r)
+\le \frac12\left(\frac{1+r}{1-r}\right)^2
+\left(E_N(r)+\frac{r^{2(N+1)}}{1-r^2}\right).
+\end{equation}
+并且给定 \(\varepsilon\in(0,1)\)，若
+\begin{equation}\label{eq:xi-time-part9d-finite-toeplitz-N-choice}
+N\ \ge\ \frac{1}{1-r}\log\frac{1}{\varepsilon},
+\end{equation}
+则
+\[
+\frac{r^{2(N+1)}}{1-r^2}\le \frac{\varepsilon^2}{1-r^2},
+\]
+从而
+\begin{equation}\label{eq:xi-time-part9d-finite-toeplitz-certificate-eps}
+D_{1-f}(r)
+\le \frac12\left(\frac{1+r}{1-r}\right)^2E_N(r)
++\frac12\left(\frac{1+r}{1-r}\right)^2\frac{\varepsilon^2}{1-r^2}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:xi-time-part9d-jensen-defect-coefficient-certificate},
+\[
+D_{1-f}(r)\le \frac12\left(\frac{1+r}{1-r}\right)^2
+\sum_{n\ge1}|c_n|^2r^{2n}.
+\]
+拆分前 \(N\) 项与尾项，并利用 Herglotz 系数满足 \(|c_n|\le1\)，得
+\[
+\sum_{n\ge N+1}|c_n|^2r^{2n}
+\le \sum_{n\ge N+1}r^{2n}
+=\frac{r^{2(N+1)}}{1-r^2},
+\]
+即得 \eqref{eq:xi-time-part9d-finite-toeplitz-certificate-main}。
+
+再由 \(\log r\le -(1-r)\)（\(0<r<1\)），得到
+\[
+r^{2(N+1)}
+=\exp\!\bigl(2(N+1)\log r\bigr)
+\le \exp\!\bigl(-2(N+1)(1-r)\bigr).
+\]
+若 \(N\) 满足 \eqref{eq:xi-time-part9d-finite-toeplitz-N-choice}，则上式 \(\le \varepsilon^2\)，故得
+\eqref{eq:xi-time-part9d-finite-toeplitz-certificate-eps}。
+\end{proof}
+
+\begin{proposition}[模 \(4\) Fourier 正交通道与 \texorpdfstring{\(\chi_4\)}{chi4} 能量审计]\label{prop:xi-time-part9d-mod4-fourier-channel-energy}
+在定理 \ref{thm:xi-time-part9d-reversekl-l2-fourier} 的设定下，定义
+\[
+\mathcal H_j:=\overline{\mathrm{span}}\{e^{in\theta}:n\in\ZZ,\ n\equiv j\!\!\!\pmod 4\},
+\qquad j=0,1,2,3,
+\]
+并令 \(\mathsf P_j:L^2(\TT,m)\to\mathcal H_j\) 为正交投影。则：
+\begin{enumerate}
+  \item 正交分解
+  \[
+  \|p_r-1\|_{L^2(m)}^2=\sum_{j=0}^3\|\mathsf P_j(p_r-1)\|_{L^2(m)}^2.
+  \]
+  \item 通道能量显式公式
+  \[
+  \|\mathsf P_0(p_r-1)\|_{L^2(m)}^2
+  =2\sum_{k\ge1}|c_{4k}|^2r^{8k},
+  \]
+  \[
+  \|\mathsf P_2(p_r-1)\|_{L^2(m)}^2
+  =2\sum_{k\ge0}|c_{4k+2}|^2r^{2(4k+2)},
+  \]
+  \[
+  \|\mathsf P_1(p_r-1)\|_{L^2(m)}^2
+  =\|\mathsf P_3(p_r-1)\|_{L^2(m)}^2
+  =\sum_{k\ge0}|c_{4k+1}|^2r^{2(4k+1)}
+  +\sum_{k\ge0}|c_{4k+3}|^2r^{2(4k+3)}.
+  \]
+  \item 定义 \(\chi_4\)-通道能量
+  \[
+  \mathcal E_0(r):=\sum_{k\ge1}|c_{4k}|^2r^{8k},\qquad
+  \mathcal E_j(r):=\sum_{k\ge0}|c_{4k+j}|^2r^{2(4k+j)}\ (j=1,2,3),
+  \]
+  则 Jensen 缺陷满足通道化证书
+  \[
+  D_{1-f}(r)
+  \le \frac12\left(\frac{1+r}{1-r}\right)^2\sum_{j=0}^3\mathcal E_j(r)
+  =\frac14\left(\frac{1+r}{1-r}\right)^2\sum_{j=0}^3\|\mathsf P_j(p_r-1)\|_{L^2(m)}^2.
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+第一条由 \(L^2(\TT,m)=\bigoplus_{j=0}^3\mathcal H_j\) 的正交直和分解得到。
+第二条由 Fourier 系数
+\(
+\widehat{(p_r-1)}(n)=c_nr^n\ (n\ge1),\ 
+\widehat{(p_r-1)}(-n)=\overline{c_n}r^n
+\)
+和 Parseval 恒等式逐类求和即得。
+第三条由推论 \ref{cor:xi-time-part9d-jensen-defect-coefficient-certificate}
+与 \(\sum_{n\ge1}|c_n|^2r^{2n}=\sum_{j=0}^3\mathcal E_j(r)\) 直接得到。
+\end{proof}
+
+\begin{remark}[与 Poisson--KL 耗散链的接口]
+命题 \ref{prop:xi-time-part9d-mod4-fourier-channel-energy} 给出纯离线可计算的 Jensen 缺陷上界；
+若结合猜想 \ref{conj:xi-poisson-kl-exact-alignment} 或
+\eqref{eq:xi-golden-chain-alignment-inequality} 的对齐接口，
+即可把 \(\chi_4\)-通道能量预算直接接入
+结论 \ref{con:xi-poisson-second-order-two-closed-constants} 与
+结论 \ref{con:xi-poisson-moment-vanishing-kl-step-closed-form}
+的 Poisson--KL 耗散常数链。
+\end{remark}

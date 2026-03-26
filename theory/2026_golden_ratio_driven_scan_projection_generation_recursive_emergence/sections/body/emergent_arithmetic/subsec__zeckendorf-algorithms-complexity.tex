@@ -1,0 +1,355 @@
+\subsection{显式算法与复杂度界}\label{subsec:zeckendorf-algorithms-complexity}
+
+本节把前文“可计算、可终止”的结构性结论提升为显式算法、复杂度界与在线实现。为保持依赖最小，所有算法都采用同一条最短闭环：值层运算（整数加法/乘法）加上 Zeckendorf 规范化（贪心折叠）。这一口径与前文的对象层语义完全一致：先在值层完成运算，再经唯一规范形选择落回稳定地址层。与此同时，本节也说明：虽然这种实现在线可做、单趟可做，但若要求用固定半径的同步局部更新在有限步内完成归一化，则不可避免地受到线性传播下界的限制。
+
+\subsubsection{Zeckendorf 规范化：从整数到合法数字}
+
+给定 \(N\in \NN\)，目标是计算其唯一 Zeckendorf 数字
+\[
+Z(N)=(c_1,c_2,\dots),
+\]
+其中仅有限个 \(c_k\neq 0\)，每个 \(c_k\in\{0,1\}\)，且不存在相邻的 \(11\)，并满足
+\[
+N=\sum_{k\ge 1} c_kF_{k+1}.
+\]
+
+\begin{itemize}
+  \item \textbf{输入：}整数 \(N\)。
+  \item \textbf{输出：}Zeckendorf 合法数字序列 \(Z(N)\)。
+\end{itemize}
+
+\textbf{算法（贪心 + 跳邻位）：}
+\begin{enumerate}
+  \item 预生成 Fibonacci 权重 \(F_2,F_3,\dots,F_{M+1}\)，其中 \(M\) 足够大，使
+  \[
+  F_{M+1}\le N<F_{M+2}.
+  \]
+  \item 从 \(k=M\) 递减到 \(1\)。若 \(F_{k+1}\le N\)，则置 \(c_k:=1\)，并令
+  \[
+  N\leftarrow N-F_{k+1};
+  \]
+  随后跳过相邻位，再继续递减。若 \(F_{k+1}>N\)，则置 \(c_k:=0\)。
+  \item 输出
+  \[
+  c=(c_1,c_2,\dots,c_M),
+  \]
+  并视其后各位均为 \(0\)。
+\end{enumerate}
+
+该算法的正确性与唯一性正是 Zeckendorf 定理的算法化形式（\cite{Zeckendorf1972}；本稿中见附录 C）：贪心法总能选出最大可用 Fibonacci 权重，而跳过相邻位保证结果始终处于合法语法中。最终得到的序列既同值，又是唯一的合法表示。特别地，当 \(N=0\) 时，输出全零地址 \(0_X=(0,0,\dots)\)。
+
+\subsubsection{稳定加法与稳定乘法：两步实现}
+
+设
+\[
+c,d\in X_\infty
+\]
+为两个仅有限支撑的稳定地址。记其值为
+\[
+\mathrm{Val}(c),\qquad \mathrm{Val}(d).
+\]
+则稳定算术的最短实现可写成两步。对输入 \(c,d\in X_\infty\)（仅有限个 \(1\)），令其有效分辨率为
+\[
+m:=\max\{k:\ c_k=1\text{ 或 }d_k=1\}.
+\]
+则
+\begin{itemize}
+  \item \textbf{稳定加法：}先在值层计算
+  \[
+  N=\mathrm{Val}(c)+\mathrm{Val}(d),
+  \]
+  再输出
+  \[
+  c\oplus d=Z(N).
+  \]
+  \item \textbf{稳定乘法：}先在值层计算
+  \[
+  N=\mathrm{Val}(c)\mathrm{Val}(d),
+  \]
+  再输出
+  \[
+  c\otimes d=Z(N).
+  \]
+\end{itemize}
+因此，稳定加法与稳定乘法的算法核心都不是在数字串上直接做局部操作，而是：
+\begin{enumerate}
+  \item 用值映射把地址送到整数层；
+  \item 在整数层完成普通运算；
+  \item 用 Zeckendorf 规范化返回唯一稳定地址。
+\end{enumerate}
+这正是前文“值层运算 + 规范横截面”的最短闭环实现。
+
+\subsubsection{复杂度（按分辨率 \texorpdfstring{$m$}{m} 与按比特两种口径）}
+
+为了避免模型依赖争议，这里同时给出两种等价口径：第一，分辨率口径，把最高非零位的尺度 \(m\) 视为输入长度；第二，比特口径，把相应整数的二进制位长视为成本尺度。由于
+\[
+F_{m+1}\asymp \varphi^m,
+\]
+故整数值的比特长度与 \(m\) 同阶，即为 \(\Theta(m)\)。结论可概括如下（详证见附录 E$'$ 中的命题 \ref{prop:fold-complexity} 与 \ref{prop:stable-arith-complexity}）：
+
+\begin{itemize}
+  \item \textbf{Zeckendorf 规范化：}对长度 \(m\) 的输入，贪心规范化在分辨率口径下为 \(O(m)\) 步；在比特口径下为 \(O(m^2)\) 比特运算。
+  \item \textbf{稳定加法：}分辨率口径为 \(O(m)\)；比特口径为 \(O(m^2)\)。
+  \item \textbf{稳定乘法：}分辨率口径为 \(O(M(m)+m)\)，其中 \(M(m)\) 是 \(\Theta(m)\)-比特整数乘法成本；比特口径为 \(O(M(m)+m^2)\)。若采用学校乘法，则 \(M(m)=O(m^2)\)，从而稳定乘法整体仍为二次量级。
+\end{itemize}
+
+\input{para__zeckendorf-parallel-propagation-lower-bound}
+
+这一定理说明：延迟 \(3\) 的单趟在线实现是一种串行机制；但若换成固定半径的同步并行局部更新，则“进位/折叠传播”有不可压缩的线性下界。
+
+\subsubsection{单趟在线延迟 \texorpdfstring{$3$}{3}：统一转导器}\label{subsec:online-delay}
+除了“值层运算 + 规范化”的最短闭环之外，Zeckendorf 归一化还存在一个完全在线的实现：它一次只读入一个字母，不回看历史，只保留一个固定大小的延迟窗口。其同步部分可用“余量守恒”给出（\cite{Frougny1999OnlineAddition}）。
+
+令 $\varphi=(1+\sqrt5)/2$，定义余量
+\[
+R(s):=s_1\varphi^{-1}+s_2\varphi^{-2}+s_3\varphi^{-3}\in[0,1),
+\]
+并令输入 $d\in\{0,1,2\}$、输出 $e\in\{0,1\}$。同步边 $(s\to t)$ 满足守恒式
+\[
+R(s)+d\varphi^{-4}=e\varphi^{-1}+t_1\varphi^{-2}+t_2\varphi^{-3}+t_3\varphi^{-4},
+\]
+等价地
+\[
+R(t)=\varphi R(s)+d\varphi^{-3}-e,\qquad R(t)\in[0,1).
+\]
+\begin{remark}[延迟-$3$ 归一化的扩张--取整表示]
+由 $R(t)\in[0,1)$ 可写成
+\[
+e=\Bigl\lfloor \varphi R(s)+d\varphi^{-3}\Bigr\rfloor,\qquad
+R(t)=\Bigl\{\varphi R(s)+d\varphi^{-3}\Bigr\},
+\]
+其中 $\{\cdot\}$ 为小数部分。由于同步核只允许 $e\in\{0,1\}$（附录 B 的转移表中无 $e=2$ 边），上述在线核等价于在 $[0,1)$ 上由扩张映射 $r\mapsto \varphi r+d\varphi^{-3}$ 生成、并以取整 cocycle 回投影的动力系统。该表示把“在线延迟”直接编码为乘法扩张与分支选择的串行结构。
+\end{remark}
+该同步部分的状态集可取为
+\[
+Q=\{000,001,002,010,100,101,0\overline{1}2,1\overline{1}2,01\overline{1},11\overline{1}\},
+\]
+并且出边（标记 $d/e$）可写为：
+\[
+\begin{aligned}
+000&\xrightarrow{d/0}00d,\qquad 100\xrightarrow{d/1}00d\quad(d=0,1,2),\\
+001&\xrightarrow{0/0}010,\ \xrightarrow{1/0}100,\ \xrightarrow{2/0}101,\\
+002&\xrightarrow{0/0}11\overline{1},\ \xrightarrow{1/1}000,\ \xrightarrow{2/1}001,\\
+010&\xrightarrow{0/0}100,\ \xrightarrow{1/0}101,\ \xrightarrow{2/1}0\overline{1}2,\\
+101&\xrightarrow{0/1}010,\ \xrightarrow{1/1}100,\ \xrightarrow{2/1}101,\\
+0\overline{1}2&\xrightarrow{0/0}01\overline{1},\ \xrightarrow{1/0}010,\ \xrightarrow{2/0}100,\\
+1\overline{1}2&\xrightarrow{0/1}01\overline{1},\ \xrightarrow{1/1}010,\ \xrightarrow{2/1}100,\\
+01\overline{1}&\xrightarrow{0/0}001,\ \xrightarrow{1/0}002,\ \xrightarrow{2/0}1\overline{1}2,\\
+11\overline{1}&\xrightarrow{0/1}001,\ \xrightarrow{1/1}002,\ \xrightarrow{2/1}1\overline{1}2.
+\end{aligned}
+\]
+末端函数可取
+\[
+\omega(s_1s_2s_3):=Z(s_1F_4+s_2F_3+s_3F_2),
+\]
+以吞吐延迟窗口的残余并落回 Zeckendorf 规范形（\cite{Frougny1999OnlineAddition}）。
+
+\begin{theorem}[单趟在线延迟 3 的 $\Fold_\infty$ 实现]\label{thm:online-delay-fold}
+以上在线转导器（含末端函数）对任意 $s\in\{0,1,2\}^m$ 输出 $\Fold_\infty(s)$；其同步图即附录 B 的 10 状态同步核。
+\end{theorem}
+
+\textbf{证明：}
+守恒式保证值不变量，末端函数输出落在 $X_m$；由定理 \ref{thm:zeckendorf-transversal} 的横截面唯一性得 $\Fold_\infty(s)$。同步图与附录 B 的状态/转移一致。证毕。
+
+\begin{theorem}[同步核 Mealy 转导器的状态最小性]\label{thm:online-delay-fold-sync-mealy-minimality}
+令 \(\mathcal K=(Q,\delta,\eta)\) 为上文给出的确定性 Mealy 转导器（输入字母表 \(\{0,1,2\}\)，输出字母表 \(\{0,1\}\)），并令 \(F:\{0,1,2\}^\ast\to\{0,1\}^\ast\) 为其所诱导的序贯函数（含延迟窗口的末端函数 \(\omega\) 所完成的终端归一化；定理 \ref{thm:online-delay-fold}）。
+则任意实现同一序贯函数 \(F\) 的确定性 Mealy 转导器，其同步部分在序贯等价意义下的状态数不小于 \(|Q|=10\)；并且 \(\mathcal K\) 达到该下界。
+\end{theorem}
+\begin{proof}
+对任意状态 \(q\in Q\)，定义从 \(q\) 出发的残差序贯函数 \(F_q:\{0,1,2\}^\ast\to\{0,1\}^\ast\) 为“以 \(q\) 为初态运行 \(\mathcal K\)（并在末端施加同一 \(\omega\)）所得到的输出函数”。
+定义状态等价关系
+\[
+q\sim q'\iff F_q=F_{q'}.
+\]
+对确定性 Mealy 转导器，\(q\sim q'\) 等价于对所有输入符号 \(d\in\{0,1,2\}\) 同时满足 \(\eta(q,d)=\eta(q',d)\) 且 \(\delta(q,d)\sim \delta(q',d)\)；因此 \(\sim\) 为一类以“输出一致 + 后继等价”闭包刻画的最大不动点关系。
+任何实现 \(F\) 的确定性 Mealy 转导器都必须区分不同的残差函数，故其状态数不小于等价类数 \(|Q/{\sim}|\)。
+\par
+对上文给出的显式边表，可在有限状态空间上对 \(\sim\) 作确定性细化计算，并输出分裂证书（为每一对不等价状态给出一条分离输入词，使两者输出词不同）。
+该细化结果给出 \(|Q/{\sim}|=10\) 的等价类计数与分离词长度上界（见生成片段 \eqref{eq:sync_kernel_10_state_mealy_minimality}），即所有 \(q\in Q\) 两两不等价，从而任意实现 \(F\) 的确定性转导器状态数至少为 \(10\)。
+由于 \(\mathcal K\) 恰有 \(10\) 个状态并实现 \(F\)，故其为最小实现。证毕。
+\end{proof}
+
+\subsubsection{统计指纹：最大熵输入驱动下的平稳分布、输入--输出耦合、反持续与输出熵率}\label{subsec:sync10-stat-fingerprint}
+上面的同步核是\emph{确定性}转导器：给定当前状态 $s_t\in Q$ 与输入 $d_t\in\{0,1,2\}$，则输出位 $e_t\in\{0,1\}$ 与下一状态 $s_{t+1}$ 唯一确定（见边表的 $d/e$ 标记）。
+为提取一个不依赖外部对象（$\zeta$、Abel 有限部、primitive 谱等）的\textbf{机制级统计指纹}，这里固定“最大熵驱动”：
+$$
+d_t\ \text{i.i.d. 且}\ \mathbb P(d_t=0)=\mathbb P(d_t=1)=\mathbb P(d_t=2)=\frac{1}{3}.
+$$
+这把同步核诱导为一个 10 状态马尔可夫链（隐藏状态为 $Q$，观测输出为 $e_t$）。其平稳分布、输入--输出耦合、输出短程相关与输出熵率都可由边表逐项枚举得到，且落在\textbf{精确有理数/可复现常数}中：
+\input{sections/generated/eq_sync_kernel_10_state_uniform_input_fingerprint}
+
+\begin{remark}[回推到扩张--取整表示的闭合方向（机制 \texorpdfstring{$\leftrightarrow$}{<->} 实动力学）]
+注记“扩张--取整表示”给出了 $[0,1)$ 上的分支扩张与取整 cocycle。
+进一步可把 10 个同步状态识别为该动力系统的一个 Markov 分割，并证明其不变密度在这些分割区间上的质量恰等于上面的平稳权重 $\pi(s)$。
+这样可把“符号核”与“实动力系统”完全闭合为同一个对象，并把统计指纹直接提升为区间动力学的可审计输出。
+\end{remark}
+
+\begin{remark}[操作数不一致与隐含属性]
+原子生成元 $E_k,E_k^{-1}$ 具有尺度参数 $k$ 与守卫条件，体现为“隐含类型”。令 $\nu(a):=\sum_k a_k$ 表示块数，则
+\[
+\nu(E_k(a))=\nu(a)+1,\qquad \nu(E_k^{-1}(a))=\nu(a)-1,
+\]
+即局部裂解/合并天然呈现 $1\leftrightarrow 2$ 的操作数不一致性。
+\end{remark}
+
+\begin{remark}[primitive 轨道与“素数影子”]\label{rem:primitive-shadow}
+上述在线转导器的同步图是有限有向图，其 primitive 周期轨道给出“不可约循环模式”。设其邻接矩阵为 $B$，则周期点计数 $a_n=\mathrm{Tr}(B^n)$，primitive 轨道数 $p_n$ 由
+\[
+a_n=\sum_{d\mid n} d\,p_d,\qquad
+p_n=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}
+\]
+给出，并与第 \ref{sec:zeta-finite-part} 节的 $\zeta$--欧拉乘积接口一致（参见 \cite{LindMarcus1995} 与附录 B 中的 $\zeta_B$、显式分解与数值谱）。
+\end{remark}
+
+\begin{remark}[素数影子与算术素数的层级差异]\label{rem:prime-shadow-vs-primes}
+有限核的 primitive 轨道谱是动力系统层的 prime-like 对象，严格由该核的 $\zeta$ 与谱决定；它不等同于整数素数集合本身。任何固定分辨率/有限状态的读出只能携带有限信息，因此无法在语义上与“整数素数”等价。若要把“素数”作为本体结构引入，需在更高层把素数作为算子族的原子标签：例如在 Hecke 对应框架中以 $T_p$ 作为生成算子，并在本征基上读出 $a_p$；此时素数寄存器是算子寄存器而非因子分解寄存器。本文的同步核谱与 $\zeta$ 计算提供的是动力学模板层，可作为这类升级接口的底座。
+\end{remark}
+
+\subsubsection{时间/空间对偶的交换图：trace--iterate 与 Euler product 的严格一致}\label{subsec:time-space-commuting-diagram}
+本节将时间侧（迭代/迹）与空间侧（primitive/欧拉乘积）的对偶性形式化为严格的交换图。核心点是：在有限矩阵（或迹类算子）层面，$\det(I-zT)$、$\mathrm{Tr}(T^n)$ 与 primitive 抽取（Möbius/Witt）都为共轭不变量，因此可以函子化地组织为一张可审计的交换图。
+
+\paragraph{三个范畴（只保留共轭不变量）}
+取如下三类对象：
+\begin{itemize}
+  \item \textbf{端态范畴 $\mathbf{End}^{\simeq}$}：对象为对 $(V,T)$（有限维线性空间与算子 $T:V\to V$），态射为相似变换（共轭）；
+  \item \textbf{序列范畴 $\mathbf{Seq}$}：对象为序列 $a=(a_n)_{n\ge 1}$（取值于 $\CC$），取离散范畴口径；
+  \item \textbf{Euler 范畴 $\mathbf{Euler}$}：对象为形式幂级数 $F(z)\in 1+z\CC[[z]]$（取离散范畴口径）。
+\end{itemize}
+
+\paragraph{四个函子（时间侧、原子化、Euler product 与行列式 $\zeta$）}
+定义：
+\[
+\mathcal{T}:\mathbf{End}^{\simeq}\to\mathbf{Seq},\qquad
+\mathcal{T}(T)=(a_n)_{n\ge 1},\ a_n:=\mathrm{Tr}(T^n),
+\]
+\[
+\mathcal{M}:\mathbf{Seq}\to\mathbf{Seq},\qquad
+(\mathcal{M}a)_n:=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d},
+\]
+\[
+\mathcal{E}:\mathbf{Seq}\to\mathbf{Euler},\qquad
+\mathcal{E}(p):=\prod_{n\ge 1}(1-z^n)^{-p_n},
+\]
+\[
+\mathcal{Z}:\mathbf{End}^{\simeq}\to\mathbf{Euler},\qquad
+\mathcal{Z}(T):=\frac{1}{\det(I-zT)}=\exp\!\left(\sum_{n\ge 1}\frac{\mathrm{Tr}(T^n)}{n}z^n\right).
+\]
+
+\begin{proposition}[交换图（严格交换）]\label{prop:time-space-commuting-diagram}
+在上述记号下有恒等式
+\[
+\boxed{\ \mathcal{Z}=\mathcal{E}\circ\mathcal{M}\circ\mathcal{T}\ }.
+\]
+等价地，令 $a_n=\mathrm{Tr}(T^n)$，令 $p=\mathcal{M}(a)$，则
+\[
+\frac{1}{\det(I-zT)}=\prod_{n\ge 1}(1-z^n)^{-p_n}\in 1+z\CC[[z]].
+\]
+\end{proposition}
+
+\begin{proof}
+由定义 $\log\mathcal{E}(p)=-\sum_{n\ge 1}p_n\log(1-z^n)$，展开得
+\[
+\log\mathcal{E}(p)=\sum_{n\ge 1}p_n\sum_{k\ge 1}\frac{z^{nk}}{k}
+=\sum_{m\ge 1}\left(\sum_{n\mid m}\frac{n\,p_n}{m}\right)z^m.
+\]
+另一方面，$p=\mathcal{M}(a)$ 等价于 $a_m=\sum_{n\mid m}n\,p_n$（周期闭环分解为 primitive 幂重复），故
+\(
+\log\mathcal{E}(p)=\sum_{m\ge 1}\frac{a_m}{m}z^m
+\)。
+取指数即得 $\mathcal{E}(p)=\exp(\sum_{m\ge 1}\frac{\mathrm{Tr}(T^m)}{m}z^m)=\mathcal{Z}(T)$。证毕。
+\end{proof}
+
+\begin{remark}[同步核的自对偶与二变量函数方程]
+取输出位势 $\varphi(e)=e$，令 $B(u)=B_0+uB_1$、$\Delta(z,u)=\det(I-zB(u))$ 与 $\zeta(z,u)=\Delta(z,u)^{-1}$。附录 \ref{app:kernel-self-dual} 给出置换矩阵 $\Pi$ 使得 $\Pi^{-1}B(u)\Pi=uB(1/u)$，因此
+\[
+\Delta(z,u)=\Delta(uz,1/u),\qquad
+\zeta(z,u)=\zeta(uz,1/u).
+\]
+这可视作端态侧对偶函子 $D_{\mathbf{End}}:B(u)\mapsto uB(1/u)$ 与 Euler 侧对偶函子 $D_{\mathbf{Euler}}:F(z,u)\mapsto F(uz,1/u)$ 之间的严格交换，从而把“时间长度 $z$”与“事件权重 $u$”在同一 $\zeta$-接口下对齐为可核验的对偶变换。
+\end{remark}
+
+\begin{remark}[完成化与 \texorpdfstring{$\ZZ/2$}{Z2} 作用]
+把 $D_{\mathbf{End}}$ 与 $D_{\mathbf{Euler}}$ 视为对参数 $u$ 的对偶作用，则 $D^2=\mathrm{Id}$ 给出一条 $\ZZ/2$-对称。若 $F(z,u)$ 满足 $F(z,u)=F(uz,1/u)$，定义完成化
+\[
+\widetilde{F}(z,\theta):=F(e^{-\theta/2}z,e^\theta),\qquad u=e^\theta,
+\]
+则 $\widetilde{F}(z,-\theta)=\widetilde{F}(z,\theta)$ 为严格偶性。对应严格交换图
+\[
+\begin{CD}
+\mathbf{End}^{\simeq} @>D_{\mathbf{End}}>> \mathbf{End}^{\simeq}\\
+@V\mathcal{Z}VV @VV\mathcal{Z}V\\
+\mathbf{Euler} @>D_{\mathbf{Euler}}>> \mathbf{Euler}
+\end{CD}
+\]
+写作完成化算子
+\[
+\mathcal{C}(F)(z,\theta):=F(e^{-\theta/2}z,e^\theta),
+\]
+则 $\mathcal{C}\circ D_{\mathbf{Euler}}=\mathcal{C}$，并且
+\[
+\widetilde{\mathcal{Z}}:=\mathcal{C}\circ\mathcal{Z}
+\]
+满足 $\widetilde{\mathcal{Z}}=\widetilde{\mathcal{Z}}\circ D_{\mathbf{End}}$。因此对同步核的 $\Delta$ 与 $\zeta$，完成化后在 $\theta$ 上呈严格偶性（见附录 \ref{app:kernel-completion}）。
+\par
+更进一步，可把 \(u=e^\theta\) 改写为 \(u=r^2\) 并引入不变量 \(s=r+r^{-1}\)、\(w=zr\)。
+这等价于在 Laurent 环上取对合 \(r\mapsto r^{-1}\) 的不变量子环 \(\ZZ[r,r^{-1}]^{\,r\mapsto r^{-1}}=\ZZ[s]\)，从而把 root-of-unity 的乘法扭曲 \(u\in\mu_m\) 压缩为实迹坐标 \(s_m=2\cos(\pi/m)\)（注 \ref{rem:completion-invariant-ring}）。
+对同步核，这一接口与 cyclotomic elimination/resultant 结合给出扭曲谱半径 \(\rho_m\) 的一元整系数证书，并导出扩散型混合尺度 \(n\asymp m^2\)（命题 \ref{prop:sync-cyclotomic-elimination} 与推论 \ref{cor:sync-rho-gap-m8-diffusive}）。
+\end{remark}
+
+\begin{remark}[为何 delay-$3$ 在线机是“prime-like 原子的产生机”]
+定理 \ref{thm:online-delay-fold} 给出一个具体对象：delay-$3$ 在线归一化同步核的邻接矩阵 $B$（附录 B）。将 $T=B$ 代入命题 \ref{prop:time-space-commuting-diagram}，则“时间侧”的 $\mathrm{Tr}(B^n)$ 与“空间侧”的 primitive 轨道数 $p_n$（prime-like 原子）严格由同一 $\zeta_B(z)=1/\det(I-zB)$ 统一。
+因此“不可并行依赖”（延迟窗口中的余量守恒/携带）并非噪声，而是把迭代动力学编码为一个有限核，使得其 primitive 闭环成为可审计的 prime-like 原子。
+\end{remark}
+
+\begin{remark}[乘法相关性的可检验落点：张量装配与 Witt/Möbius]
+当把单流核按 $m$ 条同构同余流做全局块级张量装配时，有 $T_{\mathrm{glob}}=T_{\mathrm{flow}}^{\otimes m}$，从而
+\[
+a_n^{\mathrm{glob}}(u):=\mathrm{Tr}(T_{\mathrm{glob}}(u)^n)=\bigl(a_n^{\mathrm{flow}}(u)\bigr)^m.
+\]
+在附录 \ref{app:witt-weighted} 的 $u$-加权口径下，primitive 谱多项式满足
+\[
+p_n^{\mathrm{glob}}(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}^{\mathrm{glob}}(u^d)
+=\frac{1}{n}\sum_{d\mid n}\mu(d)\,\bigl(a_{n/d}^{\mathrm{flow}}(u^d)\bigr)^m.
+\]
+特别地，若 $n=\ell$ 为素数，则
+\[
+p_\ell^{\mathrm{glob}}(u)=\frac{1}{\ell}\left(\bigl(a_\ell^{\mathrm{flow}}(u)\bigr)^m-\bigl(a_1^{\mathrm{flow}}(u^\ell)\bigr)^m\right).
+\]
+该等式把“时间侧的幂次/乘法”精确翻译为“空间侧 primitive 谱的非平凡 Witt 多项式律”（见推论 \ref{cor:par-add-global-lift-endpoints} 的同型口径），从而给出“不可并行活动”的一个可审计 prime-like 读出接口。
+\end{remark}
+
+\subsubsection{线性约束计数的可编译有理性：同步转导器与特征多项式消去}\label{subsec:compiled-linear-constraint-counting}
+
+\begin{proposition}[线性约束计数的生成函数有理性（矩阵消去形式）]\label{prop:conclusion61-rational-gf-linear-constraints}
+在 sofic--Zeckendorf 框架下，固定整数矩阵 \(Q\in\ZZ^{r\times k}\) 与向量 \(b\in\ZZ^r\)（维数 \(r,k\) 固定）。
+对每个 \(m\ge 0\)，令
+\[
+\Omega_m(Q,b):=\Bigl\{(c^{(1)},\dots,c^{(k)})\in X_m^k:\ Q\bigl(\mathrm{Val}(c^{(1)}),\dots,\mathrm{Val}(c^{(k)})\bigr)=b\Bigr\}.
+\]
+则长度生成函数
+\[
+F_{Q,b}(z):=\sum_{m\ge 0} \#\Omega_m(Q,b)\,z^m
+\]
+为有理函数，并可写为
+\[
+\boxed{\;
+F_{Q,b}(z)=u^\top(I-zB_{Q,b})^{-1}v\;}
+\]
+其中 \(B_{Q,b}\) 为由同步转导器显式构造的非负整数矩阵，\(u,v\ge 0\) 为端点向量。
+特别地，\(F_{Q,b}\) 的全部极点包含于 \(\det(I-zB_{Q,b})=0\) 的根集合；从而 \(m\mapsto \#\Omega_m(Q,b)\) 满足有限阶线性递推，并可表示为有限个特征根的指数多项式和（Jordan 分解给出多项式因子）。
+\end{proposition}
+
+\begin{proof}
+将 \(k\) 路输入 \(c^{(1)},\dots,c^{(k)}\) 以同一时间步并行读入，取“合法性约束自动机 \(\times\) 在线归一化核 \(\times\) 线性约束 carry/余量寄存器”的同步直积即可得到一个有限状态转导器：其状态空间只依赖于固定的 \(Q,b\) 与底核，而与 \(m\) 无关。
+接受长度为 \(m\) 的路径条数即为 \(\#\Omega_m(Q,b)\)，故存在 \(u,v\) 使 \(\#\Omega_m(Q,b)=u^\top B_{Q,b}^m v\)。
+对任意有限矩阵 \(B\)，有
+\(
+\sum_{m\ge 0}u^\top B^m v\,z^m=u^\top(I-zB)^{-1}v
+\)，
+并且分母由 \(\det(I-zB)\) 给出，极点与递推结构随之得到。证毕。
+\end{proof}
+
+\paragraph{本节结论}
+本节把第 \(7\) 章的“值保持归一化”落实到了算法层与复杂度层。第一，Zeckendorf 规范化可由贪心算法在线性时间完成。第二，稳定加法与稳定乘法都可化为“值层运算 + 规范化”的两步闭环。第三，虽然在线单趟延迟 \(3\) 可以实现归一化，但任何固定半径的同步局部并行方案都必须付出线性传播时间。第四，在线转导器不仅给出实现，还给出精确的统计指纹：平稳分布、输入--输出耦合、反持续性、熵率与 primitive 轨道谱。第五，时间侧的 trace--iterate 与空间侧的 Euler 乘积严格交换。第六，大类线性约束计数问题都可被编译为有限矩阵 resolvent，因此自动具有有理生成函数、线性递推与谱极点结构。
+
+这样，第 \(7\) 章就在四个层面闭合起来：对象层的可断言性、值层的规范算术、谱层的 primitive/压力结构，以及算法层的显式实现与复杂度界。

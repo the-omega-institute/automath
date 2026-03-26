@@ -1,0 +1,93 @@
+\begin{theorem}[值层半环语义的多项式刻画]\label{thm:pom-val-polynomial-semantics}
+沿定义 \ref{def:pom-rewriting-val} 的 \(\mathbf{W}_{\mathrm{val}}\) 片段，固定 \(n\) 个输入寄存器与 \(k\) 个输出寄存器。
+对任意词 \(w\in\mathbf{W}_{\mathrm{val}}\)，存在一个逐坐标的非负整系数多项式映射
+\[
+F_w\in\bigl(\NN[x_1,\dots,x_n]\bigr)^k
+\]
+使得：对任意稳定输入 \((a_1,\dots,a_n)\in X_\infty^n\)，若以 \(\mathrm{Val}\) 逐寄存器读出其值层向量，则 \(w\) 的值层语义满足
+\[
+\mathrm{Val}^{\times k}\!\bigl(w(a_1,\dots,a_n)\bigr)
+\;=\;
+F_w\!\bigl(\mathrm{Val}(a_1),\dots,\mathrm{Val}(a_n)\bigr).
+\]
+\end{theorem}
+\begin{proof}
+在 \(\mathbf{W}_{\mathrm{val}}\) 中，
+\texttt{EVOLVE(op)} 的 \texttt{op} 属于由 \(\oplus,\otimes\) 生成的值层半环闭包；
+由定理 \ref{thm:mul-definitional}，\(\mathrm{Val}\) 将 \((\oplus,\otimes)\) 同构到 \((+,\times)\)，因此任一步 \texttt{EVOLVE(op)} 在值层逐坐标等价于由 \(+,\times\) 生成的表达式，亦即非负整系数多项式。
+\texttt{PROJ\_NORM} 是规范化读出门，其值层效果保持 \(\mathrm{Val}\) 不变（由折叠公式 \(\Fold_\infty=Z\circ\mathrm{Val}\) 及 \(\mathrm{Val}\circ Z=\mathrm{id}\)）。
+\texttt{CLEAN} 对有限余量的排空/丢弃在值层对应坐标投影与常量赋值的复合，仍属于多项式映射。
+最后，多项式映射在复合下闭合，故存在所述 \(F_w\)。证毕。
+\end{proof}
+
+\begin{corollary}[值层布尔可表达性的单调性屏蔽]\label{cor:pom-val-monotone-boolean}
+将布尔值编码为 \(\{0,1\}\subset\NN\)。
+若一个布尔函数 \(f:\{0,1\}^n\to\{0,1\}\) 可由某个 \(w\in\mathbf{W}_{\mathrm{val}}\) 在值层实现，则 \(f\) 必为坐标单调函数。
+因此，在 \(\mathbf{W}_{\mathrm{val}}\) 中不可实现 \(\mathrm{NOT}\) 与 \(\mathrm{NAND}\)（以及任意非单调布尔函数）。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-val-polynomial-semantics}，\(f\) 是某个 \(\NN\)-系数多项式在 \(\{0,1\}^n\) 上的限制。
+任意 \(\NN\)-系数多项式对每一变量均单调不减，故其布尔限制亦单调。
+\(\mathrm{NOT}\) 与 \(\mathrm{NAND}\) 在至少一坐标上反单调，矛盾。证毕。
+\end{proof}
+
+\begin{proposition}[\(\mathrm{NAND}\) 的序投影预算与规范投影外提]\label{prop:pom-nand-projorder-budget-one}
+在允许 \texttt{PROJ\_ORDER(cmp)} 与 \texttt{EVOLVE(sub)} 的扩展片段中，存在一条投影词程序在 \(\{0,1\}^2\) 上实现 \(\mathrm{NAND}\)，并且实现 \(\mathrm{NAND}\) 所需的 \texttt{PROJ\_ORDER} 调用次数最小值为 \(1\)。
+此外，任意实现中出现的中间 \texttt{PROJ\_NORM} 可被推迟并合并为末端至多一次（在值层意义下）。
+\end{proposition}
+\begin{proof}
+\emph{存在性：}
+取输入位 \(x,y\in\{0,1\}\)。
+以乘法模板 \texttt{ZMUL} 得 \(z=xy\in\{0,1\}\)；
+再以减法模板 \texttt{ZSUB} 计算 \(1-z\)，其中比较门控由一次 \texttt{PROJ\_ORDER(cmp)} 给出。
+布尔恒等式 \(1-xy=\mathrm{NAND}(x,y)\) 给出正确性，从而上界为 \(1\)。
+\par
+\emph{下界：}
+若不调用 \texttt{PROJ\_ORDER}，则程序落在 \(\mathbf{W}_{\mathrm{val}}\) 的值层闭包内；
+由推论 \ref{cor:pom-val-monotone-boolean}，\(\mathrm{NAND}\) 不可实现，故最小调用次数至少为 \(1\)。
+\par
+\emph{规范投影合并：}
+由命题 \ref{prop:pom-rewriting-terminating}（及其语义来源的“一次投影正规形”，定理 \ref{thm:pom-one-fold-normal-form}），值层片段中的中间 \texttt{PROJ\_NORM} 可被外提并与末端合并为至多一次。证毕。
+\end{proof}
+
+\begin{theorem}[值层外延等价的可判定性]\label{thm:pom-val-extensional-equivalence-decidable}
+对 \(\mathbf{W}_{\mathrm{val}}\) 中的任意两词 \(w_1,w_2\)，其对所有稳定输入的值层外延语义是否相等是可判定问题。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-val-polynomial-semantics}，\(w_1,w_2\) 的值层语义分别对应 \(\NN\)-系数多项式映射 \(F_{w_1},F_{w_2}\)。
+于是外延等价当且仅当 \(F_{w_1}=F_{w_2}\) 为多项式恒等式；
+对每个坐标将多项式化为标准形式（单项式系数表）并逐项比较即可判定。证毕。
+\end{proof}
+
+\begin{theorem}[first-fit 序门扩展下外延语义的不可判定性]\label{thm:pom-firstfit-extensional-undecidable}
+若在 prime-register 纤维上允许 \texttt{PROJ\_ORDER(first-fit)}，并允许相应的一步更新 \texttt{EVOLVE(fractran-update)}（小节 \ref{subsec:pom-fractran}），则该扩展语言在外延语义下的等价判定不可判定；等价地，相应的停机/可达性问题不可判定。
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:pom-fractran-prime-translation} 将 FRACTRAN 的一步语义严格等价为 prime-register 纤维 \(\mathcal{P}\) 上的“可行性偏序约束 \(\Rightarrow\) first-fit 选择 \(\Rightarrow\) 确定性平移更新”。
+因此，含 \texttt{PROJ\_ORDER(first-fit)} 的投影词可编译并迭代实现任意 FRACTRAN 程序的一步更新。
+由于 Conway 已证明 FRACTRAN 计算模型图灵完备 \cite{Conway1987FRACTRAN}，其停机/可达性不可判定。
+若该扩展语言的外延等价可判定，则可据此判定 FRACTRAN 的停机性，矛盾。证毕。
+\end{proof}
+
+\begin{proposition}[异常类给出的交换证书步数下界与 moment 线性放大]\label{prop:pom-anom-swap-lowerbound-and-mom-amplify}
+固定三生成元片段的异常累积与异常类（定义 \ref{def:pom-anom-accumulation} 与推论 \ref{cor:pom-anom-class-additive}）。
+令 \(\pi:w\Rightarrow \mathrm{NF}(w)\) 为一条将 \(w\) 规约到接口正规形的证书，并令 \(s(\pi)\) 表示 \(\pi\) 中出现的“带异常项的交换步”（命题 \ref{prop:pom-em-lift-residual-swap} 的交换证书）次数。
+则对任意半范数 \(\|\cdot\|\)（例如 \(\ell^1\) 或 \(\ell^\infty\) 范数）都有
+\[
+s(\pi)\ \ge\ \frac{\bigl\|\mathrm{anom}(\pi)\bigr\|}{\bigl\|\mathsf{Anom}_G(K;\theta)\bigr\|},
+\]
+其中分母取交换步的单步异常标签（若为零则该不等式平凡成立）。
+并且在 moment 编译的 \(q\)-重复制口径下，异常标签满足严格线性放大律
+\[
+\mathrm{anom}(\pi^{\boxtimes q})=q\cdot \mathrm{anom}(\pi)
+\]
+（命题 \ref{prop:pom-anom-gap-amplification}），从而任何对 \(\mathrm{MOM}_q\circ w\) 的相应规约证书的交换步下界随 \(q\) 线性放大。
+\end{proposition}
+\begin{proof}
+按定义 \ref{def:pom-anom-accumulation}，除“带异常的交换步”外其余局部规约步的标签为零；
+而每一次交换步向 \(\mathrm{anom}(\pi)\) 加入同一个固定标签向量（或其在类型更新下的同型像）。
+因此 \(\mathrm{anom}(\pi)\) 是至多 \(s(\pi)\) 个单步标签的和；
+对任意半范数应用三角不等式即得所示下界。
+放大律由命题 \ref{prop:pom-anom-gap-amplification} 直接给出。证毕。
+\end{proof}
+

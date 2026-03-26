@@ -1,0 +1,127 @@
+\subsubsection{状态 forcing 的时空纤维化读法与技术实例接口}\label{subsubsec:logic-expansion-chain-spacetime-fiberization-interface}
+
+前文已经给出全文统一的上位逻辑：以逻辑层 \(\mathbb L_n\)、保守扩张链、信息状态 \(p=(\Gamma_p,R_p)\) 与状态 forcing 为骨架，统一后续的对象层语义、动态更新与扩张机制。然而，若仅把状态写成上下文与剩余实现集的二元组，则观察者、时间、空间、历史分叉、局部覆盖、通信与延迟分类等结构仍然只是被压缩地包含在状态之中，而未被显式展开。本段的目的，就是说明：后文涉及的观察者时空逻辑并不是另一套与本章并列的上位逻辑，而只是对本章 forcing 状态的一次时空纤维化展开；后续技术章节也并不是新的逻辑起点，而是这套 forcing 骨架的具体实例。
+
+为此，先把定义 \ref{def:logic-expansion-information-state} 的抽象状态重写为一类带有纤维索引的扩张状态。设原状态为
+\[
+p=(\Gamma_p,R_p),
+\]
+其中 \(\Gamma_p\) 是当前上下文，\(R_p\) 是在该上下文下尚未被排除的实现集合。定义一个时空纤维化状态为
+\[
+\widetilde p=
+\bigl(
+\Gamma_p,
+R_p,
+\iota(\widetilde p),
+\tau(\widetilde p),
+\sigma(\widetilde p),
+H_{\widetilde p}
+\bigr),
+\]
+其中 \(\iota(\widetilde p)\) 记录观察者索引，\(\tau(\widetilde p)\) 记录时间层，\(\sigma(\widetilde p)\) 记录空间支撑区域，\(H_{\widetilde p}\) 记录与该状态相容的局部历史链。于是，原 forcing 状态并不被替换，而是被纤维化为一个更细的语义对象：原有的上下文与剩余实现集依然保留，只是外部再附上一层观察者—时间—空间的索引结构。
+
+记从纤维化状态到原状态的遗忘投影为
+\[
+\pi(\widetilde p):=(\Gamma_{\widetilde p},R_{\widetilde p})=p.
+\]
+则这一步的核心结论可以写成如下保守性命题。
+
+\begin{proposition}[时空纤维化的保守性]\label{prop:logic-expansion-spacetime-fiberization-conservative}
+设 \(\widetilde M\) 是 \(M\) 的一个时空纤维化扩张，且 \(\pi:\widetilde M\to M\) 是遗忘投影。对任意仅属于旧语言层的公式 \(\varphi\)，都有
+\[
+\widetilde M,\widetilde p \Vdash \varphi
+\quad\Longleftrightarrow\quad
+M,\pi(\widetilde p)\Vdash \varphi.
+\]
+\end{proposition}
+
+\begin{proof}
+由定义 \ref{def:logic-expansion-conservative-extension}，高层扩张只能增加结构槽位，而不回写旧语言层 forcing 的既有意义。旧语言公式不显式涉及观察者索引、时间层、空间支撑与历史链，因此它们的真值只依赖于上下文 \(\Gamma_p\) 与剩余实现集 \(R_p\)。而 \(\pi\) 正是遗忘这些附加纤维数据、仅保留原 forcing 状态的投影，故两侧 forcing 等价。
+\end{proof}
+
+该命题的意义不在于增加一个新定理，而在于确定层级关系：后文若引入观察者、区域、覆盖、历史与通信，这些内容都应被理解为对本章 forcing 状态的保守展开，而不是对本章 forcing 的替换。也就是说，观察者—时间—空间逻辑与本章的关系不是并列的第二上位逻辑，而是本章的纤维化语义解释。这一点也正与定义 \ref{def:logic-expansion-ost-system} 在小节 \ref{subsec:logic-expansion-chain-observer-spacetime} 中所确立的最终层口径一致。
+
+在此基础上，可以把后文技术章节的实例化条件写成统一格式。设一个技术模块 \(\mathcal T\) 提供如下数据：
+\begin{enumerate}
+  \item 一个可指称对象集 \(A\)，后文通常把它理解为地址对象集；
+  \item 一个局部区域系统 \(\mathcal U\)，其上带有包含与覆盖；
+  \item 一个局部证书族 \(\mathcal S(U)\)，对每个 \(U\in\mathcal U\) 给出在该区域上的局部证书对象；
+  \item 限制映射
+  \[
+  \rho_V^U:\mathcal S(U)\to \mathcal S(V)
+  \qquad (V\subseteq U);
+  \]
+  \item 局部兼容族的拼接规则；
+  \item 证书细化关系与更新规则；
+  \item 读出关系
+  \[
+  \operatorname{Read}_U(s,a,x),
+  \]
+  表示在区域 \(U\) 上、证书 \(s\) 下，地址 \(a\) 的一个合法读出为 \(x\)；
+  \item 可选的数值化映射、值保持重写规则与外置账本层。
+\end{enumerate}
+再补入观察者索引集 \(O\) 与时间层集 \(T\)，则可定义状态集合
+\[
+P_{\mathcal T}
+:=
+\{(i,t,U,s): i\in O,\ t\in T,\ U\in \mathcal U,\ s\in \mathcal S(U)\},
+\]
+并规定
+\[
+\iota(i,t,U,s)=i,\qquad
+\tau(i,t,U,s)=t,\qquad
+\sigma(i,t,U,s)=U.
+\]
+再把细化关系定义为：若
+\[
+(i',t',U',s')\sqsubseteq(i,t,U,s),
+\]
+则要求 \(i'=i\)、\(t\le t'\)、\(U'\subseteq U\)，且 \(s'\) 是 \(s\) 在 \(U'\) 上的更细证书。如此一来，一个具体技术模块就自动生成了本章 forcing 骨架的一个时空化模型。
+
+这就导出第二条核心结论。
+
+\begin{proposition}[技术实例化接口]\label{prop:logic-expansion-technical-module-instantiation}
+设技术模块 \(\mathcal T\) 满足以下条件：
+\begin{enumerate}
+  \item 局部区域系统 \((\mathcal U,\subseteq,\operatorname{Cov})\) 构成一个覆盖系统；
+  \item \(U\mapsto \mathcal S(U)\) 连同 \(\rho^U_V\) 构成一个预层；
+  \item 兼容局部证书可唯一拼接为整体证书；
+  \item 证书细化与限制相容；
+  \item 技术更新只沿细化方向推进，并与时间顺序相容；
+  \item 读出关系在证书细化下单调；
+  \item 更新满足局域支撑条件；
+  \item 局部相容证书存在共同细化。
+\end{enumerate}
+则 \(\mathcal T\) 诱导出本章 forcing 骨架的一个实例模型。换言之，后文任何满足上述条件的技术章节，都应被读作本章统一上位逻辑的实例化，而不是新的逻辑母系统。
+\end{proposition}
+
+\begin{proof}
+由条件 \(1\)--\(3\)，技术模块提供了定义 \ref{def:logic-expansion-concrete-implementation-system} 所要求的局部区域、覆盖、局部对象系与拼接结构；条件 \(4\)--\(5\) 提供状态推进、时间层与细化的相容性；条件 \(6\) 给出 forcing 在证书细化下的单调性；条件 \(7\)--\(8\) 分别给出局域更新与融合存在性。于是，这些数据可以被装配成一个具体实现系统 \(\mathcal C_{\mathcal T}\)，并由定义 \ref{def:logic-expansion-instantiation-map} 诱导出实例化映射 \(\mathcal I_{\mathcal T}\)。再由定义 \ref{def:logic-expansion-realization}，\(\mathcal C_{\mathcal T}\) 在 \(\mathcal I_{\mathcal T}\) 下实现了 \(\mathbb L^{\mathrm{OST}}\)。故 \(\mathcal T\) 的逻辑地位不是新的母系统，而是本章 forcing 骨架的一个具体模型。
+\end{proof}
+
+在这一定理之后，后文技术层的逻辑地位便可以一一明确。首先，后文关于递归地址化、前缀站点、局部截面与 \(\mathsf{NULL}\) 的章节，应被理解为本章 forcing 的对象层实例：它们提供可指称对象、局部证书、限制、拼接与读出，因此回答的是何时可读、何时对象化、何时仍为空值。其次，后文关于稳定地址数值化、值保持重写、规范横截面与分辨率模结构的章节，应被理解为本章 forcing 的值层实例：它们不再重新讨论对象层准入，而是在地址已经对象化、读出已经存在、唯一性已经进入决定包络之后，讨论如何数值化、如何规范化以及如何在值层保持不变。最后，后文关于素数寄存器、外置账本、primitive 谱、\(\zeta\) 与压力曲线的内容，应被理解为本章 forcing 骨架的实现层与物理骨架化实例：它们并不改变主可见层的对象层事实，而只是作为状态扩张或额外坐标，为更高层的结构追踪提供附加信息。
+
+因此，本段可以把后续章节的结构关系压缩成一条明确的映射链：
+\[
+\text{第 4 章 forcing 母系统}
+\Longrightarrow
+\text{对象层实例（地址/截面/\(\mathsf{NULL}\)）}
+\Longrightarrow
+\text{值层实例（数值化/值保持重写）}
+\Longrightarrow
+\text{实现层/物理骨架实例（账本/谱/资源）}.
+\]
+这条链的作用不是总结全文，而是阻止读者误读。它明确说明：后文各章都不是新的逻辑起点，而只是本章统一上位逻辑的不同实现层。
+
+为使这一点彻底清楚，还可把本章 forcing 骨架与后续技术层的对应关系压缩如下：
+\begin{itemize}
+  \item 本章中的对象化谓词，对应后文地址进入对象域的规则；
+  \item 本章中的局部 forcing 与空间拼接，对应后文前缀站点与局部截面；
+  \item 本章中的 forcing 失败模式，对应后文 \(\mathsf{NULL}\) 的三分解；
+  \item 本章中的细化与共同细化，对应后文多轴细化、残差轴与延迟分类；
+  \item 本章中的决定值域，对应后文稳定地址数值化；
+  \item 本章中的值保持动作，对应后文的值保持重写与规范横截面；
+  \item 本章中的保守状态扩张，对应后文外置账本与附加寄存器结构。
+\end{itemize}
+
+于是，本段真正完成的，不是额外发明一套新逻辑，而是把第 4 章为何是唯一上位逻辑、后文为何都只是它的实例这件事彻底形式化了。本段之后，第 4 章就不再只是一个抽象 forcing 章，而成为全文真正的母框架：它既能向下收摄对象层和数值层实例，也能向后推动到物理时空骨架。也正因如此，后文中若再出现观察者、时间、空间、读出、\(\mathsf{NULL}\)、数值化或账本等对象，都不应再被解读为新的逻辑起点，而应被视为本章 forcing 的某个特定实现方向。

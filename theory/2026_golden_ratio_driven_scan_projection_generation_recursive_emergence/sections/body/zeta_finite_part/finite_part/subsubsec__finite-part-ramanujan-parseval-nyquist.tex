@@ -1,0 +1,148 @@
+% (User input window)
+
+\subsubsection{Ramanujan--Parseval/Nyquist：cyclotomic 原子与扭点采样的精确投影}\label{subsubsec:finite-part-ramanujan-parseval-nyquist}
+命题 \ref{prop:finite-part-cyclic-lift-cyclotomic-divisor-mobius} 将常数层异常分解为 cyclotomic 原子 \(\mathcal{C}_m(M)\)，并通过除数格反演闭合其可逆性。
+本段补充一条更“信号处理式”的解释：原子 \(\mathcal{C}_m(M)\) 本身等于对单层扭点取值表的一个 primitive 平均（Ramanujan 角色投影），并且扭点采样的二次能量在 Parseval 与离散混叠恒等式下给出对谱能量的指数精度恢复（Nyquist--Parseval 定律）。
+
+\paragraph{对象回顾：约化谱多项式与 cyclotomic 原子}
+设 \(M\in\ZZ_{\ge0}^{d\times d}\) primitive，\(\rho=\rho(M)>0\)，并记归一化非 Perron 谱点 \(\lambda_k=\mu_k/\rho\ (k=2,\dots,d)\)，从而 \(|\lambda_k|<1\)。
+定义约化谱多项式
+\[
+F_M(t):=\frac{\det(I-tM/\rho)}{1-t}=\prod_{k=2}^{d}(1-\lambda_k t),
+\]
+并对 \(m\ge 2\) 定义 cyclotomic 原子（命题 \ref{prop:finite-part-cyclic-lift-cyclotomic-divisor-mobius}）
+\[
+\mathcal{C}_m(M):=-\sum_{k=2}^{d}\log \Phi_m(\lambda_k),
+\]
+其中 \(\log\Phi_m\) 取 \(|z|<1\) 上由 \(\Phi_m(0)=1\) 所诱导的解析分支。
+
+\begin{theorem}[原子即 primitive 扭点平均]\label{thm:finite-part-cyclotomic-atom-primitive-torsion-average}
+令 \(\omega_m=e^{2\pi i/m}\)。则对任意 \(m\ge 2\) 有精确恒等式
+\[
+\boxed{\;
+\mathcal{C}_m(M)=-\sum_{a\in(\ZZ/m\ZZ)^\times}\log F_M(\omega_m^{\,a})\; }.
+\]
+\end{theorem}
+\begin{proof}
+对任意复数 \(|x|<1\)，由 primitive 根的因子化可得（作为 \(x\) 的多项式恒等式）
+\[
+\Phi_m(x)=\prod_{a\in(\ZZ/m\ZZ)^\times}(1-x\,\omega_m^{\,a}),
+\]
+两侧在 \(x=0\) 取值同为 \(1\)，且零点集合均为 primitive \(m\)-次单位根的逆（亦为本身），故两侧相等。
+取对数并对解析分支作一致延拓，得
+\(
+\log\Phi_m(x)=\sum_{a\in(\ZZ/m\ZZ)^\times}\log(1-x\omega_m^{\,a})
+\)
+对所有 \(|x|<1\) 成立。
+将 \(x=\lambda_k\) 代入并对 \(k=2,\dots,d\) 求和，交换求和次序并用
+\(
+\log F_M(t)=\sum_{k=2}^{d}\log(1-\lambda_k t)
+\)
+即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[Ramanujan 和展开：原子是幂和的 primitive 角色投影]\label{cor:finite-part-cyclotomic-atom-ramanujan-projection}
+令归一化幂和
+\(
+u_n(M):=\sum_{k=2}^{d}\lambda_k^{n}
+\)
+（\(n\ge 1\)），并定义 Ramanujan 和
+\[
+c_m(n):=\sum_{a\in(\ZZ/m\ZZ)^\times}\omega_m^{\,an}\qquad(n\ge 1).
+\]
+则有绝对收敛展开
+\[
+\boxed{\;
+\mathcal{C}_m(M)=\sum_{n\ge 1}\frac{u_n(M)}{n}\,c_m(n)\; }.
+\]
+\end{corollary}
+\begin{proof}
+由 \(-\log(1-x)=\sum_{n\ge 1}x^n/n\)（\(|x|<1\)）与 \(|\lambda_k|<1\) 可得
+\[
+-\log F_M(e^{i\theta})
+=\sum_{n\ge 1}\frac{u_n(M)}{n}e^{in\theta},
+\]
+且因 \(|u_n(M)|\le (d-1)\Lambda_{\mathrm{rel}}(M)^n\)（其中 \(\Lambda_{\mathrm{rel}}(M):=\max_{k\ge 2}|\lambda_k|<1\)），该级数绝对收敛并可逐项求和。
+将其在 \(\theta=2\pi a/m\) 处取值并对 \(a\in(\ZZ/m\ZZ)^\times\) 求和，交换求和次序即得
+\[
+-\sum_{a\in(\ZZ/m\ZZ)^\times}\log F_M(\omega_m^{\,a})
+=\sum_{n\ge 1}\frac{u_n(M)}{n}\sum_{a\in(\ZZ/m\ZZ)^\times}\omega_m^{\,an}
+=\sum_{n\ge 1}\frac{u_n(M)}{n}\,c_m(n).
+\]
+再由定理 \ref{thm:finite-part-cyclotomic-atom-primitive-torsion-average} 得结论。证毕。
+\end{proof}
+
+\paragraph{Nyquist--Parseval：扭点采样的能量与混叠误差}
+取任意连续对数分支并定义 \(2\pi\)-周期函数
+\[
+g(\theta):=-\log F_M(e^{i\theta})
+=\sum_{n\ge 1}\frac{u_n(M)}{n}e^{in\theta},
+\qquad \theta\in\RR.
+\]
+
+\begin{theorem}[连续 Parseval 与离散混叠恒等式]\label{thm:finite-part-nyquist-parseval-aliasing}
+有 Parseval 恒等式
+\[
+\boxed{\;
+\frac{1}{2\pi}\int_{0}^{2\pi}|g(\theta)|^2\,d\theta=\sum_{n\ge 1}\frac{|u_n(M)|^2}{n^2}\; }.
+\]
+并且对任意整数 \(q\ge 1\)，令采样点 \(\theta_j:=2\pi j/q\)，则成立精确混叠恒等式
+\[
+\boxed{\;
+\frac{1}{q}\sum_{j=0}^{q-1}|g(\theta_j)|^2
+=\sum_{n\ge 1}\frac{|u_n(M)|^2}{n^2}
+\;+\;
+\sum_{\ell\ne 0}\ \sum_{n\ge 1}\frac{u_n(M)\,\overline{u_{n+\ell q}(M)}}{n(n+\ell q)}\; }.
+\]
+\end{theorem}
+\begin{proof}
+由 Fourier 级数表示与正交性，连续 Parseval 为标准结论。
+对离散采样，展开
+\(
+|g(\theta_j)|^2
+=\sum_{n,n'\ge 1}\frac{u_n\overline{u_{n'}}}{nn'}e^{i(n-n')\theta_j}
+\)
+并对 \(j\) 取平均，使用离散正交性
+\[
+\frac{1}{q}\sum_{j=0}^{q-1}e^{i(n-n')\theta_j}
+=
+\mathbf 1_{\{n\equiv n'\ (\mathrm{mod}\ q)\}},
+\]
+即得
+\[
+\frac{1}{q}\sum_{j=0}^{q-1}|g(\theta_j)|^2
+=\sum_{n\ge 1}\frac{|u_n|^2}{n^2}
+\sum_{\ell\ne 0}\sum_{n\ge 1}\frac{u_n\overline{u_{n+\ell q}}}{n(n+\ell q)}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[Nyquist 误差的指数界]\label{cor:finite-part-nyquist-error-exp}
+令 \(\Lambda:=\Lambda_{\mathrm{rel}}(M)=\max_{k\ge 2}|\lambda_k|\in(0,1)\)。
+则存在常数 \(K>0\)（仅依赖于 \(d\) 与 \(\Lambda\)）使对所有整数 \(q\ge 1\) 有
+\[
+\boxed{\;
+\left|\frac{1}{q}\sum_{j=0}^{q-1}|g(\theta_j)|^2-\sum_{n\ge 1}\frac{|u_n(M)|^2}{n^2}\right|
+\le K\,\Lambda^{\,q}\; }.
+\]
+因此仅由单层 \(q\)-扭点采样的二次能量即可在指数精度内恢复谱能量 \(\sum |u_n|^2/n^2\)，且误差衰减率由 \(\Lambda\) 直接控制。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:finite-part-nyquist-parseval-aliasing} 的混叠项与估计 \(|u_n(M)|\le (d-1)\Lambda^{n}\) 得
+\[
+\sum_{\ell\ne 0}\sum_{n\ge 1}\left|\frac{u_n\overline{u_{n+\ell q}}}{n(n+\ell q)}\right|
+\le
+(d-1)^2\sum_{\ell\ne 0}\sum_{n\ge 1}\frac{\Lambda^{2n+|\ell|q}}{n(n+|\ell|q)}.
+\]
+对 \(n(n+|\ell|q)\ge n^2\) 并先对 \(n\) 求和、再对 \(|\ell|\ge 1\) 求和，可得右端
+\[
+\ll
+\left(\sum_{n\ge 1}\frac{\Lambda^{2n}}{n^2}\right)\left(\sum_{|\ell|\ge 1}\Lambda^{|\ell|q}\right)
+\le
+\left(\sum_{n\ge 1}\frac{\Lambda^{2n}}{n^2}\right)\frac{2\Lambda^{q}}{1-\Lambda^{q}}
+\le
+K\,\Lambda^{q},
+\]
+其中最后一步用 \(1-\Lambda^{q}\ge 1-\Lambda\) 吸收入常数 \(K\)。证毕。
+\end{proof}
+

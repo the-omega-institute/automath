@@ -1,0 +1,326 @@
+\paragraph{信息线性守恒与涨落：比例查询下的互信息、中心极限定理与大偏差}
+在微正则先验 \(F\sim\mathrm{Unif}(\mathfrak{Fold}_m(d))\) 下，
+任意确定性自适应互异查询产生的类型轨迹等价于从多重集 \(\{x^{\times d(x)}\}_{x\in X_m}\) 的无放回抽样（定理 \ref{thm:pom-microcanonical-adaptive-no-gain-without-replacement}）。
+因此，“信息获得”可在不涉及几何细节的前提下由纯组合量刻画：后验模空间 \(\mathcal{M}_k\) 的对数收缩即为信息密度；
+其热力学极限在指数尺度上线性，并在 \(\sqrt N\) 尺度呈现高斯涨落；同时可由多元超几何的 KL--对称大偏差率函数给出全大偏差描述。
+
+\begin{definition}[信息密度与归一化信息率]\label{def:pom-microcanonical-information-density}
+在定义 \ref{def:pom-microcanonical-adaptive-trajectory-counts} 与定义 \ref{def:pom-microcanonical-posterior-moduli-size-beta} 的设定下，
+令
+\[
+\mathsf{I}_k:=\log\card{\mathfrak{Fold}_m(d)}-\log \mathcal{M}_k(T_{1:k})
+\]
+为\emph{信息密度}（亦即观测轨迹的 self-information，见定理 \ref{thm:pom-microcanonical-information-identity}）。
+并定义归一化量
+\[
+\iota_N:=\frac{1}{N}\mathsf{I}_k,
+\qquad
+\ell_N:=\frac{1}{N}\log \mathcal{M}_k(T_{1:k}).
+\]
+\end{definition}
+
+\begin{theorem}[信息密度的精确模空间表示]\label{thm:pom-microcanonical-information-identity}
+在上述微正则先验与确定性自适应互异查询的设定下，对任意 \(k\le N\) 有严格恒等式
+\[
+\boxed{\;
+\mathsf{I}_k
+=-\log\mathbb{P}(T_{1:k})
+=\log\card{\mathfrak{Fold}_m(d)}-\log \mathcal{M}_k(T_{1:k})\;}
+\]
+并且互信息满足
+\[
+\boxed{\;
+I(F;T_{1:k})=H(T_{1:k})
+=\EE[\mathsf{I}_k]
+=\log\card{\mathfrak{Fold}_m(d)}-\EE\bigl[\log \mathcal{M}_k(T_{1:k})\bigr]\;}
+\]
+其中 \(H(T_{1:k})\) 为轨迹分布的 Shannon 熵（自然对数）。
+\end{theorem}
+\begin{proof}
+由于查询策略确定且每次查询点由历史响应唯一确定，轨迹 \(T_{1:k}\) 是 \(F\) 的确定性函数，故 \(I(F;T_{1:k})=H(T_{1:k})\)。
+\par
+另一方面，由定理 \ref{thm:pom-microcanonical-fold-posterior-count-and-prob} 的轨迹概率公式可知：
+对任意可实现轨迹 \(t\in X_m^k\)，其出现概率恰为
+\[
+\mathbb{P}(T_{1:k}=t)=\frac{\card{\{F'\in\mathfrak{Fold}_m(d):F'(\omega_i)=t_i,\ 1\le i\le k\}}}{\card{\mathfrak{Fold}_m(d)}}
+=\frac{\mathcal{M}_k(t)}{\card{\mathfrak{Fold}_m(d)}}.
+\]
+取 \(t=T_{1:k}\) 即得
+\(
+-\log\mathbb{P}(T_{1:k})
+=\log\card{\mathfrak{Fold}_m(d)}-\log\mathcal{M}_k(T_{1:k})
+\)，从而得到第一式。
+对两边取期望并注意 \(\EE[-\log\mathbb{P}(T_{1:k})]=H(T_{1:k})\)，得到第二组恒等式。证毕。
+\end{proof}
+
+\begin{theorem}[信息线性守恒律：比例查询下的指数率]\label{thm:pom-microcanonical-information-linear-law}
+取常数 \(\beta\in[0,1]\) 并令 \(k=\lfloor\beta N\rfloor\)。
+则在 \(N\to\infty\) 且 \(w\) 固定时，有依概率收敛
+\[
+\boxed{\;
+\frac{1}{N}\mathsf{I}_k\ \xrightarrow{\ \mathbb{P}\ }\ \beta\,H(w)\;},
+\qquad
+\boxed{\;
+\frac{1}{k}\mathsf{I}_k\ \xrightarrow{\ \mathbb{P}\ }\ H(w)\;}
+\quad(\beta\in(0,1]),
+\]
+其中 \(w(x)=d(x)/N\) 且 \(H(w)=-\sum_x w(x)\log w(x)\)。
+此外，互信息满足同一指数率
+\[
+\frac{1}{N}I(F;T_{1:k})=\frac{1}{N}\EE[\mathsf{I}_k]\ \to\ \beta\,H(w).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-microcanonical-information-identity}，
+\(
+\mathsf{I}_k=\log\card{\mathfrak{Fold}_m(d)}-\log\mathcal{M}_k(T_{1:k})
+\)。
+由定理 \ref{thm:pom-microcanonical-fold-entropy}，
+\[
+\frac{1}{N}\log\card{\mathfrak{Fold}_m(d)}=H(w)+o(1),
+\]
+而由定理 \ref{thm:pom-microcanonical-posterior-entropy-linear-law} 有
+\[
+\frac{1}{N}\log\mathcal{M}_k(T_{1:k})\ \xrightarrow{\ \mathbb{P}\ }\ (1-\beta)\,H(w).
+\]
+两式相减即得 \(\frac{1}{N}\mathsf{I}_k\to \beta H(w)\) 依概率收敛。
+再除以 \(k/N\to\beta\) 得第二式。
+最后一式由 \(\EE[\mathsf{I}_k]=I(F;T_{1:k})\) 与 \(\mathsf{I}_k/N\) 的一致有界性推出：由于 \(\log\mathcal{M}_k(T_{1:k})\ge 0\)，有
+\[
+0\le \frac{1}{N}\mathsf{I}_k\le \frac{1}{N}\log\card{\mathfrak{Fold}_m(d)}=H(w)+o(1),
+\]
+从而 \(\mathsf{I}_k/N\) 在 \(L^1\) 上一致有界；结合依概率收敛可得
+\(
+\EE[\mathsf{I}_k]/N\to \beta H(w)
+\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[互信息涨落的中心极限定理]\label{cor:pom-microcanonical-information-clt}
+在定理 \ref{thm:pom-microcanonical-posterior-moduli-clt} 的设定下（特别地 \(n\) 固定、\(w\) 固定且 \(\beta\in(0,1)\)），
+记
+\[
+V(w):=\Var_{X\sim w}\bigl(\log w(X)\bigr).
+\]
+则当 \(N\to\infty\) 时，
+\[
+\boxed{\;
+\frac{\mathsf{I}_k-\beta N H(w)}{\sqrt{\beta(1-\beta)N}}
+\ \xrightarrow{d}\ \mathcal N\bigl(0,V(w)\bigr)\;}
+\qquad\left(k=\lfloor\beta N\rfloor\right).
+\]
+\end{corollary}
+\begin{proof}
+由定义 \ref{def:pom-microcanonical-information-density} 与定理 \ref{thm:pom-microcanonical-fold-entropy}，
+\[
+\mathsf{I}_k
+=\log\card{\mathfrak{Fold}_m(d)}-\log\mathcal{M}_k(T_{1:k})
+=NH(w)-\log\mathcal{M}_k(T_{1:k})+O(n\log N).
+\]
+将定理 \ref{thm:pom-microcanonical-posterior-moduli-clt} 的中心极限定理代入并注意在 \(n\) 固定时 \(O(n\log N)=o(\sqrt N)\)，即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[多元超几何的大偏差：样本组成与剩余组成的 KL--对称分解]\label{thm:pom-microcanonical-hypergeometric-ldp-kl-sym}
+假设 \(n\) 固定、\(w\) 固定且 \(\beta\in(0,1)\)。
+令 \(k=\lfloor\beta N\rfloor\)，并定义样本组成与剩余组成
+\[
+Q_N(x):=\frac{C_k(x)}{k}\in\Delta(X_m),
+\qquad
+R_N(x):=\frac{d(x)-C_k(x)}{N-k}\in\Delta(X_m).
+\]
+则 \(Q_N\) 满足大偏差原理，其良速率函数可显式写为
+\[
+J_\beta(q)=
+\begin{cases}
+\beta\,D(q\|w)+(1-\beta)\,D(r(q)\|w), & r(q):=\dfrac{w-\beta q}{1-\beta}\in\Delta(X_m),\\[6pt]
++\infty, & \text{否则},
+\end{cases}
+\]
+其中 \(D(\cdot\|\cdot)\) 为 KL 散度（自然对数）。
+并且具有对称性
+\[
+\boxed{\;
+J_\beta(q)=J_{1-\beta}\bigl(r(q)\bigr)\;}
+\]
+对应于质量守恒 \(w=\beta q+(1-\beta)r\) 的交换不变性。
+\end{theorem}
+\begin{proof}
+由超几何分布的概率质量函数（定理 \ref{thm:pom-microcanonical-adaptive-no-gain-without-replacement} 的计数形式），
+对整数向量 \(c\) 满足 \(\sum_x c(x)=k\) 有
+\[
+\mathbb{P}(C_k=c)=\frac{\prod_{x\in X_m}\binom{d(x)}{c(x)}}{\binom{N}{k}}.
+\]
+取 \(c(x)=kq(x)\) 并对阶乘用 Stirling 公式展开，得到
+\[
+-\frac1N\log \mathbb{P}(Q_N\approx q)
+=\beta\,D(q\|w)+(1-\beta)\,D(r(q)\|w)+o(1),
+\]
+其中 \(r(q)=(w-\beta q)/(1-\beta)\) 由守恒关系强制出现。
+该展开在 \(q\) 落在单纯形内点且 \(r(q)\in\Delta(X_m)\) 时成立并给出良速率函数；若 \(r(q)\notin\Delta\) 则概率为 \(0\)，速率为 \(+\infty\)。
+对称性由把 \(\beta q\) 与 \((1-\beta)r\) 交换而保持 \(w\) 不变直接推出。证毕。
+\end{proof}
+
+\begin{theorem}[后验模空间与信息密度的全大偏差：收缩原理的显式变分式]\label{thm:pom-microcanonical-moduli-information-ldp}
+在定理 \ref{thm:pom-microcanonical-hypergeometric-ldp-kl-sym} 的假设下，\(\ell_N\) 与 \(\iota_N\) 均满足大偏差原理。
+其速率函数可写为
+\[
+K_\ell(s)=\inf\Bigl\{J_\beta(q):\ s=(1-\beta)\,H(r(q))\Bigr\},
+\]
+\[
+K_\iota(s)=\inf\Bigl\{J_\beta(q):\ s=H(w)-(1-\beta)\,H(r(q))\Bigr\},
+\]
+其中 \(r(q)=(w-\beta q)/(1-\beta)\)，且 \(H(\cdot)\) 为 Shannon 熵（自然对数）。
+最小点对应 \(q=w\)（从而 \(r(w)=w\)），并给出典型值
+\[
+\ell_N\ \to\ (1-\beta)H(w),
+\qquad
+\iota_N\ \to\ \beta H(w),
+\]
+与定理 \ref{thm:pom-microcanonical-information-linear-law} 一致。
+\end{theorem}
+\begin{proof}
+在事件 \(\{Q_N\approx q\}\) 上，剩余组成满足 \(R_N\approx r(q)\)。
+由 Stirling 展开（见定理 \ref{thm:pom-microcanonical-posterior-entropy-linear-law} 的同型推导）得到
+\[
+\frac{1}{N}\log\mathcal{M}_k(T_{1:k})
+=(1-\beta)H(R_N)+o(1)
+=(1-\beta)H(r(q))+o(1).
+\]
+因此在有效域内，映射 \(q\mapsto (1-\beta)H(r(q))\) 连续。
+对 \(Q_N\) 的大偏差原理应用收缩原理得到 \(K_\ell\)。
+由定理 \ref{thm:pom-microcanonical-fold-entropy}，有 \(\frac{1}{N}\log\card{\mathfrak{Fold}_m(d)}=H(w)+o(1)\)。
+因此
+\[
+\iota_N=\frac{1}{N}\log\card{\mathfrak{Fold}_m(d)}-\ell_N
+=H(w)-\ell_N+o(1),
+\]
+而确定性 \(o(1)\) 平移不改变 \(N\) 尺度的大偏差率函数；
+从而由 \(K_\ell\) 立得 \(K_\iota\) 的变分式（亦可视为 \(K_\iota(s)=K_\ell(H(w)-s)\) 的等价写法）。
+最小点由 \(J_\beta\) 的严格凸性（在内点上）与 \(J_\beta(w)=0\) 给出。证毕。
+\end{proof}
+
+\begin{theorem}[熵--信息的 Doob 分解：条件增量与非渐近浓缩]\label{thm:pom-microcanonical-information-doob}
+对任意 \(i\in\{0,1,\dots,k\}\) 定义剩余组成
+\[
+p_i(x):=\frac{d(x)-C_i(x)}{N-i}\in\Delta(X_m),
+\qquad C_0\equiv 0,
+\]
+并令滤过 \(\mathcal F_i:=\sigma(T_1,\dots,T_i)\)。
+则成立：
+\begin{enumerate}
+  \item \textbf{（条件增量）}对每个 \(1\le i\le k\)，有
+  \[
+  \mathbb{P}(T_i=x\mid \mathcal F_{i-1})=p_{i-1}(x),
+  \qquad
+  \mathsf{I}_k=\sum_{i=1}^k\bigl(-\log p_{i-1}(T_i)\bigr)\ \ \text{a.s.}
+  \]
+  且
+  \[
+  \EE\!\left[-\log\mathbb{P}(T_i\mid\mathcal F_{i-1})\ \big|\ \mathcal F_{i-1}\right]=H(p_{i-1}).
+  \]
+  \item \textbf{（鞅结构）}\((p_i)_{i\ge 0}\) 为 \(\Delta(X_m)\)-值鞅：\(\EE[p_i\mid\mathcal F_{i-1}]=p_{i-1}\)。
+  \item \textbf{（Azuma 型浓缩）}令
+  \[
+  M_k:=\mathsf{I}_k-\sum_{i=1}^k H(p_{i-1}),
+  \]
+  则 \((M_i)\) 为鞅且其差分满足 \(|M_i-M_{i-1}|\le \log N\)。
+  因而对任意 \(t>0\) 有非渐近界
+  \[
+  \boxed{\;
+  \mathbb{P}\Bigl(\bigl|\mathsf{I}_k-\sum_{i=1}^k H(p_{i-1})\bigr|\ge t\Bigr)
+  \le 2\exp\!\Bigl(-\frac{2t^2}{k(\log N)^2}\Bigr)\; } .
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第 (1) 点由定理 \ref{thm:pom-microcanonical-adaptive-no-gain-without-replacement} 的逐步条件分布公式直接得到。
+由链式法则，
+\(
+\mathbb{P}(T_{1:k})=\prod_{i=1}^k\mathbb{P}(T_i\mid\mathcal F_{i-1})
+\)，取负对数即得 \(\mathsf{I}_k=\sum_i -\log p_{i-1}(T_i)\)。
+条件期望恒等式由
+\(
+\EE[-\log p_{i-1}(T_i)\mid\mathcal F_{i-1}]
+=\sum_x p_{i-1}(x)(-\log p_{i-1}(x))
+=H(p_{i-1})
+\)
+给出。
+\par
+第 (2) 点：对任意 \(x\)，由 \(C_i(x)=C_{i-1}(x)+\mathbf{1}_{\{T_i=x\}}\) 与
+\(\EE[\mathbf{1}_{\{T_i=x\}}\mid\mathcal F_{i-1}]=p_{i-1}(x)\) 得
+\[
+\EE[p_i(x)\mid\mathcal F_{i-1}]
+=\EE\!\left[\frac{d(x)-C_{i-1}(x)-\mathbf{1}_{\{T_i=x\}}}{N-i}\ \Big|\ \mathcal F_{i-1}\right]
+=\frac{(N-i+1)p_{i-1}(x)-p_{i-1}(x)}{N-i}
+=p_{i-1}(x).
+\]
+\par
+第 (3) 点：由第 (1) 点，\(M_i-M_{i-1}=-\log p_{i-1}(T_i)-H(p_{i-1})\) 条件均值为 \(0\)，故 \(M_i\) 为鞅。
+并且由于 \(p_{i-1}(T_i)\ge 1/(N-i+1)\)（观测到的类型在剩余多重集中至少出现一次），
+得 \(-\log p_{i-1}(T_i)\le \log(N-i+1)\le \log N\)，而 \(0\le H(p_{i-1})\le \log n\le \log N\)；
+故 \(|M_i-M_{i-1}|\le \log N\)。
+对 \((M_i)\) 应用 Azuma--Hoeffding 即得所示界。证毕。
+\end{proof}
+
+\begin{theorem}[查询 + 外置信息比特：最优恢复率与高斯临界窗]\label{thm:pom-microcanonical-query-plus-bits-phase}
+在给定 \(k\) 次查询轨迹 \(T_{1:k}\) 后，允许额外获得 \(B\) 比特的外置信息：
+编码器可取任意映射 \(\mathrm{enc}:\mathfrak{Fold}_m(d)\to\{0,1\}^B\)，解码器以 \((T_{1:k},\mathrm{enc}(F))\) 为输入输出 \(\widehat F\)。
+\begin{enumerate}
+  \item \textbf{（最优成功率闭式）}在均匀先验下，最优精确恢复成功率满足严格恒等式
+  \[
+  \boxed{\;
+  \mathrm{Succ}^{\mathrm{opt}}_{k,B}
+  =\EE\!\left[\min\!\left(1,\frac{2^B}{\mathcal{M}_k(T_{1:k})}\right)\right]\;}
+  \]
+  其中 \(\mathcal{M}_k(T_{1:k})\) 为后验兼容集合大小（定义 \ref{def:pom-microcanonical-posterior-moduli-size-beta}）。
+  \item \textbf{（阈值与高斯窗）}
+  假设 \(n\) 固定、\(w\) 固定且 \(\beta\in(0,1)\)，令 \(k=\lfloor\beta N\rfloor\) 并取
+  \[
+  B_N=\frac{(1-\beta)NH(w)}{\log 2}
+  +\frac{t}{\log 2}\sqrt{\beta(1-\beta)N V(w)},
+  \qquad t\in\RR.
+  \]
+  则当 \(N\to\infty\) 时，
+  \[
+  \boxed{\;
+  \mathrm{Succ}^{\mathrm{opt}}_{k,B_N}\ \longrightarrow\ \Phi(t)\;}
+  \]
+  其中 \(\Phi\) 为标准正态分布函数。
+  特别地，若 \(B<(1-\beta)NH(w)/\log 2-\omega(\sqrt N)\)，则 \(\mathrm{Succ}^{\mathrm{opt}}_{k,B}\to 0\)；
+  若 \(B>(1-\beta)NH(w)/\log 2+\omega(\sqrt N)\)，则 \(\mathrm{Succ}^{\mathrm{opt}}_{k,B}\to 1\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第 (1) 点：在给定轨迹 \(T_{1:k}\) 时，后验在兼容集合上均匀（定理 \ref{thm:pom-microcanonical-count-sufficient-statistic-posterior-uniform}），其大小为 \(\mathcal{M}_k(T_{1:k})\)。
+任意 \(B\) 比特编码至多区分 \(2^B\) 个候选映射；条件于轨迹后，最优做法是在后验块内选择至多 \(2^B\) 个映射赋予互异码字，并将其余映射合并到任意码字上。
+故条件成功率的最优值为 \(\min(1,2^B/\mathcal{M}_k)\)；对轨迹取期望即得结论。
+\par
+第 (2) 点：由定理 \ref{thm:pom-microcanonical-posterior-moduli-clt}，
+\[
+\frac{\log \mathcal{M}_k-(1-\beta)NH(w)}{\sqrt{\beta(1-\beta)N}}
+\ \xrightarrow{d}\ \mathcal N\bigl(0,V(w)\bigr).
+\]
+令 \(B_N\log 2=(1-\beta)NH(w)+t\sqrt{\beta(1-\beta)NV(w)}\)。
+则
+\[
+\min\!\left(1,\frac{2^{B_N}}{\mathcal{M}_k}\right)
+=\min\!\left(1,\exp\!\bigl(B_N\log 2-\log\mathcal{M}_k\bigr)\right)
+\xrightarrow{d}\ \mathbf{1}_{\{Z\le t\}},
+\]
+其中 \(Z\sim\mathcal N(0,1)\)。
+由于左端始终落在 \([0,1]\)，由支配收敛（或 Portmanteau + 有界性）取期望得到
+\(
+\mathrm{Succ}^{\mathrm{opt}}_{k,B_N}\to \mathbb{P}(Z\le t)=\Phi(t)
+\)。
+两侧强相变由 \(t\to\pm\infty\) 得到。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-microcanonical-typeclass-hamming-ball-volume}
+
+\input{sections/body/pom/parts/part__pom-microcanonical-two-temperature-kkt-failure-exponent}
+
+% (User input window)
+\input{sections/body/pom/parts/part__pom-microcanonical-query-distortion-strong-converse}
+
+\endinput
+

@@ -1,0 +1,248 @@
+\subsubsection{循环对称化、半径重整化与 \texorpdfstring{\(p\)}{p}-进熵级联：对 Fourier 模的可审计分账}\label{subsubsec:xi-reversekl-cyclic-symmetrization-padic-cascade}
+本段在 \(\TT=\RR/2\pi\ZZ\) 上刻画一个与 Poisson 平滑严格耦合的循环对称化机制：对称化算子消去非 \(n\) 倍频，并与半径变换 \(r\mapsto r^n\) 以及倍角推前 \(\mu\mapsto \mu^{\langle n\rangle}\) 相匹配。
+由此得到一条熵单调性、一个离散 KL 余量分解，以及对被删 Fourier 模能量的二侧定量等价；进一步沿 \(p\)-进塔递归，获得反向相对熵的正项级联分解。
+
+\begin{definition}[循环对称化与倍角推前]\label{def:xi-reversekl-cyclic-symmetrization-pushforward}
+固定整数 \(n\ge 1\)。
+对可积函数 \(f:\TT\to\RR\)，定义循环对称化算子
+\[
+(\Pi_n f)(\theta):=\frac1n\sum_{j=0}^{n-1}f\!\left(\theta+\frac{2\pi j}{n}\right).
+\]
+对概率测度 \(\mu\in\mathrm{Prob}(\TT)\)，定义倍角推前
+\[
+\mu^{\langle n\rangle}:=(\theta\mapsto n\theta)_\#\mu.
+\]
+\end{definition}
+
+\begin{theorem}[循环对称化的半径重整化单调性]\label{thm:xi-reversekl-radius-renormalization-cyclic-symmetrization}
+沿用定理 \ref{thm:xi-reversekl-poisson-extremal-gap-fourier-stability} 的记号。
+给定 \(n\in\NN\)、\(r\in(0,1)\) 与 \(\mu\in\mathrm{Prob}(\TT)\)，令
+\[
+p_r:=P_r*\mu,\qquad \mathcal H_r(\mu):=\int_{\TT}-\log p_r(\theta)\,\dd m(\theta).
+\]
+则成立不等式
+\begin{equation}\label{eq:xi-reversekl-cyclic-monotonicity}
+\boxed{\ \mathcal H_r(\mu)\ \ge\ \mathcal H_{r^n}\!\bigl(\mu^{\langle n\rangle}\bigr).\ }
+\end{equation}
+并且等号成立当且仅当 \(\widehat\mu(k)=0\) 对所有 \(n\nmid k\) 成立（等价地，\(p_r\) 为 \(2\pi/n\)-周期函数）。
+\end{theorem}
+\begin{proof}
+由于 \(-\log\) 为严格凸函数，Jensen 不等式给出逐点估计
+\[
+-\log (\Pi_n p_r)(\theta)\ \le\ (\Pi_n(-\log p_r))(\theta).
+\]
+对 \(m\) 积分并用平移不变性得到
+\begin{equation}\label{eq:xi-reversekl-cyclic-jensen-gap}
+\int_{\TT}-\log(\Pi_n p_r)\,\dd m\ \le\ \int_{\TT}-\log p_r\,\dd m=\mathcal H_r(\mu).
+\end{equation}
+
+另一方面，\(\Pi_n\) 在 Fourier 侧消去非 \(n\) 倍频。
+由 Poisson 卷积的 Fourier 乘子性质 \(\widehat p_r(k)=r^{|k|}\widehat\mu(k)\)，得
+\[
+\widehat{\Pi_n p_r}(k)=0\ (n\nmid k),\qquad
+\widehat{\Pi_n p_r}(nm)=\widehat p_r(nm)=r^{n|m|}\widehat\mu(nm).
+\]
+又由定义有 \(\widehat{\mu^{\langle n\rangle}}(m)=\widehat\mu(nm)\)。
+因此存在恒等式
+\[
+(\Pi_n p_r)(\theta)=\bigl(P_{r^n}*\mu^{\langle n\rangle}\bigr)(n\theta).
+\]
+利用映射 \(\theta\mapsto n\theta\) 对 \(m\) 的测度保持性，得到
+\[
+\int_{\TT}-\log(\Pi_n p_r)\,\dd m
+=\int_{\TT}-\log\bigl(P_{r^n}*\mu^{\langle n\rangle}\bigr)\,\dd m
+=\mathcal H_{r^n}\!\bigl(\mu^{\langle n\rangle}\bigr).
+\]
+将其代入 \eqref{eq:xi-reversekl-cyclic-jensen-gap} 即得 \eqref{eq:xi-reversekl-cyclic-monotonicity}。
+
+等号刻画来自 \(-\log\) 的严格凸性：\eqref{eq:xi-reversekl-cyclic-jensen-gap} 取等当且仅当 \(p_r=\Pi_n p_r\)，
+等价于 \(\widehat p_r(k)=0\) 对 \(n\nmid k\)。
+再由 \(\widehat p_r(k)=r^{|k|}\widehat\mu(k)\) 即得到所述刻画。证毕。
+\end{proof}
+
+\begin{corollary}[循环对称化等号的 Fourier 支撑刚性与素数塔 Haar 判别]\label{cor:xi-reversekl-cyclic-equality-prime-tower-rigidity}
+固定 \(r\in(0,1)\) 与 \(\mu\in\mathrm{Prob}(\TT)\)。
+则有：
+\begin{enumerate}
+  \item 若存在整数 \(n,m\ge 2\) 满足 \(\gcd(n,m)=1\) 且
+  \[
+  \mathcal H_r(\mu)=\mathcal H_{r^n}\!\bigl(\mu^{\langle n\rangle}\bigr),
+  \qquad
+  \mathcal H_r(\mu)=\mathcal H_{r^m}\!\bigl(\mu^{\langle m\rangle}\bigr),
+  \]
+  则
+  \[
+  \widehat\mu(k)=0
+  \qquad\text{对所有 }nm\nmid k,
+  \]
+  等价地，\(p_r\) 具有 \(2\pi/(nm)\)-周期性。
+  \item 更一般地，若存在无穷多个两两不同的素数所成集合 \(\mathcal P\)，使得对每个 \(p\in\mathcal P\) 都有
+  \[
+  \mathcal H_r(\mu)=\mathcal H_{r^p}\!\bigl(\mu^{\langle p\rangle}\bigr),
+  \]
+  则 \(\mu\) 必为 \(\TT\) 上的 Haar 概率测度。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-reversekl-radius-renormalization-cyclic-symmetrization} 的等号判别，
+对给定 \(n\) 取等当且仅当
+\[
+\widehat\mu(k)=0\qquad(n\nmid k).
+\]
+若对 \(n\) 与 \(m\) 同时取等，则
+\[
+\operatorname{supp}(\widehat\mu)\subset n\ZZ\cap m\ZZ=\operatorname{lcm}(n,m)\ZZ.
+\]
+在 \(\gcd(n,m)=1\) 时，\(\operatorname{lcm}(n,m)=nm\)，故得第 (1) 条。
+
+对第 (2) 条，同理有
+\[
+\operatorname{supp}(\widehat\mu)\subset \bigcap_{p\in\mathcal P} p\ZZ.
+\]
+由于 \(\mathcal P\) 含无穷多个互异素数，右端交集仅为 \(\{0\}\)，故
+\[
+\widehat\mu(k)=0\qquad(k\neq 0).
+\]
+由 Fourier 唯一性定理，\(\mu\) 只能是单位圆上的 Haar 概率测度。
+证毕。
+\end{proof}
+
+\begin{theorem}[熵差的循环 KL 分解]\label{thm:xi-reversekl-cyclic-kl-decomposition}
+令 \(p:\TT\to(0,\infty)\) 可积并满足 \(\int_{\TT}p\,\dd m=1\)。
+固定 \(n\ge 1\)，对每个 \(\theta\in\TT\) 定义
+\[
+x_j(\theta):=p\!\left(\theta+\frac{2\pi j}{n}\right),\qquad
+\overline x(\theta):=\frac1n\sum_{j=0}^{n-1}x_j(\theta)=(\Pi_n p)(\theta),
+\]
+并定义离散概率向量
+\[
+w_\theta(j):=\frac{x_j(\theta)}{\sum_{\ell=0}^{n-1}x_\ell(\theta)}
+=\frac{x_j(\theta)}{n\,\overline x(\theta)},\qquad j=0,\dots,n-1,
+\]
+以及均匀分布 \(u_n(j)\equiv 1/n\)。
+则成立恒等式
+\begin{equation}\label{eq:xi-reversekl-cyclic-kl-identity}
+\boxed{\ 
+\int_{\TT}\!\bigl[-\log p+\log(\Pi_n p)\bigr]\,\dd m
+=\int_{\TT}D_{\mathrm{KL}}\!\bigl(u_n\mid w_\theta\bigr)\,\dd m(\theta).
+\ }
+\end{equation}
+其中 \(D_{\mathrm{KL}}(u_n\mid w_\theta)=\sum_{j=0}^{n-1}\frac1n\log\frac{u_n(j)}{w_\theta(j)}\)。
+\end{theorem}
+\begin{proof}
+由平移不变性，
+\[
+\int_{\TT}-\log p(\theta)\,\dd m(\theta)
+=\int_{\TT}\frac1n\sum_{j=0}^{n-1}-\log x_j(\theta)\,\dd m(\theta).
+\]
+故左端差为
+\[
+\int_{\TT}\Bigl[\frac1n\sum_{j=0}^{n-1}-\log x_j(\theta)+\log\overline x(\theta)\Bigr]\dd m(\theta).
+\]
+另一方面，
+\[
+D_{\mathrm{KL}}(u_n\mid w_\theta)
+=\sum_{j=0}^{n-1}\frac1n\log\frac{1/n}{x_j(\theta)/(n\overline x(\theta))}
+=\frac1n\sum_{j=0}^{n-1}\bigl[-\log x_j(\theta)+\log\overline x(\theta)\bigr].
+\]
+代回即得 \eqref{eq:xi-reversekl-cyclic-kl-identity}。证毕。
+\end{proof}
+
+\begin{theorem}[熵差与被删 Fourier 模能量的二侧等价]\label{thm:xi-reversekl-cyclic-energy-equivalence}
+设 \(p:\TT\to(0,\infty)\) 满足 \(\int_{\TT}p\,\dd m=1\) 且几乎处处落在区间 \([a,b]\) 上，其中 \(0<a\le 1\le b\)。
+则对任意 \(n\ge 1\) 有二侧估计
+\begin{equation}\label{eq:xi-reversekl-cyclic-chi2-equivalence}
+\boxed{\
+\frac1{2b^2}\,\|p-\Pi_n p\|_{L^2(m)}^2
+\ \le\
+\int_{\TT}\!\bigl[-\log p+\log(\Pi_n p)\bigr]\,\dd m
+\ \le\
+\frac1{2a^2}\,\|p-\Pi_n p\|_{L^2(m)}^2.
+\ }
+\end{equation}
+将其应用于 \(p=p_r=P_r*\mu\)（此时 \(p_r(\theta)\in[a_r,b_r]\)，\(a_r=\frac{1-r}{1+r}\)、\(b_r=\frac{1+r}{1-r}\)），并用 Parseval 恒等式与 \(\widehat p_r(k)=r^{|k|}\widehat\mu(k)\)，得到
+\begin{equation}\label{eq:xi-reversekl-cyclic-fourier-energy-bounds}
+\boxed{\
+a_r^2\!\sum_{\substack{k\ge 1\\ n\nmid k}} r^{2k}|\widehat\mu(k)|^2
+\ \le\
+\mathcal H_r(\mu)-\mathcal H_{r^n}\!\bigl(\mu^{\langle n\rangle}\bigr)
+\ \le\
+b_r^2\!\sum_{\substack{k\ge 1\\ n\nmid k}} r^{2k}|\widehat\mu(k)|^2.
+\ }
+\end{equation}
+\end{theorem}
+\begin{proof}
+对固定 \(\theta\)，令离散随机变量 \(X\) 以均匀分布取值于 \(\{x_j(\theta)\}_{j=0}^{n-1}\subset[a,b]\)，并取 \(\varphi(x)=-\log x\)。
+由于 \(\varphi''(x)=x^{-2}\in[1/b^2,1/a^2]\)（\(x\in[a,b]\)），强凸/强光滑的二阶余项估计给出
+\[
+\frac1{2b^2}\Var(X)\ \le\ \EE[\varphi(X)]-\varphi(\EE[X])\ \le\ \frac1{2a^2}\Var(X).
+\]
+注意 \(\EE[\varphi(X)]-\varphi(\EE[X])\) 即为
+\(\frac1n\sum_j[-\log x_j(\theta)]+\log\overline x(\theta)\)。
+对 \(\theta\) 积分并用平移不变性得到 \eqref{eq:xi-reversekl-cyclic-chi2-equivalence}。
+
+当 \(p=p_r\) 时，由推论 \ref{cor:xi-poisson-lowerbound-reversekl-l2} 的下界 \(p_r\ge a_r\) 及夹逼 \(p_r\le b_r\) 得 \(p_r(\theta)\in[a_r,b_r]\)。
+由定理 \ref{thm:xi-reversekl-radius-renormalization-cyclic-symmetrization} 与恒等式
+\(\int -\log(\Pi_n p_r)\,\dd m=\mathcal H_{r^n}(\mu^{\langle n\rangle})\)，可将左端识别为熵差。
+再由 \(\Pi_n\) 消去非 \(n\) 倍频，Parseval 给出
+\[
+\|p_r-\Pi_n p_r\|_{L^2(m)}^2
+=2\sum_{\substack{k\ge 1\\ n\nmid k}}|\widehat p_r(k)|^2
+=2\sum_{\substack{k\ge 1\\ n\nmid k}}r^{2k}|\widehat\mu(k)|^2.
+\]
+将其代入 \eqref{eq:xi-reversekl-cyclic-chi2-equivalence}，并用 \(b_r^{-2}=a_r^2\)、\(a_r^{-2}=b_r^2\)，得到 \eqref{eq:xi-reversekl-cyclic-fourier-energy-bounds}。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$p$}{p}-进熵级联与正项分解]\label{thm:xi-reversekl-padic-entropy-cascade}
+令 \(p\) 为素数，固定 \(r\in(0,1)\) 与 \(\mu\in\mathrm{Prob}(\TT)\)。
+对 \(j\ge 0\) 定义
+\[
+r_{p,j}:=r^{p^j},\qquad \mu_{p,j}:=\mu^{\langle p^j\rangle},\qquad
+\mathcal H_{p,j}:=\mathcal H_{r_{p,j}}(\mu_{p,j}),
+\qquad
+\mathcal G_{p,j}:=\mathcal H_{p,j}-\mathcal H_{p,j+1}.
+\]
+则：
+\begin{enumerate}
+  \item \((\mathcal H_{p,j})_{j\ge 0}\) 单调递减且 \(\lim_{j\to\infty}\mathcal H_{p,j}=0\)；
+  \item 成立严格正项分解
+  \begin{equation}\label{eq:xi-reversekl-padic-positive-sum}
+  \boxed{\ \mathcal H_r(\mu)=\sum_{j=0}^{\infty}\mathcal G_{p,j}.\ }
+  \end{equation}
+  \item 每个差分项满足二侧能量估计
+  \begin{equation}\label{eq:xi-reversekl-padic-layer-energy-bounds}
+  \boxed{\
+  a_{r_{p,j}}^2\!\sum_{\substack{m\ge 1\\ p\nmid m}} r^{2p^j m}\,|\widehat\mu(p^j m)|^2
+  \ \le\
+  \mathcal G_{p,j}
+  \ \le\
+  b_{r_{p,j}}^2\!\sum_{\substack{m\ge 1\\ p\nmid m}} r^{2p^j m}\,|\widehat\mu(p^j m)|^2.
+  }
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+将定理 \ref{thm:xi-reversekl-radius-renormalization-cyclic-symmetrization} 应用于 \((r,\mu,n)=(r_{p,j},\mu_{p,j},p)\)，得到
+\(
+\mathcal H_{p,j}\ge \mathcal H_{p,j+1}
+\)，故单调递减。
+由 \(\widehat{P_{r}*\nu}(k)=r^{|k|}\widehat\nu(k)\) 与 Parseval 恒等式，有
+\[
+\|P_{r}*\nu-1\|_{L^2(m)}^2
+=2\sum_{k\ge 1}r^{2k}|\widehat\nu(k)|^2
+\le 2\sum_{k\ge 1}r^{2k}=\frac{2r^2}{1-r^2}.
+\]
+再由定理 \ref{thm:xi-reversekl-finite-fourier-certificate} 的上界可得 \(\sup_{\nu}\mathcal H_r(\nu)\to 0\) 当 \(r\downarrow 0\)。
+由于 \(r_{p,j}\to 0\)，故 \(\mathcal H_{p,j}\to 0\)，从而望远镜求和给出 \eqref{eq:xi-reversekl-padic-positive-sum}。
+
+对任意 \(j\)，将定理 \ref{thm:xi-reversekl-cyclic-energy-equivalence} 的 Fourier 能量界 \eqref{eq:xi-reversekl-cyclic-fourier-energy-bounds} 应用于 \((r,\mu,n)=(r_{p,j},\mu_{p,j},p)\)，得
+\[
+a_{r_{p,j}}^2\!\sum_{\substack{k\ge 1\\ p\nmid k}} r_{p,j}^{2k}|\widehat{\mu_{p,j}}(k)|^2
+\le \mathcal G_{p,j}\le
+b_{r_{p,j}}^2\!\sum_{\substack{k\ge 1\\ p\nmid k}} r_{p,j}^{2k}|\widehat{\mu_{p,j}}(k)|^2.
+\]
+注意 \(\widehat{\mu_{p,j}}(k)=\widehat\mu(p^j k)\) 且 \(r_{p,j}^{2k}=r^{2p^j k}\)，将指标改写为 \(k=m\) 即得到 \eqref{eq:xi-reversekl-padic-layer-energy-bounds}。证毕。
+\end{proof}
+
+\endinput
+

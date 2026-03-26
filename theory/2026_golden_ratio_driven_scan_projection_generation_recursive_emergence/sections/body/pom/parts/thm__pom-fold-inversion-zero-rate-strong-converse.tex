@@ -1,0 +1,36 @@
+\begin{theorem}[Fold 反演的零速率强反定理：不存在常数内存反演]\label{thm:pom-fold-inversion-zero-rate-strong-converse}
+在分辨率 \(m\) 上令 \(\Omega_m=\{0,1\}^m\)，并令 \(X_m\) 为禁词 \((11)\) 的稳定语言块，折叠投影为 \(\Fold_m:\Omega_m\to X_m\)。
+令 \(U\sim\mathrm{Unif}(\Omega_m)\)，并记 \(X:=\Fold_m(U)\)。
+允许一个 \(B\) 比特侧信息寄存器：编码 \(\mathrm{enc}:\Omega_m\to\{0,1\}^B\)，解码 \(\mathrm{dec}:X_m\times\{0,1\}^B\to\Omega_m\)。
+若存在 \(\varepsilon\in(0,1)\) 使得
+\[
+\mathbb P\bigl[\mathrm{dec}(X,\mathrm{enc}(U))=U\bigr]\ge 1-\varepsilon,
+\]
+则必有信息下界
+\[
+\boxed{\;
+B\ \ge\ S_Z^{(2)}(m)\ -\ h_2(\varepsilon)\ -\ \varepsilon m\; },
+\]
+其中 \(S_Z^{(2)}(m)=\log_2(2^m/F_{m+2})\)（注 \ref{rem:pom-fold-bits}），且 \(h_2(t):=-t\log_2 t-(1-t)\log_2(1-t)\) 为二进制熵函数。
+特别地，若 \(B=o(m)\)（零速率侧信息），则任意反演机制的成功率必趋于 \(0\)（等价地错误率趋于 \(1\)）。
+\end{theorem}
+
+\begin{proof}
+由 \(X\) 取值于 \(X_m\) 得 \(H_2(X)\le \log_2|X_m|=\log_2 F_{m+2}\)，其中 \(H_2\) 表示以 \(\log_2\) 定义的 Shannon 熵。
+因此
+\[
+H_2(U\mid X)=H_2(U)-I_2(U;X)\ge H_2(U)-H_2(X)\ge m-\log_2F_{m+2}=S_Z^{(2)}(m).
+\]
+令侧信息 \(R:=\mathrm{enc}(U)\)，则 \(H_2(R)\le B\)，从而
+\[
+H_2(U\mid X,R)\ge H_2(U\mid X)-H_2(R)\ge S_Z^{(2)}(m)-B.
+\]
+又若解码错误概率不超过 \(\varepsilon\)，则 Fano 不等式给出
+\[
+H_2(U\mid X,R)\le h_2(\varepsilon)+\varepsilon\log_2(|\Omega_m|-1)\le h_2(\varepsilon)+\varepsilon m.
+\]
+合并两式即得所示不等式。
+最后一段为该不等式在 \(B=o(m)\) 下的直接推论。证毕。
+\end{proof}
+
+\endinput

@@ -1,0 +1,433 @@
+\paragraph{Poisson--Cauchy 核在首个非消失矩阶上的显式常数链}
+在 Poisson 粗粒化框架下，\(L^1\) 几何、相对熵主项与耗散率可统一归约为同一个“首个非消失中心矩阶”参数。以下给出该链条的闭式常数表达、分层刚性与缺陷测度口径下的可审计分类。
+
+\begin{theorem}[标准 Poisson 核高阶导数的 \texorpdfstring{$L^1$}{L1} 范数与 Fisher 型积分闭式]\label{thm:xi-poisson-kernel-derivative-l1-fisher-closed}
+令
+\[
+\mathsf P_t(x):=\frac1\pi\frac{t}{x^2+t^2},\qquad t>0,
+\]
+并记 \(\mathsf P_1^{(m)}:=\partial_x^m\mathsf P_1\)（\(m\in\mathbb N\)）。则对任意整数 \(m\ge 1\) 有
+\begin{align}
+\|\mathsf P_1^{(m)}\|_{L^1(\RR)}
+&=\frac{2(m-1)!}{\pi}\sum_{k=1}^{m}\sin^{m+1}\!\Bigl(\frac{k\pi}{m+1}\Bigr),\label{eq:xi-poisson-kernel-derivative-l1-closed}\\
+\int_{\RR}\frac{\bigl(\mathsf P_1^{(m)}(x)\bigr)^2}{\mathsf P_1(x)}\,\dd x
+&=\frac{m(2m)!}{(2m-1)\,2^{2m}}.\label{eq:xi-poisson-kernel-derivative-fisher-closed}
+\end{align}
+\end{theorem}
+\begin{proof}
+设 \(f(x):=(1+x^2)^{-1}\)，则 \(\mathsf P_1(x)=\pi^{-1}f(x)\)。由分式分解
+\[
+f(x)=\frac{1}{2i}\Bigl((x-i)^{-1}-(x+i)^{-1}\Bigr),
+\]
+可得
+\[
+f^{(m)}(x)
+=\frac{(-1)^m m!}{2i}\Bigl((x-i)^{-m-1}-(x+i)^{-m-1}\Bigr)
+=(-1)^{m+1}m!\,\Im\!\bigl((x+i)^{-m-1}\bigr).
+\]
+令 \(x=\cot\theta\)（\(\theta\in(0,\pi)\)），则
+\[
+x+i=\frac{e^{i\theta}}{\sin\theta},
+\]
+从而
+\begin{equation}\label{eq:xi-poisson-kernel-derivative-trig-form}
+\mathsf P_1^{(m)}(\cot\theta)
+=\frac{(-1)^m m!}{\pi}\sin^{m+1}\!\theta\,\sin\!\bigl((m+1)\theta\bigr).
+\end{equation}
+
+先证 \eqref{eq:xi-poisson-kernel-derivative-fisher-closed}。由
+\[
+\dd x=\csc^2\theta\,\dd\theta,\qquad
+\mathsf P_1(\cot\theta)=\frac1\pi\sin^2\theta,
+\]
+代入 \eqref{eq:xi-poisson-kernel-derivative-trig-form} 得
+\[
+\int_{\RR}\frac{(\mathsf P_1^{(m)})^2}{\mathsf P_1}\,\dd x
+=\frac{m!^2}{\pi}
+\int_0^\pi
+\sin^{2m-2}\!\theta\,
+\sin^2\!\bigl((m+1)\theta\bigr)\,\dd\theta.
+\]
+写
+\(
+\sin^2((m+1)\theta)=\frac12\bigl(1-\cos(2(m+1)\theta)\bigr)
+\)。
+由于 \(\sin^{2m-2}\theta\) 的 Fourier 频率仅到 \(2(m-1)\)，与 \(\cos(2(m+1)\theta)\) 在 \([0,\pi]\) 上正交，故
+\[
+\int_0^\pi\sin^{2m-2}\!\theta\,\sin^2((m+1)\theta)\,\dd\theta
+=\frac12\int_0^\pi\sin^{2m-2}\!\theta\,\dd\theta.
+\]
+再用经典积分
+\[
+\int_0^\pi\sin^{2(m-1)}\!\theta\,\dd\theta
+=\pi\,\frac{(2m-2)!}{2^{2m-2}((m-1)!)^2},
+\]
+得到
+\[
+\int_{\RR}\frac{(\mathsf P_1^{(m)})^2}{\mathsf P_1}\,\dd x
+=\frac{m!^2(2m-2)!}{2^{2m-1}((m-1)!)^2}
+=\frac{m(2m)!}{(2m-1)\,2^{2m}}.
+\]
+
+再证 \eqref{eq:xi-poisson-kernel-derivative-l1-closed}。由
+\eqref{eq:xi-poisson-kernel-derivative-trig-form}，
+\(\mathsf P_1^{(m)}\) 的零点对应
+\(
+\sin((m+1)\theta)=0
+\)，即
+\[
+\theta_k=\frac{k\pi}{m+1}\ (k=1,\dots,m),\qquad
+x_k=\cot\theta_k.
+\]
+这些零点均为单零点，且
+\(
+\lim_{x\to\pm\infty}\mathsf P_1^{(m-1)}(x)=0
+\)。
+故总变差恒等式给出
+\begin{equation}\label{eq:xi-poisson-kernel-derivative-tv}
+\|\mathsf P_1^{(m)}\|_{L^1(\RR)}
+=\mathrm{TV}\!\bigl(\mathsf P_1^{(m-1)}\bigr)
+=2\sum_{k=1}^{m}\bigl|\mathsf P_1^{(m-1)}(x_k)\bigr|.
+\end{equation}
+将 \eqref{eq:xi-poisson-kernel-derivative-trig-form} 中 \(m\) 换为 \(m-1\)，并取 \(\theta=\theta_k\)，有
+\[
+\sin(m\theta_k)=\sin(k\pi-\theta_k)=(-1)^{k+1}\sin\theta_k,
+\]
+从而
+\[
+\bigl|\mathsf P_1^{(m-1)}(x_k)\bigr|
+=\frac{(m-1)!}{\pi}\sin^{m+1}\!\theta_k.
+\]
+代回 \eqref{eq:xi-poisson-kernel-derivative-tv} 即得 \eqref{eq:xi-poisson-kernel-derivative-l1-closed}。证毕。
+\end{proof}
+
+\begin{theorem}[Poisson--Cauchy 粗粒化在首个非消失矩阶上的 \texorpdfstring{$L^1$}{L1}/KL 锐渐近]\label{thm:xi-poisson-first-nonvanishing-moment-tv-kl-sharp}
+设 \(\nu\) 为 \(\RR\) 上概率测度，\(c\in\RR\)，并定义
+\[
+g_t(x):=\mathsf P_t(x-c),\qquad
+h_t(x):=\int_{\RR}\mathsf P_t(x-\gamma)\,\dd\nu(\gamma).
+\]
+对 \(m\ge 1\)，定义中心矩
+\[
+\kappa_k:=\int_{\RR}(\gamma-c)^k\,\dd\nu(\gamma)\qquad(k\in\mathbb N).
+\]
+若满足
+\[
+\int_{\RR}|\gamma-c|^{m+1}\,\dd\nu(\gamma)<\infty,\qquad
+\kappa_1=\cdots=\kappa_{m-1}=0,\qquad
+\kappa_m\neq 0,
+\]
+则当 \(t\to\infty\) 有
+\begin{align}
+t^m\|h_t-g_t\|_{L^1(\RR)}
+&\longrightarrow
+\frac{|\kappa_m|}{m!}\,\|\mathsf P_1^{(m)}\|_{L^1(\RR)}\notag\\
+&=
+\frac{2|\kappa_m|}{m\pi}
+\sum_{k=1}^{m}\sin^{m+1}\!\Bigl(\frac{k\pi}{m+1}\Bigr),\label{eq:xi-poisson-first-nonvanishing-moment-tv-sharp}\\
+t^{2m}D_{\mathrm{KL}}(h_t\mid g_t)
+&\longrightarrow
+\frac{\kappa_m^2}{2(m!)^2}
+\int_{\RR}\frac{\bigl(\mathsf P_1^{(m)}(x)\bigr)^2}{\mathsf P_1(x)}\,\dd x\notag\\
+&=
+\frac{\kappa_m^2}{(m!)^2}\cdot
+\frac{m(2m)!}{(2m-1)\,2^{2m+1}}.\label{eq:xi-poisson-first-nonvanishing-moment-kl-sharp}
+\end{align}
+\end{theorem}
+\begin{proof}
+记 \(\Phi_t(x,u):=\mathsf P_t(x-u)\)。对固定 \(x\)，\(u\mapsto \Phi_t(x,u)\) 为 \(C^\infty\)，且
+\[
+\partial_u^k\Phi_t(x,u)=(-1)^k\partial_x^k\mathsf P_t(x-u).
+\]
+在 \(u=c\) 处对 \(u=\gamma\) 作 \(m\) 阶 Taylor 展开（积分余项形式）并对 \(\nu\) 积分，得
+\[
+h_t(x)-g_t(x)=\frac{\kappa_m}{m!}\,\partial_x^m g_t(x)+\varepsilon_t(x),
+\]
+其中
+\[
+\varepsilon_t(x)
+=\int_{\RR}R_{m+1}(x,\gamma)\,\dd\nu(\gamma),
+\]
+且
+\[
+\|\varepsilon_t\|_{L^1}
+\le
+\frac{\int |\gamma-c|^{m+1}\dd\nu(\gamma)}{(m+1)!}
+\cdot
+\|\partial_x^{m+1}\mathsf P_t\|_{L^1}
+=O(t^{-m-1}).
+\]
+这里使用了尺度关系
+\[
+\partial_x^r\mathsf P_t(x)=t^{-r-1}\mathsf P_1^{(r)}(x/t),
+\qquad
+\|\partial_x^r\mathsf P_t\|_{L^1}=t^{-r}\|\mathsf P_1^{(r)}\|_{L^1}.
+\]
+故
+\[
+\|h_t-g_t\|_{L^1}
+=\frac{|\kappa_m|}{m!}\,t^{-m}\|\mathsf P_1^{(m)}\|_{L^1}+o(t^{-m}),
+\]
+得到 \eqref{eq:xi-poisson-first-nonvanishing-moment-tv-sharp}。
+
+再看 KL 项。令
+\(
+\delta_t:=h_t/g_t-1
+\)。
+由上式可写
+\[
+\delta_t(x)
+=\frac{\kappa_m}{m!}\frac{\partial_x^m g_t(x)}{g_t(x)}+\frac{\varepsilon_t(x)}{g_t(x)}.
+\]
+写 \(y=(x-c)/t\)，则
+\[
+\frac{\partial_x^m g_t(x)}{g_t(x)}
+=t^{-m}\frac{\mathsf P_1^{(m)}(y)}{\mathsf P_1(y)}.
+\]
+并且 \(\mathsf P_1^{(m)}/\mathsf P_1\) 为有界有理函数。结合余项估计，可得
+\[
+\delta_t
+=\frac{\kappa_m}{m!}\,t^{-m}\frac{\mathsf P_1^{(m)}(y)}{\mathsf P_1(y)}
++o_{L^2(g_t)}(t^{-m}),
+\]
+且 \(\|\delta_t\|_\infty\to 0\)。
+由展开
+\(
+(1+u)\log(1+u)=u+\frac12u^2+o(u^2)
+\)
+与
+\(
+\int g_t\delta_t\,\dd x=\int(h_t-g_t)\dd x=0
+\)，得
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac12\int_{\RR}g_t\,\delta_t^2\,\dd x+o(t^{-2m}).
+\]
+乘以 \(t^{2m}\)，再作 \(x=c+ty\) 代换，即
+\[
+t^{2m}D_{\mathrm{KL}}(h_t\mid g_t)
+\to
+\frac{\kappa_m^2}{2(m!)^2}
+\int_{\RR}\frac{\bigl(\mathsf P_1^{(m)}(y)\bigr)^2}{\mathsf P_1(y)}\,\dd y.
+\]
+最后代入定理
+\ref{thm:xi-poisson-kernel-derivative-l1-fisher-closed}
+的 \eqref{eq:xi-poisson-kernel-derivative-fisher-closed} 得
+\eqref{eq:xi-poisson-first-nonvanishing-moment-kl-sharp}。证毕。
+\end{proof}
+
+\begin{corollary}[KL 衰减阶在黄金尺度链上的可审计反演]\label{cor:xi-poisson-golden-chain-entropy-slope-m}
+在定理 \ref{thm:xi-poisson-first-nonvanishing-moment-tv-kl-sharp} 的假设下，令 \(t_n:=\varphi^n\) 并定义熵斜率
+\[
+S_n:=-\frac1n\log D_{\mathrm{KL}}(h_{t_n}\mid g_{t_n}).
+\]
+则极限存在并满足
+\[
+\lim_{n\to\infty}S_n=2m\log\varphi,
+\qquad
+m=\lim_{n\to\infty}\frac{S_n}{2\log\varphi}.
+\]
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:xi-poisson-first-nonvanishing-moment-kl-sharp}，存在常数 \(C>0\) 使
+\(
+D_{\mathrm{KL}}(h_t\mid g_t)=C\,t^{-2m}(1+o(1))
+\)（\(t\to\infty\)）。
+代入 \(t=t_n=\varphi^n\) 得
+\[
+-\log D_{\mathrm{KL}}(h_{t_n}\mid g_{t_n})
+=2m\,n\log\varphi-\log C+o(1),
+\]
+两边除以 \(n\) 并令 \(n\to\infty\) 即得所示极限与反演式。证毕。
+\end{proof}
+
+\begin{corollary}[KL 与 \texorpdfstring{$L^1$}{L1} 平方等价的渐近常数]\label{cor:xi-poisson-kl-l1-square-equivalence-first-moment}
+在定理 \ref{thm:xi-poisson-first-nonvanishing-moment-tv-kl-sharp} 的假设下，存在显式常数
+\[
+\mathfrak C_m
+:=
+\frac{\displaystyle\frac{m(2m)!}{(2m-1)\,2^{2m+1}}}
+{\bigl\|\mathsf P_1^{(m)}\bigr\|_{L^1(\RR)}^2}
+\]
+使得当 \(t\to\infty\) 时成立二次等价
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\mathfrak C_m\,\|h_t-g_t\|_{L^1(\RR)}^{\,2}\,\bigl(1+o(1)\bigr).
+\]
+\end{corollary}
+\begin{proof}
+将 \eqref{eq:xi-poisson-first-nonvanishing-moment-tv-sharp} 与
+\eqref{eq:xi-poisson-first-nonvanishing-moment-kl-sharp} 的极限常数相除，\(\kappa_m^2/(m!)^2\) 抵消，得到
+\[
+\frac{D_{\mathrm{KL}}(h_t\mid g_t)}{\|h_t-g_t\|_{L^1(\RR)}^2}\to \mathfrak C_m.
+\]
+即为所述二次等价。证毕。
+\end{proof}
+
+\begin{proposition}[二阶可微 \texorpdfstring{$f$}{f}-散度首项由 \texorpdfstring{$f''(1)$}{f''(1)} 与首个非消失矩阶完全决定]\label{prop:xi-poisson-first-nonvanishing-moment-fdiv-sharp}
+在定理 \ref{thm:xi-poisson-first-nonvanishing-moment-tv-kl-sharp} 的假设下，
+令 \(f\) 为凸函数，且在 \(1\) 邻域二阶可微，满足
+\(
+f(1)=f'(1)=0
+\)。
+定义
+\[
+D_f(h_t\mid g_t):=\int_{\RR}g_t(x)\,
+f\!\left(\frac{h_t(x)}{g_t(x)}\right)\dd x.
+\]
+则
+\begin{equation}\label{eq:xi-poisson-first-nonvanishing-moment-fdiv-sharp}
+t^{2m}D_f(h_t\mid g_t)
+\longrightarrow
+\frac{f''(1)}{2}\cdot\frac{\kappa_m^2}{(m!)^2}\cdot
+\frac{m(2m)!}{(2m-1)\,2^{2m}}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:xi-poisson-first-nonvanishing-moment-tv-kl-sharp} 证明中的记号，
+\(\delta_t:=h_t/g_t-1\to 0\)，且
+\[
+\delta_t
+=\frac{\kappa_m}{m!}\,t^{-m}\frac{\mathsf P_1^{(m)}(y)}{\mathsf P_1(y)}
++o_{L^2(g_t)}(t^{-m}).
+\]
+由
+\(
+f(1+u)=\frac{f''(1)}2u^2+o(u^2)
+\)
+与 \(\int g_t\delta_t\,\dd x=0\)，可得
+\[
+D_f(h_t\mid g_t)
+=\frac{f''(1)}2\int g_t\delta_t^2\,\dd x+o(t^{-2m}).
+\]
+再用
+\[
+\int g_t\delta_t^2\,\dd x
+\sim
+\frac{\kappa_m^2}{(m!)^2}\,t^{-2m}
+\int_{\RR}\frac{(\mathsf P_1^{(m)}(y))^2}{\mathsf P_1(y)}\,\dd y
+\]
+并代入 \eqref{eq:xi-poisson-kernel-derivative-fisher-closed} 即得
+\eqref{eq:xi-poisson-first-nonvanishing-moment-fdiv-sharp}。证毕。
+\end{proof}
+
+\begin{corollary}[KL 耗散率 \texorpdfstring{$I_1$}{I1} 的阶数与显式常数]\label{cor:xi-poisson-first-nonvanishing-moment-i1-sharp}
+在定理 \ref{thm:xi-poisson-first-nonvanishing-moment-tv-kl-sharp} 的设定下，令
+\[
+I_1(h_t\mid g_t):=-\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\mid g_t).
+\]
+则
+\begin{equation}\label{eq:xi-poisson-first-nonvanishing-moment-i1-sharp}
+t^{2m+1}I_1(h_t\mid g_t)
+\longrightarrow
+\frac{\kappa_m^2}{(m!)^2}\cdot
+\frac{m^2(2m)!}{(2m-1)\,2^{2m}}.
+\end{equation}
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:xi-poisson-first-nonvanishing-moment-kl-sharp}，
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)=C\,t^{-2m}+o(t^{-2m}),
+\quad
+C:=\frac{\kappa_m^2}{(m!)^2}\cdot\frac{m(2m)!}{(2m-1)\,2^{2m+1}}.
+\]
+对 \(t\) 求导并用定义
+\(
+I_1=-\frac{\dd}{\dd t}D_{\mathrm{KL}}
+\)
+即得
+\[
+I_1(h_t\mid g_t)=2mC\,t^{-2m-1}+o(t^{-2m-1}),
+\]
+从而得到 \eqref{eq:xi-poisson-first-nonvanishing-moment-i1-sharp}。证毕。
+\end{proof}
+
+\begin{proposition}[KL 衰减阶对矩消失的必要条件]\label{prop:xi-poisson-kl-rate-implies-moment-cancellation}
+设 \(\nu\) 具有所有阶有限矩，固定 \(c\in\RR\)，并记
+\[
+h_t=\mathsf P_t*\nu,\qquad
+g_t=\mathsf P_t(\cdot-c).
+\]
+对任意 \(m\ge 1\)，若
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)=o(t^{-2m})\qquad(t\to\infty),
+\]
+则必有
+\[
+\int_{\RR}(\gamma-c)^k\,\dd\nu(\gamma)=0,\qquad k=1,\dots,m.
+\]
+特别地，若对所有 \(m\) 都有
+\(
+D_{\mathrm{KL}}(h_t\mid g_t)=o(t^{-2m})
+\)，则 \(\nu=\delta_c\)。
+\end{proposition}
+\begin{proof}
+设
+\[
+m_\ast:=\min\{k\ge 1:\ \kappa_k\neq 0\},
+\qquad
+\kappa_k:=\int_{\RR}(\gamma-c)^k\,\dd\nu(\gamma).
+\]
+若 \(m_\ast\) 存在，则由定理
+\ref{thm:xi-poisson-first-nonvanishing-moment-tv-kl-sharp}
+（取 \(m=m_\ast\)）有
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)\sim
+\frac{\kappa_{m_\ast}^2}{(m_\ast!)^2}
+\frac{m_\ast(2m_\ast)!}{(2m_\ast-1)\,2^{2m_\ast+1}}
+t^{-2m_\ast},
+\]
+与 \(o(t^{-2m_\ast})\) 矛盾，故 \(\kappa_1=\cdots=\kappa_m=0\)。
+若 \(m_\ast\) 不存在，则全部中心矩为零，尤其
+\[
+\int_{\RR}|\gamma-c|^{2r}\,\dd\nu(\gamma)=0\qquad(\forall r\ge 1),
+\]
+从而 \(\gamma=c\) \(\nu\)-a.s.，即 \(\nu=\delta_c\)。证毕。
+\end{proof}
+
+\begin{theorem}[缺陷 Poisson 粗粒化的多极指纹分类]\label{thm:xi-poisson-defect-measure-multipole-fingerprint-classification}
+在缺陷测度构造
+\eqref{eq:xi-offcritical-defect-measure-nu}--\eqref{eq:xi-offcritical-comoving-poisson-field}
+下，定义归一化高度测度
+\[
+\tilde\nu:=\frac1{M_0}\sum_j m_j\delta_{\gamma_j},
+\]
+以及
+\[
+\tilde h_t(x):=\int_{\RR}\mathsf P_t(x-\gamma)\,\dd\tilde\nu(\gamma),\qquad
+\tilde g_t(x):=\mathsf P_t(x-\bar\gamma),
+\]
+其中 \(\bar\gamma:=\int \gamma\,\dd\tilde\nu(\gamma)\)。
+再定义
+\[
+\tilde\kappa_k:=\int_{\RR}(\gamma-\bar\gamma)^k\,\dd\tilde\nu(\gamma).
+\]
+若存在最小整数 \(m_\ast\ge 1\) 使
+\[
+\tilde\kappa_{m_\ast}\neq 0,\qquad
+\int_{\RR}|\gamma-\bar\gamma|^{m_\ast+1}\,\dd\tilde\nu(\gamma)<\infty,
+\]
+则当 \(t\to\infty\)：
+\begin{enumerate}
+\item \(\|\tilde h_t-\tilde g_t\|_{L^1}\) 的主导衰减阶为 \(t^{-m_\ast}\)，且主项常数由
+\eqref{eq:xi-poisson-first-nonvanishing-moment-tv-sharp}
+（以 \(\kappa_{m_\ast}\) 替换为 \(\tilde\kappa_{m_\ast}\)）给出；
+\item \(D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_t)\) 的主导衰减阶为 \(t^{-2m_\ast}\)，且主项常数由
+\eqref{eq:xi-poisson-first-nonvanishing-moment-kl-sharp}
+（同样替换 \(\kappa_{m_\ast}\)）给出；
+\item 若观测到
+\(
+D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_t)=o(t^{-2m})
+\)，则必有
+\(
+\tilde\kappa_1=\cdots=\tilde\kappa_m=0
+\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+取定理 \ref{thm:xi-poisson-first-nonvanishing-moment-tv-kl-sharp} 与命题
+\ref{prop:xi-poisson-kl-rate-implies-moment-cancellation}
+中的 \(\nu=\tilde\nu\)、\(c=\bar\gamma\)，即可逐条得到结论。证毕。
+\end{proof}
+
+\endinput

@@ -1,0 +1,589 @@
+% (User input window)
+
+\paragraph{最大熵马尔可夫链、对称化谱与小失真协同}
+沿用定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 与定理 \ref{thm:pom-diagonal-rate-small-distortion-hellinger-endpoint} 的记号。
+本段把对角质量约束的最优耦合 \(P^\star_\delta\) 等价重写为“给定平稳分布与全局自环率的最大熵马尔可夫链”，
+并进一步给出其可逆化对称谱的“对角 \(+\) 秩一”结构、世俗方程与端点协同的张量同态律。
+
+\begin{theorem}[最大熵马尔可夫链：给定平稳分布与全局自环率时的唯一最优核]\label{thm:pom-maxent-markov-unique-optimal-kernel}
+令 \(X\) 为有限集，取全支撑分布 \(w\in\Delta(X)\)。
+对任意马尔可夫核 \(K(\cdot\mid x)\)（\(x\in X\)）考虑约束
+\[
+\sum_{x\in X}w(x)K(y\mid x)=w(y)\quad(\forall y\in X),
+\qquad
+\sum_{x\in X}w(x)K(x\mid x)\ge 1-\delta,\qquad \delta\in[0,1].
+\]
+定义熵率
+\[
+h(K):=\sum_{x\in X}w(x)\,H\!\bigl(K(\cdot\mid x)\bigr),
+\qquad
+H\!\bigl(K(\cdot\mid x)\bigr):=-\sum_{y\in X}K(y\mid x)\log K(y\mid x).
+\]
+则在上述可行集合上，\(h(K)\) 存在唯一最大化解 \(K^\star_\delta\)。
+令耦合
+\[
+P^\star_\delta(x,y):=w(x)K^\star_\delta(y\mid x),
+\]
+则 \(P^\star_\delta\) 恰为
+\[
+R_w(\delta)=\inf\{I_P(X;Y):\ P_X=P_Y=w,\ \mathbb P_P(X=Y)\ge 1-\delta\}
+\]
+的唯一极小耦合，并满足恒等式
+\[
+\boxed{\;
+R_w(\delta)=H(w)-h\!\bigl(K^\star_\delta\bigr)\; }.
+\]
+\end{theorem}
+\begin{proof}
+在平稳性约束下，\(P(x,y):=w(x)K(y\mid x)\) 满足 \(P_X=w\) 且
+\(
+P_Y(y)=\sum_x w(x)K(y\mid x)=w(y)
+\)，故 \(P_X=P_Y=w\)。
+同时
+\(
+\mathbb P_P(X=Y)=\sum_x w(x)K(x\mid x)
+\)。
+并且
+\(
+h(K)=H_P(Y\mid X)
+\)。
+因此最大化 \(h(K)\) 等价于在 \(\{P_X=P_Y=w,\ \mathbb P(X=Y)\ge 1-\delta\}\) 上最大化 \(H_P(Y\mid X)\)。
+又由恒等式
+\(
+I_P(X;Y)=H(w)-H_P(Y\mid X)
+\)，该最大化等价于最小化互信息 \(I_P(X;Y)\)，其最优值即为 \(R_w(\delta)\)。
+由于 \(K\mapsto h(K)\) 在每个行向量上严格凹、且约束为线性，最大化器唯一；
+等价地，\(P\mapsto I_P(X;Y)\) 在可行凸集上严格凸，极小化器亦唯一。
+两者互为同一对象，从而得到结论。证毕。
+\end{proof}
+
+\begin{theorem}[对称化谱的“对角 \(+\) 秩一”结构与世俗方程]\label{thm:pom-maxent-markov-diagonal-plus-rankone-spectrum}
+令 \(P^\star_\delta\) 与 \(K^\star_\delta\) 如定理 \ref{thm:pom-maxent-markov-unique-optimal-kernel}，
+并记 \(D:=\mathrm{diag}(w)\)。
+则存在唯一参数 \(\kappa_\delta\ge 0\) 与向量 \(u_\delta\in\RR_{>0}^{X}\)（唯一到整体符号，且可取 \(u_\delta\succ0\)）
+使得
+\[
+\boxed{\;
+P^\star_\delta=u_\delta u_\delta^{\mathsf T}+\kappa_\delta\,\mathrm{diag}(u_\delta^2)\;}
+\]
+亦即对 \(x\ne y\) 有 \(P^\star_\delta(x,y)=u_\delta(x)u_\delta(y)\)，并且
+\(
+P^\star_\delta(x,x)=(1+\kappa_\delta)u_\delta(x)^2
+\)。
+定义对称化算子
+\[
+S_\delta:=D^{-1/2}P^\star_\delta D^{-1/2},
+\qquad
+a_\delta:=D^{-1/2}u_\delta,
+\qquad
+d_x:=\kappa_\delta\,a_\delta(x)^2,
+\]
+则有严格分解
+\[
+\boxed{\;
+S_\delta=a_\delta a_\delta^{\mathsf T}+\kappa_\delta\,\mathrm{diag}(a_\delta^2)
+=a_\delta a_\delta^{\mathsf T}+\mathrm{diag}(d_x)\;}
+\]
+从而 \(S_\delta\succeq 0\) 且其全部特征值为非负实数。
+并且 \(S_\delta\) 与 \(K^\star_\delta\) 在 \(\ell^2(w)\) 上相似，故二者具有相同实谱；
+其中最大特征值为 \(\lambda_1=1\)。
+\par
+设 \(\lambda\in\CC\)。则 \(S_\delta\) 的特征多项式满足闭式
+\[
+\boxed{\;
+\det(S_\delta-\lambda I)
+=\Bigl(\prod_{x\in X}(d_x-\lambda)\Bigr)\Bigl(1+\sum_{x\in X}\frac{a_\delta(x)^2}{d_x-\lambda}\Bigr)\;}
+\]
+从而除去对角极点 \(d_x\) 外，全部特征值由一维世俗方程
+\[
+\boxed{\;
+1+\sum_{x\in X}\frac{a_\delta(x)^2}{d_x-\lambda}=0\;}
+\]
+刻画，并满足标准的 interlacing 交错性质。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 的指数族形式，
+对某组 \((\widehat u_\delta,\kappa_\delta,\widehat Z_\delta)\) 有
+\(
+P^\star_\delta(x,y)=\widehat u_\delta(x)\widehat u_\delta(y)\bigl(1+\kappa_\delta\mathbf 1_{\{x=y\}}\bigr)/\widehat Z_\delta
+\)。
+将 \(\widehat Z_\delta^{-1/2}\) 吸收进 \(\widehat u_\delta\) 得到 \(u_\delta:=\widehat u_\delta/\sqrt{\widehat Z_\delta}\)，即可写成
+\(
+P^\star_\delta=u_\delta u_\delta^{\mathsf T}+\kappa_\delta\mathrm{diag}(u_\delta^2)
+\)；
+由最优解唯一性可知 \(\kappa_\delta\) 与 \(u_\delta\)（取 \(u_\delta\succ0\)）唯一。
+对称化分解由左右乘 \(D^{-1/2}\) 直接得到；两项均为正半定，故 \(S_\delta\succeq 0\)。
+\par
+由于 \(P^\star_\delta\mathbf 1=w\)，有
+\[
+S_\delta\sqrt w
+=D^{-1/2}P^\star_\delta D^{-1/2}\sqrt w
+=D^{-1/2}P^\star_\delta\mathbf 1
+=D^{-1/2}w
+=\sqrt w,
+\]
+从而 \(\lambda_1=1\)。
+又 \(P^\star_\delta=D K^\star_\delta\)，故
+\(
+S_\delta=D^{1/2}K^\star_\delta D^{-1/2}
+\)，给出相似与谱一致。
+\par
+最后，对 \(\mathrm{diag}(d_x)+a_\delta a_\delta^{\mathsf T}\) 应用矩阵行列式引理
+\(
+\det(A+uv^{\mathsf T})=\det(A)\bigl(1+v^{\mathsf T}A^{-1}u\bigr)
+\)
+即可得到特征多项式闭式与世俗方程。证毕。
+\end{proof}
+
+\begin{corollary}[最优耦合的二元潜变量表示]\label{cor:pom-maxent-markov-optimal-coupling-latent-binary-mixture}
+沿用定理 \ref{thm:pom-maxent-markov-diagonal-plus-rankone-spectrum} 的 \(u_\delta,\kappa_\delta\)。
+记
+\[
+A_\delta:=\sum_{x\in X}u_\delta(x),
+\qquad
+\theta_\delta:=\kappa_\delta\sum_{x\in X}u_\delta(x)^2,
+\qquad
+\pi_\delta(x):=\frac{u_\delta(x)}{A_\delta},
+\qquad
+\rho_\delta(x):=\frac{u_\delta(x)^2}{\sum_{y\in X}u_\delta(y)^2}.
+\]
+则由概率归一化恒等式 \(\sum_{x,y}P^\star_\delta(x,y)=1\) 推出
+\[
+A_\delta^2+\theta_\delta=1.
+\]
+并且最优耦合 \(P^\star_\delta\) 可写为两端混合：
+\[
+\boxed{\;
+P^\star_\delta
+=A_\delta^2\,(\pi_\delta\otimes\pi_\delta)
+\;+\;\theta_\delta\,\mathrm{Diag}(\rho_\delta)\;}
+\]
+其中 \(\mathrm{Diag}(\rho_\delta)\) 表示集中在对角集合 \(\{(x,x)\}\) 的分布。
+等价地，存在二元潜变量 \(J\in\{0,1\}\) 使得在 \(J=0\) 时 \((X,Y)\sim\pi_\delta\otimes\pi_\delta\) 独立同分布，在 \(J=1\) 时 \(X=Y\) 且 \(X\sim\rho_\delta\)，并且
+\[
+\mathbb P(J=0)=A_\delta^2,\qquad \mathbb P(J=1)=\theta_\delta,
+\qquad
+{\rm Law}(X,Y)=P^\star_\delta.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-maxent-markov-diagonal-plus-rankone-spectrum} 的分解 \(P^\star_\delta=u_\delta u_\delta^{\mathsf T}+\kappa_\delta\,\mathrm{diag}(u_\delta^2)\)，对总质量求和得
+\[
+1=\sum_{x,y}P^\star_\delta(x,y)=\Bigl(\sum_x u_\delta(x)\Bigr)^2+\kappa_\delta\sum_x u_\delta(x)^2=A_\delta^2+\theta_\delta.
+\]
+另一方面，
+\(
+u_\delta u_\delta^{\mathsf T}=A_\delta^2(\pi_\delta\otimes\pi_\delta)
+\)
+且
+\(
+\kappa_\delta\,\mathrm{diag}(u_\delta^2)=\theta_\delta\,\mathrm{Diag}(\rho_\delta)
+\)，
+从而得到混合表示。
+将两部分视作对 \(J\) 的条件分布并按权重边缘化即可得到潜变量生成模型。证毕。
+\end{proof}
+
+\paragraph{Laguerre--世俗谱压缩与谱侧反演}
+当 \(\delta\in(0,\delta_0)\)（\(\delta_0:=1-\sum_{x\in X}w(x)^2\)）时，最优对偶参数满足 \(\kappa_\delta>0\)。
+在定理 \ref{thm:pom-maxent-markov-diagonal-plus-rankone-spectrum} 的规范下（即 \(P^\star_\delta=u_\delta u_\delta^{\mathsf T}+\kappa_\delta\mathrm{diag}(u_\delta^2)\) 且 \(\sum_{x,y}P^\star_\delta(x,y)=1\)），
+由边缘自洽关系
+\(
+w(x)=u_\delta(x)\bigl(A_\delta+\kappa_\delta u_\delta(x)\bigr)
+\)
+（其中 \(A_\delta:=\sum_{y\in X}u_\delta(y)\)）
+可引入一组等价的正参数
+\[
+t_x:=\kappa_\delta+\frac{A_\delta}{u_\delta(x)}
+=\frac{A_\delta+\kappa_\delta u_\delta(x)}{u_\delta(x)}
+=\frac{w(x)}{u_\delta(x)^2}\qquad(x\in X),
+\]
+使得世俗方程可进一步压缩为单个次数 \(n:=|X|\) 的多项式。
+
+\begin{theorem}[Laguerre--世俗谱定理：最优核谱由 \(z\mathcal P_\delta'(z)+\kappa_\delta\mathcal P_\delta(z)\) 的实根刻画]\label{thm:pom-maxent-markov-laguerre-secular-spectrum}
+取全支撑分布 \(w\in\Delta(X)\)（\(n:=|X|\ge 2\)）并固定 \(\delta\in(0,\delta_0)\)。
+令 \(P^\star_\delta,K^\star_\delta,u_\delta,\kappa_\delta,A_\delta\) 与 \(t_x\) 如上定义，并记
+\[
+\mathcal P_\delta(z):=\prod_{x\in X}(t_x-z),\qquad
+\mathcal Q_\delta(z):=z\,\mathcal P_\delta'(z)+\kappa_\delta\,\mathcal P_\delta(z).
+\]
+则成立：
+\begin{enumerate}
+  \item 对任意 \(\lambda\in\CC\setminus\{0\}\)，\(\lambda\) 是 \(K^\star_\delta\)（等价地 \(S_\delta\)）的特征值当且仅当
+  \(
+  z:=\kappa_\delta/\lambda
+  \)
+  是 \(\mathcal Q_\delta\) 的零点；对应关系为 \(\lambda=\kappa_\delta/z\)。
+  特别地，平凡特征值 \(\lambda_1=1\) 对应零点 \(z=\kappa_\delta\)，并满足恒等式
+  \[
+  \mathcal P_\delta(\kappa_\delta)+\mathcal P_\delta'(\kappa_\delta)=0
+  \qquad\Longleftrightarrow\qquad
+  \sum_{x\in X}\frac{1}{t_x-\kappa_\delta}=1.
+  \]
+  \item 若 \(t_x\) 两两不同并按升序排列为 \(t_{(1)}<\cdots<t_{(n)}\)，则 \(\mathcal Q_\delta\) 的全部零点均为实数且严格落在 \((0,\max_x t_x)\) 内，并与 \(\{t_{(k)}\}_{k=1}^{n}\) 严格交错：\(\mathcal Q_\delta\) 在 \((0,t_{(1)})\) 与每个 \((t_{(k)},t_{(k+1)})\)（\(k=1,\dots,n-1\)）内各恰有一个零点。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由 \(w(x)=t_xu_\delta(x)^2\) 得 \(a_\delta(x)^2=u_\delta(x)^2/w(x)=1/t_x\)，并且
+\(
+d_x=\kappa_\delta a_\delta(x)^2=\kappa_\delta/t_x
+\)。
+将其代入定理 \ref{thm:pom-maxent-markov-diagonal-plus-rankone-spectrum} 的世俗方程
+\(
+1+\sum_x a_\delta(x)^2/(d_x-\lambda)=0
+\)
+可化为
+\[
+1+\sum_{x\in X}\frac{1}{\kappa_\delta-\lambda t_x}=0.
+\]
+令 \(z:=\kappa_\delta/\lambda\)（\(\lambda\ne 0\)），则 \(\kappa_\delta-\lambda t_x=\lambda(z-t_x)\)，从而上式等价于
+\[
+\sum_{x\in X}\frac{1}{t_x-z}=\frac{\kappa_\delta}{z}.
+\]
+注意 \(\mathcal P_\delta'(z)/\mathcal P_\delta(z)=-\sum_x\frac{1}{t_x-z}\)，遂得到
+\(
+z\mathcal P_\delta'(z)+\kappa_\delta\mathcal P_\delta(z)=0
+\)，即所述谱--根对应。
+由于 \(K^\star_\delta\) 为马尔可夫核，\(\lambda_1=1\) 必为特征值；代入 \(z=\kappa_\delta\) 即得 \(\sum_x (t_x-\kappa_\delta)^{-1}=1\)，而由 \(t_x-\kappa_\delta=A_\delta/u_\delta(x)\) 直接验证该恒等式成立。
+\par
+为证明实根性与交错性，设 \(t_x\) 两两不同并按升序排列为 \(t_{(1)}<\cdots<t_{(n)}\)，考虑函数 \(F(z):=\sum_x (t_x-z)^{-1}\)。
+其在每个开区间 \((0,t_{(1)})\) 与 \((t_{(k)},t_{(k+1)})\)（\(k=1,\dots,n-1\)）上连续且严格递增，并在端点处发散；
+右端函数 \(G(z):=\kappa_\delta/z\) 在 \((0,\infty)\) 上严格递减。
+因此方程 \(F(z)=G(z)\) 在上述每个区间内恰有一个解，且解不可能落在 \((-\infty,0]\) 或 \([\max t_x,\infty)\)（符号相反）。
+合计得到 \(n\) 个互异实根，从而 \(\mathcal Q_\delta\) 的零点全实且逐区间唯一，并与 \(\{t_{(k)}\}\) 严格交错。证毕。
+\end{proof}
+
+\begin{corollary}[\(\zeta_\delta\) 行列式的单多项式缩放]\label{cor:pom-maxent-markov-zeta-determinant-single-polynomial}
+在定理 \ref{thm:pom-maxent-markov-laguerre-secular-spectrum} 的设定下，定义
+\[
+\zeta_\delta(z):=\det(I-zK^\star_\delta)^{-1}.
+\]
+则对任意 \(z\in\CC\) 成立严格恒等式
+\[
+\det(I-zK^\star_\delta)=\frac{1}{\kappa_\delta\,\mathcal P_\delta(0)}\,\mathcal Q_\delta(\kappa_\delta z),
+\qquad
+\mathcal P_\delta(0)=\prod_{x\in X}t_x.
+\]
+因此 \(\zeta_\delta\) 为有理函数，其全部极点皆为实数且非负，并且零点集合恰为 \(\{\kappa_\delta^{-1}z_i\}\)，其中 \(\{z_i\}\) 为 \(\mathcal Q_\delta\) 的零点。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-maxent-markov-laguerre-secular-spectrum}，设 \(\{z_i\}_{i=1}^n\) 为 \(\mathcal Q_\delta\) 的零点（含重数），则 \(K^\star_\delta\) 的特征值为 \(\lambda_i=\kappa_\delta/z_i\)。
+因此
+\[
+\det(I-zK^\star_\delta)=\prod_{i=1}^n\Bigl(1-z\frac{\kappa_\delta}{z_i}\Bigr)=\frac{\prod_i(z_i-\kappa_\delta z)}{\prod_i z_i}.
+\]
+另一方面，\(\mathcal Q_\delta\) 的常数项为 \(\mathcal Q_\delta(0)=\kappa_\delta\mathcal P_\delta(0)\)，并且 \(\mathcal Q_\delta(0)=\mathrm{lc}(\mathcal Q_\delta)\prod_i(-z_i)\)；
+据此得到 \(\prod_i z_i=\kappa_\delta\mathcal P_\delta(0)/(n+\kappa_\delta)\) 与
+\(
+\mathcal Q_\delta(\kappa_\delta z)=(n+\kappa_\delta)\prod_i(z_i-\kappa_\delta z)
+\)。
+合并即得 \(\det(I-zK^\star_\delta)=\mathcal Q_\delta(\kappa_\delta z)/(\kappa_\delta\mathcal P_\delta(0))\)；在 \(z=0\) 处两边均为 \(1\)，故恒等式无额外符号。
+极点与零点陈述由有限维谱分解 \(\det(I-zK^\star_\delta)=\prod_i(1-z\lambda_i)\) 直接推出。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-diagonal-rate-diagonal-observation}
+
+\begin{theorem}[单次谱观测的反演：由 \((\kappa_\delta,\mathrm{Spec}(K^\star_\delta))\) 重构 \(w\)]\label{thm:pom-maxent-markov-spectrum-single-shot-inversion}
+固定 \(\delta\in(0,\delta_0)\)，并设已知该 \(\delta\) 的对偶参数 \(\kappa_\delta>0\) 以及最优核的特征值多重集
+\(
+\mathrm{Spec}(K^\star_\delta)=\{1=\lambda_1,\lambda_2,\dots,\lambda_n\}
+\)。
+令
+\[
+\mathcal Q(z):=(-1)^n(n+\kappa_\delta)\prod_{i=1}^{n}\Bigl(z-\frac{\kappa_\delta}{\lambda_i}\Bigr)
+=:\sum_{m=0}^{n}q_m z^m.
+\]
+定义次数 \(n\) 多项式
+\[
+\mathcal P(z):=\sum_{m=0}^{n}\frac{q_m}{m+\kappa_\delta}\,z^m,
+\]
+则 \(\mathcal P\) 唯一满足 Euler--Cauchy 方程
+\[
+z\mathcal P'(z)+\kappa_\delta \mathcal P(z)=\mathcal Q(z),
+\]
+并且 \(\mathcal P\) 的根多重集恰为定理 \ref{thm:pom-maxent-markov-laguerre-secular-spectrum} 的 \(\{t_x\}_{x\in X}\)（至重排）。
+在此基础上，分布 \(w\)（至标签置换）由闭式有理公式唯一确定：
+\[
+w(x)=\frac{\dfrac{t_x}{(t_x-\kappa_\delta)^2}}{\sum_{y\in X}\dfrac{t_y}{(t_y-\kappa_\delta)^2}}.
+\]
+并且若 \(w(x)\ge w(y)\)，则必有 \(t_x\le t_y\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-maxent-markov-laguerre-secular-spectrum}，\(\mathcal Q_\delta\) 的零点集合恰为 \(\{\kappa_\delta/\lambda_i\}\)。
+因此以该根集合构造的多项式 \(\prod_i(z-\kappa_\delta/\lambda_i)\) 与 \(\mathcal Q_\delta\) 仅差一个首项系数；
+而 \(\mathcal Q_\delta\) 的首项系数为 \((-1)^n(n+\kappa_\delta)\)，故所定义的 \(\mathcal Q\) 与 \(\mathcal Q_\delta\) 一致。
+\par
+对 Euler--Cauchy 方程，若写 \(\mathcal P(z)=\sum_{m=0}^{n}p_m z^m\)，则
+\(
+z\mathcal P'(z)+\kappa_\delta\mathcal P(z)=\sum_{m=0}^{n}(m+\kappa_\delta)p_m z^m
+\)。
+因此系数逐项解唯一给出 \(p_m=q_m/(m+\kappa_\delta)\)，即所示 \(\mathcal P\)；
+由唯一性知该 \(\mathcal P\) 必等于定理 \ref{thm:pom-maxent-markov-laguerre-secular-spectrum} 的 \(\mathcal P_\delta\)，从而其根多重集即为 \(\{t_x\}\)（至重排）。
+\par
+最后，由 \(t_x-\kappa_\delta=A_\delta/u_\delta(x)\) 得 \(u_\delta(x)=A_\delta/(t_x-\kappa_\delta)\)，并由边缘关系
+\(
+w(x)=u_\delta(x)\bigl(A_\delta+\kappa_\delta u_\delta(x)\bigr)
+=t_xu_\delta(x)^2
+\)
+得到
+\[
+w(x)=A_\delta^2\,\frac{t_x}{(t_x-\kappa_\delta)^2}.
+\]
+对 \(x\) 求和并用 \(\sum_x w(x)=1\) 得 \(A_\delta^2=\Bigl(\sum_y \frac{t_y}{(t_y-\kappa_\delta)^2}\Bigr)^{-1}\)，代回即得闭式重构公式。
+若 \(w(x)\ge w(y)\)，由命题 \ref{prop:pom-diagonal-rate-scaling-keep-comonotone} 可知 \(u_\delta(x)\ge u_\delta(y)\)，从而 \(t_x-\kappa_\delta=A_\delta/u_\delta(x)\le A_\delta/u_\delta(y)=t_y-\kappa_\delta\)，即 \(t_x\le t_y\)。证毕。
+\end{proof}
+
+\begin{corollary}[谱--信息不变量的完备性]\label{cor:pom-maxent-markov-spectrum-rate-complete-invariant}
+对任意两全支撑分布 \(w,v\in\Delta(X)\)，若存在某个 \(\delta\in(0,\min\{\delta_0(w),\delta_0(v)\})\) 使得
+\[
+R_w'(\delta)=R_v'(\delta),
+\qquad
+\mathrm{Spec}\bigl(K_{\delta}^{\star,w}\bigr)=\mathrm{Spec}\bigl(K_{\delta}^{\star,v}\bigr)
+\]
+（两谱作为多重集相同），则 \(w=v\)（至标签置换）。
+反之，若 \(w=v\)，则对任意 \(\delta\) 上述两者恒相同。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 的敏感性公式 \(R_w'(\delta)=-\log(1+\kappa_\delta)\) 可由 \(R_w'(\delta)\) 唯一恢复 \(\kappa_\delta\)。
+再由定理 \ref{thm:pom-maxent-markov-spectrum-single-shot-inversion}，\((\kappa_\delta,\mathrm{Spec}(K^\star_\delta))\) 唯一确定 \(w\)（至标签置换），从而得到完备性。
+反向命题由定义与最优解唯一性直接推出。证毕。
+\end{proof}
+
+\begin{corollary}[无振荡性与两端谱塌缩]\label{cor:pom-maxent-markov-no-oscillation-endpoints}
+令 \(\delta_0:=1-p_2(w)=1-\sum_{x\in X}w(x)^2\)。
+则对任意 \(\delta\in[0,\delta_0]\)，最优核 \(K^\star_\delta\) 在 \(\ell^2(w)\) 上的全部特征值均属于区间 \([0,1]\)。
+特别地，\(K^\star_\delta\) 不存在负谱模态，因而在谱意义下不携带周期振荡成分。
+\par
+当 \(\delta=\delta_0\) 时，独立耦合 \(P=w\otimes w\) 可行且最优，因而
+\[
+\mathrm{Spec}(K^\star_{\delta_0})=\{1,0,\dots,0\}.
+\]
+当 \(\delta=0\) 时，对角耦合 \(P=\mathrm{Diag}(w)\) 最优，因而
+\[
+\mathrm{Spec}(K^\star_0)=\{1,1,\dots,1\}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-maxent-markov-diagonal-plus-rankone-spectrum}，\(S_\delta\succeq0\) 且与 \(K^\star_\delta\) 相似，故 \(\mathrm{Spec}(K^\star_\delta)\subseteq[0,\infty)\)。
+另一方面，\(K^\star_\delta\) 为马尔可夫核，算子范数满足 \(\|K^\star_\delta\|_{\ell^2(w)\to \ell^2(w)}\le 1\)，且 \(\lambda_1=1\)；
+故全部特征值属于 \([0,1]\)。
+\par
+端点情形：当 \(\delta=\delta_0\) 时独立耦合满足 \(\mathbb P(X=Y)=p_2(w)=1-\delta_0\) 且互信息为零，故最优且
+\(
+K(y\mid x)=w(y)
+\) 为秩一投影，谱为 \(\{1,0,\dots,0\}\)。
+当 \(\delta=0\) 时约束强制 \(\mathbb P(X=Y)=1\)，唯一可行耦合为 \(\mathrm{Diag}(w)\)，相应 \(K\) 为恒等算子，谱为全 \(1\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[谱支的单调性：非平凡特征值随失真严格下降]\label{thm:pom-maxent-markov-spectrum-monotone-in-delta}
+取全支撑分布 \(w\in\Delta(X)\)，并记 \(\delta_0:=1-\sum_{x\in X}w(x)^2\)。
+对 \(\delta\in(0,\delta_0)\) 令 \(K^\star_\delta\) 为定理 \ref{thm:pom-maxent-markov-unique-optimal-kernel} 的唯一最优核，
+并令
+\[
+1=\lambda_1(\delta)\ \ge\ \lambda_2(\delta)\ \ge\ \cdots\ \ge\ \lambda_n(\delta)\ \ge\ 0
+\]
+为其在 \(\ell^2(w)\) 上的特征值（含重数）。
+则对每个 \(i\ge 2\)，函数 \(\delta\mapsto \lambda_i(\delta)\) 在 \((0,\delta_0)\) 上严格递减且连续；
+并且存在一组实解析的谱支 \(\{\widetilde\lambda_i(\delta)\}_{i=1}^n\)（重排后与 \(\{\lambda_i(\delta)\}\) 逐点一致）覆盖整个谱族。
+端点行为满足
+\[
+\lambda_i(\delta)\xrightarrow[\delta\downarrow 0]{}1,
+\qquad
+\lambda_i(\delta)\xrightarrow[\delta\uparrow \delta_0]{}0
+\qquad(i\ge 2).
+\]
+\end{theorem}
+\begin{proof}[证明要点]
+由命题 \ref{prop:pom-diagonal-rate-analytic-strict-convexity-curvature} 与定理 \ref{thm:pom-maxent-markov-diagonal-plus-rankone-spectrum}，
+存在对偶参数 \(\kappa_\delta>0\) 与缩放向量 \(u_\delta\succ0\) 随 \(\delta\in(0,\delta_0)\) 实解析变化，
+从而对称化算子
+\(
+S_\delta:=D^{1/2}K^\star_\delta D^{-1/2}
+\)
+构成一族实解析的对称矩阵；由 Kato 解析扰动理论，可选取实解析谱支覆盖该谱族。
+\par
+对严格单调性：\(\delta\) 增大等价于约束 \(\sum_x w(x)K(x\mid x)\ge 1-\delta\) 的放松，
+其对偶乘子 \(\log(1+\kappa_\delta)\) 严格递减。
+在该对偶参数下，最优核对应于对角奖励的指数族缩放（定理 \ref{thm:pom-diagonal-rate-scaling-duality} 的同型结构），
+并诱导可逆核族在 Peskun/Dirichlet 预序上随 \(\delta\) 严格增强混合；
+将其转译到对称化算子 \(S_\delta\) 的 Rayleigh 商单调性，再用 Courant--Fischer 变分刻画即可推出全部非平凡特征值随 \(\delta\) 严格递减。
+\par
+端点由推论 \ref{cor:pom-maxent-markov-no-oscillation-endpoints} 给出（\(\delta=0\) 时为恒等核，\(\delta=\delta_0\) 时为秩一投影核），从而得到所示极限行为。证毕。
+\end{proof}
+
+\begin{corollary}[小失真谱门槛：第二特征值的首阶系数]\label{thm:pom-maxent-markov-small-distortion-lambda2-slope}
+取全支撑分布 \(w\in\Delta(X)\) 且 \(|X|=n\ge 2\)。
+令 \(K^\star_\delta\) 为定理 \ref{thm:pom-maxent-markov-unique-optimal-kernel} 的唯一最优核，并令
+\(
+0=\mu_1<\mu_2\le\cdots\le\mu_n
+\)
+为定理 \ref{thm:pom-diagonal-rate-critical-line-laplacian-first-order} 所定义之临界线拉普拉斯 \(L_w\) 的特征值。
+则当 \(\delta\downarrow 0\) 时有
+\[
+\boxed{\;
+1-\lambda_2(K^\star_\delta)=\mu_2\,\delta+o(\delta)\; }.
+\]
+并且 \(\mu_2\) 由定理 \ref{thm:pom-diagonal-rate-critical-spectrum-secular-interlacing} 的世俗方程与交错定位唯一确定。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-critical-line-laplacian-first-order} 得到全谱首阶展开
+\(
+\lambda_i(K^\star_\delta)=1-\delta\mu_i+o(\delta)
+\)
+（其中 \(\lambda_1\equiv 1\)），取 \(i=2\) 即得。
+世俗方程与定位为定理 \ref{thm:pom-diagonal-rate-critical-spectrum-secular-interlacing} 的直接推论。证毕。
+\end{proof}
+
+\begin{corollary}[端点耦合：谱隙与信息斜率指数同阶]\label{cor:pom-maxent-markov-gap-vs-rate-slope-coupling}
+沿用推论 \ref{thm:pom-maxent-markov-small-distortion-lambda2-slope} 的记号，并令
+\(
+C_{1/2}(w):=A_{1/2}(w)^2-1
+\)。
+则当 \(\delta\downarrow 0\) 时成立
+\[
+\lim_{\delta\downarrow 0}\ \frac{1-\lambda_2(K^\star_\delta)}{\exp\bigl(-R_w'(\delta)\bigr)}
+=\mu_2\,C_{1/2}(w).
+\]
+等价地，
+\[
+1-\lambda_2(K^\star_\delta)=\mu_2\,\delta\,(1+o(1)),
+\qquad
+\exp\bigl(-R_w'(\delta)\bigr)=\frac{\delta}{C_{1/2}(w)}\,(1+o(1)).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 得
+\(
+\exp(-R_w'(\delta))=(1+\kappa_\delta)^{-1}
+\)；
+又由定理 \ref{thm:pom-diagonal-rate-small-distortion-hellinger-endpoint} 有 \(\kappa_\delta\sim C_{1/2}(w)/\delta\)，
+从而 \(\exp(-R_w'(\delta))=\delta/C_{1/2}(w)\cdot(1+o(1))\)。
+另一方面，推论 \ref{thm:pom-maxent-markov-small-distortion-lambda2-slope} 给出
+\(
+1-\lambda_2(K^\star_\delta)=\mu_2\delta+o(\delta)
+\)。
+两式相除即得极限。证毕。
+\end{proof}
+
+\begin{theorem}[小失真协同：乘积分布下的最优率严格优于任意坐标分离策略]\label{thm:pom-diagonal-rate-small-distortion-synergy-product}
+取两有限集 \(X_1,X_2\)，分布 \(w\in\Delta(X_1)\)、\(v\in\Delta(X_2)\)，并令乘积分布 \(\omega:=w\otimes v\in\Delta(X_1\times X_2)\)。
+记
+\[
+C_{1/2}(w):=A_{1/2}(w)^2-1,\qquad C_{1/2}(v):=A_{1/2}(v)^2-1,\qquad
+C_{1/2}(\omega):=A_{1/2}(\omega)^2-1.
+\]
+则当 \(\delta\downarrow 0\) 时有小失真展开
+\[
+R_{\omega}(\delta)=H(w)+H(v)-\delta\log\frac{C_{1/2}(\omega)}{\delta}+O(\delta).
+\]
+\par
+称“坐标分离策略”为取两耦合 \(P_1,P_2\) 分别作用于 \(X_1,X_2\)，并用乘积耦合 \(P=P_1\otimes P_2\) 生成 \(X_1\times X_2\) 的耦合。
+若
+\(
+\mathbb P(X_1=Y_1)\ge 1-\delta_1
+\)、
+\(
+\mathbb P(X_2=Y_2)\ge 1-\delta_2
+\)，
+则
+\(
+\mathbb P(Z=Z')\ge (1-\delta_1)(1-\delta_2)=1-(\delta_1\oplus\delta_2)
+\)，其中 \(\delta_1\oplus\delta_2:=\delta_1+\delta_2-\delta_1\delta_2\)。
+在该类策略中达到对角质量 \(1-\delta\) 的最优互信息满足
+\[
+\inf_{\delta_1\oplus\delta_2=\delta}\bigl(R_w(\delta_1)+R_v(\delta_2)\bigr)
+=H(w)+H(v)-\delta\log\frac{C_{1/2}(w)+C_{1/2}(v)}{\delta}+O(\delta).
+\]
+并且存在严格协同增益：只要 \(C_{1/2}(w),C_{1/2}(v)>0\)（等价于两分布均非单点），就有
+\[
+\inf_{\delta_1\oplus\delta_2=\delta}\bigl(R_w(\delta_1)+R_v(\delta_2)\bigr)-R_{w\otimes v}(\delta)
+=\delta\log\Bigl(1+\frac{C_{1/2}(w)C_{1/2}(v)}{C_{1/2}(w)+C_{1/2}(v)}\Bigr)+o(\delta)\;>\;0.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-small-distortion-hellinger-endpoint}，
+\(
+R_w(\delta)=H(w)-\delta\log\frac{C_{1/2}(w)}{\delta}+O(\delta)
+\)，同理对 \(v\) 与 \(\omega\) 成立。
+又 \(H(\omega)=H(w)+H(v)\) 且
+\(
+A_{1/2}(\omega)=A_{1/2}(w)A_{1/2}(v)
+\)，故
+\[
+C_{1/2}(\omega)
+=A_{1/2}(\omega)^2-1
+=(1+C_{1/2}(w))(1+C_{1/2}(v))-1
+=C_{1/2}(w)+C_{1/2}(v)+C_{1/2}(w)C_{1/2}(v).
+\]
+第一式由此立即得到。
+\par
+对分离类，约束 \(\delta_1\oplus\delta_2=\delta\) 等价于 \(\delta_1+\delta_2=\delta+O(\delta^2)\)，
+故在 \(\delta\downarrow 0\) 的首阶上可将其替换为 \(\delta_1+\delta_2=\delta\)。
+将端点展开代入并用拉格朗日乘子最大化
+\(
+\delta_1\log(C_{1/2}(w)/\delta_1)+\delta_2\log(C_{1/2}(v)/\delta_2)
+\)
+得到最优配比 \(\delta_1:\delta_2=C_{1/2}(w):C_{1/2}(v)\) 与系数 \(C_{1/2}(w)+C_{1/2}(v)\)，从而给出分离最优展开。
+最后将 \(C_{1/2}(\omega)=C_{1/2}(w)+C_{1/2}(v)+C_{1/2}(w)C_{1/2}(v)\) 与上述系数比较即可得到严格差距公式。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$k$}{k} 重协同放大：小失真端点的首阶系数按乘法增长]\label{thm:pom-diagonal-rate-small-distortion-synergy-k}
+取 \(k\ge 2\) 个全支撑分布 \(w^{(1)},\dots,w^{(k)}\)，并令 \(\omega=\bigotimes_{i=1}^k w^{(i)}\)。
+记 \(C_i:=C_{1/2}(w^{(i)})\) 以及
+\[
+C_{\mathrm{joint}}:=C_{1/2}(\omega)=\prod_{i=1}^k(1+C_i)-1,\qquad
+C_{\mathrm{sep}}:=\sum_{i=1}^k C_i.
+\]
+则当 \(\delta\downarrow 0\) 时成立
+\[
+R_{\omega}(\delta)=\sum_{i=1}^k H\!\bigl(w^{(i)}\bigr)-\delta\log\frac{C_{\mathrm{joint}}}{\delta}+O(\delta),
+\]
+而任意坐标分离策略的最优首阶系数至多为 \(C_{\mathrm{sep}}\)，即
+\[
+\inf_{\delta_1\oplus\cdots\oplus\delta_k=\delta}\ \sum_{i=1}^k R_{w^{(i)}}(\delta_i)
+=\sum_{i=1}^k H\!\bigl(w^{(i)}\bigr)-\delta\log\frac{C_{\mathrm{sep}}}{\delta}+O(\delta).
+\]
+因此首阶协同增益为
+\[
+\delta\log\frac{C_{\mathrm{joint}}}{C_{\mathrm{sep}}}+o(\delta),
+\]
+其在 \(C_i\) 为常数阶时随 \(k\) 可呈指数级增长。
+\end{theorem}
+\begin{proof}
+由 \(A_{1/2}(\omega)=\prod_i A_{1/2}(w^{(i)})\) 得
+\(
+1+C_{1/2}(\omega)=\prod_i (1+C_{1/2}(w^{(i)}))
+\)，
+从而 \(C_{\mathrm{joint}}=\prod_i(1+C_i)-1\)。
+其余与定理 \ref{thm:pom-diagonal-rate-small-distortion-synergy-product} 相同：对每个因子使用端点展开并用多元拉格朗日乘子得到分离最优配比 \(\delta_i\propto C_i\)，从而首阶系数为 \(C_{\mathrm{sep}}\)。
+比较 \(C_{\mathrm{joint}}\) 与 \(C_{\mathrm{sep}}\) 即得增益。证毕。
+\end{proof}
+
+\begin{corollary}[端点协同生成元的张量同态]\label{cor:pom-diagonal-rate-small-distortion-synergy-generator-homomorphism}
+对任意全支撑分布 \(w\) 定义
+\[
+\mathcal J(w):=\log\bigl(1+C_{1/2}(w)\bigr)=2\log A_{1/2}(w).
+\]
+则对任意两分布 \(w,v\) 成立严格等式
+\[
+\boxed{\;
+\mathcal J(w\otimes v)=\mathcal J(w)+\mathcal J(v)\;}
+\]
+等价地，
+\(
+1+C_{1/2}(w\otimes v)=(1+C_{1/2}(w))(1+C_{1/2}(v))
+\)。
+并且在小失真极限 \(\delta\downarrow 0\) 下，
+\[
+H(w)-R_w(\delta)=\delta\log\frac{e^{\mathcal J(w)}-1}{\delta}+O(\delta),
+\]
+因此 \(\mathcal J\) 给出端点协同系数的可加生成元。
+\end{corollary}
+\begin{proof}
+由 \(A_{1/2}(w\otimes v)=A_{1/2}(w)A_{1/2}(v)\) 得
+\(
+\mathcal J(w\otimes v)=2\log A_{1/2}(w\otimes v)=2\log A_{1/2}(w)+2\log A_{1/2}(v)
+\)。
+最后一式由定理 \ref{thm:pom-diagonal-rate-small-distortion-hellinger-endpoint} 的端点展开重写得到。证毕。
+\end{proof}
+

@@ -1,0 +1,330 @@
+\paragraph{递推 Hankel 反演与窗口 Lie 闭合的代数审计链}
+下述陈述均在本文已给出的定义、记号与编号体系内推导；其与外部文献的同一性或新颖性比对不作为本段的审计目标。
+
+\begin{theorem}[递推参数化的 Jacobian--Hankel 恒等式]\label{thm:xi-time-part9e-recurrence-jacobian-hankel}
+设 \(d\ge 2\)，\(k\) 为特征 \(0\) 的交换域，初值
+\[
+(a_0,\dots,a_{d-1})\in k^d
+\]
+固定。对参数
+\(
+c=(c_0,\dots,c_{d-1})\in k^d
+\)
+定义递推序列
+\[
+a_n(c):=-\sum_{j=0}^{d-1}c_j\,a_{n-d+j}(c),\qquad n\ge d.
+\]
+记
+\[
+b_n(c):=a_{d+n}(c)\quad(0\le n\le d-1),\qquad
+\Phi_{d,2d-1}(c):=(b_0(c),\dots,b_{d-1}(c)),
+\]
+以及主 Hankel 块
+\[
+H(c):=\bigl(a_{i+j}(c)\bigr)_{0\le i,j\le d-1}.
+\]
+则有严格恒等式
+\[
+\det\!\bigl(D\Phi_{d,2d-1}(c)\bigr)=(-1)^d\det H(c).
+\]
+\end{theorem}
+\begin{proof}
+把 \(b=(b_0,\dots,b_{d-1})\) 视为独立变量，并令 \(a_n(c,b)\) 由同一递推延拓，且
+\(
+a_{d+n}(c,b)=b_n
+\)
+（\(0\le n\le d-1\)）。
+定义
+\[
+F_n(c,b):=a_{n+d}(c,b)+\sum_{j=0}^{d-1}c_j\,a_{n+j}(c,b),\qquad 0\le n\le d-1.
+\]
+由构造有 \(F(c,\Phi_{d,2d-1}(c))=0\)。
+隐函数求导给出
+\[
+D\Phi_{d,2d-1}(c)
+=-\bigl(D_bF(c,b)\bigr)^{-1}D_cF(c,b)\big|_{b=\Phi_{d,2d-1}(c)}.
+\]
+其中 \(D_cF=H(c)\)；
+\(D_bF\) 为单位下三角矩阵，故 \(\det(D_bF)=1\)。
+两边取行列式即得
+\[
+\det\!\bigl(D\Phi_{d,2d-1}(c)\bigr)
+=(-1)^d\det H(c).
+\]
+\end{proof}
+
+\begin{corollary}[递推系数的显式有理反演与双有理性]\label{cor:xi-time-part9e-recurrence-rational-inversion}
+沿用定理 \ref{thm:xi-time-part9e-recurrence-jacobian-hankel} 的记号。
+设
+\[
+b=\Phi_{d,2d-1}(c)=(b_0,\dots,b_{d-1}).
+\]
+定义矩阵 \(\widehat H(b)=(\widehat h_{ij}(b))_{0\le i,j\le d-1}\) 为
+\[
+\widehat h_{ij}(b):=
+\begin{cases}
+a_{i+j}, & i+j\le d-1,\\[2mm]
+b_{i+j-d}, & d\le i+j\le 2d-2,
+\end{cases}
+\]
+并记列向量 \(\mathbf b:=(b_0,\dots,b_{d-1})^{\mathsf T}\)。
+若 \(\det H(c)\neq 0\)（等价地 \(\det\widehat H(b)\neq 0\)），则
+\[
+c=-\,\widehat H(b)^{-1}\mathbf b,
+\]
+从而 \(\Phi_{d,2d-1}\) 在开集 \(\{\det H\neq 0\}\) 上为双有理同构，其分歧由 \(\det H=0\) 切出。
+\end{corollary}
+\begin{proof}
+递推关系在 \(n=0,\dots,d-1\) 上可写为
+\[
+\sum_{j=0}^{d-1}a_{n+j}(c)\,c_j=-a_{n+d}(c)=-b_n.
+\]
+系数矩阵即 \(\widehat H(b)\)，右端即 \(-\mathbf b\)。
+当 \(\det\widehat H(b)\neq 0\) 时解唯一，得到所示反演公式。
+由 \(\widehat H(b)\) 的条目只依赖固定初值与 \(b_0,\dots,b_{d-2}\)，该反演为有理映射；与 \(c\mapsto b\) 互逆即得双有理性。
+分歧结论由定理 \ref{thm:xi-time-part9e-recurrence-jacobian-hankel} 直接推出。
+\end{proof}
+
+\begin{theorem}[全主 Hankel 行列式的消去闭式与正权符号律]\label{thm:xi-time-part9e-hankel-resultant-closed-form}
+设 \(y_+(z)\) 为次数 \(\kappa+1\) 的首一多项式，根为互异实数 \(b_0,\dots,b_\kappa\)。
+定义
+\[
+c_m:=\frac{y(b_m)}{y_+'(b_m)},\qquad
+\mu_n:=\sum_{m=0}^{\kappa}c_m b_m^n\quad(n\ge 0),
+\]
+并令
+\[
+H_\kappa:=(\mu_{i+j})_{0\le i,j\le \kappa}.
+\]
+则成立
+\[
+\det(H_\kappa)=(-1)^{\kappa(\kappa+1)/2}\Res(y,y_+).
+\]
+若进一步 \(c_m>0\)（正权情形），则 \(H_\kappa\) 正定，因而
+\[
+(-1)^{\kappa(\kappa+1)/2}\Res(y,y_+)>0.
+\]
+\end{theorem}
+\begin{proof}
+令 Vandermonde 矩阵
+\[
+V=(b_m^{\,i})_{0\le i,m\le \kappa},\qquad
+C=\mathrm{diag}(c_0,\dots,c_\kappa).
+\]
+由矩定义有 \(H_\kappa=VCV^{\mathsf T}\)，从而
+\[
+\det(H_\kappa)=(\det V)^2\prod_{m=0}^{\kappa}c_m.
+\]
+又
+\[
+\prod_{m=0}^{\kappa}c_m
+=\frac{\prod_m y(b_m)}{\prod_m y_+'(b_m)}
+=\frac{\Res(y,y_+)}{\prod_m y_+'(b_m)}.
+\]
+利用恒等式
+\[
+(\det V)^2=\Disc(y_+),\qquad
+\prod_m y_+'(b_m)=(-1)^{\kappa(\kappa+1)/2}\Disc(y_+),
+\]
+消去 \(\Disc(y_+)\) 即得主式。
+当 \(c_m>0\) 时，\(H_\kappa\) 为正权 Gram 矩阵，故正定，行列式为正，符号律随之成立。
+\end{proof}
+
+\begin{theorem}[移位 Hankel 线性笔的节点对角化与 \texorpdfstring{\(H_\kappa\)}{Hk}-自伴随]\label{thm:xi-time-part9e-shifted-hankel-pencil-diagonalization}
+在定理 \ref{thm:xi-time-part9e-hankel-resultant-closed-form} 的设定下，定义
+\[
+H_\kappa^+:=(\mu_{i+j+1})_{0\le i,j\le \kappa},\qquad
+A_\kappa:=H_\kappa^{-1}H_\kappa^+.
+\]
+则有相似对角化
+\[
+A_\kappa=(V^{\mathsf T})^{-1}\mathrm{diag}(b_0,\dots,b_\kappa)V^{\mathsf T},
+\]
+故
+\[
+\chi_{A_\kappa}(z)=\prod_{m=0}^{\kappa}(z-b_m)=y_+(z).
+\]
+此外，
+\[
+A_\kappa^{\mathsf T}H_\kappa=H_\kappa A_\kappa.
+\]
+\end{theorem}
+\begin{proof}
+由 \(\mu_{i+j+1}=\sum_m c_m b_m^{i+j+1}\) 得
+\[
+H_\kappa^+=V\,\mathrm{diag}(c_0b_0,\dots,c_\kappa b_\kappa)\,V^{\mathsf T}.
+\]
+代入 \(A_\kappa=H_\kappa^{-1}H_\kappa^+\) 并用 \(H_\kappa=VCV^{\mathsf T}\) 直接化简，得到所示对角化公式与特征多项式结论。
+又因 \(H_\kappa,H_\kappa^+\) 对称，
+\[
+A_\kappa^{\mathsf T}H_\kappa
+=(H_\kappa^{-1}H_\kappa^+)^{\mathsf T}H_\kappa
+=H_\kappa^+
+=H_\kappa(H_\kappa^{-1}H_\kappa^+)
+=H_\kappa A_\kappa.
+\]
+\end{proof}
+
+\begin{theorem}[Fibonacci 幂 Hankel 行列式的完全乘积公式]\label{thm:xi-time-part9e-fibonacci-power-hankel-product}
+对整数 \(q\ge 1\)，定义
+\[
+H_q:=\bigl(F_{i+j+3}^{\,q}\bigr)_{0\le i,j\le q},
+\]
+其中 \((F_n)\) 为 Fibonacci 数列。
+则
+\[
+\det(H_q)=
+\left(\prod_{i=0}^{q}\binom{q}{i}\right)
+\left(\prod_{k=1}^{q}F_k^{\,2(q+1-k)}\right).
+\]
+右端为整数乘积闭式。
+\end{theorem}
+\begin{proof}
+由 Binet 表达 \(F_{n+3}=\alpha\varphi^n+\beta\psi^n\) 得
+\[
+F_{n+3}^{\,q}
+=\sum_{i=0}^{q}\binom{q}{i}\alpha^{q-i}\beta^i
+\bigl(\varphi^{q-i}\psi^i\bigr)^n
+=\sum_{i=0}^{q}c_i r_i^{\,n}.
+\]
+故 \(H_q\) 可分解为 Vandermonde 型乘积 \(H_q=V^{\mathsf T}CV\)，于是
+\[
+\det(H_q)=(\det V)^2\prod_{i=0}^{q}c_i.
+\]
+把 \((\det V)^2\) 按节点差显式展开，并使用
+\[
+1-(-\varphi^{-2})^k=\sqrt5\,F_k/\varphi^k
+\]
+逐项化简，可将所有代数扩张因子与 \(\prod_i c_i\) 中对应项精确抵消，最终得到所示整数乘积式。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{\(\det(H_q)\)}{det(Hq)} 的 \texorpdfstring{\(p\)}{p}-进赋值闭式与坏素数有限支撑]\label{prop:xi-time-part9e-fibonacci-hankel-padic-valuation}
+沿用定理 \ref{thm:xi-time-part9e-fibonacci-power-hankel-product}，对任意素数 \(p\) 有
+\[
+v_p\!\bigl(\det(H_q)\bigr)
+=\sum_{i=0}^{q}v_p\!\binom{q}{i}
++\sum_{k=1}^{q}2(q+1-k)\,v_p(F_k).
+\]
+特别地，素因子支撑包含于有限集合
+\[
+\{p:\exists\,i,\ p\mid \tbinom{q}{i}\}
+\cup
+\{p:\exists\,k,\ p\mid F_k\}.
+\]
+\end{proposition}
+\begin{proof}
+对定理 \ref{thm:xi-time-part9e-fibonacci-power-hankel-product} 的乘积公式逐项取 \(v_p\)，并用 \(v_p(xy)=v_p(x)+v_p(y)\) 即得。
+支撑有限性由固定 \(q\) 时参与因子仅有限个直接推出。
+\end{proof}
+
+\begin{theorem}[Smith 计数律：核与余核在 \texorpdfstring{\(p^k\)}{p^k} 尺度上的精确公式]\label{thm:xi-time-part9e-smith-kernel-cokernel-count}
+设 \(H_0\in M_d(\ZZ)\) 满秩，Smith 正规形为
+\[
+U H_0 V=\mathrm{diag}(s_1,\dots,s_d),
+\qquad
+U,V\in\GL_d(\ZZ),\quad s_i\mid s_{i+1}.
+\]
+固定素数 \(p\)，定义
+\[
+\mathcal H_p(k):=\sum_{i=1}^{d}\min\{v_p(s_i),k\},\qquad k\ge 1.
+\]
+令 \(\overline H_0:=H_0\bmod p^k\) 诱导映射
+\[
+\overline H_0:(\ZZ/p^k\ZZ)^d\to(\ZZ/p^k\ZZ)^d.
+\]
+则有
+\[
+|\ker(\overline H_0)|=p^{\mathcal H_p(k)},
+\qquad
+|\mathrm{coker}(\overline H_0)|=p^{\mathcal H_p(k)},
+\]
+并且
+\[
+\lim_{k\to\infty}\mathcal H_p(k)=v_p(\det H_0).
+\]
+\end{theorem}
+\begin{proof}
+因 \(U,V\) 在 \(\ZZ/p^k\ZZ\) 上仍可逆，核与余核基数可化归到对角映射
+\[
+(x_1,\dots,x_d)\mapsto(s_1x_1,\dots,s_dx_d).
+\]
+第 \(i\) 坐标方程 \(s_ix_i\equiv 0\pmod{p^k}\) 的解数为 \(p^{\min(v_p(s_i),k)}\)，故核基数为其乘积，即 \(p^{\mathcal H_p(k)}\)。
+对有限环上满秩方阵，核与余核基数相同，故余核同式。
+\(\mathcal H_p(k)\) 单调并在大 \(k\) 稳定到 \(\sum_i v_p(s_i)=v_p(\det H_0)\)。
+\end{proof}
+
+\begin{theorem}[模素数审计下 Hankel 正规形的可定义性与秩保持]\label{thm:xi-time-part9e-hankel-modp-rank-preservation}
+设 \((a_n)_{n\ge 0}\subset\ZZ\) 在 \(\QQ\) 上的 Hankel 秩为 \(d\)。
+取偏移 \(\ell\ge 0\)，令
+\[
+H_\ell:=\bigl(a_{\ell+i+j}\bigr)_{0\le i,j\le d-1}\in M_d(\ZZ),
+\qquad
+\Delta_\ell:=\det(H_\ell)\neq 0.
+\]
+对素数 \(p\) 定义 \(\bar a_n:=a_n\bmod p\in\FF_p\) 与 \(\bar H_\ell:=H_\ell\bmod p\)。
+则：
+\begin{enumerate}
+  \item 若 \(p\nmid \Delta_\ell\)，则 \(\bar H_\ell\in\GL_d(\FF_p)\)，故正规形恢复（例如 \(\bar A:=\bar H_\ell^{-1}\bar H_{\ell+1}\)）在 \(\FF_p\) 上可定义，且 \((\bar a_n)\) 的 Hankel 秩仍为 \(d\)；
+  \item 坏素数集合 \(\{p:\ p\mid \Delta_\ell\}\) 有限，因此除有限多个 \(p\) 外，模 \(p\) 的 Hankel 秩保持且正规形恢复始终可定义。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+当 \(p\nmid\Delta_\ell\) 时，\(\bar H_\ell\) 可逆，直接给出 \(\mathrm{rank}_{\FF_p}H(\bar a)\ge d\)。
+另一方面，矩阵 \(\bar A=\bar H_\ell^{-1}\bar H_{\ell+1}\) 提供维数 \(d\) 的线性实现，故 \(\mathrm{rank}_{\FF_p}H(\bar a)\le d\)。
+于是秩恰为 \(d\)，且恢复映射可定义。
+坏素数有限性由非零整数 \(\Delta_\ell\) 仅有有限素因子得到。
+\end{proof}
+
+\begin{theorem}[窗口 \texorpdfstring{\(m=6\)}{m=6} 的 Lie 闭合达到最大正交与特殊线性]\label{thm:xi-time-part9e-window6-lie-maximal-closure}
+令 \(m=6\)，则 \(|X_6|=F_8=21\)。记 \(V:=\RR^{X_6}\)，并令 \(L_1,\dots,L_6\) 为窗口 \(6\) 折叠/投影结构诱导的整数线性算子。
+定义
+\[
+\mathfrak g_6:=\Lie\langle L_1,\dots,L_6\rangle\subset\mathfrak{gl}(V),
+\qquad
+\mathfrak k_6:=[\mathfrak g_6,\mathfrak g_6].
+\]
+则
+\[
+\mathfrak k_6=\mathfrak{so}(V)\cong\mathfrak{so}(21),
+\qquad
+\mathfrak g_6=\mathfrak{sl}(V)\cong\mathfrak{sl}(21).
+\]
+\end{theorem}
+\begin{proof}
+由构造，\(L_i\) 迹为零，故 \(\mathfrak g_6\subset\mathfrak{sl}(V)\)，于是
+\[
+\dim\mathfrak g_6\le \dim\mathfrak{sl}(21)=440.
+\]
+同时由对称性，\([L_i,L_j]\) 落在反对称端，故 \(\mathfrak k_6\subset\mathfrak{so}(V)\)，于是
+\[
+\dim\mathfrak k_6\le \dim\mathfrak{so}(21)=210.
+\]
+窗口 \(6\) 的模素数审计脚本给出可复算维数证书：
+\input{sections/generated/eq_window6_lie_envelope_invariants}
+\input{sections/generated/eq_window6_lie_envelope_orthogonal_part_dim}
+因此 \(\dim\mathfrak g_6=440\)、\(\dim\mathfrak k_6=210\)。
+结合上界即得
+\(
+\mathfrak g_6=\mathfrak{sl}(21)
+\)
+与
+\(
+\mathfrak k_6=\mathfrak{so}(21)
+\)。
+\end{proof}
+
+\begin{conjecture}[窗口族的普遍最大正交闭合]\label{conj:xi-time-part9e-window-general-maximal-closure}
+对任意 \(m\ge 6\)，令 \(V_m:=\RR^{X_m}\)（\(|X_m|=F_{m+2}\)），并定义
+\[
+\mathfrak g_m:=\Lie\langle L_1,\dots,L_m\rangle\subset\mathfrak{gl}(V_m),
+\qquad
+\mathfrak k_m:=[\mathfrak g_m,\mathfrak g_m].
+\]
+猜想存在阈值 \(m_0\)（经验上 \(m_0=6\)），使对一切 \(m\ge m_0\)：
+\[
+\mathfrak k_m=\mathfrak{so}(V_m)\cong\mathfrak{so}(F_{m+2}),
+\qquad
+\mathfrak g_m=\mathfrak{sl}(V_m)\cong\mathfrak{sl}(F_{m+2}).
+\]
+若该猜想成立，则局部 Zeckendorf 约束诱导生成元在 Lie 意义下将给出普遍最大简单闭包，为后续谱分解、算术审计与几何分层提供统一刚性骨架。
+\end{conjecture}

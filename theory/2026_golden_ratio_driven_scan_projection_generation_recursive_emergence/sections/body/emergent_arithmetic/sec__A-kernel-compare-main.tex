@@ -1,0 +1,520 @@
+\subsection{核对比：零式 + q-场、carry-free 骨架与素数影子}\label{sec:A-kernel-compare-main}
+本小节给出一个\textbf{可直接编程并以 BFS 构造状态图}的统一接口，用以对比黄金比例基 $\tau=\frac{1+\sqrt5}{2}$ 上三类典型并行归一化核（$9/13/21$-local；Algorithm I/II/III \cite{SvobodovaAAMPVIIIParallelAddition}，细节规则见 \cite{FrougnyHellerPelantovaSvobodovaParallelAlgorithmsSlides}）。
+
+\subsubsection{统一生成模板：零式 + q-场}
+固定 $\beta=\tau$。给定 Laurent 多项式
+\[
+Z(X)=\sum_{i=-h}^{k} b_i X^i,\qquad Z(\beta)=0,
+\]
+给定有界整数场 $q=(q_j)_{j\in\ZZ}$（取值于有限集合），定义一次“注入零式”的统一更新
+\[
+z'_j:=z_j-\sum_{i=-h}^{k} b_i\,q_{j-i}.
+\]
+因为 $Z(\beta)=0$，故该更新保持值 $\sum_j z'_j\beta^j=\sum_j z_j\beta^j$。
+
+\begin{remark}[“原始场/控制场/迭代”与 \texorpdfstring{$(e,\pi,\varphi)$}{(e, pi, varphi)} 的层次对应]\label{rem:z-q-iter-epi-phi}
+更新式把值承载 \(z=(z_j)\)、控制触发 \(q=(q_j)\) 与迭代复合（时间）在对象层分离；在黄金比例基 \(\beta=\tau=\varphi\) 下，\((e,\pi,\varphi)\) 的出现分别对应紧群角色的指数归一化与代数无理方向/膨胀的背景口径（见第 \ref{sec:high-dimensional-cut-project} 节）。
+\end{remark}
+
+\paragraph{黄金比例三核只用到两种稀疏 stencil}
+Algorithm I/II/III 仅使用下列两种稀疏零式（\cite{SvobodovaAAMPVIIIParallelAddition}；推导与伪代码见 \cite{FrougnyHellerPelantovaSvobodovaParallelAlgorithmsSlides}）：
+\[
+-\tau^4+7-\tau^{-4}=0\ \Rightarrow\ z'_j=z_j-7q_j+q_{j-4}+q_{j+4}\quad (9\text{-local}),
+\]
+\[
+-\tau^2+3-\tau^{-2}=0\ \Rightarrow\ z'_j=z_j-3q_j+q_{j-2}+q_{j+2}\quad (13/21\text{-local}).
+\]
+三核的差异只在于 $q$ 的\textbf{取值域}与\textbf{触发策略}：一次（SRZ）、定步迭代（WRZ）、两相消元（A$\circ$B）。
+
+\subsubsection{块级在线化：同余流解耦与最小状态规格（单流）}
+由于 stencil 仅耦合 $\pm 4$ 或 $\pm 2$，系统按同余类解耦：$\pm 4$ 对应模 $4$ 的 $m=4$ 条流，$\pm 2$ 对应模 $2$ 的 $m=2$ 条流。每条流都可编译为确定性在线机（固定延迟），并可直接对其\textbf{可达状态空间}做 BFS 构图；全局块级在线机是各流的直积装配（见下）。
+
+\begin{proposition}[单流在线机的最小状态变量（可 BFS）]\label{prop:min-state-spec-flow}
+在单流坐标下（强核：$j=4n+r$；弱核：$j=2n+r$），三核可取以下最小状态变量，使得“读入一个输入符号 $\Rightarrow$ 状态更新 + 输出（固定延迟）”为确定性局部规则：
+\begin{itemize}
+  \item \textbf{$9$-local（强核，SRZ）}：输入 $v_n\in[-10,10]\cap\ZZ$，$q_n\in\{-1,0,1\}$ 由 $v_n$ 唯一决定（把中心位拉回内层字母表）。取状态
+  \[
+  S^{(9)}_n=(v_{n-1},\,q_{n-2}),
+  \]
+  则读入 $v_n$ 后即可输出 $z_{n-1}=v_{n-1}-7q_{n-1}+q_{n-2}+q_n$（单流延迟 $1$）。
+  \item \textbf{$13$-local（弱核，WRZ，三段微核流水线）}：每段微核取状态
+  \(
+  (z_{n-1},q_{n-2},q_{n-1})
+  \)，三段直积给出
+  \[
+  S^{(13)}_n=\bigl(S^{(1)}_n,S^{(2)}_n,S^{(3)}_n\bigr),
+  \qquad S^{(\ell)}_n=(z^{(\ell)}_{n-1},q^{(\ell)}_{n-2},q^{(\ell)}_{n-1}),
+  \]
+  单流延迟为 $3$。
+  \item \textbf{$21$-local（最小字母表，Algorithm G=A$\circ$B）}：用两相消元（先消 $-2$ 再消 $2$）得到单流延迟 $5$ 的在线机，可取状态
+  \[
+  S^{(21)}_t=(v_{t-2},v_{t-1};\ q^A_{t-3},q^A_{t-2};\ w_{t-6},w_{t-5},w_{t-4},w_{t-3};\ q^B_{t-6},q^B_{t-5}),
+  \]
+  读入 $v_t$ 后依次判定 $q^A_{t-1}$、更新 $w_{t-2}$、判定 $q^B_{t-4}$，并输出 $z_{t-5}$。
+\end{itemize}
+\end{proposition}
+
+\subsubsection{carry-free 骨架的 \texorpdfstring{$\zeta$}{zeta} 分类与 primitive 谱接口}
+对任意有限图（SFT）邻接矩阵 $A$，动力学 $\zeta$ 与行列式满足（\cite{BrinStuck2002}，Chapter 3.4）
+\[
+\zeta_A(z)=\exp\!\left(\sum_{n\ge 1}\frac{|\mathrm{Fix}(\sigma^n)|}{n}z^n\right)=\frac{1}{\det(I-zA)},
+\qquad
+|\mathrm{Fix}(\sigma^n)|=\Tr(A^n).
+\]
+primitive 轨道数（按轨道计）由 Möbius 反演提取：
+\[
+p_n=\frac{1}{n}\sum_{d\mid n}\mu(d)\,\Tr(A^{n/d}).
+\]
+
+\begin{theorem}[单流 carry-free 骨架的三分分类]\label{thm:carry-free-zeta-trichotomy}
+对 $9/13/21$-local 三核的单流在线机，引入每步“原子活动度”
+\[
+\kappa(e):=\#\{\text{该步新决定的非零 }q\text{ 事件}\}.
+\]
+取 $u=0$（仅保留 $\kappa=0$ 的边）得到 carry-free 骨架邻接矩阵 $A_0$。则其最大强连通分量分别与下列三类 SFT 共轭：
+\begin{enumerate}
+  \item $9$-local：$7$-全移位，$\det(I-zA_0)=1-7z$；
+  \item $13$-local：$3$-全移位，$\det(I-zA_0)=1-3z$；
+  \item $21$-local：黄金均值 shift（禁子词 $11$），$\det(I-zA_0)=1-z-z^2$。
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}[可审计证明位置]
+定理 \ref{thm:carry-free-zeta-trichotomy} 的证明只依赖 Algorithm S/W/G（含 A/B 判定条件）的显式触发规则；为避免在正文重复展开，证明链已在附录 \ref{app:sync-kernel-A-compare} 的命题 \ref{prop:carry-free-skeleton-three} 给出。
+\end{remark}
+
+\begin{corollary}[全局（多流）装配与 carry-free \texorpdfstring{$\zeta$}{zeta} 因子化]\label{cor:global-assembly-zeta}
+设单流 carry-free 骨架矩阵为 $A_0^{\mathrm{flow}}$，同余流条数为 $m$（强核 $m=4$，弱核 $m=2$）。则全局块级 carry-free 骨架为张量积
+\[
+A_0^{\mathrm{glob}}=(A_0^{\mathrm{flow}})^{\otimes m},
+\]
+因而
+\[
+\zeta^{\mathrm{glob}}_0(z)=\frac{1}{\det(I-zA_0^{\mathrm{glob}})}.
+\]
+特别地：
+\[
+K_9:\ \det(I-zA_0^{\mathrm{glob}})=1-2401z,\qquad
+K_{13}:\ \det(I-zA_0^{\mathrm{glob}})=1-9z,
+\]
+\[
+K_{21}:\ \det(I-zA_0^{\mathrm{glob}})=(1+z)^2(1-3z+z^2).
+\]
+\end{corollary}
+
+\input{sections/body/emergent_arithmetic/parts/sec__A-kernel-compare-main-fingerprint-thermo}
+
+\paragraph{Chebotarev/Artin-\texorpdfstring{$L$}{L} 类比：把“同余类素数分布”内生到核}
+本段把 primitive 轨道的“素数影子”从\emph{总量}升级为\emph{按同余类分层的分布律}。关键点是：对核的同步图在边上附加一个有限阿贝尔群标签（cocycle），即可定义一族扭曲行列式（扭曲 $\zeta/L$），并得到一个完全可审计的“Chebotarev 型”误差公式；其误差指数由\emph{非平凡扭曲的谱半径}显式控制。
+
+\begin{definition}[有限群标签与扭曲矩阵族]\label{def:kernel-group-twist}
+取有限群 $G$（实践中常取阿贝尔群 $G=\ZZ/m$ 或其直积，但本定义允许非阿贝尔情形），并给单流同步图 $\Gamma_K$ 的每条边 $e$ 赋一个群标签 $g(e)\in G$。
+对任意有限维复表示 $\rho:G\to\mathrm{GL}(d_\rho,\CC)$ 与温度参数 $u\in(0,1]$，定义矩阵值扭曲算子
+\[
+M_{K,\rho}(u)_{ij}:=\sum_{e:i\to j}u^{\kappa(e)}\,\rho(g(e))\in\mathrm{Mat}_{d_\rho}(\CC),
+\]
+并把它视为作用在 $\CC^{V}\otimes\CC^{d_\rho}$ 上的块矩阵。定义扭曲 $\zeta/L$-函数为
+\[
+L_{K,\rho}(z,u):=\det(I-zM_{K,\rho}(u))^{-1}.
+\]
+当 $\rho=\mathbf{1}$ 为平凡表示时，$M_{K,\mathbf{1}}(u)=M_K(u)$，从而 $L_{K,\mathbf{1}}(z,u)=\zeta_K(z,u)$。
+\end{definition}
+
+\begin{definition}[同余类分层的 primitive 谱]\label{def:kernel-chebotarev-spectrum}
+对 $c\in G$，定义按“Frobenius 标签”分层的 primitive 轨道谱
+\[
+B_{n,c}(u):=\sum_{\substack{\gamma\in\mathcal{P}\\|\gamma|=n\\g(\gamma)=c}}u^{\kappa(\gamma)}.
+\]
+当 $G$ 为阿贝尔群时，其不可约表示为角色 $\chi\in\widehat G$；此时定义扭曲 primitive 谱
+\[
+B_n(\chi;u):=\sum_{\substack{\gamma\in\mathcal{P}\\|\gamma|=n}}\chi(g(\gamma))\,u^{\kappa(\gamma)}.
+\]
+\end{definition}
+
+\begin{proposition}[角色傅里叶反演（Chebotarev 分层的精确恒等式）]\label{prop:kernel-chebotarev-fourier}
+在定义 \ref{def:kernel-chebotarev-spectrum} 的记号下，对任意 $c\in G$ 有精确恒等式
+\[
+B_{n,c}(u)=\frac{1}{|G|}\sum_{\chi\in\widehat G}\overline{\chi(c)}\,B_n(\chi;u).
+\]
+\end{proposition}
+
+\begin{proof}
+对每条 primitive 轨道 $\gamma$，用有限阿贝尔群的角色正交关系
+\(
+\frac{1}{|G|}\sum_{\chi\in\widehat G}\overline{\chi(c)}\,\chi(g(\gamma))=\mathbf{1}_{\{g(\gamma)=c\}}
+\)
+逐项展开即可。
+\end{proof}
+
+\begin{proposition}[扭曲 primitive 谱的 Möbius--Adams 抽取：\texorpdfstring{$(\chi,u)\mapsto (\chi^d,u^d)$}{(chi,u)->(chi^d,u^d)}]\label{prop:kernel-chebotarev-mobius-adams}
+沿用定义 \ref{def:kernel-group-twist} 的记号，并额外假设 \(G\) 为有限阿贝尔群。
+对任意角色 \(\chi\in\widehat G\) 与 \(u\in(0,1]\)，定义扭曲迹序列
+\[
+a_n(\chi;u):=\Tr\!\left(M_{K,\chi}(u)^n\right)\qquad(n\ge 1).
+\]
+则定义 \ref{def:kernel-chebotarev-spectrum} 的扭曲 primitive 谱满足严格恒等式
+\[
+\boxed{\ 
+B_n(\chi;u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}\!\bigl(\chi^{d};u^{d}\bigr)
+=\frac{1}{n}\sum_{d\mid n}\mu(d)\,\Tr\!\left(M_{K,\chi^{d}}(u^{d})^{\,n/d}\right)\ }.
+\]
+\end{proposition}
+\begin{proof}
+对固定 \((\chi,u)\)，设
+\(
+\zeta_{K,\chi}(z,u):=\det(I-zM_{K,\chi}(u))^{-1}
+\)。
+由行列式对数展开有
+\[
+\log\zeta_{K,\chi}(z,u)
+=\sum_{n\ge 1}\frac{a_n(\chi;u)}{n}z^n.
+\]
+另一方面，按 primitive 轨道分解（幂重复）有严格恒等式
+\[
+\log\zeta_{K,\chi}(z,u)
+=\sum_{\gamma\in\mathcal{P}}\sum_{r\ge 1}\frac{1}{r}\Bigl(z^{|\gamma|}\chi(g(\gamma))u^{\kappa(\gamma)}\Bigr)^r
+=\sum_{r\ge 1}\frac{1}{r}\sum_{n\ge 1}B_n(\chi^r;u^r)\,z^{nr}.
+\]
+比较 \(z^n\) 系数并对除子作变元替换得
+\[
+a_n(\chi;u)=\sum_{d\mid n} d\,B_d(\chi^{n/d};u^{n/d}).
+\]
+对该关系作 Möbius 反演即得所示公式：
+\(
+B_n(\chi;u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(\chi^d;u^d)
+\)。
+证毕。
+\end{proof}
+
+\begin{remark}[结构含义：Möbius/Witt 抽取是带 Adams 伸缩的端操作]\label{rem:kernel-chebotarev-mobius-adams-meaning}
+命题 \ref{prop:kernel-chebotarev-mobius-adams} 表明：在带角色轴的扭曲语境中，primitive 抽取并非对每个 \((\chi,u)\) 逐点地对 \(n\) 作 Möbius 反演；
+相反，它必然同步引入 \(d\)-次 Adams 伸缩
+\[
+(\chi,u)\longmapsto(\chi^d,u^d),
+\]
+其中 \(\chi\mapsto\chi^d\) 来自幂重复下的标签幂律 \(\chi(g(\gamma^d))=\chi(g(\gamma))^d\)，而 \(u\mapsto u^d\) 来自能量的可加性 \(\kappa(\gamma^d)=d\,\kappa(\gamma)\)。
+该“时间除子 \(d\)”与“角色/能量伸缩”的同步性，是后续把 Chebotarev（空间侧）与 Witt（时间侧）拼成严格交换图的核心机制。
+\end{remark}
+
+\begin{corollary}[Chebotarev--Plancherel 能量恒等式：空间侧均方偏差 \texorpdfstring{$=$}{=} 角色侧能量和]\label{cor:kernel-chebotarev-plancherel-energy}
+在命题 \ref{prop:kernel-chebotarev-fourier} 的设定下，仍假设 \(G\) 为有限阿贝尔群。
+令
+\[
+\overline{B}_n(u):=\frac{1}{|G|}\sum_{c\in G}B_{n,c}(u)=\frac{1}{|G|}B_n(\mathbf{1};u),
+\qquad
+\varepsilon_n(c;u):=B_{n,c}(u)-\overline{B}_n(u).
+\]
+则对任意 \(n\ge 1\) 有精确恒等式
+\[
+\boxed{\;
+\sum_{c\in G}\bigl|\varepsilon_n(c;u)\bigr|^2
+=\frac{1}{|G|}\sum_{\chi\in\widehat G\setminus\{\mathbf{1}\}}\bigl|B_n(\chi;u)\bigr|^2\; }.
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:kernel-chebotarev-fourier} 得
+\[
+\varepsilon_n(c;u)
+=\frac{1}{|G|}\sum_{\chi\ne \mathbf{1}}\overline{\chi(c)}\,B_n(\chi;u).
+\]
+对有限阿贝尔群 \(G\) 上的角色基应用 Parseval/Plancherel 恒等式即得
+\(
+\sum_{c\in G}|\varepsilon_n(c;u)|^2=\frac{1}{|G|}\sum_{\chi\ne\mathbf{1}}|B_n(\chi;u)|^2
+\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[商映射下的 \texorpdfstring{$L^2$}{L2} 偏差单调：模数细化只会暴露更多非平凡角色能量]\label{cor:kernel-chebotarev-L2-monotone}
+设 \(\pi:G_2\twoheadrightarrow G_1\) 为有限阿贝尔群的满同态，并在两层上分别构造同余分层 primitive 谱 \(B^{(i)}_{n,c}(u)\)（\(i\in\{1,2\}\)）。
+令粗层分层谱由细层推前给出
+\[
+B^{(1)}_{n,c_1}(u):=\sum_{c_2\in \pi^{-1}(c_1)}B^{(2)}_{n,c_2}(u),
+\qquad c_1\in G_1,
+\]
+并定义相对 Haar 密度（均值为 \(1\)）
+\[
+r^{(i)}_{n}(c;u):=\frac{|G_i|\,B^{(i)}_{n,c}(u)}{B^{(i)}_{n}(\mathbf{1};u)},
+\qquad
+\frac{1}{|G_i|}\sum_{c\in G_i}r^{(i)}_{n}(c;u)=1.
+\]
+则在 \(L^2(G_i)\)（按 Haar/均匀测度归一化）意义下有单调性：
+\[
+\boxed{\;
+\bigl\|r^{(1)}_{n}(\cdot;u)-1\bigr\|_{L^2(G_1)}
+\le
+\bigl\|r^{(2)}_{n}(\cdot;u)-1\bigr\|_{L^2(G_2)}\; }.
+\]
+等价地：细化群标签（例如细化模数）只会增加（或保持）可见的非平凡角色能量总和。
+\end{corollary}
+\begin{proof}
+由推前定义与 \(|G_2|=|G_1|\cdot|\ker\pi|\) 可知，对任意 \(c_1\in G_1\) 有
+\[
+r^{(1)}_{n}(c_1;u)
+=\frac{1}{|\ker\pi|}\sum_{c_2\in\pi^{-1}(c_1)}r^{(2)}_{n}(c_2;u),
+\]
+即 \(r^{(1)}_{n}\) 正是 \(r^{(2)}_{n}\) 沿 \(\pi\) 的纤维条件期望（纤维平均）。
+而条件期望作为 \(L^2\) 正交投影是收缩算子，故
+\(
+\|r^{(1)}_{n}-1\|_{2}\le \|r^{(2)}_{n}-1\|_{2}
+\)。
+证毕。
+\end{proof}
+
+\begin{proposition}[非阿贝尔 Chebotarev--Plancherel 能量恒等式与商单调性（类函数/不可约特征标通道）]\label{prop:kernel-chebotarev-plancherel-nonabelian}
+设 \(G\) 为有限群，记 \(\mathrm{Cl}(G)\) 为 \(G\) 上的类函数（共轭类不变复值函数）Hilbert 空间，并赋予内积
+\[
+\langle f_1,f_2\rangle_{\mathrm{Cl}(G)}
+:=\frac{1}{|G|}\sum_{g\in G} f_1(g)\,\overline{f_2(g)}.
+\]
+令 \(\{\chi_\rho\}_{\rho\in\widehat G}\) 为 \(G\) 的不可约特征标系，则其在 \(\mathrm{Cl}(G)\) 中构成一组正交规范基。
+对任意 \(\varepsilon\in \mathrm{Cl}(G)\) 满足零均值条件 \(\sum_{g\in G}\varepsilon(g)=0\)（等价于 \(\langle \varepsilon,\chi_{\mathbf{1}}\rangle=0\)），定义特征标通道幅度
+\[
+B(\rho):=\sum_{g\in G}\varepsilon(g)\,\overline{\chi_\rho(g)}
+\qquad(\rho\in\widehat G).
+\]
+则有 Parseval/Plancherel 型精确恒等式
+\[
+\boxed{\;
+\sum_{g\in G}\bigl|\varepsilon(g)\bigr|^2
+=\frac{1}{|G|}\sum_{\rho\in\widehat G\setminus\{\mathbf{1}\}}\bigl|B(\rho)\bigr|^2\; }.
+\]
+此外，若 \(\varphi:G\twoheadrightarrow H\) 为有限群满同态，并定义纤维平均推前（条件期望）
+\[
+(\varphi_\ast\varepsilon)(h):=\frac{1}{|\ker\varphi|}\sum_{g\in \varphi^{-1}(h)}\varepsilon(g),
+\qquad h\in H,
+\]
+则在归一化 \(L^2\) 意义下有收缩
+\[
+\bigl\|\varphi_\ast\varepsilon\bigr\|_{L^2(H)}
+\le
+\bigl\|\varepsilon\bigr\|_{L^2(G)}.
+\]
+\end{proposition}
+
+\begin{proof}
+不可约特征标的正交关系给出 Fourier 展开
+\(
+\varepsilon=\sum_{\rho\in\widehat G}\langle \varepsilon,\chi_\rho\rangle\,\chi_\rho
+\)
+以及 Parseval 恒等式
+\(
+\|\varepsilon\|_{L^2(G)}^2=\sum_{\rho\in\widehat G}|\langle \varepsilon,\chi_\rho\rangle|^2
+\)。
+由定义 \(B(\rho)=|G|\langle \varepsilon,\chi_\rho\rangle\)，而零均值条件使得 \(\langle \varepsilon,\chi_{\mathbf{1}}\rangle=0\)，故立得所示能量恒等式。
+
+对商单调性：对每个 \(h\in H\) 由 Cauchy--Schwarz 有
+\[
+\bigl|(\varphi_\ast\varepsilon)(h)\bigr|^2
+=\left|\frac{1}{|\ker\varphi|}\sum_{g\in\varphi^{-1}(h)}\varepsilon(g)\right|^2
+\le
+\frac{1}{|\ker\varphi|}\sum_{g\in\varphi^{-1}(h)}|\varepsilon(g)|^2.
+\]
+对 \(h\) 求和并用 \(|G|=|H|\cdot|\ker\varphi|\) 得
+\[
+\frac{1}{|H|}\sum_{h\in H}\bigl|(\varphi_\ast\varepsilon)(h)\bigr|^2
+\le
+\frac{1}{|G|}\sum_{g\in G}|\varepsilon(g)|^2,
+\]
+即 \(\|\varphi_\ast\varepsilon\|_{L^2(H)}\le \|\varepsilon\|_{L^2(G)}\)。证毕。
+\end{proof}
+
+\begin{remark}[对照：阿贝尔情形即角色基能量分解]\label{rem:kernel-chebotarev-plancherel-nonabelian-abelian}
+当 \(G\) 为阿贝尔群时，\(\mathrm{Cl}(G)=\CC^{G}\) 且不可约特征标即一维角色；上式退化为推论 \ref{cor:kernel-chebotarev-plancherel-energy}。
+同时，\(\varphi_\ast\) 为纤维平均条件期望，\(L^2\) 收缩即推论 \ref{cor:kernel-chebotarev-L2-monotone} 证明中的抽象算子事实。
+\end{remark}
+
+\begin{theorem}[核的 Chebotarev 型主项与指数误差（完全可计算）]\label{thm:kernel-chebotarev-exp}
+设 $u\in(0,1]$ 且 $M_K(u)$ 原始，记 $\lambda_1(u)=\rho(M_K(u))$，并令
+\[
+\eta(u):=\max_{\chi\in\widehat G,\ \chi\ne\mathbf{1}}\rho\bigl(M_{K,\chi}(u)\bigr),
+\qquad
+\Lambda(u):=\max\{|\lambda_2(u)|,\eta(u)\}.
+\]
+则对每个 $c\in G$，有
+\[
+B_{n,c}(u)=\frac{1}{|G|}\cdot\frac{\lambda_1(u)^n}{n}+O\!\left(\frac{\Lambda(u)^n}{n}\right)\qquad(n\to\infty).
+\]
+其中误差指数 $\Lambda(u)/\lambda_1(u)$ 只依赖于核在该群标签下的最坏非平凡扭曲谱半径。
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{prop:kernel-chebotarev-fourier}，
+\(
+B_{n,c}(u)=|G|^{-1}\sum_{\chi}\overline{\chi(c)}B_n(\chi;u).
+\)
+当 $\chi=\mathbf{1}$ 时，$B_n(\mathbf{1};u)=B_n(u)$，由定理 \ref{thm:kernel-weighted-prime-orbit} 得到主项与误差 $O(|\lambda_2(u)|^n/n)$。
+当 $\chi\ne\mathbf{1}$ 时，由命题 \ref{prop:kernel-chebotarev-mobius-adams}，
+\(
+B_n(\chi;u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,\Tr(M_{K,\chi^d}(u^d)^{\,n/d})
+\)
+给出，且对任意有限矩阵 $A$ 有粗界 $|\Tr(A^m)|\le (\dim A)\,\rho(A)^m$；因此
+\(
+B_n(\chi;u)=O(\eta(u)^n/n)
+\)
+一致成立。合并两类误差即得结论。
+\end{proof}
+
+\begin{definition}[核版 RH/GRH（谱隙的平方根界）]\label{def:kernel-rh}
+在固定温度 $u$ 下，定义核的“RH 型谱隙条件”
+\[
+\textsf{RH}_K(u):\quad \max_{i\ge 2}|\lambda_i(u)|\le \lambda_1(u)^{1/2},
+\]
+以及在给定有限群标签 $G$ 下的“GRH 型扭曲谱隙条件”
+\[
+\textsf{GRH}_{K,G}(u):\quad \eta(u)\le \lambda_1(u)^{1/2}.
+\]
+\end{definition}
+
+\begin{corollary}[平方根级误差：核版 RH/GRH 的“素数定理形状”]\label{cor:kernel-rh-sqrt-error}
+若 $\textsf{RH}_K(u)$ 成立，则
+\[
+B_n(u)=\frac{\lambda_1(u)^n}{n}+O\!\left(\frac{\lambda_1(u)^{n/2}}{n}\right).
+\]
+若进一步 $\textsf{GRH}_{K,G}(u)$ 成立，则对每个 $c\in G$，
+\[
+B_{n,c}(u)=\frac{1}{|G|}\cdot\frac{\lambda_1(u)^n}{n}+O\!\left(\frac{\lambda_1(u)^{n/2}}{n}\right).
+\]
+\end{corollary}
+
+\begin{proof}
+把定义 \ref{def:kernel-rh} 代入定理 \ref{thm:kernel-weighted-prime-orbit} 与定理 \ref{thm:kernel-chebotarev-exp} 即得。
+\end{proof}
+
+\begin{proposition}[非阿贝尔通道化：群代数核的 Peter--Weyl 块对角化与行列式因子化]\label{prop:kernel-peter-weyl-block-diagonalization}
+设 \(G\) 为有限群，\(V\) 为有限集合，并令
+\[
+K=(K_{ij})_{i,j\in V}\in \CC[G]^{V\times V}
+\]
+为一个以群代数为系数的矩阵。将每个矩阵元写作
+\(
+K_{ij}=\sum_{g\in G}a_{ij}(g)\,g
+\)
+（其中 \(a_{ij}(g)\in\CC\)）。
+定义算子 \(\mathcal{K}\in\mathrm{End}(\CC^{V}\otimes\CC[G])\) 为“右卷积实现”：
+对基向量 \(e_j\otimes \delta_h\)（\(j\in V,\ h\in G\)）规定
+\[
+\mathcal{K}(e_j\otimes \delta_h)
+:=
+\sum_{i\in V}\sum_{g\in G}a_{ij}(g)\,(e_i\otimes\delta_{hg}).
+\]
+对任意不可约复表示类 \(\rho\in\widehat G\)，取其代表 \(\rho:G\to\mathrm{GL}(V_\rho)\)（\(d_\rho:=\dim V_\rho\)），并定义通道矩阵
+\[
+K_\rho\in \mathrm{End}(\CC^{V}\otimes V_\rho),
+\qquad
+(K_\rho)_{ij}:=\sum_{g\in G}a_{ij}(g)\,\rho(g)\in\mathrm{End}(V_\rho).
+\]
+则存在分解（取决于表示的实现与基的选择，但通道集合 \(\widehat G\) 与重数 \(d_\rho\) 由正则表示唯一决定）
+\[
+\CC^{V}\otimes\CC[G]
+\ \cong\
+\bigoplus_{\rho\in\widehat G}\bigl(\CC^{V}\otimes V_\rho\bigr)\otimes \CC^{d_\rho},
+\]
+使得在该分解下 \(\mathcal{K}\) 块对角化为
+\[
+\mathcal{K}\ \cong\ \bigoplus_{\rho\in\widehat G}\bigl(K_\rho\otimes I_{d_\rho}\bigr).
+\]
+从而得到严格的行列式因子化
+\[
+\boxed{\;
+\det\!\bigl(I-z\mathcal{K}\bigr)
+=\prod_{\rho\in\widehat G}\det\!\bigl(I-zK_\rho\bigr)^{d_\rho}\; }.
+\]
+\end{proposition}
+
+\begin{proof}
+由 Wedderburn 分解（等价于有限群的 Peter--Weyl 理论），存在 \(\CC\)-代数同构
+\[
+\CC[G]\ \cong\ \bigoplus_{\rho\in\widehat G}\mathrm{End}(V_\rho),
+\qquad
+g\longmapsto (\rho(g))_{\rho\in\widehat G}.
+\]
+在该同构下，右卷积算子 \(R_x:y\mapsto yx\)（\(x\in\CC[G]\)）分量化为每个 \(\rho\)-块上的“右乘”算子
+\[
+R_{\rho(x)}:\mathrm{End}(V_\rho)\to\mathrm{End}(V_\rho),\qquad X\longmapsto X\,\rho(x).
+\]
+取任意基并用向量化同构 \(\mathrm{End}(V_\rho)\cong \CC^{d_\rho}\otimes\CC^{d_\rho}\)，右乘算子 \(R_{\rho(x)}\) 可识别为 \(I_{d_\rho}\otimes \rho(x)^{\mathsf T}\)（等价地亦可取 \(I_{d_\rho}\otimes\rho(x)\)，二者仅差转置）；因此
+\[
+\det\!\bigl(I-z\,R_{\rho(x)}\bigr)
+=\det\!\bigl(I-z\,\rho(x)^{\mathsf T}\bigr)^{d_\rho}
+=\det\!\bigl(I-z\,\rho(x)\bigr)^{d_\rho}.
+\]
+对矩阵 \(K=(K_{ij})\) 作同样分解：在 \(\rho\)-块上，\(\mathcal{K}\) 等价于由右乘算子 \(R_{(K_\rho)_{ij}}\) 组装而成的块算子；再一次用向量化（并按需交换张量因子顺序）可将其识别为 \(K_\rho\otimes I_{d_\rho}\)（等价地亦可取 \(K_\rho^{\mathsf T}\otimes I_{d_\rho}\)），从而
+\[
+\det\!\bigl(I-z\,\mathcal{K}\bigr)
+=\prod_{\rho\in\widehat G}\det\!\bigl(I-z(K_\rho\otimes I_{d_\rho})\bigr)
+=\prod_{\rho\in\widehat G}\det\!\bigl(I-zK_\rho\bigr)^{d_\rho}.
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[Artin 分解的有限维版本（正规覆盖的行列式因子化）]\label{prop:kernel-artin-factorization}
+在定义 \ref{def:kernel-group-twist} 的框架下，令 $M_{K,G}(u)$ 为作用在 $\CC^{V}\otimes\CC[G]$ 上的“群扩张邻接算子”：
+对基向量 $e_{i}\otimes\delta_g$，令
+\[
+M_{K,G}(u):(e_i\otimes\delta_g)\mapsto \sum_{e:i\to j}u^{\kappa(e)}\,(e_j\otimes \delta_{g\cdot g(e)}).
+\]
+则对任意 $z$ 有行列式恒等式
+\[
+\det(I-zM_{K,G}(u))=\prod_{\rho\in\widehat G}\det(I-zM_{K,\rho}(u))^{\dim\rho},
+\]
+其中 $\widehat G$ 为 $G$ 的不可约复表示类集合。等价地，覆盖 $\zeta$ 满足
+\[
+\zeta_{K,G}(z,u)=\prod_{\rho\in\widehat G}L_{K,\rho}(z,u)^{\dim\rho},
+\qquad
+\zeta_{K,G}:=\det(I-zM_{K,G}(u))^{-1}.
+\]
+\end{proposition}
+
+\begin{proof}
+将 $M_{K,G}(u)$ 视为命题 \ref{prop:kernel-peter-weyl-block-diagonalization} 的右卷积实现：其群代数系数矩阵 \(K(u)\in\CC[G]^{V\times V}\) 的 \((i,j)\)-元由从 \(i\to j\) 的边集合给出
+\[
+K(u)_{ij}:=\sum_{e:i\to j}u^{\kappa(e)}\,g(e)\in\CC[G],
+\]
+从而 \(\mathcal{K}=M_{K,G}(u)\)。
+对任意 \(\rho\in\widehat G\)，由定义 \ref{def:kernel-group-twist} 得到通道矩阵
+\(
+K(u)_\rho=M_{K,\rho}(u)
+\)。
+因此对 \(\mathcal{K}\) 应用命题 \ref{prop:kernel-peter-weyl-block-diagonalization} 的行列式因子化结论即得所述 Artin 分解。
+\end{proof}
+
+\begin{remark}[对照：Ihara-\texorpdfstring{$\zeta$}{zeta} 的“图版 RH”与 Ramanujan]\label{rem:kernel-graph-rh}
+在无回溯边移位/非回溯行走的设置中，Ihara-\(\zeta\) 及其 Bass 行列式公式把“素回路谱”与谱半径/特征值界绑定；对 $q$-正则图，Sunada 的观察可表述为：Ramanujan 条件等价于 Ihara-\(\zeta\) 满足一个 Riemann 假设型的零点/极点约束（见 \cite{TerrasZetaGraphs,StarkTerras1996GraphCoverings}）。
+本文的核版 RH/GRH（定义 \ref{def:kernel-rh}）与该图论对照的共同点在于：都把 prime-orbit 误差的“平方根界”转译为一个可检验的谱隙条件。
+\end{remark}
+
+\begin{remark}[零温“第一激发态”的可计算读出：最小平均回路]\label{rem:kernel-min-cycle-mean}
+给定边权 $w(e):=\kappa(e)$，定义周期平均 carry 密度
+\(
+\bar\kappa(\gamma)=\kappa(\gamma)/|\gamma|.
+\)
+则 $\min_{\gamma}\bar\kappa(\gamma)$ 等于有向图的最小平均回路值，可用 Karp 算法在多项式时间内求出（\cite{Karp1978MinCycleMean}）。
+对本文 $9/13/21$-local 三核，该最小值为 $0$（存在 carry-free 周期）；而把 carry-free 本质分量收缩后，仍可用同一算法给出“必须产生 carry 的周期族”中最小的正平均密度，作为零温下的第一激发态指纹。
+\end{remark}
+
+\begin{corollary}[折叠公式：加法即“叠加后归一化”]\label{cor:add-as-fold}
+将 $c,d\in X_\infty$ 视为 $\mathcal{D}$ 中的 $0/1$ 配置，令其逐点和为
+\[
+(c+d)_k:=c_k+d_k\in\{0,1,2\},
+\]
+则
+\[
+c\oplus d=\Fold_\infty(c+d).
+\]
+\end{corollary}
+
+\textbf{证明：}
+由定义 \ref{def:val-on-D}，$\mathrm{Val}(c+d)=\mathrm{Val}(c)+\mathrm{Val}(d)$，再由定理 \ref{thm:zeckendorf-transversal} 的定义 $\Fold_\infty(a)=Z(\mathrm{Val}(a))=\mathrm{Val}^{-1}(\mathrm{Val}(a))$ 即得。
+
+\begin{theorem}[加法的定义性同构（记号固定）]\label{thm:add-definitional}
+$(X_\infty,\oplus)$ 为交换幺半群，且 $\mathrm{Val}:(X_\infty,\oplus)\to(\NN,+)$ 为同构。
+\end{theorem}
+
+\textbf{证明：}
+由定理 \ref{thm:stable-add-value-consistency}，
+\[
+\mathrm{Val}(c\oplus d)=\mathrm{Val}(c)+\mathrm{Val}(d).
+\]
+又 \(\mathrm{Val}\) 为双射（Zeckendorf 唯一性），故 \((X_\infty,\oplus)\) 的结合律、交换律与单位元均由 \((\NN,+)\) 传递得到，且 \(\mathrm{Val}\) 给出同构。
+
+该定理将加法解释为“从非规范叠加到稳定地址的投影读出”：原始叠加（逐位相加）一般不保持稳定语法，需要通过规范化投影到稳定地址空间。

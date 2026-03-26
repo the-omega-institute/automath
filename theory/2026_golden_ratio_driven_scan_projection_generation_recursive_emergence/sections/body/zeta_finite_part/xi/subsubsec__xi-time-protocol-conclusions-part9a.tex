@@ -1,0 +1,546 @@
+\paragraph{两概念相干判别的 Lee--Yang 量子化、椭圆化与高维显式分解}
+在既有时间--前缀语义中，二概念竞争可写为带 Gödel 权重的复分区函数。以下命题链把零点谱列、后验阈值、有限多对一投影误差、最小传输子椭圆化以及超立方体核的 Walsh--Joukowsky 解析化置于同一可审计口径。
+
+\begin{theorem}[两概念相干判别的 Lee--Yang 量子化谱列]\label{thm:xi-two-concept-leyang-quantization}
+设字母表 \(\Sigma=\{0,1\}\)。
+给定两个概念 \(C_0,C_1\)，各自产生可计算无限序列 \(s^{(0)},s^{(1)}\in\Sigma^{\mathbb N}\)，并赋予前缀自由 Gödel 码长 \(\ell_0,\ell_1\in\mathbb N\)。
+对任意观测前缀 \(x_{1:n}\in\Sigma^n\)，定义失配能量
+\[
+E_i(n):=\#\{1\le t\le n:\ s_t^{(i)}\neq x_t\}\qquad(i=0,1),
+\]
+并记
+\[
+\Delta_n:=E_1(n)-E_0(n),
+\qquad
+Z_n(\beta):=2^{-\ell_0}e^{-\beta E_0(n)}+2^{-\ell_1}e^{-\beta E_1(n)}.
+\]
+若 \(\Delta_n\neq 0\)，则有：
+\begin{enumerate}
+  \item Lee--Yang 零点全集显式为
+  \[
+  \mathcal Z_n:=\{\beta\in\mathbb C:\ Z_n(\beta)=0\}
+  =\left\{
+  -\frac{(\ell_1-\ell_0)\ln 2+(2k+1)\pi i}{\Delta_n}
+  :\ k\in\mathbb Z
+  \right\}.
+  \]
+  \item 对任意实 \(\beta\in\mathbb R\)，后验权重
+  \[
+  \pi_{n,\beta}(0):=\frac{2^{-\ell_0}e^{-\beta E_0(n)}}{Z_n(\beta)},
+  \qquad
+  \pi_{n,\beta}(1):=1-\pi_{n,\beta}(0)
+  \]
+  满足严格 logistic 形式
+  \[
+  \pi_{n,\beta}(0)
+  =\frac{1}{1+\exp\!\left(-\bigl[\beta\Delta_n+(\ell_1-\ell_0)\ln 2\bigr]\right)}.
+  \]
+  \item 对任意 \(\varepsilon\in(0,\tfrac12)\)，条件 \(\pi_{n,\beta}(0)\ge 1-\varepsilon\) 等价于
+  \[
+  \beta\Delta_n+(\ell_1-\ell_0)\ln 2
+  \ge
+  \ln\frac{1-\varepsilon}{\varepsilon}.
+  \]
+  并且全部零点 \(\beta_{n,k}\in\mathcal Z_n\) 具有共同实部
+  \[
+  \operatorname{Re}\beta_{n,k}
+  =-\frac{(\ell_1-\ell_0)\ln 2}{\Delta_n},
+  \]
+  即后验平衡面 \(\pi_{n,\beta}(0)=\tfrac12\) 与 Lee--Yang 零点垂直谱线一致。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+因式分解得
+\[
+Z_n(\beta)
+=
+2^{-\ell_0}e^{-\beta E_0(n)}
+\Bigl(1+2^{-(\ell_1-\ell_0)}e^{-\beta\Delta_n}\Bigr).
+\]
+故 \(Z_n(\beta)=0\) 当且仅当
+\[
+e^{-\beta\Delta_n}=-2^{\ell_1-\ell_0}.
+\]
+取复对数得
+\[
+-\beta\Delta_n=(\ell_1-\ell_0)\ln 2+(2k+1)\pi i,\quad k\in\mathbb Z,
+\]
+即得零点谱列与共同实部。
+再由
+\[
+\pi_{n,\beta}(0)=\Bigl(1+2^{-(\ell_1-\ell_0)}e^{-\beta\Delta_n}\Bigr)^{-1}
+\]
+直接化为所示 logistic 形式。
+阈值不等式来自
+\[
+\frac{\pi_{n,\beta}(1)}{\pi_{n,\beta}(0)}
+=
+2^{-(\ell_1-\ell_0)}e^{-\beta\Delta_n}
+\le
+\frac{\varepsilon}{1-\varepsilon}
+\]
+并取对数。证毕。
+\end{proof}
+
+\begin{corollary}[相干时间的描述差--失配密度定量律]\label{cor:xi-two-concept-coherence-time-density-law}
+在定理 \ref{thm:xi-two-concept-leyang-quantization} 的设定下，进一步假设观测流由 \(C_0\) 生成，即 \(E_0(n)=0\) 且 \(\Delta_n=E_1(n)\)。
+记
+\[
+\underline\delta:=\liminf_{n\to\infty}\frac{E_1(n)}{n}.
+\]
+若 \(\underline\delta>0\)，则对任意固定 \(\beta>0\) 与 \(\varepsilon\in(0,\tfrac12)\)，存在 \(N\) 使得一切 \(n\ge N\) 皆有
+\[
+\pi_{n,\beta}(0)\ge 1-\varepsilon.
+\]
+定义最小相干时间
+\[
+\tau_\varepsilon(\beta):=\inf\{n\ge 1:\ \pi_{n,\beta}(0)\ge 1-\varepsilon\},
+\]
+则有渐近上界
+\[
+\tau_\varepsilon(\beta)
+\le
+\frac{(\ell_1-\ell_0)\ln 2+\ln\frac{1-\varepsilon}{\varepsilon}}{\beta\,\underline\delta}
++o(1),
+\]
+其中 \(o(1)\) 由 \(\liminf\) 外推误差诱导。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:xi-two-concept-leyang-quantization}，\(\pi_{n,\beta}(0)\ge 1-\varepsilon\) 等价于
+\[
+\beta E_1(n)+(\ell_1-\ell_0)\ln 2
+\ge
+\ln\frac{1-\varepsilon}{\varepsilon}.
+\]
+任取 \(\eta\in(0,\underline\delta)\)，当 \(n\) 充分大时有 \(E_1(n)\ge (\underline\delta-\eta)n\)，从而
+\[
+n
+\ge
+\frac{(\ell_1-\ell_0)\ln 2+\ln\frac{1-\varepsilon}{\varepsilon}}
+{\beta(\underline\delta-\eta)}
+\Longrightarrow
+\pi_{n,\beta}(0)\ge 1-\varepsilon.
+\]
+令 \(\eta\downarrow 0\) 即得所示上界。证毕。
+\end{proof}
+
+\begin{conclusion}[前缀自由族上的统一相干证书：可计算停时与显式 I 类错误上界]\label{con:xi-prefixfree-universal-coherence-certificate}
+设 \(b\ge 2\)，\(\Sigma_b:=\{0,1,\dots,b-1\}\)，并固定一台输出字母表为 \(\Sigma_b\) 的前缀自由通用机 \(U\)。
+对任意显著性水平 \(\alpha\in(0,1)\)，存在一个可计算的顺序判别过程 \(\mathcal T_\alpha\)，其输入为无限序列 \(x\in\Sigma_b^{\NN}\)，并满足：
+\begin{enumerate}
+  \item 若零假设为 \(x\sim \mathrm{Unif}(\Sigma_b)^{\otimes \NN}\)（独立同分布均匀），则
+  \[
+  \PP\bigl(\mathcal T_\alpha\ \text{在有限时刻停止}\bigr)\le \alpha.
+  \]
+  \item 若存在程序 \(p\in\mathrm{dom}(U)\) 使得 \(U(p)=x\)（逐符号输出 \(x\)），则 \(\mathcal T_\alpha\) 在有限时刻停止，并输出某个与 \(x\) 前缀一致的程序（可取停时刻的最短者）。
+  更具体地，令
+  \[
+  n_\alpha(p):=|p|+\left\lceil \log_b\frac1\alpha\right\rceil,
+  \]
+  则过程在读入 \(x\upharpoonright n_\alpha(p)\) 后必停止。
+\end{enumerate}
+\end{conclusion}
+\begin{proof}
+对每个程序 \(p\in\mathrm{dom}(U)\) 定义事件
+\[
+E_p:=\bigl\{x\in\Sigma_b^{\NN}:\ x\upharpoonright n_\alpha(p)=U(p)\upharpoonright n_\alpha(p)\bigr\},
+\]
+其中若 \(U(p)\) 在输出 \(n_\alpha(p)\) 个符号前停机则视 \(E_p=\varnothing\)。
+在零假设下，\(U(p)\upharpoonright n_\alpha(p)\) 为确定的长度 \(n_\alpha(p)\) 字串，故
+\[
+\PP(E_p)=b^{-n_\alpha(p)}
+=b^{-|p|}\cdot b^{-\lceil\log_b(1/\alpha)\rceil}
+\le \alpha\,b^{-|p|}.
+\]
+由并合界与前缀自由的 Kraft 不等式 \(\sum_{p\in\mathrm{dom}(U)} b^{-|p|}\le 1\) 得
+\[
+\PP\Bigl(\bigcup_{p\in\mathrm{dom}(U)}E_p\Bigr)
+\le
+\sum_{p\in\mathrm{dom}(U)}\PP(E_p)
+\le
+\alpha\sum_{p\in\mathrm{dom}(U)}b^{-|p|}
+\le \alpha,
+\]
+从而可取 \(\mathcal T_\alpha\) 为“首次命中事件族 \(\{E_p\}\)”的顺序检验：当读入 \(x\upharpoonright n\) 时，并行枚举并模拟全部 \(p\) 并尝试生成 \(U(p)\upharpoonright n\)，一旦存在 \(p\) 使得 \(n\ge n_\alpha(p)\) 且 \(U(p)\upharpoonright n=x\upharpoonright n\)，即停止并输出其中 \(|p|\) 最小者。上述构造可计算且其停止事件包含于 \(\bigcup_p E_p\)，故第 (1) 条成立。
+若 \(U(p)=x\)，则恒有 \(x\upharpoonright n_\alpha(p)=U(p)\upharpoonright n_\alpha(p)\)，故当过程读到长度 \(n_\alpha(p)\) 时，枚举到 \(p\) 并完成到该长度的模拟比对即可验证并停止，从而第 (2) 条成立。证毕。
+\end{proof}
+
+\begin{proposition}[有限多对一投影下的全息聚合界]\label{prop:xi-finite-to-one-holographic-aggregation-bound}
+设 \(\mathcal C\) 为微观概念族，带前缀自由码长 \(\ell:\mathcal C\to\mathbb N\)。
+设投影 \(\Pi:\mathcal C\to\bar{\mathcal C}\) 满足统一纤维上界
+\[
+\#\Pi^{-1}(\bar C)\le M<\infty\qquad(\forall \bar C\in\bar{\mathcal C}).
+\]
+定义聚合权重与等效码长
+\[
+\bar w(\bar C):=\sum_{C:\Pi(C)=\bar C}2^{-\ell(C)},
+\qquad
+\bar\ell(\bar C):=-\log_2\bar w(\bar C).
+\]
+则对任意 \(\bar C\in\bar{\mathcal C}\) 有
+\[
+\min_{C:\Pi(C)=\bar C}\ell(C)
+\le
+\bar\ell(\bar C)
+\le
+\min_{C:\Pi(C)=\bar C}\ell(C)+\log_2 M.
+\]
+因此，任意以 \(\bar\ell\) 进入分区函数的相干判别中，投影引入的描述代价仅为不随时间增长的常数级扰动，幅度至多 \(\log_2 M\)。
+\end{proposition}
+
+\begin{proof}
+记
+\[
+m:=\min_{C:\Pi(C)=\bar C}\ell(C).
+\]
+对纤维内任意 \(C\) 有 \(\ell(C)\ge m\)，故
+\[
+\bar w(\bar C)
+=
+\sum_{C:\Pi(C)=\bar C}2^{-\ell(C)}
+\le
+\sum_{C:\Pi(C)=\bar C}2^{-m}
+\le
+M\cdot 2^{-m}.
+\]
+另一方面存在 \(C_\ast\) 使 \(\ell(C_\ast)=m\)，故 \(\bar w(\bar C)\ge 2^{-m}\)。
+对上述双边不等式取 \(-\log_2\) 即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[最小相干传输子的谱曲线与 \(j=0\) 的 CM 椭圆曲线]\label{thm:xi-minimal-coherence-propagator-cm-j0}
+考虑两顶点有向多重图 \(G\)（顶点集 \(\{0,1\}\)），其边按失配代价赋权：
+\[
+0\to 0:\ 0,\quad
+0\to 1:\ 0,\quad
+1\to 0:\ 1,\quad
+1\to 1:\ 0\ \text{与}\ 2.
+\]
+令 \(u\in\mathbb C\) 为失配赝配分参数，定义加权邻接矩阵
+\[
+M(u):=
+\begin{pmatrix}
+1 & 1\\
+u & 1+u^2
+\end{pmatrix}.
+\]
+再令 \(z\) 为时间生成变量，并定义谱判别式
+\[
+\Delta(z,u):=\det(I-zM(u))
+=1-(u^2+2)z+(u^2-u+1)z^2.
+\]
+则曲线
+\[
+E:\ \Delta(z,u)=0\subset \mathbb P^1_z\times\mathbb P^1_u
+\]
+的正规化是属 \(1\) 的光滑射影曲线；进一步，它与 Weierstrass 曲线
+\[
+E_0:\quad Y^2=4X^3+1
+\]
+双有理同构，故 \(j(E_0)=0\)，并具有 \(\mathrm{CM}(\mathbb Z[\omega])\)（\(\omega=e^{2\pi i/3}\)）。
+\end{theorem}
+
+\begin{proof}
+把 \(\Delta(z,u)=0\) 视作关于 \(z\) 的二次方程，其判别式为
+\[
+D(u):=(u^2+2)^2-4(u^2-u+1)=u^4+4u=u(u^3+4).
+\]
+于是 \(E\) 的正规化与超椭圆曲线
+\[
+C:\ y^2=D(u)=u^4+4u
+\]
+双有理等价。
+因 \(D(u)\) 在 \(\mathbb C\) 上有四个互异根（\(u=0\) 与 \(u^3=-4\) 的三根），故二重覆盖 \(C\to\mathbb P^1_u\) 有四个简单分歧点。
+由 Riemann--Hurwitz 公式得 \(g(C)=1\)。
+再作双有理变换
+\[
+X:=\frac{1}{u},
+\qquad
+Y:=\frac{y}{u^2},
+\]
+可得
+\[
+Y^2
+=
+\frac{u^4+4u}{u^4}
+=
+1+4X^3,
+\]
+即 \(C\dashrightarrow E_0\)。
+经典结果给出 \(Y^2=4X^3+1\) 的 \(j\)-不变量为 \(0\)，故具 Eisenstein 型复乘法。证毕。
+\end{proof}
+
+\begin{proposition}[相干消相时刻的根单位判据]\label{prop:xi-minimal-propagator-root-of-unity-criterion}
+沿用定理 \ref{thm:xi-minimal-coherence-propagator-cm-j0} 的 \(M(u)\)。
+其特征值为
+\[
+\lambda_\pm(u)
+=
+\frac{\operatorname{tr}M(u)\pm\sqrt{D(u)}}{2}
+=
+\frac{(u^2+2)\pm\sqrt{u^4+4u}}{2}.
+\]
+对任意 \(n\ge 1\)，有
+\[
+\operatorname{tr}(M(u)^n)=\lambda_+(u)^n+\lambda_-(u)^n.
+\]
+在 \(\lambda_-(u)\neq 0\) 的点上，
+\[
+\operatorname{tr}(M(u)^n)=0
+\iff
+\left(\frac{\lambda_+(u)}{\lambda_-(u)}\right)^n=-1.
+\]
+记
+\[
+r:=\frac{\lambda_+}{\lambda_-},
+\]
+其在 \(C:y^2=u^4+4u\) 上可写为
+\[
+r(u,y)=\frac{(u^2+2)+y}{(u^2+2)-y},
+\]
+则“第 \(n\) 步完全消相”的参数集合满足
+\[
+\{u:\ \operatorname{tr}(M(u)^n)=0\}
+=
+\pi_u\!\left(
+r^{-1}\!\left(\left\{e^{(2k+1)\pi i/n}:k=0,\dots,n-1\right\}\right)
+\right),
+\]
+其中 \(\pi_u:C\to\mathbb P^1_u\) 为 \(u\)-坐标投影。
+\end{proposition}
+
+\begin{proof}
+由谱分解（或 Cayley--Hamilton）立得
+\(
+\operatorname{tr}(M^n)=\lambda_+^n+\lambda_-^n
+\)。
+当 \(\lambda_-\neq 0\) 时，
+\[
+\operatorname{tr}(M^n)=0
+\iff
+\lambda_+^n=-\lambda_-^n
+\iff
+\left(\frac{\lambda_+}{\lambda_-}\right)^n=-1.
+\]
+把 \(\sqrt{D(u)}\) 提升为曲线 \(C\) 上的坐标 \(y\)，即得 \(r(u,y)\) 的显式式与根单位原像描述。证毕。
+\end{proof}
+
+\begin{theorem}[\(k\)-维超立方体相干核的 Walsh--Joukowsky 分解]\label{thm:xi-hypercube-walsh-joukowsky-leyang-explicit}
+令 \(k\in\mathbb N\)，并记 \(\mathcal H_k:=\{0,1\}^k\)。
+赋予任意权函数 \(w:\mathcal H_k\to\mathbb C\)（例如 \(w(a)=2^{-\ell(a)}\)）。
+对任意观测地址 \(x\in\mathcal H_k\) 与参数 \(u\in\mathbb C\)，定义
+\[
+Z_x(u):=\sum_{a\in\mathcal H_k}w(a)\,u^{d_H(a,x)}.
+\]
+记 \([k]:=\{1,\dots,k\}\)，Walsh 字符
+\[
+\chi_S(y):=(-1)^{\sum_{j\in S}y_j},
+\qquad
+S\subseteq[k],
+\]
+及 Walsh 系数
+\[
+\widehat w(S):=\sum_{a\in\mathcal H_k}w(a)\chi_S(a).
+\]
+则恒有
+\[
+Z_x(u)
+=
+\left(\frac{1+u}{2}\right)^k
+\sum_{S\subseteq[k]}
+\widehat w(S)
+\left(\frac{1-u}{1+u}\right)^{|S|}
+\chi_S(x).
+\]
+等价地，令
+\[
+t:=\frac{1-u}{1+u},
+\qquad
+u=\frac{1-t}{1+t},
+\]
+并定义
+\[
+P_x(t):=\sum_{S\subseteq[k]}\widehat w(S)\,t^{|S|}\chi_S(x),
+\]
+则
+\[
+Z_x(u)=\left(\frac{1+u}{2}\right)^k P_x\!\left(\frac{1-u}{1+u}\right).
+\]
+因此，除显式因子 \((1+u)^k\) 外，Lee--Yang 零点完全由 \(P_x(t)=0\) 的根经 Möbius 变换 \(u=(1-t)/(1+t)\) 给出；特别地，\(t\)-平面的虚轴被送到 \(u\)-平面的单位圆。
+\end{theorem}
+
+\begin{proof}
+对每个坐标 \(j\)，置
+\[
+s_j:=(-1)^{a_j\oplus x_j}=\chi_{\{j\}}(a)\chi_{\{j\}}(x).
+\]
+则
+\[
+\mathbf 1_{\{a_j=x_j\}}=\frac{1+s_j}{2},
+\qquad
+\mathbf 1_{\{a_j\neq x_j\}}=\frac{1-s_j}{2},
+\]
+从而
+\[
+u^{d_H(a,x)}
+=
+\prod_{j=1}^k
+\left(
+\frac{1+u}{2}+\frac{1-u}{2}s_j
+\right).
+\]
+展开得
+\[
+u^{d_H(a,x)}
+=
+\left(\frac{1+u}{2}\right)^k
+\sum_{S\subseteq[k]}
+\left(\frac{1-u}{1+u}\right)^{|S|}
+\prod_{j\in S}s_j.
+\]
+又
+\[
+\prod_{j\in S}s_j=\chi_S(a)\chi_S(x).
+\]
+代回并对 \(a\) 求和即得首式；以 \(t=(1-u)/(1+u)\) 复写即得第二式。证毕。
+\end{proof}
+
+\input{sections/body/zeta_finite_part/xi/thm__xi-hypercube-fourier-walsh-boundary-parseval}
+\input{sections/body/zeta_finite_part/xi/thm__xi-hypercube-leyang-stokes-holography-orbifold}
+
+\paragraph{坐标权超立方体的热迹与树复杂度：欧拉型因子化与可逆读出}
+定理 \ref{thm:xi-hypercube-walsh-joukowsky-leyang-explicit} 以 Walsh 展开刻画了 Hamming 代价核的 Möbius 归一化零点结构。
+同一组 Walsh 字符亦对角化坐标权拉普拉斯，从而将热迹与树复杂度压缩为严格乘积，并在权重取对数素数时呈现欧拉型分解。
+
+\begin{theorem}[坐标权拉普拉斯的 Walsh 谱分解与热迹因子化]\label{thm:xi-hypercube-weighted-laplacian-heat-trace-factorization}
+沿用定理 \ref{thm:xi-hypercube-walsh-joukowsky-leyang-explicit} 的记号，取权向量 \(\mathbf w=(w_1,\dots,w_k)\in(0,\infty)^k\)。
+在 \(\mathcal H_k\) 上定义坐标权拉普拉斯算子
+\[
+(\Delta_{\mathbf w}f)(\omega):=\sum_{i=1}^{k}w_i\bigl(f(\omega)-f(\omega^{(i)})\bigr),
+\]
+其中 \(\omega^{(i)}\) 表示把 \(\omega\) 的第 \(i\) 位翻转后的顶点。
+则 \(\{\chi_S\}_{S\subseteq[k]}\) 为 \(\Delta_{\mathbf w}\) 的共同特征基，并满足
+\[
+\Delta_{\mathbf w}\chi_S=2\Bigl(\sum_{i\in S}w_i\Bigr)\chi_S.
+\]
+从而对任意 \(t>0\) 有热迹完全因子化
+\[
+\Tr\bigl(e^{-t\Delta_{\mathbf w}}\bigr)
+=\sum_{S\subseteq[k]}\exp\!\left(-2t\sum_{i\in S}w_i\right)
+=\prod_{i=1}^{k}\bigl(1+e^{-2tw_i}\bigr).
+\]
+\end{theorem}
+\begin{proof}
+对任意 \(S\subseteq[k]\)，若 \(i\notin S\) 则 \(\chi_S(\omega^{(i)})=\chi_S(\omega)\)；
+若 \(i\in S\) 则 \(\chi_S(\omega^{(i)})=-\chi_S(\omega)\)。
+代入定义得到
+\(
+(\Delta_{\mathbf w}\chi_S)(\omega)=\sum_{i\in S}2w_i\,\chi_S(\omega)
+=2(\sum_{i\in S}w_i)\chi_S(\omega)
+\)，从而给出谱分解。
+热迹为全部特征值的指数和，故
+\[
+\Tr\bigl(e^{-t\Delta_{\mathbf w}}\bigr)
+=\sum_{S\subseteq[k]}\exp\!\left(-2t\sum_{i\in S}w_i\right).
+\]
+取 \(a_i:=e^{-2tw_i}\) 并用子集展开恒等式
+\(
+\sum_{S\subseteq[k]}\prod_{i\in S}a_i=\prod_{i=1}^k(1+a_i)
+\)
+即得乘积式。证毕。
+\end{proof}
+
+\begin{corollary}[素数对数权的欧拉型热迹]\label{cor:xi-prime-log-weighted-hypercube-heat-trace-euler}
+在定理 \ref{thm:xi-hypercube-weighted-laplacian-heat-trace-factorization} 的设定下，若取 \(w_i=\log p_i\)（\(p_i\) 为第 \(i\) 个素数），则
+\[
+\Tr\bigl(e^{-t\Delta_{\log p}}\bigr)=\prod_{i=1}^{k}\bigl(1+p_i^{-2t}\bigr).
+\]
+\end{corollary}
+\begin{proof}
+由 \(e^{-2t\log p_i}=p_i^{-2t}\) 直接代入乘积式即得。证毕。
+\end{proof}
+
+\begin{theorem}[热迹的权重刚性：边界配分函数唯一解码多重集]\label{thm:xi-hypercube-heat-trace-weight-rigidity}
+在定理 \ref{thm:xi-hypercube-weighted-laplacian-heat-trace-factorization} 的设定下，令
+\[
+Z_{\mathbf w}(t):=\Tr\bigl(e^{-t\Delta_{\mathbf w}}\bigr)=\prod_{i=1}^{k}\bigl(1+e^{-2tw_i}\bigr),\qquad t>0.
+\]
+则函数 \(Z_{\mathbf w}:(0,\infty)\to(1,\infty)\) 唯一决定多重集 \(\{w_1,\dots,w_k\}\)（含重数）。
+具体地，若存在 \(\mathbf w'=(w'_1,\dots,w'_m)\in(0,\infty)^m\) 使 \(Z_{\mathbf w}(t)\equiv Z_{\mathbf w'}(t)\) 对一切 \(t>0\) 成立，则必有 \(m=k\)，且两组权重一致到重排。
+\end{theorem}
+\begin{proof}
+令 \(a:=\min_i w_i\)，并记其重数为 \(r:=\#\{i:\ w_i=a\}\)。
+展开
+\(
+Z_{\mathbf w}(t)=\prod_i(1+e^{-2tw_i})
+\)
+得
+\[
+Z_{\mathbf w}(t)-1=\sum_{i=1}^{k}e^{-2tw_i}+O\!\left(e^{-2t(w_{(1)}+w_{(2)})}\right)\qquad(t\to\infty),
+\]
+其中 \(w_{(1)}\le w_{(2)}\le\cdots\) 为从小到大排序。
+故
+\[
+\lim_{t\to\infty}-\frac{1}{2t}\log\bigl(Z_{\mathbf w}(t)-1\bigr)=a,
+\qquad
+\lim_{t\to\infty}e^{2at}\bigl(Z_{\mathbf w}(t)-1\bigr)=r.
+\]
+因此 \(a\) 与 \(r\) 可由 \(Z_{\mathbf w}\) 唯一恢复。
+令
+\[
+\widetilde Z(t):=\frac{Z_{\mathbf w}(t)}{(1+e^{-2at})^{r}},
+\]
+则 \(\widetilde Z(t)=\prod_{w_i>a}(1+e^{-2tw_i})\)。
+对 \(\widetilde Z\) 重复同一提取过程即可递归恢复全部权重及其重数，从而得到结论。证毕。
+\end{proof}
+
+\begin{theorem}[加权超立方体生成树的谱乘积闭式]\label{thm:xi-hypercube-weighted-spanning-tree-spectrum-product}
+令 \(Q_k\) 为顶点集 \(\mathcal H_k\) 的 \(k\)-维超立方体图，并令每条第 \(i\) 坐标方向的边赋权 \(w_i>0\)。
+记 \(\tau_{\mathbf w}(Q_k)\) 为按 Kirchhoff--Matrix Tree 口径定义的加权生成树总权（对每棵生成树取边权乘积并求和）。
+则有完全闭式
+\[
+\tau_{\mathbf w}(Q_k)
+=\frac{1}{2^k}\prod_{\varnothing\neq S\subseteq[k]}2\sum_{i\in S}w_i
+=2^{2^k-k-1}\prod_{\varnothing\neq S\subseteq[k]}\Bigl(\sum_{i\in S}w_i\Bigr).
+\]
+若进一步取 \(w_i=\log p_i\)，则
+\[
+\tau_{\log p}(Q_k)
+=2^{2^k-k-1}\prod_{\varnothing\neq S\subseteq[k]}\log\!\Bigl(\prod_{i\in S}p_i\Bigr).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-hypercube-weighted-laplacian-heat-trace-factorization}，
+\(\Delta_{\mathbf w}\) 的非零特征值为
+\(
+\lambda_S=2\sum_{i\in S}w_i
+\)
+（\(\varnothing\neq S\subseteq[k]\)）。
+加权矩阵树定理给出
+\[
+\tau_{\mathbf w}(Q_k)
+=\frac{1}{|\mathcal H_k|}\prod_{\lambda_S\neq 0}\lambda_S
+=\frac{1}{2^k}\prod_{\varnothing\neq S\subseteq[k]}2\sum_{i\in S}w_i,
+\]
+化简常数因子即得第一式。
+素数特例由
+\(
+\sum_{i\in S}\log p_i=\log\prod_{i\in S}p_i
+\)
+直接代入。证毕。
+\end{proof}
+
+\input{sections/body/zeta_finite_part/xi/subsubsec__xi-leyang-cartesian-power-atomic-clt}
+
+\begin{conjecture}[Gödel 权重下相干零点的普适圆周律与时间读出谱测]\label{conj:xi-godel-weighted-leyang-universal-circle-law}
+设 \(\mathfrak C\) 为可枚举概念类，每个概念给出可计算生成子，并以前缀自由 Gödel 码长 \(\ell\) 赋权 \(2^{-\ell}\)。
+给定观测流 \(x_{1:\infty}\)，对每个 \(n\) 定义
+\[
+Z_n(\beta):=
+\sum_{C\in\mathfrak C}
+2^{-\ell(C)}\exp\!\bigl(-\beta E_C(n)\bigr),
+\]
+其中 \(E_C(n)\) 为概念 \(C\) 对前缀 \(x_{1:n}\) 的可加失配能量。
+猜想：当观测由某一正熵可计算遍历概念生成时，随 \(n\to\infty\)，\(Z_n(\beta)\) 在复 \(\beta\)-平面的 Lee--Yang 零点经适当 Möbius 归一化后收敛到单位圆上的普适测度；该测度角密度由“描述长度--失配率”的联合大偏差谱唯一确定，从而把时间推进 \(n\) 转写为可观测的零点输运流。
+\end{conjecture}

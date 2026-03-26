@@ -1,0 +1,328 @@
+% Partial boundary observation: relative homology kernel, minimal audit completion, and matroidal structure.
+
+\paragraph{部分边界观测的核与审计补全}
+在定理 \ref{thm:spg-boundary-godelization-holographic-dictionary} 的“全边界可见”情形下，顶维边界单射给出严格可逆的离散全息字典。
+当仅能观测部分取向面（屏幕）时，信息缺口由一个相对同调群精确刻画，并且其秩同时控制最小审计补全成本与可达的 Gödel 型补账寄存器维数。
+
+\begin{theorem}[可计算双向编码下的 Kolmogorov 复杂度守恒：Stokes--Gödel 全息完备性]\label{thm:spg-stokes-godel-algorithmic-holographic-completeness}
+固定 \(m,n\ge 1\)，并令 \(\mathcal Q_m\) 为 \(I^n=[0,1]^n\) 的 \(m\)-级 dyadic 立方复形。
+取系数域 \(\FF_2\)，并记顶维边界算子为
+\[
+\partial_n:\ C_n(\mathcal Q_m;\FF_2)\longrightarrow C_{n-1}(\mathcal Q_m;\FF_2).
+\]
+由定理 \ref{thm:spg-dyadic-cubical-boundary-injective} 及 \(H_n(\mathcal Q_m;\FF_2)=0\) 可知 \(\partial_n\) 为单射。
+令 \(G:C_{n-1}(\mathcal Q_m;\FF_2)\to\NN\) 为任意可计算且在其像上可计算可逆的平方自由 Gödel 整数化（例如对每条取向 \((n{-}1)\)-面分配互异素数并取其乘积），并定义
+\[
+\Phi:=G\circ \partial_n:\ C_n(\mathcal Q_m;\FF_2)\longrightarrow \NN.
+\]
+取任意固定的前缀型 Kolmogorov 复杂度 \(K(\,\cdot\,|\,\cdot\,)\)（相对于某个固定的通用前缀机）。
+则存在仅依赖于 \(n\) 与所选编码/译码机的常数 \(C>0\)（与 \(m\) 与输入无关），使得对任意 \(u\in C_n(\mathcal Q_m;\FF_2)\) 都有
+\[
+\bigl|K(u\mid n,m)-K(\Phi(u)\mid n,m)\bigr|\le C,
+\qquad
+K(u\mid \Phi(u),n,m)\le C.
+\]
+并且存在可计算泛函 \(V:\NN\to\QQ_{\ge 0}\) 使得
+\[
+V(\Phi(u))=\operatorname{Vol}(u),
+\]
+其中 \(\operatorname{Vol}(u)\) 表示由 \(u\) 的占据数给出的 dyadic 体积（每个 \(n\)-胞腔体积取 \(2^{-mn}\)）。
+\end{theorem}
+\begin{proof}
+由于 \(\partial_n\) 可计算且 \(G\) 可计算，\(\Phi\) 可计算，故 \(K(\Phi(u)\mid n,m)\le K(u\mid n,m)+O(1)\)。
+另一方面，\(\partial_n\) 在 \(\FF_2\) 上单射且 \(\mathcal Q_m\) 有限，故 \(\partial_n^{-1}\) 在 \(\mathrm{im}(\partial_n)\) 上可由穷举/线性代数实现为可计算函数；
+又由假设 \(G\) 在其像上可计算可逆，故 \(\Phi^{-1}\) 在 \(\mathrm{im}(\Phi)\) 上可计算。
+于是 \(u\) 可由 \(\Phi(u)\) 与参数 \((n,m)\) 可计算恢复，给出
+\(
+K(u\mid \Phi(u),n,m)=O(1)
+\)
+并推出 \(K(u\mid n,m)\le K(\Phi(u)\mid n,m)+O(1)\)。
+合并两侧不等式即得复杂度差为 \(O(1)\)。
+最后，由 \(\Phi(u)\) 可计算得到 \(u\)，而 \(\operatorname{Vol}(u)\) 由 \(u\) 的占据数可计算给出，故存在可计算泛函 \(V\) 满足所示等式。证毕。
+\end{proof}
+
+\begin{theorem}[部分边界观测的屏幕核与相对顶维同调]\label{thm:spg-partial-boundary-screen-kernel-relative-homology}
+固定 \(m,n\ge 1\) 并沿用定理 \ref{thm:spg-dyadic-cubical-boundary-injective} 的 dyadic 立方复形 \(\mathcal Q_m\) 与链群 \(C_k(\mathcal Q_m;\ZZ)\) 记号。
+令 \(\overrightarrow{\mathcal F_{m}^{n-1}}\) 为全部取向 \((n-1)\)-胞腔所成的标准基。
+对任意 \(S\subset \overrightarrow{\mathcal F_{m}^{n-1}}\)，令
+\[
+\Pi_S:C_{n-1}(\mathcal Q_m;\ZZ)\longrightarrow \ZZ^{S}
+\]
+为对 \(S\) 坐标的投影，并定义部分边界观测算子
+\[
+f_S:=\Pi_S\circ\partial_n:\ C_n(\mathcal Q_m;\ZZ)\longrightarrow \ZZ^{S}.
+\]
+令 \(A_{\neg S}\subset \mathcal Q_m^{(n-1)}\) 为从 \((n-1)\)-骨架中删去 \(S\) 中那些 \((n-1)\)-胞腔后得到的子复形（保留全部 \(\le n-2\) 维胞腔，因而仍为子复形，并且 \(C_n(A_{\neg S};\ZZ)=0\)）。
+则有自然同构
+\[
+\ker f_S\ \cong\ H_n(\mathcal Q_m,\ A_{\neg S};\ZZ).
+\]
+\end{theorem}
+\begin{proof}
+由于 \(C_n(A_{\neg S};\ZZ)=0\)，相对链群满足 \(C_n(\mathcal Q_m,A_{\neg S};\ZZ)=C_n(\mathcal Q_m;\ZZ)\)。
+相对边界算子为
+\[
+\partial_n^{\mathrm{rel}}:C_n(\mathcal Q_m;\ZZ)\longrightarrow C_{n-1}(\mathcal Q_m;\ZZ)/C_{n-1}(A_{\neg S};\ZZ).
+\]
+因此 \(x\in C_n(\mathcal Q_m;\ZZ)\) 为相对 \(n\)-循环当且仅当 \(\partial_n x\in C_{n-1}(A_{\neg S};\ZZ)\)，等价于 \(\Pi_S(\partial_n x)=0\)，亦即 \(x\in\ker f_S\)。
+从而 \(\ker f_S=Z_n(\mathcal Q_m,A_{\neg S};\ZZ)\)。
+\par
+另一方面，\(\mathcal Q_m\) 无 \((n+1)\)-胞腔，故 \(C_{n+1}(\mathcal Q_m,A_{\neg S};\ZZ)=0\) 并且 \(B_n(\mathcal Q_m,A_{\neg S};\ZZ)=\mathrm{im}\,\partial_{n+1}^{\mathrm{rel}}=0\)。
+因此
+\[
+H_n(\mathcal Q_m,A_{\neg S};\ZZ)=Z_n(\mathcal Q_m,A_{\neg S};\ZZ)/B_n(\mathcal Q_m,A_{\neg S};\ZZ)\cong \ker f_S.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[屏幕核的连通分量闭式]\label{thm:spg-screen-kernel-connected-components}
+在定理 \ref{thm:spg-partial-boundary-screen-kernel-relative-homology} 的设定下，
+令 \(\Gamma\) 为 \(\mathcal Q_m\) 的顶维胞腔邻接图并添加外部顶点 \(\infty\)：其顶点集为
+\[
+V(\Gamma):=\mathcal Q_m^{(n)}\ \cup\ \{\infty\},
+\]
+其中 \(\mathcal Q_m^{(n)}\) 表示全部 \(n\)-胞腔（按单元而非取向计）。
+由屏幕 \(S\subset \overrightarrow{\mathcal F_{m}^{n-1}}\) 诱导边集 \(E_S\) 如下：
+\begin{enumerate}
+  \item 若 \(\vec f\in S\) 的底层 \((n-1)\)-面为内部共享面，且其两侧顶维胞腔为 \(u,v\in\mathcal Q_m^{(n)}\)，则令 \(\{u,v\}\in E_S\)；
+  \item 若 \(\vec f\in S\) 的底层 \((n-1)\)-面为外边界面，且其唯一相邻顶维胞腔为 \(v\in\mathcal Q_m^{(n)}\)，则令 \(\{v,\infty\}\in E_S\)。
+\end{enumerate}
+记 \(\Gamma_S:=(V(\Gamma),E_S)\) 的连通分量数为 \(c(\Gamma_S)\)。
+则有自然同构
+\[
+\ker f_S\ \cong\ \ZZ^{\,c(\Gamma_S)-1}.
+\]
+\end{theorem}
+\begin{proof}
+将 \(x\in C_n(\mathcal Q_m;\ZZ)\) 写为 \(x=\sum_{v\in\mathcal Q_m^{(n)}}x(v)[v]\)，其中 \(x(v)\in\ZZ\) 为对应顶维胞腔系数（取一组固定的顶维取向基）。
+对任意 \(\vec f\in S\)，\((\partial_n x)(\vec f)\) 仅依赖于与 \(\vec f\) 相邻的一个或两个顶维系数：
+若 \(\vec f\) 为内部共享面且两侧为 \(u,v\)，则
+\(
+(\partial_n x)(\vec f)=\pm(x(u)-x(v))
+\)；
+若 \(\vec f\) 为外边界面且相邻胞腔为 \(v\)，则
+\(
+(\partial_n x)(\vec f)=\pm x(v)
+\)。
+因此 \(f_S(x)=0\) 当且仅当满足如下约束：
+\[
+u\text{ 与 }v\text{ 由 }E_S\text{ 相连}\ \Longrightarrow\ x(u)=x(v),\qquad
+v\text{ 与 }\infty\text{ 由 }E_S\text{ 相连}\ \Longrightarrow\ x(v)=0.
+\]
+从而 \(x(\cdot)\) 在 \(\Gamma_S\) 的每个连通分量上取常值，且包含 \(\infty\) 的分量常值被迫为 \(0\)。
+令 \(\Phi:\ker f_S\to \ZZ^{c(\Gamma_S)-1}\) 为“读取其余各分量常值”的映射，则由上式刻画知 \(\Phi\) 为双射群同态，故为同构。证毕。
+\end{proof}
+
+\begin{corollary}[部分屏幕的唯一回放判据与最小审计补全成本闭式]\label{cor:spg-screen-injectivity-and-audit-cost-components}
+在定理 \ref{thm:spg-screen-kernel-connected-components} 的设定下，以下条件等价：
+\begin{enumerate}
+  \item \(f_S\) 为单射；
+  \item \(c(\Gamma_S)=1\)（亦即 \(\Gamma_S\) 连通）。
+\end{enumerate}
+并且最小审计补全成本满足
+\[
+\min_{(R,r_S)}\cdim(R)
+=\rank_{\ZZ}(\ker f_S)
+=c(\Gamma_S)-1.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:spg-screen-kernel-connected-components}，
+\(
+\ker f_S\cong \ZZ^{c(\Gamma_S)-1}
+\)。
+故 \(f_S\) 单射当且仅当 \(\ker f_S=0\)，等价于 \(c(\Gamma_S)=1\)，得到前半部。
+最小审计补全成本等于 \(\rank_{\ZZ}(\ker f_S)\) 由推论 \ref{cor:spg-partial-boundary-min-audit-cost-kernel-rank} 给出；
+代入闭式即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[轴向屏幕的面积律：审计成本的指数级下界可达]\label{prop:spg-axial-screen-area-law-audit-cost}
+固定坐标方向 \(x_1\)。
+令 \(S^{(1)}\subset \overrightarrow{\mathcal F_{m}^{n-1}}\) 为所有\emph{正交于 \(x_1\)} 的内部 \((n-1)\)-面（即两顶维胞腔仅沿 \(x_1\) 方向相邻时所共享的面；不含任何外边界面）。
+则
+\[
+c(\Gamma_{S^{(1)}})=2^{m(n-1)}+1,
+\qquad
+\min_{(R,r_{S^{(1)}})}\cdim(R)=2^{m(n-1)}.
+\]
+\end{proposition}
+\begin{proof}
+在 \(\Gamma_{S^{(1)}}\) 中，两顶维胞腔相连当且仅当其 dyadic 坐标仅在 \(x_1\) 方向相邻。
+因此对每个固定的 \((i_2,\dots,i_n)\in\{0,\dots,2^m-1\}^{n-1}\)，全体
+\(
+(i_1,i_2,\dots,i_n)
+\)
+（\(i_1\) 变动）构成一条长度 \(2^m\) 的路径图连通分量；不同 \((i_2,\dots,i_n)\) 之间无边相连。
+故由内部面诱导的连通分量共有 \(2^{m(n-1)}\) 个。
+又因为 \(S^{(1)}\) 不含外边界面，顶点 \(\infty\) 为孤立分量，从而
+\(
+c(\Gamma_{S^{(1)}})=2^{m(n-1)}+1
+\)。
+最后由推论 \ref{cor:spg-screen-injectivity-and-audit-cost-components} 得最小审计补全成本为 \(c(\Gamma_{S^{(1)}})-1=2^{m(n-1)}\)。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$\FF_2$}{F2} 计数下的纤维基数：相对 Betti 数的精确公式]\label{cor:spg-partial-boundary-fiber-cardinality-f2}
+在定理 \ref{thm:spg-partial-boundary-screen-kernel-relative-homology} 的设定下，将系数域改为 \(\FF_2\)，并把 \(f_S\) 视为线性映射
+\[
+f_S:\ C_n(\mathcal Q_m;\FF_2)\longrightarrow \FF_2^{S}.
+\]
+对任意 \(y\in \mathrm{im}(f_S)\)，其纤维基数满足精确恒等式
+\[
+\card{f_S^{-1}(y)}=2^{\beta_n(\mathcal Q_m,A_{\neg S};\FF_2)},
+\qquad
+\beta_n(\mathcal Q_m,A_{\neg S};\FF_2):=\dim_{\FF_2}H_n(\mathcal Q_m,A_{\neg S};\FF_2).
+\]
+特别地，上式右端与 \(y\) 无关，仅依赖于屏幕 \(S\)。
+\end{corollary}
+\begin{proof}
+由于 \(f_S\) 为 \(\FF_2\)-线性映射，任意非空纤维 \(f_S^{-1}(y)\) 为仿射子空间，故
+\(
+\card{f_S^{-1}(y)}=2^{\dim_{\FF_2}\ker f_S}
+\)。
+由定理 \ref{thm:spg-partial-boundary-screen-kernel-relative-homology} 的论证在 \(\FF_2\) 系数下同样成立，并且由于 \(\mathcal Q_m\) 无 \((n+1)\)-胞腔，仍有
+\(
+H_n(\mathcal Q_m,A_{\neg S};\FF_2)\cong \ker f_S
+\)。
+代入即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[最小审计补全成本等于屏幕核秩]\label{cor:spg-partial-boundary-min-audit-cost-kernel-rank}
+沿用定理 \ref{thm:spg-partial-boundary-screen-kernel-relative-homology} 的记号，并令 \(r:=\rank_{\ZZ}(\ker f_S)\)。
+则任意使 \(f_S\) 可单射提升的审计补全 \((R,r_S)\)（定义 \ref{def:cdim-audit-completion-loss}）都满足
+\[
+\cdim(R)\ \ge\ r,
+\]
+并且该下界可达。
+因此，\(f_S\) 的最小圆维审计补全成本等于
+\[
+\min_{(R,r_S)}\cdim(R)=\rank_{\ZZ}(\ker f_S)=\rank_{\ZZ}H_n(\mathcal Q_m,A_{\neg S};\ZZ).
+\]
+\end{corollary}
+\begin{proof}
+由于 \(C_n(\mathcal Q_m;\ZZ)\) 与 \(\ZZ^{S}\) 均为自由阿贝尔群，\(\ker f_S\) 亦为自由阿贝尔群，且
+\(
+\rank_{\ZZ}(\ker f_S)=\mathcal L(f_S)
+\)
+为圆维损失（定义 \ref{def:cdim-audit-completion-loss}）。
+结论由定理 \ref{thm:cdim-minimal-audit-completion} 直接给出。证毕。
+\end{proof}
+
+\begin{theorem}[部分边界 Gödelization 的最小审计补全与素数审计码]\label{thm:spg-partial-boundary-godel-audit-optimal}
+沿用定理 \ref{thm:spg-partial-boundary-screen-kernel-relative-homology} 的记号，并令 \(r:=\rank_{\ZZ}(\ker f_S)\)。
+取 \(\ker f_S\) 的一组 \(\ZZ\)-基 \(\{k_1,\dots,k_r\}\)。
+再取互异素数 \(\{\pi_1,\dots,\pi_{2r}\}\)，并要求其与用于面标签的素数族 \(\{q_{\vec f}\}\)（定理 \ref{thm:spg-boundary-godelization-holographic-dictionary}）不交。
+则存在同态
+\[
+\mathrm{Enc}_S:\ C_n(\mathcal Q_m;\ZZ)\longrightarrow \ZZ^{S}\times \NN,
+\qquad
+\mathrm{Enc}_S(x):=\bigl(f_S(x),\ \mathrm{Audit}_S(x)\bigr),
+\]
+满足：
+\begin{enumerate}
+  \item \(\mathrm{Enc}_S\) 为单射；
+  \item 存在整数向量 \(\alpha(x)=(\alpha_1(x),\dots,\alpha_r(x))\in\ZZ^r\)（关于 \(x\) 的群同态），使得
+        \[
+        \mathrm{Audit}_S(x)
+        :=
+        \prod_{j=1}^{r}\pi_j^{\max(0,\alpha_j(x))}\cdot \pi_{j+r}^{\max(0,-\alpha_j(x))},
+        \]
+        并且由 \(\mathrm{Audit}_S(x)\) 的素因子分解可唯一恢复 \(\alpha(x)\)；
+  \item 在所有使 \(f_S\) 可单射提升的审计补全中，所需的独立补账秩（圆维）最小且等于 \(r\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由于 \(C_n(\mathcal Q_m;\ZZ)\) 与 \(\ZZ^{S}\) 为自由阿贝尔群，短正合列
+\[
+0\longrightarrow \ker f_S\longrightarrow C_n(\mathcal Q_m;\ZZ)\longrightarrow \mathrm{im}(f_S)\longrightarrow 0
+\]
+以 \(\mathrm{im}(f_S)\) 自由为前提可分裂，从而存在同态重traction \(p:\,C_n(\mathcal Q_m;\ZZ)\to \ker f_S\) 使 \(p|_{\ker f_S}=\mathrm{id}\)。
+令 \(\alpha(x)\in\ZZ^r\) 为 \(p(x)\) 在基 \(\{k_j\}\) 下的坐标，即 \(p(x)=\sum_{j=1}^r \alpha_j(x)k_j\)。
+则 \(\alpha\) 为群同态，且由算术基本定理 \(\mathrm{Audit}_S(x)\) 的素因子分解唯一确定 \(\alpha(x)\)。
+\par
+若 \(\mathrm{Enc}_S(x)=\mathrm{Enc}_S(y)\)，则 \(f_S(x-y)=0\) 从而 \(x-y\in\ker f_S\)，并且 \(\alpha(x-y)=\alpha(x)-\alpha(y)=0\)。
+由 \(p|_{\ker f_S}=\mathrm{id}\) 得 \(p(x-y)=x-y\)，从而 \(x-y=0\)，故 \(\mathrm{Enc}_S\) 单射。
+\par
+最优性由推论 \ref{cor:spg-partial-boundary-min-audit-cost-kernel-rank} 给出：任意审计补全的最小成本等于 \(\rank_{\ZZ}(\ker f_S)=r\)，因此不存在秩更小的补全仍能实现单射提升。证毕。
+\end{proof}
+
+\begin{theorem}[可见秩函数的可表示拟阵性与审计缺口的超模性]\label{thm:spg-screen-rank-matroid-supermodularity}
+沿用上述记号。
+对任意 \(S\subset \overrightarrow{\mathcal F_{m}^{n-1}}\)，令
+\[
+r(S):=\rank_{\QQ}\bigl(\mathrm{im}(f_S\otimes\QQ)\bigr),
+\qquad
+\delta(S):=\rank_{\QQ}\bigl(\ker(f_S\otimes\QQ)\bigr).
+\]
+则：
+\begin{enumerate}
+  \item \(r(\cdot)\) 是 \(\overrightarrow{\mathcal F_{m}^{n-1}}\) 上一个可表示拟阵的秩函数；特别地，对任意 \(S\subset T\) 有 \(r(S)\le r(T)\)，并且对任意 \(S,T\) 有
+        \[
+        r(S)+r(T)\ \ge\ r(S\cup T)+r(S\cap T).
+        \]
+  \item \(\delta(S)=\rank_{\QQ}(C_n(\mathcal Q_m;\QQ)) - r(S)\) 从而满足超模性
+        \[
+        \delta(S)+\delta(T)\ \le\ \delta(S\cup T)+\delta(S\cap T),
+        \]
+        并且 \(\delta\) 随 \(S\) 单调不增。
+  \item 由于 \(C_n(\mathcal Q_m;\ZZ)\) 自由，\(\rank_{\QQ}\ker(f_S\otimes\QQ)=\rank_{\ZZ}\ker f_S\)。
+        结合推论 \ref{cor:spg-partial-boundary-min-audit-cost-kernel-rank}，最小审计补全成本 \(S\mapsto \min_{(R,r_S)}\cdim(R)\) 在该屏幕族上同样满足上述超模性。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+取 \(\partial_n\) 在某组 \(\ZZ\)-基下的矩阵表示 \(A\)。
+则 \(f_S\otimes\QQ\) 等价于将 \(A\) 的行按 \(S\) 取子集得到的行限制矩阵 \(A_S\)，从而
+\[
+r(S)=\dim_{\QQ}\Span\{\text{rows of }A\text{ indexed by }S\}.
+\]
+由线性拟阵的一般理论，\(r(\cdot)\) 满足单调性与次模性，从而为可表示拟阵秩函数。
+由秩亏恒等式得 \(\delta(S)=\rank_{\QQ}(C_n(\mathcal Q_m;\QQ))-r(S)\)，因此 \(\delta\) 为超模函数且单调不增。
+最后一条由 \(\ker f_S\) 的秩在张量到 \(\QQ\) 后保持不变，以及推论 \ref{cor:spg-partial-boundary-min-audit-cost-kernel-rank} 的同一刻画直接推出。证毕。
+\end{proof}
+
+\begin{corollary}[审计补全成本的单调律与单位下降界]\label{cor:spg-screen-audit-cost-monotone-unit-drop}
+沿用上述记号。对任意屏幕 \(S\subseteq T\subseteq \overrightarrow{\mathcal F_m^{n-1}}\)，定义
+\[
+\mathfrak c(S):=\min_{(R,r_S)}\cdim(R)=\rank_{\ZZ}\ker f_S.
+\]
+则有单调律
+\[
+\mathfrak c(T)\le \mathfrak c(S).
+\]
+更一般地，若 \(\card(T\setminus S)=t\)，则
+\[
+\mathfrak c(S)-t\le \mathfrak c(T)\le \mathfrak c(S).
+\]
+特别地，当 \(T=S\cup\{\vec f\}\) 仅比 \(S\) 多一张取向可见面时，
+\[
+\mathfrak c(S)-1\le \mathfrak c(T)\le \mathfrak c(S).
+\]
+\end{corollary}
+\begin{proof}
+记
+\[
+d:=\rank_{\QQ}C_n(\mathcal Q_m;\QQ),
+\qquad
+r(S):=\rank_{\QQ}\bigl(\operatorname{im}(f_S\otimes\QQ)\bigr).
+\]
+由定理 \ref{thm:spg-screen-rank-matroid-supermodularity} 与推论 \ref{cor:spg-partial-boundary-min-audit-cost-kernel-rank}，
+\[
+\mathfrak c(S)=\rank_{\QQ}\ker(f_S\otimes\QQ)=d-r(S).
+\]
+当 \(S\subseteq T\) 时，\(f_T\otimes\QQ\) 由 \(f_S\otimes\QQ\) 加入若干额外行得到，故 \(r(T)\ge r(S)\)，从而
+\[
+\mathfrak c(T)=d-r(T)\le d-r(S)=\mathfrak c(S).
+\]
+若再设 \(\card(T\setminus S)=t\)，则添入 \(t\) 行至多使秩上升 \(t\)，即
+\[
+r(T)\le r(S)+t.
+\]
+于是
+\[
+\mathfrak c(T)=d-r(T)\ge d-r(S)-t=\mathfrak c(S)-t.
+\]
+当 \(t=1\) 时即得单位下降界。证毕。
+\end{proof}
+
+\input{sections/body/spg/para__spg-coordinate-bundle-screen-audit-closure}
+
+\endinput

@@ -1,0 +1,690 @@
+\subsection{从语法到算子：转移算子、C*-代数与 \texorpdfstring{$\zeta$}{zeta}（精确口径）}\label{subsec:operator-zeta-interface}
+
+本小节把“语法—谱—$\zeta$”的联系写成可评估的算子论陈述，并明确本文真正使用的对象是什么。核心点是：在黄金均值 SFT 上，Perron--Frobenius（有限矩阵）与 Ruelle 转移算子（无穷维算子）在柱函数空间上一致；相应的 C*-代数框架（如 Cuntz--Krieger 代数/群胚 C*-代数）提供了把柱投影、最大熵态（Parry 测度）与谱/$\zeta$ 统一表述的工具。
+
+\subsubsection{转移算子与 \texorpdfstring{$\zeta$}{zeta} 的 Fredholm 行列式口径}
+
+令 $X_A^+\subset\{0,1\}^{\NN}$ 为由邻接矩阵 $A$ 定义的一侧 SFT（黄金均值约束），令 $\sigma:X_A^+\to X_A^+$ 为左移位。定义零势（计数势）下的 Ruelle 转移算子（对有界函数）
+\[
+(\mathcal{L}f)(x):=\sum_{\sigma y=x} f(y).
+\]
+在 SFT 情形，该求和是有限的。令 $\mathcal{C}_m$ 为由长度-$m$ 柱集指示函数张成的有限维子空间，则 $\mathcal{L}$ 在 $\mathcal{C}_1$ 上等价于矩阵 $A^{\mathsf T}$ 的作用，并由柱函数闭包可追踪到所有有限 $m$。
+
+\begin{definition}[Fredholm 行列式（可审计口径）]\label{def:fredholm-determinant}
+若 $T$ 为迹类算子（在本文使用的有限维/有限秩情形自动成立），定义其 Fredholm 行列式为
+\[
+\det(I-zT):=\exp\left(-\sum_{n\ge 1}\frac{\mathrm{Tr}(T^n)}{n}z^n\right),
+\quad |z|\ \text{充分小}.
+\]
+在有限维情形该定义与矩阵行列式一致，并由解析延拓得到有理函数恒等式（参见 \cite{Ruelle1976ZetaExpanding,ParryPollicott1990Zeta}）。
+\end{definition}
+
+对有限型子移位（SFT），动力学 $\zeta$ 的恒等式为
+\[
+\zeta_\sigma(z)=\frac{1}{\det(I-zA)},
+\]
+并可由周期点计数与 Fredholm 行列式口径一致地给出（参见 \cite{LindMarcus1995,Ruelle1976ZetaExpanding,Ruelle1978Thermodynamic,ParryPollicott1990Zeta}）。
+
+\subsubsection{带“复杂度势”的二变量 \texorpdfstring{$\zeta$}{zeta} 指纹：Euler 乘积与迹序列的严格对齐}\label{subsec:zeta-two-variable-kappa}
+
+本节给出一个对本文“prime-like（Euler 乘积/显式公式）侧”与“谱/迹（trace）侧”都兼容、并可直接用于数值审计的统一对象：\textbf{带势的两变量 \(\zeta_K(z,u)\)}。其中 \(z\) 计时间步数（迹的幂次），\(u\) 计一类局部可加的“复杂度/串行代价势” \(\kappa\)（例如不可并行的 delay/carry 事件数），从而把“时间代价”以乘法权重的形式嵌入 Euler 乘积的 primitive 因子。
+
+\begin{definition}[带势的两变量 \texorpdfstring{$\zeta_K(z,u)$}{zetaK(z,u)}]\label{def:zetaK-zu}
+给定一个有限有向图（或有限状态同步系统）\(\Gamma_K\)，并对每条边 \(e\) 赋一个非负整数势
+\[
+\kappa(e)\in\ZZ_{\ge 0}.
+\]
+定义带权邻接矩阵族 \(M_K(u)\in \Mat_{|V|\times |V|}(\ZZ[u])\) 为
+\[
+\bigl(M_K(u)\bigr)_{ij}:=\sum_{e:i\to j} u^{\kappa(e)}.
+\]
+定义两变量 \(\zeta\) 为形式幂级数（或在 \(|z|\) 充分小时的解析函数）
+\begin{equation}\label{eq:zetaK-trace-exp}
+\zeta_K(z,u)
+:=\exp\!\Bigl(\sum_{n\ge 1}\frac{a_n(u)}{n}z^n\Bigr),
+\qquad
+a_n(u):=\Tr\bigl(M_K(u)^n\bigr),
+\end{equation}
+从而在有限维情形严格有
+\begin{equation}\label{eq:zetaK-det}
+\zeta_K(z,u)=\frac{1}{\det(I-zM_K(u))}.
+\end{equation}
+\end{definition}
+
+\begin{remark}[Euler 乘积与 primitive 分层谱]\label{rem:zetaK-euler-product}
+记 \(\mathcal{P}_K\) 为 \(\Gamma_K\) 的 primitive 有向闭轨道集合；对 \(\gamma\in\mathcal{P}_K\) 记其长度为 \(|\gamma|\)，并定义轨道势为边势的轨道和
+\[
+\kappa(\gamma):=\sum_{e\in\gamma}\kappa(e).
+\]
+则由“周期点/闭路”展开（参见 \cite{ParryPollicott1990Zeta,LindMarcus1995}）得到严格的形式乘积恒等式
+\begin{equation}\label{eq:zetaK-euler}
+\zeta_K(z,u)=\prod_{\gamma\in\mathcal{P}_K}\bigl(1-z^{|\gamma|}u^{\kappa(\gamma)}\bigr)^{-1}.
+\end{equation}
+引入 primitive 分层谱多项式
+\begin{equation}\label{eq:zetaK-Bn}
+B_n(u):=\sum_{\gamma\in\mathcal{P}_K,\ |\gamma|=n} u^{\kappa(\gamma)}\in\ZZ[u],
+\end{equation}
+则 \(\{B_n(u)\}_{n\ge 1}\) 与迹序列 \(\{a_n(u)\}_{n\ge 1}\) 之间存在严格的 Möbius/Witt 互换（见下命题）。
+\end{remark}
+
+\begin{proposition}[Witt/Möbius 反演：由迹序列提取 primitive 分层谱]\label{prop:zetaK-mobius-primitive}
+沿用定义 \ref{def:zetaK-zu}--\ref{rem:zetaK-euler-product} 的记号。则对任意 \(n\ge 1\)：
+\begin{equation}\label{eq:zetaK-trace-from-primitive}
+a_n(u)=\sum_{d\mid n} d\,B_d\!\bigl(u^{n/d}\bigr),
+\end{equation}
+并且由 Möbius 反演可严格恢复
+\begin{equation}\label{eq:zetaK-primitive-from-trace}
+\boxed{\;
+B_n(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}\!\bigl(u^{d}\bigr)\; }.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+把 Euler 乘积 \eqref{eq:zetaK-euler} 取对数并展开为几何级数，得
+\[
+\log\zeta_K(z,u)
+=\sum_{\gamma\in\mathcal{P}_K}\sum_{k\ge 1}\frac{1}{k}z^{k|\gamma|}u^{k\kappa(\gamma)}.
+\]
+将右侧按 \(n=k|\gamma|\) 分组，并注意每个 primitive 轨道 \(\gamma\) 的 \(k\) 次幂产生 \( |\gamma| \) 条不同起点的长度 \(n\) 闭路，从而长度 \(n\) 的迹计数满足 \eqref{eq:zetaK-trace-from-primitive}。再对 \eqref{eq:zetaK-trace-from-primitive} 作 Möbius 反演即得 \eqref{eq:zetaK-primitive-from-trace}。证毕。
+\end{proof}
+
+\begin{remark}[严格交换的“迹 $\to$ primitive $\to$ Euler”桥包（交换图）]\label{rem:zetaK-commuting-diagram}
+命题 \ref{prop:zetaK-mobius-primitive} 与定义 \ref{def:zetaK-zu}（行列式口径 \eqref{eq:zetaK-det}）合在一起，给出本文反复调用的\textbf{严格交换}桥包：对任意有限核/有限矩阵 \(T\)（例如固定 \(u\) 后的 \(T=M_K(u)\)），令
+\[
+a_n(T):=\Tr(T^n)\quad(n\ge 1),
+\qquad
+p_n(T):=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(T),
+\]
+并定义 Euler 变换
+\[
+\mathrm{Euler}\bigl((p_n)_{n\ge 1}\bigr)(z):=\prod_{n\ge 1}(1-z^n)^{-p_n}.
+\]
+则对每个 \(T\) 都有逐项恒等式
+\[
+\boxed{\;
+\zeta_T(z):=\frac{1}{\det(I-zT)}
+=\exp\!\Bigl(\sum_{n\ge 1}\frac{a_n(T)}{n}z^n\Bigr)
+=\prod_{n\ge 1}(1-z^n)^{-p_n(T)}\; }.
+\]
+换言之，把“迹序列（ghost）$\to$ Möbius/Witt 反演（primitive）$\to$ Euler 乘积（prime-like）”压成最小结构，可写为如下严格交换图：
+\[
+\begin{CD}
+T @>\mathrm{TrSeq}>> (a_n(T))_{n\ge 1} @>\mathrm{Mob}>> (p_n(T))_{n\ge 1} @>\mathrm{Euler}>> \prod_{n\ge 1}(1-z^n)^{-p_n(T)}\\
+@V\mathrm{ZetaDet}VV @. @. @VV=V\\
+\det(I-zT)^{-1} @. @. \det(I-zT)^{-1}
+\end{CD}
+\]
+其中 \(\mathrm{TrSeq}(T)=(a_n(T))\)、\(\mathrm{Mob}(a)=p\) 为 Möbius 反演，而 \(\mathrm{ZetaDet}(T)=\det(I-zT)^{-1}\)。
+\end{remark}
+
+\begin{remark}[二层桥包：完成化的 unitary slice 与 Hankel 最小实现]\label{rem:two_layer_bridge_package_completed_minH}
+注 \ref{rem:zetaK-commuting-diagram} 给出的 “迹 $\to$ primitive $\to$ Euler/\(\zeta\)” 链条已经把 prime-like 侧与 trace 侧锁定为严格交换。
+在本文体系中，还存在两条与之并行、且同样可审计的“第二层”结构接口，使得“时间—空间对偶”不再停留在比喻：
+\begin{enumerate}
+  \item \textbf{完成化：函数方程/临界线几何。}
+  当某些核的二变量行列式
+  \(
+  \Delta(z,u)=\det(I-zB(u))
+  \)
+  满足自对偶 \(\Delta(z,u)=\Delta(uz,1/u)\)（\S\ref{subsec:xi-from-self-dual}），
+  可定义完成化截面算子
+  \[
+  \mathsf{Comp}_L:\Delta(z,u)\longmapsto \Xi_{\Delta,L}(s):=\Delta(L^{-s},L^{2s-1}),
+  \]
+  并得到严格函数方程 \(\Xi_{\Delta,L}(s)=\Xi_{\Delta,L}(1-s)\) 与
+  “临界线 \(\Re(s)=\tfrac12\) \(\Leftrightarrow\) unitary slice \(|u|=1\)” 的固定几何（命题 \ref{prop:xi-delta-L-functional-equation} 与注 \ref{rem:xi-critical-line-unit-circle}）。
+  更进一步，命题 \ref{prop:xi-unitary-slice-spectral-crossing} 给出一个算子化重写：临界线零点等价于归一化核族 \(U_L(\theta)\) 的特征值穿越 \(1\)。
+  \item \textbf{最小实现：Hankel 秩下降/不可见模态。}
+  对由 \(\mathrm{TrSeq}\) 或 moment-kernel 输出的序列对象，可用 Hankel 口径的最小 realization
+  （定理 \ref{thm:hankel-rank-minimal} 与 \S\ref{subsec:pom-moment-visibility}）
+  把“序列”提升为一个最小维数的线性表示（加权自动机/有理级数实现）。
+  当最小维数 \(d_q\) 低于名义模态截断维数 \(2\lfloor q/2\rfloor+1\) 时，
+  其差 \(\Delta(q)=(2\lfloor q/2\rfloor+1)-d_q\)（表 \ref{tab:fold_collision_resonance_gap_delta_q_9_17}）
+  给出一个完全可核验的“不可见/共振约束缺口”证书：它量化了在模态坐标中被强制消去的并行自由度。
+\end{enumerate}
+因此，本文的桥接链条可被组织为一个严格交换的二层包：第一层把 trace 与 Euler 乘积对齐；第二层分别把
+（i）临界线几何压缩为 unitary slice 上的谱穿越问题，
+（ii）模态/对称幂编译压缩为 Hankel 最小维数与缺口 \(\Delta(q)\) 的整数证书。
+\end{remark}
+
+\begin{remark}[可验桥包：把信息账本/纤维反射子 \texorpdfstring{$K_m$}{Km} 嵌入交换图]\label{rem:reflected-witt-euler-bridge}
+本节的 Witt/Euler 桥包（注 \ref{rem:zetaK-commuting-diagram}）只使用了一个输入对象：有限维线性算子（有限核/有限矩阵）\(T\)。
+另一方面，第 \ref{subsec:pom-information-ledger} 节给出一个\textbf{更严格、可审计}的“读出—提升”结构：
+推前（读出）\(P_m=(\Fold_m)_*\)、纤维均匀提升（最大熵提升）\(Q_m\)，以及由此生成的纤维反射子 \(K_m:=Q_m\circ P_m\)
+（定理 \ref{thm:pom-kl-ledger}、定理 \ref{thm:pom-fiber-reflector}、推论 \ref{cor:pom-second-law-Km}）。
+（注意：此处的 \(K_m\) 是分辨率 \(m\) 的纤维反射子，不要与本节中用于标记“核/图”的下标 \(K\)（如 \(\Gamma_K,M_K(u)\)）混淆。）
+它把任意微观分布的熵严格分解为
+\[
+H(\mu)=H(P_m\mu)+\kappa_m(P_m\mu)-D_{\mathrm{KL}}(\mu\|K_m\mu),
+\qquad
+H(K_m\mu)-H(\mu)=D_{\mathrm{KL}}(\mu\|K_m\mu)\ge 0,
+\]
+其中 \(\kappa_m(\pi)=\mathbb{E}_{\pi}[\log d_m(X)]\)（定义 \ref{def:pom-kappa}）是窗口层“纤维体积”缺陷，而残差 KL 则是“纤维内非均匀”的不可约信息负担。
+从范畴化视角，\(K_m\) 正是一个分辨率 \(m\) 的\emph{反射子（reflector）}：它把任意微观分布反射到“每条纤维上条件均匀”的可读出子类，
+其幂等性与固定点刻画由定理 \ref{thm:pom-fiber-reflector} 给出，而“熵增 \(=\) 残差 KL”的度量版本由推论 \ref{cor:pom-second-law-Km} 给出。
+
+\paragraph{把 \(K_m\) 插入 End。}
+在有限维口径下，可将 \(P_m,Q_m,K_m\) 视为在向量空间 \(\CC^{\Omega_m}\)、\(\CC^{X_m}\) 上的线性算子（对概率单纯形的作用只是其限制）。
+对任意线性算子 \(T:\CC^{\Omega_m}\to\CC^{\Omega_m}\)，定义其分辨率 \(m\) 的\emph{可审计压缩}（稳定层算子）
+\[
+\overline T_m\ :=\ P_m\circ T\circ Q_m:\CC^{X_m}\to\CC^{X_m},
+\]
+并记该压缩算子为 \(\mathrm{Ref}_m(T):=\overline T_m\)。
+并定义对应的\emph{反射后可见部分}
+\[
+T_m^{\mathrm{aud}}\ :=\ Q_m\circ \overline T_m\circ P_m
+\ =\ (Q_mP_m)\,T\,(Q_mP_m)
+\ =\ K_m\,T\,K_m:\CC^{\Omega_m}\to\CC^{\Omega_m}.
+\]
+由 \(P_mQ_m=\mathrm{id}\)（定理 \ref{prop:fold-pushforward-lift}）可知：
+\begin{itemize}
+  \item \(T_m^{\mathrm{aud}}\) 的像与不变子空间包含于 \(\mathrm{Im}(K_m)=Q_m(\CC^{X_m})\)（亦即“纤维条件均匀”可读出子空间）；
+  \item \(\overline T_m\) 与 \(T_m^{\mathrm{aud}}\) 在该子空间上共轭，因此二者的\textbf{全部非零谱}一致，从而对任意 \(n\ge 1\) 有严格恒等式
+  \[
+  \boxed{\ \Tr\!\bigl((T_m^{\mathrm{aud}})^n\bigr)=\Tr\!\bigl((\overline T_m)^n\bigr)\ }.
+  \]
+\end{itemize}
+因此，在“迹$\to$primitive$\to$Euler”链条中，把输入对象从 \(T\) 替换为 \(\overline T_m\)（或等价的 \(T_m^{\mathrm{aud}}\)）不会改变任何迹序列/primitive 分层谱/Euler 乘积输出；这正是把“空间/时间对偶”的可审计反射结构\emph{嵌入}注 \ref{rem:zetaK-commuting-diagram} 的方式。
+
+\paragraph{四方交换的最小图示。}
+把上述“反射压缩 + Witt/Euler 严格交换 + 证书化谱界”压成一张图，可写为
+\[
+\begin{CD}
+T @>\mathrm{Ref}_m>> \overline T_m @>\mathrm{TrSeq}>> (a_n(\overline T_m))_{n\ge 1} @>\mathrm{Mob}>> (p_n(\overline T_m))_{n\ge 1} @>\mathrm{Euler}>> \zeta_{\overline T_m}(z)\\
+@. @V\mathrm{Cert}_rVV @. @. @. @.\\
+@. \{\,H\succ 0:\ \overline T_m^\ast H\,\overline T_m\prec r^2 H\,\} @. @. @. @.
+\end{CD}
+\]
+其中上行是注 \ref{rem:zetaK-commuting-diagram} 的严格交换桥包，而下行的 \(\mathrm{Cert}_r\) 是谱半径界的 Lyapunov 可行性证书（命题 \ref{prop:lyapunov-spectral-radius-certificate}）。
+
+\paragraph{可审计谱证书层。}
+当 prime-like/RH-like 判据需要验证某个谱半径界（例如对带势核 \(M_K(u)\) 的扭曲分量）时，
+附录 \ref{app:op-algebra} 的 Lyapunov 证书（命题 \ref{prop:lyapunov-spectral-radius-certificate}）把
+\(\rho(A)<r\) 等价改写为 LMI 可行性 \(\exists\,H\succ 0:\ A^\ast H A\prec r^2H\)，从而允许把“谱界”以一份矩阵 \(H\) 的形式作为\textbf{可复算审计证书}随输出一并给出（见注 \ref{rem:lyapunov-sdp}）。
+\end{remark}
+
+\begin{remark}[Fourier--Witt 双幽灵桥（FW-Bridge）]\label{rem:fw-bridge}
+注 \ref{rem:zetaK-commuting-diagram} 给出时间/谱侧的“迹 ghost \(\to\) primitive \(\to\) Euler”严格交换桥包（Witt 侧）。
+另一方面，Fold 支路在有限循环环 \(G_m=\ZZ/F_{m+2}\ZZ\) 上还有一条完全独立、同样严格交换的“卷积 \(\leftrightarrow\) 点乘 + Parseval 能量”桥包（Fourier 侧；见注 \ref{rem:fold-fourier-parseval-bridge}）。
+两条桥共享同一个可计算的“幽灵标尺”——二阶碰撞缺口/非平凡频谱能量：
+\[
+F_{m+2}\,\mathsf{Col}_m-1=\frac{1}{4^m}\sum_{t\ne 0}\bigl|\widehat c_m(t)\bigr|^2,
+\]
+从而把 prime-like（Euler product）侧与谱/迹侧在同一张可机核验的交换图中对齐：Witt 侧把 \(\zeta=\det(I-zT)^{-1}\) 的 Euler 乘积严格从 trace 读出，而 Fourier 侧把 Fold 的 residue 叠加严格对角化，并将“偏离均匀”的强度压缩为同一个标量指纹 \(F_{m+2}\mathsf{Col}_m-1\)（等价于二阶碰撞比 \(R_m-1\)，见推论 \ref{cor:pom-renyi2-near-uniform}）。
+\end{remark}
+
+\begin{remark}[Witt--Fourier 双桥粘接的严格交换立方体：同一角色轴 \texorpdfstring{$\mathrm{Tw}_\chi$}{Tw\_chi} 同时对角化“卷积--碰撞”与“迹--Euler”]\label{rem:twist-commuting-cube}
+取有限环 $G_m$ 及其角色群 $\widehat G_m$。对每个角色 $\chi$ 定义纤维侧扭曲
+\[
+\mathrm{Tw}_\chi(d_m):=\sum_{r\in G_m} d_m(r)\,\chi(r)=\widehat d_m(\chi),
+\]
+并在轨道侧以同一角色定义扭曲核 $T_\chi$（沿边/步乘以 $\chi$ 的 Dirichlet 扭曲）。
+\par
+由定理 \ref{thm:fold-multiplicity-energy}（或等价的定理 \ref{thm:fold-collision-spectrum}）的 Parseval/Plancherel 恒等式可把“碰撞能量”写成角色能量平均：
+\[
+\boxed{\;
+\mathsf{Col}_m
+=\frac{1}{2^{2m}F_{m+2}}\sum_{\chi\in\widehat G_m}\bigl|\mathrm{Tw}_\chi(d_m)\bigr|^2\;}
+\]
+并由定理 \ref{thm:fold-spectrum-factorization} 得到完全因子化
+\[
+\mathrm{Tw}_\chi(d_m)=\prod_{j=1}^m\bigl(1+\chi(F_{j+1})\bigr).
+\]
+则“Fourier 对角化”与“Witt/Euler 交换图”在同一条 $\mathrm{Tw}_\chi$ 轴上严格相容：
+\[
+\begin{CD}
+d_m @>\mathrm{FT}_m>> \widehat d_m \\
+@V\mathrm{Tw}_\chi VV @VV\mathrm{ev}_\chi V \\
+\widehat d_m(\chi) @= \widehat d_m(\chi)
+\end{CD}
+\qquad
+\begin{CD}
+T @>\mathrm{TrSeq}>> (a_n) @>\mathrm{Mob}>> (p_n) @>\mathrm{Euler}>> \zeta_T \\
+@V\mathrm{Tw}_\chi VV @V\mathrm{Tw}_\chi VV @V\mathrm{Tw}_\chi VV @V\mathrm{Tw}_\chi VV @V\mathrm{Tw}_\chi VV \\
+T_\chi @>\mathrm{TrSeq}>> (a_n^\chi) @>\mathrm{Mob}>> (p_n^\chi) @>\mathrm{Euler}>> \zeta_{T_\chi}
+\end{CD}
+\]
+因此把这两个交换方块沿“角色扭曲”方向粘接，即得到一个严格交换的立方体：同一个 $\mathrm{Tw}_\chi$ 既对角化纤维侧卷积/碰撞能量，也对角化轨道侧迭代/迹展开。
+\end{remark}
+
+\begin{remark}[\texorpdfstring{$u$}{u} 的解释：把“不可并行 delay/串行代价”乘法化]\label{rem:zetaK-u-delay}
+在本文的核/扫描算子语境中，\(\kappa(e)\) 可取为每一步不可并行的代价事件数（例如 carry 触发次数、固定延迟事件数等）。则 \eqref{eq:zetaK-euler} 表明：沿 primitive 轨道 \(\gamma\) 的总代价 \(\kappa(\gamma)\) 以乘法权重 \(u^{\kappa(\gamma)}\) 进入 primitive 因子
+\[
+\bigl(1-z^{|\gamma|}u^{\kappa(\gamma)}\bigr)^{-1},
+\]
+从而“时间侧的串行代价”在 prime-like 侧被\emph{自动转译}为 Euler 乘积的乘法指数。
+这正是本文所需的可检验桥包：给定带势转移核 \(M_K(u)\)，既可在迹侧计算 \(a_n(u)=\Tr(M_K(u)^n)\)，也可经 \eqref{eq:zetaK-primitive-from-trace} 严格提取 primitive 分层谱 \(B_n(u)\)，再由 \eqref{eq:zetaK-euler} 复原 Euler 乘积。
+\end{remark}
+
+\begin{corollary}[primitive 层的代价矩：\texorpdfstring{$B_n^{(k)}(1)$}{Bn(k)(1)} 的直接读出]\label{cor:zetaK-primitive-moments}
+对每个 \(n\ge 1\)，令
+\(
+B_n(u)=\sum_{\gamma\in\mathcal{P}_K,\ |\gamma|=n} u^{\kappa(\gamma)}
+\)
+如 \eqref{eq:zetaK-Bn}。
+则有逐项恒等式
+\[
+\boxed{\;
+B_n'(1)=\sum_{\gamma\in\mathcal{P}_K,\ |\gamma|=n}\kappa(\gamma),\qquad
+B_n''(1)=\sum_{\gamma\in\mathcal{P}_K,\ |\gamma|=n}\kappa(\gamma)\bigl(\kappa(\gamma)-1\bigr).\;}
+\]
+因此在 \(u=1\) 处对 \(B_n(u)\) 求导即可得到长度 \(n\) 的 primitive 原子上“串行代价事件数”的一阶/二阶矩统计；这在 \(\kappa\) 取为 carry/delay 触发计数时给出可比较的复杂度指纹。
+\end{corollary}
+\begin{proof}
+对每条 primitive 轨道项 \(u^{\kappa(\gamma)}\) 逐项求导并在 \(u=1\) 代入即可。证毕。
+\end{proof}
+
+\begin{remark}[以顶端溢出比特为最小势的校准基准]\label{rem:zetaK-overflow-calibration}
+在 Fold 窗口层，隐藏位 \(b(\omega)\)（引理 \ref{lem:pom-one-bit}）可视为“最高权重进位是否穿透”的最小不可并行影子；
+其全局计数 \(|B_m|=\lfloor 2^m/3\rfloor\) 及其无取整闭式见定理 \ref{thm:pom-hidden-bit-count} 与注 \ref{rem:pom-hidden-bit-dyadic-trunc}。
+因此当 \(\kappa\) 选为更细的 carry/delay 事件计数时，可用“将 \(\kappa\) 粗化到顶端进位指示”这一投影来回收上述闭式，作为 \(u\)-势与实现管线的最小审计基准。
+\end{remark}
+
+\begin{remark}[从 toy-RH 到 RH：有限维极点格点的结构性门槛]\label{rem:finite-pole-lattice-barrier}
+本文大量使用的有限维口径（邻接矩阵/有限状态核）在审计性与可计算性上有决定性优势；但在 \(s\)-平面“临界线几何”的层面，它也携带一个不可回避的结构性限制。
+
+对任意有限维矩阵核 \(M\) 与 \(\lambda=\rho(M)\)，令
+\(
+\widehat{\zeta}(s)=\det(I-\lambda^{-s}M)^{-1}
+\)。
+命题 \ref{prop:finite-rh-triangle-dict} 给出极点的完全字典：每个非零特征值 \(\mu\) 产生一条竖直直线
+\(
+\Re(s)=\log|\mu|/\log\lambda
+\)
+上的等差格点族（公差 \(2\pi/\log\lambda\)），因此在任意有限维模型中，临界带内的“非平凡极点几何”只能由\textbf{有限条竖直直线 + 有限相位的等差梳齿}组成。
+这解释了为何 40 状态核的 toy-RH（命题 \ref{prop:finite-rh-40}）虽能把极点压到 \(\Re(s)=\tfrac12\)，但临界线上的虚部结构仍是高度刚性的（由有限多个相位决定）。
+
+因此，若希望出现更丰富的“临界线几何/统计”，需要引入极限过程（状态数增长的 sofic/SFT 逼近序列）或直接进入无穷维转移算子的 Fredholm 行列式口径；后者允许出现超出有限维“相位梳齿”的奇点结构（\cite{Ruelle1976ZetaExpanding,Ruelle1978Thermodynamic,ParryPollicott1990Zeta}）。
+\end{remark}
+
+\begin{remark}[余量扩张表示的可迭代细化：候选 \texorpdfstring{$\mathcal{L}_s$}{Ls} 与“粗分割退化为有限核”]\label{rem:remainder-map-transfer-operator-refinement}
+本段把 \S\ref{subsec:online-delay} 的余量动力学
+\[
+R(t)=\Bigl\{\varphi R(s)+d\varphi^{-3}\Bigr\},\qquad
+e=\Bigl\lfloor \varphi R(s)+d\varphi^{-3}\Bigr\rfloor\in\{0,1\},
+\]
+视为一个在 \(X:=[0,1)\) 上的\textbf{多分支扩张-取整系统}：对每个允许的分支对 \((d,e)\in\{0,1,2\}\times\{0,1\}\)，定义逆支（仿射收缩）
+\[
+\tau_{d,e}(r):=\frac{r+e-d\varphi^{-3}}{\varphi},
+\]
+并令 \(I_{d,e}:=\tau_{d,e}(X)\cap X\) 为其像区间（当 \((d,e)\) 不可达时该区间为空）。则对任意函数 \(f\)（例如有界变差函数或解析函数），可定义一个转移算子族
+\[
+(\mathcal{L}_s f)(r)
+:=\sum_{(d,e)}\mathbf{1}_{I_{d,e}}(r)\,w_{d,e}(r;s)\,f\!\bigl(\tau_{d,e}(r)\bigr),
+\]
+其中权函数 \(w_{d,e}(r;s)\) 可取为 \(e^{-s}\)（每步长度势）、也可取为更一般的解析权（例如把 carry/delay 事件势、或 \S\ref{subsec:xi-from-self-dual} 的连续尺度混合作为 \(s\)-依赖的非局部常势），从而把 \(\det(I-\mathcal{L}_s)\) 置于 Fredholm 行列式范式。
+\par
+关键点在于：\textbf{粗分割时它退化回本文已用的有限核}。具体地，\S\ref{subsec:online-delay} 已给出同步核的 $10$ 个状态 \(Q\) 与边表；并且该边表可等价解释为 \(X=[0,1)\) 上的一个 Markov 分割 \(\{J_q\}_{q\in Q}\)：
+对每个 \(q\in Q\)，令 \(J_q\subset[0,1)\) 为使当前余量落在该区间时“可实现状态”为 \(q\) 的取值域（端点由分支不连续点与其有限次原像生成）。
+则在分段常值子空间
+\(
+\mathcal{C}_Q:=\mathrm{span}\{\mathbf{1}_{J_q}:q\in Q\}
+\)
+上，\(\mathcal{L}_s\) 的作用由一个有限矩阵完全刻画；当取 \(w_{d,e}\equiv 1\) 时，该矩阵正是同步核的邻接矩阵转置 \(B^{\mathsf T}\)（附录 \ref{app:sync-kernel-basic}），亦即
+\[
+\mathcal{L}_0|_{\mathcal{C}_Q}\ \cong\ B^{\mathsf T}.
+\]
+\par
+更进一步，若以分支不连续点集合 \(\mathcal{D}_0:=\{0,1\}\cup\partial I_{d,e}\) 为初始切点，并递推细化
+\[
+\mathcal{D}_{m+1}:=\mathcal{D}_m\ \cup\ \bigcup_{(d,e)}\tau_{d,e}(\mathcal{D}_m),
+\qquad
+\Pi_m:=\text{由 }\mathcal{D}_m\text{ 诱导的区间分割},
+\]
+则得到一族可迭代的 Markov 细化分割 \(\Pi_m\)。在每个 \(\Pi_m\) 上取分段常值空间 \(\mathcal{C}_m\)，即可得到一串有限秩逼近
+\(
+\mathcal{L}_s|_{\mathcal{C}_m}
+\),
+其矩阵元素由“哪个逆支把某个原子映到另一个原子”逐项给出；并在 \(m=0\)（等价于同步核粗分割）时退化为上面的有限核 \(B^{\mathsf T}\)。
+这提供了一个最小可执行的升级接口：保留可审计的有限矩阵层，同时允许在 \(m\to\infty\) 的极限中进入真正的无穷维 Fredholm 行列式框架。
+\end{remark}
+
+\subsubsection{HTF 的降格、NonCancel 证书与留数环审计：从“逻辑屏障”到“可执行审计/构造目标”}\label{subsec:htf-downgrade-audit-constructive}
+本段把“单位圆盘内全纯（闭层）$\Rightarrow$ 内部极点不可出现（极点刚性）”这一逻辑屏障进一步压成三类可复用组件：
+\begin{itemize}
+  \item \textbf{更弱的验证假设}：HTF（或任意“几何侧=谱侧”的桥）不必在复参数全盘匹配；只要在真实协议路径 \(r\uparrow 1\) 的实轴区间 \((0,1)\) 上逐点成立，就能由解析刚性推出全盘恒等。
+  \item \textbf{更强的 NonCancel 审计}：把“同点主部消去不发生”从额外假设升级为\emph{正性/整数重数证书}（可作为构造目标）。
+  \item \textbf{可执行的 falsification 通道}：用有限个圆周采样直接估计候选点留数，并用显式界给出离散误差上界，从而把“留数必须为 \(0\)”变成可审计测试。
+\end{itemize}
+
+\begin{proposition}[实轴协议路径的充分性：只需在 \texorpdfstring{$(0,1)$}{(0,1)} 上匹配即可推出单位圆盘全盘恒等]\label{prop:real-arc-sufficiency-unit-disk}
+设 \(G(r)\) 在单位圆盘 \(\{\,|r|<1\,\}\) 上全纯。
+设谱侧写为
+\[
+G(r)=S(r)+A_\infty(r),
+\]
+其中 \(A_\infty(r)\) 在 \(|r|<1\) 上全纯，而 \(S(r)\) 在 \(|r|<1\) 上亚纯（允许有孤立极点）。
+若上述等式对所有实数 \(r\in(0,1)\) 成立，则该恒等式自动作为亚纯恒等延拓到整个单位圆盘 \(|r|<1\)；
+并且 \(S(r)\) 在 \(|r|<1\) 内的全部极点都必须是可去奇点（从而 \(S\) 实际上也在 \(|r|<1\) 上全纯）。
+\end{proposition}
+\begin{proof}
+令 \(F(r):=G(r)-A_\infty(r)-S(r)\)。则 \(F\) 在 \(|r|<1\) 上亚纯，并在 \((0,1)\) 上恒为 \(0\)。
+但非零亚纯函数的零点集在域内必为离散集；而 \((0,1)\) 在 \(|r|<1\) 内有聚点。
+故 \(F\equiv 0\)（作为亚纯函数恒等为零），从而恒等式在 \(|r|<1\) 上成立。
+由于 \(G-A_\infty\) 全纯，\(S=G-A_\infty\) 的全部极点只能是可去奇点，结论成立。
+\end{proof}
+
+\begin{proposition}[resolvent-trace 的整数留数证书：正性重数 \texorpdfstring{$\Rightarrow$}{=>} NonCancel]\label{prop:resolvent-trace-integer-residue-noncancel}
+令 \(F\) 为有限秩（或更一般为迹类）算子，并令
+\[
+S(r):=\Tr\bigl((I-rF)^{-1}-I\bigr)
+\]
+在 \(|r|\) 充分小时由幂级数 \(S(r)=\sum_{n\ge 1}r^n\Tr(F^n)\) 定义，并按解析延拓视为其在 \(|r|<1\) 内的亚纯延拓（若存在）。
+则对每个非零特征值 \(\lambda\in\mathrm{spec}(F)\setminus\{0\}\)，在 \(r_0:=1/\lambda\) 处 \(S(r)\) 至多有一阶极点，并且其主部系数为对应 Riesz 投影 \(P_\lambda\) 的迹：
+\[
+S(r)=\frac{\Tr(P_\lambda)}{1-r\lambda}+(\text{在 }r_0\text{ 处解析的项}),
+\qquad
+\mathrm{Res}(S;r_0)=-\frac{\Tr(P_\lambda)}{\lambda}.
+\]
+特别地，\(\Tr(P_\lambda)=\mathrm{rank}(P_\lambda)\in\NN\) 是正整数（代数重数），因此同点主部不可能“自发消掉”；任意声称在 \(|r|<1\) 内出现的极点都会携带一个不可为零的留数证书。
+\end{proposition}
+\begin{proof}
+取一条绕 \(\lambda\) 的小闭曲线 \(\Gamma\) 不包围其它谱点，Riesz 投影
+\[
+P_\lambda=\frac{1}{2\pi i}\oint_\Gamma (zI-F)^{-1}\,\dd z
+\]
+为有限秩投影，且 \(\Tr(P_\lambda)=\mathrm{rank}(P_\lambda)\)。
+由谱分解的标准 resolvent 主部（或有限维 Jordan 形的直接计算）知，
+\((I-rF)^{-1}\) 在 \(r_0=1/\lambda\) 附近的主部为
+\(
+\frac{1}{1-r\lambda}P_\lambda
+\)
+（更高阶的 \((1-r\lambda)^{-k}\) 项均来自 nilpotent 部分，但其迹为 \(0\)）。
+因此 \((I-rF)^{-1}-I\) 在 \(r_0\) 附近的主部同样由 \(\frac{1}{1-r\lambda}P_\lambda\) 给出（减去 \(I\) 只改变解析项）。
+对 \((I-rF)^{-1}-I\) 取迹即得所示展开与留数公式。
+\end{proof}
+
+\begin{algorithm}[留数环审计协议（Residue-ring test；可执行 falsification 通道）]\label{alg:residue-ring-test}
+给定一个候选点 \(r_0\)（例如由外部零表/谱表预测的内部极点位置）与一个在 \(|r|<1\) 内可数值评估的函数 \(G(r)\)，取任意 \(\varepsilon>0\) 使得闭圆 \(\overline{D}(r_0,\varepsilon)\subset\{|r|<1\}\)，并取整数采样数 \(K\ge 1\)。
+令 \(\theta_k:=2\pi k/K\) 并定义离散留数估计
+\[
+\boxed{\;
+\widehat{\mathrm{Res}}(G;r_0)
+\ :=\ \frac{\varepsilon}{K}\sum_{k=0}^{K-1} e^{i\theta_k}\,G\!\bigl(r_0+\varepsilon e^{i\theta_k}\bigr)\; }.
+\]
+若 \(G\) 在 \(|r|<1\) 内全纯，则理论上 \(\mathrm{Res}(G;r_0)=0\)；因此任何显著偏离 \(0\) 的数值输出都可作为“HTF 失败 / NonCancel 失败 / 或候选谱点假设不成立”的 falsification 信号。
+\end{algorithm}
+
+\begin{proposition}[离散留数估计的显式误差界（由 \texorpdfstring{$|G(r)|\le C/(1-|r|)$}{|G(r)|<=C/(1-|r|)} 给出）]\label{prop:residue-ring-explicit-error-bound}
+设 \(G\) 在 \(|r|<1\) 上全纯，且满足显式上界
+\[
+|G(r)|\le \frac{C}{1-|r|}\qquad(|r|<1)
+\]
+（例如当 \(G(r)=\sum_{t\ge 0}a_t r^t\) 且 \(|a_t|\le C\) 时成立）。
+取 \(r_0\in\{|r|<1\}\)、\(\varepsilon>0\) 使得 \(|r_0|+\varepsilon<1\)，并按算法 \ref{alg:residue-ring-test} 定义 \(\widehat{\mathrm{Res}}(G;r_0)\)。
+则真实留数满足 Cauchy 公式
+\[
+\mathrm{Res}(G;r_0)=\frac{1}{2\pi i}\oint_{|r-r_0|=\varepsilon}G(r)\,\dd r
+=\frac{\varepsilon}{2\pi}\int_0^{2\pi} e^{i\theta}\,G\!\bigl(r_0+\varepsilon e^{i\theta}\bigr)\,\dd\theta,
+\]
+并且离散误差可按下述方式显式控制：对任意 \(a>0\) 满足 \(|r_0|+\varepsilon e^{a}<1\)，都有
+\[
+\boxed{\;
+\bigl|\widehat{\mathrm{Res}}(G;r_0)-\mathrm{Res}(G;r_0)\bigr|
+\le
+\varepsilon\cdot
+\frac{2\,e^{a}}{e^{aK}-1}\cdot
+\frac{C}{1-|r_0|-\varepsilon e^{a}}\; }.
+\]
+特别地，由于 \(G\) 全纯时 \(\mathrm{Res}(G;r_0)=0\)，上式直接给出
+\(
+|\widehat{\mathrm{Res}}(G;r_0)|
+\)
+的可审计上界。
+\end{proposition}
+\begin{proof}
+令 \(g(\theta):=e^{i\theta}G(r_0+\varepsilon e^{i\theta})\)。
+则 \(\mathrm{Res}(G;r_0)=\varepsilon\cdot \frac{1}{2\pi}\int_0^{2\pi}g(\theta)\,\dd\theta\)，而 \(\widehat{\mathrm{Res}}(G;r_0)=\varepsilon\cdot \frac{1}{K}\sum_{k=0}^{K-1}g(\theta_k)\)。
+\par
+当 \(|\Im\theta|\le a\) 时有 \(|e^{i\theta}|=e^{-\Im\theta}\le e^{a}\) 且
+\(
+|r_0+\varepsilon e^{i\theta}|
+\le
+|r_0|+\varepsilon e^{a}
+<1
+\)，
+故由给定上界得
+\[
+|g(\theta)|\le e^{a}\cdot \frac{C}{1-|r_0|-\varepsilon e^{a}}
+ =: M_a.
+\]
+因此 \(g\) 作为 \(2\pi\)-周期函数在条带 \(|\Im\theta|\le a\) 内全纯且有界。
+写其 Fourier 系数 \(\widehat g_n=\frac{1}{2\pi}\int_0^{2\pi} g(\theta)\,e^{-in\theta}\,\dd\theta\)，则由移线积分得
+\(
+|\widehat g_n|\le M_a e^{-a|n|}
+\)。
+而离散平均只采样到频率为 \(K\) 的倍数项：\(\frac{1}{K}\sum_{k=0}^{K-1} g(\theta_k)=\sum_{m\in\ZZ}\widehat g_{mK}\)。
+故误差满足
+\[
+\left|
+\frac{1}{K}\sum_{k=0}^{K-1} g(\theta_k)-\frac{1}{2\pi}\int_0^{2\pi}g(\theta)\,\dd\theta
+\right|
+\le
+\sum_{m\ne 0} |\widehat g_{mK}|
+\le
+2M_a\sum_{m\ge 1} e^{-amK}
+\ =\ \frac{2M_a}{e^{aK}-1}.
+\]
+两边乘 \(\varepsilon\) 即得所示不等式。
+\end{proof}
+
+\begin{remark}[正性 Fredholm-HTF：把有限核模板升级为可承载无限谱的可执行规格（构造目标）]\label{rem:positive-fredholm-htf}
+注 \ref{rem:finite-pole-lattice-barrier}--\ref{rem:remainder-map-transfer-operator-refinement} 已指出：要摆脱有限维“相位梳齿”的极点几何，必须进入无穷维转移算子/核算子与 Fredholm 行列式范式。
+在此基础上，可把“HTF（prime-like/几何侧 \(\leftrightarrow\) 谱/迹侧）”进一步规格化为一个\textbf{同时继承全纯性、NonCancel 与 Abel-first 正则化}的构造目标：
+\begin{enumerate}
+  \item \textbf{闭层全纯性：}构造一族迹类核算子 \((\mathcal{L}_u)\)（可视为扫描协议下的转移/读出算子），使得
+  \[
+  G_W(r):=\Tr\Bigl(W\bigl((I-r\mathcal{L}_1)^{-1}-I\bigr)\Bigr)
+  \]
+  在 \(|r|<1\) 内可定义且全纯，其中 \(W\in\mathcal{S}_1\) 为任意给定的迹类通道算子（例如 \(W\succeq 0\)）。并要求 \(G_W\) 满足类似命题 \ref{prop:residue-ring-explicit-error-bound} 的一致上界（从而在闭层给出单位圆盘全纯性与可审计控制）。
+  \item \textbf{正性/整数重数证书与 NonCancel 自动：}要求 \(\mathcal{L}_u\) 的离散谱点具有有限代数重数 \(m_\lambda=\Tr(P_\lambda)\in\NN\)，并使得所关心通道的主部系数由 \(\Tr(P_\lambda)\) 或更一般的 \(\Tr(WP_\lambda)\ge 0\)（某个正算子 \(W\)）给出；于是任意极点都携带不可为零的留数证书（命题 \ref{prop:resolvent-trace-integer-residue-noncancel}），同点消去被结构性排除。
+  \item \textbf{Abel-first 与有限部兼容：}要求 Fredholm 行列式（定义 \ref{def:fredholm-determinant}）
+  \[
+  \log\det(I-r\mathcal{L}_u)=-\sum_{n\ge 1}\frac{r^n}{n}\Tr(\mathcal{L}_u^n)
+  \]
+  的 Abel 正则化与本文“先用 \(\zeta/\det\) 组织误差项，再做 primitive/有限部规约”的接口兼容：即先在 \(|r|<1\) 的全纯域内完成组织与证书化，再沿 \(r\uparrow 1\) 取有限部/常数项读出。
+\end{enumerate}
+该三条把“全纯（闭层）+ 正性（NonCancel 自动）+ Fredholm 行列式（无限谱承载）”锁死成同一个可执行规格，从而把“去做 Hilbert--P{\'o}lya”落成一份可审计的算子构造清单。
+\end{remark}
+
+\subsubsection{从 Euler 乘积回升到迹类算子：循环块迹类提升（Fredholm--Witt 截面）}\label{subsec:cyclic-traceclass-lift}
+
+本段在迹类口径下给出一个可直接执行的闭合实现：对一类可检验的 Euler 型乘积，构造一个显式迹类算子 \(L_{\mathcal D}\)，使其 Fredholm 行列式在单位圆盘内严格复原该乘积，并自动携带整数谱重数（NonCancel 证书）与 Abel-first 展开；同时，有限维截断误差具有闭式尾和上界，从而对齐注 \ref{rem:positive-fredholm-htf} 的三条规格，并在注 \ref{rem:zetaK-commuting-diagram} 的“迹 \(\Rightarrow\) primitive \(\Rightarrow\) Euler”交换链之外给出一个可检验子类上的反向截面。
+
+\begin{definition}[循环块]\label{def:cyclic-block}
+对 \(n\in\NN_{\ge 1}\)，令 \(\Pi_n\in U(n)\) 为标准 \(n\)-循环置换矩阵（\(\Pi_n e_j=e_{j+1}\)、\(\Pi_n e_n=e_1\)）。
+给定标量 \(\alpha\in\CC\)，定义循环块
+\[
+C(n,\alpha):=\alpha\,\Pi_n\in \mathrm{End}(\CC^n).
+\]
+\end{definition}
+
+\begin{definition}[可审计 primitive 数据与迹类可执行性]\label{def:traceclass-primitive-data}
+设 \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) 为可数指标族，其中
+\[
+n_j\in\NN_{\ge 1},\qquad \beta_j\in(0,1),\qquad m_j\in\NN.
+\]
+称其满足\emph{迹类可执行性}，若
+\begin{equation}\label{eq:tc-executability}
+\sum_{j\in J} m_j\,n_j\,\beta_j^{1/n_j}<\infty.
+\end{equation}
+在 \eqref{eq:tc-executability} 下，令 \(\alpha_j:=\beta_j^{1/n_j}\in(0,1)\)，并定义 Hilbert 直和空间
+\[
+H_{\mathcal D}:=\bigoplus_{j\in J}\bigl(\CC^{n_j}\otimes \CC^{m_j}\bigr),
+\]
+以及迹类算子
+\[
+L_{\mathcal D}:=\bigoplus_{j\in J}\bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr)\in\mathcal{S}_1(H_{\mathcal D}).
+\]
+\end{definition}
+
+\begin{theorem}[循环块的 Fredholm--Witt 闭合实现]\label{thm:cyclic-fredholm-witt}
+沿用定义 \ref{def:traceclass-primitive-data} 的记号，并假设 \eqref{eq:tc-executability} 成立。则：
+\begin{enumerate}
+  \item \textbf{闭层全纯性与一致上界（对齐注 \ref{rem:positive-fredholm-htf}(i)）。}
+  \(L_{\mathcal D}\) 为迹类算子，且其迹范数与算子范数满足
+  \[
+  \norm{L_{\mathcal D}}_1=\sum_{j\in J} m_j\,n_j\,\alpha_j<\infty,
+  \qquad
+  \norm{L_{\mathcal D}}=\sup_{j\in J}\alpha_j<1.
+  \]
+  因而对任意 \(|r|<1\)，算子 \((I-rL_{\mathcal D})\) 可逆。
+  对任意迹类通道 \(W\in\mathcal{S}_1(H_{\mathcal D})\)（例如 \(W\succeq 0\)），定义
+  \[
+  G_W(r):=\Tr\Bigl(W\bigl((I-rL_{\mathcal D})^{-1}-I\bigr)\Bigr),\qquad |r|<1.
+  \]
+  则 \(G_W\) 在 \(|r|<1\) 内全纯，并满足一致上界
+  \[
+  \abs{G_W(r)}
+  \le
+  \norm{W}_1\cdot\frac{|r|\,\norm{L_{\mathcal D}}}{1-|r|\,\norm{L_{\mathcal D}}}
+  \le
+  \norm{W}_1\cdot\frac{|r|}{1-|r|}.
+  \]
+
+  \item \textbf{整数谱重数与 NonCancel 证书（对齐注 \ref{rem:positive-fredholm-htf}(ii)）。}
+  每个直和块 \(C(n_j,\alpha_j)\otimes I_{m_j}\) 的谱为
+  \(
+  \{\alpha_j\omega:\ \omega^{n_j}=1\}
+  \)，且这些谱点在该块上的代数重数均为 \(m_j\)。
+  因此 \(L_{\mathcal D}\) 的任意非零离散谱点 \(\lambda\) 都具有有限代数重数
+  \[
+  m_\lambda:=\Tr(P_\lambda)
+  =
+  \sum_{j\in J}\ \sum_{\substack{\omega^{n_j}=1\\ \alpha_j\omega=\lambda}} m_j
+  \in\NN,
+  \]
+  其中 \(P_\lambda\) 为对应的 Riesz 投影。
+  特别地，对任意 \(W\succeq 0\)，主部系数可由 \(\Tr(WP_\lambda)\ge 0\) 给出，
+  从而同点消去被结构性排除（NonCancel 自动）。
+
+  \item \textbf{Abel-first 与有限部兼容（对齐注 \ref{rem:positive-fredholm-htf}(iii)）。}
+  定义 Fredholm \(\zeta\)-接口函数
+  \[
+  \zeta_{\mathcal D}(r):=\det(I-rL_{\mathcal D})^{-1}.
+  \]
+  则由定义 \ref{def:fredholm-determinant} 有严格的 Abel-first 展开
+  \[
+  \log \zeta_{\mathcal D}(r)=\sum_{n\ge 1}\frac{\Tr(L_{\mathcal D}^n)}{n}\,r^n,\qquad |r|<1,
+  \]
+  与迹类行列式口径完全一致。
+  若进一步满足
+  \begin{equation}\label{eq:fp-summability}
+  \sum_{j\in J} m_j\,\abs{\log(1-\beta_j)}<\infty,
+  \end{equation}
+  则 \(\log \zeta_{\mathcal D}(r)\) 在 \(r\uparrow 1\) 存在有限极限，且有限维截断误差可由尾和闭式控制（见推论 \ref{cor:cyclic-truncation-bounds}）。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+由构造，\(L_{\mathcal D}\) 是有限维块的 Hilbert 直和。
+每个块 \(C(n_j,\alpha_j)\otimes I_{m_j}\) 的全部奇异值都等于 \(\alpha_j\)，其重数为 \(n_jm_j\)，故该块的迹范数为 \(m_jn_j\alpha_j\)。
+由 \eqref{eq:tc-executability} 可加性得 \(\norm{L_{\mathcal D}}_1<\infty\)，从而 \(L_{\mathcal D}\in\mathcal{S}_1(H_{\mathcal D})\)；并且 \(\norm{L_{\mathcal D}}=\sup_j\alpha_j<1\)（因 \(\sum_j\alpha_j\le\sum_j m_jn_j\alpha_j<\infty\) 蕴含 \(\alpha_j\to 0\)，从而上确界在有限子集上取得且严格小于 \(1\)）。
+
+对 \(|r|<1\)，由 Neumann 级数得 \((I-rL_{\mathcal D})^{-1}\) 存在且
+\(
+\norm{(I-rL_{\mathcal D})^{-1}}\le (1-|r|\norm{L_{\mathcal D}})^{-1}
+\)。
+又 \((I-rL_{\mathcal D})^{-1}-I=rL_{\mathcal D}(I-rL_{\mathcal D})^{-1}\) 为有界算子与迹类算子的乘积，故仍为迹类；从而 \(W((I-rL_{\mathcal D})^{-1}-I)\in\mathcal{S}_1\)，且由 \(\abs{\Tr(X)}\le \norm{X}_1\) 与 \(\norm{AB}_1\le \norm{A}_1\norm{B}\) 得到所述上界。
+全纯性由 resolvent 在 \(|r|<1\) 内解析、以及迹在 \(\mathcal{S}_1\) 上的连续线性性推出。
+
+谱与重数结论来自有限维块 \(C(n,\alpha)=\alpha\Pi_n\) 的谱结构：\(\Pi_n\) 的特征值为全部 \(n\)-次单位根且各为单重；张量 \(I_{m}\) 使该块上每个谱点的代数重数变为 \(m\)；直和保持谱点的离散性与代数重数的可加性。
+因此对任意 \(\lambda\ne 0\) 的离散谱点，其 Riesz 投影 \(P_\lambda\) 为有限秩投影，且 \(\Tr(P_\lambda)=m_\lambda\in\NN\)。
+并且对 \(W\succeq 0\) 有 \(\Tr(WP_\lambda)\ge 0\)。
+
+Abel-first 展开直接由迹类 Fredholm 行列式定义 \ref{def:fredholm-determinant} 给出。
+在 \eqref{eq:fp-summability} 下，由无穷乘积（或对数级数）的绝对可和性与一致收敛性可知 \(r\uparrow 1\) 的极限存在，且误差的闭式尾和控制见推论 \ref{cor:cyclic-truncation-bounds}。
+\end{proof}
+
+\begin{proposition}[循环置换块的行列式恒等式]\label{prop:cycle-permutation-determinant}
+对任意 \(n\ge 1\) 与任意复数 \(t\)，都有
+\[
+\det(I-t\Pi_n)=1-t^n.
+\]
+因而对 \(C(n,\alpha)=\alpha\Pi_n\) 有
+\[
+\det(I-rC(n,\alpha))=1-(\alpha r)^n.
+\]
+\end{proposition}
+
+\begin{proof}
+\(\Pi_n\) 的特征值为全部 \(n\)-次单位根 \(\{\omega:\omega^n=1\}\)，故
+\(
+\det(I-t\Pi_n)=\prod_{\omega^n=1}(1-t\omega)=1-t^n
+\)。
+第二式由代入 \(t=\alpha r\) 得到。证毕。
+\end{proof}
+
+\begin{corollary}[Euler 乘积的显式恢复（迹类算子端的反向截面）]\label{cor:cyclic-euler-product}
+在定理 \ref{thm:cyclic-fredholm-witt} 的设定下，\(\zeta_{\mathcal D}\) 在 \(|r|<1\) 满足严格恒等式
+\[
+\zeta_{\mathcal D}(r)
+=\prod_{j\in J}\bigl(1-\beta_j r^{n_j}\bigr)^{-m_j}.
+\]
+因此，任意满足 \eqref{eq:tc-executability} 的 Euler 型乘积都落在迹类 Fredholm \(\zeta\)-接口的像中，并由显式的 \(L_{\mathcal D}\) 给出一个构造性实现。
+\end{corollary}
+
+\begin{proof}
+由直和与张量的行列式乘法性，以及命题 \ref{prop:cycle-permutation-determinant}，得
+\[
+\det(I-rL_{\mathcal D})
+=\prod_{j\in J}\det\bigl(I-r(C(n_j,\alpha_j)\otimes I_{m_j})\bigr)
+=\prod_{j\in J}\det\bigl(I-rC(n_j,\alpha_j)\bigr)^{m_j}
+=\prod_{j\in J}\bigl(1-\beta_j r^{n_j}\bigr)^{m_j}.
+\]
+两边取倒数即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[有限维截断与尾和误差账本]\label{cor:cyclic-truncation-bounds}
+取任意有限子集 \(J_N\subset J\)，并定义截断
+\[
+L_{\mathcal D}^{(N)}:=\bigoplus_{j\in J_N}\bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr),
+\qquad
+\zeta_{\mathcal D}^{(N)}(r):=\det(I-rL_{\mathcal D}^{(N)})^{-1}
+=\prod_{j\in J_N}\bigl(1-\beta_j r^{n_j}\bigr)^{-m_j}.
+\]
+则对任意 \(0\le r<1\) 有
+\[
+0\le \log \zeta_{\mathcal D}(r)-\log \zeta_{\mathcal D}^{(N)}(r)
+=\sum_{j\in J\setminus J_N} m_j\,\bigl(-\log(1-\beta_j r^{n_j})\bigr)
+\le
+\sum_{j\in J\setminus J_N} m_j\,\frac{\beta_j r^{n_j}}{1-\beta_j r^{n_j}}.
+\]
+若进一步满足 \eqref{eq:fp-summability}，则令 \(r\uparrow 1\) 得
+\[
+0\le \log \zeta_{\mathcal D}(1^-)-\log \zeta_{\mathcal D}^{(N)}(1)
+\le
+\sum_{j\in J\setminus J_N} m_j\,\frac{\beta_j}{1-\beta_j},
+\]
+从而 Abel 极限的有限部与有限维近似之间存在闭式尾和控制。
+\end{corollary}
+
+\subsubsection{柱投影与最大熵态：C*-代数口径}
+
+与附录 \ref{app:op-algebra} 的“投影读出”语言相呼应：在 SFT 上，柱事件对应一族两两正交投影，它们生成一个交换子代数；最大熵态（Parry 测度）给出其上的规范态。更进一步，Cuntz--Krieger 代数 $\mathcal{O}_A$ 为该 SFT 提供一个非交换的普适 C*-代数封装，其对角子代数与柱投影自然同构。
+
+\begin{remark}[柱投影的 C*-代数封装]\label{prop:ck-diagonal-cylinders}
+对角子代数 \(\mathcal{D}_A\subset\mathcal{O}_A\) 与 \(C(X_A^+)\) 自然同构，且柱集投影 \(P_\mu=S_\mu S_\mu^*\) 对应于指示函数 \(\mathbf{1}_{[\mu]}\)；任意测度（如 Parry）因此诱导 \(\mathcal{D}_A\) 上的态。见 \cite{CuntzKrieger1980}。
+\end{remark}
+
+\subsubsection{本文的新颖桥接点：分辨率折叠作为可审计的子代数选择}
+
+附录 \ref{app:op-algebra-fold-subalgebra} 给出一个对本文尤为关键、但在标准 PF/热力学形式叙述中并不自动出现的结构：对任意分辨率 $m$，由全部窗口微态投影生成的有限维交换代数 $\mathcal{A}_m$，以及由折叠不变性挑出的子代数 $\mathcal{B}_m$。该子代数选择正是“分辨率压缩/稳定类型化”的算子代数版本：它把可观测量限制为对折叠纤维常值的部分，从而把微态层的巨大自由度压缩为 $|X_m|=F_{m+2}$ 个稳定类型坐标。\par
+在此意义下，本文的算子论新信息不是重新证明 PF/Parry/$\zeta$ 已有结论，而是给出一条\textbf{从扫描投影读出到语法层算子接口的可计算桥接链}：
+\[
+\begin{aligned}
+&\text{扫描-投影二元读出}\ \Rightarrow\ \text{窗口微态投影代数 }\mathcal{A}_m\\
+&\Rightarrow\ \text{折叠不变子代数 }\mathcal{B}_m\ \Rightarrow\ \text{语法层（SFT/sofic）与 }\zeta\text{ 接口}.
+\end{aligned}
+\]
+
+\begin{remark}[折叠专属的新接口：纤维条件期望与多重度]\label{rem:fold-new-invariants}
+在 SFT/\(\zeta\) 叙述中，“对角子代数/柱投影”是给定语法后自然出现的；而在本文生成链中，\(\mathcal{B}_m\subset\mathcal{A}_m\) 的出现是由折叠 \(\Fold_m\) 强制的 coarse-graining。更进一步，附录 \ref{prop:fold-conditional-expectation} 给出一个完全显式的条件期望
+\[
+E_m:\mathcal{A}_m\to\mathcal{B}_m,\qquad
+E_m(P_a)=\frac{1}{d_m(\Fold_m(a))}\widetilde P_{\Fold_m(a)},
+\]
+其系数由折叠纤维多重度 \(d_m(x)=|\Fold_m^{-1}(x)|\) 给出。该 \(E_m\) 可视为“信息丢失接口”：它把微态层可观测量压缩为对折叠纤维常值的部分，并将多重度作为一个可审计输入。
+
+在核/同步图层面，本文进一步把“折叠/归一化机制”编码为有限图移位，从而引入一组可比较的不变量族：例如 Abel/Hadamard 有限部常数 \(\log\mathfrak{M}\)、orbit--Mertens 常数 \(\mathsf{M}\)、以及 Dirichlet--Mertens 常数张量与最坏扭曲谱半径比 \(\rho/\lambda\)。这些对象在形式上仍由 \(\zeta=1/\det(I-zA)\) 的解析结构导出，但其\emph{输入矩阵}来自归一化核的同步图（而非仅来自语法本身），因此可作为“折叠专属的谱指纹”用于跨核对比。
+\end{remark}

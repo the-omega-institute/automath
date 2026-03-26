@@ -1,0 +1,545 @@
+\paragraph{escort 温度半轴的平坦化、圆弧嵌入与固定样本二项塌缩}
+在 escort 极限族的一维 logistic 指数几何、Fisher--Rao 有限弧长、Hellinger--Chernoff 母核以及乘积试验的单比特塌缩已经确立之后，该温度半轴还可继续被压缩为一条带唯一端点完备化的平坦圆弧模型。下列结果分别给出显式平坦坐标、零温端点的度量完备化、平方根嵌入的单位圆弧表述、Chernoff 极小点的闭式反演、固定样本下的二项实验塌缩，以及顺序对数似然步长的严格二点格结构。
+
+\begin{theorem}[bin-fold escort 温度半轴的 Fisher--Rao 度量存在显式平坦坐标]\label{thm:xi-time-part9sb-escort-fisher-flat-coordinate}
+定义
+\[
+\theta(q):=\frac{1}{1+\varphi^{q+1}},
+\qquad
+\mathcal I(q):=(\log\varphi)^2\,\theta(q)\bigl(1-\theta(q)\bigr),
+\qquad q\ge 0,
+\]
+以及坐标函数
+\[
+\psi(q):=2\arctan\!\bigl(\varphi^{(q+1)/2}\bigr)
+=
+\pi-2\arctan\!\bigl(\varphi^{-(q+1)/2}\bigr).
+\]
+则
+\[
+\psi'(q)=\sqrt{\mathcal I(q)}.
+\]
+从而对任意 \(p,q\ge 0\)，escort 温度半轴上的 Fisher--Rao 距离满足闭式
+\[
+d_{\mathrm{FR}}(p,q)
+=
+\left|\psi(q)-\psi(p)\right|
+=
+\left|
+2\arctan\!\bigl(\varphi^{(q+1)/2}\bigr)
+-
+2\arctan\!\bigl(\varphi^{(p+1)/2}\bigr)
+\right|.
+\]
+特别地，\(\psi\) 把整个温度半轴 \([0,\infty)\) 等距拉直到 Euclidean 线段
+\[
+\psi([0,\infty))
+=
+\bigl[2\arctan(\sqrt\varphi),\,\pi\bigr).
+\]
+\end{theorem}
+\begin{proof}
+由结论 \ref{con:xi-time-part9o-escort-fisher-rao-closed}，极限 Fisher 密度正是
+\[
+\mathcal I(q)=(\log\varphi)^2\,\theta(q)\bigl(1-\theta(q)\bigr).
+\]
+另一方面，
+\[
+\psi'(q)
+=
+\frac{\log\varphi\,\varphi^{(q+1)/2}}{1+\varphi^{q+1}}
+=
+(\log\varphi)\sqrt{\frac{\varphi^{q+1}}{(1+\varphi^{q+1})^2}}
+=
+(\log\varphi)\sqrt{\theta(q)\bigl(1-\theta(q)\bigr)}
+=
+\sqrt{\mathcal I(q)}.
+\]
+故
+\[
+d_{\mathrm{FR}}(p,q)
+=
+\left|
+\int_p^q \sqrt{\mathcal I(r)}\,\dd r
+\right|
+=
+\left|\psi(q)-\psi(p)\right|.
+\]
+又因 \(\psi\) 严格递增，且
+\[
+\psi(0)=2\arctan(\sqrt\varphi),
+\qquad
+\lim_{q\to\infty}\psi(q)=\pi,
+\]
+遂得所示像区间。证毕。
+\end{proof}
+
+\begin{corollary}[escort 温度半轴的 Fisher--Rao 完备化只需添加一个零温端点]\label{cor:xi-time-part9sb-escort-fisher-completion-zero-endpoint}
+沿用定理 \ref{thm:xi-time-part9sb-escort-fisher-flat-coordinate} 的记号。则对任意 \(q\ge 0\)，有
+\[
+d_{\mathrm{FR}}(q,\infty)
+:=
+\lim_{r\to\infty}d_{\mathrm{FR}}(q,r)
+=
+\pi-\psi(q)
+=
+2\arctan\!\bigl(\varphi^{-(q+1)/2}\bigr).
+\]
+特别地，
+\[
+\operatorname{diam}_{\mathrm{FR}}[0,\infty)
+=
+2\arctan(\varphi^{-1/2}).
+\]
+因此，Fisher--Rao 完备化只需添加唯一端点 \(q=\infty\)；在极限一比特实验中，该端点对应于退化分布 \(\delta_0\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9sb-escort-fisher-flat-coordinate}，
+\[
+d_{\mathrm{FR}}(q,r)=|\psi(r)-\psi(q)|.
+\]
+令 \(r\to\infty\) 即得
+\[
+d_{\mathrm{FR}}(q,\infty)=\pi-\psi(q).
+\]
+再用恒等式
+\[
+\pi-2\arctan x=2\arctan(x^{-1})
+\qquad (x>0)
+\]
+并取 \(x=\varphi^{(q+1)/2}\)，便得到
+\[
+d_{\mathrm{FR}}(q,\infty)=2\arctan\!\bigl(\varphi^{-(q+1)/2}\bigr).
+\]
+取 \(q=0\) 即得总直径。
+
+另一方面，
+\[
+\theta(q)=\frac{1}{1+\varphi^{q+1}}\longrightarrow 0
+\qquad (q\to\infty),
+\]
+故极限 Bernoulli 模型退化为 \(\mathrm{Bernoulli}(0)=\delta_0\)。在 \(\psi\) 坐标下，\([0,\infty)\) 的像是半开区间 \([2\arctan(\sqrt\varphi),\pi)\)，其度量完备化只需补入端点 \(\pi\)，从而原半轴只需添加唯一零温端点。证毕。
+\end{proof}
+
+\begin{theorem}[escort 温度族的平方根嵌入是一段单位圆弧，Hellinger 亲和量满足精确余弦律]\label{thm:xi-time-part9sb-escort-sqrt-circle-hellinger}
+定义平方根嵌入
+\[
+\Psi(q):=\bigl(\sqrt{1-\theta(q)},\,\sqrt{\theta(q)}\bigr)\in\RR^2.
+\]
+则有参数化
+\[
+\Psi(q)
+=
+\left(
+\sin\frac{\psi(q)}{2},
+\,
+\cos\frac{\psi(q)}{2}
+\right),
+\qquad
+\|\Psi(q)\|_2=1.
+\]
+因此 \(\Psi([0,\infty))\) 是第一象限中的一段单位圆弧。进一步，对任意 \(p,q\ge 0\)，若记
+\[
+\mathcal H(p,q)
+:=
+\sqrt{(1-\theta(p))(1-\theta(q))}
++
+\sqrt{\theta(p)\theta(q)},
+\]
+则
+\[
+\mathcal H(p,q)
+=
+\left\langle \Psi(p),\Psi(q)\right\rangle
+=
+\cos\frac{d_{\mathrm{FR}}(p,q)}{2}.
+\]
+相应地，
+\[
+\|\Psi(p)-\Psi(q)\|_2^2
+=
+2-2\mathcal H(p,q)
+=
+4\sin^2\frac{d_{\mathrm{FR}}(p,q)}{4}.
+\]
+按结论 \ref{cor:xi-time-part9o-escort-testing-geometry-closed} 所采用的归一化，平方 Hellinger 距离
+\[
+H_{\mathrm{hel}}^2(p,q):=1-\mathcal H(p,q)
+\]
+因此满足
+\[
+H_{\mathrm{hel}}^2(p,q)=2\sin^2\frac{d_{\mathrm{FR}}(p,q)}{4}.
+\]
+\end{theorem}
+\begin{proof}
+令
+\[
+x_q:=\varphi^{(q+1)/2}.
+\]
+则
+\[
+\theta(q)=\frac{1}{1+x_q^2},
+\qquad
+1-\theta(q)=\frac{x_q^2}{1+x_q^2},
+\qquad
+\psi(q)=2\arctan x_q.
+\]
+于是半角公式给出
+\[
+\cos\frac{\psi(q)}{2}
+=
+\frac{1}{\sqrt{1+x_q^2}}
+=
+\sqrt{\theta(q)},
+\]
+\[
+\sin\frac{\psi(q)}{2}
+=
+\frac{x_q}{\sqrt{1+x_q^2}}
+=
+\sqrt{1-\theta(q)}.
+\]
+故 \(\Psi(q)\) 确为单位圆上的上述参数化。
+
+再计算内积：
+\[
+\left\langle \Psi(p),\Psi(q)\right\rangle
+=
+\sin\frac{\psi(p)}{2}\sin\frac{\psi(q)}{2}
++
+\cos\frac{\psi(p)}{2}\cos\frac{\psi(q)}{2}
+=
+\cos\frac{\psi(q)-\psi(p)}{2}.
+\]
+由定理 \ref{thm:xi-time-part9sb-escort-fisher-flat-coordinate}，
+\[
+d_{\mathrm{FR}}(p,q)=|\psi(q)-\psi(p)|,
+\]
+而余弦为偶函数，故
+\[
+\mathcal H(p,q)=\cos\frac{d_{\mathrm{FR}}(p,q)}{2}.
+\]
+最后，由单位向量的弦长恒等式
+\[
+\|\Psi(p)-\Psi(q)\|_2^2
+=
+\|\Psi(p)\|_2^2+\|\Psi(q)\|_2^2-2\langle \Psi(p),\Psi(q)\rangle
+=
+2-2\mathcal H(p,q)
+\]
+即可得到
+\[
+\|\Psi(p)-\Psi(q)\|_2^2
+=
+4\sin^2\frac{d_{\mathrm{FR}}(p,q)}{4}.
+\]
+将 \(\mathcal H(p,q)=\cos(d_{\mathrm{FR}}(p,q)/2)\) 代回
+\(
+H_{\mathrm{hel}}^2(p,q)=1-\mathcal H(p,q)
+\)
+即得最后一式。证毕。
+\end{proof}
+
+\begin{theorem}[不同温度之间的 Chernoff 极小点具有显式闭式]\label{thm:xi-time-part9sb-escort-chernoff-saddle}
+对 \(r\ge 0\) 定义
+\[
+A(r):=\varphi+\varphi^{-r}.
+\]
+对任意 \(p\neq q\) 与 \(s\in[0,1]\)，记
+\[
+\mathcal M_s(p,q)
+:=
+\frac{A(sp+(1-s)q)}{A(p)^sA(q)^{1-s}}.
+\]
+再定义 Chernoff 信息
+\[
+C_{\mathrm{Ch}}(p,q):=
+-\log\inf_{0\le s\le 1}\mathcal M_s(p,q).
+\]
+若记
+\[
+c_{p,q}
+:=
+\frac{\log A(q)-\log A(p)}{(p-q)\log\varphi}
+\in
+\bigl(\theta(\max\{p,q\}),\,\theta(\min\{p,q\})\bigr)\subset(0,1),
+\]
+则
+\[
+r_*(p,q)
+:=
+\log_\varphi\!\Bigl(\frac{1-c_{p,q}}{c_{p,q}}\Bigr)-1
+\in
+\bigl(\min\{p,q\},\,\max\{p,q\}\bigr),
+\]
+并且 \(s\mapsto \mathcal M_s(p,q)\) 在 \([0,1]\) 上存在唯一极小点
+\[
+s_*(p,q)=\frac{r_*(p,q)-q}{p-q}\in(0,1).
+\]
+进一步，
+\[
+C_{\mathrm{Ch}}(p,q)
+=
+s_*(p,q)\log A(p)
++
+\bigl(1-s_*(p,q)\bigr)\log A(q)
+-
+\log A(r_*(p,q)).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-time-part65h-escort-hellinger-chernoff-kernel}，
+\[
+\log \mathcal M_s(p,q)
+=
+\log A(r_s)-s\log A(p)-(1-s)\log A(q),
+\qquad
+r_s:=sp+(1-s)q.
+\]
+因此
+\[
+\frac{\dd}{\dd s}\log \mathcal M_s(p,q)
+=
+(p-q)\frac{A'(r_s)}{A(r_s)}-\log A(p)+\log A(q).
+\]
+又因为
+\[
+A'(r)=-(\log\varphi)\varphi^{-r},
+\qquad
+-\frac{A'(r)}{(\log\varphi)A(r)}
+=
+\frac{\varphi^{-r}}{\varphi+\varphi^{-r}}
+=
+\frac{1}{1+\varphi^{r+1}}
+=
+\theta(r),
+\]
+临界点条件等价于
+\[
+\theta(r_s)=c_{p,q}.
+\]
+
+现在令 \(g(r):=\log A(r)\)。由均值定理，存在 \(\xi\) 介于 \(p\) 与 \(q\) 之间，使得
+\[
+g(q)-g(p)=g'(\xi)(q-p).
+\]
+于是
+\[
+c_{p,q}
+=
+\frac{g(q)-g(p)}{(p-q)\log\varphi}
+=
+-\frac{g'(\xi)}{\log\varphi}
+=
+\theta(\xi),
+\]
+从而
+\[
+c_{p,q}\in
+\bigl(\theta(\max\{p,q\}),\,\theta(\min\{p,q\})\bigr).
+\]
+由于 \(\theta\) 在 \([0,\infty)\) 上严格递减，方程 \(\theta(r)=c_{p,q}\) 存在唯一解，且该解恰落在 \((\min\{p,q\},\max\{p,q\})\) 中。由
+\[
+\theta(r)=\frac{1}{1+\varphi^{r+1}}
+\]
+直接反解，便得到
+\[
+r_*(p,q)=\log_\varphi\!\Bigl(\frac{1-c_{p,q}}{c_{p,q}}\Bigr)-1.
+\]
+再由 \(r_s=sp+(1-s)q\) 得
+\[
+s_*(p,q)=\frac{r_*(p,q)-q}{p-q}\in(0,1).
+\]
+
+最后，对二阶导数求值：
+\[
+\frac{\dd^2}{\dd s^2}\log \mathcal M_s(p,q)
+=
+(p-q)^2\frac{\dd}{\dd r}\!\left(\frac{A'(r)}{A(r)}\right)_{r=r_s}
+=
+-(p-q)^2(\log\varphi)\theta'(r_s).
+\]
+而
+\[
+\theta'(r)=-(\log\varphi)\theta(r)\bigl(1-\theta(r)\bigr),
+\]
+故
+\[
+\frac{\dd^2}{\dd s^2}\log \mathcal M_s(p,q)
+=
+(p-q)^2(\log\varphi)^2\theta(r_s)\bigl(1-\theta(r_s)\bigr)>0.
+\]
+因此 \(\log\mathcal M_s(p,q)\) 严格凸，极小点唯一，且
+\[
+C_{\mathrm{Ch}}(p,q)
+=
+-\log \mathcal M_{s_*}(p,q)
+=
+s_*(p,q)\log A(p)
++
+\bigl(1-s_*(p,q)\bigr)\log A(q)
+-
+\log A(r_*(p,q)).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[固定样本数下 escort 乘积试验在 Blackwell 意义下指数塌缩为二项试验]\label{thm:xi-time-part9sb-escort-fixed-n-binomial-blackwell}
+设 \(Q<\infty\) 与 \(n\in\NN\)。定义 \(n\)-样本 escort 试验族
+\[
+\mathcal E_m^{(n,Q)}:=\{\pi_{m,q}^{\otimes n}:0\le q\le Q\},
+\]
+以及二项极限试验族
+\[
+\mathcal G^{(n,Q)}:=\{\mathrm{Binomial}(n,\theta(q)):0\le q\le Q\},
+\qquad
+\theta(q)=\frac{1}{1+\varphi^{q+1}}.
+\]
+则存在常数 \(C_{n,Q}>0\) 使得
+\[
+\Delta\bigl(\mathcal E_m^{(n,Q)},\mathcal G^{(n,Q)}\bigr)
+\le
+C_{n,Q}\Bigl(\frac{\varphi}{2}\Bigr)^m.
+\]
+特别地，前向塌缩核正是末位计数
+\[
+N_n(w^{(1)},\dots,w^{(n)})
+:=
+\sum_{j=1}^n w_m^{(j)}\in\{0,\dots,n\}.
+\]
+对任意固定 \(p,q\in[0,Q]\)，极限对数似然比仅依赖于 \(N_n\)：
+\[
+\Lambda_n(p,q)
+=
+N_n\log\frac{\theta(q)}{\theta(p)}
++
+\bigl(n-N_n\bigr)\log\frac{1-\theta(q)}{1-\theta(p)}.
+\]
+等价地，在与 \(\mathcal G^{(n,Q)}\) 对应的 Bernoulli 乘积极限试验中，\(N_n\) 承载了全部参数依赖。
+\end{theorem}
+\begin{proof}
+记
+\[
+A_i:=\{w\in X_m:w_m=i\},
+\qquad
+U_{m,i}:=\mathrm{Unif}(A_i)
+\qquad (i=0,1).
+\]
+并记单样本末位读出
+\[
+K_m(w):=w_m\in\{0,1\}.
+\]
+定义前向核
+\[
+R_m(w^{(1)},\dots,w^{(n)})
+:=
+\sum_{j=1}^n w_m^{(j)}.
+\]
+再定义反向核
+\[
+S_m(k,\cdot)
+:=
+\frac{1}{\binom{n}{k}}
+\sum_{\substack{J\subset\{1,\dots,n\}\\ |J|=k}}
+\bigotimes_{j\in J}U_{m,1}
+\otimes
+\bigotimes_{j\notin J}U_{m,0},
+\qquad 0\le k\le n.
+\]
+
+由定理 \ref{thm:xi-time-part65h-escort-blackwell-onebit-equivalence} 的证明，单样本末位分布精确满足
+\[
+K_{m\#}\pi_{m,q}=\mathrm{Bernoulli}(\theta_m(q)),
+\qquad
+\theta_m(q):=
+\frac{\varphi^{-q}F_m}{F_{m+1}+\varphi^{-q}F_m},
+\]
+并且
+\[
+\sup_{0\le q\le Q}|\theta_m(q)-\theta(q)|
+=
+O_Q\!\left(\Bigl(\frac{\varphi}{2}\Bigr)^m\right).
+\]
+因此在 \(n\) 个独立样本下，
+\[
+R_{m\#}\pi_{m,q}^{\otimes n}
+=
+\mathrm{Binomial}(n,\theta_m(q)).
+\]
+又因为计数映射不会增加总变差，而 Bernoulli 乘积分布满足望远镜估计，
+\[
+D_{\mathrm{TV}}\!\bigl(
+\mathrm{Binomial}(n,\theta_m(q)),
+\mathrm{Binomial}(n,\theta(q))
+\bigr)
+\le
+D_{\mathrm{TV}}\!\bigl(
+\mathrm{Bernoulli}(\theta_m(q))^{\otimes n},
+\mathrm{Bernoulli}(\theta(q))^{\otimes n}
+\bigr)
+\le
+n\,|\theta_m(q)-\theta(q)|.
+\]
+故前向 deficiency 由
+\[
+\sup_{0\le q\le Q}
+D_{\mathrm{TV}}\!\bigl(R_{m\#}\pi_{m,q}^{\otimes n},\mathrm{Binomial}(n,\theta(q))\bigr)
+\le
+C_{n,Q}\Bigl(\frac{\varphi}{2}\Bigr)^m
+\]
+控制。
+
+再看反向方向。对任意 \(\theta\in[0,1]\)，由二项分布与均匀放置 \(k\) 个 \(1\) 的构造，
+\[
+S_{m\#}\mathrm{Binomial}(n,\theta)
+=
+\bigl((1-\theta)U_{m,0}+\theta U_{m,1}\bigr)^{\otimes n}.
+\]
+特别地，
+\[
+S_{m\#}\mathrm{Binomial}(n,\theta(q))
+=
+\bigl((1-\theta(q))U_{m,0}+\theta(q)U_{m,1}\bigr)^{\otimes n}.
+\]
+而定理 \ref{thm:xi-time-part65h-escort-blackwell-onebit-equivalence} 已给出
+\[
+\sup_{0\le q\le Q}
+D_{\mathrm{TV}}\!\bigl(
+(1-\theta(q))U_{m,0}+\theta(q)U_{m,1},
+\pi_{m,q}
+\bigr)
+=
+O_Q\!\left(\Bigl(\frac{\varphi}{2}\Bigr)^m\right).
+\]
+对乘积测度再次应用望远镜估计，得到
+\[
+\sup_{0\le q\le Q}
+D_{\mathrm{TV}}\!\bigl(
+S_{m\#}\mathrm{Binomial}(n,\theta(q)),
+\pi_{m,q}^{\otimes n}
+\bigr)
+\le
+C_{n,Q}\Bigl(\frac{\varphi}{2}\Bigr)^m.
+\]
+两侧 deficiency 同阶受控，故所示 Le Cam 距离估计成立。
+
+最后，二项族的似然函数可写为
+\[
+\mathbf P_q(N_n=k)
+=
+\binom{n}{k}\theta(q)^k\bigl(1-\theta(q)\bigr)^{n-k},
+\]
+于是对参数 \(p,q\) 的对数似然比恰为
+\[
+\Lambda_n(p,q)
+=
+k\log\frac{\theta(q)}{\theta(p)}
++
+\bigl(n-k\bigr)\log\frac{1-\theta(q)}{1-\theta(p)}.
+\]
+这表明与 \(\mathcal G^{(n,Q)}\) 等价的 Bernoulli 乘积极限试验完全由计数 \(N_n\) 承载。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part9sba-escort-error-exponent-lattice-walk}
+
+\endinput

@@ -1,0 +1,179 @@
+% Prime-register / Gödel orbit: \ell^1 stability, asymptotic growth, smoothness, and completion-level invertibility.
+
+\paragraph{\texorpdfstring{$\ell^1$}{l1} 指数编辑范数下的稳定常数}
+令 \(\mathcal P_{\ZZ}:=\ZZ^{(\NN)}\) 为 \(\mathcal P=\NN^{(\NN)}\) 的 Grothendieck 群完备化（有限支撑整数序列），并将 \(\Phi_f\) 线性延拓为 \(\Phi_f:\mathcal P_{\ZZ}\to\mathcal P_{\ZZ}\)。
+对 \(x=\sum_{t\ge 1}x_t\mathbf e_t\in\mathcal P_{\ZZ}\) 定义
+\[
+\|x\|_{1}:=\sum_{t\ge 1}|x_t|,
+\qquad
+d_1(x,y):=\|x-y\|_1.
+\]
+
+\begin{theorem}[\texorpdfstring{$\ell^1$}{l1} Lipschitz 常数与等距分类]\label{thm:conclusion-prime-register-l1-lipschitz-isometry}
+令 \(f(z)=\sum_{j=0}^{d}a_j z^j\in\NN[z]\) 且 \(\Phi_f=\Theta(f)\) 如定理 \ref{thm:conclusion-shift-commuting-algorithms-polynomial}。
+记 \(A:=f(1)=\sum_{j=0}^{d}a_j\)。
+则对任意 \(x,y\in\mathcal P_{\ZZ}\) 有
+\[
+d_1(\Phi_f(x),\Phi_f(y))\le A\,d_1(x,y),
+\]
+并且常数 \(A\) 精确可达。
+此外，\(\Phi_f\) 在 \((\mathcal P_{\ZZ},d_1)\) 上为等距映射当且仅当 \(f(z)=z^{k}\) 为单项式。
+\end{theorem}
+\begin{proof}
+令 \(u=x-y\in\mathcal P_{\ZZ}\)。
+由于 \(\mathcal P_{\ZZ}\) 以 \(\{\mathbf e_t\}\) 为基，\(\Phi_f\) 的矩阵为一侧 Toeplitz 型：对每个 \(t\ge 1\) 有
+\(
+\Phi_f(\mathbf e_t)=\sum_{j=0}^{d}a_j\mathbf e_{t+j}
+\)，
+故每一列的绝对列和为 \(\sum_{j=0}^{d}a_j=A\)。
+由诱导矩阵 \(1\)-范数等于最大列和，得 \(\|\Phi_f(u)\|_1\le A\|u\|_1\)，即 Lipschitz 不等式。
+
+精确性：取 \(u=\mathbf e_t\) 则
+\(
+\|\Phi_f(\mathbf e_t)\|_1=\sum_{j=0}^{d}a_j=A=\|\mathbf e_t\|_1\cdot A
+\)，故常数可达。
+
+若 \(\Phi_f\) 为等距，则对所有 \(t\) 有 \(\|\Phi_f(\mathbf e_t)\|_1=\|\mathbf e_t\|_1=1\)，从而 \(\sum_{j}a_j=1\)。
+因 \(a_j\in\NN\)，必存在唯一 \(k\) 使 \(a_k=1\) 且其余为 \(0\)，即 \(f(z)=z^k\)。
+反向若 \(f(z)=z^k\)，则 \(\Phi_f=\mathrm{Sh}^{k}\) 为坐标平移，显然保持 \(d_1\)。证毕。
+\end{proof}
+
+\paragraph{迭代 Gödel 轨道的对数增长律}
+令 \(G:\mathcal P\to\NN_{\ge 1}\) 为命题 \ref{prop:conclusion-godel-integerization-prime-shift-polynomial} 的 Gödel 同构，
+并取初态 \(r^{(0)}:=\mathbf e_1\)、迭代 \(r^{(n)}:=\Phi_f^{\,n}(r^{(0)})\)。
+定义轨道整数
+\[
+n_n:=G(r^{(n)})\qquad(n\ge 0).
+\]
+若 \(f\) 非常数，则令
+\[
+\mu:=\frac{f'(1)}{f(1)}=\frac{\sum_{j=0}^{d}j\,a_j}{\sum_{j=0}^{d}a_j}\in(0,d].
+\]
+
+\begin{theorem}[超指数层的对数渐近由 \texorpdfstring{$f(1)$}{f(1)} 与 \texorpdfstring{$f'(1)$}{f'(1)} 控制]\label{thm:conclusion-prime-register-godel-orbit-superexp-loglaw}
+设 \(f\in\NN[z]\) 非常数，记 \(A=f(1)\) 与 \(\mu=f'(1)/f(1)\)。
+则当 \(n\to\infty\) 时成立渐近展开
+\begin{equation}\label{eq:conclusion-godel-orbit-log-asymptotic}
+\boxed{\;
+\log n_n
+=A^{n}\Bigl(\log n+\log\log n+\log \mu+o(1)\Bigr)\; }.
+\end{equation}
+\end{theorem}
+\begin{proof}
+令 \(c_{n,k}:=[z^k]\,f(z)^n\)。
+由 \(\Phi_{fg}=\Phi_f\circ\Phi_g\) 与对基向量的作用式（定理 \ref{thm:conclusion-shift-commuting-algorithms-polynomial}）可知
+\[
+r^{(n)}=\Phi_{f^n}(\mathbf e_1)=\sum_{k\ge 0}c_{n,k}\,\mathbf e_{1+k},
+\]
+从而
+\begin{equation}\label{eq:conclusion-godel-orbit-log-prime-sum}
+\log n_n=\sum_{k\ge 0}c_{n,k}\log p_{1+k}.
+\end{equation}
+令随机变量 \(J\in\{0,1,\dots,d\}\) 满足 \(\PP(J=j)=a_j/A\)，并令 \(S_n:=J_1+\cdots+J_n\) 为独立同分布和。
+由多项式系数的路径展开，\(\PP(S_n=k)=c_{n,k}/A^n\)，代入 \eqref{eq:conclusion-godel-orbit-log-prime-sum} 得
+\begin{equation}\label{eq:conclusion-godel-orbit-log-expectation}
+\log n_n=A^n\,\EE\bigl[\log p_{1+S_n}\bigr].
+\end{equation}
+
+由素数定理 \(p_m\sim m\log m\)（例如 \cite{Apostol1976}），有
+\[
+\log p_m=\log m+\log\log m+o(1)\qquad(m\to\infty).
+\]
+又因 \(J\) 有界且 \(\EE[J]=\mu>0\)，强大数定律给出 \(S_n/n\to\mu\) 依概率，因而 \(S_n\to\infty\) 依概率且 \(S_n\le dn\) 恒成立。
+将 \(\log p_{1+S_n}\) 写为
+\[
+\log p_{1+S_n}=\log(1+S_n)+\log\log(1+S_n)+\varepsilon_n,
+\qquad
+\varepsilon_n\to 0\ \text{依概率}.
+\]
+并注意到 \(\log(1+S_n)\le \log(dn+1)\)、\(|\log\log(1+S_n)|\le C+\log\log(dn+1)\)（对足够大 \(n\)）。
+由此可对 \(\varepsilon_n\) 作截断并用支配收敛获得 \(\EE[\varepsilon_n]=o(1)\)，且同样得到
+\[
+\EE[\log(1+S_n)]=\log n+\log\mu+o(1),
+\qquad
+\EE[\log\log(1+S_n)]=\log\log n+o(1).
+\]
+代回 \eqref{eq:conclusion-godel-orbit-log-expectation} 即得 \eqref{eq:conclusion-godel-orbit-log-asymptotic}。证毕。
+\end{proof}
+
+\input{thm__conclusion-onedim-max-coefficient-entropy-profile}
+
+\begin{corollary}[双对数线性化与参数可识别性]\label{cor:conclusion-godel-orbit-identifiability}
+在定理 \ref{thm:conclusion-prime-register-godel-orbit-superexp-loglaw} 的设定下，有
+\[
+\boxed{\ \lim_{n\to\infty}\frac{\log\log n_n}{n}=\log A\ },
+\qquad
+\boxed{\ \lim_{n\to\infty}\left(\frac{\log n_n}{A^n}-\log n-\log\log n\right)=\log\mu\ }.
+\]
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:conclusion-godel-orbit-log-asymptotic} 直接取对数与移项取极限。证毕。
+\end{proof}
+
+\input{prop__conclusion-godel-divisibility-tower}
+
+\begin{proposition}[轨道整数的极端光滑性]\label{prop:conclusion-godel-orbit-extreme-smoothness}
+令 \(d:=\deg f\)，并令 \(P^{+}(m)\) 表示正整数 \(m\) 的最大素因子。
+则对每个 \(n\ge 0\) 有
+\[
+\boxed{\ P^{+}(n_n)\le p_{1+dn}\ }.
+\]
+并且当 \(f\) 非常数（从而 \(A\ge 2\)）时，
+\[
+\boxed{\ \frac{\log n_n}{p_{1+dn}}\xrightarrow[n\to\infty]{}\infty\ }.
+\]
+\end{proposition}
+\begin{proof}
+由 \(r^{(0)}=\mathbf e_1\) 且 \(\Phi_f\) 每次最多将支撑右移 \(d\)，得 \(r^{(n)}\) 的支撑包含于 \(\{1,2,\dots,1+dn\}\)。
+因此 \(n_n=G(r^{(n)})\) 的素因子仅来自 \(\{p_1,\dots,p_{1+dn}\}\)，从而 \(P^{+}(n_n)\le p_{1+dn}\)。
+
+由素数定理 \(p_{1+dn}\sim dn\log(dn)\) 与定理 \ref{thm:conclusion-prime-register-godel-orbit-superexp-loglaw} 的主导项
+\(
+\log n_n\sim A^n\log n
+\)
+得到 \(\log n_n/p_{1+dn}\to\infty\)。证毕。
+\end{proof}
+
+\paragraph{完备化层面的可逆性与符号外置}
+由于 \(\Phi_f=\sum_{j=0}^{d}a_j\,\mathrm{Sh}^{j}\) 是上三角带状算子，形式逆元一般为幂级数而非多项式。
+这一点在“有限支撑”与“全序列完备化”之间产生结构性差异。
+
+\begin{proposition}[有限支撑群上的自同构判据]\label{prop:conclusion-prime-register-finite-support-invertibility}
+将 \(\Phi_f\) 视为 \(\ZZ\)-线性算子 \(\Phi_f:\mathcal P_{\ZZ}\to\mathcal P_{\ZZ}\)。
+则 \(\Phi_f\) 为自同构当且仅当 \(f\) 为常数且 \(f(0)=\pm 1\)。
+特别地，对 \(f\in\NN[z]\)，\(\Phi_f\) 为自同构当且仅当 \(f(z)=1\)。
+\end{proposition}
+\begin{proof}
+若 \(f(z)=a_0\) 为常数，则 \(\Phi_f\) 为对每个坐标的标量乘法 \(x\mapsto a_0 x\)，在 \(\mathcal P_{\ZZ}\) 上可逆当且仅当 \(a_0=\pm 1\)。
+
+反之，若 \(\deg f=d\ge 1\)，则 \(a_d\ge 1\) 且对任意非零 \(x=\sum_{t=1}^{T}x_t\mathbf e_t\in\mathcal P_{\ZZ}\)（取 \(T\) 为最大支撑索引）有
+\[
+(\Phi_f(x))_{T+d}=a_d\,x_T\neq 0,
+\]
+从而 \(\Phi_f(x)\) 的最大支撑索引严格大于 \(T\)。
+因此 \(\Phi_f(\mathcal P_{\ZZ})\) 不包含任何最大支撑索引为 \(1\) 的向量（例如 \(\mathbf e_1\)），故 \(\Phi_f\) 不满射，因而不可能为自同构。证毕。
+\end{proof}
+
+\begin{proposition}[全序列完备化上的形式幂级数逆元]\label{prop:conclusion-prime-register-product-completion-invertibility}
+令
+\[
+\widehat{\mathcal P}_{\ZZ}:=\prod_{t\ge 1}\ZZ\,\mathbf e_t
+\]
+为坐标完备化（允许无限支撑序列）。
+若 \(a_0=\pm 1\)，则 \(f\) 在 \(\ZZ[[z]]\) 中存在唯一形式逆元 \(g(z)=\sum_{n\ge 0}b_n z^n\) 满足 \(f(z)g(z)=1\)。
+此时按同一移位卷积规则定义的 \(\Phi_g:\widehat{\mathcal P}_{\ZZ}\to\widehat{\mathcal P}_{\ZZ}\) 良定义，并满足
+\[
+\boxed{\ \Phi_g\circ\Phi_f=\Phi_f\circ\Phi_g=\mathrm{id}_{\widehat{\mathcal P}_{\ZZ}}\ }.
+\]
+并且当 \(f\in\NN[z]\) 满足 \(a_0=1\) 且 \(\deg f\ge 1\) 时，\(\{b_n\}\) 必出现负系数，从而逆变换在整数层面必然引入符号外置。
+\end{proposition}
+\begin{proof}
+当 \(a_0=\pm 1\) 时，\(\ZZ[[z]]\) 中单位元判据给出形式逆元存在唯一性，且系数递推由比较系数得到。
+对任意 \(x=\sum_{t\ge 1}x_t\mathbf e_t\in\widehat{\mathcal P}_{\ZZ}\)，
+\(\Phi_g(x)\) 的第 \(k\) 个坐标仅依赖于 \(\{x_{k-n}\}_{0\le n\le k-1}\)，故每个坐标为有限和，从而 \(\Phi_g\) 良定义。
+由形式恒等式 \(f\cdot g=1\) 与 \(\Phi_{fg}=\Phi_f\circ\Phi_g\) 的半环同构性（定理 \ref{thm:conclusion-shift-commuting-algorithms-polynomial} 的证明方式逐项推广）得到互逆关系。
+最后，若 \(f\) 不是单项式，则 \(1/f\) 的递推系数必出现符号交替以抵消高阶项，因而存在负系数。证毕。
+\end{proof}
+
+\endinput
+

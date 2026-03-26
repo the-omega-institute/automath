@@ -1,0 +1,499 @@
+\subsection{固定阶 Rényi--Schatten 矩的 SAT 分离、纤维复制放大与平衡性反演}\label{subsec:conclusion-renyi-schatten-choi-sat-gap-copy-amplification}
+本小节沿用附录推论 \ref{cor:fold-channel-kraus-rank-hardness-template} 与定理 \ref{thm:fold-choi-maxeig-approx-sat-hard} 的两纤维 SAT 折叠信道，并把此前的最大本征值/二阶纯度二值障碍统一提升到任意固定阶 \(\alpha>2\) 的 Rényi--Schatten 幂矩与 Rényi 熵口径。
+核心输入是归一化 Choi 态的纤维谱分解：若 \(\rho=J(\mathcal E)/N\) 对应于有限折叠 \(\Fold:\Omega\to Y\) 的测量--制备信道，则每个非空纤维 \(y\) 贡献特征值 \(1/(N d(y))\) 与重数 \(d(y)^2\)。
+
+\begin{theorem}[固定阶 Rényi--Schatten 矩的 SAT 阈值分离与常数因子近似障碍]\label{thm:conclusion-fixed-alpha-renyi-schatten-sat-gap}
+固定实数 \(\alpha>2\) 与常数 \(\varepsilon\in(0,2^{\alpha-1})\)。
+沿用推论 \ref{cor:fold-channel-kraus-rank-hardness-template} 的多项式时间构造
+\[
+\varphi\longmapsto \mathcal E_\varphi,
+\]
+并记
+\[
+\rho_\varphi:=\frac{1}{N}J(\mathcal E_\varphi),
+\qquad
+N:=|\Omega_\varphi|=2^{n+1},
+\]
+其中 \(n\) 为 \(\varphi\) 的变量数。
+则成立：
+\begin{enumerate}
+\normalfont
+  \item 若 \(\varphi\notin\mathrm{SAT}\)，则
+  \[
+  \Tr(\rho_\varphi^\alpha)=N^{2-2\alpha}.
+  \]
+  \item 若 \(\varphi\in\mathrm{SAT}\)，则
+  \[
+  \Tr(\rho_\varphi^\alpha)\ge 2^{\alpha-1}N^{2-2\alpha}.
+  \]
+\end{enumerate}
+因此，若存在多项式时间算法，甚至仅在该构造族上输出 \(\widehat p(\varphi)\) 并满足
+\[
+\Tr(\rho_\varphi^\alpha)\le \widehat p(\varphi)\le (2^{\alpha-1}-\varepsilon)\Tr(\rho_\varphi^\alpha)
+\qquad(\forall \varphi),
+\]
+则 \(P=NP\)。
+\end{theorem}
+\begin{proof}
+沿用推论 \ref{cor:fold-channel-kraus-rank-hardness-template} 的 SAT 折叠：
+\[
+\Omega_\varphi=\{0,1\}^n\times\{0,1\},
+\qquad
+Y_\varphi=\{\varphi\}\sqcup\{\bot\},
+\]
+且
+\[
+\Fold_\varphi(w,b)=
+\begin{cases}
+\varphi, & b=0\ \text{且}\ w\models \varphi,\\
+\bot, & \text{否则}.
+\end{cases}
+\]
+记
+\[
+s:=\#\mathrm{SAT}(\varphi).
+\]
+则两条纤维基数为
+\[
+d(\varphi)=s,
+\qquad
+d(\bot)=N-s.
+\]
+
+对每个 \(y\in Y_\varphi\) 记 \(\Pi_y\) 为对应纤维投影。
+由测量--制备信道定义，
+\[
+\mathcal E_\varphi(\rho)
+=
+\sum_{y:\ d(y)>0}\frac{\Tr(\Pi_y\rho)}{d(y)}\,\Pi_y,
+\]
+其 Choi 矩阵分解为
+\[
+J(\mathcal E_\varphi)
+=
+\sum_{y:\ d(y)>0}\frac{1}{d(y)}\,\Pi_y\otimes \Pi_y^{\mathsf T}.
+\]
+由于 \(\Pi_y\) 在标准基下为实对角投影，\(\Pi_y^{\mathsf T}=\Pi_y\)；并且不同纤维块彼此正交。
+因此 \(\rho_\varphi=J(\mathcal E_\varphi)/N\) 的每个非零谱块均为
+\[
+\frac{1}{N\,d(y)}\,\Pi_y\otimes \Pi_y,
+\]
+从而非零特征值恰为 \(1/(N d(y))\)，其重数为 \(d(y)^2\)。
+于是对任意 \(\alpha>0\) 有
+\[
+\Tr(\rho_\varphi^\alpha)
+=
+\sum_{y:\ d(y)>0} d(y)^2\Bigl(\frac{1}{N d(y)}\Bigr)^\alpha
+=
+N^{-\alpha}\sum_{y:\ d(y)>0} d(y)^{2-\alpha}.
+\]
+
+若 \(\varphi\notin\mathrm{SAT}\)，则 \(s=0\)，仅有 \(\bot\) 纤维非空，故
+\[
+\Tr(\rho_\varphi^\alpha)=N^{-\alpha}N^{2-\alpha}=N^{2-2\alpha}.
+\]
+
+若 \(\varphi\in\mathrm{SAT}\)，则 \(1\le s\le N-1\) 且
+\[
+\Tr(\rho_\varphi^\alpha)
+=
+N^{-\alpha}\bigl(s^{2-\alpha}+(N-s)^{2-\alpha}\bigr).
+\]
+令 \(k:=\alpha-2>0\)。
+函数 \(x\mapsto x^{-k}\) 在 \((0,\infty)\) 上凸，因此由 Jensen 不等式，
+\[
+\frac{s^{-k}+(N-s)^{-k}}{2}
+\ge
+\Bigl(\frac{s+(N-s)}{2}\Bigr)^{-k}
+=
+\Bigl(\frac{N}{2}\Bigr)^{-k}.
+\]
+故
+\[
+s^{2-\alpha}+(N-s)^{2-\alpha}
+=
+s^{-k}+(N-s)^{-k}
+\ge
+2\Bigl(\frac{N}{2}\Bigr)^{-k}
+=
+2^{\alpha-1}N^{2-\alpha}.
+\]
+代回即得
+\[
+\Tr(\rho_\varphi^\alpha)\ge 2^{\alpha-1}N^{2-2\alpha}.
+\]
+
+最后取阈值
+\[
+T:=2^{\alpha-1}N^{2-2\alpha}.
+\]
+若 \(\varphi\notin\mathrm{SAT}\)，则
+\[
+\widehat p(\varphi)
+\le
+(2^{\alpha-1}-\varepsilon)N^{2-2\alpha}
+<
+T.
+\]
+若 \(\varphi\in\mathrm{SAT}\)，则
+\[
+\widehat p(\varphi)\ge \Tr(\rho_\varphi^\alpha)\ge T.
+\]
+于是比较 \(\widehat p(\varphi)\) 与 \(T\) 即可在多项式时间内判定 SAT，故 \(P=NP\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[Rényi 熵的 \texorpdfstring{$\log 2$}{log 2} 阶跃与定值加性近似障碍]\label{cor:conclusion-fixed-alpha-renyi-entropy-gap-sat-hard}
+在定理 \ref{thm:conclusion-fixed-alpha-renyi-schatten-sat-gap} 的设定下，对任意固定 \(\alpha>2\) 定义
+\[
+H_\alpha(\rho):=\frac{1}{1-\alpha}\log \Tr(\rho^\alpha).
+\]
+则：
+\begin{enumerate}
+\normalfont
+  \item 若 \(\varphi\notin\mathrm{SAT}\)，则
+  \[
+  H_\alpha(\rho_\varphi)=2\log N.
+  \]
+  \item 若 \(\varphi\in\mathrm{SAT}\)，则
+  \[
+  H_\alpha(\rho_\varphi)\le 2\log N-\log 2.
+  \]
+\end{enumerate}
+因此，若存在多项式时间算法在该信道族上输出 \(\widehat H(\varphi)\) 并满足
+\[
+\bigl|\widehat H(\varphi)-H_\alpha(\rho_\varphi)\bigr|<\frac{1}{2}\log 2
+\qquad(\forall \varphi),
+\]
+则 \(P=NP\)。
+\end{corollary}
+\begin{proof}
+若 \(\varphi\notin\mathrm{SAT}\)，由定理 \ref{thm:conclusion-fixed-alpha-renyi-schatten-sat-gap}，
+\[
+\Tr(\rho_\varphi^\alpha)=N^{2-2\alpha},
+\]
+故
+\[
+H_\alpha(\rho_\varphi)
+=
+\frac{1}{1-\alpha}(2-2\alpha)\log N
+=
+2\log N.
+\]
+
+若 \(\varphi\in\mathrm{SAT}\)，则同一定理给出
+\[
+\Tr(\rho_\varphi^\alpha)\ge 2^{\alpha-1}N^{2-2\alpha}.
+\]
+由于 \(1-\alpha<0\)，取对数并除以 \(1-\alpha\) 后不等号反向，得到
+\[
+H_\alpha(\rho_\varphi)
+\le
+\frac{1}{1-\alpha}\Bigl((\alpha-1)\log 2+(2-2\alpha)\log N\Bigr)
+=
+2\log N-\log 2.
+\]
+两种情形之间存在精确的 \(\log 2\) 间隙，故误差严格小于 \(\frac12\log 2\) 的加性近似足以区分 SAT 与 UNSAT。
+证毕。
+\end{proof}
+
+\begin{theorem}[纤维复制放大的 Rényi--Schatten 分离]\label{thm:conclusion-renyi-schatten-copy-amplification}
+固定 \(\alpha\ge 2\) 与整数 \(t\ge 1\)。
+对每个含 \(n\) 个变量的 CNF 公式 \(\varphi\)，定义
+\[
+\Omega_{\varphi,t}:=\{0,1\}^n\times\{0,1,\dots,t\},
+\qquad
+Y_t:=\{0,1,\dots,t\},
+\]
+并令
+\[
+\Fold_{\varphi,t}(w,i):=
+\begin{cases}
+i, & i\in\{1,\dots,t\}\ \text{且}\ w\models \varphi,\\
+0, & \text{否则}.
+\end{cases}
+\]
+记 \(\mathcal E_{\varphi,t}\) 为其对应测量--制备信道，
+\[
+N:=|\Omega_{\varphi,t}|=2^n(t+1),
+\qquad
+\rho_{\varphi,t}:=\frac{1}{N}J(\mathcal E_{\varphi,t}).
+\]
+则成立：
+\begin{enumerate}
+\normalfont
+  \item 若 \(\varphi\notin\mathrm{SAT}\)，则
+  \[
+  \Tr(\rho_{\varphi,t}^\alpha)=N^{2-2\alpha}.
+  \]
+  \item 若 \(\varphi\in\mathrm{SAT}\)，则
+  \[
+  \Tr(\rho_{\varphi,t}^\alpha)\ge (t+1)^{\alpha-1}N^{2-2\alpha}.
+  \]
+\end{enumerate}
+特别地，当 \(\alpha=2\) 时，
+\[
+\Tr(\rho_{\varphi,t}^2)
+=
+\frac{|\operatorname{Im}(\Fold_{\varphi,t})|}{N^2}
+=
+\begin{cases}
+1/N^2, & \varphi\notin\mathrm{SAT},\\[3pt]
+(t+1)/N^2, & \varphi\in\mathrm{SAT}.
+\end{cases}
+\]
+因此，对任意常数 \(\varepsilon\in(0,(t+1)^{\alpha-1})\)，若存在多项式时间算法在该族上输出 \(\widehat p_t(\varphi)\) 并满足
+\[
+\Tr(\rho_{\varphi,t}^\alpha)\le \widehat p_t(\varphi)\le \bigl((t+1)^{\alpha-1}-\varepsilon\bigr)\Tr(\rho_{\varphi,t}^\alpha)
+\qquad(\forall \varphi),
+\]
+则 \(P=NP\)。
+\end{theorem}
+\begin{proof}
+给定 \((\varphi,t)\) 后，\(\Fold_{\varphi,t}(w,i)\) 可在 \(\poly(n+\log t)\) 时间内计算，因此该构造在可计算折叠描述的口径下是多项式时间的。
+记
+\[
+s:=\#\mathrm{SAT}(\varphi).
+\]
+与定理 \ref{thm:conclusion-fixed-alpha-renyi-schatten-sat-gap} 的 Choi 分块计算完全同理，若非空纤维大小记为 \(\{x_j\}\)，则 \(\rho_{\varphi,t}\) 的非零特征值为 \(1/(N x_j)\)，重数为 \(x_j^2\)，从而
+\[
+\Tr(\rho_{\varphi,t}^\alpha)=N^{-\alpha}\sum_j x_j^{2-\alpha}.
+\]
+若 \(\varphi\notin\mathrm{SAT}\)，则 \(s=0\)，所有点均映到 \(0\)，故唯一非空纤维大小为 \(N\)。
+\[
+\Tr(\rho_{\varphi,t}^\alpha)=N^{-\alpha}N^{2-\alpha}=N^{2-2\alpha}.
+\]
+
+以下设 \(\varphi\in\mathrm{SAT}\)，故 \(s\ge 1\)。
+则对每个 \(i\in\{1,\dots,t\}\) 有
+\[
+d(i)=s,
+\]
+而
+\[
+d(0)=N-ts=2^n(t+1)-ts\ge 2^n>0.
+\]
+于是恰有 \(t+1\) 个非空纤维。
+记这些纤维大小为
+\[
+x_0:=N-ts,
+\qquad
+x_i:=s\quad(1\le i\le t),
+\]
+则 \(x_j>0\) 且 \(\sum_{j=0}^t x_j=N\)。
+
+若 \(\alpha=2\)，则由同一谱公式
+\[
+\Tr(\rho_{\varphi,t}^2)
+=
+N^{-2}\sum_{j=0}^t x_j^{\,0}
+=
+\frac{t+1}{N^2}.
+\]
+而当 \(\varphi\notin\mathrm{SAT}\) 时仅有一个非空纤维，故得二值公式
+\[
+\Tr(\rho_{\varphi,t}^2)=\frac{|\operatorname{Im}(\Fold_{\varphi,t})|}{N^2}.
+\]
+
+若 \(\alpha>2\)，令 \(k:=\alpha-2>0\)。
+函数 \(x\mapsto x^{-k}\) 在 \((0,\infty)\) 上凸，因此
+\[
+\frac{1}{t+1}\sum_{j=0}^t x_j^{-k}
+\ge
+\Bigl(\frac{1}{t+1}\sum_{j=0}^t x_j\Bigr)^{-k}
+=
+\Bigl(\frac{N}{t+1}\Bigr)^{-k}.
+\]
+故
+\[
+\sum_{j=0}^t x_j^{2-\alpha}
+=
+\sum_{j=0}^t x_j^{-k}
+\ge
+(t+1)\Bigl(\frac{N}{t+1}\Bigr)^{-k}
+=
+(t+1)^{\alpha-1}N^{2-\alpha}.
+\]
+代回得到
+\[
+\Tr(\rho_{\varphi,t}^\alpha)
+=
+N^{-\alpha}\sum_{j=0}^t x_j^{2-\alpha}
+\ge
+(t+1)^{\alpha-1}N^{2-2\alpha}.
+\]
+
+最后取阈值
+\[
+T_t:=(t+1)^{\alpha-1}N^{2-2\alpha}.
+\]
+若 \(\varphi\notin\mathrm{SAT}\)，则
+\[
+\widehat p_t(\varphi)
+\le
+\bigl((t+1)^{\alpha-1}-\varepsilon\bigr)N^{2-2\alpha}
+<
+T_t.
+\]
+若 \(\varphi\in\mathrm{SAT}\)，则
+\[
+\widehat p_t(\varphi)\ge \Tr(\rho_{\varphi,t}^\alpha)\ge T_t.
+\]
+比较 \(\widehat p_t(\varphi)\) 与 \(T_t\) 即可在多项式时间内判定 SAT，故 \(P=NP\)。
+证毕。
+\end{proof}
+
+该复制模板对参数 \(t\) 的依赖仅通过可计算整数标签进入折叠描述，故可令 \(t=t(n)\) 为任意多项式时间可计算函数并把其二进制描述并入输入。
+于是 \(t=n^k\) 给出 \((n^k+1)^{\alpha-1}\) 级别的多项式因子分离，而 \(t=2^n\) 给出 \((2^n+1)^{\alpha-1}\) 级别的指数因子分离。
+
+\begin{corollary}[Rényi 熵分离的线性放大]\label{cor:conclusion-renyi-entropy-copy-amplification}
+在定理 \ref{thm:conclusion-renyi-schatten-copy-amplification} 的设定下，固定 \(\alpha>2\) 并记
+\[
+H_\alpha(\rho_{\varphi,t})
+:=
+\frac{1}{1-\alpha}\log \Tr(\rho_{\varphi,t}^\alpha).
+\]
+则
+\[
+\varphi\notin\mathrm{SAT}
+\Longrightarrow
+H_\alpha(\rho_{\varphi,t})=2\log N,
+\]
+而
+\[
+\varphi\in\mathrm{SAT}
+\Longrightarrow
+H_\alpha(\rho_{\varphi,t})\le 2\log N-\log(t+1).
+\]
+特别地，在取 \(t=2^n\) 的子族上，若存在多项式时间算法与函数 \(r(n)=o(n)\) 使得
+\[
+\bigl|\widehat H(\varphi)-H_\alpha(\rho_{\varphi,2^n})\bigr|\le r(n),
+\]
+则 \(P=NP\)。
+\end{corollary}
+\begin{proof}
+前两式由定理 \ref{thm:conclusion-renyi-schatten-copy-amplification} 的矩公式直接代入 Rényi 熵定义得到。
+当 \(\varphi\notin\mathrm{SAT}\) 时，
+\[
+\Tr(\rho_{\varphi,t}^\alpha)=N^{2-2\alpha},
+\]
+故 \(H_\alpha(\rho_{\varphi,t})=2\log N\)。
+当 \(\varphi\in\mathrm{SAT}\) 时，
+\[
+\Tr(\rho_{\varphi,t}^\alpha)\ge (t+1)^{\alpha-1}N^{2-2\alpha},
+\]
+而 \(1-\alpha<0\)，于是
+\[
+H_\alpha(\rho_{\varphi,t})
+\le
+\frac{1}{1-\alpha}\Bigl((\alpha-1)\log(t+1)+(2-2\alpha)\log N\Bigr)
+=
+2\log N-\log(t+1).
+\]
+
+若取 \(t=2^n\)，则
+\[
+\log(t+1)=\log(2^n+1)=n\log 2+o(1).
+\]
+因此两种情形之间的熵间隙为 \(\Theta(n)\)。
+任何 \(o(n)\) 级别的加性近似在充分大 \(n\) 上都严格小于该间隙的一半，从而足以区分 SAT 与 UNSAT。
+对有限多个小规模 \(n\)，可向 \(\varphi\) 添加哑变量而不改变可满足性，故仍得到多项式时间判定 SAT。
+证毕。
+\end{proof}
+
+\begin{proposition}[两纤维 SAT 折叠的 Rényi 矩稳定性不等式]\label{prop:conclusion-twofiber-renyi-stability-balance}
+在定理 \ref{thm:conclusion-fixed-alpha-renyi-schatten-sat-gap} 的两纤维 SAT 构造下，固定 \(\alpha>2\)。
+对每个可满足公式 \(\varphi\) 记
+\[
+R_\alpha(\varphi):=
+\frac{\Tr(\rho_\varphi^\alpha)}{N^{2-2\alpha}}
+=
+\Bigl(\frac{N}{s}\Bigr)^{\alpha-2}
++
+\Bigl(\frac{N}{N-s}\Bigr)^{\alpha-2},
+\]
+其中 \(s:=\#\mathrm{SAT}(\varphi)\) 且 \(N=2^{n+1}\)。
+再定义平衡偏差
+\[
+\delta:=\frac{|2s-N|}{N}\in[0,1).
+\]
+则成立定量下界
+\[
+R_\alpha(\varphi)
+\ge
+2^{\alpha-1}\Bigl(1+\frac{(\alpha-2)(\alpha-1)}{2}\,\delta^2\Bigr).
+\]
+并且等号当且仅当 \(\delta=0\)，亦即 \(s=N/2\)。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:conclusion-fixed-alpha-renyi-schatten-sat-gap} 证明中的谱公式，
+\[
+R_\alpha(\varphi)
+=
+N^{\alpha-2}\bigl(s^{2-\alpha}+(N-s)^{2-\alpha}\bigr).
+\]
+令 \(k:=\alpha-2>0\)。
+在本构造中 \(1\le s\le 2^n=N/2\)，因此
+\[
+s=\frac{N}{2}(1-\delta),
+\qquad
+N-s=\frac{N}{2}(1+\delta).
+\]
+于是
+\[
+R_\alpha(\varphi)
+=
+2^k\Bigl((1-\delta)^{-k}+(1+\delta)^{-k}\Bigr).
+\]
+
+对 \(|\delta|<1\)，广义二项级数给出
+\[
+(1\pm\delta)^{-k}
+=
+\sum_{m\ge 0}\binom{k+m-1}{m}(\pm\delta)^m.
+\]
+将两式相加，奇次项抵消且偶次项系数全为正，故
+\[
+(1-\delta)^{-k}+(1+\delta)^{-k}
+\ge
+2+2\binom{k+1}{2}\delta^2
+=
+2+k(k+1)\delta^2.
+\]
+从而
+\[
+R_\alpha(\varphi)
+\ge
+2^k\bigl(2+k(k+1)\delta^2\bigr)
+=
+2^{k+1}\Bigl(1+\frac{k(k+1)}{2}\delta^2\Bigr)
+=
+2^{\alpha-1}\Bigl(1+\frac{(\alpha-2)(\alpha-1)}{2}\delta^2\Bigr).
+\]
+又因所有高阶偶次项系数严格为正，等号成立当且仅当 \(\delta=0\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[单一 Rényi 矩的平衡性反演]\label{cor:conclusion-twofiber-renyi-balance-inversion}
+在命题 \ref{prop:conclusion-twofiber-renyi-stability-balance} 的设定下，若某个可满足公式 \(\varphi\) 满足
+\[
+R_\alpha(\varphi)\le 2^{\alpha-1}(1+\eta)
+\qquad(\eta>0),
+\]
+则
+\[
+\frac{|2s-N|}{N}
+\le
+\sqrt{\frac{2\eta}{(\alpha-2)(\alpha-1)}},
+\]
+其中 \(s=\#\mathrm{SAT}(\varphi)\)。
+换言之，当 \(\Tr(\rho_\varphi^\alpha)\) 接近可满足情形的理论最小值时，满足赋值比例必被强制压到 \(1/2\) 附近。
+\end{corollary}
+\begin{proof}
+将命题 \ref{prop:conclusion-twofiber-renyi-stability-balance} 的下界与
+\[
+R_\alpha(\varphi)\le 2^{\alpha-1}(1+\eta)
+\]
+联立，并对 \(\delta=|2s-N|/N\) 解出即可。
+证毕。
+\end{proof}

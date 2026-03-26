@@ -1,0 +1,171 @@
+\begin{theorem}[再生周期三元组 \texorpdfstring{$(M,X_0,L_0)$}{(M,X0,L0)} 的显式联合分布]\label{thm:fold-bernoulli-p-regeneration-triple-joint-law}
+沿用定理 \ref{thm:fold-bernoulli-p-regeneration-bivariate-pgf} 的设定。
+记 \(p\in(0,1)\)、\(q:=1-p\)，并令几何分解变量
+\[
+M\sim \mathrm{Geom}(1-p),\qquad
+K_0,K_1,\dots\ \text{i.i.d.}\ \mathrm{Geom}(p),\qquad
+N_1,N_2,\dots\ \text{i.i.d.}\ \mathrm{Geom}(1-p)
+\]
+相互独立，满足 \eqref{eq:fold-bernoulli-p-regeneration-decomposition}。
+则对任意整数 \(\ell\ge 2\) 有
+\[
+\PP(M=0,\ X_0=0,\ L_0=\ell\mid S_0=d)
+=p\,q^{\ell-1}.
+\]
+并且对任意整数 \(m\ge 1\)、\(k\ge 3m\)、\(\ell\ge 2+2k-3m\)，令
+\[
+t:=\ell-2-2k+3m\ (\ge 0),
+\]
+则
+\[
+\PP(M=m,\ X_0=k,\ L_0=\ell\mid S_0=d)
+=\binom{k-2m-1}{m-1}\binom{t+m}{m}\,
+p^{k-m+1}q^{t+m+1},
+\]
+并约定二项式系数在参数不合法时取值为 \(0\)。
+
+从而对任意整数 \(k\ge 0\)、\(\ell\ge 2\)，有有限求和闭式
+\[
+\PP(X_0=k,\ L_0=\ell\mid S_0=d)
+=\mathbf 1_{\{k=0\}}\,p\,q^{\ell-1}
++\sum_{m\ge 1}
+\binom{k-2m-1}{m-1}\binom{\ell-2-2k+4m}{m}\,
+p^{k-m+1}q^{\ell-1-2k+4m},
+\]
+其中求和仅在同时满足 \(k\ge 3m\) 与 \(\ell\ge 2+2k-3m\) 时贡献非零项，因而该和为有限和。
+\end{theorem}
+\begin{proof}
+对 \(m\ge 1\) 固定 \(M=m\)，记
+\[
+S_N:=\sum_{i=1}^{m}N_i,\qquad S_K:=\sum_{j=0}^{m}K_j.
+\]
+由 \eqref{eq:fold-bernoulli-p-regeneration-decomposition}，
+\[
+X_0=3m+S_N,\qquad
+L_0=2+S_K+3m+2S_N.
+\]
+因此事件 \(\{M=m,X_0=k,L_0=\ell\}\) 等价于
+\(
+S_N=k-3m
+\) 与
+\(
+S_K=\ell-2-2k+3m=t
+\) 同时成立。
+由于 \(N_i\sim\mathrm{Geom}(1-p)\)、\(K_j\sim\mathrm{Geom}(p)\) 取值于 \(\NN_0\) 且独立，
+几何和服从负二项分布：
+\[
+\PP(S_N=s)=\binom{s+m-1}{m-1}\,q^m p^{s}\qquad(s\ge 0),
+\]
+\[
+\PP(S_K=t)=\binom{t+m}{m}\,p^{m+1} q^{t}\qquad(t\ge 0).
+\]
+再乘上
+\(
+\PP(M=m)=p^{m}q
+\)
+并用独立性，即得 \(m\ge 1\) 的联合闭式。
+
+当 \(m=0\) 时，\(X_0=0\) 且 \(L_0=2+K_0\)。于是
+\[
+\PP(M=0,X_0=0,L_0=\ell)
+=\PP(M=0)\,\PP(K_0=\ell-2)
+=q\cdot p q^{\ell-2}
+=p q^{\ell-1}.
+\]
+最后，对 \(m\) 求和得到 \((X_0,L_0)\) 的有限和闭式。证毕。
+\end{proof}
+
+\begin{theorem}[给定 \texorpdfstring{$(M,X_0)$}{(M,X0)} 后 \texorpdfstring{$L_0$}{L0} 的条件分布]\label{thm:fold-bernoulli-p-regeneration-conditional-length-shifted-nb}
+在定理 \ref{thm:fold-bernoulli-p-regeneration-triple-joint-law} 的设定下，
+给定 \(M=m\) 与 \(X_0=k\)（其中 \(m=0\Rightarrow k=0\)，且 \(m\ge 1\Rightarrow k\ge 3m\)），有分布恒等式
+\[
+L_0\ \stackrel{d}{=}\ 2+2k-3m+S_K,
+\]
+其中 \(S_K\) 为 \(m+1\) 个独立 \(\mathrm{Geom}(p)\) 变量之和。
+等价地，对任意整数 \(\ell\ge 2+2k-3m\) 有
+\[
+\PP(L_0=\ell\mid M=m,X_0=k)
+=\binom{\ell-2-2k+4m}{m}\,q^{\ell-2-2k+3m}\,p^{m+1}.
+\]
+并且条件矩满足
+\[
+\EE[L_0\mid M=m,X_0=k]=2+2k-3m+\frac{(m+1)q}{p},
+\qquad
+\Var(L_0\mid M=m,X_0=k)=\frac{(m+1)q}{p^2}.
+\]
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:fold-bernoulli-p-regeneration-decomposition}，
+\[
+L_0=2+\sum_{j=0}^{m}K_j+3m+2\sum_{i=1}^{m}N_i.
+\]
+在给定 \(M=m\) 与 \(X_0=k\) 时，\(\sum_{i=1}^{m}N_i=k-3m\) 被确定，从而
+\[
+L_0=2+\sum_{j=0}^{m}K_j+3m+2(k-3m)=2+2k-3m+S_K.
+\]
+由于 \((K_j)_{0\le j\le m}\) 与 \((N_i)_{1\le i\le m}\) 相互独立，条件下的 \(S_K\) 仍为 \(m+1\) 个独立 \(\mathrm{Geom}(p)\) 变量之和，故给出负二项质量函数与条件矩。证毕。
+\end{proof}
+
+\begin{theorem}[周期长度 \texorpdfstring{$L_0$}{L0} 的概率母函数、三阶递推与指数尾常数]\label{thm:fold-bernoulli-p-regeneration-length-pgf-recurrence-tail}
+在定理 \ref{thm:fold-bernoulli-p-regeneration-bivariate-pgf} 的设定下，令
+\[
+f_\ell:=\PP(L_0=\ell\mid S_0=d)\qquad(\ell\in\NN).
+\]
+则其概率母函数 \(F_L(z):=\sum_{\ell\ge 0} f_\ell z^\ell\) 为有理函数，且满足
+\[
+F_L(z)=\EE[z^{L_0}\mid S_0=d]
+=\Phi_p(1,z)
+=\frac{p q\,z^2(1-p z^2)}{1-qz-pz^2+p q^2 z^3}.
+\]
+因此 \((f_\ell)\) 在 \(\ell\ge 5\) 上满足齐次三阶线性递推
+\[
+f_\ell=q f_{\ell-1}+p f_{\ell-2}-p q^2 f_{\ell-3}.
+\]
+并且分母三次多项式
+\[
+D_L(z):=1-qz-pz^2+p q^2 z^3
+\]
+之判别式为
+\[
+\Disc_z\!\bigl(D_L(z)\bigr)
+=-p\bigl(31p^5-110p^4+147p^3-96p^2+28p-4\bigr),
+\]
+其在 \(p\in(0,1)\) 上恒不为零，因而 \(D_L\) 无重根退化并且三个根两两不同。
+
+令 \(R_L(p)>1\) 为方程 \(D_L(z)=0\) 的最小正实根，则存在常数 \(C_L(p)>0\) 使得
+\[
+f_\ell\sim C_L(p)\,R_L(p)^{-\ell}\qquad(\ell\to\infty),
+\]
+其中常数可由留数给出
+\[
+C_L(p)=\frac{p q\,R_L(p)\bigl(1-p R_L(p)^2\bigr)}{q+2pR_L(p)-3p q^2 R_L(p)^2}.
+\]
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:fold-bernoulli-p-regeneration-bivariate-pgf} 令 \(u=1\) 即得
+\(
+F_L(z)=\Phi_p(1,z)
+\)，其分母恰为 \(D_L(z)\)。
+将恒等式 \(D_L(z)F_L(z)=p q\,z^2-p^2 q\,z^4\) 比较系数可得从 \(\ell\ge 5\) 起右端系数为零，从而递推齐次化并得到所示三阶递推。
+
+对根的单性，直接计算判别式得到
+\(
+\Disc_z(D_L(z))=-p(31p^5-110p^4+147p^3-96p^2+28p-4)
+\)；
+该五次多项式在 \((0,1)\) 内无实根（其唯一实根落在 \((1,\infty)\)），故在 \(p\in(0,1)\) 上判别式恒不为零，从而三根互异。
+由于 \(f_\ell\ge 0\)，由 Pringsheim 定理可知收敛半径由正实轴上的最小奇点给出；
+对有理型 \(F_L\)，该奇点为 \(D_L\) 的最小正实根 \(R_L(p)>1\)，且由于根为单根，对应于简单极点。
+由简单极点的系数抽取公式得到
+\[
+f_\ell\sim -\frac{N(R_L)}{R_L D_L'(R_L)}\,R_L^{-\ell},
+\qquad
+N(z):=p q\,z^2(1-pz^2),
+\]
+并注意
+\(
+-D_L'(R_L)=q+2pR_L-3p q^2 R_L^2
+\)，即可化简得到所示常数 \(C_L(p)\)。证毕。
+\end{proof}
+
+\endinput
+

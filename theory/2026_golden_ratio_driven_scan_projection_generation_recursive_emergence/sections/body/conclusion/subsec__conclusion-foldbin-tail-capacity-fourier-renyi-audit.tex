@@ -1,0 +1,596 @@
+\subsection{bin-fold 尾和阈值阶梯、window-\texorpdfstring{$6$}{6} 有限容量与 Fourier--R\'enyi 审计}\label{subsec:conclusion-foldbin-tail-capacity-fourier-renyi-audit}
+沿用定义 \ref{def:K-of-m}、命题 \ref{prop:fold-bin-fiber-tail}、推论 \ref{cor:fold-bin-m6-fiber-hist}、定理 \ref{thm:fold-collision-spectrum} 与推论 \ref{cor:fold-collision-scale-diverges} 的记号。由这些内部结果可进一步把 tail-sum budget、window-\(6\) 的有限窗可逆容量、以及折叠分布的 Fourier--entropy 审计压缩为一组完全显式的终端后果。其共同结构是：bin-fold 纤维在固定末位层上由 admissible tail sums 的阈值截断精确控制；在 \(m=6\) 时，这一离散阶梯塌缩为闭式容量曲线与三能级热力学；而在渐近尺度上，碰撞缺口又强制真正参与的非平凡 Fourier 模数无界增长，从而排除 \(M^{-1/2}\) 自然尺度上的总变差收敛。
+
+\begin{theorem}[bin-fold 纤维的尾和阈值阶梯律]\label{thm:conclusion-foldbin-tail-sum-threshold-staircase}
+对任意 \(m\ge 1\) 与 \(w=(w_1,\dots,w_m)\in X_m\)，记
+\[
+V_m(w):=\sum_{k=1}^{m}w_kF_{k+1},
+\qquad
+b:=w_m,
+\]
+并令 \(K(m)\) 满足
+\[
+F_{K(m)+1}\le 2^m-1<F_{K(m)+2}.
+\]
+定义 admissible tail-sum 集合
+\[
+\mathcal T_{m,b}
+:=
+\left\{
+\sum_{k=m+1}^{K(m)}c_kF_{k+1}:\ 
+c_k\in\{0,1\},\ 
+c_kc_{k+1}=0,\ 
+bc_{m+1}=0
+\right\}.
+\]
+则
+\[
+\boxed{\;
+d_m^{\mathrm{bin}}(w)
+=
+\#\bigl\{t\in \mathcal T_{m,b}:\
+t\le 2^m-1-V_m(w)\bigr\}.\;}
+\]
+因此，在固定末位 \(b\) 时，\(d_m^{\mathrm{bin}}(w)\) 只依赖于 deficit
+\[
+\Delta_m(w):=2^m-1-V_m(w),
+\]
+并且作为 \(V_m(w)\) 的函数是单调非增的阶梯函数；等价地，其阈值位置恰由
+\[
+V=2^m-1-t,
+\qquad t\in\mathcal T_{m,b},
+\]
+完全决定。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-bin-fiber-tail}，\(\Fold_m^{\mathrm{bin}}{}^{-1}(w)\) 与满足下列三类约束的尾部位串 \((c_{m+1},\dots,c_{K(m)})\) 一一对应：相邻约束 \(c_kc_{k+1}=0\)、边界约束 \(bc_{m+1}=0\)、以及阈值约束
+\[
+V_m(w)+\sum_{k=m+1}^{K(m)}c_kF_{k+1}\le 2^m-1.
+\]
+对任一 admissible 尾串定义其权重和
+\[
+t(\mathbf c):=\sum_{k=m+1}^{K(m)}c_kF_{k+1}.
+\]
+由于 admissible 二进制串给出的 Fibonacci 展开满足 Zeckendorf 型唯一性，映射 \(\mathbf c\mapsto t(\mathbf c)\) 在 admissible 尾串集合上是单射，其像正是 \(\mathcal T_{m,b}\)。因此纤维多重度恰为满足
+\[
+t(\mathbf c)\le 2^m-1-V_m(w)=\Delta_m(w)
+\]
+的 tail-sum 个数，也即
+\[
+d_m^{\mathrm{bin}}(w)
+=
+\#\bigl\{t\in \mathcal T_{m,b}:t\le \Delta_m(w)\bigr\}.
+\]
+这就给出了所述计数公式。
+
+在固定 \(b\) 时，\(\mathcal T_{m,b}\) 与 \(m\) 固定后不再依赖于 \(w\)，故 \(d_m^{\mathrm{bin}}(w)\) 只依赖于 \(\Delta_m(w)\)。而函数
+\[
+\Delta\longmapsto \#\bigl\{t\in \mathcal T_{m,b}:t\le \Delta\bigr\}
+\]
+显然关于 \(\Delta\) 单调非减，于是关于 \(V=2^m-1-\Delta\) 单调非增，并且只有当 \(\Delta\) 穿过某个 \(t\in\mathcal T_{m,b}\) 时才会改变取值；等价地，其阈值位置正是 \(V=2^m-1-t\)。证毕。
+\end{proof}
+
+\begin{corollary}[window-\texorpdfstring{$6$}{6} 的连续容量曲线完全闭式]\label{cor:conclusion-window6-continuous-capacity-piecewise-closed}
+取 \(m=6\)，并定义连续容量
+\[
+\mathcal C_6^{\mathrm{cont}}(T):=\sum_{w\in X_6}\min\bigl(d_6^{\mathrm{bin}}(w),T\bigr)
+\qquad(T\ge 0).
+\]
+则有完全闭式
+\[
+\boxed{\;
+\mathcal C_6^{\mathrm{cont}}(T)=
+\begin{cases}
+21T, & 0\le T\le 2,\\[2pt]
+16+13T, & 2\le T\le 3,\\[2pt]
+28+9T, & 3\le T\le 4,\\[2pt]
+64, & T\ge 4.
+\end{cases}\;}
+\]
+若进一步记最优 \(B\)-bit 预言机成功率
+\[
+\mathrm{Succ}_6(B):=\frac{\mathcal C_6^{\mathrm{cont}}(2^B)}{64},
+\]
+则
+\[
+\boxed{\;
+\mathrm{Succ}_6(0)=\frac{21}{64},
+\qquad
+\mathrm{Succ}_6(1)=\frac{21}{32},
+\qquad
+\mathrm{Succ}_6(B)=1\ \ (B\ge 2).\;}
+\]
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:fold-bin-m6-fiber-hist}，window-\(6\) 的纤维直方图为
+\[
+2:8,\qquad 3:4,\qquad 4:9.
+\]
+因此直接有
+\[
+\mathcal C_6^{\mathrm{cont}}(T)
+=
+8\min(2,T)+4\min(3,T)+9\min(4,T).
+\]
+逐段化简即得所示分段闭式。再取 \(T=2^B\) 并除以总微态数 \(2^6=64\)，便得到三条成功率公式。证毕。
+\end{proof}
+
+\begin{theorem}[非平凡活跃 Fourier 模数必然无界增长]\label{thm:conclusion-foldbin-active-fourier-modes-diverge}
+记
+\[
+M:=F_{m+2},
+\qquad
+\mathsf{Col}_m:=\sum_{r\in \ZZ/(M\ZZ)}p_m(r)^2,
+\qquad
+p_m(r):=\frac{d_m(r)}{2^m},
+\]
+\[
+\mathcal Z_m:=\{k\in \ZZ/(M\ZZ):\ \widehat d_m(k)=0\},
+\qquad
+A_m:=M-1-|\mathcal Z_m|.
+\]
+则有下界
+\[
+\boxed{\;
+A_m\ge M\Bigl(\mathsf{Col}_m-\frac1M\Bigr)
+=M\,\mathsf{Col}_m-1.\;}
+\]
+特别地，由推论 \ref{cor:fold-collision-scale-diverges} 的 \(M\,\mathsf{Col}_m\to+\infty\)，可得
+\[
+\boxed{\;
+A_m\longrightarrow +\infty.\;}
+\]
+\end{theorem}
+\begin{proof}
+记归一化 Fourier 幅度
+\[
+a_m(k):=\frac{|\widehat d_m(k)|}{2^m}.
+\]
+由定理 \ref{thm:fold-collision-spectrum}，
+\[
+\mathsf{Col}_m-\frac1M
+=
+\frac1M\sum_{k\ne 0}a_m(k)^2.
+\]
+另一方面，由三角不等式
+\[
+|\widehat d_m(k)|
+\le \sum_r d_m(r)
+=2^m,
+\]
+故对每个 \(k\) 都有 \(0\le a_m(k)\le 1\)。因此
+\[
+\sum_{k\ne 0}a_m(k)^2
+\le
+\#\{k\ne 0:\ a_m(k)\ne 0\}
+=
+A_m.
+\]
+两式合并便得
+\[
+M\Bigl(\mathsf{Col}_m-\frac1M\Bigr)\le A_m.
+\]
+这就证明了第一条。
+
+再由推论 \ref{cor:fold-collision-scale-diverges}，
+\[
+M\,\mathsf{Col}_m\longrightarrow +\infty,
+\]
+故右侧下界 \(M\,\mathsf{Col}_m-1\) 也趋于 \(+\infty\)，从而 \(A_m\to+\infty\)。证毕。
+\end{proof}
+
+\begin{corollary}[自然尺度 \texorpdfstring{$M^{-1/2}$}{M^-1/2} 上的总变差收敛不可能成立]\label{cor:conclusion-foldbin-natural-scale-tv-impossible}
+沿用定理 \ref{thm:conclusion-foldbin-active-fourier-modes-diverge} 的记号，并令均匀分布
+\[
+u(r):=\frac1M
+\qquad
+\bigl(r\in \ZZ/(M\ZZ)\bigr).
+\]
+则有
+\[
+\boxed{\;
+\sqrt{M}\,\|p_m-u\|_2
+=
+\sqrt{M\Bigl(\mathsf{Col}_m-\frac1M\Bigr)}
+=
+\sqrt{M\,\mathsf{Col}_m-1}
+\longrightarrow +\infty.\;}
+\]
+从而总变差距离
+\[
+\mathrm{TV}(p_m,u):=\frac12\|p_m-u\|_1
+\]
+满足
+\[
+\boxed{\;
+\sqrt{M}\,\mathrm{TV}(p_m,u)\longrightarrow +\infty.\;}
+\]
+因而，在自然尺度 \(M^{-1/2}\) 上不可能有 \(p_m\) 向均匀分布 \(u\) 的总变差收敛。
+\end{corollary}
+\begin{proof}
+直接展开可得
+\[
+\|p_m-u\|_2^2
+=
+\sum_r p_m(r)^2-\frac{2}{M}\sum_r p_m(r)+\sum_r\frac1{M^2}
+=
+\mathsf{Col}_m-\frac1M,
+\]
+因为 \(\sum_r p_m(r)=1\) 且 \(M\) 个点上 \(\sum_r M^{-2}=1/M\)。故
+\[
+\sqrt{M}\,\|p_m-u\|_2
+=
+\sqrt{M\Bigl(\mathsf{Col}_m-\frac1M\Bigr)}
+=
+\sqrt{M\,\mathsf{Col}_m-1}.
+\]
+再由推论 \ref{cor:fold-collision-scale-diverges} 知 \(M\,\mathsf{Col}_m\to+\infty\)，于是上式趋于 \(+\infty\)。
+
+最后，由 \(\|x\|_1\ge \|x\|_2\)，得到
+\[
+\sqrt{M}\,\mathrm{TV}(p_m,u)
+=
+\frac{\sqrt{M}}{2}\|p_m-u\|_1
+\ge
+\frac{\sqrt{M}}{2}\|p_m-u\|_2,
+\]
+其右端已经趋于 \(+\infty\)，故结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[window-\texorpdfstring{$6$}{6} 的全 R\'enyi 热力学完全闭式]\label{thm:conclusion-window6-full-renyi-thermodynamics-closed}
+令 \(\mu_6\) 为 \(m=6\) 的归一化折叠输出分布：
+\[
+\mu_6(w):=\frac{d_6^{\mathrm{bin}}(w)}{64}
+\qquad (w\in X_6).
+\]
+则对任意 \(q>0\) 且 \(q\neq 1\)，R\'enyi 熵具有精确闭式
+\[
+\boxed{\;
+H_q(\mu_6)
+:=
+\frac{1}{1-q}\log\!\left(\sum_{w\in X_6}\mu_6(w)^q\right)
+=
+\frac{1}{1-q}
+\left[
+\log\!\bigl(8\cdot 2^q+4\cdot 3^q+9\cdot 4^q\bigr)-q\log 64
+\right].\;}
+\]
+相应的 Shannon 熵为
+\[
+\boxed{\;
+H(\mu_6)
+:=
+-\sum_{w\in X_6}\mu_6(w)\log\mu_6(w)
+=
+6\log 2
+-\frac{1}{64}\Bigl(8\cdot 2\log 2+4\cdot 3\log 3+9\cdot 4\log 4\Bigr).\;}
+\]
+若进一步令 escort 分布
+\[
+\pi_{6,q}(w):=\frac{\mu_6(w)^q}{\sum_{u\in X_6}\mu_6(u)^q},
+\]
+并把它按纤维大小推前到 \(\{2,3,4\}\)，则
+\[
+\boxed{\;
+\pi_{6,q}(d=2)=\frac{8\cdot 2^q}{8\cdot 2^q+4\cdot 3^q+9\cdot 4^q},\;}
+\]
+\[
+\boxed{\;
+\pi_{6,q}(d=3)=\frac{4\cdot 3^q}{8\cdot 2^q+4\cdot 3^q+9\cdot 4^q},\;}
+\]
+\[
+\boxed{\;
+\pi_{6,q}(d=4)=\frac{9\cdot 4^q}{8\cdot 2^q+4\cdot 3^q+9\cdot 4^q}.\;}
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:fold-bin-m6-fiber-hist}，
+\[
+d_6^{\mathrm{bin}}(w)=2\ \text{出现 }8\text{ 次},\qquad
+3\ \text{出现 }4\text{ 次},\qquad
+4\ \text{出现 }9\text{ 次}.
+\]
+因此
+\[
+\sum_{w\in X_6}\mu_6(w)^q
+=
+8\left(\frac{2}{64}\right)^q
++4\left(\frac{3}{64}\right)^q
++9\left(\frac{4}{64}\right)^q
+=
+\frac{8\cdot 2^q+4\cdot 3^q+9\cdot 4^q}{64^q}.
+\]
+代入 R\'enyi 熵定义便得到第一条公式。
+
+Shannon 熵则直接计算为
+\[
+\begin{aligned}
+H(\mu_6)
+&=
+-\sum_{w}\frac{d_6^{\mathrm{bin}}(w)}{64}
+\log\!\left(\frac{d_6^{\mathrm{bin}}(w)}{64}\right)\\
+&=
+\log 64-\frac{1}{64}\sum_{w}d_6^{\mathrm{bin}}(w)\log d_6^{\mathrm{bin}}(w),
+\end{aligned}
+\]
+而直方图给出
+\[
+\sum_{w}d_6^{\mathrm{bin}}(w)\log d_6^{\mathrm{bin}}(w)
+=
+8\cdot 2\log 2+4\cdot 3\log 3+9\cdot 4\log 4,
+\]
+故
+\[
+H(\mu_6)
+=
+6\log 2-\frac{1}{64}\Bigl(8\cdot 2\log 2+4\cdot 3\log 3+9\cdot 4\log 4\Bigr).
+\]
+
+最后，escort 分布满足
+\[
+\pi_{6,q}(w)\propto \mu_6(w)^q\propto d_6^{\mathrm{bin}}(w)^q.
+\]
+因此把 \(\pi_{6,q}\) 按纤维大小聚合后，只需对三个能级分别按 \(8\cdot 2^q\)、\(4\cdot 3^q\)、\(9\cdot 4^q\) 归一化，即得到后三条闭式。证毕。
+\end{proof}
+
+\begin{theorem}[二阶碰撞核的最小线性复杂度]\label{thm:conclusion-foldbin-s2-minimal-linear-complexity-three}
+设
+\[
+S_2(m):=\sum_{w\in X_m}\bigl(d_m^{\mathrm{bin}}(w)\bigr)^2
+\qquad (m\ge 2).
+\]
+则其普通生成函数
+\[
+\mathcal G_2(z):=\sum_{m\ge 2}S_2(m)\,z^{m-2}
+\]
+满足
+\[
+\mathcal G_2(z)=\frac{6+2z-4z^2}{1-2z-2z^2+2z^3},
+\]
+并且序列 \(\{S_2(m)\}_{m\ge 2}\) 的最小线性复杂度恰为 \(3\)。特别地，它不可能由任何二阶常系数递推精确描述，也不可能由任何二维线性 realization 精确实现。
+\end{theorem}
+
+\begin{proof}
+本文前面已经给出三态碰撞核表示
+\[
+S_2(m)=2\,\mathbf 1^{\!T}A_2^{\,m-2}\mathbf 1,
+\qquad
+A_2=
+\begin{pmatrix}
+0&0&1\\
+0&1&1\\
+2&1&1
+\end{pmatrix},
+\]
+以及递推
+\[
+S_2(m)=2S_2(m-1)+2S_2(m-2)-2S_2(m-3)
+\qquad (m\ge 5),
+\]
+配以初值
+\[
+S_2(2)=6,\qquad S_2(3)=14,\qquad S_2(4)=36.
+\]
+把递推按普通生成函数求和，直接得到
+\[
+\bigl(1-2z-2z^2+2z^3\bigr)\mathcal G_2(z)=6+2z-4z^2,
+\]
+从而得出所示闭式，故线性复杂度至多为 \(3\)。
+
+反之，若其线性复杂度至多为 \(2\)，则所有 \(3\times 3\) Hankel 行列式都应消失。由上式递推可先算得
+\[
+S_2(5)=88,\qquad S_2(6)=220,
+\]
+于是
+\[
+\det
+\begin{pmatrix}
+6&14&36\\
+14&36&88\\
+36&88&220
+\end{pmatrix}
+=-16\neq 0.
+\]
+故该序列不可能由任何二阶线性递推生成，因而最小线性复杂度恰为 \(3\)。证毕。
+\end{proof}
+
+\begin{theorem}[三阶碰撞核的最小线性复杂度]\label{thm:conclusion-foldbin-s3-minimal-linear-complexity-three}
+设
+\[
+S_3(m):=\sum_{w\in X_m}\bigl(d_m^{\mathrm{bin}}(w)\bigr)^3
+\qquad (m\ge 2).
+\]
+则其普通生成函数
+\[
+\mathcal G_3(z):=\sum_{m\ge 2}S_3(m)\,z^{m-2}
+\]
+满足
+\[
+\mathcal G_3(z)=\frac{10+6z-4z^2}{1-2z-4z^2+2z^3},
+\]
+并且序列 \(\{S_3(m)\}_{m\ge 2}\) 的最小线性复杂度同样恰为 \(3\)。
+\end{theorem}
+
+\begin{proof}
+本文前面已经给出三态 realization
+\[
+S_3(m)=2u_3^{T}A_3^{\,m-2}v_3,
+\qquad
+A_3=
+\begin{pmatrix}
+0&2&2\\
+1&0&2\\
+0&1&2
+\end{pmatrix},
+\]
+并给出递推
+\[
+S_3(m)=2S_3(m-1)+4S_3(m-2)-2S_3(m-3)
+\qquad (m\ge 5),
+\]
+配以初值
+\[
+S_3(2)=10,\qquad S_3(3)=26,\qquad S_3(4)=88.
+\]
+由此按生成函数求和得
+\[
+\bigl(1-2z-4z^2+2z^3\bigr)\mathcal G_3(z)=10+6z-4z^2,
+\]
+故线性复杂度至多为 \(3\)。
+
+若线性复杂度至多为 \(2\)，则相应 \(3\times 3\) Hankel 行列式必须消失。由递推继续算得
+\[
+S_3(5)=260,\qquad S_3(6)=820,
+\]
+于是
+\[
+\det
+\begin{pmatrix}
+10&26&88\\
+26&88&260\\
+88&260&820
+\end{pmatrix}
+=-432\neq 0.
+\]
+故线性复杂度不能降到 \(2\)，从而恰为 \(3\)。证毕。
+\end{proof}
+
+\begin{corollary}[三体碰撞相对于二体碰撞的指数级次单形稀释]\label{cor:conclusion-foldbin-s3-vs-s2-threehalves-exponential-dilution}
+设 \(r_2\) 与 \(r_3\) 分别为多项式
+\[
+x^3-2x^2-2x+2,
+\qquad
+x^3-2x^2-4x+2
+\]
+的 Perron 根。则
+\[
+S_2(m)=\Theta(r_2^m),
+\qquad
+S_3(m)=\Theta(r_3^m),
+\]
+并且
+\[
+\lim_{m\to\infty}\frac1m\log\frac{S_3(m)}{S_2(m)^{3/2}}
+=
+\log r_3-\frac32\log r_2
+<0.
+\]
+数值上，
+\[
+r_2\approx 2.48119430409202,
+\qquad
+r_3\approx 3.086130197651,
+\]
+故
+\[
+\log r_3-\frac32\log r_2\approx -0.2361920849.
+\]
+因此，三体碰撞并不由二体碰撞经单一有效纤维尺度的幂律闭包产生，而是相对于 \(S_2(m)^{3/2}\) 出现严格的指数级稀释。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-foldbin-s2-minimal-linear-complexity-three} 与定理 \ref{thm:conclusion-foldbin-s3-minimal-linear-complexity-three} 背后的三态矩阵 realization 可知，相应状态矩阵皆为 primitive。于是由 Perron--Frobenius 定理，
+\[
+S_2(m)=\Theta(r_2^m),
+\qquad
+S_3(m)=\Theta(r_3^m).
+\]
+故
+\[
+\frac1m\log\frac{S_3(m)}{S_2(m)^{3/2}}
+\longrightarrow
+\log r_3-\frac32\log r_2.
+\]
+把上述 Perron 根数值代入即可得到严格负值。证毕。
+\end{proof}
+
+\begin{theorem}[固定有限 Fourier 审计的渐近失效]\label{thm:conclusion-foldbin-fixed-finite-fourier-audit-vanishing-share}
+设 \(K\subset \mathbb Z\setminus\{0\}\) 为任意固定有限频率集，并定义其所捕获的非平凡碰撞能量
+\[
+E_m(K):=\frac1{F_{m+2}}\sum_{k\in K}a_m(k)^2,
+\qquad
+a_m(k):=\frac{|\widehat d_m(k)|}{2^m}\in[0,1].
+\]
+则
+\[
+\frac{E_m(K)}{\,Col_m-\frac1{F_{m+2}}\,}\longrightarrow 0
+\qquad (m\to\infty).
+\]
+也就是说，任何固定有限个非平凡 Fourier 模所能审计到的碰撞缺口，最终都只占总缺口的零比例。
+\end{theorem}
+
+\begin{proof}
+由 \(0\le a_m(k)\le 1\) 立得
+\[
+0\le E_m(K)\le \frac{|K|}{F_{m+2}}.
+\]
+另一方面，本文前面已经给出 Parseval 型恒等式
+\[
+Col_m-\frac1{F_{m+2}}
+=
+\frac1{F_{m+2}}\sum_{k\ne 0}a_m(k)^2,
+\]
+并且还已证明
+\[
+F_{m+2}Col_m\to+\infty.
+\]
+因此
+\[
+F_{m+2}\Bigl(Col_m-\frac1{F_{m+2}}\Bigr)\to+\infty.
+\]
+于是
+\[
+0\le
+\frac{E_m(K)}{Col_m-\frac1{F_{m+2}}}
+\le
+\frac{|K|}{F_{m+2}\left(Col_m-\frac1{F_{m+2}}\right)}
+\longrightarrow 0.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[任何渐近充分的频谱证书都必须无界增宽]\label{cor:conclusion-foldbin-sufficient-spectral-certificate-must-widen}
+设 \(K_m\subset \mathbb Z\setminus\{0\}\) 为一列频率族。若存在常数 \(\eta>0\) 使
+\[
+\limsup_{m\to\infty}
+\frac{\frac1{F_{m+2}}\sum_{k\in K_m}a_m(k)^2}
+{Col_m-\frac1{F_{m+2}}}
+\ge \eta,
+\]
+则必有
+\[
+|K_m|
+\ge
+\eta\,F_{m+2}\Bigl(Col_m-\frac1{F_{m+2}}\Bigr)
+\]
+对无穷多个 \(m\) 成立，因而
+\[
+|K_m|\to\infty.
+\]
+\end{corollary}
+
+\begin{proof}
+由 \(a_m(k)^2\le 1\) 可得
+\[
+\frac1{F_{m+2}}\sum_{k\in K_m}a_m(k)^2
+\le \frac{|K_m|}{F_{m+2}}.
+\]
+若左端能在极限上捕获总缺口的比例至少为 \(\eta\)，便必须有
+\[
+\frac{|K_m|}{F_{m+2}}
+\ge
+\eta\Bigl(Col_m-\frac1{F_{m+2}}\Bigr)
+\]
+在无穷多个 \(m\) 上成立，整理即得所示下界。再结合
+\[
+F_{m+2}\Bigl(Col_m-\frac1{F_{m+2}}\Bigr)\to+\infty
+\]
+便得到 \(|K_m|\to\infty\)。证毕。
+\end{proof}
+
+\input{thm__conclusion-foldbin-main-resonance-removal-still-diverges}
+
+\noindent
+以上结果把 bin-fold 口径下看似分散的多类对象压缩为同一条可审计链：尾和 admissibility 产生严格阈值阶梯，window-\(6\) 的有限窗容量因此塌缩为一条三段线性曲线并给出最优位预算的闭式基准；二阶与三阶碰撞核又分别降到最小三态线性复杂度，却仍保持彼此严格不同的 Perron 指数，从而排除了任何单一有效纤维尺度的闭包解释；与此同时，碰撞缺口的总质量虽持续增长，任何固定有限 Fourier 频率族所能捕获的份额却趋于零，这迫使一切渐近充分的频谱证书都必须无界增宽；而同一三能级直方图最终还把全部 R\'enyi 熵、Shannon 熵与 escort 质量函数完全闭式化。由此，fold multiplicity 不再只是单一的组合计数对象，而同时表现为阈值账本、容量相图、最小碰撞核、频谱活化律与有限热力学单元。
+
+\endinput

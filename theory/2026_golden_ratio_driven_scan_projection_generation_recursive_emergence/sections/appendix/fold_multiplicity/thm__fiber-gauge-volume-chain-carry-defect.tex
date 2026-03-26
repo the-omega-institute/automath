@@ -1,0 +1,461 @@
+\begin{theorem}[纤维规范群体积的复合链式分解]\label{thm:fiber-gauge-volume-chain-factorization}
+设 \(\Omega,X,Y\) 为有限集合，且 \(f:\Omega\twoheadrightarrow X\)、\(g:X\twoheadrightarrow Y\) 为满射，并记 \(h:=g\circ f\)。
+对任意满射 \(u:A\twoheadrightarrow B\) 定义纤维计数
+\[
+d_u(b):=\card{u^{-1}(b)},\qquad b\in B,
+\]
+以及纤维规范群
+\[
+\mathcal{G}(u):=\prod_{b\in B}\mathrm{Sym}\bigl(u^{-1}(b)\bigr),
+\qquad
+\card{\mathcal{G}(u)}=\prod_{b\in B} d_u(b)!.
+\]
+则成立精确恒等式
+\[
+\boxed{\;
+\card{\mathcal{G}(h)}
+=
+\card{\mathcal{G}(f)}
+\cdot
+\prod_{y\in Y}
+\binom{d_h(y)}{\bigl(d_f(x)\bigr)_{x\in g^{-1}(y)}}
+\;}
+\]
+其中多项式系数为多项式系数（多项式系数/多项式系数）定义
+\[
+\binom{n}{n_1,\dots,n_r}:=\frac{n!}{n_1!\cdots n_r!}\in\NN,
+\qquad
+\sum_{i=1}^{r}n_i=n.
+\]
+\end{theorem}
+
+\begin{proof}
+对每个 \(y\in Y\) 有不交并分解
+\[
+h^{-1}(y)=\bigsqcup_{x\in g^{-1}(y)} f^{-1}(x),
+\]
+因此
+\(
+d_h(y)=\sum_{x\in g^{-1}(y)} d_f(x)
+\)，并且
+\[
+d_h(y)!
+=
+\binom{d_h(y)}{\bigl(d_f(x)\bigr)_{x\in g^{-1}(y)}}
+\cdot
+\prod_{x\in g^{-1}(y)} d_f(x)!.
+\]
+对所有 \(y\in Y\) 取乘积即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[规范体积密度与条件信息的 Stirling 夹逼]\label{prop:fiber-gauge-volume-density-vs-conditional-entropy}
+令 \(u:A\twoheadrightarrow B\) 为满射，并令 \(\omega\) 在 \(A\) 上均匀分布，记 \(Y:=u(\omega)\)。
+则条件 Shannon 熵（自然对数）为
+\[
+H(\omega\mid Y)=\sum_{b\in B}\frac{d_u(b)}{|A|}\log d_u(b).
+\]
+定义规范体积密度
+\[
+g(u):=\frac{1}{|A|}\log\card{\mathcal{G}(u)}=\frac{1}{|A|}\sum_{b\in B}\log\bigl(d_u(b)!\bigr).
+\]
+则成立双边夹逼
+\[
+H(\omega\mid Y)-1+\frac{|B|}{|A|}\ \le\ g(u)\ \le\ H(\omega\mid Y).
+\]
+因此在任意满足 \(|B|/|A|\to 0\) 的序列中，有 \(g(u)=H(\omega\mid Y)-1+o(1)\)。
+\end{proposition}
+\begin{proof}
+对任意整数 \(n\ge 1\)，由积分比较得到
+\[
+n\log n-n+1\ \le\ \log(n!)\ \le\ n\log n.
+\]
+对每个 \(b\in B\) 取 \(n=d_u(b)\) 并求和：
+\[
+\sum_{b\in B}\bigl(d_u(b)\log d_u(b)-d_u(b)+1\bigr)
+\le
+\log\card{\mathcal{G}(u)}
+\le
+\sum_{b\in B} d_u(b)\log d_u(b).
+\]
+注意 \(\sum_{b\in B}d_u(b)=|A|\)，两端同除以 \(|A|\) 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[规范体积密度的条件阶乘链式律]\label{cor:fiber-gauge-volume-density-conditional-factorial-chain}
+设 \(\Omega,X,Y\) 为有限集合，且 \(f:\Omega\twoheadrightarrow X\)、\(\pi:X\twoheadrightarrow Y\) 为满射，令 \(h:=\pi\circ f:\Omega\twoheadrightarrow Y\)。
+对 \(x\in X\) 记 \(d_x:=|f^{-1}(x)|\)，并对 \(y\in Y\) 记
+\[
+D_y:=|h^{-1}(y)|=\sum_{x\in\pi^{-1}(y)}d_x.
+\]
+则规范体积密度满足精确恒等式
+\[
+\boxed{\;
+g(h)-g(f)
+=\frac{1}{|\Omega|}\sum_{y\in Y}\log\binom{D_y}{\bigl(d_x\bigr)_{x\in\pi^{-1}(y)}}\; }.
+\]
+特别地，恒有 \(g(h)\ge g(f)\)，且等号成立当且仅当 \(\pi\) 不发生真实合并（即对每个 \(y\in Y\) 有 \(|\pi^{-1}(y)|=1\)）。
+\end{corollary}
+\begin{proof}
+对定理 \ref{thm:fiber-gauge-volume-chain-factorization}（取其中的 \(g=\pi\)）两边取对数并除以 \(|\Omega|\) 即得恒等式。
+由于多项式系数为正整数，故其对数非负，从而 \(g(h)\ge g(f)\)。
+并且等号成立当且仅当每个 \(y\) 的多项式系数均为 \(1\)，这等价于每个纤维 \(\pi^{-1}(y)\) 退化为单点。证毕。
+\end{proof}
+
+\begin{proposition}[规范体积增量与条件 Shannon 熵的 Stirling 精确分解]\label{prop:fiber-gauge-volume-increment-conditional-shannon-stirling}
+沿用推论 \ref{cor:fiber-gauge-volume-density-conditional-factorial-chain} 的记号，令 \(\omega\) 在 \(\Omega\) 上均匀分布，并令随机变量
+\[
+X:=f(\omega)\in X,\qquad Y:=\pi(X)=h(\omega)\in Y.
+\]
+定义
+\[
+p_x:=\frac{d_x}{|\Omega|},\qquad
+q_y:=\frac{D_y}{|\Omega|},\qquad
+p_{x\mid y}:=\frac{d_x}{D_y}\quad(x\in\pi^{-1}(y)).
+\]
+则条件 Shannon 熵（自然对数）为
+\[
+H(X\mid Y):=\sum_{y\in Y}q_y\sum_{x\in\pi^{-1}(y)}p_{x\mid y}\log\frac{1}{p_{x\mid y}}.
+\]
+并且存在显式分解
+\[
+g(h)-g(f)
+=H(X\mid Y)
+\;+\;\frac{1}{2|\Omega|}\Bigl(\sum_{y\in Y}\log(2\pi D_y)-\sum_{x\in X}\log(2\pi d_x)\Bigr)
+\;+\;\varepsilon,
+\]
+其中余项满足统一界
+\[
+|\varepsilon|\le \frac{|X|+|Y|}{12\,|\Omega|}.
+\]
+\end{proposition}
+\begin{proof}
+对整数 \(m\ge 1\) 取带余项的 Stirling 展开
+\[
+\log(m!)=m\log m-m+\tfrac12\log(2\pi m)+\theta_m,
+\qquad
+0\le \theta_m\le \frac{1}{12m}.
+\]
+将其分别代入
+\(
+g(h)=\frac{1}{|\Omega|}\sum_{y\in Y}\log(D_y!)
+\)
+与
+\(
+g(f)=\frac{1}{|\Omega|}\sum_{x\in X}\log(d_x!)
+\)，
+并注意 \(\sum_{y}D_y=\sum_x d_x=|\Omega|\)，可知线性项 \((-m)\) 在差分 \(g(h)-g(f)\) 中完全抵消，从而
+\[
+g(h)-g(f)
+=\frac{1}{|\Omega|}\Bigl(\sum_{y}D_y\log D_y-\sum_x d_x\log d_x\Bigr)
+\;+\;\frac{1}{2|\Omega|}\Bigl(\sum_{y}\log(2\pi D_y)-\sum_x\log(2\pi d_x)\Bigr)
+\;+\;\varepsilon,
+\]
+其中
+\(
+\varepsilon:=|\Omega|^{-1}\bigl(\sum_y\theta_{D_y}-\sum_x\theta_{d_x}\bigr)
+\)。
+对主项，按纤维分解 \(h^{-1}(y)=\bigsqcup_{x\in\pi^{-1}(y)}f^{-1}(x)\) 得
+\[
+\sum_{y}D_y\log D_y-\sum_x d_x\log d_x
+=\sum_{y}\sum_{x\in\pi^{-1}(y)}d_x\log\frac{D_y}{d_x}
+=|\Omega|\sum_{y}q_y\sum_{x\in\pi^{-1}(y)}p_{x\mid y}\log\frac{1}{p_{x\mid y}}
+=|\Omega|\,H(X\mid Y),
+\]
+从而得到分解式。
+最后由 \(D_y,d_x\ge 1\) 及 \(|\theta_m|\le 1/(12m)\) 得
+\[
+|\varepsilon|
+\le
+\frac{1}{|\Omega|}\left(\sum_{y\in Y}\frac{1}{12D_y}+\sum_{x\in X}\frac{1}{12d_x}\right)
+\le
+\frac{|Y|+|X|}{12\,|\Omega|}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[\(p\)-进赋值与进位签名：多项式系数的 Kummer--Legendre 恒等式]\label{thm:multinomial-vp-carry-signature}
+取素数 \(p\)，记 \(v_p(\cdot)\) 为 \(p\)-进赋值，记 \(s_p(n)\) 为 \(n\) 的 \(p\)-进制数字和。
+则对任意分拆 \(n=\sum_{i=1}^{r}n_i\)（\(n_i\in\NN\)）有
+\[
+\boxed{\;
+v_p\!\left(\binom{n}{n_1,\dots,n_r}\right)
+=
+\frac{\sum_{i=1}^{r}s_p(n_i)-s_p(n)}{p-1}.
+\;}
+\]
+并且右端等于在 \(p\)-进制逐位加法中把 \((n_1,\dots,n_r)\) 相加得到 \(n\) 时产生的总进位次数（该总数与加法次序无关）。
+\end{theorem}
+
+\begin{proof}
+由 Legendre 公式
+\[
+v_p(n!)=\sum_{k\ge 1}\left\lfloor\frac{n}{p^k}\right\rfloor=\frac{n-s_p(n)}{p-1}
+\]
+得
+\[
+\begin{aligned}
+v_p\!\left(\binom{n}{n_1,\dots,n_r}\right)
+&=v_p(n!)-\sum_{i=1}^{r}v_p(n_i!)\\
+&=\frac{n-s_p(n)}{p-1}-\sum_{i=1}^{r}\frac{n_i-s_p(n_i)}{p-1}\\
+&=\frac{\sum_{i=1}^{r}s_p(n_i)-s_p(n)}{p-1}.
+\end{aligned}
+\]
+为给出进位解释，将每个 \(n_i\) 写作 \(p\)-进展开 \(n_i=\sum_{k\ge 0}a_{i,k}p^k\)（\(0\le a_{i,k}<p\)）。
+令逐位相加时第 \(k\) 位的进位为 \(c_k\)（约定 \(c_0=0\)），则存在唯一 \(b_k\in\{0,\dots,p-1\}\) 使
+\[
+\sum_{i=1}^{r}a_{i,k}+c_k=b_k+p\,c_{k+1}.
+\]
+对 \(k\) 求和并用 \(s_p(n_i)=\sum_k a_{i,k}\)、\(s_p(n)=\sum_k b_k\) 得
+\[
+\sum_{i=1}^{r}s_p(n_i)-s_p(n)=(p-1)\sum_{k\ge 1}c_k.
+\]
+右端即总进位次数（各位进位之和），且该数由对称表达式 \(\sum_i s_p(n_i)-s_p(n)\) 唯一确定，因而与加法次序无关。证毕。
+\end{proof}
+
+\begin{proposition}[二倍化规范体积的二进进位恒等式]\label{prop:fiber-gauge-volume-doubling-v2-digit-sum}
+在定理 \ref{thm:fold-multiscale-carry-defect} 的记号下，记 \(s_2(n)\) 为 \(n\) 的二进制数字和。
+则成立精确恒等式
+\[
+\boxed{\;
+v_2\!\left(\frac{\card{\mathcal{G}_m^{(2)}}}{\card{\mathcal{G}_m}^{\,2}}\right)
+=\sum_{w\in X_m} s_2\!\bigl(d_m(w)\bigr)\; }.
+\]
+等价地，\(\card{\mathcal{G}_m^{(2)}}/\card{\mathcal{G}_m}^{\,2}\) 的 \(2\)-进增益恰等于把所有纤维多重度 \(d_m(w)\) 二倍化时的总二进进位复杂度。
+\end{proposition}
+\begin{proof}
+由 Legendre 公式 \(v_2(n!)=n-s_2(n)\) 得对任意 \(d\ge 0\),
+\[
+v_2\bigl((2d)!\bigr)-2v_2(d!)
+=(2d-s_2(2d))-2(d-s_2(d))
+=2s_2(d)-s_2(2d).
+\]
+而二倍化不改变二进制数位和，即 \(s_2(2d)=s_2(d)\)，故
+\[
+v_2\bigl((2d)!\bigr)-2v_2(d!)=s_2(d).
+\]
+对 \(d=d_m(w)\) 逐点求和并用
+\(
+\card{\mathcal{G}_m}=\prod_{w\in X_m} d_m(w)!
+\)、\(
+\card{\mathcal{G}_m^{(2)}}=\prod_{w\in X_m}(2d_m(w))!
+\)
+即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[二进进位增益的规模下界]\label{cor:fiber-gauge-volume-doubling-v2-lowerbound}
+对任意 \(m\ge 1\)，有严格下界
+\[
+v_2\!\left(\frac{\card{\mathcal{G}_m^{(2)}}}{\card{\mathcal{G}_m}^{\,2}}\right)\ \ge\ |X_m|.
+\]
+\end{corollary}
+\begin{proof}
+对任意正整数 \(d\) 有 \(s_2(d)\ge 1\)。
+又对每个 \(w\in X_m\) 有 \(d_m(w)\ge 1\)，故由命题 \ref{prop:fiber-gauge-volume-doubling-v2-digit-sum} 立得。
+证毕。
+\end{proof}
+
+\begin{theorem}[多尺度相容诱导的 \(p\)-进进位缺陷]\label{thm:fold-multiscale-carry-defect}
+取二元折叠 \(\Fold_m:\Omega_m\twoheadrightarrow X_m\)（定义 \ref{def:fold-word}），并令截断
+\[
+\pi:\Omega_{m+1}\twoheadrightarrow\Omega_m,\qquad
+(\omega_1\cdots \omega_{m+1})\mapsto(\omega_1\cdots\omega_m),
+\]
+并假设存在满射限制映射
+\[
+\widetilde r:X_{m+1}\twoheadrightarrow X_m
+\]
+使得相容关系
+\[
+\widetilde r\circ\Fold_{m+1}=\Fold_m\circ\pi
+\]
+成立。
+记纤维多重度
+\[
+d_m(w):=\card{\Fold_m^{-1}(w)},\qquad w\in X_m,
+\]
+并定义折叠诱导的纤维规范体积
+\[
+\card{\mathcal{G}_m}:=\card{\mathcal{G}(\Fold_m)}=\prod_{w\in X_m} d_m(w)!,
+\qquad
+\card{\mathcal{G}_m^{(2)}}:=\prod_{w\in X_m}(2d_m(w))!.
+\]
+则成立整数恒等式
+\[
+\boxed{\;
+\frac{\card{\mathcal{G}_m^{(2)}}}{\card{\mathcal{G}_{m+1}}}
+=
+\prod_{w\in X_m}
+\binom{2d_m(w)}{\bigl(d_{m+1}(u)\bigr)_{u\in\widetilde r^{-1}(w)}}
+\in\NN.
+\;}
+\]
+并且对任意素数 \(p\)，定义尺度耦合的 \(p\)-进缺陷
+\[
+\Delta_p(m):=v_p\!\bigl(\card{\mathcal{G}_m^{(2)}}\bigr)-v_p\!\bigl(\card{\mathcal{G}_{m+1}}\bigr),
+\]
+则有精确进位表述
+\[
+\boxed{\;
+\Delta_p(m)
+=
+\sum_{w\in X_m}
+\mathrm{Carr}_p\!\Bigl(\bigl(d_{m+1}(u)\bigr)_{u\in\widetilde r^{-1}(w)}\Bigr),
+\;}
+\]
+其中 \(\mathrm{Carr}_p(n_1,\dots,n_r)\) 表示把 \((n_1,\dots,n_r)\) 在 \(p\)-进制逐位相加得到 \(\sum_i n_i\) 时产生的总进位次数。
+\end{theorem}
+
+\begin{proof}
+令 \(h:=\Fold_m\circ\pi=\widetilde r\circ\Fold_{m+1}:\Omega_{m+1}\twoheadrightarrow X_m\)。
+由于 \(\pi^{-1}(\omega)\) 对每个 \(\omega\in\Omega_m\) 恰含两点，且 \(h\) 仅依赖于前缀 \(\pi(\cdot)\)，故对任意 \(w\in X_m\) 有
+\[
+\card{h^{-1}(w)}=2\,\card{\Fold_m^{-1}(w)}=2d_m(w).
+\]
+对满射 \(\Fold_{m+1}:\Omega_{m+1}\twoheadrightarrow X_{m+1}\) 与 \(\widetilde r:X_{m+1}\twoheadrightarrow X_m\) 应用定理 \ref{thm:fiber-gauge-volume-chain-factorization}，
+并代入 \(\card{h^{-1}(w)}=2d_m(w)\) 与
+\(
+\card{\mathcal{G}(h)}=\prod_{w\in X_m}\card{h^{-1}(w)}!=\card{\mathcal{G}_m^{(2)}}
+\)，得到乘积恒等式。
+
+再对素数 \(p\) 取 \(v_p\)，并对每个 \(w\) 应用定理 \ref{thm:multinomial-vp-carry-signature}，
+即可将每一项多项式系数的 \(p\)-进赋值识别为相应纤维簇内计数之和的总进位次数，从而得到 \(\Delta_p(m)\) 的进位表述。证毕。
+\end{proof}
+
+\begin{corollary}[尺度耦合缺陷的数位和闭式与素数分解的对数缺口]\label{cor:fold-multiscale-carry-defect-digit-sum-log-gap}
+在定理 \ref{thm:fold-multiscale-carry-defect} 的设定下，对任意素数 \(p\) 记 \(s_p(n)\) 为 \(n\) 的 \(p\)-进制数字和，则
+\[
+\Delta_p(m)
+=\frac{1}{p-1}\left(
+\sum_{u\in X_{m+1}} s_p\!\bigl(d_{m+1}(u)\bigr)
+-\sum_{w\in X_m} s_p\!\bigl(2d_m(w)\bigr)
+\right).
+\]
+并且成立严格恒等式
+\[
+\log\!\left(\frac{\card{\mathcal{G}_m^{(2)}}}{\card{\mathcal{G}_{m+1}}}\right)
+=\sum_{p\ \mathrm{prime}}\Delta_p(m)\,\log p,
+\]
+从而对任意素数 \(p\) 皆有单素数下界
+\[
+\log\!\left(\frac{\card{\mathcal{G}_m^{(2)}}}{\card{\mathcal{G}_{m+1}}}\right)\ \ge\ (\log p)\,\Delta_p(m),
+\qquad
+\text{特别地}\quad
+\log\!\left(\frac{\card{\mathcal{G}_m^{(2)}}}{\card{\mathcal{G}_{m+1}}}\right)\ \ge\ (\log 2)\,\Delta_2(m).
+\]
+\end{corollary}
+\begin{proof}
+对定理 \ref{thm:fold-multiscale-carry-defect} 的乘积恒等式逐项取 \(v_p\)，并对每个 \(w\) 的多项式系数应用定理 \ref{thm:multinomial-vp-carry-signature} 的数位和表示，
+即可把 \(\Delta_p(m)\) 写成全体子纤维数位和与父纤维二倍化数位和之差，得到第一式。
+第二式对正整数 \(\card{\mathcal{G}_m^{(2)}}/\card{\mathcal{G}_{m+1}}\) 取素因数分解并取对数：
+\(
+\log n=\sum_p v_p(n)\log p
+\)；
+再代入 \(v_p(n)=\Delta_p(m)\) 即得。单项下界由逐项截断立得。证毕。
+\end{proof}
+
+\begin{theorem}[条件熵的 Gödel--carry 微正则恒等式]\label{thm:fold-godel-carry-conditional-entropy}
+在定理 \ref{thm:fold-multiscale-carry-defect} 的设定下，令 \(\omega\) 在 \(\Omega_{m+1}\) 上均匀分布，并定义随机变量
+\[
+W:=h(\omega)\in X_m,
+\qquad
+U:=\Fold_{m+1}(\omega)\in X_{m+1},
+\qquad
+h:=\Fold_m\circ\pi=\widetilde r\circ\Fold_{m+1}.
+\]
+定义层间 Gödel 整数
+\[
+\boxed{\;
+\mathcal H_m
+:=
+\prod_{w\in X_m}
+\binom{2d_m(w)}{\bigl(d_{m+1}(u)\bigr)_{u\in\widetilde r^{-1}(w)}}
+\;=\;
+\frac{\card{\mathcal{G}_m^{(2)}}}{\card{\mathcal{G}_{m+1}}}
+\in\NN\; }.
+\]
+则条件 Shannon 熵（自然对数）满足非渐近 Stirling 夹逼
+\[
+\boxed{\;
+\left|\,H(U\mid W)-\frac{1}{2^{m+1}}\log\mathcal H_m\,\right|
+\le
+\frac{C_0}{2^{m+1}}\Bigl(|X_m|+|X_{m+1}|\Bigr)\log(2^{m+1})
+\;}
+\]
+其中 \(C_0>0\) 为与 \(m\) 无关的绝对常数。
+\end{theorem}
+\begin{proof}
+对任意 \(w\in X_m\)，由 \(h=\widetilde r\circ \Fold_{m+1}\) 得到不交并分解
+\[
+h^{-1}(w)=\bigsqcup_{u\in\widetilde r^{-1}(w)}\Fold_{m+1}^{-1}(u),
+\qquad
+\card{h^{-1}(w)}=\sum_{u\in\widetilde r^{-1}(w)} d_{m+1}(u)=2d_m(w).
+\]
+因此
+\[
+\PP(W=w)=\frac{2d_m(w)}{2^{m+1}},
+\qquad
+\PP(U=u\mid W=w)=\frac{d_{m+1}(u)}{2d_m(w)}\quad(u\in\widetilde r^{-1}(w)).
+\]
+从而
+\[
+H(U\mid W)=
+\sum_{w\in X_m}\frac{2d_m(w)}{2^{m+1}}
+\left(
+-\sum_{u\in\widetilde r^{-1}(w)}\frac{d_{m+1}(u)}{2d_m(w)}\log\frac{d_{m+1}(u)}{2d_m(w)}
+\right).
+\]
+另一方面，
+\[
+\frac{1}{2^{m+1}}\log\mathcal H_m
+=
+\frac{1}{2^{m+1}}
+\sum_{w\in X_m}
+\left(
+\log(2d_m(w))!
+\;-\;
+\sum_{u\in\widetilde r^{-1}(w)}\log(d_{m+1}(u))!
+\right).
+\]
+对每个阶乘使用带余项的 Stirling 估计
+\(
+\log n!=n\log n-n+O(\log(n+1))
+\)
+（其中 \(O(\cdot)\) 的常数绝对），并在每个 \(w\) 上利用
+\(
+\sum_{u\in\widetilde r^{-1}(w)}d_{m+1}(u)=2d_m(w)
+\)
+消去线性项，即可将主项严格化简为 \(H(U\mid W)\)。
+余项为有限个 \(O(\log(n+1))\) 的求和：每个 \(w\) 贡献一项 \(O(\log(2d_m(w)+1))\)，每个 \(u\in X_{m+1}\) 贡献一项 \(O(\log(d_{m+1}(u)+1))\)。
+注意 \(1\le d_{m+1}(u)\le 2^{m+1}\) 且 \(1\le 2d_m(w)\le 2^{m+1}\)，故各对数项均被 \(O(\log(2^{m+1}))\) 控制。
+合并并除以 \(2^{m+1}\) 得到所示界，其中常数可并入 \(C_0\)。证毕。
+\end{proof}
+
+\begin{corollary}[素数进位谱分解与条件熵读出]\label{cor:fold-godel-carry-spectrum-conditional-entropy}
+沿用定理 \ref{thm:fold-godel-carry-conditional-entropy} 的记号。
+对任意素数 \(p\) 令 \(\Delta_p(m):=v_p(\mathcal H_m)\)。
+则有素因子分解恒等式
+\[
+\log\mathcal H_m=\sum_{p\ \mathrm{prime}}\Delta_p(m)\log p,
+\]
+并且对每个 \(p\) 有进位表达式
+\[
+\Delta_p(m)
+=
+\sum_{w\in X_m}
+\mathrm{Carr}_p\!\Bigl(\bigl(d_{m+1}(u)\bigr)_{u\in\widetilde r^{-1}(w)}\Bigr).
+\]
+此外，
+\[
+H(U\mid W)=\frac{1}{2^{m+1}}\sum_{p}\Delta_p(m)\log p\;+\;o_{m\to\infty}(1),
+\]
+其中 \(o_{m\to\infty}(1)\) 在 \(|X_m|+|X_{m+1}|=o(2^{m+1}/\log(2^{m+1}))\) 的任意情形下一致趋于零。
+\end{corollary}
+\begin{proof}
+第一式由 \(\mathcal H_m\in\NN\) 的唯一素因子分解直接给出。
+第二式由定理 \ref{thm:fold-multiscale-carry-defect}（对 \(\mathcal H_m=\card{\mathcal{G}_m^{(2)}}/\card{\mathcal{G}_{m+1}}\) 的逐纤维多项式系数分解）与定理 \ref{thm:multinomial-vp-carry-signature}（Kummer--Legendre 进位恒等式）逐项合成得到。
+最后一式由定理 \ref{thm:fold-godel-carry-conditional-entropy} 的误差界与
+\(
+\log(2^{m+1})\,(|X_m|+|X_{m+1}|)/2^{m+1}\to 0
+\)
+推出。证毕。
+\end{proof}
+

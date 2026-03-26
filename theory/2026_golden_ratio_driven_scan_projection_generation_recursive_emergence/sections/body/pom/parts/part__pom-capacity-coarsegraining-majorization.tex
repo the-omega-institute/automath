@@ -1,0 +1,162 @@
+\paragraph{粗化映射下的容量曲线与碰撞矩单调律}
+在定理 \ref{thm:pom-oracle-capacity-stieltjes-inversion-mellin} 的同一计数口径下，
+对任意有限映射 \(f:\Omega\to X\) 记
+\[
+d_f(x):=\card{f^{-1}(x)},\qquad
+N_f(u):=\card{\{x\in X:\ d_f(x)\ge u\}},
+\]
+\[
+C_f^{\mathrm{cont}}(T):=\sum_{x\in X}\min\{d_f(x),T\}
+=\int_0^T N_f(u)\,\dd u,\qquad
+S_q(f):=\sum_{x\in X}d_f(x)^q.
+\]
+
+\input{parts/subsubsec__pom-injectivization-sideinfo-kolmogorov}
+
+\begin{theorem}[容量曲线的数据处理不等式与碰撞矩的反向单调律]\label{thm:pom-capacity-collision-data-processing}
+设 \(f:\Omega\to X\)、\(g:X\to Y\) 为有限映射，并令 \(h:=g\circ f\)。
+则对任意 \(T>0\) 与任意 \(q\ge 1\)，成立
+\begin{enumerate}
+  \item \(C_h^{\mathrm{cont}}(T)\le C_f^{\mathrm{cont}}(T)\)；
+  \item \(S_q(h)\ge S_q(f)\)。
+\end{enumerate}
+此外，若存在 \(y\in Y\) 及 \(x_1\neq x_2\in g^{-1}(y)\) 使
+\[
+d_f(x_1)>0,\qquad d_f(x_2)>0,\qquad d_f(x_1)+d_f(x_2)>T,
+\]
+则有严格不等式 \(C_h^{\mathrm{cont}}(T)<C_f^{\mathrm{cont}}(T)\)。
+\end{theorem}
+\begin{proof}
+对每个 \(y\in Y\) 记 \(A_y:=g^{-1}(y)\)，并写 \(a_x:=d_f(x)\)（\(x\in A_y\)）。
+由 \(d_h(y)=\sum_{x\in A_y}a_x\) 得
+\[
+\min\!\Bigl(\sum_{x\in A_y}a_x,T\Bigr)\le \sum_{x\in A_y}\min(a_x,T).
+\]
+对 \(y\) 求和即得
+\[
+C_h^{\mathrm{cont}}(T)
+=\sum_{y\in Y}\min\!\Bigl(\sum_{x\in A_y}a_x,T\Bigr)
+\le \sum_{y\in Y}\sum_{x\in A_y}\min(a_x,T)
+=C_f^{\mathrm{cont}}(T).
+\]
+若某个 \(A_y\) 中存在两项正且其和超过 \(T\)，则
+\[
+\sum_{x\in A_y}\min(a_x,T)>T=\min\!\Bigl(\sum_{x\in A_y}a_x,T\Bigr),
+\]
+故整体严格。
+
+再证碰撞矩。对 \(q=1\) 有等式
+\[
+S_1(h)=\sum_{y}d_h(y)=|\Omega|=\sum_{x}d_f(x)=S_1(f).
+\]
+对 \(q>1\) 与任意 \(u,v\ge 0\)，有 \((u+v)^q\ge u^q+v^q\)；
+迭代应用得
+\[
+\Bigl(\sum_{x\in A_y}a_x\Bigr)^q\ge \sum_{x\in A_y}a_x^q.
+\]
+对 \(y\) 求和得到
+\[
+S_q(h)=\sum_{y\in Y}d_h(y)^q
+=\sum_{y\in Y}\Bigl(\sum_{x\in A_y}a_x\Bigr)^q
+\ge \sum_{y\in Y}\sum_{x\in A_y}a_x^q
+=\sum_{x\in X}d_f(x)^q
+=S_q(f).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[粗化诱导的纤维主化与 Schur 单调]\label{thm:pom-coarsegraining-majorization-schur}
+在定理 \ref{thm:pom-capacity-collision-data-processing} 的设定下，
+将 \((d_f(x))_{x\in X}\) 与 \((d_h(y))_{y\in Y}\) 依降序排列并补零到同维，分别记为 \(\mathbf d_f,\mathbf d_h\)。
+则有主化关系
+\[
+\mathbf d_h\succ \mathbf d_f.
+\]
+因此对任意对称泛函 \(\Phi\)：
+\begin{enumerate}
+  \item 若 \(\Phi\) 为 Schur-凸，则 \(\Phi(\mathbf d_h)\ge \Phi(\mathbf d_f)\)；
+  \item 若 \(\Phi\) 为 Schur-凹，则 \(\Phi(\mathbf d_h)\le \Phi(\mathbf d_f)\)。
+\end{enumerate}
+特别地，对 \(q\ge 1\) 与 \(T>0\) 有
+\[
+\sum_i (\mathbf d_h)_i^{\,q}\ge \sum_i (\mathbf d_f)_i^{\,q},
+\qquad
+\sum_i \min\{(\mathbf d_h)_i,T\}\le \sum_i \min\{(\mathbf d_f)_i,T\}.
+\]
+\end{theorem}
+\begin{proof}
+粗化 \(g\) 把 \(X\) 分成块 \(A_y=g^{-1}(y)\)，并在每个块内执行“坐标合并”：
+把若干非负坐标 \((a_1,\dots,a_r)\) 替换为 \((a_1+\cdots+a_r,0,\dots,0)\)。
+单次二坐标合并 \((a,b)\mapsto(a+b,0)\)（\(a,b\ge 0\)）保持总和不变且增大前缀和，
+故新向量主化旧向量；迭代得到 \(\mathbf d_h\succ \mathbf d_f\)。
+后续结论由 Schur 单调性的标准推论直接给出。
+证毕。
+\end{proof}
+
+\begin{proposition}[二元粗化的凹目标极值配对律]\label{prop:pom-binary-coarsegraining-concave-pairing-extremes}
+设 \(a_1\ge a_2\ge\cdots\ge a_{2n}\ge 0\)。
+把 \(\{1,\dots,2n\}\) 划分为 \(n\) 个二元块 \(P=\{\{i_k,j_k\}\}_{k=1}^n\)，并记
+\[
+b_k(P):=a_{i_k}+a_{j_k}.
+\]
+对任意凹且非降函数 \(\varphi:\RR_{\ge 0}\to\RR\)，定义
+\[
+\mathcal F_\varphi(P):=\sum_{k=1}^n \varphi\!\bigl(b_k(P)\bigr).
+\]
+则极值由如下两种显式配对实现：
+\[
+P_{\min}=\{\{1,2\},\{3,4\},\dots,\{2n-1,2n\}\},
+\]
+\[
+P_{\max}=\{\{1,2n\},\{2,2n-1\},\dots,\{n,n+1\}\},
+\]
+并有
+\[
+\mathcal F_\varphi(P_{\min})\le \mathcal F_\varphi(P)\le \mathcal F_\varphi(P_{\max}).
+\]
+取 \(\varphi(t)=\min\{t,T\}\)（\(T>0\)）即得
+\[
+F_T(P):=\sum_{k=1}^n\min\{b_k(P),T\}
+\]
+在 \(P_{\min}\) 处取最小、在 \(P_{\max}\) 处取最大。
+\end{proposition}
+\begin{proof}
+这是配对和向量的经典主化极值结论：
+在所有二元配对中，“大配大”对应的和向量最不均衡，
+“大配小”对应的和向量最均衡。
+由 \(\varphi\) 凹且非降，\(\mathcal F_\varphi=\sum_k\varphi(b_k)\) 为 Schur-凹对称泛函，
+故在最均衡配对处取最大，在最不均衡配对处取最小。
+取 \(\varphi(t)=\min\{t,T\}\) 得所述阈值目标。
+证毕。
+\end{proof}
+
+\begin{corollary}[全预算逐点最小容量曲线与最大主化等价]\label{cor:pom-capacity-pointwise-minimal-majorization}
+固定 \(f:\Omega\to X\) 并考虑一族允许的粗化映射 \(g:X\to Y\)。
+令 \(h_g:=g\circ f\)，记其纤维向量为 \(\mathbf d_{h_g}\)。
+则以下两条等价：
+\begin{enumerate}
+  \item 对一切 \(T>0\)，\(C_{h_g}^{\mathrm{cont}}(T)\) 在该粗化族中逐点达到最小；
+  \item \(\mathbf d_{h_g}\) 在该粗化族的主化序中达到极大元。
+\end{enumerate}
+特别地，当允许的粗化仅由二元块组成时，
+逐点最小容量曲线由命题 \ref{prop:pom-binary-coarsegraining-concave-pairing-extremes}
+中的 \(P_{\min}\)（即大配大）实现。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-coarsegraining-majorization-schur}，
+对每个固定 \(T>0\)，泛函
+\[
+\mathbf v\longmapsto \sum_i \min\{v_i,T\}
+\]
+是 Schur-凹的，故主化越大则容量越小。
+另一方面，对总质量固定的非负向量族，
+\[
+\mathbf x\succ \mathbf y
+\iff
+\sum_i\min\{x_i,T\}\le \sum_i\min\{y_i,T\}\quad(\forall\,T>0),
+\]
+故“所有阈值上逐点最小”与“主化极大”完全等价。
+二元块特例由命题 \ref{prop:pom-binary-coarsegraining-concave-pairing-extremes} 直接给出。
+证毕。
+\end{proof}
+

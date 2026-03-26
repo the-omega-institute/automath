@@ -1,0 +1,507 @@
+% This file is intended to be \input{} inside subsubsec__window6-cube-fold6-additional-results.tex.
+
+\paragraph{并行对象链：算子交换子包络与抽象括号的审计约束}
+“李括号的构造与唯一闭合”在 window-\(6\) 处被明确对象化为由离散可审计数据诱导的两条并行对象链。
+其一由超立方体坐标翻转边在折叠 \(F_6\) 下的推送计数定义生成元 \(\{L_i\}\)，并在 \(\mathfrak{gl}(V)\) 内以交换子 \([A,B]=AB-BA\) 生成最小 Lie 子代数闭包，从而得到一个由有限边计数完全决定的交换子 Lie 包络 \(\mathfrak{g}_6\)。
+其二以 \(X_6=X^{\mathrm{cyc}}_6\sqcup X^{\mathrm{bdry}}_6\) 的 \(18\oplus 3\) 分解为输入，在 \(V=\RR\langle X_6\rangle\) 上构造抽象括号并要求其与局域性、分块与奇偶等离散证书相容；在该链条中，“唯一闭合”指向在固定标号与可审计约束下的括号存在/唯一性，以及由几何 \(\ZZ_2\) 与 orbit--Levi 骨架诱导的紧致子结构极小化与残余代数选出问题。
+下文先对第一条链给出闭包与结构识别的定理结论，再将第二条链中与猜想 \ref{conj:window6-intrinsic-bracket-uniqueness} 对应的存在/唯一性推进为证书化表述。
+
+\begin{definition}[坐标翻转推送算子与交换子 Lie 包络]\label{def:window6-coordinate-pushforward-lie-envelope}
+令 \(V:=\RR\langle X_6\rangle\simeq \RR^{X_6}\) 为以 \(X_6\) 为基的实向量空间。
+对每个坐标方向 \(i\in\{1,\dots,6\}\)，令 \(L_i\in \mathrm{End}(V)\) 为由 \(Q_6\) 的第 \(i\) 位翻转边推送到 \(X_6\) 所得的计数算子：其矩阵元定义为
+\[
+(L_i)_{uv}:=\#\bigl\{\omega\in\Omega_6:\ F_6(\omega)=u,\ F_6(\omega\oplus e_i)=v\bigr\}
+\qquad (u,v\in X_6),
+\]
+其中 \(e_i\) 为第 \(i\) 位标准基向量。
+在 \(\mathfrak{gl}(V)\) 中以交换子
+\(
+[A,B]:=AB-BA
+\)
+作为李括号，并定义由 \(\{L_i\}\) 生成的最小 Lie 子代数
+\[
+\mathfrak{g}_6:=\mathrm{Lie}\langle L_1,\dots,L_6\rangle\ \subset\ \mathfrak{gl}(V),
+\]
+称为 window-\(6\) 的交换子 Lie 包络。
+\end{definition}
+
+\begin{lemma}[Fold\texorpdfstring{$^{\mathrm{bin}}_6$}{bin6} 的 Zeckendorf 低位投影实现]\label{lem:window6-foldbin6-zeckendorf-lowbit-projection}
+对任意整数 \(n\in\{0,\dots,63\}\)，取其 Zeckendorf 展开
+\[
+n=\sum_{k=2}^{10} d_k\,F_k,
+\qquad
+d_k\in\{0,1\},
+\qquad
+d_kd_{k+1}=0.
+\]
+则 window-\(6\) 的 dyadic 折叠读出可等价表述为
+\[
+\mathrm{Fold}^{\mathrm{bin}}_6(n)=(d_2,d_3,d_4,d_5,d_6,d_7)\in X_6.
+\]
+并且其纤维偏移结构由尾部三元组 \((F_8,F_9,F_{10})=(21,34,55)\) 的可行组合完全参数化（命题 \ref{prop:terminal-foldbin6-tail-cube-section}）。
+\end{lemma}
+\begin{proof}
+该结论是命题 \ref{prop:terminal-foldbin6-tail-cube-section} 的“低位截断”重述：在 \(m=6\) 锚点上，\(n\in[0,2^6)\) 的 Zeckendorf 数字在低位 \(\{F_2,\dots,F_7\}\) 上无歧义，且纤维中的全部额外自由度恰由尾部权重 \((F_8,F_9,F_{10})\) 的可行组合给出。
+因此 \(\mathrm{Fold}^{\mathrm{bin}}_6\) 可用低位 Zeckendorf 数字实现，而纤维参数化与文稿给出的尾部立方截面描述一致。证毕。
+\end{proof}
+
+\begin{lemma}[window-\(6\) 纤维的差分谱]\label{lem:window6-foldbin6-fiber-difference-spectrum}
+设 \(w\in X_6\)，并记其二进制折叠纤维为
+\(
+\mathrm{Fold}^{\mathrm{bin}}_6{}^{-1}(w)\subset\{0,\dots,63\}
+\)。
+则同一纤维中任意两点之差必属于集合
+\[
+\Delta_6:=\{0,\pm 13,\pm 21,\pm 34,\pm 55\}.
+\]
+\end{lemma}
+\begin{proof}
+命题 \ref{prop:terminal-foldbin6-tail-cube-section} 表明：任意纤维在尾部三权重 \((21,34,55)\) 的口径下可写为一个偏移集合的平移，并且该偏移集合包含于 \(\{0,21,34,55\}\)。
+因此，同一纤维中两点之差为两偏移之差，落在
+\(
+\{0,\pm 21,\pm 34,\pm 55,\pm(34-21)\}
+=\{0,\pm 21,\pm 34,\pm 55,\pm 13\}
+\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[最小交换子闭包的存在与唯一性]\label{thm:window6-lie-envelope-existence-uniqueness}
+令 \(S:=\{L_1,\dots,L_6\}\subset\mathfrak{gl}(V)\)。
+则存在唯一 Lie 子代数
+\[
+\mathfrak{g}_6
+=\bigcap\Bigl\{\mathfrak{h}\subseteq \mathfrak{gl}(V):\ \mathfrak{h}\ \text{为 Lie 子代数且}\ S\subseteq \mathfrak{h}\Bigr\},
+\]
+并且该交恰等于 \(\mathrm{Lie}\langle L_1,\dots,L_6\rangle\)。
+\end{theorem}
+\begin{proof}
+任意 Lie 子代数族的交仍为 Lie 子代数，且显然包含 \(S\)，故上述交良定并给出包含 \(S\) 的极小性。
+唯一性由“按包含关系取最小者”直接推出。证毕。
+\end{proof}
+
+\begin{proposition}[有限维情形的交换子闭包迭代终止]\label{prop:finite-dim-lie-closure-termination}
+设 \(V\) 有限维，\(S\subset\mathfrak{gl}(V)\) 为有限集合。
+令
+\[
+\mathfrak{g}^{(0)}:=\Span(S),\qquad
+\mathfrak{g}^{(n+1)}:=\mathfrak{g}^{(n)}+\Span\bigl\{[A,B]:\ A\in S,\ B\in\mathfrak{g}^{(n)}\bigr\}.
+\]
+则存在 \(N\) 使得 \(\mathfrak{g}^{(N)}=\mathfrak{g}^{(N+1)}=\cdots\)，并且稳定值 \(\mathfrak{g}^{(N)}\) 等于定理 \ref{thm:window6-lie-envelope-existence-uniqueness} 所定义的最小 Lie 子代数。
+\end{proposition}
+\begin{proof}
+由于 \(\dim\mathfrak{gl}(V)<\infty\)，序列 \(\dim\mathfrak{g}^{(n)}\) 为非降整数列且有上界，故必稳定：存在 \(N\) 使得 \(\dim\mathfrak{g}^{(N)}=\dim\mathfrak{g}^{(N+1)}\)。
+由 \(\mathfrak{g}^{(N)}\subseteq\mathfrak{g}^{(N+1)}\) 得 \(\mathfrak{g}^{(N)}=\mathfrak{g}^{(N+1)}\)，从而对所有 \(n\ge N\) 恒等。\par
+由构造可知 \(\mathfrak{g}^{(N)}\) 包含 \(S\)，且对与 \(S\) 的交换子封闭；结合 Jacobi 恒等式与线性闭包可推出对全体交换子封闭，故为 Lie 子代数。
+又由于 \(\mathfrak{g}^{(N)}\) 由 \(S\) 的迭代闭包生成，满足包含 \(S\) 的极小性，从而与定理 \ref{thm:window6-lie-envelope-existence-uniqueness} 的刻画一致。证毕。
+\end{proof}
+
+\begin{lemma}[对称性]\label{lem:window6-li-symmetric}
+对每个 \(i\in\{1,\dots,6\}\)，矩阵 \(L_i\) 为对称矩阵：\(L_i^{\mathsf T}=L_i\)。
+\end{lemma}
+\begin{proof}
+映射 \(\omega\mapsto \omega\oplus e_i\) 为 \(\Omega_6\) 上的对合。
+若 \(\omega\) 对 \((L_i)_{uv}\) 贡献一次计数，则 \(\omega\oplus e_i\) 对 \((L_i)_{vu}\) 贡献一次计数，故 \((L_i)_{uv}=(L_i)_{vu}\)。证毕。
+\end{proof}
+
+\begin{lemma}[零对角与迹零]\label{lem:window6-li-traceless}
+对每个 \(i\in\{1,\dots,6\}\)，有 \((L_i)_{uu}=0\ (\forall u\in X_6)\)，从而 \(\tr(L_i)=0\)。
+因此 \(\mathfrak{g}_6\subseteq \mathfrak{sl}(V)\)。
+\end{lemma}
+\begin{proof}
+记 \(n=\mathrm{int}_6(\omega)\in\{0,\dots,63\}\)。翻转第 \(i\) 位等价于 \(n\mapsto n\oplus 2^{6-i}\)，其差值的绝对值属于 \(\{1,2,4,8,16,32\}\)。
+若存在 \(u\in X_6\) 使得 \((L_i)_{uu}>0\)，则存在 \(\omega\) 使 \(F_6(\omega)=F_6(\omega\oplus e_i)=u\)，等价于存在同一纤维中的两点 \(n,n\oplus 2^{6-i}\in \mathrm{Fold}^{\mathrm{bin}}_6{}^{-1}(u)\)。
+由引理 \ref{lem:window6-foldbin6-fiber-difference-spectrum}，同一纤维中两点之差只能落在 \(\Delta_6=\{0,\pm 13,\pm 21,\pm 34,\pm 55\}\)。
+由于 \(\{1,2,4,8,16,32\}\cap\{13,21,34,55\}=\varnothing\)，矛盾。
+故 \((L_i)_{uu}=0\) 对所有 \(u\) 成立。
+迹为零随即成立。\par
+又因 \(\tr([A,B])=0\) 且 \(\mathfrak{sl}(V)\) 在交换子下封闭，故由 \(L_i\) 生成的 Lie 子代数包含于 \(\mathfrak{sl}(V)\)。证毕。
+\end{proof}
+
+\begin{remark}[对称/反对称分解与交换子闭合]\label{rem:window6-sl-decomposition-so-sym0}
+设 \(\dim V=21\) 且特征不为 \(2\)。
+记
+\[
+\mathrm{Sym}_0(V):=\{S\in\mathfrak{sl}(V):\ S^{\mathsf T}=S\},
+\qquad
+\mathfrak{so}(V):=\{K\in\mathfrak{sl}(V):\ K^{\mathsf T}=-K\}.
+\]
+则有向量空间直和分解
+\[
+\mathfrak{sl}(V)=\mathfrak{so}(V)\oplus \mathrm{Sym}_0(V),
+\qquad
+\dim\mathfrak{so}(V)=210,\ \dim \mathrm{Sym}_0(V)=230.
+\]
+并且交换子满足
+\(
+[\mathrm{Sym}_0,\mathrm{Sym}_0]\subset \mathfrak{so}
+\)、
+\(
+[\mathfrak{so},\mathrm{Sym}_0]\subset \mathrm{Sym}_0
+\)、
+\(
+[\mathfrak{so},\mathfrak{so}]\subset \mathfrak{so}
+\)。
+\end{remark}
+
+\begin{theorem}[交换子派生部分的正交闭合（window-\(6\)）]\label{thm:window6-lie-envelope-so21-from-commutators}
+在定义 \ref{def:window6-coordinate-pushforward-lie-envelope} 的设定下，令
+\[
+\mathfrak{k}_6:=\mathrm{Lie}\Bigl\langle [L_i,L_j]:\ 1\le i<j\le 6\Bigr\rangle\ \subset\ \mathfrak{gl}(V).
+\]
+则 \(\mathfrak{k}_6=\mathfrak{so}(V)\cong \mathfrak{so}(21)\)，并且 \(\dim\mathfrak{k}_6=210\)。
+\end{theorem}
+\begin{proof}
+由引理 \ref{lem:window6-li-symmetric}，对任意 \(i<j\) 有
+\(
+[L_i,L_j]^{\mathsf T}=-[L_i,L_j]
+\)，故 \([L_i,L_j]\in\mathfrak{so}(V)\)。
+因此 \(\mathfrak{k}_6\subseteq\mathfrak{so}(V)\)，从而 \(\dim\mathfrak{k}_6\le \dim\mathfrak{so}(V)=21\cdot 20/2=210\)。\par
+另一方面，脚本 \texttt{\detokenize{scripts/exp_window6_lie_envelope_orthogonal_part.py}} 以有限穷举构造 \(L_i\)，并在模素数口径下对约化子代数 \((\mathfrak{k}_6)_p\subset \mathfrak{gl}(V_{\FF_p})\) 的闭包维数给出满维证书（见 \eqref{eq:window6_lie_envelope_orthogonal_part_dim}），即 \(\dim_{\FF_p}(\mathfrak{k}_6)_p=210\)。
+令 \(V_{\QQ}:=\QQ\langle X_6\rangle\)，并记
+\(
+\mathfrak{k}_{6,\QQ}:=\Lie_{\QQ}\langle [L_i,L_j]:\,1\le i<j\le 6\rangle\subset\mathfrak{gl}(V_{\QQ})
+\)。
+由引理 \ref{lem:modp-lie-dimension-upperbound} 的维数提升不等式，得到 \(\dim_{\QQ}\mathfrak{k}_{6,\QQ}\ge 210\)，从而 \(\dim_{\RR}\mathfrak{k}_{6}=\dim_{\QQ}\mathfrak{k}_{6,\QQ}\ge 210\)。
+故 \(\dim\mathfrak{k}_6=210\)，并由包含关系 \(\mathfrak{k}_6\subseteq\mathfrak{so}(V)\) 得 \(\mathfrak{k}_6=\mathfrak{so}(V)\)。证毕。
+\end{proof}
+
+\begin{lemma}[模素数线性独立性证书的提升]\label{lem:modp-independence-lift}
+设 \(A_1,\dots,A_r\in \Mat_n(\ZZ)\)。
+若存在素数 \(p\) 使得其约化 \(\overline{A}_1,\dots,\overline{A}_r\in \Mat_n(\FF_p)\) 在 \(\FF_p\) 上线性无关，则 \(A_1,\dots,A_r\) 在 \(\QQ\) 上线性无关。
+\end{lemma}
+\begin{proof}
+若存在非平凡 \(\QQ\)-线性关系 \(\sum_i q_iA_i=0\)，乘以分母最小公倍数得非平凡整数关系 \(\sum_i c_iA_i=0\) 且 \(\gcd(c_1,\dots,c_r)=1\)。
+模 \(p\) 化得到 \(\sum_i \overline{c}_i\,\overline{A}_i=0\)，其中至少一个 \(\overline{c}_i\neq 0\)，与 \(\{\overline{A}_i\}\) 的线性无关矛盾。证毕。
+\end{proof}
+
+\begin{lemma}[模素数维数证书的特征 \(0\) 提升]\label{lem:modp-lie-dimension-upperbound}
+设 \(A_1,\dots,A_k\in\mathfrak{sl}(n,\ZZ)\)，并定义
+\[
+\mathfrak{g}_{\QQ}:=\Lie_{\QQ}\langle A_1,\dots,A_k\rangle\ \subset\ \mathfrak{sl}(n,\QQ).
+\]
+对任意素数 \(p\)，令 \(\overline{A}_i\) 为 \(A_i\) 在 \(\FF_p\) 上的约化，并定义
+\[
+\mathfrak{g}_{p}:=\Lie_{\FF_p}\langle \overline{A}_1,\dots,\overline{A}_k\rangle\ \subset\ \mathfrak{sl}(n,\FF_p).
+\]
+则有不等式
+\[
+\dim_{\FF_p}\mathfrak{g}_{p}\ \le\ \dim_{\QQ}\mathfrak{g}_{\QQ}.
+\]
+\end{lemma}
+\begin{proof}
+取 \(\mathfrak{g}_{\QQ}\) 的一组 \(\QQ\)-基并通分，可得一个自由 \(\ZZ\)-模 \(\Lambda\subset \mathfrak{sl}(n,\ZZ)\) 满足 \(\Lambda\otimes_{\ZZ}\QQ=\mathfrak{g}_{\QQ}\)。
+将 \(\Lambda\) 模 \(p\) 约化得到 \(\overline{\Lambda}\subset\mathfrak{sl}(n,\FF_p)\)，其 \(\FF_p\)-线性张成维数至多为 \(\rank_{\ZZ}\Lambda=\dim_{\QQ}\mathfrak{g}_{\QQ}\)。
+另一方面，\(\mathfrak{g}_{p}\) 由 \(\{\overline{A}_i\}\) 的 Lie 词张成，且每一 Lie 词都来自整数矩阵 Lie 词的约化，故包含于 \(\Span_{\FF_p}(\overline{\Lambda})\)。
+于是 \(\dim_{\FF_p}\mathfrak{g}_{p}\le \dim_{\QQ}\mathfrak{g}_{\QQ}\)。证毕。
+\end{proof}
+
+\begin{theorem}[window-\(6\) 推送交换子包络的结构识别]\label{thm:window6-lie-envelope-sl21}
+在定义 \ref{def:window6-coordinate-pushforward-lie-envelope} 的设定下，\(|X_6|=21\)。
+并且
+\[
+\mathfrak{g}_6=\mathfrak{sl}(V)\cong \mathfrak{sl}_{21}(\RR),
+\qquad
+\dim \mathfrak{g}_6=21^2-1=440.
+\]
+\end{theorem}
+\begin{proof}
+由引理 \ref{lem:window6-li-traceless}，\(\mathfrak{g}_6\subseteq\mathfrak{sl}(V)\)，故 \(\dim\mathfrak{g}_6\le \dim\mathfrak{sl}(V)=21^2-1=440\)。\par
+令 \(V_{\QQ}:=\QQ\langle X_6\rangle\)，并记 \(\mathfrak{g}_{6,\QQ}:=\Lie_{\QQ}\langle L_1,\dots,L_6\rangle\subseteq \mathfrak{sl}(V_{\QQ})\)。
+则 \(\mathfrak{g}_6=\mathfrak{g}_{6,\QQ}\otimes_{\QQ}\RR\)，从而 \(\dim_{\RR}\mathfrak{g}_6=\dim_{\QQ}\mathfrak{g}_{6,\QQ}\)。\par
+取任意奇素数 \(p\)。
+将整数矩阵 \(L_i\in \Mat_{21}(\ZZ)\) 模 \(p\) 约化得到 \(\overline{L}_i\in \Mat_{21}(\FF_p)\)，并记
+\(
+(\mathfrak{g}_6)_p:=\Lie_{\FF_p}\langle \overline{L}_1,\dots,\overline{L}_6\rangle\subseteq \mathfrak{sl}(21,\FF_p)
+\)。
+脚本 \texttt{\detokenize{scripts/exp_window6_lie_envelope.py}} 对 \((\mathfrak{g}_6)_p\) 的闭包维数给出证书化输出（见 \eqref{eq:window6_lie_envelope_invariants}），其结果为
+\(
+\dim_{\FF_p}(\mathfrak{g}_6)_p=440
+\)。
+由引理 \ref{lem:modp-lie-dimension-upperbound}，得到 \(\dim_{\QQ}\mathfrak{g}_{6,\QQ}\ge 440\)。
+结合上界 \(\dim\mathfrak{g}_6\le 440\)，可得 \(\dim\mathfrak{g}_6=440\)，从而 \(\mathfrak{g}_6=\mathfrak{sl}(V)\)。证毕。
+\end{proof}
+
+\begin{remark}[结构层闭合的含义]\label{rem:window6-lie-envelope-compact-substructure}
+定理 \ref{thm:window6-lie-envelope-sl21} 表明：若括号取交换子且闭包对象取定义 \ref{def:window6-coordinate-pushforward-lie-envelope} 的 \(\mathfrak{g}_6\)，则闭合后的 Lie 代数为满的 \(\mathfrak{sl}_{21}\)，而非低秩的 \(21\) 维简单代数。
+因此，任何以 \(B_3/C_3\) 等根型为目标的结构性陈述，必须被理解为对 \(\mathfrak{sl}_{21}\) 内某一\emph{受限子代数}或\emph{可观测紧致部分}的抽取结论，其唯一性应来自离散分级与可审计选择律，而非来自交换子包络本身的闭合定义。
+\end{remark}
+
+\begin{remark}[关于“内部伴随实现”断言的必要修正]\label{rem:window6-internal-adjoint-realization-obstruction}
+若存在一个以 \(V=\RR\langle X_6\rangle\) 为底空间的 \(21\) 维 Lie 代数结构 \((V,[-,-]_6)\)，使得每个 \(L_i\) 都可写为某个元素的伴随算子
+\(
+L_i=\mathrm{ad}_{x_i}
+\)
+（\(x_i\in V\)），则 \(\mathfrak{g}_6=\mathrm{Lie}\langle L_1,\dots,L_6\rangle\) 作为 \(\mathfrak{gl}(V)\) 的 Lie 子代数将包含于 \(\mathrm{ad}(V)\) 的像。
+从而
+\(
+\dim\mathfrak{g}_6\le \dim V=21
+\)，与定理 \ref{thm:window6-lie-envelope-sl21} 的 \(\dim\mathfrak{g}_6=440\) 矛盾。
+因此，任何“\(L_i\) 由类型层内禀括号伴随实现”的主张，必须被理解为在附加约束（例如可观测截断、投影闭包或不变子代数抽取）后的受限版本，而不能与定义 \ref{def:window6-coordinate-pushforward-lie-envelope} 的无约束交换子闭包同时成立。
+\end{remark}
+
+\begin{theorem}[拉回括号：由交换子包络诱导类型层李代数]\label{thm:pullback-bracket-from-operator-envelope}
+设 \(\mathfrak{g}\subseteq\mathfrak{gl}(V)\) 为 Lie 子代数，并给定线性同构
+\(
+\Phi:W\overset{\cong}{\to}\mathfrak{g}
+\)。
+定义
+\[
+[x,y]_W:=\Phi^{-1}\bigl([\Phi(x),\Phi(y)]\bigr),\qquad x,y\in W,
+\]
+其中右端括号为 \(\mathfrak{gl}(V)\) 中的交换子。
+则 \((W,[-,-]_W)\) 为 Lie 代数，且 \(\Phi\) 为 Lie 代数同构。
+\end{theorem}
+\begin{proof}
+双线性与反对称性由交换子与 \(\Phi\) 的线性性直接推出。
+对任意 \(x,y,z\in W\)，由交换子在 \(\mathfrak{gl}(V)\) 中满足 Jacobi 恒等式，有
+\[
+\Phi\bigl([x,[y,z]_W]_W+[y,[z,x]_W]_W+[z,[x,y]_W]_W\bigr)
+=[\Phi(x),[\Phi(y),\Phi(z)]]+[\Phi(y),[\Phi(z),\Phi(x)]]+[\Phi(z),[\Phi(x),\Phi(y)]]=0.
+\]
+由 \(\Phi\) 为同构得括号满足 Jacobi 恒等式。证毕。
+\end{proof}
+
+\begin{theorem}[根字典拉回的抽象括号：\texorpdfstring{$B_3/C_3$}{B3/C3} 型李代数结构的显式存在性]\label{thm:window6-root-dictionary-pullback-bracket}
+记 boundary 扇区 \(X_6^{\mathrm{bdry}}\subset X_6\) 如推论 \ref{cor:terminal-foldbin6-boundary-pure-f9-alias}，并令 \(X_6^{\mathrm{cyc}}:=X_6\setminus X_6^{\mathrm{bdry}}\)。
+设给定根字典双射 \(\iota_B:X_6^{\mathrm{cyc}}\to \Phi(B_3)\)（表 \ref{tab:fold6_b3c3_root_dictionary_b3}）或 \(\iota_C:X_6^{\mathrm{cyc}}\to \Phi(C_3)\)（表 \ref{tab:fold6_b3c3_root_dictionary_c3}），并取任一双射 \(\kappa:X_6^{\mathrm{bdry}}\to\{H_1,H_2,H_3\}\) 到 Cartan 基。
+令 \(\mathfrak{g}_{B_3}\)（或 \(\mathfrak{g}_{C_3}\)）为相应紧致实型，其 Chevalley 基为 \(\{H_j\}_{j=1}^3\cup\{E_\alpha\}_{\alpha\in\Phi}\)。
+定义线性同构 \(\varphi:V\to \mathfrak{g}_{B_3}\)（或 \(\mathfrak{g}_{C_3}\)）为
+\[
+\varphi(e_w)=
+\begin{cases}
+E_{\iota(w)},& w\in X_6^{\mathrm{cyc}},\\
+\kappa(w),& w\in X_6^{\mathrm{bdry}}.
+\end{cases}
+\]
+并在 \(V\) 上定义括号 \([x,y]_6:=\varphi^{-1}([\varphi(x),\varphi(y)])\)。
+则 \((V,[-,-]_6)\) 为 \(21\) 维实 Lie 代数，其复化为 \(B_3\)（或 \(C_3\)）型简单 Lie 代数。
+\end{theorem}
+\begin{proof}
+反对称性与 Jacobi 恒等式由 \(\mathfrak{g}_{B_3}\)（或 \(\mathfrak{g}_{C_3}\)）的李括号继承，且 \(\varphi\) 为线性同构，故拉回保持这些恒等式；根型由所选 Chevalley 基的结构给出。证毕。
+\end{proof}
+
+\begin{theorem}[猜想 \ref{conj:window6-intrinsic-bracket-uniqueness} 的证书化版本]\label{thm:window6-intrinsic-bracket-certificate-theorem}
+设给定根字典 \(\iota\) 与 Cartan 锚点双射 \(\kappa\) 如定理 \ref{thm:window6-root-dictionary-pullback-bracket}，并令 \([-,-]_6\) 为其拉回括号。
+考虑如下三类可审计证书条件：
+\begin{enumerate}
+  \item \textbf{标号刚性：}类型邻接图刚性 \(\mathrm{Aut}(\Gamma_6)=\{1\}\) 与加权邻接保持置换的平凡性（命题 \ref{prop:terminal-gamma6-rigidity} 及其推论）。
+  \item \textbf{分级相容：}boundary dyadic uplift 诱导的 sheet parity 分级与括号的相容性（推论 \ref{cor:terminal-delta-parity-rule}）。
+  \item \textbf{分块相容：}orbit--Levi 骨架与 edge--flux 分块骨架对结构常数支撑与闭包模式的限制，与括号闭合相容。
+\end{enumerate}
+若上述证书条件均成立（其核验可由有限数据的确定性计算给出），则 \([-,-]_6\) 满足猜想 \ref{conj:window6-intrinsic-bracket-uniqueness} 所述的局域性/分级/分块约束，并且在保持这些审计语义不变的同构关系下是唯一的。
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:window6-root-dictionary-pullback-bracket} 已给出 \([-,-]_6\) 的存在性与 Jacobi 恒等式。
+其余约束均为对结构常数支撑与分块闭包的有限判定条件：在固定基 \(X_6\) 下可以逐项核验。\par
+唯一性来自标号刚性：若另一括号 \([-,-]_6'\) 与同一邻接/分级/分块审计语义相容，则允许的基变换必须诱导 \(\Gamma_6\) 的自同构并保持加权邻接语义；由 \(\mathrm{Aut}(\Gamma_6)=\{1\}\) 排除非平凡重标号，剩余的有限规范自由度再被分级与分块相容性条件锁定，从而在同构意义下唯一。证毕。
+\end{proof}
+
+\begin{conjecture}[标准模型规范代数的涌现刻画：作为 \texorpdfstring{$(\mathfrak{sl}_{21},\ZZ_2)$}{(sl21,Z2)} 的唯一可观测极小紧致子代数]\label{conj:window6-sm-gauge-as-minimal-compact-observable}
+在定理 \ref{thm:window6-lie-envelope-sl21} 的设定下，并联立 window-\(6\) 的几何 \(\ZZ_2\) 稳定子（推论 \ref{cor:terminal-foldbin6-geo-stabilizer-z2}）及其在 boundary 上诱导的 sheet parity 分级（推论 \ref{cor:terminal-delta-parity-rule}），
+在 \(\mathfrak{sl}(V)\) 内考虑所有与该 \(\ZZ_2\) 分级相容、并与 orbit--Levi 骨架及 edge--flux 分块接口一致的紧致约化子代数族。
+则在“秩保持且不引入额外同构自由度”的极小化口径下，预期存在唯一（至同构）极小候选，其根型为
+\[
+A_2\oplus A_1\oplus A_0,
+\qquad\text{亦即}\qquad
+\mathfrak{su}(3)\oplus\mathfrak{su}(2)\oplus\mathfrak{u}(1).
+\]
+\end{conjecture}
+
+\begin{remark}[从抽象括号到残余代数的约束性读出]\label{rem:window6-bracket-to-sm-residual}
+在定理 \ref{thm:window6-lie-envelope-sl21} 的设定下，\(\mathfrak{sl}_{21}\) 仅提供算子链的闭包环境。
+若进一步要求 orbit--Levi 骨架与阈值轻/重分裂在同一紧致包络内兼容闭合，则会强制出现 SM 型 Levi 子结构（命题 \ref{prop:window6-common-refinement-sm-levi}）。
+几何 \(\ZZ_2\) 与 sheet parity 约束在该路径中提供“有效 \(u(1)\) 方向选出”的离散输入，并与猜想 \ref{conj:window6-sm-gauge-as-minimal-compact-observable} 的极小化口径相协调。
+\end{remark}
+
+\begin{conjecture}[内禀括号的存在性与唯一性：固定基 \texorpdfstring{$X_6$}{X6} 上的审计约束]\label{conj:window6-intrinsic-bracket-uniqueness}
+设 \(V=\RR\langle X_6\rangle\)。
+猜想存在反对称双线性运算
+\[
+[-,-]_6:\ V\times V\to V
+\]
+使得 \((V,[-,-]_6)\) 成为 Lie 代数，并满足以下可审计约束：
+\begin{enumerate}
+  \item \textbf{局域性/函子性：}结构常数仅依赖于由 \(Q_6\) 一跳推送诱导的邻接关系与边多重度；因此允许的类型重标号由类型邻接图刚性 \(\mathrm{Aut}(\Gamma_6)=\{1\}\) 强制消除（命题 \ref{prop:terminal-gamma6-rigidity}；亦见推论 \ref{cor:window6-type-superselection-autgamma6}）。
+  \item \textbf{sheet parity 相容：}括号与 boundary dyadic uplift 所诱导的 \(\delta=34\) 二层覆盖分级相容（推论 \ref{cor:terminal-delta-parity-rule}）。
+  \item \textbf{根--Cartan 接口：}在文稿固定的根--Cartan 字典接口下，cyclic 扇区与 boundary 扇区在 \([-,-]_6\) 下分别闭合为根向量生成子与 Cartan 子空间，并与秩 \(3\) 的根型审计接口相容。
+  \item \textbf{Levi 分块相容：}在 orbit--Levi 骨架与 edge--flux 分块骨架的共同约束下，括号诱导的闭包保持分块语义并与 Levi 型一致性相容。
+\end{enumerate}
+并且在保持上述审计语义不变的同构关系下，该括号在同构意义下唯一。
+\end{conjecture}
+
+\begin{proposition}[抽象括号的存在/唯一性之证书化归约]\label{prop:window6-bracket-certificate-reduction}
+在猜想 \ref{conj:window6-intrinsic-bracket-uniqueness} 的约束集合固定后，括号 \([-,-]_6\) 的存在性与唯一性等价于一组有限多项式方程的可解性与解唯一性判别：该方程组由
+反对称性、Jacobi 恒等式以及局域/分块/parity 相容性所给出的结构常数约束构成。
+此外，在要求结构常数仅依赖一跳推送邻接与边多重度的口径下，类型邻接图刚性 \(\mathrm{Aut}(\Gamma_6)=\{1\}\)（命题 \ref{prop:terminal-gamma6-rigidity}）排除任何通过类型重标号吸收非唯一性的自由度，从而“同构意义下唯一”可被压缩为给定标号下的代数唯一性。
+\end{proposition}
+
+\begin{remark}[可审计证书接口]\label{rem:window6-lie-envelope-audit-route}
+定义 \ref{def:window6-coordinate-pushforward-lie-envelope} 中的 \(L_i\) 完全由有限边计数确定，因此 \(\mathfrak{g}_6\) 的生成与闭包可被归约为有限矩阵代数的确定性计算。
+脚本 \texttt{\detokenize{scripts/exp_window6_lie_envelope.py}} 输出包含 \(L_i\) 的完整计数矩阵与 \(\mathfrak{g}_6\) 的不变量，并生成可直接 \(\backslash\)input 的公式片段 \eqref{eq:window6_lie_envelope_invariants}。
+\end{remark}
+
+\begin{equation*}
+\begin{aligned}
+\dim\mathfrak{g}_6&=440,\\
+\dim[\mathfrak{g}_6,\mathfrak{g}_6]&=440,\\
+\dim Z(\mathfrak{g}_6)&=0,\\
+\mathrm{rank}\,\kappa_6&=440,\\
+\dim\,\mathrm{Comm}(\mathrm{ad}(\mathfrak{g}_6))&=1.
+\end{aligned}
+\end{equation*}
+\begin{equation*}
+\dim\mathfrak{k}_6=210.
+\end{equation*}
+
+\begin{remark}[从审计对象到定理链条的缺口定位]\label{rem:window6-bracket-closure-gaps}
+在“交换子包络”层面，定理 \ref{thm:window6-lie-envelope-existence-uniqueness}--\ref{thm:window6-lie-envelope-sl21} 已将括号构造与闭合唯一性定理化，并将闭包结构识别为 \(\mathfrak{sl}_{21}\)。
+在“抽象括号唯一性”层面，可将仍待补齐的内容压缩为两类可核验的构造/证书：
+\begin{itemize}
+  \item \textbf{类型层括号与算子交换子的桥接证书：}给出一个显式可核验的线性同构 \(\Phi:\RR\langle X_6\rangle\to\mathfrak{g}_6\subseteq\mathfrak{gl}(V)\)，并核验其为括号同态
+  \(
+  \Phi([x,y]_6)=[\Phi(x),\Phi(y)]
+  \)
+ ；一旦给出该证书，则定理 \ref{thm:pullback-bracket-from-operator-envelope} 将“类型层括号”为交换子诱导对象的主张形式化为定理。
+  \item \textbf{审计约束的逐条验算：}在固定根--Cartan 字典、sheet parity 分级与分块骨架后，逐条核验猜想 \ref{conj:window6-intrinsic-bracket-uniqueness} 的局域性、分级与分块相容性条件；该验算等价于对有限个结构常数满足的多项式系统进行证书化判别（命题 \ref{prop:window6-bracket-certificate-reduction}）。
+\end{itemize}
+\end{remark}
+
+\begin{remark}[Lee--Yang/Toeplitz--PSD 混合证书对紧致性与唯一性的增强]\label{rem:window6-leyang-toeplitz-mixed-certificates}
+将 Lee--Yang 机制并入 window-\(6\) 的“整数—证书”体系后，与抽象括号链条相关的两类关键前提可以被重写为可复核的混合证书条件，从而避免将其作为外加的连续假设。
+
+\paragraph{由可逆详细平衡核导出的紧性原则}
+在 window-\(6\) 的推送核 \(P_6\) 口径下，详细平衡给出 \(\mathsf{T}_6\) 在 \(\ell^2(X_6,\pi_6)\) 上的自伴性，并且其交换子 \(*\)-代数 \(\mathcal C_6\) 的酉群 \(\mathrm U(\mathcal C_6)\) 为紧 Lie 群（推论 \ref{cor:window6-p6-compactness-principle}）。
+因此，若将“可观测连续规范对称”限定为保持可逆读出核 \(P_6\)（等价于与 \(\mathsf{T}_6\) 交换）的连续对称，则紧致性由有限维详细平衡证书内生推出，从而排除以非紧实型为起点的分支歧义。
+
+\paragraph{unitary slice 的零点几何译码与 Lee--Yang 条件}
+自伴谱对象的代数化核验可通过 Joukowsky--Gödel 输运与 Lee--Yang 条件的单位圆零点刻画来组织。
+在文稿的统一输运模板中，定理 \ref{thm:group-jg-elliptic-two-scale-stokes-mean} 给出 \(J_r\) 下的多项式拉回分解；
+当所考虑的完成化多项式满足 Lee--Yang 条件（零点落在单位圆）时，可进一步得到椭圆输运的严格自由能恒等式（定理 \ref{thm:group-jg-leyang-mahler-free-energy}），从而将“幺正切片”要求等价转写为对整数/有理系数多项式之零点几何的可审计断言。
+
+\paragraph{Toeplitz--PSD 的可编译化证书链}
+零点几何断言可被进一步压缩为半正定证书链：在 Carath\'eodory 正性与 Toeplitz 主子矩阵半正定的等价框架下，盘内零点禁入可由有限级 Toeplitz--PSD 失败在有限维上直接见证（定理 \ref{thm:app-horizon-toeplitz-lmi}），并可通过反射系数与最小失败索引进行单标量定位（定理 \ref{thm:xi-toeplitz-det-verblunsky}）。
+因此，若把猜想 \ref{conj:window6-intrinsic-bracket-uniqueness} 的“唯一性”从纯 Jacobi 多项式系统扩展为“Jacobi + Toeplitz--PSD”混合可行性，则其排他性可被提升为一个可复核的半代数证书问题：一方面由局域/分级/分块约束给出有限多项式条件（命题 \ref{prop:window6-bracket-certificate-reduction}），另一方面由 Toeplitz--PSD 层级给出可在有限维上核验的半正定约束。
+
+\paragraph{挠子零点几何与整数锁定的交叉审计}
+除谱侧证书外，挠子账本提供一条实现无关的零点几何交叉核验接口：有限 torsion 群 \(F\) 的圆维谱配分多项式 \(Z_F\) 的零点满足 Lee--Yang 型环带界（定理 \ref{thm:xi-cdim-spectrum-zeros-annulus}），并在同阶均匀 torsion 情形给出严格的单圆等角分布律（推论 \ref{cor:xi-cdim-spectrum-homocyclic-circle-law}）。
+在 window-\(6\) 的耦合响应账本中，模 \(23\) 的零响应线唯一性（定理 \ref{thm:terminal-window6-coupling-mod23-kernel-line}）与相应 \(23\)-Sylow 证书共同给出一条纯整数的分支锁定输入；
+将该 torsion 数据映射到 \(Z_F\) 的零点几何可形成互补约束，从而进一步压缩 \(u(1)\) 归一化与离散选择通道中的歧义空间。
+\end{remark}
+
+\begin{theorem}[由可逆核到 unitary slice 与 Toeplitz--PSD 的证书链（window-\(6\)）]\label{thm:window6-p6-toeplitz-certificate-chain}
+沿用定理 \ref{thm:terminal-foldbin6-pushforward-markov} 的推送核 \(P_6\)、平稳分布 \(\pi_6\) 与 Markov 算子 \(\mathsf{T}_6\)。
+则存在一条完全由有限对象诱导的证书链条，将“紧致连续包络”与“维数槽位逐项对齐的唯一性”置于同一可复核框架内：
+\begin{enumerate}
+  \item \textbf{可逆详细平衡 \(\Rightarrow\) 自伴与紧性原则.}
+  \(\mathsf{T}_6\) 在 \(\ell^2(X_6,\pi_6)\) 上自伴，并且保持 \(P_6\)（等价保持 \(\mathsf{T}_6\)）的连续对称必为紧 Lie 群（推论 \ref{cor:window6-p6-compactness-principle}）。
+
+  \item \textbf{自伴 Markov \(\Rightarrow\) 谱区间.}
+  \(\mathsf{T}_6\) 的谱满足
+  \[
+  \mathrm{Spec}(\mathsf{T}_6)\subseteq[-1,1],
+  \qquad\text{从而}\qquad
+  \mathrm{Spec}(2\mathsf{T}_6)\subseteq[-2,2].
+  \]
+
+  \item \textbf{谱区间 \(\Rightarrow\) 单位圆零点证书.}
+  令
+  \[
+  \chi_6(\lambda):=\det\!\bigl(\lambda I-2\mathsf{T}_6\bigr)\in\QQ[\lambda],
+  \qquad n:=|X_6|=21.
+  \]
+  定义完成化多项式
+  \[
+  \widehat{\chi}_6(z):=z^{n}\,\chi_6(z+z^{-1})\in\QQ[z].
+  \]
+  则 \(\widehat{\chi}_6\) 的全部零点均满足 \(|z|=1\)。
+  因而 unitary slice 条件可被等价改写为一个纯有理系数多项式的单位圆全根断言；并且清分母后可输出整系数证书。
+
+  \item \textbf{单位圆零点 \(\Rightarrow\) Jensen 缺陷与半正定证书.}
+  由于 \(\widehat{\chi}_6\) 在开圆盘 \(|z|<1\) 内无零点，故其 Jensen 缺陷在任意半径 \(0<\varrho<1\) 上恒为零（定义 \ref{def:app-jensen-defect} 与命题 \ref{prop:app-jensen-formula-defect} 的标准推论）。
+  在本文的圆盘化完成化口径下，盘内零点禁入亦可等价组织为 Carath\'eodory 正性与 Toeplitz--PSD 层级（定理 \ref{thm:app-horizon-toeplitz-lmi}），从而得到一族有限维半正定核验接口。
+
+  \item \textbf{紧性原则 + 维数逐项对齐 \(\Rightarrow\) 唯一因子锁定.}
+  若进一步在边界塔审计口径下得到 \(D=12\) 的 Zeckendorf 原子性并要求逐项对齐，则紧李代数同构型被强制为
+  \(
+  \mathfrak u(1)\oplus\mathfrak{su}(2)\oplus\mathfrak{su}(3)
+  \)
+  且在逐项对齐意义下唯一（命题 \ref{prop:sm-zeckendorf-lie-algebra-rigidity}）。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+第 (1) 点已在定理 \ref{thm:terminal-foldbin6-pushforward-markov} 与推论 \ref{cor:window6-p6-compactness-principle} 中给出。
+\par
+对第 (2) 点：作为 Markov 算子，\(\mathsf{T}_6\) 在 \(\ell^1(X_6,\pi_6)\) 与 \(\ell^\infty(X_6)\) 上均为收缩映射（范数不增且 \(\mathsf{T}_6\mathbf 1=\mathbf 1\)）。
+由 Riesz--Thorin 插值定理得 \(\|\mathsf{T}_6\|_{\ell^2(\pi_6)\to \ell^2(\pi_6)}\le 1\)。
+结合自伴性，谱半径等于算子范数，从而 \(\mathrm{Spec}(\mathsf{T}_6)\subseteq[-1,1]\)。
+\par
+对第 (3) 点：由第 (2) 点，\(\chi_6\) 的全部零点 \(\lambda_j\) 属于 \([-2,2]\)。
+对任意此类 \(\lambda\)，方程 \(z+z^{-1}=\lambda\) 等价于二次方程 \(z^2-\lambda z+1=0\)，其判别式 \(\lambda^2-4\le 0\)，且两根满足乘积为 \(1\) 并互为复共轭，故必有 \(|z|=1\)。
+由 \(\widehat{\chi}_6(z)=0\iff \chi_6(z+z^{-1})=0\)（注意 \(z\neq 0\)），得 \(\widehat{\chi}_6\) 的全部零点均落在单位圆上。
+\par
+第 (4) 点的 Jensen 缺陷结论为命题 \ref{prop:app-jensen-formula-defect} 对一般圆盘解析函数的直接推论；Toeplitz--PSD 层级在本文口径下由定理 \ref{thm:app-horizon-toeplitz-lmi} 给出一种可复核的半正定核验范式。
+\par
+第 (5) 点为命题 \ref{prop:sm-zeckendorf-lie-algebra-rigidity} 的直接应用。
+证毕。
+\end{proof}
+
+\begin{remark}[链条中已作为正文结论出现的环节与标准推论环节]\label{rem:window6-p6-toeplitz-chain-what-is-internal}
+定理 \ref{thm:window6-p6-toeplitz-certificate-chain} 的第 (1) 点与第 (5) 点分别对应文稿中的推送核可逆性/紧性原则接口（定理 \ref{thm:terminal-foldbin6-pushforward-markov}、推论 \ref{cor:window6-p6-compactness-principle}）与 Zeckendorf 原子性下的 SM 刚性（命题 \ref{prop:sm-zeckendorf-lie-algebra-rigidity}）。
+第 (2)--(4) 点为在本文圆盘化与 Toeplitz--PSD 证书语言中常用的标准推论：由 Markov 收缩与自伴性得到谱区间界，再由 \(z+z^{-1}\) 完成化把区间谱改写为单位圆零点，最后用 Jensen 缺陷与 Toeplitz--PSD 层级给出等价或互补的有限维核验接口（定义 \ref{def:app-jensen-defect}、命题 \ref{prop:app-jensen-formula-defect}、定理 \ref{thm:app-horizon-toeplitz-lmi}）。
+\end{remark}
+
+\input{subsubsec__window6_leyang_certificate_proof_chain}
+\input{subsubsec__window6_rootcartan_boundarytower_uniqueness}
+\input{subsubsec__window6_lie_bracket_unique_closure_synthesis}
+\input{subsubsec__window6_lie_bracket_continued_proof}
+
+\begin{remark}[射影不变量、局部因子与 \(2\)-进地址化：对“存在/唯一”的三类增量约束]\label{rem:window6-leyang-integer-audit-triple-rigidity}
+在 window-\(6\) 的审计范式下，Lee--Yang 模块与整数证书链的增益并不体现在引入新的连续结构，而在于把若干原本依赖结构选择的环节，重写为三类可交叉核验的刚性约束之交汇：射影不变量约束、算术判别式/局部因子约束、以及 \(2\)-进动力学地址化约束。
+该重写的作用是将“存在性/唯一性”从纯形式的代数闭包问题，推进到可输出证书的复核任务。
+
+\paragraph{证明对象的可审计化起点}
+交换子包络链条以定义 \ref{def:window6-coordinate-pushforward-lie-envelope} 的整数计数算子 \(L_i\) 为生成元，并以交换子闭包定义 \(\mathfrak g_6\)。
+该对象链在结构上已由定理 \ref{thm:window6-lie-envelope-sl21} 完成识别：\(\mathfrak g_6=\mathfrak{sl}_{21}\)。
+因此，秩 \(3\) 简单根型 \(B_3/C_3\) 的 \(21\) 维结构应被放置在抽象括号链条中（定理 \ref{thm:window6-root-dictionary-pullback-bracket} 与猜想 \ref{conj:window6-intrinsic-bracket-uniqueness}），或作为 \(\mathfrak{sl}_{21}\) 内受限可观测紧致部分的抽取目标（猜想 \ref{conj:window6-sm-gauge-as-minimal-compact-observable}）。
+
+\paragraph{整数证书链已给出的两类端点刚性}
+一方面，若“可观测紧致部分”的维数审计落在 \(D=12\) 且满足 Zeckendorf 原子性与逐项对齐口径，则其同构型被命题 \ref{prop:sm-zeckendorf-lie-algebra-rigidity} 强制为
+\(
+\mathfrak u(1)\oplus\mathfrak{su}(2)\oplus\mathfrak{su}(3)
+\)；
+该结论为“唯一闭合”的终点提供了完全离散的刚性约束。
+另一方面，\(\delta=34\) 的分级约束同时由 uplift 覆盖、几何稳定子掩码恒等式与 parity 规则给出（推论 \ref{cor:foldbin6-geo-mask-34} 及推论 \ref{cor:terminal-delta-parity-rule}），从而把猜想 \ref{conj:window6-intrinsic-bracket-uniqueness} 中的分级相容从选择性输入提升为硬结构约束。
+
+\paragraph{射影不变量的消混合接口}
+在 Lee--Yang 零点的射影化消混合框架中，变量混合修正的主导项具有严格的 \(1\)-余边界结构（命题 \ref{prop:xi-leyang-variable-mixing-coboundary}），并且有限交比集合在射影等价（\(\mathrm{PGL}_2(\CC)\) 作用）意义下为完备不变量（命题 \ref{prop:xi-leyang-crossratio-projective-fingerprint-complete}）。
+进一步，交比在两体积两零点的极限中对线性混合参数不敏感（定理 \ref{thm:xi-leyang-two-scale-crossratio-invariant}）。
+因此，一旦某一 window-\(6\) 可观测耦合（或括号结构常数的等价类）能够被函子化地编码为某个“零点/分歧点配置”的射影轨道，则射影不变量为“同构意义下唯一”提供一种可复核的离散化口径：同构自由度被压缩为有限交比集合的匹配问题，并与余边界闭路一致性方程形成互补约束。
+
+\paragraph{算术判别式核与局部因子约束}
+在椭圆化的 Lee--Yang 模型中，谱四次 \(\Pi(\lambda,y)\) 的结构被固定椭圆曲线 \(E_{\min}\) 与其判别式数据所锚定（定理 \ref{thm:xi-terminal-zm-leyang-elliptic-structure}）：
+其 \(y\)-判别式 \(4\lambda^3-4\lambda+1\) 同时实现为短 Weierstrass 模型的 \(2\)-除法多项式，并给出仅在素数 \(37\) 处坏约化的判别式/导子锚点。
+在证书语义上，这类“判别式核—局部因子”数据为零点几何提供一条实现无关的算术指纹。
+若将 window-\(6\) 的完成化多项式/谱对象与该椭圆锚点通过一个明确的函子化桥接对齐，则可将若干原本依赖于结构选择的分支（例如分级通道与可见的分歧配置）进一步压缩为“局部因子一致性”的可审计条件，从而增强排他性。
+
+\paragraph{\(2\)-进动力学地址化约束}
+除零点几何与局部因子外，文稿在 \(2\)-进通道给出一类可复核的地址化动力学指纹：碰撞矩序列在模 \(2^k\) 上进入终端纯周期相并满足严格的里程表律与线性阈值律（见段落 \ref{subsubsec:pom-collision-moment-2adic-odometer} 及其汇总模板）。
+与递归地址化“可见 \(\sigma\)-代数不扩张”的框架（\S\ref{sec:recursive-addressing}）合并后，这类 \(2\)-进指纹可被用作 transport/renormalization 的外部刚性输入：任何候选括号若宣称与协议读出兼容，则其诱导的可观测谱对象与分支选择应在该地址化动力学下保持协变或不变；该约束为 Levi 分块相容与分级相容提供一条可并行核验的动力学证书通道。
+
+\paragraph{证书化推进的可执行形态}
+在上述三类增量约束并入后，猜想 \ref{conj:window6-intrinsic-bracket-uniqueness} 的“存在/唯一”可被组织为一个混合证书可行性问题：
+\begin{itemize}
+  \item \textbf{多项式约束：}反对称性与 Jacobi 恒等式，加上局域支撑模板、parity 分级封闭与 Levi 分块相容（命题 \ref{prop:window6-bracket-certificate-reduction}）。
+  \item \textbf{半正定约束：}由 unitary slice 的 Toeplitz--PSD 证书链给出的有限维可行性（定理 \ref{thm:app-horizon-toeplitz-lmi} 与定理 \ref{thm:xi-toeplitz-det-verblunsky}；并参见注记 \ref{rem:window6-leyang-toeplitz-mixed-certificates}）。
+  \item \textbf{射影/算术/地址化约束：}由交比指纹、判别式核与 \(2\)-进动力学地址化提供的实现无关交叉核验（本注记前三段）。
+\end{itemize}
+该组织方式的关键在于：它把“同构意义下唯一”从纯代数消元，扩展为“多项式 + PSD + 不变量匹配”的混合排他性判别，从而更贴近本文的“整数—证书”审计口径。
+
+\paragraph{仍需补齐的关键构造}
+要将上述增量约束上升为可引用的定理链条，缺口可集中为以下几类明确的构造问题：
+\begin{itemize}
+  \item \textbf{函子化桥接：}给出从 \((X_6,\Gamma_6,\delta=34)\) 及其可观测谱对象到某一 Lee--Yang 零点/分歧配置的显式映射，使射影指纹与判别式核可被严格解释为 window-\(6\) 侧的不变量。
+  \item \textbf{不变量同源性：}在算术口径下证明 parity 通道与局部因子/判别式核之间的强相容（从而把分级相容的证书来源由“几何可实现性”提升为“局部因子必然性”的交叉约束）。
+  \item \textbf{证书输出接口：}将候选括号与可观测紧致部分的核验数据整理为可复核的有限证书（结构常数支撑表、分级闭包核验、以及与 Toeplitz--PSD/射影指纹的一致性接口）。
+\end{itemize}
+\end{remark}

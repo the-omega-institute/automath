@@ -1,0 +1,493 @@
+% Auto-split: keep each TeX source comfortably below ~600 lines.
+%
+% This part isolates the (q+1)-dimensional S_q-symmetric exceptional block of the
+% q-replica soft-core transfer matrix T^{(q)} (equivalently A^{(q)}), and records
+% closed-form Vieta data, asymptotics, and Perron--Doob mixing consequences.
+%
+
+\paragraph{例外谱块的 Vieta 刚性与 Perron--Doob 混合常数}
+
+\begin{theorem}[例外 Perron 特征向量在 Hamming 权层上的严格单调性]\label{thm:pom-replica-softcore-exceptional-perron-hamming-monotone}
+设 \(A^{(q)}\) 为命题 \ref{prop:pom-multiplicity-composition-sq-symmetry-reduction} 的 \((q+1)\times(q+1)\) 矩阵 \eqref{eq:pom-multiplicity-composition-Aq-def}。
+记 \(\rho_q=\rho(A^{(q)})\) 为 Perron 根，并取 Perron 特征向量 \(h^{(q)}=(h_0,\dots,h_q)^{\mathsf T}\succ 0\) 满足
+\[
+A^{(q)}h^{(q)}=\rho_q h^{(q)}.
+\]
+则成立严格链
+\[
+h_0>h_1>\cdots>h_q>0.
+\]
+\end{theorem}
+\begin{proof}
+由特征方程，对任意 \(0\le k\le q-1\) 作差：
+\[
+\rho_q(h_k-h_{k+1})
+=\sum_{\ell=0}^{q}\bigl(A^{(q)}_{k,\ell}-A^{(q)}_{k+1,\ell}\bigr)h_\ell
+=\frac12\sum_{\ell=0}^{q}\Bigl(\binom{q-k}{\ell}-\binom{q-k-1}{\ell}\Bigr)h_\ell.
+\]
+由恒等式 \(\binom{n}{\ell}-\binom{n-1}{\ell}=\binom{n-1}{\ell-1}\)（并约定 \(\binom{n-1}{-1}=0\)），得
+\[
+\rho_q(h_k-h_{k+1})
+=\frac12\sum_{\ell=1}^{q-k}\binom{q-k-1}{\ell-1}\,h_\ell.
+\]
+右端为严格正数：因 \(h_\ell>0\)，且至少 \(\ell=q-k\) 项的系数为 \(1\)。
+故 \(h_k-h_{k+1}>0\) 对所有 \(k\) 成立，从而得到严格单调链。证毕。
+\end{proof}
+
+\begin{theorem}[例外谱乘积的完全闭式与三角数符号律]\label{thm:pom-replica-softcore-exceptional-spectrum-product}
+沿用命题 \ref{prop:pom-multiplicity-composition-sq-symmetry-reduction} 的
+\(S_q\)-对称降维矩阵 \(A^{(q)}\)（定义 \eqref{eq:pom-multiplicity-composition-Aq-def}），
+并记其谱（按代数重数计）为
+\[
+\mathrm{spec}\!\bigl(A^{(q)}\bigr)=\{\lambda_i^{(q)}\}_{i=0}^{q}.
+\]
+则对任意整数 \(q\ge 2\)，例外谱乘积满足严格恒等式
+\begin{equation}\label{eq:pom-replica-softcore-exceptional-product}
+\boxed{\;
+\prod_{i=0}^{q}\lambda_i^{(q)}
+\;=\;
+(-1)^{\frac{q(q+1)}{2}}\,2^{-q}. \;}
+\end{equation}
+等价地，
+\[
+\det\!\bigl(A^{(q)}\bigr)=(-1)^{\frac{q(q+1)}{2}}\,2^{-q},
+\]
+从而该乘积与 \(\varphi\) 无关并呈纯二进制刚性。
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:pom-multiplicity-composition-Aq-def}，令
+\(
+\mathbf{1}:=(1,\dots,1)^{\mathsf T}\in\RR^{q+1}
+\)
+与
+\(
+b:=(\binom{q}{0},\dots,\binom{q}{q})^{\mathsf T}
+\)
+并定义矩阵 \(C^{(q)}\in\RR^{(q+1)\times(q+1)}\) 为
+\[
+C^{(q)}_{k,l}:=\binom{q-k}{l}\qquad(0\le k,l\le q).
+\]
+则有分解
+\begin{equation}\label{eq:pom-replica-softcore-Aq-rankone-plus-C}
+A^{(q)}=\frac12\bigl(\mathbf{1}b^{\mathsf T}+C^{(q)}\bigr).
+\end{equation}
+\par
+首先计算 \(\det(C^{(q)})\)。
+令 \(R\) 为行反转置换矩阵：\((Rx)_k=x_{q-k}\)。
+则
+\[
+(RC^{(q)})_{k,l}=C^{(q)}_{q-k,l}=\binom{k}{l},
+\]
+从而 \(RC^{(q)}=P\)，其中 \(P_{k,l}:=\binom{k}{l}\) 为下三角 Pascal 矩阵，故 \(\det(P)=1\)。
+而 \(R\) 的行反转需要 \(\frac{q(q+1)}{2}\) 次交换，因此
+\begin{equation}\label{eq:pom-replica-softcore-detC}
+\det(C^{(q)})=\det(R)\det(P)=(-1)^{\frac{q(q+1)}{2}}.
+\end{equation}
+\par
+其次对 \(\det(\mathbf{1}b^{\mathsf T}+C^{(q)})\) 使用秩一行列式引理：
+\[
+\det\!\bigl(C^{(q)}+\mathbf{1}b^{\mathsf T}\bigr)=\det(C^{(q)})\Bigl(1+b^{\mathsf T}(C^{(q)})^{-1}\mathbf{1}\Bigr).
+\]
+注意 \(C^{(q)}e_0=\mathbf{1}\)（其中 \(e_0:=(1,0,\dots,0)^{\mathsf T}\)），因此 \((C^{(q)})^{-1}\mathbf{1}=e_0\)，从而
+\(
+b^{\mathsf T}(C^{(q)})^{-1}\mathbf{1}=b^{\mathsf T}e_0=\binom{q}{0}=1
+\)。
+代回得到
+\[
+\det\!\bigl(C^{(q)}+\mathbf{1}b^{\mathsf T}\bigr)=2\,\det(C^{(q)}).
+\]
+结合 \eqref{eq:pom-replica-softcore-Aq-rankone-plus-C} 与 \eqref{eq:pom-replica-softcore-detC} 即得
+\[
+\det(A^{(q)})
+=2^{-(q+1)}\det\!\bigl(C^{(q)}+\mathbf{1}b^{\mathsf T}\bigr)
+=2^{-q}\det(C^{(q)})
+=(-1)^{\frac{q(q+1)}{2}}2^{-q},
+\]
+等价于 \eqref{eq:pom-replica-softcore-exceptional-product}。证毕。
+\end{proof}
+
+\begin{theorem}[例外谱迹的闭式：\texorpdfstring{$2^{q-1}$}{2^{q-1}} 主项与 \texorpdfstring{$\mathbb Z[\varphi]$}{Z[phi]} 校正项]\label{thm:pom-replica-softcore-exceptional-spectrum-trace}
+在定理 \ref{thm:pom-replica-softcore-exceptional-spectrum-product} 的设定下，令
+\(
+\rho_q:=\max\{\lambda_i^{(q)}\}
+=\rho\!\bigl(A^{(q)}\bigr)=\rho\!\bigl(T^{(q)}\bigr)
+\)
+为 Perron 根。
+则例外谱和（即例外块迹）满足严格恒等式
+\begin{equation}\label{eq:pom-replica-softcore-exceptional-trace}
+\boxed{\;
+\sum_{i=0}^{q}\lambda_i^{(q)}
+\;=\;
+2^{q-1}
+\;+\;
+\frac{\varphi^{q+2}+(-1)^q\varphi^{-q}}{2(\varphi+2)}\; } .
+\end{equation}
+因此例外块的迹由二项主项 \(2^{q-1}\) 与一个显式的 \(\mathbb Z[\varphi]\)-校正项构成。
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:pom-multiplicity-composition-Aq-def} 直接计算迹：
+\[
+\Tr\!\bigl(A^{(q)}\bigr)
+=\sum_{k=0}^{q}A^{(q)}_{k,k}
+=\frac12\sum_{k=0}^{q}\binom{q}{k}
+\;+\;\frac12\sum_{k=0}^{q}\binom{q-k}{k}
+=2^{q-1}+\frac12\sum_{k=0}^{q}\binom{q-k}{k}.
+\]
+利用经典恒等式
+\(
+\sum_{k\ge 0}\binom{q-k}{k}=F_{q+1}
+\)
+（其中 \(F_n\) 为 Fibonacci 数），得到
+\[
+\Tr\!\bigl(A^{(q)}\bigr)=2^{q-1}+\frac12F_{q+1}.
+\]
+再用 Binet 公式 \(F_{q+1}=\frac{\varphi^{q+1}+(-1)^q\varphi^{-(q+1)}}{\sqrt5}\)
+与恒等式 \(\varphi+2=\sqrt5\,\varphi\)，可化为
+\[
+\frac12F_{q+1}
+=\frac{\varphi^{q+2}+(-1)^q\varphi^{-q}}{2(\varphi+2)}.
+\]
+最后由于 \(\Tr(A^{(q)})=\sum_i\lambda_i^{(q)}\)，即得 \eqref{eq:pom-replica-softcore-exceptional-trace}。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/subsubsec__pom-replica-softcore-fibonacci-moment-collapse}
+
+\begin{theorem}[第二例外特征值的主阶渐近：向 \texorpdfstring{$\varphi^q/2$}{phi^q/2} 的指数贴近]\label{thm:pom-replica-softcore-second-exceptional-eigenvalue-asymptotics}
+令 \(\nu_q\) 为例外谱中次大特征值（即 \((S_q)\)-对称子空间上仅次于 \(\rho_q\) 的特征值）。
+则 \(0<\nu_q<\varphi^q/2\)，并且存在严格渐近展开
+\begin{equation}\label{eq:pom-replica-softcore-nuq-asymptotics}
+\nu_q
+=\frac{\varphi^{q}}{2}\Bigg(1-r^{q}
++O\!\bigl(q\,r^{2q}\bigr)\Bigg),
+\qquad q\to\infty,
+\end{equation}
+其中
+\(
+r:=\frac{5+2\sqrt5}{10}
+=\frac12\bigl(1+\frac{2\sqrt5}{5}\bigr)\in(0,1)
+\)。
+换言之，\(\nu_q\) 在相对误差尺度上以底数 \(r\) 指数趋近于 \(\varphi^q/2\)。
+\end{theorem}
+\begin{proof}[证明要点]
+由命题 \ref{prop:pom-multiplicity-composition-replica-explicit-eigs}，
+\(
+T^{(q)}=\frac12(\mathbf{1}\mathbf{1}^{\mathsf T}+K^{\otimes q})
+\)
+且 \(K\) 可在本征基 \(\{v^+,v^-\}\) 上对角化（定理 \ref{thm:pom-replica-softcore-tensor-eigenbasis}）。
+将 \(S_q\)-对称子空间在该张量谱层上坐标化后，例外块可视为对 \(K^{\otimes q}\) 最大正谱层的秩一耦合扰动；
+在 \(q\to\infty\) 下，主耦合系数由单坐标重叠比决定，从而出现底数 \(r\) 的指数校正项，
+二阶误差由高阶谱层的指数抑制与标准 resolvent 展开给出。证毕。
+\end{proof}
+
+\begin{theorem}[谱隙比率的指数律与对数分离速率]\label{thm:pom-replica-softcore-gap-ratio-log-separation}
+令 \(\rho_q\) 与 \(\nu_q\) 如上，则
+\begin{equation}\label{eq:pom-replica-softcore-gap-ratio}
+\frac{\nu_q}{\rho_q}
+=\Big(\frac{\varphi}{2}\Big)^{q}\Big(1+o(1)\Big),
+\qquad q\to\infty,
+\end{equation}
+并且对数分离满足
+\begin{equation}\label{eq:pom-replica-softcore-gap-log-separation}
+\log\frac{\rho_q}{\nu_q}
+= q\log\frac{2}{\varphi}+o(q).
+\end{equation}
+因此例外谱内的主次两特征值在对数尺度上以速率 \(\log(2/\varphi)\) 线性分离。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-replica-softcore-second-exceptional-eigenvalue-asymptotics}，
+\(
+\nu_q=\frac{\varphi^q}{2}(1+o(1))
+\)。
+另一方面，\(T^{(q)}\) 为对称矩阵且满足
+\(
+T^{(q)}=\frac12(\mathbf{1}\mathbf{1}^{\mathsf T}+K^{\otimes q})
+\)
+（命题 \ref{prop:pom-multiplicity-composition-replica-explicit-eigs}）。
+由 Weyl 扰动界（对称矩阵的特征值稳定性），有
+\[
+\bigl|\rho_q-2^{q-1}\bigr|
+\le \frac12\,\rho\!\bigl(K^{\otimes q}\bigr)
+=\frac{\varphi^q}{2},
+\]
+从而 \(\rho_q=2^{q-1}(1+o(1))\)（因 \((\varphi/2)^q\to 0\)）。
+将两式相除即得 \eqref{eq:pom-replica-softcore-gap-ratio}，
+再取对数得到 \eqref{eq:pom-replica-softcore-gap-log-separation}。证毕。
+\end{proof}
+
+\begin{theorem}[Perron 方向的定量稳定性：与均匀向量的夹角指数小]\label{thm:pom-replica-softcore-perron-angle-uniform}
+令 \(N=2^q\)，并记单位均匀向量
+\[
+u:=\frac{1}{\sqrt{N}}\mathbf 1\in\RR^{U_q}.
+\]
+令 \(v\) 为 \(T^{(q)}\) 的单位 Perron 特征向量（取 \(\|v\|_2=1\)、\(v\succ 0\)）。
+则对任意 \(q\ge 1\) 有角度估计
+\[
+\sin\angle(u,v)\ \le\ \Bigl(\frac{\varphi}{2}\Bigr)^{q},
+\qquad \bigl(\varphi=\tfrac{1+\sqrt5}{2}\bigr).
+\]
+从而
+\[
+|u^{\mathsf T}v|\ \ge\ \sqrt{1-\Bigl(\frac{\varphi}{2}\Bigr)^{2q}}.
+\]
+\end{theorem}
+\begin{proof}
+写
+\[
+T^{(q)}=\frac12J+\frac12D,\qquad
+J:=\mathbf 1\mathbf 1^{\mathsf T},\qquad D:=K^{\otimes q}.
+\]
+矩阵 \(\frac12J\) 的谱为 \(\{2^{q-1},0,\dots,0\}\)，其 Perron 特征向量为 \(u\)，并且 \(\frac12J\) 的 Perron 特征值与其余谱的间隙为 \(2^{q-1}\)。
+另一方面，由张量谱乘法性，\(\|D\|_2=\rho(D)=\varphi^q\)，故
+\(
+\|D/2\|_2=\varphi^q/2
+\)。
+对称谱扰动的 \(\sin\Theta\) 型估计（Davis--Kahan）给出
+\[
+\sin\angle(u,v)\le \frac{\|D/2\|_2}{2^{q-1}}=\Bigl(\frac{\varphi}{2}\Bigr)^q.
+\]
+再由 \(|u^{\mathsf T}v|=\cos\angle(u,v)\) 得到第二式。证毕。
+\end{proof}
+
+\begin{theorem}[Perron--Doob 变换的可逆马尔可夫核与相关衰减常数]\label{thm:pom-replica-softcore-doob-reversible-markov-corr}
+令 \(\psi^{(q)}\succ 0\) 为 \(T^{(q)}\) 的 Perron 特征向量（取 \(\|\psi^{(q)}\|_2=1\)）。
+定义 Perron--Doob 变换核
+\[
+\mathcal{P}^{(q)}(u,v)
+:=\frac{T^{(q)}_{u,v}\,\psi^{(q)}_{v}}{\rho_q\,\psi^{(q)}_{u}},
+\qquad u,v\in U_q.
+\]
+则 \(\mathcal{P}^{(q)}\) 为可逆马尔可夫核，其平稳分布为
+\[
+\pi^{(q)}(u)\propto \bigl(\psi^{(q)}_{u}\bigr)^2.
+\]
+并且对任意平方可积可观测量 \(f,g\in L^2(\pi^{(q)})\)，若 \((X_n)_{n\ge 0}\) 为以 \(\mathcal{P}^{(q)}\) 为转移核、以 \(\pi^{(q)}\) 为初始分布的平稳链，则有谱控制的相关衰减：
+\begin{equation}\label{eq:pom-replica-softcore-cov-decay}
+\bigl|\mathrm{Cov}_{\pi^{(q)}}(f(X_0),g(X_n))\bigr|
+\;\le\;
+\|f\|_{L^2(\pi^{(q)})}\,\|g\|_{L^2(\pi^{(q)})}\,
+\Bigl(\frac{\Lambda_q}{\rho_q}\Bigr)^{n},
+\end{equation}
+其中 \(\Lambda_q:=\max\{|\lambda|:\lambda\in\mathrm{spec}(T^{(q)}),\ |\lambda|<\rho_q\}\)。
+若 \(f,g\) 进一步限制为 \(S_q\)-对称可观测量（即仅依赖 Hamming 权），则上式中的 \(\Lambda_q\) 可替换为
+\(
+\max_{1\le i\le q}|\lambda_i^{(q)}|
+\)；
+并由定理 \ref{thm:pom-replica-softcore-second-exceptional-eigenvalue-asymptotics}--\ref{thm:pom-replica-softcore-gap-ratio-log-separation} 可知当 \(q\to\infty\) 时该量由 \(\nu_q\) 饱和。
+结合定理 \ref{thm:pom-replica-softcore-gap-ratio-log-separation} 与命题 \ref{prop:pom-multiplicity-composition-replica-explicit-eigs} 的固定谱簇上界，
+可得当 \(q\to\infty\) 时衰减基数满足
+\[
+\frac{\Lambda_q}{\rho_q}
+=\Big(\frac{\varphi}{2}\Big)^q\bigl(1+o(1)\bigr),
+\]
+从而相关长度在 \(q\) 上呈 \(1/q\) 量级。
+\end{theorem}
+\begin{proof}[证明要点]
+由 Perron--Frobenius 理论与 Doob 变换的标准构造，\(\mathcal{P}^{(q)}\) 为马尔可夫核且以 \(\pi^{(q)}\) 为平稳分布。
+又因 \(T^{(q)}\) 对称，\(\mathcal{P}^{(q)}\) 在 \(L^2(\pi^{(q)})\) 上自伴随，且
+\(
+\mathcal{P}^{(q)}
+\)
+与
+\(
+T^{(q)}/\rho_q
+\)
+相似，故其非平凡谱半径为 \(\Lambda_q/\rho_q\)。
+对中心化可观测量应用谱分解即得 \eqref{eq:pom-replica-softcore-cov-decay}。
+最后由命题 \ref{prop:pom-multiplicity-composition-replica-explicit-eigs} 的固定谱簇
+\(\bigl\{ \frac{(-1)^j\varphi^{q-2j}}{2}\bigr\}_{j\ge 1}\)
+给出 \(\Lambda_q\ge \varphi^{q-2}/2\)，并与定理 \ref{thm:pom-replica-softcore-gap-ratio-log-separation} 的例外块主指数律合并即可得到 \(q\to\infty\) 的指数率。证毕。
+\end{proof}
+
+\begin{theorem}[固定谱簇的显式张量本征基：\texorpdfstring{$K^{\otimes q}$}{K^⊗q} 的坐标化对角化]\label{thm:pom-replica-softcore-tensor-eigenbasis}
+令
+\(
+K=\begin{pmatrix}1&1\\[2pt]1&0\end{pmatrix}
+\),
+并取其特征向量
+\(
+v^+=(\varphi,1)^{\mathsf T}
+\)、\(
+v^-=(1,-\varphi)^{\mathsf T}
+\)，对应特征值 \(\varphi\) 与 \(-\varphi^{-1}\)。
+对任意 \(S\subseteq[q]\)，定义张量向量
+\[
+f_S:=\bigotimes_{i=1}^{q} w_i,\qquad
+w_i=
+\begin{cases}
+v^-,& i\in S,\\
+v^+,& i\notin S.
+\end{cases}
+\]
+则对 \(D^{(q)}:=K^{\otimes q}\) 有严格本征关系
+\[
+D^{(q)}f_S = (-1)^{|S|}\varphi^{\,q-2|S|}\,f_S.
+\]
+并且由于
+\(
+T^{(q)}=\tfrac12(\mathbf{1}\mathbf{1}^{\mathsf T}+D^{(q)})
+\)
+且 \(\mathbf{1}\mathbf{1}^{\mathsf T}\) 在 \(\mathbf{1}^\perp\) 上恒为零，
+任取 \(|S|=j\) 的等特征空间内与 \(\mathbf{1}\) 正交的 \(\binom{q}{j}-1\) 维子空间，
+皆为 \(T^{(q)}\) 的显式本征子空间，特征值为
+\(
+\tfrac12(-1)^j\varphi^{q-2j}
+\)。
+该结论给出除例外谱外全部高重数谱层的完全坐标化描述。
+\end{theorem}
+\begin{proof}
+前一条由 \(D^{(q)}\) 的张量谱乘法性直接给出。
+后一条由
+\(
+T^{(q)}|_{\mathbf{1}^\perp}=\frac12 D^{(q)}|_{\mathbf{1}^\perp}
+\)
+以及每个 \(D^{(q)}\) 等特征空间（维 \(\binom{q}{j}\)）与 \(\mathbf{1}^\perp\) 的维数估计得到。证毕。
+\end{proof}
+
+\begin{theorem}[特征多项式的结构性分解：例外因子与固定因子完全分离]\label{thm:pom-replica-softcore-characteristic-factorization}
+记例外块（维数 \(q+1\)）的特征多项式为
+\(
+\chi_{\mathrm{exc}}^{(q)}(x):=\prod_{i=0}^{q}(x-\lambda_i^{(q)})
+\)。
+则 \(T^{(q)}\) 的全特征多项式满足严格因子分解
+\begin{equation}\label{eq:pom-replica-softcore-characteristic-factorization}
+\chi_{T^{(q)}}(x)
+=\chi_{\mathrm{exc}}^{(q)}(x)\;
+\prod_{j=0}^{q}\Bigl(x-\frac{(-1)^j\varphi^{q-2j}}{2}\Bigr)^{\binom{q}{j}-1}.
+\end{equation}
+其中固定因子完全由张量谱簇给出，例外因子容纳全部秩一耦合效应；两者在代数上严格解耦。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-multiplicity-composition-replica-explicit-eigs} 及定理 \ref{thm:pom-replica-softcore-tensor-eigenbasis}，
+\(\frac{(-1)^j\varphi^{q-2j}}{2}\)（\(0\le j\le q\)）在 \(\mathbf{1}^\perp\) 上的本征重数至少为 \(\binom{q}{j}-1\)，
+从而固定谱簇贡献的特征因子为
+\(
+\prod_{j=0}^{q}(x-\frac{(-1)^j\varphi^{q-2j}}{2})^{\binom{q}{j}-1}
+\)。
+其余本征值至多 \(q+1\) 个且均落在 \(S_q\)-对称子空间，并与 \(A^{(q)}\) 的谱一致（命题 \ref{prop:pom-multiplicity-composition-sq-symmetry-reduction}），
+故剩余因子恰为 \(\chi_{\mathrm{exc}}^{(q)}\)。
+将全部本征值按代数重数组合即得 \eqref{eq:pom-replica-softcore-characteristic-factorization}。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-replica-softcore-word-trace-power-sums}
+\input{sections/body/pom/parts/part__pom-replica-softcore-bernoulli-subgraph-moments}
+
+\begin{theorem}[例外特征多项式的 Vieta 刚性：首一降阶项与常数项全闭式]\label{thm:pom-replica-softcore-exceptional-vieta-endpoints}
+对 \(q\ge 2\)，例外特征多项式
+\(
+\chi_{\mathrm{exc}}^{(q)}(x)=\prod_{i=0}^{q}(x-\lambda_i^{(q)})
+\)
+满足
+\begin{equation}\label{eq:pom-replica-softcore-exceptional-vieta-xq}
+\chi_{\mathrm{exc}}^{(q)}(x)
+=x^{q+1}
+-\Bigl(2^{q-1}+\frac{\varphi^{q+2}+(-1)^q\varphi^{-q}}{2(\varphi+2)}\Bigr)x^{q}
++\cdots,
+\end{equation}
+并且常数项为
+\begin{equation}\label{eq:pom-replica-softcore-exceptional-vieta-const}
+\chi_{\mathrm{exc}}^{(q)}(0)
+=(-1)^{q+1}\prod_{i=0}^{q}\lambda_i^{(q)}
+=(-1)^{q+1+\frac{q(q+1)}{2}}\,2^{-q}.
+\end{equation}
+从而例外因子的首一降阶系数与常数项在闭式意义下完全刚性。
+\end{theorem}
+\begin{proof}
+由 Vieta 公式，
+\(
+[x^{q}]\chi_{\mathrm{exc}}^{(q)}(x)=-\sum_{i=0}^{q}\lambda_i^{(q)}
+\)
+与
+\(
+\chi_{\mathrm{exc}}^{(q)}(0)=(-1)^{q+1}\prod_{i=0}^{q}\lambda_i^{(q)}
+\)。
+分别代入定理 \ref{thm:pom-replica-softcore-exceptional-spectrum-trace} 与
+定理 \ref{thm:pom-replica-softcore-exceptional-spectrum-product}
+即得 \eqref{eq:pom-replica-softcore-exceptional-vieta-xq}--\eqref{eq:pom-replica-softcore-exceptional-vieta-const}。证毕。
+\end{proof}
+
+\begin{corollary}[例外特征多项式一次项系数的显式闭式]\label{cor:pom-replica-softcore-exceptional-charpoly-linear-coefficient}
+对任意整数 \(q\ge 2\)，例外特征多项式 \(\chi_{\mathrm{exc}}^{(q)}(x)\) 的一次项系数满足
+\[
+\boxed{\;
+[x]\chi_{\mathrm{exc}}^{(q)}(x)
+=(-1)^{\frac{q(q+1)}{2}}\,2^{-q}\,\Bigl(2F_{q+1}-(-1)^q\Bigr)\; } ,
+\]
+其中 \(F_n\) 为 Fibonacci 数列（\(F_0=0,F_1=1\)）。
+\end{corollary}
+\begin{proof}
+由 Vieta 关系，\([x]\chi_{\mathrm{exc}}^{(q)}(x)=(-1)^q e_q\)，其中
+\[
+e_q=\sum_{i=0}^{q}\ \prod_{\substack{0\le j\le q\\ j\ne i}}\lambda_j^{(q)}
+=\Bigl(\prod_{j=0}^{q}\lambda_j^{(q)}\Bigr)\Bigl(\sum_{i=0}^{q}\frac{1}{\lambda_i^{(q)}}\Bigr).
+\]
+将
+\(\prod_{j=0}^{q}\lambda_j^{(q)}=\det(A^{(q)})=(-1)^{\frac{q(q+1)}{2}}2^{-q}\)
+（定理 \ref{thm:pom-replica-softcore-exceptional-spectrum-product}）
+与
+\(\sum_{i=0}^{q}\frac{1}{\lambda_i^{(q)}}=-1+2(-1)^qF_{q+1}\)
+（推论 \ref{cor:xi-terminal-replica-softcore-exceptional-reciprocal-sum-fibonacci}）
+代入即得所示闭式。证毕。
+\end{proof}
+
+\begin{proposition}[例外特征多项式第二 Vieta 系数的闭式]\label{prop:pom-replica-softcore-exceptional-vieta-e2}
+对 \(q\ge 2\)，将
+\[
+\chi_{\mathrm{exc}}^{(q)}(x)
+=\prod_{i=0}^{q}(x-\lambda_i^{(q)})
+=x^{q+1}-e_1(q)x^{q}+e_2(q)x^{q-1}-\cdots
+\]
+写为 Vieta 形式。
+则第二 Vieta 系数满足严格闭式
+\[
+\boxed{\;
+e_2(q)=\frac14\Bigl(2^{q}F_{q+1}-F_qF_{q+1}-3^{q}\Bigr)\; } .
+\]
+\end{proposition}
+\begin{proof}
+Newton 恒等式给出
+\[
+e_2(q)=\frac12\left(\Bigl(\sum_{i=0}^{q}\lambda_i^{(q)}\Bigr)^2-\sum_{i=0}^{q}\bigl(\lambda_i^{(q)}\bigr)^2\right).
+\]
+由定理 \ref{thm:pom-replica-softcore-exceptional-spectrum-trace} 的证明，有
+\(
+\sum_i\lambda_i^{(q)}=2^{q-1}+\frac12F_{q+1}
+\)；
+而结论 \ref{con:xi-terminal-replica-softcore-exceptional-spectrum-square-sum} 给出
+\(
+\sum_i(\lambda_i^{(q)})^2=4^{q-1}+\frac12\,3^q+\frac14F_{2q+2}
+\)。
+代入并使用恒等式 \(F_{2q+2}=F_{q+1}\bigl(F_{q+1}+2F_q\bigr)\) 化简，即得所示表达。证毕。
+\end{proof}
+
+\begin{conjecture}[例外特征多项式的不可约性与满对称伽罗瓦群]\label{conj:pom-replica-softcore-exceptional-charpoly-irreducible-symmetric-galois}
+对任意 \(q\ge 2\)，例外特征多项式 \(\chi_{\mathrm{exc}}^{(q)}(x)\in\QQ[x]\) 在 \(\QQ\) 上不可约，并且
+\[
+\mathrm{Gal}\!\left(\chi_{\mathrm{exc}}^{(q)}/\QQ\right)\cong S_{q+1}.
+\]
+\end{conjecture}
+
+上述猜想在有限范围内的可复现实验证书见表 \ref{tab:replica_softcore_exceptional_charpoly_galois_audit}。
+\input{sections/generated/tab_replica_softcore_exceptional_charpoly_galois_audit}
+
+\begin{theorem}[次大例外本征向量的谱层局域：向 \texorpdfstring{$j=0$}{j=0} 层的指数集中]\label{thm:pom-replica-softcore-second-exceptional-eigenvector-localization}
+令 \(\nu_q\) 与定理 \ref{thm:pom-replica-softcore-second-exceptional-eigenvalue-asymptotics} 相同，并取其单位本征向量为 \(\phi^{(q)}\)（取于例外块所在的 \((S_q)\)-对称子空间）。
+令 \(P_j\) 表示 \(D^{(q)}=K^{\otimes q}\) 的谱层正交投影（对应本征值 \((-1)^j\varphi^{q-2j}\)）。
+则存在常数 \(c>0\) 使得
+\begin{equation}\label{eq:pom-replica-softcore-second-eigvec-localization}
+1-\bigl\|\mathrm{Proj}_{\mathrm{span}\{P_0\mathbf{1}\}}\phi^{(q)}\bigr\|_2^2
+\;=\;
+O\!\bigl(r^{q}\bigr),
+\qquad q\to\infty,
+\end{equation}
+其中 \(r=\frac{5+2\sqrt5}{10}\) 同 \eqref{eq:pom-replica-softcore-nuq-asymptotics}。
+换言之，\(\nu_q\) 的本征态在例外块内以速率 \(r^{q}\) 指数集中到 \(D^{(q)}\) 的最大正谱层方向（对应 \(j=0\)），并与定理 \ref{thm:pom-replica-softcore-second-exceptional-eigenvalue-asymptotics} 的贴近尺度相一致。
+\end{theorem}
+\begin{proof}[证明要点]
+设 \(E_0:=\mathrm{Ran}(P_0)=\mathrm{span}\{(v^+)^{\otimes q}\}\) 为 \(D^{(q)}\) 的最大正谱层。
+由定理 \ref{thm:pom-replica-softcore-second-exceptional-eigenvalue-asymptotics}，\(\nu_q\) 与 \(\varphi^q/2\) 的谱距为 \(O(\varphi^q r^{q})\)。
+另一方面，除 \(E_0\) 外的全部谱层与 \(\varphi^q\) 至少相差一个常数因子（例如下一层为 \(\varphi^{q-2}\)），
+从而由谱投影的标准摄动估计可将 \(\phi^{(q)}\) 在 \(E_0^\perp\) 的分量控制为 \(O(r^{q/2})\)，
+即得到 \eqref{eq:pom-replica-softcore-second-eigvec-localization}。证毕。
+\end{proof}
+
+\endinput

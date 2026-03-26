@@ -1,0 +1,201 @@
+\paragraph{离线零点的 Dirichlet--Green 势与 Neumann 迹：Cauchy 半群、\texorpdfstring{$(-\Delta)^{1/2}$}{(-Δ)^{1/2}} 生成元与回推病态性}
+本段在上半平面镜像 Green 势口径下，把离线零点的边界 Neumann 迹组织为一条 Cauchy 半群链，并给出其 \(L^2\) 相互作用闭式、重整化 Dirichlet 能量与带限回推的噪声--分辨率律。
+
+\subparagraph{离线零点的 Green 势与边界迹}
+假设离线零点族 \(\{\rho_j\}\) 以足以交换求和与积分的方式可积（例如有限和，或满足相应的 \(L^2/L^1\) 可积性约束）。
+写
+\[
+\rho_j=\beta_j+\mathrm{i}\gamma_j,\qquad
+\delta_j:=\frac12-\beta_j>0,\qquad
+m_j\in\NN,\qquad
+z_j:=\gamma_j+\mathrm{i}\delta_j\in\mathbb H.
+\]
+对 \(z=x+\mathrm{i}a\in\mathbb H\) 定义 Dirichlet--Green 势
+\begin{equation}\label{eq:xi-offline-green-potential-P}
+\mathcal P(x,a):=\sum_j m_j\log\left|\frac{z-\overline{z_j}}{z-z_j}\right|.
+\end{equation}
+其边界 Neumann 迹在 \(a\downarrow0\) 的意义下给出
+\begin{equation}\label{eq:xi-offline-green-neumann-trace-N}
+\mathcal N(x):=\partial_a\mathcal P(x,0^+)
+=2\sum_j m_j\,\frac{\delta_j}{(x-\gamma_j)^2+\delta_j^2}.
+\end{equation}
+
+\subparagraph{Cauchy 核与尺度推进}
+记标准 Cauchy--Poisson 核为
+\[
+\mathsf P_a(x):=\frac{1}{\pi}\frac{a}{x^2+a^2}\qquad(a>0),
+\]
+并定义对 \(a\ge 0\) 的尺度推进
+\[
+\mathcal N^{(a)}:=\mathsf P_a*\mathcal N\qquad(\text{约定 }\mathsf P_0=\delta_0).
+\]
+
+\begin{theorem}[Neumann 迹的 Cauchy 半群递归与生成元]\label{thm:xi-offline-neumann-cauchy-semigroup-generator}
+在 \eqref{eq:xi-offline-green-neumann-trace-N} 的设定下：
+\begin{enumerate}
+  \item 对任意 \(a,b\ge 0\)，成立半群递归
+  \[
+  \mathcal N^{(a+b)}=\mathsf P_a*\mathcal N^{(b)}.
+  \]
+  \item 对任意 \(a\ge 0\)，有显式表示
+  \[
+  \mathcal N^{(a)}(x)
+  =2\sum_j m_j\,\frac{\delta_j+a}{(x-\gamma_j)^2+(\delta_j+a)^2}.
+  \]
+  \item 在分布意义下，对 \(a>0\) 成立演化方程
+  \[
+  \partial_a\mathcal N^{(a)}=-(-\Delta_x)^{1/2}\mathcal N^{(a)},
+  \]
+  其中 \( (-\Delta)^{1/2}\) 由 Fourier 乘子刻画：
+  \(\widehat{(-\Delta)^{1/2}f}(\xi)=|\xi|\hat f(\xi)\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:xi-offline-green-neumann-trace-N} 可写
+\[
+\mathcal N(x)=2\pi\sum_j m_j\,\mathsf P_{\delta_j}(x-\gamma_j).
+\]
+于是对 \(a\ge 0\),
+\[
+\mathcal N^{(a)}=2\pi\sum_j m_j\,(\mathsf P_a*\mathsf P_{\delta_j})(\cdot-\gamma_j).
+\]
+由 \(\widehat{\mathsf P_a}(\xi)=e^{-a|\xi|}\) 得 \(\mathsf P_a*\mathsf P_b=\mathsf P_{a+b}\)，从而得到显式表示与半群递归。
+同理
+\(
+\widehat{\mathcal N^{(a)}}(\xi)=e^{-a|\xi|}\widehat{\mathcal N}(\xi)
+\)，
+故 \(\partial_a\widehat{\mathcal N^{(a)}}=-|\xi|\widehat{\mathcal N^{(a)}}\)，反变换即得生成元方程。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$\mathcal N$}{N} 的精确 \texorpdfstring{$L^2$}{L2} 相互作用公式与深度倒数下界]\label{thm:xi-offline-neumann-l2-interaction}
+在可交换求和与积分的条件下，成立：
+\begin{enumerate}
+  \item 精确双和公式
+  \[
+  \|\mathcal N\|_{L^2(\RR)}^2
+  =4\pi\sum_{j,k}m_jm_k\,\frac{\delta_j+\delta_k}{(\gamma_j-\gamma_k)^2+(\delta_j+\delta_k)^2}.
+  \]
+  \item 去除交叉项得到下界
+  \[
+  \|\mathcal N\|_{2}^2\ge 2\pi\sum_j\frac{m_j^2}{\delta_j}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由 \(\widehat{\mathsf P_\delta}(\xi)=e^{-\delta|\xi|}\) 得
+\[
+\widehat{\mathcal N}(\xi)
+=2\pi\sum_j m_j e^{-\delta_j|\xi|}e^{-\mathrm{i}\gamma_j\xi}.
+\]
+由 Plancherel，
+\[
+\|\mathcal N\|_2^2
+=\frac{1}{2\pi}\int_{\RR}\left|\widehat{\mathcal N}(\xi)\right|^2\dd\xi
+=2\pi\sum_{j,k}m_jm_k\int_{\RR}e^{-(\delta_j+\delta_k)|\xi|}e^{-\mathrm{i}(\gamma_j-\gamma_k)\xi}\dd\xi.
+\]
+再用初等恒等式
+\(
+\int_{\RR}e^{-a|\xi|}e^{-\mathrm{i}b\xi}\dd\xi=\frac{2a}{a^2+b^2}
+\)
+（\(a>0\)）即得双和公式。
+下界由去除所有 \(j\neq k\) 项并注意对角项显式为 \(\frac{2}{\delta_j}\) 给出。
+\end{proof}
+
+\begin{theorem}[Cayley--Green 势的重整化 Dirichlet 能量闭式与严格正性]\label{thm:xi-offline-green-renormalized-dirichlet-energy}
+假设离线零点有限。
+令 \(\Omega_\varepsilon:=\mathbb H\setminus\bigcup_j B(z_j,\varepsilon)\)，并定义重整化 Dirichlet 能量
+\[
+\mathfrak E:=
+\lim_{\varepsilon\downarrow 0}\left(
+\int_{\Omega_\varepsilon}|\nabla\mathcal P|^2\,\dd x\,\dd a
+-2\pi\sum_j m_j^2\log\frac1\varepsilon
+\right).
+\]
+则极限存在，且满足闭式
+\[
+\mathfrak E
+=2\pi\left[
+\sum_j m_j^2\log(2\delta_j)
+2\sum_{j<k}m_jm_k\log\left|\frac{z_j-\overline{z_k}}{z_j-z_k}\right|
+\right].
+\]
+并且对任意 \(j<k\) 有
+\[
+\log\left|\frac{z_j-\overline{z_k}}{z_j-z_k}\right|
+=\frac12\log\frac{(\gamma_j-\gamma_k)^2+(\delta_j+\delta_k)^2}{(\gamma_j-\gamma_k)^2+(\delta_j-\delta_k)^2}>0,
+\]
+从而 \(\mathfrak E>0\) 当且仅当存在离线零点。
+\end{theorem}
+\begin{proof}
+在截断域 \(\Omega_{\varepsilon,R}:=(\mathbb H\cap\{|z|<R\})\setminus\bigcup_jB(z_j,\varepsilon)\) 上，\(\mathcal P\) 调和且满足 \(\mathcal P(\cdot,0)=0\)。
+由 Green 恒等式，
+\(
+\int_{\Omega_{\varepsilon,R}}|\nabla\mathcal P|^2=\int_{\partial\Omega_{\varepsilon,R}}\mathcal P\,\partial_n\mathcal P\,\dd s
+\)。
+实轴边界项为零；外圆 \(R\to\infty\) 时贡献消失；仅余各小圆边界项。
+对 \(z\to z_j\) 有局部展开
+\[
+\mathcal P(z)=m_j\bigl(\log(2\delta_j)-\log|z-z_j|\bigr)+\mathcal P_{\mathrm{reg}}(z_j)+o(1),
+\qquad
+\mathcal P_{\mathrm{reg}}(z_j)=\sum_{k\neq j}m_k\log\left|\frac{z_j-\overline{z_k}}{z_j-z_k}\right|.
+\]
+代入边界积分并在 \(\varepsilon\downarrow 0\) 时去除发散项后得到闭式。
+严格正性由 \(|z_j-\overline{z_k}|>|z_j-z_k|\) 直接推出。
+\end{proof}
+
+\begin{theorem}[尺度回推的指数病态性与最优带限反演的噪声--分辨率律]\label{thm:xi-offline-neumann-bandlimited-backward-stability}
+固定 \(a_0>0\)。由定理 \ref{thm:xi-offline-neumann-cauchy-semigroup-generator}，尺度推进算子
+\[
+T_{a_0}:L^2(\RR)\to L^2(\RR),\qquad T_{a_0}f:=\mathsf P_{a_0}*f
+\]
+满足 \(\widehat{T_{a_0}f}(\xi)=e^{-a_0|\xi|}\hat f(\xi)\)。
+设观测为 \(\widetilde{\mathcal N}^{(a_0)}=\mathcal N^{(a_0)}+\eta\)，且 \(\|\eta\|_{2}\le\varepsilon\)。
+对任意带宽 \(\Lambda>0\) 定义带限回推估计
+\[
+\widehat{\mathcal N_\Lambda}(\xi):=\mathbf 1_{\{|\xi|\le\Lambda\}}\,e^{a_0|\xi|}\,\widehat{\widetilde{\mathcal N}^{(a_0)}}(\xi).
+\]
+则有误差分解
+\[
+\|\mathcal N_\Lambda-\mathcal N\|_2
+\le e^{a_0\Lambda}\varepsilon+\frac{1}{\sqrt{2\pi}}\left\|\mathbf 1_{\{|\xi|>\Lambda\}}\widehat{\mathcal N}(\xi)\right\|_2.
+\]
+若进一步存在最小深度 \(\delta_{\min}:=\inf_j\delta_j>0\)，并记总质量 \(M:=\|\mathcal N\|_{1}=2\pi\sum_j m_j\)，则高频尾项满足
+\[
+\frac{1}{\sqrt{2\pi}}\left\|\mathbf 1_{\{|\xi|>\Lambda\}}\widehat{\mathcal N}(\xi)\right\|_2
+\le \frac{M}{\sqrt{\pi\,\delta_{\min}}}\,e^{-\delta_{\min}\Lambda}.
+\]
+从而
+\[
+\|\mathcal N_\Lambda-\mathcal N\|_2
+\le e^{a_0\Lambda}\varepsilon+\frac{M}{\sqrt{\pi\,\delta_{\min}}}\,e^{-\delta_{\min}\Lambda},
+\]
+并且对 \(\Lambda\) 作连续最优化得到
+\[
+\inf_{\Lambda>0}\|\mathcal N_\Lambda-\mathcal N\|_2
+\le
+\left(\frac{M}{\sqrt{\pi\,\delta_{\min}}}\right)^{\frac{a_0}{a_0+\delta_{\min}}}
+\varepsilon^{\frac{\delta_{\min}}{a_0+\delta_{\min}}}.
+\]
+\end{theorem}
+\begin{proof}
+由定义与 \(\widehat{\mathcal N^{(a_0)}}=e^{-a_0|\xi|}\widehat{\mathcal N}\) 得
+\[
+\widehat{\mathcal N_\Lambda}-\widehat{\mathcal N}
+=\mathbf 1_{\{|\xi|\le\Lambda\}}e^{a_0|\xi|}\hat\eta(\xi)-\mathbf 1_{\{|\xi|>\Lambda\}}\widehat{\mathcal N}(\xi).
+\]
+由 Plancherel 与三角不等式得到误差分解，且第一项由 \(\|e^{a_0|\xi|}\mathbf 1_{\{|\xi|\le\Lambda\}}\hat\eta\|_2\le e^{a_0\Lambda}\|\hat\eta\|_2\) 控制。
+若 \(\delta_{\min}>0\)，由 \eqref{eq:xi-offline-green-neumann-trace-N} 的显式结构可得
+\(
+|\widehat{\mathcal N}(\xi)|\le M e^{-\delta_{\min}|\xi|}
+\)，从而
+\[
+\int_{|\xi|>\Lambda}|\widehat{\mathcal N}(\xi)|^2\dd\xi
+\le M^2\int_{|\xi|>\Lambda}e^{-2\delta_{\min}|\xi|}\dd\xi
+=\frac{M^2}{\delta_{\min}}e^{-2\delta_{\min}\Lambda}.
+\]
+代入 Plancherel 即得尾项界。
+对 \(e^{a_0\Lambda}\varepsilon+Ce^{-\delta_{\min}\Lambda}\) 作一维最优化得到最后的 Hölder 型稳定指数。
+\end{proof}
+
+\endinput
+

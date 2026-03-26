@@ -1,0 +1,374 @@
+\begin{theorem}[径向二次观测的单样本离散可识别性：整数参数的支持严格分离]\label{thm:group-jg-radial-quadratic-single-sample-identifiability}
+设 \(r>0\)。定义 Joukowsky--Gödel 椭圆映射
+\[
+J_r:\ \CC^\times\to\CC,\qquad J_r(z)=rz+r^{-1}z^{-1}.
+\]
+令 \(\Theta\sim \mathrm{Unif}[0,2\pi)\)，并置
+\[
+W_r:=J_r(e^{\mathrm{i}\Theta}),\qquad U_r:=|W_r|^2.
+\]
+则有恒等式
+\[
+U_r=r^2+r^{-2}+2\cos(2\Theta),
+\qquad
+\mathrm{supp}(U_r)=I_r:=\bigl[r^2+r^{-2}-2,\ \ r^2+r^{-2}+2\bigr].
+\]
+若进一步限制 \(r\in\ZZ_{\ge 2}\)，则族 \(\{I_r\}_{r\ge 2}\) 两两不交。更精确地，对每个整数 \(r\ge 2\) 令
+\[
+g_r:=\inf I_{r+1}-\sup I_r,
+\]
+则 \(g_r>0\) 且满足统一下界
+\[
+g_r\ge g_2=\frac{31}{36}.
+\]
+因此当 \(r\in\ZZ_{\ge 2}\) 时，单次无噪声观测 \(U_r=u\) 唯一确定该整数 \(r\)。
+\end{theorem}
+
+\begin{proof}
+由定义
+\[
+W_r=r e^{\mathrm{i}\Theta}+r^{-1}e^{-\mathrm{i}\Theta},
+\]
+故
+\[
+|W_r|^2
+=(r e^{\mathrm{i}\Theta}+r^{-1}e^{-\mathrm{i}\Theta})(r e^{-\mathrm{i}\Theta}+r^{-1}e^{\mathrm{i}\Theta})
+=r^2+r^{-2}+e^{2\mathrm{i}\Theta}+e^{-2\mathrm{i}\Theta}
+=r^2+r^{-2}+2\cos(2\Theta),
+\]
+从而 \(\mathrm{supp}(U_r)=I_r\) 成立。
+\par
+对整数 \(r\ge 2\)，计算
+\[
+g_r=\bigl((r+1)^2+(r+1)^{-2}-2\bigr)-\bigl(r^2+r^{-2}+2\bigr)
+=2r-3+\bigl((r+1)^{-2}-r^{-2}\bigr)
+=2r-3-\frac{2r+1}{r^2(r+1)^2}.
+\]
+令
+\[
+f(x):=\frac{2x+1}{x^2(x+1)^2}\quad(x>0).
+\]
+则
+\[
+\frac{f'(x)}{f(x)}
+=\frac{2}{2x+1}-\frac{2}{x}-\frac{2}{x+1}
+=\frac{2}{2x+1}\Bigl(1-\frac{(2x+1)^2}{x(x+1)}\Bigr)<0,
+\]
+因为 \((2x+1)^2-x(x+1)=3x^2+3x+1>0\)。故 \(f\) 在 \((0,\infty)\) 上严格递减，特别地对 \(r\ge 2\) 有
+\[
+f(r)\le f(2)=\frac{5}{36}.
+\]
+于是
+\[
+g_r=2r-3-f(r)\ge 2r-3-\frac{5}{36}
+=\frac{72r-113}{36}\ge \frac{31}{36}.
+\]
+从而 \(g_r>0\)，即 \(I_r\cap I_{r+1}=\varnothing\)。又由于 \(r\mapsto r^2+r^{-2}\) 在 \([1,\infty)\) 上严格递增，区间端点随 \(r\) 单调右移，故全族两两不交。证毕。
+\end{proof}
+
+\begin{corollary}[有界噪声下的单样本恢复阈值]\label{cor:group-jg-radial-quadratic-bounded-noise-threshold}
+沿用定理 \ref{thm:group-jg-radial-quadratic-single-sample-identifiability} 的记号。
+设观测量带有加性噪声
+\[
+\widetilde U=U_r+\xi,\qquad |\xi|\le \sigma\ \ \text{几乎处处}.
+\]
+若 \(r\in\ZZ_{\ge 2}\) 且
+\[
+\sigma<\frac{1}{2}\inf_{r\ge 2}g_r=\frac{31}{72},
+\]
+则存在确定性解码规则使得单次观测 \(\widetilde U\) 即可无差错恢复 \(r\)。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:group-jg-radial-quadratic-single-sample-identifiability}，\(\inf_{r\ge 2}g_r=31/36\)。
+若 \(\sigma<31/72\)，则相邻区间的 \(\sigma\)-膨胀
+\[
+I_r^{(\sigma)}:=[\inf I_r-\sigma,\ \sup I_r+\sigma]
+\]
+仍不相交：
+\(
+\sup I_r+\sigma<\inf I_{r+1}-\sigma
+\)。
+因此 \(\widetilde U\) 只能落入唯一一个膨胀区间中，解码唯一且必然正确。证毕。
+\end{proof}
+
+\begin{proposition}[离散寄存器的径向二次单样本全恢复]\label{prop:group-jg-radial-quadratic-prime-register-recovery}
+设一类可交换投影算法的 Gödel 外置素数寄存器由某个正整数 \(N\ge 2\) 完全编码（即算法的全部离散信息可由 \(N\) 的素因子指数向量唯一恢复）。
+将该整数作为椭圆参数 \(r=N\)，并按定理 \ref{thm:group-jg-radial-quadratic-single-sample-identifiability} 构造 \(U_N=|J_N(e^{\mathrm{i}\Theta})|^2\)。
+则在无噪声情形下，单次观测 \(U_N=u\) 唯一确定 \(N\)，从而由唯一分解定理恢复寄存器指数向量并恢复算法本身。
+若存在有界噪声且满足推论 \ref{cor:group-jg-radial-quadratic-bounded-noise-threshold} 的阈值，则上述结论仍成立。
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:group-jg-radial-quadratic-single-sample-identifiability}，整数 \(N\ge 2\) 的支持区间 \(I_N\) 彼此不交，故单次观测 \(u\in I_N\) 唯一确定 \(N\)。
+由整数唯一素因子分解，\(N\) 决定其素数寄存器指数向量；在假设下该指数向量决定算法。
+噪声情形由推论 \ref{cor:group-jg-radial-quadratic-bounded-noise-threshold} 直接推出。证毕。
+\end{proof}
+
+\begin{theorem}[边界驱动的超二次收敛：连续参数的极值估计]\label{thm:group-jg-radial-quadratic-extreme-concentration}
+仍在定理 \ref{thm:group-jg-radial-quadratic-single-sample-identifiability} 的设定下令
+\[
+c(r):=r^2+r^{-2},
+\qquad U_r=c(r)+V,\qquad V:=2\cos(2\Theta).
+\]
+取 \(n\) 个独立同分布样本 \(U^{(1)},\dots,U^{(n)}\)，并定义
+\[
+\underline c_n:=\max_{1\le j\le n}U^{(j)}-2,\qquad
+\overline c_n:=\min_{1\le j\le n}U^{(j)}+2.
+\]
+则必有 \(\underline c_n\le c(r)\le \overline c_n\)。
+并且对任意 \(\varepsilon\in(0,2]\) 成立显式尾界
+\[
+\PP\bigl(c(r)-\underline c_n>\varepsilon\bigr)
+=\Bigl(1-\frac{1}{\pi}\arccos\!\bigl(1-\varepsilon/2\bigr)\Bigr)^{n}
+\le \exp\!\Bigl(-\frac{n}{\pi}\arccos\!\bigl(1-\varepsilon/2\bigr)\Bigr)
+\le \exp\!\Bigl(-\frac{n}{\pi}\sqrt{\varepsilon}\Bigr),
+\]
+以及对称地
+\[
+\PP\bigl(\overline c_n-c(r)>\varepsilon\bigr)\le \exp\!\Bigl(-\frac{n}{\pi}\sqrt{\varepsilon}\Bigr).
+\]
+因此对任意 \(\eta\in(0,1)\)，取
+\(
+\varepsilon_\eta:=(\pi \log(2/\eta)/n)^2
+\)
+则
+\[
+\PP\bigl(|\overline c_n-\underline c_n|>2\varepsilon_\eta\bigr)\le \eta,
+\]
+从而在固定置信水平下 \(|\overline c_n-\underline c_n|\) 的典型尺度为 \(n^{-2}\)。
+\end{theorem}
+
+\begin{proof}
+\(\underline c_n\le c(r)\le \overline c_n\) 由 \(V\in[-2,2]\) 立得。
+设 \(M_n:=\max_j V^{(j)}\)，则
+\[
+c(r)-\underline c_n=c(r)-(\max_j(c(r)+V^{(j)})-2)=2-M_n.
+\]
+令 \(\Phi\sim\mathrm{Unif}[0,2\pi)\)。由于 \(2\Theta\bmod 2\pi\) 仍为均匀分布，有 \(V=2\cos\Phi\)。
+对 \(\varepsilon\in(0,2]\)，
+\[
+\PP(V>2-\varepsilon)=\PP(\cos\Phi>1-\varepsilon/2)=\frac{1}{\pi}\arccos(1-\varepsilon/2),
+\]
+从而
+\[
+\PP(2-M_n>\varepsilon)=\PP(M_n\le 2-\varepsilon)
+=\Bigl(1-\frac{1}{\pi}\arccos(1-\varepsilon/2)\Bigr)^{n}.
+\]
+不等式 \((1-x)^n\le e^{-nx}\) 给出第一条指数上界。
+此外，由 \(\cos t\ge 1-t^2/2\)（\(t\in[0,\pi]\)）可知当 \(\cos t=1-\varepsilon/2\) 时 \(t\ge \sqrt{\varepsilon}\)，即
+\(
+\arccos(1-\varepsilon/2)\ge \sqrt{\varepsilon}
+\)，从而得到最后一条上界。
+对 \(\overline c_n\) 同理。
+最后，事件
+\(
+\{c(r)-\underline c_n\le \varepsilon_\eta\}\cap\{\overline c_n-c(r)\le \varepsilon_\eta\}
+\)
+蕴含 \(|\overline c_n-\underline c_n|\le 2\varepsilon_\eta\)，并由并集界得到概率陈述。证毕。
+\end{proof}
+
+\begin{proposition}[分布支持分离导致的 \texorpdfstring{$\mathrm{KL}$}{KL} 发散]\label{prop:group-jg-radial-quadratic-kl-infinite}
+记 \(\mathsf P_r\) 为随机变量 \(U_r\) 的分布。则对任意 \(r\neq s\) 有
+\[
+D_{\mathrm{KL}}(\mathsf P_r\Vert \mathsf P_s)=+\infty,
+\qquad
+D_{\mathrm{KL}}(\mathsf P_s\Vert \mathsf P_r)=+\infty.
+\]
+特别地，只要 \(c(r)\neq c(s)\)，则 \(\mathsf P_r\) 与 \(\mathsf P_s\) 的支持区间不同，故两分布在 Lebesgue 分解意义下互不绝对连续。
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:group-jg-radial-quadratic-single-sample-identifiability}，\(\mathrm{supp}(U_r)=I_r=[c(r)-2,c(r)+2]\)。
+若 \(r\neq s\)，则 \(c(r)\neq c(s)\)（因 \(x\mapsto x^2+x^{-2}\) 在 \([1,\infty)\) 上严格递增），从而 \(I_r\neq I_s\)。
+于是存在可测集 \(A\subset I_r\setminus I_s\) 使 \(\mathsf P_r(A)>0\) 而 \(\mathsf P_s(A)=0\)。
+此时 \(\mathsf P_r\not\ll \mathsf P_s\)，故 \(D_{\mathrm{KL}}(\mathsf P_r\Vert \mathsf P_s)=+\infty\)；交换 \(r,s\) 同理。证毕。
+\end{proof}
+
+\begin{theorem}[Joukowsky--Gödel 椭圆输运的全纯矩刚性]\label{thm:group-jg-holomorphic-moment-rigidity}
+设 \(r>0\)，并令 \(\mu_{\mathrm{Haar}}\) 为单位圆 \(S^1\subset\CC^\times\) 上的 Haar 概率测度。
+令 \(\mu_r:=(J_r)_\#\mu_{\mathrm{Haar}}\) 为其在 Joukowsky--Gödel 映射 \(J_r(z)=rz+r^{-1}z^{-1}\) 下的推前测度。
+对 \(n\in\ZZ_{\ge 0}\) 定义全纯矩
+\[
+m_n(r):=\int_{\CC} w^n\,\dd\mu_r(w).
+\]
+则对一切 \(m\in\ZZ_{\ge 0}\) 成立
+\[
+m_{2m+1}(r)=0,
+\qquad
+m_{2m}(r)=\binom{2m}{m},
+\]
+并且右端与 \(r\) 无关。
+\end{theorem}
+
+\begin{proof}
+由推前定义与参数化 \(z=e^{\mathrm{i}\theta}\) 得
+\[
+m_n(r)=\frac1{2\pi}\int_0^{2\pi}\bigl(r e^{\mathrm{i}\theta}+r^{-1}e^{-\mathrm{i}\theta}\bigr)^n\,\dd\theta.
+\]
+二项展开
+\[
+\bigl(r e^{\mathrm{i}\theta}+r^{-1}e^{-\mathrm{i}\theta}\bigr)^n
+=\sum_{j=0}^{n}\binom{n}{j} r^{2j-n}\,e^{\mathrm{i}(2j-n)\theta}.
+\]
+对 \(\theta\) 积分利用正交性
+\(
+\frac1{2\pi}\int_0^{2\pi}e^{\mathrm{i}k\theta}\dd\theta=\mathbf{1}_{k=0}
+\)
+可知仅当 \(2j-n=0\) 时有贡献。
+若 \(n\) 为奇数则无整数 \(j\) 满足该条件，故 \(m_n(r)=0\)。
+若 \(n=2m\) 为偶数则唯一贡献项为 \(j=m\)，从而
+\(
+m_{2m}(r)=\binom{2m}{m}r^{0}=\binom{2m}{m}
+\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[全纯矩映射在共焦椭圆曲线族上的非单射性]\label{thm:group-jg-holomorphic-moment-noninvertibility-ellipse-family}
+对每个 \(r>1\) 令 \(E_r:=J_r(S^1)\) 并记 \(\mu_r=(J_r)_\#\mu_{\mathrm{Haar}}\)。
+则：
+\begin{enumerate}
+  \item \(E_r\) 是解析 Jordan 曲线，且当 \(r_1\neq r_2\)（均 \(>1\)）时 \(E_{r_1}\cap E_{r_2}=\varnothing\)；因而 \(\mu_{r_1}\perp\mu_{r_2}\)（互相奇异）。
+  \item 对所有 \(r>1\) 有 \(\int_{\CC} w^n\,\dd\mu_r(w)=m_n(r)\)，其中 \((m_n(r))_{n\ge 0}\) 与 \(r\) 无关，且由定理 \ref{thm:group-jg-holomorphic-moment-rigidity} 给出闭式。
+\end{enumerate}
+因此，全纯矩映射
+\[
+\mathcal{M}:\ \mu\longmapsto \Bigl(\int_{\CC} w^n\,\dd\mu(w)\Bigr)_{n\ge 0}
+\]
+在该椭圆族上具有不可数大小的纤维，并且纤维中包含两两互相奇异的概率测度。
+\end{theorem}
+
+\begin{proof}
+对 \(r>1\)，由参数式
+\[
+J_r(e^{\mathrm{i}\theta})=(r+r^{-1})\cos\theta+\mathrm{i}(r-r^{-1})\sin\theta
+\]
+可知 \(E_r\) 为椭圆
+\[
+\frac{x^2}{(r+r^{-1})^2}+\frac{y^2}{(r-r^{-1})^2}=1.
+\]
+令 \(A_r:=r+r^{-1}\)、\(B_r:=r-r^{-1}\)，则 \(A_r,B_r>0\) 且 \(r_2>r_1>1\) 时有 \(A_{r_2}>A_{r_1}\)、\(B_{r_2}>B_{r_1}\)。
+对任意 \((x,y)\in E_{r_1}\) 有
+\[
+\frac{x^2}{A_{r_2}^2}+\frac{y^2}{B_{r_2}^2}
+<
+\frac{x^2}{A_{r_1}^2}+\frac{y^2}{B_{r_1}^2}=1,
+\]
+从而 \((x,y)\) 严格位于 \(E_{r_2}\) 的内部，故 \(E_{r_1}\cap E_{r_2}=\varnothing\)。
+支撑于不交集的概率测度互相奇异，得 \(\mu_{r_1}\perp\mu_{r_2}\)。
+\par
+第 (2) 点由推前定义与定理 \ref{thm:group-jg-holomorphic-moment-rigidity} 直接给出。
+不可数纤维性由参数 \(r>1\) 的连续性与 \((m_n(r))\) 的常值性得到。
+证毕。
+\end{proof}
+
+\begin{proposition}[椭圆参数的最小径向可识别性阈值：\texorpdfstring{$M_{1,1}$}{M11} 的完全恢复]\label{prop:group-jg-minimal-radial-identifiability-threshold}
+仍令 \(\mu_r=(J_r)_\#\mu_{\mathrm{Haar}}\)（\(r>0\)）。
+则仅由全纯矩族 \(\bigl(\int w^n\,\dd\mu_r(w)\bigr)_{n\ge 0}\) 不能识别 \(r\)（定理 \ref{thm:group-jg-holomorphic-moment-noninvertibility-ellipse-family}）。
+另一方面，加入二阶混合矩
+\[
+M_{1,1}(r):=\int_{\CC}|w|^2\,\dd\mu_r(w)
+\]
+即可在约定 \(r\ge 1\) 的规范下唯一恢复 \(r\)：
+\[
+M_{1,1}(r)=r^2+r^{-2}\ \ge\ 2,
+\qquad
+r^2=\frac{M_{1,1}(r)+\sqrt{M_{1,1}(r)^2-4}}{2}.
+\]
+\end{proposition}
+
+\begin{proof}
+不可识别性由定理 \ref{thm:group-jg-holomorphic-moment-noninvertibility-ellipse-family} 立得。
+对混合矩：在定理 \ref{thm:group-jg-radial-quadratic-single-sample-identifiability} 的记号下有 \(W_r\sim\mu_r\) 且 \(U_r=|W_r|^2\)。
+由 \eqref{thm:group-jg-radial-quadratic-single-sample-identifiability} 的恒等式
+\(
+U_r=r^2+r^{-2}+2\cos(2\Theta)
+\)
+取期望得
+\[
+M_{1,1}(r)=\mathbb{E}[U_r]=r^2+r^{-2}.
+\]
+令 \(x:=M_{1,1}(r)\ge 2\)，并设 \(u:=r^2\ge 1\)。
+则 \(u+u^{-1}=x\) 等价于二次方程 \(u^2-xu+1=0\)，故
+\[
+u=\frac{x\pm\sqrt{x^2-4}}{2}.
+\]
+由 \(u\ge 1\) 取正号支路，即得所示恢复公式。
+证毕。
+\end{proof}
+
+\begin{theorem}[椭圆推前的二项滤波恒等式与 Fourier 模式的极限提取]\label{thm:group-jg-binomial-filtering-fourier-extraction}
+令 \(\nu\) 为单位圆 \(S^1\) 上有限复 Borel 测度，并记其 Fourier 系数
+\[
+\widehat\nu(k):=\int_{S^1} z^k\,\dd\nu(z),\qquad k\in\ZZ.
+\]
+对 \(r>0\) 定义椭圆推前 \(\mu_{r,\nu}:=(J_r)_\#\nu\)。
+再对 \(n\in\ZZ_{\ge 0}\) 定义全纯矩
+\[
+m_n(r;\nu):=\int_{\CC} w^n\,\dd\mu_{r,\nu}(w).
+\]
+则对一切 \(n\ge 0\) 成立显式恒等式
+\begin{equation}\label{eq:group-jg-binomial-filtering}
+m_n(r;\nu)=\sum_{j=0}^{n}\binom{n}{j}\,r^{2j-n}\,\widehat\nu(2j-n).
+\end{equation}
+并且对每个 \(n\ge 0\) 有极限提取公式
+\[
+\widehat\nu(n)=\lim_{r\to\infty} r^{-n}m_n(r;\nu),
+\qquad
+\widehat\nu(-n)=\lim_{r\to\infty} r^{-n}m_n(r^{-1};\nu).
+\]
+因此两参数族 \(\{m_n(r;\nu)\}_{n\ge 0,\ r>0}\) 决定 \(\nu\) 的全部 Fourier 谱，从而在测度意义下唯一确定 \(\nu\)。
+\end{theorem}
+
+\begin{proof}
+由推前定义，
+\[
+m_n(r;\nu)=\int_{S^1}\bigl(rz+r^{-1}z^{-1}\bigr)^n\,\dd\nu(z).
+\]
+二项展开得
+\[
+\bigl(rz+r^{-1}z^{-1}\bigr)^n
+=\sum_{j=0}^{n}\binom{n}{j}(rz)^j(r^{-1}z^{-1})^{n-j}
+=\sum_{j=0}^{n}\binom{n}{j}r^{2j-n}z^{2j-n}.
+\]
+代入积分并交换有限和与积分即得 \eqref{eq:group-jg-binomial-filtering}。
+\par
+由 \eqref{eq:group-jg-binomial-filtering} 可见 \(m_n(r;\nu)\) 是关于 \(r\) 的有限 Laurent 多项式，其最高次项来自 \(j=n\)，为 \(r^n\widehat\nu(n)\)，其余项至多为 \(O(r^{n-2})\)。
+因此
+\(
+r^{-n}m_n(r;\nu)=\widehat\nu(n)+O(r^{-2})
+\)
+并得到第一条极限。
+第二条极限对 \(r^{-1}\) 同理：把 \eqref{eq:group-jg-binomial-filtering} 中 \(r\) 替换为 \(r^{-1}\) 后最高次项来自 \(j=0\)，为 \(r^n\widehat\nu(-n)\)。
+\par
+由 \((\widehat\nu(k))_{k\in\ZZ}\) 的唯一性可恢复 \(\nu\)（Fourier 系数唯一确定有限复测度），故由 \(\{m_n(r;\nu)\}\) 的极限提取可唯一确定 \(\nu\)。
+证毕。
+\end{proof}
+
+\begin{conjecture}[椭圆扫描的有限阶正性见证：符号缺陷的 Hankel 型可审计分离]\label{conj:group-jg-elliptic-hankel-separation}
+令 \(\nu\) 为单位圆 \(S^1\) 上有限实符号测度（Jordan 分解意义下），并对每个 \(r>1\) 令 \(\mu_{r,\nu}:=(J_r)_\#\nu\)。
+记其混合矩阵
+\[
+\mathsf M_N(r;\nu):=\Bigl(\ \int_{\CC} w^i\overline{w}^{\,j}\,\dd\mu_{r,\nu}(w)\ \Bigr)_{0\le i,j\le N}.
+\]
+猜想如下两条件等价：
+\begin{enumerate}
+  \item \(\nu\) 为正测度；
+  \item 对所有 \(r>1\) 与所有 \(N\ge 0\) 都有 \(\mathsf M_N(r;\nu)\succeq 0\)。
+\end{enumerate}
+并且若 \(\nu\) 不是正测度，则存在某个 \(r>1\) 与某个有限阶 \(N\) 使得 \(\mathsf M_N(r;\nu)\) 出现严格负特征值，从而给出一份有限维的可核验否证证书。
+\end{conjecture}
+
+\begin{conjecture}[非交换投影的低阶可观测解码泛化]\label{conj:group-jg-noncommutative-low-order-observable-decoding}
+设 \(\mathcal A\) 为由素数寄存器 Gödel 编码生成的非交换投影算法类，其对应的单位圆信息经一族可计算的代数映射 \(F_{\alpha}\)（参数 \(\alpha\) 取 Gödel 整数或其有限素因子指数向量）投影为代数曲线族 \(\Gamma_\alpha\subset\CC\)。
+猜想存在一个与 \(\alpha\) 无关的固定次数多项式可观测量 \(\mathcal O(w,\bar w)\in\RR[w,\bar w]\)（例如次数 \(\le 4\)），使得在离散参数子集上，\(\mathcal O\) 的像分布族呈现支持严格分离，从而产生常数样本量的算法全恢复机制，与命题 \ref{prop:group-jg-radial-quadratic-prime-register-recovery} 的可交换情形一致。
+\end{conjecture}
+
+\begin{remark}[可复现核验脚本]\label{rem:group-jg-radial-quadratic-identifiability-audit-script}
+定理 \ref{thm:group-jg-radial-quadratic-single-sample-identifiability}--命题 \ref{prop:group-jg-radial-quadratic-kl-infinite}
+中的区间分离常数、噪声阈值、极值尾界与支持分离的有限窗核验由脚本
+\texttt{scripts/exp\_group\_jg\_radial\_quadratic\_identifiability\_audit.py}
+给出，对应证书文件为
+\texttt{artifacts/export/group\_jg\_radial\_quadratic\_identifiability\_audit.json}。
+\end{remark}
+

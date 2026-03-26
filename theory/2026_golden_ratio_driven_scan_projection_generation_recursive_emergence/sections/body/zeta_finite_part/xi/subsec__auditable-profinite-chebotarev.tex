@@ -1,0 +1,373 @@
+\subsubsection{可审计的 profinite Chebotarev：有限数据证书、最优采样与缺陷极限}\label{subsec:auditable-profinite-chebotarev}
+
+本段把三条已建立接口并联为一个“有限 \(m\)+有限 \(n\)+有限 \(N\)”的可审计证书包：
+\begin{itemize}
+  \item \textbf{动力学尾项：}有限层的 Chebotarev 指数误差由最坏扭曲谱半径比 \(\eta_m\) 控制（定理 \ref{thm:kernel-chebotarev-exp} 的统一口径；参见 \ref{subsec:pom-order-bottleneck} 的混合尺度注记）。
+  \item \textbf{有限样本项：}折叠输出直方图 \(\hat{\pi}_{m,N}\) 对其真实边缘 \(\pi_m^{\mathrm{fold}}\) 的 TV 偏差有非渐近置信包络（第 \ref{sec:experiments} 节与定义 \ref{def:source-and-fold-output} 的对象口径）。
+  \item \textbf{缺陷项：}给定任意边缘 \(\pi\in\Delta(X_m)\)，其最大熵提升 \(\widetilde\pi\) 唯一，并由缺陷标量 \(\kappa_m(\pi)=\mathbb{E}_\pi[\log d_m(X)]\) 精确量化“纤维自由度”（定理 \ref{thm:pom-maxent-lift} 与定义 \ref{def:pom-kappa}）。
+\end{itemize}
+
+\paragraph{对象：层 \(m\) 的 cylinder 与长度 \(n\) 的 primitive 轨道比例}
+固定一个有限同余层 \(G_m\)（例如 \(G_m=(\ZZ/m)^d\) 的某个具体选择），并取 cylinder 事件 \(C\subseteq G_m\)。
+令 \(p_{n,g}\) 表示长度为 \(n\) 的 primitive 轨道中 Frobenius/同余标签落在 \(g\in G_m\) 的轨道数（按轨道计），并记 \(p_n=\sum_{g\in G_m}p_{n,g}\)。
+定义同余 cylinder 的经验比例
+\[
+\Pi_{n,m}(C):=\frac{\sum_{g\in C}p_{n,g}}{p_n}\ \in[0,1].
+\]
+
+\begin{theorem}[Markov 源下的 TV 置信包络：伪谱隙口径]\label{thm:tv-envelope-markov}
+令 \(Y_t^{(m)}=\Fold_m(W_t^{(m)})\in X_m\) 为折叠输出过程（定义 \ref{def:source-and-fold-output}），并设 \((Y_t^{(m)})\) 为有限状态不可约非周期马尔可夫链。
+记其伪谱隙（pseudo spectral gap）为 \(\gamma_{\mathrm{ps}}^{(m)}\in(0,1]\)；定义及相应的浓缩不等式见 \cite{Paulin2015MarkovConcentration}。
+则对任意 \(\delta\in(0,1)\)，存在一个完全显式的置信半径函数 \(\eta(N,m,\delta)\) 使得以概率至少 \(1-\delta\) 有
+\[
+D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})
+\ \le\
+\frac12|X_m|\,\eta(N,m,\delta),
+\qquad
+\eta(N,m,\delta)
+:=\sqrt{\frac{2}{\gamma_{\mathrm{ps}}^{(m)}N}\log\frac{2|X_m|}{\delta}}.
+\]
+\end{theorem}
+
+\begin{theorem}[可审计的 profinite Chebotarev 证书：有限 \texorpdfstring{$(m,n,N)$}{(m,n,N)}]\label{thm:auditable-profinite-chebotarev-finite}
+固定层 \(m\) 与 cylinder \(C\subseteq G_m\)。
+设该层的最坏非平凡扭曲谱半径比为
+\[
+\eta_m:=\max_{\chi\in\widehat{G_m}\setminus\{\chi_0\}}\frac{\rho(M_\chi)}{\rho(M)}\in(0,1]
+\]
+其中 \(\chi_0\) 为平凡角色，\(M_\chi\) 为 \(\chi\)-扭曲通道矩阵。
+若在该层满足统一谱隙假设
+\(
+\eta_m\le \lambda^{-1/2-\varepsilon}
+\)
+等价地，对一切 \(\chi\ne\chi_0\) 有 \(\rho(M_\chi)\le \lambda^{1/2-\varepsilon}\)，其中 \(\lambda=\rho(M)\)。
+则存在常数 \(K_1=K_1(m)\)（只依赖该层非平凡扭曲通道在定理 \ref{thm:kernel-chebotarev-exp} 中的误差常数）使得对所有 \(n\ge 1\) 有确定性尾项界
+\[
+\left|\Pi_{n,m}(C)-\frac{|C|}{|G_m|}\right|
+\ \le\
+K_1\,\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}.
+\]
+进一步地，在 Markov 源观测下，若以 \(\hat{\pi}_{m,N}\) 替代 \(\pi_m^{\mathrm{fold}}\) 来实现同一 cylinder 可观测量的经验读出，则在定理 \ref{thm:tv-envelope-markov} 的事件上同时成立
+\[
+\boxed{\;
+\left|\Pi_{n,m}(C)-\frac{|C|}{|G_m|}\right|
+\ \le\
+K_1\,\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}
+\ +\
+K_2\cdot D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})
+\;}
+\]
+其中 \(K_2\) 是该 cylinder 读出（指示函数或其有界线性组合）对 TV 的 Lipschitz 常数；对指示函数可取 \(K_2=2\)，且事实上可取 \(K_2=1\)。
+代入定理 \ref{thm:tv-envelope-markov}，得到完全显式的有限数据证书
+\[
+\boxed{\;
+\left|\Pi_{n,m}(C)-\frac{|C|}{|G_m|}\right|
+\ \le\
+K_1\,\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}
+\ +\
+K_2\cdot \frac12|X_m|\sqrt{\frac{2}{\gamma_{\mathrm{ps}}^{(m)}N}\log\frac{2|X_m|}{\delta}}
+\;}
+\]
+以概率至少 \(1-\delta\) 成立。
+\end{theorem}
+
+\begin{proof}
+确定性尾项来自定理 \ref{thm:kernel-chebotarev-exp} 的“角色分解 + 最坏扭曲指数”口径：对每个同余类 \(g\) 的 primitive 计数，误差由 \(\max_{\chi\ne\chi_0}\rho(M_\chi)^n\) 控制；归一化为比例 \(\Pi_{n,m}(C)\) 并在统一谱隙假设下即可得到所示 \(\lambda^{-(1/2+\varepsilon)n}\) 的指数界（吸收常数到 \(K_1\)）。
+第二项是三角不等式与 TV 的期望差界：对任意有界可观测 \(f\)，有 \(|\mathbb{E}_p f-\mathbb{E}_q f|\le 2\|f\|_\infty D_{\mathrm{TV}}(p,q)\)，对 cylinder 指示函数取 \(\|f\|_\infty=1\) 即得 \(K_2\) 的选择。
+最后一步代入定理 \ref{thm:tv-envelope-markov} 的显式包络。证毕。
+\end{proof}
+
+\begin{corollary}[最优折中：对数深度与二次样本成本边界曲线]\label{cor:auditable-profinite-chebotarev-tradeoff}
+在定理 \ref{thm:auditable-profinite-chebotarev-finite} 的条件下，给定目标精度 \(\tau>0\) 与置信水平 \(\delta\in(0,1)\)，把两项误差平衡（同阶）可得到一条“边界曲线”：
+\[
+K_1\,\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}
+\ \approx\
+K_2\cdot \frac12|X_m|\sqrt{\frac{2}{\gamma_{\mathrm{ps}}^{(m)}N}\log\frac{2|X_m|}{\delta}}.
+\]
+解得
+\[
+\boxed{\;
+N\ \approx\
+\frac{K_2^2|X_m|^2}{2\gamma_{\mathrm{ps}}^{(m)}}\log\frac{2|X_m|}{\delta}\cdot
+\left(\frac{\lambda^{(1/2+\varepsilon)n}}{|G_m|}\right)^2
+\;}
+\]
+等价地，
+\[
+\boxed{\;
+n\ \approx\
+\frac{1}{(1/2+\varepsilon)\log\lambda}\left(\log|G_m|+\frac12\log N+\mathrm{const}(m,\delta)\right).
+\;}
+\]
+因此在固定 \((m,\delta)\) 下，所需读出深度 \(n\) 仅随 \(|G_m|\) 以对数增长，而样本量 \(N\) 沿 \(\lambda^{(1/2+\varepsilon)n}\) 呈二次放大。
+\end{corollary}
+
+\begin{corollary}[确定性三预算定律：差异度 \texorpdfstring{$\Rightarrow$}{=>} TV \texorpdfstring{$\Rightarrow$}{=>} Chebotarev]\label{cor:auditable-profinite-chebotarev-three-budget-deterministic}
+在定理 \ref{thm:auditable-profinite-chebotarev-finite} 的统一谱隙假设下，若折叠直方图 \(\hat{\pi}_{m,N}\) 来自旋转扫描（Sturmian）模型（相位样本 \(x_t=\{x_0+t\alpha\}\)）在分辨率 \(m\) 上的折叠推前，则对任意 cylinder \(C\subseteq G_m\) 与任意 \(n,N\ge 1\) 都有完全确定性的三预算上界
+\[
+\boxed{\;
+\left|\Pi_{n,m}(C)-\frac{|C|}{|G_m|}\right|
+\ \le\
+K_1\,\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}
+\ +\
+K_2\,(m+1)\,D_N^*(\alpha;x_0)\;}
+\]
+其中 \(D_N^*(\alpha;x_0)\) 为星差异度（第 \ref{sec:statistical-stability} 节），\(K_1=K_1(m)\) 与 \(K_2\) 的含义同定理 \ref{thm:auditable-profinite-chebotarev-finite}。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:auditable-profinite-chebotarev-finite} 的误差分解（尾项 \(+\) TV 项）有
+\[
+\left|\Pi_{n,m}(C)-\frac{|C|}{|G_m|}\right|
+\ \le\
+K_1\,\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}
+\ +\
+K_2\cdot D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}}).
+\]
+另一方面，对旋转扫描模型，定理 \ref{thm:fold-suite} 的第 (7) 条给出推前不等式
+\(
+D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})\le (m+1)D_N^*(\alpha;x_0)
+\)。
+代入即得结论。证毕。
+\end{proof}
+
+\begin{remark}[传输型审计量（\texorpdfstring{$W_1$}{W1}）与坐标协变稳定性]\label{rem:auditable-profinite-chebotarev-w1-transport}
+推论 \ref{cor:auditable-profinite-chebotarev-three-budget-deterministic} 以星差异 \(D_N^*\) 控制 TV，从而天然适配柱事件（指示函数）读出。
+当读出核在相位变量上为 Lipschitz 时，可改用传输差异
+\(
+\mathsf{T}_N(\alpha)=W_1(\mu_N,\lambda)
+\)
+直接审计经验均值误差：
+\[
+\left|\frac1N\sum_{t=0}^{N-1}f(x_t)-\int_0^1 f(x)\,dx\right|
+\le
+\mathrm{Lip}(f)\,\mathsf{T}_N(\alpha)
+\]
+（定理 \ref{thm:kronecker-w1-lipschitz-readout}）。
+该审计量在 Lipschitz 坐标变换下满足显式协变放缩
+\(
+W_1(\Phi_\#\mu,\Phi_\#\nu)\le \mathrm{Lip}(\Phi)\,W_1(\mu,\nu)
+\)
+（命题 \ref{prop:w1-lipschitz-pushforward}），并在连分分母 tick 上具有闭式常数（定理 \ref{thm:kronecker-w1-denominator-closed-form}）。
+因此它可作为与星差异链条正交的一条传输型误差支柱（见附录 \ref{app:kronecker-w1-transport}）。
+\end{remark}
+
+\begin{corollary}[\texorpdfstring{$(n,N)$}{(n,N)} 平衡律与三角可见域]\label{cor:auditable-profinite-chebotarev-balance-triangle}
+在推论 \ref{cor:auditable-profinite-chebotarev-three-budget-deterministic} 的设定下，给定目标误差 \(\tau>0\)。若选取 \((n,N)\) 使得
+\[
+K_1\,\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}\ \le\ \frac{\tau}{2},
+\qquad
+(m+1)D_N^*(\alpha;x_0)\ \le\ \frac{\tau}{2K_2},
+\]
+则对任意 cylinder \(C\subseteq G_m\) 都有
+\(
+\left|\Pi_{n,m}(C)-\frac{|C|}{|G_m|}\right|\le \tau
+\)。
+在“最省分配”意义下，可将两项误差取同阶平衡
+\[
+K_1\,\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}
+\ \approx\
+K_2\,(m+1)\,D_N^*(\alpha;x_0),
+\]
+从而把时间轴 \(n\) 与相位样本轴 \(N\) 组织为同一条可审计预算律：\(n\) 的主阶由 \(\log|G_m|\) 与 \(\log(1/\tau)\) 控制，而 \(N\) 的主阶由差异度衰减律与系数 \((m+1)\) 控制。
+\par
+若进一步采用尺度化扩散口径的可见域，见猜想 \ref{conj:scaled-kernel-grh-diffusive}，则上述两条预算可同时写成一个“可见三角域”：
+\[
+\boxed{\;
+m\ \lesssim\ n^{1/2-\varepsilon_0},
+\qquad
+(m+1)D_N^*(\alpha;x_0)\ \lesssim\ \tau\; }.
+\]
+\end{corollary}
+
+\begin{theorem}[热力学缺陷的“可见极限”：纤维歧义的 TV/KL 上界]\label{thm:defect-limited-audit}
+固定层 \(m\) 与任意边缘分布 \(\pi\in\Delta(X_m)\)，令 \(\widetilde\pi\) 为其纤维均匀最大熵提升（定义 \ref{def:pom-maxent-lift}）。
+则对任意 lift \(\mu\in\Delta(\Omega_m)\) 满足 \((\Fold_m)_*\mu=\pi\)，有显式 KL 上界
+\[
+\boxed{\;
+D_{\mathrm{KL}}(\mu\|\widetilde\pi)\ \le\ \kappa_m(\pi)
+\;}
+\]
+其中 \(\kappa_m(\pi)=\mathbb{E}_\pi[\log d_m(X)]\)。
+从而由 Pinsker 不等式得到
+\[
+\boxed{\;
+D_{\mathrm{TV}}(\mu,\widetilde\pi)\ \le\ \sqrt{\frac{\kappa_m(\pi)}{2}}.
+\;}
+\]
+因此对任意有界可观测 \(f:\Omega_m\to\RR\)，所有与 \(\pi\) 相容的 lift 在 \(f\) 上相对于最大熵 lift 的系统性偏差都满足
+\[
+\boxed{\;
+\bigl|\mathbb{E}_\mu[f]-\mathbb{E}_{\widetilde\pi}[f]\bigr|
+\ \le\ 2\|f\|_\infty\sqrt{\frac{\kappa_m(\pi)}{2}}.
+\;}
+\]
+这给出一个纯内部、与扭曲谱隙无关的“可审计极限”：当 \(\kappa_m(\pi)\) 增大时，仅凭折叠边缘 \(\pi\) 不能把任何 lift 级 cylinder/同余可观测的误差压到低于 \(\Theta(\sqrt{\kappa_m(\pi)})\) 的系统性尺度。
+\end{theorem}
+
+\begin{proof}
+按纤维分解写 \(\mu(a)=\pi(x)\mu(a\mid x)\)、\(\widetilde\pi(a)=\pi(x)\cdot \frac{1}{d_m(x)}\)，其中 \(x=\Fold_m(a)\)。
+则
+\[
+D_{\mathrm{KL}}(\mu\|\widetilde\pi)
+:=\sum_{x\in X_m}\pi(x)\,D_{\mathrm{KL}}\!\left(\mu(\cdot\mid x)\ \Big\|\ \mathrm{Unif}\big(\Fold_m^{-1}(x)\big)\right).
+\]
+而对任意有限集合 \(S\) 与其均匀分布 \(\mathrm{Unif}(S)\)，有 \(D_{\mathrm{KL}}(q\|\mathrm{Unif}(S))\le \log|S|\)，且当且仅当 \(q\) 为点质量时取等号。
+逐纤维应用该上界并取 \(\pi\) 期望即得 \(D_{\mathrm{KL}}(\mu\|\widetilde\pi)\le \mathbb{E}_\pi[\log d_m(X)]=\kappa_m(\pi)\)。
+Pinsker 与期望差界是标准不等式推论。证毕。
+\end{proof}
+
+\input{sections/body/zeta_finite_part/xi/thm__xi-crt-invisibility-localization-marginal-prime-spectrum}
+
+\paragraph{前缀—清晰度：四项正交误差预算（终态可引用形式）}
+将“继续加深扫描”（时间轴 \(n\)）与“提高分辨率/可见域”（空间轴 \(m\)）在逻辑上分离，需要把读出误差按资源轴分解为相互正交的预算项。
+下述定理把动力学尾项、有限数据校准、纤维歧义与 \(\mathsf{NULL}\) 的完备性缺口并联为一个可审计的终态断言：它刻意避免中间推导，只给出可直接进入主结果的最终形式。
+
+\begin{theorem}[前缀读出的四项正交误差分解（可审计版）]\label{thm:prefix-readout-orthogonal-error-decomposition}
+固定层级 \(m\) 与同余/角色柱事件 \(C\subseteq G_m\)。
+记 \(\Pi_{n,m}(C):=\frac{\sum_{g\in C}p_{n,g}}{p_n}\) 为长度 \(n\) 的 primitive 轨道在 \(C\) 上的经验比例。
+并在统一扭曲谱隙口径下记 \(\lambda=\rho(M)\)，取 \(\varepsilon>0\) 使得对所有非平凡扭曲通道满足 \(\rho(M_\chi)\le \lambda^{1/2-\varepsilon}\)（即定理 \ref{thm:auditable-profinite-chebotarev-finite} 的统一谱隙假设）。
+则存在常数 \(K_1=K_1(m)\) 使得对任意 \(n\ge 1\) 有确定性尾项界
+\begin{equation}\label{eq:prefix-tail-term}
+\boxed{\;
+\left|\Pi_{n,m}(C)-\frac{|C|}{|G_m|}\right|
+\ \le\
+K_1\,\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}\;}
+\end{equation}
+（动力学尾项；参见定理 \ref{thm:auditable-profinite-chebotarev-finite}）。
+\par
+若以折叠输出直方图 \(\hat{\pi}_{m,N}\) 对同一柱读出作经验校准，则对指示读出（cylinder 指示函数）有
+\begin{equation}\label{eq:prefix-tail-plus-data}
+\boxed{\;
+\left|\Pi_{n,m}(C)-\frac{|C|}{|G_m|}\right|
+\ \le\
+K_1\,\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}
+\ +\
+D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})\;}
+\end{equation}
+（有限数据项；仍见定理 \ref{thm:auditable-profinite-chebotarev-finite}，并取 \(K_2=1\)）。
+进一步地，若折叠输出过程为不可约非周期有限状态马尔可夫链，其非可逆混合由伪谱隙 \(\gamma_{\mathrm{ps}}^{(m)}\in(0,1]\) 控制，则对任意 \(\delta_{\mathrm{conf}}\in(0,1)\)，以概率至少 \(1-\delta_{\mathrm{conf}}\) 有显式置信包络
+\begin{equation}\label{eq:prefix-data-envelope}
+\boxed{\;
+D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})
+\ \le\
+\frac12|X_m|\sqrt{\frac{2}{\gamma_{\mathrm{ps}}^{(m)}N}\log\frac{2|X_m|}{\delta_{\mathrm{conf}}}}\;}
+\end{equation}
+（定理 \ref{thm:tv-envelope-markov}）。
+\par
+与上述“时间—数据”两轴误差正交的是“纤维歧义”误差：对任意边缘分布 \(\pi\in\Delta(X_m)\)，令 \(\widetilde\pi\) 为其纤维均匀最大熵提升，并记
+\(
+\kappa_m(\pi):=\mathbb{E}_\pi[\log d_m(X)]
+\)。
+则对任意满足 \((\Fold_m)_*\mu=\pi\) 的 lift \(\mu\in\Delta(\Omega_m)\)，都有
+\begin{equation}\label{eq:prefix-fiber-term}
+\boxed{\;
+D_{\mathrm{TV}}(\mu,\widetilde\pi)\ \le\ \sqrt{\frac{\kappa_m(\pi)}{2}},
+\qquad
+\bigl|\mathbb{E}_\mu[f]-\mathbb{E}_{\widetilde\pi}[f]\bigr|
+\ \le\
+2\|f\|_\infty\sqrt{\frac{\kappa_m(\pi)}{2}}\;}
+\end{equation}
+（定理 \ref{thm:defect-limited-audit}）。
+\par
+最后，“\(\mathsf{NULL}\)”体现的是完备性缺口而非数值误差：在地址先于取值的语义下，它等价于证书对象在该地址处的结构性缺失（命题 \ref{prop:null-as-local-section-obstruction}）。
+在 unitary-slice 零点审计口径下，该缺口可被两类后端证书可审计地排除：可见自由度稳定（ACC-Rank/Hankel-rank 稳定）与 prime-register 分位配额充分；二者同时满足时可在给定置信口径内排除 \(\mathsf{NULL}\) 的来源，从而将 completeness 缺口压缩为这两类证书的核验任务（命题 \ref{prop:xi-completeness-auditable-decomposition}）。
+\par
+综上，给定目标误差阈值 \(\tau>0\)。若选择 \((m,n,N)\) 使得
+\begin{equation}\label{eq:prefix-audit-budget-sufficient}
+\boxed{\;
+K_1\,\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}\le \frac{\tau}{3},
+\qquad
+\frac12|X_m|\sqrt{\frac{2}{\gamma_{\mathrm{ps}}^{(m)}N}\log\frac{2|X_m|}{\delta_{\mathrm{conf}}}}\le \frac{\tau}{3},
+\qquad
+\sqrt{2\,\kappa_m(\pi_m^{\mathrm{fold}})}\le \frac{\tau}{3}\;}
+\end{equation}
+并在同一置信口径下通过 ACC-Rank 与 prime-register 两类完备性证书，则“前缀读出”在审计意义下同时获得：时间尾项、有限数据、纤维歧义与完备性（\(\mathsf{NULL}\)）四项误差的可核对上界。
+以上四项在资源轴上两两正交：增大 \(n\) 仅影响 \eqref{eq:prefix-tail-term}；增大 \(N\) 仅影响 \eqref{eq:prefix-data-envelope}；纤维歧义由 \(\kappa_m\) 单独控制；而 \(\mathsf{NULL}\) 仅由后端证书控制。
+\end{theorem}
+
+\begin{theorem}[四项正交审计下的显式停止前沿]\label{thm:prefix-audit-explicit-stopping-frontier}
+固定层级 \(m\)、目标总误差阈值 \(\tau>0\) 与置信参数 \(\delta_{\mathrm{conf}}\in(0,1)\)。
+假设：
+\begin{enumerate}
+  \item \textbf{纤维安全条件}成立，即
+  \[
+  \kappa_m(\pi_m^{\mathrm{fold}})\le \frac{\tau^2}{18};
+  \]
+  \item \(\mathsf{NULL}\) 完备性缺口已由命题 \ref{prop:xi-completeness-auditable-decomposition} 所述的后端证书排除；
+  \item 时间尾项与有限数据项分别由 \eqref{eq:prefix-tail-term} 与 \eqref{eq:prefix-data-envelope} 控制。
+\end{enumerate}
+定义显式阈值
+\[
+\boxed{\;
+n_\star(m,\tau)
+:=
+\left\lceil
+\frac{\log\!\bigl(3K_1(m)|G_m|/\tau\bigr)}
+{(1/2+\varepsilon)\log\lambda}
+\right\rceil,\;}
+\]
+\[
+\boxed{\;
+N_\star(m,\tau,\delta_{\mathrm{conf}})
+:=
+\left\lceil
+\frac{9|X_m|^2}{2\gamma_{\mathrm{ps}}^{(m)}\tau^2}
+\log\!\Bigl(\frac{2|X_m|}{\delta_{\mathrm{conf}}}\Bigr)
+\right\rceil.\;}
+\]
+则对任意
+\[
+n\ge n_\star(m,\tau),
+\qquad
+N\ge N_\star(m,\tau,\delta_{\mathrm{conf}}),
+\]
+前缀读出在审计意义下满足总误差不超过 \(\tau\)。
+并且在同一四项预算分配框架中，停止区域恰为 \((n,N)\)-平面中的东北象限
+\[
+\boxed{\;
+\{(n,N):\ n\ge n_\star(m,\tau),\ N\ge N_\star(m,\tau,\delta_{\mathrm{conf}})\}.\;}
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:prefix-readout-orthogonal-error-decomposition}，只需把四项预算中的三个数值项分别压到 \(\tau/3\) 以内，并由后端证书排除 \(\mathsf{NULL}\) 项。
+
+首先，纤维安全条件给出
+\[
+\sqrt{2\,\kappa_m(\pi_m^{\mathrm{fold}})}\le \frac{\tau}{3},
+\]
+故纤维歧义项已满足预算要求。
+
+其次，由 \eqref{eq:prefix-tail-term}，若
+\[
+K_1(m)\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}\le \frac{\tau}{3},
+\]
+则时间尾项不超过 \(\tau/3\)。
+解得
+\[
+n\ge
+\frac{\log\!\bigl(3K_1(m)|G_m|/\tau\bigr)}
+{(1/2+\varepsilon)\log\lambda},
+\]
+故取上整即得 \(n_\star(m,\tau)\)。
+
+再次，由 \eqref{eq:prefix-data-envelope}，若
+\[
+\frac12|X_m|
+\sqrt{
+\frac{2}{\gamma_{\mathrm{ps}}^{(m)}N}
+\log\!\Bigl(\frac{2|X_m|}{\delta_{\mathrm{conf}}}\Bigr)}
+\le \frac{\tau}{3},
+\]
+则有限数据项不超过 \(\tau/3\)。
+平方并整理得到
+\[
+N\ge
+\frac{9|X_m|^2}{2\gamma_{\mathrm{ps}}^{(m)}\tau^2}
+\log\!\Bigl(\frac{2|X_m|}{\delta_{\mathrm{conf}}}\Bigr),
+\]
+取上整即得 \(N_\star(m,\tau,\delta_{\mathrm{conf}})\)。
+
+反过来，在该四项预算框架内，时间尾项仅由 \(n\) 控制且随 \(n\) 单调下降，有限数据项仅由 \(N\) 控制且随 \(N\) 单调下降，而纤维项与 \(\mathsf{NULL}\) 项已分别由前两条假设锁定。
+因此一旦 \((n,N)\) 进入由 \((n_\star,N_\star)\) 生成的东北象限，全部预算同时满足；若离开该象限，则至少有一个数值阈值尚未达到。
+故停止区域恰如所述。证毕。
+\end{proof}

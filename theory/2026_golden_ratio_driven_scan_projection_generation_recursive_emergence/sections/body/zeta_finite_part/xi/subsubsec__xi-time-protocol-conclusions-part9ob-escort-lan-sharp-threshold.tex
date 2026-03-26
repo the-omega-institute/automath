@@ -1,0 +1,538 @@
+\paragraph{escort 温度族的一维指数封闭、局部正态性与阈值重建预算}
+在末位两块正则形、温度间二点散度闭式、\((e)\)-测地仿射闭合与 Fisher--Rao 几何已经明确之后，还可继续把统计模型、局部几何、假设检验与阈值预算压缩为同一条单比特指数链。
+
+\begin{theorem}[escort 温度族的一致对数指数分解与末位渐近充分性]\label{thm:xi-time-part9ob-escort-loglik-onebit-expfamily}
+对任意 \(q\ge 0\)，记
+\[
+\varepsilon_m:=\Bigl(\frac{\varphi}{2}\Bigr)^m,
+\qquad
+A_0:=\{w\in X_m:\ w_m=0\},
+\qquad
+A_1:=\{w\in X_m:\ w_m=1\}.
+\]
+定义显式两块权重
+\[
+\vartheta_m(q):=
+\frac{\varphi^{-q}F_m}{F_{m+1}+\varphi^{-q}F_m},
+\]
+以及块内均匀模型
+\[
+\bar\pi_{m,q}(w):=
+\begin{cases}
+\dfrac{1-\vartheta_m(q)}{F_{m+1}},& w\in A_0,\\[8pt]
+\dfrac{\vartheta_m(q)}{F_m},& w\in A_1.
+\end{cases}
+\]
+则对每个固定 \(q\ge 0\)，有一致对数逼近
+\[
+\sup_{w\in X_m}\left|
+\log\frac{\pi_{m,q}(w)}{\bar\pi_{m,q}(w)}
+\right|
+=
+O(\varepsilon_m).
+\]
+进一步，对任意固定 \(p,q\ge 0\)，有一致似然比展开
+\[
+\log\frac{\pi_{m,q}(w)}{\pi_{m,p}(w)}
+=
+A_m(q,p)
+-(q-p)w_m\log\varphi
++O(\varepsilon_m),
+\]
+其中
+\[
+A_m(q,p):=
+\log\frac{F_{m+1}+\varphi^{-p}F_m}{F_{m+1}+\varphi^{-q}F_m}.
+\]
+特别地，若记
+\[
+T_m(w):=w_m\in\{0,1\},
+\qquad
+\eta(q):=-q\log\varphi,
+\]
+则 \(\bar\pi_{m,q}\) 具有精确指数族表达
+\[
+\bar\pi_{m,q}(w)
+=
+\exp\!\bigl(\eta(q)T_m(w)-\Psi_m(\eta(q))\bigr),
+\qquad
+\Psi_m(\eta):=\log\!\bigl(F_{m+1}+e^{\eta}F_m\bigr),
+\]
+故 escort 温度族在渐近上被同一末位统计量 \(T_m\) 充分化为一维 Bernoulli 指数族。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-bin-two-state-asymptotic} 与命题 \ref{prop:fold-bin-power-sum-asymptotic}，对每个固定 \(q\ge 0\) 都有一致展开
+\[
+\pi_{m,q}(w)
+=
+\frac{\varphi^{-q w_m}}{F_{m+1}+\varphi^{-q}F_m}
+\bigl(1+O(\varepsilon_m)\bigr),
+\qquad
+w\in X_m.
+\]
+而由 \(|A_0|=F_{m+1}\)、\(|A_1|=F_m\) 可直接计算
+\[
+\bar\pi_{m,q}(w)=
+\begin{cases}
+\dfrac{1}{F_{m+1}+\varphi^{-q}F_m},& w\in A_0,\\[8pt]
+\dfrac{\varphi^{-q}}{F_{m+1}+\varphi^{-q}F_m},& w\in A_1.
+\end{cases}
+\]
+因此
+\[
+\frac{\pi_{m,q}(w)}{\bar\pi_{m,q}(w)}=1+O(\varepsilon_m)
+\]
+在 \(w\in X_m\) 上一致成立。由于右端对充分大 \(m\) 落在某个固定紧区间 \([1/2,3/2]\) 内，取对数便得到第一条式子。
+
+对第二条，只需将上式分别用于参数 \(q\) 与 \(p\)：
+\[
+\log\frac{\pi_{m,q}(w)}{\pi_{m,p}(w)}
+=
+\log\frac{\bar\pi_{m,q}(w)}{\bar\pi_{m,p}(w)}
++O(\varepsilon_m).
+\]
+而
+\[
+\log\frac{\bar\pi_{m,q}(w)}{\bar\pi_{m,p}(w)}
+=
+\log\frac{F_{m+1}+\varphi^{-p}F_m}{F_{m+1}+\varphi^{-q}F_m}
++\,
+\log\!\bigl(\varphi^{-(q-p)w_m}\bigr),
+\]
+这就给出所示似然比展开。
+
+最后，由 \(\eta(q)=-q\log\varphi\) 可把 \(\bar\pi_{m,q}\) 精确重写为
+\[
+\bar\pi_{m,q}(w)
+=
+\frac{e^{\eta(q)w_m}}{F_{m+1}+e^{\eta(q)}F_m}
+=
+\exp\!\bigl(\eta(q)T_m(w)-\Psi_m(\eta(q))\bigr).
+\]
+因此，全部参数依赖只通过 \(T_m(w)=w_m\) 出现，故 escort 温度族在上述一致对数误差意义下确已塌缩为一维指数族。证毕。
+\end{proof}
+
+\begin{theorem}[Neyman--Pearson 判别的末位坍缩]\label{cor:xi-time-part9ob-escort-np-lastbit-collapse}
+沿用定理 \ref{thm:xi-time-part9ob-escort-loglik-onebit-expfamily} 的记号。对任意 \(0\le p<q\)，记
+\[
+\ell_m(w):=w_m,
+\qquad
+C_m(p,q):=
+\log\frac{F_{m+1}+\varphi^{-p}F_m}{F_{m+1}+\varphi^{-q}F_m}.
+\]
+则有统一似然比展开
+\[
+\log\frac{\pi_{m,q}(w)}{\pi_{m,p}(w)}
+=
+C_m(p,q)-(q-p)\log\varphi\cdot \ell_m(w)
++O(\varepsilon_m),
+\]
+其中误差对 \(w\in X_m\) 一致。因而在 \(m\to\infty\) 极限中，任何 Neyman--Pearson 最强检验都退化为对单个比特 \(\ell_m(w)\) 的阈值检验。
+
+再令
+\[
+\theta(s):=\frac{1}{1+\varphi^{s+1}}
+\qquad (s\ge 0).
+\]
+则有
+\[
+\|\pi_{m,q}-\pi_{m,p}\|_{\mathrm{TV}}
+=
+|\theta(q)-\theta(p)|+O(\varepsilon_m),
+\]
+从而
+\[
+\lim_{m\to\infty}\|\pi_{m,q}-\pi_{m,p}\|_{\mathrm{TV}}
+=
+|\theta(q)-\theta(p)|.
+\]
+等先验下，相应 Bayes 最小判别误差满足
+\[
+\lim_{m\to\infty}P_e^\ast(\pi_{m,q},\pi_{m,p})
+=
+\frac12\bigl(1-|\theta(q)-\theta(p)|\bigr).
+\]
+更具体地，等先验 Bayes 最小错误率在极限中完全由二元参数差 \(|\theta(q)-\theta(p)|\) 支配。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9ob-escort-loglik-onebit-expfamily}，
+\[
+\|\pi_{m,q}-\bar\pi_{m,q}\|_{\mathrm{TV}}=O(\varepsilon_m),
+\qquad
+\|\pi_{m,p}-\bar\pi_{m,p}\|_{\mathrm{TV}}=O(\varepsilon_m).
+\]
+因此由三角不等式，
+\[
+\Bigl|
+\|\pi_{m,q}-\pi_{m,p}\|_{\mathrm{TV}}
+-\|\bar\pi_{m,q}-\bar\pi_{m,p}\|_{\mathrm{TV}}
+\Bigr|
+=
+O(\varepsilon_m).
+\]
+而 \(\bar\pi_{m,q}\)、\(\bar\pi_{m,p}\) 在相同分块 \(A_0\sqcup A_1\) 上块内均匀，故
+\[
+\|\bar\pi_{m,q}-\bar\pi_{m,p}\|_{\mathrm{TV}}
+=
+|\vartheta_m(q)-\vartheta_m(p)|.
+\]
+又由 \(F_{m+1}/F_m\to\varphi\)，有
+\[
+\vartheta_m(s)\to\theta(s)
+\qquad (s\ge 0),
+\]
+于是得到总变差展开与极限。Bayes 最小错误概率由 Helstrom 公式
+\[
+P_e^\ast(P,Q)=\frac12\bigl(1-\|P-Q\|_{\mathrm{TV}}\bigr)
+\]
+立得。
+
+最后，由定理 \ref{thm:xi-time-part9ob-escort-loglik-onebit-expfamily} 的似然比公式，
+\[
+\log\frac{\pi_{m,q}(w)}{\pi_{m,p}(w)}
+=
+C_m(p,q)-(q-p)\log\varphi\cdot \ell_m(w)+O(\varepsilon_m).
+\]
+因此两块上的似然比差恰为
+\[
+(p-q)\log\varphi+O(\varepsilon_m).
+\]
+由于此处 \(q>p\)，上式对充分大 \(m\) 为正，故似然比在 \(A_0\) 上严格更大。于是 Neyman--Pearson 最优检验不再需要读取整个 \(w\)，只需读取末位并在对应块上作决定。证毕。
+\end{proof}
+
+\begin{theorem}[escort 温度流的双向局部 KL 曲率闭式]\label{thm:xi-time-part9ob-escort-two-sided-local-kl}
+对任意固定 \(q\ge 0\)，当 \(h\to 0\) 且 \(q+h\ge 0\) 时，有
+\[
+\lim_{m\to\infty}D_{\mathrm{KL}}(\pi_{m,q+h}\Vert \pi_{m,q})
+=
+\frac12 I(q)h^2+O(h^3),
+\]
+\[
+\lim_{m\to\infty}D_{\mathrm{KL}}(\pi_{m,q}\Vert \pi_{m,q+h})
+=
+\frac12 I(q)h^2+O(h^3),
+\]
+其中
+\[
+I(q):=
+(\log\varphi)^2\,\theta(q)\bigl(1-\theta(q)\bigr)
+=
+(\log\varphi)^2\frac{\varphi^{q+1}}{(1+\varphi^{q+1})^2}.
+\]
+因此 escort 温度流的局部 KL 曲率在正反两个方向上都由同一 Fisher 密度 \(I(q)\) 完全控制。
+\end{theorem}
+\begin{proof}
+由结论 \ref{con:xi-time-part9o-escort-fdiv-collapse} 在
+\[
+f(u)=u\log u
+\]
+处的专化，
+\[
+\lim_{m\to\infty}D_{\mathrm{KL}}(\pi_{m,q+h}\Vert \pi_{m,q})
+=
+D_{\mathrm{KL}}\!\bigl(\mathrm{Bernoulli}(\theta(q+h))\Vert \mathrm{Bernoulli}(\theta(q))\bigr).
+\]
+对 Bernoulli 散度的标准 Taylor 展开给出
+\[
+D_{\mathrm{KL}}\!\bigl(\mathrm{Bernoulli}(\theta+\delta)\Vert \mathrm{Bernoulli}(\theta)\bigr)
+=
+\frac{\delta^2}{2\theta(1-\theta)}+O(\delta^3),
+\]
+\[
+D_{\mathrm{KL}}\!\bigl(\mathrm{Bernoulli}(\theta)\Vert \mathrm{Bernoulli}(\theta+\delta)\bigr)
+=
+\frac{\delta^2}{2\theta(1-\theta)}+O(\delta^3).
+\]
+另一方面，
+\[
+\theta'(q)
+=
+-(\log\varphi)\,\theta(q)\bigl(1-\theta(q)\bigr),
+\]
+故
+\[
+\theta(q+h)-\theta(q)=\theta'(q)h+O(h^2).
+\]
+将
+\[
+\delta=\theta(q+h)-\theta(q)
+\]
+代回前两式，即得
+\[
+\frac{(\theta'(q))^2}{2\theta(q)(1-\theta(q))}h^2+O(h^3)
+=
+\frac12(\log\varphi)^2\theta(q)(1-\theta(q))h^2+O(h^3),
+\]
+这正是所示公式。证毕。
+\end{proof}
+
+\begin{theorem}[亚临界样本规模下 escort 乘积试验与显式 Bernoulli 乘积试验的 Le Cam 等价]\label{thm:xi-time-part9ob-escort-product-lecam}
+设 \(Q\subset[0,\infty)\) 为任意有限集合，\((n_m)_{m\ge 1}\) 为正整数序列。定义 escort 乘积试验
+\[
+\mathcal E_m(Q):=\{\pi_{m,q}^{\otimes n_m}:q\in Q\}
+\qquad\text{定义在 }X_m^{n_m}\text{ 上},
+\]
+以及显式 Bernoulli 乘积试验
+\[
+\mathcal B_m(Q):=
+\{\mathrm{Bernoulli}(\vartheta_m(q))^{\otimes n_m}:q\in Q\}
+\qquad\text{定义在 }\{0,1\}^{n_m}\text{ 上}.
+\]
+则存在与 \(q\) 无关的 Markov 核
+\[
+L_m:X_m^{n_m}\rightsquigarrow \{0,1\}^{n_m},
+\qquad
+K_m:\{0,1\}^{n_m}\rightsquigarrow X_m^{n_m},
+\]
+使得对某个仅依赖于 \(Q\) 的常数 \(C_Q>0\)，有
+\[
+\sup_{q\in Q}
+D_{\mathrm{TV}}\!\bigl(L_{m\#}\pi_{m,q}^{\otimes n_m},
+\mathrm{Bernoulli}(\vartheta_m(q))^{\otimes n_m}\bigr)
+\le
+C_Q n_m\varepsilon_m,
+\]
+\[
+\sup_{q\in Q}
+D_{\mathrm{TV}}\!\bigl(K_{m\#}\mathrm{Bernoulli}(\vartheta_m(q))^{\otimes n_m},
+\pi_{m,q}^{\otimes n_m}\bigr)
+\le
+C_Q n_m\varepsilon_m.
+\]
+因而 Le Cam 距离满足
+\[
+\Delta\!\bigl(\mathcal E_m(Q),\mathcal B_m(Q)\bigr)
+\le
+C_Q n_m\varepsilon_m.
+\]
+特别地，若
+\[
+n_m=o\!\left(\Bigl(\frac{2}{\varphi}\Bigr)^m\right),
+\]
+则
+\[
+\Delta\!\bigl(\mathcal E_m(Q),\mathcal B_m(Q)\bigr)\longrightarrow 0.
+\]
+\end{theorem}
+\begin{proof}
+对 \((w^{(1)},\dots,w^{(n_m)})\in X_m^{n_m}\)，令
+\[
+L_m(w^{(1)},\dots,w^{(n_m)})
+:=
+\bigl(w^{(1)}_m,\dots,w^{(n_m)}_m\bigr).
+\]
+再令 \(U_{m,b}\) 为 \(A_b\) 上的均匀分布，并定义重构核
+\[
+K_m(b_1,\dots,b_{n_m},\cdot)
+:=
+U_{m,b_1}\otimes\cdots\otimes U_{m,b_{n_m}}.
+\]
+
+先证前向估计。记
+\[
+p_{m,q}:=\pi_{m,q}(A_1).
+\]
+则
+\[
+L_{m\#}\pi_{m,q}^{\otimes n_m}
+=
+\mathrm{Bernoulli}(p_{m,q})^{\otimes n_m}.
+\]
+另一方面，由定理 \ref{thm:xi-time-part9ob-escort-loglik-onebit-expfamily}，
+\[
+|p_{m,q}-\vartheta_m(q)|
+\le
+\|\pi_{m,q}-\bar\pi_{m,q}\|_{\mathrm{TV}}
+=
+O_Q(\varepsilon_m),
+\]
+其中由于 \(Q\) 有限，常数可对 \(q\in Q\) 统一。对乘积 Bernoulli 分布用望远镜估计，得到
+\[
+D_{\mathrm{TV}}\!\bigl(
+\mathrm{Bernoulli}(p_{m,q})^{\otimes n_m},
+\mathrm{Bernoulli}(\vartheta_m(q))^{\otimes n_m}
+\bigr)
+\le
+n_m|p_{m,q}-\vartheta_m(q)|
+\le
+C_Q n_m\varepsilon_m.
+\]
+
+再看反向估计。由构造，
+\[
+K_{m\#}\mathrm{Bernoulli}(\vartheta_m(q))^{\otimes n_m}
+=
+\bar\pi_{m,q}^{\otimes n_m}.
+\]
+又由乘积测度的望远镜估计与定理
+\ref{thm:xi-time-part9ob-escort-loglik-onebit-expfamily}，
+\[
+D_{\mathrm{TV}}\!\bigl(\bar\pi_{m,q}^{\otimes n_m},\pi_{m,q}^{\otimes n_m}\bigr)
+\le
+n_m D_{\mathrm{TV}}(\bar\pi_{m,q},\pi_{m,q})
+\le
+C_Q n_m\varepsilon_m.
+\]
+故后向估计亦成立。两侧 deficiency 都由上述界控制，遂得 Le Cam 距离估计；若 \(n_m=o((2/\varphi)^m)\)，则右端趋于 \(0\)。证毕。
+\end{proof}
+
+\begin{theorem}[escort 乘积试验的局部渐近正态性与末位计数中心序列]\label{thm:xi-time-part9ob-escort-lan-lastbit}
+设 \((n_m)_{m\ge 1}\) 满足
+\[
+n_m\to\infty,
+\qquad
+n_m=o\!\left(\Bigl(\frac{2}{\varphi}\Bigr)^m\right).
+\]
+固定 \(q>0\)，并记
+\[
+P_{m,q}:=\pi_{m,q}^{\otimes n_m}.
+\]
+对 \(W^{(1)},\dots,W^{(n_m)}\sim P_{m,q}\)，定义末位计数
+\[
+N_m:=\sum_{j=1}^{n_m}W^{(j)}_m,
+\]
+以及中心序列
+\[
+\Delta_{m,q}:=
+-\frac{\log\varphi}{\sqrt{n_m}}
+\Bigl(N_m-n_m\theta(q)\Bigr).
+\]
+再记
+\[
+I(q):=(\log\varphi)^2\theta(q)\bigl(1-\theta(q)\bigr).
+\]
+则对任意固定 \(h\in\RR\)，都有
+\[
+\log\frac{dP_{m,q+h/\sqrt{n_m}}}{dP_{m,q}}
+=
+h\Delta_{m,q}
+-\frac12 h^2 I(q)
++o_{P_{m,q}}(1),
+\]
+并且
+\[
+\Delta_{m,q}\Rightarrow \mathcal N\!\bigl(0,I(q)\bigr).
+\]
+因此 escort 乘积试验在每个内点 \(q>0\) 上都满足局部渐近正态性，而其全部局部信息只由末位计数 \(N_m\) 承载。
+\end{theorem}
+\begin{proof}
+记
+\[
+\delta_m:=\frac{h}{\sqrt{n_m}}.
+\]
+由定理 \ref{thm:fold-bin-two-state-asymptotic} 与命题 \ref{prop:fold-bin-power-sum-asymptotic} 的同一推导，在 \(q\) 的一个固定紧邻域内可取统一常数，从而
+\[
+\log\frac{\pi_{m,q+\delta_m}(w)}{\pi_{m,q}(w)}
+=
+A_m(q+\delta_m,q)-\delta_m w_m\log\varphi+O(\varepsilon_m)
+\]
+在 \(w\in X_m\) 上一致成立。对 \(n_m\) 个样本求和得
+\[
+\log\frac{dP_{m,q+\delta_m}}{dP_{m,q}}
+=
+n_mA_m(q+\delta_m,q)-\delta_m(\log\varphi)N_m
++O(n_m\varepsilon_m).
+\]
+
+令
+\[
+D_m(s):=F_{m+1}+\varphi^{-s}F_m,
+\qquad
+\vartheta_m(s):=\frac{\varphi^{-s}F_m}{D_m(s)}.
+\]
+则
+\[
+A_m(q+\delta,q)=\log D_m(q)-\log D_m(q+\delta).
+\]
+直接求导得到
+\[
+\partial_\delta A_m(q+\delta,q)\big|_{\delta=0}
+=
+(\log\varphi)\vartheta_m(q),
+\]
+\[
+\partial_\delta^2 A_m(q+\delta,q)\big|_{\delta=0}
+=
+-(\log\varphi)^2\vartheta_m(q)\bigl(1-\vartheta_m(q)\bigr).
+\]
+由于第三导数在该紧邻域内一致有界，Taylor 展开给出
+\[
+n_mA_m(q+\delta_m,q)
+=
+h(\log\varphi)\sqrt{n_m}\,\vartheta_m(q)
+-\frac12 h^2 I_m(q)
++O(n_m^{-1/2}),
+\]
+其中
+\[
+I_m(q):=
+(\log\varphi)^2\vartheta_m(q)\bigl(1-\vartheta_m(q)\bigr).
+\]
+代回得
+\[
+\log\frac{dP_{m,q+\delta_m}}{dP_{m,q}}
+=
+h\widetilde\Delta_{m,q}
+-\frac12 h^2 I_m(q)
++O(n_m\varepsilon_m)+O(n_m^{-1/2}),
+\]
+其中
+\[
+\widetilde\Delta_{m,q}
+:=
+-\frac{\log\varphi}{\sqrt{n_m}}
+\Bigl(N_m-n_m\vartheta_m(q)\Bigr).
+\]
+
+在 \(P_{m,q}\) 下，随机变量 \(W^{(j)}_m\) 相互独立，且其末位 \(W^{(j)}_m\in\{0,1\}\) 服从 Bernoulli\((p_{m,q})\)，其中
+\[
+p_{m,q}:=\pi_{m,q}(A_1)=\vartheta_m(q)+O(\varepsilon_m)
+\]
+由定理 \ref{thm:xi-time-part9ob-escort-loglik-onebit-expfamily} 得到。因此
+\[
+N_m\sim \mathrm{Binomial}(n_m,p_{m,q}).
+\]
+由经典中心极限定理，
+\[
+-\frac{\log\varphi}{\sqrt{n_m}}
+\Bigl(N_m-n_mp_{m,q}\Bigr)
+\Rightarrow
+\mathcal N\!\bigl(0,(\log\varphi)^2p_{m,q}(1-p_{m,q})\bigr).
+\]
+再用
+\[
+\sqrt{n_m}\,|p_{m,q}-\vartheta_m(q)|
+=
+O(\sqrt{n_m}\varepsilon_m)\to 0
+\]
+与
+\[
+\sqrt{n_m}\,|\vartheta_m(q)-\theta(q)|
+=
+O(\sqrt{n_m}\varepsilon_m)\to 0,
+\]
+便得到
+\[
+\widetilde\Delta_{m,q}-\Delta_{m,q}\to 0
+\qquad\text{于 }P_{m,q}\text{-概率},
+\]
+同时 \(I_m(q)\to I(q)\)。又因
+\[
+n_m\varepsilon_m\to 0,
+\qquad
+n_m^{-1/2}\to 0,
+\]
+所以上述对数似然比展开化为
+\[
+\log\frac{dP_{m,q+h/\sqrt{n_m}}}{dP_{m,q}}
+=
+h\Delta_{m,q}
+-\frac12 h^2 I(q)
++o_{P_{m,q}}(1).
+\]
+这就证明了 LAN 公式与中心序列的 Gaussian 极限。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part9oc-escort-sharp-threshold-budget}
+
+\endinput

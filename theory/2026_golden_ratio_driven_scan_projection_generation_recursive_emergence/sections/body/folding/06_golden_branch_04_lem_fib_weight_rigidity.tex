@@ -1,0 +1,135 @@
+\subsection{分辨率折叠映射（folding）}\label{subsec:folding-map}
+
+折叠的目标在于将任意窗口微态 $\omega=\omega_1\cdots \omega_m\in\Omega_m$ 规范化为一个合法词 $x\in X_m$。
+
+为避免“人为编号”，本文直接以 Fibonacci 权重赋予微态可审计整数值，再取 Zeckendorf 规范形：
+\begin{definition}[Fibonacci 加权值与折叠算子]\label{def:fold-word}
+对 $\omega=\omega_1\cdots\omega_m\in\Omega_m$ 定义其 Fibonacci 加权值
+\[
+N(\omega):=\sum_{k=1}^{m}\omega_k F_{k+1}\ \in\ \NN.
+\]
+令 $Z(N(\omega))=(c_1,c_2,\dots)$ 为 $N(\omega)$ 的 Zeckendorf 数字（\cite{Zeckendorf1972}），定义分辨率 $m$ 的折叠
+\[
+\Fold_m:\Omega_m\to X_m,\qquad
+\Fold_m(\omega):=\pi_m\!\bigl(Z(N(\omega))\bigr).
+\]
+\end{definition}
+
+\subsubsection{折叠的局部重写实现：终止、合流与顺序无关}\label{subsec:fold-local-rewrite}
+定义 \ref{def:fold-word} 以“先取值、再取 Zeckendorf 规范形”给出 $\Fold_m$。为将其落实为\textbf{局部、可执行}的归一化过程，并澄清“归约顺序不影响正规形”，我们把输入窗口嵌入到允许中间态出现冗余数字的配置空间上实施值保持重写。
+
+\paragraph{配置空间与值函数}
+令
+\[
+\mathcal{D}:=\Bigl\{a=(a_1,a_2,\dots): a_k\in\NN,\ \text{仅有限个 }a_k\neq 0\Bigr\}
+\]
+为有限支撑的非负整数数字配置。定义值同态
+\[
+\mathrm{Val}(a):=\sum_{k\ge 1} a_k F_{k+1}.
+\]
+对给定 $\omega\in\Omega_m$，记其嵌入为
+\[
+\iota_m(\omega):=(\omega_1,\dots,\omega_m,0,0,\dots)\in\mathcal{D},
+\]
+则 $\mathrm{Val}(\iota_m(\omega))=N(\omega)$。
+
+\paragraph{局部重写规则（值保持）}
+对 $a\in\mathcal{D}$，允许在满足条件时对局部模式做如下替换（其中 $e_k$ 为第 $k$ 位单位向量）：
+\begin{enumerate}
+  \renewcommand{\theenumi}{R\arabic{enumi}}
+  \renewcommand{\labelenumi}{(\theenumi)}
+  \item \label{rule:fold:adj}\textbf{相邻合并：}若 $a_k\ge 1$ 且 $a_{k+1}\ge 1$，则
+  \[
+  a\ \to\ a-e_k-e_{k+1}+e_{k+2}.
+  \]
+  \item \label{rule:fold:dedup1}\textbf{底位去重：}若 $a_1\ge 2$，则
+  \[
+  a\ \to\ a-2e_1+e_2.
+  \]
+  \item \label{rule:fold:dedup2}\textbf{第二位去重：}若 $a_2\ge 2$，则
+  \[
+  a\ \to\ a-2e_2+e_1+e_3.
+  \]
+  \item \label{rule:fold:dedupk}\textbf{一般位去重（$k\ge 3$）：}若 $a_k\ge 2$，则
+  \[
+  a\ \to\ a-2e_k+e_{k-2}+e_{k+1}.
+  \]
+\end{enumerate}
+每条规则都只改动有限个坐标，因此是严格的\textbf{局部}重写；并且它们分别对应恒等式
+\(
+F_{k+1}+F_{k+2}=F_{k+3},
+2F_2=F_3,
+2F_3=F_2+F_4,
+2F_{k+1}=F_{k-1}+F_{k+2}
+\)，因此每一步都保持 $\mathrm{Val}$ 不变。
+
+\begin{lemma}[二元局部归一化的权重递推刚性]\label{lem:fold-local-weight-rigidity-fibonacci}
+设同一组局部规则 \textup{(\ref{rule:fold:adj})--(\ref{rule:fold:dedupk})} 作用在
+\(
+\mathrm{Val}_w(a):=\sum_{k\ge 1}a_k w_k
+\)
+上并要求每一步重写都严格保持 \(\mathrm{Val}_w\) 不变。
+则权重序列 \((w_k)_{k\ge 1}\) 必满足
+\[
+w_{k+2}=w_{k+1}+w_k\qquad(k\ge 1).
+\]
+若进一步固定归一化 \(w_1=1,\ w_2=2\)，则唯一解为 \(w_k=F_{k+1}\)。
+\end{lemma}
+
+\begin{proof}
+由规则 \textup{(\ref{rule:fold:adj})} 的值保持，
+\[
+w_k+w_{k+1}=w_{k+2}\qquad(k\ge 1),
+\]
+即得二阶线性递推。
+该递推已蕴含规则 \textup{(\ref{rule:fold:dedup1})--(\ref{rule:fold:dedupk})} 的值保持恒等式，因此为必要条件。
+在初值 \(w_1=1,w_2=2\) 下，递推唯一确定 \(w_k=F_{k+1}\)。
+\end{proof}
+
+\paragraph{不可约项与 Zeckendorf 规范形}
+记 $X_\infty=\{(c_1,c_2,\dots)\in\{0,1\}^{\mathbb{N}}:\ c_kc_{k+1}=0\}$。上述规则恰在出现相邻 $11$ 或某位数字 $\ge 2$ 时可用，因此不可约项当且仅当属于 $X_\infty$。
+
+\begin{proposition}[终止性、局部合流与合流（纽曼引理）]\label{prop:fold-rewrite-newman}
+上述重写系统在 $\mathcal{D}$ 上强终止，且局部合流；由纽曼引理可得其合流性。因此每个 $a\in\mathcal{D}$ 的正规形存在且唯一，记为 $\mathrm{NF}(a)\in X_\infty$，并满足
+\[
+\mathrm{Val}(\mathrm{NF}(a))=\mathrm{Val}(a).
+\]
+\end{proposition}
+
+\begin{proof}
+\textbf{（终止性）}令 $A(a)=\sum_{k\ge 1} a_k$、$B(a)=\sum_{k\ge 1} k\,a_k$、$C(a)=a_2$，并设 $\mu(a)=(A(a),B(a),C(a))$ 按字典序比较。则规则 (\ref{rule:fold:adj}) 与 (\ref{rule:fold:dedup1}) 使 $A$ 减少；规则 (\ref{rule:fold:dedupk})（$k\ge 3$）使 $B$ 减少；规则 (\ref{rule:fold:dedup2}) 保持 $A,B$ 不变但使 $C$ 减少。故每步重写都严格降低 $\mu$，系统强终止。
+
+\textbf{（局部合流）}若 $a$ 有两条一步归约 $a\to a_1,a_2$，则两侧继续归约到不可约形后都落在 $X_\infty$，且由于每步保持 $\mathrm{Val}$，两不可约形同值；由 Zeckendorf 唯一性它们相同，于是两支可汇合。
+
+\textbf{（合流）}由纽曼引理（强终止 + 局部合流 $\Rightarrow$ 合流）即得结论。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$\Fold_m$}{Fold\_m} 的归约顺序无关实现]\label{cor:foldm-order-indep}
+对任意 $\omega\in\Omega_m$，
+\[
+\Fold_m(\omega)\ =\ \pi_m\bigl(\mathrm{NF}(\iota_m(\omega))\bigr),
+\]
+且右端与归约时选取规则/位置的顺序无关。
+\end{corollary}
+
+\begin{remark}[规范截面与可计算性]\label{rem:fold-normal-form-computable-section}
+命题 \ref{prop:fold-rewrite-newman} 给出一个可计算的规范截面：对任意 $a\in\mathcal{D}$，正规形 $\mathrm{NF}(a)\in X_\infty$ 唯一存在且与归约顺序无关。因此，当“第三参数”仅对应于等价类中代表的选择（规范冗余）时，无需显式记录该参数；可通过求正规形在多项式时间内选出唯一代表（分辨率口径为线性，见命题 \ref{prop:fold-complexity}）。需要强调的是，该消去仅恢复稳定代表，不恢复同一纤维内的微态残差。
+\end{remark}
+
+\begin{proposition}[折叠的规范性、幂等性与满射性]\label{prop:fold-basic}
+折叠算子 $\Fold_m$ 良定义且满足：
+\begin{enumerate}
+\normalfont
+  \item \textbf{（规范性）} $\Fold_m(\omega)\in X_m$；
+  \item \textbf{（幂等性）} 若 $\omega\in X_m$，则 $\Fold_m(\omega)=\omega$；
+  \item \textbf{（满射性）} $\Fold_m:\Omega_m\twoheadrightarrow X_m$ 为满射。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\textbf{（规范性）}由定义 \ref{def:fold-word}，$Z(N(\omega))\in X_\infty$，故 $\pi_m(Z(N(\omega)))\in X_m$。
+
+\textbf{（幂等性）}若 $\omega\in X_m$，令 $N=\sum_{k=1}^m \omega_k F_{k+1}$。由于 $\omega$ 已是合法 Zeckendorf 数字的长度-$m$ 前缀，且 Zeckendorf 表示唯一，故 $Z(N)$ 的前 $m$ 位必等于 $\omega$，从而 $\Fold_m(\omega)=\omega$。
+
+\textbf{（满射性）}对任意 $x\in X_m$，取 $\omega=x\in\Omega_m$，由幂等性得 $\Fold_m(\omega)=x$，故 $\Fold_m$ 满射。
+\end{proof}

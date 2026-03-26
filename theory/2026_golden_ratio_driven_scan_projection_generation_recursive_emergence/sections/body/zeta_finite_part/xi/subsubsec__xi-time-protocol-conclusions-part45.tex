@@ -1,0 +1,267 @@
+\subsubsection{Toeplitz--scan--Hankel 接口的复杂度分离、采样阈值与账本维数闭环}\label{subsubsec:xi-time-protocol-conclusions-part45}
+
+\begin{conclusion}[Toeplitz--PSD 层级与共动扫描的严格复杂度分离律]\label{con:xi-toeplitz-psd-vs-comoving-scan-strict-separation}
+设高度窗长度为 \(T\)，固定 \(\delta_0>0\) 与图表尺度 \(t>0\)。
+记
+\[
+N_{\mathrm{Toep}}(T,\delta_0)
+\]
+为固定图表的 Toeplitz--PSD 阶数提升证书的最小资源阶，
+\[
+N_{\mathrm{scan}}(T,t,\delta_0)
+\]
+为允许共动地址的扫描覆盖证书的最小资源阶。
+若采用扫描覆盖最优标度
+\[
+N_{\mathrm{scan}}(T,t,\delta_0)\asymp \frac{T}{t+\delta_0},
+\]
+则当 \(T\to\infty\) 时存在绝对常数 \(c>0\) 使
+\[
+N_{\mathrm{Toep}}(T,\delta_0)\ \ge\
+c\,\frac{(t+\delta_0)^2}{\delta_0}\cdot
+\frac{N_{\mathrm{scan}}(T,t,\delta_0)^2}
+{\log\!\bigl(1+(t+\delta_0)^2N_{\mathrm{scan}}(T,t,\delta_0)^2\bigr)}.
+\]
+特别地，
+\[
+N_{\mathrm{Toep}}\ \gtrsim\ \frac{N_{\mathrm{scan}}^2}{\log N_{\mathrm{scan}}},
+\]
+即两类可审计证书在高度窗意义下出现严格多项式指数分离：共动扫描把主阶由近二次压缩到一次。
+\end{conclusion}
+\begin{proof}
+由结论 \ref{con:xi-terminal-horizon-certificate-quadratic-linear-lb}，
+\[
+N_{\mathrm{Toep}}(T,\delta_0)\gtrsim \frac{T^2}{\delta_0}\log(1+T^2)\ge \frac{T^2}{\delta_0}.
+\]
+由 \(N_{\mathrm{scan}}(T,t,\delta_0)\asymp T/(t+\delta_0)\)，存在常数 \(c_1>0\) 使
+\[
+T\ge c_1\,(t+\delta_0)\,N_{\mathrm{scan}}(T,t,\delta_0),
+\]
+故
+\[
+N_{\mathrm{Toep}}(T,\delta_0)\ \ge\
+c_2\,\frac{(t+\delta_0)^2}{\delta_0}\,N_{\mathrm{scan}}(T,t,\delta_0)^2.
+\]
+再利用 \(\log(1+x)\ge 1\)（\(x\ge 0\)）即得
+\[
+N_{\mathrm{Toep}}(T,\delta_0)\ \ge\
+c_2\,\frac{(t+\delta_0)^2}{\delta_0}\cdot
+\frac{N_{\mathrm{scan}}(T,t,\delta_0)^2}
+{\log\!\bigl(1+(t+\delta_0)^2N_{\mathrm{scan}}(T,t,\delta_0)^2\bigr)}.
+\]
+证毕。
+\end{proof}
+
+\begin{conclusion}[严格化 counterterm 的不可观测性与零维账本必需性]\label{con:xi-counterterm-unobservability-zero-dimensional-ledger-necessity}
+设 \(C\) 为 Carath\'eodory 接口，定义核
+\[
+K(w,w'):=\frac{C(w)+C(w')^\ast}{1-ww'^\ast}.
+\]
+对任意 \(\eta\in\RR\)，令严格化变换
+\[
+C^\sharp(w):=C(w)+i\eta.
+\]
+则成立：
+\begin{enumerate}
+  \item \textnormal{核不变性：}
+  \[
+  K^\sharp(w,w')\equiv K(w,w').
+  \]
+  因而所有由 \(K\) 生成的 Toeplitz 证书数据（任意阶惯性、负指标及由其构造的铅笔）均不携带 \(\eta\) 信息。
+  \item \textnormal{谱读出不变性：}记
+  \[
+  \Lambda_N(C):=\Spec\!\bigl(\mathcal P_N(C)\bigr)\cap\mathbb D,
+  \]
+  其中 \(\mathcal P_N(C)\) 表示由 \(N\) 级 Toeplitz 数据构造的纤维谱读出铅笔。
+  则
+  \[
+  \Lambda_N(C^\sharp)=\Lambda_N(C)\qquad(\forall N).
+  \]
+\end{enumerate}
+因此 \(\eta\) 在该审计口径内是不可识别参数；若要恢复 \(\eta\)，必须引入外置寄存信息，该信息在 \(\Sigma^{\circ,\mathrm{pro}}\) 语义下属于连续圆维不增的零维核。
+\end{conclusion}
+\begin{proof}
+由定义直接计算：
+\[
+C^\sharp(w)+C^\sharp(w')^\ast
+=C(w)+i\eta+C(w')^\ast-i\eta
+=C(w)+C(w')^\ast,
+\]
+故 \(K^\sharp\equiv K\)。
+于是任意由 \(K\) 生成的 Toeplitz 截断与铅笔对象保持不变，\(\mathcal P_N(C^\sharp)=\mathcal P_N(C)\)，从而
+\(
+\Lambda_N(C^\sharp)=\Lambda_N(C)
+\)。
+结论成立。证毕。
+\end{proof}
+
+\begin{conclusion}[scan \texorpdfstring{$\to$}{->} Toeplitz 负证书的最短编译定理]\label{con:xi-scan-toeplitz-negative-certificate-shortest-compiler}
+在有限缺陷口径下，设稳定缺陷阶为 \(\kappa\)，并由共动扫描指纹 \(\{u_n\}\) 定义 Hankel 矩阵
+\[
+\mathsf H_{\kappa-1}(u):=(u_{p+q})_{0\le p,q\le \kappa-1}.
+\]
+则对每个充分大 \(N\)（特别地 \(N\ge 2\kappa-2\)）存在可逆矩阵 \(R_N\) 与 \(P_N\succeq 0\)，满足
+\[
+R_N^\ast\,\mathbf T_N(C)\,R_N
+=
+\begin{pmatrix}
+P_N & 0\\
+0 & -\,\mathsf H_{\kappa-1}(u)^\ast\mathsf H_{\kappa-1}(u)
+\end{pmatrix}.
+\]
+并且对任意 \(v\in\CC^\kappa\)，令
+\[
+x:=R_N\binom{0}{v}\in\CC^{N+1},
+\]
+则
+\[
+x^\ast\mathbf T_N(C)x
+=-\,\|\mathsf H_{\kappa-1}(u)v\|_2^2.
+\]
+因此存在最短编译器：仅输入截断指纹
+\[
+(u_0,\dots,u_{2\kappa-2}),
+\]
+即可构造 Toeplitz 负向量见证 \(x\)。
+且该阈值不可降低：一般位置下，不存在只依赖 \((u_0,\dots,u_{2\kappa-3})\) 的通用算法，能同时完成“判定缺陷阶 \(\kappa\)”与“输出保证负性的 Toeplitz 见证”。
+\end{conclusion}
+\begin{proof}
+合同分解与负向量 Rayleigh 恒等式由推论 \ref{cor:xi-toeplitz-scan-hankel-congruence-decomposition} 与命题 \ref{prop:xi-toeplitz-negative-witness-from-scan-hankel} 直接给出。
+又 \(\mathsf H_{\kappa-1}(u)\) 的全部条目只依赖 \(u_0,\dots,u_{2\kappa-2}\)，故可由该前缀直接构造见证。
+\par
+最短性由定理 \ref{thm:xi-toeplitz-negative-inertia-minimal-sampling} 给出：\(\det(\mathsf H_{\kappa-1})\) 对 \(u_{2\kappa-2}\) 为仿射函数，一般位置下其系数非零，故同一前缀 \((u_0,\dots,u_{2\kappa-3})\) 存在可逆/奇异两类延拓，导致缺陷判定与负证书存在性分岔。证毕。
+\end{proof}
+
+\begin{conclusion}[unitary-slice 交叉审计的采样下界]\label{con:xi-unitary-slice-cross-audit-sampling-lower-bound}
+沿用命题 \ref{prop:xi-unitary-slice-spectral-crossing} 的记号，固定 \(L>1\)，令
+\[
+\theta\mapsto U_L(\theta)
+\]
+为对应的幺正算子族，满足
+\[
+\Xi_{\Delta,L}\!\left(\tfrac12+it\right)=0
+\iff
+1\in\Spec\!\bigl(U_L(\theta)\bigr),\qquad \theta=2t\log L.
+\]
+设在区间 \([\theta_0,\theta_1]\) 上有 Lipschitz 约束
+\[
+\|U_L(\theta)-U_L(\theta')\|_{\mathrm{op}}
+\le
+\mathsf M\,|\theta-\theta'|.
+\]
+定义谱距函数
+\[
+d(\theta):=\min_{\lambda\in\Spec(U_L(\theta))}|\lambda-1|.
+\]
+取均匀网格 \(\theta_j=\theta_0+jh\)。若
+\[
+\min_j d(\theta_j)>\mathsf M h,
+\]
+则 \([\theta_0,\theta_1]\) 内不存在谱穿越点，因而不存在 Hardy 截面零点。
+其逆否命题给出采样下界：若区间内存在穿越（等价于存在零点），则任何步长为 \(h\) 的均匀扫描都必须满足
+\[
+\min_j d(\theta_j)\le \mathsf M h.
+\]
+于是若审计协议以阈值 \(\varepsilon\) 触发（需观测到 \(d(\theta_j)\le\varepsilon\)），则必须取
+\[
+h\le \frac{\varepsilon}{\mathsf M},
+\qquad
+N_\theta:=\left\lceil\frac{\theta_1-\theta_0}{h}\right\rceil
+\ge
+\left\lceil\frac{\mathsf M(\theta_1-\theta_0)}{\varepsilon}\right\rceil.
+\]
+\end{conclusion}
+\begin{proof}
+幺正算子为正规算子，故谱的 Hausdorff 距离满足
+\[
+\mathrm{dist}_H\!\bigl(\Spec(U),\Spec(V)\bigr)\le \|U-V\|_{\mathrm{op}}.
+\]
+对任意 \(\theta\in[\theta_j,\theta_{j+1}]\)，有
+\[
+d(\theta)
+\ge
+d(\theta_j)-\|U_L(\theta)-U_L(\theta_j)\|_{\mathrm{op}}
+\ge
+d(\theta_j)-\mathsf M h.
+\]
+若所有网格点都满足 \(d(\theta_j)>\mathsf M h\)，则 \(d(\theta)>0\) 对全区间成立，故 \(1\notin\Spec(U_L(\theta))\)，再由命题 \ref{prop:xi-unitary-slice-spectral-crossing} 即得无零点。
+取逆否命题并代入触发阈值 \(\varepsilon\) 即得采样下界。证毕。
+\end{proof}
+
+\begin{conclusion}[深度谱不适定性与素数账本信息量下界]\label{con:xi-depth-illposedness-prime-ledger-information-lower-bound}
+在有限缺陷口径下，记深度 Hankel 判别式
+\[
+\Delta_{M-1}:=\det(\mu_{p+q})_{0\le p,q\le M-1}.
+\]
+由 Vandermonde 分解（定理 \ref{thm:xi-dethankel-vandermonde-square-finite-blaschke}）可知：深度碰撞/逃逸对应 \(\Delta_{M-1}\to 0\)，且该不适定性由深度谱本身决定。
+\par
+另一方面，令 \(H_0\in M_d(\ZZ)\) 满秩（可取为上述 Hankel 主块的整数实现），并记
+\[
+H_p(k):=\sum_{i=1}^d\min\bigl(v_p(s_i),k\bigr),
+\]
+其中 \(s_i\) 为 \(H_0\) 的 Smith 不变量。
+若同余方程 \(H_0B\equiv H_1'\pmod{p^k}\) 可解，定义解集
+\[
+S_k:=\{B\in M_d(\ZZ/p^k\ZZ):\ H_0B\equiv H_1'\pmod{p^k}\},
+\]
+则
+\[
+\#S_k=p^{dH_p(k)},
+\qquad
+\lim_{k\to\infty}H_p(k)=v_p(\det H_0).
+\]
+因此，任何声称“无额外账本即可在模 \(p^k\) 下唯一重建”的协议均不成立；
+唯一化所需外置账本信息量（bit）满足不可突破下界
+\[
+I_{\mathrm{ledger}}(k)\ \ge\ \log_2\#S_k
+=d\,H_p(k)\log_2 p,
+\]
+并在 \(k\to\infty\) 时逼近
+\[
+d\,v_p(\det H_0)\log_2 p.
+\]
+当深度谱趋于碰撞/逃逸而使相应 \(p\)-进赋值累积时，该下界沿含 \(p\)-因子方向刚性增大，形成“深度谱不适定性 \(\Rightarrow\) 素数账本信息量刚性”的定量桥梁。
+\end{conclusion}
+\begin{proof}
+解数公式与极限式分别由定理 \ref{thm:xi-hankel-normalform-crt-adelic-multiplicity} 及定理 \ref{thm:xi-smith-entropy-inverts-vp-invariants} 直接给出。
+若无外置信息，确定性重建在 \(\#S_k>1\) 时无法区分全部候选；按信息论计数，下界为 \(\log_2\#S_k\)。
+极限下界由 \(H_p(k)\to v_p(\det H_0)\) 立得。
+关于不适定性与 \(\Delta_{M-1}\) 的对应由定理 \ref{thm:xi-dethankel-vandermonde-square-finite-blaschke} 的 Vandermonde 平方因子给出。证毕。
+\end{proof}
+
+\begin{conclusion}[\texorpdfstring{$\Sigma^{\circ,\mathrm{pro}}$}{Sigma^{circ,pro}} 的度量刻画与有限维化闭环]\label{con:xi-sigma-circ-pro-metric-characterization-finite-dimensional-closure}
+设拓扑有限生成紧阿贝尔群
+\[
+G\simeq \TT^{\,r}\times\widehat{\ZZ}^{\,d}\times F,
+\]
+在 \(\widehat{\ZZ}^{\,d}\) 上取 primorial 超度量 \(d_{\#}\)，在 \(\TT^r\) 上取欧氏度量 \(d_{\mathrm{Euc}}\)，并在 \(G\) 上取 max-积度量 \(d=\max\{d_{\mathrm{Euc}},d_{\#}\}\)。
+则（定理 \ref{thm:conclusion-adelic-hausdorff-dimension-cdim-pcdim}）
+\[
+\dim_{\mathrm H}(G,d)=r+d.
+\]
+且 \(r=\cdim(G)\)，\(d=\operatorname{pcdim}(\widehat{\ZZ}^{\,d})\)。
+因此可由纯度量数据恢复二元签名
+\[
+\Sigma^{\circ,\mathrm{pro}}(G)
+=
+\Bigl(\dim_{\mathrm{top}}G,\ \dim_{\mathrm H}(G,d)-\dim_{\mathrm{top}}G\Bigr),
+\]
+其中 \(\dim_{\mathrm{top}}G=r\)。
+\par
+进一步地，对任意拓扑有限生成交换 profinite 群 \(K\)，令
+\(
+r:=\operatorname{pcdim}(K)
+\)。
+则存在紧连通交换群 \(\Sigma_K\) 使
+\[
+0\longrightarrow K\longrightarrow \Sigma_K\longrightarrow \TT^{\,r}\longrightarrow 0
+\]
+正合，且该 \(r\) 为最小可能值（定理 \ref{thm:conclusion-prime-fiber-min-circle-internalization}）。
+于是 \(\operatorname{pcdim}\) 可解释为“把零维账本内化为连通相位门所需的最小圆因子数”，从而给出无穷素数支撑信息在有限维相位体系内闭合的严格原理化表述。
+\end{conclusion}
+\begin{proof}
+第一部分由定理 \ref{thm:conclusion-adelic-hausdorff-dimension-cdim-pcdim} 立即得到：Hausdorff 维数加法与 \((\cdim,\operatorname{pcdim})\) 识别同时成立，故 \(\Sigma^{\circ,\mathrm{pro}}\) 可由 \((\dim_{\mathrm{top}},\dim_{\mathrm H})\) 纯度量恢复。
+第二部分直接应用定理 \ref{thm:conclusion-prime-fiber-min-circle-internalization} 的存在性与最小性结论。证毕。
+\end{proof}
+
+\endinput

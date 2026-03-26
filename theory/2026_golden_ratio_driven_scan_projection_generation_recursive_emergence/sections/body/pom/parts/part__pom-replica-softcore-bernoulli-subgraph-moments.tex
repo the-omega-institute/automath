@@ -1,0 +1,252 @@
+\paragraph{温度参数延拓与 Bernoulli 子图矩：一般图配分函数、Hankel 正性与例外块端点刚性}
+在软核复制链口径中，传递矩阵 \(T^{(q)}\) 对应于“重叠边”代价 \(1/2\) 的特例。
+本段将该代价推广为温度门参数 \(p\in[0,1]\)，并把环幂迹与一般图上的配分函数严格识别为 Bernoulli 随机子图之独立集计数的 \(q\)-次矩。
+该识别一方面在 \(q\)-轴上自动给出 Stieltjes 矩结构与 Hankel 正半定，另一方面在 \(m\)-轴上诱导一个带权的二字母词迹展开，并保持“固定谱簇幂和的单项塌缩”机制在全参数族内的稳定性。
+
+\begin{definition}[温度门软核与 Bernoulli 子图矩]\label{def:pom-replica-softcore-temperature-kernel-bernoulli}
+取整数 \(q\ge 1\)，令 \(U_q:=\{0,1\}^q\)，并以 \(u\wedge v\) 表示逐坐标与。
+对 \(p\in[0,1]\) 定义温度门软核 \(T^{(q)}_p\in\RR^{U_q\times U_q}\)：
+\begin{equation}\label{eq:pom-replica-softcore-temperature-kernel}
+\boxed{\;
+T^{(q)}_p(u,v)
+:=
+\begin{cases}
+1,& u\wedge v=0,\\[2pt]
+p,& u\wedge v\neq 0,
+\end{cases}
+\qquad(u,v\in U_q).\;}
+\end{equation}
+等价地，令 \(\mathbf{1}\) 为全 \(1\) 向量并令 \(K=\bigl(\begin{smallmatrix}1&1\\[2pt]1&0\end{smallmatrix}\bigr)\)，则有张量分解
+\begin{equation}\label{eq:pom-replica-softcore-temperature-decomposition}
+\boxed{\;
+T^{(q)}_p
+=p\,\mathbf{1}\mathbf{1}^{\mathsf T}+(1-p)\,K^{\otimes q}\;}
+\end{equation}
+（其中 \((K^{\otimes q})_{u,v}=\mathbf{1}_{\{u\wedge v=0\}}\)）。
+当 \(p=\tfrac12\) 时，\eqref{eq:pom-replica-softcore-temperature-kernel} 退化为命题 \ref{prop:pom-multiplicity-composition-replica-softcore-transfer} 的软核 \(T^{(q)}\)。
+\par
+对任意有限简单图 \(G=(V,E)\)，定义 \(q\)-复制配分函数
+\begin{equation}\label{eq:pom-replica-softcore-graph-partition-function}
+\boxed{\;
+Z_G^{(q)}(p)
+:=\sum_{\sigma:V\to U_q}\ \prod_{\{x,y\}\in E}T^{(q)}_p\bigl(\sigma(x),\sigma(y)\bigr)\;}
+\end{equation}
+并定义独立集计数
+\[
+\mathsf{I}(H)
+:=\#\Bigl\{\tau:V(H)\to\{0,1\}:\ \tau(x)\tau(y)=0\ \text{对所有 }\{x,y\}\in E(H)\Bigr\}.
+\]
+\end{definition}
+
+\begin{remark}[单比特温度核的 NAND 表述]\label{rem:pom-replica-softcore-temperature-kernel-nand}
+在定义 \ref{def:pom-replica-softcore-temperature-kernel-bernoulli} 中，单比特矩阵 \(K\) 满足
+\[
+K_{a,b}=1\ \Longleftrightarrow\ a\wedge b=0
+\ \Longleftrightarrow\ (a,b)\neq(1,1),
+\qquad a,b\in\{0,1\}.
+\]
+因此 \(K\) 与布尔 NAND 门（仅在 \((1,1)\) 处输出 \(0\)）的真值表矩阵同构；其张量幂 \(K^{\otimes q}\) 则编码 \(q\) 坐标同时满足 \(u\wedge v=0\) 的约束核。
+\end{remark}
+
+\input{sections/body/pom/parts/thm__pom_replica_softcore_temperature_free_energy_phase_transition}
+\input{sections/body/pom/parts/thm__pom_perron_landauer_limit_law}
+
+\begin{theorem}[Bernoulli 子图的独立集矩表示]\label{thm:pom-replica-softcore-bernoulli-subgraph-moment-representation}
+在定义 \ref{def:pom-replica-softcore-temperature-kernel-bernoulli} 的设定下，对任意有限简单图 \(G=(V,E)\)、任意整数 \(q\ge 1\) 与任意 \(p\in[0,1]\) 有严格恒等式
+\begin{equation}\label{eq:pom-replica-softcore-bernoulli-subgraph-moment-representation}
+\boxed{\;
+Z_G^{(q)}(p)
+=\sum_{F\subseteq E}p^{|E|-|F|}(1-p)^{|F|}\,\mathsf{I}(G_F)^{q}\;}
+\end{equation}
+其中 \(G_F:=(V,F)\) 为生成子图。
+等价地，若 \(\mathbf{F}\subseteq E\) 为按边独立取样、以概率 \((1-p)\) 保留边的 Bernoulli 随机子图，则
+\[
+Z_G^{(q)}(p)=\mathbb{E}\bigl[\mathsf{I}(G_{\mathbf{F}})^{q}\bigr].
+\]
+\end{theorem}
+\begin{proof}
+对每条边 \(e=\{x,y\}\in E\) 定义
+\(
+D_e(\sigma):=\mathbf{1}_{\{\sigma(x)\wedge\sigma(y)=0\}}
+\)。
+由 \eqref{eq:pom-replica-softcore-temperature-kernel}，有
+\(
+T^{(q)}_p\bigl(\sigma(x),\sigma(y)\bigr)=p+(1-p)D_e(\sigma)
+\)。
+因此
+\[
+\prod_{e\in E}\bigl(p+(1-p)D_e(\sigma)\bigr)
+=\sum_{F\subseteq E}p^{|E|-|F|}(1-p)^{|F|}\prod_{e\in F}D_e(\sigma),
+\]
+将其代回 \eqref{eq:pom-replica-softcore-graph-partition-function} 并交换求和次序得
+\[
+Z_G^{(q)}(p)
+=\sum_{F\subseteq E}p^{|E|-|F|}(1-p)^{|F|}
+\sum_{\sigma:V\to U_q}\prod_{e\in F}D_e(\sigma).
+\]
+对固定 \(F\)，写 \(\sigma=(\sigma^{(1)},\dots,\sigma^{(q)})\) 为 \(q\) 个坐标的二元赋值，其中 \(\sigma^{(a)}:V\to\{0,1\}\)。
+注意到
+\(
+D_e(\sigma)=\prod_{a=1}^q\mathbf{1}_{\{\sigma^{(a)}(x)\sigma^{(a)}(y)=0\}}
+\)，
+从而
+\[
+\prod_{e\in F}D_e(\sigma)
+=\prod_{a=1}^{q}\ \prod_{\{x,y\}\in F}\mathbf{1}_{\{\sigma^{(a)}(x)\sigma^{(a)}(y)=0\}}.
+\]
+因此坐标 \(a\) 间完全解耦，并且每个坐标的允许赋值数恰为 \(\mathsf{I}(G_F)\)。
+故内层求和为 \(\mathsf{I}(G_F)^q\)，代回即得 \eqref{eq:pom-replica-softcore-bernoulli-subgraph-moment-representation}。证毕。
+\end{proof}
+
+\begin{corollary}[环幂迹的 Bernoulli 子图矩表示]\label{cor:pom-replica-softcore-cycle-trace-bernoulli-moment}
+取环图 \(C_m\)（\(m\ge 1\)），则对任意整数 \(q\ge 1\) 与任意 \(p\in[0,1]\) 有
+\begin{equation}\label{eq:pom-replica-softcore-cycle-trace-bernoulli-moment}
+\boxed{\;
+\Tr\!\bigl((T^{(q)}_p)^m\bigr)
+=\sum_{F\subseteq E(C_m)}p^{m-|F|}(1-p)^{|F|}\,\mathsf{I}\bigl((C_m)_F\bigr)^{q}\;}
+\end{equation}
+其中 \((C_m)_F\) 为生成子图。
+\end{corollary}
+\begin{proof}
+将定义 \ref{def:pom-replica-softcore-temperature-kernel-bernoulli} 的 \(Z_G^{(q)}(p)\) 取 \(G=C_m\)。
+注意到对环图有矩阵恒等式 \(Z_{C_m}^{(q)}(p)=\Tr((T^{(q)}_p)^m)\)，再应用定理 \ref{thm:pom-replica-softcore-bernoulli-subgraph-moment-representation} 即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[Stieltjes 矩结构与 Hankel 正半定]\label{prop:pom-replica-softcore-bernoulli-stieltjes-hankel}
+固定有限简单图 \(G=(V,E)\) 与 \(p\in[0,1]\)，令 \(a_q:=Z_G^{(q)}(p)\)（\(q\ge 0\)，并约定 \(Z_G^{(0)}(p)=\sum_{F\subseteq E}p^{|E|-|F|}(1-p)^{|F|}=1\)）。
+则存在有限支撑概率测度 \(\mu_{G,p}\) 使
+\begin{equation}\label{eq:pom-replica-softcore-bernoulli-stieltjes}
+\boxed{\;
+a_q=\int_{[0,\infty)} x^{q}\,\dd\mu_{G,p}(x)\qquad(q\ge 0)\;}
+\end{equation}
+从而 \((a_q)_{q\ge 0}\) 为有限支撑的 Stieltjes 矩序列。
+特别地，对任意 \(n\ge 0\)，Hankel 矩阵 \(\bigl[a_{i+j}\bigr]_{0\le i,j\le n}\) 正半定，因而全部主子式非负。
+此外，若 \(\mu_{G,p}\) 的支撑至少含两点，则对所有整数 \(q\ge 1\) 有严格对数凸
+\[
+a_q^2<a_{q-1}a_{q+1}.
+\]
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:pom-replica-softcore-bernoulli-subgraph-moment-representation}，
+\(
+a_q=\sum_{F\subseteq E}w(F)\,\mathsf{I}(G_F)^q
+\)，其中 \(w(F)=p^{|E|-|F|}(1-p)^{|F|}\) 且 \(\sum_F w(F)=1\)。
+令
+\(
+\mu_{G,p}:=\sum_{F\subseteq E}w(F)\,\delta_{\mathsf{I}(G_F)}
+\)
+即得 \eqref{eq:pom-replica-softcore-bernoulli-stieltjes}。
+\par
+Hankel 正半定性为 Gram 矩阵表述：对任意 \(c_0,\dots,c_n\in\RR\)，有
+\[
+\sum_{i,j=0}^{n}c_ic_j a_{i+j}
+=\int\Bigl(\sum_{i=0}^{n}c_i x^i\Bigr)^2\dd\mu_{G,p}(x)\ge 0.
+\]
+严格对数凸由 Cauchy--Schwarz 在非退化分布下取严格不等式得到。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$S_q$}{Sq}-对称降维的温度延拓]\label{prop:pom-replica-softcore-temperature-sq-reduction}
+固定整数 \(q\ge 1\) 与 \(p\in[0,1]\)。
+矩阵 \(T_p^{(q)}\) 在坐标置换群 \(S_q\) 下不变，因此其 Perron 根位于 \(S_q\)-对称子空间。
+在以 Hamming 权 \(k=|u|\in\{0,\dots,q\}\) 分层的基下，该限制矩阵为 \(A_p^{(q)}\in\RR^{(q+1)\times(q+1)}\)，其条目为
+\begin{equation}\label{eq:pom-replica-softcore-temperature-Apq-def}
+\boxed{\;
+\bigl(A_p^{(q)}\bigr)_{k,l}
+:=p\binom{q}{l}+(1-p)\binom{q-k}{l},
+\qquad 0\le k,l\le q.\;}
+\end{equation}
+并且有严格等式
+\begin{equation}\label{eq:pom-replica-softcore-temperature-sq-reduction}
+\boxed{\;
+\rho\!\bigl(T_p^{(q)}\bigr)=\rho\!\bigl(A_p^{(q)}\bigr).\;}
+\end{equation}
+\end{proposition}
+\begin{proof}
+对 \(u\in U_q\) 取 \(k=|u|\)，并取任意仅依赖权的正函数 \(f(u)=g(|u|)\)。
+把 \((T_p^{(q)}f)(u)=\sum_{v}T_p^{(q)}(u,v)f(v)\) 按 \(l=|v|\) 分组：
+当 \(|v|=l\) 时满足 \(u\wedge v=0\) 的 \(v\) 个数为 \(\binom{q-k}{l}\)，总数为 \(\binom{q}{l}\)。
+故
+\[
+\sum_{\substack{v\in U_q\\ |v|=l}}T_p^{(q)}(u,v)
+=\binom{q-k}{l}\cdot 1+\bigl(\binom{q}{l}-\binom{q-k}{l}\bigr)\cdot p
+=p\binom{q}{l}+(1-p)\binom{q-k}{l},
+\]
+即为 \eqref{eq:pom-replica-softcore-temperature-Apq-def}。
+由于 \(T_p^{(q)}\) 非负且 \(S_q\)-不变，Perron 根可由对称子空间内的正本征向量实现，故 \eqref{eq:pom-replica-softcore-temperature-sq-reduction} 成立。证毕。
+\end{proof}
+
+\begin{theorem}[例外块行列式的 \texorpdfstring{$(1-p)^q$}{(1-p)^q} 刚性]\label{thm:pom-replica-softcore-temperature-exceptional-determinant}
+在命题 \ref{prop:pom-replica-softcore-temperature-sq-reduction} 的设定下，对任意整数 \(q\ge 1\) 与任意 \(p\in[0,1]\) 有
+\begin{equation}\label{eq:pom-replica-softcore-temperature-exceptional-determinant}
+\boxed{\;
+\det\!\bigl(A_p^{(q)}\bigr)=(-1)^{\frac{q(q+1)}{2}}\,(1-p)^{q}.\;}
+\end{equation}
+等价地，若记 \(\mathrm{spec}(A_p^{(q)})=\{\lambda_i^{(q)}(p)\}_{i=0}^{q}\)，则
+\[
+\prod_{i=0}^{q}\lambda_i^{(q)}(p)=(-1)^{\frac{q(q+1)}{2}}\,(1-p)^{q}.
+\]
+\end{theorem}
+\begin{proof}
+令 \(\mathbf{1}\in\RR^{q+1}\) 为全 \(1\) 向量，并记 \(b:=(\binom{q}{0},\dots,\binom{q}{q})^{\mathsf T}\)。
+再令 \(C^{(q)}\in\RR^{(q+1)\times(q+1)}\) 满足 \(C^{(q)}_{k,l}=\binom{q-k}{l}\)。
+由 \eqref{eq:pom-replica-softcore-temperature-Apq-def} 有分解
+\[
+A_p^{(q)}=p\,\mathbf{1}b^{\mathsf T}+(1-p)\,C^{(q)}.
+\]
+注意 \(C^{(q)}e_0=\mathbf{1}\)（因 \(C^{(q)}_{k,0}=1\)），故 \((C^{(q)})^{-1}\mathbf{1}=e_0\)；
+并且 \(b^{\mathsf T}e_0=\binom{q}{0}=1\)。
+对 \((1-p)C^{(q)}\) 应用秩一行列式引理得到
+\[
+\det(A_p^{(q)})
+=(1-p)^{q+1}\det(C^{(q)})\Bigl(1+\frac{p}{1-p}b^{\mathsf T}(C^{(q)})^{-1}\mathbf{1}\Bigr)
+=(1-p)^{q}\det(C^{(q)}).
+\]
+而 \(\det(C^{(q)})=(-1)^{\frac{q(q+1)}{2}}\) 已由 \eqref{eq:pom-replica-softcore-detC} 给出，代回即得 \eqref{eq:pom-replica-softcore-temperature-exceptional-determinant}。证毕。
+\end{proof}
+
+\begin{theorem}[温度延拓下的词迹公式与固定谱簇单项塌缩]\label{thm:pom-replica-softcore-temperature-word-trace-collapse}
+沿用定理 \ref{thm:pom-replica-softcore-word-trace-power-sums} 的二字母词记号：\(\mathcal{W}_m=\{K,J_2\}^m\)、\(M_w=w_1\cdots w_m\)、\(\tau(w)=\Tr(M_w)\)。
+对 \(w\in\mathcal{W}_m\) 记
+\(
+N_J(w):=\#\{i:\ w_i=J_2\}
+\) 与 \(N_K(w):=\#\{i:\ w_i=K\}=m-N_J(w)\)。
+则对任意整数 \(q\ge 1,m\ge 1\) 与任意 \(p\in[0,1]\) 有
+\begin{equation}\label{eq:pom-replica-softcore-temperature-word-trace-full}
+\boxed{\;
+\Tr\!\bigl((T_p^{(q)})^{m}\bigr)
+=\sum_{w\in\mathcal{W}_m}p^{N_J(w)}(1-p)^{N_K(w)}\,\tau(w)^{q}\;}
+\end{equation}
+并且若记例外块幂和为
+\(
+S_{m,\mathrm{exc}}(q;p):=\Tr\!\bigl((A_p^{(q)})^{m}\bigr)=\sum_{i=0}^{q}\lambda_i^{(q)}(p)^{m}
+\)，则成立单项塌缩恒等式
+\begin{equation}\label{eq:pom-replica-softcore-temperature-word-trace-collapse}
+\boxed{\;
+\Tr\!\bigl((T_p^{(q)})^{m}\bigr)-S_{m,\mathrm{exc}}(q;p)
+=(1-p)^{m}\Bigl(L_m^{q}-\Omega_m(q)\Bigr)\;}
+\end{equation}
+其中 \(L_m=\Tr(K^m)\) 为 Lucas 数，而 \(\Omega_m(q)=\Tr(\mathrm{Sym}^q(K^m))\) 如 \eqref{eq:pom-replica-softcore-word-trace-collapse} 所定义。
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:pom-replica-softcore-temperature-decomposition} 与 Kronecker 幂的乘法性展开得
+\[
+(T_p^{(q)})^m
+=\sum_{w\in\mathcal{W}_m}p^{N_J(w)}(1-p)^{N_K(w)}\,(M_w)^{\otimes q},
+\]
+再取迹并用 \(\Tr((M_w)^{\otimes q})=\Tr(M_w)^q=\tau(w)^q\) 即得 \eqref{eq:pom-replica-softcore-temperature-word-trace-full}。
+\par
+另一方面，\((M_w)^{\otimes q}\) 在 \(S_q\)-对称子空间的限制同构于 \(\mathrm{Sym}^q(M_w)\)，从而
+\[
+S_{m,\mathrm{exc}}(q;p)
+=\sum_{w\in\mathcal{W}_m}p^{N_J(w)}(1-p)^{N_K(w)}\,\Tr\!\bigl(\mathrm{Sym}^q(M_w)\bigr).
+\]
+若 \(w\neq K^m\)，则 \(w\) 含至少一个 \(J_2\)，从而 \(\det(M_w)=0\)，并由定理 \ref{thm:pom-replica-softcore-word-trace-power-sums} 的论证得
+\(
+\Tr(\mathrm{Sym}^q(M_w))=\Tr(M_w)^q=\tau(w)^q
+\)。
+故两条加权词和逐项相消，仅余 \(w=K^m\) 一项，其权重为 \((1-p)^m\)，并分别贡献 \(L_m^q\) 与 \(\Omega_m(q)\)。
+于是得到 \eqref{eq:pom-replica-softcore-temperature-word-trace-collapse}。证毕。
+\end{proof}
+
+\endinput
+

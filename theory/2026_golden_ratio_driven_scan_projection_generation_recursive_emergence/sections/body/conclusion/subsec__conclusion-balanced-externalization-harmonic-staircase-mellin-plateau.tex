@@ -1,0 +1,446 @@
+\subsection{平衡外置的 Schur 最优性、临界审计阶梯与二原子 Mellin 平台律}\label{subsec:conclusion-balanced-externalization-harmonic-staircase-mellin-plateau}
+沿用命题 \ref{prop:fold-oracle-variational-projection-characterization}、定理 \ref{thm:fold-bin-two-state-asymptotic}、定理 \ref{thm:conclusion-foldbin-oracle-critical-profile}、定理 \ref{thm:conclusion-binfold-mellin-two-step-law} 与定理 \ref{thm:conclusion-binfold-uniform-output-twoatom-choquet} 的记号。前述链条已经分别把预算约束下的预言机容量、bin-fold 纤维规模的两态一致渐近、critical-scale 容量曲线以及二原子 Mellin--Choquet 机制固定为闭式。若再把纤维内外置的离散平衡原理与容量剖面的 Mellin 表达并读，则还可进一步抽出如下几条刚性后果。
+
+\begin{theorem}[纤维内平衡外置对全部凸审计泛函的普适最优性]\label{thm:conclusion-balanced-externalization-schur-optimality}
+固定分辨率 \(m\) 与外置位数 \(B\)，并记
+\[
+M:=2^B,\qquad
+\Omega_m:=\{0,1\}^m,
+\qquad
+d_m(x):=\bigl|(\mathrm{Fold}_m)^{-1}(x)\bigr|.
+\]
+对任意外置映射
+\[
+R:\Omega_m\to\{0,1\}^B,
+\]
+定义每条纤维 \(x\in X_m\) 上的占用向量
+\[
+n_x(R):=\bigl(n_{x,r}(R)\bigr)_{r\in\{0,1\}^B},
+\qquad
+n_{x,r}(R):=\#\{\omega\in\Omega_m:\ \mathrm{Fold}_m(\omega)=x,\ R(\omega)=r\}.
+\]
+若对整数 \(d\ge 0\) 写
+\[
+d=aM+r,\qquad 0\le r<M,
+\]
+并记 \(\mathbf b(d,M)\) 为由 \(r\) 个 \(a+1\) 与 \(M-r\) 个 \(a\) 组成的平衡向量，则对任意凸函数
+\[
+\Phi:[0,\infty)\to\RR
+\]
+都有
+\[
+\sum_{x\in X_m}\sum_{r\in\{0,1\}^B}\Phi\!\bigl(n_{x,r}(R)\bigr)
+\ge
+\sum_{x\in X_m}\sum_{j=1}^{M}\Phi\!\bigl(b_j(d_m(x),M)\bigr).
+\]
+并且存在某个外置映射 \(R_{\mathrm{bal}}\) 同时在每条纤维上达到该下界。
+\end{theorem}
+\begin{proof}
+固定一条纤维 \(x\in X_m\)，并记 \(d:=d_m(x)\)。在所有满足
+\[
+(n_1,\dots,n_M)\in \ZZ_{\ge 0}^M,
+\qquad
+\sum_{j=1}^{M}n_j=d
+\]
+的占用向量中，\(\mathbf b(d,M)\) 是 majorization 意义下的极小元；等价地，任意这类向量都 majorizes \(\mathbf b(d,M)\)。由 Hardy--Littlewood--P\'olya--Karamata 理论，对任意凸函数 \(\Phi\) 都有
+\[
+\sum_{j=1}^{M}\Phi(n_j)\ge \sum_{j=1}^{M}\Phi\!\bigl(b_j(d,M)\bigr).
+\]
+对每个 \(x\in X_m\) 独立应用此结论，即得逐纤维下界；再对全部纤维求和便得到所示全局不等式。
+
+另一方面，不同纤维之间不存在耦合。故可在每条纤维内部独立选取一个把 \(d_m(x)\) 个元素尽可能均匀分配到 \(M\) 个桶中的映射；将这些局部选择并合，便得到全局外置映射 \(R_{\mathrm{bal}}\)，并使每条纤维都恰好实现 \(\mathbf b(d_m(x),M)\)。故下界全局可达。证毕。
+\end{proof}
+
+\begin{corollary}[固定比特预算下最优 Rényi 型碰撞能量的精确闭式]\label{cor:conclusion-balanced-externalization-optimal-renyi-energy}
+对任意实数 \(q\ge 1\)，定义
+\[
+\mathcal J_{q,m}^{\mathrm{opt}}(B)
+:=
+\min_{R:\Omega_m\to\{0,1\}^B}
+\sum_{x\in X_m}\sum_{r\in\{0,1\}^B} n_{x,r}(R)^q.
+\]
+若对每个 \(x\in X_m\) 写
+\[
+d_m(x)=a_x\,2^B+r_x,\qquad 0\le r_x<2^B,
+\]
+则有精确公式
+\[
+\mathcal J_{q,m}^{\mathrm{opt}}(B)
+=
+\sum_{x\in X_m}
+\Bigl[
+r_x(a_x+1)^q+(2^B-r_x)a_x^q
+\Bigr].
+\]
+特别地，最优外置机制与 \(q\) 无关；同一平衡外置同时最小化全部 \(q\ge 1\) 的 Rényi 型碰撞能量。
+\end{corollary}
+\begin{proof}
+在定理 \ref{thm:conclusion-balanced-externalization-schur-optimality} 中取
+\[
+\Phi(t)=t^q
+\]
+即可。由于 \(q\ge 1\) 时 \(t\mapsto t^q\) 为凸函数，而平衡向量 \(\mathbf b(d_m(x),2^B)\) 的分量恰由 \(r_x\) 个 \(a_x+1\) 与 \(2^B-r_x\) 个 \(a_x\) 组成，故所示闭式立即成立。证毕。
+\end{proof}
+
+\begin{theorem}[bin-fold 临界预算下最优 \(q\)-能量密度的极限相图]\label{thm:conclusion-binfold-critical-budget-renyi-energy}
+考虑 bin-fold 体系 \(\mathrm{Fold}_m^{\mathrm{bin}}\)，并记
+\[
+A_m:=\Bigl(\frac{2}{\varphi}\Bigr)^m,
+\qquad
+\mathcal E_{q,m}(B):=2^{-m}\mathcal J_{q,m}^{\mathrm{opt}}(B).
+\]
+设整数预算序列 \((B_m)_{m\ge 1}\) 满足
+\[
+2^{B_m}=\tau A_m(1+o(1)),
+\qquad
+\tau>0.
+\]
+再定义
+\[
+\Theta_q(\rho):=
+\bigl(1-\{\rho\}\bigr)\lfloor\rho\rfloor^q
++
+\{\rho\}\,(\lfloor\rho\rfloor+1)^q,
+\qquad
+\{\rho\}:=\rho-\lfloor\rho\rfloor.
+\]
+则当 \(m\to\infty\) 时，
+\[
+\mathcal E_{q,m}(B_m)\longrightarrow \mathcal E_q(\tau),
+\]
+其中
+\[
+\mathcal E_q(\tau)
+=
+\frac{\varphi}{\sqrt5}\,\tau\,\Theta_q\!\Bigl(\frac1\tau\Bigr)
++
+\frac1{\sqrt5}\,\tau\,\Theta_q\!\Bigl(\frac{\varphi^{-1}}{\tau}\Bigr).
+\]
+更具体地，对每个 \(c\in\{1,\varphi^{-1}\}\)，函数
+\[
+G_{q,c}(\tau):=\tau\,\Theta_q(c/\tau)
+\]
+在每个区间
+\[
+\tau\in\Bigl[\frac{c}{n+1},\frac{c}{n}\Bigr]
+\qquad (n\ge 1)
+\]
+上都是仿射函数，并满足
+\[
+G_{q,c}(\tau)
+=
+c\bigl((n+1)^q-n^q\bigr)
++
+\tau\bigl((n+1)n^q-n(n+1)^q\bigr).
+\]
+当 \(\tau\ge c\) 时，则有
+\[
+G_{q,c}(\tau)=c.
+\]
+\end{theorem}
+\begin{proof}
+先记单纤维最优 \(q\)-能量为
+\[
+\psi_q(d,M):=
+\min_{\substack{(n_1,\dots,n_M)\in\ZZ_{\ge 0}^M\\ n_1+\cdots+n_M=d}}
+\sum_{j=1}^{M}n_j^q.
+\]
+若 \(d=aM+r\) 且 \(0\le r<M\)，则由推论 \ref{cor:conclusion-balanced-externalization-optimal-renyi-energy}
+\[
+\psi_q(d,M)=r(a+1)^q+(M-r)a^q.
+\]
+等价地，写 \(\rho=d/M=a+r/M\)，便有精确恒等式
+\[
+\psi_q(d,M)=M\,\Theta_q(\rho)=M\,\Theta_q(d/M).
+\]
+
+现在对 bin-fold 取
+\[
+A_0^{(m)}:=\{w\in X_m:\ w_m=0\},
+\qquad
+A_1^{(m)}:=\{w\in X_m:\ w_m=1\}.
+\]
+由定理 \ref{thm:fold-bin-two-state-asymptotic} 的一致展开，
+\[
+d_m^{\mathrm{bin}}(w)=A_m+o(A_m)
+\quad (w\in A_0^{(m)}),
+\qquad
+d_m^{\mathrm{bin}}(w)=\varphi^{-1}A_m+o(A_m)
+\quad (w\in A_1^{(m)}),
+\]
+且误差在各自扇区上一致。又
+\[
+|A_0^{(m)}|=F_{m+1},
+\qquad
+|A_1^{(m)}|=F_m.
+\]
+记 \(M_m:=2^{B_m}=\tau A_m(1+o(1))\)。则对任意固定 \(c>0\)，若 \(d_m=cA_m+o(A_m)\)，便有
+\[
+\frac{\psi_q(d_m,M_m)}{A_m}
+=
+\frac{M_m}{A_m}\,\Theta_q(d_m/M_m)
+\longrightarrow
+\tau\,\Theta_q(c/\tau),
+\]
+其中用到 \(\Theta_q\) 在 \([0,\infty)\) 上连续。
+
+于是
+\[
+\mathcal E_{q,m}(B_m)
+=
+2^{-m}\sum_{w\in A_0^{(m)}}\psi_q(d_m(w),M_m)
++
+2^{-m}\sum_{w\in A_1^{(m)}}\psi_q(d_m(w),M_m).
+\]
+再由
+\[
+\frac{F_{m+1}A_m}{2^m}\longrightarrow \frac{\varphi}{\sqrt5},
+\qquad
+\frac{F_mA_m}{2^m}\longrightarrow \frac1{\sqrt5},
+\]
+即可得到
+\[
+\mathcal E_{q,m}(B_m)\longrightarrow
+\frac{\varphi}{\sqrt5}\,\tau\,\Theta_q\!\Bigl(\frac1\tau\Bigr)
++
+\frac1{\sqrt5}\,\tau\,\Theta_q\!\Bigl(\frac{\varphi^{-1}}{\tau}\Bigr).
+\]
+
+若
+\[
+\tau\in\Bigl[\frac{c}{n+1},\frac{c}{n}\Bigr],
+\]
+则 \(c/\tau\in[n,n+1]\)。写
+\[
+\frac{c}{\tau}=n+\theta,
+\qquad
+0\le \theta\le 1.
+\]
+于是
+\[
+\Theta_q(c/\tau)=(1-\theta)n^q+\theta(n+1)^q,
+\qquad
+\theta=\frac{c}{\tau}-n.
+\]
+代回并整理即得
+\[
+G_{q,c}(\tau)
+=
+c\bigl((n+1)^q-n^q\bigr)
++
+\tau\bigl((n+1)n^q-n(n+1)^q\bigr).
+\]
+若 \(\tau\ge c\)，则 \(0\le c/\tau\le 1\)，从而 \(\Theta_q(c/\tau)=c/\tau\)，于是 \(G_{q,c}(\tau)=c\)。证毕。
+\end{proof}
+
+\begin{corollary}[高阶审计曲线的无穷谐波折点结构]\label{cor:conclusion-binfold-harmonic-staircase-kinks}
+若 \(q>1\)，则极限曲线 \(\mathcal E_q(\tau)\) 的全部不可微点恰为
+\[
+\Sigma_q=
+\Bigl\{\frac1n:\ n\ge 1\Bigr\}
+\cup
+\Bigl\{\frac{\varphi^{-1}}{n}:\ n\ge 1\Bigr\}.
+\]
+该集合在 \(0\) 处聚积，且除此之外无其他聚积点。因而 bin-fold 的临界外置几何并非有限折点图景，而是一条向 \(0\) 积聚的无穷谐波审计阶梯。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-binfold-critical-budget-renyi-energy}，
+\[
+\mathcal E_q(\tau)
+=
+\frac{\varphi}{\sqrt5}\,G_{q,1}(\tau)
++
+\frac1{\sqrt5}\,G_{q,\varphi^{-1}}(\tau).
+\]
+对固定 \(c>0\)，\(G_{q,c}\) 只可能在
+\[
+\tau=\frac{c}{n}
+\qquad (n\ge 1)
+\]
+处发生折点，因为这些点正对应于 \(\lfloor c/\tau\rfloor\) 的跳变。并且在区间
+\[
+\Bigl[\frac{c}{n+1},\frac{c}{n}\Bigr]
+\]
+上的斜率等于
+\[
+\sigma_{q,n}:=(n+1)n^q-n(n+1)^q.
+\]
+于是
+\[
+\sigma_{q,n}-\sigma_{q,n-1}
+=
+-n\Bigl((n+1)^q-2n^q+(n-1)^q\Bigr)<0,
+\]
+其中严格不等式来自 \(t\mapsto t^q\) 在 \(q>1\) 时的严格凸性。故每个 \(\tau=c/n\) 都是真正折点。
+
+取 \(c=1\) 与 \(c=\varphi^{-1}\)，便得全部折点包含于
+\[
+\Bigl\{\frac1n:\ n\ge 1\Bigr\}
+\cup
+\Bigl\{\frac{\varphi^{-1}}{n}:\ n\ge 1\Bigr\}.
+\]
+由于 \(\varphi^{-1}\notin\QQ\)，两条谐波格彼此不重合，故总折点集恰为其并。显然其唯一聚积点为 \(0\)。证毕。
+\end{proof}
+
+\begin{theorem}[负矩 Mellin 指纹对二原子容量律的唯一恢复]\label{thm:conclusion-negative-mellin-two-atom-uniqueness}
+设 \(\nu\) 为支撑有界的 Borel 概率测度，并定义其容量剖面
+\[
+m_\nu(\tau):=\int \min\{y,\tau\}\,\dd\nu(y),
+\qquad
+\tau\ge 0.
+\]
+若对每个 \(s>0\) 都有
+\[
+s(s+1)\int_0^\infty \tau^{-s-2}\bigl(\tau-m_\nu(\tau)\bigr)\,\dd\tau
+=
+\varphi^{-1}+\varphi^{\,s-2},
+\]
+则必有
+\[
+\nu=\varphi^{-2}\delta_{\varphi^{-1}}+\varphi^{-1}\delta_1.
+\]
+换言之，二原子 scaled multiplicity law 已经被其负矩 Mellin 指纹单独唯一刻画。
+\end{theorem}
+\begin{proof}
+对任意固定 \(y>0\)，有
+\[
+\tau-\min\{y,\tau\}=
+\begin{cases}
+0, & 0<\tau\le y,\\[2pt]
+\tau-y, & \tau>y.
+\end{cases}
+\]
+故直接计算得到
+\[
+s(s+1)\int_0^\infty \tau^{-s-2}\bigl(\tau-\min\{y,\tau\}\bigr)\,\dd\tau
+=
+y^{-s}.
+\]
+对 \(\nu\) 积分并交换积分次序，即得
+\[
+s(s+1)\int_0^\infty \tau^{-s-2}\bigl(\tau-m_\nu(\tau)\bigr)\,\dd\tau
+=
+\int y^{-s}\,\dd\nu(y).
+\]
+于是题设等价于
+\[
+\int y^{-s}\,\dd\nu(y)
+=
+\varphi^{-1}+\varphi^{-2}(\varphi^{-1})^{-s}
+\qquad (s>0).
+\]
+记
+\[
+\mu:=\nu-\bigl(\varphi^{-2}\delta_{\varphi^{-1}}+\varphi^{-1}\delta_1\bigr).
+\]
+则 \(\mu\) 是紧支撑有限符号测度，并满足
+\[
+\int y^{-s}\,\dd\mu(y)=0
+\qquad (\forall\,s>0).
+\]
+将 \(\mu\) 通过变量代换 \(y=e^t\) 推前为一支撑紧的有限符号测度 \(\eta\)，便得到
+\[
+\int e^{-st}\,\dd\eta(t)=0
+\qquad (\forall\,s>0).
+\]
+由紧支撑有限测度的 Laplace 变换唯一性，\(\eta=0\)，故 \(\mu=0\)。因此
+\[
+\nu=\varphi^{-2}\delta_{\varphi^{-1}}+\varphi^{-1}\delta_1.
+\]
+证毕。
+\end{proof}
+
+\input{sections/body/conclusion/thm__conclusion-twoatom-completion-capacity-branch-selection.tex}
+
+\begin{theorem}[超临界精确平台与亚临界幂律爆破]\label{thm:conclusion-supercritical-plateau-subcritical-power-law}
+若 \(q>1\)，则定理 \ref{thm:conclusion-binfold-critical-budget-renyi-energy} 的极限曲线满足
+\[
+\mathcal E_q(\tau)\equiv 1
+\qquad (\tau\ge 1).
+\]
+也就是说，一旦外置预算跨过最大原子尺度，最优高阶碰撞密度便出现严格平台。另一方面，当 \(\tau\downarrow 0\) 时，
+\[
+\mathcal E_q(\tau)
+=
+\frac{\varphi+\varphi^{-q}}{\sqrt5}\,\tau^{1-q}
++
+O(\tau^{2-q}).
+\]
+特别地，在二阶碰撞情形 \(q=2\) 下，
+\[
+\mathcal E_2(\tau)
+=
+\frac{2}{\sqrt5}\,\tau^{-1}+O(1),
+\qquad
+\tau\downarrow 0.
+\]
+\end{theorem}
+\begin{proof}
+若 \(\tau\ge 1\)，则
+\[
+\frac1\tau\le 1,
+\qquad
+\frac{\varphi^{-1}}{\tau}\le \varphi^{-1}<1.
+\]
+当 \(0\le \rho\le 1\) 时，\(\Theta_q(\rho)=\rho\)。因此
+\[
+\mathcal E_q(\tau)
+=
+\frac{\varphi}{\sqrt5}\,\tau\cdot \frac1\tau
++
+\frac1{\sqrt5}\,\tau\cdot \frac{\varphi^{-1}}{\tau}
+=
+\frac{\varphi+\varphi^{-1}}{\sqrt5}
+=1.
+\]
+
+若 \(\tau\downarrow 0\)，则 \(\rho\to\infty\) 时有
+\[
+\Theta_q(\rho)=\rho^q+O(\rho^{q-1}),
+\]
+因为写 \(\rho=n+\theta\) 且 \(0\le \theta<1\) 时，
+\[
+\Theta_q(\rho)=(1-\theta)n^q+\theta(n+1)^q
+=
+\rho^q+O(\rho^{q-1}).
+\]
+于是
+\[
+\tau\,\Theta_q(1/\tau)=\tau^{1-q}+O(\tau^{2-q}),
+\]
+\[
+\tau\,\Theta_q(\varphi^{-1}/\tau)=\varphi^{-q}\tau^{1-q}+O(\tau^{2-q}).
+\]
+代入定理 \ref{thm:conclusion-binfold-critical-budget-renyi-energy} 即得
+\[
+\mathcal E_q(\tau)
+=
+\frac{\varphi+\varphi^{-q}}{\sqrt5}\,\tau^{1-q}
++
+O(\tau^{2-q}).
+\]
+对 \(q=2\)，再用恒等式
+\[
+\varphi+\varphi^{-2}=2
+\]
+便得到
+\[
+\mathcal E_2(\tau)=\frac{2}{\sqrt5}\tau^{-1}+O(1).
+\]
+证毕。
+\end{proof}
+
+\paragraph{统一读法}
+这组结果把 bin-fold 外置预算几何压缩为一条比连续热力学图像更刚性的离散相图：在固定窗口上，纤维内平衡外置同时最小化全部凸审计泛函与全部 \(q\)-碰撞能量；在临界尺度上，这一最优机制收敛为由两条谐波格
+\[
+\Bigl\{\frac1n\Bigr\}_{n\ge 1},
+\qquad
+\Bigl\{\frac{\varphi^{-1}}{n}\Bigr\}_{n\ge 1}
+\]
+支配的无穷折点阶梯；在 Mellin 侧，整个容量剖面又被一支二原子测度完全唯一决定，并强制导出超临界平台与亚临界幂律爆破。进一步地，completion 自对偶因子虽然单独只给出一个二值分支，但一旦把容量相图的折点斜率比并入同一审计框架，分支立刻唯一坍缩到
+\[
+\varphi^{-1}\delta_1+\varphi^{-2}\delta_{\varphi^{-1}}.
+\]
+于是，budgeted externalization、critical-scale 容量、Mellin 指纹与 quarter-line completion 四者不再只是平行出现的统计像，而被同一两原子几何唯一锁定。
+
+\endinput

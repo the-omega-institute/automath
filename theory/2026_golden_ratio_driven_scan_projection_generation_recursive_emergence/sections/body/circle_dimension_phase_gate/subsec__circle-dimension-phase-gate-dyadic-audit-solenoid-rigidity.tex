@@ -1,0 +1,560 @@
+\subsection{dyadic 相位审计指数、solenoid 高度核与半圆维公理唯一性}\label{subsec:cdim-dyadic-audit-solenoid-rigidity}
+本小节在定义 \ref{def:circle-dimension}--\ref{def:half-circle-dimension} 的圆维/半圆维框架下，补齐三条互相兼容的接口：
+一是 dyadic 前缀读出下的相位审计指数精确律；
+二是秩一局部化群 \(\ZZ\subseteq A\subseteq\QQ\) 的高度分类与通用 solenoid 因子化；
+三是半圆维在“可加 + 有限指数不变 + 归一化”公理下的唯一性。
+
+\paragraph{dyadic 前缀读出的审计深度指数}
+\begin{definition}[dyadic 前缀量化与最小审计深度]\label{def:cdim-dyadic-prefix-audit-depth}
+设 \(r,d\in\NN\)，\(\TT:=\RR/\ZZ\)。
+对任意 \(\Theta\in M_{d\times r}(\RR)\)，定义群同态
+\[
+\Phi_{\Theta}:\ZZ^r\to\TT^d,\qquad
+\Phi_{\Theta}(n):=\Theta n\pmod{\ZZ^d}.
+\]
+对 \(L\ge 1\)，定义逐坐标 dyadic 前缀量化
+\[
+q_L:\TT^d\to(\ZZ/2^L\ZZ)^d,\qquad
+q_L(x)_j:=\left\lfloor 2^L\widetilde x_j\right\rfloor\!\!\!\pmod{2^L},
+\]
+其中 \(\widetilde x_j\in[0,1)\) 为 \(x_j\in\TT\) 的代表元。
+再定义立方窗口
+\[
+C_Q:=\{n\in\ZZ^r:\ |n|_{\infty}\le Q\}\qquad(Q\ge 1),
+\]
+以及最小审计深度
+\[
+L_{\Theta}(Q):=
+\min\{L\in\NN:\ q_L\circ\Phi_{\Theta}\ \text{在}\ C_Q\ \text{上单射}\}.
+\]
+定义 \(d\)-相位 dyadic 审计指数
+\[
+\alpha_{d}^{\mathrm{pref}}(\ZZ^r):=
+\inf_{\Theta\in M_{d\times r}(\RR)}
+\limsup_{Q\to\infty}\frac{L_{\Theta}(Q)}{\log_2 Q}.
+\]
+\end{definition}
+
+\begin{theorem}[相位审计指数的精确值]\label{thm:cdim-dyadic-prefix-audit-exact}
+在定义 \ref{def:cdim-dyadic-prefix-audit-depth} 的设定下，
+\[
+\alpha_{d}^{\mathrm{pref}}(\ZZ^r)=\frac{r}{d}.
+\]
+\end{theorem}
+\begin{proof}
+\textbf{下界.}
+对任意 \(\Theta\) 与 \(L\)，映射 \(q_L\circ\Phi_{\Theta}\) 的值域基数至多为 \(2^{Ld}\)。
+若其在 \(C_Q\) 上单射，则必有
+\[
+2^{Ld}\ge |C_Q|=(2Q+1)^r,
+\]
+故
+\[
+L_{\Theta}(Q)\ge \frac{r}{d}\log_2(2Q+1).
+\]
+取 \(\limsup_{Q\to\infty}\) 得
+\[
+\limsup_{Q\to\infty}\frac{L_{\Theta}(Q)}{\log_2 Q}\ge \frac{r}{d},
+\]
+再对 \(\Theta\) 取下确界，得到
+\(
+\alpha_{d}^{\mathrm{pref}}(\ZZ^r)\ge r/d
+\)。
+\par
+\textbf{上界.}
+由坏可逼近系统存在性（见 \cite{Schmidt1969BadlyApproximableSystems}），存在矩阵 \(\Theta\) 与常数 \(c>0\)，使对一切 \(k\in\ZZ^r\setminus\{0\}\) 有
+\[
+\operatorname{dist}_{\TT^d,\infty}(\Theta k,0)\ge c\,|k|_{\infty}^{-r/d},
+\]
+其中
+\(
+\operatorname{dist}_{\TT^d,\infty}(x,y):=\min_{m\in\ZZ^d}|x-y-m|_{\infty}
+\)。
+对任意不同 \(n,m\in C_Q\)，令 \(k=n-m\)，则 \(|k|_{\infty}\le 2Q\)，从而
+\[
+\operatorname{dist}_{\TT^d,\infty}\!\bigl(\Phi_{\Theta}(n),\Phi_{\Theta}(m)\bigr)
+\ge c(2Q)^{-r/d}.
+\]
+若取 \(L\) 满足
+\[
+2^{-L}<c(2Q)^{-r/d},
+\]
+则任意两个不同点不可能落入同一 dyadic 量化盒，故 \(q_L\circ\Phi_{\Theta}\) 在 \(C_Q\) 上单射。
+于是
+\[
+L_{\Theta}(Q)\le \frac{r}{d}\log_2 Q+O(1),
+\]
+故
+\[
+\limsup_{Q\to\infty}\frac{L_{\Theta}(Q)}{\log_2 Q}\le \frac{r}{d}.
+\]
+合并上下界得证。
+\end{proof}
+
+\begin{remark}[与最小分离指数口径的一致性]\label{rem:cdim-dyadic-prefix-vs-separation}
+定理 \ref{thm:cdim-dyadic-prefix-audit-exact} 与
+定理 \ref{thm:xi-cdim-phase-compression-aliasing-exponent}
+给出的最小分离指数在主指数上等价：
+对固定 \(\Theta\)，
+\[
+L_{\Theta}(Q)=\log_2\!\frac{1}{\Delta_Q(\Theta)}+O(1),
+\]
+其中 \(\Delta_Q(\Theta)\) 为 \(C_Q\) 上像点集的最小 \(\TT^d\)-距离。
+因此二者在 \(\log Q\) 归一化后给出同一极限指数 \(r/d\)。
+\end{remark}
+
+\input{subsubsec__circle-dimension-phase-gate-badly-approximable-audit-stability}
+
+\paragraph{圆维的最小相位预算与有限纤维不变性}
+\begin{definition}[带固定有限外置寄存器的对数可审计]\label{def:cdim-log-auditable-with-finite-register}
+设 \(G\) 为有限生成离散交换群。
+取群同态
+\(
+\Phi:G\to\TT^d
+\)
+与一个固定有限群 \(R\) 及同态
+\(
+\rho:G\to R
+\)。
+称 \((\Phi,\rho)\) 在深度函数 \(L(Q)\) 下可审计，若对某个按 \(G\) 的固定生成集定义的词长球 \(B_G(Q)\)，映射
+\[
+g\longmapsto \bigl(q_{L(Q)}(\Phi(g)),\rho(g)\bigr)
+\]
+在 \(B_G(Q)\) 上单射。
+若存在常数 \(C\) 使 \(L(Q)\le C\log_2(Q+2)+O(1)\)，称 \(G\) 在 \(d\) 个相位圆上\textbf{对数可审计}。
+\end{definition}
+
+\begin{proposition}[固定有限纤维不改变相位审计指数]\label{prop:cdim-finite-fiber-does-not-change-audit-exponent}
+在定义 \ref{def:cdim-log-auditable-with-finite-register} 的审计口径下，
+对任意有限生成离散交换群 \(G\)、有限群 \(F\) 与 \(d\in\NN\)，
+相位主指数在 \(G\) 与 \(G\oplus F\) 之间相同。
+\end{proposition}
+\begin{proof}
+设 \(G\cong \ZZ^r\oplus T\)。
+对 \(G\oplus F\) 的任何可审计方案，限制到子群 \(G\oplus\{0\}\) 仍为可审计方案，故其所需主指数不小于 \(G\) 的主指数。
+反向上，给定 \(G\) 的可审计方案 \((\Phi,\rho_G)\)，把有限群 \(F\) 并入外置寄存器，取
+\[
+\rho_{G\oplus F}(g,f):=(\rho_G(g),f)\in R_G\times F.
+\]
+该扩展不改变相位量化深度，只增加与 \(Q\) 无关的常数寄存器规模，故主指数不变。
+两向比较即得结论。
+\end{proof}
+
+\begin{theorem}[圆维等于最小对数可审计相位圆数]\label{thm:cdim-minimal-log-auditable-phase-circles}
+设 \(G\) 为有限生成离散交换群。
+则在定义 \ref{def:cdim-log-auditable-with-finite-register} 的口径下，
+\[
+\cdim(G)=
+\min\Bigl\{d\in\NN:\ G\ \text{在}\ d\ \text{个相位圆上对数可审计}\Bigr\}.
+\]
+\end{theorem}
+\begin{proof}
+写 \(G\cong \ZZ^r\oplus T\)，其中 \(r=\cdim(G)\)（定义 \ref{def:circle-dimension} 与例 \ref{ex:circle-dimension-examples}）。
+\par
+若 \(d<r\)，由定理 \ref{thm:cdim-dyadic-prefix-audit-exact}，自由部分 \(\ZZ^r\) 的相位审计深度主指数为 \(r/d>1\)，故不可能用 \(O(\log Q)\) 深度实现窗口单射，进而 \(G\) 亦不可。
+\par
+若 \(d=r\)，定理 \ref{thm:cdim-dyadic-prefix-audit-exact} 给出 \(\ZZ^r\) 上深度 \(L(Q)\le \log_2 Q+O(1)\) 的单射审计。
+再由命题 \ref{prop:cdim-finite-fiber-does-not-change-audit-exponent}，有限部分 \(T\) 仅进入常数规模外置寄存器，不改变 \(\log Q\) 主阶。
+故 \(d=r\) 可实现，且最小值即 \(r=\cdim(G)\)。
+\end{proof}
+
+\paragraph{秩一 solenoid 的高度分类与通用核}
+\begin{definition}[高度序列与秩一局部化群]\label{def:cdim-rank-one-height-sequence}
+设 \(\mathbf h=(h_p)_{p\in\mathbb P}\)，其中 \(h_p\in\NN\cup\{0,\infty\}\)。
+定义
+\[
+A_{\mathbf h}:=
+\left\{\frac{a}{b}\in\QQ:\ v_p(b)\le h_p\ \text{对所有素数 }p\right\},
+\qquad
+K_{\mathbf h}:=\widehat{A_{\mathbf h}}.
+\]
+\end{definition}
+
+\begin{theorem}[一维 solenoid 的高度分类]\label{thm:cdim-rank-one-solenoid-height-classification}
+在定义 \ref{def:cdim-rank-one-height-sequence} 的设定下，成立：
+\begin{enumerate}
+  \item \(K_{\mathbf h}\) 为紧、连通、交换群，且 \(\cdim(K_{\mathbf h})=1\)；
+  \item 存在自然短正合列
+  \[
+  0\longrightarrow P_{\mathbf h}\longrightarrow K_{\mathbf h}\xrightarrow{\ \pi\ }\TT\longrightarrow 0,
+  \]
+  其中
+  \[
+  P_{\mathbf h}\cong \prod_{p} P_p(h_p),\qquad
+  P_p(h_p)\cong
+  \begin{cases}
+  0,& h_p=0,\\
+  \ZZ/p^{h_p}\ZZ,& 1\le h_p<\infty,\\
+  \ZZ_p,& h_p=\infty;
+  \end{cases}
+  \]
+  \item 任意满足 \(\ZZ\subseteq A\subseteq\QQ\) 的子群都唯一对应某个高度序列 \(\mathbf h(A)\)，并且 \(A=A_{\mathbf h(A)}\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第 (3) 条是秩一无挠子群的高度分类：对每个素数定义
+\[
+h_p(A):=\sup\{n\in\NN:\ p^{-n}\in A\},
+\]
+即可得到唯一序列。
+\par
+由第 (3) 条与定理 \ref{thm:cdim-rankone-phase-prime-fiber}，\(K_{\mathbf h}=\widehat{A_{\mathbf h}}\) 具有短正合列
+\[
+0\to \widehat{A_{\mathbf h}/\ZZ}\to \widehat{A_{\mathbf h}}\to \widehat{\ZZ}\to 0,
+\qquad
+\widehat{\ZZ}\cong\TT.
+\]
+而
+\[
+A_{\mathbf h}/\ZZ
+\cong
+\bigoplus_{p:\,h_p<\infty}\ZZ/p^{h_p}\ZZ
+\ \oplus\
+\bigoplus_{p:\,h_p=\infty}\ZZ(p^\infty),
+\]
+对偶后得到
+\[
+\widehat{A_{\mathbf h}/\ZZ}
+\cong
+\prod_{p:\,h_p<\infty}\ZZ/p^{h_p}\ZZ
+\times
+\prod_{p:\,h_p=\infty}\ZZ_p,
+\]
+即第 (2) 条。
+\par
+第 (1) 条中，连通性来自 \(A_{\mathbf h}\) 无挠；\(\cdim=1\) 来自其 \(\QQ\)-秩为 \(1\)（见定理 \ref{thm:cdim-rankone-phase-prime-fiber}）。
+证毕。
+\end{proof}
+
+\begin{corollary}[通用 solenoid 的全素数核]\label{cor:cdim-universal-solenoid-full-prime-kernel}
+若对所有素数 \(p\) 取 \(h_p=\infty\)，则 \(A_{\mathbf h}=\QQ\)，并且
+\[
+K_{\mathbf h}=\widehat{\QQ}.
+\]
+此时短正合列成为
+\[
+0\longrightarrow \widehat{\ZZ}
+\longrightarrow \widehat{\QQ}
+\longrightarrow \TT
+\longrightarrow 0,
+\qquad
+\widehat{\ZZ}\cong \prod_{p}\ZZ_p.
+\]
+该表达与注 \ref{rem:pom-solenoid-extension} 的接口一致。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:cdim-rank-one-solenoid-height-classification} 直接代入 \(h_p=\infty\) 得证。
+\end{proof}
+
+\begin{theorem}[通用 solenoid 的唯一因子化态射]\label{thm:cdim-universal-solenoid-factorization}
+考虑如下对象：
+\[
+(K,\pi),\qquad
+K\ \text{为紧连通交换群},\ \pi:K\twoheadrightarrow \TT,
+\]
+并要求其对偶离散群 \(A:=\widehat K\) 为秩一无挠群，且 \(\widehat\pi:\ZZ\hookrightarrow A\)。
+则存在唯一连续群同态
+\[
+f_K:\widehat{\QQ}\longrightarrow K
+\]
+满足
+\[
+\pi\circ f_K=\pi_{\QQ},
+\]
+其中 \(\pi_{\QQ}:\widehat{\QQ}\twoheadrightarrow\TT\) 为推论
+\ref{cor:cdim-universal-solenoid-full-prime-kernel} 中的典范投影。
+\end{theorem}
+\begin{proof}
+由秩一无挠条件与 \(\widehat\pi:\ZZ\hookrightarrow A\)，可将 \(A\) 识别为某个
+\(\ZZ\subseteq A\subseteq\QQ\)。
+包含映射 \(i_A:A\hookrightarrow\QQ\) 唯一确定。
+对偶化得到唯一连续同态
+\[
+f_K:=\widehat{i_A}:\widehat{\QQ}\to\widehat A\cong K.
+\]
+对偶交换图直接给出 \(\pi\circ f_K=\pi_{\QQ}\)。
+唯一性由 \(i_A\) 的唯一性与 Pontryagin 对偶反变等价给出。证毕。
+\end{proof}
+
+\paragraph{交换化控制与半圆维公理唯一性}
+\begin{conjecture}[交换化秩控制相位审计主指数]\label{conj:cdim-abelianization-controls-phase-audit}
+设 \(\Gamma\) 为有限生成群，记其交换化自由秩
+\[
+r:=\operatorname{rank}\bigl(\Gamma_{\mathrm{ab}}\bigr).
+\]
+在仅允许群同态 \(\Gamma\to\TT^d\) 的相位读出口径下，审计深度主指数满足
+\[
+\alpha_d^{\mathrm{hom}}(\Gamma)=\frac{r}{d}.
+\]
+即非交换结构不改变主指数 \(r/d\)，仅影响常数项与次主项；其额外可审计信息必须通过非相位外置轴承载。
+\end{conjecture}
+
+\begin{proposition}[半圆维的公理唯一性]\label{prop:cdim-plus-axiomatic-uniqueness}
+设 \(\delta\) 定义在有限生成可消交换幺半群类上，并满足：
+\begin{enumerate}
+  \item \textbf{可加性：}\(\delta(M\oplus N)=\delta(M)+\delta(N)\)；
+  \item \textbf{有限指数不变性：}若 \(M\subseteq N\) 为有限 Rees 指数嵌入，则 \(\delta(M)=\delta(N)\)；
+  \item \textbf{归一化：}\(\delta(\NN)=\tfrac12\)。
+\end{enumerate}
+则对一切此类幺半群 \(M\) 有
+\[
+\delta(M)=\cdim_{+}(M).
+\]
+\end{proposition}
+\begin{proof}
+记 \(G(M)\) 为 \(M\) 的 Grothendieck 完成，并写
+\[
+G(M)\cong \ZZ^r\oplus F,\qquad r=\operatorname{rank}G(M).
+\]
+由定义 \ref{def:half-circle-dimension}，
+\[
+\cdim_{+}(M)=\frac12\,\cdim(G(M))=\frac{r}{2}.
+\]
+另一方面，有限生成可消交换幺半群在饱和化后与 \(\NN^r\) 于有限指数意义下等价；
+由公理 (2) 得
+\(
+\delta(M)=\delta(\NN^r)
+\)。
+再由公理 (1)(3) 得
+\[
+\delta(\NN^r)=r\,\delta(\NN)=\frac{r}{2}.
+\]
+故 \(\delta(M)=r/2=\cdim_{+}(M)\)。证毕。
+\end{proof}
+
+\subsubsection{圆维守恒与前缀--素数账本律}\label{subsubsec:cdim-prefix-prime-ledger-laws}
+在定义 \ref{def:circle-dimension} 与定义 \ref{def:half-circle-dimension} 的口径下，下面给出一组可直接用于“可见相位轴--外置账本轴”分解的结构结论。
+
+\begin{proposition}[圆维在 \texorpdfstring{$\otimes$}{tensor} 与 \texorpdfstring{$\operatorname{Hom}$}{Hom} 下的乘法律]\label{prop:cdim-tensor-hom-product-law-restated}
+设 \(G,H\) 为有限生成离散交换群，则
+\[
+\cdim(G\otimes_{\ZZ}H)=\cdim(G)\cdim(H),\qquad
+\cdim\!\bigl(\operatorname{Hom}_{\ZZ}(G,H)\bigr)=\cdim(G)\cdim(H).
+\]
+\end{proposition}
+\begin{proof}
+命题 \ref{prop:cdim-tensor-hom-ext-laws} 的第 (1)、(2) 条即给出所述等式。证毕。
+\end{proof}
+
+\begin{theorem}[前缀熵表征与维--深守恒律]\label{thm:cdim-prefix-entropy-depth-conservation}
+设 \(U:=(-\tfrac12,\tfrac12)\)，\(d\ge 1\)，\(b\in\NN\)，并定义
+\[
+A_b^{(d)}:U^d\to\{0,1,\dots,2^b-1\}^d,\qquad
+A_b^{(d)}(u_1,\dots,u_d)
+:=\bigl(\lfloor 2^b(u_1+\tfrac12)\rfloor,\dots,\lfloor 2^b(u_d+\tfrac12)\rfloor\bigr).
+\]
+设 \(G\) 为有限生成离散交换群，\(S\) 为一组有限生成元，\(|\cdot|_S\) 为相应词长，
+\[
+B_N:=\{g\in G:\ |g|_S\le N\}.
+\]
+对任意单射 \(\Phi:B_N\hookrightarrow U^d\)，定义
+\[
+b_d(N;\Phi)
+:=\min\{b\in\NN:\ A_b^{(d)}\circ\Phi\ \text{在 }B_N\text{ 上单射}\},
+\]
+并令
+\[
+b_d^\star(N):=\inf_{\Phi} b_d(N;\Phi).
+\]
+记 \(r:=\cdim(G)\)。则存在常数 \(C_1,C_2\) 使得对所有充分大的 \(N\)，
+\[
+\frac{r}{d}\log_2 N-C_1\ \le\ b_d^\star(N)\ \le\ \frac{r}{d}\log_2 N+C_2.
+\]
+因此
+\[
+\lim_{N\to\infty}\frac{d\,b_d^\star(N)}{\log_2 N}=r=\cdim(G).
+\]
+特别地，当 \(d=1\) 时，
+\[
+b_1^\star(N)=r\log_2 N+O(1).
+\]
+\end{theorem}
+\begin{proof}
+固定 \(N\)。若 \(A_b^{(d)}\circ\Phi\) 在 \(B_N\) 上单射，则其像至多有 \(2^{bd}\) 个地址，故
+\[
+|B_N|\le 2^{bd},
+\qquad\Longrightarrow\qquad
+b_d(N;\Phi)\ge \frac{\log_2|B_N|}{d}.
+\]
+对 \(\Phi\) 取下确界得
+\[
+b_d^\star(N)\ge \frac{\log_2|B_N|}{d}.
+\]
+
+反向地，取
+\[
+b_N:=\left\lceil\frac{\log_2|B_N|}{d}\right\rceil.
+\]
+则 \(2^{b_N d}\ge |B_N|\)。由有限集合计数可取单射
+\[
+e_N:B_N\hookrightarrow\{0,1,\dots,2^{b_N}-1\}^d.
+\]
+写 \(e_N(g)=(e_{N,1}(g),\dots,e_{N,d}(g))\)，定义
+\[
+\Phi_N(g):=\left(\frac{e_{N,1}(g)+1/2}{2^{b_N}}-\frac12,\dots,
+\frac{e_{N,d}(g)+1/2}{2^{b_N}}-\frac12\right)\in U^d.
+\]
+则 \(A_{b_N}^{(d)}\circ\Phi_N=e_N\) 在 \(B_N\) 上单射，故
+\[
+b_d^\star(N)\le b_N\le \frac{\log_2|B_N|}{d}+1.
+\]
+于是
+\[
+\left|\,b_d^\star(N)-\frac{\log_2|B_N|}{d}\right|\le 1.
+\]
+
+另一方面，有限生成交换群可写为 \(G\cong\ZZ^r\oplus F\)（\(F\) 有限），故任意词长球满足
+\[
+|B_N|=\Theta(N^r),
+\]
+等价于
+\[
+\log_2|B_N|=r\log_2 N+O(1).
+\]
+代入即得所述双边界与极限公式。\(d=1\) 为其直接特例。证毕。
+\end{proof}
+
+\begin{proposition}[可测同态下圆维不可坍缩]\label{prop:cdim-borel-homomorphism-noncollapse}
+设 \(r>d\ge 1\)。则不存在 Borel 可测群同态单射
+\[
+f:\TT^r\to\TT^d.
+\]
+\end{proposition}
+\begin{proof}
+\(\TT^r,\TT^d\) 都是 Polish 群。Borel 可测同态在 Polish 群之间自动连续，故 \(f\) 连续。
+连续群同态 \(f:\TT^r\to\TT^d\) 必由某个整数矩阵 \(A\in M_{d\times r}(\ZZ)\) 给出：
+\[
+f(x)=Ax\pmod{\ZZ^d}.
+\]
+由于 \(r>d\)，有 \(\operatorname{rank}(A)\le d<r\)，故线性映射 \(A:\RR^r\to\RR^d\) 的核维数至少 \(r-d>0\)。
+于是 \(\ker f\) 含非平凡子环面，\(f\) 不可能单射，矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[前缀--素数账本守恒不等式]\label{thm:cdim-prefix-prime-ledger-conservation}
+设 \(S\) 为有限集合。若编码
+\[
+c:S\to\{0,\dots,2^b-1\}\times(\ZZ/P\ZZ)
+\]
+为单射，则必有
+\[
+2^bP\ge |S|.
+\]
+进一步，设 \(G\) 为有限生成离散交换群，\(r=\cdim(G)\)，并取词长球 \(B_N\)。
+若存在对 \(B_N\) 的单射编码
+\[
+c_N:B_N\to\{0,\dots,2^b-1\}\times(\ZZ/P\ZZ),
+\]
+则存在常数 \(C\)（与 \(N\) 无关）使得对充分大 \(N\),
+\[
+b+\log_2 P\ge r\log_2 N-C.
+\]
+\end{theorem}
+\begin{proof}
+第一式是基数必要条件：单射满足
+\[
+|S|=|c(S)|\le 2^bP.
+\]
+
+对第二式，取 \(S=B_N\) 得
+\[
+b+\log_2 P\ge \log_2|B_N|.
+\]
+由 \(G\cong\ZZ^r\oplus F\) 的球增长律，\(\log_2|B_N|=r\log_2N+O(1)\)，
+故存在常数 \(C\) 使
+\[
+b+\log_2 P\ge r\log_2N-C
+\]
+对充分大 \(N\) 成立。证毕。
+\end{proof}
+
+\begin{corollary}[平方自由素数账本下的支撑规模下界]\label{cor:cdim-squarefree-prime-support-growth}
+在定理 \ref{thm:cdim-prefix-prime-ledger-conservation} 的设定下，附加约束
+\[
+P=\prod_{j=1}^{k}p_j,\qquad p_i\neq p_j.
+\]
+并采用按支撑数 \(k\) 的规范最小模数
+\[
+P_k^\#:=\prod_{j\le k}p_j
+\]
+（即前 \(k\) 个素数的乘积）。
+若该选择满足
+\[
+\log P_k^\#\ge r\log N-O(1),
+\]
+则当 \(N\to\infty\) 时
+\[
+k\ \ge\ (1-o(1))\,\frac{r\log N}{\log\log N}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:cdim-prefix-prime-ledger-conservation} 得 \(\log P\ge r\log N-O(1)\)。
+在上述规范选择下 \(P=P_k^\#\)，故
+\[
+\log P_k^\#\ge r\log N-O(1).
+\]
+又由素数定理的等价形式，
+\[
+\log P_k^\#=\vartheta(p_k)=(1+o(1))\,k\log k.
+\]
+于是
+\[
+k\log k\ge (1-o(1))\,r\log N.
+\]
+反解得到
+\[
+k\ge (1-o(1))\,\frac{r\log N}{\log\log N}.
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[有限扩张不计费语义下的圆维唯一性]\label{prop:cdim-finite-extension-axiomatic-uniqueness}
+设 \(\mathcal A\) 为有限生成离散交换群同构类。若函数
+\[
+F:\mathcal A\to\RR_{\ge 0}
+\]
+满足：
+\begin{enumerate}
+  \item \(F(G\oplus H)=F(G)+F(H)\)；
+  \item 若 \(G\) 有限，则 \(F(G)=0\)；
+  \item 若 \(0\to K\to G\to H\to 0\) 正合且 \(K\) 有限，则 \(F(G)=F(H)\)。
+\end{enumerate}
+则存在常数 \(c:=F(\ZZ)\ge 0\) 使得对任意 \(G\in\mathcal A\),
+\[
+F(G)=c\,\cdim(G).
+\]
+特别地，当 \(F(\ZZ)=1\) 时，\(F\equiv \cdim\)。
+\end{proposition}
+\begin{proof}
+写 \(G\cong\ZZ^r\oplus T\)（\(T\) 有限）。
+由正合列
+\[
+0\to T\to G\to \ZZ^r\to 0
+\]
+与条件 (3) 得
+\[
+F(G)=F(\ZZ^r).
+\]
+再由条件 (1) 得
+\[
+F(\ZZ^r)=rF(\ZZ)=cr.
+\]
+另一方面，\(\cdim(G)=r\)。
+故 \(F(G)=c\,\cdim(G)\)。当 \(c=1\) 时即得 \(F=\cdim\)。证毕。
+\end{proof}
+
+\begin{conjecture}[圆维--账本守恒的可测最优性]\label{conj:cdim-measurable-prefix-ledger-optimality}
+在扩展保存范畴 \(\mathrm{Ext}(\pi)\) 下，设某类信息对象的可见相位秩为 \(r=\cdim\)。
+对尺度 \(N\) 的有限截断系统，令实现输出由两部分组成：前缀深度 \(b_N\) 与有限可审计账本 \(R_N\)。
+定义总复杂度
+\[
+\mathfrak C(N):=b_N+\log_2|R_N|.
+\]
+猜想存在普适下界
+\[
+\mathfrak C(N)\ge r\log_2 N-O(1),
+\]
+且该下界可渐近达到，当且仅当实现在 Borel 同构意义下等价于“\(r\) 个相位坐标直积 + CRT 素数账本”的标准形。
+\end{conjecture}
+
+\endinput
+

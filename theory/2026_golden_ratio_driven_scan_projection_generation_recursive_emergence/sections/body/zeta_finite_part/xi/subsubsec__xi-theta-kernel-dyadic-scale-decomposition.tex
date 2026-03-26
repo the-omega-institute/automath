@@ -1,0 +1,279 @@
+\subsubsection{Theta 核的二幂尺度分解与零点递推：\texorpdfstring{$\Xi$}{Xi} 的双指数尾预算}\label{subsubsec:xi-theta-kernel-dyadic-scale-decomposition}
+上一段从“固定步长采样 \(\Rightarrow\) Poisson 混叠 \(\Rightarrow\) 二进制细化”的角度，把零点跟踪转译为可核验的别名尾预算。
+本段给出另一条与之正交的二幂结构：在经典 theta 核表示中按积分变量作二幂壳分割，得到一组在 \(t\)-轴上一致绝对收敛的 dyadic 分量与双指数尾界；在此基础上，将“截断 \(\Rightarrow\) 零点移动”写为逐壳增量的递推，并给出带二次型误差项的显式预算。
+
+\paragraph{theta 核表示与尺度壳分解}
+沿用 \(\xi,\Xi\) 的记号（\eqref{eq:xi-cosine-kernel-representation} 与 \S\ref{subsubsec:xi-dyadic-aliasing-zero-tracking}）。
+令
+\[
+\theta_+(x):=\sum_{n=1}^{\infty}e^{-\pi n^2 x}\qquad(x>0),
+\]
+并对 \(x\ge 1\) 定义 theta 核
+\begin{equation}\label{eq:xi-theta-kernel-K-def}
+\boxed{\;
+K(x):=4x^{-1/4}\frac{\dd}{\dd x}\Bigl[x^{3/2}\theta_+'(x)\Bigr]\; }.
+\end{equation}
+则 \(\Xi\) 具有积分表示（参见 \cite{Titchmarsh1986RiemannZeta} 的等价表述）
+\begin{equation}\label{eq:xi-theta-kernel-integral-representation}
+\boxed{\;
+\Xi(t)=\int_{1}^{\infty}K(x)\cos\!\Bigl(\tfrac{t}{2}\log x\Bigr)\,\dd x\qquad(t\in\RR).\;}
+\end{equation}
+对整数 \(k\ge 0\) 定义二幂尺度分量
+\begin{equation}\label{eq:xi-theta-kernel-dyadic-component}
+\boxed{\;
+\Xi^{[k]}(t):=\int_{2^k}^{2^{k+1}}K(x)\cos\!\Bigl(\tfrac{t}{2}\log x\Bigr)\,\dd x\;}
+\end{equation}
+并对 \(K\ge 1\) 定义截断与尾项
+\[
+F_K(t):=\sum_{k=0}^{K-1}\Xi^{[k]}(t),
+\qquad
+R_K(t):=\Xi(t)-F_K(t)=\sum_{k=K}^{\infty}\Xi^{[k]}(t).
+\]
+
+\begin{theorem}[二幂尺度分解与双指数尾界]\label{thm:xi-theta-kernel-dyadic-decomposition-doubleexp-tail}
+在表示 \eqref{eq:xi-theta-kernel-integral-representation}--\eqref{eq:xi-theta-kernel-dyadic-component} 的设定下：
+\begin{enumerate}
+  \item \(\sum_{k\ge 0}\Xi^{[k]}(t)\) 在 \(\RR\) 上一致绝对收敛，从而
+  \[
+  \Xi(t)=\sum_{k=0}^{\infty}\Xi^{[k]}(t)\qquad\text{一致于 }t\in\RR.
+  \]
+  \item 存在与 \(t\) 无关的常数 \(C>0\) 使得对一切 \(K\ge 1\) 有
+  \begin{equation}\label{eq:xi-theta-kernel-doubleexp-tail}
+  \boxed{\;
+  \|R_K\|_{L^\infty(\RR)}
+  \le C\,2^{\frac54 K}e^{-\pi 2^{K}}\;}
+  \end{equation}
+  因而尾项随 \(K\) 呈双指数衰减。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由
+\[
+\theta_+'(x)=-\pi\sum_{n\ge 1}n^2e^{-\pi n^2 x},
+\qquad
+\theta_+''(x)=\pi^2\sum_{n\ge 1}n^4e^{-\pi n^2 x},
+\]
+可得
+\(
+\frac{\dd}{\dd x}\bigl[x^{3/2}\theta_+'(x)\bigr]=\tfrac32 x^{1/2}\theta_+'(x)+x^{3/2}\theta_+''(x)
+\)。
+当 \(x\ge 1\) 时存在有限常数 \(A_2,A_4>0\) 使
+\[
+|\theta_+'(x)|\le \pi A_2 e^{-\pi x},
+\qquad
+|\theta_+''(x)|\le \pi^2 A_4 e^{-\pi x},
+\]
+从而由 \eqref{eq:xi-theta-kernel-K-def} 得到
+\begin{equation}\label{eq:xi-theta-kernel-K-pointwise-bound}
+|K(x)|\le C_0\,x^{5/4}e^{-\pi x}\qquad(x\ge 1)
+\end{equation}
+对某个常数 \(C_0>0\) 成立。
+于是对任意 \(t\in\RR\) 与 \(k\ge 0\)，
+\[
+|\Xi^{[k]}(t)|
+\le \int_{2^k}^{2^{k+1}}|K(x)|\,\dd x
+\le C_0\int_{2^k}^{\infty}x^{5/4}e^{-\pi x}\,\dd x
+\le C_1\,2^{\frac54 k}e^{-\pi 2^{k}}
+\]
+其中最后一步使用不完全伽马尾项的标准估计（等价地，使用 \(x^{5/4}e^{-\pi x}\) 的单调尾积分界）。
+因此 \(\sum_k\sup_t|\Xi^{[k]}(t)|\) 收敛并给出一致绝对收敛。
+同一估计对尾和求和得到 \eqref{eq:xi-theta-kernel-doubleexp-tail}。证毕。
+\end{proof}
+
+\begin{proposition}[全阶导数的尺度预算]\label{prop:xi-theta-kernel-dyadic-all-derivatives-budget}
+在定理 \ref{thm:xi-theta-kernel-dyadic-decomposition-doubleexp-tail} 的设定下，
+对任意整数 \(m\ge 0\)，函数 \(\Xi\) 与各分量 \(\Xi^{[k]}\) 在 \(t\) 上均为 \(C^\infty\)，并且可逐项求导：
+\begin{equation}\label{eq:xi-theta-kernel-termwise-derivative}
+\boxed{\;
+\Xi^{(m)}(t)=\sum_{k=0}^{\infty}\frac{\dd^m}{\dd t^m}\Xi^{[k]}(t)\qquad(t\in\RR).\;}
+\end{equation}
+并且存在常数 \(C_m>0\) 使得对一切 \(k\ge 0\) 有
+\begin{equation}\label{eq:xi-theta-kernel-dyadic-derivative-sup-bound}
+\boxed{\;
+\left\|\frac{\dd^m}{\dd t^m}\Xi^{[k]}\right\|_{L^\infty(\RR)}
+\le C_m\,(k+1)^m\,2^{\frac54 k}e^{-\pi 2^{k}}\;}
+\end{equation}
+从而尾项导数满足
+\begin{equation}\label{eq:xi-theta-kernel-dyadic-derivative-tail-bound}
+\boxed{\;
+\|R_K^{(m)}\|_{L^\infty(\RR)}
+\le C_m\,(K+1)^m\,2^{\frac54 K}e^{-\pi 2^{K}}
+\qquad(K\ge 1).\;}
+\end{equation}
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:xi-theta-kernel-dyadic-component} 在积分号内求导得到
+\[
+\frac{\dd^m}{\dd t^m}\Xi^{[k]}(t)
+=\int_{2^k}^{2^{k+1}}K(x)\frac{\dd^m}{\dd t^m}\cos\!\Bigl(\tfrac{t}{2}\log x\Bigr)\,\dd x,
+\qquad
+\left|\frac{\dd^m}{\dd t^m}\cos\!\Bigl(\tfrac{t}{2}\log x\Bigr)\right|
+\le \Bigl(\tfrac12|\log x|\Bigr)^m.
+\]
+在区间 \(x\in[2^k,2^{k+1}]\) 上有 \(|\log x|\le (k+1)\log 2\)，故结合 \eqref{eq:xi-theta-kernel-K-pointwise-bound} 得
+\[
+\left\|\frac{\dd^m}{\dd t^m}\Xi^{[k]}\right\|_{\infty}
+\le \Bigl(\tfrac12 (k+1)\log 2\Bigr)^m\int_{2^k}^{2^{k+1}}|K(x)|\,\dd x
+\ll_m (k+1)^m\,2^{\frac54 k}e^{-\pi 2^{k}},
+\]
+得到 \eqref{eq:xi-theta-kernel-dyadic-derivative-sup-bound}。
+对 \(k\ge K\) 求和即得 \eqref{eq:xi-theta-kernel-dyadic-derivative-tail-bound}，并因此可逐项求导得到 \eqref{eq:xi-theta-kernel-termwise-derivative}。证毕。
+\end{proof}
+
+\begin{theorem}[二幂尺度零点递推与二次型误差项]\label{thm:xi-theta-kernel-dyadic-zero-recursion}
+沿用 \(F_K,R_K\) 的记号，并定义增量项 \(H_K(t):=\Xi^{[K]}(t)\)（故 \(F_{K+1}=F_K+H_K\)）。
+设 \(K\ge 1\)，并设 \(F_K\) 在 \(t=\gamma_K\) 处有单零点：
+\[
+F_K(\gamma_K)=0,\qquad m_K:=|F_K'(\gamma_K)|>0.
+\]
+令
+\[
+\varepsilon_K:=\|H_K\|_{L^\infty(\RR)},\qquad
+L_K:=\|H_K'\|_{L^\infty(\RR)},\qquad
+M_K:=\|F_K''\|_{L^\infty(\RR)}.
+\]
+若满足小扰动条件
+\begin{equation}\label{eq:xi-theta-kernel-dyadic-zero-recursion-smallness}
+L_K\le \tfrac12 m_K,\qquad
+\varepsilon_K\le \frac{m_K^2}{16M_K},
+\end{equation}
+则：
+\begin{enumerate}
+  \item 方程 \(F_{K+1}(t)=0\) 在区间
+  \begin{equation}\label{eq:xi-theta-kernel-dyadic-zero-recursion-interval}
+  I_K:=\Bigl[\gamma_K-2\varepsilon_K/m_K,\ \gamma_K+2\varepsilon_K/m_K\Bigr]
+  \end{equation}
+  内存在唯一实根，记为 \(\gamma_{K+1}\)。
+  \item \(\gamma_{K+1}\) 满足递推
+  \begin{equation}\label{eq:xi-theta-kernel-dyadic-zero-recursion-main}
+  \boxed{\;
+  \gamma_{K+1}
+  =\gamma_K-\frac{H_K(\gamma_K)}{F_K'(\gamma_K)}+\rho_K\;}
+  \end{equation}
+  其中误差项具有显式界
+  \begin{equation}\label{eq:xi-theta-kernel-dyadic-zero-recursion-error}
+  \boxed{\;
+  |\rho_K|
+  \le
+  \frac{2\varepsilon_K L_K}{m_K^2}
+  +\frac{2M_K}{m_K^3}\varepsilon_K^2\; }.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+令 \(\delta:=t-\gamma_K\)。
+对任意 \(t\in I_K\)，由均值定理存在 \(\xi\) 介于 \(t\) 与 \(\gamma_K\) 使得
+\[
+F_K(t)=F_K'(\gamma_K)\delta+\tfrac12 F_K''(\xi)\delta^2,
+\qquad
+|F_K(t)-F_K'(\gamma_K)\delta|\le \tfrac12 M_K\delta^2.
+\]
+在 \(I_K\) 上 \(|\delta|\le 2\varepsilon_K/m_K\)，结合 \eqref{eq:xi-theta-kernel-dyadic-zero-recursion-smallness} 得
+\(
+\tfrac12 M_K\delta^2\le \tfrac18\,\varepsilon_K
+\)。
+又有 \(|H_K(t)|\le \varepsilon_K\)。
+因此 \(F_{K+1}(t)=F_K(t)+H_K(t)\) 在 \(I_K\) 两端点取异号值，从而 \(I_K\) 内至少存在一根。
+\par
+对 \(t\in I_K\)，
+\[
+|F_{K+1}'(t)|
+\ge |F_K'(\gamma_K)|-|F_K'(t)-F_K'(\gamma_K)|-|H_K'(t)|
+\ge m_K-M_K|\delta|-L_K.
+\]
+由 \(|\delta|\le 2\varepsilon_K/m_K\) 与 \eqref{eq:xi-theta-kernel-dyadic-zero-recursion-smallness} 得
+\(
+M_K|\delta|\le m_K/8
+\)
+且 \(L_K\le m_K/2\)，故 \( |F_{K+1}'(t)|\ge 3m_K/8>0 \)；
+因此 \(F_{K+1}\) 在 \(I_K\) 上严格单调，零点唯一。
+\par
+再由零点方程 \(0=F_{K+1}(\gamma_{K+1})=F_K(\gamma_{K+1})+H_K(\gamma_{K+1})\)，对两项在 \(\gamma_K\) 处作一阶（对 \(H_K\)）与二阶（对 \(F_K\)）展开，得到存在 \(\eta,\theta\in I_K\) 使
+\[
+0=F_K'(\gamma_K)(\gamma_{K+1}-\gamma_K)+\tfrac12 F_K''(\eta)(\gamma_{K+1}-\gamma_K)^2
+  +H_K(\gamma_K)+H_K'(\theta)(\gamma_{K+1}-\gamma_K).
+\]
+移项并除以 \(F_K'(\gamma_K)\) 得 \eqref{eq:xi-theta-kernel-dyadic-zero-recursion-main}，其中
+\[
+\rho_K:=
+-\frac{H_K'(\theta)}{F_K'(\gamma_K)}(\gamma_{K+1}-\gamma_K)
+-\frac{F_K''(\eta)}{2F_K'(\gamma_K)}(\gamma_{K+1}-\gamma_K)^2.
+\]
+最后由 \(|\gamma_{K+1}-\gamma_K|\le 2\varepsilon_K/m_K\)、\(|H_K'|\le L_K\)、\(|F_K''|\le M_K\) 得到 \eqref{eq:xi-theta-kernel-dyadic-zero-recursion-error}。证毕。
+\end{proof}
+
+\begin{corollary}[简单零点的双指数收敛零点链]\label{cor:xi-theta-kernel-dyadic-zero-chain}
+设 \(\gamma\in\RR\) 为 \(\Xi\) 的简单零点：\(\Xi(\gamma)=0\) 且 \(\Xi'(\gamma)\neq 0\)。
+则存在 \(K_0\) 与唯一序列 \((\gamma_K)_{K\ge K_0}\) 使得
+\[
+F_K(\gamma_K)=0,\qquad \gamma_K\to\gamma\qquad(K\to\infty),
+\]
+并且存在常数 \(C_\gamma>0\) 使对一切 \(K\ge K_0\) 有
+\begin{equation}\label{eq:xi-theta-kernel-dyadic-zero-chain-error}
+\boxed{\;
+|\gamma-\gamma_K|
+\le C_\gamma\,(K+1)\,2^{\frac54 K}e^{-\pi 2^{K}}\; }.
+\end{equation}
+\end{corollary}
+\begin{proof}[证明要点]
+取邻域 \(U\ni \gamma\) 使 \(m_\gamma:=\inf_{t\in U}|\Xi'(t)|>0\)。
+由命题 \ref{prop:xi-theta-kernel-dyadic-all-derivatives-budget} 的 \(m=1\) 情形，\(\|R_K'\|_\infty\to 0\)，故对充分大 \(K\) 有 \(\inf_{t\in U}|F_K'(t)|\ge m_\gamma/2\)。
+另一方面 \(\Xi=F_K+R_K\) 且 \(\Xi(\gamma)=0\) 给出 \(|F_K(\gamma)|=|R_K(\gamma)|\le \|R_K\|_\infty\)。
+由均值定理与导数下界推出 \(F_K\) 在 \(U\) 内存在唯一零点 \(\gamma_K\)，并满足
+\(
+|\gamma-\gamma_K|\le \frac{2}{m_\gamma}\|R_K\|_\infty
+\)。
+将 \eqref{eq:xi-theta-kernel-doubleexp-tail} 代入并吸收常数即得 \eqref{eq:xi-theta-kernel-dyadic-zero-chain-error}。证毕。
+\end{proof}
+
+\begin{theorem}[高尺度分量的单频主导渐近]\label{thm:xi-theta-kernel-dyadic-single-frequency-asymptotics}
+固定 \(t\in\RR\)。
+则当 \(k\to\infty\) 时，二幂尺度分量满足
+\begin{equation}\label{eq:xi-theta-kernel-dyadic-single-frequency-asymptotics}
+\boxed{\;
+\Xi^{[k]}(t)
+=4\pi\,2^{\frac54 k}e^{-\pi 2^k}\cos\!\Bigl(\tfrac{t}{2}k\log 2\Bigr)
+\;+\;O_t\!\bigl(2^{\frac14 k}e^{-\pi 2^k}\bigr)\;}
+\end{equation}
+其中 \(O_t(\cdot)\) 的常数仅依赖于固定的 \(t\)。
+\end{theorem}
+\begin{proof}[证明要点]
+由 \(\theta_+\) 的首项主导，
+\[
+\theta_+'(x)=-\pi e^{-\pi x}+O(e^{-4\pi x}),
+\qquad
+\theta_+''(x)=\pi^2 e^{-\pi x}+O(e^{-4\pi x})
+\qquad(x\to\infty),
+\]
+代入 \eqref{eq:xi-theta-kernel-K-def} 得到
+\[
+K(x)=4\pi^2 x^{5/4}e^{-\pi x}-6\pi x^{1/4}e^{-\pi x}+O\!\bigl(x^{5/4}e^{-4\pi x}\bigr).
+\]
+将其代回 \eqref{eq:xi-theta-kernel-dyadic-component}，并注意 \(e^{-\pi x}\) 在区间 \([2^k,2^{k+1}]\) 上的主贡献集中于左端点邻域，可将上限延拓到 \(\infty\) 并把误差吸收到 \(O_t(2^{k/4}e^{-\pi 2^k})\)。
+主项化为
+\[
+4\pi^2\,\Re\!\int_{2^k}^{\infty}x^{5/4+\mathrm{i}t/2}e^{-\pi x}\,\dd x.
+\]
+对不完全伽马函数的标准渐近展开给出
+\(
+\int_{2^k}^{\infty}x^{5/4+\mathrm{i}t/2}e^{-\pi x}\dd x
+=\pi^{-1}2^{\frac54 k}e^{-\pi 2^k}\,2^{\mathrm{i}\frac{t}{2}k}\bigl(1+O_t(2^{-k})\bigr)
+\)。
+取实部并整理得到 \eqref{eq:xi-theta-kernel-dyadic-single-frequency-asymptotics}。证毕。
+\end{proof}
+
+\begin{conjecture}[二幂尺度分量的渐近去相关]\label{conj:xi-theta-kernel-dyadic-asymptotic-decorrelation}
+令 \(T\to\infty\)，并在区间 \([T,2T]\) 内从 \(\Xi\) 的实零点集合中按均匀方式抽取一个零点 \(\gamma\)（按重数计）。
+对固定的尺度指标 \(K\ge 0\) 定义归一化分量
+\[
+Z_K(\gamma):=\frac{\Xi^{[K]}(\gamma)}{\sqrt{\mathbb{E}_T[(\Xi^{[K]}(\gamma))^2]}},
+\]
+其中 \(\mathbb{E}_T\) 表示上述零点抽样下的期望。
+则对任意固定 \(K_1\neq K_2\) 有
+\[
+\mathrm{Cov}_T\!\bigl(Z_{K_1}(\gamma),Z_{K_2}(\gamma)\bigr)\to 0\qquad(T\to\infty),
+\]
+并且有限维向量 \((Z_{K_1}(\gamma),\dots,Z_{K_m}(\gamma))\) 的分布趋于标准高斯向量。
+\end{conjecture}
+
+\endinput

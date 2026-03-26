@@ -1,0 +1,154 @@
+\begin{theorem}[Fourier--Walsh 系数的离散 Stokes 读出]\label{thm:spg-walsh-discrete-stokes-holography}
+对任意 \(n\ge 1\)，令 \(\Omega_n:=\{0,1\}^n\)。
+取任意函数 \(f:\Omega_n\to\RR\)；当 \(f=\ind_S\) 时对应集合 \(S\subseteq\Omega_n\) 的指示函数情形。
+对坐标 \(i\in\{1,\dots,n\}\) 定义翻转 \(\omega\mapsto \omega^{(i)}\)（第 \(i\) 位取反），并定义离散差分算子
+\[
+(\Delta_i f)(\omega):=f(\omega)-f(\omega^{(i)}).
+\]
+对任意指标集 \(I=\{i_1,\dots,i_k\}\subseteq\{1,\dots,n\}\)，令 \(\Delta_I:=\Delta_{i_1}\cdots\Delta_{i_k}\)（算子可交换，顺序无关）。
+再定义 \(I\)-阶 Walsh 偏差
+\[
+b_I(f):=\sum_{\omega\in\Omega_n} f(\omega)\,(-1)^{\sum_{i\in I}\omega_i}.
+\]
+则成立严格恒等式
+\[
+\boxed{\;
+b_I(f)=\sum_{\omega:\ \omega_i=0\ \forall\, i\in I} (\Delta_I f)(\omega)\; }.
+\]
+因此全部 Fourier--Walsh 系数 \(\widehat f(I)=2^{-n}b_I(f)\) 可由局部差分数据 \(\{(\Delta_I f)(\omega)\}\) 完全重建。
+当 \(f=\ind_S\) 时，\((\Delta_I f)(\omega)\) 仅可能在 \(I\)-方向上穿越集合边界的局部邻域处取非零值，从而各阶谱信息可被视作由“边界不一致”所全息承载。
+\end{theorem}
+\begin{remark}[交替顶点和的等价表述]\label{rem:spg-walsh-stokes-alternating-cube-sum}
+当 \(f=\ind_S\) 且 \(\omega_i=0\ (i\in I)\) 时，迭代差分 \(\Delta_I\) 等价于 \(I\)-子立方的交替顶点和：
+\[
+(\Delta_I \ind_S)(\omega)=\sum_{\sigma\in\{0,1\}^I}(-1)^{|\sigma|}\,\ind_S(\omega\oplus \sigma),
+\]
+其中 \(|\sigma|\) 为 Hamming 权重，且 \(\omega\oplus\sigma\) 表示仅在坐标集 \(I\) 上用 \(\sigma\) 替换 \(\omega\) 的取值（其余坐标保持不变）。
+因此定理 \ref{thm:spg-walsh-discrete-stokes-holography} 在指示函数口径下亦可写为
+\[
+b_I(S)=\sum_{\omega:\ \omega_i=0\ \forall\, i\in I} (\Delta_I \ind_S)(\omega),
+\]
+即对所有 \(I\)-子立方的交替顶点和在底层点上求和后给出 Walsh 偏差。
+\end{remark}
+\begin{proof}
+先证 \(|I|=1\) 的情形。对 \(I=\{i\}\)，分层得
+\[
+b_{\{i\}}(f)=\sum_{\omega:\ \omega_i=0} f(\omega)-\sum_{\omega:\ \omega_i=1} f(\omega).
+\]
+利用 \(\omega\mapsto \omega^{(i)}\) 在两层之间的双射，得
+\[
+b_{\{i\}}(f)=\sum_{\omega:\ \omega_i=0}\bigl(f(\omega)-f(\omega^{(i)})\bigr)
+=\sum_{\omega:\ \omega_i=0}(\Delta_i f)(\omega).
+\]
+\par
+一般情形取 \(I=\{i_1,\dots,i_k\}\)。
+对 \(\omega_{i_1}\) 做同样的二层分解并把符号因子中关于 \(\omega_{i_1}\) 的依赖吸收为一次差分，得到
+\[
+b_I(f)=\sum_{\omega:\ \omega_{i_1}=0}(\Delta_{i_1}f)(\omega)\,(-1)^{\sum_{i\in I\setminus\{i_1\}}\omega_i}.
+\]
+对集合 \(I\setminus\{i_1\}\) 重复该过程（每一步只使用层间双射与差分定义），归纳即得所示公式。证毕。
+\end{proof}
+
+\begin{corollary}[Fourier--Walsh 逆变换与集合的全谱可恢复性]\label{cor:spg-walsh-fourier-inversion-completeness}
+沿用定理 \ref{thm:spg-walsh-discrete-stokes-holography} 的记号，并令 Walsh 字符
+\[
+\chi_I(\omega):=(-1)^{\sum_{i\in I}\omega_i}\qquad(\omega\in\Omega_n,\ I\subseteq[n]).
+\]
+则对任意函数 \(f:\Omega_n\to\CC\) 都有显式逆变换
+\[
+\boxed{\;
+f(\omega)=2^{-n}\sum_{I\subseteq[n]} b_I(f)\,\chi_I(\omega)\; }.
+\]
+因此 Walsh 偏差族 \(\{b_I(f)\}_{I\subseteq[n]}\) 唯一决定 \(f\)。
+特别地，若对两子集 \(S,T\subseteq\Omega_n\) 有
+\(
+b_I(\ind_S)=b_I(\ind_T)
+\)
+对一切 \(I\subseteq[n]\) 成立，则 \(S=T\)；
+并且 \(\ind_S\) 可由逆变换公式显式重构。
+\end{corollary}
+\begin{proof}
+注意到 \(\{\chi_I\}_{I\subseteq[n]}\) 在 \(\Omega_n\) 的均匀内积
+\(
+\langle g,h\rangle:=2^{-n}\sum_{\omega\in\Omega_n} g(\omega)\overline{h(\omega)}
+\)
+下构成正交基，并满足
+\[
+2^{-n}\sum_{\omega\in\Omega_n}\chi_I(\omega)\chi_J(\omega)=\delta_{I,J}.
+\]
+对任意 \(f\)，设 \(\widehat f(I):=2^{-n}b_I(f)=\langle f,\chi_I\rangle\)，则 Fourier 展开给出
+\(
+f=\sum_I \widehat f(I)\chi_I
+\)，即所示逆变换。
+若 \(\{b_I(f)\}\) 与 \(\{b_I(g)\}\) 全同，则 \(\widehat f=\widehat g\) 且 \(f=g\)。
+取 \(f=\ind_S\)、\(g=\ind_T\) 即得集合可恢复性。证毕。
+\end{proof}
+
+\begin{corollary}[纤维平方根观测的 Walsh--Stokes 全息读出]\label{cor:spg-walsh-stokes-sqrt-fiber-holography}
+取 \(m\ge 1\)，令 \(\Omega_m=\{0,1\}^m\)，并设 \(f:\Omega_m\to X\) 为任意有限映射。
+记纤维基数 \(d_f(x):=\#f^{-1}(x)\)，并定义 pullback 观测
+\[
+g_f:\Omega_m\to\RR,\qquad g_f(\omega):=\sqrt{d_f(f(\omega))}.
+\]
+则对任意指标集 \(I\subseteq\{1,\dots,m\}\)，其 Walsh 偏差满足边界差分公式
+\[
+b_I(g_f)=\sum_{\omega:\ \omega_i=0\ \forall\, i\in I}(\Delta_I g_f)(\omega).
+\]
+并且对任意 \(i\in\{1,\dots,m\}\)，当 \(f(\omega)=f(\omega^{(i)})\) 时有 \((\Delta_i g_f)(\omega)=0\)；
+从而 \(b_I(g_f)\) 仅由那些在 \(I\)-方向翻转下使 \(f\) 的输出发生跃迁的超立方体边所贡献。
+特别地，若对每个 \(i\in I\) 与所有 \(\omega\in\Omega_m\) 都有 \(d_f(f(\omega))=d_f(f(\omega^{(i)}))\)，则 \(b_I(g_f)=0\)。
+\par
+在本文折叠语义下取 \(f=\Fold_m\) 即得 \(g_f(\omega)=\sqrt{d_m(\Fold_m(\omega))}\) 的对应结论。
+\end{corollary}
+\begin{proof}
+第一式直接将定理 \ref{thm:spg-walsh-discrete-stokes-holography} 应用于函数 \(g_f\)（取 \(n=m\)）得到。
+当 \(f(\omega)=f(\omega^{(i)})\) 时，\(g_f(\omega)=g_f(\omega^{(i)})\)，故 \((\Delta_i g_f)(\omega)=0\)，从而所有出现 \((\Delta_I g_f)(\omega)\) 的项都必须沿某条 \(I\)-翻转路径触发输出跃迁。
+最后一条：若对每个 \(i\in I\) 都有 \(\Delta_i g_f\equiv 0\)，则交换性给出 \(\Delta_I g_f\equiv 0\)，代入边界表达式即得 \(b_I(g_f)=0\)。证毕。
+\end{proof}
+
+\begin{corollary}[单坐标互信息的边界通量下界]\label{cor:spg-mutual-information-boundary-flux-lower-bound}
+沿用定理 \ref{thm:spg-walsh-discrete-stokes-holography} 的记号。
+令 \(\Omega_n\) 赋予均匀分布，取二值随机变量 \(X:=\ind_S\)，并记 \(p:=\PP(X=1)=|S|/2^n\)。
+令第 \(i\) 个坐标位 \(B_i(\omega):=\omega_i\)。
+则对任意 \(i\in\{1,\dots,n\}\)，互信息满足下界
+\[
+\boxed{\;
+I(X;B_i)\ \ge\ \frac{b_{\{i\}}(S)^2}{2^{2n+1}\,p(1-p)}\;}
+\]
+其中 \(I(\cdot;\cdot)\) 取自然对数口径。
+并且由定理 \ref{thm:spg-walsh-discrete-stokes-holography} 的 \(|I|=1\) 情形，可将 \(b_{\{i\}}(S)\) 解释为 \(i\)-方向的离散 Stokes 通量（沿 \(i\)-方向穿越边界的有向差分总量）。
+\end{corollary}
+\begin{proof}
+在均匀底测度下 \(\PP(B_i=1)=\PP(B_i=0)=1/2\)。
+并且
+\[
+\PP(B_i=1\mid X=1)=\frac{|S_i^1|}{|S|}
+=\frac12\left(1-\frac{|S_i^0|-|S_i^1|}{|S|}\right)
+=\frac12\left(1-\frac{b_{\{i\}}(S)}{|S|}\right),
+\]
+故二点分布的全变差满足
+\[
+\mathrm{TV}\bigl(\mathcal L(B_i\mid X=1),\mathcal L(B_i)\bigr)
+=\frac{|b_{\{i\}}(S)|}{2|S|}.
+\]
+由 Pinsker 不等式 \(D_{\mathrm{KL}}(P\|Q)\ge 2\,\mathrm{TV}(P,Q)^2\) 得
+\[
+D_{\mathrm{KL}}\bigl(\mathcal L(B_i\mid X=1)\,\|\,\mathcal L(B_i)\bigr)\ge \frac{b_{\{i\}}(S)^2}{2|S|^2},
+\qquad
+D_{\mathrm{KL}}\bigl(\mathcal L(B_i\mid X=0)\,\|\,\mathcal L(B_i)\bigr)\ge \frac{b_{\{i\}}(S)^2}{2(2^n-|S|)^2}.
+\]
+再用互信息分解
+\[
+I(X;B_i)
+=p\,D_{\mathrm{KL}}\bigl(\mathcal L(B_i\mid X=1)\,\|\,\mathcal L(B_i)\bigr)
+(1-p)\,D_{\mathrm{KL}}\bigl(\mathcal L(B_i\mid X=0)\,\|\,\mathcal L(B_i)\bigr),
+\]
+代入并化简得到
+\[
+I(X;B_i)\ge \frac{b_{\{i\}}(S)^2}{2|S|(2^n-|S|)}
+=\frac{b_{\{i\}}(S)^2}{2^{2n+1}\,p(1-p)}.
+\]
+最后一条解释由定理 \ref{thm:spg-walsh-discrete-stokes-holography} 在 \(I=\{i\}\) 时的恒等式给出。证毕。
+\end{proof}
+
+\endinput

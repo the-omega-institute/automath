@@ -1,0 +1,243 @@
+\paragraph{部分屏幕观测的后验熵、唯一回放阈值、压缩树补全与单面边际律}
+在部分边界观测的相对同调核、屏幕图连通分量公式、最小审计补全成本与可见秩函数的拟阵结构已经确立之后，这条主线还可继续压缩为下列五条直接后果。它们分别把 \(\FF_2\)-后验分布写成完全显式的公平比特模型，把唯一回放屏幕的极小阈值识别为全局边界多重图的生成树阈值，把任意部分屏幕的极小精确化补全面集完全刻画为压缩多重图的生成树，把带权精确化编译为最小生成树问题，并把单张观测面的边际信息增益提升为严格的 \(0\text{--}1\) 律。
+
+\begin{theorem}[部分屏幕观测的后验分布完全等价于独立公平比特]\label{thm:xi-time-part65f-screen-posterior-fair-bits}
+固定 \(m,n\ge 1\)，并沿用定理 \ref{thm:spg-partial-boundary-screen-kernel-relative-homology}、定理 \ref{thm:spg-screen-kernel-connected-components} 与推论 \ref{cor:spg-partial-boundary-fiber-cardinality-f2} 的记号。将系数域取为 \(\FF_2\)，令
+\[
+f_S:C_n(\mathcal Q_m;\FF_2)\longrightarrow \FF_2^{S},
+\qquad
+Y:=f_S(X),
+\]
+其中 \(X\) 在 \(C_n(\mathcal Q_m;\FF_2)\) 上服从均匀分布。记
+\[
+c_S:=c(\Gamma_S).
+\]
+则对每个 \(y\in \operatorname{im}(f_S)\)，纤维 \(f_S^{-1}(y)\) 是维数 \(c_S-1\) 的仿射 \(\FF_2\)-子空间；特别地，\(f_S^{-1}(y)\) 与 \(\FF_2^{\,c_S-1}\) 仿射同构。
+
+若以下 Shannon 熵与互信息均以 \(\log_2\) 为底，则有
+\[
+H(X\mid Y)=c_S-1,
+\]
+\[
+H(Y)=2^{mn}-c_S+1,
+\]
+\[
+I(X;Y)=2^{mn}-c_S+1.
+\]
+\end{theorem}
+\begin{proof}
+顶维链群 \(C_n(\mathcal Q_m;\FF_2)\) 的维数等于顶维胞腔数 \(2^{mn}\)，故
+\[
+H(X)=\log_2|C_n(\mathcal Q_m;\FF_2)|=2^{mn}.
+\]
+另一方面，定理 \ref{thm:spg-screen-kernel-connected-components} 的“分量常值”论证在系数域 \(\FF_2\) 上逐字适用，从而得到
+\[
+\ker f_S\cong \FF_2^{\,c_S-1}.
+\]
+由于 \(f_S\) 为 \(\FF_2\)-线性映射，每个非空纤维 \(f_S^{-1}(y)\) 都是某个 \(\ker f_S\) 的仿射平移，因此与 \(\FF_2^{\,c_S-1}\) 仿射同构。
+
+又由推论 \ref{cor:spg-partial-boundary-fiber-cardinality-f2}，
+\[
+|f_S^{-1}(y)|=2^{\dim_{\FF_2}\ker f_S}=2^{c_S-1}
+\qquad
+(y\in\operatorname{im}(f_S)),
+\]
+右端与 \(y\) 无关。故在均匀先验下，条件分布 \(X\mid Y=y\) 在纤维上均匀，因而
+\[
+H(X\mid Y=y)=\log_2|f_S^{-1}(y)|=c_S-1
+\]
+对所有可达 \(y\) 都成立，从而
+\[
+H(X\mid Y)=c_S-1.
+\]
+
+由链式法则，
+\[
+H(Y)=H(X)-H(X\mid Y)=2^{mn}-c_S+1.
+\]
+最后，\(Y=f_S(X)\) 是 \(X\) 的确定函数，因此
+\[
+I(X;Y)=H(Y)-H(Y\mid X)=H(Y)=2^{mn}-c_S+1.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[唯一回放屏幕的极小规模与生成树刻画]\label{thm:xi-time-part65f-exact-screen-spanning-tree-threshold}
+沿用定理 \ref{thm:spg-screen-kernel-connected-components} 的边界多重图 \(\Gamma\) 记号：其顶点集为全部 \(n\)-胞腔外加外部顶点 \(\infty\)，并把每个可观测取向 \((n-1)\)-面视为 \(\Gamma\) 的一条边；内部面连接其两侧顶维胞腔，外边界面连接相应胞腔与 \(\infty\)。对任意屏幕 \(S\subset \overrightarrow{\mathcal F_m^{n-1}}\)，记其所诱导的生成子多重图为 \(\Gamma_S\)。
+
+则成立：
+\begin{enumerate}
+  \item \(f_S\) 单射当且仅当 \(\Gamma_S\) 连通；
+  \item 任意使 \(f_S\) 单射的屏幕都满足
+        \[
+        |S|\ge 2^{mn};
+        \]
+  \item 等号成立当且仅当 \(\Gamma_S\) 是 \(\Gamma\) 的一棵生成树；
+  \item 因而极小唯一回放屏幕的总数恰为 \(\tau(\Gamma)\)，其中 \(\tau(\Gamma)\) 表示 \(\Gamma\) 的生成树数。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第 \(1\) 条正是推论 \ref{cor:spg-screen-injectivity-and-audit-cost-components} 的内容。
+
+由于 \(\mathcal Q_m\) 的顶维胞腔数为 \(2^{mn}\)，故
+\[
+|V(\Gamma)|=2^{mn}+1.
+\]
+任意使 \(f_S\) 单射的屏幕都对应一个连通 spanning sub-multigraph \(\Gamma_S\)。而任意连通图至少有 \(|V|-1\) 条边，因此
+\[
+|S|=|E(\Gamma_S)|\ge |V(\Gamma)|-1=2^{mn}.
+\]
+这就得到第 \(2\) 条。
+
+若 \(|S|=2^{mn}\) 且 \(f_S\) 单射，则 \(\Gamma_S\) 连通并且
+\[
+|E(\Gamma_S)|=|V(\Gamma)|-1,
+\]
+故 \(\Gamma_S\) 必为生成树。反之，任一生成树都连通且边数恰为 \(|V(\Gamma)|-1=2^{mn}\)，于是对应屏幕必为极小唯一回放屏幕。于是第 \(3\) 条成立。
+
+第 \(4\) 条随即成立：极小唯一回放屏幕与 \(\Gamma\) 的生成树一一对应，其总数即为 \(\tau(\Gamma)\)。证毕。
+\end{proof}
+
+\begin{theorem}[任意部分屏幕的极小精确化补全面集由压缩图生成树完全刻画]\label{thm:xi-time-part65f-screen-quotient-tree-completion}
+沿用定理 \ref{thm:spg-screen-kernel-connected-components} 的记号。给定任意部分屏幕 \(S\subset \overrightarrow{\mathcal F_m^{n-1}}\)，设
+\[
+\Gamma_S=\bigsqcup_{i=1}^{c}\mathcal C_i,
+\qquad
+c:=c(\Gamma_S).
+\]
+将每个连通分量 \(\mathcal C_i\) 缩并为一个顶点，并把 \(\Gamma\setminus E(\Gamma_S)\) 中连接不同分量的边保留下来、删去缩并后产生的回路，得到压缩多重图
+\[
+\Gamma/\Gamma_S.
+\]
+以下把每条跨分量补全边与其在 \(\Gamma/\Gamma_S\) 中对应的边仍记为同一符号。
+则成立：
+\begin{enumerate}
+  \item 同一个整数 \(c-1\) 同时等于最小圆维审计补全成本与最少追加观测面数，即
+        \[
+        \min_{(R,r_S)}\cdim(R)
+        =
+        c-1
+        =
+        \min\Bigl\{
+        |T|:\ T\subseteq E(\Gamma)\setminus E(\Gamma_S),\ \Gamma_{S\cup T}\text{ 连通}
+        \Bigr\};
+        \]
+  \item 对任意 \(T\subseteq E(\Gamma)\setminus E(\Gamma_S)\) 且 \(|T|=c-1\)，屏幕 \(S\cup T\) 达到唯一回放当且仅当 \(T\) 在压缩图 \(\Gamma/\Gamma_S\) 中的像是一棵生成树；
+  \item 因而全部极小精确化补全面集的总数恰为
+        \[
+        \tau(\Gamma/\Gamma_S).
+        \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一条中的左端等式正是推论 \ref{cor:spg-screen-injectivity-and-audit-cost-components}。
+
+现证右端等式。由于 \(\Gamma_S\) 恰有 \(c\) 个连通分量，若要通过继续添加观测面使 \(\Gamma_{S\cup T}\) 连通，则 \(T\) 在压缩图上必须把这 \(c\) 个缩并顶点连成一个连通图。任意 \(c\) 点连通图至少含 \(c-1\) 条边，因此
+\[
+|T|\ge c-1.
+\]
+另一方面，压缩图任取一棵生成树，其对应的原图边集 \(T\) 恰含 \(c-1\) 条边，并使 \(\Gamma_{S\cup T}\) 连通，从而上界可达。故右端最小值也等于 \(c-1\)。
+
+再证第 \(2\) 条。若 \(|T|=c-1\) 且 \(\Gamma_{S\cup T}\) 连通，则 \(T\) 在压缩图上的像给出一个 \(c\) 点连通图，且边数恰为 \(c-1\)，故必为生成树。反之，若该像是一棵生成树，则对应的原图边集把 \(c\) 个缩并顶点连通，从而 \(\Gamma_{S\cup T}\) 连通，推论 \ref{cor:spg-screen-injectivity-and-audit-cost-components} 遂给出 \(f_{S\cup T}\) 单射。
+
+第 \(3\) 条随之成立：压缩图的每棵生成树与一个极小精确化补全面集唯一对应，故总数恰为 \(\tau(\Gamma/\Gamma_S)\)。证毕。
+\end{proof}
+
+\begin{theorem}[带权精确化可完全编译为压缩图的最小生成树问题]\label{thm:xi-time-part65f-weighted-screen-completion-mst}
+在定理 \ref{thm:xi-time-part65f-screen-quotient-tree-completion} 的设定下，对每条补全边赋予非负代价
+\[
+\mathrm{cost}:E(\Gamma)\setminus E(\Gamma_S)\longrightarrow \RR_{\ge 0}.
+\]
+对任意补全面集 \(T\subseteq E(\Gamma)\setminus E(\Gamma_S)\)，定义总代价
+\[
+\mathrm{Cost}(T):=\sum_{e\in T}\mathrm{cost}(e).
+\]
+则
+\[
+\min\Bigl\{\mathrm{Cost}(T):\ \Gamma_{S\cup T}\text{ 连通}\Bigr\}
+=
+\min\Bigl\{\mathrm{Cost}(T):\ T\text{ 在 }\Gamma/\Gamma_S\text{ 中是一棵生成树}\Bigr\}.
+\]
+特别地：
+\begin{enumerate}
+  \item 任一压缩图最小生成树对应的补全面集都给出成本最优的精确化方案；
+  \item 反之，任一按包含极小的成本最优补全面集，其压缩像必为 \(\Gamma/\Gamma_S\) 的一棵最小生成树。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+任取使 \(\Gamma_{S\cup T}\) 连通的补全面集 \(T\)。其在压缩图上的像是一个连通生成子多重图。取其任意生成树 \(T_{\mathrm{tr}}\subseteq T\)。由于代价非负，
+\[
+\mathrm{Cost}(T_{\mathrm{tr}})\le \mathrm{Cost}(T).
+\]
+因此，在全部可行补全面集中最小化总代价，等价于在压缩图的全部生成树中最小化总代价。第一个等式得证。
+
+于是任一压缩图最小生成树都直接给出成本最优补全，这证明了第 \(1\) 条。
+
+若 \(T\) 是按包含极小的成本最优补全面集，而其压缩像含有回路，则删去该回路上一条边后图仍连通；由于边权非负，总代价不会增加。若总代价严格减小，则与成本最优性矛盾；若总代价不变，则与按包含极小矛盾。故其压缩像无回路。既然它仍连通并覆盖全部缩并顶点，便是一棵生成树；再由成本最优性可知它必是最小生成树。第 \(2\) 条成立。证毕。
+\end{proof}
+
+\begin{theorem}[单张观测面的边际信息增益具有严格的 \(0\text{--}1\) 律]\label{thm:xi-time-part65f-single-face-zero-one-marginal-law}
+沿用定理 \ref{thm:spg-screen-rank-matroid-supermodularity} 的记号，令
+\[
+r(S):=\rank_{\QQ}\bigl(\operatorname{im}(f_S\otimes\QQ)\bigr),
+\qquad
+\delta(S):=\rank_{\QQ}\bigl(\ker(f_S\otimes\QQ)\bigr).
+\]
+再把任一未观测取向 \((n-1)\)-面与其在 \(\Gamma\) 中对应的边同记为 \(e\in E(\Gamma)\setminus E(\Gamma_S)\)。若 \(e\) 的两个端点分别落在 \(\Gamma_S\) 的连通分量 \(\mathcal C_i,\mathcal C_j\) 中，则有精确公式
+\[
+\delta(S)-\delta(S\cup\{e\})
+=
+\begin{cases}
+1,& \mathcal C_i\neq \mathcal C_j,\\[4pt]
+0,& \mathcal C_i=\mathcal C_j,
+\end{cases}
+\]
+等价地，
+\[
+r(S\cup\{e\})-r(S)
+=
+\begin{cases}
+1,& \mathcal C_i\neq \mathcal C_j,\\[4pt]
+0,& \mathcal C_i=\mathcal C_j.
+\end{cases}
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:spg-screen-kernel-connected-components} 与推论 \ref{cor:spg-screen-injectivity-and-audit-cost-components}，
+\[
+\delta(S)=c(\Gamma_S)-1.
+\]
+若 \(e\) 的两个端点位于同一连通分量中，则向 \(\Gamma_S\) 添加 \(e\) 不改变连通分量数，因此
+\[
+c(\Gamma_{S\cup\{e\}})=c(\Gamma_S),
+\qquad
+\delta(S\cup\{e\})=\delta(S).
+\]
+
+若 \(e\) 连接两个不同分量，则添加 \(e\) 恰好把这两个分量合并，从而
+\[
+c(\Gamma_{S\cup\{e\}})=c(\Gamma_S)-1,
+\]
+进而
+\[
+\delta(S\cup\{e\})=c(\Gamma_{S\cup\{e\}})-1=\delta(S)-1.
+\]
+这就得到第一条 \(0\text{--}1\) 公式。
+
+再由定理 \ref{thm:spg-screen-rank-matroid-supermodularity} 的秩亏恒等式
+\[
+\delta(S)=\rank_{\QQ}C_n(\mathcal Q_m;\QQ)-r(S)
+=
+2^{mn}-r(S),
+\]
+立刻推出
+\[
+r(S\cup\{e\})-r(S)=\delta(S)-\delta(S\cup\{e\}),
+\]
+从而得到第二条公式。证毕。
+\end{proof}
+
+\noindent
+综上，部分边界观测这条链已经在概率、图论、优化与拟阵四个层面同时闭合：纤维常数不再只是一个计数事实，而是完整的后验公平比特模型；唯一回放屏幕的极小阈值不再只是 \(2^{mn}\) 的抽象秩值，而是全局边界多重图的生成树阈值；任意部分屏幕的极小精确化不再只是“还差 \(c(\Gamma_S)-1\) 张面”，而是由压缩图的生成树与最小生成树完全组织；与此同时，单张新观测面所带来的信息秩增量也不再只是超模意义下的平均改善，而是具有严格可判定的 \(0\text{--}1\) 局域律。
+
+\endinput

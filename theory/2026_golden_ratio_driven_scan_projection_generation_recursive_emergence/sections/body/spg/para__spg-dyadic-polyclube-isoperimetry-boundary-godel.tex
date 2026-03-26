@@ -1,0 +1,438 @@
+% Discrete isoperimetry and arithmetic scaling for dyadic polycubes.
+
+\paragraph{dyadic polycube 的离散等周与边界 Gödel 标度}\label{par:spg-dyadic-polyclube-isoperimetry-boundary-godel}
+在固定分辨率的 dyadic 立方复形中，顶维体链由边界链唯一确定（定理 \ref{thm:spg-dyadic-cubical-boundary-injective}）。
+下述结果进一步给出：边界链的支撑规模在离散意义下受到占据数的等周控制；并且一旦把边界支撑算术化为素因子集合，其双对数增长率与边界面数的对数同阶。
+
+\begin{theorem}[dyadic polycube 的离散等周下界]\label{thm:spg-dyadic-polyclube-discrete-isoperimetry}
+设 \(n\ge 2\) 且 \(m\ge 1\)。
+在 dyadic 剖分 \(\mathcal Q_m\) 上令 \(U\subset I^n=[0,1]^n\) 为由若干 \(m\)-dyadic \(n\)-立方体并成的 dyadic polycube，
+等价地，令 \([U]\in C_n(\mathcal Q_m;\ZZ)\) 为取系数于 \(\{0,1\}\) 的 \(n\)-链。
+记
+\[
+N(U):=\card{\{Q\in\mathcal Q_m:\ Q\subset U\}},
+\qquad
+F(U):=\#\operatorname{supp}(\partial_n[U]).
+\]
+则成立双边估计
+\[
+2n\,N(U)^{\frac{n-1}{n}}\ \le\ F(U)\ \le\ 2n\,N(U).
+\]
+\end{theorem}
+\begin{proof}
+上界由逐立方体计数给出：每个 \(n\)-立方体最多贡献 \(2n\) 张外露 \((n-1)\)-面，故 \(F(U)\le 2n\,N(U)\)。
+\par
+下界用投影纤维分解与 Loomis--Whitney 不等式。
+把 dyadic 立方体按其格点索引写作集合 \(S\subset\{0,\dots,2^m-1\}^n\)，其中 \(|S|=N(U)\)。
+对每个坐标方向 \(i\in\{1,\dots,n\}\) 记 \(\pi_i(S)\subset\{0,\dots,2^m-1\}^{n-1}\) 为删去第 \(i\) 坐标后的投影。
+对任意 \(y\in\pi_i(S)\)，纤维
+\(
+S_y:=\{t:\ (y_1,\dots,y_{i-1},t,y_i,\dots,y_{n-1})\in S\}
+\)
+非空且有限。
+沿第 \(i\) 方向，每个非空纤维至少贡献两张外露面（对应纤维段的两端；若纤维不连通则外露面更多）。
+令 \(F_i(U)\) 表示法向平行于 \(\pm e_i\) 的外露 \((n-1)\)-面数，则
+\[
+F_i(U)\ \ge\ 2\card{\pi_i(S)}.
+\]
+于是
+\[
+F(U)=\sum_{i=1}^n F_i(U)\ \ge\ 2\sum_{i=1}^n\card{\pi_i(S)}.
+\]
+离散 Loomis--Whitney 不等式给出 \(|S|^{n-1}\le \prod_{i=1}^n\card{\pi_i(S)}\)。
+再由 AM--GM 得
+\[
+\frac{1}{n}\sum_{i=1}^n\card{\pi_i(S)}
+\ \ge\
+\Bigl(\prod_{i=1}^n\card{\pi_i(S)}\Bigr)^{1/n}
+\ \ge\
+|S|^{\frac{n-1}{n}}.
+\]
+代回即得 \(F(U)\ge 2n\,|S|^{(n-1)/n}=2n\,N(U)^{(n-1)/n}\)。证毕。
+\end{proof}
+
+\begin{theorem}[随机体的边界饱和：全息压缩为指数罕见事件]\label{thm:spg-random-bulk-boundary-saturation}
+固定 \(n\ge 1\) 与 \(m\ge 1\)，令 \(\mathcal C_n\) 为 \(\mathcal Q_m\) 的全部 \(n\)-胞腔集合（\(|\mathcal C_n|=2^{nm}\)）。
+取 \(\FF_2\) 系数并令随机 \(n\)-链
+\[
+U:=\sum_{c\in\mathcal C_n}\xi_c\,c,
+\qquad
+\xi_c\overset{\mathrm{i.i.d.}}{\sim}\mathrm{Bernoulli}\Bigl(\frac12\Bigr).
+\]
+记 \(\partial U\in C_{n-1}(\mathcal Q_m;\FF_2)\)，并定义边界面数
+\[
+|\partial U|
+:=\#\{\text{\((n-1)\)-胞腔 }f:\ (\partial U)(f)=1\}.
+\]
+再令
+\[
+N_{n-1}(m):=\#\mathcal F_{n-1}(\mathcal Q_m)=n(2^m+1)\,2^{(n-1)m}.
+\]
+则：
+\begin{enumerate}
+\normalfont
+  \item 期望满足精确恒等式
+  \[
+  \mathbb E|\partial U|=\frac12\,N_{n-1}(m).
+  \]
+  \item 对任意 \(t>0\) 有集中不等式
+  \[
+  \mathbb P\Bigl(\bigl||\partial U|-\mathbb E|\partial U|\bigr|\ge t\Bigr)
+  \le
+  2\exp\!\left(-\frac{2t^2}{(2n)^2\,2^{nm}}\right).
+  \]
+  因而对任意固定 \(\delta\in(0,\tfrac12)\)，有
+  \[
+  \mathbb P\Bigl(|\partial U|\le (\tfrac12-\delta)N_{n-1}(m)\Bigr)
+  \le
+  2\exp\!\bigl(-\Omega_\delta(2^{nm})\bigr).
+  \]
+\end{enumerate}
+因此，在典型意义下随机体的边界规模为 \(\Theta\!\bigl(n2^{nm}\bigr)\)。
+与之对照，几何上“平滑”占据链（例如 \(U=I^n\)）的边界面数为 \(2n\,2^{(n-1)m}\)；
+从而在 dyadic 网格模型中，边界层虽在全息意义上携带全部体信息（推论 \ref{cor:spg-dyadic-boundary-syndrome-fillability}），但其典型支撑规模并不处于“低边界”区域，后者在随机体模型下为指数罕见子族。
+\end{theorem}
+\begin{proof}
+\textbf{(1)}
+对任意固定 \((n-1)\)-胞腔 \(f\)，\((\partial U)(f)\) 等于与 \(f\) 相邻的一个或两个 \(n\)-胞腔系数之异或（外边界处等价于与外部 \(0\) 异或）。
+由于相邻系数为独立 \(\mathrm{Bernoulli}(1/2)\)，其异或仍为 \(\mathrm{Bernoulli}(1/2)\)，故 \(\mathbb P((\partial U)(f)=1)=1/2\)。
+对全部 \(f\) 求和得 \(\mathbb E|\partial U|=\frac12 N_{n-1}(m)\)。
+\par
+\textbf{(2)}
+将 \(F((\xi_c)_{c\in\mathcal C_n}):=|\partial U|\) 视为独立伯努利变量上的函数。
+翻转单个 \(\xi_c\) 仅改变该 \(n\)-胞腔的 \(2n\) 个面在边界中的出现/消失，故 \(F\) 的单坐标 Lipschitz 常数至多为 \(2n\)。
+由 McDiarmid（有界差分）不等式，
+\[
+\mathbb P(|F-\mathbb EF|\ge t)\le 2\exp\!\left(-\frac{2t^2}{\sum_{c\in\mathcal C_n}(2n)^2}\right)
+=2\exp\!\left(-\frac{2t^2}{(2n)^2\,2^{nm}}\right).
+\]
+令 \(t=\delta N_{n-1}(m)\) 即得最后一条估计。
+证毕。
+\end{proof}
+
+\begin{theorem}[轴向共面积不等式：dyadic polycube 的线性边界--体积上界与极值唯一性]\label{thm:spg-dyadic-polyclube-axial-coarea}
+设 \(n\ge 1\) 且 \(m\ge 1\)，并记 \(L:=2^{m}\)。
+在 dyadic 剖分 \(\mathcal Q_m\) 上令 \(U\subset I^n=[0,1]^n\) 为 dyadic polycube，并记
+\[
+N(U):=\card{\{Q\in\mathcal Q_m:\ Q\subset U\}},
+\qquad
+F(U):=\#\operatorname{supp}(\partial_n[U]).
+\]
+则成立严格不等式
+\[
+N(U)\ \le\ \frac{L}{2n}\,F(U).
+\]
+等价地，令
+\[
+\operatorname{Vol}(U):=\frac{N(U)}{L^{n}},
+\qquad
+\operatorname{Area}(\partial U):=\frac{F(U)}{L^{n-1}},
+\]
+则
+\[
+\operatorname{Vol}(U)\ \le\ \frac{1}{2n}\,\operatorname{Area}(\partial U).
+\]
+并且常数 \(1/(2n)\) 为最优；等号成立当且仅当 \(U=\varnothing\) 或 \(U=I^n\)（即占据全部 \(m\)-dyadic \(n\)-立方体）。
+\end{theorem}
+\begin{proof}
+固定坐标方向 \(i\in\{1,\dots,n\}\)。
+将 \(m\)-dyadic 立方体按格点索引写作集合 \(S\subset\{0,\dots,L-1\}^n\)，其中 \(|S|=N(U)\)。
+对每个 \(a\in\{0,\dots,L-1\}^{n-1}\)（表示除第 \(i\) 坐标外的全部坐标），考虑纤维截面
+\[
+S_{a}:=\{t\in\{0,\dots,L-1\}:\ (a_1,\dots,a_{i-1},t,a_i,\dots,a_{n-1})\in S\}.
+\]
+作为 \(\{0,\dots,L-1\}\) 的子集，\(S_a\) 可唯一分解为互不相交的离散区间（连通块）之并。
+令该纤维的连通块数为 \(c_a\)。
+则每个连通块贡献的 \(i\)-正交外露 \((n-1)\)-面恰为 \(2\) 张（区间两端各一张；端点贴到 \(I^n\) 的外边界时仍计为外露面），从而该纤维在方向 \(i\) 上贡献的外露面数为 \(2c_a\)。
+另一方面有显然上界 \(|S_a|\le L\,c_a\)。
+因此
+\[
+|S_a|\le \frac{L}{2}\cdot (2c_a).
+\]
+对所有 \(a\) 求和得到
+\[
+N(U)=|S|\le \frac{L}{2}\,F_i(U),
+\]
+其中 \(F_i(U)\) 表示法向平行于 \(\pm e_i\) 的外露 \((n-1)\)-面总数。
+再对 \(i=1,\dots,n\) 求和并除以 \(n\)，并用 \(\sum_{i=1}^n F_i(U)=F(U)\)，得到所示不等式。
+\par
+常数最优性由 \(U=I^n\) 取等号给出。
+若等号成立，则对每个 \(i\) 与每条纤维 \(S_a\) 必有 \(|S_a|=L\,c_a\)，从而每个非空纤维只能是一整段 \(\{0,\dots,L-1\}\)。
+因此 \(S\) 在每一坐标方向上均对该方向的纤维取值为“全或无”，从而 \(S\) 只能为空集或全体 \(\{0,\dots,L-1\}^n\)，即 \(U=\varnothing\) 或 \(U=I^n\)。证毕。
+\end{proof}
+
+\begin{proposition}[边界 Gödel 码的双对数标度]\label{prop:spg-dyadic-boundary-godel-doublelog-scale}
+固定 \(m,n\) 并令 \(\mathcal F_{m}^{n-1}\) 为 \(\mathcal Q_m\) 的全部 \((n-1)\)-胞腔（面）。
+为每一条有向面 \(\vec f\in\overrightarrow{\mathcal F_m^{n-1}}\) 赋予两两不同的素数 \(q_{\vec f}\)，并对任意 dyadic polycube \(U\) 定义边界 Gödel 整数
+\[
+H_m(U):=\prod_{\vec f} q_{\vec f}^{\,\varepsilon_{\vec f}},
+\qquad
+\partial_n[U]=\sum_{\vec f}\varepsilon_{\vec f}\,\vec f,\ \ \varepsilon_{\vec f}\in\{0,1\}.
+\]
+记 \(F(U)=\#\operatorname{supp}(\partial_n[U])\)。
+则存在仅依赖于 \(n\) 的常数使对所有 \(m\) 与所有 \(U\) 成立
+\[
+\log\log H_m(U)\ =\ \log F(U)\ +\ O(\log m).
+\]
+\end{proposition}
+\begin{proof}
+由定义，\(H_m(U)\) 为 \(F(U)\) 个互异素数之积。
+下界：\(\log H_m(U)\ge F(U)\log 2\)，故 \(\log\log H_m(U)\ge \log F(U)+O(1)\)。
+\par
+上界：\(\mathcal Q_m\) 的 \((n-1)\)-面总数 \(M_{n-1}(m):=\card{\mathcal F_m^{n-1}}\) 满足 \(M_{n-1}(m)\asymp_n 2^{mn}\)，因此所用素数的最大指标至多为 \(M_{n-1}(m)\)。
+取粗界 \(p_k\le k^2\)（对充分大 \(k\) 成立），得
+\[
+\log H_m(U)
+=\sum_{\varepsilon_{\vec f}=1}\log q_{\vec f}
+\le F(U)\log p_{M_{n-1}(m)}
+\le F(U)\cdot O(\log M_{n-1}(m))
+=F(U)\cdot O(m).
+\]
+于是 \(\log\log H_m(U)\le \log F(U)+O(\log m)\)。合并即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[边界 Gödel 码序列唯一确定闭包]\label{thm:spg-boundary-godel-sequence-determines-closure}
+设 \(A\subset I^n=[0,1]^n\)，并对每个 \(m\ge 1\) 令 \(U_m(A)\) 为尺度 \(2^{-m}\) 的 dyadic 外逼近。
+定义边界 Gödel 整数序列
+\[
+H_m(A):=H_m\!\bigl(U_m(A)\bigr)\in\NN,
+\]
+其中 \(H_m(\cdot)\) 由命题 \ref{prop:spg-dyadic-boundary-godel-doublelog-scale} 给出。
+则序列 \(\{H_m(A)\}_{m\ge 1}\) 唯一确定 \(A\) 的拓扑闭包 \(\overline A\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:spg-boundary-godelization-holographic-dictionary}，对每个 \(m\)，整数 \(H_m\!\bigl(U_m(A)\bigr)\) 的素因子分解唯一确定边界链 \(\partial_n[U_m(A)]\)，从而唯一确定 dyadic polycube \(U_m(A)\) 本身。
+因此 \(\{H_m(A)\}_{m\ge 1}\) 唯一确定整个外逼近族 \(\{U_m(A)\}_{m\ge 1}\)。
+\par
+另一方面，对 dyadic 外逼近的定义可直接验证嵌套性 \(U_{m+1}(A)\subseteq U_m(A)\)。
+并且成立集合恒等式
+\[
+\bigcap_{m\ge 1}U_m(A)=\overline A.
+\]
+事实上，若 \(x\in\overline A\)，则对任意 \(m\) 其所在的边长 \(2^{-m}\) dyadic 立方体与 \(A\) 相交，从而 \(x\in U_m(A)\)，故 \(x\in\cap_m U_m(A)\)。
+反之，若 \(x\in\cap_m U_m(A)\)，则对任意 \(m\) 存在 \(a_m\in A\) 落在 \(x\) 所在的边长 \(2^{-m}\) dyadic 立方体中，因而 \(\|a_m-x\|_2\le \sqrt n\,2^{-m}\to 0\)，故 \(x\in\overline A\)。
+综上，\(\{U_m(A)\}\) 的交从而由 \(\{H_m(A)\}\) 唯一确定。证毕。
+\end{proof}
+
+\begin{corollary}[边界 Gödel 编码的体积全息上界：\texorpdfstring{$\log H/\log\log H$}{logH/loglogH} 控制 bulk 规模]\label{cor:spg-dyadic-boundary-godel-volume-upperbound}
+沿用定理 \ref{thm:spg-dyadic-polyclube-axial-coarea} 的记号。
+对每个 dyadic \((n-1)\)-面 \(f\) 指派一枚互异素数 \(q_f\)，并定义边界的平方自由 Gödel 整数
+\[
+H(U):=\prod_{f\subset \partial U} q_f.
+\]
+记 \(\omega(H(U))\) 为其素因子个数，则 \(\omega(H(U))=F(U)\)。
+当 \(F(U)\to\infty\) 时有渐近估计
+\[
+F(U)\ \le\ (1+o(1))\,\frac{\log H(U)}{\log\log H(U)},
+\]
+从而
+\[
+N(U)\ \le\ \frac{L}{2n}\,(1+o(1))\,\frac{\log H(U)}{\log\log H(U)}.
+\]
+\end{corollary}
+\begin{proof}
+令 \(B:=F(U)=\omega(H(U))\)。
+在由 \(B\) 个互异素数组成的乘积中，最小者为第 \(B\) 个 primorial
+\(
+p_B^\#:=\prod_{k=1}^{B}p_k
+\)。
+由于 \(H(U)\) 为 \(B\) 个互异素数之积，必有 \(H(U)\ge p_B^\#\)，从而
+\[
+\log H(U)\ge \log p_B^\#.
+\]
+由素数分布的经典渐近 \(\log p_B^\#=(1+o(1))\,B\log B\)，可反解得到
+\[
+B\le (1+o(1))\,\frac{\log H(U)}{\log\log H(U)}.
+\]
+最后将 \(B=F(U)\) 代入并结合定理 \ref{thm:spg-dyadic-polyclube-axial-coarea} 的不等式 \(N(U)\le \frac{L}{2n}F(U)\) 即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[体--边界 Gödel 维的全息夹逼]\label{thm:spg-bulk-boundary-godel-dimension-sandwich}
+对任意集合 \(A\subset I^n\)，令 \(U_m(A)\) 为其 dyadic 外近似，并记
+\[
+N_m(A):=\card{\{Q\in\mathcal Q_m:\ Q\subset U_m(A)\}}.
+\]
+令 \(G_m(A)\) 为定理 \ref{thm:spg-stokes-godel-doublelog-dimension} 中的 bulk Gödel 整数，并定义边界 Gödel 维
+\[
+d_{\partial G}(A):=\limsup_{m\to\infty}\frac{\log\log H_m(U_m(A))}{m\log 2},
+\]
+其中 \(H_m\) 如命题 \ref{prop:spg-dyadic-boundary-godel-doublelog-scale}。
+则恒有夹逼
+\[
+\frac{n-1}{n}\,d_G(A)\ \le\ d_{\partial G}(A)\ \le\ d_G(A),
+\]
+其中 \(d_G(A)\) 为定理 \ref{thm:spg-stokes-godel-doublelog-dimension} 定义的 Stokes--Gödel 双对数维。
+\end{theorem}
+\begin{proof}
+对 \(U=U_m(A)\) 应用命题 \ref{prop:spg-dyadic-boundary-godel-doublelog-scale} 得
+\[
+\log\log H_m(U_m(A))=\log F(U_m(A))+O(\log m).
+\]
+另一方面，对 \(U_m(A)\) 应用定理 \ref{thm:spg-dyadic-polyclube-discrete-isoperimetry} 得
+\[
+2n\,N_m(A)^{\frac{n-1}{n}}\ \le\ F(U_m(A))\ \le\ 2n\,N_m(A).
+\]
+取对数并除以 \(m\log 2\)，再取 \(\limsup\) 并注意 \(O(\log m)/(m\log 2)\to 0\)，得到
+\[
+\frac{n-1}{n}\limsup_{m\to\infty}\frac{\log N_m(A)}{m\log 2}
+\ \le\ d_{\partial G}(A)\ \le\
+\limsup_{m\to\infty}\frac{\log N_m(A)}{m\log 2}.
+\]
+由定理 \ref{thm:spg-stokes-godel-doublelog-dimension}，\(d_G(A)=\limsup_{m\to\infty}\frac{\log N_m(A)}{m\log 2}\)，代回即得夹逼。证毕。
+\end{proof}
+
+\begin{proposition}[正距分离下的边界 Gödel 维极值律]\label{prop:spg-boundary-godel-dimension-separated-union-max}
+设 \(A,B\subset I^n\) 满足 \(\mathrm{dist}(A,B)>0\)。
+则边界 Gödel 维满足
+\[
+d_{\partial G}(A\cup B)=\max\bigl\{d_{\partial G}(A),\,d_{\partial G}(B)\bigr\}.
+\]
+\end{proposition}
+\begin{proof}
+令 \(\delta:=\mathrm{dist}(A,B)>0\)，并取 \(m_0\) 使得 \(\sqrt n\,2^{-m_0}<\delta\)。
+则对一切 \(m\ge m_0\)，任一边长 \(2^{-m}\) 的 dyadic \(n\)-立方体不可能同时与 \(A\) 与 \(B\) 相交。
+因此
+\(
+U_m(A\cup B)=U_m(A)\sqcup U_m(B)
+\)
+为不交并。
+\par
+由命题 \ref{prop:spg-dyadic-boundary-godel-doublelog-scale} 的定义，\(H_m(U)\) 是边界有向面的素数乘积；
+而当两个 polycube 的边界面集合互不相交时，其并的边界 Gödel 整数满足乘法分解
+\[
+H_m\!\bigl(U_m(A\cup B)\bigr)=H_m\!\bigl(U_m(A)\bigr)\cdot H_m\!\bigl(U_m(B)\bigr)
+\qquad(m\ge m_0).
+\]
+记 \(X_m:=\log H_m(U_m(A))\)、\(Y_m:=\log H_m(U_m(B))\)，则
+\[
+\log\log H_m(U_m(A\cup B))
+=\log(X_m+Y_m).
+\]
+由不等式 \(\max\{X_m,Y_m\}\le X_m+Y_m\le 2\max\{X_m,Y_m\}\)，得
+\[
+\max\{\log X_m,\log Y_m\}
+\le
+\log(X_m+Y_m)
+\le
+\max\{\log X_m,\log Y_m\}+\log 2.
+\]
+两端除以 \(m\log 2\) 并取 \(\limsup_{m\to\infty}\)（注意常数项 \(\log 2/(m\log 2)\to 0\)），即得
+\(
+d_{\partial G}(A\cup B)=\max\{d_{\partial G}(A),d_{\partial G}(B)\}
+\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[Minkowski 维度对边界面增长率的双侧夹逼]\label{thm:spg-minkowski-dimension-boundary-face-growth-sandwich}
+令 \(A\subset I^n\) 为任意有界集合，并令 \(U_m(A)\) 为其 dyadic 外近似。
+记
+\[
+N_m(A):=\card{\{Q\in\mathcal Q_m:\ Q\subset U_m(A)\}},
+\qquad
+B_m(A):=\#\{\text{\(\partial U_m(A)\) 的 dyadic \((n-1)\)-面}\}.
+\]
+若 Minkowski 维度按
+\(
+\dim_M(A)=\limsup_{m\to\infty}\frac{\log N_m(A)}{m\log 2}
+\)
+给出，则必有
+\[
+\frac{n-1}{n}\,\dim_M(A)
+\ \le\
+\limsup_{m\to\infty}\frac{\log B_m(A)}{m\log 2}
+\ \le\
+\dim_M(A).
+\]
+\end{theorem}
+\begin{proof}
+对每个 \(m\)，将 \(U_m(A)\) 视为 dyadic polycube，并对其应用定理 \ref{thm:spg-dyadic-polyclube-discrete-isoperimetry}，得
+\[
+2n\,N_m(A)^{\frac{n-1}{n}}\ \le\ B_m(A)\ \le\ 2n\,N_m(A).
+\]
+两侧取对数并除以 \(m\log 2\)，再取 \(\limsup\)，并注意常数项在 \(m\to\infty\) 时消失，即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[带符号圆维的边界增长率夹逼]\label{cor:spg-minkowski-dimension-boundary-cdimpm-growth-sandwich}
+沿用定理 \ref{thm:spg-minkowski-dimension-boundary-face-growth-sandwich} 的记号，并令
+\(
+M_m:=\NN^{B_m(A)}
+\)
+为由边界面生成的自由交换幺半群。
+则由命题 \ref{prop:cdim-signed-orthant-closed} 有 \(\cdim^{\pm}(M_m)=\frac12B_m(A)\)，从而
+\[
+\frac{n-1}{n}\,\dim_M(A)
+\ \le\
+\limsup_{m\to\infty}\frac{\log \cdim^{\pm}(M_m)}{m\log 2}
+\ \le\
+\dim_M(A).
+\]
+\end{corollary}
+\begin{proof}
+由 \(\cdim^{\pm}(M_m)=\frac12 B_m(A)\) 与 \(\log(\tfrac12 B_m)=\log B_m+O(1)\)，代入定理 \ref{thm:spg-minkowski-dimension-boundary-face-growth-sandwich} 即得。证毕。
+\end{proof}
+
+\begin{corollary}[边界主导指数的算术化读出]\label{cor:spg-boundary-dominance-exponent-arithmetized}
+沿用上述记号，设
+\[
+\Theta(A):=\limsup_{m\to\infty}\frac{\log F(U_m(A))}{\log N_m(A)}.
+\]
+则 \(\Theta(A)\in\bigl[\frac{n-1}{n},1\bigr]\)。
+并且在任意满足 \(\log m=o(\log N_m(A))\) 的子序列上成立等价表述
+\[
+\Theta(A)
+\ =\
+\limsup_{m\to\infty}\frac{\log\log H_m(U_m(A))}{\log\log G_m(A)}.
+\]
+\end{corollary}
+\begin{proof}
+区间约束由定理 \ref{thm:spg-dyadic-polyclube-discrete-isoperimetry} 直接推出。
+\par
+由命题 \ref{prop:spg-dyadic-boundary-godel-doublelog-scale} 与定理 \ref{thm:spg-stokes-godel-doublelog-dimension}，有
+\[
+\log\log H_m(U_m(A))=\log F(U_m(A))+O(\log m),
+\qquad
+\log\log G_m(A)=\log N_m(A)+O(\log m).
+\]
+在 \(\log m=o(\log N_m(A))\) 的子序列上，误差项在比值中消失，得到所示等价。证毕。
+\end{proof}
+
+\begin{theorem}[边界 Gödel 编码的比特复杂度等周下界]\label{thm:spg-boundary-godel-bitcomplexity-isoperimetric}
+令 \(U\) 为 dyadic polycube，记 \(F=F(U)\)、\(N=N(U)\)。
+考虑最小素数预算的边界 Gödel 码
+\[
+H^{\min}(U):=\prod_{k=1}^{F} p_k,
+\]
+并定义其二进制长度 \(L(U):=\lceil\log_2 H^{\min}(U)\rceil\)。
+则当 \(N\to\infty\) 时存在仅依赖于 \(n\) 的常数 \(c_n,C_n>0\) 使
+\[
+c_n\,N^{\frac{n-1}{n}}\log N\ \le\ L(U)\ \le\ C_n\,N\log N.
+\]
+\end{theorem}
+\begin{proof}
+先证明 \(L(U)\asymp F\log F\)。
+由素数粗界（对充分大 \(k\) 有 \(k+1\le p_k\le k^2\)）与 Stirling 公式 \(\log(F!)=F\log F+O(F)\)，得
+\[
+\sum_{k=1}^{F}\log k\ \le\ \log H^{\min}(U)\ \le\ \sum_{k=1}^{F}2\log k,
+\]
+从而 \(\log H^{\min}(U)=\Theta(F\log F)\)，进而 \(L(U)=\Theta(F\log F)\)（换底到 \(\log_2\) 只改变常数）。
+\par
+再由定理 \ref{thm:spg-dyadic-polyclube-discrete-isoperimetry} 得 \(2n\,N^{(n-1)/n}\le F\le 2n\,N\)。
+把 \(F\log F\) 的两侧估计代回并用 \(\log F\asymp \log N\)（当 \(N\to\infty\)）即可得到所示不等式。证毕。
+\end{proof}
+
+\begin{proposition}[边界面数与内部粘连数的精确恒等式]\label{prop:spg-dyadic-polyclube-boundary-vs-adjacency-identity}
+设 \(U\) 为 dyadic polycube，并令 \(E(U)\) 表示 \(U\) 内部共享一个 \((n-1)\)-面的立方体相邻对数（内部粘连数）。
+则有严格恒等式
+\[
+F(U)=2n\,N(U)-2\,E(U).
+\]
+\end{proposition}
+\begin{proof}
+将 \(U\) 分解为 \(N(U)\) 个 \(n\)-立方体，每个立方体贡献 \(2n\) 个 \((n-1)\)-面，共计 \(2n\,N(U)\) 次计数。
+每一个内部共享面被其两侧立方体各计一次，因而在外露面总数中应抵消 \(2\) 次计数；抵消总量恰为 \(2E(U)\)。
+因此 \(F(U)=2n\,N(U)-2E(U)\)。证毕。
+\end{proof}
+
+\input{sections/body/spg/para__spg-screen-basis-top-homology-adhesion-median}
+
+\endinput

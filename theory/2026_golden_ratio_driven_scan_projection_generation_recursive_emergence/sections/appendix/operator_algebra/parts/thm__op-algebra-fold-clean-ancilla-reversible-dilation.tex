@@ -1,0 +1,163 @@
+\begin{theorem}[折叠权重入度的最小干净旁带可逆扩张阈值]\label{thm:op-algebra-fold-clean-ancilla-reversible-dilation}
+固定分辨率 \(m\ge 1\)，令 \(\Omega_m=\{0,1\}^m\)、\(X_m\subseteq\Omega_m\)，并令折叠满射 \(\Fold_m:\Omega_m\to X_m\)。
+对 \(x\in X_m\) 记纤维多重度 \(d_m(x):=\#\Fold_m^{-1}(x)\)。
+给定任意映射 \(f:X_m\to X_m\)，对每个 \(y\in X_m\) 定义折叠权重入度
+\begin{equation}\label{eq:op-algebra-fold-weighted-indegree}
+W_f(y):=\sum_{x\in f^{-1}(y)} d_m(x).
+\end{equation}
+令 \(B\in\NN\)，并考虑扩张微态空间 \(\Omega_m\times\{0,1\}^B\)。
+称 \(f\) 在旁带位数 \(B\) 下可作\emph{干净输入的可逆实现}，若存在置换（双射）
+\[
+T:\Omega_m\times\{0,1\}^B\ \longrightarrow\ \Omega_m\times\{0,1\}^B
+\]
+使得对所有 \(\omega\in\Omega_m\)，若记
+\(
+T(\omega,0^B)=(\omega',b')
+\)，则恒有
+\[
+\Fold_m(\omega')=f(\Fold_m(\omega)).
+\]
+则上述可逆实现存在当且仅当
+\begin{equation}\label{eq:op-algebra-fold-clean-ancilla-threshold}
+2^B\ \ge\ \max_{y\in X_m}\frac{W_f(y)}{d_m(y)}.
+\end{equation}
+从而最小旁带位数满足精确公式
+\[
+B_{\min}(f)=
+\left\lceil
+\log_2\!\left(\max_{y\in X_m}\frac{W_f(y)}{d_m(y)}\right)
+\right\rceil.
+\]
+\end{theorem}
+\begin{proof}
+先证必要性。固定 \(y\in X_m\)。
+集合
+\(
+\{\omega\in\Omega_m:\ f(\Fold_m(\omega))=y\}
+\)
+的大小恰为 \(W_f(y)\)。
+在干净输入 \(0^B\) 下，这些输入点经 \(T\) 映到输出集合
+\(
+\{(\omega',b'):\ \Fold_m(\omega')=y\}
+\)
+之中；该集合的容量至多为 \(\#\Fold_m^{-1}(y)\cdot 2^B=d_m(y)\cdot 2^B\)。
+由于 \(T\) 为单射，必有 \(W_f(y)\le d_m(y)\cdot 2^B\)。
+对 \(y\) 取最大即得 \eqref{eq:op-algebra-fold-clean-ancilla-threshold}。
+\par
+再证充分性。假设对所有 \(y\) 均有 \(W_f(y)\le d_m(y)\cdot 2^B\)。
+对每个 \(y\)，令
+\(
+A_y:=\{(\omega,0^B)\in\Omega_m\times\{0,1\}^B:\ f(\Fold_m(\omega))=y\}
+\)。
+由基数约束存在单射
+\[
+\iota_y:\ A_y\hookrightarrow \Fold_m^{-1}(y)\times\{0,1\}^B.
+\]
+把各 \(y\) 的像并起来得到对
+\(
+A:=\Omega_m\times\{0^B\}
+\)
+的单射
+\(
+\iota:A\hookrightarrow \Omega_m\times\{0,1\}^B
+\)，并满足对任意 \((\omega,0^B)\in A\)，若 \(\iota(\omega,0^B)=(\omega',b')\) 则 \(\Fold_m(\omega')=f(\Fold_m(\omega))\)。
+由于全空间有限，任一把 \(A\) 双射到 \(\iota(A)\) 的映射都可延拓为全空间的置换 \(T\)（在补集上任取双射补齐）。
+由构造，\(T\) 在干净输入上实现所需的折叠层映射。证毕。
+\end{proof}
+
+\begin{corollary}[旁带预算的纤维势分解]\label{cor:op-algebra-fold-clean-ancilla-budget-decomposition}
+在定理 \ref{thm:op-algebra-fold-clean-ancilla-reversible-dilation} 的设定下，令
+\(
+\delta(x):=\log_2 d_m(x)
+\)。
+则
+\[
+B_{\min}(f)
+=
+\left\lceil
+\max_{y\in X_m}
+\log_2\!\sum_{x:\ f(x)=y} 2^{\delta(x)-\delta(y)}
+\right\rceil.
+\]
+该表达式显示旁带需求由两类结构共同驱动：一者来自同一输出类型下的前像聚合；二者来自纤维体积在映射 \(x\mapsto f(x)\) 下的压缩失衡。
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:op-algebra-fold-weighted-indegree}，
+\(
+W_f(y)/d_m(y)=\sum_{x:\ f(x)=y} d_m(x)/d_m(y)
+=\sum_{x:\ f(x)=y}2^{\delta(x)-\delta(y)}
+\)。
+代入定理 \ref{thm:op-algebra-fold-clean-ancilla-reversible-dilation} 的阈值式并取二进制对数即得。证毕。
+\end{proof}
+
+\begin{theorem}[折叠等价自同构的半直积分解]\label{thm:op-algebra-fold-equivalence-aut-semidir}
+令 \(\equiv_m\) 为由折叠诱导的等价关系：\(\omega\equiv_m\omega'\iff \Fold_m(\omega)=\Fold_m(\omega')\)。
+定义
+\[
+\Aut(\equiv_m):=\{\sigma\in\mathrm{Sym}(\Omega_m):\ \omega\equiv_m\omega'\ \Longleftrightarrow\ \sigma(\omega)\equiv_m\sigma(\omega')\}.
+\]
+对每个 \(d\ge 1\) 令
+\(
+I_{m,d}:=\{x\in X_m:\ d_m(x)=d\}
+\)。
+则存在自然同构
+\[
+\Aut(\equiv_m)
+\ \cong\
+\Bigl(\prod_{d\ge 1}\mathrm{Sym}(I_{m,d})\Bigr)\ltimes\Bigl(\prod_{x\in X_m}\mathrm{Sym}(\Fold_m^{-1}(x))\Bigr),
+\]
+其中右侧第二因子为逐纤维独立的置换直积，第一因子为在同纤维规模层上对类型的置换；半直积作用由对纤维标签的重标号给出。
+\end{theorem}
+\begin{proof}
+取 \(\sigma\in\Aut(\equiv_m)\)。对任意 \(x\in X_m\) 取 \(\omega\in \Fold_m^{-1}(x)\) 并定义
+\[
+\rho_\sigma(x):=\Fold_m(\sigma(\omega)).
+\]
+由于 \(\sigma\) 保持等价类，\(\rho_\sigma(x)\) 与 \(\omega\) 的选取无关。
+并且 \(\sigma\) 将整条纤维 \(\Fold_m^{-1}(x)\) 双射到 \(\Fold_m^{-1}(\rho_\sigma(x))\)，从而 \(d_m(x)=d_m(\rho_\sigma(x))\)，即 \(\rho_\sigma\) 在每个 \(I_{m,d}\) 上给出一个置换。
+\par
+反之，一旦给定一族置换 \(\rho\in\prod_d\mathrm{Sym}(I_{m,d})\)，以及对每个 \(x\in X_m\) 给定一条双射
+\(
+\tau_x:\Fold_m^{-1}(x)\to \Fold_m^{-1}(\rho(x))
+\)，即可在不交并 \(\Omega_m=\bigsqcup_x\Fold_m^{-1}(x)\) 上拼接得到置换 \(\sigma\)，并且 \(\sigma\) 显然保等价关系。
+群运算对应于“先在类型层重标号、再在纤维内置换”的半直积组合规律。证毕。
+\end{proof}
+
+\begin{theorem}[纤维内置换共轭不变元即中心]\label{thm:op-algebra-fold-fiber-fixedpoints-center}
+令 \(\mathcal R_m:=\Omega_m\times_{X_m}\Omega_m\) 为由 \(\Fold_m\) 诱导的等价关系群胚，并令
+\(
+A_m:=C^\ast(\mathcal R_m)
+\)
+为其有限维群胚 \(C^\ast\)-代数。
+记其中心为 \(Z(A_m)\)。
+令
+\(
+G_m^{\mathrm{fib}}:=\prod_{x\in X_m}\mathrm{Sym}(\Fold_m^{-1}(x))
+\)
+作用于 \(A_m\)：在每个纤维块内取置换矩阵实现并以共轭作用延拓到直和。
+则不变子代数满足
+\[
+A_m^{G_m^{\mathrm{fib}}}=Z(A_m).
+\]
+\end{theorem}
+\begin{proof}
+由基本构造与群胚矩阵直和分解（定理 \ref{thm:op-algebra-fold-basic-construction-pair-groupoid} 的同型表述），存在 \(\ast\)-同构
+\(
+A_m\cong\bigoplus_{x\in X_m} M_{d_m(x)}(\CC)
+\)。
+在该分解下，\(G_m^{\mathrm{fib}}\) 在每个矩阵块内包含全对称群的置换矩阵实现；其共轭作用的不变元恰为标量矩阵 \(\CC\cdot I_{d_m(x)}\)。
+逐块取直和得到
+\(
+A_m^{G_m^{\mathrm{fib}}}=\bigoplus_x \CC\cdot I_{d_m(x)}=Z(A_m)
+\)。
+证毕。
+\end{proof}
+
+\begin{remark}[纤维置换体积与对数势]\label{rem:op-algebra-fold-fiber-permutation-volume}
+由 \(\prod_{x\in X_m}\mathrm{Sym}(\Fold_m^{-1}(x))\) 的直积分解立得
+\(
+|G_m^{\mathrm{fib}}|=\prod_{x\in X_m} d_m(x)!
+\)。
+该量的 Stirling 展开可被读作 \(\sum_x d_m(x)\log d_m(x)\) 的尺度化版本，从而与正文中反复出现的纤维势函数 \(\EE_{\pi}[\log d_m(X)]\) 在同一指数标尺上对齐；二进制区间折叠口径下的二阶显式余项展开见定理 \ref{thm:fold-bin-gauge-volume-stirling-second-order}。
+\end{remark}
+

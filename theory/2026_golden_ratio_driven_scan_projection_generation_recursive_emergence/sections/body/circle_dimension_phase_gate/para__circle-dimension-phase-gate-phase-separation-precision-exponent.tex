@@ -1,0 +1,117 @@
+\paragraph{相位可分辨率的体积屏障：精度指数与结构圆维}\label{par:cdim-phase-separation-precision-exponent}
+本段给出一个与实现无关的分辨率定标：当把有限窗口对象单射编码到固定 \(k\) 圆相位通道 \(\TT^k\) 中时，最小可分辨间距的幂律指数由结构圆维决定；并且该指数在常数因子意义下可达，从而允许由“最优精度增长率”恢复结构圆维。
+
+\begin{proposition}[平坦环面上的体积打包上界]\label{prop:cdim-torus-packing-bound}
+令 \(k\ge 1\) 且把 \(\TT^k=(\RR/\ZZ)^k\) 赋予标准平坦距离
+\[
+d_{\TT^k}(x,y):=\min_{n\in\ZZ^k}\norm{x-y+n}_2.
+\]
+对有限集 \(E\subset\TT^k\) 定义其最小分离度
+\[
+\Delta(E):=\min\{d_{\TT^k}(x,y):\ x\neq y,\ x,y\in E\}.
+\]
+则存在仅依赖于 \(k\) 的常数 \(C_k>0\) 使得对一切有限 \(E\) 有
+\[
+\card{E}\ \le\ C_k\,\Delta(E)^{-k},
+\qquad\text{等价地}\qquad
+\Delta(E)\ \le\ C_k\,\card{E}^{-1/k}.
+\]
+\end{proposition}
+\begin{proof}
+当 \(\Delta(E)\ge \tfrac12\) 时结论平凡（取 \(C_k\ge 2^k\)）。
+以下设 \(\Delta:=\Delta(E)<\tfrac12\)，并对每个 \(x\in E\) 取半径 \(\Delta/4\) 的闭球 \(B(x,\Delta/4)\)。
+由平移不变性与三角不等式，这些球两两不交。
+另一方面，在 \(\Delta<\tfrac12\) 的范围内，\(\TT^k\) 上半径 \(\Delta/4\) 的球在覆盖坐标中等距嵌入 \(\RR^k\)，其体积下界为 \(c_k\Delta^k\)（\(c_k>0\) 仅依赖于 \(k\)）。
+由于 \(\TT^k\) 的总体积为 \(1\)，故
+\[
+1\ \ge\ \sum_{x\in E}\mathrm{Vol}\bigl(B(x,\Delta/4)\bigr)\ \ge\ \card{E}\cdot c_k\Delta^k,
+\]
+从而 \(\card{E}\le c_k^{-1}\Delta^{-k}\)。取 \(C_k:=c_k^{-1}\) 即得。
+第二个不等式由重排得到。证毕。
+\end{proof}
+
+\begin{theorem}[结构圆维的相位可分辨率定标]\label{thm:cdim-phase-separation-precision-exponent}
+设 \(G\) 为有限生成离散交换群，记 \(r:=\cdim(G)\)。
+取元素 \(g_1,\dots,g_r\in G\) 使得 \(\langle g_1,\dots,g_r\rangle\simeq\ZZ^r\)，并令
+\[
+Q_N:=\left\{\sum_{i=1}^{r}n_i g_i:\ n_i\in\ZZ,\ |n_i|\le N\right\}\subset G.
+\]
+则 \(\card{Q_N}=(2N+1)^r\)。
+对任意单射 \(\mathrm{enc}:G\hookrightarrow\TT^k\)，令
+\[
+\Delta_N(\mathrm{enc})
+:=\Delta\bigl(\mathrm{enc}(Q_N)\bigr).
+\]
+则存在常数 \(C_k>0\)（可取为命题 \ref{prop:cdim-torus-packing-bound} 的常数）使得对一切 \(N\ge 1\) 有
+\[
+\Delta_N(\mathrm{enc})\ \le\ C_k\,(2N+1)^{-r/k}.
+\]
+因此，若某读出制度在 \(\TT^k\) 上仅允许绝对误差 \(\varepsilon\) 的相位测量并要求在 \(Q_N\) 上可唯一解码，则必须
+\[
+\varepsilon\ \le\ \frac12\,\Delta_N(\mathrm{enc})\ \lesssim_k\ (2N+1)^{-r/k}.
+\]
+等价地，若以 dyadic 深度 \(b\) 表示 \(\varepsilon\asymp 2^{-b}\)，则必有
+\[
+b\ \ge\ \frac{r}{k}\log_2 N\ -\ O_k(1).
+\]
+\end{theorem}
+\begin{proof}
+对有限集 \(\mathrm{enc}(Q_N)\subset\TT^k\) 应用命题 \ref{prop:cdim-torus-packing-bound} 得
+\[
+\Delta_N(\mathrm{enc})
+\le
+C_k\,\card{Q_N}^{-1/k}
+=C_k\,(2N+1)^{-r/k}.
+\]
+若测量误差为 \(\varepsilon\) 且要求唯一解码，则任意两编码点的 \(\varepsilon\)-邻域必须不交，从而 \(\varepsilon\le \Delta_N(\mathrm{enc})/2\)。
+代回得到所示必要条件。
+最后由 \(\varepsilon\asymp 2^{-b}\) 与 \(\log_2(1/\varepsilon)\asymp b\) 得 dyadic 形式。证毕。
+\end{proof}
+
+\begin{proposition}[精度指数的可达性与恢复公式]\label{prop:cdim-phase-separation-exponent-recovery}
+在定理 \ref{thm:cdim-phase-separation-precision-exponent} 的设定下，定义最优分离度
+\[
+\Delta_N^\star
+:=\sup\Bigl\{\Delta\bigl(\mathrm{enc}(Q_N)\bigr):\ \mathrm{enc}:Q_N\hookrightarrow\TT^k\Bigr\}.
+\]
+则存在常数 \(0<c_k\le C_k\) 使对一切 \(N\ge 1\) 有
+\[
+c_k\,(2N+1)^{-r/k}\ \le\ \Delta_N^\star\ \le\ C_k\,(2N+1)^{-r/k}.
+\]
+从而存在极限
+\[
+\lim_{N\to\infty}\frac{\log_2(1/\Delta_N^\star)}{\log_2 N}=\frac{r}{k},
+\qquad
+r=k\cdot \lim_{N\to\infty}\frac{\log_2(1/\Delta_N^\star)}{\log_2 N}.
+\]
+\end{proposition}
+\begin{proof}
+上界由定理 \ref{thm:cdim-phase-separation-precision-exponent} 立即推出。
+为证下界，记 \(M:=\card{Q_N}=(2N+1)^r\) 并令 \(L:=\lceil M^{1/k}\rceil\)。
+取网格
+\(
+\mathcal{G}_L:=\{0,1/L,\dots,(L-1)/L\}^k\subset\TT^k
+\)，则 \(\card{\mathcal{G}_L}=L^k\ge M\)。
+将 \(Q_N\) 任意单射到 \(\mathcal{G}_L\) 得一编码，其像的最小分离度至少为 \(1/L\)（在 \(d_{\TT^k}\) 下），故
+\[
+\Delta_N^\star\ \ge\ \frac{1}{L}\ \ge\ \frac{1}{M^{1/k}+1}\ \ge\ c_k\,M^{-1/k},
+\]
+其中 \(c_k>0\) 为与 \(N\) 无关的常数。
+代入 \(M=(2N+1)^r\) 得所示下界；极限关系由上下界同阶立得。证毕。
+\end{proof}
+
+\begin{remark}[有限标签的尺度圆维与残差圆维的 dyadic 兼容]\label{rem:cdim-scale-dimension-finite-labels}
+对有限集 \(F\) 与分辨率 \(\varepsilon\in(0,\tfrac12)\) 定义尺度圆维
+\[
+\cdim_\varepsilon(F):=\frac{\log\card{F}}{\log(1/\varepsilon)}.
+\]
+当 \(\varepsilon\downarrow0\) 且 \(\card{F}\) 固定时有 \(\cdim_\varepsilon(F)\to 0\)，与“有限纤维标签不增结构圆维”（备注 \ref{rem:circle-dimension-refinement}）相容。
+并且在 dyadic 规范 \(\varepsilon=2^{-b}\) 下，
+\(
+\cdim_\varepsilon(F)=\frac{\log_2\card{F}}{b}
+\)，
+与定义 \ref{def:cdim-residual-circle-dimension} 的残差圆维在量纲上同型。
+\end{remark}
+
+\endinput
+

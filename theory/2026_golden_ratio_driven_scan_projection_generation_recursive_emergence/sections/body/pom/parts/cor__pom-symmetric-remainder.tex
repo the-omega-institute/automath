@@ -1,0 +1,582 @@
+由整数除法算法与同余类代表的唯一性得到。平移群作用的轨道等于同余类，$\mathcal F_b$ 为其横截面，故投影 $\Pi_b$ 给出唯一 $r$，并据此确定 $q$。证毕。
+\end{proof}
+
+\begin{corollary}[中心余数横截面]\label{cor:pom-symmetric-remainder}
+若改用对称基本域
+\[
+\mathcal F_b^{\mathrm{sym}}:=\left\{-\left\lfloor\frac{b}{2}\right\rfloor,\dots,\left\lceil\frac{b}{2}\right\rceil-1\right\},
+\]
+则仍有唯一分解 $a=qb+r$ 且 $r\in\mathcal F_b^{\mathrm{sym}}$。该选择等价于改变横截面而非改变本体演化，可将部分“区间校正”合并到单次序投影中。
+\end{corollary}
+
+\begin{remark}[与 Fold 的群胚类比]
+定理 \ref{thm:pom-division-section} 与定理 \ref{thm:zeckendorf-transversal} 在结构上同型：二者均为“轨道 = 值纤维/同余类，横截面 = 规范代表”的投影机制；商 $q$ 与折叠残差的群胚坐标具有同一语义地位。
+\end{remark}
+
+\subsection{结论簇 III：包含商余的扩展最小原语集}\label{subsec:pom-primitive-extended}
+\begin{theorem}[扩展最小原语集]\label{thm:pom-extended-primitives}
+在配置层，$\oplus,\otimes,\mathrm{div},\mathrm{quo},\mathrm{rem}$ 可由以下原语生成：
+\begin{enumerate}
+  \item 逐点叠加（自由交换幺半群结构）；
+  \item Fibonacci 群胚生成元（值保持局部可逆重写）；
+  \item 值纤维横截面投影 $\Fold_\infty$（规范投影）；
+  \item 平移群胚横截面投影 $\Pi_b$（序/区间投影）。
+\end{enumerate}
+在过程层，等价表述为：仅以复合 $\circ$ 作为底层原语，再配合值投影 $\Fold_\infty$ 与序投影 $\Pi_b$ 把输出落回外表；原子投影 $P_{\mathrm{prim}}$ 作为谱读出接口独立施加。
+\end{theorem}
+\begin{proof}
+加法与乘法由定理 \ref{thm:composition-two-layer} 与 \ref{thm:arith-composition} 的过程层读出实现，并由 $\Fold_\infty$ 落回稳定地址。商余由定理 \ref{thm:pom-division-section} 作为平移群胚横截面投影给出。其余运算由上述原语的组合闭包得到。证毕。
+\end{proof}
+
+\begin{theorem}[双横截面正规形：值纤维 $\times$ 同余类]\label{thm:pom-double-transversal-normal-form}
+对任意配置对象 $a\in\mathcal D$ 与任意整数 $b>0$，存在唯一三元组
+\[
+\boxed{(x,q,r)\in X_\infty\times\mathbb{Z}\times\mathcal F_b}
+\]
+使得
+\[
+x=\Fold_\infty(a),\qquad
+r=\Pi_b(\mathrm{Val}(a)),\qquad
+q=\frac{\mathrm{Val}(a)-r}{b},
+\]
+并且 \(\mathrm{Val}(a)=\mathrm{Val}(x)=qb+r\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:zeckendorf-transversal}（或等价的定义 \(\Fold_\infty(a)=Z(\mathrm{Val}(a))\)）得 \(x\) 唯一且满足 \(\mathrm{Val}(x)=\mathrm{Val}(a)\)。
+由定理 \ref{thm:pom-division-section} 得 \((q,r)\) 唯一且满足 \(r=\Pi_b(\mathrm{Val}(a))\) 与 \(\mathrm{Val}(a)=qb+r\)。
+合并两部分即得所示三元组的存在唯一性。证毕。
+\end{proof}
+
+\begin{corollary}[投影调用的常数预算：末端正规化]\label{cor:pom-projection-budget}
+设 \(t\) 为任意由配置层运算 \(\oplus,\otimes,\mathrm{div},\mathrm{quo},\mathrm{rem}\) 复合得到的表达式（深度任意），并假设其\emph{外部可见输出}仅为一次稳定地址读出（落在 \(X_\infty\)）以及可选的一次商余读出（落在 \(\mathbb Z\times\mathcal F_b\)）。
+则存在一个等价的过程层实现，使得整条求值链中
+\begin{itemize}
+  \item 值横截面投影 \(\Fold_\infty\) 至多调用一次（仅在末端把输出落回 \(X_\infty\)）；
+  \item 序横截面投影 \(\Pi_b\) 至多调用一次（仅当需要输出唯一余数代表时，于末端对 \(\mathrm{Val}\) 应用）。
+\end{itemize}
+并且：若输出类型要求唯一稳定地址（或要求唯一余数代表），则对应末端投影在该意义下不可省略。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-extended-primitives}，过程层求值可改写为群胚内的可逆演化与末端横截面投影的复合。
+而 \(\Fold_\infty\) 是 \(\mathrm{Val}\) 的规范截面：\(\mathrm{Val}(\Fold_\infty(a))=\mathrm{Val}(a)\)，且 \(\Fold_\infty(a)\) 仅依赖于 \(\mathrm{Val}(a)\)。
+因此任何中间步骤对同一值纤维反复“先落回再继续演化”的正规化，都不会改变末端按最终值落回 \(X_\infty\) 的输出，可统一推迟为末端一次。
+同理，\(\Pi_b\) 仅依赖于整数值 \(\mathrm{Val}(\cdot)\)，且 \(\mathrm{Val}\) 可在末端一次性读出，故若只需一次商余读出，则 \(\Pi_b\) 亦可推迟到末端一次。
+最后，“不可省略性”来自轨道代表的非唯一性：不施加对应横截面投影，则输出仍停留在轨道上而非唯一点。证毕。
+\end{proof}
+
+\subsection{逆极限自然性与纤维不变量判别}\label{subsec:pom-new-results}
+\subsubsection{跨分辨率一致性的 Gauge 原理：fold-aware restriction}\label{subsubsec:pom-gauge}
+有限窗口微态空间 $\Omega_m=\{0,1\}^m$ 与稳定类型空间 $X_m$ 的角色并不对称：$X_m$ 在截断映射 $\pi_{m+1\to m}$ 下形成逆系统，而 $\Omega_m$ 在朴素截断下并不携带与折叠兼容的逆系统结构。该差异正是“跨分辨率一致性必须先规范化”的结构来源。
+
+\begin{definition}[朴素截断与折叠感知限制]\label{def:pom-fold-aware-restriction}
+设 $\tau_{m+1\to m}:\Omega_{m+1}\to\Omega_m$ 为朴素截断（丢弃最末一位；等价地取长度 $m$ 前缀）。定义折叠感知限制（fold-aware restriction）
+$$
+r^{\mathrm{e}}_{m+1\to m}:\Omega_{m+1}\to X_m,
+\qquad
+r^{\mathrm{e}}_{m+1\to m}:=\pi_{m+1\to m}\circ\Fold_{m+1}.
+$$
+\end{definition}
+
+\begin{proposition}[朴素截断与折叠一般不交换]\label{prop:pom-truncation-not-commute}
+一般地，图表
+$$
+\Omega_{m+1}\xrightarrow{\ \tau_{m+1\to m}\ }\Omega_m\xrightarrow{\ \Fold_m\ }X_m
+$$
+与
+$$
+\Omega_{m+1}\xrightarrow{\ \Fold_{m+1}\ }X_{m+1}\xrightarrow{\ \pi_{m+1\to m}\ }X_m
+$$
+并不一致，即存在 $\omega\in\Omega_{m+1}$ 使得
+$$
+\Fold_m(\tau_{m+1\to m}(\omega))\neq \pi_{m+1\to m}(\Fold_{m+1}(\omega)).
+$$
+\end{proposition}
+\begin{proof}
+折叠的局部重写（例如 $011\mapsto 100$）会产生跨位传播：被丢弃的末位可能决定某次局部重写是否触发，从而改变长度 $m$ 前缀在规范化后的形态。因此“先截断再折叠”与“先折叠再截断”在一般情形下不一致。证毕。
+\end{proof}
+
+\begin{proposition}[稳定逆系统的自然性：先折叠再限制]\label{prop:pom-gauge-natural}
+对任意 $m\ge 1$，折叠感知限制满足
+$$
+r^{\mathrm{e}}_{m+1\to m}
+=
+\pi_{m+1\to m}\circ \Fold_{m+1},
+$$
+从而在稳定层形成严格可交换的跨分辨率图表
+$$
+\Omega_{m+1}\xrightarrow{\ \Fold_{m+1}\ }X_{m+1}\xrightarrow{\ \pi_{m+1\to m}\ }X_m
+\qquad\text{与}\qquad
+\Omega_{m+1}\xrightarrow{\ r^{\mathrm{e}}_{m+1\to m}\ }X_m
+$$
+一致；并且对任意 $m_2\ge m_1$ 有兼容性
+$$
+\text{令 }r^{\mathrm{e}}_{m_2\to m_1}:=\pi_{m_2\to m_1}\circ\Fold_{m_2},
+\ \text{则对任意 }m_3\ge m_2\ge m_1\text{ 有 }r^{\mathrm{e}}_{m_3\to m_1}=\pi_{m_2\to m_1}\circ r^{\mathrm{e}}_{m_3\to m_2},
+$$
+因而“同一对象的跨分辨率坐标”只能在 $X_\infty\simeq\varprojlim X_m$ 的逆系统口径下被谈论。
+\end{proposition}
+\begin{proof}
+第一式为定义 \ref{def:pom-fold-aware-restriction} 的直接展开。兼容性由稳定层的逆系统映射满足的泛性质给出（定理 \ref{thm:pom-inverse-limit}），而折叠后的坐标才是逆系统对象。证毕。
+\end{proof}
+
+\begin{definition}[Gauge 曲率（2-cocycle obstruction）]\label{def:pom-gauge-curvature}
+对给定的分辨率降阶 \((m{+}1\to m)\) 与顶层微态 \(\omega\in\Omega_{m+1}\)，定义曲率指示量
+\[
+\mathcal{K}_{m+1\to m}(\omega)
+:=
+\mathbf 1\!\left[\,
+\Fold_m(\tau_{m+1\to m}(\omega))
+\neq
+\pi_{m+1\to m}(\Fold_{m+1}(\omega))
+\,\right].
+\]
+它刻画“先截断再折叠”与“先折叠再限制”在该微态上的不交换障碍。
+\end{definition}
+
+\begin{proposition}[伪不变量的可测误差条：由曲率概率控制]\label{prop:pom-gauge-curvature-shadow-bound}
+令 \(\mu\) 为 \(\Omega_{m+1}\) 上任意分布，令 \(f:X_m\to\mathbb{R}\) 为任意有界可观测量。
+则有可审计的不等式
+\[
+\boxed{
+\begin{aligned}
+&\left|\mathbb E_{\omega\sim\mu}\,f(\Fold_m(\tau_{m+1\to m}(\omega)))
+-\mathbb E_{\omega\sim\mu}\,f(\pi_{m+1\to m}(\Fold_{m+1}(\omega)))\right|\\
+&\qquad \le 2\|f\|_\infty\cdot \mathbb P_{\omega\sim\mu}\!\left[\mathcal{K}_{m+1\to m}(\omega)=1\right].
+\end{aligned}}
+\]
+特别地，在采用 fold-aware restriction 的 Gauge 口径下（命题 \ref{prop:pom-gauge-natural} 的严格交换图表），上述误差条塌缩为 \(0\)。
+\end{proposition}
+\begin{proof}
+对每个 \(\omega\)，记
+\(
+x=\Fold_m(\tau_{m+1\to m}(\omega))
+\)
+与
+\(
+y=\pi_{m+1\to m}(\Fold_{m+1}(\omega))
+\)。
+则逐点有
+\[
+|f(x)-f(y)|
+\le
+2\|f\|_\infty\,\mathbf 1[x\neq y]
+=
+2\|f\|_\infty\,\mathcal{K}_{m+1\to m}(\omega).
+\]
+取 \(\omega\sim\mu\) 的期望即得所示不等式；最后一段由命题 \ref{prop:pom-gauge-natural} 直接推出。证毕。
+\end{proof}
+
+\begin{remark}[可复现审计：曲率概率的枚举/抽样]\label{rem:pom-gauge-curvature-audit}
+右端的曲率概率
+\(\mathbb P[\mathcal{K}_{m+1\to m}=1]\)
+可直接由实现同时计算两条路径的输出并统计失配频率得到。
+脚本 \path{scripts/exp_fold_truncation_curvature.py} 在均匀微态基线下对 \(m\le 20\) 做精确枚举并生成表格片段；对一般数据源亦可按同一定义以抽样估计。
+例如，正文中用来定义 prime shadow 的计数函数、或任意 cylinder 指示函数 \(f\)，都是稳定类型的有界可观测量，因此不等式 \ref{prop:pom-gauge-curvature-shadow-bound} 给出一条可审计的“伪影误差条”。
+\end{remark}
+
+\input{sections/generated/tab_fold_truncation_curvature_stats}
+
+\input{sections/body/pom/parts/subsubsec__pom-gauge-curvature-tail}
+
+\begin{definition}[分辨率反射子（跨分辨率纤维均匀化）]\label{def:pom-resolution-reflector}
+固定顶层分辨率 $M$，并把微态空间取为 $\Omega_M$。
+对任意 $1\le m\le M$，以折叠感知限制
+\(
+r^{\mathrm{e}}_{M\to m}=\pi_{M\to m}\circ \Fold_M:\Omega_M\to X_m
+\)
+为 coarse-graining 映射，定义推前算子
+\[
+P_{M\to m}:=(r^{\mathrm{e}}_{M\to m})_*:\Delta(\Omega_M)\to\Delta(X_m),
+\]
+并记其纤维基数为
+\[
+d_{M\to m}(x):=\bigl|(r^{\mathrm{e}}_{M\to m})^{-1}(x)\bigr|\qquad(x\in X_m).
+\]
+定义纤维均匀提升算子
+\[
+Q_{M\to m}:\Delta(X_m)\to\Delta(\Omega_M),
+\qquad
+(Q_{M\to m}\pi)(\omega):=\frac{\pi(r^{\mathrm{e}}_{M\to m}(\omega))}{d_{M\to m}(r^{\mathrm{e}}_{M\to m}(\omega))}.
+\]
+则 $P_{M\to m}\circ Q_{M\to m}=\mathrm{id}_{\Delta(X_m)}$。
+对任意 $\mu\in\Delta(\Omega_M)$，定义其分辨率 $m$ 的规范化反射（纤维均匀化）为
+\[
+\mu^{(m)}:=Q_{M\to m}P_{M\to m}\mu\in\Delta(\Omega_M).
+\]
+当 $m=M$ 时，上述构造退化为小节 \ref{subsec:pom-information-ledger} 的 $P_M,Q_M$ 与 $\mu^{e}$（仅记号不同）。
+\end{definition}
+
+\begin{theorem}[KL-毕达哥拉斯：分辨率塔上的残差可加]\label{thm:pom-kl-pythagoras-tower}
+沿用定义 \ref{def:pom-resolution-reflector}，并以定理 \ref{thm:pom-kl-ledger} 的口径记 KL 散度。
+则对任意 $M\ge m_2\ge m_1\ge 1$ 与任意 $\mu\in\Delta(\Omega_M)$，成立严格恒等式
+\[
+\boxed{\;
+D_{\mathrm{KL}}(\mu\|\mu^{(m_1)})
+=D_{\mathrm{KL}}(\mu\|\mu^{(m_2)})
++D_{\mathrm{KL}}(\mu^{(m_2)}\|\mu^{(m_1)})\; }.
+\]
+\end{theorem}
+\begin{proof}
+由 KL 定义，
+\[
+D_{\mathrm{KL}}(\mu\|\mu^{(m_1)})-D_{\mathrm{KL}}(\mu\|\mu^{(m_2)})
+=\sum_{\omega\in\Omega_M}\mu(\omega)\log\frac{\mu^{(m_2)}(\omega)}{\mu^{(m_1)}(\omega)}.
+\]
+对固定的 $y\in X_{m_2}$，在纤维 $(r^{\mathrm{e}}_{M\to m_2})^{-1}(y)$ 上，上式中的比值
+\(
+\mu^{(m_2)}(\omega)/\mu^{(m_1)}(\omega)
+\)
+为常数（因为 $\mu^{(m)}$ 在每条 $r^{\mathrm{e}}_{M\to m}$-纤维上均匀）。
+因此按 $y$ 分组可得
+\[
+\sum_{\omega\in\Omega_M}\mu(\omega)\log\frac{\mu^{(m_2)}(\omega)}{\mu^{(m_1)}(\omega)}
+=\sum_{y\in X_{m_2}}(P_{M\to m_2}\mu)(y)\,
+\log\frac{\mu^{(m_2)}(\omega_y)}{\mu^{(m_1)}(\omega_y)},
+\]
+其中 $\omega_y$ 为该纤维内任意代表点。
+另一方面，由定义 \(\mu^{(m_2)}=Q_{M\to m_2}P_{M\to m_2}\mu\) 得
+\(
+P_{M\to m_2}\mu^{(m_2)}=P_{M\to m_2}\mu
+\)，
+从而上式右端可将系数 $(P_{M\to m_2}\mu)(y)$ 替换为 $(P_{M\to m_2}\mu^{(m_2)})(y)$。
+再将分组表达“反展开”回 $\Omega_M$，即得
+\[
+\sum_{\omega\in\Omega_M}\mu(\omega)\log\frac{\mu^{(m_2)}(\omega)}{\mu^{(m_1)}(\omega)}
+=\sum_{\omega\in\Omega_M}\mu^{(m_2)}(\omega)\log\frac{\mu^{(m_2)}(\omega)}{\mu^{(m_1)}(\omega)}
+=D_{\mathrm{KL}}(\mu^{(m_2)}\|\mu^{(m_1)}).
+\]
+移项即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[跨分辨率的信息守恒账本：望远镜分解]\label{cor:pom-kl-ledger-telescope}
+在定理 \ref{thm:pom-kl-pythagoras-tower} 的设定下，定义单步外置量
+\[
+\Delta_m(\mu):=D_{\mathrm{KL}}(\mu^{(m)}\|\mu^{(m-1)})\qquad(2\le m\le M).
+\]
+则对任意 $M\ge 1$ 有严格望远镜分解
+\[
+\boxed{\;
+D_{\mathrm{KL}}(\mu\|\mu^{(1)})
+=\sum_{m=2}^{M}\Delta_m(\mu)\;+\;D_{\mathrm{KL}}(\mu\|\mu^{(M)})\; }.
+\]
+\end{corollary}
+\begin{proof}
+对 $m=2,3,\dots,M$ 依次将定理 \ref{thm:pom-kl-pythagoras-tower} 应用于三元组 $(m_1,m_2)=(m-1,m)$ 并求和，所有中间项望远镜抵消，得到所示恒等式。证毕。
+\end{proof}
+
+\begin{remark}[结构判据：伪不变量来自坐标不一致]\label{rem:pom-gauge-criterion}
+若某一 ISA/微码/核在跨分辨率上使用朴素截断（$\tau$）来比较对象，而非经 $P_Z$（或等价地经 $r^{\mathrm{e}}$）落到稳定逆系统，则其“规律/不变量”可能只是坐标不一致产生的幻影：同一高分辨率微态在低分辨率下被错误归类，从而制造伪素数影子与伪收敛现象。因而跨分辨率可审计性必须以 fold-aware restriction 作为 Gauge 条件。
+\end{remark}
+
+\begin{theorem}[逆极限自然性]\label{thm:pom-inverse-limit}
+设对每个分辨率 $m$ 定义稳定层运算 $f_m:X_m\to X_m$，并满足对一切 $m_2\ge m_1$ 的截断投影
+\[
+\pi_{m_2\to m_1}\circ f_{m_2}=f_{m_1}\circ \pi_{m_2\to m_1}.
+\]
+则存在唯一的极限运算 $f_\infty:X_\infty\to X_\infty$ 使得对所有 $m$ 有 $\pi_m\circ f_\infty=f_m\circ \pi_m$。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:inverse-limit-golden}，$X_\infty\cong\varprojlim X_m$。相容性等式正是逆系统上的自然变换条件，因此由逆极限的泛性质得到唯一的 $f_\infty$。证毕。
+\end{proof}
+
+\begin{proposition}[纤维不变量判别]\label{prop:pom-fiber-invariance}
+给定 $g:\Omega_m\to\mathbb{R}$，以下条件等价：
+\begin{enumerate}
+  \item 若 $\Fold_m(a)=\Fold_m(b)$ 则 $g(a)=g(b)$；
+  \item 存在 $\bar g:X_m\to\mathbb{R}$ 使得 $g=\bar g\circ\Fold_m$；
+  \item $g$（作为可观测量）属于折叠不变量子代数 $\mathcal{B}_m$（命题 \ref{prop:fold-invariant-subalgebra}）。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1)\Rightarrow(2)$：定义 $\bar g(x)=g(a)$ 对任意 $a\in\Fold_m^{-1}(x)$，由 (1) 保证良定义。$(2)\Rightarrow(3)$：$g$ 在每条纤维上常值，故对应于 $\mathcal{B}_m$ 的坐标表示。$(3)\Rightarrow(1)$：$\mathcal{B}_m$ 的元素对纤维常值（命题 \ref{prop:fold-invariant-subalgebra}）。证毕。
+\end{proof}
+
+\begin{remark}[时间—空间对偶接口与素数影子]\label{rem:pom-time-space}
+命题 \ref{prop:time-space-commuting-diagram} 给出的严格交换图把时间侧 $\Tr(T^n)$ 与空间侧 primitive 轨道谱对齐，从而为“时间—空间正交对偶”提供可审计接口。另一方面，有限核的 primitive 轨道谱与整数素数并不等同（见注 \ref{rem:prime-shadow-vs-primes}）：前者是核动力学的内禀素性，后者需要额外的素数索引算子族。素数寄存器纤维 $\mathcal{P}$ 正是对这一额外索引结构的本体化补充。
+\end{remark}
+
+\begin{theorem}[profinite 轴上的 Chebotarev 提升]\label{thm:pom-profinite-axis}
+设 $\{G_m,\pi_{m_2\to m_1}\}$ 为有限群的投影系统，$G_\infty:=\varprojlim_m G_m$。对每个 $m$，考虑对应的 $G_m$-扩张核，并记
+$$
+\lambda_m:=\rho(B_{\mathbf 1,m}),\qquad
+\Lambda_m:=\max_{\rho\neq\mathbf 1}\rho(B_{\rho,m}).
+$$
+令 \(U\subset G_\infty\) 为 cylinder 集合，即存在某个 $m$ 与共轭不变子集 $A\subseteq G_m$ 使
+\(
+U=\pi_m^{-1}(A)
+\)。
+则对应的 primitive 轨道计数满足
+$$
+B_{n,U}
+=\mu_{\mathrm{Haar}}(U)\,\frac{\lambda_m^n}{n}
+ +O\!\left(\frac{\Lambda_m^n}{n}\right).
+$$
+其中 \(\mu_{\mathrm{Haar}}(U)=|A|/|G_m|\)。
+若进一步满足核版 GRH 条件 $\Lambda_m\le \lambda_m^{1/2}$（对该层 $m$），则误差降为平方根级
+$$
+B_{n,U}
+=\mu_{\mathrm{Haar}}(U)\,\frac{\lambda_m^n}{n}
+ +O\!\left(\frac{\lambda_m^{n/2}}{n}\right).
+$$
+\end{theorem}
+\begin{proof}
+由于 $U$ 为 cylinder，存在 $m$ 与共轭不变子集 $A\subseteq G_m$ 使 $U=\pi_m^{-1}(A)$。令 $B_{n,c}$ 表示落在共轭类 $c\subseteq G_m$ 的 primitive 轨道计数，则
+$$
+B_{n,U}=\sum_{c\subseteq A} B_{n,c}.
+$$
+对每个 $c$，由有限层的 Chebotarev 型估计（定理 \ref{thm:kernel-chebotarev-exp}）有
+$
+B_{n,c}=\frac{|c|}{|G_m|}\frac{\lambda_m^n}{n}+O(\Lambda_m^n/n)
+$。
+将各类相加得到主项系数
+$
+\sum_{c\subseteq A}|c|/|G_m|=|A|/|G_m|=\mu_{\mathrm{Haar}}(U)
+$，并因 $A$ 的共轭类数目有限，误差仍为 $O(\Lambda_m^n/n)$。若 $\Lambda_m\le \lambda_m^{1/2}$，则立得平方根级误差。证毕。
+\end{proof}
+
+\begin{corollary}[cylinder 级有效均匀化长度（相对误差的对数预算）]\label{cor:pom-profinite-cylinder-effective-n}
+沿用定理 \ref{thm:pom-profinite-axis} 的记号。令 \(U=\pi_m^{-1}(A)\subseteq G_\infty\) 为一个层级为 \(m\) 的 cylinder，且假设 \(A\neq\varnothing\)。
+则对长度 \(n\) 的 primitive 轨道计数，有相对误差界
+\[
+\frac{\bigl|B_{n,U}-\mu_{\mathrm{Haar}}(U)\,\lambda_m^n/n\bigr|}{\mu_{\mathrm{Haar}}(U)\,\lambda_m^n/n}
+\;=\;
+O\!\left(\frac{|G_m|}{|A|}\left(\frac{\Lambda_m}{\lambda_m}\right)^n\right)
+\;\le\;
+O\!\left(|G_m|\left(\frac{\Lambda_m}{\lambda_m}\right)^n\right).
+\]
+特别地，若存在 \(\varepsilon>0\) 使得该层满足统一谱隙形式
+\[
+\Lambda_m\ \le\ \lambda_m^{1/2-\varepsilon},
+\]
+则对任意目标相对误差阈值 \(\delta\in(0,1)\)，只要
+\[
+\boxed{\;
+n\ \gtrsim\ \frac{\log(|G_m|/\delta)}{(1/2+\varepsilon)\log \lambda_m}\; }
+\]
+即可保证该 cylinder 上的 Chebotarev 主项达到相对误差 \(O(\delta)\) 的尺度。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:pom-profinite-axis}，
+\(
+|B_{n,U}-\mu_{\mathrm{Haar}}(U)\lambda_m^n/n|\le C\,\Lambda_m^n/n
+\)
+（其中常数 \(C\) 仅依赖于该层的有限核与 \(A\) 的共轭类个数）。
+两边除以主项 \(\mu_{\mathrm{Haar}}(U)\lambda_m^n/n=(|A|/|G_m|)\lambda_m^n/n\) 得
+\[
+\frac{|B_{n,U}-\mu_{\mathrm{Haar}}(U)\lambda_m^n/n|}{\mu_{\mathrm{Haar}}(U)\lambda_m^n/n}
+\le
+\frac{C|G_m|}{|A|}\left(\frac{\Lambda_m}{\lambda_m}\right)^n.
+\]
+若进一步 \(\Lambda_m\le \lambda_m^{1/2-\varepsilon}\)，则 \((\Lambda_m/\lambda_m)^n\le \lambda_m^{-(1/2+\varepsilon)n}\)。
+令右端 \(\le \delta\) 并解出 \(n\) 即得所示对数预算。证毕。
+\end{proof}
+
+\begin{corollary}[反解：给定时间 \(n\) 的可承载 cylinder/寄存器容量上界]\label{cor:pom-profinite-cylinder-capacity}
+沿用推论 \ref{cor:pom-profinite-cylinder-effective-n} 的记号与统一谱隙假设
+\(
+\Lambda_m\le \lambda_m^{1/2-\varepsilon}
+\)。
+固定目标相对误差阈值 \(\delta\in(0,1)\) 与长度预算 \(n\)。
+则要在层级 \(m\) 的任意非空 cylinder \(U=\pi_m^{-1}(A)\)（\(A\neq\varnothing\)）上把 Chebotarev 相对误差压到 \(O(\delta)\) 的尺度，一个（在 \(\lesssim\) 口径下）足够的容量条件是
+\[
+\boxed{\;
+\log |G_m|\ \lesssim\ (1/2+\varepsilon)\,n\log\lambda_m\ -\ \log(1/\delta)\; }.
+\]
+换言之：在统一谱隙口径下，profinite 轴上“可承载的寄存器容量” \(\log|G_m|\) 与“时间步长” \(n\) 之间呈线性上界。
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:pom-profinite-cylinder-effective-n} 的推导过程（见其证明中的显式界）
+\(
+\mathrm{Err}\lesssim |G_m|\,\lambda_m^{-(1/2+\varepsilon)n}
+\)。
+令右端 \(\le \delta\) 并取对数，即得到所示容量上界（把隐含常数吸收进 \(\lesssim\)）。
+证毕。
+\end{proof}
+
+\begin{theorem}[同步扣除的 Chebotarev 容量律]\label{thm:pom-sync-subtracted-chebotarev-capacity}
+固定层级 \(m\) 与两类置信参数 \(\delta_{\mathrm{NULL}},\delta_{\mathrm{Cheb}}\in(0,1)\)。
+沿用同步核的右解析确定化表示与同步时间 \(T_m\)（定义 \ref{def:Ym-sync-time}），并按“地址先于概念值/未同步即无地址”的语义约定把 \(T_m\) 解释为统计型 \(\mathsf{NULL}\) 的消失时刻（备注 \ref{rem:Ym-stat-null-unsync}）。
+\par
+定义同步扣除项
+\[
+n_{\mathrm{sync}}(m,\delta_{\mathrm{NULL}})
+:=
+\begin{cases}
+D_{\mathrm{sync}}(m), & \text{若 }Y_m^{\mathrm{amb}}=\varnothing,\\[6pt]
+\left\lceil \dfrac{1}{\varepsilon_m}\log\dfrac{C_m}{\delta_{\mathrm{NULL}}}\right\rceil,
+& \text{若 }Y_m^{\mathrm{amb}}\neq\varnothing,
+\end{cases}
+\]
+其中 \(D_{\mathrm{sync}}(m)\) 由推论 \ref{cor:Ym-sync-delay}（或更一般由备注 \ref{rem:Ym-amb-empty} 的 DAG 最长路审计口径）给出；
+而第二行的常数 \(C_m,\varepsilon_m\) 来自定理 \ref{thm:Ym-sync-tail} 的指数尾预算。
+并令可用深度
+\[
+n_{\mathrm{eff}}:=\bigl(n-n_{\mathrm{sync}}(m,\delta_{\mathrm{NULL}})\bigr)_+,
+\qquad (x)_+:=\max\{x,0\}.
+\]
+\par
+若该层满足统一谱隙假设
+\(
+\Lambda_m\le \lambda_m^{1/2-\varepsilon_{\mathrm{gap}}}
+\)
+（对某个 \(\varepsilon_{\mathrm{gap}}>0\)），则任何企图在总扫描预算 \(n\) 内同时满足
+\begin{enumerate}
+  \item \textbf{读出定义性：}\(\nu_m(T_m>n_{\mathrm{sync}})\le \delta_{\mathrm{NULL}}\)（从而地址以概率 \(\ge 1-\delta_{\mathrm{NULL}}\) 被前缀唯一化），以及
+  \item \textbf{读出统计清晰度：}对任意非空 cylinder \(U=\pi_m^{-1}(A)\) 把 Chebotarev 相对误差压到 \(\le O(\delta_{\mathrm{Cheb}})\)，
+\end{enumerate}
+都必须把 \(n_{\mathrm{eff}}\) 作为进入 Chebotarev 预算的“可用深度”。等价地，推论 \ref{cor:pom-profinite-cylinder-capacity} 的容量条件发生同步扣除修正：
+\[
+\boxed{\;
+\log |G_m|
+\ \lesssim\
+(1/2+\varepsilon_{\mathrm{gap}})\,n_{\mathrm{eff}}\log\lambda_m
+\ -\
+\log(1/\delta_{\mathrm{Cheb}})
+\;}
+\]
+（隐含常数口径与推论 \ref{cor:pom-profinite-cylinder-capacity} 一致）。
+\par
+\noindent\textbf{可审计性说明（作为结论的一部分）.}
+\begin{enumerate}
+  \item 同步扣除项 \(n_{\mathrm{sync}}\) 在有限确定化图上可直接审计：歧义子图含有向环当且仅当 \(Y_m^{\mathrm{amb}}\neq\varnothing\)，无环则 \(D_{\mathrm{sync}}\) 由最长路 DP 得到（备注 \ref{rem:Ym-amb-empty} 与表 \ref{tab:phi_m_sync_theory}）。
+  \item 同步延迟属于不可空间化时间不变量：它与 residue/prime-register 等正交记录轴的扩展正交，不能通过单纯增加模轴容量消去；因此必须以显式时间扣除项进入任何容量预算（见备注 \ref{rem:pom-time-defect-dichotomy}）。
+\end{enumerate}
+\end{theorem}
+
+\begin{corollary}[Zeckendorf 折叠下的尖锐线性扣除]\label{cor:pom-sync-subtracted-chebotarev-zeckendorf}
+在本文的 Zeckendorf 折叠模型中，当 \(m\ge 3\) 时有 \(Y_m^{\mathrm{amb}}=\varnothing\) 且 \(D_{\mathrm{sync}}(m)=m-1\)（推论 \ref{cor:Ym-sync-delay} 与备注 \ref{rem:Ym-amb-empty}）。
+因此对任意 \(\delta_{\mathrm{NULL}},\delta_{\mathrm{Cheb}}\in(0,1)\)，有
+\[
+n_{\mathrm{eff}}=(n-m+1)_+,
+\]
+从而定理 \ref{thm:pom-sync-subtracted-chebotarev-capacity} 的容量条件退化为尖锐的线性扣除形式
+\[
+\log |G_m|
+\ \lesssim\
+(1/2+\varepsilon_{\mathrm{gap}})\,(n-m+1)_+\log\lambda_m
+\ -\
+\log(1/\delta_{\mathrm{Cheb}}).
+\]
+\end{corollary}
+
+\begin{corollary}[弱可逆情形的两参数预算]\label{cor:pom-sync-subtracted-chebotarev-weak}
+若 \(Y_m^{\mathrm{amb}}\neq\varnothing\)，则为使统计型 \(\mathsf{NULL}\) 在最大熵测度下以概率 \(\le \delta_{\mathrm{NULL}}\) 消失，必须先支付同步预算
+\[
+n_{\mathrm{sync}}(m,\delta_{\mathrm{NULL}})
+=\left\lceil \dfrac{1}{\varepsilon_m}\log\dfrac{C_m}{\delta_{\mathrm{NULL}}}\right\rceil,
+\]
+之后才存在统一的 Chebotarev 统计预算可谈；并且时间侧容量条件以 \(n_{\mathrm{eff}}=(n-n_{\mathrm{sync}})_+\) 的扣除方式耦合两类指数率：\(\varepsilon_m\) 控制定义性清晰度的同步尾速率，而 \(\lambda_m\) 与 \(\varepsilon_{\mathrm{gap}}\) 控制统计清晰度的谱速率（定理 \ref{thm:pom-sync-subtracted-chebotarev-capacity}）。
+\end{corollary}
+
+\subsubsection{\texorpdfstring{$L^2(\widehat{\ZZ})$}{L2(Zhat)} 上的寄存器提升算子：角色直和分解与“统一全部模数”的算子框架}\label{subsec:profinite-operator-l2}
+定理 \ref{thm:pom-profinite-axis} 以“每个有限层 \(G_m\)”为单位给出 Chebotarev 计数与误差口径。
+本小节给出一个更接近 Hilbert--P{\'o}lya 语义的压缩：把所有模数的扭曲通道统一为一个作用在 \(L^2(G_\infty)\) 上的提升算子，并在 Pontryagin 对偶侧把它严格对角化为一族 twist 矩阵。
+
+\paragraph{专门化到素数寄存器轴：\texorpdfstring{$G_\infty=\widehat{\ZZ}$}{G=Zhat}}
+取
+\[
+G_\infty=\widehat{\ZZ}=\varprojlim_m \ZZ/m\ZZ,
+\]
+它是紧阿贝尔群，其 Pontryagin 对偶为离散群
+\[
+\widehat{G_\infty}\cong \QQ/\ZZ,
+\]
+并存在一组标准正交角色基 \(\{\chi_\alpha\}_{\alpha\in\QQ/\ZZ}\subset L^2(\widehat{\ZZ})\)；见正文关于角色基与对偶的讨论，以及附录中同余轴的 DFT 口径。
+
+\paragraph{提升算子}
+设核的状态集合为有限集 \(V\)，并记带权有向边集合为 \(E\subset V\times V\)。
+对每条边 \(e:i\to j\) 赋一个权重 \(w(e)\in\CC\)（例如由输出位势/碰撞势/温度化门给出），并赋一个“寄存器增量”标记
+\(\gamma(e)\in \widehat{\ZZ}\)
+（在有限层 \(\ZZ/m\ZZ\) 上它就是同余更新步；逆极限上由相容性唯一确定）。
+定义 Hilbert 空间
+\[
+\mathcal{H}:=\ell^2(V)\otimes L^2(\widehat{\ZZ}),
+\]
+并定义提升算子 \(T:\mathcal{H}\to\mathcal{H}\) 为
+\[
+\boxed{\ (Tf)_j(x):=\sum_{e:i\to j} w(e)\,f_i\!\bigl(x-\gamma(e)\bigr)\qquad(x\in\widehat{\ZZ})\ }.
+\]
+这正是“有限状态 \(\times\) 紧群平移”型的标准构造：它把有限核的转移与寄存器平移耦合为一个单一算子。
+
+\paragraph{角色分解：一切扭曲通道同时对角化}
+由于 \(\widehat{\ZZ}\) 为紧阿贝尔群，Fourier 变换给出幺正同构
+\[
+L^2(\widehat{\ZZ})\ \cong\ \ell^2(\QQ/\ZZ),
+\]
+并把平移作用对角化为角色乘子。于是 \(T\) 在 Fourier 侧分解为一个\textbf{严格直和}（可视为以计数测度的直积分）：
+\[
+\boxed{\ T\ \simeq\ \bigoplus_{\alpha\in\QQ/\ZZ} M_{\chi_\alpha}\ },
+\]
+其中每个纤维 twist 矩阵 \(M_{\chi}\in\CC^{V\times V}\) 的条目为
+\[
+\boxed{\ (M_\chi)_{ij}:=\sum_{e:i\to j} w(e)\,\chi\!\bigl(\gamma(e)\bigr)\ }.
+\]
+因此“对所有模数/所有角色的扭曲”被统一为同一个算子 \(T\) 的角色分量谱。
+在有限层 \(G_m=\ZZ/m\ZZ\) 上，上式退化为离散傅里叶变换（DFT）下的块对角化，正是定理 \ref{thm:pom-profinite-axis} 与有限层 Chebotarev 估计背后的线性代数机制。
+
+\begin{remark}[Grand Unified Lift：把通道/边界塔并入提升算子纤维]\label{rem:pom-grand-unified-lift}
+上文的 \(T\) 统一的是“同余/模数轴”上的全部扭曲通道。
+若进一步希望把 \((\varphi,\pi,e)\) 三投影通道与多分辨率边界塔一起并入同一算子框架，
+可取一个额外的紧群（或有限群）纤维 \(G_{\mathrm{chan}}\) 来承载这些离散标签，并定义扩展纤维
+\[
+G_\infty^{\mathrm{GUT}}
+:=\widehat{\ZZ}\times G_{\mathrm{chan}},
+\qquad
+\mathcal{H}_{\mathrm{GUT}}:=\ell^2(V)\otimes L^2\!\left(G_\infty^{\mathrm{GUT}}\right).
+\]
+令每条边 \(e:i\to j\) 除携带 \(\gamma(e)\in\widehat{\ZZ}\) 外，再携带一个通道增量 \(\eta(e)\in G_{\mathrm{chan}}\)。
+则对应的提升算子可写为
+\[
+(T_{\mathrm{GUT}}f)_j(x,h)
+:=\sum_{e:i\to j} w(e)\,f_i\!\bigl(x-\gamma(e),\ h\cdot \eta(e)\bigr),
+\qquad (x,h)\in \widehat{\ZZ}\times G_{\mathrm{chan}}.
+\]
+在对偶侧，\(\widehat{\ZZ}\) 的角色分解与 \(G_{\mathrm{chan}}\) 的 Peter--Weyl 分解把它同时块对角化为以 \((\chi,\varrho)\) 标记的有限维扭曲块：
+\[
+T_{\mathrm{GUT}}\ \simeq\ \bigoplus_{\chi\in\widehat{\ZZ}}\ \bigoplus_{\varrho\in\widehat{G_{\mathrm{chan}}}}\ M_{\chi,\varrho},
+\qquad
+(M_{\chi,\varrho})_{ij}:=\sum_{e:i\to j} w(e)\,\chi(\gamma(e))\,\varrho(\eta(e)).
+\]
+于是“大统一”可以在完全有限维、可枚举的谱数据层面表述为：对一组被观测门激活的通道族 \((\chi,\varrho)\)，其谱隙耦合 \(g_{\chi,\varrho}(u)\) 在某一统一点上发生对齐（见小节 \ref{subsec:group-unification-spectral-alignment} 的 minimax 判据）。
+\end{remark}
+
+\begin{remark}[Adelic 异常泛函：局部--整体异常抵消的可证伪统一判据]\label{rem:pom-adelic-anom-functional}
+谱隙对齐（小节 \ref{subsec:group-unification-spectral-alignment}）给出的是指数级慢模的统一口径；
+若希望把“\(E_m\)--\(\mathrm{LIFT}\)”不可交换的\emph{常数级残差}也纳入同一可计算框架，
+可在定义 \ref{def:pom-anom-signature} 的异常签名 \(\mathsf{Anom}_G(K;\theta)\) 之上，对每个有限层（例如素数模轴 \(G_p=\ZZ/p\ZZ\)）引入一个标量化的局部异常强度。
+一种对优化/梯度更友好的选择是
+\[
+A_p(\theta):=\bigl\|\mathsf{Anom}_{G_p}(K;\theta)\bigr\|_{\ell^2}^2
+=\sum_{\chi\in\widehat{G_p}\setminus\{\chi_0\}}\bigl|\log\mathfrak{M}_\chi(\theta)\bigr|^2,
+\]
+其中 \(\chi_0\) 为平凡角色（亦可改用 \(\ell^\infty\) 范数 \(\max_{\chi\ne\chi_0}|\log\mathfrak{M}_\chi(\theta)|\) 作为审计口径）。
+在 profinite 口径 \(G_\infty=\widehat{\ZZ}\) 下取素数截断 \(P\)，定义整体异常泛函
+\[
+\mathcal{A}_{\le P}(\theta):=\sum_{p\le P} w_p\,A_p(\theta),
+\]
+其中权重 \(w_p\) 可取 \(\log p\)、\(p^{-2}\) 等以反映尺度缩放或通道预算。
+于是“跨模数的一致提升/异常抵消”可被表述为一个完全可证伪、且可由脚本直接审计的统一判据：
+若存在 \(\theta^\star\) 使 \(\mathcal{A}_{\le P}(\theta)\) 在 \(\theta^\star\) 附近达到稳定极小（或满足 \(\nabla_\theta\mathcal{A}_{\le P}(\theta^\star)\approx 0\)），
+并且随着截断 \(P\) 增大该最小点及最小值在数值上保持稳定（对截断深度/采样策略鲁棒），
+则可把 \(\theta^\star\) 视为一个“局部--整体的 adelic 平坦点”（即常数级曲率/异常的整体抵消）。
+由于每个 \(A_p(\theta)\) 都可由有限维扭曲块 \(M_\chi\) 的 \(\zeta\)/有限部接口计算得到，上述泛函与稳定性条件可被直接转化为可重复的优化与回归证书。
+\end{remark}
+
+\paragraph{归一化谱与 GRH 语义}
+记平凡通道的 Perron 根为 \(\lambda:=\rho(M_{\mathbf{1}})\)，并对任意角色 \(\chi\) 定义归一化纤维算子
+\[
+U_\chi:=\lambda^{-1/2}M_\chi.
+\]
+令 \(w_{\chi,1},\dots,w_{\chi,|V|}\) 为 \(U_\chi\) 的特征值，则“临界圆”条件为 \(|w_{\chi,i}|=1\)。
+由 \S\ref{subsec:zeta-online-kernel} 的谱--\(s\) 平面字典（命题 \ref{prop:s-plane-spectrum-poles}）以及附录 \ref{app:real-input-40-finite-rh} 的 toy-RH 讨论可知，这等价于把对应极点压到 \(\Re(s)=\tfrac12\)。
+因此核版 GRH 的一个可操作“谱酉化指标”可取
+\[
+\mathcal{E}(\chi):=\max_{1\le i\le |V|}\bigl|\log|w_{\chi,i}|\bigr|,
+\]
+并把“GRH-型断言”理解为：在所关心的角色域/尺度域内，\(\mathcal{E}(\chi)\) 足够小（或在极限中趋于零）。
+
+\paragraph{双尺度障碍与扩散口径}
+当把角色族扩展到 \(\QQ/\ZZ\)（包含任意高阶小角角色）时，“最坏扭曲谱半径比”一般不可能在全部模数上保持统一远离 \(1\) 的界。
+同步核加权情形里，附录已给出 near-coboundary 小角二次律并导出扩散阈值 \(n\asymp m^2\)（推论 \ref{cor:sync-rho-gap-m8-diffusive}）。
+这一现象提示：在 profinite 逆极限语义下，更自然的 GRH/Chebotarev 形式应采用长度 \(n\) 与模数 \(m\) 的双极限尺度（参见猜想 \ref{conj:scaled-kernel-grh-diffusive} 的抽象表述）。

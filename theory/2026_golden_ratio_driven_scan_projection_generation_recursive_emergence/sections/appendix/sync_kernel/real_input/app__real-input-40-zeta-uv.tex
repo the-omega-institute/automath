@@ -1,0 +1,276 @@
+\subsubsection{真实输入核的二维加权 \texorpdfstring{$\zeta(z;u,v)$}{zeta(z;u,v)}：碰撞--输出的 \texorpdfstring{$(2+8)$}{(2+8)} 次闭式分母}\label{app:real-input-40-zeta-uv}
+由命题 \ref{prop:real-input-40-essential-20}，真实输入 $40$ 状态核可表示为 $10$ 状态同步核（状态集 $Q$）与两条 Zeckendorf 输入记忆 $\{0,1\}^2$ 的直积；
+并且同步核对输入和位 $d\in\{0,1,2\}$ 的转移是确定性的，边携带标记 $(d/e)$（$e\in\{0,1\}$ 为输出位）。
+\par
+本小节在该标记系统上引入二维联合势：同时统计碰撞事件 $d=2$（等价于该步输入对 $(x,y)=(1,1)$）与输出位 $e=1$。
+
+\paragraph{定义（二维权重与加权矩阵）}
+对每条允许边 $(d/e)$ 赋权
+\[
+w(d/e):=u^{\mathbf{1}_{\{d=2\}}}v^{e},
+\]
+其中 $u$ 统计碰撞次数，$v$ 统计输出 $1$ 的次数。
+记相应的加权邻接矩阵为 $M_{u,v}$，并定义动力学行列式与二维加权 Artin--Mazur $\zeta$ 函数
+\[
+\Delta(z;u,v):=\det(I-zM_{u,v}),
+\qquad
+\zeta(z;u,v):=\frac{1}{\Delta(z;u,v)}.
+\]
+
+\begin{theorem}[二维加权行列式的 \texorpdfstring{$(2+8)$}{(2+8)} 次闭式分解]\label{thm:real-input-40-det-uv-2plus8}
+在真实输入 $40$ 状态核上，$\Delta(z;u,v)$ 在形式幂级数环（亦即 $\ZZ[u,v][[z]]$）中具有显式因子分解
+\[
+\boxed{\ \Delta(z;u,v)=(vz^{2}-1)\,P_{8}(z;u,v)\ },
+\]
+其中 $P_{8}$ 为关于 $z$ 的 $8$ 次多项式：
+\[
+\boxed{
+\begin{aligned}
+P_8(z;u,v)=\;&(u^2 v^4-u^2 v^3)z^8\\
+&+(-u^2 v^3-3u v^3+3u v^2)z^7\\
+&+(u^2 v^3-u^2 v^2+3u v^2)z^6\\
+&+(u^2 v^2+4u v^2-u v-2v^2)z^5\\
+&+(-3u v^2+u v-6v^2)z^4\\
+&+(-u v-v)z^3\\
+&+(u v+5v)z^2\\
+&+z-1.
+\end{aligned}}
+\]
+可复现核验见脚本 \texttt{scripts/exp\_sync\_kernel\_real\_input\_40\_zeta\_uv.py}（已纳入 \texttt{scripts/run\_all.py} 管线）。
+\end{theorem}
+
+\begin{corollary}[参数刚性谱支 \texorpdfstring{$\pm\sqrt v$}{±sqrt(v)}]\label{cor:real-input-40-zeta-uv-sqrtv-eigs}
+若 $v>0$，则 $M_{u,v}$ 的谱中对任意 $u$ 恒包含两条显式特征值
+\[
+\boxed{\ \lambda_\pm=\pm\sqrt v\ }.
+\]
+因此对任意 $n\ge 1$，迹中必含完全显式的“偶周期项”
+\[
+\Tr(M_{u,v}^{n})
+=\bigl(\sqrt v\bigr)^n+\bigl(-\sqrt v\bigr)^n+\text{\rm(来自 $P_8$ 的其余谱项)}
+=
+\begin{cases}
+2v^{n/2}+\cdots,& n\ \text{为偶数},\\
+0+\cdots,& n\ \text{为奇数}.
+\end{cases}
+\]
+\end{corollary}
+\begin{proof}
+由
+\(
+\Delta(z;u,v)=\prod_i(1-z\nu_i)
+\)
+（$\nu_i$ 为 $M_{u,v}$ 的特征值，按重数计），因子 $vz^2-1=-(1-z\sqrt v)(1+z\sqrt v)$ 强迫 $\pm\sqrt v$ 必为谱点。
+迹公式由特征值幂和给出。证毕。
+\end{proof}
+
+\begin{theorem}[rigid branches 与 core 的精确碰撞曲线]\label{thm:real-input-40-zeta-uv-rigid-core-collision-curves}
+在正参数区 \((u,v)\in\RR_{>0}^2\) 上，记
+\[
+s:=\sqrt v>0.
+\]
+则对定理 \ref{thm:real-input-40-det-uv-2plus8} 中的 \(P_8(z;u,v)\)，成立显式代入公式
+\[
+\boxed{\;
+P_8\!\left(\frac1s;u,s^2\right)
+=
+\frac{2(s+1)}{s^3}
+\Bigl[s(s-1)(u^2-u)+u-s^2\Bigr],
+\;}
+\]
+\[
+\boxed{\;
+P_8\!\left(-\frac1s;u,s^2\right)
+=
+\frac{2(s-1)}{s^3}
+\Bigl[s(s+1)(u^2-u)+u-s^2\Bigr].
+\;}
+\]
+因此两条 rigid branches
+\[
+\lambda_\pm=\pm\sqrt v
+\]
+与 core 谱的碰撞曲线在正参数区上完全由下列代数方程刻画：
+\[
+\mathcal C_+:\quad s(s-1)(u^2-u)+u-s^2=0,
+\]
+\[
+\mathcal C_-:\quad v=1
+\quad\text{或}\quad
+s(s+1)(u^2-u)+u-s^2=0.
+\]
+更进一步，在正参数区中，两条 rigid branches 同时与 core 碰撞的唯一点为
+\[
+\boxed{\;
+(u,v)=(1,1).\;}
+\]
+\end{theorem}
+\begin{proof}
+将定理 \ref{thm:real-input-40-det-uv-2plus8} 的显式多项式 \(P_8(z;u,v)\) 直接代入
+\[
+z=\pm\frac1s,\qquad v=s^2
+\]
+并整理，即得前两条盒装恒等式。
+
+由推论 \ref{cor:real-input-40-zeta-uv-sqrtv-eigs}，\(\lambda_+=\sqrt v\) 与 core 碰撞当且仅当
+\[
+P_8\!\left(\frac1{\sqrt v};u,v\right)=0,
+\]
+故等价于 \(\mathcal C_+\)。同理，\(\lambda_-=-\sqrt v\) 与 core 碰撞当且仅当
+\[
+P_8\!\left(-\frac1{\sqrt v};u,v\right)=0,
+\]
+这等价于 \(s=1\) 或第二个括号为零，即 \(\mathcal C_-\)。
+
+若 \((u,s)\) 同时满足两条非平凡分支方程，则两式相减得到
+\[
+2su(u-1)=0.
+\]
+在正参数区 \(s>0,u>0\) 中，故必有 \(u=1\)。代回 \(\mathcal C_+\) 得
+\[
+1-s^2=0,
+\]
+即 \(s=1\)，从而 \(v=1\)。若走 \(\mathcal C_-\) 的平面分支 \(v=1\)，则 \(\mathcal C_+\) 直接化为 \(u-1=0\)。因此唯一正参数双碰撞点为 \((u,v)=(1,1)\)。证毕。
+\end{proof}
+
+\begin{theorem}[core 在 \texorpdfstring{$z=\pm1$}{z=±1} 的整级共振面与唯一正双共振点]\label{thm:real-input-40-zeta-uv-core-zpmone-resonance-surfaces}
+在同一二维模型中，core 因子 \(P_8(z;u,v)\) 在 \(z=\pm1\) 处满足
+\[
+\boxed{\;
+P_8(1;u,v)
+=
+v\bigl(u^2v^3-u^2v^2-3uv^2+7uv-8v+4\bigr),
+\;}
+\]
+\[
+\boxed{\;
+P_8(-1;u,v)
+=
+(v-1)(uv-1)(uv^2+2uv+4v-2).
+\;}
+\]
+因此，core 在 \(z=1\) 的整级共振面为
+\[
+\mathcal R_+:\quad
+u^2v^3-u^2v^2-3uv^2+7uv-8v+4=0,
+\]
+而在 \(z=-1\) 的整级共振面为
+\[
+\mathcal R_-:\quad
+v=1
+\quad\text{或}\quad
+uv=1
+\quad\text{或}\quad
+uv^2+2uv+4v-2=0.
+\]
+更进一步，正参数区中 core 同时具有 \(+1\) 与 \(-1\) 两个本征值的唯一点为
+\[
+\boxed{\;
+(u,v)=(1,1).\;}
+\]
+\end{theorem}
+\begin{proof}
+将定理 \ref{thm:real-input-40-det-uv-2plus8} 的显式 \(P_8(z;u,v)\) 分别代入 \(z=1\) 与 \(z=-1\)，并因式分解，即得两条盒装恒等式。
+
+若 \((u,v)\in\RR_{>0}^2\) 同时满足 \(P_8(1;u,v)=P_8(-1;u,v)=0\)，则必落在 \(\mathcal R_+\cap\mathcal R_-\)。
+
+若取分支 \(v=1\)，则
+\[
+P_8(1;u,1)=4(u-1),
+\]
+故必有 \(u=1\)。
+
+若取分支 \(uv=1\)，即 \(u=1/v\)，代入 \(\mathcal R_+\) 的多项式得
+\[
+u^2v^3-u^2v^2-3uv^2+7uv-8v+4
+=
+-10(v-1),
+\]
+故仍只得 \(v=1\)，进而 \(u=1\)。
+
+若取第三支
+\[
+uv^2+2uv+4v-2=0,
+\]
+则将其与 \(\mathcal R_+\) 关于 \(u\) 消元，得到结果式
+\[
+\operatorname{Res}_u\!\bigl(
+u^2v^3-u^2v^2-3uv^2+7uv-8v+4,\,
+uv^2+2uv+4v-2
+\bigr)
+=
+10v^2(v-4)(v+1)(2v-1).
+\]
+在正参数区中，仅可能有 \(v=4\) 或 \(v=\tfrac12\)。回代第三支方程分别得到
+\[
+u=-\frac{7}{12}
+\qquad\text{或}\qquad
+u=0,
+\]
+均不属于 \(\RR_{>0}\)。故该分支在正参数区无解。
+
+综上，唯一正参数双共振点为 \((u,v)=(1,1)\)。证毕。
+\end{proof}
+
+\begin{remark}[有效谱维数与零特征值重数]\label{rem:real-input-40-zeta-uv-effective-spectrum}
+定理 \ref{thm:real-input-40-det-uv-2plus8} 表明 $\Delta(z;u,v)$ 在 $z$ 方向次数至多为 $10$。
+因此 $M_{u,v}$ 的非零特征值（按代数重数计）至多为 $10$；等价地，$M_{u,v}$ 至少具有 $30$ 个零特征值。
+在 $v=1$ 等低维参数集合上，$P_8$ 的首项系数退化，次数可进一步下降，对应更多零特征方向（与输出位势一参数情形 $v=1$ 的“激活分支”退化一致，见注 \ref{rem:real-input-40-zero-activation}）。
+\end{remark}
+
+\begin{proposition}[二维压力面的 $8$ 次代数曲线（无需再做 \texorpdfstring{$40\times 40$}{40x40} 本征计算）]\label{prop:real-input-40-zeta-uv-pressure-degree8}
+设 $u>0,v>0$，并记 $\lambda(u,v):=\rho(M_{u,v})$ 为 Perron--Frobenius 主特征值。
+令
+\[
+Q_8(\Lambda;u,v):=-\Lambda^8 P_8(\Lambda^{-1};u,v)\in\ZZ[\Lambda,u,v].
+\]
+则 $\lambda(u,v)$ 为 $Q_8(\Lambda;u,v)=0$ 的最大正实根，亦即满足显式 $8$ 次方程
+\[
+\boxed{
+\begin{aligned}
+0=;&\Lambda^8-\Lambda^7-(uv+5v)\Lambda^6+(uv+v)\Lambda^5\\
+&+(3uv^2-uv+6v^2)\Lambda^4+(-u^2v^2-4uv^2+uv+2v^2)\Lambda^3\\
+&+(-u^2v^3+u^2v^2-3uv^2)\Lambda^2+(u^2v^3+3uv^3-3uv^2)\Lambda\\
+&-u^2v^4+u^2v^3.
+\end{aligned}}
+\]
+从而二维热力学压力（自由能）可写为
+\[
+\boxed{\ \mathcal P(u,v)=\log\lambda(u,v)\ }.
+\]
+因此在该二维势族下，典型密度、协方差密度以及更高阶混合累积量均可通过对 $Q_8(\lambda(u,v);u,v)=0$ 作隐式微分得到封闭表达（分母仅涉及 $\partial_\Lambda Q_8$）。
+\end{proposition}
+
+\begin{proposition}[主极点留数常数的代数闭式]\label{prop:real-input-40-zeta-uv-residue}
+设 $u>0,v>0$ 且 $\lambda(u,v)^2\neq v$（即 Perron 根不落在刚性分支 $\pm\sqrt v$ 上）。
+令主极点 $z_\star(u,v):=\lambda(u,v)^{-1}$，并定义
+\[
+C(u,v):=\lim_{z\to z_\star(u,v)}(1-\lambda(u,v)z)\,\zeta(z;u,v).
+\]
+则有闭式
+\[
+\boxed{\ C(u,v)=\frac{\lambda(u,v)^9}{\bigl(\lambda(u,v)^2-v\bigr)\,\partial_\Lambda Q_8(\lambda(u,v);u,v)}\ }.
+\]
+\end{proposition}
+
+\begin{proposition}[迹与 primitive 的有限阶递推：从 \texorpdfstring{$40$}{40} 维降到 \texorpdfstring{$10$}{10} 维]\label{prop:real-input-40-zeta-uv-recurrence}
+固定 $(u,v)$，令
+\(
+a_n(u,v):=\Tr(M_{u,v}^n)
+\)。
+由 $\Delta(z;u,v)$ 在 $z$ 方向次数至多为 $10$（定理 \ref{thm:real-input-40-det-uv-2plus8}），序列 $\{a_n(u,v)\}_{n\ge 1}$ 满足常系数线性递推，阶数至多为 $10$。
+从而加权 primitive 轨道系数（或多项式）
+\(
+p_n(u,v)
+\)
+可由 Möbius 反演在近线性时间内递推恢复。
+\end{proposition}
+
+\begin{remark}[arity-charge 切片的三因子分解作为特例]\label{rem:real-input-40-zeta-uv-chi-specialization}
+沿 arity-charge 一参数切片 $u=q^{-1},v=q$（每步权为 $q^{e-\mathbf{1}_{\{d=2\}}}$），
+上述二维闭式退化为定理 \ref{thm:real-input-40-arity-charge-det-closed} 的三因子分解
+\(
+\det(I-zM(q))=(z+1)(1-qz^2)Q_7(z,q)
+\)，
+并由此给出次数 $7$ 的 Perron 代数压力曲线与主极点留数闭式（命题 \ref{prop:real-input-40-arity-charge-residue}）。
+\end{remark}

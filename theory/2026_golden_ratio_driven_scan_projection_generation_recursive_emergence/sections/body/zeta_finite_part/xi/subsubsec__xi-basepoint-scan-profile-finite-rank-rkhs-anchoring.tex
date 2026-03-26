@@ -1,0 +1,599 @@
+\begin{theorem}[轴外零点扫描剖面的有限秩核化：从边界标量到 \texorpdfstring{$\kappa$}{kappa} 维再现核 Hilbert 空间]\label{thm:xi-basepoint-scan-finite-rank-rkhs}
+沿用定义 \ref{def:xi-basepoint-scan-profile} 与命题 \ref{prop:xi-basepoint-depth-closed-form} 的记号。
+记
+\[
+a_k:=1+\delta_k,\qquad
+p_k:=\gamma_k-\mathrm{i}a_k\in\CC_{-},\qquad
+w_k:=4\delta_k\qquad(1\le k\le \kappa).
+\]
+定义特征映射 \(v:\RR\to\CC^{\kappa}\) 为
+\[
+v(x)_k:=\frac{\sqrt{w_k}}{x-p_k},
+\]
+并定义核
+\[
+K(x,y):=\langle v(x),v(y)\rangle_{\CC^{\kappa}}
+=\sum_{k=1}^{\kappa}\frac{w_k}{(x-p_k)(y-\overline{p_k})}
+=\sum_{k=1}^{\kappa}\frac{w_k}{(x-\gamma_k+\mathrm{i}a_k)(y-\gamma_k-\mathrm{i}a_k)}.
+\]
+则 \(K\) 为正定核，且其对角严格等于扫描剖面：
+\[
+\boxed{\;K(x,x)=H(x)\qquad(x\in\RR).\;}
+\]
+因此扫描剖面 \(H\) 可被精确核化为一个有限秩核的对角。
+并且 \(\mathcal{H}:=\overline{\Span}\{v(x):x\in\RR\}\subseteq\CC^\kappa\) 在自然内积下为 \(\kappa\)-维 Hilbert 空间（等价地：\(K\) 为一维参数生成的 \(\kappa\)-维 RKHS 的再现核）。
+\end{theorem}
+\begin{proof}
+由定义 \(K(x,y)=\langle v(x),v(y)\rangle\)，对任意有限点集 \(\{x_i\}_{i=1}^{n}\subset\RR\) 与系数 \(\{c_i\}_{i=1}^{n}\subset\CC\) 有
+\[
+\sum_{i,j=1}^{n}c_i\overline{c_j}K(x_i,x_j)
+=\left\|\sum_{i=1}^{n}c_i v(x_i)\right\|_{\CC^\kappa}^2\ \ge\ 0,
+\]
+故 \(K\) 正定。
+对角恒等式由 \(|x-p_k|^2=(x-\gamma_k)^2+a_k^2\) 直接给出：
+\[
+K(x,x)=\sum_{k=1}^{\kappa}\frac{w_k}{|x-p_k|^2}
+=\sum_{k=1}^{\kappa}\frac{4\delta_k}{(x-\gamma_k)^2+(1+\delta_k)^2}
+=H(x).
+\]
+最后，为证 \(\dim\mathcal{H}=\kappa\)，取任意 \(\kappa\) 个互异实点 \(x_1,\dots,x_\kappa\)。
+矩阵 \(\bigl(\frac{1}{x_i-p_k}\bigr)_{1\le i,k\le\kappa}\) 为 Cauchy 矩阵，其行列式由 Cauchy 恒等式严格非零（因 \(x_i\in\RR\)、\(p_k\in\CC_{-}\) 互不相等），故 \(\{v(x_i)\}_{i=1}^{\kappa}\) 线性无关并张成 \(\CC^\kappa\)。
+从而 \(\mathcal{H}=\CC^\kappa\)。
+将 \(K\) 视作特征映射 \(v\) 的内积核，即得到相应的 \(\kappa\)-维 RKHS 描述。证毕。
+\end{proof}
+
+\begin{proposition}[扫描剖面与 Cauchy 极点骨架的核唯一性]\label{prop:xi-basepoint-scan-kernel-uniqueness}
+沿用定理 \ref{thm:xi-basepoint-scan-finite-rank-rkhs} 的记号，并令扫描剖面
+\(
+H(x)=\sum_{k=1}^{\kappa}\frac{w_k}{|x-p_k|^2}
+\)。
+设给定矩阵 \(C=(c_{k\ell})\in\CC^{\kappa\times\kappa}\) 并定义核
+\[
+\widetilde K(x,y):=\sum_{k,\ell=1}^{\kappa}\frac{c_{k\ell}}{(x-p_\ell)(y-\overline{p_k})}\qquad(x,y\in\RR).
+\]
+若对所有 \(x\in\RR\) 有对角一致性 \(\widetilde K(x,x)=H(x)\)，则必有
+\[
+C=\mathrm{diag}(w_1,\dots,w_\kappa),
+\qquad
+\widetilde K(x,y)=\sum_{k=1}^{\kappa}\frac{w_k}{(x-p_k)(y-\overline{p_k})}=K(x,y).
+\]
+此外，若 \(C\) 为 Hermite 半正定矩阵，则 \(\widetilde K\) 为正定核；当 \(w_k>0\) 时，该核秩为 \(\kappa\)。
+\end{proposition}
+\begin{proof}
+设 \(W:=\mathrm{diag}(w_1,\dots,w_\kappa)\) 并令 \(D:=C-W\)。
+由对角一致性，得到对一切 \(x\in\RR\) 的有理恒等式
+\[
+0=\widetilde K(x,x)-K(x,x)
+=\sum_{k,\ell=1}^{\kappa}\frac{D_{k\ell}}{(x-p_\ell)(x-\overline{p_k})}.
+\]
+右端为关于复变量 \(z\) 的有理函数，因其在实轴上一致为零，故在 \(\CC\) 上恒等为零。
+取该有理函数在 \(z=p_j\) 处的留数（\(1\le j\le \kappa\)）得到
+\[
+0=\operatorname*{Res}_{z=p_j}\sum_{k,\ell=1}^{\kappa}\frac{D_{k\ell}}{(z-p_\ell)(z-\overline{p_k})}
+=\sum_{k=1}^{\kappa}\frac{D_{kj}}{p_j-\overline{p_k}}.
+\]
+令 \(M\in\CC^{\kappa\times\kappa}\) 为 Cauchy 矩阵 \(M_{kj}:=\frac{1}{p_j-\overline{p_k}}\)。
+由于 \(\{p_j\}\subset\CC_{-}\) 与 \(\{\overline{p_k}\}\subset\CC_{+}\) 互异，Cauchy 行列式恒等式给出 \(\det M\ne 0\)，故每个列向量 \((D_{kj})_{k}\) 必为零，从而 \(D=0\)，即 \(C=W\)。
+\par
+最后一段由标准 Gram 表示给出：若 \(C\succeq 0\)，则 \(\widetilde K(x,y)=\langle C^{1/2}u(x),C^{1/2}u(y)\rangle\)（其中 \(u(x)_k=(x-p_k)^{-1}\)）为正定核。
+当 \(w_k>0\) 时 \(C=W\) 正定，结合定理 \ref{thm:xi-basepoint-scan-finite-rank-rkhs} 证明中 Cauchy 矩阵非退化性，可得秩为 \(\kappa\)。证毕。
+\end{proof}
+
+\begin{proposition}[锚定行列式的 Cauchy--Vandermonde 闭式：满秩锚集下的完全显式分解]\label{prop:xi-basepoint-scan-anchor-det-cauchy-vandermonde}
+在定理 \ref{thm:xi-basepoint-scan-finite-rank-rkhs} 的设定下，取互异实锚点集
+\(
+A=\{x_1,\dots,x_n\}\subset\RR
+\)
+并令 \(V\in\CC^{n\times\kappa}\) 为
+\[
+V_{ik}:=v(x_i)_k=\frac{\sqrt{w_k}}{x_i-p_k}.
+\]
+记其 Gram 矩阵
+\[
+G_A:=(K(x_i,x_j))_{1\le i,j\le n}=VV^\ast.
+\]
+则对任意 \(n\le \kappa\) 有严格的 Cauchy--Binet 展开
+\[
+\boxed{\;
+\det G_A
+=\sum_{\substack{I\subseteq\{1,\dots,\kappa\}\\ |I|=n}}
+\Bigl(\prod_{k\in I}w_k\Bigr)\cdot
+\left|\det\!\left(\frac{1}{x_i-p_k}\right)_{\substack{1\le i\le n\\ k\in I}}\right|^2\; }.
+\]
+特别地，当 \(n=\kappa\)（满秩锚定）时，
+\[
+\det G_A=\Bigl(\prod_{k=1}^{\kappa}w_k\Bigr)\cdot
+\left|\det\!\left(\frac{1}{x_i-p_k}\right)_{1\le i,k\le\kappa}\right|^2
+=4^\kappa\Bigl(\prod_{k=1}^{\kappa}\delta_k\Bigr)\,
+\frac{|\Delta(X)|^2\,|\Delta(P)|^2}{\prod_{i,k}|x_i-p_k|^2},
+\]
+其中 \(\Delta(X):=\prod_{1\le i<j\le \kappa}(x_j-x_i)\)，\(\Delta(P):=\prod_{1\le i<j\le \kappa}(p_j-p_i)\)。
+\end{proposition}
+\begin{proof}
+由 \(G_A=VV^\ast\)，对 \(n\le\kappa\) 应用 Cauchy--Binet 得
+\[
+\det(VV^\ast)
+=\sum_{|I|=n}\bigl|\det(V_{(:,I)})\bigr|^2.
+\]
+并且 \(V_{(:,I)}=\bigl(\frac{1}{x_i-p_k}\bigr)_{k\in I}\cdot \mathrm{diag}(\sqrt{w_k})_{k\in I}\)，故
+\(
+|\det(V_{(:,I)})|^2
+=(\prod_{k\in I}w_k)\cdot\bigl|\det(\frac{1}{x_i-p_k})\bigr|^2
+\)，得到第一式。
+\par
+当 \(n=\kappa\) 时，Cauchy 行列式恒等式给出
+\[
+\det\!\left(\frac{1}{x_i-p_k}\right)_{1\le i,k\le\kappa}
+=\frac{\Delta(X)\Delta(P)}{\prod_{i,k}(x_i-p_k)}.
+\]
+取模平方并代入 \(w_k=4\delta_k\) 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[满秩锚定行列式的结果式表达：分母等于 \texorpdfstring{$\prod_k|y(p_k)|^2$}{prod|y(pk)|^2}]\label{cor:xi-basepoint-scan-anchor-det-resultant}
+在命题 \ref{prop:xi-basepoint-scan-anchor-det-cauchy-vandermonde} 的满秩情形 \(n=\kappa\) 下，
+令锚多项式
+\[
+y(z):=\prod_{i=1}^{\kappa}(z-x_i)
+\qquad(\text{首一，且根两两互异}).
+\]
+并令极点多项式
+\[
+\mathcal{A}(z):=\prod_{k=1}^{\kappa}(z-p_k)(z-\overline{p_k})\in\RR[z].
+\]
+定义结果式
+\(
+\operatorname{Res}(y,\mathcal{A}):=\prod_{\mathcal{A}(\zeta)=0}y(\zeta)
+\)
+（按重数计）。
+则有严格恒等式
+\[
+\boxed{\;
+\operatorname{Res}(y,\mathcal{A})
+=\prod_{k=1}^{\kappa}y(p_k)y(\overline{p_k})
+=\prod_{k=1}^{\kappa}|y(p_k)|^{2}\ >\ 0\;}
+\]
+并且
+\[
+\boxed{\;
+\det G_A
+=\Bigl(\prod_{k=1}^{\kappa}w_k\Bigr)\,
+\frac{|\Delta(X)|^2\,|\Delta(P)|^2}{\operatorname{Res}(y,\mathcal{A})}\; }.
+\]
+\end{corollary}
+\begin{proof}
+由定义，
+\(
+\operatorname{Res}(y,\mathcal{A})
+=\prod_{k=1}^{\kappa}y(p_k)y(\overline{p_k})
+\)。
+又因 \(y\in\RR[z]\)，有 \(y(\overline{p_k})=\overline{y(p_k)}\)，故该积等于 \(\prod_k|y(p_k)|^2\) 且严格为正（因 \(p_k\notin\RR\) 使 \(y(p_k)\ne 0\)）。
+\par
+另一方面，由命题 \ref{prop:xi-basepoint-scan-anchor-det-cauchy-vandermonde} 的满秩闭式
+\[
+\det G_A=\Bigl(\prod_{k=1}^{\kappa}w_k\Bigr)\,
+\frac{|\Delta(X)|^2\,|\Delta(P)|^2}{\prod_{i,k}|x_i-p_k|^2}.
+\]
+注意
+\(
+\prod_{i,k}|x_i-p_k|^2
+=\prod_{k=1}^{\kappa}\prod_{i=1}^{\kappa}|x_i-p_k|^2
+=\prod_{k=1}^{\kappa}|y(p_k)|^2
+=\operatorname{Res}(y,\mathcal{A})
+\)，代回即得。证毕。
+\end{proof}
+
+\begin{proposition}[主角分解：锚定互信息的精确几何意义与两点分离度的正弦表示]\label{prop:xi-basepoint-scan-anchor-principal-angles}
+沿用命题 \ref{prop:xi-basepoint-scan-anchor-det-cauchy-vandermonde} 的设定。
+对 \(x_i\in A\) 令
+\[
+u_i:=\frac{v(x_i)}{\|v(x_i)\|},\qquad
+\|v(x_i)\|^2=K(x_i,x_i)=H(x_i),
+\]
+并设相关矩阵 \(R_A:=(\langle u_i,u_j\rangle)_{1\le i,j\le n}\)。
+则
+\[
+\boxed{\;
+\det G_A=\Bigl(\prod_{i=1}^{n}H(x_i)\Bigr)\det R_A\; }.
+\]
+若对 \(\{u_i\}\) 作 Gram--Schmidt 正交化，记 \(\theta_j\in(0,\pi/2]\) 为 \(u_j\) 与 \(\Span\{u_1,\dots,u_{j-1}\}\) 的主角（\(2\le j\le n\)），则
+\[
+\boxed{\;
+\det R_A=\prod_{j=2}^{n}\sin^2\theta_j,\qquad
+\log\det G_A=\sum_{i=1}^{n}\log H(x_i)+2\sum_{j=2}^{n}\log(\sin\theta_j)\; }.
+\]
+特别地，当 \(n=2\) 时，
+\[
+\det R_A=1-|\langle u_1,u_2\rangle|^2=\sin^2\theta_2.
+\]
+\end{proposition}
+\begin{proof}
+由 \(v(x_i)=\|v(x_i)\|u_i=\sqrt{H(x_i)}\,u_i\) 得 \(G_A=DR_AD\)，其中 \(D=\mathrm{diag}(\sqrt{H(x_1)},\dots,\sqrt{H(x_n)})\)。
+取行列式即得第一式。
+\par
+对 \(\{u_i\}\) 作 Gram--Schmidt，记 \(d_j\) 为 \(u_j\) 到 \(\Span\{u_1,\dots,u_{j-1}\}\) 的正交距离，则 \(\det R_A=\prod_{j=1}^{n}d_j^2\)（Gram 行列式等于正交化后对角元素平方乘积），且 \(d_1=1\)、\(d_j=\sin\theta_j\)（\(j\ge 2\)）。
+代入即得所示分解；两点情形为直接计算。证毕。
+\end{proof}
+
+\begin{corollary}[近极大锚定的角度集中：行列式亏损控制“非正交事件”的比例]\label{cor:xi-basepoint-scan-anchor-angle-concentration}
+沿用命题 \ref{prop:xi-basepoint-scan-anchor-principal-angles} 的记号。
+若
+\[
+\det G_A\ \ge\ e^{-\varepsilon}\prod_{i=1}^{n}H(x_i)\qquad(\varepsilon\ge 0),
+\]
+等价于 \(\det R_A\ge e^{-\varepsilon}\)，则对任意 \(\eta\in(0,1)\)，至少有 \((1-\eta)(n-1)\) 个指标 \(j\in\{2,\dots,n\}\) 满足
+\[
+\boxed{\;
+\sin^2\theta_j\ \ge\ \exp\!\Bigl(-\frac{\varepsilon}{\eta(n-1)}\Bigr)\; }.
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:xi-basepoint-scan-anchor-principal-angles}，有 \(\prod_{j=2}^{n}\sin^2\theta_j=\det R_A\ge e^{-\varepsilon}\)，取对数得
+\[
+\sum_{j=2}^{n}-\log(\sin^2\theta_j)\le \varepsilon.
+\]
+若有超过 \(\eta(n-1)\) 个 \(j\) 满足 \(-\log(\sin^2\theta_j)>\varepsilon/(\eta(n-1))\)，则上式左端严格大于 \(\varepsilon\)，矛盾。
+故除至多 \(\eta(n-1)\) 个异常指标外，其余皆满足所示下界。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$\mathrm{PSL}(2,\RR)$}{PSL(2,R)} 共变性：扫描核与锚定行列式的严格 Möbius 变换律]\label{prop:xi-basepoint-scan-psl2r-covariance}
+在定理 \ref{thm:xi-basepoint-scan-finite-rank-rkhs} 的设定下，取 Möbius 变换
+\[
+m(z)=\frac{az+b}{cz+d}\qquad(a,b,c,d\in\RR,\ ad-bc>0),
+\]
+其将上半平面保向映到自身。
+令 \(x_i':=m(x_i)\) 与 \(p_k':=m(p_k)\)。
+定义变换后的权重
+\[
+w_k':=w_k\cdot\frac{(ad-bc)^2}{|cp_k+d|^2}.
+\]
+以 \(\{(p_k',w_k')\}\) 生成变换后特征映射 \(v'\)、核 \(K'\) 与 Gram 矩阵 \(G_{A'}'\)。
+则对所有 \(x,y\in\RR\) 有严格共变关系
+\[
+\boxed{\;
+K'(m(x),m(y))=(cx+d)(cy+d)\,K(x,y)\; }.
+\]
+从而对 \(A=\{x_1,\dots,x_n\}\) 有
+\[
+\boxed{\;
+\det G_{A'}'=\Bigl(\prod_{i=1}^{n}(cx_i+d)^2\Bigr)\det G_A\; }.
+\]
+并且归一化相关矩阵 \(R_A\)（命题 \ref{prop:xi-basepoint-scan-anchor-principal-angles}）在该变换下不变，从而由 \(\det R_A\) 与主角序列 \(\{\theta_j\}\) 所定义的“纯角度信息”是 \(\mathrm{PSL}(2,\RR)\)-不变量。
+\end{proposition}
+\begin{proof}
+恒等式
+\[
+\frac{1}{m(x)-m(p)}=\frac{(cx+d)(cp+d)}{ad-bc}\cdot\frac{1}{x-p}
+\]
+对一切 \(x\neq p\) 成立。
+取 \(p=p_k\) 并乘以 \(\sqrt{w_k'}\) 得
+\[
+\frac{\sqrt{w_k'}}{m(x)-m(p_k)}
+=(cx+d)\cdot \frac{cp_k+d}{|cp_k+d|}\cdot \frac{\sqrt{w_k}}{x-p_k}.
+\]
+因此存在对角酉矩阵 \(U=\mathrm{diag}\bigl((cp_k+d)/|cp_k+d|\bigr)\) 使对一切 \(x\in\RR\) 有
+\(
+v'(m(x))=(cx+d)\,U\,v(x)
+\)。
+取内积并用 \(U\) 的酉性即得核的共变式；Gram 行列式缩放由 \(G_{A'}'=D G_A D\)（\(D=\mathrm{diag}(cx_i+d)\)）立得。
+最后，相关矩阵在左右公共缩放下不变，故主角与 \(\det R_A\) 不变。证毕。
+\end{proof}
+
+\begin{proposition}[满秩锚定的驻点方程：实轴电荷--复极点平衡的显式系统]\label{prop:xi-basepoint-scan-full-rank-anchor-critical-equations}
+在命题 \ref{prop:xi-basepoint-scan-anchor-det-cauchy-vandermonde} 的满秩情形 \(n=\kappa\) 下，
+将 \(\det G_A\) 视为互异实变量 \((x_1,\dots,x_\kappa)\) 的函数。
+若 \(A\) 为开域内的临界点（对每个 \(x_i\) 的偏导为零），则每个 \(i=1,\dots,\kappa\) 满足平衡方程
+\[
+\boxed{\;
+\sum_{\substack{j=1\\ j\ne i}}^{\kappa}\frac{1}{x_i-x_j}
+=\sum_{k=1}^{\kappa}\Re\frac{1}{x_i-p_k}
+=\sum_{k=1}^{\kappa}\frac{x_i-\gamma_k}{(x_i-\gamma_k)^2+a_k^2}\; }.
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:xi-basepoint-scan-anchor-det-cauchy-vandermonde} 的闭式，
+\[
+\log\det G_A=\mathrm{const}+2\log|\Delta(X)|-2\sum_{i,k}\log|x_i-p_k|,
+\]
+其中常数项与 \(\{p_k,w_k\}\) 无关。
+对 \(x_i\) 求导得
+\(
+\partial_{x_i}\log|\Delta(X)|=\sum_{j\ne i}\frac{1}{x_i-x_j}
+\)
+且
+\(
+\partial_{x_i}\log|x_i-p_k|=\Re\frac{1}{x_i-p_k}
+\)。
+令 \(\partial_{x_i}\log\det G_A=0\) 即得第一条等式；最后一式为实部展开。证毕。
+\end{proof}
+
+\begin{proposition}[锚定临界构型的 Heine--Stieltjes 型微分方程：Van Vleck 多项式的存在唯一性]\label{prop:xi-basepoint-scan-heine-stieltjes-ode}
+在命题 \ref{prop:xi-basepoint-scan-full-rank-anchor-critical-equations} 的满秩情形 \(n=\kappa\) 下，
+设锚点 \(X=\{x_1,\dots,x_\kappa\}\subset\RR\) 两两互异，并令锚多项式
+\(
+y(z):=\prod_{j=1}^{\kappa}(z-x_j)
+\)
+为首一多项式。
+令极点多项式
+\[
+\mathcal{A}(z):=\prod_{k=1}^{\kappa}(z-p_k)(z-\overline{p_k})\in\RR[z].
+\]
+则以下两者等价：
+\begin{enumerate}
+\item 锚点构型 \(X\) 为 \(\det G_A\) 的临界构型（等价地满足命题 \ref{prop:xi-basepoint-scan-full-rank-anchor-critical-equations} 中的平衡方程）。
+\item 存在多项式 \(B\in\RR[z]\)（\(\deg B\le 2\kappa-2\)）使恒等式
+\[
+\boxed{\;
+\mathcal{A}(z)\,y''(z)-\mathcal{A}'(z)\,y'(z)=B(z)\,y(z)\;}
+\]
+在 \(\CC\) 上成立。
+\end{enumerate}
+并且当该恒等式成立时，多项式 \(B\) 由 \(y\) 唯一确定（称为对应的 Van Vleck 多项式）。
+\end{proposition}
+\begin{proof}
+记
+\(
+N(z):=\mathcal{A}(z)y''(z)-\mathcal{A}'(z)y'(z)
+\)。
+\par
+\emph{(1)\(\Rightarrow\)(2).}
+对任意根 \(x_i\)（故 \(y(x_i)=0\)、且 \(y'(x_i)\ne 0\)）有恒等式
+\[
+\frac{y''(x_i)}{y'(x_i)}=2\sum_{j\ne i}\frac{1}{x_i-x_j}.
+\]
+另一方面，
+\[
+\frac{\mathcal{A}'(z)}{\mathcal{A}(z)}
+=\sum_{k=1}^{\kappa}\left(\frac{1}{z-p_k}+\frac{1}{z-\overline{p_k}}\right),
+\]
+从而当 \(z=x_i\in\RR\) 时
+\(
+\frac{\mathcal{A}'(x_i)}{\mathcal{A}(x_i)}
+=2\sum_{k=1}^{\kappa}\Re\frac{1}{x_i-p_k}
+\)。
+将其与临界平衡方程
+\(
+\sum_{j\ne i}\frac{1}{x_i-x_j}=\sum_{k}\Re\frac{1}{x_i-p_k}
+\)
+合并，得到
+\(
+y''(x_i)/y'(x_i)=\mathcal{A}'(x_i)/\mathcal{A}(x_i)
+\)，等价于
+\[
+N(x_i)=\mathcal{A}(x_i)y''(x_i)-\mathcal{A}'(x_i)y'(x_i)=0.
+\]
+由于 \(\{x_i\}\) 两两互异且 \(y\) 为首一的 \(\kappa\) 次多项式，故 \(y\mid N\)。
+令 \(B:=N/y\)，则 \(B\in\RR[z]\)，且
+\(
+\deg B\le \deg N-\deg y\le (2\kappa+\kappa-2)-\kappa=2\kappa-2
+\)。
+\par
+\emph{(2)\(\Rightarrow\)(1).}
+设 \(\mathcal{A}y''-\mathcal{A}'y'=By\) 成立。
+对任意根 \(x_i\) 代入得
+\(
+\mathcal{A}(x_i)y''(x_i)-\mathcal{A}'(x_i)y'(x_i)=0
+\)。
+又因
+\(
+\mathcal{A}(x_i)=\prod_{k}|x_i-p_k|^2>0
+\)，可除得
+\(
+y''(x_i)/y'(x_i)=\mathcal{A}'(x_i)/\mathcal{A}(x_i)
+\)。
+将 \(\mathcal{A}'/\mathcal{A}\) 的部分分式展开代入，并用
+\(
+y''(x_i)/y'(x_i)=2\sum_{j\ne i}\frac{1}{x_i-x_j}
+\)，即得临界平衡方程
+\(
+\sum_{j\ne i}\frac{1}{x_i-x_j}=\sum_k\Re\frac{1}{x_i-p_k}
+\)。
+由命题 \ref{prop:xi-basepoint-scan-full-rank-anchor-critical-equations}，这等价于 \(X\) 为 \(\det G_A\) 的临界构型。
+\par
+最后，若 \(\mathcal{A}y''-\mathcal{A}'y'=B_1y=B_2y\)，则 \((B_1-B_2)y\equiv 0\) 强制 \(B_1=B_2\)。
+故 \(B\) 唯一。证毕。
+\end{proof}
+
+\begin{proposition}[Van Vleck 多项式的首项刚性与次首项闭式]\label{prop:xi-basepoint-scan-van-vleck-leading-coeffs}
+在命题 \ref{prop:xi-basepoint-scan-heine-stieltjes-ode} 的设定下，设 \(y\) 首一且 \(\deg y=\kappa\)，并令
+\[
+B(z)=b_0 z^{2\kappa-2}+b_1 z^{2\kappa-3}+O(z^{2\kappa-4}),
+\quad
+\mathcal{A}(z)=z^{2\kappa}+\mathcal{A}_1 z^{2\kappa-1}+O(z^{2\kappa-2}),
+\quad
+y(z)=z^{\kappa}+y_1 z^{\kappa-1}+O(z^{\kappa-2}).
+\]
+则必有
+\[
+\boxed{\;b_0=-\kappa(\kappa+1),\qquad b_1=-\kappa^{2}\mathcal{A}_1+2y_1.\;}
+\]
+其中
+\(
+\mathcal{A}_1=-\sum_{k=1}^{\kappa}(p_k+\overline{p_k})=-2\sum_{k=1}^{\kappa}\gamma_k
+\)，且
+\(
+y_1=-\sum_{j=1}^{\kappa}x_j
+\)。
+\end{proposition}
+\begin{proof}
+将恒等式 \(\mathcal{A}y''-\mathcal{A}'y'=By\) 在无穷远处作首项比较。
+由
+\[
+y'(z)=\kappa z^{\kappa-1}+(\kappa-1)y_1 z^{\kappa-2}+O(z^{\kappa-3}),
+\qquad
+y''(z)=\kappa(\kappa-1)z^{\kappa-2}+(\kappa-1)(\kappa-2)y_1 z^{\kappa-3}+O(z^{\kappa-4}),
+\]
+以及
+\[
+\mathcal{A}'(z)=2\kappa z^{2\kappa-1}+(2\kappa-1)\mathcal{A}_1 z^{2\kappa-2}+O(z^{2\kappa-3}),
+\]
+得到
+\[
+\mathcal{A}y''-\mathcal{A}'y'
+=\bigl(\kappa(\kappa-1)-2\kappa^2\bigr)z^{3\kappa-2}
+\bigl(-\kappa^2\mathcal{A}_1-(\kappa-1)(\kappa+2)y_1\bigr)z^{3\kappa-3}
++O(z^{3\kappa-4}).
+\]
+另一方面，
+\[
+By=b_0 z^{3\kappa-2}+(b_1+b_0y_1)z^{3\kappa-3}+O(z^{3\kappa-4}).
+\]
+逐项比较即得 \(b_0=-\kappa(\kappa+1)\) 与 \(b_1=-\kappa^{2}\mathcal{A}_1+2y_1\)。证毕。
+\end{proof}
+
+\begin{proposition}[Van Vleck 比值的零/一阶矩残差律：缺陷电流的严格线性约束]\label{prop:xi-basepoint-scan-van-vleck-residue-moment01}
+在命题 \ref{prop:xi-basepoint-scan-heine-stieltjes-ode} 的设定下，令
+\(
+f(z):=\frac{B(z)}{\mathcal{A}(z)}
+\)。
+则 \(f\) 为仅在 \(\{p_k,\overline{p_k}\}\) 处有一阶极点的有理函数，且由命题 \ref{prop:xi-basepoint-scan-van-vleck-leading-coeffs} 有
+\(
+f(z)=-\kappa(\kappa+1)z^{-2}+O(z^{-3})
+\)。
+记
+\[
+r_k:=\operatorname*{Res}_{z=p_k} f(z)=\frac{B(p_k)}{\mathcal{A}'(p_k)}.
+\]
+则必有
+\[
+\boxed{\;
+\sum_{k=1}^{\kappa}\Re r_k=0,\qquad
+\sum_{k=1}^{\kappa}\Re(p_k r_k)=-\frac{\kappa(\kappa+1)}{2}\; }.
+\]
+若 \(\mathcal{A}y''-\mathcal{A}'y'=By\) 成立，则进一步在每个 \(p_k\) 处有
+\[
+r_k=-\frac{y'(p_k)}{y(p_k)},
+\]
+从而等价地可写为
+\[
+\boxed{\;
+\sum_{k=1}^{\kappa}\Re\frac{y'(p_k)}{y(p_k)}=0,\qquad
+\sum_{k=1}^{\kappa}\Re\!\left(p_k\frac{y'(p_k)}{y(p_k)}\right)=\frac{\kappa(\kappa+1)}{2}\; }.
+\]
+\end{proposition}
+\begin{proof}
+由于 \(\deg B=\deg\mathcal{A}-2\)，\(f\) 在无穷远处无多项式部分。
+又因 \(B,\mathcal{A}\in\RR[z]\)，故 \(f\) 的极点成共轭对，且其部分分式展开可写为
+\[
+f(z)=\sum_{k=1}^{\kappa}\frac{r_k}{z-p_k}+\sum_{k=1}^{\kappa}\frac{\overline{r_k}}{z-\overline{p_k}}.
+\]
+展开于无穷远得到
+\[
+f(z)=\frac{\sum_k(r_k+\overline{r_k})}{z}
+\;+\;\frac{\sum_k(p_k r_k+\overline{p_k}\,\overline{r_k})}{z^2}
+\;+\;O(z^{-3}).
+\]
+而由命题 \ref{prop:xi-basepoint-scan-van-vleck-leading-coeffs}，
+\(
+f(z)=-\kappa(\kappa+1)z^{-2}+O(z^{-3})
+\)，其 \(z^{-1}\) 系数为零，故 \(\sum_k\Re r_k=0\)。
+其 \(z^{-2}\) 系数为 \(-\kappa(\kappa+1)\)，故
+\(
+2\sum_k\Re(p_k r_k)=-\kappa(\kappa+1)
+\)。
+\par
+最后，若 \(\mathcal{A}y''-\mathcal{A}'y'=By\) 成立，则在 \(z=p_k\) 处因 \(\mathcal{A}(p_k)=0\) 得
+\[
+-\mathcal{A}'(p_k)y'(p_k)=B(p_k)y(p_k),
+\]
+从而 \(r_k=B(p_k)/\mathcal{A}'(p_k)=-y'(p_k)/y(p_k)\)。证毕。
+\end{proof}
+
+\begin{proposition}[二阶矩残差律与“重心项”显式：极点平方加权的闭式恒等式]\label{prop:xi-basepoint-scan-van-vleck-residue-moment2}
+沿用命题 \ref{prop:xi-basepoint-scan-van-vleck-residue-moment01} 的记号。
+则有严格恒等式
+\[
+\boxed{\;
+\sum_{k=1}^{\kappa}\Re(p_k^{2} r_k)=\frac{1}{2}\bigl(b_1-b_0\mathcal{A}_1\bigr)\; }.
+\]
+在 \(r_k=-y'(p_k)/y(p_k)\) 的情形下，结合命题 \ref{prop:xi-basepoint-scan-van-vleck-leading-coeffs} 的
+\(
+b_0=-\kappa(\kappa+1)
+\)、
+\(
+b_1=-\kappa^{2}\mathcal{A}_1+2y_1
+\)，并用 \(\mathcal{A}_1=-2\sum_{k}\gamma_k\)、\(y_1=-\sum_{j}x_j\) 化简，得到
+\[
+\boxed{\;
+\sum_{k=1}^{\kappa}\Re\!\left(p_k^{2}\frac{y'(p_k)}{y(p_k)}\right)
+=\kappa\sum_{k=1}^{\kappa}\gamma_k+\sum_{j=1}^{\kappa}x_j\; }.
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:xi-basepoint-scan-van-vleck-residue-moment01} 的部分分式展开，展开于无穷远得其 \(z^{-3}\) 系数为
+\[
+\sum_{k=1}^{\kappa}(p_k^2 r_k+\overline{p_k}^2\,\overline{r_k})
+=2\sum_{k=1}^{\kappa}\Re(p_k^2 r_k).
+\]
+另一方面，
+\[
+\frac{B(z)}{\mathcal{A}(z)}
+=b_0 z^{-2}+(b_1-b_0\mathcal{A}_1)z^{-3}+O(z^{-4}),
+\]
+比较 \(z^{-3}\) 系数即得第一式。
+\par
+若 \(r_k=-y'(p_k)/y(p_k)\)，则将其与命题 \ref{prop:xi-basepoint-scan-van-vleck-leading-coeffs} 的 \(b_0,b_1\) 代入第一式，并用 \(\mathcal{A}_1=-2\sum\gamma_k\)、\(y_1=-\sum x_j\) 化简，即得第二式。证毕。
+\end{proof}
+
+\begin{proposition}[满秩锚定行列式的全局极大值存在性与临界点必然性]\label{prop:xi-basepoint-scan-anchor-det-global-maximum}
+在命题 \ref{prop:xi-basepoint-scan-anchor-det-cauchy-vandermonde} 的满秩情形 \(n=\kappa\) 下，
+视 \(\det G_A\) 为实配置空间
+\[
+\Omega:=\{(x_1,\dots,x_\kappa)\in\RR^\kappa:\ x_i\neq x_j\}
+\]
+上的连续函数（对置换对称）。
+则 \(\det G_A\) 存在全局极大值；任取极大点 \(X^\star\in\Omega\)，其必为临界构型，从而满足命题 \ref{prop:xi-basepoint-scan-full-rank-anchor-critical-equations} 中的平衡方程。
+进而由命题 \ref{prop:xi-basepoint-scan-heine-stieltjes-ode}，存在对应的首一锚多项式 \(y^\star\) 与唯一的 Van Vleck 多项式 \(B^\star\) 使
+\[
+\mathcal{A}(z)\,(y^\star)''(z)-\mathcal{A}'(z)\,(y^\star)'(z)=B^\star(z)\,y^\star(z)
+\]
+成立。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:xi-basepoint-scan-finite-rank-rkhs}，对任意互异锚点 \(X\in\Omega\)，Gram 矩阵 \(G_A\) 正定，故 \(\det G_A>0\)。
+令 \(M:=\sup_{X\in\Omega}\det G_A\in(0,\infty)\)，并取极大序列 \(X^{(m)}\in\Omega\) 使 \(\det G_{A^{(m)}}\to M\)。
+\par
+首先排除无穷远逃逸。
+由 Hadamard 不等式与 \(G_{ii}=H(x_i)\)（定理 \ref{thm:xi-basepoint-scan-finite-rank-rkhs}），有
+\[
+\det G_A\le \prod_{i=1}^{\kappa}H(x_i).
+\]
+而 \(H(x)=\sum_k w_k/|x-p_k|^2=O(x^{-2})\)（\(|x|\to\infty\)），故若 \(\max_i|x_i^{(m)}|\to\infty\)，则右端趋于 \(0\)，与 \(\det G_{A^{(m)}}\to M>0\) 矛盾。
+因此 \(\{X^{(m)}\}\) 有界，从而存在收敛子列（仍记为 \(X^{(m)}\)）使 \(X^{(m)}\to X^\star\in\RR^\kappa\)。
+\par
+其次排除碰撞边界。
+由命题 \ref{prop:xi-basepoint-scan-anchor-det-cauchy-vandermonde} 的满秩闭式，
+\(
+\det G_A\propto |\Delta(X)|^2
+\)；
+当发生碰撞 \(x_i\to x_j\) 时 \(\Delta(X)\to 0\)，故 \(\det G_A\to 0\)。
+因此极大序列的极限点 \(X^\star\) 不可能落在碰撞边界上，必满足 \(X^\star\in\Omega\)。
+由连续性得 \(\det G_{A^\star}=M\)，即全局极大值达到。
+\par
+由于 \(\Omega\) 为开集，极大点 \(X^\star\) 为内点，故 \(\nabla \det G_A(X^\star)=0\)，即为临界构型。
+由命题 \ref{prop:xi-basepoint-scan-full-rank-anchor-critical-equations} 得平衡方程成立，最后由命题 \ref{prop:xi-basepoint-scan-heine-stieltjes-ode} 得到相应的微分方程与 \(B^\star\) 的存在唯一性。证毕。
+\end{proof}
+
+\begin{proposition}[锚定临界构型的解析刚性：极点参数的实解析依赖与局部孤立性]\label{prop:xi-basepoint-scan-critical-configuration-analytic-rigidity}
+在命题 \ref{prop:xi-basepoint-scan-full-rank-anchor-critical-equations} 的满秩情形下，设极点多重集 \(\{p_k\}\subset\CC_{-}\) 互异。
+考虑映射 \(\Phi=(\Phi_1,\dots,\Phi_\kappa)\)：
+\[
+\Phi_i(x_1,\dots,x_\kappa;\,p_1,\dots,p_\kappa)
+:=\sum_{j\ne i}\frac{1}{x_i-x_j}-\sum_{k=1}^{\kappa}\Re\frac{1}{x_i-p_k},
+\qquad i=1,\dots,\kappa.
+\]
+若存在临界构型 \(X^\star=(x_1^\star,\dots,x_\kappa^\star)\) 满足 \(\Phi(X^\star;p)=0\)，且该点的 Jacobian
+\(
+J:=\bigl(\partial \Phi_i/\partial x_j\bigr)_{1\le i,j\le \kappa}
+\)
+可逆，则在 \(p\) 的充分小邻域内存在唯一实解析分支 \(X(p)\) 使 \(\Phi(X(p);p)=0\) 且 \(X(p^\star)=X^\star\)。
+因此在非退化条件下，临界锚定构型对极点参数呈现实解析刚性，并在该邻域内局部孤立。
+\end{proposition}
+\begin{proof}
+\(\Phi\) 在互异点域上对 \((x,p)\) 为实解析函数。
+可逆 Jacobian 假设使隐函数定理可用，故存在唯一实解析解分支 \(X(p)\) 并给出局部孤立性。证毕。
+\end{proof}
+
+\input{subsubsec__xi-basepoint-scan-profile-finite-rank-rkhs-anchoring-vanvleck-jacobian-envelope-translation}
+
+\input{subsubsec__xi-basepoint-scan-profile-finite-rank-rkhs-anchoring-part2-clean}
+\endinput

@@ -1,0 +1,596 @@
+\subsubsection{单切片协议下的“读出反射子”与判定完备性}\label{subsubsec:xi-read-reflector-completeness}
+沿用定义 \ref{def:xi-visible-read-null} 的协议设定，其中读出 \(\mathrm{read}:\Omega\to X_{\mathrm{vis}}\cup\{\mathsf{NULL}\}\) 由“部分观测 \(\operatorname{obs}\) + 可见域过滤 \(X_{\mathrm{vis}}\) + 检查器 \(\mathrm{Chk}\)”固定确定，并在本章的 unitary-slice 口径下取 \(X_{\mathrm{vis}}=\mathsf{Phase}\)（见 \S\ref{subsec:xi-pw-type-safety-null}）。
+该协议的关键并不在于把对象强行判等，而在于把\emph{可审计判定}限制为对读出纤维不敏感的类型化操作：一切额外自由度若未被显式外置为正交记录轴，便只能在类型层塌缩为 \(\mathsf{NULL}\)（参见命题 \ref{prop:xi-null-three-way} 与定义 \ref{def:multi_axis_address}）。
+\par
+下述因子分解律把这一“闭包式同型化”表述为一个严格的反射/商空间性质。
+
+\begin{theorem}[读出反射子的因子分解律]\label{thm:xi-read-reflector-factorization}
+令
+\(
+R_{\mathrm{read}}:=\mathrm{read}(\Omega)\subseteq X_{\mathrm{vis}}\cup\{\mathsf{NULL}\}
+\)
+为读出的像集，并定义等价关系
+\[
+\omega\sim_{\mathrm{read}}\omega'
+\quad\Longleftrightarrow\quad
+\mathrm{read}(\omega)=\mathrm{read}(\omega').
+\]
+对任意谓词 \(P:\Omega\to\{0,1\}\)，若 \(P\) 满足协议不变性
+\[
+\omega\sim_{\mathrm{read}}\omega'\ \Longrightarrow\ P(\omega)=P(\omega'),
+\]
+则存在唯一函数 \(p:R_{\mathrm{read}}\to\{0,1\}\) 使得
+\[
+P=p\circ \mathrm{read}.
+\]
+\end{theorem}
+
+\begin{proof}
+对任意 \(y\in R_{\mathrm{read}}\)，取 \(\omega\in\Omega\) 使 \(\mathrm{read}(\omega)=y\)，并定义 \(p(y):=P(\omega)\)。
+若 \(\omega'\) 亦满足 \(\mathrm{read}(\omega')=y\)，则 \(\omega\sim_{\mathrm{read}}\omega'\)，由协议不变性得 \(P(\omega)=P(\omega')\)，从而 \(p\) 定义良定。
+于是对任意 \(\omega\in\Omega\)，有 \(p(\mathrm{read}(\omega))=P(\omega)\)，即 \(P=p\circ\mathrm{read}\)。
+若 \(p_1\circ\mathrm{read}=p_2\circ\mathrm{read}=P\)，则对任意 \(y\in R_{\mathrm{read}}\) 取 \(\omega\) 使 \(\mathrm{read}(\omega)=y\)，有 \(p_1(y)=P(\omega)=p_2(y)\)，故 \(p_1=p_2\)。
+证毕。
+\end{proof}
+
+\begin{remark}[判定完备性作为“可见纤维上的闭包”]\label{rem:xi-read-reflector-completeness}
+定理 \ref{thm:xi-read-reflector-factorization} 表明：在协议固定的读出反射子之下，\(\Omega\) 上一切\emph{可审计}判定都被强制闭合到同一接口 \(R_{\mathrm{read}}\) 上。
+因此，本章所讨论的 completeness 缺口（注 \ref{rem:xi-soundness-vs-completeness}）可被精确定位为：欲判定的事件是否能在该反射子下被编译为 \(R_{\mathrm{read}}\) 上的单值可核验函数。
+若不能，则其差异只能通过外置正交记录轴进入可审计语义：典型地，盘内点状数据以 Blaschke/点谱缺陷所强制的最小维数出现（定义 \ref{def:blaschke-defect-dimension}；定理 \ref{thm:blaschke-point-spectrum-correspondence}），而离切片幅度信息则以端点/径向通道的显式寄存器化出现（推论 \ref{cor:xi-null-second-order-radial-channel}）。
+\end{remark}
+
+\begin{corollary}[单切片协议的 RH 型化原则]\label{cor:xi-single-slice-rh-typing-principle}
+在固定可见域 \(X_{\mathrm{vis}}=\mathsf{Phase}\) 的单切片协议下（定义 \ref{def:xi-visible-read-null}），任何满足协议不变性的可审计判定必经读出反射子因子分解（定理 \ref{thm:xi-read-reflector-factorization}）。
+若进一步把读出载体限制为单位圆盘内的 bounded-type 解析对象 \(F\)，则“不外置离散正交残差轴”的可寻址性条件在解析侧等价于 Blaschke 缺陷为零（定义 \ref{def:blaschke-defect-dimension}；定理 \ref{thm:blaschke-defect-zero-fixed-slice-support}），并可在视界账本侧等价压缩为 Jensen 缺陷的视界极限判据（定义 \ref{def:app-jensen-defect}；命题 \ref{prop:app-jensen-single-zero-lower-bound}）。
+其中 \(F=F_{\zeta}\) 的特例即给出定理 \ref{thm:xi-horizon-purity-criterion} 所述的 RH 单标量译码。
+\par
+同一“盘内零点禁入”条件亦可被等价重写为视界对数导数的正性约束：RH \(\Longleftrightarrow\) 视界 Carath\'eodory 对数导数函数 \(\mathscr{C}_{\zeta}\)（附录式 \eqref{eq:app-horizon-carath-def}）在 \(\mathbb{D}\) 上解析且满足 \(\Re\mathscr{C}_{\zeta}\ge 0\)，并进一步等价于 Toeplitz--PSD 层级 \(\mathbf{T}_N\succeq 0\)（定理 \ref{thm:app-horizon-toeplitz-lmi}）。
+在证书语义上，这给出一条与 Jensen 缺陷链互补的失败见证：有限级 PSD 失败可由负特征值在有限维上直接定位（推论 \ref{cor:app-horizon-toeplitz-z2-cert-split}）。
+\par
+在完成化桥核来自行列式桥接核且 \(B(u)\) 为一次族的情形，单切片约束亦可在谱侧被等价表述为二次特征铅笔 \(\mathcal{P}_L(z)\) 的视界圆约束：\(\Xi_{\Delta,L}\) 的零点与二次特征值严格等价（定理 \ref{thm:xi-qep-zero-equivalence}），而临界线对应视界圆 \(|z|=L^{-1/2}\)（推论 \ref{cor:xi-critical-line-horizon-circle}）。
+因此，轴外自由度在该口径下被压缩为“泄漏谱”（\S\ref{subsubsec:xi-quadratic-pencil-leakage-spectrum}），并在视界圆互反对称成立时被强制成对出现（定理 \ref{thm:xi-L-reciprocal-implies-critical-pairing}）。
+\end{corollary}
+
+\paragraph{端点证书化的定量接口：一组可独立引用的结论}
+下述结论组把“单切片判定闭包 \(\Rightarrow\) 端点证书化任务”的接口化后果压缩为可核验的不变量与资源下界；其证明与复核入口分别由 Toeplitz--PSD 检出门槛（附录定理 \ref{thm:app-horizon-toeplitz-detection-threshold}）、共动扫描谱分解（定理 \ref{thm:xi-comoving-horizon-scan-fourier-inversion}）与端点层析链（命题 \ref{prop:xi-endpoint-absorption-coefficient}、定理 \ref{thm:xi-endpoint-flux-pointmode-coupling}）给出。
+
+\begin{proposition}[Toeplitz 证书长度与边界层深度的定量对偶]\label{con:xi-toeplitz-length-depth-duality}
+设圆盘化完成化读出 \(F_{\zeta}\) 的内因子含有限 Blaschke 乘积
+\(
+B=\prod_{j=1}^{\kappa}b_{a_j}^{m_j}
+\)
+（按重数计），并以
+\[
+h_j:=1-|a_j|
+\qquad(j=1,\dots,\kappa)
+\]
+记零点到单位圆边界的深度（注意 \(1-|a_j|^2\asymp h_j\)）。
+令 \(\mathscr{C}_{\zeta}\) 为对应的视界 Carath\'eodory 对数导数接口（\eqref{eq:app-horizon-carath-def}），并令 \(\mathbf{T}_N\) 为其 Toeplitz 主子矩阵（定理 \ref{thm:app-horizon-toeplitz-lmi}）。
+则对任一离切片零点 \(\rho=\beta+\mathrm{i}\gamma\)（\(\beta<\tfrac12\)）所诱导的盘内极点 \(w_\rho\)（亦即 \(B\) 的零点）及其端点层余量
+\(
+h(\rho):=1-|w_\rho|^2
+\)
+（定理 \ref{thm:xi-offcritical-quadratic-radial-compression}），有限级 Toeplitz--PSD 核验的端点聚焦检出门槛满足
+\[
+N\ \gtrsim\ \frac{1}{h(\rho)}\,\log\!\bigl(1+\delta\,h(\rho)^{-1}\bigr)
+\qquad(\delta:=\tfrac12-\beta>0),
+\]
+从而特别地有粗下界 \(N\gtrsim 1/h(\rho)\)（附录定理 \ref{thm:app-horizon-toeplitz-detection-threshold}；并见命题 \ref{prop:xi-extreme-resonance-toeplitz-threshold} 与推论 \ref{cor:xi-toeplitz-height-phi-calibration} 的高度窗形式）。
+因此：端点边界层越薄（\(h(\rho)\downarrow 0\)），有限阶 Toeplitz--PSD 证书长度在复杂度意义下不可避免地按 \(1/h(\rho)\) 发散（至多差一个对数因子）。
+\end{proposition}
+
+\begin{proposition}[负谱量的几何下界：最小负特征值控制可见深度]\label{con:xi-toeplitz-negative-eigenvalue-controls-depth}
+沿用结论 \ref{con:xi-toeplitz-length-depth-duality} 的设定。
+记 \(\lambda_{\min}(\mathbf{T}_N)=-\eta_N<0\) 为 Toeplitz 主子矩阵的最小特征值。
+则存在某个盘内零点 \(a\in\mathbb{D}\)（属于 \(B\) 的零点集合）使其深度 \(h:=1-|a|\) 满足
+\[
+h\ \ge\ c\,\frac{\eta_N}{N},
+\]
+其中 \(c>0\) 为绝对常数。
+因此有限阶 Toeplitz 证书的“负性幅度”不仅给出“点状缺陷存在”的二值否证器，而且给出缺陷深度的可审计下界；在制度语义中，这等价于对端点边界层中“切片外泄漏量”的最小可见尺度估计。
+\end{proposition}
+
+\input{conj__xi-toeplitz-depth-length-duality-asymptotic-invertibility}
+
+\begin{proposition}[扫描 Hankel 秩 \(=\) 缺陷度：层析样本与 Blaschke 指数的同一化]\label{con:xi-scan-hankel-rank-equals-defect}
+设共动扫描剖面 \(H(x_0)\) 如定理 \ref{thm:xi-comoving-horizon-scan-fourier-inversion} 所定义，并固定采样步长 \(\Delta>0\)。
+取单侧指数谱样本 \(u_n:=\widehat H(n\Delta)\)（\(n\ge 0\)），并对窗口阶 \(K\ge 0\) 形成 Hankel 矩阵
+\[
+\mathsf{H}^{(K)}:=(u_{p+q})_{0\le p,q\le K}.
+\]
+若谱分解 \eqref{eq:xi-comoving-horizon-scan-fourier} 中的指数参数 \(\{(1+\delta_j)+\mathrm{i}\gamma_j\}\) 两两不同，则存在 \(K_0\) 使对所有 \(K\ge K_0\) 有
+\[
+\mathrm{rank}\,\mathsf{H}^{(K)}=M,
+\]
+其中 \(M\) 为有限缺陷多重集的原子个数（定理 \ref{thm:xi-comoving-horizon-scan-fourier-inversion}），亦等于序列 \((u_n)\) 的最小线性 realization 维数（定理 \ref{thm:hankel-rank-minimal}）。
+特别地，在简单零点口径（\(m_j\equiv 1\)，从而 \(M=\deg(B)\)）下成立等价刻画
+\[
+\deg(B)<\infty\quad\Longleftrightarrow\quad
+\sup_{K}\mathrm{rank}\,\mathsf{H}^{(K)}<\infty,
+\qquad
+\sup_{K}\mathrm{rank}\,\mathsf{H}^{(K)}=\deg(B).
+\]
+\end{proposition}
+
+\begin{proposition}[单尺度剖面的指数谱分离：高度—偏移—重数的可审计三分解]\label{con:xi-scan-exponential-spectrum-separation}
+在结论 \ref{con:xi-scan-hankel-rank-equals-defect} 的有限缺陷设定下，\(\widehat H\) 具有显式指数谱分解（定理 \ref{thm:xi-comoving-horizon-scan-fourier-inversion}）：
+\[
+\widehat H(\xi)
+=4\pi\sum_{j=1}^{M} m_j\,\frac{\delta_j}{1+\delta_j}\,
+e^{-(1+\delta_j)|\xi|}\,e^{-\mathrm{i}\gamma_j\xi}.
+\]
+因此 \( \xi\mapsto \widehat H(\xi)\,e^{|\xi|}\)（限制到任意一侧 \(\xi\ge 0\) 或 \(\xi\le 0\)）是有限个指数 \(e^{-\delta_j|\xi|}\) 与相位因子 \(e^{-\mathrm{i}\gamma_j\xi}\) 的线性组合，并且该表示在指数参数互异时唯一。
+从而离线零点全参数具有一条制度内可审计的三步分解：先由衰减谱唯一恢复 \(\{\delta_j\}\) 与对应系数 \(\{m_j\delta_j/(1+\delta_j)\}\)，再由相位谱（例如 Prony/矩阵铅笔/ESPRIT）唯一恢复 \(\{\gamma_j\}\)，而重数 \(m_j\) 由系数比值确定。
+\end{proposition}
+
+\begin{proposition}[端点通量的反射系数可计算性：有限 CMV 证书对 \texorpdfstring{$\Phi_{-1}$}{Phi-(-1)} 的指数逼近]\label{con:xi-endpoint-flux-computable-by-finite-cmv}
+设 \(B\) 为 \(F_{\zeta}\) 的 Blaschke 因子，并记端点通量（端点吸收系数）
+\[
+\Phi_{-1}(B):=\lim_{r\uparrow 1}\frac{-\log|B(-r)|}{1-r}
+\]
+（命题 \ref{prop:xi-endpoint-absorption-coefficient}；并见定理 \ref{thm:xi-endpoint-julia-indicator-equals-absorption} 的 Julia 角导数刻画）。
+令 \((\alpha_n)_{n\ge 0}\) 为由 Schur 算法生成的 Verblunsky 系数，并令 \(U^{(N)}\) 为相应的有限 CMV 证书。
+则存在显式函数族 \(\mathcal{F}_N=\mathcal{F}_N(\alpha_0,\dots,\alpha_{N-1})\) 使得对某些常数 \(C>0\)、\(q\in(0,1)\) 有
+\[
+\bigl|\Phi_{-1}(B)-\mathcal{F}_N\bigr|\ \le\ C\,q^N.
+\]
+并且 \(\mathcal{F}_N\) 仅依赖有限证书参数 \((\alpha_0,\dots,\alpha_{N-1})\) 且可在纯乘加有理运算内实现。
+因此端点通量不仅是存在性不变量，而且具有可有效逼近的有限证书表达：缺陷若存在，则其端点强度可由有限 CMV 证书以指数精度恢复。
+\end{proposition}
+
+\begin{corollary}[端点缺陷证书复杂度律：\texorpdfstring{$\Phi_{-1}$}{Phi-(-1)} 的对数级样本复杂度]\label{cor:xi-endpoint-flux-log-sample-complexity}
+沿用命题 \ref{con:xi-endpoint-flux-computable-by-finite-cmv} 的记号。
+对任意误差容忍 \(\varepsilon>0\)，若取
+\[
+N\ \ge\ \frac{\log(C/\varepsilon)}{\log(1/q)},
+\]
+则有限 CMV/Verblunsky 证书给出的近似满足
+\[
+\bigl|\Phi_{-1}(B)-\mathcal{F}_N(\alpha_0,\dots,\alpha_{N-1})\bigr|\ \le\ \varepsilon.
+\]
+因此端点通量的数值审计在该口径下具有对数级样本复杂度 \(N=O(\log \varepsilon^{-1})\)。
+\end{corollary}
+\begin{proof}
+由命题 \ref{con:xi-endpoint-flux-computable-by-finite-cmv} 的指数误差界 \( |\Phi_{-1}(B)-\mathcal{F}_N|\le Cq^N \)，令 \(Cq^N\le\varepsilon\) 并解出 \(N\) 即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[两类证书的统一下界：Toeplitz 阶数与扫描覆盖数的不可避免增长]\label{con:xi-toeplitz-vs-scan-complexity-lower-bounds}
+固定偏移下界 \(\delta\ge\delta_0>0\) 与高度窗 \(|\gamma|\le T\)。
+若要求制度内证书在该窗内对任意可能的缺陷位置给出一致可检测性，则无论采用
+\begin{enumerate}
+  \item Toeplitz--PSD 阶数提升（矩层级），或
+  \item 共动扫描的有限覆盖（有限读出族），
+\end{enumerate}
+其资源规模均必须随 \(T\) 发散，并存在显式下界：
+\[
+N_{\mathrm{Toep}}\ \gtrsim\ Q_{\max}(T,\delta_0)\,\log\!\bigl(1+\delta_0 Q_{\max}(T,\delta_0)\bigr)
+\asymp \frac{T^2}{\delta_0}\,\log(1+T^2)
+\]
+（推论 \ref{cor:xi-toeplitz-height-phi-calibration}），以及对任意固定尺度 \(t>0\) 有
+\[
+N_{\mathrm{scan}}\ \gtrsim\ \frac{T}{t+\delta_0}
+\]
+（定理 \ref{thm:xi-offcritical-poisson-matched-filter-covering}）。
+因此两类证书在高度窗极限中至少线性增长；二者差异刻画了“是否允许共动地址”这一结构权限对可检测复杂度的影响。
+\end{proposition}
+
+\paragraph{Toeplitz--Hankel 互证与格点扫描的制度后果}
+下述结论把“共动扫描谱指纹”进一步对接到 Toeplitz 负子空间与有限维否证器生成机制，并给出由 \(H\) 的全局质量、局部峰值与格点步长所诱导的可审计门槛。
+
+\begin{proposition}[Toeplitz--扫描 Hankel 的同构分解：负子空间可由层析谱指纹张成]\label{con:xi-toeplitz-hankel-isomorphic-split}
+在有限点状缺陷且无奇异内因子口径下，设 \(F_{\zeta}=B\,O\) 且 \(B\) 为有限 Blaschke 乘积（按重数展开后每因子次数为一），
+\[
+B=\prod_{j=1}^{\kappa}b_{a_j},
+\qquad
+a_j=\mathcal{C}(\gamma_j+\mathrm{i}\delta_j)\in\mathbb{D},
+\qquad
+\delta_j>0,
+\]
+其中 \(\kappa=\deg(B)=\mathfrak d_{\mathrm{Bl}}(F_{\zeta})\)（定义 \ref{def:blaschke-defect-dimension}）。
+令共动扫描剖面 \(H(x_0)\) 与其傅里叶谱 \(\widehat H\) 如定理 \ref{thm:xi-comoving-horizon-scan-fourier-inversion}，并取整数采样
+\[
+u_n:=\widehat H(n)
+=4\pi\sum_{j=1}^{\kappa}\frac{\delta_j}{1+\delta_j}\,e^{-(1+\delta_j)|n|}e^{-\mathrm{i}\gamma_j n},
+\qquad n\in\ZZ.
+\]
+记 Hankel 窗口与 Toeplitz 证书矩阵分别为
+\[
+\mathsf H_N:=(u_{p+q})_{0\le p,q\le N},
+\qquad
+\mathbf{T}_N:=(c_{j-k})_{0\le j,k\le N},
+\]
+其中 \(\mathbf{T}_N\) 由视界 Carath\'eodory 接口 \(\mathscr{C}_{\zeta}\) 的矩数据生成（附录定理 \ref{thm:app-horizon-toeplitz-lmi}）。
+若存在 \(N_0\) 使得 \(\mathrm{rank}(\mathsf H_N)=\kappa\) 对所有 \(N\ge N_0\) 成立（等价地：\(\mathsf H_{\kappa-1}\) 满秩），则对所有充分大 \(N\) 有
+\[
+\nu_-\!\bigl(\mathbf{T}_N\bigr)=\kappa
+\]
+（定理 \ref{thm:xi-toeplitz-negative-squares-equals-blaschke-defect}），并且存在可逆矩阵族 \(R_N\) 使得 Toeplitz 二次型在合同意义下分裂为正块与由层析谱指纹生成的负块：
+\[
+R_N^{\ast}\mathbf{T}_N R_N
+=
+\begin{pmatrix}
+P_N & 0\\
+0 & -\,\mathbf{G}_{\kappa-1}
+\end{pmatrix},
+\qquad
+P_N\succeq 0,
+\qquad
+\mathbf{G}_{\kappa-1}:=\mathsf H_{\kappa-1}^{\ast}\mathsf H_{\kappa-1}\succ 0.
+\]
+从而 Toeplitz 层级的全部负方向在制度语义中并非弥散产生，而可由有限个扫描谱样本 \(\{u_n\}_{0\le n\le 2\kappa-2}\) 所生成的 Hankel 指纹完全张成与确定；二者在稳定区间内等价编码同一组点状缺陷自由度。
+\end{proposition}
+
+\begin{proposition}[Cauchy--Poisson 剖面的 \(L^1\)–\(L^2\)–\(L^\infty\) 统一下界：缺陷必产生可见峰值]\label{con:xi-poisson-profile-l1l2linfty-lower}
+仍在有限缺陷口径下，令共动深度剖面（按重数展开）写作（命题 \ref{prop:xi-basepoint-depth-closed-form}）
+\[
+H(x)=\sum_{j=1}^{\kappa}\frac{4\delta_j}{(x-\gamma_j)^2+(1+\delta_j)^2}.
+\]
+则其 \(L^1\) 质量为严格闭式（推论 \ref{cor:xi-comoving-horizon-scan-mass}）
+\[
+\|H\|_{L^1(\RR)}=4\pi\sum_{j=1}^{\kappa}\frac{\delta_j}{1+\delta_j}.
+\]
+并且由非负交叉项与核平方积分公式
+\(
+\int_{\RR}\frac{\dd x}{(x^2+a^2)^2}=\frac{\pi}{2a^3}
+\)
+可得正交下界
+\[
+\|H\|_{L^2(\RR)}^2
+\ge
+\sum_{j=1}^{\kappa}
+\int_{\RR}\left(\frac{4\delta_j}{(x-\gamma_j)^2+(1+\delta_j)^2}\right)^2\dd x
+=
+\sum_{j=1}^{\kappa}8\pi\,\frac{\delta_j^2}{(1+\delta_j)^3}.
+\]
+因此存在 \(x^{\ast}\in\RR\) 使得（\(\|H\|_2^2\le \|H\|_\infty\|H\|_1\)）
+\[
+\|H\|_{L^\infty(\RR)}
+\ge
+\frac{\|H\|_{L^2(\RR)}^2}{\|H\|_{L^1(\RR)}}
+\ge
+2\cdot
+\frac{\sum_{j=1}^{\kappa}\dfrac{\delta_j^2}{(1+\delta_j)^3}}
+{\sum_{j=1}^{\kappa}\dfrac{\delta_j}{1+\delta_j}}.
+\]
+该不等式提供一条不可回收的峰值见证：只要点状缺陷非空，扫描剖面必出现严格可检测的峰值下界，其量级由 \(\{(\gamma_j,\delta_j)\}\) 的加权二次矩控制。
+\end{proposition}
+
+\begin{proposition}[缺陷计数的可审计夹逼：质量与峰值给出的双侧界]\label{con:xi-defect-count-mass-peak-sandwich}
+设 \(\delta_{\min}:=\min_j\delta_j\)、\(\delta_{\max}:=\max_j\delta_j\)，并记缺陷总重数（Blaschke 度）为 \(\kappa=\deg(B)\)。
+则由结论 \ref{con:xi-poisson-profile-l1l2linfty-lower} 的 \(L^1\) 闭式与单调性 \(x\mapsto \frac{x}{1+x}\) 得到
+\[
+4\pi\,\frac{\delta_{\min}}{1+\delta_{\max}}\,\kappa
+\le
+\|H\|_{L^1(\RR)}
+\le
+4\pi\,\frac{\delta_{\max}}{1+\delta_{\min}}\,\kappa,
+\]
+从而质量统计量给出缺陷计数的双侧可审计界
+\[
+\frac{1+\delta_{\min}}{4\pi\,\delta_{\max}}\|H\|_{L^1(\RR)}
+\le
+\kappa
+\le
+\frac{1+\delta_{\max}}{4\pi\,\delta_{\min}}\|H\|_{L^1(\RR)}.
+\]
+另一方面，由逐项点态上界
+\(
+\frac{4\delta_j}{(x-\gamma_j)^2+(1+\delta_j)^2}\le \frac{4\delta_j}{(1+\delta_j)^2}
+\le \frac{4\delta_{\max}}{(1+\delta_{\min})^2}
+\)
+得
+\[
+\|H\|_{L^\infty(\RR)}
+\le
+\frac{4\delta_{\max}}{(1+\delta_{\min})^2}\,\kappa,
+\qquad\text{即}\qquad
+\kappa\ \ge\ \frac{(1+\delta_{\min})^2}{4\delta_{\max}}\,\|H\|_{L^\infty(\RR)}.
+\]
+因此在制度允许的扫描通道中，缺陷计数可同时被质量与峰值统计量夹逼：质量提供上、下界，而峰值提供不可绕过的下界门槛。
+\end{proposition}
+
+\begin{proposition}[最小分离导出的反演稳定性：有限采样谱指纹的局部双 Lipschitz]\label{con:xi-min-separation-bilip-prony}
+在有限缺陷口径下，令 \(u_n:=\widehat H(n)\) 如结论 \ref{con:xi-toeplitz-hankel-isomorphic-split}，并设存在分离常数 \(s>0\) 使
+\(
+|\gamma_j-\gamma_k|\ge s
+\)
+对一切 \(j\neq k\) 成立，且 \(\delta_j\in[\delta_{\min},\delta_{\max}]\subset(0,\infty)\)。
+则参数到有限谱指纹的映射
+\[
+\{(\gamma_j,\delta_j)\}_{j=1}^{\kappa}\ \longmapsto\ \{u_n\}_{n=0}^{2\kappa-1}
+\]
+在满足该分离约束的参数流形上为局部双 Lipschitz：
+存在常数 \(C_1,C_2>0\)（仅依赖 \(\kappa,s,\delta_{\min},\delta_{\max}\)）使得对任意两组满足同分离约束的参数多重集 \(\Theta,\widetilde\Theta\) 有
+\[
+C_1\,d_{\mathrm{match}}(\Theta,\widetilde\Theta)
+\le
+\max_{0\le n\le 2\kappa-1}|u_n(\Theta)-u_n(\widetilde\Theta)|
+\le
+C_2\,d_{\mathrm{match}}(\Theta,\widetilde\Theta),
+\]
+其中 \(d_{\mathrm{match}}\) 可取为对称化匹配距离（按最优配对计 \(|\Delta\gamma|+|\Delta\delta|\)）。
+因此在最小分离成立时，有限采样的扫描谱指纹不仅唯一确定缺陷参数（定理 \ref{thm:xi-comoving-horizon-scan-fourier-inversion}），而且在噪声扰动下具有定量稳定性；该稳定性与 Prony/矩阵铅笔/ESPRIT 的标准反演口径相容（见 \S\ref{subsec:discrete-abel-weil-polar-rigidity} 的 Nyquist 采样段落）。
+\end{proposition}
+
+\begin{proposition}[远场矩展开：扫描剖面尾部系数给出 \texorpdfstring{$(\gamma,\delta)$}{(gamma,delta)} 的代数矩]\label{con:xi-farfield-moment-chain}
+令 \(H\) 如结论 \ref{con:xi-poisson-profile-l1l2linfty-lower}。
+记其复极点集合为
+\(
+x=\gamma_j\pm \mathrm{i}(1+\delta_j)
+\)
+（按重数计），并取
+\(
+R:=\max_j\sqrt{\gamma_j^2+(1+\delta_j)^2}.
+\)
+则 \(H\) 在 \(|x|>R\) 上具有在无穷远处的收敛 Laurent 展开
+\[
+H(x)=\sum_{n\ge 0}\frac{M_n}{x^{n+2}},
+\qquad (|x|>R),
+\]
+其中系数 \(M_n\) 为缺陷参数的显式代数矩。
+特别地，前两阶系数满足
+\[
+M_0=4\sum_{j=1}^{\kappa}\delta_j,
+\qquad
+M_1=8\sum_{j=1}^{\kappa}\delta_j\gamma_j,
+\]
+并且更一般地，\(M_n\) 是 \(\sum_j \delta_j\,\gamma_j^{k}(1+\delta_j)^{\ell}\)（\(k+\ell\le n\)）的线性组合。
+因此远场尾部在纯一维可见通道中提供一条矩链证书：若能在某个远场区间上以可审计精度估计 \((M_0,\dots,M_N)\)，则可恢复缺陷测度在 \(\gamma\) 方向的低阶矩与 \(\delta\) 的混合矩，从而把二维离线参数压缩为一列可复算的代数矩不变量。
+\end{proposition}
+
+\begin{proposition}[地址离散化的混叠阈值：格点扫描仅能确定 \texorpdfstring{$\gamma$}{gamma} 的同余类]\label{con:xi-grid-scan-aliasing-threshold}
+若制度仅允许在格点 \(x_0=n\Delta\)（\(n\in\ZZ\)）上读取共动扫描剖面 \(H(x_0)\)，则由谱指纹的相位因子
+\(
+e^{-\mathrm{i}\gamma_j n\Delta}
+\)
+可知：仅凭格点数据无法区分 \(\gamma_j\) 与 \(\gamma_j+\frac{2\pi k}{\Delta}\)（\(k\in\ZZ\)）所产生的同余类。
+特别地，若先验高度窗为 \(\gamma_j\in[-T,T]\)，则要实现无混叠的唯一确定必须满足必要条件
+\[
+\Delta<\frac{\pi}{T}.
+\]
+该阈值给出地址分辨率的制度化下界：当地址被离散化为固定步长格点时，高度信息自动折叠为模 \(2\pi/\Delta\) 的同余类；要避免该回收效应，步长必须随目标高度窗线性收缩（与 \S\ref{subsec:discrete-abel-weil-polar-rigidity} 的 Nyquist 采样尺度相容）。
+\end{proposition}
+
+\begin{proposition}[双步长去混叠定理：两套地址网格的相位载体将高度同余类压缩到最小交]\label{con:xi-grid-scan-two-step-dealiasing}
+设高度相位仅能通过格点扫描步长 \(\Delta>0\) 的字符 \(e^{-\mathrm{i}\gamma n\Delta}\)（\(n\in\ZZ\)）进入可见谱指纹，则单一 \(\Delta\) 下高度仅能确定至同余群
+\[
+\Gamma_{\Delta}:=\frac{2\pi}{\Delta}\ZZ.
+\]
+若额外引入第二步长 \(\Delta'>0\)，则可见不变性群收缩为交
+\[
+\Gamma_{\Delta}\cap \Gamma_{\Delta'}.
+\]
+并且：
+\begin{enumerate}
+  \item 若 \(\Delta/\Delta'\notin\QQ\)，则 \(\Gamma_{\Delta}\cap \Gamma_{\Delta'}=\{0\}\)，从而高度参数在理论上无全局同余混叠；
+  \item 若 \(\Delta/\Delta'=p/q\in\QQ\)（既约），则存在唯一 \(d>0\) 使 \(\Delta=pd,\ \Delta'=qd\)，并且
+  \[
+  \Gamma_{\Delta}\cap \Gamma_{\Delta'}=\frac{2\pi}{d}\ZZ,
+  \]
+  即双网格把混叠周期收缩到最小公同余周期 \(2\pi/d\)。
+\end{enumerate}
+\end{proposition}
+
+\input{subsubsec__xi-grid-scan-two-step-dealiasing-diophantine-stability}
+
+\input{subsubsec__xi-depth-height-two-level-extremal-decomposition}
+
+\input{subsubsec__xi-cayley-normalization-factor4}
+
+\paragraph{局部峰刚性、相位谱移位与有限样本病态}
+下述结论把共动扫描的点状缺陷剖面进一步压缩为“局部峰几何量—相位流密度—有限样本反演”的一组互相对齐的可审计接口：一方面单原子 Lorentzian 形状具有不可破坏的幅度--半宽代数约束；另一方面，有限缺陷族在上半平面内函数上诱导绝对连续的相位导数密度，从而把剖面 \(H\) 规范化为加权谱移位；最后，有限采样的可辨识性与其不可避免的病态爆炸可由 Hankel/Prony 指纹的最小样本门槛与谱点间距下界共同刻画。
+
+\begin{proposition}[Lorentzian 刚性：缺陷峰的幅度--半宽代数约束与一致性检验]\label{con:xi-lorentzian-amplitude-width-rigidity}
+对单个点状缺陷原子 \((\gamma,\delta,m)\) 的共动剖面核
+\[
+H_{(\gamma,\delta,m)}(x)
+:=
+m\,\frac{4\delta}{(x-\gamma)^2+(1+\delta)^2}\qquad(x\in\RR),
+\]
+记其峰值
+\(
+A:=H_{(\gamma,\delta,m)}(\gamma)
+\)
+与半高半宽 \(w>0\)（满足 \(H_{(\gamma,\delta,m)}(\gamma\pm w)=A/2\) 的最小正数）。
+则成立严格刚性关系
+\[
+\boxed{\;
+w=1+\delta,\qquad
+\frac{A}{m}=\frac{4(w-1)}{w^2}\; }.
+\]
+特别地，在离临界线偏移口径 \(\delta\in(0,1)\)（从而 \(w\in(1,2)\)）下，令 \(a:=A/m\in(0,1)\)，则由二次方程 \(aw^2-4w+4=0\) 得到闭式反演
+\[
+\boxed{\;
+w=\frac{2\bigl(1-\sqrt{1-a}\bigr)}{a},\qquad
+\delta=w-1\;}
+\]
+（取使 \(w\in(1,2)\) 的分支）。
+因此：在有限缺陷混合情形中，任何被识别为“单原子支配的孤立峰”之局部结构必须满足上述幅度--半宽一致性；该一致性提供一条制度内几何验伪准则，并在该分支口径下使 \(\delta\) 可由峰的局部几何量闭式恢复。
+\end{proposition}
+
+\begin{proposition}[扫描密度的谱移位表达：加权内函数相位导数的绝对连续化]\label{con:xi-spectral-shift-phase-density}
+设有限点状缺陷族由参数 \(\{(\gamma_j,\delta_j,m_j)\}_{j=1}^{\kappa}\) 给出，并在上半平面定义内函数
+\[
+\mathcal{S}(z)
+:=
+\prod_{j=1}^{\kappa}
+\left(
+\frac{z-\gamma_j-\mathrm{i}(1+\delta_j)}{z-\gamma_j+\mathrm{i}(1+\delta_j)}
+\right)^{m_j},
+\qquad \Im z>0.
+\]
+则其非切向边界值满足 \(|\mathcal{S}(x)|=1\)（a.e.\ \(x\in\RR\)），并具有相位导数公式
+\[
+\frac{\dd}{\dd x}\arg \mathcal{S}(x)
+=
+2\sum_{j=1}^{\kappa}m_j\,\frac{1+\delta_j}{(x-\gamma_j)^2+(1+\delta_j)^2}
+\qquad\text{（a.e.\ \(x\in\RR\)）}.
+\]
+另一方面，共动扫描剖面（点状缺陷密度）
+\[
+H(x)
+=
+\sum_{j=1}^{\kappa}m_j\,\frac{4\delta_j}{(x-\gamma_j)^2+(1+\delta_j)^2}
+\]
+满足严格加权谱移位表示
+\[
+\boxed{\;
+H(x)
+=
+\sum_{j=1}^{\kappa}m_j\,\frac{2\delta_j}{1+\delta_j}\,
+\frac{\dd}{\dd x}\arg\!\left(
+\frac{x-\gamma_j-\mathrm{i}(1+\delta_j)}{x-\gamma_j+\mathrm{i}(1+\delta_j)}
+\right)
+\;}
+\]
+从而点状缺陷在制度可见域中等价于一个“加权谱移位密度”（相位流的绝对连续部分）。
+其全质量为
+\[
+\int_{\RR}H(x)\,\dd x
+=
+4\pi\sum_{j=1}^{\kappa}m_j\,\frac{\delta_j}{1+\delta_j}
+\]
+（与推论 \ref{cor:xi-comoving-horizon-scan-mass} 的质量公式一致）。
+\end{proposition}
+
+\begin{proposition}[有限采样的最小完备性：\texorpdfstring{$2\kappa$}{2kappa} 阶谱指纹的必要且一般充分性]\label{con:xi-2kappa-minimal-complete-samples}
+固定步长 \(\Delta>0\)，取扫描谱指纹
+\(
+u_n:=\widehat H(n\Delta)
+\)
+（\(n\in\ZZ\)），其中 \(\widehat H\) 由 \eqref{eq:xi-comoving-horizon-scan-fourier} 给定。
+则对 \(n\ge 0\) 存在复参数
+\[
+r_j:=e^{-(1+\delta_j)\Delta}\,e^{-\mathrm{i}\gamma_j\Delta}\in\mathbb{D},
+\qquad
+c_j:=4\pi\,m_j\,\frac{\delta_j}{1+\delta_j}>0,
+\]
+使得
+\[
+u_n=\sum_{j=1}^{\kappa}c_j\,r_j^{n}\qquad(n=0,1,2,\dots),
+\qquad
+u_{-n}=\overline{u_n}.
+\]
+在“一般位置”假设（\(r_j\) 两两不同，且 Hankel 主块 \((u_{i+j})_{0\le i,j\le \kappa-1}\) 可逆）下，仅凭连续样本
+\(
+(u_0,u_1,\dots,u_{2\kappa-1})
+\)
+即可唯一恢复多重集 \(\{(r_j,c_j)\}_{j=1}^{\kappa}\)，从而唯一确定 \(\{(\gamma_j,\delta_j,m_j)\}\)（结合结论 \ref{con:xi-grid-scan-aliasing-threshold} 的混叠约束）。
+并且该长度在一般位置下不可再压缩：若样本长度 \(N+1\le 2\kappa-1\)，则存在两组不同参数给出同一长度为 \(N+1\) 的样本前缀。
+该“\(2\kappa\) 点锁定”与 Hankel 秩的最小 realization 刻画（定理 \ref{thm:hankel-rank-minimal}）及 \(2d\) 点有限判等原理（定理 \ref{thm:dephys-hankel-finite-audit}）一致。
+\end{proposition}
+
+\input{thm__xi-toeplitz-psd-coherence-horizon-threshold}
+\input{conj__xi-toeplitz-psd-horizon-block-foldsat}
+
+\input{subsubsec__xi-scan-fingerprint-caratheodory-schur-realization}
+
+\input{subsubsec__xi-scan-tail-ratio-peeling}
+
+\begin{proposition}[碰撞不适定性：缺陷合并导致反演条件数的必然爆炸]\label{con:xi-collision-illposedness-sep-blowup}
+沿用结论 \ref{con:xi-2kappa-minimal-complete-samples} 的参数化，令谱点间距
+\[
+\mathrm{sep}:=\min_{j\neq k}|r_j-r_k|.
+\]
+则对任意基于有限样本 \((u_n)_{n=0}^{2\kappa-1}\) 的反演（包括 Prony/Hankel 核空间法及其等价变体），其局部误差放大因子（逆映射的局部 Lipschitz 常数）不可能在 \(\mathrm{sep}\downarrow 0\) 时保持一致有界；更定量地，存在常数 \(C_\kappa>0\)（仅依赖 \(\kappa\) 与采样规范）使得在一般位置邻域内必有下界型爆炸
+\[
+L\ \ge\ C_\kappa\,\mathrm{sep}^{-(\kappa-1)}.
+\]
+特别地，当两缺陷满足 \(\delta_j=\delta_k\) 且 \(|\gamma_j-\gamma_k|\to 0\) 时，有 \(|r_j-r_k|\asymp \Delta|\gamma_j-\gamma_k|\)，从而任何稳定反演的误差放大因子至少按 \(|\gamma_j-\gamma_k|^{-(\kappa-1)}\) 发散。
+该结论刻画了制度语义中的“概念碰撞即回收”不适定性：缺陷在可见坐标中逼近将不可避免地触发反演病态，并表现为合并/不可分辨的资源性后果。
+\end{proposition}
+
+\begin{proposition}[双残数比定律：无需分离假设的 \texorpdfstring{$\delta$}{delta} 识别机制]\label{con:xi-double-residue-ratio-delta}
+在有限缺陷口径下，定义 Cauchy 变换（\(\Im z>0\)）
+\[
+M_H(z):=\int_{\RR}\frac{H(x)}{x-z}\,\dd x,
+\]
+以及由结论 \ref{con:xi-spectral-shift-phase-density} 的上半平面内函数 \(\mathcal{S}\) 诱导的“相位流生成元”
+\[
+M_{\mathcal{S}}(z):=-\mathrm{i}\,\frac{\mathcal{S}'(z)}{\mathcal{S}(z)}.
+\]
+则二者均可亚纯延拓到 \(\CC\setminus\RR\)，并在下半平面共享同一极点集合
+\[
+z_j^{\downarrow}:=\gamma_j-\mathrm{i}(1+\delta_j)\qquad(1\le j\le \kappa),
+\]
+并且留数满足显式闭式
+\[
+\operatorname*{Res}_{z=z_j^{\downarrow}}M_H(z)
+=-4\pi\,m_j\,\frac{\delta_j}{1+\delta_j},
+\qquad
+\operatorname*{Res}_{z=z_j^{\downarrow}}M_{\mathcal{S}}(z)
+=\mathrm{i}\,m_j.
+\]
+因而得到严格“残数比”识别律
+\[
+\boxed{\;
+\frac{\delta_j}{1+\delta_j}
+=
+\frac{1}{4\pi}\left|
+\frac{\operatorname*{Res}_{z=z_j^{\downarrow}}M_H(z)}
+{\operatorname*{Res}_{z=z_j^{\downarrow}}M_{\mathcal{S}}(z)}
+\right|\;}
+\]
+该公式不依赖 \(\{\gamma_j\}\) 的最小分离：只要极点仍互异（即 \((\gamma,\delta)\) 不全同），则 \(\delta_j\) 可由解析残数在制度可见域内直接恢复；分离仅影响数值稳定性（见结论 \ref{con:xi-collision-illposedness-sep-blowup}），而不影响解析可辨识性。
+\end{proposition}
+
+\begin{proposition}[Poisson 粗粒化的无毛发极限：大尺度下仅剩有限矩不变量]\label{con:xi-poisson-coarsegraining-nohair}
+令缺陷测度的低阶矩为
+\[
+M_0:=\sum_{j}m_j\delta_j,
+\qquad
+M_1:=\sum_{j}m_j\delta_j\,\gamma_j,
+\qquad
+\bar\gamma:=\frac{M_1}{M_0}\ \ (M_0>0),
+\]
+并令 Poisson 半群粗粒化剖面 \(G_t\) 如 \eqref{eq:xi-offcritical-comoving-poisson-field} 定义。
+则 \(M_0=\int_{\RR}G_t\) 与 \(M_1=\mathrm{p.v.}\int_{\RR}xG_t\) 为严格守恒量（定理 \ref{thm:xi-offcritical-poisson-conservation-dissipation}）。
+此外当 \(t\to\infty\) 时，存在一致渐近展开
+\[
+G_t(x)
+=
+\frac{M_0}{\pi}\frac{t}{(x-\bar\gamma)^2+t^2}
+\;+\;O(t^{-2}),
+\]
+其中余项在 \(x\in\RR\) 上一致，且可由缺陷的二阶中心矩控制。
+因此当观测尺度 \(t\) 足够大时，全部点状缺陷在制度可见域内不可避免地退化为单个“有效 Lorentzian”：可区分参数仅为总质量 \(M_0\) 与重心 \(\bar\gamma\)；更高阶几何信息以 \(t^{-2}\) 级别被严格压制并在粗粒化流下衰落（与能量耗散公式 \eqref{eq:xi-offcritical-poisson-energy-dissipation} 一致）。
+\end{proposition}
+
+\begin{proposition}[Poisson 粗粒化的二阶正规形：仅由二阶中心矩控制的普适校正项]\label{con:xi-poisson-coarsegraining-second-order-normal-form}
+在命题 \ref{con:xi-poisson-coarsegraining-nohair} 的记号下，令归一化权重测度为
+\[
+\tilde\nu:=\frac{1}{M_0}\sum_{j}m_j\delta_j\,\delta_{\gamma_j},
+\qquad
+\bar\gamma:=\int_{\RR}\gamma\,\dd\tilde\nu(\gamma),
+\qquad
+\mathrm{Var}:=\int_{\RR}(\gamma-\bar\gamma)^2\,\dd\tilde\nu(\gamma),
+\]
+并定义大尺度 Poisson 粗粒化密度
+\[
+h_t(x):=\int_{\RR}\frac{1}{\pi}\frac{t}{(x-\gamma)^2+t^2}\,\dd\tilde\nu(\gamma)
+\qquad (t>0).
+\]
+则当 \(t\to\infty\) 时存在二阶一致渐近展开（在 \(x\in\RR\) 上一致成立）
+\[
+\boxed{\;
+h_t(x)
+=
+\frac{1}{\pi}\frac{t}{(x-\bar\gamma)^2+t^2}
+\;+\;
+\frac{\mathrm{Var}}{\pi}\,
+\frac{t\bigl(3(x-\bar\gamma)^2-t^2\bigr)}{\bigl((x-\bar\gamma)^2+t^2\bigr)^3}
+\;+\;O(t^{-4})\; }.
+\]
+其中余项 \(O(t^{-4})\) 可由三阶中心矩 \(\int|\gamma-\bar\gamma|^3\,\dd\tilde\nu(\gamma)\) 控制。
+因此在大尺度视界观测下，全部几何自由度的可见贡献在二阶之前严格塌缩为两参数族 \((\bar\gamma,\mathrm{Var})\)：更高阶形状信息以更高次幂被制度性压制并进入不可恢复区。
+\end{proposition}
+
+\input{subsubsec__xi-poisson-coarsegraining-tv-kl-asymptotics}
+
+\input{subsubsec__xi-poisson-coarsegraining-sixth-order-audit}
+
+\input{subsubsec__xi-poisson-coarsegraining-harmonic-moment-multipole-kl}
+
+\input{subsubsec__xi-poisson-cauchy-location-scale-entropy-rigidity-busemann}
+
+\endinput

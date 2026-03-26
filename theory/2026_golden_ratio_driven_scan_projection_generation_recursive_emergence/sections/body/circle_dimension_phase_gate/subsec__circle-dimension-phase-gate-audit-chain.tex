@@ -1,0 +1,373 @@
+\paragraph{审计链的结构闭合}
+结合端点 Koenigs 线性化所提供的加性尺度时间（\S\ref{subsec:cdim-koenigs-linearization}）、Mellin--Plancherel 幺正切片的唯一等距性（定理 \ref{thm:mellin-unitary-slice-unique}）以及“扩展保存”对不可逆读出的外置纪律（附录 \ref{subsec:unit-circle-phase-information}），可将“单位圆面积相位坐标门”进一步闭合为一条可审计链：端点线性化将伸缩累积压缩为对数账本；Mellin 幺正切片将等距读出钉死在临界线；Euler 乘积把尺度链的生成元离散化为素数平移；而扩展保存把任何不可逆读出严格外置为记录轴与证书寄存器（并在范畴层给出规范初对象）。
+
+\subsection{Euler 乘积的算子分解：素数作为尺度生成元}\label{subsec:cdim-euler-operator-factorization}
+在端点线性化坐标中取 \(w>0\)，并令加性尺度坐标
+\[
+y:=-\log w.
+\]
+则伸缩 \(w\mapsto w/m\) 等价于平移 \(y\mapsto y+\log m\)。
+据此，对 \(a>0\) 定义平移算子
+\[
+(\mathcal{U}_a f)(y):=f(y+\log a),
+\qquad
+\mathcal{U}_a\mathcal{U}_b=\mathcal{U}_{ab},
+\]
+并定义尺度链算子
+\begin{equation}\label{eq:cdim-scale-chain-operator}
+\boxed{\;
+(\mathcal{K}f)(y)
+:=\sum_{m\ge 1}\frac{1}{m}(\mathcal{U}_m f)(y)
+=\sum_{m\ge 1}\frac{1}{m}f(y+\log m)\; }.
+\end{equation}
+该算子与本章 \S\ref{subsec:cdim-mellin-diagonalization} 的离散尺度转移算子在共轭意义下同型：若以 \(w=e^{-y}\) 把端点邻域改写为乘法坐标，则 \eqref{eq:cdim-scale-chain-operator} 的谱侧乘子正是 \(\zeta\)（式 \eqref{eq:scale-mellin-diagonalization}）。
+\par
+在交换半群关系 \(\mathcal{U}_a\mathcal{U}_b=\mathcal{U}_{ab}\) 下，Euler 乘积诱导如下算子化分解（在适当收敛/算子拓扑下成立，亦可视作形式恒等式）：
+\begin{equation}\label{eq:cdim-euler-operator-factorization}
+\boxed{\;
+\mathcal{K}
+=\prod_{p}\left(I-\frac{1}{p}\mathcal{U}_p\right)^{-1}\; }.
+\end{equation}
+该分解给出“圆维—尺度链”接口的代数化版本：圆维负责相位纤维的可见通道计数，而尺度链 \(\mathcal{K}\) 的离散生成元由素数平移 \(\{\mathcal{U}_p\}_p\) 给出；因此“算术的素性”在端点线性化后的信息账本中表现为一组离散尺度生成元，而非连续拟合参数。
+
+\subsection{Mellin--Plancherel 幺正切片与唯一性：临界线作为唯一等距读出}\label{subsec:cdim-mellin-plancherel-unitary-slice}
+对乘法群 \(\RR_+^\times\) 取 Haar 测度 \(\dd^\times x=\dd x/x\) 并记 \(L^2_\times=L^2(\RR_+^\times,\dd^\times x)\)。
+对 \(f\in L^1\cap L^2_\times\) 定义带临界移位的 Mellin 读出
+\[
+(\mathcal{M}f)(s):=\int_0^\infty f(x)\,x^{s-\frac12}\,\dd^\times x,
+\qquad
+(\mathcal{M}_\sigma f)(t):=(\mathcal{M}f)(\sigma+\mathrm{i}t),
+\]
+则定理 \ref{thm:mellin-unitary-slice-unique} 给出幺正切片唯一性：\(\mathcal{M}_{1/2}:L^2_\times\to L^2(\RR,\dd t/2\pi)\) 延拓为幺正同构，并且对任意 \(\sigma\in\RR\) 有严格权重扭曲恒等式
+\[
+\|\mathcal{M}_\sigma f\|_{L^2(\dd t/2\pi)}=\|x^{\sigma-\frac12}f\|_{L^2_\times}
+\qquad(\text{式 \eqref{eq:mellin-sigma-weight-twist}}).
+\]
+因此在本章语义下，“信息守恒”的等距读出不再是经验性要求，而是结构性约束：若协议拒绝外置权重扭曲 \(x^{\sigma-\frac12}\) 作为可审计记录轴，则唯一允许的等距切片被钉死在 \(\Re(s)=\tfrac12\)。
+
+\subsection{部分观测与扩展保存：把不可逆性外置为记录轴的范畴化纪律}\label{subsec:cdim-extension-preserving-category}
+相位门本身可逆；任何不可逆性来自后续投影/截断/离散化，并应被制度化为\emph{部分观测}（定义 \ref{def:unit-circle-phase-partial-observation}）。
+扩展保存原则给出最小要求：存在记录轴 \(r\) 使扩展读出 \((\pi,r)\) 在对象层恢复单射（命题 \ref{prop:unit-circle-phase-extension-preserving}）。
+但“记录轴如何压缩为可审计的最小形式”并非集合论平凡实现所能决定，而需要在证书语义下引入范畴化纪律。
+\par
+定义 \ref{def:xi-extension-preserving-category} 将扩展保存组织为因子范畴 \(\mathrm{Ext}(\pi)\)：对象为可使扩展读出单射化的记录轴，态射为保持证书可核验等价的因子化 \(r'=\phi\circ r\)。
+在 unitary slice 可见域约束与正交三分律等假设下，定理 \ref{thm:xi-extension-preserving-initial-object} 给出规范初对象 \(r_0\)，从而把“不可逆性外置”提升为一个具唯一性的最小乘积闭包：任何其它扩展保存记录轴都只能由 \(r_0\) 因子化得到。
+
+\subsection{对数 Sobolev--Gross 超收缩证书：从混合不等式推出临界线局域化}\label{subsec:cdim-logsobolev-gross-zero-band}
+在“视界零知识—幺正切片”算子模型中，若不可见部分上存在完全正、迹保持半群 \((\mathcal{T}_u)_{u\ge 0}\) 并满足维数无关对数 Sobolev 不等式（常数 \(\alpha>0\)），则对任意 \(s\) 的视界算子
+\(
+K_s=\int_0^\infty e^{-(s-\frac12)u}\mathcal{T}_u(U)\,\dd u
+\)
+在带外区域 \(|\Re(s)-\tfrac12|>c/\alpha\) 强制无零点事件，并且任何稳定的离临界线零点都会迫使 \(\alpha\downarrow 0\)（命题 \ref{prop:op-algebra-logsobolev-zero-band}）。
+其证明要点由对数 Sobolev \(\Leftrightarrow\) Gross 超收缩等价出发，将混合强度转译为对 \(\|\mathcal{T}_u(U)\|\) 的指数衰减界，从而给出严格收缩性与谱排除。
+在本章口径下，这一证书把“零点/不可逆性”与“混合强度（\(\alpha\)）”直接对偶，并把临界线局域化落实为可核验的算子不等式接口。
+
+\subsection{唯一连续横截方向：径向寄存器的因子唯一性与圆维外正交轴}\label{subsec:cdim-unique-continuous-transverse}
+幺正切片唯一性固定了等距读出的唯一位置（定理 \ref{thm:mellin-unitary-slice-unique}）。
+与之互补地，推论 \ref{cor:xi-unique-continuous-transverse-register} 给出连续记录轴的因子唯一性：在纯相位制度下，若允许外置一个连续模式轴以实现扩展保存，则任何使
+\(
+u\mapsto(\operatorname{proj}_{\mathsf{Phase}}(u),r(u))
+\)
+单射化的连续记录轴 \(r\) 都必经由 \(|u|\) 因子化，因而与径向寄存器 \(\varrho(u)=\log|u|\) 仅差单调重参数化。
+因此，unitary slice 之外不存在第二条与相位轴并列的连续横截寄存器；所有非相位连续自由度若要保守外置，必须落在与 \(\varrho\) 等价的唯一通道上，从而与“圆维”所计数的相位通道严格区分。
+
+\subsection{三类失败见证与正交记录轴的不可替代性：扩展保存的最小乘积闭包}\label{subsec:cdim-null-trichotomy-record-axes}
+在“地址先于取值”的可核验语义下，读出失败被制度化为 \(\mathsf{NULL}\) 及其离线可核验的有限失败见证。
+定理 \ref{thm:xi-null-complete-trichotomy-offline} 给出全局 \(\mathsf{NULL}\) 的完备三分律：域外拒绝、粘合扭结与硬资源不足；并且三类见证相互正交、不可替代（定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable}）。
+据此，定理 \ref{thm:xi-extension-preserving-initial-object} 以范畴初对象形式给出规范记录轴的乘积闭包：
+碰撞方向强制 residue/逆极限轴（prime-register），虚向折叠强制绕数证书轴，而端点连续累积强制 Koenigs 深度账本；任意试图以单一轴预算替代其它轴的方案都将产生可复核的否证见证。
+
+\subsection{相位前缀过滤与二次分辨率门槛：端点压缩诱导的强制碰撞律}\label{subsec:cdim-phase-prefix-quadratic-barrier}
+在仅允许相位紧化坐标的可见制度下，精细化由离散分辨率深度（前缀长度）度量而非由新增连续坐标轴提供。
+令 \(u=\upsilon(t)=\pi^{-1}\arctan(t)\in(-\tfrac12,\tfrac12)\)，并置 \(\widetilde u(t):=u+\tfrac12\in(0,1)\)。
+对整数 \(m\ge 1\) 定义 dyadic 柱单元（相位地址前缀）
+\[
+I_m(t):=\Bigl[\frac{\lfloor 2^m\widetilde u(t)\rfloor}{2^m},\ \frac{\lfloor 2^m\widetilde u(t)\rfloor+1}{2^m}\Bigr)\subset(0,1),
+\qquad
+A_m(t):=\lfloor 2^m\widetilde u(t)\rfloor.
+\]
+在“地址先于取值”的前缀语义下，\(m\) 即为分辨率深度：读出接口不引入新的连续自由度，只允许沿 \(m\uparrow\) 的柱过滤细化。
+推论 \ref{cor:xi-compactified-spacing-quadratic} 表明：端点紧化把高度轴上的平均间距压缩为 \(u\)-坐标中的二次量级，从而实现单零点级分辨所需分辨率门槛为 \(T^{-2}\log(T)^{-1}\)（并与定理 \ref{thm:xi-phase-prefix-collision-lower-bound} 同阶）。
+当零点密度随高度以 \(T\log T\) 增长时，该二次压缩强制出现不可绕过的端点分辨率/位复杂度屏障（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}），并把“碰撞型不可寻址性”提升为可审计的离散预算定律。
+
+\begin{proposition}[二次分辨率屏障的占用下界与单射门槛]\label{prop:cdim-phase-prefix-occupancy-barrier}
+存在常数 \(T_0>0\)、\(c>0\) 使得对任意 \(T\ge T_0\) 与任意 \(m\ge 1\)，在高度带 \((T,2T]\) 内必存在某个地址值 \(a\in\{0,1,\dots,2^m-1\}\) 使
+\begin{equation}\label{eq:cdim-phase-prefix-occupancy-barrier}
+\#\{\gamma\in(T,2T]:A_m(\gamma)=a\}\ \ge\ c\,\frac{T^2\log T}{2^m}.
+\end{equation}
+特别地，若要求 \((T,2T]\) 上的地址映射 \(\gamma\mapsto A_m(\gamma)\) 单射，则必须 \(2^m\gtrsim T^2\log T\)，等价地
+\[
+m\ \ge\ 2\log_2T+\log_2\log T-O(1).
+\]
+\end{proposition}
+\begin{proof}
+由 \(\upsilon'(t)=1/(\pi(1+t^2))\) 得 \(\upsilon(2T)-\upsilon(T)\asymp 1/T\)；并由零点计数主阶 \(N_\zeta(2T)-N_\zeta(T)\asymp T\log T\)，故高度带 \((T,2T]\) 内的零点在 \(\widetilde u\)-轴上落在长度 \(\asymp 1/T\) 的相位窗内。
+该相位窗至多与 \(O(2^m/T)\) 个 dyadic 柱单元 \(I_m\) 相交，抽屉原理给出某个地址 \(a\) 的占用数下界为
+\[
+\#\{\gamma\in(T,2T]:A_m(\gamma)=a\}\ \ge\ c\,\frac{T\log T}{2^m/T}
+\]
+（调整常数 \(c\) 即得 \eqref{eq:cdim-phase-prefix-occupancy-barrier}）。
+若地址映射单射，则 \eqref{eq:cdim-phase-prefix-occupancy-barrier} 的左侧 \(\le 1\)，从而得到所示门槛。证毕。
+\end{proof}
+
+\paragraph{外置残差轴：从占用下界到 prime-register 配额}
+命题 \ref{prop:cdim-phase-prefix-occupancy-barrier} 刻画了“仅凭相位前缀地址”在高高度端点压缩下的结构性碰撞不可避免性。
+在扩展保存口径中，唯一可行的修复是把碰撞完全移入外置残差寄存器（prime-register 及其有限截断即为规范实现之一）。
+下述推论把 \eqref{eq:cdim-phase-prefix-occupancy-barrier} 直接翻译为残差寄存器的最小容量，并与 Quantile-CRT 的模积门槛合并为同一联合下界。
+
+\begin{corollary}[前缀地址单射化所需残差寄存器容量]\label{cor:cdim-prefix-residual-register-capacity}
+取 \(T\ge T_0\)（其中 \(T_0\) 为命题 \ref{prop:cdim-phase-prefix-occupancy-barrier} 中常数）并令
+\[
+\Gamma(T):=\{\gamma\in(T,2T]:\ \exists\,\rho=\beta+\mathrm{i}\gamma\ \text{为非平凡零点}\}.
+\]
+令 \(m\ge 1\)。
+若存在有限集合 \(R_m\) 与映射 \(r_m:\Gamma(T)\to R_m\) 使得扩展地址
+\[
+\gamma\longmapsto \bigl(A_m(\gamma),\,r_m(\gamma)\bigr)\in\{0,\dots,2^m-1\}\times R_m
+\]
+在 \(\Gamma(T)\) 上为单射，则
+\[
+\card{R_m}\ \ge\ c\,\frac{T^2\log T}{2^m},
+\]
+其中常数 \(c>0\) 与命题 \ref{prop:cdim-phase-prefix-occupancy-barrier} 相同。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:cdim-phase-prefix-occupancy-barrier}，存在 \(a\in\{0,\dots,2^m-1\}\) 使桶
+\(
+S_a:=\{\gamma\in\Gamma(T):\ A_m(\gamma)=a\}
+\)
+满足 \(\card{S_a}\ge c\,T^2\log T/2^m\)。
+若 \(\gamma\mapsto(A_m(\gamma),r_m(\gamma))\) 单射，则 \(r_m\) 在 \(S_a\) 上必为单射，故
+\(
+\card{R_m}\ge \card{r_m(S_a)}=\card{S_a}
+\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[地址碰撞与 Quantile-CRT 的模积联合下界]\label{cor:cdim-prefix-quantile-crt-joint-modulus}
+在推论 \ref{cor:cdim-prefix-residual-register-capacity} 的设定下，进一步假设残差寄存器由两两互素模数组实现，
+使得 \(R_m\cong \ZZ/P_m\ZZ\) 且 \(P_m=\card{R_m}\)。
+若还要求该寄存器在失败概率 \(\le \varepsilon\) 的意义下实现 \((\mathrm{RCRT}_\varepsilon)\) 型可逆化读出（命题 \ref{prop:pom-rcrt-epsilon}），
+则对命题 \ref{prop:pom-rcrt-epsilon} 中任意可行尾部阈值 \(B_m(\varepsilon)\) 必有
+\[
+P_m\ \ge\ \max\!\left\{\, c\,\frac{T^2\log T}{2^m},\ 2B_m(\varepsilon)\,\right\}.
+\]
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:cdim-prefix-residual-register-capacity} 得 \(P_m=\card{R_m}\ge c\,T^2\log T/2^m\)。
+另一方面，为在好事件上由 residue 唯一恢复区间 \([-B_m(\varepsilon),B_m(\varepsilon)]\) 内的整数标签，
+必须有 \(P_m>2B_m(\varepsilon)\)（这是 CRT 在该区间上单射的算术必要条件，亦即命题 \ref{prop:pom-rcrt-epsilon} 的 CRT 侧条件）。
+合并两条必要条件并取最大值即得。证毕。
+\end{proof}
+
+\begin{remark}[模积的深度归一化密度]\label{rem:cdim-prime-register-density}
+定义 prime-register 的深度归一化容量
+\[
+\delta_m:=\frac{1}{m}\log_2 P_m.
+\]
+若把尾部阈值写为 \(B_m(\varepsilon)=\exp\!\bigl(m\,\gamma_m(\varepsilon)\bigr)\)（即 \(\gamma_m(\varepsilon):=\frac{1}{m}\log B_m(\varepsilon)\)），
+则条件 \(P_m>2B_m(\varepsilon)\) 给出换算下界
+\[
+\delta_m\ \ge\ \frac{\gamma_m(\varepsilon)}{\log 2}+\frac{1}{m}.
+\]
+该密度与残差圆维 \(\overline{\cdim}_{\mathrm{res}}\) 同量纲：二者均以“每层深度的对数容量”度量外置离散轴预算。
+\end{remark}
+
+\begin{corollary}[最小化模积阈值时的平衡深度尺度]\label{cor:cdim-optimal-depth-scale-modulus}
+在推论 \ref{cor:cdim-prefix-quantile-crt-joint-modulus} 的联合下界中，若存在常数 \(\underline\gamma(\varepsilon)>0\) 使得在所考虑深度范围内
+\[
+B_m(\varepsilon)\ \ge\ \exp\!\bigl(m\,\underline\gamma(\varepsilon)\bigr),
+\]
+则存在常数 \(C(\varepsilon)>0\) 使对所有足够大 \(T\) 有
+\[
+\inf_{m\ge 1}\ \max\!\left\{\, c\,\frac{T^2\log T}{2^m},\ 2B_m(\varepsilon)\,\right\}
+\ \ge\
+C(\varepsilon)\,
+T^{\frac{2\underline\gamma(\varepsilon)}{\underline\gamma(\varepsilon)+\log 2}}\,
+(\log T)^{\frac{\underline\gamma(\varepsilon)}{\underline\gamma(\varepsilon)+\log 2}}.
+\]
+\end{corollary}
+\begin{proof}
+在连续 \(m>0\) 上令
+\[
+f(m):=cT^2\log T\cdot 2^{-m}=cT^2\log T\cdot e^{-m\log 2},
+\qquad
+g(m):=2e^{m\underline\gamma(\varepsilon)}.
+\]
+则由假设 \(2B_m(\varepsilon)\ge g(m)\) 得
+\(
+\max\{cT^2\log T/2^m,\ 2B_m(\varepsilon)\}\ge \max\{f(m),g(m)\}
+\)。
+而 \(\max\{f(m),g(m)\}\) 的最小值（在连续 \(m\) 上）发生在交点 \(f(m)=g(m)\)，即
+\[
+m^\ast=\frac{\log(cT^2\log T)-\log 2}{\underline\gamma(\varepsilon)+\log 2}.
+\]
+将 \(m^\ast\) 代回得
+\[
+\inf_{m>0}\max\{f(m),g(m)\}
+=f(m^\ast)=g(m^\ast)
+=C(\varepsilon)\,
+T^{\frac{2\underline\gamma(\varepsilon)}{\underline\gamma(\varepsilon)+\log 2}}\,
+(\log T)^{\frac{\underline\gamma(\varepsilon)}{\underline\gamma(\varepsilon)+\log 2}},
+\]
+其中 \(C(\varepsilon)>0\) 仅依赖于 \(c\) 与 \(\underline\gamma(\varepsilon)\)。
+将连续下确界限制到整数 \(m\ge 1\) 仅改变一个与 \(T\) 无关的常数因子，吸收入 \(C(\varepsilon)\) 即得。证毕。
+\end{proof}
+
+\paragraph{dyadic 前缀的超度量结构}
+为把“共享前缀深度”制度化为可核验对象，对任意 \(\theta\in(0,1)\) 与 \(b\in\NN\) 定义 dyadic 盒
+\[
+J_b(\theta):=\Bigl[\frac{\lfloor 2^b\theta\rfloor}{2^b},\ \frac{\lfloor 2^b\theta\rfloor+1}{2^b}\Bigr),
+\qquad
+|J_b(\theta)|=2^{-b}.
+\]
+对 \(\theta,\theta'\in(0,1)\) 定义 dyadic 前缀相容深度
+\[
+m(\theta,\theta'):=\sup\{b\in\NN:\ J_b(\theta)=J_b(\theta')\}\in\NN\cup\{\infty\},
+\]
+并据此定义地址距离
+\[
+d_{\mathrm{addr}}(\theta,\theta'):=2^{-m(\theta,\theta')}.
+\]
+则 \(d_{\mathrm{addr}}\) 为超度量：对任意 \(\theta,\theta',\theta''\in(0,1)\) 有
+\(
+d_{\mathrm{addr}}(\theta,\theta'')\le \max\{d_{\mathrm{addr}}(\theta,\theta'),d_{\mathrm{addr}}(\theta',\theta'')\}
+\)；
+并且半径 \(2^{-b}\) 的闭球恰为 dyadic 盒 \(J_b\)，从而“证书细化深度”与“半径收缩”完全等同。
+
+\input{subsec__circle-dimension-phase-gate-riemann-siegel-gabcke-zero-recursion}
+
+\input{subsec__circle-dimension-phase-gate-afe-posterior-sigma-contraction}
+
+\input{subsec__circle-dimension-phase-gate-symmetric-truncation-scale-flow}
+
+\subsection{最小记录轴定理：纯相位读出下唯一连续横截与证书正交外置}\label{subsec:cdim-minimal-record-axis}
+扩展保存范畴、唯一连续横截与前缀地址屏障三条链式约束可被收束为如下统一结构定理：它把“信息守恒”落实为可核验的因子分解与最小外置，并把“离切片信息只能正交外置”精确化为连续轴的唯一性与离散证书轴的不可替代直积。
+
+\begin{theorem}[最小记录轴：初对象、唯一连续横截与正交外置]\label{thm:cdim-minimal-record-axis}
+设 \(\pi:\Omega\to Y\) 为给定读出（允许多对一压缩），并以“可核对的单值读出”为类型层前提。
+沿用扩展保存范畴 \(\mathrm{Ext}(\pi)\) 的定义（定义 \ref{def:xi-extension-preserving-category}）：对象为使扩展读出 \(\pi^{\mathrm e}=(\pi,r):\Omega\to Y\times R\) 在对象层单射的记录轴 \(r\)，态射为保持证书可核验等价的因子化 \(r'=\varphi\circ r\)。
+在 unitary slice 可见域锁定（定义 \ref{def:xi-visible-read-null}）与 \(\mathbf{PW}\) 闭包的“无未记录连续轴”原则（定理 \ref{thm:xi-pw-no-continuous-hair}）下，成立：
+\begin{enumerate}
+  \item \textbf{（规范记录轴的初对象性）}
+  \(\mathrm{Ext}(\pi)\) 中存在规范对象
+  \[
+  r_0:=r_{\mathrm{fin}}\times r_{\widehat{\ZZ}}\times r_{\mathrm{wind}}\times r_{\mathrm{end}},
+  \]
+  其中 \(r_{\widehat{\ZZ}}\) 为 residue/逆极限（prime-register）记录轴，\(r_{\mathrm{wind}}\) 为绕数证书轴，\(r_{\mathrm{end}}\) 为端点 Koenigs 深度账本，而 \(r_{\mathrm{fin}}\) 记录端点偶通道的普适极/显式有限部；
+  并且对任意 \(r\in\mathrm{Ext}(\pi)\)，存在唯一（在证书可核验等价意义下）态射 \(r_0\to r\)。
+  换言之，一切扩展保存记录轴都必为 \(r_0\) 的因子化/压缩。
+
+  \item \textbf{（唯一连续横截）}
+  在纯相位制度中，若允许外置一条连续模式轴以承载 unitary slice 之外的径向自由度，则任意使
+  \[
+  u\longmapsto\bigl(\operatorname{proj}_{\mathsf{Phase}}(u),r(u)\bigr)
+  \]
+  成为单射的连续记录轴 \(r:\CC^\times\to\RR\) 都必经由 \(|u|\) 因子化，从而与径向寄存器 \(\varrho(u)=\log|u|\) 仅差单调重参数化。
+  特别地，除相位轴外不存在第二条与之并列的连续横截寄存器；任何不与 \(\varrho\) 等价的连续扩维在闭包语义中只能触发 \(\mathsf{NULL}\)。
+
+  \item \textbf{（前缀地址屏障下的正交外置）}
+  在“地址先于取值”的前缀语义下，地址对象由柱事件给出；\(\mathsf{NULL}\) 对应“局部截面不存在”或“记录轴预算不足以单射化”的结构性失败见证（定理 \ref{thm:xi-null-complete-trichotomy-offline}）。
+  由于端点紧化诱导二次分辨率屏障（定理 \ref{thm:xi-phase-prefix-collision-lower-bound}、定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}），任何试图以“与相位解耦的额外连续坐标”绕过该屏障的方案，要么在类型层被拒绝并读出为 \(\mathsf{NULL}\)，要么在因子意义下等价于唯一径向外延 \(\varrho\)。
+  因此，除 \(\varrho\) 外的全部离切片信息只能以可离线核验的离散证书轴（例如 residue/逆极限、绕数、同调/粘合模障碍等）正交外置，并且这些外置分量在体系内不可相互替代。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+第 (1) 条即定理 \ref{thm:xi-extension-preserving-initial-object} 在本章记号下的直接引用；
+第 (2) 条由推论 \ref{cor:xi-unique-continuous-transverse-register} 与“无未记录连续轴”原则（定理 \ref{thm:xi-pw-no-continuous-hair}）给出；
+第 (3) 条由前缀碰撞的端点二次分辨率门槛（定理 \ref{thm:xi-phase-prefix-collision-lower-bound}、定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}）与 \(\mathsf{NULL}\) 的完备三分律（定理 \ref{thm:xi-null-complete-trichotomy-offline}）合并而得，并由正交见证不可替代性（定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable}）封口。证毕。
+\end{proof}
+
+\paragraph{证书寄存器规格表}
+约定：可见读出以相位前缀（柱事件）为地址对象；任何寄存器均须能被有限对象编码并由确定性检查器离线复核，且不得引入新的不可核验区分。
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.2}
+\caption{证书寄存器规格表：纯相位读出下的最小外置轴与离线核验接口。}
+\label{tab:cdim-certificate-register-spec}
+\begin{tabular}{@{}
+>{\raggedright\arraybackslash}p{0.14\linewidth}
+>{\raggedright\arraybackslash}p{0.09\linewidth}
+>{\raggedright\arraybackslash}p{0.15\linewidth}
+>{\raggedright\arraybackslash}p{0.20\linewidth}
+>{\raggedright\arraybackslash}p{0.18\linewidth}
+>{\raggedright\arraybackslash}p{0.22\linewidth}
+@{}}
+\toprule
+寄存器（符号） & 类型 & 值域/编码口径 & 承载的信息（不可替代性） & 缺失时的语义后果 & 离线核验接口（检查器要点） \\
+\midrule
+相位轴（\(\theta\) / 相位前缀 \(a_{\mathrm{vis}}\)） &
+可见轴（连续对象的离散前缀化） &
+dyadic 盒/柱前缀（有限位深度 \(b\)） &
+唯一可见的单参接口；地址对象为柱事件而非点指针 &
+地址不成立或深度不足导致聚类/碰撞，继而触发 \(\mathsf{NULL}\) 或强制外置残差轴 &
+检查前缀合法性与细化一致性；以“局部截面存在性”判定非 \(\mathsf{NULL}\)（见定理 \ref{thm:xi-null-complete-trichotomy-offline}） \\
+\addlinespace
+径向寄存器（\(\varrho(u)=\log|u|\)） &
+唯一允许的连续模式轴 &
+\(\RR\)（区间/有理括号编码） &
+unitary slice 之外唯一连续横截；任意连续外延皆与之因子等价 &
+若试图引入不与 \(\varrho\) 等价的连续轴，则被类型拒绝并读出为 \(\mathsf{NULL}\) &
+验证记录轴仅依赖 \(|u|\) 且与 \(\varrho\) 单调等价（推论 \ref{cor:xi-unique-continuous-transverse-register}；定理 \ref{thm:xi-pw-no-continuous-hair}） \\
+\addlinespace
+residue/逆极限轴（prime-register \(r_{\widehat{\ZZ}}\)） &
+离散证书轴 &
+有限支撑的同余/逆极限标签（prime-register 截断） &
+同像碰撞的可逆化最小侧信息；修复相位前缀不足导致的多对一压缩 &
+碰撞无法消除，读出单值性破坏并触发碰撞型 \(\mathsf{NULL}\) &
+检查残差一致性与模积预算门槛；因子化映射不得引入不可离线核验区分（定理 \ref{thm:address-defect-law}） \\
+\addlinespace
+绕数证书轴（\(r_{\mathrm{wind}}\)） &
+离散证书轴 &
+\(\ZZ\)（绕数/同伦类编码） &
+虚向折叠/环绕信息的最小可逆化证书 &
+缺失则相关对象在纯相位读出下不可单射化而读出为 \(\mathsf{NULL}\) &
+检查绕数一致性方程与细化兼容；因子态射不得抹除可核验绕数差异（定理 \ref{thm:dephys-dirichlet-winding-minimal}） \\
+\addlinespace
+端点深度账本（\(r_{\mathrm{end}}\)） &
+证书轴（可连续量的有限可核验编码） &
+Koenigs 深度/伸缩账本（有限对象描述） &
+端点连续累积的唯一可核验承载；与其它轴不可替代 &
+缺失则端点连续累积无法在类型层闭合，触发 \(\mathsf{NULL}\) 或强制补证书 &
+检查深度加法律与共轭一致性；在因子化下保持账本等价类（定理 \ref{thm:dephys-endpoint-koenigs-rigidity}） \\
+\addlinespace
+端点有限部轴（\(r_{\mathrm{fin}}\)） &
+离散/有限证书轴 &
+普适极 + 显式有限部（有限对象编码） &
+端点偶通道发散的闭式封口坐标；实现中立的审计基准 &
+缺失则发散/有限部不可离线锁定，导致语义层不闭合并触发 \(\mathsf{NULL}\) &
+检查普适极与有限部封口一致性，并与反变 \(\chi_4\) 通道正交（定理 \ref{thm:endpoint-even-finite-part-renormalization}；备注 \ref{rem:endpoint-renormalization-universal-pole-discrete-hair}） \\
+\addlinespace
+同调/粘合障碍轴（\(r_H\)） &
+离散失败见证轴 &
+有限可枚举的模障碍/同调类编码 &
+记录“局部截面不可全球化”的内禀原因；属于有限失败见证接口 &
+若障碍非零，则地址处无局部截面且读出必为 \(\mathsf{NULL}\)（不可用比特预算消去） &
+检查 cocycle/粘合条件与障碍类，输出可离线复核的失败证书（命题 \ref{prop:null-as-h2-obstruction}） \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+上述规格表与定理 \ref{thm:cdim-minimal-record-axis} 等价地给出：在纯相位读出下，连续记录轴在因子意义下压缩为径向寄存器 \(\varrho\) 的唯一等价类；其余信息若要保持离线可核验与信息守恒，只能落入离散证书寄存器的正交直积，并在 \(\mathrm{Ext}(\pi)\) 中以初对象 \(r_0\) 的形式实现最小化与唯一性。
+
+\input{subsec__circle-dimension-phase-gate-three-axis-address-protocol}
+
+\subsection{相位一致定标下的体积常数闭包：\texorpdfstring{$\log(2/\pi)$}{log(2/pi)} 与 Haar 推前归一化的同一性}\label{subsec:cdim-volume-constant-closure}
+在相位一致定标下，体积常数不再携带可调尺度自由度，而被锁定为可计算的刚性对象（命题 \ref{prop:phase-gate-rank1-volume-rigidity} 与命题 \ref{prop:phase-gate-u1-fixes-simple-scale}）。
+推论 \ref{cor:zigzag-entropy-su2-weyl-constant} 给出一个将离散熵常数与连续 Haar 归一化完全同一化的闭式恒等式：
+一方面离散熵常数 \(c_{\mathrm{zz}}=\lim_{n\to\infty}\frac1n\log(E_n/n!)\) 等于 \(\log(2/\pi)\)；
+另一方面，在相位一致双不变度量下，\(SU(2)\) 的 Weyl 推前 Haar 概率测度满足
+\[
+\dd\nu(\phi)=\frac{2}{\pi}\sin^2\phi\,\dd\phi,
+\qquad
+Z_{SU(2)}=\frac{2}{\pi},
+\qquad
+c_{\mathrm{zz}}=\log Z_{SU(2)}.
+\]
+因此，若相位门选定的 \(U(1)\) 方向将基本闭轨长度规范化为 \(2\pi\)，则紧简单因子的尺度自由度被消去，出现的超越结构被压缩到 \(\pi\) 及其二重商所引入的 \(2\)（备注 \ref{rem:phase-gate-volume-constants-closure}）。
+\endinput
+

@@ -1,0 +1,79 @@
+% (User input window)
+
+\paragraph{二维系统辨识：有限矩形数据确定最小双变量核}
+定理 \ref{thm:pom-bivariate-moment-zeta-fredholm} 将二维矩表 \(\{S_q(m)\}_{q,m\ge1}\) 封装为双变量 Fredholm 行列式
+\(
+\mathfrak{Z}(z,u)=\det(I-z\mathcal{A}(u))^{-1}
+\)。
+在该口径下，“二维系统辨识”问题可表述为：仅由有限窗口的矩形观测 \(\{S_q(m)\}_{q\le Q,\ m\le M}\)，能否唯一恢复最小维数的核族 \(\mathcal{A}(u)\)（至相似）并延拓出全表？
+下述结论给出一个标准的有限窗阈值：当二维 Hankel--Krylov 秩达到最小秩 \(R\) 时，有限矩形数据在原则上已构成一个可判定的完全不变量。
+
+\begin{definition}[二维 Hankel--Krylov 识别秩]\label{def:pom-bivariate-hankel-krylov-rank}
+设给定二维序列 \(\{S_q(m)\}_{q,m\ge1}\)。
+定义其双移位闭包为
+\[
+\mathsf{Span}(S):=\mathrm{span}_{\QQ}\Bigl\{(m,q)\mapsto S_{q+q_0}(m+m_0):\ m_0,q_0\in\NN_0\Bigr\},
+\]
+并令
+\[
+R:=\dim_{\QQ}\mathsf{Span}(S)\ \in\ \NN\cup\{\infty\}.
+\]
+当 \(R<\infty\) 时，称 \(R\) 为该矩表的\emph{二维 Hankel--Krylov 最小秩}（亦可理解为二维 Hankel 算子的秩；其有限性等价于存在有限维双变量有理表示）。
+\end{definition}
+
+\begin{theorem}[有限矩形可判定性与唯一性（二维最小实现）]\label{thm:pom-bivariate-system-identification-finite-window}
+假设 \(\{S_q(m)\}\) 由某个最小双变量表示生成：存在维数 \(R<\infty\) 的矩阵族
+\(\mathcal{A}(u)\in\Mat_{R\times R}(\QQ(u))\)，其在 \(u=0\) 解析且 \(\mathcal{A}(0)=0\)，并满足
+\[
+\mathfrak{Z}(z,u)
+:=\exp\!\Bigl(\sum_{m\ge1}\sum_{q\ge1}\frac{S_q(m)}{m}u^q z^m\Bigr)
+=\det(I-z\mathcal{A}(u))^{-1}.
+\]
+令 \(R\) 同时为定义 \ref{def:pom-bivariate-hankel-krylov-rank} 的最小秩。
+若给定矩形窗口
+\[
+\{S_q(m):\ 1\le m\le 2R,\ 1\le q\le 2R\},
+\]
+并且在该窗口内可核验“二维 Hankel--Krylov 秩达到 \(R\)”（即由双移位生成的线性相关关系在 \(2R\times 2R\) 窗内已稳定闭合），
+则：
+\begin{enumerate}
+  \item 存在唯一（至相似变换）维数 \(R\) 的最小核族 \(\mathcal{A}(u)\) 生成该窗口数据；
+  \item 该核族唯一延拓出全体 \(\{S_q(m)\}_{q,m\ge1}\)；
+  \item 因而“折叠--moment 编译核”的二维统计在原则上可由有限矩形观测完全重构（二维系统辨识）。
+\end{enumerate}
+\end{theorem}
+\begin{proof}[证明要点]
+由假设，\(\mathfrak{Z}(z,u)\) 为双变量有理函数，且其最小实现维数等于相应 Hankel（双移位）算子的秩 \(R\)；
+这是有限维\(\det\)-表示（或等价的线性表示/可辨识有理级数）之标准最小实现理论的结论。
+\par
+当秩为 \(R\) 时，双移位闭包 \(\mathsf{Span}(S)\) 由 \(R\) 个基函数生成；
+在窗口 \(m,q\le 2R\) 内秩已稳定意味着：所需的线性关系（二维递推/消元关系）在有限步内已可观测并可解出，
+从而可在代数上恢复一个维数为 \(R\) 的实现（例如通过构造双向 Krylov 基并解出相似类中的生成元）。
+\par
+最小实现的唯一性（至相似）同样来自 Hankel 秩的最小性：任意两个最小实现诱导同一 Hankel 双线性型，故必相似。
+一旦恢复 \(\mathcal{A}(u)\)，由
+\(
+\mathfrak{Z}(z,u)=\det(I-z\mathcal{A}(u))^{-1}
+\)
+的系数抽取恒等式即可唯一延拓出全部 \(S_q(m)\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[从模矩形到全平面：二维矩表的确定性离线提升]\label{cor:pom-bivariate-mod-rectangle-lifts-to-plane}
+在定理 \ref{thm:pom-bivariate-system-identification-finite-window} 的设定下，令
+\[
+U:=\max_{1\le m\le 2R,\ 1\le q\le 2R}|S_q(m)|.
+\]
+取模数 \(M\in\ZZ_{>0}\) 满足 \(M>2U\)，并仅给出窗口的同余数据
+\[
+S_q(m)\bmod M\qquad(1\le m\le 2R,\ 1\le q\le 2R).
+\]
+则该同余矩形在整数意义下具有唯一提升；提升后的整数矩形进一步唯一确定全体 \(\{S_q(m)\}_{q,m\ge 1}\)（等价地唯一确定最小核族 \(\mathcal A(u)\) 的相似类）。
+若 \(M=\prod_{\ell=1}^{t}p_\ell\) 为互异素数乘积，则只要 \(\prod_{\ell}p_\ell>2U\) 即可达到同一确定性提升与全平面锁定。
+\end{corollary}
+\begin{proof}
+由 \(M>2U\) 与定理 \ref{thm:pom-deterministic-congruence-audit-threshold-optimal} 的逐项版本，窗口内每个整数 \(S_q(m)\in[-U,U]\) 由其模 \(M\) 余数唯一确定，故同余矩形唯一提升为整数矩形。
+将该整数矩形代入定理 \ref{thm:pom-bivariate-system-identification-finite-window} 即得全平面唯一性。
+互异素数乘积情形由中国剩余定理合成为模 \(M\) 的同余数据后同理。证毕。
+\end{proof}
+

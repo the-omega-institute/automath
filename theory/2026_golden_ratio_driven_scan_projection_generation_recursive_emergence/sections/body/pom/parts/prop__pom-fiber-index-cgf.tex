@@ -1,0 +1,640 @@
+对 \(\gamma\ge 0\) 与 \(\varepsilon>0\)，定义“近似层”计数
+$$
+N_m(\gamma,\varepsilon):=\Bigl|\bigl\{x\in X_m:\ |\gamma_m(x)-\gamma|\le \varepsilon\bigr\}\Bigr|.
+$$
+定义纤维多重度的（上）谱函数
+$$
+f(\gamma):=\lim_{\varepsilon\downarrow 0}\ \limsup_{m\to\infty}\ \frac{1}{m}\log N_m(\gamma,\varepsilon).
+$$
+\end{definition}
+
+\begin{proposition}[碰撞谱的几何含义：纤维指数的指数矩母函数]\label{prop:pom-fiber-index-cgf}
+沿用 \(\pi_m(x)=d_m(x)/2^m\) 的输出分布记号，并把 \(\gamma_m(X)\) 视为在 \(X_m\) 上以 \(\pi_m\) 抽样的随机变量。
+则对任意整数 \(q\ge 2\) 有严格恒等式
+\[
+\boxed{\;
+\mathbb{E}_{\pi_m}\!\left[\exp\!\bigl((q-1)m\,\gamma_m(X)\bigr)\right]
+=\frac{S_q(m)}{2^m}\; }.
+\]
+从而
+\[
+\frac{1}{m}\log \mathbb{E}_{\pi_m}\!\left[\exp\!\bigl((q-1)m\,\gamma_m(X)\bigr)\right]
+=\frac{1}{m}\log S_q(m)-\log 2.
+\]
+特别地，若存在 Perron 主尺度 \(S_q(m)=\Theta(r_q^m)\)（例如由 moment-kernel 实现给出），则极限累积母函数在整点 \(t=q-1\) 上满足
+\[
+\lim_{m\to\infty}\frac{1}{m}\log \mathbb{E}_{\pi_m}\!\left[e^{t m\,\gamma_m(X)}\right]
+=\log r_{t+1}-\log 2,
+\qquad
+h_{t+1}=(t+1)\log 2-\log r_{t+1}.
+\]
+\end{proposition}
+\begin{proof}
+按定义展开并用 \(\pi_m(x)=d_m(x)/2^m\)：
+\[
+\begin{aligned}
+\mathbb{E}_{\pi_m}\!\left[\exp\!\bigl((q-1)m\,\gamma_m(X)\bigr)\right]
+&=\sum_{x\in X_m}\pi_m(x)\,e^{(q-1)\log d_m(x)}\\
+&=\sum_{x\in X_m}\frac{d_m(x)}{2^m}\,d_m(x)^{q-1}\\
+&=\frac{1}{2^m}\sum_{x\in X_m}d_m(x)^q\\
+&=\frac{S_q(m)}{2^m}.
+\end{aligned}
+\]
+取对数并除以 \(m\) 得第二式。最后一段由 \(S_q(m)=\Theta(r_q^m)\) 的指数尺度与 \(h_q=\log(2^q/r_q)\) 的定义直接推出。证毕。
+\end{proof}
+
+\begin{remark}[大偏差/多分形反演（接口 + 可执行构造）]\label{rem:pom-fiber-index-ldp}
+命题 \ref{prop:pom-fiber-index-cgf} 表明：碰撞谱 \(q\mapsto h_q\) 等价于纤维指数 \(\gamma_m\) 的指数矩母函数在整点的增长率。
+附录 \ref{app:pom-projective-pressure-operator} 给出一个具体的“整数 \(\to\) 实”提升：射影转移算子 \(\mathcal{L}_q\)（定义 \ref{def:pom-projective-transfer-operator}），并证明其在整数点 \(q\in\ZZ_{\ge 2}\) 上严格退化为对称幂 moment-kernel \(\widetilde A_q\)（定理 \ref{thm:pom-projective-operator-degenerates-to-moment-kernel}），从而把离散压力 \(\log r_q\) 对齐到一条连续压力曲线的可执行候选（注 \ref{rem:pom-projective-pressure-route}）。
+在锥收缩/准紧性假设下，可取 \(\lambda(q)\) 为 \(\mathcal{L}_q\) 的 Perron 主特征值并定义凸函数
+\(
+\Lambda(t):=\log\lambda(t+1)-\log 2
+\)
+（对 Fold 主核即 \(|A_{\mathrm{out}}|=2\)），从而得到整点一致性
+\(
+\Lambda(q-1)=\log r_q-\log 2
+\)。
+若进一步满足可微/本质严格凸等标准条件，则 Gartner--Ellis 定理给出 \(\gamma_m\) 的大偏差率函数
+\[
+I(\gamma)=\sup_{t\ge 0}\bigl(t\gamma-\Lambda(t)\bigr).
+\]
+此时 \(I\)（从而纤维厚度谱）可由碰撞谱“反演”得到，构成“从 \(h_q\) 指纹回推纤维几何”的可证伪计算目标。
+\end{remark}
+
+\begin{theorem}[纤维指数的大偏差原理（热力学完成）]\label{thm:pom-fiber-index-ldp-thermo}
+令 \(X\sim\pi_m\)（其中 \(\pi_m(x)=d_m(x)/2^m\)），并记
+\(
+\gamma_m(X)=(1/m)\log d_m(X)
+\)。
+假设极限累积母函数
+\[
+\Lambda(t)=\lim_{m\to\infty}\frac{1}{m}\log \mathbb{E}_{\pi_m}\!\left[e^{t m\,\gamma_m(X)}\right]
+\]
+在某个包含 \(t=0\) 的开区间上存在、有限，并满足 Gartner--Ellis 定理所需的本质光滑/严格凸等正则性条件。
+则序列 \((\gamma_m(X))_{m\ge 1}\) 满足大偏差原理，且其率函数为 Legendre--Fenchel 变换
+\[
+I(\gamma)=\sup_{t\ge 0}\bigl(t\gamma-\Lambda(t)\bigr).
+\]
+此外，\(I\) 为良函数并具有唯一零点
+\(
+\gamma_\ast=\Lambda'(0)
+\)；
+在有效域内部 \(I\) 严格凸，且在 \(\Lambda\) 解析处 \(I\) 解析。
+\end{theorem}
+
+\begin{theorem}[中心极限定理与二阶常数的可审计性]\label{thm:pom-fiber-index-clt-thermo}
+在定理 \ref{thm:pom-fiber-index-ldp-thermo} 的设定下，进一步假设 \(\Lambda\) 在 \(t=0\) 的邻域二次可微，并满足谱隙/解析扰动条件，使得“取极限/求导”可交换。
+则有中心极限定理
+\[
+\frac{\log d_m(X)-m\gamma_\ast}{\sqrt m}\ \Longrightarrow\ \mathcal N(0,\sigma^2),
+\qquad
+\sigma^2=\Lambda''(0).
+\]
+并且 \(\sigma^2\) 可在整数矩谱锚点 \((r_q)_{q\ge 2}\) 上进行交叉审计：由整点一致性
+\(
+\Lambda(q-1)=\log r_q-\log 2
+\)
+（注 \ref{rem:pom-fiber-index-ldp}），可用差商近似 \(\Lambda'(0)\)、\(\Lambda''(0)\)，并以凸性/一致性约束检验插值误差。
+\end{theorem}
+
+\subsubsection{典型空间损失常数：均值率与方差率}\label{subsec:pom-fiber-log-moments}
+把
+\[
+L_m:=\log d_m(X),\qquad X\sim \pi_m,\ \ \pi_m(x)=\frac{d_m(x)}{2^m},
+\]
+视为“对数纤维体积”的随机变量。
+定义其低阶累积量密度为
+\[
+\mu_m:=\frac{1}{m}\mathbb{E}_{\pi_m}[L_m],
+\qquad
+\sigma_m^2:=\frac{1}{m}\mathrm{Var}_{\pi_m}(L_m).
+\]
+若极限累积母函数
+\(
+\Lambda(t)=\lim_{m\to\infty}\frac{1}{m}\log \mathbb{E}_{\pi_m}[e^{tL_m}]
+\)
+在 \(t=0\) 的邻域可二次可微，并且可交换“取极限/求导”（标准热力学形式下常见），则有
+\[
+\mu=\Lambda'(0)=\lim_{m\to\infty}\mu_m,\qquad
+\sigma^2=\Lambda''(0)=\lim_{m\to\infty}\sigma_m^2.
+\]
+\begin{remark}[碰撞谱 \texorpdfstring{$\leftrightarrow$}{<->} 典型损失：\texorpdfstring{$\Lambda(t)=\tau(t+1)-\log2$}{Lambda(t)=tau(t+1)-log2}]\label{rem:pom-lambda-tau-shift}
+把 \(S_q(m)\) 视为实参数 \(q\in\mathbb{R}\) 的分配函数
+\[
+S_q(m):=\sum_{x\in X_m} d_m(x)^q
+\]
+（当 \(q\in\mathbb{Z}_{\ge 2}\) 时与本文的碰撞矩一致）。
+则对任意固定 \(m\) 与任意 \(t\in\mathbb{R}\)，由 \(\pi_m(x)=d_m(x)/2^m\) 直接展开得严格恒等式
+\[
+\mathbb{E}_{\pi_m}[e^{tL_m}]
+=\sum_{x\in X_m}\frac{d_m(x)}{2^m}\,d_m(x)^t
+=\frac{S_{t+1}(m)}{2^m}.
+\]
+因此若记
+\[
+\tau_m(q):=\frac1m\log S_q(m),
+\qquad
+\tau(q):=\lim_{m\to\infty}\tau_m(q)\quad(\text{在极限存在处}),
+\]
+则
+\[
+\frac1m\log \mathbb{E}_{\pi_m}[e^{tL_m}]=\tau_m(t+1)-\log2,
+\qquad
+\Lambda(t)=\tau(t+1)-\log2.
+\]
+并且在 \(q=1\) 处（无需取极限）有精确导数恒等式
+\[
+\mu_m=\tau_m'(1),
+\qquad
+\sigma_m^2=\tau_m''(1).
+\]
+在可交换“取极限/求导”的假设下，上式取 \(m\to\infty\) 给出 \(\mu=\tau'(1)\) 与 \(\sigma^2=\tau''(1)\)。
+\end{remark}
+
+\begin{corollary}[零参数审计夹逼：\texorpdfstring{$\mu$}{mu} 被 \texorpdfstring{$(r_0,r_1,r_2)$}{(r0,r1,r2)} 两端夹死]\label{cor:pom-mu-secant-audit}
+对每个固定 \(m\)，函数 \(q\mapsto \tau_m(q)=(1/m)\log S_q(m)\) 为凸函数，故其在 \(q=1\) 处的导数满足 secant 夹逼
+\[
+\boxed{\;
+\tau_m(1)-\tau_m(0)\ \le\ \mu_m\ \le\ \tau_m(2)-\tau_m(1).\;}
+\]
+在 Fold 的口径下 \(S_1(m)=\sum_x d_m(x)=2^m\)、\(S_0(m)=|X_m|=F_{m+2}\)，从而得到可直接审计的有限 \(m\) 夹逼
+\[
+\boxed{\;
+\log2-\frac1m\log F_{m+2}\ \le\ \mu_m\ \le\ \frac1m\log S_2(m)-\log2.\;}
+\]
+若进一步 \(r_2=\lim_{m\to\infty}S_2(m)^{1/m}\) 存在（由二体碰撞核 \(A_2\) 精确给出），并记端点谱常数
+\(
+r_0:=\lim_{m\to\infty}|X_m|^{1/m}=\varphi
+\)
+与
+\(
+r_1:=2
+\)，
+则取 \(m\to\infty\) 得到极限版“零参数”审计区间
+\[
+\boxed{\;
+\log\frac{2}{r_0}\ \le\ \mu\ \le\ \log\frac{r_2}{2}\;}
+\qquad(\text{即 }\ \log(2/\varphi)\le\mu\le\log(r_2/2)).
+\]
+\end{corollary}
+\begin{proof}
+由于 \(S_q(m)=\sum_x e^{q\log d_m(x)}\)，函数 \(q\mapsto \log S_q(m)\) 为 log-sum-exp，因此凸；除以 \(m\) 保持凸性。对凸函数在点 \(q=1\) 应用 secant 夹逼即得第一条。其余陈述把 \(S_0,S_1\) 的端点等式代入并取极限即可。证毕。
+\end{proof}
+表 \ref{tab:fold_fiber_log_moments_mu_sigma} 给出通过模 \(F_{m+2}\) 的 residue DP 精确计算得到的 \((\mu_m,\sigma_m^2)\) 数值，作为“典型空间损失密度与热涨落强度”的可审计常数接口。
+
+\input{sections/generated/tab_fold_fiber_log_moments_mu_sigma}
+
+\begin{proposition}[Legendre 上界：谱由 moment 压力控制]\label{prop:pom-spectrum-legendre-upper}
+对任意 \(q\ge 2\) 与任意 \(\gamma\ge 0\)，有上界
+$$
+f(\gamma)\ \le\ \inf_{q\ge 2}\bigl(\tau(q)-q\gamma\bigr).
+$$
+特别地，在 \(\tau(q)=\log r_q\) 的情形下，
+$$
+f(\gamma)\ \le\ \inf_{q\ge 2}\bigl(\log r_q-q\gamma\bigr).
+$$
+\end{proposition}
+
+\begin{proof}
+固定 \(q\ge 2\) 与 \(\gamma,\varepsilon\)。对任意满足 \(|\gamma_m(x)-\gamma|\le\varepsilon\) 的 \(x\)，有
+$$
+d_m(x)^q=\exp(qm\gamma_m(x))\ \ge\ \exp\bigl(qm(\gamma-\varepsilon)\bigr).
+$$
+因此
+$$
+S_q(m)=\sum_{x\in X_m} d_m(x)^q
+\ \ge\ N_m(\gamma,\varepsilon)\,\exp\bigl(qm(\gamma-\varepsilon)\bigr),
+$$
+即
+$$
+\frac{1}{m}\log N_m(\gamma,\varepsilon)\ \le\ \frac{1}{m}\log S_q(m)\ -\ q(\gamma-\varepsilon).
+$$
+取 \(m\to\infty\) 的 \(\limsup\) 并再令 \(\varepsilon\downarrow 0\)，得
+$$
+f(\gamma)\le \tau(q)-q\gamma.
+$$
+对所有 \(q\ge 2\) 取下确界即得结论。证毕。
+\end{proof}
+
+\begin{remark}[多重分形形式（作为可检验目标）]\label{rem:pom-spectrum-formalism}
+命题 \ref{prop:pom-spectrum-legendre-upper} 给出严格的上界：moment 压力曲线 \(\tau(q)\) 的凸共轭控制了纤维多重度的（上）谱。
+在标准热力学形式条件下（例如存在与 \(\tau\) 对偶的 Gibbs 结构并具有足够的准乘性），往往可得到相反方向的不等式从而实现等号，即“谱 \(f\) 与压力 \(\tau\) 互为 Legendre 变换”。
+在本文框架中，这一等号可被视为一条可证伪的结构目标：它把“空间损失是一条谱”转化为“\(\{r_q\}\) 族决定谱形”的可计算命题。
+\end{remark}
+
+\begin{proposition}[Paley--Zygmund 下包络：仅由 \texorpdfstring{$(r_q,r_{2q})$}{(rq,r2q)} 给出“厚尾”指数下界]\label{prop:pom-spectrum-pz-lower}
+取任意整数 \(q\ge 2\)。令 \(X\) 在 \(X_m\) 上均匀分布，并令非负随机变量
+\[
+Y:=d_m(X)^q.
+\]
+则对阈值 \(\theta=\tfrac12\) 的 Paley--Zygmund 不等式给出
+\[
+\#\Bigl\{x\in X_m:\ d_m(x)\ge \Bigl(\tfrac12\,\frac{S_q(m)}{|X_m|}\Bigr)^{1/q}\Bigr\}
+\ \ge\ \frac14\cdot\frac{S_q(m)^2}{S_{2q}(m)}.
+\]
+从而若极限 \(r_k=\lim_{m\to\infty}S_k(m)^{1/m}\) 在 \(k=q,2q\) 处存在，并且 \(\lim_{m\to\infty}\frac1m\log|X_m|=\log\varphi\)，则定义
+\[
+\gamma_q:=\frac{\log r_q-\log\varphi}{q},
+\qquad
+\underline f(q):=2\log r_q-\log r_{2q},
+\]
+有严格下界
+\[
+\boxed{\;
+\lim_{\varepsilon\downarrow 0}\ \liminf_{m\to\infty}\ \frac1m
+\log \#\bigl\{x\in X_m:\ \gamma_m(x)\ge \gamma_q-\varepsilon\bigr\}
+\ \ge\ \underline f(q)\; }.
+\]
+\end{proposition}
+\begin{proof}
+按均匀抽样 \(X\sim \mathrm{Unif}(X_m)\) 展开期望：
+\[
+\mathbb{E}[Y]=\frac{1}{|X_m|}\sum_{x\in X_m}d_m(x)^q=\frac{S_q(m)}{|X_m|},
+\qquad
+\mathbb{E}[Y^2]=\frac{S_{2q}(m)}{|X_m|}.
+\]
+对任意非负 \(Y\) 与 \(\theta\in(0,1)\)，Paley--Zygmund 不等式给出
+\[
+\mathbb{P}\!\left(Y\ge \theta\,\mathbb{E}Y\right)\ \ge\ (1-\theta)^2\frac{(\mathbb{E}Y)^2}{\mathbb{E}[Y^2]}.
+\]
+取 \(\theta=\tfrac12\) 并代入上式得到
+\[
+\mathbb{P}\!\left(Y\ge \tfrac12\,\mathbb{E}Y\right)\ \ge\ \frac14\cdot\frac{S_q(m)^2}{|X_m|\,S_{2q}(m)}.
+\]
+把概率乘以 \(|X_m|\) 即得到计数下界：
+\[
+\#\Bigl\{x\in X_m:\ d_m(x)^q\ge \tfrac12\,\frac{S_q(m)}{|X_m|}\Bigr\}
+\ \ge\ \frac14\cdot\frac{S_q(m)^2}{S_{2q}(m)},
+\]
+等价改写即得命题第一条不等式。
+\par
+对第二条，取对数并除以 \(m\)，并令 \(m\to\infty\)：
+右端给出
+\[
+\liminf_{m\to\infty}\frac1m\log\!\left(\frac14\cdot\frac{S_q(m)^2}{S_{2q}(m)}\right)
+=2\log r_q-\log r_{2q}=\underline f(q),
+\]
+而左端的阈值满足
+\[
+\frac1m\log\Bigl(\Bigl(\tfrac12\,\frac{S_q(m)}{|X_m|}\Bigr)^{1/q}\Bigr)
+=\frac{1}{q}\Bigl(\frac1m\log S_q(m)-\frac1m\log|X_m|+\frac1m\log\tfrac12\Bigr)
+\to \gamma_q.
+\]
+因此对任意 \(\varepsilon>0\)，当 \(m\) 足够大时左端集合包含于 \(\{\gamma_m(x)\ge \gamma_q-\varepsilon\}\)，从而得到所述的 \(\varepsilon\downarrow 0\) 的 \(\liminf\) 下界。证毕。
+\end{proof}
+
+\begin{corollary}[间歇性缺口 \texorpdfstring{$\delta(q)$}{delta(q)}：从表格数值可直接审计的“尾部变薄”指标]\label{cor:pom-spectrum-intermittency-deficit}
+在命题 \ref{prop:pom-spectrum-pz-lower} 的设定下，
+\[
+\underline f(q)\ \le\ \log\varphi,
+\]
+并可定义非负缺口
+\[
+\boxed{\;
+\delta(q):=\log\varphi-\underline f(q)
+=\log\varphi+\log r_{2q}-2\log r_q\ \ge\ 0.\;}
+\]
+此外，命题 \ref{prop:pom-spectrum-legendre-upper} 在特殊点
+\(
+\gamma=\gamma_q=(\log r_q-\log\varphi)/q
+\)
+处的上界读出为
+\[
+f(\gamma_q)\ \le\ \log r_q-q\gamma_q=\log\varphi,
+\]
+从而 \(\underline f(q)\) 给出“靠近 \(\gamma_q\) 的高多重度尾部”所必然包含的指数级稳定类型下界，而 \(\delta(q)\) 量化了该下界相对最大可能指数 \(\log\varphi\) 的亏损。
+\end{corollary}
+\begin{proof}
+由 Cauchy--Schwarz（或 Hölder）不等式
+\[
+\Bigl(\sum_{x\in X_m}d_m(x)^q\Bigr)^2\le |X_m|\sum_{x\in X_m}d_m(x)^{2q}
+\]
+得 \(S_q(m)^2\le |X_m|S_{2q}(m)\)。取对数并除以 \(m\)，再令 \(m\to\infty\)，得到
+\(
+2\log r_q-\log r_{2q}\le \log\varphi
+\)，即 \(\underline f(q)\le\log\varphi\) 与 \(\delta(q)\ge 0\)。
+其余陈述由命题 \ref{prop:pom-spectrum-pz-lower} 与 \(\gamma_q\) 的定义直接推出。证毕。
+\end{proof}
+
+\begin{remark}[可复核读出：\texorpdfstring{$q\le 10$}{q<=10} 的下包络点与两侧包络图]\label{rem:pom-spectrum-pz-numerics}
+对 \(q\le 10\)，由表 \ref{tab:fold_collision_renyi_spectrum_mod_dp_q20} 的 \((r_q,r_{2q})\) 可直接计算
+\(
+(\gamma_q,\underline f(q),\delta(q))
+\)（无需任何新 DP）。
+脚本 \texttt{scripts/exp\_fold\_collision\_multifractal\_envelope\_pz\_q10.py} 会从该表格片段读出 \(r_q\) 并生成派生表 \ref{tab:fold_collision_multifractal_envelope_pz_q10} 与对比图 \ref{fig:fold-collision-multifractal-envelope-pz}。
+例如由表中 \(r_2,r_4,r_{10},r_{20}\) 得
+\(
+\delta(2)\approx 0.0108
+\)、
+\(
+\delta(10)\approx 0.0804
+\)，显示高阶矩探针下“厚尾保证指数”随 \(q\) 增大而显著下降。
+\input{sections/generated/tab_fold_collision_multifractal_envelope_pz_q10}
+\input{sections/generated/fig_fold_collision_multifractal_envelope_pz_q10}
+\end{remark}
+
+\begin{proposition}[有限 \texorpdfstring{$m$}{m} 的“典型窗平台”：由 \texorpdfstring{$(\mu_m,\sigma_m^2)$}{(mu,sigma2)} 给出指数级下界]\label{prop:pom-spectrum-finite-m-plateau}
+令 \(w_m(x)=d_m(x)/2^m\) 为均匀微态的折叠推前（定义 \ref{def:pom-wm-baseline}），令 \(X\sim w_m\)，并记
+\(
+\gamma_m(X)=(1/m)\log d_m(X)
+\)。
+则对任意 \(\varepsilon>0\)，Chebyshev 不等式给出
+\[
+\boxed{\;
+w_m\!\bigl(|\gamma_m(X)-\mu_m|>\varepsilon\bigr)\ \le\ \frac{\sigma_m^2}{m\varepsilon^2}\; }.
+\]
+因此集合
+\(
+A_m(\varepsilon):=\{x\in X_m:\ |\gamma_m(x)-\mu_m|\le \varepsilon\}
+\)
+满足计数下界
+\[
+\boxed{\;
+|A_m(\varepsilon)|
+\ \ge\
+\left(1-\frac{\sigma_m^2}{m\varepsilon^2}\right)
+\exp\!\bigl(m(\log 2-\mu_m-\varepsilon)\bigr)\; }.
+\]
+上式右端只依赖于表 \ref{tab:fold_fiber_log_moments_mu_sigma} 的 \((\mu_m,\sigma_m^2)\)（以及常数 \(\log 2\)），因此提供了一个完全可审计的有限分辨率“平台保证”：在固定窗口宽度 \(\varepsilon\) 下，存在指数级多的稳定类型其 \(\gamma_m\) 落在 \(\mu_m\) 附近。
+\end{proposition}
+\begin{proof}
+由 \(\mathrm{Var}(\log d_m(X))=m\sigma_m^2\) 与 Chebyshev 得
+\[
+w_m\bigl(|\log d_m(X)-\mathbb{E}\log d_m(X)|>m\varepsilon\bigr)
+\le \frac{m\sigma_m^2}{m^2\varepsilon^2}
+=\frac{\sigma_m^2}{m\varepsilon^2},
+\]
+除以 \(m\) 即得到第一式。
+\par
+对第二式，注意对任意 \(x\in A_m(\varepsilon)\)，有
+\(
+\log d_m(x)\le m(\mu_m+\varepsilon)
+\)，从而
+\(
+w_m(x)=d_m(x)/2^m\le \exp(m(\mu_m+\varepsilon))/2^m
+\)。
+于是
+\[
+w_m(A_m(\varepsilon))
+\le |A_m(\varepsilon)|\cdot \frac{\exp(m(\mu_m+\varepsilon))}{2^m}.
+\]
+结合第一式的下界 \(w_m(A_m(\varepsilon))\ge 1-\sigma_m^2/(m\varepsilon^2)\) 并移项即得。证毕。
+\end{proof}
+
+\begin{remark}[同一个凸共轭的两种读出：\texorpdfstring{Legendre 谱上界 \(\leftrightarrow\) Chernoff 尾界}{Legendre<->Chernoff}]\label{rem:pom-legendre-chernoff-same-dual}
+命题 \ref{prop:pom-spectrum-legendre-upper}（按计数测度的几何谱上界）与命题 \ref{prop:pom-quantile-chernoff}--推论 \ref{cor:pom-quantile-dual-optimizer}（按输出测度 \(\pi_m\) 的尾部控制）本质上由同一个凸对偶核给出。
+令
+\[
+\Phi(q):=\tau(q)-\log 2,
+\qquad
+\Lambda(t):=\Phi(t+1)=\tau(t+1)-\log 2\quad(t\ge 1),
+\]
+则 Chernoff 率函数上界为
+\[
+I(\gamma)=\sup_{t\ge 1}\bigl(t\gamma-\Lambda(t)\bigr)
+\]
+（推论 \ref{cor:pom-quantile-dual-optimizer}）。
+而 Legendre 上界可改写为
+\[
+\begin{aligned}
+\inf_{q\ge 2}\bigl(\tau(q)-q\gamma\bigr)
+&=\log 2-\gamma+\inf_{t\ge 1}\bigl(\Lambda(t)-t\gamma\bigr)\\
+&=\log 2-\gamma-\sup_{t\ge 1}\bigl(t\gamma-\Lambda(t)\bigr)
+=\log 2-\gamma-I(\gamma).
+\end{aligned}
+\]
+因此二者共享同一个凸共轭 \(\sup_{t\ge 1}(t\gamma-\Lambda(t))\)：差别仅来自基准测度（计数 vs.\ \(\pi_m\)）引入的 \(-\log 2\) 归一化与 \(q\leftrightarrow t=q-1\) 的平移。
+\par
+在可微/严格凸的扩展口径下（例如把 \(q\) 视作实参数并延拓 \(\tau\)），最优矩阶 \(q^\star(\gamma)\)（无论用于谱上界还是用于尾界预算）满足同一条“支撑线条件”
+\[
+\gamma\ \in\ \partial \tau\bigl(q^\star(\gamma)\bigr),
+\]
+即 \(\tau\) 在 \(q^\star\) 处的次梯度命中 \(\gamma\)；这与压力的离散凸性（命题 \ref{prop:pom-pressure-convexity}）一起，把“选 \(q\)”从经验旋钮升级为由凸几何决定的对偶坐标。
+\end{remark}
+
+\subsubsection{在线延迟的不可约下界}\label{subsec:pom-delay-lb}
+\begin{proposition}[单趟在线延迟 $3$ 的最小性]\label{prop:pom-delay-min}
+任何实现 $\Fold_\infty:\{0,1,2\}^{\ZZ}\to X_\infty$ 的单趟在线转导器，其最小延迟满足
+\[
+\delta_{\min}(\Fold_\infty)\ge 3.
+\]
+结合定理 \ref{thm:online-delay-fold}，可得 $\delta_{\min}(\Fold_\infty)=3$。
+\end{proposition}
+\begin{proof}
+在小节 \ref{subsec:online-delay} 的在线核中，输出满足
+\(
+e=\lfloor \varphi R(s)+d\varphi^{-3}\rfloor
+\)，其中 $s$ 为长度 $3$ 的同步状态、$d\in\{0,1,2\}$ 为当前输入。取状态 $s=002$（其属于状态集 $Q$），则
+\[
+R(s)=2\varphi^{-3},\qquad
+e=\left\lfloor 2\varphi^{-2}+d\varphi^{-3}\right\rfloor.
+\]
+当 $d=0$ 时 $e=0$，当 $d=1$ 时 $e=1$，故该位输出确实依赖于“向前第 $3$ 位”输入。任何延迟 $2$ 的单趟在线机在输出此位时尚未读到该输入，必产生冲突，从而不可能实现 $\Fold_\infty$。证毕。
+\end{proof}
+
+\begin{remark}[空间缺陷与时间缺陷的正交性]\label{rem:pom-space-time-orth}
+最大纤维多重度给出“值投影”的最坏空间缺陷（定理 \ref{thm:pom-max-fiber}），而单趟在线延迟给出“步骤投影”的不可约时间缺陷（命题 \ref{prop:pom-delay-min}）。两者来源于不同的投影门，因而互不替代：增大空间并不能把 $\delta_{\min}$ 压到 $2$，而压低延迟也无法消除 $d_m$ 的纤维多重度。
+\end{remark}
+
+\begin{definition}[空间—时间—谱三指纹]\label{def:pom-fingerprint}
+对实现规范投影 $P_Z$ 的归一化核 $K$，记其分辨率截断为 $K_m:\Omega_m\to X_m$，并令
+\(
+d^{(K)}_m(x):=|K_m^{-1}(x)|
+\)。
+定义：
+\[
+S_K(m):=\max_{x}\log d^{(K)}_m(x)\quad(\text{空间指纹}),
+\qquad
+T_K:=\delta_{\min}(K)\quad(\text{时间指纹}),
+\]
+并以
+\[
+\Pi_K:=\{\zeta_K,\ \log\mathfrak{M}_K,\ \rho/\lambda,\ \text{Dirichlet--Mertens 常数张量等}\}
+\]
+作为谱指纹族（见第 \ref{sec:zeta-finite-part} 节）。三者分别量化“值投影损失”“在线不可并行延迟”与“机制谱细节”，在同一投影框架下互相正交。
+\end{definition}
+
+\begin{remark}[Fold 的三指纹]\label{rem:pom-fold-fingerprint}
+对 Zeckendorf 归一化核 $K=\Fold_\infty$，由定理 \ref{thm:pom-max-fiber} 得 $S_K(m)=\log D_m$，由命题 \ref{prop:pom-delay-min} 得 $T_K=3$，而 $\Pi_K$ 可由 10/40 状态同步核的 $\zeta$、$\log\mathfrak{M}$ 与 Dirichlet--Mertens 张量显式抽取（见第 \ref{sec:zeta-finite-part} 节与附录 \ref{app:sync-kernel-basic}、\ref{app:real-input-40-abel}）。因此“空间(值)$\times$时间(步骤)$\times$谱(机制)”形成可比较的统一量化框架。
+\end{remark}
+
+\begin{theorem}[统一闭环：在线核—碰撞矩核—\texorpdfstring{$\zeta$/primitive}{zeta/primitive}—几何维数谱]\label{thm:pom-unified-closure}
+以 $K=\Fold_\infty$ 为规范投影核。则下述链路在同一套“有限核 $\Rightarrow$ 谱 $\Rightarrow$ 轨道/有限部 $\Rightarrow$ 几何谱”的接口下闭合：
+\begin{enumerate}
+  \item \textbf{（在线核与时间缺陷）} $\Fold_\infty$ 存在单趟在线同步实现（附录 \ref{app:sync-kernel-basic} 给出显式 10 状态核），并且最小延迟刚性为 $\delta_{\min}=3$（命题 \ref{prop:pom-delay-min}）。
+  \item \textbf{（任意阶 moment-kernel 与熵率存在）} 对任意整数 $q\ge 2$，$q$-重碰撞矩 $S_q(m)$ 可由有限状态非负整数核 $A_q$ 计数（命题 \ref{prop:pom-moment-kernel-exists}），从而 $S_q$ 为 \(\mathbb N\)-有理级数并满足有限阶整系数递推；其 Perron 根 $r_q=\rho(A_q)$ 给出指数尺度 $S_q(m)=\Theta(r_q^m)$，并诱导投影熵率
+  \[
+  h_q=\log\!\left(\frac{2^q}{r_q}\right)
+  \]
+  的存在性与闭式接口（定义 \ref{def:pom-moment-pressure}）。
+  \item \textbf{（闭合维数的内禀不变量）} 在已核验范围 $q\le 8$，序列 $S_q$ 的最小线性实现维数由 Hankel 秩锁定：\(\mathrm{rank}(H)\ge 2\lfloor q/2\rfloor+1\)（定理 \ref{thm:pom-moment-hankel}），并与递推阶数一致从而在该范围内取等号（推论 \ref{cor:pom-moment-minreal}）。
+  \item \textbf{（共振/坍缩的机制判别）} 当递推阶数低于 \(2\lfloor q/2\rfloor+1\) 时，差分模态满足线性约束并导致 Hankel 秩下降（定理 \ref{thm:pom-moment-resonance}）；在 \(q=9,\dots,16\) 的已核验递推中该共振被触发。
+  \item \textbf{（几何化：Rényi 维数谱）} 当 $h_q$ 存在时，输出测度的 Rényi 维数谱由 $h_q$ 闭式决定：
+  \[
+  D_q=\frac{h_q}{(q-1)\log\varphi}
+  \]
+  （命题 \ref{prop:pom-renyi-dimension-spectrum}）。
+  \item \textbf{（机制核的周期点闭式与 primitive 抽取）} 在真实算术输入约束下，同步核与输入记忆合成 40 状态机制核 $M$（附录 \ref{app:real-input-40-abel}；构造见命题 \ref{prop:real-input-40-essential-20} 起），其 $\zeta$-函数为显式有理式并具有谱因子分解（命题 \ref{prop:real-input-40-fib-tensor} 与推论 \ref{cor:real-input-40-spectrum-decomp}）。因此周期点计数 $a_n=\Tr(M^n)$ 具有闭式表达（同上证明段落），primitive 轨道数则由 Möbius 反演
+  \[
+  p_n=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}
+  \]
+  直接抽取，从而把“prime-orbit/有限部常数/Dirichlet--Mertens 张量”等谱对象纳入同一可计算接口（第 \ref{sec:zeta-finite-part} 节与附录群）。
+\end{enumerate}
+\end{theorem}
+
+\subsubsection{可复算 commuting package：真实输入 40 状态核}\label{subsec:real-input-40-commuting-package}
+\paragraph{对象：真实输入的确定性 skew-product}
+令黄金均值移位（禁词 $(11)$）的邻接矩阵
+\[
+A=\begin{pmatrix}1&1\\[2pt]1&0\end{pmatrix},\qquad \rho(A)=\varphi.
+\]
+把两条合法 Zeckendorf 输入轨道 $(x,y)\in X\times X$ 并入同步核状态，得到
+\(
+\Sigma:=Q\times\{0,1\}^2
+\)
+（$|Q|=10,|\Sigma|=40$）。
+每步读入 $(x_k,y_k)\in\{0,1\}^2$（受黄金均值守卫约束），令 $d_k=x_k+y_k\in\{0,1,2\}$，
+并用 10 状态核的确定性转移 $s_{k+1}=\delta(s_k,d_k)$ 更新纤维坐标 $s\in Q$；
+从而得到一个 $40$ 状态 SFT，其邻接矩阵记为 $M$（详见附录 \ref{app:real-input-40-abel}）。
+
+\begin{proposition}[确定性扩张不增熵：$\rho(M)=\varphi^2$]\label{prop:real-input-40-entropy}
+真实输入 $40$ 状态核的拓扑熵满足
+\[
+h_{\mathrm{top}}(\Sigma)=h_{\mathrm{top}}(X\times X)=2\log\varphi,
+\qquad
+\rho(M)=e^{h_{\mathrm{top}}(\Sigma)}=\varphi^2.
+\]
+\end{proposition}
+\begin{proof}
+基系统为输入对语法 $X\times X$，其邻接矩阵为 $A\otimes A$，故 $h_{\mathrm{top}}(X\times X)=\log\rho(A\otimes A)=2\log\varphi$。
+另一方面，给定任意基系统符号序列 $\{(x_k,y_k)\}$，则 $d_k=x_k+y_k$ 唯一确定，因而纤维更新 $s_{k+1}=\delta(s_k,d_k)$ 亦唯一确定。
+因此对任意长度 $n$ 的基系统路径，从每个初始纤维态 $s_0$ 出发至多抬升出一条 $\Sigma$-路径，总路径数仅乘以常数 $|Q|$，指数增长率不变。
+故 $h_{\mathrm{top}}(\Sigma)=h_{\mathrm{top}}(X\times X)$，从而 $\rho(M)=\varphi^2$。证毕。
+\end{proof}
+
+\paragraph{谱—迹—Euler 乘积的闭式桥包}
+附录 \ref{app:abel-mertens-universal} 与 \ref{app:real-input-40-abel} 给出该核的完全因子分解：
+\[
+\boxed{\;
+\det(I-zM)=(1-z)^2(1+z)^3(1-3z+z^2)(1+z-z^2).\;}
+\]
+因此除零特征值外的非零谱（按重数计）为
+\[
+\sigma(M)\setminus\{0\}=\{1,1,\,-1,-1,-1,\,\varphi^2,\,\varphi^{-2},\,-\varphi,\,\varphi^{-1}\}.
+\]
+对应周期迹（周期点计数）有全闭式
+\[
+\boxed{\;
+a_n:=\Tr(M^n)=
+2+3(-1)^n+\varphi^{2n}+\varphi^{-2n}+\varphi^{-n}+(-\varphi)^n.\;}
+\]
+primitive 轨道数（按轨道计）由 Witt/Möbius 反演严格抽取：
+\[
+\boxed{\;
+p_n=\frac1n\sum_{d\mid n}\mu(d)\,a_{n/d}.\;}
+\]
+并且 Euler 乘积（prime-like 侧）与迹侧严格对齐：
+\[
+\zeta_M(z)
+=\exp\!\left(\sum_{n\ge 1}\frac{a_n}{n}z^n\right)
+=\prod_{\gamma\ \mathrm{primitive}}\frac{1}{1-z^{|\gamma|}}
+=\frac{1}{\det(I-zM)}.
+\]
+
+\paragraph{Abel/有限部常数：主极点与留数闭式}
+由 $\rho(M)=\varphi^2$ 得主极点
+\[
+z_\star=\rho(M)^{-1}=\varphi^{-2}.
+\]
+对应留数常数与 Abel 有限部常数具有闭式读出（附录 \ref{app:real-input-40-abel}）：
+\[
+\boxed{\;
+C=\lim_{z\to z_\star}(1-\varphi^2 z)\,\zeta_M(z)=\frac{47+21\sqrt5}{100}\approx 0.9395742753,\;}
+\]
+\[
+\boxed{\;
+\log\mathfrak{M}=\log C+\sum_{m\ge 2}\frac{\mu(m)}{m}\log\zeta_M(z_\star^{\,m})
+\approx -0.2543126619.\;}
+\]
+
+\paragraph{Dirichlet/模分层：arity-charge 的有限维 Fourier 反演}
+定义 arity-charge（附录 \ref{app:real-input-40-arity-charge}）
+\[
+\chi(s,d):=e-\mathbf{1}_{\{d=2\}}\in\{-1,0,1\},
+\]
+并以 $q^{\chi}$ 对边加权得到矩阵族 $M(q)$。
+令
+\(
+c_n(q):=\Tr(M(q)^n)
+\)
+与 primitive 生成多项式
+\[
+P_n(q):=\sum_{\substack{\gamma\ \mathrm{primitive}\\|\gamma|=n}}q^{\chi(\gamma)}.
+\]
+则有加权 Witt/Möbius 反演：
+\[
+c_n(q)=\sum_{d\mid n}d\,P_d\!\left(q^{n/d}\right),
+\qquad
+P_n(q)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,c_{n/d}\!\left(q^{d}\right).
+\]
+对模 $m$ 的分层计数
+\(
+N_{n,r}^{(m)}:=\sum_{k\equiv r\ (\mathrm{mod}\ m)}[q^k]P_n(q)
+\)
+可由离散傅里叶反演直接写成
+\[
+\boxed{\;
+N_{n,r}^{(m)}=\frac{1}{m}\sum_{j=0}^{m-1}\zeta_m^{-jr}P_n(\zeta_m^j),
+\qquad \zeta_m=e^{2\pi i/m}.\;}
+\]
+例如模 $2$ 时
+\(
+N_{n,0}^{(2)}=(P_n(1)+P_n(-1))/2,\,
+N_{n,1}^{(2)}=(P_n(1)-P_n(-1))/2
+\)，并且
+\[
+P_{10}(q)=54q^5+334q^4+634q^3+410q^2+79q+2,
+\qquad
+(N_{10,0}^{(2)},N_{10,1}^{(2)})=(746,767).
+\]
+
+\paragraph{时间复杂度轴：负携带势的三次压力方程与大偏差端点}
+把“串行冲突/携带活跃度”作为可观测势引入后，压力与大偏差仍保持可审计的有限维闭式。
+例如负携带势取（附录 \ref{app:vector-potential}）
+\[
+Q_-:=\{0\overline{1}2,\,1\overline{1}2,\,01\overline{1},\,11\overline{1}\},
+\qquad
+\phi(s\to t):=\mathbf{1}_{\{t\in Q_-\}},
+\]
+令 $u=e^\theta$，则主特征值 $\lambda(u)$ 满足三次方程
+\[
+\boxed{\;
+\lambda^3-(u+2)\lambda^2+(u-2)\lambda+3u=0,\qquad u=e^\theta,\;}
+\]
+从而压力 $P(\theta)=\log\lambda(e^\theta)$ 被该三次方程的最大实根完全锁定，并且
+\[
+P'(0)=\frac18,\qquad P''(0)=\frac{25}{128},
+\qquad
+I(0)=\log\frac{3}{1+\sqrt3},\quad I(1)=\log 3.
+\]
+
+\paragraph{多维势：张量化观测仍保持“有限矩阵—行列式—压力/大偏差”闭环}
+对一般向量势
+\(
+\boldsymbol{\varphi}(e)=(\varphi_1(e),\dots,\varphi_d(e))
+\)
+定义加权矩阵族
+\[
+B(\boldsymbol{\theta})_{ij}=\sum_{e:i\to j}\exp\!\bigl(\langle\boldsymbol{\theta},\boldsymbol{\varphi}(e)\rangle\bigr),
+\qquad
+P(\boldsymbol{\theta})=\log\rho(B(\boldsymbol{\theta})),
+\]
+则
+\(
+\zeta(z;\boldsymbol{\theta})=\det(I-zB(\boldsymbol{\theta}))^{-1}
+\)
+给出与标量势同型的可审计接口，且大偏差率函数由 Legendre 变换
+\(
+I(\alpha)=\sup_{\boldsymbol{\theta}}(\langle\boldsymbol{\theta},\alpha\rangle-(P(\boldsymbol{\theta})-P(0)))
+\)
+读出（见附录 \ref{app:vector-potential} 的二维/三维闭式示例）。

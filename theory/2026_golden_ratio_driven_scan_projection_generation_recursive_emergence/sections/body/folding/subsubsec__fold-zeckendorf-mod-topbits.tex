@@ -1,0 +1,315 @@
+\subsubsection{截断 Zeckendorf 位的模分解与顶位统计}\label{subsubsec:fold-zeckendorf-mod-topbits}
+
+在定义 \ref{def:fold-word} 的记号下，记
+\[
+v_m(x):=\sum_{k=1}^{m}x_kF_{k+1}\qquad(x\in X_m),
+\qquad
+M_m:=F_{m+2},
+\qquad
+T_m:=\sum_{k=1}^{m}F_{k+1}=F_{m+3}-2.
+\]
+并令 $Z(N(\omega))=(c_1,c_2,\dots)\in X_\infty$ 为 Zeckendorf 数字序列；为强调“顶位”含义，下文记
+\[
+(\zeta_m,\zeta_{m+1}):=(c_m,c_{m+1})\in\{(0,0),(1,0),(0,1)\}.
+\]
+
+\begin{theorem}[截断位的模分解与唯一性]\label{thm:fold-zeckendorf-mod-decomposition-unique}
+对任意 $m\ge 1$ 与任意 $\omega\in\Omega_m$，存在且仅存在一对 $(x,c)\in X_m\times\{0,1\}$ 使
+\[
+N(\omega)=v_m(x)+c\,M_m,
+\qquad 0\le v_m(x)<M_m,
+\]
+并且该 $x$ 必为 $\Fold_m(\omega)$。等价地，
+\[
+v_m(\Fold_m(\omega))\equiv N(\omega)\pmod{M_m},
+\qquad
+0\le v_m(\Fold_m(\omega))<M_m,
+\qquad
+c=\mathbf 1_{\{N(\omega)\ge M_m\}}.
+\]
+\end{theorem}
+
+\begin{proof}
+由 $0\le N(\omega)\le T_m=F_{m+3}-2<M_m+F_{m+1}\le 2M_m$，可知
+$c:=\mathbf 1_{\{N(\omega)\ge M_m\}}\in\{0,1\}$ 唯一确定。令 $r:=N(\omega)-cM_m$，则 $0\le r<M_m$。
+在区间 $[0,M_m)$ 上，Zeckendorf 表示不会使用权重 $F_{m+2}$，因此存在唯一 $x\in X_m$ 使 $v_m(x)=r$。
+另一方面，$Z(N(\omega))$ 的前 $m$ 位正是 $\Fold_m(\omega)$；当且仅当 $c=c_{m+1}=1$ 时出现顶位 $F_{m+2}$，截断后余数即为 $r$，从而 $v_m(\Fold_m(\omega))=r$。唯一性由 $c$ 与 Zeckendorf 表示唯一性推出。
+\end{proof}
+
+\begin{proposition}[补位对称诱导的 Fourier 相位刚性]\label{prop:fold-fiber-fourier-phase-rigidity}
+沿用命题 \ref{prop:fold-fiber-count-reciprocity} 的记号，并令
+\[
+\alpha_m:=F_{m+1}-2\in\ZZ/M_m\ZZ.
+\]
+将 \(f_m\) 视为加法群 \(\ZZ/M_m\ZZ\) 上的类函数，并定义其离散 Fourier 变换
+\[
+\widehat f_m(k):=\sum_{r\in\ZZ/M_m\ZZ} f_m(r)\exp\!\left(-\frac{2\pi i kr}{M_m}\right),
+\qquad k\in\ZZ/M_m\ZZ.
+\]
+则对任意 \(k\in\ZZ/M_m\ZZ\) 有严格恒等式
+\[
+\boxed{\;
+\widehat f_m(k)
+=\exp\!\left(-\frac{2\pi i k\alpha_m}{M_m}\right)\overline{\widehat f_m(k)}\;}
+\]
+从而
+\[
+\boxed{\;
+\exp\!\left(\frac{\pi i k\alpha_m}{M_m}\right)\widehat f_m(k)\in\RR\;}
+\]
+即每个 Fourier 系数的相位被锁定在一条固定的实直线子空间中。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:fold-fiber-count-reciprocity} 的反射对称性 \(f_m(r)=f_m(\alpha_m-r)\)，有
+\[
+\widehat f_m(k)
+=\sum_{r} f_m(\alpha_m-r)\exp\!\left(-\frac{2\pi i kr}{M_m}\right)
+=\exp\!\left(-\frac{2\pi i k\alpha_m}{M_m}\right)\sum_{r} f_m(r)\exp\!\left(\frac{2\pi i kr}{M_m}\right).
+\]
+最后一项为 \(\overline{\widehat f_m(k)}\)，故得第一式；第二式由移项并乘以半相位因子得到。证毕。
+\end{proof}
+
+\begin{corollary}[模余类刚性与有限分辨率谓词的周期性]\label{cor:fold-mod-rigidity-periodic-predicates}
+固定 $m\ge 1$，定义剩余映射
+\[
+r_m:\Omega_m\to \ZZ/M_m\ZZ,\qquad r_m(\omega):=N(\omega)\bmod M_m.
+\]
+令 \(s_m:\ZZ/M_m\ZZ\to X_m\) 为如下规范截面：对任意剩余类 \(\bar r\)，取其唯一代表元 \(r\in\{0,1,\dots,M_m-1\}\)，并令 \(s_m(\bar r)\) 为满足 \(v_m(x)=r\) 的唯一 \(x\in X_m\)。
+则
+\[
+\Fold_m\ =\ s_m\circ r_m.
+\]
+因此对任意集合 \(Y\) 与任意映射 \(g:X_m\to Y\)，复合 \(g\circ \Fold_m\) 仅依赖于 \(r_m(\omega)\)。
+特别地，对任意谓词 \(P\subseteq X_m\)，存在余类子集 \(R_P\subseteq \ZZ/M_m\ZZ\) 使得
+\[
+\Fold_m^{-1}(P)=r_m^{-1}(R_P).
+\]
+从而把 \(\ind_{\{\Fold_m(\omega)\in P\}}\) 视为 \(N(\omega)\) 的函数时，其必为周期 \(M_m\) 的周期函数。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:fold-zeckendorf-mod-decomposition-unique}，对任意 \(\omega\in\Omega_m\) 有
+\(
+v_m(\Fold_m(\omega))\equiv N(\omega)\ (\mathrm{mod}\ M_m)
+\)
+且 \(v_m(\Fold_m(\omega))\in\{0,\dots,M_m-1\}\)。
+而 \(s_m\) 恰按该余数选择唯一的 \(X_m\) 元素，因此 \(\Fold_m(\omega)=s_m(r_m(\omega))\)。
+其余断言由因子化直接推出。证毕。
+\end{proof}
+
+\begin{proposition}[端点 $M_m-1$ 的子集和表示唯一性]\label{prop:fold-endpoint-Mm-minus-one-unique}
+对任意 $m\ge 2$，方程
+\[
+\sum_{k=1}^{m}\omega_kF_{k+1}=M_m-1=F_{m+2}-1,\qquad \omega\in\Omega_m
+\]
+恰有一个解，并由交错模式给出
+\[
+(\omega_m,\omega_{m-1},\dots,\omega_1)=
+\begin{cases}
+(1,0,1,0,\dots,1,0), & m\ \text{为偶数},\\
+(1,0,1,0,\dots,0,1), & m\ \text{为奇数}.
+\end{cases}
+\]
+等价地，
+\[
+F_{m+2}-1=F_{m+1}+F_{m-1}+F_{m-3}+\cdots.
+\]
+\end{proposition}
+
+\begin{proof}
+设 $S=\sum_{k=1}^{m}\omega_kF_{k+1}=F_{m+2}-1$。注意 $\sum_{k=1}^{m-1}F_{k+1}=F_{m+2}-2$，故若 $\omega_m=0$ 则 $S\le F_{m+2}-2$ 矛盾，因而 $\omega_m=1$。
+于是
+\[
+\sum_{k=1}^{m-1}\omega_kF_{k+1}=S-F_{m+1}=F_m-1.
+\]
+同理 $\sum_{k=1}^{m-2}F_{k+1}=F_m-2$，故 $\omega_{m-1}=1$ 不可能，从而 $\omega_{m-1}=0$。继续对剩余等式递归同样论证，得到 $\omega_{m-2}=1,\omega_{m-3}=0,\dots$ 的强制交错结构，因而解唯一，并给出所述展开。
+\end{proof}
+
+\begin{theorem}[顶两位 Zeckendorf 统计的三分律与有限修正]\label{thm:fold-top-two-zeckendorf-trisect}
+在 $\Omega_m$ 上取均匀测度，并令
+\[
+A_m:=\#\{\omega\in\Omega_m:\ N(\omega)\ge M_m\}.
+\]
+则对一切 $m\ge 2$，
+\[
+\#\{(\zeta_m,\zeta_{m+1})=(0,1)\}=A_m,\qquad
+\#\{(\zeta_m,\zeta_{m+1})=(1,0)\}=2^m-2A_m-1,\qquad
+\#\{(\zeta_m,\zeta_{m+1})=(0,0)\}=A_m+1,
+\]
+且
+\[
+A_m=
+\begin{cases}
+\dfrac{4^{m/2}-1}{3}, & m\ \text{为偶数},\\[6pt]
+\dfrac{2\bigl(4^{(m-1)/2}-1\bigr)}{3}, & m\ \text{为奇数}.
+\end{cases}
+\]
+因此极限分布满足
+\[
+\lim_{m\to\infty}\PP((\zeta_m,\zeta_{m+1})=(0,0))
+=\lim_{m\to\infty}\PP((\zeta_m,\zeta_{m+1})=(1,0))
+=\lim_{m\to\infty}\PP((\zeta_m,\zeta_{m+1})=(0,1))=\frac13,
+\]
+并且有限尺寸修正为
+\[
+\PP((\zeta_m,\zeta_{m+1})=(0,1))=
+\begin{cases}
+\dfrac{1-2^{-m}}{3}, & m\ \text{为偶数},\\[6pt]
+\dfrac{1-2^{-(m-1)}}{3}, & m\ \text{为奇数},
+\end{cases}
+\]
+\[
+\PP((\zeta_m,\zeta_{m+1})=(1,0))=
+\begin{cases}
+\dfrac{1-2^{-m}}{3}, & m\ \text{为偶数},\\[6pt]
+\dfrac{1+2^{-m}}{3}, & m\ \text{为奇数},
+\end{cases}
+\]
+\[
+\PP((\zeta_m,\zeta_{m+1})=(0,0))=
+\begin{cases}
+\dfrac{1+2^{-(m-1)}}{3}, & m\ \text{为偶数},\\[6pt]
+\dfrac{1+2^{-m}}{3}, & m\ \text{为奇数}.
+\end{cases}
+\]
+\end{theorem}
+
+\begin{proof}
+先给出 $A_m$ 的递推。若 $\omega_m=0$，则 $N(\omega)\le \sum_{k=1}^{m-1}F_{k+1}=F_{m+2}-2<M_m$，故事件 $\{N(\omega)\ge M_m\}$ 蕴含 $\omega_m=1$。于是
+\[
+A_m=\#\Bigl\{\omega'\in\{0,1\}^{m-1}:\ \sum_{k=1}^{m-1}\omega'_kF_{k+1}\ge F_m\Bigr\}.
+\]
+取补集并对 $\{0,1\}^{m-1}$ 施行逐位取反对合 $\varepsilon\mapsto \bar\varepsilon$，由
+$\sum_{k=1}^{m-1}F_{k+1}=F_{m+2}-2$ 得
+\[
+A_m=\#\Bigl\{\varepsilon\in\{0,1\}^{m-1}:\ \sum_{k=1}^{m-1}\varepsilon_kF_{k+1}\le F_{m+1}-2\Bigr\}.
+\]
+按 $\varepsilon_{m-1}$ 分解：若 $\varepsilon_{m-1}=0$，则前 $m-2$ 位任意皆满足不等式（因 $\sum_{k=1}^{m-2}F_{k+1}=F_{m+1}-2$），贡献 $2^{m-2}$；
+若 $\varepsilon_{m-1}=1$，则剩余需满足
+\[
+\sum_{k=1}^{m-2}\varepsilon_kF_{k+1}\le (F_{m+1}-2)-F_m=F_{m-1}-2,
+\]
+其计数恰为 $A_{m-2}$。因此得到递推
+\[
+A_m=2^{m-2}+A_{m-2}\qquad(m\ge 4),
+\]
+并由直接核算 $A_2=1,A_3=2$ 解得所示闭式。
+
+其次把 $A_m$ 与顶两位联系。由 Zeckendorf 约束 $c_kc_{k+1}=0$，$(\zeta_m,\zeta_{m+1})$ 仅有三态，并且按权重区间划分有
+\[
+(\zeta_m,\zeta_{m+1})=(0,1)\iff N(\omega)\ge F_{m+2}=M_m,
+\]
+\[
+(\zeta_m,\zeta_{m+1})=(1,0)\iff F_{m+1}\le N(\omega)<F_{m+2}=M_m,
+\qquad
+(\zeta_m,\zeta_{m+1})=(0,0)\iff N(\omega)<F_{m+1}.
+\]
+第一式给出 $\#\{(\zeta_m,\zeta_{m+1})=(0,1)\}=A_m$。由逐位取反对合 $\omega\mapsto \bar\omega$ 满足
+$N(\bar\omega)=T_m-N(\omega)$，可得
+\[
+\#\{N(\omega)<F_{m+1}\}=\#\{N(\omega)\ge T_m-(F_{m+1}-1)+1\}=\#\{N(\omega)\ge F_{m+2}-1\}.
+\]
+右端等于 $A_m+\#\{N(\omega)=F_{m+2}-1\}$，而 $\#\{N(\omega)=F_{m+2}-1\}=1$ 由命题 \ref{prop:fold-endpoint-Mm-minus-one-unique} 给出，从而
+\(
+\#\{(\zeta_m,\zeta_{m+1})=(0,0)\}=A_m+1
+\)。
+再由总数 $2^m$ 得到
+\[
+\#\{(\zeta_m,\zeta_{m+1})=(1,0)\}=2^m-\bigl(A_m+(A_m+1)\bigr)=2^m-2A_m-1.
+\]
+将 $A_m$ 的闭式代入即可得到两条概率修正公式。
+\end{proof}
+
+\begin{corollary}[折叠溢出率与缺口期望的闭式]\label{cor:fold-overflow-gap-rate-expectation}
+在 $\Omega_m$ 的均匀测度下，令
+\[
+\Delta_m(\omega):=N(\omega)-v_m(\Fold_m(\omega))\in\{0,M_m\}
+\]
+为折叠缺口，则对一切 $m\ge 2$，
+\[
+\PP(\Delta_m=M_m)=\frac{A_m}{2^m}=
+\begin{cases}
+\dfrac{1-2^{-m}}{3}, & m\ \text{为偶数},\\[6pt]
+\dfrac{1-2^{-(m-1)}}{3}, & m\ \text{为奇数},
+\end{cases}
+\qquad
+\EE[\Delta_m]=M_m\,\PP(\Delta_m=M_m).
+\]
+并且
+\[
+\PP\bigl(v_m(\Fold_m(\omega))<F_{m+1}\bigr)=
+\begin{cases}
+\dfrac{1+2^{-(m-1)}}{3}, & m\ \text{为偶数},\\[6pt]
+\dfrac{1+2^{-m}}{3}, & m\ \text{为奇数}.
+\end{cases}
+\]
+\[
+\PP\bigl(F_{m+1}\le N(\omega)<M_m\bigr)=
+\begin{cases}
+\dfrac{1-2^{-m}}{3}, & m\ \text{为偶数},\\[6pt]
+\dfrac{1+2^{-m}}{3}, & m\ \text{为奇数}.
+\end{cases}
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:fold-zeckendorf-mod-decomposition-unique}，$\Delta_m=cM_m$ 且 $\Delta_m=M_m\iff N(\omega)\ge M_m$，故 $\PP(\Delta_m=M_m)=A_m/2^m$。代入定理 \ref{thm:fold-top-two-zeckendorf-trisect} 的 $A_m$ 化简得到所示闭式，期望等式由 $\Delta_m\in\{0,M_m\}$ 立得。第二个概率等式等价于事件 $(\zeta_m,\zeta_{m+1})=(0,0)$，第三个概率等式等价于事件 $(\zeta_m,\zeta_{m+1})=(1,0)$，均由定理 \ref{thm:fold-top-two-zeckendorf-trisect} 给出。
+\end{proof}
+
+\begin{proposition}[零剩余纤维的线性退化]\label{prop:fold-zero-fiber-linear}
+令
+\[
+f_m(0):=\#\{\omega\in\Omega_m:\ \Fold_m(\omega)=0^m\},
+\]
+则对任意 $m\ge 2$，
+\[
+f_m(0)=1+\Bigl\lfloor\frac{m}{2}\Bigr\rfloor.
+\]
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:fold-zeckendorf-mod-decomposition-unique}，$\Fold_m(\omega)=0^m$ 当且仅当 $v_m(\Fold_m(\omega))=0$，等价于 $N(\omega)\equiv 0\pmod{M_m}$。
+又因 $0\le N(\omega)<2M_m$，上述同余等价于 $N(\omega)\in\{0,M_m\}$。其中 $N(\omega)=0$ 仅由全零 $\omega=0^m$ 给出，贡献 $1$。
+剩余需计数
+\[
+B_m:=\#\{\omega\in\Omega_m:\ N(\omega)=M_m=F_{m+2}\}.
+\]
+若 $\omega_m=0$ 则 $N(\omega)\le F_{m+2}-2$ 矛盾，故必有 $\omega_m=1$，从而
+\[
+\sum_{k=1}^{m-1}\omega_kF_{k+1}=F_{m+2}-F_{m+1}=F_m.
+\]
+在右侧表示中，若 $\omega_{m-1}=1$，则左侧含项 $F_m$，其余位必须为 $0$，得到一种表示；若 $\omega_{m-1}=0$，则需用 $\{F_2,\dots,F_{m-1}\}$ 表示 $F_m$，这与参数 $m-2$ 的同类计数等价，故
+\[
+B_m=1+B_{m-2}\qquad(m\ge 4),
+\]
+并由 $B_2=1,B_3=1$ 解得 $B_m=\lfloor m/2\rfloor$。因此 $f_m(0)=1+B_m$。
+\end{proof}
+
+\begin{proposition}[纤维计数的互易律与反射对称性]\label{prop:fold-fiber-count-reciprocity}
+对任意 $m\ge 2$ 与任意 $r\in\{0,1,\dots,M_m-1\}$，令
+\[
+f_m(r):=\#\{\omega\in\Omega_m:\ v_m(\Fold_m(\omega))=r\},
+\qquad
+a_m(s):=\#\{\omega\in\Omega_m:\ N(\omega)=s\}\quad(0\le s\le T_m),
+\]
+则成立互易恒等式
+\[
+f_m(r)=a_m(r)+a_m(M_m+r),
+\]
+并且
+\[
+f_m(r)=a_m(r)+a_m(F_{m+1}-2-r),
+\qquad
+f_m(r)=f_m(F_{m+1}-2-r).
+\]
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:fold-zeckendorf-mod-decomposition-unique}，$v_m(\Fold_m(\omega))$ 是 $N(\omega)$ 模 $M_m$ 的规范代表，且 $0\le N(\omega)<2M_m$，故事件 $\{v_m(\Fold_m(\omega))=r\}$ 等价于 $\{N(\omega)\in\{r,M_m+r\}\}$，从而得到第一式。
+对合 $\omega\mapsto\bar\omega$ 满足 $N(\bar\omega)=T_m-N(\omega)$，故 $a_m(s)=a_m(T_m-s)$。注意
+\[
+T_m-(M_m+r)=(F_{m+3}-2)-(F_{m+2}+r)=F_{m+1}-2-r,
+\]
+代入 $a_m(M_m+r)=a_m(F_{m+1}-2-r)$ 即得第二式。将第二式在 $r$ 与 $F_{m+1}-2-r$ 间交换即可推出反射对称性。
+\end{proof}
+

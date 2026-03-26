@@ -1,0 +1,83 @@
+\begin{theorem}[二阶碰撞作为监督与对比学习的共同指数瓶颈]\label{thm:pom-second-order-collision-common-bottleneck}
+固定分辨率 \(m\)，令 \(X_m\) 上的样本分布为 \(w_m\)。
+对任意未知稳定标签 \(f:X_m\to\{\pm1\}\)，给定 \(n\) 个训练样本
+\[
+(X_1,f(X_1)),\dots,(X_n,f(X_n)),\qquad X_i\stackrel{\mathrm{i.i.d.}}{\sim}w_m,
+\]
+并对独立测试点 \(X_{n+1}\sim w_m\) 预测 \(f(X_{n+1})\)。
+定义最小最大分类误差
+\[
+\mathrm{Err}_m^{\mathrm{mm}}(n)
+:=\inf_{\widehat f}\ \sup_{f:X_m\to\{\pm1\}}\ \PP\bigl(\widehat f(X_{n+1})\neq f(X_{n+1})\bigr),
+\]
+其中 \(\widehat f\) 取遍所有（可测）学习规则。
+则有精确闭式
+\[
+\boxed{\;
+\mathrm{Err}_m^{\mathrm{mm}}(n)
+=\frac12\sum_{x\in X_m}w_m(x)\bigl(1-w_m(x)\bigr)^n\;}
+\]
+并因此得到二阶碰撞下界
+\[
+\boxed{\;
+\mathrm{Err}_m^{\mathrm{mm}}(n)\ \ge\ \frac12\bigl(1-n\,M_2(m)\bigr),\qquad M_2(m)=\sum_{x\in X_m}w_m(x)^2\;}
+\]
+从而若 \(M_2(m)=\Theta((r_2/4)^m)\) 且 \(n_m=\lceil e^{\kappa m}\rceil\) 满足 \(\kappa<\log(4/r_2)\)，则 \(\mathrm{Err}_m^{\mathrm{mm}}(n_m)\to 1/2\)。
+此外，由定理 \ref{thm:pom-bayes-infonce-second-collision-dominance}，固定 \(K\) 下的 Bayes 最优 InfoNCE 值满足
+\(
+L_K^\star(m)=(K-1)\log 2\cdot M_2(m)\,(1+o(1))
+\)，
+因此监督与对比两类目标在指数尺度上共享同一瓶颈 \(M_2(m)\)。
+\end{theorem}
+\begin{proof}
+先证上界。考虑如下学习规则：对任意在训练集中出现过的 \(x\)，输出其被揭示的标签；对未出现过的 \(x\)，输出独立均匀的 \(\pm1\)。
+则对任意固定 \(f\)，在事件 \(\{X_{n+1}\in\{X_1,\dots,X_n\}\}\) 上误差为 \(0\)，在补事件上误差为 \(1/2\)。
+因此该规则的误差恰为
+\[
+\frac12\,\PP\bigl(X_{n+1}\notin\{X_1,\dots,X_n\}\bigr)
+=\frac12\sum_{x\in X_m}w_m(x)\bigl(1-w_m(x)\bigr)^n,
+\]
+从而 \(\mathrm{Err}_m^{\mathrm{mm}}(n)\) 不超过右端。
+\par
+再证下界。令标签 \(\tau:X_m\to\{\pm1\}\) 在 \(\{\pm1\}^{X_m}\) 上均匀随机。
+则对任意学习规则 \(\widehat f\)，其最坏情形误差下界于该先验下的 Bayes 风险；而由定理 \ref{thm:pom-random-fiber-task-bayes-error} 的闭式，
+该 Bayes 最小误差正等于同一右端表达式。
+由最小最大原理（Yao）可得 \(\mathrm{Err}_m^{\mathrm{mm}}(n)\) 不小于该值，故精确闭式成立。
+\par
+对二阶碰撞下界，注意对 \(w\in[0,1]\) 有 \((1-w)^n\ge 1-nw\)。
+代入并求和得
+\[
+2\,\mathrm{Err}_m^{\mathrm{mm}}(n)=\sum_x w_m(x)(1-w_m(x))^n
+\ge 1-n\sum_x w_m(x)^2
+=1-n\,M_2(m).
+\]
+指数阈值结论由 \(n_mM_2(m)\to 0\) 推出 \(\mathrm{Err}_m^{\mathrm{mm}}(n_m)\to 1/2\)，而 \(n_mM_2(m)\to 0\) 等价于 \(\kappa<\log(4/r_2)\)。
+最后一条关于 InfoNCE 的陈述即为定理 \ref{thm:pom-bayes-infonce-second-collision-dominance} 的渐近式。证毕。
+\end{proof}
+
+\begin{corollary}[支持规模上界与指数样本充分条件]\label{cor:pom-second-order-collision-minimax-err-support-bound}
+在定理 \ref{thm:pom-second-order-collision-common-bottleneck} 的设定下，对任意 \(m\) 与任意 \(n\ge 1\) 都有
+\[
+\mathrm{Err}_m^{\mathrm{mm}}(n)\ \le\ \frac{|X_m|}{2n}.
+\]
+特别地，在 Fold 主线 \(|X_m|=F_{m+2}=\varphi^{m+2}/\sqrt5+O(\varphi^{-m})\) 下，若取 \(n_m=\lceil e^{\kappa m}\rceil\) 且 \(\kappa>\log\varphi\)，则
+\[
+\mathrm{Err}_m^{\mathrm{mm}}(n_m)\xrightarrow[m\to\infty]{}0.
+\]
+\end{corollary}
+\begin{proof}
+对任意 \(w\in[0,1]\) 与 \(n\ge 1\)，由 \(1-w\le e^{-w}\) 得 \((1-w)^n\le e^{-nw}\)；
+又由 \(e^{t}\ge 1+t\)（\(t\ge 0\)）得 \(e^{-nw}\le (1+nw)^{-1}\)。
+因此
+\[
+w(1-w)^n\le we^{-nw}\le \frac{w}{1+nw}\le \frac1n.
+\]
+代入定理 \ref{thm:pom-second-order-collision-common-bottleneck} 的精确闭式
+\(
+2\,\mathrm{Err}_m^{\mathrm{mm}}(n)=\sum_x w_m(x)(1-w_m(x))^n
+\)
+并求和即得第一式。
+第二式由 \(|X_m|/n_m\to 0\)（\(\kappa>\log\varphi\)）与第一式直接推出。证毕。
+\end{proof}
+
+\endinput

@@ -1,0 +1,242 @@
+\subsection{抽象 forcing 骨架与扩张链}\label{subsec:logic-expansion-chain-abstract-forcing}
+
+本小节不再把逻辑写成一张先验公理表，而先给出后文全部具体模型共同依赖的 forcing 骨架。其任务有二：其一，把对象层事实统一改写为状态上的可断言性；其二，说明后续的引用、局部对象、\(\mathsf{NULL}\)、动态更新、多轴结构与观察者时空定位，都只是沿同一骨架逐层扩充，而不是另起一套并列逻辑。
+
+\begin{definition}[逻辑层]\label{def:logic-expansion-layer}
+称
+\[
+\mathbb{L}_n=(\Sigma_n,\mathrm{Form}_n,\mathrm{St}_n,\mathrm{Mod}_n,\Vdash_n,\models_n)
+\]
+为第 \(n\) 层逻辑。其中，\(\Sigma_n\) 为语言签名，\(\mathrm{Form}_n\) 为公式类，\(\mathrm{Mod}_n\) 为模型类，\(\mathrm{St}_n\) 为把每个 \(M\in\mathrm{Mod}_n\) 送到状态集合 \(\mathrm{St}_n(M)\) 的状态指派，\(\Vdash_n\) 为状态 forcing，而 \(\models_n\) 为由 forcing 诱导出的语义后承关系。
+\end{definition}
+
+定义 \ref{def:logic-expansion-layer} 表明：这里的逻辑不是“哪些句子先被宣布为真”，而是“哪些公式在给定状态上已经可被断言”。
+
+对任意公式集 \(\Gamma\cup\{\varphi\}\subseteq \mathrm{Form}_n\)，规定
+\[
+\Gamma \models_n \varphi
+\quad:\Longleftrightarrow\quad
+\forall M\in\mathrm{Mod}_n,\ \forall p\in\mathrm{St}_n(M),
+\bigl(M,p\Vdash_n \Gamma \Rightarrow M,p\Vdash_n \varphi\bigr).
+\]
+其中 \(M,p\Vdash_n \Gamma\) 表示 \(\Gamma\) 中每个公式都在状态 \(p\) 上被强制成立。于是，语义后承不是公理系统之外的附加解释，而是 forcing 保持性的直接表达。
+
+\begin{definition}[保守扩张]\label{def:logic-expansion-conservative-extension}
+设 \(\mathbb{L}_m\) 与 \(\mathbb{L}_n\) 为两个逻辑层，且 \(m<n\)。若存在语言嵌入
+\[
+e_{m,n}:\Sigma_m\hookrightarrow \Sigma_n
+\]
+以及模型遗忘投影
+\[
+U_{n,m}:\mathrm{Mod}_n\to \mathrm{Mod}_m,
+\]
+并且对每个 \(M\in\mathrm{Mod}_n\) 都存在状态遗忘投影
+\[
+\pi_{n,m}^M:\mathrm{St}_n(M)\to \mathrm{St}_m\bigl(U_{n,m}(M)\bigr),
+\]
+使得对任意 \(\varphi\in \mathrm{Form}_m\) 与任意 \(p\in \mathrm{St}_n(M)\)，都有
+\[
+M,p\Vdash_n \varphi
+\quad\Longleftrightarrow\quad
+U_{n,m}(M),\,\pi_{n,m}^M(p)\Vdash_m \varphi,
+\]
+则称 \(\mathbb{L}_n\) 是 \(\mathbb{L}_m\) 的一个保守扩张，记作
+\[
+\mathbb{L}_m\preceq \mathbb{L}_n.
+\]
+\end{definition}
+
+定义 \ref{def:logic-expansion-conservative-extension} 保证了高层只增加结构槽位，而不回写低层 forcing 的既有意义。于是，整章需要建立的并不是若干并列理论，而是一条由保守扩张串接起来的生成链：
+\[
+\mathbb{L}_0
+\preceq
+\mathbb{L}_1
+\preceq
+\mathbb{L}_2
+\preceq
+\mathbb{L}_3
+\preceq
+\mathbb{L}_4
+\preceq
+\mathbb{L}_5
+\preceq
+\mathbb{L}_6
+\preceq
+\mathbb{L}_7
+\preceq
+\mathbb{L}_8
+\preceq
+\mathbb{L}_9
+\preceq
+\mathbb{L}_{10}^{\mathrm{OST}}.
+\]
+其中，\(\mathbb{L}_0\) 给出最小结构骨架，\(\mathbb{L}_1\) 与 \(\mathbb{L}_2\) 引入类型、上下文与信息状态，\(\mathbb{L}_3\) 立起 forcing，\(\mathbb{L}_4\) 至 \(\mathbb{L}_6\) 处理引用、局部对象与 \(\mathsf{NULL}\)，\(\mathbb{L}_7\) 与 \(\mathbb{L}_8\) 处理动态和多轴，\(\mathbb{L}_9\) 与 \(\mathbb{L}_{10}^{\mathrm{OST}}\) 则把同一 forcing 骨架纤维化到观察者与时空之上。
+
+为立起这条扩张链的第一个非平凡层，先固定一个分型语言
+\[
+\Sigma=(S,F,R),
+\]
+其中 \(S\) 是类型集，\(F\) 是函数符号族，\(R\) 是关系符号族。对任意模型 \(M\)，记 \(D_s^M\) 为类型 \(s\) 的解释域。若
+\[
+\Gamma=(x_1:s_1,\dots,x_n:s_n)
+\]
+是一个上下文，则定义其在模型 \(M\) 中的实现集合为
+\[
+\mathrm{Val}_M(\Gamma)
+:=
+\bigl\{\rho \mid \rho(x_i)\in D_{s_i}^M,\ 1\le i\le n\bigr\}.
+\]
+若 \(\Gamma\preceq \Delta\) 表示 \(\Delta\) 扩张了 \(\Gamma\)，则每个 \(\Delta\)-实现 \(\sigma\) 都有自然限制
+\[
+\sigma|_\Gamma \in \mathrm{Val}_M(\Gamma).
+\]
+
+\begin{definition}[信息状态]\label{def:logic-expansion-information-state}
+在模型 \(M\) 中，称
+\[
+p=(\Gamma_p,R_p)
+\]
+为一个信息状态，若 \(\Gamma_p\) 是一个上下文，且
+\[
+\varnothing\neq R_p\subseteq \mathrm{Val}_M(\Gamma_p).
+\]
+记 \(\mathrm{St}(M)\) 为模型 \(M\) 中全部信息状态之集合。
+\end{definition}
+
+这里的 \(R_p\) 不是单条赋值，而是仍被当前状态共同保留的一簇实现；状态表达的是“哪些可能性尚未被排除”，而不是“对象已经完全确定”。
+
+\begin{definition}[细化]\label{def:logic-expansion-refinement}
+设
+\[
+p=(\Gamma_p,R_p),
+\qquad
+q=(\Gamma_q,R_q)
+\]
+是同一模型 \(M\) 中的两个状态。称 \(q\) 是 \(p\) 的一个细化，记作
+\[
+q\le p,
+\]
+若满足：
+\begin{enumerate}
+  \item \(\Gamma_p\preceq \Gamma_q\)；
+  \item 对任意 \(\sigma\in R_q\)，都有
+  \[
+  \sigma|_{\Gamma_p}\in R_p.
+  \]
+\end{enumerate}
+\end{definition}
+
+定义 \ref{def:logic-expansion-refinement} 同时编码了两件事：语境变大，因此可表达的内容更多；允许实现变少，因此状态变得更细。
+
+\begin{definition}[状态 forcing]\label{def:logic-expansion-state-forcing}
+设 \(p=(\Gamma_p,R_p)\) 是模型 \(M\) 中的一个状态，\(\varphi\) 是在 \(\Gamma_p\) 中良构的公式。定义
+\[
+M,p\Vdash \varphi
+\quad:\Longleftrightarrow\quad
+\forall \rho\in R_p,\ M,\rho\models \varphi.
+\]
+其中右侧的 \(\models\) 表示底层分型语义下的通常满足关系。
+\end{definition}
+
+定义 \ref{def:logic-expansion-state-forcing} 把对象层事实改写成了状态上的可断言性：公式之所以成立，不是因为它在某个抽象全局世界中为真，而是因为它对状态当前保留的全部实现都已稳定成立。
+
+\begin{definition}[状态理论]\label{def:logic-expansion-state-theory}
+对任意状态 \(p\)，定义
+\[
+\mathrm{Th}_M(p)
+:=
+\{\varphi \mid M,p\Vdash \varphi\}.
+\]
+\end{definition}
+
+\begin{definition}[已决定性]\label{def:logic-expansion-decidedness}
+称公式 \(\varphi\) 在状态 \(p\) 上已决定，记作
+\[
+M,p\Downarrow \varphi,
+\]
+若
+\[
+M,p\Vdash \varphi
+\qquad\text{或}\qquad
+M,p\Vdash \neg\varphi.
+\]
+\end{definition}
+
+定义 \ref{def:logic-expansion-state-theory} 与定义 \ref{def:logic-expansion-decidedness} 说明：forcing 与已决定性并不相同；状态可以已经排除某些命题的分歧，同时对另一些命题仍保留真实的未定性。
+
+\begin{proposition}[forcing 的持久性]\label{prop:logic-expansion-forcing-persistence}
+若
+\[
+q\le p
+\qquad\text{且}\qquad
+M,p\Vdash \varphi,
+\]
+则
+\[
+M,q\Vdash \varphi^\uparrow,
+\]
+其中 \(\varphi^\uparrow\) 表示把 \(\varphi\) 看作较大上下文中的同一公式。
+\end{proposition}
+
+\begin{proof}
+任取 \(\sigma\in R_q\)。由定义 \ref{def:logic-expansion-refinement} 知 \(\sigma|_{\Gamma_p}\in R_p\)。既然 \(M,p\Vdash \varphi\)，则
+\[
+M,\sigma|_{\Gamma_p}\models \varphi.
+\]
+因此在扩张语境中，
+\[
+M,\sigma\models \varphi^\uparrow.
+\]
+由于 \(\sigma\) 任意，故 \(M,q\Vdash \varphi^\uparrow\)。
+\end{proof}
+
+命题 \ref{prop:logic-expansion-forcing-persistence} 表明：细化只会收缩未定部分，而不会推翻已经成立的对象层事实。
+
+\begin{corollary}[状态理论的单调增长]\label{cor:logic-expansion-state-theory-monotonicity}
+若
+\[
+q\le p,
+\]
+则
+\[
+\mathrm{Th}_M(p)\subseteq \mathrm{Th}_M(q).
+\]
+\end{corollary}
+
+\begin{proof}
+这是命题 \ref{prop:logic-expansion-forcing-persistence} 的直接推论。
+\end{proof}
+
+\begin{proposition}[单点保守性]\label{prop:logic-expansion-singleton-conservativity}
+设 \(\rho\in \mathrm{Val}_M(\Gamma)\)，并令
+\[
+p_\rho=(\Gamma,\{\rho\}).
+\]
+则对任意 \(\Gamma\)-公式 \(\varphi\)，都有
+\[
+M,p_\rho\Vdash \varphi
+\quad\Longleftrightarrow\quad
+M,\rho\models \varphi.
+\]
+\end{proposition}
+
+\begin{proof}
+由 \(R_{p_\rho}=\{\rho\}\) 及定义 \ref{def:logic-expansion-state-forcing}，forcing 的定义立刻退化为单点满足。
+\end{proof}
+
+命题 \ref{prop:logic-expansion-singleton-conservativity} 说明，状态 forcing 并不是对通常点语义的替代，而是对其保守提升：当状态坍缩成单点时，二者完全一致。
+
+\begin{definition}[状态语义后承]\label{def:logic-expansion-state-consequence}
+对任意公式集 \(\Phi\cup\{\varphi\}\)，定义
+\[
+\Phi \models_{\mathrm{S}} \varphi
+\]
+当且仅当对任意模型 \(M\) 与任意状态 \(p\in \mathrm{St}(M)\)，都有
+\[
+M,p\Vdash \Phi
+\Rightarrow
+M,p\Vdash \varphi.
+\]
+\end{definition}
+
+至此，整章开篇所需的最小 forcing 骨架已经立住：逻辑以层组织，层间以保守扩张相接，对象层事实写成 \(M,p\Vdash \varphi\)，而细化保持 forcing。后续各层不再改变这一核心关系，而只是在其上依次加入引用、局部对象、\(\mathsf{NULL}\)、动态、多轴与观察者时空结构。下一小节即在这一 forcing 骨架之上引入指称、局部性与结构性空缺。

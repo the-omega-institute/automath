@@ -1,0 +1,339 @@
+\subsection{在线归一化同步核的 \texorpdfstring{$\zeta_B$}{zeta\_B} 与 primitive 轨道谱}\label{subsec:zeta-online-kernel}
+第 \ref{subsec:online-delay} 小节的单趟在线延迟转导器，其同步部分给出一个 10 状态 SFT（见附录 B），记邻接矩阵为 $B$。按 SFT 的标准公式，
+\[
+\zeta_B(z)=\frac{1}{\det(I-zB)},\qquad
+a_n:=\#\mathrm{Fix}(\sigma^n)=\mathrm{Tr}(B^n).
+\]
+固定状态顺序与附录 B 一致，并令
+\[
+B_{ij}:=\#\{d\in\{0,1,2\}:\ q_i\xrightarrow{d}q_j\},
+\]
+则由同步转移表逐边计数即可得到该 $B$；其显式矩阵与计算细节见附录 B。
+
+\input{sections/body/zeta_finite_part/online_kernel/parts/prop__sync_kernel_explicit_syncword_mixing_rate}
+
+对该同步核可得显式因式分解（附录 B 给出矩阵与计算）
+\[
+\det(I-zB)=(z-1)(z+1)(3z-1)\bigl(z^3-z^2+z+1\bigr),
+\]
+因此主极点位于 $z_\star=1/3$，对应 Perron--Frobenius 主特征值 $\lambda=3$，并且
+\[
+\zeta_B(z)=\frac{C_B}{1-3z}+O(1)
+\]
+其中留数常数 \(C_B\) 可由下述闭式直接读出。令 $p_n$ 为长度 $n$ 的 primitive 轨道数（按轨道计），则
+
+\begin{remark}[10 状态同步核的主极点留数常数]\label{lem:sync-kernel-10-residue-constant}
+在 \(z_\star=1/3\) 处定义
+\(
+C_B:=\lim_{z\to z_\star}(1-3z)\zeta_B(z)
+\)。
+由 \(\zeta_B(z)=1/\det(I-zB)\) 与
+\(
+\det(I-zB)=(z-1)(z+1)(3z-1)(z^3-z^2+z+1)
+\)
+直接代入得
+\[
+\boxed{\; C_B=\frac{243}{272}\; }.
+\]
+\end{remark}
+
+\begin{remark}[主留数常数的数域分层：同步核在 \texorpdfstring{$\mathbb{Q}$}{Q}，真实输入核进入 \texorpdfstring{$\mathbb{Q}(\sqrt5)$}{Q(sqrt5)}]\label{rem:residue-field-sync-vs-real}
+同步核 \(B\) 的主留数常数 \(C_B=243/272\in\QQ\)（引理 \ref{lem:sync-kernel-10-residue-constant}）。
+而 40 状态真实输入核的主留数常数 \(C_{\mathrm{real}}\) 具有闭式并落在二次数域 \(\QQ(\sqrt5)\) 中（命题 \ref{prop:real-input-40-residue-constant}）。
+这表明“并入真实输入约束”的机制提升不仅改变主谱尺度（从 \(\lambda=3\) 到 \(\lambda=\varphi^2\)），也把有限部接口的算术类型提升到黄金二次域，与本文反复出现的 \(\varphi\)-几何结构同源。
+\end{remark}
+\[
+a_n=\sum_{d\mid n} d\,p_d,
+\qquad
+p_n=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}.
+\]
+
+\begin{remark}[10 状态同步核不满足核版 RH（\texorpdfstring{$u=1$}{u=1}）]\label{prop:sync-kernel-10-nonrh}
+记 10 状态同步核的邻接矩阵为 $B$，其 Perron 根为 $\lambda=\rho(B)=3$。则存在非平凡特征值 $\mu$ 满足
+\[
+|\mu|>\sqrt{\lambda}=\sqrt{3},
+\]
+从而核版 RH 条件（定义 \ref{def:kernel-rh}）在 $u=1$ 处不成立。
+\end{remark}
+
+\paragraph{HTF/Big-Witt 桥包的函子化：迹序列 $\Rightarrow$ primitive 原子 $\Rightarrow$ Euler 乘积的严格交换图}
+令 $R$ 为带 Adams 操作的交换环（本文的加权情形取 $R=\ZZ[u]$ 并令
+$\psi^d(f)(u):=f(u^d)$）。
+考虑对象为带参端自同态（endomorphism）的范畴 $\mathbf{End}_\psi(R)$：对象为 $(V,T(u))$，其中 $V$ 为有限自由 $R$-模，
+$T(u)\in \mathrm{End}_R(V)$，并约定 $\psi^d$ 作用在参数上（即 $u\mapsto u^d$）。
+令 $\mathbf{Seq}(R)$ 为 $R$-值序列范畴，$\mathbf{EP}(R)$ 为 $1+zR[[z]]$ 的可逆元所成乘法范畴（等价地 Euler product 形式的对象）。
+定义四个函子/算子：
+\[
+\mathsf{TrSeq}:\mathbf{End}_\psi(R)\to \mathbf{Seq}(R),\quad
+(V,T)\mapsto (a_n)_{n\ge 1},\ \ a_n(u)=\Tr(T(u)^n),
+\]
+\[
+\mathsf{Mob}_W:\mathbf{Seq}(R)\to \mathbf{Seq}(R),\quad
+(a_n)\mapsto (p_n),\ \ 
+p_n(u)=\frac1n\sum_{d\mid n}\mu(d)\,\psi^d\!\bigl(a_{n/d}\bigr)
+\;=\;\frac1n\sum_{d\mid n}\mu(d)\,a_{n/d}(u^d),
+\]
+\[
+\begin{aligned}
+\mathsf{EP}:\mathbf{Seq}(R)\to \mathbf{EP}(R),\quad
+(p_n)\mapsto \prod_{n\ge 1}(1-z^n)^{-p_n},\\
+\mathsf{Det}:\mathbf{End}_\psi(R)\to \mathbf{EP}(R),\quad
+(V,T)\mapsto \det(I-zT)^{-1}.
+\end{aligned}
+\]
+则 HTF（迹 $\leftrightarrow$ 素数影子 $\leftrightarrow$ Euler 乘积）在本框架中可表述为如下\textbf{严格交换}：
+\[
+\begin{CD}
+\mathbf{End}_\psi(R) @>\mathsf{TrSeq}>> \mathbf{Seq}(R) @>\mathsf{Mob}_W>> \mathbf{Seq}(R) @>\mathsf{EP}>> \mathbf{EP}(R) \\
+@V\mathsf{Det}VV @. @. @| \\
+\mathbf{EP}(R) @= \mathbf{EP}(R) @= \mathbf{EP}(R) @= \mathbf{EP}(R)
+\end{CD}
+\]
+交换性的内容就是两条可审计恒等式：其一，
+\[
+\det(I-zT(u))^{-1}=\exp\!\left(\sum_{n\ge 1}\frac{\Tr(T(u)^n)}{n}z^n\right),
+\]
+其二，Witt（necklace）分解与 Möbius 反演把“幂重复闭环”从 primitive 原子中剥离出来（见附录 \ref{app:witt-weighted} 与 \ref{app:witt-bridge-package}）。
+因此，“迹侧的时间序列（ghost 坐标）”与“prime-like 原子侧的 Euler 乘积（Witt 坐标）”之间并非类比，而是被上述交换图强迫的结构。
+
+\begin{remark}[Big-Witt 同余护栏：necklace 整除律与 Dwork 型 \texorpdfstring{$p$}{p}-幂同余]\label{cor:big-witt-audit-guardrails}
+设某一核（可为一维/二维/三维势，或真实输入核等）由有限加权同步图/有限状态核给出，从而其 \(\zeta\)-函数具有行列式口径
+\[
+\zeta(z;\mathbf u)=\det(I-zB(\mathbf u))^{-1}=\exp\!\left(\sum_{n\ge 1}\frac{a_n(\mathbf u)}{n}z^n\right),
+\qquad a_n(\mathbf u):=\Tr(B(\mathbf u)^n).
+\]
+令 \(\psi^d\) 为参数的 Adams 操作（逐变量幂替换 \(\mathbf u\mapsto \mathbf u^d\)）。
+则对任意 \(n\ge 1\) 与任意素数 \(p\)、\(k\ge 1\)，有严格约束
+\[
+\boxed{\ \sum_{d\mid n}\mu(d)\,\psi^d\!\bigl(a_{n/d}\bigr)\in nR\ },
+\qquad
+\boxed{\ a_{p^k}\equiv \psi^p(a_{p^{k-1}})\pmod{p^k}\ },
+\]
+其中 \(R\) 为该核的系数环（例如 \(\ZZ[u]\)、\(\ZZ[u,v]\)、\(\ZZ[u,v,w]\)）。
+\par
+\medskip\noindent\textbf{验收判据（严格交换图的整性版本）}
+在上述函子化交换图中，“迹侧 \((a_n)\) \(\xrightarrow{\ \mathsf{Mob}_W\ }\) primitive 坐标 \((p_n)\) \(\xrightarrow{\ \mathsf{EP}\ }\) Euler 乘积”的桥接若要在整系数/可审计意义下\emph{严格成立}，等价于由 Möbius--Witt 反演得到的 primitive 坐标 \(p_n=\frac1n\sum_{d\mid n}\mu(d)\,\psi^d(a_{n/d})\) 全部落在 \(R\)。
+而这又与 necklace 整除律 \(\sum_{d\mid n}\mu(d)\psi^d(a_{n/d})\in nR\) 等价；Dwork 型同余给出其在 \(p\)-幂方向上的最小模审计子族。
+因此，上述整除/同余检查可被视为“交换图是否真的交换”的零成本验收标准：任何一次失败都意味着桥包在实现或模型层面断裂。
+严格的系数环版本与多维推广见附录 \ref{app:witt-bridge-package} 的命题 \ref{prop:witt-necklace-dwork-R} 及 \S\ref{app:multi-dim-witt-guardrails}。
+\end{remark}
+
+\begin{algorithm}[自审计协议：不算谱、不算 primitive 的同余一致性检查]\label{alg:self-audit-witt}
+给定一个核的加权邻接矩阵族 \(B(\mathbf u)\)（系数环 \(R\)），以及一组要审计的整数集合 \(\mathcal N\) 与素数幂集合 \(\mathcal P=\{(p,k)\}\)：
+\begin{enumerate}
+  \item 计算周期迹多项式 \(a_n(\mathbf u)=\Tr(B(\mathbf u)^n)\in R\)（对核的常见规模，这一步可用精确矩阵幂/递推完成）。
+  \item 对每个 \(n\in\mathcal N\)，构造
+  \[
+  S_n(\mathbf u):=\sum_{d\mid n}\mu(d)\,a_{n/d}(\mathbf u^d)\in R,
+  \]
+  并检查 \(S_n(\mathbf u)\in nR\)（系数逐项能被 \(n\) 整除）。
+  \item 对每个 \((p,k)\in\mathcal P\)，检查
+  \[
+  a_{p^k}(\mathbf u)-a_{p^{k-1}}(\mathbf u^p)\in p^kR
+  \]
+  （系数逐项 \(\equiv 0\ \mathrm{mod}\ p^k\)）。
+\end{enumerate}
+任何一次失败都意味着：该迹序列不可能来自本文的 Euler 乘积/primitive--periodic Big-Witt 桥包，因此可直接定位为“实现/数据管线错误”或“对象并非本文口径的 \(\zeta\)”。
+\end{algorithm}
+
+由 $B$ 的原始性（例如 $B^5$ 全正），得到
+\[
+a_n=3^n+O(\rho^n),\qquad
+p_n=\frac{3^n}{n}+O\!\left(\frac{\rho^n}{n}\right)\quad(\rho<3).
+\]
+对应的“素数计数曲线”定义为 $\Pi_B(N):=\sum_{n\le N}p_n$，其离散主项为
+\[
+\Pi_B(N)\sim \frac{3}{2}\cdot \frac{3^N}{N},
+\]
+并可写成 $X=3^N$ 的 $X/\log X$ 形态（详见附录 B）。可复现实验脚本见 \texttt{scripts/exp\_sync\_kernel\_primitive\_spectrum.py}。
+
+\paragraph{加权 $\zeta(z,u)$ 的函数方程与输出密度常数}
+取输出位势 $\varphi(e)=e$，令 $B(u)=B_0+uB_1$、$\Delta(z,u)=\det(I-zB(u))$ 与 $\zeta(z,u)=\Delta(z,u)^{-1}$（见附录 \ref{app:witt-weighted}）。附录 \ref{app:kernel-self-dual} 给出自对偶对称
+\[
+\Delta(z,u)=\Delta(uz,1/u),\qquad
+\zeta(z,u)=\zeta(uz,1/u),
+\]
+\input{sections/body/zeta_finite_part/online_kernel/parts/thm__sync_kernel_endpoint_refined_palindrome}
+
+从而 $P(\theta)=\log\lambda(e^\theta)$ 满足 $P(\theta)=\theta+P(-\theta)$。同理令
+\[
+\widetilde{\Delta}(z,\theta):=\Delta(e^{-\theta/2}z,e^\theta),
+\]
+则完成化行列式在 $\theta$ 上严格偶对称（见附录 \ref{app:kernel-completion}）。因此
+\[
+P'(0)=\frac12,\qquad P''(0)=\frac{11}{102},
+\]
+并且除均值外的所有奇阶累积量密度皆为零（$P^{(2k+1)}(0)=0,\ k\ge 1$，见附录 \ref{app:pressure-analytic}）。
+\par
+更强地，自对偶相似变换不仅锁定了压力层的切线 \(P'(0)=\tfrac12\)，还把\textbf{整个非零谱}在 \(u=1\) 处的对数切线一并锁定：对任意在 \(u=1\) 处非零且为单特征值的谱分支 \(\lambda_j(\theta)\)（\(u=e^\theta\)），都有
+\[
+\left.\frac{\mathrm{d}}{\mathrm{d}\theta}\log\lambda_j(\theta)\right|_{\theta=0}=\frac12
+\]
+（定理 \ref{thm:sync-spectral-tangent-lock}）。
+这一“谱切线锁定”在输出密度曲线的消元闭包中表现为一个可审计的代数指纹：规范化消元多项式 \(R(\alpha,u)\) 在 \(\alpha=\tfrac12\) 截面上含有 \((u-1)^6\) 的六重聚合，并且端点系数强制出现 \(\alpha\to\tfrac14,\tfrac34\) 的四重侧翼簇（注 \ref{rem:rate-algebraic-elimination-structure}）。
+\par
+同时，Big-Witt/Dwork 的 \(2\)-幂同余在不变量坐标 \(t=u+u^{-1}\) 下闭合为一条显式动力学同余链：
+\[
+A_{2^k}(t)\equiv A_{2^{k-1}}(t^2-2)\pmod{2^k}\qquad(k\ge 2),
+\]
+其中 \(a_{2^k}(u)=u^{2^{k-1}}A_{2^k}(u+u^{-1})\) 为偶次回文迹多项式在不变量环上的唯一分解（定理 \ref{thm:chebyshev-dwork-congruence-chain}）。
+并在典型密度 $\alpha_\star=\frac12$ 附近有
+\[
+I(\alpha)=\frac{(\alpha-\frac12)^2}{2P''(0)}+O\!\left((\alpha-\tfrac12)^3\right)
+=\frac{51}{11}\Bigl(\alpha-\frac12\Bigr)^2+O(\cdot),
+\]
+其中 $I$ 为输出位计数的 LDP 率函数（见附录 \ref{app:pressure-analytic} 与 \ref{app:rate-param}）。有限 $n$ 的镜像对称与其导出的 Mertens 偶性见推论 \ref{cor:primitive-finite-sym} 与命题 \ref{prop:mertens-even}；周期迹多项式与 $\Delta$ 系数的逐项回文约束见命题 \ref{prop:trace-palindrome} 与推论 \ref{cor:delta-coeff-palindrome}。
+
+\begin{remark}[完成化零点的对偶--共轭对称（核版 RH 的基本域）]\label{prop:completed-zero-symmetry}
+设 \(\Delta(z,u)=\det(I-zB(u))\) 满足自对偶对称 \(\Delta(z,u)=\Delta(uz,1/u)\)，并令 \(N:=\dim B\)。
+定义完成化变量与完成化行列式
+\[
+w:=z\,u^{1/2},\qquad
+\widehat{\Delta}(w,u):=u^{-N/2}\,\Delta(wu^{-1/2},u).
+\]
+则有：
+\begin{enumerate}
+  \item \textbf{对偶识别：}\(\widehat{\Delta}(w,1/u)=u^{N}\widehat{\Delta}(w,u)\)。因此对任意 \(u\neq 0\)，完成化零点集只依赖于不变量
+  \(s:=u^{1/2}+u^{-1/2}\)（等价于 \(u\leftrightarrow 1/u\) 给出同一条完成化曲线）。
+  \item \textbf{单位圆上的共轭对称：}当 \(|u|=1\) 时，\(\widehat{\Delta}(\,\cdot\,,u)\) 的零点在 \(w\)-平面上关于共轭成对：若 \(\widehat{\Delta}(w_0,u)=0\)，则 \(\widehat{\Delta}(\overline{w_0},u)=0\)。
+  \item \textbf{Klein 四群作用：在 \((w,u)\) 平面}当 \(|u|=1\) 时，零点集在
+  \((w,u)\mapsto (w,1/u)\) 与 \((w,u)\mapsto(\overline{w},\overline{u})\) 的生成下闭合；由于此时 \(1/u=\overline{u}\)，这两种对称生成一个 Klein 四群，从而把“核版 RH 的检查”约化到一个基本域（例如只需扫描 \(t\in[0,\pi]\) 且 \(\Im w\ge 0\)）。
+\end{enumerate}
+\end{remark}
+
+\begin{remark}[压力对称 \texorpdfstring{$\Rightarrow$}{=>} 大偏差谱的精确镜像]\label{thm:sync-pressure-sym-ldp-mirror}
+设同步核满足自对偶对称，从而压力函数满足
+\[
+P(\theta)=\theta+P(-\theta)
+\qquad(\theta\ \text{在某邻域内}).
+\]
+令 \(I\) 为输出位计数（单位长度输出密度 \(\alpha\)）的大偏差率函数，其在可微区可由 Legendre 变换给出
+\[
+I(\alpha)=\sup_{\theta\in\RR}\bigl(\theta\alpha-P(\theta)\bigr)
+\]
+（见附录 \ref{app:rate-param}）。则：
+\begin{enumerate}
+  \item \textbf{典型密度镜像：}若定义倾斜族的典型密度为 \(\alpha(\theta):=P'(\theta)\)，则
+  \[
+  \alpha(\theta)+\alpha(-\theta)=1.
+  \]
+  \item \textbf{率函数镜像：}对所有 \(\alpha\)（落在有效域内）有精确恒等式
+  \[
+  \boxed{\ I(\alpha)=I(1-\alpha)\ }.
+  \]
+\end{enumerate}
+\end{remark}
+
+\begin{remark}[二次型刚性常数由 \texorpdfstring{$P''(0)$}{P''(0)} 锁定]\label{cor:sync-ldp-quadratic-locked}
+在定理 \ref{thm:sync-pressure-sym-ldp-mirror} 的条件下，典型密度为 \(\alpha_\star=P'(0)=1/2\)，且其附近的二次近似系数由 \(P''(0)\) 唯一确定：
+\[
+I\!\left(\tfrac12+\delta\right)=\frac{\delta^2}{2P''(0)}+o(\delta^2)
+=\frac{51}{11}\delta^2+o(\delta^2).
+\]
+\end{remark}
+
+\paragraph{Cyclotomic elimination：模 \texorpdfstring{$m$}{m} 的 residue mixing 误差指数是整系数代数数}
+把加权 primitive 轨道谱写成
+\[
+p_n(u)=\sum_{k}p_{n,k}\,u^k\in\ZZ[u],
+\]
+其中 $k$ 是长度 $n$ 的 primitive 轨道上输出 $1$ 的出现次数。对任意模 $m\ge 3$ 与同余类 $a\in\ZZ/m\ZZ$，定义 residue class 的 primitive 计数
+\[
+p_{n,a}^{(m)}:=\sum_{k\equiv a\ (m)}p_{n,k}.
+\]
+由离散傅里叶反演（evaluation@roots + DFT）有严格恒等式
+\[
+p_{n,a}^{(m)}=\frac{1}{m}\sum_{r=0}^{m-1}\omega_m^{-ar}\,p_n(\omega_m^r),
+\qquad \omega_m:=e^{2\pi i/m}.
+\]
+因此 residue mixing 的误差指数由扭曲 Perron 根
+\[
+\rho_m:=\max_{1\le r\le m-1}|\lambda(\omega_m^r)|<\lambda(1)=3
+\]
+控制（$r=0$ 为平凡频率给出主项）。下面把 $\rho_m$ 变成一个\emph{整系数代数方程}（resultant）问题。
+
+\begin{proposition}[能量分辨的 Euler 乘积：\texorpdfstring{$\zeta(z,u)=\prod_{n,k}(1-z^n u^k)^{-p_{n,k}}$}{zeta(z,u)=prod(1-z^n u^k)^(-p_{n,k})}]\label{prop:sync-bivariate-euler-product}
+沿用上文的记号，把 primitive 轨道按长度与输出能量分解为整数系数 \(p_{n,k}\)：
+\[
+p_n(u)=\sum_{k\ge 0}p_{n,k}u^k,\qquad n\ge 1.
+\]
+则加权 \(\zeta\)-函数具有精确的二变量 Euler 乘积
+\[
+\zeta(z,u)=\frac{1}{\det(I-zB(u))}
+=\prod_{n\ge 1}\ \prod_{k\ge 0}\bigl(1-z^n u^k\bigr)^{-p_{n,k}}.
+\]
+\end{proposition}
+\begin{proof}
+由附录 \ref{app:witt-weighted} 的 primitive 轨道乘积式，
+\(
+\zeta(z,u)=\prod_{\tau\ \mathrm{primitive}}\bigl(1-z^{|\tau|}u^{S_\tau\varphi}\bigr)^{-1}
+\)。
+把 primitive 轨道按 \((n,k)=(|\tau|,S_\tau\varphi)\) 分组，且记每组的轨道计数为 \(p_{n,k}\)，即可得到所示双重乘积（在形式幂级数环 \(\ZZ[u][[z]]\) 中逐阶比较即可严格化）。证毕。
+\end{proof}
+
+\begin{proposition}[联合素数谱与 action gap：Newton 支撑与可计算性]\label{prop:sync-action-gap}
+沿用命题 \ref{prop:sync-bivariate-euler-product} 的联合 primitive 计数 \(p_{n,k}\)。
+把 \((n,k)\) 视为“长度--能量”坐标，并记联合 primitive 生成函数
+\[
+P(z,u):=\sum_{n\ge 1}\sum_{k\ge 0}p_{n,k}\,z^n u^k.
+\]
+定义 action gap（最小正能量可达性）为
+\[
+A_B:=\min\{k>0:\ \exists n\ \text{使}\ p_{n,k}>0\}.
+\]
+则：
+\begin{enumerate}
+  \item \(A_B>0\) 当且仅当存在某条 primitive 回路携带正能量（等价地：存在一条含正能量边的有向环）；
+  \item \(A_B\) 与更细的“最小平均能量回路”均为可计算组合不变量：若把每条边赋能量权 \(\kappa(e)\in\ZZ_{\ge 0}\)（本节的输出位势即为一例），则最小平均能量
+  \[
+  \bar\kappa_{\min}:=\min_{\gamma\ \mathrm{cycle}}\ \frac{\sum_{e\in\gamma}\kappa(e)}{|\gamma|}
+  \]
+  可用 Karp 的 min-mean-cycle 算法在多项式时间内求出（参见注 \ref{rem:pom-order-as-zero-temp} 的同口径描述）。
+\end{enumerate}
+因此联合素数谱 \(p_{n,k}\) 不仅给出二变量 Euler 乘积，还诱导出一族不会退化为 \(0\) 的“第一激发”核指纹（\(A_B,\bar\kappa_{\min}\)），可用于区分不同同步核/加权势的机制差异。
+\end{proposition}
+\begin{proof}
+(1) 若存在 \(p_{n,k}>0\)（\(k>0\)），则存在一条 primitive 回路 \(\tau\) 满足 \(|\tau|=n\) 且能量为 \(k\)，因而其边集包含至少一条正能量边并形成有向环。反之若存在含正能量边的有向环，则该环分解为若干 primitive 回路，其中至少一条 primitive 回路具有正能量，从而某个 \(p_{n,k}\)（\(k>0\)）非零，故 \(A_B\) 良定义且为正。
+
+(2) \(\bar\kappa_{\min}\) 是有向图上边权的最小平均回路权，Karp 算法给出其多项式时间可计算性；这与本节的“硬序投影/零温极限”口径同型（见注 \ref{rem:pom-order-as-zero-temp}）。证毕。
+\end{proof}
+
+\begin{proposition}[Newton 支撑的极端斜率：\texorpdfstring{$\alpha_{\min},\alpha_{\max}$}{alpha_min, alpha_max} 与饱和端点]\label{prop:sync-newton-extreme-slopes}
+沿用命题 \ref{prop:sync-bivariate-euler-product} 的联合 primitive 计数 \(p_{n,k}\)。
+令
+\[
+\alpha_{\min}:=\inf\left\{\frac{k}{n}:\ p_{n,k}>0\right\},\qquad
+\alpha_{\max}:=\sup\left\{\frac{k}{n}:\ p_{n,k}>0\right\}.
+\]
+并把 \(\alpha_{\min},\alpha_{\max}\) 视为 \((n,k)\)-平面上 Newton 支撑（\(\{(n,k):p_{n,k}>0\}\) 的凸包）两条外支撑边的极端斜率。
+则：
+\begin{enumerate}
+  \item \(\alpha_{\min},\alpha_{\max}\) 等价于回路的极端平均能量密度：
+  \[
+  \alpha_{\min}=\min_{\gamma\ \mathrm{cycle}}\frac{\sum_{e\in\gamma}\kappa(e)}{|\gamma|},
+  \qquad
+  \alpha_{\max}=\max_{\gamma\ \mathrm{cycle}}\frac{\sum_{e\in\gamma}\kappa(e)}{|\gamma|},
+  \]
+  其中 \(\kappa(e):=\varphi(e)\in\ZZ_{\ge 0}\) 为边势（本节的输出位势即 \(\kappa\in\{0,1\}\)）。
+  \item 对压力 \(P(\theta)=\log\rho(B(e^{\theta}))\) 与典型密度 \(\alpha(\theta)=P'(\theta)\)，有饱和端点恒等式
+  \[
+  \lim_{\theta\to-\infty}\alpha(\theta)=\alpha_{\min},\qquad
+  \lim_{\theta\to+\infty}\alpha(\theta)=\alpha_{\max},
+  \]
+  且在极端温度下 \(P(\theta)=\alpha_{\max}\theta+O(1)\)（\(\theta\to+\infty\)）与 \(P(\theta)=\alpha_{\min}\theta+O(1)\)（\(\theta\to-\infty\)）。
+  \item \(\alpha_{\min}\)（min-mean-cycle）与 \(\alpha_{\max}\)（max-mean-cycle）均为多项式时间可计算的组合不变量（Karp 型算法）。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:sync-bivariate-euler-product}，\(p_{n,k}>0\) 当且仅当存在回路使平均能量密度为 \(k/n\)，从而 \(\alpha_{\min},\alpha_{\max}\) 即 min/max mean-cycle；端点饱和与 Karp 可计算性由相关 mean-cycle 理论给出。证毕。
+\end{proof}
+
+\begin{proposition}[completion \texorpdfstring{$\to$}{->} cyclotomic resultant]\label{prop:sync-cyclotomic-elimination}
+记 $\Delta(z,u)=\det(I-zB(u))$。引入完成化变量
+\[
+u=r^2,\qquad s:=r+r^{-1},\qquad w:=zr,
+\]
+则由自对偶对称 $\Delta(z,u)=\Delta(uz,1/u)$ 可知 $w$ 与 $s$ 为不变量。于是存在
+\[
+\widehat{\Delta}(w,s)\in\ZZ[s][w]
+\]

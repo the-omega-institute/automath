@@ -1,0 +1,438 @@
+% (User input window)
+
+\paragraph{Bethe 平衡、Riccati 极点消去与势系数的 \texorpdfstring{$\tau$}{tau}-梯度恒等式}
+本段在 Heine--Stieltjes--Van Vleck 接口上给出两个互补表述：其一把平衡方程等价改写为 Riccati 量在锚点处的极点消去；其二把 Schr\"odinger 势的一阶系数写成“结果式--Vandermonde”对数导数，从而把系数约束压缩为一个可微势函数的梯度；相关残差线性约束的并行陈述见 \cite{Internal2026ToeplitzScanHankelBlaschkeVanVleck}。
+
+\begin{conclusion}[Bethe 平衡方程的“极点消去”刻画：Riccati 量的无锚极点充要条件]\label{con:xi-terminal-riccati-pole-cancellation-bethe-equilibrium}
+取互异点 \(p_k=\gamma_k-\mathrm{i}a_k\in\CC_{-}\)（\(a_k>0\)）并设
+\[
+A(z):=\prod_{k=1}^{\kappa}(z-p_k)(z-\overline{p_k})\in\RR[z].
+\]
+取互异实点 \(x_1,\dots,x_\kappa\in\RR\)，令
+\[
+y(z):=\prod_{j=1}^{\kappa}(z-x_j),\qquad
+W(z):=\frac{y'(z)}{y(z)}=\sum_{j=1}^{\kappa}\frac{1}{z-x_j}.
+\]
+定义 Riccati 量
+\[
+R(z):=W'(z)+W(z)^2-\frac{A'(z)}{A(z)}W(z).
+\]
+则对每个 \(i\in\{1,\dots,\kappa\}\)，\(R\) 在 \(z=x_i\) 的主部为
+\[
+R(z)=\frac{2\sum_{j\ne i}\frac{1}{x_i-x_j}-\frac{A'(x_i)}{A(x_i)}}{z-x_i}+O(1).
+\]
+因此下列两条件等价：
+\begin{enumerate}
+  \item \(R\) 在全部锚点 \(\{x_i\}\) 处解析（即无锚极点）；
+  \item 对全部 \(i\) 成立严格平衡方程
+  \[
+  2\sum_{j\ne i}\frac{1}{x_i-x_j}
+  =\frac{A'(x_i)}{A(x_i)}
+  =\sum_{k=1}^{\kappa}\left(\frac{1}{x_i-p_k}+\frac{1}{x_i-\overline{p_k}}\right)
+  =2\sum_{k=1}^{\kappa}\Re\frac{1}{x_i-p_k}.
+  \]
+\end{enumerate}
+并且当上述等价条件成立时，\(R\) 的奇点仅可能来自 \(\frac{A'}{A}\)，即 \(\{p_k,\overline{p_k}\}\)，且皆为至多一阶极点；同时 \(R(z)=O(z^{-2})\)（\(z\to\infty\)）。
+从而存在唯一多项式 \(B\in\RR[z]\)（\(\deg B\le 2\kappa-2\)）使
+\[
+R(z)=\frac{B(z)}{A(z)},
+\qquad\text{并且}\qquad
+A(z)y''(z)-A'(z)y'(z)=B(z)y(z).
+\]
+\end{conclusion}
+\begin{proof}[证明]
+在 \(z\to x_i\) 时，
+\[
+W(z)=\frac{1}{z-x_i}+S_i+O(z-x_i),\qquad S_i:=\sum_{j\ne i}\frac{1}{x_i-x_j},
+\]
+从而
+\[
+W'(z)+W(z)^2
+=-\frac{1}{(z-x_i)^2}+\frac{1}{(z-x_i)^2}+\frac{2S_i}{z-x_i}+O(1)
+=\frac{2S_i}{z-x_i}+O(1).
+\]
+又因 \(A(x_i)\neq 0\) 且 \(\frac{A'}{A}\) 在 \(x_i\) 处解析，故
+\[
+\frac{A'(z)}{A(z)}W(z)=\frac{A'(x_i)}{A(x_i)}\cdot\frac{1}{z-x_i}+O(1),
+\]
+相减即得主部公式，因而两条件等价。
+\par
+若 \(R\) 在 \(\{x_i\}\) 无极点，则 \(R\) 的奇点仅可能来自 \(\frac{A'}{A}\)，即 \(\{p_k,\overline{p_k}\}\)，并且至多为一阶极点。
+又由
+\(
+W(z)=\kappa z^{-1}+O(z^{-2})
+\)
+与
+\(
+\frac{A'(z)}{A(z)}=2\kappa z^{-1}+O(z^{-2})
+\)
+得 \(R(z)=O(z^{-2})\)。
+令 \(B:=AR\)，则 \(B\) 为多项式且 \(\deg B\le \deg A-2=2\kappa-2\)。
+最后，\(\deg B<\deg A\) 下的有理分解唯一性给出 \(B\) 的唯一性；而恒等式
+\(
+A y''-A'y'=By
+\)
+由
+\(
+W'+W^2=y''/y
+\)
+与 \(R=B/A\) 直接推出。证毕。
+\end{proof}
+
+% (User input window)
+
+\paragraph{Wronskian 完备化与 de Branges 正定核：极点对数据的有限维 Pick/RKHS 化}
+沿用结论 \ref{con:xi-terminal-riccati-pole-cancellation-bethe-equilibrium} 的极点对 \(p_k=\gamma_k-\mathrm{i}a_k\in\CC_{-}\) 与首一多项式 \(A(z)=\prod_k(z-p_k)(z-\overline{p_k})\) 的记号。
+设存在首一多项式 \(y\in\RR[z]\)（\(\deg y=\kappa\)，实根互异）与首一多项式 \(y_{+}\in\RR[z]\)（\(\deg y_{+}=\kappa+1\)）满足严格 Wronskian 恒等式
+\[
+\boxed{\;A(z)=y(z)y_{+}'(z)-y'(z)y_{+}(z)\;}
+\]
+并记 \(y(z)=\prod_{j=1}^{\kappa}(z-x_j)\)（\(x_j\in\RR\)）。
+
+\begin{conclusion}[重心恒等式：Wronskian 数据把锚点重心锁定为极点实部之和]\label{con:xi-terminal-wronskian-centroid-identity}
+在上述设定下，必有严格恒等式
+\[
+\boxed{\;\sum_{j=1}^{\kappa}x_j=\sum_{k=1}^{\kappa}\gamma_k\;}
+\]
+即 \(y\) 的全部实根之和等于极点对 \(\{p_k,\overline{p_k}\}\) 的实部总和。
+\end{conclusion}
+\begin{proof}
+写
+\[
+A(z)=z^{2\kappa}+A_1z^{2\kappa-1}+O(z^{2\kappa-2}),\qquad
+y(z)=z^{\kappa}+y_1z^{\kappa-1}+O(z^{\kappa-2}),\qquad
+y_{+}(z)=z^{\kappa+1}+y_{+1}z^{\kappa}+O(z^{\kappa-1}).
+\]
+直接展开 \(yy_{+}'-y'y_{+}\) 的 \(z^{2\kappa-1}\) 系数可得其恰为 \(2y_1\)，故 \(A_1=2y_1\)。
+另一方面，
+\(
+A_1=-\sum_{k=1}^{\kappa}(p_k+\overline{p_k})=-2\sum_k\gamma_k
+\)，而 \(y_1=-\sum_j x_j\)。
+代回即得 \(\sum_j x_j=\sum_k\gamma_k\)。证毕。
+\end{proof}
+
+\begin{conclusion}[第二对称和约束：\texorpdfstring{$A$}{A} 的次首项系数给出 \texorpdfstring{$y$}{y} 与 \texorpdfstring{$y_{+}$}{y+} 的二阶耦合]\label{con:xi-terminal-wronskian-second-symmetric-sum-coupling}
+在上述设定下，展开
+\[
+y(z)=z^{\kappa}+y_1z^{\kappa-1}+y_2z^{\kappa-2}+O(z^{\kappa-3}),\qquad
+y_{+}(z)=z^{\kappa+1}+y_{+1}z^{\kappa}+y_{+2}z^{\kappa-1}+O(z^{\kappa-2}),
+\]
+\[
+A(z)=z^{2\kappa}+A_1z^{2\kappa-1}+A_2z^{2\kappa-2}+O(z^{2\kappa-3}),
+\]
+则必有精确恒等式
+\[
+\boxed{\;A_2=-y_{+2}+y_1y_{+1}+3y_2.\;}
+\]
+若进一步将 \(y_{+}\) 分解为
+\(
+y_{+}(z)=\prod_{m=0}^{\kappa}(z-b_m)
+\)
+并记初等对称和
+\[
+e_1(x):=\sum_{j=1}^{\kappa}x_j,\quad e_2(x):=\sum_{1\le i<j\le \kappa}x_ix_j,\qquad
+e_1(b):=\sum_{m=0}^{\kappa}b_m,\quad e_2(b):=\sum_{0\le i<j\le \kappa}b_ib_j,
+\]
+则同一恒等式可写为
+\[
+\boxed{\;A_2=-e_2(b)+e_1(x)e_1(b)+3e_2(x).\;}
+\]
+\end{conclusion}
+\begin{proof}
+将 \(yy_{+}'-y'y_{+}\) 展开到 \(z^{2\kappa-2}\) 阶并逐项比较即可得到
+\(
+A_2=-y_{+2}+y_1y_{+1}+3y_2
+\)。
+再由
+\(
+y_1=-e_1(x),\ y_2=e_2(x),\ y_{+1}=-e_1(b),\ y_{+2}=e_2(b)
+\)
+代入即得根形式。证毕。
+\end{proof}
+
+\begin{conclusion}[Hermite--Biehler 化：Wronskian 数据等价于一类多项式 Pick 映射]\label{con:xi-terminal-wronskian-hermite-biehler-pick-map}
+在上述设定下，定义有理函数
+\[
+w(z):=\frac{y_{+}(z)}{y(z)}.
+\]
+并定义多项式
+\[
+E(z):=y(z)-\mathrm{i}\,y_{+}(z)\in\CC[z],\qquad
+E^\sharp(z):=\overline{E(\overline z)}.
+\]
+则成立：
+\begin{enumerate}
+  \item \(w\) 为 Pick 函数（上半平面自映）：对一切 \(z\in\CC_{+}\) 有 \(\Im w(z)>0\)；
+  \item \(E\) 为 Hermite--Biehler 多项式：对一切 \(z\in\CC_{+}\) 有 \(|E(z)|>|E^\sharp(z)|\)；
+  \item 二者满足 Cayley 型等价关系
+  \[
+  \boxed{\;
+  \frac{E^\sharp(z)}{E(z)}=\frac{1+\mathrm{i}\,w(z)}{1-\mathrm{i}\,w(z)},
+  \qquad
+  w(z)=\mathrm{i}\,\frac{E(z)-E^\sharp(z)}{E(z)+E^\sharp(z)}\; } .
+  \]
+\end{enumerate}
+\end{conclusion}
+\begin{proof}
+由 Wronskian 恒等式得
+\[
+w'(z)=\frac{y(z)y_{+}'(z)-y'(z)y_{+}(z)}{y(z)^2}=\frac{A(z)}{y(z)^2}.
+\]
+对实 \(x\notin\{x_j\}\)，有 \(A(x)=\prod_k|x-p_k|^2>0\) 且 \(y(x)^2>0\)，故 \(w'(x)>0\)。
+从而 \(w\) 在每个实轴连通分支上严格递增，并在每个 \(x_j\) 处具有简单极点；并且由 \(\deg y_{+}=\deg y+1\) 得 \(w(z)=z+O(1)\)（\(z\to\infty\)）。
+\par
+对每个 \(x_j\) 有 \(A(x_j)=-y'(x_j)\,y_{+}(x_j)>0\)，从而
+\(
+\operatorname*{Res}_{z=x_j}w(z)=y_{+}(x_j)/y'(x_j)<0
+\)。
+记 \(\mu_j:=-y_{+}(x_j)/y'(x_j)>0\)。
+于是 \(w\) 的部分分式可写为
+\[
+w(z)=z+c-\sum_{j=1}^{\kappa}\frac{\mu_j}{z-x_j},\qquad c\in\RR.
+\]
+从而对 \(z=x+\mathrm{i}y\in\CC_{+}\) 有
+\[
+\Im w(z)=y+\sum_{j=1}^{\kappa}\mu_j\,\frac{y}{(x-x_j)^2+y^2}>0,
+\]
+得到 (1)。
+\par
+再由
+\[
+\frac{E^\sharp(z)}{E(z)}
+=\frac{y(z)+\mathrm{i}y_{+}(z)}{y(z)-\mathrm{i}y_{+}(z)}
+=\frac{1+\mathrm{i}w(z)}{1-\mathrm{i}w(z)},
+\]
+并记 \(w(z)=u+\mathrm{i}v\)（\(v>0\)），则
+\[
+\left|\frac{1+\mathrm{i}w(z)}{1-\mathrm{i}w(z)}\right|^2
+=\frac{(1-v)^2+u^2}{(1+v)^2+u^2}<1,
+\]
+从而 \(|E^\sharp(z)|<|E(z)|\)，得 (2)。
+最后 (3) 为代数恒等式与其反解。证毕。
+\end{proof}
+
+\begin{conclusion}[Wronskian 核的正定性与离散 Mercer 分解：\texorpdfstring{$y_{+}$}{y+} 的零点给出完备正交采样]\label{con:xi-terminal-wronskian-kernel-discrete-mercer-parseval}
+在结论 \ref{con:xi-terminal-wronskian-hermite-biehler-pick-map} 的设定下，定义实核（对 \(s\neq t\)）
+\[
+K(s,t):=\frac{y_{+}(s)y(t)-y(s)y_{+}(t)}{\pi(s-t)},\qquad
+K(x,x):=\frac{y(x)y_{+}'(x)-y'(x)y_{+}(x)}{\pi}=\frac{A(x)}{\pi}.
+\]
+则：
+\begin{enumerate}
+  \item \(K\) 为正定核；
+  \item 若 \(x_1,\dots,x_{\kappa}\) 为 \(y\) 的零点，则对 \(i\neq j\) 有 \(K(x_i,x_j)=0\)，且
+  \[
+  K(x_i,x_i)=\frac{A(x_i)}{\pi}=\frac{-y'(x_i)\,y_{+}(x_i)}{\pi}>0;
+  \]
+  \item \(y_{+}\) 具有 \(\kappa+1\) 个互异实根 \(b_0<\cdots<b_{\kappa}\)；
+  在该记号下，对 \(i\neq j\) 有 \(K(b_i,b_j)=0\)，且
+  \[
+  K(b_j,b_j)=\frac{A(b_j)}{\pi}=\frac{y(b_j)\,y_{+}'(b_j)}{\pi}>0.
+  \]
+  \item （离散 Mercer 分解）对一切 \(x,y\in\RR\) 有严格恒等式
+  \[
+  \boxed{\;
+  K(x,y)=\sum_{m=0}^{\kappa}\frac{K(x,b_m)\,K(b_m,y)}{K(b_m,b_m)}\; }.
+  \]
+  \item 令 \(\mathcal{H}_K\) 为由 \(K\) 生成的再现核 Hilbert 空间，则
+  \(\{K(\cdot,b_m)\}_{m=0}^{\kappa}\) 为 \(\mathcal{H}_K\) 的一组正交基，且对任意 \(f\in\mathcal{H}_K\) 成立插值展开与 Parseval 恒等式
+  \[
+  \boxed{\;
+  f(x)=\sum_{m=0}^{\kappa} f(b_m)\,\frac{K(x,b_m)}{K(b_m,b_m)},
+  \qquad
+  \|f\|_{\mathcal{H}_K}^{2}=\sum_{m=0}^{\kappa}\frac{|f(b_m)|^{2}}{K(b_m,b_m)}\; }.
+  \]
+\end{enumerate}
+\end{conclusion}
+\begin{proof}
+由结论 \ref{con:xi-terminal-wronskian-hermite-biehler-pick-map}，\(w\) 在每个区间 \((x_j,x_{j+1})\) 上严格递增并在端点处发散，且在无穷远处满足 \(w(x)\sim x\)。
+因此在每个区间 \((-\infty,x_1),(x_1,x_2),\dots,(x_\kappa,\infty)\) 上，\(w\) 为到 \(\RR\) 的双射，从而在每一段恰有一个零点；这给出 \(y_{+}\) 的 \(\kappa+1\) 个互异实根 \(b_0<\cdots<b_\kappa\)。
+相应的对角与非对角退化式由定义代入 \(y(x_i)=0\) 或 \(y_{+}(b_j)=0\) 得到。
+\par
+为证 Mercer 分解，固定 \(t\in\RR\)，函数 \(x\mapsto K(x,t)\) 为次数 \(\le \kappa\) 的多项式：分子关于 \(x\) 的次数为 \(\kappa+1\) 且在 \(x=t\) 处可被 \(x-t\) 整除。
+右端同样为次数 \(\le \kappa\) 的多项式，并且对每个 \(\ell\in\{0,\dots,\kappa\}\) 有
+\[
+\text{右端}(b_\ell,t)=\sum_{m=0}^{\kappa}\frac{K(b_\ell,b_m)K(b_m,t)}{K(b_m,b_m)}=K(b_\ell,t),
+\]
+因为当 \(\ell\neq m\) 时 \(K(b_\ell,b_m)=0\)，且 \(K(b_\ell,b_\ell)\neq 0\)。
+两边作为次数 \(\le\kappa\) 的多项式在 \(\kappa+1\) 个互异点 \(\{b_\ell\}\) 上一致，故恒等。
+\par
+将 Mercer 分解代入任意有限二次型即可得到 \(K\) 的正定性。
+最后，Gram 矩阵 \((K(b_i,b_j))\) 为对角且对角元为正，故 \(\{K(\cdot,b_m)\}\) 正交且线性无关；由 Mercer 恒等式可知其张成整个 \(\mathcal{H}_K\)，从而为正交基。
+再由再现性 \(f(b_m)=\langle f,K(\cdot,b_m)\rangle\) 得到插值展开与 Parseval 恒等式。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part23_wronskian_compressed_multiplication_weyl}
+
+\begin{conclusion}[Wronskian–结果式分解：\texorpdfstring{$\operatorname{Res}(A,y_{+})$}{Res(A,y+)} 的判别式乘积公式]\label{con:xi-terminal-wronskian-resultant-discriminant-factorization}
+沿用上述设定，并设 \(y_{+}\) 的实根为 \(b_0,\dots,b_\kappa\) 且互异。
+则有严格恒等式
+\[
+\boxed{\;
+\operatorname{Res}(A,y_{+})
+=\prod_{m=0}^{\kappa}A(b_m)
+=\prod_{k=1}^{\kappa}y_{+}(p_k)\,y_{+}(\overline{p_k})
+=\prod_{k=1}^{\kappa}|y_{+}(p_k)|^{2}\ >\ 0\; }.
+\]
+并且成立分解
+\[
+\boxed{\;
+\operatorname{Res}(A,y_{+})
+=\operatorname{Res}(y,y_{+})\cdot
+\Bigl((-1)^{\frac{\kappa(\kappa+1)}{2}}\mathrm{Disc}(y_{+})\Bigr)\; },
+\]
+其中
+\(
+\mathrm{Disc}(y_{+})=\prod_{0\le i<j\le \kappa}(b_i-b_j)^2>0
+\)。
+\end{conclusion}
+\begin{proof}
+第一组等式由结果式定义与 \(A\) 的根集合为 \(\{p_k,\overline{p_k}\}\) 直接得到；并且 \(\deg A\cdot\deg y_{+}=2\kappa(\kappa+1)\) 为偶数，故结果式对交换参数无额外符号。
+\par
+对第二组等式，注意 \(y_{+}(b_m)=0\) 代入 Wronskian 得
+\[
+A(b_m)=y(b_m)\,y_{+}'(b_m).
+\]
+因此
+\(
+\prod_m A(b_m)
+=\bigl(\prod_m y(b_m)\bigr)\bigl(\prod_m y_{+}'(b_m)\bigr)
+=\operatorname{Res}(y,y_{+})\cdot\prod_m y_{+}'(b_m)
+\)。
+而对首一多项式 \(y_{+}\) 有恒等式
+\[
+\prod_{m=0}^{\kappa} y_{+}'(b_m)=(-1)^{\frac{\kappa(\kappa+1)}{2}}\mathrm{Disc}(y_{+}),
+\]
+代回即得。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part23_wronskian_sampling_identities}
+
+\begin{conclusion}[相位量子化：\texorpdfstring{$\int_{\RR}\frac{A}{y^2+y_{+}^2}=\pi(\kappa+1)$}{int A/(y^2+y+^2)=pi(k+1)} 与 \texorpdfstring{$\pi$}{pi}-步长分段]\label{con:xi-terminal-wronskian-phase-quantization}
+沿用上述设定，并令 \(w=y_{+}/y\)。
+则对实轴去极点集合 \(\RR\setminus\{x_j\}\) 有
+\[
+\frac{\mathrm{d}}{\mathrm{d}x}\arctan w(x)
+=\frac{w'(x)}{1+w(x)^2}
+=\frac{A(x)}{y(x)^2+y_{+}(x)^2}.
+\]
+从而积分恒等式成立：
+\[
+\boxed{\;\int_{\RR}\frac{A(x)}{y(x)^2+y_{+}(x)^2}\,\mathrm{d}x=\pi(\kappa+1).\;}
+\]
+更强地，若按实极点把实轴分解为 \(\kappa+1\) 个区间
+\[
+(-\infty,x_1),\ (x_1,x_2),\ \dots,\ (x_\kappa,\infty),
+\]
+则对每一段均有精确量子化
+\[
+\boxed{\;\int_{x_j}^{x_{j+1}}\frac{A(x)}{y(x)^2+y_{+}(x)^2}\,\mathrm{d}x=\pi\;}
+\qquad(0\le j\le \kappa),
+\]
+其中约定 \(x_0=-\infty\)、\(x_{\kappa+1}=+\infty\)。
+\end{conclusion}
+\begin{proof}
+由结论 \ref{con:xi-terminal-wronskian-hermite-biehler-pick-map}，\(w'(x)>0\)（\(x\notin\{x_j\}\)），故 \(w\) 在每个区间上严格递增。
+并且在每个极点 \(x_j\) 的两侧，\(w(x)\) 以相反符号发散；在无穷远处 \(w(x)\sim x\)。
+因此对任一相邻端点区间 \((x_j,x_{j+1})\)，映射 \(w:(x_j,x_{j+1})\to\RR\) 为双射。
+作代换 \(t=w(x)\) 得
+\[
+\int_{x_j}^{x_{j+1}}\frac{A(x)}{y(x)^2+y_{+}(x)^2}\,\mathrm{d}x
+=\int_{x_j}^{x_{j+1}}\frac{w'(x)}{1+w(x)^2}\,\mathrm{d}x
+=\int_{-\infty}^{+\infty}\frac{\mathrm{d}t}{1+t^2}
+=\pi.
+\]
+对 \(j=0,\dots,\kappa\) 求和即得全局积分 \(\pi(\kappa+1)\)。证毕。
+\end{proof}
+
+\begin{conclusion}[Van Vleck 比值的纯留数表示：\texorpdfstring{$B/A$}{B/A} 的完全显式部分分式与多项式重构]\label{con:xi-terminal-van-vleck-ratio-residue-partial-fraction-reconstruction}
+在结论 \ref{con:xi-terminal-riccati-pole-cancellation-bethe-equilibrium} 的等价条件成立时，令
+\[
+r_k:=\operatorname*{Res}_{z=p_k}\frac{B(z)}{A(z)}=\frac{B(p_k)}{A'(p_k)}\in\CC.
+\]
+则有严格恒等式
+\[
+\frac{B(z)}{A(z)}=\sum_{k=1}^{\kappa}\left(\frac{r_k}{z-p_k}+\frac{\overline{r_k}}{z-\overline{p_k}}\right),
+\qquad
+r_k=-\frac{y'(p_k)}{y(p_k)}=-\sum_{j=1}^{\kappa}\frac{1}{p_k-x_j}.
+\]
+从而 \(B\) 可由锚点数据显式重构为
+\[
+B(z)=
+-\sum_{k=1}^{\kappa}A(z)\left(
+\frac{y'(p_k)}{y(p_k)}\cdot\frac{1}{z-p_k}
+\;+\;
+\frac{\overline{y'(p_k)}}{\overline{y(p_k)}}\cdot\frac{1}{z-\overline{p_k}}
+\right).
+\]
+\end{conclusion}
+\begin{proof}[证明]
+由结论 \ref{con:xi-terminal-riccati-pole-cancellation-bethe-equilibrium}，\(\deg B\le 2\kappa-2\) 且 \(\deg A=2\kappa\) 蕴含 \(B/A=O(z^{-2})\)。
+因此其部分分式展开无常数项且仅含一阶极点，唯一地写为各极点留数之和；实系数保证 \(\overline{r_k}\) 为 \(\overline{p_k}\) 处留数。
+又由方程 \(Ay''-A'y'=By\) 在 \(z=p_k\) 处取值（\(A(p_k)=0\)、\(A'(p_k)\neq 0\)）得
+\[
+-A'(p_k)y'(p_k)=B(p_k)y(p_k)\quad\Longrightarrow\quad r_k=\frac{B(p_k)}{A'(p_k)}=-\frac{y'(p_k)}{y(p_k)}.
+\]
+最后 \(y'/y=\sum_j(z-x_j)^{-1}\) 代入 \(z=p_k\) 即得 \(r_k=-\sum_j(p_k-x_j)^{-1}\)。
+将部分分式两边乘以 \(A\) 得重构公式。证毕。
+\end{proof}
+
+\begin{conclusion}[势的一阶系数的结果式--Vandermonde 表示：\texorpdfstring{$\tau$}{tau}-梯度恒等式]\label{con:xi-terminal-potential-tau-gradient-resultant-vandermonde}
+沿用结论 \ref{con:xi-terminal-heine-stieltjes-schrodinger-reduction-local-exponent-rigidity} 与
+结论 \ref{con:xi-terminal-heine-stieltjes-pole-expansion-renormalization-sum-rules} 的记号。
+设 Schr\"odinger 势在 \(\{p_k,\overline{p_k}\}\) 的部分分式展开为
+\[
+U(z)=-\frac{3}{4}\sum_{k=1}^{\kappa}\left(\frac{1}{(z-p_k)^2}+\frac{1}{(z-\overline{p_k})^2}\right)
++\sum_{k=1}^{\kappa}\left(\frac{c_k}{z-p_k}+\frac{\overline{c_k}}{z-\overline{p_k}}\right),
+\]
+并记扩展极点集
+\(
+\mathcal P:=\{p_1,\dots,p_\kappa,\overline{p_1},\dots,\overline{p_\kappa}\}
+\)。
+定义 Vandermonde
+\[
+\Delta(\mathcal P):=\prod_{\substack{u,v\in\mathcal P\\ u<v}}(u-v),
+\]
+以及结果式
+\[
+\operatorname{Res}(y,A):=\prod_{k=1}^{\kappa}y(p_k)y(\overline{p_k})
+=\prod_{k=1}^{\kappa}|y(p_k)|^2.
+\]
+则对每个 \(k\)（把 \(\overline{p_1},\dots,\overline{p_\kappa}\) 视为常量，仅对 \(p_k\) 作复导数）有严格恒等式
+\[
+\boxed{\;
+c_k=\frac{\partial}{\partial p_k}\left(\log \operatorname{Res}(y,A)-\log|\Delta(\mathcal P)|\right). \;}
+\]
+\end{conclusion}
+\begin{proof}[证明]
+由结论 \ref{con:xi-terminal-heine-stieltjes-pole-expansion-renormalization-sum-rules}，
+\(
+c_k=-r_k-\tfrac12 s_k
+\)
+且由方程 \(Ay''-A'y'=By\) 在 \(z=p_k\) 处取值（\(A(p_k)=0\)、\(A'(p_k)\neq 0\)）得
+\[
+-A'(p_k)y'(p_k)=B(p_k)y(p_k),
+\]
+故 \(r_k=B(p_k)/A'(p_k)=-y'(p_k)/y(p_k)\)，从而
+\[
+c_k=\frac{y'(p_k)}{y(p_k)}-\frac12 s_k.
+\]
+另一方面，
+\[
+\frac{\partial}{\partial p_k}\log\operatorname{Res}(y,A)
+=\frac{\partial}{\partial p_k}\log|y(p_k)|^2
+=\frac{y'(p_k)}{y(p_k)}.
+\]
+并且对 \(\Delta(\mathcal P)\)，由对数导数得
+\[
+\frac{\partial}{\partial p_k}\log \Delta(\mathcal P)
+=\sum_{\substack{u\in\mathcal P\\ u\neq p_k}}\frac{1}{p_k-u}
+=s_k.
+\]
+于是
+\(
+\frac{\partial}{\partial p_k}\log|\Delta(\mathcal P)|
+=\tfrac12 s_k
+\)，代回即得结论。证毕。
+\end{proof}
+

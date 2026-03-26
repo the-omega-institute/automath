@@ -1,0 +1,223 @@
+\subsection{可推演投影词演算的闭包：生成元、关系、正规形与指纹}\label{subsec:pom-derivable-calculus-closure}
+本节仅给出“演算学”层：把投影从解释性词汇收紧为\emph{可重写的算子语法}。要求每一步均可落到
+(i) 一个可组合的算子，
+(ii) 一个可核对的谱/常数级指纹，
+(iii) 一条可验证的交换图/自然性关系。
+正文第 \ref{sec:pom} 节与第 \ref{sec:zeta-finite-part} 节已经提供了所需的生成接口与核对指纹；这里把它们封装为一个最小闭包，作为后续“算法等价 = 投影词同态/自然同构”的可执行口径。
+
+\subsubsection{算子生成元：把投影词写成可组合字母表}
+\begin{definition}[投影词演算的最小算子闭包]\label{def:pom-operator-generators-min}
+令 \(\mathbf{W}\) 为投影词范畴（注 \ref{rem:pom-word-category}），并取其中与“谱指纹/primitive/\(\zeta\)/有限部”对齐的一组最小生成元（按用途分组）：
+\begin{itemize}
+  \item \textbf{纤维提升（空间扩张）}：\(\texttt{LIFT\_PRIME}\)（以及一般的群扩张 \(\texttt{LIFT}_G\)，见第 \ref{sec:group-unification} 节）。
+  \item \textbf{参数化权重投影}：\(\texttt{PROJ\_TEMP}(u)\)（即 \(\mathrm{PROJ}_u\)，定义 \ref{def:pom-proj-temp}）。
+  \item \textbf{时间迹读出}：\(\texttt{EVOLVE(trace)}\)（抽象为算子 \(T\)：输出 \(\{\Tr(B(u)^n)\}_{n\ge 1}\) 等周期迹序列）。
+  \item \textbf{primitive 投影}：\(\texttt{PROJ\_PRIM}\)（抽象为 \(P_{\mathrm{prim}}\)：Witt/Möbius 反演把迹序列投影到 primitive 轨道谱；见定义 \ref{def:pom-collision-zeta} 及命题 \ref{prop:time-space-commuting-diagram}）。
+  \item \textbf{Euler/\(\zeta\) 变换}：\(E\)（把 primitive 谱重组为 Euler 乘积/行列式形式的 \(\zeta\) 接口；见第 \ref{sec:zeta-finite-part} 节）。
+  \item \textbf{角色/同余投影}：\(\texttt{PROJ\_CHI}\)（抽象为 \(P_\chi\)：按 residue/角色切片生成张量常数与扭曲谱；见注 \ref{rem:pom-chi-mixing} 与第 \ref{subsec:arity-dirichlet-mertens-tensor} 小节）。
+  \item \textbf{有限部/常数项提取}：\(\texttt{FP}\)（抽象为 \(\mathrm{fp}\)：从 \(\zeta\) 或 Abel 极限提取 \(\log\mathfrak{M}(\theta)\) 与 \(M(\theta)\)，见定义 \ref{def:abel-finite-part} 与小节 \ref{subsec:logM-analyticity}）。
+  \item \textbf{CRT 重建}：\(\texttt{CRT\_READOUT}\)（抽象为 \(\mathrm{CRT}\)：把多模轴的 residue 数据重建回区间整数；见定理 \ref{thm:pom-order-spatialization}）。
+\end{itemize}
+这些生成元的复合词称为\textbf{投影词（projection word）}；其语义由谱指纹函子（见下文）给出。
+\end{definition}
+
+\subsubsection{可核对关系：把“接口串联”提升为重写规则}
+\begin{proposition}[\texorpdfstring{\(\zeta\)}{zeta} 的三段式分解是可重写关系]\label{prop:pom-zeta-factorization-rewrite}
+在本文的 \(\zeta\) 接口口径下，对应于“周期迹 \(\Rightarrow\) primitive \(\Rightarrow\) Euler/\(\zeta\)”的组合关系可写为投影词等式
+$$
+Z \;=\; E\circ P_{\mathrm{prim}}\circ T,
+$$
+并且上述等式与时间—空间交换图严格相容（命题 \ref{prop:time-space-commuting-diagram}）。
+\end{proposition}
+\begin{proof}
+这只是命题 \ref{prop:time-space-commuting-diagram} 的函子化记号重述：\(T\) 给出迹序列，\(P_{\mathrm{prim}}\) 由 Möbius 反演给出 primitive 轨道谱，\(E\) 把 primitive 谱重组为 Euler 乘积/行列式的 \(\zeta\) 接口。证毕。
+\end{proof}
+
+\begin{definition}[序投影消元的重写模式（带阈值侧条件）]\label{def:pom-order-elimination-rewrite}
+给定区间界 \(B\ge 1\)，取两两互素模数 \(p_1,\dots,p_m\)，令 \(P=\prod_{i=1}^m p_i\)。
+当 \(P>2B\) 时，把“区间内的序投影/比较读出”视为一个带参数的投影词原语 \(P_{\le,[-B,B]}\)。
+定义重写模式
+$$
+\text{(RCRT)}\quad
+P_{\le,[-B,B]}
+\ \Longrightarrow\
+\mathrm{CRT}_{\{p_i\}}\circ P_{\chi,\{p_i\}},
+$$
+其中 \(P_{\chi,\{p_i\}}\) 表示“在各模轴上的 residue/角色切片读出”的并行组合（可由 \(\texttt{LIFT\_PRIME; PROJ\_CHI}\) 实现），\(\mathrm{CRT}_{\{p_i\}}\) 为 CRT 重建算子（\(\texttt{CRT\_READOUT}\)）。
+\end{definition}
+
+\begin{proposition}[RCRT 的正确性]\label{prop:pom-order-elimination-correct}
+在定义 \ref{def:pom-order-elimination-rewrite} 的侧条件 \(P>2B\) 下，重写模式 (RCRT) 保持对 \([-B,B]\) 上整数的序判定与区间约束读出：对任意 \(x\in[-B,B]\)，其在模 \(\{p_i\}\) 下的 residue 数据经 \(\mathrm{CRT}_{\{p_i\}}\) 唯一重建为 \(x\)，从而 \(P_{\le,[-B,B]}\) 可由 \(P_{\chi,\{p_i\}}\) 与 \(\mathrm{CRT}_{\{p_i\}}\) 消去。
+\end{proposition}
+\begin{proof}
+这是定理 \ref{thm:pom-order-spatialization} 的直接翻译：\(P>2B\) 保证 \([-B,B]\) 中的整数在模 \(P\) 下唯一代表，CRT 提供唯一重建。证毕。
+\end{proof}
+
+\begin{remark}[从硬阈值到尾部分位：\texorpdfstring{$\varepsilon$}{eps}-sound 的序门消元]\label{rem:pom-rcrt-epsilon-pointer}
+定义 \ref{def:pom-order-elimination-rewrite} 与命题 \ref{prop:pom-order-elimination-correct} 给出的是最坏值（硬阈值）口径：要求序门输入被保证落在 \([-B,B]\)。
+当序门作用的对象仅需\emph{以高概率}落在该区间时，可用 moment-kernel（\(\mathrm{MOM}_q\)）导出的尾部分位/ Chernoff 证书来生成一个 \(\varepsilon\)-sound 的近似重写证书（定义 \ref{def:pom-eps-sound-rewrite}），从而把 (RCRT) 提升为可调误差预算的编译律；见 \S\ref{subsec:pom-quantile-budget-law} 的 \((\mathrm{RCRT}_\varepsilon)\) 版本。
+\end{remark}
+
+\begin{definition}[值投影推迟/压缩的重写模式（带纤维不可见证书）]\label{def:pom-value-delay-rewrite}
+在投影词片段中引入一个“本体演化门” \(U_t\)（\(t\ge 0\)）与条件期望门 \(E_m\)（等价于值投影 \(P_Z\) 的算子化口径，见定义 \ref{def:pom-proj-norm}）。
+若中间演化段 \(U_t\) 在第 \(m\) 层对折叠纤维\textbf{不可见}（即满足命题 \ref{prop:pom-fiber-invariance} 的纤维不区分条件；等价地，观测层不再区分 \(\Fold_m\) 的纤维），则把下式视为一条可定向的重写规则：
+$$
+\text{(RDelay)}\quad
+E_m\circ U_t\circ E_m\ \Longrightarrow\ E_m\circ U_t.
+$$
+该规则正是注 \ref{rem:pom-lazy-fold} 的算子等式在投影词语法层的取向形式：一旦演化段对纤维不可见，则中间的重复值投影可以被压缩为末端一次。
+\end{definition}
+
+\begin{remark}[一次值投影正规形：在不可见演化段内把 \texorpdfstring{$E_m$}{Em} 推迟到末端]\label{rem:pom-value-delay-normal-form}
+在定义 \ref{def:pom-value-delay-rewrite} 的侧条件下，规则 (RDelay) 与幂等律 \(E_m\circ E_m\Rightarrow E_m\) 结合，允许把任意仅由 \(U_t\) 与 \(E_m\) 生成的投影词规约为
+$$
+U_{t_1}\circ U_{t_2}\circ\cdots\circ U_{t_r}\circ E_m,
+$$
+亦即把所有内部的值投影门推迟/压缩到末端一次执行。
+这给出一个与“固定延迟在线归一化”（定理 \ref{thm:online-delay-fold}）相容的编译口径：只要能为某段 \(U_t\) 给出纤维不可见证书，则编译器可在词法层安全消去中间值投影而不改变可见读出。
+\end{remark}
+
+\begin{remark}[可复现：含 \texorpdfstring{$E_m$}{Em}/\texorpdfstring{$\mathrm{LIFT}_G$}{LIFT}/\texorpdfstring{$\mathrm{PROJ}_u$}{PROJ} 的投影词正规化示例]\label{rem:pom-projword-lift-proj-normalizer-demo}
+为把 “\(2\)-态射 = 重写证书” 落到可执行层面，脚本 \texttt{scripts/exp\_pom\_projword\_lift\_proj\_normalizer\_demo.py} 实现了一个最小扩展示例：
+在 \(\mathbf{PW}\) 的子片段里加入
+(\(P_Z\) 幂等)、(\(E_m\) 塔缩并)、(\(E_m\) 与 \(\mathrm{LIFT}_G\) 的 Beck--Chevalley 型交换)、以及 \(\mathrm{PROJ}_u\circ \mathrm{LIFT}_{C_n}\) 的角色分解（Artin/character 因子化）四类重写。
+该实现把每一次 \(E_m\)--\(\mathrm{LIFT}_G\) 交换都记录为一条可组合的交换证书，从而允许沿规约轨迹累积 holonomy/异常标签（定义 \ref{def:pom-anom-accumulation}）；不同规约优先级下的路径差异核验见注 \ref{rem:pom-holonomy-cocycle-audit}。
+该脚本输出若干输入投影词的正规形及重写步数，见表 \ref{tab:pom_projword_lift_proj_normalizer_demo}。
+\input{sections/generated/tab_pom_projword_lift_proj_normalizer_demo}
+\end{remark}
+
+\begin{remark}[可复现：\texorpdfstring{$(P_m,Q_m,K_m)$}{(Pm,Qm,Km)} 与 \texorpdfstring{$(E_m,\mathrm{LIFT}_G,\mathrm{PROJ}_u)$}{(Em,LIFT,PROJ)} 的合并正规化]\label{rem:pom-projword-full-normalizer-demo}
+在更接近正文“投影词闭包”的组合片段里，我们同时需要 split-epi 对 \((P_m,Q_m)\)（以及诱导幂等 \(K_m=Q_m\circ P_m\)）的局部消元，
+以及 tower/Beck--Chevalley/Artin 等可核对交换律。
+脚本 \texttt{scripts/exp\_pom\_projword\_full\_normalizer\_demo.py} 把两类片段的规则合并为一个可终止的重写引擎，并输出输入投影词的正规形与证书步数（含 \(P_Z,E_m,P_m,Q_m,K_m,\mathrm{LIFT}_G,\mathrm{PROJ}_u\) 等 token）。
+其一键生成的可审计示例表见表 \ref{tab:pom_projword_full_normalizer_demo}。
+\input{sections/generated/tab_pom_projword_full_normalizer_demo}
+\end{remark}
+
+\begin{remark}[可复现：把 \texorpdfstring{$\mathrm{MOM}_q$}{MOMq} 纳入重写闭包（含外提与合并）]\label{rem:pom-projword-mom-twist-normalizer-demo}
+为把“空间谱读取门” \(\mathrm{MOM}_q\) 从语义侧计算提升为词法侧可重写的一等生成元，
+脚本 \texttt{scripts/exp\_pom\_projword\_mom\_twist\_normalizer\_demo.py} 在合并正规化器（注 \ref{rem:pom-projword-full-normalizer-demo}）之上加入两类扩展 token：
+\(\texttt{MOM[q]}\)（\(q\ge 2\)）与 \(\texttt{TWIST[}\chi\texttt{]}\)。
+其定向规则包含：
+(i) \(\mathrm{MOM}\) 的乘法合并（把相邻的 \(\mathrm{MOM}_{q_1}\circ\mathrm{MOM}_{q_2}\) 归并为 \(\mathrm{MOM}_{q_1q_2}\)），
+(ii) 把 \(\mathrm{MOM}_q\) 逐步外提（bubble）到投影词最左端作为前缀结构门（必要时输出一条可核对的“交换失败/类型提升”残差交换证书），
+(iii) 把 \(\mathrm{TWIST}(\chi)\) 与相邻读出门融合为带角色参数的 \(\mathrm{PROJ}_{u,\chi}\)。
+该脚本输出若干输入投影词的正规形、重写步数与证书条数，见表 \ref{tab:pom_projword_mom_twist_normalizer_demo}。
+\input{sections/generated/tab_pom_projword_mom_twist_normalizer_demo}
+\end{remark}
+
+\begin{proposition}[MOM 前缀指数的严格不变量]\label{prop:pom-mom-prefix-product-invariant}
+令 \(\mathcal W\) 为由投影词生成元所成的自由单半群（定义 \ref{def:pom-operator-generators-min}），并在其上定义 MOM 乘积映射
+\[
+\Pi_{\mathrm{MOM}}:\mathcal W\to (\NN_{\ge 1},\times),
+\qquad
+\Pi_{\mathrm{MOM}}(w):=\prod \bigl\{q:\ \texttt{MOM[}q\texttt{]}\ \text{作为 token 出现在 }w\bigr\},
+\]
+其中按出现次数计重，空积取 \(1\)。
+则对任意一次重写 \(w\Rightarrow w'\)（在注 \ref{rem:pom-projword-mom-twist-normalizer-demo} 所述规则族生成的同余中），恒有
+\[
+\boxed{\;\Pi_{\mathrm{MOM}}(w)=\Pi_{\mathrm{MOM}}(w').\;}
+\]
+因此 \(\Pi_{\mathrm{MOM}}\) 是该扩展重写同余的严格不变量。
+特别地，在任何把全部 \(\mathrm{MOM}\) 外提到词首并对相邻 \(\mathrm{MOM}\) 反复合并的正规化策略下，词首的 \(\mathrm{MOM}\) 参数必等于 \(\Pi_{\mathrm{MOM}}(w)\)。
+\end{proposition}
+
+\begin{proof}
+对规则族逐一检查：
+\begin{itemize}
+  \item \(\mathrm{MOM}\) 的外提（bubble）仅改变 token 的相对位置，不改变 \(\texttt{MOM[}q\texttt{]}\) 的多重集；
+  \item \(\mathrm{TWIST}(\chi)\) 与相邻读出门融合为 \(\mathrm{PROJ}_{u,\chi}\) 不引入也不消去任何 \(\mathrm{MOM}\) token；
+  \item \(\mathrm{MOM}\) 的合并规则把相邻两项 \(\mathrm{MOM}_{q_1}\circ\mathrm{MOM}_{q_2}\) 替换为 \(\mathrm{MOM}_{q_1q_2}\)，在 \((\NN,\times)\) 上恰保持乘积不变。
+\end{itemize}
+因此一步重写保持 \(\Pi_{\mathrm{MOM}}\) 不变，进而其在重写闭包下不变。
+最后一条断言由“不变量 + 词首外提 + 合并直至不可约”直接推出：当所有 \(\mathrm{MOM}\) 被外提并合并成单一词首 token 时，该 token 的参数必须等于原词中全部 MOM 参数的乘积。证毕。
+\end{proof}
+
+\subsubsection{标量语义：纤维缺陷由 \texorpdfstring{$E_m$}{Em} 唯一决定}
+\begin{corollary}[空间损失的可推演性：\texorpdfstring{$\kappa_m$}{kappa} 作为投影词语义]\label{cor:pom-kappa-derivable}
+令 \(d_m(x)=|\Fold_m^{-1}(x)|\)，对任意 \(\pi\in\Delta(X_m)\) 定义纤维缺陷泛函
+$$
+\kappa_m(\pi):=\mathbb{E}_{\pi}[\log d_m(X)].
+$$
+令 \(\widetilde\pi\) 为在每条纤维上条件均匀的最大熵提升（定理 \ref{thm:pom-maxent-lift}），则有严格恒等式
+$$
+\kappa_m(\pi)=H(\widetilde\pi)-H(\pi).
+$$
+因此：一旦两种实现诱导同构的纤维结构（等价地同一个条件期望/提升算子语义），其 \(\kappa_m\) 必一致；\(\kappa_m\) 是可跨实现核对的可审计标量指纹。
+\end{corollary}
+\begin{proof}
+由定义 \ref{def:pom-kappa} 与定理 \ref{thm:pom-maxent-lift} 立得。证毕。
+\end{proof}
+
+\subsubsection{对称律指纹：有限部常数漂移的线性响应消失}
+\begin{corollary}[偶性 \texorpdfstring{$\Rightarrow$}{=>} 一阶项消失]\label{cor:pom-logm-linear-response-zero}
+若 \(\log\mathfrak{M}(\theta)\) 为偶函数（命题 \ref{prop:mertens-even}），则
+$$
+\left.\frac{\dd}{\dd\theta}\log\mathfrak{M}(\theta)\right|_{\theta=0}=0.
+$$
+更一般地，在多维参数中，任意沿一维切片的线性项系数均由偶性强制为零。
+\end{corollary}
+\begin{proof}
+偶函数在原点的一阶导数为零，这是初等分析事实。证毕。
+\end{proof}
+
+\subsubsection{谱闭包接口：从 moment-kernel 到压力与多重分形}
+\begin{remark}[moment-kernel 链条作为可计算重写接口]\label{rem:pom-moment-kernel-chain}
+第 \ref{sec:pom} 节已把纤维多重度的高阶矩
+\(
+S_q(m)=\sum_{x\in X_m}d_m(x)^q
+\)
+提升为一族\emph{有限维碰撞核}与 Hankel 最小实现（例如 \(q=2\) 的三态核 \(A_2\)，命题 \ref{prop:pom-s2-recurrence}；以及一般 \(q\) 的秩/最小维数刻画，定理 \ref{thm:hankel-rank-minimal} 与 \ref{thm:pom-moment-hankel}）。
+因此可以把“高阶 moment \(\Rightarrow\) 核 \(\Rightarrow\) Perron 根 \(\Rightarrow\) 压力”组织为一个可计算接口链：
+$$
+S_q\ \Longrightarrow\ A_q\ \Longrightarrow\ r_q=\rho(A_q)\ \Longrightarrow\ P(q)=\log r_q-q\log 2,
+$$
+再由 Legendre 变换得到纤维多重度的多重分形谱（见第 \ref{subsec:pom-s3} 节及其后续小节的可审计表格输出）。
+这条链条的关键在于：从有限段 \(S_q(m)\) 出发即可恢复最小 realization（Hankel 口径），从而把“谱”变成投影词语法层可重写、语义层可核对的对象。
+\end{remark}
+
+\subsubsection{Parry 基线作为复杂度证书：与低复杂度源的结构性分离}
+\begin{corollary}[折叠直方图 \texorpdfstring{$\Rightarrow$}{=>} 复杂度证书]\label{cor:pom-parry-complexity-detector}
+设 \(\hat{\pi}_{m,N}\) 为从某源过程得到的折叠稳定类型经验直方图，\(\pi_m\) 为黄金均值 SFT 的 Parry 基线柱分布。
+若该源为 Sturmian（旋转扫描）模型，则对任意 \(m,N\) 有下界
+$$
+D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m)
+\ \ge\
+D_{\mathrm{TV}}(\pi_m^{\mathrm{fold}},\pi_m)\ -\ (m+1)D_N^*(\alpha;x_0),
+$$
+其中 \(\pi_m^{\mathrm{fold}}\) 为 Sturmian 极限分布折叠后的模型分布，且
+$$
+D_{\mathrm{TV}}(\pi_m^{\mathrm{fold}},\pi_m)\ \ge\ 1-(m+1)\pi(0)\varphi^{-(m-1)}
+$$
+（命题 \ref{prop:parry-baseline-gap-sturmian}）。
+因此当 \(m\) 增大时，即便差异度证书项 \((m+1)D_N^*\) 很小，整体总变差仍被结构性 gap 逼近 \(1\)。
+反之，若在某个较大 \(m\) 上观测到 \(D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m)\) 与证书项都显著小，则该源过程不可能属于 Sturmian/低复杂度类；“接近 Parry 基线”在逻辑上充当复杂度证书。
+\end{corollary}
+\begin{proof}
+由三角不等式
+\(
+D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m)\ge D_{\mathrm{TV}}(\pi_m^{\mathrm{fold}},\pi_m)-D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})
+\)。
+再由定理 \ref{thm:tv-certificate-hist} 的推前界
+\(
+D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})\le (m+1)D_N^*(\alpha;x_0)
+\)
+得到第一条不等式；第二条由命题 \ref{prop:parry-baseline-gap-sturmian} 给出。证毕。
+\end{proof}
+
+\subsubsection{一个可执行的正规形：面向 \texorpdfstring{$\zeta$}{zeta}/有限部的编译顺序}
+\begin{remark}[\texorpdfstring{$\zeta$}{zeta}-接口正规形（编译约定）]\label{rem:pom-zeta-normal-form}
+在需要输出 \(\zeta\)/primitive/有限部常数等可审计指纹时，可把任意投影词编译到如下“接口正规形”：
+$$
+\boxed{\;
+\texttt{LIFT}\ \to\ \texttt{PROJ\_TEMP}(u)\ \to\ T\ \to\ P_{\mathrm{prim}}\ \to\ E\ \to\ \texttt{FP}\;}
+$$
+其中：
+\texttt{LIFT} 选择素数轴/群扩张语义，
+\texttt{PROJ\_TEMP}(u) 负责参数化权重，
+\(T,P_{\mathrm{prim}},E\) 由命题 \ref{prop:pom-zeta-factorization-rewrite} 的分解保证可对齐到同一 \(\zeta\) 语言，
+\texttt{FP} 把 \(\zeta\) 端的常数级漂移抽取为 \(\log\mathfrak{M}(\theta)\) 等指纹（命题 \ref{prop:mertens-even} 与小节 \ref{subsec:logM-analyticity}）。
+当词中出现序投影时，可优先触发 (RCRT)（定义 \ref{def:pom-order-elimination-rewrite}）把其改写为 \(P_\chi+\mathrm{CRT}\) 的并行空间化路径。
+该正规形不是叙事口径，而是一个面向核对的重写目标：等价判定在词法层归一化，在语义层用指纹族交叉核验。
+\end{remark}
+

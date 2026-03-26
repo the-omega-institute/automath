@@ -1,0 +1,190 @@
+% Energy-shell lattice counting on affine cycle lattices; bit lower bound.
+
+\begin{theorem}[回路圆维驱动的椭球格点计数：固定离散 Stokes 数据后的能量壳微观态熵]\label{thm:graph-energy-shell-lattice-counting}
+令 \(G\) 为有限连通无自环多重图，并固定一组取向，使
+\[
+C_1(G;\ZZ)\cong \ZZ^{E},
+\qquad
+C_0(G;\ZZ)\cong \ZZ^{V},
+\]
+其中 \(E:=|E(G)|\)、\(V:=|V(G)|\)。
+记边界算子（入射算子）为 \(\partial:C_1(G;\ZZ)\to C_0(G;\ZZ)\)，并记回路圆维
+\[
+r:=\operatorname{rank}_{\ZZ}H_1(G;\ZZ)=\operatorname{rank}_{\ZZ}\ker(\partial)=E-V+1.
+\]
+给定任意 \(\delta\in \mathrm{im}(\partial)\subset C_0(G;\ZZ)\)，任选一解 \(\varphi_0\in C_1(G;\ZZ)\) 使得 \(\partial\varphi_0=\delta\)。
+取权重 \(w:E(G)\to(0,\infty)\)，并定义加权能量二次型
+\[
+\mathcal E_w(\varphi):=\sum_{e\in E(G)} w_e\,\varphi_e^2.
+\]
+考虑能量壳内的整数 \(1\)-形式计数
+\[
+N_{\delta,w}(E):=\card{\left\{\varphi\in C_1(G;\ZZ):\ \partial\varphi=\delta,\ \mathcal E_w(\varphi)\le E\right\}}.
+\]
+则存在正定矩阵 \(A\in\mathrm{Sym}_r^+(\RR)\)（仅依赖于 \(G\) 的回路格与权重 \(w\)，且与 \(\varphi_0\) 的选取无关）使得当 \(E\to\infty\) 时
+\[
+N_{\delta,w}(E)=\frac{\operatorname{Vol}(B_r)}{\sqrt{\det A}}\,E^{r/2}+O\!\left(E^{(r-1)/2}\right),
+\]
+其中 \(\operatorname{Vol}(B_r)=\pi^{r/2}/\Gamma(r/2+1)\) 为 \(\RR^r\) 中单位欧氏球体积。
+并且若定义加权生成树多项式值
+\[
+\tau_{1/w}(G):=\sum_{T\ \mathrm{spanning\ tree}}\ \prod_{e\in T}w_e^{-1},
+\]
+则对任意由回路格 \(\ker(\partial)\subset \ZZ^{E}\) 的 \(\ZZ\)-基所诱导的 \(A\) 都有
+\[
+\boxed{\;\det A=\Bigl(\prod_{e\in E(G)}w_e\Bigr)\tau_{1/w}(G)\;}
+\]
+（定理 \ref{thm:graph-cycle-lattice-weighted-discriminant}，取 \(\rho=w\)）。
+因此在固定 \(\delta\) 后，能量 \(E\) 内微观态熵满足
+\[
+\log N_{\delta,w}(E)=\frac r2\log E-\frac12\log\det A+O(1),
+\]
+其主阶系数仅由回路圆维 \(r\) 决定。
+\end{theorem}
+\begin{proof}
+由于 \(\delta\in\mathrm{im}(\partial)\)，解集非空且为仿射格
+\[
+\{\varphi\in C_1(G;\ZZ):\ \partial\varphi=\delta\}=\varphi_0+\ker(\partial).
+\]
+取 \(\ker(\partial)\) 的一组 \(\ZZ\)-基并记相应基矩阵为 \(T\in\ZZ^{E\times r}\)，使得 \(\ker(\partial)=T\ZZ^r\)。
+于是任意解可写为 \(\varphi=\varphi_0+Tk\)（\(k\in\ZZ^r\)）。
+记 \(W:=\mathrm{diag}(w_e)\in\mathrm{Sym}_E^+(\RR)\)，则
+\[
+\mathcal E_w(\varphi_0+Tk)=(\varphi_0+Tk)^{\mathsf T}W(\varphi_0+Tk)
+=k^{\mathsf T}(T^{\mathsf T}WT)k+2b^{\mathsf T}k+c,
+\]
+其中 \(A:=T^{\mathsf T}WT\in\mathrm{Sym}_r^+(\RR)\)、\(b:=T^{\mathsf T}W\varphi_0\)、\(c:=\varphi_0^{\mathsf T}W\varphi_0\)。
+完成平方可将约束 \(\mathcal E_w(\varphi_0+Tk)\le E\) 改写为
+\[
+(k+\kappa)^{\mathsf T}A(k+\kappa)\le E',
+\]
+其中 \(\kappa\in\RR^r\) 与 \(E'=E+O(1)\) 由 \(A,b,c\) 决定。
+因此 \(N_{\delta,w}(E)\) 等于一个以 \(A\) 定义的椭球与平移格 \(\ZZ^r+\kappa\) 的交点数。
+对固定 \(A\) 的椭球族，Lipschitz 原理（体积近似）给出格点数等于椭球体积加上边界量级误差：
+\[
+N_{\delta,w}(E)=\operatorname{Vol}\{x\in\RR^r:\ x^{\mathsf T}Ax\le E'\}+O\!\left((E')^{(r-1)/2}\right).
+\]
+而体积可显式计算为
+\[
+\operatorname{Vol}\{x:\ x^{\mathsf T}Ax\le E'\}=\frac{\operatorname{Vol}(B_r)}{\sqrt{\det A}}\,(E')^{r/2}
+=\frac{\operatorname{Vol}(B_r)}{\sqrt{\det A}}\,E^{r/2}+O\!\left(E^{(r-1)/2}\right).
+\]
+将误差并入即可得到主式。
+由于 \(A=T^{\mathsf T}WT\) 仅依赖于回路格 \(\ker(\partial)\) 与权重 \(w\)，与特解 \(\varphi_0\) 无关。
+对对数式，将主项取对数并吸收相对误差得到 \(\log N_{\delta,w}(E)=\frac r2\log E-\frac12\log\det A+O(1)\)。证毕。
+\end{proof}
+
+\begin{corollary}[能量约束下的全息比特下界：圆维给出的有效自由度]\label{cor:graph-energy-shell-bit-lower-bound}
+在定理 \ref{thm:graph-energy-shell-lattice-counting} 的设定下，任意能够区分集合
+\[
+\left\{\varphi\in C_1(G;\ZZ):\ \partial\varphi=\delta,\ \mathcal E_w(\varphi)\le E\right\}
+\]
+中全部元素的单射编码，其最小信息量（以比特计）满足
+\[
+\mathrm{bits}(E)\ \ge\ \log_2 N_{\delta,w}(E)=\frac r2\log_2 E+O(1).
+\]
+\end{corollary}
+\begin{proof}
+任意单射编码对 \(N_{\delta,w}(E)\) 个不同对象至少需要 \(\log_2 N_{\delta,w}(E)\) 比特。
+再代入定理 \ref{thm:graph-energy-shell-lattice-counting} 的渐近式即得。证毕。
+\end{proof}
+
+\begin{proposition}[椭球约束下的 Gödel 码长极值：线性泛函的精确对偶]\label{prop:graph-energy-ellipsoid-godel-codelength-dual}
+在定理 \ref{thm:graph-energy-shell-lattice-counting} 的设定下，取回路格基坐标 \(k\in\ZZ^r\) 使得任意解可写为 \(\varphi=\varphi_0+Tk\)。
+令 \(A=T^{\mathsf T}WT\in\mathrm{Sym}_r^+(\RR)\) 为能量二次型在回路坐标上的 Gram 矩阵。
+取任意互异素数 \(p_1,\dots,p_r\)，并定义线性码长泛函
+\[
+\ell(k):=\sum_{j=1}^r k_j\log p_j=\langle k,\log p\rangle,
+\qquad
+\log p:=(\log p_1,\dots,\log p_r)\in\RR^r.
+\]
+则对任意 \(E>0\) 有精确极值公式
+\[
+\boxed{\;
+\sup\{|\ell(x)|:\ x\in\RR^r,\ x^{\mathsf T}Ax\le E\}
+=\sqrt E\,\sqrt{(\log p)^{\mathsf T}A^{-1}(\log p)}.
+\;}
+\]
+从而对整数点集合
+\(
+\mathcal M_A(E):=\{k\in\ZZ^r:\ k^{\mathsf T}Ak\le E\}
+\)
+有支撑界
+\[
+|\ell(k)|\ \le\ \sqrt E\,\sqrt{(\log p)^{\mathsf T}A^{-1}(\log p)}
+\qquad (k\in\mathcal M_A(E)).
+\]
+\end{proposition}
+\begin{proof}
+对任意满足 \(x^{\mathsf T}Ax\le E\) 的 \(x\in\RR^r\)，令 \(y:=A^{1/2}x\)。
+则 \(|y|^2=x^{\mathsf T}Ax\le E\)，并且
+\[
+\ell(x)=\langle x,\log p\rangle=\langle y, A^{-1/2}\log p\rangle.
+\]
+由 Cauchy--Schwarz 不等式，
+\[
+|\ell(x)|
+\le
+|y|\,|A^{-1/2}\log p|
+\le
+\sqrt E\,\sqrt{(\log p)^{\mathsf T}A^{-1}(\log p)}.
+\]
+当取 \(y\) 与 \(A^{-1/2}\log p\) 共线且 \(|y|=\sqrt E\) 时达到上确界，故为精确极值。
+对整数点支撑界由同一不等式直接推出。证毕。
+\end{proof}
+
+\begin{corollary}[行列式素支撑与核结构的不可约算术障碍]\label{cor:graph-cycle-lattice-determinant-prime-support}
+在定理 \ref{thm:graph-energy-shell-lattice-counting} 的设定下，进一步假设 \(w_e\in\ZZ_{>0}\) 且所取回路格基使得 \(A=T^{\mathsf T}\mathrm{diag}(w_e)T\in M_r(\ZZ)\)。
+考虑环面自同态
+\[
+F_A:\TT^r\to\TT^r,\qquad x\longmapsto Ax.
+\]
+则其核为有限阿贝尔群，且满足
+\[
+|\ker(F_A)|=|\det A|.
+\]
+并且对任意素数 \(\ell\)，\(\ker(F_A)\) 的 \(\ell\)-初等部分非平凡当且仅当 \(\ell\mid \det A\)。
+因此 \(\det A\) 的素因子集合（等价地，由定理 \ref{thm:graph-cycle-lattice-weighted-discriminant}，
+\(\det A=(\prod_e w_e)\tau_{1/w}(G)\) 的素因子集合）刻画了该核在素分解下的不可约算术支撑。
+\end{corollary}
+\begin{proof}
+由 \(\TT^r=\RR^r/\ZZ^r\) 及 \(A\in M_r(\ZZ)\) 得 \(\ker(F_A)\cong \ZZ^r/A\ZZ^r\)。
+对整数矩阵取 Smith 正规形可得 \(\ZZ^r/A\ZZ^r\) 为有限阿贝尔群，且其阶等于 \(|\det A|\)。
+素分解刻画由有限阿贝尔群的标准分解定理得到：\(\ell\)-初等部分非平凡当且仅当该阶被 \(\ell\) 整除。
+证毕。
+\end{proof}
+
+\begin{conjecture}[高圆维极限下的椭圆化观测：高斯--均匀解耦与“半经典”方差由有效阻抗决定]\label{conj:graph-energy-high-cdim-elliptic-observation}
+考虑一族维数 \(r\to\infty\) 的正定矩阵 \(A_r\in\mathrm{Sym}_r^+(\RR)\) 与向量 \(a_r\in\RR^r\setminus\{0\}\)，并在能量预算 \(E_r\to\infty\) 下取均匀分布
+\[
+K_r\ \sim\ \mathrm{Unif}\bigl(\mathcal M_{A_r}(E_r)\bigr),
+\qquad
+\mathcal M_{A_r}(E_r):=\{k\in\ZZ^r:\ k^{\mathsf T}A_r k\le E_r\}.
+\]
+令线性观测（对数尺度）
+\(
+U_r:=\langle a_r,K_r\rangle
+\)。
+在“几何不退化”的尺度（例如 \(E_r/r\) 有界且远离 \(0\)，且 \((A_r)\) 的条件数在 \(r\) 上一致有界）下，预期成立如下极限律：
+\begin{enumerate}
+  \item \textbf{尺度边缘的中心极限定律.}
+        归一化变量 \(\sqrt{r/E_r}\,U_r\) 收敛到中心高斯；其方差由对偶能量（有效阻抗）
+        \(
+        a_r^{\mathsf T}A_r^{-1}a_r
+        \)
+        决定。
+        等价地，
+        \(
+        \mathrm{Var}(U_r/\sqrt{E_r})\asymp r^{-1}\,a_r^{\mathsf T}A_r^{-1}a_r
+        \)。
+  \item \textbf{相位的均匀化与渐近独立.}
+        在将椭圆门输出以 Joukowsky 均匀化写作 \(z=\exp(U_r+\mathrm{i}\Theta_r)\)、\(w=z+z^{-1}\) 的口径下，
+        相位变量 \(\Theta_r\) 的边缘分布趋于 \([0,2\pi)\) 上的均匀分布，且与 \(U_r\) 渐近独立。
+  \item \textbf{椭圆侧极限分布.}
+        因而 \(w\) 在椭圆族上的极限分布呈现“调和测度 \(\times\) 高斯径向涨落”的解耦结构：角向由调和测度给出，而尺度涨落由 \(a_r^{\mathsf T}A_r^{-1}a_r\) 控制。
+\end{enumerate}
+该极限律把回路圆维 \(r\) 解释为控制半经典噪声强度的主参量，并将“能量椭球--单标量读出--椭圆门外置”统一到可检验的概率型 bulk/boundary 制度之中。
+\end{conjecture}
+
+\endinput
+

@@ -1,0 +1,240 @@
+\subsection{从同步成本到时空结构：因果锥、传播上界与连续极限}\label{subsec:cdim-sync-causal-holonomy-spacetime}
+上一小节已经把相位、射影态与干涉压回到局部--全局粘接残差在统计表示层上的投影。
+若把同一类残差改在同步、共同支撑与闭路复合层上读取，则时间、空间、因果与曲率也不必被当作外加几何舞台，而可被理解为协议内部可比性条件的几何重组。
+本小节只抽取这一重组的最小结构：同步所需的最小延迟、共同支撑所需的最小代价、以及闭路 residual 的面积归一化极限。
+因此，这里既不预设连续流形，也不预设 Lorentz 度量或固定光速常数；所谓传播上界与连续曲率，只作为这些协议量之间的表示后果出现。
+
+\subsubsection{同步延迟、共同支撑代价与因果前序}
+设 \(\mathcal X\) 为协议允许的局部状态类。
+对 \(x,y\in\mathcal X\)，记 \(x\leadsto y\) 为一条允许的单步精化、同步或传输步。
+
+\begin{definition}[同步延迟与共同支撑代价]\label{def:cdim-sync-delay-support-cost}
+对任意 \(x,y\in\mathcal X\)，定义：
+\begin{enumerate}
+  \item \textbf{同步延迟}
+  \[
+  \tau_{\mathrm{sync}}(x,y)\in[0,\infty]
+  \]
+  为把 \(x\) 与 \(y\) 拉入同一可比较协议口径所需的最小在线延迟、最小精化深度或最小同步成本；
+  \item \textbf{共同支撑代价}
+  \[
+  d_{\mathrm{space}}(x,y)\in[0,\infty]
+  \]
+  为把 \(x\) 与 \(y\) 拉入共同支撑、共同 forcing 区域或共同可比较局部图所需的最小资源代价。
+\end{enumerate}
+若不存在任何允许程序使该比较得以建立，则对应量记为 \(+\infty\)。
+\end{definition}
+
+\begin{definition}[因果可达前序]\label{def:cdim-causal-reachability-preorder}
+对 \(x,y\in\mathcal X\)，若存在有限允许链
+\[
+x=x_0\leadsto x_1\leadsto \cdots \leadsto x_n=y
+\]
+使得
+\[
+\sum_{k=0}^{n-1}\tau_{\mathrm{sync}}(x_k,x_{k+1})<\infty,
+\qquad
+\sum_{k=0}^{n-1}d_{\mathrm{space}}(x_k,x_{k+1})<\infty,
+\]
+则记
+\[
+x\preceq y,
+\]
+称 \(y\) 落在 \(x\) 的\textbf{因果可达域}中。
+\end{definition}
+
+\begin{proposition}[同步与共同支撑诱导的因果前序]\label{prop:cdim-causal-preorder-from-subadditivity}
+若同步延迟与共同支撑代价沿允许复合满足
+\[
+\tau_{\mathrm{sync}}(x,z)
+\le
+\tau_{\mathrm{sync}}(x,y)+\tau_{\mathrm{sync}}(y,z),
+\]
+\[
+d_{\mathrm{space}}(x,z)
+\le
+d_{\mathrm{space}}(x,y)+d_{\mathrm{space}}(y,z),
+\]
+且在对角线上均为 \(0\)，则定义 \ref{def:cdim-causal-reachability-preorder} 所给出的关系 \(\preceq\) 构成 \(\mathcal X\) 上的一个前序。
+\end{proposition}
+\begin{proof}
+反身性由零长度链给出。
+若 \(x\preceq y\) 且 \(y\preceq z\)，则分别存在从 \(x\) 到 \(y\) 与从 \(y\) 到 \(z\) 的有限允许链。
+将两条链首尾拼接，再利用同步延迟与共同支撑代价的次可加性，即得一条从 \(x\) 到 \(z\) 的有限允许链，其总同步成本与总支撑成本仍为有限，故 \(x\preceq z\)。
+证毕。
+\end{proof}
+
+\begin{remark}[当前稿件中的同步接口]\label{rem:cdim-sync-delay-existing-interfaces}
+定义 \ref{def:cdim-sync-delay-support-cost} 并非空泛记号，而已有若干后端实现。
+在折叠同步模型中，最坏同步延迟由推论 \ref{cor:Ym-sync-delay} 精确给出为 \(D_{\mathrm{sync}}(m)=m-1\)；在因果右逆口径下，最小延迟与最小状态数由定理 \ref{thm:xi-time-min-delay-min-states} 同时取到；在固定窗口的概率同步口径下，最小精确同步成本又可由定理 \ref{thm:conclusion-window6-exact-fold-synchronization-mutual-information} 写成互信息极小值。
+因此，同步量在本文中已经具备组合论、自动机与信息论三种可核验落点。
+\end{remark}
+
+\subsubsection{传播上界作为同步--支撑比的极大不变量}
+若一条允许步既伴随有限同步延迟，又伴随有限共同支撑代价，则其空间--时间比给出该步的局部传播速率。
+
+\begin{definition}[局部传播比与传播上界]\label{def:cdim-local-propagation-ratio}
+对任一允许的基本传播步
+\[
+e:x\leadsto y
+\qquad
+\text{且}\qquad
+0<\tau_{\mathrm{sync}}(x,y)<\infty,
+\]
+定义其\textbf{局部传播比}为
+\[
+\rho(e)
+:=
+\frac{d_{\mathrm{space}}(x,y)}{\tau_{\mathrm{sync}}(x,y)}.
+\]
+进一步定义
+\[
+c_*:=\sup\bigl\{\rho(e): e\ \text{为允许的基本传播步}\bigr\}\in[0,\infty].
+\]
+称 \(c_*\) 为该协议族的\textbf{传播上界}。
+\end{definition}
+
+\begin{proposition}[链式传播上界]\label{prop:cdim-chainwise-propagation-bound}
+设
+\[
+x=x_0\leadsto x_1\leadsto\cdots\leadsto x_n=y
+\]
+为任一允许链，并定义其总同步延迟与总共同支撑代价
+\[
+\tau_{\mathrm{chain}}
+:=
+\sum_{k=0}^{n-1}\tau_{\mathrm{sync}}(x_k,x_{k+1}),
+\qquad
+d_{\mathrm{chain}}
+:=
+\sum_{k=0}^{n-1}d_{\mathrm{space}}(x_k,x_{k+1}).
+\]
+若定义 \ref{def:cdim-local-propagation-ratio} 中的 \(c_*\) 有限，且链上每一步满足
+\[
+\tau_{\mathrm{sync}}(x_k,x_{k+1})>0
+\quad\text{或}\quad
+d_{\mathrm{space}}(x_k,x_{k+1})=0,
+\]
+则恒有
+\[
+d_{\mathrm{chain}}\le c_*\,\tau_{\mathrm{chain}}.
+\]
+\end{proposition}
+\begin{proof}
+由 \(c_*\) 的定义，对每一步 \(x_k\leadsto x_{k+1}\) 都有
+\[
+d_{\mathrm{space}}(x_k,x_{k+1})
+\le
+c_*\,\tau_{\mathrm{sync}}(x_k,x_{k+1}).
+\]
+对 \(k\) 求和即得所示不等式。
+\end{proof}
+
+\begin{definition}[未来锥、类时区与边界候选]\label{def:cdim-causal-cone-candidates}
+对任意 \(x\in\mathcal X\)，定义其未来与过去锥候选为
+\[
+J^+(x):=\{y\in\mathcal X:\ x\preceq y\},
+\qquad
+J^-(x):=\{y\in\mathcal X:\ y\preceq x\}.
+\]
+若存在一条从 \(x\) 到 \(y\) 的允许链以及某个 \(\varepsilon>0\)，使
+\[
+d_{\mathrm{chain}}
+\le
+(c_*-\varepsilon)\tau_{\mathrm{chain}},
+\]
+则称 \(y\) 属于 \(x\) 的\textbf{类时未来候选}，记为 \(I^+(x)\)；并定义传播边界候选
+\[
+N^+(x):=J^+(x)\setminus I^+(x).
+\]
+过去类时区与边界 \(I^-(x),N^-(x)\) 同理定义。
+\end{definition}
+
+\begin{conjecture}[传播锥的观察者协变性]\label{conj:cdim-causal-cone-observer-covariance}
+设 \(T:\mathcal X\to\mathcal X\) 为一个允许的观察者变换，并满足：
+\begin{enumerate}
+  \item \(T\) 把允许的局部传播步送到允许的局部传播步；
+  \item \(T\) 保持同步延迟与共同支撑代价在同一规范账本下的等价类；
+  \item \(T\) 保持局部细化、粗粒化与张量复合的可比较性结构。
+\end{enumerate}
+则预期有：
+\begin{enumerate}
+  \item \(x\preceq y\) 当且仅当 \(Tx\preceq Ty\)；
+  \item 传播上界 \(c_*\) 在 \(T\) 下不变；
+  \item \(T(J^\pm(x))=J^\pm(Tx)\)、\(T(I^\pm(x))=I^\pm(Tx)\)、\(T(N^\pm(x))=N^\pm(Tx)\)。
+\end{enumerate}
+换言之，观察者变化首先应保持的不是某个既定坐标表达，而是因果可达性、锥内部与锥边界的分层。
+\end{conjecture}
+
+\subsubsection{小回路 holonomy、归一化离散曲率与连续极限}
+若上一小节中的可见相位来自局部 lift 在重叠上的粘接残差，则几何侧的曲率应当来自同一类残差沿小回路复合后的累积。
+在本文当前稿件中，这一点已经在 dyadic holonomy 的边界重建与通量缺陷理论里获得了严格后端。
+
+\begin{definition}[dyadic 归一化 holonomy 曲率场]\label{def:cdim-dyadic-normalized-holonomy-curvature}
+沿用定理 \ref{thm:conclusion-nonabelian-dyadic-stokes-energy-reconstruction} 的设定。
+对边长 \(h_m=2^{-m}\) 的 dyadic 方形剖分 \(\mathcal Q_m\)，若
+\[
+\operatorname{Hol}_A(\partial Q)=\exp(\Omega(Q))
+\qquad (Q\in\mathcal Q_m),
+\]
+则定义分片常值的\textbf{归一化离散曲率场}
+\[
+\mathscr R_m(x)
+:=
+\sum_{Q\in\mathcal Q_m}
+\frac{\Omega(Q)}{h_m^2}\,\mathbf 1_Q(x).
+\]
+它把小回路 holonomy 的对数主项写成面积归一化后的局部曲率密度。
+\end{definition}
+
+\begin{corollary}[dyadic holonomy 归一化曲率的连续极限]\label{cor:cdim-dyadic-holonomy-curvature-limit}
+在定理 \ref{thm:conclusion-nonabelian-dyadic-stokes-energy-reconstruction} 的设定下，有
+\[
+\mathscr R_m\longrightarrow F_{12}
+\qquad\text{于 }L^2(R_1),
+\]
+并且
+\[
+\|\mathscr R_m\|_{L^2(R_1)}^2
+\longrightarrow
+\int_{R_1}|F_{12}(x)|^2\,\mathrm d x.
+\]
+因此，连续曲率对象在该 dyadic 后端上可被解释为归一化小回路 holonomy 的 \(L^2\)-极限。
+\end{corollary}
+\begin{proof}
+在定理 \ref{thm:conclusion-nonabelian-dyadic-stokes-energy-reconstruction} 的证明中，\(\mathscr R_m\) 正是其中记作 \(\mathscr H_m\) 的分片常值场。
+该证明已经给出
+\[
+\|\mathscr R_m-P_mF_{12}\|_{L^2(R_1)}\longrightarrow 0,
+\]
+其中 \(P_mF_{12}\) 为 \(F_{12}\) 关于 dyadic \(\sigma\)-代数的条件期望。
+又 \(P_mF_{12}\to F_{12}\) 于 \(L^2(R_1)\)，故由三角不等式得
+\[
+\mathscr R_m\to F_{12}\qquad\text{于 }L^2(R_1).
+\]
+第二式即定理 \ref{thm:conclusion-nonabelian-dyadic-stokes-energy-reconstruction} 对 \(\mathcal E_m^{\mathrm{NA}}(A)=\|\mathscr R_m\|_2^2\) 的陈述。
+\end{proof}
+
+\begin{remark}[通量缺陷给出的后验证书]\label{rem:cdim-dyadic-holonomy-flux-defect-certificate}
+定理 \ref{thm:conclusion-nonabelian-dyadic-flux-defect-telescoping} 进一步表明：对任意 dyadic 方形 \(Q_0\)，粗尺度 holonomy 对数 \(\Omega(Q_0)\) 与连续曲率通量 \(\int_{Q_0}F_{12}\) 之差，可以完全重写为一列绝对收敛的 dyadic 通量缺陷级数。
+因此，连续曲率不仅是小回路 holonomy 的极限对象，而且其偏离量本身也可由纯边界数据驱动的多尺度证书链后验审计。
+\end{remark}
+
+\begin{conjecture}[holonomy 细化极限的普适曲率候选]\label{conj:cdim-holonomy-curvature-refinement-limit}
+设 \(\{\mathcal U_h\}_{h\downarrow 0}\) 为一族细化覆盖，且每个尺度 \(h\) 上都给定局部过渡数据与闭路 holonomy，使得：
+\begin{enumerate}
+  \item 小回路对数 holonomy 在尺度 \(h\) 上具有一致的主支选择与局部线性化；
+  \item 面积归一化后的离散曲率场在紧集上弱预紧；
+  \item 离散 Bianchi 型约束与细化过程相容；
+  \item 多尺度通量缺陷满足与定理 \ref{thm:conclusion-nonabelian-dyadic-flux-defect-telescoping} 同型的可求和控制。
+\end{enumerate}
+则应存在子列 \(h_j\downarrow 0\)，使相应的归一化离散曲率场弱收敛到某个连续曲率候选 \(R\)；并且若极限唯一，则 \(R\) 只由离散 holonomy 的细化极限决定。
+这表明连续曲率不必预先给定，而应当作为局部粘接残差在小回路复合层上的尺度稳定首项出现。
+\end{conjecture}
+
+\noindent
+因此，在本章当前语境下，时间、空间、因果与曲率都可以被压回到同一条协议链上：同步延迟决定时间尺度，共同支撑代价决定空间比较，二者的极大传播比决定因果锥的边界，而小回路 holonomy 的面积归一化极限则给出连续曲率候选。
+这条链仍未恢复唯一的 Lorentz 型度量，也未导出场方程；但它已经说明，所谓时空骨架并不位于协议之外，而是由同步、传播、比较与闭路 residual 共同选出的几何组织。
+在本章的后续编译接口中，这也意味着地址对象不能只记录单一可见前缀，而必须继续把可见轴、残差轴与模式轴一起显式化，以承载同步账本、传播约束与 residual 的可核验外置。
+
+\endinput

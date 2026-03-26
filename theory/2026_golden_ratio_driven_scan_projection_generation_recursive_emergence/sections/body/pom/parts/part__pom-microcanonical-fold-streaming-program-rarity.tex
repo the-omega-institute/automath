@@ -1,0 +1,120 @@
+\paragraph{有限状态流式可实现性的指数稀有性：同谱实现类中的宽度下界}
+在固定纤维谱的实现类 \(\mathfrak{Fold}_m(d)\) 中（定义 \ref{def:pom-microcanonical-fold-class}），
+同像约束并不强迫“可由小状态机流式实现”：
+即便只允许读取一次输入位，宽度受限的有限状态程序所能覆盖的函数族亦仅占极小比例。
+本段给出纯计数上界，并由此导出微正则先验下的典型宽度下界。
+
+\begin{definition}[只读一次的宽度-\texorpdfstring{$S$}{S} 流式分支程序]\label{def:pom-oblivious-widthS-branching-program}
+固定长度 \(m\) 与状态数 \(S\ge 1\)。
+称一组转移表与输出标记
+\[
+\delta_i:[S]\times\{0,1\}\to [S]\quad(1\le i\le m),
+\qquad
+\lambda:[S]\to X_m
+\]
+为\emph{只读一次（oblivious）}宽度-\(S\) 流式分支程序（或等价地：读入位序固定的确定性宽度-\(S\) 流式程序）。
+取初始状态 \(s_0:=1\)，对输入 \(\omega=(\omega_1,\dots,\omega_m)\in\Omega_m=\{0,1\}^m\) 定义递推
+\[
+s_i:=\delta_i(s_{i-1},\omega_i)\quad(1\le i\le m),
+\]
+并令其计算的函数为
+\[
+F_{\delta,\lambda}(\omega):=\lambda(s_m)\in X_m.
+\]
+\end{definition}
+
+\begin{theorem}[宽度受限流式程序的可实现函数计数上界]\label{thm:pom-oblivious-widthS-branching-program-count}
+记 \(n:=\card{X_m}\)。
+则宽度至多 \(S\) 的长度 \(m\) 只读一次流式分支程序所能实现的函数总数满足
+\[
+\boxed{\;
+\mathcal N^{\mathrm{bp}}_{m,S}(n)
+\ \le\ n^{S}\,S^{2Sm}\;}
+\]
+其中 \(\mathcal N^{\mathrm{bp}}_{m,S}(n)\) 表示所有可由某个宽度 \(\le S\) 程序实现的 \(F:\Omega_m\to X_m\) 的基数上界。
+\end{theorem}
+\begin{proof}
+对每个 \(i\)，转移表 \(\delta_i\) 在 \([S]\times\{0,1\}\) 的每个输入上取值于 \([S]\)，故其可能数为
+\(
+S^{2S}
+\)；
+于是 \((\delta_1,\dots,\delta_m)\) 的可能数至多为 \(S^{2Sm}\)。
+输出标记 \(\lambda:[S]\to X_m\) 的可能数为 \(n^S\)。
+不同程序产生的函数至多不同，故可实现函数总数受上述程序数目上界控制。证毕。
+\end{proof}
+
+\begin{theorem}[微正则实现类内的指数稀有性：小宽度程序几乎从不出现]\label{thm:pom-microcanonical-streaming-program-rarity}
+在定义 \ref{def:pom-microcanonical-fold-class} 的设定下，令 \(F\sim\mathrm{Unif}(\mathfrak{Fold}_m(d))\)。
+则对任意 \(S\ge 1\)，有
+\[
+\mathbb{P}\Bigl(F\ \text{可由某个宽度}\le S\ \text{的长度 }m\ \text{流式分支程序实现}\Bigr)
+\ \le\
+\exp\!\Bigl(2Sm\log S+S\log n-\log\card{\mathfrak{Fold}_m(d)}\Bigr).
+\]
+并且结合定理 \ref{thm:pom-microcanonical-fold-entropy}（令 \(w(x)=d(x)/N\)）得到
+\[
+\boxed{\;
+\mathbb{P}(\cdot)
+\ \le\
+\exp\!\Bigl(2Sm\log S+S\log n-NH(w)+O(n\log N)\Bigr)\;}
+\qquad(N=\card{\Omega_m}=2^m).
+\]
+\end{theorem}
+\begin{proof}
+令 \(\mathcal{C}_{m,S}\) 为所有可由某个宽度 \(\le S\) 流式分支程序实现的函数集合。
+由定理 \ref{thm:pom-oblivious-widthS-branching-program-count} 得
+\(
+\card{\mathcal{C}_{m,S}}\le n^S S^{2Sm}
+\)。
+由 \(F\) 在 \(\mathfrak{Fold}_m(d)\) 上均匀，得到
+\[
+\mathbb{P}(F\in\mathcal{C}_{m,S})
+=\frac{\card{\mathcal{C}_{m,S}\cap\mathfrak{Fold}_m(d)}}{\card{\mathfrak{Fold}_m(d)}}
+\le \frac{\card{\mathcal{C}_{m,S}}}{\card{\mathfrak{Fold}_m(d)}}.
+\]
+取对数并指数化即得第一式；第二式由定理 \ref{thm:pom-microcanonical-fold-entropy} 代入得到。证毕。
+\end{proof}
+
+\begin{corollary}[典型最小宽度的指数下界]\label{cor:pom-microcanonical-streaming-program-typical-width-lb}
+设存在常数 \(c_0>0\) 使 \(H(w)\ge c_0\log n\)。
+并假设 \(\log n=O(m)\) 且 \(n\log N=o(N)\)。
+则存在常数 \(c_1,c_2>0\)，使得对所有满足
+\[
+S\ \le\ c_1\,\frac{N}{m\log N},
+\]
+都有
+\[
+\boxed{\;
+\mathbb{P}\Bigl(\min\{S:\ F\ \text{可由宽度}\le S\ \text{流式分支程序实现}\}\le S\Bigr)
+\ \le\ \exp(-c_2N)\;}
+\qquad
+F\sim\mathrm{Unif}(\mathfrak{Fold}_m(d)).
+\]
+特别地，在本文主线 \(N=2^m\) 下，典型最小宽度满足
+\[
+\min\{S:\ F\ \text{可由宽度}\le S\ \text{流式分支程序实现}\}
+\ \ge\ \Omega\!\left(\frac{2^m}{m^2}\right)
+\]
+以概率 \(1-\exp(-\Theta(2^m))\) 成立。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-microcanonical-streaming-program-rarity}，主指数为
+\(
+2Sm\log S+S\log n-NH(w)+O(n\log N)
+\)。
+在 \(\log n=O(m)\) 且 \(\log S\le \log N=O(m)\) 下，有
+\[
+2Sm\log S+S\log n\ \le\ C\,S\,m\log N,
+\]
+其中常数 \(C\) 仅依赖于 \(\log n=O(m)\) 的隐含常数。
+另一方面，由 \(H(w)\ge c_0\log n\) 且 \(n\ge 2\)（从而 \(\log n\ge \log 2\)）得
+\(
+NH(w)\ge c_0N\log n\ge c_0N\log 2
+\)。
+取 \(c_1\) 足够小，使当 \(S\le c_1 N/(m\log N)\) 时有 \(2Sm\log S+S\log n\le \tfrac{1}{2}c_0N\log 2\)；
+再用 \(n\log N=o(N)\) 吸收误差项，即得指数严格小于 \(-c_2N\) 的概率界。
+最后一句由 \(\log N=\Theta(m)\) 代入化简。证毕。
+\end{proof}
+
+\endinput
+

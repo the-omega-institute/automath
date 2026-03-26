@@ -1,0 +1,207 @@
+\subsection{乘法作为二层归一化：卷积与规范形}\label{subsec:emergent-arithmetic-stable-mul}
+
+\begin{definition}[稳定乘法]\label{def:stable-mul}
+对 $c,d\in X_\infty$，定义
+\[
+c\otimes d:=\mathrm{Val}^{-1}\bigl(\mathrm{Val}(c)\cdot\mathrm{Val}(d)\bigr)\in X_\infty.
+\]
+\end{definition}
+
+\begin{theorem}[乘法的定义性同构（记号固定）]\label{thm:mul-definitional}
+$(X_\infty,\oplus,\otimes)$ 为交换半环，且 $\mathrm{Val}$ 给出与 $(\NN,+,\times)$ 的半环同构。
+\end{theorem}
+
+\textbf{证明：}
+由定义 \ref{def:stable-add} 与 \ref{def:stable-mul}，$\mathrm{Val}$ 同时保持加法与乘法。由于 $\mathrm{Val}$ 为双射，交换律、结合律与分配律均从 $(\NN,+,\times)$ 传递，因而得到交换半环同构。
+
+由此，自然数、加法、乘法在稳定地址空间中完全由\textbf{语法约束 + 规范形归一化}定义，而不需将 $(+,\times)$ 作为原语预置。
+
+\subsubsection{乘法由加法迭代内生}\label{subsec:mul-as-iterated-add}
+\begin{theorem}[乘法可由加法与迭代内生]\label{thm:mul-by-iterated-add}
+在 $X_\infty$ 上定义
+\[
+c\odot d:=\underbrace{c\oplus c\oplus\cdots\oplus c}_{\mathrm{Val}(d)\text{ 次}},
+\qquad
+\mathrm{Val}(d)=0\text{ 时取 }0_X,
+\]
+则对任意 $c,d\in X_\infty$，$c\odot d=c\otimes d$。
+\end{theorem}
+
+\textbf{证明：}
+由定理 \ref{thm:add-definitional}，$\mathrm{Val}$ 保持 $\oplus$ 且双射，故
+\[
+\mathrm{Val}(c\odot d)=\mathrm{Val}(c)\mathrm{Val}(d)=\mathrm{Val}(c\otimes d),
+\]
+从而 $c\odot d=c\otimes d$。证毕。
+
+\begin{corollary}[“合并”的第一种严格版本]\label{cor:mul-no-new-primitive}
+$\otimes$ 由 $\oplus$ 与可迭代计数唯一确定，无需作为新的原语引入。
+\end{corollary}
+
+\subsubsection{后继与折叠：把 \texorpdfstring{$\oplus$}{oplus} 也消隐}\label{subsec:succ-and-fold}
+\begin{definition}[后继与折叠]\label{def:successor-fold}
+记 $0_X:=(0,0,\dots)\in X_\infty$，$e_1\in\mathcal{D}$ 为第 1 个标准基。定义
+\[
+S:X_\infty\to X_\infty,\qquad S(c):=\Fold_\infty(c+e_1).
+\]
+\end{definition}
+
+\begin{theorem}[后继结构同构]\label{thm:successor-structure}
+$\mathrm{Val}$ 给出结构同构
+\[
+\mathrm{Val}(0_X)=0,\qquad \mathrm{Val}(S(c))=\mathrm{Val}(c)+1,
+\]
+并且 $\mathrm{Val}$ 为双射。
+\end{theorem}
+
+\textbf{证明：}
+$\mathrm{Val}(0_X)=0$。又
+\[
+\mathrm{Val}(S(c))=\mathrm{Val}(c+e_1)=\mathrm{Val}(c)+\mathrm{Val}(e_1)=\mathrm{Val}(c)+1,
+\]
+且 $\mathrm{Val}(e_1)=F_2=1$；双射性由 Zeckendorf 唯一性。证毕。
+
+\begin{corollary}[加法由后继迭代给出]\label{cor:add-from-successor}
+令
+\[
+c\oplus_S d:=S^{\circ\mathrm{Val}(d)}(c),
+\]
+则 $c\oplus_S d=c\oplus d$，且 $c\oplus d=\Fold_\infty(c+d)$。
+\end{corollary}
+
+\textbf{证明：}
+由定理 \ref{thm:successor-structure}，$\mathrm{Val}(c\oplus_S d)=\mathrm{Val}(c)+\mathrm{Val}(d)$，由双射性得 $c\oplus_S d=c\oplus d$；折叠公式由推论 \ref{cor:add-as-fold}。证毕。
+
+\begin{theorem}[乘法由后继迭代内生]\label{thm:mul-from-successor}
+定义
+\[
+c\otimes_S d:=\underbrace{c\oplus_S c\oplus_S\cdots\oplus_S c}_{\mathrm{Val}(d)\text{ 次}},
+\qquad \mathrm{Val}(d)=0\text{ 时取 }0_X,
+\]
+则 $c\otimes_S d=c\otimes d$。
+\end{theorem}
+
+\textbf{证明：}
+由推论 \ref{cor:add-from-successor}，$\oplus_S=\oplus$，故
+\[
+\mathrm{Val}(c\otimes_S d)=\mathrm{Val}(c)\mathrm{Val}(d)=\mathrm{Val}(c\otimes d),
+\]
+由双射性得结论。证毕。
+
+\begin{corollary}[极简原语集]\label{cor:primitive-minimal-successor}
+稳定地址层的算术由后继 $S$ 与折叠 $\Fold_\infty$ 生成：$\oplus$ 为 $S$ 的一层迭代读出，$\otimes$ 为该迭代的二层叠加读出。
+\end{corollary}
+
+\subsubsection{单一原语 \texorpdfstring{$\circ$}{o} 的两层读出}\label{subsec:arith-composition}
+本小节给出一个与“扫描迭代 $\Rightarrow$ 稳定编码 $\Rightarrow$ 归一化读出”链条对齐的定理化版本：不再将加法与乘法作为原语预置，仅保留\textbf{复合}这一最底层原语，并在稳定地址层通过折叠回到规范形。
+取任意非空集合 $A$ 与自映射 $g:A\to A$。记
+\[
+S_0:=\langle g\rangle=\{g^{\circ n}:n\in\NN\}\subseteq \mathrm{End}(A),\qquad
+S_1:=\{I_n:n\in\NN\}\subseteq \mathrm{End}(\mathrm{End}(A)),
+\]
+其中 $I_n(f):=f^{\circ n}$。两层对象的唯一运算均为复合 $\circ$。
+
+\begin{theorem}[单一原语 \texorpdfstring{$\circ$}{o} 的两层读出同时生成 $(+,\times)$]\label{thm:composition-two-layer}
+定义嵌入 $\iota_0:\NN\to S_0$ 为
+\[
+\iota_0(n):=g^{\circ n},\qquad g^{\circ 0}:=\mathrm{id}_A.
+\]
+并令 $\iota_1:\NN\to S_1$ 为 $\iota_1(n):=I_n$。则对任意 $m,n\in\NN$，成立
+\[
+\iota_0(m+n)=\iota_0(m)\circ \iota_0(n),
+\qquad
+\iota_1(mn)=\iota_1(m)\circ \iota_1(n).
+\]
+\end{theorem}
+
+\textbf{证明：}
+由迭代定义与复合结合律，
+\[
+g^{\circ(m+n)}=g^{\circ m}\circ g^{\circ n},
+\]
+故 $\iota_0(m+n)=\iota_0(m)\circ \iota_0(n)$。另一方面，对任意 $f\in\mathrm{End}(A)$，
+\[
+(\iota_1(m)\circ \iota_1(n))(f)=I_m(I_n(f))=I_m(f^{\circ n})=(f^{\circ n})^{\circ m}
+=f^{\circ (nm)}=I_{mn}(f).
+\]
+由于对一切 $f$ 相等，故 $\iota_1(m)\circ \iota_1(n)=\iota_1(mn)$。证毕。
+
+\begin{theorem}[稳定地址半环的“去原语化”实现]\label{thm:arith-composition}
+沿用定义 \ref{def:stable-add} 与 \ref{def:stable-mul}，并记 $\mathrm{Val}:X_\infty\to\NN$ 为值映射。对任意定理 \ref{thm:composition-two-layer} 中的 $(A,g)$，定义两条“过程语义”映射
+\[
+\Phi_0:X_\infty\to \mathrm{End}(A),\quad \Phi_0(c):=g^{\circ\mathrm{Val}(c)},
+\]
+\[
+\Phi_1:X_\infty\to \mathrm{End}(\mathrm{End}(A)),\quad \Phi_1(c):=I_{\mathrm{Val}(c)}.
+\]
+则对任意 $c,d\in X_\infty$，
+\[
+\Phi_0(c\oplus d)=\Phi_0(c)\circ\Phi_0(d),\qquad
+\Phi_1(c\otimes d)=\Phi_1(c)\circ\Phi_1(d).
+\]
+也即：在稳定地址层的 $\oplus,\otimes$ 同时被同一原语 $\circ$ 在两层对象上实现。
+\end{theorem}
+
+\textbf{证明：}
+由 $\oplus$ 定义与定理 \ref{thm:composition-two-layer} 的第一条，
+\[
+\Phi_0(c\oplus d)=g^{\circ\mathrm{Val}(c\oplus d)}
+=g^{\circ(\mathrm{Val}(c)+\mathrm{Val}(d))}
+ =g^{\circ\mathrm{Val}(c)}\circ g^{\circ\mathrm{Val}(d)}
+=\Phi_0(c)\circ\Phi_0(d).
+\]
+同理由 $\otimes$ 定义与定理 \ref{thm:composition-two-layer} 的第二条，
+\[
+\Phi_1(c\otimes d)=I_{\mathrm{Val}(c\otimes d)}
+=I_{\mathrm{Val}(c)\mathrm{Val}(d)}
+=I_{\mathrm{Val}(c)}\circ I_{\mathrm{Val}(d)}
+=\Phi_1(c)\circ\Phi_1(d).
+\]
+证毕。
+
+\begin{corollary}[仅复合的读出落回稳定地址]\label{cor:composition-pullback}
+记 $Z:=\mathrm{Val}^{-1}$，并定义
+\[
+\rho_0:S_0\to X_\infty,\quad \rho_0(g^{\circ n}):=Z(n),\qquad
+\rho_1:S_1\to X_\infty,\quad \rho_1(I_n):=Z(n).
+\]
+则对任意 $c=Z(m),d=Z(n)\in X_\infty$，
+\[
+c\oplus d=\rho_0\bigl(\rho_0^{-1}(c)\circ \rho_0^{-1}(d)\bigr),
+\qquad
+c\otimes d=\rho_1\bigl(\rho_1^{-1}(c)\circ \rho_1^{-1}(d)\bigr).
+\]
+\end{corollary}
+
+\textbf{证明：}
+由定理 \ref{thm:composition-two-layer} 得 $\rho_0(g^{\circ m}\circ g^{\circ n})=Z(m+n)$ 与 $\rho_1(I_m\circ I_n)=Z(mn)$，再与 $\oplus,\otimes$ 的定义对齐即可。证毕。
+
+\begin{corollary}[“合并掉 $(+,\times)$”的严格表述]\label{cor:primitive-free-arith}
+在配置层，算术原语可压缩为以下最小生成集：
+\begin{itemize}
+  \item 计数配置的逐点叠加（自由交换幺半群结构）；
+  \item Fibonacci 关系诱导的局部可逆重写（群胚生成元）；
+  \item 选取规范形截面 $\Fold_\infty$（或等价的 $\mathrm{Val}$ 与 Zeckendorf 规范形 $Z$）。
+\end{itemize}
+在过程层，等价地可用复合运算 $\circ$ 与折叠 $\Fold_\infty$ 来表达：$\oplus$ 与 $\otimes$ 分别是复合在一层与二层对象上的读出，并经折叠归一化后落回 $X_\infty$。
+等价地，运算层只需 $\circ$，可见层只需编码 $Z$（或 $\mathrm{Val}/\Fold_\infty$）。
+\end{corollary}
+
+\textbf{证明：}
+配置层的三类原语由定理 \ref{thm:monoid-quotient-is-N}、定理 \ref{thm:zeckendorf-transversal} 与推论 \ref{cor:fold-as-section} 直接给出；过程层的两层复合读出由定理 \ref{thm:composition-two-layer} 与 \ref{thm:arith-composition} 给出。加法的折叠接口由推论 \ref{cor:add-as-fold} 保证，因而结论成立。
+
+\begin{remark}[商余作为规范形选择]\label{rem:division-as-selection}
+给定 $a,b\in X_\infty$ 且 $\mathrm{Val}(b)\ge 1$，整数层的商余关系
+\[
+\mathrm{Val}(a)=\mathrm{Val}(q)\,\mathrm{Val}(b)+\mathrm{Val}(r),\qquad 0\le \mathrm{Val}(r)<\mathrm{Val}(b)
+\]
+可等价重写为稳定地址层的方程
+\[
+a=q\otimes b\ \oplus\ r,
+\]
+再配合不等式约束选取唯一的规范代表 $(q,r)$。因此“除法/商余”并非新的原语，而是同一重写群胚中的\textbf{解方程 + 规范形选择}问题；其可计算性完全由 $\Fold_\infty$ 的可计算性继承。
+\end{remark}
+
+\begin{proposition}[可计算实现]\label{prop:zeckendorf-arith-computable}
+对任意 $c,d\in X_\infty$，$c\oplus d$ 与 $c\otimes d$ 可由有限步算法计算：先在值层执行整数加法/乘法得到 $\mathrm{Val}(c)\pm\mathrm{Val}(d)$ 或 $\mathrm{Val}(c)\mathrm{Val}(d)$，再以 Zeckendorf 贪心算法取唯一规范形（附录 C）。
+\end{proposition}

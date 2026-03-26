@@ -1,0 +1,535 @@
+\subsubsection{时间变量的统一陈述：从局部可逆下界到完成化反演刚性}\label{subsubsec:xi-time-protocol-conclusions}
+在本文既定的扫描--投影读出语义中，时间被固定为单生成扫描算子的迭代计数（\S\ref{sec:spg}），并通过窗口折叠、同步核与证书重写链条进入可审计对象；在单生成二元窗读出与规范归一化层的联立约束下，局部值保持与合法语法迫使归一化权重满足 Fibonacci 递推，因而在尺度上锁定黄金比标度 \(\varphi\)（命题 \ref{prop:xi-local-binary-normalization-fibonacci-rigidity}），并与 \S\ref{sec:principles} 的反共振基线一起把黄金分支 \(\alpha=\varphi^{-1}\) 外部化为该协议族的刚性规范代表。
+依 \cite{Internal2026POMGenerativeAddressThreeRegisterBridgeRH} 给出的既定设定，本小节将相关结构压缩为一组可独立引用的陈述。
+除特别声明外，记号沿用全文：\(\Fold_m\)、\(\Phi_m\)、\(T_m\)、\(\mathrm{Col}_u(m)\)、\(d_m(x)\)、\(D_m:=\max_{x\in X_m}d_m(x)\)、\(\mathbf{PW}\)。
+\par
+下述陈述均在本文既定的接口公理下陈述：概念视为可寻址事件，时间视为迭代计数，读出视为二元投影；与扫描--投影--读出框架相容。
+
+\input{subsubsec__xi-time-protocol-conclusions-bayesian-coherence}
+
+\begin{theorem}[时间补偿轴的极小性：可逆化最小延迟与最小状态数]\label{thm:xi-time-min-delay-min-states}
+设 \(m\ge 3\)，并考虑窗口折叠诱导的滑动块码 \(\Phi_m\)。
+对任意因果有限状态右逆译码器 \(\Psi\)（允许固定延迟 \(D\)），若
+\[
+\Psi\circ\Phi_m=\mathrm{id}_{\{0,1\}^{\mathbb Z}}
+\]
+在几乎处处轨道上成立，则必有
+\[
+D\ge m-1,
+\qquad
+|\mathrm{States}(\Psi)|\ge 2^{m-1}.
+\]
+并且该下界可同时取等：存在后缀状态机 \(V_m=\{0,1\}^{m-1}\) 达到
+\(
+D=m-1,\ |\mathrm{States}|=2^{m-1}
+\)。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:Phi_m-conjugacy-threshold}，\(\Phi_m\) 的逆码记忆为 \(m-1\) 且该记忆门槛是尖锐的。
+又由图表示 \(|V_m|=2^{m-1}\)（\S\ref{subsec:Phi_m-graph}）可知，区分全部长度 \(m-1\) 后缀需要至少该数量级状态。
+因此得延迟与状态数双下界，且由同一逆码构造取等。
+\end{proof}
+
+\begin{theorem}[双预算容量相变：时间预算与分辨率预算的统一指数标尺]\label{thm:xi-time-resolution-dual-budget-phase-transition}
+固定分辨率 \(m\) 与温度门 \(u\)。
+令 \(T_m\) 为同步时间，\(\mathrm{Col}_u(m)\) 为地址碰撞概率。
+对 \(N\) 个独立对象、时间预算 \(n\) 与分辨率预算 \(m\)，定义失败事件
+\[
+\mathrm{Fail}_{m,n,N}:=\{\text{存在同步未消歧（\(\mathsf{NULL}\)）或存在碰撞}\}.
+\]
+若满足常规指数律
+\[
+\nu_m(T_m>n)\asymp e^{-\varepsilon_m n},
+\qquad
+\mathrm{Col}_u(m)\asymp e^{-h_2(u)m},
+\]
+则对任意固定 \(\eta\in(0,1)\)：
+\[
+\log N\le (1-\eta)\min\!\left\{\varepsilon_m n,\frac12 h_2(u)m\right\}
+\Longrightarrow
+\mathbb P(\mathrm{Fail}_{m,n,N})\to 0,
+\]
+\[
+\log N\ge (1+\eta)\min\!\left\{\varepsilon_m n,\frac12 h_2(u)m\right\}
+\Longrightarrow
+\mathbb P(\mathrm{Fail}_{m,n,N})\to 1.
+\]
+故可寻址规模的指数标尺满足
+\[
+\log N\asymp \min\!\left\{\varepsilon_m n,\frac12 h_2(u)m\right\}.
+\]
+\end{theorem}
+
+\begin{proof}
+同步未消歧由定理 \ref{thm:Ym-sync-tail} 给出指数尾；碰撞侧由 \(\mathrm{Col}_u(m)\) 指数律给出。
+对 \(N\) 对象采用并联合并与二次矩标准界，得到阈值由两类指数中的较小者控制。
+\end{proof}
+
+\begin{proposition}[二元局部归一化的刚性：Fibonacci 权重递推不可回避]\label{prop:xi-local-binary-normalization-fibonacci-rigidity}
+设存在一族二元、局部、可终止且合流的归一化机制，满足：
+\begin{enumerate}
+  \item 每一步局部重写保持值函数 \(\mathrm{Val}(a)=\sum_{k\ge 1}a_k w_k\)；
+  \item 不可约语法恰为 \(X_\infty=\{c\in\{0,1\}^{\mathbb N}:c_kc_{k+1}=0\}\)；
+  \item 对每个 \(m\) 诱导幂等满射 \(F_m:\{0,1\}^m\twoheadrightarrow X_m\)，与正规形一致。
+\end{enumerate}
+则权重序列满足
+\[
+w_{k+2}=w_{k+1}+w_k\quad(k\ge 1).
+\]
+在尺度归一化 \(w_1=1,w_2=2\) 下，唯一解为 \(w_k=F_{k+1}\)。
+\end{proposition}
+
+\begin{proof}
+折叠局部重写系统在值保持约束下的权重刚性由局部规则
+\textup{(\ref{rule:fold:adj})} 的值保持直接给出：
+必有 \(w_{k+2}=w_{k+1}+w_k\)。
+再由归一化常数固定唯一解，即 Fibonacci 权重。
+\end{proof}
+
+\begin{theorem}[残差外置的时间下界]\label{thm:xi-time-lower-bound-from-max-fiber}
+令 \(\Fold_m:\Omega_m\to X_m\) 的最大纤维多重度为
+\[
+D_m:=\max_{x\in X_m}d_m(x).
+\]
+若协议仅允许在时间方向额外读取 \(t\) 步符号，每步有效字母表大小为 \(|\mathcal A|\)，则任意最坏情形可逆化都必须满足
+\[
+t\ge
+\left\lceil
+\frac{\log D_m}{\log |\mathcal A|}
+\right\rceil.
+\]
+特别地在二元读出 \(|\mathcal A|=2\) 时，
+\(
+t\ge \lceil \log_2 D_m\rceil
+\)；
+而当 \(D_m\) 指数增长时，得到 \(t=\Omega(m)\)。
+\end{theorem}
+
+\begin{proof}
+每步最多提供 \(\log|\mathcal A|\) 比特，\(t\) 步最多区分 \(|\mathcal A|^t\) 个候选。
+对最大纤维中的 \(D_m\) 个微态全部可逆，必有 \(|\mathcal A|^t\ge D_m\)。
+取对数即得结论；与定理 \ref{thm:address-defect-law} 的单射化下界一致。
+\end{proof}
+
+\begin{proposition}[时间长度异常为二余圈]\label{prop:xi-time-length-cocycle}
+在 \(\mathbf{PW}\) 上取正规形长度函数
+\(
+\ell(w):=\mathrm{len}(\mathrm{NF}(w))
+\)。
+定义
+\[
+\alpha(w_1,w_2):=\ell(w_1\circ w_2)-\ell(w_1)-\ell(w_2).
+\]
+则 \(\alpha\) 满足二余圈方程；更换正规化规范仅改变一个二余边界，
+故其同调类 \([\alpha]\) 为协议不变量。
+\end{proposition}
+
+\begin{proof}
+由复合结合律与长度差分定义直接验证
+\(
+\delta\alpha=0
+\)。
+规范更换对应 \(\ell\mapsto \ell+\beta\)，故
+\(
+\alpha\mapsto \alpha+\delta\beta
+\)。
+这与命题 \ref{prop:pom-anom-additive-up-to-boundary} 的边界项机制同型。
+\end{proof}
+
+\begin{theorem}[时间中心扩张的普适消缺]\label{thm:xi-time-central-extension-universal}
+给定上式 \(\alpha\)，定义中心扩张范畴 \(\widetilde{\mathbf{PW}}_{\alpha}\)：
+对象同 \(\mathbf{PW}\)，态射为 \((w,k)\)（\(k\in\mathbb Z\)），复合为
+\[
+(w_1,k_1)\circ(w_2,k_2):=
+\bigl(w_1\circ w_2,\ k_1+k_2-\alpha(w_1,w_2)\bigr).
+\]
+令
+\(
+\widetilde\ell(w,k):=\ell(w)+k
+\)。
+则 \(\widetilde\ell\) 对复合严格可加，并且任意把长度严格加法化的函子都唯一因子化经过 \(\widetilde{\mathbf{PW}}_{\alpha}\)。
+\end{theorem}
+
+\begin{proof}
+代入定义得
+\[
+\widetilde\ell\bigl((w_1,k_1)\circ(w_2,k_2)\bigr)
+=\ell(w_1\circ w_2)+k_1+k_2-\alpha
+=\ell(w_1)+k_1+\ell(w_2)+k_2.
+\]
+普适性由中心扩张的标准泛性质给出；与本文的 counterterm strictification 机制（定理 \ref{thm:pom-strictification-splitting}）一致。
+\end{proof}
+
+\begin{corollary}[双中心扩张的普适严格化：常数级 strictification 与时间加法化的统一]\label{cor:xi-double-central-extension-universal-strictification}
+固定一个有限阿贝尔 lift 群 \(G\) 及其常数层中心标签群 \(\mathcal{A}_G\)（定义 \ref{def:pom-anom-accumulation}），并取命题 \ref{prop:xi-time-length-cocycle} 的长度二余圈 \(\alpha\)。
+令 \(\widetilde{\mathbf{PW}}_{\alpha}\) 为定理 \ref{thm:xi-time-central-extension-universal} 的时间中心扩张，令
+\(\widetilde{\mathbf{PW}}=\mathbf{PW}\ltimes\mathcal{A}_G\)
+为定理 \ref{thm:pom-strictification-splitting} 的常数层中心扩张。
+则可取两者在 \(\mathbf{PW}\) 上的纤维积（或等价地：在中心 \(\mathcal{A}_G\oplus\mathbb Z\) 上的直和扩张）得到一个单一的严格化对象 \(\mathbf{PW}^{c}\)，并满足：
+\begin{enumerate}
+  \item \textbf{（时间加法化）}投影到 \(\widetilde{\mathbf{PW}}_{\alpha}\) 给出严格可加长度 \(\widetilde\ell\)，从而把“时间”外置为单一加法寄存器；
+  \item \textbf{（常数层 strictification）}在闭环接口意义下，加入适当 counterterm 门 \(\mathrm{CT}_\eta\) 可将 \(E_m\) 与 \(\mathrm{LIFT}_G\) 的 Beck--Chevalley 交换严格闭合（命题 \ref{prop:pom-counterterm-anom-cancel}）；
+  \item \textbf{（联合普适性）}任意同时实现上述两条严格化目标的方案，都唯一因子化经过 \(\mathbf{PW}^{c}\)。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+时间加法化的普适性由定理 \ref{thm:xi-time-central-extension-universal} 给出；常数层 strictification 的普适性由定理 \ref{thm:pom-strictification-splitting} 给出。
+取二者在 \(\mathbf{PW}\) 上的纤维积（对应中心直和 \(\mathcal{A}_G\oplus\mathbb Z\)）并应用其泛性质，即得联合因子化与唯一性。
+\end{proof}
+
+\begin{proposition}[完成化坐标刚性：对偶即时间反演]\label{prop:xi-completed-coordinate-rigidity-time-reversal}
+设二变量对象满足自对偶
+\[
+F(z,u)=F(uz,1/u).
+\]
+若要求变量代换 \((z,u)\mapsto (w,\theta)\) 使对偶作用化为
+\(
+\theta\mapsto-\theta
+\)
+且 \(w\) 不变，则在解析同胚条件下唯一到时间单位重标定：
+\[
+u=e^{\theta},
+\qquad
+w=z\,e^{\theta/2}.
+\]
+\end{proposition}
+
+\begin{proof}
+对偶映射是 \((z,u)\mapsto(uz,1/u)\)。
+若 \(u\) 只由 \(\theta\) 参数化且对偶对应取逆，则必有 \(u=e^{c\theta}\)（\(c>0\) 常数）。
+再要求 \(w\) 不变：\(w(z,u)=w(uz,1/u)\)。
+取乘性最小解得 \(w=z\,u^{1/2}=z\,e^{c\theta/2}\)。
+把 \(c\) 吸收进时间单位即得命题。
+\end{proof}
+
+\begin{theorem}[时间初对象性质：资源量同调退化为时间长度]\label{thm:xi-time-initial-generator-for-resources}
+设 \(R:\mathrm{Mor}(\mathbf{PW})\to (A,+)\) 为可组合资源赋值，且：
+\begin{enumerate}
+  \item 在 \(2\)-同伦等价下不变；
+  \item 对复合仅差可吸收边界项。
+\end{enumerate}
+则在不可约与遍历的常规条件下，存在常数 \(c\in A\) 与同调平凡项 \(\gamma\) 使
+\[
+R(w)=c\cdot\widetilde\ell(w)+\gamma(w).
+\]
+故资源量在同调意义下由时间长度唯一生成（至多差比例与 gauge）。
+\end{theorem}
+
+\begin{proof}
+由上同调分解，任意可组合赋值可写为加法主项加边界项。
+主项在不可约遍历类上必须与唯一加法生成元同向，故与 \(\widetilde\ell\) 成比例。
+边界项由 gauge 吸收。
+\end{proof}
+
+\begin{proposition}[时间赋范的 Lawvere 度量与 \(\mathsf{NULL}\) 的不完备性刻画]\label{prop:xi-time-lawvere-null-incompleteness}
+以严格可加长度定义
+\[
+d(x,y):=\inf\{\widetilde\ell(w):w:x\to y\}.
+\]
+则 \(d\) 构成 Lawvere 广义度量。
+若存在 Cauchy 链在当前可见域无极限，则对应统计型 \(\mathsf{NULL}\)；
+其最小补全由 Cauchy 完备化给出。
+\end{proposition}
+
+\begin{proof}
+三角不等式由长度可加性直接成立。
+命题 \ref{prop:pom-eps-distance-lawvere} 已给出预算距离的 Lawvere 结构。
+当可达链极限缺失时，读出语义出现“渐进可见但当前不可寻址”的 \(\mathsf{NULL}\) 事件，正是不完备性的定义性表现。
+\end{proof}
+
+\begin{theorem}[时间一致极限读出：逆极限恢复可观测类]\label{thm:xi-time-consistent-inverse-limit-readout}
+设 \((X_m,p_{m+1,m})\) 为分辨率塔，且 \(m(t)\to\infty\)。
+若读出满足时间一致性
+\[
+p_{m(t_2),m(t_1)}\bigl(x_{m(t_2)}(\omega)\bigr)=x_{m(t_1)}(\omega)\quad(t_2>t_1),
+\]
+则每个对象 \(\omega\) 对应唯一逆极限元素
+\[
+x_\infty(\omega)\in \varprojlim(X_m,p_{m+1,m}),
+\]
+且可区分性等价于逆极限像不同。
+\end{theorem}
+
+\begin{proof}
+一致性即逆系统相容族定义，故得到唯一极限点。
+若两对象逆极限像相同，则所有有限分辨率投影相同，不可区分；
+反向由某层投影差异立得可区分。
+\end{proof}
+
+\begin{theorem}[时间纤维最小维数定理]\label{thm:xi-time-fiber-minimal-dimension}
+设 \(\Fold_m:\Omega_m\to X_m\)。
+若要实现
+\[
+\Fold_m=\pi\circ U\circ\iota
+\]
+其中 \(U\) 为扩展空间 \(\Omega_m\times\mathcal T\) 上双射、\(\pi\) 为读出投影，则必有
+\[
+|\mathcal T|\ge D_m.
+\]
+且该下界可取等。
+\end{theorem}
+
+\begin{proof}
+对任一 \(x\in X_m\)，纤维 \(\Fold_m^{-1}(x)\) 的不同微态在可逆提升下必须映入不同辅助坐标，否则与双射性矛盾。
+故 \(|\mathcal T|\) 至少覆盖最大纤维 \(D_m\)。
+取 \(\mathcal T\cong\{1,\dots,D_m\}\) 并对每条最大纤维作注入编码即可构造取等方案。
+\end{proof}
+
+\begin{proposition}[时间反演参数化下的谱互反律]\label{prop:xi-time-reversal-spectral-reciprocity}
+在完成化坐标 \((w,\theta)\) 中，若 transfer 算子族 \(\mathcal L_\theta\) 满足时间反演共轭与迹类正则性，则 Fredholm 行列式
+\[
+Z(z,\theta):=\det(I-z\mathcal L_\theta)
+\]
+满足互反型方程
+\[
+Z(z,\theta)=z^{\kappa(\theta)}e^{c\theta}\,Z(z^{-1},-\theta),
+\]
+并且“临界切片”由 \(\theta=0\) 唯一刻画为谱正规切片。
+\end{proposition}
+
+\begin{proof}
+时间反演共轭给出 \(\mathcal L_{-\theta}\) 与 \(\mathcal L_\theta\) 的谱配对，行列式乘积展开即导出互反式。
+当 \(\theta=0\) 时共轭退化为自共轭切片，谱对称与无净增益/衰减同值。
+\end{proof}
+
+\begin{theorem}[微可逆且不可约时的守恒量退化]\label{thm:xi-time-only-conserved-quantity}
+设局部重写步可逆且可达图强连通。
+若 \(I:\mathrm{Mor}(\widetilde{\mathbf{PW}})\to\mathbb R\) 在基本可逆步上为零，且对复合严格可加，则存在 \(\lambda\in\mathbb R\) 使
+\[
+I(w)=\lambda\,\widetilde\ell(w).
+\]
+即时间长度是唯一非平凡守恒量。
+\end{theorem}
+
+\begin{proof}
+强连通与可逆性使任一守恒量由循环空间约束决定。
+基本步上守恒条件把自由度压到一维；严格可加性把该一维与 \(\widetilde\ell\) 对齐。
+\end{proof}
+
+\begin{theorem}[时间统一语义定理]\label{thm:xi-time-unified-semantic-generator}
+在投影--折叠--证书公理域内，时间长度 \(\widetilde\ell\) 同时实现：
+\begin{enumerate}
+  \item 异常消缺的中心扩张生成元；
+  \item 资源赋值的同调主生成元；
+  \item 可见域完备化的 Lawvere 度量生成元；
+  \item 折叠可逆化最小外置维数的计数量尺；
+  \item 对偶完成化中的时间反演参数；
+  \item 微可逆不可约守恒律的唯一标尺。
+\end{enumerate}
+因此时间不是附着参数，而是上述六类结构的共同极小生成元。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:xi-time-central-extension-universal}、定理 \ref{thm:xi-time-initial-generator-for-resources}、命题 \ref{prop:xi-time-lawvere-null-incompleteness}、定理 \ref{thm:xi-time-fiber-minimal-dimension}、命题 \ref{prop:xi-completed-coordinate-rigidity-time-reversal} 与定理 \ref{thm:xi-time-only-conserved-quantity} 逐项合成即得。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part1}
+\input{subsubsec__xi-time-protocol-conclusions-part3}
+\input{subsubsec__xi-time-protocol-conclusions-part4}
+\endinput
+
+\begin{theorem}[模流即时间：长度余圈诱导的动力学唯一性]\label{thm:xi-modular-flow-equals-time-cocycle}
+设 \(\mathcal G\) 为由可审计投影词与证书等价生成的可测群胚，\(\widetilde\ell:\mathcal G\to\mathbb Z\) 为可加 \(1\)-余圈：
+\[
+\widetilde\ell(gh)=\widetilde\ell(g)+\widetilde\ell(h).
+\]
+记 \(\mathcal M:=W^\ast(\mathcal G)\)。
+对任意 \(\lambda>0\)，定义权
+\[
+\varphi_\lambda(f):=\int_{\mathcal G} f(g)\,e^{-\lambda\widetilde\ell(g)}\,d\nu(g),\qquad f\in C_c(\mathcal G).
+\]
+则 Tomita--Takesaki 模自同构群满足
+\[
+(\sigma_t^{\varphi_\lambda}f)(g)=e^{it\lambda\widetilde\ell(g)}\,f(g).
+\]
+若取对象函数 \(b:\mathcal G^{(0)}\to\mathbb R\) 并作 gauge 变换，则 Connes 导数满足
+\[
+(D\varphi_{\lambda,b}:D\varphi_\lambda)_t(g)
+=e^{it\lambda\,(b(r(g))-b(s(g)))}.
+\]
+故时间 gauge 自由度与 Connes \(1\)-余圈完全同一。
+\end{theorem}
+
+\begin{proof}
+权比值的 Radon--Nikodym 导数由长度余圈给出，故模流在卷积核上表现为相位乘子 \(e^{it\lambda\widetilde\ell}\)。
+对象函数 gauge 对应余边界修正 \(\widetilde\ell\mapsto \widetilde\ell+\partial b\)，Connes 导数即该边界相位。
+\end{proof}
+
+\begin{theorem}[时间寄存器的算子实现：中心扩张与交叉积同构]\label{thm:xi-time-register-crossed-product-equivalence}
+在定理 \ref{thm:xi-modular-flow-equals-time-cocycle} 设定下，考虑交叉积
+\(
+\mathcal M\rtimes_{\sigma^{\varphi_\lambda}}\mathbb R
+\)。
+定义半直积群胚
+\[
+\widetilde{\mathcal G}:=\mathcal G\ltimes_{\widetilde\ell}\mathbb R.
+\]
+则存在自然 \(^\ast\)-同构
+\[
+W^\ast(\widetilde{\mathcal G})
+\cong
+\mathcal M\rtimes_{\sigma^{\varphi_\lambda}}\mathbb R,
+\]
+并保持时间坐标加法结构。
+因此“异常吸收至时间中心扩张”与交叉积构造给出同一普适对象。
+\end{theorem}
+
+\begin{proof}
+群胚半直积卷积代数与模流交叉积的协变表示满足同一泛性质。
+由协变表示定理得到自然 \(^\ast\)-同构；时间变量对应半直积的 \(\mathbb R\)-坐标。
+\end{proof}
+
+\begin{theorem}[局部指数即局部时间纤维维数]\label{thm:xi-local-index-equals-local-time-fiber}
+设 \(\mathcal B\subset\mathcal A\) 为粗粒化诱导包含，\(E:\mathcal A\to\mathcal B\) 为忠实正规条件期望，且具有有限 Watatani 指数 \(\mathrm{Ind}(E)\in Z(\mathcal B)_+\)。
+则对每个中心谱点 \(x\)，可逆提升所需最小时间辅助维度满足
+\[
+\dim(\mathcal T_x)_{\min}=\mathrm{Ind}(E)(x).
+\]
+在交换情形
+\(
+\mathcal A=L^\infty(\Omega),\ \mathcal B=L^\infty(X)
+\)
+且 \(E\) 为纤维平均时，
+\[
+\mathrm{Ind}(E)(x)=|\Fold^{-1}(x)|\quad\text{(a.e.)}.
+\]
+若每步可读字母表大小为 \(|\mathfrak A_0|\)，则
+\[
+T_{\min}(x)\ge \frac{\log \mathrm{Ind}(E)(x)}{\log |\mathfrak A_0|},
+\]
+并在有限型编码条件下渐近可达。
+\end{theorem}
+
+\begin{proof}
+有限指数给出 \(\mathcal A\) 作为 \(\mathcal B\)-模的局部最小 Jones 维数，即可逆提升必需辅助自由度。
+交换情形下指数退化为纤维基数。
+时间下界由每步信息容量换算得到。
+\end{proof}
+
+\begin{theorem}[时间谱三元组：长度算子重建距离与体积]\label{thm:xi-time-spectral-triple-distance-volume}
+在 \(\mathcal H=\ell^2(\mathcal G)\) 上定义
+\[
+D\,\delta_g:=\widetilde\ell(g)\,\delta_g,
+\]
+并令 \(\mathcal A=C_c(\mathcal G)\) 正则作用于 \(\mathcal H\)。
+则 \((\mathcal A,\mathcal H,D)\) 给出自然谱三元组，其 Connes 伪距离在对象空间上满足
+\[
+d_C(x,y)
+=
+\inf\left\{
+\sum_{i=1}^n\widetilde\ell(g_i):\ g_n\cdots g_1:x\to y
+\right\}.
+\]
+若存在 \(p>0\) 使 \(|D|^{-p}\) 属可测理想，则 \(p\) 为谱维数；Dixmier 迹
+\(
+\mathrm{Tr}_\omega(|D|^{-p}\pi(\cdot))
+\)
+诱导体积测度。
+\end{theorem}
+
+\begin{proof}
+\(D\) 对角于群胚基，交换子约束等价于 Lipschitz 条件，故 Connes 距离退化为最短时间长度。
+谱维数与 Dixmier 体积由标准谱三元组可测性判据给出。
+\end{proof}
+
+\begin{theorem}[时间 \(\zeta\)-函数主奇性由增长常数决定]\label{thm:xi-time-zeta-singularity-from-growth}
+定义时间谱 \(\zeta\)-函数
+\[
+\zeta_{\mathrm{time}}(s):=\mathrm{Tr}(|D|^{-s}).
+\]
+其收敛半平面由谱维数 \(p\) 决定：\(\Re(s)>p\) 收敛，\(\Re(s)\le p\) 发散。
+若时间球计数满足
+\[
+\#\{g:\widetilde\ell(g)\le t\}\sim e^{\kappa t},
+\]
+则 \(p\) 与 \(\kappa\) 存在确定性换算（同一增长标尺的倒数量纲等价）。
+若热核满足
+\[
+\mathrm{Tr}(e^{-t|D|})
+\sim
+\sum_{j=0}^{J}a_j\,t^{\,j-p}
+\qquad(t\downarrow 0),
+\]
+则 \(\zeta_{\mathrm{time}}\) 在 \(s=p-j\) 处出现可控极点，残数由 \(a_j\) 唯一确定。
+\end{theorem}
+
+\begin{proof}
+由 Mellin 变换关系
+\(
+\zeta_{\mathrm{time}}(s)=\Gamma(s)^{-1}\int_0^\infty t^{s-1}\mathrm{Tr}(e^{-t|D|})dt
+\)
+与 Tauber 型增长定理得到收敛域与极点结构。
+时间球增长率与临界指数对应同一 abscissa，给出换算关系。
+\end{proof}
+
+\begin{theorem}[纤维时间的多重分形律由压强函数唯一确定]\label{thm:xi-fiber-time-multifractal-legendre}
+令局部指数为 \(\mathrm{Ind}_m(x)\)，定义消歧时间
+\[
+T_m(x):=\log \mathrm{Ind}_m(x).
+\]
+设极限压强
+\[
+P(s):=\lim_{m\to\infty}\frac1m\log\sum_{x\in X_m}e^{\,sT_m(x)}
+\]
+存在并在一区间可微。
+则 \(\frac1mT_m(X_m)\) 满足大偏差原理，其速率函数
+\[
+I(a)=\sup_s\{sa-P(s)\}.
+\]
+并且等值集
+\(
+E(a)=\{x:\lim_{m\to\infty}m^{-1}T_m(x)=a\}
+\)
+在时间度量 \(d_C\) 下的维数由 \(P\) 的 Legendre 数据显式给出。
+\end{theorem}
+
+\begin{proof}
+由 G\"artner--Ellis 条件（压强可微）得到速率函数。
+多重分形维数公式由大偏差与时间度量覆盖估计合并得到，参数化由同一 \(P\) 完成。
+\end{proof}
+
+\begin{theorem}[时间诱导 Dirichlet 形式：扩散与拉普拉斯的一元生成]\label{thm:xi-time-induced-dirichlet-form}
+在 \(\mathcal G^{(0)}\) 上定义跳跃核
+\[
+K_\lambda(x,dy)
+=
+\frac{1}{Z_\lambda(x)}
+\sum_{g:x\to y}
+e^{-\lambda\widetilde\ell(g)}\,\nu_x(dg),
+\]
+并令 \(L_\lambda\) 为对应马氏生成元。
+则存在唯一对称 Dirichlet 形式 \(\mathcal E_\lambda\) 使
+\[
+\mathcal E_\lambda(f,f)=\langle f,-L_\lambda f\rangle.
+\]
+其能量测度与模流生成元一致。
+若 \(\lambda\to\infty\) 极限存在，则最短时间距离可由 hitting-time 指数恢复：
+\[
+d_C(x,y)
+=
+\lim_{\lambda\to\infty}
+\frac{1}{\lambda}\log\mathbb E_x[\tau_y^{(\lambda)}].
+\]
+\end{theorem}
+
+\begin{proof}
+核 \(K_\lambda\) 满足详细平衡的对称化条件，故唯一闭 Dirichlet 形式存在。
+大偏差极限下，达到时间的指数率函数等于最短作用量，即 \(d_C\)。
+\end{proof}
+
+\begin{theorem}[时间悬挂流的普适性]\label{thm:xi-suspension-flow-universality}
+设 \((X_m,p_{m+1,m})\) 为尺度塔，\(\widetilde\ell_m\) 为各层严格可加时间，且存在屋顶函数 \(r_m:X_m\to\mathbb R_{>0}\) 与时间推进一致。
+则逆极限 \(X_\infty=\varprojlim X_m\) 上存在悬挂流 \(\phi^t\)（屋顶函数 \(r=\lim r_m\)），满足：
+对任意同时兼容全部投影且保持时间长度的动力系统 \((Y,\psi^t)\)，存在半共轭 \(\Pi:Y\to X_\infty\) 使
+\[
+\Pi\circ\psi^t=\phi^t\circ\Pi.
+\]
+故尺度一致动力学统一为时间悬挂流的因子表示。
+\end{theorem}
+
+\begin{proof}
+由层间一致性构造逆极限上的可测 return-time 结构。
+悬挂流由该 return map 与屋顶函数标准生成。
+任意兼容系统都诱导到同一逆极限坐标，得到半共轭交换关系。
+\end{proof}

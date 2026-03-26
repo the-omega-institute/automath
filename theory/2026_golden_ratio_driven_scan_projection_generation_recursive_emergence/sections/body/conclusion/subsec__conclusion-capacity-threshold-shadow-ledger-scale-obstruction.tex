@@ -1,0 +1,259 @@
+\subsection{容量完备、阈值分裂与账本--尺度障碍}\label{subsec:conclusion-capacity-threshold-shadow-ledger-scale-obstruction}
+沿用定理 \ref{thm:pom-oracle-capacity-stieltjes-inversion-mellin}、定理 \ref{thm:xi-capacity-tail-histogram-moment-complete-statistic}、定理 \ref{thm:xi-time-part62df-capacity-curve-complete-inversion}、推论 \ref{cor:conclusion-renyi-universal-defect-oracle-rate-identification}、定理 \ref{thm:xi-full-microstate-exact-inversion-bitrate-threshold}、定理 \ref{thm:conclusion-frozen-phase-statistical-inversion-exponent-splitting}、定理 \ref{thm:conclusion-finite-prime-solenoid-terminal-object}、定理 \ref{thm:conclusion-finite-prime-localization-pontryagin-rigidity}、定理 \ref{thm:pom-resonance-mod2-finite-bit-automaticity} 与定理 \ref{thm:xi-resonance-closure-no-finite-lp-summability} 的记号。前述链条已经分别把容量曲线对纤维谱的完备编译、几乎全恢复与全精确反演的两类位率门槛、冻结相的统计/可逆指数分裂、局部化 prime-register 的一圆维 Lie 可见层，以及共振窗奇偶阴影的有限比特周期结构固定下来。把这些接口并置之后，还可进一步压出一条跨容量几何、峰值障碍、有限域阴影、prime-register 账本与多尺度复访成本的综合链。
+
+\begin{theorem}[整数预算成功曲线的完备决定性]\label{thm:conclusion-integer-budget-curve-complete-profile}
+固定分辨率 \(m\)，定义整数预算成功曲线
+\[
+\mathscr S_m(s)
+:=
+2^{-m}\sum_{x\in X_m}\min\bigl(d_m(x),s\bigr)
+\qquad (s\in\ZZ_{\ge 0}).
+\]
+则整条函数 \(s\mapsto \mathscr S_m(s)\) 与下列对象彼此唯一决定：
+\begin{enumerate}
+  \item 纤维多重度直方图
+  \[
+  n_m(k):=\#\{x\in X_m:\ d_m(x)=k\};
+  \]
+  \item 连续容量曲线
+  \[
+  \mathcal C_m(u):=\sum_{x\in X_m}\min\bigl(d_m(x),u\bigr)\qquad (u\ge 0);
+  \]
+  \item 尾计数函数
+  \[
+  N_m(u):=\#\{x\in X_m:\ d_m(x)>u\}\qquad (u\ge 0);
+  \]
+  \item 全部正实阶幂和矩
+  \[
+  S_m(a):=\sum_{x\in X_m}d_m(x)^a\qquad (a>0).
+  \]
+特别地，若另一套折叠系统 \((\widetilde X_m,\widetilde d_m)\) 满足
+\[
+\mathscr S_m(s)=\widetilde{\mathscr S}_m(s)
+\qquad (\forall\, s\in\ZZ_{\ge 0}),
+\]
+则两者在该分辨率上具有相同的纤维多重度多重集，并因而具有相同的连续容量、尾计数与全部正矩谱。
+\end{theorem}
+
+\begin{proof}
+由定义直接有
+\[
+\mathcal C_m(s)=2^m\mathscr S_m(s)
+\qquad (s\in\ZZ_{\ge 0}).
+\]
+因此整数预算成功曲线与连续容量曲线在全部整数节点上的取值列等价。再由定理 \ref{thm:xi-time-part62df-capacity-curve-complete-inversion} 与定理 \ref{thm:xi-capacity-tail-histogram-moment-complete-statistic}，整数节点上的容量列唯一决定纤维直方图；反向方向显然，因为直方图直接给出 \(\mathscr S_m(s)\)。
+
+进一步，由定理 \ref{thm:pom-oracle-capacity-stieltjes-inversion-mellin}，
+\[
+\mathcal C_m(u)=\int_0^u N_m(v)\,\dd v,
+\qquad
+S_m(a)=a\int_0^\infty u^{a-1}N_m(u)\,\dd u.
+\]
+故一旦容量曲线或直方图被确定，尾计数函数与全部正矩谱亦随之唯一确定；反之，直方图显然可由尾计数恢复。于是题述各类数据彼此唯一决定。证毕。
+\end{proof}
+
+\begin{corollary}[预算曲线的复杂度同型判据]\label{cor:conclusion-budget-curve-complexity-isomorphism}
+若两套折叠系统在固定分辨率 \(m\) 上具有相同的整数预算成功曲线 \(s\mapsto \mathscr S_m(s)\)，则任一仅依赖纤维多重度谱的最优恢复量都在两者之间一致；特别地，由连续容量、尾计数或矩谱所导出的全部纤维复杂度剖面完全相同。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-integer-budget-curve-complete-profile}，相同的整数预算成功曲线唯一确定同一纤维多重度多重集。任何只以该多重度谱为输入的恢复量因而必然一致。证毕。
+\end{proof}
+
+\begin{theorem}[体量阈值与峰值阈值的分离]\label{thm:conclusion-volume-peak-threshold-separation}
+在二进折叠主线中，记
+\[
+\rho_{\mathrm{vol}}:=\log_2\frac{2}{\varphi},
+\qquad
+\rho_{\mathrm{peak}}:=\frac{\alpha_\ast}{\log 2},
+\qquad
+\alpha_\ast:=\lim_{m\to\infty}\frac1m\log M_m.
+\]
+则存在两条来源不同的必要位率门槛：
+\begin{enumerate}
+  \item 若整数预算序列 \(B_m\) 满足
+  \[
+  \mathrm{Succ}^{\mathrm{bin}}_m(B_m)\longrightarrow 1,
+  \]
+  则
+  \[
+  \liminf_{m\to\infty}\frac{B_m}{m}\ge \rho_{\mathrm{vol}}.
+  \]
+  \item 设 \(\Lambda_m:\Omega_m\to\{0,1\}^{B_m}\) 为任意侧信息标签。若对每个充分大的 \(m\) 与每个 \(x\in X_m\)，映射
+  \[
+  \omega\longmapsto \bigl(\Fold_m(\omega),\Lambda_m(\omega)\bigr)
+  \]
+  在纤维 \(\Fold_m^{-1}(x)\) 上都为单射，则
+  \[
+  2^{B_m}\ge M_m,
+  \qquad
+  \liminf_{m\to\infty}\frac{B_m}{m}\ge \rho_{\mathrm{peak}}.
+  \]
+\end{enumerate}
+特别地，若 \(\alpha_\ast>\log(2/\varphi)\)，则
+\[
+\rho_{\mathrm{peak}}-\rho_{\mathrm{vol}}>0.
+\]
+因此全局体量障碍与局部峰值障碍一般并不重合。
+\end{theorem}
+
+\begin{proof}
+第一条正是推论 \ref{cor:conclusion-renyi-universal-defect-oracle-rate-identification} 的位率下界。
+
+对第二条，固定充分大的 \(m\)，取一条最大纤维 \(F_x:=\Fold_m^{-1}(x)\) 满足 \(|F_x|=M_m\)。若 \(\omega\mapsto(\Fold_m(\omega),\Lambda_m(\omega))\) 在 \(F_x\) 上单射，则不同的 \(\omega\in F_x\) 必对应不同的 \(B_m\)-比特标签；故标签空间 \(\{0,1\}^{B_m}\) 至少含有 \(M_m\) 个不同值，即
+\[
+2^{B_m}\ge M_m.
+\]
+取对数并除以 \(m\)，再令 \(m\to\infty\)，便得
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}\ge \frac{\alpha_\ast}{\log 2}=\rho_{\mathrm{peak}}.
+\]
+最后，若 \(\alpha_\ast>\log(2/\varphi)\)，则
+\[
+\rho_{\mathrm{peak}}-\rho_{\mathrm{vol}}
+=
+\frac{\alpha_\ast-\log(2/\varphi)}{\log 2}>0.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[冻结相中主导障碍的峰值定位]\label{cor:conclusion-frozen-phase-peak-obstruction-localization}
+若 \(\alpha_\ast^{(2)}<\alpha_\ast\) 且 \(a>a_{\mathrm c}\)，则冻结相中的全部平衡统计指数塌缩为 \(g_\ast\)，而精确可逆恢复的临界线性位率仍固定为 \(\alpha_\ast/\log 2\)。因而峰值阈值对应的并非可忽略的边缘异常层，而是冻结统计所集中到的主导纤维层。
+\end{corollary}
+
+\begin{proof}
+定理 \ref{thm:conclusion-frozen-escort-shannon-renyi-collapse} 已给出：当 \(a>a_{\mathrm c}\) 时，escort 测度在最大纤维层 \(A_m^{\max}\) 上指数集中。
+定理 \ref{thm:conclusion-frozen-phase-statistical-inversion-exponent-splitting} 已给出
+\[
+\mathfrak h_\theta(a)=g_\ast
+\qquad (1\le \theta\le \infty),
+\qquad
+\beta_{\mathrm{inv}}(a)=\frac{\alpha_\ast}{\log 2}.
+\]
+因此冻结相把全部平衡统计指数压缩到 \(g_\ast\)，却不改变精确可逆恢复所需的峰值位率。换言之，最难恢复的顶端纤维同时也是冻结统计的主导承载层。证毕。
+\end{proof}
+
+\begin{proposition}[共振窗奇偶阴影的常数内存塌缩]\label{prop:conclusion-parity-shadow-constant-memory-collapse}
+定义向量值奇偶阴影
+\[
+\mathbf s(m)
+:=
+\bigl(S_9(m)\bmod 2,\dots,S_{17}(m)\bmod 2\bigr)\in \FF_2^9.
+\]
+则存在某个 \(m_0\) 与函数
+\[
+F:\ZZ/16\ZZ\longrightarrow \FF_2^9
+\]
+使得对所有 \(m\ge m_0\) 都有
+\[
+\mathbf s(m)=F(m\bmod 16).
+\]
+因此，任一仅依赖 \(\mathbf s(m)\) 的流式审计器都可由一个内部状态数不超过 \(16\) 的确定有限自动机实现；特别地，这类奇偶阴影不可能充当容量曲线或纤维直方图的完备统计量。
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:pom-resonance-mod2-finite-bit-automaticity}，对每个 \(q\in\{9,\dots,17\}\) 都存在
+\[
+k_q=\left\lceil\log_2 b_q\right\rceil
+\]
+使得 \(S_q(m)\bmod 2\) 在充分大 \(m\) 上只依赖于 \(m\bmod 2^{k_q}\)。表 \ref{tab:fold_collision_charpoly_mod2_shadow_q9_17} 给出
+\[
+b_q\in\{4,6,8,10\},
+\]
+故对全部 \(q=9,\dots,17\) 都有 \(k_q\le 4\)。于是九维向量 \(\mathbf s(m)\) 在充分大 \(m\) 上统一只依赖于 \(m\bmod 16\)，即存在所述映射 \(F\)。
+
+因而只需记录当前余类 \(m\bmod 16\) 即可逐步更新 \(\mathbf s(m)\)，确定有限自动机的内部状态数至多为 \(16\)。另一方面，定理 \ref{thm:conclusion-integer-budget-curve-complete-profile} 表明容量曲线或纤维直方图在固定分辨率上是完备统计量，而 \(\mathbf s(m)\) 在长期段仅取有限多个值，故不可能充当此类完备统计量。证毕。
+\end{proof}
+
+\begin{proposition}[圆维轴与 prime-register 账本轴的严格正交]\label{prop:conclusion-circle-dimension-prime-ledger-strict-orthogonality}
+对任意有限素数集 \(S\subset\mathbb P\)，记
+\[
+G_S:=\ZZ[S^{-1}],
+\qquad
+\Sigma_S:=\widehat{G_S}.
+\]
+则成立：
+\begin{enumerate}
+  \item 存在短正合列
+  \[
+  0\longrightarrow \prod_{p\in S}\ZZ_p
+  \longrightarrow \Sigma_S
+  \longrightarrow \TT
+  \longrightarrow 0,
+  \qquad
+  \cdim^\ast(G_S)=1.
+  \]
+  \item \(\Sigma_S\cong \Sigma_T\) 当且仅当 \(S=T\)。
+  \item 不存在函数 \(F:[0,\infty)\to\NN\) 使得对所有有限 \(S\subset\mathbb P\) 都有
+  \[
+  |S|\le F\bigl(\cdim^\ast(G_S)\bigr).
+  \]
+\end{enumerate}
+换言之，连续圆维只记录唯一的一圆相位轴，而 prime-register 的规模与支撑完全滞留在全不连通账本核中。
+\end{proposition}
+
+\begin{proof}
+第一条由定理 \ref{thm:conclusion-finite-prime-solenoid-terminal-object} 与定理 \ref{thm:cdim-star-z1s-dual-extension} 直接给出。第二条正是定理 \ref{thm:conclusion-finite-prime-localization-pontryagin-rigidity} 的内容。
+
+若第三条中的函数 \(F\) 存在，则由 \(\cdim^\ast(G_S)=1\) 可得
+\[
+|S|\le F(1)
+\]
+对一切有限 \(S\subset\mathbb P\) 成立。但有限素数集的基数可以任意大，矛盾。故不存在此类函数。
+
+最后，由第二条可知真正决定 \(S\) 的正是核
+\[
+\prod_{p\in S}\ZZ_p,
+\]
+而不是恒等于 \(1\) 的圆维。证毕。
+\end{proof}
+
+\input{thm__conclusion-prime-register-ambient-ledger-debt}
+
+\begin{proposition}[共振闭包预算的 \texorpdfstring{$\ell^2$}{l2} 不可压缩性]\label{prop:conclusion-resonance-budget-no-l2-envelope}
+记 \(C_\varphi(u)\) 为黄金共振闭包常数序列。则不存在常数 \(K>0\) 与序列 \(w=(w_u)_{u\ge 1}\in \ell^2(\NN)\) 使得
+\[
+C_\varphi(u)\le K\,w_u
+\qquad (\forall\,u\ge 1).
+\]
+因此，任何试图以平方可和尾预算统一吸收全部多尺度共振复访成本的方案都不可能成立。
+\end{proposition}
+
+\begin{proof}
+若存在此类 \(K\) 与 \(w\in \ell^2(\NN)\)，则
+\[
+\sum_{u\ge 1}C_\varphi(u)^2
+\le
+K^2\sum_{u\ge 1}w_u^2
+<
+\infty.
+\]
+这与定理 \ref{thm:xi-resonance-closure-no-finite-lp-summability} 在 \(p=2\) 的情形矛盾。故所述平方可和包络不存在。证毕。
+\end{proof}
+
+\input{thm__conclusion-budgetcurve-histogram-capacity-bulkboundary}
+
+\paragraph{统一读法}
+上述综合链可压缩为
+\[
+\text{整数预算曲线}
+\Longrightarrow
+\text{纤维谱完备性}
+\Longrightarrow
+\text{体量/峰值阈值分离}
+\Longrightarrow
+\text{二维 ambient 充分而有限秩同态账本不足}
+\Longrightarrow
+\text{单寄存器实现与线性同态债务分裂}
+\Longrightarrow
+\text{奇偶阴影的有限状态塌缩}
+\Longrightarrow
+\text{圆维与 prime-register 正交}
+\Longrightarrow
+\text{bulk--boundary 联合有限完备审计}
+\Longrightarrow
+\text{共振复访预算的 }\ell^2\text{ 不可压缩性}.
+\]
+第一环给出复杂度的可测坐标，而且其一阶差分已经精确恢复尾计数与多重度直方图，因此全部 Mellin 矩、连续容量曲线、尾谱、压力谱与冻结阈值都经由预算层唯一因子化；第二环把全局体量障碍与局部峰值障碍分开，并进一步显影出容量指数下支在 \(\beta_c=\alpha_\ast/\log 2\) 处的普适折角；第三、第四环进一步说明：prime-register 的困难并不在于缺少一个固定低维 ambient，而在于任何保持乘法语义的有限秩加法账本都必然失败，因此实现层的一寄存器可序列化与结构层的线性同态债务严格并存；第五环说明低特征奇偶阴影只能提供有限状态投影；第六环排除了用单一连通圆维替代离散账本支撑的可能；第七环则把预算直方图、有限多个 dyadic Toeplitz 视界与单个端点探针拼接成 bulk--boundary 的联合有限完备审计；最后一环表明多尺度共振成本不能被平方可和尾项吸收。因而在本文固定的折叠口径下，逆向困难并不是单一复杂度标签，而是由容量几何、峰值纤维、ambient 实现/账本债务裂缝、有限域阴影、prime-register 核、bulk--boundary 审计耦合与尺度复访共同锁定的复合障碍。
+
+\endinput

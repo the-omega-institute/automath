@@ -1,0 +1,509 @@
+\paragraph{素数寄存器下的幂等投影与算术闭包}
+以下结果以素数寄存器的基本同构为背景：有限支撑指数向量
+\(
+r\in\NN^{(\mathcal P)}
+\)
+通过
+\(
+N(r)=\prod_{p\in\mathcal P}p^{r(p)}
+\)
+与正整数唯一分解等价，从而把乘法对象线性化到素数轴指数坐标。由此可将投影算法刻画为幂等端同态，并在估值系统内获得可审计的纯算术表达。
+
+\begin{theorem}[有限算法半群的素数估值算术化与自指合成律]\label{thm:killo-finite-semigroup-prime-valuation-arithmetization}
+设 \(n\ge 1\)，取两两不同的素数 \(q_0,\dots,q_{n-1}\)，并记
+\[
+[n]:=\{0,1,\dots,n-1\},
+\qquad
+S_n:=\left\{\,N=\prod_{i=0}^{n-1}q_i^{a_i}:a_i\in[n]\,\right\}.
+\]
+对 \(N\in S_n\) 定义
+\[
+f_N:[n]\to[n],\qquad f_N(i):=v_{q_i}(N).
+\]
+定义运算 \(\star\) 于 \(S_n\)：
+\[
+M\star N:=\prod_{i=0}^{n-1}q_i^{\,v_{q_{v_{q_i}(N)}}(M)}
+=\prod_{i=0}^{n-1}q_i^{\,f_M(f_N(i))}.
+\]
+则：
+\begin{enumerate}
+  \item 映射
+  \[
+  \Phi:S_n\to [n]^{[n]},\qquad \Phi(N)=f_N
+  \]
+  为双射；
+  \item \((S_n,\star)\) 与变换半群 \(([n]^{[n]},\circ)\) 同构，即
+  \[
+  f_{M\star N}=f_M\circ f_N,\qquad \forall\,M,N\in S_n.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+唯一分解给出
+\(
+N\leftrightarrow (v_{q_0}(N),\dots,v_{q_{n-1}}(N))
+\)
+的一一对应，故 \(\Phi\) 单射。任给 \(f:[n]\to[n]\)，取
+\[
+N_f:=\prod_{i=0}^{n-1}q_i^{f(i)}\in S_n,
+\]
+则 \(f_{N_f}=f\)，故 \(\Phi\) 满射。
+
+对任意 \(i\in[n]\)，
+\[
+v_{q_i}(M\star N)=v_{q_{v_{q_i}(N)}}(M)=f_M(f_N(i)),
+\]
+于是 \(f_{M\star N}=f_M\circ f_N\)。证毕。
+\end{proof}
+
+\begin{corollary}[投影幂等的素数寄存器方程]\label{cor:killo-projection-idempotent-prime-register}
+在定理 \ref{thm:killo-finite-semigroup-prime-valuation-arithmetization} 的设定下，对任意 \(N\in S_n\)，下列命题等价：
+\begin{enumerate}
+  \item \(f_N\) 为幂等映射；
+  \item \(N\star N=N\)；
+  \item 对一切 \(i\in[n]\) 有
+  \[
+  v_{q_{v_{q_i}(N)}}(N)=v_{q_i}(N).
+  \]
+\end{enumerate}
+若上述条件成立，则
+\[
+\operatorname{Im}(f_N)=\operatorname{Fix}(f_N)=\{\,j\in[n]:v_{q_j}(N)=j\,\}.
+\]
+\end{corollary}
+\begin{proof}
+由同构关系
+\(
+f_{M\star N}=f_M\circ f_N
+\)
+取 \(M=N\) 即得
+\[
+f_N^2=f_N\iff N\star N=N.
+\]
+再逐坐标比较 \(q_i\)-进估值，得与第 3 条等价。
+
+若 \(f_N\) 幂等，则 \(y=f_N(x)\Rightarrow f_N(y)=f_N(f_N(x))=f_N(x)=y\)，故 \(\operatorname{Im}(f_N)\subseteq\operatorname{Fix}(f_N)\)；反向包含显然，故二者相等。最后
+\[
+j\in\operatorname{Fix}(f_N)\iff f_N(j)=j\iff v_{q_j}(N)=j.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[链上规范投影的平方自由哥德尔像与 \(\gcd/\mathrm{lcm}\) 算术]\label{thm:killo-chain-interior-godel-gcd-lcm}
+设
+\[
+C_n=\{0<1<\cdots<n-1\}.
+\]
+称 \(I:C_n\to C_n\) 为内算子，若其满足单调、收缩与幂等：
+\[
+i\le j\Rightarrow I(i)\le I(j),\qquad I(i)\le i,\qquad I(I(i))=I(i).
+\]
+记 \(\mathrm{Int}(C_n)\) 为全体内算子，并以点态序
+\[
+I\preceq J\iff \forall i,\ I(i)\le J(i)
+\]
+赋偏序。取素数 \(q_0,\dots,q_{n-1}\)。对 \(I\in\mathrm{Int}(C_n)\) 定义平方自由像
+\[
+\kappa(I):=\prod_{i\in\mathrm{Fix}(I)}q_i,
+\qquad
+\mathrm{Fix}(I):=\{i\in[n]:I(i)=i\}.
+\]
+则：
+\begin{enumerate}
+  \item \(\mathrm{Int}(C_n)\) 与
+  \[
+  \mathcal F_n:=\{F\subseteq[n]:0\in F\}
+  \]
+  双射，对应为
+  \[
+  F\longmapsto I_F,\qquad
+  I_F(i):=\max\{\,j\in F:j\le i\,\},
+  \]
+  且 \(\mathrm{Fix}(I_F)=F\)；
+  \item \((\mathrm{Int}(C_n),\preceq)\) 构成分配格，且
+  \[
+  \mathrm{Fix}(I\wedge J)=\mathrm{Fix}(I)\cap\mathrm{Fix}(J),\qquad
+  \mathrm{Fix}(I\vee J)=\mathrm{Fix}(I)\cup\mathrm{Fix}(J);
+  \]
+  \item \(\kappa\) 将该格严格算术化为平方自由整数整除格：
+  \[
+  \kappa(I\wedge J)=\gcd(\kappa(I),\kappa(J)),\qquad
+  \kappa(I\vee J)=\mathrm{lcm}(\kappa(I),\kappa(J)).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+给定 \(I\in\mathrm{Int}(C_n)\)，令 \(F=\mathrm{Fix}(I)\)。收缩性给出 \(I(0)=0\)，故 \(0\in F\)。对任意 \(i\)，\(I(i)\in F\) 且 \(I(i)\le i\)，故
+\[
+I(i)\le \max(F\cap\{0,\dots,i\})=:m_i.
+\]
+若严格小于 \(m_i\)，则由单调性
+\(
+m_i=I(m_i)\le I(i)
+\)
+矛盾，故 \(I(i)=m_i=I_F(i)\)。反向验证 \(I_F\) 的三性质直接成立，且不动点集恰为 \(F\)。从而得第 1 条。
+
+由第 1 条可知
+\[
+I_F\preceq I_G\iff F\subseteq G,
+\]
+故格运算对应集合交并，即第 2 条成立。
+
+最后，\(\kappa(I_F)\) 为平方自由整数，\(\gcd\) 与 \(\mathrm{lcm}\) 分别对应素数集合交与并，故与第 2 条一致，得第 3 条。证毕。
+\end{proof}
+
+\begin{theorem}[链型幂等元诱导的规范 Boolean 交半格]\label{thm:killo-prime-register-chain-idempotent-boolean-meet}
+沿用定理 \ref{thm:killo-finite-semigroup-prime-valuation-arithmetization} 与定理 \ref{thm:killo-chain-interior-godel-gcd-lcm} 的记号，记
+\[
+\mathcal B_{n-1}:=\{F\subseteq [n]:0\in F\},
+\qquad
+N_F:=\Phi^{-1}(I_F),
+\qquad
+E_n^{\mathrm{ch}}:=\{N_F:F\in\mathcal B_{n-1}\}\subseteq S_n.
+\]
+在 \(E_n^{\mathrm{ch}}\) 上定义由链内算子格 \(\mathrm{Int}(C_n)\) 的 meet 传来的运算
+\[
+N_F\wedge_{\mathrm{ch}}N_G
+:=
+\Phi^{-1}(I_F\wedge I_G).
+\]
+则对任意 \(F,G\in\mathcal B_{n-1}\) 都有
+\[
+N_F\wedge_{\mathrm{ch}}N_G=N_{F\cap G}.
+\]
+因此，映射 \(F\mapsto N_F\) 给出 Boolean 交半格 \((\mathcal B_{n-1},\cap)\) 与 \((E_n^{\mathrm{ch}},\wedge_{\mathrm{ch}})\) 之间的同构。若进一步定义
+\[
+\kappa(N_F):=\kappa(I_F)=\prod_{i\in F}q_i,
+\]
+则有
+\[
+\kappa(N_F\wedge_{\mathrm{ch}}N_G)=\gcd(\kappa(N_F),\kappa(N_G)).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:killo-chain-interior-godel-gcd-lcm}，映射
+\[
+F\longmapsto I_F
+\]
+把 \(\mathcal B_{n-1}\) 与 \(\mathrm{Int}(C_n)\) 双射，并满足
+\[
+I_F\wedge I_G=I_{F\cap G}.
+\]
+再由定理 \ref{thm:killo-finite-semigroup-prime-valuation-arithmetization}，\(\Phi:S_n\to[n]^{[n]}\) 为双射，故
+\[
+N_F\wedge_{\mathrm{ch}}N_G
+=
+\Phi^{-1}(I_F\wedge I_G)
+=
+\Phi^{-1}(I_{F\cap G})
+=
+N_{F\cap G}.
+\]
+于是 \(F\mapsto N_F\) 把集合交严格传到 \((E_n^{\mathrm{ch}},\wedge_{\mathrm{ch}})\) 上，从而得到所述 Boolean 交半格同构。
+
+最后，由定理 \ref{thm:killo-chain-interior-godel-gcd-lcm} 的算术化公式，
+\[
+\kappa(I_F\wedge I_G)=\gcd(\kappa(I_F),\kappa(I_G)).
+\]
+代入 \(I_F\wedge I_G=I_{F\cap G}\) 即得
+\[
+\kappa(N_F\wedge_{\mathrm{ch}}N_G)=\gcd(\kappa(N_F),\kappa(N_G)).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[链型幂等元 Boolean 交半格的最小生成系与唯一标准形]\label{thm:killo-prime-register-chain-idempotent-boolean-rank}
+沿用定理 \ref{thm:killo-prime-register-chain-idempotent-boolean-meet} 的记号。对每个 \(j=1,\dots,n-1\)，令
+\[
+F^{(j)}:=[n]\setminus\{j\},
+\qquad
+E_j:=N_{F^{(j)}}\in E_n^{\mathrm{ch}}.
+\]
+则 \((E_n^{\mathrm{ch}},\wedge_{\mathrm{ch}})\) 由 \(\{E_1,\dots,E_{n-1}\}\) 生成；任何生成集的基数至少为 \(n-1\)；从而
+\[
+\operatorname{rank}_{\wedge}(E_n^{\mathrm{ch}})=n-1.
+\]
+并且每个 \(N_F\in E_n^{\mathrm{ch}}\) 都具有唯一标准形
+\[
+N_F=\bigwedge_{j\notin F}E_j,
+\]
+其中右端为空 meet 时约定其值为顶元 \(N_{[n]}\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:killo-prime-register-chain-idempotent-boolean-meet}，
+\[
+\bigwedge_{j\notin F}E_j
+=
+N_{\bigcap_{j\notin F}F^{(j)}}
+=
+N_F,
+\]
+因为
+\[
+\bigcap_{j\notin F}\bigl([n]\setminus\{j\}\bigr)=F.
+\]
+故 \(\{E_1,\dots,E_{n-1}\}\) 生成整个 \(E_n^{\mathrm{ch}}\)。
+
+再证最小性。设 \(\{N_{G_1},\dots,N_{G_r}\}\subseteq E_n^{\mathrm{ch}}\) 生成 \(E_n^{\mathrm{ch}}\)。由交半格运算的定义，所有可生成元素恰为
+\[
+\left\{
+\bigwedge_{j\in J}N_{G_j}:J\subseteq [r]
+\right\}
+=
+\left\{
+N_{\bigcap_{j\in J}G_j}:J\subseteq [r]
+\right\}.
+\]
+对 complements 置
+\[
+H_j:=[n]\setminus G_j\subseteq\{1,\dots,n-1\},
+\]
+则这些交集的 complements 正好是各个并集
+\[
+\bigcup_{j\in J}H_j.
+\]
+故不同可生成元素最多只有 \(2^r\) 个。另一方面，
+\[
+|E_n^{\mathrm{ch}}|
+=
+|\mathcal B_{n-1}|
+=
+2^{n-1}.
+\]
+于是必有 \(2^r\ge 2^{n-1}\)，即 \(r\ge n-1\)。结合上一步的显式生成集，得到最小生成数恰为 \(n-1\)。
+
+唯一标准形来自 Boolean 交半格的唯一补集描述：集合 \(F\) 由其缺失坐标集 \([n]\setminus F\) 唯一决定，故对应的 meet 表达也唯一。证毕。
+\end{proof}
+
+\begin{proposition}[可寻址哥德尔化外置的最坏情形信息代价]\label{prop:killo-addressable-godelization-info-cost}
+设 \(\Sigma\) 为有限字母表且 \(|\Sigma|\ge 2\)。对每个长度 \(T\)，设有单射编码
+\[
+E_T:\Sigma^T\hookrightarrow \NN_{\ge 1}.
+\]
+假设该编码满足可寻址性：存在互异素数 \(p_1,\dots,p_T\) 与解码函数 \(\delta_t:\NN\to\Sigma\) 使得
+\[
+s_t=\delta_t\!\bigl(v_{p_t}(E_T(s))\bigr),\qquad
+\forall s=(s_1,\dots,s_T)\in\Sigma^T,\ \forall t\le T.
+\]
+则存在常数 \(c>0\) 与输入 \(s^\star\in\Sigma^T\) 使
+\[
+\log E_T(s^\star)\ge \sum_{t=1}^T\log p_t\ge c\,T\log T.
+\]
+特别地，最坏情形信息规模至少为 \(\Omega(T\log T)\)。
+\end{proposition}
+\begin{proof}
+固定 \(t\)。由 \(|\Sigma|\ge2\)，可取
+\(
+\sigma_t\in\Sigma\setminus\{\delta_t(0)\}
+\)。
+令
+\(
+s^\star:=(\sigma_1,\dots,\sigma_T)\in\Sigma^T
+\)。
+若对某 \(t\) 有 \(v_{p_t}(E_T(s^\star))=0\)，则
+\[
+s_t^\star
+=\delta_t\!\bigl(v_{p_t}(E_T(s^\star))\bigr)
+=\delta_t(0),
+\]
+与 \(s_t^\star=\sigma_t\neq\delta_t(0)\) 矛盾。故
+\(
+v_{p_t}(E_T(s^\star))\ge 1
+\)
+对全部 \(t\) 成立，从而
+\[
+E_T(s^\star)\ge \prod_{t=1}^T p_t,
+\qquad
+\log E_T(s^\star)\ge \sum_{t=1}^T\log p_t.
+\]
+
+将 \(\{p_t\}_{t=1}^T\) 升序重排为 \(p_{(1)}<\cdots<p_{(T)}\)，记 \(\varpi_t\) 为第 \(t\) 个素数，则 \(p_{(t)}\ge \varpi_t\)，故
+\[
+\sum_{t=1}^T\log p_t
+=\sum_{t=1}^T\log p_{(t)}
+\ge \sum_{t=1}^T\log \varpi_t
+=\vartheta(\varpi_T)\sim \varpi_T\sim T\log T
+\]
+（\(\vartheta\) 为 Chebyshev 函数，最后一步由素数定理）。故存在 \(c>0\) 使对充分大 \(T\) 有
+\[
+\sum_{t=1}^T\log p_t\ge cT\log T.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[素数加权二维读出的椭圆型高斯极限指纹]\label{thm:killo-prime-weighted-elliptic-fingerprint-clt}
+设 \(p_t\) 为互异素数序列，\(u_t\in\RR^2\) 为确定性向量，\(\xi_t\) 为独立同分布实随机变量，满足
+\[
+\EE[\xi_t]=0,\qquad
+\EE[\xi_t^2]=\sigma^2\in(0,\infty),\qquad
+\EE[|\xi_t|^{2+\eta}]<\infty
+\]
+（某 \(\eta>0\)）。定义
+\[
+S_T:=\sum_{t=1}^T (\log p_t)\,u_t\,\xi_t\in\RR^2,
+\qquad
+V_T:=\sum_{t=1}^T (\log p_t)^2\,u_tu_t^\top.
+\]
+并假设：
+\[
+\operatorname{tr}(V_T)\to\infty,\qquad
+\frac{\max_{1\le t\le T}(\log p_t)^2\|u_t\|^2}{\operatorname{tr}(V_T)}\to 0,\qquad
+\frac{V_T}{\operatorname{tr}(V_T)}\to \Sigma_\infty
+\]
+其中 \(\Sigma_\infty\) 为正定 \(2\times2\) 矩阵。则
+\[
+\bigl(\operatorname{tr}(V_T)\bigr)^{-1/2}S_T
+\xRightarrow[T\to\infty]{}
+\mathcal N\bigl(0,\sigma^2\Sigma_\infty\bigr).
+\]
+因此极限密度等值线为椭圆，其主轴方向与轴长比分别由 \(\Sigma_\infty\) 的特征向量与特征值决定。
+\end{theorem}
+\begin{proof}
+令
+\[
+a_{T,t}:=\frac{(\log p_t)u_t}{\sqrt{\operatorname{tr}(V_T)}},
+\qquad
+\bigl(\operatorname{tr}(V_T)\bigr)^{-1/2}S_T=\sum_{t=1}^T a_{T,t}\xi_t.
+\]
+由第二个假设，\(\max_{t\le T}\|a_{T,t}\|\to 0\)。
+
+取任意 \(\theta\in\RR^2\)，设 \(b_{T,t}:=\theta^\top a_{T,t}\)。则
+\[
+\sum_{t=1}^T b_{T,t}\xi_t
+\]
+为标量三角阵。其方差满足
+\[
+\sum_{t=1}^T b_{T,t}^2
+=\theta^\top\frac{V_T}{\operatorname{tr}(V_T)}\theta
+\longrightarrow
+\theta^\top\Sigma_\infty\theta.
+\]
+对任意 \(\varepsilon>0\)，由 \(2+\eta\) 矩条件与 Markov 不等式，
+\[
+\sum_{t=1}^T\EE\!\left[b_{T,t}^2\xi_t^2\mathbf 1_{\{|b_{T,t}\xi_t|>\varepsilon\}}\right]
+\le
+\frac{\EE|\xi_1|^{2+\eta}}{\varepsilon^\eta}\sum_{t=1}^T|b_{T,t}|^{2+\eta}
+\le
+\frac{\EE|\xi_1|^{2+\eta}}{\varepsilon^\eta}
+\bigl(\max_{t\le T}|b_{T,t}|^\eta\bigr)\sum_{t=1}^T b_{T,t}^2
+\to 0.
+\]
+故 Lindeberg 条件成立。由标量 Lindeberg--Feller 定理，
+\[
+\sum_{t=1}^T b_{T,t}\xi_t
+\xRightarrow[T\to\infty]{}
+\mathcal N\!\bigl(0,\sigma^2\,\theta^\top\Sigma_\infty\theta\bigr).
+\]
+再由 Cram\'er--Wold 装置得到向量收敛
+\[
+\sum_{t=1}^T a_{T,t}\xi_t
+\xRightarrow[T\to\infty]{}
+\mathcal N(0,\sigma^2\Sigma_\infty).
+\]
+结论成立。
+\end{proof}
+
+\begin{corollary}[素数加权二维读出的角向极限律与 \texorpdfstring{$\Sigma_\infty$}{Sigma infty} 的唯一恢复]\label{cor:killo-prime-weighted-angular-law-sigma-recovery}
+在定理 \ref{thm:killo-prime-weighted-elliptic-fingerprint-clt} 的设定下，记
+\[
+Y_T:=\bigl(\operatorname{tr}(V_T)\bigr)^{-1/2}S_T.
+\]
+在事件 \(Y_T\neq 0\) 上令
+\[
+U_T:=\frac{Y_T}{\|Y_T\|}\in S^1,
+\]
+并在 \(Y_T=0\) 时任取一个固定点作为延拓。则 \(U_T\) 在 \(S^1\) 上依分布收敛到某个极限随机变量 \(U\)。若写
+\[
+U=\bigl(\cos\Theta,\sin\Theta\bigr),\qquad \Theta\in[0,2\pi),
+\]
+则 \(\Theta\) 关于角变量 \(\theta\) 的密度为
+\[
+\boxed{\;
+f_{\Sigma_\infty}(\theta)=
+\frac{1}{2\pi\sqrt{\det\Sigma_\infty}}
+\Bigl(u(\theta)^\top\Sigma_\infty^{-1}u(\theta)\Bigr)^{-1},
+\qquad
+u(\theta):=(\cos\theta,\sin\theta).
+\;}
+\]
+等价地，极限角向分布仅由 \(\Sigma_\infty\) 决定，并且因为
+\[
+\operatorname{tr}\Sigma_\infty=1,
+\]
+该角向密度唯一恢复 \(\Sigma_\infty\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:killo-prime-weighted-elliptic-fingerprint-clt}，
+\[
+Y_T\xRightarrow[T\to\infty]{}Y\sim \mathcal N(0,\sigma^2\Sigma_\infty).
+\]
+由于 \(\Sigma_\infty\) 正定，极限高斯分布具有处处连续密度，从而
+\[
+\PP(Y=0)=0.
+\]
+因此映射 \(x\mapsto x/\|x\|\) 在极限分布支撑上几乎处处连续，连续映射定理给出
+\[
+U_T\xRightarrow[T\to\infty]{}U:=\frac{Y}{\|Y\|}.
+\]
+
+记 \(\Sigma:=\Sigma_\infty\)。随机向量 \(Y\) 的平面密度为
+\[
+\frac{1}{2\pi\sigma^2\sqrt{\det\Sigma}}
+\exp\!\left(-\frac{1}{2\sigma^2}x^\top\Sigma^{-1}x\right).
+\]
+写 \(x=ru(\theta)\)（其中 \(r>0\)、\(\theta\in[0,2\pi)\)），则 Jacobian 为 \(r\,\dd r\,\dd\theta\)。故角变量 \(\Theta\) 的密度满足
+\[
+f_\Sigma(\theta)
+=
+\int_0^\infty
+\frac{1}{2\pi\sigma^2\sqrt{\det\Sigma}}
+\exp\!\left(
+-\frac{r^2}{2\sigma^2}u(\theta)^\top\Sigma^{-1}u(\theta)
+\right)
+r\,\dd r.
+\]
+对
+\[
+a(\theta):=u(\theta)^\top\Sigma^{-1}u(\theta)>0
+\]
+应用积分公式
+\[
+\int_0^\infty r\,e^{-a(\theta)r^2/(2\sigma^2)}\,\dd r
+=\frac{\sigma^2}{a(\theta)},
+\]
+即得所示闭式密度。
+
+再由
+\[
+\operatorname{tr}\!\left(\frac{V_T}{\operatorname{tr}(V_T)}\right)=1
+\]
+对每个 \(T\) 都成立，极限满足 \(\operatorname{tr}\Sigma_\infty=1\)。若两个正定矩阵 \(\Sigma_1,\Sigma_2\) 给出相同角向密度，则对一切 \(\theta\) 有
+\[
+\frac{1}{\sqrt{\det\Sigma_1}}
+\Bigl(u(\theta)^\top\Sigma_1^{-1}u(\theta)\Bigr)^{-1}
+=
+\frac{1}{\sqrt{\det\Sigma_2}}
+\Bigl(u(\theta)^\top\Sigma_2^{-1}u(\theta)\Bigr)^{-1}.
+\]
+等价地，存在常数
+\[
+c=\sqrt{\det\Sigma_2/\det\Sigma_1}>0
+\]
+使
+\[
+u(\theta)^\top\Sigma_1^{-1}u(\theta)
+=
+c\,u(\theta)^\top\Sigma_2^{-1}u(\theta)
+\qquad
+(\forall\,\theta).
+\]
+两边都是 \((\cos\theta,\sin\theta)\) 上的二维二次型，故必有
+\[
+\Sigma_1^{-1}=c\,\Sigma_2^{-1},
+\qquad\text{从而}\qquad
+\Sigma_1=c^{-1}\Sigma_2.
+\]
+结合 \(\operatorname{tr}\Sigma_1=\operatorname{tr}\Sigma_2=1\)，得到 \(c=1\)，即 \(\Sigma_1=\Sigma_2\)。证毕。
+\end{proof}
+
+上述结果给出一条闭合链：函数合成在素数估值坐标中转写为自指代换律；投影幂等对应可审计的估值方程；全序兼容的规范投影经由链内算子格的传递 meet 诱导出链型 Boolean 交半格，并在平方自由整数上实现 \(\gcd/\mathrm{lcm}\) 同构；可寻址外置的最坏情形代价达到 \(\Omega(T\log T)\)；二维统计读出则在素数权重下产生椭圆型高斯极限指纹，而其角向边际进一步唯一编码归一化协方差矩阵 \(\Sigma_\infty\)。

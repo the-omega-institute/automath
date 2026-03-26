@@ -1,0 +1,202 @@
+\paragraph{Cartesian 幂模型的双原子凝聚、切向极限与椭圆输运}
+以下把迭代层级 \(d\) 视为唯一外参，并以 \(d\to\infty\) 的尺度极限刻画单位圆 Lee--Yang 零点云的两尺度几何：宏观上原子化，切向上复苏为一维连续测度；在 Joukowsky--Gödel 椭圆输运下，该切向高斯极限进一步诱导各向异性的二次像。
+
+\begin{theorem}[Cartesian 幂的 Lee--Yang 零点双原子凝聚与切向中心极限定理]\label{thm:xi-cartesian-power-leyang-double-atom-tangent-clt}
+设 \(G\) 为有限无向图，邻接矩阵为 \(A\in\RR^{N\times N}\)，其谱（按重数）为 \(\{\lambda_j\}_{j=1}^{N}\subset\RR\)。
+记谱半径与归一化谱测度
+\[
+\rho:=\max_{1\le j\le N}|\lambda_j|,
+\qquad
+\nu_G:=\frac1N\sum_{j=1}^{N}\delta_{\lambda_j},
+\qquad
+\sigma^2:=\int \lambda^2\,d\nu_G(\lambda)=\frac1N\sum_{j=1}^{N}\lambda_j^2.
+\]
+对每个 \(d\in\NN\)，令 \(G^{\square d}\) 为 \(d\) 次 Cartesian 幂，记其邻接矩阵为 \(A_d\)。
+定义缩放后的特征多项式
+\[
+P_{G,d}(t):=\det\!\Bigl(t I_{N^d}-\frac{2}{d\rho}A_d\Bigr),
+\]
+并作 Lee--Yang 提升
+\[
+L_{G,d}(z):=z^{N^d}P_{G,d}(z+z^{-1}).
+\]
+令 \(\mathcal Z_{G,d}\subset\TT\) 为 \(L_{G,d}\) 的零点多重集，并定义其经验测度
+\[
+\mu_{G,d}:=\frac1{|\mathcal Z_{G,d}|}\sum_{\zeta\in\mathcal Z_{G,d}}\delta_{\zeta}.
+\]
+则当 \(d\to\infty\) 时成立：
+\begin{enumerate}
+  \item \textup{（双原子凝聚）}\(\mu_{G,d}\Longrightarrow \tfrac12\delta_{i}+\tfrac12\delta_{-i}\)。
+  \item \textup{（切向 CLT）}在上半圆以 \(\zeta=e^{i\theta}\)（\(\theta\in(0,\pi)\)）作角坐标，并定义切向放大映射
+  \[
+  B_d(e^{i\theta}):=\sqrt d\Bigl(\theta-\frac{\pi}{2}\Bigr)\in\RR.
+  \]
+  记上半圆条件化测度
+  \[
+  \mu_{G,d}^{+}
+  :=\frac{\mu_{G,d}\restriction_{\theta\in(0,\pi)}}{\mu_{G,d}(\theta\in(0,\pi))},
+  \]
+  并置 \(\nu_{G,d}:=(B_d)_*\mu_{G,d}^{+}\)，则
+  \[
+  \nu_{G,d}\Longrightarrow \mathcal N\!\Bigl(0,\frac{\sigma^2}{\rho^2}\Bigr).
+  \]
+  同理，在凝聚点 \(-i=e^{i3\pi/2}\) 处以相同尺度展开亦成立。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+由 Cartesian 积的谱性质，\(A_d\) 的全部特征值多重集恰为
+\[
+\left\{\lambda_{j_1}+\cdots+\lambda_{j_d}:\ 1\le j_k\le N\right\},
+\]
+其按重数归一化的谱测度为 \(\nu_G^{*d}\)。
+因此 \(P_{G,d}\) 的根可写为
+\[
+t=\frac{2}{d\rho}(\lambda_{j_1}+\cdots+\lambda_{j_d})\in[-2,2],
+\]
+从而方程 \(z+z^{-1}=t\) 在单位圆上给出一对根 \(z=e^{\pm i\theta}\)（其中 \(t=2\cos\theta\)）。
+等价地，令 \(X_1,X_2,\dots\overset{\mathrm{i.i.d.}}{\sim}\nu_G\) 并置
+\[
+U_d:=\frac{1}{d\rho}\sum_{k=1}^{d}X_k,
+\]
+则 \(\mu_{G,d}\) 是把 \(U_d\) 经 \(u\mapsto e^{\pm i\arccos(u)}\) 推送后的对称化像测度。
+注意 \(\EE[X_k]=\tfrac1N\mathrm{tr}(A)=0\) 且 \(\mathrm{Var}(X_k)=\sigma^2\)，故经典中心极限定理给出
+\[
+\sqrt d\,U_d=\frac{1}{\rho\sqrt d}\sum_{k=1}^{d}X_k
+\Longrightarrow
+\mathcal N\!\Bigl(0,\frac{\sigma^2}{\rho^2}\Bigr),
+\]
+从而 \(U_d\to 0\) 依概率收敛。
+由 \(\arccos(u)\to \pi/2\)（\(u\to 0\)）及正负号对称性，立得零点宏观凝聚到 \(\pm i\) 且权重各半，得到第一条。
+\par
+进一步，\(\arccos\) 在 \(0\) 处可微且 \(\arccos'(0)=-1\)，由 Delta 方法
+\[
+\sqrt d\left(\arccos(U_d)-\frac{\pi}{2}\right)
+=-\sqrt d\,U_d+o_{\PP}(1)
+\Longrightarrow
+\mathcal N\!\Bigl(0,\frac{\sigma^2}{\rho^2}\Bigr).
+\]
+将 \(\theta=\arccos(U_d)\) 视为上半圆角坐标，并把上述收敛转写为 \((B_d)_*\) 的测度收敛，即得第二条。证毕。
+\end{proof}
+
+\begin{theorem}[Joukowsky--Gödel 椭圆输运下的各向异性二次极限律]\label{thm:xi-cartesian-power-joukowsky-godel-anisotropic-parabola}
+取 \(r>1\)，定义 Joukowsky--Gödel 变换
+\[
+J_r(z):=rz+r^{-1}z^{-1}.
+\]
+在定理 \ref{thm:xi-cartesian-power-leyang-double-atom-tangent-clt} 的设定下，令 \(\zeta_d\) 依上半圆条件化测度 \(\mu_{G,d}^{+}\) 抽样，并置 \(W_d:=J_r(\zeta_d)\)。
+记椭圆上端点 \(w_\star:=i(r-r^{-1})\)。
+则当 \(d\to\infty\) 时存在 \(Y\sim\mathcal N(0,\sigma^2/\rho^2)\) 使得
+\[
+\Bigl(\ \sqrt d\,\Re(W_d-w_\star),\ d\,\Im(W_d-w_\star)\ \Bigr)
+\Longrightarrow
+\Bigl(\ -(r+r^{-1})Y,\ -\frac{r-r^{-1}}{2}Y^2\Bigr).
+\]
+特别地，极限支持于抛物线
+\[
+\Im=\ -\frac{r-r^{-1}}{2(r+r^{-1})^2}\,(\Re)^2.
+\]
+\end{theorem}
+
+\begin{proof}
+写 \(\zeta_d=e^{i\theta_d}\)，并令 \(\Delta_d:=\theta_d-\pi/2\) 为 \(i\) 处的角偏差。
+由定理 \ref{thm:xi-cartesian-power-leyang-double-atom-tangent-clt} 的切向 CLT，有 \(\sqrt d\,\Delta_d\Rightarrow Y\)。
+对 \(\theta=\pi/2+\Delta\) 作泰勒展开：
+\[
+\cos(\pi/2+\Delta)=-\Delta+O(\Delta^3),
+\qquad
+\sin(\pi/2+\Delta)=1-\Delta^2/2+O(\Delta^4).
+\]
+又
+\[
+J_r(e^{i\theta})=(r+r^{-1})\cos\theta+i(r-r^{-1})\sin\theta,
+\]
+故
+\[
+W_d-w_\star
+=(r+r^{-1})\cos\theta_d+i(r-r^{-1})(\sin\theta_d-1),
+\]
+从而
+\[
+\Re(W_d-w_\star)=-(r+r^{-1})\Delta_d+O(\Delta_d^3),
+\qquad
+\Im(W_d-w_\star)=-(r-r^{-1})\frac{\Delta_d^2}{2}+O(\Delta_d^4).
+\]
+两式分别乘以 \(\sqrt d\) 与 \(d\) 并用 \(\Delta_d=O_{\PP}(d^{-1/2})\) 即得
+\[
+\sqrt d\,\Re(W_d-w_\star)=-(r+r^{-1})\sqrt d\,\Delta_d+o_{\PP}(1),
+\qquad
+d\,\Im(W_d-w_\star)=-\frac{r-r^{-1}}{2}(\sqrt d\,\Delta_d)^2+o_{\PP}(1).
+\]
+由连续映射定理与 Slutsky 定理给出联合收敛。证毕。
+\end{proof}
+
+\begin{theorem}[超立方体维数的边界二阶统计可读出性]\label{thm:xi-hypercube-dimension-readable-from-leyang-angular-variance}
+令 \(H_d:=K_2^{\square d}\) 为 \(d\) 维超立方体图，其邻接谱为 \(\{d-2k\}_{k=0}^{d}\)（重数 \(\binom{d}{k}\)）。
+沿用定理 \ref{thm:xi-cartesian-power-leyang-double-atom-tangent-clt} 的缩放口径（此处基图谱半径为 \(1\)，故 \(\rho=1\)），相应的单位圆 Lee--Yang 角可取
+\[
+\theta_{d,k}:=\arccos\!\Bigl(1-\frac{2k}{d}\Bigr)\in[0,\pi],
+\]
+并按权重 \(\binom{d}{k}/2^d\) 出现（单位圆上再与 \(\pm\theta_{d,k}\) 配对）。
+定义边界二阶统计量
+\[
+M_d:=\sum_{k=0}^{d}\frac{\binom{d}{k}}{2^d}\left(\theta_{d,k}-\frac{\pi}{2}\right)^2.
+\]
+则当 \(d\to\infty\) 时有渐近展开
+\[
+d\,M_d=1+\frac1d+O\!\Bigl(\frac1{d^2}\Bigr),
+\qquad
+\frac1{M_d}=d-1+O\!\Bigl(\frac1d\Bigr).
+\]
+因此，超立方体维数 \(d\) 可由 Lee--Yang 零点角云的单一二阶边界统计量在渐近意义下反演。
+\end{theorem}
+
+\begin{proof}
+令 \(K\sim\mathrm{Bin}(d,\tfrac12)\)，并置
+\[
+U_d:=1-\frac{2K}{d}\in[-1,1],
+\qquad
+\Theta_d:=\arccos(U_d),
+\]
+则 \(M_d=\EE\bigl[(\Theta_d-\pi/2)^2\bigr]\)。
+由二项分布的中心矩计算得
+\[
+\EE[U_d^2]=\frac1d,
+\qquad
+\EE[U_d^4]=\frac{3}{d^2}-\frac{2}{d^3},
+\qquad
+\EE[U_d^6]=\frac{15}{d^3}+O\!\Bigl(\frac1{d^4}\Bigr),
+\]
+并且由 \(|U_d|\le 1\) 有 \(\EE[U_d^8]=O(d^{-4})\)。
+另一方面，\(\arccos\) 在 \(0\) 处的泰勒展开为
+\[
+\arccos(u)-\frac{\pi}{2}
+=-u-\frac{u^3}{6}-\frac{3u^5}{40}+O(u^7),
+\]
+故平方后
+\[
+\left(\arccos(u)-\frac{\pi}{2}\right)^2
+=u^2+\frac13u^4+\frac{8}{45}u^6+O(u^8).
+\]
+取期望并代入上述矩，得到
+\[
+M_d=\frac1d+\frac1{d^2}+O\!\Bigl(\frac1{d^3}\Bigr),
+\]
+从而 \(dM_d=1+\frac1d+O(d^{-2})\)。
+再由 \(\frac1{1+x}=1-x+O(x^2)\)（\(x\to 0\)）得到 \(\frac1{M_d}=d-1+O(d^{-1})\)。证毕。
+\end{proof}
+
+\begin{corollary}[圆维的两尺度跃迁：切向维数复苏]\label{cor:xi-leyang-tangent-dimension-resurrection}
+在定理 \ref{thm:xi-cartesian-power-leyang-double-atom-tangent-clt} 的设定下，\(\mu_{G,d}\) 的宏观弱极限为纯原子测度 \(\tfrac12(\delta_i+\delta_{-i})\)，其 Hausdorff 维数为 \(0\)。
+而在凝聚点 \(i\) 处的切向推前测度
+\[
+\nu_{G,d}:=(B_d)_*\mu_{G,d}^{+}
+\]
+收敛到高斯测度 \(\mathcal N(0,\sigma^2/\rho^2)\)，从而任一非平凡切向极限测度皆与该高斯测度绝对连续等价并为 exact-dimensional，且其 Hausdorff 维数为 \(1\)。
+\end{corollary}
+
+\begin{proof}
+第一条由定理 \ref{thm:xi-cartesian-power-leyang-double-atom-tangent-clt} 的双原子凝聚立得。
+第二条由同一定理的切向 CLT 立得；高斯测度在 \(\RR\) 上绝对连续且具有正的有限密度，故为 exact-dimensional 且 Hausdorff 维数为 \(1\)。证毕。
+\end{proof}
+

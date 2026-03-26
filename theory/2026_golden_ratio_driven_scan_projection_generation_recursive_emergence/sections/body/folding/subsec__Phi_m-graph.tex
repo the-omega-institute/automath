@@ -1,0 +1,58 @@
+\subsection{诱导过程与转移结构：显式有限标记图}\label{subsec:Phi_m-graph}
+
+下面给出 $Y_m$ 的一个完全显式的 sofic 图表示，从而刻画“将 $\Fold_m$ 沿长轨迹连续重叠窗口施加后，输出过程的状态/转移结构”。
+
+\begin{definition}[长度 \texorpdfstring{$m-1$}{m-1} 后缀状态图]\label{def:G_m}
+令顶点集为
+\[
+V_m:=\{0,1\}^{m-1}.
+\]
+对任意顶点 $v=v_1\cdots v_{m-1}\in V_m$ 与任意 $b\in\{0,1\}$，定义一条有向边
+\[
+e=(v,b):\ v\to v':=v_2\cdots v_{m-1}b,
+\]
+并用 $\ell_m(e)\in X_m$ 标记该边：
+\[
+\ell_m(e):=\Fold_m(v_1\cdots v_{m-1}b)\in X_m.
+\]
+由此得到一个有限标记图 $G_m=(V_m,E_m,\ell_m)$，其中 $|V_m|=2^{m-1}$，$|E_m|=2^{m}$。
+\end{definition}
+
+\begin{theorem}[显式 sofic 表示与可计算诱导结构]\label{thm:Phi_m-sofic-graph}
+令 $Z_m\subset E_m^{\ZZ}$ 为图 $G_m$ 的双边边移位（即双边路径空间），并令
+\[
+(\mathcal{L}_m(e))_t:=\ell_m(e_t)\in X_m
+\]
+为逐边取标记得到的序列。则
+\[
+Y_m=\mathcal{L}_m(Z_m),
+\]
+从而 $Y_m$ 是一个由 $G_m$ 给出的 sofic 子移位；并且 $G_m$ 给出一个可审计的有限状态诱导结构：状态为长度 $m-1$ 的输入后缀，转移为追加一比特，输出为对应窗口经 $\Fold_m$ 的稳定类型。
+\end{theorem}
+
+\begin{proof}
+\textbf{（包含 $\subset$）} 给定任意输入序列 $s\in\{0,1\}^{\ZZ}$，定义
+\[
+v_t:=s_t s_{t+1}\cdots s_{t+m-2}\in V_m,\qquad
+e_t:=(v_t,s_{t+m-1})\in E_m.
+\]
+则 $e=(e_t)_{t\in\ZZ}$ 是 $G_m$ 上的一条双边路径（因为 $v_{t+1}$ 恰为 $v_t$ 去首加尾的更新）。并且由标记定义，
+\[
+(\mathcal{L}_m(e))_t=\ell_m(e_t)=\Fold_m(s_t\cdots s_{t+m-1})=(\Phi_m(s))_t.
+\]
+因此 $\Phi_m(s)\in \mathcal{L}_m(Z_m)$，即 $Y_m\subset \mathcal{L}_m(Z_m)$。
+
+\textbf{（包含 $\supset$）} 反之，取任意双边路径 $e=(e_t)\in Z_m$。每条边 $e_t$ 具有形式 $(v_t,b_t)$，且路径条件保证 $v_{t+1}$ 等于 $v_t$ 去首加尾的更新。由此可一致地构造一个二元序列 $s\in\{0,1\}^{\ZZ}$：令 $s_{t+m-1}:=b_t$，并用 $v_t$ 提供窗口的其余 $m-1$ 位（路径相容性保证该定义不矛盾）。于是对该 $s$ 有
+\[
+(\Phi_m(s))_t=\Fold_m(s_t\cdots s_{t+m-1})=\Fold_m(v_t b_t)=\ell_m(e_t)=(\mathcal{L}_m(e))_t.
+\]
+因此 $\mathcal{L}_m(e)\in Y_m$，从而 $\mathcal{L}_m(Z_m)\subset Y_m$。两边相等，证毕。
+\end{proof}
+
+\input{cor__Phi_m-entropy-no-drop}
+
+\input{subsec__Phi_m-conjugacy}
+
+\begin{remark}[关于 Markov 性与可计算近似]\label{rem:Phi_m-not-markov}
+定理 \ref{thm:Phi_m-sofic-graph} 给出的是\emph{拓扑/组合}层面的有限状态表示：$Y_m$ 的所有允许序列由有限图刻画。但对任意输入过程（例如第 \ref{sec:experiments} 节的旋转扫描产生的 Sturmian 序列），其推前测度 $(\Phi_m)_*\mu$ 在 $Y_m$ 上未必是一阶马尔可夫测度。若需要“诱导转移结构”的数值近似，可在图 $G_m$ 上用长样本估计边/状态频率，从而得到一个可审计的有限状态 Markov 近似；该近似与第 \ref{sec:quant-fit} 节的直方图/偏差指标对齐。
+\end{remark}

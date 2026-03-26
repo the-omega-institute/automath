@@ -1,0 +1,121 @@
+\begin{proposition}[碰撞素数处节点分裂符号的二次特征判别]\label{prop:xi-terminal-zm-delta-ca5-collision-node-splitting-legendre}
+沿用结论 \ref{con:xi-terminal-zm-delta-a5-fixedfield-hyperelliptic-genus2} 的属 \(2\) 超椭圆曲线
+\[
+C_{A_5}:\quad s^2=(\delta-4)\,B_5(\delta),
+\]
+并取碰撞素数 \(p\in P_2=\{17,37,223,3739,7333\}\)。
+由结论 \ref{con:xi-terminal-zm-delta-b5-bad-reduction-primes-collision-fingerprint}，\(B_5\bmod p\) 在 \(\FF_p\) 上恰有一处二重根，记为 \(\delta=r_p\in\FF_p\)。
+记 \(x_p:=(r_p,0)\) 为 \(C_{A_5,\FF_p}\) 的唯一节点，并令 \(\varepsilon_p\in\{\pm 1\}\) 表示其分裂符号（分裂取 \(+1\)，非分裂取 \(-1\)）。
+则有显式判别：
+\[
+\varepsilon_p=\left(\frac{u_p}{p}\right),
+\qquad
+u_p:=\left.\frac{(\delta-4)\,B_5''(\delta)}{2}\right|_{\delta=r_p}\in\FF_p^\times.
+\]
+在本例中，
+\[
+\varepsilon_{17}=+1,\qquad
+\varepsilon_{37}=\varepsilon_{223}=\varepsilon_{3739}=\varepsilon_{7333}=-1,
+\]
+并且对应的节点参数满足
+\[
+u_{17}\equiv 15\ (17),\quad
+u_{37}\equiv 29\ (37),\quad
+u_{223}\equiv 10\ (223),\quad
+u_{3739}\equiv 3694\ (3739),\quad
+u_{7333}\equiv 6699\ (7333).
+\]
+\end{proposition}
+\begin{proof}
+在 \(\FF_p[\delta]\) 中写
+\(
+B_5(\delta)=(\delta-r_p)^2 g(\delta)
+\)
+且 \(g(r_p)\neq 0\)。
+则在节点 \(x_p\) 的邻域，
+\[
+(\delta-4)B_5(\delta)=(\delta-r_p)^2\cdot (\delta-4)g(\delta),
+\]
+归一化由 \(v:=s/(\delta-r_p)\) 给出，从而得到局部模型
+\[
+v^2=(\delta-4)g(\delta).
+\]
+因此节点在 \(\FF_p\) 上分裂当且仅当 \((r_p-4)g(r_p)\in(\FF_p^\times)^2\)，即
+\(
+\varepsilon_p=\left(\frac{(r_p-4)g(r_p)}{p}\right)
+\)。
+\par
+另一方面，对恒等式 \(B_5(\delta)=(\delta-r_p)^2g(\delta)\) 作二阶导并代入 \(\delta=r_p\) 得
+\[
+B_5''(r_p)=2g(r_p),
+\]
+从而
+\(
+(r_p-4)g(r_p)=\left.\frac{(\delta-4)B_5''(\delta)}{2}\right|_{\delta=r_p}=u_p
+\)。
+于是 \(\varepsilon_p=\left(\frac{u_p}{p}\right)\) 成立。
+\par
+在本例中，
+\[
+B_5''(\delta)=1000000\,\delta^3+1633344\,\delta^2+364656\,\delta-53424,
+\]
+将结论 \ref{con:xi-terminal-zm-delta-b5-bad-reduction-primes-collision-fingerprint} 给出的 \(r_p\) 代入并在 \(\FF_p\) 中化简得到所列 \(u_p\)，再由 Euler 判别式确定平方类即可得到 \(\varepsilon_p\) 的取值。
+可复现核验脚本为 \texttt{scripts/exp\_xi\_delta\_ca5\_semistable\_local\_factors\_audit.py}。证毕。
+\end{proof}
+
+\begin{proposition}[非分歧碰撞素数处的符号由二次分辨子域控制]\label{prop:xi-terminal-zm-delta-ca5-collision-node-sign-unramified-quadratic}
+令
+\[
+d:=-140267=-17\cdot 37\cdot 223,
+\]
+并沿用结论 \ref{con:xi-terminal-zm-delta-b5-discriminant-ramification-quadratic} 的二次分辨子域
+\(
+\QQ(\sqrt{\Disc(B_5)})=\QQ(\sqrt d)
+\)。
+则对两条“非分歧碰撞素数” \(p\in\{3739,7333\}\)（即 \(p\nmid d\)），
+命题 \ref{prop:xi-terminal-zm-delta-ca5-collision-node-splitting-legendre} 的节点参数 \(u_p\) 满足更强的平方类一致性
+\[
+u_p\in d\cdot(\FF_p^\times)^2,
+\]
+从而
+\[
+\varepsilon_p=\left(\frac{u_p}{p}\right)=\left(\frac{d}{p}\right)
+\qquad(p\in\{3739,7333\}).
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:xi-terminal-zm-delta-ca5-collision-node-splitting-legendre} 的显式同余，
+\(
+u_{3739}\equiv 3694
+\)
+与
+\(
+u_{7333}\equiv 6699
+\)。
+将 \(d\) 在对应素数处取逆并在 \(\FF_p\) 中检查
+\(
+u_p d^{-1}\in(\FF_p^\times)^2
+\)
+即可得到 \(u_p\) 与 \(d\) 在 \(\FF_p^\times/(\FF_p^\times)^2\) 中属于同一平方类。
+于是二次特征满足 \(\left(\frac{u_p}{p}\right)=\left(\frac{d}{p}\right)\)，从而得到所示 \(\varepsilon_p\) 恒等式。
+可复现核验脚本为 \texttt{scripts/exp\_xi\_delta\_ca5\_semistable\_local\_factors\_audit.py}。证毕。
+\end{proof}
+
+\begin{remark}[可计算不变量链条：节点数据、群论统计与二次特征的同构锁定]\label{rem:xi-terminal-zm-delta-collision-node-invariants-chain}
+命题 \ref{prop:xi-terminal-zm-delta-ca5-collision-node-splitting-legendre}--\ref{prop:xi-terminal-zm-delta-ca5-collision-node-sign-unramified-quadratic}
+与定理 \ref{thm:xi-terminal-zm-delta-s5-intermediate-quotient-collision-nodal-count}--\ref{thm:xi-terminal-zm-delta-s5-collision-node-sign-zeta-factorization}
+在同一符号体系内把三类对象统一为一组可直接计算的不变量：
+\begin{itemize}
+  \item 几何侧：碰撞退化的节点数 \(n_{H,p}\) 与归一化属数 \(g(\widetilde Y_{H,\FF_p})\)；
+  \item 群论侧：中间商 \(Y_H=X/H\) 的共轭类统计量 \(\bigl(a(H),b(H)\bigr)\)；
+  \item 算术侧：二次分辨子域 \(\QQ(\sqrt{\Disc(B_5)})=\QQ(\sqrt d)\) 的 Frobenius 二次特征 \(\left(\frac{d}{p}\right)\)（在 \(p\nmid d\) 的碰撞素数上与节点符号 \(\varepsilon_p\) 一致）。
+\end{itemize}
+它们共同决定稳定纤维的节点数、归一化属数以及 Lee--Yang 型的 \(\zeta\)-校正因子
+\(
+(1-\varepsilon_p t)^{n_{H,p}}
+\)
+的零点位置（\(t=\pm 1\)），从而把“边界退化”的几何数据与一维非分歧二次特征（亦即局部 Langlands 参数的最简分量）在同一条可审计链条上锁定。
+\end{remark}
+
+\endinput
+

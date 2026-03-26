@@ -1,0 +1,540 @@
+\begin{theorem}[Lee--Yang 根谱的逐根可加性：纤维条件 KL 的 Bernoulli 分解]\label{thm:pom-fiber-leyang-kl-bernoulli-decomposition}
+固定 \(m\ge 1\) 与 \(x\in X_m\)，并沿用定理 \ref{thm:pom-fiber-biased-posterior-poisson-binomial} 的 Lee--Yang 根分解
+\[
+Z_x(z)=C_x\prod_{j=1}^{d_x}\left(1+\frac{z}{\alpha_{x,j}}\right),
+\qquad
+\alpha_{x,j}>0,
+\qquad
+q_{x,j}(t):=\frac{t}{t+\alpha_{x,j}}.
+\]
+则对任意 \(p,q\in(0,1)\) 与 \(t_p=p/(1-p)\)、\(t_q=q/(1-q)\) 有严格恒等式
+\[
+D_{\mathrm{KL}}\!\left(\mu_{m,p}(\cdot\mid x)\,\middle\|\,\mu_{m,q}(\cdot\mid x)\right)
+=\sum_{j=1}^{d_x}
+D_{\mathrm{KL}}\!\left(\mathrm{Bern}(q_{x,j}(t_p))\,\middle\|\,\mathrm{Bern}(q_{x,j}(t_q))\right).
+\]
+\end{theorem}
+\begin{proof}
+对任意 \(\alpha>0\) 定义 \(q(t)=t/(t+\alpha)\)。
+直接计算 Bernoulli 相对熵得
+\[
+D_{\mathrm{KL}}\!\left(\mathrm{Bern}(q(t_p))\,\middle\|\,\mathrm{Bern}(q(t_q))\right)
+=q(t_p)\log\frac{t_p}{t_q}-\log\frac{\alpha+t_p}{\alpha+t_q}.
+\]
+对 \(\alpha=\alpha_{x,j}\) 求和并注意
+\[
+\sum_{j=1}^{d_x}q_{x,j}(t_p)=\EE_{\mu_{m,p}(\cdot\mid x)}[R_{x,p}]
+\]
+（定理 \ref{thm:pom-fiber-biased-posterior-poisson-binomial}）以及
+\[
+\log\frac{Z_x(t_p)}{Z_x(t_q)}
+=\sum_{j=1}^{d_x}\log\frac{\alpha_{x,j}+t_p}{\alpha_{x,j}+t_q}
+\]
+（由根分解取对数）即得
+\[
+\sum_{j=1}^{d_x}
+D_{\mathrm{KL}}\!\left(\mathrm{Bern}(q_{x,j}(t_p))\,\middle\|\,\mathrm{Bern}(q_{x,j}(t_q))\right)
+=\EE[R_{x,p}\mid x]\log\frac{t_p}{t_q}-\log\frac{Z_x(t_p)}{Z_x(t_q)}.
+\]
+与定理 \ref{thm:pom-fiber-biased-conditional-kl-chain} 的闭式 \eqref{eq:pom-fiber-biased-conditional-kl-closed} 一致，故结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[Lee--Yang 根谱的逐根可加性：纤维条件 R\'enyi 散度分解]\label{thm:pom-fiber-leyang-renyi-bernoulli-decomposition}
+固定 \(m\ge 1\) 与 \(x\in X_m\)，并沿用定理 \ref{thm:pom-fiber-biased-posterior-poisson-binomial} 的记号。
+对 \(s>0\)、\(s\neq 1\)，定义有限样本空间上的 R\'enyi 散度
+\[
+D_s(P\|Q):=\frac{1}{s-1}\log\sum_{\omega}P(\omega)^sQ(\omega)^{1-s}.
+\]
+则对任意 \(p,q\in(0,1)\) 有恒等式
+\[
+D_s\!\left(\mu_{m,p}(\cdot\mid x)\,\middle\|\,\mu_{m,q}(\cdot\mid x)\right)
+=\sum_{j=1}^{d_x}
+D_s\!\left(\mathrm{Bern}(q_{x,j}(t_p))\,\middle\|\,\mathrm{Bern}(q_{x,j}(t_q))\right).
+\]
+并且当 \(s\to 1\) 时该分解连续退化为定理 \ref{thm:pom-fiber-leyang-kl-bernoulli-decomposition} 的 KL 分解。
+\end{theorem}
+\begin{proof}
+由 \(\mu_{m,p}(\omega\mid x)=t_p^{r(\omega)}/Z_x(t_p)\) 得
+\[
+\sum_{\omega\in\Fold_m^{-1}(x)}\mu_{m,p}(\omega\mid x)^s\mu_{m,q}(\omega\mid x)^{1-s}
+=\frac{Z_x(t_p^s t_q^{1-s})}{Z_x(t_p)^s Z_x(t_q)^{1-s}}.
+\]
+将根分解代入并逐因子化简，得到
+\[
+\frac{Z_x(t_p^s t_q^{1-s})}{Z_x(t_p)^s Z_x(t_q)^{1-s}}
+=\prod_{j=1}^{d_x}
+\frac{\alpha_{x,j}+t_p^s t_q^{1-s}}{(\alpha_{x,j}+t_p)^s(\alpha_{x,j}+t_q)^{1-s}}.
+\]
+另一方面，对 \(q(t)=t/(t+\alpha)\) 有恒等式
+\[
+q(t_p)^s q(t_q)^{1-s}+\bigl(1-q(t_p)\bigr)^s\bigl(1-q(t_q)\bigr)^{1-s}
+=\frac{\alpha+t_p^s t_q^{1-s}}{(\alpha+t_p)^s(\alpha+t_q)^{1-s}}.
+\]
+因此取对数并除以 \(s-1\) 得到逐根相加的 R\'enyi 分解。
+极限 \(s\to 1\) 的连续性在有限样本空间上是标准事实，故可退化得到 KL 情形。证毕。
+\end{proof}
+
+\begin{corollary}[条件 Chernoff 信息的严格凸谱表达与唯一极小点]\label{cor:pom-fiber-leyang-chernoff-unique-minimizer}
+固定 \(m\ge 1\) 与 \(x\in X_m\)，取 \(p,q\in(0,1)\)。
+定义条件 Chernoff 信息
+\[
+\mathcal{C}_x(p,q)
+:=
+-\log\!\left(\inf_{s\in[0,1]}\sum_{\omega}\mu_{m,p}(\omega\mid x)^s\,\mu_{m,q}(\omega\mid x)^{1-s}\right).
+\]
+则有变分表示
+\[
+\mathcal{C}_x(p,q)
+=\max_{s\in[0,1]}
+\Bigl(
+s\log Z_x(t_p)+(1-s)\log Z_x(t_q)-\log Z_x(t_p^s t_q^{1-s})
+\Bigr),
+\]
+并且函数
+\[
+s\ \longmapsto\ \log Z_x(t_p^s t_q^{1-s})-s\log Z_x(t_p)-(1-s)\log Z_x(t_q)
+\]
+在 \((0,1)\) 上凸；
+若 \(p\neq q\) 且 \(Z_x\) 非常值，则其在 \((0,1)\) 上严格凸，从而 \(\mathcal{C}_x(p,q)\) 的极小点唯一（等价地，上述对偶极大点唯一）。
+进一步，借助 Lee--Yang 根分解可写成
+\[
+\mathcal{C}_x(p,q)
+=\max_{s\in[0,1]}\sum_{j=1}^{d_x}
+\Bigl(
+s\log(\alpha_{x,j}+t_p)+(1-s)\log(\alpha_{x,j}+t_q)-\log(\alpha_{x,j}+t_p^s t_q^{1-s})
+\Bigr).
+\]
+\end{corollary}
+\begin{proof}
+由 R\'enyi “幂平均”恒等式（定理 \ref{thm:pom-fiber-leyang-renyi-bernoulli-decomposition} 的证明）得
+\(
+\sum_{\omega}\mu_{m,p}(\omega\mid x)^s\mu_{m,q}(\omega\mid x)^{1-s}
+=Z_x(t_p^s t_q^{1-s})/(Z_x(t_p)^s Z_x(t_q)^{1-s})
+\)。
+代入定义并取 \(-\log\)，得到所示对偶极大形式。
+\par
+令 \(A(\eta):=\log Z_x(e^\eta)\) 且 \(\eta_p=\log t_p\)、\(\eta_q=\log t_q\)，并记 \(\eta(s)=s\eta_p+(1-s)\eta_q\)。
+则上式中的括号项恰为
+\(
+A(\eta(s))-sA(\eta_p)-(1-s)A(\eta_q)
+\)。
+由指数族性质 \(A''(\eta)=\mathrm{Var}(R_{x,p}\mid x)\ge 0\) 可得该 Jensen 差的二阶导数为
+\(
+\frac{\dd^2}{\dd s^2}\bigl(A(\eta(s))-sA(\eta_p)-(1-s)A(\eta_q)\bigr)
+=(\eta_p-\eta_q)^2A''(\eta(s))
+\)，
+从而该函数在 \((0,1)\) 上凸；并且当 \(p\neq q\) 且 \(Z_x\) 非常值时，\(A''(\eta(s))>0\) 导出严格凸性并从而极小点唯一。
+最后一式由根分解把 \(\log Z_x\) 写成求和后逐项展开即得。证毕。
+\end{proof}
+
+\begin{proposition}[由条件 KL 曲线反演 Lee--Yang 根谱]\label{prop:pom-fiber-leyang-roots-identifiable-from-kl-curve}
+固定 \(m\ge 1\) 与 \(x\in X_m\)，并令
+\[
+D_x(t\,\|\,t_0):=D_{\mathrm{KL}}\!\left(\mu_{m,p(t)}(\cdot\mid x)\,\middle\|\,\mu_{m,p(t_0)}(\cdot\mid x)\right),
+\qquad
+p(t):=\frac{t}{1+t}.
+\]
+若函数 \(t\mapsto D_x(t\,\|\,t_0)\) 在某个开区间 \(I\subset(0,\infty)\) 上可观测，则 \(\log Z_x(t)\) 在 \(I\) 上可由 \(D_x(\cdot\,\|\,t_0)\) 唯一恢复至多差一个与 \(t\) 无关的加性常数。
+从而 \(Z_x\) 的 Lee--Yang 根多重集合 \(\{\alpha_{x,j}\}_{j=1}^{d_x}\) 被 \(D_x(\cdot\,\|\,t_0)\) 唯一确定。
+\end{proposition}
+\begin{proof}
+令自然参数 \(\eta=\log t\)，并定义对数配分函数 \(A(\eta):=\log Z_x(e^\eta)\)。
+由定理 \ref{thm:pom-fiber-biased-conditional-kl-chain} 的闭式 \eqref{eq:pom-fiber-biased-conditional-kl-closed} 可整理为
+\[
+D_x(e^\eta\,\|\,e^{\eta_0})
+=A'(\eta)(\eta-\eta_0)-\bigl(A(\eta)-A(\eta_0)\bigr),
+\qquad \eta_0:=\log t_0.
+\]
+对 \(\eta\) 求导得
+\[
+\frac{\dd}{\dd\eta}D_x(e^\eta\,\|\,e^{\eta_0})
+=A''(\eta)(\eta-\eta_0),
+\]
+从而在 \(\eta\neq\eta_0\) 处有
+\(
+A''(\eta)=\bigl(\frac{\dd}{\dd\eta}D_x(e^\eta\,\|\,e^{\eta_0})\bigr)/(\eta-\eta_0)
+\)。
+因此 \(D_x(\cdot\,\|\,t_0)\) 在开区间上确定 \(A''\)，进而两次积分确定 \(A\) 在该区间上至多差一个仿射函数。
+但 \(A(\eta)=\log Z_x(e^\eta)\) 在 \(\eta\to-\infty\) 时有界（因 \(Z_x(0)=C_x\in(0,\infty)\)），迫使该仿射不确定性无斜率项，仅余加性常数。
+最后，由 \(Z_x\) 在开区间上的值（至多差乘性常数）即可唯一决定其根集合；乘性常数不影响根谱，故 \(\{\alpha_{x,j}\}\) 被唯一确定。证毕。
+\end{proof}
+
+\paragraph{纤维后验的谱几何闭合}
+在上述逐根散度分解之外，均值响应、阶乘累积与局部判别几何也都可由同一 Lee--Yang 根谱完全编码。
+
+\begin{theorem}[纤维后验均值响应的 complete Bernstein 刻画与根谱恢复]\label{thm:pom-fiber-mean-response-complete-bernstein-root-recovery}
+固定 \(m\ge 1\) 与 \(x\in X_m\)。沿用定理 \ref{thm:pom-fiber-biased-posterior-poisson-binomial} 的记号，定义
+\[
+M_x(t):=\EE[R_{x,p}\mid x],
+\qquad
+t=\frac{p}{1-p}\in(0,\infty),
+\]
+并记
+\[
+\nu_x:=\sum_{j=1}^{d_x}\delta_{\alpha_{x,j}}.
+\]
+则
+\[
+M_x(t)
+=
+\sum_{j=1}^{d_x}\frac{t}{t+\alpha_{x,j}}
+=
+\int_{(0,\infty)}\frac{t}{t+\alpha}\,\dd\nu_x(\alpha).
+\]
+并且：
+\begin{enumerate}
+  \item \(M_x\) 是一个有理 complete Bernstein 函数；更具体地，对任意 \(n\ge 1\) 都有
+  \[
+  (-1)^{n-1}M_x^{(n)}(t)
+  =
+  n!\sum_{j=1}^{d_x}\frac{\alpha_{x,j}}{(t+\alpha_{x,j})^{n+1}}
+  >0,
+  \qquad t>0.
+  \]
+  \item \(M_x\) 在任一非空开区间上的限制唯一决定 Lee--Yang 根多重集合 \(\{\alpha_{x,j}\}_{j=1}^{d_x}\)。
+  \item 更一般地，任意有限原子计数测度
+  \[
+  \nu=\sum_{j=1}^{d}\delta_{\alpha_j}
+  \qquad(\alpha_j>0,\ \text{允许重复})
+  \]
+  唯一对应有理函数
+  \[
+  M_\nu(t):=\int_{(0,\infty)}\frac{t}{t+\alpha}\,\dd\nu(\alpha)
+  =
+  \sum_{j=1}^{d}\frac{t}{t+\alpha_j},
+  \]
+  并且 \(\nu\) 可由 \(M_\nu\) 唯一恢复。
+\end{enumerate}
+特别地，在本文的纤维后验类中，均值响应 \(M_x\) 与 Lee--Yang 根谱计数测度 \(\nu_x\) 构成一一对应。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-biased-posterior-poisson-binomial}，
+\[
+M_x(t)=\sum_{j=1}^{d_x}q_{x,j}(t)=\sum_{j=1}^{d_x}\frac{t}{t+\alpha_{x,j}},
+\]
+即得积分表示。
+由于核函数 \(t\mapsto t/(t+\alpha)\) 给出标准的 complete Bernstein 表示，故 \(M_x\) 为有理 complete Bernstein 函数。
+另一方面，
+\[
+\frac{\dd^n}{\dd t^n}\frac{t}{t+\alpha}
+=
+(-1)^{n-1}n!\frac{\alpha}{(t+\alpha)^{n+1}},
+\qquad n\ge 1,
+\]
+逐项求导便得到第一条。
+
+若两组正数多重集合 \(\{\alpha_j\}\)、\(\{\beta_k\}\) 在某个非空开区间上诱导相同函数
+\[
+\sum_j\frac{t}{t+\alpha_j}
+=
+\sum_k\frac{t}{t+\beta_k},
+\]
+则二者差是一个在开区间上恒为零的有理函数，因而恒等于零。
+比较极点位置与留数，即得两组多重集合完全一致。
+同理，对任意有限原子计数测度 \(\nu\)，其对应函数 \(M_\nu\) 的极点恰为 \(-\alpha_j\) 且留数为 \(-\alpha_j\) 乘以相应重数，故 \(\nu\) 与 \(M_\nu\) 彼此唯一确定。
+证毕。
+\end{proof}
+
+\begin{theorem}[纤维后验的阶乘累积量闭式、符号交替与对数凸性]\label{thm:pom-fiber-factorial-cumulants-sign-logconvex}
+沿用定理 \ref{thm:pom-fiber-biased-posterior-poisson-binomial} 与定理
+\ref{thm:pom-fiber-mean-response-complete-bernstein-root-recovery} 的记号。
+定义条件阶乘累积母函数
+\[
+\Psi_x(u;t):=
+\log\EE\!\left[(1+u)^{R_{x,p}}\mid x\right]
+=
+\log\frac{Z_x(t(1+u))}{Z_x(t)},
+\]
+并记其 \(n\) 阶阶乘累积量为
+\[
+\kappa^{[F]}_{x,n}(t)
+:=
+\left.\frac{\partial^n}{\partial u^n}\Psi_x(u;t)\right|_{u=0}.
+\]
+则对任意 \(n\ge 1\) 都有闭式
+\[
+\kappa^{[F]}_{x,n}(t)
+=
+(-1)^{n-1}(n-1)!\sum_{j=1}^{d_x}q_{x,j}(t)^n.
+\]
+因此：
+\begin{enumerate}
+  \item 对任意 \(n\ge 1\) 与 \(t>0\)，
+  \[
+  (-1)^{n-1}\kappa^{[F]}_{x,n}(t)>0.
+  \]
+  \item 若定义
+  \[
+  a_{x,n}(t):=\frac{(-1)^{n-1}}{(n-1)!}\kappa^{[F]}_{x,n}(t)
+  =
+  \sum_{j=1}^{d_x}q_{x,j}(t)^n,
+  \]
+  则对任意 \(n\ge 2\)，
+  \[
+  a_{x,n}(t)^2\le a_{x,n-1}(t)\,a_{x,n+1}(t).
+  \]
+  \item 方差满足
+  \[
+  t\,M_x'(t)
+  =
+  \mathrm{Var}(R_{x,p}\mid x)
+  =
+  M_x(t)+\kappa^{[F]}_{x,2}(t).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-biased-posterior-poisson-binomial} 的乘积分解，
+\[
+\EE\!\left[(1+u)^{R_{x,p}}\mid x\right]
+=
+\prod_{j=1}^{d_x}\bigl(1+q_{x,j}(t)u\bigr),
+\]
+故
+\[
+\Psi_x(u;t)
+=
+\sum_{j=1}^{d_x}\log\bigl(1+q_{x,j}(t)u\bigr).
+\]
+对任意常数 \(c>0\)，直接求导得
+\[
+\left.\frac{\partial^n}{\partial u^n}\log(1+cu)\right|_{u=0}
+=
+(-1)^{n-1}(n-1)!c^n.
+\]
+取 \(c=q_{x,j}(t)\) 并逐项求和，即得阶乘累积量闭式与符号交替律。
+
+第二条由正数列 \(\{q_{x,j}(t)\}\) 的幂和不等式得到：
+\[
+\left(\sum_j q_{x,j}(t)^n\right)^2
+\le
+\left(\sum_j q_{x,j}(t)^{n-1}\right)
+\left(\sum_j q_{x,j}(t)^{n+1}\right),
+\]
+这正是 Cauchy--Schwarz 不等式应用于向量
+\(\bigl(q_{x,j}(t)^{(n-1)/2}\bigr)_j\) 与 \(\bigl(q_{x,j}(t)^{(n+1)/2}\bigr)_j\) 的结果。
+
+最后，由定理 \ref{thm:pom-fiber-mean-response-complete-bernstein-root-recovery}，
+\[
+tM_x'(t)
+=
+t\sum_{j=1}^{d_x}\frac{\alpha_{x,j}}{(t+\alpha_{x,j})^2}
+=
+\sum_{j=1}^{d_x}q_{x,j}(t)\bigl(1-q_{x,j}(t)\bigr)
+=
+\mathrm{Var}(R_{x,p}\mid x).
+\]
+而
+\[
+\kappa^{[F]}_{x,2}(t)=-\sum_{j=1}^{d_x}q_{x,j}(t)^2,
+\]
+故
+\[
+M_x(t)+\kappa^{[F]}_{x,2}(t)
+=
+\sum_{j=1}^{d_x}q_{x,j}(t)\bigl(1-q_{x,j}(t)\bigr)
+=
+\mathrm{Var}(R_{x,p}\mid x).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[条件 KL 散度的方差势表示与局部 Fisher--Rao 度量]\label{thm:pom-fiber-kl-variance-potential-fisher-rao}
+固定 \(x\in X_m\)。
+对 \(t>0\) 记
+\[
+p(t):=\frac{t}{1+t},
+\qquad
+\mu_t:=\mu_{m,p(t)}(\cdot\mid x),
+\]
+并把 \(R_x(\omega):=r(\omega)\) 视为 \(\mu_t\) 下的随机变量。
+则对任意 \(s,t>0\) 有精确积分表示
+\[
+D_{\mathrm{KL}}\!\left(\mu_t\,\middle\|\,\mu_s\right)
+=
+\int_s^t\log\frac{u}{s}\,M_x'(u)\,\dd u
+=
+\int_s^t\log\frac{u}{s}\,\frac{\mathrm{Var}_{\mu_u}(R_x\mid x)}{u}\,\dd u.
+\]
+因此：
+\begin{enumerate}
+  \item 条件 KL 曲线完全由均值响应 \(M_x\) 决定，因而完全由 Lee--Yang 根谱决定。
+  \item 若改用自然参数 \(\eta=\log t\) 并记 \(\mu_\eta:=\mu_{e^\eta}\)，则
+  \[
+  D_{\mathrm{KL}}\!\left(\mu_{\eta+h}\,\middle\|\,\mu_\eta\right)
+  =
+  \frac12\,\mathrm{Var}_{\mu_\eta}(R_x\mid x)\,h^2+O(h^3),
+  \qquad h\to 0,
+  \]
+  从而 Fisher--Rao 度量张量为
+  \[
+  g_x(\eta)=\mathrm{Var}_{\mu_\eta}(R_x\mid x).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-biased-conditional-kl-chain}，
+\[
+D_{\mathrm{KL}}\!\left(\mu_t\,\middle\|\,\mu_s\right)
+=
+M_x(t)\log\frac{t}{s}-\log\frac{Z_x(t)}{Z_x(s)}.
+\]
+另一方面，
+\[
+\frac{\dd}{\dd u}\log Z_x(u)
+=
+\frac{Z_x'(u)}{Z_x(u)}
+=
+\frac{M_x(u)}{u},
+\]
+故
+\[
+\log\frac{Z_x(t)}{Z_x(s)}
+=
+\int_s^t\frac{M_x(u)}{u}\,\dd u.
+\]
+代回并作分部积分，得到
+\[
+\int_s^t\log\frac{u}{s}\,M_x'(u)\,\dd u
+=
+\left[\log\frac{u}{s}\,M_x(u)\right]_{u=s}^{u=t}
+-\int_s^t\frac{M_x(u)}{u}\,\dd u
+=
+M_x(t)\log\frac{t}{s}-\log\frac{Z_x(t)}{Z_x(s)}.
+\]
+第一条积分公式遂得证。
+再由定理 \ref{thm:pom-fiber-factorial-cumulants-sign-logconvex} 的方差--导数恒等式，
+\[
+uM_x'(u)=\mathrm{Var}_{\mu_u}(R_x\mid x),
+\]
+即可得到第二条积分表示。
+
+若令
+\[
+A_x(\eta):=\log Z_x(e^\eta),
+\]
+则
+\[
+A_x'(\eta)=M_x(e^\eta),
+\qquad
+A_x''(\eta)=e^\eta M_x'(e^\eta)=\mathrm{Var}_{\mu_\eta}(R_x\mid x).
+\]
+而
+\[
+D_{\mathrm{KL}}\!\left(\mu_{\eta+h}\,\middle\|\,\mu_\eta\right)
+=
+A_x'(\eta+h)\,h-\bigl(A_x(\eta+h)-A_x(\eta)\bigr).
+\]
+对右端作 Taylor 展开即可得到
+\[
+D_{\mathrm{KL}}\!\left(\mu_{\eta+h}\,\middle\|\,\mu_\eta\right)
+=
+\frac12A_x''(\eta)\,h^2+O(h^3)
+=
+\frac12\,\mathrm{Var}_{\mu_\eta}(R_x\mid x)\,h^2+O(h^3),
+\]
+故 Fisher--Rao 度量张量即为所示方差函数。证毕。
+\end{proof}
+
+\begin{theorem}[条件 Chernoff 信息的割线均值律与唯一极大点]\label{thm:pom-fiber-chernoff-secant-law-unique-maximizer}
+固定 \(x\in X_m\) 与 \(p,q\in(0,1)\)，并记
+\[
+t_p:=\frac{p}{1-p},
+\qquad
+t_q:=\frac{q}{1-q}.
+\]
+若 \(p\neq q\) 且 \(Z_x\) 非常值，则推论
+\ref{cor:pom-fiber-leyang-chernoff-unique-minimizer} 中的条件 Chernoff 信息
+\[
+\mathcal C_x(p,q)
+=
+\max_{s\in[0,1]}\Phi_x(s),
+\]
+其中
+\[
+\Phi_x(s):=
+s\log Z_x(t_p)+(1-s)\log Z_x(t_q)-\log Z_x(t_p^s t_q^{1-s}),
+\]
+满足：
+\begin{enumerate}
+  \item 极大点 \(s^\star\) 唯一且属于 \((0,1)\)。
+  \item 若记
+  \[
+  t_\star:=t_p^{s^\star}t_q^{1-s^\star},
+  \]
+  则 \(t_\star\) 由割线均值方程唯一刻画：
+  \[
+  M_x(t_\star)
+  =
+  \frac{\log Z_x(t_p)-\log Z_x(t_q)}{\log t_p-\log t_q}.
+  \]
+  \item 因而 \(\mathcal C_x(p,q)\) 完全由均值响应 \(M_x\) 决定，等价地完全由 Lee--Yang 根谱决定。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+设
+\[
+A_x(\eta):=\log Z_x(e^\eta),
+\qquad
+\eta_p:=\log t_p,
+\qquad
+\eta_q:=\log t_q.
+\]
+并记
+\(
+\mu_\eta:=\mu_{m,\frac{e^\eta}{1+e^\eta}}(\cdot\mid x)
+\)。
+则
+\[
+\Phi_x(s)=sA_x(\eta_p)+(1-s)A_x(\eta_q)-A_x\bigl(s\eta_p+(1-s)\eta_q\bigr).
+\]
+由定理 \ref{thm:pom-fiber-factorial-cumulants-sign-logconvex} 的方差--导数恒等式与
+\(
+A_x'(\eta)=M_x(e^\eta)
+\)，
+\[
+A_x''(\eta)=\mathrm{Var}_{\mu_\eta}(R_x\mid x).
+\]
+当 \(Z_x\) 非常值时，这个方差在整个参数区间上严格为正，故 \(A_x\) 严格凸，从而 \(\Phi_x\) 在 \([0,1]\) 上严格凹。
+并且当 \(p\neq q\) 时，由严格 Jensen 不等式，
+\[
+\Phi_x(s)>0
+\qquad(0<s<1),
+\]
+而
+\(
+\Phi_x(0)=\Phi_x(1)=0
+\)，
+故 \(\Phi_x\) 的唯一极大点必位于 \((0,1)\)。
+
+记
+\[
+t_s:=t_p^s t_q^{1-s}.
+\]
+由 \(A_x'(\eta)=M_x(e^\eta)\) 可得
+\[
+\Phi_x'(s)
+=
+\log Z_x(t_p)-\log Z_x(t_q)-(\log t_p-\log t_q)\,M_x(t_s).
+\]
+令 \(\Phi_x'(s^\star)=0\)，便得到
+\[
+M_x(t_\star)
+=
+\frac{\log Z_x(t_p)-\log Z_x(t_q)}{\log t_p-\log t_q},
+\qquad
+t_\star=t_{s^\star}.
+\]
+再由定理 \ref{thm:pom-fiber-mean-response-complete-bernstein-root-recovery}，\(M_x\) 在 \((0,\infty)\) 上严格递增，故该方程的解 \(t_\star\) 唯一，继而 \(s^\star\) 唯一。
+
+最后，由
+\[
+\log Z_x(t)-\log Z_x(t_0)
+=
+\int_{t_0}^{t}\frac{M_x(u)}{u}\,\dd u
+\]
+可知 \(\log Z_x\) 在加法常数之外由 \(M_x\) 唯一决定，而该常数在 \(\Phi_x\) 中完全抵消。
+因此 \(\mathcal C_x(p,q)\) 完全由 \(M_x\) 决定；再结合定理 \ref{thm:pom-fiber-mean-response-complete-bernstein-root-recovery} 的根谱恢复结论，即得最后一条。
+证毕。
+\end{proof}
+

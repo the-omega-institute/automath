@@ -1,0 +1,335 @@
+\begin{theorem}[圆维对双向预测互信息的对数量化律]\label{thm:xi-terminal-zm-cdim-bidirectional-mi-loglaw}
+设 \(d\ge 1\)，\(\TT^d=\RR^d/\ZZ^d\)。考虑 Kronecker 平移
+\[
+T_\alpha:\TT^d\to\TT^d,\qquad x\mapsto x+\alpha,
+\]
+其中 \(\alpha=(\alpha_1,\dots,\alpha_d)\)，每个 \(\alpha_j\) 为无理有界型数。对每一坐标 \(j\) 取有限切分
+\[
+0=t_{j,0}<t_{j,1}<\cdots<t_{j,m_j}=1,\qquad
+I_{j,k}:=[t_{j,k-1},t_{j,k}),
+\]
+并令
+\[
+\mathcal P:=\Bigl\{\prod_{j=1}^d I_{j,k_j}:\ 1\le k_j\le m_j\Bigr\}.
+\]
+记 \(\pi:\TT^d\to\mathcal A\) 为分割标签映射，取 \(x\sim\mu\)（\(\mu\) 为 Haar 概率测度），并定义双边平稳过程
+\[
+X_n:=\pi(T_\alpha^n x),\qquad n\in\ZZ.
+\]
+设
+\[
+H_n:=H(X_0^{n-1}),\qquad
+I_n:=I(X_{-n+1}^{0};X_1^n).
+\]
+则存在常数 \(C_-,C_+>0\) 使
+\[
+d\log n-C_-\le H_n\le d\log n+C_+,
+\]
+从而
+\[
+H_n=d\log n+O(1),\qquad I_n=d\log n+O(1).
+\]
+特别地，对数系数等于 \(\cdim(\TT^d)=d\)。
+\end{theorem}
+\begin{proof}
+固定坐标 \(j\)。令
+\[
+D_{j,n}:=\{\,t_{j,k}-i\alpha_j\!\!\pmod 1:\ 1\le k\le m_j-1,\ 0\le i\le n-1\,\}.
+\]
+长度 \(n\) 的一维柱集合边界由 \(D_{j,n}\) 决定，故一维可实现词数 \(p_j(n)\) 满足
+\[
+p_j(n)\le |D_{j,n}|+1\le n(m_j-1)+1.
+\]
+由有界型旋转的间隙估计，存在常数 \(C_j>0\) 使得 \(D_{j,n}\) 诱导分割的最大间隙长度至多 \(C_j/n\)。因此每个一维长度 \(n\) 柱集合测度至多 \(C_j/n\)。
+
+由于 \(T_\alpha\) 逐坐标作用且 \(\mathcal P\) 为直积分割，任意 \(d\) 维长度 \(n\) 柱集合 \([w]\) 的测度分解为坐标柱集合测度之积，故
+\[
+\mu([w])\le \prod_{j=1}^d \frac{C_j}{n}=\frac{C}{n^d},
+\qquad C:=\prod_{j=1}^d C_j.
+\]
+于是
+\[
+H_n\ge -\log\max_w\mu([w])\ge d\log n-\log C.
+\]
+
+另一方面，
+\[
+p(n)\le \prod_{j=1}^d p_j(n)\le \prod_{j=1}^d (n(m_j-1)+1)=O(n^d),
+\]
+故
+\[
+H_n\le \log p(n)=d\log n+O(1).
+\]
+合并得 \(H_n=d\log n+O(1)\)。
+
+再由平稳性和链式恒等式
+\[
+I_n=H(X_{-n+1}^{0})+H(X_1^n)-H(X_{-n+1}^{n})
+=2H_n-H_{2n},
+\]
+立得
+\[
+I_n=d\log n+O(1).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[椭圆曲线复点环面上的时间--信息对数律]\label{cor:xi-terminal-zm-elliptic-complex-torus-mi-loglaw}
+设 \(E/\CC\) 为椭圆曲线，取解析统一化 \(E(\CC)\cong \CC/\Lambda\cong \TT^2\)。设 \(P\in E(\CC)\) 为非扭点，且在上述环面坐标下对应平移向量满足有界型条件。将 \(\TT^2\) 的轴对齐矩形有限分割拉回至 \(E(\CC)\)，并按 Haar 测度取初值定义符号过程 \((X_n)_{n\in\ZZ}\)。则
+\[
+H_n=2\log n+O(1),\qquad I_n=2\log n+O(1).
+\]
+\end{corollary}
+\begin{proof}
+在群同胚 \(E(\CC)\cong\TT^2\) 下，平移 \(x\mapsto x+P\) 等价为二维 Kronecker 平移。应用定理 \ref{thm:xi-terminal-zm-cdim-bidirectional-mi-loglaw}（\(d=2\)）即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[前缀 Gödel 编码长度的互信息差分恒等式]\label{prop:xi-terminal-zm-godel-prefix-code-mi-difference}
+设 \((X_n)_{n\in\ZZ}\) 为有限字母表上的平稳过程。记
+\[
+H_n:=H(X_0^{n-1}).
+\]
+对每个 \(n\)，在所有前缀自由码中取最小期望码长（bit）\(\mathsf L_n^\star\)，并定义 nats 计量
+\[
+\bar L_n:=\mathsf L_n^\star\ln 2.
+\]
+则存在常数 \(C>0\)（与 \(n\) 无关）使
+\[
+|\bar L_n-H_n|\le C,
+\]
+并且
+\[
+I(X_{-n+1}^{0};X_1^n)=2\bar L_n-\bar L_{2n}+O(1).
+\]
+\end{proposition}
+\begin{proof}
+Shannon 源编码定理对最优前缀码给出
+\[
+H_n\le \bar L_n\le H_n+\ln 2.
+\]
+故第一式成立。由平稳过程恒等式
+\[
+I(X_{-n+1}^{0};X_1^n)=2H_n-H_{2n},
+\]
+将 \(H_n\) 与 \(H_{2n}\) 用 \(\bar L_n,\bar L_{2n}\) 代换并吸收有界误差即得第二式。证毕。
+\end{proof}
+
+\begin{theorem}[语言复杂度对数等于最小极大在线对数损失]\label{thm:xi-terminal-zm-language-minimax-logloss}
+设 \(\mathcal L\subset\mathcal A^\ast\) 为语言，\(\mathcal L_n:=\mathcal L\cap\mathcal A^n\)（有限）。对任意在线预测器 \(q\) 定义
+\[
+\ell_q(x_1^n):=-\sum_{t=1}^n\log q_t(x_t\mid x_1^{t-1})
+=-\log Q_q(x_1^n),
+\]
+\[
+Q_q(x_1^n):=\prod_{t=1}^n q_t(x_t\mid x_1^{t-1}).
+\]
+则
+\[
+\inf_q\ \sup_{x_1^n\in\mathcal L_n}\ \ell_q(x_1^n)=\log|\mathcal L_n|.
+\]
+若 \(\mathcal L\) 取自定理 \ref{thm:xi-terminal-zm-cdim-bidirectional-mi-loglaw} 的 Kronecker 编码语言，则
+\[
+\inf_q\sup_{x_1^n\in\mathcal L_n}\ell_q(x_1^n)=d\log n+O(1)
+=\cdim(\TT^d)\log n+O(1).
+\]
+\end{theorem}
+\begin{proof}
+下界：任意 \(q\) 诱导分布 \(Q_q\) 于 \(\mathcal A^n\)。因
+\(
+\sum_{x\in\mathcal L_n}Q_q(x)\le 1
+\)，存在 \(x^\star\in\mathcal L_n\) 使
+\[
+Q_q(x^\star)\le |\mathcal L_n|^{-1},
+\]
+故
+\[
+\sup_{x\in\mathcal L_n}\ell_q(x)\ge \ell_q(x^\star)\ge \log|\mathcal L_n|.
+\]
+取 \(\inf_q\) 得下界。
+
+上界：定义长度 \(n\) 上均匀分布
+\[
+Q^{\mathrm{unif}}(x_1^n):=|\mathcal L_n|^{-1}\mathbf 1_{\{x_1^n\in\mathcal L_n\}}.
+\]
+其链式分解给出预测器
+\[
+q_t(a\mid u)=
+\frac{|\{x\in\mathcal L_n:\ x_{1:t-1}=u,\ x_t=a\}|}
+{|\{x\in\mathcal L_n:\ x_{1:t-1}=u\}|},
+\]
+并满足 \(Q_q=Q^{\mathrm{unif}}\) 在 \(\mathcal L_n\) 上。故对任意 \(x\in\mathcal L_n\),
+\[
+\ell_q(x)=-\log Q^{\mathrm{unif}}(x)=\log|\mathcal L_n|.
+\]
+于是上界成立，等式得证。
+
+对 Kronecker 语言，定理 \ref{thm:xi-terminal-zm-cdim-bidirectional-mi-loglaw} 给出
+\(
+H_n=d\log n+O(1)
+\)，且一般地 \(H_n\le \log|\mathcal L_n|\)；
+同一定理证明中的词数上界给出 \(\log|\mathcal L_n|\le d\log n+O(1)\)。
+故 \(\log|\mathcal L_n|=d\log n+O(1)\)，代回即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[Gödel--Lee--Yang 多模型证据的热带竖带与零点晶格]\label{thm:xi-terminal-zm-godel-leyang-tropical-strip-lattice}
+设有限假设族 \(\{1,\dots,K\}\)，令 \(c_i=2^{-\ell_i}>0\)（\(\ell_i\in\NN\) 为前缀 Gödel 码长），能量 \(E_i\in\RR\)。定义
+\[
+Z(\beta):=\sum_{i=1}^K c_i e^{-\beta E_i},\qquad \beta\in\CC.
+\]
+对实数 \(x\)，令
+\[
+F_i(x):=\log c_i-xE_i,\qquad
+M(x):=\max_i F_i(x),
+\]
+\[
+\Delta(x):=
+\begin{cases}
+M(x)-\max_{j\ne i^\ast}F_j(x), & i^\ast\ \text{唯一极大指标},\\
+0, & \text{否则}.
+\end{cases}
+\]
+则有：
+\begin{enumerate}
+  \item 若 \(\Delta(x)>\log(K-1)\)，则对所有 \(\Re\beta=x\) 有 \(Z(\beta)\neq 0\)。特别地，任一零点 \(\beta\) 必满足
+  \[
+  \Delta(\Re\beta)\le \log(K-1).
+  \]
+  \item 设存在 \(x_0\in\RR\) 与 \(i\neq j\)（且 \(E_i\neq E_j\)）使
+  \[
+  F_i(x_0)=F_j(x_0)=M(x_0),\qquad
+  F_k(x_0)\le M(x_0)-\delta\ \ (k\ne i,j)
+  \]
+  对某 \(\delta>0\) 成立。则对每个 \(m\in\ZZ\)，存在零点 \(\beta_m\) 满足
+  \[
+  \beta_m
+  =x_0+i\frac{(2m+1)\pi}{E_i-E_j}
+  +O\!\left(\frac{e^{-\delta}}{|E_i-E_j|}\right),
+  \]
+  且误差常数与 \(m\) 无关。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+设 \(\beta=x+it\)，并取唯一极大指标 \(i^\ast\)。则
+\[
+|Z(\beta)|
+\ge c_{i^\ast}e^{-xE_{i^\ast}}-\sum_{j\ne i^\ast}c_je^{-xE_j}
+=e^{M(x)}-\sum_{j\ne i^\ast}e^{F_j(x)}.
+\]
+由 \(F_j(x)\le M(x)-\Delta(x)\)，有
+\[
+\sum_{j\ne i^\ast}e^{F_j(x)}\le (K-1)e^{M(x)-\Delta(x)},
+\]
+故
+\[
+|Z(\beta)|\ge e^{M(x)}\!\left(1-(K-1)e^{-\Delta(x)}\right).
+\]
+若 \(\Delta(x)>\log(K-1)\)，右端严格正，故竖线 \(\Re\beta=x\) 无零点，得到第一条。
+
+第二条中定义
+\[
+g(\beta):=c_i e^{-\beta E_i}+c_j e^{-\beta E_j},\qquad
+r(\beta):=Z(\beta)-g(\beta).
+\]
+在 \(\Re\beta=x_0\) 上，
+\[
+|r(\beta)|\le \sum_{k\ne i,j}e^{F_k(x_0)}\le (K-2)e^{M(x_0)-\delta}.
+\]
+由 \(F_i(x_0)=F_j(x_0)\)，\(g(x_0+it)=0\) 当且仅当
+\[
+e^{-it(E_i-E_j)}=-1
+\Longleftrightarrow
+t=\frac{(2m+1)\pi}{E_i-E_j}.
+\]
+记 \(\beta_m^{(0)}:=x_0+i\frac{(2m+1)\pi}{E_i-E_j}\)。该点是 \(g\) 的简单零点，且
+\[
+|g'(\beta_m^{(0)})|=|E_i-E_j|\,e^{M(x_0)}.
+\]
+故存在与 \(m\) 无关常数 \(c_0>0\)，使得在小圆周 \(|\beta-\beta_m^{(0)}|=\rho\) 上
+\[
+|g(\beta)|\ge c_0 |E_i-E_j| e^{M(x_0)}\rho.
+\]
+取
+\[
+\rho:=\frac{2(K-2)}{c_0}\frac{e^{-\delta}}{|E_i-E_j|},
+\]
+则圆周上 \(|g|>|r|\)。由 Rouch\'e 定理，\(Z=g+r\) 与 \(g\) 在该圆盘内零点数相同，故存在唯一零点 \(\beta_m\) 且
+\[
+|\beta_m-\beta_m^{(0)}|=O\!\left(\frac{e^{-\delta}}{|E_i-E_j|}\right).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[Lee--Yang 竖带外的温度鲁棒性与递归误差控制]\label{cor:xi-terminal-zm-leyang-strip-robustness-error-control}
+沿定理 \ref{thm:xi-terminal-zm-godel-leyang-tropical-strip-lattice} 记号，定义实温度后验
+\[
+\pi_i(x):=\frac{c_i e^{-xE_i}}{\sum_{j=1}^K c_j e^{-xE_j}}.
+\]
+若 \(\Delta(x)>\log(K-1)\)，且 \(i^\ast\) 为唯一极大指标，则：
+\begin{enumerate}
+  \item
+  \[
+  1-\pi_{i^\ast}(x)\le (K-1)e^{-\Delta(x)}.
+  \]
+  \item 设近似能量 \(\tilde E_i\) 满足 \(\max_i |\tilde E_i-E_i|\le \varepsilon\)。若扰动后极大指标仍为 \(i^\ast\)，则存在仅依赖 \(K\) 的常数 \(C>0\)，使
+  \[
+  \|\pi(x;E)-\pi(x;\tilde E)\|_1
+  \le
+  C\,|x|\,\varepsilon\,
+  \frac{(K-1)e^{-\Delta(x)}}{1-(K-1)e^{-\Delta(x)}}.
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+记 \(w_i:=c_i e^{-xE_i}\)，则
+\[
+\frac{\sum_{j\ne i^\ast}w_j}{w_{i^\ast}}
+=\sum_{j\ne i^\ast}\exp(F_j(x)-M(x))
+\le (K-1)e^{-\Delta(x)}.
+\]
+于是
+\[
+1-\pi_{i^\ast}(x)
+=\frac{\sum_{j\ne i^\ast}w_j}{\sum_j w_j}
+\le \frac{\sum_{j\ne i^\ast}w_j}{w_{i^\ast}}
+\le (K-1)e^{-\Delta(x)}.
+\]
+得第一条。
+
+第二条令 \(\tilde w_i:=c_i e^{-x\tilde E_i}\)，则
+\[
+\tilde w_i=w_i e^{-x(\tilde E_i-E_i)},\qquad
+e^{-|x|\varepsilon}\le \frac{\tilde w_i}{w_i}\le e^{|x|\varepsilon}.
+\]
+故比值扰动在 \(O(|x|\varepsilon)\) 量级。再由第一条给出的尾部比率上界
+\(
+\sum_{j\ne i^\ast}w_j/w_{i^\ast}\le (K-1)e^{-\Delta(x)}
+\)
+及归一化映射 \(w\mapsto w/\|w\|_1\) 在该锥域上的局部 Lipschitz 性，得到
+\[
+\|\pi(x;E)-\pi(x;\tilde E)\|_1
+\le
+C\,|x|\,\varepsilon\,
+\frac{(K-1)e^{-\Delta(x)}}{1-(K-1)e^{-\Delta(x)}}.
+\]
+证毕。
+\end{proof}
+
+\begin{conjecture}[Langlands--Lee--Yang--圆维秩原则]\label{conj:xi-terminal-zm-langlands-leyang-cdim-rank-principle}
+设 \(G\) 为约化代数群，\({}^LG\) 为其 \(L\)-群，\(T^\vee\subset {}^LG\) 为极大复环面，记
+\[
+r:=\cdim(T^\vee)=\operatorname{rank}(G).
+\]
+对非分歧自守表示 \(\pi\) 的 Satake 参数 \((s_p)_p\in T^\vee/W\)，构造局部系数 \((a_{p,k})_{k\ge 0}\) 并定义
+\[
+Z_\pi(\beta):=\prod_p\Bigl(\sum_{k\ge 0}a_{p,k}e^{-\beta k}\Bigr),
+\]
+其中乘积在有限素数截断与标准重整化后取极限。预期：
+\begin{enumerate}
+  \item Lee--Yang 零点的极限角分布为 \(T^\vee\) 上 Haar 测度（或其 Weyl 反对称推前）的像；
+  \item 由该零点过程定义的双向预测互信息满足
+  \[
+  I_n=r\log n+O(1),
+  \]
+  即增长系数由对偶环面的圆维决定。
+\end{enumerate}
+\end{conjecture}

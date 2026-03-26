@@ -1,0 +1,551 @@
+\label{subsec:xi-certificate-coherence-orthogonal-axis-capacity-part3}
+
+\begin{corollary}[固定分辨率预算下的不可见阈值（比特/账本口径）]\label{cor:xi-offcritical-visibility-threshold-bit-budget}
+在定理 \ref{thm:xi-offcritical-quadratic-radial-compression} 的设定下，
+若希望在某个半径审计点 \(\varrho\in(0,1)\) 处\emph{强制}出现由该离线零点贡献导致的正缺陷（即要求 \(\varrho>|w_\rho|\)，从而 \(D_\zeta(\varrho)\ge \log(\varrho/|w_\rho|)>0\)），
+则必须满足端点分辨率门槛
+\[
+1-\varrho\ \lesssim\ \frac{\delta}{\gamma^2}
+\]
+（推论 \ref{cor:app-horocycle-visible-resolution} 的高高度尺度律）。
+特别地，若把分辨率预算以 dyadic 比特深度 \(b\) 参数化，使得
+\(
+1-\varrho\asymp 2^{-b}
+\),
+则必要条件可等价写为
+\begin{equation}\label{eq:xi-offcritical-bit-budget}
+\boxed{\;
+b\log 2\ \gtrsim\ 2\log|\gamma|+\log\frac{1}{\delta}+O(1)\; }.
+\end{equation}
+换言之：在固定预算 \(b\) 下存在高度阈值，使得当 \(|\gamma|\) 足够大时，离临界线偏移的二阶径向信号必落入不可分辨尺度；
+在纯相位制度（unitary slice）中，其语义后果稳定表现为“不可寻址”（\(\mathsf{NULL}\)，推论 \ref{cor:xi-null-second-order-radial-channel}）。
+\end{corollary}
+
+\begin{proof}
+由推论 \ref{cor:app-horocycle-visible-resolution}，必要条件为 \(1-\varrho\lesssim \delta/\gamma^2\)。
+代入 \(1-\varrho\asymp 2^{-b}\) 并取对数得
+\(
+b\log 2\gtrsim 2\log|\gamma|+\log(1/\delta)+O(1)
+\)。
+最后一句由推论 \ref{cor:xi-null-second-order-radial-channel} 的“二阶径向通道被纯相位制度抹除”给出。证毕。
+\end{proof}
+
+式 \eqref{eq:xi-offcritical-bit-budget} 的首项 \(2\log|\gamma|\) 体现了高度增长对端点分辨率的不可约需求；
+该量级与定理 \ref{thm:xi-offcritical-quadratic-radial-compression} 的“二阶径向通道”一致。
+在有限高度带 \(|\gamma|\le T\) 上，同一压缩律还允许把“离切片”的存在性转写为单半径缺陷的不等式证书，从而得到直接的带状排除结论。
+
+\begin{theorem}[单半径 Jensen 缺陷证书：有限高度带状禁入的可核验判据]\label{thm:xi-jensen-single-radius-band-exclusion}
+令 \(T\ge 1\)、\(\Delta\in(0,\tfrac12]\)，并定义
+\[
+  R(T,\Delta)^2:=\frac{T^2+(\Delta-1)^2}{T^2+(\Delta+1)^2}\in(0,1).
+\]
+则对任意满足 \(|\gamma|\le T\)、\(\delta=\tfrac12-\beta\ge\Delta\) 的离临界线零点 \(\rho=\beta+\mathrm{i}\gamma\)，其圆盘像 \(w_\rho\) 满足
+\[
+  |w_\rho|\le R(T,\Delta).
+\]
+进一步，对任意审计半径 \(\varrho\in(R(T,\Delta),1)\) 有单零点 Jensen 下界
+\[
+  D_\zeta(\varrho)\ \ge\ \log\frac{\varrho}{|w_\rho|}\ \ge\ \log\frac{\varrho}{R(T,\Delta)}
+\]
+（命题 \ref{prop:app-jensen-single-zero-lower-bound}）。
+因此，若在某一选定半径 \(\varrho>R(T,\Delta)\) 处核验到
+\[
+  D_\zeta(\varrho)\ <\ \log\frac{\varrho}{R(T,\Delta)},
+\]
+则可作为一份离线可核验的\emph{带状禁入证书}：在该协议口径下，不存在满足 \(|\gamma|\le T\) 且 \(\tfrac12-\beta\ge\Delta\) 的离临界线零点。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:xi-offcritical-quadratic-radial-compression} 的闭式，
+\[
+|w_\rho|^2
+:=1-\frac{4\delta}{\gamma^2+(1+\delta)^2}
+:=\frac{\gamma^2+(1-\delta)^2}{\gamma^2+(1+\delta)^2}.
+\]
+注意到当 \(\gamma^2\) 增大时，上式右端单调增；当 \(\delta\) 增大时，上式右端单调减（在 \(\delta\in(0,1)\) 的带内）。
+因此在约束 \(|\gamma|\le T\)、\(\delta\ge\Delta\) 下，
+\[
+|w_\rho|^2
+\le \frac{T^2+(1-\Delta)^2}{T^2+(1+\Delta)^2}
+:=R(T,\Delta)^2,
+\]
+从而 \(|w_\rho|\le R(T,\Delta)\)。
+当 \(\varrho>|w_\rho|\) 时，命题 \ref{prop:app-jensen-single-zero-lower-bound} 给出
+\(
+D_\zeta(\varrho)\ge \log(\varrho/|w_\rho|)
+\)，再用 \(|w_\rho|\le R(T,\Delta)\) 得到所述下界与证书形式。证毕。
+\end{proof}
+
+\begin{corollary}[取 \texorpdfstring{$\varrho=\tfrac12(1+R(T,\Delta))$}{varrho=(1+R)/2} 的显式单点证书]\label{cor:xi-jensen-single-radius-band-exclusion-midradius}
+沿用定理 \ref{thm:xi-jensen-single-radius-band-exclusion} 的记号，并令
+\(
+\varrho:=\tfrac12\bigl(1+R(T,\Delta)\bigr)
+\)。
+若核验到
+\[
+  D_\zeta(\varrho)\ <\ \log\frac{1+R(T,\Delta)}{2R(T,\Delta)},
+\]
+则推出在 \(|\gamma|\le T\) 且 \(\tfrac12-\beta\ge\Delta\) 的带状区域内不存在离临界线零点。
+\end{corollary}
+
+\begin{proof}
+将 \(\varrho=\tfrac12(1+R(T,\Delta))\) 代入定理 \ref{thm:xi-jensen-single-radius-band-exclusion} 的证书不等式即得。证毕。
+\end{proof}
+
+\paragraph{对“构造离线零点”的可证伪重述：第四寄存器或失败见证}
+在本文闭包语义中，“构造一个不在 \(\Re(s)=\tfrac12\) 上的零点”并不等价于给出一个数值点；
+它等价于给出一个能通过闭包检查器的\emph{可核验地址对象}（定义 \ref{def:multi_axis_address}），或给出该地址在协议内不可能存在的失败见证。
+
+\begin{proposition}[离线零点断言的唯一可证伪接口：扩展模式轴或输出 \texorpdfstring{$\mathsf{NULL}$}{NULL} 失败见证]\label{prop:xi-offcritical-falsifiable-restatement}
+在 unitary slice 可见域约束与 \(\mathbf{PW}\) 类型闭包下，任何声称“存在离线零点（\(|u|\neq 1\) 等价地 \(|w|<1\)）”的断言在体系内只能呈现为以下二者之一：
+\begin{enumerate}
+  \item \textbf{模式轴外延（显式径向记录）}：外延读出/证书类型，使地址三轴前缀中的模式轴 \(a_{\mathrm{mode}}\) 显式携带径向数据（注 \ref{rem:xi-soundness-vs-completeness} 的 \(\operatorname{proj}^{\mathrm e}\) 口径）；并且在高高度下，该外延必须支付由推论 \ref{cor:xi-offcritical-visibility-threshold-bit-budget} 给出的端点容量下界。
+  \item \textbf{失败见证（协议锁定）}：输出一份离线可核验的失败见证，证明该断言在既定可见域/闭包协议下不可类型化，从而其读出必退化为 \(\mathsf{NULL}\)（定理 \ref{thm:xi-offset-null-type-safety}；并见命题 \ref{prop:xi-null-three-way} 对 \(\mathsf{NULL}\) 的三分解）。
+\end{enumerate}
+并且：若以“减少 \(\mathsf{NULL}\)”为目标而允许外置侧信息以实现单射化，则该外置轴在结构上必然是 residue/逆极限轴（prime-register）而非与相位解耦的额外连续坐标寄存器（定理 \ref{thm:xi-pw-no-continuous-hair}）。
+\end{proposition}
+
+\begin{proof}
+若不外延模式轴，则 \(|u|\neq 1\)（或 \(|w|<1\)）落在可见域之外，按定义 \ref{def:xi-visible-read-null} 的过滤直接读出为 \(\mathsf{NULL}\)，并由定理 \ref{thm:xi-offset-null-type-safety} 得到类型安全拒绝。
+若外延模式轴，则由注 \ref{rem:xi-soundness-vs-completeness} 的扩展保存构造得到非退化扩展读出；其在高高度下的必要预算由推论 \ref{cor:xi-offcritical-visibility-threshold-bit-budget} 给出。
+最后，“外置必须是 residue/逆极限轴而非额外连续寄存器”即定理 \ref{thm:xi-pw-no-continuous-hair} 的第 (2) 条。证毕。
+\end{proof}
+
+\begin{corollary}[离切片零点事件的二歧性：接受或 \texorpdfstring{$\mathsf{NULL}$}{NULL}\,+\,离线见证]\label{cor:xi-offcritical-dichotomy-acceptable-or-null}
+在 unitary slice 锁定的可见域约束与 \(\mathbf{PW}\) 闭包下，任一试图把“离切片零点事件”对象化为可核验读出的过程，其结局只能是：
+\begin{enumerate}
+  \item \textbf{（接受）}事件通过 unitary slice 的类型化核验接口并被接受，从而落入协议允许的可见类型域；在该意义下，其零点参数满足 \(|u_L(s_0)|=1\)；
+  \item \textbf{（可证伪拒绝）}事件在闭包内无地址并读出为 \(\mathsf{NULL}\)；并且按定理 \ref{thm:xi-null-complete-trichotomy-offline}，该 \(\mathsf{NULL}\) 必伴随一份可离线核验的失败见证，其支撑必在“域外拒绝/粘合扭结/硬资源不足”三类正交方向之一上非平凡。
+\end{enumerate}
+因此不存在“通过引入与相位解耦的额外连续坐标寄存器以规避 \(\mathsf{NULL}\)”的第三条路径：任何连续扩维若要减少 \(\mathsf{NULL}\)，在因子意义下必等价于外置唯一的径向寄存器 \(\varrho(u)=\log|u|\)（推论 \ref{cor:xi-unique-continuous-transverse-register}），否则仍将被闭包类型系统编译为 \(\mathsf{NULL}\)。
+\end{corollary}
+
+\begin{proof}
+二歧性来自命题 \ref{prop:xi-offcritical-falsifiable-restatement}：离线零点断言在体系内只能以“模式轴外延”或“\(\mathsf{NULL}\) 失败见证”出现。
+当断言在纯相位制度内可被接受时，它必须通过 unitary slice 的可见域过滤（定义 \ref{def:xi-visible-read-null}），从而满足 \(|u_L(s_0)|=1\)；当断言不可类型化时，其读出为 \(\mathsf{NULL}\)，并由定理 \ref{thm:xi-null-complete-trichotomy-offline} 取得离线见证分类。
+最后一句由“无额外连续毛发”原则（定理 \ref{thm:xi-pw-no-continuous-hair}）与推论 \ref{cor:xi-unique-continuous-transverse-register} 的连续轴唯一性给出。证毕。
+\end{proof}
+
+\paragraph{\texorpdfstring{$\tau$}{tau}-对合自同构下的对称性刚性：Toeplitz--PSD 的 \texorpdfstring{$\ZZ/2$}{Z/2} 分解、Jensen 缺陷的残差下界与异常同调的定位}
+在 \S\ref{subsec:xi-from-self-dual} 的二变量接口上，\(\tau:(z,u)\mapsto(uz,u^{-1})\) 为对合自同构；
+自对偶条件 \(\Delta=\Delta\circ\tau\) 在任意底 \(L>1\) 的截面上拉回为严格函数方程 \(\Xi_{\Delta,L}(s)=\Xi_{\Delta,L}(1-s)\)（命题 \ref{prop:xi-delta-L-functional-equation}）。
+其不动点集合对应完成化参数的 unitary slice：\(|u_L(s)|=1\iff \Re(s)=\tfrac12\)（注 \ref{rem:xi-critical-line-unit-circle}）。
+在本文的可见域过滤与“地址先于取值”语义下，该固定切片被提升为可寻址制度：当 \(X_{\mathrm{vis}}=\mathsf{Phase}\) 时，偏离切片的点在类型层无地址，其读出按协议退化为 \(\mathsf{NULL}\)（定义 \ref{def:xi-visible-read-null}；定理 \ref{thm:xi-offset-null-type-safety}），并与递归地址化仅在旧层可见 \(\sigma\)-代数内重选事件而不扩张可见域的口径一致（命题 \ref{prop:recursive-addressing-refinement}；推论 \ref{cor:recursive-addressing-visible-sigma-nonexpansion}）。
+\par
+在谱侧，圆盘化视界对数导数的 Carath\'eodory 正性等价于 Toeplitz--PSD 层级 \(\{\mathbf{T}_N\succeq 0\}_{N\ge 0}\)（附录定理 \ref{thm:app-horizon-toeplitz-lmi}）。
+当进一步锁定实结构 \(c_n\in\RR\) 时，该层级在有限截断上与反转对合对易，因而分裂为偶/奇两条独立的 PSD 子层级（命题 \ref{prop:app-horizon-toeplitz-z2-splitting}；推论 \ref{cor:app-horizon-toeplitz-z2-cert-split}）；
+由此，任何有限级别的 PSD 失败证据都可被定位到某一最小 \(N_\star\) 与某一扇区符号 \(\epsilon\in\{+,-\}\)，给出“失败模式”的 \(\ZZ/2\) 分类。
+\par
+在演算侧，\(\mathbf{PW}\) 的交换失败残差被组织为异常签名并提升为 \(2\)-上同调类（\S\ref{subsec:pom-anom-cohomology}）；
+其可见性定位由 Beck--Chevalley 严格化给出：在可见扭曲通道上异常为零（命题 \ref{prop:pom-bc-quotient-strictify}），从而任何非零异常坐标只能支撑在对 \(N^{\mathrm{BC}}_m\) 非平凡的不可见角色方向上（推论 \ref{cor:pom-anom-supported-on-bc-kernel}）。
+\begin{remark}[Toeplitz 扇区与异常类的并置定位]\label{rem:xi-toeplitz-z2-anom-alignment}
+命题 \ref{prop:app-horizon-toeplitz-z2-splitting} 给出 Toeplitz--PSD 证书在实结构锁定下的 \(\ZZ/2\) 扇区分解；
+推论 \ref{cor:pom-anom-supported-on-bc-kernel} 则把 \(\mathbf{PW}\) 的交换失败定位为只支撑于不可见角色方向的异常上同调类。
+二者并置提供一条实现无关的障碍坐标系：若某一断言在 unitary slice 的闭包语义中出现破缺，则其谱侧见证可（在有限级别上）被定位到某一 \(\epsilon\in\{+,-\}\) 扇区的负特征值，而其演算侧残差可由异常类的非零坐标承载；
+两类定位互不替代，但可在同一证书链中并行记录。
+\end{remark}
+在圆盘化完成化接口中，所谓“漏泄势”可取为对数平均势的相对量，即 Jensen 缺陷（定义 \ref{def:app-jensen-defect}）：
+\[
+D_F(\varrho)
+:=\frac{1}{2\pi}\int_{0}^{2\pi}\log\bigl|F(\varrho e^{\mathrm{i}\theta})\bigr|\,\dd\theta
+-\log|F(0)|
+\qquad(0<\varrho<1).
+\]
+由 Jensen--Blaschke 求和式（命题 \ref{prop:app-jensen-formula-defect}），
+\[
+D_F(\varrho)=\sum_{|a_k|<\varrho}\log\!\Bigl(\frac{\varrho}{|a_k|}\Bigr)\ \ge\ 0,
+\]
+因此“盘内出现任何点状零点”都会强制生成严格正、且可定量的漏泄下界；
+单零点的最小漏泄由命题 \ref{prop:app-jensen-single-zero-lower-bound} 给出。
+在本文的投影读出语义中，这与命题 \ref{prop:xi-offcritical-falsifiable-restatement} 完全对齐：任何偏离固定切片 \(|u|=1\) 的点状奇异，要么以缺陷账本 \(D_\zeta(\varrho)\) 的正贡献形式出现并触发额外正交证书（残差/预算）外置，要么在拒绝外置模式轴时被协议编译为 \(\mathsf{NULL}\) 的失败见证。
+\par
+进一步地，“固定切片”不仅是自同构的固定集合，也是对数平均势的唯一平衡面。
+下述命题给出一个可逐行核验的反演对称律，它把“内外域互为镜像”的自对偶性直接转译为平均势的偶性刚性。
+
+\begin{proposition}[自对偶对称下的对数平均势反演律]\label{prop:xi-selfdual-mean-potential-inversion}
+令 \(A=\{u\in\CC:\ r_0<|u|<r_0^{-1}\}\) 且 \(G\) 在 \(A\) 上解析，且 \(G\not\equiv 0\)。
+设存在整数 \(m\) 使得对所有 \(u\in A\) 有
+\[
+G(u)=u^{m}\,\overline{G(1/\overline{u})}.
+\]
+对 \(r\in(r_0,r_0^{-1})\) 定义对数平均势
+\[
+\mathcal{M}_G(r):=\frac{1}{2\pi}\int_{0}^{2\pi}\log\bigl|G(re^{\mathrm{i}\theta})\bigr|\,\dd\theta.
+\]
+则对所有 \(r\in(r_0,r_0^{-1})\) 成立严格恒等式
+\[
+\boxed{\ \mathcal{M}_G(r)=m\log r+\mathcal{M}_G(1/r)\ }.
+\]
+等价地，令 \(r=e^t\)，则 \(t\mapsto \mathcal{M}_G(e^t)-\frac{m}{2}t\) 为偶函数，其唯一可能的平衡切片为 \(t=0\)，即 \(|u|=1\)。
+\end{proposition}
+
+\begin{proof}
+取 \(u=re^{\mathrm{i}\theta}\)，则 \(1/\overline{u}=r^{-1}e^{\mathrm{i}\theta}\)。
+由假设得
+\(
+|G(re^{\mathrm{i}\theta})|
+:=|u|^{m}\,|G(r^{-1}e^{\mathrm{i}\theta})|
+:=r^{m}|G(r^{-1}e^{\mathrm{i}\theta})|
+\)。
+两侧取对数并对 \(\theta\) 平均即得所述恒等式；将 \(r=e^t\) 代入并整理得到偶性与平衡切片结论。证毕。
+\end{proof}
+
+上述反演律给出“\(\Re(s)=\tfrac12\) 是对称轴”的严格版本：对称性并非坐标轴的互换，而是内外域在自对偶对合下互为镜像；其固定集合 \(|u|=1\) 因而成为对数平均势（归一化后）的唯一平衡面。
+\par
+在此基础上，综合定理 \ref{thm:xi-orthogonal-slice-structure}、定理 \ref{thm:xi-offcritical-quadratic-radial-compression} 及其推论链条，可将“unitary slice（自对偶投影的固定可见切片）”在协议口径下的含义归结为以下四条结论性命题：
+\begin{enumerate}
+  \item \textbf{（端点载荷分解）}
+  离线偏移 \(\delta\) 与高度 \(\gamma\) 在端点层深度中以可加负载出现（推论 \ref{cor:xi-offcritical-endpoint-depth-log-decomposition}），并由精度势 \(\mathcal{P}\) 给出统一账本坐标。
+  \item \textbf{（复杂度屏障）}
+  从 unitary slice 的相位轴进入离线方向，端点层位预算从 \(\Theta(\log T)\) 跃迁为 \(\Theta(2\log T)\)，并受到显式下界约束（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound} 及注 \ref{rem:xi-unitary-vs-offcritical-bit-gap}）。
+  \item \textbf{（内因子可见性）}
+  在 Hardy/Smirnov 条件口径下，离线零点等价于 Blaschke 内因子数据；该数据在纯相位可见接口内不可由边界模长生成，故其核验语义必强制占用正交寄存器（推论 \ref{cor:xi-inner-factor-orthogonal-register}）。
+  \item \textbf{（端点相位证书）}
+  在 Hardy/Smirnov 条件口径下，内因子可定义相位电流测度 \(\mu_{\mathrm{in}}\)，其端点密度 \(j_{\mathrm{in}}(\pi)\) 对盘内零点给出不可抵消的正下界；并且对离临界线偏移总量满足 \(j_{\mathrm{in}}(\pi)\ge \sum_k\delta_k\)（定理 \ref{thm:app-inner-phase-current-poisson} 与推论 \ref{cor:app-endpoint-phase-current-offcritical}）。
+  在无奇异内因子 \(S\equiv 1\) 的条件下，端点相位电流的零证书 \(j_{\mathrm{in}}(\pi)=0\) 强制 \(B\equiv 1\)，从而推出盘内零点禁入并回到 RH（推论 \ref{cor:app-endpoint-phase-certificate}）。
+\end{enumerate}
+\par
+\paragraph{端点吸收系数：盘内零点集合的单点通量压缩}
+上述端点相位电流密度 \(j_{\mathrm{in}}(\pi)\)（有限 Blaschke 情形下即为端点 Poisson 权重求和）不仅给出“不可抵消的正下界”，亦提供一条单点可读出的径向衰减率证书：盘内零点集合可被压缩为端点 \(-1\) 的吸收系数，并由 \(w=-r\uparrow-1\) 的一阶衰减率读出。
+
+\begin{proposition}[端点吸收系数与径向吸收律]\label{prop:xi-endpoint-absorption-coefficient}
+令 \(B\) 为有限 Blaschke 乘积，零点集合为 \(\{a_k\}_{k=1}^{N}\subset\mathbb{D}\)（按重数计）。
+定义端点 \(-1\) 的吸收系数
+\[
+\Phi_{-1}(B):=\sum_{k=1}^{N}P_{a_k}(-1)=\sum_{k=1}^{N}\frac{1-|a_k|^2}{|1+a_k|^2}\ \in[0,\infty).
+\]
+则当 \(r\uparrow 1\) 时，沿端点径向 \(w=-r\) 有渐近律
+\[
+\log|B(-r)|=-(1-r)\,\Phi_{-1}(B)+o(1-r).
+\]
+特别地，\(\Phi_{-1}(B)=0\) 当且仅当 \(B\equiv 1\)。
+\end{proposition}
+
+\begin{proof}
+见附录命题 \ref{prop:app-endpoint-blaschke-radial-absorption}。证毕。
+\end{proof}
+
+\begin{theorem}[端点 Julia--Carath\'eodory 指标等于吸收系数：\texorpdfstring{$\Phi_{-1}$}{Phi-(-1)} 的角导数化]\label{thm:xi-endpoint-julia-indicator-equals-absorption}
+在命题 \ref{prop:xi-endpoint-absorption-coefficient} 的设定下，定义端点 \(-1\) 的 Julia--Carath\'eodory 指标
+\[
+\mathcal{J}_{-1}(B):=\lim_{r\uparrow 1}\frac{1-|B(-r)|^2}{1-r^2}.
+\]
+则该极限存在且满足
+\[
+\boxed{\;\mathcal{J}_{-1}(B)=\Phi_{-1}(B)\;}
+\]
+并且（角导数存在且为有限值）
+\[
+\boxed{\;\Phi_{-1}(B)=\Re\!\left(-\frac{B'(-1)}{B(-1)}\right).\;}
+\]
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{prop:xi-endpoint-absorption-coefficient} 的径向吸收律，
+\(
+\log|B(-r)|=-(1-r)\Phi_{-1}(B)+o(1-r)
+\)。
+故
+\[
+|B(-r)|^2=\exp\!\bigl(2\log|B(-r)|\bigr)
+=\exp\!\bigl(-2(1-r)\Phi_{-1}(B)+o(1-r)\bigr)
+=1-2(1-r)\Phi_{-1}(B)+o(1-r),
+\]
+从而
+\(
+1-|B(-r)|^2=2(1-r)\Phi_{-1}(B)+o(1-r)
+\)。
+注意 \(1-r^2=2(1-r)+o(1-r)\)，遂得 \(\mathcal{J}_{-1}(B)=\Phi_{-1}(B)\)。
+\par
+另一方面，有限 Blaschke 乘积在闭圆盘邻域解析且 \(|B(-1)|=1\)，故
+\(
+B(-r)=B(-1)+(1-r)B'(-1)+o(1-r)
+\)；
+将其代入并展开得
+\(
+1-|B(-r)|^2=-2(1-r)\Re\!\bigl(B'(-1)/B(-1)\bigr)+o(1-r)
+\)，
+再除以 \(1-r^2\) 并令 \(r\uparrow 1\) 即得
+\(
+\mathcal{J}_{-1}(B)=\Re\!\bigl(-B'(-1)/B(-1)\bigr)
+\)。
+与第一步合并即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[端点吸收系数的可加守恒与单点层析]\label{cor:xi-endpoint-absorption-additive-tomography}
+在命题 \ref{prop:xi-endpoint-absorption-coefficient} 的设定下，成立如下恒等式与可核验读出：
+\begin{enumerate}
+  \item \textbf{（端点 Poisson--Busemann 质量的可加守恒）}
+  \[
+  \Phi_{-1}(B)=\sum_{k=1}^{N}B^{-1}(a_k)
+  \qquad(\text{按重数计}),
+  \]
+  其中 \(B^{-1}(w)=\frac{1-|w|^2}{|1+w|^2}\) 为端点 \(-1\) 的指数化 Busemann 坐标（命题 \ref{prop:app-busemann-poisson-minus1}）。
+  \item \textbf{（单点层析：沿一条径向读出偏移总量）}
+  \[
+  \Phi_{-1}(B)=\lim_{r\uparrow 1}\frac{-\log|B(-r)|}{1-r}.
+  \]
+  \item \textbf{（离切片偏移总量的证书化）}
+  若进一步假设 \(a_k=w_{\rho_k}\) 由离切片零点 \(\rho_k\) 的圆盘像给出，
+  并令 \(\delta_k:=\tfrac12-\Re(\rho_k)=B^{-1}(w_{\rho_k})\)（定理 \ref{thm:xi-offcritical-quadratic-radial-compression}），
+  则
+  \[
+  \Phi_{-1}(B)=\sum_{k=1}^{N}\delta_k.
+  \]
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+第 (1) 条由 \(P_{a}(-1)=\frac{1-|a|^2}{|1+a|^2}=B^{-1}(a)\)（命题 \ref{prop:app-busemann-poisson-minus1}）与 \(\Phi_{-1}(B)=\sum_k P_{a_k}(-1)\) 的定义直接得到。
+第 (2) 条由命题 \ref{prop:xi-endpoint-absorption-coefficient} 的渐近式两侧同除以 \(1-r\) 并令 \(r\uparrow 1\) 得到。
+第 (3) 条由第 (1) 条与 \(\delta_k=B^{-1}(w_{\rho_k})\)（定理 \ref{thm:xi-offcritical-quadratic-radial-compression}）合并即得。证毕。
+\end{proof}
+
+\paragraph{高度压缩与端点解耦：两条证书通道的可见尺度分裂}
+定理 \ref{thm:xi-offcritical-quadratic-radial-compression} 表明：对离切片零点 \(\rho=\beta+\mathrm{i}\gamma\) 的圆盘像 \(w_\rho\)，径向缺口满足
+\(
+1-|w_\rho|^2=\frac{4\delta}{\gamma^2+(1+\delta)^2}
+\)
+并随 \(|\gamma|\) 呈二次压缩；
+因此若试图仅以径向缺口通道（Jensen 圆平均）在固定半径处读出该零点的贡献，则必须进入端点边界层分辨率 \(1-\varrho\lesssim \delta/\gamma^2\)，从而触发不可绕过的分辨率/位预算门槛（推论 \ref{cor:xi-offcritical-visibility-threshold-bit-budget}；并见定理 \ref{thm:xi-jensen-quadratic-resolution-barrier} 的壁垒形式）。
+\par
+与之相对，同一零点的偏移坐标 \(\delta=B^{-1}(w_\rho)\) 是端点 \(-1\) 的 horocycle 层标签（命题 \ref{prop:app-busemann-poisson-minus1} 与定理 \ref{thm:xi-offcritical-quadratic-radial-compression}），其并不随 \(|\gamma|\) 衰减；
+在“偏移仅由 Blaschke 数据承载”的口径下，它直接进入端点吸收系数的可加守恒量 \(\Phi_{-1}(B)=\sum_k \delta_k\) 并可由单点径向衰减率读出（推论 \ref{cor:xi-endpoint-absorption-additive-tomography}）。
+因此，“离切片偏移”的可核验信息在闭环接口中自然分裂为两条正交证书通道：一条随高度发生二次径向压缩的径向缺口通道，另一条高度解耦、由端点 Poisson--Busemann 质量与单点通量承载的端点通道。
+
+\begin{definition}[两端点吸收系数]\label{def:xi-endpoint-two-absorption-coefficients}
+令 \(B\) 为有限 Blaschke 乘积，零点集合为 \(\{a_k\}_{k=1}^{N}\subset\mathbb{D}\)（按重数计）。
+除命题 \ref{prop:xi-endpoint-absorption-coefficient} 的端点 \(-1\) 吸收系数 \(\Phi_{-1}(B)\) 外，定义端点 \(+1\) 的吸收系数
+\[
+\Phi_{+1}(B):=\sum_{k=1}^{N}P_{a_k}(+1)=\sum_{k=1}^{N}\frac{1-|a_k|^2}{|1-a_k|^2}\ \in[0,\infty).
+\]
+\end{definition}
+
+\begin{theorem}[Adams 尺度门的端点吸收奇偶律与线性放大]\label{thm:xi-endpoint-absorption-adams-rescaling}
+令 \(B\) 为有限 Blaschke 乘积，并令 Adams 尺度门 \(\pi_m(w):=w^m\)（\(m\in\NN\)）。
+记幂拉回 \(B^{(m)}:=B\circ\pi_m\)，即 \(B^{(m)}(w)=B(w^m)\)。
+则对任意 \(m\ge 1\) 有
+\[
+\boxed{\;
+\Phi_{-1}\bigl(B^{(m)}\bigr)=
+\begin{cases}
+m\,\Phi_{-1}(B),& m\ \text{为奇数},\\[2pt]
+m\,\Phi_{+1}(B),& m\ \text{为偶数},
+\end{cases}
+\qquad
+\Phi_{+1}\bigl(B^{(m)}\bigr)=m\,\Phi_{+1}(B).\;}
+\]
+\end{theorem}
+
+\begin{proof}
+先由命题 \ref{prop:xi-endpoint-absorption-coefficient} 推出端点 \(+1\) 的径向吸收律：令 \(\widetilde B(w):=B(-w)\)，则 \(\widetilde B\) 仍为有限 Blaschke 乘积且 \(\widetilde B(-r)=B(r)\)。
+并且
+\[
+\Phi_{-1}(\widetilde B)
+:=\sum_{k=1}^{N}\frac{1-|(-a_k)|^2}{|1+(-a_k)|^2}
+=\sum_{k=1}^{N}\frac{1-|a_k|^2}{|1-a_k|^2}
+=\Phi_{+1}(B),
+\]
+故由命题 \ref{prop:xi-endpoint-absorption-coefficient} 得
+\[
+\log|B(r)|
+=\log|\widetilde B(-r)|
+=-(1-r)\,\Phi_{-1}(\widetilde B)+o(1-r)
+=-(1-r)\,\Phi_{+1}(B)+o(1-r)
+\qquad(r\uparrow 1).
+\]
+\par
+对 \(\Phi_{-1}(B^{(m)})\)，取 \(w=-r\uparrow-1\)，则
+\(
+B^{(m)}(-r)=B((-r)^m)
+\)。
+若 \(m\) 为奇数，则 \((-r)^m=-r^m\uparrow-1\)，由命题 \ref{prop:xi-endpoint-absorption-coefficient}（对 \(r^m\uparrow 1\) 应用）得
+\[
+\log|B^{(m)}(-r)|=\log|B(-r^m)|=-(1-r^m)\,\Phi_{-1}(B)+o(1-r^m).
+\]
+若 \(m\) 为偶数，则 \((-r)^m=r^m\uparrow+1\)，由上一步的 \(+1\) 径向吸收律得
+\[
+\log|B^{(m)}(-r)|=\log|B(r^m)|=-(1-r^m)\,\Phi_{+1}(B)+o(1-r^m).
+\]
+又因 \(1-r^m=m(1-r)+o(1-r)\)（\(r\uparrow 1\)），并且 \(B^{(m)}\) 仍为有限 Blaschke 乘积可适用命题 \ref{prop:xi-endpoint-absorption-coefficient}，从而
+\(
+\log|B^{(m)}(-r)|=-(1-r)\,\Phi_{-1}(B^{(m)})+o(1-r)
+\)；
+比较一阶系数即得所述奇偶律。
+\par
+对 \(\Phi_{+1}(B^{(m)})\)，取 \(w=r\uparrow+1\)，则 \(B^{(m)}(r)=B(r^m)\) 且 \(r^m\uparrow 1\)。
+由上一步的 \(+1\) 径向吸收律对 \(B\) 与 \(B^{(m)}\) 分别应用，得
+\[
+\log|B^{(m)}(r)|
+=\log|B(r^m)|
+=-(1-r^m)\,\Phi_{+1}(B)+o(1-r^m)
+=-(1-r)\,m\,\Phi_{+1}(B)+o(1-r)
+\]
+以及
+\(
+\log|B^{(m)}(r)|=-(1-r)\,\Phi_{+1}(B^{(m)})+o(1-r)
+\)。
+比较一阶系数得 \(\Phi_{+1}(B^{(m)})=m\Phi_{+1}(B)\)。证毕。
+\end{proof}
+
+\begin{remark}[奇偶性与端点通道的退化/合并]\label{rem:xi-endpoint-absorption-adams-parity}
+幂门 \(\pi_m(w)=w^m\) 在端点上的像满足 \(\pi_m(+1)=+1\) 且 \(\pi_m(-1)=(-1)^m\)：
+奇 \(m\) 时端点 \(-1\) 保持不变，从而 \(\Phi_{-1}\) 通道被线性放大而不改变基点；
+偶 \(m\) 时端点 \(-1\) 被送至 \(+1\)，故 \(\Phi_{-1}(B^{(m)})\) 读取的是 \(B\) 在 \(+1\) 的吸收系数 \(\Phi_{+1}(B)\)。
+特别地，偶 \(m\) 时端点双通道在 \(B^{(m)}\) 上合并为同一指标：
+\[
+\Phi_{-1}(B^{(m)})=\Phi_{+1}(B^{(m)})=m\,\Phi_{+1}(B),
+\]
+从而端点审计在该尺度上退化为一维。
+\end{remark}
+
+\begin{remark}[可审计的终端判别形式：端点一维指数与多尺度审计链]\label{rem:xi-endpoint-absorption-terminal-index}
+在 Hardy/Smirnov 因子分解与“偏移仅由 Blaschke 数据承载”的口径下，离切片偏移可被压缩为端点一维指数 \(\Phi_{-1}(B)\)（并配套端点 \(+1\) 指数 \(\Phi_{+1}(B)\)，定义 \ref{def:xi-endpoint-two-absorption-coefficients}）：
+其一方面等于单点径向衰减率的极限 \(\lim_{r\uparrow 1}\frac{-\log|B(-r)|}{1-r}\)（推论 \ref{cor:xi-endpoint-absorption-additive-tomography}），另一方面满足 \(\Phi_{-1}(B)=0\iff B\equiv 1\)（命题 \ref{prop:xi-endpoint-absorption-coefficient}），从而为“无离切片偏移”给出一个独立于径向缺口分辨率的端点判别接口。
+此外，Adams 尺度门 \(\pi_m\) 对端点指数给出确定性的线性重标定（定理 \ref{thm:xi-endpoint-absorption-adams-rescaling}）：
+奇数 \(m\) 保持端点 \(-1\) 通道，从而族 \(\{\Phi_{-1}(B^{(m)})\}_{m\ \mathrm{odd}}\) 形成一条无损的多尺度审计链；它以整系数尺度参数把“偏移总量”作为可加守恒量进行确定性放大，而不引入新的连续自由度。
+偶数 \(m\) 则触发端点通道的退化合并（注 \ref{rem:xi-endpoint-absorption-adams-parity}），使该链在该尺度上丢失 \(-1\) 与 \(+1\) 的区分。
+\end{remark}
+
+\begin{theorem}[多尺度一致性 \texorpdfstring{$\Longrightarrow$}{=>} 固定切片承载：奇数 Adams 门端点预算一致上界的充分条件]\label{thm:xi-multiscale-consistency-implies-rh}
+在 Hardy/Smirnov 因子分解口径下，设圆盘完成化对象 \(F_\zeta\) 的内因子为纯 Blaschke 对象 \(B\)（无奇异内因子）。
+若存在常数 \(M<\infty\) 使得对所有奇数 \(m\ge 1\) 的 Adams 尺度门 \(\pi_m(w)=w^m\) 都有一致上界
+\[
+\Phi_{-1}\bigl(B\circ \pi_m\bigr)\le M,
+\]
+则 \(\Phi_{-1}(B)=0\)，从而 \(B\equiv 1\)。
+因此 \(F_\zeta\) 在开单位圆盘 \(\mathbb{D}\) 内无零点，进而 RH 成立（推论 \ref{cor:app-endpoint-phase-certificate} 与 \S\ref{subsec:unit-disk-inner-outer}）。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:xi-endpoint-absorption-adams-rescaling}，对奇数 \(m\) 有
+\(
+\Phi_{-1}(B\circ\pi_m)=m\,\Phi_{-1}(B)
+\)。
+若其对所有奇数 \(m\) 一致有界，则令 \(m\to\infty\) 得 \(\Phi_{-1}(B)=0\)。
+由命题 \ref{prop:xi-endpoint-absorption-coefficient} 的最后一句知 \(B\equiv 1\)。
+在无奇异内因子假设下，\(B\equiv 1\) 等价于盘内无点状零点数据，从而 \(F_\zeta\) 在 \(\mathbb{D}\) 内无零点；由推论 \ref{cor:app-endpoint-phase-certificate} 即回到 RH。证毕。
+\end{proof}
+
+\paragraph{视界重整化：端点通量的严格缩放律}
+端点吸收系数 \(\Phi_{-1}(B)\) 是盘内点状缺陷的单点压缩；与之配套的尺度语义由“伸缩半群”给出。
+附录 \eqref{eq:scale-psi-m} 引入保持 \(\{\pm 1\}\) 不动点的 Möbius 半群 \(\{\psi_m\}_{m>0}\subset\mathrm{Aut}(\mathbb{D})\)，其端点乘子满足 \(\psi_m'(-1)=m^{-1}\)（命题 \ref{prop:scale-linearization-identity-multipliers}）。
+下述定理表明：端点 Poisson 权重（亦即通量的单原子贡献）在该尺度链下严格按因子 \(m\) 放大。
+
+\begin{theorem}[端点 Poisson 权重的尺度共变性]\label{thm:xi-endpoint-poisson-weight-scaling}
+令 \(m>1\) 且 \(\psi_m\) 如 \eqref{eq:scale-psi-m}。
+对任意 \(a\in\mathbb{D}\) 的端点 Poisson 权重
+\(
+P_a(-1):=\frac{1-|a|^2}{|1+a|^2}
+\)
+有严格恒等式
+\[
+\boxed{\;P_{\psi_m(a)}(-1)=m\,P_a(-1)\;}
+\]
+因此若 \(B\) 为有限 Blaschke 乘积、其零点集合为 \(\{a_k\}_{k=1}^{N}\subset\mathbb{D}\)（按重数计），并令
+\[
+a_k^{(n)}:=\psi_{m^n}(a_k),
+\]
+再令 \(B^{(n)}\) 为以 \(\{a_k^{(n)}\}\) 为零点集合的 Blaschke 乘积（重数保持），则端点毛发通量满足
+\[
+\boxed{\;\Phi_{-1}(B^{(n)})=m^n\,\Phi_{-1}(B)\;}
+\]
+其中 \(\Phi_{-1}\) 由命题 \ref{prop:xi-endpoint-absorption-coefficient} 定义。
+\end{theorem}
+
+\begin{proof}
+由 \eqref{eq:scale-psi-m} 直接计算（亦见命题 \ref{prop:scale-linearization-identity-multipliers} 的证明）得到恒等式
+\[
+\frac{1-\psi_m(a)}{1+\psi_m(a)}=m\,\frac{1-a}{1+a}.
+\]
+另一方面，对任意 \(z\in\mathbb{D}\) 有
+\[
+\Re\!\left(\frac{1-z}{1+z}\right)=\frac{1-|z|^2}{|1+z|^2}=P_z(-1),
+\]
+故取实部立得 \(P_{\psi_m(a)}(-1)=m\,P_a(-1)\)。
+最后一式由逐项求和与 \(\psi_{m^n}=\psi_m^{\circ n}\) 的半群性质推出。证毕。
+\end{proof}
+
+\begin{corollary}[跨尺度闭合 \texorpdfstring{$\Longrightarrow$}{=>} 无毛发固定点]\label{cor:xi-nohair-fixedpoint-flux-closure}
+令 \(m>1\) 并取上定理的尺度推送族 \(\{B^{(n)}\}_{n\ge 0}\)。
+若存在常数 \(M<\infty\) 使
+\[
+\sup_{n\ge 0}\Phi_{-1}(B^{(n)})\le M,
+\]
+则 \(\Phi_{-1}(B)=0\)，从而 \(B\equiv 1\)。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:xi-endpoint-poisson-weight-scaling}，\(\Phi_{-1}(B^{(n)})=m^n\Phi_{-1}(B)\)。
+当 \(m>1\) 时，若左端对 \(n\) 一致有界，则必有 \(\Phi_{-1}(B)=0\)。
+由命题 \ref{prop:xi-endpoint-absorption-coefficient} 的最后一句得 \(B\equiv 1\)。证毕。
+\end{proof}
+
+\begin{corollary}[端点通量的极端共振判据（无奇异内因子口径）]\label{cor:xi-extreme-resonance-criterion}
+在 Hardy/Smirnov 条件口径下，写圆盘化完成化对象为因子分解 \(F_{\zeta}=B\,S\,O\)（附录 \S\ref{subsec:unit-disk-inner-outer}）。
+进一步假设无奇异内因子 \(S\equiv 1\)，并且 \(B\) 为有限 Blaschke 乘积（零点集合按重数计为 \(\{a_k\}\)）。
+则以下命题等价：
+\begin{enumerate}
+  \item \(B\equiv 1\)（盘内无点状零点数据）；
+  \item \(\Phi_{-1}(B)=0\)；
+  \item 端点相位电流密度 \(j_{\mathrm{in}}(\pi)=0\)，其中 \(j_{\mathrm{in}}(\pi):=\sum_k P_{a_k}(-1)\)（定理 \ref{thm:app-inner-phase-current-poisson}）。
+\end{enumerate}
+并且若存在可审计上界 \(j_{\mathrm{in}}(\pi)\le M<\infty\)，则离临界线偏移总量满足线性约束
+\[
+\sum_k\delta_k\le M.
+\]
+\end{corollary}
+
+\begin{proof}
+在 \(S\equiv 1\) 且 \(B\) 为有限 Blaschke 乘积时，由定理 \ref{thm:app-inner-phase-current-poisson} 有
+\(
+j_{\mathrm{in}}(\pi)=\sum_k P_{a_k}(-1)=\Phi_{-1}(B)
+\)。
+每一项 \(P_{a_k}(-1)\) 严格为正，故
+\(
+j_{\mathrm{in}}(\pi)=0
+\iff
+\Phi_{-1}(B)=0
+\iff
+\{a_k\}=\varnothing
+\iff
+B\equiv 1
+\)，得到等价性。
+最后一式由推论 \ref{cor:app-endpoint-phase-current-offcritical}（或推论 \ref{cor:app-endpoint-phase-certificate} 的上界段落）直接推出：\(j_{\mathrm{in}}(\pi)\ge \sum_k\delta_k\)，故若 \(j_{\mathrm{in}}(\pi)\le M\) 则 \(\sum_k\delta_k\le M\)。证毕。
+\end{proof}
+
+\begin{remark}[阈值承载（极端共振）的数学化表述]\label{rem:xi-threshold-carrying-extreme-resonance}
+在本文的圆盘化—固定切片语义中，有限 Blaschke 数据 \(B\) 的存在等价于最小 realization 的点谱残差轴：其最小残差维数为 \(\deg B\)（定理 \ref{thm:blaschke-point-spectrum-correspondence}）。
+因此一旦 \(B\equiv 1\)（亦即端点通量为零），盘内离散点谱共振被排除；
+若仍允许奇异，则它只能以边界方式承载在固定切片 \(|w|=1\) 上（例如通过边界奇异内因子 \(S\) 与边界测度，见定理 \ref{thm:blaschke-defect-zero-fixed-slice-support} 与附录 \S\ref{subsec:unit-disk-inner-outer}）。
+\par
+在这一意义下，“极端共振”可被严格理解为：奇异不再以盘内离散模态出现，而仅允许以阈值边界承载出现；
+该表述与 unitary slice 的闭包语义（拒绝额外正交残差轴）以及严格 Beck--Chevalley/strictification 的零异常口径相容（参见定理 \ref{thm:dephys-offline-hair-curvature-reduction} 的归约链）。
+\end{remark}
+
+\begin{proposition}[共振品质因数与 Toeplitz--PSD 的检出门槛]\label{prop:xi-extreme-resonance-toeplitz-threshold}
+沿用视界 Carath\'eodory 对数导数 \(\mathscr{C}_{\zeta}\) 与 Toeplitz--PSD 层级（附录定理 \ref{thm:app-horizon-toeplitz-lmi}）。
+若存在离临界线零点 \(\rho=\beta+\mathrm{i}\gamma\)（\(\beta<\tfrac12\)，\(\delta:=\tfrac12-\beta>0\)），记其圆盘像 \(w_\rho=\mathcal{C}(\gamma+\mathrm{i}\delta)\in\mathbb{D}\)，并定义共振品质因数
+\[
+Q_\rho:=\frac{1}{1-|w_\rho|^2}=\frac{\gamma^2+(1+\delta)^2}{4\delta}
+\qquad\text{（推论 \ref{cor:app-offcritical-horocycle-busemann}）}.
+\]
+则盘内极点在 \(\mathscr{C}_{\zeta}\) 的多极矩 \(\{c_n\}\) 中留下显式主项印迹（命题 \ref{prop:app-horizon-pole-imprint}），从而在“余项具有可审计上界”的制度下，Toeplitz--PSD 的有限级核验存在一个内禀检出门槛：若希望以有限级 PSD 证书排除该极点（即强制出现有限维失败见证），则所需矩阶 \(N\) 必满足
+\[
+N\ \gtrsim\ Q_\rho\,\log\!\bigl(1+\delta Q_\rho\bigr)
+\asymp \frac{\gamma^2}{\delta}\,\log(1+\gamma^2)
+\]
+（附录定理 \ref{thm:app-horizon-toeplitz-detection-threshold}；并见备注 \ref{rem:app-horizon-toeplitz-witness-endpoint-focus} 对端点聚焦的解释）。
+\end{proposition}
+
+最后需要强调的是：“零漏泄”应被理解为可核验制度而非单点偶然。
+在圆盘化完成化 \(F_\zeta\) 上，RH 等价于缺陷恒零 \(D_{\zeta}(\varrho)\equiv 0\)（推论 \ref{cor:app-rh-iff-jensen-defect-zero}），亦等价于对任意趋近列 \(\varrho_n\uparrow 1\) 的可数约束 \(D_{\zeta}(\varrho_n)=0\)（定理 \ref{thm:app-jensen-countable-criterion}）。
+在该“零漏泄制度”下，Jensen--Blaschke 机制排除一切盘内点状零点；结合完成化自对偶参数 \(u=u(s)\) 的固定切片 \(|u|=1\iff \Re(s)=\tfrac12\)，得到：点状零点只能承载于固定切片，从而只能承载于 \(\Re(s)=\tfrac12\)。
+与之配套，拉马努金型对称在本文框架中的作用并非“交换轴”，而是通过局部谱界强制相位化闭包，从而逐通道消去幅度/径向漏泄（\S\ref{subsubsec:ramanujan-phase-lift-symmetry}；定理 \ref{thm:ramanujan-phase-lift-principle}）。
+\par
+因此在本文体系中，unitary slice 是连续可见参数的极小截面：偏离该截面的径向信息在端点层以二次压缩律进入（定理 \ref{thm:xi-offcritical-quadratic-radial-compression}），其可见化需要不可约的端点分辨率/位预算（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}），并可在有限高度带上由单半径 Jensen 缺陷不等式证书化（定理 \ref{thm:xi-jensen-single-radius-band-exclusion}）。
+共动局部化虽可在线性尺度显影偏移，但其代价是引入必须显式给定的可寻址前缀（注 \ref{rem:xi-comoving-horizon-localization-address-null}）；在固定可见接口下若拒绝外置该前缀，则离切片偏移仍被迫通过端点二次径向通道进入并触发相应容量门槛。
+上述预算轴在协议语义中相互正交且不可替代（定理 \ref{thm:xi-null-complete-trichotomy-offline}）：提升某一轴的预算不能抵消另一轴的门槛违背；在拒绝外置模式轴时，“离切片断言”在类型层不可形成可核验地址并稳定退化为 \(\mathsf{NULL}\)。
+
+\endinput
+

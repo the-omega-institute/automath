@@ -1,0 +1,720 @@
+\subsubsection{加权核的压力与大偏差：可审计接口}\label{subsubsec:sync-kernel-weighted-pressure-ldp}
+令 $\phi$ 为同步图边上的可观测量（例如输出位 $e$ 的指示函数，或"到达含 $\overline{1}$ 状态"的指示函数）。定义加权矩阵
+\[
+(B_\theta)_{ij}:=\sum_{e:i\to j}\exp\bigl(\theta\,\phi(e)\bigr),
+\]
+其中求和遍历所有从 $i$ 到 $j$ 的边。记
+\[
+\lambda(\theta):=\rho(B_\theta),\qquad P(\theta):=\log\lambda(\theta).
+\]
+则 $P(\theta)$ 为有限型情形的压力函数，且 $P(0)=\log 3$。令
+\[
+I(\alpha):=\sup_{\theta\in\RR}\bigl(\theta\alpha-(P(\theta)-P(0))\bigr),
+\]
+则 $I(\alpha)$ 给出 $\phi$ 的长程平均的大偏差率函数（标准热力学形式口径，见 \cite{Ruelle1978Thermodynamic,ParryPollicott1990Zeta}）。
+
+加权 $\zeta$ 仍由
+\[
+\zeta_{B,\theta}(z)=\frac{1}{\det(I-zB_\theta)}
+\]
+给出，并可定义加权 primitive 轨道谱
+\[
+a_n(\theta):=\mathrm{Tr}(B_\theta^n),\qquad
+p_n(\theta)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(d\theta),
+\]
+以及相应的加权 Mertens 常数族（对 $z\to 1/\lambda(\theta)$ 取 Abel 有限部）。
+可审计数值由脚本 \texttt{scripts/exp\_sync\_kernel\_weighted\_pressure.py} 输出。
+
+\subsubsection{加权 primitive--periodic 的 Witt 分解}\label{app:witt-weighted}
+以下取输出位势 $\varphi(e)=e$，令
+\[
+u=e^\theta,\qquad B(u)=B_0+uB_1,\qquad \Delta(z,u):=\det(I-zB(u)).
+\]
+其中 $B_0$（resp.\ $B_1$）只计数输出位 $e=0$（resp.\ $e=1$）的边。
+则
+\[
+\zeta(z,u)=\exp\!\left(\sum_{n\ge 1}\frac{\mathrm{Tr}(B(u)^n)}{n}z^n\right)=\Delta(z,u)^{-1}.
+\]
+令
+\[
+a_n(u):=\mathrm{Tr}(B(u)^n),\qquad
+P(z,u):=\sum_{n\ge 1}p_n(u)z^n,
+\]
+其中
+\(
+p_n(u)=\sum_{\tau\ \mathrm{primitive},\,|\tau|=n}u^{S_\tau\varphi}
+\)
+为 primitive 轨道的加权谱多项式。Euler 乘积给出
+\[
+\zeta(z,u)=\prod_{\tau\ \mathrm{primitive}}\bigl(1-z^{|\tau|}u^{S_\tau\varphi}\bigr)^{-1}.
+\]
+取对数并展开幂重复得到 Witt 分解
+\[
+\log\zeta(z,u)=\sum_{m\ge 1}\frac{1}{m}P(z^m,u^m).
+\]
+由 Möbius 反演得到
+\[
+P(z,u)=\sum_{m\ge 1}\frac{\mu(m)}{m}\log\zeta(z^m,u^m),
+\]
+对系数比较即有
+\[
+p_n(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(u^d)
+\quad\Longleftrightarrow\quad
+p_n(\theta)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(d\theta).
+\]
+
+\subsubsection{Big-Witt/necklace 桥包与可检验同余}\label{app:witt-bridge-package}
+上式不仅是“可计算公式”，而是 Big-Witt（necklace ring）上的标准坐标变换：$a_n(u)$ 为 ghost 分量，$p_n(u)$ 为 Witt 坐标，而 Euler 乘积是 plethystic exponential。等价地，对任意带参矩阵族 $T(u)$，有严格恒等式
+\[
+\boxed{\ \zeta_T(z,u)=\mathrm{Exp}_W\bigl(\mathrm{Mob}_W(\mathrm{TrSeq}(T))\bigr)\ }
+\]
+其中 $\mathrm{TrSeq}(T)=(a_n(u))_{n\ge 1}$、$\mathrm{Mob}_W(a)=p$ 给出 $p_n(u)=\frac1n\sum_{d\mid n}\mu(d)\,a_{n/d}(u^d)$，而 $\mathrm{Exp}_W$ 由
+\(
+\log\zeta=\sum_{m\ge 1}\frac{1}{m}P(z^m,u^m)
+\)
+定义。该“桥包”直接产出一批可检验算术约束：
+
+\begin{proposition}[交换图的函子化：intertwiner 下的自然性]\label{prop:witt-bridge-functorial}
+取系数环 \(R\)（例如 \(R=\ZZ[u]\) 或 \(R=\ZZ[u,u^{-1}]\)），并令 \(\mathbf{End}_R\) 的对象为 \((V,T)\)（有限秩自由 \(R\)-模与其 \(R\)-线性自同态），态射为 intertwiner \(f:(V,T)\to (W,S)\) 满足 \(f\circ T=S\circ f\)。
+令 \(\mathbf{Seq}_R\) 为 \(R\)-值序列范畴（按分量逐项映射），并定义
+\[
+\mathsf{Ghost}:\mathbf{End}_R\to \mathbf{Seq}_R,\qquad
+(V,T)\mapsto (a_n)_{n\ge 1},\ a_n:=\Tr(T^n).
+\]
+则 \(\mathsf{Ghost}\) 为函子，且对任意 intertwiner \(f\) 有 \(a_n(T)=a_n(S)\)（因此 \(\zeta_T=\zeta_S\)）。
+再令 \(\mathsf{Mob}\) 为带 Adams 操作 \(\psi^d(u)=u^d\) 的 Witt--Möbius 变换
+\[
+\mathsf{Mob}(a)=p,\qquad
+p_n(u):=\frac1n\sum_{d\mid n}\mu(d)\,a_{n/d}(u^d),
+\]
+并令 \(\mathsf{Euler}\) 为由 \(p\) 生成 Euler 乘积（等价于 plethystic exponential）的构造。
+则对每个 \((V,T)\) 有严格恒等式
+\[
+\boxed{\;
+\mathsf{Zeta}(V,T)
+=\mathsf{Euler}\bigl(\mathsf{Mob}(\mathsf{Ghost}(V,T))\bigr)\; },
+\qquad
+\mathsf{Zeta}(V,T):=\exp\!\left(\sum_{n\ge 1}\frac{\Tr(T^n)}{n}z^n\right)=\det(I-zT)^{-1}.
+\]
+因此“trace（时间 ghost）\(\leftrightarrow\) primitive（空间原子）”的交换图不仅是类比，而是由 Big-Witt 坐标变换给出的严格自然变换。
+\end{proposition}
+
+\begin{theorem}[Dirichlet 角色扭转的 Witt--Möbius 变换]\label{thm:witt-dirichlet-twist}
+对任意 Dirichlet 角色 \(\chi\)，定义扭转 \(\mathsf{Mob}\) 变换
+\[
+p_n^{(\chi)}:=\frac{1}{n}\sum_{d\mid n}\mu(d)\,\chi(d)\,\psi^d\!\bigl(a_{n/d}\bigr)\in R,
+\]
+并定义扭转 zeta 生成函数
+\[
+\mathsf{Zeta}_{\chi}(V,T)
+:=\exp\!\Bigl(\sum_{n\ge 1}\frac{\chi(n)}{n}\,\Tr(T^{n})\,z^{n}\Bigr).
+\]
+则存在严格恒等式
+\[
+\boxed{\;\mathsf{Zeta}_{\chi}(V,T)=\mathsf{Euler}\bigl(p^{(\chi)}\bigr)\; },
+\]
+且其“primitive 剥离”（即 \(\mathsf{Mob}_{\chi}^{-1}\)）的 Dirichlet 系数为 \(\mu(n)\chi(n)\)，与未扭转情形 \(\mathcal{P}(s)=\sum_{m\ge 1}\frac{\mu(m)}{m}\log\mathcal{Z}(ms)\) 的结构完全同型。
+\end{theorem}
+\begin{proof}
+由扭转 ghost 分量 \(a_n^{(\chi)}:=\chi(n)\Tr(T^n)\) 与标准 Witt/Möbius 反演 \(n\,p_n=\sum_{d\mid n}\mu(d)\,\psi^d(a_{n/d})\)，代入 \(a_{n/d}^{(\chi)}=\chi(n/d)\Tr(T^{n/d})\) 得 \(p_n^{(\chi)}=\frac{1}{n}\sum_{d\mid n}\mu(d)\chi(d)\,\psi^d(a_{n/d})\)；Euler 乘积由 \(\mathsf{Zeta}_{\chi}=\exp\bigl(\sum_n \chi(n)\Tr(T^n)z^n/n\bigr)\) 与 primitive 展开 \(\log\mathsf{Zeta}_{\chi}=\sum_m p_m^{(\chi)}(z^m)/m\) 的对应性给出。primitive 剥离的 Möbius 反演核为 \(\mu(n)\chi(n)\)。证毕。
+\end{proof}
+该定理给出体系内部的正交表示分解刻画：当相位压缩引入角色通道（例如模 \(4\) 的分支记忆）时，角色并非外加标签，而是 Big-Witt 自然变换在 Adams 结构上的必然扭转；相位层的通道化分解由 Dirichlet 角色所给出的表示论基向量完全刻画。
+
+\begin{definition}[Adams--Dirichlet 重整化门（算术伸缩）]\label{def:witt-adams-dirichlet-renorm-gate}
+对每个整数 \(d\ge 1\)，定义一个作用在“扭转参数对”上的算术重整化门
+\begin{equation}\label{eq:witt-adams-dirichlet-renorm-gate}
+\boxed{\;
+\mathsf{Ren}_d:\ (\chi,u)\longmapsto(\chi^d,u^d)\;}
+\end{equation}
+其中 \(\chi^d\) 为角色的 \(d\) 次幂：\(\chi^d(n):=\chi(n)^d\)（仍为 Dirichlet 角色），而 \(u^d\) 表示系数环上的 Adams 操作 \(\psi^d\) 在参数多项式环情形的幂替换（\(\psi^d(u)=u^d\)）。
+\end{definition}
+
+\begin{proposition}[重整化单子：\texorpdfstring{$(\chi,u)\mapsto(\chi^d,u^d)$}{(chi,u)->(chi^d,u^d)} 的半群律与扭转兼容]\label{prop:witt-renorm-monoid}
+对任意 \(d,e\ge 1\) 有半群律
+\[
+\mathsf{Ren}_d\circ\mathsf{Ren}_e=\mathsf{Ren}_{de}.
+\]
+并且在定理 \ref{thm:witt-dirichlet-twist} 的口径下，\(\mathsf{Ren}_d\) 保持扭转--Witt 交换图的形式不变：将 \((\chi,u)\) 同时替换为 \((\chi^d,u^d)\) 时，扭转 Möbius 公式与扭转 \(\mathsf{Zeta}_\chi\) 的 Euler 乘积表达仍逐项成立。
+\end{proposition}
+
+\begin{proof}
+半群律由幂的结合性与 Adams 操作的复合律 \(\psi^{de}=\psi^d\circ\psi^e\) 直接推出（见命题 \ref{prop:witt-bridge-functorial} 对 \(\psi^d\) 的约定）。
+兼容性则因定理 \ref{thm:witt-dirichlet-twist} 的公式仅由 \(\chi\) 的乘法性与 \(\psi^d\) 的幂替换性质构成：对任意 \(d\ge 1\) 作代换 \((\chi,u)\mapsto(\chi^d,u^d)\)，各项仍满足同一代数恒等式。证毕。
+\end{proof}
+
+\begin{remark}[cyclotomic 幂映射的范畴化影子]\label{rem:witt-renorm-cyclotomic-power-shadow}
+在主文的 Dirichlet 轴束 \(G_\infty=\varprojlim_m(\ZZ/m\ZZ)^\times\) 上，幂映射 \(g\mapsto g^d\) 在对偶侧诱导 \(\chi\mapsto\chi^d\)。
+因此 \(\mathsf{Ren}_d\) 的 \(\chi\)-方向正对应 cyclotomic 商上的幂端同态，而 \(u\)-方向对应 Adams/尺度替换；二者在 Big-Witt 交换图内被统一为单一的算术伸缩门。
+\end{remark}
+
+\begin{proposition}[necklace 整除律]\label{prop:witt-necklace-div}
+对任意 $n\ge 1$，有
+\[
+n\ \Big|\ \sum_{d\mid n}\mu(d)\,a_{n/d}(u^d)\qquad\text{于}\ \mathbb{Z}[u].
+\]
+\end{proposition}
+\begin{proof}
+由于 $p_n(u)\in\mathbb{Z}[u]$ 是 primitive 轨道的加权计数，多项式恒在整系数环内；由 $n\,p_n(u)=\sum_{d\mid n}\mu(d)a_{n/d}(u^d)$ 得整除结论。证毕。
+\end{proof}
+
+\begin{corollary}[$p$-幂 Dwork 型同余]\label{cor:witt-dwork-congruence}
+取 $n=p^k$（素数 $p$），则
+\[
+a_{p^k}(u)\equiv a_{p^{k-1}}(u^p)\pmod{p^k}\qquad\text{于}\ \mathbb{Z}[u].
+\]
+\end{corollary}
+\begin{proof}
+由 $\mu(1)=1,\mu(p)=-1,\mu(p^2)=0$ 得
+\(
+p^k\,p_{p^k}(u)=a_{p^k}(u)-a_{p^{k-1}}(u^p)
+\)。
+利用命题 \ref{prop:witt-necklace-div} 即得结论。证毕。
+\end{proof}
+
+\input{prop__witt-pk-sparsification}
+
+\begin{proposition}[系数环版本：necklace 整除律与 Dwork 型 \texorpdfstring{$p$}{p}-幂同余]\label{prop:witt-necklace-dwork-R}
+令 \(R\) 为交换的 \(\ZZ\)-代数，并带有 Adams 操作族 \(\psi^d:R\to R\)（\(d\ge 1\)）满足
+\(\psi^1=\mathrm{id}\)、\(\psi^{de}=\psi^d\circ\psi^e\)，且在参数多项式环情形 \(\psi^d\) 由逐变量幂替换给出（例如在 \(\ZZ[u_1,\dots,u_m]\) 上为 \(u_i\mapsto u_i^d\)）。
+设 \(B(\mathbf u)\) 为一有限加权同步图/有限状态核所诱导的加权邻接矩阵族，其条目属于 \(R\)（因此每条边携带的权重为 \(R\) 中的一个元素），并定义
+\[
+a_n:=\Tr\bigl(B(\mathbf u)^n\bigr)\in R,\qquad n\ge 1.
+\]
+将 primitive 加权谱多项式定义为
+\[
+p_n:=\sum_{\tau\ \mathrm{primitive},\,|\tau|=n} w(\tau)\in R,
+\]
+其中 \(w(\tau)\in R\) 为该 primitive 轨道的权重乘积（对多参数即为对应单项式/权重的乘积）。
+则对每个 \(n\ge 1\) 有严格恒等式（Witt/Möbius 反演）
+\[
+n\,p_n=\sum_{d\mid n}\mu(d)\,\psi^d\!\bigl(a_{n/d}\bigr)\in R.
+\]
+从而得到两条对任何此类“Euler 乘积核”成立的算术约束：
+\begin{enumerate}
+  \item \textbf{（necklace 整除）} \(\sum_{d\mid n}\mu(d)\,\psi^d(a_{n/d})\in nR\)；
+  \item \textbf{（Dwork 型同余）} 对任意素数 \(p\) 与 \(k\ge 1\)，有
+  \[
+  a_{p^k}\equiv \psi^{p}\!\bigl(a_{p^{k-1}}\bigr)\pmod{p^k}\qquad\text{于}\ R.
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+在有限图/SFT 核口径下，周期点（闭环）与 primitive 轨道之间满足标准关系
+\[
+a_n=\sum_{d\mid n} d\,\psi^{n/d}(p_d)\qquad(n\ge 1),
+\]
+其含义是：长度 \(n\) 的闭环按最小周期 \(d\) 分解后，每个 primitive 轨道在 \(n/d\) 次幂重复下贡献 \(d\) 个相位起点；而权重在幂重复下由 Adams 操作 \(\psi^{n/d}\) 作用（在多参数多项式环上即为逐变量 \(x\mapsto x^{n/d}\) 的幂替换）。
+对上式作 Möbius 反演得到
+\(
+n\,p_n=\sum_{d\mid n}\mu(d)\psi^d(a_{n/d})
+\)，并且 \(p_n\in R\) 由其作为 primitive 轨道加权和的定义保证。
+当 \(n=p^k\) 时，因 \(\mu(p^j)=0\)（\(j\ge 2\)），上式塌缩为
+\(
+p^k p_{p^k}=a_{p^k}-\psi^{p}(a_{p^{k-1}})
+\)，从而给出所示的 \(\bmod p^k\) 同余。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$p$}{p}-进超同余：\texorpdfstring{$a_{p^k}(-1)$}{a_{p^k}(-1)} 被 \texorpdfstring{$p^k$}{p^k} 整除]\label{cor:witt-dwork-supercongruence-minus1}
+取任意奇素数 \(p\)。则对任意 \(k\ge 1\) 有
+\[
+\boxed{\ a_{p^k}(-1)\equiv 0\pmod{p^k}\ }.
+\]
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:witt-dwork-congruence}，对 \(k\ge 1\) 有
+\[
+a_{p^k}(u)\equiv a_{p^{k-1}}(u^p)\pmod{p^k}\qquad\text{于}\ \ZZ[u].
+\]
+在 \(u=-1\) 处特化并用 \(p\) 为奇数（从而 \((-1)^p=-1\)）得
+\[
+a_{p^k}(-1)\equiv a_{p^{k-1}}(-1)\pmod{p^k}.
+\]
+而 \(p^{k-1}\) 为奇数，故由命题 \ref{prop:trace-palindrome} 的结论 \(a_n(-1)=0\)（奇数 \(n\)）知 \(a_{p^{k-1}}(-1)=0\)。
+于是 \(a_{p^k}(-1)\equiv 0\pmod{p^k}\)。证毕。
+\end{proof}
+
+\begin{remark}[\texorpdfstring{$p$}{p}-幂方向的 Witt 解释：Frobenius 兼容的 ghost 分量]\label{rem:witt-ptypical-ghost}
+把 \(a_n(u)\) 视作 Big-Witt（necklace）环上的 ghost 坐标，则 \(\{a_{p^k}(u)\}_{k\ge 0}\) 是其在 \(p\)-幂索引上的 ghost 子序列。
+推论 \ref{cor:witt-dwork-congruence} 的 Dwork 型同余表明该子序列在 \(u\mapsto u^p\) 的 Adams/Frobenius 操作下满足强的 \(p\)-进兼容性：
+\[
+a_{p^k}(u)-a_{p^{k-1}}(u^p)\in p^k\,\ZZ[u].
+\]
+因此同步核的 primitive/trace 桥包不仅在复解析侧可检验（\(\zeta\)、Euler 乘积），在 \(p\)-进整性侧也携带一条自然的“Frobenius-lift”约束。
+在后续若考虑 \(p\)-进方向的插值或对比不同核的“算术指纹”，该同余可作为最基本的可审计输入。
+\end{remark}
+
+\begin{proposition}[\texorpdfstring{$p$}{p}-幂 primitive 坐标的显式公式]\label{prop:witt-ppower-primitive-coordinate}
+对任意素数 \(p\) 与 \(k\ge 1\)，Big-Witt/Möbius 反演在 \(n=p^k\) 处塌缩为
+\[
+\boxed{\;
+p_{p^k}(u)=\frac{a_{p^k}(u)-a_{p^{k-1}}(u^p)}{p^k}\in\ZZ[u]\; }.
+\]
+因此推论 \ref{cor:witt-dwork-congruence} 等价于“\(p\)-幂方向的 primitive 坐标 \(p_{p^k}(u)\) 在整系数环内良定义”，并给出一条可审计的 \(p\)-进差分指纹序列 \(\{p_{p^k}(u)\}_{k\ge 0}\)。
+\end{proposition}
+\begin{proof}
+由定义
+\(
+p_n(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(u^d)
+\)。
+当 \(n=p^k\) 时，除数仅为 \(p^j\)，且 \(\mu(p^j)=0\)（\(j\ge 2\)），故仅剩 \(d=1\) 与 \(d=p\) 两项，得到
+\[
+p_{p^k}(u)=\frac{1}{p^k}\bigl(a_{p^k}(u)-a_{p^{k-1}}(u^p)\bigr).
+\]
+由命题 \ref{prop:witt-necklace-div} 知右端确为 \(\ZZ[u]\) 元素。证毕。
+\end{proof}
+
+\begin{lemma}[核版 Dieudonn\'e--Dwork 整性判据（形式幂级数）]\label{lem:witt-dieudonne-dwork}
+设 \(R\) 为无 \(p\)-挠的 \(p\)-进完备环（例如 \(R=\ZZ_p[u]\)），并定义 Frobenius 提升算子
+\[
+\varphi:\ R[[T]]\to R[[T]],\qquad
+\varphi\!\left(\sum_{n\ge 0}c_n(u)T^n\right):=\sum_{n\ge 0}c_n(u^p)\,T^{pn}.
+\]
+若 \(F(T)\in 1+T\,R\otimes_{\ZZ_p}\QQ_p[[T]]\) 满足
+\[
+\boxed{\;
+\frac{\varphi(F(T))}{F(T)^p}\in 1+pT\,R[[T]]\;},
+\]
+则必有 \(F(T)\in 1+T\,R[[T]]\)（即 \(F\) 的全部系数 \(p\)-整）。
+\end{lemma}
+\begin{proof}
+这是 \(p\)-典型 Witt/Artin--Hasse 理论中常用的整性判据（Dieudonn\'e--Dwork 形式）。
+在本文所需形式下，可用如下思路证明：对 \(F\) 取 \(p\)-进对数 \(\log F\)（其在 \(T\)-进拓扑下收敛），将条件改写为
+\(
+\varphi(\log F)-p\log F\in pT\,R[[T]]
+\)；
+再按 \(T\) 的次数作归纳，可逐次推出 \(\log F\) 的系数均在 \(R\) 中，从而 \(F=\exp(\log F)\) 亦在 \(1+T\,R[[T]]\) 内。证毕。
+\end{proof}
+
+\begin{theorem}[核版 Dwork 引理的 \texorpdfstring{$p$}{p}-典型整性：局部 \texorpdfstring{$p$}{p}-因子在 \texorpdfstring{$\ZZ_p[u]$}{Z\_p[u]} 内闭合]\label{thm:witt-dwork-zp-integrality}
+固定素数 \(p\)。定义
+\[
+S_p(T;u):=\sum_{k\ge 0}\frac{a_{p^k}(u)}{p^k}\,T^{p^k}\in \QQ_p[u][[T]],
+\qquad
+Z_p(T;u):=\exp\!\bigl(S_p(T;u)\bigr).
+\]
+则有
+\[
+\boxed{\;
+Z_p(T;u)\in 1+T\,\ZZ_p[u][[T]]\; }.
+\]
+\end{theorem}
+\begin{proof}
+取引理 \ref{lem:witt-dieudonne-dwork} 中的 \(R=\ZZ_p[u]\)。
+对 \(S_p\) 施加 \(\varphi\) 得
+\[
+\varphi(S_p)(T;u)
+=\sum_{k\ge 0}\frac{a_{p^k}(u^p)}{p^k}\,T^{p^{k+1}}
+=\sum_{k\ge 1}\frac{a_{p^{k-1}}(u^p)}{p^{k-1}}\,T^{p^{k}}.
+\]
+另一方面
+\[
+pS_p(T;u)
+=p\,a_1(u)\,T+\sum_{k\ge 1}\frac{a_{p^k}(u)}{p^{k-1}}\,T^{p^k}.
+\]
+因此
+\[
+\varphi(S_p)(T;u)-pS_p(T;u)
+=-p\,a_1(u)\,T+\sum_{k\ge 1}\frac{a_{p^{k-1}}(u^p)-a_{p^k}(u)}{p^{k-1}}\,T^{p^k}.
+\]
+由推论 \ref{cor:witt-dwork-congruence}，对 \(k\ge 1\) 有
+\(
+a_{p^k}(u)-a_{p^{k-1}}(u^p)\in p^k\ZZ[u]
+\)，
+故每一项
+\(
+\frac{a_{p^{k-1}}(u^p)-a_{p^k}(u)}{p^{k-1}}
+\)
+均在 \(p\,\ZZ_p[u]\) 中。又 \(-p a_1(u)T\in pT\,\ZZ_p[u][[T]]\)，从而
+\[
+\varphi(S_p)-pS_p\in pT\,\ZZ_p[u][[T]].
+\]
+令 \(Z_p=\exp(S_p)\)，则
+\[
+\frac{\varphi(Z_p)}{Z_p^p}
+=\exp\!\bigl(\varphi(S_p)-pS_p\bigr)\in 1+pT\,\ZZ_p[u][[T]].
+\]
+由引理 \ref{lem:witt-dieudonne-dwork} 得 \(Z_p\in 1+T\,\ZZ_p[u][[T]]\)。证毕。
+\end{proof}
+
+\begin{proposition}[unit-root 极限不变量：\texorpdfstring{$u^p=u$}{u^p=u} 时 \texorpdfstring{$a_{p^k}(u)$}{a_{p^k}(u)} 在 \texorpdfstring{$\ZZ_p$}{Z_p} 中收敛]\label{prop:witt-unit-root-limit}
+令 \(p\) 为奇素数。若 \(u\) 满足 \(u^p=u\)（例如 \(u\in\mu_{p-1}\subset\ZZ_p^\times\) 的 Teichm\"uller 单位），则序列 \(\{a_{p^k}(u)\}_{k\ge 0}\) 在 \(\ZZ_p\) 中为 Cauchy 序列，并收敛到极限
+\[
+\boxed{\;
+A_p(u):=\lim_{k\to\infty}a_{p^k}(u)\in \ZZ_p\; }.
+\]
+并且有显式 \(p\)-进误差界
+\[
+v_p\!\bigl(a_{p^k}(u)-a_{p^{k-1}}(u)\bigr)\ge k\qquad(k\ge 1).
+\]
+\end{proposition}
+\begin{proof}
+在条件 \(u^p=u\) 下，推论 \ref{cor:witt-dwork-congruence} 退化为
+\(
+a_{p^k}(u)\equiv a_{p^{k-1}}(u)\ (\mathrm{mod}\ p^k)
+\)，
+即 \(a_{p^k}(u)-a_{p^{k-1}}(u)\in p^k\ZZ_p\)，从而给出上式的 \(p\)-进赋值界。
+因此对任意 \(r>s\)，有
+\[
+a_{p^r}(u)-a_{p^s}(u)=\sum_{k=s+1}^{r}\bigl(a_{p^k}(u)-a_{p^{k-1}}(u)\bigr)\in p^{s+1}\ZZ_p,
+\]
+故为 Cauchy 序列并收敛于 \(\ZZ_p\)。证毕。
+\end{proof}
+
+\begin{remark}[unit-root 极限与自对偶的相容性]\label{rem:witt-unit-root-self-dual}
+若进一步使用命题 \ref{prop:trace-palindrome} 的回文关系 \(a_n(u)=u^n a_n(1/u)\)，则在 \(u^p=u\) 的 Teichm\"uller 情形有 \(u^{p^k}=u\)，从而
+\[
+a_{p^k}(u)=u\,a_{p^k}(1/u).
+\]
+令 \(k\to\infty\) 并用命题 \ref{prop:witt-unit-root-limit} 的收敛性，可得极限不变量满足
+\[
+\boxed{\ A_p(u)=u\,A_p(1/u)\ }.
+\]
+这给出 unit-root 指纹在自对偶对称下的一个可审计约束。
+\end{remark}
+
+\subsubsection{同步核的自对偶对称}\label{app:kernel-self-dual}
+对同步核存在状态对合 $\iota$，其作用为
+\[
+\iota:\quad
+000\leftrightarrow 101,\quad
+001\leftrightarrow 100,\quad
+002\leftrightarrow 010,\quad
+0\overline{1}2\leftrightarrow 11\overline{1},\quad
+1\overline{1}2\leftrightarrow 01\overline{1}.
+\]
+令 $\Pi$ 为该置换的矩阵，则
+\[
+\Pi^{-1}B_0\Pi=B_1,\qquad \Pi^{-1}B_1\Pi=B_0,
+\]
+从而
+\[
+\Pi^{-1}B(u)\Pi=uB(1/u).
+\]
+\begin{lemma}[\texorpdfstring{$\Pi$}{Pi}-偶/奇分量与 \texorpdfstring{$B(u)$}{B(u)} 的唯一分解]\label{lem:sync-kernel-even-odd-splitting}
+定义
+\[
+B_{\mathrm{sym}}:=\frac{B_0+B_1}{2},\qquad
+B_{\mathrm{asym}}:=\frac{B_1-B_0}{2}.
+\]
+则对一切 \(u\in\CC\) 有
+\[
+\boxed{\ B(u)=(1+u)\,B_{\mathrm{sym}}+(u-1)\,B_{\mathrm{asym}}\ }.
+\]
+并且在自对偶交换关系 \(\Pi^{-1}B_0\Pi=B_1,\ \Pi^{-1}B_1\Pi=B_0\) 下，
+\[
+\boxed{\ \Pi^{-1}B_{\mathrm{sym}}\Pi=B_{\mathrm{sym}},\qquad
+\Pi^{-1}B_{\mathrm{asym}}\Pi=-B_{\mathrm{asym}}\ }.
+\]
+此外，上述 \((1+u)\)--\((u-1)\) 分解在 \(\QQ\)-线性意义下是唯一的：若存在 \(S,A\) 使得
+\(
+B(u)=(1+u)S+(u-1)A
+\)，则必有 \(S=B_{\mathrm{sym}}\) 且 \(A=B_{\mathrm{asym}}\)。
+\end{lemma}
+
+\begin{proof}
+由定义直接展开
+\[
+(1+u)B_{\mathrm{sym}}+(u-1)B_{\mathrm{asym}}
+=\frac12\Bigl((1+u)(B_0+B_1)+(u-1)(B_1-B_0)\Bigr)
+=B_0+uB_1
+=B(u).
+\]
+再由 \(\Pi\) 交换 \(B_0,B_1\) 得
+\[
+\Pi^{-1}B_{\mathrm{sym}}\Pi
+=\frac{1}{2}\bigl(\Pi^{-1}B_0\Pi+\Pi^{-1}B_1\Pi\bigr)
+=\frac{B_1+B_0}{2}
+=B_{\mathrm{sym}},
+\]
+\[
+\Pi^{-1}B_{\mathrm{asym}}\Pi
+=\frac{1}{2}\bigl(\Pi^{-1}B_1\Pi-\Pi^{-1}B_0\Pi\bigr)
+=\frac{B_0-B_1}{2}
+=-B_{\mathrm{asym}}.
+\]
+唯一性由比较 \(u=0,1\) 两点给出：若 \(B(u)=(1+u)S+(u-1)A\)，则
+\(
+B(0)=S-A=B_0
+\)
+与
+\(
+B(1)=2S=B_0+B_1
+\)
+联立解得 \(S=(B_0+B_1)/2=B_{\mathrm{sym}}\)，再代回得 \(A=(B_1-B_0)/2=B_{\mathrm{asym}}\)。
+证毕。
+\end{proof}
+
+\begin{remark}[可计算桥包：结论 \ref{lem:sync-kernel-even-odd-splitting} 的矩阵级核验清单]\label{rem:sync-kernel-even-odd-bridge}
+给定整数矩阵 \((B_0,B_1)\) 与置换矩阵 \(\Pi\)，可按以下等式逐条核验：
+\begin{enumerate}
+  \item \textbf{自对偶交换：}验证 \(\Pi^{-1}B_0\Pi=B_1\) 与 \(\Pi^{-1}B_1\Pi=B_0\)（置换矩阵下等价于 \(\Pi^\top B_0\Pi=B_1\)）。
+  \item \textbf{偶/奇分量：}计算 \(2B_{\mathrm{sym}}=B_0+B_1\)、\(2B_{\mathrm{asym}}=B_1-B_0\)，并验证
+  \[
+  \Pi^{-1}(2B_{\mathrm{sym}})\Pi=2B_{\mathrm{sym}},\qquad
+  \Pi^{-1}(2B_{\mathrm{asym}})\Pi=-2B_{\mathrm{asym}}.
+  \]
+  \item \textbf{\(u\)-依赖重构：}对任意采样 \(u\)（如随机复数），验证
+  \(
+  B(u)=B_0+uB_1=(1+u)B_{\mathrm{sym}}+(u-1)B_{\mathrm{asym}}
+  \)。
+\end{enumerate}
+在命题 \ref{prop:self-dual-normal-form-1pmu} 的 \(\Pi\) 本征分解基下，上述分量分别对应
+\(
+B_{\mathrm{sym}}=\bigl(\begin{smallmatrix}X&0\\0&W\end{smallmatrix}\bigr)
+\)
+与
+\(
+B_{\mathrm{asym}}=\bigl(\begin{smallmatrix}0&-Y\\-Z&0\end{smallmatrix}\bigr)
+\)。
+对应的一键审计脚本见 \texttt{scripts/exp\_sync\_kernel\_weighted\_self\_dual\_bridge.py}。
+\end{remark}
+
+\begin{definition}[完成化矩阵]\label{def:completed-matrix}
+令 \(u=e^{\theta}\)（\(\theta\in\CC\)），并定义完成化矩阵
+\[
+\widetilde B(\theta):=e^{-\theta/2}B(e^{\theta}).
+\]
+\end{definition}
+
+\begin{lemma}[完成化的自对偶相似]\label{lem:completed-similarity}
+在上述记号下，对所有 \(\theta\) 有
+\[
+\boxed{\ \Pi^{-1}\widetilde B(\theta)\Pi=\widetilde B(-\theta)\ }.
+\]
+因此 \(\widetilde B(\theta)\) 与 \(\widetilde B(-\theta)\) 相似；特别地，
+\(\det(\lambda I-\widetilde B(\theta))\) 作为 \(\theta\) 的解析函数是偶函数。
+\end{lemma}
+\begin{proof}
+由自对偶 \(\Pi^{-1}B(u)\Pi=uB(1/u)\)，代入 \(u=e^{\theta}\) 得
+\(
+\Pi^{-1}B(e^\theta)\Pi=e^\theta B(e^{-\theta})
+\)。
+两边同乘 \(e^{-\theta/2}\) 即得
+\(
+\Pi^{-1}\widetilde B(\theta)\Pi=\widetilde B(-\theta)
+\)。
+相似性推出特征多项式相同，故 \(\det(\lambda I-\widetilde B(\theta))=\det(\lambda I-\widetilde B(-\theta))\)，即为 \(\theta\) 的偶函数。证毕。
+\end{proof}
+
+\begin{lemma}[Ward 恒等式：\texorpdfstring{$B_{\mathrm{asym}}$}{B_asym} 对一切时间迹一阶正交]\label{lem:sync-kernel-ward-traces}
+沿用引理 \ref{lem:sync-kernel-even-odd-splitting} 的记号，并令
+\(
+\widetilde B(\theta)=e^{-\theta/2}B(e^{\theta})
+\)。
+则对任意整数 \(n\ge 1\) 有严格恒等式
+\[
+\boxed{\ \Tr\!\bigl(B(1)^{n-1}\,B_{\mathrm{asym}}\bigr)=0\ }.
+\]
+\end{lemma}
+
+\begin{proof}
+由引理 \ref{lem:completed-similarity}，\(\widetilde B(\theta)\) 与 \(\widetilde B(-\theta)\) 相似，故
+\(
+\Tr(\widetilde B(\theta)^n)
+\)
+为 \(\theta\) 的偶函数，因而其在 \(\theta=0\) 处的一阶导数为零：
+\[
+0=\left.\frac{d}{d\theta}\Tr(\widetilde B(\theta)^n)\right|_{\theta=0}.
+\]
+另一方面，对解析矩阵族 \(A(\theta)\) 有
+\(
+\frac{d}{d\theta}\Tr(A(\theta)^n)
+=\sum_{j=0}^{n-1}\Tr\!\bigl(A(\theta)^j A'(\theta)A(\theta)^{n-1-j}\bigr)
+=n\,\Tr\!\bigl(A(\theta)^{n-1}A'(\theta)\bigr)
+\)
+（最后一步用迹的循环性）。
+取 \(A(\theta)=\widetilde B(\theta)\) 并在 \(\theta=0\) 处代入得
+\[
+0=n\,\Tr\!\bigl(\widetilde B(0)^{n-1}\widetilde B'(0)\bigr).
+\]
+注意到 \(\widetilde B(0)=B(1)\)，且由
+\(
+\widetilde B(\theta)=e^{-\theta/2}(B_0+e^\theta B_1)
+\)
+直接计算
+\[
+\widetilde B'(0)=-\frac12(B_0+B_1)+B_1=\frac{B_1-B_0}{2}=B_{\mathrm{asym}}.
+\]
+于是得到所示恒等式。证毕。
+\end{proof}
+
+\begin{remark}[可计算桥包：引理 \ref{lem:sync-kernel-ward-traces} 的迹核验]\label{rem:sync-kernel-ward-traces-bridge}
+对给定 \((B_0,B_1,\Pi)\)，先由引理 \ref{lem:sync-kernel-even-odd-splitting} 计算 \(B_{\mathrm{asym}}\) 与 \(B(1)=B_0+B_1\)，再对一组长度上界 \(1\le n\le N\)（例如 \(N=30\)）逐项核验
+\[
+\Tr\!\bigl(B(1)^{n-1}B_{\mathrm{asym}}\bigr)=0.
+\]
+该恒等式为整数（或有理数）级的精确等式，因此适合做独立审计（不依赖浮点谱排序）。一键核验脚本见 \texttt{scripts/exp\_sync\_kernel\_weighted\_self\_dual\_bridge.py}。
+\end{remark}
+
+\begin{theorem}[谱切线锁定：\texorpdfstring{$u=1$}{u=1} 处全谱对数斜率恒为 \texorpdfstring{$1/2$}{1/2}]\label{thm:sync-spectral-tangent-lock}
+令 \(\widetilde B(\theta)\) 如定义 \ref{def:completed-matrix}。
+取 \(\widetilde B(0)=B(1)\) 的任一\textbf{非零单特征值} \(\mu_0\neq 0\)（即其在特征多项式中为单根）。
+则存在唯一解析函数 \(\mu(\theta)\)（在 \(\theta=0\) 的某邻域）满足
+\[
+\mu(0)=\mu_0,\qquad \mu(\theta)\in\mathrm{spec}\bigl(\widetilde B(\theta)\bigr),
+\]
+并且该分支满足严格偶性
+\[
+\boxed{\ \mu(\theta)=\mu(-\theta)\ } \qquad(\text{从而 } \mu'(0)=0).
+\]
+令
+\[
+\lambda(\theta):=e^{\theta/2}\mu(\theta),
+\]
+则 \(\lambda(\theta)\) 是矩阵 \(B(e^{\theta})\) 的一条解析特征分支（且 \(\lambda(0)=\mu_0\neq 0\)），并满足
+\[
+\boxed{\ \left.\frac{\mathrm{d}}{\mathrm{d}\theta}\log\lambda(\theta)\right|_{\theta=0}=\frac12\ }.
+\]
+\end{theorem}
+\begin{proof}
+由引理 \ref{lem:completed-similarity}，\(\chi(\lambda,\theta):=\det(\lambda I-\widetilde B(\theta))\) 是 \(\theta\) 的偶函数，且 \(\chi(\mu_0,0)=0\)。
+由于 \(\mu_0\) 为单特征值，有 \(\partial_\lambda\chi(\mu_0,0)\neq 0\)，故由隐函数定理存在唯一解析分支 \(\mu(\theta)\) 使 \(\chi(\mu(\theta),\theta)=0\) 且 \(\mu(0)=\mu_0\)。
+另一方面，偶性给出 \(\chi(\lambda,\theta)=\chi(\lambda,-\theta)\)，从而 \(\mu(-\theta)\) 亦满足同一方程且取同一初值 \(\mu(-0)=\mu_0\)；由唯一性得到 \(\mu(\theta)=\mu(-\theta)\)，于是 \(\mu'(0)=0\)。
+最后由 \(B(e^\theta)=e^{\theta/2}\widetilde B(\theta)\) 知 \(\lambda(\theta)=e^{\theta/2}\mu(\theta)\) 为 \(B(e^\theta)\) 的特征值分支，并且
+\[
+\left.\frac{\mathrm{d}}{\mathrm{d}\theta}\log\lambda(\theta)\right|_{\theta=0}
+=\left.\frac{\mathrm{d}}{\mathrm{d}\theta}\left(\frac{\theta}{2}+\log\mu(\theta)\right)\right|_{\theta=0}
+=\frac12+\frac{\mu'(0)}{\mu(0)}
+=\frac12.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[同步核的 \texorpdfstring{$6$}{6} 条非零谱分支在 \texorpdfstring{$u=1$}{u=1} 处同时锁定]\label{cor:sync-spectral-tangent-lock-6}
+对本同步核，矩阵 \(B(1)\) 的非零谱共有 \(6\) 条解析分支且在 \(u=1\) 处均为单特征值（其特征多项式为次数 \(6\) 的 \(\det(I-zB(1))\)，见附录 \ref{app:sync-kernel-basic} 的显式分解）。
+因此这 \(6\) 条非零谱分支均满足定理 \ref{thm:sync-spectral-tangent-lock} 的结论：
+在 \(u=e^\theta\) 的参数下，\(\left.\frac{\mathrm{d}}{\mathrm{d}\theta}\log\lambda_j(\theta)\right|_{\theta=0}=\frac12\)。
+\end{corollary}
+
+于是
+\[
+\Delta(z,u)=\det(I-zB(u))=\det(I-uzB(1/u))=\Delta(uz,1/u).
+\]
+
+\begin{proposition}[自对偶诱导的 \texorpdfstring{$(1+u)$}{(1+u)}--\texorpdfstring{$(1-u)$}{(1-u)} 两参数正常形]\label{prop:self-dual-normal-form-1pmu}
+设 \(B(u)=B_0+uB_1\) 且自对偶置换矩阵 \(\Pi\) 满足 \(\Pi^{-1}B_0\Pi=B_1\)。
+令
+\[
+V_+:=\ker(\Pi-I),\qquad V_-:=\ker(\Pi+I),
+\qquad V=V_+\oplus V_-,
+\]
+并把 \(B_0\) 在分解 \(V_+\oplus V_-\) 下写成分块算子
+\[
+B_0=
+\begin{pmatrix}
+X & Y\\
+Z & W
+\end{pmatrix}.
+\]
+则对所有 \(u\in\CC\) 有
+\[
+\boxed{
+B(u)=B_0+u\Pi^{-1}B_0\Pi
+=
+\begin{pmatrix}
+(1+u)X & (1-u)Y\\
+(1-u)Z & (1+u)W
+\end{pmatrix}.
+}
+\]
+在本同步核上，\(\Pi\) 为五个互换的直和，故 \(\dim V_+=\dim V_-=5\)。
+\end{proposition}
+\begin{proof}
+在分解 \(V=V_+\oplus V_-\) 下，\(\Pi\) 作用为 \(\Pi|_{V_+}=+I,\ \Pi|_{V_-}=-I\)，故对任意分块算子 \(T=\bigl(\begin{smallmatrix}X&Y\\ Z&W\end{smallmatrix}\bigr)\) 有
+\(
+\Pi^{-1}T\Pi=\bigl(\begin{smallmatrix}X&-Y\\ -Z&W\end{smallmatrix}\bigr)
+\)。
+取 \(T=B_0\) 并代入 \(B(u)=B_0+u\Pi^{-1}B_0\Pi\) 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$u=1$}{u=1} 的强制解耦]\label{cor:self-dual-u1-decouple}
+在命题 \ref{prop:self-dual-normal-form-1pmu} 的分块表示下，
+\[
+\boxed{\ B(1)=
+\begin{pmatrix}
+2X & 0\\
+0 & 2W
+\end{pmatrix}\ }.
+\]
+因此跨子空间耦合项仅通过系数 \((1-u)\) 出现并在 \(u=1\) 处被强制抑制。
+\end{corollary}
+
+\begin{corollary}[\texorpdfstring{$u=1$}{u=1} 的两通道 \texorpdfstring{$\Delta/\zeta$}{Delta/zeta} 分解]\label{cor:self-dual-u1-two-channel-zeta}
+沿用命题 \ref{prop:self-dual-normal-form-1pmu} 的分块记号。则在 \(u=1\) 处有严格因子分解
+\[
+\boxed{\ \Delta(z,1)=\det(I-zB(1))=\det(I-2zX)\cdot\det(I-2zW)\ }.
+\]
+因此若定义两条“通道 \(\zeta\)”为
+\[
+\zeta_{V_+}(z):=\det(I-2zX)^{-1},\qquad
+\zeta_{V_-}(z):=\det(I-2zW)^{-1},
+\]
+则满足
+\[
+\boxed{\ \zeta(z,1)=\Delta(z,1)^{-1}=\zeta_{V_+}(z)\,\zeta_{V_-}(z)\ }.
+\]
+\end{corollary}
+
+\begin{proof}
+由推论 \ref{cor:self-dual-u1-decouple}，\(B(1)\) 在分解 \(V_+\oplus V_-\) 下为块对角矩阵 \(\mathrm{diag}(2X,2W)\)。
+对块对角矩阵取 \(\det(I-z\cdot)\) 即得
+\(
+\det(I-zB(1))=\det(I-2zX)\det(I-2zW)
+\)。
+\(\zeta\) 的分解由取倒数得到。证毕。
+\end{proof}
+
+\begin{remark}[可计算桥包：推论 \ref{cor:self-dual-u1-two-channel-zeta} 的分块验算]\label{rem:sync-kernel-u1-two-channel-bridge}
+对给定 \((B_0,B_1,\Pi)\)，先把 \(\Pi\) 对角化（取 \(V_+\oplus V_-\) 的任意基，等价地把状态按 \(\Pi\) 的 \(2\)-轮换配对并取 \(\pm\) 组合），据此把 \(B(1)\) 写成块对角 \(\mathrm{diag}(2X,2W)\)。
+随后：
+\begin{enumerate}
+  \item \textbf{矩阵级：}核验 \(B(1)\) 的 off-diagonal 块为零；
+  \item \textbf{行列式级：}对一组采样 \(z\) 验证 \(\det(I-zB(1))=\det(I-2zX)\det(I-2zW)\)；
+  \item \textbf{通道 \(\zeta\)：}分别计算 \(\zeta_{V_\pm}\) 并核验 \(\zeta(z,1)=\zeta_{V_+}(z)\zeta_{V_-}(z)\)。
+\end{enumerate}
+一键核验脚本见 \texttt{scripts/exp\_sync\_kernel\_weighted\_self\_dual\_bridge.py}。
+\end{remark}
+
+\begin{corollary}[\texorpdfstring{$\Delta(z,u)$}{Delta(z,u)} 的 \texorpdfstring{$(1-u)^2$}{(1-u)^2} 依赖压缩]\label{cor:self-dual-delta-even-in-1mu}
+在命题 \ref{prop:self-dual-normal-form-1pmu} 的正常形下，对每个固定的 \(z\)，
+\(\Delta(z,u)=\det(I-zB(u))\)
+作为 \(u\) 的多项式，其对 \((1-u)\) 仅以偶次出现；等价地，
+\[
+\boxed{\ \Delta(z,u)\in \ZZ[z]\bigl[(1+u),\ (1-u)^2\bigr]\ }.
+\]
+同样地，若把 \(a_n(u)=\Tr(B(u)^n)\) 展开为 \(u\)-多项式，则其系数也可重写为 \(\ZZ[(1+u),(1-u)^2]\) 中的元素。
+\end{corollary}
+\begin{proof}
+行列式的置换展开由置换循环组成；每个循环必须回到起点，因此它跨越 \(V_+\leftrightarrow V_-\) 的次数为偶数。
+而跨越仅来自 off-diagonal 分块 \((1-u)Y,(1-u)Z\)，故每一项中 \((1-u)\) 的总指数为偶数，从而 \(\Delta\) 为 \((1-u)^2\) 的多项式。
+对 \(\Tr(B(u)^n)\) 同理：它是长度 \(n\) 闭路的权重和，每条闭路的子空间翻转次数亦为偶数。
+证毕。
+\end{proof}
+
+此外，\(\Delta\) 在本核上可由六次方程 \(F(\lambda,u)=0\) 直接恢复为一个显式多项式（并与 \(10\times 10\) 的矩阵定义逐点验算一致）：
+\input{sections/generated/eq_sync_kernel_weighted_delta_explicit}
+\begin{proposition}[完成化行列式的二元闭式：\texorpdfstring{$\Delta(z,u)=\widehat\Delta(w,s)$}{Delta=hatDelta}]\label{prop:sync-kernel-weighted-hat-delta}
+取完成化坐标
+\[
+u=r^2,\qquad w:=zr=z\sqrt{u},\qquad s:=r+r^{-1}=\sqrt{u}+\frac{1}{\sqrt{u}}.
+\]
+则存在整系数二元多项式 \(\widehat\Delta(w,s)\in\ZZ[w,s]\) 使得
+\[
+\boxed{\ \Delta(z,u)=\widehat\Delta\!\left(z\sqrt{u},\ \sqrt{u}+\frac{1}{\sqrt{u}}\right)\ }.
+\]
+在本核上，\(\widehat\Delta\) 可取为式 \eqref{eq:sync-kernel-weighted-delta-completed} 的闭式（由脚本直接生成并与 \eqref{eq:sync-kernel-weighted-delta-explicit} 逐项核验一致）：
+\input{sections/generated/eq_sync_kernel_weighted_delta_completed}
+\end{proposition}
+\begin{proof}
+由自对偶 \(\Delta(z,u)=\Delta(uz,1/u)\)，把 \(u=r^2\) 并令 \(w=zr\)，可知
+\(
+\Delta(w/r,r^2)
+\)
+在 \(r\mapsto r^{-1}\) 下不变。
+而不变量子环恒等式
+\(
+\ZZ[r,r^{-1}]^{\,r\mapsto r^{-1}}=\ZZ[r+r^{-1}]=\ZZ[s]
+\)
+保证其可写成某个 \(\widehat\Delta(w,s)\in\ZZ[w,s]\)。
+把 \eqref{eq:sync-kernel-weighted-delta-explicit} 代入 \(u=r^2,z=w/r\) 并在不变量基 \(C_k(s)=r^k+r^{-k}\) 上化简，即得 \eqref{eq:sync-kernel-weighted-delta-completed}；脚本 \texttt{scripts/exp\_sync\_kernel\_weighted\_delta\_completed.py} 对该恒等式作了符号核验。证毕。
+\end{proof}

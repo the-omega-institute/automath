@@ -1,0 +1,398 @@
+\subsection{\texorpdfstring{S4 护照 $(4)(2)^5$ 的 Nielsen 单轨道性与双判别同步：离散外置证书链}{S4 护照 (4)(2) 五重型的 Nielsen 单轨道性与双判别同步：离散外置证书链}}\label{subsec:cdim-s4-hurwitz-nielsen-double-discriminant}
+本小节记录一类可被完全离线复核的离散外置证书：以分歧循环型（Hurwitz 护照）固定局部单值数据，并在 Nielsen 类意义下把覆盖的同伦类型压缩为有限轨道；同时给出一个与该护照相匹配的双判别同步四次族，使分歧像集合与其整性平移闭包在代数层面被刚性锁定。
+上述两条链路合并后，形成一条从\emph{判别式恒等式}到\emph{Nielsen 离散不变量}的闭合审计接口：前者将连续参数空间压缩为有限分歧像集合，后者将局部循环型压缩为有限轨道与覆盖度。
+
+\paragraph{Hurwitz 变换与同时共轭}
+令 \(G\) 为有限群，取 \(r\ge 2\)。
+对 \(r\)-元组 \((g_1,\dots,g_r)\in G^r\)，辫群 \(B_r\) 的标准 Hurwitz 生成元 \(\sigma_i\)（\(1\le i\le r-1\)）按右作用定义为
+\[
+\sigma_i:\ (g_1,\dots,g_i,g_{i+1},\dots,g_r)\longmapsto
+(g_1,\dots,g_{i+1},g_{i+1}^{-1}g_i g_{i+1},\dots,g_r).
+\]
+该作用保持乘积 \(g_1\cdots g_r\) 不变，并保持由 \(\{g_1,\dots,g_r\}\) 所生成的子群不变。
+另一方面，\(G\) 可对 \((g_1,\dots,g_r)\) 作同时共轭：
+\(
+h\cdot(g_1,\dots,g_r):=(hg_1h^{-1},\dots,hg_rh^{-1})
+\)。
+二者可交换组合为 \(B_r\times G\) 的作用。
+
+\paragraph{护照 \texorpdfstring{$(4)(2)^5$}{(4)(2)^5} 的 Nielsen 数据}
+在 \(G=S_4\) 中，考虑满足一条 \(4\)-循环与五条换位之乘积约束的 Nielsen 数据。设
+\[
+\mathcal{F}
+:=\Bigl\{\,
+\mathbf{g}=(g_\infty,g_1,g_2,g_3,g_4,g_5)\in S_4^6\ \Bigm|\ 
+\begin{array}{l}
+g_\infty\ \text{为 \(4\)-循环},\\
+g_1,\dots,g_5\ \text{均为换位},\\
+g_1g_2g_3g_4g_5=g_\infty,\\
+\langle g_\infty,g_1,\dots,g_5\rangle=S_4
+\end{array}
+\,\Bigr\}.
+\]
+辫群 \(B_5\) 作用于 \((g_1,\dots,g_5)\)，并令 \(S_4\) 按同时共轭作用于 \(\mathbf g\)。
+
+\begin{theorem}[护照 \texorpdfstring{$(4)(2)^5$}{(4)(2)^5} 的 Hurwitz--共轭单轨道性]\label{thm:cdim-s4-hurwitz-conjugacy-single-orbit}
+在 \(B_5\times S_4\) 的自然作用下，集合 \(\mathcal{F}\) 为单一轨道。
+并且存在代表元满足
+\[
+g_\infty=(1,2,3,4),\qquad
+(g_1,g_2,g_3,g_4,g_5)=\bigl((3,4),(2,3),(2,4),(1,4),(1,3)\bigr),
+\]
+其满足 \(g_1g_2g_3g_4g_5=g_\infty\) 且生成 \(S_4\)。
+\end{theorem}
+\begin{proof}
+Hurwitz 变换保持乘积不变并在生成子群意义下闭合，因此保守 \(\mathcal{F}\) 的三条结构约束（循环型、乘积约束与生成性）。
+在 \(S_4\) 的具体情形下，满足给定循环型的数据集合为有限集。
+以同时共轭将 \(g_\infty\) 规约到固定 \(4\)-循环，再对满足乘积约束且生成 \(S_4\) 的五换位分解作枚举，并在 Hurwitz 生成元闭包下计算轨道分解，可得仅出现一条轨道，从而任意 \(\mathbf g\in\mathcal{F}\) 与所示代表元 Hurwitz--共轭等价。
+上述枚举与轨道分解可由纯有限群运算完全复算；对应的可重复审计输出由脚本 \texttt{scripts/exp\_fold\_zm\_trace\_galois\_audit.py} 生成并写入 \texttt{artifacts/export/fold\_zm\_trace\_galois\_audit.json}。
+\end{proof}
+
+\begin{corollary}[绝对 Nielsen 类的基数与覆盖度]\label{cor:cdim-s4-abs-nielsen-cardinality-degree}
+令 \(\mathrm{Ni}^{\mathrm{abs}}:=\mathcal{F}/S_4\) 为按同时共轭取商得到的绝对 Nielsen 类集合，则有
+\[
+\card{\mathcal{F}}=3840,
+\qquad
+\card{\mathrm{Ni}^{\mathrm{abs}}}=\frac{\card{\mathcal{F}}}{\card{S_4}}=160.
+\]
+并且 \(B_5\) 在 \(\mathrm{Ni}^{\mathrm{abs}}\) 上作用传递；因此与该护照相应的（带序分歧点的）Hurwitz 空间为连通覆盖，其覆盖度为 \(160\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:cdim-s4-hurwitz-conjugacy-single-orbit} 的单轨道性，\(B_5\) 在 \(\mathcal{F}/S_4\) 上作用传递。
+另一方面，由 \(\langle g_\infty,g_1,\dots,g_5\rangle=S_4\) 可知同时共轭的稳定子为 \(S_4\) 的中心，因而为平凡群；故每个共轭轨道大小为 \(\card{S_4}=24\)，从而 \(\card{\mathrm{Ni}^{\mathrm{abs}}}=\card{\mathcal{F}}/24\)。
+数值 \(\card{\mathcal{F}}=3840\) 由同一有限枚举直接得到，并已在上述审计脚本输出中给出。证毕。
+\end{proof}
+
+\paragraph{双判别同步约束：\texorpdfstring{$(y)$}{y}-判别式锁定 \texorpdfstring{$(\lambda,y)$}{(lambda,y)} 体系的代数骨架}
+考虑二元整式
+\[
+\Pi(\lambda,y)=y^{2}+p(\lambda)\,y+q(\lambda)\in\ZZ[\lambda,y],
+\]
+并要求 \(\Pi\) 关于 \(y\) 为首一二次、关于 \(\lambda\) 为首一四次。
+若其 \(y\)-判别式满足
+\begin{equation}\label{eq:cdim-double-discriminant-Disc-y}
+\mathrm{Disc}_{y}\bigl(\Pi(\lambda,\cdot)\bigr)
+=p(\lambda)^{2}-4q(\lambda)
+=4\lambda^{3}-4\lambda+1,
+\end{equation}
+则 \eqref{eq:cdim-double-discriminant-Disc-y} 将 \(\Pi\) 的自由度压缩为同余受限的二参数族。
+
+\begin{proposition}[双判别同步族的二参数压缩]\label{prop:cdim-double-discriminant-two-parameter-family}
+在 \eqref{eq:cdim-double-discriminant-Disc-y} 的设定下，必有
+\[
+p(\lambda)=\pm 2\lambda^{2}+a\lambda+b,
+\qquad
+a\equiv 0\pmod{2},\quad b\equiv 1\pmod{2},
+\]
+且
+\[
+q(\lambda)=\frac{p(\lambda)^{2}-(4\lambda^{3}-4\lambda+1)}{4}\in\ZZ[\lambda]
+\]
+由 \(p(\lambda)\) 唯一决定。
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:cdim-double-discriminant-Disc-y} 右端为三次多项式知 \(p(\lambda)^{2}\) 的四次首项必须与 \(4q(\lambda)\) 的四次首项完全抵消，故 \(\deg p=2\) 且其二次首系数为 \(\pm 2\)。
+写 \(p(\lambda)=\pm 2\lambda^{2}+a\lambda+b\) 并代入 \eqref{eq:cdim-double-discriminant-Disc-y}，得到
+\[
+q(\lambda)=\frac{p(\lambda)^{2}-(4\lambda^{3}-4\lambda+1)}{4}.
+\]
+比较系数可见 \(q\in\ZZ[\lambda]\) 当且仅当 \(a\) 为偶数且 \(b\) 为奇数（由 \(\lambda^{2}\) 与常数项的四分之一整性强制）。
+唯一性由上式直接给出。证毕。
+\end{proof}
+
+\paragraph{整数平移刚性：相邻整点的有理分歧与 Lee--Yang 三次核}
+在命题 \ref{prop:cdim-double-discriminant-two-parameter-family} 的族中，取
+\[
+p(\lambda)=1-2\lambda^{2}
+\qquad(\text{对应取负号分支且 }a=0,\ b=1),
+\]
+则 \(q(\lambda)=\lambda^{4}-\lambda^{3}-\lambda^{2}+\lambda\)，从而得到显式四次
+\begin{equation}\label{eq:cdim-double-discriminant-Pi-special}
+\Pi(\lambda,y)=\lambda^{4}-\lambda^{3}-(2y+1)\lambda^{2}+\lambda+y(y+1)
+=y^{2}+(1-2\lambda^{2})y+\bigl(\lambda^{4}-\lambda^{3}-\lambda^{2}+\lambda\bigr).
+\end{equation}
+定义 Lee--Yang 三次核
+\[
+P_{\mathrm{LY}}(y):=256y^{3}+411y^{2}+165y+32\in\ZZ[y].
+\]
+
+\begin{proposition}[判别式核的因式分解与整数平移闭包]\label{prop:cdim-double-discriminant-integer-translate-rigidity}
+令 \(\Pi\) 如 \eqref{eq:cdim-double-discriminant-Pi-special}，并记
+\(
+\Delta(y):=\mathrm{Disc}_{\lambda}\bigl(\Pi(\cdot,y)\bigr)\in\ZZ[y]
+\)。
+则有严格恒等式
+\[
+\Delta(y)=-y(y-1)P_{\mathrm{LY}}(y).
+\]
+并且对任意整数 \(k\in\ZZ\)，令 \(\Pi_k(\lambda,y):=\Pi(\lambda,y-k)\)，则
+\[
+\mathrm{Disc}_{\lambda}\bigl(\Pi_k(\cdot,y)\bigr)
+=-(y-k)(y-k-1)\,P_{\mathrm{LY}}(y-k).
+\]
+因此在该双判别同步特例中，两条有理分歧值只能以相邻整点 \((k,k+1)\) 的形态出现；其余三条有限分歧值由 \(P_{\mathrm{LY}}\) 的三根在平移 \(y\mapsto y+k\) 下整体搬运得到。
+\end{proposition}
+\begin{proof}
+对 \eqref{eq:cdim-double-discriminant-Pi-special} 直接计算 \(\lambda\)-判别式并因式分解可得 \(\Delta(y)=-y(y-1)P_{\mathrm{LY}}(y)\)。
+在平移重参数化 \(y\mapsto y-k\) 下，判别式作为消元多项式的构造保持其代数形式，仅对参数作同一平移，故
+\(
+\mathrm{Disc}_{\lambda}(\Pi(\cdot,y-k))=\Delta(y-k)
+\)，代入上式即得结论。证毕。
+\end{proof}
+
+\begin{conjecture}[双判别同步族的有理分歧极小性]\label{conj:cdim-double-discriminant-rational-branch-minimality}
+在命题 \ref{prop:cdim-double-discriminant-two-parameter-family} 的全二参数族中，若 \(\mathrm{Disc}_{\lambda}(\Pi(\cdot,y))\in\QQ[y]\) 具有两个互异有理根，则在仿射变换 \(y\mapsto y+c\) 与对合 \(y\mapsto-1-y\) 的等价下，\(\Pi\) 等价于 \eqref{eq:cdim-double-discriminant-Pi-special} 所给的特例。
+\end{conjecture}
+
+\paragraph{\texorpdfstring{$S_4$}{S4} 轨道典范环的堆栈化重构与分次代数后果}
+在定理 \ref{thm:cdim-s4-hurwitz-conjugacy-single-orbit} 与推论 \ref{cor:cdim-s4-abs-nielsen-cardinality-degree} 固定的护照
+\((4)(2)^5\)
+口径下，可将局部分歧数据进一步编译为一个可直接计算的轨道典范环模型。
+下述结论把该模型的分次结构、最小生成、最小分辨率与 Veronese 退化行为统一到同一条代数链路中。
+
+\begin{conclusion}[\texorpdfstring{$S_4$}{S4}-不变多重典范环的堆栈化描述]\label{con:cdim-s4-stacky-pluricanonical-ring}
+设
+\[
+f:X\longrightarrow Y\simeq\PP^1
+\]
+为分歧型 \((4,2,2,2,2,2)\) 的 \(S_4\)-Galois 覆盖，分歧点记为 \(b_0,\dots,b_5\in Y\)，其惯性阶分别为
+\[
+e_0=4,\qquad e_1=\cdots=e_5=2.
+\]
+定义 \(Y\) 上的 \(\QQ\)-除子
+\[
+D
+:=
+K_Y+\Bigl(1-\frac14\Bigr)b_0+\sum_{i=1}^5\Bigl(1-\frac12\Bigr)b_i
+=
+K_Y+\frac34\,b_0+\frac12\sum_{i=1}^5 b_i.
+\]
+则存在自然的分次环同构
+\[
+R^{S_4}
+:=
+\bigoplus_{n\ge 0}H^0(X,nK_X)^{S_4}
+\cong
+\bigoplus_{n\ge 0}H^0\!\bigl(Y,\mathcal O_Y(\lfloor nD\rfloor)\bigr).
+\]
+\end{conclusion}
+\begin{proof}
+由除子形式的 Riemann--Hurwitz 公式，
+\[
+K_X=f^*\!\left(K_Y+\sum_{i=0}^5\Bigl(1-\frac1{e_i}\Bigr)b_i\right)=f^*(D)
+\]
+（等式在 \(\QQ\)-除子意义下成立），故 \(nK_X=f^*(nD)\)。
+局部坐标下若分歧指数为 \(e\)，写 \(y=t^e\)，则 \(S_4\)-不变 \(n\)-重微分在 \(y\)-坐标可出现的极阶恰由 \(\lfloor n(1-\tfrac1e)\rfloor\) 控制；
+把各分歧点叠加即得 \(\lfloor nD\rfloor\)。
+因此对每个 \(n\ge 0\) 有
+\[
+H^0(X,nK_X)^{S_4}\cong H^0\!\bigl(Y,\mathcal O_Y(\lfloor nD\rfloor)\bigr),
+\]
+并与乘法结构相容，结论成立。
+\end{proof}
+
+\begin{conclusion}[\texorpdfstring{$R^{S_4}$}{RS4} 的 Hilbert 级数、\texorpdfstring{$a$}{a}-不变量与 Gorenstein 性]\label{con:cdim-s4-hilbert-a-gorenstein}
+\(S_4\)-不变多重典范环 \(R^{S_4}\) 的 Hilbert 级数为
+\[
+H_{R^{S_4}}(t)
+:=
+\sum_{n\ge0}\dim H^0(X,nK_X)^{S_4}\,t^n
+=
+\frac{1+2t^2+2t^3+2t^4+2t^5+t^7}{(1-t^2)(1-t^4)}.
+\]
+因此 \(R^{S_4}\) 为二维正规 Cohen--Macaulay 整环；其 \(h\)-多项式
+\[
+h(t)=1+2t^2+2t^3+2t^4+2t^5+t^7
+\]
+为回文多项式，\(a\)-不变量满足 \(a(R^{S_4})=1\)，并且 \(R^{S_4}\) 为 Gorenstein。
+\end{conclusion}
+\begin{proof}
+由结论 \ref{con:cdim-s4-stacky-pluricanonical-ring}，取 \(Y=\PP^1\) 上 \(K_Y=-2(\infty)\)，得
+\[
+\deg\lfloor nD\rfloor
+=
+-2n+\Bigl\lfloor\frac{3n}{4}\Bigr\rfloor+5\Bigl\lfloor\frac{n}{2}\Bigr\rfloor.
+\]
+于是
+\[
+\dim H^0\!\bigl(Y,\mathcal O_Y(\lfloor nD\rfloor)\bigr)
+=
+\max\!\bigl\{\deg\lfloor nD\rfloor+1,\,0\bigr\}.
+\]
+按 \(n\bmod 4\) 分解求和即可得所示闭式 Hilbert 级数。
+另一方面，\(R(X)=\bigoplus_{n\ge0}H^0(X,nK_X)\) 为正规整环，有限群不变子环保持正规性，故 \(R^{S_4}\) 正规。
+Krull 维数为 \(2\) 时，正规性给出 \(S_2\) 条件，从而 \(R^{S_4}\) 为 Cohen--Macaulay。
+再由 \(h(t)\) 回文与 Cohen--Macaulay 条件可用 Stanley 判别得到 Gorenstein 性；
+且 \(\deg h=7\)、参数次数为 \(2,4\)，故
+\[
+a(R^{S_4})=\deg h-(2+4)=1.
+\]
+\end{proof}
+
+\begin{conclusion}[最小代数生成中的四次不可约层]\label{con:cdim-s4-minimal-generators-degree-profile}
+设 \(\operatorname{char}\mathbf k=0\)。
+则 \(R^{S_4}\) 作为分次 \(\mathbf k\)-代数可取且仅需如下次数分布的最小生成系：
+\[
+\text{次数 }2\text{ 生成元 }3\text{ 个},\qquad
+\text{次数 }3\text{ 生成元 }2\text{ 个},\qquad
+\text{次数 }4\text{ 生成元 }1\text{ 个}.
+\]
+其中次数 \(4\) 生成元在最小生成意义下不可删除。
+\end{conclusion}
+\begin{proof}
+由结论 \ref{con:cdim-s4-hilbert-a-gorenstein}，有
+\[
+\dim R^{S_4}_1=0,\qquad
+\dim R^{S_4}_2=3,\qquad
+\dim R^{S_4}_3=2.
+\]
+故次数 \(2,3\) 的最小生成元数至少分别为 \(3,2\)。
+对次数 \(4\) 层，结论 \ref{con:cdim-s4-stacky-pluricanonical-ring} 给出
+\[
+\lfloor 2D\rfloor+\lfloor 2D\rfloor<\lfloor 4D\rfloor
+\]
+（在 \(b_0\) 处系数为 \(2<3\)），从而
+\[
+R^{S_4}_2\cdot R^{S_4}_2
+\subseteq
+H^0\!\bigl(Y,\mathcal O_Y(2\lfloor 2D\rfloor)\bigr)
+\subsetneq
+H^0\!\bigl(Y,\mathcal O_Y(\lfloor 4D\rfloor)\bigr)=R^{S_4}_4.
+\]
+又因 \(\deg\lfloor2D\rfloor=2\)，\(\PP^1\) 上乘法映射
+\(
+H^0(\mathcal O(2))\otimes H^0(\mathcal O(2))\to H^0(\mathcal O(4))
+\)
+满射，故 \(\dim(R^{S_4}_2\cdot R^{S_4}_2)=5\)，而 \(\dim R^{S_4}_4=6\)，恰有一个新的次数 \(4\) 不可分解生成元。
+
+另一方面，\(4D\) 为整除子，故对任意 \(n\ge0\),
+\[
+\lfloor(n+4)D\rfloor=\lfloor nD\rfloor+4D.
+\]
+在 \(\PP^1\) 上线束截面乘法始终满射，遂得 \(R^{S_4}_{n+4}\) 可由 \(R^{S_4}_n\cdot R^{S_4}_4\) 生成。
+并且
+\[
+\lfloor5D\rfloor=\lfloor2D\rfloor+\lfloor3D\rfloor,\quad
+\lfloor6D\rfloor=\lfloor2D\rfloor+\lfloor4D\rfloor,\quad
+\lfloor7D\rfloor=\lfloor3D\rfloor+\lfloor4D\rfloor,
+\]
+从而任意次数可归约到 \(\le4\) 的层，故上述 \(3+2+1\) 个生成元已足够，且为最小。
+\end{proof}
+
+\begin{conclusion}[加权射影模型的最小分辨率与关系次数分布]\label{con:cdim-s4-minimal-resolution-shifts}
+取多项式环
+\[
+S=\mathbf k[x_1,x_2,x_3,y_1,y_2,z],\qquad
+\deg x_i=2,\ \deg y_j=3,\ \deg z=4,
+\]
+并令 \(S\twoheadrightarrow R^{S_4}\) 为结论 \ref{con:cdim-s4-minimal-generators-degree-profile} 的最小满射，核理想记为 \(I\subset S\)。
+则 \(R^{S_4}\cong S/I\) 的最小分次自由分辨率为
+\[
+0\to S(-17)\to
+\bigl(S(-13)\oplus S(-12)^{\oplus2}\oplus S(-11)^{\oplus5}\bigr)
+\]
+\[
+\to
+\bigl(S(-10)\oplus S(-9)^{\oplus6}\oplus S(-8)^{\oplus6}\oplus S(-7)\bigr)
+\to
+\bigl(S(-6)^{\oplus5}\oplus S(-5)^{\oplus2}\oplus S(-4)\bigr)
+\to S\to R^{S_4}\to0.
+\]
+特别地，\(I\) 的最小齐次关系次数分布为
+\[
+\#\{\text{四次关系}\}=1,\qquad
+\#\{\text{五次关系}\}=2,\qquad
+\#\{\text{六次关系}\}=5.
+\]
+\end{conclusion}
+\begin{proof}
+由结论 \ref{con:cdim-s4-hilbert-a-gorenstein} 与结论 \ref{con:cdim-s4-minimal-generators-degree-profile}，
+\[
+H_S(t)=\frac{1}{(1-t^2)^3(1-t^3)^2(1-t^4)},\qquad
+H_{R^{S_4}}(t)=H_S(t)\,P(t),
+\]
+其中
+\[
+P(t)=1-t^4-2t^5-5t^6+t^7+6t^8+6t^9+t^{10}-5t^{11}-2t^{12}-t^{13}+t^{17}.
+\]
+又 \(\dim S=6\)、\(\dim R^{S_4}=2\)，且 \(R^{S_4}\) Cohen--Macaulay，故 \(\operatorname{projdim}_S R^{S_4}=4\)。
+由结论 \ref{con:cdim-s4-hilbert-a-gorenstein} 的 Gorenstein 性，最小分辨率自对偶，且末端为秩 \(1\) 的 \(S(-17)\)。
+于是可写
+\[
+P(t)=1-B_1(t)+B_2(t)-t^{17}B_1(t^{-1})+t^{17},
+\quad t^{17}B_2(t^{-1})=B_2(t),
+\]
+比较系数唯一得到
+\[
+B_1(t)=t^4+2t^5+5t^6,\qquad
+B_2(t)=t^7+6t^8+6t^9+t^{10},
+\]
+从而逐级读出所示移位与重数，进而得到关系次数分布及 \(17\)-对称的自对偶结构。
+\end{proof}
+
+\begin{conclusion}[四次 Veronese 子环与五次有理正态曲线坐标环]\label{con:cdim-s4-veronese-five-rational-normal-curve}
+令
+\[
+R^{S_4,(4)}:=\bigoplus_{k\ge0}R^{S_4}_{4k}.
+\]
+则存在自然的分次同构
+\[
+R^{S_4,(4)}
+\cong
+\bigoplus_{k\ge0}H^0(\PP^1,\mathcal O_{\PP^1}(5k))
+\cong
+\mathbf k[s,t]^{(5)},
+\]
+其中右端为二元多项式环的五次 Veronese 子环。
+因此 \(\operatorname{Proj}R^{S_4,(4)}\) 同构于嵌入 \(\PP^5\) 的五次有理正态曲线。
+\end{conclusion}
+\begin{proof}
+由结论 \ref{con:cdim-s4-stacky-pluricanonical-ring}，
+\[
+R^{S_4}_{4k}\cong H^0\!\bigl(\PP^1,\mathcal O_{\PP^1}(k\cdot 4D)\bigr).
+\]
+而
+\[
+4D=-8(\infty)+3b_0+2\sum_{i=1}^5 b_i,\qquad \deg(4D)=5,
+\]
+故 \(R^{S_4,(4)}\) 即 \(\PP^1\) 上次数 \(5\) 线束的截面环。
+\(\PP^1\) 上任意次数 \(5\) 线束均同构于 \(\mathcal O_{\PP^1}(5)\)，遂得
+\[
+R^{S_4,(4)}\cong \bigoplus_{k\ge0}H^0(\PP^1,\mathcal O_{\PP^1}(5k))
+\cong \mathbf k[s,t]^{(5)}.
+\]
+由 Veronese 嵌入的标准刻画，\(\operatorname{Proj}R^{S_4,(4)}\) 为五次有理正态曲线。
+\end{proof}
+
+\begin{conclusion}[Artinian Gorenstein 横截面与七次对偶生成元的唯一性]\label{con:cdim-s4-artinian-gorenstein-dual-generator}
+存在同次参数序列 \((u,v)\)，其中
+\[
+u\in R^{S_4}_2,\qquad v\in R^{S_4}_4,
+\]
+使得
+\[
+A:=R^{S_4}/(u,v)
+\]
+为 Artinian Gorenstein 代数，且其 Hilbert 函数为
+\[
+\dim_{\mathbf k}A_i=(1,0,2,2,2,2,0,1)\qquad(i=0,\dots,7).
+\]
+特别地，\(A\) 的 socle 次数为 \(7\)。
+按 Macaulay 对偶理论，存在且仅存在一个（差一个非零标量）七次齐次对偶生成元 \(\Phi\)，使 \(A\) 恰为 \(\Phi\) 的 apolar 消去理想所定义的 Artinian Gorenstein 代数。
+\end{conclusion}
+\begin{proof}
+由结论 \ref{con:cdim-s4-hilbert-a-gorenstein}，
+\[
+H_{R^{S_4}}(t)=\frac{h(t)}{(1-t^2)(1-t^4)},\qquad
+h(t)=1+2t^2+2t^3+2t^4+2t^5+t^7.
+\]
+因 \(R^{S_4}\) Cohen--Macaulay，可取次数 \(2,4\) 的齐次参数序列 \((u,v)\) 且其为正则序列。
+商去该正则序列后，
+\[
+H_A(t)=h(t),
+\]
+故 Hilbert 函数即为 \((1,0,2,2,2,2,0,1)\)，socle 次数为 \(7\)。
+又 \(R^{S_4}\) 为 Gorenstein，正则序列商保持 Gorenstein 性，故 \(A\) 为 Artinian Gorenstein。
+最后由 Macaulay 反演系统（inverse systems）理论，\(A\) 与一个唯一到标量的七次对偶生成元 \(\Phi\) 一一对应。
+\end{proof}
+

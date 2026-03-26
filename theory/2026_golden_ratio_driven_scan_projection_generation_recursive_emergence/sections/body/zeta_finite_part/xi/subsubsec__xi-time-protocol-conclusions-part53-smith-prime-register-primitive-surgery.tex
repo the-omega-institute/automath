@@ -1,0 +1,470 @@
+\paragraph{Smith 信息亏损谱、有限历史 prime-register 压缩与 Euler 原子的严格手术律}
+下列结果把定理 \ref{thm:killo-smith-loss-spectrum}、\ref{thm:killo-layered-prime-slices-finite-depth}、\ref{thm:killo-natural-extension-branch-register} 与命题 \ref{prop:atomic-2-orbit-split-logM}、\ref{prop:primitive-orbit-surgery} 接入同一条“线性投影--分支寄存器--prime-slice 历史--primitive 手术”链条。
+
+\begin{theorem}[Smith 信息亏损谱与一步精确反演的最小分支寄存器]\label{thm:xi-smith-loss-minimal-branch-register}
+设
+\[
+A\in M_{m\times n}(\ZZ),
+\qquad
+\operatorname{rank}_{\QQ}(A)=m,
+\]
+其 Smith 不变量记为
+\[
+d_1\mid d_2\mid\cdots\mid d_m.
+\]
+固定素数 \(p\) 与整数 \(k\ge 1\)，并将
+\[
+T_{A,p^k}:(\ZZ/p^k\ZZ)^n\longrightarrow (\ZZ/p^k\ZZ)^m,
+\qquad
+x\longmapsto Ax\bmod p^k
+\]
+视为到其像上的满射。记
+\[
+K_p(k):=\#\ker(A\bmod p^k),
+\qquad
+e_i(p):=v_p(d_i),
+\qquad
+f_p(k):=\sum_{i=1}^{m}\min\{k,e_i(p)\}.
+\]
+若存在映射
+\[
+R:(\ZZ/p^k\ZZ)^n\longrightarrow \mathcal R
+\]
+使得
+\[
+x\longmapsto \bigl(T_{A,p^k}(x),R(x)\bigr)
+\]
+为单射，则必有
+\[
+|\mathcal R|\ge K_p(k)=p^{\,k(n-m)+f_p(k)}.
+\]
+该下界可达。特别地，
+\[
+\log_p|\mathcal R|\ge k(n-m)+f_p(k),
+\qquad
+\log_2|\mathcal R|\ge \bigl(k(n-m)+f_p(k)\bigr)\log_2 p.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:killo-smith-loss-spectrum}，
+\[
+K_p(k)=p^{\,k(n-m)+f_p(k)}.
+\]
+由于 \(T_{A,p^k}\) 是有限 Abel 群之间的同态，其任意非空纤维都是 \(\ker(A\bmod p^k)\) 的仿射陪集，故每条纤维的基数都等于 \(K_p(k)\)。
+
+若 \(x\mapsto (T_{A,p^k}(x),R(x))\) 单射，则对每个 \(y\in\operatorname{Im}(T_{A,p^k})\)，限制映射
+\[
+R:T_{A,p^k}^{-1}(y)\to \mathcal R
+\]
+必须单射。于是 \(|\mathcal R|\) 至少不小于任一纤维的大小，即
+\(
+|\mathcal R|\ge K_p(k)
+\)。
+
+反之，取一个固定集合 \(\mathcal R_0\) 满足 \(|\mathcal R_0|=K_p(k)\)。由于 \((\ZZ/p^k\ZZ)^n\) 有限，对每条纤维 \(T_{A,p^k}^{-1}(y)\) 任选一个双射
+\[
+\rho_y:T_{A,p^k}^{-1}(y)\xrightarrow{\sim}\mathcal R_0.
+\]
+定义 \(R(x):=\rho_{T_{A,p^k}(x)}(x)\)，则同一宏态纤维内由 \(R\) 区分，不同宏态由 \(T_{A,p^k}\) 区分，从而
+\[
+x\longmapsto \bigl(T_{A,p^k}(x),R(x)\bigr)
+\]
+为单射，故下界可达。
+\end{proof}
+
+\begin{corollary}[Smith 指数的层寿命与逐层寄存器增量]\label{cor:xi-smith-index-layer-lifetime-register}
+沿用定理 \ref{thm:xi-smith-loss-minimal-branch-register} 的记号，定义
+\[
+B_p(k):=\log_p K_p(k)=k(n-m)+f_p(k),
+\qquad
+f_p(0):=0,
+\]
+\[
+\Delta_p(k):=f_p(k)-f_p(k-1)
+\qquad(k\ge 1).
+\]
+则有
+\[
+\Delta_p(k)=\#\{i:\ e_i(p)\ge k\},
+\]
+从而
+\[
+B_p(k)-B_p(k-1)=(n-m)+\Delta_p(k).
+\]
+因此自由核秩 \(n-m\) 在每一层都贡献恒定的 \(p\)-元寄存器长度，而每个 Smith 指数 \(e_i(p)\) 则精确贡献一个寿命为 \(e_i(p)\) 的附加 digit 轴。若进一步 \(m=n\)，则
+\[
+\sum_{k\ge 1}\Delta_p(k)=\sum_{i=1}^{n}e_i(p)=v_p(\det A).
+\]
+\end{corollary}
+\begin{proof}
+由定义
+\[
+f_p(k)=\sum_{i=1}^{m}\min\{k,e_i(p)\}.
+\]
+故
+\[
+\Delta_p(k)
+=\sum_{i=1}^{m}\bigl(\min\{k,e_i(p)\}-\min\{k-1,e_i(p)\}\bigr)
+=\#\{i:\ e_i(p)\ge k\},
+\]
+因为对任意整数 \(e\ge 0\) 都有
+\[
+\min\{k,e\}-\min\{k-1,e\}=\mathbf 1_{\{e\ge k\}}.
+\]
+将该式代入
+\(
+B_p(k)=k(n-m)+f_p(k)
+\)
+即可得到
+\[
+B_p(k)-B_p(k-1)=(n-m)+\Delta_p(k).
+\]
+若 \(m=n\)，则 \(\Delta_p(k)\) 只有有限支撑，故
+\[
+\sum_{k\ge 1}\Delta_p(k)=f_p(\infty)=\sum_{i=1}^{n}e_i(p)=v_p(\det A).
+\]
+\end{proof}
+
+\begin{theorem}[有限历史的 prime-register 压缩与自然扩张的逆极限实现]\label{thm:xi-prime-register-history-inverse-limit}
+设 \(X\) 为可数集合，\(T:X\twoheadrightarrow X\) 为有限纤维满射，并固定定理 \ref{thm:killo-natural-extension-branch-register} 中的分支指标
+\[
+\beta(x):=\iota_{T(x)}(x).
+\]
+对每个 \(k\ge 1\)，定义 \(k\)-步历史空间
+\[
+X^{\leftarrow,k}
+:=
+\{(x_0,x_{-1},\dots,x_{-k})\in X^{k+1}:\ T(x_{-j})=x_{-j+1}\ \ (1\le j\le k)\},
+\]
+以及截断分支码
+\[
+\mathcal C_k(x_0,\dots,x_{-k})
+:=
+\bigl(x_0,\bigl(\beta(x_{-1}),\dots,\beta(x_{-k})\bigr)\bigr)\in X\times \NN^k.
+\]
+则对每个 \(k\ge 1\) 都存在单射
+\[
+\Phi_k:X^{\leftarrow,k}\hookrightarrow X\times \ZZ_{>0},
+\qquad
+\Phi_k(x_0,\dots,x_{-k})=\bigl(x_0,G_k(x_0,\dots,x_{-k})\bigr),
+\]
+满足：
+\begin{enumerate}
+  \item \(G_k\) 具有严格分层分解
+  \[
+  G_k=\prod_{\ell=1}^{k}q_\ell,
+  \qquad
+  q_\ell\in\mathcal P_{\ell-1},
+  \]
+  其中 \((\mathcal P_j)_{j\ge 0}\) 为定理 \ref{thm:killo-layered-prime-slices-finite-depth} 的不交素数片；
+  \item 由 \((x_0,G_k)\) 可确定性恢复唯一历史 \((x_0,\dots,x_{-k})\)，等价地可恢复 \(\mathcal C_k(x_0,\dots,x_{-k})\)；
+  \item 若记 \(\widehat X_k:=\Phi_k(X^{\leftarrow,k})\)，并对 \((x_0,\prod_{\ell=1}^{k+1}q_\ell)\in\widehat X_{k+1}\) 定义
+  \[
+  \tau_{k+1,k}\!\left(x_0,\prod_{\ell=1}^{k+1}q_\ell\right)
+  :=
+  \left(x_0,\prod_{\ell=1}^{k}q_\ell\right),
+  \]
+  则 \((\widehat X_k,\tau_{k+1,k})\) 构成投影系统，其逆极限与定理 \ref{thm:killo-natural-extension-branch-register} 中的 \(\widehat X\) 规范同构；因此，经该同构输运的动力学与自然扩张 \((X^{\leftarrow},\sigma)\) 共轭。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:killo-layered-prime-slices-finite-depth}，素数集合分解为两两不交的可数片
+\[
+\mathcal P=\bigsqcup_{j\ge 0}\mathcal P_j.
+\]
+对每个 \(\ell\ge 1\)，集合 \(X^{\leftarrow,\ell-1}\times\NN\) 可数，故可取单射
+\[
+\alpha_\ell:X^{\leftarrow,\ell-1}\times\NN\hookrightarrow \mathcal P_{\ell-1}.
+\]
+对任意 \((x_0,\dots,x_{-k})\in X^{\leftarrow,k}\)，定义
+\[
+q_\ell:=\alpha_\ell\!\bigl((x_0,\dots,x_{-\ell+1}),\beta(x_{-\ell})\bigr)
+\qquad(1\le \ell\le k),
+\]
+以及
+\[
+G_k(x_0,\dots,x_{-k}):=\prod_{\ell=1}^{k}q_\ell.
+\]
+于是 \(q_\ell\in\mathcal P_{\ell-1}\)，从而得到第一条。
+
+现由 \((x_0,G_k)\) 恢复历史。由于素数片两两不交，唯一分解定理可从 \(G_k\) 中逐片抽取出每个 \(q_\ell\)。已知 \(x_0\) 后，由 \(q_1\) 与 \(\alpha_1\) 的像上反演可恢复 \(\beta(x_{-1})\)；再由 \(\beta(x_{-1})=\iota_{x_0}(x_{-1})\) 与 \(\iota_{x_0}\) 的像上反演，可唯一恢复 \(x_{-1}\)。随后已知 \((x_0,x_{-1})\) 与 \(q_2\)，同理恢复 \(\beta(x_{-2})\) 及 \(x_{-2}\)。如此归纳，依次恢复全部 \(x_{-\ell}\)（\(1\le \ell\le k\)），从而得到唯一历史与唯一的 \(\mathcal C_k\)。第二条成立。
+
+再看相容性。对任意 \((x_0,\dots,x_{-(k+1)})\in X^{\leftarrow,k+1}\)，有
+\[
+\Phi_{k+1}(x_0,\dots,x_{-(k+1)})
+=
+\left(x_0,\prod_{\ell=1}^{k+1}q_\ell\right),
+\]
+其中最后一层因子 \(q_{k+1}\in\mathcal P_k\) 只编码新增的最深一级前史 \(x_{-(k+1)}\)。因此
+\[
+\tau_{k+1,k}\circ \Phi_{k+1}
+=
+\Phi_k\circ \pi_{k+1,k},
+\]
+其中
+\[
+\pi_{k+1,k}(x_0,\dots,x_{-(k+1)})=(x_0,\dots,x_{-k}).
+\]
+故 \((\widehat X_k,\tau_{k+1,k})\) 确为投影系统。
+
+最后说明逆极限识别。一个相容族 \(\bigl((x_0,G_k)\bigr)_{k\ge 1}\in\varprojlim \widehat X_k\) 通过逐层抽取素数片因子，唯一给出一列整数
+\[
+a_\ell:=\beta(x_{-\ell})\in\NN
+\qquad(\ell\ge 1),
+\]
+从而唯一确定
+\[
+\bigl(x_0,(a_1,a_2,\dots)\bigr)\in \widehat X.
+\]
+反之，任取 \(\widehat X\) 中元素 \(\bigl(x_0,(\beta(x_{-1}),\beta(x_{-2}),\dots)\bigr)\)，按照上述构造截取前 \(k\) 项即可得到 \(\widehat X_k\) 中的兼容族。于是
+\[
+\varprojlim \widehat X_k\cong \widehat X.
+\]
+再由定理 \ref{thm:killo-natural-extension-branch-register}，
+\((\widehat X,\widehat T)\) 与 \((X^{\leftarrow},\sigma)\) 共轭，故把 \(\widehat T\) 通过上述同构输运到 \(\varprojlim\widehat X_k\) 上，即得到与自然扩张共轭的逆极限动力学。
+\end{proof}
+
+\begin{theorem}[有限多 Euler 原子的 primitive 手术可加律]\label{thm:xi-finite-euler-primitive-surgery-additivity}
+设某个加权 \(\zeta\)-函数可写成
+\[
+\zeta(z,u)
+=
+\left(\prod_{\nu=1}^{s}(1-u^{E_\nu}z^{\ell_\nu})^{-m_\nu}\right)
+\zeta_{\mathrm{core}}(z,u),
+\]
+其中
+\[
+m_\nu\in\ZZ_{>0},
+\qquad
+E_\nu\in\ZZ_{\ge 0},
+\qquad
+\ell_\nu\in\ZZ_{\ge 1},
+\]
+并假设对每个 \(\nu\) 都有
+\[
+1-u^{E_\nu}z_\star(u)^{\ell_\nu}\neq 0,
+\]
+其中 \(z_\star(u)=\lambda(u)^{-1}\) 为 \(\zeta_{\mathrm{core}}\) 的主极点。令 \(P(z,u)\)、\(P_{\mathrm{core}}(z,u)\) 分别为 \(\zeta(z,u)\)、\(\zeta_{\mathrm{core}}(z,u)\) 的 primitive 生成函数，\(\log\mathfrak M(u)\)、\(\log\mathfrak M_{\mathrm{core}}(u)\) 为对应的 Abel 有限部常数。则有严格加法公式
+\[
+P(z,u)=P_{\mathrm{core}}(z,u)+\sum_{\nu=1}^{s}m_\nu u^{E_\nu}z^{\ell_\nu},
+\]
+\[
+\log\mathfrak M(u)
+=
+\log\mathfrak M_{\mathrm{core}}(u)
++\sum_{\nu=1}^{s}m_\nu u^{E_\nu}z_\star(u)^{\ell_\nu}.
+\]
+特别地，有限多个可剥离 Euler 原子之间不存在任何交叉修正项。
+\end{theorem}
+\begin{proof}
+把分解式取对数，得到
+\[
+\log\zeta(z,u)
+=
+\sum_{\nu=1}^{s}-m_\nu\log(1-u^{E_\nu}z^{\ell_\nu})
++\log\zeta_{\mathrm{core}}(z,u).
+\]
+对两边施加 Witt/M\"obius 变换
+\[
+P(z,u)=\sum_{r\ge 1}\frac{\mu(r)}{r}\log\zeta(z^r,u^r),
+\]
+便有
+\[
+P(z,u)
+=
+P_{\mathrm{core}}(z,u)
++\sum_{\nu=1}^{s}m_\nu
+\left(
+-\sum_{r\ge 1}\frac{\mu(r)}{r}\log(1-u^{rE_\nu}z^{r\ell_\nu})
+\right).
+\]
+对形式变量 \(X\) 使用标准恒等式
+\[
+-\sum_{r\ge 1}\frac{\mu(r)}{r}\log(1-X^r)=X,
+\]
+并取 \(X=u^{E_\nu}z^{\ell_\nu}\)，即得
+\[
+P(z,u)=P_{\mathrm{core}}(z,u)+\sum_{\nu=1}^{s}m_\nu u^{E_\nu}z^{\ell_\nu}.
+\]
+
+由于各原子因子在 \(z=z_\star(u)\) 处均解析且不为零，主极点仍由 \(\zeta_{\mathrm{core}}\) 控制。于是可逐项将上式代入 Abel 有限部常数的定义；等价地，也可对每个原子重复应用命题 \ref{prop:primitive-orbit-surgery}。由线性性立即得到
+\[
+\log\mathfrak M(u)
+=
+\log\mathfrak M_{\mathrm{core}}(u)
++\sum_{\nu=1}^{s}m_\nu u^{E_\nu}z_\star(u)^{\ell_\nu}.
+\]
+当 \(s=1\)、\((m_1,E_1,\ell_1)=(1,1,2)\) 时，即回到真实输入 \(40\) 状态核中命题 \ref{prop:atomic-2-orbit-split-logM} 的长度 \(2\) 原子剥离。
+\end{proof}
+
+\paragraph{有限模层析、ghost 闭式与 Abel 位移}
+
+\begin{theorem}[原子 primitive 轨道手术的有限同余层析]\label{thm:xi-primitive-surgery-finite-congruence-tomography}
+设某个加权有限矩阵族/有限型子移位满足
+\[
+\zeta(z,u)=\frac{1}{(1-u^Ez^\ell)^m}\,\zeta_{\mathrm{core}}(z,u),
+\qquad
+m\in\ZZ_{\ge 1},\ \ell\in\ZZ_{\ge 1},\ E\in\ZZ_{\ge 0},
+\]
+并令 primitive 生成函数满足
+\[
+P(z,u)=P_{\mathrm{core}}(z,u)+m\,u^Ez^\ell.
+\]
+对任意模数 \(q\ge 2\) 与剩余类 \(a\in\ZZ/q\ZZ\)，定义 root-of-unity 滤波的 primitive 生成函数
+\[
+P_{a,q}(z,u):=\frac1q\sum_{j=0}^{q-1}\omega_q^{-aj}P(\omega_q^j z,u),
+\qquad
+\omega_q:=e^{2\pi i/q},
+\]
+并对 \(P_{\mathrm{core}}\) 同样定义 \(P^{\mathrm{core}}_{a,q}(z,u)\)。则成立精确公式
+\[
+\boxed{\;
+P_{a,q}(z,u)-P^{\mathrm{core}}_{a,q}(z,u)
+=
+m\,u^E z^\ell\,
+\mathbf 1_{\{a\equiv \ell\;(\mathrm{mod}\,q)\}}.\;}
+\]
+因此，若取两两互素模数 \(q_1,\dots,q_r\) 满足
+\[
+Q:=q_1\cdots q_r>\ell,
+\]
+并已知对每个 \(q_i\) 都存在唯一剩余类 \(a_i\in\ZZ/q_i\ZZ\) 使
+\[
+P_{a_i,q_i}(z,u)-P^{\mathrm{core}}_{a_i,q_i}(z,u)\neq 0,
+\]
+则由中国剩余定理可唯一恢复 \(\ell\)。进一步，若在两个不同正参数 \(u_1\neq u_2\) 处测得相应非零系数
+\[
+c_i^{(j)}
+:=
+\left[z^\ell\right]
+\bigl(
+P_{a_i,q_i}(z,u_j)-P^{\mathrm{core}}_{a_i,q_i}(z,u_j)
+\bigr)
+=
+m\,u_j^E
+\qquad (j=1,2),
+\]
+则 \(E\) 与 \(m\) 亦由此唯一恢复：
+\[
+E=\frac{\log(c_i^{(2)}/c_i^{(1)})}{\log(u_2/u_1)},
+\qquad
+m=\frac{c_i^{(1)}}{u_1^E}.
+\]
+\end{theorem}
+\begin{proof}
+把
+\[
+P(z,u)-P_{\mathrm{core}}(z,u)=m\,u^Ez^\ell
+\]
+代入 root-of-unity 滤波的定义，得到
+\[
+\begin{aligned}
+P_{a,q}(z,u)-P^{\mathrm{core}}_{a,q}(z,u)
+&=
+\frac1q\sum_{j=0}^{q-1}\omega_q^{-aj}
+\bigl(P(\omega_q^j z,u)-P_{\mathrm{core}}(\omega_q^j z,u)\bigr)\\
+&=
+\frac1q\sum_{j=0}^{q-1}\omega_q^{-aj}\,m\,u^E(\omega_q^j z)^\ell\\
+&=
+m\,u^Ez^\ell\cdot
+\frac1q\sum_{j=0}^{q-1}\omega_q^{j(\ell-a)}.
+\end{aligned}
+\]
+有限 Fourier 求和给出
+\[
+\frac1q\sum_{j=0}^{q-1}\omega_q^{j(\ell-a)}
+=
+\mathbf 1_{\{a\equiv \ell\;(\mathrm{mod}\,q)\}},
+\]
+从而得到所示精确公式。
+
+于是每个模数 \(q_i\) 都唯一暴露 \(\ell\bmod q_i\)。因 \(q_1,\dots,q_r\) 两两互素，中国剩余定理给出唯一的
+\[
+\ell \pmod Q.
+\]
+又因 \(0\le \ell<Q\)，故 \(\ell\) 本身唯一确定。已知 \(\ell\) 后，任何非零滤波系数都等于 \(m\,u^E\)。在两个不同正参数 \(u_1\neq u_2\) 处比较，便唯一恢复
+\[
+E=\frac{\log(c_i^{(2)}/c_i^{(1)})}{\log(u_2/u_1)},
+\qquad
+m=\frac{c_i^{(1)}}{u_1^E}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[原子手术的 ghost 级数闭式与 Abel 有限部的精确位移]\label{thm:xi-atomic-surgery-ghost-abel-shift-general}
+沿用定理 \ref{thm:xi-primitive-surgery-finite-congruence-tomography} 的设定。定义 periodic/ghost 系数 \(a_n(u)\)、\(a_n^{\mathrm{core}}(u)\) 为
+\[
+\log \zeta(z,u)=\sum_{n\ge 1}\frac{a_n(u)}{n}z^n,
+\qquad
+\log \zeta_{\mathrm{core}}(z,u)=\sum_{n\ge 1}\frac{a_n^{\mathrm{core}}(u)}{n}z^n.
+\]
+则有精确 ghost 修正公式
+\[
+\boxed{\;
+a_n(u)-a_n^{\mathrm{core}}(u)
+=
+m\ell\,u^{En/\ell}\,\mathbf 1_{\{\ell\mid n\}}.\;}
+\]
+进一步，若记主增长率为 \(\lambda(u)=z_\star(u)^{-1}\)，并定义 Abel 有限部常数
+\[
+\log\mathfrak M(u):=\sum_{n\ge 1}\left(\frac{p_n(u)}{\lambda(u)^n}-\frac1n\right),
+\]
+其中 \(P(z,u)=\sum_{n\ge 1}p_n(u)z^n\)，而 \(\log\mathfrak M_{\mathrm{core}}(u)\) 对 \(P_{\mathrm{core}}\) 同样定义，则有
+\[
+\boxed{\;
+\log\mathfrak M(u)-\log\mathfrak M_{\mathrm{core}}(u)
+=
+m\,u^Ez_\star(u)^\ell.\;}
+\]
+\end{theorem}
+\begin{proof}
+由
+\[
+\zeta(z,u)=\frac{1}{(1-u^Ez^\ell)^m}\,\zeta_{\mathrm{core}}(z,u)
+\]
+直接取对数可得
+\[
+\log\zeta(z,u)-\log\zeta_{\mathrm{core}}(z,u)
+=
+-m\log(1-u^Ez^\ell)
+=
+m\sum_{r\ge 1}\frac{u^{Er}z^{\ell r}}{r}.
+\]
+另一方面，
+\[
+\log\zeta(z,u)-\log\zeta_{\mathrm{core}}(z,u)
+=
+\sum_{n\ge 1}\frac{a_n(u)-a_n^{\mathrm{core}}(u)}{n}z^n.
+\]
+比较两边系数，若 \(n=\ell r\) 则
+\[
+\frac{a_n(u)-a_n^{\mathrm{core}}(u)}{n}
+=
+\frac{m\,u^{Er}}{r},
+\]
+亦即
+\[
+a_n(u)-a_n^{\mathrm{core}}(u)
+=
+m\ell\,u^{En/\ell}.
+\]
+若 \(\ell\nmid n\)，则对应系数为 \(0\)。这就得到 ghost 修正公式。
+
+至于 Abel 有限部的位移，定理 \ref{thm:xi-finite-euler-primitive-surgery-additivity} 在单原子情形 \(s=1\) 已经给出
+\[
+\log\mathfrak M(u)-\log\mathfrak M_{\mathrm{core}}(u)
+=
+m\,u^Ez_\star(u)^\ell.
+\]
+证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part53b-witt-surgery-pressure-abel-rigidity}
+
+\input{subsubsec__xi-time-protocol-conclusions-part53a-natural-extension-primeslice-smith-dirichlet}
+\input{subsubsec__xi-time-protocol-conclusions-part53ab-layered-primeslice-fibermax-smith-prefix}
+\input{subsubsec__xi-time-protocol-conclusions-part53ac-primeslice-inverse-limit-smith-solvability-ellipse-profinite}
+
+\input{subsubsec__xi-time-protocol-conclusions-part53aa-atomic-ghost-subsemigroup-support}
+
+\endinput

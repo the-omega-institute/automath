@@ -1,0 +1,368 @@
+\paragraph{escort 乘法链、微正则层与 oracle 前沿的几何闭包}
+在整数压力谱的乘法链式恒等式、微正则条件化与 escort 的信息等价、以及热相前沿的 Gaussian 临界窗口都已经建立之后，还可把这些结果压缩为下列四条彼此闭合的派生定理。
+
+\begin{theorem}[整数压力谱的素因子边缘全息重建]\label{thm:pom-pressure-prime-edge-holographic-reconstruction}
+设
+\[
+n=r_1r_2\cdots r_k,\qquad r_j\ge 2,
+\]
+为任意有序因子分解，并记
+\[
+a_0:=1,\qquad a_j:=r_1r_2\cdots r_j\qquad(1\le j\le k).
+\]
+则整数压力谱满足严格重建公式
+\[
+\boxed{\;
+P_n
+=
+n\log 2
+-\sum_{j=1}^{k}\frac{n}{a_j}\,\mathcal{H}_{\mathrm{loss}}(a_{j-1},r_j)\;}
+\]
+以及等价形式
+\[
+\boxed{\;
+P_n
+=
+n\log 2
+-\sum_{j=1}^{k}\frac{n}{a_j}(r_j-1)\,h^{\mathrm{esc}}_{r_j}(a_{j-1}).\;}
+\]
+右端对因子分解路径无依赖；这一路径无关性等价于熵亏损的平直性恒等式
+\[
+\mathcal{H}_{\mathrm{loss}}(a,bc)
+=
+c\,\mathcal{H}_{\mathrm{loss}}(a,b)+\mathcal{H}_{\mathrm{loss}}(ab,c).
+\]
+特别地，若 \(n=p^e\) 为素数幂，则
+\[
+\boxed{\;
+P_{p^e}
+=
+p^e\log 2
+-(p-1)\sum_{\ell=0}^{e-1}p^{\,e-1-\ell}\,h^{\mathrm{esc}}_{p}(p^\ell).\;}
+\]
+\end{theorem}
+\begin{proof}
+由定义 \ref{def:pom-entropy-loss-cocycle} 与推论 \ref{cor:pom-entropy-loss-factor-chain-expansion}（取 \(a=1\), \(b=n\)），有
+\[
+\mathcal{H}_{\mathrm{loss}}(1,n)
+=
+\sum_{j=1}^{k}\left(\prod_{t=j+1}^{k}r_t\right)
+\mathcal{H}_{\mathrm{loss}}(a_{j-1},r_j)
+=
+\sum_{j=1}^{k}\frac{n}{a_j}\,\mathcal{H}_{\mathrm{loss}}(a_{j-1},r_j).
+\]
+另一方面，
+\[
+\mathcal{H}_{\mathrm{loss}}(1,n)=nP_1-P_n=n\log 2-P_n,
+\]
+其中 \(P_1=\log 2\) 由推论 \ref{cor:pom-escort-renyi-rate-inversion} 已得。移项即得第一条重建公式。
+
+再由定义 \ref{def:pom-entropy-loss-cocycle} 中
+\[
+\mathcal{H}_{\mathrm{loss}}(a,b)=(b-1)\,h^{\mathrm{esc}}_{b}(a)
+\]
+可得第二条公式。由于左端 \(n\log2-P_n\) 仅依赖于终点 \(n\)，故右端自动与有序分解无关；反过来，这种路径无关正由定理 \ref{thm:pom-entropy-loss-1cocycle-flat} 的平直性恒等式所编码。
+
+当 \(r_1=\cdots=r_e=p\) 时，\(a_j=p^j\)，于是
+\[
+P_{p^e}
+=
+p^e\log 2-\sum_{j=1}^{e}p^{e-j}(p-1)\,h^{\mathrm{esc}}_{p}(p^{j-1}),
+\]
+将指标改写为 \(\ell=j-1\) 即得所示素数幂公式。证毕。
+\end{proof}
+
+\begin{theorem}[零温缺口的除性单调律与乘法射线求和公式]\label{thm:pom-zero-temperature-gap-divisibility-ray-sum}
+为避免与定理 \ref{thm:pom-oracle-local-cost-kl-bregman} 中的局部代价记号 \(R(a)=\log 2-\Gamma_{\mathrm{orc}}(a)\) 混淆，此处记零温缺口为
+\[
+\mathcal{R}_{\infty}(a):=P_a-a\alpha_\ast
+=
+h_\infty^{\mathrm{esc}}(a),
+\]
+并定义单位化缺口
+\[
+r_\infty(a):=\frac{\mathcal{R}_{\infty}(a)}{a}
+=
+\frac{P_a}{a}-\alpha_\ast.
+\]
+则对任意整数 \(a\ge 1,\ b\ge 2\)，成立严格恒等式
+\[
+\boxed{\;
+r_\infty(a)-r_\infty(ab)
+=
+\frac{\mathcal{H}_{\mathrm{loss}}(a,b)}{ab}
+=
+\frac{(b-1)\,h_b^{\mathrm{esc}}(a)}{ab}\ge 0.\;}
+\]
+因此 \(r_\infty(a)\) 在整除偏序上单调不增：若 \(a\mid a'\)，则 \(r_\infty(a')\le r_\infty(a)\)。
+
+进一步，对任意 \(a\ge 1,\ b\ge 2\) 都有绝对收敛级数表示
+\[
+\boxed{\;
+\mathcal{R}_{\infty}(a)
+=
+\sum_{k=0}^{\infty}\frac{\mathcal{H}_{\mathrm{loss}}(ab^k,b)}{b^{k+1}}
+=
+\sum_{k=0}^{\infty}\frac{(b-1)\,h_b^{\mathrm{esc}}(ab^k)}{b^{k+1}}.\;}
+\]
+特别地，对固定 \(a\) 有等价关系
+\[
+\boxed{\;
+\mathcal{R}_{\infty}(a)=0
+\iff
+\mathcal{H}_{\mathrm{loss}}(a,b)=0\ \ (\forall b\ge 2)
+\iff
+h_\infty^{\mathrm{esc}}(a)=0.\;}
+\]
+\end{theorem}
+\begin{proof}
+由定义，
+\[
+r_\infty(a)-r_\infty(ab)
+=
+\frac{P_a}{a}-\frac{P_{ab}}{ab}
+=
+\frac{bP_a-P_{ab}}{ab}
+=
+\frac{\mathcal{H}_{\mathrm{loss}}(a,b)}{ab}.
+\]
+再由 \(\mathcal{H}_{\mathrm{loss}}(a,b)=(b-1)h_b^{\mathrm{esc}}(a)\) 得到第二个等式；非负性则来自 \(h_b^{\mathrm{esc}}(a)\ge 0\)。于是 \(r_\infty\) 沿乘法细化单调不增；若 \(a'=ab_1\cdots b_\ell\)，迭代该不等式即可得到整除偏序上的单调性。
+
+另一方面，定理 \ref{thm:pom-multiplicative-refinement-telescope-alpha} 在 \(N=0\) 时给出
+\[
+\frac{P_a}{a}
+=
+\alpha_\ast+\sum_{k=0}^{\infty}\frac{\mathcal{H}_{\mathrm{loss}}(ab^k,b)}{ab^{k+1}}.
+\]
+两边乘以 \(a\) 即得
+\[
+\mathcal{R}_{\infty}(a)
+=
+\sum_{k=0}^{\infty}\frac{\mathcal{H}_{\mathrm{loss}}(ab^k,b)}{b^{k+1}}.
+\]
+再用 \(\mathcal{H}_{\mathrm{loss}}=(b-1)h_b^{\mathrm{esc}}\) 即得第二条级数公式。
+
+最后，由定理 \ref{thm:pom-escort-minentropy-zero-temperature-identity}，
+\[
+\mathcal{R}_{\infty}(a)=h_\infty^{\mathrm{esc}}(a).
+\]
+再由推论 \ref{cor:pom-escort-freezing-criterion}，对固定 \(a\) 有
+\[
+h_\infty^{\mathrm{esc}}(a)=0
+\iff
+P_a=a\alpha_\ast
+\iff
+\mathcal{H}_{\mathrm{loss}}(a,b)=0\ \ (\forall b\ge 2).
+\]
+这便得到最后的等价关系。证毕。
+\end{proof}
+
+\begin{theorem}[微正则层上的全 Rényi 退化]\label{thm:pom-microcanonical-escort-all-renyi-collapse}
+取热相区间中的 \(a\in(a_0,a_1)\)，并令
+\[
+q_*:=q_*(a)\in(0,1)
+\]
+满足
+\[
+\tau'(q_*)=a.
+\]
+对 \(\varepsilon>0\) 定义层集
+\[
+E_m(a,\varepsilon):=\{x\in X_m:\ |Y_m(x)-a|<\varepsilon\},
+\]
+以及条件均匀分布与条件 escort 分布
+\[
+U_m^{a,\varepsilon}:=U_m(\cdot\mid E_m(a,\varepsilon)),
+\qquad
+w_{m,q_*}^{a,\varepsilon}:=w_{m,q_*}(\cdot\mid E_m(a,\varepsilon)),
+\]
+其中对充分大 \(m\) 上述层集非空。则对任意 Rényi 阶 \(b\in(0,\infty]\)，都有统一极限
+\[
+\boxed{\;
+\lim_{\varepsilon\downarrow 0}\lim_{m\to\infty}\frac{1}{m}H_b\!\bigl(U_m^{a,\varepsilon}\bigr)
+=
+\lim_{\varepsilon\downarrow 0}\lim_{m\to\infty}\frac{1}{m}H_b\!\bigl(w_{m,q_*}^{a,\varepsilon}\bigr)
+=
+f(a).\;}
+\]
+其中 \(H_\infty(\pi):=-\log\max_x\pi(x)\)。
+\end{theorem}
+\begin{proof}
+先看均匀条件分布。由定义，对任意 \(b\in(0,\infty]\) 都有
+\[
+U_m^{a,\varepsilon}(x)=\frac{1}{|E_m(a,\varepsilon)|}\,\mathbf 1_{E_m(a,\varepsilon)}(x),
+\]
+故
+\[
+H_b\!\bigl(U_m^{a,\varepsilon}\bigr)=\log |E_m(a,\varepsilon)|.
+\]
+另一方面，由定理 \ref{thm:pom-ldp-uniform-and-wm-exact-spectrum} 的局部计数等号，
+\[
+\lim_{\varepsilon\downarrow 0}\lim_{m\to\infty}\frac{1}{m}\log |E_m(a,\varepsilon)|=f(a).
+\]
+这便给出第一半式。
+
+再看条件 escort 分布。定理 \ref{thm:pom-microcanonical-escort-kl-rate-zero} 的证明已给出层集上的对数 Radon--Nikodym 振幅控制：存在
+\[
+\eta_{m,\varepsilon}=O(\varepsilon m)+o(m)
+\]
+使得对所有 \(x\in E_m(a,\varepsilon)\) 都有
+\[
+e^{-\eta_{m,\varepsilon}}\,|E_m(a,\varepsilon)|^{-1}
+\le
+w_{m,q_*}^{a,\varepsilon}(x)
+\le
+e^{\eta_{m,\varepsilon}}\,|E_m(a,\varepsilon)|^{-1}.
+\]
+记 \(E:=E_m(a,\varepsilon)\)。
+
+当 \(b\in(0,\infty)\setminus\{1\}\) 时，由上式得到
+\[
+|E|^{1-b}e^{-b\eta_{m,\varepsilon}}
+\le
+\sum_{x\in E}\bigl(w_{m,q_*}^{a,\varepsilon}(x)\bigr)^b
+\le
+|E|^{1-b}e^{b\eta_{m,\varepsilon}}.
+\]
+因此
+\[
+\left|
+\log\sum_{x\in E}\bigl(w_{m,q_*}^{a,\varepsilon}(x)\bigr)^b
+-(1-b)\log|E|
+\right|
+\le
+b\,\eta_{m,\varepsilon},
+\]
+从而
+\[
+\left|
+H_b\!\bigl(w_{m,q_*}^{a,\varepsilon}\bigr)-\log|E|
+\right|
+\le
+\frac{b}{|1-b|}\,\eta_{m,\varepsilon}.
+\]
+
+当 \(b=1\) 时，由
+\[
+\log|E|-\eta_{m,\varepsilon}
+\le
+-\log w_{m,q_*}^{a,\varepsilon}(x)
+\le
+\log|E|+\eta_{m,\varepsilon}
+\qquad (x\in E)
+\]
+可知
+\[
+\left|
+H_1\!\bigl(w_{m,q_*}^{a,\varepsilon}\bigr)-\log|E|
+\right|
+\le
+\eta_{m,\varepsilon}.
+\]
+
+当 \(b=\infty\) 时，
+\[
+e^{-\eta_{m,\varepsilon}}|E|^{-1}
+\le
+\max_{x\in E}w_{m,q_*}^{a,\varepsilon}(x)
+\le
+e^{\eta_{m,\varepsilon}}|E|^{-1},
+\]
+故
+\[
+\left|
+H_\infty\!\bigl(w_{m,q_*}^{a,\varepsilon}\bigr)-\log|E|
+\right|
+\le
+\eta_{m,\varepsilon}.
+\]
+
+综上，对任意固定 \(b\in(0,\infty]\) 都有
+\[
+H_b\!\bigl(w_{m,q_*}^{a,\varepsilon}\bigr)
+=
+\log|E_m(a,\varepsilon)|+O(\varepsilon m)+o(m).
+\]
+两边除以 \(m\)，先令 \(m\to\infty\) 再令 \(\varepsilon\downarrow 0\)，便得到
+\[
+\lim_{\varepsilon\downarrow 0}\lim_{m\to\infty}\frac{1}{m}H_b\!\bigl(w_{m,q_*}^{a,\varepsilon}\bigr)=f(a).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[oracle 前沿的曲率公式与 Gaussian 窗口系数的几何起源]\label{thm:pom-oracle-frontier-curvature-gaussian-window}
+在热相区间 \((a_0,a_1)\) 内，沿用推论 \ref{cor:pom-oracle-capacity-slope-readout} 的记号。若 \(\tau\) 在 \((0,1)\) 上二次可微，则
+\[
+\boxed{\;
+\Gamma_{\mathrm{orc}}''(a)
+=
+-\frac{1}{\tau''(q_*(a))}<0
+\qquad (a\in(a_0,a_1)).\;}
+\]
+因此 \(\Gamma_{\mathrm{orc}}\) 在热相区间上严格凹。
+
+进一步，记
+\[
+a_1:=\tau'(1^-),\qquad
+\sigma^2:=\tau''(1^-),\qquad
+\beta_{\mathrm{crit}}:=\frac{a_1}{\log 2}.
+\]
+则推论 \ref{cor:pom-oracle-critical-window-bit-inversion} 中的 Gaussian 预算展开可改写为
+\[
+\boxed{\;
+B_m(p)
+=
+\beta_{\mathrm{crit}}m
++
+\frac{\Phi^{-1}(p)}{\log 2}\,
+\frac{\sqrt m}{\sqrt{-\Gamma_{\mathrm{orc}}''(a_1^-)}}
++o(\sqrt m),\qquad p\in(0,1).\;}
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:pom-oracle-capacity-slope-readout}，
+\[
+\Gamma_{\mathrm{orc}}'(a)=1-q_*(a).
+\]
+对 \(a\) 求导得到
+\[
+\Gamma_{\mathrm{orc}}''(a)=-q_*'(a).
+\]
+另一方面，\(q_*(a)\) 由方程
+\[
+\tau'(q_*(a))=a
+\]
+隐式定义。对该方程关于 \(a\) 求导可得
+\[
+\tau''(q_*(a))\,q_*'(a)=1,
+\qquad
+q_*'(a)=\frac{1}{\tau''(q_*(a))}.
+\]
+代回即得
+\[
+\Gamma_{\mathrm{orc}}''(a)
+=
+-\frac{1}{\tau''(q_*(a))}.
+\]
+由于热相内部 \(\tau\) 严格凸，故 \(\tau''(q_*(a))>0\)，于是 \(\Gamma_{\mathrm{orc}}''(a)<0\)。这证明了严格凹性。
+
+再看临界端点。由 \(a_1=\tau'(1^-)\) 与 \(q_*(a)\) 的定义，可知当 \(a\uparrow a_1\) 时有 \(q_*(a)\uparrow 1\)。因此
+\[
+-\Gamma_{\mathrm{orc}}''(a_1^-)
+=
+\frac{1}{\tau''(1^-)}
+=
+\frac{1}{\sigma^2}.
+\]
+等价地，
+\[
+\sigma=\frac{1}{\sqrt{-\Gamma_{\mathrm{orc}}''(a_1^-)}}.
+\]
+将此代入推论 \ref{cor:pom-oracle-critical-window-bit-inversion} 的公式
+\[
+B_m(p)=\beta_{\mathrm{crit}}m+\frac{\sigma}{\log 2}\,\Phi^{-1}(p)\sqrt m+o(\sqrt m)
+\]
+即得所示几何形式。证毕。
+\end{proof}
+
+\endinput

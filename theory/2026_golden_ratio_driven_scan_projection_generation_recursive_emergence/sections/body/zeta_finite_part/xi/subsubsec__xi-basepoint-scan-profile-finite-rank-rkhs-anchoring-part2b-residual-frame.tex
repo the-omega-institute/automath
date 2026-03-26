@@ -1,0 +1,187 @@
+% (User input window)
+%
+% Residual kernel and polynomial frames (general codimension).
+
+\begin{proposition}[余维一锚定的条件余核：秩一闭式与 \texorpdfstring{$\ell_A=\mathcal{R}_A(\cdot,\cdot)$}{ellA=residual}]\label{prop:xi-basepoint-scan-residual-kernel-codim1-rankone}
+在定理 \ref{thm:xi-basepoint-scan-leverage-gap-codim1-closed-form} 的设定下（\(|A|=\kappa-1\) 且 \(G_A\) 可逆），定义条件余核
+\[
+\mathcal{R}_A(x,y):=K(x,y)-K(x,A)\,G_A^{-1}\,K(A,y)\qquad(x,y\in\RR).
+\]
+则 \(\mathcal{R}_A\) 为秩一正定核，并满足闭式
+\[
+\boxed{\;
+\mathcal{R}_A(x,y)
+=
+\frac{\displaystyle \frac{y_A(x)\,\overline{y_A(y)}}{\Pi(x)\,\overline{\Pi(y)}}}{
+\displaystyle \sum_{k=1}^{\kappa}\frac{|y_A(p_k)|^2}{w_k\,|\Pi'(p_k)|^2}
+}\; }.
+\]
+特别地，对角即为杠杆缺口：
+\[
+\boxed{\;\ell_A(x)=\mathcal{R}_A(x,x)\; }.
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:xi-basepoint-scan-gram-determinant-schur-increment} 的投影解释，
+\[
+\mathcal{R}_A(x,y)=\left\langle \mathrm{proj}_{\Span\{v(a):a\in A\}^\perp}v(x),\ \mathrm{proj}_{\Span\{v(a):a\in A\}^\perp}v(y)\right\rangle,
+\]
+其中 \(\Span\{v(a):a\in A\}^\perp\) 为一维（因 \(|A|=\kappa-1\)）。
+定理 \ref{thm:xi-basepoint-scan-leverage-gap-codim1-closed-form} 证明中构造的向量
+\(
+c_k=\overline{y_A(p_k)/\Pi'(p_k)}/\sqrt{w_k}
+\)
+张成该正交补，并且 \(\langle v(x),c\rangle=y_A(x)/\Pi(x)\)、\(\|c\|^2=\sum_k |y_A(p_k)|^2/(w_k|\Pi'(p_k)|^2)\)。
+由一维投影公式
+\(
+\mathrm{proj}_{\Span\{c\}}v(x)=\langle v(x),c\rangle\,c/\|c\|^2
+\)
+代入即得所示闭式与秩一性；取 \(x=y\) 得 \(\ell_A(x)=\mathcal{R}_A(x,x)\)。证毕。
+\end{proof}
+
+\begin{theorem}[一般余维下的余核分解：残差多项式框架与正交归一性]\label{thm:xi-basepoint-scan-residual-kernel-polynomial-frame}
+沿用命题 \ref{prop:xi-basepoint-scan-gram-determinant-schur-increment} 的记号，设 \(|A|=n\le\kappa\) 且 \(G_A\) 可逆，并记余维数 \(r:=\kappa-n\ge 1\)。
+定义条件余核
+\[
+\mathcal{R}_A(x,y):=K(x,y)-K(x,A)\,G_A^{-1}\,K(A,y)\qquad(x,y\in\RR).
+\]
+则存在 \(r\) 个次数 \(\le \kappa-1\) 的多项式 \(y_{A,1},\dots,y_{A,r}\) 使：
+\begin{enumerate}
+  \item 余核具有规范分解
+  \[
+  \boxed{\;
+  \mathcal{R}_A(x,y)=\frac{1}{\Pi(x)\overline{\Pi(y)}}\sum_{j=1}^{r} y_{A,j}(x)\,\overline{y_{A,j}(y)}\; }.
+  \]
+  \item 杠杆缺口为向量平方
+  \[
+  \boxed{\;\ell_A(x)=\mathcal{R}_A(x,x)=\frac{1}{|\Pi(x)|^2}\sum_{j=1}^{r}|y_{A,j}(x)|^2\; }.
+  \]
+  \item 对每个 \(a\in A\) 与每个 \(j\)，有 \(y_{A,j}(a)=0\)。因此存在次数 \(\le r-1\) 的多项式 \(q_{A,j}\) 使
+  \[
+  y_{A,j}(z)=y_A(z)\,q_{A,j}(z),
+  \qquad
+  y_A(z):=\prod_{a\in A}(z-a),
+  \]
+  并且
+  \[
+  \ell_A(x)=\frac{|y_A(x)|^2}{|\Pi(x)|^2}\sum_{j=1}^{r}|q_{A,j}(x)|^2.
+  \]
+  \item 可取 \(\{y_{A,j}\}\) 满足残差内积的正交归一性
+  \[
+  \boxed{\;
+  \sum_{k=1}^{\kappa}\frac{y_{A,i}(p_k)\overline{y_{A,j}(p_k)}}{w_k|\Pi'(p_k)|^2}=\delta_{ij}\; }.
+  \]
+  并且该族在整体酉变换意义下唯一。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+记 \(U:=\Span\{v(a):a\in A\}\subset\CC^\kappa\)，则 \(\dim U=n\)，故 \(\dim U^\perp=r\)。
+取 \(U^\perp\) 的一组正交归一基 \(u^{(1)},\dots,u^{(r)}\)。
+令
+\[
+F_j(x):=\langle v(x),u^{(j)}\rangle\qquad(1\le j\le r).
+\]
+由投影分解
+\(
+\mathrm{proj}_{U^\perp}v(x)=\sum_{j=1}^r F_j(x)\,u^{(j)}
+\)
+得到
+\[
+\mathcal{R}_A(x,y)=\langle \mathrm{proj}_{U^\perp}v(x),\mathrm{proj}_{U^\perp}v(y)\rangle=\sum_{j=1}^r F_j(x)\overline{F_j(y)},
+\]
+从而 \(\ell_A(x)=\sum_j|F_j(x)|^2\)。
+\par
+每个 \(F_j\) 是在 \(\{p_k\}\) 处具有简单极点的有理函数，且无多项式部分，因此可唯一写为
+\(
+F_j(z)=y_{A,j}(z)/\Pi(z)
+\)
+其中 \(y_{A,j}\) 为次数 \(\le \kappa-1\) 的多项式。
+代回得到第一、二条。
+\par
+由 \(u^{(j)}\in U^\perp\) 得对每个 \(a\in A\) 有 \(F_j(a)=\langle v(a),u^{(j)}\rangle=0\)，从而 \(y_{A,j}(a)=0\)。
+故 \(y_{A,j}\) 被 \(y_A\) 整除，并可写为 \(y_{A,j}=y_A q_{A,j}\) 且 \(\deg q_{A,j}\le r-1\)，得到第三条。
+\par
+最后，比较留数：由 \(F_j(z)=\sum_k \sqrt{w_k}\overline{u^{(j)}_k}/(z-p_k)\) 与 \(F_j=y_{A,j}/\Pi\) 得
+\(
+y_{A,j}(p_k)/\Pi'(p_k)=\sqrt{w_k}\,\overline{u^{(j)}_k}
+\)。
+因此
+\[
+\sum_{k=1}^{\kappa}\frac{y_{A,i}(p_k)\overline{y_{A,j}(p_k)}}{w_k|\Pi'(p_k)|^2}
+=
+\sum_{k=1}^{\kappa}u^{(j)}_k\overline{u^{(i)}_k}
+=\delta_{ij},
+\]
+得到正交归一性。
+若更换 \(U^\perp\) 的正交归一基，则 \(u^{(j)}\) 仅差一个 \(r\times r\) 酉矩阵，故 \((y_{A,j})\) 仅差整体酉变换。证毕。
+\end{proof}
+
+\begin{proposition}[扩展 Gram 行列式的余核 Plücker 因子分解]\label{prop:xi-basepoint-scan-gram-plucker-residual-factorization}
+沿用定理 \ref{thm:xi-basepoint-scan-residual-kernel-polynomial-frame} 的设定，并取互异实点
+\(
+X=\{x_1,\dots,x_r\}\subset\RR\setminus A
+\)。
+则扩展 Gram 行列式满足
+\[
+\boxed{\;
+\frac{\det G_{A\cup X}}{\det G_A}
+=\det\bigl(\mathcal{R}_A(x_i,x_j)\bigr)_{1\le i,j\le r}\; }.
+\]
+进一步地，若 \(y_{A,j}=y_A q_{A,j}\) 如定理 \ref{thm:xi-basepoint-scan-residual-kernel-polynomial-frame}，
+则有完全显式因子化
+\[
+\boxed{\;
+\det\bigl(\mathcal{R}_A(x_i,x_j)\bigr)_{i,j}
+=
+\frac{\prod_{i=1}^{r}|y_A(x_i)|^2}{\prod_{i=1}^{r}|\Pi(x_i)|^2}\cdot
+\left|\det\bigl(q_{A,j}(x_i)\bigr)_{1\le i,j\le r}\right|^2\; }.
+\]
+右端与正交归一基的选择无关。
+\end{proposition}
+\begin{proof}
+将 \(G_{A\cup X}\) 写成分块矩阵
+\[
+G_{A\cup X}=
+\begin{pmatrix}
+G_A & K(A,X)\\
+K(X,A) & K(X,X)
+\end{pmatrix}.
+\]
+由 Schur 补行列式公式得
+\[
+\det G_{A\cup X}=\det G_A\cdot \det\!\Bigl(K(X,X)-K(X,A)G_A^{-1}K(A,X)\Bigr).
+\]
+括号内矩阵的 \((i,j)\) 元即为 \(\mathcal{R}_A(x_i,x_j)\)，得第一式。
+\par
+由定理 \ref{thm:xi-basepoint-scan-residual-kernel-polynomial-frame}，矩阵 \(\bigl(\mathcal{R}_A(x_i,x_j)\bigr)_{i,j}\) 可写为
+\(
+D\,(Q Q^\ast)\,D^\ast
+\)，其中
+\[
+D:=\mathrm{diag}\Bigl(\frac{y_A(x_1)}{\Pi(x_1)},\dots,\frac{y_A(x_r)}{\Pi(x_r)}\Bigr),
+\qquad
+Q:=(q_{A,j}(x_i))_{1\le i,j\le r}.
+\]
+因此
+\(
+\det(\mathcal{R})=|\det D|^2\det(QQ^\ast)=|\det D|^2|\det Q|^2
+\)，得到第二式。
+正交归一基更换对应 \(Q\mapsto Q U\)（\(U\) 酉），故 \(|\det Q|\) 不变。证毕。
+\end{proof}
+
+\begin{conjecture}[残差多项式范数的统一衰减机制]\label{conj:xi-basepoint-scan-residual-polynomial-norm-decay}
+设给定一族以 \(m\) 为索引的有限秩核数据 \(\{(p_k^{(m)},w_k^{(m)})\}_{k\le \kappa_m}\)（其中 \(p_k^{(m)}\in\CC_-\)、\(w_k^{(m)}>0\)）并诱导核 \(K^{(m)}\) 与余核 \(\mathcal{R}_{A}^{(m)}\)。
+则存在固定余维数 \(r\ge 1\) 与一族锚点选取规则 \(A_m\subset\RR\)（\(|A_m|=\kappa_m-r\) 且 \(G_{A_m}^{(m)}\) 可逆）使得
+\[
+\sup_{x\in\RR}\ \frac{\ell_{A_m}^{(m)}(x)}{K^{(m)}(x,x)}\ \longrightarrow\ 0\qquad(m\to\infty),
+\]
+其中 \(\ell_{A_m}^{(m)}(x)=\mathcal{R}_{A_m}^{(m)}(x,x)\)。
+等价地，令 \(y_{A_m}(z)=\prod_{a\in A_m}(z-a)\)、\(\Pi_m(z)=\prod_{k\le\kappa_m}(z-p_k^{(m)})\)，并取定理 \ref{thm:xi-basepoint-scan-residual-kernel-polynomial-frame} 的残差商多项式 \(q_{A_m,j}^{(m)}\)（\(1\le j\le r\)），则上式可被视为
+\[
+\sup_{x\in\RR}\ \frac{|y_{A_m}(x)|^2}{|\Pi_m(x)|^2}\sum_{j=1}^{r}\bigl|q_{A_m,j}^{(m)}(x)\bigr|^2\ \longrightarrow\ 0
+\]
+在核化口径下的统一表述。
+\end{conjecture}
+
+\endinput
+

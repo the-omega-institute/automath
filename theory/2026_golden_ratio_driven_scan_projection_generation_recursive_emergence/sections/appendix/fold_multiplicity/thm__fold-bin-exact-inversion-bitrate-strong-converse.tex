@@ -1,0 +1,90 @@
+\begin{theorem}[bin-fold 精确反演的最小固定长比特率极限与强逆定理]\label{thm:fold-bin-exact-inversion-bitrate-strong-converse}
+沿用定理 \ref{thm:fold-oracle-capacity-closed-form} 与定理 \ref{thm:fold-bin-max-fiber-exponent} 的记号。对 bin-fold 记
+\[
+\mathcal C_m^{\mathrm{bin}}(B)
+:=
+\sum_{w\in X_m}\min\bigl(d_m^{\mathrm{bin}}(w),2^B\bigr),
+\qquad
+\mathrm{Succ}_m^{\mathrm{bin}}(B):=\frac{\mathcal C_m^{\mathrm{bin}}(B)}{2^m},
+\]
+并令
+\[
+M_m^{\mathrm{bin}}:=\max_{w\in X_m}d_m^{\mathrm{bin}}(w),
+\qquad
+B_m^{\mathrm{exact}}
+:=
+\min\{B\in\ZZ_{\ge 0}:\ \mathcal C_m^{\mathrm{bin}}(B)=2^m\}.
+\]
+则有：
+\begin{enumerate}
+  \item 精确阈值闭式
+  \[
+  \boxed{\;
+  B_m^{\mathrm{exact}}=\left\lceil \log_2 M_m^{\mathrm{bin}}\right\rceil.\;}
+  \]
+  \item 最小固定长比特率极限
+  \[
+  \boxed{\;
+  \lim_{m\to\infty}\frac{B_m^{\mathrm{exact}}}{m}
+  =
+  \log_2\frac{2}{\varphi}.\;}
+  \]
+  \item 强逆定理：对任意 \(\eta>0\)，若一列预算满足
+  \[
+  B_m\le \left(\log_2\frac{2}{\varphi}-\eta\right)m
+  \qquad(m\gg 1),
+  \]
+  则存在常数 \(C_\eta>0\) 使得
+  \[
+  \boxed{\;
+  \mathrm{Succ}_m^{\mathrm{bin}}(B_m)\le C_\eta\,2^{-\eta m}
+  \qquad(m\gg 1).\;}
+  \]
+\end{enumerate}
+因此，在 bin-fold 口径下，完美反演的临界 advice rate 恰为 \(\log_2(2/\varphi)\)；任何低于该斜率的固定长预算，都会使最优成功率指数级坍缩。
+\end{theorem}
+\begin{proof}
+第一条直接由定理 \ref{thm:fold-oracle-capacity-closed-form} 得到：\(\mathcal C_m^{\mathrm{bin}}(B)=2^m\) 当且仅当
+\[
+\min\bigl(d_m^{\mathrm{bin}}(w),2^B\bigr)=d_m^{\mathrm{bin}}(w)
+\qquad(\forall\, w\in X_m),
+\]
+亦即 \(2^B\ge M_m^{\mathrm{bin}}\)。故最小整数 \(B\) 正是
+\[
+\left\lceil \log_2 M_m^{\mathrm{bin}}\right\rceil.
+\]
+
+第二条由第一条与定理 \ref{thm:fold-bin-max-fiber-exponent} 立即推出，因为
+\[
+0\le \left\lceil \log_2 M_m^{\mathrm{bin}}\right\rceil-\log_2 M_m^{\mathrm{bin}}<1.
+\]
+
+最后证明强逆。由平凡估计
+\[
+\min\bigl(d_m^{\mathrm{bin}}(w),2^{B_m}\bigr)\le 2^{B_m}
+\]
+对所有 \(w\in X_m\) 成立，故
+\[
+\mathcal C_m^{\mathrm{bin}}(B_m)\le |X_m|\,2^{B_m}.
+\]
+于是
+\[
+\mathrm{Succ}_m^{\mathrm{bin}}(B_m)
+\le
+\frac{|X_m|\,2^{B_m}}{2^m}.
+\]
+而 bin-fold 的稳定型计数满足
+\[
+|X_m|=F_{m+2}=\Theta(\varphi^m).
+\]
+因此对某个与 \(\eta\) 无关的常数 \(C_\eta>0\)，当 \(m\) 充分大时有
+\[
+\mathrm{Succ}_m^{\mathrm{bin}}(B_m)
+\le
+C_\eta\,\varphi^m\,2^{-m}\,
+2^{(\log_2(2/\varphi)-\eta)m}
+=
+C_\eta\,2^{-\eta m}.
+\]
+证毕。
+\end{proof}

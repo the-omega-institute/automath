@@ -1,0 +1,506 @@
+\paragraph{碰撞势的局部对偶、素数模阈值与 dyadic 三谱迹}
+碰撞位势 \(P_2(\theta)=\log\rho(e^\theta)\) 已在附录中被压缩为一条三次代数压力链：它一方面给出 \(\theta=0\) 处全部低阶累积量的 \(\sqrt5\)-闭式，另一方面在单位根扭曲与 \(u=-1\) 奇偶通道上保留足够低阶的谱数据，使局部 Legendre 对偶、介观模数阈值与 dyadic 周期迹振荡可以继续闭合为一组不再依赖外加参数化的终端结论。
+
+\begin{theorem}[碰撞速率函数在平衡点的四阶 Cramér--Edgeworth 局部几何]\label{thm:xi-real-input-40-collision-rate-cramer-edgeworth}
+沿用命题 \ref{prop:real-input-40-collision-pressure}、推论 \ref{cor:real-input-40-collision-cumulants}、\ref{cor:real-input-40-collision-cumulants-higher} 与注 \ref{rem:real-input-40-collision-ldp-param} 的记号。按注 \ref{rem:real-input-40-collision-ldp-param} 的归一化，定义
+\[
+I_2(\alpha):=\sup_{\theta\in\RR}\bigl(\alpha\theta-(P_2(\theta)-P_2(0))\bigr),
+\qquad
+\alpha_*:=P_2'(0)=\frac{3-\sqrt5}{10}.
+\]
+再记
+\[
+\kappa_2:=P_2''(0)=\frac{6\sqrt5-5}{125},\qquad
+\kappa_3:=P_2^{(3)}(0)=\frac{9+10\sqrt5}{625},\qquad
+\kappa_4:=P_2^{(4)}(0)=\frac{7+24\sqrt5}{3125}.
+\]
+则在 \(\alpha_*\) 的某个邻域内，若写
+\[
+\delta:=\alpha-\alpha_*,
+\]
+便有解析展开
+\[
+\boxed{\;
+I_2(\alpha_*+\delta)
+=
+\frac{\delta^2}{2\kappa_2}
+-\frac{\kappa_3}{6\kappa_2^3}\,\delta^3
++\frac{3\kappa_3^2-\kappa_2\kappa_4}{24\kappa_2^5}\,\delta^4
++O(\delta^5).\;}
+\]
+并且前三个非平凡局部系数可完全显式写成
+\[
+\boxed{\;
+\frac{1}{2\kappa_2}
+=
+\frac{125}{62}+\frac{75\sqrt5}{31}
+\approx 7.4259709133059428\;}
+\]
+\[
+\boxed{\;
+-\frac{\kappa_3}{6\kappa_2^3}
+=
+-\frac{849375}{59582}-\frac{525250\sqrt5}{89373}
+\approx -27.3970573347852767\;}
+\]
+\[
+\boxed{\;
+\frac{3\kappa_3^2-\kappa_2\kappa_4}{24\kappa_2^5}
+=
+\frac{32390871875}{343549812}
++\frac{4803058125\sqrt5}{114516604}
+\approx 188.068114201582058.\;}
+\]
+特别地，由于 \(\kappa_3>0\)，局部奇次项严格不对称：
+\[
+\boxed{\;
+I_2(\alpha_*+\delta)-I_2(\alpha_*-\delta)
+=
+-\frac{\kappa_3}{3\kappa_2^3}\,\delta^3+O(\delta^5)
+<0
+\qquad(\delta>0\ \text{充分小}).\;}
+\]
+因此在均值点附近，右侧偏差严格比左侧偏差“更便宜”。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:real-input-40-collision-cumulants} 与推论 \ref{cor:real-input-40-collision-cumulants-higher}，
+\[
+P_2(\theta)-P_2(0)
+=
+\alpha_*\theta+\frac{\kappa_2}{2}\theta^2+\frac{\kappa_3}{6}\theta^3+\frac{\kappa_4}{24}\theta^4+O(\theta^5),
+\]
+故
+\[
+\alpha(\theta):=P_2'(\theta)
+=
+\alpha_*+\kappa_2\theta+\frac{\kappa_3}{2}\theta^2+\frac{\kappa_4}{6}\theta^3+O(\theta^4).
+\]
+由 \(\kappa_2>0\) 可知 \(\theta=0\) 处存在局部反函数 \(\theta=\theta(\delta)\)。逐次比较幂次，得到
+\[
+\theta(\delta)
+=
+\frac{\delta}{\kappa_2}
+-\frac{\kappa_3}{2\kappa_2^3}\,\delta^2
++\frac{3\kappa_3^2-\kappa_2\kappa_4}{6\kappa_2^5}\,\delta^3
++O(\delta^4).
+\]
+另一方面，归一化 Legendre 对偶满足 \(I_2(\alpha_*)=0\) 且
+\[
+I_2'(\alpha)=\theta(\alpha)
+\]
+在 \(\alpha_*\) 邻域内成立，因此
+\[
+I_2(\alpha_*+\delta)=\int_0^\delta \theta(s)\,\dd s.
+\]
+逐项积分便得盒装展开式。再把 \(\kappa_2,\kappa_3,\kappa_4\) 的闭式代入并化简，即得三条显式系数公式。最后以 \(\delta\) 与 \(-\delta\) 相减并保留奇次项，即得第二条盒装式；由于 \(\kappa_3=(9+10\sqrt5)/625>0\)，右侧严格小于左侧。脚本 \texttt{scripts/exp\_xi\_real\_input\_40\_collision\_ldp\_median\_twist\_audit.py} 对反函数系数与速率函数系数给出符号核验。证毕。
+\end{proof}
+
+\begin{corollary}[碰撞计数的 Edgeworth 连续中位点具有显式常数位移]\label{cor:xi-real-input-40-collision-edgeworth-continuous-median-shift}
+沿用定理 \ref{thm:xi-real-input-40-collision-rate-cramer-edgeworth} 的记号。令 \(S_n\) 为长度 \(n\) 上碰撞观测 \(\varphi_2\) 的总和，并把 \(\mathfrak m_n\) 定义为下列一阶 Edgeworth 半质量方程在 \(n\alpha_*\) 附近的唯一实解：
+\[
+\Phi\!\left(\frac{\mathfrak m_n-n\alpha_*}{\sqrt{n\kappa_2}}\right)
++\frac{\kappa_3}{6\kappa_2^{3/2}\sqrt n}
+\left(
+1-\left(\frac{\mathfrak m_n-n\alpha_*}{\sqrt{n\kappa_2}}\right)^2
+\right)
+\phi\!\left(\frac{\mathfrak m_n-n\alpha_*}{\sqrt{n\kappa_2}}\right)
+=
+\frac12,
+\]
+其中 \(\Phi,\phi\) 分别为标准正态分布函数与密度。则
+\[
+\boxed{\;
+\mathfrak m_n
+=
+n\alpha_*-\frac{\kappa_3}{6\kappa_2}+o(1)
+=
+n\frac{3-\sqrt5}{10}
+-\left(\frac{23}{310}+\frac{52\sqrt5}{2325}\right)+o(1).\;}
+\]
+特别地，连续中心位置始终位于 \(n\alpha_*\) 的左侧一个非零常数量级处。另一方面，由于 \(\alpha_*=(3-\sqrt5)/10\notin\QQ\)，任何整数中位数序列都不可能满足
+\[
+m_n=n\alpha_*+C+o(1)
+\]
+对某个固定常数 \(C\) 成立；因此上式刻画的是 Edgeworth 中心位置本身，而离散中位数的精确描述必须再附加独立的 lattice 修正。
+\end{corollary}
+\begin{proof}
+对于有限状态解析加权矩阵的一维加性泛函，附录 \ref{app:pressure-analytic} 的标准解析扰动法逐字适用；结合推论 \ref{cor:real-input-40-collision-cumulants} 与推论 \ref{cor:real-input-40-collision-cumulants-higher}，碰撞总数的标准化变量
+\[
+Z_n:=\frac{S_n-n\alpha_*}{\sqrt{n\kappa_2}}
+\]
+满足一阶 Edgeworth 近似
+\[
+\PP(Z_n\le x)
+=
+\Phi(x)
++\frac{\kappa_3}{6\kappa_2^{3/2}\sqrt n}(1-x^2)\phi(x)
++O(n^{-1})
+\]
+在中心窗口内一致成立。令
+\[
+x_n:=\frac{\mathfrak m_n-n\alpha_*}{\sqrt{n\kappa_2}}.
+\]
+由中心极限定理知 \(x_n\to0\)。将 \(x=x_n\) 代入上式，并用
+\[
+\Phi(x_n)-\frac12=\phi(0)x_n+O(x_n^3),
+\qquad
+(1-x_n^2)\phi(x_n)=\phi(0)+O(x_n^2),
+\]
+得到
+\[
+0=\phi(0)x_n+\frac{\kappa_3}{6\kappa_2^{3/2}\sqrt n}\phi(0)+O(n^{-1}),
+\]
+从而
+\[
+x_n=-\frac{\kappa_3}{6\kappa_2^{3/2}\sqrt n}+O(n^{-1}).
+\]
+乘回 \(\sqrt{n\kappa_2}\) 即得
+\[
+\mathfrak m_n-n\alpha_*=-\frac{\kappa_3}{6\kappa_2}+o(1).
+\]
+最后，将 \(\kappa_2,\kappa_3\) 的闭式直接代入并化简，便得到
+\[
+-\frac{\kappa_3}{6\kappa_2}
+=
+-\frac{23}{310}-\frac{52\sqrt5}{2325}.
+\]
+又因 \(\alpha_*\notin\QQ\)，序列 \(n\alpha_*\) 的小数部分不可能收敛，故整数值中位数不可能收敛到某个固定常数平移的形式；若要对其作精确刻画，必须额外引入 lattice 修正。证毕。
+\end{proof}
+
+\begin{theorem}[模素数扭曲的精确介观窗口：\texorpdfstring{$p^2$}{p2} 尺度阈值律]\label{thm:xi-real-input-40-collision-prime-twist-p2-threshold}
+沿用命题 \ref{prop:real-input-40-collision-pressure} 与推论 \ref{cor:real-input-40-collision-twist-fourth} 的记号。对每个奇素数 \(p\)，记
+\[
+\rho_p:=\rho\!\bigl(W(e^{2\pi i/p})\bigr),
+\qquad
+\lambda:=\rho(W(1))=\varphi^2,
+\]
+并定义常数
+\[
+c_2:=\frac{2\pi^2}{125}(6\sqrt5-5),
+\qquad
+c_4:=\frac{2\pi^4}{9375}(7+24\sqrt5).
+\]
+则当 \(p\to\infty\) 时有精确渐近
+\[
+\boxed{\;
+\log\frac{\rho_p}{\lambda}
+=
+-\frac{c_2}{p^2}+\frac{c_4}{p^4}+O(p^{-6}).\;}
+\]
+因此，对任意沿奇素数指标取的正整数列 \(\{n_p\}\)：
+\begin{enumerate}
+  \item 若 \(n_p/p^2\to 0\)，则
+  \[
+  \left(\frac{\rho_p}{\lambda}\right)^{n_p}\to 1;
+  \]
+  \item 若 \(n_p/p^2\to \tau\in(0,\infty)\)，则
+  \[
+  \left(\frac{\rho_p}{\lambda}\right)^{n_p}\to e^{-c_2\tau};
+  \]
+  \item 若 \(n_p/p^2\to\infty\)，则
+  \[
+  \left(\frac{\rho_p}{\lambda}\right)^{n_p}\to 0.
+  \]
+\end{enumerate}
+换言之，模 \(p\) 的非平凡扭曲通道在长度尺度 \(n\asymp p^2\) 上发生唯一的介观过渡：低于该尺度时几乎不可见；高于该尺度时则被指数压制。
+\end{theorem}
+\begin{proof}
+推论 \ref{cor:real-input-40-collision-twist-fourth} 在 \(t_p=2\pi/p\) 处给出
+\[
+\log\frac{\rho_p}{\lambda}
+=
+-\frac{P_2''(0)}{2}\left(\frac{2\pi}{p}\right)^2
++\frac{P_2^{(4)}(0)}{24}\left(\frac{2\pi}{p}\right)^4
++O(p^{-6}),
+\]
+将推论 \ref{cor:real-input-40-collision-cumulants} 与推论 \ref{cor:real-input-40-collision-cumulants-higher} 中的闭式代入，即得第一条盒装式。等价地，
+\[
+\log\frac{\rho_p}{\lambda}
+=
+-\frac{c_2}{p^2}\left(1-\frac{c_4}{c_2p^2}+O(p^{-4})\right)
+=
+-\frac{c_2+o(1)}{p^2}.
+\]
+于是
+\[
+n_p\log\frac{\rho_p}{\lambda}
+=
+-\bigl(c_2+o(1)\bigr)\frac{n_p}{p^2},
+\]
+三种极限情形立刻分别给出 \(0\)、\(-c_2\tau\) 与 \(-\infty\)。指数化即得所述结论。
+\par
+由于周期迹层的模 \(p\) 扭曲通道正是 \(\Tr(W(e^{2\pi i/p})^n)\)，而 primitive 层只是在其上再施加 Möbius/Witt 投影，上述阈值便同时给出两层通道的唯一介观尺度。脚本 \texttt{scripts/exp\_xi\_real\_input\_40\_collision\_ldp\_median\_twist\_audit.py} 对若干奇素数样本的 \(p^{-6}\) 余项进行数值核验。证毕。
+\end{proof}
+
+\begin{theorem}[模 \texorpdfstring{$2$}{2} 扭曲周期迹的精确三谱分解]\label{thm:xi-real-input-40-collision-mod2-trace-three-spectrum}
+沿用命题 \ref{prop:real-input-40-collision-pressure} 与注 \ref{rem:real-input-40-collision-parity} 的记号。令
+\[
+F=\begin{pmatrix}1&1\\ 1&0\end{pmatrix},
+\qquad
+A:=F\otimes F,
+\qquad
+W(-1):=D(-1)A,
+\]
+并定义
+\[
+a_n(-1):=\Tr\!\bigl(W(-1)^n\bigr)\qquad(n\ge 1).
+\]
+则 \(\det(xI-W(-1))\) 精确分解为
+\[
+(x+1)\bigl(x^3-2x^2-1\bigr).
+\]
+记 \(\rho_-\) 为三次方程
+\[
+x^3-2x^2-1=0
+\]
+的最大实根，并记其余两根为 \(\xi,\bar\xi\)。则成立：
+\begin{enumerate}
+  \item
+  \[
+  |\xi|=|\bar\xi|=\rho_-^{-1/2},
+  \qquad
+  \xi+\bar\xi=2-\rho_-;
+  \]
+  \item 存在唯一角 \(\vartheta\in(0,\pi)\) 使
+  \[
+  \xi=\rho_-^{-1/2}e^{i\vartheta},
+  \qquad
+  \cos\vartheta=\frac{(2-\rho_-)\sqrt{\rho_-}}{2};
+  \]
+  \item 对一切 \(n\ge 1\)，有完全闭式
+  \[
+  \boxed{\;
+  a_n(-1)
+  =
+  \rho_-^n+(-1)^n+2\rho_-^{-n/2}\cos(n\vartheta).\;}
+  \]
+\end{enumerate}
+特别地，
+\[
+a_n(-1)=\rho_-^n+O(1),
+\qquad
+\frac1n\log|a_n(-1)|\to \log\rho_-.
+\]
+因此模 \(2\) 奇偶扭曲下不存在额外隐藏模态：全部振荡都由单一实根 \(\rho_-\) 与单一角频率 \(\vartheta\) 完全控制。
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:real-input-40-collision-pressure} 的特征多项式公式在 \(u=-1\) 处退化为
+\[
+\det(xI-W(-1))=(x+1)(x^3-2x^2-1).
+\]
+因此 \(W(-1)\) 的四个特征值恰为
+\[
+-1,\qquad \rho_-,\qquad \xi,\qquad \bar\xi.
+\]
+对 monic 三次多项式 \(x^3-2x^2+0x-1\) 应用 Vi\`ete 关系，得到
+\[
+\rho_-+\xi+\bar\xi=2,
+\qquad
+\rho_-\xi\bar\xi=1.
+\]
+由于 \(\xi,\bar\xi\) 为共轭复根，第二式给出
+\[
+|\xi|^2=\xi\bar\xi=\rho_-^{-1},
+\]
+从而 \(|\xi|=|\bar\xi|=\rho_-^{-1/2}\)；第一式则给出
+\[
+2\Re\xi=2-\rho_-.
+\]
+于是存在唯一 \(\vartheta\in(0,\pi)\) 使
+\[
+\xi=\rho_-^{-1/2}e^{i\vartheta},
+\qquad
+\cos\vartheta=\frac{\Re\xi}{|\xi|}
+=
+\frac{(2-\rho_-)\sqrt{\rho_-}}{2}.
+\]
+最后，迹等于全部特征值的 \(n\) 次幂之和，故
+\[
+a_n(-1)
+=
+(-1)^n+\rho_-^n+\xi^n+\bar\xi^n
+=
+\rho_-^n+(-1)^n+2\rho_-^{-n/2}\cos(n\vartheta).
+\]
+将右式除以 \(\rho_-^n\) 得
+\[
+\rho_-^{-n}a_n(-1)
+=
+1+(-1)^n\rho_-^{-n}+2\rho_-^{-3n/2}\cos(n\vartheta),
+\]
+故 \(\rho_-^{-n}a_n(-1)\to1\)，于是既有 \(a_n(-1)=\rho_-^n+O(1)\)，又有
+\[
+\frac1n\log|a_n(-1)|\to\log\rho_-.
+\]
+脚本 \texttt{scripts/exp\_xi\_real\_input\_40\_collision\_ldp\_median\_twist\_audit.py} 对特征多项式分解以及前若干 \(n\) 的迹样本进行逐项核验。证毕。
+\end{proof}
+
+\begin{theorem}[模 \texorpdfstring{$2$}{2} 奇偶扭曲对应的负频率代数支]\label{thm:xi-real-input-40-collision-mod2-negative-frequency-branch}
+沿用定理 \ref{thm:xi-real-input-40-collision-mod2-trace-three-spectrum} 的记号，并令
+\[
+\alpha_-:=
+\frac{(\rho_-^2-2\rho_--1)(\rho_--1)}
+{2\rho_-^3-5\rho_-^2+4\rho_-+1}.
+\]
+则 \(\alpha_-\) 是三次代数数，并满足不可约方程
+\[
+\boxed{\;
+59\alpha^3-59\alpha^2+15\alpha+2=0.\;}
+\]
+该三次多项式仅有一个实根，且
+\[
+\alpha_-\approx -0.0947099154877496.
+\]
+特别地，
+\[
+\alpha_-\notin \left[0,\frac12\right].
+\]
+因此，模 \(2\) 奇偶扭曲不落在定理 \ref{thm:xi-time-part9p-positive-branch-global-coordinate} 的实正扭曲分支上，而对应于同一代数参数化中的唯一负频率实支。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-real-input-40-collision-mod2-trace-three-spectrum}，
+\(\rho_-\) 满足
+\[
+\rho_-^3-2\rho_-^2-1=0.
+\]
+另一方面，定理 \ref{thm:xi-time-part9p-collision-frequency-algebraic-ldp} 已给出参数化公式
+\[
+\alpha(\rho)=
+\frac{(\rho^2-2\rho-1)(\rho-1)}
+{2\rho^3-5\rho^2+4\rho+1}.
+\]
+因此 \(\alpha_-=\alpha(\rho_-)\) 满足二元代数系统
+\[
+\rho^3-2\rho^2-1=0,
+\]
+\[
+\alpha(2\rho^3-5\rho^2+4\rho+1)-(\rho^2-2\rho-1)(\rho-1)=0.
+\]
+对 \(\rho\) 取 Sylvester 结果式可得
+\[
+2\bigl(59\alpha^3-59\alpha^2+15\alpha+2\bigr)=0,
+\]
+故 \(\alpha_-\) 必满足所示三次方程。由有理根判别法，其可能有理根只能取
+\[
+\pm 1,\ \pm 2,\ \pm \frac{1}{59},\ \pm \frac{2}{59},
+\]
+直接代入均不为零，因此该三次在 \(\QQ\) 上不可约。
+
+记
+\[
+f(\alpha):=59\alpha^3-59\alpha^2+15\alpha+2.
+\]
+其判别式为
+\[
+\Delta_f=-625931<0,
+\]
+故 \(f\) 恰有一个实根。又
+\[
+f(0)=2>0,
+\qquad
+f\!\left(-\frac{1}{10}\right)=-\frac{149}{1000}<0,
+\]
+故该唯一实根位于 \((-\tfrac{1}{10},0)\)。由于 \(\alpha_-\) 本身就是该三次的实根，只能等于这一唯一实根，从而
+\[
+\alpha_-\approx -0.0947099154877496.
+\]
+最后，由定理 \ref{thm:xi-time-part9p-positive-branch-global-coordinate}，实正扭曲支与 \(\alpha\in(0,\tfrac12)\) 严格一一对应；既然 \(\alpha_-<0\)，该模 \(2\) 分支便不可能属于实正扭曲支。上述结式消元、残差与数值根可由脚本 \texttt{scripts/exp\_xi\_real\_input\_40\_collision\_ldp\_median\_twist\_audit.py} 逐项核验。证毕。
+\end{proof}
+
+\begin{theorem}[奇素数单位根扭曲的近主模态刚性]\label{thm:xi-real-input-40-collision-prime-near-perron-rigidity}
+沿用定理 \ref{thm:xi-real-input-40-collision-prime-twist-p2-threshold} 的记号。对奇素数 \(p\) 定义
+\[
+\Theta_p:=\frac{\log \rho_p}{\log\lambda}.
+\]
+则当 \(p\to\infty\) 时有四阶渐近
+\[
+\boxed{\;
+\Theta_p
+=
+1-\frac{6\sqrt5-5}{250\log\lambda}\Bigl(\frac{2\pi}{p}\Bigr)^2
++\frac{7+24\sqrt5}{75000\log\lambda}\Bigl(\frac{2\pi}{p}\Bigr)^4
++O(p^{-6}).\;}
+\]
+特别地，
+\[
+\Theta_p
+=
+1-\frac{1.3809571881649568\ldots}{p^2}
++\frac{1.3098894548658713\ldots}{p^4}
++O(p^{-6}),
+\]
+从而 \(\Theta_p\to 1\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-real-input-40-collision-prime-twist-p2-threshold}，
+\[
+\log\frac{\rho_p}{\lambda}
+=-\frac{c_2}{p^2}+\frac{c_4}{p^4}+O(p^{-6}),
+\]
+其中
+\[
+c_2=\frac{2\pi^2}{125}(6\sqrt5-5),
+\qquad
+c_4=\frac{2\pi^4}{9375}(7+24\sqrt5).
+\]
+因此
+\[
+\log\rho_p
+=\log\lambda-\frac{c_2}{p^2}+\frac{c_4}{p^4}+O(p^{-6}).
+\]
+两边除以 \(\log\lambda\) 即得
+\[
+\Theta_p
+=
+1-\frac{c_2}{(\log\lambda)\,p^2}
++\frac{c_4}{(\log\lambda)\,p^4}
++O(p^{-6}),
+\]
+这正是盒装式。将 \(\lambda=\varphi^2\) 代入并化简，便得到后面的数值系数。最后由主项显然可知 \(\Theta_p\to 1\)。证毕。
+\end{proof}
+
+\begin{remark}[平方根门槛失效的强化]\label{rem:xi-real-input-40-collision-prime-near-perron-meaning}
+上一定理强于单纯的 \(\Theta_p>\frac12\)。它表明奇素数模上的非平凡单位根扭曲并非只是在若干模数上越过平方根门槛，而是以显式 \(p^{-2}\) 速率贴近未扭曲 Perron 指数 \(1\)；换言之，这族扭曲通道在大素数极限中几乎保留了全部主模态指数。
+\end{remark}
+
+\begin{corollary}[素数模上的平方根门槛呈余有限失效]\label{cor:xi-real-input-40-collision-prime-cofinite-sqrt-failure}
+沿用定理 \ref{thm:xi-real-input-40-collision-prime-near-perron-rigidity} 与
+\ref{thm:xi-real-input-40-collision-mod2-trace-three-spectrum} 的记号。则存在 \(p_0\)，使得对所有奇素数 \(p>p_0\) 都有
+\[
+\Theta_p>\frac12.
+\]
+另一方面，模 \(2\) 扭曲指数
+\[
+\theta_2:=\frac{\log\rho_-}{\log\lambda}
+\]
+亦满足
+\[
+\theta_2>\frac12.
+\]
+因此，在素数模集合中，满足 RH 形平方根门槛的 Dirichlet 扭曲误差至多只剩有限个例外；等价地，平方根门槛在素数模方向呈余有限失效。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-real-input-40-collision-prime-near-perron-rigidity}，\(\Theta_p\to 1\)，故对充分大的奇素数 \(p\) 必有 \(\Theta_p>\frac12\)。
+
+对模 \(2\) 的情形，由定理 \ref{thm:xi-real-input-40-collision-mod2-trace-three-spectrum}，\(\rho_-\) 是三次方程
+\[
+x^3-2x^2-1=0
+\]
+的最大实根。又该多项式在 \(x=2\) 处取值为 \(-1\)，在 \(x=3\) 处取值为 \(8\)，故
+\[
+\rho_->2>\varphi=\lambda^{1/2}.
+\]
+于是
+\[
+\theta_2=\frac{\log\rho_-}{\log\lambda}>\frac12.
+\]
+综上，素数模上的平方根门槛失效只可能保留有限个例外。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part58a-dirichlet-minimal-witness-worst-exponent}
+\input{subsubsec__xi-time-protocol-conclusions-part58b-real-input40-congruence-ldp-synthesis}
+
+\input{subsubsec__xi-time-protocol-conclusions-part59-bernoulli-zero-natural-extension-resonance}
+\input{subsubsec__xi-time-protocol-conclusions-part59a-resonance-closure-pisot-bernoulli}
+
+\endinput

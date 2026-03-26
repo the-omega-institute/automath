@@ -1,0 +1,141 @@
+\subsection{核心结论簇：临界线像“垃圾回收器”的严格化（Witt--Euler--Fredholm--unitary slice--CMV 极限）}\label{subsec:discussion-rh-garbage-collector-core}
+本小节给出一组可直接作为全文“核心结论簇”的结构性结果，用以严格化“RH/临界线像垃圾回收器”这一现象。
+其中“垃圾回收器”一语仅作为隐喻：其数学实质是两条严格交换的压缩机制把任意可审计对象回收到同一类可核验事件。
+第一条机制是\textbf{共轭遗忘（Witt--Euler 交换图）}：把 endomorphism 仅通过共轭不变量（迹序列/primitive 序列/欧拉乘积）读出；
+第二条机制是\textbf{完成化单点化（unitary slice 的谱穿越）}：把临界线上的零点事件压缩为 unitary slice 上“是否穿越 \(1\)”这一单点谱事件。
+两条机制在迹类 Fredholm 行列式与 CMV 稳定化极限上均具有可复算的实现，从而形成一个闭合的、可审计且可反演的压缩框架。
+
+\begin{theorem}[严格交换的 Witt--Euler 交换图：共轭不变量的“遗忘函子”]\label{thm:discussion-witt-euler-gc-functor}
+考虑只保留相似共轭不变量的范畴 \(\mathrm{End}^{\prime}\)（对象为 \((V,T)\)、态射为相似变换），序列范畴 \(\mathrm{Seq}\) 与 Euler 幂级数范畴 \(\mathrm{Euler}=1+z\CC[[z]]\)。
+定义函子
+\[
+\mathrm{TrSeq}(T)=(a_n)_{n\ge 1},\qquad a_n:=\Tr(T^n),
+\]
+\[
+\mathrm{Mob}(a)=p,\qquad p_n:=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d},
+\]
+\[
+\mathrm{Euler}(p)(z):=\prod_{n\ge 1}(1-z^n)^{-p_n},
+\qquad
+\mathrm{ZetaDet}(T)(z):=\det(I-zT)^{-1}.
+\]
+则恒有严格交换恒等式
+\[
+\boxed{\ \mathrm{ZetaDet}=\mathrm{Euler}\circ\mathrm{Mob}\circ\mathrm{TrSeq}\ }.
+\]
+在文档记号中，这正是 \(\mathcal Z=\mathcal E\circ\mathcal M\circ\mathcal T\) 的同一陈述，其中 \(\mathcal T=\mathrm{TrSeq}\)、\(\mathcal M=\mathrm{Mob}\)、\(\mathcal E=\mathrm{Euler}\)、\(\mathcal Z=\mathrm{ZetaDet}\)。
+等价地，
+\[
+\det(I-zT)^{-1}
+=\exp\!\Bigl(\sum_{n\ge 1}\frac{\Tr(T^n)}{n}z^n\Bigr)
+=\prod_{n\ge 1}(1-z^n)^{-p_n}\in 1+z\CC[[z]].
+\]
+\end{theorem}
+
+\begin{proof}
+见注 \ref{rem:zetaK-commuting-diagram}（命题 \ref{prop:zetaK-mobius-primitive} 与定义 \ref{def:fredholm-determinant} 的合成）。证毕。
+\end{proof}
+
+\begin{corollary}[GC 等价关系的完备刻画]\label{cor:discussion-gc-equivalence-characterization}
+对有限维算子（矩阵）\(T_1,T_2\)，下列命题等价：
+\begin{enumerate}
+  \item \(\det(I-zT_1)=\det(I-zT_2)\)；
+  \item \(\Tr(T_1^n)=\Tr(T_2^n)\) 对所有 \(n\ge 1\) 成立；
+  \item \(\mathrm{Mob}(\mathrm{TrSeq}(T_1))=\mathrm{Mob}(\mathrm{TrSeq}(T_2))\)。
+\end{enumerate}
+因此，“被 GC 视为同一对象”可由全部迹序列（ghost）或全部 primitive 序列完备刻画。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:discussion-witt-euler-gc-functor}，
+\(
+\det(I-zT)^{-1}
+=\exp(\sum_{n\ge 1}\Tr(T^n)z^n/n)
+\)；
+两侧相等当且仅当指数中的系数逐项相等，即 (1)\(\Longleftrightarrow\)(2)。
+(2)\(\Longleftrightarrow\)(3) 由 Möbius 反演的可逆性（命题 \ref{prop:zetaK-mobius-primitive}）立得。证毕。
+\end{proof}
+
+\begin{theorem}[Euler 乘积到迹类 Fredholm \texorpdfstring{$\zeta$}{zeta} 的反向截面定理：任意原子 Euler 乘积皆可构造性实现]\label{thm:discussion-traceclass-fredholm-euler-surjection}
+令 \(\Pi_n\) 为标准 \(n\)-循环置换矩阵，则恒有
+\[
+\det(I-t\Pi_n)=1-t^n
+\]
+（命题 \ref{prop:cycle-permutation-determinant}）。
+因此对 \(C(n,\alpha)=\alpha\Pi_n\) 有
+\(\det(I-rC(n,\alpha))=1-(\alpha r)^n\)。
+\par
+更一般地，给定任意 Euler 型乘积数据 \(\mathcal D=\{(n_j,\beta_j,m_j)\}_{j\in J}\) 满足迹类可执行性 \eqref{eq:tc-executability}，则存在显式迹类算子 \(L_{\mathcal D}\in\mathcal{S}_1(H_{\mathcal D})\)（定义 \ref{def:traceclass-primitive-data}）使得其 Fredholm \(\zeta\)-接口
+\[
+\zeta_{\mathcal D}(r):=\det(I-rL_{\mathcal D})^{-1}
+\]
+在 \(|r|<1\) 上严格复原给定的 Euler 乘积
+\[
+\boxed{\ \zeta_{\mathcal D}(r)=\prod_{j\in J}\bigl(1-\beta_j r^{n_j}\bigr)^{-m_j}\ }.
+\]
+从而任意满足该可执行性的 Euler 型乘积都落在迹类 Fredholm \(\zeta\)-接口的像中，且该像中的“primitive 因子”具有整数谱重数与 NonCancel 的自动证书化。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:cyclic-fredholm-witt} 与推论 \ref{cor:cyclic-euler-product}，并用命题 \ref{prop:cycle-permutation-determinant}。证毕。
+\end{proof}
+
+\begin{corollary}[Euler 因子 \(=\) 单基点单位根轨道（primitive 原子）]\label{cor:discussion-euler-factor-is-basepoint-orbit}
+每一因子 \((1-\beta r^{n})^{-m}\) 等价于一个长度为 \(n\) 的循环基块 \(C(n,\alpha)\otimes I_m\)，其中 \(\alpha^n=\beta\)。
+该块的谱为单基点 \(\alpha\) 的 \(n\)-次单位根轨道
+\(
+\{\alpha\omega:\omega^n=1\}
+\)
+且各谱点的代数重数为 \(m\)（定理 \ref{thm:cyclic-fredholm-witt}）。
+因此，“primitive/prime-like”在本文口径下精确对应为\textbf{循环轨道的共轭不变量}：一个 primitive 因子把一个多点谱压缩为“一个基点的轨道”，并作为 \(\mathrm{ZetaDet}\) 的最小回收单元。
+\end{corollary}
+
+\begin{theorem}[二层桥包的谱流化：临界线零点压缩为“特征值穿越 \(1\)”的单点事件]\label{thm:discussion-critical-line-single-point-crossing}
+在自对偶完成化设定下（\(\Delta(z,u)=\Delta(uz,1/u)\)），若进一步假设 \(\Delta(z,u)=\det(I-zB(u))\)，则沿完成化截面
+\(
+\Xi_{\Delta,L}(s)=\Delta(L^{-s},L^{2s-1})
+\)
+并在 unitary slice 参数 \(\theta=2t\log L\) 下，存在归一化核族
+\(
+U_L(\theta):=L^{-1/2}e^{-i\theta/2}B(e^{i\theta})
+\)
+使得
+\[
+\boxed{\ \Xi_{\Delta,L}\!\left(\tfrac12+it\right)=\det\!\bigl(I-U_L(\theta)\bigr)\ },
+\]
+从而
+\[
+\boxed{\ \Xi_{\Delta,L}\!\left(\tfrac12+it\right)=0\ \Longleftrightarrow\ 1\in\mathrm{Spec}(U_L(\theta))\ }.
+\]
+因此在完成化与 unitary slice 规约后，临界线零点事件被压缩为单位圆上同一点 \(1\) 的谱穿越事件。
+\end{theorem}
+
+\begin{proof}
+见命题 \ref{prop:xi-unitary-slice-spectral-crossing}。证毕。
+\end{proof}
+
+\begin{theorem}[有限 CMV 证书的点态稳定化 \texorpdfstring{$\Rightarrow$}{=>} 无限维 CMV 幺正谱实现]\label{thm:discussion-cmv-stabilization-core}
+设 \(\{U_L^{\mathrm{CMV}}\}_L\) 为一族有限维 CMV-like 伴随矩阵实现，其 Verblunsky/Schur 参数 \(\alpha_n(L)\) 在每个固定 \(n\) 上点态稳定为 \(\alpha_n\)。
+则存在唯一无限维 CMV 幺正算子 \(U_\infty\)（Verblunsky 系数为 \((\alpha_n)_{n\ge 0}\)），并且将 \(U_L^{\mathrm{CMV}}\) 以直和扩展为 \(\widetilde U_L\) 后有
+\[
+\widetilde U_L\to U_\infty\quad\text{于强算子拓扑},
+\qquad
+\mu_L\Rightarrow \mu_\infty,
+\]
+且相应 Carath\'eodory 函数在 \(\mathbb{D}\) 内按紧子集局部一致收敛。
+\end{theorem}
+
+\begin{proof}
+见定理 \ref{thm:xi-cmv-stabilization-infinite}。证毕。
+\end{proof}
+
+\paragraph{结论性归并：RH 的“垃圾回收器”性质的严格化}
+综合定理 \ref{thm:discussion-witt-euler-gc-functor}--\ref{thm:discussion-cmv-stabilization-core}，可把“任意概念最终呈现 RH 型判定”的现象严格定位为三步压缩链：
+\begin{enumerate}
+  \item \textbf{共轭遗忘（第一层）}：\((V,T)\) 的可审计输出经 \(\mathrm{ZetaDet}\) 被严格回收到 Euler 乘积数据（迹/primitive/Euler），且该回收由严格交换图控制（定理 \ref{thm:discussion-witt-euler-gc-functor}）。
+  \item \textbf{循环原子化（迹类满射）}：任意可执行的 Euler 型乘积都可由显式迹类算子 \(L_{\mathcal D}\) 的 Fredholm 行列式复原；primitive 因子对应单基点的单位根轨道，从而把多点谱压缩为单基点轨道的组合（定理 \ref{thm:discussion-traceclass-fredholm-euler-surjection} 与推论 \ref{cor:discussion-euler-factor-is-basepoint-orbit}）。
+  \item \textbf{完成化单点穿越（第二层）}：自对偶完成化把“临界线”规约为 unitary slice，并把临界线零点事件压缩为“特征值穿越 \(1\)”这一单点事件；有限 CMV 证书的点态稳定化进一步保证该单点机制在无限维幺正谱对象上闭合（定理 \ref{thm:discussion-critical-line-single-point-crossing} 与定理 \ref{thm:discussion-cmv-stabilization-core}）。
+\end{enumerate}
+因此，“黑洞式压缩/垃圾回收”在本文中不是对象间的逻辑等价，而是两层桥包所强制实施的同态化与同点化：内部结构经第一层被回收为 Euler/primitive 账本，而完成化把可见异常进一步压成 unitary slice 上对同一点 \(1\) 的穿越审计。
+
+\endinput

@@ -1,0 +1,446 @@
+\paragraph{Poisson--Cauchy 粗粒化的六阶信息精化：反向熵、零点结构与重参数化猜想}
+在命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form} 与命题
+\ref{prop:xi-poisson-kl-dissipation-fractional-fisher}
+给出的二阶正规形与耗散恒等式框架内，本段把六阶层的可见信息进一步拆分为
+正向/反向相对熵系数、一般 \(f\)-散度曲率项、\(L^p\) 尺度常数、差分剖面零点刚性，
+以及与 Jensen 缺陷证书链的重参数化对齐。
+
+\begin{theorem}[\texorpdfstring{$D_{\mathrm{KL}}$}{KL} 的 \texorpdfstring{$t^{-6}$}{t^-6} 精确二项展开：三、四阶中心矩入系数]\label{thm:xi-poisson-kl-sixth-order-refined-binomials}
+设 \(\tilde\nu\) 为 \(\RR\) 上概率测度，记
+\[
+m_k:=\int_{\RR}(\gamma-\bar\gamma)^k\,\dd\tilde\nu(\gamma),\qquad
+\sigma^2:=m_2>0,\qquad
+\bar\gamma:=\int_{\RR}\gamma\,\dd\tilde\nu(\gamma),
+\]
+并假设
+\(
+\int_{\RR}\abs{\gamma-\bar\gamma}^5\,\dd\tilde\nu(\gamma)<\infty
+\)。
+定义
+\[
+P_t(x):=\frac{1}{\pi}\frac{t}{x^2+t^2},\qquad
+\tilde h_t:=P_t*\tilde\nu,\qquad
+\tilde g_t(x):=P_t(x-\bar\gamma).
+\]
+则当 \(t\to\infty\) 时，
+\begin{equation}\label{eq:xi-poisson-kl-sixth-order-refined-binomials}
+D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_t)
+=\frac{\sigma^4}{8t^4}
++\frac{1}{t^6}\left(
+\frac{\sigma^6}{64}
++\frac{3m_3^2}{32}
+-\frac{\sigma^2m_4}{8}
+\right)
++o(t^{-6}).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+令 \(Z:=\gamma-\bar\gamma\)。对 \(x\mapsto \tilde g_t(x)=P_t(x-\bar\gamma)\) 作四阶 Taylor 展开并取积分余项，得到
+\[
+\tilde h_t
+=\tilde g_t+\frac{m_2}{2}\tilde g_t''
+-\frac{m_3}{6}\tilde g_t'''
++\frac{m_4}{24}\tilde g_t^{(4)}+R_t.
+\]
+由 \(\|P_t^{(5)}\|_\infty\asymp t^{-6}\) 及 \(\EE|Z|^5<\infty\)，有 \(\|R_t\|_\infty=O(t^{-6})\)。
+记
+\[
+\delta_t(x):=\frac{\tilde h_t(x)}{\tilde g_t(x)}-1,\qquad
+x=\bar\gamma+ty,\qquad
+G(y):=\frac{1}{\pi(1+y^2)}.
+\]
+则
+\[
+\delta_t(\bar\gamma+ty)
+=\frac{\sigma^2}{t^2}U_2(y)
++\frac{m_3}{t^3}V_3(y)
++\frac{m_4}{t^4}W_4(y)
++O(t^{-5}),
+\]
+其中
+\[
+U_2(y)=\frac{3y^2-1}{(1+y^2)^2},\quad
+V_3(y)=\frac{4y(y^2-1)}{(1+y^2)^3},\quad
+W_4(y)=\frac{5y^4-10y^2+1}{(1+y^2)^4}.
+\]
+由 \(\int \tilde g_t\delta_t=0\) 与 \(\delta_t=O(t^{-2})\) 得
+\[
+D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_t)
+=\frac12\int_{\RR}G\,\delta_t^2\,\dd y
+-\frac16\int_{\RR}G\,\delta_t^3\,\dd y
++o(t^{-6}).
+\]
+利用 \(U_2,W_4\) 为偶、\(V_3\) 为奇，得到 \(t^{-5}\) 交叉项消失。再用 Cauchy 权重积分常数
+\[
+\int_{\RR}G\,U_2^2\,\dd y=\frac14,\qquad
+\int_{\RR}G\,V_3^2\,\dd y=\frac{3}{16},
+\]
+\[
+\int_{\RR}G\,U_2W_4\,\dd y=-\frac18,\qquad
+\int_{\RR}G\,U_2^3\,\dd y=-\frac{3}{32},
+\]
+即可得到 \eqref{eq:xi-poisson-kl-sixth-order-refined-binomials}。
+\end{proof}
+
+\begin{proposition}[一般 \texorpdfstring{$f$}{f}-散度的 \texorpdfstring{$t^{-6}$}{t^-6} 二项展开]\label{prop:xi-poisson-fdiv-sixth-order-refined-binomials}
+在定理 \ref{thm:xi-poisson-kl-sixth-order-refined-binomials} 的矩条件下，
+设 \(f\) 为凸函数，满足 \(f(1)=0\)，并在 \(1\) 的邻域 \(C^3\)。定义
+\[
+D_f(\tilde h_t\mid \tilde g_t)
+:=\int_{\RR}\tilde g_t(x)\,
+f\!\left(\frac{\tilde h_t(x)}{\tilde g_t(x)}\right)\dd x.
+\]
+则当 \(t\to\infty\) 时，
+\begin{equation}\label{eq:xi-poisson-fdiv-sixth-order-refined-binomials}
+D_f(\tilde h_t\mid \tilde g_t)
+=\frac{f''(1)\sigma^4}{8t^4}
++\frac{1}{t^6}\left[
+f''(1)\!\left(\frac{3m_3^2}{32}-\frac{\sigma^2m_4}{8}\right)
+-\frac{f'''(1)\sigma^6}{64}
+\right]
++o(t^{-6}).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+在 \(u=0\) 处展开
+\[
+f(1+u)=f(1)+f'(1)u+\frac{f''(1)}{2}u^2+\frac{f'''(1)}{6}u^3+O(u^4).
+\]
+代入 \(u=\delta_t\) 后，线性项由 \(\int\tilde g_t\delta_t=0\) 消失，且 \(\delta_t=O(t^{-2})\) 使四次及以上项积分为 \(O(t^{-8})\)。于是
+\[
+D_f(\tilde h_t\mid \tilde g_t)
+=\frac{f''(1)}{2}\int_{\RR}G\,\delta_t^2\,\dd y
++\frac{f'''(1)}{6}\int_{\RR}G\,\delta_t^3\,\dd y
++o(t^{-6}).
+\]
+再代入定理 \ref{thm:xi-poisson-kl-sixth-order-refined-binomials} 证明中的同一 \(\delta_t\) 展开和积分常数即可。
+\end{proof}
+
+\begin{theorem}[Poisson 差分剖面的 \texorpdfstring{$L^p$}{Lp} 普适尺度律]\label{thm:xi-poisson-lp-universal-scaling-refined}
+在命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form} 的一致二阶展开与误差控制下，
+对任意 \(p\in(1,\infty]\) 成立
+\begin{equation}\label{eq:xi-poisson-lp-universal-scaling-refined}
+\lim_{t\to\infty}\frac{t^{3-1/p}}{\sigma^2}\,\|\tilde h_t-\tilde g_t\|_{L^p(\RR)}=C_p,
+\end{equation}
+其中
+\[
+C_p:=\left(\int_{\RR}\left|
+\frac{1}{\pi}\frac{3y^2-1}{(1+y^2)^3}
+\right|^p\dd y\right)^{1/p}\quad(p<\infty),
+\]
+\[
+C_\infty:=\sup_{y\in\RR}\left|
+\frac{1}{\pi}\frac{3y^2-1}{(1+y^2)^3}
+\right|=\frac{1}{\pi}.
+\]
+特别地，
+\begin{equation}\label{eq:xi-poisson-lp-c2-refined}
+C_2=\sqrt{\frac{3}{16\pi}}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form}，
+\[
+\tilde h_t-\tilde g_t=\sigma^2 r_t+\varepsilon_t,
+\]
+且
+\[
+r_t(\bar\gamma+ty)=t^{-3}\rho(y),\qquad
+\rho(y):=\frac{1}{\pi}\frac{3y^2-1}{(1+y^2)^3}.
+\]
+于是
+\[
+\|r_t\|_{L^p}=t^{1/p-3}\|\rho\|_{L^p}\ \ (p<\infty),\qquad
+\|r_t\|_{L^\infty}=t^{-3}\|\rho\|_{L^\infty}.
+\]
+误差项由同一命题的余项控制给出
+\(
+\|\varepsilon_t\|_{L^p}=o(t^{1/p-3})
+\)，故
+\[
+\frac{t^{3-1/p}}{\sigma^2}\,\|\tilde h_t-\tilde g_t\|_{L^p}
+=t^{3-1/p}\|r_t\|_{L^p}+o(1)\to C_p.
+\]
+当 \(p=2\) 时，
+\(
+\int_{\RR}\rho(y)^2\dd y=3/(16\pi)
+\)，得到 \eqref{eq:xi-poisson-lp-c2-refined}。
+\end{proof}
+
+\begin{theorem}[差分剖面的双零刚性与三阶矩偏心漂移]\label{thm:xi-poisson-difference-two-zero-rigidity-refined}
+设 \(\sigma^2=m_2>0\)，并假设
+\(
+\int_{\RR}\abs{\gamma-\bar\gamma}^4\,\dd\tilde\nu(\gamma)<\infty
+\)。
+则存在 \(T_0<\infty\)，使得对所有 \(t\ge T_0\)，函数
+\(\tilde h_t-\tilde g_t\) 在 \(\RR\) 上恰有两个简单零点
+\(
+x_-(t)<x_+(t)
+\)，并满足
+\begin{equation}\label{eq:xi-poisson-difference-two-zero-sign-refined}
+\tilde h_t(x)-\tilde g_t(x)<0\ \ (x\in(x_-(t),x_+(t))),\qquad
+\tilde h_t(x)-\tilde g_t(x)>0\ \ (x\notin[x_-(t),x_+(t)]).
+\end{equation}
+若进一步 \(\abs{m_3}<\infty\)，则
+\begin{equation}\label{eq:xi-poisson-difference-two-zero-drift-refined}
+x_\pm(t)=\bar\gamma\pm\frac{t}{\sqrt3}+\frac{m_3}{3\sigma^2}+o(1)\qquad(t\to\infty).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+由三阶展开并利用四阶矩控制余项，可得
+\[
+\tilde h_t=\tilde g_t+\frac{m_2}{2}\tilde g_t''-\frac{m_3}{6}\tilde g_t'''+O(t^{-5})
+\]
+在 \(x\in\RR\) 上一致成立。令 \(x=\bar\gamma+ty\)，化为
+\[
+\tilde h_t(\bar\gamma+ty)-\tilde g_t(\bar\gamma+ty)
+=\sigma^2t^{-3}f_0(y)+m_3t^{-4}f_1(y)+O(t^{-5}),
+\]
+其中
+\[
+f_0(y)=\frac{1}{\pi}\frac{3y^2-1}{(1+y^2)^3},\qquad
+f_1(y)=\frac{4}{\pi}\frac{y(y^2-1)}{(1+y^2)^4}.
+\]
+\(f_0\) 在 \(\pm y_0\)（\(y_0:=1/\sqrt3\)）处有且仅有两个简单零点，且
+\(
+f_0<0\) 于 \(|y|<y_0\)，\(f_0>0\) 于 \(|y|>y_0\)。
+扰动项在 \(t\to\infty\) 下一致趋零，故由简单零点稳定性得到 \eqref{eq:xi-poisson-difference-two-zero-sign-refined}。
+
+令 \(y_\pm(t):=(x_\pm(t)-\bar\gamma)/t\)，设
+\(
+y_\pm(t)=\pm y_0+c/t+o(t^{-1})
+\)。
+代入零点方程并线性化：
+\[
+0=\sigma^2\!\left(f_0'(\pm y_0)\frac{c}{t}+o(t^{-1})\right)
++\frac{m_3}{t}f_1(\pm y_0)+o(t^{-1}).
+\]
+因此
+\[
+c=-\frac{m_3f_1(\pm y_0)}{\sigma^2f_0'(\pm y_0)}.
+\]
+直接计算得 \(-f_1(y_0)/f_0'(y_0)=1/3\)，并由奇偶对称性在 \(-y_0\) 处同值，故 \(c=m_3/(3\sigma^2)\)，即得 \eqref{eq:xi-poisson-difference-two-zero-drift-refined}。
+\end{proof}
+
+\begin{proposition}[反向 \texorpdfstring{$D_{\mathrm{KL}}$}{KL} 的 \texorpdfstring{$t^{-6}$}{t^-6} 系数与几何非对称]\label{prop:xi-poisson-reverse-kl-sixth-order-refined}
+在定理 \ref{thm:xi-poisson-kl-sixth-order-refined-binomials} 的矩条件下，
+\[
+D_{\mathrm{KL}}(\tilde g_t\mid \tilde h_t)
+:=\int_{\RR}\tilde g_t(x)\log\frac{\tilde g_t(x)}{\tilde h_t(x)}\,\dd x
+\]
+满足
+\begin{equation}\label{eq:xi-poisson-reverse-kl-sixth-order-refined}
+D_{\mathrm{KL}}(\tilde g_t\mid \tilde h_t)
+=\frac{\sigma^4}{8t^4}
++\frac{1}{t^6}\left(
+\frac{\sigma^6}{32}
++\frac{3m_3^2}{32}
+-\frac{\sigma^2m_4}{8}
+\right)
++o(t^{-6}).
+\end{equation}
+特别地，
+\[
+D_{\mathrm{KL}}(\tilde g_t\mid \tilde h_t)-D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_t)
+=\frac{\sigma^6}{64t^6}+o(t^{-6}).
+\]
+\end{proposition}
+
+\begin{proof}
+记 \(\delta_t:=\tilde h_t/\tilde g_t-1\)。则
+\[
+D_{\mathrm{KL}}(\tilde g_t\mid \tilde h_t)
+=\int_{\RR}\tilde g_t(x)\,\bigl(-\log(1+\delta_t(x))\bigr)\,\dd x.
+\]
+由
+\(
+-\log(1+u)=-u+\frac12u^2-\frac13u^3+O(u^4)
+\)，并利用 \(\int\tilde g_t\delta_t=0\)、\(\delta_t=O(t^{-2})\)，有
+\[
+D_{\mathrm{KL}}(\tilde g_t\mid \tilde h_t)
+=\frac12\int_{\RR}G\,\delta_t^2\,\dd y
+-\frac13\int_{\RR}G\,\delta_t^3\,\dd y
++o(t^{-6}).
+\]
+再代入定理 \ref{thm:xi-poisson-kl-sixth-order-refined-binomials} 证明中的 \(\delta_t\) 展开与同一组积分常数，即得
+\eqref{eq:xi-poisson-reverse-kl-sixth-order-refined}。
+\end{proof}
+
+\begin{corollary}[耗散率 \texorpdfstring{$I_1$}{I1} 的 \texorpdfstring{$t^{-7}$}{t^-7} 精确二项展开]\label{cor:xi-poisson-i1-seventh-order-refined}
+定义
+\(
+I_1(\tilde h_t\mid \tilde g_t):=-\frac{\dd}{\dd t}D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_t)
+\)。
+在定理 \ref{thm:xi-poisson-kl-sixth-order-refined-binomials} 条件下，
+\begin{equation}\label{eq:xi-poisson-i1-seventh-order-refined}
+I_1(\tilde h_t\mid \tilde g_t)
+=\frac{\sigma^4}{2t^5}
++\frac{1}{t^7}\left(
+\frac{3\sigma^6}{32}
++\frac{9m_3^2}{16}
+-\frac{3\sigma^2m_4}{4}
+\right)
++o(t^{-7}).
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+由 \eqref{eq:xi-poisson-kl-sixth-order-refined-binomials} 逐项求导：
+\[
+-\frac{\dd}{\dd t}\!\left(\frac{\sigma^4}{8t^4}\right)=\frac{\sigma^4}{2t^5},\qquad
+-\frac{\dd}{\dd t}\!\left(\frac{C}{t^6}\right)=\frac{6C}{t^7},
+\]
+\[
+C:=\frac{\sigma^6}{64}+\frac{3m_3^2}{32}-\frac{\sigma^2m_4}{8}.
+\]
+代入 \(6C\) 并整理即得 \eqref{eq:xi-poisson-i1-seventh-order-refined}。
+\end{proof}
+
+\begin{theorem}[Poisson--Cauchy 差分剖面的全形态 \texorpdfstring{$L^1$}{L1} 极限]\label{thm:xi-poisson-cauchy-fullshape-l1-limit}
+沿用命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form} 的设定，
+记
+\[
+\sigma^2:=\int_{\RR}(\gamma-\bar\gamma)^2\,\dd\tilde\nu(\gamma)\in(0,\infty),\qquad
+\tilde h_t:=P_t*\tilde\nu,\qquad
+\tilde g_t(x):=P_t(x-\bar\gamma),
+\]
+并定义重标定差分剖面
+\[
+\Delta_t(y):=\frac{t^3}{\sigma^2}\Bigl(\tilde h_t(\bar\gamma+ty)-\tilde g_t(\bar\gamma+ty)\Bigr),
+\qquad y\in\RR.
+\]
+则当 \(t\to\infty\) 时，
+\begin{equation}\label{eq:xi-poisson-cauchy-fullshape-l1-limit}
+\Delta_t\longrightarrow R
+\quad\text{于 }L^1(\RR,\dd y),
+\qquad
+R(y):=\frac{1}{\pi}\frac{3y^2-1}{(1+y^2)^3}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form}，
+存在余项 \(\varepsilon_t\) 使
+\[
+\tilde h_t=\tilde g_t+\sigma^2\tilde r_t+\varepsilon_t,\qquad
+\tilde r_t(\bar\gamma+ty)=t^{-3}R(y),\qquad
+\|\varepsilon_t\|_{L^1(\RR,\dd x)}=O(t^{-3}).
+\]
+因此
+\[
+\Delta_t(y)=R(y)+\frac{t^3}{\sigma^2}\,\varepsilon_t(\bar\gamma+ty).
+\]
+对误差项作变量代换 \(x=\bar\gamma+ty\)，得到
+\[
+\|\Delta_t-R\|_{L^1(\RR,\dd y)}
+\le
+\left\|\frac{t^3}{\sigma^2}\varepsilon_t(\bar\gamma+t\cdot)\right\|_{L^1(\RR,\dd y)}
+=\frac{t^2}{\sigma^2}\|\varepsilon_t\|_{L^1(\RR,\dd x)}
+=O(t^{-1})\xrightarrow[t\to\infty]{}0.
+\]
+故 \eqref{eq:xi-poisson-cauchy-fullshape-l1-limit} 成立。证毕。
+\end{proof}
+
+\begin{theorem}[Rényi 散度主导系数的普适常数律]\label{thm:xi-poisson-cauchy-renyi-alpha-over-8}
+在定理 \ref{thm:xi-poisson-kl-sixth-order-refined-binomials} 的条件下，
+对任意固定 \(\alpha\in(0,\infty)\setminus\{1\}\) 定义
+\[
+D_\alpha(\tilde h_t\mid \tilde g_t)
+:=\frac{1}{\alpha-1}\log\!\int_{\RR}\tilde h_t(x)^\alpha\tilde g_t(x)^{1-\alpha}\,\dd x.
+\]
+则有
+\begin{equation}\label{eq:xi-poisson-cauchy-renyi-alpha-over-8}
+\lim_{t\to\infty}\frac{t^4}{\sigma^4}\,D_\alpha(\tilde h_t\mid \tilde g_t)=\frac{\alpha}{8}.
+\end{equation}
+等价地，
+\[
+D_\alpha(\tilde h_t\mid \tilde g_t)=\frac{\alpha\sigma^4}{8t^4}+o(t^{-4}).
+\]
+特别地，\(\alpha\downarrow1\) 回收 KL 主导常数 \(\sigma^4/8\)；而 \(\alpha=\tfrac12\) 时，
+\[
+-\log\!\int_{\RR}\sqrt{\tilde h_t\tilde g_t}\,\dd x
+=\frac{1}{2}D_{1/2}(\tilde h_t\mid \tilde g_t)
+=\frac{\sigma^4}{32t^4}+o(t^{-4}).
+\]
+\end{theorem}
+
+\begin{proof}
+记
+\[
+M_\alpha(t):=\int_{\RR}\tilde h_t^\alpha\tilde g_t^{1-\alpha}\,\dd x.
+\]
+考虑 \(f_\alpha(u):=\frac{u^\alpha-1}{\alpha-1}\)。
+则 \(f_\alpha(1)=0\)、\(f_\alpha''(1)=\alpha\)，并且
+\[
+D_{f_\alpha}(\tilde h_t\mid \tilde g_t)
+=\int_{\RR}\tilde g_t(x)\,f_\alpha\!\left(\frac{\tilde h_t(x)}{\tilde g_t(x)}\right)\dd x
+=\frac{M_\alpha(t)-1}{\alpha-1}.
+\]
+由命题 \ref{prop:xi-cauchy-poisson-fdiv-universal-constant} 得
+\[
+\frac{M_\alpha(t)-1}{\alpha-1}
+=\frac{\alpha\sigma^4}{8t^4}+o(t^{-4}),
+\]
+即
+\[
+M_\alpha(t)=1+\frac{\alpha(\alpha-1)\sigma^4}{8t^4}+o(t^{-4}).
+\]
+由于 \(\log(1+u)=u+O(u^2)\) 且 \(u=O(t^{-4})\)，可得
+\[
+\log M_\alpha(t)
+=\frac{\alpha(\alpha-1)\sigma^4}{8t^4}+o(t^{-4}).
+\]
+两边除以 \(\alpha-1\) 即得 \eqref{eq:xi-poisson-cauchy-renyi-alpha-over-8}。证毕。
+\end{proof}
+
+\begin{corollary}[KL 六阶精化的中心矩记号重写]\label{cor:xi-poisson-cauchy-kl-tminus6-mu34-form}
+在定理 \ref{thm:xi-poisson-kl-sixth-order-refined-binomials} 的条件下，若进一步满足
+\[
+\int_{\RR}\abs{\gamma-\bar\gamma}^6\,\dd\tilde\nu(\gamma)<\infty,
+\]
+并记
+\[
+\mu_3:=\int_{\RR}(\gamma-\bar\gamma)^3\,\dd\tilde\nu(\gamma),\qquad
+\mu_4:=\int_{\RR}(\gamma-\bar\gamma)^4\,\dd\tilde\nu(\gamma),
+\]
+则
+\begin{equation}\label{eq:xi-poisson-cauchy-kl-tminus6-mu34-form}
+D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_t)
+=\frac{\sigma^4}{8t^4}
++\frac{1}{t^6}\left(
+\frac{\sigma^6}{64}
+-\frac{\sigma^2\mu_4}{8}
++\frac{3\mu_3^2}{32}
+\right)
++o(t^{-6}).
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+该式即 \eqref{eq:xi-poisson-kl-sixth-order-refined-binomials} 在记号
+\(
+\mu_3=m_3,\ \mu_4=m_4
+\)
+下的直接改写；六阶矩条件蕴含原定理所需矩条件。证毕。
+\end{proof}
+
+\begin{conjecture}[Jensen 缺陷与 Poisson 熵证书的重参数化对齐]\label{conj:xi-jensen-poisson-defect-alignment-refined}
+存在仅依赖文内既定坐标门（Cayley/相位门）与缺陷测度构造的显式重参数化
+\(
+t=t(\rho)\uparrow\infty\ (\rho\uparrow1)
+\)，以及由 \(G_t\) 可审计诱导的概率剖面族 \(\{\tilde h_t\}\)，使
+\begin{equation}\label{eq:xi-jensen-poisson-defect-alignment-refined}
+D_\zeta(\rho)=0\ \ (\forall \rho\in(0,1))
+\Longleftrightarrow
+\lim_{\rho\uparrow1}t(\rho)^4\,D_{\mathrm{KL}}(\tilde h_{t(\rho)}\mid \tilde g_{t(\rho)})=0.
+\end{equation}
+若 RH 不成立，则上式极限严格为正，且其首阶量纲由
+\eqref{eq:xi-poisson-kl-sixth-order-refined-binomials}
+中的 \(\sigma^4/8\) 提供方差指纹。
+\end{conjecture}
+
+\endinput

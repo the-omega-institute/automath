@@ -1,0 +1,98 @@
+\paragraph{自适应无增益与充分统计：微正则先验下的无放回抽样与计数后验}
+以下在均匀微正则先验 \(F\sim\mathrm{Unif}(\mathfrak{Fold}_m(d))\) 下，
+把任意确定性自适应查询过程严格等价为对多重集 \(\{x^{\times d(x)}\}_{x\in X_m}\) 的无放回抽样；
+并指出计数向量 \(C_k\) 在后验意义下构成关于 \(F\) 的最小充分统计量。
+
+\begin{definition}[自适应互异查询轨迹与计数统计]\label{def:pom-microcanonical-adaptive-trajectory-counts}
+令 \(\mathcal{A}\) 为任意确定性自适应算法，进行 \(k\) 次互异查询：第 \(i\) 步选择
+\[
+\omega_i\in\Omega_m\setminus\{\omega_1,\dots,\omega_{i-1}\},
+\]
+并观察响应
+\[
+T_i:=F(\omega_i)\in X_m.
+\]
+记轨迹 \(T_{1:k}:=(T_1,\dots,T_k)\in X_m^k\)，并定义计数向量
+\[
+C_k(x):=\card{\{i\in\{1,\dots,k\}:\ T_i=x\}},\qquad x\in X_m.
+\]
+\end{definition}
+
+\begin{theorem}[自适应无增益：轨迹分布与逐步无放回抽样律]\label{thm:pom-microcanonical-adaptive-no-gain-without-replacement}
+在定义 \ref{def:pom-microcanonical-adaptive-trajectory-counts} 的设定下：
+\begin{enumerate}
+  \item \textbf{（轨迹分布与策略无关）}
+  对任意 \(t=(t_1,\dots,t_k)\in X_m^k\)，其出现概率仅依赖于 \(k\) 与纤维谱 \(d\)，并满足
+  \[
+  \boxed{\;
+  \mathbb{P}_{\mathcal{A}}(T_{1:k}=t)
+  =\frac{1}{(N)_k}\prod_{x\in X_m}\bigl(d(x)\bigr)_{c_t(x)}\;},
+  \]
+  其中 \(c_t(x)=\card{\{i:\ t_i=x\}}\) 为 \(t\) 的计数向量，\((u)_r:=u(u-1)\cdots(u-r+1)\) 为下降阶乘，
+  并约定 \((N)_k:=N(N-1)\cdots(N-k+1)\)。
+  \item \textbf{（逐步无放回抽样）}
+  对每个 \(i\ge 1\) 与任意 \(x\in X_m\)，有条件概率公式
+  \[
+  \boxed{\;
+  \mathbb{P}_{\mathcal{A}}\!\bigl(T_i=x\mid T_{1:i-1}\bigr)
+  =\frac{d(x)-C_{i-1}(x)}{N-i+1}\; } .
+  \]
+  因而 \((T_i)\) 与从多重集 \(\{x^{\times d(x)}\}_{x\in X_m}\) 的无放回抽样过程同分布。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对任意给定轨迹 \(t\in X_m^k\)，算法 \(\mathcal{A}\) 的查询点序列 \((\omega_i)\) 是 \(t\) 的前缀的确定性函数；
+因此事件 \(\{T_{1:k}=t\}\) 等价于某个互异点集 \(Q_t=\{\omega_1(t),\dots,\omega_k(t)\}\subset\Omega_m\) 上满足
+\(
+F(\omega_i(t))=t_i
+\)。
+由定理 \ref{thm:pom-microcanonical-fold-posterior-count-and-prob} 的轨迹概率公式，
+\(\mathbb{P}(T_{1:k}=t)\) 仅依赖于 \(c_t\) 并给出所示表达；该表达中不含 \(Q_t\) 的几何信息，故亦与 \(\mathcal{A}\) 的选择规则无关。
+\par
+逐步条件概率由比值计算得到：对任意历史前缀 \(t_{1:i-1}\) 与任意 \(x\in X_m\)，
+将定理 \ref{thm:pom-microcanonical-fold-posterior-count-and-prob} 的概率公式分别应用于长度 \(i\) 的轨迹 \((t_{1:i-1},x)\) 与长度 \(i-1\) 的轨迹 \(t_{1:i-1}\)，并取比值得
+\[
+\mathbb{P}(T_i=x\mid T_{1:i-1}=t_{1:i-1})
+=\frac{(d(x))_{c_{t_{1:i-1}}(x)+1}}{(d(x))_{c_{t_{1:i-1}}(x)}}\cdot\frac{(N)_{i-1}}{(N)_{i}}
+=\frac{d(x)-C_{i-1}(x)}{N-i+1},
+\]
+其中使用了恒等式 \((u)_{r+1}=(u-r)(u)_r\)。
+结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[计数充分统计与后验均匀性]\label{thm:pom-microcanonical-count-sufficient-statistic-posterior-uniform}
+在定义 \ref{def:pom-microcanonical-adaptive-trajectory-counts} 的设定下，设算法在 \(k\) 次查询后得到轨迹 \(t\in X_m^k\)，并令 \(Q_k:=\{\omega_1,\dots,\omega_k\}\)、
+\(U_k:=\Omega_m\setminus Q_k\)。
+\begin{enumerate}
+  \item \textbf{（后验仅依赖计数）}
+  对任意两条轨迹 \(t,t'\in X_m^k\)，若 \(c_t=c_{t'}\)，则诱导的后验分布同构：
+  存在域置换 \(\sigma\in\mathrm{Sym}(\Omega_m)\) 使
+  \[
+  \mathrm{Law}\bigl(F\mid T_{1:k}=t\bigr)\ \cong\ \mathrm{Law}\bigl(F\circ\sigma^{-1}\mid T_{1:k}=t'\bigr).
+  \]
+  因而轨迹对后验的全部影响可压缩为计数向量 \(C_k\)，并且 \(C_k\) 在该意义下为关于 \(F\) 的最小充分统计量。
+  \item \textbf{（未查询部分的条件后验均匀性）}
+  在给定轨迹 \(t\) 时，限制在未查询集 \(U_k\) 上的后验为均匀分布：
+  \[
+  \mathrm{Law}\bigl(F|_{U_k}\mid T_{1:k}=t\bigr)
+  =\mathrm{Unif}\bigl(\mathfrak{F}_{U_k}(d-c_t)\bigr),
+  \]
+  其中 \(\mathfrak{F}_{U_k}(d-c_t)\) 表示把 \(U_k\) 映射到 \(X_m\) 且纤维大小为 \(d(x)-c_t(x)\) 的全部映射集合。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对任意给定的查询点集 \(Q_k\) 与其上标签赋值 \(t\)，兼容集合
+\[
+\Bigl\{F\in\mathfrak{Fold}_m(d):\ F(\omega_i)=t_i,\ 1\le i\le k\Bigr\}
+\]
+仅要求在 \(U_k\) 上实现剩余计数 \(d-c_t\)；
+由于先验在 \(\mathfrak{Fold}_m(d)\) 上均匀，条件化后在该兼容集合上仍均匀。
+将上述均匀性限制到 \(U_k\) 即得第 (2) 点。
+\par
+若两条轨迹 \(t,t'\) 具有相同计数向量，则存在一个置换把 \(Q_k\) 上的标签分配从 \(t\) 搬运到 \(t'\) 而不改变每个标签的使用次数；
+由先验在 \(\Omega_m\) 上的置换不变性可将两后验识别为同构，从而得到第 (1) 点。
+最小充分性由“后验仅依赖 \(c_t\)”与“剩余计数 \(d-c_t\) 唯一确定后验可行集合”直接推出。证毕。
+\end{proof}
+
+\endinput
+

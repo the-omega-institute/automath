@@ -1,0 +1,309 @@
+\subsection{指称、局部性与 \texorpdfstring{$\mathsf{NULL}$}{NULL} 层}\label{subsec:logic-expansion-chain-ref-local-null}
+
+上一小节已经把对象层事实统一改写为状态上的 forcing，但此时仍有一个根本区分尚未建立：某个公式中所谈论的对象，究竟是尚未进入当前语义域，还是已经进入语义域但尚未形成可用对象。若不把这两件事分开，则后文关于地址、局部截面、空值与失败模式的讨论，都只能被粗略压缩为“是否已有值”的问题。因此，本小节在 forcing 骨架之上，进一步加入指称、局部性与结构性空缺三个层次。
+
+本小节仍不引入任何新公理，只作定义性扩充。新增内容都只是对前述状态 forcing 的进一步组织。
+
+先固定一个可引用类型族
+\[
+S_{\mathrm{ref}}\subseteq S.
+\]
+对每个 \(s\in S_{\mathrm{ref}}\)，在语言中加入一个引用类型
+\[
+\mathsf{Ref}_s
+\]
+以及一个一元谓词
+\[
+\mathsf{Adm}_s(\cdot).
+\]
+其中，\(\mathsf{Adm}_s(r)\) 的意义是：引用 \(r\) 已经进入当前状态的可接受引用域。
+
+若 \(p\) 是一个状态，\(r,r'\) 是同一引用类型上的两个项，则定义状态中的引用等价
+\[
+r\equiv_p r'
+\quad:\Longleftrightarrow\quad
+p\Vdash (r=r').
+\]
+于是，状态 \(p\) 中真正稳定的引用对象，不应理解为单个项，而应理解为其等价类。记
+\[
+\mathrm{Ref}_s(p)
+:=
+\{[r]_p\mid p\Vdash \mathsf{Adm}_s(r)\}.
+\]
+
+这一步的意义在于：对象层首先处理的不是“值”，而是“哪些引用已经被状态接纳”。只有在可接受引用域中，后续的局部对象、局部截面与整体读出才有资格被讨论。这便是本文所说的“指称先于评价”。
+
+在此基础上，对每个状态 \(p\) 与每个可引用类型 \(s\)，给出一个局部引用框架
+\[
+\mathcal{B}_{p,s}
+:=
+\bigl(\mathrm{Ref}_s(p),\sqsubseteq_{p,s},\mathrm{Cov}_{p,s}\bigr),
+\]
+其中 \(\sqsubseteq_{p,s}\) 是局部细化关系；对每个 \(a\in \mathrm{Ref}_s(p)\)，\(\mathrm{Cov}_{p,s}(a)\) 是 \(a\) 的覆盖族，每个覆盖写作
+\[
+\{a_i\to a\}_{i\in I},
+\qquad
+a_i\sqsubseteq_{p,s} a.
+\]
+并约定每个对象都带有平凡覆盖
+\[
+\{a\to a\}\in \mathrm{Cov}_{p,s}(a).
+\]
+
+于是，一个引用对象不再被理解为一次性整体给出的东西，而是允许被若干局部片段覆盖。对象的出现，从这一刻起就是局部化的。
+
+接着引入局部对象系。对每个 \((p,s)\)，给出一个反变函子
+\[
+F_{p,s}:\mathcal{B}_{p,s}^{op}\to \mathsf{Set}.
+\]
+对每个 \(a\in \mathrm{Ref}_s(p)\)，集合 \(F_{p,s}(a)\) 中的元素称为定义在 \(a\) 上的局部对象或局部截面。若 \(b\sqsubseteq_{p,s} a\)，则存在限制映射
+\[
+\mathrm{res}^{a}_{b}:F_{p,s}(a)\to F_{p,s}(b).
+\]
+
+至此，“对象存在”第一次获得了局部意义：它不再是某个全局值直接出现，而是某个引用之上是否已经附着了局部对象。
+
+\begin{definition}[局部、相容与整体存在]\label{def:logic-expansion-local-compatible-global-existence}
+设 \(r:\mathsf{Ref}_s\) 且 \(p\Vdash \mathsf{Adm}_s(r)\)。记
+\[
+a=[r]_p\in \mathrm{Ref}_s(p).
+\]
+定义：
+\begin{enumerate}
+  \item 称 \(r\) 在状态 \(p\) 上\emph{局部可截面化}，记作
+  \[
+  p\Vdash \mathsf{LocSec}_s(r),
+  \]
+  若存在某个覆盖
+  \[
+  \{a_i\to a\}_{i\in I}\in \mathrm{Cov}_{p,s}(a)
+  \]
+  使得对所有 \(i\in I\)，都有
+  \[
+  F_{p,s}(a_i)\neq \varnothing.
+  \]
+  \item 称 \(r\) 在状态 \(p\) 上\emph{相容局部可截面化}，记作
+  \[
+  p\Vdash \mathsf{CompSec}_s(r),
+  \]
+  若存在某个覆盖 \(\{a_i\to a\}_{i\in I}\) 及一族局部截面
+  \[
+  (\sigma_i)_{i\in I},
+  \qquad
+  \sigma_i\in F_{p,s}(a_i),
+  \]
+  使得它们在任意公共细化上一致：对任意 \(i,j\in I\) 及任意同时满足
+  \[
+  c\sqsubseteq_{p,s} a_i,
+  \qquad
+  c\sqsubseteq_{p,s} a_j,
+  \]
+  的 \(c\in \mathrm{Ref}_s(p)\)，都有
+  \[
+  \mathrm{res}^{a_i}_{c}(\sigma_i)=\mathrm{res}^{a_j}_{c}(\sigma_j).
+  \]
+  \item 称 \(r\) 在状态 \(p\) 上\emph{整体局部截面存在}，记作
+  \[
+  p\Vdash \mathsf{Sec}_s(r),
+  \]
+  若
+  \[
+  F_{p,s}(a)\neq \varnothing.
+  \]
+\end{enumerate}
+\end{definition}
+
+定义 \ref{def:logic-expansion-local-compatible-global-existence} 把存在性明确分成三层：最弱的是每个局部片段上都能找到对象；更强的是这些局部对象彼此相容；最强的是已经存在一个整体对象。
+
+\begin{proposition}[整体存在蕴含局部相容存在]\label{prop:logic-expansion-global-implies-compatible-local}
+若
+\[
+p\Vdash \mathsf{Sec}_s(r),
+\]
+则
+\[
+p\Vdash \mathsf{CompSec}_s(r)
+\qquad\text{且}\qquad
+p\Vdash \mathsf{LocSec}_s(r).
+\]
+\end{proposition}
+
+\begin{proof}
+设 \(a=[r]_p\)，并取任意整体截面 \(\sigma\in F_{p,s}(a)\)。取平凡覆盖 \(\{a\to a\}\in \mathrm{Cov}_{p,s}(a)\)。则
+\[
+\sigma\in F_{p,s}(a)
+\]
+本身已经给出局部非空性，从而得到 \(\mathsf{LocSec}_s(r)\)。进一步，在同一平凡覆盖上取单项族 \((\sigma)\)，其相容性是平凡成立的，故
+\[
+p\Vdash \mathsf{CompSec}_s(r).
+\]
+若愿意，也可对任意覆盖 \(\{a_i\to a\}_{i\in I}\in \mathrm{Cov}_{p,s}(a)\) 定义
+\[
+\sigma_i:=\mathrm{res}^{a}_{a_i}(\sigma)\in F_{p,s}(a_i).
+\]
+此时每个 \(F_{p,s}(a_i)\) 都非空，并且由反变函子的函子性，对任意公共细化 \(c\sqsubseteq_{p,s} a_i,a_j\) 都有
+\[
+\mathrm{res}^{a_i}_{c}(\sigma_i)
+\;=\;
+\mathrm{res}^{a}_{c}(\sigma)
+\;=\;
+\mathrm{res}^{a_j}_{c}(\sigma_j),
+\]
+故 \((\sigma_i)_{i\in I}\) 构成相容局部族。
+\end{proof}
+
+反过来，若局部对象系在 \(a\) 上满足 sheaf 型粘接条件，则整体对象也可由相容局部片段恢复出来。
+
+\begin{proposition}[局部到整体原理]\label{prop:logic-expansion-local-to-global}
+设 \(a=[r]_p\)。若 \(F_{p,s}\) 在 \(a\) 上满足如下粘接条件：任意覆盖 \(\{a_i\to a\}_{i\in I}\in \mathrm{Cov}_{p,s}(a)\) 上的每个相容局部族 \((\sigma_i)_{i\in I}\) 都能唯一粘接为某个 \(\sigma\in F_{p,s}(a)\)，并且
+\[
+\mathrm{res}^{a}_{a_i}(\sigma)=\sigma_i
+\qquad(\forall i\in I),
+\]
+则
+\[
+p\Vdash \mathsf{CompSec}_s(r)
+\quad\Longrightarrow\quad
+p\Vdash \mathsf{Sec}_s(r).
+\]
+\end{proposition}
+
+\begin{proof}
+由 \(p\Vdash \mathsf{CompSec}_s(r)\)，存在某个覆盖 \(\{a_i\to a\}_{i\in I}\) 及其上的相容局部族 \((\sigma_i)_{i\in I}\)。按假设，可将其唯一粘接为某个 \(\sigma\in F_{p,s}(a)\)。故 \(F_{p,s}(a)\neq \varnothing\)，即 \(p\Vdash \mathsf{Sec}_s(r)\)。
+\end{proof}
+
+在此基础上，才能正式引入结构性空缺。首先必须区分“外域未定义”与“内域空缺”。
+
+\begin{definition}[外域未定义、整体实现与 \texorpdfstring{$\mathsf{NULL}$}{NULL}]\label{def:logic-expansion-undef-total-null}
+对 \(r:\mathsf{Ref}_s\)，定义
+\[
+\mathsf{Undef}_s(r):=\neg \mathsf{Adm}_s(r),
+\]
+\[
+\mathsf{Tot}_s(r):=\mathsf{Adm}_s(r)\land \mathsf{Sec}_s(r),
+\]
+\[
+\mathsf{Null}_s(r):=\mathsf{Adm}_s(r)\land \neg \mathsf{Sec}_s(r).
+\]
+\end{definition}
+
+定义 \ref{def:logic-expansion-undef-total-null} 中，\(\mathsf{Undef}\) 表示对象尚未进入当前可接受引用域，\(\mathsf{Tot}\) 表示对象已进入语义域且已形成整体局部截面，\(\mathsf{Null}\) 则表示对象已进入语义域，但整体对象尚未形成。这一步的关键意义在于：\(\mathsf{NULL}\) 不是某个特殊值，而是一个结构性状态标签；它的逻辑位置在“可接受引用”之后，在“整体局部截面”之前。
+
+进一步地，\(\mathsf{Null}\) 还可沿形成链分解为三种失败模式。
+
+\begin{definition}[\texorpdfstring{$\mathsf{NULL}$}{NULL} 的三种失败模式]\label{def:logic-expansion-null-three-modes}
+对 \(r:\mathsf{Ref}_s\)，定义：
+\begin{enumerate}
+  \item 局部空缺
+  \[
+  \mathsf{Null}^{\mathrm{loc}}_s(r)
+  :=
+  \mathsf{Adm}_s(r)\land \neg \mathsf{LocSec}_s(r).
+  \]
+  \item 相容空缺
+  \[
+  \mathsf{Null}^{\mathrm{cmp}}_s(r)
+  :=
+  \mathsf{Adm}_s(r)\land \mathsf{LocSec}_s(r)\land \neg \mathsf{CompSec}_s(r).
+  \]
+  \item 粘接空缺
+  \[
+  \mathsf{Null}^{\mathrm{glue}}_s(r)
+  :=
+  \mathsf{Adm}_s(r)\land \mathsf{CompSec}_s(r)\land \neg \mathsf{Sec}_s(r).
+  \]
+\end{enumerate}
+\end{definition}
+
+这三种失败方式分别表示：连局部片段都没有形成；局部片段已经形成但彼此不兼容；局部片段已经相容但仍不能提升为整体对象。于是，\(\mathsf{NULL}\) 不再是一种模糊的“空”，而被严格分解为形成链上的三个断裂位置。
+
+\begin{proposition}[\texorpdfstring{$\mathsf{NULL}$}{NULL} 模式蕴含 \texorpdfstring{$\mathsf{NULL}$}{NULL}]\label{prop:logic-expansion-null-modes-imply-null}
+对任意 \(r:\mathsf{Ref}_s\)，都有
+\[
+\mathsf{Null}^{\mathrm{loc}}_s(r)\to \mathsf{Null}_s(r),
+\]
+\[
+\mathsf{Null}^{\mathrm{cmp}}_s(r)\to \mathsf{Null}_s(r),
+\]
+\[
+\mathsf{Null}^{\mathrm{glue}}_s(r)\to \mathsf{Null}_s(r).
+\]
+\end{proposition}
+
+\begin{proof}
+前两式由命题 \ref{prop:logic-expansion-global-implies-compatible-local} 的逆否命题直接得到：若 \(\neg \mathsf{LocSec}_s(r)\) 或 \(\mathsf{LocSec}_s(r)\land \neg \mathsf{CompSec}_s(r)\) 成立，则不可能有 \(\mathsf{Sec}_s(r)\)。第三式则由定义 \ref{def:logic-expansion-null-three-modes} 直接包含了 \(\neg \mathsf{Sec}_s(r)\)。三者又都包含 \(\mathsf{Adm}_s(r)\)，故均推出 \(\mathsf{Null}_s(r)\)。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$\mathsf{NULL}$}{NULL} 模式的互斥性]\label{prop:logic-expansion-null-modes-exclusive}
+任意两个不同的 \(\mathsf{NULL}\) 模式都不能同时在同一状态上对同一引用成立。
+\end{proposition}
+
+\begin{proof}
+\(\mathsf{Null}^{\mathrm{loc}}_s(r)\) 强制 \(\neg \mathsf{LocSec}_s(r)\)，而 \(\mathsf{Null}^{\mathrm{cmp}}_s(r)\) 与 \(\mathsf{Null}^{\mathrm{glue}}_s(r)\) 都强制 \(\mathsf{LocSec}_s(r)\)，故前者与后二者互斥。另一方面，\(\mathsf{Null}^{\mathrm{cmp}}_s(r)\) 强制 \(\neg \mathsf{CompSec}_s(r)\)，而 \(\mathsf{Null}^{\mathrm{glue}}_s(r)\) 强制 \(\mathsf{CompSec}_s(r)\)，故后二者也互斥。
+\end{proof}
+
+需要特别指出的是，在本文的构造性 forcing 语义中，
+\[
+\mathsf{Null}_s(r)
+\]
+并不自动推出“三种模式中恰有一种”。因为这需要状态已经足以决定
+\[
+\mathsf{LocSec}_s(r)
+\qquad\text{和}\qquad
+\mathsf{CompSec}_s(r)
+\]
+的真假。于是，应单独定义分解判定性。
+
+\begin{definition}[分解判定性]\label{def:logic-expansion-null-decomposition-decidability}
+称状态 \(p\) 对引用 \(r:\mathsf{Ref}_s\) 具有\emph{分解判定性}，若
+\[
+p\Downarrow \mathsf{LocSec}_s(r)
+\qquad\text{且}\qquad
+p\Downarrow \mathsf{CompSec}_s(r).
+\]
+\end{definition}
+
+\begin{proposition}[在分解判定性下的三分解]\label{prop:logic-expansion-null-trichotomy}
+若状态 \(p\) 对引用 \(r:\mathsf{Ref}_s\) 具有分解判定性，则
+\[
+p\Vdash \mathsf{Null}_s(r)
+\]
+当且仅当以下三种情形恰有一种成立：
+\[
+p\Vdash \mathsf{Null}^{\mathrm{loc}}_s(r),
+\]
+\[
+p\Vdash \mathsf{Null}^{\mathrm{cmp}}_s(r),
+\]
+\[
+p\Vdash \mathsf{Null}^{\mathrm{glue}}_s(r).
+\]
+\end{proposition}
+
+\begin{proof}
+先证充分性。三种模式都由命题 \ref{prop:logic-expansion-null-modes-imply-null} 推出 \(\mathsf{Null}_s(r)\)，并由命题 \ref{prop:logic-expansion-null-modes-exclusive} 知它们互斥，故若恰有一种成立，则必有 \(p\Vdash \mathsf{Null}_s(r)\)。
+\par
+再证必要性。设 \(p\Vdash \mathsf{Null}_s(r)\)。则
+\[
+p\Vdash \mathsf{Adm}_s(r)
+\qquad\text{且}\qquad
+p\Vdash \neg \mathsf{Sec}_s(r).
+\]
+由于 \(p\) 对 \(\mathsf{LocSec}_s(r)\) 与 \(\mathsf{CompSec}_s(r)\) 具有分解判定性，分三种情形。
+\par
+若 \(p\Vdash \neg \mathsf{LocSec}_s(r)\)，则立得 \(p\Vdash \mathsf{Null}^{\mathrm{loc}}_s(r)\)。
+\par
+若 \(p\Vdash \mathsf{LocSec}_s(r)\) 且 \(p\Vdash \neg \mathsf{CompSec}_s(r)\)，则立得 \(p\Vdash \mathsf{Null}^{\mathrm{cmp}}_s(r)\)。
+\par
+若 \(p\Vdash \mathsf{LocSec}_s(r)\) 且 \(p\Vdash \mathsf{CompSec}_s(r)\)，则结合 \(p\Vdash \neg \mathsf{Sec}_s(r)\) 得
+\[
+p\Vdash \mathsf{Null}^{\mathrm{glue}}_s(r).
+\]
+因此三者必居其一；再由命题 \ref{prop:logic-expansion-null-modes-exclusive} 知其至多居其一，故恰有一种成立。
+\end{proof}
+
+命题 \ref{prop:logic-expansion-null-trichotomy} 说明：\(\mathsf{NULL}\) 的三分解不是一条无条件的经典析取，而是一种只有在足够信息支撑下才被展开的构造性分类。换言之，状态可以先知道“整体对象尚未形成”，而后随着进一步细化，才知道失败究竟发生在哪一层。
+
+综上，本小节完成了三项关键工作。第一，它把对象层从“有无 forcing”推进到“对象如何先被引用，再被局部化，再形成整体”。第二，它把整体不存在重新解释为局部形成链上的结构性失败，而不是某个特殊值。第三，它把 \(\mathsf{NULL}\) 严格分成了三种模式，并说明三分解本身也依赖状态的判定能力。
+
+这意味着，从本小节开始，后文任何具体的地址、前缀、局部证书或非 \(\mathsf{NULL}\) 判据，都不再需要被视作新的逻辑起点；它们都只是这里这套指称--局部性--\(\mathsf{NULL}\) 逻辑的实例。下一小节将在这一基础上引入状态推进、时间与多轴细化，使当前的静态局部分类进入真正的动态演化框架。

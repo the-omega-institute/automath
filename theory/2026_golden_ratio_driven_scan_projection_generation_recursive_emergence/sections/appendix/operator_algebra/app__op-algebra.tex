@@ -1,0 +1,748 @@
+\section{算子代数表述（投影作为概念，读出作为 \texorpdfstring{$0/1$}{0/1}）}
+\label{app:op-algebra}
+
+令 $\mathcal{H}$ 为 Hilbert 空间，$U$ 为幺正算子表示扫描步（群作用生成元的表示），$P$ 为投影算子表示窗口读出。则时间平移后的读出算子为
+\[
+P_t=U^{-t}PU^t.
+\]
+长度 $m$ 的地址 $a=a_0\cdots a_{m-1}\in\{0,1\}^m$ 可对应投影乘积
+\[
+P_a=\prod_{j=0}^{m-1} Q_{j}(a_j),\quad
+Q_{j}(1)=P_j,\quad Q_{j}(0)=I-P_j,
+\]
+在可交换情形下 $P_a$ 即柱集指示投影；对给定态 $\rho$（密度算子），其读出概率为 $\Tr(\rho P_a)$。
+在该表述中，“概念由地址确定”即为投影 $P_a$ 的定义依赖于地址；而“概念值为 $0/1$”对应在纯态 $\lvert\psi\rangle$ 的精确测量极限下，取值为投影谱 $\{0,1\}$。
+
+\subsection{\texorpdfstring{$\mathrm{HSP}$}{HSP} 的非交换迹实现：Kronecker 扫描的交叉积表述}\label{app:op-algebra-hsp-trace}
+
+本节将“扫描协议 \(\Rightarrow\) 周期值”的读出，提升为一条严格的“交叉积代数上的规范迹”公式：时间平均（周期值）等于规范迹值；并将其组织为协议范畴到周期数据范畴的函子。
+
+\begin{definition}[协议范畴 \texorpdfstring{$\mathrm{Scanalg}$}{Scanalg}：Kronecker 扫描对象与态射]\label{def:scanalg}
+令 \(\mathrm{Scanalg}\) 为如下范畴：
+\begin{itemize}
+  \item \textbf{对象}为四元组
+  \[
+  P=(\TT^d,T_\alpha,x_0,f_R),
+  \qquad
+  T_\alpha(x):=x+\alpha\ (\mathrm{mod}\ 1),
+  \]
+  其中 \(d\ge 1\)、\(x_0\in\TT^d\)、\(\alpha\in\TT^d\)（假设 \(T_\alpha\) 唯一遍历，从而 Birkhoff 平均对任意连续 \(f_R\) 收敛到 Haar 平均），且 \(f_R\in C(\TT^d)\) 为（可能带正则化参数 \(R\) 的）读出可观测量。
+  \item \textbf{态射} \(P\to P'\) 由一个仿射 torus 同构 \(\Phi:\TT^d\overset{\sim}{\to}\TT^{d'}\) 给出（因此 \(d=d'\) 且 \(\Phi\) 保持归一化 Haar 测度），满足共轭条件
+  \[
+  \Phi\circ T_\alpha = T_{\alpha'}\circ \Phi,\qquad \Phi(x_0)=x_0',\qquad f_R'=f_R\circ \Phi^{-1}.
+  \]
+\end{itemize}
+\end{definition}
+
+\begin{definition}[周期数据范畴 \texorpdfstring{$\mathrm{PerDatum}$}{PerDatum}：带迹的代数与观测量]\label{def:perdatum}
+令 \(\mathrm{PerDatum}\) 为如下范畴：对象为三元组 \((A,\tau,a)\)，其中 \(A\) 为含单位元的 \(C^\ast\)-代数，\(\tau\) 为 \(A\) 上的迹态（tracial state），且 \(a\in A\) 为指定观测元；态射为保持单位元与迹的 \(\ast\)-同态 \(\phi:(A,\tau,a)\to(A',\tau',a')\) 满足 \(\tau' \circ \phi=\tau\) 且 \(\phi(a)=a'\)。
+\end{definition}
+
+\begin{definition}[\texorpdfstring{$\mathrm{HSP}$}{HSP} 函子：交叉积与规范迹]\label{def:hsp-functor}
+对对象 \(P=(\TT^d,T_\alpha,x_0,f_R)\in\mathrm{Scanalg}\)，定义
+\[
+A_P:=C(\TT^d)\rtimes_{T_\alpha}\ZZ,
+\]
+并记 \(\iota_P:C(\TT^d)\hookrightarrow A_P\) 为自然包含。
+定义 \(A_P\) 上的\textbf{规范迹} \(\tau_P\) 为：对任意有限 Fourier 展开元
+\(
+\sum_{n\in\ZZ} f_n U^n
+\)（其中 \(U\) 为实现 \(T_\alpha\) 的幺正元）取
+\[
+\tau_P\!\left(\sum_{n\in\ZZ} f_n U^n\right):=\int_{\TT^d} f_0(x)\,dx,
+\]
+其中 \(dx\) 为归一化 Haar 测度。于是定义
+\[
+\mathrm{HSP}(P):=\bigl(A_P,\tau_P,\iota_P(f_R)\bigr)\in\mathrm{PerDatum}.
+\]
+对态射 \(\Phi:P\to P'\)（定义 \ref{def:scanalg}），由共轭诱导交叉积同构 \(\Phi_\rtimes:A_P\to A_{P'}\)（在 \(C(\TT^d)\) 上由 \(f\mapsto f\circ\Phi^{-1}\) 给出，并把实现元 \(U\) 送至 \(U'\)），从而令 \(\mathrm{HSP}(\Phi):=\Phi_\rtimes\)。
+\end{definition}
+
+\begin{theorem}[“周期值 \(=\) 迹值”：唯一遍历 Birkhoff 平均的非交换表述]\label{thm:hsp-period-trace}
+在定义 \ref{def:scanalg}--\ref{def:hsp-functor} 下，对任意 \(P=(\TT^d,T_\alpha,x_0,f_R)\in\mathrm{Scanalg}\) 有
+\[
+\lim_{N\to\infty}\frac{1}{N}\sum_{t=0}^{N-1} f_R\!\bigl(T_\alpha^t x_0\bigr)
+=\int_{\TT^d} f_R(x)\,dx
+=\tau_P\!\bigl(\iota_P(f_R)\bigr).
+\]
+并且对任意态射 \(\Phi:P\to P'\)，有严格的迹保持与周期值不变性：
+\[
+\tau_{P'}\!\bigl(\mathrm{HSP}(\Phi)(\iota_P(f_R))\bigr)=\tau_P\!\bigl(\iota_P(f_R)\bigr).
+\]
+\end{theorem}
+
+\begin{proof}
+唯一遍历给出 Birkhoff 平均对任意连续 \(f_R\) 收敛到 Haar 平均，得到第一条等式；第二条等式由 \(\tau_P\) 的定义立即给出。
+对函子性部分：由 \(\Phi_\rtimes\) 在 \(C(\TT^d)\) 上的作用、以及 \(\Phi\) 对归一化 Haar 测度的保持性知 \(\tau_{P'}\circ \Phi_\rtimes=\tau_P\)，并且 \(\Phi_\rtimes(\iota_P(f_R))=\iota_{P'}(f_R')\)。故结论成立。
+\end{proof}
+
+\subsection{lapse-加权的 Wish/HSP 读出：测度变换与显式误差证书}\label{app:op-algebra-wish-lapse}
+定理 \ref{thm:hsp-period-trace} 给出“周期值 \(=\) 迹值”的极限实现；而在可审计协议语义中，读出不仅要收敛，还必须在有限样本与实现层截断下附带\emph{显式}误差证书。
+本小节将两类结构同时纳入同一口径：其一是以正密度实施的测度变换（computational lapse），其二是由实现层输出的表格误差/正则化误差预算。
+
+\paragraph{lapse 作为测度变换：加权周期与加权读出}
+固定 \(d\ge 1\)，令 \(D:=\TT^d\)，并以 \(dx\) 表示归一化 Haar 测度。
+给定正函数 \(N:D\to(0,\infty)\)，将其视为 lapse（可取为外部开销比 \(N=\kappa_0/\kappa\)，见注 \ref{rem:lapse-modulated-tau-mix}）。
+对任意可积观测 \(g\in L^1(D)\)，定义 \(N\)-加权目标周期为
+\begin{equation}\label{eq:op-algebra-perN-def}
+\operatorname{per}_{N}(g)
+~:=~
+\frac{\int_{D} g(x)\,N(x)\,dx}{\int_{D} N(x)\,dx}.
+\end{equation}
+对协议对象 \(P=(D,T_\alpha,x_0,g)\in\mathrm{Scanalg}\) 与样本长度 \(N_{\mathrm{samp}}\ge 1\)，记轨道点 \(x_t:=T_\alpha^t x_0\) 并定义加权有限样本读出
+\begin{equation}\label{eq:op-algebra-weighted-readout-def}
+A^{(N)}_{N_{\mathrm{samp}}}(P)
+~:=~
+\frac{\sum_{t=0}^{N_{\mathrm{samp}}-1} N(x_t)\,g(x_t)}{\sum_{t=0}^{N_{\mathrm{samp}}-1} N(x_t)}.
+\end{equation}
+
+\begin{definition}[protocol-stable period datum（Wish）]\label{def:op-algebra-wish}
+固定目标观测 \(f\in L^1(D)\) 并记 \(W_0:=(D,f,\mathrm{Id})\)。
+称 \(W_0\) 为一个 \textbf{Wish}，若存在一族实现协议
+\[
+P_\lambda=(D,T_\alpha,x_0,f_{R_\lambda})\in\mathrm{Scanalg}\qquad(\lambda\to\infty),
+\]
+并且在给定 lapse 密度 \(N\) 后，存在两类可审计预算项
+\[
+\varepsilon_{\mathrm{reg}}(\lambda;N)
+~:=~
+\bigl|\operatorname{per}_{N}(f_{R_\lambda})-\operatorname{per}_{N}(f)\bigr|,
+\qquad
+\varepsilon_{\mathrm{tab}}(N_{\mathrm{samp}},\lambda)\ge 0,
+\]
+其中 \(\varepsilon_{\mathrm{reg}}\) 刻画实现层观测 \(f_{R_\lambda}\) 对目标 \(f\) 的有限部/正则化偏差，而 \(\varepsilon_{\mathrm{tab}}\) 允许覆盖有限样本求值中的表格截断/舍入等实现误差。
+记合并预算
+\begin{equation}\label{eq:op-algebra-wish-eps-def}
+\varepsilon(N_{\mathrm{samp}},\lambda)
+~:=~
+\varepsilon_{\mathrm{tab}}(N_{\mathrm{samp}},\lambda)+\varepsilon_{\mathrm{reg}}(\lambda;N).
+\end{equation}
+\end{definition}
+
+\paragraph{加权 Koksma 闭包：显式有限样本误差证书}
+记 \(\{x_t\}_{t=0}^{N_{\mathrm{samp}}-1}\subset [0,1)^d\) 的星差异度为
+\begin{equation}\label{eq:op-algebra-star-discrepancy}
+D_{N_{\mathrm{samp}}}^{\ast}(P)
+:=\sup_{a\in[0,1)^d}\left|
+\frac{1}{N_{\mathrm{samp}}}\sum_{t=0}^{N_{\mathrm{samp}}-1}\ind_{[0,a)}(x_t)-\prod_{j=1}^{d} a_j
+\right|.
+\end{equation}
+对 Hardy--Krause 有界变差类（Koksma--Hlawka 不等式所用的标准 BV 类，见 \cite{KuipersNiederreiter1974}），记其变差为 \(V_{\mathrm{HK}}(\cdot)\)。
+
+\begin{theorem}[lapse-加权 Wish 的可审计收敛与显式误差证书]\label{thm:op-algebra-lapse-weighted-wish-koksma}
+设 \(W_0=(D,f,\mathrm{Id})\) 为定义 \ref{def:op-algebra-wish} 的 Wish，且 \(P_\lambda=(D,T_\alpha,x_0,f_{R_\lambda})\) 为其实现族。
+固定 lapse 密度 \(N:D\to(0,\infty)\) 与样本长度 \(N_{\mathrm{samp}}\ge 1\)。
+假设 \(N\) 与 \(N\cdot f_{R_\lambda}\) 属于 Hardy--Krause 有界变差类（从而 Koksma--Hlawka 适用），并且满足分母正性条件
+\begin{equation}\label{eq:op-algebra-denominator-positivity}
+\int_D N(x)\,dx\;>\;V_{\mathrm{HK}}(N)\,D_{N_{\mathrm{samp}}}^{\ast}(P_\lambda).
+\end{equation}
+则加权读出 \eqref{eq:op-algebra-weighted-readout-def} 具有如下显式误差上界：
+\begin{equation}\label{eq:op-algebra-weighted-koksma-bound}
+\boxed{\;
+\left|
+A^{(N)}_{N_{\mathrm{samp}}}(P_\lambda)-\operatorname{per}_{N}(f)
+\right|
+\ \le\
+\frac{\Bigl(V_{\mathrm{HK}}(N f_{R_\lambda})+|\operatorname{per}_{N}(f)|\,V_{\mathrm{HK}}(N)\Bigr)\,D_{N_{\mathrm{samp}}}^{\ast}(P_\lambda)}
+{\int_D N\,dx- V_{\mathrm{HK}}(N)\,D_{N_{\mathrm{samp}}}^{\ast}(P_\lambda)}
+\;+\;\varepsilon(N_{\mathrm{samp}},\lambda)\;}
+\end{equation}
+其中 \(\varepsilon(N_{\mathrm{samp}},\lambda)\) 可取为定义 \ref{def:op-algebra-wish} 的合并预算 \eqref{eq:op-algebra-wish-eps-def}（表格误差 + 正则化误差）。
+\end{theorem}
+
+\begin{proof}
+设
+\[
+\widehat I_{N}:=\frac{1}{N_{\mathrm{samp}}}\sum_{t=0}^{N_{\mathrm{samp}}-1}N(x_t),\qquad
+I_{N}:=\int_D N(x)\,dx,
+\]
+\[
+\widehat I_{Nf}:=\frac{1}{N_{\mathrm{samp}}}\sum_{t=0}^{N_{\mathrm{samp}}-1}N(x_t)\,f_{R_\lambda}(x_t),\qquad
+I_{Nf}:=\int_D N(x)\,f_{R_\lambda}(x)\,dx.
+\]
+由 Koksma--Hlawka 不等式（\cite{KuipersNiederreiter1974}）及 \eqref{eq:op-algebra-star-discrepancy}，有
+\[
+|\widehat I_{N}-I_{N}|\le V_{\mathrm{HK}}(N)\,D_{N_{\mathrm{samp}}}^{\ast}(P_\lambda),
+\qquad
+|\widehat I_{Nf}-I_{Nf}|\le V_{\mathrm{HK}}(N f_{R_\lambda})\,D_{N_{\mathrm{samp}}}^{\ast}(P_\lambda).
+\]
+由 \eqref{eq:op-algebra-denominator-positivity} 得 \(\widehat I_N\ge I_N- V_{\mathrm{HK}}(N)D_{N_{\mathrm{samp}}}^{\ast}(P_\lambda)>0\)。
+于是
+\[
+\left|\frac{\widehat I_{Nf}}{\widehat I_{N}}-\frac{I_{Nf}}{I_{N}}\right|
+\le
+\frac{|\widehat I_{Nf}-I_{Nf}|}{\widehat I_N}
+\;+\;
+\frac{|I_{Nf}|}{I_N}\cdot\frac{|\widehat I_N-I_N|}{\widehat I_N}.
+\]
+注意到 \(|I_{Nf}|/I_N=|\operatorname{per}_N(f_{R_\lambda})|\)，并用
+\(
+|\operatorname{per}_N(f_{R_\lambda})-\operatorname{per}_N(f)|\le \varepsilon_{\mathrm{reg}}(\lambda;N)
+\)
+（定义 \ref{def:op-algebra-wish}）将其替换为 \(|\operatorname{per}_N(f)|\) 并吸收进 \(\varepsilon(N_{\mathrm{samp}},\lambda)\)，即可得到 \eqref{eq:op-algebra-weighted-koksma-bound}。
+最后将可能的有限样本求值误差以 \(\varepsilon_{\mathrm{tab}}(N_{\mathrm{samp}},\lambda)\) 一并并入 \(\varepsilon(N_{\mathrm{samp}},\lambda)\)（式 \eqref{eq:op-algebra-wish-eps-def}），结论成立。
+\end{proof}
+
+\begin{corollary}[lapse 测度变换下的协议时间口径不变性]\label{cor:op-algebra-lapse-time-gauge-invariance}
+令 \(\mu\) 为 \(D\) 上的参考测度（此处可取 Haar 测度），并令
+\(
+\mu_N(A):=\frac{\int_A N\,d\mu}{\int_D N\,d\mu}
+\)
+为由正密度 \(N\) 诱导的绝对连续测度变换。
+若 \(N\) 有界且有界离零：存在常数 \(0<c\le C<\infty\) 使得 \(c\le N\le C\) \(\mu\)-几乎处处成立，则对任意可测集 \(A\)（\(\mu(A)>0\)）有
+\[
+-\log\mu_N(A)
+~=~
+-\log\mu(A)\;+\;O(1),
+\qquad
+\text{且 }|O(1)|\le \log(C/c).
+\]
+因此在协议时间口径
+\(
+\tau(t):=-\log\mu\bigl(C(a_0{:}a_{t-1})\bigr)
+\)
+下，用 \(\mu_N\) 替换 \(\mu\) 仅引入 \(O(1)\) 的加性改动；从而不改变以 \(\tau\to\infty\) 定义的渐近优先序与任何 \(o(\tau)\) 误差口径的判别。
+\end{corollary}
+
+\subsection{折叠诱导的稳定子代数（可审计的 coarse-graining）}\label{app:op-algebra-fold-subalgebra}
+
+对固定分辨率 $m$，$\{P_a\}_{a\in\Omega_m}$ 在可交换情形下给出一个有限分割（互斥且和为单位）：$P_aP_b=0$（$a\neq b$）且 $\sum_{a\in\Omega_m}P_a=I$。因此它们生成一个有限维交换 C*-代数
+\[
+\mathcal{A}_m:=\mathrm{span}\{P_a:\ a\in\Omega_m\}\ \cong\ \CC^{|\Omega_m|}.
+\]
+
+折叠 $\Fold_m:\Omega_m\to X_m$ 给出一个等价关系：$a\sim b$ 当且仅当 $\Fold_m(a)=\Fold_m(b)$。相应地，定义对每个稳定类型 $x\in X_m$ 的\textbf{折叠投影}
+\[
+\widetilde P_x:=\sum_{\substack{a\in\Omega_m\\ \Fold_m(a)=x}} P_a.
+\]
+
+\begin{proposition}[折叠不变量子代数]\label{prop:fold-invariant-subalgebra}
+族 $\{\widetilde P_x\}_{x\in X_m}$ 是一族两两正交投影且 $\sum_{x\in X_m}\widetilde P_x=I$。它们生成的子代数
+\[
+\mathcal{B}_m:=\mathrm{span}\{\widetilde P_x:\ x\in X_m\}\ \subset\ \mathcal{A}_m
+\]
+同构于 $\CC^{|X_m|}$，并且可解释为 $\mathcal{A}_m$ 中“对折叠等价关系不变”的可观测量：$A\in\mathcal{B}_m$ 当且仅当 $A$ 在每个纤维 $\Fold_m^{-1}(x)$ 上取常值。
+\end{proposition}
+
+\begin{proof}
+由 $P_a$ 的互斥性立得 $\widetilde P_x\widetilde P_{x'}=0$（$x\neq x'$）且每个 $\widetilde P_x$ 为投影。又因为 $\Fold_m$ 满射且纤维分割 $\Omega_m$，求和得 $\sum_{x}\widetilde P_x=\sum_{a}P_a=I$。因此 $\{\widetilde P_x\}$ 给出一个有限分割，生成的代数与 $\CC^{|X_m|}$ 同构。最后，“在纤维上常值”的刻画是交换代数 $\CC^{|\Omega_m|}$ 的直接等价描述：由极小投影 $P_a$ 的坐标表示即可验证。
+\end{proof}
+
+\begin{remark}[折叠直方图作为态的限制]
+对任意态 $\rho$，$x\mapsto \Tr(\rho\,\widetilde P_x)$ 给出 $\mathcal{B}_m$ 上的一个概率向量；在本文的实验设置中，它正是折叠后稳定类型直方图的理论对象，而经验直方图则由样本频率估计得到（见第 \ref{sec:experiments} 节）。
+\end{remark}
+
+\begin{proposition}[折叠诱导的条件期望（纤维平均算子）]\label{prop:fold-conditional-expectation}
+对每个 $m$，定义纤维多重度
+\[
+d_m(x):=\bigl|\Fold_m^{-1}(x)\bigr|\qquad(x\in X_m),
+\]
+并定义线性映射 $E_m:\mathcal{A}_m\to \mathcal{B}_m$ 在极小投影基上为
+\[
+E_m(P_a):=\frac{1}{d_m(\Fold_m(a))}\,\widetilde P_{\Fold_m(a)}\qquad(a\in\Omega_m),
+\]
+再线性延拓到 $\mathcal{A}_m$。则：
+\begin{enumerate}
+  \item $E_m$ 是一个正的、保持单位元的幂等映射（即条件期望的有限维交换代数版本）；
+  \item $E_m$ 在 $\mathcal{B}_m$ 上为恒等：对任意 $B\in\mathcal{B}_m$，$E_m(B)=B$；
+  \item $E_m$ 是 $\mathcal{B}_m$-双模映射：对任意 $B_1,B_2\in\mathcal{B}_m$ 与 $A\in\mathcal{A}_m$，
+  \[
+  E_m(B_1AB_2)=B_1\,E_m(A)\,B_2.
+  \]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+由于 $\mathcal{A}_m$ 与 $\mathcal{B}_m$ 都是由互斥极小投影张成的有限维交换 C*-代数，验证只需在基 $\{P_a\}$ 与 $\{\widetilde P_x\}$ 上进行。
+
+\textbf{(2)} 对任意 $x\in X_m$，
+\[
+E_m(\widetilde P_x)=E_m\!\left(\sum_{\Fold_m(a)=x}P_a\right)
+=\sum_{\Fold_m(a)=x}\frac{1}{d_m(x)}\,\widetilde P_x
+=\widetilde P_x,
+\]
+故对 $\mathcal{B}_m$ 上的任意线性组合 $B$ 亦有 $E_m(B)=B$。
+
+\textbf{(1)} 由 (2) 与 $E_m(\mathcal{A}_m)\subset\mathcal{B}_m$ 立得幂等性：$E_m(E_m(A))=E_m(A)$。又因为
+\[
+E_m(I)=E_m\!\left(\sum_{a\in\Omega_m}P_a\right)
+=\sum_{x\in X_m}\sum_{\Fold_m(a)=x}\frac{1}{d_m(x)}\widetilde P_x
+=\sum_{x\in X_m}\widetilde P_x
+=I,
+\]
+故 $E_m$ 保单位元。正性可由坐标描述看出：在同构 $\mathcal{A}_m\cong\CC^{|\Omega_m|}$ 下，正元等价于各坐标非负；而 $E_m$ 的作用是对每条纤维做算术平均后复制到该纤维对应的块上，故保持非负性。
+
+\textbf{(3)} 对 $B_1=\widetilde P_{x_1}$、$B_2=\widetilde P_{x_2}$ 与基元 $A=P_a$，有
+\[
+\widetilde P_{x_1}P_a\widetilde P_{x_2}
+=
+\begin{cases}
+P_a,& \Fold_m(a)=x_1=x_2,\\
+0,& \text{否则}.
+\end{cases}
+\]
+若 $\Fold_m(a)=x_1=x_2=x$，则
+\[
+E_m(\widetilde P_xP_a\widetilde P_x)=E_m(P_a)=\frac{1}{d_m(x)}\widetilde P_x
+=\widetilde P_x\,E_m(P_a)\,\widetilde P_x.
+\]
+若不满足 $\Fold_m(a)=x_1=x_2$，则两边同为 $0$。线性扩张到一般 $A\in\mathcal{A}_m$ 与一般 $B_1,B_2\in\mathcal{B}_m$ 即得。
+\end{proof}
+
+\begin{definition}[折叠的 fold-gauge 群（纤维自同构群）]\label{def:fold-gauge-group}
+固定分辨率 \(m\)。定义折叠 \(\Fold_m:\Omega_m\to X_m\) 的纤维自同构群
+\[
+\mathcal{G}_m
+:=
+\mathrm{Aut}(\Fold_m)
+:=
+\left\{\sigma\in \mathrm{Sym}(\Omega_m):\ \Fold_m\circ \sigma=\Fold_m\right\}.
+\]
+等价地，\(\sigma\) 可以在每条纤维 \(\Fold_m^{-1}(x)\) 内任意置换，但不改变稳定类型标签 \(x\in X_m\)。
+\end{definition}
+
+\begin{proposition}[纤维置换分解与 Reynolds 投影]\label{prop:fold-gauge-reynolds}
+设 \(\mathcal{G}_m\) 如定义 \ref{def:fold-gauge-group}，并令 \(d_m(x)=|\Fold_m^{-1}(x)|\)。
+则：
+\begin{enumerate}
+  \item \textbf{（直积分解）}存在自然同构
+  \[
+  \boxed{\ \mathcal{G}_m\ \cong\ \prod_{x\in X_m} S_{d_m(x)}\ }.
+  \]
+  \item \textbf{（不变量子代数）}\(\mathcal{G}_m\) 通过 \(\sigma(P_a):=P_{\sigma(a)}\) 自然作用在 \(\mathcal{A}_m\) 上。其不动点子代数满足
+  \[
+  \boxed{\ \mathcal{A}_m^{\mathcal{G}_m}=\mathcal{B}_m\ }.
+  \]
+  \item \textbf{（Reynolds 投影 = 条件期望）}定义 Reynolds 平均算子
+  \[
+  \mathcal{R}_m:\mathcal{A}_m\to\mathcal{A}_m,\qquad
+  \mathcal{R}_m(A):=\frac{1}{|\mathcal{G}_m|}\sum_{\sigma\in\mathcal{G}_m}\sigma(A).
+  \]
+  则 \(\mathcal{R}_m\) 的像恰为 \(\mathcal{B}_m\)，并且在 \(\mathcal{B}_m\subset\mathcal{A}_m\) 的识别下有严格恒等式
+  \[
+  \boxed{\ \mathcal{R}_m=E_m\ }.
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\textbf{(1)} 由 \(\Fold_m\circ\sigma=\Fold_m\) 可知任意 \(\sigma\in\mathcal{G}_m\) 必在每条纤维内部置换；反过来，对每个 \(x\in X_m\) 任取一个 \(\sigma_x\in S_{d_m(x)}\)，把它们在不交并 \(\Omega_m=\bigsqcup_x \Fold_m^{-1}(x)\) 上拼成全局置换，即得到一个满足 \(\Fold_m\circ\sigma=\Fold_m\) 的元素。由此得直积分解。
+\par
+\textbf{(2)} 在同构 \(\mathcal{A}_m\cong \CC^{\Omega_m}\) 下，\(\mathcal{G}_m\) 的作用就是在每条纤维上置换坐标。因而不变量恰为“在每条纤维上取常值”的函数子空间，与命题 \ref{prop:fold-invariant-subalgebra} 对 \(\mathcal{B}_m\) 的刻画一致。
+\par
+\textbf{(3)} 由于 \(\mathcal{R}_m\) 是对有限群作用的平均，它必落在不动点子代数上，故像包含于 \(\mathcal{B}_m\)。在基元 \(P_a\) 上，设 \(x=\Fold_m(a)\)。则轨道 \(\{\sigma(a):\sigma\in\mathcal{G}_m\}\) 等于整条纤维 \(\Fold_m^{-1}(x)\)，且每个 \(a'\in \Fold_m^{-1}(x)\) 在该轨道中出现的次数相同（为稳定子大小）。因此
+\[
+\mathcal{R}_m(P_a)
+=\frac{1}{|\mathcal{G}_m|}\sum_{\sigma\in\mathcal{G}_m}P_{\sigma(a)}
+=\frac{1}{d_m(x)}\sum_{\Fold_m(a')=x}P_{a'}
+=\frac{1}{d_m(x)}\,\widetilde P_x
+=E_m(P_a),
+\]
+再由线性性得 \(\mathcal{R}_m=E_m\)。证毕。
+\end{proof}
+
+\begin{remark}[折叠专属的可审计“信息丢失接口”]
+\label{rem:fold-expectation-interface}
+命题 \ref{prop:fold-conditional-expectation} 给出的 $E_m$ 是一个完全显式的“纤维平均”算子：它把微态层可观测量 $A\in\mathcal{A}_m$ 压缩为对折叠纤维常值的部分 $E_m(A)\in\mathcal{B}_m$。其系数仅依赖于折叠多重度 $d_m(x)$（见附录 \ref{app:fold-multiplicity}），因此可作为折叠诱导的一个结构性不变量接口：不同折叠/不同归一化规则会改变纤维结构，从而改变 $E_m$ 的块平均方式。
+\end{remark}
+
+\begin{proposition}[条件期望的奇异值谱：完全由纤维多重度决定]\label{prop:fold-conditional-expectation-singular-spectrum}
+将 $E_m$ 识别为线性算子
+\[
+E_m:\ell^2(\Omega_m)\to \ell^2(X_m),
+\qquad
+(E_m f)(x):=\frac{1}{d_m(x)}\sum_{\Fold_m(a)=x} f(a),
+\]
+其中两侧的内积均取计数测度下的标准内积。则其伴随算子满足
+\[
+(E_m^\ast g)(a)=\frac{1}{d_m(\Fold_m(a))}\,g(\Fold_m(a)),
+\]
+并且 \(E_mE_m^\ast\) 在 \(\ell^2(X_m)\) 上为对角算子：
+\[
+(E_mE_m^\ast g)(x)=\frac{1}{d_m(x)}\,g(x).
+\]
+因此 \(E_m\) 的全部奇异值为
+\[
+\boxed{\ \sigma_x(E_m)=d_m(x)^{-1/2}\qquad(x\in X_m).\ }
+\]
+\end{proposition}
+\begin{proof}
+由定义对任意 \(f\in\ell^2(\Omega_m)\)、\(g\in\ell^2(X_m)\) 计算配对：
+\[
+\langle E_m f,\ g\rangle_{\ell^2(X_m)}
+=\sum_{x\in X_m}\left(\frac{1}{d_m(x)}\sum_{\Fold_m(a)=x} f(a)\right)\overline{g(x)}
+=\sum_{a\in\Omega_m} f(a)\,\overline{\left(\frac{1}{d_m(\Fold_m(a))}g(\Fold_m(a))\right)},
+\]
+故得到 \(E_m^\ast\) 的坐标公式。再代入
+\[
+(E_mE_m^\ast g)(x)
+=\frac{1}{d_m(x)}\sum_{\Fold_m(a)=x}(E_m^\ast g)(a)
+=\frac{1}{d_m(x)}\sum_{\Fold_m(a)=x}\frac{1}{d_m(x)}\,g(x)
+=\frac{1}{d_m(x)}\,g(x).
+\]
+于是 \(E_mE_m^\ast\) 的本征值为 \(\{1/d_m(x)\}_{x\in X_m}\)，从而奇异值为其平方根。证毕。
+\end{proof}
+
+\begin{corollary}[Schatten 范数族：负矩阶“投影成本谱”]\label{cor:fold-conditional-expectation-schatten}
+对任意 \(p\ge 1\)，Schatten 范数满足
+\[
+\boxed{\ \|E_m\|_{S_p}^p=\sum_{x\in X_m} d_m(x)^{-p/2}\ }.
+\]
+特别地
+\[
+\|E_m\|_{HS}^2=\sum_{x\in X_m}\frac{1}{d_m(x)},
+\qquad
+\|E_m\|_{op}=\max_{x\in X_m} d_m(x)^{-1/2}=d_{\min}^{-1/2}.
+\]
+表 \ref{tab:fold_conditional_expectation_singular_spectrum} 给出若干 \(m\) 的可复现数值输出。
+\input{sections/generated/tab_fold_conditional_expectation_singular_spectrum}
+\end{corollary}
+
+\begin{definition}[纤维多重度谱算子（multiplicity operator）]\label{def:fold-fiber-multiplicity-operator}
+在命题 \ref{prop:fold-conditional-expectation-singular-spectrum} 的 \(\ell^2(X_m)\) 口径下，定义正对角算子
+\[
+\mathcal{F}_m:=(E_mE_m^\ast)^{-1}:\ell^2(X_m)\to\ell^2(X_m),
+\qquad
+(\mathcal{F}_m g)(x):=d_m(x)\,g(x).
+\]
+（为避免与 Fibonacci 数 \(F_m\) 混淆，这里使用花体符号 \(\mathcal{F}_m\)。）
+\end{definition}
+
+\begin{proposition}[空间矩与负矩的迹表示]\label{prop:fold-fiber-multiplicity-trace-moments}
+对任意实数 \(t\in\RR\)，有
+\[
+\boxed{\;
+\Tr(\mathcal{F}_m^{t})=\sum_{x\in X_m} d_m(x)^{t}\; }.
+\]
+特别地，对任意整数 \(q\ge 1\)，正文的碰撞矩满足
+\[
+\boxed{\;
+S_q(m)=\sum_{x\in X_m}d_m(x)^q=\Tr(\mathcal{F}_m^{q})\; }.
+\]
+并且对任意 \(s>0\)，负矩和满足
+\[
+\boxed{\;
+\sum_{x\in X_m}d_m(x)^{-s}=\Tr(\mathcal{F}_m^{-s})=\|E_m\|_{S_{2s}}^{2s}\; }.
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:fold-conditional-expectation-singular-spectrum}，算子 \(E_mE_m^\ast\) 在标准基 \(\{\delta_x\}_{x\in X_m}\) 下对角化且本征值为 \(1/d_m(x)\)。
+因此 \(\mathcal{F}_m=(E_mE_m^\ast)^{-1}\) 亦为对角算子，本征值为 \(d_m(x)\)，并且对任意 \(t\in\RR\) 有 \(\mathcal{F}_m^t\) 仍为对角算子、本征值为 \(d_m(x)^t\)。
+取迹即得 \(\Tr(\mathcal{F}_m^{t})=\sum_x d_m(x)^t\)。
+最后一条等式 \(\sum_x d_m(x)^{-s}=\|E_m\|_{S_{2s}}^{2s}\) 由推论 \ref{cor:fold-conditional-expectation-schatten} 立即得到。证毕。
+\end{proof}
+
+\subsection{负矩谱的三类直接派生结论：左尾自由能、可见有效支撑与左尾证书}\label{app:op-algebra-negative-moment-consequences}
+
+推论 \ref{cor:fold-conditional-expectation-schatten} 与表 \ref{tab:fold_conditional_expectation_singular_spectrum} 给出的并非仅是一串范数值。
+由于 \(\|E_m\|_{S_p}^p\) 精确等于折叠纤维多重度 \(d_m\) 的负矩和，它们可被直接提升为三类可审计的派生结论：刻画小多重度层增长的“左尾自由能”、把奇异值能量分布转化为可解释的“有效支撑规模”、以及对中等/低多重度类型数量的显式下界证书。
+
+\begin{definition}[负矩和与左尾自由能密度]\label{def:fold-negative-moment-sum-left-tail}
+对任意 \(s>0\) 定义负矩和
+\[
+T_s(m):=\sum_{x\in X_m} d_m(x)^{-s}.
+\]
+由命题 \ref{prop:fold-fiber-multiplicity-trace-moments} 与推论 \ref{cor:fold-conditional-expectation-schatten} 立即得到
+\[
+\boxed{\ T_s(m)=\Tr(\mathcal{F}_m^{-s})=\|E_m\|_{S_{2s}}^{2s}\ }.
+\]
+定义其指数尺度（左尾自由能密度）为
+\[
+t_s:=\limsup_{m\to\infty}\frac{1}{m}\log T_s(m).
+\]
+\end{definition}
+
+\begin{remark}[左尾指数率族的经验稳定：每增加 \(1\) 个 \(m\) 的底数]\label{rem:fold-negative-moment-free-energy-bases}
+在偶数分辨率网格 \(m=8,10,\dots,24\) 上，可用相邻步长 \(2\) 的比值给出“每增加 \(1\) 个 \(m\)”的经验底数
+\[
+b_s(m):=\Bigl(\frac{T_s(m)}{T_s(m-2)}\Bigr)^{1/2}\qquad(m\ge 10).
+\]
+由表 \ref{tab:fold_conditional_expectation_singular_spectrum} 的数值可直接审计地观察到 \(b_s(m)\) 很快趋于稳定：
+特别地，对 \(s=\tfrac12,1,2\)（分别对应 \(\|E_m\|_{S_1}\)、\(\|E_m\|_{HS}^2\)、\(\|E_m\|_{S_4}^4\)），在 \(m=24\) 时有
+\[
+b_{1/2}(24)\approx 1.4582,\qquad
+b_{1}(24)\approx 1.3167,\qquad
+b_{2}(24)\approx 1.0924,
+\]
+其中 \(s=2\) 的底数仍在缓慢下降。
+若进一步存在极限 \(b_s:=\lim_{m\to\infty}b_s(m)\)，则 \(t_s=\log b_s\)，从而 \(\{t_s\}_{s>0}\) 给出一族与正文正矩谱（刻画高多重度右尾）正交的左尾指数率接口。
+\end{remark}
+
+\input{sections/generated/tab_fold_conditional_expectation_left_tail_bases}
+
+\begin{definition}[奇异值能量分布与可见有效支撑规模]\label{def:fold-Em-effective-support}
+记命题 \ref{prop:fold-conditional-expectation-singular-spectrum} 的奇异值为
+\(\sigma_x(E_m)=d_m(x)^{-1/2}\)（\(x\in X_m\)）。
+定义奇异值“能量”分布（平方归一化）为
+\[
+p_x:=\frac{\sigma_x(E_m)^2}{\sum_{y\in X_m}\sigma_y(E_m)^2}
+=\frac{d_m(x)^{-1}}{\sum_{y\in X_m}d_m(y)^{-1}}
+=\frac{d_m(x)^{-1}}{\|E_m\|_{HS}^2},
+\qquad x\in X_m.
+\]
+由此定义两种完全可审计的有效支撑规模：
+\[
+\begin{aligned}
+N_2(m)&:=\frac{1}{\sum_x p_x^2}
+\quad(\text{Rényi-2 / collision 有效规模}),\\
+N_{1/2}(m)&:=\Bigl(\sum_x\sqrt{p_x}\Bigr)^2
+\quad(\text{Rényi-}\tfrac12\text{ 有效规模}).
+\end{aligned}
+\]
+\end{definition}
+
+\begin{proposition}[有效支撑的 Schatten 闭式读出]\label{prop:fold-Em-effective-support-schatten}
+在定义 \ref{def:fold-Em-effective-support} 下，
+\[
+\boxed{\;
+N_2(m)=\frac{\bigl(\sum_x d_m(x)^{-1}\bigr)^2}{\sum_x d_m(x)^{-2}}
+=\frac{\|E_m\|_{HS}^4}{\|E_m\|_{S_4}^4}\;},
+\qquad
+\boxed{\;
+N_{1/2}(m)=\frac{\bigl(\sum_x d_m(x)^{-1/2}\bigr)^2}{\sum_x d_m(x)^{-1}}
+=\left(\frac{\|E_m\|_{S_1}}{\|E_m\|_{S_2}}\right)^2\;}.
+\]
+\end{proposition}
+
+\input{sections/generated/tab_fold_conditional_expectation_effective_support}
+
+\begin{theorem}[负矩左尾证书给出的“低多重度厚尾”不可消去下界]\label{prop:fold-negative-moment-left-tail-certificate}
+令 \(X\sim \mathrm{Unif}(X_m)\)，取任意 \(s>0\)，并令非负随机变量
+\[
+Y:=d_m(X)^{-s}.
+\]
+取阈值 \(\theta=\tfrac12\) 的 Paley--Zygmund 不等式给出
+\[
+\mathbb P\!\left(Y\ge \tfrac12\,\mathbb EY\right)
+\ \ge\
+\frac{1}{4}\frac{(\mathbb EY)^2}{\mathbb E[Y^2]}
+\ =\
+\frac{1}{4}\frac{T_s(m)^2}{|X_m|\,T_{2s}(m)}.
+\]
+并且事件 \(Y\ge \tfrac12\mathbb EY\) 等价于一个显式的低多重度阈值
+\[
+d_m(X)\ \le\ \left(\frac{2|X_m|}{T_s(m)}\right)^{1/s}.
+\]
+因此得到完全可审计的计数下界：
+\[
+\boxed{
+\frac{\#\left\{x\in X_m:\ d_m(x)\le \left(\frac{2|X_m|}{T_s(m)}\right)^{1/s}\right\}}{|X_m|}
+\ \ge\
+\frac{1}{4}\frac{T_s(m)^2}{|X_m|\,T_{2s}(m)}.
+}
+\]
+该证书仅依赖负矩（等价于 \(E_m\) 的 Schatten 谱），因此在给定该谱数据的审计规格下，低多重度区间的厚尾占比具有显式下界，不能被纤维内重标记或局部重写所消去；它同时对正文主要由正矩谱约束的高多重度右尾提供一条正交的比例下界补齐。
+\end{theorem}
+
+\input{sections/generated/eq_fold_conditional_expectation_left_tail_m24}
+
+\begin{theorem}[折叠的“推前—均匀提升”给出概率单纯形上的规范 Markov 伴随投影]\label{prop:fold-pushforward-lift}
+在交换情形下，可将 $\mathcal{A}_m$ 与 $\mathcal{B}_m$ 分别识别为有限集上的复值函数代数：
+\[
+\mathcal{A}_m\cong \CC^{\Omega_m},\qquad
+\mathcal{B}_m\cong \CC^{X_m}.
+\]
+在该识别下，任意态 $\rho$ 在 $\mathcal{A}_m$ 上对应一个概率向量
+\(
+\mu_\rho(a):=\Tr(\rho P_a)
+\)
+（$a\in\Omega_m$），在 $\mathcal{B}_m$ 上对应
+\(
+\pi_\rho(x):=\Tr(\rho \widetilde P_x)
+\)
+（$x\in X_m$）。则：
+\begin{enumerate}
+  \item \textbf{（推前）}折叠的推前分布满足显式公式
+  \[
+  \pi_\rho(x)=\sum_{\substack{a\in\Omega_m\\ \Fold_m(a)=x}}\mu_\rho(a),
+  \qquad x\in X_m,
+  \]
+  即 $\pi_\rho=(\Fold_m)_*\mu_\rho$。
+  \item \textbf{（均匀提升）}定义从 $X_m$ 到 $\Omega_m$ 的 Markov 核（在每条纤维上均匀分配）：
+  \[
+  Q_m:\ \Delta(X_m)\to\Delta(\Omega_m),\qquad
+  (Q_m\pi)(a):=\frac{\pi(\Fold_m(a))}{d_m(\Fold_m(a))},
+  \]
+  其中 $\Delta(\cdot)$ 表示概率单纯形。则 $(\Fold_m)_*\circ Q_m=\mathrm{id}_{\Delta(X_m)}$。
+  \item \textbf{（对偶性）}令 $P_m=(\Fold_m)_*:\Delta(\Omega_m)\to\Delta(X_m)$，则对任意可观测量 $f\in \CC^{\Omega_m}$ 与分布 $\mu\in\Delta(\Omega_m)$，
+  \[
+  \langle E_m f,\mu\rangle\ =\ \langle f,(Q_m\circ P_m)\mu\rangle,
+  \]
+  其中 $\langle f,\mu\rangle:=\sum_{a\in\Omega_m} f(a)\mu(a)$ 是期望配对。换言之，$E_m$ 在观测量层面与 “先推前到 $X_m$ 再在纤维上均匀提升回 $\Omega_m$” 的 Markov 核 $Q_m\circ P_m$ 互为伴随。
+\end{enumerate}
+因此，$Q_m\circ P_m$ 给出一条可审计的“最小信息逆像”正规化：它在每条纤维上抹去全部非均匀结构，仅保留纤维体积 $d_m$ 作为外置残差的唯一载体。
+\end{theorem}
+
+\begin{proof}
+\textbf{(1)} 由定义 \(\widetilde P_x=\sum_{\Fold_m(a)=x}P_a\) 得
+\(
+\pi_\rho(x)=\Tr(\rho\widetilde P_x)=\sum_{\Fold_m(a)=x}\Tr(\rho P_a)=\sum_{\Fold_m(a)=x}\mu_\rho(a)
+\)。
+
+\textbf{(2)} 对任意 $x\in X_m$，
+\[
+((\Fold_m)_*(Q_m\pi))(x)=\sum_{\Fold_m(a)=x}\frac{\pi(x)}{d_m(x)}=\pi(x).
+\]
+
+\textbf{(3)} 在函数代数识别 $\mathcal{A}_m\cong \CC^{\Omega_m}$ 下，$E_m$ 正是“对纤维做算术平均再复制回纤维”的算子：
+\[
+(E_m f)(a)=\frac{1}{d_m(\Fold_m(a))}\sum_{\Fold_m(b)=\Fold_m(a)} f(b).
+\]
+因此
+\[
+\langle E_m f,\mu\rangle
+=\sum_{a\in\Omega_m}\mu(a)\frac{1}{d_m(\Fold_m(a))}\sum_{\Fold_m(b)=\Fold_m(a)} f(b)
+=\sum_{x\in X_m}\frac{\sum_{\Fold_m(a)=x}\mu(a)}{d_m(x)}\sum_{\Fold_m(b)=x}f(b).
+\]
+而 $(P_m\mu)(x)=\sum_{\Fold_m(a)=x}\mu(a)$，并且 $(Q_m(P_m\mu))(b)=(P_m\mu)(\Fold_m(b))/d_m(\Fold_m(b))$，代入得
+\[
+\langle f,(Q_m\circ P_m)\mu\rangle
+=\sum_{b\in\Omega_m} f(b)\frac{(P_m\mu)(\Fold_m(b))}{d_m(\Fold_m(b))}
+=\sum_{x\in X_m}\frac{(P_m\mu)(x)}{d_m(x)}\sum_{\Fold_m(b)=x}f(b),
+\]
+与上式一致。
+\end{proof}
+
+\subsection{投影词范畴：可组合、可重写、可判等价}\label{app:op-algebra-projection-word}
+本附录前两节已经给出三类硬接口：折叠不变量子代数 \(\mathcal{B}_m\subset\mathcal{A}_m\)（命题 \ref{prop:fold-invariant-subalgebra}）、条件期望 \(E_m:\mathcal{A}_m\to\mathcal{B}_m\)（命题 \ref{prop:fold-conditional-expectation}），以及概率单纯形上的推前 \(P_m=(\Fold_m)_*\) 与纤维均匀提升 \(Q_m\)（定理 \ref{prop:fold-pushforward-lift}）。
+本小节把它们收紧为一套“投影词演算”：允许把这些接口作为生成元自由复合，并给出可终止的消去规则与正规形，从而把“算法等价”提升为“投影词等价”的可判定问题（在固定分辨率 \(m\) 的语义层面）。
+
+\paragraph{两侧对象：观测量侧与分布侧}
+为避免把态与可观测量混写，我们对固定 \(m\) 引入两条并行的对象层：
+\begin{itemize}
+  \item \textbf{观测量侧：}\(\mathcal{A}_m\simeq \CC^{\Omega_m}\)、\(\mathcal{B}_m\simeq \CC^{X_m}\)，以及可见化算子 \(E_m:\mathcal{A}_m\to\mathcal{B}_m\)；
+  \item \textbf{分布侧：}\(\Delta(\Omega_m)\)、\(\Delta(X_m)\)，以及推前 \(P_m:\Delta(\Omega_m)\to\Delta(X_m)\) 与最大熵/纤维均匀提升 \(Q_m:\Delta(X_m)\to\Delta(\Omega_m)\)。
+\end{itemize}
+二者以自然配对
+\(
+\langle f,\mu\rangle:=\sum_{a\in\Omega_m} f(a)\mu(a)
+\)
+连接，定理 \ref{prop:fold-pushforward-lift} (3) 给出 \(E_m\) 与 \(Q_m\circ P_m\) 的伴随关系。
+
+\begin{definition}[投影词范畴（固定分辨率）]\label{def:projection-word-category}
+固定 \(m\)。定义两端点集合
+\[
+\mathrm{Obj}_{\mathrm{obs}}(m):=\{\mathcal{A}_m,\mathcal{B}_m\},\qquad
+\mathrm{Obj}_{\mathrm{mea}}(m):=\{\Delta(\Omega_m),\Delta(X_m)\}.
+\]
+并定义两类基本态射：
+\begin{enumerate}
+  \item \textbf{观测量侧生成元：}包含 \(E_m:\mathcal{A}_m\to\mathcal{B}_m\) 与折叠拉回（包含）算子
+  \[
+  \iota_m:\mathcal{B}_m\to\mathcal{A}_m,\qquad
+  (\iota_m b)(a):=b(\Fold_m(a)).
+  \]
+  \item \textbf{分布侧生成元：}包含推前 \(P_m:\Delta(\Omega_m)\to\Delta(X_m)\) 与提升 \(Q_m:\Delta(X_m)\to\Delta(\Omega_m)\)（式 \eqref{eq:pom-fiber-uniform-lift} 与定理 \ref{prop:fold-pushforward-lift}）。
+\end{enumerate}
+允许上述生成元做有限复合，得到的复合词称为分辨率 \(m\) 的\emph{投影词}。
+\end{definition}
+
+\begin{proposition}[基本消去规则与幂等投影]\label{prop:projection-word-rewrite}
+在定义 \ref{def:projection-word-category} 下，存在两条严格消去恒等式
+\[
+\boxed{\ E_m\circ \iota_m=\mathrm{id}_{\mathcal{B}_m}\ },\qquad
+\boxed{\ P_m\circ Q_m=\mathrm{id}_{\Delta(X_m)}\ }.
+\]
+并且由此定义的两条“投影闭包”都是幂等的：
+\[
+\Pi_m:=\iota_m\circ E_m:\mathcal{A}_m\to\mathcal{A}_m,\qquad
+K_m:=Q_m\circ P_m:\Delta(\Omega_m)\to\Delta(\Omega_m),
+\]
+满足 \(\Pi_m^2=\Pi_m\)、\(K_m^2=K_m\)；且 \(\Pi_m\)（分别 \(K_m\)）的像恰为“纤维常值观测量”（分别“纤维均匀分布”）子空间。
+\end{proposition}
+\begin{proof}
+恒等式 \(E_m\circ\iota_m=\mathrm{id}\) 直接由命题 \ref{prop:fold-conditional-expectation} 的 (2)（\(E_m\) 在 \(\mathcal{B}_m\) 上为恒等）与 \(\iota_m(\widetilde P_x)=\widetilde P_x\) 给出。
+恒等式 \(P_m\circ Q_m=\mathrm{id}\) 由定理 \ref{prop:fold-pushforward-lift} (2) 给出。
+\par
+幂等性由消去恒等式立得：\(\Pi_m^2=\iota_m(E_m\iota_m)E_m=\iota_mE_m=\Pi_m\)，\(K_m^2=Q_m(P_mQ_m)P_m=Q_mP_m=K_m\)。
+像空间刻画来自 \(\Pi_m\)（\(K_m\)）的定义：\(\Pi_m f\) 在每条纤维上取其平均值并复制回纤维，故像为纤维常值子空间；同理 \(K_m\mu\) 在每条纤维上变为均匀分配，故像为纤维均匀分布子空间。证毕。
+\end{proof}
+
+\begin{proposition}[投影词正规形与可判等价]\label{prop:projection-word-normal-form}
+固定 \(m\)。在观测量侧，任意投影词 \(w:\mathcal{A}_m\to\mathcal{A}_m\) 在等式意义下都可约化为三种正规形之一：
+\[
+\mathrm{id}_{\mathcal{A}_m},\qquad
+\Pi_m=\iota_m\circ E_m,\qquad
+\iota_m\circ \beta\circ E_m\ \ (\beta\in\mathrm{End}(\mathcal{B}_m)).
+\]
+在分布侧，任意投影词 \(w:\Delta(\Omega_m)\to\Delta(\Omega_m)\) 可约化为
+\[
+\mathrm{id}_{\Delta(\Omega_m)},\qquad
+K_m=Q_m\circ P_m,\qquad
+Q_m\circ \alpha\circ P_m\ \ (\alpha\in\mathrm{End}(\Delta(X_m))).
+\]
+因此在固定 \(m\) 的纯“投影词语言”中，词等价可通过消去规则 \(E_m\iota_m\Rightarrow \mathrm{id}\)、\(P_mQ_m\Rightarrow \mathrm{id}\) 的有限归约判定。
+\end{proposition}
+\begin{proof}
+观测量侧：任意复合词由 \(\iota_m\) 与 \(E_m\) 交替出现构成。使用消去规则 \(E_m\circ\iota_m=\mathrm{id}_{\mathcal{B}_m}\) 可消去所有相邻的 \(E_m\iota_m\) 子词，最终得到“无可进一步消去”的交替形态；其两端点若同为 \(\mathcal{A}_m\)，则必为 \(\mathrm{id}\) 或 \(\iota_m(\cdot)E_m\) 夹着一个 \(\mathcal{B}_m\) 自同态的形式。
+分布侧同理，使用 \(P_m\circ Q_m=\mathrm{id}_{\Delta(X_m)}\) 即得。
+由于每次消去严格缩短词长，归约必终止，从而得到可判等价性。证毕。
+\end{proof}
+
+\begin{remark}[熵增作为投影词的标量语义]\label{rem:projection-word-entropy-defect}
+对分布侧的提升 \(Q_m\)，正文定理 \ref{thm:pom-maxent-lift} 给出严格“最大熵提升”的唯一性，并定义纤维缺陷泛函
+\[
+\kappa_m(\pi):=\mathbb{E}_{\pi}\bigl[\log d_m(X)\bigr]\qquad(\pi\in\Delta(X_m)).
+\]
+它可视为投影词 \(Q_m\) 的一条\textbf{标量语义}：对任意 \(\pi\)，提升后的熵满足
+\(
+H(Q_m\pi)=H(\pi)+\kappa_m(\pi)
+\)。
+因此在“投影词演算”的语义层，除了谱指纹（\(\rho,\log\mathfrak{M},\) Dirichlet--Mertens 张量等）之外，\(\kappa_m\) 提供了一个与分辨率 \(m\) 强绑定的可审计标量不变量接口。
+\end{remark}
+
+\subsection{谱半径的可审计证书：Lyapunov 不等式与半正定可行性}\label{app:op-algebra-lyapunov}
+在正文的核版 RH/GRH 判据中，“平方根界”与“最坏扭曲谱半径界”都以谱半径不等式表述。
+本段给出一个在有限维上完全严格、且可作为\textbf{可审计证书}输出的等价刻画：把谱半径上界转写为一个 Lyapunov 型矩阵不等式的可行性。
+
+\begin{proposition}[谱半径界 \texorpdfstring{$\Leftrightarrow$}{<->} Lyapunov 不等式]\label{prop:lyapunov-spectral-radius-certificate}
+令 $A\in\CC^{n\times n}$，$r>0$。则以下条件等价：
+\begin{enumerate}
+  \item $\rho(A)<r$；
+  \item 存在 Hermitian 正定矩阵 $H\succ 0$ 使得
+  \[
+  \boxed{\;
+  A^\ast H A\ \prec\ r^2 H.
+  \;}
+  \]
+\end{enumerate}
+特别地，对任意带参数扭曲矩阵族 $M_{K,\rho}(u)$，若取 $r=\lambda_1(u)^{1/2}$，则“核版 (G)RH 的平方根界”
+\(
+\rho(M_{K,\rho}(u))<\lambda_1(u)^{1/2}
+\)
+等价于存在证书矩阵 $H_{\rho,u}\succ 0$ 使
+\[
+M_{K,\rho}(u)^\ast H_{\rho,u} M_{K,\rho}(u)\ \prec\ \lambda_1(u)\,H_{\rho,u}.
+\]
+\end{proposition}
+\begin{proof}
+\textbf{(1)$\Rightarrow$(2)} 令 $B:=A/r$，则 $\rho(B)<1$。取
+\[
+H:=\sum_{k\ge 0}(B^\ast)^k B^k.
+\]
+由于 $\rho(B^\ast B)<1$，上式收敛并给出 $H\succ 0$。并且直接计算得
+\[
+B^\ast H B
+=\sum_{k\ge 0}(B^\ast)^{k+1}B^{k+1}
+=H-I\ \prec\ H,
+\]
+从而 $A^\ast H A=r^2 B^\ast H B\prec r^2 H$。
+
+\textbf{(2)$\Rightarrow$(1)} 若 $A^\ast H A\prec r^2 H$，对任意特征对 $Av=\lambda v$（$v\neq 0$），有
+\[
+v^\ast A^\ast H A v=|\lambda|^2 v^\ast H v\ <\ r^2 v^\ast H v,
+\]
+因此 $|\lambda|<r$，从而 $\rho(A)<r$。证毕。
+\end{proof}
+
+\begin{remark}[半正定规划口径：把谱界变成可计算的证书]\label{rem:lyapunov-sdp}
+命题 \ref{prop:lyapunov-spectral-radius-certificate} 把谱半径不等式转化为线性矩阵不等式（LMI）：
+\(
+A^\ast H A\preceq r^2 H
+\)
+在变量 $H$ 上是凸可行性问题。因而在有限维可计算口径下，可将“核版 (G)RH”组织为一组可审计的证书输出：
+对每个非平凡扭曲分量（角色/表示）给出一份 $H_{\rho,u}\succ 0$，并同时输出残差矩阵
+\(
+r^2H_{\rho,u}-A^\ast H_{\rho,u}A
+\)
+以供复核。
+\end{remark}

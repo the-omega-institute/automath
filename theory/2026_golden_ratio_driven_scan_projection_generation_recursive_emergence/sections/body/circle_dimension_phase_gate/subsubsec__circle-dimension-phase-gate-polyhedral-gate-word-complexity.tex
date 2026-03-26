@@ -1,0 +1,84 @@
+\subsubsection{多面体门读出与词复杂度：圆维的多项式壁垒}\label{subsubsec:cdim-polyhedral-gate-word-complexity}
+本段给出一个与圆维一致的可检验上界：当最大等距因子为 \(d\) 维环面平移且读出分割为有限多面体门时，长度 \(t\) 的读出词复杂度至多为 \(t^d\) 级，从而零误差相干所需的观测长度在概念规模 \(M\) 下具有 \(M^{1/d}\) 级下界。
+
+\begin{theorem}[多面体门编码的词复杂度上界]\label{thm:cdim-polyhedral-gate-word-complexity-td}
+令 \(\TT^d=(\RR/\ZZ)^d\)，取平移 \(R_\alpha(x)=x+\alpha\)（\(\alpha\) 的坐标有理独立），并以 Haar 测度记为 \(\mathrm{Haar}\)。
+设 \(\mathcal P=\{P_1,\dots,P_M\}\) 为 \(\TT^d\) 的有限可测分割，且每个 \(\partial P_j\) 均包含于有限个仿射超平面在 \(\TT^d\) 中的像之并（“多面体门”）。
+定义符号读出
+\[
+a_n(x)=j\quad\Longleftrightarrow\quad R_\alpha^n x\in P_j,
+\]
+并令长度 \(t\) 的词复杂度为
+\[
+p(t):=\card\{\,a_0(x)\cdots a_{t-1}(x):x\in\TT^d\,\}.
+\]
+则存在常数 \(C=C(\mathcal P,d)\) 使对所有 \(t\ge 1\) 成立
+\[
+p(t)\le C\,t^d.
+\]
+\end{theorem}
+\begin{proof}
+记分割边界并集 \(H:=\bigcup_{j=1}^M\partial P_j\)。
+对长度 \(t\) 的词 \(w\)，其柱集为
+\[
+C(w)=\bigcap_{k=0}^{t-1}R_\alpha^{-k}(P_{w_k}),
+\]
+故其边界满足
+\(
+\partial C(w)\subseteq \bigcup_{k=0}^{t-1}R_\alpha^{-k}(H)
+\)。
+由假设，\(H\) 包含于有限个仿射超平面的并，设其数量为 \(r\)。
+则 \(\bigcup_{k=0}^{t-1}R_\alpha^{-k}(H)\) 包含于至多 \(N:=rt\) 个仿射超平面在 \(\TT^d\) 中的像之并。
+\par
+将 \(\TT^d\) 在 \(\RR^d\) 中作周期提升，可把上述超平面像视作 \(\RR^d\) 中的周期超平面族；
+每个柱集 \(C(w)\) 必为 \(\TT^d\setminus \bigcup_{k=0}^{t-1}R_\alpha^{-k}(H)\) 的某个连通分量（或若干分量之并），因此 \(p(t)\) 不超过该补集的连通分量数。
+而在 \(\RR^d\) 中，任取 \(N\) 个仿射超平面所能切分出的区域数至多为
+\[
+\sum_{k=0}^{d}\binom{N}{k}\le \Big(\frac{eN}{d}\Big)^d,
+\]
+这是超平面排列的标准上界。
+取 \(N=rt\) 即得 \(p(t)\le C t^d\)。证毕。
+\end{proof}
+
+\begin{theorem}[圆维诱导的零误差相干下界]\label{thm:cdim-coherence-time-lower-bound-M-1overd}
+沿定理 \ref{thm:cdim-polyhedral-gate-word-complexity-td} 的设定，固定 \(M\) 个概念实例 \(x^{(1)},\dots,x^{(M)}\in\TT^d\)，并记其长度 \(t\) 读出词为
+\[
+W_t^{(i)}:=a_0(x^{(i)})\cdots a_{t-1}(x^{(i)}).
+\]
+若 \(p(t)<M\)，则必存在 \(i\neq j\) 使 \(W_t^{(i)}=W_t^{(j)}\)。
+因此任何仅依赖长度 \(t\) 读出词的判别程序都不可能对这 \(M\) 个实例实现零误差辨识。
+并且由定理 \ref{thm:cdim-polyhedral-gate-word-complexity-td} 得到必要条件
+\[
+t\ \ge\ \Big(\frac{M}{C}\Big)^{1/d},
+\]
+其中 \(C\) 同定理 \ref{thm:cdim-polyhedral-gate-word-complexity-td}。
+\end{theorem}
+\begin{proof}
+\(\{W_t^{(i)}\}_{i=1}^{M}\) 的取值集合至多有 \(p(t)\) 个元素。
+若 \(p(t)<M\)，则由抽屉原理存在 \(i\neq j\) 使 \(W_t^{(i)}=W_t^{(j)}\)。
+此时任一仅依赖输入词 \(W_t\) 的判别程序在两实例上输入相同，输出必同，从而至少一例误判。
+最后将 \(p(t)\le Ct^d\) 代入并解出 \(t\) 的下界即可。证毕。
+\end{proof}
+
+\begin{corollary}[复杂度先验下的相干时间壁垒]\label{cor:cdim-coherence-time-barrier-2power-k-over-d}
+在定理 \ref{thm:cdim-coherence-time-lower-bound-M-1overd} 的设定下，若候选概念族规模满足 \(M\ge 2^k\)，则任意零误差相干所需观测长度满足
+\[
+t\ \ge\ \Big(\frac{2^k}{C}\Big)^{1/d}=C^{-1/d}\,2^{k/d}.
+\]
+特别地，当 \(d=6\) 时有 \(t\gtrsim 2^{k/6}\)（常数仅依赖于分割 \(\mathcal P\)）。
+\end{corollary}
+\begin{proof}
+将 \(M\ge 2^k\) 代入定理 \ref{thm:cdim-coherence-time-lower-bound-M-1overd} 的必要条件即可。证毕。
+\end{proof}
+
+\begin{conjecture}[圆维与对数信息时间的首阶系数律]\label{conj:cdim-log-information-time-leading-coefficient}
+设 \((X,T,\mu)\) 为零熵测度动力系统，并且其最大等距因子同构于 \(d\) 维环面平移（或等价地：其可见圆因子数为 \(d\)）。
+取一个边界分段光滑（或更一般：分段可微且边界测度为零）的有限可测分割产生符号读出，并记 \(C(w_t)\) 为长度 \(t\) 读出词 \(w_t\) 的柱集。
+则猜想对 \(\mu\)-几乎处处轨道存在极限
+\[
+\frac{-\log\mu(C(w_t))}{\log t}\ \longrightarrow\ d,
+\]
+且偏差为 \(o(\log t)\)。
+在 \(d=1\) 的 Sturmian 旋转原型下，定理 \ref{thm:spg-sturmian-cylinder-measure-continued-fraction-sandwich} 与推论 \ref{cor:spg-golden-sturmian-log-information-time-rigid} 给出与之相容的强形式证据。
+\end{conjecture}
+

@@ -1,0 +1,306 @@
+% Auto-split to keep each TeX source < 600 lines.
+
+\paragraph{接受—刷新强平稳时刻与分离距离的谱闭式}\label{para:pom-diagonal-rate-refresh-strong-stationary-separation}
+在最优核 \(K^\star_\delta\) 的“保持 \(+\) 全局刷新”秩一结构下（命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone}），
+可以在同一代数系统内同时封闭三类对象：
+强平稳时刻、分离距离及其谱侧权重。
+其核心事实是：沿刷新时刻做拒绝采样，可以把背景分布 \(\pi_\delta\) 精确重加权为平稳分布 \(w\)，并由一类 halting 状态把分离距离的最坏点固定在时间上。
+
+\begin{definition}[接受—刷新强平稳时刻]\label{def:pom-diagonal-rate-accept-refresh-sst}
+在命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 的设定下，
+令 \((X_t)_{t\ge 0}\) 为以最优核 \(K^\star_\delta\) 驱动、起点 \(X_0=x\) 的离散时间马尔可夫链。
+由命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 的秩一闭包，对任意 \(x,y\in X\) 有
+\[
+K^\star_\delta(y\mid x)
+=r_\delta(x)\,\pi_\delta(y)+\bigl(1-r_\delta(x)\bigr)\mathbf 1_{\{y=x\}},
+\qquad
+r_\delta(x)=\frac{t_x-\kappa_\delta}{t_x},
+\quad
+\pi_\delta(y)=\frac{1}{t_y-\kappa_\delta},
+\]
+并满足归一化 \(\sum_{y\in X}\pi_\delta(y)=1\)。
+\par
+记最小刷新率与其最小点集为
+\[
+c_\delta:=\min_{z\in X} r_\delta(z)\in(0,1),
+\qquad
+\mathcal H_\delta:=\arg\min_{z\in X} r_\delta(z)=\arg\min_{z\in X} t_z.
+\]
+取定一个 \(h\in\mathcal H_\delta\) 并令接受率
+\[
+a_\delta(y):=\frac{c_\delta}{r_\delta(y)}\in(0,1]\qquad(y\in X),
+\qquad a_\delta(h)=1.
+\]
+在每一次“触发刷新”的步上，链产生新状态 \(Y:=X_t\sim\pi_\delta\)（条件于刷新事件），并独立地以概率 \(a_\delta(Y)\) 停止。
+令 \(T\) 为首次停止时刻（即首次被接受的刷新步）。
+\end{definition}
+
+\begin{theorem}[强平稳性]\label{thm:pom-diagonal-rate-accept-refresh-sst-strong}
+在定义 \ref{def:pom-diagonal-rate-accept-refresh-sst} 的设定下，
+\(T\) 是 \(K^\star_\delta\) 的强平稳时刻：对每个起点 \(x\in X\)，随机变量 \(X_T\) 服从平稳分布 \(w\)，并且与 \(T\) 独立。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 的显式参数化，
+对任意 \(y\in X\) 有
+\(
+w(y)\propto \dfrac{t_y}{(t_y-\kappa_\delta)^2}
+\)
+（见定理 \ref{thm:pom-diagonal-rate-diagonal-statistics-complete} 的证明要点）。
+另一方面，
+\[
+\pi_\delta(y)\,\frac{1}{r_\delta(y)}
+=\frac{1}{t_y-\kappa_\delta}\cdot\frac{t_y}{t_y-\kappa_\delta}
+=\frac{t_y}{(t_y-\kappa_\delta)^2},
+\]
+从而 \(w\) 与向量 \(\bigl(\pi_\delta(y)/r_\delta(y)\bigr)_{y\in X}\) 同比例。
+因此在任意一次刷新中，接受后的状态分布满足
+\[
+\PP(Y=y\mid \text{\rm 刷新且被接受})
+\propto \pi_\delta(y)\,a_\delta(y)
+=c_\delta\,\frac{\pi_\delta(y)}{r_\delta(y)}
+\propto w(y),
+\]
+故 \({\rm Law}(Y\mid \text{\rm 刷新且被接受})=w\)，且该分布与刷新发生的时间无关。
+由于停止只可能发生在刷新步，且“是否停止”仅依赖于该步的刷新样本 \(Y\) 与独立抛硬币，
+得 \(\PP_x(T=t,X_T=y)=\PP_x(T=t)\,w(y)\)。
+等价地，\(X_T\sim w\) 且与 \(T\) 独立。证毕。
+\end{proof}
+
+\begin{proposition}[halting 状态]\label{prop:pom-diagonal-rate-accept-refresh-halting-state}
+在定义 \ref{def:pom-diagonal-rate-accept-refresh-sst} 的设定下，若起点 \(x\ne h\)，则对任意 \(m\ge 0\) 有事件包含
+\[
+\{X_m=h\}\subseteq \{T\le m\}.
+\]
+\end{proposition}
+\begin{proof}
+当 \(x\ne h\) 时，要在时刻 \(m\) 处于 \(h\) 必须在某个时刻 \(t\in\{1,\dots,m\}\) 发生刷新并采样到 \(h\)（非刷新步只能自环）。
+而一旦刷新样本为 \(h\)，由 \(a_\delta(h)=1\) 得该刷新步必被接受并立即停止，故 \(T\le t\le m\)。证毕。
+\end{proof}
+
+\begin{theorem}[精确分离距离与时间一致的最坏点]\label{thm:pom-diagonal-rate-accept-refresh-separation-exact}
+在定义 \ref{def:pom-diagonal-rate-accept-refresh-sst} 的设定下，
+对任意起点 \(x\in X\setminus\{h\}\) 与任意 \(m\ge 0\)，分离距离
+\[
+\mathrm{sep}_x(m):=\max_{y\in X}\Bigl(1-\frac{(K^\star_\delta)^m(y\mid x)}{w(y)}\Bigr)
+\]
+满足严格恒等式
+\[
+\mathrm{sep}_x(m)=\PP_x(T>m)=1-\frac{(K^\star_\delta)^m(h\mid x)}{w(h)}.
+\]
+并且最坏点在时间上不变：对所有 \(m\ge 0\)，有
+\[
+h\in\arg\min_{y\in X}\frac{(K^\star_\delta)^m(y\mid x)}{w(y)}.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-accept-refresh-sst-strong} 的强平稳性，
+\(
+\PP_x(T\le m,\,X_m=y)=\PP_x(T\le m)\,w(y)
+\)
+对一切 \(y\in X\) 成立。
+因此
+\[
+\frac{(K^\star_\delta)^m(y\mid x)}{w(y)}
+=\frac{\PP_x(X_m=y)}{w(y)}
+\ge \PP_x(T\le m),
+\]
+从而 \(\mathrm{sep}_x(m)\le \PP_x(T>m)\)。
+\par
+另一方面，由命题 \ref{prop:pom-diagonal-rate-accept-refresh-halting-state}，对 \(x\ne h\) 有
+\(\PP_x(X_m=h,\,T>m)=0\)，故
+\[
+(K^\star_\delta)^m(h\mid x)
+=\PP_x(T\le m,\,X_m=h)
+=\PP_x(T\le m)\,w(h),
+\]
+即 \((K^\star_\delta)^m(h\mid x)/w(h)=\PP_x(T\le m)\)。
+代回即得
+\(
+1-(K^\star_\delta)^m(h\mid x)/w(h)=\PP_x(T>m)
+\)
+并与上界合并得到所示恒等式。
+最后，由 \((K^\star_\delta)^m(y\mid x)/w(y)\ge \PP_x(T\le m)=(K^\star_\delta)^m(h\mid x)/w(h)\)，知 \(h\) 总实现最小比值，故为时间一致的最坏点之一。证毕。
+\end{proof}
+
+\begin{corollary}[严格分离]\label{cor:pom-diagonal-rate-accept-refresh-separation-strict}
+在定理 \ref{thm:pom-diagonal-rate-accept-refresh-separation-exact} 的设定下，
+若 \(\mathcal H_\delta=\{h\}\) 为单点（等价地，\(t_h< t_y\) 对一切 \(y\ne h\) 成立），则对任意 \(x\ne h\)、任意 \(m\ge 0\) 与任意 \(y\ne h\) 有严格不等式
+\[
+\frac{(K^\star_\delta)^m(y\mid x)}{w(y)}>\frac{(K^\star_\delta)^m(h\mid x)}{w(h)}.
+\]
+\end{corollary}
+\begin{proof}
+若存在 \(y\ne h\) 使某个 \(m\) 处取等，则需有
+\(\PP_x(X_m=y,\,T>m)=0\)。
+由于 \(T\) 仅在刷新步停止，\(\PP_x(X_m=y,\,T>m)=0\) 蕴含：一旦在某次刷新采样到 \(y\) 即必然接受。
+这要求 \(a_\delta(y)=1\)，即 \(r_\delta(y)=c_\delta\)，与 \(\mathcal H_\delta=\{h\}\) 矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[强平稳时刻的母函数闭式]\label{thm:pom-diagonal-rate-accept-refresh-sst-pgf}
+在定义 \ref{def:pom-diagonal-rate-accept-refresh-sst} 的设定下，
+取 \(x\in X\setminus\{h\}\)。
+定义
+\[
+\mathcal P_\delta(z):=\prod_{u\in X}(t_u-z),
+\qquad
+\mathcal Q_\delta(z):=z\,\mathcal P_\delta'(z)+\kappa_\delta\,\mathcal P_\delta(z),
+\qquad
+\mathcal P_{-x,-h}(z):=\prod_{u\in X\setminus\{x,h\}}(t_u-z).
+\]
+则对 \(|s|\) 充分小，有严格恒等式
+\[
+\EE_x[s^T]
+=\frac{\kappa_\delta(1+\kappa_\delta)}{1+\kappa_\delta\delta}\,
+(t_x-\kappa_\delta)(t_h-\kappa_\delta)\cdot
+\frac{s(1-s)\,\mathcal P_{-x,-h}(\kappa_\delta s)}{\mathcal Q_\delta(\kappa_\delta s)}.
+\]
+\end{theorem}
+\begin{proof}
+以“刷新步”为唯一停止机会，\(\EE_x[s^T]\) 满足一组线性母函数方程 \((I-s\widetilde K)f=sq\)，其中 \(\widetilde K\) 为“未停止”下的次转移核。
+在最优核参数化中，\(\widetilde K\) 保持“对角 \(+\) 秩一”结构，
+从而可用秩一行列式引理把解压缩到一维多项式比值；
+再利用恒等式 \(A_\delta^2=(1+\kappa_\delta\delta)^{-1}(1+\kappa_\delta)\)（见定理 \ref{thm:pom-diagonal-rate-diagonal-statistics-complete}）与
+\(\mathcal Q_\delta(\kappa_\delta)=0\)（定理 \ref{thm:pom-maxent-markov-laguerre-secular-spectrum}）
+化简即可得到闭式。证毕。
+\end{proof}
+
+\begin{corollary}[分离距离母函数的有理性]\label{cor:pom-diagonal-rate-separation-pgf-rational}
+在定理 \ref{thm:pom-diagonal-rate-accept-refresh-sst-pgf} 的设定下，
+令
+\[
+\Delta_\delta(s):=\frac{\mathcal Q_\delta(\kappa_\delta s)}{1-s},
+\qquad
+\mathcal S_x(s):=\sum_{m\ge 0}\mathrm{sep}_x(m)\,s^m=\sum_{m\ge 0}\PP_x(T>m)\,s^m.
+\]
+则 \(\Delta_\delta\) 为次数 \(n-1\) 多项式，并且存在次数至多 \(n-2\) 的多项式 \(N_{x,\delta}\) 使
+\[
+\mathcal S_x(s)=\frac{N_{x,\delta}(s)}{\Delta_\delta(s)}.
+\]
+更精确地，可取
+\[
+N_{x,\delta}(s)
+:=\frac{\Delta_\delta(s)
+-\frac{\kappa_\delta(1+\kappa_\delta)}{1+\kappa_\delta\delta}(t_x-\kappa_\delta)(t_h-\kappa_\delta)\,
+s\,\mathcal P_{-x,-h}(\kappa_\delta s)}{1-s}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-accept-refresh-separation-exact} 与恒等式
+\(
+\sum_{m\ge 0}\PP(T>m)s^m=\frac{1-\EE[s^T]}{1-s}
+\)
+得
+\(
+\mathcal S_x(s)=\frac{1-\EE_x[s^T]}{1-s}
+\)。
+将定理 \ref{thm:pom-diagonal-rate-accept-refresh-sst-pgf} 代入，并用
+\(\mathcal Q_\delta(\kappa_\delta s)=(1-s)\Delta_\delta(s)\)
+整理即得。
+由于 \(\mathcal S_x(1)=\EE_x[T]<\infty\)，分子在 \(s=1\) 处必消去，从而 \(N_{x,\delta}\) 为多项式且 \(\deg N_{x,\delta}\le n-2\)。证毕。
+\end{proof}
+
+\begin{theorem}[分离距离的谱展开与残数系数]\label{thm:pom-diagonal-rate-separation-spectral-residue}
+设 \(t_u\) 两两不同，并令 \(\mathcal Q_\delta\) 的全部零点按升序记为
+\[
+z_1=\kappa_\delta<z_2<\cdots<z_n.
+\]
+置
+\(
+\lambda_i:=\kappa_\delta/z_i\in(0,1)
+\)
+（\(i=2,\dots,n\)）。
+则对任意 \(x\ne h\) 与任意 \(m\ge 0\)，存在唯一系数 \(\{\omega_i(x)\}_{i=2}^{n}\subset\RR\)（\(\sum_{i=2}^n\omega_i(x)=1\)）使
+\[
+\mathrm{sep}_x(m)=\sum_{i=2}^{n}\omega_i(x)\,\lambda_i^{m}.
+\]
+并且系数具有显式残数闭式
+\[
+\omega_i(x)=\frac{1+\kappa_\delta}{1+\kappa_\delta\delta}\,
+(t_x-\kappa_\delta)(t_h-\kappa_\delta)\cdot
+\frac{\mathcal P_{-x,-h}(z_i)}{\mathcal Q_\delta'(z_i)}
+\qquad(i=2,\dots,n).
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:pom-diagonal-rate-separation-pgf-rational}，
+\(\mathcal S_x(s)=N_{x,\delta}(s)/\Delta_\delta(s)\) 为有理函数，
+其极点为 \(\Delta_\delta(s)=0\) 的根 \(s_i=z_i/\kappa_\delta=1/\lambda_i\)（\(i=2,\dots,n\)），且均为单极点。
+对 \(\mathcal S_x\) 作部分分式分解得到
+\[
+\mathcal S_x(s)=\sum_{i=2}^{n}\frac{\omega_i(x)}{1-\lambda_i s},
+\]
+从而系数展开给出 \(\mathrm{sep}_x(m)=\sum_{i=2}^{n}\omega_i(x)\lambda_i^m\)；
+唯一性由 \(\{\lambda_i\}\) 互异的线性无关性给出。
+\par
+残数闭式由
+\(
+\mathrm{Res}_{s=s_i}\mathcal S_x(s)=-\omega_i(x)/\lambda_i
+\)
+及
+\(
+\Delta_\delta'(s_i)=\kappa_\delta\,\mathcal Q_\delta'(z_i)/(1-s_i)
+\)
+与 \(N_{x,\delta}(s_i)=-C_\delta\,s_i\,\mathcal P_{-x,-h}(z_i)/(1-s_i)\)
+（其中 \(C_\delta=\kappa_\delta(1+\kappa_\delta)(t_x-\kappa_\delta)(t_h-\kappa_\delta)/(1+\kappa_\delta\delta)\)）
+代回并化简得到。证毕。
+\end{proof}
+
+\begin{proposition}[系数符号的交错判据]\label{prop:pom-diagonal-rate-separation-weight-sign-rule}
+在定理 \ref{thm:pom-diagonal-rate-separation-spectral-residue} 的设定下，
+对每个 \(i\ge 2\) 有符号恒等式
+\[
+\mathrm{sign}\bigl(\omega_i(x)\bigr)=\mathrm{sign}(t_x-z_i).
+\]
+特别地，若 \(x\in\arg\max_{u\in X}t_u\)（等价地 \(p_\delta(x)=K^\star_\delta(x\mid x)\) 取最小值），则 \(\omega_i(x)>0\) 对所有 \(i=2,\dots,n\) 成立。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:pom-maxent-markov-laguerre-secular-spectrum} 的交错性，\(z_i\notin\{t_u\}\) 且 \(z_i\) 为单根。
+记
+\(
+\phi(z):=\sum_{u}(t_u-z)^{-1}-\kappa_\delta/z
+\)。
+则 \(\phi(z)=0\) 与 \(\mathcal Q_\delta(z)=0\) 等价，并且 \(\phi'(z)=\sum_u(t_u-z)^{-2}+\kappa_\delta/z^2>0\)。
+利用恒等式 \(\phi(z)=-\mathcal Q_\delta(z)/(z\mathcal P_\delta(z))\)，在零点处得到
+\[
+\mathcal Q_\delta'(z_i)=-z_i\,\mathcal P_\delta(z_i)\,\phi'(z_i),
+\]
+从而 \(\mathrm{sign}(\mathcal Q_\delta'(z_i))=-\mathrm{sign}(\mathcal P_\delta(z_i))\)。
+另一方面，
+\(
+\mathcal P_\delta(z_i)=(t_x-z_i)(t_h-z_i)\mathcal P_{-x,-h}(z_i)
+\)。
+由于 \(h\in\arg\min t\) 且 \(i\ge 2\) 蕴含 \(z_i>t_h\)，有 \(t_h-z_i<0\)。
+将上述符号关系代入定理 \ref{thm:pom-diagonal-rate-separation-spectral-residue} 的残数闭式即得
+\(\mathrm{sign}(\omega_i(x))=\mathrm{sign}(t_x-z_i)\)。证毕。
+\end{proof}
+
+\begin{corollary}[极端起点下的完全单调与严格对数凸]\label{cor:pom-diagonal-rate-separation-hausdorff-logconvex}
+在定理 \ref{thm:pom-diagonal-rate-separation-spectral-residue} 的设定下，
+若 \(x\in\arg\max_{u}t_u\)，则 \(\{\mathrm{sep}_x(m)\}_{m\ge 0}\) 为 \([0,1)\) 上离散概率测度
+\(
+\sum_{i=2}^{n}\omega_i(x)\delta_{\lambda_i}
+\)
+的 Hausdorff 矩序列，因而对任意 \(k,m\ge 0\) 成立完全单调性
+\[
+(-1)^k(\Delta^k \mathrm{sep}_x)_m\ge 0.
+\]
+并且当 \(n\ge 3\) 时，对所有 \(m\ge 1\) 有严格对数凸与比值单调：
+\[
+\mathrm{sep}_x(m)^2<\mathrm{sep}_x(m-1)\mathrm{sep}_x(m+1),
+\qquad
+\frac{\mathrm{sep}_x(m+1)}{\mathrm{sep}_x(m)}\ \text{\rm 严格递增}.
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-diagonal-rate-separation-weight-sign-rule}，
+\(\omega_i(x)>0\) 且 \(\sum_{i=2}^n\omega_i(x)=1\)，并由定理 \ref{thm:pom-maxent-markov-laguerre-secular-spectrum} 知 \(\lambda_i\in(0,1)\)。
+故由定理 \ref{thm:pom-diagonal-rate-separation-spectral-residue} 的表示得到 Hausdorff 矩序列表述与完全单调性。
+当 \(n\ge 3\) 时，至少存在两条不同的 \(\lambda_i\)，从而完全单调矩序列的标准严格性结论给出严格对数凸与比值单调。证毕。
+\end{proof}
+
+\begin{corollary}[单次对角观测确定分离距离剖面]\label{cor:pom-diagonal-rate-diagonal-determines-separation-profile}
+在定理 \ref{thm:pom-diagonal-rate-diagonal-statistics-complete} 的设定下，
+仅由对角保持率向量 \(p_\delta(x)=K^\star_\delta(x\mid x)\) 即可回收 \(\kappa_\delta\) 与 \(\{t_x\}_{x\in X}\)，
+从而可构造 \(\mathcal P_\delta,\mathcal Q_\delta\) 并由定理 \ref{thm:pom-diagonal-rate-separation-spectral-residue} 给出任意起点 \(x\ne h\) 的精确分离距离序列 \(\{\mathrm{sep}_x(m)\}_{m\ge 0}\)。
+\end{corollary}
+

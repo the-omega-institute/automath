@@ -1,0 +1,96 @@
+\begin{proposition}[同步字等待时间给出的显式混合率]\label{prop:sync-kernel-explicit-syncword-mixing-rate}
+沿用附录 B 的同步核记号：令 \((Q_t)_{t\ge 0}\) 为 10 状态同步核在输入字母 \(d_t\in\{0,1,2\}\) 驱动下的状态过程，并假设 \((d_t)_{t\ge 1}\) 独立同分布且在 \(\{0,1,2\}\) 上均匀。
+设存在同步字 \(00000\) 满足：对任意初始状态 \(Q_0\)，一旦读入五步输入块 \(00000\) 则 \(Q_5\) 落入同一确定状态（附录 B 的同步性证书）。
+令
+\[
+T:=\inf\{t\ge 5:\ (d_{t-4},d_{t-3},d_{t-2},d_{t-1},d_t)=(0,0,0,0,0)\}
+\]
+为首次出现同步字的等待时间（以步数计）。
+则对任意 \(k\in\NN\) 有尾界
+\[
+\PP(T>5k)\ \le\ (1-3^{-5})^{k}.
+\]
+从而存在显式常数 \(\lambda:=1-3^{-5}\in(0,1)\) 使得对任意两初始分布 \(\mu,\nu\) 与任意 \(n\ge 5\)，同步核状态边缘满足全变差界
+\[
+\bigl\|\mathcal L(Q_n\mid Q_0\sim\mu)-\mathcal L(Q_n\mid Q_0\sim\nu)\bigr\|_{\mathrm{TV}}
+\ \le\
+\lambda^{\lfloor (n-5)/5\rfloor}.
+\]
+并且同样的指数界适用于任何由有限前视窗口的可测输出过程（例如二值输出 \(e_t\in\{0,1\}\) 及其跳变指示 \(J_t:=\mathbf 1_{\{e_{t+1}\ne e_t\}}\)），即其时间 \(n\) 的边缘分布对初始分布的敏感度在 \(\mathrm{TV}\) 距离下至多以 \(\lambda^{\lfloor (n-5)/5\rfloor}\) 衰减。
+\end{proposition}
+\begin{proof}
+将输入序列按互不重叠的 5-块分组：
+\((d_1,\dots,d_5),(d_6,\dots,d_{10}),\dots,(d_{5k-4},\dots,d_{5k})\)。
+若 \(T>5k\)，则前 \(k\) 个块均不等于 \(00000\)。
+由独立性与均匀性，
+\[
+\PP(T>5k)\le \bigl(1-\PP(d_{1..5}=00000)\bigr)^k=\bigl(1-3^{-5}\bigr)^k.
+\]
+对混合界，取一条标准耦合：在同一输入序列 \((d_t)\) 下运行两条链，并分别从 \(\mu,\nu\) 取初态。
+一旦某个时刻出现同步字块，二者在该块末端的状态必相同，并从此后完全一致。
+因此对任意 \(n\ge 5\) 有
+\[
+\bigl\|\mathcal L(Q_n\mid \mu)-\mathcal L(Q_n\mid \nu)\bigr\|_{\mathrm{TV}}
+\le \PP(T>n)
+\le \PP\!\left(T>5\left\lfloor\frac{n}{5}\right\rfloor\right)
+\le \lambda^{\lfloor (n-5)/5\rfloor}.
+\]
+最后，若 \(e_t\)（或 \(J_t\)）为状态与输入的可测函数，则在上述耦合下两条输出过程亦在同步时刻之后完全一致，从而同一 \(\PP(T>n)\) 上界传递到其边缘分布的 \(\mathrm{TV}\) 距离。证毕。
+\end{proof}
+
+\begin{corollary}[同步字等待时间的尾界与期望界（一般 i.i.d.\ 输入）]\label{cor:sync-kernel-reset-word-waiting-time-general-iid}
+设输入字母序列 \((d_t)_{t\ge 1}\) 独立同分布，取值于有限字母表 \(\Sigma\)，并设存在同步字 \(w_0\in\Sigma^{L}\)（长度 \(L\ge 1\)）满足：对任意初始状态，一旦读入连续 \(L\) 步输入块等于 \(w_0\)，则核状态被复位到同一确定状态。
+令
+\[
+T:=\inf\{t\ge L:\ (d_{t-L+1},\dots,d_t)=w_0\}
+\]
+为首次出现同步字的等待时间。
+记
+\(
+\pi_0:=\PP\bigl((d_1,\dots,d_L)=w_0\bigr)>0
+\)。
+则对任意 \(k\in\NN\) 有尾界
+\[
+\PP(T>kL)\ \le\ (1-\pi_0)^{k},
+\]
+并且期望满足
+\[
+\EE[T]\ \le\ \frac{L}{\pi_0}.
+\]
+\end{corollary}
+\begin{proof}
+将输入序列按互不重叠的 \(L\)-块分组：
+\((d_1,\dots,d_L),(d_{L+1},\dots,d_{2L}),\dots,(d_{(k-1)L+1},\dots,d_{kL})\)。
+若 \(T>kL\)，则前 \(k\) 个块均不等于 \(w_0\)，故
+\[
+\PP(T>kL)\le (1-\pi_0)^k,
+\]
+其中使用了 i.i.d.\ 导致的块独立性。
+\par
+由尾分布求和公式与上界，
+\[
+\EE[T]=\sum_{t\ge 0}\PP(T>t)
+\le \sum_{k\ge 0}\sum_{t=kL}^{(k+1)L-1}\PP(T>kL)
+\le L\sum_{k\ge 0}(1-\pi_0)^k
+=\frac{L}{\pi_0}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[固定状态同步核的遗忘时间尺度可无界]\label{cor:sync-kernel-reset-time-unbounded-under-small-q}
+在命题 \ref{prop:sync-kernel-explicit-syncword-mixing-rate} 的同步核设定下，取同步字 \(w_0=00000\)（\(L=5\)）。
+若输入满足独立同分布且 \(\PP(d_t=0)=q>0\)，则
+\[
+\EE[T]\ \le\ 5q^{-5},
+\]
+从而在 \(q\downarrow 0\) 时 \(\EE[T]\) 发散。
+因此，固定状态数的同步核并不强制“统计遗忘时间尺度”的统一上界：该尺度可随输入分布的稀疏化而无界增长。
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:sync-kernel-reset-word-waiting-time-general-iid}，此时
+\(
+\pi_0=\PP(d_1=\cdots=d_5=0)=q^5
+\)，代入即得 \(\EE[T]\le 5/q^5\)。
+发散性由 \(q\downarrow 0\) 立得。证毕。
+\end{proof}
+

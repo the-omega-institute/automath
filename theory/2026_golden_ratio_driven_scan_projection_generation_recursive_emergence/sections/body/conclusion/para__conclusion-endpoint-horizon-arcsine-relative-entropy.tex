@@ -1,0 +1,143 @@
+\paragraph{端点视界的反正弦律与相对熵闭式：Gödel 对数成本的普适常数缺口}\label{par:conclusion-endpoint-horizon-arcsine-relative-entropy}
+本段给出一条可直接与 prime-register 椭圆化外置接口对接的闭式恒等式：当观测仅保留单位圆在单轴上的端点视界密度时，其可观测统计差异由一个双曲坐标精确刻画，并与 Gödel 对数成本之间仅相差普适常数。
+
+\begin{definition}[端点视界密度与 KL 相对熵]\label{def:conclusion-endpoint-horizon-arcsine-kl}
+对 \(a>0\)，定义端点视界（反正弦）密度
+\[
+f_a(x):=\frac{\mathbf 1_{|x|<a}}{\pi\sqrt{a^2-x^2}}.
+\]
+对 \(0<a\le b\) 定义 Kullback--Leibler 相对熵
+\[
+D_{\mathrm{KL}}(f_a\Vert f_b):=\int_{-a}^{a} f_a(x)\log\frac{f_a(x)}{f_b(x)}\,\dd x.
+\]
+\end{definition}
+
+\begin{theorem}[端点视界相对熵的反双曲闭式]\label{thm:conclusion-endpoint-horizon-arcsine-kl-closed-form}
+在定义 \ref{def:conclusion-endpoint-horizon-arcsine-kl} 的设定下，对任意 \(0<a\le b\) 有严格闭式
+\[
+D_{\mathrm{KL}}(f_a\Vert f_b)
+=\operatorname{arcosh}\!\Bigl(\frac{b}{a}\Bigr)
+=\log\!\Bigl(\frac{b+\sqrt{b^2-a^2}}{a}\Bigr).
+\]
+\end{theorem}
+
+\begin{proof}
+由定义直接化简得
+\[
+\log\frac{f_a(x)}{f_b(x)}=\frac12\log\frac{b^2-x^2}{a^2-x^2}.
+\]
+作代换 \(x=a\sin\theta\)（\(\theta\in[-\tfrac\pi2,\tfrac\pi2]\)），则 \(\dd x=a\cos\theta\,\dd\theta\) 且
+\(
+f_a(x)\,\dd x=\frac{1}{\pi}\,\dd\theta
+\)。
+因此
+\[
+D_{\mathrm{KL}}(f_a\Vert f_b)
+=\frac{1}{2\pi}\int_{-\pi/2}^{\pi/2}\log\frac{b^2-a^2\sin^2\theta}{a^2\cos^2\theta}\,\dd\theta.
+\]
+将分母项分离并用恒等式
+\(
+\int_{-\pi/2}^{\pi/2}\log(\cos^2\theta)\,\dd\theta=-2\pi\log 2
+\)
+得到
+\[
+D_{\mathrm{KL}}(f_a\Vert f_b)
+=\frac{1}{2\pi}\int_{-\pi/2}^{\pi/2}\log\!\bigl(b^2-a^2\sin^2\theta\bigr)\,\dd\theta
+-\log a+\log 2.
+\]
+令 \(k^2:=a^2/b^2\in(0,1]\)，并记
+\[
+I(k):=\int_{0}^{\pi/2}\log\!\bigl(1-k^2\sin^2\theta\bigr)\,\dd\theta.
+\]
+则
+\[
+\int_{-\pi/2}^{\pi/2}\log\!\bigl(b^2-a^2\sin^2\theta\bigr)\,\dd\theta
+=\pi\log b^2+2I(k).
+\]
+对 \(k\in(0,1)\) 求导并交换积分得
+\[
+I'(k)=\int_0^{\pi/2}\frac{-2k\sin^2\theta}{1-k^2\sin^2\theta}\,\dd\theta
+=-\frac{2}{k}\left(\int_0^{\pi/2}\frac{\dd\theta}{1-k^2\sin^2\theta}-\frac{\pi}{2}\right).
+\]
+再作代换 \(t=\tan\theta\)，得到
+\[
+\int_0^{\pi/2}\frac{\dd\theta}{1-k^2\sin^2\theta}
+=\int_0^\infty \frac{\dd t}{1+(1-k^2)t^2}
+=\frac{\pi}{2\sqrt{1-k^2}}.
+\]
+故
+\[
+I'(k)=-\frac{\pi}{k}\left(\frac{1}{\sqrt{1-k^2}}-1\right).
+\]
+积分并用 \(I(0)=0\) 定常数，得到
+\[
+I(k)=\pi\log\!\left(\frac{1+\sqrt{1-k^2}}{2}\right).
+\]
+回代可得
+\[
+D_{\mathrm{KL}}(f_a\Vert f_b)
+=\log b+\log\!\left(\frac{1+\sqrt{1-k^2}}{2}\right)-\log a+\log 2
+=\log\!\left(\frac{b+\sqrt{b^2-a^2}}{a}\right).
+\]
+最后由 \(\operatorname{arcosh}(t)=\log(t+\sqrt{t^2-1})\)（\(t\ge 1\)）得等价表述。证毕。
+\end{proof}
+
+\begin{corollary}[Gödel 对数成本与可观测相对熵的至多 \texorpdfstring{$1$}{1} bit 缺口]\label{cor:conclusion-endpoint-horizon-kl-vs-log-cost-onebit}
+令 \(\rho:=b/a\ge 1\)。则有一致夹逼
+\[
+\log\rho\ \le\ D_{\mathrm{KL}}(f_a\Vert f_b)\ \le\ \log(2\rho),
+\]
+从而
+\[
+0\ \le\ D_{\mathrm{KL}}(f_a\Vert f_b)-\log\rho\ \le\ \log 2.
+\]
+若取以 \(2\) 为底的对数，则差额不超过 \(1\) bit。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-endpoint-horizon-arcsine-kl-closed-form}，
+\[
+D_{\mathrm{KL}}(f_a\Vert f_b)=\log\bigl(\rho+\sqrt{\rho^2-1}\bigr).
+\]
+显然 \(\rho\le \rho+\sqrt{\rho^2-1}\le 2\rho\)，取对数即得。证毕。
+\end{proof}
+
+\begin{proposition}[两素数尺度的稠密逼近与端点视界 KL 的任意精度逼近]\label{prop:conclusion-endpoint-horizon-two-prime-approx}
+令 \(H:=\{2^m3^n:\ (m,n)\in\ZZ^2\}\subset\RR_{>0}\)。
+则对任意 \(\rho\ge 1\) 与任意 \(\varepsilon>0\)，存在 \(h\in H\) 使
+\[
+\bigl|D_{\mathrm{KL}}(f_1\Vert f_{\rho})-D_{\mathrm{KL}}(f_1\Vert f_{h})\bigr|<\varepsilon.
+\]
+\end{proposition}
+
+\begin{proof}
+由于 \(\log 2/\log 3\notin\QQ\)，加法群 \(\{m\log 2+n\log 3\}\) 在 \(\RR\) 中稠密（参见 \cite{KuipersNiederreiter1974}），从而 \(H=\exp(\{m\log 2+n\log 3\})\) 在 \(\RR_{>0}\) 中稠密。
+取 \(h\in H\) 使 \(h\to\rho\) 足够近。
+由定理 \ref{thm:conclusion-endpoint-horizon-arcsine-kl-closed-form}，映射 \(\rho\mapsto D_{\mathrm{KL}}(f_1\Vert f_\rho)=\operatorname{arcosh}(\rho)\) 在 \([1,\infty)\) 连续，故可使差异小于 \(\varepsilon\)。证毕。
+\end{proof}
+
+\begin{proposition}[单整数 Gödel 乘法同态的交换化障碍]\label{prop:conclusion-godel-multiplicative-homomorphism-abelianization}
+令 \((\mathcal A,\circ)\) 为半群，且 \(G:\mathcal A\to(\NN_{\ge 1},\times)\) 满足
+\[
+G(A\circ B)=G(A)G(B)\qquad(\forall A,B\in\mathcal A).
+\]
+若 \(G\) 为单射，则 \(\mathcal A\) 必为交换半群。
+\end{proposition}
+
+\begin{proof}
+任取 \(A,B\in\mathcal A\)。由同态性与整数乘法交换性，
+\[
+G(A\circ B)=G(A)G(B)=G(B)G(A)=G(B\circ A).
+\]
+单射性推出 \(A\circ B=B\circ A\)。证毕。
+\end{proof}
+
+\begin{remark}[与 prime-register 椭圆化外置的接口]\label{rem:conclusion-endpoint-horizon-prime-register-interface}
+在 prime-register 椭圆化表述中（例如命题 \ref{prop:conclusion-prime-register-elliptic-representation}），轴比参数可取为 \(\rho=N(r)\)。
+若端点视界观测只保留一维边界密度 \(f_a\) 的尺度比 \(\rho=b/a\)，则推论 \ref{cor:conclusion-endpoint-horizon-kl-vs-log-cost-onebit} 给出：该可观测 KL 相对熵与 Gödel 对数成本 \(\log\rho=\sum_p r(p)\log p\) 之间仅相差一个普适常数上界 \(\log 2\)（等价于至多 \(1\) bit 的信息差额）。
+\par
+本段中的数值核验脚本为 \texttt{scripts/exp\_conclusion\_endpoint\_horizon\_arcsine\_kl\_audit.py}，对应证书文件为 \texttt{artifacts/export/conclusion\_endpoint\_horizon\_arcsine\_kl\_audit.json}。
+\end{remark}
+
+\endinput
+

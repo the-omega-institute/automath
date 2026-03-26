@@ -1,0 +1,166 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Pullback factorization of the Lee--Yang discriminant on E_D.
+
+English-only by repository convention.
+
+We work on the elliptic curve
+  E_D: u^2 = -4 m^3 - 16 m^2 + 16 m + 65
+and the degree-3 map
+  y = (u - (4 m^2 - 17)) / (2 (m-2)(m+2)^2).
+
+Let
+  g(y) = 256 y^3 + 411 y^2 + 165 y + 32,
+  Delta(y) = -y (y-1) g(y).
+
+This script computes Delta(y(m,u)) in Q(E_D), reduces it using u^2=f(m), and
+factors the numerator into three linear factors in u:
+  (u - (4 m^2 - 17)) (u - (2 m^3 + 8 m^2 - 8 m - 33)) Xi(m,u),
+with Xi(m,u) = A(m) + u B(m), where A,B are explicit polynomials in Z[m].
+
+Outputs:
+  - artifacts/export/xi_ed_discriminant_pullback_factorization_audit.json
+  - sections/generated/eq_xi_ed_discriminant_pullback_factorization.tex
+"""
+
+from __future__ import annotations
+
+import json
+from dataclasses import asdict, dataclass
+from pathlib import Path
+from typing import Dict, List, Tuple
+
+import sympy as sp
+
+from common_paths import export_dir, generated_dir
+
+
+def _write_text(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+
+
+def _write_json(path: Path, payload: Dict[str, object]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _reduce_u_powers(poly_u: sp.Poly, u: sp.Symbol, f_m: sp.Expr) -> sp.Expr:
+    # Reduce a polynomial in u using u^2 = f(m) into degree <= 1 in u.
+    out0 = sp.Integer(0)
+    out1 = sp.Integer(0)
+    for (k,), coeff in poly_u.terms():
+        ck = sp.simplify(coeff)
+        if k == 0:
+            out0 += ck
+        elif k == 1:
+            out1 += ck
+        else:
+            if k % 2 == 0:
+                out0 += ck * (f_m ** (k // 2))
+            else:
+                out1 += ck * (f_m ** ((k - 1) // 2))
+    return sp.simplify(out0 + out1 * u)
+
+
+def _as_primitive_int_poly(expr: sp.Expr, var: sp.Symbol) -> sp.Poly:
+    p = sp.Poly(sp.together(expr), var, domain=sp.QQ)
+    num, den = sp.fraction(p.as_expr())
+    den_lcm = sp.ilcm(*[sp.denom(c) for c in sp.Poly(num, var, domain=sp.QQ).all_coeffs()] + [1])
+    q = sp.Poly(sp.expand(num * den_lcm), var, domain=sp.ZZ)
+    coeffs = [sp.Abs(c) for c in q.all_coeffs() if c != 0] or [sp.Integer(1)]
+    content = sp.gcd_list(coeffs)
+    return q.quo_ground(content)
+
+
+@dataclass(frozen=True)
+class Payload:
+    ok: bool
+    denom_factor: str
+    deg_A: int
+    deg_B: int
+
+
+def main() -> None:
+    m, u = sp.symbols("m u")
+
+    f = -4 * m**3 - 16 * m**2 + 16 * m + 65
+    A = (m - 2) * (m + 2) ** 2
+    B = 4 * m**2 - 17
+    y = (u - B) / (2 * A)
+
+    g = 256 * y**3 + 411 * y**2 + 165 * y + 32
+    Delta = -y * (y - 1) * g
+
+    # Reduce g(y(m,u)) in Q(E_D) to a linear form in u.
+    g_simpl = sp.together(sp.simplify(g))
+    g_num, g_den = sp.fraction(g_simpl)
+    g_num_poly_u = sp.Poly(sp.expand(g_num), u, domain=sp.QQ[m])
+    g_num_red = _reduce_u_powers(g_num_poly_u, u, f)
+    g_den_simpl = sp.factor(sp.expand(g_den))
+
+    # Extract Xi(m,u)=A(m)+uB(m) from the reduced numerator of g.
+    g_lin_u = sp.Poly(sp.expand(g_num_red), u, domain=sp.QQ[m])
+    if g_lin_u.degree() != 1:
+        raise RuntimeError("unexpected non-linear reduced numerator for g(y(m,u))")
+    gB, gA = g_lin_u.all_coeffs()  # gB*u + gA
+    Bm = _as_primitive_int_poly(gB, m)
+    Am = _as_primitive_int_poly(gA, m)
+    Xi_norm = Am.as_expr() + u * Bm.as_expr()
+
+    # Write Delta(y)= -y(y-1)g(y) with y=(u-B)/(2A), y-1=(u-(B+2A))/(2A).
+    lin1 = u - B
+    lin2 = u - (B + 2 * A)
+    Delta_lin = sp.together(sp.simplify(-(lin1 / (2 * A)) * (lin2 / (2 * A)) * (Xi_norm / g_den_simpl)))
+
+    # Compute the simplified denominator factor in Q(m) by reducing the ratio in Q(E_D).
+    ratio = sp.together(-(lin1 * lin2 * Xi_norm) / Delta)
+    ratio_num, ratio_den = sp.fraction(ratio)
+    ratio_num_red = _reduce_u_powers(sp.Poly(sp.expand(ratio_num), u, domain=sp.QQ[m]), u, f)
+    ratio_den_red = _reduce_u_powers(sp.Poly(sp.expand(ratio_den), u, domain=sp.QQ[m]), u, f)
+    ratio_red = sp.together(sp.simplify(ratio_num_red / ratio_den_red))
+    # ratio_red should be u-free.
+    if sp.Poly(ratio_red, u).degree() != 0:
+        raise RuntimeError("unexpected u-dependence in reduced denominator factor")
+    denom_factor = sp.factor(ratio_red)
+
+    # Verify equality in Q(E_D) by reducing Delta - target/denom_factor.
+    diff = sp.together(Delta - (-(lin1 * lin2 * Xi_norm) / denom_factor))
+    diff_num, diff_den = sp.fraction(diff)
+    diff_num_red = _reduce_u_powers(sp.Poly(sp.expand(diff_num), u, domain=sp.QQ[m]), u, f)
+    ok = sp.simplify(diff_num_red) == 0
+
+    payload = Payload(ok=bool(ok), denom_factor=sp.sstr(denom_factor), deg_A=int(Am.degree()), deg_B=int(Bm.degree()))
+    _write_json(export_dir() / "xi_ed_discriminant_pullback_factorization_audit.json", asdict(payload))
+
+    tex: List[str] = []
+    tex.append("% Auto-generated by scripts/exp_xi_ed_discriminant_pullback_factorization_audit.py")
+    tex.append("\\[")
+    tex.append("g(y)=256y^3+411y^2+165y+32,\\qquad \\Delta(y)=-y(y-1)g(y).")
+    tex.append("\\]")
+    tex.append("\\[")
+    tex.append("y=\\frac{u-(4m^2-17)}{2(m-2)(m+2)^2}\\ \\in\\ \\QQ(E_{\\mathrm D}).")
+    tex.append("\\]")
+    tex.append("\\[")
+    tex.append("\\Xi(m,u):=A(m)+u\\,B(m),")
+    tex.append("\\]")
+    tex.append("\\[")
+    tex.append("\\begin{aligned}")
+    tex.append(f"A(m)&={sp.latex(Am.as_expr())},\\\\")
+    tex.append(f"B(m)&={sp.latex(Bm.as_expr())}.")
+    tex.append("\\end{aligned}")
+    tex.append("\\]")
+    tex.append("\\[")
+    tex.append(
+        "\\Delta\\bigl(y(m,u)\\bigr)"
+        f"=-\\frac{{\\bigl(u-4m^2+17\\bigr)\\bigl(u-2m^3-8m^2+8m+33\\bigr)\\,\\Xi(m,u)}}"
+        f"{{{sp.latex(denom_factor)}}}."
+    )
+    tex.append("\\]")
+    _write_text(generated_dir() / "eq_xi_ed_discriminant_pullback_factorization.tex", "\n".join(tex) + "\n")
+
+
+if __name__ == "__main__":
+    main()
+

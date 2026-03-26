@@ -1,0 +1,192 @@
+\subsubsection{Walsh 通量、异常曲率与指数配对的 Stokes 互译}\label{subsubsec:discussion-generalized-stokes-spectral-hierarchy}
+在不同离散载体上，Stokes 型恒等式的共同结构是：以差分（或余边界）编码的“精确项”在总体求和时望远镜相消，仅在边界（或闭链配对）上留下可观测贡献。
+本段把若干在文稿各处出现的实例压缩为一条可复用的互译链。
+
+\begin{theorem}[Walsh--Stokes 高阶通量公式]\label{thm:discussion-walsh-stokes-higher-flux}
+令 \(n\ge 1\)，\(\Omega_n:=\{0,1\}^n\)。
+对 \(i\in\{1,\dots,n\}\)，记 \(\omega^{(i)}\) 为将 \(\omega\) 的第 \(i\) 位翻转后的顶点，并定义离散导数算子
+\[
+(\Delta_i f)(\omega):=f(\omega)-f(\omega^{(i)}).
+\]
+对任意 \(A\subseteq\{1,\dots,n\}\)，令 \(\Delta_A:=\prod_{i\in A}\Delta_i\)（算子可交换，故定义与次序无关），并定义 \(A\)-通量
+\[
+\Phi_A(f):=\sum_{\omega:\ \omega_j=0\ \forall j\in A}(\Delta_A f)(\omega).
+\]
+则对任意取值于交换群的函数 \(f:\Omega_n\to \mathsf{Ab}\) 成立严格恒等式
+\[
+\boxed{\;
+\Phi_A(f)=\sum_{\omega\in\Omega_n}(-1)^{\sum_{j\in A}\omega_j}\,f(\omega)\; }.
+\]
+当 \(f=\ind_S\) 为任意 \(S\subseteq\Omega_n\) 的指示函数时，右端正是 \(S\) 在频率 \(A\) 处的 Walsh 偏差 \(b_A(S)\)；
+特别地，定理 \ref{thm:spg-walsh-discrete-stokes-holography} 为其在 \(\mathsf{Ab}=\ZZ\) 且 \(f=\ind_S\) 的特例表述。
+\end{theorem}
+\begin{proof}
+先证 \(|A|=1\)。
+取 \(A=\{i\}\)。由映射 \(\omega\mapsto\omega^{(i)}\) 在两层 \(\{\omega:\omega_i=0\}\) 与 \(\{\omega:\omega_i=1\}\) 之间给出双射，
+\[
+\sum_{\omega:\ \omega_i=0}(\Delta_i f)(\omega)
+=\sum_{\omega:\ \omega_i=0}\bigl(f(\omega)-f(\omega^{(i)})\bigr)
+=\sum_{\omega\in\Omega_n}(-1)^{\omega_i}f(\omega).
+\]
+对一般 \(A\)，取任意枚举 \(A=\{i_1,\dots,i_k\}\)。
+对 \(g:=\Delta_{A\setminus\{i_1\}}f\) 应用上一恒等式并对 \(i_2,\dots,i_k\) 迭代，得到
+\[
+\sum_{\omega:\ \omega_j=0\ \forall j\in A}(\Delta_A f)(\omega)
+=\sum_{\omega\in\Omega_n}\Bigl(\prod_{j\in A}(-1)^{\omega_j}\Bigr)f(\omega)
+=\sum_{\omega\in\Omega_n}(-1)^{\sum_{j\in A}\omega_j}f(\omega).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[高阶边界变差对 Walsh 偏差的支配]\label{cor:discussion-walsh-bias-controlled-by-boundary-variation}
+在定理 \ref{thm:discussion-walsh-stokes-higher-flux} 的设定下，设 \(\mathsf{Ab}\) 嵌入某赋范线性空间 \(V\) 并以 \(\|\cdot\|\) 表示范数。
+定义 \(A\)-边界变差
+\[
+\partial_A(f):=\sum_{\omega:\ \omega_j=0\ \forall j\in A}\bigl\|(\Delta_A f)(\omega)\bigr\|.
+\]
+则有
+\[
+\bigl\|\Phi_A(f)\bigr\|\le \partial_A(f).
+\]
+特别地，对 \(f=\ind_S\)（\(S\subseteq\Omega_n\)）有
+\[
+\abs{\sum_{\omega\in\Omega_n}(-1)^{\sum_{j\in A}\omega_j}\ind_S(\omega)}
+\le
+\sum_{\omega:\ \omega_j=0\ \forall j\in A}\abs{(\Delta_A\ind_S)(\omega)}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:discussion-walsh-stokes-higher-flux}，\(\Phi_A(f)\) 为若干项之和；对各项取范数并用三角不等式即得。
+指示函数情形仅是将 \(\|\cdot\|\) 取为绝对值。证毕。
+\end{proof}
+
+\begin{proposition}[二维异常曲率与 holonomy 的离散 Stokes 配对]\label{prop:discussion-squier-curvature-holonomy-stokes}
+令 \(\mathcal K\) 为由有限临界对切片诱导的有限 \(2\)-复形（正文 \(\mathbf{PW}\) 口径，见 \ref{subsubsec:pom-pw-noncommutative-stokes-counterterm-hodge}）。
+令 \(\mathcal A\) 为中心标签群（可交换），并取 \(1\)-上链 \(a\in C^1(\mathcal K;\mathcal A)\) 表示逐基本重写步的中心残差增量。
+定义曲率 \(2\)-上链
+\[
+\Omega:=\delta a\in C^2(\mathcal K;\mathcal A).
+\]
+则 \(\Omega\) 为 \(2\)-余圈，并且对任意 \(2\)-链 \(\Sigma\in C_2(\mathcal K;\ZZ)\) 成立严格恒等式
+\[
+\boxed{\;\langle a,\partial\Sigma\rangle=\langle \Omega,\Sigma\rangle.\;}
+\]
+从而任意闭合规约回路 \(\gamma=\partial\Sigma\) 的 holonomy \(\langle a,\gamma\rangle\) 由曲率在任意填充 \(2\)-链上的配对完全决定。
+\end{proposition}
+\begin{proof}
+由 \(\delta^2=0\) 得 \(\delta\Omega=0\)，故 \(\Omega\) 为余圈。
+而 \(\langle a,\partial\Sigma\rangle=\langle \delta a,\Sigma\rangle\) 为链复形与上链复形配对的基本恒等式，即离散 Stokes。
+在 \(\mathbf{PW}\) 的模型化中，该恒等式与定理 \ref{thm:pom-pw-noncommutative-stokes} 的路径差表达一致。证毕。
+\end{proof}
+
+\begin{corollary}[严格化的判别与参数空间]\label{cor:discussion-squier-zero-curvature-strictification}
+沿用命题 \ref{prop:discussion-squier-curvature-holonomy-stokes} 的记号。
+则 \([\Omega]=0\in H^2(\mathcal K;\mathcal A)\) 当且仅当存在 \(\varphi\in C^0(\mathcal K;\mathcal A)\) 使 \(a=\delta\varphi\)。
+在可行情形下，所有严格化选择构成 \(H^1(\mathcal K;\mathcal A)\) 的挠子。
+\end{corollary}
+\begin{proof}
+\([\Omega]=0\) 等价于 \(\Omega=\delta a\) 为余边界，亦即 \(a\) 在上链层面为余边界。
+两种严格化之差为 \(1\)-余圈并按加法给出挠子结构。
+该表述与定理 \ref{thm:pom-pw-counterterm-strictification-criterion} 的 counterterm 判别一致。证毕。
+\end{proof}
+
+\begin{remark}[二维 \texorpdfstring{$\ell^\infty$}{L-infty} 严格化常数的最优性]\label{rem:discussion-linf-strictification-quarter}
+对立方余链上的量化 Stokes--Poincar\'e 分解，定理 \ref{thm:spg-cubical-quantized-stokes-poincare-linf-optimal} 给出线性右逆的最优常数 \(\frac{1}{2(k+1)}\)；
+其 \(k=1\) 情形推出残差的 \(\ell^\infty\) 控制常数为 \(\frac14\)，并在单位方形上不可改进（推论 \ref{cor:spg-hypercube-gradient-consistency-by-square-defect}）。
+\end{remark}
+
+\begin{proposition}[超立方体势差流的曲率闭式与受控严格化分解]\label{prop:discussion-hypercube-potential-curvature-controlled-strictification}
+令 \(\Omega_m=\{0,1\}^m\) 视为标准 \(m\)-维立方体复形的顶点集，并取其由边与方形诱导的余链复形。
+给定任意映射 \(F:\Omega_m\to Y\) 与任意势函数 \(\Phi:Y\to\RR\)，在有向边上定义 \(1\)-余链
+\[
+\beta_\Phi(u\to v):=\Phi(F(v))-\Phi(F(u)).
+\]
+则其曲率 \(2\)-余链 \(\kappa_\Phi:=\delta\beta_\Phi\in C^2(\Omega_m;\RR)\) 在任意坐标方形
+\(
+\square_{ij}(u)=(u,\ u\oplus e_i,\ u\oplus e_j,\ u\oplus e_i\oplus e_j)
+\)
+上满足显式二阶差分公式
+\[
+\kappa_\Phi(\square_{ij}(u))
+=
+\Phi(F(u\oplus e_i\oplus e_j))-\Phi(F(u\oplus e_i))-\Phi(F(u\oplus e_j))+\Phi(F(u)).
+\]
+并且存在 \(0\)-余链 \(\psi\in C^0(\Omega_m;\RR)\) 与残差 \(r\in C^1(\Omega_m;\RR)\) 使
+\[
+\beta_\Phi=\delta\psi+r,
+\qquad
+\|r\|_{\ell^\infty}\le m\,\|\kappa_\Phi\|_{\ell^\infty},
+\qquad
+\delta r=\kappa_\Phi.
+\]
+特别地，\(\kappa_\Phi\equiv 0\) 当且仅当 \(\beta_\Phi\) 为恰当余链，从而势差流在全体可交换方形上满足平行四边形恒等式。
+\end{proposition}
+\begin{proof}
+二阶差分公式为 \(\kappa_\Phi=\delta\beta_\Phi\) 在方形边界上的展开，直接代入定义即得。
+分解由命题 \ref{prop:conclusion-discrete-stokes-integrable-correction} 取 \(k=1\) 且 \(\mathrm{diam}(\Omega_m)=m\) 得到；并且由构造有 \(\delta r=\delta\beta_\Phi=\kappa_\Phi\)。
+最后一段由 \(\kappa_\Phi=0\Rightarrow r=0\) 与 \(\beta_\Phi=\delta\psi\) 等价性立得。证毕。
+\end{proof}
+
+\begin{proposition}[纤维 Stokes 恒等式与 Watatani 指数归一]\label{prop:discussion-fiber-stokes-watatani-normalization}
+令 \(\Omega_n=\{0,1\}^n\)，并给定满射折叠 \(\Fold:\Omega_n\twoheadrightarrow X\)。
+对 \(x\in X\) 记纤维 \(S_x:=\Fold^{-1}(x)\) 与多重度 \(d(x):=\card{S_x}\)。
+对坐标 \(i\) 定义奇偶可观测量 \(\pi_i(\omega):=(-1)^{\omega_i}\)。
+则在纤维均匀测度下有
+\[
+\EE\bigl[\pi_i(\omega)\mid x\bigr]
+=\frac1{d(x)}\sum_{\omega\in S_x}(-1)^{\omega_i}
+=\frac{N_i^+(S_x)-N_i^-(S_x)}{d(x)},
+\]
+其中 \(N_i^\pm(S_x)\) 为命题 \ref{prop:fold-hypercube-godel-stokes-flux-bias} 的有向边界计数。
+并且
+\[
+\abs{\EE\bigl[\pi_i(\omega)\mid x\bigr]}
+\le \frac{c_i(S_x)}{d(x)},
+\qquad c_i(S_x):=N_i^+(S_x)+N_i^-(S_x).
+\]
+在附录 \ref{subsec:op-algebra-fold-watatani-index} 的交换算子代数模型中，折叠条件期望 \(E\) 的 Watatani 指标元满足
+\(
+\mathrm{Ind}_{\mathrm W}(E)(x)=d(x)
+\)
+（定理 \ref{thm:op-algebra-fold-watatani-index-equals-multiplicity-field}），从而上式亦可写为
+\[
+\EE\bigl[\pi_i(\omega)\mid x\bigr]
+=\frac{N_i^+(S_x)-N_i^-(S_x)}{\mathrm{Ind}_{\mathrm W}(E)(x)}.
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:fold-hypercube-godel-stokes-flux-bias}，
+\(
+N_i^+(S_x)-N_i^-(S_x)=\sum_{\omega\in S_x}(-1)^{\omega_i}
+\)；
+两边除以 \(d(x)\) 得第一组恒等式。
+不等式由 \(|a-b|\le a+b\)（取 \(a=N_i^+(S_x)\), \(b=N_i^-(S_x)\)）立得。
+指数归一化表达式由定理 \ref{thm:op-algebra-fold-watatani-index-equals-multiplicity-field} 的点态闭式直接代入。证毕。
+\end{proof}
+
+\begin{corollary}[中心扩张读出的坐标化指数配对]\label{cor:discussion-character-index-holonomy}
+设 \(\ell:\mathcal G\to \mathsf A\) 为某可交换群值 \(1\)-余圈，并取群同态 \(\chi:\mathsf A\to\ZZ\)。
+以 \(\chi\circ \ell\) 替换时间余圈 \(\widetilde\ell\) 即可在同一谱三元组构造中得到坐标化算子 \(D_\chi\)，并把定理 \ref{thm:xi-time-index-theorem-k1-holonomy} 的指数配对恒等式逐字推广到 \(\chi\)-坐标下的 holonomy。
+\end{corollary}
+
+\begin{corollary}[Stokes 角色空间的有限指数稳定性]\label{cor:discussion-wdim-finite-index-stability}
+设 \(M,M'\) 为有限生成、可消去交换幺半群，并假定存在幺半群同态 \(f:M'\to M\) 使诱导的群同态
+\(
+U(M')\to U(M)
+\)
+与
+\(
+G(M')/U(M')\to G(M)/U(M)
+\)
+均为有限扩张。
+则
+\[
+\mathrm{wdim}(M')=\mathrm{wdim}(M).
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:cdim-signed-laws}(4) 得 \(\cdim^{\pm}(M')=\cdim^{\pm}(M)\)；
+再由定理 \ref{thm:cdim-stokes-character-contraction-general-monoid} 的恒等式 \(\mathrm{wdim}=\cdim^{\pm}\) 即得结论。证毕。
+\end{proof}
+
+\endinput

@@ -1,0 +1,180 @@
+\subsection{bin-fold escort 的固定样本决策塌缩、Chernoff 等距几何与统计维数临界尺度}\label{subsec:conclusion-binfold-fixedn-chernoff-statdim}
+沿用定理 \ref{thm:conclusion-binfold-escort-blackwell-equivalence}、定理 \ref{thm:conclusion-binfold-escort-bayes-risk-collapse}、定理 \ref{thm:xi-time-part9sb-escort-fixed-n-binomial-blackwell} 与定理 \ref{thm:xi-time-part9sb-escort-chernoff-saddle} 的记号。前述结果已经把单样本 escort 温度族压缩为一维 Bernoulli 极限，并给出固定样本数下乘积试验对二项实验的指数 Blackwell 塌缩。把这些接口继续并读后，还可进一步抽出如下三条后果：固定样本数口径下全部有界损失决策问题的范畴塌缩、Chernoff 指数在 escort 弧上的唯一 Bregman 等距接触点，以及样本规模 \((2/\varphi)^m\) 所提示的统计维数临界跃迁。
+
+\begin{theorem}[固定样本数下的有界损失决策完备塌缩]\label{thm:conclusion-binfold-escort-fixed-n-bounded-loss-decision-collapse}
+固定 \(Q<\infty\) 与 \(n\in\NN\)。令
+\[
+\mathcal E_m^{(n,Q)}:=\{\pi_{m,q}^{\otimes n}:0\le q\le Q\},
+\qquad
+\theta(q):=\frac{1}{1+\varphi^{q+1}},
+\]
+\[
+N_n(w^{(1)},\dots,w^{(n)}):=\sum_{j=1}^n w_m^{(j)}\in\{0,\dots,n\}.
+\]
+设 \(\mathcal A\) 为标准 Borel 动作空间，\(L:[0,Q]\times\mathcal A\to\RR\) 为有界损失，并记
+\[
+\|L\|_\infty:=\sup_{(q,a)\in[0,Q]\times\mathcal A}|L(q,a)|.
+\]
+则对任意全样本随机决策规则
+\[
+\delta_m:X_m^n\rightsquigarrow \mathcal A
+\]
+都存在仅依赖于 \(N_n\) 的规则
+\[
+\widetilde\delta_m=\rho_m\circ N_n
+\qquad
+(\rho_m:\{0,\dots,n\}\rightsquigarrow \mathcal A),
+\]
+使得其逐点风险
+\[
+R_q(\delta):=\int L(q,a)\,\delta(\mathbf w,\dd a)\,\pi_{m,q}^{\otimes n}(\dd\mathbf w)
+\]
+满足
+\[
+\sup_{0\le q\le Q}|R_q(\delta_m)-R_q(\widetilde\delta_m)|
+\le
+2\|L\|_\infty\,C_{n,Q}\Bigl(\frac{\varphi}{2}\Bigr)^m.
+\]
+反向地，任意 \(N_n\)-可测规则经前复合 \(N_n\) 即可视为全样本规则，且不引入额外风险误差。因而在固定样本数口径下，全部有界损失决策问题在渐近上都塌缩为同一个一维二项试验。
+\end{theorem}
+\begin{proof}
+记
+\[
+\varepsilon_m:=\Delta\bigl(\mathcal E_m^{(n,Q)},\{\mathrm{Binomial}(n,\theta(q)):0\le q\le Q\}\bigr).
+\]
+由定理 \ref{thm:xi-time-part9sb-escort-fixed-n-binomial-blackwell}，
+\[
+\varepsilon_m\le C_{n,Q}\Bigl(\frac{\varphi}{2}\Bigr)^m,
+\]
+且其前向塌缩核正是 \(N_n\)；同一定理的证明还构造了反向核
+\[
+S_m:\{0,\dots,n\}\rightsquigarrow X_m^n
+\]
+满足
+\[
+\sup_{0\le q\le Q}
+\|S_{m\sharp}\mathrm{Binomial}(n,\theta(q))-\pi_{m,q}^{\otimes n}\|_{\mathrm{TV}}
+\le \varepsilon_m.
+\]
+对给定 \(\delta_m\)，定义
+\[
+\rho_m:=\delta_m\circ S_m,
+\qquad
+\widetilde\delta_m:=\rho_m\circ N_n.
+\]
+则对任意 \(q\in[0,Q]\)，由损失有界性与总变差控制，
+\[
+|R_q(\delta_m)-R_q(\widetilde\delta_m)|
+\le
+2\|L\|_\infty\,
+\|S_{m\sharp}\mathrm{Binomial}(n,\theta(q))-\pi_{m,q}^{\otimes n}\|_{\mathrm{TV}}
+\le
+2\|L\|_\infty\varepsilon_m.
+\]
+取 \(q\) 上确界并代入 \(\varepsilon_m\) 的估计即得结论。反向方向只是注意到 \(N_n\)-可测规则本来就是全样本规则的子类。证毕。
+\end{proof}
+
+\begin{theorem}[Chernoff 弦--切等距与唯一 Bregman 接触点]\label{thm:conclusion-binfold-escort-chernoff-bregman-equidistance}
+记
+\[
+\psi(r):=\log A(r),
+\qquad
+A(r):=\varphi+\varphi^{-r}.
+\]
+对任意 \(p\neq q\)，令 \(r_\ast(p,q)\) 与 \(s_\ast(p,q)\) 为定理 \ref{thm:xi-time-part9sb-escort-chernoff-saddle} 给出的唯一极小点数据，即
+\[
+r_\ast(p,q)=s_\ast(p,q)p+\bigl(1-s_\ast(p,q)\bigr)q
+\in(\min\{p,q\},\max\{p,q\}),
+\]
+并满足
+\[
+\psi'(r_\ast(p,q))
+=
+\frac{\psi(q)-\psi(p)}{q-p}.
+\]
+则 Chernoff 信息不仅可写为 Jensen 间隙
+\[
+C_{\mathrm{Ch}}(p,q)
+=
+s_\ast(p,q)\psi(p)+\bigl(1-s_\ast(p,q)\bigr)\psi(q)-\psi(r_\ast(p,q)),
+\]
+而且满足双边 Bregman 等距
+\[
+C_{\mathrm{Ch}}(p,q)=D_\psi(p,r_\ast(p,q))=D_\psi(q,r_\ast(p,q)),
+\]
+其中
+\[
+D_\psi(a,b):=\psi(a)-\psi(b)-\psi'(b)(a-b).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9sb-escort-chernoff-saddle}，
+\[
+C_{\mathrm{Ch}}(p,q)
+=
+s_\ast\psi(p)+(1-s_\ast)\psi(q)-\psi(r_\ast),
+\qquad
+r_\ast=s_\ast p+(1-s_\ast)q,
+\]
+且 \(r_\ast\) 的定义等价于
+\[
+\psi'(r_\ast)=\frac{\psi(q)-\psi(p)}{q-p}.
+\]
+于是
+\[
+D_\psi(p,r_\ast)-D_\psi(q,r_\ast)
+=
+\psi(p)-\psi(q)-\psi'(r_\ast)(p-q)=0,
+\]
+故两侧 Bregman 散度相等。另一方面，
+\[
+s_\ast D_\psi(p,r_\ast)+(1-s_\ast)D_\psi(q,r_\ast)
+=
+s_\ast\psi(p)+(1-s_\ast)\psi(q)-\psi(r_\ast)
+=
+C_{\mathrm{Ch}}(p,q).
+\]
+由于加权平均的两项已经相等，它们都必等于 \(C_{\mathrm{Ch}}(p,q)\)。证毕。
+\end{proof}
+
+\begin{conjecture}[escort 乘积试验的统计维数临界跃迁]\label{conj:conclusion-binfold-escort-statistical-dimension-critical-scale}
+固定 \(Q<\infty\)，并考虑样本数随分辨率变化的 escort 试验族
+\[
+\mathcal E_m^{(n_m,Q)}:=\{\pi_{m,q}^{\otimes n_m}:0\le q\le Q\}.
+\]
+则尺度
+\[
+n_m\asymp \Bigl(\frac{2}{\varphi}\Bigr)^m
+\]
+应是其统计维数的尖锐临界点。更具体地，预期存在如下三相分裂：
+\[
+n_m=o\!\left(\Bigl(\frac{2}{\varphi}\Bigr)^m\right)
+\Longrightarrow
+\mathcal E_m^{(n_m,Q)}
+\ \text{在 Le Cam/Blackwell 意义下退化为一维二项实验};
+\]
+\[
+n_m\sim c\Bigl(\frac{2}{\varphi}\Bigr)^m
+\Longrightarrow
+\text{出现非平凡的双坐标临界极限实验};
+\]
+\[
+n_m\gg \Bigl(\frac{2}{\varphi}\Bigr)^m
+\Longrightarrow
+\Delta_{\mathrm{LeCam}}\!\bigl(\mathcal E_m^{(n_m,Q)},\mathcal G^{(n_m,Q)}\bigr)\not\to 0.
+\]
+其直接动机是定理 \ref{thm:xi-time-part9sb-escort-fixed-n-binomial-blackwell} 中的误差主项
+\[
+n_m\,C_Q\Bigl(\frac{\varphi}{2}\Bigr)^m,
+\]
+它恰在上述尺度首次达到常数量级；因此第二统计坐标若要从末位塌缩之外浮现，唯一自然窗口正是这一临界区。
+\end{conjecture}
+
+\noindent
+因此，bin-fold escort 族在已有的单样本 Blackwell 等价与 Bayes 风险塌缩之外，还呈现出三重进一步刚性：其一，固定样本数下的整个有界损失决策范畴都被末位计数 \(N_n\) 完全吸收；其二，二元 Chernoff 指数并非由参数区间上的任意插值点给出，而是由 escort 弧上的唯一 Bregman 等距接触点锁定；其三，这种一维塌缩不应在所有样本尺度上永久保持，而应当在 \(n_m\asymp(2/\varphi)^m\) 处发生真正的统计维数相变。于是，escort 试验族的结论层结构不仅是单比特实验的闭式化，而且自然指向一条由临界样本规模触发的更高维实验分岔图景。
+
+若再把这一固定样本图景与单标量幂散度辨识、相对均匀基线的二原子散度闭包、末位统计量的亚临界 product-Le-Cam 等价，以及局部 Fisher--LAN 公式并读，则一维塌缩还可继续强化为一条此前未显式抽出的秩一统计几何链：在 \(n_m=o((2/\varphi)^m)\) 的整个亚临界区，完整 escort 温度实验、全部极限 \(f\)-散度、Fisher--Rao 几何与 LAN 切空间都不再携带彼此独立的自由度，而是被同一个常数级模参数统一生成。
+
+\input{thm__conclusion-binfold-rankone-subcritical-geometry}
+
+\endinput

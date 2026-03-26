@@ -1,0 +1,1004 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Event-time rescaling error budget from exact tau(k) quantiles.
+
+Goal: quantify the time-change uncertainty when replacing step-time n by event-time k
+through the hitting time tau(k) := inf {n >= 1 : T_n >= k}.
+
+We compute exact quantiles of tau(k) under the theta=0 Parry equilibrium of the
+40-state real-input kernel, using a dynamic programming recursion for the binned
+distribution of the event-count T_n.
+
+We additionally instantiate k at the twisted mixing scale:
+  k_mix := ceil(mu_e * tau_mix)
+where tau_mix is read from artifacts/export/real_input_40_event_clock_vs_tau_mix.json.
+
+Outputs:
+- artifacts/export/real_input_40_event_time_rescaling_error_budget.json
+- sections/generated/tab_real_input_40_event_time_rescaling_error_budget.tex
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import time
+from dataclasses import asdict, dataclass
+from pathlib import Path
+from typing import Dict, List, Tuple
+
+import numpy as np
+
+from common_paths import export_dir, generated_dir
+from exp_real_input_40_time_correlation import _pick_pf_eigpair, parry_markov
+from exp_sync_kernel_real_input_40 import (
+    build_kernel_edges,
+    build_kernel_map,
+    build_real_input_states,
+    build_weighted_matrix,
+)
+
+
+def _fmt(x: float) -> str:
+    if math.isnan(x):
+        return "\\mathrm{NaN}"
+    if not math.isfinite(x):
+        return "\\infty"
+    return f"{x:.12f}"
+
+
+def _phi() -> float:
+    return (1.0 + math.sqrt(5.0)) / 2.0
+
+
+def _edge_e(
+    states: List[Tuple[str, int, int]],
+    kernel_map: Dict[Tuple[str, int], Tuple[str, int]],
+    i: int,
+    j: int,
+) -> int:
+    (s, _px, _py) = states[i]
+    (dst_state, x, y) = states[j]
+    d = int(x) + int(y)
+    dst2, e = kernel_map[(s, d)]
+    if dst2 != dst_state:
+        raise RuntimeError(
+            f"edge mismatch: {states[i]} -> {states[j]} gives dst={dst2}"
+        )
+    return int(e)
+
+
+def _build_edges(
+    P: np.ndarray,
+    states: List[Tuple[str, int, int]],
+    kernel_map: Dict[Tuple[str, int], Tuple[str, int]],
+) -> List[List[Tuple[int, float, int]]]:
+    # adjacency list: out[i] = [(j, pij, e), ...]
+    n = int(P.shape[0])
+    out: List[List[Tuple[int, float, int]]] = []
+    for i in range(n):
+        lst: List[Tuple[int, float, int]] = []
+        for j in range(n):
+            pij = float(P[i, j])
+            if pij <= 0.0:
+                continue
+            e = _edge_e(states, kernel_map, i=i, j=j)
+            lst.append((j, pij, int(e)))
+        out.append(lst)
+    return out
+
+
+def _mu_from_edges(pi: np.ndarray, out: List[List[Tuple[int, float, int]]]) -> float:
+    mu = 0.0
+    for i, w in enumerate(pi.tolist()):
+        if w <= 0.0:
+            continue
+        for _j, pij, e in out[i]:
+            mu += float(w) * float(pij) * float(e)
+    return float(mu)
+
+
+def _dist_Tn_binned(
+    *,
+    pi: np.ndarray,
+    out: List[List[Tuple[int, float, int]]],
+    n_max: int,
+    k_cap: int,
+    tick_seconds: float = 20.0,
+) -> List[np.ndarray]:
+    # Bin index m=0..k_cap where bin k_cap represents counts >= k_cap.
+    n_states = int(len(out))
+    dp = np.zeros((n_states, k_cap + 1), dtype=float)
+    dp[:, 0] = pi
+
+    dists: List[np.ndarray] = [np.sum(dp, axis=0).copy()]
+    t_last = time.time()
+    for n in range(1, n_max + 1):
+        nxt = np.zeros_like(dp)
+        for i in range(n_states):
+            row = dp[i]
+            if float(np.sum(row)) <= 0.0:
+                continue
+            for j, pij, e in out[i]:
+                if e == 0:
+                    nxt[j, :] += row * pij
+                else:
+                    # shift right by 1 with saturation at k_cap
+                    nxt[j, 1:k_cap] += row[0 : k_cap - 1] * pij
+                    nxt[j, k_cap] += (row[k_cap - 1] + row[k_cap]) * pij
+        dp = nxt
+        dists.append(np.sum(dp, axis=0).copy())
+        now = time.time()
+        if now - t_last >= tick_seconds:
+            print(f"[rescale-budget] progressed n={n}/{n_max}", flush=True)
+            t_last = now
+    return dists
+
+
+def _tail_prob(dist: np.ndarray, k: int) -> float:
+    # P(T_n >= k) using binned dist[0..k_cap] where last bin is >=k_cap.
+    k_cap = len(dist) - 1
+    if k <= 0:
+        return 1.0
+    if k > k_cap:
+        # We did not keep bins beyond k_cap; treat as 0 by construction.
+        return 0.0
+    return float(np.sum(dist[k:]))
+
+
+def _quantile_tau(
+    dists: List[np.ndarray],
+    k: int,
+    q: float,
+) -> int:
+    # Minimal n >= 1 such that P(tau(k) <= n) >= q, i.e. P(T_n >= k) >= q.
+    if not (0.0 <= q <= 1.0):
+        raise ValueError("q must be in [0,1]")
+    for n in range(1, len(dists)):
+        if _tail_prob(dists[n], k=k) >= q:
+            return n
+    return len(dists) - 1
+
+
+def _write_tex(
+    path: Path,
+    mu: float,
+    rho: float,
+    q_lo: float,
+    q_hi: float,
+    rows: List[Dict[str, float]],
+) -> None:
+    lines: List[str] = []
+    lines.append(
+        "% AUTO-GENERATED by scripts/exp_real_input_40_event_time_rescaling_error_budget.py"
+    )
+    lines.append("\\begin{table}[H]")
+    lines.append("\\centering")
+    lines.append("\\scriptsize")
+    lines.append("\\setlength{\\tabcolsep}{6pt}")
+    lines.append("\\renewcommand{\\arraystretch}{1.15}")
+    lines.append(
+        "\\caption{事件时间换时误差预算：$\\tau(k)$ 的精确分位数与指数包络扰动（真实输入 40 状态核；$t=0$ Parry 平衡态）。"
+        + "设 $\\mu_e="
+        + _fmt(mu)
+        + "$，$\\rho=\\rho_{\\mathrm{corr}}(0)="
+        + _fmt(rho)
+        + "$，$\\tau(k)=\\inf\\{n\\ge1:\\,T_n\\ge k\\}$。"
+        + "表中 $n_{\\mathrm{lo}},n_{\\mathrm{hi}}$ 满足 $\\mathbb{P}(\\tau(k)\\le n_{\\mathrm{lo}})\\ge "
+        + f"{q_lo:.3g}"
+        + "$ 与 $\\mathbb{P}(\\tau(k)\\le n_{\\mathrm{hi}})\\ge "
+        + f"{q_hi:.3g}"
+        + "$。"
+        "并给出 $\\rho^{\\tau(k)}$ 相对 $\\rho^{k/\\mu_e}$ 的乘性不确定性区间 $[\\rho^{n_{\\mathrm{hi}}-k/\\mu_e},\\,\\rho^{n_{\\mathrm{lo}}-k/\\mu_e}]$（由 $\\rho\\in(0,1)$ 的单调性确定）。}"
+    )
+    lines.append("\\label{tab:real-input-40-event-time-rescaling-error-budget}")
+    lines.append("\\begin{tabular}{r r r r r r}")
+    lines.append("\\toprule")
+    lines.append(
+        "$k$ & $k/\\mu_e$ & $n_{\\mathrm{lo}}$ & $n_{\\mathrm{hi}}$ & $\\max|n-k/\\mu_e|$ & $\\rho^{n_{\\mathrm{hi}}-k/\\mu_e} \\sim \\rho^{n_{\\mathrm{lo}}-k/\\mu_e}$\\\\"
+    )
+    lines.append("\\midrule")
+    for r in rows:
+        lines.append(
+            f"{int(r['k'])}"
+            f" & {_fmt(r['k_over_mu'])}"
+            f" & {int(r['n_lo'])}"
+            f" & {int(r['n_hi'])}"
+            f" & {_fmt(r['max_abs_dev'])}"
+            f" & ${_fmt(r['rho_factor_min'])}\\,\\sim\\,{_fmt(r['rho_factor_max'])}$\\\\"
+        )
+    lines.append("\\bottomrule")
+    lines.append("\\end{tabular}")
+    lines.append("\\end{table}")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _write_tex_focus(
+    path: Path,
+    mu: float,
+    rho: float,
+    tau_mix: float,
+    q_lo: float,
+    q_hi: float,
+    rows: List[Dict[str, float]],
+) -> None:
+    rho_tau_mix = float(pow(rho, float(tau_mix)))
+    lines: List[str] = []
+    lines.append(
+        "% AUTO-GENERATED by scripts/exp_real_input_40_event_time_rescaling_error_budget.py"
+    )
+    lines.append("\\begin{table}[H]")
+    lines.append("\\centering")
+    lines.append("\\scriptsize")
+    lines.append("\\setlength{\\tabcolsep}{6pt}")
+    lines.append("\\renewcommand{\\arraystretch}{1.15}")
+    lines.append(
+        "\\caption{事件时间指数包络在扭曲混合尺度处的对齐比较（真实输入 40 状态核；$t=0$ Parry 平衡态）。"
+        + "设 $\\mu_e="
+        + _fmt(mu)
+        + "$，$\\rho=\\rho_{\\mathrm{corr}}(0)="
+        + _fmt(rho)
+        + "$，$\\tau_{\\mathrm{mix}}="
+        + _fmt(tau_mix)
+        + "$，并记 $\\rho^{\\tau_{\\mathrm{mix}}}="
+        + _fmt(rho_tau_mix)
+        + "$。"
+        + "对 $k$ 的严格换时 $\\tau(k)=\\inf\\{n\\ge1:\\,T_n\\ge k\\}$，令 $n_{\\mathrm{lo}},n_{\\mathrm{med}},n_{\\mathrm{hi}}$ 分别为"
+        + f" $q_{{\\mathrm{{lo}}}}={q_lo:.3g}$、$0.5$、$q_{{\\mathrm{{hi}}}}={q_hi:.3g}$ 的精确分位数（由 $\\mathbb{{P}}(\\tau(k)\\le n)=\\mathbb{{P}}(T_n\\ge k)$ 的有限步递推给出）。"
+        + "表中最后一列给出 $\\rho^{\\tau(k)}$ 在 $[q_{\\mathrm{lo}},q_{\\mathrm{hi}}]$ 区间上的乘性范围，相对于 $\\rho^{\\tau_{\\mathrm{mix}}}$ 的比值区间"
+        + " $[\\rho^{n_{\\mathrm{hi}}-\\tau_{\\mathrm{mix}}},\\,\\rho^{n_{\\mathrm{lo}}-\\tau_{\\mathrm{mix}}}]$。}"
+    )
+    lines.append("\\label{tab:real-input-40-event-time-envelope-vs-tau-mix}")
+    lines.append("\\begin{tabular}{r r r r r r}")
+    lines.append("\\toprule")
+    lines.append(
+        "$k$ & $k/\\mu_e$ & $n_{\\mathrm{lo}}$ & $n_{\\mathrm{med}}$ & $n_{\\mathrm{hi}}$ & $\\rho^{n_{\\mathrm{hi}}-\\tau_{\\mathrm{mix}}} \\sim \\rho^{n_{\\mathrm{lo}}-\\tau_{\\mathrm{mix}}}$\\\\"
+    )
+    lines.append("\\midrule")
+    for r in rows:
+        lines.append(
+            f"{int(r['k'])}"
+            f" & {_fmt(r['k_over_mu'])}"
+            f" & {int(r['n_lo'])}"
+            f" & {int(r['n_med'])}"
+            f" & {int(r['n_hi'])}"
+            f" & ${_fmt(r['rho_vs_tau_mix_min'])}\\,\\sim\\,{_fmt(r['rho_vs_tau_mix_max'])}$\\\\"
+        )
+    lines.append("\\bottomrule")
+    lines.append("\\end{tabular}")
+    lines.append("\\end{table}")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _write_tex_tau_eff(
+    path: Path,
+    mu: float,
+    rho: float,
+    tau_mix: float,
+    q_lo: float,
+    q_hi: float,
+    rows: List[Dict[str, float]],
+) -> None:
+    tau_corr_step = float(1.0 / (-math.log(rho)))
+    lines: List[str] = []
+    lines.append(
+        "% AUTO-GENERATED by scripts/exp_real_input_40_event_time_rescaling_error_budget.py"
+    )
+    lines.append("\\begin{table}[H]")
+    lines.append("\\centering")
+    lines.append("\\scriptsize")
+    lines.append("\\setlength{\\tabcolsep}{6pt}")
+    lines.append("\\renewcommand{\\arraystretch}{1.15}")
+    caption = (
+        "分位数调整后的事件时间相关尺度：$\\tau_{\\mathrm{eff}}^{(e)}(k)$ 与扭曲混合时间 $\\tau_{\\mathrm{mix}}$ 的对比（真实输入 40 状态核；$t=0$ Parry 平衡态）。"
+        + f"设步数时间指数包络为 $\\rho^n$，其中 $\\rho=\\rho_{{\\mathrm{{corr}}}}(0)={_fmt(rho)}$，"
+        + f"$\\tau_{{\\mathrm{{corr}}}}(0)=1/(-\\log\\rho)={_fmt(tau_corr_step)}$。"
+        + "对事件阈值 $k$ 的击中时间 $\\tau(k)$，以其精确分位数 $n_{\\mathrm{lo}},n_{\\mathrm{med}},n_{\\mathrm{hi}}$ 诱导事件时间的有效相关尺度"
+        + " $\\tau_{\\mathrm{eff}}^{(e)}(k):=(k/\\tau(k))\\,\\tau_{\\mathrm{corr}}(0)$。"
+        + "表中给出 $[q_{\\mathrm{lo}},q_{\\mathrm{hi}}]$ 区间内的尺度区间"
+        + " $[\\tau_{\\mathrm{eff,lo}}^{(e)}(k),\\tau_{\\mathrm{eff,hi}}^{(e)}(k)]=[(k/n_{\\mathrm{hi}})\\tau_{\\mathrm{corr}}(0),(k/n_{\\mathrm{lo}})\\tau_{\\mathrm{corr}}(0)]$，"
+        + f"其中 $q_{{\\mathrm{{lo}}}}={q_lo:.3g}$，$q_{{\\mathrm{{hi}}}}={q_hi:.3g}$，并比较 $\\tau_{{\\mathrm{{mix}}}}={_fmt(tau_mix)}$ 与该区间的比值。"
+    )
+    lines.append("\\caption{" + caption + "}")
+    lines.append("\\label{tab:real-input-40-event-time-tau-eff-vs-tau-mix}")
+    lines.append("\\begin{tabular}{r r r r r r}")
+    lines.append("\\toprule")
+    lines.append(
+        "$k$ & $k/\\mu_e$ & $\\tau_{\\mathrm{eff,lo}}^{(e)}(k)$ & $\\tau_{\\mathrm{eff,med}}^{(e)}(k)$ & $\\tau_{\\mathrm{eff,hi}}^{(e)}(k)$ & $\\tau_{\\mathrm{mix}}/\\tau_{\\mathrm{eff,hi}}^{(e)} \\sim \\tau_{\\mathrm{mix}}/\\tau_{\\mathrm{eff,lo}}^{(e)}$\\\\"
+    )
+    lines.append("\\midrule")
+    for r in rows:
+        lines.append(
+            f"{int(r['k'])}"
+            f" & {_fmt(r['k_over_mu'])}"
+            f" & {_fmt(r['tau_eff_lo'])}"
+            f" & {_fmt(r['tau_eff_med'])}"
+            f" & {_fmt(r['tau_eff_hi'])}"
+            f" & ${_fmt(r['tau_mix_over_tau_eff_hi'])}\\,\\sim\\,{_fmt(r['tau_mix_over_tau_eff_lo'])}$\\\\"
+        )
+    lines.append("\\bottomrule")
+    lines.append("\\end{tabular}")
+    lines.append("\\end{table}")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _tau_pmf_from_dists(dists: List[np.ndarray], k: int) -> List[float]:
+    # pmf[n] = P(tau(k) = n) for n=0..n_max where n_max=len(dists)-1.
+    # Convention: pmf[0]=0 since tau(k) is defined on n>=1.
+    n_max = len(dists) - 1
+    F = [0.0] * (n_max + 1)
+    for n in range(0, n_max + 1):
+        Fn = float(_tail_prob(dists[n], k=k))
+        if Fn < 0.0:
+            Fn = 0.0
+        if Fn > 1.0:
+            Fn = 1.0
+        F[n] = Fn
+    pmf = [0.0] * (n_max + 1)
+    if n_max >= 1:
+        pmf[1] = float(F[1])
+    for n in range(2, n_max + 1):
+        pmf[n] = float(F[n] - F[n - 1])
+    return pmf
+
+
+def _rho_tau_expectation_bounds(
+    *,
+    dists: List[np.ndarray],
+    k: int,
+    rho: float,
+) -> Dict[str, float]:
+    # Compute a rigorous interval for E[rho^{tau(k)}] using finite-horizon PMF and
+    # a trivial tail bound.
+    n_max = len(dists) - 1
+    if not (0.0 < rho < 1.0):
+        raise ValueError("rho must be in (0,1)")
+    pmf = _tau_pmf_from_dists(dists, k=k)
+    partial = 0.0
+    for n in range(1, n_max + 1):
+        partial += float(pow(rho, float(n))) * float(pmf[n])
+    # Tail: for n>n_max, rho^n <= rho^{n_max+1}.
+    F_nmax = float(_tail_prob(dists[n_max], k=k))
+    if F_nmax < 0.0:
+        F_nmax = 0.0
+    if F_nmax > 1.0:
+        F_nmax = 1.0
+    tail_prob = float(max(0.0, 1.0 - F_nmax))
+    tail_upper = float(pow(rho, float(n_max + 1))) * tail_prob
+    return {
+        "n_max": float(n_max),
+        "E_rho_tau_lo": float(partial),
+        "E_rho_tau_hi": float(partial + tail_upper),
+        "tail_prob": float(tail_prob),
+        "tail_upper": float(tail_upper),
+    }
+
+
+def _tauE_bounds_from_E_bounds(
+    *,
+    E_lo: float,
+    E_hi: float,
+    rho: float,
+) -> Dict[str, float]:
+    # Map bounds for E[rho^{tau(k)}] into bounds for the effective exponent
+    # tauE := log(E)/log(rho). Note log(rho)<0 so the inequality direction flips.
+    if not (0.0 < rho < 1.0):
+        raise ValueError("rho must be in (0,1)")
+    if not (E_lo > 0.0 and E_hi > 0.0 and E_lo <= E_hi):
+        raise ValueError("need 0 < E_lo <= E_hi")
+    log_rho = float(math.log(float(rho)))
+    if not (log_rho < 0.0 and math.isfinite(log_rho)):
+        raise ValueError("log(rho) must be finite and <0")
+    t_lo_raw = float(math.log(float(E_lo)) / log_rho)
+    t_hi_raw = float(math.log(float(E_hi)) / log_rho)
+    t_lo = float(min(t_lo_raw, t_hi_raw))
+    t_hi = float(max(t_lo_raw, t_hi_raw))
+    return {
+        "tauE_lo": float(t_lo),
+        "tauE_hi": float(t_hi),
+    }
+
+
+def _write_tex_rho_tau_expectation(
+    path: Path,
+    mu: float,
+    rho: float,
+    tau_mix: float,
+    n_max: int,
+    rows: List[Dict[str, float]],
+) -> None:
+    rho_tau_mix = float(pow(rho, float(tau_mix)))
+    lines: List[str] = []
+    lines.append(
+        "% AUTO-GENERATED by scripts/exp_real_input_40_event_time_rescaling_error_budget.py"
+    )
+    lines.append("\\begin{table}[H]")
+    lines.append("\\centering")
+    lines.append("\\scriptsize")
+    lines.append("\\setlength{\\tabcolsep}{6pt}")
+    lines.append("\\renewcommand{\\arraystretch}{1.15}")
+    caption = (
+        "事件换时的期望级证书：$\\mathbb{E}(\\rho^{\\tau(k)})$ 的严格区间与 $\\rho^{\\tau_{\\mathrm{mix}}}$ 对比（真实输入 40 状态核；$t=0$ Parry 平衡态）。"
+        + "设 $\\mu_e="
+        + _fmt(mu)
+        + "$，$\\rho=\\rho_{\\mathrm{corr}}(0)="
+        + _fmt(rho)
+        + "$，$\\tau_{\\mathrm{mix}}="
+        + _fmt(tau_mix)
+        + "$，并记 $\\rho^{\\tau_{\\mathrm{mix}}}="
+        + _fmt(rho_tau_mix)
+        + "$。"
+        + "对每个 $k$，用有限步递推得到 $F_n(k)=\\mathbb{P}(\\tau(k)\\le n)=\\mathbb{P}(T_n\\ge k)$（$n\\le "
+        + str(int(n_max))
+        + "$），从而 $p_n(k)=F_n(k)-F_{n-1}(k)$。"
+        + "由此计算 $\\sum_{n=1}^{n_{\\max}}\\rho^n p_n(k)$，并用尾界"
+        + " $\\sum_{n>n_{\\max}}\\rho^n p_n(k)\\le \\rho^{n_{\\max}+1}\\,\\mathbb{P}(\\tau(k)>n_{\\max})$ 给出 $\\mathbb{E}(\\rho^{\\tau(k)})$ 的严格区间。"
+    )
+    lines.append("\\caption{" + caption + "}")
+    lines.append("\\label{tab:real-input-40-event-time-rho-tau-expectation-vs-tau-mix}")
+    lines.append("\\begin{tabular}{r r r r r r}")
+    lines.append("\\toprule")
+    lines.append(
+        "$k$ & $k/\\mu_e$ & $\\mathbb{E}(\\rho^{\\tau(k)})_{\\mathrm{lo}}$ & $\\mathbb{E}(\\rho^{\\tau(k)})_{\\mathrm{hi}}$ & $\\mathbb{E}(\\rho^{\\tau(k)})/\\rho^{\\tau_{\\mathrm{mix}}}$ & $\\mathbb{P}(\\tau(k)>n_{\\max})$\\\\"
+    )
+    lines.append("\\midrule")
+    for r in rows:
+        ratio_lo = float(r["E_rho_tau_lo"] / rho_tau_mix)
+        ratio_hi = float(r["E_rho_tau_hi"] / rho_tau_mix)
+        lines.append(
+            f"{int(r['k'])}"
+            f" & {_fmt(r['k_over_mu'])}"
+            f" & {_fmt(r['E_rho_tau_lo'])}"
+            f" & {_fmt(r['E_rho_tau_hi'])}"
+            f" & ${_fmt(ratio_lo)}\\,\\sim\\,{_fmt(ratio_hi)}$"
+            f" & {_fmt(r['tail_prob'])}\\\\"
+        )
+    lines.append("\\bottomrule")
+    lines.append("\\end{tabular}")
+    lines.append("\\end{table}")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _write_tex_tauE_delta(
+    path: Path,
+    mu: float,
+    rho: float,
+    tau_mix: float,
+    n_max: int,
+    rows: List[Dict[str, float]],
+) -> None:
+    lines: List[str] = []
+    lines.append(
+        "% AUTO-GENERATED by scripts/exp_real_input_40_event_time_rescaling_error_budget.py"
+    )
+    lines.append("\\begin{table}[H]")
+    lines.append("\\centering")
+    lines.append("\\scriptsize")
+    lines.append("\\setlength{\\tabcolsep}{6pt}")
+    lines.append("\\renewcommand{\\arraystretch}{1.15}")
+    caption = (
+        "事件换时的期望有效指数与偏移：定义 $\\tau^{(E)}(k):=\\log\\mathbb{E}(\\rho^{\\tau(k)})/\\log\\rho$，并记"
+        + " $\\Delta^{(E)}(k):=\\tau^{(E)}(k)-k/\\mu_e$（真实输入 40 状态核；$t=0$ Parry 平衡态）。"
+        + "设 $\\mu_e="
+        + _fmt(mu)
+        + "$，$\\rho=\\rho_{\\mathrm{corr}}(0)="
+        + _fmt(rho)
+        + "$，$\\tau_{\\mathrm{mix}}="
+        + _fmt(tau_mix)
+        + "$，并用 $n_{\\max}="
+        + str(int(n_max))
+        + "$ 的有限递推与尾界得到 $\\mathbb{E}(\\rho^{\\tau(k)})$ 的严格区间（见表 "
+        + "\\ref{tab:real-input-40-event-time-rho-tau-expectation-vs-tau-mix}）。"
+        + "由 $\\log$ 单调性与 $\\log\\rho<0$，可把该区间推出 $\\tau^{(E)}(k)$ 与 $\\Delta^{(E)}(k)$ 的严格区间。"
+    )
+    lines.append("\\caption{" + caption + "}")
+    lines.append("\\label{tab:real-input-40-event-time-tauE-delta-vs-tau-mix}")
+    lines.append("\\begin{tabular}{r r r r r r}")
+    lines.append("\\toprule")
+    lines.append(
+        "$k$ & $k/\\mu_e$ & $\\tau^{(E)}(k)_{\\mathrm{lo}}$ & $\\tau^{(E)}(k)_{\\mathrm{hi}}$ & $\\Delta^{(E)}(k)_{\\mathrm{lo}}$ & $\\Delta^{(E)}(k)_{\\mathrm{hi}}$\\\\"
+    )
+    lines.append("\\midrule")
+    for r in rows:
+        lines.append(
+            f"{int(r['k'])}"
+            f" & {_fmt(r['k_over_mu'])}"
+            f" & {_fmt(r['tauE_lo'])}"
+            f" & {_fmt(r['tauE_hi'])}"
+            f" & {_fmt(r['delta_lo'])}"
+            f" & {_fmt(r['delta_hi'])}\\\\"
+        )
+    lines.append("\\bottomrule")
+    lines.append("\\end{tabular}")
+    lines.append("\\end{table}")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+@dataclass(frozen=True)
+class Payload:
+    model: str
+    n_max: int
+    q_lo: float
+    q_hi: float
+    mu_event: float
+    rho_corr: float
+    tau_mix: float
+    k_mix: int
+    k_list: List[int]
+    rows: List[Dict[str, float]]
+
+
+@dataclass(frozen=True)
+class FocusPayload:
+    model: str
+    n_max: int
+    q_lo: float
+    q_hi: float
+    mu_event: float
+    rho_corr: float
+    tau_mix: float
+    k_mix: int
+    k_focus: List[int]
+    rows: List[Dict[str, float]]
+
+
+@dataclass(frozen=True)
+class TauEffPayload:
+    model: str
+    n_max: int
+    q_lo: float
+    q_hi: float
+    mu_event: float
+    rho_corr: float
+    tau_corr_step: float
+    tau_mix: float
+    k_mix: int
+    k_focus: List[int]
+    rows: List[Dict[str, float]]
+
+
+@dataclass(frozen=True)
+class RhoTauExpectationPayload:
+    model: str
+    n_max: int
+    mu_event: float
+    rho_corr: float
+    tau_mix: float
+    k_mix: int
+    k_focus: List[int]
+    rows: List[Dict[str, float]]
+
+
+@dataclass(frozen=True)
+class TauEDeltaPayload:
+    model: str
+    n_max: int
+    mu_event: float
+    rho_corr: float
+    tau_mix: float
+    k_mix: int
+    k_focus: List[int]
+    rows: List[Dict[str, float]]
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Event-time rescaling error budget.")
+    parser.add_argument("--n-max", type=int, default=260)
+    parser.add_argument("--q-lo", type=float, default=0.05)
+    parser.add_argument("--q-hi", type=float, default=0.95)
+    parser.add_argument(
+        "--event-clock-json",
+        type=str,
+        default="artifacts/export/real_input_40_event_clock_vs_tau_mix.json",
+    )
+    parser.add_argument(
+        "--k-extra",
+        type=str,
+        default="5,10,20,50,73",
+        help="Comma-separated extra k values; k_mix is always included.",
+    )
+    parser.add_argument(
+        "--json-out",
+        type=str,
+        default=str(
+            export_dir() / "real_input_40_event_time_rescaling_error_budget.json"
+        ),
+    )
+    parser.add_argument(
+        "--tex-out",
+        type=str,
+        default=str(
+            generated_dir() / "tab_real_input_40_event_time_rescaling_error_budget.tex"
+        ),
+    )
+    parser.add_argument(
+        "--k-mix-window",
+        type=int,
+        default=2,
+        help="Include k in [k_mix-window, k_mix+window] for the focused envelope-vs-tau_mix table.",
+    )
+    parser.add_argument(
+        "--focus-json-out",
+        type=str,
+        default=str(export_dir() / "real_input_40_event_time_envelope_vs_tau_mix.json"),
+    )
+    parser.add_argument(
+        "--focus-tex-out",
+        type=str,
+        default=str(
+            generated_dir() / "tab_real_input_40_event_time_envelope_vs_tau_mix.tex"
+        ),
+    )
+    parser.add_argument(
+        "--tau-eff-json-out",
+        type=str,
+        default=str(export_dir() / "real_input_40_event_time_tau_eff_vs_tau_mix.json"),
+    )
+    parser.add_argument(
+        "--tau-eff-tex-out",
+        type=str,
+        default=str(
+            generated_dir() / "tab_real_input_40_event_time_tau_eff_vs_tau_mix.tex"
+        ),
+    )
+    parser.add_argument(
+        "--rho-tau-json-out",
+        type=str,
+        default=str(
+            export_dir()
+            / "real_input_40_event_time_rho_tau_expectation_vs_tau_mix.json"
+        ),
+    )
+    parser.add_argument(
+        "--rho-tau-tex-out",
+        type=str,
+        default=str(
+            generated_dir()
+            / "tab_real_input_40_event_time_rho_tau_expectation_vs_tau_mix.tex"
+        ),
+    )
+    parser.add_argument(
+        "--tauE-delta-json-out",
+        type=str,
+        default=str(
+            export_dir() / "real_input_40_event_time_tauE_delta_vs_tau_mix.json"
+        ),
+    )
+    parser.add_argument(
+        "--tauE-delta-tex-out",
+        type=str,
+        default=str(
+            generated_dir() / "tab_real_input_40_event_time_tauE_delta_vs_tau_mix.tex"
+        ),
+    )
+    args = parser.parse_args()
+
+    n_max = int(args.n_max)
+    q_lo = float(args.q_lo)
+    q_hi = float(args.q_hi)
+    if n_max < 1:
+        raise SystemExit("--n-max must be >= 1")
+    if not (0.0 < q_lo < 1.0 and 0.0 < q_hi < 1.0 and q_lo < q_hi):
+        raise SystemExit("need 0<q_lo<q_hi<1")
+
+    meta = json.loads(
+        (Path(__file__).resolve().parent.parent / str(args.event_clock_json)).read_text(
+            encoding="utf-8"
+        )
+    )
+    mu = float(meta.get("mu_event", float("nan")))
+    tau_mix = float(meta.get("tau_mix", float("nan")))
+    if not (
+        math.isfinite(mu) and mu > 0.0 and math.isfinite(tau_mix) and tau_mix > 0.0
+    ):
+        raise SystemExit("invalid mu_event or tau_mix in event-clock json")
+    k_mix = int(math.ceil(mu * tau_mix))
+    if k_mix < 1:
+        k_mix = 1
+
+    k_extra = [int(x.strip()) for x in str(args.k_extra).split(",") if x.strip()]
+    k_list = sorted({k for k in ([k_mix] + k_extra) if k >= 1})
+
+    # Correlation ratio rho at t=0 is phi^{-1}.
+    rho = 1.0 / _phi()
+
+    # Build Parry chain and a transition edge list.
+    edges = build_kernel_edges()
+    kernel_map = build_kernel_map(edges)
+    states = build_real_input_states()
+    B0 = build_weighted_matrix(0.0, 0.0, 0.0, states, kernel_map)
+    lam, _eigvals, v, u = _pick_pf_eigpair(B0)
+    pi, P = parry_markov(B0, lam=lam, v=v, u=u)
+    out = _build_edges(P, states, kernel_map)
+    mu2 = _mu_from_edges(pi, out)
+    if math.isfinite(mu2) and abs(mu2 - mu) > 5e-10:
+        mu = mu2
+
+    # DP bins up to max_k, with saturation at max_k.
+    k_cap = max(k_list)
+    dists = _dist_Tn_binned(pi=pi, out=out, n_max=n_max, k_cap=k_cap)
+
+    rows: List[Dict[str, float]] = []
+    for k in k_list:
+        k_over_mu = float(k) / float(mu)
+        n_lo = _quantile_tau(dists, k=k, q=q_lo)
+        n_hi = _quantile_tau(dists, k=k, q=q_hi)
+        max_abs_dev = float(
+            max(abs(float(n_lo) - k_over_mu), abs(float(n_hi) - k_over_mu))
+        )
+
+        # Multiplicative uncertainty for rho^{tau(k)} around rho^{k/mu}.
+        # Since rho in (0,1): exponent larger -> smaller value.
+        d_hi = float(n_hi) - k_over_mu
+        d_lo = float(n_lo) - k_over_mu
+        rho_factor_min = float(pow(rho, d_hi))
+        rho_factor_max = float(pow(rho, d_lo))
+        if rho_factor_min > rho_factor_max:
+            rho_factor_min, rho_factor_max = rho_factor_max, rho_factor_min
+
+        rows.append(
+            {
+                "k": float(k),
+                "k_over_mu": float(k_over_mu),
+                "n_lo": float(n_lo),
+                "n_hi": float(n_hi),
+                "max_abs_dev": float(max_abs_dev),
+                "rho_factor_min": float(rho_factor_min),
+                "rho_factor_max": float(rho_factor_max),
+            }
+        )
+
+    payload = Payload(
+        model="real_input_40",
+        n_max=int(n_max),
+        q_lo=float(q_lo),
+        q_hi=float(q_hi),
+        mu_event=float(mu),
+        rho_corr=float(rho),
+        tau_mix=float(tau_mix),
+        k_mix=int(k_mix),
+        k_list=[int(k) for k in k_list],
+        rows=rows,
+    )
+
+    jout = Path(args.json_out)
+    jout.parent.mkdir(parents=True, exist_ok=True)
+    jout.write_text(
+        json.dumps(asdict(payload), indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(f"[rescale-budget] wrote {jout}", flush=True)
+
+    tout = Path(args.tex_out)
+    _write_tex(tout, mu=mu, rho=rho, q_lo=q_lo, q_hi=q_hi, rows=rows)
+    print(f"[rescale-budget] wrote {tout}", flush=True)
+
+    # Focused neighborhood around k_mix: compare event-time envelope to step-time tau_mix.
+    w = int(args.k_mix_window)
+    if w < 0:
+        w = 0
+    k_focus = [k for k in range(max(1, k_mix - w), k_mix + w + 1)]
+    focus_rows: List[Dict[str, float]] = []
+    for k in k_focus:
+        k_over_mu = float(k) / float(mu)
+        n_lo = _quantile_tau(dists, k=k, q=q_lo)
+        n_med = _quantile_tau(dists, k=k, q=0.5)
+        n_hi = _quantile_tau(dists, k=k, q=q_hi)
+
+        d_hi = float(n_hi) - float(tau_mix)
+        d_lo = float(n_lo) - float(tau_mix)
+        rho_vs_tau_mix_min = float(pow(rho, d_hi))
+        rho_vs_tau_mix_max = float(pow(rho, d_lo))
+        if rho_vs_tau_mix_min > rho_vs_tau_mix_max:
+            rho_vs_tau_mix_min, rho_vs_tau_mix_max = (
+                rho_vs_tau_mix_max,
+                rho_vs_tau_mix_min,
+            )
+
+        focus_rows.append(
+            {
+                "k": float(k),
+                "k_over_mu": float(k_over_mu),
+                "n_lo": float(n_lo),
+                "n_med": float(n_med),
+                "n_hi": float(n_hi),
+                "rho_vs_tau_mix_min": float(rho_vs_tau_mix_min),
+                "rho_vs_tau_mix_max": float(rho_vs_tau_mix_max),
+            }
+        )
+
+    fpayload = FocusPayload(
+        model="real_input_40",
+        n_max=int(n_max),
+        q_lo=float(q_lo),
+        q_hi=float(q_hi),
+        mu_event=float(mu),
+        rho_corr=float(rho),
+        tau_mix=float(tau_mix),
+        k_mix=int(k_mix),
+        k_focus=[int(k) for k in k_focus],
+        rows=focus_rows,
+    )
+    fjout = Path(args.focus_json_out)
+    fjout.parent.mkdir(parents=True, exist_ok=True)
+    fjout.write_text(
+        json.dumps(asdict(fpayload), indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(f"[rescale-budget] wrote {fjout}", flush=True)
+
+    ftout = Path(args.focus_tex_out)
+    _write_tex_focus(
+        ftout,
+        mu=mu,
+        rho=rho,
+        tau_mix=tau_mix,
+        q_lo=q_lo,
+        q_hi=q_hi,
+        rows=focus_rows,
+    )
+    print(f"[rescale-budget] wrote {ftout}", flush=True)
+
+    # Quantile-adjusted effective event-time correlation scale.
+    tau_corr_step = float(1.0 / (-math.log(rho)))
+    tau_eff_rows: List[Dict[str, float]] = []
+    for r in focus_rows:
+        k = float(r["k"])
+        k_over_mu = float(r["k_over_mu"])
+        n_lo = float(r["n_lo"])
+        n_med = float(r["n_med"])
+        n_hi = float(r["n_hi"])
+
+        tau_eff_lo = float((k / n_hi) * tau_corr_step)
+        tau_eff_med = float((k / n_med) * tau_corr_step)
+        tau_eff_hi = float((k / n_lo) * tau_corr_step)
+        tau_mix_over_tau_eff_hi = float(tau_mix / tau_eff_hi)
+        tau_mix_over_tau_eff_lo = float(tau_mix / tau_eff_lo)
+        tau_eff_rows.append(
+            {
+                "k": float(k),
+                "k_over_mu": float(k_over_mu),
+                "tau_eff_lo": float(tau_eff_lo),
+                "tau_eff_med": float(tau_eff_med),
+                "tau_eff_hi": float(tau_eff_hi),
+                "tau_mix_over_tau_eff_hi": float(tau_mix_over_tau_eff_hi),
+                "tau_mix_over_tau_eff_lo": float(tau_mix_over_tau_eff_lo),
+            }
+        )
+
+    tpayload = TauEffPayload(
+        model="real_input_40",
+        n_max=int(n_max),
+        q_lo=float(q_lo),
+        q_hi=float(q_hi),
+        mu_event=float(mu),
+        rho_corr=float(rho),
+        tau_corr_step=float(tau_corr_step),
+        tau_mix=float(tau_mix),
+        k_mix=int(k_mix),
+        k_focus=[int(k) for k in k_focus],
+        rows=tau_eff_rows,
+    )
+    tjout = Path(args.tau_eff_json_out)
+    tjout.parent.mkdir(parents=True, exist_ok=True)
+    tjout.write_text(
+        json.dumps(asdict(tpayload), indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(f"[rescale-budget] wrote {tjout}", flush=True)
+
+    ttout = Path(args.tau_eff_tex_out)
+    _write_tex_tau_eff(
+        ttout,
+        mu=mu,
+        rho=rho,
+        tau_mix=tau_mix,
+        q_lo=q_lo,
+        q_hi=q_hi,
+        rows=tau_eff_rows,
+    )
+    print(f"[rescale-budget] wrote {ttout}", flush=True)
+
+    # Expectation-level certificate for E[rho^{tau(k)}] (rigorous interval).
+    rho_tau_rows: List[Dict[str, float]] = []
+    for k in k_focus:
+        k_over_mu = float(k) / float(mu)
+        b = _rho_tau_expectation_bounds(dists=dists, k=int(k), rho=rho)
+        rho_tau_rows.append(
+            {
+                "k": float(k),
+                "k_over_mu": float(k_over_mu),
+                "E_rho_tau_lo": float(b["E_rho_tau_lo"]),
+                "E_rho_tau_hi": float(b["E_rho_tau_hi"]),
+                "tail_prob": float(b["tail_prob"]),
+                "tail_upper": float(b["tail_upper"]),
+            }
+        )
+
+    rpayload = RhoTauExpectationPayload(
+        model="real_input_40",
+        n_max=int(n_max),
+        mu_event=float(mu),
+        rho_corr=float(rho),
+        tau_mix=float(tau_mix),
+        k_mix=int(k_mix),
+        k_focus=[int(k) for k in k_focus],
+        rows=rho_tau_rows,
+    )
+    rjout = Path(args.rho_tau_json_out)
+    rjout.parent.mkdir(parents=True, exist_ok=True)
+    rjout.write_text(
+        json.dumps(asdict(rpayload), indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(f"[rescale-budget] wrote {rjout}", flush=True)
+
+    rtout = Path(args.rho_tau_tex_out)
+    _write_tex_rho_tau_expectation(
+        rtout,
+        mu=mu,
+        rho=rho,
+        tau_mix=tau_mix,
+        n_max=int(n_max),
+        rows=rho_tau_rows,
+    )
+    print(f"[rescale-budget] wrote {rtout}", flush=True)
+
+    # Effective exponent tau^(E)(k) := log E[rho^{tau(k)}] / log rho and its offset.
+    tauE_rows: List[Dict[str, float]] = []
+    for r in rho_tau_rows:
+        k = int(r["k"])
+        k_over_mu = float(r["k_over_mu"])
+        tb = _tauE_bounds_from_E_bounds(
+            E_lo=float(r["E_rho_tau_lo"]),
+            E_hi=float(r["E_rho_tau_hi"]),
+            rho=float(rho),
+        )
+        tauE_lo = float(tb["tauE_lo"])
+        tauE_hi = float(tb["tauE_hi"])
+        delta_lo = float(tauE_lo - k_over_mu)
+        delta_hi = float(tauE_hi - k_over_mu)
+        tauE_rows.append(
+            {
+                "k": float(k),
+                "k_over_mu": float(k_over_mu),
+                "tauE_lo": float(tauE_lo),
+                "tauE_hi": float(tauE_hi),
+                "delta_lo": float(delta_lo),
+                "delta_hi": float(delta_hi),
+            }
+        )
+
+    tpayload = TauEDeltaPayload(
+        model="real_input_40",
+        n_max=int(n_max),
+        mu_event=float(mu),
+        rho_corr=float(rho),
+        tau_mix=float(tau_mix),
+        k_mix=int(k_mix),
+        k_focus=[int(k) for k in k_focus],
+        rows=tauE_rows,
+    )
+    tjout = Path(args.tauE_delta_json_out)
+    tjout.parent.mkdir(parents=True, exist_ok=True)
+    tjout.write_text(
+        json.dumps(asdict(tpayload), indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(f"[rescale-budget] wrote {tjout}", flush=True)
+
+    ttout = Path(args.tauE_delta_tex_out)
+    _write_tex_tauE_delta(
+        ttout,
+        mu=float(mu),
+        rho=float(rho),
+        tau_mix=float(tau_mix),
+        n_max=int(n_max),
+        rows=tauE_rows,
+    )
+    print(f"[rescale-budget] wrote {ttout}", flush=True)
+
+
+if __name__ == "__main__":
+    main()

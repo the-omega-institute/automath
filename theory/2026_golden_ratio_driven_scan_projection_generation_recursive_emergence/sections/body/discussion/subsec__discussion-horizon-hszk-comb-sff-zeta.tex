@@ -1,0 +1,219 @@
+\subsection{视界交互的统计零知识：comb--钻石范数判据、退耦机制与 \texorpdfstring{$\zeta$}{zeta}-谱闭环}\label{subsec:discussion-horizon-hszk-comb-sff-zeta}
+上一小节以“截断视界多极矩/Toeplitz--PSD 证书”作为可观测代数约束，给出 no-hair 的信息论重述与端点二次压缩所导出的可区分性面积律（\S\ref{subsec:discussion-horizon-zk-toeplitz-area-law}）。
+本小节将该口径提升到量子交互层：把视界接口刻画为 quantum comb（量子策略/量子网络的可插接骨架），并以交互映射的钻石范数给出“视界统计零知识”（HSZK）的可检验判据；随后将 HSZK 误差与外部可获取信息（Holevo 泄露）定量对齐，并用“近似二设计 \(\Rightarrow\) 退耦”把混沌搅乱机制转化为零知识可模拟性；最后给出一条可操作的谱诊断路径：由框势（frame potential）与谱形状因子（SFF）控制近似设计阈值，并在 \(\zeta\)-谱模型中把零点结构确定为零知识误差时间行为的唯一谱输入。
+\par
+本小节的角色仅为接口化与可证伪对接：除明确标注为猜想者外，所有断言均为标准量子信息论不等式或其直接推论，并不作为正文既有证明链的前提。
+\par
+
+\paragraph{宏观荷纤维与视界 comb}
+令 \(\mathcal{H}_A\) 为系统的微观自由度（可取有限维），并令 \(\Omega\) 为其状态集合（纯态或混态皆可）。
+设 \(Q:\Omega\to\mathcal{Q}\) 为宏观荷映射（例如质量/角动量/电荷的离散化扇区标签），并记荷纤维为 \(Q^{-1}(q)\)。
+对任意交互时长 \(t\ge 0\)，以 quantum comb 形式给出视界接口
+\[
+\mathsf{H}_{\le t}:\Omega\to \mathrm{Comb}\bigl(\mathsf{In}_{\le t}\to \mathsf{Out}_{\le t}\bigr),
+\]
+其含义是：外部验证者可在 \([0,t]\) 内自适应注入探测态并对输出做测量，而 \(\mathsf{H}_{\le t}(\omega)\) 给出在微态 \(\omega\) 下允许的一切交互式 CPTP 策略的等价类（参见 \cite{ChiribellaDArianoPerinotti2008QuantumCircuitArchitecture,ChiribellaDArianoPerinotti2009FrameworkQuantumNetworks}）。
+令外部策略（验证者）为任意允许的 comb \(\mathsf{V}_{\le t}\)，其与 \(\mathsf{H}_{\le t}(\omega)\) 复合后产生一个末态视图（密度算子）
+\[
+\sigma^{(t,\mathsf{V})}_\omega\ :=\ \mathrm{View}_t(\omega;\mathsf{V})\ \in\ \mathsf{D}(\mathcal{H}_{\mathsf{V}}),
+\]
+其中 \(\mathcal{H}_{\mathsf{V}}\) 为验证者末态寄存器。
+\par
+
+\begin{definition}[视界统计零知识（HSZK）]\label{def:discussion-hszk}
+固定 \(t\ge 0\) 与 \(\varepsilon\in[0,1]\)。
+称视界接口 \(\mathsf{H}_{\le t}\) 在误差 \(\varepsilon\) 下满足\textbf{视界统计零知识}（记为 \(\mathrm{HSZK}_\varepsilon(t)\)），若对任意宏观荷 \(q\in\mathcal{Q}\)，存在仅依赖 \(q\) 的“荷因子化接口”
+\[
+\widetilde{\mathsf{H}}_{\le t,q}\ \in\ \mathrm{Comb}\bigl(\mathsf{In}_{\le t}\to \mathsf{Out}_{\le t}\bigr)
+\]
+使得对任意允许的外部策略 \(\mathsf{V}_{\le t}\) 与任意 \(\omega\in Q^{-1}(q)\) 都有
+\begin{equation}\label{eq:discussion-hszk-view-trace}
+\norm{\sigma^{(t,\mathsf{V})}_\omega-\widetilde{\sigma}^{(t,\mathsf{V})}_q}_1\ \le\ \varepsilon,
+\qquad
+\widetilde{\sigma}^{(t,\mathsf{V})}_q:=\mathrm{View}_t(\widetilde{\mathsf{H}}_{\le t,q};\mathsf{V}).
+\end{equation}
+其中 \(\norm{\cdot}_1\) 为迹范数。
+\end{definition}
+
+\begin{definition}[comb 的钻石范数距离]\label{def:discussion-comb-diamond}
+对任意两条同型 comb \(X,Y\in \mathrm{Comb}(\mathsf{In}_{\le t}\to\mathsf{Out}_{\le t})\)，定义其交互区分范数（钻石范数/策略范数）为
+\begin{equation}\label{eq:discussion-comb-diamond-def}
+\boxed{\;
+\norm{X-Y}_\diamond
+:=\sup_{\mathsf{V}_{\le t}}\ \norm{\mathrm{View}_t(X;\mathsf{V})-\mathrm{View}_t(Y;\mathsf{V})}_1\;}
+\end{equation}
+其中上确界取遍所有允许的外部策略 comb。
+\end{definition}
+
+\begin{theorem}[HSZK 的范畴化刻画与钻石范数判据]\label{thm:discussion-hszk-iff-diamond}
+在定义 \ref{def:discussion-hszk}--\ref{def:discussion-comb-diamond} 的设定下，
+\(\mathrm{HSZK}_\varepsilon(t)\)
+当且仅当对任意 \(q\in\mathcal{Q}\) 存在 \(\widetilde{\mathsf{H}}_{\le t,q}\) 使
+\begin{equation}\label{eq:discussion-hszk-diamond}
+\boxed{\;
+\sup_{\omega\in Q^{-1}(q)}\ \norm{\mathsf{H}_{\le t}(\omega)-\widetilde{\mathsf{H}}_{\le t,q}}_\diamond\ \le\ \varepsilon\;.}
+\end{equation}
+在此意义下，“视界不泄露微态信息”的物理表述被严格提升为一个交互范数判据：在固定荷扇区内，视界 comb 族在 \(\norm{\cdot}_\diamond\) 下集中到单一荷接口 \(\widetilde{\mathsf{H}}_{\le t,q}\) 的 \(\varepsilon\)-邻域。
+\end{theorem}
+
+\begin{proof}
+由定义 \ref{def:discussion-comb-diamond}，对任意固定的 \((\omega,q)\) 与任意候选 \(\widetilde{\mathsf{H}}_{\le t,q}\)，不等式
+\(
+\norm{\mathsf{H}_{\le t}(\omega)-\widetilde{\mathsf{H}}_{\le t,q}}_\diamond\le \varepsilon
+\)
+等价于对所有 \(\mathsf{V}_{\le t}\) 成立 \eqref{eq:discussion-hszk-view-trace}。
+对 \(\omega\in Q^{-1}(q)\) 取上确界即得 \eqref{eq:discussion-hszk-diamond}，从而与 \(\mathrm{HSZK}_\varepsilon(t)\) 的量词结构一致。证毕。
+\end{proof}
+
+\begin{remark}[规范模拟器：微正则/最大熵代表与荷对称中心]\label{rem:discussion-canonical-simulator-microcanonical}
+定义 \ref{def:discussion-hszk} 的“荷因子化接口”并不要求唯一。
+在给定荷扇区 \(q\) 上，一个自然的规范选择是取最大熵代表（微正则平均态）
+\[
+\bar\rho_q:=\frac{I_q}{\dim\mathcal{H}_q},
+\]
+其中 \(\mathcal{H}_q\) 为荷扇区的有效子空间。
+若 \(\omega\mapsto \mathsf{H}_{\le t}(\omega)\) 在状态上是仿射的（物理 CPTP 线性性）且在扇区内对称协变，则
+\(\widetilde{\mathsf{H}}_{\le t,q}:=\mathsf{H}_{\le t}(\bar\rho_q)\)
+给出一条荷对称的规范模拟器。
+在该协变口径下，\(\bar\rho_q\) 是扇区内唯一的对称不动点，因此亦是“荷对称接口类”中最自然的中心选择；由此得到的模拟器可作为后续把谱统计量引入 \(\varepsilon\) 误差控制的统一入口。
+\end{remark}
+
+\begin{proposition}[零知识误差与可获取信息的等价刻画：Holevo 泄露界与反向界]\label{prop:discussion-hszk-holevo}
+固定 \(t,q\) 并令 \(\{\sigma^{(t,\mathsf{V})}_\omega\}_{\omega\in Q^{-1}(q)}\) 为某一外部策略 \(\mathsf{V}_{\le t}\) 所产生的视图态族。
+若 \(\mathrm{HSZK}_\varepsilon(t)\) 成立，则存在 \(\widetilde{\sigma}^{(t,\mathsf{V})}_q\) 使对所有 \(\omega\in Q^{-1}(q)\) 有 \(\norm{\sigma^{(t,\mathsf{V})}_\omega-\widetilde{\sigma}^{(t,\mathsf{V})}_q}_1\le \varepsilon\)。
+于是对任意分布 \(p\)（支撑于 \(Q^{-1}(q)\)）的 Holevo 信息满足
+\begin{equation}\label{eq:discussion-holevo-upper}
+\boxed{\;
+\chi\bigl(\{p(\omega),\sigma^{(t,\mathsf{V})}_\omega\}\bigr)
+\ \le\
+2\varepsilon\,\log d_{\mathsf{V}}+2\,h(\varepsilon)\;}
+\end{equation}
+其中 \(d_{\mathsf{V}}:=\dim\mathcal{H}_{\mathsf{V}}\)，\(h\) 为二元熵函数。
+\par
+反之，若对所有允许的 \(\mathsf{V}_{\le t}\) 与所有分布 \(p\subseteq Q^{-1}(q)\) 都有 \(\chi\le \delta\)，
+则对任意 \(\omega,\omega'\in Q^{-1}(q)\) 有
+\begin{equation}\label{eq:discussion-holevo-reverse}
+\boxed{\;
+\norm{\sigma^{(t,\mathsf{V})}_\omega-\sigma^{(t,\mathsf{V})}_{\omega'}}_1
+\ \le\
+\sqrt{8(\ln 2)\,\delta}\;}
+\end{equation}
+从而存在 \(\varepsilon=O(\sqrt{\delta})\) 使 \(\mathrm{HSZK}_\varepsilon(t)\) 成立（在常数因子意义下）。
+因此，“视界零知识”与“外部可获取微态信息趋零”在定量上互为等价刻画。
+\end{proposition}
+
+\begin{proof}
+上界 \eqref{eq:discussion-holevo-upper} 为 Holevo 信息的连续性估计：当一族态在迹距意义下位于同一 \(\varepsilon\)-球内时，其可区分信息量被 \(O(\varepsilon\log d+h(\varepsilon))\) 控制（可由 Alicki--Fannes/Audenaert 型不等式推出）。
+\par
+反向界 \eqref{eq:discussion-holevo-reverse} 取二点分布 \(p=\frac12(\delta_\omega+\delta_{\omega'})\)。
+此时 Holevo 信息写作
+\(
+\chi=\frac12 D(\sigma_\omega\Vert \bar\sigma)+\frac12 D(\sigma_{\omega'}\Vert \bar\sigma)
+\)
+其中 \(\bar\sigma=\frac12(\sigma_\omega+\sigma_{\omega'})\)。
+由量子 Pinsker 不等式 \(D(\rho\Vert\sigma)\ge \frac{1}{2\ln 2}\norm{\rho-\sigma}_1^2\)，并注意
+\(\sigma_\omega-\bar\sigma=\frac12(\sigma_\omega-\sigma_{\omega'})\)，得
+\(
+\chi\ge \frac{1}{8\ln 2}\norm{\sigma_\omega-\sigma_{\omega'}}_1^2
+\)，从而推出 \eqref{eq:discussion-holevo-reverse}。
+最后对所有 \(\omega\) 取同一参考点 \(\omega_0\) 并令 \(\widetilde{\sigma}:=\sigma_{\omega_0}\)，即可得到 \(\mathrm{HSZK}_{O(\sqrt\delta)}\)（常数因子级别）。证毕。
+\end{proof}
+
+\paragraph{近似二设计 \texorpdfstring{$\Rightarrow$}{=>} 退耦 \texorpdfstring{$\Rightarrow$}{=>} HSZK}
+为把“混沌搅乱”严格转译为零知识误差上界，采用近似二设计的退耦定理（\cite{SzehrDupuisTomamichelRenner2013DecouplingTwoDesigns}）。
+
+\begin{theorem}[近似二设计的退耦推出视界零知识（交互可观测上界）]\label{thm:discussion-2design-decoupling-hszk}
+令 \(A\) 表示系统微观自由度，\(R\) 为参考系（可吸收验证者的私有寄存器以覆盖交互最坏情形）。
+设在时长 \(t\) 内的有效演化由两步组成：先取随机幺正 \(U\sim\mathcal{E}_t\) 作用于 \(A\)，再施加固定 CPTP 过程 \(T:A\to B\)（辐射释放/外部可及约化），并记初始态为 \(\rho_{AR}\)。
+若 \(\mathcal{E}_t\) 为 \(\delta\)-近似幺正二设计，则存在一个仅依赖于 \(T\) 的边缘态 \(\omega_B\) 使
+\begin{equation}\label{eq:discussion-decoupling-bound}
+\mathbb{E}_{U\sim\mathcal{E}_t}\,
+\norm{\,T\bigl((U\otimes I_R)\rho_{AR}(U^\dagger\otimes I_R)\bigr)-\omega_B\otimes\rho_R\,}_1
+\ \le\
+\mathrm{poly}(\dim A)\cdot \sqrt{\delta}\cdot 2^{-\frac12\Xi_{\min}},
+\end{equation}
+其中 \(\Xi_{\min}\) 为由 \(\rho_{AR}\) 与 \(T\) 的最小熵数据决定的负指数（参见 \cite{SzehrDupuisTomamichelRenner2013DecouplingTwoDesigns} 的精确表述）。
+\par
+将 \eqref{eq:discussion-decoupling-bound} 解释为：在达到二设计阈值的时间尺度之后，外部可见边缘与参考系（即微态标签）在迹距意义下近似张量分离，故存在只依赖宏观扇区的模拟输出 \(\omega_B\)，并由此诱导 \(\mathrm{HSZK}_{\varepsilon(t)}(t)\)（其中 \(\varepsilon(t)\) 由右端显式控制）。
+\end{theorem}
+
+\paragraph{谱形式：SFF/框势 \texorpdfstring{$\Rightarrow$}{=>} 近似设计阈值 \texorpdfstring{$\Rightarrow$}{=>} HSZK}
+谱形状因子（SFF）与框势为“接近 Haar 二阶矩”的可计算诊断量（参见 \cite{Liu2018SpectralFormFactors} 与相关设计文献）。
+
+\begin{definition}[谱形状因子（SFF）]\label{def:discussion-sff}
+给定哈密顿量 \(H\) 与配分函数 \(Z(\beta)=\Tr(e^{-\beta H})\)，定义标准归一化的谱形状因子
+\[
+\mathrm{SFF}(\beta,t):=\left|\frac{Z(\beta+\mathrm{i}t)}{Z(\beta)}\right|^2.
+\]
+\end{definition}
+
+\begin{proposition}[由框势/谱诊断得到 HSZK 的可计算充分条件]\label{prop:discussion-framepotential-sff-to-hszk}
+设 \(\mathcal{E}_t\) 为时间平滑后的演化集合，\(F^{(2)}(\mathcal{E}_t)\) 为其二阶框势，且 \(F^{(2)}_{\mathrm{Haar}}\) 为 Haar 值。
+若存在函数 \(\eta(t)\) 使
+\[
+F^{(2)}(\mathcal{E}_t)-F^{(2)}_{\mathrm{Haar}}\ \le\ \eta(t),
+\]
+则可推出 \(\mathcal{E}_t\) 为 \(\delta(t)\)-近似二设计（其中 \(\delta(t)\) 可由 \(\eta(t)\) 显式控制），从而由定理 \ref{thm:discussion-2design-decoupling-hszk} 得到
+\(\mathrm{HSZK}_{\varepsilon(t)}(t)\)，且 \(\varepsilon(t)\) 由 \(\eta(t)\)（及最小熵数据）显式控制。
+\par
+在许多标准谱模型中，\(\eta(t)\) 可由某一平滑后的 \(\mathrm{SFF}(\beta,t)\) 或其高阶矩上界控制；因此“HSZK 的启动/失效”可被归约为 SFF 进入 ramp--plateau 区域的量化判别。
+\end{proposition}
+
+\paragraph{\texorpdfstring{$\zeta$}{zeta}-谱模型：零点作为零知识误差的唯一谱入口}
+考虑截断能谱 \(E_n=\log n\)（\(n\le N\)）。
+令
+\(
+Z_N(s)=\sum_{n\le N}n^{-s}
+\)，则对 \(\beta>0\) 有
+\(
+Z_N(\beta+\mathrm{i}t)=\sum_{n\le N}e^{-(\beta+\mathrm{i}t)\log n}
+\)
+为该谱模型的截断配分函数。
+因此其 SFF 具有闭式
+\[
+\mathrm{SFF}_N(\beta,t)=\left|\frac{Z_N(\beta+\mathrm{i}t)}{Z_N(\beta)}\right|^2.
+\]
+在适当正则化与极限口径下，\(Z_N(s)\) 与 \(\zeta(s)\) 的解析结构同一，从而把 SFF 的 dip--ramp--plateau 行为与 \(\zeta\) 的模行为直接对齐（参见 \cite{BasuDasKrishnan2025AnalyticZetaRamp}）。
+
+\begin{proposition}[\texorpdfstring{$\zeta$}{zeta}-谱模型下的显式零知识控制律：零点进入误差界的唯一入口]\label{prop:discussion-zeta-spectral-hszk}
+在命题 \ref{prop:discussion-framepotential-sff-to-hszk} 的“零知识--SFF 控制律”口径下，
+若 \(\eta(t)\) 可由 \(\mathrm{SFF}_N(\beta,t)\) 的某一平滑上界控制，则 \(\mathrm{HSZK}_{\varepsilon(t)}(t)\) 的误差上界可被一个仅由 \(|Z_N(\beta+\mathrm{i}t)|\)（及其平滑平均）决定的函数所控制。
+在 \(N\to\infty\) 的解析延拓口径下，这等价于仅由 \(|\zeta(\beta+\mathrm{i}t)|\) 控制。
+\par
+由于 \(\zeta\) 的模行为在解析数论中最终由其零点集合所支配（Hadamard 分解/显式公式），故在该谱模型中：
+黎曼零点并非作为类比修辞出现，而是作为决定零知识误差时间行为的唯一谱输入量出现。
+\end{proposition}
+
+\begin{definition}[零知识混合时间]\label{def:discussion-zk-mixing-time}
+定义零知识混合时间
+\[
+t_{\mathrm{ZK}}(\varepsilon):=\inf\{\,t:\ \mathrm{HSZK}_{\varepsilon}(t)\ \text{成立}\,\}.
+\]
+\end{definition}
+
+\begin{corollary}[零知识混合时间与 Thouless 时间的同一化（可检验时间尺度）]\label{cor:discussion-zk-vs-thouless}
+若存在时间尺度 \(t_{\mathrm{Th}}\) 使得当 \(t\ge t_{\mathrm{Th}}\) 时，谱诊断量（SFF 或框势）进入稳定 ramp 并达到近似二设计阈值，则由命题 \ref{prop:discussion-framepotential-sff-to-hszk} 与定理 \ref{thm:discussion-2design-decoupling-hszk} 有
+\[
+t_{\mathrm{ZK}}(\varepsilon)\ \le\ t_{\mathrm{Th}}+O_\varepsilon(1),
+\]
+其中 \(O_\varepsilon(1)\) 由阈值与平滑方式决定。
+对 \(\zeta\)-谱模型，已有解析工作给出其 Thouless 时间为 \(O(1)\) 的证据（在其规范化定义下，见 \cite{BasuDasKrishnan2025AnalyticZetaRamp}），从而得到 \(t_{\mathrm{ZK}}(\varepsilon)=O(1)\) 的同阶结论。
+\end{corollary}
+
+\begin{conjecture}[视界零知识的谱刚性猜想：HSZK \texorpdfstring{$\Rightarrow$}{=>} 正弦核相关]\label{conj:discussion-horizon-zk-rigidity}
+设存在一族系统维数 \(d\to\infty\) 的视界接口 \(\{\mathsf{H}^{(d)}_{\le t}\}\)，并存在时间标度 \(t(d)=\mathrm{poly}(\log d)\) 使
+\(\mathrm{HSZK}_{o(1)}(t(d))\)
+对所有多项式复杂度外部交互策略一致成立。
+则猜想相应有效哈密顿量的展开能级在局部 unfolding 尺度上必须进入随机矩阵的能级排斥与正弦核二点相关普适类；
+换言之，若局部统计显著偏离 Montgomery 型配对相关（或其推广），则存在一族多项式复杂度交互验证者可构造出可观测的“知识泄露”区分器，从而否定 \(\mathrm{HSZK}_{o(1)}\)。
+该猜想把“零知识可模拟性”提升为一条谱普适性原则，并为数论中的配对相关目标提供一条信息论式的否证接口（可参照 \cite{GoldstonLeeSchettlerSuriajaya2025PairCorrelationConjecture} 的 PCC 推进口径）。
+\end{conjecture}
+
+\begin{remark}[近视界—零点实现的筛选原则：由 HSZK 约束零点实现机制]\label{rem:discussion-zk-filter-zero-realization}
+近视界动力学实现黎曼零点的提案（例如通过近视界标量场模频与非平凡零点的匹配机制）可在谱层面给出零点集合的实现候选（参见 \cite{Giri2010PhysicalRealizationRiemannZerosBlackHole} 之类的模型）。
+本小节提供一条额外的可证伪筛选原则：若同时要求“宏观荷固定下外部交互不泄露微态”（即满足 \(\mathrm{HSZK}_\varepsilon\) 的强形式），则其有效演化必须在交互意义下诱导近似二设计与退耦，从而其 SFF 必须进入 ramp--plateau 普适类，并满足与 \(\varepsilon(t)\) 一致的量化阈值。
+因此“零点实现”不再仅需匹配某一谱集合，而需同时通过零知识可模拟性与谱形状因子普适结构的双重约束；该原则把形式类比推进为可审计的接口条件。
+\end{remark}
+
+\endinput
+

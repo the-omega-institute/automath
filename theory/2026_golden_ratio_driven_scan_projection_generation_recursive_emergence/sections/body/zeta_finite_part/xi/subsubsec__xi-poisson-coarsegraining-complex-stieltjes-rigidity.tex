@@ -1,0 +1,371 @@
+\paragraph{复 Stieltjes 多极层级：六阶显式系数、耗散阶对齐与超多极刚性}
+在命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form}、命题 \ref{prop:xi-poisson-kl-dissipation-fractional-fisher} 与定理 \ref{thm:xi-poisson-cauchy-harmonic-moment-multipole-kl} 的框架内，
+下述结果把 Poisson--Cauchy 粗粒化的 KL 主项、全阶复矩展开与耗散阶数统一为一条可离线核验的闭合链。
+
+\begin{theorem}[KL 二项锐渐近的六次系数闭式]\label{thm:xi-poisson-cauchy-kl-two-term-explicit-coeff}
+设 \(\tilde\nu\) 为 \(\RR\) 上概率测度，均值 \(\bar\gamma\)，方差 \(\sigma^2\in(0,\infty)\)，并满足
+\[
+\int_{\RR}|\gamma-\bar\gamma|^6\,\dd\tilde\nu(\gamma)<\infty.
+\]
+记中心矩
+\[
+m_3:=\int_{\RR}(\gamma-\bar\gamma)^3\,\dd\tilde\nu(\gamma),\qquad
+m_4:=\int_{\RR}(\gamma-\bar\gamma)^4\,\dd\tilde\nu(\gamma).
+\]
+定义
+\[
+\tilde h_t:=\mathsf P_t*\tilde\nu,\qquad
+\tilde g_t(x):=\mathsf P_t(x-\bar\gamma),\qquad
+\mathsf P_t(x):=\frac1\pi\frac{t}{x^2+t^2}.
+\]
+则当 \(t\to\infty\) 时有
+\[
+\boxed{
+D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_t)
+=\frac{\sigma^4}{8t^4}
++\frac{1}{t^6}\!\left(\frac{\sigma^6}{64}-\frac{\sigma^2m_4}{8}+\frac{3m_3^2}{32}\right)
++o(t^{-6}).}
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-cauchy-poisson-kl-sharp-asymptotics} 的同一正规形记号，置
+\[
+\frac{\tilde h_t(x)}{\tilde g_t(x)}=1+\delta_t(x),\qquad
+y:=\frac{x-\bar\gamma}{t},
+\]
+则有
+\[
+\delta_t(x)
+=\frac{\sigma^2}{t^2}u(y)+\frac{m_3}{t^3}v(y)+\frac{m_4}{t^4}w(y)+O(t^{-5}),
+\]
+其中
+\[
+u(y)=\frac{3y^2-1}{(1+y^2)^2},\qquad
+v(y)=\frac{4y(y^2-1)}{(1+y^2)^3},\qquad
+w(y)=\frac{5y^4-10y^2+1}{(1+y^2)^4}.
+\]
+记
+\[
+G(y):=\frac1\pi\frac{1}{1+y^2},\qquad \tilde g_t(x)\,\dd x=G(y)\,\dd y.
+\]
+由 \(\int \tilde g_t\delta_t\,\dd x=0\) 与
+\(
+(1+\delta)\log(1+\delta)=\delta+\frac12\delta^2-\frac16\delta^3+O(\delta^4)
+\)，得到
+\[
+D_{\mathrm{KL}}(\tilde h_t\mid\tilde g_t)
+=\frac12\int \tilde g_t\delta_t^2\,\dd x
+-\frac16\int \tilde g_t\delta_t^3\,\dd x
++o(t^{-6}).
+\]
+由奇偶性（\(u,w\) 偶、\(v\) 奇）消去 \(t^{-5}\) 混合项，得
+\[
+\int \tilde g_t\delta_t^2\,\dd x
+=\frac{\sigma^4}{t^4}\!\int Gu^2
++\frac{1}{t^6}\!\left(2\sigma^2m_4\!\int Guw+m_3^2\!\int Gv^2\right)+o(t^{-6}),
+\]
+\[
+\int \tilde g_t\delta_t^3\,\dd x
+=\frac{\sigma^6}{t^6}\!\int Gu^3+o(t^{-6}).
+\]
+四个标准积分为
+\[
+\int_{\RR}Gu^2\,\dd y=\frac14,\quad
+\int_{\RR}Guw\,\dd y=-\frac18,\quad
+\int_{\RR}Gv^2\,\dd y=\frac{3}{16},\quad
+\int_{\RR}Gu^3\,\dd y=-\frac{3}{32}.
+\]
+代回即得所述闭式系数。证毕。
+\end{proof}
+
+\begin{theorem}[位置--尺度混合的全阶 Stieltjes 多极展开]\label{thm:xi-poisson-cauchy-complex-stieltjes-full-expansion}
+令 \((\Gamma,\mathcal A)\) 为 \(\RR\times(0,\infty)\) 值随机向量，均值 \((\bar\gamma,\bar a)\)。
+设对某个整数 \(M\ge 2\) 满足
+\[
+\mathbb E|Z|^{M+1}<\infty,\qquad
+Z:=(\Gamma-\bar\gamma)+i(\mathcal A-\bar a).
+\]
+定义
+\[
+h_t(x):=\mathbb E\!\left[\mathsf P_{t+\mathcal A}(x-\Gamma)\right],\qquad
+g_t(x):=\mathsf P_{t+\bar a}(x-\bar\gamma),\qquad t>0.
+\]
+则对全部 \(x\in\RR\) 有一致渐近展开
+\[
+\boxed{
+h_t(x)
+=g_t(x)+\frac1\pi\sum_{n=2}^{M}
+\Im\!\left(\frac{\mu_n}{(x-\bar\gamma-i(t+\bar a))^{n+1}}\right)
++O(t^{-M-2}),\quad t\to\infty,}
+\]
+其中
+\[
+\mu_n:=\mathbb E[Z^n]\qquad(n\ge 0).
+\]
+\end{theorem}
+\begin{proof}
+利用恒等式
+\[
+\mathsf P_s(u)=\frac1\pi\Im\frac{1}{u-is}\qquad(s>0),
+\]
+并置
+\[
+w:=x-\bar\gamma-i(t+\bar a)\in\CC_{-},
+\]
+可写成
+\[
+h_t(x)=\frac1\pi\,\Im\,\mathbb E\!\left[\frac{1}{w-Z}\right].
+\]
+当 \(t\) 足够大时有 \(|w|\ge t+\bar a\)，故
+\[
+\frac{1}{w-Z}
+=\sum_{n=0}^{M}\frac{Z^n}{w^{n+1}}+R_{M+1}(w,Z),
+\]
+\[
+R_{M+1}(w,Z)=\frac{Z^{M+1}}{w^{M+2}}\cdot \frac{1}{1-Z/w}.
+\]
+由 \(\mathbb E|Z|^{M+1}<\infty\) 与 \(|w|^{-1}\lesssim t^{-1}\) 得
+\[
+\mathbb E|R_{M+1}(w,Z)|\lesssim |w|^{-M-2}\lesssim t^{-M-2},
+\]
+且该界对 \(x\) 一致。
+再用 \(\mu_0=1,\mu_1=0\) 得
+\[
+\mathbb E\!\left[\frac{1}{w-Z}\right]
+=\frac1w+\sum_{n=2}^{M}\frac{\mu_n}{w^{n+1}}+O(t^{-M-2}).
+\]
+取虚部并乘 \(1/\pi\) 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[KL 主项的二阶复矩不变量]\label{cor:xi-poisson-cauchy-kl-leading-lorentz-invariant-m2}
+在定理 \ref{thm:xi-poisson-cauchy-complex-stieltjes-full-expansion} 下，若 \(\mathbb E|Z|^4<\infty\)，则
+\[
+\lim_{t\to\infty}(t+\bar a)^4D_{\mathrm{KL}}(h_t\mid g_t)=\frac{|\mu_2|^2}{8},
+\qquad \mu_2=\mathbb E[Z^2].
+\]
+并且
+\[
+\mu_2=\Var(\Gamma)-\Var(\mathcal A)+2i\,\Cov(\Gamma,\mathcal A),
+\]
+\[
+\frac{|\mu_2|^2}{8}
+=\frac{(\Var(\Gamma)-\Var(\mathcal A))^2+4\Cov(\Gamma,\mathcal A)^2}{8}.
+\]
+因此
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)=o((t+\bar a)^{-4})
+\iff \mu_2=0
+\iff
+\begin{cases}
+\Var(\Gamma)=\Var(\mathcal A),\\
+\Cov(\Gamma,\mathcal A)=0.
+\end{cases}
+\]
+\end{corollary}
+\begin{proof}
+在定理 \ref{thm:xi-poisson-cauchy-complex-stieltjes-full-expansion} 取 \(M=2\)，令 \(s=t+\bar a\)、\(y=(x-\bar\gamma)/s\)。
+写 \(\mu_2=a+ib\)，则
+\[
+\frac{h_t}{g_t}=1+\delta_t,\qquad
+\delta_t(x)=\frac{1}{s^2}\bigl(a\phi_{2,1}(y)+b\phi_{2,2}(y)\bigr)+O(s^{-3}),
+\]
+其中
+\[
+\phi_{2,1}(y)=\frac{3y^2-1}{(1+y^2)^2}\ \text{(偶)},\qquad
+\phi_{2,2}(y)=\frac{y(y^2-3)}{(1+y^2)^2}\ \text{(奇)}.
+\]
+仍记 \(G(y)=\pi^{-1}(1+y^2)^{-1}\)。
+由 \(\int g_t\delta_t=0\) 与二阶熵展开，
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac12\int g_t\delta_t^2\,\dd x+o(s^{-4}).
+\]
+奇偶性给出交叉项消失，且
+\[
+\int_{\RR}G\phi_{2,1}^2\,\dd y
+=\int_{\RR}G\phi_{2,2}^2\,\dd y
+=\frac14.
+\]
+故
+\[
+\int g_t\delta_t^2\,\dd x
+=\frac{a^2+b^2}{4s^4}+o(s^{-4})
+=\frac{|\mu_2|^2}{4s^4}+o(s^{-4}),
+\]
+从而
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)=\frac{|\mu_2|^2}{8s^4}+o(s^{-4}).
+\]
+其余等价式由 \(\mu_2\) 的实虚部展开直接得到。证毕。
+\end{proof}
+
+\begin{theorem}[多极阶 \texorpdfstring{$m$}{m} 的 KL 普适系数]\label{thm:xi-poisson-cauchy-kl-universal-cm-complex-moment}
+在定理 \ref{thm:xi-poisson-cauchy-complex-stieltjes-full-expansion} 的设定下，
+设某个 \(m\ge 2\) 满足
+\[
+\mu_2=\mu_3=\cdots=\mu_{m-1}=0,\qquad \mu_m\neq 0,
+\]
+且 \(\mathbb E|Z|^{m+1}<\infty\)。
+则
+\[
+\lim_{t\to\infty}(t+\bar a)^{2m}D_{\mathrm{KL}}(h_t\mid g_t)
+=C_m|\mu_m|^2,
+\qquad
+C_m=\frac{\binom{2m-2}{m-1}}{2^{2m}}.
+\]
+\end{theorem}
+\begin{proof}
+令 \(s=t+\bar a\)、\(w=x-\bar\gamma-is\)、\(y=(x-\bar\gamma)/s\)。
+由定理 \ref{thm:xi-poisson-cauchy-complex-stieltjes-full-expansion} 与低阶矩消失条件，
+\[
+h_t(x)=g_t(x)+\frac1\pi\Im\!\left(\frac{\mu_m}{w^{m+1}}\right)+O(s^{-m-2}),
+\]
+从而
+\[
+\delta_t(x):=\frac{h_t(x)}{g_t(x)}-1
+=\frac{1}{s^m}\Phi_m(y)+O(s^{-m-1}),
+\]
+\[
+\Phi_m(y):=(1+y^2)\Im\!\left(\mu_m(y-i)^{-(m+1)}\right).
+\]
+由 \(\int g_t\delta_t=0\) 与二阶熵展开，
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{1}{2s^{2m}}\int_{\RR}G(y)\Phi_m(y)^2\,\dd y+o(s^{-2m}).
+\]
+写 \(\mu_m=a+ib\)，并令
+\[
+\psi_{m,1}(y):=(1+y^2)\Im\!\big((y-i)^{-(m+1)}\big),\quad
+\psi_{m,2}(y):=(1+y^2)\Re\!\big((y-i)^{-(m+1)}\big),
+\]
+则 \(\Phi_m=a\psi_{m,1}+b\psi_{m,2}\)。
+用 \(y=\tan\theta\) 代换得
+\[
+G(y)\,\dd y=\frac{1}{\pi}\,\dd\theta,\qquad
+\frac{1+y^2}{(y-i)^{m+1}}
+=\cos^{m-1}\theta\,e^{\,i(m+1)\left(\frac{\pi}{2}-\theta\right)}.
+\]
+故 \(\psi_{m,1},\psi_{m,2}\) 是同权函数下正交的正弦/余弦模式，进而
+\[
+\int_{\RR}G\psi_{m,1}\psi_{m,2}\,\dd y=0,
+\]
+\[
+\int_{\RR}G\psi_{m,1}^2\,\dd y
+=\int_{\RR}G\psi_{m,2}^2\,\dd y
+=\frac{\binom{2m-2}{m-1}}{2^{2m-1}}.
+\]
+于是
+\[
+\int_{\RR}G\Phi_m^2\,\dd y
+=|\mu_m|^2\frac{\binom{2m-2}{m-1}}{2^{2m-1}},
+\]
+代回即得
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{\binom{2m-2}{m-1}}{2^{2m}}\frac{|\mu_m|^2}{s^{2m}}+o(s^{-2m}),
+\]
+从而结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[耗散阶与多极阶的严格对齐]\label{cor:xi-poisson-cauchy-i1-over-kl-ratio-2m}
+在定理 \ref{thm:xi-poisson-cauchy-kl-universal-cm-complex-moment} 的假设下，
+若 \((h_t,g_t)\) 沿 Poisson 半群演化并满足
+\[
+\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\mid g_t)=-I_1(h_t\mid g_t),
+\]
+则
+\[
+\lim_{t\to\infty}(t+\bar a)^{2m+1}I_1(h_t\mid g_t)
+=2m\,C_m|\mu_m|^2,
+\]
+\[
+\lim_{t\to\infty}\frac{(t+\bar a)\,I_1(h_t\mid g_t)}{D_{\mathrm{KL}}(h_t\mid g_t)}=2m.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-poisson-cauchy-kl-universal-cm-complex-moment}，
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=C_m|\mu_m|^2(t+\bar a)^{-2m}+o((t+\bar a)^{-2m}).
+\]
+对 \(t\) 求导并使用耗散恒等式得
+\[
+I_1(h_t\mid g_t)
+=2m\,C_m|\mu_m|^2(t+\bar a)^{-2m-1}+o((t+\bar a)^{-2m-1}),
+\]
+两条极限立即成立。证毕。
+\end{proof}
+
+\begin{theorem}[超多极衰减的分层刚性]\label{thm:xi-poisson-cauchy-supermultipole-hierarchy-rigidity}
+在定理 \ref{thm:xi-poisson-cauchy-complex-stieltjes-full-expansion} 的设定下，
+固定 \(m\ge 2\)，并假设 \(\mathbb E|Z|^{m+1}<\infty\)。
+则以下两命题等价：
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)=o((t+\bar a)^{-2m})\quad(t\to\infty),
+\]
+\[
+\mu_2=\mu_3=\cdots=\mu_m=0.
+\]
+进一步，若存在 \(\varepsilon>0\) 使
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)=O((t+\bar a)^{-2m-\varepsilon}),
+\]
+则必有 \(\mu_2=\cdots=\mu_m=0\)。
+若再附加分布可定性假设（例如复矩序列 \(\{\mu_n\}_{n\ge0}\) 在该模型类中唯一决定 \(Z\) 的分布），则
+\[
+\bigl(\forall N,\ D_{\mathrm{KL}}(h_t\mid g_t)=O((t+\bar a)^{-N})\bigr)
+\iff Z=0\ \text{a.s.}
+\iff h_t\equiv g_t\ \ (\forall t>0).
+\]
+\end{theorem}
+\begin{proof}
+\(\Rightarrow\) 方向用反证。若 \(\mu_2,\dots,\mu_m\) 不全为零，
+取最小 \(k\in\{2,\dots,m\}\) 使 \(\mu_k\neq 0\)。
+由定理 \ref{thm:xi-poisson-cauchy-kl-universal-cm-complex-moment}（对该 \(k\)）得
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)\sim C_k|\mu_k|^2(t+\bar a)^{-2k},
+\]
+与 \(o((t+\bar a)^{-2m})\)（因 \(2k\le 2m\)）矛盾，故必须 \(\mu_2=\cdots=\mu_m=0\)。
+\par
+\(\Leftarrow\) 方向：若 \(\mu_2=\cdots=\mu_m=0\)，由定理
+\ref{thm:xi-poisson-cauchy-complex-stieltjes-full-expansion}（取 \(M=m\)）得
+\[
+h_t(x)-g_t(x)=O\!\left(|w|^{-m-2}\right),
+\qquad
+w=x-\bar\gamma-i(t+\bar a).
+\]
+写 \(s=t+\bar a\)、\(y=(x-\bar\gamma)/s\)，则
+\[
+|h_t-g_t|
+\lesssim s^{-m-2}(1+y^2)^{-\frac{m+2}{2}},\qquad
+g_t=\frac{1}{\pi s}\frac{1}{1+y^2}.
+\]
+故
+\[
+|\delta_t|:=\left|\frac{h_t-g_t}{g_t}\right|
+\lesssim s^{-m-1}(1+y^2)^{-\frac m2},
+\]
+从而
+\[
+\int_{\RR}g_t\,\delta_t^2\,\dd x
+\lesssim s^{-2m}\!\int_{\RR}\frac{1}{\pi}\frac{1}{(1+y^2)^{m+1}}\,\dd y
+=O(s^{-2m}).
+\]
+进一步利用 \(h_t-g_t=O(|w|^{-m-2})\) 的 \(w\)-尺度衰减，
+右端可细化为 \(O(s^{-2m-2})\)，从而特别是 \(o(s^{-2m})\)。
+再由
+\(
+D_{\mathrm{KL}}=\frac12\int g_t\delta_t^2+o(\int g_t\delta_t^2)
+\)
+得到 \(D_{\mathrm{KL}}(h_t\mid g_t)=o(s^{-2m})\)。
+因此两命题等价。
+\par
+若给定 \(O((t+\bar a)^{-2m-\varepsilon})\)，同样反证：若存在 \(k\le m\) 使 \(\mu_k\neq 0\)，则主阶至多为 \((t+\bar a)^{-2m}\)，与更快幂律矛盾。
+\par
+最后在可定性假设下，若对所有 \(N\) 都有超多极衰减，则对每个 \(m\ge 2\) 应用已证等价性可得
+\(\mu_2=\cdots=\mu_m=0\)，故 \(\mu_n=0\)（\(n\ge 2\)）且 \(\mu_1=0\)。
+由可定性可知 \(Z\) 的分布与 \(\delta_0\) 一致，故 \(Z=0\) 几乎处处。
+反向显然：\(Z=0\) a.s. 即 \((\Gamma,\mathcal A)\) 退化到 \((\bar\gamma,\bar a)\)，从定义得 \(h_t\equiv g_t\)。证毕。
+\end{proof}
+
+\endinput

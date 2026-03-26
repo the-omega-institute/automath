@@ -1,0 +1,269 @@
+\subsection{广义 Stokes 母题的离散链条：规范变换、热力学极限与谱层矩}\label{subsec:discussion-generalized-stokes-path-sum}
+本小节抽取一个可被形式化复核的统一母题：在离散对象上，\emph{精确项的累积仅在边界留下贡献}。
+该母题把有限状态路径求和的规范不变性、热力学极限的同调不变性、有限状态链上的 Hodge--Stokes 分解以及超立方体差分能量与 Fourier 谱层矩之间的二项变换置于同一结构框架内；陈述均为可独立成文的命题与证明，不依赖解释性类比。
+
+\begin{theorem}[路径分配函数的离散 Stokes 规范不变性与 Lee--Yang 除子刚性]\label{thm:discussion-discrete-stokes-gauge-leyang}
+设 \(G=(V,E)\) 为有限有向多重图，取整数权函数 \(g:E\to\ZZ\)。
+对 \(u\in\CC^\times\) 定义带权邻接矩阵
+\[
+  A(u)_{ij}:=\sum_{e:i\to j}u^{g(e)}\in\CC[u,u^{-1}].
+\]
+对任意 \(m\ge 1\) 与端点 \(s,t\in V\)，定义长度 \(m\) 的端点分配函数
+\[
+  Z^{(m)}_{s\to t}(u):=\bigl(A(u)^m\bigr)_{st}\in\CC[u,u^{-1}],
+\]
+以及周期分配函数 \(Z^{(m)}_{\mathrm{cyc}}(u):=\Tr(A(u)^m)\)。
+令 \(\varphi:V\to\ZZ\) 为任意 \(0\)-余链，并令 \(g':=g+\delta\varphi\)，即对每条边 \(e\) 有
+\[
+  g'(e)=g(e)+\varphi(\mathrm{head}(e))-\varphi(\mathrm{tail}(e)).
+\]
+以 \(g'\) 定义 \(A'(u)\)、\(Z'^{(m)}_{s\to t}(u)\)、\(Z'^{(m)}_{\mathrm{cyc}}(u)\)。
+则对一切 \(m,s,t\) 与 \(u\in\CC^\times\) 有严格恒等式
+\[
+  Z'^{(m)}_{s\to t}(u)=u^{\varphi(t)-\varphi(s)}\,Z^{(m)}_{s\to t}(u),
+  \qquad
+  Z'^{(m)}_{\mathrm{cyc}}(u)=Z^{(m)}_{\mathrm{cyc}}(u).
+\]
+因此在 \(\CC^\times\) 上，端点分配函数的零点除子（按重数计）在该规范变换下保持不变；周期分配函数的零点集合逐点保持不变。
+\end{theorem}
+
+\begin{proof}
+记对角矩阵 \(D(u):=\mathrm{diag}(u^{\varphi(v)})_{v\in V}\)。
+则
+\[
+  A'(u)_{ij}
+  =\sum_{e:i\to j}u^{g(e)+\varphi(j)-\varphi(i)}
+  =u^{-\varphi(i)}\Bigl(\sum_{e:i\to j}u^{g(e)}\Bigr)u^{\varphi(j)}
+  =\bigl(D(u)^{-1}A(u)D(u)\bigr)_{ij}.
+\]
+从而在 \(\CC(u)\) 上 \(A'(u)=D(u)^{-1}A(u)D(u)\)，并且
+\[
+  A'(u)^m=D(u)^{-1}A(u)^mD(u)
+  \quad\Rightarrow\quad
+  Z'^{(m)}_{s\to t}(u)=u^{-\varphi(s)}\bigl(A(u)^m\bigr)_{st}u^{\varphi(t)}.
+\]
+迹函数满足 \(\Tr(D^{-1}A^mD)=\Tr(A^m)\)，故周期分配函数不变。证毕。
+\end{proof}
+
+\begin{corollary}[热力学极限与大偏差的同调不变性]\label{cor:discussion-thermo-ldp-homology-invariance}
+在定理 \ref{thm:discussion-discrete-stokes-gauge-leyang} 的设定下，记 \((X_0\to X_1\to\cdots\to X_m)\) 为任意长度 \(m\) 的边路径，并令
+\[
+  S_m:=\sum_{k=0}^{m-1}g(e_k),\qquad
+  S'_m:=\sum_{k=0}^{m-1}g'(e_k),
+\]
+其中 \(e_k:X_k\to X_{k+1}\)。
+则对任意样本路径都有严格望远镜恒等式
+\[
+  S'_m=S_m+\varphi(X_m)-\varphi(X_0).
+\]
+从而对任一赋予路径的概率结构（在有限状态空间上）均有如下同调不变性陈述：
+\begin{enumerate}
+  \item 若极限
+  \[
+    \Lambda(\theta):=\lim_{m\to\infty}\frac1m\log\EE\bigl[e^{\theta S_m}\bigr]
+  \]
+  存在，则对 \(S'_m\) 的相同极限亦存在且 \(\Lambda'(\theta)=\Lambda(\theta)\)（在共同定义域内）。
+  \item 若 \((S_m/m)\) 在速度 \(m\) 下满足大偏差原理且速率函数为 \(I\)，则 \((S'_m/m)\) 亦满足同一速率函数 \(I\)。
+  \item 若 \((S_m-m\mu)/\sqrt m\Rightarrow N(0,\sigma^2)\)，则 \((S'_m-m\mu)/\sqrt m\Rightarrow N(0,\sigma^2)\)。
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+由定义
+\[
+  S'_m-S_m=\sum_{k=0}^{m-1}\bigl(\varphi(X_{k+1})-\varphi(X_k)\bigr)=\varphi(X_m)-\varphi(X_0).
+\]
+由于状态空间有限，\(\varphi\) 有界，故 \(\abs{S'_m-S_m}\le 2\norm{\varphi}_\infty\)。
+因此
+\[
+  \frac{S'_m}{m}-\frac{S_m}{m}=O(m^{-1}),
+  \qquad
+  \frac{S'_m-m\mu}{\sqrt m}-\frac{S_m-m\mu}{\sqrt m}=O(m^{-1/2}).
+\]
+第 (1) 条由 \(\exp(\theta(S'_m-S_m))\) 仅引入一致有界的乘子并在 \(\frac1m\log\) 归一化下消失而得。
+第 (2) 条与第 (3) 条分别由边界项在速度 \(m\) 与 \(\sqrt m\) 归一化下的可忽略性推出。证毕。
+\end{proof}
+
+\begin{theorem}[有限状态链上的 Hodge--Stokes 分解与方差率刚性]\label{thm:discussion-hodge-stokes-variance-rigidity}
+设 \((X_k)_{k\ge 0}\) 为有限状态不可约 Markov 链，转移矩阵为 \(P\)，平稳分布为 \(\pi\)。
+在边空间 \(L^2(\pi P)\) 上取内积
+\[
+  \langle F,G\rangle_{\pi P}:=\sum_{i,j}\pi_iP_{ij}F(i,j)G(i,j),
+\]
+在点空间 \(L^2(\pi)\) 上取内积 \(\langle f,h\rangle_\pi:=\sum_i\pi_i f(i)h(i)\)。
+定义离散梯度算子
+\[
+  (\delta\phi)(i,j):=\phi(j)-\phi(i),
+\]
+并记 \(\delta^\ast\) 为 \(\delta\) 关于上述内积的伴随。
+则对任意 \(g\in L^2(\pi P)\) 存在唯一分解（以 \(\langle\phi,1\rangle_\pi=0\) 规一化）
+\[
+  g=\delta\phi+h,
+  \qquad
+  h\in\ker(\delta^\ast).
+\]
+并且：
+\begin{enumerate}
+  \item \(\mathrm{Im}(\delta)\perp\ker(\delta^\ast)\)，该分解为 \(g\) 在两子空间上的正交投影。
+  \item 对任意样本路径与任意 \(m\ge 1\)，有严格望远镜恒等式
+  \[
+    \sum_{k=0}^{m-1}g(X_k,X_{k+1})
+    =
+    \sum_{k=0}^{m-1}h(X_k,X_{k+1})+\phi(X_m)-\phi(X_0).
+  \]
+  \item 若对 \(h\) 的加性泛函满足中心极限定理且方差率为 \(\sigma^2(h)\)，则对应的 \(g\) 亦满足中心极限定理且 \(\sigma^2(g)=\sigma^2(h)\)；同理，在速度 \(m\) 的大偏差口径下速率函数仅依赖于 \(h\)。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+有限维 Hilbert 空间中有 \(\ker(\delta^\ast)=(\mathrm{Im}(\delta))^\perp\)，因此存在唯一正交分解 \(g=\delta\phi+h\)，并以 \(\langle\phi,1\rangle_\pi=0\) 固定常数自由度，得 (1)。
+对 (2)，直接计算
+\[
+  \sum_{k=0}^{m-1}(\delta\phi)(X_k,X_{k+1})
+  =\sum_{k=0}^{m-1}\bigl(\phi(X_{k+1})-\phi(X_k)\bigr)
+  =\phi(X_m)-\phi(X_0).
+\]
+对 (3)，由于状态空间有限，\(\phi(X_m)-\phi(X_0)\) 一致有界，故在 \(\sqrt m\) 与 \(m\) 归一化下均可忽略；由此 \(g\) 与 \(h\) 的中心极限定理方差率与速度 \(m\) 大偏差速率函数一致。证毕。
+\end{proof}
+
+\begin{proposition}[立方复形上的离散 Stokes 消除准则：异常只能驻留于 \(2\)-循环]\label{prop:discussion-cubical-stokes-elimination-2cycle}
+令 \(K\) 为有限立方复形，\(A\) 为可除交换群（例如任意实向量空间）。
+取 \(A\)-值 \(2\)-共链 \(c\in C^{2}(K;A)\)，并假设 \(dc=0\)。
+则下列条件等价：
+\begin{enumerate}
+  \item 存在 \(b\in C^{1}(K;A)\) 使 \(db=c\)；
+  \item 对任意 \(2\)-循环 \(Z\in Z_{2}(K;\ZZ)\)，都有 \(\langle c,Z\rangle=0\)；
+  \item \([c]=0\in H^{2}(K;A)\)。
+\end{enumerate}
+因此，当 \(K\) 可缩时，任何离散闭 \(2\)-共链必为余边界；反之，任何不可规约的全局异常类都必然在某个非平凡 \(2\)-循环上具有非零配对。
+\end{proposition}
+\begin{proof}
+\((1)\Leftrightarrow(3)\) 为上同调定义；\((3)\Rightarrow(2)\) 由配对的自然性立得。
+对 \((2)\Rightarrow(3)\)，由普适系数定理有短正合列
+\[
+0\to \mathrm{Ext}^{1}_{\ZZ}\!\bigl(H_{1}(K;\ZZ),A\bigr)\to H^{2}(K;A)\to \mathrm{Hom}\!\bigl(H_{2}(K;\ZZ),A\bigr)\to 0.
+\]
+当 \(A\) 可除时 \(\mathrm{Ext}^{1}_{\ZZ}(-,A)=0\)，故 \(H^{2}(K;A)\cong \mathrm{Hom}(H_{2}(K;\ZZ),A)\)；
+而右端同构正由 Kronecker 配对 \(\langle c,\cdot\rangle\) 给出。
+于是 (2) 等价于该同态为零，从而 \([c]=0\)。证毕。
+\end{proof}
+
+\input{subsubsec__discussion-generalized-stokes-spectral-hierarchy}
+
+\begin{theorem}[超立方体上的 Stokes--Fourier 二项变换与谱层矩恒等式]\label{thm:discussion-hypercube-stokes-fourier-binomial}
+令 \(f:\{-1,1\}^n\to\RR\) 为平方可积函数，取 Walsh--Fourier 展开 \(f=\sum_{S\subset[n]}\widehat f(S)\chi_S\)，并记谱层权重
+\[
+  W_r(f):=\sum_{\abs{S}=r}\widehat f(S)^2,\qquad 0\le r\le n.
+\]
+对单坐标翻转 \(\tau_i\) 定义一阶差分算子 \(\Delta_i f:=f-f\circ\tau_i\)，并对 \(I=\{i_1,\dots,i_k\}\) 定义混合差分 \(\Delta_I:=\Delta_{i_1}\cdots\Delta_{i_k}\)。
+定义 \(k\) 维差分通量能量
+\[
+  M_k(f):=\frac1{4^k}\sum_{\abs{I}=k}\EE\bigl[(\Delta_I f(X))^2\bigr],
+\]
+其中 \(X\) 为均匀随机顶点。
+则对一切 \(0\le k\le n\) 有严格等式
+\[
+  M_k(f)=\sum_{r=k}^n\binom{r}{k}W_r(f),
+\]
+并且二项反演逐层精确恢复谱分布：
+\[
+  W_r(f)=\sum_{k=r}^n(-1)^{k-r}\binom{k}{r}M_k(f),\qquad 0\le r\le n.
+\]
+若 \(F\) 为 \(f\) 在 \([0,1]^n\) 上的多线性延拓，则对任意坐标 \(k\)-子立方体 \(Q_I\cong[0,1]^k\) 有
+\[
+  (\Delta_I f)(\text{对应顶点})
+  =
+  \int_{Q_I}\frac{\partial^k F}{\partial x_{i_1}\cdots\partial x_{i_k}}\,\dd x,
+\]
+从而差分通量可被理解为对 \(k\) 次混合偏导的体积分；其边界型表述可由迭代一维基本定理等价给出。
+\end{theorem}
+
+\begin{proof}
+对 Fourier 基函数 \(\chi_S\)，有 \(\chi_S\circ\tau_i=(-1)^{\ind_{i\in S}}\chi_S\)，故
+\[
+  \Delta_i\chi_S=(1-(-1)^{\ind_{i\in S}})\chi_S=
+  \begin{cases}
+    0,&i\notin S,\\
+    2\chi_S,&i\in S.
+  \end{cases}
+\]
+从而 \(\Delta_I\chi_S=2^k\chi_S\) 当且仅当 \(I\subset S\)，否则为 \(0\)。
+于是
+\[
+  \Delta_I f=2^k\sum_{S\supset I}\widehat f(S)\chi_S,
+  \qquad
+  \EE[(\Delta_I f)^2]=4^k\sum_{S\supset I}\widehat f(S)^2.
+\]
+将其对 \(\abs{I}=k\) 求和并交换求和次序，得
+\[
+  M_k(f)
+  =\frac1{4^k}\sum_{\abs{I}=k}4^k\sum_{S\supset I}\widehat f(S)^2
+  =\sum_S\widehat f(S)^2\,\card{\{I\subset S:\ \abs{I}=k\}}
+  =\sum_{r=k}^n\binom{r}{k}W_r(f).
+\]
+二项反演由比较生成函数
+\(
+H(y):=\sum_{k=0}^nM_k(f)y^k=\sum_{r=0}^nW_r(f)(1+y)^r
+\)
+的系数得到。
+最后，多线性延拓下的积分恒等式为经典的混合差分--混合偏导对应，结论可由逐坐标迭代基本定理推出。证毕。
+\end{proof}
+
+\begin{theorem}[由差分通量矩给出的谱尾界与证书化误差控制]\label{thm:discussion-spectral-tail-bound-from-flux}
+沿用定理 \ref{thm:discussion-hypercube-stokes-fourier-binomial} 的记号。
+对任意 \(d\in\{0,1,\dots,n\}\) 与任意 \(k\in\{1,\dots,d\}\)，记 \(f_{<d}:=\sum_{\abs{S}<d}\widehat f(S)\chi_S\)。
+则有严格谱尾界
+\[
+  \norm{f-f_{<d}}_{L^2}^2=\sum_{r\ge d}W_r(f)\ \le\ \frac{M_k(f)}{\binom{d}{k}}.
+\]
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:discussion-hypercube-stokes-fourier-binomial} 得
+\[
+  M_k(f)=\sum_{r=k}^n\binom{r}{k}W_r(f)
+  \ge \sum_{r\ge d}\binom{r}{k}W_r(f)
+  \ge \binom{d}{k}\sum_{r\ge d}W_r(f).
+\]
+移项即得结论。证毕。
+\end{proof}
+
+\begin{conjecture}[属 \(1\) Lee--Yang--Stokes 电流的模性结构与几何 Langlands 读出]\label{conj:discussion-leyang-stokes-modularity-langlands}
+设 \(A(u)\in\Mat_m(\ZZ[u,u^{-1}])\) 为一族在适当实参数 \(u>0\) 上不可约且正的矩阵，并设其特征曲线
+\[
+  C:\ \det(\mu I-A(u))=0
+\]
+为光滑属 \(1\) 曲线，从而给出一条定义于 \(\QQ\) 上的椭圆曲线 \(E\)（经双有理同构）。
+令 \(\rho(u)\) 为 Perron 根分支并设自由能 \(F(u):=\Log\rho(u)\)。
+定义 Lee--Yang--Stokes 电流（以二维 Laplacian 表述的零点极限曲率）
+\[
+  \mu_{\mathrm{LY}}:=\frac1{2\pi}\Delta(\Re F).
+\]
+猜想存在一条由 \(E\) 的 N\'eron 微分 \(\omega_E\) 与 Abel--Jacobi 统一化导出的自然参数化，使得：
+\begin{enumerate}
+  \item \(\mu_{\mathrm{LY}}\) 为 \(E(\CC)\) 上 Haar 概率测度在 \(u\)-平面上的推前；
+  \item \(\mu_{\mathrm{LY}}\) 的适当矩序列（例如其 Cauchy 变换在无穷远处的 Laurent 系数）满足与 \(E\) 对应的权 \(2\) 新形式 \(f_E\) 的 Hecke 递推同构；
+  \item 因而 \(\mu_{\mathrm{LY}}\) 的可计算谱矩作为几何实现，把 \(H^1(E)\) 上的二维 Galois 表示与 \(\GL_2\) 自守表示的对应显影为一条可审计的周期/矩一致性链。
+\end{enumerate}
+\end{conjecture}
+
+\begin{conjecture}[折叠塔的标度极限与视界 \texorpdfstring{$w_{1+\infty}$}{w1+infty} 的离散正则化]\label{conj:discussion-fold-tower-w1infty-discretization}
+令 \(X_\infty\) 为黄金均值移位，并令 \(\mathcal A_m\) 为由长度 \(m\) 柱集生成的有限维柱代数（在交换 \(C^\ast\) 口径下可识别为 \(\CC^{\mathcal P_m}\)；参见附录 \ref{app:op-algebra-fold-subalgebra} 与 \S\ref{subsec:op-algebra-cylinder-properdatum}）。
+记 \(\mathcal A_\infty=\varinjlim_m \mathcal A_m\cong C(X_\infty)\)。
+以两态骨架矩阵 \(M=\bigl(\begin{smallmatrix}1&1\\[2pt]1&0\end{smallmatrix}\bigr)\) 的 Perron 根 \(\varphi\) 给出重整化标度 \(m\mapsto \varphi^{-m}\)。
+\par
+猜想存在一族由折叠在线转导与柱语义闭包自然诱导的局部差分算子
+\[
+\mathfrak D^{(m)}_{k,\ell}\in \End(\mathcal A_m),
+\]
+使得在适当的嵌入与完备化下，重标度交换子极限存在并闭合为 \(w_{1+\infty}\)（可能带中心扩张）的一个表示：
+\[
+\varphi^{-m}\bigl[\mathfrak D^{(m)}_{k,\ell},\,\mathfrak D^{(m)}_{k',\ell'}\bigr]
+\ \longrightarrow\
+\bigl[\mathfrak D_{k,\ell},\,\mathfrak D_{k',\ell'}\bigr]
+\qquad(m\to\infty),
+\]
+其中右端在某一稠密定义域上满足 \(w_{1+\infty}\) 的结构常数关系。
+该极限若成立，则给出一条可检验桥梁：有限层柱代数与有限延迟转导提供紫外截断，而黄金标度提供连续极限参数，使折叠塔成为视界无穷维对称的离散正则化模型。
+\end{conjecture}
+

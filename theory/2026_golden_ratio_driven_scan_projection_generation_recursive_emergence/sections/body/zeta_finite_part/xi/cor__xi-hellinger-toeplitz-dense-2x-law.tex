@@ -1,0 +1,95 @@
+% (User input window)
+%
+% 稠密 Toeplitz 极限下：熵密度渐近、条件数指数与比特预算的二倍关系。
+
+\begin{corollary}[稠密 Toeplitz 的二倍律：条件数指数与体积熵密度指数同型且比值趋于 \texorpdfstring{$2$}{2}]\label{cor:xi-hellinger-toeplitz-dense-2x-law}
+在等距深度 \(\sigma_j=\sigma_0+(j-1)\Delta\) 下，令 \(G_\kappa(\Delta)\) 为对应的 Toeplitz 主块，并定义体积熵密度
+\[
+e(\Delta):=\lim_{\kappa\to\infty}-\frac1\kappa\log\det G_\kappa(\Delta)
+=-\frac{1}{2\pi}\int_{-\pi}^{\pi}\log\sigma_\Delta(\theta)\,\dd\theta.
+\]
+令双边 Toeplitz 卷积算子 \(T_\Delta:\ell^2(\ZZ)\to\ell^2(\ZZ)\) 由
+\[
+(T_\Delta x)_n:=\sum_{m\in\ZZ}A((n-m)\Delta)\,x_m
+\]
+给出，则其符号为 \(\sigma_\Delta\) 且条件数满足
+\[
+\mathrm{cond}(T_\Delta)=\frac{\max_{\theta\in[-\pi,\pi]}\sigma_\Delta(\theta)}{\min_{\theta\in[-\pi,\pi]}\sigma_\Delta(\theta)},
+\qquad
+c(\Delta):=\log\mathrm{cond}(T_\Delta).
+\]
+当 \(\Delta\downarrow0\) 时有渐近
+\[
+\boxed{\;
+e(\Delta)=\frac{\pi^2}{\Delta}+O\!\Bigl(\log\frac1\Delta\Bigr),\qquad
+c(\Delta)=\frac{2\pi^2}{\Delta}+O\!\Bigl(\log\frac1\Delta\Bigr),\qquad
+\frac{c(\Delta)}{e(\Delta)}\to 2.\;}
+\]
+因此稳定可逆性的指数门槛与 bulk 对数体积（熵密度）由同一常数 \(2\pi^2/\Delta\) 控制，且边界指数严格为 bulk 指数的两倍。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:xi-hellinger-toeplitz-symbol-poisson}，
+\[
+\sigma_\Delta(\theta)=\frac{1}{\Delta}\sum_{k\in\ZZ}\frac{\pi^{2}}{\cosh^{2}\!\Bigl(\pi\frac{\theta+2\pi k}{\Delta}\Bigr)}.
+\]
+记主项
+\(
+\sigma_\Delta^{(0)}(\theta):=\frac{\pi^{2}}{\Delta}\cosh^{-2}(\pi\theta/\Delta)
+\)。
+对 \(\theta\in[-\pi,\pi]\)，当 \(k\neq0\) 时 \(|\theta+2\pi k|\ge\pi\)，并由 \(\cosh t\ge \tfrac12 e^{|t|}\) 得
+\[
+0\le \sigma_\Delta(\theta)-\sigma_\Delta^{(0)}(\theta)
+\le \frac{1}{\Delta}\sum_{k\neq0}4\pi^{2}\exp\!\Bigl(-2\pi\frac{|\theta+2\pi k|}{\Delta}\Bigr)
+\le C\,\frac{\pi^{2}}{\Delta}\,e^{-2\pi^{2}/\Delta},
+\]
+其中 \(C>0\) 与 \(\Delta\) 无关。
+又由 \(\cosh^{-2}\) 的单调性，
+\(
+\sigma_\Delta^{(0)}(\theta)\ge \sigma_\Delta^{(0)}(\pi)=\frac{\pi^{2}}{\Delta}\cosh^{-2}(\pi^{2}/\Delta)
+\asymp \frac{\pi^{2}}{\Delta}e^{-2\pi^{2}/\Delta}
+\)，
+从而 \(\log\sigma_\Delta(\theta)=\log\sigma_\Delta^{(0)}(\theta)+O(1)\) 一致成立，故 \(e(\Delta)=e_0(\Delta)+O(1)\)，其中
+\[
+e_0(\Delta):=-\frac{1}{2\pi}\int_{-\pi}^{\pi}\log\sigma_\Delta^{(0)}(\theta)\,\dd\theta
+=-\log\frac{\pi^{2}}{\Delta}+\frac{1}{\pi}\int_{-\pi}^{\pi}\log\cosh\!\Bigl(\pi\frac{\theta}{\Delta}\Bigr)\,\dd\theta.
+\]
+利用不等式 \(x-\log2\le \log\cosh x\le x\)（\(x\ge0\)）得
+\[
+\frac{1}{\Delta}\int_{-\pi}^{\pi}|\theta|\,\dd\theta-\log\frac{4\pi^{2}}{\Delta}
+\ \le\ e_0(\Delta)\ \le\
+\frac{1}{\Delta}\int_{-\pi}^{\pi}|\theta|\,\dd\theta-\log\frac{\pi^{2}}{\Delta},
+\]
+而 \(\int_{-\pi}^{\pi}|\theta|\,\dd\theta=\pi^{2}\)，故 \(e(\Delta)=\pi^{2}/\Delta+O(\log(1/\Delta))\)。
+\par
+对条件数，注意 \(T_\Delta\) 在 Fourier 侧为乘子 \(\sigma_\Delta(\theta)\)，故 \(\mathrm{cond}(T_\Delta)=\max\sigma_\Delta/\min\sigma_\Delta\)。
+由 \(\sigma_\Delta(0)=\frac{\pi^{2}}{\Delta}+O\!\bigl(\frac{\pi^{2}}{\Delta}e^{-4\pi^{2}/\Delta}\bigr)\) 及
+\(
+\sigma_\Delta(\pi)\asymp \frac{\pi^{2}}{\Delta}e^{-2\pi^{2}/\Delta}
+\)
+得到
+\(
+c(\Delta)=\log\frac{\max\sigma_\Delta}{\min\sigma_\Delta}
+=\frac{2\pi^{2}}{\Delta}+O(\log(1/\Delta))
+\)，
+从而 \(c(\Delta)/e(\Delta)\to2\)。证毕。
+\end{proof}
+
+\begin{corollary}[比特预算—体积熵密度的线性律：稳定反演的最小有效精度]\label{cor:xi-hellinger-toeplitz-bit-budget-linear-law}
+在推论 \ref{cor:xi-hellinger-toeplitz-dense-2x-law} 的设定下，若要求数值反演在相对误差意义下稳定，并以 \(B\) 比特有效精度度量，则必要条件为
+\[
+\boxed{\;
+B\ \gtrsim\ \log_2\mathrm{cond}(T_\Delta)=\frac{c(\Delta)}{\ln 2}
+\ \sim\ \frac{2\pi^{2}}{\Delta\ln 2}\qquad(\Delta\downarrow0).\;}
+\]
+结合 \(c(\Delta)\sim 2e(\Delta)\) 得到无参数线性律
+\[
+B\ \gtrsim\ \frac{2}{\ln 2}\,e(\Delta).
+\]
+因此在稠密极限中，任何试图在固定精度下提升分辨率的方案都必然触发条件数的指数爆炸。
+\end{corollary}
+\begin{proof}
+稳定反演的经典必要条件是机器精度 \(\varepsilon_{\mathrm{mach}}\) 至少满足 \(\varepsilon_{\mathrm{mach}}\lesssim \mathrm{cond}(T_\Delta)^{-1}\)；
+以 \(B\) 比特有效精度计 \(\varepsilon_{\mathrm{mach}}\asymp 2^{-B}\)，得 \(B\gtrsim \log_2\mathrm{cond}(T_\Delta)=c(\Delta)/\ln 2\)。
+再由推论 \ref{cor:xi-hellinger-toeplitz-dense-2x-law} 的渐近式即得结论。证毕。
+\end{proof}
+

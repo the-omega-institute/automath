@@ -1,0 +1,136 @@
+% Gödel–RT arithmetized min-cut and Kirchhoff determinant bridge.
+
+\subsubsection{Gödel 赋值下的离散极小割与 Kirchhoff 行列式桥接}\label{subsubsec:spg-godel-rt-mincut-kirchhoff-bridge}
+
+在 dyadic 立方复形的边界 Gödel 字典中，素数的唯一分解不仅提供可逆的边界编码，还允许把离散极小割的退化严格剔除，并将割容量与 Kirchhoff 生成树行列式直接对齐为可审计的算术桥。
+
+\begin{theorem}[Gödel--Ryu--Takayanagi 切割原理：平方自由极小割的唯一性与强次可加]\label{thm:spg-godel-rt-mincut-uniqueness-ssa}
+固定 \(m,n\ge 1\) 并令 \(\Gamma_m\) 为定理 \ref{thm:spg-linear-time-bulk-decode-from-boundary} 中的 \(n\)-胞腔邻接图（含外部顶点 \(\infty\)）。
+记 \(\partial V(\Gamma_m):=\{v\in V(\Gamma_m)\setminus\{\infty\}:\ v\text{ 与 }\infty\text{ 相邻}\}\) 为其边界顶点集合。
+对每条边 \(e\in E(\Gamma_m)\) 赋予互异素数 \(q_e\)。
+对任意边界区域 \(A\subseteq \partial V(\Gamma_m)\)，定义
+\[
+\mathsf H_{\mathrm{RT}}(A)
+:=\min_{\substack{S\subseteq V(\Gamma_m)\setminus\{\infty\}\\ S\cap \partial V(\Gamma_m)=A}}
+\ \prod_{e\in\delta(S)} q_e,
+\qquad
+\mathsf S_{\mathrm{RT}}(A):=\log \mathsf H_{\mathrm{RT}}(A),
+\]
+其中 \(\delta(S):=\{e=\{u,v\}\in E(\Gamma_m):\ \abs{\{u,v\}\cap S}=1\}\) 为割边集。
+则成立：
+\begin{enumerate}
+  \item \textbf{（最小割等价）} \(\mathsf S_{\mathrm{RT}}(A)\) 等于带权最小割值
+        \[
+        \mathsf S_{\mathrm{RT}}(A)
+        =\min_{S\cap\partial V=A}\ \sum_{e\in\delta(S)}\log q_e.
+        \]
+  \item \textbf{（割边集唯一性）} 若 \(S_\ast\) 达到上述极小值，则其割边集 \(\delta(S_\ast)\) 在边集层面是唯一的。
+  \item \textbf{（强次可加）} 对任意边界区域 \(A,B\subseteq \partial V(\Gamma_m)\) 有
+        \[
+        \mathsf S_{\mathrm{RT}}(A)+\mathsf S_{\mathrm{RT}}(B)
+        \ge \mathsf S_{\mathrm{RT}}(A\cup B)+\mathsf S_{\mathrm{RT}}(A\cap B).
+        \]
+        等价地，
+        \[
+        \mathsf H_{\mathrm{RT}}(A)\,\mathsf H_{\mathrm{RT}}(B)
+        \ge
+        \mathsf H_{\mathrm{RT}}(A\cup B)\,\mathsf H_{\mathrm{RT}}(A\cap B).
+        \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\textbf{（1）}由对数函数的严格单调性，最小化平方自由素数乘积等价于最小化其对数和，得到带权最小割表述。
+\par
+\textbf{（2）}若存在两组不同割边集 \(C_1\neq C_2\) 皆达到同一极小值，则
+\(
+\prod_{e\in C_1}q_e=\prod_{e\in C_2}q_e
+\)。
+由于 \(e\mapsto q_e\) 为单射且两侧均为平方自由整数，算术基本定理推出 \(C_1=C_2\)，矛盾。
+\par
+\textbf{（3）}记割权函数
+\(
+f(S):=\sum_{e\in\delta(S)}\log q_e
+\)。
+对任意边 \(e=\{u,v\}\)，指示函数 \(\mathbf 1[e\in\delta(S)]\) 关于集合运算满足点态次模性：
+\[
+\mathbf 1[e\in\delta(S_A)]+\mathbf 1[e\in\delta(S_B)]
+\ge
+\mathbf 1[e\in\delta(S_A\cup S_B)]+\mathbf 1[e\in\delta(S_A\cap S_B)].
+\]
+逐边加和得到 \(f(S_A)+f(S_B)\ge f(S_A\cup S_B)+f(S_A\cap S_B)\)。
+取 \(S_A,S_B\) 分别为达到 \(\mathsf S_{\mathrm{RT}}(A),\mathsf S_{\mathrm{RT}}(B)\) 的极小割，则 \(S_A\cup S_B\) 与 \(S_A\cap S_B\) 分别满足边界条件 \(A\cup B\) 与 \(A\cap B\)，从而
+\[
+\mathsf S_{\mathrm{RT}}(A)+\mathsf S_{\mathrm{RT}}(B)
+=f(S_A)+f(S_B)
+\ge f(S_A\cup S_B)+f(S_A\cap S_B)
+\ge \mathsf S_{\mathrm{RT}}(A\cup B)+\mathsf S_{\mathrm{RT}}(A\cap B).
+\]
+指数化即得乘法形式不等式。证毕。
+\end{proof}
+
+\begin{conjecture}[Walsh--Stokes 可重建族的 RT--最小切割变分律]\label{conj:spg-walsh-stokes-rt-mincut-variational}
+固定 \(k\ge 1\) 并沿用定理 \ref{thm:spg-godel-rt-mincut-uniqueness-ssa} 的设定。
+令 \(\mathcal W_{\le k}\) 表示由阶数 \(|I|\le k\) 的 Walsh--Stokes 偏差 \(b_I(S)\)（及其 dyadic 边界 Gödel 字典中的对应物）生成的边界可观测族。
+猜想存在一类与该字典相容的离散全息编码模型，使得对任意边界区域 \(A\subseteq\partial V(\Gamma_m)\)，在 \(A\) 上重建 \(\mathcal W_{\le k}\) 所需的最小外置资源满足 RT 型变分律：存在最小资源函数 \(\mathsf S_{\mathrm{ext}}^{(\le k)}(A)\) 使
+\[
+\mathsf S_{\mathrm{ext}}^{(\le k)}(A)=\mathsf S_{\mathrm{RT}}(A).
+\]
+在平方自由 Gödel 权重下，上式等价于最坏素数乘积规模由 \(\mathsf H_{\mathrm{RT}}(A)\) 给出，因此 \(\mathsf S_{\mathrm{ext}}^{(\le k)}\) 继承强次可加性质。
+\end{conjecture}
+
+\begin{proposition}[Kirchhoff 余子式的基本割容量上界与 Laplacian 椭球体积下界]\label{prop:spg-kirchhoff-fundamental-cut-capacity-hadamard}
+设 \(G=(V,E)\) 为有限连通图，取正权 \(w_e>0\)。
+令 \(B\) 为 \(G\) 的任意取向关联矩阵，并定义加权 Laplacian
+\[
+L_w:=B\,\mathrm{diag}(w)\,B^\top .
+\]
+删去任一根顶点后的余子式记为 \(L_w^\ast\)，并令
+\(
+\tau_w(G):=\det(L_w^\ast)
+\)。
+取任意生成树 \(T\subseteq E\)。
+对每条树边 \(t\in T\)，令 \(\delta_t\) 为删去 \(t\) 后诱导的基本割，并设其容量
+\[
+c_t:=\sum_{e\in\delta_t} w_e.
+\]
+则有行列式上界
+\[
+\tau_w(G)\le \prod_{t\in T} c_t.
+\]
+从而对椭球
+\[
+E_w:=\{x\in\RR^{|V|-1}:\ x^\top L_w^\ast x\le 1\},
+\]
+其体积满足
+\[
+\operatorname{Vol}(E_w)\ge \frac{\kappa_{|V|-1}}{\sqrt{\prod_{t\in T} c_t}},
+\]
+其中 \(\kappa_d\) 为 \(\RR^d\) 中单位欧氏球的体积。
+\end{proposition}
+\begin{proof}
+令 \(B_r\) 为删去根行后的约化关联矩阵（维数 \((|V|-1)\times |E|\)）。
+将边排序使生成树边在前，则 \(B_{r,T}\) 为方阵且 \(\det(B_{r,T})=\pm1\)。
+令
+\[
+C:=(B_{r,T})^{-1}B_r,
+\]
+则
+\[
+\tau_w(G)=\det(B_r\,\mathrm{diag}(w)\,B_r^\top)=\det(C\,\mathrm{diag}(w)\,C^\top).
+\]
+记 \(M:=C\,\mathrm{diag}(w)\,C^\top\)。
+对每条树边 \(t\in T\)，矩阵 \(C\) 的第 \(t\) 行给出基本割 \(\delta_t\) 的指示向量（取 \(\pm1\) 号差异仅影响符号而不影响平方），因此
+\[
+M_{tt}=\sum_{e\in E} w_e\,C_{t,e}^2=\sum_{e\in\delta_t} w_e=c_t.
+\]
+由 Hadamard 不等式 \(\det M\le \prod_{t\in T} M_{tt}\) 得到 \(\tau_w(G)\le \prod_{t\in T} c_t\)。
+\par
+椭球体积公式给出
+\(
+\operatorname{Vol}(E_w)=\kappa_{|V|-1}/\sqrt{\det(L_w^\ast)}=\kappa_{|V|-1}/\sqrt{\tau_w(G)}
+\)。
+与上界合并即得所示体积下界。证毕。
+\end{proof}
+
+\endinput
+

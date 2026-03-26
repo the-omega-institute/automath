@@ -1,0 +1,57 @@
+% Bayes optimality of scan-clarity and functional stability.
+
+\begin{proposition}\label{prop:spg-clarity-bayes-optimality}
+沿用定义 \ref{def:spg-scan-error-profile} 的记号，并令
+\[
+p_m:=\mu(\mathsf P\mid\mathcal F_m).
+\]
+定义 Bayes 最优的 \(\mathcal F_m\)-可测近似（在 \(\{p_m=1/2\}\) 上任取）
+\[
+\mathsf P_m^\star:=\{\omega:\ p_m(\omega)\ge 1/2\}\in\mathcal F_m.
+\]
+则：
+\begin{enumerate}
+  \item 对任意 \(\mathsf Q\in\mathcal F_m\)，有
+  \[
+  \mu(\mathsf P\triangle \mathsf Q)\ \ge\ \varepsilon_m(\mathsf P;\mu),
+  \qquad
+  \mu(\mathsf P\triangle \mathsf P_m^\star)=\varepsilon_m(\mathsf P;\mu).
+  \]
+  \item 对任意有界 \(\mathcal F_\infty\)-可测函数 \(\varphi\)，有
+  \[
+  \left|\int \varphi\,\ind_{\mathsf P}\,d\mu-\int \varphi\,\ind_{\mathsf P_m^\star}\,d\mu\right|
+  \le \|\varphi\|_{\infty}\,\varepsilon_m(\mathsf P;\mu).
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+对 \(\mathcal F_m\) 的原子 \(C\in\mathcal C_m\)，\(p_m\) 在 \(C\) 上为常数 \(p_C=\mu(\mathsf P\mid C)\)。
+任意 \(\mathsf Q\in\mathcal F_m\) 在 \(C\) 上要么全取要么全舍。
+若取，则 \(\mu((\mathsf P\triangle \mathsf Q)\cap C)=\mu(C\setminus \mathsf P)=\mu(C)(1-p_C)\)；
+若舍，则 \(\mu((\mathsf P\triangle \mathsf Q)\cap C)=\mu(\mathsf P\cap C)=\mu(C)p_C\)。
+故在每个原子上最小值为 \(\mu(C)\min\{p_C,1-p_C\}\)，且由阈值规则 \(p_C\ge 1/2\iff C\subseteq \mathsf P_m^\star\) 取到该最小值。
+对全部原子求和并用命题 \ref{prop:spg-scan-error-cylinder} 的表达式即得 (1)。
+\par
+对 (2)，注意 \(\ind_{\mathsf P}-\ind_{\mathsf P_m^\star}\) 支撑于 \(\mathsf P\triangle \mathsf P_m^\star\)，故
+\[
+\left|\int \varphi(\ind_{\mathsf P}-\ind_{\mathsf P_m^\star})\,d\mu\right|
+\le \|\varphi\|_\infty\,\mu(\mathsf P\triangle \mathsf P_m^\star)
+=\|\varphi\|_\infty\,\varepsilon_m(\mathsf P;\mu).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}\label{cor:spg-clarity-walsh-spectral-stability}
+在 \(\Omega_n=\{0,1\}^n\) 上取均匀测度并令 \(\mathcal F_m\) 为前 \(m\) 位投影生成的 \(\sigma\)-代数。
+对任意 Walsh 字符 \(\chi_I(\omega)=(-1)^{\sum_{i\in I}\omega_i}\)（\(I\subseteq[n]\)）与任意事件 \(\mathsf P\subseteq\Omega_n\)，令 \(\mathsf P_m^\star\) 如命题 \ref{prop:spg-clarity-bayes-optimality}。
+则有谱稳定性估计
+\[
+\left|2^{-n}\sum_{\omega\in\Omega_n}\chi_I(\omega)\bigl(\ind_{\mathsf P}(\omega)-\ind_{\mathsf P_m^\star}(\omega)\bigr)\right|
+\le \varepsilon_m(\mathsf P;\mu).
+\]
+\end{corollary}
+\begin{proof}
+取 \(\varphi=\chi_I\) 并注意 \(\|\chi_I\|_\infty=1\)，由命题 \ref{prop:spg-clarity-bayes-optimality}(2) 立得。证毕。
+\end{proof}
+
+\endinput

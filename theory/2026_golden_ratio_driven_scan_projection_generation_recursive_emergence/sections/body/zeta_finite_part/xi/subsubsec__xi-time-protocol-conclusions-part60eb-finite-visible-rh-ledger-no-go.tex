@@ -1,0 +1,194 @@
+\paragraph{有限视界 classical RH 审计、谱替身与共尾 prime-ledger 的分离障碍}
+在有限半径/有限素数证书的不完备性、无一致 realization 维数上界时的谱替身分岔、纯相位制度下的 \(\mathsf{NULL}\) 类型安全，以及扭子塔首次偏离深度的 Busy--Beaver 下界都已建立之后，还可把有限可见审计的障碍机制压缩为如下七条终端结论。它们分别刻画有限视界完备模数的不可计算增长、有限可见语言中的谱替身不可分辨、可靠性/完备性/可计算性的三难并立不可能、障碍来源的精确定位、纯相位制度下离切片信息的二歧、共尾 prime-ledger 的有限视界不可重构，以及相应的视界--账本分离原则。
+
+\begin{theorem}[有限视界完备模数的 Busy--Beaver 障碍]\label{thm:xi-time-part60eb-finite-horizon-complete-modulus-busybeaver}
+设 \(\mathcal V\) 为一种 classical RH 审计制度。对每个输入长度上界 \(\ell\)，\(\mathcal V\) 只允许访问受同一资源参数控制的
+\[
+\text{有限 prime-stage } \Sigma_S,\qquad
+\text{有限 Toeplitz 主子式阶数},\qquad
+\text{有限 dyadic 深度},\qquad
+\text{有限 torsion 层级}.
+\]
+若存在函数 \(\Phi:\NN\to\NN\) 使得：对所有长度不超过 \(\ell\) 的输入实例，审计制度 \(\mathcal V\) 仅访问资源不超过 \(\Phi(\ell)\) 的上述四类有限视界，便总能给出正确判定，则称 \(\Phi\) 为 \(\mathcal V\) 的完备模数。
+
+若 \(\mathcal V\) 在命题 \ref{prop:xi-time-part9g-deviation-depth-computability-separation} 的 torsion-tower 编码所给出的停机型偏离实例族上同时可靠且完备，则 \(\Phi\) 不可计算。更强地，存在常数 \(c>0\) 使得对充分大的 \(\ell\)，有
+\[
+\Phi(\ell)\ \ge\ L\,\mathrm{BB}(\ell-c)+1.
+\]
+\end{theorem}
+\begin{proof}
+沿用命题 \ref{prop:xi-time-part9g-first-deviation-depth} 与命题
+\ref{prop:xi-time-part9g-deviation-depth-computability-separation}
+的记号。对每个编码实例 \((M,x)\)，其有限层 torsion 投影
+\[
+Q_{M,x}^{(n)}
+\]
+都是全可计算的，并且
+\[
+\delta(M,x)<\infty
+\quad\Longleftrightarrow\quad
+M(x)\ \text{停机}.
+\]
+
+现取一个停机实例 \((M,x)\)，并记其首次偏离深度为 \(\delta(M,x)\)。由命题
+\ref{prop:xi-time-part9g-first-deviation-depth}，
+在全部层级 \(n<\delta(M,x)\) 上，编码对象与非停机基线对象的 torsion 投影完全一致。由于 prime-stage、有限 Toeplitz 主子式、有限 dyadic 深度与有限 torsion 层级都被同一资源上界控制，只要资源预算严格小于 \(\delta(M,x)\)，审计制度就仍停留在“首次偏离尚未出现”的有限视界之内，因而无法把该停机实例与对应的非停机基线区分开来。
+
+若 \(\mathcal V\) 在这族实例上既可靠又完备，则对每个长度不超过 \(\ell\) 的停机实例都必须在资源 \(\Phi(\ell)\) 以内检出首次偏离；否则它就会把某个停机实例与非停机基线混淆。故必有
+\[
+\delta(M,x)\le \Phi(|(M,x)|)
+\]
+对全部停机实例成立。于是 \(\Phi\) 支配了一条统一验证深度函数。命题
+\ref{prop:xi-time-part9g-deviation-depth-computability-separation}
+第 \(3\) 条立即给出
+\[
+\Phi(\ell)\ \ge\ L\,\mathrm{BB}(\ell-c)+1
+\]
+对充分大的 \(\ell\) 成立，从而 \(\Phi\) 不可计算。证毕。
+\end{proof}
+
+\begin{theorem}[有限可见语言中的谱替身不可分辨]\label{thm:xi-time-part60eb-finite-visible-language-spectral-surrogates}
+设 \(\mathcal L_{\mathrm{vis}}\) 为由下列可见对象生成的对象语言：
+\[
+\text{(i) disk-visible 相位输出},\qquad
+\text{(ii) 有限多个有理频率角色},\qquad
+\text{(iii) 有限阶 Toeplitz/Gram 主子式},\qquad
+\text{(iv) 有限 dyadic 证书对象}.
+\]
+再设 admissible completion 族 \(\mathfrak X\) 在文稿既定的 Toeplitz--Carath\'eodory 审计语义下满足：其最小 realization 维数不存在一致上界。
+
+则对任意有限子语言 \(\mathcal L_0\subset \mathcal L_{\mathrm{vis}}\)，存在两个 completion 对象
+\[
+X^+,X^-\in\mathfrak X
+\]
+满足
+\[
+X^+\equiv_{\mathcal L_0}X^-,
+\]
+其中 \(\equiv_{\mathcal L_0}\) 表示二者在 \(\mathcal L_0\) 的全部可见项与关系解释上完全一致；
+但 \(X^+\) 满足全局 Toeplitz--Carath\'eodory 正性，而 \(X^-\) 不满足。等价地，在本文的 classical RH 语义中，真值不能由任意固定有限可见语言完全分离。
+\end{theorem}
+\begin{proof}
+先把 \(\mathcal L_0\) 所访问的数据压缩为一个有限审计切片。由推论 \ref{cor:xi-time-part60e-infinite-solenoid-finite-visible-factorization}，任意有限族连续可见同态都必经由某个有限 prime-stage 因子化。另一方面，命题 \ref{prop:xi-time-part62d-universal-solenoid-phase-completed-scan} 第 \(3\) 条说明：任意有限有理频率扫描都只依赖某个有限层因子。于是，disk-visible 相位输出与有限多个有理频率角色可共同压缩到某个有限 prime-stage。
+
+有限阶 Toeplitz/Gram 主子式与有限 dyadic 证书对象只涉及有限多个可见坐标以及有限次代数运算，因此在把上述有限 prime-stage 进一步放大后，也都经由同一有限视界因子化。故 \(\mathcal L_0\) 所能读取的全部信息可等价压缩为一个固定有限审计规则 \(\mathcal A_{\mathcal L_0}\)。
+
+再由定理 \ref{thm:xi-spectral-surrogate-finite-audit-undecidable}，在不存在一致 realization 维数上界时，任意固定有限审计都存在两组谱替身对象，它们在该审计访问的一切有限数据上完全一致，而全局 Toeplitz--PSD 真值相反。又由定理 \ref{thm:xi-slice-horizon-carath-toeplitz}，全局 Toeplitz--Carath\'eodory 正性与相应的 RH 真值等价。于是存在 \(X^+,X^-\in\mathfrak X\) 使
+\[
+X^+\equiv_{\mathcal L_0}X^-,
+\]
+但其全局真值相反。证毕。
+\end{proof}
+
+\begin{corollary}[无一致 realization 维数界时有限视界 RH 审计的三难并立不可能]\label{cor:xi-time-part60eb-finite-horizon-rh-audit-trilemma}
+在无一致 realization 维数上界的前提下，任何把 classical RH 限制在 \(\mathcal L_{\mathrm{vis}}\) 中进行的有限视界审计制度，都不可能同时满足：
+\[
+\text{可靠性},\qquad
+\text{完备性},\qquad
+\text{可计算性}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-time-part60eb-finite-visible-language-spectral-surrogates}，任意固定有限可见语言都存在不可分辨而全局真值相反的谱替身，故若坚持停留在有限视界内，则完备性失效。
+
+若试图通过引入一个统一的完备模数来恢复完备性，则在 torsion-tower 编码的停机型偏离实例族上，定理 \ref{thm:xi-time-part60eb-finite-horizon-complete-modulus-busybeaver} 强制该模数具有 Busy--Beaver 级不可计算增长。故可计算性失效。
+
+因此，在无一致 realization 维数界时，上述三者不能并存。证毕。
+\end{proof}
+
+\begin{proposition}[决定性障碍并非“处于无限维背景”本身]\label{prop:xi-time-part60eb-obstruction-not-ambient-infinity}
+在本文框架内，classical RH 的 no-go 机制并不等价于“对象处于无限维背景”这一事实本身。真正不可压缩的障碍是：
+\[
+\text{(a) realization 维数无一致上界},\qquad
+\text{(b) 可见层对 prime-ledger 核失真},\qquad
+\text{(c) 因而全阶 Toeplitz 量词无法统一消去为有限证书}.
+\]
+更精确地，若一族候选 completion 对象具有一致 realization 维数上界 \(D\)，则存在统一截断阶
+\[
+N_0\le 2D
+\]
+使全局 Toeplitz--Carath\'eodory 正性等价于有限个主子式条件。故“处于无限维背景中”本身并不推出制度性不可判定。
+\end{proposition}
+\begin{proof}
+若最小 realization 维数有一致上界 \(D\)，则定理 \ref{thm:xi-toeplitz-psd-coherence-horizon-threshold} 与定理 \ref{thm:xi-oracle-collapse-toeplitz-psd-finite-truncation} 同时给出：存在统一阈值 \(N_0\le 2D\)，使
+\[
+\forall N\ge 0,\ \mathbf T_N\succeq 0
+\quad\Longleftrightarrow\quad
+\forall N\le N_0,\ \mathbf T_N\succeq 0.
+\]
+于是全局正性层级在该有界类上可被压缩为有限证书对象。
+
+反之，若一致维数上界失效，则定理 \ref{thm:xi-spectral-surrogate-finite-audit-undecidable} 给出有限审计不可判定的谱替身；而定理 \ref{thm:xi-time-part67-continuous-phase-external-arithmetic-kernel} 与推论 \ref{cor:xi-time-part60e-infinite-solenoid-finite-visible-factorization} 表明，连通可见层并不忠实保留外置 prime-ledger 核。故真正导致 no-go 的，是“无一致维数界”与“核失真”这两条结构性机制的合成，而非背景空间的无限维性本身。证毕。
+\end{proof}
+
+\begin{theorem}[纯相位制度下离切片信息的二歧结构]\label{thm:xi-time-part60eb-pure-phase-offslice-bifurcation}
+在纯相位可见协议中，任何关于离切片信息的断言都只能以如下两种方式之一出现：
+\[
+\text{(i) 显式外置模式轴 }\rho=\log|u|,\qquad
+\text{(ii) 作为 }\mathsf{NULL}\text{ 或失败见证被外置。}
+\]
+不存在第三种纯相位内部表述，可在不增加模式轴的前提下稳定承载离切片信息。并且，若企图以统一可计算的有限模式轴预算来恢复全部离切片信息，则该预算必受定理 \ref{thm:xi-time-part60eb-finite-horizon-complete-modulus-busybeaver} 的 Busy--Beaver 障碍支配。
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:xi-offcritical-falsifiable-restatement} 已经给出严格的接口二分：离切片断言在体系内只能以“模式轴外延”或“\(\mathsf{NULL}\) 失败见证”两种方式出现。定理 \ref{thm:xi-offset-null-type-safety} 与命题 \ref{prop:xi-null-three-way} 进一步说明：若拒绝外置相应的正交记录轴，则该自由度在类型层不可被内部吸收，只能稳定退化为 \(\mathsf{NULL}\)。故不存在第三种纯相位内部表述。
+
+若反设存在一条统一可计算的有限模式轴预算，能够对某族输入完全恢复离切片信息，则它与其余有限视界资源合并后便给出一条可计算的完备模数。把此模数施用于 torsion-tower 编码的停机型偏离实例族，即与定理 \ref{thm:xi-time-part60eb-finite-horizon-complete-modulus-busybeaver} 矛盾。故任何这类统一预算都必受 Busy--Beaver 级障碍支配。证毕。
+\end{proof}
+
+\begin{theorem}[共尾 prime-ledger 的有限视界不可重构性]\label{thm:xi-time-part60eb-cofinal-prime-ledger-finite-horizon-nonreconstruction}
+设 \(\mathcal O\) 为任意有限族可见观测量，其成员皆由 disk-visible 输出、有限有理频率角色、有限阶 Toeplitz/Gram 主子式与有限 dyadic 证书对象编译而成。则存在一个有限素数集 \(S_0\) 使得
+\[
+\forall O\in\mathcal O,\qquad
+O\ \text{都经由}\ \Sigma_{S_0}\ \text{因子化}.
+\]
+
+进一步，对任意严格共尾扩张链
+\[
+S_0\subsetneq S_1\subsetneq S_2\subsetneq \cdots,
+\qquad
+\bigcup_{n\ge 0}S_n=\mathbb P,
+\]
+相应 solenoid \(\Sigma_{S_n}\) 在全部 \(\mathcal O\)-观测上完全不可区分；然而它们的 prime-ledger 核
+\[
+K_{S_n}\cong \prod_{p\in S_n}\ZZ_p
+\]
+两两不可同构，并且每个 \(S_n\) 都可由 \(K_{S_n}\) 唯一恢复。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:xi-time-part60e-infinite-solenoid-finite-visible-factorization}，任意有限族连续可见同态都共同经由某个有限 prime-stage \(\Sigma_{S_0}\) 因子化。命题 \ref{prop:xi-time-part62d-universal-solenoid-phase-completed-scan} 第 \(3\) 条又说明：任意有限有理频率扫描本身就是某个有限层因子观测。于是 disk-visible 输出与有限有理频率角色都经由某个有限阶段因子化。
+
+有限阶 Toeplitz/Gram 主子式以及有限 dyadic 证书对象只依赖于有限多个可见坐标和有限次代数运算；把所需有限阶段一并并入 \(S_0\) 后，它们也都经由 \(\Sigma_{S_0}\) 因子化。故对任意 \(O\in\mathcal O\)，都有
+\[
+O=O_0\circ \pi_{S_n\to S_0}
+\qquad(n\ge 0)
+\]
+对某个 \(O_0\) 成立。这证明了 \(\Sigma_{S_n}\) 在全部 \(\mathcal O\)-观测上不可区分。
+
+另一方面，若 \(S_n\neq S_m\)，则存在素数 \(p\) 使 \(p\in S_n\triangle S_m\)。对任意有限素数集 \(S\)，有
+\[
+K_S\cong \prod_{q\in S}\ZZ_q,
+\]
+故
+\[
+p\in S
+\quad\Longleftrightarrow\quad
+K_S/pK_S\neq 0
+\quad\Longleftrightarrow\quad
+\operatorname{Hom}_{\mathrm{cts}}(K_S,\ZZ/p\ZZ)\neq 0.
+\]
+因此 \(K_{S_n}\) 与 \(K_{S_m}\) 的 \(p\)-主因子结构不同，从而二者不同构；并且 \(S\) 可由判别全部素数 \(p\) 的上述等价条件唯一恢复。证毕。
+\end{proof}
+
+\begin{corollary}[视界--账本分离原则]\label{cor:xi-time-part60eb-horizon-ledger-separation-principle}
+若 classical RH 的真值最终依赖于共尾 prime-ledger 的整体几何，而审计协议仅驻留于有限视界可见层，则该真值的完全恢复必然失败。更准确地说，失败机制并非“样本不足”，而是可见函子对内部 prime-ledger 的非忠实压缩。
+\end{corollary}
+\begin{proof}
+定理 \ref{thm:xi-time-part60eb-cofinal-prime-ledger-finite-horizon-nonreconstruction} 表明：任意有限视界可见层都只能看到某个有限 prime-stage，而不同的共尾 prime-ledger 可以在全部有限可见观测上保持不可区分。若 classical RH 的真值确实依赖于这种共尾账本几何，则任何忠实恢复过程都必须在有限视界内区分这些对象；这与定理 \ref{thm:xi-time-part60eb-cofinal-prime-ledger-finite-horizon-nonreconstruction} 相矛盾。
+
+若进一步无一致 realization 维数上界，则定理 \ref{thm:xi-time-part60eb-finite-visible-language-spectral-surrogates} 把这种函子性失真强化为一对有限可见完全同像而全局 Toeplitz--Carath\'eodory 真值相反的谱替身对象。故所述恢复失败是结构性的，而非样本数量意义下的偶然不足。证毕。
+\end{proof}
+
+\noindent
+综上，本文中的有限可见障碍机制可被严格压缩为一条共同结构：一方面，只要可靠完备性试图覆盖 torsion-tower 编码的停机型偏离实例，就必然遭遇 Busy--Beaver 级不可计算完备模数；另一方面，只要一致 realization 维数上界缺失，有限可见语言便不可避免地出现谱替身，而纯相位制度对离切片信息的处理又只能在“模式轴外延”与“\(\mathsf{NULL}\) 失败见证”之间二歧。于是真正不可压缩的障碍并不在于抽象的无限维背景本身，而在于无界 realization 维数、prime-ledger 核的可见失真以及有限视界预算的 Busy--Beaver 增长三者的共同作用。
+
+\endinput

@@ -1,0 +1,334 @@
+\paragraph{相干阈值的指数律与信息--时间换算}
+本段将“相干”视为后验集中阈值的到达事件，并以相对熵率（或其可计算替代）给出相干到达时间的精确标尺；其形式与本文的“投影读出导致信息折叠、时间作为读出资源的标尺”的接口一致。
+
+\begin{theorem}[相干阈值的贝叶斯到达时间与相对熵率标尺]\label{thm:xi-coherence-arrival-time-relative-entropy-rate}
+设 \(\Sigma\) 为有限字母表，\(\{\mu_i\}_{i\in I}\) 为定义在 \(\Sigma^{\mathbb N}\) 上的可数个平稳遍历概率源（概念族），并给定先验权重 \(w_i>0\) 且 \(\sum_{i\in I}w_i=1\)。
+观测过程 \((X_k)_{k\ge 1}\) 由真实概念 \(\mu_{i_\star}\) 生成。
+记
+\[
+X_1^n:=X_1\cdots X_n,
+\qquad
+\pi_n(i):=\frac{w_i\,\mu_i(X_1^n)}{\sum_{j\in I}w_j\,\mu_j(X_1^n)}.
+\]
+对阈值 \(\varepsilon\in(0,1)\) 定义相干到达时间
+\[
+\tau_\varepsilon:=\inf\{n\ge 1:\ \pi_n(i_\star)\ge 1-\varepsilon\}.
+\]
+假设对每个 \(j\neq i_\star\)，相对熵率
+\[
+D(\mu_{i_\star}\|\mu_j):=\lim_{n\to\infty}\frac1n\log\frac{\mu_{i_\star}(X_1^n)}{\mu_j(X_1^n)}
+\quad\text{在 }\mu_{i_\star}\text{-a.s. 意义下存在且属于 }(0,\infty),
+\]
+并令
+\[
+D_\star:=\inf_{j\neq i_\star}D(\mu_{i_\star}\|\mu_j)\ >\ 0.
+\]
+则在 \(\mu_{i_\star}\)-a.s. 意义下成立：
+\begin{enumerate}
+  \item \textbf{后验非相干质量的指数律：}
+  \[
+  \lim_{n\to\infty}-\frac1n\log\bigl(1-\pi_n(i_\star)\bigr)=D_\star.
+  \]
+  \item \textbf{相干到达时间的主阶：}
+  \[
+  \lim_{\varepsilon\downarrow 0}\frac{\tau_\varepsilon}{\log(1/\varepsilon)}=\frac1{D_\star}.
+  \]
+  \item \textbf{先验罚项的精细渐近：}当 \(\varepsilon\downarrow 0\) 时，
+  \[
+  \tau_\varepsilon=\frac{\log(1/\varepsilon)+\log(1/w_{i_\star})+o(\log(1/\varepsilon))}{D_\star}.
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+对任意 \(j\neq i_\star\) 记对数似然比
+\(
+L_{j,n}:=\log\frac{\mu_{i_\star}(X_1^n)}{\mu_j(X_1^n)}
+\)。
+由假设，有 \(\frac1nL_{j,n}\to D(\mu_{i_\star}\|\mu_j)\) 于 \(\mu_{i_\star}\)-a.s. 成立。
+注意到
+\[
+1-\pi_n(i_\star)
+=\frac{\sum_{j\neq i_\star}w_j\mu_j(X_1^n)}{\sum_{k\in I}w_k\mu_k(X_1^n)}
+\le
+\frac{\sum_{j\neq i_\star}w_j\mu_j(X_1^n)}{w_{i_\star}\mu_{i_\star}(X_1^n)}
+=\sum_{j\neq i_\star}\frac{w_j}{w_{i_\star}}e^{-L_{j,n}}.
+\]
+给定 \(\delta>0\)，对每个固定 \(j\neq i_\star\) 皆有 \(L_{j,n}\ge n(D(\mu_{i_\star}\|\mu_j)-\delta)\) 当 \(n\) 充分大；对可数集合用对角线选取法得到 \(\mu_{i_\star}\)-a.s. 下对所有 \(j\neq i_\star\) 同时成立。
+于是
+\[
+1-\pi_n(i_\star)
+\le
+\frac1{w_{i_\star}}\sum_{j\neq i_\star}w_j\,e^{-n(D(\mu_{i_\star}\|\mu_j)-\delta)}
+\le
+\frac1{w_{i_\star}}e^{-n(D_\star-\delta)}.
+\]
+从而 \(\liminf_{n\to\infty}-\frac1n\log(1-\pi_n(i_\star))\ge D_\star\)。
+反向不等式：对任意 \(\delta>0\) 取 \(j_\delta\neq i_\star\) 使 \(D(\mu_{i_\star}\|\mu_{j_\delta})\le D_\star+\delta\)。
+则
+\[
+1-\pi_n(i_\star)
+\ge
+\frac{w_{j_\delta}\mu_{j_\delta}(X_1^n)}{\sum_{k\in I}w_k\mu_k(X_1^n)}
+\ge
+\frac{w_{j_\delta}\mu_{j_\delta}(X_1^n)}{w_{i_\star}\mu_{i_\star}(X_1^n)+w_{j_\delta}\mu_{j_\delta}(X_1^n)}
+=\frac{1}{1+\frac{w_{i_\star}}{w_{j_\delta}}e^{L_{j_\delta,n}}}.
+\]
+因此 \(\limsup_{n\to\infty}-\frac1n\log(1-\pi_n(i_\star))\le D(\mu_{i_\star}\|\mu_{j_\delta})\le D_\star+\delta\)，令 \(\delta\downarrow 0\) 得 \(\limsup\le D_\star\)。
+合并即得第 (1) 条。
+第 (2)(3) 条由 (1) 的指数律与阈值方程 \(1-\pi_{\tau_\varepsilon}(i_\star)\approx \varepsilon\) 的对数主阶匹配得到；其中 \(\log(1/w_{i_\star})\) 作为先验罚项进入同一主阶展开。证毕。
+\end{proof}
+
+\begin{proposition}[噪声读出下的错配信息率与可计算指数律]\label{prop:xi-bsc-mismatch-information-rate}
+令真实概念为确定性无穷序列 \(s\in\{\pm1\}^{\mathbb N}\)，观测由二元对称信道噪声读出给出：
+\[
+Y_k=s_k\,\xi_k,
+\qquad
+\PP(\xi_k=1)=1-\eta,\ \PP(\xi_k=-1)=\eta,
+\qquad
+\eta\in(0,1/2),
+\]
+其中 \((\xi_k)_{k\ge 1}\) 独立同分布。
+对任意候选概念 \(t\in\{\pm1\}^{\mathbb N}\)，记错配集合与错配数
+\[
+M_n(s,t):=\{1\le k\le n:\ s_k\neq t_k\},
+\qquad
+m_n:=|M_n(s,t)|.
+\]
+则对数似然比具有恒等式
+\[
+\log\frac{\PP(Y_1^n\mid s)}{\PP(Y_1^n\mid t)}
+=2\beta\sum_{k\in M_n(s,t)}\xi_k,
+\qquad
+\beta:=\frac12\log\frac{1-\eta}{\eta}.
+\]
+若错配密度极限 \(\delta(s,t):=\lim_{n\to\infty}m_n/n\) 存在，则在 \(\PP(\cdot\mid s)\)-a.s. 意义下
+\[
+\lim_{n\to\infty}\frac1n\log\frac{\PP(Y_1^n\mid s)}{\PP(Y_1^n\mid t)}
+=\delta(s,t)\,I(\eta),
+\qquad
+I(\eta):=(1-2\eta)\log\frac{1-\eta}{\eta}.
+\]
+\end{proposition}
+
+\begin{proof}
+单步条件分布为
+\[
+\PP(Y_k\mid s_k)=
+\begin{cases}
+1-\eta,&Y_k=s_k,\\
+\eta,&Y_k\neq s_k,
+\end{cases}
+\]
+从而存在常数 \(C_\eta=\sqrt{\eta(1-\eta)}\) 使
+\(
+\PP(Y_k\mid s_k)=C_\eta\exp(\beta Y_k s_k)
+\)。
+因此
+\[
+\log\frac{\PP(Y_1^n\mid s)}{\PP(Y_1^n\mid t)}
+=\beta\sum_{k=1}^n Y_k(s_k-t_k).
+\]
+若 \(s_k=t_k\) 则对应项为零；若 \(s_k\neq t_k\) 则 \(t_k=-s_k\)，故 \(s_k-t_k=2s_k\)，并且 \(Y_k s_k=\xi_k\)，得恒等式。
+在真实模型下 \(\EE[\xi_k]=1-2\eta\)，若 \(\delta(s,t)\) 存在，则强大数定律给出
+\[
+\frac1n\sum_{k\in M_n(s,t)}\xi_k
+=\frac{m_n}{n}\cdot\frac1{m_n}\sum_{k\in M_n(s,t)}\xi_k
+\to
+\delta(s,t)\,(1-2\eta),
+\]
+代回得到极限为 \(\delta(s,t)\,2\beta(1-2\eta)=\delta(s,t)\,I(\eta)\)。证毕。
+\end{proof}
+
+\begin{proposition}[两概念对称竞争的 Lee--Yang 单位圆零点律]\label{prop:xi-leyang-two-hypothesis-unit-circle}
+令 \(s\in\{\pm1\}^{\mathbb N}\) 为确定性概念序列，并令另一候选概念为其符号反演 \(-s\)。
+观测由二元对称信道给出：
+\[
+Y_k=s_k\,\xi_k,\qquad \PP(\xi_k=1)=1-\eta,\ \PP(\xi_k=-1)=\eta,\qquad 0<\eta<\tfrac12,
+\]
+其中 \((\xi_k)_{k\ge 1}\) 独立同分布。
+取等先验 \(w_+=w_-=\tfrac12\)，并记
+\[
+\beta:=\frac12\log\frac{1-\eta}{\eta},
+\qquad
+S_n:=\sum_{k=1}^n s_kY_k\in\ZZ.
+\]
+令复场变量 \(z:=e^{2\beta}\in\CC^\times\)。
+则边缘证据（配分函数）在乘以一个单项式因子后可写为 Laurent 多项式
+\[
+Z_n(z)=z^{S_n}+1.
+\]
+当 \(S_n\neq 0\) 时，\(Z_n\) 的全部零点为
+\[
+z_\ell=\exp\!\Big(\frac{(2\ell+1)\pi i}{S_n}\Big),\qquad \ell=0,1,\dots,|S_n|-1,
+\]
+从而严格落在单位圆 \(|z|=1\) 上。
+\end{proposition}
+\begin{proof}
+由
+\(
+\PP(Y_k\mid s_k)=\sqrt{\eta(1-\eta)}\,\exp(\beta Y_ks_k)
+\)
+与候选 \(-s\) 的对应式可得
+\[
+\sum_{h\in\{s,-s\}}w_h\,\PP(Y_1^n\mid h)
+\propto
+e^{\beta S_n}+e^{-\beta S_n}.
+\]
+令 \(z=e^{2\beta}\) 并乘以 \(z^{S_n/2}\) 得到与 \(z^{S_n}+1\) 成比例的 Laurent 多项式；零点不随该单项式因子改变。
+零点满足 \(z^{S_n}=-1\)，其全部解即为所列根，且模长恒为 \(1\)。证毕。
+\end{proof}
+
+\begin{corollary}[可计算概念族的相干到达时间：复杂度先验罚项与最小错配信息率]\label{cor:xi-holographic-coherence-time-godel-penalty}
+在命题 \ref{prop:xi-bsc-mismatch-information-rate} 的设定下，令概念族为可数集合 \(\{s^{(i)}\}_{i\in I}\subset\{\pm1\}^{\mathbb N}\)，先验权重为 \(w_i>0\)。
+设真实概念为 \(s^{(i_\star)}\)，并假设
+\[
+\delta_\star:=\inf_{j\neq i_\star}\delta\bigl(s^{(i_\star)},s^{(j)}\bigr)\ >\ 0.
+\]
+则定理 \ref{thm:xi-coherence-arrival-time-relative-entropy-rate} 中的相对熵率下确界取为
+\[
+D_\star=\delta_\star\,I(\eta),
+\]
+从而在 \(\PP(\cdot\mid s^{(i_\star)})\)-a.s. 意义下，当 \(\varepsilon\downarrow 0\) 有
+\[
+\tau_\varepsilon
+=\frac{\log(1/\varepsilon)+\log(1/w_{i_\star})+o(\log(1/\varepsilon))}{\delta_\star\,I(\eta)}.
+\]
+若进一步采用以描述复杂度为主导的先验（例如 \(w_i\asymp 2^{-K(i)}\)，其中 \(K(i)\) 为前缀 Kolmogorov 复杂度），则 \(\log(1/w_{i_\star})=K(i_\star)\log 2+O(1)\)，故在固定小 \(\varepsilon\) 且 \(K(i_\star)\to\infty\) 的标度极限中满足
+\[
+\tau_\varepsilon\sim \frac{K(i_\star)\log 2}{\delta_\star\,I(\eta)}.
+\]
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:xi-bsc-mismatch-information-rate}，对任意 \(j\neq i_\star\) 有
+\[
+D\bigl(\PP(\cdot\mid s^{(i_\star)})\big\|\PP(\cdot\mid s^{(j)})\bigr)
+=\delta\bigl(s^{(i_\star)},s^{(j)}\bigr)\,I(\eta).
+\]
+取下确界得到 \(D_\star=\delta_\star I(\eta)\)，代回定理 \ref{thm:xi-coherence-arrival-time-relative-entropy-rate} 即得。
+复杂度先验结论由 \(\log(1/w_{i_\star})\) 的渐近替换得到。证毕。
+\end{proof}
+
+\input{para__xi-holography-coherence-separation}
+
+\begin{theorem}[受约束 Ising 证据配分函数与 Lyapunov 自由能]\label{thm:xi-leyang-evidence-ising-lyapunov}
+令 \(X\subset\{\pm1\}^{\mathbb N}\) 为一阶 SFT，由两张 \(d\times d\) 的 \(0\!-\!1\) 矩阵 \(A^{+},A^{-}\) 表示转移约束：从状态 \(p\) 到 \(q\) 的允许边若输出符号为 \(+1\) 则 \((A^{+})_{pq}=1\)，若输出为 \(-1\) 则 \((A^{-})_{pq}=1\)。
+对给定观测词 \(y_1^n\in\{\pm1\}^n\) 与场强 \(\beta\in\RR\)，定义证据配分函数
+\[
+Z_n(\beta;y):=\sum_{x_1^n\in\mathcal L_n(X)}\exp\!\Bigl(\beta\sum_{k=1}^n x_k y_k\Bigr),
+\]
+其中 \(\mathcal L_n(X)\) 为 \(X\) 的长度 \(n\) 允词集合。
+则：
+\begin{enumerate}
+  \item 存在矩阵乘积表示
+  \[
+  Z_n(\beta;y)=\ind^\top M_{y_1}(\beta)\cdots M_{y_n}(\beta)\,\ind,
+  \]
+  其中
+  \[
+  M_{+1}(\beta)=e^{\beta}A^{+}+e^{-\beta}A^{-},
+  \qquad
+  M_{-1}(\beta)=e^{-\beta}A^{+}+e^{\beta}A^{-}.
+  \]
+  \item 若观测过程 \((Y_k)_{k\ge 1}\) 在移位下平稳遍历，则极限
+  \[
+  f(\beta):=\lim_{n\to\infty}\frac1n\log Z_n(\beta;Y_1^n)
+  \]
+  在 \(\PP\)-a.s. 意义下存在且为常数，并与 cocycle \(\{M_{Y_k}(\beta)\}\) 的顶 Lyapunov 指数一致。
+  \item \(f(\beta)\) 关于 \(\beta\) 为凸函数；其 Legendre 对偶给出在 \(X\) 约束下序参量 \(\frac1n\sum_{k=1}^n X_kY_k\) 的偏差原理速率函数。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+矩阵表示由路径求和展开得到：每条长度 \(n\) 的可行状态路径确定一个允词 \(x_1^n\)，第 \(k\) 步贡献因子 \(e^{\beta x_k y_k}\)，汇总即得 \(\ind^\top\prod_k M_{y_k}\ind\)。
+对随机观测 \(Y\)，取 \(B_n:=M_{Y_1}(\beta)\cdots M_{Y_n}(\beta)\)。
+令 \(a_n:=\log\|B_n\|\)（任一算子范数），则由次乘性得次可加性 \(a_{n+m}\le a_n+a_m\circ T^n\)。
+由 Kingman 次可加遍历定理，\(\frac1n a_n\) 于 \(\PP\)-a.s. 收敛到顶 Lyapunov 指数。
+又因 \(\ind^\top B_n\ind\) 与 \(\|B_n\|\) 在固定维数下仅差至多加性常数（上界由 Cauchy--Schwarz，下界由 SFT 的混合性在足够长块上给出统一正下界），故 \(\frac1n\log Z_n\) 与 \(\frac1n\log\|B_n\|\) 具有同一极限。
+凸性由 \(\beta\mapsto \log\sum\exp(\beta\cdot)\) 的凸性在 \(n\) 层级上继承并取极限得到；Legendre 对偶与偏差原理由热力学形式主义的标准推论给出。证毕。
+\end{proof}
+
+\begin{theorem}[贝叶斯自由能的精确变分式：后验为唯一极小化器]\label{thm:xi-bayesian-free-energy-variational-posterior-minimizer}
+在定理 \ref{thm:xi-coherence-arrival-time-relative-entropy-rate} 的可数概念族设定下，对任意样本 \(x_1^n\) 定义贝叶斯自由能（边缘码长）
+\[
+F_n(x_1^n):=-\log\sum_{i\in I}w_i\,\mu_i(x_1^n).
+\]
+则有精确变分表示
+\[
+F_n(x_1^n)
+=
+\inf_{q\in\Delta(I)}
+\left\{
+\sum_{i\in I}q_i\bigl(-\log\mu_i(x_1^n)\bigr)
++
+D(q\|w)
+\right\},
+\]
+其中 \(\Delta(I)\) 为 \(I\) 上概率单纯形，且
+\(
+D(q\|w):=\sum_{i\in I}q_i\log\frac{q_i}{w_i}
+\)。
+极小化器唯一，且等于后验 \(q=\pi_n(\cdot)\)。
+\end{theorem}
+
+\begin{proof}
+记
+\(
+\pi_n(i)=\frac{w_i\mu_i(x_1^n)}{\sum_j w_j\mu_j(x_1^n)}
+\)。
+对任意 \(q\in\Delta(I)\)，由 KL 非负性
+\[
+0\le D(q\|\pi_n)
+=\sum_{i\in I}q_i\log\frac{q_i}{\pi_n(i)}
+=D(q\|w)+\sum_{i\in I}q_i\bigl(-\log\mu_i(x_1^n)\bigr)+\log\sum_{j\in I}w_j\mu_j(x_1^n).
+\]
+移项得
+\[
+F_n(x_1^n)\le \sum_{i\in I}q_i\bigl(-\log\mu_i(x_1^n)\bigr)+D(q\|w).
+\]
+对 \(q\) 取下确界得“\(\le\)”方向；取 \(q=\pi_n\) 时上式取等号，因而得到等式。
+唯一性由 \(D(q\|\pi_n)=0\) 当且仅当 \(q=\pi_n\) 给出。证毕。
+\end{proof}
+
+\begin{conjecture}[Lee--Yang 边界、Lyapunov 判别集与投影窗口解析边界]\label{conj:xi-leyang-boundary-capacity-coherence}
+沿定理 \ref{thm:xi-leyang-evidence-ising-lyapunov} 的证据配分函数，把复场变量写作 \(z:=e^{2\beta}\in\CC^\times\)，则对每个 \(n\)，\(Z_n(\beta;Y_1^n)\) 视为 \(z\) 的 Laurent 多项式。
+记其零点集合为 \(\mathcal Z_n\subset\CC^\times\)。
+对任意平稳遍历观测源 \(Y\)，猜想存在确定的紧集 \(\mathcal K\subset\CC^\times\) 使得：
+\begin{enumerate}
+  \item \(\mathcal Z_n\) 在 Hausdorff 意义下收敛到 \(\mathcal K\)（或其任意小邻域）；
+  \item \(\mathcal K\) 可表述为复化矩阵 cocycle 的两条最大 Lyapunov 指数相等的判别集；
+  \item \(\mathcal K\) 的对数容量满足
+  \[
+  \operatorname{cap}(\mathcal K)=e^{-D_\star},
+  \]
+  其中 \(D_\star\) 为定理 \ref{thm:xi-coherence-arrival-time-relative-entropy-rate} 的相干指数常数；
+  \item 当约束 \(X\) 来源于与黄金比例 \(\varphi\) 相关的高维 cut--project 投影窗口族时，\(\mathcal K\) 的归一化代数闭包在 \(\QQ(\sqrt5)\) 上给出亏格 \(1\) 的曲线，从而与“圆维/椭圆化”机制在代数层面闭合。
+\end{enumerate}
+\end{conjecture}
+
+\input{para__xi-gauss-kuzmin-event-digit-bridge}
+
+\begin{conjecture}[Puiseux 分歧指数控制相干时间标度：幂律指数的实现无关性]\label{conj:xi-leyang-puiseux-index-coherence-time}
+设一族有限状态读出机制诱导参数化证据配分函数 \(Z_n(z)\)（\(n\) 为读取长度），并设极限自由能
+\[
+f(z):=\lim_{n\to\infty}\frac1n\log Z_n(z)
+\]
+在某个实解析点 \(z_0\in(0,\infty)\subset\CC^\times\) 的邻域存在解析延拓。
+假设 \(f\) 在复平面上距离 \(z_0\) 最近的非解析点为代数分歧点 \(z_\ast\)，且在局部坐标下具有 Puiseux 展开
+\[
+f(z)=f_0+\sum_{\ell\ge 1}c_\ell\,(z-z_\ast)^{\ell/m_\ast},
+\qquad
+m_\ast\ge 2,
+\]
+并满足非退化条件 \(c_1\neq 0\)。
+令 \(\tau_\varepsilon\) 为定理 \ref{thm:xi-coherence-arrival-time-relative-entropy-rate} 的相干到达时间（置信水平 \(1-\varepsilon\)）。
+则猜想当 \(\varepsilon\downarrow 0\) 时存在常数 \(A,B>0\) 使
+\[
+\tau_\varepsilon
+=
+A\,|\log\varepsilon|\,\mathrm{dist}(z_0,z_\ast)^{-\frac{m_\ast}{m_\ast-1}}\,(1+o(1)),
+\]
+并且幂指数 \(\frac{m_\ast}{m_\ast-1}\) 仅由分歧指标 \(m_\ast\) 决定而与实现细节无关；实现差异仅进入前因子 \(A\) 与低阶修正项（允许出现由共轭分歧对辐角诱导的确定性振荡项）。
+\end{conjecture}
+

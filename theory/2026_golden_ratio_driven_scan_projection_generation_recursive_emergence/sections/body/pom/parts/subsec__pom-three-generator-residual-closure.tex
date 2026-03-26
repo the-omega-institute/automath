@@ -1,0 +1,613 @@
+\subsection{三生成元的残差闭包：从交换证书到可计算异常签名}\label{subsec:pom-three-generator-residual-closure}
+
+本小节将三个生成元
+$$
+\mathrm{PROJ}_u,\qquad E_m,\qquad \mathrm{LIFT}_G
+$$
+收紧为一套“带参数的投影词语法 + 可核对残差指纹”的闭包口径。
+第 \ref{subsec:pom-derivable-calculus-closure} 小节已给出投影词 $2$-范畴 $\mathbf{PW}$ 的接口化定义（定义 \ref{def:pom-projword-2cat}）并展示了含 \(E_m,\mathrm{LIFT}_G,\mathrm{PROJ}_u\) 的可执行正规化示例（注 \ref{rem:pom-projword-lift-proj-normalizer-demo}）。
+这里的关键之处是：不把 “\(E_m\) 与 \(\mathrm{LIFT}_G\) 可交换” 当作一条无条件的语法断言，而是把其\emph{可交换性失败}压缩为一个可计算的“扭曲有限部异常签名”，从而把“算法等价”从叙事升级为可判定的自然性条件。
+
+\subsubsection{异常签名：用非平凡扭曲通道的有限部常数承载残差}\label{subsec:pom-anom-signature}
+
+\paragraph{动机}
+在核接口上，\(\mathrm{LIFT}_G\) 的语义由群扩张/角色分解给出：对有限阿贝尔标签群 \(G\)，其 \(\zeta\)（或行列式）可按角色族分解为一族扭曲通道（见第 \ref{sec:zeta-finite-part} 节，尤其是注 \ref{prop:arity-chebotarev-mertens-fourier} 的 DFT/反演口径）。
+另一方面，\(E_m\) 是折叠诱导的条件期望（定义 \ref{def:pom-proj-norm} 与命题 \ref{prop:fold-conditional-expectation}），它沿纤维平均并在分辨率塔上满足幂等/塔性质。
+两者在“纯产品纤维”情形下可以严格交换（Beck--Chevalley 型方块），但在一般的“标签与折叠纤维耦合”情形下，交换性破缺会把信息推入非平凡扭曲通道；而本文恰好已经具备一个可审计的常数级接口去承载这一破缺：Abel/Hadamard 有限部常数 \(\log\mathfrak{M}(\theta)\)（定义 \ref{def:abel-finite-part}）。
+
+\begin{definition}[扭曲有限部异常签名]\label{def:pom-anom-signature}
+取一个带势核 \(K\)（或等价的加权矩阵族 \(M_\theta\)），以及一个有限阿贝尔标签群 \(G\) 的 lift 语义。
+对每个角色 \(\chi\in\widehat G\)，记 \(\zeta_{\theta,\chi}\) 为 \(\chi\)-扭曲通道的 \(\zeta\) 接口（角色分解意义下的行列式因子），并按定义 \ref{def:abel-finite-part} 定义其 Abel/Hadamard 有限部常数 \(\log\mathfrak{M}_\chi(\theta)\)。
+定义 \textbf{异常签名}为非平凡角色的有限部常数族
+$$
+\mathsf{Anom}_{G}(K;\theta)
+:=\Bigl(\log\mathfrak{M}_\chi(\theta)\Bigr)_{\chi\in\widehat G\setminus\{\chi_0\}},
+$$
+其中 \(\chi_0\) 为平凡角色。
+\end{definition}
+
+\begin{remark}[为何选有限部而非仅选谱半径比]\label{rem:pom-anom-why-finite-part}
+谱半径比 \(\rho_\chi/\lambda\) 量化“慢模”的指数缺口，是扭曲破缺的主尺度证书；但它对不同扭曲通道在同一指数级下的差别不敏感。
+有限部常数 \(\log\mathfrak{M}_\chi(\theta)\) 捕获 prime-orbit Mertens 主项中的常数级漂移（命题 \ref{prop:abel-finite-part-mobius-zeta}），能稳定承载“交换失败”在常数级的残差输出；这正是把“不可交换性”从玄学变成可核对签名所需的最小补充。
+\end{remark}
+
+\subsubsection{带残差的交换律：把重写证书升级为可核对的异常项}\label{subsec:pom-residual-swap}
+
+\begin{proposition}[带异常项的 \texorpdfstring{$E_m$}{Em}--\texorpdfstring{$\mathrm{LIFT}_G$}{LIFT} 交换证书（接口版）]\label{prop:pom-em-lift-residual-swap}
+在投影词 $2$-范畴 \(\mathbf{PW}\)（定义 \ref{def:pom-projword-2cat}）中，存在一类“交换证书”把复合
+\(
+E_m\circ \mathrm{LIFT}_G
+\)
+改写为
+\(
+\mathrm{LIFT}_G\circ E_m
+\)
+并附带一个可核对的残差签名 \(\mathsf{Anom}_G(K;\theta)\)：
+对任意对象 \(\mathcal{I}(m;K;\kappa)\)，若 lift 标签与折叠纤维在机制上解耦（等价地，满足一个 Beck--Chevalley 型可拉回方块条件），则该交换证书的异常签名为零（所有非平凡扭曲通道的有限部常数与平凡通道一致到零漂移）；在一般情形下，交换失败的残差完全由非平凡扭曲通道的有限部常数族 \(\mathsf{Anom}_G(K;\theta)\) 承载。
+\end{proposition}
+
+\begin{proof}
+本命题是接口级封装：\(\mathrm{LIFT}_G\) 的角色分解把 lift 后的 \(\zeta\)/有限部输出拆成 \(\widehat G\) 上的扭曲因子族（注 \ref{prop:arity-chebotarev-mertens-fourier}），而 \(E_m\) 的语义是沿折叠纤维的条件期望（命题 \ref{prop:fold-conditional-expectation}）。
+当两者满足 Beck--Chevalley 型拉回条件时，条件期望与标签提升为直积结构，因而在每个扭曲通道上严格交换，异常签名为零。
+一般情形下，交换不再是严格等式；但由于本文所有可审计输出最终都通过同一个 \(\zeta_\theta=1/\det(I-zM_\theta)\) 与有限部接口抽取（定义 \ref{def:abel-finite-part}），交换破缺的\emph{可观测部分}必然落在“非平凡扭曲通道相对于平凡通道”的有限部差异上，即 \(\mathsf{Anom}_G(K;\theta)\)。
+\end{proof}
+
+\begin{corollary}[零异常 \texorpdfstring{$\Longleftrightarrow$}{<->} Beck--Chevalley 可拉回（闭环接口版）]\label{cor:pom-zero-anom-pullback-exactness}
+在命题 \ref{prop:pom-em-lift-residual-swap} 的设定下，把“严格交换”理解为：对每个扭曲角色通道 \(\chi\in\widehat G\)，在本文采用的闭环接口
+\[
+\text{有限核/矩阵族}\Rightarrow \zeta \Rightarrow \log\mathfrak{M}
+\]
+上，复合 \(E_m\circ \mathrm{LIFT}_G\) 与 \(\mathrm{LIFT}_G\circ E_m\) 给出相同的通道输出（等价地：该方块是离散 Beck--Chevalley 型的可拉回方块）。
+则有等价刻画：
+\[
+\boxed{\;
+\mathsf{Anom}_G(K;\theta)=0
+\quad\Longleftrightarrow\quad
+E_m\ \text{与}\ \mathrm{LIFT}_G\ \text{在所有扭曲通道上严格交换（接口意义下）}.}
+\]
+\end{corollary}
+
+\begin{proof}
+命题 \ref{prop:pom-em-lift-residual-swap} 已把交换失败的全部可观测残差压缩为 \(\mathsf{Anom}_G(K;\theta)\)；
+因此“残差为零”与“闭环接口上严格交换”互为充要条件。
+\end{proof}
+
+\subsubsection{普适可交换化群商：把残差从“数值签名”提升为“被折叠抹掉的群方向”}\label{subsec:pom-bc-quotient}
+命题 \ref{prop:pom-em-lift-residual-swap} 与推论 \ref{cor:pom-zero-anom-pullback-exactness} 把 \(E_m\) 与 \(\mathrm{LIFT}_G\) 的交换失败压缩为常数级异常签名 \(\mathsf{Anom}_G(K;\theta)\)。
+在“可推演的演算学”层面，仅有数值残差仍不足以构成可计算的结构对象：还需要把“交换失败来自哪一部分群信息”本体化为一个可构造对象。
+\par
+本段给出一个纯群论的 strictification：对固定分辨率 \(m\)，构造一个\textbf{普适群商} \(G\twoheadrightarrow G^{\mathrm{BC}}_m\)，使得在 \(G^{\mathrm{BC}}_m\) 上交换在接口意义下\emph{严格}成立；并且该群商是最大的（普适的），因此它刻画了“在 \(E_m\) 视角下仍可见的最大群寄存器”，而其核即为“被折叠抹掉的群方向”。
+
+\begin{definition}[纤维可见等价与 Beck--Chevalley 可交换化商]\label{def:pom-bc-quotient}
+固定对象 \(\mathcal{I}(m;K;\kappa)\) 与分辨率 \(m\)。
+设折叠为 \(\Fold_m:\Omega_m\to X_m\)，并以 \(E_m\) 表示其诱导的条件期望/纤维平均接口（命题 \ref{prop:fold-conditional-expectation}）。
+设 lift 语义由一个有限阿贝尔群 \(G\) 与一个（一步或长度 \(m\) 的）群标签函数
+\[
+\ell:\Omega_m\to G
+\]
+给出（其来源可以是核边上的 cocycle 沿长度 \(m\) 路径的积累；在纤维内 Fourier 口径中同样写作 \(\ell\)，见定义 \ref{def:pom-fiber-fourier-coeff}）。
+\par
+定义“纤维不可分辨”关系为
+\[
+a\sim_m b\quad\Longleftrightarrow\quad \Fold_m(a)=\Fold_m(b)\qquad(a,b\in\Omega_m),
+\]
+并定义\textbf{纤维不变子群}（被折叠抹掉的群方向）为
+\[
+N^{\mathrm{BC}}_m
+:=\left\langle\ \ell(a)\ell(b)^{-1}\ :\ a,b\in\Omega_m,\ a\sim_m b\ \right\rangle\ \le\ G.
+\]
+令 \(\pi_m:G\twoheadrightarrow G^{\mathrm{BC}}_m:=G/N^{\mathrm{BC}}_m\) 为商映射，并记 \(\bar\ell_m:=\pi_m\circ \ell:\Omega_m\to G^{\mathrm{BC}}_m\)。
+则 \(\bar\ell_m\) 在每条折叠纤维上常值，从而诱导一个良定义的\textbf{可见标签}
+\[
+\ell^{\mathrm{vis}}_m:X_m\to G^{\mathrm{BC}}_m,
+\qquad
+\ell^{\mathrm{vis}}_m\bigl(\Fold_m(a)\bigr)=\bar\ell_m(a).
+\]
+\end{definition}
+
+\begin{proposition}[严格可交换化：在 \(G^{\mathrm{BC}}_m\) 上异常为零]\label{prop:pom-bc-quotient-strictify}
+沿用定义 \ref{def:pom-bc-quotient} 的记号。
+将 \(\mathrm{LIFT}_G\) 的群轴替换为 \(G^{\mathrm{BC}}_m\)（即以 \(\bar\ell_m\) 作为 lift 标签），则 \(E_m\) 与 \(\mathrm{LIFT}_{G^{\mathrm{BC}}_m}\) 在闭环接口意义下严格交换；等价地，
+\[
+\mathsf{Anom}_{G^{\mathrm{BC}}_m}(K;\theta)=0
+\]
+（对所有被考虑的势参数 \(\theta\) 与所有非平凡扭曲通道）成立。
+\end{proposition}
+\begin{proof}
+由构造，\(\bar\ell_m\) 仅依赖于 \(\Fold_m(a)\)，即存在 \(\ell^{\mathrm{vis}}_m\) 使得 \(\bar\ell_m=\ell^{\mathrm{vis}}_m\circ \Fold_m\)。
+因此对任意角色 \(\overline\chi\in\widehat{G^{\mathrm{BC}}_m}\)，函数
+\(
+f_{\overline\chi}:=\overline\chi\circ \bar\ell_m
+=
+\overline\chi\circ \ell^{\mathrm{vis}}_m\circ \Fold_m
+\)
+是 \(\sigma(\Fold_m)\)-可测，故满足 \(E_m f_{\overline\chi}=f_{\overline\chi}\)。
+这正是 Beck--Chevalley 型“标签与折叠纤维解耦”的严格版本：在每个可见扭曲通道上，条件期望不再引入通道间混合，因此 \(E_m\) 与 \(\mathrm{LIFT}_{G^{\mathrm{BC}}_m}\) 的交换方块在闭环接口上严格闭合。
+由推论 \ref{cor:pom-zero-anom-pullback-exactness} 得 \(\mathsf{Anom}_{G^{\mathrm{BC}}_m}(K;\theta)=0\)。证毕。
+\end{proof}
+
+\begin{proposition}[普适性（最大性）：任何严格交换的群商必因子化]\label{prop:pom-bc-quotient-universal}
+沿用定义 \ref{def:pom-bc-quotient} 的设定。
+设 \(\phi:G\twoheadrightarrow H\) 为任意满同态。
+若 \(\phi\circ \ell\) 在折叠纤维上不变（等价地：存在 \(\ell_H^{\mathrm{vis}}:X_m\to H\) 使得 \(\phi\circ\ell=\ell_H^{\mathrm{vis}}\circ\Fold_m\)，亦等价于 \(E_m\) 与 \(\mathrm{LIFT}_H\) 在闭环接口意义下严格交换），则必有
+\[
+N^{\mathrm{BC}}_m\ \le\ \ker(\phi),
+\]
+从而存在唯一满同态 \(\bar\phi:G^{\mathrm{BC}}_m\twoheadrightarrow H\) 使得 \(\phi=\bar\phi\circ \pi_m\)。
+\end{proposition}
+\begin{proof}
+对任意 \(a\sim_m b\)，由假设 \(\phi\circ\ell\) 在纤维上不变得 \(\phi(\ell(a))=\phi(\ell(b))\)，即 \(\phi(\ell(a)\ell(b)^{-1})=1\)。
+因此 \(\ell(a)\ell(b)^{-1}\in\ker(\phi)\)。
+由 \(N^{\mathrm{BC}}_m\) 的生成定义，得 \(N^{\mathrm{BC}}_m\le \ker(\phi)\)。
+于是 \(\phi\) 在商群 \(G/N^{\mathrm{BC}}_m\) 上诱导出唯一的 \(\bar\phi\)，并满足 \(\phi=\bar\phi\circ\pi_m\)。证毕。
+\end{proof}
+
+\begin{remark}[可计算性：从纤维枚举到商群的标准形]\label{rem:pom-bc-quotient-computable}
+定义 \ref{def:pom-bc-quotient} 的构造在有限分辨率上是直接可计算的：给定可计算的折叠 \(\Fold_m:\Omega_m\to X_m\) 与可计算的标签 \(\ell:\Omega_m\to G\)，枚举每条纤维 \(\Fold_m^{-1}(x)\) 并收集生成元
+\(
+\ell(a)\ell(b)^{-1}
+\)
+即可得到 \(N^{\mathrm{BC}}_m\) 的一个有限生成集合。
+当 \(G\) 为有限阿贝尔群时，可将 \(G\) 表示为有限个循环群的直积，并对生成元矩阵做 Smith 标准形，从而在多项式时间内得到商群 \(G^{\mathrm{BC}}_m=G/N^{\mathrm{BC}}_m\) 的不变量分解与角色域 \(\widehat{G^{\mathrm{BC}}_m}\)。
+因此“严格可交换化商”不仅存在，而且可作为审计流水线的一项离散输出直接核对。
+\end{remark}
+
+\begin{corollary}[异常的支撑：仅来自 \texorpdfstring{$\widehat{N^{\mathrm{BC}}_m}$}{N^BC_m}-方向]\label{cor:pom-anom-supported-on-bc-kernel}
+沿用定义 \ref{def:pom-bc-quotient} 的设定。
+将 \(\widehat{G^{\mathrm{BC}}_m}\) 视为 \(\widehat G\) 的子群（即：\(\widehat{G^{\mathrm{BC}}_m}\cong\{\chi\in\widehat G:\chi|_{N^{\mathrm{BC}}_m}=1\}\)）。
+则对任意 \(\chi\in\widehat G\)，若 \(\chi|_{N^{\mathrm{BC}}_m}=1\)，则对应扭曲通道的交换残差为零：
+\[
+\chi|_{N^{\mathrm{BC}}_m}=1
+\quad\Longrightarrow\quad
+\bigl(\mathsf{Anom}_G(K;\theta)\bigr)_{\chi}=0.
+\]
+因此任何非零异常坐标只能出现在 \(\widehat G\setminus \widehat{G^{\mathrm{BC}}_m}\)（即对 \(N^{\mathrm{BC}}_m\) 非平凡的角色）方向上。
+\end{corollary}
+\begin{proof}
+若 \(\chi|_{N^{\mathrm{BC}}_m}=1\)，则 \(\chi\) 因子化为某个 \(\overline\chi\in\widehat{G^{\mathrm{BC}}_m}\) 与商映射 \(\pi_m\) 的复合。
+因此 \(\chi\)-扭曲通道等价于在 \(G^{\mathrm{BC}}_m\) 上的可见扭曲通道。
+由命题 \ref{prop:pom-bc-quotient-strictify}，所有可见扭曲通道的异常为零，从而对应坐标 \(\bigl(\mathsf{Anom}_G(K;\theta)\bigr)_{\chi}=0\)。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/cor__pom-bc-pontryagin-dual-classification}
+
+\begin{corollary}[分辨率塔上的可见寄存器逆系统]\label{cor:pom-bc-inverse-system}
+对任意 \(m_2\ge m_1\)，由于折叠条件期望满足塔性质 \(E_{m_1}\circ E_{m_2}=E_{m_1}\)（见 \S\ref{subsec:pom-conditional-expectation}），\(m_2\) 层的纤维不可分辨关系细化 \(m_1\) 层，因而
+\[
+N^{\mathrm{BC}}_{m_2}\ \le\ N^{\mathrm{BC}}_{m_1},
+\qquad\text{从而}\qquad
+G^{\mathrm{BC}}_{m_2}\twoheadrightarrow G^{\mathrm{BC}}_{m_1}.
+\]
+因此 \(\{G^{\mathrm{BC}}_m\}_{m\ge 1}\) 构成一个逆系统，并可定义其逆极限
+\[
+G^{\mathrm{BC}}_\infty:=\varprojlim_m G^{\mathrm{BC}}_m.
+\]
+该极限对象可被解释为：在“无限分辨率读出”下仍与折叠严格相容的群寄存器可见骨架。
+\end{corollary}
+
+\subsubsection{异常签名的可组合律：作为 \texorpdfstring{$\mathbf{PW}$}{PW} 的 \texorpdfstring{$2$}{2}-上同调类}\label{subsec:pom-anom-cohomology}
+把命题 \ref{prop:pom-em-lift-residual-swap} 的“带标签交换证书”视为 \(\mathbf{PW}\) 的一个 \(2\)-态射生成元，其关键收益是：异常不再是事后补丁，而是一个可在重写层面组合、并在改变规约路径时只发生边界变换的残差类。
+
+\begin{definition}[异常累积与规范化异常]\label{def:pom-anom-accumulation}
+固定一个带参对象 \(\mathcal{I}(m;K;\kappa)\)、一个有限阿贝尔 lift 群 \(G\) 与势参数 \(\theta\)。
+在仅由 \(\mathrm{PROJ}_u,E_m,\mathrm{LIFT}_G\) 生成的子片段中，令
+\[
+\mathcal{A}_G:=\RR^{\widehat G\setminus\{\chi_0\}}
+\]
+并以分量加法为群运算。
+对任意重写证书（\(2\)-态射） \(\alpha:w\Rightarrow w'\)，定义其\textbf{异常累积}
+\(\mathrm{anom}(\alpha)\in\mathcal{A}_G\)
+为：把 \(\alpha\) 分解为一串局部重写步后，对每一步取其标签并求和，其中
+(i) 幂等/塔缩并/严格可交换步的标签取 \(0\)；
+(ii) 每一次 \(E_m\)--\(\mathrm{LIFT}_G\) 的带残差交换步的标签取 \(\mathsf{Anom}_G(K;\theta)\)（定义 \ref{def:pom-anom-signature}）。
+给定一个正规形选择算子 \(N\) 及其规范化证书族 \(\eta_w:w\Rightarrow N(w)\)，定义词的\textbf{规范化异常}为
+\[
+\mathrm{Anom}(w):=\mathrm{anom}(\eta_w).
+\]
+\end{definition}
+
+\begin{proposition}[加法复合律与边界项]\label{prop:pom-anom-additive-up-to-boundary}
+在定义 \ref{def:pom-anom-accumulation} 的设定下，\(\mathrm{anom}\) 对 \(2\)-态射的纵向复合严格可加：若 \(\alpha:w\Rightarrow w'\) 与 \(\beta:w'\Rightarrow w''\) 可复合，则
+\[
+\mathrm{anom}(\beta\circ\alpha)=\mathrm{anom}(\beta)+\mathrm{anom}(\alpha).
+\]
+进一步地，对任意可复合的 \(1\)-态射 \(w_1,w_2\)，存在一个仅依赖于正规形选择的 \(2\)-cochain \(B(w_2,w_1)\in\mathcal{A}_G\)，使得
+\[
+\mathrm{Anom}(w_2\circ w_1)
+=
+\mathrm{Anom}(w_2)+\mathrm{Anom}(w_1)+\partial B(w_2,w_1),
+\]
+其中 \(\partial B\) 表示因“先各自规约再合并”与“直接规约”两条规范化路径的比较而产生的边界项（等价地：改变规范化证书族 \(\{\eta_w\}\) 时，\(\mathrm{Anom}\) 只改变一个 coboundary）。
+\end{proposition}
+
+\begin{corollary}[零异常是路径不变量]\label{cor:pom-anom-cohomology-class}
+“异常是否为零”与规约路径/规约基准无关：若在某一正规化选择下 \(\mathrm{Anom}(w)=0\)，则对任意其他正规化选择所得的 \(\mathrm{Anom}'(w)\) 亦为零。
+等价地，\(\mathrm{Anom}\) 定义了一个可计算的（\(2\)-）上同调类，其消失刻画了交换失败是否可被重写完全消去。
+\end{corollary}
+
+\begin{corollary}[异常类的严格加法性（水平复合）]\label{cor:pom-anom-class-additive}
+在命题 \ref{prop:pom-anom-additive-up-to-boundary} 的记号下，对任意可复合的 \(1\)-态射 \(w_1,w_2\)，其异常上同调类满足严格加法律
+\[
+\boxed{\;
+[\mathrm{Anom}(w_2\circ w_1)]
+=
+[\mathrm{Anom}(w_2)]
++
+[\mathrm{Anom}(w_1)]\;}
+\]
+（因为边界项 \(\partial B(w_2,w_1)\) 在取上同调类后消失）。
+\end{corollary}
+
+\begin{remark}[带残差的 \(2\)-合流：把“不可交换”内化为中心标签]\label{rem:pom-residual-2confluence}
+在三生成元片段上，我们不要求 \(E_m\) 与 \(\mathrm{LIFT}_G\) \emph{严格}交换，而是要求其交换失败被一个可加的中心标签群 \(\mathcal{A}_G\) 完全承载（定义 \ref{def:pom-anom-accumulation}）。
+于是“合流”应被理解为一种带残差的 \(2\)-合流口径：在固定复杂度上界内，任意两条重写路径都可并到同一个接口正规形（命题 \ref{prop:pom-three-gen-interface-normal-form}），而其残差差异（若出现）必落在命题 \ref{prop:pom-anom-additive-up-to-boundary} 的边界项上；因此 \(\bigl(\mathrm{NF}(w),[\mathrm{Anom}(w)]\bigr)\)（正规形 + 异常上同调类）成为路径不变量。
+这正是推论 \ref{cor:pom-three-gen-normal-form-decidable} 的“正规形判等 + 有限签名核对”在演算学层面的封装：不可交换性不再破坏可推演性，而被提升为可组合、可审计的 \(2\)-态射数据。
+\end{remark}
+
+\begin{remark}[离散联络观点：异常即曲率（闭层规范场强）]\label{rem:pom-anom-as-curvature}
+把对象 \(\mathcal{I}(m;K;\kappa)\) 的参数对 \((m,G)\) 视为一个离散“基底平面”的两条轴：
+分辨率/模数轴 \(m\)（由条件期望 \(E_m\) 给出 coarse-graining 的平行移动），以及内部标签轴 \(G\)（由 \(\mathrm{LIFT}_G\) 给出标签提升的平行移动）。
+则命题 \ref{prop:pom-em-lift-residual-swap} 所给的
+\[
+E_m\circ \mathrm{LIFT}_G\ \Rightarrow\ \mathrm{LIFT}_G\circ E_m
+\]
+正可被理解为该离散联络在一个基本方块上的\emph{曲率 \(2\)-胞腔}：
+当 lift 与折叠纤维解耦（Beck--Chevalley 型方块可拉回）时该曲率退化为恒等 \(2\)-态射；一般情形下的“方块不闭合”会把可观测残差推入非平凡扭曲通道，并被最小地压缩为有限部常数族 \(\mathsf{Anom}_G(K;\theta)\)（定义 \ref{def:pom-anom-signature}）。
+因此在本文的闭层 primitives 口径中，规范场无需先验连续纤维丛/李群即可被定义：它最小地由离散平行移动 \((E_m,\mathrm{LIFT}_G)\) 及其曲率证书 \(\mathsf{Anom}_G\) 给出。
+推论 \ref{cor:pom-anom-cohomology-class} 的上同调不变量性则对应于“改变规约基准（离散 gauge 选择）只改变一个 coboundary，而不改变曲率是否为零”的事实。
+\end{remark}
+
+\begin{remark}[面向 completion：critical pairs 决定额外异常生成元]\label{rem:pom-anom-completion}
+推论 \ref{cor:pom-anom-cohomology-class} 的工程含义是：当把投影词片段扩展（例如加入 \(\mathrm{MOM}_q\) 或更一般的 lift/cocycle）时，只需枚举新旧生成元之间的临界对（critical pairs）并对重写系统做 completion，新出现的“不可严格交换”将自动表现为 \(\mathcal{A}\)-值标签；异常签名因此成为一个可组合的残差簇，而非逐条规则的临时补丁。
+例如在四生成元扩展中，\(\mathrm{MOM}_q\) 与 \(\mathrm{LIFT}_G\) 的新耦合由 \((\mathrm{RMOML})\)（命题 \ref{prop:pom-rmoml-sound}）统一归约，而其常数层可核对指纹由高阶异常签名塔 \(\mathsf{Anom}^{(q)}_G\)（定义 \ref{def:pom-anom-signature-tower}）组织。
+三生成元片段上的有界临界对枚举与 completion 审计见注 \ref{rem:pom-threegen-kb-completion-audit}。
+\end{remark}
+
+\begin{proposition}[Moment 的异常放大律（\texorpdfstring{$q$}{q} 倍 gap amplification）]\label{prop:pom-anom-moment-amplification}
+在四生成元扩展片段（定义 \ref{def:pom-four-gen-rewrite-rules}）中，取任意三生成元投影词 \(w\)。
+把定义 \ref{def:pom-anom-accumulation} 的“中心标签累积”口径按同一规约证书规范延拓到含 \(\mathrm{MOM}_q\) 的规约轨迹上（即仍只对每一次 \(E_m\)--\(\mathrm{LIFT}_G\) 的残差交换步累积 \(\mathsf{Anom}_G\) 标签，并按 coboundary 取商）。
+则对任意整数 \(q\ge 2\)，有异常上同调类的线性放大律：
+\[
+\boxed{\;
+[\mathrm{Anom}(\mathrm{MOM}_q\circ w)]
+=
+q\cdot [\mathrm{Anom}(w)].\;}
+\]
+因此，一旦两词的异常类差异在常数层过小而不易数值核验，可通过选择更高阶 moment 门将该差异按 \(q\) 线性放大，并仍停留在有限核可编译/可审计的语义域内。
+\end{proposition}
+
+\begin{proof}[证明思路]
+按 \(\mathrm{MOM}_q\) 的 fiber-product 语义，它把底层轨道约束提升为 \(q\) 份并置的同步世界；因此任意一条针对 \(w\) 的规约证书轨迹，在 \(\mathrm{MOM}_q\circ w\) 上对应为“逐份提升”的 \(q\) 份平行证书轨迹。
+由于异常标签群 \(\mathcal{A}_G\) 在定义 \ref{def:pom-anom-accumulation} 中以分量加法为中心运算，且 \(\mathrm{anom}\) 对纵向复合严格可加（命题 \ref{prop:pom-anom-additive-up-to-boundary}），故累积标签随并置份数线性增长，得到所示 \(q\) 倍放大；取上同调类后边界项消失，结论不依赖规约路径选择。证毕。
+\end{proof}
+
+\begin{remark}[可复现：holonomy/路径差异的自动核验]\label{rem:pom-holonomy-cocycle-audit}
+为把“异常作为 \(2\)-上同调类”的口径落到可执行证书，我们提供一个最小的 holonomy 核验脚本：
+\texttt{scripts/exp\_pom\_holonomy\_cocycle\_audit.py}。
+该脚本随机生成若干含 \(\mathrm{PROJ}_u,E_m,\mathrm{LIFT}_G\) 的投影词，并用两种不同的重写优先级分别规约到同一正规形候选；
+随后比较
+(i) 词法正规形是否一致，
+以及
+(ii) 在所选证书规范（gauge）下，交换证书（每次 \(E_m\)--\(\mathrm{LIFT}_G\) 的 swap）累积得到的 holonomy 计数是否一致。
+当检测到差异时，脚本会把反例词、两条规约轨迹及其 holonomy 统计写入
+\texttt{artifacts/export/pom\_holonomy\_cocycle\_audit.json}，
+用于定位 completion 所需的关键临界对/边界修正（命题 \ref{prop:pom-anom-additive-up-to-boundary}）。
+\end{remark}
+
+\begin{remark}[可复现：三生成元片段的临界对枚举与 completion 审计]\label{rem:pom-threegen-kb-completion-audit}
+注 \ref{rem:pom-holonomy-cocycle-audit} 给出的是“随机词 + 两种规约优先级”的路径差异核验。
+为得到一个更接近 Knuth--Bendix completion 的\emph{穷举式}审计，我们提供脚本
+\texttt{scripts/exp\_pom\_projword\_three\_gen\_kb\_completion\_audit.py}：
+在固定复杂度上界（限制 \(m\)、限制 lift 的群列表、限制温度参数采样集合）下枚举所有长度 \(3\) 的 overlap 语境，
+并对每个临界对比较两条局部规约分支的接口正规形与残差计数。
+脚本输出 JSON 摘要与若干反例轨迹到
+\texttt{artifacts/export/pom\_projword\_three\_gen\_kb\_completion\_audit.json}，
+并生成表 \ref{tab:pom_projword_three_gen_kb_completion_audit} 作为可复现见证：
+\input{sections/generated/tab_pom_projword_three_gen_kb_completion_audit}
+\noindent 表中 \(\#\)NF mismatch 为零意味着该有界片段在词法层通过了局部合流审计；
+而 residual mismatch 的出现对应于命题 \ref{prop:pom-anom-additive-up-to-boundary} 中的边界项，
+脚本在 JSON 中给出按临界对类型聚类的 completion 候选修正。
+\end{remark}
+
+\begin{proposition}[合流不是绝对合流，而是合流模异常（有界审计版）]\label{prop:pom-confluence-mod-anom-audited}
+在与注 \ref{rem:pom-threegen-kb-completion-audit} 相同的复杂度上界内，三生成元片段 \((\mathrm{PROJ}_u,E_m,\mathrm{LIFT}_G)\) 满足：
+\begin{enumerate}
+  \item \textbf{（正规形唯一）} 对任意被审计的 overlap 临界对，两条局部规约分支都可并到同一个接口正规形，因此在该复杂度类上正规形是路径不变量（表 \ref{tab:pom_projword_three_gen_kb_completion_audit} 的 \(\#\mathrm{NF\ mismatch}=0\)）。
+  \item \textbf{（残差仅差边界）} 规约路径可能产生不同的残差标签（表 \ref{tab:pom_projword_three_gen_kb_completion_audit} 的 residual mismatch），但其差异必落在命题 \ref{prop:pom-anom-additive-up-to-boundary} 的边界项（coboundary）中；因此异常的上同调类 \([\mathrm{Anom}(w)]\) 与“异常是否为零”均为路径不变量（推论 \ref{cor:pom-anom-cohomology-class}）。
+\end{enumerate}
+因此，把投影词的判等关系取为“正规形一致 + 异常类一致”是自然的：改变规约优先级只改变一个 coboundary，而不改变异常类是否为零。
+\end{proposition}
+
+\begin{definition}[算法等价（正规形 + 异常类）]\label{def:pom-algorithmic-equivalence-nf-anom}
+在上述复杂度上界内，对任意两个投影词 \(w_1,w_2\)，定义
+\[
+w_1\sim w_2
+\iff
+\mathrm{NF}(w_1)=\mathrm{NF}(w_2)
+\ \text{且}\
+[\mathrm{Anom}(w_1)]=[\mathrm{Anom}(w_2)].
+\]
+其中 \(\mathrm{NF}\) 可取命题 \ref{prop:pom-three-gen-interface-normal-form} 的接口正规形代表，而 \([\mathrm{Anom}(w)]\) 为命题 \ref{prop:pom-anom-additive-up-to-boundary} 所确定的异常上同调类（在任一固定规约证书规范下计算的代表元，按 coboundary 取商）。
+在本文实现中我们固定一种正规化器与证书规范，因此该等价关系可由推论 \ref{cor:pom-three-gen-normal-form-decidable} 的“正规形参数 + 有限异常签名核对”直接判定。
+\end{definition}
+
+\begin{corollary}[含 \texorpdfstring{$(\mathrm{PROJ}_u,E_m,\mathrm{LIFT}_G)$}{(PROJ,Em,LIFT)} 的正规形与有限签名判等]\label{cor:pom-three-gen-normal-form-decidable}
+固定词复杂度上界（例如限制 \(m\)、限制 lift 的群大小、限制温度参数采样集合）。
+则任何仅由 \(\mathrm{PROJ}_u,E_m,\mathrm{LIFT}_G\) 生成的投影词，都可归约到一类接口正规形（参见注 \ref{rem:pom-zeta-normal-form} 的编译顺序）并附带有限异常签名
+\(
+\mathsf{Anom}_G(K;\theta)
+\)
+的有限采样集合。
+因此在该复杂度类上，“算法等价”（自然性意义下的可交换/可同构）可归结为：
+比较正规形参数 \((u,m,G)\) 以及比较有限个采样点上的异常签名是否一致。
+\end{corollary}
+
+\begin{definition}[保守语义函子 \texorpdfstring{$\mathsf{Sem}$}{Sem}（有界复杂度切片）]\label{def:pom-conservative-sem-functor}
+令 \(\Theta\) 表示本文接口参数的一个\emph{有限审计切片}：例如固定分辨率上界 \(m\le m_{\max}\)、固定 lift 群列表 \(\mathcal{G}_{\max}\)（从而 \(|G|\le G_{\max}\)）、固定 moment 阶窗口 \(q\le q_{\max}\)，并对温度 \(u\in(0,1]\) 与势参数 \(\theta\) 取一组有限采样网格。
+把各生成元视为 \(\Theta\)-族后，得到参数化的投影词 \(2\)-范畴记作 \(\mathbf{PW}*\Theta\)。
+\par
+在该切片上，定义两个可计算的语义输出域：
+\begin{enumerate}
+  \item \textbf{签名域 \(\mathbf{Sig}*\Theta\)：}记录常数层与正规形层的可核对指纹。对词 \(w\) 取
+  \[
+  \mathsf{Sig}(w):=\Bigl(\mathrm{NF}(w),\ G^{\mathrm{BC}}_m(w),\ [\mathrm{Anom}(w)],\ \{\mathsf{Anom}_{G}(K;\theta)\}_{\theta\in\Theta}\Bigr),
+  \]
+  其中 \(\mathrm{NF}(w)\) 为接口正规形代表（命题 \ref{prop:pom-three-gen-interface-normal-form}），
+  \(G^{\mathrm{BC}}_m(w)\) 为定义 \ref{def:pom-bc-quotient} 的普适可交换化商（记录“在 \(E_m\) 视角下仍可见的最大群寄存器”），
+  \([\mathrm{Anom}(w)]\) 为异常的 \(2\)-上同调类（命题 \ref{prop:pom-anom-additive-up-to-boundary}），
+  而 \(\{\mathsf{Anom}_{G}(K;\theta)\}_{\theta\in\Theta}\) 是有限采样签名族（定义 \ref{def:pom-anom-signature}）。
+  \item \textbf{谱域 \(\mathbf{Spec}*\Theta\)：}记录指数主尺度的谱资源读出。典型选择是：对每个通道参数 \((\chi,u)\) 与整数 \(q\) 输出加权碰撞 moment-kernel 的 Perron 根
+  \(r^{(w)}_{q,\chi}(u)\)，或等价的压力/预算曲线 \(\Sigma_{\mathrm{space}}(w)(q;\chi,u)\) 与其离散凸闭包类型正规形 \(\mathrm{Ty}_{\mathrm{space}}(w;\chi,u)\)（\S\ref{subsec:pom-spectral-resource-type}）。
+\end{enumerate}
+于是得到组合语义赋值（在切片上为可计算函子）
+\[
+\boxed{\;
+\mathsf{Sem}:\mathbf{PW}*\Theta\longrightarrow \mathbf{Sig}*\Theta\times \mathbf{Spec}*\Theta,\qquad
+\mathsf{Sem}(w):=(\mathsf{Sig}(w),\mathsf{Spec}(w)).\;}
+\]
+\end{definition}
+
+\begin{theorem}[有界切片上的语义保守性（自然同构的可判定核心）]\label{thm:pom-sem-conservative-on-slice}
+在与推论 \ref{cor:pom-three-gen-normal-form-decidable} 相同的复杂度上界内，\(\mathsf{Sem}\) 是保守的：若两词 \(w_1,w_2\) 满足
+\(
+\mathsf{Sem}(w_1)=\mathsf{Sem}(w_2)
+\)，
+则存在可逆 \(2\)-态射（自然同构）使 \(w_1\simeq w_2\)；等价地 \(w_1\sim w_2\)（定义 \ref{def:pom-algorithmic-equivalence-nf-anom}）。
+\end{theorem}
+
+\begin{proof}
+\(\mathsf{Sem}(w_1)=\mathsf{Sem}(w_2)\) 蕴含签名分量相等，特别是 \(\mathrm{NF}(w_1)=\mathrm{NF}(w_2)\) 且 \([\mathrm{Anom}(w_1)]=[\mathrm{Anom}(w_2)]\)。
+由定义 \ref{def:pom-algorithmic-equivalence-nf-anom} 得 \(w_1\sim w_2\)，并由推论 \ref{cor:pom-three-gen-normal-form-decidable} 的可判定性口径得到对应的可逆证书。
+谱分量在该结论中可视为冗余核验（但在后续的类型定向重写与多尺度预算比较中提供额外判别力）。证毕。
+\end{proof}
+
+\begin{remark}[符号证书升级：用扭曲特征多项式替代有限采样]\label{rem:pom-anom-symbolic-certificate}
+推论 \ref{cor:pom-three-gen-normal-form-decidable} 的“有限采样签名”是工程友好的可审计口径；
+若希望把等价性进一步升级为\emph{完全形式化}的代数等式证书，可在固定复杂度上界下对扭曲通道做符号化：
+对每个非平凡角色 \(\chi\in\widehat G\setminus\{\chi_0\}\)，将投影词 \(w\)（含 \(\mathrm{PROJ}_u\) 的温度参数）编译为有限维扭曲矩阵 \(M_{\chi}^{(w)}(u)\)，并定义
+\[
+\Delta_\chi(w;z,u):=\det\bigl(I-z\,M_{\chi}^{(w)}(u)\bigr).
+\]
+在本文的接口设定中，矩阵条目由有限图核的边权生成（典型为 \(u\) 的幂或有限生成的解析函数），因此在给定复杂度类内 \(\Delta_\chi\) 是可计算的符号对象（关于 \(z\) 的多项式，系数在 \(u\) 的可计算代数域中）。
+一旦两实现对所有非平凡 \(\chi\) 的 \(\Delta_\chi\) 完全一致，则对应的扭曲 \(\zeta\) 与有限部常数一致，从而异常签名一致；此时“可审计”等价被提升为“可证明”等价。
+\end{remark}
+
+\subsubsection{三生成元的可计算重写系统与接口正规形}\label{subsec:pom-three-gen-rewrite-normal}
+
+本段把“语义接口”落回到词法层：给出一套只依赖参数的重写规则，把任何由
+\(\mathrm{PROJ}_u,E_m,\mathrm{LIFT}_G\)
+生成的投影词归约到一个可执行的接口正规形，并把非交换残差显式收束为异常签名（定义 \ref{def:pom-anom-signature}）。
+
+\begin{definition}[三生成元片段上的重写规则族]\label{def:pom-three-gen-rewrite-rules}
+在 $\mathbf{PW}$ 中取仅由 \(\mathrm{PROJ}_u\)、\(\mathrm{LIFT}_G\)、\(E_m\) 生成的子片段。
+定义其上的重写规则族如下（均为 $2$-态射证书，省略单位与结合子的同构）：
+\begin{enumerate}
+  \item \textbf{温度门合并（幂半群）：}
+  $$
+  (\mathrm{RPROJ})\quad
+  \mathrm{PROJ}_u\circ \mathrm{PROJ}_v\ \Rightarrow\ \mathrm{PROJ}_{uv}.
+  $$
+  \item \textbf{lift 合并（直积提升）：}
+  $$
+  (\mathrm{RLIFT})\quad
+  \mathrm{LIFT}_G\circ \mathrm{LIFT}_H\ \Rightarrow\ \mathrm{LIFT}_{G\times H}.
+  $$
+  \item \textbf{条件期望塔缩并：}
+  $$
+  (\mathrm{RE})\quad
+  E_{m_1}\circ E_{m_2}\ \Rightarrow\ E_{\min(m_1,m_2)}.
+  $$
+  \item \textbf{温度门与 lift 可交换（权重拉回）：}
+  $$
+  (\mathrm{RPL})\quad
+  \mathrm{PROJ}_u\circ \mathrm{LIFT}_G\ \Rightarrow\ \mathrm{LIFT}_G\circ \mathrm{PROJ}_u.
+  $$
+  \item \textbf{带残差的 \(E_m\)--lift 交换：}
+  以命题 \ref{prop:pom-em-lift-residual-swap} 为证书口径，把 \(E_m\circ\mathrm{LIFT}_G\) 归约为 \(\mathrm{LIFT}_G\circ E_m\) 并输出异常签名 \(\mathsf{Anom}_G(K;\theta)\) 作为可核对残差。
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[三生成元重写的终止性（逆序度量）]\label{prop:pom-three-gen-termination}
+取正规序
+\(
+\mathrm{LIFT}\prec \mathrm{PROJ}\prec E
+\)。
+对任意三生成元投影词 \(W\)，令 \(\ell(W)\) 为词长（生成元个数），并定义\textbf{逆序度量}
+\[
+\mu(W):=\#\{(i,j):i<j,\ \text{且第 }i\text{ 位与第 }j\text{ 位的生成元次序违反 }\prec\}.
+\]
+则在规则族 \ref{def:pom-three-gen-rewrite-rules} 下，每一次重写都会严格降低字典序量
+\(
+(\ell(W),\mu(W))
+\)。
+因此该片段的重写必然终止；残差异常作为 \(2\)-态射标签记录，不影响 \(1\)-态射的下降度量。
+\end{proposition}
+\begin{proof}
+规则 \((\mathrm{RPROJ}),(\mathrm{RLIFT}),(\mathrm{RE})\) 把同类门复合缩并为一个门，故严格降低 \(\ell(W)\)。
+规则 \((\mathrm{RPL})\) 与带残差的 \(E_m\)--\(\mathrm{LIFT}_G\) 交换仅改变门的相对次序且不增词长；由于它们把“逆序对”交换成正序对，\(\mu(W)\) 严格下降。
+因此每一步都严格降低字典序量 \((\ell,\mu)\)，不存在无限重写链。证毕。
+\end{proof}
+
+\begin{remark}[可复现：三生成元正规化器与异常签名证书]\label{rem:pom-projword-threegen-anom-normalizer-demo}
+脚本 \texttt{scripts/exp\_pom\_projword\_three\_gen\_anom\_normalizer.py} 实现定义 \ref{def:pom-three-gen-rewrite-rules} 的最小三生成元重写片段：
+它把任意由 \texttt{E[m]}, \texttt{PROJ[u]}, \texttt{LIFT[G]} 生成的投影词规约到接口正规形
+\(\mathrm{LIFT}\circ\mathrm{PROJ}\circ E\)（命题 \ref{prop:pom-three-gen-interface-normal-form}），
+并在每一次 \(E_m\)--\(\mathrm{LIFT}_G\) 交换处输出一条带残差项的交换证书
+（接口为 \(\mathsf{Anom}_G(K;\theta)\)，定义 \ref{def:pom-anom-signature}）。
+该脚本写出正规形、重写轨迹与证书列表到
+\texttt{artifacts/export/pom\_projword\_three\_gen\_anom\_normalizer\_demo.json}，
+作为“异常签名进入规约轨迹”的可执行见证。
+\end{remark}
+
+\begin{remark}[关于 \texorpdfstring{$(\mathrm{RLIFT})$}{RLIFT} 的适用范围]\label{rem:pom-rlift-scope}
+规则 \((\mathrm{RLIFT})\) 反映“独立轴的并置提升”：把两次相互独立的有限标签提升合并为一次到直积群的提升。
+在更一般的群扩张（例如非平凡半直积或 cocycle 扭曲）中，对应的合并律应以扩张数据的纤维积/合成取代直积；本文在可审计实现中主要使用有限阿贝尔标签与其角色分解，因此以上写法足以覆盖本文的数值接口与重写示例。
+\end{remark}
+
+\begin{remark}[交叉异常：\texorpdfstring{$(\mathrm{RLIFT})$}{RLIFT} 独立性的一条可计算审计条件]\label{rem:pom-rlift-cross-anom-test}
+设 \(G,H\) 为有限阿贝尔群，则 \(\widehat{G\times H}\cong\widehat G\times\widehat H\)。
+对任意 \((\chi,\psi)\in\widehat G\times\widehat H\)，记 \(\chi\otimes\psi\) 为 \(G\times H\) 上的乘积角色
+\((g,h)\mapsto \chi(g)\psi(h)\)，并记 \(\chi_0,\psi_0\) 为平凡角色。
+在异常签名口径（定义 \ref{def:pom-anom-signature}）下，定义\textbf{交叉异常}为
+\[
+\Delta^{\mathrm{sep}}_{\chi,\psi}(\theta)
+:=
+\log\mathfrak{M}_{\chi\otimes\psi}(\theta)
+-\log\mathfrak{M}_{\chi\otimes\psi_0}(\theta)
+-\log\mathfrak{M}_{\chi_0\otimes\psi}(\theta),
+\qquad
+\chi\neq\chi_0,\ \psi\neq\psi_0.
+\]
+若两次 lift 的语义确为独立轴并置（对应 \((\mathrm{RLIFT})\) 的直积提升），则对每个取样参数 \(\theta\) 均应有
+\(\Delta^{\mathrm{sep}}_{\chi,\psi}(\theta)=0\)：其等价表述是在扭曲通道上存在可核对的分解
+\(\zeta_{\theta,\chi\otimes\psi}=\zeta_{\theta,\chi\otimes\psi_0}\cdot \zeta_{\theta,\chi_0\otimes\psi}\)，
+从而有限部常数层面严格可加。
+因此 \(\Delta^{\mathrm{sep}}\) 的非零给出一条可审计的“跨轴耦合指纹”，提示 lift 的合并不应被简化为直积，而需引入扩张数据（例如 cocycle/半直积）或把耦合显式留在残差项中。
+\end{remark}
+
+\begin{proposition}[接口正规形：\texorpdfstring{$(\mathrm{PROJ}_u,E_m,\mathrm{LIFT}_G)$}{(PROJ,Em,LIFT)} 的可归约顺序]\label{prop:pom-three-gen-interface-normal-form}
+在规则族 \ref{def:pom-three-gen-rewrite-rules} 下，任意三生成元投影词都可重写为如下“接口正规形”：
+$$
+\boxed{\;
+\mathrm{LIFT}_G\ \circ\ \mathrm{PROJ}_u\ \circ\ E_m
+\;}
+$$
+并伴随一个异常签名输出 \(\mathsf{Anom}_G(K;\theta)\)（在存在非交换残差时非零）。
+进一步地，把该正规形接入注 \ref{rem:pom-zeta-normal-form} 的 \(\zeta\)/primitive/有限部编译约定，即得到一条从词法归一化到谱指纹核验的可执行判等流程。
+\end{proposition}
+
+\begin{proof}
+规则 \((\mathrm{RPROJ}),(\mathrm{RLIFT}),(\mathrm{RE})\) 消去同类门的冗余复合；规则 \((\mathrm{RPL})\) 把 \(\mathrm{PROJ}_u\) 交换到 lift 的右侧；而 \(E_m\) 与 lift 的交换由命题 \ref{prop:pom-em-lift-residual-swap} 给出（零异常时为严格交换，否则输出异常签名承载残差）。
+因此可把任意词排序为 \(\mathrm{LIFT}\to \mathrm{PROJ}\to E\) 的形式；再用合并律压缩多次出现的同类门，即得所示正规形与伴随异常签名。证毕。
+\end{proof}
+
+\subsubsection{高阶交叉异常与轴可分解严格化：Möbius 完备分解}\label{subsec:pom-rlift-higher-cross-anom}
+
+注 \ref{rem:pom-rlift-cross-anom-test} 给出了两体交叉异常 \(\Delta^{\mathrm{sep}}\) 作为 \((\mathrm{RLIFT})\) 独立性的必要审计条件。
+当 lift 的并置轴数 \(k\ge 3\) 时，为得到\emph{充分且必要}的可计算判别，需要引入布尔子格上的全阶异常族 \(\{\Delta_S\}_{|S|\ge 2}\)，并将“Euler/直积可分解性”严格化为一条 Möbius 反演恒等式。
+
+\begin{definition}[高阶交叉异常族 \texorpdfstring{$\Delta_S$}{DeltaS}]\label{def:pom-higher-cross-anomaly}
+取 \(k\ge 2\)，令 \(G_1,\dots,G_k\) 为有限阿贝尔群，记
+\[
+G:=\prod_{i=1}^k G_i,
+\qquad
+\widehat G\cong \prod_{i=1}^k \widehat{G_i}.
+\]
+对每个取样参数 \(\theta\) 与每个 \(\chi\in\widehat G\)，设已给定 Abel/Hadamard 有限部常数 \(\log\mathfrak{M}_{\chi}(\theta)\in\RR\)，并约定归一化
+\[
+\log\mathfrak{M}_{\chi^0}(\theta)=0,
+\qquad
+\chi^0:=(\chi_{1,0},\dots,\chi_{k,0})
+\]
+（各坐标的平凡角色）。
+令 \([k]:=\{1,\dots,k\}\)。
+对任意非空子集 \(S\subseteq[k]\) 与任意子元组 \(\chi_S=(\chi_i)_{i\in S}\in\prod_{i\in S}\widehat{G_i}\)，定义 \(S\)-阶交叉异常为
+\[
+\Delta_S(\chi_S;\theta)
+:=\sum_{T\subseteq S}(-1)^{|S|-|T|}\,\log\mathfrak{M}_{\chi^{(T)}}(\theta),
+\]
+其中 \(\chi^{(T)}\in\widehat G\) 表示：当 \(i\in T\) 时第 \(i\) 坐标取 \(\chi_i\)，当 \(i\notin T\) 时第 \(i\) 坐标取平凡角色 \(\chi_{i,0}\)。
+当 \(|S|=2\) 时，该定义与注 \ref{rem:pom-rlift-cross-anom-test} 的 \(\Delta^{\mathrm{sep}}\) 一致（在 \(\log\mathfrak{M}_{\chi^0}=0\) 的归一化下）。
+\end{definition}
+
+\begin{theorem}[Möbius 完备分解]\label{thm:pom-mobius-complete-decomposition}
+在定义 \ref{def:pom-higher-cross-anomaly} 的设定下，对任意 \(\chi=(\chi_1,\dots,\chi_k)\in\widehat G\) 与任意 \(\theta\)，成立恒等式
+\[
+\boxed{\;
+\log\mathfrak{M}_\chi(\theta)
+=\sum_{\varnothing\neq S\subseteq[k]}\Delta_S(\chi_S;\theta)\; }.
+\]
+\end{theorem}
+\begin{proof}
+该恒等式等价于布尔格点上的 Möbius 反演。
+令 \(f(\chi):=\log\mathfrak{M}_\chi(\theta)\)（固定 \(\theta\)）。
+对每个坐标 \(i\in[k]\) 定义差分算子
+\[
+(\delta_i f)(\chi):=f(\chi)-f(\chi^{(i\mapsto 0)}),
+\]
+并对任意非空 \(S\subseteq[k]\) 令 \(\delta_S:=\prod_{i\in S}\delta_i\)（算子可交换）。
+展开可得
+\(
+(\delta_S f)(\chi^{(S)})=\sum_{T\subseteq S}(-1)^{|S|-|T|}f(\chi^{(T)})
+\)，
+故 \(\Delta_S(\chi_S;\theta)=(\delta_S f)(\chi^{(S)})\)。
+另一方面，
+\[
+\mathrm{Id}=\prod_{i=1}^k\bigl((\mathrm{Id}-\delta_i)+\delta_i\bigr)
+=\sum_{S\subseteq[k]}\delta_S\prod_{i\notin S}(\mathrm{Id}-\delta_i).
+\]
+将其作用于 \(f\) 并在 \(\chi\) 处取值；利用 \(f(\chi^0)=0\) 及 \(\prod_{i\notin S}(\mathrm{Id}-\delta_i)\) 的逐坐标归零效应，得到
+\(
+f(\chi)=\sum_{\varnothing\neq S\subseteq[k]}(\delta_S f)(\chi^{(S)})
+\)，
+即所示分解。证毕。
+\end{proof}
+
+\begin{theorem}[轴可分解严格化的充要条件]\label{thm:pom-axis-decomposability-iff}
+在上述设定下，以下两条件等价：
+\begin{enumerate}
+  \item \textbf{（轴可分解性）}存在函数族 \(L_i:\widehat{G_i}\to\RR\)（满足 \(L_i(\chi_{i,0})=0\)），使得对一切 \(\chi\in\widehat G\) 有
+  \[
+  \log\mathfrak{M}_{\chi}(\theta)=\sum_{i=1}^k L_i(\chi_i).
+  \]
+  \item \textbf{（高阶交叉异常全消失）}对一切 \(|S|\ge 2\) 与一切 \(\chi_S\)，有
+  \[
+  \Delta_S(\chi_S;\theta)=0.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\((1)\Rightarrow(2)\)：若 \(\log\mathfrak{M}_\chi(\theta)=\sum_i L_i(\chi_i)\)，则当 \(|S|\ge 2\) 时，
+\(\Delta_S\) 是对至少两个坐标的差分，必为零。
+\par
+\((2)\Rightarrow(1)\)：由定理 \ref{thm:pom-mobius-complete-decomposition}，
+\[
+\log\mathfrak{M}_\chi(\theta)=\sum_{i=1}^k\Delta_{\{i\}}(\chi_i;\theta)+\sum_{|S|\ge 2}\Delta_S(\chi_S;\theta).
+\]
+在 (2) 下第二项消失，令 \(L_i(\chi_i):=\Delta_{\{i\}}(\chi_i;\theta)\) 即得 (1)。证毕。
+\end{proof}
+
+\begin{proposition}[两体核验不充分：存在纯三体耦合]\label{prop:pom-pairwise-cross-anom-insufficient}
+当 \(k\ge 3\) 时，仅检验所有两体交叉异常 \(\Delta_{\{i,j\}}\equiv 0\) 不能推出轴可分解性。
+\end{proposition}
+\begin{proof}
+取每个 \(\widehat{G_i}\) 含有一个非平凡元素 \(a_i\)，并在固定 \(\theta\) 下定义函数
+\[
+\log\mathfrak{M}_{\chi}(\theta):=
+\begin{cases}
+1, & \chi=(a_1,a_2,a_3,\chi_{4,0},\dots,\chi_{k,0}),\\
+0, & \text{其他情形}.
+\end{cases}
+\]
+则任意两体截面（其余坐标取平凡）上函数恒为 \(0\)，从而 \(\Delta_{\{i,j\}}\equiv 0\)；
+但 \(\Delta_{\{1,2,3\}}(a_1,a_2,a_3;\theta)=1\neq 0\)，故由定理 \ref{thm:pom-axis-decomposability-iff} 不可分解。证毕。
+\end{proof}
+
+\begin{remark}[与素数寄存器极限的对齐：Euler 可分解性的可审计判别]\label{rem:pom-higher-cross-anom-euler}
+在 prime-register 的极限口径 \(\widehat{\ZZ}\cong\prod_p\ZZ_p\)（定义 \ref{def:pom-profinite}）下，
+若把 \(\log\mathfrak{M}\) 视为多轴（多素数或多直积分量）并置 lift 的常数层载荷，
+则定理 \ref{thm:pom-axis-decomposability-iff} 给出的“全阶交叉异常全消失”
+正是将合并律严格化为直积（Euler 型限制积因子化）而\emph{不引入} cocycle/半直积等扩张数据的充要条件；
+命题 \ref{prop:pom-pairwise-cross-anom-insufficient} 则说明两体审计 \(\Delta^{\mathrm{sep}}\) 在多轴情形下仅为必要条件。
+\end{remark}
+\input{parts/subsec__pom-mom-rewrite-normal}

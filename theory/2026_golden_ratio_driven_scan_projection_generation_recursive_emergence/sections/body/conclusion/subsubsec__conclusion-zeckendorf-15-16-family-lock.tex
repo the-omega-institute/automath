@@ -1,0 +1,138 @@
+\subsubsection{家族计数的 Zeckendorf 可见层与分辨率锁定}\label{subsubsec:conclusion-zeckendorf-15-16-family-lock}
+
+本段给出两条与“每代 \(15\)”与“\(16\) 维补全”口径相容的纯算术刚性：其一为 \(15F_n\) 与 \(16F_n\) 的 Zeckendorf 闭式分解（并在 \(n\) 足够大时直接等于规范分解），其二为由此诱导的跨分辨率分解与一个在 Zeckendorf 可见层上的分辨率锁定律。
+
+\begin{theorem}[ \(15F_n\) 与 \(16F_n\) 的 Zeckendorf 闭式分解]\label{thm:conclusion-zeckendorf-15-16-closed}
+沿用全文 Fibonacci 记号（\(F_{k+1}=F_k+F_{k-1}\)，且 \(F_2=1,F_3=2\)）。
+则对一切 \(n\ge 8\)，成立两条恒等式
+\[
+15F_n=F_{n+5}+F_{n+2}+F_{n}+F_{n-3}+F_{n-6},
+\qquad
+16F_n=F_{n+5}+F_{n+3}+F_{n-1}+F_{n-6},
+\]
+并且右端在 Zeckendorf 意义下已为规范分解：各指标两两不相邻，因而与 Zeckendorf 唯一性相容并等于贪心规范形。
+\end{theorem}
+
+\begin{proof}
+先证等式。由标准恒等式 \(F_{n+k}=F_kF_{n+1}+F_{k-1}F_n\)（对 \(k\) 归纳即可），取 \(k=5,3,2\) 得
+\[
+F_{n+5}=5F_{n+1}+3F_n,\qquad
+F_{n+3}=2F_{n+1}+F_n,\qquad
+F_{n+2}=F_{n+1}+F_n.
+\]
+因此
+\[
+F_{n+5}+F_{n+2}+F_n
+=(5F_{n+1}+3F_n)+(F_{n+1}+F_n)+F_n
+=6F_{n+1}+5F_n.
+\]
+将 \(F_{n+1}=F_n+F_{n-1}\) 代入并用递推向下消去，可化为
+\[
+6F_{n+1}+5F_n+F_{n-3}+F_{n-6}
+=11F_n+6F_{n-1}+F_{n-3}+F_{n-6}
+=15F_n,
+\]
+其中最后一步等价于 \(6F_{n-1}+F_{n-3}+F_{n-6}=4F_n\)，再用 \(F_n=F_{n-1}+F_{n-2}\) 与 \(F_{n-2}=F_{n-3}+F_{n-4}\) 逐项替换即可核对。第一式得证。
+第二式同理：将 \(F_{n+5}\) 与 \(F_{n+3}\) 展开为 \((F_{n+1},F_n)\) 的线性组合并回代消元，可得到恒等式。
+
+再证其为 Zeckendorf 规范分解。当 \(n\ge 8\) 时，集合
+\(\{n+5,n+2,n,n-3,n-6\}\) 与 \(\{n+5,n+3,n-1,n-6\}\) 中任意两指标之差至少为 \(2\)，故均满足 Zeckendorf 邻接禁规则。由 Zeckendorf 唯一性可知：一旦存在该合法表示，它即为规范分解（等价于贪心输出）。证毕。
+\end{proof}
+
+\begin{corollary}[跨分辨率分解：把 \(15|X_m^{\mathrm{bdry}}|\)、\(16|X_m^{\mathrm{bdry}}|\) 写成有限个 \(|X_k|\) 之和]\label{cor:conclusion-zeckendorf-15-16-cross-resolution}
+在稳定类型口径下 \(|X_m|=F_{m+2}\)，并且对 \(m\ge 6\) 有 \(|X_m^{\mathrm{bdry}}|=F_{m-2}\)（\S\ref{subsec:bdry-tower-zeck-gut}）。
+令 \(m\ge 10\) 并记 \(n=m-2\ge 8\)。则
+\[
+15|X_m^{\mathrm{bdry}}|
+=|X_{m+1}|+|X_{m-2}|+|X_{m-4}|+|X_{m-7}|+|X_{m-10}|,
+\]
+\[
+16|X_m^{\mathrm{bdry}}|
+=|X_{m+1}|+|X_{m-1}|+|X_{m-5}|+|X_{m-10}|.
+\]
+\end{corollary}
+
+\begin{proof}
+由 \(|X_m^{\mathrm{bdry}}|=F_{m-2}=F_n\) 与定理 \ref{thm:conclusion-zeckendorf-15-16-closed}，将每个 \(F_{n+\ell}\) 以
+\(
+F_{n+\ell}=|X_{(n+\ell)-2}|=|X_{m+\ell-4}|
+\)
+代换即可。
+\end{proof}
+
+\begin{proposition}[ \(15\to 16\) 补全的尺度无关进位律]\label{prop:conclusion-zeckendorf-15to16-carry}
+对一切整数 \(n\ge 5\)，成立恒等式
+\[
+F_{n+2}+2F_n+F_{n-3}=F_{n+3}+F_{n-1}.
+\]
+\end{proposition}
+
+\begin{proof}
+由递推 \(F_{n+3}=F_{n+2}+F_{n+1}\) 与 \(F_{n+1}=F_n+F_{n-1}\) 得
+\[
+F_{n+3}+F_{n-1}=F_{n+2}+F_n+2F_{n-1}.
+\]
+故所证式等价于 \(2F_{n-1}=F_n+F_{n-3}\)。而 \(F_n=F_{n-1}+F_{n-2}\)、\(F_{n-1}=F_{n-2}+F_{n-3}\)，代入得
+\(
+2F_{n-1}=F_{n-1}+F_{n-2}+F_{n-3}=F_n+F_{n-3}
+\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[Zeckendorf 可见层的分辨率锁定：仅在 \(m=6\) 同时显化 \(|X_2|\) 与 \(|X_4|\)]\label{thm:conclusion-zeckendorf-resolution-lock-m6}
+令
+\[
+M(m):=15|X_m^{\mathrm{bdry}}|=15F_{m-2}\qquad(m\ge 6).
+\]
+则在 Zeckendorf 分解意义下，\(M(m)\) 的规范分解中同时出现
+\[
+|X_2|=F_4=3,
+\qquad
+|X_4|=F_6=8
+\]
+作为分解项，当且仅当 \(m=6\)。
+\end{theorem}
+
+\begin{proof}
+写 \(n=m-2\)，则 \(M(m)=15F_n\)。当 \(n\ge 8\) 时，由定理 \ref{thm:conclusion-zeckendorf-15-16-closed}，
+\[
+15F_n=F_{n+5}+F_{n+2}+F_n+F_{n-3}+F_{n-6},
+\]
+其 Zeckendorf 指标集合为 \(\{n+5,n+2,n,n-3,n-6\}\)。
+若 \(F_4\) 出现，则只能由 \(n-6=4\) 给出，即 \(n=10\)；若 \(F_6\) 出现，则只能由 \(n-3=6\)（即 \(n=9\)）或 \(n-6=6\)（即 \(n=12\)）给出。
+上述条件不可能同时成立，故 \(n\ge 8\) 无解。
+
+对剩余有限情形 \(n\le 7\) 可直接核对 Zeckendorf 规范形；其中仅 \(n=4\) 满足
+\[
+15F_4=45=F_9+F_6+F_4,
+\]
+从而同时含 \(F_6\) 与 \(F_4\)。因此唯一解为 \(n=4\)，即 \(m=n+2=6\)。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$\delta=34$}{δ=34} 与 \(m=6\) 的算术同一化：由顶层 Zeckendorf 权重反推分辨率]\label{prop:conclusion-delta34-top-zeckendorf-implies-m6}
+对 \(m\ge 6\)，记 \(T(m)\) 为 \(M(m)=15|X_m^{\mathrm{bdry}}|\) 的 Zeckendorf 规范分解中的最大 Fibonacci 项。
+则
+\[
+T(m)=F_{m+3},
+\]
+并且在 window-\(6\) 的 uplift 指纹 \(\delta=34=F_9\) 已固定的前提下，三者等价：
+\[
+T(m)=\delta
+\quad\Longleftrightarrow\quad
+m=6
+\quad\Longleftrightarrow\quad
+|X_m^{\mathrm{bdry}}|=3.
+\]
+\end{proposition}
+
+\begin{proof}
+令 \(n=m-2\ge 4\)。由贪心法首项判别，只需验证
+\(
+F_{n+5}\le 15F_n< F_{n+6}
+\)。
+该不等式可由将 \(F_{n+6}\) 与 \(F_{n+5}\) 写成 \((F_n,F_{n-1})\) 的线性组合并比较系数得到；从而 \(T(m)=F_{n+5}=F_{m+3}\)。
+于是 \(T(m)=\delta=F_9\) 等价于 \(m+3=9\)，即 \(m=6\)。最后由 \(|X_m^{\mathrm{bdry}}|=F_{m-2}\) 得 \(m=6\iff |X_m^{\mathrm{bdry}}|=F_4=3\)。证毕。
+\end{proof}
+
+\endinput
+

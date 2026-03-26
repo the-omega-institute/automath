@@ -1,0 +1,429 @@
+\subsection{投影作为集合分割：素数寄存器编码、闭包算法与预算对偶}\label{subsec:pom-projection-as-partition-prime-register}
+本小节给出一个完全有限的原型模型，用以将三条语义在同一组严格对象上对齐：
+(i) 投影可理解为等价关系（集合分割）所诱导的商结构；
+(ii) 被投影压缩掉的区分信息可理解为“生成该等价关系所需的数据”；
+(iii) 外置可逆化可理解为在素数寄存器上对该生成数据作可逆编码，并以固定闭包算法完成 join/合成。
+该模型不依赖任何渐近或连续化假设，但足以展示“寄存器预算（素数轴维度）”与“算法预算（闭包规则复杂度）”之间的可量化对偶。
+
+\begin{definition}[集合分割格]\label{def:pom-partition-lattice}
+对整数 \(n\ge 1\) 记 \([n]:=\{1,\dots,n\}\)。
+令 \(\mathcal{P}([n])\) 表示 \([n]\) 上的集合分割格（等价关系格），偏序取“细化”关系：
+\(\pi\le\sigma\) 当且仅当 \(\pi\) 比 \(\sigma\) 更细（每个 \(\pi\)-块包含于某个 \(\sigma\)-块）。
+底元 \(\hat 0\) 为离散分割（全为单点块），顶元 \(\hat 1\) 为单块分割。
+记 meet 与 join 分别为 \(\wedge\) 与 \(\vee\)。
+\end{definition}
+
+\begin{definition}[边集与等价闭包]\label{def:pom-edge-closure}
+令
+\[
+E_n:=\binom{[n]}2
+\]
+为完全图 \(K_n\) 的无序边集。对任意 \(F\subseteq E_n\)，令无向图 \(([n],F)\) 的连通分支为 \(C_1,\dots,C_k\)。
+定义闭包算子 \(\mathrm{cl}:2^{E_n}\to 2^{E_n}\) 为
+\[
+\boxed{\;
+\mathrm{cl}(F):=\bigcup_{t=1}^{k}\binom{C_t}{2}\; }.
+\]
+即对每个连通分支把其诱导边集补全为团。
+\end{definition}
+
+\begin{proposition}[闭包不动点与集合分割的一一对应]\label{prop:pom-closure-fixedpoints-partitions}
+映射
+\[
+\pi\in\mathcal{P}([n])\longmapsto
+F_\pi:=\bigcup_{B\in\pi}\binom{B}{2}\ \in 2^{E_n}
+\]
+给出 \(\mathcal{P}([n])\) 与 \(\mathrm{cl}\) 的不动点集合
+\(
+\mathrm{Fix}(\mathrm{cl}):=\{F\subseteq E_n:\ \mathrm{cl}(F)=F\}
+\)
+之间的双射。并且对任意 \(\pi,\sigma\in\mathcal{P}([n])\) 有
+\[
+F_{\pi\wedge\sigma}=F_\pi\cap F_\sigma,
+\qquad
+F_{\pi\vee\sigma}=\mathrm{cl}(F_\pi\cup F_\sigma).
+\]
+\end{proposition}
+\begin{proof}
+若 \(F\in\mathrm{Fix}(\mathrm{cl})\)，则 \(([n],F)\) 的每个连通分支在 \(F\) 中已被补全为团；因此“同一连通分支”给出 \([n]\) 上的等价关系，其块即为连通分支。反之，对任意分割 \(\pi\)，集合 \(F_\pi\) 显然在每个块上为团边集，故 \(\mathrm{cl}(F_\pi)=F_\pi\)，从而 \(F_\pi\in\mathrm{Fix}(\mathrm{cl})\)。二者互为逆过程，得到双射。
+\par
+meet 在等价关系层为关系交，对应到团边集合即为边集合交，故 \(F_{\pi\wedge\sigma}=F_\pi\cap F_\sigma\)。
+join 在等价关系层为由并集关系生成的最小等价关系；在无向图表示下，这等价于先取边并集形成连通分支，再将每个分支补团，即 \(\mathrm{cl}(F_\pi\cup F_\sigma)\)。证毕。
+\end{proof}
+
+\begin{definition}[素数寄存器与平方自由编码]\label{def:pom-squarefree-edge-code}
+固定一组两两不同的素数族 \(\{p_e\}_{e\in E_n}\)。
+记
+\[
+\NN_{\mathrm{sf}}(E_n):=\left\{\prod_{e\in F}p_e:\ F\subseteq E_n\right\}\subset\NN_{>0}
+\]
+为其生成的平方自由整数集合（以整除为偏序）。
+对 \(F\subseteq E_n\) 定义编码
+\[
+\mathsf{Code}(F):=\prod_{e\in F}p_e\in\NN_{\mathrm{sf}}(E_n),
+\]
+并对 \(N\in\NN_{\mathrm{sf}}(E_n)\) 定义解码
+\[
+\mathsf{Edges}(N):=\{e\in E_n:\ p_e\mid N\}\subseteq E_n.
+\]
+对 \(\pi\in\mathcal{P}([n])\) 定义其素数寄存器编码为
+\[
+\boxed{\;
+\mathsf{Code}(\pi):=\mathsf{Code}(F_\pi)\;}
+\qquad\bigl(F_\pi\ \text{如命题 \ref{prop:pom-closure-fixedpoints-partitions}}\bigr).
+\]
+\end{definition}
+
+\begin{theorem}[仅保留 meet\(\to\)\(\gcd\) 的代价：二次规模的素数预算]\label{thm:pom-meet-gcd-prime-budget}
+设 \(n\ge 3\)。令 \(S\) 为有限素数集合，并令 \(\NN_{\mathrm{sf}}(S)\) 表示素因子全在 \(S\) 中的平方自由整数集合（以整除为偏序，\(\gcd\) 为二元运算）。
+若存在单射
+\[
+\Phi:\mathcal{P}([n])\hookrightarrow \NN_{\mathrm{sf}}(S)
+\]
+满足对一切 \(\pi,\sigma\in\mathcal{P}([n])\) 有
+\[
+\Phi(\pi\wedge\sigma)=\gcd(\Phi(\pi),\Phi(\sigma)),
+\]
+则必有
+\[
+\boxed{\ |S|\ge \binom{n}{2}\ }.
+\]
+并且当 \(|S|=\binom{n}{2}\) 时，在整体乘上同一平方自由常数的平凡规范化后，\(\mathcal{P}([n])\) 的原子元（atoms）可与 \(S\) 中的素数作双射，使每个原子在 \(\Phi\) 下的像恰为一个素数。
+\end{theorem}
+\begin{proof}
+\(\mathcal{P}([n])\) 的原子元恰为“仅把某一对 \(\{i,j\}\) 合并、其余皆为单点块”的分割，原子总数为 \(\binom{n}{2}\)。
+对任意两不同原子 \(\alpha\ne\beta\)，有 \(\alpha\wedge\beta=\hat 0\)，故
+\[
+\gcd(\Phi(\alpha),\Phi(\beta))=\Phi(\hat 0)\qquad(\alpha\ne\beta).
+\]
+记 \(d:=\Phi(\hat 0)\)。则对每个原子 \(\alpha\) 有 \(d\mid \Phi(\alpha)\)。写 \(\Phi(\alpha)=d\cdot a_\alpha\)（仍为平方自由整数），上式等价于
+\[
+\gcd(a_\alpha,a_\beta)=1\qquad(\alpha\ne\beta).
+\]
+又因 \(\Phi\) 单射，\(\Phi(\alpha)\ne d\) 从而 \(a_\alpha\ne 1\)；故每个 \(a_\alpha\) 至少含有一个素因子。
+由于 \(\{a_\alpha\}\) 两两互素，这些素因子在不同原子之间互不共享，故 \(S\) 至少包含 \(\binom{n}{2}\) 个互异素数，得到 \(|S|\ge \binom{n}{2}\)。
+\par
+若 \(|S|=\binom{n}{2}\)，则每个 \(a_\alpha\) 必恰为一个素数（否则某个 \(a_\alpha\) 至少含两素因子将迫使 \(|S|>\binom{n}{2}\)），从而原子与素数之间给出双射。证毕。
+\end{proof}
+
+\begin{theorem}[分割格的素数—闭包算术模型与可逆解码]\label{thm:pom-partition-prime-closure-model}
+在定义 \ref{def:pom-squarefree-edge-code} 的设定下，映射 \(\mathsf{Code}:\mathcal{P}([n])\to \NN_{\mathrm{sf}}(E_n)\) 满足：
+\begin{enumerate}
+  \item \(\mathsf{Code}\) 为单射；
+  \item \(\pi\le\sigma\iff \mathsf{Code}(\pi)\mid \mathsf{Code}(\sigma)\)；
+  \item \(\mathsf{Code}(\pi\wedge\sigma)=\gcd(\mathsf{Code}(\pi),\mathsf{Code}(\sigma))\)；
+  \item \(\mathsf{Code}(\pi\vee\sigma)=\mathsf{Code}\!\bigl(\mathrm{cl}(\mathsf{Edges}(\mathrm{lcm}(\mathsf{Code}(\pi),\mathsf{Code}(\sigma))))\bigr)\)；
+  \item 给定 \(N=\mathsf{Code}(\pi)\)，对图 \(([n],\mathsf{Edges}(N))\) 取连通分支 \(C_1,\dots,C_k\)，则 \(\pi=\{C_1,\dots,C_k\}\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-closure-fixedpoints-partitions}，分割 \(\pi\) 等价于团边集合 \(F_\pi\)；而 \(\mathsf{Code}\) 通过唯一素因子分解在平方自由编码与边集合之间给出互逆 \(\mathsf{Code}\dashv\mathsf{Edges}\)。
+因此 \(\mathsf{Code}\) 单射，且
+\[
+F_\pi\subseteq F_\sigma\iff \mathsf{Code}(F_\pi)\mid \mathsf{Code}(F_\sigma)
+\]
+给出 (2)。又因平方自由情形下 \(\gcd\) 对应素因子集合交，故
+\(
+\gcd(\mathsf{Code}(\pi),\mathsf{Code}(\sigma))=\mathsf{Code}(F_\pi\cap F_\sigma)
+\)，结合命题 \ref{prop:pom-closure-fixedpoints-partitions} 的 \(F_{\pi\wedge\sigma}=F_\pi\cap F_\sigma\) 得 (3)。
+\par
+\(\mathrm{lcm}\) 对应素因子集合并，因此
+\(
+\mathsf{Edges}(\mathrm{lcm}(\mathsf{Code}(\pi),\mathsf{Code}(\sigma)))=F_\pi\cup F_\sigma
+\)。
+再用 \(F_{\pi\vee\sigma}=\mathrm{cl}(F_\pi\cup F_\sigma)\) 得 (4)。
+(5) 由 \(F_\pi\) 在每个块上为团，故连通分支即为块本身。证毕。
+\end{proof}
+
+\begin{theorem}[骨架压缩与最小素数占用：格秩的线性律]\label{thm:pom-partition-skeleton-compression}
+在定义 \ref{def:pom-squarefree-edge-code} 的设定下，对任意 \(\pi\in\mathcal{P}([n])\) 定义其\textbf{骨架编码}为
+\[
+\mathsf{Code}_{\min}(\pi)
+:=\min\left\{\mathsf{Code}(F):\ F\subseteq E_n,\ \mathrm{cl}(F)=F_\pi\right\}\in\NN_{\mathrm{sf}}(E_n),
+\]
+其中最小值按整数大小取。则：
+\begin{enumerate}
+  \item \(\mathsf{Code}_{\min}(\pi)\) 存在且唯一；
+  \item 若 \(\pi\) 的块为 \(B_1,\dots,B_k\)，则任何满足 \(\mathrm{cl}(F)=F_\pi\) 的 \(F\subseteq E_n\) 必满足
+  \[
+  |F|\ge \sum_{t=1}^{k}(|B_t|-1)=n-k,
+  \]
+  且存在 \(F\) 达到该下界（每块取一棵生成树），从而
+  \[
+  \boxed{\ \min\{|F|:\ \mathrm{cl}(F)=F_\pi\}=n-|\pi|\ }.
+  \]
+  \item 记权重 \(w(e):=\log p_e\)。达到 \(\mathsf{Code}_{\min}(\pi)\) 的最优边集可按块分解为最小生成树：对每个块 \(B_t\)，在完全图 \(K_{B_t}\) 上取关于 \(w\) 的最小生成树 \(T_t\)，并令 \(F=\bigcup_t T_t\)。
+  \item \(\mathsf{Code}_{\min}\) 为单射，并可通过“分解素因子 \(\to\) 得到骨架边集 \(F\) \(\to\) 施加 \(\mathrm{cl}\) \(\to\) 得到 \(F_\pi\)”解码回 \(\pi\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\textbf{(1)} 集合
+\(
+\{\mathsf{Code}(F):\ \mathrm{cl}(F)=F_\pi\}
+\)
+非空且有限（至多 \(2^{|E_n|}\) 个），故最小元存在且唯一。
+\par
+\textbf{(2)} 条件 \(\mathrm{cl}(F)=F_\pi\) 迫使对每个块 \(B_t\)，图 \(([n],F)\) 在 \(B_t\) 上诱导连通；否则闭包不会把该块补成团。任意 \(|B_t|\) 点连通图至少含 \(|B_t|-1\) 条边，故
+\(
+|F|\ge\sum_t(|B_t|-1)=n-|\pi|
+\)。
+反过来，对每个 \(B_t\) 取一棵生成树 \(T_t\subseteq \binom{B_t}{2}\)，令 \(F=\bigcup_t T_t\)，则 \(([n],F)\) 的连通分支恰为各 \(B_t\)，从而 \(\mathrm{cl}(F)=F_\pi\)，达到下界。
+\par
+\textbf{(3)} 由于 \(\mathrm{cl}(F)\) 仅取决于 \(([n],F)\) 的连通分支，若某个可行 \(F\) 在某个块 \(B_t\) 上含回路，则删去该回路上一条边不改变连通分支，从而仍满足 \(\mathrm{cl}(F)=F_\pi\)；而 \(p_e>1\) 使 \(\mathsf{Code}(F)=\prod_{e\in F}p_e\) 严格减小。
+因此达到 \(\mathsf{Code}_{\min}(\pi)\) 的最优边集必在每个块上无回路，特别地 \(|F|=n-|\pi|\)。
+在 \(|F|=n-|\pi|\) 的可行集合中，最小化 \(\mathsf{Code}(F)\) 等价于最小化
+\(
+\log\mathsf{Code}(F)=\sum_{e\in F}\log p_e=\sum_{e\in F}w(e)
+\)。
+而可行性按块分解为“每个 \(B_t\) 上诱导连通”，且 \(|F|\) 达到下界时每个块上恰为生成树；因此全局最小化分解为各块独立的最小生成树问题。
+\par
+\textbf{(4)} 单射性由唯一素因子分解与闭包解码过程给出：从 \(\mathsf{Code}_{\min}(\pi)\) 可唯一恢复骨架边集 \(F\)，再由 \(\mathrm{cl}(F)=F_\pi\) 唯一恢复分割 \(\pi\)（命题 \ref{prop:pom-closure-fixedpoints-partitions}）。证毕。
+\end{proof}
+
+\begin{corollary}[二次—线性预算对偶律]\label{cor:pom-partition-budget-duality}
+在集合分割语义下，若要求仅用寄存器算术 \(\gcd\) 即可完成共同细化（meet）的可逆编码，则全局素数预算必为二次规模：
+\(|S|\ge \binom{n}{2}\)（定理 \ref{thm:pom-meet-gcd-prime-budget}）。
+另一方面，若允许固定闭包算法 \(\mathrm{cl}\) 作为 join/合成的唯一额外计算，则每个分割 \(\pi\) 存在线性规模的最小外置编码，其素数占用严格等于 \(n-|\pi|\)（定理 \ref{thm:pom-partition-skeleton-compression}）。
+\end{corollary}
+
+\begin{theorem}[等价闭包的 Horn 蕴涵基全局最小性与唯一性刻画]\label{thm:pom-eq-closure-horn-binary-min}
+将边集 \(E_n\) 视为命题变量集合。
+令 \(\mathcal{IB}(\mathrm{cl})\) 表示所有 Horn 蕴涵规则基 \(\mathcal{R}\) 的集合，使得由 \(\mathcal{R}\) 的前向推演所诱导的闭包算子 \(\mathrm{cl}_{\mathcal{R}}\) 满足
+\[
+\mathrm{cl}_{\mathcal{R}}=\mathrm{cl}\quad\text{在 }2^{E_n}\text{ 上恒等}.
+\]
+则对任意 \(\mathcal{R}\in\mathcal{IB}(\mathrm{cl})\) 都有
+\[
+\boxed{\ |\mathcal{R}|\ \ge\ 3\binom{n}{3}\ }.
+\]
+并且当且仅当 \(\mathcal{R}\) 恰由全部三角补全规则组成时取等号：对每个 \(1\le i<j<k\le n\)，包含三条规则
+\[
+\{ij,jk\}\to ik,\qquad
+\{ij,ik\}\to jk,\qquad
+\{ik,jk\}\to ij.
+\]
+因此，在边重标号同构意义下，达到最小规模的 Horn 蕴涵基唯一。
+\end{theorem}
+\begin{proof}
+先验证三角补全规则基确实生成 \(\mathrm{cl}\)。
+任取 \(F\subseteq E_n\) 并考虑图 \(([n],F)\) 的任一连通分支 \(C\)。
+对任意 \(u,v\in C\)，存在路径 \(u=v_0-v_1-\cdots-v_\ell=v\) 使 \(\{v_{t-1}v_t\}\subseteq F\)。
+沿路径逐步应用三角补全规则可推出 \(v_0v_2,v_0v_3,\dots,v_0v_\ell\)，从而推出 \(uv\)。
+因此推演闭包补全每个连通分支为团，恰为 \(\mathrm{cl}(F)\)，故三角补全规则基属于 \(\mathcal{IB}(\mathrm{cl})\)，并给出上界 \(|\mathcal{R}|\le 3\binom{n}{3}\)。
+\par
+为证下界与唯一性，取任意 \(\mathcal{R}\in\mathcal{IB}(\mathrm{cl})\)。
+固定互异三点 \(1\le i<j<k\le n\)，并令
+\(
+F:=\{ij,jk\}
+\)。
+由定义 \ref{def:pom-edge-closure}，有
+\(
+\mathrm{cl}(F)=\{ij,jk,ik\}
+\)，从而 \(ik\in \mathrm{cl}_{\mathcal{R}}(F)\)。
+考虑从 \(F\) 出发的前向推演。
+在首次推出 \(ik\) 之前，系统中仅包含 \(F\) 中的边，故必存在一条规则 \(A\to ik\in\mathcal{R}\) 使其前提满足 \(A\subseteq F\)。
+于是 \(A\) 只能是 \(\varnothing\)、\(\{ij\}\)、\(\{jk\}\) 或 \(\{ij,jk\}\)。
+前三种情形分别迫使 \(ik\in \mathrm{cl}_{\mathcal{R}}(\varnothing)\)、\(ik\in \mathrm{cl}_{\mathcal{R}}(\{ij\})\) 或 \(ik\in \mathrm{cl}_{\mathcal{R}}(\{jk\})\)，与
+\(\mathrm{cl}(\varnothing)=\varnothing\) 与 \(\mathrm{cl}(\{ij\})=\{ij\}\)、\(\mathrm{cl}(\{jk\})=\{jk\}\) 矛盾。
+因此必有 \(A=\{ij,jk\}\)，从而 \(\{ij,jk\}\to ik\in\mathcal{R}\)。
+\par
+对同一三元组，分别从 \(\{ij,ik\}\) 推出 \(jk\)，以及从 \(\{ik,jk\}\) 推出 \(ij\)，得到另外两条强制规则。
+故每个三元组 \(\{i,j,k\}\) 都贡献至少三条互不相同的规则，推出 \(|\mathcal{R}|\ge 3\binom{n}{3}\)。
+若取等号，则 \(\mathcal{R}\) 只能由这些被强制的三角补全规则组成，不允许额外规则，故达到最小规模的规则基在边重标号意义下唯一。证毕。
+\end{proof}
+
+\begin{corollary}[强制规则与不可约分解]\label{cor:pom-eq-closure-unavoidable-triangles}
+在定理 \ref{thm:pom-eq-closure-horn-binary-min} 的设定下，任取 \(\mathcal{R}\in\mathcal{IB}(\mathrm{cl})\) 与任意互异 \(i,j,k\in[n]\)，三角补全规则
+\[
+\{ij,jk\}\to ik
+\]
+在 \(\mathcal{R}\) 中必然出现；并且 \(\mathcal{R}\) 在规则层面具有唯一的不可约分解：
+\[
+\boxed{\ \mathcal{R}=\mathcal{R}_{\triangle}\ \sqcup\ \mathcal{R}_{\mathrm{red}}\ },
+\]
+其中 \(\mathcal{R}_{\triangle}\) 为全体三角补全规则之集合，而 \(\mathcal{R}_{\mathrm{red}}\) 为冗余部分：移除 \(\mathcal{R}_{\mathrm{red}}\) 后闭包算子仍保持为 \(\mathrm{cl}\)。
+\end{corollary}
+\begin{proof}
+强制性结论即定理 \ref{thm:pom-eq-closure-horn-binary-min} 证明中对固定三元组 \(\{i,j,k\}\) 的推理：若 \(\mathcal{R}\) 生成 \(\mathrm{cl}\)，则从 \(F=\{ij,jk\}\) 出发的前向推演在首次产生 \(ik\) 的时刻，必触发某条前提 \(A\subseteq F\) 的规则 \(A\to ik\)，而除 \(A=\{ij,jk\}\) 外均与 \(\mathrm{cl}\) 在 \(\varnothing,\{ij\},\{jk\}\) 上的取值矛盾。
+因此 \(\mathcal{R}_{\triangle}\subseteq \mathcal{R}\)。
+令 \(\mathcal{R}_{\mathrm{red}}:=\mathcal{R}\setminus \mathcal{R}_{\triangle}\)，则由于 \(\mathcal{R}_{\triangle}\in \mathcal{IB}(\mathrm{cl})\)，有 \(\mathrm{cl}_{\mathcal{R}_{\triangle}}=\mathrm{cl}\)，从而 \(\mathrm{cl}_{\mathcal{R}}=\mathrm{cl}_{\mathcal{R}_{\triangle}}\)。
+这表明 \(\mathcal{R}_{\mathrm{red}}\) 对闭包算子不产生额外贡献，可视为冗余项。证毕。
+\end{proof}
+
+\begin{definition}[并行前向推演算子、前提宽度与深度]\label{def:pom-horn-width-depth}
+对任意 Horn 规则族 \(\mathcal{R}\) 与 \(S\subseteq E_n\)，定义一次并行推演算子
+\[
+T_{\mathcal{R}}(S):=S\ \cup\ \{b\in E_n:\ \exists(A\to b)\in\mathcal{R}\text{ 且 }A\subseteq S\}.
+\]
+定义 \(\mathcal{R}\) 的\textbf{前提宽度}
+\[
+w(\mathcal{R}):=\max\{|A|:\ (A\to b)\in\mathcal{R}\},
+\]
+并对任意初始边集 \(F\subseteq E_n\) 定义序列 \(S_0:=F\)、\(S_{t+1}:=T_{\mathcal{R}}(S_t)\)。
+令
+\[
+d_{\mathcal{R}}(F):=\min\{t\ge 0:\ S_t=\mathrm{cl}_{\mathcal{R}}(F)\},
+\qquad
+d(\mathcal{R}):=\sup_{F\subseteq E_n} d_{\mathcal{R}}(F),
+\]
+其中 \(\mathrm{cl}_{\mathcal{R}}(F):=\bigcup_{t\ge 0} S_t\)。
+\end{definition}
+
+\begin{theorem}[等价闭包的“宽度—深度”互补律]\label{thm:pom-eq-closure-width-depth-complement}
+设 \(n\ge 3\)，并令 \(\mathcal{R}\in\mathcal{IB}(\mathrm{cl})\)。
+对任意整数 \(r\ge 2\)，在约束 \(w(\mathcal{R})\le r\) 下成立下界
+\[
+\boxed{\ d(\mathcal{R})\ \ge\ \left\lceil \log_r(n-1)\right\rceil\ }.
+\]
+此外，存在显式构造的 Horn 规则族 \(\mathcal{R}^{(r)}\in\mathcal{IB}(\mathrm{cl})\) 满足 \(w(\mathcal{R}^{(r)})=r\) 且
+\[
+\boxed{\ d(\mathcal{R}^{(r)})\ =\ \left\lceil \log_r(n-1)\right\rceil\ }.
+\]
+\end{theorem}
+\begin{proof}
+\textbf{下界.}
+考虑路径边集
+\[
+F_{\mathrm{path}}:=\{12,23,\dots,(n-1)n\}\subseteq E_n.
+\]
+由定义 \ref{def:pom-edge-closure}，\(\mathrm{cl}(F_{\mathrm{path}})=E_n\)。
+对任意边 \(uv\in E_n\) 定义跨度 \(\ell(uv):=|u-v|\)。
+断言对所有 \(t\ge 0\) 有
+\[
+\max\{\ell(e):\ e\in S_t\}\ \le\ r^t,
+\]
+其中 \(S_t\) 为定义 \ref{def:pom-horn-width-depth} 所引入的并行推演序列，且假设 \(w(\mathcal{R})\le r\)。
+用归纳法证明：初始 \(S_0=F_{\mathrm{path}}\) 中每条边跨度为 \(1=r^0\)。
+设结论对 \(t\) 成立，并取任意 \(e=uv\in S_{t+1}\setminus S_t\)。
+则存在规则 \(A\to uv\in\mathcal{R}\) 使 \(A\subseteq S_t\) 且 \(|A|\le r\)。
+由于 \(\mathcal{R}\) 生成 \(\mathrm{cl}\)，规则 \(A\to uv\) 在闭包语义下必须有效，因而 \(uv\in \mathrm{cl}(A)\)；按定义 \ref{def:pom-edge-closure}，这等价于 \(u\) 与 \(v\) 在图 \(([n],A)\) 中连通。
+于是存在一条由 \(A\) 的边组成的 \(u\!-\!v\) 路径 \(e_1,\dots,e_m\)，其边数满足 \(m\le |A|\le r\)。
+由归纳假设对每个 \(j\) 有 \(\ell(e_j)\le r^t\)，从而
+\[
+\ell(uv)\le \sum_{j=1}^m \ell(e_j)\le m\cdot r^t\le r^{t+1}.
+\]
+归纳完成。
+因此若 \(S_t=E_n\)，则必须包含边 \(1n\)，其跨度 \(\ell(1n)=n-1\)。
+由上式得到 \(n-1\le r^t\)，即 \(t\ge \lceil \log_r(n-1)\rceil\)。
+从而 \(d(\mathcal{R})\ge d_{\mathcal{R}}(F_{\mathrm{path}})\ge \lceil \log_r(n-1)\rceil\)。
+\par
+\textbf{可达性.}
+定义规则族
+\[
+\mathcal{R}^{(r)}
+:=\Bigl\{\ \{v_0v_1,\dots,v_{m-1}v_m\}\to v_0v_m:\ 2\le m\le r,\ v_0,\dots,v_m\ \text{两两不同}\ \Bigr\}.
+\]
+显然 \(w(\mathcal{R}^{(r)})=r\)，且每条规则的前提在图论上给出一条从 \(v_0\) 到 \(v_m\) 的路径，从而在等价闭包 \(\mathrm{cl}\) 下有效。
+固定 \(F\subseteq E_n\)，设图 \(G_0:=([n],F)\)，并递归令 \(G_{t+1}\) 为在 \(G_t\) 上加上所有“路径长度不超过 \(r\)”的边所得的图。
+由于 \(\mathcal{R}^{(r)}\) 包含所有长度 \(m\le r\) 的路径补边规则，定义 \ref{def:pom-horn-width-depth} 的一次并行推演恰对应 \(G_{t}\mapsto G_{t+1}\)。
+归纳可得：对任意 \(t\ge 0\)，若两点在 \(G_0\) 中的图距离不超过 \(r^t\)，则其间边属于 \(S_t\)。
+当 \(r^t\) 不小于每个连通分支的直径时，\(S_t\) 在该分支上成为团边集，因此 \(S_t=\mathrm{cl}(F)\)。
+最坏情形直径至多 \(n-1\)，故对一切 \(F\) 有 \(d_{\mathcal{R}^{(r)}}(F)\le \lceil \log_r(n-1)\rceil\)，于是 \(d(\mathcal{R}^{(r)})\le \lceil \log_r(n-1)\rceil\)。
+结合下界即得等号成立。证毕。
+\end{proof}
+
+\begin{definition}[一轮闭包基]\label{def:pom-one-round-closure-basis}
+称 \(\mathcal{R}\in\mathcal{IB}(\mathrm{cl})\) 为\textbf{一轮闭包基}，若对所有 \(F\subseteq E_n\) 都有
+\[
+T_{\mathcal{R}}(F)=\mathrm{cl}(F),
+\]
+亦即 \(d(\mathcal{R})=1\)。
+\end{definition}
+
+\begin{theorem}[一轮闭包的规则数下界]\label{thm:pom-one-round-closure-basis-size}
+设 \(\mathcal{R}\in\mathcal{IB}(\mathrm{cl})\) 为一轮闭包基，则
+\[
+\boxed{\ |\mathcal{R}|\ \ge\ \frac{n!}{2}\ },
+\]
+并且 \(\mathcal{R}\) 中至少 \(\frac{n!}{2}\) 条规则的前提规模为 \(n-1\)。
+\end{theorem}
+\begin{proof}
+对任意排列 \(\sigma\in S_n\)，令
+\[
+F_\sigma:=\{\sigma(1)\sigma(2),\ \sigma(2)\sigma(3),\ \dots,\ \sigma(n-1)\sigma(n)\}\subseteq E_n,
+\]
+即一条哈密顿路径的边集。
+该图连通，故 \(\mathrm{cl}(F_\sigma)=E_n\)，从而在一轮闭包假设下 \(T_{\mathcal{R}}(F_\sigma)=E_n\)。
+特别地，边 \(\sigma(1)\sigma(n)\) 必须在一次并行推演中产生，于是存在规则 \(A\to \sigma(1)\sigma(n)\in\mathcal{R}\) 使 \(A\subseteq F_\sigma\)。
+\par
+在路径图 \(F_\sigma\) 中，端点 \(\sigma(1)\) 与 \(\sigma(n)\) 的连通性对边集呈现极小性：删除任意一条边都会使端点不连通。
+由于规则 \(A\to \sigma(1)\sigma(n)\) 在等价闭包语义下有效，必有 \(\sigma(1)\sigma(n)\in \mathrm{cl}(A)\)，等价于端点在 \(([n],A)\) 中连通，因而只能有 \(A=F_\sigma\)。
+故对每个无向哈密顿路径边集 \(F_\sigma\) 都必须出现一条以 \(F_\sigma\) 为前提、以端点边为结论的规则，且其前提规模为 \(n-1\)。
+\par
+无向哈密顿路径条数为 \(n!/2\)（排列与其反向对应同一无向路径边集），从而得到 \(|\mathcal{R}|\ge n!/2\)，并且至少 \(n!/2\) 条规则的前提规模为 \(n-1\)。证毕。
+\end{proof}
+
+\begin{theorem}[素数表语义：自同态的生成元赋值与幂等性判定]\label{thm:pom-idempotent-projection-prime-determined}
+令 \(M=(\NN_{>0},\times)\) 为乘法幺半群，并以 \(\nu_p(n)\) 表示素数 \(p\) 在 \(n\) 的素因子分解中的指数。
+任给对每个素数 \(p\) 的赋值 \(u_p\in\NN_{>0}\)，存在唯一幺半群自同态 \(f:M\to M\) 满足 \(f(p)=u_p\) 且
+\[
+f(n)=\prod_{p\ \text{素数}}u_p^{\nu_p(n)}\qquad(n\in\NN_{>0}),
+\]
+其中乘积为有限乘积。
+此外，以下命题等价：
+\begin{enumerate}
+  \item \(f\) 幂等：\(f\circ f=f\)；
+  \item 对一切素数 \(p\)，有 \(f(f(p))=f(p)\)。
+\end{enumerate}
+在上述情形下，\(f\) 在 \(\mathrm{Im}(f)\) 上为恒等，且
+\[
+\mathrm{Im}(f)=\bigl\langle f(p):\ p\ \text{素数}\bigr\rangle
+\]
+为由 \(\{f(p)\}\) 生成的子幺半群。
+\end{theorem}
+\begin{proof}
+由算术基本定理，任意 \(n\in\NN_{>0}\) 都可唯一写成有限乘积 \(n=\prod_{p\ \text{素数}}p^{\nu_p(n)}\)。
+因此若给定素数赋值 \(u_p\)，公式
+\(
+f(n):=\prod_{p\ \text{素数}}u_p^{\nu_p(n)}
+\)
+良定义并满足 \(f(ab)=f(a)f(b)\)，从而给出幺半群自同态；唯一性由同一分解与同态性立得。
+\par
+\textbf{(1)\(\Rightarrow\)(2)} 显然。
+反之，若对所有素数 \(p\) 有 \(f(f(p))=f(p)\)，则对任意 \(n=\prod_{p\ \text{素数}} p^{\nu_p(n)}\) 有
+\[
+f(f(n))
+=f\!\left(\prod_{p}f(p)^{\nu_p(n)}\right)
+=\prod_{p}f(f(p))^{\nu_p(n)}
+=\prod_{p}f(p)^{\nu_p(n)}
+=f(n),
+\]
+故 \(f\) 幂等。
+\par
+若 \(y\in\mathrm{Im}(f)\)，则 \(y=f(x)\) 对某个 \(x\) 成立，从而 \(f(y)=f(f(x))=f(x)=y\)，故 \(f\) 在像上为恒等。
+又对任意 \(n\)，\(f(n)\) 是 \(\{f(p)\}\) 的有限乘积，故 \(\mathrm{Im}(f)\subseteq\langle f(p)\rangle\)；反向包含由 \(\langle f(p)\rangle\) 中任意有限乘积均可写成 \(f(\prod p^{k_p})\) 得到。证毕。
+\end{proof}
+
+\begin{corollary}[正交素数寄存器下的删轴刻画]\label{cor:pom-orthogonal-idempotent-delete-primes}
+设 \(f:M\to M\) 为幺半群自同态且幂等。若进一步满足：
+\begin{enumerate}
+  \item 对任意素数 \(p\)，\(f(p)\) 要么等于 \(1\)，要么等于某个素数；
+  \item 对任意两不同素数 \(p\ne q\)，\(\gcd(f(p),f(q))=1\)；
+\end{enumerate}
+则存在素数集合 \(S\) 使对一切 \(n\in\NN_{>0}\) 有
+\[
+\boxed{\;
+f(n)=\prod_{p\in S}p^{\nu_p(n)}\; }.
+\]
+\end{corollary}
+\begin{proof}
+取任意素数 \(p\)。若 \(f(p)=1\) 则无事可证。否则由条件 (1) 存在素数 \(r\) 使 \(f(p)=r\)。
+由幂等性得 \(f(r)=f(f(p))=f(p)=r\)。
+若 \(p\ne r\)，则 \(p,r\) 为不同素数，但
+\(
+\gcd(f(p),f(r))=\gcd(r,r)=r\ne 1
+\)，与条件 (2) 矛盾。
+因此必有 \(r=p\)，即对每个素数 \(p\)，\(f(p)\in\{1,p\}\)。
+令 \(S:=\{p:\ p\ \text{为素数且 }f(p)=p\}\)，则对任意 \(n=\prod p^{\nu_p(n)}\) 有
+\(
+f(n)=\prod f(p)^{\nu_p(n)}=\prod_{p\in S}p^{\nu_p(n)}
+\)。
+证毕。
+\end{proof}
+
+\begin{remark}\label{rem:pom-horn-basis-global-min}
+对定义 \ref{def:pom-edge-closure} 的等价闭包，定理 \ref{thm:pom-eq-closure-horn-binary-min} 给出了 Horn 蕴涵基在允许任意有限前提大小时的全局下界与唯一性刻画，并表明三角补全规则族在规模意义下不可改进。
+\end{remark}
+
+\endinput
+

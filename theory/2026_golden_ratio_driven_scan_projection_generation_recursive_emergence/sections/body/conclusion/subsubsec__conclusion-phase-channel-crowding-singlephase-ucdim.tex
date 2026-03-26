@@ -1,0 +1,338 @@
+\subsubsection{有限相位通道的拥挤下界与可审计性—精度账本接口}\label{subsubsec:conclusion-phase-channel-crowding-singlephase-ucdim}
+
+\begin{theorem}[有限相位通道对 \texorpdfstring{$\ZZ^r$}{Z^r} 的必然拥挤下界]\label{thm:conclusion-phase-channel-crowding-lb}
+设 \(r,k\in\NN\)，\(\TT^k:=(\RR/\ZZ)^k\)，并以基本域 \([0,1)^k\) 上的 \(\ell^\infty\) 距离诱导度量
+\[
+d_\infty(x,y):=\max_{1\le j\le k}\|x_j-y_j\|_{\RR/\ZZ},
+\qquad
+\|t\|_{\RR/\ZZ}:=\min_{m\in\ZZ}|t-m|.
+\]
+则对任意群同态 \(\varphi:\ZZ^r\to \TT^k\) 与任意 \(N\ge 1\)，存在 \(0\neq n\in\ZZ^r\) 满足
+\[
+\|n\|_\infty\le N,
+\qquad
+d_\infty(\varphi(n),0)\le \frac{1}{q},
+\]
+其中
+\[
+q:=\max\!\left\{1,\ \left\lceil (N+1)^{r/k}\right\rceil-1\right\}.
+\]
+\end{theorem}
+
+\begin{proof}
+取整数盒
+\(
+S:=\{0,1,\dots,N\}^r
+\)，则 \(|S|=(N+1)^r\)。
+将基本域 \([0,1)^k\) 划分为 \(q^k\) 个边长 \(1/q\) 的半开立方体。由于 \(q\ge \lceil (N+1)^{r/k}\rceil-1\)，有 \(q^k<(N+1)^r\)（当 \(q=1\) 时断言显然成立），故鸽巢原理给出不同 \(u,v\in S\) 使 \(\varphi(u)\)、\(\varphi(v)\) 落入同一小立方体，从而
+\[
+d_\infty(\varphi(u)-\varphi(v),0)\le \frac{1}{q}.
+\]
+令 \(n:=u-v\neq 0\)，则 \(\|n\|_\infty\le N\) 且满足所示不等式。证毕。
+\end{proof}
+
+\begin{corollary}[圆维—精度账本的不可压缩下界]\label{cor:conclusion-cdim-precision-ledger-lb-kphase}
+取 \(r,k\in\NN\) 并令 \(B_\infty(N):=\{n\in\ZZ^r:\|n\|_\infty\le N\}\)。
+若群同态 \(\varphi:\ZZ^r\to\TT^k\) 在 \(B_\infty(N)\) 上满足 \(\varepsilon\)-分离，即
+\[
+d_\infty(\varphi(n),\varphi(m))\ge \varepsilon
+\qquad
+(\forall\,n\neq m\in B_\infty(N)),
+\]
+则必有
+\[
+\varepsilon\le \frac{1}{\max\{1,\lceil (N+1)^{r/k}\rceil-1\}}.
+\]
+等价地，精度比特预算满足
+\[
+\log_2\frac{1}{\varepsilon}\ \ge\ \frac{r}{k}\log_2(N+1)-O(1).
+\]
+\end{corollary}
+
+\begin{proof}
+若 \(\varepsilon\)-分离成立，则对所有 \(0\neq n\in B_\infty(N)\) 必有 \(d_\infty(\varphi(n),0)\ge \varepsilon\)。
+与定理 \ref{thm:conclusion-phase-channel-crowding-lb} 矛盾，除非 \(\varepsilon\) 满足所示上界。证毕。
+\end{proof}
+
+\begin{definition}[\texorpdfstring{$U(1)$}{U(1)}-实现维数]\label{def:conclusion-ucdim}
+对离散交换群 \(G\)，定义
+\[
+\mathrm{ucdim}(G):=\min\left\{k\in\NN:\ \exists\ \text{群单射 }G\hookrightarrow \TT^k\right\}.
+\]
+\end{definition}
+
+\begin{proposition}[\texorpdfstring{$\mathrm{ucdim}(\ZZ^r)=1$}{ucdim(Z^r)=1}]\label{prop:conclusion-ucdim-zr}
+对任意 \(r\ge 1\)，有 \(\mathrm{ucdim}(\ZZ^r)=1\)。
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-zn-to-circle-injective-dense} 存在群单射 \(\ZZ^r\hookrightarrow \TT\)，故 \(\mathrm{ucdim}(\ZZ^r)\le 1\)。
+又 \(\TT^k\) 平凡群情形外不允许 \(k=0\)，故最小值为 \(1\)。证毕。
+\end{proof}
+
+\begin{proposition}[乘法自然数在单相位中的单射同态实现]\label{prop:conclusion-multiplicative-n-to-circle-mono-injection}
+令 \(\TT=\RR/\ZZ\)，并以自然对数定义映射
+\[
+\Phi:\NN^\times\to\TT,
+\qquad
+\Phi(n):=\log n\ \bmod 1.
+\]
+则 \(\Phi\) 为单射单子同态（乘法 \(\to\) 加法）：
+\[
+\Phi(ab)=\Phi(a)+\Phi(b),
+\qquad
+\ker\Phi=\{1\}.
+\]
+\end{proposition}
+
+\begin{proof}
+同态性由 \(\log(ab)=\log a+\log b\) 立即得到。
+若 \(\Phi(n)=\Phi(m)\)，则 \(\log(n/m)\in\ZZ\)，即 \(n/m=e^k\)（某 \(k\in\ZZ\)）。
+当 \(k\neq 0\) 时，由 Lindemann 定理 \(e^k\) 为超越数，从而 \(e^k\notin\QQ\)，与 \(n/m\in\QQ\) 矛盾；故 \(k=0\) 且 \(n=m\)。证毕。
+\end{proof}
+
+\begin{proposition}[正有理乘法群的显式单相位单射同态]\label{prop:conclusion-qpos-sqrtp-phase-injection}
+以素数集 \(\mathcal P\) 为指标，按唯一分解有
+\(
+\QQ_{>0}^\times\cong \bigoplus_{p\in\mathcal P}\ZZ
+\)。
+定义
+\[
+\Psi:\QQ_{>0}^\times\to\TT,
+\qquad
+\Psi\!\left(\prod_{p}p^{e_p}\right):=\sum_{p}e_p\sqrt{p}\ \bmod 1,
+\]
+其中仅有限个 \(e_p\neq 0\)。
+则 \(\Psi\) 为单射群同态。
+\end{proposition}
+
+\begin{proof}
+同态性由指数加法立即推出。设 \(\sum_{i=1}^n c_i\sqrt{p_i}\in\ZZ\)（\(c_i\in\ZZ\)，\(p_i\) 互异素数）。
+取域 \(K=\QQ(\sqrt{p_1},\dots,\sqrt{p_n})\)。对每个 \(j\) 存在自同构 \(\sigma_j\in\mathrm{Gal}(K/\QQ)\) 使
+\(\sigma_j(\sqrt{p_j})=-\sqrt{p_j}\) 且对 \(i\neq j\) 有 \(\sigma_j(\sqrt{p_i})=\sqrt{p_i}\)。
+对等式施以 \(\sigma_1\) 并与原式相减得 \(2c_1\sqrt{p_1}=0\)，故 \(c_1=0\)；依次得到 \(c_i=0\)。
+因此 \(\sum_p e_p\sqrt p\in\ZZ\) 仅在全体 \(e_p=0\) 时成立，从而 \(\ker\Psi=\{1\}\)。证毕。
+\end{proof}
+
+\begin{theorem}[素数账本的单圈相位化：同态、单射与稠密像]\label{thm:conclusion-qpos-general-singlephase-injective-dense}
+设 \(\mathbb P\) 为素数集，\(\Theta=\{\theta_p\}_{p\in\mathbb P}\subset\RR\) 满足
+\[
+\{1\}\cup\{\theta_p:\ p\in\mathbb P\}\ \text{在}\ \QQ\text{-线性意义下线性无关}.
+\]
+定义
+\[
+\Phi_\Theta:\QQ_{>0}^\times\to\TT,\qquad
+\Phi_\Theta(q):=\exp\!\left(2\pi i\sum_{p\in\mathbb P}v_p(q)\theta_p\right),
+\]
+其中仅有限个 \(v_p(q)\neq 0\)。则：
+\begin{enumerate}
+  \item \(\Phi_\Theta\) 为群同态；
+  \item \(\Phi_\Theta\) 为单射；
+  \item \(\Phi_\Theta(\QQ_{>0}^\times)\) 在 \(\TT\) 中稠密。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+同态性由 \(v_p(q_1q_2)=v_p(q_1)+v_p(q_2)\) 直接得到。
+若 \(\Phi_\Theta(q)=1\)，则存在 \(k\in\ZZ\) 使
+\[
+\sum_{p}v_p(q)\theta_p-k=0.
+\]
+这给出 \(\{1\}\cup\{\theta_p\}\) 的一个有理线性关系；由线性无关性得 \(k=0\) 且全部 \(v_p(q)=0\)，故 \(q=1\)，从而 \(\Phi_\Theta\) 单射。
+
+由单射知像无限。又 \(\Phi_\Theta(\QQ_{>0}^\times)\) 为 \(\TT\) 的子群，按定理 \ref{thm:conclusion-circle-closed-subgroup-classification}，无限子群的闭包只能是 \(\TT\) 本身，故像稠密。证毕。
+\end{proof}
+
+\begin{remark}[单圈相位化的有限精度不可逆性]\label{rem:conclusion-qpos-singlephase-finite-precision-irrev}
+定理 \ref{thm:conclusion-qpos-general-singlephase-injective-dense} 给出实现层的严格分界：\(\QQ_{>0}^\times\) 可单圈单射编码，但像在 \(\TT\) 中稠密。
+因此任何固定分辨率的量化读出都会把无穷多个不同账本点压缩到同一相位桶，无法在全域上实现可逆解码。
+\end{remark}
+
+\begin{theorem}[多平方根线性型的范数下界]\label{thm:conclusion-multisqrt-norm-lower-bound}
+取两两不同素数 \(p_1,\dots,p_r\)（\(r\ge 1\)）。
+对任意 \(a_1,\dots,a_r,k\in\ZZ\)，定义
+\[
+\alpha:=\sum_{j=1}^r a_j\sqrt{p_j}-k.
+\]
+若 \(\alpha\neq 0\)，则有
+\[
+|\alpha|
+\ge
+\left(|k|+\sum_{j=1}^r |a_j|\sqrt{p_j}\right)^{-(2^r-1)}.
+\]
+\end{theorem}
+
+\begin{proof}
+令 \(K=\QQ(\sqrt{p_1},\dots,\sqrt{p_r})\)。其 Galois 群同构于 \((\ZZ/2\ZZ)^r\)，每个自同构对应于独立改变各 \(\sqrt{p_j}\) 的符号。
+由 \(\sqrt{p_j}\) 为代数整数知 \(\alpha\in\mathcal O_K\)，故范数
+\[
+N_{K/\QQ}(\alpha)
+=
+\prod_{\varepsilon\in\{\pm1\}^r}
+\left(\sum_{j=1}^r \varepsilon_j a_j\sqrt{p_j}-k\right)
+\]
+为非零整数，从而 \(|N_{K/\QQ}(\alpha)|\ge 1\)。
+
+设
+\[
+M:=|k|+\sum_{j=1}^r |a_j|\sqrt{p_j}.
+\]
+则每个共轭因子的绝对值都不超过 \(M\)，于是
+\[
+|N_{K/\QQ}(\alpha)|\le |\alpha|\,M^{2^r-1}.
+\]
+结合 \(|N_{K/\QQ}(\alpha)|\ge 1\) 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[单圈相位化的有限盒精度窗口]\label{cor:conclusion-prime-singlephase-precision-window-exp2r}
+取两两不同素数 \(p_1,\dots,p_r\) 并定义
+\[
+\phi(e_1,\dots,e_r):=\exp\!\left(2\pi i\sum_{j=1}^r e_j\sqrt{p_j}\right)\in\TT.
+\]
+对 \(A\ge 1\)，记
+\[
+\mathcal E_{r,A}:=\{-A,\dots,A\}^r,\qquad
+\delta_{r,A}:=\min_{\substack{e\neq e'\\ e,e'\in\mathcal E_{r,A}}}
+\mathrm{dist}_{\TT}\bigl(\phi(e),\phi(e')\bigr),
+\]
+\[
+B_{r,A}:=\left\lceil\log_2\frac{2}{\delta_{r,A}}\right\rceil.
+\]
+则有双侧界
+\[
+r\log_2(2A+1)\ \le\ B_{r,A}\ \le\
+1+(2^r-1)\log_2\!\bigl(3Ar\sqrt{p_r}\bigr).
+\]
+特别地，有限盒上的证书化精度上界包含 \(2^r-1\) 指数项。
+\end{corollary}
+
+\begin{proof}
+先证右侧上界。任取 \(e\neq e'\)，令 \(a_j=e_j-e'_j\) 并定义
+\[
+\Delta:=\left\|\sum_{j=1}^r a_j\sqrt{p_j}\right\|_{\RR/\ZZ}.
+\]
+取最近整数 \(k\in\ZZ\) 使
+\[
+\Delta=\left|\sum_{j=1}^r a_j\sqrt{p_j}-k\right|.
+\]
+由命题 \ref{prop:conclusion-qpos-sqrtp-phase-injection}，当 \(e\neq e'\) 时该差不可能为 \(0\)，故可应用定理 \ref{thm:conclusion-multisqrt-norm-lower-bound}。
+由 \(|a_j|\le A\) 得
+\[
+|k|\le Ar\sqrt{p_r}+\frac12,\qquad
+|k|+\sum_{j=1}^r |a_j|\sqrt{p_j}\le 3Ar\sqrt{p_r}.
+\]
+并由定理 \ref{thm:conclusion-multisqrt-norm-lower-bound} 得
+\[
+\Delta\ge (3Ar\sqrt{p_r})^{-(2^r-1)}.
+\]
+取 \(e\neq e'\) 的最小值得
+\[
+\delta_{r,A}\ge (3Ar\sqrt{p_r})^{-(2^r-1)},
+\]
+故
+\[
+B_{r,A}
+\le
+1+(2^r-1)\log_2(3Ar\sqrt{p_r}).
+\]
+
+再证左侧下界。点集 \(\phi(\mathcal E_{r,A})\) 的基数为 \((2A+1)^r\)。
+把单位圆按弧长分成 \((2A+1)^r\) 个等分弧，抽屉原理给出两点弧距不超过 \((2A+1)^{-r}\)，即
+\[
+\delta_{r,A}\le (2A+1)^{-r}.
+\]
+因此
+\[
+B_{r,A}
+=\left\lceil\log_2\frac{2}{\delta_{r,A}}\right\rceil
+\ge r\log_2(2A+1).
+\]
+证毕。
+\end{proof}
+
+\begin{remark}[单圈相位化精度窗口的数值审计]\label{rem:conclusion-singlephase-prime-ledger-audit}
+脚本 \texttt{scripts/exp\_conclusion\_singlephase\_prime\_ledger\_precision\_audit.py}
+给出有限盒分离度、范数下界随机抽检与稠密性启发式审计，并生成
+\texttt{artifacts/export/conclusion\_singlephase\_prime\_ledger\_precision\_audit.json}
+与表 \ref{tab:conclusion_singlephase_prime_ledger_precision_audit}。
+\input{sections/generated/tab_conclusion_singlephase_prime_ledger_precision_audit}
+\end{remark}
+
+\begin{theorem}[圆群闭子群分类与无限子群稠密性]\label{thm:conclusion-circle-closed-subgroup-classification}
+设 \(H\le \TT\) 为闭子群，则必有
+\[
+H\cong \ZZ/n\ZZ\ (n\in\NN)\qquad\text{或}\qquad H=\TT.
+\]
+因此任意无限子群 \(G\le\TT\) 在 \(\TT\) 中稠密。
+\end{theorem}
+
+\begin{proof}
+记商映射 \(\pi:\RR\to\RR/\ZZ\simeq\TT\)，并置 \(\widetilde H:=\pi^{-1}(H)\)。
+则 \(\widetilde H\) 为 \(\RR\) 的闭子群且 \(\ZZ\subseteq \widetilde H\)。
+\(\RR\) 的闭子群仅有 \(a\ZZ\)（\(a\ge 0\)）与 \(\RR\) 两类。
+若 \(\widetilde H=\RR\)，则 \(H=\TT\)。
+若 \(\widetilde H=a\ZZ\)，由 \(\ZZ\subseteq a\ZZ\) 得 \(a=1/n\)（某 \(n\in\NN\)），从而
+\[
+H=\widetilde H/\ZZ\cong (1/n)\ZZ/\ZZ\cong \ZZ/n\ZZ.
+\]
+结论即得。证毕。
+\end{proof}
+
+\begin{theorem}[平方自由素数账本的指数级拥挤]\label{thm:conclusion-squarefree-crowding-kphase}
+设 \(k\in\NN\) 且 \(\iota:\NN^\times\hookrightarrow \TT^k\) 为任意单射映射。
+令 \(p_1,\dots,p_m\) 为前 \(m\) 个素数，并定义平方自由集合
+\[
+\mathcal S_m:=\left\{\prod_{j=1}^{m}p_j^{\varepsilon_j}:\ \varepsilon_j\in\{0,1\}\right\},
+\qquad
+|\mathcal S_m|=2^m.
+\]
+记最小分离度
+\[
+\delta_m:=\min_{\substack{x\neq y\\ x,y\in\mathcal S_m}} d_\infty\bigl(\iota(x),\iota(y)\bigr).
+\]
+则对所有 \(m\ge 1\) 有
+\[
+\delta_m\le \frac{1}{\max\{1,\lceil 2^{m/k}\rceil-1\}}
+\ \lesssim\ 2^{-m/k}.
+\]
+\end{theorem}
+
+\begin{proof}
+将 \([0,1)^k\) 分割为 \(Q^k\) 个边长 \(1/Q\) 的半开立方体，其中 \(Q:=\max\{1,\lceil 2^{m/k}\rceil-1\}\)。
+则 \(Q^k<2^m=|\mathcal S_m|\)（当 \(Q=1\) 时断言显然成立），故存在不同 \(x,y\in\mathcal S_m\) 使 \(\iota(x),\iota(y)\) 落于同一立方体，从而
+\(
+d_\infty(\iota(x),\iota(y))\le 1/Q
+\)。
+取最小即得所述不等式。证毕。
+\end{proof}
+
+\begin{corollary}[固定相位维数与固定分辨率下的可审计性破裂]\label{cor:conclusion-squarefree-audit-breakdown}
+固定 \(k\in\NN\) 与目标分辨率 \(\varepsilon\in(0,1)\)。对任意单射映射 \(\iota:\NN^\times\hookrightarrow\TT^k\)，存在 \(m_0=m_0(k,\varepsilon)\) 使当 \(m\ge m_0\) 时，\(\iota\) 在 \(\mathcal S_m\) 上不可能保持 \(\varepsilon\)-分离。
+更定量地，若要求对某个 \(m\) 在 \(\mathcal S_m\) 上满足
+\(
+d_\infty(\iota(x),\iota(y))\ge \varepsilon
+\)
+对所有 \(x\neq y\) 成立，则必有
+\[
+k\ \ge\ \frac{m}{\log_2(1/\varepsilon)}-O(1).
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-squarefree-crowding-kphase} 有 \(\delta_m\le 1/(\max\{1,\lceil 2^{m/k}\rceil-1\})\)。
+若 \(\varepsilon\)-分离成立，则 \(\delta_m\ge \varepsilon\)，从而 \(\varepsilon\le 1/(\lceil 2^{m/k}\rceil-1)\)，整理得所示下界。证毕。
+\end{proof}
+
+\begin{conjecture}[平方自由层上的最优条件数常数]\label{conj:conclusion-squarefree-optimal-conditioning}
+对单射映射 \(\iota:\NN^\times\hookrightarrow \TT^k\) 定义
+\[
+C(\iota):=\liminf_{m\to\infty} 2^{m/k}\,\delta_m,
+\]
+其中 \(\delta_m\) 如定理 \ref{thm:conclusion-squarefree-crowding-kphase}。
+预期对每个固定 \(k\) 存在常数 \(0<C_k^-\le C_k^+<\infty\) 使
+\[
+C_k^-\ \le\ \sup_{\iota} C(\iota)\ \le\ C_k^+,
+\]
+并且上确界可由算术上自然的相位同态实现达到。
+\end{conjecture}
+

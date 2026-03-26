@@ -1,0 +1,249 @@
+\paragraph{幂基重整化协变性、Julia 动力学判别与阻尼阈值分相}\label{par:xi-discrete-abel-weil-powerbase-julia-threshold-laws}
+本段在子小节 \ref{subsec:discrete-abel-weil-polar-rigidity} 与段落 \ref{def:abel-decimation-operators} 的记号下，
+把“底数幂递归 \(b\mapsto b^m\)”统一为一条可审计链：
+\[
+\text{系数抽取协变}\ \Longrightarrow\ \text{极点幂映射}\ \Longrightarrow\ \text{Julia 分相判别}\ \Longrightarrow\ \text{Hardy 阈值二分}\ \Longrightarrow\ \sigma_* \text{ 的降采样反演}.
+\]
+
+\begin{theorem}[幂基重整化协变性与零点极点幂映射]\label{thm:xi-abel-powerbase-covariance-pole-power-map}
+固定 \(b>1\)，并沿用
+\[
+E_b(n)=b^{-n/2}\psi_0(b^n)-b^{n/2},\qquad
+\mathcal A_b(r)=\sum_{n\ge 0}E_b(n)r^n
+\]
+与阻尼版
+\[
+\mathcal A_{b,\delta}(r):=\mathcal A_b(b^{-\delta}r)=\sum_{n\ge 0}E_b(n)b^{-\delta n}r^n\qquad(\delta\ge 0).
+\]
+对任意整数 \(m\ge 1\)，记 \(B:=b^m\)，并记抽取算子 \(\mathsf D_m\)（定义 \ref{def:abel-decimation-operators}）。
+则有严格协变恒等式
+\[
+\mathcal A_{B,\delta}(r)=\mathsf D_m\!\bigl(\mathcal A_{b,\delta}\bigr)(r),
+\qquad
+H_{B,\delta}(r)=\mathsf D_m\!\bigl(H_{b,\delta}\bigr)(r),
+\]
+其中 \(H_{b,\delta}\) 为命题 \ref{prop:damped-poles} 的解析余项。
+并且对任意非平凡零点 \(\rho\)，其阻尼极点
+\[
+r_{\rho,\delta}(b):=b^{-(\rho-(\frac12+\delta))}
+\]
+满足幂映射闭合律
+\[
+r_{\rho,\delta}(b^m)=\bigl(r_{\rho,\delta}(b)\bigr)^m.
+\]
+\end{theorem}
+
+\begin{proof}
+由定义直接计算
+\[
+E_{b^m}(n)
+=(b^m)^{-n/2}\psi_0((b^m)^n)-(b^m)^{n/2}
+=b^{-mn/2}\psi_0(b^{mn})-b^{mn/2}
+=E_b(mn).
+\]
+因此
+\[
+\mathcal A_{b^m,\delta}(r)
+=\sum_{n\ge 0}E_{b^m}(n)(b^m)^{-\delta n}r^n
+=\sum_{n\ge 0}E_b(mn)b^{-m\delta n}r^n
+=\mathsf D_m(\mathcal A_{b,\delta})(r).
+\]
+对余项
+\(
+H_{b,\delta}(r)=\sum_{n\ge 0}h_n r^n
+\)
+同理得到
+\(
+H_{b^m,\delta}(r)=\sum_{n\ge 0}h_{mn}r^n=\mathsf D_m(H_{b,\delta})(r)
+\)。
+最后由极点位置公式
+\[
+r_{\rho,\delta}(b^m)
+=(b^m)^{-(\rho-(\frac12+\delta))}
+=b^{-m(\rho-(\frac12+\delta))}
+=\bigl(r_{\rho,\delta}(b)\bigr)^m
+\]
+即得。证毕。
+\end{proof}
+
+\begin{theorem}[极点动力学的 Julia 刚性与临界线判别]\label{thm:xi-abel-pole-julia-rigidity}
+固定整数 \(m\ge 2\)，定义幂动力系统
+\[
+\Phi_m:\CC\setminus\{0\}\to\CC\setminus\{0\},\qquad \Phi_m(r)=r^m.
+\]
+对任意 \(\delta\ge 0\) 与任意非平凡零点 \(\rho\)，有等价链
+\[
+\Re\rho>\frac12+\delta
+\Longleftrightarrow
+|r_{\rho,\delta}(b)|<1
+\Longleftrightarrow
+\Phi_m^{\circ k}(r_{\rho,\delta}(b))\to 0,
+\]
+\[
+\Re\rho<\frac12+\delta
+\Longleftrightarrow
+|r_{\rho,\delta}(b)|>1
+\Longleftrightarrow
+\Phi_m^{\circ k}(r_{\rho,\delta}(b))\to \infty,
+\]
+\[
+\Re\rho=\frac12+\delta
+\Longleftrightarrow
+|r_{\rho,\delta}(b)|=1
+\Longleftrightarrow
+r_{\rho,\delta}(b)\in J(\Phi_m)=\{\,|r|=1\,\}.
+\]
+特别地，当 \(\delta=0\) 时
+\[
+\mathrm{RH}
+\Longleftrightarrow
+\forall\rho,\ \Re\rho=\frac12
+\Longleftrightarrow
+\{r_{\rho,0}(b)\}_{\rho}\subset J(\Phi_m).
+\]
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{prop:damped-poles} 的模长公式
+\[
+|r_{\rho,\delta}(b)|
+=b^{-(\Re\rho-(\frac12+\delta))}
+\]
+立即得到与 \(1\) 的大小比较。
+另一方面，\(\Phi_m\) 迭代满足：\(|r|<1\Rightarrow r^{m^k}\to 0\)，\(|r|>1\Rightarrow r^{m^k}\to\infty\)，\(|r|=1\Rightarrow\) 轨道留在单位圆。
+而 \(r\mapsto r^m\) 的 Julia 集是单位圆 \(\{|r|=1\}\)。
+故全部等价成立；\(\delta=0\) 的特例即 RH 判别式。证毕。
+\end{proof}
+
+\begin{proposition}[重整化轨道的 Hardy 能量单调性与统一点态封口]\label{prop:xi-abel-hardy-energy-monotone-uniform-bound}
+取 \(\delta\ge 0\)，并假设 \(\mathcal A_{b,\delta}\in H^2(\mathbb D)\)。
+则对任意 \(m\ge 1\) 有
+\[
+\|\mathcal A_{b^m,\delta}\|_{H^2(\mathbb D)}^2
+=\sum_{n\ge 0}|E_b(mn)|^2 b^{-2m\delta n}
+\le
+\sum_{n\ge 0}|E_b(n)|^2 b^{-2\delta n}
+=\|\mathcal A_{b,\delta}\|_{H^2(\mathbb D)}^2.
+\]
+并且对任意 \(0<r_0<1\) 成立统一点态界
+\[
+\sup_{m\ge 1}\ \sup_{|r|\le r_0}|\mathcal A_{b^m,\delta}(r)|
+\le
+\frac{\|\mathcal A_{b,\delta}\|_{H^2(\mathbb D)}}{\sqrt{1-r_0^2}}.
+\]
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:xi-abel-powerbase-covariance-pole-power-map}，
+\(
+\mathcal A_{b^m,\delta}=\mathsf D_m(\mathcal A_{b,\delta})
+\)。
+而 \(H^2\) 的系数刻画给出
+\[
+\|\mathsf D_m F\|_{H^2}^2=\sum_{n\ge 0}|a_{mn}|^2\le \sum_{n\ge 0}|a_n|^2=\|F\|_{H^2}^2
+\]
+（\(F(r)=\sum a_n r^n\)），得能量单调性。
+点态估计由 Cauchy--Schwarz：
+\[
+|\mathsf D_mF(r)|
+\le \Bigl(\sum_{n\ge 0}|a_{mn}|^2\Bigr)^{1/2}
+\Bigl(\sum_{n\ge 0}|r|^{2n}\Bigr)^{1/2}
+\le \frac{\|F\|_{H^2}}{\sqrt{1-|r|^2}}.
+\]
+取 \(F=\mathcal A_{b,\delta}\) 并在 \(|r|\le r_0\) 上取上确界即得。证毕。
+\end{proof}
+
+\begin{theorem}[阻尼阈值的稳定--失稳二分律]\label{thm:xi-abel-damping-threshold-bifurcation}
+记
+\[
+\sigma_*:=\sup_{\rho}\Re\rho,\qquad
+\delta_c:=\sigma_*-\frac12.
+\]
+固定 \(b>1\) 与 \(\delta\ge 0\)，考虑重整化轨道
+\[
+\{\mathcal A_{b^m,\delta}\}_{m\ge 1}.
+\]
+则有二分律：
+\begin{enumerate}
+  \item 若 \(\delta>\delta_c\)，则 \(\{\mathcal A_{b^m,\delta}\}_{m\ge 1}\) 在 \(\mathbb D\) 上局部一致有界，故为正规族；并且
+  \[
+  \sup_{m\ge 1}\|\mathcal A_{b^m,\delta}\|_{H^2(\mathbb D)}<\infty.
+  \]
+  \item 若 \(\delta<\delta_c\)，则对任意 \(r_0\in(0,1)\)，存在 \(m_0(r_0)\) 使得对所有 \(m\ge m_0(r_0)\)，
+  \(\mathcal A_{b^m,\delta}\) 在 \(|r|\le r_0\) 内出现零点诱导极点；
+  因而
+  \[
+  \sup_{|r|\le r_0}|\mathcal A_{b^m,\delta}(r)|=\infty.
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+若 \(\delta>\delta_c\)，则存在 \(\varepsilon=\delta-\delta_c>0\) 使
+\(
+\Re\rho\le \frac12+\delta-\varepsilon
+\)
+对全部零点成立。
+由定理 \ref{thm:hardy-criterion-delta} 得 \(\mathcal A_{b,\delta}\in H^2(\mathbb D)\)；
+再由命题 \ref{prop:xi-abel-hardy-energy-monotone-uniform-bound} 得
+\[
+\sup_{m\ge 1}\sup_{|r|\le r_0}|\mathcal A_{b^m,\delta}(r)|
+\le
+\frac{\|\mathcal A_{b,\delta}\|_{H^2}}{\sqrt{1-r_0^2}}
+\]
+（任意 \(0<r_0<1\)），故局部一致有界并由 Montel 定理得到正规性。
+
+若 \(\delta<\delta_c\)，则存在零点 \(\rho\) 使 \(\Re\rho>\frac12+\delta\)，即
+\(
+|r_{\rho,\delta}(b)|<1
+\)。
+由定理 \ref{thm:xi-abel-powerbase-covariance-pole-power-map}，
+\[
+|r_{\rho,\delta}(b^m)|
+=|r_{\rho,\delta}(b)|^m
+\xrightarrow[m\to\infty]{}0.
+\]
+故给定 \(r_0\in(0,1)\)，当 \(m\ge m_0(r_0)\) 时有
+\(
+|r_{\rho,\delta}(b^m)|<r_0
+\)，即极点进入 \(|r|\le r_0\)。
+于是 \(\sup_{|r|\le r_0}|\mathcal A_{b^m,\delta}(r)|=\infty\)。证毕。
+\end{proof}
+
+\begin{corollary}[任意固定步长降采样的增长率反演]\label{cor:xi-abel-fixed-step-growth-recovers-sigma-star}
+对任意整数 \(m\ge 1\)，定义
+\[
+\Lambda_{b,m}:=\limsup_{n\to\infty}\frac{1}{n}\log|E_b(mn)|.
+\]
+则恒有
+\[
+\Lambda_{b,m}=m\Bigl(\sigma_*-\frac12\Bigr)\log b,
+\qquad
+\sigma_*=\frac12+\frac{\Lambda_{b,m}}{m\log b}.
+\]
+即 \(\sigma_*\) 可由任意固定步长 \(m\) 的降采样序列指数增长率无损恢复。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:xi-abel-powerbase-covariance-pole-power-map}，\(E_{b^m}(n)=E_b(mn)\)。
+再由定理 \ref{thm:radius-captures-sigma-star} 应用于底数 \(b^m\)：
+\[
+R_{b^m}=(b^m)^{-(\sigma_*-\frac12)}.
+\]
+由 Cauchy--Hadamard，
+\[
+\frac{1}{R_{b^m}}
+=\limsup_{n\to\infty}|E_{b^m}(n)|^{1/n}
+=\limsup_{n\to\infty}|E_b(mn)|^{1/n}.
+\]
+取对数即得
+\[
+\Lambda_{b,m}
+=\log\frac{1}{R_{b^m}}
+=\log\!\big((b^m)^{\sigma_*-\frac12}\big)
+=m\Bigl(\sigma_*-\frac12\Bigr)\log b.
+\]
+整理得到反演式。证毕。
+\end{proof}
+
+\endinput

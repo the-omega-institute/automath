@@ -1,0 +1,66 @@
+\begin{proposition}[保持—重采样通道表示]\label{prop:pom-diagonal-rate-keep-resample-channel}
+令 \(P^\star_\delta\) 为实现 \(R_w(\delta)\) 的最优耦合，并写成定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 的指数族形式
+\[
+P^\star_\delta(x,y)=\frac{u_xu_y\bigl(1+\kappa\,\mathbf 1_{\{x=y\}}\bigr)}{Z},
+\qquad
+u\in\RR_{>0}^X,\ \kappa>0.
+\]
+定义条件核 \(K_\delta(y\mid x):=P^\star_\delta(x,y)/w(x)\) 及背景分布
+\[
+\pi_\delta(x):=\frac{u_x}{\sum_{z\in X}u_z}.
+\]
+则对每个 \(x\in X\) 存在保持率 \(p_\delta(x)\in(0,1)\) 使得
+\[
+K_\delta(x\mid x)=p_\delta(x),\qquad
+K_\delta(y\mid x,\ y\ne x)=(1-p_\delta(x))\,\frac{\pi_\delta(y)}{1-\pi_\delta(x)}.
+\]
+因此最优通道可表述为“保持—重采样”机制：以概率 \(p_\delta(x)\) 保持 \(y=x\)，否则从背景 \(\pi_\delta\) 在 \(X\setminus\{x\}\) 上的条件化分布重采样。
+\end{proposition}
+\begin{proof}
+记 \(A:=\sum_{z\in X}u_z\)。
+由指数族表示，对 \(y\ne x\) 有 \(P^\star_\delta(x,y)=u_xu_y/Z\)，从而
+\[
+K_\delta(y\mid x)=\frac{u_y}{A+\kappa u_x}\qquad(y\ne x),
+\]
+其中用到了边缘自洽恒等式 \(w(x)=\sum_y P^\star_\delta(x,y)=u_x(A+\kappa u_x)/Z\)。
+另一方面，
+\[
+p_\delta(x):=K_\delta(x\mid x)
+=\frac{(1+\kappa)u_x}{A+\kappa u_x}\in(0,1),
+\]
+并且
+\[
+\sum_{y\ne x}K_\delta(y\mid x)=\frac{A-u_x}{A+\kappa u_x}=1-p_\delta(x).
+\]
+将 \(u_y/(A+\kappa u_x)\) 写成 \((1-p_\delta(x))\,u_y/(A-u_x)\)，再用 \(\pi_\delta(y)=u_y/A\) 得
+\(
+u_y/(A-u_x)=\pi_\delta(y)/(1-\pi_\delta(x))
+\)，即得所示分解。证毕。
+\end{proof}
+
+\begin{proposition}[保持率沿边缘质量单调]\label{prop:pom-diagonal-rate-keep-probability-monotone}
+在命题 \ref{prop:pom-diagonal-rate-keep-resample-channel} 的设定下，设 \(\delta<1-p_2(w)\) 且 \(w\) 全支撑，从而最优耦合 \(P^\star_\delta\) 唯一。
+记保持率 \(p_\delta(x)=K_\delta(x\mid x)\)。
+则对任意 \(x\ne y\)，若 \(w(x)>w(y)\)，则
+\[
+p_\delta(x)\ >\ p_\delta(y).
+\]
+\end{proposition}
+\begin{proof}
+沿定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 的边缘自洽恒等式，
+\[
+w(x)=\frac{u_x(A+\kappa u_x)}{Z},
+\qquad
+A:=\sum_{z\in X}u_z,\ \kappa>0,\ Z>0.
+\]
+函数 \(u\mapsto u(A+\kappa u)\) 在 \(u>0\) 上严格递增，故 \(w(x)>w(y)\Rightarrow u_x>u_y\)。
+另一方面，由命题 \ref{prop:pom-diagonal-rate-keep-resample-channel} 的显式公式
+\[
+p_\delta(x)=\frac{(1+\kappa)u_x}{A+\kappa u_x},
+\]
+而函数 \(u\mapsto \frac{(1+\kappa)u}{A+\kappa u}\) 在 \(u>0\) 上严格递增（导数为 \(\frac{(1+\kappa)A}{(A+\kappa u)^2}>0\)）。
+合并即得结论。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-diagonal-rate-rank-one-refresh-spectral-collapse}
+

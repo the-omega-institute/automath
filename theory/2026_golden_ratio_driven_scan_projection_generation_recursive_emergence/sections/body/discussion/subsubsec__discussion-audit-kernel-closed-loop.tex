@@ -1,0 +1,108 @@
+\subsubsection{统一审计协议的闭合链：分辨率反射—曲率—纤维谱—Hankel 正规形—算术刚性}\label{subsubsec:discussion-audit-kernel-closed-loop}
+第三条界面是全文真正的闭合链。如果前两条界面分别说明分辨率为何不是局部量、机制等价为何必须经由证书包接口，那么本小节说明的是：这些界面并不是散落在各章里的孤立判断，而已经被串入一条可以闭合的核验链。
+
+在解释性压缩下，这条链可写为
+\[
+\text{分辨率反射}
+\Longrightarrow
+\text{规范差/曲率候选}
+\Longrightarrow
+\text{纤维谱/primitive 指纹}
+\Longrightarrow
+\text{Hankel 正规形}
+\Longrightarrow
+\text{算术刚性}.
+\]
+每一个箭头都对应正文中已经建立的接口：分辨率反射规定比较对象的共同切片，规范差与曲率候选控制局部共识为何在全局受阻，纤维谱与 primitive 指纹把这种受阻压缩为可计数闭环对象，Hankel/Prony 正规形把闭环对象组织为可计算的线性代数指纹，而算术刚性则说明这些指纹不会在值保持重写下任意漂移。
+
+因此，本小节的重点并不是再罗列更多技术节点，而是指出全文多数强结论其实已经被这条统一审计协议绑在一起。无论从对象层、值层、谱层还是实验输出层进入，最后都可以回到同一闭合链上；也正因如此，全文不是若干平行结果的堆叠，而是一套真正可以互相回校的生成—审计系统。
+
+\paragraph{分辨率反射子：把规范选择做成幂等投影}
+固定顶层分辨率 \(M\) 后，分辨率 \(m\) 的反射子由推前 \(P_{M\to m}\) 与纤维均匀提升 \(Q_{M\to m}\) 组成，并定义
+\[
+\mu^{(m)}:=Q_{M\to m}P_{M\to m}\mu\in\Delta(\Omega_M)
+\qquad\text{（定义 \ref{def:pom-resolution-reflector}）}.
+\]
+由 \(P_{M\to m}\circ Q_{M\to m}=\mathrm{id}_{\Delta(X_m)}\)（同一定义）立得幂等性
+\[
+(\mu^{(m)})^{(m)}=\mu^{(m)},
+\qquad
+P_{M\to m}\mu^{(m)}=P_{M\to m}\mu,
+\]
+因此“gauge fixing”在本文口径下并非叙事性约定，而是一个可复核的算子 \(Q_{M\to m}P_{M\to m}\)。
+在跨分辨率比较中，先将数据反射到同一规范切片再谈不变量，可避免由坐标不一致诱发的伪规律（注 \ref{rem:pom-gauge-criterion}；并见 KL-塔上的残差可加恒等式：定理 \ref{thm:pom-kl-pythagoras-tower}）。
+
+\paragraph{曲率与局部不交换：常数级缺陷的可审计迹象}
+跨分辨率“先截断再折叠”与“先折叠再限制”的不交换性由 gauge 曲率
+\(\mathcal{K}_{m+1\to m}\)（定义 \ref{def:pom-gauge-curvature}）给出；
+对任意有界观测 \(f:X_m\to\RR\)，曲率概率提供严格误差条（命题 \ref{prop:pom-gauge-curvature-shadow-bound}）。
+在均匀微态基线下，对 \(m\le 20\) 的精确枚举（注 \ref{rem:pom-gauge-curvature-audit}；表 \ref{tab:fold_truncation_curvature_stats}）呈现两类与审计协议直接相关的迹象：
+\begin{itemize}
+  \item \textbf{曲率概率的常数迹象：} \(\mathbb{P}[\mathcal{K}_{m+1\to m}=1]\) 在枚举范围内逼近 \(1/3\)，提示该障碍更接近常数级局部缺陷而非随尺度扩散为宏观偏差；
+  \item \textbf{Hamming 失配的常数迹象：}表 \ref{tab:fold_truncation_curvature_stats} 同时报告两条路径输出的 Hamming 距离 \(H_m\)，其均值在枚举范围内逼近 \(1/2\)，而 \(\mathbb{E}[H_m]/m\) 明显趋零。
+\end{itemize}
+由于 \(\mathcal{K}_{m+1\to m}=\mathbf 1[H_m>0]\)，因而可把
+\[
+\mathbb{E}[H_m\mid \mathcal{K}_{m+1\to m}=1]
+=\frac{\mathbb{E}[H_m]}{\mathbb{P}[\mathcal{K}_{m+1\to m}=1]}
+\]
+作为一个纯数值、可证伪的“条件失配位数”审计常数。
+在表 \ref{tab:fold_truncation_curvature_stats} 的 \(m\le 20\) 枚举范围内，该比值稳定接近 \(3/2\)，从而给出一个可进一步核验的局部缺陷猜想：曲率发生时的典型失配位数可能收敛到常数（而非随 \(m\) 增长）。
+
+\paragraph{纤维谱的离散相压缩：两点极限律与别名门户}
+对 bin-fold，纤维规模在指数主阶上退化为末位两态的常数因子（定理 \ref{thm:fold-bin-two-state-asymptotic}），并在均匀 dyadic 输入下进一步给出两点极限律：
+令 \(U_m\sim\mathrm{Unif}\{0,\dots,2^m-1\}\)、\(W_m=\mathrm{Fold}^{\mathrm{bin}}_m(U_m)\)，则尺度化变量
+\(
+Z_m=(\varphi/2)^m d^{\mathrm{bin}}_m(W_m)
+\)
+在分布上收敛到取值 \(\{1,\varphi^{-1}\}\) 的两点分布（推论 \ref{cor:fold-bin-two-point-limit-law}）。
+该结论等价于：在均匀基线下，“典型纤维规模”几乎只剩一个二值相位证书，且误差在指数尺度上可忽略。
+\par
+在最小锚点 window-\(6\) 上，别名结构还能被进一步压缩为门户式的离散偏移谱：
+对边界扇区 \(X_6^{\mathrm{bdry}}\)，dyadic uplift 呈现规范的二层覆盖，每个边界词恰有两条预像，且差值严格为 \(34=F_9\)（表 \ref{tab:fold6_boundary_sheet_pairs}；并见 \S\ref{subsubsec:window6-terminal-propositions} 的对应说明）。
+这类“固定偏移的二层别名门户”把纤维谱的非均匀性从连续的幅度信息压缩为可复核的离散相（sheet parity）证书。
+\par
+同一机制还给出 dyadic 截止深度与 Fibonacci 权重深度之间的确定性重标定：由 \(K(m)\) 的定义（定义 \ref{def:K-of-m}）与其渐近估计（例如定理 \ref{thm:fold-bin-max-fiber-exponent} 的证明中给出的 \(K(m)=m\log_\varphi 2+O(1)\)）可见，
+二进制截止与 Zeckendorf 权重深度之间存在不可消去的线性尺度失配；该失配本身可被视为一条独立的分辨率证书坐标，用于对齐“位长预算”与“\(\varphi\)-分辨率预算”的互译口径。
+
+\paragraph{Hankel 正规形：\texorpdfstring{$2d$}{2d} 点锁定全序列的最小实现判等协议}
+对固定 \(q\ge 2\)，碰撞矩序列 \(a_n:=S_q(n+2)\) 的 Hankel 秩 \(d\) 锁定最小 realization 维数，并由最小偏移 \(\ell_q\) 的可逆 Hankel 块构造 Hankel-正规形
+\(\mathrm{HANKELNF}_q\)（定义 \ref{def:pom-hankel-normal-form}）。
+更强地，若两条实现路径产生的 \(S_q,S'_q\) 具有同一 Hankel 秩 \(d\)，则只要它们在长度为 \(2d\) 的连续窗口上相等，即共享同一 \(\mathrm{HANKELNF}_q\)，从而对所有 \(m\ge 2\) 完全一致（命题 \ref{prop:pom-moment-finite-sampling-decidable}；并见定理 \ref{thm:dephys-hankel-finite-audit} 的协议化表述）。
+因此“机制同一性”的可计算判等可被压缩为有限样本的硬接口：一旦 \(d\) 与 \(\ell_q\) 作为证书被输出，核验只需检查 \(2d\) 个整数样本。
+
+\paragraph{算术刚性与共振：\texorpdfstring{$p$}{p}-进跳变、NullMode 与整除商分解证书}
+Hankel 见证块行列式不仅提供秩下界（定理 \ref{thm:pom-moment-hankel}），也携带不可伪造的算术刚性指纹。
+例如 \(p=5\) 的刚性指数在 \(k=5\) 处首次出现高赋值跳变（注 \ref{rem:pom-hankel-stiffness-p5}），给出一个完全内部的可复核算术阈值。
+\par
+在共振窗口 \(q=9,\dots,17\)，Hankel 秩下降触发显式模态约束（定理 \ref{thm:pom-moment-resonance}），并可被离线输出为整数 NullMode 证书：对相应 Hankel 块，\(\ker(H^{\mathsf T})\) 的整数基向量见表 \ref{tab:fold_collision_resonance_nullmodes_q9_17}。
+更强的是，这些 NullMode 诱导的湮灭多项式 \(A^{(j)}(\lambda)\) 与最小递推特征多项式 \(P_q(\lambda)\) 之间满足精确的整系数整除分解
+\(
+A^{(j)}(\lambda)=Q^{(j)}(\lambda)P_q(\lambda)
+\)
+且余式为零；相应商多项式 \(Q^{(j)}\) 作为额外证书字段被逐项输出并核验（表 \ref{tab:fold_collision_resonance_nullmodes_primitive_quotient_q9_17}）。
+这类“共振—代数商”证书把结构性降维与算术整除刚性同时显影，构成审计协议中最难伪造的一类整系数指纹。
+
+\paragraph{低频可压缩结构量：谐波能量占比作为 near-coboundary 指纹}
+在真实输入 \(40\) 状态核的三维 Dirichlet--Mertens 常数张量 \(C^{(3,3,5)}\)（第三轴取碰撞计数 \(N_2\bmod 5\)）中，
+\(\ZZ/5\) 轴上的漂移对每个 \((a,b)\) 精确分解为“均值 \(+\) 两条谐波复矩阵” \(A^{(1)},A^{(2)}\)（见生成片段 \ref{tab:real_input_40_arity_dirichlet_mertens_335_N2_summary} 的输出）。
+由此可定义谐波能量占比
+\[
+\mathcal{E}_1:=\frac{\|A^{(1)}\|_F^2}{\|A^{(1)}\|_F^2+\|A^{(2)}\|_F^2},
+\]
+并把 \(\mathcal{E}_1\) 作为“低频可压缩”与 near-coboundary 结构的无量纲指纹字段（同一生成片段同时输出数值证书）。
+该字段与 small-angle 扭曲的二次律审计（\(\rho/\lambda\) 在有限角点上的一致性）共同构成一个可复核的“低频结构—扩散慢模”拼接诊断接口。
+
+\paragraph{审计核接口：从有限样本到字段化证书的统一输出}
+将上述节点按统一接口组织，可得到一个可复现的审计核（audit kernel）协议模板：
+输入为任意实现路径产出的有限样本（分布推前、有限段 moment、或有限窗枚举统计），输出为一组字段化证书对象；任一字段稳定失配都可作为机制等价性的否证接口。
+在本文已建立的对象与脚本体系中，该输出至少可包含：
+\begin{itemize}
+  \item 分辨率反射切片 \(\mu^{(m)}\) 及其 KL-塔残差账本（定义 \ref{def:pom-resolution-reflector}；定理 \ref{thm:pom-kl-pythagoras-tower}）；
+  \item 曲率概率与误差条（定义 \ref{def:pom-gauge-curvature}；命题 \ref{prop:pom-gauge-curvature-shadow-bound}；表 \ref{tab:fold_truncation_curvature_stats}）；
+  \item bin-fold 两点相与 window-\(6\) 门户别名偏移谱（推论 \ref{cor:fold-bin-two-point-limit-law}；表 \ref{tab:fold6_boundary_sheet_pairs}）；
+  \item Hankel-正规形 \(\mathrm{HANKELNF}_q\) 及 \(2d\) 点有限判等窗口（定义 \ref{def:pom-hankel-normal-form}；命题 \ref{prop:pom-moment-finite-sampling-decidable}）；
+  \item \(p\)-进刚性指数与共振 NullMode/整除商分解（注 \ref{rem:pom-hankel-stiffness-p5}；表 \ref{tab:fold_collision_resonance_nullmodes_q9_17}--\ref{tab:fold_collision_resonance_nullmodes_primitive_quotient_q9_17}）；
+  \item 低频结构量 \(\mathcal{E}_1\) 与 small-angle 二次律类诊断字段（片段 \ref{tab:real_input_40_arity_dirichlet_mertens_335_N2_summary}）。
+\end{itemize}
+因此，本文的“先审计、后解释”可被实现为一种完全实现中立的核验协议：在固定读出与基线口径下，任何替代实现若声称同机制，必须复现同一组证书字段；否则可在不进入内部机制细节的前提下被离线地、机器可检地拒绝。

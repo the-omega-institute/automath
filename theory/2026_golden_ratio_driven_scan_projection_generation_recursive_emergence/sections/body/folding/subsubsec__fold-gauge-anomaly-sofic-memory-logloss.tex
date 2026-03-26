@@ -1,0 +1,230 @@
+\paragraph{有限上下文对数损失的不可消去缺口：由 \texorpdfstring{$\varepsilon$}{ε}-机尾部给出的显式下界}\label{par:fold-gauge-anomaly-sofic-memory-logloss}
+沿用 \S\ref{par:fold-gauge-anomaly-sofic-memory} 的记号：\((g_t)\) 为均匀基线下的失配指示过程，其 \(\varepsilon\)-机状态集为 \(\mathcal S=\{B,C,A\}\cup\{R_n:n\in\NN_0\}\)，并满足
+\[
+\alpha_n:=\PP(g_{t+1}=1\mid R_n)=\frac{F_{n+2}}{2F_{n+4}},
+\qquad
+\pi(R_n)=\frac{F_{n+4}}{36\cdot 2^n},
+\]
+以及对 \(k\ge 2\),
+\[
+q_k:=\PP(g_{t+1}=1\mid g_{t-k+1}\cdots g_t=0^k)=\frac{F_{k+3}}{2F_{k+5}}
+\]
+（分别见定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius}、定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-stationary-fibonacci-tail} 与定理 \ref{thm:fold-gauge-anomaly-zero-run-fibonacci}）。
+
+\begin{theorem}[\texorpdfstring{$k$}{k}-上下文预测的对数损失缺口下界（Fibonacci 显式）]\label{thm:fold-gauge-anomaly-logloss-context-gap}
+令 \(k\ge 2\)，并令 \(\mathcal Q_k\) 为所有 \(k\)-上下文概率预测器
+\[
+\mathcal Q_k:=\Bigl\{q:\{0,1\}^k\to(0,1)\Bigr\}.
+\]
+对任意 \(q\in\mathcal Q_k\)，定义其单步期望对数损失（自然对数）为
+\[
+\mathcal L(q):=
+\EE\Bigl[-\log q(g_{t-k+1}\cdots g_t)\cdot \mathbf 1_{\{g_{t+1}=1\}}
+-\log\bigl(1-q(g_{t-k+1}\cdots g_t)\bigr)\cdot \mathbf 1_{\{g_{t+1}=0\}}\Bigr].
+\]
+令
+\(
+\mathcal L_k:=\inf_{q\in\mathcal Q_k}\mathcal L(q)
+\)
+并令 \(\mathcal L_\infty\) 表示允许使用全历史的 Bayes 最优对数损失（等于熵率，见命题 \ref{prop:fold-gauge-anomaly-epsilon-machine-entropy-rate-complexity} 的 unifilar 表达）。
+则成立显式下界
+\[
+\boxed{\;
+\mathcal L_k-\mathcal L_\infty
+\ \ge\
+\pi(R_{k-1})\cdot
+D_{\mathrm{KL}}\!\Bigl(\mathrm{Bern}(\alpha_{k-1})\ \big\|\ \mathrm{Bern}(q_k)\Bigr)\;},
+\]
+其中
+\[
+\pi(R_{k-1})=\frac{F_{k+3}}{36\cdot 2^{k-1}},
+\qquad
+\alpha_{k-1}=\frac{F_{k+1}}{2F_{k+3}},
+\qquad
+q_k=\frac{F_{k+3}}{2F_{k+5}}.
+\]
+并且存在常数 \(c>0\) 与 \(k_0\) 使得对所有 \(k\ge k_0\) 成立指数下界
+\[
+\mathcal L_k-\mathcal L_\infty\ \ge\ c\cdot (2\varphi^3)^{-k}.
+\]
+\end{theorem}
+\begin{proof}
+对数损失的 Bayes 分解给出
+\[
+\mathcal L(q)-\mathcal L_\infty
+=
+\EE\Bigl[
+D_{\mathrm{KL}}\!\Bigl(\PP(g_{t+1}\in\cdot\mid g_{-\infty}^t)\ \big\|\ \mathrm{Bern}(q(g_{t-k+1}\cdots g_t))\Bigr)
+\Bigr],
+\]
+其中右端的“真条件律”由全历史决定。
+对任意 \(k\ge 2\)，在事件 \(\{S_t\in R_{k-1}\}\) 上，\(\varepsilon\)-机给出
+\(
+\PP(g_{t+1}=1\mid g_{-\infty}^t)=\PP(g_{t+1}=1\mid R_{k-1})=\alpha_{k-1}
+\)；
+并且由 \(R_n\xrightarrow{0}R_{n+1}\) 的结构可知在该事件上最近 \(k\) 个输出为 \(0^k\)，从而 \(g_{t-k+1}\cdots g_t=0^k\)。
+因此
+\[
+\mathcal L(q)-\mathcal L_\infty
+\ \ge\
+\PP(R_{k-1})\cdot
+D_{\mathrm{KL}}\!\Bigl(\mathrm{Bern}(\alpha_{k-1})\ \big\|\ \mathrm{Bern}(q(0^k))\Bigr).
+\]
+当取 \(q\) 为 \(\mathcal Q_k\) 的最优解时，由对数损失的点态 Bayes 最优性必有 \(q(0^k)=\PP(g_{t+1}=1\mid 0^k)=q_k\)，得到第一条不等式。
+代入 \(\PP(R_{k-1})=\pi(R_{k-1})\) 的闭式即得所示显式下界。
+\par
+最后，对 \(k\to\infty\) 由 Binet 渐近 \(F_n\asymp \varphi^n\) 得 \(\pi(R_{k-1})\asymp (\varphi/2)^k\)，并且 \(|\alpha_{k-1}-q_k|\asymp \varphi^{-2k}\)。
+由于两者均收敛到 \(\frac{1}{2\varphi^2}\in(0,1)\)，Bernoulli 的 \(D_{\mathrm{KL}}\) 在小偏差下具有二次型下界 \(D_{\mathrm{KL}}(\mathrm{Bern}(p)\|\mathrm{Bern}(p+\Delta))\gtrsim \Delta^2\)；
+故 \(\mathcal L_k-\mathcal L_\infty\gtrsim (\varphi/2)^k\cdot\varphi^{-4k}=(2\varphi^3)^{-k}\)，从而存在 \(c,k_0\) 使对所有 \(k\ge k_0\) 成立。证毕。
+\end{proof}
+
+\begin{corollary}[达到指定误差阈值所需的上下文深度]\label{cor:fold-gauge-anomaly-logloss-context-depth}
+在定理 \ref{thm:fold-gauge-anomaly-logloss-context-gap} 的指数下界下，对任意 \(\varepsilon\in(0,1)\)，若 \(\mathcal L_k-\mathcal L_\infty\le \varepsilon\) 且 \(k\ge k_0\)，则必有
+\[
+k\ \ge\ \frac{\log(c/\varepsilon)}{\log(2\varphi^3)}.
+\]
+\end{corollary}
+
+\begin{conjecture}[对数损失缺口的精确指数率与主导项]\label{conj:fold-gauge-anomaly-logloss-gap-asymptotic}
+沿用定理 \ref{thm:fold-gauge-anomaly-logloss-context-gap} 的记号。
+猜想存在常数 \(C>0\) 使当 \(k\to\infty\) 时
+\[
+\mathcal L_k-\mathcal L_\infty\ \sim\ C\cdot (2\varphi^3)^{-k},
+\]
+并且主导贡献由 \(\varepsilon\)-机尾部单态 \(R_{k-1}\) 的项
+\(
+\pi(R_{k-1})\cdot D_{\mathrm{KL}}\bigl(\mathrm{Bern}(\alpha_{k-1})\|\mathrm{Bern}(q_k)\bigr)
+\)
+所承载。
+\end{conjecture}
+
+\paragraph{零块语境下的有限记忆极小化误差}
+对数损失刻画的是平均意义下的不可压缩缺口；在最坏情形的绝对误差口径下，\(\varepsilon\)-机尾部 \(\{R_n\}\) 诱导出一族可精确求解的极小化问题。
+
+\begin{theorem}[零块语境下的最优有限记忆绝对误差（Fibonacci 闭式）]\label{thm:fold-gauge-anomaly-zero-block-minimax-abs-error}
+取整数 \(n\ge 2\)。
+令 \(\mathcal E_n^{(0)}\) 表示如下零块条件下的一步预测极小化误差：
+允许任意预测器 \(\varphi:\{0,1\}^n\to[0,1]\)，并定义
+\[
+\mathcal E_n^{(0)}
+:=\inf_{\varphi}\ \sup_{\substack{u\in\operatorname{supp}(g)\\ u_{t-n+1}\cdots u_t=0^n}}
+\left|\ \PP(g_{t+1}=1\mid g_{-\infty}^t=u)\;-\;\varphi(0^n)\ \right|.
+\]
+则成立严格等式
+\[
+\boxed{\ \mathcal E_n^{(0)}=\frac{1}{4F_{n+3}F_{n+4}}\ }.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-synchronizing-word}，在观测到至少两个连续 \(0\) 后，预测态必落入尾部族 \(\{R_m:m\ge 1\}\)，并且每额外观测一个 \(0\) 就把预测态推进一级 \(R_m\mapsto R_{m+1}\)。
+因此对任意满足 \(u_{t-n+1}\cdots u_t=0^n\) 的可实现全历史 \(u\)，存在 \(m\in\{n-1,n,\dots\}\cup\{\infty\}\) 使得
+\[
+\PP(g_{t+1}=1\mid g_{-\infty}^t=u)=\PP(g_{t+1}=1\mid R_m)=\alpha_m,
+\]
+其中 \(\alpha_m=\frac{F_{m+2}}{2F_{m+4}}\)（定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius}），并约定 \(\alpha_\infty=\lim_{m\to\infty}\alpha_m=\frac{1}{2\varphi^2}\)。
+\par
+由同一定理中的 Möbius 迭代 \(r_{m+1}=\frac{1}{4r_m+2}\) 与单调性可知：区间
+\(
+[\,\min\{\alpha_{m},\alpha_{m+1}\},\max\{\alpha_{m},\alpha_{m+1}\}\,]
+\)
+随 \(m\) 增大严格嵌套收缩；因此集合 \(\{\alpha_j:\ j\ge n-1\}\cup\{\alpha_\infty\}\) 的直径由前两项实现，
+\[
+\sup_{j\ge n-1}\alpha_j-\inf_{j\ge n-1}\alpha_j=|\alpha_{n-1}-\alpha_n|.
+\]
+对任意预测器 \(\varphi\)，在零块 \(0^n\) 上其输出只能取某个常数 \(q:=\varphi(0^n)\)；
+于是最坏误差至少为区间直径的一半，
+\[
+\sup_{\substack{u\in\operatorname{supp}(g)\\ u_{t-n+1}\cdots u_t=0^n}}
+\bigl|\PP(g_{t+1}=1\mid u)-q\bigr|
+\ge \frac12|\alpha_{n-1}-\alpha_n|.
+\]
+取 \(q=\tfrac12(\alpha_{n-1}+\alpha_n)\) 可使该下界取等，故
+\(
+\mathcal E_n^{(0)}=\frac12|\alpha_{n-1}-\alpha_n|
+\)。
+由 \(\alpha_{n-1}=\frac{F_{n+1}}{2F_{n+3}}\)、\(\alpha_{n}=\frac{F_{n+2}}{2F_{n+4}}\)（定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius}），并用 Cassini 型恒等式
+\(
+F_{n+2}F_{n+3}-F_{n+1}F_{n+4}=(-1)^{n+1}
+\)，得到
+\[
+|\alpha_{n-1}-\alpha_n|
+=\frac{1}{2F_{n+3}F_{n+4}},
+\]
+从而 \(\mathcal E_n^{(0)}=\frac{1}{4F_{n+3}F_{n+4}}\)。证毕。
+\end{proof}
+
+\begin{corollary}[达到给定误差阈值所需的零块记忆深度]\label{cor:fold-gauge-anomaly-zero-block-memory-depth}
+令 \(\varepsilon\in(0,1/8)\)，并定义
+\[
+n_{\varepsilon}:=\min\Bigl\{n\ge 2:\ F_{n+3}F_{n+4}\ge \frac{1}{4\varepsilon}\Bigr\}.
+\]
+则存在且仅存在长度 \(n\ge n_{\varepsilon}\) 的有限记忆预测器 \(\varphi\) 使得 \(\mathcal E_n^{(0)}\le \varepsilon\)。
+并且当 \(\varepsilon\downarrow 0\) 时有渐近
+\[
+n_{\varepsilon}=\frac{1}{2\log\varphi}\log\frac{1}{\varepsilon}+O(1).
+\]
+\end{corollary}
+\begin{proof}
+第一断言由定理 \ref{thm:fold-gauge-anomaly-zero-block-minimax-abs-error} 的闭式立即得到。
+渐近式由 Binet 公式 \(F_n=\varphi^n/\sqrt5+O(\varphi^{-n})\) 推出
+\(
+F_{n+3}F_{n+4}=\varphi^{2n+7}/5\cdot(1+o(1))
+\)，代回定义并取对数即可。证毕。
+\end{proof}
+
+\begin{theorem}[有限状态近似的最坏情形误差尺度律]\label{thm:fold-gauge-anomaly-finite-state-minimax-abs-error}
+令 \(\mathscr P_N\) 表示如下有限状态概率预测器类：其内态空间大小为 \(N\)，读入输出符号后按确定性规则更新，并在每一步输出下一符号为 \(1\) 的预测概率。
+对 \(\Pi\in\mathscr P_N\) 记其单步最坏情形绝对误差为
+\[
+\mathcal R(\Pi):=\sup_{u\in\operatorname{supp}(g)}\left|\PP(g_{t+1}=1\mid g_{-\infty}^t=u)-\Pi(u)\right|,
+\]
+并令
+\[
+\mathcal R_N:=\inf_{\Pi\in\mathscr P_N}\mathcal R(\Pi).
+\]
+则存在常数 \(c_1,c_2>0\) 与 \(N_0\) 使得对所有 \(N\ge N_0\) 成立
+\[
+\boxed{\ c_1\,\varphi^{-2N}\ \le\ \mathcal R_N\ \le\ c_2\,\varphi^{-2N}\ }.
+\]
+从而达到误差阈值 \(\varepsilon\) 的最小态数满足 \(N(\varepsilon)=\Theta\!\bigl(\log(1/\varepsilon)\bigr)\)。
+另一方面，若用长度 \(n\) 的朴素 \(n\)-阶 Markov 预测器（状态数 \(2^n\)）实现同阶精度，则状态数满足
+\[
+2^{n(\varepsilon)}=\exp\!\bigl(\Theta(\log(1/\varepsilon))\bigr),
+\]
+与 \(N(\varepsilon)=\Theta(\log(1/\varepsilon))\) 形成指数分离。
+\end{theorem}
+\begin{proof}
+\textbf{上界。}
+由定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-synchronizing-word} 的 \(\varepsilon\)-机结构，取整数 \(M\ge 0\)，保留有限状态集 \(\{B,C,A,R_0,\dots,R_M\}\) 并将尾部 \(\{R_{m}:m>M\}\) 合并为单态 \(\widehat R\)。
+在 \(\widehat R\) 上输出取区间 \(\{\alpha_m:m\ge M+1\}\cup\{\alpha_\infty\}\) 的中点。
+由于 \(R_m\xrightarrow{0}R_{m+1}\) 与 \(R_m\xrightarrow{1}B\) 的确定性，该合并保持确定更新。
+由定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius} 的收缩性，尾部区间直径为 \(|\alpha_{M+1}-\alpha_{M+2}|\)，从而该合并引入的最坏误差为其一半：
+\[
+\mathcal R(\Pi)\le \frac12|\alpha_{M+1}-\alpha_{M+2}|=\frac{1}{4F_{M+5}F_{M+6}}=\Theta(\varphi^{-2M}).
+\]
+取 \(N=M+4\) 并吸收常数即得 \(\mathcal R_N\le c_2\varphi^{-2N}\)。
+\par
+\textbf{下界。}
+对每个 \(m\ge 0\)，定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-infinite-markov-order} 的构造给出可实现历史，使得预测态为 \(R_m\)，并且真实下一位条件概率为 \(\alpha_m\)。
+对任意 \(N\)-态预测器 \(\Pi\)，考虑由上述构造得到的 \(N+1\) 个历史（分别把预测态固定为 \(R_0,\dots,R_N\)）。
+由于内态只有 \(N\) 个，必存在 \(0\le i<j\le N\) 使两条历史被映射到同一内态，因此 \(\Pi\) 在这两条历史上的输出概率相同。
+于是
+\[
+\mathcal R(\Pi)\ \ge\ \frac12\,|\alpha_i-\alpha_j|\ \ge\ \frac12\min_{0\le i<j\le N}|\alpha_i-\alpha_j|.
+\]
+由差值闭式
+\(
+\alpha_{m+1}-\alpha_{m}=\frac{(-1)^{m}}{2F_{m+4}F_{m+5}}
+\)
+可知 \((\alpha_{2m})_{m\ge 0}\) 严格递增、\((\alpha_{2m+1})_{m\ge 0}\) 严格递减，并且 \(\alpha_{2m}<\alpha_{2m+1}\)。
+因此在集合 \(\{\alpha_0,\dots,\alpha_N\}\) 中，最小间距由最靠近极限 \(\alpha_\infty\) 的一对异奇偶项实现，即 \(|\alpha_{N-1}-\alpha_N|\)。
+从而
+\[
+\min_{0\le i<j\le N}|\alpha_i-\alpha_j|=|\alpha_{N-1}-\alpha_N|
+=\frac{1}{2F_{N+3}F_{N+4}}=\Theta(\varphi^{-2N}),
+\]
+故 \(\mathcal R(\Pi)\ge \Theta(\varphi^{-2N})\)，进而 \(\mathcal R_N\ge c_1\varphi^{-2N}\)。
+两侧合并即得结论。证毕。
+\end{proof}
+
+\endinput

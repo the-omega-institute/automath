@@ -1,0 +1,575 @@
+\subparagraph{primorial 归一化下的 Gödel 外置素数寄存器：自平均、偏差与复杂度胀量}
+在定理 \ref{thm:fold-gauge-anomaly-bernoulli-p-laws} 的平稳 Bernoulli\((p)\) 设定下，定义逐位失配指示
+\[
+M_k:=g(S_{k-1},S_k)\in\{0,1\},\qquad
+G_m=\sum_{k=1}^{m}M_k.
+\]
+再令 \(\mathfrak p_k\) 为第 \(k\) 个素数，并记
+\[
+\mathfrak P_m:=\prod_{k=1}^{m}\mathfrak p_k,\qquad
+A_m:=\log \mathfrak P_m=\sum_{k=1}^{m}\log \mathfrak p_k,
+\]
+\[
+R_m:=\prod_{k=1}^{m}\mathfrak p_k^{M_k},\qquad
+H_m:=\log R_m=\sum_{k=1}^{m}M_k\log \mathfrak p_k.
+\]
+下述结果把“投影失配外置到素数寄存器”的统计极限与复杂度代价转写为可检验闭式。
+
+\begin{theorem}[primorial 归一化下的外置寄存器极限定律]\label{thm:fold-gauge-anomaly-bernoulli-p-primorial-godel-laws}
+在上述设定下，令
+\[
+g_\ast(p)=\frac{p^2(3-2p)}{1+p^3},
+\]
+并令 \(\sigma_G^2(p)\) 为定理 \ref{thm:fold-gauge-anomaly-bernoulli-p-laws} 中的方差率闭式。
+则有：
+\begin{enumerate}
+  \item \textbf{强自平均：}
+  \[
+  \frac{H_m}{A_m}\xrightarrow[m\to\infty]{a.s.}g_\ast(p).
+  \]
+  \item \textbf{中心极限定理（同方差率）：}
+  \[
+  \frac{H_m-g_\ast(p)A_m}{\sqrt m\,\log m}
+  \ \Rightarrow\
+  \mathcal N\!\bigl(0,\sigma_G^2(p)\bigr).
+  \]
+  \item \textbf{大偏差同率函数：}
+  序列 \(\bigl(H_m/A_m\bigr)_{m\ge1}\) 在速度 \(m\) 下满足大偏差原理，其良率函数与
+  \(\bigl(G_m/m\bigr)_{m\ge1}\) 相同，即命题
+  \ref{prop:fold-gauge-anomaly-bernoulli-p-ldp} 的 \(I_p\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\textbf{(1) 强自平均.}
+记
+\(
+S_m:=\sum_{k=1}^{m}(M_k-g_\ast(p))
+\)。
+由定理 \ref{thm:fold-gauge-anomaly-bernoulli-p-laws}(1)，有 \(S_m=o(m)\) 几乎处处。
+由 Abel 变换，
+\[
+H_m-g_\ast(p)A_m
+=
+S_m\log\mathfrak p_m
+-\sum_{k=1}^{m-1}S_k\bigl(\log\mathfrak p_{k+1}-\log\mathfrak p_k\bigr).
+\]
+利用经典素数渐近 \(\log\mathfrak p_k=\log k+O(\log\log k)\)，得
+\(
+\log\mathfrak p_{k+1}-\log\mathfrak p_k=O(k^{-1})
+\)、
+\(
+A_m\sim m\log m
+\)。
+于是第一项满足
+\[
+\frac{|S_m|\log\mathfrak p_m}{A_m}\to 0.
+\]
+第二项中，对任意 \(\varepsilon>0\)，取 \(K\) 使 \(|S_k|\le \varepsilon k\)（\(k\ge K\)）：
+\[
+\sum_{k=K}^{m-1}|S_k|\bigl|\log\mathfrak p_{k+1}-\log\mathfrak p_k\bigr|
+\le
+C\varepsilon\sum_{k=K}^{m-1}1
+=
+O(\varepsilon m),
+\]
+再除以 \(A_m\sim m\log m\) 得 \(O(\varepsilon/\log m)\to0\)；
+有限前缀 \(k<K\) 贡献为 \(O(1/A_m)\to0\)。
+故
+\[
+\frac{H_m-g_\ast(p)A_m}{A_m}\to0,
+\]
+即 \(H_m/A_m\to g_\ast(p)\) 几乎处处。
+\par
+\textbf{(2) 中心极限定理.}
+分解
+\[
+H_m-g_\ast(p)A_m
+=
+(\log m)\bigl(G_m-mg_\ast(p)\bigr)
++\sum_{k=1}^{m}\bigl(M_k-g_\ast(p)\bigr)b_{m,k},
+\]
+其中
+\(
+b_{m,k}:=\log\mathfrak p_k-\log m
+\)。
+第一项由定理 \ref{thm:fold-gauge-anomaly-bernoulli-p-laws}(2) 直接给出
+\[
+\frac{(\log m)\bigl(G_m-mg_\ast(p)\bigr)}{\sqrt m\,\log m}
+\Rightarrow
+\mathcal N\!\bigl(0,\sigma_G^2(p)\bigr).
+\]
+对余项，令 \(\xi_k:=M_k-g_\ast(p)\)。
+有限状态不可约非周期马尔可夫链上的有界可加观测给出协方差绝对可和，
+故存在常数 \(C_0\) 使
+\[
+\operatorname{Var}\!\left(\sum_{k=1}^{m}\xi_k b_{m,k}\right)
+\le
+C_0\sum_{k=1}^{m}b_{m,k}^2.
+\]
+又由 \(\log\mathfrak p_k=\log k+O(\log\log k)\) 得
+\[
+b_{m,k}=\log(k/m)+O(\log\log m),
+\]
+从而
+\[
+\sum_{k=1}^{m}b_{m,k}^2=O\!\bigl(m(\log\log m)^2\bigr).
+\]
+于是
+\[
+\operatorname{Var}\!\left(
+\frac{1}{\sqrt m\,\log m}\sum_{k=1}^{m}\xi_k b_{m,k}
+\right)
+=
+O\!\left(\frac{(\log\log m)^2}{\log^2 m}\right)\to0,
+\]
+即该余项在 \(L^2\) 中收敛到 \(0\)。
+由 Slutsky 定理得到所述极限正态律。
+\par
+\textbf{(3) 大偏差同率函数.}
+有确定性估计
+\[
+\left|\frac{H_m}{A_m}-\frac{G_m}{m}\right|
+\le
+\frac{1}{A_m}\sum_{k=1}^{m}\left|\log\mathfrak p_k-\frac{A_m}{m}\right|.
+\]
+同样用 \(\log\mathfrak p_k=\log k+O(\log\log k)\) 与 \(A_m\sim m\log m\)，可得右端为
+\(
+O(1/\log m)\to0
+\)。
+因而对任意 \(\delta>0\)，充分大 \(m\) 时
+\[
+\PP\!\left(\left|\frac{H_m}{A_m}-\frac{G_m}{m}\right|>\delta\right)=0,
+\]
+即两序列在速度 \(m\) 下指数等价。
+命题 \ref{prop:fold-gauge-anomaly-bernoulli-p-ldp} 已给出 \(G_m/m\) 的 LDP 与率函数 \(I_p\)；
+指数等价保持率函数，故 \(H_m/A_m\) 共享同一 \(I_p\)。
+证毕。
+\end{proof}
+
+\begin{proposition}[逐层赋值可审计强制互异素因子与 primorial 下界]\label{prop:fold-layerwise-auditable-primorial-necessity}
+令 \(\Sigma\) 为有限字母表，\(T\ge 1\)。
+设存在乘法外置编码
+\[
+\mathcal N(a_1\cdots a_T)=\prod_{t=1}^{T} q_t^{\,c_t(a_t)},
+\qquad q_t\in\NN_{\ge 2},
+\qquad c_t:\Sigma\hookrightarrow\{1,\dots,M\}\ \text{单射}.
+\]
+称其为\emph{逐层赋值可审计}，若对每个位置 \(t\) 存在素数 \(p_t\) 使对所有串 \(w=a_1\cdots a_T\) 都有
+\[
+v_{p_t}(\mathcal N(w))=c_t(a_t).
+\]
+则存在两两互异素数 \(p_1,\dots,p_T\) 满足：
+\begin{enumerate}
+  \item \(p_t\mid q_t\) 且 \(v_{p_t}(q_t)=1\)；
+  \item 对 \(s\neq t\)，有 \(p_t\nmid q_s\)；
+  \item 因而对所有 \(w\)，有 \(\mathcal N(w)\ge \prod_{t=1}^{T}p_t\)。
+\end{enumerate}
+特别地，在最小化最坏情形比特长度的意义下，最优选择为 \(q_t=p_t\) 且取前 \(T\) 个素数，从而强制出现 primorial 型增长。
+\end{proposition}
+
+\begin{proof}
+固定 \(t\)。
+由赋值加法性与编码的乘法形式，对任意 \(w=a_1\cdots a_T\) 有
+\[
+v_{p_t}(\mathcal N(w))=\sum_{s=1}^{T} c_s(a_s)\,v_{p_t}(q_s).
+\]
+该值对所有 \(w\) 仅依赖 \(a_t\)，故若存在 \(s\neq t\) 使 \(v_{p_t}(q_s)>0\)，则改变 \(a_s\) 会改变右端，矛盾。
+因此对 \(s\neq t\)，必有 \(v_{p_t}(q_s)=0\)，即 \(p_t\nmid q_s\)。
+另一方面，若 \(v_{p_t}(q_t)=0\)，则上式右端与 \(a_t\) 无关，与可审计性矛盾；
+故 \(v_{p_t}(q_t)\ge 1\)，即 \(p_t\mid q_t\)。
+将 \(s\neq t\) 项已知为 \(0\) 代回上式可得
+\(
+v_{p_t}(\mathcal N(w))=c_t(a_t)\,v_{p_t}(q_t)
+\)；
+而该值对所有 \(a_t\) 恒等于 \(c_t(a_t)\)，故必有 \(v_{p_t}(q_t)=1\)。
+由 (2) 立即推出 \(p_t\) 两两互异。
+\par
+最后，由 \(c_t(a_t)\ge 1\) 与 \(v_{p_t}(q_t)=1\) 得对所有 \(w\)，
+\(
+v_{p_t}(\mathcal N(w))\ge 1
+\)，从而 \(p_t\mid \mathcal N(w)\)。
+因此 \(\mathcal N(w)\ge \prod_{t=1}^{T}p_t\)。
+在互异素数集合中，\(\prod_{t=1}^{T}p_t\) 的最小值由取前 \(T\) 个素数实现；同时 \(q_t\) 含额外素因子或更高幂只会增大最坏情形规模，故最优为 \(q_t=p_t\)。
+\end{proof}
+
+\begin{corollary}[有限字典 Gödel 码的比特长度为 \texorpdfstring{$\Theta(T\log T)$}{Theta(T log T)}]\label{cor:fold-godel-finite-dictionary-bitlength-theta-TlogT}
+固定 \(B\in\NN_{\ge 1}\)，令字母表 \(A_B:=\{1,\dots,B\}\)。
+对 \(T\ge 1\) 定义位址型 Gödel 编码
+\[
+G_{B,T}:A_B^T\longrightarrow \NN_{\ge 1},
+\qquad
+G_{B,T}(a_1,\dots,a_T):=\prod_{t=1}^{T}\mathfrak p_t^{a_t},
+\]
+其中 \(\mathfrak p_t\) 为第 \(t\) 个素数，并记 primorial \(\mathfrak P_T:=\prod_{t=1}^{T}\mathfrak p_t\)。
+则对任意 \(a\in A_B^T\) 有
+\[
+\mathfrak P_T\le G_{B,T}(a)\le (\mathfrak P_T)^B.
+\]
+从而其二进制长度 \(L(a):=\lfloor \log_2 G_{B,T}(a)\rfloor+1\) 满足
+\[
+\log_2\mathfrak P_T\ \le\ L(a)\ \le\ B\log_2\mathfrak P_T+1.
+\]
+特别地，当 \(T\to\infty\) 时有 \(L(a)=\Theta(T\log T)\)，且常数因子落在区间 \([1,B]\)。
+\end{corollary}
+\begin{proof}
+由 \(a_t\in\{1,\dots,B\}\) 直接得到
+\(
+G_{B,T}(a)\ge \prod_{t=1}^{T}\mathfrak p_t=\mathfrak P_T
+\)
+与
+\(
+G_{B,T}(a)\le \prod_{t=1}^{T}\mathfrak p_t^{B}=(\mathfrak P_T)^B
+\)。
+取 \(\log_2\) 即得长度夹逼。
+最后由 primorial 渐近 \(\log\mathfrak P_T\sim T\log T\) 得 \(L(a)=\Theta(T\log T)\)。证毕。
+\end{proof}
+
+\begin{theorem}[有限字典 Gödel 像的 Dirichlet 分配函数与全纯收敛域]\label{thm:fold-godel-finite-dictionary-dirichlet-partition-holomorphic}
+固定 \(B\in\NN_{\ge 1}\)，定义 Gödel 影像集合
+\[
+\mathcal G_B:=\bigcup_{T\ge 0}\left\{\ \prod_{t=1}^{T}\mathfrak p_t^{a_t}:\ a_t\in\{1,\dots,B\}\ \right\}\subset \NN_{\ge 1},
+\]
+其中 \(T=0\) 时乘积约定为 \(1\)。
+定义其 Dirichlet 分配函数
+\[
+Z_B(s):=\sum_{n\in\mathcal G_B} n^{-s}\qquad (s\in\CC).
+\]
+则对所有满足 \(\Re(s)>0\) 的 \(s\)，级数 \(Z_B(s)\) 绝对收敛，并具有分层分解
+\[
+Z_B(s)=\sum_{T=0}^{\infty}\ \prod_{t=1}^{T}\left(\sum_{a=1}^{B}\mathfrak p_t^{-as}\right).
+\]
+因此 \(Z_B\) 在半平面 \(\Re(s)>0\) 上全纯。
+\end{theorem}
+\begin{proof}
+设 \(\sigma=\Re(s)>0\)。
+对每个 \(t\) 有
+\[
+\sum_{a=1}^{B}\left|\mathfrak p_t^{-as}\right|
+=\sum_{a=1}^{B}\mathfrak p_t^{-a\sigma}
+\le B\,\mathfrak p_t^{-\sigma}.
+\]
+从而对每个 \(T\ge 0\) 有
+\[
+\prod_{t=1}^{T}\left(\sum_{a=1}^{B}\mathfrak p_t^{-a\sigma}\right)
+\le
+B^T\prod_{t=1}^{T}\mathfrak p_t^{-\sigma}
+=
+B^T\,\mathfrak P_T^{-\sigma}.
+\]
+又由 \(\mathfrak p_t\ge t+1\) 得 \(\mathfrak P_T\ge (T+1)!\)，故
+\[
+B^T\,\mathfrak P_T^{-\sigma}\le B^T\,((T+1)!)^{-\sigma}.
+\]
+而 \(\sum_{T\ge 0} B^T/((T+1)!)^{\sigma}\) 由阶乘支配收敛，故 \(Z_B(s)\) 在 \(\Re(s)>0\) 绝对收敛。
+对任意紧子集上一致收敛由同一估计给出，从而由 Weierstrass 判别法得 \(Z_B\) 在该半平面全纯。
+分层分解由按长度 \(T\) 分组并使用有限乘积展开的交换性得到。证毕。
+\end{proof}
+
+\begin{theorem}[Gödel--\texorpdfstring{$\zeta$}{zeta} Gibbs 因子化：长度与位条件独立]\label{thm:fold-godel-finite-dictionary-gibbs-factorization}
+取 \(\sigma>0\) 并令 \(\mathbf A_B^{\ast}:=\bigcup_{T\ge 0}A_B^{T}\) 为有限字典的自由幺半群。
+按定理 \ref{thm:fold-godel-finite-dictionary-dirichlet-partition-holomorphic} 的 \(Z_B(\sigma)\) 定义概率测度
+\[
+\PP_{\sigma,B}(a_1,\dots,a_T)
+:=
+\frac{\left(\prod_{t=1}^{T}\mathfrak p_t^{a_t}\right)^{-\sigma}}{Z_B(\sigma)}
+\qquad\bigl((a_1,\dots,a_T)\in A_B^T,\ T\ge 0\bigr),
+\]
+其中 \(T=0\) 对应空字。
+记随机变量 \(T\) 为字长，并在条件 \(T=T_0\) 下记 \((A_t)_{t=1}^{T_0}\) 为位数字。
+则：
+\begin{enumerate}
+  \item \(T\) 的分布为
+  \[
+  \PP_{\sigma,B}(T=T_0)=\frac{W_{T_0}(\sigma)}{Z_B(\sigma)},
+  \qquad
+  W_T(\sigma):=\prod_{t=1}^{T} w_t(\sigma),
+  \qquad
+  w_t(\sigma):=\sum_{a=1}^{B}\mathfrak p_t^{-a\sigma}.
+  \]
+  \item 在条件 \(T=T_0\) 下，\((A_t)_{t=1}^{T_0}\) 相互独立，且边际为
+  \[
+  \PP_{\sigma,B}(A_t=a\mid T=T_0)
+  =
+  \frac{\mathfrak p_t^{-a\sigma}}{\sum_{u=1}^{B}\mathfrak p_t^{-u\sigma}}
+  \qquad (a\in\{1,\dots,B\}).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对固定 \(T_0\) 有
+\[
+\sum_{(a_1,\dots,a_{T_0})\in A_B^{T_0}}\prod_{t=1}^{T_0}\mathfrak p_t^{-a_t\sigma}
+\;=\;
+\prod_{t=1}^{T_0}\left(\sum_{a=1}^{B}\mathfrak p_t^{-a\sigma}\right)
+\;=\;
+W_{T_0}(\sigma),
+\]
+故长度分布为 \(W_{T_0}(\sigma)/Z_B(\sigma)\)。
+在条件 \(T=T_0\) 下，权重 \(\prod_{t=1}^{T_0}\mathfrak p_t^{-a_t\sigma}\) 对坐标 \(t\) 完全分离，归一化后即得到乘积分布与所示边际。证毕。
+\end{proof}
+
+\begin{conjecture}[有限字典 Dirichlet 分配函数的自然边界与有效温度匹配]\label{conj:fold-godel-finite-dictionary-natural-boundary-temperature-match}
+对任意 \(B\ge 2\)，猜想 \(Z_B(s)\) 在直线 \(\Re(s)=0\) 上存在自然边界：不存在穿越该直线的解析延拓。
+此外，若某一可审计 prime-register 外置方案在宏观上产生证书整数族 \(N_m\) 并满足步数/密度律（例如定理 \ref{thm:fold-local-rewrite-ldp-lower-tail-barrier} 的线性下界口径），
+则预期存在唯一 \(\sigma^\ast>0\) 使得经适当归一化后的 \(\log N_m\) 的偏差原理与 \(Z_B(\sigma)\) 的 Legendre 对偶在 \(\sigma=\sigma^\ast\) 处匹配；
+等价地，可将 \(\sigma^\ast\) 视为使得外置证书的长度统计在主阶上逼近定理 \ref{thm:fold-godel-finite-dictionary-gibbs-factorization} 所诱导的 Gibbs 因子化机制的有效温度参数。
+\end{conjecture}
+
+\begin{theorem}[坐标可分 Gödel 整数化的不可压缩胀量]\label{thm:fold-gauge-anomaly-godel-coprime-inflation}
+令 \((q_k)_{k\ge1}\subset\NN_{\ge2}\) 两两互素。
+对任意二进模式 \(b=(b_k)_{k\ge1}\in\{0,1\}^{\NN}\)，定义前缀 Gödel 整数
+\[
+N_m(b):=\prod_{k=1}^{m}q_k^{b_k},
+\qquad
+s_m:=\sum_{k=1}^{m}b_k.
+\]
+若 \(b\) 的 \(1\)-密度存在且为 \(\alpha\in(0,1)\)，即 \(s_m/m\to\alpha\)，则有
+\[
+\liminf_{m\to\infty}\frac{\log N_m(b)}{m\log m}\ge \alpha.
+\]
+此外，当 \(q_k=\mathfrak p_k\)（前缀素数寄存器）时，极限存在且
+\[
+\lim_{m\to\infty}\frac{\log N_m(b)}{m\log m}=\alpha.
+\]
+\end{theorem}
+\begin{proof}
+设
+\(
+I_m:=\{1\le k\le m:\ b_k=1\}
+\)，则 \(|I_m|=s_m\)。
+集合 \(\{q_k:\ k\in I_m\}\) 由 \(s_m\) 个两两互素整数构成，故其乘积不小于前 \(s_m\) 个素数的乘积：
+\[
+N_m(b)=\prod_{k\in I_m}q_k\ge \prod_{j=1}^{s_m}\mathfrak p_j=: \mathfrak P_{s_m}.
+\]
+于是
+\[
+\frac{\log N_m(b)}{m\log m}
+\ge
+\frac{\log \mathfrak P_{s_m}}{m\log m}.
+\]
+由 primorial 渐近 \(\log\mathfrak P_n\sim n\log n\)，再结合 \(s_m/m\to\alpha\)，得
+\[
+\liminf_{m\to\infty}\frac{\log N_m(b)}{m\log m}\ge \alpha.
+\]
+\par
+若 \(q_k=\mathfrak p_k\)，则
+\[
+\log N_m(b)=\sum_{k=1}^{m}b_k\log\mathfrak p_k.
+\]
+记 \(B(x):=\sum_{k\le x}b_k=\alpha x+o(x)\)。
+由部分求和与 \(\log\mathfrak p_k=\log k+O(\log\log k)\)：
+\[
+\sum_{k=1}^{m}b_k\log\mathfrak p_k
+=
+\sum_{k=1}^{m}b_k\log k
++O\!\left(\sum_{k=1}^{m}b_k\log\log k\right)
+=
+\alpha m\log m+o(m\log m).
+\]
+两边同除 \(m\log m\) 得极限为 \(\alpha\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[失配模式的 primorial 外置胀量]\label{cor:fold-gauge-anomaly-mismatch-primorial-growth}
+取 \(b_k=M_k\)。
+则在定理 \ref{thm:fold-gauge-anomaly-bernoulli-p-primorial-godel-laws} 的平稳设定下，几乎处处有
+\[
+\lim_{m\to\infty}\frac{\log R_m}{m\log m}=g_\ast(p).
+\]
+更一般地，任意坐标可分、两两互素的 Gödel 外置机制对同一失配模式都满足
+\[
+\liminf_{m\to\infty}\frac{\log N_m}{m\log m}\ge g_\ast(p)\qquad a.s.
+\]
+因此把长度 \(m\) 的失配模式外置为单整数时，位长主阶不可避免地带有 \(\log m\) 膨胀因子。
+\end{corollary}
+\begin{proof}
+第一式由定理 \ref{thm:fold-gauge-anomaly-bernoulli-p-primorial-godel-laws}(1) 与
+\(
+A_m\sim m\log m
+\) 直接推出。
+第二式由定理 \ref{thm:fold-gauge-anomaly-godel-coprime-inflation} 代入
+\(
+\alpha=g_\ast(p)
+\) 得到。证毕。
+\end{proof}
+
+\begin{corollary}[局部重写步数下界强制 \texorpdfstring{$m\log m$}{m log m} 级 prime-certificate 比特胀量]\label{cor:fold-local-rewrite-prime-certificate-bit-inflation}
+在定理 \ref{thm:fold-local-rewrite-ldp-lower-tail-barrier} 的设定下，令 \(T_m(\mathsf S)\) 为局部重写正规化算法 \(\mathsf S\) 的步数。
+设一类可审计 prime-register 证书把每一步编码为一位素数轴上的正指数，从而存在 \(a_t\ge 1\) 使证书整数可写为
+\[
+N_m=\prod_{t=1}^{T_m(\mathsf S)}\mathfrak p_t^{a_t}.
+\]
+则几乎处处成立下界
+\[
+\liminf_{m\to\infty}\frac{\log_2 N_m}{m\log_2 m}\ \ge\ \frac{4}{9R}.
+\]
+因此该类逐步可审计的整数证书在典型尺度上必为 \(\Omega(m\log m)\) 比特。
+\end{corollary}
+\begin{proof}
+由 \(a_t\ge 1\) 得
+\(
+N_m\ge \prod_{t=1}^{T_m(\mathsf S)}\mathfrak p_t=\mathfrak P_{T_m(\mathsf S)}
+\)，故 \(\log_2 N_m\ge \log_2\mathfrak P_{T_m(\mathsf S)}\)。
+由 primorial 渐近 \(\log \mathfrak P_n\sim n\log n\) 得
+\(
+\log_2\mathfrak P_{T_m}\ge (1+o(1))\,T_m\log_2 T_m
+\)。
+另一方面，定理 \ref{thm:fold-local-rewrite-ldp-lower-tail-barrier}(2) 给出
+\(
+T_m(\mathsf S)\ge (\frac{4}{9R}+o(1))m
+\)
+几乎处处成立，从而 \(\log T_m\sim \log m\)。
+合并即得
+\(
+\log_2 N_m\ge (\frac{4}{9R}+o(1))m\log_2 m
+\)。证毕。
+\end{proof}
+
+\begin{proposition}[算术可审计性与信息论旁信息下界之间的发散缺口]\label{prop:fold-prime-certificate-vs-it-gap-diverges}
+令 \(\omega\sim\mathrm{Unif}(\Omega_m)\) 且令 \(x:=\Fold_m(\omega)\in X_m\) 为确定性折叠读出（其中 \(|\Omega_m|=2^m\)、\(|X_m|=F_{m+2}\)）。
+则条件熵满足
+\[
+H(\omega\mid x)=H(\omega)-H(x)\le m\log 2-\log|X_m|=O(m).
+\]
+另一方面，在推论 \ref{cor:fold-local-rewrite-prime-certificate-bit-inflation} 的设定下，任一逐步可审计 prime-register 证书的比特长度为 \(\Omega(m\log m)\)。
+因此其与信息论旁信息下界之比满足
+\[
+\frac{\mathrm{Len}_2(\mathrm{certificate})}{H(\omega\mid x)}\xrightarrow[m\to\infty]{}\infty,
+\]
+并且至少以 \(\Omega(\log m)\) 速度发散。
+\end{proposition}
+\begin{proof}
+由 \(x\) 为 \(\omega\) 的确定函数，\(H(\omega\mid x)=H(\omega)-H(x)\)。
+又 \(H(\omega)=m\log 2\) 且 \(H(x)\ge 0\)，并且 \(\log|X_m|=\Theta(m)\)（由 \(|X_m|=F_{m+2}\asymp\varphi^{m}\)），故 \(H(\omega\mid x)=O(m)\)。
+另一方面，\(\Omega(m\log m)\) 的证书比特下界由推论 \ref{cor:fold-local-rewrite-prime-certificate-bit-inflation} 给出。
+相除得到发散，并由主阶比较得到至少 \(\Omega(\log m)\) 的速度。证毕。
+\end{proof}
+
+\begin{proposition}[素数寄存器诱导的随机椭球体积律]\label{prop:fold-gauge-anomaly-godel-ellipsoid-volume}
+对每个 \(m\)，定义线性算子
+\[
+D_m:=\mathrm{diag}\!\left(\mathfrak p_1^{M_1/2},\dots,\mathfrak p_m^{M_m/2}\right),
+\]
+并令
+\[
+B_m:=\{x\in\RR^m:\ |x|_2\le1\},\qquad E_m:=D_m(B_m).
+\]
+则体积比恒等式成立：
+\[
+\frac{\operatorname{Vol}(E_m)}{\operatorname{Vol}(B_m)}
+=\det(D_m)
+=\prod_{k=1}^{m}\mathfrak p_k^{M_k/2}
+=R_m^{1/2}.
+\]
+因此在平稳 Bernoulli\((p)\) 设定下：
+\begin{enumerate}
+  \item \[
+  \frac{\log\operatorname{Vol}(E_m)-\log\operatorname{Vol}(B_m)}{A_m}
+  \xrightarrow[m\to\infty]{a.s.}
+  \frac12 g_\ast(p).
+  \]
+  \item \[
+  \frac{\log\operatorname{Vol}(E_m)-\log\operatorname{Vol}(B_m)-\frac12 g_\ast(p)A_m}
+  {\sqrt m\,\log m}
+  \Rightarrow
+  \mathcal N\!\left(0,\frac14\sigma_G^2(p)\right).
+  \]
+  \item 变量
+  \(
+  \bigl(\log\operatorname{Vol}(E_m)-\log\operatorname{Vol}(B_m)\bigr)/A_m
+  \)
+  在速度 \(m\) 下满足 LDP，率函数为
+  \[
+  J_p(x)=I_p(2x),\qquad x\in[0,1/2].
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+体积恒等式由线性代数公式
+\(
+\operatorname{Vol}(D(B_m))=\det(D)\operatorname{Vol}(B_m)
+\)
+直接给出。
+其余三条分别由定理
+\ref{thm:fold-gauge-anomaly-bernoulli-p-primorial-godel-laws}
+在变换 \(x\mapsto x/2\) 下立即推出。证毕。
+\end{proof}
+
+\begin{theorem}[Gödel 素数外置的 Benford 极限定律]\label{thm:fold-godel-prime-register-benford}
+设整数底 \(b\ge 2\)，并取参数 \(q\in(0,1)\)。
+令 \((B_k)_{k\ge 1}\) 为独立同分布的 Bernoulli\((q)\) 随机变量，并以第 \(k\) 个素数 \(\mathfrak p_k\) 定义 Gödel 化素数外置寄存器
+\[
+R_n:=\prod_{k=1}^{n}\mathfrak p_k^{B_k}\qquad(n\ge 1).
+\]
+记 \(\{x\}:=x-\lfloor x\rfloor\) 为小数部分。
+则随机变量 \(\{\log_b R_n\}\) 在分布意义下收敛到 \([0,1)\) 上的均匀分布。
+从而 \(R_n\) 在底 \(b\) 表示下的首位数字分布收敛到 Benford 律：对 \(d\in\{1,\dots,b-1\}\)，
+\[
+\lim_{n\to\infty}\PP(\text{首位数字}=d)=\log_b\!\Bigl(1+\frac{1}{d}\Bigr).
+\]
+\end{theorem}
+\begin{proof}
+令 \(\alpha_k:=\log_b\mathfrak p_k\)，则
+\(
+\log_b R_n=\sum_{k=1}^{n}B_k\alpha_k
+\)。
+由分布型 Weyl 判别准则，只需证明对任意非零整数 \(\ell\)，其 Fourier 系数
+\[
+\phi_n(\ell):=\EE\bigl[\exp(2\pi i\ell \log_b R_n)\bigr]
+\]
+满足 \(\phi_n(\ell)\to 0\)。
+由独立性，
+\[
+\phi_n(\ell)
+=\prod_{k=1}^{n}\EE\bigl[\exp(2\pi i\ell B_k\alpha_k)\bigr]
+=\prod_{k=1}^{n}\Bigl((1-q)+q\,\exp(2\pi i\ell\alpha_k)\Bigr).
+\]
+对任意实数 \(\theta\) 有恒等式
+\[
+\bigl|(1-q)+q\,\exp(2\pi i\theta)\bigr|^2
+=1-4q(1-q)\sin^2(\pi\theta),
+\]
+再用不等式 \(\sqrt{1-x}\le e^{-x/2}\)（\(x\in[0,1]\)）得
+\[
+\bigl|(1-q)+q\,\exp(2\pi i\theta)\bigr|
+\le
+\exp\!\bigl(-2q(1-q)\sin^2(\pi\theta)\bigr).
+\]
+于是
+\[
+|\phi_n(\ell)|
+\le
+\exp\!\Bigl(-2q(1-q)\sum_{k=1}^{n}\sin^2(\pi\ell\alpha_k)\Bigr).
+\]
+因此只需证级数 \(\sum_{k\ge 1}\sin^2(\pi\ell\log_b \mathfrak p_k)\) 发散。
+\par
+取 \(\eta>0\) 足够小使 \(0<|\ell|\log_b(1+2\eta)<1\)，并记
+\[
+\delta_1:=|\ell|\log_b(1+\eta),\qquad
+\delta_2:=|\ell|\log_b(1+2\eta),
+\]
+则 \(0<\delta_1<\delta_2<1\)。
+连续函数 \(t\mapsto \sin^2(\pi t)\) 在紧区间 \([\delta_1,\delta_2]\) 上取到正最小值
+\[
+c:=\min_{t\in[\delta_1,\delta_2]}\sin^2(\pi t)>0.
+\]
+对任意充分大的整数 \(m\)，考虑区间
+\[
+I_m:=[\,b^{m/|\ell|}(1+\eta),\ b^{m/|\ell|}(1+2\eta)\,].
+\]
+其长度为 \(\eta\,b^{m/|\ell|}\)，由素数定理可知 \(I_m\) 中的素数个数随 \(m\to\infty\) 发散；故对无穷多个 \(m\)，可取 \(\mathfrak p\in I_m\) 为素数。
+写 \(\mathfrak p=b^{m/|\ell|}u\) 其中 \(u\in(1+\eta,1+2\eta)\)，则
+\[
+|\ell|\log_b \mathfrak p=m+|\ell|\log_b u,
+\]
+其小数部分落在 \([\delta_1,\delta_2]\)，从而
+\(
+\sin^2(\pi\ell\log_b \mathfrak p)\ge c
+\)。
+因此该发散级数有无穷多个项 \(\ge c\)，故必发散。
+于是 \(|\phi_n(\ell)|\to 0\)，从而 \(\{\log_b R_n\}\Rightarrow \mathrm{Unif}[0,1)\)。
+Benford 首位数字分布是均匀小数部分的直接推论。证毕。
+\end{proof}
+
+\endinput
+

@@ -1,0 +1,246 @@
+\subsection{状态推进、时间与多轴细化}\label{subsec:logic-expansion-chain-dynamics-time-multiaxis}
+
+前一小节已经把对象形成链压缩为“指称进入、局部对象形成与 \(\mathsf{NULL}\) 分解”的静态结构，但此时逻辑仍停留在单一状态截面上。为了刻画信息如何逐步排除未定实现、如何在不同方向上细化，并最终把决定性建立在若干信息轴之上，还需把状态 forcing 推进为真正的演化层。
+
+本小节的目标有三重。其一，把更新理解为状态的进一步细化，而不是对既有事实的回写。其二，把时间解释为更新链上的顺序参数，而不是脱离状态而独立流动的实体。其三，把“信息更多”细化为“沿哪些轴发生细化”，从而使命题的决定性能够被分解为若干方向性的支持结构。
+
+\begin{definition}[多轴状态推进结构]\label{def:logic-expansion-multi-axis-dynamic-structure}
+在固定模型 \(M\) 上，称
+\[
+\mathfrak{D}
+=
+\bigl(\mathrm{St}(M),\le,\tau,J,\{\rightsquigarrow_j\}_{j\in J},\{\equiv_j\}_{j\in J}\bigr)
+\]
+为一个多轴状态推进结构，若满足：
+\begin{enumerate}
+  \item \(J\) 是轴索引集；
+  \item 对每个 \(j\in J\)，\(\rightsquigarrow_j\) 是 \(\mathrm{St}(M)\) 上的单轴推进关系；若
+  \[
+  p\rightsquigarrow_j q,
+  \]
+  则必有 \(q\le p\)；
+  \item \(\tau:\mathrm{St}(M)\to T\) 是到某个线序集 \(T\) 的时间标记，并满足
+  \[
+  p\rightsquigarrow_j q
+  \Longrightarrow
+  \tau(q)\ge \tau(p).
+  \]
+  \item 对每个 \(j\in J\)，\(\equiv_j\) 是状态上的一个等价关系，用以表达“在轴 \(j\) 上不可区分”；
+  \item 对任意有限轴集 \(K\subseteq J\)，定义
+  \[
+  p\rightsquigarrow_K q
+  \]
+  表示存在一条从 \(p\) 到 \(q\) 的有限推进链，其所使用的轴全都属于 \(K\)；并定义
+  \[
+  q\equiv_K r
+  \quad:\Longleftrightarrow\quad
+  \forall j\in K,\ q\equiv_j r.
+  \]
+\end{enumerate}
+\end{definition}
+
+定义 \ref{def:logic-expansion-multi-axis-dynamic-structure} 表明：更新不是一个无方向的黑箱操作，而是沿特定轴发生的细化；时间也不是独立原语，而只是记录状态何时推进到了更细层。
+
+\begin{proposition}[更新保持 forcing]\label{prop:logic-expansion-updates-preserve-forcing}
+若
+\[
+p\rightsquigarrow_K q
+\qquad\text{且}\qquad
+M,p\Vdash \varphi,
+\]
+则
+\[
+M,q\Vdash \varphi^\uparrow.
+\]
+\end{proposition}
+
+\begin{proof}
+由定义 \ref{def:logic-expansion-multi-axis-dynamic-structure}，\(p\rightsquigarrow_K q\) 蕴含 \(q\le p\)。因此命题 \ref{prop:logic-expansion-forcing-persistence} 直接给出
+\[
+M,q\Vdash \varphi^\uparrow.
+\]
+\end{proof}
+
+命题 \ref{prop:logic-expansion-updates-preserve-forcing} 说明：更新使状态变细，而不是改写既有 forcing。一旦某命题在某状态中已经被强制成立，则所有可达后继都只能保留它，而不能将其撤销。
+
+\paragraph{时间与延迟定解}
+在更新语义中，时间的作用并不是为命题外加一个独立的“真值流”，而只是标记状态细化发生的先后顺序。由此，所谓“后来才知道”的逻辑意义，也必须用状态推进而非外在时间流来表达。
+
+\begin{definition}[延迟定解]\label{def:logic-expansion-delayed-decidability}
+设
+\[
+p\rightsquigarrow_K q.
+\]
+称公式 \(\varphi\) 在推进 \(p\to q\) 中发生了\emph{延迟定解}，若
+\[
+M,p\nVdash \varphi,
+\qquad
+M,p\nVdash \neg\varphi,
+\]
+但
+\[
+M,q\Downarrow \varphi.
+\]
+\end{definition}
+
+\begin{proposition}[延迟定解不创造真值]\label{prop:logic-expansion-delayed-decidability-no-new-truth}
+若 \(\varphi\) 在推进 \(p\rightsquigarrow_K q\) 中发生延迟定解，则 \(q\) 所做的不是创造新的对象层事实，而是排除了在 \(p\) 中导致分歧的未定实现。
+\end{proposition}
+
+\begin{proof}
+若 \(M,p\Vdash \varphi\) 或 \(M,p\Vdash \neg\varphi\)，则由命题 \ref{prop:logic-expansion-updates-preserve-forcing} 可知同一判断会在 \(q\) 中保持，因而不存在“由未定转为已定”的延迟定解。故延迟定解只可能发生在 \(p\) 尚未强制任一侧时。另一方面，\(p\rightsquigarrow_K q\) 蕴含 \(q\le p\)，因此 \(q\) 只是通过进一步细化缩小了允许实现类，使原先造成分歧的那部分实现不再保留。故其作用是消除未定实现，而非新造真值。
+\end{proof}
+
+命题 \ref{prop:logic-expansion-delayed-decidability-no-new-truth} 说明：时间所记录的不是“事实在何时被创造”，而是“状态在何时拥有了足够细的信息来决定既有命题”。
+
+\paragraph{轴支持与不可或缺性}
+一旦更新被分解为多条轴，命题的决定性便不应再仅被表述为“信息是否足够”，而应被表述为“哪些轴已经足以控制 forcing”。这就引出轴支持与轴不可或缺性的概念。
+
+\begin{definition}[轴支持与最小轴支持]\label{def:logic-expansion-axis-support}
+设 \(K\subseteq J\) 为有限轴集。称 \(K\) 在状态 \(p\) 上\emph{支持}命题 \(\varphi\)，记作
+\[
+K\triangleright_p \varphi,
+\]
+若对任意满足
+\[
+p\rightsquigarrow_K q,
+\qquad
+p\rightsquigarrow_K r,
+\qquad
+q\equiv_K r,
+\qquad
+M,q\Downarrow \varphi,
+\qquad
+M,r\Downarrow \varphi
+\]
+的两个后继状态 \(q,r\)，都有
+\[
+M,q\Vdash \varphi
+\quad\Longleftrightarrow\quad
+M,r\Vdash \varphi.
+\]
+若 \(K\triangleright_p \varphi\)，且任意真子集 \(L\subsetneq K\) 都不满足
+\[
+L\triangleright_p \varphi,
+\]
+则称 \(K\) 是 \(\varphi\) 在 \(p\) 上的一个\emph{最小轴支持}。
+\end{definition}
+
+定义 \ref{def:logic-expansion-axis-support} 的含义是：一旦两个后继状态在 \(K\) 所提供的信息上不可区分，那么它们就不能对 \(\varphi\) 给出相反决定。因此，\(K\) 所携带的方向性信息已经足以控制 \(\varphi\) 的 forcing。
+
+\begin{definition}[相对不可或缺性]\label{def:logic-expansion-axis-indispensability}
+设 \(K\subseteq J\) 为有限轴集，\(j\in K\)。称轴 \(j\) 相对于 \(K\) 对命题 \(\varphi\) 在状态 \(p\) 上\emph{不可或缺}，若存在两个状态 \(q,r\) 使得
+\[
+p\rightsquigarrow_K q,
+\qquad
+p\rightsquigarrow_K r,
+\qquad
+q\equiv_{K\setminus\{j\}} r,
+\]
+并且
+\[
+M,q\Vdash \varphi,
+\qquad
+M,r\Vdash \neg\varphi.
+\]
+\end{definition}
+
+定义 \ref{def:logic-expansion-axis-indispensability} 表明：若删去轴 \(j\) 之后，其余轴上的信息已不足以阻止 \(\varphi\) 出现相反决定，则 \(j\) 对该命题而言是不可替代的。
+
+\begin{proposition}[不可或缺性推出最小性]\label{prop:logic-expansion-indispensability-implies-minimality}
+若
+\[
+K\triangleright_p \varphi,
+\]
+并且对每个 \(j\in K\)，\(j\) 都相对于 \(K\) 对 \(\varphi\) 不可或缺，则 \(K\) 是 \(\varphi\) 在 \(p\) 上的一个最小轴支持。
+\end{proposition}
+
+\begin{proof}
+若 \(K\) 不是最小支持，则存在真子集 \(L\subsetneq K\) 仍满足
+\[
+L\triangleright_p \varphi.
+\]
+取任意 \(j\in K\setminus L\)。由于
+\[
+L\subseteq K\setminus\{j\},
+\]
+若两状态在 \(K\setminus\{j\}\) 上不可区分，则它们当然也在 \(L\) 上不可区分。由 \(L\triangleright_p \varphi\) 可知，这两状态在 \(\varphi\) 上不可能给出相反决定，这与 \(j\) 的不可或缺性矛盾。因此，\(K\) 必为最小轴支持。
+\end{proof}
+
+命题 \ref{prop:logic-expansion-indispensability-implies-minimality} 把“轴不可替代性”与“最小信息支持”严格连接了起来。于是，某条轴之所以重要，不再是经验性的判断，而是因为一旦删去它，就确实存在状态对在其余轴上完全相同，却对同一命题给出不同决定。
+
+\paragraph{轴正交性与融合}
+多轴结构不仅要求“哪些轴决定哪些命题”，还要求“不同轴上的细化能否共同工作”。如果两条轴上的细化彼此独立，但无法被合到同一更细状态中，那么它们虽然都重要，却不能组成真正的联合支持。因此，还需引入正交性与融合。
+
+\begin{definition}[轴正交性]\label{def:logic-expansion-axis-orthogonality}
+设 \(j,k\in J\)。称轴 \(j\) 与轴 \(k\) 在状态 \(p\) 上正交，记作
+\[
+j\perp_p k,
+\]
+若对任意
+\[
+p\rightsquigarrow_j q,
+\qquad
+p\rightsquigarrow_k r,
+\]
+都存在某个状态 \(s\) 使得
+\[
+q\rightsquigarrow_k s,
+\qquad
+r\rightsquigarrow_j s.
+\]
+\end{definition}
+
+定义 \ref{def:logic-expansion-axis-orthogonality} 表示：沿轴 \(j\) 的细化与沿轴 \(k\) 的细化可以交换到一个共同后继中。换言之，二者不是互相冲突的两条分支，而是可以在更细状态中兼容合并。
+
+\begin{definition}[融合]\label{def:logic-expansion-fusion}
+设 \(K\subseteq J\) 是有限轴集，且对每个 \(j\in K\) 都给定一个单轴后继
+\[
+p\rightsquigarrow_j q_j.
+\]
+称状态 \(s\) 是族 \((q_j)_{j\in K}\) 在基状态 \(p\) 上的一个\emph{融合}，若
+\[
+p\rightsquigarrow_K s
+\]
+且对每个 \(j\in K\)，都有
+\[
+s\equiv_j q_j.
+\]
+\end{definition}
+
+这里的含义是：\(s\) 同时保留了所有单轴后继在各自轴上的信息，因此它是这些轴向细化的联合状态。
+
+\begin{definition}[轴完备性]\label{def:logic-expansion-axis-completeness}
+称一个多轴状态推进结构满足\emph{轴完备性}，若对任意状态 \(p\)、任意有限轴集 \(K\subseteq J\)，只要族 \((q_j)_{j\in K}\) 两两正交且各自满足
+\[
+p\rightsquigarrow_j q_j,
+\]
+就至少存在一个融合状态 \(s\)。
+\end{definition}
+
+在满足轴完备性的模型中，独立来源的细化就不再只是并列存在，而真正能组合成一个更强的后继状态。于是，多轴逻辑中的“联合信息”不再是模糊直觉，而是有严格语义支撑的融合结构。
+
+\begin{proposition}[正交族的联合可达性]\label{prop:logic-expansion-orthogonal-family-joint-reachability}
+在满足轴完备性的模型中，若有限轴集 \(K\) 的单轴后继族 \((q_j)_{j\in K}\) 两两正交，则存在某个状态 \(s\)，使得
+\[
+p\rightsquigarrow_K s
+\]
+且 \(s\) 是 \((q_j)_{j\in K}\) 的一个融合。
+\end{proposition}
+
+\begin{proof}
+这是定义 \ref{def:logic-expansion-axis-completeness} 的直接展开。两两正交与各自单轴可达已构成该定义的前提，因此可直接得到某个融合状态 \(s\) 的存在。
+\end{proof}
+
+命题 \ref{prop:logic-expansion-orthogonal-family-joint-reachability} 说明：多轴信息不是简单叠加，而是在正交性与完备性条件下通过融合形成的。后续若把具体模型中的不同方向理解为前缀轴、残差轴、模式轴或证书轴，那么它们能否共同形成一个完备读出，实质上都要落到这里的“正交 + 融合”框架中来理解。
+
+\paragraph{本节的结论}
+本小节把原先静态的状态 forcing 推进成了一个真正的演化层。其逻辑骨架可压缩为四点。
+\begin{enumerate}
+  \item 更新使状态变细，而不是改写既有 forcing。因此，一旦某命题在某状态中被 forcing，它在所有可达后继中都继续保持。
+  \item 时间只是状态更新链上的顺序参数。它记录的是状态何时推进到更细层，而不是一个脱离状态而独立流动的实体。
+  \item 延迟定解不是新造真值，而是消除未定实现。所谓“后来才知道”，只是因为后继状态排除了先前造成分歧的那部分实现。
+  \item 多轴结构使“信息来源”本身进入逻辑。一个命题之所以被决定，不只是因为“信息更多”，而是因为某组轴已经足以控制它的 forcing；若某条轴不可或缺，则它不能被其他轴替代。
+\end{enumerate}
+
+因此，本小节完成的是从“静态可断言性”到“演化中的可断言性”的过渡，同时也把“信息量”提升为“信息方向”的问题。下一小节将在这一基础上引入观察者与时空定位，使状态不仅沿更新链推进，而且被纤维化到观察者索引之上，并最终嵌入事件与区域系统之中。

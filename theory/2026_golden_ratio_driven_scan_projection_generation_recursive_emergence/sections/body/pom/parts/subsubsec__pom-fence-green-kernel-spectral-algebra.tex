@@ -1,0 +1,516 @@
+\paragraph{Green 核的谱代数：Gram 分解、Chebyshev 识别与重整化常数}
+本段补充说明锯齿核 \(K_k(i,j)=\min(i,j)\) 的若干\emph{整数/谱/行列式}刚性后果。
+这些结论把先前出现的 \(4\sin^2(\cdot)\) 形式从“半角恒等式”提升为可审计的\emph{Gram 归一化 + Chebyshev 整系数}的闭合约束链。
+
+\begin{lemma}[Gram 分解与行列式归一化]\label{lem:pom-Kk-gram-det}
+令 \(K_k\in\ZZ^{k\times k}\) 由 \(K_k(i,j)=\min(i,j)\) 定义。
+取单位下三角矩阵 \(B_k\in\ZZ^{k\times k}\) 满足
+\[
+(B_k)_{ij}:=\mathbf{1}_{\{j\le i\}}.
+\]
+则有严格 Gram 分解
+\[
+K_k=B_kB_k^{\mathsf T},
+\qquad
+\det(B_k)=1,
+\qquad
+\det(K_k)=1.
+\]
+\end{lemma}
+\begin{proof}
+对任意 \(1\le i,j\le k\)，有
+\[
+(B_kB_k^{\mathsf T})_{ij}
+=\sum_{t=1}^{k}(B_k)_{it}(B_k)_{jt}
+=\sum_{t=1}^{k}\mathbf{1}_{\{t\le i\}}\mathbf{1}_{\{t\le j\}}
+=\sum_{t=1}^{\min(i,j)}1
+=\min(i,j),
+\]
+故 \(K_k=B_kB_k^{\mathsf T}\)。
+而 \(B_k\) 为单位下三角矩阵，故 \(\det(B_k)=1\)，从而 \(\det(K_k)=\det(B_k)^2=1\)。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{\((4\sin^2)\)}{(4 sin^2)} 乘积恒等式与求和恒等式]\label{cor:pom-Kk-sine-product-sum}
+令
+\(
+\phi_p:=\frac{(2p-1)\pi}{4k+2}
+\)（\(p=1,\dots,k\)）。
+则有严格恒等式
+\[
+\prod_{p=1}^{k}4\sin^2(\phi_p)=1,
+\qquad
+\sum_{p=1}^{k}\frac{1}{4\sin^2(\phi_p)}=\frac{k(k+1)}{2}.
+\]
+因此谱表示中的系数 \(4\) 受到行列式归一化刚性的约束：在保持整数 Gram 结构与 \(\det(K_k)=1\) 的前提下，
+\((4\sin^2(\cdot))\) 不可再标度消去。
+\end{corollary}
+\begin{proof}
+由引理 \ref{lem:pom-Kk-eigenvalues} 与注 \ref{rem:pom-Kk-factor4-spectral-rigidity}，\(K_k\) 的特征值为
+\(
+\lambda_p=(4\sin^2\phi_p)^{-1}
+\)。
+由引理 \ref{lem:pom-Kk-gram-det} 得 \(\det(K_k)=1=\prod_p\lambda_p\)，从而 \(\prod_p 4\sin^2(\phi_p)=1\)。
+又 \(\mathrm{tr}(K_k)=\sum_{i=1}^k K_k(i,i)=\sum_{i=1}^k i=k(k+1)/2\)，而 \(\mathrm{tr}(K_k)=\sum_p\lambda_p\)，故得到求和恒等式。证毕。
+\end{proof}
+
+\begin{theorem}[Chebyshev 识别与 \texorpdfstring{\(\lambda/4\)}{lambda/4} 的整系数正规化]\label{thm:pom-Lk-chebyshev-charpoly}
+记 \(L_k:=K_k^{-1}\in\ZZ^{k\times k}\)（其显式三对角形式见注 \ref{rem:pom-Kk-factor4-spectral-rigidity}）。
+令 \(T_n\) 为第一类 Chebyshev 多项式（\(T_n(\cos\theta)=\cos(n\theta)\)），并定义
+\[
+P_k(y):=\frac{T_{2k+1}(\sqrt y)}{\sqrt y}\in\ZZ[y].
+\]
+则对任意 \(\lambda\in\CC\)，有特征多项式闭式
+\[
+\det(\lambda I-L_k)=(-1)^k\,P_k\!\Bigl(1-\frac{\lambda}{4}\Bigr).
+\]
+等价地，\(L_k\) 的谱点为
+\[
+\mu_p=4\sin^2\!\Bigl(\frac{(2p-1)\pi}{4k+2}\Bigr),\qquad p=1,\dots,k,
+\]
+并且线性变换 \(\lambda\mapsto 1-\lambda/4\) 是使 \(\det(\lambda I-L_k)\) 与 \(T_{2k+1}\) 发生整系数同构识别的自然正规化。
+\end{theorem}
+\begin{proof}
+由于 \(2k+1\) 为奇数，\(T_{2k+1}(z)\) 为奇多项式，故 \(T_{2k+1}(z)/z\) 为关于 \(z\) 的偶多项式，从而可唯一写成 \(P_k(z^2)\)；并且 \(T_n\) 具有整系数，故 \(P_k\in\ZZ[y]\)。
+\par
+由注 \ref{rem:pom-Kk-factor4-spectral-rigidity}，\(L_k\) 的谱满足
+\(
+\mu_p=4\sin^2(\phi_p)
+\)
+其中 \(\phi_p=\frac{(2p-1)\pi}{4k+2}\)。
+对任意此类 \(\mu_p\)，令 \(y_p:=1-\mu_p/4=\cos^2(\phi_p)\)。
+则 \(T_{2k+1}(\cos\phi_p)=\cos((2k+1)\phi_p)=\cos((2p-1)\pi/2)=0\)，从而
+\(
+P_k(y_p)=T_{2k+1}(\cos\phi_p)/\cos\phi_p=0
+\)。
+因此多项式 \(\lambda\mapsto P_k(1-\lambda/4)\) 的零点集恰为 \(\{\mu_p\}_{p=1}^k\)，与 \(\det(\lambda I-L_k)\) 的谱零点一致；
+再由两者同为次数 \(k\) 的首一（除去符号）多项式，可得所示恒等式。证毕。
+\end{proof}
+
+\begin{corollary}[移位行列式闭式、自由能密度与重整化常数项]\label{cor:pom-Lk-shifted-det-free-energy}
+对任意实参数 \(t>-4\)，令 \(x:=\sqrt{1+t/4}>0\)。
+则有严格恒等式
+\[
+\det(L_k+tI)=\det(I+tK_k)=P_k\!\Bigl(1+\frac{t}{4}\Bigr)=\frac{T_{2k+1}(x)}{x}.
+\]
+当 \(x>1\) 时，令 \(\eta:=\mathrm{arcosh}(x)\)，则
+\[
+\log\det(L_k+tI)=\log\cosh\bigl((2k+1)\eta\bigr)-\log x.
+\]
+并且存在自由能密度极限
+\[
+\lim_{k\to\infty}\frac{1}{2k+1}\log\det(L_k+tI)=\eta=\mathrm{arcosh}\!\Bigl(\sqrt{1+\frac{t}{4}}\Bigr).
+\]
+此外，定义重整化余项
+\[
+F_k(t):=\log\det(L_k+tI)-(2k+1)\,\mathrm{arcosh}\!\Bigl(\sqrt{1+\frac{t}{4}}\Bigr),
+\]
+则极限存在且为显式常数
+\[
+\lim_{k\to\infty}F_k(t)=-\log\!\Bigl(2\sqrt{1+\frac{t}{4}}\Bigr).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-Lk-chebyshev-charpoly}，将 \(\lambda=-t\) 代入并注意
+\(
+\det(-tI-L_k)=(-1)^k\det(L_k+tI)
+\)
+即可得到 \(\det(L_k+tI)=P_k(1+t/4)\)。
+又由 \(K_kL_k=I\) 与引理 \ref{lem:pom-Kk-gram-det} 的 \(\det(K_k)=1\)，有
+\(
+I+tK_k=K_k(L_k+tI)
+\)
+从而 \(\det(I+tK_k)=\det(L_k+tI)\)。
+当 \(x>1\) 时，\(T_{2k+1}(x)=\cosh((2k+1)\eta)\)，代回得到对数形式。
+最后由 \(\log\cosh((2k+1)\eta)=(2k+1)\eta-\log 2+o(1)\) 得密度极限与常数项极限。证毕。
+\end{proof}
+\input{parts/subsubsec__pom-fence-green-kernel-spectral-algebra__determinant-polynomials}
+
+\input{parts/subsubsec__pom-fence-green-kernel-area-law-resolvent}
+
+\input{parts/subsubsec__pom-fence-green-kernel-golden-coupling-fisher-zeros}
+
+\begin{corollary}[谱隙常数的完全显式化]\label{cor:pom-Lk-gap-pi2}
+令 \(\mu_1\le\mu_2\le\cdots\le\mu_k\) 为 \(L_k\) 的升序特征值，则
+\[
+\mu_1=4\sin^2\!\Bigl(\frac{\pi}{4k+2}\Bigr),
+\qquad
+\mu_2=4\sin^2\!\Bigl(\frac{3\pi}{4k+2}\Bigr),
+\qquad
+\frac{\mu_2}{\mu_1}=\frac{\sin^2\!\bigl(\frac{3\pi}{4k+2}\bigr)}{\sin^2\!\bigl(\frac{\pi}{4k+2}\bigr)}.
+\]
+并且当 \(k\to\infty\) 时有渐近
+\[
+\mu_1=\frac{\pi^2}{(2k+1)^2}+O(k^{-4}),
+\qquad
+\lambda_{\max}(K_k)=\mu_1^{-1}=\frac{(2k+1)^2}{\pi^2}+O(1).
+\]
+\end{corollary}
+\begin{proof}
+由注 \ref{rem:pom-Kk-factor4-spectral-rigidity} 的谱闭式与 \(\phi_p=\frac{(2p-1)\pi}{4k+2}\) 的单调性可得最小/次小特征值表达。
+最后两式由 \(\sin x=x+O(x^3)\) 得 \(\mu_1=4(\pi/(4k+2))^2+O(k^{-4})\)，并取倒数得到 \(\lambda_{\max}(K_k)=\mu_1^{-1}\)。证毕。
+\end{proof}
+
+\begin{proposition}[Green 核 \texorpdfstring{$K_k$}{Kk} 的偶次多项式矩律诱导 \texorpdfstring{$\zeta(2r)$}{zeta(2r)} 极限：Bernoulli 系数与奇整数谱矩锁合（228）]\label{prop:pom-csc-moments-bernoulli}
+对整数 \(r\ge 1\) 定义
+\[
+S_r(k):=\sum_{p=1}^{k}\csc^{2r}\!\Bigl(\frac{(2p-1)\pi}{4k+2}\Bigr),
+\qquad
+n:=2k+1.
+\]
+则 \(S_r(k)\) 是 \(n\) 的偶次多项式，且存在有理系数 \(a_{r,j}\in\QQ\) 使
+\[
+S_r(k)=-\frac12+\sum_{j=1}^{r} a_{r,j}\,n^{2j}.
+\]
+其最高次系数由 Bernoulli 数给出：
+\[
+a_{r,r}=\frac{2^{2r-1}(2^{2r}-1)\,|B_{2r}|}{(2r)!}.
+\]
+并且 \(K_k\) 的迹矩满足
+\[
+\mathrm{tr}(K_k^{\,r})=\sum_{p=1}^{k}\lambda_p^{\,r}=\frac{1}{4^{\,r}}\,S_r(k),
+\]
+其中 \(\lambda_p=(4\sin^2\phi_p)^{-1}\) 为 \(K_k\) 的特征值（引理 \ref{lem:pom-Kk-eigenvalues}）。
+特别地，取 \(r\in\NN\) 并按主尺度 \(n=2k+1\) 归一化，则由推论 \ref{cor:pom-Lk-normalized-zeta-odd-projection}（注意 \(\zeta_k(r)=\sum_p\mu_p^{-r}=\sum_p\lambda_p^{\,r}=\mathrm{tr}(K_k^{\,r})\)）有严格极限
+\[
+\lim_{k\to\infty}\Bigl(\frac{\pi}{n}\Bigr)^{2r}\mathrm{tr}(K_k^{\,r})
+=(1-2^{-2r})\zeta(2r)
+=\sum_{\substack{q\ge 1\\ q\ \mathrm{odd}}}\frac{1}{q^{2r}}.
+\]
+\end{proposition}
+\begin{proof}
+令
+\(
+A_r(m):=\sum_{q=1}^{m-1}\csc^{2r}(\pi q/m)
+\)。
+由 \(\pi\cot(\pi z)\) 的部分分式展开与留数计算可得 \(A_r(m)\) 为 \(m\) 的偶次多项式，且其最高次系数为 \(2^{2r}|B_{2r}|/(2r)!\)。
+将 \(m=2n\) 的总和按奇偶指标分解：
+\[
+A_r(2n)=\sum_{q=1}^{n-1}\csc^{2r}\!\Bigl(\frac{\pi q}{n}\Bigr)+\sum_{\substack{1\le q\le 2n-1\\ q\ \mathrm{odd}}}\csc^{2r}\!\Bigl(\frac{\pi q}{2n}\Bigr)
+=A_r(n)+\Bigl(2S_r(k)+1\Bigr),
+\]
+其中最后一步用到正弦对称性把奇指标和配对为 \(2S_r(k)\)，并分离出 \(q=n\) 的 \(\csc^{2r}(\pi/2)=1\)。
+故
+\(
+S_r(k)=\frac12(A_r(2n)-A_r(n)-1)
+\)，从而 \(S_r(k)\) 为 \(n\) 的偶次多项式并具有常数项 \(-1/2\)。
+记 \(c\) 为 \(A_r(m)\) 的最高次系数，则 \(A_r(2n)\) 的 \(n^{2r}\) 系数为 \(2^{2r}c\)，而 \(A_r(n)\) 的 \(n^{2r}\) 系数为 \(c\)，故 \(S_r(k)\) 的最高次系数为
+\[
+\frac{2^{2r}-1}{2}\,c.
+\]
+代入 \(c=2^{2r}|B_{2r}|/(2r)!\) 即得所示
+\(
+a_{r,r}=\frac{2^{2r-1}(2^{2r}-1)\,|B_{2r}|}{(2r)!}
+\)。
+最后一式由 \(\lambda_p=(4\sin^2\phi_p)^{-1}=(1/4)\csc^2\phi_p\) 直接代入即得。证毕。
+\end{proof}
+
+\begin{corollary}[偶值 \texorpdfstring{$\zeta$}{zeta} 的有限迹反演：由有限个离散迹矩确定主项系数]\label{cor:pom-csc-moments-finite-trace-inversion}
+固定整数 \(r\ge 1\)，并对 \(k\ge 1\) 记 \(n_k:=2k+1\)、\(u_k:=n_k^2\)。
+令 \(S_r(k)\) 如命题 \ref{prop:pom-csc-moments-bernoulli}，并写作
+\[
+S_r(k)+\frac12=\sum_{j=1}^{r}a_{r,j}\,n_k^{2j}=:Q_r(u_k),
+\qquad
+Q_r(U):=\sum_{j=1}^{r}a_{r,j}\,U^{j}\in\QQ[U].
+\]
+则 \(Q_r\) 为次数 \(r\) 的多项式，并由 \(r+1\) 个有限迹矩
+\(
+\{\mathrm{tr}(K_k^{\,r})\}_{k=1}^{r+1}
+\)
+（等价地由 \(\{S_r(k)\}_{k=1}^{r+1}\)）唯一确定；
+从而主项系数 \(a_{r,r}\) 可由有限数据确定性回收，并满足恒等式
+\[
+\boxed{\;
+(1-2^{-2r})\zeta(2r)=\frac{\pi^{2r}}{4^{\,r}}\,a_{r,r}\; }.
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-csc-moments-bernoulli}，对每个 \(k\) 有 \(S_r(k)=-\frac12+Q_r(n_k^2)\) 且 \(Q_r\in\QQ[U]\) 的次数为 \(r\)。
+又 \(u_k=n_k^2\) 在 \(k=1,\dots,r+1\) 上互异，故插值唯一性推出 \(Q_r\)（因而各 \(a_{r,j}\)）由 \(\{Q_r(u_k)\}_{k=1}^{r+1}\) 唯一确定。
+而 \(Q_r(u_k)=S_r(k)+\frac12=4^{\,r}\mathrm{tr}(K_k^{\,r})+\frac12\) 由有限迹矩直接给出。
+最后，\(\mathrm{tr}(K_k^{\,r})=\frac{1}{4^{\,r}}S_r(k)=\frac{a_{r,r}}{4^{\,r}}\,n_k^{2r}+O(n_k^{2r-2})\)，故
+\(
+(\pi/n_k)^{2r}\mathrm{tr}(K_k^{\,r})\to \pi^{2r}a_{r,r}/4^{\,r}
+\)；
+再与命题 \ref{prop:pom-csc-moments-bernoulli} 的极限恒等式对齐即得。证毕。
+\end{proof}
+
+\begin{remark}[Green 核 \texorpdfstring{$K_k$}{Kk} 的前三阶矩闭式与 Schatten 标度：有限窗即可完全审计（229）]\label{rem:pom-csc-moments-examples}
+写 \(n:=2k+1\)。
+则
+\[
+S_1(k)=\frac{n^2}{2}-\frac12,\qquad
+S_2(k)=\frac{n^4}{6}+\frac{n^2}{3}-\frac12,\qquad
+S_3(k)=\frac{n^6}{15}+\frac{n^4}{6}+\frac{4n^2}{15}-\frac12.
+\]
+从而 \(\mathrm{tr}(K_k^{\,r})=\frac{1}{4^{\,r}}S_r(k)\) 在 \(r=1,2,3\) 的有限窗上可逐项核验（表 \ref{tab:fence_green_kernel_spectral_algebra_audit}）。
+由于 \(K_k\succeq 0\)，上述闭式亦为 \(\|K_k\|_{S_r}^r=\mathrm{tr}(K_k^{\,r})\)（\(r=1,2,3\)）提供无需数值对角化的确定型输入。
+\end{remark}
+
+\begin{remark}[有限窗审计：Gram/行列式刚性、Chebyshev 识别与高阶矩]\label{rem:pom-fence-green-kernel-spectral-algebra-audit}
+脚本在有限窗上逐项核验：\(\det(K_k)=1\) 及由此推出的 \((4\sin^2)\) 乘积/求和恒等式（推论 \ref{cor:pom-Kk-sine-product-sum}）、
+Chebyshev 特征多项式识别（定理 \ref{thm:pom-Lk-chebyshev-charpoly}）、
+以及前三阶幂和闭式（注 \ref{rem:pom-csc-moments-examples}）。
+审计表如下：
+\input{sections/generated/tab_fence_green_kernel_spectral_algebra_audit}
+\end{remark}
+
+\paragraph{谱测度与连续极限：反正弦律、离散 Weyl 定律与热核/Bessel 对偶}
+下面把混合边界离散 Laplacian \(L_k\) 的“半奇整数量子化”进一步提升为一个\emph{谱测度极限律}，
+并给出全区间上的离散 Weyl 计数余项界与热核密度的闭式极限。
+
+\begin{theorem}[经验谱测度的反正弦极限律]\label{thm:pom-Lk-arcsine-law}
+设 \(L_k:=K_k^{-1}\)（见注 \ref{rem:pom-Kk-factor4-spectral-rigidity}），其特征值为
+\[
+\mu_p
+=4\sin^2\!\Bigl(\frac{(2p-1)\pi}{4k+2}\Bigr)
+=2\Bigl(1-\cos\frac{(2p-1)\pi}{2k+1}\Bigr)\in(0,4),
+\qquad p=1,\dots,k.
+\]
+定义经验谱测度
+\[
+\nu_k:=\frac{1}{k}\sum_{p=1}^{k}\delta_{\mu_p}.
+\]
+则 \(\nu_k\) 在弱拓扑下收敛到 \([0,4]\) 上的反正弦分布 \(\nu\)，其密度为
+\[
+\dd\nu(\mu)=\frac{1}{\pi\sqrt{\mu(4-\mu)}}\,\dd\mu,\qquad \mu\in(0,4).
+\]
+等价地，对任意连续函数 \(f\in C([0,4])\)，有迹函数极限
+\[
+\lim_{k\to\infty}\frac{1}{k}\operatorname{tr}f(L_k)
+=\frac{1}{\pi}\int_{0}^{4}\frac{f(\mu)}{\sqrt{\mu(4-\mu)}}\,\dd\mu
+=\frac{1}{\pi}\int_{0}^{\pi} f\!\bigl(2(1-\cos\theta)\bigr)\,\dd\theta.
+\]
+\end{theorem}
+\begin{proof}
+令 \(n:=2k+1\) 并记 \(\theta_p:=\frac{(2p-1)\pi}{n}\in(0,\pi)\)，则 \(\mu_p=2(1-\cos\theta_p)\)。
+因为 \(\{\theta_p\}_{p=1}^k\) 为 \((0,\pi)\) 上步长 \(2\pi/n\) 的半奇整数网格，
+对任意连续 \(g\in C([0,\pi])\) 有 Riemann 和收敛
+\[
+\lim_{k\to\infty}\frac{1}{k}\sum_{p=1}^{k} g(\theta_p)
+=\frac{1}{\pi}\int_0^\pi g(\theta)\,\dd\theta.
+\]
+取 \(g(\theta):=f(2(1-\cos\theta))\) 即得
+\(
+\lim_{k\to\infty}\frac{1}{k}\sum_{p} f(\mu_p)=\frac{1}{\pi}\int_0^\pi f(2(1-\cos\theta))\,\dd\theta
+\)。
+再作代换 \(\mu=2(1-\cos\theta)\)（于是 \(\mu(4-\mu)=4\sin^2\theta\) 且 \(\dd\mu=2\sin\theta\,\dd\theta=\sqrt{\mu(4-\mu)}\,\dd\theta\)），得到
+\[
+\frac{1}{\pi}\int_0^\pi f(2(1-\cos\theta))\,\dd\theta
+=\frac{1}{\pi}\int_0^4 \frac{f(\mu)}{\sqrt{\mu(4-\mu)}}\,\dd\mu,
+\]
+从而结论成立。证毕。
+\end{proof}
+\input{parts/subsubsec__pom-fence-green-kernel-spectral-algebra__boundary-spectral-measure}
+
+\begin{corollary}[离散 Weyl 定律：计数函数的显式反函数与统一余项界]\label{cor:pom-Lk-discrete-weyl}
+定义计数函数 \(N_k(\mu):=\#\{p\le k:\ \mu_p\le \mu\}\)（\(\mu\in(0,4)\)），并令
+\[
+\theta(\mu):=\arccos\Bigl(1-\frac{\mu}{2}\Bigr)\in(0,\pi).
+\]
+则对所有 \(\mu\in(0,4)\) 有
+\[
+N_k(\mu)=\left\lfloor \frac{2k+1}{2\pi}\,\theta(\mu)+\frac12\right\rfloor,
+\qquad
+\Bigl|N_k(\mu)-\frac{2k+1}{2\pi}\theta(\mu)\Bigr|\le 1.
+\]
+因此 \(\nu_k\) 的分布函数在全区间上以 \(O(1/k)\) 精度逼近反正弦律的分布函数。
+\end{corollary}
+\begin{proof}
+由于 \(\mu_p=2(1-\cos\theta_p)\) 且 \(\theta\mapsto 2(1-\cos\theta)\) 在 \((0,\pi)\) 上严格递增，
+\(\mu_p\le\mu\) 等价于 \(\theta_p\le \theta(\mu)\)。
+而 \(\theta_p=\frac{(2p-1)\pi}{2k+1}\)，故
+\[
+\theta_p\le\theta(\mu)
+\quad\Longleftrightarrow\quad
+2p-1\le \frac{2k+1}{\pi}\,\theta(\mu)
+\quad\Longleftrightarrow\quad
+p\le \frac{2k+1}{2\pi}\,\theta(\mu)+\frac12.
+\]
+取最大整数 \(p\) 即得显式取整式；余项界由 \(|\lfloor x\rfloor-x|\le 1\) 立得。证毕。
+\end{proof}
+
+\begin{corollary}[热核密度的闭式极限：Bessel--反正弦对偶]\label{cor:pom-Lk-heat-kernel-bessel}
+定义热迹
+\(
+H_k(t):=\operatorname{tr}(e^{-tL_k})=\sum_{p=1}^{k}e^{-t\mu_p}
+\)（\(t\ge 0\)）。
+则对任意 \(t\ge 0\)，有极限
+\[
+\lim_{k\to\infty}\frac{1}{k}H_k(t)
+=\frac{1}{\pi}\int_0^\pi e^{-2t(1-\cos\theta)}\,\dd\theta
+=e^{-2t}I_0(2t),
+\]
+其中 \(I_0\) 为第一类修正 Bessel 函数。
+并且按“边界长度”\(2k+1\) 归一化时，
+\[
+\lim_{k\to\infty}\frac{1}{2k+1}H_k(t)=\frac12\,e^{-2t}I_0(2t).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-Lk-arcsine-law} 取 \(f(\mu)=e^{-t\mu}\) 得第一式的积分表示。
+再用 Bessel 函数的经典积分表示
+\(
+I_0(z)=\frac1\pi\int_0^\pi e^{z\cos\theta}\,\dd\theta
+\)
+并取 \(z=2t\)，得
+\(
+\frac{1}{\pi}\int_0^\pi e^{-2t(1-\cos\theta)}\,\dd\theta=e^{-2t}I_0(2t)
+\)。
+最后一式由 \(\frac{k}{2k+1}\to \frac12\) 立得。证毕。
+\end{proof}
+
+\begin{proposition}[谱 \texorpdfstring{\(\zeta\)}{zeta} 函数的主导项与半奇整数 Dirichlet 因子]\label{prop:pom-Lk-spectral-zeta-dirichlet}
+对复参数 \(s\)（取 \(\Re(s)>\tfrac12\)），定义谱 \(\zeta\) 函数
+\[
+\zeta_k(s):=\sum_{p=1}^{k}\mu_p^{-s}.
+\]
+则当 \(k\to\infty\) 时有主导渐近
+\[
+\zeta_k(s)
+=\Bigl(\frac{2k+1}{\pi}\Bigr)^{2s}\Bigl(1-2^{-2s}\Bigr)\zeta(2s)
+\;+\;O(k),
+\]
+其中 \(\zeta\) 为 Riemann \(\zeta\) 函数。
+因子 \(\bigl(1-2^{-2s}\bigr)\) 是半奇整数模态（仅出现奇频）在 \(\zeta\) 主项中所强制产生的 Dirichlet 投影因子。
+\end{proposition}
+\begin{proof}
+记 \(n:=2k+1\) 且 \(\phi_p=\frac{(2p-1)\pi}{2n}\in(0,\pi/2)\)，则 \(\mu_p=4\sin^2\phi_p\) 且
+\[
+\zeta_k(s)=\sum_{p=1}^{k}(2\sin\phi_p)^{-2s}.
+\]
+对小角展开，\(\sin x=x+O(x^3)\) 给出 \((2\sin x)^{-2s}=(2x)^{-2s}\bigl(1+O(x^2)\bigr)\)（当 \(\Re(s)>\tfrac12\) 时该误差在求和中可积）。
+将 \(2\phi_p=(2p-1)\pi/n\) 代入得
+\[
+(2\sin\phi_p)^{-2s}
+=\Bigl(\frac{n}{\pi}\Bigr)^{2s}(2p-1)^{-2s}
+\;+\;O\!\Bigl(n^{2\Re(s)-2}(2p-1)^{2-2\Re(s)}\Bigr).
+\]
+对 \(p\le k\) 求和，误差项为
+\(
+O\bigl(n^{2\Re(s)-2}\sum_{p\le k}(2p-1)^{2-2\Re(s)}\bigr)=O(n)=O(k)
+\)。
+因此
+\[
+\zeta_k(s)=\Bigl(\frac{n}{\pi}\Bigr)^{2s}\sum_{p=1}^{k}(2p-1)^{-2s}+O(k).
+\]
+而 \(\sum_{p=1}^{k}(2p-1)^{-2s}=(1-2^{-2s})\zeta(2s)+O(k^{1-2\Re(s)})\)；
+将尾项乘以 \(n^{2\Re(s)}\) 得到 \(O(k)\) 量级，从而结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[归一化谱 \texorpdfstring{\(\zeta\)}{zeta} 的极限与奇频 Dirichlet 投影]\label{cor:pom-Lk-normalized-zeta-odd-projection}
+对 \(\Re(s)>\tfrac12\)，定义归一化谱函数
+\[
+\widetilde\zeta_k(s):=\Bigl(\frac{\pi}{2k+1}\Bigr)^{2s}\zeta_k(s).
+\]
+则对每个 \(\Re(s)>\tfrac12\) 有极限
+\[
+\lim_{k\to\infty}\widetilde\zeta_k(s)
+=\Bigl(1-2^{-2s}\Bigr)\zeta(2s)
+=\sum_{\substack{n\ge 1\\ n\ \mathrm{odd}}}\frac{1}{n^{2s}}.
+\]
+\end{corollary}
+\begin{proof}
+将命题 \ref{prop:pom-Lk-spectral-zeta-dirichlet} 的渐近式两端乘以 \(\bigl(\pi/(2k+1)\bigr)^{2s}\) 得
+\[
+\widetilde\zeta_k(s)
+=\Bigl(1-2^{-2s}\Bigr)\zeta(2s)
+\;+\;
+O(k)\Bigl(\frac{\pi}{2k+1}\Bigr)^{2s}.
+\]
+当 \(\Re(s)>\tfrac12\) 时，误差项为 \(O(k^{1-2\Re(s)})\to 0\)，故极限成立。
+最后一式由
+\(
+(1-2^{-2s})\zeta(2s)=\sum_{n\ \mathrm{odd}} n^{-2s}
+\)
+的恒等式给出。证毕。
+\end{proof}
+
+\begin{corollary}[连续极限的严格匹配：ND 行列式极限与 \texorpdfstring{\(t/4\)}{t/4} 的唯一尺度]\label{cor:pom-Lk-continuum-ND-det-cosh}
+令连续算子 \(\mathcal L:=-\frac{\dd^2}{\dd x^2}\) 作用于区间 \([0,1]\)，取 Neumann--Dirichlet 边界条件 \(u'(0)=0,\ u(1)=0\)。
+其谱为 \(\{((2p-1)\pi/2)^2\}_{p\ge 1}\)，且其加质量行列式满足
+\(
+\det(\mathcal L+s)=\cosh(\sqrt{s})
+\)（\(\zeta\)-正规化意义）。
+\par
+另一方面，离散谱在小模态上满足
+\[
+\mu_p=\Bigl(\frac{(2p-1)\pi}{2k+1}\Bigr)^2+O(k^{-4})\qquad(p\ \text{固定},\ k\to\infty),
+\]
+因此缩放算子 \(\widetilde L_k:=\frac{(2k+1)^2}{4}L_k\) 在谱意义下趋近于 \(\mathcal L\)。
+更强地，对任意固定 \(s\ge 0\) 有行列式极限
+\[
+\lim_{k\to\infty}\det\!\Bigl(L_k+\frac{4s}{(2k+1)^2}I\Bigr)=\cosh(\sqrt{s}).
+\]
+从而尺度因子 \(t/4\)（即以 \(4s/(2k+1)^2\) 加质量）并非可选规范，而由半奇整数模态的连续极限匹配结构性强制给出。
+\end{corollary}
+\begin{proof}
+取 \(n:=2k+1\)。由推论 \ref{cor:pom-Lk-shifted-det-free-energy}，
+\[
+\det\!\Bigl(L_k+\frac{4s}{n^2}I\Bigr)
+=\frac{T_{n}\!\bigl(\sqrt{1+s/n^2}\bigr)}{\sqrt{1+s/n^2}}.
+\]
+当 \(x:=\sqrt{1+s/n^2}\ge 1\) 时，有 \(T_n(x)=\cosh(n\,\mathrm{arcosh}(x))\)。
+并且 \(n\,\mathrm{arcosh}(\sqrt{1+s/n^2})=\sqrt{s}+O(n^{-2})\)（由 \(\mathrm{arcosh}(1+u)=\sqrt{2u}+O(u^{3/2})\) 及 \(u=s/(2n^2)+O(n^{-4})\) 得到）。
+于是
+\[
+\det\!\Bigl(L_k+\frac{4s}{n^2}I\Bigr)
+=\frac{\cosh(\sqrt{s}+O(n^{-2}))}{1+O(n^{-2})}
+\longrightarrow \cosh(\sqrt{s}).
+\]
+最后关于“小模态匹配”的特征值渐近由 \(\sin x=x+O(x^3)\) 直接给出。证毕。
+\end{proof}
+
+\begin{corollary}[ND 行列式极限的局部一致收敛：谱不变量可逐阶交换极限]\label{cor:pom-Lk-continuum-ND-det-cosh-locally-uniform}
+沿用推论 \ref{cor:pom-Lk-continuum-ND-det-cosh} 的记号，并设
+\[
+D_k(s):=\det\!\Bigl(L_k+\frac{4s}{(2k+1)^2}I\Bigr).
+\]
+则对任意紧集 \(K\subset\CC\) 有局部一致收敛
+\[
+\sup_{s\in K}\bigl|D_k(s)-\cosh(\sqrt{s})\bigr|\longrightarrow 0,
+\]
+其中 \(\cosh(\sqrt{s})\) 视为整函数
+\(
+\sum_{n\ge 0}s^n/(2n)!
+\)。
+因此可逐阶交换导数与极限：对任意 \(n\ge 0\) 成立
+\[
+\lim_{k\to\infty}D_k^{(n)}(0)=\frac{n!}{(2n)!}.
+\]
+\end{corollary}
+\begin{proof}
+令 \(n:=2k+1\)。由推论 \ref{cor:pom-Lk-shifted-det-free-energy}，
+\[
+D_k(s)=\frac{T_{n}\!\bigl(\sqrt{1+s/n^2}\bigr)}{\sqrt{1+s/n^2}}.
+\]
+固定紧集 \(K\subset\CC\)，记 \(R:=\max_{s\in K}|s|\)。
+当 \(n\) 充分大时 \(|s|/n^2\le R/n^2\) 足够小，从而
+\(\sqrt{1+s/n^2}=1+O_K(n^{-2})\) 一致成立。
+并且由 \(\mathrm{arsinh}(z)=z+O(|z|^3)\) 得
+\[
+n\,\mathrm{arsinh}\!\Bigl(\frac{\sqrt{s}}{n}\Bigr)=\sqrt{s}+O_K(n^{-2}),
+\]
+其中误差界仅依赖于 \(|s|\)，故对 \(K\) 一致。
+结合恒等式 \(T_n(\sqrt{1+z^2})=\cosh(n\,\mathrm{arsinh}(z))\)（先在 \(z\in\RR_{\ge 0}\) 上成立，再由解析延拓推广），得到
+\[
+T_n(\sqrt{1+s/n^2})=\cosh(\sqrt{s}+O_K(n^{-2})).
+\]
+由于 \(\cosh\) 在有界集上一致 Lipschitz，且分母 \(\sqrt{1+s/n^2}=1+O_K(n^{-2})\)，可得
+\(
+\sup_{s\in K}|D_k(s)-\cosh(\sqrt{s})|\to 0
+\)。
+最后，局部一致收敛由 Weierstrass 定理推出导数可逐阶交换，从而
+\(
+\lim_{k\to\infty}D_k^{(n)}(0)=\bigl(\cosh(\sqrt{s})\bigr)^{(n)}|_{s=0}=n!/(2n)!
+\)。
+证毕。
+\end{proof}
+
+\begin{remark}[有限窗审计：经验谱律、热核与 ND 行列式极限]\label{rem:pom-fence-green-kernel-spectral-limit-laws-audit}
+脚本在有限窗上核验：经验谱分布与反正弦律的分布函数误差为 \(O(1/k)\)（推论 \ref{cor:pom-Lk-discrete-weyl}），
+热核密度 \(\frac{1}{k}H_k(t)\) 对 \(e^{-2t}I_0(2t)\) 的收敛（推论 \ref{cor:pom-Lk-heat-kernel-bessel}），以及
+\(\det\bigl(L_k+\frac{4s}{(2k+1)^2}I\bigr)\) 对 \(\cosh(\sqrt{s})\) 的收敛（推论 \ref{cor:pom-Lk-continuum-ND-det-cosh}）。
+审计表如下：
+\input{sections/generated/tab_fence_green_kernel_spectral_limit_laws_audit}
+\end{remark}
+

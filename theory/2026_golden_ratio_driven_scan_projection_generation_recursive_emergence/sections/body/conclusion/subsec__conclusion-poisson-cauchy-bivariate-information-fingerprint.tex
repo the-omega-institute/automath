@@ -1,0 +1,414 @@
+\subsection{二维位置--尺度扰动下 Poisson--Cauchy 粗粒化的二阶信息指纹}\label{subsec:conclusion-poisson-cauchy-bivariate-information-fingerprint}
+本小节把 \S\ref{subsec:cdim-poisson-cauchy} 与 \S\ref{subsec:cdim-poisson-cauchy-bivariate-uplift} 的双参数粗粒化结果压缩为一组可直接调用的结论接口。
+核心对象是位置--尺度随机扰动 \((\Gamma,\Delta)\) 对 Poisson 核的混合：
+\[
+P_t(x):=\frac{1}{\pi}\frac{t}{x^2+t^2},\qquad
+h_t(x):=\EE\!\left[P_{t+\Delta}(x-\Gamma)\right],
+\]
+并以均值同参单核
+\[
+g_t(x):=P_{t+\bar\Delta}(x-\bar\Gamma),\qquad
+\bar\Gamma:=\EE\Gamma,\ \bar\Delta:=\EE\Delta
+\]
+作为比较基准。
+
+\begin{theorem}[二维位置--尺度扰动下的 KL 锐渐近常数]\label{thm:conclusion-poisson-bivariate-kl-sharp}
+设 \((\Gamma,\Delta)\) 满足：
+\begin{enumerate}
+  \item \(\EE|\Gamma|^4+\EE|\Delta|^4<\infty\)；
+  \item 存在 \(t_0>0\) 使 \(\PP(\Delta>-t_0)=1\)。
+\end{enumerate}
+定义
+\[
+A:=\mathrm{Var}(\Gamma)-\mathrm{Var}(\Delta),\qquad
+B:=\mathrm{Cov}(\Gamma,\Delta).
+\]
+则
+\[
+\lim_{t\to\infty}(t+\bar\Delta)^4\,D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{A^2}{8}+\frac{B^2}{2}.
+\]
+\end{theorem}
+\begin{proof}
+置 \(\widetilde\Delta:=\Delta+t_0\ge 0\)（a.s.），\(\tau:=t-t_0\)。
+则
+\[
+h_t(x)=\EE\!\left[P_{\tau+\widetilde\Delta}(x-\Gamma)\right],\qquad
+g_t(x)=P_{\tau+\overline{\widetilde\Delta}}(x-\bar\Gamma),
+\]
+且
+\(
+\overline{\widetilde\Delta}=\bar\Delta+t_0
+\)，并有
+\(
+\mathrm{Var}(\widetilde\Delta)=\mathrm{Var}(\Delta)
+\),
+\(
+\mathrm{Cov}(\Gamma,\widetilde\Delta)=\mathrm{Cov}(\Gamma,\Delta)
+\)。
+因此该模型满足命题 \ref{prop:cdim-poisson-bivariate-fdiv-fourth-order-constant}（取 \(f(u)=u\log u\)）的条件。
+由该命题直接得
+\[
+\lim_{\tau\to\infty}\tau^4 D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{A^2}{8}+\frac{B^2}{2}.
+\]
+又 \(\tau+\overline{\widetilde\Delta}=t+\bar\Delta\)，故等价写成
+\[
+\lim_{t\to\infty}(t+\bar\Delta)^4 D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{A^2}{8}+\frac{B^2}{2}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[任意平滑 \(f\)-散度的二阶谱指纹一致性]\label{cor:conclusion-poisson-bivariate-fdiv-sharp}
+沿用定理 \ref{thm:conclusion-poisson-bivariate-kl-sharp} 设定。
+设 \(f\in C^3\) 且
+\[
+f(1)=f'(1)=0,\qquad f''(1)>0.
+\]
+定义
+\[
+D_f(h_t\mid g_t):=\int_{\RR} g_t(x)\,f\!\left(\frac{h_t(x)}{g_t(x)}\right)\dd x.
+\]
+则
+\[
+\lim_{t\to\infty}(t+\bar\Delta)^4\,D_f(h_t\mid g_t)
+=f''(1)\left(\frac{A^2}{8}+\frac{B^2}{2}\right).
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:cdim-poisson-bivariate-fdiv-fourth-order-constant} 与上述平移规约 \((\Delta,\tau)\mapsto(\widetilde\Delta,\tau)\) 直接得到。
+\end{proof}
+
+\begin{theorem}[Poisson 半群下分数 Fisher 耗散率的二参数锐常数]\label{thm:conclusion-poisson-bivariate-fisher-sharp}
+沿用定理 \ref{thm:conclusion-poisson-bivariate-kl-sharp} 设定。
+若
+\[
+\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\mid g_t)=-I_1(h_t\mid g_t)
+\]
+按命题 \ref{prop:xi-poisson-relative-entropy-fisher-krein} 的口径定义，则
+\[
+\lim_{t\to\infty}(t+\bar\Delta)^5\,I_1(h_t\mid g_t)
+=\frac{A^2}{2}+2B^2.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-poisson-bivariate-kl-sharp}，
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\left(\frac{A^2}{8}+\frac{B^2}{2}\right)(t+\bar\Delta)^{-4}+o(t^{-4}).
+\]
+对 \(t\) 求导并用耗散恒等式
+\(
+I_1=-\frac{\dd}{\dd t}D_{\mathrm{KL}}
+\)
+得
+\[
+I_1(h_t\mid g_t)
+=4\left(\frac{A^2}{8}+\frac{B^2}{2}\right)(t+\bar\Delta)^{-5}+o(t^{-5}),
+\]
+即所求极限。证毕。
+\end{proof}
+
+\begin{corollary}[四阶标度消失的充要条件]\label{cor:conclusion-poisson-bivariate-fourth-order-vanishing}
+沿用定理 \ref{thm:conclusion-poisson-bivariate-kl-sharp} 的设定。
+则
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)=o\bigl((t+\bar\Delta)^{-4}\bigr)\quad(t\to\infty)
+\quad\Longleftrightarrow\quad
+A=0\ \text{且}\ B=0.
+\]
+特别地，若 \(\Delta\) 几乎处处为常数（\(\mathrm{Var}(\Delta)=0\)），则该条件退化为 \(\mathrm{Var}(\Gamma)=0\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-poisson-bivariate-kl-sharp}，
+\[
+\lim_{t\to\infty}(t+\bar\Delta)^4\,D_{\mathrm{KL}}(h_t\mid g_t)=\frac{A^2}{8}+\frac{B^2}{2}\ge 0.
+\]
+故 \(D_{\mathrm{KL}}(h_t\mid g_t)=o((t+\bar\Delta)^{-4})\) 当且仅当右端极限为零，即当且仅当 \(A=B=0\)。
+当 \(\mathrm{Var}(\Delta)=0\) 时 \(B=\mathrm{Cov}(\Gamma,\Delta)=0\) 且 \(A=\mathrm{Var}(\Gamma)\)，从而条件等价于 \(\mathrm{Var}(\Gamma)=0\)。证毕。
+\end{proof}
+
+\begin{theorem}[二参数全变差极限的显式积分律]\label{thm:conclusion-poisson-bivariate-tv-sharp}
+沿用定理 \ref{thm:conclusion-poisson-bivariate-kl-sharp} 设定。
+则
+\[
+\lim_{t\to\infty}(t+\bar\Delta)^2\,\|h_t-g_t\|_{L^1(\RR)}
+=\frac{1}{\pi}\int_{\RR}
+\frac{\left|A(3y^2-1)-2B\,y(3-y^2)\right|}{(1+y^2)^3}\,\dd y.
+\]
+并且两条坐标轴特例为
+\[
+\lim_{t\to\infty}(t+\bar\Delta)^2\|h_t-g_t\|_{L^1}
+=\frac{3\sqrt3}{4\pi}|A|
+\quad(B=0),
+\]
+\[
+\lim_{t\to\infty}(t+\bar\Delta)^2\|h_t-g_t\|_{L^1}
+=\frac{5}{2\pi}|B|
+\quad(A=0).
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:cdim-poisson-bivariate-second-order-normal-form}，
+\[
+h_t-g_t
+=A\,r_t+B\,q_t+o\!\left((t+\bar\Delta)^{-3}\right)\quad\text{于 }L^1.
+\]
+令 \(s:=t+\bar\Delta,\ u:=x-\bar\Gamma,\ y:=u/s\)。
+利用
+\[
+r_t(x)=\frac{1}{\pi s^3}\frac{3y^2-1}{(1+y^2)^3},\qquad
+q_t(x)=-\frac{1}{\pi s^3}\frac{2y(3-y^2)}{(1+y^2)^3},
+\]
+得到
+\[
+h_t(x)-g_t(x)
+=\frac{1}{\pi s^3}
+\frac{A(3y^2-1)-2B\,y(3-y^2)}{(1+y^2)^3}
++o(s^{-3}).
+\]
+乘 \(L^1\) 并作变量替换 \(x=\bar\Gamma+sy\) 即得主公式。
+\par
+当 \(B=0\) 时积分化为
+\[
+\frac{|A|}{\pi}\int_{\RR}\frac{|3y^2-1|}{(1+y^2)^3}\dd y
+=\frac{3\sqrt3}{4\pi}|A|.
+\]
+当 \(A=0\) 时积分化为
+\[
+\frac{2|B|}{\pi}\int_{\RR}\frac{|y(3-y^2)|}{(1+y^2)^3}\dd y
+=\frac{5}{2\pi}|B|.
+\]
+两积分均可由 \(y=\tan\theta\) 与分段积分直接得到。证毕。
+\end{proof}
+
+\begin{theorem}[点缺陷 Poisson 场的二阶熵指纹]\label{thm:conclusion-point-defect-poisson-entropy-fingerprint}
+令点缺陷 Poisson 场
+\[
+G_t(x):=\sum_j m_j\delta_j\,P_{t+\delta_j}(x-\gamma_j),
+\]
+并设
+\[
+M_0:=\sum_j m_j\delta_j\in(0,\infty),\qquad
+h_t(x):=\frac{1}{M_0}G_t(x).
+\]
+令离散测度
+\[
+\mu:=\frac{1}{M_0}\sum_j m_j\delta_j\,\delta_{(\gamma_j,\delta_j)},
+\]
+并记 \((\Gamma,\Delta)\sim\mu\)、\(\bar\Gamma=\EE_\mu\Gamma,\ \bar\Delta=\EE_\mu\Delta\)，
+\[
+A=\mathrm{Var}_\mu(\Gamma)-\mathrm{Var}_\mu(\Delta),\qquad
+B=\mathrm{Cov}_\mu(\Gamma,\Delta),
+\]
+\[
+g_t(x):=P_{t+\bar\Delta}(x-\bar\Gamma).
+\]
+则
+\[
+\lim_{t\to\infty}(t+\bar\Delta)^4 D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{A^2}{8}+\frac{B^2}{2}.
+\]
+\end{theorem}
+\begin{proof}
+由定义，
+\[
+h_t(x)=\int_{\RR^2}P_{t+\Delta}(x-\Gamma)\,\dd\mu(\Gamma,\Delta),
+\]
+恰为定理 \ref{thm:conclusion-poisson-bivariate-kl-sharp} 的混合模型。
+故结论直接成立。
+端点 Poisson--Busemann 对接见命题 \ref{prop:app-busemann-poisson-minus1}，其将 \(\delta_j\) 解释为端点权重深度坐标。证毕。
+\end{proof}
+
+\begin{theorem}[二阶信息投影的参数漂移与 KL 常数减半]\label{thm:conclusion-poisson-bivariate-information-projection-halving}
+沿用定理 \ref{thm:conclusion-poisson-bivariate-kl-sharp} 设定，记 Cauchy 位置--尺度族
+\[
+\mathcal C:=\{P_s(\cdot-m):\ s>0,\ m\in\RR\}.
+\]
+令 \(s=t+\bar\Delta\)。
+对充分大 \(t\)，在 \((\bar\Gamma,s)\) 的固定邻域内取局部最优参数
+\[
+(m_t,s_t)\in\arg\min_{(m,\sigma)}D_{\mathrm{KL}}\!\bigl(h_t\mid P_\sigma(\cdot-m)\bigr).
+\]
+则
+\[
+m_t=\bar\Gamma-\frac{B}{s}+o(s^{-1}),
+\qquad
+s_t=s+\frac{A}{2s}+o(s^{-1}),
+\]
+并且
+\[
+\lim_{t\to\infty}s^4
+\inf_{m\in\RR,\ \sigma>0}
+D_{\mathrm{KL}}\!\bigl(h_t\mid P_\sigma(\cdot-m)\bigr)
+=\frac{A^2}{16}+\frac{B^2}{4}.
+\]
+\end{theorem}
+\begin{proof}
+记 \(y=(x-\bar\Gamma)/s\)，\(G(y)=\frac{1}{\pi(1+y^2)}\)。
+由定理 \ref{thm:conclusion-poisson-bivariate-kl-sharp} 的二阶展开可写
+\[
+\frac{h_t}{g_t}-1
+=\frac{1}{s^2}\bigl(AU(y)-BV(y)\bigr)+o(s^{-2}),
+\]
+其中
+\[
+U(y)=\frac{3y^2-1}{(1+y^2)^2},\qquad
+V(y)=\frac{2y(3-y^2)}{(1+y^2)^2}.
+\]
+令参数重标定
+\[
+m=\bar\Gamma+\frac{\alpha}{s},\qquad
+\sigma=s+\frac{\beta}{s}.
+\]
+一阶参数展开给出
+\[
+\frac{P_\sigma(\cdot-m)}{g_t}
+=1+\frac{1}{s^2}\bigl(\alpha a(y)+\beta w(y)\bigr)+O(s^{-4}),
+\]
+\[
+a(y)=\frac{2y}{1+y^2},\qquad
+w(y)=\frac{y^2-1}{1+y^2}.
+\]
+故
+\[
+\frac{h_t}{P_\sigma(\cdot-m)}-1
+=\frac{1}{s^2}\bigl(AU-BV-\alpha a-\beta w\bigr)+o(s^{-2})
+\quad\text{于 }L^2(G\dd y).
+\]
+由 \((1+u)\log(1+u)=\frac12u^2+o(u^2)\) 得
+\[
+s^4D_{\mathrm{KL}}\!\bigl(h_t\mid P_\sigma(\cdot-m)\bigr)
+=\frac12\,\mathcal Q(\alpha,\beta)+o(1),
+\]
+其中
+\[
+\mathcal Q(\alpha,\beta)
+=\int_{\RR}G(y)\,\bigl(AU-BV-\alpha a-\beta w\bigr)^2\dd y.
+\]
+所需内积常数为
+\[
+\int GU^2=\frac14,\ \int GV^2=1,\ \int Ga^2=\frac12,\ \int Gw^2=\frac12,
+\]
+\[
+\int GVa=\frac12,\ \int GUw=\frac14,\qquad
+\int GUV=\int GUa=\int GVw=\int Gaw=0.
+\]
+因此
+\[
+\mathcal Q(\alpha,\beta)
+=\frac{A^2}{4}+B^2+\frac{\alpha^2}{2}+\frac{\beta^2}{2}
++B\alpha-\frac{A\beta}{2}.
+\]
+该二次型严格凸，极小点唯一：
+\[
+\alpha^\ast=-B,\qquad \beta^\ast=\frac{A}{2}.
+\]
+从而
+\[
+m_t=\bar\Gamma+\frac{\alpha^\ast}{s}+o(s^{-1})
+=\bar\Gamma-\frac{B}{s}+o(s^{-1}),
+\]
+\[
+s_t=s+\frac{\beta^\ast}{s}+o(s^{-1})
+=s+\frac{A}{2s}+o(s^{-1}).
+\]
+并且
+\[
+\min_{\alpha,\beta}\mathcal Q(\alpha,\beta)
+=\frac{A^2}{8}+\frac{B^2}{2}.
+\]
+另一方面，若 \(|m-\bar\Gamma|+|\sigma-s|\gg s^{-1}\)，则由 Cauchy 族的一阶参数敏感度可得
+\(
+\|h_t-P_\sigma(\cdot-m)\|_{L^1}\gtrsim s^{-1}
+\)，故 Pinsker 不等式给出
+\(
+D_{\mathrm{KL}}(h_t\mid P_\sigma(\cdot-m))\gtrsim s^{-2}
+\)；
+因此 \(s^4\)-标度下的最优值必由上述 \(s^{-1}\) 邻域内参数实现。
+故全局最小 KL 常数等于该局部二次型极小值的一半：
+\[
+\lim_{t\to\infty}s^4\inf_{m,\sigma}D_{\mathrm{KL}}\!\bigl(h_t\mid P_\sigma(\cdot-m)\bigr)
+=\frac12\left(\frac{A^2}{8}+\frac{B^2}{2}\right)
+=\frac{A^2}{16}+\frac{B^2}{4}.
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[调和性诱导的二阶不变量：等方差独立噪声不可见]\label{prop:conclusion-poisson-bivariate-isotropic-noise-invariance}
+沿用定理 \ref{thm:conclusion-poisson-bivariate-kl-sharp} 设定。
+设 \((Z_1,Z_2)\) 与 \((\Gamma,\Delta)\) 独立，且
+\[
+\EE Z_1=\EE Z_2=0,\qquad
+\mathrm{Var}(Z_1)=\mathrm{Var}(Z_2),\qquad
+\mathrm{Cov}(Z_1,Z_2)=0.
+\]
+令
+\[
+(\Gamma',\Delta')=(\Gamma+Z_1,\Delta+Z_2),
+\]
+并据此构造 \(h_t',g_t'\) 与对应常数 \(A',B'\)。
+则
+\[
+A'=A,\qquad B'=B,
+\]
+进而
+\[
+\lim_{t\to\infty}(t+\bar\Delta')^4D_{\mathrm{KL}}(h_t'\mid g_t')
+=\lim_{t\to\infty}(t+\bar\Delta)^4D_{\mathrm{KL}}(h_t\mid g_t).
+\]
+\end{proposition}
+\begin{proof}
+由独立与零均值，
+\[
+\mathrm{Var}(\Gamma')=\mathrm{Var}(\Gamma)+\mathrm{Var}(Z_1),\qquad
+\mathrm{Var}(\Delta')=\mathrm{Var}(\Delta)+\mathrm{Var}(Z_2),
+\]
+\[
+\mathrm{Cov}(\Gamma',\Delta')=\mathrm{Cov}(\Gamma,\Delta)+\mathrm{Cov}(Z_1,Z_2).
+\]
+代入假设即得 \(A'=A,\ B'=B\)。
+再由定理 \ref{thm:conclusion-poisson-bivariate-kl-sharp} 对 \((\Gamma',\Delta')\) 与 \((\Gamma,\Delta)\) 分别应用即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[二阶信息指纹的完备性：同 \((A,B)\) 的长时 KL 不可区分]\label{prop:conclusion-poisson-bivariate-nohair}
+设 \(\mu_1,\mu_2\) 为 \(\RR\times(0,\infty)\) 上概率测度，并令 \((\Gamma_i,\Delta_i)\sim\mu_i\)（\(i=1,2\)）。
+假设两者具有相同的一阶矩
+\[
+\EE\Gamma_1=\EE\Gamma_2=:\bar\Gamma,\qquad
+\EE\Delta_1=\EE\Delta_2=:\bar\Delta,
+\]
+并分别构造
+\[
+h_t^{(i)}(x):=\EE\!\left[P_{t+\Delta_i}(x-\Gamma_i)\right],
+\qquad
+g_t(x):=P_{t+\bar\Delta}(x-\bar\Gamma).
+\]
+若两者对应的二阶不变量满足
+\[
+A_i=\mathrm{Var}(\Gamma_i)-\mathrm{Var}(\Delta_i),\qquad
+B_i=\mathrm{Cov}(\Gamma_i,\Delta_i),
+\qquad
+(A_1,B_1)=(A_2,B_2),
+\]
+则
+\[
+D_{\mathrm{KL}}\!\bigl(h_t^{(1)}\mid g_t\bigr)-D_{\mathrm{KL}}\!\bigl(h_t^{(2)}\mid g_t\bigr)
+=o\bigl((t+\bar\Delta)^{-4}\bigr)\quad(t\to\infty).
+\]
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:conclusion-poisson-bivariate-kl-sharp} 分别作用于 \(\mu_1,\mu_2\) 得
+\[
+D_{\mathrm{KL}}\!\bigl(h_t^{(i)}\mid g_t\bigr)
+=\left(\frac{A_i^2}{8}+\frac{B_i^2}{2}\right)(t+\bar\Delta)^{-4}+o\bigl((t+\bar\Delta)^{-4}\bigr).
+\]
+当 \((A_1,B_1)=(A_2,B_2)\) 时四阶主项相消，差即为 \(o((t+\bar\Delta)^{-4})\)。证毕。
+\end{proof}
+
+到这里为止，二阶长时指纹已经被压缩为 \((A,B)\) 这一对协方差差值坐标；继续沿同一条链条收束，则可见这些 KL、Fisher、TV、最优投影与参数漂移常数实际上都只依赖于协方差矩阵去掉标量部分后的 traceless quadrupole，并且该二维模空间还能被正的双原子模型完全充满，从而把任意有限点缺陷 Poisson 场在二阶信息层面压入一个严格的两点规范形。
+
+\input{thm__conclusion-poisson-cauchy-traceless-quadrupole-twoatomic}
+
+\input{para__conclusion-block-constraint-information-collapse}

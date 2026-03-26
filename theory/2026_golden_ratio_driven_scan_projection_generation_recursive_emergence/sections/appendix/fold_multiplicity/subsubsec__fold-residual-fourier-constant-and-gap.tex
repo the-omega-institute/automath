@@ -1,0 +1,204 @@
+% Residue Fourier constant and spectral-gap upper bounds.
+
+\subsubsection{残差频率的临界共振常数与推前链的谱隙上界}\label{subsubsec:fold-residual-fourier-constant-and-gap}
+本段在附录 \ref{app:fold-multiplicity} 的模环口径上，把残差分布的 Fibonacci 共振频率常数与一类自然推前 Markov 链的谱隙上界组织为可直接调用的闭式陈述。
+
+\begin{proposition}[临界共振幅度的指数收敛率]\label{prop:fold-critical-resonance-constant-exp-rate}
+沿用定理 \ref{thm:fold-critical-resonance-constant} 的记号。
+则存在常数 \(K>0\) 使对一切 \(m\ge 1\) 有
+\[
+\Bigl|a_m(F_m)-C_\varphi\Bigr|\le K\,\varphi^{-m},
+\qquad
+\Bigl|a_m(F_{m+1})-C_\varphi\Bigr|\le K\,\varphi^{-m}.
+\]
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:fold-critical-resonance-constant} 的精确表示
+\(
+a_m(F_m)=\prod_{j=1}^m\bigl|\cos\bigl(\pi F_{m+1-j}/F_{m+2}\bigr)\bigr|
+\)，
+并注意对每个固定 \(j\) 有
+\(
+F_{m+1-j}/F_{m+2}=\varphi^{-(j+1)}+O(\varphi^{-m})
+\)（Binet 渐近）。
+对有限首段 \(1\le j\le J\)，由 \(\cos\) 的 Lipschitz 性得到乘积因子逐项误差为 \(O(\varphi^{-m})\)，从而首段乘积误差为 \(O(\varphi^{-m})\)。
+对尾段 \(j>J\)，由 \(|\log|\cos(\pi x)||\ll x^2\)（\(|x|\) 小）与 \(\sum_{j>J}\varphi^{-2(j+1)}\ll \varphi^{-2J}\) 控制尾积对极限的偏差。
+取 \(J\asymp m\) 并合并两段得到指数界。
+对 \(a_m(F_{m+1})\) 由 \(F_{m+1}\equiv -F_m\ (\mathrm{mod}\ F_{m+2})\) 与 \(\cos\) 偶性同理。
+证毕。
+\end{proof}
+
+\begin{proposition}[成对反向步长核上的角色 Dirichlet 形式剥离恒等式]\label{prop:fold-paired-step-dirichlet-character-identity}
+令 \(M\ge 2\) 为整数，考虑状态空间 \(\ZZ/(M\ZZ)\) 上的 Markov 核 \(P\)。
+设存在步长集合 \(\{s_1,\dots,s_m\}\subset\ZZ/(M\ZZ)\) 与函数 \(p_k:\ZZ/(M\ZZ)\to[0,1]\) 使对任意 \(r\in\ZZ/(M\ZZ)\) 有
+\[
+P(r,r+s_k)=\frac{1}{m}\bigl(1-p_k(r)\bigr),\qquad
+P(r,r-s_k)=\frac{1}{m}p_k(r),
+\qquad 1\le k\le m,
+\]
+且其余跃迁概率为 \(0\)。
+令 \(\pi\) 为任一平稳分布，并以
+\[
+\mathcal E_P(f,f):=\frac12\sum_{r}\pi(r)\sum_{y}P(r,y)\,|f(r)-f(y)|^2
+\]
+定义 Dirichlet 形式。
+对任意频率 \(a\in\ZZ/(M\ZZ)\) 定义加性角色 \(\psi_a(r):=e^{2\pi i ar/M}\)。
+则有恒等式
+\[
+\mathcal E_P(\psi_a,\psi_a)
+=\frac{1}{m}\sum_{k=1}^m\Bigl(1-\cos\!\frac{2\pi a s_k}{M}\Bigr)
+=\frac{2}{m}\sum_{k=1}^m\sin^2\!\Bigl(\frac{\pi a s_k}{M}\Bigr),
+\]
+并且右端与全部 \(p_k(\cdot)\) 及 \(\pi\) 无关。
+从而对中心化函数 \(\widetilde\psi_a:=\psi_a-\mathbb E_\pi[\psi_a]\) 有
+\[
+\frac{\mathcal E_P(\widetilde\psi_a,\widetilde\psi_a)}{\mathrm{Var}_\pi(\widetilde\psi_a)}
+=\frac{\mathcal E_P(\psi_a,\psi_a)}{\mathrm{Var}_\pi(\psi_a)},
+\qquad
+\mathrm{Var}_\pi(\psi_a)=1-\bigl|\mathbb E_\pi[\psi_a]\bigr|^2.
+\]
+并且谱隙满足 Rayleigh 上界
+\[
+\mathrm{gap}(P)\ \le\
+\frac{ \frac{1}{m}\sum_{k=1}^m \bigl(1-\cos\frac{2\pi a s_k}{M}\bigr)}{1-\big|\mathbb E_\pi[\psi_a]\big|^2},
+\qquad a\not\equiv 0\ (\mathrm{mod}\ M).
+\]
+\end{proposition}
+
+\begin{proof}
+按定义
+\[
+|\psi_a(r)-\psi_a(r\pm s)|^2=\bigl|1-e^{\pm 2\pi i as/M}\bigr|^2=2-2\cos(2\pi as/M),
+\]
+不依赖于 \(r\) 且与 \(\pm\) 无关。
+因此对固定 \(k\) 有
+\[
+\sum_{y}P(r,y)\,|\psi_a(r)-\psi_a(y)|^2
+=\Bigl(P(r,r+s_k)+P(r,r-s_k)\Bigr)\Bigl(2-2\cos\frac{2\pi a s_k}{M}\Bigr)
+=\frac{1}{m}\Bigl(2-2\cos\frac{2\pi a s_k}{M}\Bigr).
+\]
+将其代回 Dirichlet 形式并用 \(\sum_r\pi(r)=1\) 即得能量闭式与其独立性。
+中心化恒等式由 \(\mathcal E_P\) 对常数函数为零（故对加常数不变）立得。
+谱隙上界由变分定义
+\(
+\mathrm{gap}(P)=\inf_{f\not\equiv\mathrm{const}}\mathcal E_P(f,f)/\mathrm{Var}_\pi(f)
+\)
+对测试函数 \(f=\widetilde\psi_a\) 取上界得到。
+证毕。
+\end{proof}
+
+\paragraph{残差推前链与共振频率的 \texorpdfstring{$\Theta(1/m)$}{Theta(1/m)} 谱隙上界}
+令 \(\Omega_m=\{0,1\}^m\)，并沿用附录 \ref{app:fold-multiplicity} 中的残差映射
+\(
+r(\omega)\equiv \sum_{k=1}^m \omega_kF_{k+1}\ (\mathrm{mod}\ F_{m+2})
+\)。
+在 \(\Omega_m\) 上取“单比特翻转”随机游走：每一步等概率选择一个坐标并翻转该比特。
+将该链经 \(r\) 推前得到模环 \(\ZZ/(F_{m+2}\ZZ)\) 上的 Markov 核 \(P_m\)。
+其平稳分布为 \(\mu_m(r)=d_m(r)/2^m\)（定义 \ref{thm:fold-spectrum-factorization}）。
+
+\begin{corollary}[Fibonacci 残差推前链的谱隙上界常数]\label{cor:fold-residual-pushforward-gap-upper-bound}
+在上述推前链 \(P_m\) 上，取 \(M=F_{m+2}\)、步长 \(s_k=F_{k+1}\)（\(1\le k\le m\)）与频率 \(a=F_{m+1}\)。
+定义常数
+\[
+\mathsf D_\varphi:=\sum_{n=2}^{\infty}\Bigl(1-\cos(2\pi\varphi^{-n})\Bigr),
+\qquad
+\kappa_\varphi:=\frac{\mathsf D_\varphi}{1-C_\varphi^2}.
+\]
+则存在常数 \(K'>0\) 使得
+\[
+\mathrm{gap}(P_m)\le \frac{\kappa_\varphi}{m}+K'\frac{\varphi^{-m}}{m}.
+\]
+并且数值常数可由脚本 \texttt{scripts/exp\_fold\_residual\_gap\_constants\_phi.py} 复现：
+\input{sections/generated/eq_fold_residual_gap_constants_phi}
+\end{corollary}
+
+\begin{proof}
+由推前链的构造，若第 \(k\) 位被翻转，则残差改变量为 \(\pm F_{k+1}\)；因此 \(P_m\) 满足命题 \ref{prop:fold-paired-step-dirichlet-character-identity} 的成对反向步长形式，且平稳分布为 \(\pi=\mu_m\)。
+由引理 \ref{lem:fold-resonance-docagne} 的同余压缩，可把
+\(
+F_{m+1}F_{k+1}/F_{m+2}
+\)
+化为整数加上 \(\pm F_{m+1-k}/F_{m+2}\)，从而
+\[
+\mathcal E_{P_m}(\psi_{F_{m+1}},\psi_{F_{m+1}})
+=\frac{1}{m}\sum_{k=1}^m\Bigl(1-\cos\!\Bigl(2\pi\frac{F_{m+1-k}}{F_{m+2}}\Bigr)\Bigr)
+=\frac{1}{m}\sum_{j=1}^m\Bigl(1-\cos\!\Bigl(2\pi\frac{F_{j}}{F_{m+2}}\Bigr)\Bigr).
+\]
+令 \(j=m-r\)，并用 \(F_{m-r}/F_{m+2}=\varphi^{-r-2}+O(\varphi^{-m})\) 与 \(1-\cos x\ll x^2\) 的可和尾控制，可得
+\[
+\sum_{j=1}^m\Bigl(1-\cos\!\Bigl(2\pi\frac{F_{j}}{F_{m+2}}\Bigr)\Bigr)
+=\mathsf D_\varphi+O(\varphi^{-m}),
+\]
+从而 \(\mathcal E_{P_m}(\psi_{F_{m+1}},\psi_{F_{m+1}})=\mathsf D_\varphi/m+O(\varphi^{-m}/m)\)。
+另一方面，
+\(
+\mathbb E_{\mu_m}[\psi_{F_{m+1}}]=\widehat\mu_m(F_{m+1})
+\)
+且由定义 \ref{def:fold-normalized-amplitude} 与定理 \ref{thm:fold-critical-resonance-constant}（并用命题 \ref{prop:fold-critical-resonance-constant-exp-rate} 的误差估计）有
+\[
+1-\bigl|\mathbb E_{\mu_m}[\psi_{F_{m+1}}]\bigr|^2
+=1-a_m(F_{m+1})^2
+=1-C_\varphi^2+O(\varphi^{-m}).
+\]
+将上述两式代入命题 \ref{prop:fold-paired-step-dirichlet-character-identity} 的 Rayleigh 上界并吸收误差即得所示。
+证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$\varphi$}{phi}-缩放余弦积的整函数化、重整化方程与零点结构]\label{prop:fold-cosine-product-entire-renormalization-zeros}
+定义
+\[
+\mathcal P_\varphi(z):=\prod_{n=2}^{\infty}\cos\!\bigl(z\,\varphi^{-n}\bigr),\qquad z\in\CC.
+\]
+则：
+\begin{enumerate}
+  \item \(\mathcal P_\varphi\) 在 \(\CC\) 上定义整函数，且上述乘积在任意紧集上一致收敛；
+  \item 成立重整化方程
+  \[
+  \mathcal P_\varphi(z)=\cos(z\varphi^{-2})\,\mathcal P_\varphi(z/\varphi);
+  \]
+  \item 零点集合为
+  \[
+  Z(\mathcal P_\varphi)=\Bigl\{\bigl(\tfrac{\pi}{2}+\pi k\bigr)\varphi^{n}:\ k\in\ZZ,\ n\ge 2\Bigr\},
+  \]
+  且所有零点均为单零点；
+  \item 常数 \(C_\varphi\) 满足 \(C_\varphi=\mathcal P_\varphi(\pi)\)。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+对任意紧集 \(K\subset\CC\)，当 \(n\to\infty\) 时有
+\(
+\cos(z\varphi^{-n})=1+O_K(\varphi^{-2n})
+\)（一致）。
+由于 \(\sum_{n\ge 2}\varphi^{-2n}<\infty\)，由 Weierstrass 的一致收敛判别可得乘积在 \(K\) 上一致收敛且定义整函数。
+重整化方程由抽出首因子并作指标平移 \(n\mapsto n+1\) 直接得到。
+零点描述来自因子 \(\cos(z\varphi^{-n})\) 的零点集合并取并。
+若存在不同 \((n,k)\neq(n',k')\) 产生同一零点，则
+\(
+\varphi^{n-n'}=(\frac{\pi}{2}+\pi k')/(\frac{\pi}{2}+\pi k)\in\QQ
+\)，与 \(\varphi\) 的无理性矛盾，故无重合零点且均为单零点。
+最后，由定义
+\(
+\mathcal P_\varphi(\pi)=\prod_{n\ge 2}\cos(\pi\varphi^{-n})
+\)，
+而定理 \ref{thm:fold-critical-resonance-constant} 中该乘积因子均为正，故与 \(C_\varphi=\prod_{n\ge 2}|\cos(\pi\varphi^{-n})|\) 一致。
+证毕。
+\end{proof}
+
+\begin{conjecture}[残差推前链谱隙的精确渐近与慢模态唯一性]\label{conj:fold-residual-gap-asymptotic-unique-slowmode}
+在推前链 \(P_m\) 与平稳分布 \(\mu_m\) 的设定下，记
+\(
+\psi_m(r):=e^{2\pi i F_{m+1}r/F_{m+2}}
+\)
+并中心化为 \(\widetilde\psi_m:=\psi_m-\mathbb E_{\mu_m}[\psi_m]\)。
+猜想存在极限常数 \(\kappa_\varphi>0\) 使
+\[
+\mathrm{gap}(P_m)=\frac{\kappa_\varphi}{m}+o\!\left(\frac{1}{m}\right),
+\qquad
+\kappa_\varphi=\frac{\mathsf D_\varphi}{1-C_\varphi^2},
+\]
+并且除复共轭与符号对称外，\(\widetilde\psi_m\) 给出 Rayleigh 商的渐近极小化方向，从而在谱隙尺度上刻画唯一慢模态。
+\end{conjecture}
+
+\endinput

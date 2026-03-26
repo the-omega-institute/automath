@@ -1,0 +1,592 @@
+\paragraph{低预算线性相、二点实验塌缩、局部化周期谱与形式线性化的闭合后果}
+在审计偶窗的最小退化 Fibonacci 律、末位两层塌缩、局部化 solenoid 的自覆盖分类、素数寄存器的幂等估值算术化以及 fold-gauge 缺陷的纯奇次重整化已经建立之后，还可把这些链条继续压缩为下列七条结果。它们分别刻画审计偶窗中的低预算严格线性段及其首个偏离阈值、bin-fold 输出实验的 Le Cam 二点塌缩、一般局部化有理乘法自同态的固定点与 Artin--Mazur \(\zeta\) 函数、相应周期点几何的指数率、素数寄存器幂等元的精确闭式计数，以及 fold-gauge 缺陷的形式 Koenigs 线性化。
+
+\begin{theorem}[bin-fold 审计偶数窗上的低预算严格线性律]\label{thm:xi-time-part69-audited-even-pure-pigeonhole-linear-phase}
+对审计偶数窗
+\[
+m\in\{6,8,10,12\},
+\]
+定义
+\[
+d_{\min}(m):=\min_{w\in X_m}d_m^{\mathrm{bin}}(w),
+\qquad
+C_m^{\mathrm{bin}}(B):=\sum_{w\in X_m}\min\bigl(d_m^{\mathrm{bin}}(w),2^B\bigr),
+\]
+\[
+\mathrm{Succ}_m^{\mathrm{bin}}(B):=\frac{C_m^{\mathrm{bin}}(B)}{2^m}.
+\]
+若整数预算 \(B\ge 0\) 满足
+\[
+2^B\le d_{\min}(m)=F_{m/2},
+\]
+则有精确公式
+\[
+C_m^{\mathrm{bin}}(B)=2^B\,F_{m+2},
+\qquad
+\mathrm{Succ}_m^{\mathrm{bin}}(B)=2^{B-m}F_{m+2}.
+\]
+因此，在最小退化阈值之前，bin-fold 的每增加一比特辅助信息都会使可逆微态总数严格翻倍，且不出现任何次级修正。
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:fold-bin-min-degeneracy-fib-audited} 已证明：当
+\[
+m\in\{6,8,10,12\}
+\]
+时，
+\[
+d_{\min}(m)=F_{m/2}.
+\]
+若 \(2^B\le F_{m/2}\)，则对所有 \(w\in X_m\) 都有
+\[
+2^B\le d_{\min}(m)\le d_m^{\mathrm{bin}}(w),
+\]
+从而
+\[
+\min\bigl(d_m^{\mathrm{bin}}(w),2^B\bigr)=2^B.
+\]
+因此
+\[
+C_m^{\mathrm{bin}}(B)
+=
+\sum_{w\in X_m}2^B
+=
+2^B|X_m|.
+\]
+另一方面，由稳定词计数律
+\[
+|X_m|=F_{m+2},
+\]
+即得
+\[
+C_m^{\mathrm{bin}}(B)=2^BF_{m+2}.
+\]
+再除以 \(2^m\)，得到
+\[
+\mathrm{Succ}_m^{\mathrm{bin}}(B)=2^{B-m}F_{m+2}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[bin-fold 容量曲线的首个折点恰位于 \texorpdfstring{$F_{m/2}$}{F(m/2)}]\label{cor:xi-time-part69-binfold-first-kink}
+在定理 \ref{thm:xi-time-part69-audited-even-pure-pigeonhole-linear-phase} 的设定下，容量曲线
+\[
+B\longmapsto C_m^{\mathrm{bin}}(B)
+\]
+的首个偏离线性区间发生在最小整数
+\[
+B_{\mathrm{kink}}(m):=\min\{B\in\NN:\ 2^B>F_{m/2}\}
+=
+\bigl\lfloor \log_2 F_{m/2}\bigr\rfloor+1.
+\]
+更准确地，
+\[
+C_m^{\mathrm{bin}}(B)=2^BF_{m+2}
+\quad\Longleftrightarrow\quad
+2^B\le F_{m/2},
+\]
+而一旦 \(2^B>F_{m/2}\)，便有严格不等式
+\[
+C_m^{\mathrm{bin}}(B)<2^BF_{m+2}.
+\]
+\end{corollary}
+\begin{proof}
+“若”方向即定理 \ref{thm:xi-time-part69-audited-even-pure-pigeonhole-linear-phase}。反之，由 \(X_m\) 的有限性与
+\[
+d_{\min}(m)=F_{m/2}
+\]
+可取 \(w_0\in X_m\) 使
+\[
+d_m^{\mathrm{bin}}(w_0)=F_{m/2}.
+\]
+若 \(2^B>F_{m/2}\)，则
+\[
+\min\bigl(d_m^{\mathrm{bin}}(w_0),2^B\bigr)=F_{m/2}<2^B,
+\]
+而其余各项至多为 \(2^B\)。于是
+\[
+C_m^{\mathrm{bin}}(B)<2^B|X_m|=2^BF_{m+2}.
+\]
+故首个折点恰由阈值 \(F_{m/2}\) 决定。证毕。
+\end{proof}
+
+\begin{theorem}[bin-fold 统计实验的 Le Cam 二点塌缩]\label{thm:xi-time-part69-binfold-lecam-two-point-collapse}
+设
+\[
+\mu_m(w):=\frac{d_m^{\mathrm{bin}}(w)}{2^m},
+\qquad
+u_m(w):=\frac{1}{|X_m|},
+\qquad
+\ell_m(w):=w_m\in\{0,1\},
+\]
+并定义两块
+\[
+A_0:=\{w\in X_m:\ w_m=0\},
+\qquad
+A_1:=\{w\in X_m:\ w_m=1\}.
+\]
+令
+\[
+T_m:=\ell_m:X_m\to\{0,1\},
+\qquad
+K_m(i,\cdot):=\mathrm{Unif}(A_i)\qquad(i=0,1).
+\]
+再定义极限二点实验
+\[
+Q_\infty:=\left(\frac1\varphi,\frac1{\varphi^2}\right),
+\qquad
+P_\infty:=\left(\frac{\varphi}{\sqrt5},\frac{1}{\varphi\sqrt5}\right),
+\]
+其中坐标顺序对应 \((0,1)\)。则原始两点统计实验
+\[
+\mathcal E_m:=\{u_m,\mu_m\}\quad\text{定义在 }X_m
+\]
+与二元实验
+\[
+\mathcal E_\infty:=\{Q_\infty,P_\infty\}\quad\text{定义在 }\{0,1\}
+\]
+在 Le Cam 意义下渐近等价。更具体地，
+\[
+D_{\mathrm{TV}}\!\bigl(T_{m\#}u_m,Q_\infty\bigr)=O(\varphi^{-2m}),
+\qquad
+D_{\mathrm{TV}}\!\bigl(T_{m\#}\mu_m,P_\infty\bigr)=O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr),
+\]
+并且
+\[
+D_{\mathrm{TV}}\!\bigl(u_m,K_{m\#}Q_\infty\bigr)=O(\varphi^{-2m}),
+\qquad
+D_{\mathrm{TV}}\!\bigl(\mu_m,K_{m\#}P_\infty\bigr)=O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr).
+\]
+因此
+\[
+\Delta(\mathcal E_m,\mathcal E_\infty)\xrightarrow[m\to\infty]{}0.
+\]
+\end{theorem}
+\begin{proof}
+先看均匀基线 \(u_m\)。由
+\[
+|A_0|=F_{m+1},
+\qquad
+|A_1|=F_m,
+\qquad
+|X_m|=F_{m+2},
+\]
+可得
+\[
+T_{m\#}u_m=
+\left(\frac{F_{m+1}}{F_{m+2}},\frac{F_m}{F_{m+2}}\right)
+\]
+且由 Binet 公式比较相邻 Fibonacci 比值可知，其两坐标分别与 \(Q_\infty\) 的对应坐标相差 \(O(\varphi^{-2m})\)。特别地，
+\[
+D_{\mathrm{TV}}\!\bigl(T_{m\#}u_m,Q_\infty\bigr)=O(\varphi^{-2m}).
+\]
+另一方面，\(u_m\) 在每个块 \(A_i\) 上本来就是严格均匀分布，因此
+\[
+u_m=K_{m\#}(T_{m\#}u_m).
+\]
+由 Markov 核的收缩性，
+\[
+D_{\mathrm{TV}}\!\bigl(u_m,K_{m\#}Q_\infty\bigr)
+\le
+D_{\mathrm{TV}}\!\bigl(T_{m\#}u_m,Q_\infty\bigr)
+=
+O(\varphi^{-2m}).
+\]
+
+再看 \(\mu_m\)。定理 \ref{thm:xi-fold-lastbit-asymptotic-sufficiency} 已给出
+\[
+D_{\mathrm{TV}}\!\bigl(\mu_m,K_{m\#}(T_{m\#}\mu_m)\bigr)
+=
+O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr).
+\]
+另一方面，定理 \ref{thm:xi-fold-lastbit-two-layer-collapse} 证明 \(\mu_m\) 与末位两层模型 \(\nu_m(w)=\varphi^{-m-w_m}\) 在全变差意义下相差
+\[
+O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr).
+\]
+而由
+\[
+\nu_m(A_0)=\varphi^{-m}F_{m+1}=\frac{\varphi}{\sqrt5}+O(\varphi^{-2m}),
+\qquad
+\nu_m(A_1)=\varphi^{-m-1}F_m=\frac{1}{\varphi\sqrt5}+O(\varphi^{-2m}),
+\]
+再与
+\[
+D_{\mathrm{TV}}(\mu_m,\nu_m)=O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr)
+\]
+合并，可知
+\[
+D_{\mathrm{TV}}\!\bigl(T_{m\#}\mu_m,P_\infty\bigr)
+=
+O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr).
+\]
+于是再用 Markov 核收缩性，
+\[
+\begin{aligned}
+D_{\mathrm{TV}}\!\bigl(\mu_m,K_{m\#}P_\infty\bigr)
+&\le
+D_{\mathrm{TV}}\!\bigl(\mu_m,K_{m\#}(T_{m\#}\mu_m)\bigr)
++
+D_{\mathrm{TV}}\!\bigl(K_{m\#}(T_{m\#}\mu_m),K_{m\#}P_\infty\bigr)\\
+&\le
+O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr)
++
+D_{\mathrm{TV}}\!\bigl(T_{m\#}\mu_m,P_\infty\bigr)\\
+&=
+O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr).
+\end{aligned}
+\]
+
+最后，对参数集 \(\{0,1\}\) 上的两点实验，前向缺陷由核 \(T_m\) 控制，后向缺陷由核 \(K_m\) 控制，因此 Le Cam 距离满足
+\[
+\Delta(\mathcal E_m,\mathcal E_\infty)
+\le
+\max\Bigl\{
+D_{\mathrm{TV}}(T_{m\#}u_m,Q_\infty),
+D_{\mathrm{TV}}(T_{m\#}\mu_m,P_\infty),
+D_{\mathrm{TV}}(u_m,K_{m\#}Q_\infty),
+D_{\mathrm{TV}}(\mu_m,K_{m\#}P_\infty)
+\Bigr\},
+\]
+右端趋于 \(0\)，故结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[局部化 solenoid 上有理乘法自同态的固定点与 Artin--Mazur \texorpdfstring{$\zeta$}{zeta} 函数]\label{thm:xi-time-part69-localized-rational-endomorphism-fixedpoints-zeta}
+设 \(S\subset\mathbb P\) 为有限素数集，并记
+\[
+G_S:=\ZZ[S^{-1}],
+\qquad
+\Sigma_S:=\widehat{G_S}.
+\]
+取有理数
+\[
+r=\frac{a}{b}\in G_S,
+\qquad
+\gcd(a,b)=1,
+\]
+其中 \(b\) 的全部素因子都属于 \(S\)，并设 \(f_r:\Sigma_S\to\Sigma_S\) 为乘法映射
+\[
+x\longmapsto rx\qquad (x\in G_S)
+\]
+的 Pontryagin 对偶连续自同态。若 \(|a|\neq |b|\)，则对每个 \(n\ge 1\)，都有
+\[
+\#\mathrm{Fix}(f_r^n)=|a^n-b^n|_{S^\perp},
+\]
+其中对任意非零整数 \(N\)，记
+\[
+|N|_{S^\perp}:=(|N|)_{S^\perp}
+\]
+为其 \(S\)-自由部分。并且 Artin--Mazur 动力学 \(\zeta\) 函数满足
+\[
+\zeta_{f_r}(z)
+:=
+\exp\!\left(
+\sum_{n\ge 1}\frac{\#\mathrm{Fix}(f_r^n)}{n}z^n
+\right)
+=
+\exp\!\left(
+\sum_{n\ge 1}\frac{|a^n-b^n|_{S^\perp}}{n}z^n
+\right).
+\]
+换言之，局部化 solenoid 上的周期点几何只感知 \(a^n-b^n\) 的 \(S\)-外部。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-localized-solenoid-self-cover-degree-classification}，任意连续自同态都唯一对应于某个 \(r\in G_S\)，其对偶离散同态为
+\[
+x\longmapsto rx
+\qquad (x\in G_S).
+\]
+因此对每个 \(n\ge 1\)，
+\[
+f_r^n
+\]
+在对偶离散侧对应于乘法
+\[
+x\longmapsto r^n x.
+\]
+按定理 \ref{thm:xi-localized-solenoid-fixedpoints-artin-mazur-series} 的同样论证，
+\[
+\mathrm{Fix}(f_r^n)\cong \widehat{G_S/(r^n-1)G_S}.
+\]
+
+现把
+\[
+r^n-1=\frac{a^n-b^n}{b^n}
+\]
+代入。由于 \(b\) 的全部素因子都属于 \(S\)，故 \(b^n\in G_S^\times\) 是单位，从而
+\[
+(r^n-1)G_S=(a^n-b^n)G_S.
+\]
+又因 \(|a|\neq |b|\)，故 \(a^n-b^n\neq 0\)。于是由定理 \ref{thm:xi-localized-quotient-exact-sfree-externalization}，
+\[
+G_S/(a^n-b^n)G_S
+\cong
+\ZZ/|a^n-b^n|_{S^\perp}\ZZ.
+\]
+取 Pontryagin 对偶便得到
+\[
+\#\mathrm{Fix}(f_r^n)=|a^n-b^n|_{S^\perp}.
+\]
+再将该固定点计数代入 Artin--Mazur \(\zeta\) 函数定义，即得所示级数公式。证毕。
+\end{proof}
+
+\begin{theorem}[局部化有理自覆盖的周期点指数率只由分子分母的最大模控制]\label{thm:xi-time-part69-localized-rational-endomorphism-growth-rate}
+沿用定理 \ref{thm:xi-time-part69-localized-rational-endomorphism-fixedpoints-zeta} 的记号，并进一步假设
+\[
+|a|\neq |b|.
+\]
+则有极限
+\[
+\lim_{n\to\infty}\frac{1}{n}\log \#\mathrm{Fix}(f_r^n)
+=
+\log\max\{|a|,|b|\}.
+\]
+换言之，局部化 solenoid 上有理自覆盖的周期点指数率不受 \(S\)-内素因子的影响，而仅由分子与分母模长中的较大者决定。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-time-part69-localized-rational-endomorphism-fixedpoints-zeta} 证明中的同一对偶化论证，对每个 \(n\ge 1\) 都有
+\[
+\mathrm{Fix}(f_r^n)\cong \widehat{G_S/(r^n-1)G_S}.
+\]
+又因 \(|a|\neq |b|\)，故 \(a^n-b^n\neq 0\)。并且
+\[
+r^n-1=\frac{a^n-b^n}{b^n},
+\]
+其中 \(b^n\in G_S^\times\) 为单位，于是
+\[
+(r^n-1)G_S=(a^n-b^n)G_S.
+\]
+再由定理 \ref{thm:xi-localized-quotient-exact-sfree-externalization}，
+\[
+\#\mathrm{Fix}(f_r^n)=|a^n-b^n|_{S^\perp}.
+\]
+因此只需比较 \(a^n-b^n\) 的 \(S\)-内与 \(S\)-外部分的增长。
+
+先固定 \(p\in S\)。若 \(p\mid ab\)，则由 \(\gcd(a,b)=1\) 可知 \(p\) 不能同时整除 \(a\) 与 \(b\)，从而对任意 \(n\ge 1\) 都有
+\[
+p\nmid (a^n-b^n).
+\]
+若 \(p\nmid ab\)，则 \(a/b\) 在 \((\ZZ/p\ZZ)^\times\) 中有定义。记其模 \(p\) 的乘法阶为 \(t_p\)。只有在 \(t_p\mid n\) 时，\(p\) 才可能整除 \(a^n-b^n\)；并且由标准 lifting-the-exponent 估计，存在仅依赖于 \(p,a,b\) 的常数 \(C_p\)，使得
+\[
+v_p(a^n-b^n)\le C_p+v_p(n)
+\qquad(n\ge 1).
+\]
+由于 \(S\) 有限，遂得
+\[
+\sum_{p\in S}v_p(a^n-b^n)\log p=O(\log n),
+\]
+因而
+\[
+\frac{1}{n}\sum_{p\in S}v_p(a^n-b^n)\log p\longrightarrow 0.
+\]
+
+另一方面，若 \(|a|>|b|\)，则
+\[
+|a^n-b^n|
+=
+|a|^n\Bigl|1-(b/a)^n\Bigr|
+=
+|a|^n(1+o(1)),
+\]
+故
+\[
+\frac{1}{n}\log |a^n-b^n|\longrightarrow \log|a|.
+\]
+若 \(|b|>|a|\)，同理得到极限为 \(\log|b|\)。
+
+最后，由
+\[
+\log |a^n-b^n|_{S^\perp}
+=
+\log |a^n-b^n|
+-\sum_{p\in S}v_p(a^n-b^n)\log p
+\]
+即知
+\[
+\frac{1}{n}\log |a^n-b^n|_{S^\perp}
+\longrightarrow
+\log\max\{|a|,|b|\}.
+\]
+再代回
+\(\#\mathrm{Fix}(f_r^n)=|a^n-b^n|_{S^\perp}\)，即得所示极限。证毕。
+\end{proof}
+
+\begin{theorem}[素数寄存器半群幂等元的精确计数律]\label{thm:xi-time-part69-prime-register-idempotent-count-law}
+沿用定理 \ref{thm:killo-finite-semigroup-prime-valuation-arithmetization} 的记号，设
+\[
+S_n:=\left\{\prod_{i=0}^{n-1}q_i^{a_i}: a_i\in\{0,\dots,n-1\}\right\},
+\]
+并记
+\[
+E_n:=\{N\in S_n:\ N\star N=N\},
+\qquad
+E_{n,k}:=\{N\in E_n:\ |\operatorname{Im}(f_N)|=k\}
+\qquad (1\le k\le n).
+\]
+则有精确计数公式
+\[
+|E_{n,k}|=\binom{n}{k}k^{n-k}
+\qquad (1\le k\le n),
+\]
+从而
+\[
+|E_n|=\sum_{k=1}^{n}\binom{n}{k}k^{n-k}.
+\]
+换言之，素数寄存器中的幂等投影按像集大小完全分层，而其总数与 \([n]\) 上幂等自映射的经典计数严格一致。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:killo-finite-semigroup-prime-valuation-arithmetization} 与推论 \ref{cor:killo-projection-idempotent-prime-register}，\(N\in S_n\) 为幂等元当且仅当对应映射
+\[
+f_N:[n]\to[n]
+\]
+为幂等变换。
+
+固定 \(k\in\{1,\dots,n\}\)，并设 \(|\operatorname{Im}(f_N)|=k\)。记
+\[
+A:=\operatorname{Im}(f_N)\subseteq [n],
+\qquad |A|=k.
+\]
+幂等条件
+\[
+f_N\circ f_N=f_N
+\]
+等价于：每个 \(a\in A\) 都必须是定点，即
+\[
+f_N(a)=a
+\qquad (a\in A),
+\]
+而对每个 \(x\in[n]\setminus A\)，其像只需任意落在 \(A\) 中。因而，一旦像集 \(A\) 固定，幂等变换数恰为
+\[
+k^{n-k}.
+\]
+再对全部 \(\binom{n}{k}\) 个 \(k\)-元像集求和，即得
+\[
+|E_{n,k}|=\binom{n}{k}k^{n-k}.
+\]
+最后对 \(k=1,\dots,n\) 求和，得到
+\[
+|E_n|=\sum_{k=1}^{n}\binom{n}{k}k^{n-k}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[fold-gauge 缺陷的形式 Koenigs 线性化]\label{thm:xi-time-part69-fold-gauge-formal-koenigs-linearization}
+记
+\[
+E_m:=\log C_m-\log(2\pi),
+\qquad
+x:=\frac{\varphi}{2}\in(0,1).
+\]
+由定理 \ref{thm:xi-time-part60ab-gauge-constant-recursive-bernoulli-stripping}，存在奇形式级数
+\[
+F(y):=\sum_{r\ge 1}a_r y^{2r-1}\in y\RR[[y^2]],
+\qquad
+a_1=\frac{1}{3\varphi}\neq 0,
+\]
+使
+\[
+E_m=F(x^m).
+\]
+则存在唯一奇形式幂级数
+\[
+\mathcal K(z)=3\varphi\,z+\kappa_3 z^3+\kappa_5 z^5+\cdots \in z\RR[[z^2]]
+\]
+使得对任意 \(N\ge 1\)，若记 \(\mathcal K_N\) 为其截断到 \(z^{2N+1}\) 的多项式，则
+\[
+\mathcal K_N(E_m)=x^m+O\!\bigl(x^{(2N+1)m}\bigr)
+\qquad (m\to\infty).
+\]
+等价地，若 \(\mathcal R(z)\in z\RR[[z^2]]\) 为定理 \ref{thm:xi-time-part64a-fold-gauge-purely-odd-renormalization} 中的唯一形式重整化映射，则
+\[
+\mathcal K(\mathcal R(z))=x\,\mathcal K(z)
+\]
+在形式幂级数意义下成立。其首个非平凡系数为
+\[
+\kappa_3=\frac{135+63\sqrt5}{40}.
+\]
+\end{theorem}
+\begin{proof}
+由于 \(a_1\neq 0\)，级数 \(F\) 在形式幂级数环中存在唯一复合逆
+\[
+F^{-1}(z)\in z\RR[[z]].
+\]
+又因为 \(F\) 为奇级数，其逆也必为奇级数，于是
+\[
+\mathcal K(z):=F^{-1}(z)\in z\RR[[z^2]].
+\]
+由构造立得
+\[
+\mathcal K(E_m)=\mathcal K(F(x^m))=x^m
+\]
+作为形式恒等式成立。若 \(\mathcal K_N\) 为截断到 \(z^{2N+1}\) 的多项式，则
+\[
+\mathcal K(z)-\mathcal K_N(z)=O(z^{2N+3}),
+\]
+而 \(E_m\sim a_1x^m\)，故
+\[
+\mathcal K_N(E_m)=x^m+O(x^{(2N+3)m}),
+\]
+特别地也有较弱的
+\[
+\mathcal K_N(E_m)=x^m+O(x^{(2N+1)m}).
+\]
+
+另一方面，定理 \ref{thm:xi-time-part64a-fold-gauge-purely-odd-renormalization} 已给出唯一形式重整化映射
+\[
+\mathcal R(z)=F\!\bigl(xF^{-1}(z)\bigr).
+\]
+于是
+\[
+\mathcal K(\mathcal R(z))
+=
+F^{-1}\!\bigl(F(xF^{-1}(z))\bigr)
+=
+xF^{-1}(z)
+=
+x\,\mathcal K(z),
+\]
+这正是 Koenigs 线性化方程。
+
+最后计算首项系数。由 \(r=1,2\) 的系数公式，
+\[
+a_1=\frac{1}{3\varphi},
+\qquad
+a_2=\frac{B_4}{2\cdot 3}\,(\varphi^{-1}+\varphi)
+=
+-\frac{\sqrt5}{180},
+\]
+其中用到 \(B_4=-1/30\) 与 \(\varphi+\varphi^{-1}=\sqrt5\)。设
+\[
+\mathcal K(z)=k_1 z+k_3 z^3+O(z^5).
+\]
+把它代入
+\[
+\mathcal K(F(y))=y
+\]
+并比较 \(y\) 与 \(y^3\) 的系数，得到
+\[
+k_1a_1=1,
+\qquad
+k_1a_2+k_3a_1^3=0.
+\]
+第一式给出
+\[
+k_1=\frac{1}{a_1}=3\varphi.
+\]
+第二式给出
+\[
+k_3=-\frac{a_2}{a_1^4}
+=
+\frac{135+63\sqrt5}{40}.
+\]
+故 \(\kappa_3=k_3\)。证毕。
+\end{proof}
+
+\noindent
+上述七条结果表明，审计偶窗的低预算容量、其首个非线性折点、bin-fold 的完整统计实验、局部化 solenoid 的周期点几何、素数寄存器的有限幂等结构以及 fold-gauge 缺陷的形式重整化之间存在同一类低维闭合机制：在有限分辨率层面，它表现为严格线性段、精确折点与精确的幂等计数；在统计层面，它表现为末位二点实验对全模型的 Le Cam 塌缩；在局部化动力学层面，它既表现为 \(S\)-外部因子对周期点计数的完全控制，也表现为指数率仅由 \(\max\{|a|,|b|\}\) 锁定；而在形式动力学层面，它最终收束为 Koenigs 坐标下的严格乘法线性化。于是，有限预算盲区、容量折点、二点统计极限、局部化周期谱与重整化正规形不再是彼此分离的技术现象，而被统一压缩为同一条可审计的降维主线。
+
+\input{subsubsec__xi-time-protocol-conclusions-part69a-localized-unit-automorphism-primeblindness}
+\input{subsubsec__xi-time-protocol-conclusions-part69b-character-audit-primitive-tailblindness}
+\input{subsubsec__xi-time-protocol-conclusions-part69c-localized-finite-visibility-quotient-endomorphism-closure}
+\input{subsubsec__xi-time-protocol-conclusions-part69c-topophase-darkblock-boundarytransport-cutoff}
+\input{subsubsec__xi-time-protocol-conclusions-part70-twoatom-capacity-richardson-prime-defect}
+
+\endinput

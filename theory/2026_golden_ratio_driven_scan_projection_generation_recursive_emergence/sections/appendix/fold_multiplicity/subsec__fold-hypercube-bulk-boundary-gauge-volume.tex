@@ -1,0 +1,573 @@
+\subsection{超立方体粗粒化的规范体积与边界切割：体--界字典的离散等周接口}\label{subsec:fold-hypercube-bulk-boundary-gauge-volume}
+本小节在与定理 \ref{thm:fiber-gauge-volume-chain-factorization} 一致的纤维规范群口径下，讨论超立方体微态空间 \(\Omega_n=\{0,1\}^n\) 上的任意满射粗粒化 \(f:\Omega_n\twoheadrightarrow X\)。
+核心目标是将纤维规范体积密度与界面切割面积联系起来，并以边界邻接多图的回路圆维（自由秩）给出等价表述。
+
+\begin{definition}[超立方体粗粒化的界面面积与规范体积密度]\label{def:hypercube-coarsegraining-area-gauge-volume}
+记 \(Q_n=(\Omega_n,E_n)\) 为 \(n\)-维超立方体图（相邻当且仅当 Hamming 距离为 \(1\)），并取满射 \(f:\Omega_n\twoheadrightarrow X\)。
+对 \(x\in X\) 记纤维 \(S_x:=f^{-1}(x)\) 与纤维大小 \(d_x:=\card{S_x}\)。
+定义纤维规范群
+\[
+\mathcal G(f):=\mathcal G(f:\Omega_n\twoheadrightarrow X)
+=\prod_{x\in X}\mathrm{Sym}(S_x),
+\qquad
+\card{\mathcal G(f)}=\prod_{x\in X} d_x!,
+\]
+以及规范体积密度
+\[
+g(f):=2^{-n}\log\card{\mathcal G(f)}=2^{-n}\sum_{x\in X}\log(d_x!).
+\]
+再定义界面面积（切割边数）
+\[
+A(f):=\card{\{\{u,v\}\in E_n:\ f(u)\neq f(v)\}}.
+\]
+\end{definition}
+
+\begin{theorem}[Shannon--Stirling 双展开与体--界熵缺口恒等式]\label{thm:hypercube-gauge-volume-shannon-stirling-gap}
+在定义 \ref{def:hypercube-coarsegraining-area-gauge-volume} 的设定下，令推前分布 \(p_x:=d_x/2^n\)（\(x\in X\)），并记 Shannon 熵
+\[
+H(p):=-\sum_{x\in X}p_x\log p_x.
+\]
+则存在显式余项 \(R(f)\ge 0\) 使得严格恒等式成立：
+\[
+\boxed{\;
+g(f)=n\log 2-1-H(p)
+\;+\;\frac1{2^{n+1}}\sum_{x\in X}\log(2\pi d_x)
+\;+\;R(f).
+\;}
+\]
+并且余项满足统一上界
+\[
+0\le R(f)\le \frac{|X|}{12\cdot 2^n}.
+\]
+因此
+\[
+\bigl|g(f)-(n\log 2-1-H(p))\bigr|
+\le
+\frac{|X|}{2^{n+1}}\log(2\pi 2^n)+\frac{|X|}{12\cdot 2^n}.
+\]
+特别地，若 \(|X|/2^n\to 0\)（当 \(n\to\infty\)），则
+\(
+g(f)=n\log 2-1-H(p)+o(1)
+\)。
+\end{theorem}
+\begin{proof}
+对整数 \(m\ge 1\) 取带余项的 Stirling 展开
+\[
+\log(m!)=m\log m-m+\tfrac12\log(2\pi m)+\theta_m,
+\qquad
+0\le \theta_m\le \frac1{12m}.
+\]
+将其代入 \(g(f)=2^{-n}\sum_x\log(d_x!)\) 并逐项求和得
+\[
+g(f)
+=2^{-n}\sum_x\bigl(d_x\log d_x-d_x\bigr)
+\;+\;\frac1{2^{n+1}}\sum_x\log(2\pi d_x)
+\;+\;2^{-n}\sum_x\theta_{d_x}.
+\]
+注意 \(\sum_x d_x=2^n\)，故 \(2^{-n}\sum_x d_x=1\)，并且
+\[
+2^{-n}\sum_x d_x\log d_x
+=\sum_x p_x\log(2^n p_x)
+=n\log 2+\sum_x p_x\log p_x
+=n\log 2-H(p).
+\]
+令
+\(
+R(f):=2^{-n}\sum_x\theta_{d_x}
+\)，则 \(R(f)\ge 0\) 且
+\[
+0\le R(f)\le 2^{-n}\sum_x\frac1{12d_x}\le \frac{|X|}{12\cdot 2^n}.
+\]
+从而得到所述恒等式与误差界。证毕。
+\end{proof}
+
+\begin{proposition}[规范体积密度的 Rényi 型上界（由碰撞矩直接控制）]\label{prop:hypercube-gauge-volume-renyi-upperbound}
+在定义 \ref{def:hypercube-coarsegraining-area-gauge-volume} 的设定下，令推前分布 \(p_x:=d_x/2^n\)（\(x\in X\)）。
+对任意 \(q>1\) 定义 \(q\)-碰撞矩
+\[
+S_q(f):=\sum_{x\in X} d_x^q.
+\]
+则规范体积密度满足上界
+\begin{equation}\label{eq:hypercube-gauge-volume-renyi-upperbound}
+\boxed{\;
+g(f)\ \le\ \frac{1}{q-1}\Bigl(\log S_q(f)-n\log 2\Bigr)\ -\ 1\ +\ \frac{|X|}{2^n}.\;}
+\end{equation}
+\end{proposition}
+\begin{proof}
+由基本不等式 \(\log(m!)\le m\log m-m+1\)（\(m\ge 1\)）得
+\[
+g(f)=2^{-n}\sum_{x\in X}\log(d_x!)
+\le 2^{-n}\sum_{x\in X}\bigl(d_x\log d_x-d_x+1\bigr)
+=\sum_{x\in X}p_x\log d_x-1+\frac{|X|}{2^n}.
+\]
+又对 \(q>1\)，由 Jensen 不等式（\(\log\) 凹）得到
+\[
+\sum_{x\in X}p_x\log d_x
+=\frac{1}{q-1}\sum_{x\in X}p_x\log d_x^{\,q-1}
+\le \frac{1}{q-1}\log\sum_{x\in X}p_x d_x^{\,q-1}
+=\frac{1}{q-1}\log\Bigl(\frac{S_q(f)}{2^n}\Bigr),
+\]
+代回即得 \eqref{eq:hypercube-gauge-volume-renyi-upperbound}。证毕。
+\end{proof}
+
+\begin{proposition}[离散全息斯托克不等式：规范体积密度的切割下界]\label{prop:hypercube-discrete-holographic-stokes-gauge-area}
+在定义 \ref{def:hypercube-coarsegraining-area-gauge-volume} 的设定下，恒有
+\[
+\boxed{\;
+g(f)\ \ge\ (n\log 2-1)\ -\ 2\log 2\cdot\frac{A(f)}{2^n}\ +\ \frac{\card{X}}{2^n}.
+\;}
+\]
+\end{proposition}
+
+\begin{proof}
+\textbf{（阶乘下界）}
+对整数 \(m\ge 1\) 有
+\[
+\log(m!)=\sum_{k=1}^{m}\log k\ \ge\ \int_{1}^{m}\log t\,\dd t\ =\ m\log m-m+1.
+\]
+故
+\[
+\sum_{x\in X}\log(d_x!)
+\ge
+\sum_{x\in X}(d_x\log d_x-d_x+1)
+=
+\sum_{x\in X}d_x\log d_x-2^n+\card{X}.
+\]
+
+\textbf{（超立方体边缘等周不等式）}
+对任意 \(S\subseteq \Omega_n\)，记其边界边集
+\(
+\partial S:=\{\{u,v\}\in E_n:\ u\in S,\ v\notin S\}
+\)。
+超立方体的标准边缘等周不等式给出
+\[
+\card{\partial S}
+\ge
+\card{S}\log_2\!\Bigl(\frac{2^n}{\card{S}}\Bigr)
+=
+\card{S}\bigl(n-\log_2\card{S}\bigr).
+\]
+应用于每个纤维 \(S_x\) 得
+\[
+\card{\partial S_x}\ge d_x\bigl(n-\log_2 d_x\bigr)
+\quad\Longrightarrow\quad
+d_x\log_2 d_x\ \ge\ nd_x-\card{\partial S_x}.
+\]
+对 \(x\in X\) 求和并用 \(\sum_x d_x=2^n\)，得
+\[
+\sum_{x\in X}d_x\log_2 d_x
+\ge
+n2^n-\sum_{x\in X}\card{\partial S_x}.
+\]
+注意每条切割边 \(\{u,v\}\)（满足 \(f(u)\neq f(v)\)）恰被计入 \(\sum_x\card{\partial S_x}\) 两次，故 \(\sum_x\card{\partial S_x}=2A(f)\)。
+于是
+\[
+\sum_{x\in X}d_x\log d_x
+=
+\log 2\cdot \sum_{x\in X}d_x\log_2 d_x
+\ge
+\log 2\cdot (n2^n-2A(f)).
+\]
+
+\textbf{（合并）}
+代回阶乘下界并除以 \(2^n\) 得
+\[
+g(f)
+\ge
+2^{-n}\Bigl(\log 2\cdot (n2^n-2A(f))-2^n+\card{X}\Bigr),
+\]
+即所示不等式。证毕。
+\end{proof}
+
+\input{thm__hypercube-kraft-godel-sideinfo-lower-bound}
+
+\begin{proposition}[面积律的熵上界与二相刚性]\label{prop:hypercube-entropy-area-rigidity}
+在定义 \ref{def:hypercube-coarsegraining-area-gauge-volume} 的设定下，令 \(p_x:=d_x/2^n\) 为纤维分布，并记 Shannon 熵
+\[
+H(p):=-\sum_{x\in X}p_x\log p_x.
+\]
+则有：
+\begin{enumerate}
+  \item \label{it:hypercube-entropy-area} 熵--面积上界
+  \[
+  \boxed{\;
+  H(p)\ \le\ 2\log 2\cdot \frac{A(f)}{2^n}.
+  \;}
+  \]
+  \item \label{it:hypercube-area-collapse} 若 \(A(f)=o(2^n)\)（当 \(n\to\infty\)），则 \(\max_x p_x\to 1\)。
+  \item \label{it:hypercube-area-saturation} 记 \(\card{E_n}=n2^{n-1}\)。若 \(A(f)=\card{E_n}-o(2^n)\)，则对均匀随机边 \(\{U,V\}\in E_n\) 有 \(\PP(f(U)=f(V))\to 0\)。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\textbf{（\ref{it:hypercube-entropy-area}）}
+由边缘等周不等式，\(\card{\partial S_x}\ge d_x\log_2(2^n/d_x)=d_x\log_2(1/p_x)\)。
+求和得
+\[
+\sum_{x\in X}\card{\partial S_x}
+\ge
+2^n\sum_{x\in X}p_x\log_2(1/p_x)
+=
+2^n H_2(p),
+\]
+其中 \(H_2(p):=-\sum_x p_x\log_2 p_x\) 为以 \(2\) 为底的熵。
+又 \(\sum_x\card{\partial S_x}=2A(f)\)，故 \(H(p)=\log 2\cdot H_2(p)\le 2\log 2\cdot A(f)/2^n\)。
+
+\textbf{（\ref{it:hypercube-area-collapse}）}
+设 \(p_{\max}=1-\delta\)。则对任意分布有下界 \(H(p)\ge h(\delta)\)，其中
+\(
+h(\delta):=-\delta\log\delta-(1-\delta)\log(1-\delta)
+\)。
+由 \ref{it:hypercube-entropy-area} 若 \(A(f)=o(2^n)\) 则 \(H(p)\to 0\)，从而 \(\delta\to 0\)，即 \(p_{\max}\to 1\)。
+
+\textbf{（\ref{it:hypercube-area-saturation}）}
+记内部边数
+\[
+I(f):=\card{\{\{u,v\}\in E_n:\ f(u)=f(v)\}},
+\]
+则 \(A(f)=\card{E_n}-I(f)\)。
+若 \(A(f)=\card{E_n}-o(2^n)\)，则 \(I(f)=o(2^n)\)。
+对均匀随机边 \(\{U,V\}\) 有
+\[
+\PP(f(U)=f(V))=\frac{I(f)}{\card{E_n}}=\frac{o(2^n)}{n2^{n-1}}\to 0.
+\]
+证毕。
+\end{proof}
+
+\begin{definition}[边界邻接多图]\label{def:hypercube-boundary-multigraph}
+在定义 \ref{def:hypercube-coarsegraining-area-gauge-volume} 的设定下，定义边界邻接多图 \(\mathsf B_f\) 为：其顶点集为 \(X\)，并对每条切割边 \(\{u,v\}\in E_n\)（满足 \(f(u)\neq f(v)\)）添加一条连接 \(f(u)\) 与 \(f(v)\) 的无向边（允许重边与自环；本构造中自环不出现）。
+于是 \(\card{E(\mathsf B_f)}=A(f)\)。
+\end{definition}
+
+\begin{proposition}[回路圆维的欧拉恒等式]\label{prop:hypercube-boundary-multigraph-h1-cdim}
+在定义 \ref{def:hypercube-boundary-multigraph} 的设定下，记 \(\mathsf B_f\) 的连通分量数为 \(c(\mathsf B_f)\)。
+则其一维同调为自由阿贝尔群，且
+\[
+H_1(\mathsf B_f;\ZZ)\ \cong\ \ZZ^{\,A(f)-\card{X}+c(\mathsf B_f)}.
+\]
+因此（按圆维在有限生成交换群上的自由秩口径）
+\[
+\boxed{\;
+\cdim\bigl(H_1(\mathsf B_f;\ZZ)\bigr)=A(f)-\card{X}+c(\mathsf B_f).
+\;}
+\]
+\end{proposition}
+
+\begin{proof}
+将 \(\mathsf B_f\) 视作一维 CW 复形。其链复形满足 \(C_1\cong \ZZ^{\card{E}}\)、\(C_0\cong \ZZ^{\card{V}}\)，且
+\(
+\operatorname{rank}H_1=\card{E}-\card{V}+c
+\)。
+代入 \(\card{E}=A(f)\)、\(\card{V}=\card{X}\) 即得秩公式，并得同构 \(H_1(\mathsf B_f;\ZZ)\cong \ZZ^{\operatorname{rank}H_1}\)。
+最后由 \(\cdim(\ZZ^r)=r\) 得圆维等式。证毕。
+\end{proof}
+
+\input{sections/appendix/fold_multiplicity/thm__graph-coarsegraining-cycle-rank-decomposition}
+
+\begin{theorem}[加权回路格判别式的矩阵树恒等式]\label{thm:graph-cycle-lattice-weighted-discriminant}
+令 \(G=(V,E)\) 为有限连通无自环多重图，固定一组取向并把 \(1\)-链识别为 \(\ZZ^{E}\)。
+令 \(\partial:\ZZ^{E}\to \ZZ^{V}\) 为边界算子，并令
+\[
+\Lambda(G):=\ker(\partial)\subset \ZZ^{E},
+\qquad
+r:=\rank_{\ZZ}\Lambda(G)=\rank_{\ZZ}H_1(G;\ZZ)=|E|-|V|+1.
+\]
+给定正权 \(\rho:E\to(0,\infty)\)，定义二次型
+\[
+Q_\rho(z):=\sum_{e\in E}\rho_e\,z_e^2,\qquad z=(z_e)_{e\in E}\in\RR^{E}.
+\]
+取任意 \(\ZZ\)-基 \(c_1,\dots,c_r\) 生成 \(\Lambda(G)\)，并令 \(C\in\ZZ^{r\times |E|}\) 为基矩阵（第 \(j\) 行为 \(c_j^{\mathsf T}\)）。
+定义
+\[
+\Gamma_\rho:=C\,\mathrm{diag}(\rho_e)\,C^{\mathsf T}\in \mathrm{Sym}_r^+(\RR).
+\]
+则 \(\det(\Gamma_\rho)\) 与基的选择无关，且满足精确恒等式
+\[
+\boxed{\;
+\det(\Gamma_\rho)=\Bigl(\prod_{e\in E}\rho_e\Bigr)\,\tau_{1/\rho}(G),
+\qquad
+\tau_{1/\rho}(G):=\sum_{T\ \mathrm{spanning\ tree}}\ \prod_{e\in T}\rho_e^{-1}.
+\;}
+\]
+\end{theorem}
+\begin{proof}
+基不变性来自：更换 \(\ZZ\)-基等价于 \(C\mapsto UC\)（\(U\in\GL_r(\ZZ)\)），从而 \(\Gamma_\rho\mapsto U\Gamma_\rho U^{\mathsf T}\)，其行列式不变。
+\par
+取 \(G\) 的一棵生成树 \(T_0\subseteq E\) 并由此构造基本回路基，使得存在 unimodular 矩阵 \(M\in\GL_{|E|}(\ZZ)\)，其上方 \(|V|-1\) 行为删去一行后的约化关联矩阵 \(\tilde B\in\ZZ^{(|V|-1)\times |E|}\)，下方 \(r\) 行恰为某个回路基矩阵 \(C\)，从而 \(\tilde B C^{\mathsf T}=0\)。
+\par
+对 \(\Gamma_\rho=C\,\mathrm{diag}(\rho_e)\,C^{\mathsf T}\) 应用 Cauchy--Binet 公式，得
+\[
+\det(\Gamma_\rho)
+=\sum_{S\subseteq E,\ |S|=r}\det(C_S)^2\prod_{e\in S}\rho_e,
+\]
+其中 \(C_S\) 为取列集 \(S\) 的 \(r\times r\) 子矩阵。
+由于 \(M\) unimodular，其互补子式满足
+\(
+\det(C_S)=\pm\det(\tilde B_{E\setminus S})
+\)，
+其中 \(\tilde B_{E\setminus S}\) 为 \(\tilde B\) 取列集 \(E\setminus S\) 的 \((|V|-1)\times(|V|-1)\) 子矩阵。
+由矩阵树定理的标准整数形式（关联矩阵全酉模性质），\(\det(\tilde B_{E\setminus S})=\pm 1\) 当且仅当 \(E\setminus S\) 构成生成树，否则为 \(0\)。
+因此
+\[
+\det(\Gamma_\rho)
+=\sum_{T\ \mathrm{spanning\ tree}}\ \prod_{e\in E\setminus T}\rho_e
+=\Bigl(\prod_{e\in E}\rho_e\Bigr)\sum_{T}\prod_{e\in T}\rho_e^{-1}
+=\Bigl(\prod_{e\in E}\rho_e\Bigr)\tau_{1/\rho}(G).
+\]
+证毕。
+\end{proof}
+
+\input{sections/appendix/fold_multiplicity/prop__graph-cycle-lattice-leyang-phase-polynomial}
+
+\input{sections/appendix/fold_multiplicity/thm__graph-cycle-lattice-theta-modular-inversion}
+
+\begin{theorem}[边界回路格的 \texorpdfstring{$\Theta$}{Theta} 函数极限律：圆维主项与树数校正]\label{thm:hypercube-cycle-lattice-theta-asymptotic}
+令 \(G=(V,E)\) 为有限连通多重图，固定一组取向并将 \(1\)-链视作 \(\ZZ^{E}\subset\RR^{E}\)。
+令 \(B\in\ZZ^{V\times E}\) 为取向关联矩阵，并令 \(\tilde B\in\ZZ^{(|V|-1)\times E}\) 为删去一行后的约化关联矩阵。
+定义回路格
+\[
+\Lambda(G):=\ker(\tilde B)\cap\ZZ^{E},
+\qquad
+r:=\operatorname{rank}_{\ZZ}\Lambda(G)=|E|-|V|+1.
+\]
+以 \(\RR^{E}\) 的标准内积诱导 Euclid 范数 \(|\cdot|\)，并定义回路格的 theta 函数
+\[
+\Theta_G(t):=\sum_{z\in\Lambda(G)}e^{-\pi t|z|^2},
+\qquad t>0.
+\]
+记 \(\tau(G)\) 为 \(G\) 的生成树个数（Kirchhoff 复杂度）。
+则存在常数 \(c(G)>0\) 使得当 \(t\downarrow 0\) 时有渐近展开
+\[
+\boxed{\;
+\Theta_G(t)=t^{-r/2}\,\tau(G)^{-1/2}\Bigl(1+O\bigl(e^{-c(G)/t}\bigr)\Bigr).
+\;}
+\]
+从而
+\[
+\boxed{\;
+\log\Theta_G(t)=\frac r2\log\frac1t-\frac12\log\tau(G)+O\bigl(e^{-c(G)/t}\bigr).
+\;}
+\]
+特别地，取 \(G=\mathsf B_f\) 时，\(r=\cdim(H_1(\mathsf B_f;\ZZ))\)（命题 \ref{prop:hypercube-boundary-multigraph-h1-cdim}），故上述自由能主项系数即为边界回路圆维。
+\end{theorem}
+\begin{proof}
+\textbf{（i）回路格协体积与树数）}
+选取 \(G\) 的一棵生成树 \(T\subseteq E\)。
+记 \(E= T\sqcup C\) 为边集分解，其中 \(|T|=|V|-1\)、\(|C|=r\)。
+按该分解将 \(\tilde B\) 分块写成
+\(
+\tilde B=[\tilde B_T\ \ \tilde B_C]
+\)。
+由于 \(T\) 为树，\(\tilde B_T\in\ZZ^{(|V|-1)\times(|V|-1)}\) 可逆且 \(\det(\tilde B_T)=\pm 1\)（关联矩阵的树子式为 \(\pm 1\)）。
+于是对任意 \(u\in\ZZ^{r}\)，向量
+\[
+z(u):=\begin{pmatrix}
+ -\tilde B_T^{-1}\tilde B_C\,u\\
+ u
+\end{pmatrix}\in\ZZ^{E}
+\]
+满足 \(\tilde B z(u)=0\)，并且 \(u\mapsto z(u)\) 给出 \(\Lambda(G)\) 的一组 \(\ZZ\)-基。
+令 \(Z\in\ZZ^{E\times r}\) 为该基矩阵，则回路格的协体积平方为
+\[
+\operatorname{covol}(\Lambda(G))^2=\det(Z^\top Z).
+\]
+写 \(X:=-\tilde B_T^{-1}\tilde B_C\)，则 \(Z=\binom{X}{I_r}\)，从而
+\[
+\det(Z^\top Z)=\det(I_r+X^\top X)=\det(I_{|V|-1}+XX^\top),
+\]
+其中最后一步用 Sylvester 行列式恒等式。
+进一步
+\[
+XX^\top=\tilde B_T^{-1}\tilde B_C\tilde B_C^\top(\tilde B_T^{-1})^\top,
+\]
+故
+\[
+\det(I_{|V|-1}+XX^\top)
+=\det(\tilde B_T\tilde B_T^\top)^{-1}\det(\tilde B_T\tilde B_T^\top+\tilde B_C\tilde B_C^\top).
+\]
+而 \(\det(\tilde B_T\tilde B_T^\top)=\det(\tilde B_T)^2=1\)，并且
+\(
+\tilde B_T\tilde B_T^\top+\tilde B_C\tilde B_C^\top=\tilde B\tilde B^\top
+\)
+为约化 Laplacian。
+因此
+\[
+\operatorname{covol}(\Lambda(G))^2=\det(\tilde B\tilde B^\top).
+\]
+由 Kirchhoff 矩阵树定理，\(\det(\tilde B\tilde B^\top)=\tau(G)\)，从而
+\(
+\operatorname{covol}(\Lambda(G))=\sqrt{\tau(G)}
+\)。
+
+\textbf{（ii）Poisson 求和与极限）}
+令 \(\Lambda\subset\RR^{r}\) 为任意满秩欧氏格，\(\Lambda^\ast\) 为其对偶格。
+对高斯函数 \(\phi_t(x):=e^{-\pi t|x|^2}\) 有 Fourier 变换 \(\widehat\phi_t(\xi)=t^{-r/2}e^{-\pi|\xi|^2/t}\)。
+应用 Poisson 求和公式得
+\[
+\Theta_\Lambda(t)=\sum_{z\in\Lambda}\phi_t(z)
+=\frac{1}{\operatorname{covol}(\Lambda)}\sum_{y\in\Lambda^\ast}\widehat\phi_t(y)
+=t^{-r/2}\operatorname{covol}(\Lambda)^{-1}\Theta_{\Lambda^\ast}(1/t).
+\]
+当 \(t\downarrow 0\) 时，\(1/t\uparrow\infty\)，并且
+\[
+\Theta_{\Lambda^\ast}(1/t)=1+O\bigl(e^{-\pi \lambda_1(\Lambda^\ast)^2/t}\bigr),
+\]
+其中 \(\lambda_1(\Lambda^\ast)\) 为对偶格最短非零向量长度。
+取 \(c(G):=\pi\lambda_1(\Lambda(G)^\ast)^2\) 并代入 \(\operatorname{covol}(\Lambda(G))=\sqrt{\tau(G)}\) 即得所述两式。证毕。
+\end{proof}
+
+\input{sections/appendix/fold_multiplicity/thm__graph-energy-shell-lattice-counting}
+
+\begin{remark}[离散面积律的圆维主项与生成树行列式校正]\label{rem:hypercube-boundary-cycle-entropy-area-law-tree-correction}
+将定理 \ref{thm:graph-energy-shell-lattice-counting} 应用于边界邻接多图 \(G=\mathsf B_f\) 并固定散度数据（例如由体偏差或 Walsh 读出诱导的 \(\delta\)），可得能量阈值 \(E\) 内的可兼容边界整数 \(1\)-形式计数满足
+\[
+\log N_{\delta,w}(E)
+=\frac{1}{2}\cdim\bigl(H_1(\mathsf B_f;\ZZ)\bigr)\log E
+-\frac12\sum_{e\in E(\mathsf B_f)}\log w_e
+-\frac12\log\tau_{1/w}(\mathsf B_f)
+ +O(1),
+\]
+其中 \(\tau_{1/w}(\mathsf B_f)=\sum_{T}\prod_{e\in T}w_e^{-1}\) 为导通权 \(1/w\) 下的加权生成树多项式值（定理 \ref{thm:graph-cycle-lattice-weighted-discriminant}）。
+该分解把“由边界回路圆维控制的幂律态数增长”与“由 Kirchhoff 复杂度给出的行列式修正”在同一可审计公式中对齐，并为正文关于面积律/纠缠语义接口的视界模型（例如 \S\ref{subsec:dephysicalized-horizon-timefiber-nohair} 的 AdS/CFT 解释性接口）提供一条纯离散的可计算原型。
+\end{remark}
+
+\begin{conjecture}[生成树行列式的连续谱极限接口]\label{conj:boundary-tree-determinant-spectral-limit}
+设 \(\{\mathsf B^{(m)}_f\}_{m\ge 1}\) 为某一 dyadic 细化极限下的边界邻接多图序列，并取与边界归一化 Stokes 逆塔一致的权重归一化方案（参见附录 \ref{app:multiscale-normalized-stokes-inverse-tower}）。
+记 \(L^{(m)}\) 为 \(\mathsf B^{(m)}_f\) 的加权 Laplacian（导通权为 \(1/w^{(m)}\)），并令 \(\tau_{1/w^{(m)}}(\mathsf B^{(m)}_f)=\det\bigl((L^{(m)})_{\mathrm{red}}\bigr)\) 为其加权生成树多项式值（Kirchhoff 定理）。
+则在适当的重整化下，\(-\tfrac12\log\tau_{1/w^{(m)}}(\mathsf B^{(m)}_f)\) 收敛到某个极限量，该极限与连续边界算子（例如 Dirichlet-to-Neumann 映射或 Laplacian）的 \(\zeta\)-正则化行列式 \(\det_\zeta\) 相一致：
+\[
+-\frac12\log\tau_{1/w^{(m)}}(\mathsf B^{(m)}_f)\ \longrightarrow\ -\frac12\log\det_\zeta(\mathcal L_{\partial}).
+\]
+在该意义下，\(-\tfrac12\log\tau_{1/w}(\mathsf B_f)\) 可被视为对由圆维主项给出的“面积律”项的离散行列式修正。
+\end{conjecture}
+
+\begin{corollary}[回路格球截断的体积主项与 Gödel 外置对数规模]\label{cor:hypercube-cycle-lattice-counting-godel-log}
+在定理 \ref{thm:hypercube-cycle-lattice-theta-asymptotic} 的设定下，对 \(R>0\) 定义球截断
+\[
+\Lambda(G;R):=\{z\in\Lambda(G):\ |z|\le R\}.
+\]
+则存在常数 \(C_G>0\) 使得当 \(R\to\infty\) 时有渐近计数
+\[
+\boxed{\;
+|\Lambda(G;R)|
+=\frac{\operatorname{vol}(B_r)}{\sqrt{\tau(G)}}\,R^r+O(R^{r-1}).
+\;}
+\]
+其中 \(\operatorname{vol}(B_r)\) 为 \(\RR^{r}\) 中单位球体积。
+进一步，取任意 Gödel 外置单射 \(\Gamma:\Lambda(G)\hookrightarrow\NN\)，则
+\[
+\boxed{\;
+\log|\Gamma(\Lambda(G;R))|
+=r\log R-\tfrac12\log\tau(G)+O(1).
+\;}
+\]
+\end{corollary}
+\begin{proof}
+记 \(\Lambda:=\Lambda(G)\subset \RR^{E}\)，其秩为 \(r\) 且 \(\operatorname{covol}(\Lambda)=\sqrt{\tau(G)}\)（定理 \ref{thm:hypercube-cycle-lattice-theta-asymptotic}）。
+取 \(\Lambda\) 在其张成子空间上的一个基本平行体 \(P\)（可取由一组格基生成），并记其直径为 \(D\)。
+令 \(B(R)\) 为该子空间中的半径 \(R\) 球。
+\par
+\textbf{（体积夹逼）}
+由于 \(\{z+P:z\in\Lambda\}\) 构成无交叠的平移铺砌，有
+\[
+|\Lambda\cap B(R)|\cdot \operatorname{vol}(P)
+\le \operatorname{vol}(B(R+D)).
+\]
+同理，若 \(z\in\Lambda\cap B(R-D)\)，则 \(z+P\subset B(R)\)，因此
+\[
+\operatorname{vol}(B(R-D))
+\le |\Lambda\cap B(R)|\cdot \operatorname{vol}(P).
+\]
+合并并用 \(\operatorname{vol}(P)=\operatorname{covol}(\Lambda)\) 得
+\[
+\frac{\operatorname{vol}(B(R-D))}{\operatorname{covol}(\Lambda)}
+\le |\Lambda(G;R)|
+\le \frac{\operatorname{vol}(B(R+D))}{\operatorname{covol}(\Lambda)}.
+\]
+利用 \(\operatorname{vol}(B(R))=\operatorname{vol}(B_r)R^r\) 与二项展开，
+\[
+\operatorname{vol}(B(R\pm D))
+=\operatorname{vol}(B_r)\,(R\pm D)^r
+=\operatorname{vol}(B_r)R^r+O(R^{r-1}),
+\]
+从而得到首式，且隐含常数仅依赖于 \(G\)。
+\par
+\textbf{（Gödel 对数）}
+由于 \(\Gamma\) 为单射，\(|\Gamma(\Lambda(G;R))|=|\Lambda(G;R)|\)。
+对首式取对数即得
+\[
+\log|\Lambda(G;R)|
+=\log\Bigl(\frac{\operatorname{vol}(B_r)}{\sqrt{\tau(G)}}R^r\bigl(1+O(R^{-1})\bigr)\Bigr)
+=r\log R-\tfrac12\log\tau(G)+O(1).
+\]
+证毕。
+\end{proof}
+
+\input{cor__hypercube-cycle-lattice-godel-ellipsoid-counting}
+
+\input{cor__hypercube-cycle-lattice-directsum-mdl}
+
+\begin{corollary}[回路圆维与规范体积的互补下界]\label{cor:hypercube-loop-cdim-gauge-volume-complement}
+在命题 \ref{prop:hypercube-discrete-holographic-stokes-gauge-area} 与命题 \ref{prop:hypercube-boundary-multigraph-h1-cdim} 的设定下，有
+\[
+\boxed{\;
+g(f)\ \ge\ (n\log 2-1)\ -\ 2\log 2\cdot\frac{\cdim(H_1(\mathsf B_f;\ZZ))+\card{X}-c(\mathsf B_f)}{2^n}\ +\ \frac{\card{X}}{2^n}.
+\;}
+\]
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:hypercube-boundary-multigraph-h1-cdim} 得
+\(
+A(f)=\cdim(H_1(\mathsf B_f;\ZZ))+\card{X}-c(\mathsf B_f)
+\)。
+代入命题 \ref{prop:hypercube-discrete-holographic-stokes-gauge-area} 即得。证毕。
+\end{proof}
+
+\begin{corollary}[面积密度极限下的线性面积律]\label{cor:hypercube-linear-area-law-density}
+取一列满射粗粒化 \(f_n:\Omega_n\twoheadrightarrow X_n\)。
+记面积密度
+\[
+a_n:=\frac{A(f_n)}{n2^{n-1}}\in[0,1],
+\]
+以及每比特规范体积密度
+\[
+\bar g_n:=\frac{g(f_n)}{n}.
+\]
+若 \(\card{X_n}/2^n\to 0\)，则
+\[
+\boxed{\;
+\liminf_{n\to\infty}\bar g_n\ \ge\ (1-\limsup_{n\to\infty}a_n)\log 2.
+\;}
+\]
+特别地，若 \(a_n\to a\in[0,1]\)，则 \(\liminf_{n\to\infty}\bar g_n\ge (1-a)\log 2\)。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:hypercube-discrete-holographic-stokes-gauge-area}，
+\[
+\bar g_n
+\ge
+\log 2-\frac{1}{n}-2\log 2\cdot\frac{A(f_n)}{n2^n}+\frac{\card{X_n}}{n2^n}.
+\]
+注意 \(\frac{A(f_n)}{2^n}=\frac{n}{2}a_n\)，故
+\[
+\bar g_n\ge (1-a_n)\log 2-\frac{1}{n}+\frac{\card{X_n}}{n2^n}.
+\]
+取 \(\liminf\) 并用 \(\card{X_n}/2^n\to 0\) 即得结论。证毕。
+\end{proof}
+
+\input{para__fold-hypercube-godel-stokes-walsh-hodge}
+
+\input{thm__fold-coarsegraining-quadratic-stokes-area-rigidity}
+
+\input{thm__fold-hypercube-godel-length-energy-upperbound}
+
+\input{thm__fold-hypercube-stokes-plancherel-boundary-energy}
+\input{thm__fold-hypercube-weighted-stokes-sobolev-energy-spectrum}
+\input{cor__fold-boundary-torsor-h1-cohomology}
+\input{cor__fold-boundary-hodge-stokes-orthogonal-decomposition}
+\input{thm__fold-coarsegraining-naturality-rayleigh-stokes}
+\input{conj__fold-boundary-stokes-langlands-modularity}
+
+\endinput

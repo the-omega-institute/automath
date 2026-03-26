@@ -1,0 +1,248 @@
+% Semistable primes and local factors for the A5-quotient genus-2 curve C_{A5}.
+
+\begin{proposition}[属 \(2\) 超椭圆商的判别式分解与奇半稳定素数]\label{prop:xi-terminal-zm-delta-ca5-discriminant-factorization-semistable-primes}
+沿用结论 \ref{con:xi-terminal-zm-delta-a5-fixedfield-hyperelliptic-genus2} 的
+\(
+C_{A_5}:\ s^2=(\delta-4)B_5(\delta)
+\)
+并令
+\(
+f(\delta):=(\delta-4)B_5(\delta)\in\ZZ[\delta]
+\)。
+则
+\[
+\Disc(f)=\Disc(B_5)\cdot B_5(4)^{2}.
+\]
+并且
+\(
+B_5(4)=2^{6}\cdot 3^{4}\cdot 11^{3}\cdot 13
+\)，
+从而
+\[
+\Disc(f)
+=-2^{28}\cdot 3^{24}\cdot 11^{6}\cdot 13^{2}\cdot 17^{3}\cdot 37\cdot 223^{3}\cdot 3739^{2}\cdot 7333^{2}.
+\]
+因此在奇素数 \(p\neq 3\) 下，\(C_{A_5}\) 的特殊纤维出现且仅出现一个普通二重点当且仅当
+\[
+p\in\{11,13,17,37,223,3739,7333\}.
+\]
+其中 \(p\in\{17,37,223,3739,7333\}\) 的节点由 \(B_5\bmod p\) 的二重根诱导（结论 \ref{con:xi-terminal-zm-delta-b5-bad-reduction-primes-collision-fingerprint}），而 \(p\in\{11,13\}\) 的节点对应 \(\delta\equiv 4\pmod p\) 的分支碰撞。
+\end{proposition}
+\begin{proof}
+对任意 \(a\in\ZZ\) 与 \(g\in\ZZ[\delta]\) 的标准恒等式
+\[
+\Disc\bigl((\delta-a)g(\delta)\bigr)=\Disc(g)\cdot g(a)^2
+\]
+可由根集分解（\(\{a\}\cup\{\text{\(g\) 的根}\}\)）或由结式/判别式的定义直接推出。
+取 \(g=B_5\)、\(a=4\) 即得第一式。\
+由结论 \ref{con:xi-terminal-zm-delta-b5-discriminant-ramification-quadratic} 的 \(\Disc(B_5)\) 素分解与直接代入计算
+\(
+B_5(4)=89698752=2^6\cdot 3^4\cdot 11^3\cdot 13
+\)，
+遂得到 \(\Disc(f)\) 的完全素因子分解。
+\par
+当 \(p\neq 2\) 时，超椭圆模型 \(s^2=f(\delta)\) 在 \(\FF_p\) 上出现奇异点当且仅当 \(f\) 在 \(\overline{\FF}_p\) 上不可分（即含重根）。
+对奇素数 \(p\neq 3\)，由上述分解知 \(f\bmod p\) 含重根当且仅当 \(p\in\{11,13,17,37,223,3739,7333\}\)。
+并且当 \(p\in\{17,37,223,3739,7333\}\) 时 \(B_5\bmod p\) 恰含一处二重根且其余根单纯（结论 \ref{con:xi-terminal-zm-delta-b5-bad-reduction-primes-collision-fingerprint}），从而 \(f=(\delta-4)B_5(\delta)\) 亦恰出现一处二重根；
+当 \(p\in\{11,13\}\) 时 \(B_5(4)\equiv 0\pmod p\) 而 \(p\nmid\Disc(B_5)\)，故 \(B_5\bmod p\) 在 \(\delta=4\) 处为单根，从而 \(f\) 在 \(\delta=4\) 处恰为二重根且其余根皆单根。
+因此上述各 \(p\) 处特殊纤维均为单节点半稳定曲线。\
+可复现核验脚本：\texttt{scripts/exp\_xi\_delta\_ca5\_semistable\_local\_factors\_audit.py}。证毕。
+\end{proof}
+
+\begin{theorem}[单节点半稳定约化与归一化椭圆核的 \(j\)-不变量]\label{thm:xi-terminal-zm-delta-ca5-nodal-semistable-j}
+设 \(p\in\{11,13,17,223,3739,7333\}\)，并记 \(C_{A_5}/\FF_p\) 为 \(C_{A_5}\) 的约化。
+则 \(C_{A_5}/\FF_p\) 恰含一个普通二重点（节点），因而半稳定且非光滑。
+设该节点对应的二重根为 \(\delta=\delta_0\)。
+则其归一化为属 \(1\) 曲线 \(E_p\)，可由四次模型
+\[
+E_p:\quad
+v^2=\frac{(\delta-4)B_5(\delta)}{(\delta-\delta_0)^2},
+\qquad
+v=\frac{s}{\delta-\delta_0}
+\]
+给出，并且 \(E_p\) 的 \(j\)-不变量满足同余（均在 \(\FF_p\) 中）：
+\[
+\begin{aligned}
+j(E_{11})&\equiv 5\pmod{11},\qquad
+&j(E_{13})&\equiv 2\pmod{13},\\
+j(E_{17})&\equiv 15\pmod{17},\qquad
+&j(E_{223})&\equiv 98\pmod{223},\\
+j(E_{3739})&\equiv 188\pmod{3739},\qquad
+&j(E_{7333})&\equiv 5450\pmod{7333}.
+\end{aligned}
+\]
+此外，该节点在 \(\FF_p\) 上分裂当且仅当 \(p=17\)；其余五个素数处节点均为非分裂节点。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:xi-terminal-zm-delta-ca5-discriminant-factorization-semistable-primes}，对所列 \(p\) 而言 \(f=(\delta-4)B_5(\delta)\) 在 \(\overline{\FF}_p\) 上恰有一处二重根 \(\delta_0\) 且其余根皆单根。
+因此超椭圆模型 \(s^2=f(\delta)\) 的特殊纤维在 \((\delta_0,0)\) 处给出唯一普通二重点。\
+将平方因子剥离并令 \(v=s/(\delta-\delta_0)\) 得到归一化四次模型，即所示 \(E_p\)。
+\par
+对四次模型 \(v^2=a\delta^4+b\delta^3+c\delta^2+d\delta+e\) 的二元四次不变量口径可参照结论 \ref{con:xi-terminal-zm-delta-a5-curve-semistable-reduction-p37-j16}：
+由 \(I=12ae-3bd+c^2\)、\(J=72ace+9bcd-27ad^2-27b^2e-2c^3\)、\(\Delta=4I^3-J^2\) 与
+\(
+j=1728\cdot \frac{4I^3}{\Delta}
+\)
+在 \(\FF_p\) 中计算 \(j\)-不变量，逐一代入得到所示同余列表。\
+节点分裂性由切锥平方类判别：若写 \(f(\delta)=(\delta-\delta_0)^2g(\delta)\) 且 \(g(\delta_0)\neq 0\)，则节点在 \(\FF_p\) 上分裂当且仅当 \(g(\delta_0)\in(\FF_p^\times)^2\)。
+对六个素数逐一计算平方类可得仅 \(p=17\) 分裂。\
+可复现核验脚本：\texttt{scripts/exp\_xi\_delta\_ca5\_semistable\_local\_factors\_audit.py}。证毕。
+\end{proof}
+
+\begin{corollary}[单节点半稳定处的局部 \(L\)-因子分解与显式 \texorpdfstring{$(a_p,\varepsilon_p)$}{(ap,epsp)}]\label{cor:xi-terminal-zm-delta-ca5-local-factor-ap-eps}
+设 \(p\in\{11,13,17,223,3739,7333\}\)、\(\ell\neq p\)，并令
+\(
+V_\ell:=H^1(C_{A_5,\overline{\QQ}},\QQ_\ell)
+\)。
+则在 \(p\) 处有半单分解
+\[
+\bigl(V_\ell^{I_p}\bigr)^{\mathrm{ss}}
+\ \cong\
+H^1(E_p,\QQ_\ell)\ \oplus\ \QQ_\ell(\varepsilon_p),
+\]
+其中 \(E_p\) 为定理 \ref{thm:xi-terminal-zm-delta-ca5-nodal-semistable-j} 的归一化椭圆核，
+\(\varepsilon_p=+1\) 当且仅当节点分裂（等价地 \(p=17\)），否则 \(\varepsilon_p=-1\)。
+并且局部因子满足
+\[
+L_p(C_{A_5},T)=\frac{L_p(E_p,T)}{1-\varepsilon_p T},
+\qquad
+L_p(E_p,T)=(1-a_pT+pT^2)^{-1}.
+\]
+在本例中，\((a_p,\varepsilon_p)\) 取值为
+\[
+\begin{array}{c|cccccc}
+p & 11 & 13 & 17 & 223 & 3739 & 7333\\ \hline
+a_p & 5 & 1 & -5 & -6 & 33 & -38\\
+\varepsilon_p & -1 & -1 & +1 & -1 & -1 & -1
+\end{array}
+\]
+从而
+\[
+L_p(C_{A_5},T)=\frac{1}{(1-\varepsilon_pT)(1-a_pT+pT^2)}.
+\]
+\end{corollary}
+\begin{proof}
+单节点半稳定约化的 \(\ell\)-进惯性不变量分裂为“归一化椭圆核的 \(H^1\)”与“一维环面特征”的直和是标准事实；
+后一项的 Frobenius 符号 \(\varepsilon_p\in\{\pm 1\}\) 由节点的分裂/非分裂型决定。
+因此局部因子分解 \(L_p(C_{A_5},T)=L_p(E_p,T)/(1-\varepsilon_p T)\) 由定义立即推出。\
+表中的 \(a_p\) 可由点计数
+\(
+a_p=p+1-\#E_p(\FF_p)
+\)
+得到，\(\varepsilon_p\) 由定理 \ref{thm:xi-terminal-zm-delta-ca5-nodal-semistable-j} 的分裂性刻画给出。
+可复现核验脚本：\texttt{scripts/exp\_xi\_delta\_ca5\_semistable\_local\_factors\_audit.py}。证毕。
+\end{proof}
+
+\begin{proposition}[Weil--Deligne 参数的“椭圆 \texorpdfstring{$\oplus$}{+} 特殊表示”分裂]\label{prop:xi-terminal-zm-delta-ca5-wd-elliptic-plus-special}
+仍取 \(p\in\{11,13,17,223,3739,7333\}\) 且 \(\ell\neq p\)，并令 \(V_\ell=H^1(C_{A_5,\overline{\QQ}},\QQ_\ell)\)。
+则与 \(V_\ell\) 相伴的 Weil--Deligne 表示 \(\mathrm{WD}_p(V_\ell)=(\rho,N)\) 满足 \(N\neq 0\) 且 \(\rank(N)=1\)。
+并且在半单范畴中有分裂
+\[
+\mathrm{WD}_p(V_\ell)^{\mathrm{ss}}\ \simeq\ \rho_{E_p}\ \oplus\ \mathrm{Sp}_{2}(\varepsilon_p),
+\]
+其中 \(\rho_{E_p}\) 为来自归一化椭圆核 \(E_p\) 的二维非分歧表示（Frobenius 特征多项式 \(X^2-a_pX+p\)），
+\(\mathrm{Sp}_{2}(\varepsilon_p)\) 为由 \(\varepsilon_p\) 决定的二维特殊表示（其惯性不变子空间维数为 \(1\)）。
+因此该局部参数在 \(\mathrm{GSp}(4)\) 的局部 Langlands 参数化中落入 Siegel--抛物诱导型。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:xi-terminal-zm-delta-ca5-nodal-semistable-j}，\(C_{A_5}\) 在所列 \(p\) 处为单节点半稳定约化。
+半稳定情形下的 Picard--Lefschetz 理论给出单值化算子 \(N\) 非零且秩为 \(1\)，对应于唯一节点的消没循环。
+另一方面，推论 \ref{cor:xi-terminal-zm-delta-ca5-local-factor-ap-eps} 给出惯性不变量的半单化分解
+\(
+\bigl(V_\ell^{I_p}\bigr)^{\mathrm{ss}}\cong H^1(E_p)\oplus \QQ_\ell(\varepsilon_p)
+\)；
+这等价于 Weil 部分的“椭圆 \(2\)-维非分歧分量”与“\(1\)-维非分歧特征”之并列。
+把后一维特征与秩 \(1\) 的单值化算子拼合得到二维特殊表示 \(\mathrm{Sp}_2(\varepsilon_p)\)，从而得到所示分裂；
+其局部 \(L\)-因子与推论 \ref{cor:xi-terminal-zm-delta-ca5-local-factor-ap-eps} 的分式表达一致。
+最后，含一支二维特殊表示的四维辛相容参数属于 Siegel--抛物诱导型为局部 Langlands 的标准分类结论。证毕。
+\end{proof}
+
+\begin{theorem}[Lee--Yang 节点符号精确决定局部 \texorpdfstring{$\varepsilon$}{epsilon}-因子]\label{thm:xi-terminal-zm-delta-ca5-local-epsilon-factor-from-node-sign}
+取 \(p\in\{11,13,17,223,3739,7333\}\) 且 \(\ell\neq p\)，并令
+\[
+V_\ell:=H^1(C_{A_5,\overline{\QQ}},\QQ_\ell).
+\]
+取 \(\QQ_p\) 上任意导子为 \(0\) 的加性特征 \(\psi\)。
+则局部 Deligne \(\varepsilon\)-因子满足显式闭式
+\[
+\varepsilon\!\left(s,V_\ell,\psi\right)=-\,\varepsilon_p\cdot p^{-(s-\tfrac12)}.
+\]
+从而 Artin 导子指数满足 \(f_p(V_\ell)=1\)，并且局部根数
+\[
+w_p(V_\ell):=\frac{\varepsilon(\tfrac12,V_\ell,\psi)}{\left|\varepsilon(\tfrac12,V_\ell,\psi)\right|}
+=-\varepsilon_p.
+\]
+在本例中，由推论 \ref{cor:xi-terminal-zm-delta-ca5-local-factor-ap-eps} 的 \(\varepsilon_p\) 列表可直接读出
+\[
+w_{11}=w_{13}=w_{223}=w_{3739}=w_{7333}=+1,\qquad w_{17}=-1,
+\qquad
+\prod_{p\in\{11,13,17,223,3739,7333\}}w_p(V_\ell)=-1.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:xi-terminal-zm-delta-ca5-wd-elliptic-plus-special} 的 Weil--Deligne 半单分裂
+\(
+\mathrm{WD}_p(V_\ell)^{\mathrm{ss}}\simeq \rho_{E_p}\oplus \mathrm{Sp}_2(\varepsilon_p)
+\)，
+其中 \(\rho_{E_p}\) 为二维非分歧表示，故对导子为 \(0\) 的 \(\psi\) 有
+\(
+\varepsilon(s,\rho_{E_p},\psi)=1
+\)。
+另一方面，对非分歧一维特征 \(\chi\) 的特殊表示 \(\mathrm{Sp}_2(\chi)\)，Deligne 的局部常数公式给出
+\[
+\varepsilon\!\left(s,\mathrm{Sp}_2(\chi),\psi\right)=-\chi(\mathrm{Frob}_p)\,p^{-(s-\tfrac12)}.
+\]
+取 \(\chi(\mathrm{Frob}_p)=\varepsilon_p\) 即得所示 \(\varepsilon\)-因子闭式。
+半稳定情形下 \(\mathrm{Sp}_2(\chi)\) 的 Artin 导子指数为 \(1\)，从而 \(f_p(V_\ell)=1\)；
+将 \(s=\tfrac12\) 代入并归一化即得根数恒等式 \(w_p(V_\ell)=-\varepsilon_p\)。
+最后代入推论 \ref{cor:xi-terminal-zm-delta-ca5-local-factor-ap-eps} 的 \(\varepsilon_p\) 取值即可得到数值与乘积。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$\Jac(C_{A_5})$}{Jac(CA5)} 在奇素数处的根数乘积刚性]\label{cor:xi-terminal-zm-delta-ca5-jacobian-odd-rootnumber-product-rigidity}
+令 \(A:=\Jac(C_{A_5})\)。
+则对奇素数 \(p\neq 3\)，除
+\(
+p\in\{11,13,17,37,223,3739,7333\}
+\)
+外均为良约化，因而局部根数为 \(+1\)。
+并且在上述七个奇素数处皆为单节点半稳定约化（命题 \ref{prop:xi-terminal-zm-delta-ca5-discriminant-factorization-semistable-primes} 与结论 \ref{con:xi-terminal-zm-delta-a5-curve-semistable-reduction-p37-j16}），其节点符号为 \(\varepsilon_p\)（其中 \(\varepsilon_{37}=-1\)，见命题 \ref{prop:xi-terminal-zm-delta-ca5-collision-node-splitting-legendre}）。
+因此
+\[
+\prod_{\substack{p\ \text{奇素数}\\p\neq 3}}
+w_p\!\left(H^1(A_{\overline{\QQ}},\QQ_\ell)\right)
+=-1,
+\]
+从而全局根数满足严格约束
+\[
+w(A)=-\,w_2(A)\,w_3(A),
+\qquad
+w_2(A),w_3(A)\in\{\pm 1\}.
+\]
+\end{corollary}
+\begin{proof}
+由良约化处的非分歧性，除有限多个坏素数外局部根数皆为 \(+1\)。
+命题 \ref{prop:xi-terminal-zm-delta-ca5-discriminant-factorization-semistable-primes} 给出在奇素数 \(p\neq 3\) 下坏约化的充要素数集合，并且每处恰为单节点半稳定约化；
+对 \(p=37\) 的半稳定性由结论 \ref{con:xi-terminal-zm-delta-a5-curve-semistable-reduction-p37-j16} 给出。
+对 \(p\in\{11,13,17,223,3739,7333\}\) 由定理 \ref{thm:xi-terminal-zm-delta-ca5-local-epsilon-factor-from-node-sign} 得
+\(
+w_p(H^1(A))=w_p(V_\ell)=-\varepsilon_p
+\)；
+对 \(p=37\)，同一单节点半稳定结构亦给出 \(w_{37}(H^1(A))=-\varepsilon_{37}=+1\)。
+将这些取值相乘即得所示乘积恒等式。
+全局根数等于全体局部根数之积，遂得到 \(w(A)=-w_2(A)w_3(A)\)。证毕。
+\end{proof}
+
+\begin{conjecture}[由单节点局部型态控制的 \texorpdfstring{$\mathrm{GSp}(4)$}{GSp(4)} 全局对应]\label{conj:xi-terminal-zm-delta-ca5-paramodularity}
+令 \(A:=\Jac(C_{A_5})\) 为一主极化阿贝尔曲面，并记
+\[
+N_{\mathrm{tame}}:=11\cdot 13\cdot 17\cdot 37\cdot 223\cdot 3739\cdot 7333.
+\]
+则预期存在权 \(2\) 的 Siegel 参模形式 \(F\)，其参模层 \(N\) 满足 \(N_{\mathrm{tame}}\mid N\)，并使得：
+\begin{itemize}
+  \item 对所有奇素数 \(p\nmid N\) 的良约化处，\(A\) 的局部 \(L\)-因子与 \(F\) 的 Hecke--Satake 参数一致；
+  \item 对每个 \(p\mid N_{\mathrm{tame}}\)，其局部 \(L\)-参数属于命题 \ref{prop:xi-terminal-zm-delta-ca5-wd-elliptic-plus-special} 所述的 Siegel--抛物诱导型，且节点符号 \(\varepsilon_p\) 与 Atkin--Lehner 号相容。
+\end{itemize}
+\end{conjecture}
+
+\endinput
+

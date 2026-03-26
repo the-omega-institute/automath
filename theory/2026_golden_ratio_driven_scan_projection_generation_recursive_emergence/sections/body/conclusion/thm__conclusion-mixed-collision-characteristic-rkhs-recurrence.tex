@@ -1,0 +1,124 @@
+\begin{theorem}[混合碰撞核的 characteristic Hilbert 几何与 sharp 等号判据]\label{thm:conclusion-mixed-collision-characteristic-hilbert-geometry}
+固定分辨率 \(m\ge 1\) 与整数 \(q\ge 1\)。在正概率单纯形
+\[
+\Delta^\circ(X_m):=\{u\in \Delta(X_m):u(x)>0\ \forall x\in X_m\}
+\]
+上定义核
+\[
+K_{q,m}(u,v):=\sum_{x\in X_m}u(x)^qv(x)^q.
+\]
+则：
+\begin{enumerate}
+  \item \(K_{q,m}\) 为正定核，其特征映射可取为
+  \[
+  \Phi_{q,m}(u):=\bigl(u(x)^q\bigr)_{x\in X_m}\in \ell^2(X_m),
+  \]
+  并满足
+  \[
+  K_{q,m}(u,v)=\langle \Phi_{q,m}(u),\Phi_{q,m}(v)\rangle_{\ell^2(X_m)}.
+  \]
+  \item 相应最大均值差异具有显式闭式
+  \[
+  \mathrm{MMD}_{q,m}(u,v)^2
+  =\sum_{x\in X_m}\bigl(u(x)^q-v(x)^q\bigr)^2.
+  \]
+  因而 \(K_{q,m}\) 是 characteristic 的：
+  \[
+  \mathrm{MMD}_{q,m}(u,v)=0\iff u=v.
+  \]
+  \item Cauchy--Schwarz 等号具有 sharp 刚性：
+  \[
+  K_{q,m}(u,v)^2=K_{q,m}(u,u)K_{q,m}(v,v)
+  \iff u=v.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一条由定义立即成立，故 \(K_{q,m}\) 为 \(\ell^2(X_m)\) 中特征映射的 Gram 核。
+
+第二条由 Hilbert 空间中核与最大均值差异的标准恒等式给出：
+\[
+\mathrm{MMD}_{q,m}(u,v)^2
+=K_{q,m}(u,u)+K_{q,m}(v,v)-2K_{q,m}(u,v)
+=\sum_{x\in X_m}\bigl(u(x)^q-v(x)^q\bigr)^2.
+\]
+若该量为零，则对所有 \(x\in X_m\) 有 \(u(x)^q=v(x)^q\)。由于 \(q>0\) 且 \(u,v\) 逐点为正，遂得 \(u(x)=v(x)\) 对一切 \(x\) 成立，即 \(u=v\)。
+
+对第三条，若
+\[
+K_{q,m}(u,v)^2=K_{q,m}(u,u)K_{q,m}(v,v),
+\]
+则由 \(\ell^2\) 中 Cauchy--Schwarz 等号判据，\(\Phi_{q,m}(u)\) 与 \(\Phi_{q,m}(v)\) 线性相关，即存在 \(c>0\) 使
+\[
+u(x)^q=cv(x)^q\qquad (\forall x\in X_m).
+\]
+因此 \(u=c^{1/q}v\)。再用 \(u,v\) 都是概率分布，
+\[
+1=\sum_x u(x)=c^{1/q}\sum_x v(x)=c^{1/q},
+\]
+故 \(c=1\)，从而 \(u=v\)。反向显然。证毕。
+\end{proof}
+
+\begin{theorem}[有限状态机制的 mixed-MMD 刚性递推]\label{thm:conclusion-mixed-collision-finite-state-mmd-recurrence}
+设两列分布
+\[
+w_m^{(0)},\ w_m^{(1)}\in \Delta^\circ(X_m)
+\]
+都由某个有限状态在线核产生。对固定整数 \(q\ge 1\)，定义
+\[
+\Delta_q(m):=\mathrm{MMD}_{q,m}\!\bigl(w_m^{(0)},w_m^{(1)}\bigr)^2.
+\]
+则序列 \(\{\Delta_q(m)\}_{m\ge m_0}\) 满足有限阶整系数线性递推。更具体地，
+\[
+\Delta_q(m)
+=\mathrm{Col}^{(0,0)}_q(m)+\mathrm{Col}^{(1,1)}_q(m)-2\mathrm{Col}^{(0,1)}_q(m),
+\]
+其中三项都可由有限维非负矩阵幂读出，因此其指数增长主尺度由有限多个 Perron 根的最大者控制。
+
+若记 \(\Delta_q\) 的最小递推阶数为 \(d_q^{\mathrm{mix}}\)，则
+\[
+\Delta_q(m)=0\quad\text{在任意 }d_q^{\mathrm{mix}}\text{ 个连续窗口上成立}
+\]
+便强制
+\[
+\Delta_q(m)=0\quad\text{对全部后继 }m\text{ 成立},
+\]
+从而
+\[
+w_m^{(0)}=w_m^{(1)}
+\qquad
+(\text{对全部后继 }m).
+\]
+\end{theorem}
+\begin{proof}
+由定义 \ref{def:pom-mixed-collision-probability} 与推论 \ref{cor:pom-mixed-collision-pd-kernel}，
+\[
+\mathrm{MMD}_{q,m}\!\bigl(w_m^{(0)},w_m^{(1)}\bigr)^2
+=\sum_{x\in X_m}\bigl((w_m^{(0)}(x))^q-(w_m^{(1)}(x))^q\bigr)^2,
+\]
+展开即得
+\[
+\Delta_q(m)
+=\mathrm{Col}^{(0,0)}_q(m)+\mathrm{Col}^{(1,1)}_q(m)-2\mathrm{Col}^{(0,1)}_q(m).
+\]
+其中混合项 \(\mathrm{Col}^{(0,1)}_q(m)\) 由命题 \ref{prop:pom-mixed-collision-kernel-computable} 可编译为有限维非负矩阵幂；两条自碰撞项是同一有限状态编译在对角情形 \((0,0)\)、\((1,1)\) 的特例，故同样满足有限阶整系数线性递推。于是它们的线性组合 \(\Delta_q(m)\) 也满足有限阶整系数线性递推，而其指数增长主尺度由对应矩阵族 Perron 根的有限并所控制。
+
+若 \(\Delta_q\) 在长度 \(d_q^{\mathrm{mix}}\) 的连续窗口上为零，则由线性递推的唯一性，所有后继项都必须为零。再由定理 \ref{thm:conclusion-mixed-collision-characteristic-hilbert-geometry} 的 characteristic 性，
+\[
+\Delta_q(m)=0
+\iff
+w_m^{(0)}=w_m^{(1)}.
+\]
+故对全部后继 \(m\) 都有 \(w_m^{(0)}=w_m^{(1)}\)。证毕。
+\end{proof}
+
+\begin{conjecture}[局部 Walsh--hard-core 层析与全局 mixed-collision 几何的完备闭包]\label{conj:conclusion-walsh-hardcore-mixed-collision-complete-closure}
+固定分辨率 \(m\ge 1\)。设两套有限状态折叠机制具有同一稳定类型集合 \(X_m\)，并分别诱导局部纤维族 \(\{F_x\}_{x\in X_m}\) 与正分布簇 \(\{w_{m,a}\}_{a\in A}\subset \Delta^\circ(X_m)\)。
+记其局部层析数据与全局机制几何数据为
+\[
+\mathfrak W_m:=\{W_x(I)\}_{x\in X_m,\ I\subseteq[m]},
+\qquad
+\mathfrak K_m:=\{K_{q,m}(w_{m,a},w_{m,b})\}_{q\ge 1,\ a,b\in A}.
+\]
+则若两套机制在 \((\mathfrak W_m,\mathfrak K_m)\) 上完全一致，它们应当只相差于稳定类型的重标记与同步状态的极小实现等价。换言之，在当前 fiber/hard-core/Walsh/moment-kernel 语义下，\((\mathfrak W_m,\mathfrak K_m)\) 应已构成局部--全局可见量的完备闭包。
+\end{conjecture}

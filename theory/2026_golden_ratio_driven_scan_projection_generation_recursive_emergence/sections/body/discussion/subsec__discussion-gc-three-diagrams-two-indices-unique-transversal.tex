@@ -1,0 +1,186 @@
+\subsection{结构性结果簇：三类交换图、两类指数与唯一连续横截}\label{subsec:discussion-gc-three-diagrams-two-indices-unique-transversal}
+本小节把上一小节的“固定切片像回收器”现象进一步严格化为一组完全可核验的代数/算子不变量：
+三类严格交换图把可见信息压缩到一条统一的审计接口，两类整数/维数指数刻画制度允许的离散残余，而若要保留切片外的连续自由度，则其唯一连续横截必因子化为 \(\log|u|\)（推论 \ref{cor:xi-unique-continuous-transverse-register}）。
+下述陈述均以前文已编号结论为锚点，仅作结构性归并，不引入新的证明前提。
+
+\paragraph{三类交换图（压缩机制）}
+本文语境中的“回收”可被精确拆分为三条严格交换的压缩链：
+\begin{enumerate}
+  \item \textbf{Witt--Euler 交换图（共轭遗忘）：}
+  由定理 \ref{thm:discussion-witt-euler-gc-functor}（亦见注 \ref{rem:zetaK-commuting-diagram}），
+  \[
+  \mathrm{ZetaDet}
+  ~=~
+  \mathrm{Euler}\circ\mathrm{Mob}\circ\mathrm{TrSeq},
+  \]
+  即任何 endomorphism 在制度内仅通过迹序列/primitive 序列/Euler 乘积被读出并严格等价。
+  \item \textbf{完成化 Chebyshev--Adams 压缩（幂半群回收为 \(\ZZ[S]\) 的 Adams 操作）：}
+  幂替换 \(u\mapsto u^d\) 在完成化迹坐标 \(S=r+r^{-1}\) 上严格压缩为 \(S\mapsto C_d(S)\)（附录 \S\ref{subsec:unit-disk-witt-chebyshev}，并见推论 \ref{cor:chebyshev-witt-completed}），从而把所有倍角/完成化审计落入同一整系数闭包。
+  \item \textbf{unitary slice 穿越交换图（零点事件 \(\Leftrightarrow\) 穿越 \(1\)）：}
+  自对偶完成化把临界线零点事件严格压缩为 unitary slice 上同一点 \(1\) 的谱穿越事件（定理 \ref{thm:discussion-critical-line-single-point-crossing}）。
+\end{enumerate}
+
+\begin{theorem}[Chebyshev--Witt 等变性：完成化后 Möbius/Witt 反演与 Adams 操作严格交换]\label{thm:discussion-chebyshev-witt-equivariance}
+取半角变量 \(r\) 并令 \(u=r^2\)、\(S=r+r^{-1}\in[-2,2]\)。
+对每个 \(d\ge 1\) 定义 Chebyshev--Adams 多项式
+\[
+C_d(S):=r^d+r^{-d}\in\ZZ[S].
+\]
+设 \(\{a_n(u)\}_{n\ge 1}\) 为迹（ghost）多项式序列，\(\{p_n(u)\}_{n\ge 1}\) 为其 primitive 序列（Witt/Möbius 反演，命题 \ref{prop:zetaK-mobius-primitive}）。
+在完成化坐标下定义 completed ghost 与 completed primitive
+\[
+\widehat a_n(S):=r^{-n}a_n(r^2)\in\ZZ[S],\qquad
+\widehat p_n(S):=r^{-n}p_n(r^2)\in\ZZ[S].
+\]
+则对任意 \(n\ge 1\) 有严格恒等式
+\[
+\boxed{\ 
+\widehat p_n(S)=\frac1n\sum_{d\mid n}\mu(d)\,\widehat a_{n/d}\!\bigl(C_d(S)\bigr),
+\qquad
+\widehat a_n(S)=\sum_{d\mid n}d\,\widehat p_d\!\bigl(C_{n/d}(S)\bigr)\ }.
+\]
+并且完成化后的幂替换满足严格“倍角律”
+\[
+\boxed{\ r^{-dn}\,p_n(r^{2d})=\widehat p_n\!\bigl(C_d(S)\bigr)\ }.
+\]
+\end{theorem}
+
+\begin{proof}
+见推论 \ref{cor:chebyshev-witt-completed} 与推论 \ref{cor:primitive-completion-hatp}；其中 \(\widehat a_n,\widehat p_n\in\ZZ[S]\) 的下降来自反演不变子环恒等式（注 \ref{rem:completion-invariant-ring} 或命题 \ref{prop:completion-subring-unique-angle}）。证毕。
+\end{proof}
+
+\begin{corollary}[概念压缩命题：primitive 抽取是 \texorpdfstring{$\ZZ[S]$}{Z[S]} 上的 \texorpdfstring{$\lambda$}{lambda}-等变结构]\label{cor:discussion-lambda-equivariant-primitive}
+在 \(\ZZ[S]\) 上定义 Adams 操作族 \(\psi^d:\ZZ[S]\to\ZZ[S]\)（\(d\ge 1\)）
+\[
+\boxed{\ (\psi^d f)(S):=f\!\bigl(C_d(S)\bigr)\ }.
+\]
+则完成化后的 Möbius/Witt 反演在 \((\ZZ[S],\psi^d)\) 上严格等变：\(\{\widehat a_n\}\) 为 ghost 数据，\(\{\widehat p_n\}\) 为 Big-Witt primitive 块，且“幂半群回收”为同一 \(\lambda\)-结构上的可审计 primitive 坐标。
+\end{corollary}
+
+\begin{proof}
+直接由定理 \ref{thm:discussion-chebyshev-witt-equivariance} 的两条互反恒等式可见：所有出现的幂替换仅以 \(S\mapsto C_d(S)\) 的形式进入，即为 \(\psi^d\) 的作用。证毕。
+\end{proof}
+
+\begin{corollary}[审计制度的代数闭包：unitary-slice 的倍角/完成化证书可完全在 \texorpdfstring{$\ZZ[x]$}{Z[x]} 中实现]\label{cor:discussion-audit-closure-Zx}
+取 Cayley 坐标 \(r=\iota(x)=\frac{1+\mathrm{i}x}{1-\mathrm{i}x}\)（\(x\in\RR\)），则
+\[
+S(x)=r+r^{-1}=\frac{2(1-x^2)}{1+x^2},
+\]
+且对每个 \(d\ge 1\) 存在 \(\tau_d(x)=B_d(x)/A_d(x)\in\QQ(x)\)（其中 \(A_d,B_d\in\ZZ[x]\) 由纯乘加递推生成）使得
+\[
+C_d\!\bigl(S(x)\bigr)=S\!\bigl(\tau_d(x)\bigr).
+\]
+因此，任何仅依赖于 \(S\mapsto C_d(S)\) 的 unitary-slice 证书链（包括对 \(\widehat a_n,\widehat p_n\) 的迭代代入与组合）都可完全在 \(\ZZ[x]\) 的乘加运算内实现。
+\end{corollary}
+
+\begin{proof}
+见命题 \ref{prop:chebyshev-adams-fully-rational}。证毕。
+\end{proof}
+
+\begin{theorem}[完成化--Dwork 同余（Chebyshev 形式）]\label{thm:discussion-completed-dwork-chebyshev}
+令 \(p\) 为素数、\(k\ge 1\)。在定理 \ref{thm:discussion-chebyshev-witt-equivariance} 的完成化记号下，completed ghost 满足同余
+\[
+\boxed{\ \widehat a_{p^k}(S)\equiv \widehat a_{p^{k-1}}\!\bigl(C_p(S)\bigr)\pmod{p^k}\qquad\text{于 }\ZZ[S].\ }
+\]
+\end{theorem}
+
+\begin{proof}
+由推论 \ref{cor:witt-dwork-congruence}，在 \(\ZZ[u]\) 中有
+\(
+a_{p^k}(u)\equiv a_{p^{k-1}}(u^p)\ (\mathrm{mod}\ p^k)
+\)。
+代入 \(u=r^2\) 得
+\(
+a_{p^k}(r^2)\equiv a_{p^{k-1}}(r^{2p})\ (\mathrm{mod}\ p^k)
+\) 于 \(\ZZ[r,r^{-1}]\)。
+两侧同乘 \(r^{-p^k}\) 并注意
+\[
+r^{-p^k}a_{p^{k-1}}(r^{2p})
+=(r^p)^{-p^{k-1}}a_{p^{k-1}}\!\bigl((r^p)^2\bigr)
+=\widehat a_{p^{k-1}}\!\bigl(S(r^p)\bigr)
+=\widehat a_{p^{k-1}}\!\bigl(C_p(S)\bigr),
+\]
+即得所示同余；并由 \(\widehat a_{\bullet}\in\ZZ[S]\)（定理 \ref{thm:discussion-chebyshev-witt-equivariance}）可将同余视为在 \(\ZZ[S]\) 中成立。证毕。
+\end{proof}
+
+\begin{corollary}[回收残余：模 \texorpdfstring{$p^k$}{p^k} 护栏与 \texorpdfstring{$\mathbb{F}_p$}{F\_p} 稳定指纹]\label{cor:discussion-recycling-residuals}
+在仅允许固定切片可见量的制度下，除被交换图回收的实现细节之外，仍存在两类完全内部、可离线核验的剩余指纹：
+\begin{enumerate}
+  \item \textbf{\(\ZZ/p^k\)-同余型残余（Dwork/necklace 护栏）：}
+  完成化 Dwork 同余（定理 \ref{thm:discussion-completed-dwork-chebyshev}）及其系数稀疏化/迭代下降（命题 \ref{prop:witt-pk-sparsification} 与命题 \ref{prop:witt-frobenius-iterated-descent}）给出逐层可审计的 \(\bmod p^k\) 约束。
+  \item \textbf{\(\mathbb{F}_p\)-稳定指纹：}
+  对 \(\theta\)-导数矩 \(A^{(r)}_{p^k}\) 的 \(p\)-进滤波产生与层级 \(k\) 无关的稳定首位残差 \(\alpha_{p,r}\in\mathbb{F}_p\)（推论 \ref{cor:witt-theta-stable-residue}）；在 \(p=2\) 时进一步得到永久稳定的二进制指纹 \(\varepsilon_r\in\{0,1\}\)（推论 \ref{cor:witt-theta-binary-fingerprint}）。
+\end{enumerate}
+因此，“回收残余”可严格落入有限代数指纹：同余护栏 \(\bmod p^k\) 与稳定指纹 \(\bmod p\)。
+\end{corollary}
+
+\paragraph{两类指数（制度允许的离散异常）}
+若把“切片外自由度”理解为必须被外置为寄存器的可审计差异，则本文得到两类最小指数：
+\begin{enumerate}
+  \item \textbf{点状缺陷的整数指数 \(\kappa\)：}
+  在边界酉化、无奇异内因子且有限缺陷口径下，
+  \(\kappa=\mathrm{Wind}(F)=\deg(B_F)\)
+  （命题 \ref{prop:winding-equals-blaschke-degree}），并与 Toeplitz 负平方/Pontryagin/Tate--Maslov 障碍等价统一（定理 \ref{thm:xi-tate-maslov-pontryagin-unification}）。
+  \item \textbf{维数型 \(\mathsf{NULL}\) 的指数 \(d_\ast\)：}
+  在统一最小性与协议闭包下，模式轴完备性当且仅当 Hankel 秩一致有界，即存在统一维数上界 \(d_\ast\) 使所有层级/相位的最小 realization 不超过该维数（定理 \ref{thm:xi-completeness-iff-hankel-bounded}）。
+\end{enumerate}
+
+\begin{theorem}[穿越--绕数--Blaschke 度的统一指数：制度允许的点状异常仅能以整数形式出现]\label{thm:discussion-crossing-winding-blaschke-index}
+在自对偶 completion 与 unitary-slice 规约下，临界线零点事件等价于 unitary slice 上 \(1\in\mathrm{Spec}(U_L(\theta))\) 的穿越事件（定理 \ref{thm:discussion-critical-line-single-point-crossing}）。
+若进一步处于边界酉化且无奇异内因子 \(S_F\equiv 1\) 的有限缺陷口径，则存在整数指数
+\[
+\boxed{\ \kappa=\mathrm{Wind}(F)=\deg(B_F)\ }
+\]
+并且该 \(\kappa\) 完备刻画制度内允许的点状离切片缺陷（Blaschke 点状缺陷/Toeplitz 失效形态/Tate--Maslov 障碍的同一化，定理 \ref{thm:xi-tate-maslov-pontryagin-unification}）。
+特别地，\(\deg(B_F)=0\) 是“点状缺陷不可见化（不外置正交残差轴）”的严格必要条件。
+\end{theorem}
+
+\begin{proof}
+第一句即定理 \ref{thm:discussion-critical-line-single-point-crossing}。
+在有限 Blaschke 且 \(S_F\equiv 1\) 的口径下，命题 \ref{prop:winding-equals-blaschke-degree} 给出 \(\mathrm{Wind}(F)=\deg(B_F)\)；
+而点状缺陷作为制度不变量由定理 \ref{thm:xi-tate-maslov-pontryagin-unification} 统一为同一个整数 \(\kappa\)。
+最后一句由 \(\deg(B_F)=0\iff B_F\equiv 1\)（备注 \ref{rem:blaschke-defect-finite}）立得。证毕。
+\end{proof}
+
+\begin{theorem}[唯一连续横截方向：若要保存切片外连续自由度，唯一可行寄存器必因子化为 \texorpdfstring{$\log|u|$}{log|u|}]\label{thm:discussion-unique-continuous-transversal}
+若允许在纯相位制度之外外置一个连续记录轴以承载径向自由度，则在因子意义下该连续横截方向唯一：任何“减少 \(\mathsf{NULL}\)”的连续扩维，必等价于外置径向寄存器 \(\varrho(u)=\log|u|\) 的单调重参数化；不存在第二条与相位轴并列的连续横截寄存器。
+\end{theorem}
+
+\begin{proof}
+见推论 \ref{cor:xi-unique-continuous-transverse-register}（并与定理 \ref{thm:xi-pw-no-continuous-hair} 的“无额外连续毛发”原则配套）。证毕。
+\end{proof}
+
+\begin{corollary}[端点的离散残差与精度势账本：唯一连续通道 \texorpdfstring{$\perp$}{⊥} 有限离散通道]\label{cor:discussion-endpoint-discrete-vs-continuous}
+在端点 \(u=-1\) 邻域，幂半群作用在完成化坐标上分解为两条互不耦合的载荷：
+\begin{enumerate}
+  \item \textbf{离散端点残差：}\(C_m(0)\in\{0,\pm 2\}\) 仅由 \(m\bmod 4\) 决定（命题 \ref{prop:half-angle-z4-residue}）；
+  \item \textbf{连续精度账本：}端点精度势 \(y(u)=-\log|\mathfrak{w}(u)|\) 在伸缩下满足加法律 \(y(\psi_m(u))=y(u)+\log m\)（命题 \ref{prop:endpoint-orthogonal-decomposition-z4-Rplus}，亦见 \S\ref{subsec:unit-circle-scale-linearization}）。
+\end{enumerate}
+因此在禁止径向连续寄存器的纯相位闭包内，切片外的连续信息通道被结构性封死（只能触发 \(\mathsf{NULL}\)）；制度仍允许的非平凡残余只能落在可数/离散通道（例如整数指数 \(\kappa\) 与端点有限残差）。
+\end{corollary}
+
+\begin{theorem}[“维数型 \texorpdfstring{$\mathsf{NULL}$}{NULL}”的可核验触发条件：Hankel 秩一致有界 \texorpdfstring{$\Longleftrightarrow$}{<->} 模式轴完备性]\label{thm:discussion-dimensional-null-trigger}
+在统一最小性与协议闭包假设下，模式轴完备性当且仅当 Hankel 秩一致有界：
+存在常数 \(d_\ast\) 与层级阈值 \(\ell_0\) 使得对所有 \(\ell\ge \ell_0\) 与所有相位采样 \(\theta\) 有
+\[
+d^{(\ell)}_{\min}(\theta)\le d_\ast.
+\]
+当 Hankel 秩不能一致有界时，任何固定有限维模式类型都会在某些 \((\ell,\theta)\) 上出现不可消去的模态塌缩；在协议闭包下该塌缩不能被暗中吸收，只能以维数型 \(\mathsf{NULL}\) 触发回收。
+\end{theorem}
+
+\begin{proof}
+这正是定理 \ref{thm:xi-completeness-iff-hankel-bounded} 的讨论性重述；其证明依赖 Hankel 秩定理 \ref{thm:hankel-rank-minimal}。证毕。
+\end{proof}
+
+\paragraph{结论性归并（严格分类）}
+综合本小节与上一小节的交换图/指数/横截唯一性，可将“固定切片像回收器”的数学实质表述为：在制度允许的可审计口径下，任意差异最终只能表现为
+\begin{enumerate}
+  \item 点状缺陷的整数指数 \(\kappa=\deg(B_F)\)（或等价的 Toeplitz/Pontryagin/Tate--Maslov 整数障碍）；
+  \item 端点的有限离散残差（例如 \(m\bmod 4\)）；
+  \item 或在允许连续外置时，唯一的径向横截 \(\varrho=\log|u|\)（及其单调重参数化）；
+  \item 以及与上述压缩兼容的有限域/同余指纹（Dwork 护栏与稳定残差谱，推论 \ref{cor:discussion-recycling-residuals}）。
+\end{enumerate}
+除上述残余外，其余自由度在类型层必被回收为 \(\mathsf{NULL}\) 或被压缩到可核验的 primitive/指数不变量之中。
+
+\endinput
+

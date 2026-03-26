@@ -1,0 +1,108 @@
+% Auto-split to keep each TeX source < 600 lines.
+
+\paragraph{R\'enyi--预言机反演的非渐近误差界}\label{par:fold-oracle-renyi-nonasymptotic}
+本段在预言机容量闭式（定理 \ref{thm:fold-oracle-capacity-closed-form}）之上给出一条对任意有限映射均成立的非渐近失败上界：
+失败概率可由推出分布的 R\'enyi 质量 \(\sum_x\pi(x)^q\) 控制，从而在给定矩谱指数 \(h_q\) 的情形下导出线性比特预算下的失败指数下界。
+
+\begin{theorem}[R\'enyi--预言机反演的非渐近失败界]\label{thm:oracle-renyi-nonasymptotic-error-bound}
+设 \(f:\Omega\to X\) 为有限集合间映射，记纤维多重度 \(d(x):=\card{f^{-1}(x)}\) 并令
+\[
+\pi(x):=\frac{d(x)}{|\Omega|}\qquad(x\in X),
+\]
+从而 \(\pi\) 为 \(X\) 上概率分布。
+给定 \(B\in\NN\) 比特侧信息，记最优成功率为
+\[
+\mathrm{Succ}_f(B):=\frac{1}{|\Omega|}\sum_{x\in X}\min\bigl(d(x),2^B\bigr)
+=\sum_{x\in X}\min\bigl(\pi(x),t\bigr),
+\qquad
+t:=\frac{2^B}{|\Omega|}.
+\]
+则对任意 \(q>1\) 成立非渐近不等式
+\begin{equation}\label{eq:oracle-renyi-nonasymptotic}
+1-\mathrm{Succ}_f(B)\ \le\ t^{1-q}\sum_{x\in X}\pi(x)^q.
+\end{equation}
+等价地，令 R\'enyi 熵（自然对数）为
+\[
+H_q(\pi):=\frac{1}{1-q}\log\sum_{x\in X}\pi(x)^q,
+\]
+则对任意 \(q>1\) 与任意 \(\varepsilon\in(0,1)\)，只要
+\begin{equation}\label{eq:oracle-renyi-budget}
+B\ \ge\ \frac{\log|\Omega|-H_q(\pi)+\frac{1}{q-1}\log\frac{1}{\varepsilon}}{\log 2},
+\end{equation}
+便有 \(\mathrm{Succ}_f(B)\ge 1-\varepsilon\)。
+\end{theorem}
+\begin{proof}
+由定义 \(1-\mathrm{Succ}_f(B)=\sum_x(\pi(x)-t)_+\)。
+对任意 \(a,t>0\) 与 \(q>1\) 有初等不等式
+\[
+(a-t)_+\le t^{1-q}a^q:
+\]
+当 \(a\le t\) 左端为 \(0\)；当 \(a>t\) 时有 \(a-t<a\le a(a/t)^{q-1}=t^{1-q}a^q\)。
+逐点应用并求和即得 \eqref{eq:oracle-renyi-nonasymptotic}。
+将右端写成指数形式并解出 \(B\) 得 \eqref{eq:oracle-renyi-budget}。证毕。
+\end{proof}
+
+\begin{corollary}[矩谱给出的预言机失败指数下界]\label{cor:oracle-failure-exponent-from-renyi-spectrum}
+设一列映射 \(f_m:\Omega_m\to X_m\) 满足 \(|\Omega_m|=2^m\)，并令 \(\pi_m(x):=d_m(x)/2^m\) 为推出分布。
+若对某个 \(q>1\) 极限
+\[
+h_q:=-\lim_{m\to\infty}\frac{1}{m}\log\sum_{x\in X_m}\pi_m(x)^q
+\]
+存在。
+取线性比特预算 \(B=\lfloor \alpha m\rfloor\)（\(\alpha\in[0,1]\)）。
+则
+\begin{equation}\label{eq:oracle-failure-exponent-lower-bound}
+\liminf_{m\to\infty}-\frac{1}{m}\log\bigl(1-\mathrm{Succ}_{f_m}(B)\bigr)
+\ \ge\
+\Bigl[h_q-(q-1)(1-\alpha)\log 2\Bigr]_+,
+\end{equation}
+其中 \([u]_+:=\max(u,0)\)。
+\end{corollary}
+\begin{proof}
+将定理 \ref{thm:oracle-renyi-nonasymptotic-error-bound} 应用于 \(f_m\)。
+此时 \(t_m=2^{B}/2^{m}=2^{-(1-\alpha)m+o(m)}=\exp\bigl(-(1-\alpha)m\log 2+o(m)\bigr)\)，且
+\(\sum_x\pi_m(x)^q=\exp(-mh_q+o(m))\)。
+代入 \eqref{eq:oracle-renyi-nonasymptotic} 得
+\[
+1-\mathrm{Succ}_{f_m}(B)
+\le
+\exp\Bigl(m\bigl((q-1)(1-\alpha)\log 2-h_q\bigr)+o(m)\Bigr).
+\]
+取 \(-\frac1m\log\) 并取 \(\liminf\) 得 \eqref{eq:oracle-failure-exponent-lower-bound}。证毕。
+\end{proof}
+
+\begin{corollary}[Fold\(_m\) 的二阶矩证书给出显式成功指数阈值]\label{cor:fold-oracle-success-exponent-from-h2}
+对折叠 \(\Fold_m:\Omega_m\to X_m\)（\(|\Omega_m|=2^m\)），令 \(\pi_m(x)=d_m(x)/2^m\)。
+表 \ref{tab:fold_collision_renyi_spectrum} 给出
+\[
+h_2=0.477554342632\cdots .
+\]
+于是对任意线性比特预算 \(B=\lfloor \alpha m\rfloor\) 有
+\[
+\liminf_{m\to\infty}-\frac{1}{m}\log\bigl(1-\mathrm{Succ}_{m}(B)\bigr)
+\ \ge\
+\Bigl[h_2-(1-\alpha)\log 2\Bigr]_+.
+\]
+特别地，若
+\[
+\alpha\ >\ 1-\frac{h_2}{\log 2}
+\ =\ 0.3110347181298\cdots,
+\]
+则最优失败概率以至少指数速率 \(h_2-(1-\alpha)\log 2>0\) 衰减。
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:oracle-failure-exponent-from-renyi-spectrum} 取 \(q=2\) 即得第一式；阈值条件由 \(h_2>(1-\alpha)\log 2\) 等价变形得到。证毕。
+\end{proof}
+
+\begin{conjecture}[oracle 失败指数与矩谱的精确对偶]\label{conj:fold-oracle-failure-exponent-duality}
+对折叠族 \(\Fold_m\)，对每个 \(\alpha\in[0,1]\) 记失败指数（若极限存在）为
+\[
+E(\alpha):=\lim_{m\to\infty}-\frac{1}{m}\log\bigl(1-\mathrm{Succ}_m(\lfloor \alpha m\rfloor)\bigr).
+\]
+推论 \ref{cor:oracle-failure-exponent-from-renyi-spectrum} 给出下界
+\[
+E(\alpha)\ \ge\ \sup_{q>1}\Bigl[h_q-(q-1)(1-\alpha)\log 2\Bigr]_+.
+\]
+猜想：存在充分强的纤维权重多重分形原理，使得上述下界对所有 \(\alpha\) 取到等号。
+\end{conjecture}
+

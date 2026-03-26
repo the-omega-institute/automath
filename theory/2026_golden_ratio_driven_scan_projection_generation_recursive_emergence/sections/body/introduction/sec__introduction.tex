@@ -1,0 +1,40 @@
+\section{引言}\label{sec:introduction}
+
+有限窗口观测在动力系统、符号动力学与自动机/编码理论中提供了一个统一接口：给定单生成作用 \(T^t\) 与二元投影读出 \(s_t=\ind_W(T^t x)\)，观测数据天然以长度 \(m\) 的滑动窗口微态 \(\Omega_m=\{0,1\}^m\) 组织。该视角的困难在于：当 \(m\) 增大时微态空间指数膨胀，直接以微态作为“概念/类型”将导致稀疏性与不稳定，进而阻断跨分辨率的可审计推理链条。
+\par
+本文的目标是构造一条可审计的生成链：从扫描—投影读出出发，经统计稳定性与递归地址化得到稳定语法、折叠规范形与可实现的算术结构。为保证可核对性，本文将证明链与解释性叙述严格分离：所有结论以前文编号的定义/定理/命题为锚点，解释性术语不作为证明前提。全文固定黄金分支 \(\alpha=\varphi^{-1}\) 作为 Hurwitz/Markov 最坏有理逼近口径下的反共振规范代表（\cite{Cassels1957,KuipersNiederreiter1974}），并在频率/稳定性语句中采用 \(T\)-不变测度与遍历工具（\cite{WaltersErgodicTheory}）。
+
+\subsection{贡献清单：可审计接口}\label{subsec:contrib-scope}
+\textbf{本文的数学贡献}集中在一组可独立审计的结构性结论上，可概括为以下几条“可审计接口”：
+\begin{itemize}
+  \item \textbf{递归地址化的极简性：}将递归地址化严格化为“可读出前缀”的内生化机制：地址对象未给定时，评价函数 \(\ind_{C_a}\) 在指称/类型层不成立，读出偏函数不定义并以 \(\mathsf{NULL}\) 表示不可寻址；一旦地址给定，派生柱事件族不扩张既有可见 \(\sigma\)-代数，而仅在旧层可见 \(\mathcal{G}^{(L)}\) 内重选并组织可见事件，从而 \(\mathcal{G}^{(L+1)}\subseteq \mathcal{G}^{(L)}\)（命题 \ref{prop:null-as-local-section-obstruction}、\ref{prop:recursive-addressing-refinement}；推论 \ref{cor:recursive-addressing-visible-sigma-nonexpansion}）。
+  \item \textbf{分辨率折叠与跨尺度相容：}构造有限窗口折叠 \(\Fold_m\) 及其可计算实现，并证明合流性、逆系统相容与 sofic 因子接口的统一结论（定理 \ref{thm:fold-suite}；并见定义 \ref{def:fold-word} 与命题 \ref{prop:fold-basic}）。
+  \item \textbf{扫描长度—清晰度定量律：}在“地址先于概念值”的接口上，将分辨率可判定性刻画为柱拓扑下的闭开性，并以最优判错剖面与边界柱维数给出“扫描越深越清晰”的指数律（命题 \ref{prop:spg-decidable-clopen}、定义 \ref{def:spg-scan-error-profile}、定理 \ref{thm:spg-clarity-boundary-dimension}；并见折叠可见度与判错二侧界定理 \ref{thm:pom-visibility-to-error-two-sided}）。在地址语义下，该指数清晰度可进一步分解为“统计型 \(\mathsf{NULL}\)”与“去碰撞”两类独立失效，并由双预算寻址容量律统一刻画（定理 \ref{thm:spg-double-budget-address-capacity}）。
+  \item \textbf{投影本体数学与信息账本：}定义扫描—投影生成器与投影词演算（定义 \ref{def:pom-spg}、\ref{def:pom-projection-word}、\ref{def:pom-projword-2cat}），并给出相对熵缺陷的闭式信息账本恒等式与其推论（定理 \ref{thm:pom-kl-ledger}、推论 \ref{cor:pom-ent-increase-equals-kl}）。
+  \item \textbf{读出塔重写与可判定闭环：}在局部读出塔片段上证明终止性与合流性并给出正规形（定理 \ref{thm:pom-rewrite-termination-confluence}），并由此得到词问题的可判定性与审计闭环（命题 \ref{prop:pom-projword-decidable}、\ref{prop:pom-rewrite-audit-loop}）。
+  \item \textbf{共振机制与 Hankel 秩坍缩：}对任意阶碰撞矩给出有限状态的 moment-kernel 编译与 Perron 主谱刻画（定理 \ref{thm:pom-collision-kernel-ak}），并给出模态约束导致 Hankel 秩下降的充分判别，从而把共振定位为可检验的机制（定理 \ref{thm:pom-moment-resonance}）。
+  \item \textbf{同步扣除的 Chebotarev 容量律：}在核版 GRH/统一谱隙口径下，沿 profinite 轴提升有限层 Chebotarev 计数并给出 cylinder 集的等分布误差（定理 \ref{thm:pom-profinite-axis}）；并在在线语义下把同步门槛以显式扣除项并入容量不等式，从而把“先同步、后均匀化”编译为可核对的不等式族（定理 \ref{thm:pom-sync-subtracted-chebotarev-capacity}）。
+\end{itemize}
+
+\textbf{范围边界：}
+\begin{itemize}
+  \item \textbf{旋转（Sturmian）下折叠极限等于 Parry：}一般不成立；本文将 Parry 分布作为最大熵基线，并用误差分解定位“有限样本误差”与“模型差异项”（第 \ref{sec:experiments} 节）。
+  \item \textbf{解释性术语不参与证明链：}所有推导以前文编号结论与外部标准定理为准。
+\end{itemize}
+
+\subsection{本文的可检验输出：定量}
+本文的主要输出均可在纯数学意义下被审计：
+\begin{itemize}
+  \item \textbf{折叠直方图的可审计证书：}给出跨分辨率一致性残差与折叠边界扰动事件的显式上界，并据此构造可复现的结构性审计量（第 \ref{subsec:multiscale-residual} 节）。
+  \item \textbf{共振判别：}对高阶碰撞矩给出递推阶数与 Hankel 秩下降的充分判别，从而把共振定位为模态约束的可检验机制（定理 \ref{thm:pom-moment-resonance}）。
+  \item \textbf{谱级投影熵率指纹：}给出 \(q=2,\dots,23\) 的 \(r_q\) 与 \(h_q=\log(2^q/r_q)\)（其中 \(q=2,3,4\) 来自有限状态碰撞核，\(q\ge 5\) 来自已核验整系数递推），见表 \ref{tab:fold_collision_renyi_spectrum}、\ref{tab:fold_collision_moment_spectrum_k9_17} 与 \ref{tab:fold_collision_moment_spectrum_k18_23}。
+\end{itemize}
+
+\subsection{结构概览}
+第 \ref{sec:preliminaries} 节统一固定记号、对象层级与最小可审计前提；第 \ref{sec:principles} 节固定反共振基线与有限样本差异度证书；第 \ref{sec:logic-expansion-chain} 节给出全文的统一上位逻辑与状态 forcing 母框架；第 \ref{sec:spg} 节则将扫描--投影生成器（群作用与二元读出）固定为标准化输入口径。\par
+在构造链条上，第 \ref{sec:folding} 节构造并分析折叠算子 \(\Fold_m\) 及其跨分辨率相容；第 \ref{sec:recursive-addressing} 节把递归地址化对象化为“可读出前缀”的内生机制，并给出可见 \(\sigma\)-代数不扩张结论；第 \ref{sec:emergent-arithmetic} 节建立值保持重写与有限分辨率算术；第 \ref{sec:pom} 节提出投影本体数学并给出信息账本、重写闭环与共振判别；第 \ref{sec:high-dimensional-cut-project}、第 \ref{sec:group-unification} 与第 \ref{sec:circle-dimension-phase-gate} 节进一步把高维切投影、群表示、相位账本、局部--全局粘接障碍与离散 holonomy 接入同一接口链。\par
+在桥接与验证环节，第 \ref{sec:zeta-finite-part} 节组织与谱/有限部相关的桥接接口；第 \ref{sec:fold-residual-time} 节对“协议筛选--折叠纤维 residual--时间尺度”的接口链作统一整理；第 \ref{sec:physical-spacetime-skeleton} 节则把观察者、时间、空间、因果、相位、干涉、传播上界与连续曲率候选压回到统一上位逻辑的实例化口径；第 \ref{sec:statistical-stability} 与第 \ref{sec:experiments} 节给出偏差指标、误差分解与可复现实验协议；第 \ref{sec:discussion} 节收纳解释性综合、边界与可证伪点；最后在结论中作核心收束。附录汇集算子代数、相位塔、同步核与桥包式接口等支撑材料。
+\par
+本文的目标不是把量子态、相位、干涉、时空度量或传播常数作为新的起始公理嵌入统一框架，也不是直接写出现成的 Schr\"odinger 方程、Lorentz 度量或 Einstein 型场方程。本文所追求的，是更强也更节制的结论：在统一上位逻辑已经具备局部读出、局部--全局粘接、条件期望、资源比较以及复合 residual 等内部结构的前提下，量子结构与时空结构的最小骨架是否能够被纯粹导出，而不再作为先验输入。
+\par
+因此，本文的核心主张不是“直接得到现成物理理论”，而是“把通常被视为起始物理结构的对象，尽可能压回到统一上位逻辑内部已经存在的结构后果”。本文已经完成的是从局部读出到量子/时空骨架的纯推导程序；平方型读出的唯一性、射影态类的 Hilbert 型表示、传播上界的协变性以及离散曲率到连续几何的刚性极限，则被明确后移为表示定理、极限定理与刚性定理。

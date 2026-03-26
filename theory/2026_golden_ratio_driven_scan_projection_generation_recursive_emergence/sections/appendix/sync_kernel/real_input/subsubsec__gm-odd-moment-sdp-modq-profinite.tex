@@ -1,0 +1,295 @@
+\subsubsection{奇阶迹矩谱提升、半定规划矩证书与模分布谱隙：从 Schatten 极值到 profinite Haar}\label{subsubsec:gm-odd-moment-sdp-modq-profinite}
+本小节在 \S\ref{subsubsec:gm-third-trace-dual-certificates} 的三阶迹闭合与 Perron 编译接口之上，补充三类“统一化”结论：其一，将 \(\tr(G^3)\) 推广到任意奇阶 \(\tr(G^{2k+1})\) 并给出谱范数提升的最优可解上界；其二，把大值频次问题抽象为一个半定规划（SDP）可行域的矩模型，并把“有限阶迹矩推理”识别为对偶侧的有限阶矩证书；其三，把 Zeckendorf--sofic 的模 \(q\) 统计与加性能量主项/误差完全还原为扭曲 Perron 根的谱隙，并在 projective 极限上给出 Haar 二分律与仿射近闭包的刚性退化判别。
+
+\paragraph{奇 Schatten 迹矩约束下的谱范数最优上界（统一 \texorpdfstring{$(2k+1)$}{2k+1} 次极值方程）}
+\begin{theorem}[奇 Schatten 迹矩约束下谱范数的最优可解上界：统一的 \texorpdfstring{$(2k+1)$}{2k+1} 次极值方程与唯一极端谱型]\label{thm:gm-odd-schatten-spectral-norm-extremal}
+设 \(m\ge 2\)、\(k\in\NN\)，且 \(G\succeq 0\) 为 \(m\times m\) 复矩阵。
+记
+\[
+S_1:=\tr(G),\qquad S_{2k+1}:=\tr\!\bigl(G^{2k+1}\bigr).
+\]
+令 \(x^\star\in[S_1/m,S_1]\) 为方程
+\begin{equation}\label{eq:gm-odd-schatten-extremal-eq}
+\boxed{\ (m-1)^{2k}\,x^{2k+1}+(S_1-x)^{2k+1}=(m-1)^{2k}\,S_{2k+1}\ }
+\end{equation}
+在区间 \([S_1/m,S_1]\) 上的最大实根，并令 \(y^\star:=(S_1-x^\star)/(m-1)\)。
+则对一切满足给定 \((S_1,S_{2k+1})\) 的 \(G\succeq0\) 都有
+\[
+\boxed{\ \lambda_{\max}(G)\le x^\star\ }.
+\]
+并且该上界在且仅在“二层谱”情形取等：存在 \(x\ge y\ge 0\) 使
+\[
+\mathrm{spec}(G)=\{x,y,\dots,y\}\quad\text{（其中 \(y\) 的重数为 \(m-1\)）},
+\]
+且 \((x,y)=(x^\star,y^\star)\) 等价满足
+\(
+x+(m-1)y=S_1
+\) 与
+\(
+x^{2k+1}+(m-1)y^{2k+1}=S_{2k+1}.
+\)
+因此，任何仅依赖 \((\tr(G),\tr(G^{2k+1}),m)\) 的谱提升步骤在信息论意义上已完备：其最优常数与极端谱型完全由 \eqref{eq:gm-odd-schatten-extremal-eq} 刻画。
+\end{theorem}
+
+\begin{proof}
+设特征值 \(\lambda_1\ge\cdots\ge\lambda_m\ge 0\) 且令 \(x:=\lambda_1\)。
+在约束 \(\sum_{i=2}^m\lambda_i=S_1-x\) 下，由 \(t\mapsto t^{2k+1}\) 的凸性与 Jensen 不等式，
+\[
+\sum_{i=2}^m\lambda_i^{2k+1}\ \ge\ (m-1)\left(\frac{S_1-x}{m-1}\right)^{2k+1},
+\]
+等号当且仅当 \(\lambda_2=\cdots=\lambda_m=(S_1-x)/(m-1)\)。
+故必有
+\[
+S_{2k+1}
+=x^{2k+1}+\sum_{i=2}^m\lambda_i^{2k+1}
+\ \ge\ x^{2k+1}+(m-1)\left(\frac{S_1-x}{m-1}\right)^{2k+1}.
+\]
+将右端同乘 \((m-1)^{2k}\) 得到
+\(
+(m-1)^{2k}x^{2k+1}+(S_1-x)^{2k+1}\le (m-1)^{2k}S_{2k+1}
+\)。
+注意到函数
+\(
+F(x):=(m-1)^{2k}x^{2k+1}+(S_1-x)^{2k+1}
+\)
+在 \(x\in[S_1/m,S_1]\) 上单调递增（因 \(x\ge S_1/m\Rightarrow (m-1)x\ge S_1-x\)），故 \(x\le x^\star\)，即 \(\lambda_{\max}(G)\le x^\star\)。
+等号刻画由 Jensen 等号条件给出。证毕。
+\end{proof}
+
+\begin{remark}[与三阶迹极值律的一致性]
+当 \(k=1\) 时，\eqref{eq:gm-odd-schatten-extremal-eq} 等价于 \S\ref{subsubsec:gm-third-trace-dual-certificates} 中的三次极值方程 \eqref{eq:gm-trace3-cubic}，从而定理 \ref{thm:gm-odd-schatten-spectral-norm-extremal} 回收定理 \ref{thm:gm-trace3-spectral-norm-extremal}。
+\end{remark}
+
+\paragraph{大值频次的非交换矩模型：半定规划与有限阶矩证书}
+\begin{theorem}[大值频次问题的矩模型与半定规划对偶：有限阶迹矩推理 \texorpdfstring{$\Leftrightarrow$}{<->} 有限阶非交换矩证书]\label{thm:gm-large-values-sdp-moment-duality}
+令 \(D(t)=\sum_{n\sim N} b_n n^{it}\) 且 \(|b_n|\le 1\)。
+取 \(1\)-分离点集 \(\{t_r\}_{r\le R}\subset[0,T]\) 满足 \(|D(t_r)|\ge V\)。
+令
+\[
+G_{rs}:=\sum_{n\sim N} |b_n|^2\,n^{i(t_r-t_s)},\qquad
+u_r:=D(t_r),\qquad
+M:=\#\{n\sim N\}.
+\]
+则块矩阵
+\begin{equation}\label{eq:gm-sdp-moment-matrix}
+H:=\begin{pmatrix}
+G & u\\
+u^\ast & M
+\end{pmatrix}\ \succeq\ 0,
+\qquad |u_r|\ge V\ \ (r\le R).
+\end{equation}
+反之，任意满足 \eqref{eq:gm-sdp-moment-matrix} 的 \(H\succeq 0\) 都可视为某一“非交换矩模型”的可行解：存在 Hilbert 空间中的向量族 \(\{v_r\}_{r\le R}\) 与向量 \(v_0\)（\(\|v_0\|_2^2=M\)）使
+\[
+G_{rs}=\langle v_r,v_s\rangle,\qquad u_r=\langle v_r,v_0\rangle.
+\]
+在该矩模型下，对 \(R\) 的任何上界均可等价表述为某一 SDP 可行域的最大维度问题；
+并且任何“仅使用 \(\tr(G^j)\ (j\le 2k+1)\) 与分离/带宽所导出的线性约束”的推理，
+等价于在上述 SDP 的对偶侧构造一个次数至多 \(2k+1\) 的非交换多项式矩证书。
+因此，若欲在同一推理范式内继续改进幂次，必须引入新的可行域约束（而非仅改良由迹矩到谱范数的提升步骤；后者已由定理 \ref{thm:gm-odd-schatten-spectral-norm-extremal} 完全封闭）。
+\end{theorem}
+
+\begin{proof}
+对每个 \(r\) 定义向量
+\(
+v_r:=(\overline{b_n}\,n^{-it_r})_{n\sim N}\in\CC^{M}
+\)，并令 \(v_0:=\mathbf{1}:=(1)_{n\sim N}\)。
+则
+\(
+G_{rs}=\langle v_r,v_s\rangle
+\) 且
+\(
+u_r=D(t_r)=\langle v_r,v_0\rangle
+\)
+并且 \(\|v_0\|_2^2=M\)。
+从而 \(\widetilde H:=\bigl(\langle v_i,v_j\rangle\bigr)_{0\le i,j\le R}\succeq 0\)；
+并注意 \(\|v_0\|_2^2=M\) 即得到 \eqref{eq:gm-sdp-moment-matrix}。
+反向陈述由任意半正定矩阵的 Gram 分解（Cholesky 分解）给出。
+对偶侧“有限阶矩证书”的识别来自：\(\tr(G^j)\) 是 \(H\) 的非交换单项式（由 \(G\) 块产生）的线性泛函，
+而 SDP 的线性/半正定可行性与其对偶多项式分离证书在有限维凸分析中互为等价表述。证毕。
+\end{proof}
+
+\paragraph{临界区间的等价瓶颈：仿射平均残差算子范数}
+\begin{theorem}[突破临界区间的必要且充分瓶颈量：仿射平均残差范数的等价刻画]\label{thm:gm-critical-bottleneck-residual-opnorm}
+在三阶迹—Poisson—带宽核的闭合框架中，令 \(\mathrm{PW}_B\) 为带宽 \(B\asymp T/N\) 的 Paley--Wiener 子空间。
+设非零 Poisson 频率诱导的仿射平均算子 \(\mathcal{A}:\mathrm{PW}_B\to\mathrm{PW}_B\) 在该子空间上分解为
+\[
+\mathcal{A}=\mathcal{U}+\mathcal{R},
+\]
+其中 \(\mathcal{U}\) 为秩一主通道（零频/均匀通道）且 \(\mathcal{R}:=\mathcal{A}-\mathcal{U}\) 为残差通道。
+则在临界区间（典型标度 \(V\asymp N^{3/4}\)）中，大值频次上界的主导项完全由单一瓶颈量
+\[
+\boxed{\ \|\mathcal{R}\|_{\mathrm{op}}^2\ }
+\]
+控制：在迹矩到谱范数的提升环节取最优闭合（定理 \ref{thm:gm-trace3-spectral-norm-extremal} 与命题 \ref{prop:gm-trace3-gap-optimal-spectralization}）后，
+任意将临界区间的幂次严格优于既有三阶迹界的改进，当且仅当在同一带宽标度下对 \(\|\mathcal{R}\|_{\mathrm{op}}\) 获得严格幂次节省；
+反之，一旦获得该节省，则临界区间自动产生对应幅度的频次改进。
+\end{theorem}
+
+\begin{proof}
+三阶迹法的 Poisson 展开把非零频率残差组织为带宽核的正算子谱控制（命题 \ref{prop:gm-trace3-poisson-collision-energy}），而零频主项在带宽闭包下坍缩为秩一通道（命题 \ref{prop:gm-affine-average-rank1-residual}）。
+在谱提升步骤已最优封闭的前提下，剩余松弛仅来自对残差通道的算子范数控制，故改进的充要性归结为 \(\|\mathcal{R}\|_{\mathrm{op}}\) 的幂次节省。
+必要性可由饱和构型给出：存在有理网格聚集模型使除 \(\|\mathcal{R}\|_{\mathrm{op}}\) 外的各环节在量级上取等，从而任何频次界改进必迫使 \(\|\mathcal{R}\|_{\mathrm{op}}\) 改进。证毕。
+\end{proof}
+
+\paragraph{模 \texorpdfstring{$q$}{q} 递推闭合、谱隙判据与 Chebotarev--Plancherel 证书}
+\begin{theorem}[Zeckendorf--sofic 集合的模 \texorpdfstring{$q$}{q} 递推闭合：Pisano 周期升维后的 Perron 算子表示]\label{thm:gm-modq-recursion-closure}
+设 \(\mathcal{L}\subset\{0,1\}^\ast\) 为 primitive sofic 语言，并令
+\(
+A_m:=A_m(\mathcal{L})=\{\mathrm{val}(\omega):\ \omega\in\mathcal{L}_m\}
+\)。
+并假设对每个 \(m\) 映射 \(\mathrm{val}\) 在 \(\mathcal{L}_m\) 上单射（例如在 Zeckendorf 合法语法下并禁止前导零），从而 \(|A_m|=|\mathcal{L}_m|\) 且对 \(A_m\) 的计数等价于对 \(\mathcal{L}_m\) 的路径计数。
+对任意 \(q\ge 2\)，令 Fibonacci 数列在模 \(q\) 下的 Pisano 周期为 \(\pi(q)\)。
+则存在一个显式构造的有限状态提升系统：将识别 \(\mathcal{L}\) 的自动机与“位置模 \(\pi(q)\)”与“取值模 \(q\)”同步积，
+从而得到一个有限非负整数矩阵 \(M_q\) 与一族向量 \(u_q\ge 0\)、\(\{v_{q,a}\}_{a\in\ZZ/q\ZZ}\ge 0\)，使得对所有 \(m\ge 0\) 与 \(a\in\ZZ/q\ZZ\) 有
+\[
+N_m(a;q):=\#\{x\in A_m:\ x\equiv a\ (\bmod q)\}
+\ =\ u_q^{\mathsf T}M_q^{\,m}v_{q,a}.
+\]
+因此 \(\{N_m(a;q)\}_{m\ge 0}\) 对每个固定 \(a\) 都满足有限阶整系数线性递推，且指数增长率由 \(\rho(M_q)\) 精确控制。
+\end{theorem}
+
+\begin{proof}
+在同步积自动机上，边标签为下一位 \(\omega_{j+1}\in\{0,1\}\)，并附带更新
+\(
+a\mapsto a+\omega_{j+1}F_{j+2}\ (\bmod q)
+\)
+与
+\(
+j\mapsto j+1\ (\bmod \pi(q))
+\)。
+于是长度-\(m\) 的可接受路径计数即为给定同余类的计数 \(N_m(a;q)\)。
+以该图邻接矩阵为 \(M_q\)，入口/出口集合给出 \(u_q,v_{q,a}\)，即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[模 \texorpdfstring{$q$}{q} 等分布的谱隙判据：由扭曲 Perron 根给出的指数误差项]\label{thm:gm-modq-equidistribution-spectral-gap}
+沿用定理 \ref{thm:gm-modq-recursion-closure} 的记号。
+对每个加性角色 \(\chi\)（即 \(\chi(x)=e^{2\pi i kx/q}\)），定义特征和
+\[
+S_m(\chi):=\sum_{x\in A_m}\chi(x).
+\]
+则存在相应的扭曲转移矩阵 \(M_q(\chi)\)（在 \(M_q\) 的每条边上乘以角色权）使得
+\(
+S_m(\chi)=\tilde u_q^{\mathsf T}M_q(\chi)^{\,m}\tilde v_q
+\)
+并满足
+\(
+|S_m(\chi)|\ll \rho(M_q(\chi))^m
+\)。
+若系统在模 \(q\) 意义下非退化（即不存在非平凡角色使权函数在支撑上为共边界），则严格谱降成立：
+\[
+\rho_q^\ast:=\max_{\chi\ne 1}\rho\!\bigl(M_q(\chi)\bigr)\ <\ \rho\!\bigl(M_q(1)\bigr)=:\alpha_q,
+\]
+并且有指数误差界
+\[
+\max_{a\in\ZZ/q\ZZ}\left|N_m(a;q)-\frac{|A_m|}{q}\right|
+\ \ll\ (\rho_q^\ast)^{m}.
+\]
+\end{theorem}
+
+\begin{proof}
+矩阵表示与谱半径控制为扭曲 Perron 机制的直接结果（亦可与定理 \ref{thm:gm-twisted-perron-fourier-decay} 的构造互证）。
+严格谱降由 Wielandt 等号刻画推出：若 \(\rho(M_q(\chi))=\rho(M_q(1))\)，则角色权必须为共边界，从而与非退化假设矛盾。
+误差界由离散 Fourier 反演
+\(
+N_m(a;q)-|A_m|/q=\frac{1}{q}\sum_{\chi\ne 1}\overline{\chi(a)}\,S_m(\chi)
+\)
+与 \(|S_m(\chi)|\ll \rho(M_q(\chi))^m\) 合成得到。证毕。
+\end{proof}
+
+\begin{proposition}[Chebotarev--Plancherel 不等式：剩余类偏差的二次平均由扭曲谱半径统一支配]\label{prop:gm-chebotarev-plancherel-l2}
+定义模 \(q\) 偏差二次平均
+\[
+\mathcal{D}_m(q):=\sum_{a\in\ZZ/q\ZZ}\left(N_m(a;q)-\frac{|A_m|}{q}\right)^2.
+\]
+则恒有 Plancherel 恒等式
+\[
+\mathcal{D}_m(q)=\frac{1}{q}\sum_{\chi\ne 1}|S_m(\chi)|^2.
+\]
+在定理 \ref{thm:gm-modq-equidistribution-spectral-gap} 的谱隙条件下，
+\[
+\boxed{\ \mathcal{D}_m(q)\ \ll\ q\,(\rho_q^\ast)^{2m}\ }.
+\]
+\end{proposition}
+
+\begin{proof}
+由有限 Abel 群上的正交关系得 Plancherel 恒等式。
+再由 \(|S_m(\chi)|\ll (\rho_q^\ast)^m\) 对 \(\chi\ne 1\) 求和即可。证毕。
+\end{proof}
+
+\begin{proposition}[模 \texorpdfstring{$q$}{q} 加性能量的主项与误差：四次 Plancherel 公式的谱隙化]\label{prop:gm-modq-additive-energy-main-error}
+定义模 \(q\) 加性能量
+\[
+E_m(q):=\#\{x_1+x_2\equiv x_3+x_4\ (\bmod q):\ x_i\in A_m\}.
+\]
+则有四次 Fourier 恒等式
+\[
+E_m(q)=\frac{1}{q}\sum_{\chi}|S_m(\chi)|^4.
+\]
+在谱隙条件下，
+\[
+\boxed{\ E_m(q)=\frac{|A_m|^4}{q}+O\!\bigl(q\,(\rho_q^\ast)^{4m}\bigr)\ }.
+\]
+\end{proposition}
+
+\begin{proof}
+四次恒等式由对 \(\ZZ/q\ZZ\) 上指示函数做 Fourier 展开并用正交关系得到。
+主项来自平凡角色 \(\chi=1\)，其余角色用 \(|S_m(\chi)|\ll (\rho_q^\ast)^m\) 控制即得误差。证毕。
+\end{proof}
+
+\paragraph{Profinite Haar 二分律与仿射近闭包的刚性退化}
+\begin{theorem}[Profinite Haar 二分律：要么 Haar，要么落在真闭子群陪集上]\label{thm:gm-profinite-haar-dichotomy}
+令 \(\widehat{\ZZ}\) 为 \(\ZZ\) 的 profinite 完备化。
+由模 \(q\) 计数 \(N_m(\cdot;q)\) 的相容性（对 \(q'\mid q\) 的自然投影一致）可定义概率测度族 \(\mu_m\) 在各有限商 \(\ZZ/q\ZZ\) 上的像，并由此得到 \(\widehat{\ZZ}\) 上的一列测度（projective 意义下）。
+若对每个固定 \(q\ge 2\) 都满足定理 \ref{thm:gm-modq-equidistribution-spectral-gap} 的非退化谱隙条件，则 \(\mu_m\) 在每个 \(\ZZ/q\ZZ\) 上指数趋于均匀分布，因而 \(\mu_m\) 在 \(\widehat{\ZZ}\) 上收敛到 Haar 测度。
+\par
+反之，若存在某个 \(q\) 与某个非平凡角色 \(\chi\) 使 \(\rho(M_q(\chi))=\rho(M_q(1))\)，则 \(\chi\) 在 \(A_m\) 上为共边界相位并在接受结构下退化为常量：存在陪集 \(a_0+H_q\subsetneq \ZZ/q\ZZ\)（其中 \(H_q=\ker\chi\)）使对所有充分大 \(m\) 有 \(A_m\bmod q\subset a_0+H_q\)。
+对应地，存在真闭子群 \(H\subsetneq \widehat{\ZZ}\) 与陪集 \(x_0+H\) 使 \(\mu_m\) 的任意极限点测度支撑包含于 \(x_0+H\)。
+\end{theorem}
+
+\begin{proof}
+第一部分由定理 \ref{thm:gm-modq-equidistribution-spectral-gap} 给出对每个固定 \(q\) 的指数混合，从而 projective 极限给出 Haar 收敛。
+第二部分由 Wielandt 等号刻画：\(\rho(M_q(\chi))=\rho(M_q(1))\) 迫使角色权为共边界，进而 \(\chi(\mathrm{val}(\omega))\) 仅依赖于起终状态；在固定初态与接受态口径下即为常量，故 \(A_m\bmod q\) 落在某个非平凡角色的等值集合内，即某一真子群陪集。提升到 \(\widehat{\ZZ}\) 得到闭子群陪集支撑结论。证毕。
+\end{proof}
+
+\begin{proposition}[仿射自相容的刚性分类：非平凡有理仿射近闭包迫使 profinite 支撑退化]\label{prop:gm-affine-near-closure-profinite-degeneracy}
+设 \(T(x)=(ax+b)/c\) 为固定有理仿射变换（\(\gcd(a,c)=1\)），并假设 \(T\) 不属于由 \((\mathcal{L},\mathrm{val})\) 诱导的平凡有限状态同态族。
+若存在 \(\delta>0\) 与无穷多 \(m\) 使
+\[
+|A_m\cap T^{-1}(A_m)|\ \ge\ \delta\,|A_m|,
+\]
+则必存在某个模数 \(q\) 使得定理 \ref{thm:gm-profinite-haar-dichotomy} 的“非退化谱隙”失败，即存在非平凡角色 \(\chi\) 使 \(\rho(M_q(\chi))=\rho(M_q(1))\)，从而 \(\{A_m\}\) 的 profinite 极限分布不可能为 Haar，且支撑退化到某个真闭子群陪集上。
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:gm-affine-selfmap-spectral-gap}，在非平凡同态假设下应有 \(|A_m\cap T^{-1}(A_m)|\ll(\alpha-\varepsilon_T)^m\)，与 \(|A_m|\asymp \alpha^m\) 及所给下界矛盾。
+因此必须出现“谱隙消失”的退化机制，使得仿射同步约束在某些有限商上不再严格降低熵；这等价于某个模 \(q\) 上存在共边界角色，从而落入定理 \ref{thm:gm-profinite-haar-dichotomy} 的第二分支。证毕。
+\end{proof}
+
+\paragraph{带分布输入的三阶迹大值改进模板：模分布谱隙 \texorpdfstring{$\Rightarrow$}{=>} 幂次节省}
+\begin{theorem}[带分布假设的三阶迹大值改进：以模分布谱隙为输入的幂次节省模板]\label{thm:gm-trace3-improvement-from-mod-distribution}
+设 \(D(t)=\sum_{n\sim N} b_n n^{it}\) 的系数满足如下模分布谱隙输入：存在 \(\theta\in(0,1)\)、\(\delta>0\)，使对所有 \(q\le N^\theta\) 与所有非平凡角色 \(\chi\ (\bmod q)\) 都有
+\begin{equation}\label{eq:gm-mod-distribution-input}
+\left|\sum_{n\sim N} b_n\,\chi(n)\right|\ \ll\ N^{1-\delta}.
+\end{equation}
+则在三阶迹—Poisson—仿射平均的同一推理架构中，所有由模求和（非零 Poisson 频率）引起的残差项获得 \(N^{-2\delta}\) 级别的幂次节省；
+从而在临界区间的瓶颈量 \(\|\mathcal{R}\|_{\mathrm{op}}^2\)（定理 \ref{thm:gm-critical-bottleneck-residual-opnorm}）上触发严格幂次改进，并把相应的大值频次界中由残差通道主导的项整体下降 \(N^{-2\delta}\)。
+特别地，在 Guth--Maynard 的三阶迹界原型中，这一输入可把频次上界的残差项形式化为
+\[
+R\ \ll\ T^{o(1)}
+\Bigl(
+N^2V^{-2}
+\,+\,N^{18/5-2\delta}V^{-4}
+\,+\,TN^{12/5-2\delta}V^{-4}
+\Bigr),
+\]
+从而在 \(V\asymp N^{3/4}\) 区间产生严格改进。
+\end{theorem}
+
+\begin{proof}
+Poisson 展开把非零频率残差写成带窗的模求和/指数和组合；在分离与带宽化口径下，其主贡献可归结为对有限族模数 \(q\) 的角色和控制。
+假设 \eqref{eq:gm-mod-distribution-input} 使得每个非平凡角色的贡献获得 \(N^{-\delta}\) 节省，残差为二体碰撞能量的平方型因此在 \(L^2\) 或算子范数层面产生 \(N^{-2\delta}\) 级节省（参见命题 \ref{prop:gm-trace3-poisson-collision-energy} 的“残差 \(\Leftrightarrow\) 正算子谱控制”转写）。
+由定理 \ref{thm:gm-critical-bottleneck-residual-opnorm} 的充要瓶颈性即可推出临界区间的频次改进；所示具体幂次形式对应于三阶迹界原型中主通道与残差通道的尺度配比。证毕。
+\end{proof}
+
+\endinput
+

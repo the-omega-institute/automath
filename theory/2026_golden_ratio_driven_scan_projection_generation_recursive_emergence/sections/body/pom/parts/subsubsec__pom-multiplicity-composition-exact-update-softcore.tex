@@ -1,0 +1,431 @@
+% Auto-split: keep each TeX source comfortably below ~600 lines.
+%
+% This subsubsection supplements the multiplicity-composition thermodynamics with:
+% - exact finite-volume conditional i.i.d. representations,
+% - a soft-core chain (transfer-matrix / 传递矩阵) realization for integer replica index q,
+% - explicit S_q symmetry reduction and an auditable φ-power eigen-spectrum,
+% - Palm size-bias limits and exponential mixing constants.
+%
+
+\subsubsection{纤维权有序分解的精确更新与软核链等价：条件独立、谱隙与 \texorpdfstring{$\varphi$}{phi}-幂级谱}\label{subsec:pom-multiplicity-composition-exact-update-softcore}
+沿用定义 \ref{def:pom-multiplicity-composition-partition}--\ref{def:pom-multiplicity-real-q-pressure} 的记号：
+\(\mathcal{C}_L\) 为总长度 \(L\) 的全体有序分解，
+\(
+w_q(\boldsymbol{\ell})=\prod_i F_{\ell_i+2}^{\,q}
+\),
+\(
+Z_L^{(q)}=\sum_{\boldsymbol{\ell}\in\mathcal{C}_L}w_q(\boldsymbol{\ell})
+\),
+\(
+P_L^{(q)}(\boldsymbol{\ell})=w_q(\boldsymbol{\ell})/Z_L^{(q)}
+\)
+（当 \(q=1\) 时 \(P_L^{(1)}=P_L=\mathbb{P}_L\)，并且 \(\lambda(1)=\lambda_1=\frac{3+\sqrt{17}}{2}\)、\(\rho_\star=\lambda(1)^{-1}=\frac{\sqrt{17}-3}{4}\)）。
+本节给出两类互补的严格等价表示：其一为每个有限 \(L\) 的精确条件独立更新链；
+其二为整数 \(q\) 下的 \(\{0,1\}^q\) 软核链传递矩阵表示及其对称降维，
+并由此导出可审计的谱隙常数、Palm 尺度偏置与指数混合。
+
+\begin{theorem}[纤维权分解的精确条件独立更新表示：有限体积严格等价]\label{thm:pom-multiplicity-composition-exact-conditional-iid}
+固定实数 \(q\ge 0\)。
+令 \(\rho(q)\in(0,1)\) 为定义 \ref{def:pom-multiplicity-real-q-pressure} 中满足
+\(
+\sum_{k\ge 1}F_{k+2}^{\,q}\rho(q)^k=1
+\)
+的唯一解，并定义更新分布
+\[
+p_q(k):=F_{k+2}^{\,q}\rho(q)^k\qquad(k\ge 1),
+\qquad
+\sum_{k\ge 1}p_q(k)=1.
+\]
+令 \((\ell_1,\ell_2,\dots)\) 为独立同分布增量、\(\ell_i\sim p_q\)，并记部分和 \(S_n=\sum_{i=1}^n\ell_i\) 以及首次命中时刻
+\[
+\tau_L:=\inf\{n\ge 1:\ S_n=L\}.
+\]
+则对每个 \(L\ge 1\) 与任意 \(\boldsymbol{\ell}=(\ell_1,\dots,\ell_r)\in\mathcal{C}_L\) 有严格恒等式
+\begin{equation}\label{eq:pom-multiplicity-composition-exact-conditional-iid}
+\boxed{\;
+\mathbb{P}\Bigl((\ell_1,\dots,\ell_{\tau_L})=\boldsymbol{\ell}\ \Big|\ \tau_L<\infty\Bigr)
+=P_L^{(q)}(\boldsymbol{\ell})
+=\frac{w_q(\boldsymbol{\ell})}{Z_L^{(q)}}\; }.
+\end{equation}
+并且命中概率具有完全闭式
+\begin{equation}\label{eq:pom-multiplicity-composition-hit-prob}
+\boxed{\;
+\mathbb{P}(\tau_L<\infty)=\rho(q)^{L}\,Z_L^{(q)}\; }.
+\end{equation}
+因此，\(P_L^{(q)}\) 不仅在体极限上呈“局部 i.i.d.”，而是对每个有限 \(L\) 精确等价于一条 i.i.d.\ 更新链在事件 \(\{S_{\tau_L}=L\}\) 上的条件分布。
+\end{theorem}
+\begin{proof}
+对任意 \(\boldsymbol{\ell}=(\ell_1,\dots,\ell_r)\in\mathcal{C}_L\)，由独立性与 \(p_q(k)=F_{k+2}^{\,q}\rho(q)^k\) 有
+\[
+\mathbb{P}\bigl((\ell_1,\dots,\ell_r)=\boldsymbol{\ell}\bigr)
+=\prod_{i=1}^r F_{\ell_i+2}^{\,q}\rho(q)^{\ell_i}
+=w_q(\boldsymbol{\ell})\,\rho(q)^L.
+\]
+由于增量严格为正，事件 \(\{\tau_L<\infty\}\) 等价于“某个前缀和恰为 \(L\)”，并由全体有序分解分割为不交并：
+\(
+\{\tau_L<\infty\}=\bigsqcup_{\boldsymbol{\ell}\in\mathcal{C}_L}\{(\ell_1,\dots,\ell_{\tau_L})=\boldsymbol{\ell}\}
+\)。
+对上述概率求和即得 \eqref{eq:pom-multiplicity-composition-hit-prob}。
+再用条件概率公式得到
+\[
+\mathbb{P}\Bigl((\ell_1,\dots,\ell_{\tau_L})=\boldsymbol{\ell}\ \Big|\ \tau_L<\infty\Bigr)
+=\frac{w_q(\boldsymbol{\ell})\,\rho(q)^L}{\rho(q)^L Z_L^{(q)}}
+=\frac{w_q(\boldsymbol{\ell})}{Z_L^{(q)}}
+=P_L^{(q)}(\boldsymbol{\ell}),
+\]
+即为 \eqref{eq:pom-multiplicity-composition-exact-conditional-iid}。证毕。
+\end{proof}
+
+\begin{proposition}[首部件长度的有限窗精确公式与指数收敛速率]\label{prop:pom-multiplicity-composition-first-part-exact-and-rate}
+固定 \(q\ge 0\)。对任意 \(L\ge 1\) 与 \(1\le k\le L\)，在 \(P_L^{(q)}\) 下首部件长度满足严格恒等式
+\begin{equation}\label{eq:pom-multiplicity-composition-first-part-exact}
+\boxed{\;
+P_L^{(q)}(\ell_1=k)=\frac{F_{k+2}^{\,q}\,Z_{L-k}^{(q)}}{Z_L^{(q)}}\; }.
+\end{equation}
+此外，当 \(q=1\) 时存在常数 \(C_k<\infty\) 使对所有 \(L\ge 1\) 成立指数界
+\begin{equation}\label{eq:pom-multiplicity-composition-first-part-exp-rate}
+\boxed{\;
+\Bigl|P_L(\ell_1=k)-F_{k+2}\rho_\star^{k}\Bigr|
+\le C_k\Bigl(\frac{2}{\lambda(1)^2}\Bigr)^{L}\; } ,
+\qquad
+\rho_\star=\lambda(1)^{-1}.
+\end{equation}
+其中 \(\frac{2}{\lambda(1)^2}=\frac{4}{13+3\sqrt{17}}\in(0,1)\) 为显式代数谱隙常数。
+\end{proposition}
+\begin{proof}
+恒等式 \eqref{eq:pom-multiplicity-composition-first-part-exact} 由“首部件长度 \(k\) + 尾部为 \(L-k\) 的任意分解”并用权重的串接乘法性直接得到。
+\par
+对指数界，只需用命题 \ref{prop:pom-multiplicity-composition-partition-rational} 的闭式
+\(
+Z_L=a\lambda_+^L+b\lambda_-^L
+\)
+（其中 \(\lambda_+=\lambda(1)\)、\(a=\frac{17+\sqrt{17}}{34}>0\)、\(b=\frac{17-\sqrt{17}}{34}>0\)、\(\lambda_-=\frac{3-\sqrt{17}}{2}\)）
+比较比值 \(Z_{L-k}/Z_L\) 与 \(\lambda_+^{-k}=\rho_\star^{k}\)：
+令 \(r:=\lambda_-/\lambda_+\)，则 \(|r|=\frac{2}{\lambda(1)^2}\) 且对所有 \(L\ge 1\) 有
+\[
+\frac{Z_{L-k}}{Z_L}
+=\lambda_+^{-k}\cdot\frac{a+br^{L-k}}{a+br^L},
+\qquad
+\frac{Z_{L-k}}{Z_L}-\lambda_+^{-k}
+=\lambda_+^{-k}\cdot\frac{b(r^{L-k}-r^L)}{a+br^L}.
+\]
+用下界 \(a+br^L\ge a-b|r|\)（对 \(L\ge 1\)）与 \(|r^{L-k}-r^L|\le |r|^{L-k}(1+|r|^k)\) 得
+\[
+\Bigl|\frac{Z_{L-k}}{Z_L}-\lambda_+^{-k}\Bigr|
+\le
+\lambda_+^{-k}\cdot \frac{b(1+|r|^k)}{a-b|r|}\,|r|^{L-k}
+\le
+\lambda_+^{-k}\cdot \frac{b(1+|r|^k)}{a-b|r|}\,|r|^{-k}\,|r|^L.
+\]
+乘以 \(F_{k+2}\) 并取
+\(
+C_k:=F_{k+2}\lambda_+^{-k}\frac{b(1+|r|^k)}{a-b|r|}|r|^{-k}
+\)
+即可得到 \eqref{eq:pom-multiplicity-composition-first-part-exp-rate}。证毕。
+\end{proof}
+
+\begin{algorithm}[Doob--更新核的精确序贯生成：残长马尔可夫链与吸收采样]\label{alg:pom-multiplicity-composition-doob-update-sampler}
+固定 \(q\ge 0\) 与 \(L\ge 1\)。定义残长过程 \(N_0=L\)，并对任意 \(N\ge 1\) 定义一步核
+\begin{equation}\label{eq:pom-multiplicity-composition-doob-kernel}
+\boxed{\;
+\mathbb{P}(N\to N-k)=\frac{F_{k+2}^{\,q}\,Z_{N-k}^{(q)}}{Z_N^{(q)}},
+\qquad 1\le k\le N\; }.
+\end{equation}
+令过程在 \(N=0\) 吸收，并把每一步的跳长记为 \(k_1,k_2,\dots,k_{\tau}\)（其中 \(\tau\) 为吸收时间）。
+则 \((k_1,\dots,k_\tau)\in\mathcal{C}_L\) 且其分布严格等于 \(P_L^{(q)}\)：
+\[
+(k_1,\dots,k_\tau)\ \sim\ P_L^{(q)}.
+\]
+\end{algorithm}
+\begin{proof}
+由 \eqref{eq:pom-multiplicity-composition-doob-kernel}，
+对任意 \(\boldsymbol{k}=(k_1,\dots,k_r)\in\mathcal{C}_L\) 有
+\[
+\mathbb{P}\bigl((k_1,\dots,k_\tau)=\boldsymbol{k}\bigr)
+=\prod_{i=1}^{r}\frac{F_{k_i+2}^{\,q}Z_{L-\sum_{j\le i}k_j}^{(q)}}{Z_{L-\sum_{j<i}k_j}^{(q)}}
+=\frac{\prod_{i=1}^{r}F_{k_i+2}^{\,q}}{Z_L^{(q)}}
+=P_L^{(q)}(\boldsymbol{k}),
+\]
+其中分式连乘按望远镜消去化简。证毕。
+\end{proof}
+
+\begin{proposition}[整阶矩配分函数的 \texorpdfstring{$q$}{q}-复制软核链表示：状态空间 \texorpdfstring{$\{0,1\}^q$}{\{0,1\}^q} 的传递矩阵刻画]\label{prop:pom-multiplicity-composition-replica-softcore-transfer}
+取整数 \(q\ge 1\)。
+令 \(U_q:=\{0,1\}^q\) 并把 \(u\wedge v\in\{0,1\}^q\) 记为逐坐标与。
+定义传递矩阵 \(T^{(q)}\in\RR^{U_q\times U_q}\) 为
+\[
+T^{(q)}_{u,v}:=2^{-\mathbf{1}_{\{u\wedge v\neq 0\}}}
+\qquad(u,v\in U_q).
+\]
+则对任意 \(L\ge 1\) 成立严格等价
+\begin{equation}\label{eq:pom-multiplicity-composition-replica-transfer}
+\boxed{\;
+Z_L^{(q)}=2^{L-1}\sum_{(u_1,\dots,u_L)\in U_q^{L}}\ 2^{-\sum_{i=1}^{L-1}\mathbf{1}_{\{u_i\wedge u_{i+1}\neq 0\}}}
+=2^{L-1}\,\mathbf{1}^{\mathsf T}\bigl(T^{(q)}\bigr)^{L-1}\mathbf{1}\; } ,
+\end{equation}
+其中 \(\mathbf{1}\) 为 \(\RR^{U_q}\) 上的全 \(1\) 向量。
+从而整数一致性增长常数满足
+\begin{equation}\label{eq:pom-multiplicity-composition-lambdaq-transfer-radius}
+\boxed{\;
+\lambda(q)=\lambda_q=2\,\rho\!\bigl(T^{(q)}\bigr)\qquad(q\in\ZZ_{\ge 1}),\;}
+\end{equation}
+其中 \(\rho(\cdot)\) 表示谱半径。
+\end{proposition}
+\begin{proof}
+把 \(\boldsymbol{\ell}\in\mathcal{C}_L\) 视为在 \(\{1,\dots,L-1\}\) 上的切边集 \(C(\boldsymbol{\ell})\subseteq\{1,\dots,L-1\}\)：
+若 \(i\) 为某个部件的右端点则 \(i\in C(\boldsymbol{\ell})\)（于是 \(|C|=R(\boldsymbol{\ell})-1\)）。
+\par
+另一方面，\(F_{\ell+2}\) 计数长度 \(\ell\) 上“无相邻 \(1\)”的二元串；
+因此 \(F_{\ell+2}^{\,q}\) 计数 \(q\) 份独立的无相邻 \(1\) 串，等价于计数向量串 \((u_1,\dots,u_\ell)\in U_q^\ell\) 满足对每个相邻对 \(u_i\wedge u_{i+1}=0\)（逐坐标无重叠）。
+由此，给定切边集 \(C\) 后，分量乘法给出
+\[
+w_q(\boldsymbol{\ell})
+=\prod_{\text{分量}}F_{\ell_i+2}^{\,q}
+=\#\Bigl\{(u_1,\dots,u_L)\in U_q^L:\ \forall i\notin C,\ u_i\wedge u_{i+1}=0\Bigr\}.
+\]
+对固定 \((u_1,\dots,u_L)\)，令违约边集合
+\(
+S(u):=\{i:\ u_i\wedge u_{i+1}\neq 0\}
+\)。
+则上述条件等价于 \(C\supseteq S(u)\)，并且满足 \(C\supseteq S(u)\) 的切边集个数为 \(2^{(L-1)-|S(u)|}\)。
+交换求和次序得到
+\[
+Z_L^{(q)}
+=\sum_{C\subseteq\{1,\dots,L-1\}}\#\{u:\ C\supseteq S(u)\}
+=\sum_{u\in U_q^L}2^{(L-1)-|S(u)|}
+=2^{L-1}\sum_{u\in U_q^L}2^{-\sum_{i=1}^{L-1}\mathbf{1}_{\{u_i\wedge u_{i+1}\neq 0\}}},
+\]
+即得 \eqref{eq:pom-multiplicity-composition-replica-transfer}。
+最后，\(Z_L^{(q)}=2^{L-1}\mathbf{1}^{\mathsf T}(T^{(q)})^{L-1}\mathbf{1}\) 的指数增长率由 Perron--Frobenius 给出为
+\(
+\log 2+\log\rho(T^{(q)})=\log(2\rho(T^{(q)}))
+\)，从而得到 \eqref{eq:pom-multiplicity-composition-lambdaq-transfer-radius}。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$S_q$}{Sq}-对称降维：\(\rho(T^{(q)})\) 为显式 \texorpdfstring{$(q+1)\times(q+1)$}{(q+1)x(q+1)} 矩阵的 Perron 根]\label{prop:pom-multiplicity-composition-sq-symmetry-reduction}
+在命题 \ref{prop:pom-multiplicity-composition-replica-softcore-transfer} 的整数 \(q\ge 1\) 设定下，
+令 \(|u|\) 表示 Hamming 权。
+定义显式矩阵 \(A^{(q)}\in\RR^{(q+1)\times(q+1)}\) 为
+\begin{equation}\label{eq:pom-multiplicity-composition-Aq-def}
+\boxed{\;
+A^{(q)}_{k,l}:=\frac12\Bigl(\binom{q}{l}+\binom{q-k}{l}\Bigr),
+\qquad 0\le k,l\le q.\;}
+\end{equation}
+则 Perron 根满足严格等式
+\begin{equation}\label{eq:pom-multiplicity-composition-sq-reduction}
+\boxed{\;
+\rho\!\bigl(T^{(q)}\bigr)=\rho\!\bigl(A^{(q)}\bigr),\qquad
+\lambda_q=2\,\rho\!\bigl(A^{(q)}\bigr).\;}
+\end{equation}
+因此对每个整数 \(q\ge 1\)，增长常数 \(\lambda_q\) 为次数至多 \(q+1\) 的代数数（由 \(\det(\rho(A^{(q)})I-A^{(q)})=0\) 给出）。
+\end{proposition}
+\begin{proof}
+矩阵 \(T^{(q)}\) 在坐标置换群 \(S_q\) 下不变，故其 Perron 特征向量可取为 \(S_q\)-不变的类函数：
+存在正函数 \(f:U_q\to\RR_+\) 仅依赖于 \(k=|u|\)。
+把 \(f(u)\equiv g(|u|)\) 代入 \((T^{(q)}f)(u)=\sum_{v\in U_q}T^{(q)}_{u,v}f(v)\)，并对 \(v\) 按权 \(l=|v|\) 分组：
+对固定 \(u\)（\(|u|=k\)）与固定 \(l\)，满足 \(|v|=l\) 且 \(u\wedge v=0\) 的 \(v\) 个数为 \(\binom{q-k}{l}\)，而权为 \(l\) 的总数为 \(\binom{q}{l}\)。
+因此
+\[
+\sum_{\substack{v\in U_q\\ |v|=l}}T^{(q)}_{u,v}
+=\binom{q-k}{l}\cdot 1 + \bigl(\binom{q}{l}-\binom{q-k}{l}\bigr)\cdot \frac12
+=\frac12\Bigl(\binom{q}{l}+\binom{q-k}{l}\Bigr)
+=A^{(q)}_{k,l}.
+\]
+这表明 \(T^{(q)}\) 在 \(S_q\)-不变子空间（维数 \(q+1\)）上的矩阵表示正是 \(A^{(q)}\)，且 Perron 本征值位于该子空间并等于 \(\rho(A^{(q)})\)。
+由于 \(T^{(q)}\) 逐项正，Perron 根唯一且必由该 \(S_q\)-不变 Perron 向量实现，故 \(\rho(T^{(q)})=\rho(A^{(q)})\)。
+结合 \(\lambda_q=2\rho(T^{(q)})\) 得 \eqref{eq:pom-multiplicity-composition-sq-reduction}。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$q=1$}{q=1} 的完全可解马尔可夫化：平稳分布、转移核与交替相关长度]\label{prop:pom-multiplicity-composition-q1-markov}
+在 \(q=1\) 时，令
+\[
+T:=T^{(1)}=\begin{pmatrix}1&1\\[2pt]1&\tfrac12\end{pmatrix},
+\qquad
+\alpha:=\rho(T)=\frac{3+\sqrt{17}}{4},
+\qquad
+\rho_\star:=\lambda(1)^{-1}=\frac{1}{2\alpha}.
+\]
+考虑一维 Gibbs 权
+\(
+\pi_L(\sigma)\propto \prod_{i=1}^{L-1}T_{\sigma_i,\sigma_{i+1}}
+\)
+（\(\sigma\in\{0,1\}^L\)）。
+则其体极限存在且唯一，并等价于二态平移不变马尔可夫链 \((\sigma_i)_{i\in\ZZ}\)，其转移核满足
+\[
+\boxed{\;
+\mathbb{P}(\sigma_{i+1}=1\mid\sigma_i=1)=\rho_\star,\qquad
+\mathbb{P}(\sigma_{i+1}=1\mid\sigma_i=0)=1-2\rho_\star.\;}
+\]
+该链具有平稳分布闭式
+\[
+\boxed{\;
+\mathbb{P}(\sigma_i=1)=\frac{17-\sqrt{17}}{34},\qquad
+\mathbb{P}(\sigma_i=0)=\frac{17+\sqrt{17}}{34}.\;}
+\]
+并且二点相关严格指数衰减且符号交替：对任意仅依赖单点的有界函数 \(f,g\)，存在常数 \(C(f,g)\) 使
+\[
+\mathrm{Cov}\bigl(f(\sigma_0),g(\sigma_n)\bigr)
+=C(f,g)\Bigl(-\frac{2}{\lambda(1)^2}\Bigr)^{n}\qquad(n\ge 0).
+\]
+因此相关长度由 \(\xi^{-1}=\log(\lambda(1)^2/2)\) 给出。
+\end{proposition}
+\begin{proof}[证明要点]
+由对称转移矩阵 \(T\) 的 Perron--Frobenius 理论，体极限 Gibbs 态由 Perron 特征向量 \(r\) 给出，并且可写为马尔可夫链：
+\(
+P(a\to b)=T_{ab}r_b/(\alpha r_a)
+\)。
+直接解 \(Tr=\alpha r\) 得 \(r\propto(1,\alpha-1)\)，代回即得转移核闭式；
+平稳分布由可逆性 \(\pi(a)\propto r_a^2\) 化简得到。
+相关衰减由 \(2\times 2\) 链的第二特征值比给出；
+由于 \(2T\) 的特征值为 \(\lambda_\pm=\frac{3\pm\sqrt{17}}{2}\) 且 \(\lambda_+\lambda_-=-2\)，得到衰减因子
+\(
+\lambda_-/\lambda_+=-2/\lambda(1)^2
+\)
+并呈交替符号。证毕。
+\end{proof}
+
+\begin{corollary}[切边密度的代数闭式：分解密度与“软核重叠”强迫切断的平均]\label{cor:pom-multiplicity-composition-cut-density}
+对 \(L\ge 2\)，把 \(\boldsymbol{\ell}\in\mathcal{C}_L\) 等价为切边变量 \(C_i\in\{0,1\}\)（\(1\le i\le L-1\)）：
+当且仅当 \(i\) 为某个部件右端点时 \(C_i=1\)。
+则在体极限中切边密度满足闭式
+\[
+\boxed{\;
+\lim_{L\to\infty}\frac{1}{L-1}\mathbb{E}_{P_L}\Bigl[\sum_{i=1}^{L-1}C_i\Bigr]
+=\frac{17+5\sqrt{17}}{68}\; }.
+\]
+从而典型部件长度极限为其倒数
+\[
+\boxed{\;
+\lim_{L\to\infty}\frac{L}{\mathbb{E}_{P_L}[R_L]}
+=\frac{5\sqrt{17}-17}{2}\; } ,
+\]
+其中 \(R_L\) 为部件数（定义 \ref{def:pom-multiplicity-induced-composition-measure}）。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-multiplicity-composition-replica-softcore-transfer} 在 \(q=1\) 的表示，
+\(Z_L\) 亦可视为对偶变量 \((\sigma,C)\) 的一致计数：对每条边 \(i\)，若 \(\sigma_i=\sigma_{i+1}=1\) 则强迫 \(C_i=1\)，否则 \(C_i\) 自由取值。
+因此在 Gibbs 极限下，
+\[
+\mathbb{E}[C_i]=\frac12+\frac12\,\mathbb{P}(\sigma_i=\sigma_{i+1}=1).
+\]
+由命题 \ref{prop:pom-multiplicity-composition-q1-markov} 的平稳分布与转移核，
+\(
+\mathbb{P}(\sigma_i=\sigma_{i+1}=1)=\mathbb{P}(\sigma_i=1)\mathbb{P}(\sigma_{i+1}=1\mid\sigma_i=1)
+=\frac{17-\sqrt{17}}{34}\cdot \frac{\sqrt{17}-3}{4}
+=\frac{5\sqrt{17}-17}{34}
+\)。
+代入得
+\(
+\mathbb{E}[C_i]=\frac12+\frac{5\sqrt{17}-17}{68}=\frac{17+5\sqrt{17}}{68}
+\)。
+又因 \(R_L=1+\sum_{i=1}^{L-1}C_i\)，除以 \(L\) 并取极限得到第二式。证毕。
+\end{proof}
+
+\begin{proposition}[Palm 尺度的部件长度分布：均匀位置看到的长度为严格尺寸偏置]\label{prop:pom-multiplicity-composition-palm-size-bias}
+在 \(P_L\) 下令 \(V_L\) 为从 \(\{1,\dots,L\}\) 均匀取的随机位置，并记 \(\mathcal{L}_L\) 为包含 \(V_L\) 的部件长度。
+令 \(p(k)=F_{k+2}\rho_\star^k\) 为定理 \ref{thm:pom-multiplicity-composition-exact-conditional-iid} 在 \(q=1\) 的更新分布，且记
+\(
+\mathbb{E}[\ell]=\sum_{k\ge 1}k\,p(k)=\frac{5\sqrt{17}-17}{2}
+\)（命题 \ref{prop:pom-multiplicity-composition-part-length-iid-limit}）。
+则当 \(L\to\infty\) 时，\(\mathcal{L}_L\) 收敛到尺寸偏置极限
+\begin{equation}\label{eq:pom-multiplicity-composition-palm-size-bias-law}
+\boxed{\;
+\mathbb{P}(\mathcal{L}=k)=\frac{k\,p(k)}{\mathbb{E}[\ell]}
+=\frac{k\,F_{k+2}\rho_\star^k}{\mathbb{E}[\ell]}\qquad(k\ge 1).\;}
+\end{equation}
+并且其均值为闭式
+\[
+\boxed{\;
+\mathbb{E}[\mathcal{L}]
+=\frac{\mathbb{E}[\ell^2]}{\mathbb{E}[\ell]}
+=\frac{(393-93\sqrt{17})/2}{(5\sqrt{17}-17)/2}
+=\frac{393-93\sqrt{17}}{5\sqrt{17}-17}\; } .
+\]
+\end{proposition}
+\begin{proof}[证明要点]
+把分解视为更新过程生成的 renewal 分割，并以“均匀位置”诱导 Palm 视角：
+在平移不变更新极限中，落在长度为 \(k\) 的部件内的概率与其长度成正比，因此极限分布为尺寸偏置 \(\propto k\,p(k)\)。
+均值恒等式 \(\mathbb{E}[\mathcal{L}]=\mathbb{E}[\ell^2]/\mathbb{E}[\ell]\) 为标准 Palm 计算；
+其中
+\(
+\mathbb{E}[\ell^2]=\mathrm{Var}(\ell)+\mathbb{E}[\ell]^2
+=(18-4\sqrt{17})+\bigl(\frac{5\sqrt{17}-17}{2}\bigr)^2
+=(393-93\sqrt{17})/2
+\)
+由命题 \ref{prop:pom-multiplicity-composition-part-length-iid-limit} 立即得到。证毕。
+\end{proof}
+
+\begin{theorem}[指数混合：宏观分解的远距独立性由谱隙 \texorpdfstring{$2/\lambda(1)^2$}{2/lambda(1)^2} 控制]\label{thm:pom-multiplicity-composition-exponential-mixing}
+令 \(A,B\) 为仅依赖于切边变量 \((C_i)\) 在两个相距至少 \(n\) 条边的有限窗口上的任意柱事件。
+则在 \(L\to\infty\) 的体极限中，存在常数 \(C(A,B)<\infty\) 使
+\[
+\boxed{\;
+\bigl|\mathbb{P}(A\cap B)-\mathbb{P}(A)\mathbb{P}(B)\bigr|
+\le C(A,B)\Bigl(\frac{2}{\lambda(1)^2}\Bigr)^{n}\; } .
+\]
+\end{theorem}
+\begin{proof}[证明要点]
+由 \(q=1\) 的软核链表示，\((C_i)\) 可由隐藏马尔可夫链 \((\sigma_i)\) 生成：若 \((\sigma_i,\sigma_{i+1})=(1,1)\) 则 \(C_i\equiv 1\)，否则 \(C_i\) 条件独立且 \(\mathbb{P}(C_i=1\mid \sigma_i\sigma_{i+1}=0)=1/2\)。
+命题 \ref{prop:pom-multiplicity-composition-q1-markov} 给出 \((\sigma_i)\) 的谱隙与相关衰减因子 \(|-2/\lambda(1)^2|<1\)；
+对给定窗口事件 \(A,B\) 先对 \(\sigma\) 条件化并用马尔可夫链的指数混合，再用给定 \(\sigma\) 时 \(C\) 在边上的条件独立性即可把同一衰减率转移到 \(C\) 的柱事件上。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$q$}{q}-复制谱的显式非对称本征序列：大量本征值为 \texorpdfstring{$(-\varphi^{-1})$}{-phi^{-1}}-幂的可审计结构]\label{prop:pom-multiplicity-composition-replica-explicit-eigs}
+在命题 \ref{prop:pom-multiplicity-composition-replica-softcore-transfer} 的整数 \(q\ge 1\) 设定下，
+令
+\[
+K=\begin{pmatrix}1&1\\[2pt]1&0\end{pmatrix},
+\qquad
+\text{其特征值为 }\ \varphi=\frac{1+\sqrt5}{2}\ \text{与}\ -\varphi^{-1}.
+\]
+令 \(D:=K^{\otimes q}\)（按自然张量基识别为 \(U_q\times U_q\) 矩阵），则有严格恒等式
+\[
+\boxed{\;
+T^{(q)}=\frac12\bigl(\mathbf{1}\mathbf{1}^{\mathsf T}+D\bigr),\qquad
+D_{u,v}=\mathbf{1}_{\{u\wedge v=0\}}\; } .
+\]
+因此对每个 \(0\le j\le q\)，数
+\begin{equation}\label{eq:pom-multiplicity-composition-replica-explicit-eigs}
+\boxed{\;
+\frac{(-1)^j\varphi^{\,q-2j}}{2}\;}
+\end{equation}
+作为 \(T^{(q)}\) 的本征值至少具有重数 \(\binom{q}{j}-1\)（在与 \(\mathbf{1}\) 正交的部分）。
+其余至多 \(q+1\) 个本征值全部落在 \(S_q\)-对称子空间，并由命题 \ref{prop:pom-multiplicity-composition-sq-symmetry-reduction} 的显式矩阵 \(A^{(q)}\) 给出。
+\end{proposition}
+\begin{proof}
+对 \(u,v\in\{0,1\}\)，有
+\(
+K_{u,v}=\mathbf{1}_{\{uv=0\}}
+\)。
+由张量积的逐坐标乘法性，
+\(
+D_{u,v}=\prod_{a=1}^q \mathbf{1}_{\{u_av_a=0\}}=\mathbf{1}_{\{u\wedge v=0\}}
+\)；
+于是
+\(
+T^{(q)}_{u,v}=1\) 当且仅当 \(u\wedge v=0\)，否则 \(T^{(q)}_{u,v}=1/2\)，即 \(T^{(q)}=\frac12(\mathbf{1}\mathbf{1}^{\mathsf T}+D)\)。
+\par
+矩阵 \(D=K^{\otimes q}\) 的本征值为张量谱的乘积：
+对每个 \(j\)，取 \(j\) 个因子给出本征值 \(-\varphi^{-1}\)、其余 \(q-j\) 个因子取 \(\varphi\)，得到本征值 \((-1)^j\varphi^{q-2j}\)，其代数重数为 \(\binom{q}{j}\)。
+另一方面 \(\mathbf{1}\mathbf{1}^{\mathsf T}\) 在 \(\mathbf{1}^\perp\) 上为零，故在 \(\mathbf{1}^\perp\) 上有 \(T^{(q)}|_{\mathbf{1}^\perp}=\frac12 D|_{\mathbf{1}^\perp}\)。
+任一 \(\binom{q}{j}\)-维本征空间与 \(\mathbf{1}^\perp\)（余维 \(1\)）相交的维数至少为 \(\binom{q}{j}-1\)，从而得到 \eqref{eq:pom-multiplicity-composition-replica-explicit-eigs} 的重数下界。
+剩余本征值位于 \(S_q\)-对称子空间（维数 \(q+1\)），并由命题 \ref{prop:pom-multiplicity-composition-sq-symmetry-reduction} 的降维给出。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/subsubsec__pom-multiplicity-composition-exact-update-softcore-part2}
+
+\begin{remark}[有限窗张量化与一般 \texorpdfstring{$q\ge 0$}{q>=0} 的指数解耦]\label{rem:pom-multiplicity-composition-window-tensorization}
+定理 \ref{thm:pom-multiplicity-composition-exact-conditional-iid} 给出对任意实 \(q\ge 0\) 的有限体积精确条件 i.i.d.\ 表示。
+由 \(G_q(t)=1/(1-W_q(t))\) 的正系数解析结构（\(W_q\) 在 \((0,1)\) 上严格递增且 \(W_q(\rho(q))=1\) 为简单根，定理 \ref{thm:pom-multiplicity-real-q-pressure}），
+可得对每个固定窗口长度 \(m\) 存在常数 \(C_{m,q}<\infty\) 与 \(\eta(q)\in(0,1)\) 使
+\[
+\Bigl\|\ \mathcal{L}_{P_L^{(q)}}(\ell_1,\dots,\ell_m)-p_q^{\otimes m}\ \Bigr\|_{\mathrm{TV}}
+\le C_{m,q}\,\eta(q)^{L}
+\qquad(L\to\infty),
+\]
+其中 \(\eta(q)\) 可取为相应 renewal/转移算子的谱半径比（支配奇点与次支配奇点的模比）。
+该指数解耦把“边界抽样”对有限窗口的影响量化为指数小量，并与 \(q=1\) 的显式谱隙常数 \(2/\lambda(1)^2\) 相容（定理 \ref{thm:pom-multiplicity-composition-exponential-mixing} 与命题 \ref{prop:pom-multiplicity-composition-first-part-exact-and-rate}）。
+\end{remark}
+
+\endinput
+

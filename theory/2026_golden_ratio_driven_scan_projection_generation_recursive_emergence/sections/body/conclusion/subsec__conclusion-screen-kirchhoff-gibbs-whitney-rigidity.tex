@@ -1,0 +1,229 @@
+\subsection{部分屏幕精确化的 Kirchhoff 分配函数、有效电阻与 Whitney 刚性}\label{subsec:conclusion-screen-kirchhoff-gibbs-whitney-rigidity}
+沿用前一小节关于部分屏幕 \(S\subseteq E(\Gamma)\)、压缩图 \(Q_S\)、连通分量数
+\[
+k:=c(\Gamma_S)=|V(Q_S)|
+\]
+以及最小精确审计包的记号。既然主稿已经把极小唯一回放屏幕与任意部分屏幕的极小精确化都严格编译为压缩图上的生成树或最小生成树，那么同一机制还可再推进为一组完整的 Kirchhoff 型后果：极小精确化不仅可计数，而且携带删缩递推、Gibbs 边占用公式、局域 \(0\text{--}1\) 律的电阻精化、最优基簇的交换几何，以及最终的 Whitney \(2\)-同构刚性。
+
+\begin{theorem}[极小精确化的 Kirchhoff 分配函数]\label{thm:conclusion-screen-kirchhoff-partition-function}
+沿用定理 \ref{thm:conclusion-screen-minimal-exact-audit-tree-kirchhoff-count} 的记号，记
+\[
+E_S^\times:=E(Q_S).
+\]
+定义加权极小精确化多项式
+\[
+\mathcal K_S(\mathbf x)
+:=
+\sum_{T\in\mathcal T(Q_S)}
+\prod_{e\in T}x_e,
+\qquad
+\mathbf x=(x_e)_{e\in E_S^\times},
+\]
+其中 \(\mathcal T(Q_S)\) 为 \(Q_S\) 的生成树族。则：
+\begin{enumerate}
+  \item \(\mathcal K_S\) 的单项式支撑恰好枚举全部极小精确化补全面集在压缩图中的像边集；
+  \item \(\mathcal K_S\) 为次数恰为 \(k-1\) 的齐次多项式；
+  \item 若 \(L_{Q_S}(\mathbf x)\) 为 \(Q_S\) 的加权 Laplace 矩阵，则对任意顶点 \(v\in V(Q_S)\) 都有
+  \[
+  \mathcal K_S(\mathbf x)=\det L_{Q_S}(\mathbf x)^{(v)},
+  \]
+  其中右端为删去 \(v\) 所对应行列后的 Kirchhoff 余子式。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-screen-minimal-exact-audit-tree-kirchhoff-count}，极小精确化补全面集与 \(Q_S\) 的生成树一一对应，且任一此类边集都恰含 \(k-1\) 条边。故 \(\mathcal K_S\) 的单项式支撑正好枚举全部极小精确化补全面集，而其次数必为 \(k-1\)。
+
+最后一条只是 Kirchhoff--Matrix Tree 定理在加权多重图 \(Q_S\) 上的直接应用。证毕。
+\end{proof}
+
+\begin{theorem}[极小精确化计数的删缩递推]\label{thm:conclusion-screen-kirchhoff-deletion-contraction}
+任取 \(e\in E_S^\times\)。则有精确递推
+\[
+\mathcal K_S(\mathbf x)
+=
+\mathcal K_{Q_S\setminus e}(\mathbf x)
++
+x_e\,\mathcal K_{Q_S/e}(\mathbf x),
+\]
+其中右端变量由其余边自然继承。特别地，在无权情形 \(x_f\equiv 1\) 下，
+\[
+\tau(Q_S)=\tau(Q_S\setminus e)+\tau(Q_S/e).
+\]
+于是
+\[
+\#\{\text{极小精确化补全面集含 }e\}
+=
+\tau(Q_S/e),
+\]
+\[
+\#\{\text{极小精确化补全面集避开 }e\}
+=
+\tau(Q_S\setminus e).
+\]
+\end{theorem}
+\begin{proof}
+将 \(Q_S\) 的生成树按是否包含边 \(e\) 分割。凡不含 \(e\) 的生成树，正是 \(Q_S\setminus e\) 的生成树；凡含 \(e\) 的生成树，缩并 \(e\) 后与 \(Q_S/e\) 的生成树一一对应，并额外贡献一个因子 \(x_e\)。故有
+\[
+\mathcal K_S(\mathbf x)
+=
+\mathcal K_{Q_S\setminus e}(\mathbf x)
++
+x_e\,\mathcal K_{Q_S/e}(\mathbf x).
+\]
+令全部变量取 \(1\) 即得生成树数的删缩递推。再结合定理 \ref{thm:conclusion-screen-kirchhoff-partition-function} 中极小精确化与生成树的一一对应，便得到关于“含 \(e\)”与“避开 \(e\)”的计数分拆。证毕。
+\end{proof}
+
+\begin{theorem}[加权极小精确化 Gibbs 系综的边占用公式]\label{thm:conclusion-screen-kirchhoff-gibbs-edge-occupation}
+设 \(x_e>0\) 对所有 \(e\in E_S^\times\)。在 \(\mathcal T(Q_S)\) 上定义概率测度
+\[
+\mu_{S,\mathbf x}(T)
+:=
+\frac{1}{\mathcal K_S(\mathbf x)}
+\prod_{e\in T}x_e.
+\]
+则对任意边 \(e=uv\in E_S^\times\)，有
+\[
+\mu_{S,\mathbf x}(e\in T)
+=
+\frac{\partial \log \mathcal K_S}{\partial \log x_e}
+=
+x_e\,R^{\mathrm{eff}}_{Q_S,\mathbf x}(u,v),
+\]
+其中 \(R^{\mathrm{eff}}_{Q_S,\mathbf x}(u,v)\) 表示把 \(x_e\) 视为导通率时 \(u,v\) 间的有效电阻。
+\end{theorem}
+\begin{proof}
+由定义直接计算，
+\[
+\frac{\partial \mathcal K_S}{\partial x_e}
+=
+\sum_{T\ni e}\prod_{f\in T\setminus\{e\}}x_f.
+\]
+故
+\[
+\frac{\partial \log \mathcal K_S}{\partial \log x_e}
+=
+\frac{x_e}{\mathcal K_S}\frac{\partial \mathcal K_S}{\partial x_e}
+=
+\frac1{\mathcal K_S}
+\sum_{T\ni e}\prod_{f\in T}x_f
+=
+\mu_{S,\mathbf x}(e\in T).
+\]
+另一方面，经典 transfer-current / electrical network 恒等式给出
+\[
+\frac{\partial \log \mathcal K_S}{\partial \log x_e}
+=
+x_e\,R^{\mathrm{eff}}_{Q_S,\mathbf x}(u,v).
+\]
+二式合并即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[\(0\text{--}1\) 局域律的电阻精化]\label{cor:conclusion-screen-zero-one-local-law-effective-resistance}
+对任意尚未观测之原图边 \(e\in E(\Gamma)\setminus S\)，定义其全局关键度
+\[
+\kappa_S(e)
+:=
+\begin{cases}
+0, & e \text{ 的两个端点落在 }\Gamma_S\text{ 的同一连通分量中},\\[4pt]
+\mu_{S,\mathbf 1}(e\in T), & e \text{ 的两个端点落在不同分量中},
+\end{cases}
+\]
+其中 \(\mathbf 1\) 表示全部导通率取 \(1\)。则：
+\begin{enumerate}
+  \item
+  \[
+  \kappa_S(e)=0
+  \iff
+  r(S\cup\{e\})-r(S)=0;
+  \]
+  \item 当 \(e\) 跨分量时，
+  \[
+  r(S\cup\{e\})-r(S)=1;
+  \]
+  \item 在跨分量情形下，
+  \[
+  \kappa_S(e)=1
+  \iff
+  e \text{ 在 }Q_S\text{ 中为桥},
+  \]
+  \[
+  0<\kappa_S(e)<1
+  \iff
+  e \text{ 跨分量但并非桥}.
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+第一条与第二条是主稿关于单张新增观测面的边际秩增量 \(0\text{--}1\) 律的直接翻译：新增边只有在连接 \(\Gamma_S\) 的不同连通分量时才使秩增加 \(1\)，否则秩增量为 \(0\)。
+
+若 \(e\) 跨分量，则它在压缩图 \(Q_S\) 中对应一条边，且由定理 \ref{thm:conclusion-screen-kirchhoff-gibbs-edge-occupation} 的无权情形，
+\[
+\kappa_S(e)=R^{\mathrm{eff}}_{Q_S}(u,v).
+\]
+对单位电阻图中的单边 \(e=uv\)，总有
+\[
+0<R^{\mathrm{eff}}_{Q_S}(u,v)\le 1.
+\]
+并且等号 \(R^{\mathrm{eff}}_{Q_S}(u,v)=1\) 当且仅当不存在绕开 \(e\) 的第二条 \(u\)--\(v\) 路径，也即 \(e\) 为桥；若 \(e\) 不是桥，则存在并联替代路径，于是有效电阻严格小于 \(1\)。故得到最后两条。证毕。
+\end{proof}
+
+\begin{proposition}[成本最优极小精确化簇的交换连通性]\label{prop:conclusion-screen-optimal-exactization-exchange-connected}
+固定非负代价函数
+\[
+\mathrm{cost}:E_S^\times\to\RR_{\ge0},
+\]
+记
+\[
+\mathcal O_S
+:=
+\{T\subseteq E_S^\times:\ T \text{ 为按包含极小的成本最优极小精确化补全面集}\}.
+\]
+则每个 \(T\in\mathcal O_S\) 都满足 \(|T|=k-1\)，并且 \(\mathcal O_S\) 在单边交换下连通：对任意
+\[
+T_1,T_2\in\mathcal O_S,
+\]
+存在有限链
+\[
+T_1=U_0,\ U_1,\ \dots,\ U_N=T_2
+\]
+使得对每个 \(j\),
+\[
+U_{j+1}=U_j-e_j+f_j,
+\qquad
+e_j\in U_j,\ f_j\notin U_j,
+\]
+且所有 \(U_j\) 仍属于 \(\mathcal O_S\)。
+\end{proposition}
+\begin{proof}
+由主稿关于带权精确化可完全编译为压缩图最小生成树的结论，\(\mathcal O_S\) 正是 \(Q_S\) 的全部最小权生成树。因而任一 \(T\in\mathcal O_S\) 都是图形拟阵 \(M(Q_S)\) 的最小权基，故必有
+\[
+|T|=\operatorname{rank}M(Q_S)=k-1.
+\]
+
+另一方面，经典加权拟阵理论断言：一个拟阵的最小权基族本身仍构成某个拟阵的基族。故 \(\mathcal O_S\) 自动满足基交换公理，并在单边交换图上连通。于是任意两个成本最优极小精确化补全面集都可通过保持代价不变且基数不变的单边交换链互相变形。证毕。
+\end{proof}
+
+\begin{theorem}[Kirchhoff--Whitney 刚性]\label{thm:conclusion-screen-kirchhoff-whitney-rigidity}
+设 \(S,S'\) 为两个部分屏幕，并设其跨分量未观测边集合在某个标号双射下已被识别。记相应压缩图为 \(Q_S,Q_{S'}\)，相应极小精确化多项式为 \(\mathcal K_S,\mathcal K_{S'}\)。则以下四个命题等价：
+\begin{enumerate}
+  \item \(\mathcal K_S(\mathbf x)\equiv \mathcal K_{S'}(\mathbf x)\)；
+  \item \(S\) 与 \(S'\) 的极小精确化补全面集族在该标号下完全一致；
+  \item \(Q_S\) 与 \(Q_{S'}\) 诱导同一个图形拟阵；
+  \item \(Q_S\) 与 \(Q_{S'}\) 在 Whitney 意义下 \(2\)-同构。
+\end{enumerate}
+特别地，完整的加权极小精确化多项式 \(\mathcal K_S\) 已经足以将压缩图的审计结构唯一确定到 \(2\)-同构为止。
+\end{theorem}
+\begin{proof}
+\((1)\Rightarrow(2)\)：由定理 \ref{thm:conclusion-screen-kirchhoff-partition-function}，\(\mathcal K_S\) 的每个单项式都对应 \(Q_S\) 的一棵生成树，且系数恒为 \(1\)。故多项式相等当且仅当其单项式支撑相同，也即生成树族完全一致。再由定理 \ref{thm:conclusion-screen-minimal-exact-audit-tree-kirchhoff-count}，这正等价于极小精确化补全面集族完全一致。
+
+\((2)\Rightarrow(1)\) 显然，因为 \(\mathcal K_S\) 正是对这些补全面集的无重计数生成函数。
+
+\((2)\Leftrightarrow(3)\)：对任意图，生成树正是图形拟阵的全部基。故极小精确化补全面集族完全一致，当且仅当 \(Q_S,Q_{S'}\) 的图形拟阵一致。
+
+\((3)\Leftrightarrow(4)\) 则是 Whitney 关于图形拟阵的经典 \(2\)-同构刻画。故四者等价。证毕。
+\end{proof}
+
+\noindent
+由此，部分屏幕 exactization 在结论层不再只是“还差 \(k-1\) 张隐藏面”的数值问题，而是完整携带了一套 Kirchhoff 型几何：极小精确化族由单一分配函数编码，边占用概率等于有效电阻，局域 \(0\text{--}1\) 秩律可以被全局关键度细化，成本最优方案形成可交换连通的最优基簇，而整个压缩图最终又被 \(\mathcal K_S\) 唯一识别到 Whitney \(2\)-同构层级。于是，生成树、删缩、导数、MST 基交换与图形拟阵刚性在本文的部分屏幕语义中被压缩为同一条可递归调用的审计几何链。
+
+\endinput

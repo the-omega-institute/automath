@@ -1,0 +1,145 @@
+\subsection{递归 solenoid 族的圆维判定障碍与拓扑不可判定性}\label{subsec:conclusion-recursive-solenoid-pcdim-undecidability}
+本小节把局部化除法所产生的一维 prime-solenoid 与停机障碍直接耦合，给出一个完全有效的逆极限族：
+其在不停机时退化为圆周，在停机时稳定为一维 prime-solenoid。
+由此，纤维核的 \(\pcdim\) 与同构类型判定都获得不可判定边界。
+
+\begin{theorem}[递归 solenoid 族的圆维判定障碍]\label{thm:conclusion-recursive-solenoid-pcdim-halting-undecidable}
+取任意可计算素数序列 \((q_e)_{e\ge 1}\)（例如第 \(e\) 个素数）。
+对每个图灵机编号 \(e\) 与每个 \(n\ge 1\)，定义
+\[
+N_{e,n}
+:=
+\begin{cases}
+1, & \text{若机器 \(e\) 在前 \(n\) 步内未停机},\\
+q_e, & \text{若机器 \(e\) 在前 \(n\) 步内已停机},
+\end{cases}
+\]
+并令
+\[
+\Sigma_e
+:=
+\varprojlim\!\Bigl(
+\TT\xleftarrow{\times N_{e,1}}\TT\xleftarrow{\times N_{e,2}}\TT\xleftarrow{\times N_{e,3}}\cdots
+\Bigr).
+\]
+则：
+\begin{enumerate}
+\normalfont
+  \item 若机器 \(e\) 永不停机，则 \(\Sigma_e\cong \TT\)。
+  \item 若机器 \(e\) 在有限时间停机，则 \(\Sigma_e\cong \Sigma_{q_e,1}\)。
+  特别地，第一坐标投影
+  \[
+  \pi_0:\Sigma_e\to \TT
+  \]
+  的核满足
+  \[
+  \pcdim(\ker\pi_0)=
+  \begin{cases}
+  0, & \text{若 \(e\) 永不停机},\\
+  1, & \text{若 \(e\) 在有限时间停机}.
+  \end{cases}
+  \]
+  \item 因而在该可计算族上，谓词
+  \[
+  \pcdim(\ker\pi_0)=0
+  \]
+  不可判定。
+  等价地，映射 \(e\mapsto \Sigma_e\) 把停机问题 many-one 归约到该族上的同构判定问题。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+映射 \((e,n)\mapsto N_{e,n}\) 可由对机器 \(e\) 做 \(n\) 步有限模拟来计算，故 \(\Sigma_e\) 构成一族有效给定的逆极限紧交换群。
+
+若 \(e\) 永不停机，则对所有 \(n\) 有 \(N_{e,n}=1\)，故逆系统的全部键合映射均为恒等映射，从而
+\[
+\Sigma_e\cong \varprojlim(\TT\xleftarrow{\mathrm{id}}\TT\xleftarrow{\mathrm{id}}\cdots)\cong \TT.
+\]
+
+若 \(e\) 在第 \(t\) 步停机，则对所有 \(n\ge t\) 有 \(N_{e,n}=q_e\)。
+去掉有限多个前缀层级不改变逆极限的同构类型；更具体地，尾投影
+\[
+(x_0,x_1,\dots)\longmapsto (x_{t-1},x_t,x_{t+1},\dots)
+\]
+把 \(\Sigma_e\) 同构到常值尾系统
+\[
+\varprojlim\!\Bigl(
+\TT\xleftarrow{\times q_e}\TT\xleftarrow{\times q_e}\TT\cdots
+\Bigr)=\Sigma_{q_e,1}.
+\]
+因此第二条的同构结论成立。
+
+再由定理 \ref{thm:cdim-localized-division-prime-fiber-no-growth}，
+\(\Sigma_{q_e,1}\) 的第一坐标投影核同构于 \(\ZZ_{q_e}\)；
+而定理 \ref{thm:cdim-zn-procyclic-and-min-generators} 给出
+\[
+\pcdim(\ZZ_{q_e})=1.
+\]
+另一方面，\(\Sigma_e\cong \TT\) 时 \(\pi_0\) 为恒等映射，故 \(\ker\pi_0=0\)，从而 \(\pcdim(\ker\pi_0)=0\)。
+于是得到所述二值判别。
+
+若该谓词可判定，则可由其判断机器 \(e\) 是否停机，矛盾。
+故不可判定性成立。
+同构判定的 many-one 归约由
+\[
+e\in\mathrm{HALT}
+\quad\Longleftrightarrow\quad
+\Sigma_e\not\cong \TT
+\]
+立即得到。证毕。
+\end{proof}
+
+\begin{theorem}[递归 solenoid 族的 Lie 阴影常值]\label{thm:conclusion-recursive-solenoid-lie-shadow-constant}
+沿用定理 \ref{thm:conclusion-recursive-solenoid-pcdim-halting-undecidable} 的记号。对每个机器编号 \(e\)，递归 solenoid \(\Sigma_e\) 的最大紧连通 Lie 商都同构于 \(\TT\)。更强地，任意连续满射
+\[
+q:\Sigma_e\twoheadrightarrow K
+\]
+到紧连通 Lie 交换群 \(K\) 都满足
+\[
+K\cong 0
+\qquad\text{或}\qquad
+K\cong \TT.
+\]
+\end{theorem}
+\begin{proof}
+若机器 \(e\) 永不停机，则由定理 \ref{thm:conclusion-recursive-solenoid-pcdim-halting-undecidable}，
+\[
+\Sigma_e\cong \TT,
+\]
+故其最大紧连通 Lie 商显然就是 \(\TT\)，且任意连通 Lie 商只能为 \(0\) 或 \(\TT\)。
+
+若机器 \(e\) 在有限时间停机，则同一定理给出
+\[
+\Sigma_e\cong \Sigma_{q_e,1}.
+\]
+而定理 \ref{thm:conclusion-finite-prime-solenoid-terminal-object} 已证明：对任意单素数局部化 solenoid，其任意非平凡连通紧 Lie 商都同构于 \(\TT\)。故此时 \(\Sigma_e\) 的最大紧连通 Lie 商仍为 \(\TT\)，并且任意连通 Lie 商亦只能是 \(0\) 或 \(\TT\)。证毕。
+\end{proof}
+
+\begin{corollary}[停机信息完全滞留于零维核]\label{cor:conclusion-recursive-solenoid-halting-zero-dimensional-kernel-only}
+在递归族 \((\Sigma_e)_e\) 上，任何仅依赖于紧连通 Lie 商的数据、函子或审计协议都必为常值。特别地，停机谓词不能由任何有限维 Lie 观测恢复；定理 \ref{thm:conclusion-recursive-solenoid-pcdim-halting-undecidable} 中的二值分裂
+\[
+\pcdim(\ker\pi_0)=
+\begin{cases}
+0, & e\notin \mathrm{HALT},\\
+1, & e\in \mathrm{HALT},
+\end{cases}
+\]
+因此纯粹是一条零维 profinite 核信号。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-recursive-solenoid-lie-shadow-constant}，对每个 \(e\)，\(\Sigma_e\) 的最大紧连通 Lie 阴影都同构于同一个圆周 \(\TT\)。因此任何仅通过连通 Lie 商读取的信息在整个递归族上都不随 \(e\) 改变。
+
+另一方面，定理 \ref{thm:conclusion-recursive-solenoid-pcdim-halting-undecidable} 已给出
+\[
+\pcdim(\ker\pi_0)=0 \iff e\notin\mathrm{HALT},
+\qquad
+\pcdim(\ker\pi_0)=1 \iff e\in\mathrm{HALT}.
+\]
+故停机信息不可能由 Lie 阴影承载，只能滞留在零维核的 profinite 结构中。证毕。
+\end{proof}
+
+\begin{remark}[solenoid 吸引子口径的同型障碍]\label{rem:conclusion-recursive-solenoid-attractor-undecidable}
+对每个 \(q\ge 2\)，一维 \(q\)-solenoid 具有经典的双曲吸引子实现。
+因此定理 \ref{thm:conclusion-recursive-solenoid-pcdim-halting-undecidable} 同时给出一个有效族：
+其在不停机情形退化为圆周，而在停机情形实现为 prime-solenoid 吸引子。
+从而，在该可计算族内，区分“圆周型”与“solenoidal”拓扑类型同样承载停机障碍。
+\end{remark}

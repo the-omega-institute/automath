@@ -1,0 +1,476 @@
+\paragraph{部分可逆尾量、二原子信息塌缩、乘法外置与条件正交的横向闭合}
+在预言机容量闭式、bin-fold 相对均匀基线的两点 \(f\)-散度极限、稳定地址半环的 PTIME 双向可解释性、一般 Ostrowski 数字层的规范化函子性、三轴 CRT 最小窗以及十次分歧/Lee--Yang 三次的 Chebotarev 乘法律已经建立之后，还可把部分可逆误差、信息几何塌缩、数字层局域性、三轴最小窗及跨指纹条件独立进一步压缩为下列八条结论。前四条把最优部分读出的全部损失先后还原为纤维超额尾量、Neyman--Pearson 对偶与矩谱驱动的非渐近失败界；中间三条分别把渐近 \(f\)-几何压缩到唯一二原子似然比测度、把 Zeckendorf/Ostrowski 层的局域可加性与乘法账本不可有限化严格分离，并指出三轴最小窗在最小层面即不可纯化；最后一条则表明十次线性因子指纹对 Lee--Yang 的符号/根/全分裂粗读出保持完全条件不变。
+
+\begin{theorem}[最优部分可逆率的溢出恒等式]\label{thm:xi-time-part64b-optimal-partial-invertibility-overflow}
+沿用定理 \ref{thm:fold-oracle-capacity-closed-form} 的记号。记
+\[
+d_m(x):=\bigl|\Fold_m^{-1}(x)\bigr|,
+\qquad
+T:=2^B,
+\]
+\[
+C_m(B):=\mathcal C_m(B)=\sum_{x\in X_m}\min\bigl(d_m(x),T\bigr),
+\qquad
+\mathrm{Succ}_m(B):=\frac{C_m(B)}{2^m}.
+\]
+则有严格恒等式
+\[
+\boxed{\;
+1-\mathrm{Succ}_m(B)
+=
+2^{-m}\sum_{x\in X_m}\bigl(d_m(x)-T\bigr)_+.\;}
+\]
+换言之，全部不可逆损失恰等于超过阈值 \(T\) 的纤维超额体积之归一化总和。
+\end{theorem}
+\begin{proof}
+对任意整数 \(d\ge 0\)，都有逐点恒等式
+\[
+\min(d,T)=d-(d-T)_+.
+\]
+将其代入容量闭式得
+\[
+C_m(B)
+=
+\sum_{x\in X_m}\Bigl[d_m(x)-\bigl(d_m(x)-T\bigr)_+\Bigr].
+\]
+又
+\[
+\sum_{x\in X_m}d_m(x)=|\Omega_m|=2^m,
+\]
+故
+\[
+C_m(B)=2^m-\sum_{x\in X_m}\bigl(d_m(x)-T\bigr)_+.
+\]
+两边同除以 \(2^m\)，便得到
+\[
+1-\mathrm{Succ}_m(B)
+=
+2^{-m}\sum_{x\in X_m}\bigl(d_m(x)-T\bigr)_+.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[近完美读出的尖锐必要条件]\label{cor:xi-time-part64b-near-perfect-readout-sharp-necessary-condition}
+沿用定理 \ref{thm:xi-time-part64b-optimal-partial-invertibility-overflow} 的记号，并记
+\[
+M_m:=\max_{x\in X_m}d_m(x).
+\]
+若对某个 \(\varepsilon\ge 0\) 有
+\[
+\mathrm{Succ}_m(B)\ge 1-\varepsilon,
+\]
+则必有
+\[
+\boxed{\;
+2^B\ge M_m-\varepsilon\,2^m.\;}
+\]
+特别地：
+\begin{enumerate}
+  \item 当 \(\varepsilon=0\) 时，
+  \[
+  2^B\ge M_m
+  \]
+  是零误差全可逆的必要条件；
+  \item 若 \(2^B<M_m\)，则必有严格损失下界
+  \[
+  \boxed{\;
+  1-\mathrm{Succ}_m(B)\ge \frac{M_m-2^B}{2^m}.\;}
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-time-part64b-optimal-partial-invertibility-overflow}，
+\[
+1-\mathrm{Succ}_m(B)
+=
+2^{-m}\sum_{x\in X_m}\bigl(d_m(x)-2^B\bigr)_+.
+\]
+由于对某个达到最大值的 \(x_\ast\in X_m\) 有 \(d_m(x_\ast)=M_m\)，故
+\[
+1-\mathrm{Succ}_m(B)
+\ge
+2^{-m}\bigl(M_m-2^B\bigr)_+.
+\]
+若 \(\mathrm{Succ}_m(B)\ge 1-\varepsilon\)，则
+\[
+\varepsilon\ge \frac{\bigl(M_m-2^B\bigr)_+}{2^m}.
+\]
+若 \(M_m\le 2^B\)，所示结论显然成立；若 \(M_m>2^B\)，则上式化为
+\[
+M_m-2^B\le \varepsilon\,2^m,
+\]
+即
+\[
+2^B\ge M_m-\varepsilon\,2^m.
+\]
+其余两条断言分别对应 \(\varepsilon=0\) 与 \(M_m>2^B\) 的特例。证毕。
+\end{proof}
+
+\begin{theorem}[预言机容量的 Neyman--Pearson 对偶：推前分布与稳定层均匀基线的精确差异表达]\label{thm:xi-time-part64b-oracle-capacity-neyman-pearson-duality}
+沿用定理 \ref{thm:fold-oracle-capacity-closed-form} 的记号。定义推前分布与稳定层均匀基线
+\[
+\mu_m(x):=\frac{d_m(x)}{2^m},
+\qquad
+u_m(x):=\frac{1}{|X_m|}
+\qquad (x\in X_m),
+\]
+并令阈值 \(T:=2^B\)。再定义差异泛函
+\[
+\mathfrak D_m(B):=
+\sup_{A\subseteq X_m}
+\Bigl(
+\mu_m(A)-2^{B-m}|X_m|\,u_m(A)
+\Bigr).
+\]
+则有严格恒等式
+\[
+\mathrm{Succ}_m(B)=1-\mathfrak D_m(B),
+\]
+并且上确界恰由阈值集
+\[
+A_B^\star:=\{x\in X_m:\ d_m(x)>2^B\}
+\]
+取得。
+\end{theorem}
+\begin{proof}
+由于
+\[
+|X_m|\,u_m(A)=|A|,
+\]
+故对任意 \(A\subseteq X_m\)，有
+\[
+\mu_m(A)-2^{B-m}|X_m|\,u_m(A)
+=
+\sum_{x\in A}\left(\frac{d_m(x)}{2^m}-\frac{2^B}{2^m}\right)
+=
+\frac{1}{2^m}\sum_{x\in A}\bigl(d_m(x)-2^B\bigr).
+\]
+上式在且仅在取遍所有正项时达到最大，因此
+\[
+\mathfrak D_m(B)
+=
+\frac{1}{2^m}
+\sum_{x:\,d_m(x)>2^B}\bigl(d_m(x)-2^B\bigr),
+\]
+且最大集正是 \(A_B^\star\)。
+
+另一方面，由定理 \ref{thm:xi-time-part64b-optimal-partial-invertibility-overflow} 的逐点恒等式
+\[
+\min(d,2^B)=d-(d-2^B)_+
+\]
+可得
+\[
+C_m(B)
+=
+\sum_{x\in X_m}\min\bigl(d_m(x),2^B\bigr)
+=
+2^m-\sum_{x\in X_m}\bigl(d_m(x)-2^B\bigr)_+.
+\]
+因此
+\[
+\mathfrak D_m(B)
+=
+\frac{2^m-C_m(B)}{2^m}
+=
+1-\mathrm{Succ}_m(B).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[幂和诱导的非渐近失败率指数界与可计算预算下界]\label{thm:xi-time-part64b-power-sum-failure-bound-budget-lower}
+对任意 \(q>1\)，定义幂和
+\[
+S_q(m):=\sum_{x\in X_m}d_m(x)^q.
+\]
+则对任意实预算 \(B\in\mathbb R\) 都有失败率上界
+\[
+1-\mathrm{Succ}_m(B)
+\le
+\frac{S_q(m)}{2^m\,2^{(q-1)B}}.
+\]
+因此，若希望
+\[
+\mathrm{Succ}_m(B)\ge 1-\varepsilon
+\qquad (\varepsilon\in(0,1)),
+\]
+则充分条件为
+\[
+B\ge
+\frac{\log_2 S_q(m)-m-\log_2\varepsilon}{q-1}.
+\]
+对右端再对 \(q>1\) 取下确界，便得到完全由矩谱驱动的最强可计算预算下界。
+\end{theorem}
+\begin{proof}
+记
+\[
+T:=2^B.
+\]
+由定理 \ref{thm:xi-time-part64b-optimal-partial-invertibility-overflow}，
+\[
+2^m-C_m(B)=\sum_{x\in X_m}(d_m(x)-T)_+.
+\]
+对任意 \(d\ge 0\) 与 \(q>1\)，成立初等不等式
+\[
+(d-T)_+\le \frac{d^q}{T^{q-1}}.
+\]
+确实，若 \(d\le T\)，左端为 \(0\)；若 \(d>T\)，则
+\[
+d-T\le d\le d\left(\frac{d}{T}\right)^{q-1}=\frac{d^q}{T^{q-1}}.
+\]
+逐项求和即得
+\[
+2^m-C_m(B)
+\le
+\frac{1}{T^{q-1}}\sum_{x\in X_m}d_m(x)^q
+=
+\frac{S_q(m)}{2^{(q-1)B}}.
+\]
+两边同除以 \(2^m\)，便有
+\[
+1-\mathrm{Succ}_m(B)\le \frac{S_q(m)}{2^m\,2^{(q-1)B}}.
+\]
+若右端不超过 \(\varepsilon\)，则 \(\mathrm{Succ}_m(B)\ge 1-\varepsilon\)。对上式整理即得
+\[
+B\ge
+\frac{\log_2 S_q(m)-m-\log_2\varepsilon}{q-1}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[折叠信息几何的二点塌缩原理]\label{thm:xi-time-part64b-fold-information-geometry-two-point-collapse}
+沿用命题 \ref{prop:fold-bin-f-divergence-collapse} 的记号。定义
+\[
+a:=\frac{\varphi^2}{\sqrt5},
+\qquad
+b:=\frac{\varphi}{\sqrt5},
+\qquad
+\nu_\varphi:=\frac1\varphi\,\delta_a+\frac1{\varphi^2}\,\delta_b.
+\]
+则对任意凸函数 \(f:(0,\infty)\to\RR\) 满足 \(f(1)=0\)，其对应的 Csisz\'ar \(f\)-散度满足
+\[
+\boxed{\;
+\lim_{m\to\infty}D_f(\mu_m\Vert u_m)
+=
+\int_{(0,\infty)}f(t)\,\dd\nu_\varphi(t)
+=
+\frac1\varphi\,f\!\left(\frac{\varphi^2}{\sqrt5}\right)
++\frac1{\varphi^2}\,f\!\left(\frac{\varphi}{\sqrt5}\right).\;}
+\]
+因此，\((\mu_m,u_m)\) 的全部渐近 \(f\)-信息几何并不依赖于完整纤维谱，而完全塌缩到两个似然比原子 \(a,b\) 上；换言之，折叠多重度在信息论极限中仅保留二相可辨结构。
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:fold-bin-f-divergence-collapse} 已直接给出
+\[
+D_f(\mu_m\Vert u_m)
+=
+\frac1\varphi\,f\!\left(\frac{\varphi^2}{\sqrt5}\right)
++\frac1{\varphi^2}\,f\!\left(\frac{\varphi}{\sqrt5}\right)
++O_f\bigl((\varphi/2)^m\bigr),
+\]
+故所示极限公式立即成立。
+
+另一方面，同一命题的证明还给出一致展开
+\[
+\frac{\mu_m(w)}{u_m(w)}
+=
+\frac{\varphi^{2-w_m}}{\sqrt5}+O\bigl((\varphi/2)^m\bigr)
+\qquad (w\in X_m),
+\]
+因而极限似然比仅可能落在
+\[
+\frac{\varphi^2}{\sqrt5}=a,
+\qquad
+\frac{\varphi}{\sqrt5}=b
+\]
+两点上。再由
+\[
+u_m(w_m=0)=\frac{F_{m+1}}{F_{m+2}}\longrightarrow \frac1\varphi,
+\qquad
+u_m(w_m=1)=\frac{F_m}{F_{m+2}}\longrightarrow \frac1{\varphi^2},
+\]
+可知极限似然比测度恰为
+\[
+\nu_\varphi=\frac1\varphi\,\delta_a+\frac1{\varphi^2}\,\delta_b.
+\]
+于是任意由似然比驱动并在该一致收敛下稳定的 \(f\)-统计，都只能因子化通过 \(\nu_\varphi\)。证毕。
+\end{proof}
+
+\begin{theorem}[局域可加性与非局域可乘性的严格偏振]\label{thm:xi-time-part64b-local-additivity-nonlocal-multiplicativity-polarization}
+沿用定义 \ref{def:stable-add}、\ref{def:stable-mul}，定理 \ref{thm:normalize-then-truncate-functorial}，注 \ref{rem:zeckendorf-normalize-fst} 以及命题 \ref{prop:killo-implementation-vs-structural-half-circle-dimension} 的记号。则在本文构造的 Zeckendorf/Ostrowski 数字层中，规范化与加法具有纯数字串实现：可在有限状态换能器或局部重写框架内完成，并在分辨率口径上线性、在比特口径上为多项式时间。
+
+然而，若坚持“乘法 \(\mapsto\) 有限寄存器加法”的严格同态语义，则不存在任何有限秩压缩：既不存在单射幺半群同态
+\[
+\NN_{\times}\hookrightarrow (\NN^k,+)
+\qquad(k<\infty),
+\]
+亦不存在有限生成交换群 \(L\) 使得
+\[
+\Phi(ab)=\Phi(a)+\Phi(b),
+\qquad
+\Phi:\NN_{\times}\to \ZZ\oplus L
+\]
+为单射。
+
+并且
+\[
+\boxed{\;
+\cdim^{\mathrm{hom}}_{+}(\NN_{\times})=+\infty,
+\qquad
+\cdim^{\mathrm{impl}}(\NN_{\times})=\frac12.\;}
+\]
+因此，该体系中的精确算术必然分裂为两层：一层是局域、有限状态、纯数字的可加层；另一层是任何有限加法账本都无法吸收的外置乘法层。
+\end{theorem}
+\begin{proof}
+先看数字层的局域实现。定理 \ref{thm:normalize-then-truncate-functorial} 已把一般 Ostrowski 数字层的“先规范形再截断”固定为定义性的局部机制，而注 \ref{rem:zeckendorf-normalize-fst} 进一步指出，在黄金分支上 Zeckendorf/Ostrowski 规范化与在线加法可由纯数字串层的有限状态换能器或局部重写实现，从而在分辨率口径上具有线性复杂度。另一方面，定理 \ref{thm:xi-stable-semiring-ptime-biinterpretability} 又给出值层回拉实现的多项式时间界：稳定地址层与自然数半环在 PTIME 内双向可解释，故在比特口径上，加法、规范化以及经由值层回拉的乘法都具有多项式时间实现。
+
+再看“乘法 \(\mapsto\) 有限寄存器加法”的严格同态化是否可能。推论 \ref{cor:killo-no-finite-additive-register-linearization} 断言：对任意有限 \(k\)，不存在单射幺半群同态
+\[
+\NN_{\times}\hookrightarrow (\NN^k,+).
+\]
+定理 \ref{thm:killo-godel-compression-not-finite-rank-homologizable} 又断言：若 \(L\) 有限生成，则不存在单射
+\[
+\Phi:\NN_{\times}\to \ZZ\oplus L
+\]
+满足
+\[
+\Phi(ab)=\Phi(a)+\Phi(b).
+\]
+因此，一切有限秩加法账本上的严格乘法同态化都被排除。
+
+最后，由命题 \ref{prop:killo-implementation-vs-structural-half-circle-dimension}，
+\[
+\cdim^{\mathrm{hom}}_{+}(\NN_{\times})=+\infty,
+\qquad
+\cdim^{\mathrm{impl}}(\NN_{\times})=\frac12.
+\]
+这正表明：作为集合，\(\NN_{\times}\) 仍可嵌入单寄存器实现层；但作为乘法幺半群，其结构层同态半圆维不可有限化。故局域数字可加性与乘法外置性形成严格偏振。证毕。
+\end{proof}
+
+\begin{theorem}[三轴最小窗的非纯化定理]\label{thm:xi-time-part64b-three-axis-minimum-window-non-purification}
+设 \(m_\star\) 为命题 \ref{prop:crt-235-min-depth} 给出的三轴窗最小分辨率。则
+\[
+\boxed{\;
+m_\star=58,
+\qquad
+m_\star+2=60.\;}
+\]
+其对应底层 Fibonacci 模数满足
+\[
+\boxed{\;
+F_{60}
+=
+2^4\cdot 3^2\cdot 5\cdot 11\cdot 31\cdot 41\cdot 61\cdot 2521.\;}
+\]
+因此，第一次三轴共现并非仅引入目标三条算术方向 \(2,3,5\)；它被严格迫使同时携带五条额外素轴 \(11,31,41,61,2521\)。换言之，三轴统一在最小可见层上即不可纯化。
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:crt-235-min-depth} 已给出最小三轴窗的精确位置
+\[
+m_\star=58,
+\qquad
+m_\star+2=60.
+\]
+另一方面，注 \ref{rem:crt-235-m58-factorization} 已给出对应 Fibonacci 模数的精确分解
+\[
+F_{60}
+=
+1548008755920
+=
+2^4\cdot 3^2\cdot 5\cdot 11\cdot 31\cdot 41\cdot 61\cdot 2521.
+\]
+故在最小三轴层中，除目标三轴 \(2,3,5\) 外，还不可避免地并入五条额外素轴
+\[
+11,\ 31,\ 41,\ 61,\ 2521.
+\]
+这就说明三轴最小窗并不能被“纯三轴”算术所单独承载，而天然带有额外的剩余素数方向。证毕。
+\end{proof}
+
+\begin{theorem}[十次指纹对 Lee--Yang 粗读出的条件不变性]\label{thm:xi-time-part64b-p10-fingerprint-leyang-coarse-readout-invariance}
+记
+\[
+A:=\{\text{\(P_{10}\bmod p\) 含一次因子}\},
+\]
+并定义 Lee--Yang 侧三个粗事件
+\[
+E_1:=\{\chi_{\mathrm{LY}}(p)=+1\},
+\qquad
+E_2:=\{\chi_{\mathrm{LY}}(p)=-1\},
+\qquad
+E_3:=B_{\mathrm{root}}:=\{\text{\(g\bmod p\) 至少有一根}\}.
+\]
+再记
+\[
+B_{\mathrm{split}}:=\{\text{\(g\bmod p\) 全分裂}\}.
+\]
+则自然密度满足
+\[
+\boxed{\;
+\delta(A\mid E_1)
+=
+\delta(A\mid E_2)
+=
+\delta(A\mid E_3)
+=
+\delta(A)
+=
+\frac{28319}{44800}.\;}
+\]
+并且
+\[
+\boxed{\;
+\delta(A\mid B_{\mathrm{split}})
+=
+\frac{28319}{44800}.\;}
+\]
+因此，十次模分解指纹与 Lee--Yang 的符号读出、存在根读出及全分裂读出在统计上完全正交：任何此类粗 Lee--Yang 观测都不改变十次线性因子事件的密度。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-gauge-anomaly-P10-leyang-linear-disjointness} 与推论
+\ref{cor:fold-gauge-anomaly-P10-leyang-chebotarev-product-law}，任意只依赖 \(S_{10}\) 因子的共轭类事件与任意只依赖 \(S_3\) 因子的共轭类事件，其联合自然密度都等于边际密度之积。
+
+事件 \(A\) 只依赖 \(P_{10}\) 分裂域的 \(S_{10}\) 因子；而
+\[
+E_1,\ E_2,\ B_{\mathrm{root}},\ B_{\mathrm{split}}
+\]
+都只依赖 Lee--Yang 三次分裂域的 \(S_3\) 因子。故对任意
+\[
+E\in\{E_1,E_2,B_{\mathrm{root}},B_{\mathrm{split}}\}
+\]
+都成立
+\[
+\delta(A\cap E)=\delta(A)\,\delta(E).
+\]
+
+再由推论 \ref{cor:fold-gauge-anomaly-P10-modp-splitting-densities}，
+\[
+\delta(A)=\frac{28319}{44800}.
+\]
+另一方面，在 \(S_3\) 中，偶置换与奇置换各占 \(3\) 个元素，故
+\[
+\delta(E_1)=\delta(E_2)=\frac12.
+\]
+又由结论 \ref{con:xi-terminal-zm-leyang-cubic-modp-splitting-density}，\(g\bmod p\) 的分裂型与 \(S_3\) 的循环型一一对应：恒等类对应全分裂，换位类对应恰有一根，三循环类对应不可约。三类大小分别为 \(1,3,2\)，故
+\[
+\delta(B_{\mathrm{split}})=\frac16,
+\qquad
+\delta(B_{\mathrm{root}})=\frac{1+3}{6}=\frac23.
+\]
+
+由于上述四个条件事件的密度均为正，分别相除即可得到
+\[
+\delta(A\mid E_1)=\delta(A),
+\qquad
+\delta(A\mid E_2)=\delta(A),
+\]
+\[
+\delta(A\mid B_{\mathrm{root}})=\delta(A),
+\qquad
+\delta(A\mid B_{\mathrm{split}})=\delta(A).
+\]
+将 \(\delta(A)=28319/44800\) 代回，即得全部公式。证毕。
+\end{proof}
+
+\noindent
+上述六条结果把容量亏损、极限信息几何、数字层实现、三轴最小窗与 Chebotarev 条件化五条原先分立的链进一步压缩为同一组有限证书：部分可逆误差由纤维超额尾量完全记录，渐近似然比只剩两原子，乘法的外置性由同态半圆维无穷障碍强制，最小三轴窗天然携带额外素轴，而十次指纹对 Lee--Yang 粗读出保持严格条件不变。于是，恢复论、信息论、实现论、模窗算术与分裂型统计之间的横向耦合便获得了统一的有限闭合。
+
+\endinput

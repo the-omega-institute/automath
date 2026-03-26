@@ -1,0 +1,113 @@
+\subsubsection{可逆性阈值：\texorpdfstring{$\Phi_m$}{Phi\_m} 的共轭与纤维坍缩}\label{subsec:Phi_m-conjugacy}
+
+上一节已将 $Y_m$ 组织为标记图 $G_m$ 的像（定理 \ref{thm:Phi_m-sofic-graph}），并证明熵率不降（推论 \ref{cor:Phi_m-entropy-no-drop}）。
+本节给出可逆性与纤维结构的确定结论：在 Zeckendorf 折叠 $\Fold_m$ 的口径下，除去 $m=2$ 的两点退化外，$\Phi_m$ 在 $m\ge 3$ 时为共轭。
+
+\paragraph{可终止的局部判定口径（子集滤波）}
+沿定义 \ref{def:G_m}，对任意候选后缀集合 $S\subseteq V_m$ 与输出符号 $a\in X_m$，定义一步更新
+$$
+\delta_m(S,a):=\{v'\in V_m:\exists\,e:v\to v'\ \text{s.t. }v\in S,\ \ell_m(e)=a\}.
+$$
+从初始集合 $S_0:=V_m$ 出发，对任意输出块 $a_0a_1\cdots a_{t-1}$ 递推
+$$
+S_{j+1}:=\delta_m(S_j,a_j)\qquad(0\le j<t).
+$$
+该递推可视为“仅由输出块驱动”的有限状态滤波器：$S_j$ 记录读入前 $j$ 个输出符号后，内部后缀（顶点）仍可能取到的候选集。
+当 $S_t$ 为单点集时，意味着该长度-$t$ 输出块已将内部后缀同步到唯一值。
+
+\begin{theorem}[可逆性阈值与有限窗逆码]\label{thm:Phi_m-conjugacy-threshold}
+令 $\Phi_m$ 为定义 \ref{def:Phi_m} 的滑动块码，$Y_m$ 为定义 \ref{def:Y_m} 的像子移位。
+则：
+\begin{enumerate}
+  \item 当 $m\ge 3$ 时，$\Phi_m:\{0,1\}^{\ZZ}\to Y_m$ 为拓扑共轭；更具体地，存在一个滑动块码
+  $$
+  \Psi_m:Y_m\to\{0,1\}^{\ZZ},
+  $$
+  其\textbf{记忆}为 $m-1$、\textbf{预期性}为 $0$，并满足
+  $$
+  \Psi_m\circ\Phi_m=\mathrm{id}_{\{0,1\}^{\ZZ}},\qquad
+  \Phi_m\circ\Psi_m=\mathrm{id}_{Y_m}.
+  $$
+  \item 当 $m=2$ 时，$\Phi_2$ 恰好在两条常值序列 $0^{\ZZ}$ 与 $1^{\ZZ}$ 上出现 $2$-对-$1$ 退化，其余点一一。
+\end{enumerate}
+\end{theorem}
+
+\begin{corollary}[像子移位的共轭类塌缩（\(m\ge 3\)）]\label{cor:Ym-conjugacy-all-mge3}
+对任意 $m,n\ge 3$，移位系统 $(Y_m,\sigma)$ 与 $(Y_n,\sigma)$ 拓扑共轭。
+更具体地，若取定理 \ref{thm:Phi_m-conjugacy-threshold} 中的逆码 $\Psi_m:Y_m\to\{0,1\}^{\ZZ}$，则
+\[
+h_{m\to n}:=\Phi_n\circ \Psi_m:\ Y_m\longrightarrow Y_n
+\]
+为同胚且满足 \(h_{m\to n}\circ\sigma=\sigma\circ h_{m\to n}\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:Phi_m-conjugacy-threshold}，当 \(m\ge 3\) 时 \(\Phi_m\) 为 \(\{0,1\}^{\ZZ}\) 与 \(Y_m\) 的共轭，其逆映射为 \(\Psi_m\)。
+因此 \(h_{m\to n}\) 为同胚；又由于 \(\Phi_n\) 与 \(\Psi_m\) 均与移位交换，故 \(h_{m\to n}\) 与移位交换。
+证毕。
+\end{proof}
+
+\begin{proof}
+证明思路建立在“有限可判定”的滤波器上。
+
+\paragraph{局部同步：长度-$m$ 块把候选集压到单点}
+对固定 $m$，考虑上述滤波更新 $S_{j+1}=\delta_m(S_j,a_j)$，并记
+$$
+R_m:=\{S_m:\exists\,a_0\cdots a_{m-1}\in\mathcal{L}_m(Y_m)\ \text{s.t. 递推得到 }S_m\}.
+$$
+若 $R_m$ 中每个元素都是单点集，则任意长度-$m$ 的输出块都把内部后缀同步到唯一顶点。
+该命题对每个固定 $m$ 是一个\textbf{完全有限}的判定问题：状态空间为 $V_m$ 的幂集可达部分，转移由 $G_m$ 给出。
+脚本 \texttt{scripts/exp\_phi\_m\_conjugacy\_threshold.py} 对 $m\in[2,12]$ 的范围给出可复算证书，输出汇总见表 \ref{tab:phi_m_conjugacy_threshold}。
+\input{sections/generated/tab_phi_m_conjugacy_threshold}
+其中 $m\ge 3$ 时 $R_m$ 的“non-singleton ends $(m)$”为 $0$，而 $m=2$ 时在任何步数都出现唯一一个非单点端态，对应常值输出块所导致的两点退化。
+同时表中 “non-singleton ends $(m-1)$” 在 $m\ge 3$ 时严格为正，这给出同步延迟的尖锐性见证：一般需要完整的长度-$m$ 输出块才能把候选集压到单点（对应逆码记忆为 $m-1$）。
+
+\paragraph{从单点端态到唯一 lift：利用双向解析性}
+由定理 \ref{thm:pom-right-resolving} 与定理 \ref{thm:pom-left-resolving}，标记图 $G_m$ 在 Zeckendorf 折叠下同时右解析与左解析：同一顶点出发（或到达）的一步扩展可由标记唯一判别。
+因此一旦长度-$m$ 输出块把端态同步为单点 $\{v'\}$，则该块在 $G_m$ 上的长度-$m$ lift 路径不仅存在，而且由左解析性可从终点 $v'$ 逐步唯一回溯得到；从而该输出块对应唯一的长度-$(2m-1)$ 输入块。
+
+\paragraph{构造逆码 \texorpdfstring{$\Psi_m$}{Psi\_m}}
+当 $m\ge 3$ 时，由上述两步可知：对任意允许的长度-$m$ 输出块
+$$
+a_{t-m+1}\cdots a_t\in\mathcal{L}_m(Y_m),
+$$
+存在唯一的 $G_m$-路径
+$$
+e_{t-m+1},\dots,e_t\in E_m
+$$
+使得其逐边标记恰为该输出块。
+令 $e_{t-m+1}=(v,b)$（其中 $b\in\{0,1\}$ 是该边对应的追加比特），定义
+$$
+(\Psi_m(y))_t:=b,
+$$
+其中 $y\in Y_m$ 且 $a_j=y_j$。
+该定义仅依赖 $y_{t-m+1},\dots,y_t$，故 $\Psi_m$ 的记忆为 $m-1$、预期性为 $0$。
+由构造立得 $\Psi_m\circ\Phi_m=\mathrm{id}$，并因 $\Phi_m$ 满射到 $Y_m$ 得 $\Phi_m\circ\Psi_m=\mathrm{id}_{Y_m}$。
+
+\paragraph{$m=2$ 的两点退化}
+脚本证书给出：唯一的非单点端态对应常值输出块，其恰来自两条输入常值序列 $0^{\ZZ},1^{\ZZ}$；
+此外对任意其它输出点滤波在有限步内同步到单点，从而 lift 唯一。
+综上得到 $m=2$ 的“仅两点 $2$-对-$1$”退化结论。
+\end{proof}
+
+\begin{remark}[可逆性阈值的同调解释：\(m=2\) 的唯一分支点对应不可消去的 \texorpdfstring{$\mathbb{Z}/2$}{Z/2} 隐变量]\label{rem:Phi_m-conjugacy-threshold-z2-homology}
+定理 \ref{thm:Phi_m-conjugacy-threshold} 可被理解为：一个 \(\mathbb{Z}/2\)-值的纤维标签是否能被长度-\(m\) 的输出窗口制度性读出，从而被“规范化”为同调零（coboundary）的判定。
+滤波器递推 \(S_{j+1}=\delta_m(S_j,a_j)\) 记录在给定输出块下内部后缀的候选集合；当 \(m\ge 3\) 时，任意长度-\(m\) 输出块将候选集合同步到单点（表 \ref{tab:phi_m_conjugacy_threshold}），因而该 \(\mathbb{Z}/2\) 标签在窗口内可被完全同步并由逆码 \(\Psi_m\) 消去，表现为共轭。
+相反，当 \(m=2\) 时，唯一的非单点端态恰对应两条常值轨道 \(0^{\ZZ},1^{\ZZ}\)，等价于：在该分支轨道上存在一个不可由长度-\(2\) 输出决定的 \(\mathbb{Z}/2\) 隐变量；它给出唯一的拓扑分支点并构成共轭失败的唯一障碍。
+\end{remark}
+
+\begin{corollary}[\texorpdfstring{$\zeta_{Y_m}$}{zetaYm} 的封口与“折叠因子不产出非平凡 prime shadow”]\label{cor:Phi_m-zeta-closed}
+对 $m\ge 3$，由于 $Y_m$ 与二元全移位共轭（定理 \ref{thm:Phi_m-conjugacy-threshold}），其周期点计数满足
+$$
+\#\mathrm{Fix}(\sigma^n|_{Y_m})=2^n\qquad(n\ge 1),
+$$
+从而内禀 Artin--Mazur \(\zeta\)-函数为
+$$
+\zeta_{Y_m}(z)=\frac{1}{1-2z}.
+$$
+而 $m=2$ 时有
+$$
+\#\mathrm{Fix}(\sigma^n|_{Y_2})=2^n-1,\qquad
+\zeta_{Y_2}(z)=\frac{1-z}{1-2z}.
+$$
+因此当 $m\ge 3$ 时，$Y_m$ 自身的 prime-orbit/\(\zeta\) 指纹退化为全移位骨架；本文中出现的非平凡 prime shadow 必然来自“核 + 势/权重 + 扭曲通道”（而非单纯来自折叠因子 $Y_m$）。
+\end{corollary}

@@ -1,0 +1,105 @@
+\subsection{有限阶碰撞矩对最大纤维阈值的不可判别性}\label{subsec:op-algebra-collision-moment-camouflage-maxfiber}
+在电路折叠口径下，最大纤维 \(D(C)=\max_y|C^{-1}(y)|\) 等于条件期望的指数 \(\mathrm{Ind}(E_C)\)（命题 \ref{prop:circuit-condexp-index-maxfiber}），而 \(q\)-阶碰撞矩 \(S_q(C)=\sum_y|C^{-1}(y)|^q\) 同时等于 Watatani 指标元 \(\mathrm{Ind}_{\mathrm W}(E_C)\) 的坐标迹矩（推论 \ref{cor:circuit-watatani-moments-sharpP-complete}）。
+因此，若试图以有限个低阶矩 \(\{S_q(C)\}_{2\le q\le k}\)（或等价的有限个迹矩）锁定最大纤维阈值，必须首先排除下述等矩异极值的显式构造。
+
+\begin{theorem}[Prouhet--Thue--Morse 分割下有限阶碰撞矩无法锁定最大纤维阈值]\label{thm:circuit-prouhet-collision-moment-camouflage-maxfiber}
+固定整数 \(k\ge 2\)。
+存在一族显式可构造的电路对 \((C_0,C_1)\)，其输入输出位数相同且规模多项式有界，使得
+\begin{enumerate}
+  \item 对每个 \(q\in\{2,3,\dots,k\}\) 有 \(S_q(C_0)=S_q(C_1)\)；
+  \item 存在一个区间 \(\mathcal T\subset\NN\) 满足 \(|\mathcal T|=2^{\Theta(n)}\)（其中 \(n\) 为输入输出位数），并且对任意 \(T\in\mathcal T\) 有
+  \[
+  \ind[D(C_0)\ge T]\ne \ind[D(C_1)\ge T].
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+令 \(\ell:=k+1\) 并取任意 \(s\ge 1\)，定义 \(t:=\ell+s\) 与 \(n:=\ell+t=2\ell+s\)。
+将输入 \(x\in\{0,1\}^{n}\) 解析为二元组 \((y,u)\)，其中 \(y\in\{0,1\}^{\ell}\)、\(u\in\{0,1\}^{t}\)。
+记 \(\mathrm{int}(y)\in\{0,1,\dots,2^{\ell}-1\}\) 为二进制整数值，并定义 Prouhet--Thue--Morse 符号
+\[
+\tau(r):=(-1)^{s_2(r)},\qquad r\in\{0,1,\dots,2^{\ell}-1\},
+\]
+其中 \(s_2(\cdot)\) 为二进制数位和。
+并简记 \(\tau(y):=\tau(\mathrm{int}(y))\)。
+令 \(M:=2^s\)。
+
+定义两组纤维目标函数 \(d_0,d_1:\{0,1\}^{\ell}\to\NN\)：
+\[
+d_0(y):=
+\begin{cases}
+M(\mathrm{int}(y)+1),& \tau(y)=+1,\\
+1,& \tau(y)=-1,
+\end{cases}
+\qquad
+d_1(y):=
+\begin{cases}
+M(\mathrm{int}(y)+1),& \tau(y)=-1,\\
+1,& \tau(y)=+1.
+\end{cases}
+\]
+由于 \(\max_y d_i(y)\le M\cdot 2^{\ell}=2^t\)，比较谓词 \(\mathrm{int}(u)<d_i(y)\) 可在 \(t\) 位上实现。
+据此定义电路 \(C_i:\{0,1\}^{\ell+t}\to\{0,1\}^{\ell+t}\)：
+\[
+C_i(y,u):=
+\begin{cases}
+(y,0^t),& \mathrm{int}(u)<d_i(y),\\
+(y,u),& \mathrm{int}(u)\ge d_i(y).
+\end{cases}
+\]
+上述运算仅含位和奇偶、加一、移位乘 \(M\)、\(t\)-位比较与多路选择，故 \(C_i\) 可由规模 \(\mathrm{poly}(n)\) 的电路显式构造。
+
+\paragraph{最大纤维阈值的分离与指数尺度区间。}
+对任意 \(y\)，输出点 \((y,0^t)\) 的纤维大小恰为 \(d_i(y)\)，其余可达输出点均为单点纤维，因而
+\[
+D(C_i)=\max_{y} d_i(y).
+\]
+由于 \(\tau(1^{\ell})=(-1)^{\ell}\)，在 \(y=1^{\ell}\) 处有
+\(
+d_i(1^{\ell})=M\cdot 2^{\ell}
+\)
+当且仅当 \(\tau(1^{\ell})=(-1)^i\)；另一电路的最大值为 \(M(2^{\ell}-1)\)。
+取
+\[
+\mathcal T:=\{T\in\NN:\ M(2^{\ell}-1)<T\le M\cdot 2^{\ell}\},
+\]
+则对任意 \(T\in\mathcal T\) 有 \(\ind[D(C_0)\ge T]\ne \ind[D(C_1)\ge T]\)。
+并且 \(|\mathcal T|=M=2^s=2^{n-2\ell}=2^{\Theta(n)}\)（因 \(k\) 固定而 \(\ell=k+1\) 为常数）。
+
+\paragraph{低阶碰撞矩的完全一致。}
+对任意整数 \(q\ge 2\)，由纤维结构直接得
+\[
+S_q(C_i)
+=\sum_{y} d_i(y)^q\;+\;\sum_{y}(2^t-d_i(y))\cdot 1
+=2^{\ell}2^{t}\;+\;\sum_{y}\bigl(d_i(y)^q-d_i(y)\bigr).
+\]
+因此只需证明对每个 \(q\in\{1,2,\dots,k\}\) 有
+\(
+\sum_{y}d_0(y)^q=\sum_{y}d_1(y)^q
+\)。
+令
+\(
+A:=\{r:\ 0\le r<2^{\ell},\ \tau(r)=+1\}
+\)、
+\(
+B:=\{r:\ 0\le r<2^{\ell},\ \tau(r)=-1\}
+\)。
+由定理 \ref{thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments} 证明中的 Prouhet--Thue--Morse 等幂分割可知
+\[
+\sum_{r\in A} r^j=\sum_{r\in B} r^j,\qquad 0\le j\le \ell-1=k.
+\]
+于是对任意 \(1\le q\le k\)，\((r+1)^q\) 为次数 \(\le q\) 的多项式，故仍有
+\(
+\sum_{r\in A}(r+1)^q=\sum_{r\in B}(r+1)^q
+\)。
+将 \(d_0,d_1\) 的定义代入可得
+\[
+\sum_{y} d_0(y)^q
+=M^q\sum_{r\in A}(r+1)^q+\sum_{r\in B}1^q
+=M^q\sum_{r\in B}(r+1)^q+\sum_{r\in A}1^q
+=\sum_{y} d_1(y)^q,
+\]
+从而 \(S_q(C_0)=S_q(C_1)\) 对所有 \(2\le q\le k\) 成立。证毕。
+\end{proof}
+
+\endinput

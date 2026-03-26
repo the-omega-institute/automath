@@ -1,0 +1,278 @@
+\begin{theorem}[可寻址 Gödel 整数化的精确乘积下界与极小化器分类]\label{thm:xi-addressable-godel-product-lower-bound-classification}
+设 \(\Sigma\) 为有限字母表，\(|\Sigma|=q\ge 2\)。固定整数 \(T\ge 1\) 与互异素数
+\[
+p_1,\dots,p_T.
+\]
+设
+\[
+E_T:\Sigma^T\hookrightarrow \mathbb N_{\ge 1}
+\]
+满足如下可寻址性：对每个 \(1\le t\le T\)，存在函数
+\[
+\delta_t:\mathbb N\to \Sigma
+\]
+使得对任意 \(s=(s_1,\dots,s_T)\in\Sigma^T\) 都有
+\[
+s_t=\delta_t\!\bigl(v_{p_t}(E_T(s))\bigr).
+\]
+则全部码字的乘积满足严格下界
+\[
+\prod_{s\in\Sigma^T}E_T(s)
+\ge
+\left(\prod_{t=1}^{T}p_t\right)^{q^T(q-1)/2},
+\]
+等价地，
+\[
+\frac{1}{q^T}\sum_{s\in\Sigma^T}\log E_T(s)
+\ge
+\frac{q-1}{2}\sum_{t=1}^{T}\log p_t.
+\]
+并且取等当且仅当：对每个 \(t\) 都存在双射
+\[
+\iota_t:\Sigma\xrightarrow{\sim}\{0,1,\dots,q-1\}
+\]
+使得
+\[
+E_T(s)=\prod_{t=1}^{T}p_t^{\,\iota_t(s_t)}
+\qquad
+(\forall\,s\in\Sigma^T).
+\]
+换言之，全部极小化器恰为逐坐标、逐素数、无冗余因子的纯估值编码。
+\end{theorem}
+\begin{proof}
+对每个 \(t\) 与 \(a\in\Sigma\)，记
+\[
+\mathcal V_{t,a}:=
+\{v_{p_t}(E_T(s)):\ s_t=a\}\subset \ZZ_{\ge 0},
+\qquad
+m_{t,a}:=\min \mathcal V_{t,a}.
+\]
+由于 \(s_t\) 由 \(v_{p_t}(E_T(s))\) 经 \(\delta_t\) 单独解码，不同字母 \(a\neq b\) 的估值集合 \(\mathcal V_{t,a},\mathcal V_{t,b}\) 必两两不交。故
+\[
+\{m_{t,a}:a\in\Sigma\}
+\]
+是 \(q\) 个互异的非负整数，从而
+\[
+\sum_{a\in\Sigma}m_{t,a}\ge 0+1+\cdots+(q-1)=\frac{q(q-1)}{2}.
+\]
+
+对固定的 \(t\)，把所有长度 \(T\) 的词按第 \(t\) 位分组，得到
+\[
+\sum_{s\in\Sigma^T}v_{p_t}(E_T(s))
+=
+\sum_{a\in\Sigma}\sum_{s_t=a}v_{p_t}(E_T(s))
+\ge
+q^{T-1}\sum_{a\in\Sigma}m_{t,a}
+\ge
+q^T\frac{q-1}{2}.
+\]
+于是
+\[
+\begin{aligned}
+\sum_{s\in\Sigma^T}\log E_T(s)
+&=
+\sum_{s\in\Sigma^T}\sum_{p}v_p(E_T(s))\log p\\
+&\ge
+\sum_{t=1}^{T}\log p_t\sum_{s\in\Sigma^T}v_{p_t}(E_T(s))\\
+&\ge
+q^T\frac{q-1}{2}\sum_{t=1}^{T}\log p_t.
+\end{aligned}
+\]
+指数化即得乘积下界，除以 \(q^T\) 即得平均对数下界。
+
+若取等，则上述每一步均须取等。首先，求和中被忽略的其它素数贡献必须全部为零，因此任一码字都不含 \(p_1,\dots,p_T\) 之外的额外素因子。其次，对每个固定的 \(t,a\)，必有
+\[
+v_{p_t}(E_T(s))=m_{t,a}
+\qquad
+(\forall\,s\in\Sigma^T\text{ with }s_t=a),
+\]
+即第 \(t\) 个素数的估值仅依赖于第 \(t\) 个字母。最后，由
+\[
+\sum_{a\in\Sigma}m_{t,a}=\frac{q(q-1)}{2}
+\]
+且这些 \(m_{t,a}\) 是 \(q\) 个互异非负整数，必知
+\[
+\{m_{t,a}:a\in\Sigma\}=\{0,1,\dots,q-1\}.
+\]
+故存在双射 \(\iota_t:\Sigma\to\{0,1,\dots,q-1\}\) 使
+\[
+v_{p_t}(E_T(s))=\iota_t(s_t).
+\]
+再结合“无额外素因子”，便得到
+\[
+E_T(s)=\prod_{t=1}^{T}p_t^{\,\iota_t(s_t)}.
+\]
+反之，此类编码显然满足逐坐标可寻址性，并在每个坐标上以最小可能估值集 \(\{0,\dots,q-1\}\) 取到全部下界等号。证毕。
+\end{proof}
+
+\begin{corollary}[可寻址 Gödel 整数化的平均复杂度最优律与二元最坏情形闭式]\label{cor:xi-addressable-godel-average-binary-optimality}
+沿用定理 \ref{thm:xi-addressable-godel-product-lower-bound-classification} 的记号。则：
+\begin{enumerate}
+  \item 全部可寻址编码的最小平均对数复杂度精确为
+  \[
+  \inf_{E_T}
+  \frac{1}{q^T}\sum_{s\in\Sigma^T}\log E_T(s)
+  =
+  \frac{q-1}{2}\sum_{t=1}^{T}\log p_t.
+  \]
+  \item 存在绝对常数 \(c>0\)，使得
+  \[
+  \inf_{E_T}
+  \frac{1}{q^T}\sum_{s\in\Sigma^T}\log E_T(s)
+  \ge
+  \frac{q-1}{2}\,c\,T\log T.
+  \]
+  \item 当 \(q=2\) 时，最小最坏情形复杂度也被完全锁定：
+  \[
+  \inf_{E_T}\ \max_{s\in\Sigma^T}\log E_T(s)
+  =
+  \sum_{t=1}^{T}\log p_t.
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+第 \(1\) 条由定理 \ref{thm:xi-addressable-godel-product-lower-bound-classification} 的下界与极小化器分类直接得到。任选双射
+\[
+\iota_t:\Sigma\xrightarrow{\sim}\{0,1,\dots,q-1\},
+\]
+则纯估值编码
+\[
+E_T^{\min}(s):=\prod_{t=1}^{T}p_t^{\,\iota_t(s_t)}
+\]
+达到该平均值。
+
+对第 \(2\) 条，由 \(p_t\ge t+1\) 得
+\[
+\sum_{t=1}^{T}\log p_t
+\ge
+\sum_{t=1}^{T}\log(t+1)
+=
+\log((T+1)!).
+\]
+再用 Stirling 下界可知存在绝对常数 \(c>0\)，使对充分大的 \(T\) 有
+\[
+\log((T+1)!)\ge c\,T\log T.
+\]
+吸收有限个小 \(T\) 的情形后即得所示统一下界。
+
+最后处理 \(q=2\)。由定理 \ref{thm:xi-addressable-godel-product-lower-bound-classification} 的极小化器分类，取
+\[
+\iota_t:\Sigma\xrightarrow{\sim}\{0,1\}
+\]
+即可得到
+\[
+\max_{s\in\Sigma^T}\log E_T^{\min}(s)=\sum_{t=1}^{T}\log p_t.
+\]
+反之，任取任一可寻址编码 \(E_T\)。对每个 \(t\)，两字母对应的估值集合是两个互不相交的非空非负整数集，因此总有某个字母 \(a_t^\star\in\Sigma\) 满足
+\[
+m_{t,a_t^\star}\ge 1.
+\]
+取
+\[
+s^\star:=(a_1^\star,\dots,a_T^\star)\in\Sigma^T,
+\]
+则对每个 \(t\) 都有
+\[
+v_{p_t}(E_T(s^\star))\ge m_{t,a_t^\star}\ge 1,
+\]
+从而
+\[
+\log E_T(s^\star)\ge \sum_{t=1}^{T}\log p_t.
+\]
+于是
+\[
+\max_{s\in\Sigma^T}\log E_T(s)\ge \sum_{t=1}^{T}\log p_t.
+\]
+上下界合并即得第 \(3\) 条。证毕。
+\end{proof}
+
+\begin{theorem}[可寻址 Gödel 外置的最坏相对冗余比无界发散]\label{thm:xi-addressable-godel-worstcase-redundancy-diverges}
+沿用定理 \ref{thm:xi-addressable-godel-product-lower-bound-classification} 的记号。对任意满足逐坐标可寻址性的编码
+\[
+E_T:\Sigma^T\hookrightarrow \NN_{\ge 1},
+\qquad
+|\Sigma|=q\ge 2,
+\]
+定义最坏对数复杂度与相对冗余比
+\[
+L_T(E_T):=\max_{s\in\Sigma^T}\log E_T(s),
+\qquad
+\mathscr R_T(E_T):=\frac{L_T(E_T)}{T\log q}.
+\]
+则存在仅依赖于 \(q\) 的常数 \(c_q>0\)，使得对一切 \(T\ge 1\) 都有
+\[
+\boxed{\;
+L_T(E_T)\ge c_q\,T\log T.\;}
+\]
+因而不存在任何可寻址编码族使
+\[
+L_T(E_T)=O(T).
+\]
+更进一步，
+\[
+\boxed{\;
+\mathscr R_T(E_T)\ge \frac{c_q}{\log q}\log T\longrightarrow +\infty.\;}
+\]
+也就是说，一旦要求每个坐标都能被单独 prime-address 解码，则最坏情形开销相对于原始信息量 \(T\log q\) 的膨胀因子必然无界增长。
+
+特别地，当 \(q=2\) 时，推论 \ref{cor:xi-addressable-godel-average-binary-optimality} 还给出精确最优值
+\[
+\inf_{E_T}L_T(E_T)=\sum_{t=1}^{T}\log p_t=\Theta(T\log T).
+\]
+因此，把链上规范投影通过
+\[
+\mathcal I_n\cong \{0,1\}^{\,n-1}
+\]
+识别为二元标签空间后，任何逐位可寻址的 Gödel 算术化都必须支付
+\[
+\Omega(n\log n)
+\]
+的最坏情形对数代价；再结合推论 \ref{cor:xi-chain-interior-canonical-arithmeticization-optimal-order}，这一阶数同时又是 sharp 的。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-addressable-godel-product-lower-bound-classification}，
+\[
+\frac{1}{q^T}\sum_{s\in\Sigma^T}\log E_T(s)
+\ge
+\frac{q-1}{2}\sum_{t=1}^{T}\log p_t.
+\]
+而平均值不超过最大值，故
+\[
+L_T(E_T)\ge \frac{q-1}{2}\sum_{t=1}^{T}\log p_t.
+\]
+由素数定理的标准推论，存在绝对常数 \(c>0\) 使
+\[
+\sum_{t=1}^{T}\log p_t\ge c\,T\log T
+\]
+对充分大的 \(T\) 成立；吸收有限个小 \(T\) 后可得对全部 \(T\ge1\) 都成立的常数
+\[
+c_q:=\frac{q-1}{2}c>0.
+\]
+于是
+\[
+L_T(E_T)\ge c_q\,T\log T,
+\]
+这立刻排除了 \(L_T(E_T)=O(T)\) 的可能性。
+
+再除以 \(T\log q\)，得到
+\[
+\mathscr R_T(E_T)\ge \frac{c_q}{\log q}\log T\to+\infty,
+\]
+即最坏相对冗余比无界发散。
+
+当 \(q=2\) 时，推论 \ref{cor:xi-addressable-godel-average-binary-optimality} 已给出
+\[
+\inf_{E_T}\max_{s\in\Sigma^T}\log E_T(s)=\sum_{t=1}^{T}\log p_t,
+\]
+故最优最坏复杂度恰为 \(\Theta(T\log T)\)。
+
+最后，对链上规范投影，由定理 \ref{thm:xi-chain-interior-boolean-flag-closed-form} 有
+\[
+|\mathcal I_n|=2^{n-1},
+\]
+并由固定点集识别得到
+\[
+\mathcal I_n\cong \{0,1\}^{\,n-1}.
+\]
+于是取 \(T=n-1\)、\(q=2\) 即知任何逐位可寻址的 Gödel 外置都满足最坏情形下界 \(\Omega(n\log n)\)；而推论 \ref{cor:xi-chain-interior-canonical-arithmeticization-optimal-order} 又给出 matching 的 \(O(n\log n)\) 上界，从而该阶数是 sharp 的。证毕。
+\end{proof}

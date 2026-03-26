@@ -1,0 +1,19 @@
+\begin{theorem}[布尔电路的投影预算编译]\label{thm:pom-boolean-circuit-projection-budget}
+固定布尔编码 \(\{0,1\}\subset\NN\subset X_\infty\)。
+设 \(C\) 为仅由 \(\mathrm{NAND}\) 门构成的布尔电路，门数为 \(s\)。
+则存在一条在稳定地址输入上正确实现 \(C\) 的投影词/微码程序 \(I_C\)，其投影预算满足
+\[
+W(I_C)=(1,s),
+\]
+即规范投影 \texttt{PROJ\_NORM} 的总调用可规约为末端一次，而序投影 \texttt{PROJ\_ORDER} 的调用次数线性等于 \(\mathrm{NAND}\) 门数。
+并且在“值层半环演化 \(\langle\oplus,\otimes\rangle\) +（可选）序投影”的口径下，任意实现非单调布尔函数的程序都必须满足 \(k_{\le}(I)\ge 1\)。
+\end{theorem}
+\begin{proof}
+对每个 \(\mathrm{NAND}\) 门采用命题 \ref{prop:pom-nand-projorder-budget-one} 的宏实现，其包含恰一次 \texttt{PROJ\_ORDER}。
+按电路连线将这些宏作顺序复合得到 \(I_C\)，则 \(k_{\le}(I_C)=s\)。
+另一方面，由命题 \ref{prop:pom-rewriting-terminating} 的值层正规形（及其语义来源的“一次投影正规形”，定理 \ref{thm:pom-one-fold-normal-form}），所有中间 \texttt{PROJ\_NORM} 可推迟并合并为末端至多一次，从而可取 \(k_Z(I_C)=1\)。
+\par
+若 \(k_{\le}(I)=0\)，则程序落在 \(\mathbf{W}_{\mathrm{val}}\) 的值层闭包内。
+由推论 \ref{cor:pom-val-monotone-boolean}，其布尔语义必单调，故不可能实现非单调布尔函数；因此任何实现非单调函数者必满足 \(k_{\le}(I)\ge 1\)。证毕。
+\end{proof}
+

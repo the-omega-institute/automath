@@ -1,0 +1,709 @@
+\subsubsection{Arity-charge 的同调非负化、密度上界与零荷子系统}\label{app:real-input-40-arity-charge}
+\paragraph{概述}
+本小节在命题 \ref{prop:real-input-40-essential-20} 的真实输入 essential $20$ 状态核心上研究 arity-charge 观测量 $\chi$。
+核心结论为：(\textup{i}) $\chi$ 在同调意义下可规范为逐边的 $0/1$ 指标，从而闭轨上 $\chi(\gamma)\ge 0$ 且 primitive 生成函数 $P_n(q)$ 不含 Laurent 负幂；
+(\textup{ii}) 任意 primitive 轨道满足密度上界 $\chi(\gamma)\le \lfloor|\gamma|/2\rfloor$，且上界尖；
+(\textup{iii}) 零荷层（$\chi(\gamma)=0$）诱导一个新的 SFT 子系统，其 $\zeta$ 与熵具有低阶代数闭式；
+(\textup{iv}) $\chi$-加权压力在 $\theta\to+\infty$ 具有精确渐近直线 $P_\chi(\theta)=\frac12\theta+\frac12\log 3+o(1)$，从而端点斜率显式为 $1/2$，截距为 $\frac12\log 3$。
+
+\paragraph{定义（arity-charge 分层与生成函数）}
+在真实输入核的图表示中，每条允许边对应一步合法输入 $(x,y)\in\{0,1\}^2$（受一步记忆约束），并携带边标记 $(d,e)$：
+其中 $d=x+y\in\{0,1,2\}$，$e\in\{0,1\}$ 为同步核输出位。
+定义一步 arity-charge
+\[
+\chi(s,d):=e-\mathbf{1}_{\{d=2\}}\in\{-1,0,1\},
+\]
+并对真实输入核的每条边赋权 $q^{\chi}$，得到加权矩阵 $M(q)$。
+令
+\[
+c_n(q):=\operatorname{tr}(M(q)^n),
+\qquad
+\zeta(z,q)=\exp\!\left(\sum_{n\ge 1}\frac{c_n(q)}{n}z^n\right)
+=\frac{1}{\det(I-zM(q))}.
+\]
+定义 primitive 轨道的 arity 生成多项式
+\[
+P_n(q):=\sum_{\substack{\gamma\ \mathrm{primitive}\|\gamma|=n}} q^{\chi(\gamma)},
+\qquad
+\chi(\gamma):=\sum_{e\in\gamma}\chi(e),
+\]
+其系数给出分层计数：
+\[
+[q^k]P_n(q)=\#\{\gamma:\ |\gamma|=n,\ \chi(\gamma)=k\}.
+\]
+则加权 Möbius 反演给出
+\[
+c_n(q)=\sum_{d\mid n} d\,P_d\!\left(q^{n/d}\right),
+\qquad
+P_n(q)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,c_{n/d}\!\left(q^{d}\right).
+\]
+
+\begin{theorem}[arity-charge 的 $0/1$ 共边界正规形（essential core 上）]\label{thm:real-input-40-arity-charge-coboundary}
+在命题 \ref{prop:real-input-40-essential-20} 的 essential $20$ 状态核心上，存在势函数
+\[
+V:\Sigma_{\mathrm{ess}}\to\{0,1\},
+\]
+使得对核心上每一条允许边 $e:u\to v$ 都有
+\[
+g(e):=\chi(e)+V(v)-V(u)\in\{0,1\}.
+\]
+并且可取 $V=1$ 当且仅当
+\[
+(s,p_x,p_y)\in\{(1\overline{1}2,1,1),(101,1,1),(002,1,1),(11\overline{1},0,0)\},
+\]
+其余核心状态取 $V=0$。
+等价地，若令 $\widehat V:=1-V$，则 $\widehat V$ 在上述 $4$ 个核心状态取 $0$、其余 $16$ 个取 $1$，并且
+\(
+g(e)=\chi(e)+\widehat V(u)-\widehat V(v)\in\{0,1\}
+\)（完全符合“逐边非负化”的有限证书口径）。
+因此对任意周期轨道（尤其 primitive）$\gamma$ 有
+\[
+\chi(\gamma)=\sum_{e\in\gamma}\chi(e)=\sum_{e\in\gamma}g(e)\ge 0.
+\]
+\end{theorem}
+
+\begin{proof}
+核心图有限，且 $V$ 已显式给出；逐边核验 $g(e)\in\{0,1\}$ 即得一个有限证书。
+对任意周期轨道 $\gamma$，有
+\[
+\sum_{e\in\gamma}g(e)=\sum_{e\in\gamma}\chi(e)+\sum_{e:u\to v\in\gamma}\bigl(V(v)-V(u)\bigr)=\chi(\gamma),
+\]
+其中势函数项在闭合回路上望远镜相消。于是 $\chi(\gamma)=\sum_{e\in\gamma}g(e)\ge 0$。
+可审计复现脚本见
+\texttt{scripts/exp\_sync\_kernel\_real\_input\_40\_arity\_charge\_closed\_form.py}。
+\end{proof}
+
+\begin{corollary}[前缀欠账深度为 $1$（任意有限路径）]\label{cor:real-input-40-arity-charge-prefix-debt}
+对 essential core 上任意有限允许路径 \(\pi:u\leadsto v\)，有
+\[
+\sum_{e\in\pi}\chi(e)\ge -1.
+\]
+等价地，若沿一条合法轨道记录部分和 \(S_n:=\sum_{k=0}^{n-1}\chi(e_k)\)，则对任意 \(n\) 均有 \(S_n\ge -1\)：
+arity 欠账在任何时刻至多积累一个单位。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:real-input-40-arity-charge-coboundary}，对每条边 \(e:u\to v\) 有
+\(
+\chi(e)=g(e)-V(v)+V(u)
+\)
+且 \(g(e)\in\{0,1\}\)。
+沿路径 \(\pi\) 求和得
+\[
+\sum_{e\in\pi}\chi(e)
+=\sum_{e\in\pi}g(e)+V(u)-V(v)\ \ge\ -1,
+\]
+其中 \(\sum g(e)\ge 0\)，而 \(V(u)-V(v)\ge -1\) 因为 \(V\) 仅取 \(0/1\)。
+\end{proof}
+
+\begin{remark}[记号对齐：\texorpdfstring{$\widetilde\chi$}{chi-tilde} 的 $0/1$ 二值化]\label{rem:real-input-40-arity-charge-chi-tilde}
+令 \(H:=V\)，并对每条边 \(e:u\to v\) 定义
+\[
+\widetilde\chi(e):=\chi(e)+H(v)-H(u).
+\]
+则由定理 \ref{thm:real-input-40-arity-charge-coboundary} 得 \(\widetilde\chi(e)=g(e)\in\{0,1\}\)。
+该表述与“逐边二值化的共边界正规形”完全等价：闭轨上 \(\sum\chi=\sum\widetilde\chi\ge 0\)，而有限路径上由 \(H\) 的取值范围直接给出推论 \ref{cor:real-input-40-arity-charge-prefix-debt} 的欠账深度界。
+\end{remark}
+
+\begin{corollary}[（原稿编号为 Conjecture B.211）闭轨 arity-charge 非负性]\label{cor:real-input-40-arity-charge-conjecture-b211}
+在命题 \ref{prop:real-input-40-essential-20} 的 essential $20$ 状态核心上，对任意周期轨道 \(\gamma\)（尤其 primitive）都有
+\[
+\chi(\gamma)\ge 0.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:real-input-40-arity-charge-coboundary}，对任意周期轨道有 \(\chi(\gamma)=\sum_{e\in\gamma}g(e)\ge 0\)。
+因此原稿中的 Conjecture B.211 成立；更强地，定理 \ref{thm:real-input-40-arity-charge-coboundary} 给出逐边的 \(0/1\) 共边界证书。
+证毕。
+\end{proof}
+
+\begin{corollary}[碰撞计数不超过输出计数（闭轨级）]\label{cor:real-input-40-arity-charge-collision-le-output}
+在同一核心上，对任意周期轨道 \(\gamma\) 记
+\[
+N_e(\gamma):=\sum_{k=1}^{|\gamma|} e_k,
+\qquad
+N_2(\gamma):=\sum_{k=1}^{|\gamma|}\mathbf{1}_{\{d_k=2\}}.
+\]
+则 \(N_2(\gamma)\le N_e(\gamma)\)。
+\end{corollary}
+\begin{proof}
+由 \(\chi=e-\mathbf{1}_{\{d=2\}}\) 得 \(\chi(\gamma)=N_e(\gamma)-N_2(\gamma)\)。
+结合推论 \ref{cor:real-input-40-arity-charge-conjecture-b211} 的 \(\chi(\gamma)\ge 0\) 即得 \(N_2(\gamma)\le N_e(\gamma)\)。
+证毕。
+\end{proof}
+
+\begin{remark}[有限证书（逐边核验表）]\label{rem:real-input-40-arity-charge-coboundary-audit}
+上述证明严格等价于一个有限不等式系统：在 essential $20$ 状态核心上逐边检查 $g(e)\in\{0,1\}$。
+本核的核心允许边总数为 $48$；表 \ref{tab:real-input-40-arity-charge-coboundary-audit} 给出全部边的 $(d,e,\chi,V(u),V(v),g)$，因此是一个可被逐行核对的有限证书。
+\end{remark}
+\input{sections/generated/tab_real_input_40_arity_charge_coboundary_audit}
+
+\begin{remark}[arity-charge 的纯计数语义]\label{rem:real-input-40-arity-charge-pure-counting}
+由 $\chi(\gamma)=\sum_{e\in\gamma}g(e)$ 且 $g(e)\in\{0,1\}$，对任意周期轨道 $\gamma$ 有
+\[
+\chi(\gamma)=\#\{\,e\in\gamma:\ g(e)=1\,\},
+\]
+即 arity-charge（在同调意义下）等于沿轨道走到的 $g=1$ 边的次数；因此不会出现“负电荷抵消”导致的 Laurent 负幂。
+\end{remark}
+
+\begin{corollary}[primitive arity-charge 多项式无 Laurent 负幂]\label{cor:real-input-40-arity-charge-no-laurent}
+对一切 $n\ge 1$，有
+\[
+P_n(q)\in\ZZ_{\ge 0}[q].
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:real-input-40-arity-charge-coboundary}，$\chi$ 与 $g$ 在周期轨道上同和，且 $g$ 逐边取值于 $\{0,1\}$。
+因此每条 primitive 轨道权重 $q^{\chi(\gamma)}=q^{g(\gamma)}$ 为非负整数次幂，且系数为计数。证毕。
+\end{proof}
+
+\begin{theorem}[arity-charge 的密度上界与尖性]\label{thm:real-input-40-arity-charge-density-bound}
+对任意 primitive 周期轨道 $\gamma$，记 $n=|\gamma|$。则
+\[
+0\le \chi(\gamma)\le \left\lfloor \frac{n}{2}\right\rfloor.
+\]
+并且存在长度 $2$ 的 primitive 轨道满足 $\chi(\gamma)=1$，故上界可达。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:real-input-40-arity-charge-coboundary}，取 $g(e)\in\{0,1\}$ 使 $\chi(\gamma)=\sum_{e\in\gamma}g(e)$。
+令
+\[
+w(e):=1-2g(e)\in\{+1,-1\}.
+\]
+可取势函数
+\[
+h:\Sigma_{\mathrm{ess}}\to\{-2,-1,0\}
+\]
+使得对任意核心边 $e:u\to v$ 有
+\[
+w(e)+h(u)-h(v)\ge 0.
+\]
+例如，可取 $h$ 在 $20$ 个核心状态上的显式赋值为：
+\[
+\begin{aligned}
+h=-2&\quad\Longleftrightarrow\quad (s,m)\in\{(000,00),(001,01),(001,10)\},\\
+h=-1&\quad\Longleftrightarrow\quad (s,m)\in\{(000,01),(000,10),(010,00),(100,01),(100,10),(002,11),(11\overline{1},00)\},\\
+h=0&\quad\Longleftrightarrow\quad \text{其余核心状态}.
+\end{aligned}
+\]
+逐边核验上述不等式（核心内共 $48$ 条边）即得到一个有限证书。
+沿闭轨求和得到 $\sum_{e\in\gamma}w(e)\ge 0$，即 $\sum_{e\in\gamma}g(e)\le n/2$，从而得到上界。
+长度 $2$ 的可达性见表 \ref{tab:real-input-40-rotation-polytope-vertices} 中 $\bar\chi=1/2$ 的见证轨道。
+\end{proof}
+
+\begin{remark}[有限证书（密度上界势函数的逐边核验表）]\label{rem:real-input-40-arity-charge-density-audit}
+定理 \ref{thm:real-input-40-arity-charge-density-bound} 的证明等价于一个有限不等式系统：
+在 essential $20$ 状态核心上逐边核验 $w(e)+h(u)-h(v)\ge 0$（其中 $w=1-2g$，$g\in\{0,1\}$）。
+表 \ref{tab:real-input-40-arity-charge-density-audit} 给出全部 $48$ 条核心边的逐行核验值，因此构成一个可审计的有限证书。
+\end{remark}
+\input{sections/generated/tab_real_input_40_arity_charge_density_audit}
+
+\begin{corollary}[primitive arity-charge 多项式的次数上界]\label{cor:real-input-40-arity-charge-degree-bound}
+对任意 $n\ge 1$，有
+\[
+\deg P_n(q)\le \left\lfloor \frac{n}{2}\right\rfloor.
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:real-input-40-arity-charge-density-bound} 对每条长度 $n$ 的 primitive 轨道成立 $\chi(\gamma)\le \lfloor n/2\rfloor$，故 $P_n(q)$ 的最高幂不超过该上界。
+\end{proof}
+
+\begin{corollary}[$g=1$ 子图无环与 $M_1$ 幂零]\label{cor:real-input-40-arity-charge-g1-acyclic}
+仅由 $g=1$ 边组成的子图无有向环，因此 $M_1$ 为幂零矩阵。
+\end{corollary}
+
+\begin{proof}
+若存在仅由 $g=1$ 边构成的闭轨，则有 $\chi(\gamma)=|\gamma|$，与定理 \ref{thm:real-input-40-arity-charge-density-bound} 矛盾。
+\end{proof}
+
+由推论 \ref{cor:real-input-40-arity-charge-no-laurent}，其前 12 项为
+\[
+\begin{aligned}
+P_1(q)&=1,\\
+P_2(q)&=6q+1,\\
+P_3(q)&=4q,\\
+P_4(q)&=4q^2+6q+1,\\
+P_5(q)&=12q^2+9q+1,\\
+P_6(q)&=10q^3+22q^2+20q+1,\\
+P_7(q)&=36q^3+50q^2+29q+1,\\
+P_8(q)&=21q^4+92q^3+121q^2+40q+1,\\
+P_9(q)&=108q^4+232q^3+236q^2+54q+2,\\
+P_{10}(q)&=54q^5+334q^4+634q^3+410q^2+79q+2,\\
+P_{11}(q)&=324q^5+1000q^4+1444q^3+698q^2+113q+3,\\
+P_{12}(q)&=125q^6+1220q^5+2946q^4+3002q^3+1181q^2+158q+3.
+\end{aligned}
+\]
+同样可由脚本继续计算得到 $P_{13}\sim P_{20}$（亦可由后文定理 \ref{thm:real-input-40-arity-charge-det-closed} 的 $z$-分母次数为 $10$ 推出对 $c_n(q)$ 的线性递推，从而无需再枚举即可恢复全部 $P_n(q)$）：
+\[
+\begin{aligned}
+P_{13}(q)&=972q^6+4064q^5+7680q^4+5926q^3+1976q^2+217q+5,\\
+P_{14}(q)&=330q^7+4258q^6+13034q^5+18163q^4+11498q^3+3172q^2+301q+6,\\
+P_{15}(q)&=2916q^7+15900q^6+37524q^5+40566q^4+21582q^3+5019q^2+419q+8,\\
+P_{16}(q)&=840q^8+14708q^7+55064q^6+98698q^5+87496q^4+39216q^3+7811q^2+582q+10,\\
+P_{17}(q)&=8748q^8+60464q^7+173008q^6+243394q^5+182100q^4+69271q^3+12107q^2+804q+14,\\
+P_{18}(q)&=2240q^9+49774q^8+225610q^7+496962q^6+575156q^5+365310q^4\\
+&\qquad\qquad+120040q^3+18505q^2+1110q+17,\\
+P_{19}(q)&=26244q^9+224608q^8+764008q^7+1334990q^6+1304974q^5+710658q^4\\
+&\qquad\qquad+204589q^3+28079q^2+1534q+24,\\
+P_{20}(q)&=5979q^{10}+166724q^9+899324q^8+2370202q^7+3413073q^6+2850282q^5\\
+&\qquad\qquad+1348139q^4+343237q^3+42187q^2+2121q+30.
+\end{aligned}
+\]
+代入 $q=1$ 即回到未分层的 primitive 轨道数 $p_n=P_n(1)$。数值复现见脚本
+\path{scripts/exp_sync_kernel_real_input_40_arity.py}。
+
+\paragraph{零电荷子动力系统（$g=0$ 的骨架）}
+由定理 \ref{thm:real-input-40-arity-charge-coboundary}，将对角共轭
+\(
+D(q):=\mathrm{diag}\bigl(q^{V(\cdot)}\bigr)
+\)
+作用到 $M(q)$（$q\neq 0$）可把边权 $q^{\chi}$ 规范到 $q^{g}$：令
+\[
+\widetilde M(q):=D(q)^{-1}M(q)D(q),
+\qquad
+\widetilde M(q)=M_0+qM_1,
+\]
+其中 $M_0$（resp.\ $M_1$）仅保留 $g=0$（resp.\ $g=1$）的边。于是 $M(q)$ 与 $\widetilde M(q)$ 相似，故其谱与 $\det(I-zM(q))$ 一致。
+
+\begin{proposition}[零电荷子系统的 $\zeta$ 闭式与增长率]\label{prop:real-input-40-arity-charge-zero-zeta}
+令 $M_0$ 为 essential core 上仅保留 $g=0$ 边得到的邻接矩阵，并定义
+\(
+\zeta_0(z):=\det(I-zM_0)^{-1}
+\)。
+则有显式因子化与闭式（脚本生成）：
+\input{sections/generated/eq_real_input_40_arity_charge_zero_charge_zeta}
+其中 $\kappa>1$ 为 $\kappa^4-\kappa^3-1=0$ 的唯一实根，给出零电荷 primitive 轨道数的指数增长率（熵为 $\log\kappa$）。
+\end{proposition}
+
+\begin{proof}
+由 $M_0$ 的有限维行列式计算可直接因子化得到所示闭式；复现见脚本
+\texttt{scripts/exp\_sync\_kernel\_real\_input\_40\_arity\_charge\_closed\_form.py}。
+\end{proof}
+
+\begin{proposition}[零电荷子系统的 Abel/Mertens 常数]\label{prop:real-input-40-arity-charge-zero-constants}
+记 $z_0=\kappa^{-1}$，并定义主极点常数
+\[
+C_0:=\lim_{z\to z_0}(1-\kappa z)\,\zeta_0(z).
+\]
+按与 \S\ref{app:real-input-40-finite-part} 同型的 Abel 有限部，令
+\[
+\log\mathfrak{M}_0:=\log C_0+\sum_{m\ge 2}\frac{\mu(m)}{m}\log\zeta_0(z_0^m),
+\qquad
+\mathsf{M}_0:=\log\mathfrak{M}_0+\gamma.
+\]
+则数值上
+\[
+C_0\approx 0.604848,\quad
+\log\mathfrak{M}_0\approx -1.385549,\quad
+\mathsf{M}_0\approx -0.808334,
+\qquad
+\mathfrak{M}_0\approx 0.2505.
+\]
+\end{proposition}
+
+\begin{corollary}[\texorpdfstring{$\chi$}{chi} 的最小周期平均值为 $0$]\label{cor:real-input-40-arity-charge-min-average}
+存在周期轨道 $\gamma$ 使 $\chi(\gamma)=0$；因此
+\[
+\min_{\gamma}\frac{\chi(\gamma)}{|\gamma|}=0,
+\]
+其中最小值在周期轨道类上取。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:real-input-40-arity-charge-zero-zeta} 的 $\zeta_0$ 非平凡可知 $M_0$ 子图存在有向环，从而存在周期轨道满足沿轨道每步 $g=0$。
+而定理 \ref{thm:real-input-40-arity-charge-coboundary} 给出对周期轨道有 $\chi(\gamma)=g(\gamma)$，故 $\chi(\gamma)=0$ 可实现。证毕。
+\end{proof}
+
+\paragraph{arity-charge 加权 $\zeta(z,q)$ 的完全闭式化：显式二元分母}
+对 arity-charge 权 $M(q)$，其动力学行列式在 essential core 上可完全闭式化（脚本生成）：
+\begin{theorem}[两变量行列式闭式与代数压力（度 $7$）]\label{thm:real-input-40-arity-charge-det-closed}
+有分解
+\input{sections/generated/eq_real_input_40_arity_charge_det_closed}
+其中 $Q_7(z,q)\in\ZZ[z,q]$。因此当 $q>0$ 时，Perron 根 $\lambda(q)=\rho(M(q))$ 为 $P_7(\Lambda,q)=0$ 的最大正实根，
+从而压力函数 $\log\lambda(q)$ 是一条解析的代数曲线分支（次数 $7$）。
+\end{theorem}
+
+\begin{remark}[与 \texorpdfstring{$(z+1)(qz^2-1)\Delta_\chi$}{(z+1)(qz^2-1)Delta} 记号的一致化]\label{rem:real-input-40-arity-charge-delta-chi}
+定理 \ref{thm:real-input-40-arity-charge-det-closed} 的分解等价于如下符号约定：令
+\[
+\Delta_\chi(z,q):=-Q_7(z,q),
+\]
+则
+\[
+\boxed{\ \det(I-zM(q))=(z+1)(qz^2-1)\,\Delta_\chi(z,q)\ }.
+\]
+并且 \(\Delta_\chi\) 的显式展开可写为
+\[
+\boxed{
+\begin{aligned}
+\Delta_\chi(z,q)
+={}&q^2z^7-4q^2z^6+4q^2z^5-6q^2z^4\\
+&-qz^7+3qz^6+qz^5+3qz^4-6qz^3+5qz^2\\
+&-z^5+z^4-z^2+2z-1.
+\end{aligned}}
+\]
+因此除去平凡因子 \((z+1)(qz^2-1)\) 后，所有非平凡本征值（非零部分）均由一个 \(7\) 次代数方程控制，并且分母在 \(q\) 上不含 Laurent 负幂（\(\Delta_\chi\in\ZZ[z,q]\)）。
+\end{remark}
+
+\begin{remark}[显式的 \texorpdfstring{$q$}{q}-三次分母]\label{rem:real-input-40-arity-charge-det-q-cubic}
+令 $\Delta(z,q):=\det(I-zM(q))$。由定理 \ref{thm:real-input-40-arity-charge-det-closed} 可知 $\Delta$ 在 $z$ 方向次数为 $10$，且作为 $q$ 的多项式次数恰为 $3$。
+将其按 $q$ 展开得到完全显式的闭式：
+\input{sections/generated/eq_real_input_40_arity_charge_det_q_cubic}
+因此 $\zeta(z,q)=\Delta(z,q)^{-1}$ 的分母对 $q$ 只有三次，并可直接审计。
+\end{remark}
+
+\begin{remark}[由 primitive 谱反推分母的 Newton 递推（数据闭合）]\label{rem:real-input-40-arity-charge-newton}
+令
+\(
+D(z,q):=\det(I-zM(q))=\sum_{n\ge 0}d_n(q)z^n
+\)（$d_0(q)=1$）。
+由
+\(
+\log D(z,q)=-\sum_{n\ge 1}\frac{c_n(q)}{n}z^n
+\)
+得 Newton 型恒等式
+\[
+n\,d_n(q)=-\sum_{k=1}^n c_k(q)\,d_{n-k}(q)\qquad(n\ge 1),
+\]
+其中 $c_n(q)=\mathrm{tr}(M(q)^n)$ 可由 primitive 多项式经
+\(
+c_n(q)=\sum_{d\mid n} d\,P_d\!\left(q^{n/d}\right)
+\)
+恢复。
+因此仅由枚举得到的 $P_1,\dots,P_{12}$ 即可反推出 $d_1,\dots,d_{12}$，
+并观测到 $d_{11}(q)\equiv d_{12}(q)\equiv 0$ 且 $d_{10}(q)=q^2(q-1)\neq 0$，
+表明分母在 $z$ 方向的有效次数为 $10$（而在 $q=1$ 处退化回 $9$ 次）。
+定理 \ref{thm:real-input-40-arity-charge-det-closed} 给出了这一闭合的严格闭式与因子分解。
+\end{remark}
+
+\begin{corollary}[显式谱支 \texorpdfstring{$\pm\sqrt q$}{±sqrt(q)} 与偶奇振荡项]\label{cor:real-input-40-arity-charge-sqrtq}
+由定理 \ref{thm:real-input-40-arity-charge-det-closed} 的因子 $(1-qz^2)$，矩阵 $M(q)$ 的谱中对一切 $q$ 都包含两条显式特征值
+\(
+\lambda_\pm(q)=\pm\sqrt q
+\)。
+因此对任意 $n\ge 1$，迹必含完全显式的振荡贡献
+\[
+\mathrm{Tr}(M(q)^n)\ \text{含}\ 
+\begin{cases}
+2q^{n/2},&n\ \text{偶},\\
+0,&n\ \text{奇},
+\end{cases}
+\]
+并叠加来自固定特征值 $\Lambda=-1$ 的项 $(-1)^n$。
+\end{corollary}
+
+\begin{proposition}[主极点留数常数的代数闭式]\label{prop:real-input-40-arity-charge-residue}
+令 $\lambda(q)=\rho(M(q))$，并记主极点 $z_\star(q)=\lambda(q)^{-1}$。定义主极点留数常数
+\[
+C_{\mathrm{pole}}(q):=\lim_{z\to z_\star(q)}(1-\lambda(q)z)\,\zeta(z,q).
+\]
+则由定理 \ref{thm:real-input-40-arity-charge-det-closed} 的特征多项式分解，有显式公式
+\[
+\boxed{\ 
+C_{\mathrm{pole}}(q)=\frac{\lambda(q)^9}{(\lambda(q)+1)(\lambda(q)^2-q)\,\partial_\Lambda P_7(\lambda(q),q)}\ }.
+\]
+代入 $q=1$ 立刻得到未加权情形的闭式 $C_{\mathrm{pole}}(1)=\frac{47+21\sqrt5}{100}$（与附录 \ref{app:real-input-40-finite-part} 一致）。
+\end{proposition}
+
+\begin{remark}[在 $q=1$ 处与未加权行列式严格对接]
+代入 $q=1$ 时，$Q_7(z,1)$ 的 $z^7$ 项消失（对应额外的零特征值退化），从而次数由 $10$ 降为 $9$，
+并退化回附录 \ref{app:real-input-40-abel} 给出的未加权分解
+\(
+\det(I-zM)=(1-z)^2(1+z)^3(1-3z+z^2)(1+z-z^2)
+\)。
+\end{remark}
+
+对模 $m$ 的 arity 类，定义
+\[
+N_{n,r}^{(m)}:=\sum_{k\equiv r\ (\mathrm{mod}\ m)}[q^k]P_n(q),
+\qquad r=0,1,\dots,m-1,
+\]
+等价地可由离散傅里叶变换写成
+\[
+N_{n,r}^{(m)}=\frac{1}{m}\sum_{j=0}^{m-1}\zeta_m^{-jr}P_n(\zeta_m^j),
+\qquad \zeta_m=e^{2\pi i/m}.
+\]
+\begin{theorem}[同余类均方偏差的 Parseval 能量恒等式]\label{thm:real-input-40-arity-charge-parseval-energy}
+令 \(p_n:=P_n(1)=\sum_{r=0}^{m-1}N_{n,r}^{(m)}\)。则有精确恒等式
+\[
+\sum_{r=0}^{m-1}\left|N_{n,r}^{(m)}-\frac{p_n}{m}\right|^2
+=\frac{1}{m}\sum_{j=1}^{m-1}\left|P_n(\zeta_m^j)\right|^2.
+\]
+等价地，归一化后
+\[
+\sum_{r=0}^{m-1}\left(\frac{N_{n,r}^{(m)}}{p_n}-\frac{1}{m}\right)^2
+=\frac{1}{m\,p_n^2}\sum_{j=1}^{m-1}\left|P_n(\zeta_m^j)\right|^2.
+\]
+\end{theorem}
+\begin{proof}
+令 \(f(r):=N_{n,r}^{(m)}\)（\(r=0,1,\dots,m-1\)），并定义其离散 Fourier 变换
+\[
+\widehat f(j):=\sum_{r=0}^{m-1} f(r)\,\zeta_m^{jr}\qquad (j=0,1,\dots,m-1).
+\]
+由 \(P_n(q)=\sum_k [q^k]P_n(q)\,q^k\) 与 \(f(r)\) 的定义可知
+\[
+\widehat f(j)=\sum_{r=0}^{m-1}\sum_{k\equiv r\ (\mathrm{mod}\ m)}[q^k]P_n(q)\,\zeta_m^{jr}
+=\sum_k [q^k]P_n(q)\,\zeta_m^{jk}
+=P_n(\zeta_m^j).
+\]
+又 \(p_n=\sum_r f(r)=\widehat f(0)\)。令 \(\overline f:=p_n/m\) 且 \(g(r):=f(r)-\overline f\)。
+当 \(j\neq 0\) 时，\(\sum_{r=0}^{m-1}\overline f\,\zeta_m^{jr}=0\)，故 \(\widehat g(j)=\widehat f(j)=P_n(\zeta_m^j)\)（\(j=1,\dots,m-1\)），而 \(\widehat g(0)=0\)。
+对 \(g\) 应用离散 Parseval 恒等式得到
+\[
+\sum_{r=0}^{m-1}|g(r)|^2=\frac{1}{m}\sum_{j=0}^{m-1}|\widehat g(j)|^2
+=\frac{1}{m}\sum_{j=1}^{m-1}|P_n(\zeta_m^j)|^2,
+\]
+即第一条式子。两边同除以 \(p_n^2\) 得到归一化形式。证毕。
+\end{proof}
+例如模 $2$（偶/奇）有
+\[
+N_{n,0}^{(2)}=\frac{P_n(1)+P_n(-1)}{2},\qquad
+N_{n,1}^{(2)}=\frac{P_n(1)-P_n(-1)}{2},
+\]
+当 $n=10$ 时 $(N_{10,0}^{(2)},N_{10,1}^{(2)})=(746,767)$，且 $P_{10}(-1)=-21$。
+模 $3$ 时 $n=10$ 给出
+\[
+(N_{10,0}^{(3)},N_{10,1}^{(3)},N_{10,2}^{(3)})=(636,413,464).
+\]
+\paragraph{定理（扭曲谱半径下降与指数等分布）}
+记
+\[
+\rho_m:=\max_{1\le j\le m-1}\rho(M(\zeta_m^j))<\lambda,
+\]
+若对所有非平凡角色 $q=\zeta_m^j\neq 1$ 有 $\rho(M(q))<\lambda$，则
+\[
+N_{n,r}^{(m)}=\frac{1}{m}p_n+O\!\left(\frac{\rho_m^n}{n}\right),
+\qquad p_n=P_n(1),
+\]
+即 arity-charge 在模 $m$ 下指数级趋于等分布。
+由于 $\rho(M(\zeta_m^j))<\lambda$（数值上
+$\rho(M(-1))\approx 1.8536691513$，
+$\rho(M(e^{2\pi i/3}))\approx 2.1262298605$，
+$\rho(M(e^{2\pi i/5}))\approx 2.4432116352$），
+对应比值为
+\[
+\frac{\rho(M(-1))}{\lambda}\approx 0.7080386119,\quad
+\frac{\rho(M(e^{2\pi i/3}))}{\lambda}\approx 0.8121475388,\quad
+\frac{\rho(M(e^{2\pi i/5}))}{\lambda}\approx 0.9332238029,
+\]
+故 $P_n(\zeta_m^j)/\lambda^n$ 的级数绝对收敛。
+\paragraph{推论（Dirichlet--Mertens 常数）}
+据此定义非平凡扭曲常数
+\[
+C(\zeta_m^j):=\sum_{n\ge 1}\frac{P_n(\zeta_m^j)}{\lambda^n},
+\qquad j=1,\dots,m-1,
+\]
+并记同余类的 Mertens 型常数
+\[
+C_{m,r}:=\frac{\mathsf{M}_{\varphi^2}}{m}
+\ +\ \frac{1}{m}\sum_{j=1}^{m-1}\zeta_m^{-jr}C(\zeta_m^j),
+\]
+则
+\[
+\sum_{n\le N}\frac{N_{n,r}^{(m)}}{\lambda^n}
+=\frac{1}{m}\log N+C_{m,r}+o(1).
+\]
+特别地，arity 的 Chebyshev 偏置
+\[
+B_n:=P_n(-1)=N_{n,0}^{(2)}-N_{n,1}^{(2)}
+\]
+满足 $B_n=O(\rho(M(-1))^n/n)$，从而
+\[
+\frac{B_n}{p_n}=O\!\left(\left(\frac{\rho(M(-1))}{\lambda}\right)^n\right),
+\qquad
+\frac{\rho(M(-1))}{\lambda}\approx 0.708038612.
+\]
+由此定义 arity 类的 Abel 常数
+\[
+\log\mathfrak{M}_r^{(m)}
+=\frac{1}{m}\log\mathfrak{M}
++\frac{1}{m}\sum_{j=1}^{m-1}\zeta_m^{-jr}\sum_{n\ge 1}\frac{P_n(\zeta_m^j)}{\lambda^n},
+\]
+并对应 Mertens 常数
+\[
+\mathsf{M}_r^{(m)}=\log\mathfrak{M}_r^{(m)}+\frac{\gamma}{m}.
+\]
+数值上（$r=0,\dots,m-1$），并且 $C_{m,r}=\mathsf{M}_r^{(m)}$：
+\[
+C(-1)\approx -0.443931576503,
+\]
+\[
+C(e^{2\pi i/3})\approx -0.181857952811+0.789845233399\,i,
+\qquad
+C(e^{4\pi i/3})=\overline{C(e^{2\pi i/3})},
+\]
+\[
+\begin{aligned}
+C(e^{2\pi i/5})&\approx 0.464143283431+1.303687056130\,i,\\
+C(e^{4\pi i/5})&\approx -0.351306525075+0.483279158585\,i,\\
+C(e^{6\pi i/5})&=\overline{C(e^{4\pi i/5})},\qquad
+C(e^{8\pi i/5})=\overline{C(e^{2\pi i/5})}.
+\end{aligned}
+\]
+\[
+C_{2,\bullet}\approx(-0.060514286752,\ 0.383417289751),
+\]
+\[
+C_{3,\bullet}\approx(-0.013604300874,\ 0.624271010058,\ -0.287763706184),
+\]
+\[
+C_{5,\bullet}\approx(0.109715308488,\ 0.845214817130,\ -0.006378307837,\ -0.251708090802,\ -0.373940723979).
+\]
+\[
+\log\mathfrak{M}^{(2)}\approx(-0.349122119202,\ 0.094809457301),
+\quad
+\mathsf{M}^{(2)}\approx(-0.060514286752,\ 0.383417289751),
+\]
+\[
+\log\mathfrak{M}^{(3)}\approx(-0.206009522508,\ 0.431865788424,\ -0.480168927818),
+\]
+\[
+\mathsf{M}^{(3)}\approx(-0.013604300874,\ 0.624271010058,\ -0.287763706184),
+\]
+\[
+\begin{aligned}
+\log\mathfrak{M}^{(5)}&\approx\bigl(-0.005727824492,\ 0.729771684150,\\
+&\qquad -0.121821440818,\ -0.367151223782,\\
+&\qquad -0.489383856960\bigr),
+\end{aligned}
+\]
+\[
+\begin{aligned}
+\mathsf{M}^{(5)}&\approx\bigl(0.109715308488,\ 0.845214817130,\\
+&\qquad -0.006378307837,\ -0.251708090802,\\
+&\qquad -0.373940723979\bigr).
+\end{aligned}
+\]
+\paragraph{计算协议（可审计计算）}
+\begin{itemize}
+  \item 构造真实输入核状态 $(s,x_{k-1},y_{k-1})$ 并枚举合法输入对 $(x,y)$；
+  \item 赋权得到扭曲矩阵 $M(q)$，计算 $a_n(q)=\mathrm{tr}(M(q)^n)$；
+  \item 用 Möbius 反演提取 $P_n(q)$ 并由离散傅里叶反演得到 $N_{n,r}^{(m)}$；
+  \item 计算 $C(\omega_m^j)=\sum_{n\ge 1}P_n(\omega_m^j)/\lambda^n$ 与
+  $M=\gamma+\sum_{n\ge 1}(p_n/\lambda^n-1/n)$；
+  \item 由 $C_{m,r}=\frac{M}{m}+\frac{1}{m}\sum_{j=1}^{m-1}\omega_m^{-jr}C(\omega_m^j)$ 得到常数矩阵。
+\end{itemize}
+数值复现见脚本 \path{scripts/exp_sync_kernel_real_input_40_arity.py}。
+作为 arity 类的原始谱计数，前 $10$ 项的 $N_{n,r}^{(m)}$ 为
+\[
+N_{n,0}^{(2)}=(1,1,0,5,13,23,51,143,346,746),\quad
+N_{n,1}^{(2)}=(0,6,4,6,9,30,65,132,286,767),
+\]
+\[
+N_{n,0}^{(3)}=(1,1,0,1,1,11,37,93,234,636),\quad
+N_{n,1}^{(3)}=(0,6,4,6,9,20,29,61,162,413),
+\]
+\[
+N_{n,2}^{(3)}=(0,0,0,4,12,22,50,121,236,464),
+\]
+\[
+N_{n,0}^{(5)}=(1,1,0,1,1,1,1,1,2,56),\quad
+N_{n,1}^{(5)}=(0,6,4,6,9,20,29,40,54,79),
+\]
+\[
+N_{n,2}^{(5)}=(0,0,0,4,12,22,50,121,236,410),\quad
+N_{n,3}^{(5)}=(0,0,0,0,0,10,36,92,232,634),
+\]
+\[
+N_{n,4}^{(5)}=(0,0,0,0,0,0,0,21,108,334).
+\]
+将模数扩展到 $m\in\{2,3,5,7,11\}$ 时，arity 类密度 $N_{n,r}^{(m)}/p_n$ 随 $n$ 的变化见图 \ref{fig:arity_class_density}，
+对应的 Abel 常数分布见图 \ref{fig:arity_class_logM}（数值由脚本生成）。
+\input{sections/generated/fig_arity_class_density}
+\input{sections/generated/fig_arity_class_logM}
+将 $q=e^\theta$ 视为一维权重，记
+\[
+P_\chi(\theta):=\log\rho(M(e^\theta)),
+\]
+则 $P_\chi^{(k)}(0)$ 给出 $\chi$ 的 $k$ 阶累积量密度（$k\ge 1$）；特别地
+$P_\chi'(0)=\mathbb{E}[\chi]$ 与 $P_\chi''(0)=\mathrm{Var}_\infty(\chi)$。
+由定理 \ref{thm:real-input-40-arity-charge-det-closed} 的代数方程 $P_7(\Lambda,q)=0$ 在 $q=1$ 处作隐式求导，可得闭式累积量密度（脚本生成）：
+\input{sections/generated/eq_real_input_40_arity_charge_cumulants_closed}
+其中 $\mathrm{Var}_\infty(\chi)=P_\chi''(0)$。
+从而局部大偏差率函数满足
+\[
+I_\chi(\alpha)\approx \frac{(\alpha-\mathbb{E}[\chi])^2}{2\,\mathrm{Var}_\infty(\chi)}
+\approx 5.9421865040\cdot(\alpha-0.2909830056)^2.
+\]
+数值复现见脚本 \texttt{scripts/exp\_sync\_kernel\_real\_input\_40\_arity.py} 与
+\texttt{scripts/exp\_sync\_kernel\_real\_input\_40\_arity\_charge\_closed\_form.py}。
+
+\paragraph{端点热力学（$\theta\to\pm\infty$）}
+\begin{proposition}[端点压力与极端电荷密度]\label{prop:real-input-40-arity-charge-endpoints}
+当 $\theta\to-\infty$（即 $q=e^\theta\to 0^+$）时，有
+\[
+P_\chi(\theta)\to \log\kappa,
+\]
+其中 $\kappa>1$ 为 $\kappa^4-\kappa^3-1=0$ 的 Perron 根（同命题 \ref{prop:real-input-40-arity-charge-zero-zeta}）。
+当 $\theta\to+\infty$（即 $q\to+\infty$）时，
+\[
+P_\chi(\theta)=\frac12\,\theta+\frac12\log 3+o(1),
+\]
+从而
+\[
+\sup_\mu\int\chi\,d\mu=\lim_{\theta\to+\infty}P_\chi'(\theta)=\frac12.
+\]
+\end{proposition}
+
+\begin{proof}
+令 $q=e^\theta$。当 $\theta\to-\infty$ 时 $M(q)=M_0+qM_1\to M_0$，由谱半径的连续性得
+$\rho(M(q))\to\rho(M_0)=\kappa$。
+当 $\theta\to+\infty$ 时，Perron 根 $\lambda(q)=\rho(M(q))$ 满足定理 \ref{thm:real-input-40-arity-charge-det-closed} 的代数方程
+$P_7(\lambda(q),q)=0$。
+令 $\lambda(q)=s\sqrt q$ 并将方程按 $q^{7/2}$ 归一化，主阶平衡给出
+$s^3(s^4-5s^2+6)=0$，故极限分支满足 $s\in\{\sqrt2,\sqrt3\}$。
+由于 Perron 根选择最大正实根分支，得到 $s\to\sqrt3$，即 $\lambda(q)\sim \sqrt{3q}$，
+从而 $P_\chi(\theta)=\log\lambda(e^\theta)=\frac12\theta+\frac12\log 3+o(1)$。
+最后一式由端点斜率给出。
+\end{proof}
+
+\begin{remark}[大偏置极限的组合机制]\label{rem:real-input-40-arity-charge-large-bias-mechanism}
+由推论 \ref{cor:real-input-40-arity-charge-g1-acyclic}，$M_1$ 幂零，故 $g=1$ 边无闭环；
+最大密度 $1/2$ 的轨道必须在 $g=0/1$ 间交替。
+令两步混合矩阵
+\[
+B:=M_0M_1+M_1M_0,
+\]
+其特征多项式在本核上出现完全因子分解（脚本生成）：
+\input{sections/generated/eq_real_input_40_arity_charge_B_charpoly}
+从而 $\rho(B)=3$，因此
+\[
+\rho(M(q))\sim\sqrt{q\,\rho(B)}=\sqrt{3q},
+\]
+等价于 $P_\chi(\theta)=\frac12\theta+\frac12\log 3+o(1)$。
+这给出命题 \ref{prop:real-input-40-arity-charge-endpoints} 的结构性解释，并与密度上界 \ref{thm:real-input-40-arity-charge-density-bound} 一致。
+此外，同一分解还显示 \(B\) 的次大正本征值为 \(2\)（重数 \(3\)），因此代数方程 \(P_7(\Lambda,q)=0\) 还存在一条正实分支
+\[
+\lambda_{\mathrm{sub}}(q)=\sqrt{2q}+O(1)\qquad(q\to+\infty),
+\]
+对应零温极限下的次大增长率（次优相）。
+\end{remark}
+
+\begin{proposition}[零温展开：\texorpdfstring{$q\to+\infty$}{q->+infty} 的两项闭式]\label{prop:real-input-40-arity-charge-zero-temp-expansion}
+当 $q\to+\infty$ 时，Perron 根 $\lambda(q)=\rho(M(q))$ 具有 Puiseux 渐近展开
+\[
+\lambda(q)=\sqrt{3q}+\frac23+\frac{56}{81}\,q^{-1}+O(q^{-3/2}).
+\]
+因此压力函数 $P_\chi(\theta)=\log\lambda(e^\theta)$ 满足
+\[
+P_\chi(\theta)=\frac12\,\theta+\frac12\log 3+\frac{2}{3\sqrt3}\,e^{-\theta/2}-\frac{2}{27}\,e^{-\theta}+O(e^{-3\theta/2}).
+\]
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:real-input-40-arity-charge-det-closed}，$\lambda(q)$ 是代数方程 $P_7(\Lambda,q)=0$ 的最大正实根分支。
+令 $t:=q^{-1/2}\to 0^+$，并作 Puiseux 级数代入
+\[
+\lambda(q)=\frac{\sqrt3}{t}+a_0+a_1t+a_2t^2+a_3t^3+\cdots.
+\]
+将其代回 $P_7(\lambda(q),t^{-2})=0$ 并逐次比较 $t$ 的幂次系数，得到 $a_0=\frac23,\ a_1=0,\ a_2=\frac{56}{81}$，
+于是 $\lambda(q)=\sqrt{3q}+\frac23+\frac{56}{81}q^{-1}+O(q^{-3/2})$。
+再由
+\(
+P_\chi(\theta)=\log\lambda(e^\theta)
+\)
+对 $\lambda(e^\theta)=\sqrt{3}\,e^{\theta/2}\bigl(1+\frac{2}{3\sqrt3}e^{-\theta/2}+O(e^{-\theta})\bigr)$ 作对数展开即可得到所示压力渐近式。证毕。
+\end{proof}

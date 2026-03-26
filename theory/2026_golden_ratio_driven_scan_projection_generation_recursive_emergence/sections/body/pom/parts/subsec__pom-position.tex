@@ -1,0 +1,603 @@
+\subsection{定位与对照：在既有骨架上提升到统一语法}\label{subsec:pom-position}
+本章不是另起炉灶，也不是把前文结果重新包装成抽象术语。它所做的，是把已经出现但尚未被统一命名的几类结构提升到同一语法层：折叠与规范代表说明可见对象往往不是原始配置，而是同值轨道上的规范横截面；局部可读与条件期望说明对象层断言总是相对于给定窗口、给定地址域与给定证书接口而成立；时间--空间交换图说明迭代--取迹与 primitive--Euler 展开是同一谱对象的两种投影；而算术的去原语化则说明加法、乘法、商余与比较都不是底层演化的先验字母，而是“值层运算 + 规范回落”或“复合 + 折叠”闭包下的派生读出。
+
+因此，本节真正完成的是一次上升：以前文的折叠 $\Fold_m/\Fold_\infty$、序列级因子 $\Phi_m$（第 \ref{sec:folding} 节）、算子代数上的条件期望 $E_m$（附录 \ref{app:op-algebra}）、在线归一化延迟（定理 \ref{thm:online-delay-fold}）以及时间--空间交换图 $Z=E\circ M\circ T$（命题 \ref{prop:time-space-commuting-diagram}）为底座，引入三条先验纤维，并将加减乘除商余统一为“同一本体演化 \(U\) + 三类投影 \((P_Z,P_{\mathrm{prim}},P_{\le})\) + 线性化深度 \(D_U\)”的投影词语法。
+
+\subsection{目标与基本命题}\label{subsec:pom-goal}
+本节目标不是再造一套独立形式主义，而是从前文已经闭合的若干技术链中抽取一个最小本体结构：存在先验的高维态空间与局部演化律，而数学对象与运算只是该本体在不同投影门下的稳定读出。为此，后文反复依赖如下五个基本命题：
+\begin{enumerate}
+  \item \textbf{本体态可分解为外表纤维与先验纤维：}外表纤维承载当前类型制度下的稳定可见对象；三条先验纤维 $\mathcal S_\varphi,\mathcal T,\mathcal P$ 及有限维余量/控制场 $\mathcal M$ 承载尺度、相位、素数寄存器与外置残差（见小节 \ref{subsec:pom-fibers} 与 \ref{subsec:pom-state-evolution}）。
+  \item \textbf{存在统一的本体演化：}加法、乘法、primitive 分解、角色切片与重写闭包，不对应于彼此独立的宇宙规则，而是同一本体演化 \(U\) 在不同纤维与不同读出门下的可见像；在过程语义层面，复合 $\circ$ 与折叠 $\Fold_\infty$ 构成最小原语集（见小节 \ref{subsec:pom-primitive-free}）。
+  \item \textbf{至少存在三类不可互换的投影门：}规范投影 $P_Z$ 负责取商并选截面，原子投影 $P_{\mathrm{prim}}$ 负责从时间迹读出 primitive 原子层，序投影 $P_{\le}$ 负责比较、区间约束与不可并行增长的结构瓶颈；三者构成读出分裂与复杂度分界（见小节 \ref{subsec:pom-projections} 与 \ref{subsec:pom-order-bottleneck}）。
+  \item \textbf{证明可词化而证书可重写：}当对象与运算都被写成“提升--演化--投影”的复合时，命题与证明也就可以被写成投影词的等价与规约，并在可审计重写系统中给出证书（见定义 \ref{def:pom-projword-2cat}、定义 \ref{def:pom-alg-equivalence-2morphism}、定理 \ref{thm:pom-rewrite-termination-confluence} 与命题 \ref{prop:pom-projword-decidable}）。
+  \item \textbf{空间--时间资源由投影门决定：}同一底层演化在不同投影门下会呈现不同的时间代价、空间代价、外置预算与可逆性门槛；资源并不是附加统计量，而是投影结构的固有伴生量（见小节 \ref{subsec:pom-resources}）。
+\end{enumerate}
+
+\subsection{统一图景（摘要）：提升—演化—投影与证书}\label{subsec:pom-unified-picture}
+\paragraph{结构摘要}
+投影本体数学的统一图景可以压缩为一条生成链：同一本体演化 \(U\) 在不同先验纤维上的提升，经由不同读出门落为对象层的稳定可见像；而定理与证明则不再首先被理解为解释文本，而被理解为投影词在可核对重写系统中的等价证书（定义 \ref{def:pom-projword-2cat}、定义 \ref{def:pom-alg-equivalence-2morphism} 与定理 \ref{thm:pom-rewrite-termination-confluence}）。这样，对象是某类长度为一的投影词，运算是可复合投影词，定理是投影词等价，证明则是把一个投影词规约到另一个投影词正规形的可审计重写链。
+
+\paragraph{统一微句法（机制层）}
+在机制层面，任一可见读出过程都可被抽象为三段复合：
+\[
+\boxed{\;
+\mathrm{LIFT}\ \circ\ U^{t}\ \circ\ \mathrm{PROJ}\;}
+\]
+其中 \(\mathrm{LIFT}\) 选择并激活隐纤维（如尺度纤维 \(\mathcal S_\varphi\)、相位纤维 \(\mathcal T\)、素数寄存器纤维 \(\mathcal P\)；见定义 \ref{def:pom-scale-fiber}--\ref{def:pom-prime-fiber}），
+\(\mathrm{PROJ}\) 选择读出门族（如 \(P_Z,P_{\mathrm{prim}},P_{\le},P_\chi\)；见定义 \ref{def:pom-proj-norm}--\ref{def:pom-proj-chi}），
+而 \(U\) 是同一本体一步演化（定义 \ref{def:pom-state-space}，定义 \ref{def:pom-locality}）。
+
+
+\paragraph{对象—运算—定理—证明（POM 口径）}
+\begin{itemize}
+  \item \textbf{对象：}纤维上的态 \(\mathcal{H}_m=\mathcal{X}_m\times \mathcal{M}_m\) 及其外表读出（定义 \ref{def:pom-state-space} 与定义 \ref{def:pom-observable-fiber}）。
+  \item \textbf{运算：}可复合的投影门/提升门组成的投影词（定义 \ref{def:pom-projword-2cat}；简化计数版见定义 \ref{def:pom-projection-word}）。
+  \item \textbf{定理：}两个投影词在所选接口语义下等价（存在 \(2\)-态射证书或 \(\varepsilon\)-sound 证书；定义 \ref{def:pom-alg-equivalence-2morphism}）。
+  \item \textbf{证明：}一串可核对的重写步，把词规约到同一正规形；因此词问题在可审计片段上可判定（定理 \ref{thm:pom-rewrite-termination-confluence} 与命题 \ref{prop:pom-projword-decidable}）。
+\end{itemize}
+
+\begin{remark}[统一原则：坐标—缺陷二分（解释性）]\label{rem:pom-coordinate-defect-principle}
+任一整数对象在结构上均内禀地对应两套自由交换幺半群坐标系统：
+Zeckendorf 坐标适配加法的规范化，素数指数坐标适配乘法的线性化（注 \ref{rem:pom-two-monoids}）。
+在“投影—纤维”的语言中，二者并非来自两套不同本体演化，而来自：
+\begin{itemize}
+  \item 选哪套坐标作为\emph{外表纤维}（可见稳定代表）；
+  \item 两套坐标之间的不一致如何被\emph{缺陷/残差}读出并补偿（例如 prime-register 承载折叠残差，注 \ref{rem:pom-prime-carry}）。
+\end{itemize}
+因此算术差异的核心不在于“演化不同”，而在于“坐标选择 + 缺陷读出”的组合方式。
+\end{remark}
+
+\begin{remark}[\texorpdfstring{$\varphi,e,\pi$}{phi,e,pi} 的层级位置（解释性）]\label{rem:pom-constants-levels}
+\(\varphi\) 来自尺度纤维 \(\mathcal S_\varphi\) 的稳定语法与计数斜率（定义 \ref{def:pom-scale-fiber} 与小节 \ref{subsec:pom-fold-compression}）。
+而 \(e\) 与 \(2\pi\)（从而出现 \(\pi\)）来自相位纤维 \(\mathcal T\) 的角色归一化：角色基写作 \(e^{2\pi i\langle k,x\rangle}\)（定义 \ref{def:pom-phase-fiber}），并在傅里叶/扭曲通道分解与完成化接口中固定为不可避免的单位制常数。
+这一点的要害是：这些常数不是并列外加，而分别绑定在“尺度—角色—循环几何”三层接口上。
+\end{remark}
+
+\begin{remark}[不可消去投影门给出的运算分层（解释性）]\label{rem:pom-projection-gate-stratification}
+把“可见数学”视为允许的投影门集合 \(\mathcal{G}\) 生成的闭包，则门集的扩张给出一条清晰的分层：
+\begin{enumerate}
+  \item \(\mathcal{G}=\{P_Z\}\)：只得到稳定地址层的归一化代数（加法/乘法作为“值层多项式 + 一次规范投影”的闭环实现；见小节 \ref{subsec:pom-primitive-free}）。
+  \item \(\mathcal{G}=\{P_Z,P_{\le}\}\)：第一次出现真正的“序/商余”，不可并行增长的瓶颈由序投影引入（见小节 \ref{subsec:pom-order-bottleneck}；其空间化替代由 (RCRT\(_\varepsilon\)) 一类证书实现，命题 \ref{prop:pom-rcrt-epsilon}）。
+  \item \(\mathcal{G}=\{P_Z,P_{\le},P_{\mathrm{prim}}\}\)：出现 primitive 原子层：把时间迹分解为 primitive（prime-like）原子谱（定义 \ref{def:pom-proj-prim} 与交换图小节 \ref{subsec:pom-time-space-diagram}）。
+  \item \(\mathcal{G}=\{P_Z,P_{\le},P_{\mathrm{prim}},P_\chi\}\)：出现同余/角色切片与傅里叶层（定义 \ref{def:pom-proj-chi}），并把常数级指纹（有限部、Dirichlet--Mertens 张量等）作为不可约接口对象化。
+\end{enumerate}
+该分层提供一个“生成论”的最短列表：与其枚举定理表，不如枚举\emph{不可消去的投影门}及其闭包所能生成的可见结构。
+\end{remark}
+
+\begin{remark}[两投影正规形（生成论版，解释性）]\label{rem:pom-two-projection-normal-form}
+把四则与商余看作“同一本体演化 \(U\) 的编排 + 少量读出门”的组合，则差异主要体现在 lift 路线与序门是否出现：
+\begin{itemize}
+  \item \textbf{加法/乘法：}本体演化段不同的重点是线性化所走的纤维路线（尺度/相位/素数寄存器），而不是更换本体规则本身。
+  \item \textbf{除法/商余：}真正不可消去的额外成本来自一次序投影 \(P_{\le}\)（小节 \ref{subsec:pom-order-bottleneck}）。
+  \item \textbf{归一化：}在满足“中间态对后续读出不可见”的侧条件时，中间出现的规范投影 \(P_Z\) 可由在线延迟律推迟到末端一次执行（定理 \ref{thm:online-delay-fold}）。
+\end{itemize}
+这一口径与“投影词先规约到接口正规形、再进入 \(\zeta\)/primitive/有限部闭环”的编译顺序相容（参见命题 \ref{prop:pom-three-gen-interface-normal-form} 与注 \ref{rem:pom-zeta-normal-form}）。
+\end{remark}
+
+\begin{remark}[澄清：投影 \texorpdfstring{$\neq$}{!=} 除法；稳定 \texorpdfstring{$\neq$}{!=} 素数]\label{rem:pom-projection-vs-division}
+\textbf{投影不等于除法本身：}投影的语义是“取横截面代表/取基本域代表”，而带商余的除法更精确地对应于“把轨道坐标分解为基本域余量与穿越次数（商）”，其不可约读出体现在序门 \(P_{\le}\) 上。
+\par
+\textbf{稳定对象与原子对象属于不同层次：}稳定（\(P_Z\)）给的是值纤维上的规范代表；原子（\(P_{\mathrm{prim}}\)）给的是时间迹的 primitive 原子层（定义 \ref{def:pom-proj-prim}）。二者都可被称作“原子”，但属于不同投影门的原子性。
+\end{remark}
+
+\paragraph{最短闭环生成链（提要）}
+把本文的“生成”压缩为一条最短闭环可写为：
+(i) 地址 \(\to\) 柱事件 \(\to\) 可见 \(\sigma\)-代数内的前缀内生化重选（概念可寻址；第 \ref{sec:recursive-addressing} 节）；
+(ii) 折叠 \(\Fold\) 选 Zeckendorf 横截面得到稳定外表（第 \ref{sec:folding} 节与小节 \ref{subsec:pom-quotient-section}）；
+(iii) 四则与商余统一为“同一本体演化 + 门集 \(\{P_Z,P_{\le}\}\)”；
+(iv) 加入 \(P_{\mathrm{prim}},P_\chi\) 得到 primitive/角色层与解析接口（交换图与扭曲通道）；
+(v) 证明系统落在投影词 \(2\)-范畴的重写证书上（正规形、可判等价）。
+
+\input{parts/para__pom-min-interface-bridge}
+
+\subsection{POM 的最小接口约定}\label{subsec:pom-min}
+为避免后文反复回到协议前提，本小节把 POM 默认采用的接口合同压缩如下；它们并非独立公理，而是前文已建立机制在本章中的统一调用口径。下面列出其可审计锚点。
+\begin{itemize}
+  \item \textbf{读出与窗口：}扫描—投影读出 \(s_t=\ind_W(T^t x)\) 与窗口微态 \(\omega_m(x;t)\in\Omega_m\) 见第 \ref{sec:spg} 节。
+  \item \textbf{稳定语法与折叠：}黄金均值稳定词集合 \(X_m\) 与折叠 \(\Fold_m:\Omega_m\to X_m\) 的定义与可审计实现见第 \ref{sec:folding} 节（尤其是定理 \ref{thm:fold-suite}）。
+  \item \textbf{地址与空值约定：}地址 \(a\in\{0,1\}^k\) 诱导柱事件与二元读出，地址未给定时读出不定义（记为 \(\mathsf{NULL}\)）的语义约定见第 \ref{sec:recursive-addressing} 节及第 \ref{sec:spg} 节的“地址先于概念值”口径。
+  \item \textbf{残差外置与可逆化：}prime-register 残差提升与“折叠可逆化”见定义 \ref{def:pom-fold-prime-lift} 与命题 \ref{prop:pom-fold-prime-lift-injective}。
+  \item \textbf{投影词证书演算：}投影词 \(2\)-范畴、局部重写、正规形与可判定性见定义 \ref{def:pom-projword-2cat}、定理 \ref{thm:pom-rewrite-termination-confluence} 与命题 \ref{prop:pom-projword-decidable}。
+\end{itemize}
+
+\subsubsection{无绝对本体与规范群胚口径}\label{subsec:pom-gauge-groupoid}
+POM 不预设一个全局固定的绝对本体坐标系，而把对象理解为局部表示之间可读、可变换、可粘接的结构。更准确地说，令 \(\mathfrak{G}\) 为作用在本体态空间 \(\Omega\) 上的可逆重写或坐标变换族（可视为规范群胚的可组合箭头），则对象身份由等价关系
+\[
+\omega\sim g\cdot\omega,\qquad g\in\mathfrak{G}
+\]
+给出。于是，一个观测量只有在满足规范不变性 \(O(g\cdot\omega)=O(\omega)\) 时才真正进入对象层；否则它只是某个坐标选择下的表示量，而不属于对象本身。
+
+\begin{remark}[对称性的对象：投影系统的自同构]\label{rem:symmetry-projection-automorphism}
+在本文口径下，对称性并不首先指向某一“几何轴”，而指向投影系统（由本体态空间及协议允许的读出/证书接口生成）在读出意义下的自同构：存在 \(g\in\mathfrak{G}\) 使得对所有协议允许的可读出观测量 \(O\) 成立 \(O\circ g=O\)；
+等价地，在投影词 \(2\)-范畴 \(\mathbf{PW}\) 的接口语义下，该类自同构表现为保持可见输出不变的自然同构类。
+因此，文中关于“轴/切片/正交”的表述应理解为：在固定可见域或选择规范截面之后，对同一对象的等变分解/载荷分量所作的记号化描述；其作用是刻画哪些不变量必须外置、哪些分量在协议下被屏蔽，而非引入额外的对称轴假设。
+\end{remark}
+
+\begin{remark}[粘接数据与第三寄存器]\label{rem:pom-gauge-third-register}
+设对象仅在局部坐标片 \(U_i\) 上有读出 \(x_i\)，在交叠 \(U_i\cap U_j\) 上由过渡变换 \(g_{ij}\) 关联，则
+\[
+x_j=g_{ij}\cdot x_i.
+\]
+若在三重交叠上满足余循环条件 \(g_{ij}g_{jk}g_{ki}=e\)，局部描述可粘接为全局对象；否则只能保留为局部族。第三寄存器在该口径下即为 \(\{g_{ij}\}\) 或其等价的粘接证书：它不是“额外记忆”，而是对象能否全局化的必要结构。
+\end{remark}
+
+\begin{remark}[规范截面、精度与可消去条件]\label{rem:pom-gauge-normal-form}
+精度在此被理解为：是否存在可计算的规范截面/正规形算子 \(\mathrm{NF}\)，使每个等价类选出唯一代表且 \(\mathrm{NF}\) 可在 \(\mathrm{poly}(n)\) 时间计算。若满足该条件，则“第三寄存器可由搜索找回”应理解为：寄存器仅承载纯规范冗余，可由正规形消去。反之，一旦出现全局粘接障碍（如非平凡 holonomy/曲率导致无法选取全局连续截面），寄存器不可消去；省略它会混淆同一对象的不同局部代表，从而在类型层触发 \(\mathsf{NULL}\)。
+\end{remark}
+
+\begin{remark}[Zeckendorf、相位与 \texorpdfstring{$\mathsf{NULL}$}{NULL} 的类型化解释]\label{rem:pom-gauge-zeck-phase-null}
+Zeckendorf 折叠 \(P_Z\) 是值纤维上的规范截面选择（定理 \ref{thm:zeckendorf-transversal}）：稳定类型属于规范不变量，纤维残差属于规范纤维数据，需由 prime-register 或时间记忆外置承载（注 \ref{rem:pom-prime-carry} 与注 \ref{rem:Phi-m-memory-implicit-register}）。相位接口同理：unitary slice 是一种规范切片，只有落在该切片的结构被视为可读出对象（小节 \ref{subsec:xi-pw-type-safety-null}）。任何要求径向自由度的描述若未外置记录轴，则在本类型系统中按 \(\mathsf{NULL}\) 处理。
+\end{remark}
+
+
+\subsection{扫描—投影生成器（SPG）}\label{subsec:pom-spg}
+为了把“本体演化”写成可计算、可组合且可审计的机制对象，本章引入一个最小生成器：扫描负责局部扩张、搬运、重写、卷积与同步推进，投影负责在每一步或末端把其中某些自由度压回允许的可见层。于是，所谓数学生成不再是“先有对象，再对对象运算”，而是先有扫描与演化，再由投影切出对象。
+
+\begin{definition}[扫描—投影生成器]\label{def:pom-spg}
+设 $\Gamma$ 为作用在配置空间上的群或半群，$S$ 为由局部规则驱动的扫描算子，$P$ 为每步执行的二值投影（规范/抑制、保留/丢弃）。定义扫描—投影生成器
+\[
+\mathrm{SPG}:=P\circ S,
+\qquad
+\mathrm{SPG}^t=P\circ S^t.
+\]
+在局部性与投影幂等性的约束下，$\mathrm{SPG}$ 把噪声轨道压缩为稳定读出，从而把“结构生成”统一为同一机制。
+\end{definition}
+\begin{remark}[反共振尺度选择（解释性）]\label{rem:pom-anti-resonance}
+从 Hurwitz/Markov--Lagrange 谱的意义看，黄金比例族给出“最坏有理逼近”的极值，从而对扫描过程中共振污染具有最强抑制；因此尺度纤维选择 $\varphi$ 可被解释为反共振稳定性原则。该叙述仅作动机性说明，不作为后续推理前提。
+\end{remark}
+
+\subsection{既有核心架构的可审计提炼}\label{subsec:pom-hard-skeleton}
+下面把前文已经出现的折叠、交换图、去原语化算术、压缩率与条件期望，重新写成 POM 语言中的基本模块。这样做的目的不是重复已有结论，而是把它们放回同一条“提升--演化--投影--证书”的生成链中。
+
+\subsubsection{规范投影的商与截面}\label{subsec:pom-quotient-section}
+令 $\mathcal{D}$ 为冗余数字配置空间，$\equiv$ 为由 Fibonacci 关系生成的同余（定义见第 \ref{sec:groupoid-zeckendorf} 节）。值映射 $\mathrm{Val}$ 在商 $\mathcal{D}/\!\equiv$ 上与 $(\NN,+)$ 同构（定理 \ref{thm:monoid-quotient-is-N}），而 $X_\infty$ 给出每个同余类的唯一规范代表。由此
+\[
+\Fold_\infty(a)=Z(\mathrm{Val}(a))
+\]
+是沿值保持轨道投影到横截面的截面算子（定理 \ref{thm:zeckendorf-transversal}）。因此 $P_Z$ 的幂等、满射与规范性源于“商 + 截面”的结构事实（定理 \ref{thm:fold-suite}）。
+
+\subsubsection{时间—空间交换图}\label{subsec:pom-time-space-diagram}
+命题 \ref{prop:time-space-commuting-diagram} 给出严格交换图 $Z=E\circ M\circ T$：时间侧以 $\Tr(T^n)$ 编码迭代统计，空间侧以 primitive 轨道谱实现 Euler 乘积与 Möbius 反演。因而 primitive 并不是另一个独立世界中的对象，而是同一演化在原子投影下的空间读出；时间读出与空间原子分解由同一 $\zeta$-行列式接口统一起来。
+
+\begin{remark}[时间迹重建空间原子谱]\label{rem:pom-trace-to-prime}
+由交换图与 Möbius/Witt 反演，给定时间侧迹序列 $a_n=\Tr(T^n)$ 即可重建 primitive 轨道数 $p_n$，并恢复 Euler 乘积。因而在固定核下，“时间侧观测 $\Rightarrow$ 空间侧原子谱”的反演是严格可审计的，不需要先枚举 primitive 循环。
+\end{remark}
+
+\begin{remark}[Witt 坐标与并行放大]\label{rem:pom-witt-amplifier}
+在 Witt 向量视角下，迹序列 $a_n$ 是 ghost 分量，primitive 谱 $p_n$ 是 Witt 坐标。并行张量装配满足
+\[
+a_n^{\mathrm{glob}}(u)=a_n^{\mathrm{flow}}(u)^m
+\]
+且 primitive 谱由 Möbius 反演给出（推论 \ref{cor:par-add-global-lift-endpoints}）。因此素数长度的 primitive 项直接隔离了“不可约循环”与“幂重复循环”的差异，并随并行度 $m$ 被指数放大，可作为隐藏并行度与结构分解的无偏探针。
+\end{remark}
+
+\subsubsection{算术的去原语化与单一原语}\label{subsec:pom-primitive-free}
+后继结构由 $S(c)=\Fold_\infty(c+e_1)$ 给出（定理 \ref{thm:successor-structure}），并诱导加法与乘法的迭代读出（推论 \ref{cor:add-from-successor} 与定理 \ref{thm:mul-from-successor}）。在 POM 语言中，这意味着算术原语不是对象层的预设，而是某条纤维路线、某个投影门序列与某个规范形末端读取的闭包结果。更进一步，过程层可压缩为“合成 $\circ$ 与折叠 $\Fold_\infty$”两类原语：定理 \ref{thm:composition-two-layer} 与 \ref{thm:arith-composition} 给出两层读出的一致实现，推论 \ref{cor:primitive-minimal-successor} 给出最小原语集。
+
+\subsubsection{折叠压缩率与空间代价}\label{subsec:pom-fold-compression}
+稳定类型集合满足 $|X_m|=F_{m+2}$，折叠压缩率为 $2^m/F_{m+2}$，并具有指数增长率 $(2/\varphi)^m$（附录 \ref{app:fold-multiplicity}）。该量衡量的不是单纯“压缩好不好”，而是规范投影 \(P_Z\) 在给定分辨率下把多少微态不可逆地压到同一可见对象，因此是空间代价的第一层定量基准。
+
+\subsubsection{条件期望与纤维平均}\label{subsec:pom-conditional-expectation}
+折叠诱导的子代数 $\mathcal{B}_m$ 与条件期望 $E_m:\mathcal{A}_m\to\mathcal{B}_m$（命题 \ref{prop:fold-conditional-expectation}）给出“沿折叠纤维做平均”的算子化接口，从而把 \(P_Z\) 在可观测层面的信息丢失机制精确化。于是，规范投影既可在地址层表现为“取商并选截面”，也可在可观测量层表现为“沿纤维平均并保留折叠不变量子代数”。
+
+\begin{remark}[规范投影的双态]\label{rem:pom-pz-dual}
+规范投影 $P_Z$ 同时具有两种相容实现：其一是在态/地址层面由 $\Fold_m$ 或 $\Fold_\infty$ 给出的横截面选择；其二是在可观测量层面由条件期望 $E_m$ 给出的纤维平均。二者分别刻画“唯一代表的选取”与“信息遗忘的量化”，共同组成 $P_Z$ 的双态结构。
+\end{remark}
+
+在函数代数口径下，沿折叠纤维的粗化由条件期望 $E_m$ 给出：它对每条纤维取均匀平均，并保持折叠不变量子代数 $\mathcal{B}_m$ 不变。该刻画可由“纤维内置换不变 + 正性 + 幂等”直接推出；相关背景可参见 \cite{WaltersErgodicTheory}。
+
+固定 $m$。取任意概率向量 $\pi\in\Delta(X_m)$，并定义其在微态空间 $\Omega_m$ 上的\textbf{纤维均匀提升}
+\begin{equation}
+\label{eq:pom-fiber-uniform-lift}
+\mu(a):=\frac{\pi(\Fold_m(a))}{d_m(\Fold_m(a))},\qquad a\in\Omega_m,
+\end{equation}
+其中 $d_m(x):=|\Fold_m^{-1}(x)|$。在 $L^2(\mu)$ 内积下，$E_m$ 是到 $\mathcal{B}_m$ 的正交投影，因此对任意 $f\in\mathcal{A}_m$ 有 $L^2$ 分解与最小误差刻画：
+其中 $d_m(x):=|\Fold_m^{-1}(x)|$。在 $L^2(\mu)$ 内积下，$E_m$ 是到 $\mathcal{B}_m$ 的正交投影，因此对任意 $f\in\mathcal{A}_m$ 有 $L^2$ 分解与最小误差刻画：
+\begin{equation}
+\label{eq:pom-L2-pythagoras}
+\|f\|_{2,\mu}^2=\|E_m f\|_{2,\mu}^2+\|f-E_m f\|_{2,\mu}^2,
+\end{equation}
+且 $E_m f$ 为在 $\mathcal{B}_m$ 上的最小二乘近似。
+
+\begin{remark}[与射影度量收缩口径的对齐]\label{rem:pom-fold-projective-metric}
+$L^2(\mu)$ 口径下的正交分解可与 Hilbert 射影度量或 Hopf 振荡半范数的收缩系数刻画对齐，从而给出“跨纤维一致化/混合”的普适性表述；参见 \cite{GaubertQu2015DobrushinCones} 及相关的射影度量工具 \cite{ReebKastoryanoWolf2011HilbertProjectiveQuantum}。
+\end{remark}
+
+固定 $m$。令 $P_m=(\Fold_m)_*:\Delta(\Omega_m)\to\Delta(X_m)$ 为推前，$Q_m$ 为纤维均匀提升（定理 \ref{prop:fold-pushforward-lift}），并定义
+\begin{equation}
+\label{eq:pom-Km-def}
+K_m:=Q_m\circ P_m:\Delta(\Omega_m)\to\Delta(\Omega_m).
+\end{equation}
+则 $K_m$ 是幂等 Markov 投影，且对任意 $\mu,\nu\in\Delta(\Omega_m)$ 有可见距离等式与 TV 分解上界：
+\begin{equation}
+\label{eq:pom-tv-visible-equality}
+D_{\mathrm{TV}}(K_m\mu,\ K_m\nu)=D_{\mathrm{TV}}(P_m\mu,\ P_m\nu),
+\end{equation}
+\begin{equation}
+\label{eq:pom-tv-decomposition-upper}
+D_{\mathrm{TV}}(\mu,\nu)\le D_{\mathrm{TV}}(P_m\mu,P_m\nu)+D_{\mathrm{TV}}(\mu,K_m\mu)+D_{\mathrm{TV}}(\nu,K_m\nu).
+\end{equation}
+其中 $D_{\mathrm{TV}}(\mu,K_m\mu)$ 量化纤维内非均匀性的残差。
+
+固定 $m$。令 $\mu\in\Delta(\Omega_m)$，并记 $\pi=P_m\mu$。对任意函数 $f:\Omega_m\to\RR$，在 $\sigma(\Fold_m)$ 下的条件期望可写为纤维上的条件平均
+\begin{equation}
+\label{eq:pom-Emu-def}
+(E_{\mu}[f\mid\Fold_m])(a)
+:=
+\begin{cases}
+\dfrac{1}{\pi(x)}\sum_{b\in\Fold_m^{-1}(x)}\mu(b)f(b),& \pi(x)>0,\\
+0,& \pi(x)=0,
+\end{cases}
+\qquad x=\Fold_m(a).
+\end{equation}
+于是得到 $L^2$ 分解与方差分解公式：
+\begin{equation}
+\label{eq:pom-Emu-pythagoras}
+\|f\|_{2,\mu}^2=\|E_{\mu}[f\mid\Fold_m]\|_{2,\mu}^2+\|f-E_{\mu}[f\mid\Fold_m]\|_{2,\mu}^2,
+\end{equation}
+\begin{equation}
+\label{eq:pom-var-decomposition}
+\mathrm{Var}_{\mu}(f)=\mathbb{E}_{\mu}[\mathrm{Var}_{\mu}(f\mid\Fold_m)]+\mathrm{Var}_{\pi}\bigl(\mathbb{E}_{\mu}[f\mid\Fold_m]\bigr),
+\end{equation}
+其中 $\mathbb{E}_{\mu}[\mathrm{Var}_{\mu}(f\mid\Fold_m)]=\sum_{x\in X_m}\pi(x)\,\mathrm{Var}_{\mu_x}(f)$。
+
+有限字母表上的 Pinsker 不等式桥接 TV 与 KL：
+\begin{equation}
+\label{eq:pinsker-tv-kl}
+D_{\mathrm{TV}}(p,q)\le \sqrt{\frac{1}{2}D_{\mathrm{KL}}(p\|q)}\qquad (p,q\in\Delta(\mathcal{S})),
+\end{equation}
+从而对任意 $\mu\in\Delta(\Omega_m)$ 与 $\mu^e:=K_m\mu$ 有
+\begin{equation}
+\label{eq:pom-residual-tv-by-kl}
+D_{\mathrm{TV}}(\mu,\mu^e)\le \sqrt{\frac{1}{2}D_{\mathrm{KL}}(\mu\|\mu^e)}
+\end{equation}
+（参见 \cite{CoverThomas2006,Tsybakov2009Nonparametric}）。结合引理 \ref{lem:pom-fiberwise-kl} 的纤维 KL 分解，这给出把“不可见残差”转写为可见纤维平均的统一上界。
+
+对任意 $m_2\ge m_1$，由柱事件延拓得到 $\mathcal{A}_{m_1}\subseteq \mathcal{A}_{m_2}$ 与 $\mathcal{B}_{m_1}\subseteq \mathcal{B}_{m_2}$；相应的条件期望满足塔性质
+\[
+E_{m_1}\circ E_{m_2}=E_{m_1}\qquad\text{于}\ \mathcal{A}_{m_2}.
+\]
+
+\begin{remark}[本体可见性判据]\label{rem:pom-visible-criterion}
+对任意 $A\in\mathcal{A}_m$，有
+\[
+A\in\mathcal{B}_m\quad\Longleftrightarrow\quad E_m(A)=A.
+\]
+因此“外表可见/稳定读出”的对象等价于落在稳定子代数 $\mathcal{B}_m$（极限为 $\mathcal{B}_\infty$）中的可观测量。
+\end{remark}
+
+\subsection{三条先验纤维}\label{subsec:pom-fibers}
+\input{parts/para__pom-three-fiber-motivation}
+
+\begin{definition}[外表纤维 $\mathcal Z$]\label{def:pom-observable-fiber}
+外表纤维取 Zeckendorf 稳定地址
+\[
+\mathcal Z:=X_\infty=\{(c_k)_{k\ge 1}: c_k\in\{0,1\},\ c_kc_{k+1}=0,\ \text{仅有限个 }1\}.
+\]
+值映射 $\mathrm{Val}(c)=\sum_{k\ge 1}c_kF_{k+1}$ 把外表与自然数同构；其本体含义是“在值纤维上选取唯一代表的 canonical section”（见定理 \ref{thm:zeckendorf-transversal}）。
+\end{definition}
+
+\begin{definition}[尺度纤维 $\mathcal{S}_\varphi$]\label{def:pom-scale-fiber}
+取无理数 $\alpha\in(0,1)$ 的连分数 $\alpha=[0;a_1,a_2,\dots]$，Ostrowski 表示给出
+\[
+N=\sum_{n\ge 1} d_n q_{n-1},
+\]
+其中 $q_n$ 为收敛分母，数字 $(d_n)$ 满足合法约束。取 $\alpha=\varphi^{-1}$ 时，退化为 Fibonacci 权重与 Zeckendorf 合法语法（禁止相邻 $11$）。定义尺度纤维为该语法下的稳定地址空间（有限分辨率为 $X_m$，极限为 $X_\infty$），其折叠归一化由 $\Fold_m/\Fold_\infty$ 给出（第 \ref{sec:folding} 节）。
+\end{definition}
+
+\begin{remark}[更换尺度的代价斜率]\label{rem:pom-scale-slope}
+若改用其它最终周期连分数（例如金属平均族）所诱导的稳定语法，其稳定类型规模一般满足 $|X_m|\asymp \lambda^m$。在保持二元读出 $|\Omega_m|=2^m$ 的前提下，折叠熵的斜率将变为
+\[
+S_Z(m)\sim m\log\!\left(\frac{2}{\lambda}\right),
+\]
+从而把“空间代价常数”系统性改写为底数 $\lambda$ 的函数。
+\end{remark}
+
+\begin{definition}[相位纤维 $\mathcal{T}$]\label{def:pom-phase-fiber}
+设相空间为紧阿贝尔群（例如 $\TT^n$），其角色基为
+\[
+\chi_k(x)=e^{2\pi i\langle k,x\rangle},\quad k\in\ZZ^n.
+\]
+相位纤维 $\mathcal{T}$ 指由该角色结构诱导的谱坐标层，用于把可加观测量提升为可乘权重与卷积对角化（见第 \ref{sec:zeta-finite-part} 节与第 \ref{sec:high-dimensional-cut-project} 节）。
+\end{definition}
+
+\begin{definition}[素数寄存器纤维 $\mathcal{P}$]\label{def:pom-prime-fiber}
+令 $\mathbb{P}$ 为素数集合，定义有限支撑指数向量空间
+\[
+\mathcal{P}:=\mathbb{N}^{(\mathbb{P})}=\{\mathbf{r}:\mathbb{P}\to\mathbb{N}\mid \mathbf{r}(p)=0\ \text{除有限多个 }p\}.
+\]
+定义值映射
+\[
+N(\mathbf{r})=\prod_{p\in\mathbb{P}} p^{\mathbf{r}(p)}.
+\]
+由算术基本定理（参见 \cite{Apostol1976}），$N(\cdot)$ 给出 $\mathcal{P}$ 与 $\mathbb{N}_{\ge 1}$ 的同构，从而把乘法线性化为坐标加法。由于每个状态仅激活有限多素数轴，该纤维满足“无限坐标系 + 局部触发”的可实现口径。
+\end{definition}
+
+\begin{remark}[两套自由交换幺半群坐标的并存]\label{rem:pom-two-monoids}
+Zeckendorf 坐标与素数指数坐标分别线性化加法与乘法；同一整数对象拥有两套自由交换幺半群坐标（见注 \ref{rem:two-coordinate-monoids}）。本节所加的素数纤维即是该坐标系统在本体层的显式化。
+\end{remark}
+
+\begin{remark}[折叠残差的素数承载]\label{rem:pom-prime-carry}
+每次 $P_Z$ 折叠都会在纤维内产生“不可见差异标签”（由 $d_m$ 计数）。由于任意有限集合都可嵌入有限支撑的素数幂坐标，素数寄存器纤维可视为一条通用承载轴：它把折叠产生的残差标签转移为可寻址的本体坐标，从而把“信息丢失”改写为“跨纤维存储”。
+\end{remark}
+
+\begin{definition}[带 prime-register 残差的无损折叠提升]\label{def:pom-fold-prime-lift}
+固定一个\textbf{确定性的}折叠正规化策略 \(\mathsf{S}\)：对任意输入微态 \(\omega\in\Omega_m\)，其嵌入配置 \(a_0:=\iota_m(\omega)\)（定义 \ref{def:fold-word}）被 \(\mathsf{S}\) 产生一条有限重写轨迹
+\[
+a_0\ \to\ a_1\ \to\ \cdots\ \to\ a_T=\mathrm{NF}(a_0),
+\]
+其中每一步都是一条局部原子重写（例如应用某条规则于某个窗口位置；见定义 \ref{def:fold-word}）。
+把第 \(t\) 步原子事件记为 \(e_t(\omega)\)，并取一个可审计的注入编码
+\(
+\mathrm{code}:\{e\}\hookrightarrow\NN_{\ge 1}
+\)
+（编码中包含规则类型与位置等足以在回放时唯一确定逆操作的信息）。
+\par
+令 \(p_1<p_2<\cdots\) 为素数序列，定义 prime-register 残差向量 \(r_{\mathsf S}(\omega)\in\mathcal P\) 为
+\[
+r_{\mathsf S}(\omega)(p_t):=\mathrm{code}\bigl(e_t(\omega)\bigr)\quad(1\le t\le T),
+\qquad
+r_{\mathsf S}(\omega)(p)=0\ \text{对其余 }p.
+\]
+最后定义\textbf{无损折叠提升}为
+\[
+\widetilde{\Fold}^{\mathsf S}_m:\Omega_m\to X_m\times\mathcal P,
+\qquad
+\widetilde{\Fold}^{\mathsf S}_m(\omega):=\bigl(\Fold_m(\omega),\,r_{\mathsf S}(\omega)\bigr).
+\]
+\end{definition}
+
+\begin{proposition}[可逆化：提升后折叠成为单射]\label{prop:pom-fold-prime-lift-injective}
+对任意分辨率 \(m\) 与任意确定性策略 \(\mathsf S\)，映射 \(\widetilde{\Fold}^{\mathsf S}_m\) 是单射。
+等价地，存在一个可构造的逆过程 \(\mathrm{UNLIFT}^{\mathsf S}_m\) 使得
+\[
+\mathrm{UNLIFT}^{\mathsf S}_m\bigl(\widetilde{\Fold}^{\mathsf S}_m(\omega)\bigr)=\omega,\qquad \forall\,\omega\in\Omega_m.
+\]
+\end{proposition}
+\begin{proof}
+给定输出对 \((x,r)\in X_m\times\mathcal P\)。
+由算术基本定理，向量 \(r\) 的有限支撑坐标 \(\{r(p_t)\}_{t\le T}\) 唯一确定一个有限序列 \((\mathrm{code}(e_1),\dots,\mathrm{code}(e_T))\)，从而唯一确定事件序列 \((e_1,\dots,e_T)\)。
+又由编码约定，每个 \(e_t\) 都携带足够信息以在配置上施加对应的逆原子重写。
+因此从正规形 \(\iota_m(x)\) 出发，按 \(t=T,T{-}1,\dots,1\) 逆序回放这些逆原子重写，唯一恢复初始配置 \(a_0=\iota_m(\omega)\)，从而恢复 \(\omega\)。
+故 \((x,r)\) 至多对应一个 \(\omega\)，即 \(\widetilde{\Fold}^{\mathsf S}_m\) 为单射。证毕。
+\end{proof}\begin{remark}[“不丢信息”的严格版本：丢失被外置为可寻址残差]\label{rem:pom-fold-lossless}
+命题 \ref{prop:pom-fold-prime-lift-injective} 给出“空间换时间”的最干净形式之一：折叠作为规范投影门 \(P_Z\) 本身多对一，但只要愿意在 \(\mathcal P\) 上外置一份稀疏残差账本（prime-register），就能把它提升为可逆门。
+因此“信息丢失”不是不可控的湮灭，而是被编译为一份可寻址、可回放的外置证书；其空间占用由残差支撑大小（原子事件条数）计数，而其可回放性由唯一分解与确定性策略保证。
+\end{remark}
+
+\input{parts/para__pom-fold-prime-register-rigidity-forest-trace-index}
+
+\begin{corollary}[可逆化不免费：prime-register 残差的线性下界（均匀基线）]\label{cor:pom-prime-residual-linear-lb}
+沿用定义 \ref{def:pom-fold-prime-lift}：对输入 $\omega\in\Omega_{m+1}$，令 $T_{m+1}^{\mathsf S}(\omega)$ 为策略 $\mathsf S$ 产生的原子重写事件步数，并令 $r_{\mathsf S}(\omega)\in\mathcal P$ 为对应 prime-register 残差向量。
+则在定义 \ref{def:fold-word} 的局部重写规则下，每一步最多改动 $3$ 个坐标，因此对任意 $\omega\in\Omega_{m+1}$ 都有纯组合下界
+\[
+T_{m+1}^{\mathsf S}(\omega)\ \ge\ \left\lceil \frac{G_m(\omega)}{3}\right\rceil ,
+\]
+其中 $G_m(\omega)$ 为规范差（定义 \ref{def:fold-gauge-anomaly}）。
+从而在均匀基线 $\omega\sim\mathrm{Unif}(\Omega_{m+1})$ 下，
+\[
+\liminf_{m\to\infty}\frac{1}{m}\,\mathbb E\!\left[T_{m+1}^{\mathsf S}(\omega)\right]\ \ge\ \frac{4}{27}.
+\]
+特别地，为把折叠通过 prime-register 残差提升为可逆门，残差向量的非零坐标数（其值等于 $T_{m+1}^{\mathsf S}(\omega)$）在无结构输入基线下必须是 $\Theta(m)$，不可能是 $o(m)$。
+\end{corollary}
+\begin{proof}
+由定义 \ref{def:fold-word}，每条原子重写规则至多触及 $3$ 个坐标（例如规则 (\ref{rule:fold:adj}) 触及 $(k,k{+}1,k{+}2)$，规则 (\ref{rule:fold:dedupk}) 触及 $(k{-}2,k,k{+}1)$）。
+因此任意重写轨迹 $a_0\to a_1\to\cdots\to a_T$ 满足
+\(
+\#\{k\le m:\ (a_0)_k\neq (a_T)_k\}\le 3T
+\)。
+对 $a_0=\iota_{m+1}(\omega)$ 与 $a_T=\mathrm{NF}(a_0)$，左端正是
+\(
+|r_{m+1\to m}(\omega)\oplus \widetilde r_{m+1\to m}(\omega)|_0=G_m(\omega)
+\)，
+从而 $G_m(\omega)\le 3T_{m+1}^{\mathsf S}(\omega)$，得到所示下界。
+\par
+取期望并除以 $m$，再用定理 \ref{thm:fold-gauge-anomaly-density} 的
+\(
+\lim_{m\to\infty}\mathbb E[G_m(\omega)]/m=4/9
+\)，
+得 $\liminf_{m\to\infty}\mathbb E[T_{m+1}^{\mathsf S}(\omega)]/m\ge 4/27$。
+最后，由定义 \ref{def:pom-fold-prime-lift}，对 $1\le t\le T$ 有 $r_{\mathsf S}(\omega)(p_t)=\mathrm{code}(e_t(\omega))\in\NN_{\ge 1}$，因此残差向量的非零坐标数恰为 $T_{m+1}^{\mathsf S}(\omega)$。证毕。
+\end{proof}\begin{remark}[生长但不丢信息：保守细化与残差外置]\label{rem:pom-growth-no-loss}
+本文中“体系在生长”的严格对应物不是“永远不做投影”，而是把信息损失从不可控的丢弃改写为\emph{可计数、可搬运、可回收}的残差坐标，同时把生长落实为分辨率与语义的保守细化。其要点可由三条规范化接口约束固定：
+\begin{enumerate}
+  \item \textbf{对象层（分辨率保守细化）：}稳定地址空间在截断映射 \(\pi_{m+1\to m}:X_{m+1}\to X_m\) 下形成逆系统，并满足
+  \[
+  X_\infty\ \cong\ \varprojlim_m X_m
+  \]
+  （定理 \ref{thm:pom-inverse-limit}）。因此增加分辨率只是在同一对象 \(X_\infty\) 上延长可见前缀，并不更换本体对象。
+  \item \textbf{语义层（保守扩张）：}新概念只通过既有可观测事件的柱集细化与代数组合产生；在代数语言下，这体现为柱事件延拓导致的包含塔
+  \(
+  \mathcal{A}_{m_1}\subseteq\mathcal{A}_{m_2},\ 
+  \mathcal{B}_{m_1}\subseteq\mathcal{B}_{m_2}
+  \)
+  以及条件期望塔 \(E_{m_1}\circ E_{m_2}=E_{m_1}\)。因此旧层可判定的事件在新层仍保持可判定性，新层仅增加可寻址的组合与细化，而不抹除旧真值。
+  \item \textbf{机制层（遗忘显式化为纤维残差）：}投影 \(P_Z\) 的“丢失”发生在有限分辨率：\(\Fold_m:\Omega_m\to X_m\) 必然多对一，其纤维多重度 \(d_m(x)\) 与条件期望 \(E_m\) 给出沿纤维平均的 coarse-graining 接口。因此丢失不再是黑箱，而是由可计数的纤维自由度显式量化；并且该残差可通过额外轴束（例如素数寄存器纤维 \(\mathcal{P}\)；注 \ref{rem:pom-prime-carry}）外置存储，从而在更高态空间中实现“信息守恒”的可审计版本。
+\end{enumerate}
+以上三点把“生长但不丢信息”精确化为：主尺度（本体对象与熵率）保持不变，差异被转写为可追踪的残差坐标；体系的增长体现在分辨率与语义表达的保守细化上，而不体现为对旧结构的覆盖。
+\end{remark}
+
+\subsection{可回放外置的算术下界：素数轴占用与 Gödel 位长代价}\label{subsec:pom-replayable-externalization-arithmetic-lower-bounds}
+上一小节把“通过 prime-register 残差实现可回放单射化”的必要事件步数 \(T_{m+1}^{\mathsf S}\) 与规范差 \(G_m\) 对齐，并在均匀基线下给出线性下界（推论 \ref{cor:pom-prime-residual-linear-lb}）。
+本小节进一步在整数层给出两类不可约的算术代价：在线幅度约束下的素数轴占用下界，以及在时间索引互素账本口径下的 primorial 位长下界；二者合并后给出 prime-register 回放 Gödel 整数的超线性位长下界。
+
+\input{parts/para__pom-localized-number-system-evidence}
+
+\paragraph{在线乘法外置与素数轴占用}
+令 \(\Sigma\) 为有限字母表，\(|\Sigma|=A\ge 2\)。
+给定一族映射 \(h_t:\Sigma\to\NN_{\ge 2}\ (t=1,2,\dots,T)\)，定义在线乘法编码
+\[
+G_T:\Sigma^T\to\NN_{\ge 1},\qquad
+G_T(a_1,\dots,a_T):=\prod_{t=1}^{T} h_t(a_t).
+\]
+记由该编码在 \(1\le t\le T\) 内所动用的素因子集合为
+\[
+S_T:=\Bigl\{p\in\mathbb{P}:\ \exists\,t\le T,\ \exists\,a\in\Sigma\ \text{使}\ p\mid h_t(a)\Bigr\}.
+\]
+
+\begin{theorem}[多项式幅度约束下的素数轴下界]\label{thm:pom-online-multiplicative-prime-support-lb}
+沿用上述记号，并假设：
+\begin{enumerate}
+  \item 对每个 \(t\le T\)，映射 \(h_t\) 为单射；
+  \item 编码 \(G_T\) 为单射；
+  \item 存在常数 \(\kappa>0\) 使得对所有 \(t\le T\) 与所有 \(a\in\Sigma\) 都有 \(h_t(a)\le t^{\kappa}\)。
+\end{enumerate}
+则成立下界
+\[
+\boxed{\;
+|S_T|
+\ \ge\
+\frac{T\log A}{\log\!\Bigl(1+\frac{\kappa}{\log 2}\log(T!)\Bigr)}\;}
+\]
+并且当 \(T\to\infty\) 时有渐近
+\[
+|S_T|=\Omega\!\left(\frac{T}{\log T}\right).
+\]
+\end{theorem}
+\begin{proof}
+对素数 \(p\) 记 \(v_p(n)\) 为 \(p\)-进指数。
+由幅度约束与 \(p\ge 2\)，对任意 \(t\le T\) 与 \(a\in\Sigma\) 有
+\[
+v_p\!\bigl(h_t(a)\bigr)\le \log_p h_t(a)\le \frac{\log h_t(a)}{\log 2}\le \frac{\kappa\log t}{\log 2}.
+\]
+因此对任意序列 \((a_1,\dots,a_T)\) 与任意 \(p\in S_T\)，有
+\[
+v_p\!\bigl(G_T(a_1,\dots,a_T)\bigr)
+\le \frac{\kappa}{\log 2}\sum_{t=1}^{T}\log t
+=\frac{\kappa}{\log 2}\log(T!).
+\]
+于是每个坐标 \(v_p(G_T(\cdot))\) 的可取值个数至多为
+\(
+1+\frac{\kappa}{\log 2}\log(T!)
+\)。
+由算术基本定理，任意 \(n\in\mathrm{Im}(G_T)\) 被指数向量 \((v_p(n))_{p\in S_T}\) 唯一确定，从而
+\[
+|\mathrm{Im}(G_T)|
+\le
+\Bigl(1+\tfrac{\kappa}{\log 2}\log(T!)\Bigr)^{|S_T|}.
+\]
+另一方面，\(G_T\) 单射蕴含 \(|\mathrm{Im}(G_T)|=|\Sigma^T|=A^T\)。
+取对数并整理即得所示下界。
+最后，\(\log(T!)\sim T\log T\) 给出
+\(\log\!\bigl(1+\frac{\kappa}{\log 2}\log(T!)\bigr)=\Theta(\log T)\)，从而得到 \(|S_T|=\Omega(T/\log T)\)。
+\end{proof}
+
+\input{parts/para__pom-commutative-ledger-order-obstruction-noncommutative-2x2}
+
+\paragraph{互素时间索引账本与 primorial 位长}
+在回放型外置中，常见制度是把时间索引 \(t\) 解释为一条互不混叠的离散轴：即每一时刻使用与其它时刻互素的底数，避免跨时刻共享同一素因子而引入不可审计的纠缠。
+下述定理给出该制度在位长意义下的最优选择与不可改进下界。
+
+\begin{theorem}[互素时间索引账本的 primorial 最优性]\label{thm:pom-coprime-ledger-primorial-optimality}
+沿用上述 \(\Sigma,A,T\)。
+设存在整数 \(M\ge 1\)、一族两两互素的整数 \((q_t)_{t=1}^{T}\)（即 \(\gcd(q_i,q_j)=1\) 若 \(i\ne j\)），以及映射 \(c_t:\Sigma\to\{1,2,\dots,M\}\) 使得
+\[
+h_t(a)=q_t^{\,c_t(a)}\qquad(a\in\Sigma,\ 1\le t\le T).
+\]
+并假设每个 \(t\) 都满足 \(\max_{a\in\Sigma}c_t(a)=M\)。
+令 \(p_1<p_2<\cdots\) 为素数序列，并记 primorial
+\(
+p_T\#:=\prod_{t=1}^{T}p_t
+\)。
+则对任意此类系统都有最坏情形位长下界
+\[
+\boxed{\;
+\max_{(a_1,\dots,a_T)\in\Sigma^T}\ \log G_T(a_1,\dots,a_T)
+\ \ge\
+M\log(p_T\#)\;}
+\]
+并且在所有满足两两互素约束的 \((q_t)\) 中，使该最坏情形达到最小的选择可取为
+\[
+q_t=p_t\qquad(1\le t\le T).
+\]
+此外由素数定理的标准推论 \(\log(p_T\#)\sim T\log T\)，任一互素账本都满足
+\(
+\max \log G_T=\Omega(T\log T)
+\)，而 \(q_t=p_t\) 实现 \(\Theta(T\log T)\)（精确到常数因子）。
+\end{theorem}
+\begin{proof}
+记 \(m_t:=\max_{a\in\Sigma}c_t(a)=M\)。
+则
+\[
+\max_{(a_1,\dots,a_T)} \log G_T(a_1,\dots,a_T)
+=\sum_{t=1}^{T}\max_{a\in\Sigma}c_t(a)\,\log q_t
+=M\sum_{t=1}^{T}\log q_t
+=M\log\!\Bigl(\prod_{t=1}^{T}q_t\Bigr).
+\]
+对每个 \(t\) 取 \(r_t\) 为 \(q_t\) 的任一素因子，则 \(r_t\) 为素数。
+两两互素性保证 \(r_1,\dots,r_T\) 两两不同，因此
+\[
+\prod_{t=1}^{T}q_t\ \ge\ \prod_{t=1}^{T}r_t\ \ge\ \prod_{t=1}^{T}p_t\ =\ p_T\#.
+\]
+代回即得所示下界。
+当取 \(q_t=p_t\) 时，上述链式不等式在“选取 \(T\) 个两两不同素数之积”意义下达到最小，从而使最坏位长达到最小。
+最后，\(\log(p_T\#)\sim T\log T\) 为素数定理推论，得到渐近断言。
+\end{proof}
+
+\input{parts/para__pom-steinitz-prefix-fiber-parikh-area-primorial}
+
+\paragraph{应用：\texorpdfstring{$\widetilde{\Fold}^{\mathsf S}_m$}{Fold} 的 prime-register 回放位长}
+定义 \ref{def:pom-fold-prime-lift} 把原子事件序列外置到 prime-register 残差 \(r_{\mathsf S}(\omega)\in\mathcal P\)，并由命题 \ref{prop:pom-fold-prime-lift-injective} 给出回放单射化。
+下述定理表明：在该制度下，Gödel 整数 \(N(r_{\mathsf S}(\omega))\) 的位长必须呈现超线性增长。
+
+\begin{theorem}[prime-register 回放的 Gödel 位长超线性下界]\label{thm:pom-fold-prime-godel-bitlength-superlinear}
+沿用定义 \ref{def:pom-prime-fiber} 与定义 \ref{def:pom-fold-prime-lift} 的记号。
+对输入 \(\omega\in\Omega_{m+1}\) 记事件步数为 \(T_{m+1}^{\mathsf S}(\omega)\)，并令 primorial \(p_T\#=\prod_{t=1}^{T}p_t\)。
+则对每个 \(\omega\) 都有点态下界
+\[
+\boxed{\;
+\log N\!\bigl(r_{\mathsf S}(\omega)\bigr)\ \ge\ \log\!\bigl(p_{T_{m+1}^{\mathsf S}(\omega)}\#\bigr)\;}
+\]
+并且在均匀基线 \(\omega\sim\mathrm{Unif}(\Omega_{m+1})\) 下存在绝对常数 \(c>0\) 使
+\[
+\EE\!\left[\log N\!\bigl(r_{\mathsf S}(\omega)\bigr)\right]
+\ \ge\
+c\,m\log m\ +\ o(m\log m)
+\qquad(m\to\infty).
+\]
+\end{theorem}
+\begin{proof}
+由定义 \ref{def:pom-fold-prime-lift}，对 \(1\le t\le T:=T_{m+1}^{\mathsf S}(\omega)\) 有
+\(
+r_{\mathsf S}(\omega)(p_t)=\mathrm{code}(e_t(\omega))\in\NN_{\ge 1}
+\)；
+因此
+\[
+N\!\bigl(r_{\mathsf S}(\omega)\bigr)
+=\prod_{p\in\mathbb{P}}p^{r_{\mathsf S}(\omega)(p)}
+\ge \prod_{t=1}^{T} p_t
+=p_T\#,
+\]
+得到点态下界。
+\par
+由素数定理推论 \(\log(p_T\#)\sim T\log T\)，存在 \(T_0\) 使得对所有 \(T\ge T_0\) 有
+\(
+\log(p_T\#)\ge \tfrac12\,T\log T
+\)。
+于是对足够大的 \(m\)，将 \(T<T_0\) 的贡献吸收进 \(o(m\log m)\) 得
+\[
+\EE\!\left[\log N(r_{\mathsf S}(\omega))\right]
+\ge \frac12\,\EE\!\left[T_{m+1}^{\mathsf S}(\omega)\,\log T_{m+1}^{\mathsf S}(\omega)\right]
++o(m\log m).
+\]
+注意函数 \(x\mapsto x\log x\) 在 \((0,\infty)\) 上凸，故由 Jensen 不等式
+\[
+\EE[T\log T]\ \ge\ \EE[T]\log\EE[T]
+\qquad\bigl(T=T_{m+1}^{\mathsf S}(\omega)\bigr).
+\]
+再由推论 \ref{cor:pom-prime-residual-linear-lb} 的
+\(
+\EE[T_{m+1}^{\mathsf S}(\omega)]\ge \frac{4}{27}m+o(m)
+\)
+得到
+\(
+\EE[T]\log\EE[T]\ge c'\,m\log m+o(m\log m)
+\)
+对某个常数 \(c'>0\)。
+合并即得结论。
+\end{proof}
+
+\begin{remark}[制度含义：回放型外置的位长主项]\label{rem:pom-replayable-externalization-bitlength}
+定理 \ref{thm:pom-fold-prime-godel-bitlength-superlinear} 表明：在以 prime-register 作为可回放外置轴、并把事件序列以素数坐标逐步外置的制度下，Gödel 整数位长的主项被强制提升为 \(m\log m\) 量纲。
+该量纲约束并非由“单射化原则”本身直接给出（命题 \ref{prop:pom-fold-prime-lift-injective}），而是由“时间索引互素轴 \(\Rightarrow\) primorial 位长”与“均匀基线下事件数线性增长”（推论 \ref{cor:pom-prime-residual-linear-lb}）合成推出的算术后果。
+\end{remark}

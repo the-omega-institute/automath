@@ -1,0 +1,371 @@
+\paragraph{伴随矩阵、Witt 分解、模 \texorpdfstring{$m$}{m} 可解性与交叠块的整数逆核}\label{subsubsec:xi-time-protocol-conclusions-part30a-boolean-kernel-rigidity}
+沿用 \S\ref{subsubsec:xi-time-protocol-conclusions-part30a-boolean-kernel-rigidity} 的布尔格记号：
+固定 \(q\ge 2\)，令 \(V_q:=2^{[q]}\)，并以集合交并书写指标。
+对任意交换环 \(R\) 与参数 \(a,b\in R\)，定义两层互斥核矩阵
+\[
+B^{(q)}(a,b)\in R^{V_q\times V_q},
+\qquad
+B^{(q)}(a,b)_{U,V}:=
+\begin{cases}
+a,&U\cap V=\varnothing,\\
+b,&U\cap V\neq \varnothing,
+\end{cases}
+\qquad(U,V\in V_q),
+\]
+并记 \(d:=a-b\)。
+当 \(R=\ZZ\)、\((a,b)=(2,1)\) 时，\(B^{(q)}(2,1)=A_q\) 即本节所用的不交核整数化矩阵。
+
+\begin{theorem}[\texorpdfstring{$\zeta$}{zeta}--\texorpdfstring{$\mu$}{mu} 显式对角化]\label{thm:xi-boolean-two-layer-zeta-mu-diagonalization}
+仍令 \(Z_q\) 与 \(\mu_q:=Z_q^{-1}\) 分别为 Boolean 格 \((V_q,\subseteq)\) 的 \(\zeta\)-矩阵与 Möbius 矩阵（见命题 \ref{prop:xi-disjointness-boolean-zeta-ldlt}），并定义对角矩阵 \(\Delta_q(a,b)\) 为
+\[
+\bigl(\Delta_q(a,b)\bigr)_{S,S}:=
+\begin{cases}
+a,&S=\varnothing,\\
+d\,(-1)^{\card{S}},&S\neq \varnothing.
+\end{cases}
+\]
+则恒有
+\[
+B^{(q)}(a,b)=Z_q^{\mathsf T}\Delta_q(a,b)Z_q,
+\qquad\text{等价地}\qquad
+\mu_q^{\mathsf T}B^{(q)}(a,b)\mu_q=\Delta_q(a,b).
+\]
+\end{theorem}
+\begin{proof}
+对任意 \(U,V\in V_q\)，由定义
+\[
+\bigl(Z_q^{\mathsf T}\Delta_q(a,b)Z_q\bigr)_{U,V}
+=\sum_{S\subseteq U\cap V}\bigl(\Delta_q(a,b)\bigr)_{S,S}
+=a+\sum_{\varnothing\neq S\subseteq U\cap V}d(-1)^{\card{S}}.
+\]
+若 \(U\cap V=\varnothing\)，则和式为空，取值为 \(a\)。
+若 \(U\cap V\neq\varnothing\)，则
+\(
+\sum_{S\subseteq U\cap V}(-1)^{\card{S}}=(1-1)^{\card{U\cap V}}=0
+\)
+给出
+\(
+\sum_{\varnothing\neq S\subseteq U\cap V}(-1)^{\card{S}}=-1
+\)，
+从而矩阵元为 \(a-d=b\)。
+故 \(Z_q^{\mathsf T}\Delta_q(a,b)Z_q=B^{(q)}(a,b)\) 逐项成立。
+两侧左、右乘 \(\mu_q^{\mathsf T},\mu_q\) 即得等价式。证毕。
+\end{proof}
+
+\begin{theorem}[整数情形的 Smith 正规形]\label{thm:xi-boolean-two-layer-smith-normal-form}
+令 \(a,b\in\ZZ\)、\(q\ge 2\)、\(N:=2^q\)，并记 \(d:=a-b\)、\(g:=\gcd(a,b)\)。
+则 \(B^{(q)}(a,b)\) 的 Smith 正规形由不变量因子给出：
+\[
+\mathrm{SNF}\!\bigl(B^{(q)}(a,b)\bigr)
+=\operatorname{diag}\Bigl(g,\ \underbrace{|d|,\dots,|d|}_{N-2\text{ 次}},\ \frac{|ad|}{g}\Bigr),
+\]
+其中对角元按整除链排序（\(g\mid |d|\mid |ad|/g\)）。
+特别地，
+\[
+\det\bigl(B^{(q)}(a,b)\bigr)=a\,d^{\,N-1}.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-boolean-two-layer-zeta-mu-diagonalization}，
+\(\mu_q^{\mathsf T}B^{(q)}(a,b)\mu_q=\Delta_q(a,b)\)；
+并且 \(\mu_q\in\mathrm{GL}_N(\ZZ)\)，故 Smith 等价类与 \(\Delta_q(a,b)\) 相同。
+对角矩阵 \(\Delta_q(a,b)\) 的对角元为 \(a\) 与 \(N-1\) 个 \(\pm d\)；
+行、列乘以 \(-1\) 可消去符号，得到与 \(\operatorname{diag}(a,\underbrace{d,\dots,d}_{N-1})\) Smith 等价。
+当 \(q\ge 2\) 时至少有两个 \(d\) 可保持不动，仅对 \(\operatorname{diag}(a,d)\) 应用 Bézout 关系即可作幺模行列变换把其化为 \(\operatorname{diag}(g,ad/g)\)，其余 \(N-2\) 个 \(d\) 不变，从而得到所示 Smith 形。
+行列式公式由对角积直接推出。证毕。
+\end{proof}
+
+\begin{proposition}[余核分解与模 \texorpdfstring{$m$}{m} 核计数闭式]\label{prop:xi-boolean-two-layer-coker-and-modm-kernel-count}
+在定理 \ref{thm:xi-boolean-two-layer-smith-normal-form} 的设定下，有同构
+\[
+\operatorname{coker}\!\left(B^{(q)}(a,b):\ZZ^{N}\to\ZZ^{N}\right)
+\cong
+\ZZ/g\ZZ
+\ \oplus\
+(\ZZ/|d|\ZZ)^{\oplus(N-2)}
+\ \oplus\
+\ZZ/(|ad|/g)\ZZ.
+\]
+并且对任意整数 \(m\ge 1\)，同余方程 \(B^{(q)}(a,b)x\equiv 0\pmod m\) 在 \((\ZZ/m\ZZ)^N\) 中的解个数满足
+\[
+\#\ker\bigl(B^{(q)}(a,b)\bmod m\bigr)
+=\gcd(g,m)\cdot \gcd(|d|,m)^{N-2}\cdot \gcd(|ad|/g,m).
+\]
+\end{proposition}
+\begin{proof}
+由 Smith 正规形的结构定理，
+\(
+\operatorname{coker}\cong\bigoplus_i \ZZ/s_i\ZZ
+\)
+且
+\(
+\#\ker(\operatorname{diag}(s_i)\bmod m)=\prod_i\gcd(s_i,m)
+\)。
+将定理 \ref{thm:xi-boolean-two-layer-smith-normal-form} 的不变量因子代入即得。证毕。
+\end{proof}
+
+\begin{theorem}[逆矩阵的补全集支撑律与伴随矩阵稀疏闭式]\label{thm:xi-boolean-two-layer-inverse-support-law}
+令 \(q\ge 2\)，并在交换环 \(R\) 中取参数 \(a,b\in R\)，记 \(d:=a-b\)。
+若 \(a\) 与 \(d\) 在 \(R\) 中可逆，则 \(B^{(q)}(a,b)\) 可逆，且对任意 \(U,V\in V_q\) 成立
+\[
+\bigl(B^{(q)}(a,b)^{-1}\bigr)_{U,V}=
+\begin{cases}
+-\dfrac{b}{ad},&U=V=\varnothing,\\[8pt]
+\dfrac{(-1)^{\card{U\cap V}}}{d},&U\cup V=[q],\\[8pt]
+0,&\text{其余情形}.
+\end{cases}
+\]
+若进一步 \(a,b\in\ZZ\) 且 \(ad\neq 0\)，令 \(N=2^q\)，则伴随矩阵满足
+\[
+\operatorname{adj}\!\bigl(B^{(q)}(a,b)\bigr)_{U,V}=
+\begin{cases}
+-\,b\,d^{\,N-2},&U=V=\varnothing,\\[4pt]
+a\,d^{\,N-2}(-1)^{\card{U\cap V}},&U\cup V=[q],\\[4pt]
+0,&\text{其余情形},
+\end{cases}
+\]
+从而 \(\operatorname{adj}(B^{(q)}(a,b))\) 的非零元个数精确为 \(3^q+1\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-boolean-two-layer-zeta-mu-diagonalization}，
+\(
+B^{(q)}(a,b)^{-1}=\mu_q\,\Delta_q(a,b)^{-1}\mu_q^{\mathsf T}
+\)。
+对任意 \(U,V\in V_q\)，由 Möbius 矩阵支撑性质，\((B^{-1})_{U,V}\) 可写为对所有 \(S\supseteq U\cup V\) 的有限和。
+当 \(U\cup V\neq [q]\) 时，求和中出现的符号在 \(|S\setminus (U\cup V)|>0\) 的自由坐标上完全抵消，得到 \(0\)。
+当 \(U\cup V=[q]\) 时，求和仅含 \(S=[q]\) 一项，并用恒等式 \(\card{U}+\card{V}=q+\card{U\cap V}\) 化简符号，即得
+\(
+(B^{-1})_{U,V}=(-1)^{\card{U\cap V}}/d
+\)。
+当 \(U=V=\varnothing\) 时，除去 \(\Delta^{-1}_{\varnothing,\varnothing}=1/a\) 的贡献，非空子集贡献之和为 \(\sum_{\varnothing\neq S\subseteq[q]}(-1)^{\card{S}}=-1\)，故
+\(
+(B^{-1})_{\varnothing,\varnothing}=1/a-1/d=-b/(ad)
+\)。
+\par
+整数情形下由 \(\det(B^{(q)}(a,b))=a d^{N-1}\)（定理 \ref{thm:xi-boolean-two-layer-smith-normal-form}）与 \(\operatorname{adj}(B)=\det(B)\,B^{-1}\) 立得伴随矩阵闭式。
+计数 \(U\cup V=[q]\) 的有序对，每个坐标有三态选择（入 \(U\) / 入 \(V\) / 同时入二者），故为 \(3^q\)；
+再加 \((\varnothing,\varnothing)\) 得 \(3^q+1\)。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part30a-boolean-kernel-symmetric-quotient-orderideal}
+
+\begin{theorem}[Witt 分解的二维核心]\label{thm:xi-boolean-two-layer-witt-core}
+令 \(K\) 为特征不为 \(2\) 的域，\(q\ge 2\)，并取 \(a,b\in K\) 使 \(a(a-b)\neq 0\)。
+则由 \(B^{(q)}(a,b)\) 定义的对称双线性型在 Witt 群 \(W(K)\) 中满足
+\[
+\bigl[B^{(q)}(a,b)\bigr]=\langle a\rangle\ \oplus\ \langle -(a-b)\rangle,
+\]
+并且存在 \(K\)-同构
+\[
+B^{(q)}(a,b)\ \sim_K\ \langle a,\,-(a-b)\rangle\ \perp\ H^{\perp(2^{q-1}-1)},
+\]
+其中 \(H\) 为双曲平面。等价地，其 Witt 指数为 \(2^{q-1}-1\)，各向异核维数恒为 \(2\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-boolean-two-layer-zeta-mu-diagonalization} 得到 \(K\)-合同对角化
+\[
+B^{(q)}(a,b)\ \sim_K\ \operatorname{diag}\bigl(a,\ d(-1)^{\card{S}}\ (S\neq\varnothing)\bigr),
+\qquad d=a-b.
+\]
+在 \(S\neq\varnothing\) 部分，非空偶子集数为 \(2^{q-1}-1\)，奇子集数为 \(2^{q-1}\)；
+故可配对剥离出 \(2^{q-1}-1\) 个 \(\langle d,-d\rangle\cong H\)，余下仅一份 \(\langle -d\rangle\) 与首项 \(\langle a\rangle\)。
+从而 Witt 类与分解式成立。证毕。
+\end{proof}
+
+\begin{theorem}[整数方程的 Möbius 判别准则]\label{thm:xi-boolean-two-layer-mobius-diophantine-criterion}
+令 \(q\ge 2\)、\(a,b\in\ZZ\)，并设 \(a(a-b)\neq 0\)。
+给定 \(y\in\ZZ^{V_q}\)，线性丢番图方程
+\[
+B^{(q)}(a,b)\,x=y
+\]
+在 \(\ZZ^{V_q}\) 中存在整数解（此时解唯一）当且仅当
+\[
+\widehat y:=\mu_q^{\mathsf T}y
+\]
+满足整除条件
+\[
+a\mid \widehat y_{\varnothing},
+\qquad
+(a-b)\mid \widehat y_S\quad(\forall\,S\neq\varnothing).
+\]
+在可解时，唯一整数解由
+\[
+x=\mu_q\,\Delta_q(a,b)^{-1}\widehat y
+\]
+给出，其中 \(\Delta_q(a,b)\) 见定理 \ref{thm:xi-boolean-two-layer-zeta-mu-diagonalization}。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-boolean-two-layer-zeta-mu-diagonalization} 的等价式
+\(\mu_q^{\mathsf T}B^{(q)}(a,b)\mu_q=\Delta_q(a,b)\)。
+令 \(x':=Z_qx=\mu_q^{-1}x\)，则方程等价于
+\[
+\Delta_q(a,b)\,x'=\mu_q^{\mathsf T}y=\widehat y.
+\]
+由于 \(\Delta_q(a,b)\) 为对角整矩阵，上式在 \(\ZZ^{V_q}\) 中可解当且仅当各坐标满足相应整除条件；
+并且一旦可解，\(x'\) 唯一，故 \(x=\mu_qx'\) 唯一。证毕。
+\end{proof}
+
+\begin{corollary}[伴随矩阵的覆盖支撑与带符号余因子值域]\label{cor:xi-disjointness-boolean-adjugate-cover-support}
+对任意 \(U,V\in V_q\) 有
+\[
+\operatorname{adj}(A_q)_{U,V}
+=
+2(-1)^{\card{U\cap V}}\mathbf 1_{\{U\cup V=[q]\}}
+-\mathbf 1_{\{U=\varnothing=V\}}.
+\]
+因此任意 \((2^q-1)\times(2^q-1)\) 的带符号余因子仅取值于 \(\{0,-1,\pm2\}\)；
+并且除 \((U,V)=(\varnothing,\varnothing)\) 外，\(\operatorname{adj}(A_q)_{U,V}\neq 0\) 当且仅当 \(U\cup V=[q]\)。
+\end{corollary}
+
+\begin{proof}
+取定理 \ref{thm:xi-boolean-two-layer-inverse-support-law} 的整数情形并令 \((a,b)=(2,1)\)，则 \(A_q=B^{(q)}(2,1)\) 且
+\[
+\operatorname{adj}(A_q)_{U,V}
+=\operatorname{adj}\!\bigl(B^{(q)}(2,1)\bigr)_{U,V}
+=2(-1)^{\card{U\cap V}}\mathbf 1_{\{U\cup V=[q]\}}
+-\mathbf 1_{\{U=\varnothing=V\}},
+\]
+即得所示闭式。证毕。
+\end{proof}
+
+\begin{proposition}[有理二次型的 Witt 分解与各向异核的稳定性]\label{prop:xi-disjointness-boolean-witt-decomposition-q}
+视 \(A_q\) 为 \(\QQ\)-二次型的 Gram 矩阵，并在 \(\QQ^{V_q}\) 上定义
+\[
+Q_q(x):=x^{\mathsf T}A_qx,\qquad x\in\QQ^{V_q}.
+\]
+则对一切 \(q\ge 2\) 成立正交分解
+\[
+(\QQ^{V_q},Q_q)\ \cong\ H^{\oplus (2^{q-1}-1)}\ \perp\ \langle 1,-2\rangle,
+\]
+其中 \(H\) 为双曲平面。
+因而 \(Q_q\) 的 Witt 指数为 \(2^{q-1}-1\)，并且其各向异核在 \(\QQ\) 上同构于 \(\langle 1,-2\rangle\)，与 \(q\) 无关。
+\end{proposition}
+
+\begin{proof}
+取定理 \ref{thm:xi-boolean-two-layer-witt-core} 并令 \((a,b)=(2,1)\)，由 \(\mu\)-对角化得到 \(A_q=B^{(q)}(2,1)\) 在 \(\QQ\) 上同构于对角型
+\[
+2x_{\varnothing}^2+\sum_{\substack{S\neq\varnothing\\ \card{S}\ \mathrm{even}}}x_S^2
+-\sum_{\substack{S\\ \card{S}\ \mathrm{odd}}}x_S^2.
+\]
+非空偶子集数为 \(2^{q-1}-1\)，奇子集数为 \(2^{q-1}\)。
+将每个非空偶子集与一个奇子集配对，可逐对剥离出双曲平面 \(\langle 1\rangle\perp\langle-1\rangle\cong H\)，共得到 \(2^{q-1}-1\) 个 \(H\)。
+剩余的二维部分同构于 \(\langle 2,-1\rangle\)，经尺度变换等价于 \(\langle 1,-2\rangle\)。
+最后，若 \(\langle 1,-2\rangle\) 在 \(\QQ\) 上各向同性，则存在 \((a,b)\neq (0,0)\) 使 \(a^2-2b^2=0\)，从而 \(2=(a/b)^2\) 为有理平方，矛盾。
+故该二维部分为各向异核，Witt 分解成立。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$\sqrt2$}{sqrt2} 判据与 \texorpdfstring{$p$}{p}-进分型]\label{cor:xi-disjointness-boolean-witt-sqrt2-criterion}
+令 \(F\) 为特征不为 \(2\) 的域，并将 \(Q_q\) 标量扩张为 \(Q_{q,F}\)。
+则对一切 \(q\ge 2\) 有
+\[
+(F^{V_q},Q_{q,F})\ \cong\ H^{\oplus (2^{q-1}-1)}\ \perp\ \langle 1,-2\rangle_F.
+\]
+从而该二次空间在 \(F\) 上全分裂为双曲型（即同构于 \(H^{\oplus 2^{q-1}}\)）当且仅当 \(2\in(F^\times)^2\)。
+特别地，当 \(F=\QQ_p\)（\(p\) 为奇素数）时，
+\[
+(\QQ_p^{V_q},Q_{q,\QQ_p})\ \text{全分裂}
+\quad\Longleftrightarrow\quad
+\left(\frac{2}{p}\right)=1
+\quad\Longleftrightarrow\quad
+p\equiv \pm 1\pmod 8.
+\]
+\end{corollary}
+
+\begin{proof}
+命题 \ref{prop:xi-disjointness-boolean-witt-decomposition-q} 的正交直和分解在任意标量扩张下保持，得第一式。
+二维型 \(\langle 1,-2\rangle_F\) 为双曲平面当且仅当存在非零解使 \(x^2-2y^2=0\)，等价于 \(2\) 为 \(F\) 中平方。
+对 \(F=\QQ_p\)（\(p\) 奇），\(\sqrt2\in\QQ_p\) 当且仅当 \(2\) 为二次剩余；由二次互反律的标准结论
+\(\left(\frac{2}{p}\right)=(-1)^{(p^2-1)/8}\)，得到模 \(8\) 的等价刻画。证毕。
+\end{proof}
+
+\begin{proposition}[模 \texorpdfstring{$m$}{m} 线性方程的存在性与解数：\texorpdfstring{$\gcd(2,m)$}{gcd(2,m)} 规律]\label{prop:xi-disjointness-boolean-congruence-solvability-gcd2m}
+令 \(m\ge 1\)。
+在 \((\ZZ/m\ZZ)^{V_q}\) 上考虑同余方程
+\[
+A_qx\equiv b\pmod m.
+\]
+则对一切 \(q\ge 2\)，该方程可解当且仅当
+\[
+b_{\varnothing}\equiv 0\pmod{\gcd(2,m)}.
+\]
+当可解时，其解集为一个仿射陪集，解的总数恰为 \(\gcd(2,m)\)。
+更精确地：
+\begin{enumerate}
+  \item 若 \(m\) 为奇数，则解唯一；
+  \item 若 \(m\) 为偶数，则恰有两解，且其差为 \((m/2)\delta_{\varnothing}\)。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:xi-boolean-two-layer-smith-normal-form}（取 \((a,b)=(2,1)\)）可知
+\(
+\mathrm{SNF}(A_q)=\operatorname{diag}(1,\dots,1,2)
+\)；
+从而在任意模 \(m\) 下，方程可解的唯一障碍来自唯一的因子 \(2\)，即首坐标必须落入 \(\gcd(2,m)\) 倍子群。
+另一方面，由命题 \ref{prop:xi-disjointness-boolean-zeta-ldlt} 的整同余分解 \(A_q=Z_q^{\mathsf T}\Delta_q Z_q\)，取 \(y:=Z_qx\)、\(c:=Z_q^{-\mathsf T}b\)，可将同余方程化为
+\(\Delta_q y\equiv c\pmod m\)；
+其中除 \(\varnothing\) 分量外的对角元均为 \(\pm 1\)，故唯一非平凡约束为
+\(
+2y_{\varnothing}\equiv c_{\varnothing}\pmod m
+\)。
+又 Möbius 矩阵满足 \((Z_q^{-\mathsf T}b)_{\varnothing}=b_{\varnothing}\)，因此可解条件等价于 \(b_{\varnothing}\equiv 0\pmod{\gcd(2,m)}\)。
+当该条件满足时，\(\varnothing\) 分量的解数正好为 \(\gcd(2,m)\)，其余分量唯一确定，故总解数亦为 \(\gcd(2,m)\)。
+偶模情形下核由 \((m/2)\delta_{\varnothing}\) 生成，给出“两解差”为 \((m/2)\delta_{\varnothing}\) 的精确描述。证毕。
+\end{proof}
+
+\begin{conjecture}[\texorpdfstring{$S_q$}{Sq}-不变块的不可约性与满对称 Galois 群]\label{conj:xi-boolean-two-layer-symmetric-block-galois}
+设 \(q\ge 2\)，并考虑整数矩阵 \(B^{(q)}(2,1)=A_q\) 在 \(\mathfrak S_q\)-不变子空间上的限制。
+在按 Hamming 权层求和得到的自然基下，该限制矩阵可取为
+\[
+A_{\mathrm{sym}}^{(q)}(k,\ell)=\binom{q}{\ell}+\binom{q-k}{\ell},
+\qquad 0\le k,\ell\le q.
+\]
+令
+\[
+E_q(x):=\det\bigl(xI_{q+1}-A_{\mathrm{sym}}^{(q)}\bigr)\in\ZZ[x].
+\]
+则预期对所有 \(q\ge 2\)，多项式 \(E_q(x)\) 在 \(\QQ\) 上不可约，且其伽罗瓦群为满对称群 \(S_{q+1}\)。
+\end{conjecture}
+
+\begin{proposition}[非空交叠矩阵的整数逆核：支撑在覆盖对且仅取 \texorpdfstring{$\{-1,0,1\}$}{-1,0,1}]\label{prop:xi-disjointness-boolean-overlap-matrix-inverse}
+令 \(V_q^+:=V_q\setminus\{\varnothing\}\)，并定义交叠矩阵 \(B_q\in \ZZ^{V_q^+\times V_q^+}\)：
+\[
+(B_q)_{U,V}:=\mathbf 1_{\{U\cap V\neq\varnothing\}}\qquad(U,V\in V_q^+).
+\]
+则 \(B_q\) 在 \(\ZZ\) 上可逆，且其逆矩阵满足
+\[
+\bigl(B_q\bigr)^{-1}_{U,V}
+=(-1)^{\card{U\cap V}+1}\mathbf 1_{\{U\cup V=[q]\}}
+\qquad (U,V\in V_q^+).
+\]
+因此 \(\bigl(B_q\bigr)^{-1}\) 的每个元素都属于 \(\{-1,0,1\}\)，并且其非零位置精确由覆盖条件 \(U\cup V=[q]\) 刻画。
+\end{proposition}
+
+\begin{proof}
+取基变换 \(P\in\mathrm{GL}_{2^q}(\ZZ)\) 由
+\[
+f_{\varnothing}=\delta_{\varnothing},\qquad
+f_U=\delta_U-\delta_{\varnothing}\ \ (U\in V_q^+)
+\]
+定义。
+直接计算得到块分解
+\[
+P^{\mathsf T}A_qP=\begin{pmatrix}2&0\\[2pt]0&-B_q\end{pmatrix}.
+\]
+两边取逆并比较右下块，得到
+\[
+\bigl(A_q^{-1}\bigr)\big|_{V_q^+\times V_q^+}=-(B_q)^{-1}.
+\]
+另一方面，由结论 \ref{con:xi-terminal-disjointness-boolean-inverse-closed-form} 与 \(\operatorname{adj}(A_q)=2A_q^{-1}\) 可知：
+对 \(U,V\in V_q^+\)，有
+\[
+2(A_q^{-1})_{U,V}
+=\operatorname{adj}(A_q)_{U,V}
+=2(-1)^{\card{U\cap V}}\mathbf 1_{\{U\cup V=[q]\}},
+\]
+从而 \((A_q^{-1})_{U,V}=(-1)^{\card{U\cap V}}\mathbf 1_{\{U\cup V=[q]\}}\)。
+代回即可得到 \((B_q)^{-1}\) 的逐元闭式。证毕。
+\end{proof}
+
+\endinput
+

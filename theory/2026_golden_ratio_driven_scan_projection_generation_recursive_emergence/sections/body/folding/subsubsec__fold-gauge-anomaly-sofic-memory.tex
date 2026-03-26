@@ -1,0 +1,600 @@
+% (User input window)
+
+\paragraph{均匀基线下失配指示过程的同步收缩与无限记忆}\label{par:fold-gauge-anomaly-sofic-memory}
+在定理 \ref{thm:fold-gauge-anomaly-bernoulli-p-laws} 的 Markov 表示下取 \(p=\tfrac12\)。
+沿用边势 \(g\)（式 \eqref{eq:fold-gauge-anomaly-bernoulli-p-edge-potential}），并把它视作二元观测过程
+\[
+g_t:=g(S_{t-1},S_t)\in\{0,1\},\qquad t\in\ZZ,
+\]
+其中 \((S_t)_{t\in\ZZ}\) 为该平稳链。
+记 \(0^n,1^n\) 为长度 \(n\) 的常字串，并沿用 \S\ref{subsec:folding-fibonacci-stable-syntax} 的 Fibonacci 数列 \((F_k)\) 与黄金比例 \(\varphi\)。
+
+\par
+为固定记号，回到命题 \ref{prop:fold-gauge-anomaly-pressure} 的加权邻接矩阵表示：在均匀输入下
+\[
+g_t=\mathbf 1_{\{X_t\neq Y_t\}}\in\{0,1\},
+\qquad
+A_\theta=\frac12\begin{pmatrix}
+1 & e^\theta & 0 & 1\\
+0 & 0 & e^\theta & 0\\
+e^\theta & 2 & 0 & 0\\
+1 & 0 & 0 & 0
+\end{pmatrix}
+\]
+（按状态次序 \((a,b,c,d)\)），其中恰有三条带因子 \(e^\theta\) 的边对应失配边。
+在 \(\theta=0\) 处取 Perron--Frobenius/Parry 归一化得到基准动力学核，该核在文中用于相关闭式与有限长度方差的完全闭式化。
+
+\begin{proposition}[Parry 转移核与失配边标记]\label{prop:fold-gauge-anomaly-parry-kernel-mismatch-label}
+令 \(M:=2A_0\)。则 \(\rho(M)=2\)，并且 \(v=(2,1,2,1)^{\mathsf T}\) 为一组右 Perron 向量。
+定义 Parry 转移核
+\[
+P_{ij}:=\frac{M_{ij}v_j}{2v_i}\quad (i,j\in\{a,b,c,d\}),
+\]
+则
+\[
+P=
+\begin{pmatrix}
+\frac12&\frac14&0&\frac14\\[2pt]
+0&0&1&0\\[2pt]
+\frac12&\frac12&0&0\\[2pt]
+1&0&0&0
+\end{pmatrix}.
+\]
+并在允许边上定义输出字母
+\[
+g(i\to j)=1\iff (i,j)\in\{(a,b),(b,c),(c,a)\},
+\]
+其余允许边取 \(g=0\)。
+令 \(g_t=g(S_{t-1}\to S_t)\) 为边标记输出，则该输出过程与均匀基线下的逐位失配指示一致。
+\end{proposition}
+\begin{proof}
+直接计算得 \(Mv=2v\)，从而 \(\rho(M)=2\) 且 \(v\) 为右 Perron 向量；代入 Parry 公式得到所示 \(P\)。
+最后的边标记恰与 \(A_\theta\) 中出现 \(e^\theta\) 的三处位置一致，故与失配指示同一。
+证毕。
+\end{proof}
+
+\begin{theorem}[长度 \(3\) 同步词与可数 unifilar \texorpdfstring{$\varepsilon$}{ε}-机表示]\label{thm:fold-gauge-anomaly-epsilon-machine-synchronizing-word}
+在命题 \ref{prop:fold-gauge-anomaly-parry-kernel-mismatch-label} 的核 \(P\) 与边标记 \(g\) 下，单词 \(001\) 为同步词：若 \(g_{t-2}g_{t-1}g_t=001\)，则隐藏状态必为 \(S_t=b\)，且与更早历史无关。
+\par
+因此 \((g_t)\) 具有一个可数且 unifilar 的预测态表示（\(\varepsilon\)-机覆盖）。
+其状态集可取为
+\[
+\mathcal S=\{B,C,A\}\cup\{R_n:n\in\NN_0\},
+\]
+其中 \(B,C,A\) 分别对应后验确定的隐藏状态 \(b,c,a\)，而 \(R_n\) 对应后验支撑于 \(\{a,d\}\) 的不确定预测态。
+其转移（箭头标记输出符号）为
+\[
+B \xrightarrow{1} C,\qquad
+C \xrightarrow{0} B,\qquad C \xrightarrow{1} A,
+\]
+\[
+A \xrightarrow{1} B,\qquad A \xrightarrow{0} R_0,
+\qquad
+R_n \xrightarrow{1} B,\qquad R_n \xrightarrow{0} R_{n+1}\qquad(n\ge 0).
+\]
+\end{theorem}
+\begin{proof}
+设 \(g_{t-2}g_{t-1}g_t=001\)。
+由 \(g_{t-2}=0\) 与 \(P\) 的结构知不存在任何标记为 \(0\) 且终点为 \(c\) 的边，故 \(S_{t-2}\neq c\)；同理 \(S_{t-1}\neq c\)。
+而 \(g_t=1\) 强制 \((S_{t-1},S_t)\in\{(a,b),(b,c),(c,a)\}\)，结合 \(S_{t-1}\neq c\) 排除 \((c,a)\)，仅余 \((a,b)\) 与 \((b,c)\)。
+若 \((S_{t-1},S_t)=(b,c)\)，则 \(S_{t-1}=b\)；
+但 \(g_{t-1}=0\) 时到达 \(b\) 的唯一 \(0\)-边为 \(c\to b\)，从而 \(S_{t-2}=c\)，矛盾。
+故必为 \((S_{t-1},S_t)=(a,b)\)，从而 \(S_t=b\)，同步性成立。
+\par
+其余转移由 \(P\) 与边标记直接读出：
+\(b\to c\) 为确定一步且输出 \(1\)，得 \(B\xrightarrow{1}C\)；
+在 \(c\) 处，\(c\to b\) 与 \(c\to a\) 分别输出 \(0\) 与 \(1\) 且各以概率 \(1/2\)，得 \(C\xrightarrow{0}B\)、\(C\xrightarrow{1}A\)；
+在 \(a\) 处，\(a\to b\) 输出 \(1\)，而 \(a\to a\)、\(a\to d\) 输出 \(0\)，得 \(A\xrightarrow{1}B\)、\(A\xrightarrow{0}R_0\)。
+一旦后验支撑落在 \(\{a,d\}\)，输出 \(1\) 仅可能来自 \(a\to b\)，故观测到 \(1\) 即同步回 \(b\)，给出 \(R_n\xrightarrow{1}B\)；
+观测到 \(0\) 则保持在 \(\{a,d\}\) 并更新不确定度，给出 \(R_n\xrightarrow{0}R_{n+1}\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[不确定预测态的 Fibonacci--M\"obius 完全闭式]\label{thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius}
+记 Fibonacci 数列 \(F_0=0,F_1=1,F_{n+2}=F_{n+1}+F_n\)。
+在定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-synchronizing-word} 的 \(\varepsilon\)-机中，存在显式参数 \(r_n>0\) 使得
+\[
+R_n:\quad \PP(S_t=d\mid R_n)=\frac{r_n}{1+r_n},\qquad
+\PP(S_t=a\mid R_n)=\frac{1}{1+r_n},
+\]
+且
+\[
+r_n=\frac{F_{n+1}}{2F_{n+2}}\qquad(n\ge 0).
+\]
+从而在 \(R_n\) 处下一步输出为 \(1\) 的条件概率为
+\[
+\alpha_n:=\PP(g_{t+1}=1\mid R_n)=\frac{1}{4(1+r_n)}=\frac{F_{n+2}}{2F_{n+4}}.
+\]
+此外，\((r_n)\) 满足 M\"obius 迭代
+\[
+r_{n+1}=\frac{1}{4r_n+2},
+\]
+并以速度 \(\varphi^{-2n}\) 交错收敛到 \(r_\infty=\frac1{2\varphi}\)。
+\end{theorem}
+\begin{proof}
+由 \(A\xrightarrow{0}R_0\) 的 Bayes 更新：在 \(a\) 处条件于输出 \(0\)，两条 \(0\)-边 \(a\to a\)、\(a\to d\) 的相对概率为 \((1/2):(1/4)=2:1\)，故 \(r_0=\PP(d)/\PP(a)=1/2\)。
+\par
+若在 \(R_n\) 处再次观测到 \(0\)，则下一状态只可能为 \(a\) 或 \(d\)。
+未归一化权重为：到 \(d\) 仅由 \(a\to d\)，权重 \(\frac{1}{1+r_n}\cdot\frac14\)；到 \(a\) 由 \(a\to a\) 与 \(d\to a\)，权重 \(\frac{1}{1+r_n}\cdot\frac12+\frac{r_n}{1+r_n}\cdot 1\)。
+因此
+\[
+r_{n+1}
+=\frac{\frac{1}{1+r_n}\cdot \frac14}{\frac{1}{1+r_n}\cdot\frac12+\frac{r_n}{1+r_n}\cdot 1}
+=\frac{1}{4r_n+2}.
+\]
+归纳验证 Fibonacci 闭式：若 \(r_n=\frac{F_{n+1}}{2F_{n+2}}\)，则
+\[
+r_{n+1}=\frac{1}{4r_n+2}
+=\frac{1}{2\frac{F_{n+1}}{F_{n+2}}+2}
+=\frac{F_{n+2}}{2(F_{n+1}+F_{n+2})}
+=\frac{F_{n+2}}{2F_{n+3}}.
+\]
+从而对一切 \(n\ge 0\) 成立。
+由“输出 \(1\) 仅来自 \(a\to b\)”与 \(P_{ab}=1/4\) 得 \(\alpha_n=\frac{1}{4(1+r_n)}\)；
+代入 \(r_n\) 并用恒等式 \(F_{n+4}=2F_{n+2}+F_{n+1}\) 得 \(\alpha_n=\frac{F_{n+2}}{2F_{n+4}}\)。
+收敛性由 \(F_{n+1}/F_{n+2}\to\varphi^{-1}\) 立得。
+证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$\varepsilon$}{ε}-机平稳分布的 Fibonacci 尾与完全归一化]\label{thm:fold-gauge-anomaly-epsilon-machine-stationary-fibonacci-tail}
+该 \(\varepsilon\)-机存在唯一平稳分布 \(\pi\)，并满足
+\[
+\pi(B)=\pi(C)=\frac{2}{9},\qquad \pi(A)=\frac{1}{9},
+\]
+以及对一切 \(n\ge 0\),
+\[
+\pi(R_n)=\frac{F_{n+4}}{36\cdot 2^n}.
+\]
+特别地，\(\sum_{n\ge 0}\pi(R_n)=\frac49\)。
+\end{theorem}
+\begin{proof}
+由 \(B\xrightarrow{1}C\) 的确定性得 \(\pi(C)=\pi(B)\)，而进入 \(A\) 的唯一入流边为 \(C\xrightarrow{1}A\) 且概率 \(1/2\)，故 \(\pi(A)=\frac12\pi(C)=\frac12\pi(B)\)。
+对 \(R_0\)，唯一入流边为 \(A\xrightarrow{0}R_0\) 且概率 \(3/4\)，故 \(\pi(R_0)=\frac34\pi(A)=\frac{3}{8}\pi(B)\)。
+又由 \(R_n\xrightarrow{0}R_{n+1}\) 得 \(\pi(R_{n+1})=\pi(R_n)(1-\alpha_n)\)。
+由定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius}，
+\(
+1-\alpha_n=\frac{F_{n+5}}{2F_{n+4}}
+\)，从而
+\[
+\pi(R_n)=\pi(R_0)\prod_{k=0}^{n-1}\frac{F_{k+5}}{2F_{k+4}}
+=\pi(R_0)\cdot\frac{F_{n+4}}{3\cdot 2^n}.
+\]
+归一化由生成函数恒等式 \(\sum_{n\ge0}F_{n+4}2^{-n}=16\) 给出：
+\[
+\sum_{n\ge0}\pi(R_n)=\pi(R_0)\cdot\frac13\sum_{n\ge0}\frac{F_{n+4}}{2^n}
+=\pi(R_0)\cdot\frac{16}{3}
+=2\pi(B).
+\]
+因此 \(1=\pi(B)+\pi(C)+\pi(A)+\sum_{n\ge0}\pi(R_n)=\frac92\pi(B)\)，从而 \(\pi(B)=2/9\)，代回即得全部闭式。
+证毕。
+\end{proof}
+
+\begin{corollary}[不确定相位零串长度的精确分布、母函数与矩]\label{cor:fold-gauge-anomaly-epsilon-machine-zero-run-length}
+条件于进入 \(R_0\)，记从该时刻起直至下一次输出 \(1\) 为止所观测到的连续 \(0\) 的总长度为 \(L\in\{1,2,\dots\}\)。
+则对一切 \(n\ge0\),
+\[
+\PP(L=n+1)=\frac{F_{n+2}}{6\cdot 2^n},\qquad
+\PP(L\ge n+1)=\frac{F_{n+4}}{3\cdot 2^n}.
+\]
+其概率母函数为
+\[
+\EE[z^L]=\frac{z(2+z)}{12-6z-3z^2},
+\]
+并且
+\[
+\EE[L]=\frac{16}{3},\qquad \mathrm{Var}(L)=\frac{200}{9}.
+\]
+\end{corollary}
+\begin{proof}
+令 \(T:=\min\{n\ge0:\text{在 }R_n\text{ 处输出 }1\}\)，则 \(L=T+1\)。
+由乘法公式
+\[
+\PP(T=n)=\alpha_n\prod_{k=0}^{n-1}(1-\alpha_k),
+\qquad
+\PP(T\ge n)=\prod_{k=0}^{n-1}(1-\alpha_k),
+\]
+并用 \(\alpha_n=\frac{F_{n+2}}{2F_{n+4}}\) 及望远镜积
+\(
+\prod_{k=0}^{n-1}(1-\alpha_k)=\frac{F_{n+4}}{3\cdot 2^n}
+\)
+得到两条分布闭式。
+母函数由恒等式 \(\sum_{n\ge0}F_{n+2}x^n=\frac{1+x}{1-x-x^2}\) 在 \(x=z/2\) 处代入得到。
+矩可由母函数求导或由尾和公式 \(\EE[L]=\sum_{n\ge0}\PP(L\ge n+1)\) 得到；二阶矩同理由母函数二阶导数闭式化得到 \(\mathrm{Var}(L)=200/9\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[Markov 阶无限与 \texorpdfstring{$\varepsilon$}{ε}-机可数无限]\label{thm:fold-gauge-anomaly-epsilon-machine-infinite-markov-order}
+输出过程 \((g_t)\) 不是任何有限阶 \(k\) 的 Markov 链；等价地，其最小 Markov 阶为 \(\infty\)。
+并且其 \(\varepsilon\)-机具有可数无限个状态 \(\{R_n\}_{n\ge0}\)（因此严格超出任意有限状态 Markov 近似）。
+\end{theorem}
+\begin{proof}
+固定任意 \(k\in\NN\)，考虑两段具正概率的历史前缀
+\[
+h_k:=00111\,0^{k+1},\qquad h_k':=00111\,0^{k+2}.
+\]
+由定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-synchronizing-word}，\(001\) 同步到 \(B\)，随后必经 \(B\xrightarrow{1}C\)，并以正概率 \(C\xrightarrow{1}A\)；
+故前缀 \(00111\) 保证处于 \(A\)，继而 \(0^{k+1}\) 与 \(0^{k+2}\) 分别把预测态推进到 \(R_k\) 与 \(R_{k+1}\)。
+因此
+\[
+\PP(g_{t+1}=1\mid \mathrm{past}=h_k)=\alpha_k,\qquad
+\PP(g_{t+1}=1\mid \mathrm{past}=h_k')=\alpha_{k+1},
+\]
+其中 \(\alpha_n=\frac{F_{n+2}}{2F_{n+4}}\)（定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius}），故两者不相等。
+另一方面，\(h_k\) 与 \(h_k'\) 的最后 \(k\) 个输出符号均为 \(0^k\)。
+若 \((g_t)\) 为 \(k\) 阶 Markov，则上述两条件概率应相等，矛盾。
+故 Markov 阶为 \(\infty\)。
+\par
+此外，\(\{R_n\}\) 给出不同的一步预测分布 \(\PP(g_{t+1}=1\mid R_n)=\alpha_n\)，且 \(\alpha_n\) 随 \(n\) 变化严格互异，因此这些预测态不可合并，故 \(\varepsilon\)-机状态数可数无限。
+证毕。
+\end{proof}
+
+\begin{proposition}[熵率与统计复杂度的显式级数]\label{prop:fold-gauge-anomaly-epsilon-machine-entropy-rate-complexity}
+令二元熵函数 \(H_2(p):=-p\log_2 p-(1-p)\log_2(1-p)\)。
+则熵率存在并由 \(\varepsilon\)-机平稳分布给出绝对收敛级数：
+\[
+h_\mu
+=\frac{2}{9}\,H_2\!\Bigl(\frac12\Bigr)
+\;+\;\frac{1}{9}\,H_2\!\Bigl(\frac14\Bigr)
+\;+\;\sum_{n\ge0}\frac{F_{n+4}}{36\cdot 2^n}\,
+H_2\!\Bigl(\frac{F_{n+2}}{2F_{n+4}}\Bigr),
+\]
+其中第一项来自状态 \(C\)、第二项来自状态 \(A\)，无穷和来自 \(\{R_n\}_{n\ge0}\)，而状态 \(B\) 因确定输出 \(1\) 不贡献熵。
+该级数以比率 \((\varphi/2)^n\) 指数收敛，数值上
+\[
+h_\mu\approx 0.6215495141\ \text{bits/step}.
+\]
+此外，统计复杂度
+\(
+C_\mu:=-\sum_{s\in\mathcal S}\pi(s)\log_2\pi(s)
+\)
+有限，并由 \(\pi(B)=\pi(C)=2/9\)、\(\pi(A)=1/9\)、\(\pi(R_n)=F_{n+4}/(36\cdot2^n)\) 给出显式收敛级数。
+\end{proposition}
+\begin{proof}
+由于 \(\varepsilon\)-机为 unifilar，熵率满足
+\(
+h_\mu=\sum_{s\in\mathcal S}\pi(s)\,H_2(\PP(g_{t+1}=1\mid s))
+\)。
+由定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-synchronizing-word} 的转移结构与定理 \ref{thm:fold-gauge-anomaly-epsilon-machine-fibonacci-mobius} 的 \(\alpha_n\) 得到所示表达式。
+收敛性由 \(F_{n+4}\sim \varphi^n/\sqrt5\) 推出 \(\pi(R_n)=O((\varphi/2)^n)\) 并结合 \(H_2\) 有界得到；\(C_\mu\) 的有限性同理由 \(\pi(R_n)=O((\varphi/2)^n)\) 与 \(|\log\pi(R_n)|=O(n)\) 得出。
+证毕。
+\end{proof}
+
+\begin{theorem}[零段条件律的 Fibonacci 闭式与同步收缩]\label{thm:fold-gauge-anomaly-zero-run-fibonacci}
+在上述均匀基线下，对任意整数 \(n\ge 2\) 成立
+\[
+\PP\!\bigl(g_{t+1}=1\mid g_{t-n+1}\cdots g_t=0^n\bigr)
+=\frac{F_{n+3}}{2F_{n+5}}.
+\]
+并且该条件概率收敛到极限
+\[
+\lim_{n\to\infty}\PP(g_{t+1}=1\mid 0^n)=\frac{1}{2\varphi^2}=\frac{3-\sqrt5}{4},
+\]
+且振荡误差满足上界
+\[
+\Bigl|\PP(g_{t+1}=1\mid 0^n)-\frac{3-\sqrt5}{4}\Bigr|
+<\frac{1}{2F_{n+5}F_{n+6}}
+\qquad(n\ge 2).
+\]
+\end{theorem}
+\begin{proof}
+在 \(p=\tfrac12\) 时，由 \eqref{eq:fold-gauge-anomaly-bernoulli-p-transition} 得到四态链的转移矩阵
+\[
+P=
+\begin{pmatrix}
+\frac12&\frac14&0&\frac14\\
+0&0&1&0\\
+\frac12&\frac12&0&0\\
+1&0&0&0
+\end{pmatrix},
+\qquad
+\pi=\Bigl(\frac49,\frac29,\frac29,\frac19\Bigr),
+\]
+其中 \(\pi\) 为平稳分布（定理 \ref{thm:fold-gauge-anomaly-bernoulli-p-laws} 的闭式在 \(p=\tfrac12\) 的特化）。
+\par
+由 \eqref{eq:fold-gauge-anomaly-bernoulli-p-edge-potential}，事件 \(g_t=0\) 等价于一步转移不在三条失配边
+\(
+a\to b,\ b\to c,\ c\to a
+\)
+之中；因此在该链上 \(g=0\) 的允许边恰为
+\[
+a\to a,\ a\to d,\ c\to b,\ d\to a.
+\]
+由此可见：若 \(g_{t-1}g_t=00\)，则第二步必须从 \(S_{t-1}\) 走一条 \(0\)-边，而状态 \(b\) 无 \(0\)-出边，故 \(S_{t-1}\neq b\)；
+又因 \(c\) 无 \(0\)-入边（即上式无任何 \(0\)-边以 \(c\) 为终点），结合 \(g_t=0\) 可得
+\[
+\PP(S_t\in\{a,d\}\mid g_{t-1}g_t=00)=1.
+\]
+从而对一切 \(n\ge 2\)，在条件 \(g_{t-n+1}\cdots g_t=0^n\) 下亦有 \(\PP(S_t\in\{a,d\}\mid 0^n)=1\)。
+\par
+记
+\[
+p_n:=\PP(S_t=a\mid g_{t-n+1}\cdots g_t=0^n)\qquad(n\ge 2).
+\]
+由于在集合 \(\{a,d\}\) 上仅 \(a\) 能以概率 \(P_{ab}=\tfrac14\) 产生下一位 \(g_{t+1}=1\)，从而
+\[
+\PP(g_{t+1}=1\mid 0^n)=\frac{p_n}{4}.
+\]
+另一方面，在后验分布 \((p,1-p)\)（对应 \(\{a,d\}\)）下观测到下一位为 \(0\) 的 Bayes 更新为
+\[
+p\longmapsto f(p)
+:=\frac{p\cdot P(a\to a)+(1-p)\cdot P(d\to a)}{p\cdot \PP(g_{t+1}=0\mid S_t=a)+(1-p)\cdot \PP(g_{t+1}=0\mid S_t=d)}
+=\frac{p\cdot\frac12+(1-p)\cdot 1}{p\cdot\frac34+(1-p)\cdot 1}
+=\frac{4-2p}{4-p},
+\]
+从而 \(p_{n+1}=f(p_n)\)（\(n\ge 2\)）。
+由平稳分布与两步滤波直接计算得到初值 \(p_2=\frac{10}{13}\)。
+\par
+断言
+\[
+p_n=\frac{2F_{n+3}}{F_{n+5}}\qquad(n\ge 2)
+\]
+可由归纳法验证：基例 \(n=2\) 成立；
+若对某个 \(n\ge 2\) 成立，则
+\[
+p_{n+1}=f(p_n)=\frac{4-2p_n}{4-p_n}
+=\frac{4-\frac{4F_{n+3}}{F_{n+5}}}{4-\frac{2F_{n+3}}{F_{n+5}}}
+=\frac{2F_{n+4}}{F_{n+6}}
+\]
+（其中用到 \(F_{n+5}-F_{n+3}=F_{n+4}\)、\(2F_{n+4}+F_{n+3}=F_{n+6}\)），得到归纳步。
+于是
+\[
+\PP(g_{t+1}=1\mid 0^n)=\frac{p_n}{4}=\frac{F_{n+3}}{2F_{n+5}}.
+\]
+极限由 \(F_{n+3}/F_{n+5}\to\varphi^{-2}\) 给出。
+误差界来自 Fibonacci 连分数收敛子的标准估计：\(\frac{F_{n+3}}{F_{n+5}}\) 为 \(\varphi^{-2}\) 的交错有界逼近且满足
+\(
+\bigl|\frac{F_{n+3}}{F_{n+5}}-\varphi^{-2}\bigr|<\frac{1}{F_{n+5}F_{n+6}}
+\)；
+两边乘以 \(\tfrac12\) 即得所示上界。证毕。
+\end{proof}
+
+\begin{theorem}[有限型支撑下的无限 Markov 阶：可计算的不可截断记忆]\label{thm:fold-gauge-anomaly-strictly-sofic-infinite-memory}
+在定理 \ref{thm:fold-gauge-anomaly-zero-run-fibonacci} 的设定下，对任意整数 \(n\ge 2\) 成立
+\[
+\PP\!\bigl(g_{t+1}=1\mid g_{t-n}\cdots g_t=10^n\bigr)=\frac{F_{n+1}}{2F_{n+3}}.
+\]
+并且对任意 \(k\ge 1\)，过程 \((g_t)_{t\in\ZZ}\) 不可能是 \(k\) 阶 Markov 链。
+更强地，对任意 \(n\ge \max\{2,k\}\)，两段共享同一长度 \(k\) 后缀的历史 \(0^n\) 与 \(10^n\) 给出严格不同的下一位条件律，且差值具有闭式：
+\[
+\PP(g_{t+1}=1\mid 10^n)-\PP(g_{t+1}=1\mid 0^n)
+=\frac{(-1)^n}{2F_{n+3}F_{n+5}}\neq 0.
+\]
+\end{theorem}
+\begin{proof}
+对 \(n\ge 2\)，历史 \(10^n\) 仍以 \(00\) 结尾，因而同样将 \(S_t\) 同步到 \(\{a,d\}\)，并在零段内部满足同一 Möbius 更新 \(p\mapsto f(p)=\frac{4-2p}{4-p}\)。
+令
+\[
+p^{(1)}_n:=\PP(S_t=a\mid g_{t-n}\cdots g_t=10^n)\qquad(n\ge 2),
+\]
+则对 \(n\ge 2\) 有 \(\PP(g_{t+1}=1\mid 10^n)=p^{(1)}_n/4\) 且 \(p^{(1)}_{n+1}=f(p^{(1)}_n)\)。
+只需确定初值：当 \(n=2\) 时 \(10^n=100\)，直接由平稳链计算得 \(\PP(g_{t+1}=1\mid 100)=\frac15\)，从而 \(p^{(1)}_2=\frac45\)。
+\par
+由归纳法可得
+\[
+p^{(1)}_n=\frac{2F_{n+1}}{F_{n+3}}\qquad(n\ge 2),
+\]
+因而
+\(
+\PP(g_{t+1}=1\mid 10^n)=\frac{F_{n+1}}{2F_{n+3}}
+\)。
+\par
+其次，Fibonacci 的广义 Cassini 恒等式给出
+\[
+F_{n+1}F_{n+5}-F_{n+3}^2 = (-1)^n,
+\]
+从而差值闭式成立：
+\[
+\frac{F_{n+1}}{2F_{n+3}}-\frac{F_{n+3}}{2F_{n+5}}
+=\frac{F_{n+1}F_{n+5}-F_{n+3}^2}{2F_{n+3}F_{n+5}}
+=\frac{(-1)^n}{2F_{n+3}F_{n+5}}.
+\]
+最后，若 \((g_t)\) 为某个有限阶 \(k\) 的 Markov 链，则任意两段历史只要共享长度 \(k\) 的末尾块，其下一位条件分布必相同。
+取任意 \(n\ge k\)，则 \(0^n\) 与 \(10^n\) 共享后缀 \(0^k\)，但其下一位取值 \(1\) 的条件概率差值严格非零，矛盾。
+因此不存在有限 \(k\) 使 \((g_t)\) 成为 \(k\) 阶 Markov。
+由于 \((g_t)\) 为有限状态链在边标号下的输出过程，其支撑由定理 \ref{thm:fold-gauge-anomaly-g-support-sofic} 给出为有限型子移位，上述结论可视为“有限型支撑 + 无限记忆核”的可计算证书。证毕。
+\end{proof}
+
+\begin{theorem}[规范异常场支撑的有限型刻画与拓扑不变量]\label{thm:fold-gauge-anomaly-g-support-sofic}
+设 \((X_t,Y_t)_{t\in\ZZ}\) 为定理 \ref{thm:fold-gauge-anomaly-bernoulli-p-laws} 在 \(p=\tfrac12\) 下的四状态联合过程，并记
+\[
+g_t:=\mathbf 1_{\{X_t\neq Y_t\}}\in\{0,1\}.
+\]
+在边势定义 \eqref{eq:fold-gauge-anomaly-bernoulli-p-edge-potential} 的标记图口径下，\(g_t=1\) 恰对应三条边
+\(
+a\to b,\ b\to c,\ c\to a
+\)，其余可达边均标记为 \(0\)。
+
+定义
+\[
+\Sigma_g:=\Bigl\{\mathbf g\in\{0,1\}^{\ZZ}:\ 
+\text{任意长度 \(4\) 子块均不等于 }0010\text{ 或 }0100\Bigr\}.
+\]
+则 \(g\) 的拓扑支撑满足
+\[
+\operatorname{supp}(g)=\Sigma_g.
+\]
+并且
+\[
+h_{\mathrm{top}}(\Sigma_g)=\log\lambda,
+\quad
+\lambda>1\ \text{为}\ x^5-x^4-x^3-x-1=0\ \text{的 Perron 实根},
+\]
+其 Artin--Mazur \(\zeta\) 函数为
+\[
+\zeta_{\Sigma_g}(z)=\frac{1}{\det(I-zA)}
+=\frac{1}{(1-z)(1-z-z^2-z^4-z^5)},
+\]
+其中 \(A\) 为以 \(\{0,1\}^3\) 为顶点、由允许长度 \(4\) 块诱导的三步 de Bruijn 呈示邻接矩阵。
+\end{theorem}
+\begin{proof}
+\textbf{必要性。}
+由边标记结构，\(1\) 仅可出现在三条三环边上；
+并且从 \(b\) 的唯一出边为 \(b\to c\)（标记 \(1\)），从 \(d\) 的唯一出边为 \(d\to a\)（标记 \(0\)）。
+对长度 \(4\) 局部块做穷尽可达性分析可得：模式 \(0010\) 与 \(0100\) 均与上述局部转移约束矛盾，故不可实现。
+于是 \(\operatorname{supp}(g)\subseteq\Sigma_g\)。
+
+\textbf{充分性。}
+对四状态标记图施行标准确定化（子集构造）并去除瞬态状态，得到一个 \(8\) 状态再返呈示；
+该呈示与长度 \(3\) 二元块集合 \(\{0,1\}^3\) 一一对应，且允许长度 \(4\) 块恰为
+\[
+\{0,1\}^4\setminus\{0010,0100\}.
+\]
+因此任意不含禁块 \(0010,0100\) 的双边序列都可在该确定型呈示上实现。
+由确定化前后语言等价性，原四状态标记图亦可实现该序列，故
+\(\Sigma_g\subseteq\operatorname{supp}(g)\)。
+综上 \(\operatorname{supp}(g)=\Sigma_g\)。
+
+\textbf{熵与 \(\zeta\) 函数。}
+由三步 de Bruijn 呈示邻接矩阵 \(A\) 的特征多项式分解
+\[
+\chi_A(x)=x^2(x-1)\bigl(x^5-x^4-x^3-x-1\bigr),
+\]
+其 Perron 根即上述 \(\lambda\)，故
+\(
+h_{\mathrm{top}}(\Sigma_g)=\log\lambda
+\)。
+对 SFT 有标准公式
+\(
+\zeta_{\Sigma_g}(z)=1/\det(I-zA)
+\)，直接计算得
+\[
+\det(I-zA)=(1-z)(1-z-z^2-z^4-z^5).
+\]
+命题成立。
+\end{proof}
+
+\begin{theorem}[再生分解与周期内异常数的显式母函数]\label{thm:fold-gauge-anomaly-regeneration-pgf}
+在同一四状态链中，状态 \(d\) 满足 \(d\to a\) 为确定转移，且进入 \(d\) 的唯一方式为 \(a\to d\)（该边标记 \(0\)）。
+令 \((\tau_k)_{k\ge0}\) 为 \(d\) 的相继到达时刻，并定义块
+\[
+B_k:=(g_{\tau_k},g_{\tau_k+1},\dots,g_{\tau_{k+1}-1}).
+\]
+则 \((B_k)_{k\ge0}\) 构成独立同分布再生块。
+记
+\[
+L:=\tau_{k+1}-\tau_k,\qquad
+S:=\sum_{t=\tau_k}^{\tau_{k+1}-1}g_t.
+\]
+则二元概率母函数为
+\[
+\EE[u^S z^L]
+=\frac{u z^{4}-2 z^{2}}{u^{3}z^{3}-2u z^{3}+4u z^{2}+4z-8},
+\qquad (|z|\ \text{充分小}).
+\]
+特别地，
+\[
+\EE[u^S]=\frac{u-2}{u^3+2u-4},
+\]
+并且
+\[
+\PP(S=1)=\PP(S=2)=0,
+\]
+且对 \(k\ge3\) 存在整数序列 \((a_k)\) 使
+\[
+\PP(S=k)=\frac{a_k}{2^k},\qquad
+a_3=a_4=a_5=1,\quad
+a_k=a_{k-1}+2a_{k-3}\ (k\ge6).
+\]
+\end{theorem}
+\begin{proof}
+\textbf{再生性。}
+由 \(d\to a\) 的确定性与 \(a\to d\) 的唯一入射结构，\(d\) 为再生状态；
+Markov 性立即给出 \((B_k)\) 独立同分布。
+
+\textbf{母函数。}
+从 \(d\) 出发第一步必为 \(d\to a\)，贡献一因子 \(z\)（长度加 \(1\)，异常计数加 \(0\)）。
+令 \(F_s(u,z)\) 表示从 \(s\in\{a,b,c\}\) 出发直到首次到达 \(d\)（含吸收步）的 \(\EE[u^S z^L]\)。
+由边标记与转移概率，得到线性系统
+\[
+\begin{aligned}
+F_a&=\tfrac14 z+\tfrac12 z F_a+\tfrac14 z\,u\,F_b,\\
+F_b&=z\,u\,F_c,\\
+F_c&=\tfrac12 z\,u\,F_a+\tfrac12 z\,F_b.
+\end{aligned}
+\]
+解得
+\[
+F_a(u,z)=\frac{u z^3-2z}{u^3 z^3-2u z^3+4u z^2+4z-8}.
+\]
+故
+\[
+\EE[u^S z^L]=zF_a(u,z)
+=\frac{u z^{4}-2 z^{2}}{u^{3}z^{3}-2u z^{3}+4u z^{2}+4z-8}.
+\]
+取 \(z=1\) 得 \(\EE[u^S]=(u-2)/(u^3+2u-4)\)。
+
+\textbf{系数递推。}
+写
+\(
+\EE[u^S]=\sum_{k\ge0}p_k u^k
+\)。
+由
+\[
+(u^3+2u-4)\sum_{k\ge0}p_k u^k=u-2
+\]
+比较系数可得
+\[
+p_0=\tfrac12,\qquad p_1=p_2=0,\qquad
+p_k=\tfrac12 p_{k-1}+\tfrac14 p_{k-3}\ (k\ge3).
+\]
+令 \(p_k=a_k/2^k\)（\(k\ge3\)），即得
+\[
+a_3=a_4=a_5=1,\qquad a_k=a_{k-1}+2a_{k-3}\ (k\ge6).
+\]
+命题成立。
+\end{proof}
+
+\begin{proposition}[柱事件 \(1^n\) 的三周期精确律]\label{prop:fold-gauge-anomaly-one-block-three-period-law}
+在同一设定下，记柱事件概率
+\[
+p_n:=\PP(g_{t+1}\cdots g_{t+n}=1^n)\qquad(n\ge 1).
+\]
+则对任意整数 \(m\ge 0\) 成立
+\[
+p_{3m+1}=\frac{4}{9\cdot 8^{m}},\qquad
+p_{3m+2}=\frac{1}{4\cdot 8^{m}},\qquad
+p_{3m}=\frac{1}{9\cdot 8^{m-1}}\ (m\ge 1).
+\]
+因此下一位条件概率呈严格三周期：
+\[
+\PP(g_{t+1}=1\mid 1^{3m})=\frac12,\quad
+\PP(g_{t+1}=1\mid 1^{3m+1})=\frac{9}{16},\quad
+\PP(g_{t+1}=1\mid 1^{3m+2})=\frac{4}{9}.
+\]
+\end{proposition}
+\begin{proof}
+在 \eqref{eq:fold-gauge-anomaly-bernoulli-p-edge-potential} 的标号下，标号为 \(1\) 的边强迫隐藏态沿三环
+\(
+a\to b\to c\to a
+\)
+运动；并且对应转移概率分别为 \(\frac14,1,\frac12\)，三步一圈的乘积为 \(\frac18\)。
+因此对任意 \(m\ge 0\)，在事件 \(1^{3m}\) 下隐藏态回到同一顶点并额外带来权重因子 \(8^{-m}\)。
+再由平稳分布 \(\pi_a+\pi_b+\pi_c=\frac89\) 与
+\(
+p_1=\PP(g_{t+1}=1)=g_\ast=\frac49
+\)
+及
+\(
+p_2=\PP(g_{t+1}g_{t+2}=11)=\frac14
+\)
+（直接由 \(\pi\) 与 \(P\) 计算），即可得到三条闭式；条件概率由比值 \(p_{n+1}/p_n\) 立得。证毕。
+\end{proof}
+
+\begin{conjecture}[金属平均 Ostrowski 家族中的 continuant 支配律]\label{conj:fold-gauge-anomaly-metallic-continuant-law}
+设 \(\alpha_A=[0;A,A,A,\dots]\) 为常数型连分数（\(A\in\NN_{\ge 1}\)），并假设相应的“取规范形”过程可由某个同步、确定性的有限状态转导器实现（Fibonacci 情形可参见 \cite{ITA_2001__35_6_491_0,LabbeLepsova2023FibonacciTwosComplement} 的 Berstel 加法器与不歧义换能器接口）。
+令 \((g^{(A)}_t)_{t\in\ZZ}\) 为相应的规范差异（mismatch）指示过程。
+\par
+记 continuant（广义 Fibonacci）序列 \((K^{(A)}_n)_{n\ge 0}\) 由
+\[
+K^{(A)}_0=0,\quad K^{(A)}_1=1,\quad K^{(A)}_{n+2}=A K^{(A)}_{n+1}+K^{(A)}_{n}
+\]
+定义。
+则存在有限阈值 \(n_0(A)\) 使得对一切 \(n\ge n_0(A)\) 成立闭式条件律
+\[
+\PP\!\bigl(g^{(A)}_{t+1}=1\mid 0^n\bigr)=\frac{K^{(A)}_{n+3}}{2K^{(A)}_{n+5}}.
+\]
+并且对任意 \(k\ge 1\)，过程 \((g^{(A)}_t)\) 不可能是 \(k\) 阶 Markov；其不可截断记忆差值应由 \(K^{(A)}\) 的广义 Cassini 型行列式恒等式给出显式闭式（在 \(A=1\) 时退化为定理 \ref{thm:fold-gauge-anomaly-strictly-sofic-infinite-memory} 的 Fibonacci 公式）。
+\end{conjecture}
+
+\endinput
+

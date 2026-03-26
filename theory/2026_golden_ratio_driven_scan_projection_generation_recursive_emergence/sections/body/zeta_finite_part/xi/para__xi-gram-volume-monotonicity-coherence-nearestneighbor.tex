@@ -1,0 +1,102 @@
+% (User input window)
+%
+% 本文件把 Gram 行列式体积解释推进到“观测收缩/相干能量/最近邻封口”三条可审计律。
+
+\begin{proposition}[线性观测的体积单调律：Gram--det 熵在收缩算子下严格增大]\label{prop:xi-gram-det-entropy-monotone-under-contraction}
+设 \(H\) 为复 Hilbert 空间，\(\psi_1,\dots,\psi_\kappa\in H\) 线性无关，记 Gram 矩阵
+\[
+G=(\langle\psi_i,\psi_j\rangle)_{1\le i,j\le\kappa}\succ0,
+\qquad
+S:=-\log\det G.
+\]
+对任意有界线性算子 \(T:H\to H\) 满足 \(T^\ast T\preceq I\)，令
+\[
+G_T:=(\langle T\psi_i,T\psi_j\rangle)_{1\le i,j\le\kappa}.
+\]
+则有
+\[
+\boxed{\;
+0\prec G_T\preceq G,\qquad
+\det G_T\le \det G,\qquad
+S_T:=-\log\det G_T\ge S.\;}
+\]
+并且等号成立当且仅当 \(T\) 在子空间 \(\mathrm{span}\{\psi_1,\dots,\psi_\kappa\}\) 上为等距同构（等价于 \(T^\ast T=I\) 在该子空间上的限制）。
+因此“带宽截断/噪声平滑/子空间投影”等任何线性收缩观测都统一受制于一条严格的体积不可逆律。
+\end{proposition}
+\begin{proof}
+对任意 \(c=(c_1,\dots,c_\kappa)\in\CC^\kappa\)，置 \(v=\sum_{j=1}^\kappa c_j\psi_j\)。
+则
+\[
+c^\ast G_T c=\|Tv\|^2\le \|v\|^2=c^\ast G c,
+\]
+故 \(G_T\preceq G\)，且因 \(\{\psi_j\}\) 线性无关得 \(G_T\succ0\)。
+由 Loewner 序下特征值单调性（从而行列式单调性）得到 \(\det G_T\le \det G\)，于是 \(S_T\ge S\)。
+若 \(\det G_T=\det G\)，则 \(G_T\preceq G\) 且行列式相等迫使 \(G_T=G\)，从而 \(\|Tv\|=\|v\|\) 对所有 \(v\in\mathrm{span}\{\psi_j\}\) 成立，即 \(T\) 在该子空间上为等距同构。证毕。
+\end{proof}
+
+\begin{proposition}[相干能量下界：体积熵由平方相干强制]\label{prop:xi-gram-entropy-lower-bound-by-coherence}
+沿用命题 \ref{prop:xi-gram-det-entropy-monotone-under-contraction} 的记号，并进一步假设 \(\|\psi_j\|=1\)（\(1\le j\le\kappa\)）。
+于是 \(G=I+E\) 且 \(E\) Hermitian、\(\mathrm{diag}(E)=0\)。
+则有严格下界
+\[
+\boxed{\;
+S=-\log\det(I+E)\ \ge\ \frac{\|E\|_{\mathrm F}^{2}}{2\,(1+\|E\|_{2})}\;}
+\]
+其中 \(\|E\|_{\mathrm F}^{2}=\sum_{i\neq j}|\langle\psi_i,\psi_j\rangle|^2\)、\(\|E\|_2\) 为谱范数。
+特别地，当 \(\|E\|_2=o(1)\) 时，
+\[
+S=\frac12\sum_{i\neq j}|\langle\psi_i,\psi_j\rangle|^2+o\!\Bigl(\sum_{i\neq j}|\langle\psi_i,\psi_j\rangle|^2\Bigr),
+\]
+从而体积熵在“弱相干相”中由二体平方相干完全主导。
+\end{proposition}
+\begin{proof}[证明要点]
+令 \(\{\lambda_r\}_{r=1}^\kappa\) 为 \(E\) 的实特征值，则 \(\lambda_r>-1\)（因 \(I+E\succ0\)），且 \(\sum_r\lambda_r=\mathrm{tr}(E)=0\)。
+因此
+\[
+S=-\sum_{r=1}^\kappa\log(1+\lambda_r)=\sum_{r=1}^\kappa\bigl(\lambda_r-\log(1+\lambda_r)\bigr).
+\]
+对任意 \(x>-1\) 有标量不等式
+\[
+x-\log(1+x)\ge \frac{x^2}{2(1+|x|)}\ge \frac{x^2}{2(1+\|E\|_2)}.
+\]
+求和并用 \(\sum_r\lambda_r^2=\|E\|_{\mathrm F}^2\) 得所示下界。
+弱相干展开由矩阵对数级数
+\(
+\log\det(I+E)=\mathrm{tr}(E)-\frac12\mathrm{tr}(E^2)+O(\|E\|_2\|E\|_{\mathrm F}^2)
+\)
+与 \(\mathrm{tr}(E)=0\) 得到。证毕。
+\end{proof}
+
+\begin{proposition}[最近邻乘积上界：体积熵由相邻二体退化严格封口]\label{prop:xi-gram-det-nearest-neighbor-product-upper-bound}
+设 \(\psi_1,\dots,\psi_\kappa\in H\) 满足 \(\|\psi_j\|=1\)，其 Gram 矩阵为 \(G=(\langle\psi_i,\psi_j\rangle)\)。
+则有严格不等式
+\[
+\boxed{\;
+\det G\ \le\ \prod_{j=1}^{\kappa-1}\bigl(1-|\langle\psi_{j+1},\psi_j\rangle|^2\bigr)\;}
+\qquad
+\Longrightarrow\qquad
+S=-\log\det G\ \ge\ \sum_{j=1}^{\kappa-1}-\log\bigl(1-|\langle\psi_{j+1},\psi_j\rangle|^2\bigr).
+\]
+在本文的 Hellinger--RKHS 设定下取 \(\psi_j=k_{s_j}\) 且 \(s_1<\cdots<s_\kappa\)，则 \(|\langle\psi_{j+1},\psi_j\rangle|=A(\Delta_j)\)（\(\Delta_j=s_{j+1}-s_j\)），从而体积熵势在相邻间隔上被一维最近邻账本严格封口；任一间隔塌缩（\(A(\Delta_j)\uparrow 1\)）即强制右端对数发散，给出簇化病态的最小可审计证书。
+\end{proposition}
+\begin{proof}
+将 \(\{\psi_j\}\) 依次作 Gram--Schmidt 正交化：令
+\(
+v_1:=\psi_1
+\)，以及对 \(j\ge 2\),
+\(
+v_j:=\psi_j-\mathrm{Proj}_{\mathrm{span}\{\psi_1,\dots,\psi_{j-1}\}}\psi_j
+\)。
+则 Gram 行列式的体积解释给出
+\[
+\det G=\prod_{j=1}^{\kappa}\|v_j\|^2.
+\]
+并且对 \(j\ge 2\),
+\[
+\|v_j\|^2=1-\bigl\|\mathrm{Proj}_{\mathrm{span}\{\psi_1,\dots,\psi_{j-1}\}}\psi_j\bigr\|^2
+\le 1-|\langle\psi_j,\psi_{j-1}\rangle|^2,
+\]
+因为投影到 \(\mathrm{span}\{\psi_1,\dots,\psi_{j-1}\}\) 的范数至少不小于沿单位向量 \(\psi_{j-1}\) 的分量。
+相乘即得所示不等式；取负对数得到熵下界。证毕。
+\end{proof}
+

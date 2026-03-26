@@ -1,0 +1,74 @@
+\begin{theorem}[停机时间的外置预算刻画：可逆化最小预算精确等于运行步数]\label{thm:conclusion-halting-time-external-budget-exact}
+固定确定性图灵机 \(M\) 与输入 \(x\)，记首次停机时间
+\[
+T(M,x)\in\NN\cup\{\infty\},
+\]
+其中 \(T(M,x)=\infty\) 表示不停机。
+则存在一全定义可计算映射 \(\pi^{\mathrm{time}}_{M,x}:\Omega\to X\)，满足 \(D(\pi^{\mathrm{time}}_{M,x})<\infty\)，并且其最小外置预算（定理 \ref{thm:conclusion-minimal-external-budget-undecidable}）满足
+\[
+b\!\left(\pi^{\mathrm{time}}_{M,x}\right)=
+\begin{cases}
+1,& T(M,x)=\infty,\\[2pt]
+T(M,x)+1,& T(M,x)<\infty.
+\end{cases}
+\]
+\end{theorem}
+\begin{proof}
+取
+\[
+\Omega:=\{(t,i)\in\NN\times\NN:\ 0\le i\le t\},
+\qquad
+X:=(\{0\}\times\NN)\ \sqcup\ (\{1\}\times\Omega),
+\]
+并定义
+\[
+\pi^{\mathrm{time}}_{M,x}(t,i):=
+\begin{cases}
+(0,t),& \text{若 \(M(x)\) 恰在第 \(t\) 步停机},\\
+(1,(t,i)),& \text{否则}.
+\end{cases}
+\]
+对给定 \((t,i)\)，谓词“\(M(x)\) 恰在第 \(t\) 步停机”可由对 \(M(x)\) 的有限步模拟判定，故 \(\pi^{\mathrm{time}}_{M,x}\) 为全定义可计算映射。
+\par
+若 \(T(M,x)=\infty\)，则第一分支永不触发，且 \((t,i)\mapsto (1,(t,i))\) 为单射，故 \(D(\pi^{\mathrm{time}}_{M,x})=1\)。
+若 \(T(M,x)=T<\infty\)，则恰有
+\(
+\pi^{\mathrm{time}}_{M,x}(T,i)=(0,T)
+\)
+对 \(i=0,1,\dots,T\) 成立，从而纤维 \(\bigl(\pi^{\mathrm{time}}_{M,x}\bigr)^{-1}(0,T)\) 基数为 \(T+1\)；
+而其余输出均来自第二分支并保持单射性，故 \(D(\pi^{\mathrm{time}}_{M,x})=T+1\)。
+\par
+由定理 \ref{thm:conclusion-minimal-external-budget-undecidable} 的恒等式 \(b(\pi)=D(\pi)\)（有限纤维上界类），即得所示预算刻画。证毕。
+\end{proof}
+
+\begin{corollary}[有界素数寄存器轴数的停机下界]\label{cor:conclusion-halting-time-prime-register-axis-lower-bound}
+固定整数 \(E\ge 1\)。
+若存在单射外置
+\[
+\iota:\Omega\hookrightarrow X\times\mathcal P_{k,E},
+\qquad
+\operatorname{pr}_X\circ\iota=\pi^{\mathrm{time}}_{M,x},
+\]
+则必有
+\[
+(E+1)^k\ \ge\ b\!\left(\pi^{\mathrm{time}}_{M,x}\right).
+\]
+特别地，当 \(T(M,x)=T<\infty\) 时
+\[
+k\ \ge\ \Bigl\lceil \log_{E+1}(T+1)\Bigr\rceil,
+\]
+而当 \(T(M,x)=\infty\) 时仅需 \(k\ge 0\)。
+\end{corollary}
+\begin{proof}
+由定义 \ref{def:conclusion-truncated-prime-register} 有 \(|\mathcal P_{k,E}|=(E+1)^k\)。
+对任意 \(y\in X\)，\(\iota\) 在纤维 \(\bigl(\pi^{\mathrm{time}}_{M,x}\bigr)^{-1}(y)\) 上诱导单射到 \(\mathcal P_{k,E}\)，故
+\[
+\#\bigl(\pi^{\mathrm{time}}_{M,x}\bigr)^{-1}(y)\le (E+1)^k.
+\]
+取 \(y\) 上确界得 \(D(\pi^{\mathrm{time}}_{M,x})\le (E+1)^k\)。
+再由定理 \ref{thm:conclusion-minimal-external-budget-undecidable} 的恒等式 \(b(\pi)=D(\pi)\) 得 \((E+1)^k\ge b(\pi^{\mathrm{time}}_{M,x})\)。
+最后代入定理 \ref{thm:conclusion-halting-time-external-budget-exact} 的 \(b(\pi^{\mathrm{time}}_{M,x})\) 即得 \(k\) 的下界。证毕。
+\end{proof}
+
+\endinput
+

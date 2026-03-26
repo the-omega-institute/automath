@@ -1,0 +1,185 @@
+% This file is intended to be \input{} from subsubsec__window6_lie_bracket_closure.tex.
+
+\paragraph{Window-\(6\) 续证：6D 超立方体推送交换子包络与兼容闭合的唯一性链}
+本段续接“window-\(6\) 的李括号构造与唯一闭合”的证明链条，并将论证拆分为两段互补但不混同的对象链。
+第一段在 \(6\) 维超立方体 \(Q_6\) 与 dyadic bin-fold 标号 \(F_6\) 的推送口径下，
+给出由有限边计数完全决定的交换子包络，从而把李括号固定为矩阵交换子 \([A,B]=AB-BA\)，并给出可复核的闭合识别证书。
+第二段在 orbit--Levi 分块与阈值轻/重分裂要求同一包络结构兼容闭合时，推出标准模型型 Levi 子结构的强制出现与同构意义唯一性。
+\par
+为便于核验，沿用定义 \ref{def:window6-coordinate-pushforward-lie-envelope} 的符号，并回忆：
+\[
+\Omega_6:=\{0,1\}^6,\qquad
+\mathrm{int}_6(\omega_1\cdots\omega_6):=\sum_{k=1}^{6}\omega_k\,2^{6-k}\in\{0,\dots,63\},
+\qquad
+F_6(\omega):=\mathrm{Fold}^{\mathrm{bin}}_6(\mathrm{int}_6(\omega))\in X_6.
+\]
+对每个坐标方向 \(i\in\{1,\dots,6\}\) 的翻转边 \(\omega\mapsto \omega\oplus e_i\)，推送计数算子 \(L_i\) 由
+\[
+(L_i)_{uv}=\#\{\omega\in\Omega_6:\ F_6(\omega)=u,\ F_6(\omega\oplus e_i)=v\}\qquad (u,v\in X_6)
+\]
+确定，并以交换子作为李括号定义
+\(
+\mathfrak g_6:=\Lie\langle L_1,\dots,L_6\rangle\subset\mathfrak{gl}(V)
+\)。
+
+\begin{theorem}[推送交换子包络的可核验闭合]\label{thm:window6-push-envelope-certificate-upgrade}
+令 \(V=\RR\langle X_6\rangle\) 且 \(|X_6|=21\)。
+对定义 \ref{def:window6-coordinate-pushforward-lie-envelope} 的生成元 \(\{L_i\}_{i=1}^{6}\)，有
+\[
+\mathfrak{k}_6:=\Lie\langle [L_i,L_j]:1\le i<j\le 6\rangle=\mathfrak{so}(V),\qquad
+\dim \mathfrak{k}_6=210,
+\]
+\[
+\mathfrak{g}_6:=\Lie\langle L_1,\dots,L_6\rangle=\mathfrak{sl}(V),\qquad
+\dim \mathfrak{g}_6=440.
+\]
+并且相应维数与结构不变量由
+\eqref{eq:window6_lie_envelope_orthogonal_part_dim}
+和
+\eqref{eq:window6_lie_envelope_invariants}
+给出可复核证书。
+\end{theorem}
+\begin{proof}
+由引理 \ref{lem:window6-li-symmetric}，生成元 \(L_i\) 为对称矩阵，
+因而任意交换子 \([L_i,L_j]\) 为斜对称矩阵并落在 \(\mathfrak{so}(V)\)。
+由引理 \ref{lem:window6-li-traceless}，每个 \(L_i\) 均迹零，故 \(\mathfrak g_6\subseteq\mathfrak{sl}(V)\)。
+\par
+交换子部分 \(\mathfrak{k}_6=\mathfrak{so}(V)\) 由定理 \ref{thm:window6-lie-envelope-so21-from-commutators} 给出；
+全包络部分 \(\mathfrak{g}_6=\mathfrak{sl}(V)\) 由定理 \ref{thm:window6-lie-envelope-sl21} 给出。
+相应维数证书可由模素数闭包核验输出（脚本 \texttt{\detokenize{scripts/exp_window6_lie_envelope_orthogonal_part.py}} 与 \texttt{\detokenize{scripts/exp_window6_lie_envelope.py}}），
+并以 \eqref{eq:window6_lie_envelope_orthogonal_part_dim} 与 \eqref{eq:window6_lie_envelope_invariants} 的形式嵌入正文供离线复核。
+证毕。
+\end{proof}
+
+\begin{remark}[与低秩预期对象的差异定位]\label{rem:window6-conjectural-gap-object-layer}
+定理 \ref{thm:window6-push-envelope-certificate-upgrade} 说明：
+若对象固定为定义 \ref{def:window6-coordinate-pushforward-lie-envelope} 的无约束交换子闭包，
+则其结果是 \(\mathfrak{sl}_{21}\) 的极大包络，而非秩 \(3\)、维数 \(21\) 的低秩简单对象。
+因此，低秩根型结构必须落在以下两类对象中之一：
+\begin{enumerate}
+  \item 内禀括号链（猜想 \ref{conj:window6-intrinsic-bracket-uniqueness}）；
+  \item 在 \(\mathfrak{sl}_{21}\) 内加入可观测压缩/兼容约束后抽取的紧致子对象（猜想 \ref{conj:window6-sm-gauge-as-minimal-compact-observable}）。
+\end{enumerate}
+这一定义层分离与注记 \ref{rem:window6-conj-10170-object-correction} 一致。
+\end{remark}
+
+\begin{remark}[orbit--Levi 与阈值轻/重分裂的兼容闭合强制 SM Levi]\label{rem:window6-orbit-levi-threshold-compatible-closure}
+交换子包络链条给出的是最大闭合背景 \(\mathfrak g_6=\mathfrak{sl}(V)\)，其本身不产生低秩紧致规范对象（命题 \ref{prop:window6-lowrank-needs-observable-compression}）。
+因此，“唯一闭合”的可读紧致子结构必须来自在该最大背景上施加的实现无关兼容约束。
+\par
+在 window-\(6\) 的离散审计口径下，orbit--Levi 分块 \(21=15\oplus 3\oplus 3\) 与阈值轻/重分裂 \(X_6=1\oplus 8\oplus 12\) 为两条彼此独立的分解接口。
+当要求二者在同一连续包络/可观测语义下同时出现并兼容闭合，且轻扇区 \(1\oplus 8\) 在 \(15\) 维块内闭合时，
+命题 \ref{prop:window6-common-refinement-sm-levi} 强制给出 SM 型 Levi 子结构
+\(
+\mathfrak{su}(3)\oplus\mathfrak{su}(2)_L\oplus\mathfrak u(1)
+\)
+的出现与同构意义唯一性。
+进一步的 \(\mathfrak u(1)\) 方向刚性可由 \(\mathfrak{su}(4)\supset \mathfrak{su}(3)\oplus\mathfrak u(1)\) 的嵌入共轭唯一性（推论 \ref{cor:window6-su4-embedding-rigidity}）
+以及几何 \(\ZZ_2\)/sheet parity 的审计输入共同锁定（推论 \ref{cor:window6-levi-rigidity-sm-residual}）。
+\end{remark}
+
+\begin{proposition}[内禀括号存在唯一性的有限整数系统归约]\label{prop:window6-intrinsic-bracket-finite-integer-reduction}
+取基 \(B=\{e_a\}_{a\in X_6}\) 并设
+\[
+[e_a,e_b]_6=\sum_{c\in X_6}C_{ab}^{c}\,e_c,\qquad C_{ab}^{c}\in\ZZ.
+\]
+则猜想 \ref{conj:window6-intrinsic-bracket-uniqueness} 的存在与唯一性可等价归约为
+\(\mathbf C=(C_{ab}^{c})\) 的有限整系数方程组
+\[
+\mathcal F(\mathbf C)=0
+\]
+的可解性与唯一性，其中 \(\mathcal F\) 由以下约束并成：
+\begin{enumerate}
+  \item \textbf{反对称约束：}
+  \(
+  C_{ab}^{c}+C_{ba}^{c}=0
+  \)；
+  \item \textbf{局域支撑约束：}
+  若 \((a,b;c)\) 不在一跳推送邻接与边多重度确定的允许模板 \(\mathcal S\) 中，则
+  \(
+  C_{ab}^{c}=0
+  \)；
+  \item \textbf{parity 约束：}
+  在 \(\delta=34\) 分级下，
+  \(
+  \deg(a)+\deg(b)\not\equiv \deg(c)\ (\mathrm{mod}\ 2)
+  \Rightarrow C_{ab}^{c}=0
+  \)
+  （推论 \ref{cor:terminal-delta-parity-rule}）；
+  \item \textbf{根--Cartan 兼容约束：}
+  与定理 \ref{thm:window6-root-dictionary-pullback-bracket} 的根字典接口一致；
+  \item \textbf{分块兼容约束：}
+  与 orbit--Levi 与 edge--flux 双骨架的分块闭包一致
+  （命题 \ref{prop:window6-common-refinement-sm-levi}）；
+  \item \textbf{Jacobi 约束：}
+  \[
+  [e_a,[e_b,e_c]_6]_6+[e_b,[e_c,e_a]_6]_6+[e_c,[e_a,e_b]_6]_6=0
+  \qquad (\forall a,b,c\in X_6).
+  \]
+\end{enumerate}
+此外，类型邻接图刚性 \(\mathrm{Aut}(\Gamma_6)=\{1\}\)（命题 \ref{prop:terminal-gamma6-rigidity}）
+消除类型重标号自由度，使“同构意义唯一”可压缩为固定标号下的代数唯一性判别。
+\end{proposition}
+\begin{proof}
+命题 \ref{prop:window6-bracket-certificate-reduction} 已给出“反对称 + Jacobi + 局域/分级/分块”到有限多项式系统的归约框架。
+本命题只是将该框架以结构常数 \(\mathbf C\) 显式化，并把 parity 与双分块接口写成线性稀疏约束。
+根字典接口提供坐标系，邻接图刚性排除重标号吸收非唯一性，故唯一性可在固定标号上判别。证毕。
+\end{proof}
+
+\begin{theorem}[Lee--Yang 式模素数提升判据（内禀括号版）]\label{thm:window6-intrinsic-bracket-modp-lift-criterion}
+设 \(\mathcal F(\mathbf C)=0\) 为命题
+\ref{prop:window6-intrinsic-bracket-finite-integer-reduction}
+中的整系数系统，
+并加入线性归一化条件 \(\mathcal N(\mathbf C)=0\) 以固定有限规范自由度。
+若存在奇素数 \(p\) 使得：
+\begin{enumerate}
+  \item 约化系统
+  \(
+  (\mathcal F,\mathcal N)\equiv 0\pmod p
+  \)
+  在 \(\FF_p\) 上有唯一解 \(\bar{\mathbf C}\)；
+  \item Jacobi 矩阵
+  \[
+  J_p(\bar{\mathbf C})
+  :=\frac{\partial(\mathcal F,\mathcal N)}{\partial\mathbf C}(\bar{\mathbf C})
+  \]
+  在 \(\FF_p\) 上满秩；
+  \item 存在整数向量 \(\mathbf C^\star\) 满足
+  \[
+  (\mathcal F,\mathcal N)(\mathbf C^\star)=0,\qquad
+  \mathbf C^\star\equiv \bar{\mathbf C}\pmod p,
+  \]
+  且经直接代入可逐式核验。
+\end{enumerate}
+则 \(\mathbf C^\star\) 在该归一化下为唯一整数解；因此
+\((V,[-,-]_6)\) 的内禀括号在特征 \(0\) 上存在且唯一。
+\end{theorem}
+\begin{proof}
+由 (1)(2)，\(\bar{\mathbf C}\) 是模 \(p\) 的简单根，按 Hensel 提升定理存在唯一 \(p\)-进提升。
+任意整数解在模 \(p\) 约化后都必须等于 \(\bar{\mathbf C}\)，故其 \(p\)-进像与该唯一提升一致。
+由 (3) 已给出一个满足全部整系数方程的整数代表 \(\mathbf C^\star\)。
+若存在另一整数解 \(\mathbf C'\)，则其模 \(p\) 约化同为 \(\bar{\mathbf C}\)，因此 \(\mathbf C'\) 与 \(\mathbf C^\star\) 在 \(\ZZ_p\) 中对应同一唯一提升根。
+由于嵌入 \(\ZZ^N\hookrightarrow \ZZ_p^N\) 为单射，必有 \(\mathbf C'=\mathbf C^\star\)。
+故唯一性成立。证毕。
+\end{proof}
+
+\begin{corollary}[内禀括号定理化的可执行证书链]\label{cor:window6-intrinsic-bracket-theoremization-pipeline}
+在定理 \ref{thm:window6-push-envelope-certificate-upgrade} 的推送包络证书基础上，
+将猜想 \ref{conj:window6-intrinsic-bracket-uniqueness} 升格为定理可按如下链条执行：
+\begin{enumerate}
+  \item 由 \(L_i\)、\(\Gamma_6\)、\(\delta=34\) 分级与双分块骨架生成 \(\mathcal S\) 与 \((\mathcal F,\mathcal N)\)；
+  \item 在大素数域上计算唯一模 \(p\) 解与 Jacobian 满秩证书；
+  \item 回到整数域执行直接代入核验并输出结构常数表；
+  \item 结合定理 \ref{thm:window6-bracket-uniqueness-mixed-certificate-reduction} 的 Toeplitz--PSD 侧证书，完成代数侧与谱侧的交叉一致性审计。
+\end{enumerate}
+由此，“存在唯一性”被压缩为有限对象上的可判定任务，并与 Lee--Yang 式整数/模素数证书方法保持同型。
+\end{corollary}
+\begin{proof}
+第 (1) 步由命题
+\ref{prop:window6-intrinsic-bracket-finite-integer-reduction}
+给出；第 (2)(3) 步由定理
+\ref{thm:window6-intrinsic-bracket-modp-lift-criterion}
+给出；第 (4) 步由定理
+\ref{thm:window6-bracket-uniqueness-mixed-certificate-reduction}
+给出。组合即得。证毕。
+\end{proof}

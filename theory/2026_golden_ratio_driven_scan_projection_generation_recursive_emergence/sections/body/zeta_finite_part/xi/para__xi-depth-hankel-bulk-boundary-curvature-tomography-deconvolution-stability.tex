@@ -1,0 +1,553 @@
+% (User input window)
+%
+% 在 logistic 核层析口径下，曲率概率密度 \(p\) 的反演不仅是可识别的，而且具有全显式算子表达；
+% 同一乘子结构同时强制噪声放大、零点密度与比特复杂度的普适阈值。
+
+命题 \ref{prop:xi-bulk-curvature-logistic-kernel-decomposition}--\ref{prop:xi-bulk-curvature-tomography-identifiability} 给出曲率核的有限原子分解与可识别性；
+在同一记号下，可进一步将反演写成显式算子，并由同一乘子结构推出稳定性、零点密度与精度预算的普适封口。
+
+\begin{proposition}[尺度曲率的精确反卷积：logistic 平滑的显式逆算子]\label{prop:xi-bulk-curvature-exact-deconvolution-operator}
+在推论 \ref{cor:xi-bulk-curvature-probability-moments} 的设定下，记
+\[
+\nu:=\frac{1}{\kappa}\sum_{j=1}^{\kappa}\delta_{\sigma_j},
+\qquad
+\phi(s)=\frac{e^{s}}{(1+e^{s})^{2}}=\frac{1}{4\cosh^{2}(s/2)},
+\qquad
+p=\phi*\nu.
+\]
+令 \(\mathcal D\) 为 \(\mathcal S'(\RR)\) 上的 Fourier 乘子算子（在 \(\xi=0\) 处取连续延拓值）
+\[
+\widehat{(\mathcal D f)}(\xi):=\frac{\sinh(\pi\xi)}{\pi\xi}\,\widehat f(\xi).
+\]
+则在温和分布意义下有严格恒等式
+\[
+\boxed{\;\mathcal D p=\nu.\;}
+\]
+并且 \(\mathcal D\) 具有 Weierstrass 乘积表示（作为 Fourier 乘子算子作用于 \(\mathcal S(\RR)\)）
+\[
+\boxed{\;
+\mathcal D=\prod_{n\ge1}\Bigl(1-\frac{1}{n^{2}}\partial_{s}^{2}\Bigr)
+=\frac{\sinh\!\bigl(\pi\sqrt{-\partial_{s}^{2}}\bigr)}{\pi\sqrt{-\partial_{s}^{2}}}\; }.
+\]
+因此“尺度平滑 \(p=\phi*\nu\)”在该体系内并非不可逆噪声通道，而是由一条全显式的整函数型无限阶算子精确可逆。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:xi-bulk-curvature-tomography-identifiability} 中的闭式 Fourier 变换
+\(
+\widehat\phi(\xi)=\pi\xi/\sinh(\pi\xi)
+\)
+与卷积定理，得
+\(
+\widehat p(\xi)=\widehat\phi(\xi)\widehat\nu(\xi)
+\)。
+两边同乘 \(\sinh(\pi\xi)/(\pi\xi)\) 即得
+\(
+\widehat\nu(\xi)=\frac{\sinh(\pi\xi)}{\pi\xi}\widehat p(\xi)
+=\widehat{(\mathcal D p)}(\xi)
+\)，从而 \(\mathcal Dp=\nu\)。
+乘积表示由经典整函数恒等式
+\(
+\sinh(\pi z)/(\pi z)=\prod_{n\ge1}(1+z^{2}/n^{2})
+\)
+与 Fourier 侧替换 \(z^{2}\mapsto \xi^{2}\)（等价于物理侧 \(1+z^{2}/n^{2}\mapsto 1-\partial_{s}^{2}/n^{2}\)）得到。证毕。
+\end{proof}
+
+% (User input window)
+
+\begin{corollary}[尺度形状因子的模平方全息：深度差分多重集的加权计数]\label{cor:xi-bulk-curvature-modsquare-holography}
+令
+\(
+\widehat p(\xi)=\int_{\RR}e^{-i\xi s}p(s)\,\dd s
+\)。
+则有严格恒等式
+\[
+\boxed{\;
+\Bigl|\frac{\sinh(\pi\xi)}{\pi\xi}\widehat p(\xi)\Bigr|^2
+=|\widehat\nu(\xi)|^2
+=\frac{1}{\kappa^2}\sum_{j,k=1}^{\kappa}e^{-i\xi(\sigma_j-\sigma_k)}
+=\frac{1}{\kappa^2}\sum_{\Delta\in\mathcal D}m(\Delta)e^{-i\xi\Delta}\; }.
+\]
+其中 \(\mathcal D:=\{\sigma_j-\sigma_k\}_{j,k}\) 为差分多重集，\(m(\Delta)\) 为其重数。
+因此在剥离通用乘子 \(\widehat\phi(\xi)=\pi\xi/\sinh(\pi\xi)\) 后，模平方数据 \(|\widehat p(\xi)|^2\) 等价于深度差分谱的特征函数，从而二体几何可在不恢复相位的条件下被直接审计。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:xi-bulk-curvature-exact-deconvolution-operator} 得
+\(
+\widehat\nu(\xi)=\frac{\sinh(\pi\xi)}{\pi\xi}\widehat p(\xi)
+\)。
+取模平方并用
+\(
+\widehat\nu(\xi)=\kappa^{-1}\sum_{j=1}^{\kappa}e^{-i\xi\sigma_j}
+\)
+展开即得。证毕。
+\end{proof}
+
+\begin{corollary}[一般位置下的深度谱唯一性：由差分多重集刚性反演点集]\label{cor:xi-bulk-curvature-difference-multiset-rigid-inversion}
+设深度谱 \(\{\sigma_j\}_{j=1}^{\kappa}\subset\RR\) 满足一般位置条件：除 \(0\) 外，差分多重集 \(\mathcal D=\{\sigma_j-\sigma_k\}_{j,k}\) 不含重元，即对任意 \(\Delta\neq 0\) 有 \(m(\Delta)\in\{0,1\}\)。
+则差分多重集 \((\mathcal D,m)\) 唯一确定无序多重集 \(\{\sigma_j\}\) 于整体平移与反射不变换之下；并且该反演可由有限步组合算法实现。
+结合推论 \ref{cor:xi-bulk-curvature-modsquare-holography}，在该一般位置假设下，模平方数据 \(|\widehat p(\xi)|^{2}\) 已足以将深度谱锁定到仅剩 \(\RR\rtimes\ZZ_2\) 的全局对称自由度。
+\end{corollary}
+\begin{proof}[证明要点]
+这是经典 turnpike/Golomb ruler 反演问题的标准刚性结论：最大差分给出两端点间距，递归地从差分多重集中剥离与端点兼容的差分，并在一般位置假设下消除分支，从而得到唯一解；平移与反射为唯一残余对称。证毕。
+\end{proof}
+
+\begin{theorem}[Hankel--Prony 学习的零点谱稳定性与可递归误差证书]\label{thm:xi-hankel-prony-root-stability-recursive-certificate}
+设 \(\zeta_1,\dots,\zeta_r\in\CC^\times\) 两两不同，\(c_1,\dots,c_r\in\CC\setminus\{0\}\)，并定义矩序列
+\[
+m_k:=\sum_{j=1}^{r}c_j\zeta_j^k,\qquad k=0,1,\dots,2r-1.
+\]
+令 Hankel 矩阵
+\[
+H:=(m_{i+j})_{0\le i,j\le r-1}\in\Mat_r(\CC),
+\]
+并假设 \(H\) 可逆，记 \(\sigma_{\min}:=\sigma_{\min}(H)>0\)。
+给定噪声观测 \(\tilde m_k=m_k+\varepsilon_k\) 且 \(|\varepsilon_k|\le \epsilon\)，构造 \(\tilde H=(\tilde m_{i+j})_{0\le i,j\le r-1}\)。
+则存在常数
+\[
+C=C\!\left(r,\ \max_j|c_j|,\ \max_j|\zeta_j|\right)>0
+\]
+使得当 \(\epsilon\le \sigma_{\min}/(2C)\) 时，由 Prony--Hankel 过程从 \(\{\tilde m_k\}_{k=0}^{2r-1}\) 所恢复的估计根 \(\tilde\zeta_1,\dots,\tilde\zeta_r\) 可重标记满足
+\[
+\max_{1\le j\le r}|\tilde\zeta_j-\zeta_j|\ \le\ \frac{C}{\sigma_{\min}}\,\epsilon.
+\]
+并且当追加矩观测 \(\tilde m_{2r},\tilde m_{2r+1},\dots\) 以形成更高阶 Hankel 扩维矩阵时，\(\sigma_{\min}\) 的下界与上述上界可由 Schur 补与最小奇异值扰动估计逐步更新，从而在每一阶生成后验可核验的稳定性证书。
+\end{theorem}
+\begin{proof}[证明要点]
+矩分解可写为 \(H=VCV^{\mathsf T}\)，其中 \(V=(\zeta_j^i)_{0\le i\le r-1,\,1\le j\le r}\) 为 Vandermonde 矩阵且 \(C=\mathrm{diag}(c_1,\dots,c_r)\)。
+由 \(|\varepsilon_k|\le\epsilon\) 得 \(\|\tilde H-H\|_{\mathrm{op}}\le C_0(r)\epsilon\)。
+当 \(\epsilon\le \sigma_{\min}/(2C)\) 时，可保证 \(\tilde H\) 可逆且 \(\|\tilde H^{-1}\|_{\mathrm{op}}\le 2/\sigma_{\min}\)。
+Prony 重构可表述为从 \(\tilde H\) 解出线性递推（或等价 companion 矩阵）并取其特征根；该映射在根互异域内对数据是局部 Lipschitz。
+将线性系统的条件数界（由 \(\sigma_{\min}^{-1}\) 控制）与多项式根对系数的稳定性界（例如由 companion 矩阵的 Bauer--Fike 型估计）合并，即得所示 \(\frac{C}{\sigma_{\min}}\epsilon\) 上界；常数 \(C\) 仅依赖于 \(r\) 与 \(\max_j|c_j|\)、\(\max_j|\zeta_j|\) 的上界。
+递归更新部分由 Hankel 扩维的块矩阵 Schur 补公式与 Weyl 型奇异值扰动界给出。证毕。
+\end{proof}
+
+\begin{proposition}[累积矩噪声下的 Hankel 反演稳定性：逆矩阵差分与特征值扰动界]\label{prop:xi-hankel-inversion-noise-stability-neumann-bauerfike}
+令 \(H_0,H_1\in\Mat_r(\CC)\)，并设 \(H_0\) 可逆。
+给定扰动 \(\widetilde H_0,\widetilde H_1\in\Mat_r(\CC)\)，假设
+\begin{equation}\label{eq:xi-hankel-neumann-smallness}
+\boxed{\;
+\|H_0^{-1}\|\,\|\widetilde H_0-H_0\|\ \le\ \frac12\;}
+\end{equation}
+其中 \(\|\cdot\|\) 为任意次乘法矩阵范数（例如算子范数）。
+则：
+\begin{enumerate}
+  \item \(\widetilde H_0\) 可逆且满足
+  \[
+  \boxed{\;
+  \|\widetilde H_0^{-1}-H_0^{-1}\|
+  \ \le\
+  2\,\|H_0^{-1}\|^{2}\,\|\widetilde H_0-H_0\|\;}
+  \]
+  并且 \(\|\widetilde H_0^{-1}\|\le 2\|H_0^{-1}\|\)；
+  \item 令
+  \[
+  S:=H_0^{-1}H_1,\qquad \widetilde S:=\widetilde H_0^{-1}\widetilde H_1,
+  \]
+  则有显式扰动界
+  \[
+  \boxed{\;
+  \|\widetilde S-S\|
+  \ \le\
+  4\,\|H_0^{-1}\|\Bigl(\|\widetilde H_1-H_1\|+\|S\|\,\|\widetilde H_0-H_0\|\Bigr)\;}
+  \]
+  \item 若 \(S\) 可对角化，即 \(S=PDP^{-1}\)（\(D\) 对角），则对任意 \(\widetilde S\) 的特征值 \(\widetilde\xi\) 有
+  \[
+  \boxed{\;
+  \mathrm{dist}\bigl(\widetilde\xi,\sigma(S)\bigr)\ \le\ \kappa(P)\,\|\widetilde S-S\|,
+  \qquad \kappa(P):=\|P\|\,\|P^{-1}\|\;}
+  \]
+  因而在零点重构 \(\widetilde\zeta:=1/\widetilde\xi\) 的口径下，若 \(\sigma(S)\) 与 \(0\) 保持正距离，则零点集合在 Hausdorff 距离意义下具有显式 Lipschitz 稳定性常数。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) 写作 \(\widetilde H_0=H_0(I+E)\)，其中 \(E:=H_0^{-1}(\widetilde H_0-H_0)\)。
+由 \eqref{eq:xi-hankel-neumann-smallness} 得 \(\|E\|\le 1/2\)，故 \(I+E\) 可逆且
+\(\|(I+E)^{-1}\|\le \sum_{k\ge 0}\|E\|^k\le 2\)。
+于是 \(\widetilde H_0^{-1}=(I+E)^{-1}H_0^{-1}\) 且 \(\|\widetilde H_0^{-1}\|\le 2\|H_0^{-1}\|\)。
+并且由恒等式
+\(
+\widetilde H_0^{-1}-H_0^{-1}=\widetilde H_0^{-1}(H_0-\widetilde H_0)H_0^{-1}
+\)
+得
+\[
+\|\widetilde H_0^{-1}-H_0^{-1}\|
+\le \|\widetilde H_0^{-1}\|\,\|\widetilde H_0-H_0\|\,\|H_0^{-1}\|
+\le 2\|H_0^{-1}\|^2\|\widetilde H_0-H_0\|.
+\]
+(2) 展开
+\[
+\widetilde S-S
+=(\widetilde H_0^{-1}-H_0^{-1})H_1+\widetilde H_0^{-1}(\widetilde H_1-H_1),
+\]
+并用 \(\|H_1\|\le \|H_0\|\,\|S\|\) 与 \(\|\widetilde H_0^{-1}\|\le 2\|H_0^{-1}\|\)，结合 (1) 的界即可得到所示估计（常数用粗估吸收为 \(4\)）。
+(3) 由 Bauer--Fike 定理立得特征值扰动界。若 \(\inf_{\xi\in\sigma(S)}|\xi|>0\)，则映射 \(\xi\mapsto 1/\xi\) 在该谱邻域上 Lipschitz，从而零点重构的 Hausdorff 稳定性随之成立。证毕。
+\end{proof}
+
+\begin{corollary}[超分辨率屏障常数 \texorpdfstring{$\pi$}{pi}：深度分离的稳定阈值为 \texorpdfstring{$\exp(-\pi/\Delta)$}{exp(-pi/Delta)}]\label{cor:xi-bulk-curvature-superresolution-pi-barrier}
+设观测到的曲率概率密度为 \(\widetilde p=p+\eta\)，并假定 Fourier 噪声在带宽 \(|\xi|\le\Omega\) 内满足
+\[
+\sup_{|\xi|\le\Omega}|\widehat\eta(\xi)|\le\varepsilon.
+\]
+令线性反卷积输出为 \(\widetilde\nu:=\mathcal D\widetilde p\)。
+由命题 \ref{prop:xi-bulk-curvature-exact-deconvolution-operator} 的反卷积乘子可知，在最坏情形噪声下，
+\[
+\sup_{|\xi|\le\Omega}\bigl|\widehat{(\widetilde\nu-\nu)}(\xi)\bigr|
+\ \gtrsim\
+\varepsilon\cdot \frac{\sinh(\pi\Omega)}{\pi\Omega}
+\ \asymp\
+\varepsilon\,e^{\pi\Omega}.
+\]
+因此若希望在尺度轴上以分离度 \(\Delta\) 稳定地区分原子（通常需要使用 \(\Omega\gtrsim 1/\Delta\) 的频率），则噪声预算必须在量级上满足
+\[
+\varepsilon \lesssim \exp\!\Bigl(-\frac{\pi}{\Delta}\Bigr),
+\qquad\text{等价地}\qquad
+\Delta \gtrsim \frac{\pi}{\log(1/\varepsilon)}.
+\]
+该阈值不依赖于 \(\kappa\) 与 \(\{\sigma_j\}\) 的几何细节，常数 \(\pi\) 为普适屏障常数。
+\end{corollary}
+\begin{proof}[证明要点]
+由 \(\widetilde\nu-\nu=\mathcal D\eta\) 与乘子定义，
+\(
+|\widehat{(\widetilde\nu-\nu)}(\xi)|
+=\frac{\sinh(\pi|\xi|)}{\pi|\xi|}\,|\widehat\eta(\xi)|
+\)。
+在噪声约束下选择相位对齐的 \(\widehat\eta\) 可达到最坏情形放大因子 \(\sinh(\pi\Omega)/(\pi\Omega)\)。
+再与分辨率--带宽互反标尺 \(\Omega\gtrsim 1/\Delta\) 合并即可。证毕。
+\end{proof}
+
+% (User input window)
+
+\begin{remark}[双重不可逾越界：原子数—分离度—精度的联合极限]\label{rem:xi-bulk-curvature-double-barrier-kappa-separation-precision}
+在深度谱恢复问题中，分离度 \(\Delta_{\min}\) 同时受到两条互不替代的制度性门槛约束：
+\begin{itemize}
+\item \textbf{体积稳定门槛（Gram 侧）}：
+若希望 Hellinger--Gram 体积不发生簇化塌缩，则需进入准正交相的分离阈值（推论 \ref{cor:xi-hellinger-quasi-orthogonal-phase}）。
+反之，一旦 \(\Delta_{\min}\) 被迫随 \(\kappa\) 缩小，则簇化条件数以 \(\kappa(\kappa-1)\) 次幂制度爆炸（推论 \ref{cor:xi-hellinger-gram-cluster-conditioning-exponent}）。
+\item \textbf{可辨识门槛（反卷积侧）}：
+要在分离度 \(\Delta_{\min}\) 下稳定区分原子，噪声预算必须满足
+\(
+\varepsilon\lesssim \exp(-\pi/\Delta_{\min})
+\)
+（推论 \ref{cor:xi-bulk-curvature-superresolution-pi-barrier}）。
+在固定跨度 \(L=\sigma_\kappa-\sigma_1\) 的约束下有 \(\Delta_{\min}\le L/(\kappa-1)\)，从而噪声门槛进一步压缩为
+\[
+\varepsilon\lesssim \exp\!\Bigl(-\frac{\pi(\kappa-1)}{L}\Bigr),
+\]
+即精度成本对 \(\kappa\) 呈指数级增长。
+\end{itemize}
+因此在任何限制 \(\Delta_{\min}\) 随 \(\kappa\) 缩小的预算口径下，原子数提升与稳定恢复不可同时进入任意高秩与任意小误差的双极限；可行域由 \(\Delta_{\min}\) 的双重门槛共同截断。
+\end{remark}
+
+\begin{proposition}[极点--整函数二分解：尺度曲率母函数的通用晶格奇性与深度因子]\label{prop:xi-bulk-curvature-moment-generating-factorization}
+定义母函数（双侧 Laplace 变换）
+\[
+M_p(t):=\int_{\RR}e^{ts}p(s)\,\dd s,
+\qquad |\Re t|<1.
+\]
+则存在严格因子化
+\[
+\boxed{\;
+M_p(t)=\frac{\pi t}{\sin(\pi t)}\,E(t),\qquad
+E(t):=\int_{\RR}e^{ts}\,\dd\nu(s)=\frac{1}{\kappa}\sum_{j=1}^{\kappa}e^{t\sigma_j}.\;}
+\]
+其中 \(\frac{\pi t}{\sin(\pi t)}\) 给出全部通用奇性：在每个非零整数 \(n\in\ZZ\setminus\{0\}\) 处具有简单极点；
+而 \(E\) 为整函数并携带全部深度信息。
+特别地，
+\[
+\boxed{\;\frac{\sin(\pi t)}{\pi t}\,M_p(t)=E(t)\;}
+\]
+是有限指数和，构成深度谱的解析指纹。
+\end{proposition}
+\begin{proof}
+由 \(p=\phi*\nu\) 与 Fubini 定理（\(|\Re t|<1\) 保障绝对可积），得
+\[
+M_p(t)=\int_{\RR}\int_{\RR}e^{t(s+u)}\phi(s)\,\dd s\,\dd\nu(u)
+=\Bigl(\int_{\RR}e^{ts}\phi(s)\,\dd s\Bigr)\cdot\Bigl(\int_{\RR}e^{tu}\,\dd\nu(u)\Bigr).
+\]
+对 \(\phi(s)=e^{s}(1+e^{s})^{-2}\)，作代换 \(x=e^{s}\)（\(\dd s=\dd x/x\)）得
+\[
+\int_{\RR}e^{ts}\phi(s)\,\dd s
+=\int_{0}^{\infty}\frac{x^{t}}{(1+x)^{2}}\,\dd x
+=\mathrm{B}(t+1,1-t)
+=\Gamma(t+1)\Gamma(1-t)
+=\frac{\pi t}{\sin(\pi t)}.
+\]
+从而得到所示因子化。证毕。
+\end{proof}
+
+\begin{remark}[尺度 \texorpdfstring{$\zeta$}{zeta} 接口的记号：母函数即尺度 \texorpdfstring{$\zeta$}{zeta} 函数]\label{rem:xi-bulk-curvature-scale-zeta-notation}
+母函数 \(M_p(t)\) 亦可记为尺度 \(\zeta\) 接口
+\[
+\zeta_{\mathrm{scale}}(t):=\int_{\RR}e^{ts}p(s)\,\dd s=M_p(t),
+\qquad
+|\Re t|<1.
+\]
+由命题 \ref{prop:xi-bulk-curvature-moment-generating-factorization}，\(\zeta_{\mathrm{scale}}\) 具有唯一的亚纯延拓；
+其全部整数晶格极点由通用因子 \(\pi t/\sin(\pi t)\) 承载，而深度信息完全由整函数 \(E(t)\) 承载。
+\end{remark}
+
+\begin{corollary}[整数极点留数的深度 Dirichlet 数据：有限个局部数据的代数重建]\label{cor:xi-bulk-curvature-residue-dirichlet-data}
+在命题 \ref{prop:xi-bulk-curvature-moment-generating-factorization} 的设定下，对任意 \(n\in\NN\) 有显式留数公式
+\[
+\boxed{\;
+\operatorname*{Res}_{t=n}M_p(t)=(-1)^n\,n\,E(n),\qquad
+\operatorname*{Res}_{t=-n}M_p(t)=(-1)^n\,(-n)\,E(-n).\;}
+\]
+令 \(y_j:=e^{\sigma_j}=\delta_j^{-1}\)。
+则
+\[
+E(n)=\frac{1}{\kappa}\sum_{j=1}^{\kappa}y_j^{n}.
+\]
+若 \(\{y_j\}\) 两两不同，则有限序列 \(\{E(n)\}_{n=1}^{2\kappa}\)（等价地，\(\{\operatorname*{Res}_{t=\pm n}M_p(t)\}_{n=1}^{2\kappa}\)）唯一确定无序多重集 \(\{y_j\}\)，从而唯一确定 \(\{\delta_j\}\)。
+\end{corollary}
+\begin{proof}
+由
+\(
+\frac{\pi t}{\sin(\pi t)}
+\)
+在 \(t=n\) 的留数为 \((-1)^n n\)，与因子化式相乘即得留数公式。
+第二部分为经典幂和反演：\(\{y_j\}\) 两两不同下，幂和序列满足阶数为 \(\kappa\) 的线性递推；
+由 \(\{E(n)\}_{n=1}^{2\kappa}\) 可构造 Hankel 系统解出递推系数，从而得到以 \(\{y_j\}\) 为根的首一多项式并恢复 \(\{y_j\}\)，进而恢复 \(\{\delta_j=y_j^{-1}\}\)。证毕。
+\end{proof}
+
+% (User input window)
+
+\begin{corollary}[整数留数的极值重建：最大深度与重数的无损读出]\label{cor:xi-bulk-curvature-residue-extremal-recovery}
+在推论 \ref{cor:xi-bulk-curvature-residue-dirichlet-data} 的设定下，令
+\[
+R_n:=(-1)^n\,\frac{1}{n}\operatorname*{Res}_{t=n}\zeta_{\mathrm{scale}}(t)=E(n)\qquad(n\in\NN).
+\]
+记最大深度与其重数为
+\[
+\sigma_{\max}:=\max_{1\le j\le\kappa}\sigma_j,
+\qquad
+r_{\max}:=\card\{j:\ \sigma_j=\sigma_{\max}\}.
+\]
+则有严格极限公式
+\[
+\boxed{\;
+\sigma_{\max}=\lim_{n\to\infty}\frac{1}{n}\log\bigl(\kappa R_n\bigr),\qquad
+r_{\max}=\lim_{n\to\infty}\kappa R_n\,e^{-n\sigma_{\max}}\in\NN.\;}
+\]
+因此“最深缺陷”及其重数无需全谱反演即可由整数极点的留数序列直接证书化。
+\end{corollary}
+\begin{proof}[证明要点]
+由 \(R_n=E(n)=\kappa^{-1}\sum_{j=1}^{\kappa}e^{n\sigma_j}\)，将最大深度项分离得
+\[
+\kappa R_n=r_{\max}e^{n\sigma_{\max}}+\sum_{\sigma_j<\sigma_{\max}}e^{n\sigma_j}
+=r_{\max}e^{n\sigma_{\max}}\Bigl(1+O(e^{-n(\sigma_{\max}-\sigma_2)})\Bigr),
+\]
+其中 \(\sigma_2\) 为次大深度（若不存在则误差视为 \(0\)）。
+两端取对数并除以 \(n\) 即得 \(\sigma_{\max}\) 的极限；再将上式乘以 \(e^{-n\sigma_{\max}}\) 取极限即得 \(r_{\max}\)。证毕。
+\end{proof}
+
+\begin{remark}[尺度 Euler--Möbius 原语账本：幂和矩与 primitive 序列的互换]\label{rem:xi-bulk-curvature-euler-mobius-ledger}
+令 \(y_j:=e^{\sigma_j}=\delta_j^{-1}\)，并记幂和
+\(
+p_n:=\sum_{j=1}^{\kappa}y_j^{n}=\kappa E(n)
+\)（\(n\in\NN\)）。
+引入形式幂级数
+\[
+\mathfrak Z_{\mathrm{scale}}(z)
+:=\prod_{j=1}^{\kappa}\frac{1}{1-y_j z}
+=\exp\Bigl(\sum_{n\ge 1}\frac{p_n}{n}z^{n}\Bigr)
+\qquad(\text{形式意义}).
+\]
+并定义其 primitive 系数（Möbius 反演）
+\[
+\pi^{\mathrm{prim}}_n
+:=\frac{1}{n}\sum_{d\mid n}\mu(d)\,p_{n/d}
+=\frac{1}{n}\sum_{d\mid n}\mu(d)\sum_{j=1}^{\kappa}y_j^{n/d}.
+\]
+则有等价 Euler 分解
+\[
+\mathfrak Z_{\mathrm{scale}}(z)=\prod_{n\ge 1}\frac{1}{(1-z^{n})^{\pi^{\mathrm{prim}}_n}}
+\qquad(\text{形式意义}),
+\]
+从而 \(\{E(n)\}\)（或 \(\{p_n\}\)）给出“总量矩”账本，而 \(\{\pi^{\mathrm{prim}}_n\}\) 给出其 Euler--Möbius 的原语分解；二者互相可由有限步代数运算转写。
+\end{remark}
+
+\begin{proposition}[原语账本的指数主导律：最大深度锁定 primitive 指数率]\label{prop:xi-bulk-curvature-primitive-max-depth-dominance}
+沿用注 \ref{rem:xi-bulk-curvature-euler-mobius-ledger} 的记号，并设
+\[
+\Lambda:=\max_{1\le j\le\kappa}y_j,\qquad
+r:=\card{\{j:\ y_j=\Lambda\}},
+\qquad
+\Lambda_2:=\max\{y_j:\ y_j<\Lambda\}\ \ (\text{若存在}).
+\]
+若 \(\Lambda>1\)，则对 \(n\to\infty\) 有
+\[
+\boxed{\;
+\pi^{\mathrm{prim}}_n=\frac{r}{n}\Lambda^n
++O\!\Bigl(\frac{1}{n}\Lambda^{n/2}\Bigr)
++O\!\Bigl(\frac{1}{n}\Lambda_2^{\,n}\Bigr)\;}
+\]
+（第二项仅在 \(n\) 含非平凡因子时出现，且以 \(\Lambda^{n/2}\) 为最坏情形量级）。
+从而指数率由最大深度唯一锁定：
+\[
+\boxed{\;\lim_{n\to\infty}\frac{1}{n}\log\bigl|n\pi^{\mathrm{prim}}_n\bigr|=\log\Lambda.\;}
+\]
+\end{proposition}
+\begin{proof}
+由定义 \(n\pi^{\mathrm{prim}}_n=\sum_{d\mid n}\mu(d)\,p_{n/d}\) 且 \(p_m=\sum_{j}y_j^m\)，得
+\[
+p_n=r\Lambda^n+O(\Lambda_2^{\,n}),
+\]
+其中 \(\Lambda_2\) 不存在时可将 \(O(\Lambda_2^{\,n})\) 理解为 \(0\)。
+另一方面，对任意 \(d\mid n\) 且 \(d\ge 2\) 有 \(n/d\le n/2\)，从而
+\[
+|p_{n/d}|\le \sum_{j=1}^{\kappa}y_j^{n/d}\le \kappa\,\Lambda^{n/d}\le \kappa\,\Lambda^{n/2}.
+\]
+将 \(d=1\) 项与其余项分离即可得到所示展开。
+最后，由 \(\Lambda>1\) 可知 \(\Lambda^{n/2}=o(\Lambda^n)\) 且 \(\Lambda_2^{\,n}=o(\Lambda^n)\)，故 \(n\pi^{\mathrm{prim}}_n\) 的指数增长率为 \(\log\Lambda\)。证毕。
+\end{proof}
+
+\begin{remark}[隐藏圆谱几何：反卷积乘子与圆 Laplacian 的 \texorpdfstring{$\zeta$}{zeta}-行列式比]\label{rem:xi-bulk-curvature-circle-zeta-determinant}
+令 \(L=-\partial_\theta^2\) 为圆 \(S^1\) 上 Laplacian，其正谱为 \(\{n^2\}_{n\ge1}\)。
+其 \(\zeta\)-正规化行列式比满足
+\[
+\frac{\det_\zeta(L+\xi^{2})}{\det_\zeta(L)}
+=\prod_{n\ge1}\Bigl(1+\frac{\xi^{2}}{n^{2}}\Bigr)
+=\frac{\sinh(\pi|\xi|)}{\pi|\xi|}.
+\]
+因此命题 \ref{prop:xi-bulk-curvature-exact-deconvolution-operator} 的反卷积乘子精确等同于圆 Laplacian 的 \(\zeta\)-行列式比；
+常数 \(\pi\) 的出现对应于该隐藏圆谱几何在尺度轴上的投影。
+\end{remark}
+
+\begin{proposition}[尺度相干核与尺度体积势：短程 Vandermonde 排斥与长程指数正交化]\label{prop:xi-bulk-curvature-scale-gram-two-phase}
+在推论 \ref{cor:xi-bulk-curvature-probability-moments} 的设定下，定义尺度相干核
+\[
+K(\Delta):=\int_{\RR}\phi(s)\phi(s-\Delta)\,\dd s=(\phi*\phi)(\Delta).
+\]
+则 \(K\) 为偶函数且具有闭式
+\[
+\boxed{\;
+K(\Delta)=\frac{|\Delta|\coth\!\bigl(|\Delta|/2\bigr)-2}{4\sinh^{2}\!\bigl(|\Delta|/2\bigr)}\; } ,
+\qquad
+K(0)=\frac{1}{6}.
+\]
+对尺度谱 \(\{\sigma_j\}_{j=1}^{\kappa}\) 定义 Gram 矩阵
+\(
+G^{\mathrm{scale}}_{jk}:=K(\sigma_j-\sigma_k)
+\)
+与尺度体积势
+\(
+S_{\mathrm{scale}}:=-\log\det G^{\mathrm{scale}}
+\)。
+则存在两端极限结构：
+当最小分离 \(\Delta_{\min}:=\min_{j\neq k}|\sigma_j-\sigma_k|\to\infty\) 时，
+\[
+\det G^{\mathrm{scale}}=(K(0))^{\kappa}\bigl(1+o(1)\bigr)=\Bigl(\frac16\Bigr)^{\kappa}\bigl(1+o(1)\bigr),
+\qquad
+S_{\mathrm{scale}}=\kappa\log 6+o(1),
+\]
+且核尾部满足 \(K(\Delta)\sim (|\Delta|-2)e^{-|\Delta|}\)，从而非对角耦合以 \(e^{-|\Delta|}\) 指数湮灭。
+另一方面，当 \(\sigma_j=\sigma_\star+\varepsilon t_j\) 且 \(\varepsilon\downarrow0\)（\(t_j\) 两两不同）时，
+\[
+S_{\mathrm{scale}}
+=\kappa(\kappa-1)\log\frac{1}{\varepsilon}
++2\sum_{1\le j<k\le \kappa}\log\frac{1}{|t_k-t_j|}
++O(1),
+\]
+表现出 Vandermonde 型对数排斥。
+\end{proposition}
+\begin{proof}
+闭式由直接积分计算得到：对 \(\phi(s)=\frac{1}{4\cosh^{2}(s/2)}\) 令 \(s=2u\)，化为
+\(
+K(\Delta)=\frac18\int_{\RR}\frac{1}{\cosh^{2}(u)\cosh^{2}(u-\Delta/2)}\,\dd u
+\)，再用双曲函数恒等式积分可得所示表达；\(K(0)=\int \phi^2=\frac16\) 由 \(\int_{\RR}\cosh(u)^{-4}\dd u=\frac43\) 得到。
+\par
+长程相由 \(G^{\mathrm{scale}}=K(0)I+O(\max_{j\neq k}K(\sigma_j-\sigma_k))\) 与行列式连续性推出；尾项渐近由闭式在 \(|\Delta|\to\infty\) 时展开得到。
+\par
+短程相可由平移族 \(\phi(\cdot-\sigma_\star-\varepsilon t_j)\) 在 \(L^2\) 中对 \(\varepsilon\) 的 Taylor 展开得到：该族在 \(\varepsilon\to0\) 时收敛到导数塔 \(\{\phi^{(r)}(\cdot-\sigma_\star)\}_{r=0}^{\kappa-1}\) 的张成；
+Gram 行列式的首阶非零项由 confluent Vandermonde 结构给出，因而出现 \(\varepsilon^{\kappa(\kappa-1)}\prod_{j<k}(t_k-t_j)^2\) 的尺度律。
+取对数即得所示展开。证毕。
+\end{proof}
+
+\begin{proposition}[深度跨度的解析指纹：去极点后的整函数零点密度给出跨度]\label{prop:xi-bulk-curvature-depth-span-zero-density}
+在命题 \ref{prop:xi-bulk-curvature-moment-generating-factorization} 的设定下，记
+\[
+E(t)=\frac{\sin(\pi t)}{\pi t}\,M_p(t)=\frac{1}{\kappa}\sum_{j=1}^{\kappa}e^{t\sigma_j}.
+\]
+令深度跨度
+\(
+L:=\max_j\sigma_j-\min_j\sigma_j
+\)。
+设 \(N_E(R)\) 为 \(E\) 在圆盘 \(\{t\in\CC:\ |t|\le R\}\) 内的零点计数函数（按重数计），则存在极限
+\[
+\boxed{\;\lim_{R\to\infty}\frac{N_E(R)}{R}=\frac{L}{\pi}.\;}
+\]
+因此 \(L\) 可由母函数 \(M_p\) 去除通用晶格因子后、仅凭整函数 \(E\) 的零点密度无损读出。
+\end{proposition}
+\begin{proof}[证明要点]
+因子 \(e^{t\min_j\sigma_j}\) 不改变零点集合，可将 \(E\) 化为形如 \(\sum_{j}c_j e^{a_j t}\) 的指数多项式（\(0=a_1<\cdots<a_\kappa=L\)）。
+该类函数属 Cartwright 型整函数，其指示图为实轴上的线段 \([0,L]\)，由 Cartwright 密度定理可得零点计数满足 \(N_E(R)\sim (L/\pi)R\)。证毕。
+\end{proof}
+
+\begin{corollary}[稳定反演的高斯正则化：最小可辨尺度的普适门槛]\label{cor:xi-bulk-curvature-gaussian-regularization-threshold}
+引入高斯正则化 \(\nu_\sigma:=G_\sigma*\nu\)（Fourier 乘子 \(e^{-\sigma^{2}\xi^{2}/2}\)）。
+则由命题 \ref{prop:xi-bulk-curvature-exact-deconvolution-operator} 得到线性恢复算子
+\[
+\widehat{\nu_\sigma}(\xi)=e^{-\sigma^{2}\xi^{2}/2}\frac{\sinh(\pi\xi)}{\pi\xi}\,\widehat p(\xi).
+\]
+其噪声放大因子满足
+\[
+\mathcal A_\sigma(\xi):=e^{-\sigma^{2}\xi^{2}/2}\frac{\sinh(\pi|\xi|)}{\pi|\xi|}
+\asymp
+\exp\!\Bigl(\pi|\xi|-\frac{\sigma^{2}\xi^{2}}{2}\Bigr),
+\]
+并在 \(|\xi|\approx \pi/\sigma^{2}\) 处达到最大值 \(\asymp \exp(\pi^{2}/(2\sigma^{2}))\)。
+因此在最坏情形 Fourier 噪声预算 \(\varepsilon\) 下，若希望输出噪声保持在常数级（同量级预算），则必须选取
+\[
+\boxed{\;\sigma\ \gtrsim\ \frac{\pi}{\sqrt{2\log(1/\varepsilon)}}.\;}
+\]
+\end{corollary}
+\begin{proof}
+由乘子表示可知输出噪声上界为 \(\sup_\xi \mathcal A_\sigma(\xi)\cdot\varepsilon\)。
+指数项的最大值由一元函数 \(\pi|\xi|-\sigma^{2}\xi^{2}/2\) 的极大点 \(|\xi|=\pi/\sigma^{2}\) 给出，对应指数增益 \(\exp(\pi^{2}/(2\sigma^{2}))\)；
+令 \(\varepsilon\exp(\pi^{2}/(2\sigma^{2}))\lesssim 1\) 得所示门槛。证毕。
+\end{proof}
+
+\begin{corollary}[比特复杂度下界：分辨率与精度位数的线性阈值]\label{cor:xi-bulk-curvature-bit-complexity-lower-bound}
+设观测到的曲率概率密度为 \(\widetilde p=p+\eta\)，并假定其在频域带宽 \(|\xi|\le \Omega\) 上具有 \(B\) 比特精度，即
+\(
+\sup_{|\xi|\le\Omega}|\widehat\eta(\xi)|\le 2^{-B}
+\)。
+令 \(\widetilde\nu:=\mathcal D\widetilde p\)。
+则由命题 \ref{prop:xi-bulk-curvature-exact-deconvolution-operator} 的乘子增长可知，在最坏情形噪声下
+\[
+\sup_{|\xi|\le\Omega}\bigl|\widehat{(\widetilde\nu-\nu)}(\xi)\bigr|
+\ \gtrsim\
+2^{-B}\,\frac{\sinh(\pi\Omega)}{\pi\Omega}
+\ \asymp\
+2^{-B}e^{\pi\Omega}.
+\]
+若要实现尺度分辨率 \(\Delta\)（通常需要 \(\Omega\gtrsim 1/\Delta\)），则必要的精度位数在量级上满足
+\[
+\boxed{\;B\ \gtrsim\ \frac{\pi}{\Delta\ln 2}\;}
+\qquad(\text{忽略对数次级项}).
+\]
+\end{corollary}
+\begin{proof}[证明要点]
+对噪声约束选择相位对齐的 \(\widehat\eta\) 可达到最坏情形放大因子 \(\sinh(\pi\Omega)/(\pi\Omega)\)。
+再以 \(\Omega\gtrsim 1/\Delta\) 换算即可得到位数阈值。证毕。
+\end{proof}
+
+\begin{remark}[屏障常数的同阶可达性：粗反卷积与 Prony 重构给出一条可执行链]\label{rem:xi-bulk-curvature-superresolution-achievability}
+在有限原子口径下，一旦噪声预算满足推论 \ref{cor:xi-bulk-curvature-bit-complexity-lower-bound} 的线性位数阈值，
+即可将反演实现为一条显式的可执行链：先在带宽 \(|\xi|\le \Omega\) 内施加反卷积乘子（命题 \ref{prop:xi-bulk-curvature-exact-deconvolution-operator} 或其有限阶截断版本，结论 \ref{con:xi-terminal-scale-kernel-partial-deconvolution-resolution}），
+得到 \(\widehat\nu\) 的带限近似；
+随后在一般位置与最小分离假设下，可用标准 Prony/矩阵铅笔/ESPRIT 等低秩谱反演由有限采样稳定恢复原子位置（与结论 \ref{con:xi-terminal-atomic-defect-hankel-prony} 的 Hankel--Prony 口径同型）。
+因此常数 \(\pi/(\ln 2)\) 所给出的线性斜率不仅给出必要屏障，也在同阶上可由构造链达到（差异仅出现在对数次级项中）。
+\end{remark}
+
+\begin{remark}[\texorpdfstring{$(q=4)$}{(q=4)} 的统一阈值：涨落、反卷积与二体体积的首个可见校正阶]\label{rem:xi-scale-q4-threshold-principle}
+注 \ref{rem:xi-bulk-entropy-fermi-grand-canonical} 将 bulk 熵曲率写为 Bernoulli 方差和；
+在以二阶累积量（高斯近似）为基底的制度中，其首个系统性偏离由四阶累积量支配。
+另一方面，结论 \ref{con:xi-terminal-scale-kernel-gamma-closed-form} 的小频率展开显示反卷积乘子 \(\log M_N(\xi)\) 的首修正项由 \(\zeta(4)\) 给出，
+从而在带宽受控的粗反卷积制度中，四阶亦为最小非线性校正阶。
+再者，logistic 平移族的散度字典满足 \(D_{\mathrm{KL}}=4H^2+O(\Delta^4)\)（注 \ref{rem:xi-logistic-fourth-order-closure}），
+而 Hellinger--Gram 体积势的短程展开亦以 \(O(\Delta^4)\) 项给出首个超二次偏离（命题 \ref{prop:xi-logistic-hellinger-gram-determinant}）。
+因此在本文的尺度全息接口中，四阶构成“首次不可忽略结构偏离”的共同闭合层级。
+\end{remark}
+

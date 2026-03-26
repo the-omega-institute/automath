@@ -1,0 +1,71 @@
+\begin{theorem}[Gödel 化投影算法的语义等价不可判定]\label{thm:conclusion-semantic-equivalence-undecidable}
+令 \(\mathcal F\) 为一类全定义可计算函数的有效编码族（例如 \(\NN\to\{0,1\}\) 的全定义可计算函数族，并约定输入给出其程序编码）。
+将语义等价定义为外延相等：对 \(f,g\in\mathcal F\)，
+\[
+f\equiv g\quad:\Longleftrightarrow\quad \forall n\in\NN,\ f(n)=g(n).
+\]
+则判定问题
+\[
+\text{输入 }(f,g)\in\mathcal F^2,\ \text{判定 }f\equiv g
+\]
+不可判定。
+\end{theorem}
+
+\begin{proof}
+令 \(M\) 为图灵机，\(x\) 为输入。
+定义全可计算函数
+\[
+f_{M,x}(n):=
+\begin{cases}
+0,& M(x)\ \text{于 }n\text{ 步内停机},\\
+1,& \text{否则}.
+\end{cases}
+\]
+并令 \(g(n)\equiv 1\) 为常值函数。
+则 \(f_{M,x}\equiv g\) 当且仅当 \(M(x)\) 不停机。
+若外延等价可判定，则可判定非停机集合，从而与停机问题的经典不可判定性矛盾。证毕。
+\end{proof}
+
+\begin{corollary}[不存在可计算的有限素数完备不变量]\label{cor:conclusion-no-computable-finite-prime-complete-invariant}
+设 \(\mathcal A\) 为任意语义上图灵完备的投影/外置算法模型，使其可编译实现定理 \ref{thm:conclusion-semantic-equivalence-undecidable} 中的 \(\mathcal F\)。
+则不存在可计算映射 \(\mathrm{Inv}:\mathcal A\to\mathcal D\) 满足对任意 \(A,B\in\mathcal A\)，
+\[
+A\equiv B\quad\Longleftrightarrow\quad \mathrm{Inv}(A)=\mathrm{Inv}(B),
+\]
+其中 \(\mathcal D\) 为任何可有效比较的有限数据域（例如有限素数集、有限 prime-register 配置、有限精度椭圆参数、有限字符串）。
+换言之，尽管对象可被 Gödel 化为素数数据，但不存在可计算的有限素数/几何参数作为语义等价的完备分类。
+\end{corollary}
+
+\begin{proof}
+若存在这样的 \(\mathrm{Inv}\)，则给定 \(A,B\) 可计算 \(\mathrm{Inv}(A),\mathrm{Inv}(B)\) 并有效比较其相等性，从而判定 \(A\equiv B\)。
+这与定理 \ref{thm:conclusion-semantic-equivalence-undecidable} 的不可判定性矛盾。证毕。
+\end{proof}
+
+\begin{corollary}[图灵完备门演算不存在可计算的完备正规形]\label{cor:conclusion-no-computable-complete-normal-form}
+设 \(\mathcal A\) 为任意语义上图灵完备的投影/门电路模型，使其可编译实现定理 \ref{thm:conclusion-semantic-equivalence-undecidable} 的 \(\mathcal F\)。
+则不存在全定义可计算算子
+\(
+\mathrm{NF}:\mathcal A\to\mathcal A
+\)
+使得同时满足：
+\begin{enumerate}
+\normalfont
+  \item 对任意 \(a\in\mathcal A\)，有 \(\mathrm{NF}(a)\equiv a\)；
+  \item 对任意 \(a,b\in\mathcal A\)，有
+  \[
+  a\equiv b\quad\Longleftrightarrow\quad \mathrm{NF}(a)=\mathrm{NF}(b),
+  \]
+  其中右端为语法相等。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+若 \(\mathrm{NF}\) 存在，则给定 \(a,b\) 可计算 \(\mathrm{NF}(a),\mathrm{NF}(b)\) 并判定其语法相等性，从而判定 \(a\equiv b\)。
+与定理 \ref{thm:conclusion-semantic-equivalence-undecidable} 的不可判定性矛盾。证毕。
+\end{proof}
+
+\begin{remark}
+在若干严格受限片段（例如固定有界切片）内，终止且合流的重写系统确实给出可计算的唯一正规形，从而词问题与门级代价最小化均落入可判定范畴（定理 \ref{thm:pom-rewrite-termination-confluence}，推论 \ref{cor:pom-rewrite-normalform-minimal-audit}）。
+上述推论说明：此类“局部可正规化”的机制无法延拓为覆盖图灵完备语义的全域完备正规形。
+\end{remark}
+
+\endinput

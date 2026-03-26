@@ -1,0 +1,203 @@
+\paragraph{Hilbert 投影结构与尺度无关的采样集中}
+多尺度斯托克斯能量不仅给出 \(\|d\alpha\|_{L^2}\) 的尺度极限，还携带一个内生的 \(L^2\) 投影/鞅结构，从而导出尺度单调性与正交增量分解；在有界性假设下，胞腔层的 Monte Carlo 估计具备与尺度无关的统一置信界。
+
+\begin{theorem}[多尺度斯托克斯能量的 \(L^2\) 投影结构与正交增量]\label{thm:conclusion-multiscale-stokes-energy-hilbert-projection}
+沿用定理 \ref{thm:conclusion-multiscale-stokes-energy-l2-reconstruction} 的记号，并令
+\(
+\beta:=d\alpha
+\)。
+对固定的终端尺度 \(M\in\NN\)，在有限集合 \(\mathcal C_M^{k+1}\) 上取均匀随机胞腔 \(C_M\)。
+对每个 \(0\le m\le M\)，令 \(C_m\in\mathcal C_m^{k+1}\) 为 \(C_M\) 的唯一祖先胞腔（同向并满足 \(C_M\subset C_m\)），并令 \(\mathcal F_m:=\sigma(C_m)\)。
+记
+\[
+X_M:=\mathbf S_M\alpha(C_M)=\frac{1}{h_M^{k+1}}\int_{C_M}\beta,
+\qquad h_m:=2^{-m}.
+\]
+则对每个 \(m\le M\) 有
+\begin{equation}\label{eq:conclusion-stokes-energy-conditional-expectation}
+\boxed{\;
+\EE[X_M\mid \mathcal F_m]=\mathbf S_m\alpha(C_m)\;}
+\end{equation}
+从而在 \(L^2\) 意义下成立尺度单调性与正交增量分解：
+\begin{equation}\label{eq:conclusion-stokes-energy-pythagoras-increments}
+\boxed{\;
+\EE\bigl[| \mathbf S_{m+1}\alpha(C_{m+1})|^2\bigr]
+-\EE\bigl[|\mathbf S_{m}\alpha(C_{m})|^2\bigr]
+=\EE\bigl[|\mathbf S_{m+1}\alpha(C_{m+1})-\mathbf S_{m}\alpha(C_{m})|^2\bigr]\ \ge 0.\;}
+\end{equation}
+\end{theorem}
+\begin{proof}
+由祖先定义，条件于事件 \(\{C_m=C\}\)（\(C\in\mathcal C_m^{k+1}\)）时，随机变量 \(C_M\) 在 \(C\) 的全部 \(M\)-级子胞腔上均匀分布。
+由积分的可加性与 \(\beta\) 在子胞腔上的平均迭代，
+\[
+\EE[X_M\mid C_m=C]
+=\frac{1}{h_M^{k+1}}\cdot \frac{1}{\#\{\text{子胞腔}\}}\sum_{C'\subset C}\int_{C'}\beta
+=\frac{1}{h_m^{k+1}}\int_{C}\beta
+=\mathbf S_m\alpha(C),
+\]
+得到 \eqref{eq:conclusion-stokes-energy-conditional-expectation}。
+\par
+由于 \(\{\mathcal F_m\}_{m\le M}\) 为递增过滤，\(X_m:=\EE[X_M\mid\mathcal F_m]\) 构成 \(L^2\)-鞅。
+因此
+\(
+X_{m+1}-X_m\perp X_m
+\)
+且 \(\EE[|X_{m+1}|^2]=\EE[|X_m|^2]+\EE[|X_{m+1}-X_m|^2]\)。
+把 \(X_m\) 代回 \eqref{eq:conclusion-stokes-energy-conditional-expectation} 即得 \eqref{eq:conclusion-stokes-energy-pythagoras-increments}。证毕。
+\end{proof}
+
+\begin{theorem}[顶维 dyadic 分割下的条件期望表征与跨尺度能量恒等式]\label{thm:conclusion-stokes-energy-dyadic-martingale}
+沿用定理 \ref{thm:conclusion-multiscale-stokes-energy-l2-reconstruction}，并取顶维情形 \(k=d-1\)。
+令 \(\beta=d\alpha\) 并以标准体积形式识别为 \(d\)-维密度 \(f\in L^2(Q)\)：\(\beta=f(x)\,\mathrm dx\)。
+令 \(\mathscr F_m\) 为由 dyadic 顶维立方剖分 \(\mathcal C_m^{d}\) 生成的 \(\sigma\)-代数。
+则成立：
+\begin{enumerate}
+  \item 条件期望表征
+  \[
+  \mathcal E_m(\alpha)=\bigl\|\EE[f\mid \mathscr F_m]\bigr\|_{L^2(Q)}^2.
+  \]
+  \item 精确方差分解
+  \[
+  \|f\|_{L^2(Q)}^2-\mathcal E_m(\alpha)
+  =\sum_{C\in\mathcal C_m^{d}}\int_C\bigl|f-\langle f\rangle_C\bigr|^2,
+  \qquad
+  \langle f\rangle_C:=\frac1{|C|}\int_C f=\mathbf S_m\alpha(C),
+  \]
+  从而 \(m\mapsto \mathcal E_m(\alpha)\) 单调不减且 \(\mathcal E_m(\alpha)\uparrow \|f\|_2^2\)。
+  \item 跨尺度能量恒等式与局部 Haar 增量公式
+  \[
+  \|f\|_2^2=\mathcal E_0(\alpha)+\sum_{m\ge 0}\bigl(\mathcal E_{m+1}(\alpha)-\mathcal E_m(\alpha)\bigr),
+  \qquad
+  \mathcal E_{m+1}(\alpha)-\mathcal E_m(\alpha)
+  =\bigl\|\EE[f\mid\mathscr F_{m+1}]-\EE[f\mid\mathscr F_m]\bigr\|_2^2\ge 0,
+  \]
+  并且每一增量满足完全显式的局部方差公式
+  \[
+  \mathcal E_{m+1}(\alpha)-\mathcal E_m(\alpha)
+  =\sum_{P\in\mathcal C_m^{d}}\frac{|P|}{2^d}\sum_{\substack{C\subset P\\ C\in\mathcal C_{m+1}^{d}}}
+  \bigl|\mathbf S_{m+1}\alpha(C)-\mathbf S_m\alpha(P)\bigr|^2.
+  \]
+  因此尾项误差具有严格证书表达：
+  \(
+  \|f\|_2^2-\mathcal E_M(\alpha)=\sum_{m\ge M}(\mathcal E_{m+1}-\mathcal E_m)
+  \)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对每个 \(C\in\mathcal C_m^{d}\) 记 \(f_C:=\langle f\rangle_C=\frac1{|C|}\int_C f\)。
+由顶维斯托克斯读出 \(\mathbf S_m\alpha(C)=h^{-d}\int_C\beta=f_C\)，并且
+\(
+\EE[f\mid\mathscr F_m]=\sum_{C\in\mathcal C_m^{d}} f_C\,\ind_C
+\)。
+因此
+\[
+\bigl\|\EE[f\mid\mathscr F_m]\bigr\|_2^2
+=\sum_{C}\int_C |f_C|^2
+=\sum_C |C|\,|f_C|^2
+=h^d\sum_C |\mathbf S_m\alpha(C)|^2
+=\mathcal E_m(\alpha),
+\]
+得 (1)。
+\par
+在每个 \(C\) 上有 \(\int_C f_C(f-f_C)=f_C\int_C(f-f_C)=0\)，故
+\(
+\int_C|f|^2=\int_C|f_C|^2+\int_C|f-f_C|^2
+\)。
+对 \(C\) 求和并识别第一项为 \(\mathcal E_m(\alpha)\) 即得 (2)；
+单调性与 \(\mathcal E_m(\alpha)\uparrow\|f\|_2^2\) 亦可由条件期望范数随细化单调增加推出。
+\par
+令 \(X_m:=\EE[f\mid\mathscr F_m]\)，则 \((X_m)_{m\ge 0}\) 为 \(L^2\) 鞅且
+\(
+\|X_{m+1}\|_2^2-\|X_m\|_2^2=\|X_{m+1}-X_m\|_2^2
+\)。
+代入 (1) 得跨尺度恒等式与非负性。
+局部方差公式由逐父胞腔分解：
+对每个 \(P\in\mathcal C_m^d\) 记其 \(2^d\) 个子胞腔均值为 \(f_C\) 且 \(f_P\) 为父均值，则
+\[
+\sum_{C\subset P}|C|\,|f_C|^2-|P|\,|f_P|^2
+=\sum_{C\subset P}|C|\,|f_C-f_P|^2,
+\]
+其中使用 \(\sum_{C\subset P}|C|(f_C-f_P)=0\)。
+将 \(|C|=|P|/2^d\) 并代回 \(f_C=\mathbf S_{m+1}\alpha(C)\)、\(f_P=\mathbf S_m\alpha(P)\) 即得所示公式。证毕。
+\end{proof}
+
+\begin{corollary}[\(H^1\) 正则性下的二阶尺度误差控制]\label{cor:conclusion-stokes-energy-h1-second-order}
+在定理 \ref{thm:conclusion-stokes-energy-dyadic-martingale} 的设定下，若 \(f\in H^1(Q)\)，则存在仅依赖于维数 \(d\) 的常数 \(C_d>0\) 使得对任意 \(m\ge 0\) 有
+\[
+0\le \|f\|_2^2-\mathcal E_m(\alpha)\le C_d\,2^{-2m}\,\|\nabla f\|_2^2.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-stokes-energy-dyadic-martingale}(2)，误差为 \(\sum_C\int_C|f-\langle f\rangle_C|^2\)。
+对每个边长 \(h=2^{-m}\) 的立方体 \(C\) 用 Poincar\'e 不等式得
+\(
+\int_C|f-\langle f\rangle_C|^2\le C_d\,h^2\int_C|\nabla f|^2
+\)；
+求和即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[顶维胞腔抽样对 \texorpdfstring{$\|d\alpha\|_{L^2}$}{||dα||\_2} 的置信区间]\label{cor:conclusion-stokes-energy-topcell-confidence}
+在命题 \ref{prop:conclusion-stokes-energy-cell-sampling-concentration} 的设定下取 \(k=d-1\)，并记 \(\widehat E_m:=\widehat{\mathcal E}_m(\alpha)\)。
+则对任意 \(0<\delta<1\)，以概率至少 \(1-\delta\) 有
+\[
+\bigl|\widehat E_m-\|d\alpha\|_{L^2(Q)}^2\bigr|
+\le
+\bigl(\|d\alpha\|_{L^2(Q)}^2-\mathcal E_m(\alpha)\bigr)
+ + M^2\sqrt{\frac{\log(2/\delta)}{2N}}.
+\]
+若进一步 \(f\in H^1(Q)\)，则可用推论 \ref{cor:conclusion-stokes-energy-h1-second-order} 将离散化偏差显式上界为 \(C_d\,2^{-2m}\|\nabla f\|_2^2\)。
+\end{corollary}
+
+\begin{proposition}[胞腔抽样下斯托克斯能量的尺度无关集中界]\label{prop:conclusion-stokes-energy-cell-sampling-concentration}
+沿用定理 \ref{thm:conclusion-multiscale-stokes-energy-l2-reconstruction} 的记号，并额外假设 \(d\alpha\in L^\infty(Q)\) 且 \(\|d\alpha\|_\infty\le M\)。
+固定尺度 \(m\)，从 \(\mathcal C_m^{k+1}\) 中独立等概率抽取 \(N\) 个胞腔 \(C_1,\dots,C_N\)，并定义估计量
+\[
+\widehat{\mathcal E}_m(\alpha)
+:=
+h_m^{d}\,|\mathcal C_m^{k+1}|\cdot \frac1N\sum_{j=1}^{N}\bigl|\mathbf S_m\alpha(C_j)\bigr|^2.
+\]
+则对任意 \(0<\delta<1\)，以概率至少 \(1-\delta\) 有
+\[
+\boxed{\;
+\bigl|\widehat{\mathcal E}_m(\alpha)-\mathcal E_m(\alpha)\bigr|
+\le
+h_m^{d}\,|\mathcal C_m^{k+1}|\,M^2\sqrt{\frac{\log(2/\delta)}{2N}}\;}
+\]
+并且在标准 dyadic 约定下（以半开胞腔计数），有恒等式
+\(
+h_m^{d}\,|\mathcal C_m^{k+1}|=\binom{d}{k+1}
+\)，
+从而上界与尺度 \(m\) 无关。
+\end{proposition}
+\begin{proof}
+由 Jensen 不等式与 \(\|d\alpha\|_\infty\le M\) 得
+\(
+|\mathbf S_m\alpha(C)|\le M
+\)，从而随机变量
+\(
+X_j:=|\mathbf S_m\alpha(C_j)|^2
+\)
+满足 \(X_j\in[0,M^2]\) 且 \(\EE[X_j]=\frac1{|\mathcal C_m^{k+1}|}\sum_{C}|\mathbf S_m\alpha(C)|^2\)。
+由 Hoeffding 不等式，
+\[
+\PP\!\left(\left|\frac1N\sum_{j=1}^N X_j-\EE[X_1]\right|>\varepsilon\right)
+\le 2\exp\!\left(-\frac{2N\varepsilon^2}{M^4}\right).
+\]
+取 \(\varepsilon=M^2\sqrt{\log(2/\delta)/(2N)}\) 并乘以 \(h_m^{d}|\mathcal C_m^{k+1}|\) 即得结论；计数恒等式由 dyadic 网格的平移不变计数直接给出。证毕。
+\end{proof}
+
+\begin{conjecture}[折叠动力学诱导的斯托克斯胞腔平均的统一次高斯性]\label{conj:conclusion-stokes-energy-uniform-subgaussian}
+在折叠语法与纤维重构图呈 CAT(0) 立方几何的体系中，取一族由可见相位/审计势自然生成的 \(1\)-形式 \(\alpha\)（使 \(d\alpha\in L^2(Q)\)）。
+令 \(C\) 为在尺度 \(m\) 上按平移不变方式抽取的随机 \((k+1)\)-胞腔，并记随机变量
+\[
+Z_m:=\mathbf S_m\alpha(C)-\EE[\mathbf S_m\alpha(C)].
+\]
+则存在仅依赖于 \((d,k)\) 与局部折叠约束的常数 \(K<\infty\)，使得对所有 \(m\) 与所有 \(t\ge 0\) 都有一致的次高斯尾界
+\[
+\PP(|Z_m|\ge t)\le 2\exp\!\left(-\frac{t^2}{K\,\|d\alpha\|_{L^2(Q)}^2}\right).
+\]
+若该猜想成立，则命题 \ref{prop:conclusion-stokes-energy-cell-sampling-concentration} 的尺度无关集中界可在不依赖 \(L^\infty\) 假设下推广为普适现象，并为尺度鲁棒的泛化界与自适应停止准则提供统一概率桥梁。
+\end{conjecture}
+
+\endinput
+

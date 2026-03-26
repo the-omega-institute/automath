@@ -1,0 +1,85 @@
+\subsection{稳定压缩率与分辨率不足的形式化}\label{subsec:folding-stable-compression-resolution}
+
+折叠压缩率由
+\[
+\frac{|\Omega_m|}{|X_m|}=\frac{2^m}{F_{m+2}}
+\]
+刻画。由于 $F_{m+2}\asymp \varphi^m$，平均折叠多重度具有指数增长率 $(2/\varphi)^m$。因此，尽管稳定类型数量随 $m$ 指数增长，微态数量增长更快，折叠必然为多对一：不同微态在有限分辨率下不可区分而被归入同一稳定类型。该结论给出“分辨率不足导致规律不可读出”的严格表述：不可读出并非缺乏规律，而是稳定投影将大量微差异压缩到同一类中，从而在微观层面丢失可区分信息。
+
+\subsubsection{信息二分与纤维残差}
+在 Zeckendorf 语法约束下，折叠 $\Fold_m:\Omega_m\to X_m$ 将可观测微态信息分解为两类：其一为稳定类型 $x:=\Fold_m(\omega)\in X_m$，作为等价类的规范代表；其二为纤维残差 $r\in \Fold_m^{-1}(x)$，刻画被压缩抹去但在可逆重建口径下必须外置承载的自由度。压缩率 $|\Omega_m|/|X_m|=2^m/F_{m+2}$ 表明第二类自由度在分辨率增长时不可忽略；相应的纤维规模以 $d_m(x):=|\Fold_m^{-1}(x)|$ 定量刻画，并在小节 \ref{subsec:pom-information-ledger} 的信息账本中以 $\mathbb{E}_{\pi}[\log d_m(X)]$ 的形式进入熵分解。更精细的纤维内部结构可在投影本体数学部分直接闭式读出：纤维的分量分解与“逆代换次数分布”见定理 \ref{thm:pom-fiber-indset-factorization}--\ref{thm:pom-path-indset-poly-closed}；带符号指数与 \(\bmod 3\) 阻碍见定理 \ref{thm:pom-fiber-signed-index-periodicity}；纤维指数的热力学完成（LDP/CLT）见定理 \ref{thm:pom-fiber-index-ldp-thermo}--\ref{thm:pom-fiber-index-clt-thermo}。
+
+\begin{theorem}[最大纤维内的全息深度可任意放大]\label{thm:fold-maxfiber-holographic-depth-amplification}
+沿用折叠 \(\Fold_m:\Omega_m\to X_m\) 的记号，并记纤维多重度 \(d_m(x):=\card{\Fold_m^{-1}(x)}\) 与最大纤维
+\(
+D_m:=\max_{x\in X_m}d_m(x)
+\)。
+令 \(t:\NN\to\NN\) 为任意可计算且无界的时间界函数。
+则存在无穷多个尺度 \(m\) 与最大达到者 \(x_m\in X_m\)（满足 \(d_m(x_m)=D_m\)），使得在纤维 \(\Fold_m^{-1}(x_m)\) 内存在微态 \(\omega_m\) 满足：
+\begin{enumerate}
+  \item \(K(\omega_m\mid x_m,m)=O(\log m)\)；
+  \item 存在常数 \(c>0\) 使
+  \[
+  K^{t(m)}(\omega_m\mid x_m,m)\ \ge\ K(\omega_m\mid x_m,m)+c,
+  \]
+  其中 \(K\) 为固定通用机下的前缀条件 Kolmogorov 复杂度，\(K^{t(m)}\) 为时间受限的条件复杂度（要求在 \(t(m)\) 步内输出）。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:pom-max-fiber} 的最大纤维渐近 \(D_m=\Theta(\varphi^{m/2})\)，可取无穷多个 \(m\) 使得对任意预先给定常数 \(A>0\) 有 \(D_m>m^{A}\)。
+对每个这样的 \(m\)，取 \(x_m\) 为最大达到者。
+\par
+令 \(L:=\lceil A\log_2 m\rceil\)。
+枚举所有长度不超过 \(L\) 的前缀程序 \(p\)，在条件输入 \((x_m,m)\) 下并行模拟每个 \(p\) 至多 \(t(m)\) 步。
+令 \(S\) 为在该时间内确实输出、且输出落在纤维 \(\Fold_m^{-1}(x_m)\) 内的结果集合，则 \(\card{S}\le 2^{L}\le m^{A}\)。
+由于 \(d_m(x_m)=D_m>m^A\)，存在 \(\omega_m\in \Fold_m^{-1}(x_m)\setminus S\)。
+取字典序最小的此类 \(\omega_m\)。
+\par
+一方面，给定 \((x_m,m)\)，由固定算法（依赖于 \(t\) 与 \(A\)）执行上述并行枚举并取首个未在 \(t(m)\) 步内被长度 \(\le L\) 程序输出的纤维元素，即可确定 \(\omega_m\)，故 \(K(\omega_m\mid x_m,m)=O(\log m)\)。
+另一方面，若存在长度 \(\le L\) 的程序能在 \(t(m)\) 步内输出 \(\omega_m\)，则 \(\omega_m\in S\)，与构造矛盾；因此 \(K^{t(m)}(\omega_m\mid x_m,m)\ge L+1\)。
+取 \(A\) 充分大即可使 \(L+1-K(\omega_m\mid x_m,m)\) 被某个与 \(m\) 无关的常数 \(c>0\) 下界，从而得到所示不等式。证毕。
+\end{proof}
+
+\begin{proposition}[次指数纤维多重度下的全息码长率守恒]\label{prop:fold-subexp-multiplicity-holographic-rate-conservation}
+设 \(\Pi_n:\Omega_n\to\bar\Omega_n\) 为任意多对一投影，并记最大多重度
+\[
+M_n:=\max_{\bar\omega\in\bar\Omega_n}\card{\Pi_n^{-1}(\bar\omega)}.
+\]
+给定任意码长函数 \(m:\Omega_n\to\RR_{\ge 0}\)。
+对每个 \(\bar\omega\in\bar\Omega_n\) 定义最短码长与聚合码长
+\[
+m_{\min}(\bar\omega):=\min_{\omega\in\Pi_n^{-1}(\bar\omega)}m(\omega),
+\qquad
+m_{\mathrm{agg}}(\bar\omega):=-\log_2\sum_{\omega\in\Pi_n^{-1}(\bar\omega)}2^{-m(\omega)}.
+\]
+则存在与 \(n\) 无关的常数 \(C\) 使对任意 \(\bar\omega\in\bar\Omega_n\) 有
+\[
+\Bigl|m_{\mathrm{agg}}(\bar\omega)-m_{\min}(\bar\omega)\Bigr|
+\ \le\ \log_2 M_n + C.
+\]
+特别地，若 \(\log M_n=o(n)\)，则
+\[
+\frac{1}{n}\Bigl|m_{\mathrm{agg}}(\bar\omega)-m_{\min}(\bar\omega)\Bigr|
+\ \xrightarrow[n\to\infty]{}\ 0
+\]
+一致成立。
+\end{proposition}
+
+\begin{proof}
+对任意 \(\bar\omega\)，由定义知 \(\sum_{\omega\in\Pi_n^{-1}(\bar\omega)}2^{-m(\omega)}\ge 2^{-m_{\min}(\bar\omega)}\)，从而
+\(
+m_{\mathrm{agg}}(\bar\omega)\le m_{\min}(\bar\omega)
+\)。
+另一方面，由 \(\card{\Pi_n^{-1}(\bar\omega)}\le M_n\) 与 \(m(\omega)\ge m_{\min}(\bar\omega)\) 得
+\[
+\sum_{\omega\in\Pi_n^{-1}(\bar\omega)}2^{-m(\omega)}
+\le
+\card{\Pi_n^{-1}(\bar\omega)}\,2^{-m_{\min}(\bar\omega)}
+\le
+M_n\,2^{-m_{\min}(\bar\omega)},
+\]
+从而 \(m_{\mathrm{agg}}(\bar\omega)\ge m_{\min}(\bar\omega)-\log_2 M_n\)。
+将常数规范（由对数底与码长约定诱导）吸收到 \(C\) 即得第一式。
+两端同除以 \(n\) 并用 \(\log M_n=o(n)\) 得一致收敛。证毕。
+\end{proof}

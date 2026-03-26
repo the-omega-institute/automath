@@ -1,0 +1,564 @@
+在命题 \ref{prop:pom-diagonal-rate-rank-one-refresh-decomposition} 的秩一刷新表示下，最优核的首达时间与电网络对象出现一维闭合。
+其要点在于：每一步仅包含“状态依赖保持”与“全局刷新采样”两种机制，
+从而首达时间分布可分解为几何次数的几何停留时间之和；同时，由可逆性诱导的电导完全图为秩一乘积，Kron 还原退化为星形网络。
+
+\paragraph{首达时间的概率母函数与复合几何表示}
+沿用命题 \ref{prop:pom-diagonal-rate-rank-one-refresh-decomposition} 的记号，
+令 \((X_t)_{t\ge 0}\) 为以核 \(K_\delta\) 驱动、起点 \(X_0=x\) 的离散时间马尔可夫链。
+对目标点 \(y\in X\) 定义首次到达时间
+\[
+\tau_y:=\inf\{t\ge 0:\ X_t=y\}.
+\]
+并对每个起点 \(x\in X\) 定义“首次刷新等待时间”
+\[
+H_x:=\inf\{t\ge 1:\ \text{在第 \(t\) 步触发刷新}\}.
+\]
+
+\begin{lemma}[几何停留时间的母函数]\label{lem:pom-diagonal-rate-refresh-holding-time-pgf}
+在秩一刷新表示
+\(
+K_\delta=\mathrm{diag}(1-r_\delta)+r_\delta\,\pi_\delta^{\mathsf T}
+\)
+下，对每个 \(x\in X\)，随机变量 \(H_x\) 服从参数为 \(r_\delta(x)\) 的几何分布（取值于 \(\{1,2,\dots\}\)），其概率母函数为
+\[
+G_x(s):=\EE[s^{H_x}]=\frac{r_\delta(x)s}{1-(1-r_\delta(x))s},
+\qquad |s|<\frac{1}{1-r_\delta(x)}.
+\]
+\end{lemma}
+\begin{proof}
+由定义，链在每一步以概率 \(1-r_\delta(x)\) 保持在 \(x\)，以概率 \(r_\delta(x)\) 触发刷新；\(H_x\) 即“首次刷新”所需的步数。
+因此 \(\mathbb P(H_x=t)=(1-r_\delta(x))^{t-1}r_\delta(x)\)（\(t\ge 1\)），求和得到母函数闭式。证毕。
+\end{proof}
+
+\begin{theorem}[首达时间的概率母函数闭式与复合几何分解]\label{thm:pom-diagonal-rate-refresh-hitting-time-pgf-closed}
+对任意互异 \(x,y\in X\)，\(\tau_y\) 的概率母函数在 \(s=0\) 的邻域内解析，并满足严格闭式
+\[
+\EE_x[s^{\tau_y}]
+=G_x(s)\cdot \frac{\pi_\delta(y)}{1-(1-\pi_\delta(y))\,\overline G_{-y}(s)},
+\qquad
+\overline G_{-y}(s):=\sum_{z\ne y}\frac{\pi_\delta(z)}{1-\pi_\delta(y)}\,G_z(s).
+\]
+等价地，\(\tau_y\) 具有如下复合分布表示：令 \(N\sim\mathrm{Geom}(\pi_\delta(y))\) 为取值于 \(\{0,1,2,\dots\}\) 的几何分布（失败轮数），并令
+\(
+Z_i\overset{\text{\rm i.i.d.}}{\sim}\pi_\delta(\cdot\mid\cdot\ne y)
+\)
+且与 \(N\) 及 \(\{H_z\}\) 相互独立，则
+\[
+\tau_y\ \overset{d}{=}\ H_x+\sum_{i=1}^{N} H_{Z_i}.
+\]
+\end{theorem}
+\begin{proof}
+由秩一刷新表示，若 \(X_t\ne y\)，则离开当前状态的唯一机制是触发一次刷新并从 \(\pi_\delta\) 采样下一状态。
+从 \(x\ne y\) 出发，首次刷新前的步数为 \(H_x\)（引理 \ref{lem:pom-diagonal-rate-refresh-holding-time-pgf}）。
+刷新后以概率 \(\pi_\delta(y)\) 直接命中 \(y\) 并终止；否则落在某个 \(z\ne y\)，并从该 \(z\) 重新开始同一过程。
+因此失败轮数 \(N\) 服从 \(\mathrm{Geom}(\pi_\delta(y))\)，失败轮的落点序列 \(Z_i\) 为条件化背景分布 \(\pi_\delta(\cdot\mid\cdot\ne y)\) 的独立样本；
+每轮在落点 \(z\) 的等待时间为 \(H_z\)，且与 \(N,Z_i\) 独立。
+由复合独立性得到分布等式；对母函数取期望并使用 \(\EE[t^N]=\pi_\delta(y)/(1-(1-\pi_\delta(y))t)\) 得闭式。证毕。
+\end{proof}
+
+\begin{corollary}[均值命中时闭式]\label{cor:pom-diagonal-rate-refresh-hitting-time-mean-closed}
+对任意互异 \(x,y\in X\)，有
+\[
+\EE_x[\tau_y]=\frac{1}{r_\delta(x)}+\frac{1}{\pi_\delta(y)}\sum_{z\ne y}\frac{\pi_\delta(z)}{r_\delta(z)}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-refresh-hitting-time-pgf-closed} 的复合分布表示，\(\EE[H_x]=1/r_\delta(x)\) 且
+\(
+\EE[N]=(1-\pi_\delta(y))/\pi_\delta(y)
+\)。
+并且
+\(
+\EE[H_{Z_1}]=\sum_{z\ne y}\frac{\pi_\delta(z)}{1-\pi_\delta(y)}\cdot \frac{1}{r_\delta(z)}
+\)。
+代回即得所示闭式。证毕。
+\end{proof}
+
+\paragraph{删点 Laguerre 多项式与几何谱分解}
+当核进一步专化为最优核 \(K^\star_\delta\) 的显式参数化（命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone}）时，
+首达时间母函数可被压缩为一个删点 Laguerre 多项式的有理式；
+其分母的实根交错把首达时间分布的全部信息压缩为一组落在 \((0,1)\) 的几何谱参数 \(\{\lambda_{y,i}\}\) 以及相应的残数系数。
+
+\begin{theorem}[首达时间母函数的删点 Laguerre 闭式]\label{thm:pom-diagonal-rate-refresh-hitting-time-deleted-laguerre-pgf}
+在命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 的设定下，固定互异 \(x,y\in X\)，并令 \((X_t)_{t\ge 0}\) 由最优核 \(K^\star_\delta\) 驱动且 \(X_0=x\)。
+定义首达时间 \(\tau_y:=\inf\{t\ge 0:\ X_t=y\}\)。
+令删点多项式
+\[
+P_{-y}(z):=\prod_{u\in X\setminus\{y\}}(t_u-z),\qquad
+D_y(z):=zP_{-y}'(z)+\kappa_\delta P_{-y}(z),
+\qquad
+P_{-x,-y}(z):=\prod_{u\in X\setminus\{x,y\}}(t_u-z).
+\]
+则对 \(|s|\) 充分小有严格恒等式
+\[
+\EE_x[s^{\tau_y}]
+=
+\frac{\kappa_\delta\,s\,(t_x-\kappa_\delta)}{t_y-\kappa_\delta}\cdot
+\frac{P_{-x,-y}(\kappa_\delta s)}{D_y(\kappa_\delta s)}.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone}，最优核满足秩一刷新分解
+\[
+K^\star_\delta(z\mid x)=(1-r_\delta(x))\mathbf 1_{\{z=x\}}+r_\delta(x)\pi_\delta(z),
+\qquad
+r_\delta(x)=\frac{t_x-\kappa_\delta}{t_x},\quad
+\pi_\delta(z)=\frac{1}{t_z-\kappa_\delta}.
+\]
+沿用定理 \ref{thm:pom-diagonal-rate-refresh-hitting-time-pgf-closed} 的记号并取 \(f_x(s):=\EE_x[s^{\tau_y}]\)（\(x\ne y\)），则由一步分解得到线性方程
+\(
+(I-sT^{(y)})f=sq^{(y)}
+\)
+（\(T^{(y)}\) 为删去 \(y\) 的次转移矩阵，\(q^{(y)}(x)=K^\star_\delta(y\mid x)\)）。
+在秩一结构下可直接化为
+\[
+f_x(s)
+=\frac{s\,r_\delta(x)\pi_\delta(y)}{1-s(1-r_\delta(x))}
+\cdot
+\frac{1}{1-s\sum_{z\ne y}\frac{\pi_\delta(z)r_\delta(z)}{1-s(1-r_\delta(z))}}.
+\]
+代入 \(\pi_\delta(z)r_\delta(z)=1/t_z\) 与 \(1-s(1-r_\delta(z))=(t_z-\kappa_\delta s)/t_z\) 得
+\[
+\sum_{z\ne y}\frac{\pi_\delta(z)r_\delta(z)}{1-s(1-r_\delta(z))}
+=\sum_{z\ne y}\frac{1}{t_z-\kappa_\delta s}.
+\]
+令 \(z=\kappa_\delta s\) 并用对数导数恒等式
+\(
+\sum_{u\ne y}\frac{1}{t_u-z}=-\frac{P_{-y}'(z)}{P_{-y}(z)}
+\)
+化简得到
+\[
+\frac{1}{1-s\sum_{z\ne y}\frac{1}{t_z-\kappa_\delta s}}
+=\frac{\kappa_\delta P_{-y}(\kappa_\delta s)}{D_y(\kappa_\delta s)}.
+\]
+再注意 \(P_{-y}(\kappa_\delta s)=(t_x-\kappa_\delta s)P_{-x,-y}(\kappa_\delta s)\) 并与前因子中的 \((t_x-\kappa_\delta s)^{-1}\) 消去，整理即得所示恒等式。证毕。
+\end{proof}
+
+\begin{theorem}[吸收 Laguerre 多项式的实根交错]\label{thm:pom-diagonal-rate-refresh-absorbing-laguerre-interlacing}
+在定理 \ref{thm:pom-diagonal-rate-refresh-hitting-time-deleted-laguerre-pgf} 的设定下，
+设 \(\{t_u:\ u\ne y\}\) 的升序排列为 \(t_{(1)}<\cdots<t_{(n-1)}\)（其中 \(n:=|X|\ge 2\)）。
+则 \(D_y\) 的全部零点均为单实根，记为
+\(
+\kappa_\delta<z_{y,1}<\cdots<z_{y,n-1}
+\)
+并满足严格交错
+\[
+\kappa_\delta<z_{y,1}<t_{(1)}<z_{y,2}<t_{(2)}<\cdots<z_{y,n-1}<t_{(n-1)}.
+\]
+特别地，\(\lambda_{y,i}:=\kappa_\delta/z_{y,i}\in(0,1)\)。
+\end{theorem}
+\begin{proof}
+注意 \(D_y(z)=0\) 等价于世俗方程
+\[
+\sum_{u\ne y}\frac{1}{t_u-z}=\frac{\kappa_\delta}{z},
+\]
+其左端在每个开区间 \((0,t_{(1)})\) 与 \((t_{(k)},t_{(k+1)})\) 上连续严格递增并在端点处发散，
+而右端在 \((0,\infty)\) 上严格递减且为正。
+由介值定理可知在每个 \((t_{(k)},t_{(k+1)})\) 内存在唯一解，并在 \((0,t_{(1)})\) 内存在唯一解。
+\par
+为定位该最小解在 \((\kappa_\delta,t_{(1)})\) 内，利用命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 的归一化条件
+\(
+\sum_{u\in X}(t_u-\kappa_\delta)^{-1}=1
+\)
+得到
+\(
+\sum_{u\ne y}(t_u-\kappa_\delta)^{-1}=1-(t_y-\kappa_\delta)^{-1}<1=\kappa_\delta/\kappa_\delta
+\)。
+结合左端在 \((0,t_{(1)})\) 上严格递增与 \(t_{(1)}>\kappa_\delta\) 可知该唯一解必落在 \((\kappa_\delta,t_{(1)})\)。
+各区间解的唯一性同时推出全部根均为单根，从而得到所示交错与 \(\lambda_{y,i}\in(0,1)\)。证毕。
+\end{proof}
+
+\begin{theorem}[几何谱分解表示]\label{thm:pom-diagonal-rate-refresh-hitting-time-geometric-spectral-decomp}
+在定理 \ref{thm:pom-diagonal-rate-refresh-absorbing-laguerre-interlacing} 的设定下，
+对任意互异 \(x,y\in X\) 存在唯一系数 \(\{\omega_i^{(x,y)}\}_{i=1}^{n-1}\subset\RR\)（\(\sum_i\omega_i^{(x,y)}=1\)）使对一切 \(k\ge 1\) 成立
+\[
+\PP_x(\tau_y=k)=\sum_{i=1}^{n-1}\omega_i^{(x,y)}\,(1-\lambda_{y,i})\,\lambda_{y,i}^{k-1}.
+\]
+并且系数具有显式残数公式
+\[
+\omega_i^{(x,y)}
+=
+-\frac{t_x-\kappa_\delta}{t_y-\kappa_\delta}\cdot
+\frac{\kappa_\delta\,P_{-x,-y}(z_{y,i})}{(z_{y,i}-\kappa_\delta)\,D_y'(z_{y,i})}.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-refresh-hitting-time-deleted-laguerre-pgf} 可知 \(\EE_x[s^{\tau_y}]/s\) 为关于 \(z=\kappa_\delta s\) 的有理函数
+\[
+F(z)=\frac{t_x-\kappa_\delta}{t_y-\kappa_\delta}\cdot \kappa_\delta\,\frac{P_{-x,-y}(z)}{D_y(z)}.
+\]
+由定理 \ref{thm:pom-diagonal-rate-refresh-absorbing-laguerre-interlacing}，分母 \(D_y\) 具有互异实根 \(\{z_{y,i}\}_{i=1}^{n-1}\)，且 \(\deg P_{-x,-y}=n-2< n-1=\deg D_y\)，故 \(F\) 可作部分分式分解并回代 \(z=\kappa_\delta s\) 得
+\[
+\EE_x[s^{\tau_y}]
+=\sum_{i=1}^{n-1}c_i^{(x,y)}\,\frac{s}{1-\lambda_{y,i}s},
+\qquad
+c_i^{(x,y)}:=-\frac{t_x-\kappa_\delta}{t_y-\kappa_\delta}\cdot
+\frac{\kappa_\delta\,P_{-x,-y}(z_{y,i})}{z_{y,i}D_y'(z_{y,i})}.
+\]
+将每一项改写为几何母函数 \(\frac{(1-\lambda)s}{1-\lambda s}=\sum_{k\ge 1}(1-\lambda)\lambda^{k-1}s^k\) 的线性组合即得所示表示，其中 \(\omega_i^{(x,y)}=c_i^{(x,y)}/(1-\lambda_{y,i})\)，即为残数公式。
+归一化 \(\sum_i\omega_i^{(x,y)}=1\) 由 \(s\uparrow 1\) 时 \(\EE_x[s^{\tau_y}]\to 1\) 及每一几何母函数在 \(s=1\) 取值为 \(1\) 得出；
+唯一性由 \(\{\lambda_{y,i}\}\) 互异而母函数表示的线性无关性给出。证毕。
+\end{proof}
+
+\begin{corollary}[尾概率的几何谱展开]\label{cor:pom-diagonal-rate-refresh-hitting-time-tail-spectral}
+在定理 \ref{thm:pom-diagonal-rate-refresh-hitting-time-geometric-spectral-decomp} 的设定下，令尾概率 \(S_k^{(x,y)}:=\PP_x(\tau_y>k)\)。
+则对一切 \(k\ge 0\) 有
+\[
+S_k^{(x,y)}=\sum_{i=1}^{n-1}\omega_i^{(x,y)}\,\lambda_{y,i}^{k}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-refresh-hitting-time-geometric-spectral-decomp} 的表示逐项求和即可得到尾概率展开。证毕。
+\end{proof}
+
+\begin{remark}[系数正性与完全单调尾]\label{rem:pom-diagonal-rate-refresh-hitting-time-tail-hausdorff-condition}
+在推论 \ref{cor:pom-diagonal-rate-refresh-hitting-time-tail-spectral} 的谱展开中，\(\lambda_{y,i}\in(0,1)\) 由实根交错强制；
+然而系数 \(\omega_i^{(x,y)}\) 的符号并不由该交错性质单独决定。
+若进一步满足 \(\omega_i^{(x,y)}\ge 0\)（从而 \(\sum_i\omega_i^{(x,y)}=1\) 给出 \([0,1)\) 上的离散概率测度 \(\sum_i\omega_i^{(x,y)}\delta_{\lambda_{y,i}}\)），则 \(\{S_k^{(x,y)}\}_{k\ge 0}\) 为 Hausdorff 矩序列并满足完全单调性
+\[
+(-1)^m(\Delta^m S^{(x,y)})_k\ge 0\qquad(m,k\ge 0),
+\]
+并且风险率 \(h_k^{(x,y)}:=\PP_x(\tau_y=k\mid \tau_y\ge k)\) 对 \(k\ge 1\) 具有递减性 \(h_{k+1}^{(x,y)}\le h_k^{(x,y)}\)。
+\end{remark}
+
+\input{sections/body/pom/parts/para__pom-diagonal-rate-refresh-strong-stationary-separation}
+
+\paragraph{删点基本矩阵的秩一闭式}
+对删点链的占据与访问次数，秩一刷新结构同样给出一行公式封闭。
+
+\begin{theorem}[删点基本矩阵秩一闭式]\label{thm:pom-diagonal-rate-refresh-fundamental-matrix-rankone}
+在秩一刷新表示 \(K_\delta=\mathrm{diag}(1-r_\delta)+r_\delta\,\pi_\delta^{\mathsf T}\) 下，固定 \(y\in X\)，
+令 \(T^{(y)}\) 表示在 \(X\setminus\{y\}\) 上由删去 \(y\) 诱导的次转移矩阵，并定义基本矩阵 \(N^{(y)}:=(I-T^{(y)})^{-1}\)。
+则对任意 \(x,z\in X\setminus\{y\}\) 有严格恒等式
+\[
+N^{(y)}_{xz}=\frac{1}{r_\delta(x)}\,\mathbf 1_{\{x=z\}}+\frac{\pi_\delta(z)}{\pi_\delta(y)\,r_\delta(z)}.
+\]
+从而对固定 \(z\ne y\)，期望访问次数 \(N^{(y)}_{xz}\) 对起点 \(x\) 的依赖仅通过初始补丁项 \(\frac{1}{r_\delta(x)}\mathbf 1_{\{x=z\}}\) 出现；其余部分与 \(x\) 无关。
+并且对 \(x\ne y\) 有
+\(
+\EE_x[\tau_y]=\sum_{z\ne y}N^{(y)}_{xz}
+\)，从而推出推论 \ref{cor:pom-diagonal-rate-refresh-hitting-time-mean-closed}。
+\end{theorem}
+\begin{proof}
+在 \(X\setminus\{y\}\) 上，次转移矩阵可写为
+\[
+T^{(y)}=\mathrm{diag}(1-r_\delta)+r_\delta\,\pi_{-y}^{!\mathsf T},
+\]
+其中 \(\pi_{-y}^{!}\) 为删去 \(y\) 的行向量。
+因此
+\[
+I-T^{(y)}=\mathrm{diag}(r_\delta)-r_\delta\,\pi_{-y}^{!\mathsf T}.
+\]
+记 \(D:=\mathrm{diag}(r_\delta)\)（可逆），并注意 \(\pi_{-y}^{!\mathsf T}D^{-1}r_\delta=\sum_{z\ne y}\pi_\delta(z)=1-\pi_\delta(y)\)。
+对 \(D-r_\delta\pi_{-y}^{!\mathsf T}\) 应用 Sherman--Morrison 公式得到
+\[
+(I-T^{(y)})^{-1}
+=D^{-1}+\frac{D^{-1}r_\delta\,\pi_{-y}^{!\mathsf T}D^{-1}}{1-(1-\pi_\delta(y))}.
+\]
+并用 \(D^{-1}r_\delta=\mathbf 1\) 化简即可得到所示矩阵元公式。
+最后对 \(z\) 求和得到 \(\EE_x[\tau_y]=\sum_{z\ne y}N^{(y)}_{xz}\)，并与前式比较即得推论 \ref{cor:pom-diagonal-rate-refresh-hitting-time-mean-closed}。证毕。
+\end{proof}
+
+\paragraph{多靶集合的闭式推广}
+上述删点结构对任意非空真子集 \(B\subset X\) 保持同型：删集 Laguerre 多项式同时控制命中时分布与基本矩阵。
+
+\begin{theorem}[删集 Laguerre 多项式控制 \texorpdfstring{$\tau_B$}{tau_B}]\label{thm:pom-diagonal-rate-refresh-hitting-time-deleted-set-laguerre-pgf}
+在命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 的设定下，令 \(B\subset X\) 为非空真子集，定义命中时
+\(
+\tau_B:=\inf\{t\ge 0:\ X_t\in B\}
+\)。
+记
+\[
+P_{-B}(z):=\prod_{u\in X\setminus B}(t_u-z),\qquad
+D_B(z):=zP_{-B}'(z)+\kappa_\delta P_{-B}(z),
+\qquad
+\pi_\delta(B):=\sum_{b\in B}\pi_\delta(b)=\sum_{b\in B}\frac{1}{t_b-\kappa_\delta}.
+\]
+则对任意 \(x\notin B\) 与 \(|s|\) 充分小，有严格恒等式
+\[
+\EE_x[s^{\tau_B}]
+=
+\kappa_\delta\,s\,(t_x-\kappa_\delta)\,\pi_\delta(B)\cdot
+\frac{P_{-(B\cup\{x\})}(\kappa_\delta s)}{D_B(\kappa_\delta s)}.
+\]
+\end{theorem}
+\begin{proof}
+将定理 \ref{thm:pom-diagonal-rate-refresh-hitting-time-pgf-closed} 的论证对目标集合 \(B\) 平行改写即可：
+失败轮数服从 \(\mathrm{Geom}(\pi_\delta(B))\)，且失败落点为条件化分布 \(\pi_\delta(\cdot\mid \cdot\notin B)\) 的独立样本。
+在最优核参数化下，
+\(
+\sum_{z\notin B}\pi_\delta(z)G_z(s)=s\sum_{z\notin B}(t_z-\kappa_\delta s)^{-1}
+\)；
+令 \(z=\kappa_\delta s\) 并用对数导数恒等式
+\(
+\sum_{u\notin B}(t_u-z)^{-1}=-P_{-B}'(z)/P_{-B}(z)
+\)
+化简得到
+\(
+\bigl(1-s\sum_{z\notin B}(t_z-\kappa_\delta s)^{-1}\bigr)^{-1}=\kappa_\delta P_{-B}(\kappa_\delta s)/D_B(\kappa_\delta s)
+\)。
+再用 \(P_{-B}(\kappa_\delta s)=(t_x-\kappa_\delta s)P_{-(B\cup\{x\})}(\kappa_\delta s)\) 消去 \((t_x-\kappa_\delta s)^{-1}\) 即得。证毕。
+\end{proof}
+
+\begin{proposition}[删集基本矩阵的秩一闭式]\label{prop:pom-diagonal-rate-refresh-fundamental-matrix-rankone-set}
+在定理 \ref{thm:pom-diagonal-rate-refresh-fundamental-matrix-rankone} 的设定下，令 \(B\subset X\) 为非空真子集，记 \(T^{(B)}\) 为在 \(X\setminus B\) 上删去 \(B\) 后诱导的次转移矩阵，\(N^{(B)}:=(I-T^{(B)})^{-1}\) 为基本矩阵。
+则对任意 \(x,z\notin B\) 有
+\[
+N^{(B)}_{xz}=\frac{1}{r_\delta(x)}\,\mathbf 1_{\{x=z\}}+\frac{\pi_\delta(z)}{\pi_\delta(B)\,r_\delta(z)}.
+\]
+\end{proposition}
+\begin{proof}
+与定理 \ref{thm:pom-diagonal-rate-refresh-fundamental-matrix-rankone} 同型：在删集情形下仅需将 \(\pi_\delta(y)\) 替换为 \(\pi_\delta(B)\)，并将求和索引从 \(X\setminus\{y\}\) 改为 \(X\setminus B\)；
+Sherman--Morrison 化简不变。证毕。
+\end{proof}
+
+\begin{conjecture}[Laguerre--P\'olya 闭包与极限实零性]\label{conj:pom-diagonal-rate-refresh-deleted-laguerre-lp-closure}
+设存在一族规模趋于无穷的有限模型
+\(
+(X_m,\kappa_m,\{t_x^{(m)}\}_{x\in X_m})
+\)
+及靶集合 \(B_m\subset X_m\)（非空真子集），使删集多项式
+\[
+D_{B_m}^{(m)}(z):=z\,(P_{-B_m}^{(m)})'(z)+\kappa_m P_{-B_m}^{(m)}(z),
+\qquad
+P_{-B_m}^{(m)}(z):=\prod_{u\in X_m\setminus B_m}(t_u^{(m)}-z)
+\]
+在适当尺度归一化后局部一致收敛到整函数 \(D_\infty(z)\)。
+若经验谱测度
+\[
+\nu_m:=\frac{1}{|X_m\setminus B_m|}\sum_{x\notin B_m}\delta_{t_x^{(m)}}
+\]
+在某个 \((\underline t,\infty)\) 上弱收敛到极限测度 \(\nu\)，并满足一条 Stieltjes 紧性条件（例如 \(\sup_m\int (t-\underline t)^{-2}\,d\nu_m(t)<\infty\) 且 \(\inf_m\kappa_m>0\)），
+则极限整函数 \(D_\infty\) 属于 Laguerre--P\'olya 类，
+其全部零点为正实数并与 \(\mathrm{supp}(\nu)\) 的间隙保持交错。
+该实零性质在删集命中时的几何谱表示中对应于谱参数落在 \((0,1)\)；
+而系数测度的正性（从而 Hausdorff 尾矩与完全单调性）则属于独立的附加约束，需在具体折叠/极限构造中另行核验。
+\end{conjecture}
+
+\begin{proposition}[有向命中时的秩二分解与势差闭合]\label{prop:pom-diagonal-rate-refresh-hitting-time-rank-two-potential}
+对互异 \(x,y\in X\) 定义
+\(
+m_\delta(x,y):=\EE_x[\tau_y]
+\)。
+则存在函数 \(A_\delta:X\to(0,\infty)\) 与 \(B_\delta:X\to(0,\infty)\)，使得对一切 \(x\ne y\) 有分离表示
+\[
+m_\delta(x,y)=A_\delta(x)+B_\delta(y),
+\qquad
+A_\delta(x)=\frac{1}{r_\delta(x)},
+\quad
+B_\delta(y)=\frac{1}{\pi_\delta(y)}\sum_{z\ne y}\frac{\pi_\delta(z)}{r_\delta(z)}.
+\]
+从而非对角均值命中时矩阵 \(\bigl(m_\delta(x,y)\bigr)_{x\ne y}\) 的秩至多为 \(2\)。
+并且定义势函数 \(\Phi_\delta(x):=A_\delta(x)-B_\delta(x)\)，则对任意互异 \(x,y\in X\) 有严格恒等式
+\[
+m_\delta(x,y)-m_\delta(y,x)=\Phi_\delta(x)-\Phi_\delta(y),
+\]
+从而对任意有向环 \(x_1\to x_2\to\cdots\to x_k\to x_1\) 成立环路守恒
+\[
+\sum_{i=1}^{k} m_\delta(x_i,x_{i+1})=\sum_{i=1}^{k} m_\delta(x_{i+1},x_i),
+\qquad (x_{k+1}:=x_1).
+\]
+\end{proposition}
+\begin{proof}
+由推论 \ref{cor:pom-diagonal-rate-refresh-hitting-time-mean-closed} 逐点分离即得 \(m_\delta(x,y)=A_\delta(x)+B_\delta(y)\)。
+势差恒等式由代入并消去对称项立即推出；环路守恒为沿环求和后的直接推论。证毕。
+\end{proof}
+
+\paragraph{电导完全图的星形 Kron 还原与通勤时闭式}
+由最优耦合的详细平衡，核 \(K_\delta\) 在平稳分布 \(w\) 下可逆。
+定义对称电导（边权）
+\[
+c_{xy}:=w(x)K_\delta(y\mid x)\qquad(x\ne y),
+\]
+并令
+\[
+S_\delta:=\sum_{z\in X}\frac{\pi_\delta(z)}{r_\delta(z)}\ (>0).
+\]
+
+\begin{proposition}[秩一电导与星形网络等价]\label{prop:pom-diagonal-rate-refresh-kron-star-equivalence}
+在上述记号下，对任意互异 \(x,y\in X\) 有严格恒等式
+\[
+c_{xy}=\frac{1}{S_\delta}\,\pi_\delta(x)\pi_\delta(y).
+\]
+从而完全图电导为秩一乘积。
+进一步，考虑星形图 \(S\)（枢纽 \(0\) 与叶集 \(X\)），对边 \((0,x)\) 赋电导
+\[
+g_x:=\frac{\pi_\delta(x)}{S_\delta}.
+\]
+则消去枢纽 \(0\) 的 Kron 还原（Schur 补）在叶集 \(X\) 上诱导的等效完全图电导恰为 \(\{c_{xy}\}_{x\ne y}\)。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:pom-diagonal-rate-rank-one-refresh-decomposition}，对 \(x\ne y\) 有 \(K_\delta(y\mid x)=r_\delta(x)\pi_\delta(y)\)，故
+\[
+c_{xy}=w(x)r_\delta(x)\pi_\delta(y).
+\]
+对 \(x\ne y\) 的详细平衡 \(w(x)K_\delta(y\mid x)=w(y)K_\delta(x\mid y)\) 给出
+\(
+w(x)r_\delta(x)/\pi_\delta(x)=w(y)r_\delta(y)/\pi_\delta(y)
+\)，
+从而存在常数 \(C_\delta>0\) 使 \(w(x)r_\delta(x)=C_\delta\,\pi_\delta(x)\)。
+对 \(x\) 求和并用 \(\sum_x w(x)=1\) 得
+\[
+1=\sum_x w(x)=\sum_x \frac{C_\delta\,\pi_\delta(x)}{r_\delta(x)}=C_\delta\,S_\delta,
+\qquad\text{即}\qquad C_\delta=\frac{1}{S_\delta}.
+\]
+代回得 \(c_{xy}=S_\delta^{-1}\pi_\delta(x)\pi_\delta(y)\)。
+\par
+对星形图的 Kron 还原，标准 Schur 补给出叶间等效电导
+\(
+c^{\mathrm{eff}}_{xy}=g_xg_y/\sum_{z\in X}g_z
+\)。
+由于 \(\sum_z g_z=S_\delta^{-1}\sum_z\pi_\delta(z)=S_\delta^{-1}\)，得
+\(
+c^{\mathrm{eff}}_{xy}=S_\delta^{-1}\pi_\delta(x)\pi_\delta(y)=c_{xy}
+\)，即为所示。证毕。
+\end{proof}
+
+\begin{corollary}[有效电阻与通勤时的星形闭式]\label{cor:pom-diagonal-rate-refresh-commute-effective-resistance}
+记 \(R_{\mathrm{eff}}(x,y)\) 为上述电网络在叶集 \(X\) 上的有效电阻，则对任意互异 \(x,y\in X\) 有
+\[
+R_{\mathrm{eff}}(x,y)=\frac{1}{g_x}+\frac{1}{g_y}
+=S_\delta\left(\frac{1}{\pi_\delta(x)}+\frac{1}{\pi_\delta(y)}\right).
+\]
+并且通勤时
+\(
+\mathrm{Comm}(x,y):=\EE_x[\tau_y]+\EE_y[\tau_x]
+\)
+满足严格闭式
+\[
+\mathrm{Comm}(x,y)=S_\delta\left(\frac{1}{\pi_\delta(x)}+\frac{1}{\pi_\delta(y)}\right)
+=R_{\mathrm{eff}}(x,y).
+\]
+\end{corollary}
+\begin{proof}
+有效电阻恒等式由星形网络两叶间串联电阻 \(1/g_x+1/g_y\) 直接得到。
+另一方面，由推论 \ref{cor:pom-diagonal-rate-refresh-hitting-time-mean-closed} 得
+\[
+\EE_x[\tau_y]+\EE_y[\tau_x]
+=\frac{1}{\pi_\delta(y)}\sum_{z\ne y}\frac{\pi_\delta(z)}{r_\delta(z)}
+\ +\ \frac{1}{\pi_\delta(x)}\sum_{z\ne x}\frac{\pi_\delta(z)}{r_\delta(z)}.
+\]
+将 \(\sum_{z\ne y}\pi_\delta(z)/r_\delta(z)=S_\delta-\pi_\delta(y)/r_\delta(y)\) 代入并化简，得到
+\(
+\mathrm{Comm}(x,y)=S_\delta(\pi_\delta(x)^{-1}+\pi_\delta(y)^{-1})
+\)。
+与前式比较即得 \(\mathrm{Comm}(x,y)=R_{\mathrm{eff}}(x,y)\)。证毕。
+\end{proof}
+
+\paragraph{加权生成树总权重与伪行列式闭式}
+令 \(n:=|X|\ge 2\)，并令 \(\tau_\delta\) 表示由 \(\{c_{xy}\}_{x\ne y}\) 定义的加权生成树总权重：
+\[
+\tau_\delta:=\sum_{T\ \text{\rm 生成树}}\ \prod_{\{x,y\}\in E(T)} c_{xy}.
+\]
+
+\begin{theorem}[加权 Cayley--Pr\"ufer 闭式]\label{thm:pom-diagonal-rate-refresh-weighted-cayley-prufer}
+在命题 \ref{prop:pom-diagonal-rate-refresh-kron-star-equivalence} 的设定下，有严格恒等式
+\[
+\tau_\delta=S_\delta^{-(n-1)}\prod_{x\in X}\pi_\delta(x).
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-diagonal-rate-refresh-kron-star-equivalence}，对 \(x\ne y\) 有
+\(
+c_{xy}=a_xa_y
+\)
+其中 \(a_x:=\pi_\delta(x)/\sqrt{S_\delta}\)。
+对边权 \(a_xa_y\) 的完全图，Pr\"ufer 码计数给出加权 Cayley 恒等式
+\(
+\sum_T\prod_{\{x,y\}\in E(T)}a_xa_y=(\sum_x a_x)^{n-2}\prod_x a_x
+\)。
+代入 \(\sum_x a_x=1/\sqrt{S_\delta}\) 即得所示闭式。证毕。
+\end{proof}
+
+\begin{corollary}[归一化 Laplacian 的伪行列式]\label{cor:pom-diagonal-rate-refresh-laplacian-pdet}
+令 \(L\) 为该完全图的 Laplacian（对 \(x\ne y\) 取 \(L_{xy}=-c_{xy}\)，并令 \(L_{xx}=\sum_{y\ne x}c_{xy}\)）。
+则矩阵树定理给出
+\[
+\operatorname{pdet}(L)=n\,\tau_\delta.
+\]
+进一步，对归一化 Laplacian \(\mathcal L:=\mathrm{diag}(w)^{-1/2}L\,\mathrm{diag}(w)^{-1/2}\) 有
+\[
+\operatorname{pdet}(\mathcal L)=\frac{\tau_\delta}{\prod_{x\in X}w(x)}.
+\]
+\end{corollary}
+\begin{proof}
+第一式为矩阵树定理的标准形式：\(\det(L^{(x)})=\tau_\delta\)（删去第 \(x\) 行列的任一主余子式），并由 \(L\) 的零空间由 \(\mathbf 1\) 张成而得 \(\operatorname{pdet}(L)=n\tau_\delta\)。
+\par
+对第二式，注意 \(\mathcal L\) 的零向量为 \(\sqrt w\)（逐点平方根），且任取 \(x\) 的主余子式满足
+\[
+\det(\mathcal L^{(x)})=\frac{\det(L^{(x)})}{\prod_{z\ne x}w(z)}=\frac{\tau_\delta}{\prod_{z\ne x}w(z)}.
+\]
+由秩 \(n-1\) 对称矩阵的伴随矩阵结构，\(\det(\mathcal L^{(x)})/\bigl(\sqrt{w(x)}\,\bigr)^2\) 与 \(x\) 无关，并等于 \(\operatorname{pdet}(\mathcal L)/\norm{\sqrt w}_2^2\)；
+而 \(\norm{\sqrt w}_2^2=\sum_x w(x)=1\)，故
+\(
+\operatorname{pdet}(\mathcal L)=\tau_\delta/\prod_x w(x)
+\)。
+证毕。
+\end{proof}
+
+\paragraph{单次对角观测决定通勤时与 Kemeny 常数}
+对角保持率 \(p_\delta(x)=K^\star_\delta(x\mid x)\) 的完备性已由定理 \ref{thm:pom-diagonal-rate-diagonal-statistics-complete} 给出。
+结合推论 \ref{cor:pom-diagonal-rate-refresh-commute-effective-resistance} 可将通勤时矩阵与 Kemeny 常数闭合为单次对角统计的代数函数。
+
+\begin{corollary}[对角保持率决定全通勤时矩阵]\label{cor:pom-diagonal-rate-diagonal-determines-commute}
+沿用定理 \ref{thm:pom-diagonal-rate-diagonal-statistics-complete} 的记号，
+由对角保持率向量 \(p_\delta(\cdot)\) 恢复 \(\kappa_\delta\) 与 \(\pi_\delta\)，并令
+\[
+r_\delta(x):=1-\frac{\kappa_\delta}{1+\kappa_\delta}\,p_\delta(x),
+\qquad
+S_\delta:=\sum_{z\in X}\frac{\pi_\delta(z)}{r_\delta(z)}.
+\]
+则对任意互异 \(x,y\in X\) 有通勤时闭式
+\[
+\mathrm{Comm}(x,y)=S_\delta\left(\frac{1}{\pi_\delta(x)}+\frac{1}{\pi_\delta(y)}\right).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-diagonal-statistics-complete}，\(\kappa_\delta,\pi_\delta\) 与 \(K^\star_\delta\) 可由 \(p_\delta(\cdot)\) 显式回收；
+并由 \(K^\star_\delta=\mathrm{diag}(1-r_\delta)+r_\delta\pi_\delta^{\mathsf T}\) 得 \(r_\delta(x)=1-\frac{\kappa_\delta}{1+\kappa_\delta}p_\delta(x)\)。
+代入推论 \ref{cor:pom-diagonal-rate-refresh-commute-effective-resistance} 即得。证毕。
+\end{proof}
+
+\begin{theorem}[Kemeny 常数的星形闭式]\label{thm:pom-diagonal-rate-refresh-kemeny-star-closed}
+令
+\(
+\mathcal K_\delta:=\sum_{y\in X}w(y)\,\EE_x[\tau_y]
+\)
+为 Kemeny 常数（其与起点 \(x\) 无关）。
+则在上述记号下成立严格恒等式
+\[
+\mathcal K_\delta
+=S_\delta\sum_{y\in X}\frac{w(y)\bigl(1-w(y)\bigr)}{\pi_\delta(y)}.
+\]
+并且借助定理 \ref{thm:pom-diagonal-rate-diagonal-statistics-complete} 的对角闭包，\(\mathcal K_\delta\) 可由单次对角观测 \(p_\delta(\cdot)\) 在 \(O(n)\) 时间内精确回收。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-diagonal-rate-refresh-hitting-time-rank-two-potential} 的秩二分解，
+对任意起点 \(x\) 有
+\[
+\sum_{y\in X}w(y)\,\EE_x[\tau_y]
+=\sum_{y\ne x}w(y)\bigl(A_\delta(x)+B_\delta(y)\bigr)
+=A_\delta(x)\bigl(1-w(x)\bigr)+\sum_{y\ne x}w(y)B_\delta(y).
+\]
+利用 \(w(x)r_\delta(x)=S_\delta^{-1}\pi_\delta(x)\)（命题 \ref{prop:pom-diagonal-rate-refresh-kron-star-equivalence} 的证明）可验证右端与 \(x\) 无关，从而该和确为 Kemeny 常数。
+另一方面，将
+\(
+B_\delta(y)=\pi_\delta(y)^{-1}\sum_{z\ne y}\pi_\delta(z)/r_\delta(z)
+=S_\delta/\pi_\delta(y)-1/r_\delta(y)
+\)
+代回并整理得
+\[
+\mathcal K_\delta
+=S_\delta\sum_{y\ne x}\frac{w(y)}{\pi_\delta(y)}-\sum_{y\ne x}\frac{w(y)}{r_\delta(y)}
+=S_\delta\sum_{y\in X}\frac{w(y)\bigl(1-w(y)\bigr)}{\pi_\delta(y)},
+\]
+其中最后一步使用恒等式
+\(
+\sum_y w(y)/r_\delta(y)=S_\delta\sum_y w(y)^2/\pi_\delta(y)
+\)
+（由 \(1/r_\delta(y)=S_\delta w(y)/\pi_\delta(y)\) 得出）。
+时间复杂度陈述由 \(\kappa_\delta,\pi_\delta,w\) 的对角闭式与一次线性求和直接推出。证毕。
+\par
+可复现核验脚本：\texttt{scripts/exp\_pom\_diagonal\_rate\_hitting\_star\_commute\_audit.py}。
+\end{proof}
+

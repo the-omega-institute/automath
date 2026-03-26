@@ -1,0 +1,158 @@
+\subsection{dyadic 证书链的逆极限寻址与读出决定性}
+
+在前缀站点 \(\mathcal A_{\mathrm{adm}}\) 与局部截面预层 \(\mathscr F\) 已经建立之后，递归地址化还可向两个方向继续闭合：
+其一是把有限精度地址链压缩为一个逆极限对象，从而把“跨层一致地址”严格对象化；
+其二是把 unitary-slice 可见读出的单值决定性重写为预层在该地址处的分离性，并把三类 \(\mathsf{NULL}\) 失败分别对应为空纤维、不可下降与非分离。
+
+\begin{theorem}[dyadic 证书链的逆极限寻址与稳定点对象]\label{thm:recursive-addressing-dyadic-inverse-limit-stable-object}
+设 \((\mathcal A_b,\pi_{b'\to b})_{b'\ge b\ge 0}\) 为一列有限非空离散集合及满射投影，其中 \(\mathcal A_b\) 表示深度 \(b\) 的类型化地址空间，而
+\[
+\pi_{b'\to b}:\mathcal A_{b'}\twoheadrightarrow \mathcal A_b
+\]
+表示从高精度到低精度的遗忘映射，并满足通常的相容关系
+\[
+\pi_{b''\to b}=\pi_{b'\to b}\circ \pi_{b''\to b'}
+\qquad(b''\ge b'\ge b).
+\]
+定义其逆极限
+\[
+\mathcal A_\infty:=\varprojlim_b \mathcal A_b
+=
+\left\{
+(a_b)_{b\ge 0}\in \prod_{b\ge 0}\mathcal A_b:\ 
+\pi_{b'\to b}(a_{b'})=a_b\ \text{对所有 }b'\ge b
+\right\}.
+\]
+则成立：
+\begin{enumerate}
+  \item \(\mathcal A_\infty\neq\varnothing\)；
+  \item 若把 \(\mathcal A_\infty\) 赋予 dyadic 超度量
+  \[
+  d_{\mathrm{dy}}(a,a')=
+  \begin{cases}
+  0,& a=a',\\[1mm]
+  2^{-b_\ast(a,a')},& a\neq a',
+  \end{cases}
+  \qquad
+  b_\ast(a,a'):=\max\{b\ge 0:\ a_b=a'_b\},
+  \]
+  则 \((\mathcal A_\infty,d_{\mathrm{dy}})\) 为紧致、完备且全不连通的超度量空间；
+  \item 若进一步给定一个完备度量空间 \(Y\) 及一族与地址相容的非空闭集
+  \[
+  F_b(a_b)\subseteq Y\qquad(a_b\in\mathcal A_b),
+  \]
+  满足
+  \[
+  F_{b'}(a_{b'})\subseteq F_b(a_b)
+  \quad\text{当}\quad
+  \pi_{b'\to b}(a_{b'})=a_b,
+  \]
+  并且存在常数 \(C>0\) 使
+  \[
+  \operatorname{diam}\bigl(F_b(a_b)\bigr)\le C\,2^{-b}
+  \qquad(\forall\,b,\ \forall\,a_b\in\mathcal A_b),
+  \]
+  则每个逆极限地址 \(a=(a_b)_{b\ge 0}\in\mathcal A_\infty\) 都对应唯一点
+  \[
+  x(a)\in \bigcap_{b\ge 0}F_b(a_b).
+  \]
+  该点即为地址 \(a\) 所确定的稳定点对象。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+对每个 \(b\ge 0\) 定义
+\[
+E_b:=\left\{
+(a_j)_{j\ge 0}\in\prod_{j\ge 0}\mathcal A_j:\ 
+\pi_{j\to i}(a_j)=a_i\ \text{对所有 }b\ge j\ge i\ge 0
+\right\}.
+\]
+由于各 \(\mathcal A_j\) 有限非空，乘积 \(\prod_j \mathcal A_j\) 在乘积拓扑下紧致；
+而每个 \(E_b\) 都由有限个相容方程切出，故为闭集。
+又由各投影满射，可逐层向上提升地址，因此每个有限交 \(\bigcap_{r=0}^{m}E_r\) 都非空。
+紧性与有限交性质推出
+\[
+\mathcal A_\infty=\bigcap_{b\ge 0}E_b\neq\varnothing,
+\]
+即得第 \(1\) 条。
+
+第 \(2\) 条中，\(d_{\mathrm{dy}}\) 的超三角不等式是前缀超度量的标准性质：两个地址共享的最长公共前缀长度至少为任意一对共享长度的最小值。
+由此得到超度量结构。
+紧致性来自 \(\mathcal A_\infty\) 是有限离散空间乘积中的闭子集；
+完备性则可由 Cauchy 列的逐层稳定性得到：若 \((a^{(n)})_n\) 为 \(d_{\mathrm{dy}}\)-Cauchy 列，则对每个固定 \(b\)，从某个指标以后全体 \(a^{(n)}_b\) 都相同，故可定义极限坐标 \(a_b\in\mathcal A_b\)，且层间相容关系由各 \(a^{(n)}\in\mathcal A_\infty\) 逐层传递。
+全不连通性由柱集
+\[
+U_b(a):=\{a'\in\mathcal A_\infty:\ a'_b=a_b\}
+\]
+既开又闭且形成基直接给出。
+
+对第 \(3\) 条，固定 \(a=(a_b)\in\mathcal A_\infty\)。
+由相容性假设，\(\{F_b(a_b)\}_{b\ge 0}\) 是一列非空闭集降链。
+又因 \(\operatorname{diam}(F_b(a_b))\le C2^{-b}\to 0\)，可取 \(x_b\in F_b(a_b)\) 得到 Cauchy 列，故在完备空间 \(Y\) 中收敛到某个 \(x\in Y\)。
+每个 \(F_b(a_b)\) 闭且含有尾部全部 \(x_{b'}\)（\(b'\ge b\)），故 \(x\in F_b(a_b)\) 对所有 \(b\) 成立，即
+\[
+x\in\bigcap_{b\ge 0}F_b(a_b).
+\]
+若 \(x,y\) 都属于该交，则
+\[
+d_Y(x,y)\le \operatorname{diam}(F_b(a_b))\le C2^{-b}
+\qquad(\forall b),
+\]
+令 \(b\to\infty\) 即得 \(x=y\)。
+故稳定点对象存在且唯一。证毕。
+\end{proof}
+
+\begin{theorem}[unitary-slice 读出的预层分离性与 \(\mathsf{NULL}\) 三分解]\label{thm:recursive-addressing-readout-separatedness-null}
+沿用定义 \ref{def:xi-visible-read-null}、定义 \ref{def:prefix-site} 与定义 \ref{def:prefix-sheaf-readout} 的记号，并把 unitary-slice 可见读出偏函数记为
+\[
+\mathrm{Read}_{\mathrm{US}}:=\mathrm{read}.
+\]
+再沿用定理 \ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} 的逆极限地址空间 \(\mathcal A_\infty\)，并对每个 \(a=(a_b)_{b\ge 0}\in\mathcal A_\infty\) 记其 dyadic 邻域基为
+\[
+U_b(a):=\{a'\in\mathcal A_\infty:\ a'_b=a_b\}.
+\]
+通过前缀对象 \(a_b\) 与柱集 \(U_b(a)\) 的标准对应，以下统一记
+\[
+\mathscr F(U_b(a)):=\mathscr F(a_b),
+\qquad
+\mathscr F(a):=\varprojlim_b \mathscr F(U_b(a))
+\]
+为地址 \(a\) 处的兼容局部截面纤维。
+假设显式提升原则成立，即所有限制映射都保持在同一类型系统内，禁止混合精度对象在限制过程中偷偷引入新的可见自由度。
+则对任意稳定地址 \(a\in\mathcal A_\infty\)，下列两条等价：
+\begin{enumerate}
+  \item \(\mathrm{Read}_{\mathrm{US}}\) 在地址 \(a\) 处给出 \(0/1\) 值且跨实现可复现，即任意与 \(a\) 相容的实现若通过同一局部证书链，则所得读出一致；
+  \item 预层 \(\mathscr F\) 在地址 \(a\) 处满足分离性：对任意有限 dyadic 覆盖
+  \[
+  U_{b_1}(a),\dots,U_{b_r}(a),
+  \]
+  若两条截面 \(s,t\in\mathscr F(a)\) 在每个覆盖块上的限制都相同，则 \(s=t\)。
+\end{enumerate}
+此外，\(\mathsf{NULL}\) 的三类来源可在该口径下内禀化为：
+\begin{enumerate}
+  \item \textbf{语义空值：}某个充分小的 dyadic 邻域上局部纤维为空，即 \(\mathscr F(U_b(a))=\varnothing\)；
+  \item \textbf{协议空值：}存在有限 dyadic 覆盖 \(\{U_{b_i}(a)\}\) 及其上局部截面族 \((s_i)\)，它们在重叠处相容，但不存在全局 \(s\in\mathscr F(a)\) 使 \(s|_{U_{b_i}(a)}=s_i\)；
+  \item \textbf{碰撞空值：}分离性失败，即存在 \(s\neq t\in\mathscr F(a)\) 在某个有限 dyadic 覆盖上逐块限制相同。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\((2)\Rightarrow(1)\)。
+若 \(\mathscr F\) 在 \(a\) 处分离，则任何两条与同一稳定地址相容、且在每个有限精度前缀上给出相同局部证书的候选实现，必在所有 dyadic 邻域基上具有相同限制。
+由分离性得对应的全局截面只能有一个，故读出值唯一。
+由于 \(\mathrm{Read}_{\mathrm{US}}\) 的可见值域在本口径下已被固定为 \(0/1\)，故其在地址 \(a\) 处给出跨实现可复现的单值读出。
+
+\((1)\Rightarrow(2)\)。
+若分离性失败，则存在 \(s\neq t\in\mathscr F(a)\) 与一组有限 dyadic 覆盖，使 \(s\) 与 \(t\) 在每块上的限制都相同。
+这意味着所有有限精度可见指纹与局部证书均无法区分二者。
+在显式提升原则下，限制过程不允许借助额外模式轴或更高精度自由度来打破这种重合，因此两条不同全局对象会在同一地址处诱导两个不可区分的候选实现。
+这与“\(\mathrm{Read}_{\mathrm{US}}\) 在地址 \(a\) 处跨实现可复现”矛盾。
+故分离性必须成立。
+
+三类 \(\mathsf{NULL}\) 的识别则分别来自局部存在、下降存在与分离性的三个层面。
+若某个足够小的 \(U_b(a)\) 上 \(\mathscr F(U_b(a))=\varnothing\)，则连局部对象都不存在，故属于语义空值。
+若局部截面存在且相容，却无法下降为 \(a\) 上的全局对象，则空值来源并非地址缺失，而是协议允许的下降失败，即协议空值。
+最后，若存在不同全局对象在全部局部块上给出相同限制，则地址 \(a\) 处并非“无对象”，而是“对象不可单值区分”；在本文的单值读出契约下，这正对应碰撞空值。
+证毕。
+\end{proof}

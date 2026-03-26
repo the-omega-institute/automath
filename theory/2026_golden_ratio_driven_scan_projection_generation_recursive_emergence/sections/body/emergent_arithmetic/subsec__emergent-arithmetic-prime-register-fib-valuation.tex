@@ -1,0 +1,585 @@
+\subsection{素数寄存器实现：Fibonacci 估值、折叠正规形与外置账本}\label{subsec:emergent-arithmetic-prime-register-fib-valuation}
+
+前两小节已经给出稳定算术的抽象骨架：尺度计数配置构成自由交换幺半群，Fibonacci 关系在其上生成同余，而 Zeckendorf 规范形给出每个同值类的唯一横截面。
+本小节把这一抽象结构落实为一个完全显式、且可直接计算的素数寄存器实现。
+
+其基本思想是：以一列固定素数充当尺度寄存器，把每个尺度上的计数写成对应素数的指数。
+如此一来，尺度计数单子便获得了一个乘法幺半群实现，而 Fibonacci 值映射则转化为指数向量上的加权估值。
+于是，前两小节的同值轨道、规范横截面与归一化重写，都可改写为寄存器上的局部指数变换。
+
+与此同时，必须区分两种本质不同的线性化：
+寄存器内部的乘法对应的是值的加法叠加；值的乘法则不能由同一内部操作直接实现，而必须经由对象层值本身的普通素因子分解，被外置到一个独立账本中。
+因此，本小节得到的不是把一切运算压进同一坐标系的单层编码，而是一个严格分层的实现框架：Fibonacci 寄存器负责加法侧的折叠与规范化，普通素数账本负责乘法侧的外置线性化。
+
+\begin{definition}[素数寄存器单子、Fibonacci 估值与 Zeckendorf 正规寄存器]\label{def:prime-register-fib-valuation-zg-code}
+取一列严格递增的素数
+\[
+\Pi=(\pi_1,\pi_2,\pi_3,\dots),
+\]
+并定义寄存器状态集合
+\[
+\mathcal R_{\Pi}
+:=
+\left\{
+\prod_{k\ge1}\pi_k^{a_k}
+\;:\;
+a_k\in\NN,\ \text{仅有限个 }a_k\neq 0
+\right\}.
+\]
+在通常整数乘法下，\(\mathcal R_{\Pi}\) 构成一个自由交换幺半群，其单位元为 \(1\)。
+
+定义幺半群同构
+\[
+\Gamma:\mathcal D\to\mathcal R_{\Pi},
+\qquad
+\Gamma(a):=\prod_{k\ge1}\pi_k^{a_k},
+\]
+其中 \(\mathcal D\) 为定义 \ref{def:fib-congruence} 之前引入的尺度计数单子。
+
+在 \(\mathcal R_{\Pi}\) 上定义 Fibonacci 估值
+\[
+\mathrm{Val}_{\mathrm{pr}}:\mathcal R_{\Pi}\to\NN,
+\qquad
+\mathrm{Val}_{\mathrm{pr}}\!\left(\prod_{k\ge1}\pi_k^{a_k}\right)
+:=
+\sum_{k\ge1}a_kF_{k+1}.
+\]
+等价地，
+\[
+\mathrm{Val}_{\mathrm{pr}}=\mathrm{Val}\circ\Gamma^{-1}.
+\]
+
+对任意 \(N\in\NN\)，记其 Zeckendorf 规范形为
+\[
+Z(N)=(z_1(N),z_2(N),\dots)\in X_{\infty},
+\]
+并定义相应的规范寄存器
+\[
+R_F(N):=\prod_{k\ge1}\pi_k^{z_k(N)}.
+\]
+同时记
+\[
+\mathsf g(N):=R_F(N),
+\qquad
+\mathrm{ZG}:=\mathsf g(\NN)\subset\mathcal R_{\Pi}.
+\]
+\end{definition}
+
+\begin{proposition}[尺度计数配置与寄存器状态的同构]\label{prop:prime-register-monoid-realization}
+映射 \(\Gamma\) 是交换幺半群同构。
+因此，尺度计数配置与寄存器状态只是同一自由交换结构的两种表示：前者是指数向量表示，后者是素数幂积表示。
+\end{proposition}
+
+\begin{proof}
+由算术基本定理，\(\mathcal R_{\Pi}\) 中每个元素都唯一写成 \(\prod_{k\ge1}\pi_k^{a_k}\) 的形式，并且乘法对应指数逐点相加。
+因此 \(\Gamma\) 既单射又满射，且满足
+\[
+\Gamma(a+b)=\Gamma(a)\Gamma(b).
+\]
+故其为交换幺半群同构。证毕。
+\end{proof}
+
+\begin{proposition}[寄存器内部乘法对应值的加法]\label{prop:prime-register-internal-product-adds-values}
+对任意 \(r,s\in\mathcal R_{\Pi}\)，有
+\[
+\mathrm{Val}_{\mathrm{pr}}(rs)=\mathrm{Val}_{\mathrm{pr}}(r)+\mathrm{Val}_{\mathrm{pr}}(s),
+\qquad
+\mathrm{Val}_{\mathrm{pr}}(1)=0.
+\]
+因此，寄存器空间内部的乘法并不实现值的乘法，而实现值的加法叠加。
+\end{proposition}
+
+\begin{proof}
+设
+\[
+r=\prod_{k\ge1}\pi_k^{a_k},
+\qquad
+s=\prod_{k\ge1}\pi_k^{b_k}.
+\]
+则
+\[
+rs=\prod_{k\ge1}\pi_k^{a_k+b_k},
+\]
+从而
+\[
+\mathrm{Val}_{\mathrm{pr}}(rs)
+=\sum_{k\ge1}(a_k+b_k)F_{k+1}
+=\sum_{k\ge1}a_kF_{k+1}+\sum_{k\ge1}b_kF_{k+1}
+=\mathrm{Val}_{\mathrm{pr}}(r)+\mathrm{Val}_{\mathrm{pr}}(s).
+\]
+而 \(1\) 的全部指数皆为零，故 \(\mathrm{Val}_{\mathrm{pr}}(1)=0\)。证毕。
+\end{proof}
+
+\begin{remark}[寄存器内部乘法的对象层语义]\label{rem:prime-register-internal-product-semantics}
+命题 \ref{prop:prime-register-internal-product-adds-values} 表明，寄存器乘法的对象层语义是把两个尺度计数配置叠加到一起。
+因此，若 \(R_F(m)\) 与 \(R_F(n)\) 分别表示对象层值 \(m,n\) 的规范寄存器形，则其普通乘积对应的是 \(m+n\) 的未归一化表示，而不是 \(mn\) 的表示。
+这说明 Fibonacci 寄存器天然适配加法侧的结构，而不直接适配乘法侧。
+\end{remark}
+
+\begin{definition}[寄存器上的局部值保持变换]\label{def:prime-register-local-value-preserving-moves}
+在 \(\mathcal R_{\Pi}\) 上定义以下部分可逆局部变换：
+\begin{enumerate}
+  \item 基准变换
+  \[
+  \pi_2 \longleftrightarrow \pi_1^2;
+  \]
+  \item Fibonacci 递推变换：对每个 \(k\ge1\)，
+  \[
+  \pi_{k+2} \longleftrightarrow \pi_{k+1}\pi_k.
+  \]
+\end{enumerate}
+更一般地，若某寄存器状态包含左端因子，则可把其替换为右端因子；若包含右端因子，则亦可反向替换。
+由这些局部部分双射生成的群胚记为 \(\mathcal G_{\Pi}\)。
+\end{definition}
+
+\begin{proposition}[寄存器局部变换保持 Fibonacci 估值]\label{prop:prime-register-local-moves-preserve-valuation}
+\(\mathcal G_{\Pi}\) 的每一条箭头都保持 \(\mathrm{Val}_{\mathrm{pr}}\) 不变。
+也就是说，若 \(r\to r'\) 是由定义 \ref{def:prime-register-local-value-preserving-moves} 的生成元有限复合得到的箭头，则
+\[
+\mathrm{Val}_{\mathrm{pr}}(r)=\mathrm{Val}_{\mathrm{pr}}(r').
+\]
+\end{proposition}
+
+\begin{proof}
+对生成元逐个验证即可。
+对基准变换，
+\[
+\mathrm{Val}_{\mathrm{pr}}(\pi_2)=F_3=2F_2=\mathrm{Val}_{\mathrm{pr}}(\pi_1^2).
+\]
+对递推变换，
+\[
+\mathrm{Val}_{\mathrm{pr}}(\pi_{k+2})
+=F_{k+3}
+=F_{k+2}+F_{k+1}
+=\mathrm{Val}_{\mathrm{pr}}(\pi_{k+1}\pi_k).
+\]
+因此每一步局部替换都保持 \(\mathrm{Val}_{\mathrm{pr}}\) 不变，有限复合后仍保持不变。证毕。
+\end{proof}
+
+\begin{theorem}[寄存器轨道与值纤维的一致性]\label{thm:prime-register-orbit-fiber-coincidence}
+对任意寄存器状态 \(r\in\mathcal R_{\Pi}\)，其 \(\mathcal G_{\Pi}\)-轨道恰等于其 Fibonacci 估值纤维：
+\[
+\mathcal G_{\Pi}\cdot r
+=
+\{s\in\mathcal R_{\Pi}:\ \mathrm{Val}_{\mathrm{pr}}(s)=\mathrm{Val}_{\mathrm{pr}}(r)\}.
+\]
+因此，两个寄存器状态可由局部 Fibonacci 变换互相到达，当且仅当它们具有相同的对象层值。
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{prop:prime-register-local-moves-preserve-valuation}，\(\mathcal G_{\Pi}\)-轨道必包含于值纤维。
+
+反过来，若 \(\mathrm{Val}_{\mathrm{pr}}(r)=\mathrm{Val}_{\mathrm{pr}}(s)\)，记
+\[
+a=\Gamma^{-1}(r),
+\qquad
+b=\Gamma^{-1}(s).
+\]
+则 \(\mathrm{Val}(a)=\mathrm{Val}(b)\)。
+由定理 \ref{thm:monoid-quotient-is-N} 与定理 \ref{thm:zeckendorf-transversal}，配置 \(a,b\) 属于同一 Fibonacci 同余类，并可由一系列局部可逆变换互达。
+经由 \(\Gamma\) 转运，这些变换正对应 \(\mathcal R_{\Pi}\) 上的生成元，故 \(r,s\) 落在同一 \(\mathcal G_{\Pi}\)-轨道。证毕。
+\end{proof}
+
+\begin{definition}[折叠正规形寄存器与内部加法]\label{def:prime-register-normal-form}
+对任意 \(r\in\mathcal R_{\Pi}\)，定义其折叠正规形为
+\[
+\mathrm{NF}_{\mathrm{pr}}(r):=R_F\bigl(\mathrm{Val}_{\mathrm{pr}}(r)\bigr)=\mathsf g\bigl(\mathrm{Val}_{\mathrm{pr}}(r)\bigr)\in\mathrm{ZG}.
+\]
+在 \(\mathrm{ZG}\) 上定义二元运算
+\[
+a\boxplus_{\mathrm{pr}} b:=\mathrm{NF}_{\mathrm{pr}}(ab)
+\qquad(a,b\in\mathrm{ZG}).
+\]
+\end{definition}
+
+\begin{proposition}[寄存器正规形的存在唯一性]\label{prop:prime-register-normal-form-uniqueness}
+对任意 \(r\in\mathcal R_{\Pi}\)，存在唯一折叠正规形寄存器 \(\mathrm{NF}_{\mathrm{pr}}(r)\in \mathrm{ZG}\)，并且 \(r\) 可经有限次局部值保持变换化到该状态。
+\end{proposition}
+
+\begin{proof}
+经 \(\Gamma^{-1}\) 将 \(r\) 送回尺度计数配置空间，可得某个 \(a\in\mathcal D\)。
+由命题 \ref{prop:directed-rewrite-termination}，\(a\) 经有限次值保持重写必终止于唯一 Zeckendorf 正规形 \(Z(\mathrm{Val}(a))\)。
+再经 \(\Gamma\) 送回寄存器空间，即得到唯一寄存器正规形
+\[
+R_F(\mathrm{Val}(a))=R_F(\mathrm{Val}_{\mathrm{pr}}(r))=\mathrm{NF}_{\mathrm{pr}}(r).
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[寄存器替换重写系的终止性、合流性与正规形判定]\label{prop:prime-register-rewrite-confluent-normal-form}
+在 \(\mathcal R_{\Pi}\) 上考虑如下局部值保持重写：
+\begin{enumerate}
+  \item 若 \(\pi_k\pi_{k+1}\mid r\)，则
+  \[
+  r\ \longrightarrow\ r\cdot \frac{\pi_{k+2}}{\pi_k\pi_{k+1}}
+  \qquad(k\ge1);
+  \]
+  \item 若 \(\pi_1^2\mid r\)，则
+  \[
+  r\ \longrightarrow\ r\cdot \frac{\pi_2}{\pi_1^2};
+  \]
+  \item 若 \(\pi_2^2\mid r\)，则
+  \[
+  r\ \longrightarrow\ r\cdot \frac{\pi_1\pi_3}{\pi_2^2};
+  \]
+  \item 若 \(k\ge3\) 且 \(\pi_k^2\mid r\)，则
+  \[
+  r\ \longrightarrow\ r\cdot \frac{\pi_{k-2}\pi_{k+1}}{\pi_k^2}.
+  \]
+\end{enumerate}
+则：
+\begin{enumerate}
+  \item 每一步重写都严格保持 \(\mathrm{Val}_{\mathrm{pr}}\) 不变；
+  \item 该重写系在 \(\mathcal R_{\Pi}\) 上强终止，并具有唯一正规形；
+  \item 对任意 \(r\in\mathcal R_{\Pi}\)，其唯一正规形恰为 \(\mathrm{NF}_{\mathrm{pr}}(r)\in\mathrm{ZG}\)。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+每条重写在指数向量层都对应 \S\ref{subsec:directed-rewrite} 中的局部规则：相邻合并、底位去重、第二位去重与一般位去重。
+因此第 (1) 条由相应的 Fibonacci 权重恒等式
+\[
+F_{k+1}+F_{k+2}=F_{k+3},
+\qquad
+2F_2=F_3,
+\qquad
+2F_3=F_2+F_4,
+\qquad
+2F_{k+1}=F_{k-1}+F_{k+2}
+\]
+直接得到。
+
+对第 (2)--(3) 条，记 \(\nu(r):=\Gamma^{-1}(r)\in\mathcal D\)。
+上述整数重写在指数向量层恰对应命题 \ref{prop:directed-rewrite-termination} 的定向化归一化重写。
+因此该重写系强终止，且终止形唯一，并等于
+\[
+Z(\mathrm{Val}(\nu(r)))=Z(\mathrm{Val}_{\mathrm{pr}}(r)).
+\]
+再经 \(\Gamma\) 送回寄存器空间，即得到唯一正规形
+\[
+\Gamma\bigl(Z(\mathrm{Val}_{\mathrm{pr}}(r))\bigr)
+=R_F(\mathrm{Val}_{\mathrm{pr}}(r))
+=\mathrm{NF}_{\mathrm{pr}}(r).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[乘法归一化实现可加结构的严格同构]\label{thm:prime-register-multiplicative-normalization-additive-iso}
+\((\mathrm{ZG},\boxplus_{\mathrm{pr}})\) 为以 \(1\) 为单位元的交换幺半群，并且映射
+\[
+\mathsf g:\ (\NN,+)\longrightarrow (\mathrm{ZG},\boxplus_{\mathrm{pr}})
+\]
+是交换幺半群同构。
+等价地，对任意 \(m,n\in\NN\)，有
+\[
+\mathrm{Val}_{\mathrm{pr}}(R_F(m)R_F(n))=m+n,
+\qquad
+\mathrm{NF}_{\mathrm{pr}}\bigl(R_F(m)R_F(n)\bigr)=R_F(m+n).
+\]
+\end{theorem}
+
+\begin{proof}
+首先，由定义 \ref{def:prime-register-normal-form} 与命题 \ref{prop:prime-register-internal-product-adds-values}，
+\[
+\mathrm{NF}_{\mathrm{pr}}\bigl(R_F(m)R_F(n)\bigr)
+=R_F\!\Bigl(\mathrm{Val}_{\mathrm{pr}}(R_F(m)R_F(n))\Bigr)
+=R_F(m+n).
+\]
+因此
+\[
+R_F(m)\boxplus_{\mathrm{pr}}R_F(n)=R_F(m+n),
+\]
+从而 \(\mathsf g=R_F\) 为幺半群同态。
+
+其单射性由 Zeckendorf 规范形唯一性推出：若 \(R_F(m)=R_F(n)\)，则相应数字向量相同，故 \(m=n\)。
+满射性由 \(\mathrm{ZG}=R_F(\NN)\) 的定义成立，故 \(\mathsf g\) 为交换幺半群同构。证毕。
+\end{proof}
+
+\begin{remark}[加法的内部化与乘法的缺席]\label{rem:prime-register-addition-internalized}
+定理 \ref{thm:prime-register-multiplicative-normalization-additive-iso} 表明，Fibonacci 寄存器已经把值的加法完全内部化：寄存器相乘，再经正规化，即对应对象层值相加。
+然而对象层值的乘法并未在同一内部机制中出现。
+若要实现乘法，必须把值先送回普通整数，再把其素因子指数外置到账本中。
+这正是下文外置账本层的必要性。
+\end{remark}
+
+\begin{definition}[普通素数账本]\label{def:ordinary-prime-ledger}
+记 \(\PP\) 为普通算术意义下的素数集合。
+对每个正整数 \(n\ge1\)，定义其素数账本为
+\[
+\mathcal L(n)
+:=
+\sum_{p\in\PP}v_p(n)\,\mathbf e_p
+\in
+\bigoplus_{p\in\PP}\NN \mathbf e_p,
+\]
+其中 \(v_p(n)\) 为 \(n\) 的 \(p\)-进指数。
+
+这里必须区分两套索引：
+\(\Pi=(\pi_k)\) 记录的是 Fibonacci 尺度配置，而 \(\PP\) 记录的是对象层值本身的普通素因子分解。
+前者适配加法归一化，后者适配乘法线性化。
+\end{definition}
+
+\begin{proposition}[普通素数账本线性化值的乘法]\label{prop:ordinary-prime-ledger-linearizes-multiplication}
+对任意正整数 \(m,n\ge1\)，有
+\[
+\mathcal L(mn)=\mathcal L(m)+\mathcal L(n),
+\qquad
+\mathcal L(1)=0.
+\]
+并且 \(\mathcal L\) 为单射。
+\end{proposition}
+
+\begin{proof}
+由唯一素因子分解，
+\[
+m=\prod_{p\in\PP}p^{v_p(m)},
+\qquad
+n=\prod_{p\in\PP}p^{v_p(n)},
+\]
+故
+\[
+mn=\prod_{p\in\PP}p^{v_p(m)+v_p(n)}.
+\]
+于是对每个 \(p\in\PP\) 有 \(v_p(mn)=v_p(m)+v_p(n)\)，从而
+\[
+\mathcal L(mn)
+=\sum_{p\in\PP}(v_p(m)+v_p(n))\mathbf e_p
+=\mathcal L(m)+\mathcal L(n).
+\]
+\(\mathcal L(1)=0\) 显然。
+单射性同样来自唯一素因子分解：若 \(\mathcal L(m)=\mathcal L(n)\)，则一切 \(p\)-进指数相同，从而 \(m=n\)。证毕。
+\end{proof}
+
+\begin{theorem}[丢失信息的自由阿贝尔账本：值核与残差分数群]\label{thm:prime-register-residual-ledger-group}
+令 \(A:=\bigoplus_{k\ge1}\ZZ e_k\) 为有限支撑整数序列的自由阿贝尔群，并定义群同态
+\[
+\varphi:A\to\ZZ,
+\qquad
+\varphi(e_k)=F_{k+1}.
+\]
+记 \(K:=\ker\varphi\)。
+则：
+\begin{enumerate}
+  \item 记
+  \[
+  b_0:=e_2-2e_1,
+  \qquad
+  b_k:=e_{k+2}-e_{k+1}-e_k\quad(k\ge1).
+  \]
+  则 \(\{b_0,b_1,b_2,\dots\}\) 构成 \(K\) 的一组 \(\ZZ\)-基；特别地，\(K\) 为可数秩自由阿贝尔群。
+
+  \item 定义素数分数群
+  \[
+  H:=
+  \left\{
+  \prod_{k\ge1}\pi_k^{\delta_k}
+  \;:\;
+  \delta=(\delta_k)_{k\ge1}\in K
+  \right\}\subset\QQ_{>0}.
+  \]
+  则 \(H\) 亦为可数秩自由阿贝尔群，并由
+  \[
+  h_0:=\frac{\pi_2}{\pi_1^2},
+  \qquad
+  h_k:=\frac{\pi_{k+2}}{\pi_{k+1}\pi_k}\quad(k\ge1)
+  \]
+  自由生成。
+
+  \item 对任意 \(r\in\mathcal R_{\Pi}\)，定义其残差分数
+  \[
+  R(r):=\frac{r}{\mathrm{NF}_{\mathrm{pr}}(r)}\in\QQ_{>0}.
+  \]
+  则 \(R(r)\in H\)，并且映射
+  \[
+  \Theta:\mathcal R_{\Pi}\to \mathrm{ZG}\times H,
+  \qquad
+  \Theta(r):=\bigl(\mathrm{NF}_{\mathrm{pr}}(r),R(r)\bigr)
+  \]
+  为单射。
+  此外，\(\Gamma^{-1}(r)-Z(\mathrm{Val}_{\mathrm{pr}}(r))\in K\) 在基 \(\{b_i\}_{i\ge0}\) 上的坐标唯一存在，从而给出一份与归一化路径无关的 carry 账本。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{(1)} 由
+\[
+\varphi(b_0)=F_3-2F_2=0,
+\qquad
+\varphi(b_k)=F_{k+3}-F_{k+2}-F_{k+1}=0\quad(k\ge1),
+\]
+可知 \(b_i\in K\)。
+对任意 \(N\ge2\)，令 \(A_N:=\bigoplus_{k=1}^{N}\ZZ e_k\)，\(K_N:=K\cap A_N\)。
+则 \(\mathrm{rank}(K_N)=N-1\)。
+集合 \(\{b_0,\dots,b_{N-2}\}\subset K_N\) 含有 \(N-1\) 个元素。
+若 \(\sum_{i=0}^{N-2}c_i b_i=0\)，则从 \(e_N\) 的系数开始向下回代可得 \(c_{N-2}=\cdots=c_0=0\)，故它们线性无关，从而构成 \(K_N\) 的一组基。
+由 \(K=\bigcup_{N}K_N\) 即得 \(\{b_i\}_{i\ge0}\) 为 \(K\) 的 \(\ZZ\)-基。
+
+\textbf{(2)} 由算术基本定理，映射
+\[
+(\delta_k)_{k\ge1}\longmapsto \prod_{k\ge1}\pi_k^{\delta_k}
+\]
+给出 \(A\) 到由 \(\Pi\) 生成的分数群的群同构。
+因此 \(H\simeq K\) 为可数秩自由阿贝尔群。
+并且
+\[
+\prod_{k\ge1}\pi_k^{b_0}=\frac{\pi_2}{\pi_1^2}=h_0,
+\qquad
+\prod_{k\ge1}\pi_k^{b_k}=\frac{\pi_{k+2}}{\pi_{k+1}\pi_k}=h_k,
+\]
+故 \(\{h_i\}_{i\ge0}\) 为 \(H\) 的自由生成元。
+
+\textbf{(3)} 设 \(r=\prod_{k\ge1}\pi_k^{a_k}\)，并记
+\[
+\mathrm{NF}_{\mathrm{pr}}(r)=\prod_{k\ge1}\pi_k^{z_k(\mathrm{Val}_{\mathrm{pr}}(r))}.
+\]
+于是
+\[
+R(r)=\prod_{k\ge1}\pi_k^{\delta_k(r)},
+\qquad
+\delta_k(r):=a_k-z_k(\mathrm{Val}_{\mathrm{pr}}(r)).
+\]
+由命题 \ref{prop:prime-register-rewrite-confluent-normal-form}，
+\[
+\mathrm{Val}_{\mathrm{pr}}(\mathrm{NF}_{\mathrm{pr}}(r))=\mathrm{Val}_{\mathrm{pr}}(r),
+\]
+故
+\[
+\sum_{k\ge1}\delta_k(r)F_{k+1}
+=\mathrm{Val}_{\mathrm{pr}}(r)-\mathrm{Val}_{\mathrm{pr}}(\mathrm{NF}_{\mathrm{pr}}(r))
+=0.
+\]
+因此 \(\delta(r):=(\delta_k(r))\in K\)，从而 \(R(r)\in H\)。
+
+单射性由指数向量的逐坐标恢复给出：\(\Theta(r)=(a,h)\) 等价于
+\[
+\Gamma^{-1}(r)=\Gamma^{-1}(a)+\delta(h),
+\]
+其中 \(\delta(h)\in K\subset A\) 为 \(h\) 的唯一指数向量。
+右端唯一确定 \(\Gamma^{-1}(r)\)，继而唯一确定 \(r\)。
+最后，\(\Gamma^{-1}(r)-Z(\mathrm{Val}_{\mathrm{pr}}(r))\in K\) 在基 \(\{b_i\}\) 上坐标唯一存在，且仅由 \(r\) 与其正规形决定，故与任何具体重写路径无关。证毕。
+\end{proof}
+
+\begin{definition}[Fibonacci 值的外置账本]\label{def:prime-register-external-ledger}
+对任意满足 \(\mathrm{Val}_{\mathrm{pr}}(r)\ge1\) 的寄存器状态 \(r\in\mathcal R_{\Pi}\)，定义其外置账本为
+\[
+\Lambda_F(r):=\mathcal L(\mathrm{Val}_{\mathrm{pr}}(r)).
+\]
+也就是说，先从 Fibonacci 寄存器中恢复对象层值，再把该值的乘法结构送入普通素数账本。
+\end{definition}
+
+\begin{proposition}[外置账本在值保持轨道上不变]\label{prop:prime-register-external-ledger-orbit-invariance}
+若 \(r,s\in\mathcal R_{\Pi}\) 满足 \(s\in\mathcal G_{\Pi}\cdot r\)，且 \(\mathrm{Val}_{\mathrm{pr}}(r)\ge1\)，则
+\[
+\Lambda_F(r)=\Lambda_F(s).
+\]
+特别地，
+\[
+\Lambda_F(r)=\Lambda_F(\mathrm{NF}_{\mathrm{pr}}(r)).
+\]
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:prime-register-orbit-fiber-coincidence}，\(s\in\mathcal G_{\Pi}\cdot r\) 等价于 \(\mathrm{Val}_{\mathrm{pr}}(s)=\mathrm{Val}_{\mathrm{pr}}(r)\)。
+因此
+\[
+\Lambda_F(s)=\mathcal L(\mathrm{Val}_{\mathrm{pr}}(s))
+=\mathcal L(\mathrm{Val}_{\mathrm{pr}}(r))
+=\Lambda_F(r).
+\]
+取 \(s=\mathrm{NF}_{\mathrm{pr}}(r)\) 即得第二式。证毕。
+\end{proof}
+
+\begin{definition}[拉回的值乘]\label{def:prime-register-pulled-back-value-multiplication}
+在规范寄存器集合
+\[
+\mathcal N_F:=\{R_F(n):n\in\NN\}=\mathrm{ZG}
+\]
+上定义新运算 \(\odot\)：
+\[
+R_F(m)\odot R_F(n):=R_F(mn).
+\]
+这不是寄存器空间原有的整数乘法，而是把对象层整数乘法经由 \(R_F\) 拉回到规范寄存器集合上的结果。
+\end{definition}
+
+\begin{proposition}[内部乘法与拉回值乘的严格区分]\label{prop:prime-register-internal-vs-pulled-back-product}
+对任意 \(m,n\in\NN_{>0}\)，有
+\[
+R_F(m)R_F(n)\xrightarrow{\ \mathrm{NF}_{\mathrm{pr}}\ }R_F(m+n),
+\]
+而
+\[
+R_F(m)\odot R_F(n)=R_F(mn).
+\]
+此外，外置账本对 \(\odot\) 线性化：
+\[
+\Lambda_F\bigl(R_F(m)\odot R_F(n)\bigr)
+=\Lambda_F(R_F(m))+\Lambda_F(R_F(n)).
+\]
+\end{proposition}
+
+\begin{proof}
+第一式即定理 \ref{thm:prime-register-multiplicative-normalization-additive-iso}。
+第二式由定义 \ref{def:prime-register-pulled-back-value-multiplication}。
+第三式由定义 \ref{def:prime-register-external-ledger} 与命题 \ref{prop:ordinary-prime-ledger-linearizes-multiplication}：
+\[
+\Lambda_F(R_F(m)\odot R_F(n))
+=\mathcal L(mn)
+=\mathcal L(m)+\mathcal L(n)
+=\Lambda_F(R_F(m))+\Lambda_F(R_F(n)).
+\]
+证毕。
+\end{proof}
+
+\begin{definition}[有限可见账本与余额余因子]\label{def:prime-register-finite-ledger}
+对有限素数集 \(S\subset\PP\)，定义截断账本
+\[
+\mathcal L_S(n):=\sum_{p\in S}v_p(n)\,\mathbf e_p,
+\]
+并定义余额余因子
+\[
+\rho_S(n):=
+n\cdot\prod_{p\in S}p^{-v_p(n)}.
+\]
+于是 \(n\) 可唯一写成
+\[
+n=\left(\prod_{p\in S}p^{v_p(n)}\right)\rho_S(n),
+\]
+其中前半部分对应账本窗口 \(S\) 可见的素数分量，后半部分则是窗口之外的余额。
+\end{definition}
+
+\begin{proposition}[有限账本的可恢复性]\label{prop:prime-register-finite-ledger-recoverability}
+对任意有限素数集 \(S\subset\PP\)，映射
+\[
+n\longmapsto \bigl(\mathcal L_S(n),\rho_S(n)\bigr)
+\]
+是单射。
+因此，有限截断账本本身不足以恢复对象层值，但“截断账本 + 余额余因子”能够完全恢复原值。
+\end{proposition}
+
+\begin{proof}
+由定义 \ref{def:prime-register-finite-ledger}，
+\[
+n=
+\left(\prod_{p\in S}p^{(\mathcal L_S(n))_p}\right)\rho_S(n).
+\]
+右端由二元组 \((\mathcal L_S(n),\rho_S(n))\) 唯一确定，故该映射为单射。证毕。
+\end{proof}
+
+\begin{remark}[与对象层 forcing 语义的衔接]\label{rem:prime-register-forcing-interface}
+本小节的一切构造都以“值已经进入对象层”为前提。
+只有当某个地址--值对在第 \ref{sec:recursive-addressing} 节的意义下已经完成对象化、通过协议允许性与非 \(\mathsf{NULL}\) 判据时，才谈得上为其建立 \(R_F(n)\)、\(\mathrm{NF}_{\mathrm{pr}}\)、\(\Lambda_F\) 或 \(\mathcal L_S\) 等值层结构。
+因此，本小节并不替代对象层准入，而是在其基础上继续做值层实现：第 \ref{sec:recursive-addressing} 节回答何时可谈，第 \ref{subsec:emergent-arithmetic-prime-register-fib-valuation} 节回答既然已可谈，如何把该值实现为 Fibonacci 寄存器正规形，并把其乘法结构外置到账本。
+\end{remark}
+
+\begin{remark}[本小节的两层结构]\label{rem:prime-register-two-layer-summary}
+至此得到两层互补而不可混同的结构。
+第一层是 Fibonacci 寄存器层：它把尺度计数配置实现为素数指数向量，把值映射实现为 Fibonacci 加权估值，并把规范化实现为局部值保持重写通向唯一折叠正规形；因此，这一层天然适配加法与归一化。
+
+第二层是普通素数账本层：它不再记录尺度配置，而记录对象层值本身的素因子指数；因而它把值的乘法线性化为加法，但其位置必须是外置的。
+有限账本只给出局部乘法可见性，而完整恢复还需余额余因子。
+\end{remark}
+
+在此基础上，外置尺度不再停留在离散指数账本层，而被进一步送入一个可解析观测的复几何门结构。
+下一小节给出与该外置寄存器严格兼容的 Gödel--Joukowsky 椭圆化，并据此讨论解析不可见性、径向恢复与零点输运。
+
+\input{subsec__emergent-arithmetic-godel-joukowsky-gate}

@@ -1,0 +1,233 @@
+\paragraph{对角闭包与单次对角观测}
+在定理 \ref{thm:pom-maxent-markov-diagonal-plus-rankone-spectrum} 的“对角 \(+\) 秩一”规范下，
+最优核的非对角部分具有严格秩一结构；并且其对角保持率向量在代数意义下已足以回收对偶参数、失真水平、平稳分布与全核。
+
+\begin{proposition}[对角闭包：非对角核的秩一乘积形]\label{prop:pom-diagonal-rate-diagonal-closure-rankone}
+取全支撑分布 \(w\in\Delta(X)\) 并令 \(\delta\in(0,\delta_0)\)，其中 \(\delta_0:=1-\sum_{x\in X}w(x)^2\)。
+沿用定理 \ref{thm:pom-maxent-markov-diagonal-plus-rankone-spectrum} 与定理 \ref{thm:pom-maxent-markov-laguerre-secular-spectrum} 的记号，
+令 \(P^\star_\delta,K^\star_\delta,u_\delta,\kappa_\delta,A_\delta\) 与
+\(
+t_x=\kappa_\delta+A_\delta/u_\delta(x)
+\)
+如上定义，并记对角保持率
+\[
+p_\delta(x):=K^\star_\delta(x\mid x)\in(0,1)\qquad(x\in X).
+\]
+则对任意 \(x,y\in X\) 有显式核公式
+\[
+K^\star_\delta(y\mid x)=
+\begin{cases}
+\dfrac{1+\kappa_\delta}{t_x},&y=x,\\[8pt]
+\dfrac{t_x-\kappa_\delta}{t_x}\cdot\dfrac{1}{t_y-\kappa_\delta},&y\ne x,
+\end{cases}
+\qquad
+\sum_{y\in X}\frac{1}{t_y-\kappa_\delta}=1.
+\]
+从而非对角部分严格为秩一乘积：对 \(y\ne x\) 有 \(K^\star_\delta(y\mid x)=a_\delta(x)b_\delta(y)\)，其中
+\[
+a_\delta(x):=\frac{t_x-\kappa_\delta}{t_x},
+\qquad
+b_\delta(y):=\frac{1}{t_y-\kappa_\delta}.
+\]
+\end{proposition}
+\begin{proof}[证明要点]
+由结论 \ref{cor:pom-maxent-markov-optimal-coupling-latent-binary-mixture} 的定义，
+\(
+w(x)=u_\delta(x)\bigl(A_\delta+\kappa_\delta u_\delta(x)\bigr)
+=t_xu_\delta(x)^2
+\)，
+故
+\(
+p_\delta(x)=P^\star_\delta(x,x)/w(x)=(1+\kappa_\delta)u_\delta(x)^2/w(x)=(1+\kappa_\delta)/t_x
+\)。
+又由 \(t_x-\kappa_\delta=A_\delta/u_\delta(x)\) 得
+\(
+b_\delta(x)=1/(t_x-\kappa_\delta)=u_\delta(x)/A_\delta
+\)，
+从而 \(\sum_y b_\delta(y)=1\)。
+最后，对 \(y\ne x\)，
+\[
+K^\star_\delta(y\mid x)=\frac{P^\star_\delta(x,y)}{w(x)}=\frac{u_\delta(x)u_\delta(y)}{t_xu_\delta(x)^2}
+=\frac{u_\delta(y)}{u_\delta(x)t_x}
+=\frac{A_\delta}{u_\delta(x)t_x}\cdot \frac{u_\delta(y)}{A_\delta}
+=\frac{t_x-\kappa_\delta}{t_x}\cdot\frac{1}{t_y-\kappa_\delta}.
+\]
+证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-diagonal-rate-sturm-cauchy-resolvent-sst}
+
+\begin{theorem}[对角统计的完备性：由保持率向量回收 \texorpdfstring{$(\kappa_\delta,\delta,w,K^\star_\delta)$}{(kappa,delta,w,K*)}]\label{thm:pom-diagonal-rate-diagonal-statistics-complete}
+在命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 的设定下，设仅给定最优核对角
+\(
+p_\delta(x)=K^\star_\delta(x\mid x)
+\)。
+定义
+\[
+F(\kappa):=\sum_{x\in X}\frac{p_\delta(x)}{1+\kappa-\kappa p_\delta(x)}.
+\]
+则成立：
+\begin{enumerate}
+  \item \textbf{（\(\kappa_\delta\) 的唯一恢复）}
+  方程 \(F(\kappa)=1\) 在 \((0,\infty)\) 上存在唯一解；该唯一解等于最优对偶参数 \(\kappa_\delta\)。
+
+  \item \textbf{（背景分布的代数闭式）}
+  令
+  \[
+  \pi_\delta(x):=\frac{p_\delta(x)}{1+\kappa_\delta-\kappa_\delta p_\delta(x)}\qquad(x\in X),
+  \]
+  则 \(\pi_\delta\in\Delta(X)\)，且与结论 \ref{cor:pom-maxent-markov-optimal-coupling-latent-binary-mixture} 的背景分布一致。
+  记 \(s_2:=\sum_x \pi_\delta(x)^2\)，则失真由对角唯一确定为
+  \[
+  \delta=\frac{1-s_2}{1+\kappa_\delta s_2},
+  \qquad\text{等价地}\qquad
+  s_2=\frac{1-\delta}{1+\kappa_\delta\delta}.
+  \]
+
+  \item \textbf{（平稳分布的对角闭式）}
+  平稳分布由对角显式回收：
+  \[
+  w(x)=\frac{\dfrac{p_\delta(x)}{(1+\kappa_\delta-\kappa_\delta p_\delta(x))^{2}}}{\sum_{y\in X}\dfrac{p_\delta(y)}{(1+\kappa_\delta-\kappa_\delta p_\delta(y))^{2}}}\qquad(x\in X).
+  \]
+
+  \item \textbf{（全核的对角闭式）}
+  对任意 \(x,y\in X\)，
+  \[
+  K^\star_\delta(y\mid x)=
+  \begin{cases}
+  p_\delta(x),&y=x,\\[6pt]
+  \Bigl(1-\dfrac{\kappa_\delta}{1+\kappa_\delta}p_\delta(x)\Bigr)\,\pi_\delta(y),&y\ne x.
+  \end{cases}
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}[证明要点]
+由命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone}，\(p_\delta(x)=(1+\kappa_\delta)/t_x\) 且
+\(
+\sum_x (t_x-\kappa_\delta)^{-1}=1
+\)。
+注意
+\(
+t_x=(1+\kappa_\delta)/p_\delta(x)
+\)，从而
+\[
+\frac{1}{t_x-\kappa_\delta}
+=\frac{1}{\frac{1+\kappa_\delta}{p_\delta(x)}-\kappa_\delta}
+=\frac{p_\delta(x)}{1+\kappa_\delta-\kappa_\delta p_\delta(x)}.
+\]
+将其对 \(x\) 求和即得 \(F(\kappa_\delta)=1\)。
+另一方面，对任意固定的 \(p_\delta(x)\in(0,1)\)，函数 \(\kappa\mapsto p_\delta(x)/(1+\kappa-\kappa p_\delta(x))\) 在 \([0,\infty)\) 上连续严格递减，
+从而 \(F\) 在 \([0,\infty)\) 上连续严格递减且 \(F(\infty)=0\)。
+由结论 \ref{cor:pom-maxent-markov-no-oscillation-endpoints}，\(\mathrm{Spec}(K^\star_\delta)\subseteq[0,1]\) 且 \(\lambda_1=1\)，故 \(\sum_x p_\delta(x)=\mathrm{tr}(K^\star_\delta)\ge 1\)；
+并且当 \(\delta\in(0,\delta_0)\) 时 \(K^\star_\delta\) 不可能为秩一核（否则必退化为独立核并迫使 \(\delta=\delta_0\)），因此 \(\sum_x p_\delta(x)>1\)，即 \(F(0)>1\)。
+由介值定理与严格单调性得到 \((0,\infty)\) 上唯一根，且必等于 \(\kappa_\delta\)。
+\par
+\(\pi_\delta\in\Delta(X)\) 由 \(F(\kappa_\delta)=1\) 直接推出；并由上式知其等于 \(1/(t_x-\kappa_\delta)=u_\delta(x)/A_\delta\)，故与背景分布一致。
+写 \(u_\delta(x)=A_\delta\pi_\delta(x)\) 并代入归一化恒等式
+\(
+1=A_\delta^2+\kappa_\delta\sum_x u_\delta(x)^2
+=A_\delta^2\bigl(1+\kappa_\delta s_2\bigr)
+\)
+得 \(A_\delta^2=(1+\kappa_\delta s_2)^{-1}\)。
+再由对角质量
+\(
+1-\delta=\sum_x P^\star_\delta(x,x)=(1+\kappa_\delta)\sum_x u_\delta(x)^2=(1+\kappa_\delta)A_\delta^2 s_2
+\)
+即可解出 \(\delta=(1-s_2)/(1+\kappa_\delta s_2)\)。
+\par
+由 \(w(x)=t_xu_\delta(x)^2\) 与 \(u_\delta(x)=A_\delta\pi_\delta(x)=A_\delta/(t_x-\kappa_\delta)\) 得
+\[
+w(x)=A_\delta^2\,\frac{t_x}{(t_x-\kappa_\delta)^2}.
+\]
+将 \(t_x=(1+\kappa_\delta)/p_\delta(x)\) 代入并用 \(\sum_x w(x)=1\) 归一化，即得到 \(w\) 的对角闭式。
+全核闭式由命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 将 \(t_x\) 与 \((t_x-\kappa_\delta)^{-1}=\pi_\delta(x)\) 代回即可。证毕。
+\par
+可复现核验脚本：\texttt{scripts/exp\_pom\_diagonal\_rate\_diagonal\_observation\_audit.py}。
+\end{proof}
+
+\begin{corollary}[对角 Laguerre 变换：特征行列式的闭式]\label{cor:pom-diagonal-rate-diagonal-laguerre-determinant}
+在定理 \ref{thm:pom-diagonal-rate-diagonal-statistics-complete} 的设定下，定义对角多项式
+\[
+\widetilde{\mathcal P}_\delta(z):=\prod_{x\in X}\Bigl(1-\frac{p_\delta(x)}{1+\kappa_\delta}z\Bigr).
+\]
+则对任意 \(z\in\CC\) 有严格恒等式
+\[
+\det(I-zK^\star_\delta)=\widetilde{\mathcal P}_\delta(\kappa_\delta z)+z\,\widetilde{\mathcal P}_\delta'(\kappa_\delta z).
+\]
+\end{corollary}
+\begin{proof}[证明要点]
+由 \(p_\delta(x)=(1+\kappa_\delta)/t_x\) 得
+\(
+\mathcal P_\delta(z)=\prod_x(t_x-z)=\mathcal P_\delta(0)\widetilde{\mathcal P}_\delta(z)
+\)。
+将其代入
+\(
+\mathcal Q_\delta(z)=z\mathcal P_\delta'(z)+\kappa_\delta\mathcal P_\delta(z)
+\)
+与推论 \ref{cor:pom-maxent-markov-zeta-determinant-single-polynomial} 的恒等式
+\(
+\det(I-zK^\star_\delta)=\mathcal Q_\delta(\kappa_\delta z)/(\kappa_\delta\mathcal P_\delta(0))
+\)
+并约去公共因子即可。证毕。
+\end{proof}
+
+\begin{corollary}[对角即全谱：特征值与 \texorpdfstring{$\zeta_\delta$}{zeta} 极点的单次恢复]\label{cor:pom-diagonal-rate-diagonal-determines-spectrum}
+在推论 \ref{cor:pom-diagonal-rate-diagonal-laguerre-determinant} 的设定下，
+\(\zeta_\delta(z)=\det(I-zK^\star_\delta)^{-1}\) 的全部极点（含重数）由方程
+\[
+\widetilde{\mathcal P}_\delta(\kappa_\delta z)+z\,\widetilde{\mathcal P}_\delta'(\kappa_\delta z)=0
+\]
+的全部零点给出；等价地，最优核的特征值多重集由上述零点的倒数（再加上平凡特征值 \(1\)）完全确定。
+\end{corollary}
+
+\begin{corollary}[速率—对角 Euler 恒等式]\label{cor:pom-diagonal-rate-euler-diagonal-identity}
+取随机变量 \(X\sim w\)，并记 \(p_\delta(X):=K^\star_\delta(X\mid X)\)。
+则对任意 \(\delta\in(0,\delta_0)\) 有严格恒等式
+\[
+R_w(\delta)=H(w)+\EE_w\!\bigl[\log p_\delta(X)\bigr]+\delta\,R_w'(\delta).
+\]
+等价地，若记 \(\kappa_\delta=\exp\!\bigl(-R_w'(\delta)\bigr)-1\)，则
+\[
+R_w(\delta)=H(w)+\EE_w\!\bigl[\log p_\delta(X)\bigr]-\delta\log(1+\kappa_\delta).
+\]
+\end{corollary}
+\begin{proof}[证明要点]
+由命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 与 \(w(x)=t_xu_\delta(x)^2\) 得
+\(
+p_\delta(x)=(1+\kappa_\delta)u_\delta(x)^2/w(x)
+\)，从而
+\[
+\EE_w[\log p_\delta(X)]
+=\log(1+\kappa_\delta)+2\sum_x w(x)\log u_\delta(x)-\sum_x w(x)\log w(x).
+\]
+将其与推论 \ref{cor:pom-diagonal-rate-scalar-collapse-rate} 的闭式速率表达式合并即可得到
+\(
+R_w(\delta)=H(w)+\EE_w[\log p_\delta(X)]-\delta\log(1+\kappa_\delta)
+\)。
+再由对偶敏感性公式 \(R_w'(\delta)=-\log(1+\kappa_\delta)\)（定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative}）得到等价写法。证毕。
+\end{proof}
+
+\begin{proposition}[对角对数的回馈律：\texorpdfstring{$\delta$}{delta}-导数由曲率给出]\label{prop:pom-diagonal-rate-diagonal-log-feedback}
+在 \(\delta\in(0,\delta_0)\) 上，函数 \(\delta\mapsto \EE_w[\log p_\delta(X)]\) 可微且满足
+\[
+\frac{\mathrm d}{\mathrm d\delta}\,\EE_w[\log p_\delta(X)]
+=-\delta\,R_w''(\delta).
+\]
+特别地，由命题 \ref{prop:pom-diagonal-rate-analytic-strict-convexity-curvature} 的严格凸性 \(R_w''(\delta)>0\) 可知
+\(\EE_w[\log p_\delta(X)]\) 在 \((0,\delta_0)\) 上严格递减。
+并且结合其曲率表示可等价写为
+\[
+\frac{\mathrm d}{\mathrm d\delta}\,\EE_w[\log p_\delta(X)]
+=-\frac{\delta}{\Var_{P^\star_\delta}(Z)},
+\qquad
+Z:=\mathbf 1_{\{X=Y\}},\ (X,Y)\sim P^\star_\delta.
+\]
+\end{proposition}
+\begin{proof}
+对推论 \ref{cor:pom-diagonal-rate-euler-diagonal-identity} 的恒等式两边对 \(\delta\) 求导，并消去公共项 \(R_w'(\delta)\) 即得
+\(
+\frac{\mathrm d}{\mathrm d\delta}\EE_w[\log p_\delta(X)]=-\delta R_w''(\delta)
+\)。
+最后一式由命题 \ref{prop:pom-diagonal-rate-analytic-strict-convexity-curvature} 的曲率表示 \(R_w''(\delta)=1/\Var_{P^\star_\delta}(Z)\) 代入得到。证毕。
+\end{proof}
+

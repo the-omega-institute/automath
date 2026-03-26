@@ -1,0 +1,185 @@
+\subsubsection{完成化行列式曲线的几何商与覆盖结构}\label{subsubsec:sync-kernel-hatdelta-curve-geometry}
+本小节整理自内部推导文档。除注 \ref{rem:sync-hatdelta-explicit} 所定义之完成化行列式
+\(\widehat{\Delta}(w,s)\in\ZZ[s][w]\) 及其对称性
+\(\widehat\Delta(w,-s)=\widehat\Delta(-w,s)\)，并采用同处给定之变量关系
+\(
+u=r^2,\ s=r+r^{-1},\ w=zr
+\)
+外，不再引入额外输入。
+\par
+把 \(\widehat\Delta(w,s)=0\) 视为 \(\mathbb{A}^2_{w,s}\) 上的平面代数曲线，并记其射影闭包在 \(\mathbb{P}^2\) 上的规范化为 \(\mathcal{X}\)。
+由
+\(
+\widehat\Delta(-w,-s)=\widehat\Delta(w,s)
+\)
+可知对合
+\[
+\iota:\mathcal{X}\longrightarrow\mathcal{X},\qquad (w,s)\longmapsto(-w,-s)
+\]
+为良定的代数自同构。
+
+\begin{proposition}[对称性诱导的几何商：显式平面四次模型与属三]\label{prop:sync-hatdelta-curve-quotient-plane-quartic-genus3}
+令 \(\mathcal{C}\subset\mathbb{A}^2_{x,y}\) 为仿射平面曲线，其方程为
+\[
+F(x,y)=1-y-5x+3xy+5x^2-xy^2+xy^3-6x^2y+x^2y^2-x^3=0.
+\]
+则在函数域层面，\(\mathcal{X}/\langle\iota\rangle\) 由 \(\iota\)-不变量
+\[
+x:=w^2,\qquad y:=sw
+\]
+生成，并与 \(\mathcal{C}\) 双有理同构。
+其射影闭包 \(\overline{\mathcal{C}}\subset\mathbb{P}^2_{X:Y:Z}\) 由齐次四次方程
+\[
+\begin{aligned}
+0={}&Z^4-YZ^3-5XZ^3+3XYZ^2+5X^2Z^2-XY^2Z+XY^3\\
+&\quad +X^2Y^2-6X^2YZ-X^3Z
+\end{aligned}
+\]
+刻画，且在代数闭包上光滑。
+因此 \(\overline{\mathcal{C}}\) 为非超椭圆属三曲线（等价地：光滑平面四次曲线），从而
+\[
+g(\overline{\mathcal{C}})=3.
+\]
+\end{proposition}
+\begin{proof}[证明要点]
+由 \(\widehat\Delta(w,-s)=\widehat\Delta(-w,s)\) 得 \(\widehat\Delta(-w,-s)=\widehat\Delta(w,s)\)，故 \(\iota\) 保持曲线。
+并且 \(x=w^2\)、\(y=sw\) 在 \(\iota\) 作用下不变。
+在 \(w\neq 0\) 的开集上代入 \(s=y/w\)、\(w^2=x\)，可将 \(\widehat\Delta(w,s)=0\) 等价改写为 \(F(x,y)=0\)，从而得到商曲线的显式仿射模型与双有理同构。
+\par
+光滑性可由逐点梯度判别在仿射图与无穷远点上直接核验；因而 \(\overline{\mathcal{C}}\) 为光滑平面四次曲线。
+平面四次的属公式给出 \(g(\overline{\mathcal{C}})=(4-1)(4-2)/2=3\)。
+可复现核验脚本：\texttt{scripts/exp\_sync\_kernel\_hatdelta\_discriminant.py}。证毕。
+\end{proof}
+
+\begin{proposition}[二次扩张与分歧：仅两处分歧且 \texorpdfstring{$g(\mathcal{X})=6$}{g(X)=6}]\label{prop:sync-hatdelta-curve-double-cover-branch-genus6}
+在函数域意义下有二次扩张
+\[
+\QQ(\mathcal{X})=\QQ(\overline{\mathcal{C}})\bigl(\sqrt{x}\bigr),
+\]
+并由此得到规范化二次覆盖
+\[
+\pi:\mathcal{X}\longrightarrow\overline{\mathcal{C}},
+\]
+其甲板变换即为 \(\iota\)。
+该覆盖的分歧由 \(x\) 在 \(\overline{\mathcal{C}}\) 上的奇阶零点与奇阶极点完全决定；
+就本曲线而言，奇阶零/极点恰为两点：
+\[
+P_0=(x,y)=(0,1)\in \overline{\mathcal{C}}(\QQ),\qquad
+P_\infty=[1:-1:0]\in \overline{\mathcal{C}}(\QQ),
+\]
+其中 \(x\) 在 \(P_0\) 为一次零点、在 \(P_\infty\) 为一次极点。
+此外，\([0:1:0]\) 处 \(x\) 具有二阶零点，\([1:0:0]\) 处 \(x\) 具有二阶极点，故均不致分歧。
+因此 \(\pi\) 恰在 \(\{P_0,P_\infty\}\) 处分歧、其余处皆为 \'{e}tale，且 \(\mathcal{X}^{\iota}\) 由两点组成。
+由 Hurwitz 公式得
+\[
+g(\mathcal{X})
+=2g(\overline{\mathcal{C}})-1+\frac{\#\mathrm{Branch}(\pi)}{2}
+=2\cdot 3-1+\frac{2}{2}
+=6.
+\]
+\end{proposition}
+\begin{proof}[证明要点]
+由 \(\QQ(\mathcal{X})=\QQ(w,s)\) 与不变量关系 \(x=w^2\)、\(y=sw\) 得 \(\QQ(\overline{\mathcal{C}})=\QQ(x,y)\)，并且 \(\QQ(\mathcal{X})=\QQ(\overline{\mathcal{C}})(w)=\QQ(\overline{\mathcal{C}})(\sqrt{x})\)。
+分歧点由 \(x\) 的奇阶零/极点刻画。
+\par
+在仿射点 \(P_0=(0,1)\) 处，\(F_y(0,1)=-1\neq 0\)，故 \(x\) 为局部参数并给出一次零点。
+对无穷远点 \(P_\infty=[1:-1:0]\)，取图 \(X=1\) 并令 \((y,z)=(Y/X,Z/X)\)，则 \(x=X/Z=1/z\)；
+曲线方程在该图中对 \(y\) 的偏导在 \((y,z)=(-1,0)\) 处非零，从而 \(z\) 为局部参数，\(x\) 给出一次极点。
+对 \([1:0:0]\) 与 \([0:1:0]\)，同理在相应仿射图中作最低阶展开可得 \(z\sim y^2\) 与 \(x\sim z^2\) 的二阶行为，因此零/极点阶为偶数并不分歧。
+Hurwitz 公式即得属数结论。证毕。
+\end{proof}
+
+\begin{proposition}[商曲线的三重覆盖：三次扩张、判别式与 \texorpdfstring{$S_3$}{S3} 闭包]\label{prop:sync-hatdelta-quotient-triple-cover-s3-discriminant}
+\(\overline{\mathcal{C}}\) 上的有理函数 \(x\) 定义一个三重覆盖
+\[
+\varphi:\overline{\mathcal{C}}\longrightarrow\mathbb{P}^1_x.
+\]
+其函数域扩张 \(\QQ(x)\subset\QQ(\overline{\mathcal{C}})\) 可由关于 \(y\) 的三次方程显式刻画：
+\[
+x\,y^3+(x^2-x)\,y^2+(3x-6x^2-1)\,y+(1-5x+5x^2-x^3)=0.
+\]
+该三次方程关于 \(y\) 的判别式满足严格恒等式
+\[
+\mathrm{Disc}_y=x\cdot P_8(x),
+\qquad
+P_8(x)=4x^8+85x^7+416x^6-818x^5+1196x^4-871x^3+284x^2-44x+4.
+\]
+因此 \(\varphi\) 的有限分歧点由 \(x=0\) 与 \(P_8(x)=0\) 给出；无穷远处另出现一次分歧以满足 \(g(\overline{\mathcal{C}})=3\) 的 Riemann--Hurwitz 约束。
+并且由于 \(\mathrm{Disc}_y\) 在 \(\QQ(x)\) 中非平方，该三次扩张的几何/算术 Galois 闭包群为 \(S_3\)。
+判别式平方根所对应之二次中间扩张确定一条自然的超椭圆曲线
+\[
+H:\quad v^2=x\,P_8(x),
+\]
+其右端为九次多项式，故 \(H\) 为属四超椭圆曲线；它刻画了 \(S_3\)-闭包中的唯一二次子域。
+\end{proposition}
+\begin{proof}[证明要点]
+\(\overline{\mathcal{C}}\) 的仿射模型即为 \(F(x,y)=0\)，视为 \(y\) 的三次多项式即可得到所示三次方程与三重覆盖。
+对该多项式取 \(\mathrm{Disc}_y\) 并因式分解可得 \(\mathrm{Disc}_y=xP_8(x)\)。
+三次不可约扩张的 Galois 群为 \(A_3\) 当且仅当判别式为平方；此处非平方，故闭包群为 \(S_3\)。
+二次子域由 \(\sqrt{\mathrm{Disc}_y}\) 生成，从而得到超椭圆模型 \(v^2=xP_8(x)\)，其属数由 \(\deg(xP_8)=9\) 立得。
+可复现核验脚本：\texttt{scripts/exp\_sync\_kernel\_hatdelta\_discriminant.py}。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$\widehat\Delta(w,s)$}{hatDelta(w,s)} 的通用伽罗瓦群与满单群性]\label{prop:sync-hatdelta-galois-s6-generic}
+将 \(\widehat\Delta(w,s)\) 视为 \(\QQ(s)\) 上关于 \(w\) 的六次多项式，则其在 \(\QQ(s)\) 上的伽罗瓦群为全对称群：
+\[
+\mathrm{Gal}\bigl(\widehat\Delta(w,s)\ /\ \QQ(s)\bigr)\cong S_6.
+\]
+并且自然投影 \(\mathcal{X}\to\mathbb{P}^1_s\) 的一般单群（monodromy）为 \(S_6\)，从而该六叶覆盖在几何上为满对称型。
+\end{proposition}
+\begin{proof}[证明要点]
+在特化 \(s=3\) 时得到不可约六次多项式
+\[
+\widehat\Delta(w,3)=8w^6+9w^5-4w^4+9w^3-5w^2-3w+1\in\QQ[w],
+\]
+其在 \(\QQ\) 上的伽罗瓦群为 \(S_6\)。
+一般情形的伽罗瓦群是 \(S_6\) 的一个传递子群，并且特化不会增大伽罗瓦群：对除有限多个退化参数外的特化，特化伽罗瓦群可视为一般伽罗瓦群的一个子群；因此一旦存在某个特化得到 \(S_6\)，一般伽罗瓦群只能为 \(S_6\)。
+单群性由“函数域伽罗瓦群与一般单群一致”（对分歧点之外的几何纤维）得到。
+可复现核验脚本：\texttt{scripts/exp\_sync\_kernel\_hatdelta\_discriminant.py}。证毕。
+\end{proof}
+
+\begin{remark}[\texorpdfstring{$s=\infty$}{s=infty} 处的 Puiseux 分支分类与显式展开]\label{rem:sync-hatdelta-puiseux-at-infty}
+令 \(t:=1/s\)，并取 \(u:=t^{1/2}\)。
+则在 \(\mathcal{X}\) 的规范化上，\(s=\infty\) 的邻域出现六条解析分支 \(w=w(s)\)：
+两条为整数 Laurent 型（不分歧），四条为半整数 Puiseux 型（对应两处指数 \(2\) 的分歧点，每处贡献两张局部分支）。
+可取如下规范化展开（仅陈列首若干项）：
+\begin{enumerate}
+  \item 极点型分支（\(w\sim -s\)）：
+  \[
+  w_{\mathrm{pole}}(s)= -s+\frac{4}{s}+\frac{2}{s^3}-\frac{24}{s^5}-\frac{189}{s^7}+O(s^{-9}).
+  \]
+  \item 小量型分支（\(w\sim s^{-1}\)）：
+  \[
+  w_{\mathrm{small}}(s)= \frac{1}{s}-\frac{2}{s^3}+\frac{39}{s^7}-\frac{120}{s^9}-\frac{1240}{s^{11}}+O(s^{-13}).
+  \]
+  \item 实平方根型分支（两张局部分支在同一分歧点处汇合）：
+  \[
+  w_{\pm}(s)=\pm s^{-1/2}\ \mp\ \frac{3}{4}s^{-3/2}\ +\ \frac{1}{4}s^{-2}\ \pm\ \frac{65}{32}s^{-5/2}\ +\ \frac{5}{4}s^{-3}\ +\ O(s^{-7/2}).
+  \]
+  \item 纯虚平方根型分支（另一处分歧点）：
+  \[
+  w_{\pm i}(s)=\pm i\,s^{-1/2}\ \pm\ \frac{3i}{4}s^{-3/2}\ -\ \frac{1}{4}s^{-2}\ \pm\ \frac{65i}{32}s^{-5/2}\ +\ \frac{5}{4}s^{-3}\ +\ O(s^{-7/2}).
+  \]
+\end{enumerate}
+并且对合 \(\iota:(w,s)\mapsto(-w,-s)\) 在该点的作用满足：前两条整数型分支对应的两点为 \(\iota\) 的不动点，而平方根型四分支在局部被成对互换（体现了 \(\iota\) 在无穷远处的非平凡局部作用）。
+\end{remark}
+
+\begin{corollary}[Jacobian 的 Prym 分解：维数三的 \texorpdfstring{$(1,1,2)$}{(1,1,2)}-极化因子]\label{cor:sync-hatdelta-prym-decomposition}
+由命题 \ref{prop:sync-hatdelta-curve-double-cover-branch-genus6} 的二次分歧覆盖 \(\pi:\mathcal{X}\to\overline{\mathcal{C}}\)（分歧点数为 \(2\)），存在维数为 \(3\) 的 Prym 代数簇
+\(\mathrm{Prym}(\mathcal{X}/\overline{\mathcal{C}})\subset J(\mathcal{X})\)，并且在 \(\QQ\) 上同源分解
+\[
+J(\mathcal{X})\ \sim\ J(\overline{\mathcal{C}})\times \mathrm{Prym}(\mathcal{X}/\overline{\mathcal{C}}).
+\]
+由于分歧点数为 \(2\)，\(\mathrm{Prym}(\mathcal{X}/\overline{\mathcal{C}})\) 所继承的极化类型为 \((1,1,2)\)。
+\end{corollary}
+\begin{proof}[证明要点]
+对分歧二次覆盖的 Prym 理论给出
+\(\dim\mathrm{Prym}(\mathcal{X}/\overline{\mathcal{C}})=g(\mathcal{X})-g(\overline{\mathcal{C}})=6-3=3\)，
+并且 Jacobian 的同源分解成立。
+分歧点数为 \(2\) 时，诱导极化类型为 \((1,1,2)\) 为标准结论。
+证毕。
+\end{proof}
+
+\par
+在上述显式模型基础上，可进一步对 \(\mathrm{Prym}(\mathcal{X}/\overline{\mathcal{C}})\) 的分解型态、端自同态代数以及与命题 \ref{prop:sync-hatdelta-quotient-triple-cover-s3-discriminant} 中属四判别双覆 \(H\) 的 Jacobian 之间的同源关系进行可检验刻画；
+一条自然路径是结合有限域点计数与 Frobenius/Hecke 特征多项式检验，把同源分解与模参数识别提升为可复现的审计输出。

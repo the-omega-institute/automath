@@ -1,0 +1,598 @@
+\paragraph{PRIMEGAME 的估值格点共轭、有限支撑分解与局部化 solenoid 宿主}
+在自然扩张的外置预算、prime-register 账本语义与局部化 solenoid 终对象已经确立之后，固定 PRIMEGAME 微码的算术动力学还可进一步压缩为一条有限活跃支撑链：整数状态、first-fit 控制与局部化紧化在同一估值坐标中严格闭合。
+沿用定义 \ref{def:pom-fractran}、命题 \ref{prop:pom-fractran-prime-translation} 与定理 \ref{thm:xi-time-part56-solenoid-terminal-prime-register-recovery} 的记号。固定一条十四指令 FRACTRAN 程序
+\[
+F=\left(\frac{a_1}{b_1},\dots,\frac{a_{14}}{b_{14}}\right),
+\]
+并称之为 PRIMEGAME。设其活跃素数集为
+\[
+S_*:=\{2,3,5,7,11,13,17,19,23,29\},
+\]
+且 PRIMEGAME 的全部分子与分母都只含 \(S_*\) 中的素因子。记
+\[
+\NN_{S_*}:=\left\{\prod_{p\in S_*}p^{x_p}:x_p\in \ZZ_{\ge 0}\right\},
+\qquad
+P_*:=\prod_{p\in S_*}p,
+\qquad
+G_{S_*}:=\ZZ[S_*^{-1}],
+\]
+并约定 \((\ZZ_{\ge 0})^{S_*}\) 与 \(\ZZ^{S_*}\) 上的偏序 \(x\ge y\) 总按逐坐标解释。
+
+\begin{theorem}[PRIMEGAME 的精确 prime-register 共轭]\label{thm:xi-time-part62ae-primegame-exact-prime-register-conjugacy}
+定义估值坐标
+\[
+\Psi_{S_*}:\NN_{S_*}\longrightarrow (\ZZ_{\ge 0})^{S_*},
+\qquad
+\Psi_{S_*}(n):=(v_p(n))_{p\in S_*}.
+\]
+对每个 \(1\le i\le 14\)，记
+\[
+\beta_i^{(*)}:=(v_p(b_i))_{p\in S_*}\in (\ZZ_{\ge 0})^{S_*},
+\qquad
+\delta_i^{(*)}:=(v_p(a_i)-v_p(b_i))_{p\in S_*}\in \ZZ^{S_*}.
+\]
+则 PRIMEGAME 的一步演化 \(T_F\) 在 \(\NN_{S_*}\) 上与估值格点上的分段平移
+\[
+\widetilde T_F(x):=x+\delta_{i(x)}^{(*)},
+\qquad
+i(x):=\min\{\,i:\ x\ge \beta_i^{(*)}\,\}
+\]
+严格共轭，即
+\[
+\Psi_{S_*}\circ T_F=\widetilde T_F\circ \Psi_{S_*}
+\]
+在 \(T_F\) 的定义域上恒成立。
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:pom-fractran-prime-translation} 已在全素数寄存器纤维上给出同一结论；此处只需把坐标限制到活跃支撑 \(S_*\)。对任意 \(n\in \NN_{S_*}\) 与任意指令 \(a_i/b_i\)，有
+\[
+\frac{a_i}{b_i}\ \text{可用于}\ n
+\iff
+b_i\mid n
+\iff
+v_p(n)\ge v_p(b_i)\quad(\forall\, p\in S_*),
+\]
+因为 PRIMEGAME 的全部分母都只含 \(S_*\)-素因子。故在 \(\Psi_{S_*}\)-坐标中，可行性恰由
+\[
+\Psi_{S_*}(n)\ge \beta_i^{(*)}
+\]
+刻画。若第 \(i\) 条指令被 first-fit 规则选中，则
+\[
+T_F(n)=n\frac{a_i}{b_i},
+\]
+从而对每个 \(p\in S_*\) 都有
+\[
+v_p(T_F(n))=v_p(n)+v_p(a_i)-v_p(b_i).
+\]
+于是
+\[
+\Psi_{S_*}(T_F(n))
+=
+\Psi_{S_*}(n)+\delta_i^{(*)}.
+\]
+再由 first-fit 选择定义，所取索引正是
+\[
+i(\Psi_{S_*}(n))
+=
+\min\{\,i:\ \Psi_{S_*}(n)\ge \beta_i^{(*)}\,\}.
+\]
+故共轭关系成立。证毕。
+\end{proof}
+
+\begin{theorem}[PRIMEGAME 的活跃支撑分解]\label{thm:xi-time-part62ae-primegame-active-support-splitting}
+任取 \(n\in \ZZ_{>0}\)，则存在唯一分解
+\[
+n=u\,m,
+\qquad
+u\in \NN_{S_*},
+\qquad
+\gcd(m,P_*)=1.
+\]
+并且 PRIMEGAME 的一步演化满足：
+\begin{enumerate}
+  \item first-fit 选中的指令索引只由 \(u\) 决定，与 \(m\) 无关；
+  \item 若 \(T_F(u)\) 有定义，则
+  \[
+  T_F(n)=m\,T_F(u);
+  \]
+  若 \(T_F(u)\) 无定义，则 \(T_F(n)\) 亦无定义。
+\end{enumerate}
+特别地，从初值 \(n_0=2\) 出发的 PRIMEGAME 轨道完全落在 \(\NN_{S_*}\) 内。
+\end{theorem}
+\begin{proof}
+唯一分解来自整数的素因子分离：把 \(n\) 的 \(S_*\)-主部分并入 \(u\)，其余素因子并入 \(m\) 即得，而且此分解显然唯一。对任意指令 \(a_i/b_i\)，由于 \(\gcd(m,b_i)=1\) 且 \(b_i\) 的全部素因子都落在 \(S_*\)，有
+\[
+b_i\mid n
+\iff
+b_i\mid u.
+\]
+因此可行指令集合以及由此决定的 first-fit 索引只依赖于 \(u\)。若第 \(i\) 条指令适用于 \(u\)，则
+\[
+T_F(n)
+=
+n\frac{a_i}{b_i}
+=
+u\,m\frac{a_i}{b_i}
+=
+m\left(u\frac{a_i}{b_i}\right)
+=
+m\,T_F(u),
+\]
+其中最后一步利用了 PRIMEGAME 的全部分子也只含 \(S_*\)-素因子，故外部因子 \(m\) 完全惰性。若 \(u\) 上无可用指令，则 \(n\) 上也无可用指令。最后，由 \(2\in S_*\) 可知初值 \(n_0=2\) 对应 \(m=1\)；再由上式归纳即得整条轨道始终满足 \(m=1\)，从而完全落在 \(\NN_{S_*}\) 内。证毕。
+\end{proof}
+
+\begin{corollary}[PRIMEGAME 的有限阶段 solenoidal 宿主]\label{cor:xi-time-part62ae-primegame-finite-solenoidal-host}
+PRIMEGAME 的一步控制律以及一切仅依赖 \(S_*\)-估值坐标的轨道观测，都先天地因子化到 \(G_{S_*}=\ZZ[S_*^{-1}]\) 的局部化阶段。其自然紧化宿主为有限阶段 arithmetic solenoid
+\[
+\Sigma_{S_*}:=\widehat{G_{S_*}},
+\]
+并满足 Pontryagin 对偶短正合列
+\[
+0\longrightarrow \prod_{p\in S_*}\ZZ_p
+\longrightarrow \Sigma_{S_*}
+\longrightarrow \TT
+\longrightarrow 0.
+\]
+因此，对固定的 PRIMEGAME 微码而言，universal solenoid \(\widehat{\QQ}\) 并非操作层所必需；只有在把 PRIMEGAME 置入程序族、Mellin 读出或 \(\zeta\)-型完成时，才需要引入通用阶段。
+\end{corollary}
+\begin{proof}
+定理 \ref{thm:xi-time-part62ae-primegame-active-support-splitting} 表明，PRIMEGAME 的一步选择与更新完全由 \(S_*\)-支撑部分 \(u\in \NN_{S_*}\) 决定，而与外部因子 \(m\) 解耦。因此任何只读取 \(S_*\)-估值坐标的轨道观测，都可经由 \(\NN_{S_*}\subset G_{S_*}\) 因子化。
+另一方面，定理 \ref{thm:xi-time-part56-solenoid-terminal-prime-register-recovery} 与定理 \ref{thm:xi-localized-phase-sampling-closed-form} 已给出 \(G_{S_*}\) 的 Pontryagin 对偶紧化正是
+\[
+\Sigma_{S_*}=\widehat{G_{S_*}},
+\]
+并带有所示短正合列。故 PRIMEGAME 的自然紧化宿主已在有限局部化阶段闭合。证毕。
+\end{proof}
+
+\begin{corollary}[固定 FRACTRAN 微码的有限素数支撑刚性]\label{cor:xi-time-part62ae-fixed-fractran-finite-prime-support-rigidity}
+任意固定长度的 FRACTRAN 程序
+\[
+F=\left(\frac{a_1}{b_1},\dots,\frac{a_k}{b_k}\right)
+\]
+都只激活有限个 prime-register 轴，即
+\[
+S(F):=\bigcup_{i=1}^k\{\,p\in \mathbb P:\ v_p(a_i b_i)>0\,\}
+\]
+为有限集，并且其一步 first-fit 控制与更新完全由该有限活跃支撑决定。因而单个固定程序表不能仅凭微码自身实现真正的无限素数控制；若要出现 universal-solenoidal 现象，必须把无穷性置于程序族、观测族或 Mellin/\(\zeta\) 完成过程中。
+\end{corollary}
+\begin{proof}
+定理 \ref{thm:xi-time-part62ae-primegame-active-support-splitting} 的分解论证只用到了“程序表有限”与“全部分子分母的素因子支撑有限”这两点，因此对任意固定长度的 FRACTRAN 程序可逐字适用。把其中的 \(S_*\) 换成 \(S(F)\) 即得结论。证毕。
+\end{proof}
+
+因此，PRIMEGAME 在本文口径下可被精确识别为：哥德尔素数估值坐标给出状态空间，FRACTRAN 的 first-fit 规则给出微码执行，而有限局部化 solenoid 给出其紧化宿主。若继续推进谱侧分析，则自然对象将是 \(\Sigma_{S_*}\) 上的 transfer kernel、轨道 \(\zeta\) 与 Mellin 型读出。
+
+\paragraph{单一 first-fit 微码的 classical 阻断、共尾素数耗尽与惰性谱扇区}
+在 PRIMEGAME 的有限活跃支撑分解、局部化 solenoidal 宿主与有限素数账本刚性已经确定之后，若进一步要求单一 first-fit 微码直接抵达 classical \(\zeta\)/\(\Xi\) 的 Euler/Fredholm 层，则 prime-support、账本秩与有限阶段谱读出之间还会出现如下结构障碍。
+
+\begin{theorem}[单一 first-fit 微码的经典 Euler 乘积阻断]\label{thm:xi-time-part62ae-single-firstfit-classical-euler-obstruction}
+设
+\[
+F=\left(\frac{a_1}{b_1},\dots,\frac{a_k}{b_k}\right)
+\]
+为任意有限 FRACTRAN-compatible first-fit 微码，并记其活跃素数集为
+\[
+S(F):=\{\,p\in\mathbb P:\ v_p(a_i b_i)>0\ \text{for some }1\le i\le k\,\}.
+\]
+若某条证明路线坚持：其全部算术语义都由 \(F\) 的 prime-register 动力学，经结构保持的局部化 solenoidal 完成读出；并且该读出所诱导的 Euler/Fredholm 行列式在文稿既定的通用层语义下应与 classical \(\zeta\) 或完成函数 \(\Xi\) 一致，则该路线不可能由单一 \(F\) 实现。
+\end{theorem}
+\begin{proof}
+记
+\[
+\NN_{S(F)}
+:=
+\left\{
+\prod_{p\in S(F)}p^{x_p}:x_p\in\ZZ_{\ge 0}
+\right\}.
+\]
+由推论 \ref{cor:xi-time-part62ae-fixed-fractran-finite-prime-support-rigidity}，\(F\) 的一步控制与更新完全由有限支撑 \(S(F)\) 决定。更具体地，若
+\[
+n=u\,m,
+\qquad
+u\in \NN_{S(F)},
+\qquad
+\gcd\!\Bigl(m,\prod_{p\in S(F)}p\Bigr)=1,
+\]
+则 first-fit 选中的指令索引只由 \(u\) 决定，且一旦 \(T_F(u)\) 有定义便有
+\[
+T_F(n)=m\,T_F(u).
+\]
+因此 \(F\) 的 prime-register 语义严格因子化到局部化阶段
+\[
+G_{S(F)}=\ZZ[S(F)^{-1}]
+\]
+之上。
+
+再由定理 \ref{thm:killo-localization-circle-dimension-prime-ledger-splitting}，
+\[
+0\longrightarrow \prod_{p\in S(F)}\ZZ_p
+\longrightarrow \widehat{G_{S(F)}}
+\longrightarrow \TT
+\longrightarrow 0,
+\]
+且 \(S(F)\) 可由核 \(\prod_{p\in S(F)}\ZZ_p\) 完全恢复。故任何仅从 \(\widehat{G_{S(F)}}\) 及其 Pontryagin 对偶账本 functorially 构造的对象，在结构层都不可能生成 \(S(F)\) 之外的新素数方向。
+
+然而，文稿在 \S\ref{subsec:profinite-operator-l2} 中把“统一全部模数”的寄存器提升算子安置于 \(L^2(\widehat{\ZZ})\) 上，并在定理 \ref{thm:mellin-unitary-slice-unique}、定理 \ref{thm:app-horizon-toeplitz-lmi} 与定理 \ref{thm:xi-slice-horizon-carath-toeplitz} 中把 classical \(\Xi\)-切片的 Mellin--Plancherel 幺正读出及其 Toeplitz--Carath\'eodory 正性放在这一通用层上刻画。若单一有限微码已足以恢复 classical \(\zeta\) 或 \(\Xi\)，则该通用层中的全部素数尺度必须可由某个有限 \(S(F)\)-支撑对象结构性再现，矛盾。故结论成立。
+\end{proof}
+
+\begin{theorem}[共尾素数耗尽]\label{thm:xi-time-part62ae-cofinal-prime-exhaustion}
+设 \(\mathscr S\) 为某一 FRACTRAN-compatible 路线中实际出现的全部有限 prime-support 之族。若该路线的目标是 classical \(\zeta\)/\(\Xi\) 而非固定有限核上的 RH 证书，则必存在一列有限素数集
+\[
+S_1\subset S_2\subset \cdots \subset \mathbb P,
+\qquad
+\bigcup_{n\ge 1}S_n=\mathbb P,
+\]
+并且每个 \(S_n\) 都可写成 \(\mathscr S\) 中有限多个支撑的并。特别地，通用 solenoidal 宿主并非附加修饰，而是由 prime-support 逻辑强制出的共尾极限对象。
+\end{theorem}
+\begin{proof}
+若
+\[
+\bigcup_{S\in\mathscr S}S\neq \mathbb P,
+\]
+则可取某个素数 \(p_0\notin \bigcup_{S\in\mathscr S}S\)。于是对每个 \(S\in\mathscr S\)，定理 \ref{thm:killo-localization-circle-dimension-prime-ledger-splitting} 都给出
+\[
+\ker\!\bigl(\widehat{G_S}\to\TT\bigr)\cong \prod_{p\in S}\ZZ_p,
+\]
+其 \(p_0\)-主因子必为平凡。另一方面，定理 \ref{thm:xi-time-part62ac-localized-prime-adjoining-natural-extension} 表明：只有显式邻接素数 \(p_0\) 才会在自然扩张中新增一条 \(\ZZ_{p_0}\)-方向；推论 \ref{cor:xi-time-part62ac-prime-adjoining-order-independent-kernel-product} 又说明反复邻接后的最终对象只取决于实际并入的素数并。既然 \(p_0\) 从未出现，则任何由这些有限阶段及其共尾组合得到的对象都不可能在结构层看见 \(p_0\)。这与 classical Euler 乘积必须包含 \(p_0\)-尺度矛盾，故并集只能是 \(\mathbb P\)。
+
+现取素数的固定枚举
+\[
+\mathbb P=\{p_1,p_2,\dots\}.
+\]
+对每个 \(n\ge 1\)，由上式并集等于 \(\mathbb P\)，可选 \(S^{(n)}\in\mathscr S\) 使 \(p_n\in S^{(n)}\)。定义
+\[
+S_n:=\bigcup_{j=1}^{n}S^{(j)}.
+\]
+则每个 \(S_n\) 皆有限，且
+\[
+S_1\subset S_2\subset\cdots,
+\qquad
+\bigcup_{n\ge 1}S_n=\mathbb P.
+\]
+再由推论 \ref{cor:xi-time-part62ac-prime-adjoining-order-independent-kernel-product}，每个有限阶段都对应规范短正合列
+\[
+0\longrightarrow \prod_{p\in S_n}\ZZ_p
+\longrightarrow \Sigma_{S_n}
+\longrightarrow \TT
+\longrightarrow 0,
+\qquad
+\Sigma_{S_n}:=\widehat{G_{S_n}},
+\]
+并且各阶段之间的过渡正是逐素数邻接所诱导的共尾系统。故通用 solenoidal 宿主只能作为这些有限阶段的共尾极限出现，而不可能绕过 prime-support 账本被直接获得。证毕。
+\end{proof}
+
+\begin{theorem}[异常项与无穷秩账本的二择一]\label{thm:xi-time-part62ae-anomaly-infinite-rank-dichotomy}
+设某条 Gödel--FRACTRAN 路线试图从 prime-register 微码抵达 classical \(\zeta\)/\(\Xi\)。若其 prime-support 最终覆盖全部素数，则至少发生下列两类机制之一：
+\begin{enumerate}
+  \item 承载乘法语义的有限阶段账本秩无界增长，并仅在共尾极限后进入通用层；
+  \item 乘法到账本的传递在某一层失去严格同态性，而必须由异常签名、counterterm strictification 或普适可交换化群商承担补偿。
+\end{enumerate}
+特别地，不存在同时满足“prime-support 共尾覆盖全部素数、账本秩一致有界、乘法语义在各层皆严格同态”的证明链。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-time-part62ae-cofinal-prime-exhaustion}，可取一列有限支撑
+\[
+S_1\subset S_2\subset\cdots\subset\mathbb P,
+\qquad
+\bigcup_{n\ge 1}S_n=\mathbb P.
+\]
+若在某一阶段中，\(S_n\) 内已有素数方向在账本中发生不可逆合并，从而不再可区分，则该路线上“乘法到账本”的传递已不再保持严格忠实语义，因而已经落入第二分支。故以下只需排除“各阶段都严格忠实同态化且账本秩一致有界”的可能性。
+
+反设存在一致常数 \(R\)，使每一有限阶段的账本都可在秩至多 \(R\) 的加法/局部化对象上严格同态实现，并且在结构层忠实保留 \(S_n\) 中全部素数方向。由于 \(|S_n|\to\infty\)，可取 \(n\) 使
+\[
+|S_n|>R.
+\]
+记
+\[
+M_{S_n}:=\langle p:\ p\in S_n\rangle_{\times}\subset \NN^\times.
+\]
+则 \(M_{S_n}\cong (\NN^{|S_n|},+)\) 为由 \(|S_n|\) 个独立素数方向生成的自由交换幺半群。若其可在秩至多 \(R\) 的局部化账本中严格忠实实现，便与定理 \ref{thm:xi-time-part62debb-finite-prime-support-localized-axis-threshold} 及定理 \ref{thm:xi-localized-directsum-prime-truncation-minimal-channels} 矛盾。故只要严格同态性在各层保持，账本秩就不可能一致有界；这给出第一分支。
+
+若反而坚持账本秩一致有界，则上面的矛盾表明：在某一有限阶段，乘法到账本的传递必不能继续保持严格同态。文稿内部对此类失配的可见补偿机制正是异常签名与 strictification 链：定义 \ref{def:pom-anom-signature} 给出异常对象，命题 \ref{prop:pom-counterterm-anom-cancel} 给出常数层对消律，命题 \ref{prop:pom-bc-quotient-strictify} 与命题 \ref{prop:pom-bc-quotient-universal} 给出普适可交换化群商，而定理 \ref{thm:dephys-offline-hair-curvature-reduction} 把这一失配压缩为“正规形—异常类—strictification”的统一归约。故任何绕开有限秩矛盾的路径都必须落入第二分支。特别地，三项条件不可能同时成立。证毕。
+\end{proof}
+
+\begin{corollary}[Ramanujan 窗口不可单独升级为 classical RH]\label{cor:xi-time-part62ae-ramanujan-window-no-classical-upgrade}
+任意固定有限核家族上的 RH-sharp/Ramanujan 窗口结论，即便其边界由唯一临界参数与显式代数方程精确给出，也不能单独升级为 classical RH。特别地，命题 \ref{prop:real-input-40-collision-rhk-window} 给出的 \(4\times 4\) 碰撞位势窗口
+\[
+\Lambda(u)\le \lambda_1(u)^{1/2}
+\iff
+0<u\le u_R
+\]
+只构成一个有限核 RH 证书，而不构成 classical \(\Xi\) 的全局闭合。
+\end{corollary}
+\begin{proof}
+命题 \ref{prop:real-input-40-collision-rhk-window} 已给出一个边界完全显式的有限维窗口，其参数 \(u_R\) 由唯一正实五次根确定。然 \S\ref{subsubsec:xi-horizon-ramanujan-feasible-reduction} 已明确指出：从 Ramanujan 机制出发逼近真实 RH，必须超出“固定有限维 \(+\) 单尺度 Dirichlet 化”的范式，进入增长维数的逼近序列或无穷维 Fredholm 行列式口径。
+
+另一方面，定理 \ref{thm:xi-time-part62ae-single-firstfit-classical-euler-obstruction}、定理 \ref{thm:xi-time-part62ae-cofinal-prime-exhaustion} 与定理 \ref{thm:xi-time-part62ae-anomaly-infinite-rank-dichotomy} 表明：若目标是 classical \(\zeta\)/\(\Xi\)，则必须同时面对全素数共尾支撑、无界账本秩或异常补偿分支。单个固定有限核家族并不携带这些结构条件，故其 Ramanujan 窗口不能单独升级为 classical RH。证毕。
+\end{proof}
+
+\begin{proposition}[真实输入 \texorpdfstring{$40$}{40} 状态核的刚性惰性谱对]\label{prop:xi-time-part62ae-real-input40-rigid-inert-spectral-pair}
+沿用定理 \ref{thm:real-input-40-det-uv-2plus8} 与推论 \ref{cor:real-input-40-zeta-uv-sqrtv-eigs} 的记号。则二维加权行列式
+\[
+\Delta(z;u,v)=\det(I-zM_{u,v})=(vz^2-1)P_8(z;u,v)
+\]
+对任意 \(u\) 恒带有一对参数刚性谱支
+\[
+\lambda_\pm=\pm\sqrt v.
+\]
+因此：
+\begin{enumerate}
+  \item 对每个整数 \(r\ge 1\)，都有
+  \[
+  \partial_u^{\,r}\log(vz^2-1)=0;
+  \]
+  \item 任何仅由 \(\partial_u^{\,r}\log\Delta(z;u,v)\) 所提取的谱统计，都只能读取 core 因子 \(P_8(z;u,v)\) 的变化，而对刚性谱对 \(\{\pm\sqrt v\}\) 完全失明；
+  \item 因而任何仅以碰撞参数 \(u\) 的变形来读取“素数影子”的方案，都不可能在全谱层面保持忠实；若要与通用素数生成元层或 Mellin 幺正切片比对，必须先对该刚性扇区作商化或重整化。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+定理 \ref{thm:real-input-40-det-uv-2plus8} 与推论 \ref{cor:real-input-40-zeta-uv-sqrtv-eigs} 直接给出
+\[
+\Delta(z;u,v)=(vz^2-1)P_8(z;u,v),
+\qquad
+\lambda_\pm=\pm\sqrt v,
+\]
+其中 \(\lambda_\pm\) 与 \(u\) 无关。故对任意 \(r\ge 1\)，
+\[
+\partial_u^{\,r}\log(vz^2-1)=0,
+\]
+第一条成立。
+
+进一步，
+\[
+\log\Delta(z;u,v)=\log(vz^2-1)+\log P_8(z;u,v),
+\]
+故一切 \(u\)-微分都自动杀掉刚性因子，只留下 \(P_8\) 的贡献。等价地，由定理 \ref{thm:xi-time-part73-twoparam-atomic-ghost-u-blindness} 与定理 \ref{thm:xi-time-part73-nonrigid-trace-newton-cayley-closure}，任何仅依赖 \(u\)-导数的 ghost/trace 审计都只能看到去除 \(\pm\sqrt v\) 后的非刚性迹谱 \(R_n(u,v)\)。
+
+于是，若某个谱读出函子只使用 \(u\)-变形，则它会把“整条 determinant family”与“剔除刚性因子后的 core family”识别为同一对象；这在全谱层面不是忠实读出。故若要把该二维核接到通用素数生成元层或 Mellin 幺正切片的比较问题上，必须先将刚性惰性扇区 \((vz^2-1)\) 商去或重整化。证毕。
+\end{proof}
+
+\begin{conjecture}[Cofinal PRIMEGAME--\texorpdfstring{$\Xi$}{Xi} 极限定理]\label{conj:xi-time-part62ae-cofinal-primegame-xi-limit}
+存在一族按有限素数集 \(S\subset\mathbb P\) 过滤的 FRACTRAN-compatible first-fit 微码 \(F_S\)，以及一族作用于 \(L^2(\widehat{\ZZ})\) 的迹类算子 \(\mathcal L_S\)，使得若记
+\[
+\widetilde\Delta_S(z):=\det(I-z\mathcal L_S),
+\]
+则满足：
+\begin{enumerate}
+  \item \(F_S\) 的 prime-register 语义因子化到
+  \[
+  G_S=\ZZ[S^{-1}];
+  \]
+  \item 若 \(S'\subset S\)，则 \(\widetilde\Delta_{S'}\) 与 \(\widetilde\Delta_S\) 在限制映射下相容；
+  \item 当 \(S\nearrow \mathbb P\) 时，\(\mathcal L_S\) 在迹范数中收敛到某个迹类极限 \(\mathcal L_\infty\)，从而
+  \[
+  \widetilde\Delta_S(z)\longrightarrow
+  \widetilde\Delta_\infty(z):=\det(I-z\mathcal L_\infty)
+  \]
+  于紧子集上一致成立；
+  \item \(\widetilde\Delta_\infty\) 的 Mellin--Plancherel 幺正切片与圆盘完成化的 \(\Xi\)-截面一致。
+\end{enumerate}
+在此设定下，classical RH 等价于极限视界 Carath\'eodory 函数的 Toeplitz--PSD 层级成立。
+\end{conjecture}
+
+\paragraph{自然扩张层深、黄金共振 Schatten 排斥与单参数热力学塔的 RH 不可识别性}
+在共尾 prime-support、有限阶段 solenoidal 宿主与 \(40\) 状态核的刚性谱扇区已经确定之后，还可把这三条链进一步压缩为一组彼此咬合的后果：自然扩张层深在局部化 prime-ledger 上具有严格线性下界；黄金共振振幅在算子侧排斥一切有限反项的 Schatten 正则化；而单参数热力学导数塔则不足以恢复圆盘完成化所需的 Toeplitz--Carath\'eodory 证书。
+
+\begin{theorem}[自然扩张层深的 prime-slice 线性下界]\label{thm:xi-time-part62ae-natural-extension-prime-slice-linear-lower-bound}
+沿用定理 \ref{thm:xi-layered-prime-register-sharp-natural-extension} 的设定。设
+\[
+\Psi_k(x_0):=(x_k,H_k(x_0)),
+\qquad
+H_k(x_0):=\prod_{j=0}^{k-1}h_j(x_0),
+\]
+且对每个 \(j<k\) 都存在两两不交的素数集 \(P_j\subset\mathbb P\)，使 \(h_j(x_0)\) 的全部素因子都落在 \(P_j\) 中。定义
+\[
+\operatorname{supp}_{\mathbb P}(h_j)
+:=
+\left\{
+p\in\mathbb P:\ \exists\,x_0\in X_0,\ v_p\bigl(h_j(x_0)\bigr)>0
+\right\}.
+\]
+若对每个 \(j<k\) 都存在 \(y_j\in X_{j+1}\) 使
+\[
+\#\pi_j^{-1}(y_j)\ge 2,
+\]
+且 \(\Psi_k\) 为单射，则有
+\[
+\#\Bigl(\bigcup_{j=0}^{k-1}\operatorname{supp}_{\mathbb P}(h_j)\Bigr)\ge k.
+\]
+更强地，对每个 \(j<k\) 都存在某个素数 \(p_j\in P_j\) 与某个微态 \(x_0^{(j)}\in X_0\) 使
+\[
+v_{p_j}\bigl(h_j(x_0^{(j)})\bigr)>0.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-layered-prime-register-sharp-natural-extension}，对每个 \(j<k\) 都存在某个微态 \(x_0^{(j)}\in X_0\) 使
+\[
+h_j\bigl(x_0^{(j)}\bigr)\neq 1.
+\]
+因此 \(h_j(x_0^{(j)})\) 至少含有一个素因子 \(p_j\in P_j\)，并满足
+\[
+v_{p_j}\bigl(h_j(x_0^{(j)})\bigr)>0.
+\]
+由于各 \(P_j\) 两两不交，故这些 \(p_j\) 两两不同，从而
+\[
+\#\Bigl(\bigcup_{j=0}^{k-1}\operatorname{supp}_{\mathbb P}(h_j)\Bigr)\ge k.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[有限阶段 arithmetic solenoid 的分支历史容量]\label{cor:xi-time-part62ae-finite-solenoid-branch-history-capacity}
+设 \(S\subset\mathbb P\) 为有限集，并记
+\[
+G_S=\ZZ[S^{-1}],
+\qquad
+0\longrightarrow \prod_{p\in S}\ZZ_p
+\longrightarrow \widehat{G_S}
+\longrightarrow \TT
+\longrightarrow 0
+\]
+为定理 \ref{thm:xi-time-part56-solenoid-terminal-prime-register-recovery} 所给出的 arithmetic solenoid 短正合列。则任何 prime-register 方向受限于 \(S\) 的自然扩张忠实编码，至多只能承载 \(|S|\) 层非平凡分支历史。特别地，若某个有限纤维自映射 \(T:X\twoheadrightarrow X\) 的自然扩张在无穷多层上都存在真实分支，则不存在任何固定有限 \(S\) 使 \(\widehat{G_S}\) 忠实承载其全部前史；只能取一列
+\[
+S_1\subset S_2\subset\cdots,
+\qquad
+\bigcup_{n\ge 1}S_n=\mathbb P,
+\]
+并进入相应的共尾逆极限。
+\end{corollary}
+\begin{proof}
+定理 \ref{thm:xi-time-part56-solenoid-terminal-prime-register-recovery} 与定理 \ref{thm:xi-localized-phase-sampling-closed-form} 表明：\(\widehat{G_S}\) 的全不连通 prime-ledger 核恰为
+\[
+\prod_{p\in S}\ZZ_p,
+\]
+因而其可用素数方向完全由 \(S\) 决定。若某个深度为 \(k\) 的自然扩张前史能在该有限阶段上被忠实编码，则它必然给出一个所有素因子都落在 \(S\) 中的单射分层 prime-register 外置。由定理 \ref{thm:xi-time-part62ae-natural-extension-prime-slice-linear-lower-bound}，此时至少需要 \(k\) 个互异素数方向，故 \(k\le |S|\)。
+
+若 \(T\) 的自然扩张在无穷多层上均存在真实分支，则对任意 \(k\) 都可取长度 \(k\) 的前史截断，并由上段推出任何忠实编码都需要至少 \(k\) 个互异素数方向。于是任意固定有限 \(S\) 最终都会失效，只能取 \(S_n\nearrow\mathbb P\) 的共尾系统。证毕。
+\end{proof}
+
+\begin{theorem}[黄金共振振幅的 Hilbert--Schmidt 排斥]\label{thm:xi-time-part62ae-golden-resonance-hilbert-schmidt-obstruction}
+设 \((e_u)_{u\ge 1}\) 为 Hilbert 空间 \(\mathcal H\) 中一组标准正交系，并令
+\[
+R
+:=
+\sum_{u\ge 1}C_\varphi(u)\,\langle\cdot,e_u\rangle e_u
+\]
+为其在自然极大定义域上的对角算子。则
+\[
+R\notin \mathcal S_2(\mathcal H).
+\]
+更强地，对任意 \(N\ge 0\)，尾算子
+\[
+R_{>N}
+:=
+\sum_{u>N}C_\varphi(u)\,\langle\cdot,e_u\rangle e_u
+\]
+亦不属于 \(\mathcal S_2(\mathcal H)\)。特别地，
+\[
+R\notin \mathcal S_1(\mathcal H).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-sigma-phi-diverges}，
+\[
+\Sigma_\varphi
+:=
+1+2\sum_{u=1}^{\infty}C_\varphi(u)^2
+=+\infty,
+\]
+从而
+\[
+\sum_{u\ge 1}|C_\varphi(u)|^2=+\infty.
+\]
+这也正与推论 \ref{cor:fold-bernoulli-fourier-sampling-not-l2} 中 Fourier 采样序列的非平方可和性一致。对角算子的 Hilbert--Schmidt 范数满足
+\[
+\|R\|_{\mathcal S_2}^2
+=
+\sum_{u\ge 1}|C_\varphi(u)|^2,
+\]
+故 \(\|R\|_{\mathcal S_2}=+\infty\)，于是 \(R\notin\mathcal S_2(\mathcal H)\)。
+
+同理，对任意固定 \(N\ge 0\)，有
+\[
+\|R_{>N}\|_{\mathcal S_2}^2
+=
+\sum_{u>N}|C_\varphi(u)|^2
+=+\infty,
+\]
+故 \(R_{>N}\notin \mathcal S_2(\mathcal H)\)。最后，由 \(\mathcal S_1(\mathcal H)\subset \mathcal S_2(\mathcal H)\) 即得 \(R\notin \mathcal S_1(\mathcal H)\)。证毕。
+\end{proof}
+
+\begin{corollary}[有限反项 Fredholm 封口的不可能性]\label{cor:xi-time-part62ae-no-finite-counterterm-fredholm-closure}
+在定理 \ref{thm:xi-time-part62ae-golden-resonance-hilbert-schmidt-obstruction} 的设定下，不存在任何有限秩算子 \(F\) 使
+\[
+R-F\in \mathcal S_1(\mathcal H).
+\]
+等价地，任何试图把原始黄金共振振幅直接作为 Mellin/Fourier 正交通道特征值的 Fredholm--Hilbert--P\'olya 封口，都不可能通过有限个 counterterm 获得迹类正则化。
+\end{corollary}
+\begin{proof}
+若存在有限秩算子 \(F\) 使 \(R-F\in\mathcal S_1(\mathcal H)\)，则 \(R-F\in\mathcal S_2(\mathcal H)\)。另一方面，有限秩算子必属于 \(\mathcal S_2(\mathcal H)\)，故
+\[
+R=(R-F)+F\in\mathcal S_2(\mathcal H),
+\]
+与定理 \ref{thm:xi-time-part62ae-golden-resonance-hilbert-schmidt-obstruction} 矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[单参数热力学塔对 RH 证书的不可识别性]\label{thm:xi-time-part62ae-oneparam-thermodynamic-tower-rh-indistinguishability}
+固定 \(v>0\)。沿用定理 \ref{thm:real-input-40-det-uv-2plus8} 与推论 \ref{cor:real-input-40-zeta-uv-sqrtv-eigs} 的记号，定义
+\[
+\Delta_{\mathrm{full}}(z;u)
+:=
+\Delta(z;u,v)
+=(vz^2-1)P_8(z;u,v),
+\qquad
+\Delta_{\mathrm{red}}(z;u):=P_8(z;u,v).
+\]
+对每个 \(r\ge 1\)，定义
+\[
+\mathcal C_r(z;u):=\partial_u^r\log\Delta(z;u,v).
+\]
+则对一切 \(r\ge 1\) 都有
+\[
+\partial_u^r\log \Delta_{\mathrm{full}}(z;u)
+=
+\partial_u^r\log \Delta_{\mathrm{red}}(z;u).
+\]
+因此，任何仅由 \(u\)-压力、\(u\)-矩、\(u\)-大偏差或其有限代数组合所生成、并最终只依赖这条 \(u\)-导数塔的热力学观察子，都无法区分 \(\Delta_{\mathrm{full}}\) 与 \(\Delta_{\mathrm{red}}\)。
+
+然而，一旦把这两族对象送入文稿既定的圆盘完成化--Toeplitz--PSD 接口，则相应的 RH 正性证书并不相同。更一般地，若 \(B(z)\) 为任一与 \(u\) 无关的非常数完成因子，则 \(B(z)\Delta_{\mathrm{red}}(z;u)\) 与 \(\Delta_{\mathrm{red}}(z;u)\) 具有完全相同的全部 \(u\)-导数塔，但其 Toeplitz--Carath\'eodory 边界数据因
+\[
+\partial_z\log\!\bigl(B(z)\Delta_{\mathrm{red}}(z;u)\bigr)
+=
+\partial_z\log \Delta_{\mathrm{red}}(z;u)+\partial_z\log B(z)
+\]
+而被改写。特别地，取 \(B(z)=1-vz^2\) 时，\(\Delta_{\mathrm{full}}\) 与 \(\Delta_{\mathrm{red}}\) 在热力学塔上不可区分，却在完成化证书端保持可区分。
+\end{theorem}
+\begin{proof}
+由
+\[
+\log\Delta_{\mathrm{full}}(z;u)
+=
+\log(vz^2-1)+\log P_8(z;u,v),
+\]
+并注意到 \(\log(vz^2-1)\) 与 \(u\) 无关，便对每个 \(r\ge 1\) 得到
+\[
+\partial_u^r\log\Delta_{\mathrm{full}}(z;u)
+=
+\partial_u^r\log P_8(z;u,v)
+=
+\partial_u^r\log\Delta_{\mathrm{red}}(z;u).
+\]
+因此任何仅由这条 \(u\)-导数塔构成的热力学观察子都无法区分二者。
+
+另一方面，定理 \ref{thm:mellin-unitary-slice-unique} 与定理 \ref{thm:xi-slice-horizon-carath-toeplitz} 表明：classical RH 端所使用的是完成对象的 Mellin--Plancherel 幺正切片及其诱导的 Toeplitz--Carath\'eodory 边界数据，而非单一参数的热力学导数塔。若将完成对象乘上一个与 \(u\) 无关的非常数因子 \(B(z)\)，则全部 \(u\)-导数塔保持不变，但 \(\partial_z\log B(z)\) 会向边界系数额外注入一个非零序列，从而改变 Toeplitz 数据。取 \(B(z)=1-vz^2\) 即得所述具体例子。故从单参数热力学塔到 RH 证书的映射不是单射。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$40$}{40} 状态核通向 classical RH 的最小额外输入]\label{cor:xi-time-part62ae-realinput40-minimal-extra-rh-input}
+任何仅依赖 \(u\)-单参数热力学数据的 \(40\) 状态核--RH 方案，在逻辑上都不完备。若要抵达文稿中的 classical RH 终端证书，则至少必须补入下列三类信息之一：
+\begin{enumerate}
+  \item 一个与 \(u\) 独立的第二形变参数；
+  \item 由分支历史或惯性谱扇区所决定的规范反因子；
+  \item 直接给定的 Toeplitz--Carath\'eodory 边界数据。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+若单参数 \(u\)-热力学塔已足以恢复完成化 RH 证书，则定理 \ref{thm:xi-time-part62ae-oneparam-thermodynamic-tower-rh-indistinguishability} 中的 \(\Delta_{\mathrm{full}}\) 与 \(\Delta_{\mathrm{red}}\) 应在 RH 端不可区分；但该定理恰表明它们在全部 \(u\)-导数塔上不可区分，而在 Toeplitz--Carath\'eodory 证书端可区分，矛盾。故必须补入至少一类与单参数热力学塔独立的额外信息。证毕。
+\end{proof}
+
+\begin{conjecture}[分支惯性反因子与 reduced determinant 的共尾 \texorpdfstring{$\Xi$}{Xi} 极限]\label{conj:xi-time-part62ae-branch-inertia-counterfactor-cofinal-xi-limit}
+猜想 \ref{conj:xi-time-part62ae-cofinal-primegame-xi-limit} 还应具有如下规范分解：存在一族按有限素数集 \(S\subset\mathbb P\) 过滤的 FRACTRAN-compatible / Fibonacci-compatible 内核 \(\Delta_S\)，以及与之伴随的一族规范反因子 \(B_S(z)\)，使得若记
+\[
+\Delta_S^{\mathrm{red}}(z):=\frac{\Delta_S(z)}{B_S(z)},
+\]
+则满足：
+\begin{enumerate}
+  \item \(B_S\) 恰吸收一切对所选热力学形变不可见、但对完成化证书可见的惯性谱支；
+  \item \(\Delta_S^{\mathrm{red}}\) 对自然扩张分支历史保持忠实；
+  \item 若 \(S'\subset S\)，则 \(B_{S'}\) 与 \(B_S\) 在限制映射下相容；
+  \item 当 \(S\nearrow\mathbb P\) 时，\(\Delta_S^{\mathrm{red}}\) 在适当的 Fredholm--Mellin 口径下收敛到某个极限 \(\Delta_\infty\)，且 \(\Delta_\infty\) 的 Mellin--Plancherel 幺正切片与文稿圆盘完成化中的 \(\Xi\)-截面一致。
+\end{enumerate}
+在此设定下，classical RH 等价于 \(\Delta_\infty\) 所诱导的 Toeplitz--Carath\'eodory 数据全阶正性。
+\end{conjecture}
+
+综上，PRIMEGAME/FRACTRAN--solenoid--Mellin 路线在本文口径下呈现出一条明确的三重结构障碍：
+\[
+\boxed{\;
+\text{分支历史要求共尾 prime-ledger，}\quad
+\text{黄金共振排斥有限反项 Fredholm 封口，}\quad
+\text{单参数热力学塔不能恢复 RH 的 Toeplitz 证书。}\;}
+\]
+因此，真正尚待建立的并非更多有限核实验，而是一套定义在共尾 prime-register 家族上的规范反因子理论，并要求其同时与自然扩张分支历史、有限阶段惯性谱扇区的剥离，以及 Mellin--Plancherel / Toeplitz--Carath\'eodory 终端接口严格相容。

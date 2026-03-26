@@ -1,0 +1,595 @@
+\paragraph{停机集与 Lee--Yang 边界原子谱}
+固定一台通用前缀自由图灵机 \(U\)，并固定一个可计算枚举 \((p_e)_{e\ge 1}\)（每个 \(p_e\) 为二进制程序）。
+定义停机集
+\[
+\mathcal H:=\{e\ge 1:\ U(p_e)\ \text{停机}\}.
+\]
+令 \(q_e\) 为第 \(e\) 个奇素数，并记 \(\zeta_{q}:=\exp(2\pi \mathrm{i}/q)\)。
+对 \(N\ge 1\) 定义阶段停机集
+\[
+\mathcal H_N:=\{e\le N:\ U(p_e)\ \text{在}\ N\ \text{步内停机}\}.
+\]
+对 \(N\ge 2\) 置 \(L_N:=2^{N-2}\)（\(N=1\) 的取值不影响下述渐近结论）。
+对 \(e\le N\) 定义重复次数
+\[
+r_{e,N}:=
+\Bigl\lfloor\frac{2^{N-e-2}}{q_e}\Bigr\rfloor\mathbf 1_{\{e\in\mathcal H_N\}}
+\qquad(e\le N),
+\]
+并定义整数多项式
+\[
+P_N(z):=(1-z^{L_N})\cdot\prod_{e=1}^{N}(1-z^{q_e})^{r_{e,N}}\in\ZZ[z].
+\]
+令 \(\mu_N\) 为 \(P_N\) 的零点计数测度的归一化（按重数计）：
+\[
+\mu_N:=\frac1{\deg P_N}\sum_{P_N(\omega)=0}\delta_{\omega}.
+\]
+
+\begin{theorem}[停机集的 Lee--Yang 全息编码与有限体近似]\label{thm:fold-computability-halting-leyang-holographic-encoding}
+对一切 \(N\ge 1\)，有 \(\mathrm{supp}(\mu_N)\subset \mathbb T:=\{z\in\CC:\ |z|=1\}\)。
+并且存在 \(\mathbb T\) 上概率测度 \(\mu\) 使得 \(\mu_N\Rightarrow \mu\)（弱-\(*\) 收敛），并满足以下分解：
+令
+\[
+S:=\sum_{e\in\mathcal H}2^{-e}\in(0,1],
+\]
+则
+\begin{equation}\label{eq:fold-computability-halting-leyang-limit-measure}
+\boxed{\;
+\mu=\frac{1}{1+S}\,m_{\mathbb T}
+\;+\;
+\sum_{e\in\mathcal H}\frac{2^{-e}}{1+S}\,\nu_{q_e},\;}
+\end{equation}
+其中 \(m_{\mathbb T}\) 为单位圆 Haar 测度，\(\nu_q\) 为 \(q\) 次单位根的均匀测度。
+此外，对每个 \(e\ge 1\) 有原子读出等价式
+\[
+\mu(\{\zeta_{q_e}\})>0\quad\Longleftrightarrow\quad e\in\mathcal H,
+\]
+从而 \(\mathcal H\) 可由 \(\mu\) 的原子谱完全恢复。
+\end{theorem}
+\begin{proof}
+\textbf{支撑在 \(\mathbb T\).}
+\((1-z^M)\) 的零点恰为 \(M\) 次单位根，故 \(P_N\) 的全部零点位于 \(\mathbb T\)。
+
+\textbf{极限分解.}
+记 \(\nu_M\) 为 \(M\) 次单位根的均匀测度。
+设
+\[
+D_N:=L_N+\sum_{e=1}^{N}r_{e,N}q_e,
+\]
+则由零点多重集合的加性可得
+\[
+\mu_N=\frac{L_N}{D_N}\nu_{L_N}+\sum_{e=1}^{N}\frac{r_{e,N}q_e}{D_N}\nu_{q_e}.
+\]
+若 \(e\in\mathcal H\)，则存在 \(N_0(e)\) 使得 \(e\in\mathcal H_N\) 对所有 \(N\ge N_0(e)\) 成立，并且
+\[
+\frac{r_{e,N}q_e}{2^{N-e-2}}\to 1\qquad(N\to\infty),
+\]
+因为取整误差至多 \(q_e\) 而 \(2^{N-e-2}\to\infty\)。
+因此
+\[
+\frac{1}{2^{N-2}}\sum_{e=1}^{N}r_{e,N}q_e\to \sum_{e\in\mathcal H}2^{-e}=S,
+\qquad
+\frac{L_N}{D_N}\to \frac1{1+S}.
+\]
+对固定 \(e\)，同理得
+\[
+\frac{r_{e,N}q_e}{D_N}\to
+\begin{cases}
+\dfrac{2^{-e}}{1+S},& e\in\mathcal H,\\[6pt]
+0,& e\notin\mathcal H.
+\end{cases}
+\]
+另一方面，\(\nu_{L_N}\Rightarrow m_{\mathbb T}\)（等分点列的经典均匀分布极限）。
+将上述权重极限与
+\(
+\sum_{e\ge 1}2^{-e}<\infty
+\)
+给出的尾部控制合并即可推出 \(\mu_N\Rightarrow \mu\) 且 \eqref{eq:fold-computability-halting-leyang-limit-measure} 成立。
+
+\textbf{原子读出.}
+对素数 \(q_e\)，点 \(\zeta_{q_e}\) 只属于 \(q_e\) 次单位根集合而不属于任何 \(q_{e'}\)（\(e'\neq e\)）的单位根集合，故
+\[
+\mu(\{\zeta_{q_e}\})
+=\frac{2^{-e}}{1+S}\cdot\frac{1}{q_e}\mathbf 1_{\{e\in\mathcal H\}}.
+\]
+结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[弱收敛存在但不存在可计算收敛模]\label{cor:fold-computability-halting-no-computable-modulus}
+令 \(A_e:=\{\zeta_{q_e}\}\subset\mathbb T\)。
+不存在全域可计算函数 \(g:\NN\times\NN\to\NN\) 使得对一切 \(e,k\) 与所有 \(N\ge g(e,k)\) 都有
+\[
+\bigl|\mu_N(A_e)-\mu(A_e)\bigr|<2^{-k}.
+\]
+更一般地，不存在任何总停机可计算过程能够对族 \(\{A_e\}_{e\ge 1}\) 给出统一且可核验的误差证书，从而把 \(\mu(A_e)\) 作为可学习极限量实施一致误差控制。
+\end{corollary}
+\begin{proof}
+反设存在 \(g\)。对每个 \(e\) 取
+\[
+k(e):=e+3+\left\lceil\log_2 q_e\right\rceil.
+\]
+由 \(\sum_{e\ge 1}2^{-e}\le 1\) 得 \(1+S\le 2\)，从而若 \(e\in\mathcal H\)，则由定理 \ref{thm:fold-computability-halting-leyang-holographic-encoding} 有
+\[
+\mu(A_e)=\frac{2^{-e}}{(1+S)q_e}\ge \frac{2^{-e-1}}{q_e}>2^{-k(e)}.
+\]
+令 \(N:=g(e,k(e))\)。若 \(U(p_e)\) 在 \(N\) 步内不停机且 \(e\in\mathcal H\)，则 \(\mu_N(A_e)=0\) 而 \(\mu(A_e)\ge 2^{-k(e)}\)，与误差界矛盾；故“在 \(N\) 步内不停机”推出 \(e\notin\mathcal H\)。
+于是 \(e\in\mathcal H\) 可由有限步模拟判定，矛盾。证毕。
+\end{proof}
+
+\begin{definition}[Fourier 矩度量]\label{def:fold-computability-fourier-moment-metric}
+对单位圆 \(\mathbb T\) 上的概率测度 \(\sigma,\tau\)，定义
+\[
+d(\sigma,\tau):=\sum_{n\ge 1}2^{-n}\left|\int_{\mathbb T}z^n\,\dd\sigma-\int_{\mathbb T}z^n\,\dd\tau\right|.
+\]
+\end{definition}
+
+\begin{theorem}[稀疏 Fourier 矩不存在可计算收敛模]\label{thm:fold-computability-halting-no-computable-modulus-sparse-moments}
+在定理 \ref{thm:fold-computability-halting-leyang-holographic-encoding} 的 \((\mu_N)\Rightarrow\mu\) 构造下，
+不存在全可计算函数 \(M:\NN\to\NN\) 使得对所有 \(e\ge 1\) 与一切 \(N\ge M(e)\) 都有
+\[
+\left|\int_{\mathbb T} z^{q_e}\,\dd\mu_N-\int_{\mathbb T} z^{q_e}\,\dd\mu\right|<2^{-e}/6.
+\]
+\end{theorem}
+\begin{proof}
+反设存在 \(M\)。
+对任意 \(m\ge 1\) 与 \(n\ge 1\)，\(m\) 次单位根均匀测度 \(\nu_m\) 的 \(n\) 次 Fourier 矩满足
+\[
+\int_{\mathbb T}z^n\,\dd\nu_m=
+\begin{cases}
+1,& m\mid n,\\
+0,& m\nmid n.
+\end{cases}
+\]
+由 \eqref{eq:fold-computability-halting-leyang-limit-measure}，
+对素数 \(q_e\) 有
+\[
+\int_{\mathbb T} z^{q_e}\,\dd\mu=
+\frac{2^{-e}}{1+S}\,\mathbf 1_{\{e\in\mathcal H\}}.
+\]
+并且 \(L_N=2^{N-2}\) 为 \(2\) 的幂，故 \(L_N\nmid q_e\)，从而
+\(
+\int z^{q_e}\,\dd\nu_{L_N}=0
+\)。
+结合 \(\mu_N=\frac{L_N}{D_N}\nu_{L_N}+\sum_{j=1}^{N}\frac{r_{j,N}q_j}{D_N}\nu_{q_j}\) 得
+\[
+\int_{\mathbb T} z^{q_e}\,\dd\mu_N=\frac{r_{e,N}q_e}{D_N},
+\]
+其中 \(r_{e,N}\) 可由有限步模拟 \(U(p_e)\) 得到，且 \(D_N\) 亦可由对 \(p_1,\dots,p_N\) 的 \(N\) 步模拟有效计算。
+\par
+由 \(\sum_{e\ge 1}2^{-e}\le 1\) 得 \(1+S\le 2\)，故当 \(e\in\mathcal H\) 时
+\(
+\int z^{q_e}\,\dd\mu\ge 2^{-e-1}
+\)。
+令 \(N:=M(e)\)。若 \(U(p_e)\) 在 \(N\) 步内不停机但 \(e\in\mathcal H\)，则 \(r_{e,N}=0\) 从而 \(\int z^{q_e}\dd\mu_N=0\)，与
+\[
+\left|\int z^{q_e}\,\dd\mu_N-\int z^{q_e}\,\dd\mu\right|
+\ge 2^{-e-1}
+\]
+矛盾（右端严格大于 \(2^{-e}/6\)）。
+因此，“在 \(N\) 步内不停机”推出 \(e\notin\mathcal H\)，从而 \(e\in\mathcal H\) 可由有限步模拟判定，矛盾。证毕。
+\end{proof}
+
+\begin{corollary}[全息边界的统一误差控制学习不可能]\label{cor:fold-computability-halting-no-uniform-learning}
+沿用定义 \ref{def:fold-computability-fourier-moment-metric} 的度量 \(d\) 与定理 \ref{thm:fold-computability-halting-leyang-holographic-encoding} 的极限测度 \(\mu\)。
+设存在总停机算法 \(\mathcal A\)，对任意输入 \((N,\varepsilon)\) 输出概率测度 \(\widehat{\mu}_{N,\varepsilon}\)，并满足如下“一致误差控制”：
+存在全可计算函数 \(N_0:\QQ_{>0}\to\NN\) 使得对所有 \(N\ge N_0(\varepsilon)\) 有
+\[
+d(\widehat{\mu}_{N,\varepsilon},\mu)<\varepsilon.
+\]
+则停机集 \(\mathcal H\) 可判定；因此此类 \(\mathcal A\) 不存在。
+\end{corollary}
+\begin{proof}
+给定 \(e\ge 1\)，取
+\(
+\varepsilon_e:=2^{-e}/(12\cdot 2^{q_e})
+\)
+并令 \(N:=N_0(\varepsilon_e)\)。
+输出 \(\widehat{\mu}:=\widehat{\mu}_{N,\varepsilon_e}\)。
+由定义 \ref{def:fold-computability-fourier-moment-metric}，第 \(q_e\) 项给出
+\[
+2^{-q_e}\left|\int z^{q_e}\,\dd\widehat{\mu}-\int z^{q_e}\,\dd\mu\right|
+\le d(\widehat{\mu},\mu)
+<\varepsilon_e,
+\]
+从而
+\[
+\left|\int z^{q_e}\,\dd\widehat{\mu}-\int z^{q_e}\,\dd\mu\right|
+<2^{q_e}\varepsilon_e
+=2^{-e}/12.
+\]
+由 \(\int z^{q_e}\dd\mu=\frac{2^{-e}}{1+S}\mathbf 1_{\{e\in\mathcal H\}}\) 且 \(1+S\le 2\)，可取阈值 \(2^{-e}/6\) 判别：
+若 \(e\notin\mathcal H\)，则 \(\int z^{q_e}\dd\widehat{\mu}<2^{-e}/6\)；
+若 \(e\in\mathcal H\)，则 \(\int z^{q_e}\dd\mu\ge 2^{-e}/2\) 从而 \(\int z^{q_e}\dd\widehat{\mu}>2^{-e}/6\)。
+因此 \(e\in\mathcal H\) 可由有限计算判定，矛盾。证毕。
+\end{proof}
+
+\paragraph{Fourier 时窗盲区与停机谱反演的非连续性}
+为把“有限 Fourier 读出”与“极限反演”之间的结构性鸿沟表述为纯度量命题，引入下述测度族。
+
+\begin{definition}[Lee--Yang 停机谱测度族]\label{def:fold-computability-leyang-halting-spectrum-measure-family}
+对任意子集 \(\mathsf H\subseteq\NN\)，令
+\[
+S_{\mathsf H}:=\sum_{e\in\mathsf H}2^{-e}\in[0,1],
+\]
+并定义单位圆 \(\mathbb T\) 上的概率测度
+\[
+\mu_{\mathsf H}
+:=
+\frac{1}{1+S_{\mathsf H}}\,m_{\mathbb T}
+\;+\;
+\sum_{e\in\mathsf H}\frac{2^{-e}}{1+S_{\mathsf H}}\,\nu_{q_e}.
+\]
+记
+\(
+\mathcal M:=\{\mu_{\mathsf H}:\ \mathsf H\subseteq\NN\}\subset\mathrm{Prob}(\mathbb T)
+\)。
+在定理 \ref{thm:fold-computability-halting-leyang-holographic-encoding} 的设定下，\(\mu=\mu_{\mathcal H}\)。
+\end{definition}
+
+\begin{proposition}[有限 Fourier 时窗的不可辨识盲区]\label{prop:fold-computability-halting-spectrum-finite-fourier-window-blindspot}
+给定任意 \(N\ge 1\)，取 \(e\) 使得 \(q_e>N\)。
+令 \(\mathsf H_0:=\varnothing\)、\(\mathsf H_1:=\{e\}\)。
+则对所有 \(1\le n\le N\) 有
+\[
+\int_{\mathbb T}z^n\,\dd\mu_{\mathsf H_0}
+\;=\;
+\int_{\mathbb T}z^n\,\dd\mu_{\mathsf H_1}.
+\]
+因此任何仅依赖有限观测向量
+\(
+(\int z\,\dd\mu,\dots,\int z^N\,\dd\mu)
+\)
+的判定过程，都无法在最坏情形下以错误率 \(<1/2\) 区分 \(\mathsf H_0\) 与 \(\mathsf H_1\)。
+\end{proposition}
+\begin{proof}
+对 Haar 测度 \(m_{\mathbb T}\) 有 \(\int_{\mathbb T}z^n\,\dd m_{\mathbb T}=0\)（\(n\ge 1\)）。
+对均匀原子测度 \(\nu_{q}\) 有
+\(
+\int_{\mathbb T}z^n\,\dd\nu_{q}=1
+\)
+当且仅当 \(q\mid n\)，否则为 \(0\)。
+当 \(1\le n\le N<q_e\) 时 \(q_e\nmid n\)，故 \(\mu_{\mathsf H_0}\) 与 \(\mu_{\mathsf H_1}\) 在前 \(N\) 个 Fourier 矩上同为 \(0\)，得到第一断言。
+第二断言为经典“同分布输入不可区分”下界：任意判定在两输入实例上的输出分布相同，而真值相反，故至少一例上错误率不小于 \(1/2\)。证毕。
+\end{proof}
+
+\begin{theorem}[停机谱反演算子的处处不连续性]\label{thm:fold-computability-halting-spectrum-inversion-everywhere-discontinuous}
+在度量空间 \((\mathcal M,d)\) 上定义反演算子
+\[
+\mathrm{Inv}:\mathcal M\to 2^{\NN},\qquad
+\mathrm{Inv}(\mu_{\mathsf H})=\mathsf H.
+\]
+则 \(\mathrm{Inv}\) 在 \((\mathcal M,d)\) 上处处不连续：对任意 \(\mathsf H\subseteq\NN\) 与任意 \(\varepsilon>0\)，存在 \(e\) 足够大使得令 \(\mathsf H':=\mathsf H\triangle\{e\}\) 有
+\[
+d(\mu_{\mathsf H},\mu_{\mathsf H'})<\varepsilon
+\quad\text{而}\quad
+\mathrm{Inv}(\mu_{\mathsf H})\neq \mathrm{Inv}(\mu_{\mathsf H'}).
+\]
+\end{theorem}
+\begin{proof}
+记 \(S:=S_{\mathsf H}\)、\(S':=S_{\mathsf H'}\)，则 \(|S-S'|=2^{-e}\) 且
+\[
+\left|\frac{1}{1+S}-\frac{1}{1+S'}\right|
+=\frac{2^{-e}}{(1+S)(1+S')}\le 2^{-e}.
+\]
+对任意 \(n\ge 1\)，由
+\[
+\int_{\mathbb T} z^n\,\dd\mu_{\mathsf H}
+=\frac{1}{1+S}\sum_{\substack{j\in\mathsf H\\ q_j\mid n}}2^{-j}
+\]
+与 \(\sum_{j\ge 1}2^{-j}=1\) 得到一致界
+\[
+\left|\int z^n\,\dd\mu_{\mathsf H}-\int z^n\,\dd\mu_{\mathsf H'}\right|
+\le
+2^{-e}\sum_{\substack{j\in\mathsf H\\ q_j\mid n}}2^{-j}
+\;+\;
+\frac{2^{-e}}{1+S'}\mathbf 1_{\{q_e\mid n\}}
+\le 2^{1-e}.
+\]
+代入定义 \ref{def:fold-computability-fourier-moment-metric} 并用 \(\sum_{n\ge 1}2^{-n}=1\)，得
+\(
+d(\mu_{\mathsf H},\mu_{\mathsf H'})\le 2^{1-e}
+\)。
+取 \(e\) 使 \(2^{1-e}<\varepsilon\) 即得。
+由于 \(\mathsf H'\neq \mathsf H\)，反演值不同，故 \(\mathrm{Inv}\) 在 \(\mu_{\mathsf H}\) 处不连续；\(\mathsf H\) 任意，处处不连续成立。证毕。
+\end{proof}
+
+\begin{theorem}[Lee--Yang 停机谱测度像的 Hausdorff 维数]\label{thm:fold-computability-halting-spectrum-measure-image-hausdorff-dim}
+在度量空间 \((\mathrm{Prob}(\mathbb T),d)\) 中，集合 \(\mathcal M\) 的 Hausdorff 维数满足
+\[
+\dim_H(\mathcal M)=1.
+\]
+\end{theorem}
+\begin{proof}
+\textbf{上界：}
+对任意 \(N\ge 1\)，对每个 \(A\subseteq\{1,\dots,N\}\) 取中心 \(\mu_A\)。
+对任意 \(\mathsf H\subseteq\NN\) 令 \(A:=\mathsf H\cap\{1,\dots,N\}\)，则 \(|S_{\mathsf H}-S_A|\le \sum_{e>N}2^{-e}\le 2^{-N}\)。
+按上一定理证明中的一致界（把 \(2^{-e}\) 换为 \(2^{-N}\)）可得
+\(
+d(\mu_{\mathsf H},\mu_A)\le 2^{1-N}
+\)。
+因此 \(\mathcal M\) 可被 \(2^N\) 个半径 \(r_N:=2^{1-N}\) 的 \(d\)-球覆盖，从而对任意 \(s>1\),
+\[
+\mathscr{H}^s_\infty(\mathcal M)
+\le \liminf_{N\to\infty}2^N r_N^s
+\le 2^s\liminf_{N\to\infty}2^{(1-s)N}
+=0,
+\]
+故 \(\dim_H(\mathcal M)\le 1\)。
+\par
+\textbf{下界：}
+取子族 \(\mathcal M_1:=\{\mu_{\mathsf H}:\ 1\in\mathsf H\}\subset\mathcal M\)。
+对 \(\mu_{\mathsf H}\in\mathcal M_1\)，由 \(q_1=3\) 得
+\[
+\int_{\mathbb T}z^{3}\,\dd\mu_{\mathsf H}=\frac{2^{-1}}{1+S_{\mathsf H}}.
+\]
+当 \(1\in\mathsf H\) 固定时，\(S_{\mathsf H}\) 取遍区间 \([1/2,1]\)，上式值域包含区间 \([1/4,1/3]\)。
+又因映射 \(\mu\mapsto \int z^3\,\dd\mu\) 为 \(8\)-Lipschitz（由定义 \ref{def:fold-computability-fourier-moment-metric} 的第 \(n=3\) 项立得），其像集的 Hausdorff 维数不超过原集，故
+\(
+1=\dim_H([1/4,1/3])\le \dim_H(\mathcal M_1)\le \dim_H(\mathcal M)
+\)。
+合并上下界即得 \(\dim_H(\mathcal M)=1\)。证毕。
+\end{proof}
+
+\begin{corollary}[全息边界、扭子塔与分形读出的停机图灵等价]\label{cor:fold-computability-holography-torsion-fractal-halting-equivalent}
+在本文固定的编码与语义下，下列三类读出任务均与停机问题图灵等价（从而与 \(\mathbf 0'\) 同度）：
+\begin{enumerate}
+\normalfont
+  \item \textbf{全息边界 Fourier 读出：}
+  给定 \(\mu=\mu_{\mathcal H}\) 的 \(d\)-柯西名（即对任意精度 \(N\) 可获得 \(\nu_N\) 使 \(d(\nu_N,\mu)\le 2^{-N}\)），判定任意 \(e\) 是否属于停机集 \(\mathcal H\)；
+  \item \textbf{二进扭子塔读出：}
+  给定 \((M,x)\)，计算首次偏离深度 \(\delta(M,x)\) 或判定其是否为 \(\infty\)（命题 \ref{prop:xi-time-part9g-deviation-depth-computability-separation}）；
+  \item \textbf{二元吸引子分形读出：}
+  给定 \((M,x)\)，计算二元数字吸引子的 Hausdorff 维数（定理 \ref{thm:conclusion-halting-dimension-binary-law}）或临界 Hausdorff 测度 \(\mathcal H^{1/L}(K_{M,x})\)（定理 \ref{thm:xi-time-part9g-godel-leyang-hausdorff}）。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+\textbf{(1)} 由定理 \ref{thm:fold-computability-halting-leyang-holographic-encoding} 的显式公式，
+\(
+\int z^{q_e}\dd\mu=\frac{2^{-e}}{1+S}\mathbf 1_{\{e\in\mathcal H\}}
+\)。
+由定义 \ref{def:fold-computability-fourier-moment-metric}，从 \(d\)-柯西名可把 \(\int z^{q_e}\dd\mu\) 逼近到误差 \(<2^{-e}/12\)，从而以阈值 \(2^{-e}/6\) 判定 \(e\in\mathcal H\)（同推论 \ref{cor:fold-computability-halting-no-uniform-learning} 的阈值论证）。
+反向，若可判定 \(\mathcal H\)，则可有效逼近 \(S=\sum_{e\in\mathcal H}2^{-e}\) 并据 \eqref{eq:fold-computability-halting-leyang-limit-measure} 构造 \(\mu\) 的 \(d\)-柯西名。
+\par
+\textbf{(2)--(3)} 由命题 \ref{prop:xi-time-part9g-first-deviation-depth} 与定理 \ref{thm:conclusion-halting-dimension-binary-law}（或定理 \ref{thm:xi-time-part9g-godel-leyang-hausdorff}）可知：
+\(\delta(M,x)<\infty\) 与 \(\dim_H(K_{M,x})>0\) 均当且仅当 \(M(x)\) 停机，故任一读出任务都可判定停机；
+反向，停机预言机可先判定停机与否，再在停机情形下通过有限步模拟得到首次停机时间，从而由上述显式关系计算 \(\delta\) 与相应分形量。证毕。
+\end{proof}
+
+\paragraph{统一电路族的首次碰撞时间}
+停机不可计算性不仅能通过 Lee--Yang 边界的极限原子谱读出，也可在完全离散的有限门模型中以“纤维阈值首次穿越”实现。
+
+\begin{theorem}[统一电路族的首次碰撞时间不可计算]\label{thm:fold-computability-uniform-circuit-first-collision-time}
+存在一个可计算变换，将任意图灵机 \(M\) 与输入 \(x\) 映为一个统一（uniform）电路生成器 \(G_{M,x}\)。
+该生成器在输入 \(t\in\NN\) 上输出布尔电路
+\[
+C_t:\{0,1\}^{m(t)}\to\{0,1\}^{m(t)}
+\]
+并停机，其中 \(m(t):=t+1\)。
+记
+\[
+D(C_t):=\max_{y\in\{0,1\}^{m(t)}}\bigl|C_t^{-1}(y)\bigr|.
+\]
+则：
+\begin{enumerate}
+\normalfont
+  \item 若 \(M(x)\) 不停机，则对一切 \(t\)，\(C_t=\mathrm{id}\)，从而 \(D(C_t)=1\)；
+  \item 若 \(M(x)\) 在恰好 \(T\) 步停机，则对一切 \(t<T\)，\(C_t=\mathrm{id}\)（从而 \(D(C_t)=1\)），而对一切 \(t\ge T\)，\(C_t\) 为常值映射（从而 \(D(C_t)=2^{m(t)}\ge 2\)）。
+\end{enumerate}
+因此函数
+\[
+t^\ast(M,x):=\min\{t\in\NN:\ D(C_t)\ge 2\}
+\quad(\text{若集合为空则记 }t^\ast=\infty)
+\]
+满足 \(t^\ast(M,x)=T\)（若停机）或 \(t^\ast(M,x)=\infty\)（若不停机），从而 \(t^\ast\) 不可计算；并且判定性质 \(\exists t,\ D(C_t)\ge 2\) 与停机问题等价，因而在算术层级意义下为 \(\Sigma^0_1\)-完备。
+\end{theorem}
+\begin{proof}
+构造 \(G_{M,x}\) 如下。
+给定 \(t\)，令 \(m(t):=t+1\)。
+生成器输出电路 \(C_t\)，其在输入 \(w\in\{0,1\}^{m(t)}\) 上先计算布尔标志
+\[
+h_t=
+\begin{cases}
+1,&\text{若 }M(x)\text{ 在至多 }t\text{ 步内停机},\\
+0,&\text{否则}.
+\end{cases}
+\]
+该标志可由对 \(M(x)\) 的 \(t\) 步时间截断模拟得到；由于截断步数为 \(t\)，该模拟可被展开为规模 \(\mathrm{poly}(t)\) 的布尔电路并由生成器有效输出（标准电路化编译）。
+随后令
+\[
+C_t(w)=
+\begin{cases}
+w,& h_t=0,\\
+0^{m(t)},& h_t=1.
+\end{cases}
+\]
+若 \(M(x)\) 不停机，则对所有 \(t\) 有 \(h_t=0\)，故 \(C_t=\mathrm{id}\)，从而 \(D(C_t)=1\)。
+若 \(M(x)\) 在 \(T\) 步停机，则当 \(t<T\) 时 \(h_t=0\) 故 \(C_t=\mathrm{id}\)；当 \(t\ge T\) 时 \(h_t=1\) 故 \(C_t\) 为常值映射，且 \(D(C_t)=|\{0,1\}^{m(t)}|=2^{m(t)}\ge 2\)。
+因此首次出现 \(D(C_t)\ge 2\) 的 \(t\) 恰为 \(T\)，即 \(t^\ast(M,x)=T\)；若 \(M(x)\) 不停机则集合为空而 \(t^\ast=\infty\)。
+若 \(t^\ast\) 可计算，则停机时间可计算，矛盾；故 \(t^\ast\) 不可计算。
+另一方面，\(\exists t,\ D(C_t)\ge 2\) 等价于 \(\exists t,\ h_t=1\) 等价于 \(M(x)\) 停机，从而该性质与停机问题 many-one 等价，故为 \(\Sigma^0_1\)-完备。证毕。
+\end{proof}
+
+\paragraph{语义等价的规范形选择与证书完备性障碍}
+下面给出两条与“停机集不可判定”同型的抽象障碍：一旦把等价关系提升到图灵完备的语义层（外延相等），则不存在可计算的规范形选取，也不存在递归可枚举的完备有限证书系统。
+这与正文投影词框架中“等价 = 可组合的 \(2\)-态射证书”（定义 \ref{def:pom-projword-2cat}）的制度取向一致：在该口径下，等价被定义为\emph{存在证书}而非宣称覆盖全部语义等价类。
+
+\begin{theorem}[语义等价类不存在可计算的规范形选取]\label{thm:fold-computability-no-computable-normal-form-selector}
+令 \(\mathcal F\) 为一类全定义可计算函数的有效编码族（例如 \(\NN\to\{0,1\}\) 的全定义可计算函数），并以外延相等
+\[
+f\equiv g\quad\Longleftrightarrow\quad \forall n\in\NN,\ f(n)=g(n)
+\]
+定义其语义等价。
+则不存在全定义可计算映射 \(\mathrm{NF}:\mathcal F\to\mathcal F\) 同时满足：
+\begin{enumerate}
+\normalfont
+  \item \(\mathrm{NF}(f)\equiv f\)；
+  \item \(\mathrm{NF}(f)=\mathrm{NF}(g)\iff f\equiv g\)。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+若存在此 \(\mathrm{NF}\)，则对任意 \((f,g)\) 可计算 \(\mathrm{NF}(f),\mathrm{NF}(g)\) 并以语法相等判定 \(f\equiv g\)。
+但外延相等判定在该类上不可判定：例如对任意图灵机 \(M\) 与输入 \(x\) 构造全定义可计算函数
+\[
+f_{M,x}(n):=
+\begin{cases}
+0,& M(x)\ \text{于 }n\text{ 步内停机},\\
+1,& \text{否则},
+\end{cases}
+\qquad
+g(n)\equiv 1,
+\]
+则 \(f_{M,x}\equiv g\) 当且仅当 \(M(x)\) 不停机。
+若可判定 \(f_{M,x}\equiv g\)，即可判定停机问题，矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[语义等价不存在递归可枚举的完备有限证书系统]\label{thm:fold-computability-no-re-complete-certificates-for-extensional-equality}
+在定理 \ref{thm:fold-computability-no-computable-normal-form-selector} 的设定下，
+不存在谓词 \(\mathrm{Cert}(f,g,\pi)\)（其中 \(\pi\in\{0,1\}^\ast\) 为有限证书）使得：
+\begin{enumerate}
+\normalfont
+  \item \(\mathrm{Cert}\) 对 \((f,g,\pi)\) 可判定；
+  \item 对任意 \(f,g\in\mathcal F\)，有
+  \[
+  f\equiv g\quad \Longleftrightarrow\quad \exists \pi\ \mathrm{Cert}(f,g,\pi).
+  \]
+\end{enumerate}
+换言之，关系 \(\equiv\) 不是递归可枚举的，因而不可能由“有限可核验证书”完备刻画。
+\end{theorem}
+
+\begin{proof}
+若存在上述 \(\mathrm{Cert}\)，则集合 \(\{(f,g): f\equiv g\}\) 递归可枚举。
+取上一证明中的 \(f_{M,x}\) 与常值 \(g\equiv 1\)，有
+\(
+f_{M,x}\equiv g \Longleftrightarrow M(x)\ \text{不停机}
+\)。
+于是集合 \(\{(M,x):M(x)\ \text{不停机}\}\) 亦递归可枚举，这与经典结论矛盾。证毕。
+\end{proof}
+
+\paragraph{\texorpdfstring{$\varepsilon$}{eps}-sound 距离的二进制谱嵌入}
+把停机时间压缩为区间 \([0,1]\) 上的离散谱值，可用一个最小预算型距离完成。
+
+\begin{theorem}[\texorpdfstring{$\varepsilon$}{eps}-sound 距离的离散值域与停机时间谱线]\label{thm:fold-computability-eps-sound-distance-halting-spectrum}
+取几何分布 \(\mu\) 于 \(\NN\)：
+\[
+\mu(\{n\})=2^{-(n+1)}\qquad(n\ge 0).
+\]
+对任意确定性函数 \(f,g:\NN\to\{0,1\}\)，定义其 \(\mu\)-\(\varepsilon\)-sound 距离
+\[
+d_\mu(f,g):=\inf\Bigl\{\varepsilon\ge 0:\ \exists E\subseteq\NN,\ \mu(E)\le \varepsilon,\ \forall n\notin E,\ f(n)=g(n)\Bigr\}.
+\]
+则：
+\begin{enumerate}
+\normalfont
+  \item 恒有 \(d_\mu(f,g)=\mu(\{n:\ f(n)\neq g(n)\})\)。
+  \item 对上一段中的 \(f_{M,x}\) 与 \(g\equiv 1\)，有
+  \[
+  d_\mu(f_{M,x},g)=
+  \begin{cases}
+  0,& T(M,x)=\infty,\\[2mm]
+  2^{-T(M,x)},& T(M,x)\in\NN,
+  \end{cases}
+  \]
+  其中 \(T(M,x)\) 为停机时间（不停机记为 \(\infty\)）。
+  因而 \(d_\mu\) 的取值集合严格等于
+  \(
+  \{0\}\cup\{2^{-t}:t\in\NN\}
+  \)，且在 \(T(M,x)<\infty\) 时有整数谱线读出
+  \[
+  -\log_2 d_\mu(f_{M,x},g)=T(M,x).
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+对确定性函数，满足“在坏事件外相等”的最小预算显然等于分歧集合的测度：
+\(
+d_\mu(f,g)=\mu(\{n:\ f(n)\ne g(n)\})
+\)，得 (1)。
+若 \(T(M,x)=\infty\)，则 \(f_{M,x}(n)\equiv 1\)，分歧集为空，距离为 \(0\)。
+若 \(T(M,x)=T<\infty\)，则 \(f_{M,x}(n)\ne g(n)\) 当且仅当 \(n\ge T\)，故
+\[
+d_\mu(f_{M,x},g)=\sum_{n=T}^{\infty}2^{-(n+1)}=2^{-T}.
+\]
+其余断言立得。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$\varepsilon$}{eps}-sound 距离的不可计算性与强不可近似性]\label{cor:fold-computability-eps-sound-distance-noncomputable-inapproximable}
+映射 \((M,x)\mapsto d_\mu(f_{M,x},g)\) 不可计算。
+更强地，不存在算法 \(\mathcal A\) 对所有 \((M,x)\) 输出有理数 \(q\ge 0\) 使得：
+\begin{enumerate}
+\normalfont
+  \item 若 \(T(M,x)=\infty\)，则 \(q=0\)；
+  \item 若 \(T(M,x)<\infty\)，则 \(\tfrac12 d_\mu(f_{M,x},g)\le q\le 2\,d_\mu(f_{M,x},g)\)。
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+若 \(d_\mu\) 可计算，则可判定 \(d_\mu(f_{M,x},g)=0\) 与否，从而判定 \(T(M,x)=\infty\) 与否，矛盾。
+对强不可近似性：当 \(T<\infty\) 时 \(d_\mu=2^{-T}\) 且 \(q\in[2^{-(T+1)},2^{-(T-1)}]\)，故 \(-\log_2 q\in[T-1,T+1]\)；
+取最近整数即可恢复 \(T\)，而 \(q=0\) 等价于不停机。
+因此 \(\mathcal A\) 将判定停机问题，矛盾。证毕。
+\end{proof}
+
+\paragraph{可数强分离相似 IFS 的停机完备维数}
+\begin{theorem}[可枚举自相似吸引子的 Hausdorff 维数停机完备性]\label{thm:fold-computability-countable-ifs-halting-complete-dimension}
+构造区间 \([0,1]\) 上的可数相似 IFS 如下。
+固定
+\[
+f_0(x):=\frac{x}{3},\qquad f_1(x):=\frac{x}{3}+\frac{2}{3}.
+\]
+对每个 \(e\ge 1\)，若 \(e\in\mathcal H\)，则加入一映射
+\[
+f_e(x):=2^{-2^{e+1}}x+t_e,
+\]
+其中平移 \(t_e\in(1/3,2/3)\) 可取使得各像集 \(f_e([0,1])\) 两两不交且与
+\(
+f_0([0,1])\cup f_1([0,1])
+\)
+不交；若 \(e\notin\mathcal H\) 则不加入该映射。
+记该 IFS 的吸引子为 \(K\subset[0,1]\)，并记其 Hausdorff 维数为 \(d:=\dim_H(K)\)。
+则：
+\begin{enumerate}
+  \item \(d\) 为唯一实数解满足维数方程
+  \begin{equation}\label{eq:fold-computability-countable-ifs-moran}
+  2\cdot 3^{-d}+\sum_{e\in\mathcal H}2^{-d\cdot 2^{e+1}}=1.
+  \end{equation}
+  \item 由 \(d\) 可恢复停机集：令
+  \[
+  t_e:=2^{-d\cdot 2^{e+1}},\qquad
+  \delta_1:=1-2\cdot 3^{-d},
+  \]
+  并递归定义
+  \[
+  \delta_{e+1}:=
+  \begin{cases}
+  \delta_e-t_e,& \delta_e\ge \tfrac12 t_e,\\
+  \delta_e,& \delta_e<\tfrac12 t_e.
+  \end{cases}
+  \]
+  则对每个 \(e\ge 1\) 有
+  \[
+  e\in\mathcal H\quad\Longleftrightarrow\quad \delta_e\ge \tfrac12 t_e.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由构造可取强分离（强开集条件），故 Moran--Carath\'eodory 理论适用于该可数 IFS，维数等于相似比压强零点，即 \eqref{eq:fold-computability-countable-ifs-moran} 的唯一解。
+
+由 \eqref{eq:fold-computability-countable-ifs-moran} 得
+\(
+\delta_1=\sum_{e\in\mathcal H}t_e
+\)。
+注意 \(t_{e+1}=t_e^2\)。
+并且由 \(2\cdot 3^{-d}<1\) 可知 \(d>\log 2/\log 3>1/2\)，从而 \(t_1=2^{-4d}<1/4\)，进而对一切 \(e\ge 1\) 有 \(t_e\le t_1<1/4\)。
+因此尾和满足
+\[
+\sum_{j>e}t_j\le \frac{t_{e+1}}{1-t_{e+1}}<2t_{e+1}=2t_e^2<\tfrac12 t_e.
+\]
+令 \(\delta_e=\sum_{j\ge e,\ j\in\mathcal H}t_j\)（由递推保持），则若 \(e\in\mathcal H\) 有 \(\delta_e\ge t_e\ge \tfrac12 t_e\)；
+若 \(e\notin\mathcal H\)，则 \(\delta_e=\sum_{j>e,\ j\in\mathcal H}t_j<\tfrac12 t_e\)。
+据此得到判别式，并由 \(\delta_{e+1}=\delta_e-t_e\)（当 \(e\in\mathcal H\)）或 \(\delta_{e+1}=\delta_e\)（否则）实现逐位恢复。证毕。
+\end{proof}
+
+\endinput
+

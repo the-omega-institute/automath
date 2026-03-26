@@ -1,0 +1,160 @@
+\subsection{残差展开与时间尺度：纤维自由度的解析深度}\label{subsec:residual-unfolding-time-depth}
+
+本小节以折叠商结构为起点，把“类内区别”提升为可审计的残差量，并将在线延迟、同步时间尾与高阶碰撞矩等对象统一解释为残差在时间方向上的展开证书。其核心锚点为信息账本恒等式（定理 \ref{thm:pom-kl-ledger}）及其纤维 KL 分解（引理 \ref{lem:pom-fiberwise-kl}）。\par
+本节中“时间”首先仍按第 \ref{sec:spg} 节的协议固定为单生成元作用的迭代计数；而“时间尺度/时间深度”指在折叠读出制度下，为解析纤维残差所必须支付的最小迭代深度（或等价的记忆深度/同步深度）。本小节不引入新的熵/距离公理；一切记号沿用第 \ref{sec:folding} 节与第 \ref{sec:pom} 节。
+
+\subsubsection{折叠商结构与纤维分解}\label{subsubsec:frt-quotient-fibers}
+固定分辨率 \(m\)。窗口微态空间为 \(\Omega_m=\{0,1\}^m\)，稳定类型空间为黄金均值语法块
+\[
+X_m:=\{w\in\{0,1\}^m:\text{不含子词 }11\}
+\]
+（小节 \ref{subsec:folding-fibonacci-stable-syntax}）。折叠算子 \(\Fold_m:\Omega_m\to X_m\) 由“Fibonacci 加权值 \(\to\) Zeckendorf 规范形 \(\to\) 截断”给出（定义 \ref{def:fold-word}），并满足规范性、幂等性与满射性（命题 \ref{prop:fold-basic}）。\par
+由此诱导等价关系
+\[
+\omega\sim_m\omega'\quad\Longleftrightarrow\quad \Fold_m(\omega)=\Fold_m(\omega'),
+\]
+其等价类（纤维）即 \(\Fold_m^{-1}(x)\ (x\in X_m)\)，并以纤维多重度
+\[
+d_m(x):=\bigl|\Fold_m^{-1}(x)\bigr|
+\]
+定量刻画类内自由度（小节 \ref{subsec:folding-stable-compression-resolution}）。在均匀微态基线下，折叠推前分布为
+\[
+w_m(x)=\frac{d_m(x)}{2^m},
+\]
+并由压缩率 \(2^m/|X_m|=2^m/F_{m+2}\) 表明：当 \(m\) 增大时折叠必然为多对一，纤维残差在尺度上不可忽略（同上小节）。
+
+\subsubsection{残差：信息账本的两种等价读法}\label{subsubsec:frt-residual-ledger}
+信息账本在第 \ref{sec:pom} 节已被固定为一条严格恒等式。为便于本节的语义对齐，回顾其接口记号（小节 \ref{subsec:pom-information-ledger}）：对任意微观分布 \(\mu\in\Delta(\Omega_m)\)，令其稳定推前为 \(\pi:=P_m\mu=(\Fold_m)_*\mu\in\Delta(X_m)\)，并令 \(\mu^e:=Q_m\pi\) 为“在每条纤维上条件均匀”的提升。则定理 \ref{thm:pom-kl-ledger} 给出
+\[
+\boxed{\;
+H(\mu)=H(\pi)+\mathbb{E}_{\pi}\!\bigl[\log d_m(X)\bigr]\;-\;D_{\mathrm{KL}}(\mu\|\mu^e).
+\;}
+\]
+其中（i）\(H(\pi)\) 为稳定类型的可见熵；（ii）\(\mathbb{E}_{\pi}[\log d_m(X)]\) 为纤维规模预算（不可见容量）；（iii）\(D_{\mathrm{KL}}(\mu\|\mu^e)\) 为同一宏观下微观分布偏离“纤维均匀基线”的可审计结构残差。引理 \ref{lem:pom-fiberwise-kl} 进一步将该 KL 项分解为纤维 KL 的平均：
+\[
+D_{\mathrm{KL}}(\mu\|\mu^e)=\sum_{x\in X_m}\pi(x)\,D_{\mathrm{KL}}(\mu_x\|u_x),
+\]
+其中 \(\mu_x\) 是纤维条件分布，\(u_x\) 为纤维上的均匀分布。\par
+因此，“残差”在本文口径下天然具有两种互补读法：一方面，条件熵差
+\[
+H(\mu)-H(\pi)
+\]
+刻画宏观读出无法解释的类内不确定性；另一方面，纤维预算与纤维 KL 给出其精确分解
+\[
+\boxed{\;
+H(\mu)-H(\pi)=\mathbb{E}_{\pi}\!\bigl[\log d_m(X)\bigr]\;-\;D_{\mathrm{KL}}(\mu\|\mu^e).
+\;}
+\]
+在均匀微态基线（\(\mu\) 在每条纤维上条件均匀）下有 \(D_{\mathrm{KL}}(\mu\|\mu^e)=0\)，故残差完全由纤维预算 \(\mathbb{E}_{\pi}[\log d_m]\) 承载；而当纤维内部仍含结构时，平均纤维 KL 精确刻画“预算扣除量”。
+
+\begin{proposition}[条件均匀提升的 KL 等距嵌入]\label{prop:frt-conditional-uniform-lift-kl-isometry}
+固定 \(m\ge 1\)，并沿用 \(Q_m:\Delta(X_m)\to\Delta(\Omega_m)\) 的条件均匀提升。
+则对任意 \(\pi,\eta\in\Delta(X_m)\) 有严格恒等式
+\[
+\boxed{\;
+D_{\mathrm{KL}}(Q_m\pi\ \|\ Q_m\eta)=D_{\mathrm{KL}}(\pi\ \|\ \eta)\; }.
+\]
+\end{proposition}
+\begin{proof}
+按定义，对 \(a\in\Omega_m\) 写 \(x_a:=\Fold_m(a)\) 与 \(d(x):=d_m(x)\)，则
+\(
+(Q_m\pi)(a)=\pi(x_a)/d(x_a)
+\)、
+\(
+(Q_m\eta)(a)=\eta(x_a)/d(x_a)
+\)。
+因此
+\[
+\begin{aligned}
+D_{\mathrm{KL}}(Q_m\pi\|Q_m\eta)
+&=\sum_{a\in\Omega_m}\frac{\pi(x_a)}{d(x_a)}\log\frac{\pi(x_a)/d(x_a)}{\eta(x_a)/d(x_a)}
+=\sum_{a\in\Omega_m}\frac{\pi(x_a)}{d(x_a)}\log\frac{\pi(x_a)}{\eta(x_a)}\\
+&=\sum_{x\in X_m}\left(\sum_{a:\,x_a=x}\frac{\pi(x)}{d(x)}\right)\log\frac{\pi(x)}{\eta(x)}
+=\sum_{x\in X_m}\pi(x)\log\frac{\pi(x)}{\eta(x)}
+=D_{\mathrm{KL}}(\pi\|\eta).
+\end{aligned}
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[折叠 KL 几何的 Pythagoras 分解与 I-投影唯一性]\label{prop:frt-fold-kl-pythagoras-iprojection}
+固定 \(m\ge 1\)，对任意 \(\mu\in\Delta(\Omega_m)\) 令 \(\pi:=P_m\mu\in\Delta(X_m)\)，并记条件均匀提升 \(\mu^e:=Q_m\pi\)。
+则对任意 \(\eta\in\Delta(X_m)\) 有严格分解
+\[
+\boxed{\;
+D_{\mathrm{KL}}(\mu\ \|\ Q_m\eta)
+=D_{\mathrm{KL}}(\mu\ \|\ \mu^e)+D_{\mathrm{KL}}(\pi\ \|\ \eta)\; }.
+\]
+从而 \(\mu^e\) 是流形 \(\{Q_m\eta:\eta\in\Delta(X_m)\}\) 上对 \(\mu\) 的唯一 I-投影：它唯一最小化 \(D_{\mathrm{KL}}(\mu\|Q_m\eta)\)，并且最小值等于 \(D_{\mathrm{KL}}(\mu\|\mu^e)\)。
+\end{proposition}
+\begin{proof}
+仍写 \(x_a=\Fold_m(a)\)、\(d(x)=d_m(x)\)，则
+\(
+\mu^e(a)=\pi(x_a)/d(x_a)
+\)、
+\(
+(Q_m\eta)(a)=\eta(x_a)/d(x_a)
+\)，从而
+\(
+\log\frac{\mu^e(a)}{(Q_m\eta)(a)}=\log\frac{\pi(x_a)}{\eta(x_a)}
+\)。
+于是
+\[
+\begin{aligned}
+D_{\mathrm{KL}}(\mu\|Q_m\eta)-D_{\mathrm{KL}}(\mu\|\mu^e)
+&=\sum_{a\in\Omega_m}\mu(a)\log\frac{\mu^e(a)}{(Q_m\eta)(a)}\\
+&=\sum_{a\in\Omega_m}\mu(a)\log\frac{\pi(x_a)}{\eta(x_a)}
+=\sum_{x\in X_m}\left(\sum_{a:\,x_a=x}\mu(a)\right)\log\frac{\pi(x)}{\eta(x)}\\
+&=\sum_{x\in X_m}\pi(x)\log\frac{\pi(x)}{\eta(x)}
+=D_{\mathrm{KL}}(\pi\|\eta),
+\end{aligned}
+\]
+即得所示分解。
+由 \(D_{\mathrm{KL}}(\pi\|\eta)\ge 0\) 且等号当且仅当 \(\eta=\pi\) 可知最小化点唯一，并且 \(\arg\min_{\eta}D_{\mathrm{KL}}(\mu\|Q_m\eta)=\pi\)，对应 \(Q_m\pi=\mu^e\)。证毕。
+\end{proof}
+
+\subsubsection{时间作为解析深度：前缀超度量与分辨率分离}\label{subsubsec:frt-time-as-depth}
+第 \ref{sec:spg} 节已将“时间”固定为迭代计数，并在符号柱集上引入前缀超度量 \(d_{\mathrm{pre}}\)（段落 \ref{par:spg-prefix-ultrametric}），其球等同于柱集，从而“前缀细化 \(\Leftrightarrow\) 半径收缩”。在地址语义侧，dyadic 前缀相容深度与地址超度量 \(d_{\mathrm{addr}}\) 的定义见定义 \ref{def:xi-dyadic-prefix-depth-ultrametric}。\par
+本节的“时间尺度”即在上述前缀几何上引入折叠读出后的\emph{可分离层级}：纤维内差别并非在固定分辨率上一次性可见，而是随着分辨率 \(m\) 的推进逐层外化为可判别差别。为避免与正文中自同构 \(\tau\) 的记号冲突，定义如下分离深度。
+\begin{definition}[折叠分离深度]\label{def:frt-fold-separation-depth}
+对任意两条一侧微态流 \(\omega,\omega'\in\{0,1\}^{\mathbb{N}}\)，记其长度 \(m\) 前缀为 \(\omega|_m,\omega'|_m\in\Omega_m\)。定义折叠分离深度
+\[
+m_{\mathrm{sep}}(\omega,\omega')
+:=\inf\{\,m\ge 1:\ \Fold_m(\omega|_m)\ne \Fold_m(\omega'|_m)\,\}\in\NN\cup\{\infty\}.
+\]
+\end{definition}
+该量刻画“两条微态在何种分辨率上首次被折叠读出区分”。由此可把“类内区别的层级”理解为一个以 \(m\) 为刻度的分割深度：越大的 \(m_{\mathrm{sep}}\) 表示越晚（越深）才会从折叠读出中显现差别。该层级与前缀超度量一致地组织“柱拓扑—可判定性—分辨率门槛”的语义，而不需要额外的背景维度。
+
+\subsubsection{序列层可逆化：纤维残差的时间化外置}\label{subsubsec:frt-sequence-inversion}
+窗口层折叠 \(\Fold_m\) 典型为多对一，但其在序列层的滑动块码提升 \(\Phi_m\) 可在阈值后恢复可逆性：定理 \ref{thm:Phi_m-conjugacy-threshold} 证明，当 \(m\ge 3\) 时 \(\Phi_m\) 为拓扑共轭，且存在一个逆码 \(\Psi_m\) 使
+\[
+\Psi_m\circ\Phi_m=\mathrm{id},\qquad \Phi_m\circ\Psi_m=\mathrm{id},
+\]
+并且 \(\Psi_m\) 的记忆为 \(m-1\)。这给出“残差 \(\Rightarrow\) 时间深度”的严格译文：窗口层被折叠压缩掉的纤维自由度并未消失，而是被系统性迁移为序列层逆码所需的有限记忆深度。\par
+在同一口径下，同步时间 \(T_m\) 以在线方式度量“候选集收缩到单点所需的最短读入深度”（定义 \ref{def:Ym-sync-time}），其意义可表述为“统计型 \(\mathsf{NULL}\) 首次消失”的时刻（见小节 \ref{subsec:Ym-zeta-spectrum} 的定义后解释段落）。因此，\(\Psi_m\) 的有限记忆与 \(T_m\) 的在线收缩深度共同提供了两种等价的“残差展开深度”刻度：前者是离线逆码口径，后者是在线滤波口径。
+
+\subsubsection{最小在线延迟：残差外化的最小时间量子}\label{subsubsec:frt-min-online-delay}
+若要求折叠在在线、因果与有限状态意义下实现，则残差的外化存在不可约的最小延迟。定理 \ref{thm:online-delay-fold} 给出一个延迟 \(3\) 的 \(\Fold_\infty\) 单趟在线实现；命题 \ref{prop:pom-delay-min} 进一步证明该常数是最小的，即
+\[
+\delta_{\min}(\Fold_\infty)=3.
+\]
+该结论把“时间的最小量子”钉成一个可审计的机制下界：延迟并非工程选择，而是由 Zeckendorf 规范化的跨位传播与同步状态强制产生。\par
+并且该“时间缺陷”与“空间缺陷”（最大纤维多重度）互不替代：增加空间无法把 \(\delta_{\min}\) 压到 \(2\)，而压低延迟也不能消去纤维多重度（注 \ref{rem:pom-space-time-orth}）。在本文的统一口径下，二者与谱指纹共同组成“空间—时间—谱三指纹”（定义 \ref{def:pom-fingerprint}）。
+
+\subsubsection{同步时间尾与谱证书}\label{subsubsec:frt-sync-tail-spectrum}
+同步时间不仅可定义，还具有可审计的尾律：在最大熵测度下，同步尾满足指数界
+\[
+\nu_m(T_m>n)\le C_m e^{-\varepsilon_m n}
+\]
+（定理 \ref{thm:Ym-sync-tail}）。该结论将“残差寿命”对象化为一条时间统计，并把其衰减率与歧义壳的有限图结构锁定在同一谱对象上（定理 \ref{thm:Ym-sync-tail} 给出的矩阵幂表达与极限率 \(\varepsilon_m\)）。在本文的 Zeckendorf 折叠中，\(m\ge 3\) 时歧义壳为空（见小节 \ref{subsec:Ym-amb-transient} 的结论与备注），从而同步时间在有限处截断；该退化作为一致性检查被保留，强调“同步成本”在本模型中是有限可审计常数而非额外熵损失（同小节）。
+
+\subsubsection{高阶碰撞矩与 \texorpdfstring{$\mathrm{MOM}_q$}{MOMq}：类内结构的不变量族}\label{subsubsec:frt-moments}
+纤维多重度的全体分布 \(\{d_m(x)\}_{x\in X_m}\) 可由高阶碰撞矩统一编码：对整数 \(q\ge 2\)，定义
+\[
+S_q(m):=\sum_{x\in X_m}d_m(x)^q.
+\]
+其意义是“\(q\) 体仍被折叠为同一稳定类型”的重合计数。POM 语言将其提升为一个可编译门：\(\mathrm{MOM}_q\) 把底层在线核编译为 \(q\)-重 fiber-product moment-kernel，从而在有限状态上读出 \(S_q(m)\) 的递推与 Perron 主尺度（定理 \ref{thm:pom-collision-kernel-ak}；并见小节 \ref{subsec:pom-mom-rewrite-normal}）。因此，高阶矩并非启发式特征，而是纤维谱的可审计不变量族：它们在有限尺度上决定 \(\sum_x w_m(x)^q=S_q(m)/2^{qm}\) 的全部 Rényi 指纹率，并进一步在统一闭环中与 \(\zeta\)/primitive/谱对象对齐（定理 \ref{thm:pom-unified-closure}）。
+
+\subsubsection{频域封装：\texorpdfstring{$\zeta$}{zeta} 接口与时间—空间交换图}\label{subsubsec:frt-zeta-packaging}
+残差的“时间展开”不仅可在同步尾与在线延迟中被直接读出，还可在频域以 \(\zeta\) 形式被封装。命题 \ref{prop:time-space-commuting-diagram} 给出严格交换图 \(Z=E\circ M\circ T\)：时间侧以迹序列编码迭代统计，空间侧以 primitive 轨道谱实现 Euler 乘积与 Möbius 反演，从而把“时间读出”与“空间原子分解”统一到同一 \(\zeta\)-行列式接口。结合定理 \ref{thm:pom-unified-closure}，在线核的时间缺陷 \(\delta_{\min}\)、碰撞矩谱的 Perron 根族 \(\{r_q\}\) 与第 \ref{sec:zeta-finite-part} 节的谱/有限部指纹由同一可计算接口闭合。\par
+在该闭合口径下，“时间作为残差”可被精确理解为：折叠所诱导的核方向信息不能在协议中被隐式抹除，只能在可审计的正交通道中外置（记忆深度、同步尾或额外寄存器轴），并以谱对象/递推/尾律等形式给出可复核证书。

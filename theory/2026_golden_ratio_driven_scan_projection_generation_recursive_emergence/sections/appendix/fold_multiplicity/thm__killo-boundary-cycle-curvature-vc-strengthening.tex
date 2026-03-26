@@ -1,0 +1,313 @@
+\paragraph{边界--循环秩机制与曲率可和口径下的进一步强化}
+本段在既有定义与定理之上，给出一组可直接审计的强化命题。
+核心依赖链为：规范体积密度与界面面积的互补不等式、边界方程的循环秩计数、prime-register 外置预算下界，以及跨分辨率曲率概率误差条。
+
+\begin{theorem}[可见熵密度受面积密度控制]\label{thm:killo-visible-entropy-density-area-control}
+设
+\[
+f_n:\Omega_n=\{0,1\}^n\twoheadrightarrow X_n
+\]
+为满射粗粒化，\(U_n\sim\mathrm{Unif}(\Omega_n)\)，\(Y_n:=f_n(U_n)\)。
+记
+\[
+a(f_n):=\frac{A(f_n)}{n2^{n-1}},
+\qquad
+g(f_n):=2^{-n}\log|\mathcal G(f_n)|.
+\]
+若 \(|X_n|/2^n\to 0\)（\(n\to\infty\)），则
+\[
+\frac{H(Y_n)}{n}\ \le\ (\log 2)\,a(f_n)+o(1).
+\]
+\end{theorem}
+\begin{proof}
+令 \(d_x:=|f_n^{-1}(x)|\)、\(p_x:=d_x/2^n\)（\(x\in X_n\)），则 \(H(Y_n)=H(p)\)。
+由定理 \ref{thm:hypercube-gauge-volume-shannon-stirling-gap}，
+\[
+g(f_n)=n\log 2-1-H(Y_n)+\Xi_n,
+\]
+其中
+\[
+\Xi_n:=\frac1{2^{n+1}}\sum_{x\in X_n}\log(2\pi d_x)+R(f_n),\qquad
+0\le R(f_n)\le \frac{|X_n|}{12\cdot 2^n}.
+\]
+又 \(d_x\le 2^n\)，故
+\[
+0\le \Xi_n
+\le
+\frac{|X_n|}{2^n}\!\left(\frac{n\log 2+\log(2\pi)}{2}+\frac1{12}\right)
+=o(n),
+\]
+从而
+\[
+\frac{g(f_n)}{n}=\log 2-\frac{H(Y_n)}{n}+o(1).
+\]
+另一方面由定理 \ref{thm:spg-gauge-volume-area-complementarity}，
+\[
+\frac{g(f_n)}{n}+(\log 2)\,a(f_n)\ge \log 2-\frac1n.
+\]
+代入并整理即得
+\[
+\frac{H(Y_n)}{n}\le (\log 2)\,a(f_n)+o(1).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[正信息率排斥常数外置记忆]\label{cor:killo-positive-entropy-rate-excludes-constant-external-memory}
+在定理 \ref{thm:killo-visible-entropy-density-area-control} 的设定下，若存在常数 \(h>0\) 使
+\[
+\liminf_{n\to\infty}\frac{H(Y_n)}{n}\ge h,
+\]
+则
+\[
+\liminf_{n\to\infty}a(f_n)\ge \frac{h}{\log 2}>0.
+\]
+进一步，固定素数 \(p\) 与轴容量参数 \(E\ge 0\)。
+若每个 \(n\) 上都要求存在注入
+\[
+\iota_n:\FF_p(\delta_n)\hookrightarrow \mathcal P_{k_n,E},
+\qquad
+\delta_n\in\mathrm{im}(\partial_p),
+\]
+则必有
+\[
+k_n\ \ge\ \frac{\log p}{\log(E+1)}
+\Bigl(\frac{h}{\log 2}+o(1)\Bigr)\,n2^{n-1}.
+\]
+因而不可能存在 \(k_n=O(1)\) 的常数轴数外置单射化方案。
+\end{corollary}
+\begin{proof}
+第一式由定理 \ref{thm:killo-visible-entropy-density-area-control} 直接给出。
+
+令
+\[
+r(f_n):=A(f_n)-|X_n|+c(B_{f_n})
+\]
+（定理 \ref{thm:spg-boundary-affine-fiber-cycle-rank}）。
+由 \(c(B_{f_n})\le |X_n|\) 与 \(|X_n|/2^n\to 0\) 得
+\[
+r(f_n)=A(f_n)+o(n2^{n-1})=(a(f_n)+o(1))\,n2^{n-1}.
+\]
+再由定理 \ref{thm:spg-prime-register-budget-lower-bound}，
+\[
+k_n\log(E+1)\ge r(f_n)\log p.
+\]
+结合 \(a(f_n)\ge h/\log 2+o(1)\) 得
+\[
+k_n\ge
+\frac{\log p}{\log(E+1)}
+\Bigl(\frac{h}{\log 2}+o(1)\Bigr)\,n2^{n-1}.
+\]
+因此 \(k_n\) 至少线性于 \(n2^{n-1}\)，不可能为 \(O(1)\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[Fold 近似地址化的 Fano 下界]\label{thm:killo-fold-approx-address-fano-lower-bound}
+固定分辨率 \(m\)。
+令 \(\mathbf A\sim\mathrm{Unif}(\Omega_m)\)，\(X:=\Fold_m(\mathbf A)\in X_m\)，并记
+\[
+d_m(x):=|\Fold_m^{-1}(x)|.
+\]
+取有限记录轴 \(r:\Omega_m\to R\) 与解码器 \(D:X_m\times R\to\Omega_m\)。
+若
+\[
+\PP\!\bigl[D(X,r(\mathbf A))=\mathbf A\bigr]\ge 1-\delta,\qquad 0<\delta<1,
+\]
+则
+\[
+\log|R|\ \ge\ \EE\!\bigl[\log d_m(X)\bigr]-h(\delta)-\delta\,m\log 2,
+\]
+其中 \(h(\delta)=-\delta\log\delta-(1-\delta)\log(1-\delta)\)。
+特别地，若 \(\EE[\log d_m(X)]\ge c\,m\)（某 \(c>0\)）且 \(|R|=O(1)\)，则 \(\delta\) 不能趋于 \(0\)。
+\end{theorem}
+\begin{proof}
+令 \(\widehat{\mathbf A}:=D(X,r(\mathbf A))\)，则
+\(
+\PP[\widehat{\mathbf A}\neq \mathbf A]\le \delta
+\)。
+由 Fano 不等式，
+\[
+H(\mathbf A\mid X,r(\mathbf A))
+\le
+h(\delta)+\delta\log(|\Omega_m|-1)
+\le
+h(\delta)+\delta\,m\log 2.
+\]
+又
+\[
+H(\mathbf A\mid X)
+=
+H(\mathbf A\mid X,r(\mathbf A))+I(\mathbf A;r(\mathbf A)\mid X),
+\]
+且
+\[
+I(\mathbf A;r(\mathbf A)\mid X)\le H(r(\mathbf A)\mid X)\le \log|R|.
+\]
+故
+\[
+\log|R|
+\ge
+H(\mathbf A\mid X)-h(\delta)-\delta\,m\log 2.
+\]
+最后计算 \(H(\mathbf A\mid X)\)。
+对任意 \(x\in X_m\)，在条件 \(X=x\) 下，\(\mathbf A\) 在纤维 \(\Fold_m^{-1}(x)\) 上均匀分布，故
+\[
+H(\mathbf A\mid X=x)=\log d_m(x).
+\]
+取期望得
+\[
+H(\mathbf A\mid X)=\EE[\log d_m(X)].
+\]
+代回即证。
+\end{proof}
+
+\begin{proposition}[曲率事件可和蕴含最终一致的逆极限提升]\label{prop:killo-curvature-summable-eventual-inverse-limit-lift}
+记 \(\omega^{(m)}:=\tau_{\infty\to m}(\omega_\infty)\)。
+若
+\[
+\sum_{m\ge 1}\PP\!\left[\mathcal K_{m+1\to m}(\omega^{(m+1)})=1\right]<\infty,
+\]
+则几乎处处存在 \(m_0(\omega_\infty)\) 使得对所有 \(m\ge m_0\) 成立
+\[
+\pi_{m+1\to m}\!\bigl(\Fold_{m+1}(\omega^{(m+1)})\bigr)
+=
+\Fold_m(\omega^{(m)}).
+\]
+从而尾序列 \(\bigl(\Fold_m(\omega^{(m)})\bigr)_{m\ge m_0}\) 定义了唯一的逆极限元素
+\[
+x_\infty(\omega_\infty)\in X_\infty\simeq \varprojlim X_m.
+\]
+\end{proposition}
+\begin{proof}
+设事件
+\(
+A_m:=\{\mathcal K_{m+1\to m}(\omega^{(m+1)})=1\}
+\)。
+由第一 Borel--Cantelli 引理，\(\sum_m\PP(A_m)<\infty\Rightarrow \PP(A_m\ \mathrm{i.o.})=0\)。
+故几乎处处仅有限多个 \(m\) 使 \(A_m\) 发生，即存在 \(m_0\) 使 \(m\ge m_0\) 时 \(\mathcal K_{m+1\to m}=0\)。
+按定义 \(\mathcal K_{m+1\to m}=0\) 等价于
+\[
+\pi_{m+1\to m}(\Fold_{m+1}(\omega^{(m+1)}))=\Fold_m(\omega^{(m)}).
+\]
+这给出逆系统相容尾部，因此确定唯一逆极限点。
+证毕。
+\end{proof}
+
+\begin{theorem}[曲率概率控制跨分辨率观测极限一致性]\label{thm:killo-curvature-probability-observable-limit-consistency}
+在命题 \ref{prop:killo-curvature-summable-eventual-inverse-limit-lift} 的设定下，记
+\[
+\varepsilon_m:=\PP\!\left[\mathcal K_{m+1\to m}(\omega^{(m+1)})=1\right],\qquad
+\sum_{m\ge 1}\varepsilon_m<\infty.
+\]
+取任意固定分辨率 \(m_\ast\) 与任意有界可观测量 \(f:X_{m_\ast}\to\RR\)。
+定义
+\[
+Z_m:=\EE\!\left[f\!\left(\pi_{m\to m_\ast}(\Fold_m(\omega^{(m)}))\right)\right],\qquad m\ge m_\ast.
+\]
+则 \((Z_m)_{m\ge m_\ast}\) 收敛。
+并且“先沿 \(\tau\) 再 Fold”与“先 Fold 再沿 \(\pi\)”两条路径在 \(m\to\infty\) 下给出同一极限。
+\end{theorem}
+\begin{proof}
+令 \(f_m:=f\circ \pi_{m\to m_\ast}:X_m\to\RR\)。
+由命题 \ref{prop:pom-gauge-curvature-shadow-bound}（取 \(\mu=\mathcal L(\omega^{(m+1)})\) 与可观测量 \(f_m\)）得
+\[
+\begin{aligned}
+|Z_{m+1}-Z_m|
+&=
+\left|
+\EE f_m\!\left(\pi_{m+1\to m}(\Fold_{m+1}(\omega^{(m+1)}))\right)
+-\EE f_m\!\left(\Fold_m(\tau_{m+1\to m}(\omega^{(m+1)}))\right)
+\right|\\
+&\le 2\|f_m\|_\infty\,\varepsilon_m
+\le 2\|f\|_\infty\,\varepsilon_m.
+\end{aligned}
+\]
+于是对 \(N>M\ge m_\ast\)，
+\[
+|Z_N-Z_M|
+\le
+\sum_{m=M}^{N-1}|Z_{m+1}-Z_m|
+\le
+2\|f\|_\infty\sum_{m=M}^{N-1}\varepsilon_m.
+\]
+右端由可和性趋于 \(0\)，故 \((Z_m)\) 为 Cauchy 列并收敛。
+
+再记
+\[
+Y_m:=\EE\!\left[f\!\left(\Fold_{m_\ast}(\tau_{m\to m_\ast}(\omega^{(m)}))\right)\right].
+\]
+对固定 \(m\ge m_\ast\)，定义中间量
+\[
+W^{(m)}_j:=
+\EE\!\left[
+f\!\left(\pi_{j\to m_\ast}\!\bigl(\Fold_j(\tau_{m\to j}(\omega^{(m)}))\bigr)\right)
+\right],
+\qquad
+j=m_\ast,\dots,m.
+\]
+则 \(W^{(m)}_{m_\ast}=Y_m\)、\(W^{(m)}_m=Z_m\)。
+对每个 \(j\in\{m_\ast,\dots,m-1\}\)，把命题 \ref{prop:pom-gauge-curvature-shadow-bound} 应用于可观测量 \(f_j=f\circ\pi_{j\to m_\ast}\) 与随机变量 \(\tau_{m\to j+1}(\omega^{(m)})\sim\mu_{j+1}\)，得
+\[
+\left|W^{(m)}_{j+1}-W^{(m)}_j\right|
+\le 2\|f\|_\infty\,\varepsilon_j.
+\]
+沿 \(j\) 求和即得
+\[
+|Y_m-Z_m|
+\le
+2\|f\|_\infty\sum_{j=m_\ast}^{m-1}\varepsilon_j
+\xrightarrow[m\to\infty]{}0.
+\]
+因此两条路径极限相同。
+证毕。
+\end{proof}
+
+\begin{theorem}[单一水库纤维内的线性 VC 维下界]\label{thm:killo-single-reservoir-fiber-linear-vc-lower-bound}
+取 \(m=4k\)，并沿用定义 \ref{def:fold-block-reservoir-code} 的
+\[
+\rho_k=(1000)^k,\qquad
+\mathrm{Enc}_k:\{0,1\}^k\to \Omega_m.
+\]
+令纤维
+\[
+F:=\Fold_m^{-1}(\rho_k).
+\]
+定义概念类
+\[
+\mathcal C:=\{C_T:\ T\subseteq [k]\},
+\]
+其中
+\[
+C_T:=\left\{\omega\in F:\ \forall j\in T,\ \omega|_{\text{第 }j\text{ 块}}=0110\right\}.
+\]
+则
+\[
+\mathrm{VCdim}(\mathcal C|_F)\ \ge\ k=\frac{m}{4}.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-block-reservoir-encoding-constant-radius}，\(\mathrm{Enc}_k\) 为单射且
+\[
+\Fold_m(\mathrm{Enc}_k(w))=\rho_k\qquad(\forall w\in\{0,1\}^k),
+\]
+故 \(\mathrm{Enc}_k(\{0,1\}^k)\subseteq F\)。
+
+对 \(i\in[k]\)，令 \(p_i\in\{0,1\}^k\) 满足 \(p_i(i)=0\) 且 \(p_i(j)=1\)（\(j\neq i\)），并置
+\[
+P:=\{\mathrm{Enc}_k(p_i):\ i=1,\dots,k\}\subseteq F.
+\]
+任取 \(S\subseteq[k]\)，令 \(T:=[k]\setminus S\)。
+若 \(i\in S\)，则对每个 \(j\in T\) 有 \(p_i(j)=1\)，故 \(\mathrm{Enc}_k(p_i)\) 的第 \(j\) 块为 \(0110\)，从而 \(\mathrm{Enc}_k(p_i)\in C_T\)。
+若 \(i\notin S\)，则 \(i\in T\)，而 \(p_i(i)=0\)，故第 \(i\) 块为 \(1000\neq 0110\)，从而 \(\mathrm{Enc}_k(p_i)\notin C_T\)。
+于是
+\[
+C_T\cap P=\{\mathrm{Enc}_k(p_i):\ i\in S\}.
+\]
+即 \(P\) 被 \(\mathcal C\) 打碎。
+按定义 \ref{def:conclusion-vc-dim}，得到
+\[
+\mathrm{VCdim}(\mathcal C|_F)\ge |P|=k.
+\]
+证毕。
+\end{proof}
+
+\endinput

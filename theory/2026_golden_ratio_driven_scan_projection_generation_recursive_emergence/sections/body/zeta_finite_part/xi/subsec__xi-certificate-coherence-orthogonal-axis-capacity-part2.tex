@@ -1,0 +1,163 @@
+\label{subsec:xi-certificate-coherence-orthogonal-axis-capacity-part2}
+
+\begin{remark}[unitary slice 与离线方向的二次压缩缺口]\label{rem:xi-unitary-vs-offcritical-bit-gap}
+在 unitary slice 上，高度参数 \(x\in\RR\) 与相位盒坐标 \(u=\upsilon(x)=\frac{1}{\pi}\arctan(x)\) 的关系满足
+\(
+\frac{\dd u}{\dd x}=\frac{1}{\pi(1+x^2)}
+\)
+（式 \eqref{eq:unit-circle-phase-derivative}），因此当 \(|x|\asymp T\) 时，为区分“高度尺度 \(\asymp T\)”只需相位分辨率 \(\Delta u\asymp 1/T\)，对应比特预算为 \(\Theta(\log T)\)。
+与之相对，定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound} 给出：若要在同一高度窗内排除固定偏移下界 \(\delta\ge\delta_0\) 的离线零点，则必须支付 \(p=\Theta(2\log T)\) 的端点层位预算。
+该跃迁把“离开切片”的信息投影具体化为一个不可跨越的分辨率--位复杂度屏障。
+\end{remark}
+
+\paragraph{地址作为“合法读出前缀”的两条可检验定量律}\label{par:xi-legal-readout-prefix-two-laws}
+在本文“地址先于取值”的可核验语义下，前缀之所以可被称为\emph{合法地址}，并非仅由其形式长度决定，而是同时受制于两条互不替代的门槛：其一为时间层的同步门（未同步即统计型 \(\mathsf{NULL}\)，注 \ref{rem:Ym-stat-null-unsync}）；其二为端点紧化的精度门（紧化 Jacobian 把动态范围压入末位精度，见附录式 \eqref{eq:app-precision-amplification} 与下述定理 \ref{thm:xi-radial-information-projection-lower-bound}）。
+两条门槛分别回答“前缀何时在语法上可指称”为地址与“该地址何时在几何上足以承载可分辨差异”，并因此给出“扫描预算 \(\Rightarrow\) 清晰度”的两条可检验定量律。
+\begin{enumerate}
+  \item \textbf{语法/解码层：合法前缀密度的谱律。}
+  令 \(\mathcal{W}_{m}^{\mathrm{unsync}}(n)\subset X_m^n\) 为长度 \(n\) 的未同步输出前缀集合（定义 \ref{def:Ym-unsync-prefix-count}），并记其计数为 \(N_m^{\mathrm{unsync}}(n):=\#\mathcal{W}_{m}^{\mathrm{unsync}}(n)\)。
+  在“未同步即无地址”的制度下，\(\mathcal{W}_{m}^{\mathrm{unsync}}(n)\) 恰刻画长度-\(n\) 前缀处统计型 \(\mathsf{NULL}\) 的对象层密度：其元素对应那些读入后确定化滤波状态仍为非单点（\(|S_n|>1\)）的前缀，因此在类型意义下尚不足以生成可引用的地址对象。
+  在定理 \ref{thm:Ym-unsync-prefix-pf-sharp} 的假设下，存在常数 \(c_m>0\) 与二阶谱半径 \(\rho_{\mathrm{amb},2}(m)<\rho_{\mathrm{amb}}(m)<2\)，使得未同步密度具有可审计的 Perron--Frobenius 锐化渐近
+  \begin{equation}\label{eq:xi-unsync-prefix-density-pf-law}
+  \boxed{\;
+  \frac{N_m^{\mathrm{unsync}}(n)}{2^n}
+  =c_m\,e^{-\varepsilon_m n}\ +\ O\!\Bigl(\bigl(\tfrac{\rho_{\mathrm{amb},2}(m)}{2}\bigr)^n\Bigr),
+  \qquad
+  \varepsilon_m=\log 2-\log\rho_{\mathrm{amb}}(m)>0,\quad n\to\infty\; }.
+  \end{equation}
+  因而“合法地址出现”的扫描复杂度在指数尺度上由歧义子图的 Perron 根 \(\rho_{\mathrm{amb}}(m)\) 完全锁定：每增加 \(1\) 位读出前缀，不合法前缀密度按固定倍率 \(e^{-\varepsilon_m}\) 衰减，并具有主常数与谱隙误差项。
+  相应的阈值型最小扫描长度由推论 \ref{cor:Ym-scan-length-asymptotic} 给出。
+  \item \textbf{几何/精度层：端点紧化的位复杂度下界。}
+  对无参紧化 \(u=\upsilon(x)=\pi^{-1}\arctan(x)\)，由 \(\frac{\dd x}{\dd u}=\pi(1+x^2)\)（式 \eqref{eq:app-precision-amplification}）知：当 \(|x|\) 大时，微小的相位盒误差将被放大为幅度域的不可忽略误差。
+  在本文的证书语义中，这一放大律被严格编译为“位复杂度 \(\Rightarrow\) 可核验精度”的硬下界：若协议仅允许给出 \(u\) 的 dyadic 括号并要求离线复核得到关于 \(x\) 的单值可核验读出，则所需证书位数必随 \(\log(1+x^2)\) 增长（定理 \ref{thm:xi-radial-information-projection-lower-bound}）。
+\end{enumerate}
+
+\begin{corollary}[扫描预算的双门槛下界：语法同步与端点精度]\label{cor:xi-legal-readout-prefix-double-budget}
+固定分辨率 \(m\) 并假设定理 \ref{thm:Ym-unsync-prefix-pf-sharp} 的假设成立。
+给定阈值 \(\eta\in(0,1)\) 与幅度窗 \(X\ge 1\)。
+则：
+\begin{enumerate}
+  \item \textbf{（语法预算）}
+  令 \(n_{\eta}\) 为推论 \ref{cor:Ym-scan-length-asymptotic} 定义的最小扫描长度，使得
+  \(\frac{N_m^{\mathrm{unsync}}(n)}{2^n}\le \eta\)。
+  则当 \(\eta\downarrow 0\) 时有渐近律
+  \[
+  n_{\eta}
+  =\frac{1}{\varepsilon_m}\log\!\Bigl(\frac{c_m}{\eta}\Bigr)\ +\ O(1),
+  \]
+  其中 \(\varepsilon_m\) 与 \(c_m\) 分别为定理 \ref{thm:Ym-unsync-prefix-pf-sharp} 的熵缺口与 Perron 主项常数。
+  \item \textbf{（精度预算）}
+  以 \(b\in\NN\) 记相位盒 dyadic 深度（对应定理 \ref{thm:xi-radial-information-projection-lower-bound} 中的 \(n\)）。
+  设某一证书协议仅允许输出 \(u=\upsilon(x)\) 的 dyadic 括号 \(J\) 且 \(|J|\lesssim 2^{-b}\)，并要求对所有满足 \(|x|\le X\) 的输入，在离线复核下得到关于 \(x\) 的单值可核验读出且绝对误差不超过 \(1\)。
+  则由定理 \ref{thm:xi-radial-information-projection-lower-bound}（取 \(\varepsilon=1\) 并对 \(|x|\le X\) 取最坏情形）必有
+  \[
+  b\ \ge\ \log_2\!\bigl(\pi(1+X^2)\bigr)\ +\ O(1).
+  \]
+  \item \textbf{（合成下界）}
+  若某一实现以单一扫描预算 \(N\) 同时作为时间层前缀长度与 dyadic 深度（例如每步扫描同时增加一位读出前缀并细化一次 dyadic 括号，从而两类深度同取 \(N\)），并要求同时满足以上两类门槛，
+  则在渐近尺度上必有
+  \begin{equation}\label{eq:xi-legal-readout-prefix-max-budget}
+  \boxed{\;
+  N\ \ge\ \max\Bigl\{\ \frac{1}{\varepsilon_m}\log\!\Bigl(\frac{c_m}{\eta}\Bigr),\ \log_2\!\bigl(\pi(1+X^2)\bigr)\Bigr\}\ +\ O(1)\; }.
+  \end{equation}
+\end{enumerate}
+并且两类预算在本文的类型语义中正交：增加其中一侧预算无法替代另一侧门槛的违背（参见定理 \ref{thm:xi-null-complete-trichotomy-offline} 的不可替代性断言）。
+\end{corollary}
+
+\begin{theorem}[径向偏移的信息投影下界：紧化读出的可证书化位复杂度]\label{thm:xi-radial-information-projection-lower-bound}
+设 \(x\in\RR\)，并以无参紧化
+\[
+u=\upsilon(x):=\frac{1}{\pi}\arctan(x)
+\]
+把非紧实轴坐标压到相位盒坐标（式 \eqref{eq:unit-circle-phase-derivative}）。
+假设某一协议试图仅通过 \(u\) 的 \(n\)-比特 dyadic 近似来证书化 \(x\)：
+即读出/证书在对象层只允许给出一个 dyadic 括号 \(J=[u_-,u_+]\) 满足
+\(
+u\in J,\ |J|\lesssim 2^{-n}
+\)；
+并要求存在一个确定性离线复核规则，把该 \(J\) 还原为一个关于 \(x\) 的单值可核验读出，其绝对误差不超过 \(\varepsilon\in(0,1]\)。
+则必有位复杂度下界
+\begin{equation}\label{eq:xi-radial-info-projection-lb}
+\boxed{\;
+n\ \ge\ \log_2\!\Bigl(\frac{1}{\varepsilon}\Bigr)\ +\ \log_2(1+x^2)\ +\ \log_2\pi\ +\ O(1)\; }.
+\end{equation}
+\par
+将其应用到完成化接口的径向参数
+\[
+u_L(s)=L^{2s-1}=e^{x+\mathrm{i}\theta},
+\qquad
+x=\log|u_L(s)|=(2\Re(s)-1)\log L,
+\]
+得到：任意声称能在固定精度 \(\varepsilon\) 下对 \(x\) 给出可核验单值读出的制度，若允许 \(L\to\infty\)，则当 \(\Re(s)\neq\tfrac12\) 时其证书位数 \(n\) 不可一致有界，而必须至少按 \(\log_2(1+x^2)\asymp 2\log_2\log L\) 增长。
+\end{theorem}
+
+\begin{proof}
+由附录的精度放大律 \eqref{eq:app-precision-amplification}，
+\(
+\frac{\dd x}{\dd u}=\pi(1+x^2)
+\)
+并且 \(x=\tan(\pi u)\) 在 \(u\)-盒上严格单调。
+因此若 \(J=[u_-,u_+]\) 的宽度为 \(|J|\)，则其逆像区间的宽度满足
+\[
+|\,\upsilon^{-1}(J)\,|
+:=|\,\tan(\pi u_+)-\tan(\pi u_-)\,|
+\gtrsim \pi(1+x^2)\,|J|
+\]
+（常数仅依赖于 \(J\) 的括号约定与 \(\varepsilon\le 1\) 的局部范围；其来源是 \(\tan\) 在紧化盒上的局部 Jacobian 下界）。
+若要求从 \(J\) 得到对 \(x\) 的单值可核验读出且绝对误差 \(\le\varepsilon\)，则必须有
+\(
+|\,\upsilon^{-1}(J)\,|\lesssim \varepsilon
+\)，从而推出
+\(
+|J|\lesssim \varepsilon/(\pi(1+x^2))
+\)。
+再代入 \(|J|\lesssim 2^{-n}\) 并取二进制对数，即得 \eqref{eq:xi-radial-info-projection-lb}。证毕。
+\end{proof}
+
+\begin{corollary}[端点紧化读出的误差门槛位预算（绝对/相对）]\label{cor:xi-radial-info-projection-thresholds}
+在定理 \ref{thm:xi-radial-information-projection-lower-bound} 的设定下：
+\begin{enumerate}
+  \item \textbf{（固定绝对误差门槛）}
+  若要求由 \(n\)-比特 dyadic 括号得到关于 \(x\) 的单值可核验读出且绝对误差 \(\le 1\)，则必有
+  \[
+  n\ \ge\ \log_2\!\bigl(\pi(1+x^2)\bigr)\ +\ O(1)
+  =2\log_2|x|\ +\ O(1)\qquad(|x|\to\infty).
+  \]
+  \item \textbf{（固定相对误差门槛）}
+  给定 \(\eta\in(0,1)\) 且 \(x\neq 0\)。
+  若要求相对误差 \(|\widehat x-x|\le \eta|x|\)，则必有
+  \[
+  n\ \ge\ \log_2\!\Bigl(\frac{\pi(1+x^2)}{\eta|x|}\Bigr)\ +\ O(1)
+  =\log_2(\pi|x|)\ +\ \log_2\!\Bigl(\frac{1}{\eta}\Bigr)\ +\ O(1)\qquad(|x|\to\infty),
+  \]
+  其中常数项仅依赖于 dyadic 括号约定，并可允许对 \(\eta\) 有界依赖（但与 \(x\) 无关）。
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+第 (1) 条在 \eqref{eq:xi-radial-info-projection-lb} 中取 \(\varepsilon=1\) 即得。
+第 (2) 条将定理 \ref{thm:xi-radial-information-projection-lower-bound} 的证明中“误差门槛 \(\varepsilon\)”替换为 \(\eta|x|\) 并重复同一估计即可得到
+\(
+n\ge \log_2(\pi(1+x^2)/(\eta|x|))+O(1)
+\)；
+当 \(|x|\to\infty\) 时，\(\log_2(1+x^2)=2\log_2|x|+O(1)\)，从而得到所示主阶展开。证毕。
+\end{proof}
+
+\begin{corollary}[规模一致性刚性：\texorpdfstring{$\Re(s)=\tfrac12$}{Re(s)=1/2} 为唯一低复杂度切片]\label{cor:xi-critical-line-unique-low-complexity-slice}
+在本文的 unitary slice 核验语义（定义 \ref{def:xi-visible-read-null}，取 \(X_{\mathrm{vis}}=\mathsf{Phase}\)）与三寄存器闭包下，
+若某一“零点可核验协议”要求：当尺度 \(L\) 可任意放大时，证书长度对 \(L\) 保持一致有界（仅允许随所要求误差 \(\varepsilon\) 增长），
+则任何可寻址的连续零点事件必满足
+\[
+\Re(s)=\tfrac12.
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:xi-radial-information-projection-lower-bound}，
+若试图在可核验语义中单值读出径向参数 \(x=\log|u_L(s)|=(2\Re(s)-1)\log L\) 并保持绝对误差 \(\varepsilon\)（固定），则所需位数 \(n\) 至少包含一项 \(\log_2(1+x^2)\)。
+当 \(\Re(s)\neq\tfrac12\) 时有 \(|x|\sim |\Re(s)-\tfrac12|\,\log L\to\infty\)（\(L\to\infty\)），从而 \(\log_2(1+x^2)\to\infty\)，与“对 \(L\) 一致有界”的复杂度要求矛盾。
+故必须有 \(x\equiv 0\)，即 \(|u_L(s)|=1\)，等价于 \(\Re(s)=\tfrac12\)。证毕。
+\end{proof}
+
+\endinput
+

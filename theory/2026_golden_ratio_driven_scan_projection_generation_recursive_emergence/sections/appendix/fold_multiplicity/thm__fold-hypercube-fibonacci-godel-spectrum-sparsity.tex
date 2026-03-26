@@ -1,0 +1,159 @@
+\begin{definition}[斐波那契 Gödel 半径]\label{def:fold-hypercube-fibonacci-godel-radius}
+令 \((F_k)_{k\ge 0}\) 为斐波那契数列（\(F_0=0,F_1=1\)），并取黄金分割比
+\[
+\varphi:=\frac{1+\sqrt5}{2}.
+\]
+对任意有限指标集 \(I\subseteq\NN\)，定义其斐波那契 Gödel 半径为
+\[
+\mathsf N_{\mathrm{Fib}}(I):=\sum_{i\in I}F_{i+1}.
+\]
+\end{definition}
+
+\begin{proposition}[斐波那契 Gödel 半径的子集计数幂律]\label{prop:fold-hypercube-fibonacci-godel-radius-count}
+令 \(\mathcal M_{\mathrm{Fib}}(R):=\{I\subseteq\NN:\ \mathsf N_{\mathrm{Fib}}(I)\le R\}\)（\(R\ge 1\)）。
+则有
+\[
+\#\mathcal M_{\mathrm{Fib}}(R)=\Theta\!\left(R^{\frac{\log 2}{\log\varphi}}\right)
+\qquad(R\to\infty).
+\]
+更精确地，若 \(k=k(R)\) 由 \(F_{k+1}\le R<F_{k+2}\) 唯一确定，则
+\[
+2^{k-2}\ \le\ \#\mathcal M_{\mathrm{Fib}}(R)\ \le\ 2^{k}.
+\]
+\end{proposition}
+\begin{proof}
+取 \(k\) 使 \(F_{k+1}\le R<F_{k+2}\)。
+若 \(I\in\mathcal M_{\mathrm{Fib}}(R)\) 且 \(I\) 含有某个 \(i\ge k+1\)，则 \(\mathsf N_{\mathrm{Fib}}(I)\ge F_{i+1}\ge F_{k+2}>R\)，矛盾；
+故 \(I\subseteq\{1,\dots,k\}\)，从而 \(\#\mathcal M_{\mathrm{Fib}}(R)\le 2^k\)。
+\par
+另一方面，对任意 \(J\subseteq\{1,\dots,k-2\}\) 有
+\[
+\mathsf N_{\mathrm{Fib}}(J)
+\le
+\sum_{i=1}^{k-2}F_{i+1}
+=
+\sum_{j=2}^{k-1}F_j
+=
+F_{k+1}-2
+\le
+R,
+\]
+其中使用恒等式 \(\sum_{j=1}^{m}F_j=F_{m+2}-1\)。
+因此 \(\{1,\dots,k-2\}\) 的全部子集均属于 \(\mathcal M_{\mathrm{Fib}}(R)\)，给出下界 \(\#\mathcal M_{\mathrm{Fib}}(R)\ge 2^{k-2}\)。
+\par
+最后，由 \(F_{k+1}=\Theta(\varphi^{k})\) 得 \(k=\log_\varphi R+O(1)\)。
+将 \(2^{k}\) 改写为 \(R^{\log_\varphi 2}\)（并用 \(\log_\varphi 2=\frac{\log 2}{\log\varphi}\)）即可得到 \(\#\mathcal M_{\mathrm{Fib}}(R)=\Theta\!\left(R^{\frac{\log 2}{\log\varphi}}\right)\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[斐波那契权重下的截止谱可见性与多项式维数律]\label{cor:fold-hypercube-fibonacci-godel-spectrum-polynomial}
+在定理 \ref{thm:fold-hypercube-walsh-stokes-energy-cutoff-reconstruction} 的设定下，取权重
+\[
+w_i:=F_{i+1},\qquad 1\le i\le n.
+\]
+则对每个 \(I\subseteq[n]\) 有
+\[
+\lambda_I=4\sum_{i\in I}w_i=4\,\mathsf N_{\mathrm{Fib}}(I).
+\]
+因此对任意 \(\varepsilon>0\)，若取
+\[
+\Lambda:=\frac{\mathcal E_w(f)}{\varepsilon^2},
+\]
+则由定理 \ref{thm:fold-hypercube-walsh-stokes-energy-cutoff-reconstruction} 可由所有满足 \(\mathsf N_{\mathrm{Fib}}(I)\le \Lambda/4\) 的边界全息观测确定 \(P_\Lambda f\)，并且
+\[
+\|f-P_\Lambda f\|_2^2=\|R_\Lambda f\|_2^2\le \varepsilon^2.
+\]
+当 \(n\) 足够大以容纳全部满足 \(\mathsf N_{\mathrm{Fib}}(I)\le R\) 的频率指标时，所需观测模态数满足
+\[
+\#\{I\subseteq[n]:\ \mathsf N_{\mathrm{Fib}}(I)\le R\}
+=
+\Theta\!\left(R^{\frac{\log 2}{\log\varphi}}\right)
+\qquad(R\to\infty).
+\]
+\end{corollary}
+\begin{proof}
+由权重取值，\(\lambda_I=4\sum_{i\in I}F_{i+1}=4\,\mathsf N_{\mathrm{Fib}}(I)\) 立得截止条件等价性。
+其余结论直接由定理 \ref{thm:fold-hypercube-walsh-stokes-energy-cutoff-reconstruction} 取 \(\Lambda=\mathcal E_w(f)/\varepsilon^2\) 与命题 \ref{prop:fold-hypercube-fibonacci-godel-radius-count} 给出。
+\end{proof}
+
+\begin{theorem}[斐波那契能量约束指示函数族的 \texorpdfstring{$\varepsilon$}{eps}-熵上界]\label{thm:fold-hypercube-fibonacci-eps-entropy-upper}
+沿用推论 \ref{cor:fold-hypercube-fibonacci-godel-spectrum-polynomial} 的权重 \(w_i=F_{i+1}\) 与归一化 \(L^2\) 范数 \(\|\cdot\|_2\)。
+对 \(E>0\) 定义能量受限类
+\[
+\mathcal F_E(n):=\{f=\mathbf 1_S:\ S\subseteq\Omega_n,\ \mathcal E_w(f)\le E\}\subset L^2(\Omega_n).
+\]
+记 \(N(\varepsilon,\mathcal F_E(n),\|\cdot\|_2)\) 为该类在距离 \(\|\cdot\|_2\) 下的 \(\varepsilon\)-覆盖数。
+则存在与 \(n,E,\varepsilon\) 无关的常数 \(C_1,C_2>0\)，使对任意 \(0<\varepsilon<1\) 有
+\[
+\log N(\varepsilon,\mathcal F_E(n),\|\cdot\|_2)
+\le
+C_1\left(\frac{E}{\varepsilon^2}\right)^{\frac{\log 2}{\log\varphi}}
+\log\!\left(C_2\frac{E}{\varepsilon}\right).
+\]
+\end{theorem}
+\begin{proof}
+对任意 \(f\in\mathcal F_E(n)\) 与任意 \(\Lambda>0\)，定理 \ref{thm:fold-hypercube-walsh-stokes-energy-cutoff-reconstruction} 给出
+\[
+\|f-P_\Lambda f\|_2^2\le \frac{\mathcal E_w(f)}{\Lambda}\le \frac{E}{\Lambda}.
+\]
+取 \(\Lambda:=4E/\varepsilon^2\) 得 \(\|f-P_\Lambda f\|_2\le \varepsilon/2\)。
+因此构造 \(\varepsilon\)-网只需在有限维子空间
+\[
+V_\Lambda:=\mathrm{span}\{\chi_I:\ \lambda_I\le \Lambda\}
+\]
+上对 \(P_\Lambda f\) 作离散化。
+\par
+令
+\[
+N_\Lambda:=\dim V_\Lambda=\#\{I\subseteq[n]:\ \lambda_I\le \Lambda\}.
+\]
+由 \(\lambda_I=4\,\mathsf N_{\mathrm{Fib}}(I)\) 及命题 \ref{prop:fold-hypercube-fibonacci-godel-radius-count}（并注意 \(n\) 有限只会减小计数）可知
+\[
+N_\Lambda=\Theta\!\left(\left(\frac{\Lambda}{4}\right)^{\frac{\log 2}{\log\varphi}}\right)
+=\Theta\!\left(\left(\frac{E}{\varepsilon^2}\right)^{\frac{\log 2}{\log\varphi}}\right).
+\]
+\par
+写 \(P_\Lambda f=\sum_{\lambda_I\le \Lambda}\widehat f(I)\chi_I\)。
+由于 Walsh 基在 \(\|\cdot\|_2\) 下正交归一，且 \(|\widehat f(I)|\le \|f\|_2\le 1\)，可对每个系数 \(\widehat f(I)\in[-1,1]\) 作步长
+\[
+\delta:=\frac{\varepsilon}{2\sqrt{N_\Lambda}}
+\]
+的均匀量化。
+由量化误差的 \(\ell^2\) 估计，系数向量的误差满足
+\(
+\sqrt{N_\Lambda}\,\delta=\varepsilon/2
+\)，从而在函数层面得到
+\[
+\|P_\Lambda f-\widetilde f\|_2\le \varepsilon/2.
+\]
+与 \(\|f-P_\Lambda f\|_2\le \varepsilon/2\) 合并即得 \(\|f-\widetilde f\|_2\le \varepsilon\)。
+\par
+每个系数区间 \([-1,1]\) 的网格点数至多 \(1+2/\delta\le 4/\delta\)（因 \(\varepsilon<1\) 且 \(N_\Lambda\ge 1\)）。
+故覆盖数满足
+\[
+N(\varepsilon,\mathcal F_E(n),\|\cdot\|_2)
+\le
+\left(\frac{4}{\delta}\right)^{N_\Lambda}
+=
+\left(\frac{8\sqrt{N_\Lambda}}{\varepsilon}\right)^{N_\Lambda}.
+\]
+取对数并用 \(N_\Lambda=\Theta((E/\varepsilon^2)^{\frac{\log 2}{\log\varphi}})\) 吸收常数，得到所示上界形式。
+\end{proof}
+
+\begin{conjecture}[斐波那契谱指数的最坏情形刚性]\label{conj:fold-hypercube-fibonacci-spectral-exponent-rigidity}
+在权重 \(w_i=F_{i+1}\) 下，记
+\(
+\mathcal M_{\mathrm{Fib}}(R)=\{I\subseteq\NN:\ \mathsf N_{\mathrm{Fib}}(I)\le R\}
+\)
+并由命题 \ref{prop:fold-hypercube-fibonacci-godel-radius-count} 知 \(\#\mathcal M_{\mathrm{Fib}}(R)\asymp R^{\frac{\log 2}{\log\varphi}}\)。
+猜想存在绝对常数 \(c_0,c_1>0\)，使得对任意充分小的 \(\varepsilon\in(0,1)\) 与充分大的 \(E\)，存在维数 \(n\) 与某个集合 \(S\subseteq\Omega_n\) 满足 \(\mathcal E_w(\mathbf 1_S)\le E\)，并且对任意真子集
+\[
+\mathcal J\subsetneq \{I\subseteq[n]:\ \mathsf N_{\mathrm{Fib}}(I)\le c_0E/\varepsilon^2\}
+\]
+若 \(\#\mathcal J\le (1-c_1)\,\#\{I\subseteq[n]:\ \mathsf N_{\mathrm{Fib}}(I)\le c_0E/\varepsilon^2\}\)，则仅由 \(\{\widehat{\mathbf 1_S}(I)\}_{I\in\mathcal J}\)（等价：仅由相应边界全息观测）所构造的任意重构都不能保证在最坏情形下达到 \(L^2\) 误差 \(\le \varepsilon\)。
+\par
+等价地，指数 \(\frac{\log 2}{\log\varphi}\) 作为边界可见低能模态的增长阶在最坏情形下不可降低。
+\end{conjecture}
+
+\endinput
+

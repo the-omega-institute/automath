@@ -1,0 +1,377 @@
+\subsubsection{真正 arity 维度的 primitive 素数谱：Dirichlet 分层与 Mertens 常数张量}\label{subsec:arity-dirichlet-mertens-tensor}
+本小节把 40 状态真实输入核（附录 \ref{app:real-input-40-abel}）的 primitive 轨道按三个可加观测量做 Dirichlet 分层，并把每个同余类压缩为 Abel/Hadamard 有限部常数项（Mertens 常数漂移）。该输出提供同余类常数张量以及等分布收敛的最坏误差指数。
+
+\paragraph{三条分层量（arity-charge + 两类隐藏/触发维度）}
+对一条 primitive 轨道 $\gamma$，记其沿边的三类可加计数为
+$$
+\Phi_e(\gamma),\qquad \Phi_-(\gamma),\qquad \Phi_2(\gamma),
+$$
+它们分别对应附录 \ref{app:real-input-40-logm-theta} 中的三条边势 $\varphi_e,\varphi_-,\varphi_2$ 的轨道和。
+在本文选择的三维 Dirichlet 分层中，我们以 $\chi$ 作为 arity-charge，并以 $N_-$ 与 $N_e$ 作为两条事件计数轴（其中 $N_e$ 是输出位计数；$N_2$ 仅作为构造 $\chi$ 的辅助量保留在定义中）。
+定义轨道层的 arity-charge 与事件计数
+\[
+\begin{aligned}
+\chi(\gamma)&:=\Phi_e(\gamma)-\Phi_2(\gamma)\in\ZZ,\\
+N_-(\gamma)&:=\Phi_-(\gamma)\in\ZZ,\\
+N_e(\gamma)&:=\Phi_e(\gamma)\in\ZZ,\\
+N_2(\gamma)&:=\Phi_2(\gamma)\in\ZZ.
+\end{aligned}
+\]
+在“真实输入 40 状态核”的同步边标记 $(s,d)\mapsto(e,t)$ 口径下，可取每步观测量
+$$
+\chi:=e-\mathbf{1}_{\{d=2\}}\in\{-1,0,1\},
+\qquad
+\nu:=\mathbf{1}_{\{t\in Q_-\}}\in\{0,1\},
+\qquad
+e\in\{0,1\},
+\qquad
+\xi:=\mathbf{1}_{\{d=2\}}\in\{0,1\}.
+$$
+从而
+$$
+\Phi_e(\gamma)=\sum_{k=1}^{|\gamma|} e_k,
+\qquad
+\Phi_-(\gamma)=\sum_{k=1}^{|\gamma|} \nu_k,
+\qquad
+\Phi_2(\gamma)=\sum_{k=1}^{|\gamma|} \xi_k,
+$$
+并因此 $\chi(\gamma)=\sum_{k=1}^{|\gamma|}\chi_k$、$N_-(\gamma)=\sum_{k=1}^{|\gamma|}\nu_k$、$N_e(\gamma)=\sum_{k=1}^{|\gamma|}e_k$、$N_2(\gamma)=\sum_{k=1}^{|\gamma|}\xi_k$。
+其中 $\chi(\gamma)$ 为 arity-charge（把二元碰撞的可见/不可见分配编码为可加电荷），$N_-(\gamma)$ 记录进入负携带区的事件计数，而 $N_e(\gamma)$ 记录输出位计数。主增长率取真实输入核的 Perron--Frobenius 主特征值
+$$
+\lambda=\rho(M)=\varphi^2\approx 2.61803398875.
+$$
+
+\paragraph{多可观测量热力系统：向量势、rotation polytope 与可计算相图}
+上述三条观测量不仅能做 Dirichlet 分层，也能被统一视为一个\textbf{向量值局部常势}。把 40 状态核的核心图（essential SCC；见命题 \ref{prop:real-input-40-essential-20}）记为 $\Gamma$，并对每条有向边 $e:i\to j$ 赋一个向量值观测量
+$$
+\Phi(e):=(\chi(e),\nu(e),\xi(e))\in\ZZ^3.
+$$
+对任意参数向量 $\mathbf{u}=(u_\chi,u_-,u_2)\in(\CC^\times)^3$，可定义多参权重
+$$
+w_{\mathbf{u}}(e):=\mathbf{u}^{\Phi(e)}:=u_\chi^{\chi(e)}u_-^{\nu(e)}u_2^{\xi(e)},
+$$
+并得到多参带权邻接矩阵族
+$$
+M(\mathbf{u})_{ij}:=\sum_{e:i\to j} w_{\mathbf{u}}(e),
+$$
+其 $\zeta$--行列式与 primitive Euler 乘积仍按 SFT 口径成立（\cite{BrinStuck2002,ParryPollicott1990Zeta}）。本文前述的三维扭曲矩阵 $M_{j_1,j_2,j_3}$ 正是取 $\mathbf{u}$ 为有限群角色（单位圆上的根）时的特例。
+
+更进一步，对边移位系统（SFT）与向量势 $\Phi$，定义 rotation set（旋转集合）
+$$
+\mathrm{Rot}(\Phi)
+:=
+\left\{\int \Phi\,d\mu:\ \mu\ \text{是}\ \Gamma\ \text{上的}\ \sigma\text{-不变概率测度}\right\}\subset\RR^3.
+$$
+当 $\Gamma$ 为传递 SFT 且 $\Phi$ 仅依赖长度 $2$ 的 cylinder（即仅依赖边标签）时，$\mathrm{Rot}(\Phi)$ 为\textbf{凸多面体}，周期点（周期轨道）的 rotation vectors 在其中稠密，且每个内点由遍历测度实现（\cite{Ziemian1995RotationSFT}）。因此，“隐含属性/操作类型配比”的长期平均并非原始对象，而是一个\textbf{有限维凸多面体坐标}。
+
+rotation polytope 的支撑函数可通过\textbf{最小平均回路权}精确计算：对任意方向 $\theta\in\RR^3$，设标量化势
+$$
+\phi_\theta(e):=\langle\theta,\Phi(e)\rangle,
+$$
+则有（见 \cite{Karp1978MinCycleMean} 的最小平均回路刻画）
+$$
+h_{\min}(\theta):=\min_{v\in\mathrm{Rot}(\Phi)}\langle\theta,v\rangle
+=\min_{\gamma}\frac{1}{|\gamma|}\sum_{e\in\gamma}\phi_\theta(e),
+$$
+右端对所有周期轨道（回路） $\gamma$ 取最小。由此可把“纯相”定义为被某个方向 $\theta$ 暴露的面；$\theta$-空间中使同一面被选中的区域构成 rotation polytope 的 normal fan，从而得到一个\textbf{有限个相的核相图}。这一视角与局部常势的零温极限（$\beta\to+\infty$）一致：零温选择集中在有限并的周期/子移位分量上（参见 \cite{ChazottesGambaudoUgalde2011ZeroTempLocConst} 的一般理论）。
+
+作为可审计示例，我们在 essential 20 状态核心上取 $\Phi=(\chi,\nu,\xi)$，对若干方向 $\theta$ 做标量化并在图上求最小平均回路权与见证周期轨道，输出其周期均值（rotation vector）：
+\input{sections/generated/tab_real_input_40_rotation_polytope_sample}
+
+\begin{proposition}[规范剪切：\texorpdfstring{$(\chi,\nu,\xi)$}{(chi,nu,xi)} rotation polytope 与 \texorpdfstring{$(e,\nu,\xi)$}{(e,nu,xi)} rotation polytope 的线性同胚]\label{prop:rotation-polytope-shear}
+在真实输入 40 状态核的同步边口径下，令
+\[
+\Phi^{(e)}(e):=(e(e),\nu(e),\xi(e))\in\ZZ^3,
+\qquad
+\Phi^{(\chi)}(e):=(\chi(e),\nu(e),\xi(e))\in\ZZ^3,
+\]
+其中 \(\chi=e-\xi\)。定义线性剪切
+\[
+L:\RR^3\to\RR^3,\qquad L(x_e,x_\nu,x_\xi):=(x_e-x_\xi,\ x_\nu,\ x_\xi).
+\]
+则 rotation 集满足
+\[
+\mathrm{Rot}(\Phi^{(\chi)})=L\bigl(\mathrm{Rot}(\Phi^{(e)})\bigr),
+\]
+从而两者的 rotation polytope 仅相差一个可逆线性剪切同胚（其逆为 \(L^{-1}(x_\chi,x_\nu,x_\xi)=(x_\chi+x_\xi,x_\nu,x_\xi)\)）。
+进一步，对任意方向 \(\theta=(\theta_\chi,\theta_-,\theta_2)\in\RR^3\)，其最小支撑函数满足
+\[
+\boxed{\;
+h_{\min}^{(\chi)}(\theta_\chi,\theta_-,\theta_2)
+=h_{\min}^{(e)}(\theta_e,\theta_-,\widetilde\theta_2)\;},
+\qquad
+(\theta_e,\widetilde\theta_2):=(\theta_\chi,\ \theta_2-\theta_\chi),
+\]
+因此 \((\chi,\nu,\xi)\) 的 normal fan（零温相图分区）是 \((e,\nu,\xi)\) 相图在 \((\theta_e,\theta_2)\)-平面上沿直线族 \(\theta_2-\theta_e=\mathrm{const}\) 的拉回。
+\end{proposition}
+\begin{proof}
+由 \(\chi=e-\xi\)，对任意不变测度 \(\mu\) 有
+\[
+\int \Phi^{(\chi)}\,\dd\mu=\left(\int e\,\dd\mu-\int \xi\,\dd\mu,\ \int \nu\,\dd\mu,\ \int \xi\,\dd\mu\right)
+=L\left(\int \Phi^{(e)}\,\dd\mu\right).
+\]
+对所有不变测度取像即得 \(\mathrm{Rot}(\Phi^{(\chi)})=L(\mathrm{Rot}(\Phi^{(e)}))\)。
+
+对支撑函数，注意
+\[
+\langle\theta,\Phi^{(\chi)}\rangle
+=\theta_\chi\chi+\theta_-\nu+\theta_2\xi
+=\theta_\chi e+\theta_-\nu+(\theta_2-\theta_\chi)\xi
+=\left\langle(\theta_\chi,\theta_-,\theta_2-\theta_\chi),\,\Phi^{(e)}\right\rangle.
+\]
+将该恒等式代入上文对最小平均回路权 \(h_{\min}(\theta)\) 的刻画即可得到支撑函数等价；normal fan 的拉回结论是支撑函数在对偶参数空间的线性变换推论。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$\chi$}{chi} 扭曲的降维与参数冗余]\label{cor:chi-twist-dimension-reduction}
+对任意 \(\mathbf{u}=(u_\chi,u_-,u_2)\in(\CC^\times)^3\)，矩阵族 \(M(\mathbf{u})\) 的权重满足
+\[
+u_\chi^{\chi(e)}u_-^{\nu(e)}u_2^{\xi(e)}
+=u_\chi^{e(e)}u_-^{\nu(e)}\left(\frac{u_2}{u_\chi}\right)^{\xi(e)}.
+\]
+因此把 \(\chi\) 作为一条额外扭曲轴并不会引入新的自由度：它等价于在 \((e,\nu,\xi)\) 的三基势上做一次线性重参数化（参见附录 \ref{app:real-input-40-logm-theta} 的命题 \ref{prop:chi-reparam-4d}）。
+特别地，在单位根 Dirichlet 扭曲（有限群角色）口径下，沿 \(\chi\) 的角色扭曲可分解为沿 \(e\) 与 \(\xi\) 的反向组合；因此在枚举 \(((m,m,p))\) 一类三轴扭曲参数时，若其中一轴取 \(\chi\)，则存在一个可消去的线性冗余方向，可把枚举空间降一维。
+\end{corollary}
+
+\begin{theorem}[真实输入 40 状态核的 rotation polytope（6 顶点闭式）]\label{thm:real-input-40-rotation-polytope-6v}
+在真实输入 40 状态核的 essential 20 状态核心上，三观测量 \((e,\nu,\xi)\)（等价地 \((\chi,\nu,\xi)\)）的 rotation set 是一个 6 顶点有理多面体；其顶点表为：
+\input{sections/generated/eq_real_input_40_rotation_polytope_vertices}
+并且该多面体等价地由 7 条尖锐 facet 不等式刻画：
+\input{sections/generated/eq_real_input_40_rotation_polytope_facets}
+其中每个顶点都由周期 \(\le 6\) 的周期轨道实现；其最短见证周期轨道可完全列举（见表 \ref{tab:real-input-40-rotation-polytope-vertices}）。
+因此对任意线性组合势 \(\theta\cdot(\bar e,\bar\nu,\bar\xi)=\theta_e\bar e+\theta_-\bar\nu+\theta_2\bar\xi\)，沿射线 \(t\theta\) 的零温缩放极限满足显式分段线性闭式：
+\input{sections/generated/eq_real_input_40_rotation_polytope_zero_temp_support}
+达到最大值的顶点（等价地：暴露面）决定零温极限的 ground states；从而零温相图只需在上述 6 条短周期轨道之间作有限比较即可。
+\end{theorem}
+
+\begin{remark}[与 \texorpdfstring{$(\bar e,\bar c,\bar n)$}{(e,c,n)} 记号的对齐]\label{rem:real-input-40-rotation-polytope-ecn}
+在定理 \ref{thm:real-input-40-rotation-polytope-6v} 中，\(\nu=\mathbf{1}_{\{t\in Q_-\}}\) 为负携带事件指标，\(\xi=\mathbf{1}_{\{d=2\}}\) 为碰撞事件指标。
+若改用频率坐标
+\[
+(\bar e,\bar c,\bar n)
+:=\bigl(\langle e\rangle,\langle\xi\rangle,\langle\nu\rangle\bigr)
+=\bigl(\langle e\rangle,\langle\mathbf{1}_{\{d=2\}}\rangle,\langle\mathbf{1}_{\{t\in Q_-\}}\rangle\bigr),
+\]
+则该 rotation polytope 的 6 个顶点等价重写为
+\[
+\boxed{
+(0,0,0),\
+\Big(\tfrac12,0,0\Big),\
+\Big(\tfrac12,0,\tfrac12\Big),\
+\Big(\tfrac12,\tfrac12,1\Big),\
+\Big(\tfrac25,\tfrac25,\tfrac25\Big),\
+\Big(\tfrac12,\tfrac13,\tfrac16\Big)
+}
+\]
+并且 7 条 facet 不等式等价写为
+\[
+\boxed{
+0\le \bar c\le \bar e \le \tfrac12,\qquad
+\bar c \le 2\bar n,\qquad
+2\bar c \le \bar e+\bar n,\qquad
+\bar n \le \bar e+\bar c,\qquad
+\bar e+5\bar c-\bar n \le 2.
+}
+\]
+其中 \(\bar c\le\bar e\) 等价于 \(\bar\chi=\bar e-\bar c\ge 0\)；
+其周期轨道级别的强形式（逐边 \(0/1\) 共边界证书）见附录 \ref{app:real-input-40-arity-charge} 的定理 \ref{thm:real-input-40-arity-charge-coboundary} 与推论 \ref{cor:real-input-40-arity-charge-conjecture-b211}。
+\end{remark}
+
+\input{sections/generated/tab_real_input_40_rotation_polytope_vertices}
+
+\begin{corollary}[\texorpdfstring{$(\bar\chi,\bar\nu)$}{(chi,nu)} 的二维 rotation set 是四边形]\label{cor:real-input-40-rotation-set-chi-nu-quad}
+令 \(\pi:\RR^3\to\RR^2\) 为坐标投影 \(\pi(\bar\chi,\bar\nu,\bar\xi)=(\bar\chi,\bar\nu)\)，并定义
+\[
+\mathrm{Rot}(\chi,\nu):=\pi\!\left(\mathrm{Rot}(\Phi^{(\chi)})\right)\subset\RR^2.
+\]
+则有完全显式的凸体闭式：
+\[
+\boxed{\;
+\mathrm{Rot}(\chi,\nu)
+=\mathrm{conv}\Bigl\{(0,0),\ \bigl(\tfrac12,0\bigr),\ \bigl(\tfrac12,\tfrac12\bigr),\ (0,1)\Bigr\}\; }.
+\]
+等价地，对任意 \(\sigma\)-不变概率测度（因此对任意长周期轨道的周期均值极限）都有两条尖锐不等式
+\[
+0\le \bar\chi\le \tfrac12,
+\qquad
+0\le \bar\nu\le 1-\bar\chi.
+\]
+并且上述四个顶点均由表 \ref{tab:real-input-40-rotation-polytope-vertices} 的短周期轨道实现。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:real-input-40-rotation-polytope-6v}（特别地，其 \((\chi,\nu,\xi)\) 坐标下的 facet 不等式）可知，对任意
+\((\bar\chi,\bar\nu,\bar\xi)\in\mathrm{Rot}(\Phi^{(\chi)})\) 都有
+\[
+\bar\xi\ge 0,\quad
+\bar\chi\ge 0,\quad
+\bar\chi+\bar\xi\le \tfrac12,\quad
+\bar\xi\le 2\bar\nu,\quad
+\bar\nu\le \bar\chi+2\bar\xi.
+\]
+由前三条得 \(0\le \bar\chi\le \tfrac12\)；由 \(\bar\xi\ge 0\) 与 \(\bar\xi\le 2\bar\nu\) 得 \(\bar\nu\ge 0\)；
+再由 \(\bar\chi+\bar\xi\le \tfrac12\) 得 \(\bar\xi\le \tfrac12-\bar\chi\)，代入 \(\bar\nu\le \bar\chi+2\bar\xi\) 得
+\(\bar\nu\le \bar\chi+2(\tfrac12-\bar\chi)=1-\bar\chi\)。
+故 \(\mathrm{Rot}(\chi,\nu)\subset\{(\bar\chi,\bar\nu):0\le \bar\chi\le \tfrac12,\ 0\le \bar\nu\le 1-\bar\chi\}\)，右端恰为所示四边形。
+
+另一方面，该四边形的四个顶点分别对应 \(\mathrm{Rot}(\Phi^{(\chi)})\) 的顶点
+\((0,0,0)\)、\((\tfrac12,0,0)\)、\((\tfrac12,\tfrac12,0)\)、\((0,1,\tfrac12)\)，均由表 \ref{tab:real-input-40-rotation-polytope-vertices} 中的周期轨道实现。
+由于 rotation set 对不变测度是凸的，故包含这四点的凸包；从而投影必包含上述四边形。
+两边夹逼即得等号成立。证毕。
+\end{proof}
+
+\begin{remark}[可复现计算链：全简单回路穷举]\label{rem:real-input-40-rotation-polytope-exact-repro}
+定理 \ref{thm:real-input-40-rotation-polytope-6v} 可由脚本 \texttt{scripts/exp\_real\_input\_40\_rotation\_polytope\_exact.py} 复现：它在 essential 20 核心上穷举全部简单回路（本核上总数为 \(178\)），计算每条回路的 rotation vector，并验证上述 V/H-表示的一致性。
+\end{remark}
+
+\begin{remark}[无回溯素数影子与覆盖的 \texorpdfstring{$L$}{L}-函数分解]\label{rem:rotation-polytope-bartholdi}
+上文的 primitive Euler 乘积基于“周期点/闭路”口径；但在“原子更新近可逆”的核语境里，更自然的素数影子常需\textbf{排除回溯}（做了又撤销）。这对应 Ihara--Bass--Hashimoto/Bartholdi 的无回溯素回路框架：对（有向/带权）图可定义加权 Bartholdi $\zeta$ 与相应的加权 $L$-函数，并给出行列式表达；在图覆盖（有限群标记）下还存在 Artin 型分解：覆盖的 $\zeta$ 可分解为各不可约表示的扭曲 $L$-函数乘积（见 \cite{ChoeKwakParkSato2007Bartholdi,Sato2008WeightedBartholdiCoverings}）。与本节的 Dirichlet 扭曲谱半径比 $\rho/\lambda$ 类似，覆盖/扭曲的谱半径比提供了“同余类偏差”的可计算指数尺度；在 Axiom A/超曲性动力系统中，这一类比进一步对应到 Chebotarev 型分布定理（参见 \cite{PollicottSharp2007Chebotarev}）。
+本稿在真实输入核上给出该路线的一组完全可抄写实例：见 \S\ref{subsec:real-input-40-geodesic-prime-shadow} 的测地 prime shadow 与 Bartholdi 回头 fugacity 二变量行列式闭式。
+\end{remark}
+
+\paragraph{\texorpdfstring{$((2,2,2))$}{(2,2,2)}：arity--Mertens 常数张量}
+记 residue 向量
+$$
+(r_1,r_2,r_3)=\bigl(\chi(\gamma)\bmod 2,\ N_-(\gamma)\bmod 2,\ N_e(\gamma)\bmod 2\bigr)\in(\ZZ/2)^3.
+$$
+令 $p_{n,r_1r_2r_3}$ 表示长度为 $n$ 的 primitive 轨道中落在该 residue 的轨道数（按轨道计）。定义 Mertens 部分和
+$$
+S_{r_1r_2r_3}(N):=\sum_{n\le N}\frac{p_{n,r_1r_2r_3}}{\lambda^n}.
+$$
+则存在常数 $C_{r_1r_2r_3}$ 使得
+$$
+S_{r_1r_2r_3}(N)=\frac{1}{8}\log N + C_{r_1r_2r_3}+o(1),
+\qquad
+\sum_{r_1,r_2,r_3\in\{0,1\}}C_{r_1r_2r_3}=\mathsf{M},
+$$
+其中总 Mertens 常数满足
+$$
+\mathsf{M}\approx 0.322903002999.
+$$
+
+\begin{remark}[Chebotarev--Mertens 常数张量的严格傅里叶可逆性与仿射坐标化]\label{prop:arity-chebotarev-mertens-fourier}
+令 $G$ 为有限交换群（在本节的具体算例中 $G=(\ZZ/m_1)\times(\ZZ/m_2)\times(\ZZ/m_3)$，其元素由 residue 向量 $(a,b,c)$ 表示），并记 $\widehat G$ 为其角色群。对每个同余类 $g\in G$，记 $p_{n,g}$ 为长度为 $n$ 的 primitive 轨道计数（按轨道计），并定义 Abel 生成函数
+$$
+P_g(r):=\sum_{n\ge 1}\frac{p_{n,g}}{\lambda^n}r^n,\qquad 0\le r<1.
+$$
+对每个角色 $\chi\in\widehat G$，定义扭曲计数与其 Abel 生成函数
+$$
+p_{n,\chi}:=\sum_{g\in G}\overline{\chi(g)}\,p_{n,g},
+\qquad
+P_\chi(r):=\sum_{n\ge 1}\frac{p_{n,\chi}}{\lambda^n}r^n.
+$$
+则有严格的离散傅里叶互换
+$$
+P_g(r)=\frac{1}{|G|}\sum_{\chi\in\widehat G}\chi(g)\,P_\chi(r).
+$$
+并且当 $r\uparrow 1$ 时，存在常数 $\log\mathfrak{M}_g$ 使得
+$$
+P_g(r)=-\frac{1}{|G|}\log(1-r)+\log\mathfrak{M}_g+o(1),
+$$
+且 $\log\mathfrak{M}_g$ 满足闭式
+$$
+\boxed{\ 
+\log\mathfrak{M}_g
+=\frac{1}{|G|}\log\mathfrak{M}
+\;+\;\frac{1}{|G|}\sum_{\chi\neq \chi_0}\chi(g)\,P_\chi(1)\ 
+}
+$$
+其中 $\chi_0$ 为平凡角色，$\log\mathfrak{M}$ 为总体（不分层）primitive Abel 有限部常数（定义 \ref{def:abel-finite-part}，以及附录 \ref{app:real-input-40-dirichlet} 的 Dirichlet 等价口径）。
+\end{remark}
+
+\begin{remark}[常数张量的归一化一致性]\label{cor:arity-chebotarev-mertens-sum}
+在上述记号下有
+$$
+\sum_{g\in G}\log\mathfrak{M}_g=\log\mathfrak{M}.
+$$
+从而（把 Abel 有限部常数换回部分和常数的口径）亦可解释本节各级常数张量满足的求和恒等式
+$
+\sum_g C_g=\mathsf{M}
+$
+为角色正交性在有限部常数层面的直接投影。
+\end{remark}
+对应的常数张量数值与最坏误差指数（$\rho/\lambda$）由脚本
+\path{scripts/exp_sync_kernel_real_input_40_arity_3d.py}
+自动生成并输出为可 \verb|\input| 的 \LaTeX\ 片段：
+\input{sections/generated/tab_real_input_40_arity_dirichlet_mertens_222}
+
+\begin{remark}[常数级边缘偏置：\texorpdfstring{$\chi\bmod 2$}{chi mod 2} 与 \texorpdfstring{$N_e\bmod 2$}{Ne mod 2}]\label{cor:real-input-40-mertens-222-marginal-bias}
+在 \(((2,2,2))\) 常数张量 \(C_{abc}\)（\(a=\chi\bmod 2,\ b=N_-\bmod 2,\ c=N_e\bmod 2\)）下，定义两条一维边缘差：
+\[
+\Delta_\chi:=\sum_{b,c}\bigl(C_{1bc}-C_{0bc}\bigr),\qquad
+\Delta_{N_e}:=\sum_{a,b}\bigl(C_{ab1}-C_{ab0}\bigr).
+\]
+则数值上（可复现输出）有
+\input{sections/generated/eq_real_input_40_arity_dirichlet_mertens_222_bias}
+从而在该核上，同余分层在指数主尺度（\(\tfrac18\log N\)）保持均匀，但在有限部常数层呈现显著净偏置；
+并且此算例中 \(N_e\bmod 2\) 的边缘偏置强于 \(\chi\bmod 2\) 的边缘偏置（\(|\Delta_{N_e}|>|\Delta_\chi|\)）。
+\end{remark}
+
+\paragraph{\texorpdfstring{$((3,2,2))$}{(3,2,2)}：把 arity 维度提升为真正 Dirichlet 分层}
+把第一维升级为
+$$
+(a,b,c)=\bigl(\chi(\gamma)\bmod 3,\ N_-(\gamma)\bmod 2,\ N_e(\gamma)\bmod 2\bigr)\in(\ZZ/3)\times(\ZZ/2)\times(\ZZ/2),
+$$
+并令 $p_{n,a,b,c}$ 为相应同余类的 primitive 轨道计数，定义
+$$
+S_{a,b,c}(N):=\sum_{n\le N}\frac{p_{n,a,b,c}}{\lambda^n}.
+$$
+则同样有
+$$
+S_{a,b,c}(N)=\frac{1}{12}\log N + C_{a,b,c}+o(1),
+\qquad
+\sum_{a\in\{0,1,2\}}\sum_{b,c\in\{0,1\}}C_{a,b,c}=\mathsf{M}.
+$$
+对应的常数张量数值与最坏误差指数（$\rho/\lambda$）同样由脚本
+\path{scripts/exp_sync_kernel_real_input_40_arity_3d.py}
+自动生成并输出为可 \verb|\input| 的 \LaTeX\ 片段：
+\input{sections/generated/tab_real_input_40_arity_dirichlet_mertens_322}
+
+\paragraph{\texorpdfstring{$((3,3,3))$}{(3,3,3)}：三维 Dirichlet--Mertens 常数张量}
+进一步把三条观测量同时提升到模 $3$ 的 Dirichlet 分层：
+$$
+(a,b,c)=\bigl(\chi(\gamma)\bmod 3,\ N_-(\gamma)\bmod 3,\ N_e(\gamma)\bmod 3\bigr)\in(\ZZ/3)^3.
+$$
+令 $p_{n,a,b,c}$ 表示长度为 $n$ 的 primitive 轨道中落在该 residue 的轨道数（按轨道计），并定义
+$$
+S_{a,b,c}(N):=\sum_{n\le N}\frac{p_{n,a,b,c}}{\lambda^n}.
+$$
+则存在常数张量 $C^{(3,3,3)}_{a,b,c}$ 使得
+$$
+S_{a,b,c}(N)=\frac{1}{27}\log N + C^{(3,3,3)}_{a,b,c}+o(1),
+\qquad
+\sum_{a,b,c\in\{0,1,2\}} C^{(3,3,3)}_{a,b,c}=\mathsf{M}.
+$$
+对应的常数张量数值（含一维边际常数、以及最坏扭曲角色索引）由脚本
+\texttt{scripts/exp\_sync\_kernel\_real\_input\_40\_arity\_3d.py}
+直接生成并输出为可 \verb|\input| 的 \LaTeX\ 片段：
+\input{sections/generated/tab_real_input_40_arity_dirichlet_mertens_333}
+
+\paragraph{指数级误差：最坏扭曲谱半径比}
+令 $\omega_3:=e^{2\pi i/3}$。对每个非平凡角色 $(j_1,j_2,j_3)\in(\ZZ/3)^3\setminus\{(0,0,0)\}$，定义三变量扭曲矩阵为
+$$
+M(\omega_3^{j_1},\omega_3^{j_2},\omega_3^{j_3})
+$$
+（即沿边对三条可加观测量分别施加角色权重），并令
+$$
+\rho_{3,3,3}
+:=
+\max_{(j_1,j_2,j_3)\neq(0,0,0)}
+\rho\bigl(M(\omega_3^{j_1},\omega_3^{j_2},\omega_3^{j_3})\bigr).
+$$
+其数值输出亦包含在上述 \verb|\input| 片段中。
+因此同余类趋于等分布的误差为指数级：
+$$
+p_{n,a,b,c}=\frac{p_n}{27}+O\!\left(\frac{\rho_{3,3,3}^n}{n}\right),
+\qquad
+p_n\sim\frac{\lambda^n}{n}.
+$$
+
+\begin{remark}[最坏扭曲的共轭对锁定：二点角色集原则]\label{rem:arity-333-worst-twist-conjugate-pair}
+在 \(((3,3,3))\) 中，非平凡角色总数为 \(3^3-1=26\)。由可复现输出（\(\rho_{3,3,3}/\lambda\approx 0.936686340205\)）可见，达到最坏谱半径的角色索引可取为
+\[
+j=(1,2,2)\quad\text{与}\quad j=(2,1,1),
+\]
+二者互为共轭对。
+因此在 Chebotarev 型指数误差包络 \(O((\rho_{3,3,3}/\lambda)^n)\) 的确定性估计中，控制全部 \(26\) 个非平凡通道的指数主尺度可无损压缩为控制该共轭对通道（及其共轭）对应的扭曲谱半径；从而“最坏指数尺度”由一对角色而非全角色集的复杂极值决定。
+\end{remark}
+

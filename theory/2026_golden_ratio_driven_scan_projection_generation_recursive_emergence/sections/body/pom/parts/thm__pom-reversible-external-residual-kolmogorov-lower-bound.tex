@@ -1,0 +1,90 @@
+\begin{theorem}[可逆外置残差的不可压缩下界：条件 Kolmogorov 复杂度]\label{thm:pom-reversible-external-residual-kolmogorov-lower-bound}
+固定 \(m\ge 1\)，令 \(\Omega_m=\{0,1\}^m\)，并令 \(X:=\Fold_m(\omega)\in X_m\) 为折叠稳定类型（\(\omega\sim\mathrm{Unif}(\Omega_m)\)）。
+记纤维多重度 \(d_m(x):=\card{\Fold_m^{-1}(x)}\)。
+\par
+设 \(R:\Omega_m\to\{0,1\}^{\ast}\) 为任意可计算函数，且映射
+\[
+\Omega_m\longrightarrow X_m\times \{0,1\}^{\ast},
+\qquad
+\omega\longmapsto \bigl(\Fold_m(\omega),\,R(\omega)\bigr)
+\]
+为可计算单射。
+令 \(K(\cdot\mid\cdot)\) 表示前缀 Kolmogorov 复杂度。
+则存在常数 \(C>0\)（与 \(m\) 与 \(R\) 无关）使得对任意 \(c\ge 1\) 成立
+\[
+\PP\!\left(
+K\bigl(R(\omega)\mid X,m\bigr)
+\ \ge\
+\left\lfloor \log_2 d_m(X)\right\rfloor-C-c
+\right)\ \ge\ 1-2^{-c}.
+\]
+因此取期望得到
+\[
+\EE\!\left[K\bigl(R(\omega)\mid X,m\bigr)\right]
+\ \ge\
+\EE\!\left[\log_2 d_m(X)\right]-O(1).
+\]
+\end{theorem}
+
+\begin{corollary}[纤维内的两侧最优性：\texorpdfstring{$K(R\mid x,m)$}{K} 与 \texorpdfstring{$\log d_m(x)$}{log d} 一致]\label{cor:pom-reversible-external-residual-kolmogorov-typical-equality}
+在定理 \ref{thm:pom-reversible-external-residual-kolmogorov-lower-bound} 的设定下，对任意固定 \(x\in X_m\) 与纤维均匀随机 \(\omega\sim \mathrm{Unif}(\Fold_m^{-1}(x))\)，存在常数 \(C_1,C_2>0\)（与 \(m\)、\(R\) 无关）使得对任意 \(t\ge 1\) 有
+\[
+\PP\!\left(
+K\bigl(R(\omega)\mid x,m\bigr)\ \le\ \left\lfloor \log_2 d_m(x)\right\rfloor-C_1-t
+\ \middle|\ X=x
+\right)\ \le\ 2^{-t},
+\]
+并且对所有 \(\omega\in\Fold_m^{-1}(x)\) 都有上界
+\[
+K\bigl(R(\omega)\mid x,m\bigr)\ \le\ \left\lceil \log_2 d_m(x)\right\rceil+C_2.
+\]
+因此 \(K(R(\omega)\mid x,m)=\log_2 d_m(x)\pm O(1)\) 在纤维上以概率 \(1-2^{-\Omega(1)}\) 成立。
+\end{corollary}
+
+\begin{proof}
+对任意固定 \(x\in X_m\)，将 \(R\) 限制到纤维 \(\Fold_m^{-1}(x)\) 上。
+由于 \(\omega\mapsto(\Fold_m(\omega),R(\omega))\) 为单射，故 \(\omega\mapsto R(\omega)\) 在该纤维上亦为单射，
+从而像集
+\[
+\mathcal R_x:=\{R(\omega):\ \omega\in\Fold_m^{-1}(x)\}
+\]
+满足 \(\card{\mathcal R_x}=d_m(x)\)。
+\par
+令 \(L\ge 0\)。由前缀 Kolmogorov 复杂度的基本计数性质，满足
+\(
+K(u\mid x,m)<L
+\)
+的二进制串 \(u\) 的个数严格小于 \(2^{L}\)。
+因此在纤维均匀分布下有
+\[
+\PP\bigl(K(R(\omega)\mid x,m)<L\mid X=x\bigr)
+\le \frac{2^{L}}{d_m(x)}.
+\]
+取
+\(
+L=\lfloor \log_2 d_m(x)\rfloor-C-c
+\)
+并令 \(C\) 足够大以吸收不同通用机选择的常数项，得到
+\[
+\PP\!\left(
+K(R(\omega)\mid x,m)
+<
+\lfloor \log_2 d_m(x)\rfloor-C-c
+\ \middle|\ X=x
+\right)\ \le\ 2^{-c}.
+\]
+对 \(x\) 解除条件并对补事件取概率即得第一式。
+第二式由第一式对 \(c\) 固定并对两端取期望得到（常数项吸收入 \(O(1)\)）。证毕。
+\end{proof}
+
+\begin{proof}[推论 \ref{cor:pom-reversible-external-residual-kolmogorov-typical-equality} 的证明]
+第一式即为定理证明中的纤维计数界（把 \(c\) 换元为 \(t\) 并保持条件 \(X=x\)）。
+\par
+对上界，固定 \(x\)。
+由定理设定的单射性，像集 \(\mathcal R_x=\{R(\omega):\omega\in\Fold_m^{-1}(x)\}\) 满足 \(\card{\mathcal R_x}=d_m(x)\)。
+给定 \(x,m\) 与一个索引 \(i\in\{1,\dots,d_m(x)\}\)，可通过枚举 \(\Omega_m\) 并筛选 \(\Fold_m(\omega)=x\) 来枚举 \(\mathcal R_x\)（按首次出现去重），从而输出第 \(i\) 个元素。
+因此每个 \(u\in\mathcal R_x\) 都可由其索引用 \(\lceil\log_2 d_m(x)\rceil+O(1)\) 比特描述，得到所示上界。
+证毕。
+\end{proof}
+
+\endinput

@@ -1,0 +1,217 @@
+\subsection{分辨率折叠映射（folding）}\label{subsec:folding-map}
+
+折叠的目标在于将任意窗口微态 $\omega=\omega_1\cdots \omega_m\in\Omega_m$ 规范化为一个合法词 $x\in X_m$。
+
+为避免“人为编号”，本文直接以 Fibonacci 权重赋予微态可审计整数值，再取 Zeckendorf 规范形：
+\begin{definition}[Fibonacci 加权值与折叠算子]\label{def:fold-word}
+对 $\omega=\omega_1\cdots\omega_m\in\Omega_m$ 定义其 Fibonacci 加权值
+\[
+N(\omega):=\sum_{k=1}^{m}\omega_k F_{k+1}\ \in\ \NN.
+\]
+令 $Z(N(\omega))=(c_1,c_2,\dots)$ 为 $N(\omega)$ 的 Zeckendorf 数字（\cite{Zeckendorf1972}），定义分辨率 $m$ 的折叠
+\[
+\Fold_m:\Omega_m\to X_m,\qquad
+\Fold_m(\omega):=\pi_m\!\bigl(Z(N(\omega))\bigr).
+\]
+\end{definition}
+
+\input{subsubsec__fold-zeckendorf-mod-topbits}
+
+\subsubsection{折叠的局部重写实现：终止、合流与顺序无关}\label{subsec:fold-local-rewrite}
+定义 \ref{def:fold-word} 以“先取值、再取 Zeckendorf 规范形”给出 $\Fold_m$。为将其落实为\textbf{局部、可执行}的归一化过程，并澄清“归约顺序不影响正规形”，我们把输入窗口嵌入到允许中间态出现冗余数字的配置空间上实施值保持重写。
+
+\paragraph{配置空间与值函数}
+令
+\[
+\mathcal{D}:=\Bigl\{a=(a_1,a_2,\dots): a_k\in\NN,\ \text{仅有限个 }a_k\neq 0\Bigr\}
+\]
+为有限支撑的非负整数数字配置。定义值同态
+\[
+\mathrm{Val}(a):=\sum_{k\ge 1} a_k F_{k+1}.
+\]
+对给定 $\omega\in\Omega_m$，记其嵌入为
+\[
+\iota_m(\omega):=(\omega_1,\dots,\omega_m,0,0,\dots)\in\mathcal{D},
+\]
+则 $\mathrm{Val}(\iota_m(\omega))=N(\omega)$。
+
+\paragraph{局部重写规则（值保持）}
+对 $a\in\mathcal{D}$，允许在满足条件时对局部模式做如下替换（其中 $e_k$ 为第 $k$ 位单位向量）：
+\begin{enumerate}
+  \renewcommand{\theenumi}{R\arabic{enumi}}
+  \renewcommand{\labelenumi}{(\theenumi)}
+  \item \label{rule:fold:adj}\textbf{相邻合并：}若 $a_k\ge 1$ 且 $a_{k+1}\ge 1$，则
+  \[
+  a\ \to\ a-e_k-e_{k+1}+e_{k+2}.
+  \]
+  \item \label{rule:fold:dedup1}\textbf{底位去重：}若 $a_1\ge 2$，则
+  \[
+  a\ \to\ a-2e_1+e_2.
+  \]
+  \item \label{rule:fold:dedup2}\textbf{第二位去重：}若 $a_2\ge 2$，则
+  \[
+  a\ \to\ a-2e_2+e_1+e_3.
+  \]
+  \item \label{rule:fold:dedupk}\textbf{一般位去重（$k\ge 3$）：}若 $a_k\ge 2$，则
+  \[
+  a\ \to\ a-2e_k+e_{k-2}+e_{k+1}.
+  \]
+\end{enumerate}
+每条规则都只改动有限个坐标，因此是严格的\textbf{局部}重写；并且它们分别对应恒等式
+\(
+F_{k+1}+F_{k+2}=F_{k+3},
+2F_2=F_3,
+2F_3=F_2+F_4,
+2F_{k+1}=F_{k-1}+F_{k+2}
+\)，因此每一步都保持 $\mathrm{Val}$ 不变。
+
+\paragraph{不可约项与 Zeckendorf 规范形}
+记 $X_\infty=\{(c_1,c_2,\dots)\in\{0,1\}^{\mathbb{N}}:\ c_kc_{k+1}=0\}$。上述规则恰在出现相邻 $11$ 或某位数字 $\ge 2$ 时可用，因此不可约项当且仅当属于 $X_\infty$。
+
+\begin{proposition}[分辨率稳定类型的逆极限本体]\label{prop:fold-inverse-limit-xm-xinfty}
+对每个 \(m\ge 1\) 令 \(r_{m+1\to m}:X_{m+1}\to X_m\) 为前缀截断 \(r_{m+1\to m}(a_1\cdots a_{m+1})=a_1\cdots a_m\)。
+则 \((X_m,r_{m+1\to m})\) 构成逆系统，并存在自然同构
+\[
+\varprojlim_m X_m\ \cong\ X_\infty,
+\]
+其中 \(X_\infty\to X_m\) 的结构映射为取前 \(m\) 位前缀。
+此外，对任意 \(m\ge 1\)，Zeckendorf 截断映射
+\(
+N\mapsto \pi_m(Z(N))
+\)
+在区间 \(\{0,1,\dots,F_{m+2}-1\}\) 上与 \(X_m\) 构成双射，其逆映射为 \(w\mapsto V_m(w)\)（\S\ref{subsec:emergent-arithmetic-zeckendorf-value-address}；并见引理 \ref{lem:zeckendorf-range-bijection}）。
+\end{proposition}
+\begin{proof}
+由于“无相邻 \(11\)”对前缀封闭，\(r_{m+1\to m}\) 良定义，从而得到逆系统。
+给定相容族 \((w_m)_{m\ge 1}\in\varprojlim_m X_m\)，对每个坐标 \(i\ge 1\) 令 \(a_i\) 为任意 \(m\ge i\) 时 \(w_m\) 的第 \(i\) 位。
+相容性保证该定义与 \(m\) 的选择无关，因此得到唯一的无限词 \(a=(a_i)_{i\ge 1}\in\{0,1\}^{\NN}\)；
+又因每个 \(w_m\) 无相邻 \(11\)，故 \(a\in X_\infty\)。
+反之，对任意 \(a\in X_\infty\)，其前缀 \(\pi_m(a)\in X_m\) 形成相容族 \((\pi_m(a))_m\in\varprojlim X_m\)。
+两构造互为逆，得到同构。
+最后一条双射性由 \(V_m\) 的范围双射与 Zeckendorf 唯一性给出（引理 \ref{lem:zeckendorf-range-bijection}）。证毕。
+\end{proof}
+
+\begin{proposition}[一致纤维集的前缀覆盖数与外置比特率上界]\label{prop:fold-consistent-fiber-hausdorff-prefix-count}
+令 \(\Omega_\infty:=\{0,1\}^{\NN}\)，并以 \(\tau_{\infty\to m}:\Omega_\infty\to\Omega_m\) 表示取前 \(m\) 位前缀。
+给定 \(x_\infty\in X_\infty\cong\varprojlim X_m\)，记 \(x_m:=\pi_m(x_\infty)\in X_m\)。
+定义与 \(x_\infty\) 相容的一致纤维集
+\[
+\mathcal F(x_\infty)
+:=\Bigl\{\omega\in\Omega_\infty:\ \Fold_m\bigl(\tau_{\infty\to m}(\omega)\bigr)=x_m\ \text{对所有 }m\ge 1\Bigr\}.
+\]
+对每个 \(m\ge 1\) 令
+\[
+N_m(x_\infty)
+:=\#\Bigl\{a\in\Omega_m:\ [a]\cap \mathcal F(x_\infty)\neq\varnothing\Bigr\}
+=\#\Bigl\{\tau_{\infty\to m}(\omega):\ \omega\in\mathcal F(x_\infty)\Bigr\},
+\]
+其中 \([a]\subset\Omega_\infty\) 为柱集。
+则有纯计数上界
+\[
+N_m(x_\infty)\ \le\ d_m(x_m):=\bigl|\Fold_m^{-1}(x_m)\bigr|.
+\]
+并且对任意 \(\omega\in\mathcal F(x_\infty)\) 都存在确定性解码使
+\[
+K\bigl(\tau_{\infty\to m}(\omega)\mid x_\infty,m\bigr)
+\ \le\
+\log_2 d_m(x_m)+O(\log m).
+\]
+因此
+\[
+\liminf_{m\to\infty}\frac{K(\tau_{\infty\to m}(\omega)\mid x_\infty,m)}{m}
+\ \le\
+\liminf_{m\to\infty}\frac{\log_2 d_m(x_m)}{m}.
+\]
+\end{proposition}
+\begin{proof}
+由定义，若 \([a]\cap\mathcal F(x_\infty)\neq\varnothing\)，则存在 \(\omega\in\mathcal F(x_\infty)\) 使 \(\tau_{\infty\to m}(\omega)=a\)，并满足 \(\Fold_m(a)=x_m\)；
+故所有可达前缀集合包含于纤维 \(\Fold_m^{-1}(x_m)\)，得到 \(N_m(x_\infty)\le d_m(x_m)\)。
+\par
+对复杂度上界：给定 \((x_\infty,m)\) 可恢复 \(x_m=\pi_m(x_\infty)\)。
+由 \(\Fold_m\) 可计算且纤维有限可枚举，可对集合 \(\Fold_m^{-1}(x_m)\) 取字典序枚举并用秩 \(i\in\{0,\dots,d_m(x_m)-1\}\) 编码元素；
+该秩可用 \(\lceil\log_2 d_m(x_m)\rceil\) 比特描述，而解释器与枚举程序只引入 \(O(\log m)\) 的开销。
+故得所示上界；最后一式由两边除以 \(m\) 并取 \(\liminf\) 得到。
+证毕。
+\end{proof}
+
+\begin{proposition}[路径分量纤维的 rank/unrank 线性时间实现]\label{prop:fold-fiber-rank-unrank-linear}
+对整数 \(\ell\ge 0\)，令
+\[
+\mathcal{L}_\ell:=\{s\in\{0,1\}^{\ell}:\ s\ \text{不含相邻子串 }11\},
+\qquad
+\card{\mathcal{L}_\ell}=F_{\ell+2}.
+\]
+存在确定性算法 \(\mathrm{rank}_\ell:\mathcal{L}_\ell\to[0,F_{\ell+2}-1]\) 与 \(\mathrm{unrank}_\ell:[0,F_{\ell+2}-1]\to\mathcal{L}_\ell\)，互为逆，并且二者均在 \(O(\ell)\) 时间内可计算。
+进一步，若某纤维在某一规范双射下分解为有限直积
+\[
+\Fold_m^{-1}(x)\ \cong\ \prod_{i=1}^{r}\mathcal{L}_{\ell_i},
+\qquad
+d_m(x)=\prod_{i=1}^{r}F_{\ell_i+2},
+\]
+则可用混合进制分解把纤维内的 rank/unrank 归约为分量 rank/unrank，从而在 \(O(\sum_i\ell_i)=O(m)\) 时间内实现纤维内的 rank/unrank。
+\end{proposition}
+\begin{proof}
+对 \(\mathcal{L}_\ell\) 的 rank/unrank 用 Fibonacci 递推实现。
+对任意 \(s=s_1\cdots s_\ell\in\mathcal{L}_\ell\)，若 \(s_1=0\)，则其在字典序下与 \(\mathcal{L}_{\ell-1}\) 的尾串秩一致；若 \(s_1=1\)，则必有 \(s_2=0\)，并且以 \(0\) 起始的合法串共有 \(\card{\mathcal{L}_{\ell-1}}=F_{\ell+1}\) 个，故
+\[
+\mathrm{rank}_\ell(s)=F_{\ell+1}+\mathrm{rank}_{\ell-2}(s_3\cdots s_\ell).
+\]
+反秩同理：给定 \(j\in[0,F_{\ell+2}-1]\)，若 \(j<F_{\ell+1}\) 则取首位为 \(0\) 并递归于 \(\ell-1\)；否则取前两位为 \(10\) 并递归于 \(\ell-2\) 的余数 \(j-F_{\ell+1}\)。
+每步长度减少 \(1\) 或 \(2\)，故时间为 \(O(\ell)\)。
+\par
+对直积情形，令 \(N_i:=F_{\ell_i+2}\)。
+任意 \(j\in[0,\prod_i N_i-1]\) 唯一分解为混合进制坐标
+\(
+j=\sum_i j_i\prod_{k<i}N_k
+\)
+（其中 \(0\le j_i<N_i\)）。
+对每个分量执行 \(\mathrm{unrank}_{\ell_i}(j_i)\) 并拼接即得全局 unrank；rank 由逐分量 rank 得到 \((j_i)\) 后再作同一混合进制合成。
+总时间为 \(O(\sum_i\ell_i)=O(m)\)。证毕。
+\end{proof}
+
+\begin{proposition}[终止性、局部合流与合流（纽曼引理）]\label{prop:fold-rewrite-newman}
+上述重写系统在 $\mathcal{D}$ 上强终止，且局部合流；由纽曼引理可得其合流性。因此每个 $a\in\mathcal{D}$ 的正规形存在且唯一，记为 $\mathrm{NF}(a)\in X_\infty$，并满足
+\[
+\mathrm{Val}(\mathrm{NF}(a))=\mathrm{Val}(a).
+\]
+\end{proposition}
+
+\begin{proof}
+\textbf{（终止性）}令 $A(a)=\sum_{k\ge 1} a_k$、$B(a)=\sum_{k\ge 1} k\,a_k$、$C(a)=a_2$，并设 $\mu(a)=(A(a),B(a),C(a))$ 按字典序比较。则规则 (\ref{rule:fold:adj}) 与 (\ref{rule:fold:dedup1}) 使 $A$ 减少；规则 (\ref{rule:fold:dedupk})（$k\ge 3$）使 $B$ 减少；规则 (\ref{rule:fold:dedup2}) 保持 $A,B$ 不变但使 $C$ 减少。故每步重写都严格降低 $\mu$，系统强终止。
+
+\textbf{（局部合流）}若 $a$ 有两条一步归约 $a\to a_1,a_2$，则两侧继续归约到不可约形后都落在 $X_\infty$，且由于每步保持 $\mathrm{Val}$，两不可约形同值；由 Zeckendorf 唯一性它们相同，于是两支可汇合。
+
+\textbf{（合流）}由纽曼引理（强终止 + 局部合流 $\Rightarrow$ 合流）即得结论。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$\Fold_m$}{Fold\_m} 的归约顺序无关实现]\label{cor:foldm-order-indep}
+对任意 $\omega\in\Omega_m$，
+\[
+\Fold_m(\omega)\ =\ \pi_m\bigl(\mathrm{NF}(\iota_m(\omega))\bigr),
+\]
+且右端与归约时选取规则/位置的顺序无关。
+\end{corollary}
+
+\begin{remark}[规范截面与可计算性]\label{rem:fold-normal-form-computable-section}
+命题 \ref{prop:fold-rewrite-newman} 给出一个可计算的规范截面：对任意 $a\in\mathcal{D}$，正规形 $\mathrm{NF}(a)\in X_\infty$ 唯一存在且与归约顺序无关。因此，当“第三参数”仅对应于等价类中代表的选择（规范冗余）时，无需显式记录该参数；可通过求正规形在多项式时间内选出唯一代表（分辨率口径为线性，见命题 \ref{prop:fold-complexity}）。需要强调的是，该消去仅恢复稳定代表，不恢复同一纤维内的微态残差。
+\end{remark}
+
+\input{thm__fold-microstate-residual-window-reachability}
+
+\begin{proposition}[折叠的规范性、幂等性与满射性]\label{prop:fold-basic}
+折叠算子 $\Fold_m$ 良定义且满足：
+\begin{enumerate}
+\normalfont
+  \item \textbf{（规范性）} $\Fold_m(\omega)\in X_m$；
+  \item \textbf{（幂等性）} 若 $\omega\in X_m$，则 $\Fold_m(\omega)=\omega$；
+  \item \textbf{（满射性）} $\Fold_m:\Omega_m\twoheadrightarrow X_m$ 为满射。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\textbf{（规范性）}由定义 \ref{def:fold-word}，$Z(N(\omega))\in X_\infty$，故 $\pi_m(Z(N(\omega)))\in X_m$。
+
+\textbf{（幂等性）}若 $\omega\in X_m$，令 $N=\sum_{k=1}^m \omega_k F_{k+1}$。由于 $\omega$ 已是合法 Zeckendorf 数字的长度-$m$ 前缀，且 Zeckendorf 表示唯一，故 $Z(N)$ 的前 $m$ 位必等于 $\omega$，从而 $\Fold_m(\omega)=\omega$。
+
+\textbf{（满射性）}对任意 $x\in X_m$，取 $\omega=x\in\Omega_m$，由幂等性得 $\Fold_m(\omega)=x$，故 $\Fold_m$ 满射。
+\end{proof}

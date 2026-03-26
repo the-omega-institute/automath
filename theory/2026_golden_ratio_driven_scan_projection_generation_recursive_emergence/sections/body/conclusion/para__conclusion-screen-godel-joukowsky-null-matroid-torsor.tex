@@ -1,0 +1,397 @@
+\paragraph{屏幕余秩、Gödel 病态分裂、张量 Joukowsky 盲性与碰撞扭量}
+在观察者时空 forcing 骨架、部分屏幕观测的相对顶维同调刻画、边界 Gödelization 的可计算可逆性以及 Joukowsky 椭圆族的解析矩盲性都已经建立之后，还可把这几条原本分散的接口再压缩成一条更高阶的结构链：屏幕补全成本实际上是一个 graphic matroid 的余秩函数；边界 Gödel 全息在算法复杂度上是充分的，却在度量意义上指数病态；Joukowsky 乘积族的全部全纯矩对尺度参数完全失明，而最小解除盲性的外置维数恰等于参数维数；最后，碰撞型 \(\mathsf{NULL}\) 不是布尔空值，而是由屏幕核所张成的自由阿贝尔扭量。
+
+\begin{theorem}[屏幕审计成本的图拟阵余秩表示与超模性]\label{thm:conclusion-screen-graphic-matroid-corank-supermodularity}
+固定分辨率 \(m\) 与维数 \(n\)。设 \(\Gamma=(V,E)\) 为定理 \ref{thm:spg-screen-kernel-connected-components} 中由全部顶维胞腔与外部顶点 \(\infty\) 组成的完整屏幕图。对任意可见屏幕 \(S\subseteq E\)，记 \(\Gamma_S:=(V,S)\)，并定义其最小审计补全成本
+\[
+\lambda(S):=\min_{(R,r^S)}\cdim(R).
+\]
+再记 \(r_{\mathrm{gr}}\) 为 \(\Gamma\) 的 graphic matroid 在边集 \(E\) 上的秩函数。则有精确公式
+\[
+\lambda(S)=c(\Gamma_S)-1=|V|-1-r_{\mathrm{gr}}(S).
+\]
+因而：
+\begin{enumerate}
+  \item \(\lambda(\varnothing)=|V|-1\)，\(\lambda(E)=0\)；
+  \item 若 \(S\subseteq T\subseteq E\)，则 \(\lambda(T)\le \lambda(S)\)；
+  \item \(\lambda\) 为超模函数，即对任意 \(S,T\subseteq E\) 都有
+        \[
+        \lambda(S\cap T)+\lambda(S\cup T)\ge \lambda(S)+\lambda(T).
+        \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+由推论 \ref{cor:spg-screen-injectivity-and-audit-cost-components}，
+\[
+\lambda(S)=c(\Gamma_S)-1.
+\]
+另一方面，graphic matroid 的秩公式给出
+\[
+r_{\mathrm{gr}}(S)=|V|-c(\Gamma_S),
+\]
+故
+\[
+\lambda(S)=|V|-1-r_{\mathrm{gr}}(S).
+\]
+第 \(1\) 条对应于 \(\Gamma_\varnothing\) 有 \(|V|\) 个分量而 \(\Gamma_E=\Gamma\) 连通。第 \(2\) 条由 \(r_{\mathrm{gr}}\) 的单调性立得。第 \(3\) 条则由拟阵秩函数的次模性
+\[
+r_{\mathrm{gr}}(S)+r_{\mathrm{gr}}(T)\ge r_{\mathrm{gr}}(S\cap T)+r_{\mathrm{gr}}(S\cup T)
+\]
+代入上述余秩表示后立即得到。证毕。
+\end{proof}
+
+\begin{theorem}[延迟证书包的相对秩削减律与闭包判据]\label{thm:conclusion-screen-rank-gain-closure-diminishing-returns}
+沿用定理 \ref{thm:conclusion-screen-graphic-matroid-corank-supermodularity} 的记号。对任意 \(S\subseteq E\) 与补充屏幕包 \(A\subseteq E\setminus S\)，定义补全收益
+\[
+\Delta_A\lambda(S):=\lambda(S)-\lambda(S\cup A).
+\]
+则有精确公式
+\[
+\Delta_A\lambda(S)=r_{\mathrm{gr}}(S\cup A)-r_{\mathrm{gr}}(S).
+\]
+特别地：
+\begin{enumerate}
+  \item 对单边 \(e\in E\setminus S\)，有
+        \[
+        \Delta_{\{e\}}\lambda(S)\in\{0,1\};
+        \]
+  \item \(\Delta_{\{e\}}\lambda(S)=1\) 当且仅当 \(e\) 的两个端点位于 \(\Gamma_S\) 的不同连通分量；
+  \item 定义
+        \[
+        \operatorname{cl}_{\lambda}(S):=\{e\in E:\lambda(S\cup\{e\})=\lambda(S)\},
+        \]
+        则 \(\operatorname{cl}_{\lambda}(S)\) 恰为 graphic matroid 对 \(S\) 的闭包；
+  \item 若 \(S\subseteq T\subseteq E\) 且 \(e\notin T\)，则有边际收益递减律
+        \[
+        \Delta_{\{e\}}\lambda(S)\ge \Delta_{\{e\}}\lambda(T).
+        \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-screen-graphic-matroid-corank-supermodularity}，
+\[
+\lambda(S)=|V|-1-r_{\mathrm{gr}}(S),
+\]
+故
+\[
+\Delta_A\lambda(S)=r_{\mathrm{gr}}(S\cup A)-r_{\mathrm{gr}}(S).
+\]
+这就给出了主公式。
+
+对单边情形，graphic matroid 的秩增量至多为 \(1\)，故只能取 \(0\) 或 \(1\)。并且增量为 \(1\) 当且仅当 \(e\) 不在 \(S\) 的闭包中；对图拟阵来说，这等价于 \(e\) 连接了 \(\Gamma_S\) 的两个不同连通分量。第 \(3\) 条只是闭包定义的直接翻译。最后，第 \(4\) 条由拟阵秩的次模性等价推出，即边际秩增量沿包含关系单调递减。证毕。
+\end{proof}
+
+\begin{theorem}[算法充分性与度量稳定性的指数分离]\label{thm:conclusion-godel-algorithmic-sufficiency-metric-instability-separation}
+固定 \(n\ge 1\)。对每个分辨率 \(m\)，存在一族边界 Gödel 编码
+\[
+\Phi_m:C_n(\mathcal Q_m;\FF_2)\to\NN
+\]
+满足：
+\begin{enumerate}
+  \item \(\Phi_m\) 在其像上可计算可逆；
+  \item 存在常数 \(C>0\)，与 \(m\) 及输入无关，使得对任意 \(u\in C_n(\mathcal Q_m;\FF_2)\)，都有
+        \[
+        \bigl|K(\Phi_m(u)\mid n,m)-K(u\mid n,m)\bigr|\le C,
+        \qquad
+        K(u\mid \Phi_m(u),n,m)\le C.
+        \]
+\end{enumerate}
+然而，对任意线性左逆
+\[
+L_m:C_{n-1}(\mathcal Q_m;\RR)\to C_n(\mathcal Q_m;\RR),
+\qquad
+L_m\partial_n=\mathrm{Id},
+\]
+都必有算子范数下界
+\[
+\|L_m\|_{2\to 2}\ge \frac{1}{\sqrt{2n}}\,2^{m/2}.
+\]
+因此，不存在一族同时满足“精确无损”“可计算反演”与“多项式条件数”的线性全息反演器。
+\end{theorem}
+
+\begin{proof}
+前半部正是定理 \ref{thm:spg-stokes-godel-algorithmic-holographic-completeness} 的结论：边界 Gödelization 在固定 \((m,n)\) 下给出一个可计算双向字典，并把 Kolmogorov 复杂度守恒到 \(O(1)\) 常数。
+
+后半部则由定理 \ref{thm:spg-dyadic-top-dimensional-holographic-inversion-exponential-ill-conditioning} 直接给出。该定理表明，任意线性左逆都满足
+\[
+\|L_m\|_{2\to 2}\ge \frac{1}{\sqrt{2n}}\,2^{m/2}.
+\]
+若反设存在 \(\|L_m\|_{2\to 2}\le m^C\) 的多项式条件数族，则与此指数下界矛盾。故算法上的可逆充分性与度量上的稳定可逆性严格分离。证毕。
+\end{proof}
+
+\begin{corollary}[噪声阈值下的统一线性重构不可能性]\label{cor:conclusion-godel-noise-threshold-no-uniform-linear-reconstruction}
+在定理 \ref{thm:conclusion-godel-algorithmic-sufficiency-metric-instability-separation} 的设定下，对任意固定目标精度 \(\delta>0\)，若观测噪声满足
+\[
+\|\eta_m\|_2\gg 2^{-m/2},
+\]
+则不存在统一的线性重构规则能够在全部分辨率上保持
+\[
+\|L_m\eta_m\|_2\le \delta.
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-godel-algorithmic-sufficiency-metric-instability-separation}，
+\[
+\|L_m\eta_m\|_2\ge \frac{1}{\sqrt{2n}}\,2^{m/2}\|\eta_m\|_2.
+\]
+若 \(\|\eta_m\|_2\gg 2^{-m/2}\)，则右端不能在 \(m\to\infty\) 下被统一压到任意固定的 \(\delta>0\) 之内。故此类统一线性重构不可能存在。证毕。
+\end{proof}
+
+\begin{theorem}[Joukowsky 乘积族的张量盲性与最小径向充分性]\label{thm:conclusion-joukowsky-product-analytic-blindness-minimal-radial-sufficiency}
+对任意整数 \(k\ge 1\)，取参数
+\[
+\mathbf r=(r_1,\dots,r_k)\in(1,\infty)^k,
+\qquad
+\mu_{\mathbf r}:=\mu_{r_1}\otimes\cdots\otimes\mu_{r_k},
+\]
+其中 \(\mu_{r_j}\) 为一维 Joukowsky 椭圆推前测度。则：
+\begin{enumerate}
+  \item 对任意全纯多项式
+        \[
+        p\in\CC[w_1,\dots,w_k],
+        \]
+        其矩泛函
+        \[
+        \varphi_{\mathbf r}(p):=\int_{\CC^k}p\,\dd\mu_{\mathbf r}
+        \]
+        与 \(\mathbf r\) 无关；
+  \item 映射
+        \[
+        \mathbf r\longmapsto \mathbf R_2(\mathbf r):=
+        \bigl(r_1^2+r_1^{-2},\dots,r_k^2+r_k^{-2}\bigr)
+        \]
+        在 \((1,\infty)^k\) 上为单射，且每个坐标可由
+        \[
+        r_j=
+        \left(
+        \frac{R_{2,j}+\sqrt{R_{2,j}^2-4}}{2}
+        \right)^{1/2}
+        \]
+        唯一恢复；
+  \item 任意企图在全部全纯矩之外仅再加入 \(d<k\) 个连续实标量观测而分离整个参数族的方案都不可能；
+  \item 因而，恰需 \(k\) 个独立径向标量观测，方可极小地解除该盲性。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+若
+\[
+p(w)=w_1^{a_1}\cdots w_k^{a_k},
+\]
+则
+\[
+\varphi_{\mathbf r}(p)
+=
+\prod_{j=1}^{k}\int_{\CC} w_j^{a_j}\,\dd\mu_{r_j}(w_j).
+\]
+由推论 \ref{cor:prime-register-joukowsky-analytic-moments}，每个一维解析矩都与 \(r_j\) 无关，故乘积亦与 \(\mathbf r\) 无关；线性延拓即得第 \(1\) 条。
+
+第 \(2\) 条逐坐标由定理 \ref{thm:conclusion-analytic-holography-inversion-rigidity} 给出：一维参数 \(r_j\) 可由二阶径向矩 \(R_{2,j}=r_j^2+r_j^{-2}\) 唯一恢复。因而 \(\mathbf R_2\) 在 \((1,\infty)^k\) 上单射。
+
+若存在 \(d<k\) 个连续实标量观测 \(F_1,\dots,F_d\) 能分离整个参数族，则得到连续单射
+\[
+F:(1,\infty)^k\to\RR^d,
+\qquad
+F(\mathbf r):=(F_1(\mathbf r),\dots,F_d(\mathbf r)).
+\]
+但 \((1,\infty)^k\) 是 \(k\)-维流形，而连续单射到 \(\RR^d\)（\(d<k\)）与拓扑维数单调性矛盾。故第 \(3\) 条成立。
+
+最后，第 \(2\) 条已经构造出 \(k\) 个连续径向观测 \((R_{2,1},\dots,R_{2,k})\) 并实现了参数的唯一反演，故第 \(4\) 条成立。证毕。
+\end{proof}
+
+\begin{corollary}[乘积 Joukowsky 族的最小分离 \texorpdfstring{$*$}{*}-代数扩张]\label{cor:conclusion-joukowsky-product-minimal-star-algebra-resolution}
+令
+\[
+\mathcal H_k:=\CC[w_1,\dots,w_k].
+\]
+考虑所有有限生成交换 \(^*\)-代数
+\[
+\mathcal H_k\subseteq \mathcal A\subseteq C(\CC^k)
+\]
+并要求状态族 \(\{\varphi_{\mathbf r}\}_{\mathbf r\in(1,\infty)^k}\) 在 \(\mathcal A\) 上可分离。则：
+\begin{enumerate}
+  \item 任意这样的 \(\mathcal A\) 至少需要 \(k\) 个额外自伴生成元；
+  \item 代数
+        \[
+        \mathcal A_{\min}:=\CC\bigl[w_1,\dots,w_k,\ |w_1|^2,\dots,|w_k|^2\bigr]
+        \]
+        达到该下界；
+  \item 因而 \(\mathcal A_{\min}\) 是乘积 Joukowsky 参数族的最小分离扩张。
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+全纯部分 \(\mathcal H_k\) 按定理 \ref{thm:conclusion-joukowsky-product-analytic-blindness-minimal-radial-sufficiency} 第 \(1\) 条对参数完全失明，故全部分离信息只能由额外自伴生成元提供。若其数目少于 \(k\)，则它们给出到某个 \(\RR^d\)（\(d<k\)）的连续分离映射，与定理 \ref{thm:conclusion-joukowsky-product-analytic-blindness-minimal-radial-sufficiency} 第 \(3\) 条矛盾。
+
+另一方面，\((|w_1|^2,\dots,|w_k|^2)\) 在状态 \(\mu_{\mathbf r}\) 下的期望正是 \(\mathbf R_2(\mathbf r)\)，并由定理 \ref{thm:conclusion-joukowsky-product-analytic-blindness-minimal-radial-sufficiency} 第 \(2\) 条唯一恢复 \(\mathbf r\)。故 \(\mathcal A_{\min}\) 确实分离该参数族，并达到最小生成元数。证毕。
+\end{proof}
+
+\begin{theorem}[碰撞型 \texorpdfstring{$\mathsf{NULL}$}{NULL} 的拓扑化：完成纤维的同调扭量]\label{thm:conclusion-collision-null-topological-torsor}
+固定分辨率 \(m,n\) 与部分屏幕 \(S\subseteq E\)。设
+\[
+f_S:C_n(\mathcal Q_m;\ZZ)\to \ZZ^S
+\]
+为定理 \ref{thm:spg-partial-boundary-screen-kernel-relative-homology} 的部分边界观测算子。对任意可见边界数据 \(y\in\operatorname{im}f_S\)，定义其完成纤维
+\[
+\mathcal C_S(y):=f_S^{-1}(y).
+\]
+则：
+\begin{enumerate}
+  \item 若 \(\mathcal C_S(y)\neq\varnothing\)，则 \(\mathcal C_S(y)\) 是 \(\ker f_S\) 的主齐次空间；
+  \item 存在自然同构
+        \[
+        \ker f_S\cong H_n(\mathcal Q_m,A_{\neg S};\ZZ)\cong \ZZ^{\,c(\Gamma_S)-1},
+        \]
+        因而 \(\mathcal C_S(y)\) 是一个自由阿贝尔扭量；
+  \item 在推论 \ref{cor:null-trichotomy-local-section} 的三分解语言中，一旦语义空值与协议空值都已排除，剩余的碰撞型 \(\mathsf{NULL}\) 正对应于该扭量的非平凡性；
+  \item 碰撞型 \(\mathsf{NULL}\) 消失当且仅当 \(\Gamma_S\) 连通。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+若 \(\mathcal C_S(y)\neq\varnothing\)，取任意 \(x_0\in\mathcal C_S(y)\)。则
+\[
+\mathcal C_S(y)=x_0+\ker f_S,
+\]
+故 \(\mathcal C_S(y)\) 是 \(\ker f_S\) 的主齐次空间。第一条得证。
+
+第二条由定理 \ref{thm:spg-partial-boundary-screen-kernel-relative-homology} 与定理 \ref{thm:spg-screen-kernel-connected-components} 复合即得：
+\[
+\ker f_S\cong H_n(\mathcal Q_m,A_{\neg S};\ZZ)\cong \ZZ^{\,c(\Gamma_S)-1}.
+\]
+于是 \(\mathcal C_S(y)\) 不是单纯的“多解集”，而是一个自由阿贝尔扭量。
+
+对第 \(3\) 条，推论 \ref{cor:null-trichotomy-local-section} 已把 \(\mathsf{NULL}\) 分为语义、协议与碰撞三类。当前在 \(y\in\operatorname{im}f_S\) 的前提下，语义未定义与协议不相容都已被排除，于是剩余的失败只能来自同一可见数据允许多个 bulk completion；这恰等价于 \(\mathcal C_S(y)\) 作为 torsor 非平凡，亦即 \(\ker f_S\neq 0\)。
+
+最后，由 \(\ker f_S\cong \ZZ^{\,c(\Gamma_S)-1}\)，碰撞型 \(\mathsf{NULL}\) 消失当且仅当 \(\ker f_S=0\)，亦即当且仅当 \(c(\Gamma_S)=1\)，等价于 \(\Gamma_S\) 连通。证毕。
+\end{proof}
+
+\begin{theorem}[延迟补全的碰撞扭量商与秩削减律]\label{thm:conclusion-delayed-completion-collision-torsor-rank-law}
+沿用定理 \ref{thm:conclusion-screen-graphic-matroid-corank-supermodularity} 与定理 \ref{thm:conclusion-collision-null-topological-torsor} 的记号。设 \(S\subseteq T\subseteq E\)，且 \(y_T\in\operatorname{im}f_T\) 在限制映射下投影为 \(y_S\in\operatorname{im}f_S\)。则存在自然嵌入
+\[
+\mathcal C_T(y_T)\hookrightarrow \mathcal C_S(y_S),
+\]
+并且有短正合列
+\[
+0\longrightarrow \ker f_T\longrightarrow \ker f_S\longrightarrow \ker f_S/\ker f_T\longrightarrow 0,
+\qquad
+\ker f_S/\ker f_T\cong \ZZ^{\,\lambda(S)-\lambda(T)}.
+\]
+特别地，若 \(T=S\cup A\)，则
+\[
+\operatorname{rank}\bigl(\ker f_S/\ker f_T\bigr)
+=
+\lambda(S)-\lambda(T)
+=
+r_{\mathrm{gr}}(T)-r_{\mathrm{gr}}(S).
+\]
+换言之，延迟送达的证书包 \(A\) 所消灭的并非某种模糊“未知性”，而恰好是
+\[
+r_{\mathrm{gr}}(T)-r_{\mathrm{gr}}(S)
+\]
+个彼此独立的碰撞同调方向。
+\end{theorem}
+
+\begin{proof}
+因为 \(S\subseteq T\)，算子 \(f_T\) 比 \(f_S\) 观测更多坐标，故
+\[
+\ker f_T\subseteq \ker f_S.
+\]
+若 \(x\in\mathcal C_T(y_T)\)，则 \(f_T(x)=y_T\) 立即推出 \(f_S(x)=y_S\)，故存在自然嵌入
+\[
+\mathcal C_T(y_T)\hookrightarrow \mathcal C_S(y_S).
+\]
+
+两核都是自由阿贝尔群，其商 \(\ker f_S/\ker f_T\) 亦自由阿贝尔；其秩等于秩差：
+\[
+\operatorname{rank}(\ker f_S/\ker f_T)
+=
+\operatorname{rank}\ker f_S-\operatorname{rank}\ker f_T.
+\]
+由推论 \ref{cor:spg-partial-boundary-min-audit-cost-kernel-rank} 与定理 \ref{thm:conclusion-screen-graphic-matroid-corank-supermodularity}，
+\[
+\operatorname{rank}\ker f_S=\lambda(S),
+\qquad
+\operatorname{rank}\ker f_T=\lambda(T).
+\]
+故
+\[
+\ker f_S/\ker f_T\cong \ZZ^{\,\lambda(S)-\lambda(T)}.
+\]
+最后把定理 \ref{thm:conclusion-screen-graphic-matroid-corank-supermodularity} 中
+\[
+\lambda(U)=|V|-1-r_{\mathrm{gr}}(U)
+\]
+分别代入 \(U=S,T\)，便得
+\[
+\lambda(S)-\lambda(T)=r_{\mathrm{gr}}(T)-r_{\mathrm{gr}}(S).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[离散同调歧义与连续尺度盲性的加性最小外置定理]\label{thm:conclusion-screen-joukowsky-additive-minimal-externalization}
+固定一个可接受屏幕 \(S\) 与一条非空纤维 \(f_S^{-1}(y)\)。设
+\[
+\beta:=\beta_n(\mathcal Q_m,A_{\neg S};\FF_2),
+\qquad
+\mathbf r=(r_1,\dots,r_k)\in (1,\infty)^k.
+\]
+考虑复合隐藏状态空间
+\[
+\mathcal H_{S,k}(y):=f_S^{-1}(y)\times (1,\infty)^k.
+\]
+称一组可分离的分离式审计架构由一对映射
+\[
+a:f_S^{-1}(y)\to \{0,1\}^b,
+\qquad
+b:(1,\infty)^k\to \RR^d
+\]
+给出，若乘积映射
+\[
+\Psi(x,\mathbf r):=(a(x),b(\mathbf r))
+\]
+在 \(\mathcal H_{S,k}(y)\) 上单射。则：
+\begin{enumerate}
+  \item 任意此类架构都必须满足
+        \[
+        b\ge \beta,
+        \qquad
+        d\ge k;
+        \]
+  \item 该下界是锐的：取 \(b=\beta\)、\(d=k\) 可以实现单射；
+  \item 若进一步要求 \(b(\mathbf r)\) 完全因子化经由 \(k\)-重 Joukowsky 乘积族的全纯多项式矩，则对任意 \(b,d\) 都不存在可分离架构。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+先固定任意 \(\mathbf r_0\in (1,\infty)^k\)。若 \(\Psi\) 在 \(\mathcal H_{S,k}(y)\) 上单射，则
+\[
+x\longmapsto \Psi(x,\mathbf r_0)=(a(x),b(\mathbf r_0))
+\]
+在有限集合 \(f_S^{-1}(y)\) 上也必须单射，故 \(a\) 本身必须单射。由定理 \ref{thm:conclusion-screen-exact-binary-audit-homological-bit-bound}，这立即推出
+\[
+b\ge \beta.
+\]
+
+再固定任意 \(x_0\in f_S^{-1}(y)\)。由同样的单射性，
+\[
+\mathbf r\longmapsto \Psi(x_0,\mathbf r)=(a(x_0),b(\mathbf r))
+\]
+在 \((1,\infty)^k\) 上必须单射，因此 \(b:(1,\infty)^k\to \RR^d\) 为连续单射。由于 \((1,\infty)^k\) 是 \(k\)-维流形，按拓扑维数单调性，不存在到 \(\RR^d\) 的连续单射当 \(d<k\)。故
+\[
+d\ge k.
+\]
+
+这两个下界都是可达的。离散部分令 \(a\) 取定理 \ref{thm:conclusion-screen-exact-binary-audit-homological-bit-bound} 中的最优 \(\beta\)-比特核坐标编码；连续部分取
+\[
+b(\mathbf r):=\bigl(r_1^2+r_1^{-2},\dots,r_k^2+r_k^{-2}\bigr).
+\]
+由推论 \ref{cor:conclusion-joukowsky-product-minimal-star-algebra-resolution} 背后的逐坐标径向反演公式，每个 \(r_j\) 都可由对应分量唯一恢复，故该 \(\Psi\) 的确是单射。
+
+最后，若 \(b(\mathbf r)\) 完全因子化经由 \(k\)-重 Joukowsky 乘积族的全纯多项式矩，则由定理 \ref{thm:conclusion-joukowsky-product-analytic-blindness-minimal-radial-sufficiency}，所有这类矩对 \(\mathbf r\) 都与 \(\mathbf r\) 无关，于是 \(b\) 必为常值映射，不可能在 \((1,\infty)^k\) 上单射。故此类可分离架构不存在。证毕。
+\end{proof}
+
+\endinput

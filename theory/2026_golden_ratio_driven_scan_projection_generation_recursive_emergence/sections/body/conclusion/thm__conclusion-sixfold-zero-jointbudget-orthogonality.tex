@@ -1,0 +1,387 @@
+\begin{theorem}[六倍窗零见证随机命中的精确指数阈值]\label{thm:conclusion-sixfold-zero-random-hit-sharp-threshold}
+在定理 \ref{thm:conclusion-sixfold-zero-witness-square-root-law} 的六倍窗设定下，记
+\[
+p_m:=\frac{|\mathcal Z_m|}{M}.
+\]
+对任意固定 \(\theta\ge 0\)，定义
+\[
+\mathsf P_m(\theta):=1-(1-p_m)^{\lfloor M^\theta\rfloor}.
+\]
+则有严格二相律
+\[
+\theta<\frac12 \Longrightarrow \mathsf P_m(\theta)\to 0,
+\qquad
+\theta>\frac12 \Longrightarrow \mathsf P_m(\theta)\to 1.
+\]
+因此，六倍窗零见证的随机命中阈值在指数尺度上精确等于 \(1/2\)。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-sixfold-zero-witness-square-root-law}，
+\[
+5^{-1/4}M^{-1/2}(1+o(1))\le p_m\le M^{-1/2+o(1)}.
+\]
+若 \(\theta<1/2\)，则
+\[
+\lfloor M^\theta\rfloor p_m\le M^{\theta-1/2+o(1)}\to 0.
+\]
+由并合界，
+\[
+\mathsf P_m(\theta)\le \lfloor M^\theta\rfloor p_m\to 0.
+\]
+
+若 \(\theta>1/2\)，则
+\[
+\lfloor M^\theta\rfloor p_m\ge 5^{-1/4}M^{\theta-1/2}(1+o(1))\to \infty.
+\]
+因此
+\[
+\mathsf P_m(\theta)
+=1-(1-p_m)^{\lfloor M^\theta\rfloor}
+\ge 1-\exp\!\bigl(-\lfloor M^\theta\rfloor p_m\bigr)\to 1.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[固定置信度的最小抽样复杂度为半速率阶]\label{cor:conclusion-sixfold-zero-fixed-confidence-sample-complexity}
+对任意固定 \(\eta\in(0,1)\)，定义
+\[
+N_m(\eta):=\min\{N\ge 1:1-(1-p_m)^N\ge \eta\}.
+\]
+则
+\[
+\lim_{\substack{m\to\infty\\ m+2\equiv 0\ (\mathrm{mod}\ 6)}}
+\frac{\log N_m(\eta)}{\log M}
+=
+\frac12.
+\]
+\end{corollary}
+
+\begin{proof}
+任取 \(\varepsilon>0\)。由定理 \ref{thm:conclusion-sixfold-zero-random-hit-sharp-threshold}，
+\[
+1-(1-p_m)^{M^{1/2-\varepsilon}}\to 0<\eta,
+\]
+故对充分大的 \(m\) 有
+\[
+N_m(\eta)>M^{1/2-\varepsilon}.
+\]
+同理，
+\[
+1-(1-p_m)^{M^{1/2+\varepsilon}}\to 1>\eta,
+\]
+故对充分大的 \(m\) 有
+\[
+N_m(\eta)\le M^{1/2+\varepsilon}.
+\]
+夹逼并令 \(\varepsilon\downarrow 0\) 即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[零见证命中计数的稀疏相与自平均相]\label{prop:conclusion-sixfold-zero-hitcount-sparse-selfaveraging}
+设 \(k_1,\dots,k_N\) 为 \(\ZZ/(M\ZZ)\) 上独立均匀样本，并记命中计数
+\[
+H_m(N):=\sum_{j=1}^{N}\mathbf 1_{\{k_j\in \mathcal Z_m\}}.
+\]
+则对任意固定 \(\theta\ge 0\)：
+\begin{enumerate}
+  \item 若 \(\theta<1/2\)，则
+  \[
+  H_m(M^\theta)\xrightarrow{\mathbb P}0;
+  \]
+  \item 若 \(\theta>1/2\)，则
+  \[
+  \frac{H_m(M^\theta)}{\mathbb E\,H_m(M^\theta)}\xrightarrow{\mathbb P}1,
+  \qquad
+  \mathbb E\,H_m(M^\theta)=M^{\theta-1/2+o(1)}\to\infty.
+  \]
+\end{enumerate}
+因此，指数阈值 \(1/2\) 同时区分了稀疏命中相与自平均命中相。
+\end{proposition}
+
+\begin{proof}
+随机变量 \(H_m(N)\) 服从二项分布 \(\mathrm{Bin}(N,p_m)\)，故
+\[
+\mathbb E\,H_m(N)=Np_m,
+\qquad
+\Var(H_m(N))=Np_m(1-p_m)\le Np_m.
+\]
+若 \(\theta<1/2\)，则
+\[
+\mathbb E\,H_m(M^\theta)=M^{\theta-1/2+o(1)}\to 0.
+\]
+由 Markov 不等式，
+\[
+\mathbb P\bigl(H_m(M^\theta)\ge 1\bigr)\le \mathbb E\,H_m(M^\theta)\to 0,
+\]
+故 \(H_m(M^\theta)\xrightarrow{\mathbb P}0\)。
+
+若 \(\theta>1/2\)，则由定理 \ref{thm:conclusion-sixfold-zero-witness-square-root-law}，
+\[
+\mathbb E\,H_m(M^\theta)\ge 5^{-1/4}M^{\theta-1/2}(1+o(1))\to\infty.
+\]
+于是对任意 \(\varepsilon>0\)，
+\[
+\mathbb P\!\left(
+\left|H_m(M^\theta)-\mathbb E\,H_m(M^\theta)\right|
+>
+\varepsilon\,\mathbb E\,H_m(M^\theta)
+\right)
+\le
+\frac{\Var(H_m(M^\theta))}{\varepsilon^2\mathbb E\,H_m(M^\theta)^2}
+\le
+\frac{1}{\varepsilon^2\mathbb E\,H_m(M^\theta)}
+\to 0.
+\]
+故相对偏差趋于零。证毕。
+\end{proof}
+
+\begin{theorem}[同一可见层同时承担两项精确任务时的强逆指数]\label{thm:conclusion-solenoidal-rh-joint-visible-layer-strong-inverse}
+固定 \(a>a_{\mathrm c}\)。对每个 \(B\ge 0\)，令 \(\mathcal J_m(B)\) 表示在“至多 \(2^B\) 个可见等价类”的约束下，同一可见证书系统同时承担
+\begin{enumerate}
+  \item 折叠微态的精确反演；
+  \item 冻结相实现点的精确识别
+\end{enumerate}
+时所能达到的最优统一成功率。更具体地，
+\[
+\mathcal J_m(B):=
+\sup_{|\mathcal C|\le 2^B}
+\min\!\bigl\{s_m^{\mathrm{inv}}(\mathcal C),\,s_m^{\mathrm{frz}}(\mathcal C)\bigr\}.
+\]
+则对任意预算序列 \((B_m)\) 都有
+\[
+\limsup_{m\to\infty}\frac1m\log_2 \mathcal J_m(B_m)
+\le
+\limsup_{m\to\infty}\frac{B_m}{m}
+-\max\!\bigl\{r_\varphi,g_*^{(2)}\bigr\}.
+\]
+特别地，若存在 \(\delta>0\) 使
+\[
+\limsup_{m\to\infty}\frac{B_m}{m}
+\le
+\max\!\bigl\{r_\varphi,g_*^{(2)}\bigr\}-\delta,
+\]
+则
+\[
+\mathcal J_m(B_m)\le 2^{-\delta m+o(m)}.
+\]
+\end{theorem}
+
+\begin{proof}
+对任意可见层 \(\mathcal C\) 且 \(|\mathcal C|\le 2^B\)，都有
+\[
+\min\!\bigl\{s_m^{\mathrm{inv}}(\mathcal C),s_m^{\mathrm{frz}}(\mathcal C)\bigr\}
+\le
+s_m^{\mathrm{inv}}(\mathcal C)\le \mathrm{Succ}_m(B),
+\]
+并且
+\[
+\min\!\bigl\{s_m^{\mathrm{inv}}(\mathcal C),s_m^{\mathrm{frz}}(\mathcal C)\bigr\}
+\le
+s_m^{\mathrm{frz}}(\mathcal C)\le P_m^{\mathrm{frz}}(B).
+\]
+故
+\[
+\mathcal J_m(B)\le \min\!\bigl\{\mathrm{Succ}_m(B),P_m^{\mathrm{frz}}(B)\bigr\}.
+\]
+再分别应用定理 \ref{thm:conclusion-solenoidal-rh-fold-strong-converse} 与定理 \ref{thm:conclusion-solenoidal-rh-frozen-visible-strong-converse}，得
+\[
+\limsup_{m\to\infty}\frac1m\log_2 \mathcal J_m(B_m)
+\le
+\limsup_{m\to\infty}\frac{B_m}{m}-r_\varphi,
+\]
+以及
+\[
+\limsup_{m\to\infty}\frac1m\log_2 \mathcal J_m(B_m)
+\le
+\limsup_{m\to\infty}\frac{B_m}{m}-g_*^{(2)}.
+\]
+两式合并即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[三预算加法律]\label{thm:conclusion-solenoidal-rh-three-budget-additive-law}
+考虑一族 verifier，其在分辨率 \(m\) 上同时使用：
+\begin{enumerate}
+  \item 一个至多 \(2^{B_m}\) 类的可见证书系统；
+  \item \(N_m\) 次对 \(\ZZ/(M\ZZ)\) 的独立均匀随机探测；
+  \item 一个有限 prime-stage \(S_m\)。
+\end{enumerate}
+假设该家族满足：
+\begin{enumerate}
+  \item 折叠微态反演渐近精确；
+  \item 对某个固定 \(a>a_{\mathrm c}\)，冻结相实现点识别渐近精确；
+  \item 零见证随机命中概率有非退化下界：
+  \[
+  \liminf_{m\to\infty}\bigl(1-(1-p_m)^{N_m}\bigr)>0;
+  \]
+  \item 在定理 \ref{thm:xi-layered-prime-register-sharp-natural-extension} 的意义下，其 hidden prime-ledger 历史含有 \(k(m)\) 层真正分支。
+\end{enumerate}
+则必有
+\[
+\liminf_{m\to\infty}
+\left(
+\frac{B_m}{m}
++
+\frac{\log_2 N_m}{m}
+\right)
+\ge
+\max\!\bigl\{r_\varphi,g_*^{(2)}\bigr\}
++
+\frac12\log_2\varphi,
+\]
+并且
+\[
+|S_m|\ge k(m).
+\]
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-solenoidal-rh-double-budget-lower-bound}，前两项可见精确性与 hidden prime-ledger 条件已迫使
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}\ge \max\!\bigl\{r_\varphi,g_*^{(2)}\bigr\},
+\qquad
+|S_m|\ge k(m).
+\]
+另一方面，由随机命中概率的非退化下界，存在常数 \(\eta>0\) 与充分大的 \(m\) 使
+\[
+1-(1-p_m)^{N_m}\ge \eta.
+\]
+由推论 \ref{cor:conclusion-sixfold-zero-fixed-confidence-sample-complexity} 可知，这迫使
+\[
+\frac{\log N_m}{\log M}\ge \frac12-o(1).
+\]
+又因为
+\[
+\log_2 M=(\log_2\varphi)\,m+o(m),
+\]
+故
+\[
+\liminf_{m\to\infty}\frac{\log_2 N_m}{m}\ge \frac12\log_2\varphi.
+\]
+将两项下界相加即得所示不等式。prime-stage 下界已如上给出。证毕。
+\end{proof}
+
+\begin{corollary}[冻结瓶颈不超过折叠瓶颈时的黄金常数塌缩]\label{cor:conclusion-solenoidal-rh-golden-total-burden-collapse}
+若
+\[
+g_*^{(2)}\le r_\varphi,
+\]
+则定理 \ref{thm:conclusion-solenoidal-rh-three-budget-additive-law} 简化为
+\[
+\liminf_{m\to\infty}
+\left(
+\frac{B_m}{m}
++
+\frac{\log_2 N_m}{m}
+\right)
+\ge
+r_\varphi+\frac12\log_2\varphi
+=
+1-\frac12\log_2\varphi.
+\]
+特别地，
+\[
+\liminf_{m\to\infty}
+\left(
+\frac{B_m}{m}
++
+\frac{\log_2 N_m}{m}
+\right)
+\ge
+0.6528790431846913\ldots
+\]
+\end{corollary}
+
+\begin{proof}
+在定理 \ref{thm:conclusion-solenoidal-rh-three-budget-additive-law} 中代入
+\[
+\max\!\bigl\{r_\varphi,g_*^{(2)}\bigr\}=r_\varphi,
+\]
+再用
+\[
+r_\varphi=\log_2\frac{2}{\varphi}=1-\log_2\varphi
+\]
+即可。证毕。
+\end{proof}
+
+\begin{theorem}[zero-count 证书的碰撞区间具有单位加法宽度与整一幂乘法宽度]\label{thm:conclusion-zero-count-certificate-unit-additive-width}
+在六倍窗设定下，令
+\[
+L_m:=\frac{1+2C_\varphi^2+o(1)}{M},
+\qquad
+U_m:=1-M^{-1/2+o(1)}.
+\]
+其中 \(L_m\) 是真实碰撞的黄金共振下界，而 \(U_m\) 是由 zero-count 证书导出的碰撞上界。则区间
+\[
+I_m^{\mathrm{zc}}:=[L_m,U_m]
+\]
+满足
+\[
+U_m-L_m=1-o(1),
+\]
+以及
+\[
+\frac{U_m}{L_m}
+=
+\frac{M^{1+o(1)}}{1+2C_\varphi^2}.
+\]
+特别地，
+\[
+\lim_{\substack{m\to\infty\\ m+2\equiv0\ (\mathrm{mod}\ 6)}}
+\frac{\log(U_m/L_m)}{\log M}=1.
+\]
+因此，即使完整给定 \(|\mathcal Z_m|\)，所导出的碰撞区间在加法尺度上几乎与 \([0,1]\) 同宽，而在乘法尺度上仍比真实 \(M^{-1}\) 层级粗糙整整一个 \(M^{1+o(1)}\) 幂阶。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-zero-count-collision-blindness}，
+\[
+U_m=1-M^{-1/2+o(1)},
+\qquad
+L_m=\frac{1+2C_\varphi^2+o(1)}{M}.
+\]
+于是
+\[
+U_m-L_m
+=
+1-M^{-1/2+o(1)}-\frac{1+2C_\varphi^2+o(1)}{M}
+=
+1-o(1).
+\]
+又因为 \(U_m\to 1\)，故
+\[
+\frac{U_m}{L_m}
+=
+\frac{1-M^{-1/2+o(1)}}{(1+2C_\varphi^2+o(1))/M}
+=
+\frac{M^{1+o(1)}}{1+2C_\varphi^2}.
+\]
+两边取对数并除以 \(\log M\)，即可得到指数极限。证毕。
+\end{proof}
+
+\begin{conjecture}[三坐标预算正交性]\label{conj:conclusion-solenoidal-rh-three-coordinate-budget-orthogonality}
+在任何可量化正规化的 solenoidal 审计框架内，若一族 verifier 同时要求：
+\begin{enumerate}
+  \item 折叠微态反演渐近精确；
+  \item 冻结相实现点识别渐近精确；
+  \item 六倍窗零见证随机命中概率有正下界；
+  \item hidden prime-ledger 历史含有 \(k(m)\) 层真正分支，
+\end{enumerate}
+则其资源三元组
+\[
+\left(
+\frac{B_m}{m},
+\frac{\log_2 N_m}{m},
+|S_m|
+\right)
+\]
+在渐近上满足不可交换的坐标下界
+\[
+\frac{B_m}{m}\ge \max\!\bigl\{r_\varphi,g_*^{(2)}\bigr\}-o(1),
+\qquad
+\frac{\log_2 N_m}{m}\ge \frac12\log_2\varphi-o(1),
+\qquad
+|S_m|\ge k(m),
+\]
+并且不存在任何非平凡 trade-off 原理，可用一坐标的超额去补偿另一坐标的亏缺。
+等价地，本文框架中的 no-go 区域并非由单一标量预算切出，而是一个真正的正交角域：visible witness rate、square-root sampling exponent 与 cofinal prime-stage depth 分别构成三条彼此不可替代的临界轴。
+\end{conjecture}

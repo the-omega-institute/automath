@@ -1,0 +1,440 @@
+% Auto-split: keep each TeX source comfortably below ~600 lines.
+%
+% This subsubsection sharpens the q-tilted composition partition functions:
+% - simple-pole asymptotics with explicit constant C(q)=1/μ_q,
+% - renewal/hitting-probability factorization and exponential convergence,
+% - LLN/CLT/local limit for part count under P_L^{(q)},
+% - two-parameter pressure λ(q,y) and joint LDP for (R_L/L, E_L),
+% - Shannon/Rényi entropy rates as closed forms of λ(·),
+% - universal extreme-value and functional invariance principles,
+% - exponential mixing rate controlled by the next root r_q>1.
+%
+
+\subsubsection{简单极点常数、更新命中与两参压力：\texorpdfstring{$Z_L^{(q)}$}{ZLq} 的尖锐主项、极限定理与指数混合}\label{subsec:pom-multiplicity-composition-sharp-asymptotics-renewal}
+本节在 \S\ref{subsec:pom-multiplicity-composition-exact-update-softcore} 的“精确条件 i.i.d.”更新表示与传递矩阵等价之上，
+把整参（乃至全实数）矩压力 \(\lambda(q)\) 的信息进一步尖锐化到\emph{主项常数}与\emph{指数收敛率}层面，
+并据此给出 \(q\)-倾斜分解在部件数、熵率、极值与路径波动上的统一极限定理模板。
+为与前文一致，下面仅将
+\(
+A_q(t):=\sum_{k\ge 1}F_{k+2}^{\,q}t^k
+\)
+视为定义 \ref{def:pom-multiplicity-real-q-pressure} 中 \(W_q(t)\) 的同义记号（便于强调其“更新原子”角色）。
+
+\paragraph{尖锐主项：简单极点常数 \texorpdfstring{$C(q)=1/\mu_q$}{C(q)=1/mu\_q}}
+\begin{proposition}[整参矩配分函数的简单极点常数与尖锐主项]\label{prop:pom-multiplicity-composition-sharp-main-term-constant}
+取实数 \(q\ge 0\)，并令
+\[
+A_q(t):=\sum_{k\ge 1}F_{k+2}^{\,q}t^k,\qquad |t|<\varphi^{-q},
+\qquad \varphi=\frac{1+\sqrt5}{2}.
+\]
+令 \(\rho(q)\in(0,\varphi^{-q})\) 为方程 \(A_q(\rho(q))=1\) 的唯一解，并令 \(\lambda(q):=\rho(q)^{-1}\)（定义 \ref{def:pom-multiplicity-real-q-pressure}）。
+对 \(L\ge 0\) 定义
+\[
+Z_L^{(q)}:=\sum_{\boldsymbol{\ell}\in\mathcal{C}_L}\prod_i F_{\ell_i+2}^{\,q}.
+\]
+则生成函数具有严格恒等式
+\begin{equation}\label{eq:pom-multiplicity-composition-gf-simple-pole}
+\boxed{\;
+\sum_{L\ge 0}Z_L^{(q)}t^L=\frac{1}{1-A_q(t)}\;}
+\end{equation}
+并且在 \(t=\rho(q)\) 处为简单极点。
+令更新分布 \(p_q\) 与均值 \(\mu_q\) 为
+\[
+p_q(k):=F_{k+2}^{\,q}\rho(q)^k\quad(k\ge 1),
+\qquad
+\mu_q:=\sum_{k\ge 1}k\,p_q(k)=\rho(q)A_q'(\rho(q)).
+\]
+则存在 \(\theta(q)\in(0,1)\) 使得尖锐渐近成立：
+\begin{equation}\label{eq:pom-multiplicity-composition-sharp-asymptotic-ZLq}
+\boxed{\;
+Z_L^{(q)}=\frac{1}{\rho(q)A_q'(\rho(q))}\,\lambda(q)^{L}\;+\;O\!\bigl(\lambda(q)^L\,\theta(q)^{L}\bigr)
+=\frac{1}{\mu_q}\,\lambda(q)^{L}\;+\;O\!\bigl(\lambda(q)^L\,\theta(q)^{L}\bigr).}
+\end{equation}
+等价地，主项常数为 \(C(q)=1/\mu_q\)。
+\end{proposition}
+\begin{proof}[证明要点]
+生成函数恒等式 \eqref{eq:pom-multiplicity-composition-gf-simple-pole} 由有序分解的串接乘法性给出：每个部件长度 \(k\) 贡献原子权 \(F_{k+2}^{\,q}t^k\)，故全体分解为 \(\sum_{r\ge 0}A_q(t)^r=1/(1-A_q(t))\)。
+\par
+由于 \(A_q\) 在 \((0,\varphi^{-q})\) 上严格递增且 \(A_q(\rho(q))=1\)，有 \(A_q'(\rho(q))>0\)，从而 \(1-A_q(t)\) 在 \(t=\rho(q)\) 有简单零点，故 \(t=\rho(q)\) 为简单极点。
+再由正系数性与 Pringsheim 定理，收敛半径为 \(\rho(q)\)，且支配奇点仅发生在正实轴。
+取 \(R(q)>\rho(q)\) 为次近奇点模长（或任取 \(R\in(\rho(q),R(q))\)），则在 \(|t|<R\) 内除该简单极点外解析；
+由标准留数/传递定理，系数主项由 \(\mathrm{Res}_{t=\rho(q)}(1/(1-A_q(t)))\) 给出，即
+\(
+1/(\rho(q)A_q'(\rho(q)))
+\)，
+而误差由 \(\theta(q)=\rho(q)/R\in(0,1)\) 控制，得到 \eqref{eq:pom-multiplicity-composition-sharp-asymptotic-ZLq}。证毕。
+\end{proof}
+
+\paragraph{命中概率的指数收敛：更新过程的 renewal 解释}
+\begin{proposition}[更新命中概率与 \texorpdfstring{$Z_L^{(q)}$}{ZLq} 的严格分解；\texorpdfstring{$u_q(L)\to 1/\mu_q$}{u\_q(L)->1/mu\_q} 的指数收敛]\label{prop:pom-multiplicity-composition-renewal-hit-prob}
+取 \(q\ge 0\)，令 \(p_q\) 如命题 \ref{prop:pom-multiplicity-composition-sharp-main-term-constant}，并定义 renewal 命中概率
+\[
+u_q(L):=\sum_{r\ge 1}p_q^{*r}(L)\qquad(L\ge 1),
+\]
+其中 \(p_q^{*r}\) 为 \(r\) 次卷积。
+则对每个 \(L\ge 1\) 有严格恒等式
+\begin{equation}\label{eq:pom-multiplicity-composition-ZLq-renewal-factor}
+\boxed{\;
+Z_L^{(q)}=\lambda(q)^{L}\,u_q(L).\;}
+\end{equation}
+并且由于 \(p_q(k)>0\) 对所有 \(k\ge 1\) 成立（故 \(\gcd\{k:p_q(k)>0\}=1\)），存在常数 \(r(q)>1\) 使得
+\begin{equation}\label{eq:pom-multiplicity-composition-renewal-exp-conv}
+\boxed{\;
+u_q(L)=\frac{1}{\mu_q}+O\!\bigl(r(q)^{-L}\bigr)\qquad(L\to\infty).\;}
+\end{equation}
+其中 \(r(q)>1\) 可取为命题 \ref{prop:pom-multiplicity-composition-sharp-main-term-constant} 中误差因子 \(\theta(q)\) 的倒数：
+由 \(u_q(L)=\rho(q)^L Z_L^{(q)}\) 与 \eqref{eq:pom-multiplicity-composition-sharp-asymptotic-ZLq} 立得
+\(
+u_q(L)=\frac{1}{\mu_q}+O(\theta(q)^L)
+\)，
+故可取
+\(
+r(q)=\theta(q)^{-1}
+\)。
+当 \(A_q\) 具有可审计的 meromorphic 延拓（例如整数 \(q\) 情形，由命题 \ref{prop:pom-multiplicity-composition-moment-hierarchy-rational-growth} 的有理性），
+\(r(q)\) 亦可等价刻画为 renewal 生成函数
+\(
+U_q(z)=\sum_{L\ge 1}u_q(L)z^L
+\)
+在 \(z=1\) 之外的最近奇点模长。
+\end{proposition}
+\begin{proof}[证明要点]
+由 \(p_q(k)=F_{k+2}^{\,q}\rho(q)^k\)，对任意 \(\boldsymbol{\ell}\in\mathcal{C}_L\) 有
+\(
+\prod_i p_q(\ell_i)=\rho(q)^{L}\prod_i F_{\ell_i+2}^{\,q}
+\)。
+对给定 \(r\) 求和得到
+\[
+p_q^{*r}(L)=\rho(q)^L\sum_{\substack{\boldsymbol{\ell}\in\mathcal{C}_L\\ R(\boldsymbol{\ell})=r}}\ \prod_i F_{\ell_i+2}^{\,q}.
+\]
+再对 \(r\ge 1\) 求和得
+\(
+u_q(L)=\rho(q)^L Z_L^{(q)}
+\)，
+即 \(Z_L^{(q)}=\rho(q)^{-L}u_q(L)=\lambda(q)^L u_q(L)\)，得到 \eqref{eq:pom-multiplicity-composition-ZLq-renewal-factor}。
+\par
+由 \(u_q(L)=\rho(q)^L Z_L^{(q)}\) 与命题 \ref{prop:pom-multiplicity-composition-sharp-main-term-constant} 的尖锐渐近 \eqref{eq:pom-multiplicity-composition-sharp-asymptotic-ZLq}，
+立即得到
+\(
+u_q(L)=\frac{1}{\mu_q}+O(\theta(q)^L)
+\)，
+其中 \(\theta(q)\in(0,1)\)。
+改写为 \(O(r(q)^{-L})\)（取 \(r(q)=\theta(q)^{-1}\)）即得 \eqref{eq:pom-multiplicity-composition-renewal-exp-conv}。证毕。
+\end{proof}
+
+\begin{corollary}[命题 \ref{prop:pom-multiplicity-composition-sharp-main-term-constant} 的 renewal 解释]\label{cor:pom-multiplicity-composition-sharp-main-term-from-renewal}
+在命题 \ref{prop:pom-multiplicity-composition-renewal-hit-prob} 的设定下，有
+\[
+Z_L^{(q)}=\frac{1}{\mu_q}\lambda(q)^L+O\!\left(\Bigl(\frac{\lambda(q)}{r(q)}\Bigr)^{\!L}\right),
+\]
+从而 \(\theta(q)\) 可取为 \(1/r(q)\)。
+\end{corollary}
+
+\input{sections/body/pom/parts/thm__pom-multiplicity-composition-mod3-sparsity}
+\input{sections/body/pom/parts/subsubsec__pom-multiplicity-composition-mod3-sharp-prefactor-chi}
+
+\paragraph{部件数的极限定律：一般 \texorpdfstring{$q$}{q} 的 LLN/CLT/局部极限定理}
+\begin{theorem}[\texorpdfstring{$q$}{q}-倾斜分解的部件数极限定律]\label{thm:pom-multiplicity-composition-partcount-generalq-llt}
+固定 \(q\ge 0\)，在 \(P_L^{(q)}(\boldsymbol{\ell})\propto \prod_i F_{\ell_i+2}^{\,q}\) 下令 \(R_L\) 表示部件数。
+令 \(\ell\sim p_q\) 为命题 \ref{prop:pom-multiplicity-composition-sharp-main-term-constant} 的更新增量，
+并记
+\[
+\mu_q:=\mathbb{E}[\ell],\qquad
+\sigma_q^2:=\mathrm{Var}(\ell)=\Bigl(\rho(q)^2A_q''(\rho(q))+\rho(q)A_q'(\rho(q))\Bigr)-\mu_q^2\in(0,\infty).
+\]
+则成立大数律与中心极限定律
+\begin{equation}\label{eq:pom-multiplicity-composition-partcount-lln-clt-generalq}
+\boxed{\;
+\frac{R_L}{L}\xrightarrow[L\to\infty]{}\frac{1}{\mu_q}\qquad(\text{依概率}),\qquad
+\frac{R_L-\frac{L}{\mu_q}}{\sqrt{L}}\Longrightarrow \mathcal{N}\!\left(0,\ \frac{\sigma_q^2}{\mu_q^{3}}\right).}
+\end{equation}
+并且存在局部极限定理：对满足 \(\bigl|r-\frac{L}{\mu_q}\bigr|=O(\sqrt{L})\) 的整数 \(r\)，有
+\begin{equation}\label{eq:pom-multiplicity-composition-partcount-local-limit-generalq}
+\mathbb{P}_{P_L^{(q)}}(R_L=r)
+=\frac{1}{\sqrt{2\pi(\sigma_q^2/\mu_q^3)L}}
+\exp\!\left(-\frac{\bigl(r-\frac{L}{\mu_q}\bigr)^2}{2(\sigma_q^2/\mu_q^3)L}\right)
+\;+\;O(L^{-1/2}),
+\end{equation}
+其中误差项可取一致于该中心窗。
+\end{theorem}
+\begin{proof}[证明要点]
+由两参配分函数 \(Z_L^{(q)}(y)\)（见下文定义 \ref{def:pom-multiplicity-composition-two-parameter-partition}）与
+\(
+\mathbb{E}_{P_L^{(q)}}[e^{tR_L}]=Z_L^{(q)}(e^t)/Z_L^{(q)}(1)
+\)，
+再结合命题 \ref{prop:pom-multiplicity-composition-sharp-main-term-constant} 的简单极点与解析扰动，
+可将 \(\log \mathbb{E}[e^{tR_L}]\) 写为 \(L\) 倍的解析函数加上有界余项（quasi-power 形态）。
+由此可推出 LLN/CLT 与局部极限定理；
+其中均值与方差由 \(\log\lambda(q,e^t)\) 在 \(t=0\) 的一、二阶导数给出，
+并可与更新分布矩（\(\mu_q,\sigma_q^2\)）作显式对齐，得到 \eqref{eq:pom-multiplicity-composition-partcount-lln-clt-generalq}--\eqref{eq:pom-multiplicity-composition-partcount-local-limit-generalq}。证毕。
+\end{proof}
+
+\paragraph{两参压力与联合大偏差：\texorpdfstring{$(R_L/L,E_L)$}{(R\_L/L,E\_L)} 的可审计速率函数}
+\begin{definition}[两参配分函数、根方程与两参压力]\label{def:pom-multiplicity-composition-two-parameter-partition}
+对 \(q\ge 0\)、\(y>0\) 定义两参配分函数
+\[
+Z_L^{(q)}(y):=\sum_{\boldsymbol{\ell}\in\mathcal{C}_L}y^{R(\boldsymbol{\ell})}\prod_i F_{\ell_i+2}^{\,q}.
+\]
+定义 \(\rho(q,y)\in(0,\varphi^{-q})\) 为方程
+\(
+yA_q(\rho(q,y))=1
+\)
+的唯一解，并记
+\[
+\boxed{\;\lambda(q,y):=\rho(q,y)^{-1}.\;}
+\]
+\end{definition}
+
+\begin{theorem}[两参压力与联合大偏差：\texorpdfstring{$(R_L/L,E_L)$}{(R\_L/L,E\_L)} 的 Gartner--Ellis 速率函数]\label{thm:pom-multiplicity-composition-joint-ldp-partcount-energy}
+固定 \(q\ge 0\) 并在 \(P_L^{(q)}\) 下定义能量密度
+\[
+E_L(\boldsymbol{\ell}):=\frac{1}{L}\log w(\boldsymbol{\ell}),
+\qquad
+w(\boldsymbol{\ell})=\prod_i F_{\ell_i+2}.
+\]
+则向量 \(\bigl(\frac{R_L}{L},E_L\bigr)\) 满足 Gartner--Ellis 型大偏差原理，其规范化累积母函数为
+\begin{equation}\label{eq:pom-multiplicity-composition-joint-cgf}
+\boxed{\;
+\Psi_q(t,s)
+:=\lim_{L\to\infty}\frac{1}{L}\log \mathbb{E}_{P_L^{(q)}}\!\big[\exp(tR_L+sLE_L)\big]
+=\log \lambda(q+s,e^{t})-\log\lambda(q,1),\qquad s>-q.}
+\end{equation}
+相应速率函数为二元 Legendre--Fenchel 变换
+\begin{equation}\label{eq:pom-multiplicity-composition-joint-rate}
+\boxed{\;
+I_q(r,e)=\sup_{t\in\RR,\ s>-q}\bigl\{tr+se-\Psi_q(t,s)\bigr\}.}
+\end{equation}
+在内部值域上，\(I_q\) 严格凸且实解析；其梯度参数化由倾斜更新分布
+\[
+p_{q+s,e^t}(k):=e^{t}F_{k+2}^{\,q+s}\rho(q+s,e^t)^{k}\qquad(k\ge 1)
+\]
+的矩（\(\mathbb{E}[\ell]\)、\(\mathbb{E}[\log F_{\ell+2}]\)）给出，从而实现参数化可审计性。
+\end{theorem}
+\begin{proof}[证明要点]
+由定义与 \(P_L^{(q)}(\boldsymbol{\ell})=w(\boldsymbol{\ell})^q/Z_L^{(q)}(1)\) 得
+\[
+\mathbb{E}_{P_L^{(q)}}\!\big[e^{tR_L+sLE_L}\big]
+=\frac{1}{Z_L^{(q)}(1)}\sum_{\boldsymbol{\ell}\in\mathcal{C}_L}e^{tR(\boldsymbol{\ell})}w(\boldsymbol{\ell})^{q+s}
+=\frac{Z_L^{(q+s)}(e^t)}{Z_L^{(q)}(1)}.
+\]
+由串接结构可得两参母函数
+\(
+\sum_{L\ge 0}Z_L^{(q)}(y)z^L=1/(1-yA_q(z))
+\)，
+从而支配奇点由 \(yA_q(z)=1\) 的唯一正根 \(\rho(q,y)\) 给出。
+因此
+\(
+L^{-1}\log Z_L^{(q)}(y)\to \log\lambda(q,y)
+\)。
+代回并取极限即得 \eqref{eq:pom-multiplicity-composition-joint-cgf}。
+严格凸与解析性来自 \((q,t)\mapsto\log\lambda(q,e^t)\) 的严格凸解析性（可由 H\"older 不等式与隐函数定理给出；亦见定理 \ref{thm:pom-multiplicity-real-q-pressure} 的一参严格凸性证明思路）。
+Legendre--Fenchel 变换得到 \eqref{eq:pom-multiplicity-composition-joint-rate}。证毕。
+\end{proof}
+
+\begin{proposition}[两参压力的严格凸性：\texorpdfstring{$(q,t)\mapsto\log\lambda(q,e^t)$}{(q,t)->log lambda(q,e^t)} 的 Hessian 正定]\label{prop:pom-multiplicity-composition-two-parameter-hessian-pd}
+令 \(f(q,t):=\log\lambda(q,e^t)\)（\(q>0,t\in\RR\)），并令 \(\rho(q,e^t)=\lambda(q,e^t)^{-1}\) 如定义 \ref{def:pom-multiplicity-composition-two-parameter-partition}。
+定义倾斜更新分布
+\[
+p_{q,t}(k):=e^t F_{k+2}^{\,q}\rho(q,e^t)^{k}\qquad(k\ge 1),
+\qquad \sum_{k\ge 1}p_{q,t}(k)=1,
+\]
+并在 \(p_{q,t}\) 下记随机变量 \(K:=k\)、\(X:=\log F_{k+2}\)，其均值记为
+\[
+\mu(q,t):=\mathbb{E}[K],\qquad m(q,t):=\mathbb{E}[X],\qquad e(q,t):=\frac{m(q,t)}{\mu(q,t)}.
+\]
+则梯度具有闭式
+\[
+\boxed{\;
+\partial_t f(q,t)=\frac{1}{\mu(q,t)},\qquad
+\partial_q f(q,t)=e(q,t)=\frac{\mathbb{E}[X]}{\mathbb{E}[K]}\;}
+\]
+并且 Hessian 可显式写为
+\[
+\boxed{\;
+\nabla^2 f(q,t)=
+\begin{pmatrix}
+\dfrac{\mathrm{Var}(K)}{\mu(q,t)^3} & -\dfrac{\mathrm{Cov}(K,\,X-e(q,t)K)}{\mu(q,t)^2}\\[1.2ex]
+-\dfrac{\mathrm{Cov}(K,\,X-e(q,t)K)}{\mu(q,t)^2} & \dfrac{\mathrm{Var}(X-e(q,t)K)}{\mu(q,t)}
+\end{pmatrix}.}
+\]
+特别地，由于 \(k\mapsto \log F_{k+2}\) 不是 \(k\) 的仿射函数，协方差矩阵非退化，从而 \(\nabla^2 f(q,t)\) 在每点正定；因此 \((q,t)\mapsto \log\lambda(q,e^t)\) 在 \((0,\infty)\times\RR\) 上严格凸且实解析。
+\end{proposition}
+\begin{proof}[证明要点]
+由根方程 \(e^tA_q(\rho(q,e^t))=1\) 对 \(t\) 隐式微分得
+\(
+\rho_t=-1/(e^tA_q'(\rho))
+\)，
+再由 \(\mu(q,t)=\sum k p_{q,t}(k)=e^t\rho A_q'(\rho)\) 得 \(\partial_t f=-\rho_t/\rho=1/\mu(q,t)\)。
+\(\partial_q f\) 的比值表达同理由对 \(q\) 的隐式微分得到（与命题 \ref{prop:pom-multiplicity-lambdaq-derivative-gibbs} 的 \(t=0\) 情形一致）。
+\par
+对二阶导数，注意 \(p_{q,t}(k)=\exp(t+qX+k\log\rho)\) 且 \(\sum_k p_{q,t}(k)\equiv 1\)；
+由此可得对任意可积 \(g\) 有 \(\partial_t\mathbb{E}[g]=\mathbb{E}[g(1-K/\mu)]\)、\(\partial_q\mathbb{E}[g]=\mathbb{E}[g(X-eK)]\)。
+将其应用于 \(g=K\) 与 \(g=X\) 并代回 \(f_t=1/\mu\)、\(f_q=e\) 的链式法则，即得所示 Hessian 公式。
+正定性等价于二维协方差矩阵的行列式严格为正；而若 \(\mathrm{Var}(X-eK)=0\) 则 \(X\) 几乎处处为 \(K\) 的仿射函数，与 Fibonacci 的严格非线性增长矛盾。证毕。
+\end{proof}
+
+\paragraph{熵率与多分形：Shannon/Rényi 的闭式层级}
+\begin{proposition}[参数 \(q\) 的 Shannon 熵率闭式与两端渐近]\label{prop:pom-multiplicity-composition-shannon-entropy-rate-generalq}
+令
+\(
+h(q):=\lim_{L\to\infty}\frac{1}{L}H(P_L^{(q)})
+\)
+为 \(P_L^{(q)}\) 的 Shannon 熵率（bits/length）。
+则极限存在且满足完全闭式
+\begin{equation}\label{eq:pom-multiplicity-composition-shannon-rate-closed}
+\boxed{\;
+h(q)=\log_2\lambda(q)-q\,\frac{d}{dq}\log_2\lambda(q).\;}
+\end{equation}
+并且 \(h(0)=1\)、\(\lim_{q\to\infty}h(q)=0\)，且 \(h\) 在 \((0,\infty)\) 上实解析并严格递减。
+此外，若 \(\log_2\lambda(q)=1+\frac{S_1}{2}q+\frac12 c_2 q^2+O(q^3)\)（命题 \ref{prop:pom-multiplicity-lambdaq-taylor-q0}），则
+\[
+h(q)=1-\frac{c_2}{2}q^2+O(q^3)\qquad(q\downarrow 0).
+\]
+若 \(\lambda(q)=2^q(1+(3/4)^q+o((3/4)^q))\)（命题 \ref{prop:pom-multiplicity-lambdaq-large-q-asymptotic}），则
+\[
+h(q)=\frac{1+q\ln(4/3)}{\ln 2}\Bigl(\frac34\Bigr)^{q}+o\!\Bigl(\Bigl(\frac34\Bigr)^{q}\Bigr)\qquad(q\to\infty).
+\]
+\end{proposition}
+\begin{proof}[证明要点]
+由 \(P_L^{(q)}(\boldsymbol{\ell})=w(\boldsymbol{\ell})^q/Z_L^{(q)}(1)\)，有
+\[
+H(P_L^{(q)})
+=-\sum_{\boldsymbol{\ell}}P_L^{(q)}(\boldsymbol{\ell})\log_2 P_L^{(q)}(\boldsymbol{\ell})
+=\log_2 Z_L^{(q)}(1)-q\,\mathbb{E}_{P_L^{(q)}}[\log_2 w(\boldsymbol{\ell})].
+\]
+而
+\(
+\mathbb{E}_{P_L^{(q)}}[\log w]=\partial_q \log Z_L^{(q)}(1)
+\)
+由直接微分得到。
+将上述恒等式除以 \(L\) 并用
+\(
+L^{-1}\log Z_L^{(q)}(1)\to \log\lambda(q)
+\)
+与可交换求导（由 \(\log\lambda\) 的解析性与简单极点一致性）即得 \eqref{eq:pom-multiplicity-composition-shannon-rate-closed}。
+端点 \(h(0)=1\) 由均匀分解 \(P_L^{(0)}\) 上 \(|\mathcal{C}_L|=2^{L-1}\) 给出；
+\(\lim_{q\to\infty}h(q)=0\) 由低温极限 \(P_L^{(q)}\) 向最大权原子集中（命题 \ref{prop:pom-multiplicity-low-temperature-gibbs}）推出。
+两端渐近由 \(\log_2\lambda\) 的相应展开代入得到。证毕。
+\end{proof}
+
+\begin{proposition}[Rényi 熵率与自碰撞指数：\texorpdfstring{$\lambda(\cdot)$}{lambda}-二点比较的完全闭式]\label{prop:pom-multiplicity-composition-renyi-collision-generalq}
+对任意 \(\alpha>1\)，令
+\(
+h^{(\alpha)}(q):=\lim_{L\to\infty}\frac{1}{L}H_\alpha(P_L^{(q)})
+\)
+为 \(\alpha\)-阶 Rényi 熵率，其中
+\(
+H_\alpha(P)=\frac{1}{1-\alpha}\log_2\sum_x P(x)^\alpha
+\)。
+则极限存在且满足闭式
+\begin{equation}\label{eq:pom-multiplicity-composition-renyi-rate-generalq}
+\boxed{\;
+h^{(\alpha)}(q)=\frac{1}{1-\alpha}\Bigl(\log_2\lambda(\alpha q)-\alpha\log_2\lambda(q)\Bigr).\;}
+\end{equation}
+特别地，碰撞概率
+\(
+C_L(q):=\sum_{\boldsymbol{\ell}}P_L^{(q)}(\boldsymbol{\ell})^2
+\)
+具有指数律
+\[
+\boxed{\;
+-\lim_{L\to\infty}\frac{1}{L}\log_2 C_L(q)=\log_2\frac{\lambda(q)^2}{\lambda(2q)}.\;}
+\]
+\end{proposition}
+\begin{proof}
+由定义
+\(
+\sum P_L^{(q)}(\boldsymbol{\ell})^\alpha
+=Z_L^{(\alpha q)}(1)/(Z_L^{(q)}(1))^\alpha
+\)。
+取对数、除以 \(L\)，并用
+\(
+L^{-1}\log Z_L^{(q)}(1)\to \log\lambda(q)
+\)
+得到 \eqref{eq:pom-multiplicity-composition-renyi-rate-generalq}；
+\(\alpha=2\) 给出碰撞指数。证毕。
+\end{proof}
+
+\paragraph{极值与路径波动：一般 \texorpdfstring{$q$}{q} 的 Gumbel 与布朗桥}
+\begin{theorem}[最大部件长度的普适极值律：一般 \(q\) 的 Gumbel 标度]\label{thm:pom-multiplicity-composition-maxpart-gumbel-generalq}
+固定 \(q\ge 0\)，在 \(P_L^{(q)}\) 下令 \(M_L:=\max_i \ell_i\) 为最大部件长度。
+令
+\[
+a(q):=\varphi^{q}\rho(q)=\frac{\varphi^{q}}{\lambda(q)}\in(0,1).
+\]
+则更新分布 \(p_q(k)=F_{k+2}^{\,q}\rho(q)^k\) 具有几何尾：存在常数 \(c_q>0\) 使
+\[
+\mathbb{P}(\ell\ge k)\sim c_q\,a(q)^k\qquad(k\to\infty),
+\qquad
+c_q=\frac{\varphi^{2q}}{5^{q/2}(1-a(q))}.
+\]
+定义中心化函数
+\[
+m_L(x):=\left\lfloor \frac{\log\!\bigl((L/\mu_q)c_q\bigr)+x}{-\log a(q)}\right\rfloor .
+\]
+则有极值极限
+\[
+\lim_{L\to\infty}\mathbb{P}_{P_L^{(q)}}\bigl(M_L\le m_L(x)\bigr)=\exp(-e^{-x}),
+\]
+从而
+\(
+M_L=\frac{\log L}{-\log a(q)}+O_{\mathbb{P}}(1)
+\)，其涨落属于 Gumbel 普适类，且尺度常数由 \(a(q)=\varphi^{q}/\lambda(q)\) 完全决定。
+\end{theorem}
+\begin{proof}[证明要点]
+尾部渐近由 Binet 公式 \(F_{k+2}=\varphi^{k+2}/\sqrt5\cdot(1+O(\varphi^{-2k}))\) 给出，
+从而
+\(
+p_q(k)=F_{k+2}^{\,q}\rho(q)^k\sim (\varphi^{2q}/5^{q/2})a(q)^k
+\)，并对几何级数求和得到 \(c_q\)。
+\par
+由定理 \ref{thm:pom-multiplicity-composition-partcount-generalq-llt}，
+典型部件数 \(R_L\) 满足 \(R_L=L/\mu_q+O_{\mathbb{P}}(\sqrt{L})\)；
+并由命题 \ref{prop:pom-multiplicity-composition-renewal-hit-prob} 的指数混合/renewal 表示，
+远距窗口的依赖为指数小量，因此 \(M_L\) 的极值可与 \(n\approx L/\mu_q\) 个几何尾 i.i.d.\ 样本的最大值对齐。
+对后者的标准极值理论给出在中心化 \(m_L(x)\) 下的 Gumbel 极限；将随机样本量涨落并入对数中心化项即可得到所述极限。证毕。
+\end{proof}
+
+\begin{theorem}[命中条件下的路径级不变性原理：更新过程到布朗桥]\label{thm:pom-multiplicity-composition-brown-bridge-invariance}
+固定 \(q>0\)。令 \((\ell_i)_{i\ge 1}\) 为 i.i.d.\ 更新增量、\(\ell_i\sim p_q\)，并令部分和 \(S_n=\sum_{i=1}^n\ell_i\)。
+令 \(\tau_L=\inf\{n\ge 1:S_n=L\}\)。
+在条件分布 \(\mathbb{P}(\cdot\mid\tau_L<\infty)\) 下（由定理 \ref{thm:pom-multiplicity-composition-exact-conditional-iid} 与 \(P_L^{(q)}\) 严格等价），定义连续插值过程
+\[
+X_L(t):=\frac{1}{\sqrt{L}}\Bigl(S_{\lfloor t\,\tau_L\rfloor}-tL\Bigr),\qquad t\in[0,1].
+\]
+则在 \(L\to\infty\) 时有函数极限定理
+\[
+X_L(\cdot)\Longrightarrow \sqrt{\frac{\sigma_q^2}{\mu_q}}\,B^\circ(\cdot),
+\]
+其中 \(B^\circ\) 为标准布朗桥。
+\end{theorem}
+\begin{proof}[证明要点]
+对无条件随机游走 \((S_n)_{n\ge 0}\) 应用 Donsker 不变性原理得到布朗运动极限；
+再对事件 \(\{S_{\tau_L}=L\}\)（等价于 \(\{\tau_L<\infty\}\)）作条件化，可将路径分布理解为对末端约束的桥化（Doob-\(h\) 变换）并得到布朗桥极限。
+随机终止时刻 \(\tau_L\) 的波动由定理 \ref{thm:pom-multiplicity-composition-partcount-generalq-llt} 控制，
+从而把离散时间插值 \(\lfloor t\tau_L\rfloor\) 的扰动并入同一紧性框架。证毕。
+\end{proof}
+
+\paragraph{指数混合率：由次近根 \texorpdfstring{$r(q)$}{r(q)} 完全控制}
+\begin{theorem}[谱隙决定的指数混合：一般 \(q\) 的边界解耦率]\label{thm:pom-multiplicity-composition-exponential-mixing-generalq}
+固定 \(q\ge 0\) 并令 \(r(q)>1\) 如命题 \ref{prop:pom-multiplicity-composition-renewal-hit-prob}（即由 renewal 指数收敛率给出）。
+令 \(A,B\) 为仅依赖于分解在两个相距至少 \(n\) 个顶点的有限窗口上的任意柱事件。
+则在 \(L\to\infty\) 的体极限中存在常数 \(C(A,B;q)<\infty\) 使
+\[
+\boxed{\;
+\bigl|\mathbb{P}(A\cap B)-\mathbb{P}(A)\mathbb{P}(B)\bigr|
+\le C(A,B;q)\,r(q)^{-n}.\;}
+\]
+因此，\(q\)-倾斜分解的指数混合率由解析方程 \(A_q(\rho(q)z)=1\) 的次近根结构完全决定。
+\end{theorem}
+\begin{proof}[证明要点]
+由命题 \ref{prop:pom-multiplicity-composition-renewal-hit-prob}，
+renewal 命中概率 \(u_q(L)\) 以速率 \(r(q)^{-L}\) 收敛到 \(1/\mu_q\)。
+对固定窗口事件 \(A,B\)，将分解在间隔区间上的更新视为 renewal 过程的连接段，
+并用“命中概率的乘法近似 + 误差的指数控制”把远距相关压缩为一个由 \(u_q\) 的尾部主导的误差项；
+该误差项的指数率即为 \(r(q)^{-n}\)。
+形式化证明可用生成函数分解或 renewal 方程的解算子谱半径给出。证毕。
+\end{proof}
+
+\endinput
+

@@ -1,0 +1,199 @@
+% (User input window)
+
+\paragraph{维度—体积—熵的变分统一式：压力由层集谱的“体积加权”完全决定}
+沿用 \(S_q(m)=\sum_{x\in X_m}d_m(x)^q\)、层集计数 \(N_m(\gamma,\varepsilon)\) 与谱函数 \(f(\gamma)\) 的记号（定义 \ref{def:pom-fiber-spectrum}），并沿用 moment 压力
+\(\tau(q)=\limsup_{m\to\infty}\frac1m\log S_q(m)\)（定义 \ref{def:pom-moment-pressure}）。
+本段把 \(q\)-矩压力、层集体积增长与纤维指数统一为同一条“对数体积的 Laplace 原理”，并给出由此导出的守恒线、缺口最小化与相共存判据。
+
+\begin{proposition}[变分统一式：\texorpdfstring{$\tau(q)=\sup_\gamma(f(\gamma)+q\gamma)$}{tau(q)=sup(f+qg)}]\label{prop:pom-variational-unity-tau-from-f}
+对每个整数 \(q\ge 1\)，约定 \(\tau(1):=\log 2\)（由 \(S_1(m)=2^m\)），并对 \(q\ge 2\) 仍取定义 \ref{def:pom-moment-pressure} 的 \(\tau(q)\)。
+则成立严格恒等式
+\[
+\boxed{\;
+\tau(q)=\sup_{\gamma\in[0,\log 2]}\bigl(f(\gamma)+q\gamma\bigr).\;}
+\]
+\end{proposition}
+\begin{proof}
+记 \(\gamma_m(x)=\frac1m\log d_m(x)\in[0,\log 2]\)。
+固定 \(\varepsilon\in(0,1)\) 并取网格点 \(\gamma_k:=k\varepsilon\)（\(k=0,1,\dots,K\)，其中 \(K:=\lceil \log 2/\varepsilon\rceil\)）。
+则区间覆盖 \([0,\log 2]\subseteq\bigcup_{k=0}^{K}[\gamma_k-\varepsilon,\gamma_k+\varepsilon]\) 给出
+\[
+X_m\subseteq \bigcup_{k=0}^{K}\{x\in X_m:\ |\gamma_m(x)-\gamma_k|\le \varepsilon\}.
+\]
+从而
+\[
+S_q(m)=\sum_{x\in X_m}e^{qm\gamma_m(x)}
+\le
+\sum_{k=0}^{K}N_m(\gamma_k,\varepsilon)\,e^{qm(\gamma_k+\varepsilon)}.
+\]
+取对数并除以 \(m\) 得
+\[
+\frac1m\log S_q(m)
+\le
+\frac{\log(K+1)}{m}+q\varepsilon+\max_{0\le k\le K}\left(\frac1m\log N_m(\gamma_k,\varepsilon)+q\gamma_k\right).
+\]
+对 \(m\to\infty\) 取 \(\limsup\) 并用 \(\log(K+1)=O(\log(1/\varepsilon))\) 得
+\[
+\tau(q)\le q\varepsilon+\sup_{\gamma\in[0,\log 2]}\left(\limsup_{m\to\infty}\frac1m\log N_m(\gamma,\varepsilon)+q\gamma\right).
+\]
+再令 \(\varepsilon\downarrow 0\) 并用 \(f(\gamma)\) 的定义，即得上界
+\(\tau(q)\le \sup_{\gamma}(f(\gamma)+q\gamma)\)。
+\par
+另一方面，对任意 \(\gamma\in[0,\log 2]\) 与 \(\varepsilon>0\)，由 \(|\gamma_m(x)-\gamma|\le\varepsilon\Rightarrow \gamma_m(x)\ge \gamma-\varepsilon\) 得
+\[
+S_q(m)\ge N_m(\gamma,\varepsilon)\,e^{qm(\gamma-\varepsilon)}.
+\]
+故
+\[
+\tau(q)\ge \limsup_{m\to\infty}\frac1m\log N_m(\gamma,\varepsilon)+q(\gamma-\varepsilon).
+\]
+令 \(\varepsilon\downarrow 0\) 得 \(\tau(q)\ge f(\gamma)+q\gamma\)，再对 \(\gamma\) 取上确界得到下界
+\(\tau(q)\ge \sup_\gamma(f(\gamma)+q\gamma)\)。
+合并即得所示恒等式。证毕。
+\end{proof}
+
+\begin{corollary}[全息守恒律：\texorpdfstring{$\log 2=\sup_\gamma(f(\gamma)+\gamma)$}{log2=sup(f+g)}]\label{cor:pom-holographic-conservation-f-plus-gamma}
+有严格恒等式
+\[
+\boxed{\;\sup_{\gamma\in[0,\log 2]}\bigl(f(\gamma)+\gamma\bigr)=\log 2\;}
+\qquad\text{以及}\qquad
+\boxed{\;f(\gamma)\le \log 2-\gamma\ \ (\forall\gamma).\;}
+\]
+\end{corollary}
+\begin{proof}
+由 \(S_1(m)=\sum_x d_m(x)=2^m\) 得 \(\tau(1)=\log 2\)。
+将 \(q=1\) 代入命题 \ref{prop:pom-variational-unity-tau-from-f} 即得第一式；第二式由第一式移项得到。证毕。
+\end{proof}
+
+\begin{corollary}[Rényi 熵率的“体积缺口”表示：熵为层集谱的最小罚函数]\label{cor:pom-renyi-entropy-gap-as-inf}
+沿用定义 \ref{def:pom-moment-pressure} 的归一化压力 \(P(q)=\tau(q)-q\log 2\)，并令 Rényi 熵率
+\[
+h_q:=-P(q)=q\log 2-\tau(q)\qquad(q\ge 2).
+\]
+则对每个整数 \(q\ge 2\) 有等价极小表示
+\[
+\boxed{\;
+h_q
+=q\log 2-\sup_{\gamma\in[0,\log 2]}\bigl(f(\gamma)+q\gamma\bigr)
+=\inf_{\gamma\in[0,\log 2]}\Bigl(q(\log 2-\gamma)-f(\gamma)\Bigr).\;}
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-variational-unity-tau-from-f}，
+\(
+\tau(q)=\sup_{\gamma}(f(\gamma)+q\gamma)
+\)；
+代入 \(h_q=q\log 2-\tau(q)\) 并用 \(\,a-\sup b=\inf(a-b)\,\) 即得。证毕。
+\end{proof}
+
+\begin{corollary}[维数谱的极小原理：维度为“守恒缺口”的尺度化]\label{cor:pom-dimension-spectrum-gap-min-principle}
+在几何标度 \(\varepsilon_m=\varphi^{-m}\) 下，Rényi 维数谱满足
+\[
+D_q=\frac{h_q}{(q-1)\log\varphi}\qquad(q\ge 2)
+\]
+（见命题 \ref{prop:pom-renyi-dimension-spectrum}）。
+因此结合推论 \ref{cor:pom-renyi-entropy-gap-as-inf}，得到等价极小表示
+\[
+\boxed{\;
+D_q
+=\frac{1}{(q-1)\log\varphi}\inf_{\gamma\in[0,\log 2]}
+\Bigl(q(\log 2-\gamma)-f(\gamma)\Bigr).\;}
+\]
+\end{corollary}
+
+\begin{proposition}[相变的谱几何刻画：压力折点 \texorpdfstring{$\Longleftrightarrow$}{<->} 层集谱的线性面]\label{prop:pom-phase-transition-kink-vs-linear-face}
+在定理 \ref{thm:pom-ldp-uniform-and-wm-exact-spectrum} 的谱等号/Legendre 对偶制度下，
+对任意 \(q\ge 1\) 定义相集合
+\[
+\Gamma_q:=\arg\max_{\gamma\in[0,\log 2]}\bigl(f(\gamma)+q\gamma\bigr).
+\]
+则以下断言两两等价：
+\begin{enumerate}
+  \item \(|\Gamma_q|\ge 2\)（存在至少两类不同纤维指数共同主导 \(q\)-矩体积）；
+  \item \(\tau\) 在 \(q\) 处不可微（等价地：其凸延拓在该处出现折点/子梯度区间）；
+  \item \(f\) 存在斜率为 \(-q\) 的非平凡线性面：存在 \(\gamma_-<\gamma_+\) 使
+  \(
+  f(\gamma)=f(\gamma_-)-q(\gamma-\gamma_-)
+  \)
+  对一切 \(\gamma\in[\gamma_-,\gamma_+]\) 成立。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:pom-variational-unity-tau-from-f}，函数 \(q\mapsto\tau(q)\) 可视为一族仿射函数 \(q\mapsto q\gamma+f(\gamma)\) 的上包络，故其子梯度集合由达到上确界的斜率 \(\gamma\) 决定：\(\partial\tau(q)\) 为达到上确界的 \(\gamma\) 的凸包。
+因此 \(\tau\) 在 \(q\) 处可微当且仅当达到上确界的 \(\gamma\) 唯一，即 (1) 与 (2) 等价。
+\par
+在定理 \ref{thm:pom-ldp-uniform-and-wm-exact-spectrum} 的对偶制度下，
+有 Fenchel 等号：\(\gamma\in\partial\tau(q)\) 当且仅当 \(f(\gamma)=\tau(q)-q\gamma\) 且 \(q\in\partial(-f)(\gamma)\)。
+因此若 \(\partial\tau(q)\) 为非退化区间 \([\gamma_-,\gamma_+]\)，则对所有 \(\gamma\in[\gamma_-,\gamma_+]\) 有
+\(
+f(\gamma)=\tau(q)-q\gamma
+\)，从而 \(f\) 在该区间为斜率 \(-q\) 的线性面，得 (2)\(\Rightarrow\)(3)。
+反之，若 \(f\) 存在斜率 \(-q\) 的线性面，则该区间内任意 \(\gamma\) 均使 \(f(\gamma)+q\gamma\) 取同一最大值，故 \(|\Gamma_q|\ge 2\) 且 \(\tau\) 在 \(q\) 处不可微，得 (3)\(\Rightarrow\)(1)(2)。证毕。
+\end{proof}
+
+\begin{corollary}[全息“维度加和”上界：边界维度 + 纤维维度不超过微观总维度]\label{cor:pom-holographic-dimension-sum-bound}
+在 \(\varphi\)-标度下定义层集的边界维度与纤维维度
+\[
+d_{\partial}(\gamma):=\frac{f(\gamma)}{\log\varphi},\qquad
+d_{\mathrm{fib}}(\gamma):=\frac{\gamma}{\log\varphi}.
+\]
+则由推论 \ref{cor:pom-holographic-conservation-f-plus-gamma} 得严格上界
+\[
+\boxed{\;
+\sup_{\gamma\in[0,\log 2]}\bigl(d_{\partial}(\gamma)+d_{\mathrm{fib}}(\gamma)\bigr)=\frac{\log 2}{\log\varphi}.\;}
+\]
+\end{corollary}
+
+\begin{remark}[矩阵化等价：谱密度、Schatten 体积与行列式势]\label{rem:pom-matrixization-spectrum-density-schatten-det}
+对每个 \(m\) 可取一正算子（例如对角矩阵）
+\(
+\mathsf F_m:=\mathrm{diag}\bigl(d_m(x)\bigr)_{x\in X_m}
+\)
+使得其幂和满足
+\(
+\mathrm{Tr}(\mathsf F_m^q)=\sum_x d_m(x)^q=S_q(m)
+\)。
+因此 \(q\)-矩压力 \(\tau(q)\) 即为 Schatten-\(q\) 体积 \(\|\mathsf F_m\|_q^q=\mathrm{Tr}(\mathsf F_m^q)\) 的指数增长率；
+而对数谱
+\(
+\frac{1}{m}\log\mathrm{Spec}(\mathsf F_m)=\{\gamma_m(x)\}_{x\in X_m}
+\)
+的层集计数指数率正是 \(f(\gamma)\)。
+另一方面，幂和坐标 \(\{p_q\}\) 对交换对称统计的完备性（定理 \ref{thm:pom-mom-symmetric-observables-stone-weierstrass}）与 Newton 恒等式（定理 \ref{thm:pom-power-sum-vandermonde-jacobian} 的证明）表明：有限幂和在一般位置已足以恢复谱多重集，从而把“多分形几何”降解为有限维线性代数可审计对象。
+\end{remark}
+
+\begin{remark}[“可计算相变”：\texorpdfstring{$\delta_q$}{deltaq} 越线与压力/谱骨架的可恢复性断裂]\label{rem:pom-computational-phase-transition-deltaq}
+命题 \ref{prop:pom-phase-transition-kink-vs-linear-face} 把几何相变内部化为“最优层集不唯一”；
+而在可采样口径下，推论 \ref{cor:pom-deltaq-sample-complexity-threshold} 给出二次通道越线指数
+\(\delta_q=\log(\Lambda_q^2/r_q)\) 的算法含义：当 \(\delta_q>0\) 时，为保持相对均方误差 \(o(1)\) 所需样本量满足 \(N\gtrsim \exp(m\delta_q)\)。
+因此在已审计的 near-RH 窗口中，\(q=4\) 作为最小越线阶（注 \ref{rem:pom-deltaq-minimal-visible-order-auditability}）同时标记了一个\emph{可计算相变}的起点：从该阶起，二次通道进入主导竞争，使得以有限 \(m\) 数据稳定反演 \(\tau(q)\)（乃至由其诱导的谱骨架）不可避免地遭遇指数预算断裂。
+\end{remark}
+
+\begin{remark}[熵窗全息化：层集的 Shannon 体积为 \texorpdfstring{$f(\gamma)+\gamma$}{f+g}]\label{rem:pom-layer-set-shannon-holography}
+固定 \(\gamma\in[0,\log 2]\) 与 \(\varepsilon>0\)，令层集
+\[
+L_{m}(\gamma,\varepsilon):=\{x\in X_m:\ |\gamma_m(x)-\gamma|\le \varepsilon\},
+\qquad
+\pi_{m,\gamma,\varepsilon}:=\mathrm{Unif}\bigl(L_m(\gamma,\varepsilon)\bigr)\in\Delta(X_m).
+\]
+令 \(\mu^{e}_{m,\gamma,\varepsilon}:=Q_m\pi_{m,\gamma,\varepsilon}\in\Delta(\Omega_m)\) 为纤维均匀提升（见 \S\ref{subsec:pom-information-ledger} 与定理 \ref{thm:pom-kl-ledger}）。
+由于 \(D_{\mathrm{KL}}(\mu^{e}\|\mu^{e})=0\)，由账本恒等式得严格分解
+\[
+H(\mu^{e}_{m,\gamma,\varepsilon})
+=H(\pi_{m,\gamma,\varepsilon})+\mathbb{E}_{\pi_{m,\gamma,\varepsilon}}[\log d_m(X)].
+\]
+其中 \(H(\pi_{m,\gamma,\varepsilon})=\log|L_m(\gamma,\varepsilon)|=\log N_m(\gamma,\varepsilon)\)，并且
+\(
+\frac1m\mathbb{E}_{\pi_{m,\gamma,\varepsilon}}[\log d_m(X)]\in[\gamma-\varepsilon,\gamma+\varepsilon]
+\)。
+因此先取 \(m\to\infty\) 的 \(\limsup\)，再令 \(\varepsilon\downarrow 0\)，得到
+\[
+\lim_{\varepsilon\downarrow 0}\ \limsup_{m\to\infty}\frac{1}{m}H(\mu^{e}_{m,\gamma,\varepsilon})
+=f(\gamma)+\gamma.
+\]
+另一方面 \(H(\mu^{e})\le \log|\Omega_m|=m\log 2\) 强制
+\(
+f(\gamma)+\gamma\le \log 2
+\)，这与推论 \ref{cor:pom-holographic-conservation-f-plus-gamma} 的守恒线同型：层集的“边界体积”与“纤维熵”在 Shannon 意义下可加，并由微观极限熵 \(\log 2\) 精确封顶。
+\end{remark}
+

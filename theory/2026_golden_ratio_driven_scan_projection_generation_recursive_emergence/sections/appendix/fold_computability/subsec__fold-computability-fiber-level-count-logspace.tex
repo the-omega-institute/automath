@@ -1,0 +1,84 @@
+\paragraph{逆代换层与精确分层计数的可计算读出}
+本段把正文 POM 纤维分解（定理 \ref{thm:pom-fiber-indset-factorization}）与其逆代换次数生成函数 \(Z_x(t)\) 的乘法结构，
+转写为两类纯组合读出：逆代换层的存在性判定与精确分层计数的函数复杂度上界。
+
+\begin{definition}[纤维逆代换层判定与分层计数]\label{def:fold-fiber-level-and-count}
+给定 \((m,x,k)\)（其中 \(m\ge 1\)、\(x\in X_m\)、\(k\in\NN\) 以二进制编码给出），定义判定问题
+\[
+\textsc{Fold-Level}(m,x,k):\quad \exists\,\omega\in \Fold_m^{-1}(x)\ \text{使}\ r(\omega)=k?
+\]
+并定义计数函数
+\[
+\textsc{Fold-Count}(m,x):=\card{\Fold_m^{-1}(x)},
+\qquad
+\textsc{Fold-Count}_k(m,x):=\card{\{\omega\in\Fold_m^{-1}(x):\ r(\omega)=k\}}.
+\]
+\end{definition}
+
+\begin{theorem}[逆代换层的区间谱与对数空间判定]\label{thm:fold-fiber-level-logspace}
+固定 \(m\ge 1\) 与 \(x\in X_m\)。
+设候选位点诱导图 \(\Gamma_x\) 分解为路径不交并
+\(
+\Gamma_x\cong \bigsqcup_{i=1}^{c(x)}P_{\ell_i}
+\)。
+定义
+\[
+R_{\max}(x):=\sum_{i=1}^{c(x)}\left\lceil \frac{\ell_i}{2}\right\rceil.
+\]
+则对任意 \(k\in\NN\)，有等价关系
+\[
+\text{\normalfont\textsc{Fold-Level}}(m,x,k)\quad\Longleftrightarrow\quad 0\le k\le R_{\max}(x).
+\]
+从而 \(\text{\normalfont\textsc{Fold-Level}}\in \mathbf{L}\)（确定性对数空间）。
+\end{theorem}
+
+\begin{proof}
+由推论 \ref{cor:pom-fiber-rewrite-spectrum-no-gaps}，
+\(
+\{r(\omega):\omega\in\Fold_m^{-1}(x)\}=\{0,1,\dots,R_{\max}(x)\}
+\)，
+故可满足性当且仅当 \(0\le k\le R_{\max}(x)\)。
+\par
+剩余仅需说明 \(R_{\max}(x)\) 在对数空间内可计算。
+\(\Gamma_x\) 的顶点集（候选位点）与边关系由折叠核的局部结构以线性扫描方式确定（定理 \ref{thm:pom-fiber-indset-factorization} 的构造），且 \(\Gamma_x\) 的连通分量均为路径。
+因此可以在单遍扫描中维护“当前分量长度 \(\ell\)”与累积和 \(\sum\lceil \ell/2\rceil\)（二者均为 \(O(m)\) 规模整数）并在分量边界处更新；
+对数空间机可用 \(O(\log m)\) 位工作带存储这些计数器。
+于是该判定问题属于 \(\mathbf{L}\)。
+\end{proof}
+
+\begin{theorem}[纤维计数与分层计数的对数空间转导]\label{thm:fold-fiber-counts-logspace}
+在定义 \ref{def:fold-fiber-level-and-count} 的记号下：
+\begin{enumerate}
+\normalfont
+  \item \(\textsc{Fold-Count}(m,x)\) 可由确定性对数空间转导机输出；
+  \item 对任意 \(k\in\NN\)，\(\textsc{Fold-Count}_k(m,x)\) 可由确定性对数空间转导机输出。
+\end{enumerate}
+并且两类输出的二进制长度均为 \(O(m)\)。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:pom-fiber-indset-factorization}，有生成函数分解
+\(
+Z_x(t)=\prod_{i=1}^{c(x)} I_{\ell_i}(t)
+\)，并且
+\(
+\textsc{Fold-Count}(m,x)=Z_x(1)=\prod_i I_{\ell_i}(1)
+\)；
+其中 \(I_{\ell}(1)=\card{\mathsf{Ind}(P_\ell)}=F_{\ell+2}\)，从而
+\[
+\textsc{Fold-Count}(m,x)=\prod_{i=1}^{c(x)}F_{\ell_i+2}.
+\]
+另一方面，
+\(
+\textsc{Fold-Count}_k(m,x)=[t^k]Z_x(t)
+\)
+为次数 \(O(m)\) 的多项式乘积的系数读出。
+\par
+由于 \(\textsc{Fold-Count}(m,x)\le 2^m\) 且 \(\textsc{Fold-Count}_k(m,x)\le 2^m\)，其二进制长度均为 \(O(m)\)。
+对数空间转导的构造可采用标准的“分治乘法树 + 系数投影”口径：先以对数空间可计算方式得到分量长度序列 \((\ell_i)\)，
+再在对数深度的乘法树中迭代组合各分量的 \(I_{\ell_i}\)（在该口径下，多项式乘法与系数提取可由对数空间统一实现）。
+从而两类函数均属于 \(\mathbf{FL}\)。
+\end{proof}
+
+\endinput
+

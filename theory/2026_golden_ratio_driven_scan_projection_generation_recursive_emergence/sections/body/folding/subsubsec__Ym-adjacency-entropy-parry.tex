@@ -1,0 +1,75 @@
+\subsubsection{邻接关系、拓扑熵与 Parry（最大熵）测度}\label{subsubsec:Ym-adjacency-entropy-parry}
+取一个右解析且 follower-separated 的表示（例如上面的 Fischer cover），记为
+\[
+H_m=(\mathcal{S}_m,\mathcal{E}_m,\lambda_m),
+\]
+其中每条边 $e\in\mathcal{E}_m$ 具有起点 $s(e)\in\mathcal{S}_m$、终点 $t(e)\in\mathcal{S}_m$ 与标记 $\lambda_m(e)\in X_m$。
+
+\begin{definition}[覆盖 SFT 的邻接矩阵（边移位）]\label{def:Phi_m-adjacency}
+令 $X_{A_m}$ 为图 $H_m$ 的\textbf{边移位}（把边当作字母的 SFT）。其邻接矩阵 $A_m$ 为 $0$--$1$ 矩阵，索引集为 $\mathcal{E}_m$，并由
+\[
+(A_m)_{e,e'}:=\mathbf{1}\{\,t(e)=s(e')\,\}
+\]
+给出。这一邻接关系是完全显式的：它只依赖于 $H_m$ 的端点相容性。
+\end{definition}
+
+\begin{proposition}[拓扑熵的可计算公式]\label{prop:Phi_m-entropy}
+设 $H_m$ 不可约（或取其最大熵不可约分量），则
+\[
+h_{\mathrm{top}}(Y_m)=h_{\mathrm{top}}(X_{A_m})=\log\rho(A_m).
+\]
+\end{proposition}
+
+\begin{proof}
+$X_{A_m}$ 通过逐边取标记映射到 $Y_m$（滑动块因子）。在 Fischer cover 上该因子码有限对一，因此熵保持；而 SFT 的熵为 $\log\rho(A_m)$。参见 \cite{LindMarcus1995,Kitchens1998SymbolicDynamics}。
+\end{proof}
+
+\begin{proposition}[Parry 最大熵测度（覆盖 \texorpdfstring{$X_{A_m}$}{XAm} 上）]\label{prop:Phi_m-parry}
+令 $\lambda=\rho(A_m)$，取 Perron--Frobenius 左/右特征向量 $l,r>0$ 满足
+\(
+l^{\mathsf T}A_m=\lambda l^{\mathsf T},\ A_m r=\lambda r
+\)
+并规范化为 $l^{\mathsf T}r=1$。定义状态权重
+\[
+\pi(e):=l_e r_e\qquad (e\in\mathcal{E}_m),
+\]
+以及转移概率
+\[
+P_{e\to e'}:=\frac{(A_m)_{e,e'}\,r_{e'}}{\lambda\, r_e}.
+\]
+则由 $(\pi,P)$ 给出的平稳马尔可夫测度是 $X_{A_m}$ 上唯一的最大熵测度（Parry 测度），记为 $\mu_{A_m}^{\mathrm{Parry}}$。
+其对边柱集 $[e_0e_1\cdots e_{n-1}]$ 的概率满足
+\[
+\mu_{A_m}^{\mathrm{Parry}}([e_0\cdots e_{n-1}])=\pi(e_0)\prod_{j=0}^{n-2} P_{e_j\to e_{j+1}}.
+\]
+\end{proposition}
+
+\begin{proposition}[把 Parry 测度推前到 \texorpdfstring{$Y_m$}{Ym}]\label{prop:Phi_m-parry-pushforward}
+令 $\pi_m:X_{A_m}\to Y_m$ 为逐边取标记的因子映射
+\[
+(\pi_m((e_t)_{t\in\ZZ}))_t:=\lambda_m(e_t)\in X_m.
+\]
+则 $\nu_m:=({\pi_m})_*\mu_{A_m}^{\mathrm{Parry}}$ 是 $Y_m$ 的最大熵测度（当 $Y_m$ 不可约时唯一）。对任意输出柱集 $[a_0\cdots a_{n-1}]$（$a_j\in X_m$），有完全显式的求和公式
+\[
+\nu_m([a_0\cdots a_{n-1}])
+=
+\sum_{\substack{e_0,\dots,e_{n-1}\in\mathcal{E}_m\\ \lambda_m(e_j)=a_j}}
+\mu_{A_m}^{\mathrm{Parry}}([e_0\cdots e_{n-1}]),
+\]
+其中 $\mu_{A_m}^{\mathrm{Parry}}([e_0\cdots e_{n-1}])$ 由命题 \ref{prop:Phi_m-parry} 的 PF 数据给出。
+\end{proposition}
+
+\begin{proof}
+Fischer cover 的 Parry 测度推前为 sofic shift 的最大熵测度；柱集公式只是“推前测度 = 对 lift 求和”的展开。参见 \cite{LindMarcus1995,Kitchens1998SymbolicDynamics}。
+\end{proof}
+
+\begin{remark}[可复现的邻接关系与熵计算（脚本）]\label{rem:phi_m_entropy_script}
+上文给出的是“如何从右解析表示得到邻接关系/熵/Parry 测度”的抽象接口。为回应“需要可计算邻接关系与显式熵值”的审计需求，仓库提供脚本 \texttt{scripts/exp\_phi\_m\_sofic\_entropy.py}：它从定义 \ref{def:G_m} 的标记图 $G_m$ 出发，经子集确定化与右语言最小化构造一个右解析表示，并输出其（最大熵本质分量上的）邻接计数矩阵的谱半径，从而得到 $h_{\mathrm{top}}(Y_m)$ 的数值值。表 \ref{tab:phi_m_sofic_entropy} 为该脚本的默认输出摘要（见 \texttt{artifacts/export/phi\_m\_sofic\_entropy.csv} 与 \texttt{sections/generated/tab\_phi\_m\_sofic\_entropy.tex}）。
+\end{remark}
+
+\input{sections/generated/tab_phi_m_sofic_entropy}
+
+\begin{remark}[为什么在本文中用“覆盖的 \texorpdfstring{$\zeta$}{zeta}”作为接口]\label{rem:sofic-zeta-vs-cover}
+需要强调：sofic shift 的\emph{内禀} Artin--Mazur \(\zeta_{Y_m}\) 虽然是有理函数（可由自动机/cover 理论计算），但它\textbf{并不}在有限对一因子下保持不变，因此不能简单地由 \(\det(I-zA_m)\) 直接给出。本文把 \(\det(I-zA)\) 与 Fredholm 行列式作为“语法层可计算接口”时，所对应的是覆盖 SFT（即 Fischer cover）的 \(\zeta\)，这也是 Cuntz--Krieger/群胚 C*-代数与 PF/Parry 理论的对接对象。
+\end{remark}
+

@@ -1,0 +1,346 @@
+\paragraph{同余块 Abel--Weil 展开、留数锁相与误差可审计重构链}\label{par:xi-discrete-abel-weil-congruence-residue-locking-audit}
+在定理 \ref{thm:discrete-abel-weil-expansion} 的离散 Abel--Weil 分解基础上，
+可将底数采样误差序列按同余类拆分为一组共享极点的子通道。
+该拆分把“零点参数 \(\rho\)”转写为“公共极点位置 + 通道留数相位/模长”的代数可观测量，
+并允许在观测误差下给出显式的非渐近传播上界。
+
+\begin{theorem}[同余块 Abel--Weil 展开与公共极点留数锁相]\label{thm:xi-congruence-block-abel-weil-residue-locking}
+固定 \(b>1\) 与整数 \(m\ge 2\)。
+沿用
+\[
+E_b(n):=b^{-n/2}\bigl(\psi_0(b^n)-b^n\bigr),
+\qquad
+\mathcal A_b(r):=\sum_{n\ge 0}E_b(n)r^n.
+\]
+对每个 \(j\in\{0,1,\dots,m-1\}\) 定义同余块生成函数
+\[
+\mathcal A_{b,m}^{(j)}(u):=\sum_{n\ge 0}E_b(mn+j)\,u^n.
+\]
+记 \(\zeta\) 非平凡零点的重数为 \(\mathrm{mult}(\rho)\)。
+则在 \(|u|\) 足够小（继而按亚纯延拓）时有
+\begin{equation}\label{eq:xi-congruence-block-abel-weil}
+\mathcal A_{b,m}^{(j)}(u)
+=-\sum_{\rho}\frac{\mathrm{mult}(\rho)\,b^{(\rho-\frac12)j}}{\rho}\cdot
+\frac{1}{1-u\,b^{m(\rho-\frac12)}}
++H_{b,m}^{(j)}(u),
+\end{equation}
+其中
+\[
+H_{b,m}^{(j)}(u):=\sum_{n\ge 0}b^{-(mn+j)/2}G(b^{mn+j})\,u^n
+\]
+至少在 \(|u|<b^{m/2}\) 内解析。
+于是每个非平凡零点 \(\rho\) 诱导公共极点
+\[
+u_\rho:=b^{-m(\rho-\frac12)},
+\]
+且在第 \(j\) 通道的留数满足
+\begin{equation}\label{eq:xi-congruence-block-residue-locking}
+\operatorname{Res}_{u=u_\rho}\mathcal A_{b,m}^{(j)}(u)
+=\frac{\mathrm{mult}(\rho)\,b^{(\rho-\frac12)j}\,u_\rho}{\rho}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+由 \eqref{eq:Abel-Weil-decomposition} 的系数形式，
+\[
+E_b(n)= -\sum_\rho \frac{\mathrm{mult}(\rho)}{\rho}\,b^{(\rho-\frac12)n}
++b^{-n/2}G(b^n).
+\]
+代入 \(n=mn+j\) 并求和得
+\[
+\mathcal A_{b,m}^{(j)}(u)
+=-\sum_\rho \frac{\mathrm{mult}(\rho)\,b^{(\rho-\frac12)j}}{\rho}
+\sum_{n\ge 0}\bigl(u\,b^{m(\rho-\frac12)}\bigr)^n
++\sum_{n\ge 0}b^{-(mn+j)/2}G(b^{mn+j})u^n,
+\]
+即 \eqref{eq:xi-congruence-block-abel-weil}。
+由 \(G(b^{mn+j})=O(1)\) 得余项系数 \(O(b^{-(mn+j)/2})\)，故解析半径至少为 \(b^{m/2}\)。
+对主项的几何核
+\(
+(1-u\,b^{m(\rho-\frac12)})^{-1}
+\)
+在 \(u=u_\rho\) 处取留数即得 \eqref{eq:xi-congruence-block-residue-locking}。证毕。
+\end{proof}
+
+\begin{corollary}[留数比恢复零点实部与模长平坦判据]\label{cor:xi-congruence-block-residue-ratio-realpart}
+在定理 \ref{thm:xi-congruence-block-abel-weil-residue-locking} 设定下，
+若 \(\rho\) 为单零点，则定义
+\[
+r_\rho:=b^{-(\rho-\frac12)},\qquad u_\rho=r_\rho^m.
+\]
+对任意 \(j\in\{0,\dots,m-2\}\) 有
+\begin{equation}\label{eq:xi-congruence-block-residue-ratio}
+\frac{\operatorname{Res}_{u=u_\rho}\mathcal A_{b,m}^{(j)}}
+{\operatorname{Res}_{u=u_\rho}\mathcal A_{b,m}^{(j+1)}}
+=r_\rho.
+\end{equation}
+因此
+\begin{equation}\label{eq:xi-congruence-block-realpart-from-residue-ratio}
+\Re(\rho)-\frac12
+=-\frac{1}{\log b}\log|r_\rho|
+=-\frac{1}{\log b}
+\log\left|
+\frac{\operatorname{Res}\mathcal A_{b,m}^{(j)}}
+{\operatorname{Res}\mathcal A_{b,m}^{(j+1)}}
+\right|.
+\end{equation}
+并且
+\[
+\Re(\rho)=\frac12
+\Longleftrightarrow
+\left|\operatorname{Res}\mathcal A_{b,m}^{(j)}\right|
+=\left|\operatorname{Res}\mathcal A_{b,m}^{(j+1)}\right|
+\quad(0\le j\le m-2).
+\]
+\end{corollary}
+
+\begin{proof}
+由 \eqref{eq:xi-congruence-block-residue-locking}（\(\mathrm{mult}(\rho)=1\)）直接相除得到
+\eqref{eq:xi-congruence-block-residue-ratio}。取模与对数即得
+\eqref{eq:xi-congruence-block-realpart-from-residue-ratio}。证毕。
+\end{proof}
+
+\begin{proposition}[幂覆盖的解析截面由留数比内禀给出]\label{prop:xi-congruence-block-power-cover-section}
+在推论 \ref{cor:xi-congruence-block-residue-ratio-realpart} 条件下，
+对公共极点 \(u_\rho\) 定义
+\[
+s_m(u_\rho):=
+\frac{\operatorname{Res}_{u=u_\rho}\mathcal A_{b,m}^{(j)}}
+{\operatorname{Res}_{u=u_\rho}\mathcal A_{b,m}^{(j+1)}}
+\qquad(0\le j\le m-2).
+\]
+则 \(s_m(u_\rho)\) 与 \(j\) 无关，且
+\[
+s_m(u_\rho)=r_\rho,\qquad s_m(u_\rho)^m=u_\rho.
+\]
+换言之，在零点诱导极点除子上，幂映射 \(\pi_m:z\mapsto z^m\) 存在由留数数据唯一确定的截面。
+\end{proposition}
+
+\begin{proof}
+由 \eqref{eq:xi-congruence-block-residue-ratio} 得 \(s_m(u_\rho)=r_\rho\) 与 \(j\) 无关。
+再由 \(u_\rho=r_\rho^m\) 即得 \(s_m(u_\rho)^m=u_\rho\)。证毕。
+\end{proof}
+
+\begin{theorem}[单基去混叠的可数例外集定理]\label{thm:xi-single-base-dealiasing-countable-exception}
+设 \(S\subset\CC\) 为可数集合。
+对每个 \(b>1\) 定义
+\[
+\Phi_b:S\to\CC^\times,\qquad
+\Phi_b(s):=b^{-(s-\frac12)}.
+\]
+则存在至多可数的例外集合 \(\mathcal B\subset(1,\infty)\)，使得对任意
+\(
+b\in(1,\infty)\setminus\mathcal B
+\)，\(\Phi_b\) 在 \(S\) 上单射。
+\end{theorem}
+
+\begin{proof}
+固定 \(s\neq s'\in S\)。
+若 \(\Phi_b(s)=\Phi_b(s')\)，则
+\[
+b^{-(s-s')}=1
+\Longleftrightarrow
+(s-s')\log b\in 2\pi i\,\ZZ.
+\]
+若 \(\Re(s-s')\neq 0\)，上式无解；
+若 \(\Re(s-s')=0\)，则对每个非零整数 \(k\) 至多给出一个解
+\(
+\log b=2\pi k/\Im(s-s')
+\)。
+故每对 \((s,s')\) 的碰撞底数集合至多可数。
+对可数对集合 \(S\times S\setminus\{(s,s)\}\) 取并，得到例外集 \(\mathcal B\) 至多可数。证毕。
+\end{proof}
+
+\begin{theorem}[双基残差比编码的唯一重构]\label{thm:xi-two-base-residue-ratio-unique-recovery}
+取 \(b_1,b_2>1\) 满足
+\[
+\frac{\log b_1}{\log b_2}\notin\QQ.
+\]
+设 \(\rho\) 为非平凡单零点，并在两底数下定义
+\[
+r_\rho^{(k)}
+:=b_k^{-(\rho-\frac12)}
+=\frac{\operatorname{Res}\mathcal A_{b_k,m}^{(j)}}
+{\operatorname{Res}\mathcal A_{b_k,m}^{(j+1)}},
+\qquad k=1,2.
+\]
+则有序对 \(\bigl(r_\rho^{(1)},r_\rho^{(2)}\bigr)\) 唯一决定 \(\rho\)。
+\end{theorem}
+
+\begin{proof}
+若 \(\rho,\rho'\) 诱导同一编码对，则
+\[
+b_1^{-(\rho-\rho')}=1,\qquad b_2^{-(\rho-\rho')}=1.
+\]
+故存在整数 \(k_1,k_2\) 使
+\[
+\rho-\rho'=\frac{2\pi i k_1}{\log b_1}
+=\frac{2\pi i k_2}{\log b_2}.
+\]
+若 \(\rho\neq\rho'\)，则
+\(
+\log b_1/\log b_2=k_1/k_2\in\QQ
+\)，与假设矛盾，故 \(\rho=\rho'\)。证毕。
+\end{proof}
+
+\begin{proposition}[留数观测误差到零点实部误差的显式传播界]\label{prop:xi-residue-ratio-error-propagation-realpart}
+固定 \(b>1,m\ge2\)。
+设在公共极点 \(u_\rho\) 处，相邻通道真留数为 \(R_j,R_{j+1}\neq 0\)，观测值为
+\(\widehat R_j,\widehat R_{j+1}\)，且
+\[
+\left|\frac{\widehat R_j}{R_j}-1\right|\le\varepsilon,\qquad
+\left|\frac{\widehat R_{j+1}}{R_{j+1}}-1\right|\le\varepsilon,\qquad
+0\le\varepsilon<1.
+\]
+定义
+\[
+r:=\frac{R_j}{R_{j+1}}=b^{-(\rho-\frac12)},
+\qquad
+\widehat r:=\frac{\widehat R_j}{\widehat R_{j+1}}.
+\]
+则
+\begin{equation}\label{eq:xi-residue-ratio-relative-error-bound}
+\left|\frac{\widehat r}{r}-1\right|
+\le
+\frac{2\varepsilon}{1-\varepsilon}.
+\end{equation}
+并且若
+\(
+\widehat\rho:=\frac12-\frac{\Log(\widehat r)}{\log b}
+\)
+（取一致对数分支），则
+\begin{equation}\label{eq:xi-residue-ratio-realpart-error-bound}
+\left|\Re(\widehat\rho)-\Re(\rho)\right|
+\le
+\frac{1}{\log b}
+\log\!\left(1+\frac{2\varepsilon}{1-\varepsilon}\right).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+写
+\(
+\widehat R_j=R_j(1+\delta_j),\ 
+\widehat R_{j+1}=R_{j+1}(1+\delta_{j+1})
+\)
+且 \(|\delta_j|,|\delta_{j+1}|\le\varepsilon\)。
+则
+\[
+\frac{\widehat r}{r}
+=\frac{1+\delta_j}{1+\delta_{j+1}},
+\qquad
+\left|\frac{\widehat r}{r}-1\right|
+=\left|\frac{\delta_j-\delta_{j+1}}{1+\delta_{j+1}}\right|
+\le\frac{|\delta_j|+|\delta_{j+1}|}{1-\varepsilon}
+\le \frac{2\varepsilon}{1-\varepsilon},
+\]
+得 \eqref{eq:xi-residue-ratio-relative-error-bound}。
+再由
+\[
+\Re(\widehat\rho)-\Re(\rho)
+=-\frac{1}{\log b}\log\frac{|\widehat r|}{|r|},
+\]
+与不等式 \(|\log(1+z)|\le \log(1+|z|)\)（当 \(|z|<1\)）及
+\eqref{eq:xi-residue-ratio-relative-error-bound}，得
+\eqref{eq:xi-residue-ratio-realpart-error-bound}。证毕。
+\end{proof}
+
+\begin{theorem}[单极点轮廓积分读出与可审计误差界]\label{thm:xi-single-pole-contour-readout-error-audit}
+设 \(F\) 在闭圆盘 \(\overline{D(0,R)}\) 邻域内亚纯，并在 \(D(0,R)\) 内恰有一个简单极点 \(u_0\)。
+令 \(\Gamma_R:=\{u:\ |u|=R\}\)，定义
+\[
+J_0:=\oint_{\Gamma_R}F(u)\,\dd u,\qquad
+J_1:=\oint_{\Gamma_R}uF(u)\,\dd u.
+\]
+则有精确读出
+\[
+\operatorname{Res}_{u=u_0}F=\frac{1}{2\pi i}J_0,\qquad
+u_0=\frac{J_1}{J_0}.
+\]
+若 \(\widetilde F\) 是 \(\Gamma_R\) 上近似，且
+\[
+\sup_{|u|=R}|F(u)-\widetilde F(u)|\le \eta,
+\]
+定义 \(\widetilde J_k:=\oint_{\Gamma_R}u^k\widetilde F(u)\,\dd u\)（\(k=0,1\)），并假设非退化条件
+\[
+|\widetilde J_0|>2\pi R\eta,
+\]
+则 \(J_0\neq 0\)，并有
+\begin{equation}\label{eq:xi-contour-residue-error-bound}
+\left|\operatorname{Res}_{u=u_0}F-\frac{1}{2\pi i}\widetilde J_0\right|
+\le R\eta,
+\end{equation}
+\begin{equation}\label{eq:xi-contour-pole-location-error-bound}
+\left|u_0-\frac{\widetilde J_1}{\widetilde J_0}\right|
+\le
+\frac{R^2\eta}{\frac{|\widetilde J_0|}{2\pi}-R\eta}
++
+\frac{R^3\eta}{\left(\frac{|\widetilde J_0|}{2\pi}-R\eta\right)\frac{|\widetilde J_0|}{2\pi}}
+\cdot
+\sup_{|u|=R}|\widetilde F(u)|.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+由留数定理，
+\(
+J_0=2\pi i\,\operatorname{Res}_{u=u_0}F
+\)
+且
+\(
+J_1=2\pi i\,u_0\,\operatorname{Res}_{u=u_0}F
+\)，
+故读出式成立。
+
+设 \(\Delta_k:=J_k-\widetilde J_k\)。
+则
+\[
+|\Delta_k|
+\le
+\oint_{|u|=R}|u|^k|F-\widetilde F|\,|\dd u|
+\le
+2\pi R^{k+1}\eta,
+\qquad k=0,1.
+\]
+于是
+\[
+\left|\operatorname{Res}F-\frac{1}{2\pi i}\widetilde J_0\right|
+=\frac{|\Delta_0|}{2\pi}\le R\eta,
+\]
+即 \eqref{eq:xi-contour-residue-error-bound}。
+并由 \(|J_0|\ge |\widetilde J_0|-|\Delta_0|>0\) 得 \(J_0\neq 0\)。
+
+再由分式差估计
+\[
+\left|\frac{J_1}{J_0}-\frac{\widetilde J_1}{\widetilde J_0}\right|
+\le
+\frac{|J_1-\widetilde J_1|}{|J_0|}
++
+\frac{|\widetilde J_1|\,|J_0-\widetilde J_0|}{|J_0|\,|\widetilde J_0|},
+\]
+并代入
+\[
+|J_1-\widetilde J_1|\le 2\pi R^2\eta,\qquad
+|J_0-\widetilde J_0|\le 2\pi R\eta,\qquad
+|J_0|\ge |\widetilde J_0|-2\pi R\eta,
+\]
+以及
+\[
+|\widetilde J_1|
+\le
+\oint_{|u|=R}|u|\,|\widetilde F(u)|\,|\dd u|
+\le
+2\pi R^2\sup_{|u|=R}|\widetilde F(u)|,
+\]
+即可化得 \eqref{eq:xi-contour-pole-location-error-bound}。证毕。
+\end{proof}
+
+\begin{remark}[与同余块极点审计的接口]\label{rem:xi-congruence-block-contour-audit-interface}
+将定理 \ref{thm:xi-single-pole-contour-readout-error-audit}
+应用于 \(\mathcal A_{b,m}^{(j)}\) 在局部隔离轮廓中的单极点读出，
+即可把“同余块留数锁相”转写为一条可递归缩放的误差审计链：
+轮廓半径 \(R\) 与边界逼近误差 \(\eta\) 的选择直接给出
+极点位置与留数的不确定度闭式上界。
+\end{remark}
+
+\endinput

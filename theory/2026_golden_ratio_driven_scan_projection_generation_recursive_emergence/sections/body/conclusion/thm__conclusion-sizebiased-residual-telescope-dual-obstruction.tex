@@ -1,0 +1,137 @@
+\begin{theorem}[尺寸偏置残差的全塔望远镜分解]\label{thm:conclusion-sizebiased-residual-telescope}
+设
+\[
+X_0\xrightarrow{f_1}X_1\xrightarrow{f_2}\cdots\xrightarrow{f_n}X_n
+\]
+为满射链，记 \(F_k:=f_k\circ\cdots\circ f_1\)，并对 \(\mu\in\Delta(X_0)\) 定义
+\[
+\mu_{(k)}^{e}:=L_{F_k}\bigl((F_k)_\ast\mu\bigr),
+\qquad
+R^{(k)}(\mu):=D_{\mathrm{KL}}(\mu\|\mu_{(k)}^{e}).
+\]
+再令
+\[
+\pi_k:=(F_k)_\ast\mu,
+\]
+并对每个 \(x_{k+1}\in X_{k+1}\) 记 \(\sigma^{(k)}_{x_{k+1}}\) 为由 \(F_k\) 的纤维基数诱导的尺寸偏置基准。则有严格望远镜恒等式
+\[
+R^{(n)}(\mu)
+=
+\sum_{k=0}^{n-1}
+\mathbb E_{X_{k+1}}
+\Bigl[
+D_{\mathrm{KL}}\bigl(\pi_k(\cdot\mid X_{k+1})\|\sigma^{(k)}_{X_{k+1}}\bigr)
+\Bigr].
+\]
+因此，塔顶尺寸偏置残差并不是一个不可分解总量，而恰精确裂解为每一层“条件后验相对于局部尺寸偏置基准”的 KL 账本。
+\end{theorem}
+\begin{proof}
+这正是推论 \ref{cor:pom-ledger-residual-telescoping} 的重写：该推论给出
+\[
+\mathsf R_{(k+1)}(\mu)-\mathsf R_{(k)}(\mu)
+=
+\mathbb E_{X_{k+1}}
+\Bigl[
+D_{\mathrm{KL}}\bigl(\pi_k(\cdot\mid X_{k+1})\|\sigma^{(k)}_{X_{k+1}}\bigr)
+\Bigr]\ge 0
+\]
+以及
+\[
+\mathsf R_{(n)}(\mu)
+=
+\sum_{k=0}^{n-1}
+\mathbb E_{X_{k+1}}
+\Bigl[
+D_{\mathrm{KL}}\bigl(\pi_k(\cdot\mid X_{k+1})\|\sigma^{(k)}_{X_{k+1}}\bigr)
+\Bigr].
+\]
+把结论中的记号 \(R^{(k)}(\mu)\) 与正文记号 \(\mathsf R_{(k)}(\mu)\) 识别，即得所述望远镜公式。证毕。
+\end{proof}
+
+\begin{corollary}[全塔零残差的逐层刚性判据]\label{cor:conclusion-zero-sizebiased-residual-layerwise-rigidity}
+在定理 \ref{thm:conclusion-sizebiased-residual-telescope} 的设定下，下列命题等价：
+\begin{enumerate}
+  \item \(R^{(n)}(\mu)=0\)；
+  \item 对每个 \(k=0,\dots,n-1\)，都有
+  \[
+  \pi_k(\cdot\mid X_{k+1})=\sigma^{(k)}_{X_{k+1}}
+  \qquad\text{a.s.};
+  \]
+  \item 每一层残差增量都为零，即
+  \[
+  R^{(k+1)}(\mu)-R^{(k)}(\mu)=0
+  \qquad (0\le k\le n-1).
+  \]
+\end{enumerate}
+故“零残差”不是模糊的塔顶事件，而是一个逐层逐纤维的尺寸偏置刚性条件。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-sizebiased-residual-telescope}，\(R^{(n)}(\mu)\) 是若干非负 KL 项之和，且每一项又恰等于相应层的残差增量。故 \(\textup{(1)}\Leftrightarrow\textup{(3)}\) 由非负项和为零当且仅当逐项为零得出；而 \(\textup{(2)}\Leftrightarrow\textup{(3)}\) 则由 KL 散度的零判据给出。证毕。
+\end{proof}
+
+\begin{proposition}[尺寸偏置残差与可见异常的逻辑独立性]\label{prop:conclusion-sizebias-visible-anomaly-logical-independence}
+“尺寸偏置残差为零”与“可见异常为零”之间不存在任何单向逻辑蕴含。更具体地：
+\begin{enumerate}
+  \item 存在例子使得
+  \[
+  \mathsf{Anom}_G(K;\theta)=0
+  \qquad\text{而}\qquad
+  R^{(n)}(\mu)>0;
+  \]
+  \item 也存在例子使得
+  \[
+  R^{(n)}(\mu)=0
+  \qquad\text{而}\qquad
+  \mathsf{Anom}_G(K;\theta)\neq 0.
+  \]
+\end{enumerate}
+因此，strictification 至少包含两条彼此独立的障碍通道：一条是几率型的尺寸偏置残差，另一条是角色接口型的可见异常。
+\end{proposition}
+\begin{proof}
+对 \(\textup{(1)}\)，取平凡群提升 \(G=\{e\}\)。此时所有可见扭曲通道退化，故异常恒为零。另一方面，只要选取一个投影塔与某个 \(\mu\) 使结论 \ref{cor:conclusion-zero-sizebiased-residual-layerwise-rigidity} 的逐层尺寸偏置条件失败于正概率集合上，就有 \(R^{(n)}(\mu)>0\)。
+
+对 \(\textup{(2)}\)，固定任一存在非 strictifiable 可见群商的闭环接口，即相应群商不因子化通过 \(G_m^{\mathrm{BC}}\)。由定理 \ref{thm:conclusion-zero-anomaly-maximal-visible-cp-realization}，其可见异常必非零。另一方面，对同一投影塔取 \(\mu=\mu_{(n)}^{e}\)，则按定义
+\[
+R^{(n)}(\mu)=D_{\mathrm{KL}}(\mu_{(n)}^{e}\|\mu_{(n)}^{e})=0.
+\]
+故两类障碍互不蕴含。证毕。
+\end{proof}
+
+\begin{theorem}[完全 strictification 的双判据]\label{thm:conclusion-complete-strictification-dual-criterion}
+对一条带群提升的投影塔，若要求同时满足
+\[
+\text{(i) 塔顶尺寸偏置残差为零},
+\qquad
+\text{(ii) 扭曲角色接口上的可见异常为零},
+\]
+则且仅则下述两类条件同时成立：
+\begin{enumerate}
+  \item 每一层的条件后验都等于相应局部尺寸偏置基准；
+  \item 任意含 \(E_m\) 与 \(\mathrm{LIFT}_G\) 的投影词都可规约到单末端值投影正规形，并且可见通道族通过最大可见群商 \(G_m^{\mathrm{BC}}\) 获得完全正实现。
+\end{enumerate}
+换言之，完全 strictification 不是单一方程，而是“局部尺寸偏置刚性”与“角色接口严格交换”这两条条件的交。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:conclusion-zero-sizebiased-residual-layerwise-rigidity}，条件 \(\textup{(i)}\) 当且仅当每一层条件后验都等于相应尺寸偏置基准。由定理 \ref{thm:conclusion-zero-anomaly-maximal-visible-cp-realization}，条件 \(\textup{(ii)}\) 当且仅当闭环接口在全部可见扭曲通道上严格交换，并且严格交换的完全正实现唯一经由 \(G_m^{\mathrm{BC}}\)。
+
+再由定理 \ref{thm:conclusion-strictified-projection-word-terminal-normal-form}，一旦异常为零，所有含 \(E_m\) 与 \(\mathrm{LIFT}_G\) 的投影词都可规约到单末端值投影正规形。于是 \(\textup{(i)}\) 与 \(\textup{(ii)}\) 的合取恰好等价于结论中的两条刚性条件。证毕。
+\end{proof}
+
+\begin{conjecture}[逆极限 strictification 的双障碍完备性]\label{conj:conclusion-inverse-limit-strictification-dual-obstruction-completeness}
+设
+\[
+X_\infty=\varprojlim X_m
+\]
+为折叠逆极限，并记有限层上的两类障碍分别为
+\[
+\mathcal R_m(\mu):=R^{(m)}(\mu),
+\qquad
+\mathcal A_m(K;\theta):=\mathsf{Anom}_G(K;\theta).
+\]
+则在 projective-limit 语义下，全局可见 strictification 存在，当且仅当两项条件同时成立：
+\begin{enumerate}
+  \item 对所有有限前缀塔，尺寸偏置残差在极限中消失；
+  \item 对所有有限分辨率与全部扭曲角色通道，可见异常严格为零。
+\end{enumerate}
+若该判据成立，则逆极限中的全部 strictification 障碍并不需要新的原语；它们已经在有限层上被穷尽为局部尺寸偏置残差与角色接口异常这两类量。
+\end{conjecture}

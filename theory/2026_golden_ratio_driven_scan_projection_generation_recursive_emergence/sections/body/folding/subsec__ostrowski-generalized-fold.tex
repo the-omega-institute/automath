@@ -1,0 +1,527 @@
+\subsection{推广：一般 Ostrowski 计数下的稳定折叠}\label{subsec:ostrowski-generalized-fold}
+
+本节将“Fibonacci/Zeckendorf 折叠”推广到一般无理数的 Ostrowski 计数系统，以回应“扩展到更广泛计数框架”的结构性需求。黄金分支的特殊性在于：当 $\alpha=\varphi^{-1}=[0;1,1,1,\dots]$ 时，Ostrowski 计数退化为 Fibonacci 权重与 Zeckendorf 语法，因此稳定类型空间成为最简单的二元 SFT（禁止相邻 $11$），并使 PF/$\zeta$ 接口闭式可得。
+
+\subsubsection{一般 Ostrowski 权重与合法数字}
+
+设 $\alpha\in(0,1)\setminus\QQ$ 的连分数展开为
+\[
+\alpha=[0;a_1,a_2,\dots],\qquad a_k\in\NN.
+\]
+令其收敛分母 $(q_n)_{n\ge 0}$ 由递推定义
+\[
+q_{-1}=0,\ q_0=1,\qquad q_{n+1}=a_{n+1}q_n+q_{n-1}\quad(n\ge 0).
+\]
+
+Ostrowski 表示定理保证：对任意 $N\in\NN$，存在唯一数字序列 $(d_n)_{n\ge 1}$ 满足
+\(0\le d_n\le a_n\)、若 $d_n=a_n$ 则 $d_{n-1}=0$（$n\ge 2$）、且仅有限个 $d_n\neq 0$，并有
+\[
+N=\sum_{n\ge 1} d_n q_{n-1}.
+\]
+以下记该唯一序列为 $N$ 的 Ostrowski 数字，记为 $Z_\alpha(N)=(d_1,d_2,\dots)$（参见 \cite{Ostrowski1922} 及后续综述）。
+
+\begin{definition}[一般稳定类型空间]\label{def:Xm-alpha}
+对任意 $m\ge 1$，定义长度-$m$ 的 Ostrowski 合法集合
+\[
+X_m^{(\alpha)}:=\Bigl\{(d_1,\dots,d_m):\ 0\le d_n\le a_n,\ \ d_n=a_n\Rightarrow d_{n-1}=0\ (n\ge 2)\Bigr\}.
+\]
+并定义截断 $\pi_m^{(\alpha)}(d_1,d_2,\dots)=(d_1,\dots,d_m)$。
+\end{definition}
+
+\begin{proposition}[计数与递推（分母即计数）]\label{prop:Xm-alpha-cardinality}
+对任意 $m\ge 1$，有
+\[
+\bigl|X_m^{(\alpha)}\bigr|=q_{m+1}.
+\]
+特别地，当 $\alpha=\varphi^{-1}$（即 $a_n\equiv 1$）时，$q_{m+1}=F_{m+2}$，而 $X_m^{(\alpha)}$ 退化为二元集合 $\{0,1\}^m$ 中禁止相邻 $11$ 的黄金均值语法 $X_m$。
+\end{proposition}
+
+\begin{definition}[一般 Ostrowski 折叠的熵隙指数]\label{def:ostrowski-entropy-gap}
+对给定 $\alpha=[0;a_1,a_2,\dots]$，长度 $m$ 的“原始数字空间”与稳定类型空间分别为
+\[
+\Omega_m^{(\alpha)}=\prod_{n=1}^{m}\{0,1,\dots,a_n\},
+\qquad
+X_m^{(\alpha)}\subseteq \Omega_m^{(\alpha)},
+\]
+并满足 $|X_m^{(\alpha)}|=q_{m+1}$（命题 \ref{prop:Xm-alpha-cardinality}）。
+定义分辨率 $m$ 的折叠压缩量（自然对数）
+\[
+S_Z^{(\alpha)}(m):=\log\frac{|\Omega_m^{(\alpha)}|}{|X_m^{(\alpha)}|}
+=\sum_{n=1}^{m}\log(a_n+1)-\log q_{m+1},
+\]
+以及对应的熵隙指数
+\[
+\kappa(\alpha):=\limsup_{m\to\infty}\frac{1}{m}S_Z^{(\alpha)}(m).
+\]
+\end{definition}
+
+\begin{remark}[黄金分支为最简周期特例]
+当 $\alpha=\varphi^{-1}=[0;1,1,1,\dots]$ 时，$\Omega_m^{(\alpha)}=\{0,1\}^m$、$|X_m^{(\alpha)}|=F_{m+2}$，从而
+\[
+S_Z^{(\alpha)}(m)=\log\frac{2^m}{F_{m+2}}
+=m\log\!\left(\frac{2}{\varphi}\right)+O(1),
+\]
+因此 $\kappa(\varphi^{-1})=\log(2/\varphi)$，与本文二元折叠的熵隙常数一致（见第 \ref{subsec:pom-projection-entropy} 小节的相关公式）。
+\end{remark}
+
+\subsubsection{金属平均族：常数型 \texorpdfstring{$\alpha_A=[0;A,A,A,\dots]$}{alphaA} 的两态语法与“压缩/反共振”对偶}
+
+\paragraph{两态 SFT 表示（合法语法的最小记忆）}
+当 $a_n\equiv A$ 为常数（$A\in\NN_{\ge 1}$）时，合法约束
+\(
+d_n=A\Rightarrow d_{n-1}=0
+\)
+只依赖“上一位是否为 $0$”。因此可用两态记忆刻画：
+\[
+S_0:\ d_{n-1}=0,\qquad S_+:\ d_{n-1}\in\{1,\dots,A\}.
+\]
+
+\begin{proposition}[金属平均族的合法语法是两态 SFT]\label{prop:metallic-two-state-sft}
+设 $\alpha_A=[0;A,A,A,\dots]$（$A\in\NN_{\ge 1}$）。则长度-$m$ 的合法集合 $X_m^{(\alpha_A)}$ 可由两态 SFT 的计数矩阵给出：
+\[
+M_A=
+\begin{pmatrix}
+1 & A\\
+1 & A-1
+\end{pmatrix},
+\qquad
+\chi_{M_A}(\lambda)=\lambda^2-A\lambda-1,
+\]
+其 Perron 根为
+\[
+\lambda_A=\frac{A+\sqrt{A^2+4}}{2}.
+\]
+并且拓扑熵满足
+\[
+h_{\mathrm{top}}\bigl(X^{(\alpha_A)}\bigr)=\log\lambda_A.
+\]
+\end{proposition}
+\begin{proof}
+转移计数为：从 $S_0$ 选 $0$（$1$ 种）留在 $S_0$，选 $1,\dots,A$（$A$ 种）到 $S_+$；从 $S_+$ 选 $0$（$1$ 种）到 $S_0$，选 $1,\dots,A-1$（$A-1$ 种）留在 $S_+$（$A$ 被禁止）。故计数矩阵为 $M_A$。
+其特征多项式与 Perron 根为直接计算；而有限型移位的拓扑熵等于邻接矩阵谱半径的对数，故得结论。证毕。
+\end{proof}
+
+\paragraph{折叠压缩的最优性：存在内部极大点}
+对金属平均族，原始数字空间规模为 $|\Omega_m^{(\alpha_A)}|=(A+1)^m$，而命题 \ref{prop:Xm-alpha-cardinality} 给出
+\(
+|X_m^{(\alpha_A)}|=q_{m+1}\asymp \lambda_A^m
+\)。
+因此折叠压缩的指数斜率为
+\[
+h_Z(A):=\lim_{m\to\infty}\frac{1}{m}\log\frac{|\Omega_m^{(\alpha_A)}|}{|X_m^{(\alpha_A)}|}
+=\log\!\left(\frac{A+1}{\lambda_A}\right).
+\]
+
+\begin{proposition}[金属平均族的投影压缩率在 \texorpdfstring{$A=\frac{3}{2}$}{A=3/2} 处取极大]\label{prop:metallic-compression-extremum}
+把 $A$ 连续化为实参数（$A\ge 1$），则函数
+\(
+h_Z(A)=\log\!\left(\frac{A+1}{\lambda_A}\right)
+\)
+在区间 $[1,\infty)$ 上存在唯一极大点
+\[
+A_\star=\frac{3}{2}.
+\]
+若限制 $A\in\ZZ_{\ge 1}$，则 $h_Z(A)$ 的最大值在 $A=2$（白银分支）处取得。
+\end{proposition}
+\begin{proof}
+由 $\lambda_A=(A+\sqrt{A^2+4})/2$，直接求导得到
+\[
+h_Z'(A)=\frac{1}{A+1}-\frac{1}{\sqrt{A^2+4}}.
+\]
+方程 $h_Z'(A)=0$ 等价于 $\sqrt{A^2+4}=A+1$，唯一解为 $A_\star=3/2$。再由
+\[
+h_Z''(A)=-\frac{1}{(A+1)^2}+\frac{A}{(A^2+4)^{3/2}}<0\qquad(A\ge 1)
+\]
+（可平方化为一条初等不等式）知该临界点为严格极大点，且全局唯一。
+对整数点，因 $h_Z$ 在 $[1,A_\star]$ 上严格增、在 $[A_\star,\infty)$ 上严格减，最大只能在 $A=1,2$ 中取到。比较
+\[
+h_Z(2)-h_Z(1)=\log\!\left(\frac{3}{1+\sqrt2}\cdot\frac{1+\sqrt5}{4}\right)
+\]
+只需验证
+\(
+3(1+\sqrt5)>4(1+\sqrt2)
+\)，即
+\(
+3\sqrt5-4\sqrt2>1
+\)，其平方为 $77-24\sqrt{10}>1$，等价于 $(19/6)^2>10$，成立。故整数最大在 $A=2$。证毕。
+\end{proof}
+
+\paragraph{与反共振证书的不可兼得}
+附录 \ref{app:kronecker-discrepancy-metallic-gap} 的 gap/差异度证书给出另一条“反共振强度”泛函，其典型形式可写为
+\[
+\kappa(A):=\frac{A}{\log\lambda_A},
+\]
+并且在 $A\ge 1$ 上严格递增（黄金分支 $A=1$ 在该证书意义下严格最优）。
+
+\begin{remark}[两类最优性分离：反共振 vs 投影压缩]\label{rem:metallic-dual-optimality}
+金属平均族的尺度更换并非“黄金最优”的单一结论：同一参数轴上存在两条竞争的极值目标。
+\begin{itemize}
+  \item \textbf{反共振/有限样本稳定性证书最强：}由 $\kappa(A)$ 的单调性，取 $A=1$（黄金）最优；
+  \item \textbf{投影压缩率最大（每位被压扁的信息量最大）：}由命题 \ref{prop:metallic-compression-extremum}，连续极值在 $A=3/2$，整数最优在 $A=2$（白银）。
+\end{itemize}
+因此“反共振最优性”与“投影压缩最优性”在金属平均族上不可兼得：它们对应两条不同的可审计泛函，且极值点分离。
+\end{remark}
+
+\paragraph{金属平均族的二目标相图：帕累托前沿、标量化阈值与有限样本设计律}
+
+\begin{proposition}[金属平均族的两目标帕累托前沿：\texorpdfstring{$\lambda$}{lambda} 一参数闭式刻画]\label{prop:metallic-pareto-frontier-lambda}
+令 \(\lambda:=\lambda_A\) 为命题 \ref{prop:metallic-two-state-sft} 的 Perron 根。由特征方程
+\(\lambda^2-A\lambda-1=0\) 得到参数变换
+\[
+A=\lambda-\lambda^{-1},\qquad \lambda\ge \varphi.
+\]
+于是两条可审计目标函数 \(h_Z\) 与 \(\kappa\) 可写成一维闭式曲线
+\[
+h_Z(\lambda)=\log\!\left(1+\lambda^{-1}-\lambda^{-2}\right),
+\qquad
+\kappa(\lambda)=\frac{\lambda-\lambda^{-1}}{\log\lambda}.
+\]
+在连续参数 \(A\ge 1\)（等价于 \(\lambda\ge\varphi\)）下，以“\textbf{最大化} \(h_Z\)”与“\textbf{最小化} \(\kappa\)”为准则的连续帕累托前沿
+恰为区间 \(\lambda\in[\varphi,2]\)（等价于 \(A\in[1,3/2]\)）的像 \(\lambda\mapsto(\kappa(\lambda),h_Z(\lambda))\)；
+而对 \(\lambda>2\)（等价于 \(A>3/2\)）的分支，两目标同时变差，从而被前沿严格支配。
+\end{proposition}
+\begin{proof}
+由 \(\lambda^2-A\lambda-1=0\) 直接解出 \(A=\lambda-\lambda^{-1}\)。把该关系代回
+\(
+h_Z(A)=\log\bigl((A+1)/\lambda_A\bigr)
+\)
+与
+\(
+\kappa(A)=A/\log\lambda_A
+\)
+即可得到所示闭式表达。
+\par
+另一方面，命题 \ref{prop:metallic-compression-extremum} 表明 \(h_Z(A)\) 在 \([1,3/2]\) 上严格增、在 \([3/2,\infty)\) 上严格减，而 \(\kappa(A)\) 在 \(A\ge 1\) 上严格递增。
+因此当 \(A>3/2\) 时，取 \(A_\star=3/2\) 有 \(\kappa(A_\star)<\kappa(A)\) 且 \(h_Z(A_\star)>h_Z(A)\)，故该分支被严格支配；而 \(A\in[1,3/2]\) 上任意两点一增一减，互不支配，从而构成帕累托前沿。证毕。
+\end{proof}
+
+\begin{remark}[设计空间缩减：无需讨论 \texorpdfstring{$A>3/2$}{A>3/2}]\label{rem:metallic-design-space-reduction}
+命题 \ref{prop:metallic-pareto-frontier-lambda} 表明：在连续参数下，所有 \(A>3/2\) 的分支在“压缩/反共振”二目标意义下都被 \(A_\star=3/2\) 严格支配，因而不属于帕累托集合。
+因此若允许 \(A\) 连续化，则设计空间可无损缩减为
+\[
+A\in\left[1,\frac{3}{2}\right].
+\]
+若强制 \(A\in\ZZ_{\ge 1}\)，则由同样的单调性可知 \(A\ge 3\) 均被 \(A=2\) 严格支配，从而整数帕累托集合缩减为 \(\{1,2\}\)。
+\end{remark}
+
+\begin{conjecture}[Pisot 规范化的末位支配：bin-\texorpdfstring{$\beta$}{beta}-fold 的一比特指数等价]\label{conj:ostrowski-pisot-last-digit-dominance-lecam}
+设 \(\beta>1\) 为 Pisot 数，并考虑与 \(\beta\)-展开/相应 Ostrowski 合法语法相容的有限窗规范化折叠
+\(
+\mathrm{Fold}^{(\beta)}_m:\Omega_m^{(\beta)}\to X_m^{(\beta)}
+\)。
+令 \(U_m^{(\beta)}:=\mathrm{Unif}(X_m^{(\beta)})\)，并令 \(\mu_m^{(\beta)}\) 为 bin-\(\beta\)-fold 在 \(X_m^{(\beta)}\) 上的推前分布。
+取末位统计量 \(\ell(x)\) 为最末一位数字（或等价的末位合法状态标签）。
+则猜想存在常数 \(c_\beta\in(0,1)\) 与参数序列 \(\beta_m^{(\beta)}\to\log\beta\)，使得指数族近似
+\[
+\bar\mu_m^{(\beta)}(x)\ \propto\ U_m^{(\beta)}(x)\,\exp\!\bigl(-\beta_m^{(\beta)}\,\ell(x)\bigr)
+\]
+满足
+\[
+D_{\mathrm{TV}}\bigl(\mu_m^{(\beta)},\bar\mu_m^{(\beta)}\bigr)\ \le\ C_\beta\,c_\beta^{\,m},
+\]
+并且在 Le Cam 意义下，二点实验 \((\mu_m^{(\beta)},U_m^{(\beta)})\) 与其末位推前实验 \((\ell_\#\mu_m^{(\beta)},\ell_\#U_m^{(\beta)})\) 指数等价：全信息的最优检验误差在指数精度上由末位完全承载。
+\end{conjecture}
+
+\begin{corollary}[最大投影压缩的“语法熵锁定”：\texorpdfstring{$\lambda=2$}{lambda=2}]\label{cor:metallic-compression-locking-lambda2}
+命题 \ref{prop:metallic-compression-extremum} 的连续极大点 \(A_\star=3/2\) 等价于
+\[
+\lambda_{A_\star}=2.
+\]
+此时最大压缩斜率为闭式常数
+\[
+h_Z(A_\star)=h_Z(\lambda=2)=\log\!\left(\frac{5}{4}\right).
+\]
+\end{corollary}
+\begin{proof}
+由 \(\lambda_A=(A+\sqrt{A^2+4})/2\)，代入 \(A_\star=3/2\) 得 \(\lambda_{A_\star}=2\)。
+再由 \(h_Z(A)=\log((A+1)/\lambda_A)\) 得
+\(
+h_Z(A_\star)=\log((5/2)/2)=\log(5/4)
+\)。证毕。
+\end{proof}
+
+\begin{proposition}[线性权衡的端点相变阈值]\label{prop:metallic-linear-scalarization-threshold}
+对权重 \(\beta\ge 0\)，考虑线性标量化目标
+\[
+J_\beta(A):=h_Z(A)-\beta\,\kappa(A),\qquad A\ge 1.
+\]
+定义临界阈值
+\[
+\beta_c:=\frac{h_Z'(1)}{\kappa'(1)}
+=\frac{\left(\frac{1}{2}-\frac{1}{\sqrt5}\right)(\log\varphi)^2}{\log\varphi-\frac{1}{\sqrt5}}
+\approx 0.35953.
+\]
+则 \(J_\beta\) 的最大化点 \(A_\beta\) 满足：
+\begin{itemize}
+  \item 若 \(\beta\ge \beta_c\)，则 \(A_\beta=1\)（黄金端点被强制选中）；
+  \item 若 \(0\le \beta<\beta_c\)，则存在唯一 \(A_\beta\in(1,3/2]\) 使得 \(J_\beta'(A_\beta)=0\)，并且当 \(\beta\downarrow 0\) 时 \(A_\beta\to 3/2\)。
+\end{itemize}
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:metallic-pareto-frontier-lambda}，对任意 \(A>3/2\) 都有 \(h_Z(A)<h_Z(3/2)\) 且 \(\kappa(A)>\kappa(3/2)\)，因此对任意 \(\beta\ge 0\)，
+\[
+J_\beta(A)=h_Z(A)-\beta\kappa(A)\ <\ h_Z(3/2)-\beta\kappa(3/2)=J_\beta(3/2),
+\]
+从而最大化点必落在紧区间 \([1,3/2]\)。
+\par
+在该区间上，由命题 \ref{prop:metallic-compression-extremum} 的推导可得
+\[
+h_Z'(A)=\frac{1}{A+1}-\frac{1}{\sqrt{A^2+4}},\qquad
+h_Z''(A)=-\frac{1}{(A+1)^2}+\frac{A}{(A^2+4)^{3/2}}<0.
+\]
+另一方面，由 \(\lambda_A^2-A\lambda_A-1=0\) 微分得到
+\[
+(\log\lambda_A)'=\frac{1}{\sqrt{A^2+4}},
+\]
+从而
+\[
+\kappa'(A)=\frac{\log\lambda_A-\frac{A}{\sqrt{A^2+4}}}{(\log\lambda_A)^2}.
+\]
+再令
+\[
+f(A):=\frac{2A\sqrt{A^2+4}}{A^2+8}-\log\lambda_A.
+\]
+直接计算得到
+\[
+f'(A)=\frac{A^2(8-A^2)}{\sqrt{A^2+4}\,(A^2+8)^2}>0\qquad(1\le A\le 3/2),
+\]
+并且 \(f(1)=2\sqrt5/9-\log\varphi\approx 1.50\times 10^{-2}>0\)，故 \(f(A)>0\) 在 \([1,3/2]\) 上成立。
+注意到
+\[
+\kappa''(A)=\frac{-A^2-8+\frac{2A\sqrt{A^2+4}}{\log\lambda_A}}{(A^2+4)^{3/2}(\log\lambda_A)^2},
+\]
+其分子与 \(f(A)\) 同号，故 \(\kappa''(A)>0\) 在 \([1,3/2]\) 上成立。
+于是对任意 \(\beta\ge 0\)，
+\[
+J_\beta''(A)=h_Z''(A)-\beta\,\kappa''(A)<0\qquad(1\le A\le 3/2),
+\]
+即 \(J_\beta\) 在 \([1,3/2]\) 上严格凹，从而最大化点唯一。
+\par
+再计算 \(J_\beta'(1)=h_Z'(1)-\beta\kappa'(1)\)。当 \(\beta\ge\beta_c\) 时，\(J_\beta'(1)\le 0\)，结合严格凹性可知最大化点为端点 \(A_\beta=1\)。
+当 \(0\le\beta<\beta_c\) 时，\(J_\beta'(1)>0\)，且 \(J_\beta'(3/2)=h_Z'(3/2)-\beta\kappa'(3/2)=-\beta\kappa'(3/2)<0\)，由介值定理存在唯一 \(A_\beta\in(1,3/2]\) 使 \(J_\beta'(A_\beta)=0\)，并由严格凹性知其即为最大化点。
+最后，当 \(\beta\downarrow 0\) 时，\(J_\beta'\to h_Z'\)（在紧区间上一致），而 \(h_Z'\) 在 \(A_\star=3/2\) 处唯一为零，故 \(A_\beta\to 3/2\)。证毕。
+\end{proof}
+
+\begin{corollary}[连续 Pareto 尺度律：权重 \texorpdfstring{$\beta$}{beta} \texorpdfstring{$\mapsto$}{->} 最优 \texorpdfstring{$A_\beta$}{A_beta}]\label{cor:metallic-pareto-scale-law}
+沿命题 \ref{prop:metallic-linear-scalarization-threshold} 的记号，令 \(A_\beta\) 表示标量化目标
+\(
+J_\beta(A)=h_Z(A)-\beta\kappa(A)
+\)
+在 \(A\ge 1\) 上的唯一最大化点。
+则：
+\begin{enumerate}
+  \item 对每个 \(\beta\ge 0\)，都存在且仅存在一个最优尺度 \(A_\beta\in[1,3/2]\)；
+  \item 当 \(0\le \beta<\beta_c\) 时，\(A_\beta\in(1,3/2]\) 为唯一内点解
+  \[
+  h_Z'(A_\beta)=\beta\,\kappa'(A_\beta),
+  \]
+  并且映射 \(\beta\mapsto A_\beta\) 在 \([0,\beta_c)\) 上连续且严格递减（因此 \(\beta\) 增大把最优尺度从 \(3/2\) 单调推向 \(1\)）；
+  \item 当 \(\beta\ge \beta_c\) 时，端点 \(A_\beta=1\) 被强制选中。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+命题 \ref{prop:metallic-linear-scalarization-threshold} 已给出：最大化点唯一，且必落在 \([1,3/2]\)；并且当 \(\beta<\beta_c\) 时最大化点为内点并满足一阶条件 \(J_\beta'(A_\beta)=0\)，即 \(h_Z'(A_\beta)=\beta\kappa'(A_\beta)\)。
+\par
+对 \(\beta\in[0,\beta_c)\) 定义
+\(
+F(A,\beta):=h_Z'(A)-\beta\kappa'(A)
+\)。
+由命题 \ref{prop:metallic-linear-scalarization-threshold} 的推导，\([1,3/2]\) 上有 \(h_Z''(A)<0\) 且 \(\kappa''(A)>0\)，从而在解点处
+\(
+\partial_A F(A_\beta,\beta)=h_Z''(A_\beta)-\beta\kappa''(A_\beta)<0
+\)。
+因此由隐函数定理，\(\beta\mapsto A_\beta\) 在 \([0,\beta_c)\) 上连续且可微，并满足
+\[
+\frac{dA_\beta}{d\beta}
+=\frac{\kappa'(A_\beta)}{h_Z''(A_\beta)-\beta\kappa''(A_\beta)}<0,
+\]
+即严格递减。最后当 \(\beta\ge\beta_c\) 时的端点结论已由同一命题给出。证毕。
+\end{proof}
+
+\begin{corollary}[把权重绑定到有限样本证书的样本量阈值]\label{cor:metallic-sample-threshold}
+令
+\[
+\beta(N):=\frac{\log N}{N}\qquad(N\ge 2),
+\]
+并记 \(A_N:=A_{\beta(N)}\) 为命题 \ref{prop:metallic-linear-scalarization-threshold} 的最大化点。
+令 \(N_c\) 为方程 \(\beta(N)=\beta_c\) 在区间 \(N\in[e,\infty)\) 上的唯一解，则
+\[
+N_c\approx 3.42058.
+\]
+于是对所有整数 \(N\ge 4\)，均有 \(A_N\in(1,3/2]\)，并且当 \(N\to\infty\) 时 \(A_N\to 3/2\)。
+\end{corollary}
+\begin{proof}
+函数 \(N\mapsto \beta(N)=\log N/N\) 在 \(N\ge e\) 上严格递减，且 \(\beta(e)=1/e>\beta_c\)、\(\lim_{N\to\infty}\beta(N)=0\)，故在 \([e,\infty)\) 上存在唯一解 \(N_c\)。
+数值近似由该一元方程直接求得（可复现计算）。
+当 \(N\ge 4>N_c\) 时有 \(\beta(N)<\beta_c\)，由命题 \ref{prop:metallic-linear-scalarization-threshold} 得 \(A_N\in(1,3/2]\)。
+又因 \(\beta(N)\to 0\)，结合同一命题的极限结论得到 \(A_N\to 3/2\)。证毕。
+\end{proof}
+
+\begin{remark}[“最后 \texorpdfstring{$5\%$}{5\%} 压缩”的边际代价常数]\label{rem:metallic-marginal-price}
+由推论 \ref{cor:metallic-compression-locking-lambda2} 的连续压缩最优点 \(A_\star=3/2\) 与黄金端点 \(A=1\) 的比较，
+压缩斜率增量为
+\[
+\Delta h:=h_Z(3/2)-h_Z(1)
+=\log\!\left(\frac{5}{4}\right)-\log\!\left(\frac{2}{\varphi}\right)
+=\log\!\left(\frac{5\varphi}{8}\right)\approx 1.12082\times 10^{-2},
+\]
+相对增益 \(\Delta h/h_Z(1)\approx 5.29\%\)。
+而反共振证书系数增量为
+\[
+\Delta \kappa:=\kappa(3/2)-\kappa(1)
+=\frac{3}{2\log 2}-\frac{1}{\log\varphi}\approx 8.59556\times 10^{-2}.
+\]
+因此“单位压缩增益对应的证书代价”可由可复现常数指纹
+\[
+\boxed{\ \Pi:=\frac{\Delta \kappa}{\Delta h}\approx 7.669\ }
+\]
+量化。
+\par
+若强制整数 \(A\in\ZZ_{\ge 1}\)，则黄金 \(\to\) 白银（\(A=2\)）的对应比值为
+\[
+\Pi_{2:1}:=\frac{\kappa(2)-\kappa(1)}{h_Z(2)-h_Z(1)}\approx 36.03,
+\]
+体现出整数分支上“低回报-高代价”段更为陡峭。
+\end{remark}
+
+\begin{remark}[设计律：黄金 \texorpdfstring{$A=1$}{A=1} $\to$ 白银 \texorpdfstring{$A=2$}{A=2} 属于“低回报-高代价”段]\label{rem:metallic-design-law-low-return}
+在 \(A\in[1,2]\)（等价于 \(\lambda\in[\varphi,1+\sqrt2]\)）上，压缩斜率的增益处于低量级而反共振证书单调变差：
+\[
+0<h_Z(2)-h_Z(1)
+=\log\!\left(\frac{3}{1+\sqrt2}\cdot\frac{1+\sqrt5}{4}\right)\approx 5.2\times 10^{-3},
+\]
+而
+\[
+\kappa(2)-\kappa(1)=\frac{2}{\log(1+\sqrt2)}-\frac{1}{\log\varphi}>0.
+\]
+因此若主目标是“有限样本稳定性/可审计证书”，黄金端点 \(A=1\) 是性价比最优的帕累托端点；
+若主目标是“最大投影压缩”，则应在连续最优 \(\lambda=2\)（或整数最优 \(A=2\)）附近选取参数。
+\end{remark}
+
+\input{subsubsec__ostrowski_metallic_mean_local_normalization_and_truncation_mismatch}
+\input{subsubsec__ostrowski_metallic_binet_oscillation_integer_phase_transition}
+
+\subsubsection{一般折叠算子 \texorpdfstring{$\Fold_m^{(\alpha)}$}{Fold\_m(alpha)}}
+
+为了与本文的“折叠 = 取值 + 取规范形”机制保持一致，我们把一般 Ostrowski 折叠定义为：先将“未规范数字”（允许违反相邻最大值约束）赋一个可审计整数值，再取 Ostrowski 规范形并截断。
+
+\begin{definition}[Ostrowski 加权值与折叠]\label{def:fold-alpha}
+令
+\[
+\Omega_m^{(\alpha)}:=\prod_{n=1}^{m}\{0,1,\dots,a_n\}
+\]
+为长度-$m$ 的“原始数字空间”。对 $\omega=(\omega_1,\dots,\omega_m)\in\Omega_m^{(\alpha)}$ 定义其 Ostrowski 加权值
+\[
+N_\alpha(\omega):=\sum_{n=1}^{m}\omega_n q_{n-1}\in\NN.
+\]
+定义一般折叠
+\[
+\Fold_m^{(\alpha)}:\Omega_m^{(\alpha)}\to X_m^{(\alpha)},\qquad
+\Fold_m^{(\alpha)}(\omega):=\pi_m^{(\alpha)}\!\bigl(Z_\alpha(N_\alpha(\omega))\bigr).
+\]
+\end{definition}
+
+\begin{proposition}[一般折叠的基本性质]\label{prop:fold-alpha-basic}
+$\Fold_m^{(\alpha)}$ 良定义且满足：
+\begin{enumerate}
+  \item \textbf{（规范性）} $\Fold_m^{(\alpha)}(\omega)\in X_m^{(\alpha)}$；
+  \item \textbf{（幂等性）} 若 $\omega\in X_m^{(\alpha)}$，则 $\Fold_m^{(\alpha)}(\omega)=\omega$；
+  \item \textbf{（满射性）} $\Fold_m^{(\alpha)}:\Omega_m^{(\alpha)}\twoheadrightarrow X_m^{(\alpha)}$ 为满射；
+  \item \textbf{（多尺度相容）} 对 $m_2\ge m_1$，有
+  \[
+  \pi_{m_2\to m_1}^{(\alpha)}\circ \Fold_{m_2}^{(\alpha)}=\Fold_{m_1}^{(\alpha)}\circ \pi_{m_2\to m_1}^{(\alpha)},
+  \]
+  其中 $\pi_{m_2\to m_1}^{(\alpha)}$ 为截断到前 $m_1$ 位的投影。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+第 1 条由 Ostrowski 表示的合法性立得。第 2 条：若 $\omega$ 已合法，则 $\omega$ 即为某个整数的规范 Ostrowski 数字的前 $m$ 位，唯一性迫使规范化后截断不变。第 3 条：对任意 $x\in X_m^{(\alpha)}$，取 $\omega=x$ 即有 $\Fold_m^{(\alpha)}(\omega)=x$。第 4 条由截断与“先取值再取规范形”的函子性得到：对任意 $\omega$，两边都等于 $\pi_{m_1}^{(\alpha)}(Z_\alpha(N_\alpha(\omega)))$。
+\end{proof}
+
+\begin{theorem}[“先规范形再截断”与跨分辨率函子性]\label{thm:normalize-then-truncate-functorial}
+一般 Ostrowski 折叠按定义 \ref{def:fold-alpha} 采取“取值 \(\to\) 取规范形 \(\to\) 截断”的顺序，因此跨分辨率交换图（命题 \ref{prop:fold-alpha-basic}-(4)）是\textbf{定义性}成立的：它并非额外结构，而是由规范化顺序强制给出。
+\par
+在本文的二元 Zeckendorf 折叠中，微态空间 \(\Omega_m=\{0,1\}^m\) 上的朴素截断 \(r_{m+1\to m}\)（小节 \ref{subsec:fold-omega-restriction}）对应的是“先截断再规范化”的顺序，因此一般不满足交换。
+相反，折叠感知 restriction
+\[
+\widetilde r_{m+1\to m}:=\pi_{m+1\to m}\circ \Fold_{m+1}\qquad(\Omega_{m+1}\to X_m\subset\Omega_m)
+\]
+正是把微态层的降分辨率顺序纠正为“先规范形再截断”，从而恢复严格交换（命题 \ref{prop:fold-omega-commute}）。
+\par
+并且在如下“自然性”约束下该修正是唯一的：若映射 \(\widehat r_{m+1\to m}:\Omega_{m+1}\to X_m\) 满足
+\[
+\Fold_m\circ \widehat r_{m+1\to m}=\pi_{m+1\to m}\circ \Fold_{m+1},
+\]
+则必有 \(\widehat r_{m+1\to m}=\widetilde r_{m+1\to m}\)。
+\end{theorem}
+
+\begin{proof}
+前两段只是对定义 \ref{def:fold-alpha} 与命题 \ref{prop:fold-alpha-basic}-(4) 的逻辑展开，以及对小节 \ref{subsec:fold-omega-restriction} 中“朴素截断不交换、折叠感知 restriction 交换”的机制解释。
+\par
+对唯一性：若 \(\widehat r_{m+1\to m}(\omega)\in X_m\)，则由二元折叠的幂等性（定理 \ref{thm:fold-suite}-(2)，即 \(\Fold_m|_{X_m}=\mathrm{id}\)）有
+\[
+(\Fold_m\circ \widehat r_{m+1\to m})(\omega)=\widehat r_{m+1\to m}(\omega).
+\]
+与假设 \(\Fold_m\circ \widehat r_{m+1\to m}=\pi_{m+1\to m}\circ \Fold_{m+1}\) 合并即得
+\(
+\widehat r_{m+1\to m}(\omega)=\pi_{m+1\to m}(\Fold_{m+1}(\omega))=\widetilde r_{m+1\to m}(\omega)
+\)
+对所有 \(\omega\) 成立。证毕。
+\end{proof}
+
+\begin{corollary}[跨分辨率可审计不变量的判据]\label{cor:multiscale-auditable-invariants}
+若某一“跨分辨率规律/指纹”依赖于使用朴素截断 \(r_{m+1\to m}\) 而非折叠感知 restriction \(\widetilde r_{m+1\to m}\)，则它不具备命题 \ref{prop:fold-omega-commute} 的自然性，因而只能被视为由降分辨率规范选择诱发的 gauge 现象，而不能进入跨分辨率的可审计不变量库。
+\end{corollary}
+
+\begin{remark}[与本文二元读出的关系]
+本文的主线实验固定二元读出与黄金语法（便于得到闭式 PF/Parry/$\zeta$ 基线）。上述一般化表明：若允许更一般的计数/地址字母表（或更一般的观测通道），则“折叠 = 取值 + Ostrowski 规范形”的机制可原则化推广；黄金分支只是其中最简、最可闭式分析的特例。
+\end{remark}
+
+\begin{theorem}[二次无理 \texorpdfstring{$\alpha$}{alpha} 下折叠可观测的有限状态矩阵化：压力函数的解析性与代数可计算性]\label{thm:ostrowski-quadratic-irrational-pressure-matrix-algebraicity}
+设 \(\alpha\in(0,1)\) 为二次无理数，并取定义 \ref{def:fold-alpha} 的 Ostrowski 折叠 \(\Fold_m^{(\alpha)}\)。
+固定一个长度 \(m\) 的可加观测量 \(G_m\)，其由规范化/折叠过程的有限窗口局部贡献逐步累加得到（例如由朴素截断与折叠感知截断之间的逐位失配指示所加和；在二元 Fold 的情形可取定义 \ref{def:fold-gauge-anomaly} 的规范差 \(G_m\)）。
+\par
+令 \(\mathbb P\) 为一族乘积分布，使输入数字 \(\omega_n\) 独立且其边缘分布仅依赖于相位 \(n\bmod p\)（某个固定 \(p\ge 1\)），并在每个允许取值上赋正概率。
+定义对数矩母函数
+\[
+\Lambda_\alpha(\theta):=\lim_{m\to\infty}\frac1m\log \mathbb E_{\mathbb P}\!\big[e^{\theta G_m}\big],
+\]
+若极限存在。
+则：
+\begin{enumerate}
+  \item \(\Lambda_\alpha(\theta)\) 在 \(\theta\) 的某邻域内存在且解析；
+  \item 存在有限维非负矩阵 \(M_\alpha(\theta)\)，其元素属于由
+  \(\{e^\theta\}\cup\{\mathbb P(\omega_n=\cdot)\}\) 生成的系数扩张，使得
+  \[
+  \Lambda_\alpha(\theta)=\log \rho\bigl(M_\alpha(\theta)\bigr),
+  \]
+  其中 \(\rho(\cdot)\) 为 Perron--Frobenius 谱半径；
+  \item 密度极限
+  \[
+  g_\alpha:=\lim_{m\to\infty}\frac1m\,\mathbb E_{\mathbb P}[G_m]
+  \]
+  存在且满足 \(g_\alpha=\Lambda_\alpha'(0)\)；并且当基线概率为有理数时，\(g_\alpha\) 属于上述系数扩张的代数闭包（特别地为代数数）。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+二次无理 \(\alpha\) 的连分数展开最终周期性意味着 Ostrowski 规范化的进位/借位规则在“相位 \(n\bmod p\)”意义下为有限型；
+因此存在一个有限状态在线转导器，其状态可取为“局部寄存器（携带规范化所需的有限记忆）\(+\) 相位”，输入为 \(\omega\)，输出为 \(\Fold^{(\alpha)}(\omega)\)，并同步产生每一步对 \(G_m\) 的局部贡献。
+\par
+对任意 \(\theta\) 在该有限状态图上对每条转移边赋权
+\[
+w_\theta(\text{edge})
+=\mathbb P(\text{该输入符号})\cdot e^{\theta\cdot(\text{该步贡献})},
+\]
+得到加权邻接矩阵 \(M_\alpha(\theta)\)。
+于是存在向量 \(\mathbf u,\mathbf v\) 使
+\(
+\mathbb E[e^{\theta G_m}]=\mathbf u^\top M_\alpha(\theta)^m\mathbf v
+\)。
+由于 \(M_\alpha(\theta)\) 非负且在 \(\theta\) 的小邻域内保持原始性（由全支持与强连通性保证），Perron--Frobenius 定理给出
+\[
+\lim_{m\to\infty}\frac1m\log \mathbf u^\top M_\alpha(\theta)^m\mathbf v=\log\rho(M_\alpha(\theta)),
+\]
+并且主特征值随 \(\theta\) 解析变化，从而得到 (1)(2)。
+对 \(\theta\) 在 \(0\) 处求导并用解析性确保交换极限与导数，即得 (3)。证毕。
+\end{proof}

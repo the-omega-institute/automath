@@ -1,0 +1,575 @@
+\subsubsection{真实算术输入约束下的同步核（40 状态）}\label{app:real-input-40-kernel}
+令 $X\subset\{0,1\}^{\ZZ}$ 为 Zeckendorf（黄金均值）移位：禁止相邻子词 $11$。它是 $1$-step SFT，邻接矩阵
+\[
+A=\begin{pmatrix}1&1\\[2pt]1&0\end{pmatrix},\qquad \rho(A)=\varphi,
+\]
+因此 $h(X\times X)=2\log\varphi$（参见第 \ref{subsec:zeta-online-kernel} 节的"语法 SFT"接口）。
+在线延迟核的输入字母表虽为 $\{0,1,2\}$，但真实算术输入来自两条合法 Zeckendorf 轨道
+$x,y\in X$ 的逐位和 $d_k=x_k+y_k$，其中 $x_kx_{k+1}=0,\ y_ky_{k+1}=0$。
+因此把同步核状态 $s\in Q$ 与输入记忆 $(p_x,p_y)\in\{0,1\}^2$ 合并，得到
+\[
+\Sigma:=Q\times\{0,1\}^2,\qquad |\Sigma|=40.
+\]
+\begin{remark}[直积分解与确定性标记]\label{rem:real-input-40-product-kernel}
+这里 \(Q\) 为附录~\ref{app:sync-kernel-basic} 的 \(10\) 状态同步核（亦可视为同步余量核）\(K_{\mathrm{sync}}\) 的内部状态集：该核是一个确定性 Mealy 转导器，
+其状态转移对输入和位 \(d\in\{0,1,2\}\) 确定（$\delta:Q\times\{0,1,2\}\to Q$），并伴随输出位 \(e\in\{0,1\}\)；
+同步图的边因此可按 \(d/e\) 标记（见图 \ref{fig:sync_kernel_10_state_graph}）。
+于是“真实输入”\(40\) 状态核的状态空间是同步核与两条 Zeckendorf 输入记忆 \(\{0,1\}^2\) 的直积：
+\(\Sigma\cong K_{\mathrm{sync}}\times\{0,1\}^2\)。
+\end{remark}
+从 $(s,p_x,p_y)$ 出发，允许选择 $(x,y)\in\{0,1\}^2$ 且满足 $p_xx=0,\ p_yy=0$，
+令 $d=x+y$，并由同步核确定性转移更新 $s$，下一个记忆为 $(x,y)$。
+由此得到 40 状态 SFT，其邻接矩阵记为 $M$。
+
+\begin{remark}[40 状态核的表示唯一性]\label{rem:real-input-40-minimal-kernel}
+在真实算术输入约束下，任何确定性在线归一化器都可编译为带标记边的有限转导器；若两套局部规则实现同一 $\Fold_\infty$ 映射，则对其转导器做确定性最小化后得到的核心在标记图同构意义下唯一。因而不同局部算法只是同一核的不同 presentation；40 状态核给出一个可审计的最小规格。
+\end{remark}
+
+\input{thm__real-input-40-product-lower-bound}
+
+\begin{proposition}[40 状态核的本质核心：唯一 essential SCC]\label{prop:real-input-40-essential-20}
+把 $M$ 视为有向图（顶点为 $\Sigma$，边由允许转移给出）。则该图的强连通分解满足：
+\begin{itemize}
+  \item 存在且仅存在一个 essential 强连通分量（包含双边序列/周期轨道的分量）；
+  \item 该 essential 分量恰含 $20$ 个顶点；其余 $20$ 个顶点均为瞬态（不在任何有向环上），因此不贡献任何周期点计数对象（如 $a_n=\Tr(M^n)$、$\zeta_M$、$\det(I-zM)$ 等）。
+\end{itemize}
+并且该 $20$ 状态核心可按记忆 $m=(x_{k-1},y_{k-1})$ 分组为
+\[
+\begin{array}{ll}
+m=00:& s\in\{000,001,010,100,01\overline{1},11\overline{1}\}\quad(6\ \text{个}),\\
+m=01:& s\in\{000,001,002,100,101\}\quad(5\ \text{个}),\\
+m=10:& s\in\{000,001,002,100,101\}\quad(5\ \text{个}),\\
+m=11:& s\in\{0\overline{1}2,1\overline{1}2,002,101\}\quad(4\ \text{个}),
+\end{array}
+\]
+合计 $6+5+5+4=20$。因此以该 $20$ 状态核心子图诱导的邻接矩阵 $M_{\mathrm{ess}}$ 取代 $M$，不会改变任意周期轨道计数不变量。
+\end{proposition}
+
+\begin{proposition}[把 40 状态压缩为 20 状态而不改变 \texorpdfstring{$\zeta$}{zeta}/周期轨道对象]\label{prop:real-input-40-essential-reduction}
+设 $M$ 为 40 状态邻接矩阵，$M_{\mathrm{ess}}$ 为其唯一 essential 强连通分量诱导的 $20\times 20$ 邻接矩阵（按命题 \ref{prop:real-input-40-essential-20} 的分量选取）。则存在一个置换矩阵 $P$ 与某个 $20\times 20$ 矩阵 $N$ 使得
+\[
+PMP^{-1}=
+\begin{pmatrix}
+M_{\mathrm{ess}} & *\\
+0 & N
+\end{pmatrix},
+\qquad
+N\ \text{幂零（nilpotent）}.
+\]
+因此对任意 $n\ge 1$，
+\[
+\Tr(M^n)=\Tr(M_{\mathrm{ess}}^n),
+\qquad
+\det(I-zM)=\det(I-zM_{\mathrm{ess}}),
+\qquad
+\zeta_M(z)=\zeta_{M_{\mathrm{ess}}}(z),
+\]
+从而所有依赖周期点/primitive 轨道的对象（例如 $a_n=\Tr(M^n)$、primitive 轨道数 $p_n$、Abel/Mertens 常数与其扭曲版本）都可在 $M_{\mathrm{ess}}$ 上无损计算。
+\end{proposition}
+
+\begin{proof}
+令 $G$ 为由 $M$ 定义的有向图。把顶点按“essential 分量在前、其余顶点在后”的顺序重排，即得某个置换矩阵 $P$ 使得 $PMP^{-1}$ 为块上三角矩阵，左上块即为 $M_{\mathrm{ess}}$，右下块记为 $N$；左下块为 $0$ 的原因是：从瞬态顶点不可能回到 essential 分量（否则瞬态顶点也会落入同一强连通分量）。
+
+接着证明 $N$ 幂零。由定义，瞬态顶点不属于任何有向环；特别地，瞬态子图中不存在有向环。因此瞬态子图是一个 DAG，可按拓扑序排序使得其邻接矩阵严格上三角，从而 $N$ 幂零（等价地：存在 $L$ 使得 $N^L=0$）。
+
+由块上三角结构，$M^n$ 同样为块上三角，其迹满足
+\(
+\Tr(M^n)=\Tr(M_{\mathrm{ess}}^n)+\Tr(N^n)
+\)；而 $N$ 幂零给出对所有 $n\ge 1$ 有 $\Tr(N^n)=0$，故 $\Tr(M^n)=\Tr(M_{\mathrm{ess}}^n)$。
+同理，对任意 $z$，有
+\[
+\det(I-zM)=\det(I-zM_{\mathrm{ess}})\det(I-zN).
+\]
+但 $N$ 幂零 $\Rightarrow$ $I-zN$ 为单位上三角矩阵（在某基下）且其全部特征值为 $1$，故 $\det(I-zN)=1$，于是 $\det(I-zM)=\det(I-zM_{\mathrm{ess}})$。
+最后由有限图的 zeta--行列式口径 $\zeta(z)=1/\det(I-zM)$ 得 $\zeta_M=\zeta_{M_{\mathrm{ess}}}$。证毕。
+\end{proof}
+
+\begin{proposition}[确定性分块扩张的输入骨架因子]\label{prop:real-input-40-skeleton-factor}
+对每个 $d\in\{0,1,2\}$，矩阵 $B^{(d)}$ 为确定性（函数型）$0$--$1$ 矩阵：每行恰有一个 $1$，因此满足 $B^{(d)}\mathbf{1}=\mathbf{1}$（$\mathbf{1}$ 为全 $1$ 向量）。
+令
+\(
+U:=\RR^{4}\otimes \mathrm{span}\{\mathbf{1}\}\subset\RR^{40}
+\),
+则 $U$ 在 $M$ 作用下不变，且 $M|_U$ 等价于把块矩阵表示中每个非零块 $B^{(d)}$ 替换为标量 $1$ 得到的 $4\times 4$ 记忆骨架矩阵
+\[
+A=\begin{pmatrix}
+1&1&1&1\\
+1&0&1&0\\
+1&1&0&0\\
+1&0&0&0
+\end{pmatrix}.
+\]
+从而
+\[
+\det(I-zA)\ \mid\ \det(I-zM),
+\qquad
+\rho(M)=\rho(A),
+\]
+并且 $M$ 的“纵向残差因子”定义为
+\(
+\det_{\mathrm{vert}}(z):=\det(I-zM)/\det(I-zA)
+\)
+（其特征值模严格小于 $\rho(A)$）。
+在本核上
+\[
+\det(I-zA)=(z+1)^2(z^2-3z+1),
+\qquad
+\det_{\mathrm{vert}}(z)=-(z-1)^2(z+1)(z^2-z-1),
+\]
+因此 Perron 根 $\lambda=\rho(M)=\varphi^2$ 完全由输入骨架 $A$ 决定，而核方向只贡献更小模的谱与指数级修正。
+\end{proposition}
+
+\begin{proposition}[骨架矩阵的黄金均值张量平方与一个隐藏的 \texorpdfstring{$(-A_0)$}{(-A0)} 因子]\label{prop:real-input-40-A0-tensor-hidden}
+定义黄金均值（Fibonacci）邻接矩阵
+\[
+A_0:=\begin{pmatrix}1&1\\[2pt]1&0\end{pmatrix}.
+\]
+按记忆状态顺序 \((00,01,10,11)\)，命题 \ref{prop:real-input-40-skeleton-factor} 的 \(4\times 4\) 记忆骨架矩阵满足
+\[
+\boxed{\ A=A_0\otimes A_0\ }.
+\]
+从而有因子分解
+\[
+\det(I-zA)=\det\!\bigl(I-z(A_0\otimes A_0)\bigr)
+=(1+z)^2(1-3z+z^2).
+\]
+进一步，纵向残差因子可改写为
+\[
+\boxed{\ \det_{\mathrm{vert}}(z)=(1-z)^2(1+z)\,\det(I+zA_0)\ },
+\qquad
+\det(I+zA_0)=1+z-z^2.
+\]
+因此 40 状态核的行列式分解可被提升为“三因子”结构：
+\[
+\boxed{\;
+\det(I-zM)
+=(1-z)^2(1+z)\,
+\det\!\bigl(I-z(A_0\otimes A_0)\bigr)\,
+\det\!\bigl(I-z(-A_0)\bigr)\; }.
+\]
+等价地，对应的动力学 \(\zeta\) 分解为
+\[
+\boxed{\;
+\zeta_M(z)=\frac{1}{(1-z)^2(1+z)}\cdot
+\zeta_{A_0\otimes A_0}(z)\cdot
+\zeta_{-A_0}(z),\qquad
+\zeta_T(z):=\det(I-zT)^{-1}\; }.
+\]
+\end{proposition}
+
+\begin{proof}
+首先由 Kronecker 积的定义，在顺序 \((00,01,10,11)\) 下，
+\[
+A_0\otimes A_0=
+\begin{pmatrix}
+1\cdot A_0 & 1\cdot A_0\\
+1\cdot A_0 & 0\cdot A_0
+\end{pmatrix}
+=
+\begin{pmatrix}
+1&1&1&1\\
+1&0&1&0\\
+1&1&0&0\\
+1&0&0&0
+\end{pmatrix}=A,
+\]
+得到 \(A=A_0\otimes A_0\)。
+其次，由 \(A_0\) 的谱为 \(\{\varphi,-\varphi^{-1}\}\) 可知 \(A_0\otimes A_0\) 的谱为四个两两乘积
+\(\{\varphi^2,-1,-1,\varphi^{-2}\}\)，从而
+\(\det(I-z(A_0\otimes A_0))=(1-\varphi^2 z)(1+\!z)^2(1-\varphi^{-2}z)\)，化简即得 \((1+z)^2(1-3z+z^2)\)。
+最后，由命题 \ref{prop:real-input-40-skeleton-factor} 的显式式子
+\[
+\det_{\mathrm{vert}}(z)=-(z-1)^2(z+1)(z^2-z-1)
+=(1-z)^2(1+z)(1+z-z^2),
+\]
+而 \(1+z-z^2=\det(I+zA_0)=\det(I-z(-A_0))\)，得出所示三因子分解与 \(\zeta\) 分解。证毕。
+\end{proof}
+
+\input{prop__real-input-40-nonzero-spectrum-trace-primitive}
+
+\begin{proposition}[同步复位词：\texorpdfstring{$0^5$}{0^5}]\label{prop:real-input-40-reset-word}
+令同步核的确定性转移为 $\delta:Q\times\{0,1,2\}\to Q$。则对任意 $s\in Q$ 都有
+\[
+\delta(s,\underbrace{0,0,0,0,0}_{5\ \text{次}})=000,
+\]
+并且长度 $5$ 为最短同步长度：不存在长度 $<5$ 的词 $w\in\{0,1,2\}^{<5}$ 使得 $\delta(s,w)$ 对所有 $s\in Q$ 取同一值。
+\end{proposition}
+
+\begin{proposition}[最大熵测度下的输入记忆边缘分布（闭式）]\label{prop:real-input-40-input-memory-marginal}
+令输入系统为 $X\times X$，其中 $X$ 为黄金均值 shift，并取其 Parry 最大熵测度的直积作为 $X\times X$ 的最大熵测度。
+记记忆态 $m=(x_{k-1},y_{k-1})\in\{00,01,10,11\}$。则其边缘分布满足闭式
+\[
+\mathbb{P}(00)=\frac{3+\sqrt5}{10},\qquad
+\mathbb{P}(01)=\mathbb{P}(10)=\frac15,\qquad
+\mathbb{P}(11)=\frac{3-\sqrt5}{10}.
+\]
+因此单边 $1$ 密度为
+\[
+\mathbb{P}(x_k=1)=\mathbb{P}(y_k=1)=\frac{5-\sqrt5}{10}=\frac{1}{\varphi^2+1},
+\]
+并且和位 $d_k=x_k+y_k\in\{0,1,2\}$ 的分布为
+\[
+\mathbb{P}(d=0)=\frac{3+\sqrt5}{10},\qquad
+\mathbb{P}(d=1)=\frac25,\qquad
+\mathbb{P}(d=2)=\frac{3-\sqrt5}{10},
+\]
+其中 $\mathbb{P}(d=2)=\mathbb{P}(11)=\frac{3-\sqrt5}{10}$ 恰为碰撞触发密度。
+\end{proposition}
+
+\paragraph{复位词诱导的再生常数与指数尾界（Parry 基线）}
+在命题 \ref{prop:real-input-40-reset-word} 的同步复位词 $0^5$ 与命题 \ref{prop:real-input-40-input-memory-marginal} 的 Parry 基线下，“最近 $5$ 位输入和均为 $0$”给出一个原子再生扇区。
+由此可把复位机制提升为一组\textbf{闭式再生常数}（复位态占比、Kac 回返间隔、非复位起点的平均等待）与\textbf{严格指数尾界}（Perron 根主指数），并导出一个\textbf{无需同步核谱隙假设}的相关衰减证书。
+相应常数与尾界由脚本 \texttt{scripts/exp\_real\_input\_40\_reset\_regeneration\_constants.py} 一键复算，并输出可直接 \verb|\input| 的 \LaTeX{} 片段如下：
+\input{sections/generated/eq_real_input_40_reset_regeneration_constants}
+
+\begin{proposition}[最大熵测度的输入投影刚性]\label{prop:real-input-40-input-measure-rigid}
+令 $\pi:\Sigma\to X\times X$ 为忘掉同步核内部状态 $s$ 的因子映射。则对任一 $\Sigma$ 的最大熵测度 $\mu_\Sigma$，
+其推前 $\nu:=\pi_\ast\mu_\Sigma$ 必等于 $X\times X$ 的最大熵测度 $\mu_X\otimes\mu_X$。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:real-input-40-reset-word}，输入词 $0^5$ 为同步复位词：若双向输入序列中出现 $0^5$，
+则对应的内部状态在该位置被唯一确定，进而整个状态序列被输入唯一决定。
+由于 $\nu$ 在 $X\times X$ 上具有满支撑，$0^5$ 在 $\nu$-几乎处处的输入中以正频率出现（其“不出现 $0^5$”异常集的拓扑熵定量见定理 \ref{thm:real-input-defect-entropy}），
+故 $\pi$ 在 $\nu$-几乎处处为一一映射。于是相对熵为 $0$，得到
+\(
+h(\mu_\Sigma)=h(\nu).
+\)
+而 $h(\mu_\Sigma)=h_{\mathrm{top}}(\Sigma)=h_{\mathrm{top}}(X\times X)$，
+所以 $\nu$ 达到 $X\times X$ 的最大熵；由于 $X\times X$ 为混合 SFT，其最大熵测度唯一，
+故 $\nu=\mu_X\otimes\mu_X$。证毕。
+\end{proof}
+
+\begin{corollary}[输入势的降维原则]\label{cor:real-input-40-input-potential-reduction}
+若 $\psi$ 为仅依赖输入 $(x,y)$ 的 Hölder 势，则
+\[
+P_\Sigma(\psi\circ\pi)=P_{X\times X}(\psi),
+\]
+从而可在 $4\times 4$ 记忆骨架上闭式求压：若以 $A$ 为 $X\times X$ 的邻接矩阵，
+并以对角权重矩阵 $D_\psi$ 编码 $\psi$（按状态 $00,01,10,11$ 排列），则
+\(
+P_{X\times X}(\psi)=\log\rho(D_\psi A)
+\)。
+因此任意仅看输入的势，其压力、CLT 方差密度与 LDP 速率函数均可在 $4\times 4$ 骨架上闭式读出。
+\end{corollary}
+
+\paragraph{块结构（输入约束 $\times$ 同步核的 skew-product）}
+记同步核的确定性转移为 $\delta:Q\times\{0,1,2\}\to Q$。对每个 $d\in\{0,1,2\}$，定义 $10\times 10$ 的确定性转移矩阵（函数型矩阵）
+\[
+\bigl(B^{(d)}\bigr)_{s,t}:=\mathbf{1}_{\{\delta(s,d)=t\}},
+\qquad s,t\in Q.
+\]
+把记忆状态 $(p_x,p_y)\in\{0,1\}^2$ 依次按
+\[
+00,\ 01,\ 10,\ 11
+\]
+排列，则 $M$ 可写成 $4\times 4$ 的 $10\times 10$ 块矩阵
+\[
+M=
+\begin{pmatrix}
+B^{(0)} & B^{(1)} & B^{(1)} & B^{(2)}\\
+B^{(0)} & 0   & B^{(1)} & 0\\
+B^{(0)} & B^{(1)} & 0   & 0\\
+B^{(0)} & 0   & 0   & 0
+\end{pmatrix}.
+\]
+该表示把全部真实输入约束压缩到 $4\times 4$ 的记忆骨架，而同步核仅通过 cocycle $B^{(d)}$（等价地：确定性映射 $f_d:q\mapsto\delta(q,d)$）进入。
+
+\begin{remark}[确定性 skew-product 的严格读法：基图扩张而非 permutation lift]\label{rem:real-input-40-deterministic-lift}
+基图顶点为记忆态 \(V_{\mathrm{base}}=\{00,01,10,11\}\)，其邻接由记忆骨架矩阵 \(A\) 给出（命题 \ref{prop:real-input-40-skeleton-factor}）；纤维为同步核内部状态集 \(Q\)（\(|Q|=10\)）。
+对每条允许的基边 \(i\to j\)，由输入和位确定一个字母 \(d=d(i\to j)\in\{0,1,2\}\)，并以确定性映射 \(f_d\)（矩阵 \(B^{(d)}\)）作为纤维上的 cocycle：
+提升边 \((i,s)\to(j,t)\) 存在当且仅当 \(\delta(s,d)=t\)。
+这给出一个有限状态 skew-product 扩张。
+\par
+需要强调的是：一般而言 \(f_d\) 并非双射（例如在 $d=0$ 时有 \(\delta(000,0)=\delta(100,0)=000\)），故此处\emph{不是}置换覆盖（permutation lift），也不存在由置换群表示推出的 Artin 型通道分解。
+我们在本文中只使用由“每行恰有一个 $1$”推出的 \(B^{(d)}\mathbf{1}=\mathbf{1}\)，从而常纤维子空间
+\(
+U=\RR^{4}\otimes \mathrm{span}\{\mathbf{1}\}
+\)
+不变并给出骨架因子 \(\det(I-zA)\) 及纵向残差 \(\det_{\mathrm{vert}}\)（命题 \ref{prop:real-input-40-skeleton-factor}）。
+\end{remark}
+
+\input{sections/generated/fig_sync_kernel_real_input_40_matrix}
+
+对该 SFT 定义周期点计数
+\[
+a_n:=|{\rm Fix}(\sigma^n)|=\operatorname{tr}(M^n),
+\]
+其动力学 $\zeta$-函数满足
+\[
+\zeta_M(z)=\exp\!\left(\sum_{n\ge 1}\frac{a_n}{n}z^n\right)=\frac{1}{\det(I-zM)}.
+\]
+对该 40 状态核可显式因式分解
+\[
+\det(I-zM)=(1-z)^2(1+z)^3(1-3z+z^2)(1+z-z^2),
+\]
+从而
+\[
+\zeta_M(z)=\frac{1}{(1-z)^2(1+z)^3(1-3z+z^2)(1+z-z^2)}.
+\]
+从而非零特征值（含重数）为
+\[
+\{\varphi^2,-\varphi,1^{(2)},(-1)^{(3)},\varphi^{-2},\varphi^{-1}\},
+\]
+其余 $31$ 个特征值为 $0$。
+等价地，其特征多项式可写成
+\[
+\det(tI-M)=t^{31}(t-1)^2(t+1)^3(t^2-3t+1)(t^2+t-1).
+\]
+primitive 轨道数 $p_n$ 与 $a_n$ 的关系为
+\[
+a_n=\sum_{d\mid n} d\,p_d,\qquad
+p_n=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}.
+\]
+
+\paragraph{符号动力学与算子代数不变量：Bowen--Franks 群与 Cuntz--Krieger \texorpdfstring{$K$}{K}-群}
+除 $\zeta$、primitive 谱与有限部常数外，整数邻接矩阵还携带一组对流等价（flow equivalence）/稳定同构分类高度敏感的整格不变量。
+对任意整数矩阵 $A\in M_N(\ZZ)$ 定义 Bowen--Franks 群
+\[
+\mathrm{BF}(A):=\ZZ^N/(I-A)\ZZ^N.
+\]
+并且对 Cuntz--Krieger 代数 $\mathcal O_A$（由图/邻接矩阵 $A$ 定义）的 $K$-群，有标准同构
+\[
+K_0(\mathcal O_A)\cong \mathrm{coker}(I-A^\mathsf T),\qquad
+K_1(\mathcal O_A)\cong \ker(I-A^\mathsf T).
+\]
+在本工作中，$A$ 可取为 essential 核 $M_{\mathrm{ess}}$，或取全矩阵 $M$；两者对 $\mathrm{BF}$ 与 $K$-群给出相同的非平凡部分（瞬态扩张只贡献单位不变量）。
+
+\begin{proposition}[真实输入核的 Bowen--Franks 群与 Cuntz--Krieger \texorpdfstring{$K$}{K}-理论]\label{prop:real-input-40-bf-ktheory}
+令 $A=M_{\mathrm{ess}}$ 为命题 \ref{prop:real-input-40-essential-20} 的 $20\times 20$ essential 邻接矩阵。则
+\[
+\mathrm{SNF}(I-A)=\mathrm{SNF}(I-A^\mathsf T)=\mathrm{diag}(1,\dots,1,2,0,0),
+\]
+其中 $1$ 出现 $17$ 次。因而
+\[
+\mathrm{BF}(A)\cong \ZZ^2\oplus \ZZ/2\ZZ,
+\qquad
+K_0(\mathcal O_A)\cong \ZZ^2\oplus \ZZ/2\ZZ,
+\qquad
+K_1(\mathcal O_A)\cong \ZZ^2.
+\]
+\end{proposition}
+
+\begin{remark}[\texorpdfstring{$\ZZ/2$}{Z/2} 扭结作为“离散残余规范”选择原则]\label{rem:bf-z2-residual-gauge}
+命题 \ref{prop:real-input-40-bf-ktheory} 给出 $\mathrm{BF}(A)$ 的有限扭结部分含有一个不可约的 $2$-扭结：
+\(
+\mathrm{Tor}\,\mathrm{BF}(A)\cong \ZZ/2\ZZ
+\)。
+由于 Bowen--Franks 群是 flow equivalence 的基本不变量（对 SFT 的稳定同构分类高度敏感），该扭结因子在“换 presentation / 去瞬态扩张 / 取 essential 核”等操作下保持不变（见表 \ref{tab:real_input_40_bf_ktheory}）。
+\par
+在本文的统一叙事中，这提供了一个完全由离散核强制出的选择原则：若某个连续统一候选被视为该离散动力系统的“连续完成”，则其破缺后必须能自然地产生一个 \(\ZZ_2\) 型的离散残余（宇称/物质宇称式的最小模板），以解释该 $2$-扭结的拓扑来源。
+\par
+另一方面，在纤维立方几何层面亦存在一个实现无关的 \(\ZZ_2\) 分级：推论 \ref{cor:pom-fiber-reconstruction-median-partialcube-cat0} 表明纤维重构图的二分分解由逆代换次数（等价于独立集大小）的奇偶性规范给出。
+因此在同时要求“纤维几何语义”与“BF/\(K\)-理论扭结不变量”两条接口保持的口径下，\(\ZZ_2\) 残余并非可选装饰，而是被两端结构同时强制的共同约束。
+我们强调：这里的 \(\ZZ_2\) 不是手工外加的对称假设，而是由核的 $K$-理论扭结与纤维 CAT(0) 立方几何共同给出的\emph{约束}。
+\end{remark}
+
+\begin{remark}[可复现输出：Smith normal form 与 \texorpdfstring{$\mathrm{BF}/K$}{BF/K}-群]\label{rem:real-input-40-bf-ktheory-repro}
+表 \ref{tab:real_input_40_bf_ktheory} 给出 $A=M_{\mathrm{ess}}$ 与全矩阵 $M$ 的 $I-A$ 的 Smith 标准形（SNF）。
+复现脚本：\texttt{scripts/exp\_real\_input\_40\_operator\_algebra\_invariants.py}。
+\end{remark}
+\input{sections/generated/tab_real_input_40_bf_ktheory}
+
+\paragraph{最大熵测度下的内部 carry 稳态分布（\texorpdfstring{$\mathbb Q(\sqrt5)$}{Q(sqrt5)} 闭式）}
+由于 $M_{\mathrm{ess}}$ 不可约，Parry 最大熵测度可由 Perron 根 $\lambda=\rho(M_{\mathrm{ess}})$ 的左右特征向量 $(\ell,r)$ 显式给出；
+顶点边缘满足 $\pi_i\propto \ell_i r_i$。
+把顶点标记为 $(s,p_x,p_y)\in Q\times\{0,1\}^2$，记忆态记为 $m=(p_x,p_y)\in\{00,01,10,11\}$。
+
+\begin{proposition}[真实输入核的内部同步态条件分布（闭式）]\label{prop:real-input-40-parry-internal-distribution}
+在 $M_{\mathrm{ess}}$ 的 Parry 最大熵测度下，同步态 $s\in Q$ 的条件分布 $\mathbb{P}(s\mid m)$（给定记忆态 $m$）落在 $\mathbb Q(\sqrt5)$，
+并由表 \ref{tab:real_input_40_parry_internal_distribution} 给出。
+\end{proposition}
+
+\begin{remark}[可复现核验：内部稳态分布]\label{rem:real-input-40-parry-internal-distribution-repro}
+表 \ref{tab:real_input_40_parry_internal_distribution} 同时给出同步态边缘分布 $\mathbb{P}(s)$。
+复现脚本：\texttt{scripts/exp\_real\_input\_40\_operator\_algebra\_invariants.py}。
+\end{remark}
+\input{sections/generated/tab_real_input_40_parry_internal_distribution}
+
+\paragraph{从表 \ref{tab:real_input_40_parry_internal_distribution} 反推出输入记忆边缘、贝叶斯后验与可观测性指标}
+表 \ref{tab:real_input_40_parry_internal_distribution} 给出两类信息：条件分布 $\mathbb{P}(s\mid m)$ 与同步态边缘 $\mathbb{P}(s)$。
+仅用这两类数据，即可进一步推出若干可直接用于“在线解码/可观测性/信息论”讨论的闭式结论。
+
+\begin{proposition}[输入记忆边缘分布的闭式反推]\label{prop:real-input-40-memory-marginal}
+在 Parry 最大熵测度下，输入记忆 $m=(p_x,p_y)\in\{00,01,10,11\}$ 的边缘分布为
+\[
+\mathbb{P}(00)=\frac{3+\sqrt5}{10},\qquad
+\mathbb{P}(01)=\mathbb{P}(10)=\frac15,\qquad
+\mathbb{P}(11)=\frac{3-\sqrt5}{10}.
+\]
+\end{proposition}
+
+\begin{proof}
+由表 \ref{tab:real_input_40_parry_internal_distribution} 可见同步态 $010$ 只在 $m=00$ 时出现，故
+\(
+\mathbb{P}(010)=\mathbb{P}(00)\mathbb{P}(010\mid 00)
+\)，
+从而
+\(
+\mathbb{P}(00)=\mathbb{P}(010)/\mathbb{P}(010\mid 00)=\frac{3+\sqrt5}{10}
+\)。
+同理 $0$-$12$ 只在 $m=11$ 时出现，故
+\(
+\mathbb{P}(11)=\mathbb{P}(0\text{-}12)/\mathbb{P}(0\text{-}12\mid 11)=\frac{3-\sqrt5}{10}
+\)。
+再由 $\sum_m \mathbb{P}(m)=1$ 与 $01\leftrightarrow 10$ 对称性得 $\mathbb{P}(01)=\mathbb{P}(10)=\frac15$。
+\end{proof}
+
+\begin{corollary}[Parry 下输入两比特的严格独立性]\label{cor:real-input-40-memory-independence}
+设 $m=(p_x,p_y)$，则
+\[
+\mathbb{P}(p_x=1)=\mathbb{P}(p_y=1)=\frac{5-\sqrt5}{10},
+\qquad
+\mathbb{P}(p_x,p_y)=\mathbb{P}(p_x)\mathbb{P}(p_y),
+\]
+即 $(p_x,p_y)$ 在 Parry 测度下严格独立。
+\end{corollary}
+
+\begin{remark}[本质 $20$ 状态核的全联合分布]\label{rem:real-input-40-parry-essential-20-joint}
+表 \ref{tab:real_input_40_parry_internal_distribution} 的四行（记忆条件）合计允许恰好 $20$ 个 $(s,m)$ 组合。
+由 $\mathbb{P}(s,m)=\mathbb{P}(m)\mathbb{P}(s\mid m)$ 得到其 Parry 联合分布的完全闭式（均在 $\mathbb{Q}(\sqrt5)$）：
+\[
+\begin{aligned}
+&\mathbb{P}(000,00)=\mathbb{P}(010,00)=\frac{1}{20}+\frac{\sqrt5}{20},\quad
+\mathbb{P}(001,00)=\mathbb{P}(01\text{-}1,00)=\frac{3}{20}-\frac{\sqrt5}{20},\\
+&\mathbb{P}(100,00)=\mathbb{P}(11\text{-}1,00)=-\frac{1}{20}+\frac{\sqrt5}{20};\\[2pt]
+&\mathbb{P}(000,01)=\mathbb{P}(000,10)=-\frac{11}{20}+\frac{\sqrt5}{4},\quad
+\mathbb{P}(001,01)=\mathbb{P}(001,10)=\frac{3}{10}-\frac{\sqrt5}{10},\\
+&\mathbb{P}(002,01)=\mathbb{P}(002,10)=-\frac15+\frac{\sqrt5}{10},\quad
+\mathbb{P}(100,01)=\mathbb{P}(100,10)=\frac12-\frac{\sqrt5}{5},\\
+&\mathbb{P}(101,01)=\mathbb{P}(101,10)=\frac{3}{20}-\frac{\sqrt5}{20};\\[2pt]
+&\mathbb{P}(0\text{-}12,11)=-\frac15+\frac{\sqrt5}{10},\quad
+\mathbb{P}(002,11)=-\frac34+\frac{7\sqrt5}{20},\\
+&\mathbb{P}(1\text{-}12,11)=\frac7{20}-\frac{3\sqrt5}{20},\quad
+\mathbb{P}(101,11)=\frac9{10}-\frac{2\sqrt5}{5}.
+\end{aligned}
+\]
+\end{remark}
+
+\begin{remark}[贝叶斯反推与“硬/软”解码分层]\label{rem:real-input-40-bayes-decode}
+由
+\[
+\mathbb{P}(m\mid s)=\frac{\mathbb{P}(s,m)}{\mathbb{P}(s)}
+\]
+可直接得到同步态对记忆位的后验分布。特别地，
+\[
+s\in\{01\text{-}1,010,11\text{-}1\}\Rightarrow \mathbb{P}(m=00\mid s)=1,
+\qquad
+s\in\{0\text{-}12,1\text{-}12\}\Rightarrow \mathbb{P}(m=11\mid s)=1,
+\]
+且这类“硬判定”同步态的总概率为
+\[
+\mathbb{P}(01\text{-}1)+\mathbb{P}(010)+\mathbb{P}(11\text{-}1)+\mathbb{P}(0\text{-}12)+\mathbb{P}(1\text{-}12)=\frac{3}{10}.
+\]
+作为例子，
+\[
+\mathbb{P}(00\mid 001)=\frac15,\quad
+\mathbb{P}(01\mid 001)=\mathbb{P}(10\mid 001)=\frac25,\quad
+\mathbb{P}(11\mid 001)=0,
+\]
+而
+\[
+\mathbb{P}(00\mid 000)=\frac{19+8\sqrt5}{41},\quad
+\mathbb{P}(01\mid 000)=\mathbb{P}(10\mid 000)=\frac{11-4\sqrt5}{41},\quad
+\mathbb{P}(11\mid 000)=0.
+\]
+除 $\pm12$ 外，只有 $s\in\{002,101\}$ 会使 $\mathbb{P}(11\mid s)\in(0,1)$，
+且
+\(
+\mathbb{P}(11\mid 002)=\frac{10-\sqrt5}{19}
+\),
+\(
+\mathbb{P}(11\mid 101)=\frac{8-3\sqrt5}{19}
+\)。
+\end{remark}
+
+\begin{remark}[互信息与可观测性（bit）]\label{rem:real-input-40-mutual-info}
+把 $(S,M)$ 视为一个观测信道，取二进制对数，则
+\[
+H(M)\approx 1.700979,\qquad
+H(S)\approx 2.989758,\qquad
+I(S;M)\approx 0.812300\ \text{bits}.
+\]
+进一步，把单比特 $p_x,p_y$ 与碰撞指示 $C:=\ind_{\{m=11\}}$ 作为函数变量，则
+\[
+I(S;p_x)=I(S;p_y)\approx 0.311298,\qquad
+I(S;C)\approx 0.282063\ \text{bits}.
+\]
+\end{remark}
+
+\begin{proposition}[最优在线判别率（MAP）]\label{prop:real-input-40-map-accuracies}
+给定同步态 $s$ 进行 MAP 判决（取使 $\mathbb{P}(\cdot\mid s)$ 最大者），则最优可达准确率为
+\[
+\mathrm{Acc}^*(M\leftarrow S)=\sum_s \mathbb{P}(s)\max_m \mathbb{P}(m\mid s)=\frac{3\sqrt5}{10}.
+\]
+对若干自然的二值函数亦可得到简洁闭式：
+\[
+\begin{aligned}
+\mathrm{Acc}^*(p_x\leftarrow S)&=\mathrm{Acc}^*(p_y\leftarrow S)=\frac45,\\
+\mathrm{Acc}^*(C\leftarrow S)&=\frac{17+\sqrt5}{20},\\
+\mathrm{Acc}^*(p_x\oplus p_y\leftarrow S)&=\frac{37-9\sqrt5}{20}.
+\end{aligned}
+\]
+\end{proposition}
+
+\begin{remark}[两条“动力学味道”的直接推论]\label{rem:real-input-40-two-dyn-inferences}
+(i) 碰撞事件的一半发生在同步态 $\pm12$：
+\[
+\mathbb{P}(0\text{-}12)+\mathbb{P}(1\text{-}12)=\frac{3-\sqrt5}{20}=\frac12\,\mathbb{P}(11).
+\]
+(ii) 同步态对记忆位的硬判定占比恰为 $3/10$（见注 \ref{rem:real-input-40-bayes-decode}）。
+\end{remark}
+
+\paragraph{零特征值的幂零指数：延迟与同步复位词的线性代数阴影}
+行列式因子化只给出 $0$ 特征值的代数重数；其 Jordan 块大小（幂零指数）需要通过 $\dim\ker(A^k)$ 链来识别。
+对本核而言，这一“不可对角化性”完全聚焦在 $0$ 上，并与在线同步的延迟/复位结构直接对应。
+
+\begin{proposition}[本质核指数 \texorpdfstring{$3$}{3} 与全核指数 \texorpdfstring{$5$}{5}]\label{prop:real-input-40-nilpotent-index}
+令 $A=M_{\mathrm{ess}}$ 为 $20\times 20$ essential 核矩阵。则
+\[
+\dim\ker(A)=7,\qquad
+\dim\ker(A^2)=10,\qquad
+\dim\ker(A^3)=11,
+\]
+并从 $k=3$ 起稳定，故 $0$ 处最大 Jordan 块大小为 $3$。
+
+另一方面，对全矩阵 $M$（含瞬态扩张）有
+\[
+\dim\ker(M)=16,\ 
+\dim\ker(M^2)=24,\ 
+\dim\ker(M^3)=29,\ 
+\dim\ker(M^4)=30,\ 
+\dim\ker(M^5)=31,
+\]
+并从 $k=5$ 起稳定，故 $0$ 处最大 Jordan 块大小为 $5$。
+这与同步核的在线延迟 $3$（本质核）与同步复位词长度 $5$（命题 \ref{prop:real-input-40-reset-word}）相呼应。
+\end{proposition}
+
+\begin{corollary}[幂零指数的可观测后果：瞬态记忆深度的严格上界]\label{cor:real-input-40-nilpotent-memory-depth}
+令 \(V_0(M)\) 为全矩阵 \(M\) 在特征值 \(0\) 处的广义特征子空间（即 \(0\)-谱的瞬态子空间），并记其幂零指数为
+\(
+r_{\mathrm{full}}:=\max\{\text{$0$ 处 Jordan 块大小}\}
+\)
+（命题 \ref{prop:real-input-40-nilpotent-index} 给出 \(r_{\mathrm{full}}=5\)）。
+则对任意固定向量 \(v,w\)，计数序列
+\[
+f_m:=v^\ast M^m w
+\]
+满足：当 \(m\ge r_{\mathrm{full}}\) 时，\(f_m\) 与 \(w\) 在 \(V_0(M)\) 上的分量无关（等价地：所有来自 \(0\)-谱的瞬态贡献在 \(m\ge r_{\mathrm{full}}\) 后被幂零部分彻底湮灭）。
+同理，对 essential 核 \(A=M_{\mathrm{ess}}\) 的对应结论以 \(r_{\mathrm{ess}}=3\) 成立。
+\end{corollary}
+
+\begin{proof}
+在广义特征分解下，限制到 \(V_0(M)\) 上的算子 \(M|_{V_0(M)}\) 幂零，且幂零指数即为 \(r_{\mathrm{full}}\)；
+因此 \((M|_{V_0(M)})^{r_{\mathrm{full}}}=0\)。
+把 \(w=w_0+w_\perp\) 分解为 \(w_0\in V_0(M)\) 与 \(w_\perp\perp V_0(M)\)（取任意补空间即可），则当 \(m\ge r_{\mathrm{full}}\) 时有 \(M^m w_0=0\)，从而
+\(
+f_m=v^\ast M^m w=v^\ast M^m w_\perp
+\)
+与 \(w_0\) 无关。essential 情形同理。证毕。
+\end{proof}
+
+\begin{remark}[可复现输出：核维数链与 Jordan 块计数]\label{rem:real-input-40-nilpotent-index-repro}
+表 \ref{tab:real_input_40_nilpotent_jordan} 汇总了 $(\dim\ker A^k)$ 链，并据此给出 $0$ 处 Jordan 块大小的计数摘要。
+复现脚本：\texttt{scripts/exp\_real\_input\_40\_operator\_algebra\_invariants.py}。
+\end{remark}
+\input{sections/generated/tab_real_input_40_nilpotent_jordan}

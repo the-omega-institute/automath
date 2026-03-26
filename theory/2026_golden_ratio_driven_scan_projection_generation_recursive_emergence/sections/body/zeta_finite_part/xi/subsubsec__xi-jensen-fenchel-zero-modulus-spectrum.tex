@@ -1,0 +1,358 @@
+\paragraph{Jensen 缺陷的 Fenchel 对偶、排斥半径几何与离线偏移量可加权控制}
+以下结论在附录 \ref{subsec:unit-disk-jensen-defect} 的 Jensen 缺陷接口上工作，
+并与共动圆盘化记号 \eqref{eq:xi-comoving-shifted-jensen-defect}、离线半径压缩闭式
+\eqref{eq:app-offcritical-radius-closed} 保持一致。
+
+\begin{theorem}[Fenchel--Jensen 对偶与最深零点乘积泛函]\label{thm:xi-jensen-fenchel-deepzero-product-functional}
+设 \(F\) 在单位圆盘 \(\mathbb D\) 内解析且 \(F(0)\neq 0\)。记盘内零点按重数并按模长非降序排列为
+\[
+0<|a_1|\le |a_2|\le \cdots .
+\]
+对 \(0<r<1\) 定义 Jensen 缺陷
+\[
+D_F(r):=\frac{1}{2\pi}\int_0^{2\pi}\log|F(re^{\mathrm i\theta})|\,\dd\theta-\log|F(0)|.
+\]
+由 Jensen 公式
+\[
+D_F(r)=\sum_{|a_j|<r}\log\frac{r}{|a_j|}.
+\]
+对任意整数 \(k\ge 1\)，定义
+\[
+\mathcal P_k(F):=\sup_{0<r<1}\Bigl(r^k e^{-D_F(r)}\Bigr).
+\]
+等价地，在 \(u=\log r\) 坐标下
+\begin{equation}\label{eq:xi-jensen-fenchel-log-duality}
+\log\mathcal P_k(F)=\sup_{u<0}\Bigl(ku-D_F(e^u)\Bigr).
+\end{equation}
+则恒等式成立
+\begin{equation}\label{eq:xi-jensen-fenchel-deepzero-product}
+\boxed{\;
+\mathcal P_k(F)=\prod_{j=1}^{k}|a_j|.\;}
+\end{equation}
+若盘内零点个数小于 \(k\)，约定缺失项以 \(1\) 填充，即上式右端仍取前 \(k\) 个模长的乘积（超出零点总数的项取 \(1\)）。
+\end{theorem}
+\begin{proof}
+对固定 \(r\in(0,1)\)，记
+\[
+n(r):=\#\{j:\ |a_j|<r\}.
+\]
+由 Jensen 公式可写
+\[
+D_F(r)=n(r)\log r-\sum_{j=1}^{n(r)}\log|a_j|,
+\]
+故
+\[
+r^k e^{-D_F(r)}
+=r^{k-n(r)}\prod_{j=1}^{n(r)}|a_j|.
+\]
+取对数并以 \(u=\log r\) 代换，立即得到
+\eqref{eq:xi-jensen-fenchel-log-duality} 的 Fenchel 形式。
+分情形讨论：
+
+若 \(n(r)=k\)，则
+\[
+r^k e^{-D_F(r)}=\prod_{j=1}^{k}|a_j|,
+\]
+与 \(r\) 无关。
+
+若 \(n(r)<k\)，则由排序得
+\(
+r\le |a_{n(r)+1}|\le\cdots\le |a_k|
+\)，故
+\[
+r^{k-n(r)}\le \prod_{j=n(r)+1}^{k}|a_j|,
+\]
+进而
+\[
+r^k e^{-D_F(r)}
+\le \prod_{j=1}^{k}|a_j|.
+\]
+
+若 \(n(r)>k\)，则
+\[
+r^k e^{-D_F(r)}
+=\prod_{j=1}^{k}|a_j|
+\prod_{j=k+1}^{n(r)}\frac{|a_j|}{r}
+<\prod_{j=1}^{k}|a_j|.
+\]
+综上，\(\sup_{0<r<1}r^k e^{-D_F(r)}=\prod_{j=1}^{k}|a_j|\)，即
+\eqref{eq:xi-jensen-fenchel-deepzero-product}。证毕。
+\end{proof}
+
+\begin{corollary}[零点模长谱的递归可观测性与误差传播界]\label{cor:xi-jensen-modulus-recursive-observability-stability}
+在定理 \ref{thm:xi-jensen-fenchel-deepzero-product-functional} 的设定下，令
+\[
+\mathcal P_0(F):=1,\qquad
+\mathcal P_k(F):=\sup_{0<r<1}\bigl(r^k e^{-D_F(r)}\bigr)\ (k\ge 1).
+\]
+则零点模长满足严格递归关系
+\begin{equation}\label{eq:xi-jensen-modulus-recursive-ratio}
+\boxed{\;
+|a_k|=\frac{\mathcal P_k(F)}{\mathcal P_{k-1}(F)}\qquad(k\ge 1).\;}
+\end{equation}
+
+进一步，设 \(\widetilde D\) 为 \(D_F\) 的一致近似，满足
+\[
+\sup_{0<r<1}\bigl|\widetilde D(r)-D_F(r)\bigr|\le \varepsilon,
+\]
+并定义
+\[
+\widetilde{\mathcal P}_k:=\sup_{0<r<1}\bigl(r^k e^{-\widetilde D(r)}\bigr).
+\]
+则对任意 \(k\ge 1\) 有
+\begin{equation}\label{eq:xi-jensen-modulus-stability-envelope}
+e^{-\varepsilon}\mathcal P_k(F)\le \widetilde{\mathcal P}_k\le e^{\varepsilon}\mathcal P_k(F),
+\end{equation}
+并且
+\begin{equation}\label{eq:xi-jensen-modulus-ratio-stability}
+\boxed{\;
+e^{-2\varepsilon}|a_k|
+\le
+\frac{\widetilde{\mathcal P}_k}{\widetilde{\mathcal P}_{k-1}}
+\le
+e^{2\varepsilon}|a_k|.\;}
+\end{equation}
+\end{corollary}
+\begin{proof}
+\eqref{eq:xi-jensen-modulus-recursive-ratio}
+由 \eqref{eq:xi-jensen-fenchel-deepzero-product} 直接相除得到。
+
+对误差界，任意 \(r\in(0,1)\) 满足
+\[
+e^{-\varepsilon}e^{-D_F(r)}
+\le e^{-\widetilde D(r)}
+\le e^{\varepsilon}e^{-D_F(r)}.
+\]
+乘以 \(r^k\) 并取上确界即得
+\eqref{eq:xi-jensen-modulus-stability-envelope}。
+再将 \(k\) 与 \(k-1\) 的不等式相除，结合
+\eqref{eq:xi-jensen-modulus-recursive-ratio}，得到
+\eqref{eq:xi-jensen-modulus-ratio-stability}。证毕。
+\end{proof}
+
+\begin{theorem}[排斥半径的凹性与跨尺度误差传播不等式]\label{thm:xi-jensen-exclusion-radius-concavity-crossscale}
+在同一设定下定义排斥半径
+\[
+r_\ast(r):=r\,e^{-D_F(r)},\qquad 0<r<1.
+\]
+令 \(u=\log r\in(-\infty,0)\)，并记
+\[
+\Phi(u):=\log r_\ast(e^u)=u-D_F(e^u).
+\]
+则：
+\begin{enumerate}
+  \item \(\Phi\) 为凹函数，且几乎处处可导，并满足
+  \begin{equation}\label{eq:xi-jensen-phi-derivative-count}
+  \Phi'(u)=1-N_F(e^u),\qquad
+  N_F(r):=\#\{j:\ |a_j|<r\};
+  \end{equation}
+  \item 对任意 \(0<r_1<r_2<r_3<1\)，令
+  \[
+  \lambda:=\frac{\log r_3-\log r_2}{\log r_3-\log r_1}\in(0,1),
+  \]
+  则成立跨尺度乘法凹性
+  \begin{equation}\label{eq:xi-jensen-exclusion-crossscale}
+  \boxed{\;
+  r_\ast(r_2)\ge r_\ast(r_1)^{\lambda}\,r_\ast(r_3)^{1-\lambda}. \;}
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+令 \(v_j:=\log|a_j|\)。对每个 \(u<0\)，有
+\[
+D_F(e^u)=\sum_j (u-v_j)_+,
+\]
+其中 \((x)_+:=\max\{x,0\}\)。
+由于 \((u-v)_+\) 关于 \(u\) 为凸函数，故 \(D_F(e^u)\) 为凸函数，进而 \(\Phi(u)=u-D_F(e^u)\) 为凹函数。
+
+在可导点，
+\[
+\frac{\dd}{\dd u}(u-v_j)_+=\mathbf 1_{\{u>v_j\}},
+\]
+故
+\[
+\frac{\dd}{\dd u}D_F(e^u)=\sum_j\mathbf 1_{\{u>v_j\}}=N_F(e^u),
+\]
+即 \eqref{eq:xi-jensen-phi-derivative-count}。
+
+再由凹性，对 \(u_i:=\log r_i\)（\(i=1,2,3\)）有
+\[
+u_2=\lambda u_1+(1-\lambda)u_3,\qquad
+\Phi(u_2)\ge \lambda\Phi(u_1)+(1-\lambda)\Phi(u_3).
+\]
+两边指数化即得
+\eqref{eq:xi-jensen-exclusion-crossscale}。证毕。
+\end{proof}
+
+\begin{proposition}[最邻近盘零点的平台刚性与单零点可检出性]\label{prop:xi-jensen-nearest-zero-platform-rigidity}
+定义
+\[
+\rho_{\min}:=\inf\{|a_j|:\ a_j\in\mathbb D,\ F(a_j)=0\},
+\]
+若盘内无零点则约定 \(\rho_{\min}=1\)。则
+\begin{equation}\label{eq:xi-jensen-nearest-zero-sup}
+\boxed{\;
+\sup_{0<r<1}r_\ast(r)=\rho_{\min}. \;}
+\end{equation}
+
+若模长为 \(\rho_{\min}\) 的零点总重数恰为 \(1\)，并记
+\[
+\rho_2:=\inf\{|a_j|:\ |a_j|>\rho_{\min}\}
+\]
+（若不存在则 \(\rho_2:=1\)），则对全部 \(r\in(\rho_{\min},\rho_2]\) 有
+\begin{equation}\label{eq:xi-jensen-nearest-zero-plateau}
+\boxed{\;
+r_\ast(r)\equiv \rho_{\min}. \;}
+\end{equation}
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:xi-jensen-fenchel-deepzero-product} 在 \(k=1\) 时得
+\[
+\sup_{0<r<1}r e^{-D_F(r)}=\mathcal P_1(F)=|a_1|=\rho_{\min},
+\]
+即 \eqref{eq:xi-jensen-nearest-zero-sup}。
+
+若最邻近零点重数为 \(1\)，则 \(r\in(\rho_{\min},\rho_2]\) 时恰有一个零点进入 \(|z|<r\)：
+\[
+D_F(r)=\log\frac{r}{\rho_{\min}}.
+\]
+故
+\[
+r_\ast(r)=r\,e^{-D_F(r)}
+=r\,e^{-\log(r/\rho_{\min})}
+=\rho_{\min},
+\]
+得到 \eqref{eq:xi-jensen-nearest-zero-plateau}。证毕。
+\end{proof}
+
+\begin{theorem}[离临界线偏移量的 Cayley--缺陷谱双边控制]\label{thm:xi-cayley-offset-defect-spectrum-bounds}
+设 \(\xi(s)=\frac12 s(s-1)\pi^{-s/2}\Gamma(s/2)\zeta(s)\)，取任意满足 \(\beta<\frac12\) 的零点
+\[
+\rho=\beta+\mathrm i\gamma,\qquad
+\delta:=\frac12-\beta>0,\qquad
+z:=\gamma+\mathrm i\delta.
+\]
+令 Cayley 变换
+\[
+w=\mathcal C(z):=\frac{z-\mathrm i}{z+\mathrm i}\in\mathbb D.
+\]
+则有精确恒等式
+\begin{equation}\label{eq:xi-cayley-offset-modulus-closed}
+|w|^2=\frac{\gamma^2+(\delta-1)^2}{\gamma^2+(\delta+1)^2},
+\end{equation}
+并满足双边估计
+\begin{equation}\label{eq:xi-cayley-offset-negative-log-bounds}
+\boxed{\;
+\frac{2\delta}{\gamma^2+(\delta+1)^2}
+\le -\log|w|
+\le \frac{2\delta}{\gamma^2+(\delta-1)^2}. \;}
+\end{equation}
+
+进一步，令 \(F_\zeta\) 为圆盘化对象，\(D_\zeta\) 为其 Jensen 缺陷，定义
+\[
+\mathcal P_k(\zeta):=\sup_{0<r<1}\bigl(r^k e^{-D_\zeta(r)}\bigr).
+\]
+记盘内零点模长排序为 \(|w_1|\le |w_2|\le\cdots\)。则
+\begin{equation}\label{eq:xi-cayley-defect-spectrum-logsum}
+-\log\mathcal P_k(\zeta)=\sum_{j=1}^{k}\bigl(-\log|w_j|\bigr),
+\end{equation}
+并由 \eqref{eq:xi-cayley-offset-negative-log-bounds} 逐项求和得到
+\begin{equation}\label{eq:xi-cayley-defect-spectrum-delta-gamma-bounds}
+\sum_{j=1}^{k}\frac{2\delta_j}{\gamma_j^2+(\delta_j+1)^2}
+\le -\log\mathcal P_k(\zeta)
+\le
+\sum_{j=1}^{k}\frac{2\delta_j}{\gamma_j^2+(\delta_j-1)^2}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+对 \eqref{eq:xi-cayley-offset-modulus-closed}，直接计算
+\[
+|w|^2
+=\left|\frac{z-\mathrm i}{z+\mathrm i}\right|^2
+=\frac{\gamma^2+(\delta-1)^2}{\gamma^2+(\delta+1)^2}.
+\]
+从而
+\[
+-\log|w|
+=\frac12\log\frac{\gamma^2+(\delta+1)^2}{\gamma^2+(\delta-1)^2}
+=\frac12\log\!\left(1+\frac{4\delta}{\gamma^2+(\delta-1)^2}\right).
+\]
+记
+\[
+x:=\frac{4\delta}{\gamma^2+(\delta-1)^2}>0.
+\]
+由
+\[
+\log(1+x)=\int_0^x\frac{1}{1+t}\,\dd t,\qquad
+\frac{1}{1+x}\le \frac{1}{1+t}\le 1\ \ (0\le t\le x),
+\]
+得到
+\[
+\frac{x}{1+x}\le \log(1+x)\le x.
+\]
+乘以 \(1/2\) 即得
+\[
+\frac12\frac{x}{1+x}
+=\frac{2\delta}{\gamma^2+(\delta+1)^2}
+\le -\log|w|
+\le \frac12 x
+=\frac{2\delta}{\gamma^2+(\delta-1)^2},
+\]
+即 \eqref{eq:xi-cayley-offset-negative-log-bounds}。
+
+再由定理 \ref{thm:xi-jensen-fenchel-deepzero-product-functional} 应用于 \(F_\zeta\)，有
+\[
+\mathcal P_k(\zeta)=\prod_{j=1}^{k}|w_j|,
+\]
+取负对数即得 \eqref{eq:xi-cayley-defect-spectrum-logsum}，再逐项应用
+\eqref{eq:xi-cayley-offset-negative-log-bounds} 即得
+\eqref{eq:xi-cayley-defect-spectrum-delta-gamma-bounds}。证毕。
+\end{proof}
+
+\begin{corollary}[对数深度与共动深度场的逐点可比性]\label{cor:xi-cayley-logdepth-vs-depthfield-comparability}
+取 \(x\in\RR\)、\(\delta\in(0,1)\)，并令
+\[
+w:=\mathcal C(x+\mathrm{i}\delta)\in\mathbb D,
+\qquad
+u_\delta(x):=-\log|w|,
+\qquad
+h_\delta(x):=1-|w|^2=\frac{4\delta}{x^2+(1+\delta)^2}.
+\]
+则成立逐点双边估计
+\begin{equation}\label{eq:xi-cayley-logdepth-depthfield-pointwise}
+\boxed{\;
+\frac12\,h_\delta(x)\ \le\ u_\delta(x)\ \le\ \frac{(1+\delta)^2}{2(1-\delta)^2}\,h_\delta(x).\;}
+\end{equation}
+进一步，对任意有限缺陷族 \(\{(\gamma_j,\delta_j,m_j)\}_{j=1}^{\kappa}\subset\RR\times(0,1)\times\NN\)，定义
+\[
+w_{j,x_0}:=\mathcal C\bigl((\gamma_j-x_0)+\mathrm{i}\delta_j\bigr),
+\qquad
+J(x_0):=\sum_{j=1}^{\kappa}m_j\log\frac{1}{|w_{j,x_0}|},
+\qquad
+H(x_0):=\sum_{j=1}^{\kappa}m_j\bigl(1-|w_{j,x_0}|^2\bigr),
+\]
+则对一切 \(x_0\in\RR\) 有
+\begin{equation}\label{eq:xi-cayley-logdepth-depthfield-summed}
+\boxed{\;
+\frac12\,H(x_0)\ \le\ J(x_0)\ \le\ \frac{(1+\delta_\ast)^2}{2(1-\delta_\ast)^2}\,H(x_0),\qquad
+\delta_\ast:=\max_{1\le j\le\kappa}\delta_j<1.\;}
+\end{equation}
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:xi-cayley-offset-negative-log-bounds} 得
+\(
+u_\delta(x)\ge \frac{2\delta}{x^2+(1+\delta)^2}=\frac12 h_\delta(x)
+\)，给出下界。
+上界由
+\[
+u_\delta(x)\le \frac{2\delta}{x^2+(1-\delta)^2}
+=\frac12 h_\delta(x)\cdot\frac{x^2+(1+\delta)^2}{x^2+(1-\delta)^2}
+\le \frac{(1+\delta)^2}{2(1-\delta)^2}\,h_\delta(x)
+\]
+得到，其中最后一步取 \(x=0\) 达到最大比值。
+对有限缺陷族逐项应用 \eqref{eq:xi-cayley-logdepth-depthfield-pointwise} 并求和即得
+\eqref{eq:xi-cayley-logdepth-depthfield-summed}；右端常数用 \(\delta_j\le \delta_\ast\) 统一控制。证毕。
+\end{proof}
+
+\endinput
+

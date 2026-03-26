@@ -1,0 +1,420 @@
+\subsection{线性预算变分律、强全息稳定与可逆外置边界}\label{subsec:conclusion-fold-ledger-dual-ldp-holography-undecidability-langlands}
+本小节在 \(\Fold_m\) 纤维账本、dyadic 链全息、异常类分解与停机不可计算边界之间给出一组可直接复用的统一命题。
+记
+\[
+d_m(x):=\card{\Fold_m^{-1}(x)},\qquad
+Y_m(x):=\frac1m\log d_m(x),
+\]
+并沿用 \(X_m\) 上两种测度
+\[
+u_m:=\mathrm{Unif}(X_m),\qquad
+w_m(x):=\frac{d_m(x)}{2^m}.
+\]
+
+\begin{theorem}[线性比特预算下预言机成功率的双大偏差变分律]\label{thm:conclusion-oracle-success-double-ldp-variational}
+对预算 \(B\in\ZZ_{\ge 0}\) 定义最优成功率
+\[
+\mathrm{Succ}_m(B):=\frac{1}{2^m}\sum_{x\in X_m}\min\!\bigl(d_m(x),2^B\bigr).
+\]
+该闭式由纤维内局部贪心策略达到：对每个 \(x\) 覆盖 \(\min(d_m(x),2^B)\) 个原像即可。
+
+进一步，假设 \(Y_m\) 在 \(u_m,w_m\) 下均满足完全大偏差原理，率函数分别为 \(I_U,I_w\)，并且其对数矩母函数满足
+\[
+\Lambda_U(q):=\lim_{m\to\infty}\frac1m\log\EE_{u_m}\!\left[e^{qmY_m}\right]
+=\tau(1+q)-\log\varphi,
+\]
+\[
+\Lambda_w(q):=\lim_{m\to\infty}\frac1m\log\EE_{w_m}\!\left[e^{qmY_m}\right]
+=\tau(1+q)-\tau(1),
+\]
+其中 \(\tau\) 为碰撞谱压力极限，且 \(\tau(1)=\log 2\)。
+令 \(B_m=\lfloor \beta m\rfloor\)、\(a:=\beta\log 2\)，则
+\[
+\lim_{m\to\infty}\frac1m\log \mathrm{Succ}_m(B_m)
+\]
+\[
+=
+\max\!\Bigl\{
+-\inf_{\alpha\le a}I_w(\alpha),\
+\log\varphi+(\beta-1)\log 2-\inf_{\alpha>a}I_U(\alpha)
+\Bigr\}.
+\]
+\end{theorem}
+
+\begin{proof}
+第一式即定理 \ref{thm:pom-oracle-renyi-pressure-failure-bound} 中容量记号
+\(
+C_m(B)=\sum_x\min(d_m(x),2^B)
+\)
+的归一化版本。
+其最优性来自逐纤维独立选择：给定 \(x\) 后可命中的微态数上界正是 \(\min(d_m(x),2^B)\)，且该上界可逐纤维同时达到。
+
+令 \(B=B_m\) 并分解
+\[
+\min(d,2^{B_m})=d\,\mathbf 1_{\{d\le 2^{B_m}\}}+2^{B_m}\mathbf 1_{\{d>2^{B_m}\}}.
+\]
+代回得
+\[
+\mathrm{Succ}_m(B_m)
+=\sum_{x\in X_m}\frac{d_m(x)}{2^m}\mathbf 1_{\{Y_m(x)\le a+o(1)\}}
++2^{B_m-m}|X_m|
+\sum_{x\in X_m}\frac{1}{|X_m|}\mathbf 1_{\{Y_m(x)>a+o(1)\}}.
+\]
+即
+\[
+\mathrm{Succ}_m(B_m)
+=w_m\!\bigl(Y_m\le a+o(1)\bigr)
++2^{B_m-m}|X_m|\,u_m\!\bigl(Y_m>a+o(1)\bigr).
+\]
+由 \(|X_m|=\exp(m\log\varphi+o(m))\) 与两套 LDP，分别得到两项指数速率
+\[
+\lim_{m\to\infty}\frac1m\log w_m(Y_m\le a+o(1))
+=-\inf_{\alpha\le a}I_w(\alpha),
+\]
+\[
+\lim_{m\to\infty}\frac1m\log\!\Bigl(2^{B_m-m}|X_m|\,u_m(Y_m>a+o(1))\Bigr)
+=\log\varphi+(\beta-1)\log2-\inf_{\alpha>a}I_U(\alpha).
+\]
+最后使用指数尺度下的加法原则
+\(
+\log(A_m+B_m)\sim\max\{\log A_m,\log B_m\}
+\)
+即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[可逆容量曲线的强逆判据]\label{cor:conclusion-oracle-success-strong-converse}
+定义
+\[
+\Xi(\beta):=\lim_{m\to\infty}\frac1m\log \mathrm{Succ}_m(\lfloor \beta m\rfloor)\le 0.
+\]
+则
+\[
+\Xi(\beta)=0
+\iff
+\inf_{\alpha\le \beta\log 2}I_w(\alpha)=0.
+\]
+等价地，\(\beta\log 2\) 至少覆盖了 \(I_w\) 的零点集（即 \(w_m\) 下典型纤维增长指数）。
+若 \(\beta\log 2\) 严格低于该典型指数，则 \(\Xi(\beta)<0\)。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-oracle-success-double-ldp-variational}，
+\[
+\Xi(\beta)=\max\{A(\beta),B(\beta)\},
+\]
+其中
+\[
+A(\beta):=-\inf_{\alpha\le a}I_w(\alpha),\qquad
+B(\beta):=\log\varphi+(\beta-1)\log2-\inf_{\alpha>a}I_U(\alpha),
+\]
+且 \(a=\beta\log2\)。
+
+率函数非负，故 \(A(\beta)\le 0\)，并且 \(A(\beta)=0\) 当且仅当集合 \((-\infty,a]\) 与 \(I_w\) 的零点集相交。
+另一方面，由推论 \ref{cor:pom-oracle-Iw-Iu-affine-tilt}
+\[
+I_w(\alpha)=I_U(\alpha)-\alpha+(\log2-\log\varphi),
+\]
+可改写
+\[
+B(\beta)=a-\inf_{\alpha>a}\bigl(I_w(\alpha)+\alpha\bigr)\le 0.
+\]
+当 \(a\) 低于零点集下确界时，\(A(\beta)<0\) 且 \(B(\beta)<0\)，故 \(\Xi(\beta)<0\)。
+于是 \(\Xi(\beta)=0\) 等价于 \(A(\beta)=0\)，即所述判据。证毕。
+\end{proof}
+
+\begin{theorem}[强全息的定量稳定版：边界误差对体积误差的 Lipschitz 控制]\label{thm:conclusion-strong-holography-lipschitz-stability}
+在定理 \ref{thm:spg-dyadic-cubical-boundary-injective} 的 dyadic 立方复形设定下，记 \(C_n(\mathcal Q_m)\) 为 \(m\)-级 \(n\)-胞腔链群，并在标准基上取 \(\ell^1\) 范数
+\[
+\|c\|_1:=\sum_{\sigma\in\mathcal Q_m^{(n)}}|c(\sigma)|.
+\]
+则对任意 \(U,V\in C_n(\mathcal Q_m)\) 成立
+\[
+\|U-V\|_1\le 2^m\|\partial U-\partial V\|_1.
+\]
+特别地，若 \(U,V\) 为 \(0/1\) 指示的 polycube 体积链，则
+\[
+\mathrm{Vol}(U\triangle V)\le \mathrm{Area}(\partial U-\partial V),
+\]
+其中
+\[
+\mathrm{Vol}(U\triangle V)=2^{-mn}\|U-V\|_1,\qquad
+\mathrm{Area}(\cdot)=2^{-m(n-1)}\|\cdot\|_1.
+\]
+\end{theorem}
+
+\begin{proof}
+令 \(D:=U-V\)。
+固定第一坐标方向，把 \(n\)-胞腔按索引
+\(
+(i_1,\dots,i_n)\in\{1,\dots,2^m\}^n
+\)
+编号，并约定边界外侧值 \(D(0,i_2,\dots,i_n)=0\)。
+对每个固定横截 \((i_2,\dots,i_n)\)，有离散积分恒等式
+\[
+D(i_1,\dots,i_n)
+=\sum_{k=1}^{i_1}\bigl(D(k,\dots)-D(k-1,\dots)\bigr).
+\]
+取绝对值并求和得
+\[
+|D(i_1,\dots,i_n)|
+\le
+\sum_{k=1}^{i_1}\bigl|D(k,\dots)-D(k-1,\dots)\bigr|.
+\]
+再对 \(i_1=1,\dots,2^m\) 求和并交换求和次序，
+\[
+\sum_{i_1=1}^{2^m}|D(i_1,\dots,i_n)|
+\le
+2^m\sum_{k=1}^{2^m}|D(k,\dots)-D(k-1,\dots)|.
+\]
+最后对所有横截 \((i_2,\dots,i_n)\) 再求和，得到
+\[
+\|D\|_1\le 2^m\|\partial D\|_1,
+\]
+而 \(\partial D=\partial U-\partial V\)，即
+\[
+\|U-V\|_1\le 2^m\|\partial U-\partial V\|_1.
+\]
+乘以尺度因子 \(2^{-mn}\) 即得体积--面积形式。证毕。
+\end{proof}
+
+\begin{proposition}[有限条奇异环绕数证书对连续异常自由度的不可完备性]\label{prop:conclusion-finite-winding-certificate-incompleteness}
+设 \(G\simeq \ZZ^r\oplus F\) 为有限生成交换群。
+由定理 \ref{thm:cdim-anomaly-quadratic-law} 与命题 \ref{prop:cdim-discrete-anomaly-ledger}，
+\[
+\mathcal A(G)\cong \TT^{r(r-1)/2}\times \mathcal D(G),
+\qquad
+\mathcal D(G)=\pi_0(\mathcal A(G)).
+\]
+在绕数 strictification 口径（定理 \ref{thm:dephys-dirichlet-winding-minimal}）下，设可见通道
+\(\chi_1,\dots,\chi_M\)
+给出有限绕数证书映射
+\[
+W_M:\mathcal A(G)\to \ZZ^M,\qquad
+W_M(a):=\bigl(\mathrm{Wind}(\det S_{\chi_1}(a)),\dots,\mathrm{Wind}(\det S_{\chi_M}(a))\bigr).
+\]
+若 \(r\ge 2\)，则 \(W_M\) 在连通分量 \(\TT^{r(r-1)/2}\subset \mathcal A(G)\) 上不可能单射。
+因此存在 \(a\neq a'\)（可取同属 torus 分量）使
+\[
+W_M(a)=W_M(a').
+\]
+\end{proposition}
+
+\begin{proof}
+当 \(r\ge 2\) 时，\(\TT^{r(r-1)/2}\) 为不可数紧群，而 \(\ZZ^M\) 为可数集合。
+任意从不可数集合到可数集合的映射都不可能单射。
+将该事实应用到 \(W_M|_{\TT^{r(r-1)/2}}\) 即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[Lee--Yang 判别式支配的平方根分支与参数解析障碍]\label{thm:conclusion-leyang-discriminant-sqrt-branch-obstruction}
+令
+\[
+\Pi(X,y)=X^4-X^3-(2y+1)X^2+X+y(y+1),
+\]
+并定义迹函数
+\[
+T_m(y):=\Tr_{\QQ(E)/\QQ(y)}(X^m),
+\]
+其满足递推（见结论 \ref{con:xi-terminal-zm-trace-pushforward-origin}）
+\[
+T_m=T_{m-1}+(2y+1)T_{m-2}-T_{m-3}-y(y+1)T_{m-4}\qquad(m\ge 4).
+\]
+再记（见结论 \ref{con:xi-terminal-zm-v4-resolvent-discriminant-complete-coincidence}）
+\[
+\Disc_{\lambda}\Pi(\lambda,y)=-y(y-1)P_{\mathrm{LY}}(y),
+\qquad
+P_{\mathrm{LY}}(y)=256y^3+411y^2+165y+32.
+\]
+设 \(y_0\) 满足
+\[
+\Disc_{\lambda}\Pi(\lambda,y_0)=0,\qquad
+\partial_y\Disc_{\lambda}\Pi(\lambda,y)\big|_{y=y_0}\neq 0.
+\]
+则存在邻域 \(U\ni y_0\) 与常数 \(\lambda_0,c\neq 0\)，使两条根分支具有 Puiseux 展开
+\[
+\lambda_{\pm}(y)=\lambda_0\pm c\,(y-y_0)^{1/2}+O(y-y_0).
+\]
+令
+\[
+G(y,t):=\sum_{m\ge 0}T_m(y)t^m.
+\]
+则 \(G\) 关于 \(t\) 的分母为
+\[
+Q(y,t)=1-t-(2y+1)t^2+t^3+y(y+1)t^4=t^4\Pi(1/t,y),
+\]
+故极点 \(t_i(y)=\lambda_i(y)^{-1}\) 在 \(y\to y_0\) 时发生平方根型碰撞，进而 \(G\) 作为 \(y\)-参数族在 \(y_0\) 处出现不可解析延拓分支。
+
+若进一步假设在 \(y_0\) 邻域内该碰撞极点对控制收敛半径
+\[
+R(y):=\min\{|t|:\ Q(y,t)=0\},
+\]
+则 \(R(y)\) 在 \(y_0\) 处具有平方根分支，且
+\(
+L(y):=-\log R(y)
+\)
+在 \(y_0\) 不可能是 \(C^1\)。
+\end{theorem}
+
+\begin{proof}
+判别式在 \(y_0\) 处为简单零意味着：存在 \(\lambda_0\) 使
+\[
+\Pi(\lambda_0,y_0)=0,\qquad
+\partial_{\lambda}\Pi(\lambda_0,y_0)=0,
+\]
+且可取
+\(
+\partial_{\lambda\lambda}\Pi(\lambda_0,y_0)\neq 0
+\),
+\(
+\partial_y\Pi(\lambda_0,y_0)\neq 0
+\)。
+在 \((\lambda_0,y_0)\) 处二阶展开：
+\[
+0=\Pi(\lambda,y)
+=\frac12\Pi_{\lambda\lambda}(\lambda_0,y_0)(\lambda-\lambda_0)^2
++\Pi_y(\lambda_0,y_0)(y-y_0)
++O\!\left(|\lambda-\lambda_0|^3+|y-y_0||\lambda-\lambda_0|+|y-y_0|^2\right).
+\]
+移项得
+\[
+(\lambda-\lambda_0)^2
+=-2\frac{\Pi_y(\lambda_0,y_0)}{\Pi_{\lambda\lambda}(\lambda_0,y_0)}(y-y_0)
++O\!\left((y-y_0)^2\right),
+\]
+由 Weierstrass--Puiseux 理论得到两支平方根分歧，即 \(\lambda_{\pm}\) 展开式。
+
+另一方面，线性递推标准计算给出
+\(
+G(y,t)=P(y,t)/Q(y,t)
+\)
+（\(P\) 为初值决定的多项式），且 \(Q=t^4\Pi(1/t,y)\)，故极点正是 \(t_i(y)=\lambda_i(y)^{-1}\)。
+当 \(\lambda_{\pm}\) 碰撞为平方根分支时，\(t_{\pm}\) 同样呈平方根碰撞，从而 \(G\) 对参数 \(y\) 的解析延拓在 \(y_0\) 不可单值解析。
+
+若碰撞极点对在邻域内主导最小模，则
+\(
+R(y)=|t_{\pm}(y)|
+\)
+继承同阶平方根分支；
+故 \(L(y)=-\log R(y)\) 在 \(y_0\) 不可能为 \(C^1\)。证毕。
+\end{proof}
+
+\begin{theorem}[预算函数的近似不可计算性：优于因子 \texorpdfstring{$2$}{2} 的逼近将判定停机]\label{thm:conclusion-budget-factor2-inapproximability}
+在定理 \ref{thm:conclusion-minimal-external-budget-undecidable} 的有限纤维全定义可计算投影类上，不存在可计算函数 \(A\)（可取实值）满足：存在固定 \(\varepsilon>0\) 使对所有 \(\pi\) 都有
+\[
+b(\pi)\le A(\pi)<(2-\varepsilon)\,b(\pi).
+\]
+特别地，也不存在可计算 \(A\) 满足
+\[
+b(\pi)\le A(\pi)<2\,b(\pi)\qquad(\forall\,\pi).
+\]
+\end{theorem}
+
+\begin{proof}
+反设存在第一类 \(A\)。
+代入定理 \ref{thm:conclusion-minimal-external-budget-undecidable} 的构造族 \(\pi_{M,x}\)：
+\[
+b(\pi_{M,x})=
+\begin{cases}
+1,& M(x)\ \text{不停机},\\
+2,& M(x)\ \text{停机}.
+\end{cases}
+\]
+若 \(M(x)\) 不停机，则 \(A(\pi_{M,x})<2-\varepsilon<2\)；
+若 \(M(x)\) 停机，则 \(A(\pi_{M,x})\ge 2\)。
+故判据
+\(
+A(\pi_{M,x})<2
+\)
+当且仅当不停机，从而可判定停机问题，矛盾。
+
+对第二类不等式同理：
+\(
+b=1\Rightarrow A<2
+\),
+\(
+b=2\Rightarrow A\ge 2
+\)；
+同样得到停机判定矛盾。证毕。
+\end{proof}
+
+\begin{corollary}[纤维上界不约束状态复杂度：最小状态数可达 Busy--Beaver 增长]\label{cor:conclusion-bounded-fiber-unbounded-state-busybeaver}
+存在可计算映射 \((M,x)\mapsto \pi_{M,x}\)，使每个输出纤维大小至多为 \(2\)，且
+\[
+s(\pi_{M,x})=
+\begin{cases}
+T(M,x)+1,& T(M,x)<\infty,\\
+O(1),& T(M,x)=\infty,
+\end{cases}
+\]
+其中 \(s(\pi)\) 为最小确定性有限状态转导器状态数。
+于是对 Busy--Beaver 函数 \(\mathrm{BB}(n)\)，存在描述长度 \(\Theta(n)\) 的投影 \(\pi\) 满足 \(b(\pi)\le 2\) 且
+\[
+s(\pi)\ge \mathrm{BB}(n)+1.
+\]
+因此 \(s(\pi)\) 可超越任意可计算上界（即便以描述长度或纤维上界为自变量）。
+\end{corollary}
+
+\begin{proof}
+第一条直接由定理 \ref{thm:conclusion-minimal-state-complexity-halting}。
+又由同定理的纤维上界 \(\sup_y|\pi^{-1}(y)|\le 2\) 及定理 \ref{thm:conclusion-minimal-external-budget-undecidable} 的恒等式 \(b(\pi)=D(\pi)\)，得到 \(b(\pi)\le 2\)。
+
+对给定 \(n\)，取达到 \(\mathrm{BB}(n)\) 的 \(n\)-状态停机机 \(M_n\) 与固定输入 \(x\)。
+令 \(\pi:=\pi_{M_n,x}\)，则
+\[
+s(\pi)=T(M_n,x)+1=\mathrm{BB}(n)+1.
+\]
+标准编码下 \((M_n,x)\) 的描述长度为 \(\Theta(n)\)，故结论成立。
+由于 \(\mathrm{BB}\) 超越任意可计算函数，\(s(\pi)\) 亦不能被任何可计算函数以上述参数统一上界。证毕。
+\end{proof}
+
+\begin{theorem}[机器学习视角的不可泛化判定：有限样本无法区分可逆与不可逆纤维]\label{thm:conclusion-ml-finite-sample-nongeneralization-budget}
+考虑定理 \ref{thm:conclusion-minimal-external-budget-undecidable} 的族 \(\{\pi_{M,x}\}\)，并以标签
+\[
+\ell(\pi):=\ind_{\{b(\pi)=1\}}\in\{0,1\}
+\]
+作为二元学习任务。
+对任意仅允许有限次查询（或仅观察有限多对 \((z,\pi(z))\) 样本）的判定算法 \(\mathcal A\)，有最坏风险下界
+\[
+\inf_{\mathcal A}\ \sup_{(M,x)}\ \Pr\!\bigl(\mathcal A\ \text{误判}\ \ell(\pi_{M,x})\bigr)\ge \frac12.
+\]
+\end{theorem}
+
+\begin{proof}
+固定任意有限观测算法 \(\mathcal A\)。
+对一次运行，其可见数据只涉及有限多个输入点 \((n,b)\)，记涉及的最大时间索引为 \(n_{\max}\)。
+
+取两类实例：
+\begin{itemize}
+  \item 非停机实例 \((M_\infty,x_\infty)\)，其映射记为 \(\pi^\infty\)；
+  \item 停机实例 \((M_T,x_T)\)，首次停机时间取 \(T>n_{\max}\)，其映射记为 \(\pi^T\)。
+\end{itemize}
+由定理 \ref{thm:conclusion-minimal-external-budget-undecidable} 的显式构造，当 \(n<T\) 时两者都满足
+\[
+\pi^\infty(n,b)=\pi^T(n,b)=4n+2b.
+\]
+因此在 \(\mathcal A\) 所有可见样本点上，两实例给出完全相同观测 transcript，故 \(\mathcal A\) 输出一致。
+但两实例真标签相反：
+\(
+\ell(\pi^\infty)=1,\ \ell(\pi^T)=0
+\)。
+于是该共同输出至少错一者。
+在二点均匀先验下平均错误率至少 \(1/2\)，故最坏风险下界亦至少 \(1/2\)。证毕。
+\end{proof}
+
+\begin{conjecture}[圆维门与 Langlands 完备化 \texorpdfstring{$\Gamma$}{Gamma} 因子的最小对齐原理]\label{conj:conclusion-cdim-langlands-gamma-minimal-alignment}
+在定理 \ref{thm:cdim-minimal-record-axis} 的扩展保存范畴 \(\mathrm{Ext}(\pi)\) 中，设规范初对象
+\[
+r_0=r_{\mathrm{fin}}\times r_{\widehat{\ZZ}}\times r_{\mathrm{wind}}\times r_{\mathrm{end}}.
+\]
+对任意具有 Langlands 完备化 \(\Lambda(s)\) 的算术--动力学对象，设其 Archimedean 因子为
+\[
+\prod_{j=1}^{d_\infty}\Gamma_{\RR/\CC}(s+\mu_j).
+\]
+猜想在“相位门 + 账本轴”可逆化框架下成立：
+\begin{enumerate}
+  \item 连续相位门所需最小圆维恰为 \(d_\infty\)，且该圆维由 \(r_{\mathrm{fin}}\) 的结构强制；
+  \item 全部有限素数信息仅经 \(r_{\widehat{\ZZ}}\)（prime-register 截断）进入，不增加圆维；
+  \item 任意把连续相位门压缩到圆维 \(<d_\infty\) 的因子化，要么在 \(\mathrm{Ext}(\pi)\) 中触发 \(\mathsf{NULL}\)，要么被迫引入不可核验连续轴，因而在类型层被排斥。
+\end{enumerate}
+\end{conjecture}
+
+\endinput

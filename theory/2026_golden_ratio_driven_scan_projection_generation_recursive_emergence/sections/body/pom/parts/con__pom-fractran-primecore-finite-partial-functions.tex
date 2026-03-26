@@ -1,0 +1,190 @@
+\begin{theorem}[prime-core FRACTRAN 的有限部分函数范畴等价]\label{thm:pom-fractran-primecore-finite-partial-function-category}
+固定有限素数集 \(S\subset\mathbb P\)，并取一条素数 \(\bot\notin S\)（作为“未定义/停机”标记）。
+记 \(S_\bot:=S\cup\{\bot\}\)。
+考虑满足下述约束的 FRACTRAN 程序 \(F=(f_1,\dots,f_k)\)（定义 \ref{def:pom-fractran}）：
+\begin{enumerate}
+  \item 每条非平凡指令均为 prime-to-prime 形式 \(f_i=q_i/p_i\)，其中 \(p_i,q_i\in S_\bot\) 为素数；
+  \item \(F\) 不含任何分母为 \(\bot\) 的指令；
+  \item \(F\) 的最后一条指令为恒等分数 \(1\)（即 \(f_k=1/1\)）。
+\end{enumerate}
+对这类 \(F\)，令 \(T_F:\NN_{\ge 1}\to\NN_{\ge 1}\) 表示其一步语义的全化版本（将“无可行指令”通过末端恒等指令全化为不动点）。
+则对每个 \(p\in S\)，值 \(T_F(p)\) 必落在 \(S_\bot\)，从而可定义部分函数
+\[
+\Theta_S(F):S\rightharpoonup S,
+\qquad
+\Theta_S(F)(p):=
+\begin{cases}
+T_F(p),& T_F(p)\in S,\\
+\text{未定义},& T_F(p)=\bot.
+\end{cases}
+\]
+则映射 \(F\mapsto \Theta_S(F)\) 在“诱导部分函数一致”的等价关系下诱导出一条范畴同构
+\[
+\Theta_S:\ \mathbf{Frac}_{pp}^{\bot}(S)\ \xrightarrow{\ \cong\ }\ \mathbf{PPart}(S),
+\]
+其中：
+\begin{itemize}
+  \item \(\mathbf{PPart}(S)\) 为以 \(S\) 为对象、态射为 \(S\rightharpoonup S\) 的部分函数范畴（复合为通常部分函数复合）；
+  \item \(\mathbf{Frac}_{pp}^{\bot}(S)\) 为以 \(S\) 为对象、态射为上述受限程序在 \(S\) 上诱导的 \(\Theta_S(F)\)（按诱导部分函数识别）的范畴。
+\end{itemize}
+并且对任意部分函数 \(\varphi:S\rightharpoonup S\)，存在一个显式规范代表程序 \(F_\varphi\) 使 \(\Theta_S(F_\varphi)=\varphi\)，且 \(F_\varphi\) 的长度至多为 \(|S|+1\)。
+\end{theorem}
+\begin{proof}
+对 \(p\in S\)，由 \(F\) 的约束可知：除末端恒等指令 \(1\) 外，能够在素数输入 \(p\) 上可行的指令必满足分母等于 \(p\)（因为若 \(p'\in S_\bot\) 为素数且 \(p'\neq p\)，则 \(p\cdot(q/p')\notin\NN\)）。
+因此 \(T_F(p)\) 只可能取为某个分子素数 \(q\in S_\bot\)（若存在分母为 \(p\) 的首条指令），或取为 \(p\)（若不存在分母为 \(p\) 的指令，则末端恒等指令生效）。
+又由“分母不为 \(\bot\)”可知 \(T_F(\bot)=\bot\)，从而 \(\bot\) 为吸收标记并可作为未定义值的全化承载。
+于是 \(\Theta_S(F)\) 为良定义的部分函数。
+\par
+给定任意 \(\varphi:S\rightharpoonup S\)，构造规范代表如下：
+对每个 \(p\in S\)，
+若 \(\varphi(p)\) 定义且 \(\varphi(p)\neq p\)，置入一条指令 \(\varphi(p)/p\)；
+若 \(\varphi(p)\) 未定义，则置入一条指令 \(\bot/p\)；
+若 \(\varphi(p)=p\)，则不置入任何分母为 \(p\) 的指令。
+将上述指令按任意顺序排列，并在末尾追加恒等指令 \(1\)，得到 \(F_\varphi\)。
+由上一段对素数输入可行性的刻画，逐 \(p\) 检验可得 \(T_{F_\varphi}(p)\in\{\varphi(p),\bot,p\}\) 且恰与 \(\varphi\) 的三种情形一致，
+从而 \(\Theta_S(F_\varphi)=\varphi\)。
+显然 \(F_\varphi\) 的非恒等指令数至多为 \(|S|\)，故总长度至多为 \(|S|+1\)。
+\par
+最后，按诱导部分函数识别态射后，复合由 \(\Theta_S\) 转写为通常的部分函数复合，故得到范畴同构。
+上述构造与复合一致性可由脚本 \texttt{scripts/exp\_pom\_fractran\_primecore\_finite\_partial\_functions\_audit.py} 在有限样例窗内复核。证毕。
+\end{proof}
+
+\begin{corollary}[有限更新表的素数寄存器一步编译]\label{cor:pom-fractran-finite-update-table-one-step}
+设 \(X\) 为有限集，\(f:X\to X\) 为任意自映射。
+则存在一组互异素数编码 \(\iota:X\hookrightarrow\mathbb P\) 与一条 FRACTRAN 程序 \(F\)，使得对一切 \(x\in X\) 有
+\[
+T_F\!\bigl(\iota(x)\bigr)=\iota\!\bigl(f(x)\bigr).
+\]
+\end{corollary}
+\begin{proof}
+令 \(S:=\iota(X)\)。
+将 \(f\) 视为 \(S\) 上的全定义函数（经 \(\iota\) 共轭），再应用定理 \ref{thm:pom-fractran-primecore-finite-partial-function-category} 中对全定义函数的规范代表构造（无需 \(\bot\)-指令，仅对 \(f(p)\neq p\) 置入 \(f(p)/p\) 并末尾追加恒等指令 \(1\)），即得所需 \(F\)。证毕。
+\end{proof}
+
+\begin{theorem}[有限置换群在 prime-core 中的忠实嵌入与长度下界]\label{thm:pom-fractran-permutation-embedding-length}
+设 \(X\) 为 \(n\) 元集合，取互异素数编码 \(\iota:X\hookrightarrow\mathbb P\)，并记 \(S:=\iota(X)\)。
+对任意置换 \(\sigma\in\mathrm{Sym}(X)\)，令 \(F_\sigma\) 为由下述指令表构成的 FRACTRAN 程序：
+对所有满足 \(\sigma(x)\neq x\) 的 \(x\in X\) 置入一条指令 \(\iota(\sigma(x))/\iota(x)\)，并在末尾追加恒等指令 \(1\)。
+则限制映射
+\[
+\Phi:\mathrm{Sym}(X)\longrightarrow \mathrm{End}(S),
+\qquad
+\Phi(\sigma):=T_{F_\sigma}\big|_{S}
+\]
+为群的忠实表示（单射同态）。
+\par
+此外，若 \(F\) 为任意不含分母 \(1\) 的 FRACTRAN 程序，且 \(T_F\) 在某个 \(n\) 元素数集 \(S\subset\mathbb P\) 上诱导一条置换，则 \(F\) 的指令数至少为 \(n\)。
+\end{theorem}
+\begin{proof}
+对第一部分，取 \(p=\iota(x)\in S\)。
+除末端恒等指令外，能够在素数输入 \(p\) 上可行的指令分母必为 \(p\)，且若 \(\sigma(x)\neq x\) 则首条分母为 \(p\) 的指令即为 \(\iota(\sigma(x))/p\)，从而 \(T_{F_\sigma}(p)=\iota(\sigma(x))\)；
+若 \(\sigma(x)=x\)，则无分母为 \(p\) 的指令，末端恒等指令生效并给出 \(T_{F_\sigma}(p)=p\)。
+于是 \(\Phi(\sigma)(\iota(x))=\iota(\sigma(x))\)，并由此立得 \(\Phi(\sigma\circ\tau)=\Phi(\sigma)\circ\Phi(\tau)\) 与单射性。
+\par
+对长度下界，设 \(S=\{p_1,\dots,p_n\}\subset\mathbb P\) 且 \(T_F\) 在 \(S\) 上诱导置换。
+对每个 \(p_j\)，由于禁止分母 \(1\)，要使 \(T_F(p_j)\) 不停机，必须存在某条指令 \(a_i/b_i\) 使 \(p_j(a_i/b_i)\in\NN\)，即 \(b_i\mid p_j\)。
+由于 \(p_j\) 为素数且 \(b_i\neq 1\)，故必有 \(b_i=p_j\)。
+不同 \(p_j\) 互异，因而至少需要 \(n\) 条互异分母指令，得到指令数下界。证毕。
+\end{proof}
+
+\begin{theorem}[有限确定性转移系统的二素数分母编译]\label{thm:pom-fractran-two-prime-denominator-dfa-compile}
+设 \((Q,\Sigma,\delta)\) 为有限确定性转移系统：\(Q\) 为状态集，\(\Sigma\) 为输入字母集，\(\delta:Q\times\Sigma\to Q\) 为转移函数。
+则存在两组互不相交的素数编码
+\[
+\iota_Q:Q\hookrightarrow\mathbb P,
+\qquad
+\iota_\Sigma:\Sigma\hookrightarrow\mathbb P,
+\]
+以及一条 FRACTRAN 程序 \(F_\delta\)（长度 \(|Q|\cdot|\Sigma|\)），使得对任意 \((q,s)\in Q\times\Sigma\) 有
+\[
+T_{F_\delta}\bigl(\iota_Q(q)\,\iota_\Sigma(s)\bigr)=\iota_Q(\delta(q,s)).
+\]
+\end{theorem}
+\begin{proof}
+对每个 \((q,s)\in Q\times\Sigma\) 置入指令
+\[
+f_{q,s}:=\frac{\iota_Q(\delta(q,s))}{\iota_Q(q)\,\iota_\Sigma(s)},
+\]
+并将其按任意顺序排列成程序 \(F_\delta\)。
+对输入 \(N=\iota_Q(q)\iota_\Sigma(s)\)，仅当分母恰为 \(\iota_Q(q)\iota_\Sigma(s)\) 时才可能整除 \(N\)；
+由于 \(\iota_Q(Q)\) 与 \(\iota_\Sigma(\Sigma)\) 不相交，该分母在指令表中唯一出现，故 first-fit 必选该指令并输出 \(\iota_Q(\delta(q,s))\)。
+于是得到所示恒等式。证毕。
+\end{proof}
+
+\begin{theorem}[有限控制的一步编译：状态--符号二元表与移动指令的线性素数支持]\label{thm:pom-fractran-tm-local-compile-prime-sparse}
+设 \(Q\) 为有限状态集，\(\Sigma\) 为有限带符号集，\(\delta:Q\times \Sigma\to Q\times \Sigma\times\{L,R,S\}\) 为一步转移函数（允许部分定义）。
+取两族两两不同且互不相交的素数
+\(
+\{p_q\}_{q\in Q}
+\)、
+\(
+\{p_a\}_{a\in \Sigma}
+\)，并再取三枚素数 \(p_L,p_R,p_S\)（均不同于前两族）表示移动指令。
+定义局部控制编码
+\[
+N(q,a;R):=p_q\,p_a\,R,
+\]
+其中 \(R\) 与上述所有素数互素（其余寄存器的内部结构在本结论中不参与）。
+则存在一条 FRACTRAN 程序 \(F_\delta\)（按 first-fit 语义，且指令条数至多 \(|Q||\Sigma|+1\)），满足：
+对任意 \((q,a)\) 属于 \(\delta\) 的定义域，若
+\(
+\delta(q,a)=(q',a',\mathrm{mv})
+\)，则在输入 \(N(q,a;R)\) 上的一步输出为
+\[
+N(q',a';R)\cdot p_{\mathrm{mv}}
+\;=\;
+N(q,a;R)\cdot \frac{p_{q'}p_{a'}p_{\mathrm{mv}}}{p_qp_a}.
+\]
+若 \(\delta(q,a)\) 未定义，则程序在该输入上无可触发指令（按约定停机）。
+该编译所用素数支持规模为 \(|Q|+|\Sigma|+3\)。
+\end{theorem}
+\begin{proof}
+对每个定义域中的二元组 \((q,a)\)，在程序中加入一条分数
+\[
+f_{q,a}:=\frac{p_{q'}p_{a'}p_{\mathrm{mv}}}{p_qp_a},
+\qquad \delta(q,a)=(q',a',\mathrm{mv}).
+\]
+将所有这些分数按任意固定顺序排列得到 \(F_\delta\)；必要时可在末尾附加恒等分数 \(1\) 作为全化指令，从而指令条数至多 \(|Q||\Sigma|+1\)。
+\par
+取输入 \(N(q,a;R)=p_qp_aR\)。
+由于 \(R\) 与全部编码素数互素，且 \(p_q,p_a\) 在编码中各出现一次，故对任意分数 \(f_{q_1,a_1}\) 有
+\[
+p_{q_1}p_{a_1}\mid N(q,a;R)\quad\Longleftrightarrow\quad (q_1,a_1)=(q,a).
+\]
+因此当 \(\delta(q,a)\) 定义时，恰有且仅有分母 \(p_qp_a\) 可整除输入，first-fit 语义必选中对应指令并完成所示更新；当 \(\delta(q,a)\) 未定义时，不存在对应分数，故无指令可触发而停机。
+素数支持规模由所选素数族的大小立即得出。证毕。
+\end{proof}
+
+\begin{proposition}[可交换外置与算法外置的结构分岔：阿贝尔化上界与 prime-core 完全承载]\label{prop:pom-fractran-commutative-vs-algorithmic-externalization}
+设 \(\pi:\Omega\to X\) 为有限集合间的满射，并记其纤维置换群
+\[
+\mathrm{Aut}(\pi):=\{\sigma\in\mathrm{Sym}(\Omega):\ \pi\circ\sigma=\pi\}.
+\]
+则：
+\begin{enumerate}
+  \item 对任意交换群 \(A\) 与任意群同态 \(\rho:\mathrm{Aut}(\pi)\to A\)，同态 \(\rho\) 必经由阿贝尔化因子化
+  \[
+  \mathrm{Aut}(\pi)\twoheadrightarrow \mathrm{Aut}(\pi)^{\mathrm{ab}}\xrightarrow{\ \overline\rho\ } A.
+  \]
+  \item 取任意互异素数编码 \(\iota:\Omega\hookrightarrow\mathbb P\)。则存在 prime-core FRACTRAN 编译，使得 \(\mathrm{Aut}(\pi)\) 作为一置换群忠实嵌入到 \(\iota(\Omega)\) 上的一步可审计更新中；可取为定理 \ref{thm:pom-fractran-permutation-embedding-length} 的构造在子群 \(\mathrm{Aut}(\pi)\le \mathrm{Sym}(\Omega)\) 上的限制。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+第一条为群论基本事实：任意到交换群的同态必消去交换子子群，故因子化通过最大交换商。
+第二条由定理 \ref{thm:pom-fractran-permutation-embedding-length} 的忠实嵌入对任意置换群均成立，取子群 \(\mathrm{Aut}(\pi)\) 即得。证毕。
+\end{proof}
+
+\begin{conjecture}[prime-to-prime 一步编译的最小素数支撑相变]\label{conj:pom-fractran-min-prime-support-linear}
+对整数 \(n\ge 1\)，令 \(s_n\) 表示下述最小素数支撑规模：
+在所有 FRACTRAN 程序 \(F\) 中取最小，使得存在一组大小为 \(n\) 的状态编码集合 \(S\subset\mathbb N_{\ge 1}\)，并且 \(\{T_F|_{S}\}\) 的诱导变换半群（按一步语义复合生成）包含 \(S\) 上的全变换半群 \(\mathrm{End}(S)\)；
+其中“素数支撑规模”取为分母出现的不同素数个数
+\[
+\mathrm{sprt}(F):=\#\Bigl(\bigcup_{i}\mathrm{supp}(b_i)\Bigr).
+\]
+则猜想存在绝对常数 \(c>0\) 使得对所有 \(n\) 有
+\[
+s_n\ \ge\ c\,n,
+\]
+并且 prime-core 的显式构造给出同阶上界 \(s_n\ll n\)，从而 \(s_n\asymp n\)。
+\end{conjecture}
+

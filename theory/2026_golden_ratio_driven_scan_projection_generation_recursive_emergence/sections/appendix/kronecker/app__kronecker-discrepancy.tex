@@ -1,0 +1,238 @@
+\section{Kronecker 序列的一维星差异度上界（部分商控制）}\label{app:kronecker-discrepancy}
+
+本附录仅记录后文所用的 Kronecker 星差异度证书口径：对 Kronecker 序列
+\(x_t=\{x_0+t\alpha\}\) 的星差异度 \(D_N^\ast(\alpha;x_0)\)，其标准上界可由连分数部分商控制；精确形式与常数依赖见 \cite{KuipersNiederreiter1974,Goda2024QuasiUniformKronecker}。特别地，若 \(\alpha\) badly approximable（部分商有界），则存在 \(C_\alpha<\infty\) 使 \(D_N^\ast(\alpha;x_0)\le C_\alpha(\log N)/N\)（\cite{KuipersNiederreiter1974}）。
+\par
+对黄金分支 \(\alpha=\varphi^{-1}\) 的一条显式上界可写为
+\[
+D_N^*(\varphi^{-1})\ \le\ \frac{3+\left\lceil \frac{\log(\sqrt5\,N)}{\log \varphi}\right\rceil}{N}.
+\]
+
+\subsection{一阶 Wasserstein 距离（\texorpdfstring{$W_1$}{W1}）的传输差异：Lipschitz 读出的可审计证书}\label{app:kronecker-w1-transport}
+
+\paragraph{对象：经验测度与传输差异}
+设 \(\alpha\in(0,1)\setminus\QQ\)，并取 Kronecker 轨道 \(x_t=\{t\alpha\}\in[0,1)\)（为简明略去初相位；其引入只影响一个平移而不改变下述审计量的尺度）。
+对样本长度 \(N\ge 1\) 定义经验测度
+\[
+\mu_N:=\frac1N\sum_{t=0}^{N-1}\delta_{x_t},
+\qquad
+\lambda:=\text{Lebesgue 测度}.
+\]
+在代价 \(c(x,y)=|x-y|\) 下的一阶 Wasserstein 距离定义为
+\[
+W_1(\mu,\nu):=\inf_{\pi\in\Pi(\mu,\nu)}\int_{[0,1)^2}|x-y|\,d\pi(x,y),
+\]
+其中 \(\Pi(\mu,\nu)\) 为以 \((\mu,\nu)\) 为边缘的耦合集合。
+记
+\[
+\mathsf{T}_N(\alpha):=W_1(\mu_N,\lambda)
+\]
+为 \textbf{传输差异}（transport discrepancy）。
+
+\begin{theorem}[Lipschitz 读出的传输审计不等式]\label{thm:kronecker-w1-lipschitz-readout}
+若 \(f:[0,1)\to\RR\) 为 Lipschitz 函数，且 \(\mathrm{Lip}(f)\) 为其 Lipschitz 常数，则对任意 \(N\ge 1\) 有
+\[
+\left|\frac1N\sum_{t=0}^{N-1}f(x_t)-\int_0^1 f(x)\,dx\right|
+\ \le\
+\mathrm{Lip}(f)\,\mathsf{T}_N(\alpha).
+\]
+\end{theorem}
+\begin{proof}
+任取 \(\pi\in\Pi(\mu_N,\lambda)\)。则
+\[
+\int f\,d\mu_N-\int f\,d\lambda=\int_{[0,1)^2}\bigl(f(x)-f(y)\bigr)\,d\pi(x,y),
+\]
+从而由 Lipschitz 性得
+\[
+\left|\int f\,d\mu_N-\int f\,d\lambda\right|
+\le
+\int |f(x)-f(y)|\,d\pi(x,y)
+\le
+\mathrm{Lip}(f)\int |x-y|\,d\pi(x,y).
+\]
+对 \(\pi\) 取下确界即得结论。证毕。
+\end{proof}
+
+\subsubsection{连分分母长度处的 \texorpdfstring{$W_1$}{W1} 闭式与二次修正}\label{subsec:kronecker-w1-denominator}
+
+\begin{lemma}[一维单调耦合的分位公式]\label{lem:w1-quantile-formula-empirical-uniform}
+设 \(0\le x_0\le x_1\le\cdots\le x_{q-1}<1\)，并令
+\(
+\mu_q:=\frac1q\sum_{j=0}^{q-1}\delta_{x_j}
+\)。
+则有
+\[
+W_1(\mu_q,\lambda)=\sum_{j=0}^{q-1}\int_{j/q}^{(j+1)/q}\bigl|x_j-t\bigr|\,dt.
+\]
+\end{lemma}
+\begin{proof}
+令 \(T:[0,1)\to[0,1)\) 为分段常值映射 \(T(t)=x_j\)（当 \(t\in[j/q,(j+1)/q)\)）。则 \(T_\#\lambda=\mu_q\)，从而耦合 \(\pi:=(T,\mathrm{Id})_\#\lambda\in\Pi(\mu_q,\lambda)\) 给出上界
+\(
+W_1(\mu_q,\lambda)\le \int|T(t)-t|\,dt
+\)，其右端即所示求和式。
+\par
+另一方面，在一维线序下，代价 \(c(x,y)=|x-y|\) 具有 Monge 性质：若 \(t_1<t_2\) 且 \(x_a>x_b\)，则交换配对不增总代价
+\(
+|x_a-t_1|+|x_b-t_2|\ge |x_a-t_2|+|x_b-t_1|
+\)。
+因此任一最优耦合可被无损地改写为无交叉（单调）耦合；对 \((\mu_q,\lambda)\) 而言，该单调耦合正对应上述 \(T\) 的分段重排形式，其总代价即为所示积分和。
+综上等号成立。证毕。
+\end{proof}
+
+\begin{theorem}[分母长度 tick 的 \texorpdfstring{$W_1$}{W1} 精确闭式]\label{thm:kronecker-w1-denominator-closed-form}
+设 \(p/q\) 为既约有理数，且满足
+\[
+\left|\alpha-\frac pq\right|<\frac1{q^2}.
+\]
+令 \(\delta:=\alpha-\frac pq\)，并考虑点集
+\(
+P_q(\alpha):=\{\{t\alpha\}:t=0,1,\dots,q-1\}\subset[0,1)
+\)
+及其经验测度 \(\mu_q:=\frac1q\sum_{x\in P_q(\alpha)}\delta_x\)。
+则 \(\mathsf{T}_q(\alpha)=W_1(\mu_q,\lambda)\) 满足下述闭式：
+\begin{enumerate}
+  \item 若 \(\delta<0\)（即 \(\alpha<p/q\)），则
+  \begin{equation}\label{eq:kronecker-w1-bad-side-linear}
+  \boxed{\;
+  \mathsf{T}_q(\alpha)=\frac1{2q}+\frac{q-1}{2}\Bigl(\frac pq-\alpha\Bigr)\;}
+  \end{equation}
+  并且在该设定下点集的星差异闭式为
+  \(
+  D_q^\ast(P_q(\alpha))=\frac1q+(q-1)\bigl(\frac pq-\alpha\bigr)
+  \)，从而
+  \begin{equation}\label{eq:kronecker-w1-half-star}
+  \boxed{\;\mathsf{T}_q(\alpha)=\frac12\,D_q^\ast(P_q(\alpha)).\;}
+  \end{equation}
+  \item 若 \(\delta>0\)（即 \(\alpha>p/q\)），则
+  \begin{equation}\label{eq:kronecker-w1-good-side-quadratic}
+  \boxed{\;
+  \mathsf{T}_q(\alpha)=\frac1{2q}-\frac{q-1}{2}\Bigl(\alpha-\frac pq\Bigr)
+  +\frac{q(q-1)(2q-1)}6\Bigl(\alpha-\frac pq\Bigr)^2\;}
+  \end{equation}
+  并且该侧星差异退化为常数 \(D_q^\ast(P_q(\alpha))=1/q\)（每个箱 \([j/q,(j+1)/q)\) 恰含一点）。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+令 \(t(j)\in\{0,1,\dots,q-1\}\) 为满足
+\(
+t(j)p\equiv j\pmod q
+\)
+的唯一整数；则 \(j\mapsto t(j)\) 为一个置换且 \(t(0)=0\)。
+对任意 \(j\)，有
+\[
+\{t(j)\alpha\}
+=\left\{\frac{j}{q}+t(j)\delta\right\}.
+\]
+由 \(|t(j)\delta|\le (q-1)|\delta|<1/q\) 可知该括号内值不会跨越相邻整数，从而小数部分可直接去掉花括号。
+\par
+\textbf{(i) \(\delta>0\).}
+此时 \(x_j:=\{t(j)\alpha\}=\frac{j}{q}+t(j)\delta\) 满足
+\(
+\frac{j}{q}\le x_j<\frac{j+1}{q}
+\)
+（因为 \(t(j)\delta<1/q\)），从而 \((x_0,\dots,x_{q-1})\) 已按 \(j\) 递增排序。
+由引理 \ref{lem:w1-quantile-formula-empirical-uniform}，
+\[
+\mathsf{T}_q(\alpha)=\sum_{j=0}^{q-1}\int_{j/q}^{(j+1)/q}\left|t(j)\delta-(t-j/q)\right|dt
+=\sum_{j=0}^{q-1}\frac12\left((t(j)\delta)^2+\left(\frac1q-t(j)\delta\right)^2\right).
+\]
+展开并求和得
+\[
+\mathsf{T}_q(\alpha)
+=\frac1{2q}-\frac{\delta}{q}\sum_{j=0}^{q-1}t(j)+\delta^2\sum_{j=0}^{q-1}t(j)^2.
+\]
+利用置换恒等式
+\(
+\sum_{j=0}^{q-1}t(j)=\frac{q(q-1)}2
+\)、
+\(
+\sum_{j=0}^{q-1}t(j)^2=\frac{q(q-1)(2q-1)}6
+\)
+即得 \eqref{eq:kronecker-w1-good-side-quadratic}。
+并且此时每个箱 \([j/q,(j+1)/q)\) 恰含一点，故 \(D_q^\ast(P_q(\alpha))=1/q\)。
+\par
+\textbf{(ii) \(\delta<0\).}
+记 \(\delta':=-\delta=\frac pq-\alpha>0\)。
+对 \(j\ge 1\) 有
+\(
+\frac{j-1}{q}<\frac{j}{q}-t(j)\delta'<\frac{j}{q}
+\)，且 \(x_0=0\)；
+因此排序仍按 \(j\) 给出，并且对所有 \(j\ge 1\) 都有 \(x_j<j/q\)。
+由引理 \ref{lem:w1-quantile-formula-empirical-uniform}，
+对 \(j\ge 1\) 的区间 \(t\in[j/q,(j+1)/q)\) 有 \(|x_j-t|=t-x_j\)，从而
+\[
+\mathsf{T}_q(\alpha)
+=\sum_{j=0}^{q-1}\int_{j/q}^{(j+1)/q}\bigl(t-x_j\bigr)\,dt
+=\frac12-\frac1q\sum_{j=0}^{q-1}x_j.
+\]
+而
+\(
+\sum_{j=0}^{q-1}x_j
+=\sum_{j=1}^{q-1}\left(\frac{j}{q}-t(j)\delta'\right)
+=\frac{q-1}{2}-\delta'\sum_{j=1}^{q-1}t(j)
+\)，并且 \(\sum_{j=1}^{q-1}t(j)=\frac{q(q-1)}2\)。
+代回即得 \eqref{eq:kronecker-w1-bad-side-linear}。
+在该设定下，箱占据出现“首箱双占/末箱空缺”的确定性偏差，直接计算给出
+\(
+D_q^\ast(P_q(\alpha))=\frac1q+(q-1)\delta'
+\)，从而得到 \eqref{eq:kronecker-w1-half-star}。
+证毕。
+\end{proof}
+
+\begin{corollary}[坏侧二分改进与好侧箱内灵敏性]\label{cor:kronecker-w1-two-sided-interpretation}
+在定理 \ref{thm:kronecker-w1-denominator-closed-form} 的设定下：
+\begin{enumerate}
+  \item 在 \(\alpha<p/q\) 的坏侧，\(\mathsf{T}_q=\tfrac12 D_q^\ast\)（式 \eqref{eq:kronecker-w1-half-star}），因此对 Lipschitz 核读出误差，传输审计量相较基于星差异的闭式预算给出常数因子 \(2\) 的严格改进。
+  \item 在 \(\alpha>p/q\) 的好侧，星差异退化为常数 \(1/q\)，而 \(\mathsf{T}_q(\alpha)\) 仍以 \(\delta\) 的二次多项式形式分辨箱内偏移（式 \eqref{eq:kronecker-w1-good-side-quadratic}），从而提供对“箱内几何”的额外可审计信息。
+\end{enumerate}
+\end{corollary}
+
+\subsubsection{黄金分支的闭式极限常数}\label{subsec:kronecker-w1-golden}
+
+\begin{lemma}[黄金分支收敛误差的闭式表达]\label{lem:golden-convergent-error-closed}
+令 \(\alpha=\varphi^{-1}\in(0,1)\)，并取 \(p=F_{n-1},q=F_n\)（Fibonacci 分母；\(n\ge 2\)）。
+则误差 \(\delta_n:=\alpha-\frac pq\) 满足精确恒等式
+\begin{equation}\label{eq:golden-error-exact}
+\boxed{\;
+\delta_n=(-1)^{n-1}\frac{\alpha^n}{F_n}
+=\frac{(-1)^{n-1}}{\sqrt5\,F_n^2}\Bigl(1-(-1)^n\varphi^{-2n}\Bigr)\;}
+\end{equation}
+并因此有渐近 \(\delta_n=\frac{(-1)^{n-1}}{\sqrt5\,F_n^2}+O(F_n^{-4})\)。
+\end{lemma}
+\begin{proof}
+由 Binet 公式 \(F_n=(\varphi^n-(-1)^n\varphi^{-n})/\sqrt5\) 与 \(\alpha=\varphi^{-1}\) 直接计算得到
+\(
+\alpha-\frac{F_{n-1}}{F_n}=(-1)^{n-1}\alpha^n/F_n
+\)；
+再将 \(F_n\alpha^n=\frac{1}{\sqrt5}(1-(-1)^n\varphi^{-2n})\) 代回即得 \eqref{eq:golden-error-exact}。证毕。
+\end{proof}
+
+\begin{corollary}[Fibonacci 长度处的 \texorpdfstring{$W_1$}{W1} 极限常数]\label{cor:kronecker-w1-fibonacci-limits}
+令 \(\alpha=\varphi^{-1}\) 且 \(q=F_n,p=F_{n-1}\)。
+则由定理 \ref{thm:kronecker-w1-denominator-closed-form} 与引理 \ref{lem:golden-convergent-error-closed}，沿两条交错子序列有极限常数
+\[
+F_n\,\mathsf{T}_{F_n}(\alpha)\longrightarrow
+\frac12+\frac1{2\sqrt5}
+\qquad(n\to\infty,\ \delta_n<0),
+\]
+\[
+F_n\,\mathsf{T}_{F_n}(\alpha)\longrightarrow
+\frac12-\frac1{2\sqrt5}+\frac1{15}
+\qquad(n\to\infty,\ \delta_n>0).
+\]
+等价地，由 \(\mathrm{sign}(\delta_n)=(-1)^{n-1}\) 可知：当 \(n\) 为偶数（\(\delta_n<0\)）取第一常数；当 \(n\) 为奇数（\(\delta_n>0\)）取第二常数。
+\end{corollary}
+
+\begin{proposition}[Lipschitz 推前的 \texorpdfstring{$W_1$}{W1} 协变性]\label{prop:w1-lipschitz-pushforward}
+若 \(\Phi:[0,1)\to[0,1)\) 为 \(L\)-Lipschitz 映射，则对任意概率测度 \(\mu,\nu\) 有
+\[
+W_1(\Phi_\#\mu,\Phi_\#\nu)\le L\,W_1(\mu,\nu).
+\]
+\end{proposition}
+\begin{proof}
+任取 \(\pi\in\Pi(\mu,\nu)\)，则 \((\Phi\times\Phi)_\#\pi\in\Pi(\Phi_\#\mu,\Phi_\#\nu)\)，并且
+\[
+\int|\Phi(x)-\Phi(y)|\,d\pi(x,y)\le L\int|x-y|\,d\pi(x,y).
+\]
+对 \(\pi\) 取下确界即得。证毕。
+\end{proof}

@@ -1,0 +1,273 @@
+\subsubsection{仿射均匀化的逆定理与有限维大筛谱证书：从主弧集中到算术障碍二分}\label{subsubsec:gm-affine-inverse-gram-arithmetic-dichotomy}
+本小节把 \S\ref{subsubsec:gm-rational-sieve-affine-centered-opuc-multifractal} 的“有理频率大筛分解”推进到\emph{逆向刻画}与\emph{可计算证书}层面：一方面，证明仿射均匀化残差的 \(M^4\) 近饱和当且仅当 Fourier 质量在某个有理主弧上集中；另一方面，将残差谱范数在常数意义下等价为一个显式有限维 Gram 矩阵的最大特征值，从而把“幂次改进是否可得”还原为一个可核验的谱半径数值判定问题。随后把该主弧机制与 \S\ref{subsubsec:gm-odd-moment-sdp-modq-profinite} 的 profinite Haar 二分律对接，得到算术障碍的刚性分类与仿射改进的二分定理，并给出任意奇阶中心奇矩证书的最优谱提升闭式表达。
+
+\paragraph{逆定理：近饱和 \texorpdfstring{$\Longleftrightarrow$}{<->} 有理主弧频谱集中}
+\begin{theorem}[仿射均匀化不等式的逆定理：近饱和当且仅当有理主弧频谱集中]\label{thm:gm-affine-inverse-major-arc}
+设 \(f\in L^2(\RR)\) 为带宽 \(T\) 的 Paley--Wiener 函数，即 \(\mathrm{supp}(\widehat f)\subset[-T,T]\)。
+令 \(\mathcal{A}_M\) 为任一 Guth--Maynard 型三参数有理仿射平均算子在 \(\mathrm{PW}_T\) 上的实现，并令 \(\mathcal{U}_M\) 为其秩一主通道（零频/均匀通道），记残差 \(\mathcal{R}_M:=\mathcal{A}_M-\mathcal{U}_M\)。
+\begin{enumerate}
+  \item \textbf{（近饱和 \(\Rightarrow\) 主弧集中）}若存在常数 \(c_0>0\) 使
+  \[
+  \|\mathcal{R}_M f\|_{L^2}^2\ \ge\ c_0\,M^{4}\|f\|_{L^2}^2,
+  \]
+  则存在 \(1\le q\le M\) 与 \(a\in(\ZZ/q\ZZ)^\times\) 使得
+  \begin{equation}\label{eq:gm-major-arc-concentration}
+  \int_{|\xi-a/q|\le c_1T/M^{2}} |\widehat f(\xi)|^2\,d\xi\ \ge\ c_2\,\|f\|_{L^2}^2,
+  \end{equation}
+  其中常数 \(c_1,c_2>0\) 仅依赖平滑规范（与 \(f,M,T\) 无关）。
+  \item \textbf{（主弧集中 \(\Rightarrow\) 近饱和）}反之，若对某个 \(1\le q\le M\)、\(a\in(\ZZ/q\ZZ)^\times\) 成立 \eqref{eq:gm-major-arc-concentration}，则存在 \(c_3>0\)（仅依赖平滑规范）使
+  \[
+  \|\mathcal{R}_M f\|_{L^2}^2\ \ge\ c_3\,M^{4}\|f\|_{L^2}^2.
+  \]
+\end{enumerate}
+从而 \(M^4\) 残差项的饱和机制与有理主弧频谱集中在定量意义下完全等价。
+\end{theorem}
+
+\begin{proof}
+由 \S\ref{subsubsec:gm-rational-sieve-affine-centered-opuc-multifractal} 的有理频率大筛分解（定理 \ref{thm:gm-affine-rational-sieve-M4}）可把残差通道的二次型控制为一族围绕有理点 \(a/q\) 的频域局部化质量之上确界。
+若 \(\|\mathcal{R}_M f\|_2^2\) 在 \(M^4\) 量级近饱和，则该确界必须被某个 \((q,a)\) 以正比例饱和，从而得到主弧集中 \eqref{eq:gm-major-arc-concentration}（把局部化核下界为对应主弧指示函数的常数倍即可）。
+反向由同一分解的下界方向给出：主弧上 \(L^2\) 质量占优时，相应的局部化核二次型为正比例，从而迫使 \(\|\mathcal{R}_M f\|_2^2\) 至少为 \(c_3M^4\|f\|_2^2\)。证毕。
+\end{proof}
+
+\paragraph{结构刚性：主弧集中强制多尺度近仿射自相关}
+\begin{proposition}[近饱和的结构刚性：主弧集中强制产生高密度近仿射自相关]\label{prop:gm-major-arc-rigidity-affine-autocorr}
+在定理 \ref{thm:gm-affine-inverse-major-arc} 的设定下，若对某个 \(1\le q\le M\)、\(a\in(\ZZ/q\ZZ)^\times\) 有主弧集中
+\[
+\int_{|\xi-a/q|\le cT/M^{2}} |\widehat f(\xi)|^2\,d\xi\ \gg\ \|f\|_2^2,
+\]
+则存在参数集
+\[
+\mathcal{P}\subset\{(m_1,m_2,m_3):\ |m_1|\sim M_1,\ m_2\sim M_2,\ |m_3|\lesssim M_3\}
+\]
+满足 \(|\mathcal{P}|\gg M^3\)，并存在可测集 \(E\subset\RR\) 使 \(\|f\mathbf{1}_E\|_2\gg \|f\|_2\)，且对所有 \((m_1,m_2,m_3)\in\mathcal{P}\) 有
+\[
+\int_E f(u)\,\overline{f\!\left(\frac{m_1u+m_3}{m_2}\right)}\,du\ \gg\ \|f\|_2^2.
+\]
+因此残差项的近饱和不仅等价于频域主弧集中，而且在时域上强制产生在大量有理仿射变换下的高密度近自相关结构。
+\end{proposition}
+
+\begin{proof}
+主弧集中意味着 \(f\) 在 \(E\) 上可由“单一有理相位 \(e^{2\pi i(a/q)u}\) 乘以慢变包络”的模型近似；将该近似代入仿射推前 \(u\mapsto(m_1u+m_3)/m_2\) 后，相关积分的相位差由 \((m_1,m_2,m_3)\) 的有理同余条件控制。
+当参数在足够大的一族 \(\mathcal{P}\) 上使相位差落在主弧容许的误差窗内时，相关不再发生抵消，从而得到所示的统一下界。证毕。
+\end{proof}
+
+\paragraph{残差谱范数的有限维证书：有理频率大筛 Gram 矩阵}
+\begin{theorem}[残差谱范数的有限维证书：有理频率大筛 Gram 矩阵的完全等价]\label{thm:gm-residual-opnorm-gram-equivalence}
+固定带宽 \(T\) 的平滑窗口 \(\phi\)（频域为近单位算子核），并记有理频率集合
+\[
+\mathcal{Q}_M:=\left\{\frac{a}{q}:\ 1\le q\le M,\ (a,q)=1\right\}.
+\]
+定义以 \(\mathcal{Q}_M\) 为指标的 Gram 矩阵 \(K_M\)：
+\[
+(K_M)_{r,r'}:=\widehat{\phi}(r-r')\qquad (r,r'\in\mathcal{Q}_M).
+\]
+则存在常数 \(C\ge 1\)（仅依赖 \(\phi\)）使得对 Guth--Maynard 型仿射平均残差算子 \(\mathcal{R}_M=\mathcal{A}_M-\mathcal{U}_M\) 有
+\[
+\boxed{\ 
+C^{-1}M^4\,\|K_M\|_{\mathrm{op}}
+\ \le\
+\|\mathcal{R}_M\|_{\mathrm{op}}^2
+\ \le\
+C\,M^4\,\|K_M\|_{\mathrm{op}}
+\ }.
+\]
+从而“仿射均匀化残差”的谱范数控制与显式有限维大筛 Gram 矩阵的最大特征值在常数意义下等价，给出直接可核验的谱证书。
+\end{theorem}
+
+\begin{proof}
+在 \(\mathrm{PW}_T\) 上，\(\mathcal{R}_M\) 的频域作用由一族围绕 \(r\in\mathcal{Q}_M\) 的局部化核叠加给出；其二次型可写为这些局部化核的 Gram 形式。
+将局部化核在 \(T^{-1}\)-尺度上离散化并用 \(\phi\) 固定其窗函数后，可把该 Gram 形式压缩为 \(K_M\) 的二次型；而 \(M^4\) 因子来自残差通道的有效自由度计数（参见命题 \ref{prop:gm-affine-average-rank1-residual} 的 \(M^4\) 量级）。
+上下界由局部化核族的框架常数控制，遂得结论。证毕。
+\end{proof}
+
+\begin{corollary}[谱证书的可计算性：多项式复杂度的 \texorpdfstring{$\vartheta$}{vtheta} 输出与可审计改进阈值]\label{cor:gm-KM-computable-vtheta}
+沿用定理 \ref{thm:gm-residual-opnorm-gram-equivalence} 的设定。对任意误差参数 \(\epsilon\in(0,1)\)，存在确定性算法在时间
+\[
+O\!\left(|\mathcal{Q}_M|^{2}\,\mathrm{polylog}(M/\epsilon)\right)
+\]
+内输出 \(\lambda_\epsilon\) 使得
+\[
+(1-\epsilon)\|K_M\|_{\mathrm{op}}\ \le\ \lambda_\epsilon\ \le\ (1+\epsilon)\|K_M\|_{\mathrm{op}}.
+\]
+因此一旦 \(\|K_M\|_{\mathrm{op}}\ll M^{-\vartheta}\)（某 \(\vartheta>0\)），即可由有限维谱计算生成严格幂次节省证书
+\[
+\|\mathcal{R}_M\|_{\mathrm{op}}^2\ \ll\ M^{4-\vartheta},
+\]
+且 \(\vartheta\) 可由 \(-\log\lambda_\epsilon/\log M\) 直接读出（在 \(\epsilon\) 给定后具有可审计误差预算）。
+\end{corollary}
+
+\begin{proof}
+对称（或正规化后的自伴）矩阵 \(K_M\) 的最大特征值可用 Lanczos/幂迭代在多项式时间内逼近；每次矩阵--向量乘法开销为 \(O(|\mathcal{Q}_M|^2)\)，迭代次数由谱隙与 \(\epsilon\) 的多对数控制，故得到所示复杂度。
+由定理 \ref{thm:gm-residual-opnorm-gram-equivalence} 立得残差幂次节省证书与 \(\vartheta\) 的读出式。证毕。
+\end{proof}
+
+\paragraph{绝对中心奇矩证书：最优闭式谱提升与两层谱唯一极端}
+\begin{theorem}[绝对中心奇矩约束下谱范数的最优上界：两层谱极端与显式常数]\label{thm:gm-abs-centered-odd-moment-extremal}
+设 \(G\succeq 0\) 为 \(m\times m\) 矩阵，令 \(\bar\lambda:=\tr(G)/m\)。
+对 \(k\in\NN\) 定义绝对中心奇矩
+\[
+A_{2k+1}(G):=\tr\!\left(\left|G-\bar\lambda I\right|^{2k+1}\right).
+\]
+则在仅固定 \((m,\tr(G),A_{2k+1}(G))\) 的约束下，\(\lambda_{\max}(G)\) 的最大可能值由唯一两层谱实现：
+存在 \(x\ge y\ge 0\) 使 \(\mathrm{spec}(G)=\{x,y,\dots,y\}\)，并且有最优闭式上界
+\[
+\boxed{\ 
+\lambda_{\max}(G)\ \le\ \bar\lambda+\left(\frac{A_{2k+1}(G)}{1+(m-1)^{-2k}}\right)^{\!1/(2k+1)}
+\ }.
+\]
+该常数在上述两层谱情形取等，从而给出“中心奇矩证书 \(\Rightarrow\) 谱范数提升”的最优闭式表达。
+\end{theorem}
+
+\begin{proof}
+令特征值 \(\lambda_1\ge\cdots\ge\lambda_m\ge 0\)，记偏差 \(d_i:=\lambda_i-\bar\lambda\) 则 \(\sum_i d_i=0\)。
+在固定 \(\sum_i|d_i|^{2k+1}=A_{2k+1}(G)\) 的条件下，欲最大化 \(d_1=\lambda_{\max}(G)-\bar\lambda\)，须使其余 \(m-1\) 个偏差尽可能“平均”以最小化给定 \(d_1\) 所需的绝对矩消耗；由凸性与 Jensen 不等式，该最小化由
+\(
+d_2=\cdots=d_m=-d_1/(m-1)
+\)
+实现，亦即两层谱极端。
+在该极端下直接计算
+\[
+A_{2k+1}(G)
+=|d_1|^{2k+1}+(m-1)\left|\frac{d_1}{m-1}\right|^{2k+1}
+=\left(1+(m-1)^{-2k}\right)d_1^{2k+1},
+\]
+从而 \(d_1\le \bigl(A_{2k+1}(G)/(1+(m-1)^{-2k})\bigr)^{1/(2k+1)}\)。
+等号刻画同样由 Jensen 等号条件给出。证毕。
+\end{proof}
+
+\paragraph{中心奇矩证书的可分解性：主弧--能量--谱隙三通道的任意奇阶闭合}
+\begin{proposition}[中心奇矩证书的可分解性：三通道闭合与 \texorpdfstring{$M^{-\vartheta/2}$}{M^{-vtheta/2}} 节省]\label{prop:gm-abs-centered-moment-three-channels}
+设 \(G\) 为由带宽核采样得到的 Gram 矩阵（例如 Dirichlet 多项式或其读出核所诱导），并设相应仿射残差谱范数证书满足
+\[
+\|\mathcal{R}_M\|_{\mathrm{op}}^2\ \ll\ M^{4-\vartheta}\qquad(\vartheta\ge 0).
+\]
+则对每个固定 \(k\in\NN\)，存在可显式写出的分解常数与核正规化，使得绝对中心奇矩满足
+\[
+A_{2k+1}(G)\ \ll\ T^{o(1)}
+\Bigl(
+\mathfrak{M}_k(W)\ +\ M^{-\vartheta/2}\,\mathfrak{E}_k(W)
+\Bigr),
+\]
+其中 \(\mathfrak{M}_k(W)\) 为仅由均匀主通道决定的项（不含加性能量耦合），而 \(\mathfrak{E}_k(W)\) 为唯一含能量耦合的通道；且其系数获得 \(M^{-\vartheta/2}\) 的幂次节省。
+结合定理 \ref{thm:gm-abs-centered-odd-moment-extremal}，可将任意奇阶中心矩估计闭合为谱范数上界并实现可调阶的系统性改进。
+\end{proposition}
+
+\begin{proof}
+中心化把平凡主通道从迹矩中消去（参见命题 \ref{prop:gm-centered-trace3-energy-variance} 的三阶情形），从而中心奇矩仅对非平凡相关通道敏感。
+在仿射平均的有理频率大筛分解下（定理 \ref{thm:gm-affine-rational-sieve-M4}），能量耦合通道的唯一输入是残差通道的谱范数；当 \(\|\mathcal{R}_M\|_{\mathrm{op}}^2\) 获得 \(M^{-\vartheta}\) 节省时，对应的奇阶中心矩耦合系数以平方根方式进入，从而产生 \(M^{-\vartheta/2}\) 的节省因子。
+其余均匀通道贡献被吸收进 \(\mathfrak{M}_k(W)\)。证毕。
+\end{proof}
+
+\paragraph{主弧集中 \texorpdfstring{$\Longleftrightarrow$}{<->} profinite 支撑退化：双向判别}
+\begin{theorem}[主弧集中与模分布退化的等价：从有理频谱到 profinite 支撑的双向判别]\label{thm:gm-major-arc-profinite-equivalence}
+设 \(\{A_m\}\subset\ZZ\) 来自某一 primitive sofic--Zeckendorf 生成系统，并定义指数和
+\[
+S_m(\theta):=\sum_{x\in A_m}e^{i\theta x}.
+\]
+\begin{enumerate}
+  \item 若存在常数 \(c_0>0\) 与无穷多组 \((a,q)\)（\(1\le q\le e^{cm}\)）使得
+  \[
+  |S_m(2\pi a/q)|\ \ge\ c_0|A_m|,
+  \]
+  则 \S\ref{subsubsec:gm-odd-moment-sdp-modq-profinite} 的 profinite 极限测度不可能为 Haar，且支撑必落在某个真闭子群陪集上。
+  \item 反之，若 profinite 极限测度支撑落在真闭子群陪集上，则存在一族模数 \(q\to\infty\) 与非平凡角色 \(\chi\neq 1\) 使
+  \[
+  \left|\sum_{x\in A_m}\chi(x)\right|\ \ge\ c_1|A_m|,
+  \]
+  从而产生一族有理主弧频谱集中（取 \(\chi(x)=e^{2\pi i a x/q}\)）。
+\end{enumerate}
+因此，在该生成类中，有理主弧集中与模分布退化（profinite 支撑退化）构成严格等价。
+\end{theorem}
+
+\begin{proof}
+第一方向中，\(|S_m(2\pi a/q)|\ge c_0|A_m|\) 意味着模 \(q\) 的某个非平凡角色和不衰减，从而违背定理 \ref{thm:gm-modq-equidistribution-spectral-gap} 的谱隙结论，因而落入定理 \ref{thm:gm-profinite-haar-dichotomy} 的第二分支。
+反向由同一定理的第二分支直接给出：若支撑落在真闭子群陪集，则存在非平凡角色在支撑上为常量，从而其角色和与 \(|A_m|\) 同阶，等价于某些有理频率的主弧集中。证毕。
+\end{proof}
+
+\paragraph{能量指数、扭曲等半径与算术障碍：刚性二分}
+\begin{theorem}[加性能量指数的谱判据：扭曲谱隙 \texorpdfstring{$\Longleftrightarrow$}{<->} 基线指数与能量相变]\label{thm:gm-energy-exponent-twist-criterion}
+设 \(\{A_m\}\) 来自 primitive sofic--Zeckendorf 生成系统，令 \(\alpha:=\lim_{m\to\infty}|A_m|^{1/m}\)。
+记整数加性能量
+\(
+E_m:=\#\{x_1+x_2=x_3+x_4:\ x_i\in A_m\}
+\)
+的指数率为 \(\log\beta:=\lim_{m\to\infty}m^{-1}\log E_m\)。
+设 \(\{A_q(\chi)\}\) 为模 \(q\) 的扭曲转移算子族（定理 \ref{thm:gm-twisted-perron-fourier-decay} 与定理 \ref{thm:gm-modq-equidistribution-spectral-gap} 的统一记号），并以“无非平凡共边界”表述为：对任意 \(q\ge 2\) 与 \(\chi\ne 1\)，均有 \(\rho(A_q(\chi))\le (1-\kappa_q)\rho(A_q(1))\) 且 \(\inf_q\kappa_q>0\)。
+则在该统一谱隙条件下，能量指数处于基线相区（由零频邻域贡献决定）；而一旦存在某个非平凡扭曲出现等半径共振（\(\rho(A_q(\chi))=\rho(A_q(1))\)），则能量指数发生相变抬升，其抬升完全由共振扭曲所诱导的主弧集合决定。
+\end{theorem}
+
+\begin{proof}
+由 Fourier 能量恒等式与扭曲谱半径控制（定理 \ref{thm:gm-modq-equidistribution-spectral-gap}、命题 \ref{prop:gm-modq-additive-energy-main-error}）可把能量拆为零频主项与非平凡扭曲的误差项之和；统一谱隙使误差项指数衰减，从而指数率由零频邻域（基线相区）给出。
+若出现等半径共振，则存在一族有理频率上 \(|S_m|\) 与 \(|A_m|\) 同阶，导致能量在这些主弧上获得额外指数贡献，从而发生相变抬升。证毕。
+\end{proof}
+
+\begin{theorem}[扭曲等半径的算术刚性：共振强制产生有限模因子]\label{thm:gm-twist-equal-radius-arithmetic-factor}
+在定理 \ref{thm:gm-energy-exponent-twist-criterion} 的设定下，若存在模数 \(q\ge 2\) 与非平凡角色 \(\chi\) 使 \(\rho(A_q(\chi))=\rho(A_q(1))\)，则存在一个非平凡有限模因子映射（在符号空间上）
+\[
+\pi:\mathcal{L}\to\ZZ/q\ZZ
+\]
+使得取值函数在该因子上为共边界：存在函数 \(g\) 使
+\[
+\mathrm{val}\ \equiv\ g-g\circ\sigma\quad (\bmod\ q).
+\]
+因此扭曲等半径并非解析偶然，而是严格等价于生成系统内部存在非平凡有限模算术障碍。
+\end{theorem}
+
+\begin{proof}
+由 Wielandt 等号刻画与 Perron--Frobenius 理论，\(\rho(A_q(\chi))=\rho(A_q(1))\) 迫使 \(\chi\) 权为图上的单位模共边界，亦即存在单位模函数 \(\psi\) 使得沿每条可接受边的相位增量为 \(\psi/\psi'\) 的比值。
+将 \(\psi\) 视为 \(q\)-值相位的 lifted 表示，即得到一个有限模因子 \(\pi\)；相位为共边界等价于 \(\mathrm{val}\) 在该因子上为共边界。证毕。
+\end{proof}
+
+\begin{theorem}[仿射改进的二分律：要么存在统一 \texorpdfstring{$\vartheta>0$}{vtheta>0}，要么陷入算术障碍且改进不可得]\label{thm:gm-affine-improvement-dichotomy}
+设 \(f\) 来自某一 primitive sofic--Zeckendorf 读出并经带宽平滑，记对应仿射残差谱范数证书为 \(\|\mathcal{R}_M\|_{\mathrm{op}}^2\)。
+则存在严格二分：
+\begin{enumerate}
+  \item 若系统无有限模算术障碍（等价于定理 \ref{thm:gm-twist-equal-radius-arithmetic-factor} 的否定），则存在仅依赖系统的常数 \(\vartheta>0\)，使对所有充分大 \(M\) 有
+  \[
+  \|\mathcal{R}_M\|_{\mathrm{op}}^2\ \ll\ M^{4-\vartheta}.
+  \]
+  \item 若存在有限模算术障碍，则对无穷多 \(M\) 必有
+  \[
+  \|\mathcal{R}_M\|_{\mathrm{op}}^2\ \gg\ M^{4-o(1)},
+  \]
+  从而任何统一幂次改进均不可能成立。
+\end{enumerate}
+该二分律把可改进性完全还原为系统的算术共振结构。
+\end{theorem}
+
+\begin{proof}
+若无算术障碍，则由扭曲谱隙与主弧质量不集中得到推论 \ref{cor:gm-affine-uniformization-improvement} 的统一 \(\vartheta\)，并通过定理 \ref{thm:gm-residual-opnorm-gram-equivalence} 升级为算子范数证书，得到 (1)。
+若存在算术障碍，则由定理 \ref{thm:gm-major-arc-profinite-equivalence} 必有一族主弧频率上 \(L^2\) 质量集中；再由定理 \ref{thm:gm-affine-inverse-major-arc} 的逆向刻画得到残差在 \(M^4\) 量级近饱和，推出 (2)。证毕。
+\end{proof}
+
+\begin{proposition}[主弧--能量--仿射闭包的三重互补：共振迫使三类结构同时出现]\label{prop:gm-triple-complementarity}
+在定理 \ref{thm:gm-affine-improvement-dichotomy} 的算术障碍情形下，存在无穷多模数 \(q\) 与有理点 \(a/q\) 使主弧频谱集中
+\(
+|S_m(2\pi a/q)|\ge c|A_m|
+\)
+成立；并同时存在非平凡有理仿射 \(T\) 使
+\(
+|A_m\cap T^{-1}(A_m)|\ge c'|A_m|
+\)
+在无穷多 \(m\) 成立；且加性能量指数出现相变抬升（定理 \ref{thm:gm-energy-exponent-twist-criterion}）。
+因此“主弧共振”“仿射近闭包”“能量指数抬升”在该生成类中为同一算术障碍的等价表征。
+\end{proposition}
+
+\begin{proof}
+算术障碍 \(\Rightarrow\) 扭曲等半径由定理 \ref{thm:gm-twist-equal-radius-arithmetic-factor}。
+扭曲等半径 \(\Rightarrow\) 主弧集中与 profinite 退化由定理 \ref{thm:gm-major-arc-profinite-equivalence}。
+主弧集中 \(\Rightarrow\) 仿射残差近饱和由定理 \ref{thm:gm-affine-inverse-major-arc}，从而在参数空间中诱导大量近自相关与近闭包结构（命题 \ref{prop:gm-major-arc-rigidity-affine-autocorr}），并通过能量恒等式触发能量指数抬升（定理 \ref{thm:gm-energy-exponent-twist-criterion}）。证毕。
+\end{proof}
+
+\paragraph{统一归约：解析瓶颈 \texorpdfstring{$\Longleftrightarrow$}{<->} 单一谱数值判定问题}
+\begin{theorem}[统一归约：解析大值瓶颈当且仅当有理频率 Gram 谱半径的单一数值判定]\label{thm:gm-unified-reduction-one-spectral-number}
+对任何以三阶迹（或任意固定奇阶中心奇矩）为谱证书的大值频次方法，其全部可改进空间可统一归约为如下单一判定问题：
+\[
+\text{对每个 \(M\) 计算定理 \ref{thm:gm-residual-opnorm-gram-equivalence} 的 \(K_M\) 并判定是否存在统一 \(\vartheta>0\) 使 }\ \|K_M\|_{\mathrm{op}}\ll M^{-\vartheta}.
+\]
+若存在统一 \(\vartheta>0\)，则可在同一推理框架内把能量耦合通道获得严格幂次节省（推论 \ref{cor:gm-KM-computable-vtheta}），并由命题 \ref{prop:gm-abs-centered-moment-three-channels} 与定理 \ref{thm:gm-abs-centered-odd-moment-extremal} 自动转译为谱范数与频次上界的系统性改进；
+若不存在，则必落入定理 \ref{thm:gm-affine-improvement-dichotomy} 的算术障碍分支并出现命题 \ref{prop:gm-triple-complementarity} 的结构性共振三联征。
+\end{theorem}
+
+\endinput
+

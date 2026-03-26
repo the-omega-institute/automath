@@ -1,0 +1,488 @@
+\subsection{bin-fold 预言机容量的临界曲线、似然比二点极限与块阈值结构}\label{subsec:conclusion-foldbin-critical-capacity-likelihood-neyman-pearson}
+本小节把 bin-fold 在临界比特尺度上的预言机容量极限、最小预算反演、相对均匀基线的似然比两点极限，以及最优解结构的块阈值塌缩统一为同一条末位二态机制。记
+\[
+\Omega_m:=\{0,1\}^m,\qquad
+d_m(w):=d_m^{\mathrm{bin}}(w):=\bigl|(\mathrm{Fold}^{\mathrm{bin}}_m)^{-1}(w)\bigr|,
+\]
+\[
+\mathcal C_m^{\mathrm{bin}}(B):=\sum_{w\in X_m}\min\bigl(d_m(w),2^B\bigr),
+\qquad
+\mathrm{Succ}_m^{\mathrm{bin}}(B):=\frac{\mathcal C_m^{\mathrm{bin}}(B)}{2^m},
+\]
+\[
+\mu_m(w):=\frac{d_m(w)}{2^m},\qquad
+u_m(w):=\frac{1}{|X_m|},
+\qquad
+A_m:=\Bigl(\frac{2}{\varphi}\Bigr)^m,
+\]
+并将稳定词按末位分成
+\[
+A_0^{(m)}:=\{w\in X_m:\ w_m=0\},
+\qquad
+A_1^{(m)}:=\{w\in X_m:\ w_m=1\}.
+\]
+
+\begin{theorem}[bin-fold 预言机容量在临界比特尺度上的三相极限曲线]\label{thm:conclusion-foldbin-oracle-critical-profile}
+令 \((B_m)_{m\ge 1}\subset\ZZ_{\ge 0}\) 为整数预算序列，并定义
+\[
+\tau_m:=\frac{2^{B_m}}{A_m}.
+\]
+若 \(\tau_m\to\tau\in[0,\infty)\)，则成功率极限存在，且满足
+\[
+\lim_{m\to\infty}\mathrm{Succ}_m^{\mathrm{bin}}(B_m)=\mathscr S(\tau),
+\]
+其中 \(\mathscr S:[0,\infty)\to[0,1]\) 为连续分段线性函数
+\[
+\mathscr S(\tau)=
+\begin{cases}
+\dfrac{\varphi^2}{\sqrt5}\,\tau, & 0\le \tau\le \varphi^{-1},\\[8pt]
+\dfrac{1}{\varphi\sqrt5}+\dfrac{\varphi}{\sqrt5}\,\tau, & \varphi^{-1}\le \tau\le 1,\\[10pt]
+1, & \tau\ge 1.
+\end{cases}
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-bin-degeneracy-tail-capacity-kinks}，尺度化连续容量
+\[
+\widehat C_m^{\mathrm{bin}}(s):=
+2^{-m}\,\mathcal C_m^{\mathrm{bin,cont}}\!\Bigl(s\Bigl(\frac{2}{\varphi}\Bigr)^m\Bigr)
+\]
+在每个紧区间上一致收敛到
+\[
+\widehat C_\infty^{\mathrm{bin}}(s)=\frac{\varphi}{\sqrt5}\min\{1,s\}+\frac{1}{\sqrt5}\min\{\varphi^{-1},s\}.
+\]
+而由定义
+\[
+\mathrm{Succ}_m^{\mathrm{bin}}(B_m)
+=
+2^{-m}\,\mathcal C_m^{\mathrm{bin,cont}}(2^{B_m})
+=
+\widehat C_m^{\mathrm{bin}}(\tau_m).
+\]
+由于 \(\tau_m\to\tau\)，序列 \((\tau_m)\) 终究落在某个紧区间内，故
+\[
+\mathrm{Succ}_m^{\mathrm{bin}}(B_m)\longrightarrow \widehat C_\infty^{\mathrm{bin}}(\tau).
+\]
+将 \(\widehat C_\infty^{\mathrm{bin}}\) 逐段展开，并用恒等式
+\(
+\varphi+1=\varphi^2
+\)
+与
+\(
+\varphi+\varphi^{-1}=\sqrt5
+\)，即得所示公式。证毕。
+\end{proof}
+
+\begin{corollary}[给定成功率的最小比特预算具有精确一阶反演]\label{cor:conclusion-foldbin-oracle-budget-inversion}
+对任意 \(s\in(0,1]\)，定义最小预算
+\[
+B_m^\star(s):=\min\bigl\{B\in\ZZ_{\ge 0}:\ \mathrm{Succ}_m^{\mathrm{bin}}(B)\ge s\bigr\}.
+\]
+令 \(\tau_s\) 为方程 \(\mathscr S(\tau)=s\) 的唯一解，则
+\[
+\tau_s=
+\begin{cases}
+\dfrac{s\sqrt5}{\varphi^2}, & 0<s\le \dfrac{\varphi}{\sqrt5},\\[8pt]
+\dfrac{s\sqrt5-\varphi^{-1}}{\varphi}, & \dfrac{\varphi}{\sqrt5}\le s<1,\\[10pt]
+1, & s=1.
+\end{cases}
+\]
+并且
+\[
+B_m^\star(s)
+=
+m\log_2\!\Bigl(\frac{2}{\varphi}\Bigr)+\log_2\tau_s+O(1).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-foldbin-oracle-critical-profile}，\(\mathscr S\) 在 \([0,\infty)\) 上连续且在 \([0,1]\) 上严格单调，故当 \(0<s<1\) 时逆函数 \(\tau_s\) 存在且唯一；逐段反解即得所示闭式。
+
+固定 \(s\in(0,1)\)，并取足够小的 \(\varepsilon>0\) 使 \(\tau_s-\varepsilon>0\)。
+由定理 \ref{thm:conclusion-foldbin-oracle-critical-profile}，
+对充分大的 \(m\)：
+若 \(2^B\le (\tau_s-\varepsilon)A_m\)，则
+\(\mathrm{Succ}_m^{\mathrm{bin}}(B)<s\)；
+若 \(2^B\ge (\tau_s+\varepsilon)A_m\)，则
+\(\mathrm{Succ}_m^{\mathrm{bin}}(B)>s\)。
+由 \(B_m^\star(s)\) 的极小性得到
+\[
+\log_2\!\bigl((\tau_s-\varepsilon)A_m\bigr)
+<
+B_m^\star(s)
+\le
+\log_2\!\bigl((\tau_s+\varepsilon)A_m\bigr)+1.
+\]
+代入 \(A_m=(2/\varphi)^m\) 即得
+\[
+B_m^\star(s)
+=
+m\log_2\!\Bigl(\frac{2}{\varphi}\Bigr)+\log_2\tau_s+O(1).
+\]
+
+当 \(s=1\) 时，\(B_m^\star(1)\) 满足
+\[
+2^{B_m^\star(1)-1}<d_{\max}^{\mathrm{bin}}(m)\le 2^{B_m^\star(1)},
+\qquad
+d_{\max}^{\mathrm{bin}}(m):=\max_{w\in X_m}d_m(w).
+\]
+由定理 \ref{thm:fold-bin-two-state-asymptotic} 在 \(w=0^m\) 处的主项，
+\(
+d_{\max}^{\mathrm{bin}}(m)=A_m+O(1)
+\)，
+从而
+\[
+B_m^\star(1)=m\log_2\!\Bigl(\frac{2}{\varphi}\Bigr)+O(1).
+\]
+这与 \(\tau_1=1\) 一致。证毕。
+\end{proof}
+
+\begin{theorem}[似然比随机变量的二点极限与泛函传递原则]\label{thm:conclusion-foldbin-likelihood-ratio-two-atom-transfer}
+定义似然比随机变量
+\[
+R_m(w):=\frac{\mu_m(w)}{u_m(w)}=\frac{|X_m|\,d_m(w)}{2^m},
+\qquad
+w\in X_m,
+\]
+并令 \(W_m\sim u_m\)。则 \(R_m(W_m)\) 在分布上收敛到两点随机变量 \(R_\infty\)：
+\[
+R_\infty=
+\begin{cases}
+\dfrac{\varphi^2}{\sqrt5}, & \text{以概率 }\dfrac{1}{\varphi},\\[10pt]
+\dfrac{\varphi}{\sqrt5}, & \text{以概率 }\dfrac{1}{\varphi^2}.
+\end{cases}
+\]
+此外，存在闭区间 \(I\subset(0,\infty)\) 使对充分大的 \(m\) 有 \(R_m(W_m)\in I\) 几乎处处成立；因此对任意连续函数 \(f:I\to\mathbb R\)，有
+\[
+\lim_{m\to\infty}\mathbb E\!\bigl[f(R_m(W_m))\bigr]
+=
+\frac{1}{\varphi}\,f\!\Bigl(\frac{\varphi^2}{\sqrt5}\Bigr)
++
+\frac{1}{\varphi^2}\,f\!\Bigl(\frac{\varphi}{\sqrt5}\Bigr).
+\]
+特别地，对任意 \(\alpha>0\)、\(\alpha\neq 1\)，Rényi 散度满足
+\[
+\lim_{m\to\infty}D_\alpha(\mu_m\Vert u_m)
+=
+\frac{1}{\alpha-1}\log\!\left(
+\frac{1}{\varphi}\Bigl(\frac{\varphi^2}{\sqrt5}\Bigr)^\alpha
++
+\frac{1}{\varphi^2}\Bigl(\frac{\varphi}{\sqrt5}\Bigr)^\alpha
+\right),
+\]
+并且 \(\alpha\to 1\) 的连续延拓恢复命题 \ref{prop:fold-bin-kl-constant} 给出的 KL 极限常数。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-foldbin-pushforward-uniform-two-atom-ledger}，
+存在常数 \(c>0\) 使
+\[
+R_m(w)=r_{w_m}+O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr),
+\qquad
+r_0:=\frac{\varphi^2}{\sqrt5},
+\quad
+r_1:=\frac{\varphi}{\sqrt5},
+\]
+且误差在 \(w\in X_m\) 上一致。
+另一方面，
+\[
+u_m\bigl(A_0^{(m)}\bigr)=\frac{F_{m+1}}{F_{m+2}}\longrightarrow \frac{1}{\varphi},
+\qquad
+u_m\bigl(A_1^{(m)}\bigr)=\frac{F_m}{F_{m+2}}\longrightarrow \frac{1}{\varphi^2}.
+\]
+故 \(R_m(W_m)\Rightarrow R_\infty\)。
+
+由一致逼近可知，对充分大的 \(m\)，随机变量 \(R_m(W_m)\) 全部落在包含 \(\{r_0,r_1\}\) 的某个固定闭区间 \(I\subset(0,\infty)\) 中。于是对任意连续函数 \(f:I\to\mathbb R\)，由弱收敛与支撑紧性得到
+\[
+\mathbb E\!\bigl[f(R_m(W_m))\bigr]
+\longrightarrow
+\mathbb E\!\bigl[f(R_\infty)\bigr]
+=
+\frac{1}{\varphi}f(r_0)+\frac{1}{\varphi^2}f(r_1).
+\]
+取 \(f(r)=r^\alpha\) 即得
+\[
+\mathbb E[R_m(W_m)^\alpha]
+\longrightarrow
+\frac{1}{\varphi}r_0^\alpha+\frac{1}{\varphi^2}r_1^\alpha,
+\]
+而
+\[
+D_\alpha(\mu_m\Vert u_m)=\frac{1}{\alpha-1}\log \mathbb E[R_m(W_m)^\alpha].
+\]
+这便给出 Rényi 极限闭式。
+\(\alpha\to 1\) 的连续延拓与命题 \ref{prop:fold-bin-kl-constant} 给出的 KL 常数一致。证毕。
+\end{proof}
+
+\begin{theorem}[bin-fold 渐近 Rényi 谱的 Mellin 完备性]\label{thm:conclusion-foldbin-renyi-mellin-complete-two-point-law}
+沿用上文记号，并令 \(\widetilde W_m\sim \mu_m\) 为按输出分布抽样的随机稳定词。则随机变量
+\[
+R_m(\widetilde W_m)=\frac{|X_m|\,d_m(\widetilde W_m)}{2^m}
+\]
+在分布上收敛到两点随机变量 \(R_\infty\)：
+\[
+R_\infty=
+\begin{cases}
+\dfrac{\varphi^2}{\sqrt5}, & \text{以概率 }\dfrac{\varphi}{\sqrt5},\\[10pt]
+\dfrac{\varphi}{\sqrt5}, & \text{以概率 }\dfrac{1}{\varphi\sqrt5}.
+\end{cases}
+\]
+并且对任意 \(\alpha>0\) 都有
+\[
+D_\alpha^\infty
+:=
+\lim_{m\to\infty}D_\alpha(\mu_m\Vert u_m)
+=
+\frac{1}{\alpha-1}\log \EE\!\left(R_\infty^{\alpha-1}\right)
+\]
+（\(\alpha=1\) 按连续延拓解释）。
+
+反之，若某个正随机变量 \(R\) 的 Mellin 变换在某开区间上存在，且满足
+\[
+\frac{1}{\alpha-1}\log \EE\!\left(R^{\alpha-1}\right)=D_\alpha^\infty
+\]
+于该区间上成立，则 \(R\) 的分布必与 \(R_\infty\) 相同。因而，bin-fold 的渐近 Rényi 谱对其两点相对密度律给出 Mellin 完备刻画。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:fold-bin-two-point-limit-law}，在 \(\mu_m\)-随机输出下，
+\[
+Z_m:=\left(\frac{\varphi}{2}\right)^m d_m(\widetilde W_m)
+\]
+在分布上收敛到两点随机变量 \(Z\)，其中
+\[
+Z=
+\begin{cases}
+1, & \text{以概率 }\dfrac{\varphi}{\sqrt5},\\[8pt]
+\varphi^{-1}, & \text{以概率 }\dfrac{1}{\varphi\sqrt5}.
+\end{cases}
+\]
+另一方面，由 Binet 渐近
+\[
+|X_m|=F_{m+2}\sim \frac{\varphi^{m+2}}{\sqrt5},
+\]
+故
+\[
+R_m(\widetilde W_m)
+=
+\frac{|X_m|\,d_m(\widetilde W_m)}{2^m}
+=
+\frac{\varphi^2}{\sqrt5}\,Z_m+o(1)
+\]
+在分布上成立，从而
+\[
+R_m(\widetilde W_m)\Rightarrow R_\infty:=\frac{\varphi^2}{\sqrt5}Z.
+\]
+这就给出所述两点极限律。
+
+再由 Rényi 散度定义，
+\[
+e^{(\alpha-1)D_\alpha(\mu_m\Vert u_m)}
+=
+\sum_{w\in X_m}\mu_m(w)\,R_m(w)^{\alpha-1}
+=
+\EE\!\left(R_m(\widetilde W_m)^{\alpha-1}\right).
+\]
+由两点极限与定理 \ref{thm:fold-bin-two-state-asymptotic} 的一致有界性，可用支配收敛得到
+\[
+e^{(\alpha-1)D_\alpha^\infty}
+=
+\EE\!\left(R_\infty^{\alpha-1}\right),
+\]
+即所示公式；\(\alpha=1\) 时连续延拓便恢复 Shannon/KL 极限。
+
+反向唯一性方面，令 \(Y:=\log R\)、\(Y_\infty:=\log R_\infty\)。给定假设等价于
+\[
+\EE(e^{sY})=\EE(e^{sY_\infty})
+\]
+在某个包含 \(0\) 的开区间上成立，其中 \(s=\alpha-1\)。由 Laplace 变换唯一性，\(Y\) 与 \(Y_\infty\) 同分布，从而 \(R\) 与 \(R_\infty\) 同分布。证毕。
+\end{proof}
+
+\begin{corollary}[subcritical 分位阈值与 Rényi-\texorpdfstring{$\infty$}{infty} 极限的统一]\label{cor:conclusion-foldbin-quantile-threshold-renyi-infty-unification}
+沿用推论 \ref{cor:fold-bin-quantile-threshold-constant} 的分位阈值 \(B_m^{\mathrm{bin}}(\varepsilon)\)。对任意固定
+\[
+0<\varepsilon<\frac{\varphi}{\sqrt5},
+\]
+有极限
+\[
+\lim_{m\to\infty}\frac{|X_m|\,B_m^{\mathrm{bin}}(\varepsilon)}{2^m}
+=
+\frac{\varphi^2}{\sqrt5}.
+\]
+另一方面，定义
+\[
+D_\infty^\infty:=\lim_{\alpha\to\infty}D_\alpha^\infty.
+\]
+则
+\[
+\exp(D_\infty^\infty)=\frac{\varphi^2}{\sqrt5},
+\]
+从而得到严格同一
+\[
+\lim_{m\to\infty}\frac{|X_m|\,B_m^{\mathrm{bin}}(\varepsilon)}{2^m}
+=
+\exp(D_\infty^\infty).
+\]
+因此，subcritical quantile regime 中的最小可见尾阈值，恰等于 order-\(\infty\) Rényi 指纹的指数化。
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:fold-bin-quantile-threshold-constant}，
+\[
+B_m^{\mathrm{bin}}(\varepsilon)
+=
+\left(\frac{2}{\varphi}\right)^m(1+o(1))
+\qquad
+\left(0<\varepsilon<\frac{\varphi}{\sqrt5}\right).
+\]
+再结合
+\[
+|X_m|=F_{m+2}\sim \frac{\varphi^{m+2}}{\sqrt5},
+\]
+即得
+\[
+\frac{|X_m|\,B_m^{\mathrm{bin}}(\varepsilon)}{2^m}
+\longrightarrow
+\frac{\varphi^{m+2}}{\sqrt5}\cdot\frac{(2/\varphi)^m}{2^m}
+=
+\frac{\varphi^2}{\sqrt5}.
+\]
+
+另一方面，由定理 \ref{thm:conclusion-foldbin-renyi-mellin-complete-two-point-law}，
+\[
+e^{(\alpha-1)D_\alpha^\infty}
+=
+\EE\!\left(R_\infty^{\alpha-1}\right).
+\]
+令 \(\alpha\to\infty\)，即可得到
+\[
+\exp(D_\infty^\infty)
+=
+\operatorname*{ess\,sup}R_\infty
+=
+\frac{\varphi^2}{\sqrt5},
+\]
+因为 \(R_\infty\) 的较大原子正是 \(\varphi^2/\sqrt5\)。两式合并即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[临界预算下最优预言机反演的块阈值塌缩]\label{thm:conclusion-foldbin-oracle-block-threshold-collapse}
+令 \((B_m)_{m\ge 1}\subset\ZZ_{\ge 0}\) 满足
+\[
+\tau_m:=\frac{2^{B_m}}{A_m}\longrightarrow \tau\in(0,\infty)\setminus\{\varphi^{-1},1\}.
+\]
+则对充分大的 \(m\)，存在达到容量 \(\mathcal C_m^{\mathrm{bin}}(B_m)\) 的最优可逆集合 \(G_m^\star\subseteq \Omega_m\)，使得
+\[
+\bigl|G_m^\star\cap (\mathrm{Fold}^{\mathrm{bin}}_m)^{-1}(w)\bigr|
+\]
+仅依赖于末位 \(w_m\)，并满足如下三相结构：
+\[
+\bigl|G_m^\star\cap (\mathrm{Fold}^{\mathrm{bin}}_m)^{-1}(w)\bigr|=
+\begin{cases}
+2^{B_m}, & 0<\tau<\varphi^{-1},\\[4pt]
+d_m(w), & \varphi^{-1}<\tau<1\ \text{且}\ w\in A_1^{(m)},\\[4pt]
+2^{B_m}, & \varphi^{-1}<\tau<1\ \text{且}\ w\in A_0^{(m)},\\[4pt]
+d_m(w), & \tau>1.
+\end{cases}
+\]
+因此任一最优编码--解码方案都可在不改变容量的前提下，替换为具有同一块阈值基数分配的方案。
+
+进一步，若记
+\[
+\lambda_m:=2^{B_m-m}|X_m|,
+\]
+则比较
+\(
+d_m(w)\lesseqgtr 2^{B_m}
+\)
+等价于比较
+\(
+R_m(w)\lesseqgtr \lambda_m
+\)；
+而
+\[
+\lambda_m\longrightarrow \tau\frac{\varphi^2}{\sqrt5},
+\]
+故上述块阈值结构正对应于极限两点似然比
+\(
+\{\varphi/\sqrt5,\varphi^2/\sqrt5\}
+\)
+上的二元阈值规则。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-oracle-variational-projection-characterization}，任一最优解在每条纤维上都必须取得最大允许基数
+\[
+\min\bigl(d_m(w),2^{B_m}\bigr).
+\]
+因此只需判定对充分大的 \(m\)，比较关系
+\(
+d_m(w)\lesseqgtr 2^{B_m}
+\)
+是否在每个末位块上稳定。
+
+由定理 \ref{thm:fold-bin-two-state-asymptotic}，
+\[
+\frac{d_m(w)}{A_m}=1+O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr)
+\quad\text{在 }A_0^{(m)}\text{ 上一致},
+\]
+\[
+\frac{d_m(w)}{A_m}=\varphi^{-1}+O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr)
+\quad\text{在 }A_1^{(m)}\text{ 上一致}.
+\]
+若 \(0<\tau<\varphi^{-1}\)，取 \(\varepsilon>0\) 使 \(\tau+\varepsilon<\varphi^{-1}\)。
+对充分大的 \(m\)，有 \(\tau_m<\tau+\varepsilon\)，并且两块上的 \(d_m(w)/A_m\) 全都严格大于 \(\tau+\varepsilon\)，故
+\(
+d_m(w)>2^{B_m}
+\)
+对所有 \(w\) 成立，于是最优基数恒为 \(2^{B_m}\)。
+
+若 \(\varphi^{-1}<\tau<1\)，取 \(\varepsilon>0\) 使
+\(
+\varphi^{-1}<\tau-\varepsilon<\tau+\varepsilon<1
+\)。
+对充分大的 \(m\)，在 \(A_1^{(m)}\) 上有
+\(
+d_m(w)/A_m<\tau-\varepsilon<\tau_m
+\)，
+在 \(A_0^{(m)}\) 上有
+\(
+d_m(w)/A_m>\tau+\varepsilon>\tau_m
+\)。
+故 \(A_1^{(m)}\) 上全部纤维完全恢复，而 \(A_0^{(m)}\) 上全部纤维统一截断到 \(2^{B_m}\)。
+
+若 \(\tau>1\)，取 \(\varepsilon>0\) 使 \(1+\varepsilon<\tau\)。
+对充分大的 \(m\)，两块上的 \(d_m(w)/A_m\) 全都严格小于 \(\tau_m\)，因此
+\(
+d_m(w)\le 2^{B_m}
+\)
+对所有 \(w\) 成立，最优解遂完全恢复全部纤维。
+
+最后，由
+\[
+R_m(w)=\frac{|X_m|\,d_m(w)}{2^m}
+\]
+可知
+\(
+d_m(w)\lesseqgtr 2^{B_m}
+\)
+当且仅当
+\(
+R_m(w)\lesseqgtr \lambda_m
+\)。
+又因
+\[
+\lambda_m
+=
+\tau_m\frac{A_m|X_m|}{2^m}
+=
+\tau_m\varphi^{-m}|X_m|
+\longrightarrow
+\tau\frac{\varphi^2}{\sqrt5},
+\]
+故三相恰对应于阈值极限位于
+\(
+\varphi/\sqrt5
+\)
+与
+\(
+\varphi^2/\sqrt5
+\)
+的下方、中间或上方。证毕。
+\end{proof}
+
+因此，bin-fold 在临界比特尺度上的容量曲线、逆预算常数、似然比极限对象与最优反演结构并非彼此独立：它们全部由末位二态机制在不同函数接口上的像所决定。

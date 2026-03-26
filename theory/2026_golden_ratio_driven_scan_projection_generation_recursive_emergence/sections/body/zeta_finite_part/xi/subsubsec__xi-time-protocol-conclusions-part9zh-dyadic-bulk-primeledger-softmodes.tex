@@ -1,0 +1,310 @@
+\paragraph{dyadic bulk 地址的线性精度、prime-register 边界账本的超线性代价与奇偶谱壁分离}
+在全息 \(2\)-进地址、prime-register 外置下界与单位根扭曲 slow mode 已经分别获得闭式之后，还可把 bulk 与 boundary 的制度分工进一步压缩为同一条刚性链。其要点在于：bulk 侧的 \(B\)-进地址在固定二维 Tate 模块上只需线性精度深度即可恢复有限前缀，而一旦要求 boundary 侧仍保持逐坐标可寻址，prime-register 账本便不可避免地出现 \(T\log T\) 级的最坏情形位长；同时，奇素数扭曲会在 \(p\to\infty\) 时软化到 Perron 主支，而模 \(2\) 奇偶缺陷则始终停留在一条固定的硬谱壁之上。由此，线性 bulk 地址、超线性 boundary 外置、soft prime modes 与 hard parity defect 便在同一层面完成分离。
+
+\begin{theorem}[dyadic bulk 的线性精度深度与 prime-register 边界账本的超线性代价分离]\label{thm:xi-time-part9zh-dyadic-bulk-linear-depth-vs-prime-ledger}
+设 \(E\) 为满足 \(|E|\ge 2\) 的有限事件集，并固定注入编码
+\[
+\mathrm{code}:E\hookrightarrow \NN,
+\qquad
+M:=\max_{e\in E}\mathrm{code}(e),
+\qquad
+B:=2^L>M.
+\]
+再取非零原始向量
+\[
+\mathcal T:=T_2(E_{\min}),
+\qquad
+v\in \mathcal T\setminus 2\mathcal T.
+\]
+对任意长度 \(T\) 的事件前缀
+\[
+e^{(T)}=(e_1,\dots,e_T)\in E^T
+\]
+定义其 dyadic bulk 地址
+\[
+X_T\!\bigl(e^{(T)}\bigr)
+:=
+\sum_{t=1}^{T}\mathrm{code}(e_t)B^{t-1}v\in \mathcal T.
+\]
+并定义最小 \(B\)-进精度深度
+\[
+\ell_B\!\bigl(X_T(e^{(T)})\bigr)
+:=
+\min\Bigl\{n\ge 1:\ 
+X_T(e^{(T)})\bmod B^n\mathcal T
+\text{ 在 }E^T\text{ 中唯一确定 }e_1,\dots,e_T
+\Bigr\}.
+\]
+则对每个 \(e^{(T)}\in E^T\) 都有
+\[
+\ell_B\!\bigl(X_T(e^{(T)})\bigr)=T.
+\]
+
+反之，存在绝对常数 \(c>0\) 与 \(T_0\)，使得对每个 \(T\ge T_0\)，若 \(|\Sigma|\ge 2\) 且
+\[
+E_T:\Sigma^T\hookrightarrow \NN_{\ge 1}
+\]
+是任意逐坐标可寻址的 prime-register 外置编码，则有
+\[
+\max_{s\in\Sigma^T}\log E_T(s)\ge c\,T\log T.
+\]
+因此
+\[
+\frac{\max_{s\in\Sigma^T}\log E_T(s)}
+{\sup_{e^{(T)}\in E^T}\ell_B(X_T(e^{(T)}))}
+\ge c\log T.
+\]
+换言之，在保持逐位置可寻址性的前提下，boundary prime-register 账本相对于 dyadic bulk 地址必然多出一个不可消去的对数量级。
+\end{theorem}
+\begin{proof}
+固定任意参考尾流 \(\boldsymbol\eta=(\eta_1,\eta_2,\dots)\in E^{\NN}\)。对每个前缀 \(e^{(T)}\in E^T\)，记其补尾无限流为
+\[
+\mathbf e:=\bigl(e_1,\dots,e_T,\eta_1,\eta_2,\dots\bigr)\in E^{\NN}.
+\]
+由定理 \ref{thm:xi-time-part9xb-prefix-words-faithful-affine-realization}，
+\[
+X(\mathbf e)=X_T(e^{(T)})+B^T X(\boldsymbol\eta).
+\]
+因此，对任意两条长度 \(T\) 的前缀 \(e^{(T)},f^{(T)}\in E^T\)，都有
+\[
+X(\mathbf e)-X(\mathbf f)
+=
+X_T(e^{(T)})-X_T(f^{(T)}).
+\]
+
+若 \(e^{(T)}\neq f^{(T)}\)，记它们的首个分歧位置为
+\[
+\tau:=\min\{1\le t\le T:\ e_t\neq f_t\}.
+\]
+由定理 \ref{thm:xi-time-part9w-holographic-first-difference-valuation}，
+\[
+X_T(e^{(T)})-X_T(f^{(T)})
+\in
+B^{\tau-1}\mathcal T\setminus B^\tau\mathcal T.
+\]
+由于 \(\tau\le T\)，便有
+\[
+X_T(e^{(T)})-X_T(f^{(T)})\notin B^T\mathcal T.
+\]
+故不同长度 \(T\) 前缀在商 \(\mathcal T/B^T\mathcal T\) 中具有不同像，从而模 \(B^T\) 的信息足以唯一恢复整条长度 \(T\) 前缀。这说明
+\[
+\ell_B\!\bigl(X_T(e^{(T)})\bigr)\le T.
+\]
+
+另一方面，由 \(|E|\ge 2\)，可取两个不同事件 \(a\neq b\in E\)。固定任意共同前缀
+\[
+(e_1,\dots,e_{T-1})\in E^{T-1},
+\]
+并定义
+\[
+u^{(T)}:=(e_1,\dots,e_{T-1},a),
+\qquad
+v^{(T)}:=(e_1,\dots,e_{T-1},b).
+\]
+它们的首个分歧位置恰为 \(T\)，故再由定理
+\ref{thm:xi-time-part9w-holographic-first-difference-valuation}，
+\[
+X_T(u^{(T)})-X_T(v^{(T)})
+\in
+B^{T-1}\mathcal T\setminus B^T\mathcal T.
+\]
+于是
+\[
+X_T(u^{(T)})\equiv X_T(v^{(T)})\pmod{B^{T-1}\mathcal T},
+\]
+故仅知道模 \(B^{T-1}\) 的类不足以区分长度 \(T\) 前缀。于是
+\[
+\ell_B\!\bigl(X_T(e^{(T)})\bigr)\ge T.
+\]
+合并得
+\[
+\ell_B\!\bigl(X_T(e^{(T)})\bigr)=T.
+\]
+
+再看 prime-register 外置编码。由定理
+\ref{thm:xi-addressable-godel-worstcase-chebyshev-sharp-lower-bound}，对任意逐坐标可寻址单射
+\[
+E_T:\Sigma^T\hookrightarrow \NN_{\ge 1},
+\qquad |\Sigma|\ge 2,
+\]
+都满足
+\[
+\max_{s\in\Sigma^T}\log E_T(s)\ge T\log T+T\log\log T+O(T),
+\]
+从而存在绝对常数 \(c>0\) 与 \(T_0\)，使得当 \(T\ge T_0\) 时，
+\[
+\max_{s\in\Sigma^T}\log E_T(s)\ge c\,T\log T.
+\]
+又因前半部分已证明
+\[
+\sup_{e^{(T)}\in E^T}\ell_B(X_T(e^{(T)}))=T,
+\]
+故最后的不等式立即成立。证毕。
+\end{proof}
+
+\begin{corollary}[边界 admissibility 的正密度并不削弱最坏情形地址代价]\label{cor:xi-time-part9zh-zg-positive-density-does-not-weaken-address-cost}
+定义
+\[
+\mathrm{ZG}
+:=
+\left\{
+\prod_{k\ge 1}p_k^{z_k}:\ 
+z_k\in\{0,1\},\ 
+z_kz_{k+1}=0,\ 
+z_k=0\ \text{对充分大 }k
+\right\},
+\]
+即平方自由且不含相邻素因子的整数集。若 \(|\Sigma|\ge 2\) 且一族逐坐标可寻址编码
+\[
+E_T:\Sigma^T\hookrightarrow \mathrm{ZG}
+\]
+的像完全落在 \(\mathrm{ZG}\) 中，则存在绝对常数 \(c>0\) 与 \(T_0\)，使得对每个 \(T\ge T_0\) 都有
+\[
+\max_{s\in\Sigma^T}\log E_T(s)\ge c\,T\log T.
+\]
+与此同时，
+\[
+\delta(\mathrm{ZG})\in(0,1).
+\]
+故 prime-register 外置的代价爆炸并非来自 admissible 码字在 \(\NN\) 中过于稀薄；真正的障碍是逐坐标可寻址性本身，而非 admissibility 的体积稀缺。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9w-zg-positive-density-cofinal-tail}，
+\[
+\delta(\mathrm{ZG})\in(0,1).
+\]
+另一方面，定理
+\ref{thm:xi-addressable-godel-worstcase-chebyshev-sharp-lower-bound}
+适用于任意逐坐标可寻址单射
+\[
+E_T:\Sigma^T\hookrightarrow \NN_{\ge 1},
+\]
+其证明仅依赖于素数估值可逐坐标恢复，而并不依赖像集在 \(\NN\) 中的稠密度。故把像进一步限制在 \(\mathrm{ZG}\subset\NN_{\ge 1}\) 内，并不会改变同一下界。于是仍存在绝对常数 \(c>0\) 与 \(T_0\)，使得当 \(T\ge T_0\) 时都有
+\[
+\max_{s\in\Sigma^T}\log E_T(s)\ge c\,T\log T.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[奇素数扭曲的软化极限与模 \texorpdfstring{$2$}{2} 缺陷的硬隔离]\label{thm:xi-time-part9zh-oddprime-softening-vs-parity-hard-wall}
+记
+\[
+\lambda:=\rho(1)=\varphi^2,
+\qquad
+\rho_{(2)}:=\rho_-:=\rho\!\bigl(W(-1)\bigr),
+\qquad
+\rho_p:=\left|\rho\!\left(e^{2\pi i/p}\right)\right|
+\quad (p\ge 3\ \text{为奇素数}).
+\]
+则有四阶渐近
+\[
+\log\frac{\rho_p}{\lambda}
+=
+-\frac{6\sqrt5-5}{250}\left(\frac{2\pi}{p}\right)^2
++\frac{7+24\sqrt5}{75000}\left(\frac{2\pi}{p}\right)^4
++O(p^{-6}),
+\]
+从而
+\[
+\frac{\rho_p}{\lambda}\longrightarrow 1
+\qquad (p\to\infty,\ p\ \text{奇素数}).
+\]
+另一方面，
+\[
+\frac{\rho_{(2)}}{\lambda}\approx 0.8424525579<1.
+\]
+于是存在 \(p_0\)，使得对所有奇素数 \(p\ge p_0\) 都有
+\[
+\rho_p>\rho_{(2)}.
+\]
+因此，充分大的奇素数 congruence 扭曲都比模 \(2\) 奇偶扭曲更接近 Perron 主支；模 \(2\) 缺陷在谱意义上构成一条硬隔离分支，而奇素数扭曲则形成一族软化分支。
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:xi-time-part9xg-parity-wall-versus-cofinal-prime-twists} 已经给出全部所需结论：其一，
+\[
+\rho_-=\rho\!\bigl(W(-1)\bigr)
+\]
+是三次方程
+\[
+x^3-2x^2-1=0
+\]
+的最大实根，且
+\[
+\frac{\rho_-}{\lambda}\approx 0.8424525579<1;
+\]
+其二，对奇素数 \(p\) 的扭曲分支有四阶展开
+\[
+\log\frac{\rho_p}{\lambda}
+=
+-\frac{6\sqrt5-5}{250}\left(\frac{2\pi}{p}\right)^2
++\frac{7+24\sqrt5}{75000}\left(\frac{2\pi}{p}\right)^4
++O(p^{-6}),
+\]
+故 \(\rho_p/\lambda\to 1\)；其三，存在奇素数阈值 \(p_0\) 使得所有 \(p\ge p_0\) 都满足
+\[
+\rho_p>\rho_-.
+\]
+把 \(\rho_-\) 记为 \(\rho_{(2)}\) 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[奇素数扭曲弛豫时间的 \texorpdfstring{$p^2$}{p2} 律与 parity-defect 的有限寿命]\label{cor:xi-time-part9zh-oddprime-p2-relaxation-vs-parity-lifetime}
+沿用定理 \ref{thm:xi-time-part9zh-oddprime-softening-vs-parity-hard-wall} 的记号，定义奇素数扭曲的弛豫时间
+\[
+\tau_p:=\frac{1}{-\log(\rho_p/\lambda)},
+\]
+以及 parity-defect 的弛豫时间
+\[
+\tau_{(2)}:=\frac{1}{-\log(\rho_{(2)}/\lambda)}.
+\]
+则
+\[
+\tau_p=
+\frac{250}{(6\sqrt5-5)(2\pi)^2}\,p^2\bigl(1+O(p^{-2})\bigr),
+\qquad
+\tau_{(2)}<\infty.
+\]
+特别地，
+\[
+\frac{\tau_p}{\tau_{(2)}}\longrightarrow\infty
+\qquad (p\to\infty,\ p\ \text{奇素数}).
+\]
+故奇素数扭曲形成一族可任意变慢的 soft modes，而 parity-defect 始终对应一条寿命有限的 hard mode；二者不属于同一低能动力学普适类。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9zh-oddprime-softening-vs-parity-hard-wall}，
+\[
+-\log\frac{\rho_p}{\lambda}
+=
+\frac{6\sqrt5-5}{250}\left(\frac{2\pi}{p}\right)^2
++O(p^{-4}).
+\]
+对其取倒数，得到
+\[
+\tau_p
+=
+\frac{1}{\left(\frac{6\sqrt5-5}{250}\right)(2\pi)^2}\,p^2
+\bigl(1+O(p^{-2})\bigr),
+\]
+即所示常数。
+
+另一方面，定理
+\ref{thm:xi-time-part9zh-oddprime-softening-vs-parity-hard-wall}
+已给出
+\[
+0<\frac{\rho_{(2)}}{\lambda}<1,
+\]
+故
+\[
+\tau_{(2)}=\frac{1}{-\log(\rho_{(2)}/\lambda)}
+\]
+是有限正常数。于是
+\[
+\frac{\tau_p}{\tau_{(2)}}\to\infty.
+\]
+证毕。
+\end{proof}
+
+\noindent
+由此，bulk 与 boundary、soft 与 hard 两组分工同时被锁定：在地址侧，dyadic bulk 只需线性精度深度 \(T\) 便足以恢复长度 \(T\) 的有限前缀，而 boundary 侧一旦要求逐坐标 prime-addressability，就不可避免地付出 \(T\log T\) 级的最坏位长；在 slow-mode 侧，奇素数扭曲可以连续软化到 Perron 主支，而模 \(2\) 奇偶缺陷却始终停留在固定的 \(O(1)\) 谱壁之上。于是，线性 bulk 地址、超线性 prime-ledger 外置、以及 soft prime modes 与 hard parity defect 的制度分层便在同一条主线中同时显现。
+
+\endinput

@@ -1,0 +1,253 @@
+\subsubsection{Mellin 尺度递归系数、双基数去混叠与递归证书复杂度下界}\label{subsubsec:xi-mellin-scale-recursion-bohr-dealiasing}
+本段把“零点的尺度递归表征”写成可直接审计的 Mellin 系数链条，并把“平滑/截断诱导的误差控制”与“递归定位位深下界”放在同一闭环：前者给出 RH 的尺度有界性表述与双基数去混叠编码，后者给出紧化坐标下不可规避的 dyadic 分辨率成本。
+
+\paragraph{尺度递归系数与 Mellin 归一化}
+记
+\[
+\psi(x):=\sum_{n\le x}\Lambda(n),\qquad
+\psi_0(x):=\frac{\psi(x+0)+\psi(x-0)}{2},
+\]
+并定义归一化偏差
+\[
+E(x):=\frac{\psi_0(x)-x}{x^{1/2}}\qquad (x>1).
+\]
+固定伸缩基数 \(\lambda>1\)。对任意 \(\varphi\in C_c^\infty((1,\lambda))\) 且满足零 Mellin 均值
+\[
+\mathcal M\varphi(0)=\int_0^\infty \varphi(u)\,\frac{\dd u}{u}=0,
+\]
+定义尺度递归系数
+\[
+C_{\varphi,\lambda}(m):=
+\int_1^\infty E(x)\,\varphi\!\left(\frac{x}{\lambda^m}\right)\frac{\dd x}{x},
+\qquad m\in\NN.
+\]
+其中 Mellin 变换记为
+\[
+\mathcal M\varphi(s):=\int_0^\infty \varphi(u)\,u^s\frac{\dd u}{u}.
+\]
+
+称有限族 \(\Phi=\{\varphi_r\}_{r=1}^R\subset C_c^\infty((1,\lambda))\) 为非退化，若
+\begin{enumerate}
+  \item 对所有 \(r\) 有 \(\mathcal M\varphi_r(0)=0\)；
+  \item 对任意非平凡零点 \(\rho\) 满足 \(\Re\rho\neq \frac12\) 时，存在 \(r\) 使
+  \(\mathcal M\varphi_r(\rho-\frac12)\neq 0\)。
+\end{enumerate}
+
+\begin{theorem}[Bohr--Mellin 多尺度判据：RH 的尺度有界/几乎周期等价]\label{thm:xi-mellin-scale-bohr-rh-equivalence}
+给定 \(\lambda>1\) 与一个非退化族 \(\Phi=\{\varphi_r\}_{r=1}^R\)，下列陈述等价：
+\begin{enumerate}
+  \item RH 成立；
+  \item 对每个 \(r\)，序列 \(\{C_{\varphi_r,\lambda}(m)\}_{m\ge 1}\) 一致有界；
+  \item 对每个 \(r\)，存在 Bohr 几乎周期函数 \(F_r:\RR\to\CC\) 使
+  \[
+  C_{\varphi_r,\lambda}(m)=F_r(m)+O(\lambda^{-m/2}),
+  \]
+  且 \(F_r\) 的 Bohr 频谱由集合
+  \(\{\gamma\log\lambda:\ \rho=\frac12+\mathrm{i}\gamma\}\) 生成。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由 \(\psi_0\) 的显式公式（见 \cite{Titchmarsh1986RiemannZeta}）可写
+\[
+E(x)=
+-\sum_{\rho}\frac{x^{\rho-\frac12}}{\rho}
++O(x^{-1/2})\qquad (x\ge 2),
+\]
+其中求和遍历非平凡零点并按重数计。代入 \(C_{\varphi,\lambda}(m)\) 后，令 \(x=\lambda^m u\)，得到
+\begin{equation}\label{eq:xi-mellin-scale-coeff-explicit}
+C_{\varphi,\lambda}(m)
+=-\sum_{\rho}
+\frac{\lambda^{m(\rho-\frac12)}\mathcal M\varphi(\rho-\frac12)}{\rho}
++O(\lambda^{-m/2}).
+\end{equation}
+交换求和与积分的合法性来自两点：其一，\(\varphi\in C_c^\infty\) 蕴含
+\(\mathcal M\varphi(\sigma+\mathrm{i}t)\) 沿竖线对任意阶快速衰减；其二，零点计数满足
+\(N(T)=O(T\log T)\)，故与快速衰减权相乘后绝对可和。
+
+若 RH 成立，\(\rho=\frac12+\mathrm{i}\gamma\)，于是
+\[
+C_{\varphi,\lambda}(m)
+=-\sum_{\gamma}
+\frac{\mathcal M\varphi(\mathrm{i}\gamma)}{\frac12+\mathrm{i}\gamma}
+e^{\mathrm{i}m\gamma\log\lambda}
++O(\lambda^{-m/2}).
+\]
+主和是绝对收敛的指数级数，因此给出 Bohr 几乎周期函数 \(F_\varphi(m)\)；
+进而得到 (1)\(\Rightarrow\)(3)\(\Rightarrow\)(2)。
+
+反过来，若 RH 不成立，则存在 \(\rho_0=\beta_0+\mathrm{i}\gamma_0\) 且 \(\beta_0>\frac12\)。
+由非退化性可取某个 \(r\) 使
+\(\mathcal M\varphi_r(\rho_0-\frac12)\neq 0\)。
+在 \eqref{eq:xi-mellin-scale-coeff-explicit} 中，相应模态携带因子
+\(\lambda^{m(\beta_0-\frac12)}\)，其幅度随 \(m\) 指数放大；该增长不可能与余下模态及 \(O(\lambda^{-m/2})\) 项共同维持全局一致有界，故 (2) 不成立。
+因此 (2)\(\Rightarrow\)(1)。
+\end{proof}
+
+\begin{theorem}[双基数去混叠的相位注入编码]\label{thm:xi-dual-base-dealiasing-injective-encoding}
+设 RH 成立，取 \(\lambda_1,\lambda_2>1\) 且
+\begin{equation}\label{eq:xi-dual-base-irrational-log-ratio}
+\frac{\log\lambda_1}{\log\lambda_2}\notin\QQ.
+\end{equation}
+则映射
+\[
+\gamma\longmapsto
+\left(e^{\mathrm{i}\gamma\log\lambda_1},\ e^{\mathrm{i}\gamma\log\lambda_2}\right)\in\TT^2
+\]
+在零点纵坐标集合上为单射。换言之，若
+\[
+\left(e^{\mathrm{i}\gamma\log\lambda_1},e^{\mathrm{i}\gamma\log\lambda_2}\right)
+=
+\left(e^{\mathrm{i}\gamma'\log\lambda_1},e^{\mathrm{i}\gamma'\log\lambda_2}\right),
+\]
+则必有 \(\gamma=\gamma'\)。
+\end{theorem}
+\begin{proof}
+若上述相位对相等，则
+\[
+(\gamma-\gamma')\log\lambda_j\in 2\pi\ZZ,\qquad j=1,2.
+\]
+于是存在 \(k_1,k_2\in\ZZ\) 使
+\[
+\gamma-\gamma'
+=\frac{2\pi k_1}{\log\lambda_1}
+=\frac{2\pi k_2}{\log\lambda_2}.
+\]
+若 \(\gamma\neq\gamma'\)，则 \((k_1,k_2)\neq(0,0)\)，从而
+\(
+\log\lambda_1/\log\lambda_2=k_1/k_2\in\QQ
+\)，与 \eqref{eq:xi-dual-base-irrational-log-ratio} 矛盾。故 \(\gamma=\gamma'\)。
+\end{proof}
+
+\begin{corollary}[二进制--黄金比去混叠对]\label{cor:xi-dual-base-dealiasing-2-phi}
+取 \(\lambda_1=2\)、\(\lambda_2=\varphi=\frac{1+\sqrt5}{2}\)，则定理
+\ref{thm:xi-dual-base-dealiasing-injective-encoding} 的单射结论成立。
+\end{corollary}
+\begin{proof}
+若 \(\log\varphi/\log2\in\QQ\)，则存在 \(p,q\in\NN\) 使 \(\varphi^q=2^p\)。
+在二次域 \(\QQ(\sqrt5)\) 取范数：
+\[
+(-1)^q=\mathrm N(\varphi^q)=\mathrm N(2^p)=4^p,
+\]
+矛盾。故 \(\log\varphi/\log2\notin\QQ\)。
+\end{proof}
+
+\begin{theorem}[零点谱截断的统一超多项式误差界]\label{thm:xi-scale-spectral-truncation-uniform-superpoly}
+在 RH 下，固定 \(\lambda>1\) 与 \(\varphi\in C_c^\infty((1,\lambda))\)、\(\mathcal M\varphi(0)=0\)。
+由 \eqref{eq:xi-mellin-scale-coeff-explicit} 写
+\[
+C_{\varphi,\lambda}(m)
+=-\sum_{\gamma}
+\frac{\lambda^{\mathrm{i}m\gamma}\mathcal M\varphi(\mathrm{i}\gamma)}{\frac12+\mathrm{i}\gamma}
++R_{\varphi,\lambda}(m),
+\qquad
+\left|R_{\varphi,\lambda}(m)\right|\le C_{\varphi,\lambda}\lambda^{-m/2}.
+\]
+定义截断量
+\[
+C_{\varphi,\lambda}^{(\Gamma)}(m):=
+-\sum_{|\gamma|\le\Gamma}
+\frac{\lambda^{\mathrm{i}m\gamma}\mathcal M\varphi(\mathrm{i}\gamma)}{\frac12+\mathrm{i}\gamma}
++R_{\varphi,\lambda}(m).
+\]
+则对任意 \(A>0\)，存在常数 \(K_A(\varphi,\lambda)\) 使
+\[
+\sup_{m\ge 1}
+\left|C_{\varphi,\lambda}(m)-C_{\varphi,\lambda}^{(\Gamma)}(m)\right|
+\le
+K_A(\varphi,\lambda)\,\Gamma^{-A},
+\qquad \Gamma\ge 2.
+\]
+\end{theorem}
+\begin{proof}
+两者差仅为零点尾和：
+\[
+\left|C_{\varphi,\lambda}(m)-C_{\varphi,\lambda}^{(\Gamma)}(m)\right|
+\le
+\sum_{|\gamma|>\Gamma}
+\frac{\left|\mathcal M\varphi(\mathrm{i}\gamma)\right|}{\left|\frac12+\mathrm{i}\gamma\right|}.
+\]
+对任意 \(B>0\)，有
+\(\left|\mathcal M\varphi(\mathrm{i}\gamma)\right|\ll_B(1+|\gamma|)^{-B}\)；
+再结合 \(N(T)=O(T\log T)\) 给出的单位长度零点数估计，得
+\[
+\sum_{|\gamma|>\Gamma}
+\frac{\left|\mathcal M\varphi(\mathrm{i}\gamma)\right|}{\left|\frac12+\mathrm{i}\gamma\right|}
+\ll_B
+\sum_{n\ge \Gamma}\frac{\log n}{n^{B+1}}
+\ll_A \Gamma^{-A},
+\]
+取 \(B\) 足够大即得结论。
+\end{proof}
+
+\begin{theorem}[紧化坐标下的 dyadic 最小位深下界]\label{thm:xi-compactified-dyadic-depth-lower-bound}
+令 \(0<\gamma_1\le\gamma_2\le\cdots\) 为非平凡零点纵坐标（按重数计），并定义
+\[
+u(t):=\frac{1}{\pi}\arctan t\in\left(0,\frac12\right),\qquad
+u_n:=u(\gamma_n).
+\]
+则当 \(T\to\infty\) 时，在区间 \([T,2T]\) 内存在相邻零点
+\(\gamma_n<\gamma_{n+1}\) 满足
+\begin{equation}\label{eq:xi-u-gap-upper-bound}
+u_{n+1}-u_n
+\le
+\frac{2}{(1+T^2)\log\!\bigl(\frac{T}{2\pi}\bigr)}\,(1+o(1)).
+\end{equation}
+因此，若某 dyadic 递归隔离方案要求在 \(u\)-坐标上使用长度至多 \(2^{-b}\) 的区间并满足“每区间至多含一个零点”，则必有
+\begin{equation}\label{eq:xi-dyadic-bitdepth-lower-bound}
+b\ge
+\log_2\!\Bigl((1+T^2)\log\!\bigl(\tfrac{T}{2\pi}\bigr)\Bigr)-1+o(1)
+=2\log_2 T+\log_2\log T+O(1).
+\end{equation}
+\end{theorem}
+\begin{proof}
+由 Riemann--von Mangoldt 公式（见 \cite{Titchmarsh1986RiemannZeta}）
+\[
+N(T)=\frac{T}{2\pi}\log\frac{T}{2\pi}-\frac{T}{2\pi}+O(\log T),
+\]
+可得
+\[
+N(2T)-N(T)=\frac{T}{2\pi}\log\frac{T}{2\pi}+O(T).
+\]
+故 \([T,2T]\) 内平均零点间距为
+\[
+\frac{T}{N(2T)-N(T)}
+=\frac{2\pi}{\log\!\bigl(\frac{T}{2\pi}\bigr)}(1+o(1)),
+\]
+从而存在相邻零点满足
+\[
+\gamma_{n+1}-\gamma_n
+\le
+\frac{2\pi}{\log\!\bigl(\frac{T}{2\pi}\bigr)}(1+o(1)).
+\]
+又 \(u'(t)=1/(\pi(1+t^2))\)，在 \([T,2T]\) 上有
+\[
+u'(\xi)\le \frac{1}{\pi(1+T^2)}.
+\]
+由中值定理即得 \eqref{eq:xi-u-gap-upper-bound}。
+若 \(2^{-b}\) 大于某个相邻差值，则无法保证“每区间至多一个零点”，故必须有
+\(
+2^{-b}\le \min(u_{n+1}-u_n)
+\)
+于目标层级，代入 \eqref{eq:xi-u-gap-upper-bound} 得 \eqref{eq:xi-dyadic-bitdepth-lower-bound}。
+\end{proof}
+
+\begin{corollary}[递归零点证书的总比特复杂度下界]\label{cor:xi-recursive-certificate-bit-complexity-lower-bound}
+记 \(B(T)\) 为在 \(u\)-坐标中对所有 \(0<\gamma_n\le T\) 构造两两不重叠 dyadic 证书区间所需的最小总位深预算。则
+\[
+B(T)\ge
+\bigl(N(T)-N(T/2)\bigr)\,
+\bigl(2\log_2T+\log_2\log T+O(1)\bigr),
+\]
+从而
+\[
+B(T)=\Omega\!\bigl(T(\log T)^2\bigr).
+\]
+\end{corollary}
+\begin{proof}
+对高度层 \([T/2,T]\) 内的每个零点，定理 \ref{thm:xi-compactified-dyadic-depth-lower-bound}
+给出同阶位深下界 \(2\log_2T+\log_2\log T+O(1)\)。
+该层零点个数为 \(N(T)-N(T/2)\asymp T\log T\)，将逐点下界求和即得结论。
+\end{proof}
+
+\endinput
+

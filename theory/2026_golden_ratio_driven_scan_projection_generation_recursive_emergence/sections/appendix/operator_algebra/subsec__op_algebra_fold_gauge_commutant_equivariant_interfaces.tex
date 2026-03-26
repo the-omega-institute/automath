@@ -1,0 +1,567 @@
+\subsection{折叠规范群的交换子与等变接口：纤维两模态、可逆噪声闭包与可观测 lift 判别}\label{subsec:op-algebra-fold-gauge-commutant}
+本小节在附录 \ref{app:op-algebra-fold-subalgebra} 的交换设定中，把折叠的纤维对称 \(G_m=\Aut(\Fold_m)\) 作为一个统一接口：其交换子刻画了所有 \emph{纤维对称等变} 的线性机制；其条件期望 \(E_m\) 与纤维均匀 lift 给出可逆噪声闭包；其集合论商性质给出“仅依赖可见变量”的因果抽象完备性，并导出可观测置换的 lift 判别与规范不定性计数。
+
+\paragraph{设置：纤维规范群与置换表示}
+固定分辨率 \(m\ge 1\)。记 \(\Omega_m=\{0,1\}^m\)、\(X_m\subseteq\Omega_m\) 为禁词 \(11\) 的稳定语法块，并令折叠满射 \(\Fold_m:\Omega_m\to X_m\)（定义 \ref{def:fold-word}）。
+对 \(x\in X_m\) 记纤维多重度 \(d_m(x):=\#\Fold_m^{-1}(x)\)。
+折叠的纤维自同构群定义为
+\[
+G_m:=\Aut(\Fold_m):=\{\sigma\in\mathrm{Sym}(\Omega_m):\ \Fold_m\circ\sigma=\Fold_m\}.
+\]
+由纤维分解 \( \Omega_m=\bigsqcup_{x\in X_m}\Fold_m^{-1}(x)\) 得到自然同构
+\[
+G_m\ \cong\ \prod_{x\in X_m}\mathfrak{S}_{d_m(x)}.
+\]
+
+\input{parts/thm__op-algebra-fold-gauge-orbit-classification-qtuple}
+
+\begin{proposition}[纤维退化谱决定的群论骨架：导群、中心、Abel 化与合成因子]\label{prop:op-algebra-fold-gauge-group-structure}
+沿上段设置，记纤维退化度直方图
+\[
+N_{m,d}:=\#\{x\in X_m:\ d_m(x)=d\}\qquad(d\ge 1).
+\]
+则 \(G_m\) 的群论骨架完全由 \(\{N_{m,d}\}_{d\ge 1}\) 决定，且满足如下闭式。
+\begin{enumerate}
+  \item \textbf{导群：}
+  \[
+  [G_m,G_m]\ \cong\ \prod_{x\in X_m,\ d_m(x)\ge 3}\mathfrak{A}_{d_m(x)}
+  \ \cong\ \prod_{d\ge 3}\mathfrak{A}_d^{\,N_{m,d}}.
+  \]
+  \item \textbf{中心：}
+  \[
+  Z(G_m)\ \cong\ \prod_{x\in X_m,\ d_m(x)=2}\mathfrak{S}_2
+  \ \cong\ (\ZZ_2)^{\,N_{m,2}}.
+  \]
+  \item \textbf{Abel 化：}
+  \[
+  G_m^{\mathrm{ab}}
+  :=G_m/[G_m,G_m]
+  \ \cong\ \prod_{x\in X_m,\ d_m(x)\ge 2}\ZZ_2
+  \ \cong\ (\ZZ_2)^{\,\sum_{d\ge 2}N_{m,d}}.
+  \]
+  \item \textbf{非阿贝尔简单合成因子：}
+  除 \(\ZZ_2\)、\(\ZZ_3\) 等低阶循环因子外，\(G_m\) 的所有非阿贝尔简单 Jordan--H\"older 因子恰为
+  \[
+  \left\{\mathfrak{A}_{d_m(x)}:\ x\in X_m,\ d_m(x)\ge 5\right\}
+  =
+  \left\{\mathfrak{A}_d:\ d\ge 5,\ N_{m,d}>0\right\}.
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+由直积分解 \(G_m\cong\prod_{x\in X_m}\mathfrak S_{d_m(x)}\) 及有限直积对导群、中心与 Abel 化的乘法性，
+\[
+[\textstyle\prod_i G_i,\prod_i G_i]=\prod_i[G_i,G_i],\qquad
+Z(\textstyle\prod_i G_i)=\prod_i Z(G_i),\qquad
+(\textstyle\prod_i G_i)^{\mathrm{ab}}\cong\prod_i G_i^{\mathrm{ab}}.
+\]
+而对称群满足：当 \(n\ge 3\) 时 \([\,\mathfrak S_n,\mathfrak S_n\,]=\mathfrak A_n\)，当 \(n\ge 3\) 时 \(Z(\mathfrak S_n)=1\)，当 \(n\ge 2\) 时 \(\mathfrak S_n^{\mathrm{ab}}\cong \ZZ_2\)，且 \(\mathfrak S_1\) 平凡。
+逐纤维代入即得前三条。
+合成因子陈述由 \(\mathfrak S_n\) 的 Jordan--H\"older 分解与直积的合成因子并运算得到：当 \(n\ge 5\) 时存在唯一的非阿贝尔简单因子 \(\mathfrak A_n\)，其余因子为循环群。证毕。
+\end{proof}
+\input{parts/cor__op-algebra-fold-gauge-nonabelian-spectrum-rigidity}
+\input{parts/cor__op-algebra-fold-gauge-ab-k0-mod2}
+令 \(\mathcal H_m:=\CC^{\Omega_m}\)（标准基 \(\{e_a\}_{a\in\Omega_m}\)），并令 \(U_\sigma e_a:=e_{\sigma(a)}\) 为 \(G_m\) 的置换表示。
+定义交换子代数
+\[
+\End_{G_m}(\mathcal H_m):=\{T\in\End(\mathcal H_m):\ TU_\sigma=U_\sigma T\ \ (\forall\sigma\in G_m)\}.
+\]
+
+\begin{theorem}[折叠条件期望的 Haar 投影表示与唯一性]\label{thm:op-algebra-fold-conditional-expectation-haar}
+在函数代数识别 \(\mathcal A_m\cong\CC^{\Omega_m}\)、\(\mathcal B_m\cong\CC^{X_m}\)（附录 \ref{app:op-algebra-fold-subalgebra}）下，令 \(G_m\) 通过拉回作用于 \(\mathcal A_m\)：
+\[
+(\sigma\cdot f)(\omega):=f(\sigma^{-1}\omega)\qquad(\sigma\in G_m,\ f\in\mathcal A_m).
+\]
+则折叠诱导的条件期望 \(E_m:\mathcal A_m\to\mathcal B_m\)（命题 \ref{prop:fold-conditional-expectation}）满足有限群 Haar 平均表示
+\[
+\boxed{\;
+E_m(f)=\frac{1}{|G_m|}\sum_{\sigma\in G_m}\sigma\cdot f\qquad(f\in\mathcal A_m).\;}
+\]
+并且在“保持 \(\mathcal B_m\) 点态不变且对 \(G_m\) 等变”的类中唯一：若 \(E:\mathcal A_m\to\mathcal B_m\) 为任一满足
+\(
+E(B)=B\ (B\in\mathcal B_m)
+\)
+且
+\(
+E(\sigma\cdot f)=E(f)\ (\sigma\in G_m)
+\)
+的条件期望，则 \(E=E_m\)。
+\end{theorem}
+\begin{proof}
+由于 \(G_m\cong\prod_{x\in X_m}\mathfrak S_{d_m(x)}\)，其在每条纤维 \(\Fold_m^{-1}(x)\) 上作用为全对称群并且传递。
+因此对任意 \(f\in\mathcal A_m\)，Haar 平均
+\(
+\overline f:=|G_m|^{-1}\sum_{\sigma\in G_m}\sigma\cdot f
+\)
+在每条纤维上为常值；并且对 \(\omega\in\Fold_m^{-1}(x)\) 有轨道平均恒等式
+\[
+\overline f(\omega)=\frac{1}{d_m(x)}\sum_{\omega'\in\Fold_m^{-1}(x)}f(\omega').
+\]
+右端仅依赖于 \(x\)，与 \(E_m\) 的逐纤维平均公式一致，故 \(\overline f=E_m(f)\)。
+\par
+唯一性：取点质量基函数 \(\delta_\omega\in\mathcal A_m\)。等变性强制 \(E(\delta_\omega)\) 在纤维内取常值。
+又对任意 \(x\) 有 \(\sum_{\omega\in\Fold_m^{-1}(x)}\delta_\omega\) 在纤维上恒等为 \(1\)，由 \(E\) 的保单位性与 \(E|_{\mathcal B_m}=\mathrm{id}\) 得该常值必为 \(1/d_m(x)\)。
+于是 \(E\) 与 \(E_m\) 在基上相同，从而 \(E=E_m\)。证毕。
+\end{proof}
+
+\input{parts/prop__op-algebra-fold-reynolds-risk-convex}
+
+\begin{theorem}[交换子代数的显式闭式：逐纤维的 \texorpdfstring{$\mathrm{span}\{I,J\}$}{span{I,J}}]\label{thm:op-algebra-fold-gauge-commutant-explicit}
+沿上段设置，存在自然同构
+\[
+\boxed{\;
+\End_{G_m}(\mathcal H_m)\ \cong\ \bigoplus_{x\in X_m}\Bigl\{a_x I_{d_m(x)}+b_x J_{d_m(x)}:\ a_x,b_x\in\CC\Bigr\},\;}
+\]
+其中 \(I_d\) 为 \(d\times d\) 单位阵，\(J_d\) 为全 \(1\) 矩阵（当 \(d=1\) 时 \(J_1=I_1\)）。
+\end{theorem}
+\begin{proof}
+\(\mathcal H_m\) 分解为纤维直和 \(\mathcal H_m=\bigoplus_{x\in X_m}\mathcal H_x\)，其中 \(\mathcal H_x:=\CC^{\Fold_m^{-1}(x)}\cong \CC^{d_m(x)}\)，且 \(G_m\) 在各纤维上独立作用为全对称群。
+因此
+\(
+\End_{G_m}(\mathcal H_m)\cong\bigoplus_x \End_{\mathfrak S_{d_m(x)}}(\CC^{d_m(x)}).
+\)
+对固定 \(d:=d_m(x)\)，置换表示分解为
+\[
+\CC^d=\CC\mathbf 1\ \oplus\ \mathbf 1^\perp,
+\]
+其中 \(\CC\mathbf 1\) 为平凡表示，\(\mathbf 1^\perp\) 为标准表示并在 \(\CC\) 上不可约，且两者各以重数 \(1\) 出现。
+由 Schur 引理，交换子在该直和上只能为两条标量，从而在标准基下必为 \(aI_d+bJ_d\) 的形式。
+对全部 \(x\) 取直和得到结论。证毕。
+\end{proof}
+
+\begin{corollary}[纤维等变算子的两模态结构]\label{cor:op-algebra-fold-gauge-two-mode}
+若线性算子 \(T:\mathcal H_m\to\mathcal H_m\) 满足 \(TU_\sigma=U_\sigma T\)（\(\forall\sigma\in G_m\)），则对每个 \(x\in X_m\) 有
+\[
+T|_{\mathcal H_x}=a_x\,\mathrm{Id}+b_x\,\mathrm{Av}_x,
+\qquad
+\mathrm{Av}_x(v):=\left(\frac{1}{d_m(x)}\sum_{a\in\Fold_m^{-1}(x)}v(a)\right)\mathbf 1.
+\]
+因此在每条纤维上仅有两类独立模态：均值模态 \(\CC\mathbf 1\) 与零和模态 \(\mathbf 1^\perp\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:op-algebra-fold-gauge-commutant-explicit}，\(T|_{\mathcal H_x}=a_x I_d+b_x J_d\)。
+注意 \(J_d=d\,\Pi_{\mathrm{triv}}\) 且 \(\mathrm{Av}_x=\Pi_{\mathrm{triv}}\) 在标准基下的算子表达，代入即得。证毕。
+\end{proof}
+
+\paragraph{对称噪声的 Fold 闭包与 Dirichlet 形式同一}
+设 \(K\) 为 \(\Omega_m\) 上的马尔可夫核，并假设 \(K\) 关于均匀分布 \(u(a)=2^{-m}\) 可逆（等价地：对一切 \(a,b\in\Omega_m\) 有 \(u(a)K(a,b)=u(b)K(b,a)\)）。
+令 \(w_m(x):=d_m(x)/2^m\) 为折叠推前的均匀基线权重。
+定义纤维均匀 lift 核 \(L(x,a):=d_m(x)^{-1}\mathbf 1_{\{\Fold_m(a)=x\}}\)，并定义诱导核
+\[
+P(x,y):=\sum_{a\in\Omega_m}\sum_{b\in\Omega_m} L(x,a)\,K(a,b)\,\mathbf 1_{\{\Fold_m(b)=y\}}.
+\]
+
+\begin{proposition}[可逆平衡与能量形式保持]\label{prop:op-algebra-fold-lift-noise-fold-reversibility}
+在上述假设下，\(w_m\) 为 \(P\) 的平衡分布，且 \(P\) 关于 \(w_m\) 可逆：
+\[
+w_m(x)P(x,y)=w_m(y)P(y,x).
+\]
+此外，对任意 \(f:X_m\to\RR\)，令 \(\widetilde f:=f\circ\Fold_m\)。
+分别记
+\[
+\mathcal E_P(f,f):=\frac12\sum_{x,y\in X_m}w_m(x)P(x,y)\bigl(f(x)-f(y)\bigr)^2,
+\quad
+\mathcal E_K(\widetilde f,\widetilde f):=\frac12\sum_{a,b\in\Omega_m}u(a)K(a,b)\bigl(\widetilde f(a)-\widetilde f(b)\bigr)^2.
+\]
+则有严格恒等式
+\[
+\boxed{\;\mathcal E_P(f,f)=\mathcal E_K(\widetilde f,\widetilde f).\;}
+\]
+\end{proposition}
+\begin{proof}
+先证平衡：对任意 \(a\in\Omega_m\)，由 \(w_m\) 与 \(L\) 的定义得
+\[
+\sum_{x\in X_m} w_m(x)L(x,a)
+=\sum_x \frac{d_m(x)}{2^m}\cdot \frac{1}{d_m(x)}\mathbf 1_{\{\Fold_m(a)=x\}}
+=\frac{1}{2^m}=u(a),
+\]
+即“先按 \(w_m\) 取 \(x\)，再按 \(L(x,\cdot)\) 取 \(a\)”给出 \(\Omega_m\) 上的均匀分布。
+由 \(K\) 的可逆性知一步后仍为均匀，推前到 \(X_m\) 即得 \(w_m\) 不变。
+细致平衡由展开
+\[
+w_m(x)P(x,y)
+=\frac{1}{2^m}\sum_{a:\Fold_m(a)=x}\sum_{b:\Fold_m(b)=y}K(a,b)
+\]
+并交换 \((a,b)\) 及用 \(u(a)K(a,b)=u(b)K(b,a)\) 得到。
+最后，代入 \(\mathcal E_P\) 的定义并利用上式即得
+\[
+\mathcal E_P(f,f)
+=\frac{1}{2^{m+1}}\sum_{a,b\in\Omega_m}K(a,b)\bigl(f(\Fold_m(a))-f(\Fold_m(b))\bigr)^2
+=\mathcal E_K(\widetilde f,\widetilde f).
+\]
+证毕。
+\end{proof}
+
+\paragraph{纤维均匀生成模型的风险分解}
+令 \(\mu\) 为 \(\Omega_m\) 上任意分布，并记其折叠边缘 \(\pi:= (\Fold_m)_\#\mu\) 于 \(X_m\)。
+对任意模型 \(q\in\Delta(X_m)\)，定义其纤维均匀 lift 到 \(\Omega_m\) 的生成模型
+\[
+\widetilde q(a):=\frac{q(\Fold_m(a))}{d_m(\Fold_m(a))}\qquad(a\in\Omega_m).
+\]
+
+\begin{proposition}[负对数似然的严格账本分解]\label{prop:op-algebra-fold-uniformlift-nll-decomposition}
+沿上段设置，负对数似然风险满足严格恒等式
+\[
+\EE_{\mu}\bigl[-\log \widetilde q(A)\bigr]
+=H(\pi)+D_{\mathrm{KL}}(\pi\|q)+\EE_{\pi}\!\bigl[\log d_m(X)\bigr].
+\]
+因此该模型族内的唯一极小点为 \(q^\star=\pi\)，且超额风险严格等于 \(D_{\mathrm{KL}}(\pi\|q)\)。
+\end{proposition}
+\begin{proof}
+展开
+\(
+-\log \widetilde q(a)=-\log q(\Fold_m(a))+\log d_m(\Fold_m(a))
+\)。
+对 \(\mu\) 取期望后，第一项成为 \(\EE_{\pi}[-\log q(X)]=H(\pi)+D_{\mathrm{KL}}(\pi\|q)\)，第二项成为 \(\EE_{\pi}[\log d_m(X)]\)。
+极小性与唯一性由 \(D_{\mathrm{KL}}\ge 0\) 及等号条件给出。证毕。
+\end{proof}
+
+\begin{theorem}[纤维均匀模型的似然分解与贝叶斯后验塌缩]\label{thm:op-algebra-fold-bayes-posterior-collapse}
+令 \(\mathcal P_m:\Delta(\Omega_m)\to\Delta(X_m)\) 为折叠推前 \((\Fold_m)_\#\)，并令 \(\mathcal Q_m:\Delta(X_m)\to\Delta(\Omega_m)\) 为纤维条件均匀提升：
+\[
+(\mathcal Q_m\pi)(a)=\frac{\pi(\Fold_m(a))}{d_m(\Fold_m(a))},
+\qquad
+\mathcal P_m\circ \mathcal Q_m=\mathrm{id}.
+\]
+设统计模型族 \(\{\mu_\theta\}_{\theta\in\Theta}\subset\Delta(\Omega_m)\) 满足存在 \(\pi_\theta\in\Delta(X_m)\) 使
+\(
+\mu_\theta=\mathcal Q_m\pi_\theta
+\)。
+令 \(A_1,\dots,A_n\stackrel{\mathrm{i.i.d.}}{\sim}\mu_\theta\)，并记 \(X_i=\Fold_m(A_i)\)。
+则对任意样本 \(a_{1:n}\in\Omega_m^n\) 有精确似然分解
+\[
+\mu_\theta(a_{1:n})
+=\prod_{i=1}^n \frac{\pi_\theta(x_i)}{d_m(x_i)}
+=\Bigl(\prod_{i=1}^n d_m(x_i)^{-1}\Bigr)\cdot \pi_\theta(x_{1:n}).
+\]
+从而对任意先验 \(\Pi\) 于 \(\Theta\)，贝叶斯后验满足
+\[
+\Pi(\,\cdot\,\mid A_{1:n}=a_{1:n})=\Pi(\,\cdot\,\mid X_{1:n}=x_{1:n}),
+\]
+即 \(\sigma(X_{1:n})\) 为该模型族的贝叶斯充分统计量；任意贝叶斯最优决策（对任意损失函数）均仅依赖于 \(x_{1:n}\)。
+\end{theorem}
+
+\begin{proof}
+由 \(\mu_\theta=\mathcal Q_m\pi_\theta\) 的定义，\(\mu_\theta(a_i)=\pi_\theta(x_i)/d_m(x_i)\)，相乘得到似然分解。
+在贝叶斯公式中，\(\prod_i d_m(x_i)^{-1}\) 与 \(\theta\) 无关，归一化时消去，故后验仅依赖于 \(\pi_\theta(x_{1:n})\)，亦即仅依赖于 \(x_{1:n}\)。证毕。
+\end{proof}
+
+\paragraph{规范增强下的信息复杂度上界}
+记 \(\mu:=Q_m\pi\) 为 \(\pi\) 的纤维条件均匀 lift（见命题 \ref{prop:fold-conditional-expectation} 与正文 \S\ref{subsec:pom-information-ledger} 的 \(Q_m\)）。
+设训练样本 \(S=(A_1,\dots,A_n)\) 独立同分布于 \(\mu\)，并记 \(X_i:=\Fold_m(A_i)\)。
+
+\begin{proposition}[纤维置换不变性 \texorpdfstring{$\Rightarrow$}{=>} 仅依赖可见变量]\label{prop:op-algebra-fold-gauge-mi-bound}
+设学习算法输出随机变量 \(W\)，并满足如下 \(G_m\)-不变性：对任意独立取样的 \(\sigma_1,\dots,\sigma_n\in G_m\)，有
+\[
+\mathsf{Law}\bigl(W\,\big|\,A_1,\dots,A_n\bigr)
+=\mathsf{Law}\bigl(W\,\big|\,\sigma_1(A_1),\dots,\sigma_n(A_n)\bigr).
+\]
+则存在某随机映射 \(B\) 使得
+\[
+W\ \stackrel{d}{=}\ B(X_1,\dots,X_n).
+\]
+并且信息复杂度满足
+\[
+I(S;W)\ \le\ I(X^n;W)\ \le\ H(X^n)=n\,H(\pi).
+\]
+\end{proposition}
+\begin{proof}
+在给定 \(X^n=x^n\) 条件下，\(S\) 在直积纤维 \(\prod_i\Fold_m^{-1}(x_i)\) 上条件均匀。
+任取两点 \(s,s'\) 属于该直积纤维，存在 \((\sigma_1,\dots,\sigma_n)\in G_m^n\) 使得 \(s'=(\sigma_1,\dots,\sigma_n)\cdot s\)。
+由假设，\(\mathsf{Law}(W\mid S=s)=\mathsf{Law}(W\mid S=s')\)，从而条件分布 \(\mathsf{Law}(W\mid X^n=x^n)\) 良定且仅依赖 \(x^n\)，等价于存在 \(B\) 使 \(W\stackrel d=B(X^n)\)。
+数据处理不等式给出 \(I(S;W)\le I(X^n;W)\)，而 \(I(X^n;W)\le H(X^n)=nH(\pi)\) 由互信息基本界给出。证毕。
+\end{proof}
+
+\paragraph{纤维重采样与对比学习：InfoNCE 的贝叶斯最优闭式}\label{par:op-algebra-fold-infonce-fiber}
+令 \(X\sim w_m\) 为折叠在均匀微态基线下的推前分布
+\(
+w_m(x)=d_m(x)/2^m
+\)。
+条件于 \(X\)，令 \(U,V\) 在同一纤维 \(\Fold_m^{-1}(X)\) 上条件独立且均匀分布；
+并令负样本 \(W_1,\dots,W_{K-1}\) 独立同分布于 \(\mathrm{Unif}(\Omega_m)\)，且与 \((U,V)\) 独立。
+对任意评分函数 \(s:\Omega_m\times\Omega_m\to\RR\cup\{-\infty\}\) 定义 InfoNCE 损失
+\[
+\mathcal L_K(s):=\EE\!\left[
+-\log\frac{e^{s(U,V)}}{e^{s(U,V)}+\sum_{i=1}^{K-1}e^{s(U,W_i)}}
+\right]\qquad(K\ge 2).
+\]
+
+\begin{theorem}[纤维重采样下 InfoNCE 的全局最小值]\label{thm:op-algebra-fold-infonce-bayes-opt}
+在上述取样机制下，InfoNCE 的全局最小值满足精确恒等式
+\begin{equation}\label{eq:op-algebra-fold-infonce-inf}
+\inf_s \mathcal L_K(s)
+=\EE\!\left[\log(1+J)\right],
+\qquad
+J\,\big|\,X\sim \mathrm{Binomial}\!\bigl(K-1,\ w_m(X)\bigr).
+\end{equation}
+并且可由纯等价关系判别实现：取
+\begin{equation}\label{eq:op-algebra-fold-infonce-sstar}
+s^\star(u,v)=
+\begin{cases}
+0,& \Fold_m(u)=\Fold_m(v),\\
+-\infty,& \text{否则},
+\end{cases}
+\end{equation}
+则 \(\mathcal L_K(s^\star)=\inf_s\mathcal L_K(s)\)。
+\end{theorem}
+\begin{proof}
+记 \(X=\Fold_m(U)\)，并令 \(J:=\sum_{i=1}^{K-1}\mathbf 1_{\{\Fold_m(W_i)=X\}}\) 为落入同纤维的负样本个数。
+在给定 \((U,X)\) 与候选集合 \(\{V,W_1,\dots,W_{K-1}\}\) 的条件下，所有满足 \(\Fold_m(\cdot)=X\) 的候选点在条件分布上彼此可交换：\(V\) 与这些 \(W_i\) 的条件分布均为 \(\Fold_m^{-1}(X)\) 上的均匀分布。
+因此对任意评分函数 \(s\)，在条件于 \((U,X)\) 的对数损失最小化中，正样本索引在这 \(1+J\) 个可交换候选之间的最优后验必为均匀分布，从而条件最小损失为 \(\log(1+J)\)。
+对 \((U,X)\) 取期望即得 \eqref{eq:op-algebra-fold-infonce-inf}。
+
+另一方面，对 \(s^\star\) 有 \(e^{s^\star(U,\cdot)}\) 在 \(\Fold_m^{-1}(X)\) 之外为 \(0\)，在同纤维内为常数 \(1\)，从而 softmax 仅在 \(1+J\) 个可交换候选上均匀分配，并给出损失恰为 \(\log(1+J)\)。
+故 \(\mathcal L_K(s^\star)=\EE[\log(1+J)]=\inf_s\mathcal L_K(s)\)。证毕。
+\end{proof}
+
+\begin{corollary}[两视角互信息与大负样本极限]\label{cor:op-algebra-fold-infonce-mi-limit}
+在定理 \ref{thm:op-algebra-fold-infonce-bayes-opt} 的取样机制下，有
+\[
+I(U;V)=H(X),
+\]
+并且（自然对数）
+\begin{equation}\label{eq:op-algebra-fold-infonce-logK-limit}
+\lim_{K\to\infty}\Bigl(\log K-\inf_s\mathcal L_K(s)\Bigr)=H(X).
+\end{equation}
+\end{corollary}
+\begin{proof}
+由于 \(X=\Fold_m(U)\) 为 \(U\) 的确定函数，且 \(V\) 在给定 \(X\) 后与 \(U\) 条件独立，故
+\(
+I(U;V)=I(X;V)=H(X)-H(X\mid V)
+\)。
+又因 \(X=\Fold_m(V)\) 几乎必然成立，从而 \(H(X\mid V)=0\)，得 \(I(U;V)=H(X)\)。
+
+由 \eqref{eq:op-algebra-fold-infonce-inf}，\(\inf_s\mathcal L_K(s)=\EE[\log(1+J)]\) 且 \(J/(K-1)\to w_m(X)\)（给定 \(X\) 的强大数定律）。
+由于 \(X_m\) 有限且 \(w_m(x)>0\)（满射保证每条纤维非空），可在 \(X\) 上应用支配收敛，得到
+\(
+\log(1+J)=\log K+\log w_m(X)+o(1)
+\)
+在期望意义下成立，从而
+\[
+\log K-\inf_s\mathcal L_K(s)\to -\EE[\log w_m(X)]=H(X),
+\]
+即 \eqref{eq:op-algebra-fold-infonce-logK-limit}。证毕。
+\end{proof}
+
+\begin{proposition}[有限负样本下的矩闭式：仅依赖有限阶碰撞矩]\label{prop:op-algebra-fold-infonce-finiteK-moment-formula}
+令 \(\mathcal L_K^\star:=\inf_s\mathcal L_K(s)\)。
+对任意整数 \(K\ge 2\)，存在仅依赖 \(K\) 的系数 \(\{\beta_{K,q}\}_{q=2}^{K}\subset\RR\) 使得
+\begin{equation}\label{eq:op-algebra-fold-infonce-moment-linear}
+\mathcal L_K^\star=\sum_{q=2}^{K}\beta_{K,q}\,c_q(m),
+\qquad
+c_q(m):=\sum_{x\in X_m}w_m(x)^q=\frac{S_q(m)}{2^{qm}}.
+\end{equation}
+其中系数可取为完全显式的闭式
+\begin{equation}\label{eq:op-algebra-fold-infonce-beta}
+\beta_{K,q}
+\;=\;
+\binom{K-1}{q-1}\sum_{j=0}^{q-1}\binom{q-1}{j}(-1)^{q-1-j}\log(1+j).
+\end{equation}
+特别地，
+\[
+\mathcal L_2^\star=(\log 2)\,c_2(m),
+\]
+\[
+\mathcal L_3^\star=2(\log 2)\,c_2(m)+(\log 3-2\log 2)\,c_3(m).
+\]
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:op-algebra-fold-infonce-bayes-opt}，
+\[
+\mathcal L_K^\star
+=\EE_X\!\left[\sum_{j=0}^{K-1}\binom{K-1}{j}w_m(X)^j(1-w_m(X))^{K-1-j}\log(1+j)\right].
+\]
+对 \((1-w)^{K-1-j}\) 作二项式展开并收集 \(w\) 的幂次，可写为
+\(
+\mathcal L_K^\star=\sum_{\ell=1}^{K-1}a_{K,\ell}\,\EE[w_m(X)^\ell]
+\)
+的线性组合；而 \(\EE[w_m(X)^\ell]=\sum_x w_m(x)^{\ell+1}=c_{\ell+1}(m)\)，得到
+\eqref{eq:op-algebra-fold-infonce-moment-linear}。
+进一步利用恒等式
+\(
+\binom{K-1}{j}\binom{K-1-j}{q-1-j}=\binom{K-1}{q-1}\binom{q-1}{j}
+\)
+将系数化简为 \eqref{eq:op-algebra-fold-infonce-beta}。证毕。
+\end{proof}
+
+\paragraph{仅依赖稳定类型的监督任务：不可改进的样本复杂度下界}\label{par:op-algebra-fold-supervised-lowerbound}
+令未知标注函数 \(f:X_m\to\{0,1\}\)。
+观测 \(n\) 个样本 \((U_i,Y_i)\)：
+\[
+U_i\stackrel{\mathrm{i.i.d.}}{\sim}\mathrm{Unif}(\Omega_m),
+\qquad
+Y_i=f(\Fold_m(U_i)).
+\]
+令学习器输出任意分类器 \(\widehat h:\Omega_m\to\{0,1\}\)，并定义泛化误差
+\[
+\mathrm{err}(\widehat h;f):=\PP_{U\sim\mathrm{Unif}(\Omega_m)}\bigl[\widehat h(U)\neq f(\Fold_m(U))\bigr].
+\]
+
+\begin{theorem}[极小极大风险的精确闭式与碰撞下界]\label{thm:op-algebra-fold-supervised-minimax-risk}
+在上述零噪声设定下，极小极大风险满足精确恒等式
+\begin{equation}\label{eq:op-algebra-fold-supervised-minimax-exact}
+\inf_{\widehat h}\sup_{f}\ \EE\bigl[\mathrm{err}(\widehat h;f)\bigr]
+=\frac12\sum_{x\in X_m}w_m(x)\,(1-w_m(x))^n.
+\end{equation}
+并且存在普适下界
+\begin{equation}\label{eq:op-algebra-fold-supervised-minimax-c2-lb}
+\inf_{\widehat h}\sup_{f}\ \EE\bigl[\mathrm{err}(\widehat h;f)\bigr]
+\ \ge\ \frac12\Bigl(1-n\,c_2(m)\Bigr),
+\qquad
+c_2(m)=\sum_{x\in X_m}w_m(x)^2=\frac{S_2(m)}{4^m}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+取 \(f\) 在 \(X_m\) 上独立均匀随机（Yao 原理）。
+给定训练样本后，任何未出现过的类型 \(x\) 的标签 \(f(x)\) 与数据独立，故在该类型上任意预测均以概率 \(1/2\) 出错；而对出现过的类型可用记忆法做到零误差。
+因此期望风险等于 \(\tfrac12\) 乘以“未见类型”的总概率质量，并且
+\[
+\EE\left[\sum_{x}w_m(x)\mathbf 1_{\{x\ \text{未被样本命中}\}}\right]
+=\sum_x w_m(x)\PP(\text{类型 }x\ \text{未出现})
+=\sum_x w_m(x)(1-w_m(x))^n,
+\]
+得到 \eqref{eq:op-algebra-fold-supervised-minimax-exact}，并由记忆算法达到该值。
+对下界，使用 Bernoulli 不等式 \((1-t)^n\ge 1-nt\)（\(t\in[0,1]\)）得
+\[
+\sum_x w_m(x)(1-w_m(x))^n\ge \sum_x w_m(x)(1-nw_m(x))=1-n\sum_x w_m(x)^2,
+\]
+从而得到 \eqref{eq:op-algebra-fold-supervised-minimax-c2-lb}。证毕。
+\end{proof}
+
+\begin{proposition}[随机标注器的一步泛化上界：指数级上下文需求]\label{prop:op-algebra-random-labeler-one-shot-generalization}
+固定分辨率 \(m\)，令 \(d_m:X_m\to\mathbb Z_{\ge 1}\) 为一组纤维规模，并记
+\(
+D_m:=\max_{x\in X_m} d_m(x)
+\)。
+考虑如下随机标注任务：从集合
+\[
+\mathcal F(d_m):=\Bigl\{F:\Omega_m\to X_m:\ \#F^{-1}(x)=d_m(x)\ (\forall x\in X_m)\Bigr\}
+\]
+中等概率抽取未知标注器 \(F\)；随后无放回抽取 \(p\) 个互异点 \(a_1,\dots,a_p\in\Omega_m\) 并揭示其标签 \(F(a_i)\)；再独立均匀抽取查询点 \(A\sim\mathrm{Unif}(\Omega_m)\)。
+则对任意（可随机的）学习器 \(\mathcal A\)，其平均成功率满足上界
+\[
+\mathbb P\bigl(\mathcal A(\{(a_i,F(a_i))\}_{i=1}^p,A)=F(A)\bigr)
+\le
+\frac{p+D_m}{|\Omega_m|}
+=\frac{p+D_m}{2^m}.
+\]
+因此当 \(p=\mathrm{poly}(m)\) 且 \(D_m=\Theta(\varphi^{m/2})\)（定理 \ref{thm:pom-max-fiber}）时，成功率以指数速率衰减，其端点指数与 \(h_\infty=\log(2/\sqrt\varphi)\)（推论 \ref{cor:pom-max-fiber-rate-endpoint}）对齐。
+\end{proposition}
+
+\begin{proof}
+令事件 \(E:=\{A\in\{a_1,\dots,a_p\}\}\)，则 \(\mathbb P(E)=p/|\Omega_m|\)，且在 \(E\) 上成功率至多为 \(1\)。
+在 \(E^c\) 上，查询点为未出现点。给定上下文后，对任意 \(x\in X_m\)，未出现点中标签为 \(x\) 的剩余数量至多为 \(d_m(x)\le D_m\)，从而（即便采用最优 MAP）条件成功率至多为 \(D_m/(|\Omega_m|-p)\)。
+于是总成功率
+\[
+\le \mathbb P(E)\cdot 1+\mathbb P(E^c)\cdot \frac{D_m}{|\Omega_m|-p}
+=\frac{p}{|\Omega_m|}+\frac{|\Omega_m|-p}{|\Omega_m|}\cdot\frac{D_m}{|\Omega_m|-p}
+=\frac{p+D_m}{|\Omega_m|}.
+\]
+证毕。
+\end{proof}
+
+\paragraph{抽象的一步马尔可夫逼近：最优核与条件互信息}\label{par:op-algebra-fold-markov-closure-cmi}
+设 \((S_t)_{t\in\ZZ}\) 为有限不可约马尔可夫链，状态空间 \(\Omega\)，转移核 \(K(\cdot\mid \omega)\)，平稳分布 \(\pi\)。
+给定确定性表示 \(F:\Omega\to X\)，令宏变量 \(X_t:=F(S_t)\)。
+对 \(\omega\in\Omega\) 与 \(x\in X\) 定义一步宏条件分布
+\[
+P_\omega(\cdot):=\PP(X_{t+1}\in\cdot\mid S_t=\omega),
+\qquad
+P_x(\cdot):=\PP(X_{t+1}\in\cdot\mid X_t=x).
+\]
+考虑所有一阶马尔可夫近似核 \(Q(\cdot\mid x)\)（定义于 \(X\) 上）的 KL 风险泛函
+\[
+\mathcal D(Q):=\EE_{\omega\sim \pi}\Bigl[\mathrm{KL}\bigl(P_\omega\,\Vert\,Q(\cdot\mid F(\omega))\bigr)\Bigr].
+\]
+
+\begin{theorem}[最优一阶马尔可夫化与条件互信息恒等式]\label{thm:op-algebra-fold-optimal-markovization-cmi}
+\(\mathcal D(Q)\) 的唯一极小解为真实条件核
+\begin{equation}\label{eq:op-algebra-fold-optimal-markov-kernel}
+Q^\star(\cdot\mid x)=P_x(\cdot)=\EE_{\omega\sim \pi(\cdot\mid x)}[P_\omega(\cdot)].
+\end{equation}
+并且极小值具有信息论等价式
+\begin{equation}\label{eq:op-algebra-fold-optimal-markov-cmi}
+\inf_Q \mathcal D(Q)=\mathcal D(Q^\star)=I(S_t;X_{t+1}\mid X_t).
+\end{equation}
+若进一步满足 \(\pi(\cdot\mid x)\) 在每个纤维 \(F^{-1}(x)\) 上为均匀分布，则 \(Q^\star\) 与“先纤维内瞬时热化、后一步微观跃迁、再投影”的闭包核一致（参见命题 \ref{prop:op-algebra-fold-lift-noise-fold-reversibility} 的诱导核构造）。
+\end{theorem}
+\begin{proof}
+对每个固定 \(x\in X\)，考虑函数
+\(
+Q\mapsto \sum_{\omega:F(\omega)=x}\pi(\omega)\,\mathrm{KL}(P_\omega\Vert Q(\cdot\mid x))
+\)。
+该函数在概率单纯形上严格凸，且其唯一极小点由 KL 的“重心最小化”性质给出为
+\(
+Q^\star(\cdot\mid x)=\sum_{\omega:F(\omega)=x}\pi(\omega\mid x)\,P_\omega(\cdot)=P_x(\cdot)
+\)，得到 \eqref{eq:op-algebra-fold-optimal-markov-kernel} 与唯一性。
+
+对 \eqref{eq:op-algebra-fold-optimal-markov-cmi}，注意 \(X_t=F(S_t)\) 为 \(S_t\) 的函数，故
+\(
+\PP(X_{t+1}\in\cdot\mid S_t,X_t)=\PP(X_{t+1}\in\cdot\mid S_t)=P_{S_t}
+\)。
+于是条件互信息的 KL 表达式给出
+\[
+I(S_t;X_{t+1}\mid X_t)
+=\EE\Bigl[\mathrm{KL}\bigl(\PP(X_{t+1}\in\cdot\mid S_t)\,\Vert\,\PP(X_{t+1}\in\cdot\mid X_t)\bigr)\Bigr]
+=\mathcal D(Q^\star),
+\]
+即 \eqref{eq:op-algebra-fold-optimal-markov-cmi}。证毕。
+\end{proof}
+
+\begin{conjecture}[Fold 抽象的非马尔可夫性与碰撞谱控制律]\label{conj:op-algebra-fold-nonmarkovianity-collision-control}
+取 \(\Omega_m=\{0,1\}^m\) 上的简单随机游走（每步均匀翻转一位），其平稳分布为 \(\mathrm{Unif}(\Omega_m)\)。
+令宏变量 \(X_t:=\Fold^{\mathrm{bin}}_m(S_t)\)（定义 \ref{def:fold-bin}），并记最优一阶马尔可夫化不可约误差
+\[
+\mathfrak I_m:=I(S_t;X_{t+1}\mid X_t)
+\]
+（定理 \ref{thm:op-algebra-fold-optimal-markovization-cmi}）。
+猜想存在 \(\gamma>0\) 使得在 \(m\to\infty\) 下满足幂律尺度关系
+\[
+\mathfrak I_m\ \asymp\ c_2(m)^{\gamma},
+\qquad
+c_2(m)=\sum_{x\in X_m}w_m(x)^2=\frac{S_2(m)}{4^m},
+\]
+并且指数 \(\gamma\) 由折叠碰撞谱的热力学函数（例如 \(q\mapsto \lim_{m\to\infty}\frac{1}{m}\log S_q(m)\) 在 \(q\downarrow 1\) 的侧导数）所刻画。
+\end{conjecture}
+
+\paragraph{集合论商与可观测置换的 lift 判别}
+\begin{proposition}[折叠作为集合论商的泛性质]\label{prop:op-algebra-fold-quotient-universal}
+令 \(Z\) 为任意集合。
+对任意满足 \(f(a)=f(a')\) 当且仅当 \(\Fold_m(a)=\Fold_m(a')\) 的映射 \(f:\Omega_m\to Z\)，存在唯一映射 \(\overline f:X_m\to Z\) 使
+\[
+f=\overline f\circ \Fold_m.
+\]
+\end{proposition}
+\begin{proof}
+由假设 \(f\) 在每条纤维上常值，定义 \(\overline f(x):=f(a)\)（取任意 \(a\in\Fold_m^{-1}(x)\)）良定。
+满射性给出存在性，若 \(\overline f_1\circ\Fold_m=\overline f_2\circ\Fold_m\) 则对每个 \(x\) 取 \(a\in\Fold_m^{-1}(x)\) 得 \(\overline f_1(x)=\overline f_2(x)\)，故唯一。证毕。
+\end{proof}
+
+\begin{proposition}[可观测置换的 lift 判别与规范不定性]\label{prop:op-algebra-fold-visible-permutation-lifts}
+取任意置换 \(f\in\mathrm{Sym}(X_m)\)。称 \(\tau\in\mathrm{Sym}(\Omega_m)\) 为其一个 Fold-lift，若
+\[
+\Fold_m\circ\tau=f\circ\Fold_m.
+\]
+则存在 Fold-lift 当且仅当 \(f\) 保持纤维多重度：
+\[
+d_m(f(x))=d_m(x)\qquad(\forall x\in X_m).
+\]
+在 lift 存在时，所有 lifts 构成 \(G_m\) 的一个左陪集；从而 lift 的总数等于
+\[
+|G_m|=\prod_{x\in X_m} d_m(x)!.
+\]
+\end{proposition}
+\begin{proof}
+必要性：若 \(\Fold_m\circ\tau=f\circ\Fold_m\)，则 \(\tau\) 给出双射 \(\Fold_m^{-1}(x)\to\Fold_m^{-1}(f(x))\)，故基数相等。
+充分性：若对所有 \(x\) 有 \(d_m(f(x))=d_m(x)\)，则可为每个 \(x\) 任取双射 \(\tau_x:\Fold_m^{-1}(x)\to\Fold_m^{-1}(f(x))\)，并在不交并 \(\Omega_m=\bigsqcup_x\Fold_m^{-1}(x)\) 上拼接得到全局置换 \(\tau\)，满足所需同余。
+\par
+若 \(\tau,\tau'\) 均为 lifts，则 \(\sigma:=\tau'\tau^{-1}\) 满足 \(\Fold_m\circ\sigma=\Fold_m\)，故 \(\sigma\in G_m\)，从而 \(\tau'=\sigma\tau\)，lifts 构成左陪集并与 \(G_m\) 等势。
+由 \(G_m\cong\prod_x \mathfrak S_{d_m(x)}\) 得 \(|G_m|=\prod_x d_m(x)!\)。证毕。
+\end{proof}
+
+\input{parts/thm__op-algebra-fold-fiber-normalizer-wreath}
+
+\input{parts/thm__op-algebra-fold-clean-ancilla-reversible-dilation}
+
+\endinput
+

@@ -1,0 +1,67 @@
+% Mismatch language: word complexity + Parry MME + cohomology obstruction.
+
+\paragraph{失配语言的词复杂度递推、极大熵态与上同调障碍}\label{par:fold-gauge-anomaly-mismatch-language-word-complexity}
+沿用定理 \ref{thm:fold-gauge-anomaly-g-support-sofic} 的有限型支撑 \(\Sigma_g\subset\{0,1\}^{\ZZ}\)。
+记其长度 \(n\) 的允许词集合为 \(\mathcal L_n(\Sigma_g)\)，并令
+\[
+N(n):=\#\mathcal L_n(\Sigma_g)\qquad(n\ge 1).
+\]
+
+\begin{proposition}[允许词计数的精确递推与指数谱分解]\label{prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence}
+对一切 \(n\ge 6\)，允许词计数满足线性递推
+\[
+\boxed{\ N(n)=N(n-1)+N(n-2)+N(n-4)+N(n-5)\ }.
+\]
+其初值可取为
+\[
+N(1)=2,\quad N(2)=4,\quad N(3)=8,\quad N(4)=14,\quad N(5)=25.
+\]
+令 \(\lambda>1\) 为定理 \ref{thm:fold-gauge-anomaly-g-support-sofic} 中多项式
+\(
+x^5-x^4-x^3-x-1
+\)
+的 Perron 实根。
+则存在常数 \(C>0\) 与 \(0<\beta<\lambda\) 使
+\[
+N(n)=C\,\lambda^{n}+O(\beta^{n}).
+\]
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:fold-gauge-anomaly-g-support-sofic}，\(\Sigma_g\) 为以禁块 \(0010,0100\) 定义的 \(3\)-步 SFT；
+因此其语言为一个正则对象，可由“记忆 \(3\)”的确定型有限自动机计数（transfer-matrix 方法；参见 \cite{LindMarcus1995,Kitchens1998SymbolicDynamics}）。
+对该自动机的可达态空间作最小化后得到一个有限维线性递推系统，其特征多项式的主因子即为
+\(
+x^5-x^4-x^3-x-1
+\)；
+从而 \(N(n)\) 满足所示五阶递推，并以 \(N(1),\dots,N(5)\) 唯一确定。
+\par
+谱分解部分由递推的特征根展开给出：主项由 Perron 根 \(\lambda\) 贡献，其余根的模严格小于 \(\lambda\)，故余项为 \(O(\beta^n)\)（可取 \(\beta\) 为其余特征根模的最大值）。
+证毕。
+\end{proof}
+
+\begin{corollary}[有限型支撑上的内禀唯一极大熵态]\label{cor:fold-gauge-anomaly-mismatch-language-intrinsic-ergodic}
+\(\Sigma_g\) 为不可约有限型子移位，因而存在唯一极大熵测度（Parry 测度）\(\mu_{\max}\)，并且 \((\Sigma_g,\sigma)\) 内禀可测。
+取一个右解析且 follower-separated 的呈示（例如定理 \ref{thm:fold-gauge-anomaly-g-support-sofic} 的三步 de Bruijn 呈示），即可将其视为右 Fischer cover 的可计算接口。
+该测度可由定理 \ref{thm:fold-gauge-anomaly-g-support-sofic} 的三步 de Bruijn 呈示邻接矩阵 \(A\) 的 Perron--Frobenius 本征结构显式给出：若 \(\lambda=\rho(A)\)、\(r,l\) 分别为右/左 Perron 向量并按 \(\langle l,r\rangle=1\) 归一化，则对任意允许边 \(i\to j\) 有 Parry 核
+\[
+P(i\to j)=\frac{A_{ij}r_j}{\lambda r_i},
+\]
+并由逐边取符号的 lift 求和得到柱集概率。
+\end{corollary}
+
+\begin{proposition}[失配标记的非 coboundary 性]\label{prop:fold-gauge-anomaly-mismatch-language-non-coboundary}
+在定理 \ref{thm:fold-gauge-anomaly-g-support-sofic} 的三步 de Bruijn 呈示上，把边的输出标记视为整数值函数 \(\gamma(e)\in\{0,1\}\)。
+则不存在顶点函数 \(h\) 使得对任意边 \(e:v\to w\) 成立
+\[
+\gamma(e)=h(w)-h(v).
+\]
+等价地，\(\gamma\) 在图上同调中定义了非零的 \(1\)-上同调类。
+\end{proposition}
+\begin{proof}
+若 \(\gamma\) 为 coboundary，则任意有向回路 \(C\) 上必有 \(\sum_{e\in C}\gamma(e)=0\)。
+但 \(\Sigma_g\) 含周期点 \(1^{\ZZ}\)，其在呈示图上对应于标记恒为 \(1\) 的回路；
+取其任意周期长度 \(n\) 的闭路段即得 \(\sum_{e\in C}\gamma(e)=n\neq 0\)，矛盾。
+证毕。
+\end{proof}
+
+\endinput

@@ -1,0 +1,592 @@
+% Auto-split to keep each TeX source < 600 lines.
+
+\subsubsection{纤维基态结构、冻结阈值与预言机容量：从压力谱线性化到矩谱对偶}\label{subsubsec:fold-fiber-groundstate-freezing-oracle-capacity}
+本节记录一组与具体折叠实现无关、仅依赖纤维多重度谱的通用结论。
+其核心是：一旦最大纤维与次大纤维在指数尺度上出现严格间隙，则高阶幂和压力谱在充分大阶上必进入线性“冻结相”；相应的 escort 测度在基态集合上出现指数集中。
+同一纤维谱亦决定了一个以侧信息（预言机比特）为资源的可逆容量曲线；该容量曲线与高阶碰撞矩谱之间满足精确的 Mellin--Stieltjes 双对偶。
+
+\paragraph{纤维幂和与压力谱}
+在分辨率 \(m\) 上，记折叠算子为 \(\Fold_m:\Omega_m\to X_m\)，并令纤维多重度函数
+\[
+d_m(x):=\bigl|\Fold_m^{-1}(x)\bigr|,
+\qquad x\in X_m.
+\]
+对整数 \(a\ge 1\) 定义幂和
+\[
+S_a(m):=\sum_{x\in X_m} d_m(x)^a,
+\]
+并假设压力极限
+\[
+P_a:=\lim_{m\to\infty}\frac{1}{m}\log S_a(m)
+\]
+对所有整数 \(a\ge 1\) 存在。
+此外，本文的稳定类型空间满足 \(|X_m|=F_{m+2}\)，从而
+\[
+\lim_{m\to\infty}\frac{1}{m}\log|X_m|=\log\varphi.
+\]
+
+令
+\[
+M_m:=\max_{x\in X_m} d_m(x),
+\qquad
+K_m:=\bigl|\{x\in X_m:\ d_m(x)=M_m\}\bigr|,
+\]
+并设指数极限存在
+\[
+\alpha_*:=\lim_{m\to\infty}\frac{1}{m}\log M_m,
+\qquad
+g_*:=\lim_{m\to\infty}\frac{1}{m}\log K_m.
+\]
+再令
+\[
+M_m^{(2)}:=\max\{d_m(x):\ d_m(x)<M_m\},
+\]
+并定义
+\[
+\alpha_*^{(2)}:=\limsup_{m\to\infty}\frac{1}{m}\log M_m^{(2)},
+\]
+其中若不存在次大纤维则约定 \(M_m^{(2)}:=1\)。
+
+\begin{theorem}[基态下界与全局上界]\label{thm:fold-pressure-groundstate-bounds}
+对任意整数 \(a\ge 1\) 有
+\[
+a\alpha_*+g_*\ \le\ P_a\ \le\ a\alpha_*+\log\varphi.
+\]
+\end{theorem}
+
+\begin{proof}
+由 \(S_a(m)\ge K_m M_m^a\) 得
+\[
+\frac{1}{m}\log S_a(m)\ge a\frac{1}{m}\log M_m+\frac{1}{m}\log K_m,
+\]
+令 \(m\to\infty\) 即得下界。
+另一方面 \(S_a(m)\le |X_m|M_m^a\)，故
+\[
+\frac{1}{m}\log S_a(m)\le a\frac{1}{m}\log M_m+\frac{1}{m}\log|X_m|,
+\]
+取极限并用 \(\lim_{m\to\infty}\frac1m\log|X_m|=\log\varphi\) 得上界。证毕。
+\end{proof}
+
+\begin{theorem}[冻结阈值与高阶线性化]\label{thm:fold-pressure-freezing-threshold}
+若存在严格基态间隙 \(\alpha_*^{(2)}<\alpha_*\)，并令
+\[
+a_{\mathrm c}:=\frac{\log\varphi-g_*}{\alpha_*-\alpha_*^{(2)}}\in[0,\infty),
+\]
+则对所有整数 \(a>a_{\mathrm c}\) 成立
+\[
+P_a=a\alpha_*+g_*.
+\]
+亦即：当矩阶超过阈值 \(a_{\mathrm c}\) 后，压力谱进入线性冻结相，其斜率锁定为 \(\alpha_*\)，截距锁定为 \(g_*\)。
+\end{theorem}
+
+\begin{proof}
+分解
+\[
+S_a(m)=K_m M_m^a+\sum_{d_m(x)<M_m} d_m(x)^a
+\le K_m M_m^a+|X_m|\,(M_m^{(2)})^a.
+\]
+取 \(\frac1m\log\) 并令 \(m\to\infty\)，得到
+\[
+P_a\le \max\{a\alpha_*+g_*,\ a\alpha_*^{(2)}+\log\varphi\}.
+\]
+当 \(a(\alpha_*-\alpha_*^{(2)})>\log\varphi-g_*\) 时，右端最大项为 \(a\alpha_*+g_*\)。
+与定理 \ref{thm:fold-pressure-groundstate-bounds} 的下界 \(P_a\ge a\alpha_*+g_*\) 合并即得等式。证毕。
+\end{proof}
+
+\paragraph{冻结相中的 escort 指数集中}
+对整数 \(a\ge 1\) 定义 escort 分布
+\[
+\pi_{m,a}(x):=\frac{d_m(x)^a}{S_a(m)},\qquad x\in X_m,
+\]
+并记基态集合 \(A_m^{\max}:=\{x\in X_m:\ d_m(x)=M_m\}\)。
+
+\begin{theorem}[基态质量的指数收敛]\label{thm:fold-escort-groundstate-concentration}
+在定理 \ref{thm:fold-pressure-freezing-threshold} 的假设下，若 \(a>a_{\mathrm c}\)，则
+\[
+\Delta(a):=a(\alpha_*-\alpha_*^{(2)})-(\log\varphi-g_*)>0
+\]
+且
+\[
+\pi_{m,a}(A_m^{\max})\ \ge\ 1-\exp\!\bigl(-m\Delta(a)+o(m)\bigr),
+\qquad m\to\infty.
+\]
+\end{theorem}
+
+\begin{proof}
+写 \(S_a(m)=K_mM_m^a+R_a(m)\)，其中
+\(
+R_a(m):=\sum_{d_m(x)<M_m} d_m(x)^a\le |X_m|(M_m^{(2)})^a
+\)。
+则
+\[
+1-\pi_{m,a}(A_m^{\max})
+=\frac{R_a(m)}{S_a(m)}
+\le \frac{|X_m|(M_m^{(2)})^a}{K_mM_m^a}.
+\]
+对右端取对数并除以 \(m\)，利用 \(\log|X_m|=m\log\varphi+o(m)\) 以及 \(\log K_m=mg_*+o(m)\)、\(\log M_m=m\alpha_*+o(m)\)、
+\(\log M_m^{(2)}\le m\alpha_*^{(2)}+o(m)\)，得到
+\[
+\log\bigl(1-\pi_{m,a}(A_m^{\max})\bigr)
+\le -m\Delta(a)+o(m),
+\]
+从而结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[冻结相的基态简并指数识别]\label{cor:fold-escort-minentropy-rate}
+若 min-entropy 率
+\[
+h_\infty(a):=\lim_{m\to\infty}\frac{1}{m}\Bigl(-\log\max_{x\in X_m}\pi_{m,a}(x)\Bigr)
+\]
+存在，则当 \(a>a_{\mathrm c}\) 时有
+\[
+h_\infty(a)=g_*.
+\]
+\end{corollary}
+
+\begin{proof}
+冻结相下 \(S_a(m)=K_mM_m^a\bigl(1+o(1)\bigr)\)。
+另一方面 \(\max_x\pi_{m,a}(x)=M_m^a/S_a(m)\)，故
+\[
+\max_x\pi_{m,a}(x)=\frac{1}{K_m}\bigl(1+o(1)\bigr).
+\]
+两端取 \(-\log\) 并除以 \(m\) 即得 \(h_\infty(a)=g_*\)。证毕。
+\end{proof}
+
+\paragraph{预言机容量：侧信息下的可逆微态数}
+将折叠视为信息损失通道 \(\Fold_m:\Omega_m\to X_m\)。
+给定整数 \(B\ge 0\)，称一对映射
+\[
+{\rm dec}:X_m\times\{0,1\}^B\to\Omega_m,\qquad
+{\rm enc}:\Omega_m\to\{0,1\}^B
+\]
+为 \(B\)-比特预言机反演机制，若存在集合 \(\mathcal{G}\subseteq\Omega_m\) 使得
+\[
+{\rm dec}\bigl(\Fold_m(\omega),{\rm enc}(\omega)\bigr)=\omega,\qquad \forall \omega\in\mathcal{G},
+\]
+并且对所有 \(x\in X_m\)、\(b\in\{0,1\}^B\) 都满足 \(\Fold_m({\rm dec}(x,b))=x\)（解码永不越纤维）。
+定义预言机容量
+\[
+\mathcal{C}_m(B):=\max_{({\rm enc},{\rm dec})}|\mathcal{G}|.
+\]
+
+\begin{theorem}[预言机容量的闭式表达]\label{thm:fold-oracle-capacity-closed-form}
+对任意整数 \(B\ge 0\)，有
+\[
+\mathcal{C}_m(B)=\sum_{x\in X_m}\min\bigl(d_m(x),2^B\bigr).
+\]
+从而在均匀微态输入（\(\omega\) 在 \(\Omega_m\) 上均匀）下，最优成功率为
+\[
+{\rm Succ}_m(B)=\frac{\mathcal{C}_m(B)}{2^m}.
+\]
+\end{theorem}
+
+\begin{proof}
+对固定 \(x\)，编码限制在纤维 \(\Fold_m^{-1}(x)\) 内对可逆集合 \(\mathcal{G}\cap \Fold_m^{-1}(x)\) 注入到 \(\{0,1\}^B\)，故其基数不超过 \(2^B\)；同时显然不超过纤维大小 \(d_m(x)\)。
+因此
+\[
+|\mathcal{G}|\le \sum_{x\in X_m}\min\bigl(d_m(x),2^B\bigr).
+\]
+反向构造可逐纤维实现该上界：对每个 \(x\) 任取 \(\min(d_m(x),2^B)\) 个纤维内微态并赋予互异码字，由此定义 \({\rm enc}\) 与 \({\rm dec}\) 即达等号。证毕。
+\end{proof}
+
+\begin{proposition}[Watatani 指数元的截断迹表示]\label{prop:fold-oracle-watatani-index-trace-formula}
+固定分辨率 \(m\) 并令
+\(
+\Fold_m:\Omega_m\to X_m
+\)
+为折叠映射。
+令
+\[
+A_m:=\CC^{\Omega_m},\qquad B_m:=\CC^{X_m},
+\qquad
+\iota_m:B_m\hookrightarrow A_m,\ (\iota_m g)(\omega):=g(\Fold_m(\omega)).
+\]
+在 \(B_m\) 上定义条件期望 \(E_m:A_m\to B_m\) 为纤维平均
+\[
+(E_m f)(x):=\frac{1}{d_m(x)}\sum_{\omega\in\Fold_m^{-1}(x)}f(\omega),
+\qquad d_m(x):=\card{\Fold_m^{-1}(x)}.
+\]
+令 \(\tau_m\) 为 \(A_m\) 上的规范迹态
+\(
+\tau_m(f):=2^{-m}\sum_{\omega\in\Omega_m}f(\omega)
+\)。
+则 \(E_m\) 具有有限 Watatani 指数，且其指数元在 \(B_m\) 中由
+\[
+\mathrm{IndW}(E_m)(x)=d_m(x)
+\]
+给出。
+对任意整数 \(B\ge 0\)，令
+\[
+\mathrm{IndW}_B:=\mathrm{IndW}(E_m)\wedge 2^B\in B_m,\qquad
+(\mathrm{IndW}_B)(x)=\min\bigl(d_m(x),2^B\bigr),
+\]
+其中“\(\wedge\)”表示在交换代数中的函数演算截断。
+则最优成功率满足严格恒等式
+\[
+\boxed{\;
+{\rm Succ}_m(B)
+=\tau_m\!\left(\iota_m\bigl(\mathrm{IndW}_B\cdot \mathrm{IndW}(E_m)^{-1}\bigr)\right)\;}
+\]
+并且容量计数可写为
+\[
+\mathcal{C}_m(B)
+=2^m\,\tau_m\!\left(\iota_m\bigl(\mathrm{IndW}_B\cdot \mathrm{IndW}(E_m)^{-1}\bigr)\right).
+\]
+\end{proposition}
+\begin{proof}
+对交换情形，\(E_m\) 的 Watatani 指数元等于纤维基数函数 \(d_m(\cdot)\)；
+此处亦可直接核对：\(B_m\) 在 \(A_m\) 中按 \(\iota_m\) 识别为纤维常值函数，而 \(E_m\) 的准基可取为每条纤维的标准基向量系，从而指数元在 \(x\)-纤维上给出系数 \(d_m(x)\)。
+\par
+将 \(\mathrm{IndW}_B\cdot \mathrm{IndW}^{-1}\) 视为 \(B_m\) 上函数 \(x\mapsto \min(d_m(x),2^B)/d_m(x)\)，并用 \(\tau_m(\iota_m g)=2^{-m}\sum_x d_m(x)g(x)\) 得
+\[
+\tau_m\!\left(\iota_m\bigl(\mathrm{IndW}_B\cdot \mathrm{IndW}^{-1}\bigr)\right)
+=\frac{1}{2^m}\sum_{x\in X_m}\min\bigl(d_m(x),2^B\bigr)
+=\frac{\mathcal{C}_m(B)}{2^m}
+={\rm Succ}_m(B),
+\]
+其中第二个等号为定理 \ref{thm:fold-oracle-capacity-closed-form} 的闭式表达。证毕。
+\end{proof}
+
+\begin{proposition}[预算约束下的变分刻画]\label{prop:fold-oracle-variational-projection-characterization}
+沿用命题 \ref{prop:fold-oracle-watatani-index-trace-formula} 的记号。
+令 \(\mathrm{Proj}(A_m)\) 表示 \(A_m\) 的投影集合（等价于 \(\Omega_m\) 的集合指示函数）。
+则对任意整数 \(B\ge 0\) 有严格等式
+\[
+\boxed{\;
+{\rm Succ}_m(B)
+=\max\Bigl\{\tau_m(P):\ P\in\mathrm{Proj}(A_m),\ E_m(P)\le 2^B\,\mathrm{IndW}(E_m)^{-1}\Bigr\}\; }.
+\]
+并且任一极大解 \(P^\star\) 满足逐纤维饱和：对每个 \(x\in X_m\)，若 \(d_m(x)\le 2^B\)，则 \(P^\star\) 在纤维 \(\Fold_m^{-1}(x)\) 上恒等于 \(1\)；
+若 \(d_m(x)>2^B\)，则 \(P^\star\) 在该纤维上取任意秩为 \(2^B\) 的子投影（等价于选择任意 \(2^B\) 个微态）。
+\end{proposition}
+\begin{proof}
+在交换代数 \(A_m=\CC^{\Omega_m}\) 中，每个投影 \(P\) 皆可写为 \(P=\mathbf 1_S\)（某个子集 \(S\subseteq\Omega_m\) 的指示函数）。
+此时对每个 \(x\in X_m\) 有
+\[
+E_m(P)(x)=\frac{\card{S\cap \Fold_m^{-1}(x)}}{d_m(x)}.
+\]
+另一方面，\(\mathrm{IndW}(E_m)^{-1}(x)=1/d_m(x)\)，故约束
+\(
+E_m(P)\le 2^B\,\mathrm{IndW}(E_m)^{-1}
+\)
+逐点等价于
+\(
+\card{S\cap \Fold_m^{-1}(x)}\le 2^B
+\)
+对所有 \(x\) 成立。
+\par
+在该逐纤维预算下，
+\(
+\tau_m(P)=2^{-m}\card{S}
+\)
+的最大化可逐纤维独立实现，并且每个纤维上的最大取值为 \(\min(d_m(x),2^B)\)。
+因此
+\[
+\max \tau_m(P)
+=\frac{1}{2^m}\sum_{x\in X_m}\min(d_m(x),2^B)
+={\rm Succ}_m(B)
+\]
+（最后一步用定理 \ref{thm:fold-oracle-capacity-closed-form}）。
+极大解的纤维内结构由饱和条件直接推出。证毕。
+\end{proof}
+
+\begin{theorem}[典型纤维指数膨胀下的零比例可恢复性]\label{thm:fold-oracle-capacity-vanishing-under-typical-exponential-fibers}
+沿用定理 \ref{thm:fold-oracle-capacity-closed-form} 的设定。
+令 \(\omega\sim\mathrm{Unif}(\Omega_m)\)，并记随机变量
+\[
+D_m:=d_m(\Fold_m(\omega)).
+\]
+则有表示
+\[
+{\rm Succ}_m(B)=\mathbb E\left[\min\!\left(1,\frac{2^B}{D_m}\right)\right].
+\]
+设存在常数 \(\alpha>0\) 使得
+\[
+\mathbb P\bigl(\log_2 D_m\ge \alpha m\bigr)\xrightarrow[m\to\infty]{}1.
+\]
+则对任意满足 \(B=o(m)\) 的侧信息预算序列 \(B=B(m)\)，有
+\[
+\frac{\mathcal C_m(B)}{2^m}={\rm Succ}_m(B)\xrightarrow[m\to\infty]{}0.
+\]
+更强地，若存在 \(\eta\in(0,1)\) 使
+\(
+\limsup_{m\to\infty}{\rm Succ}_m(B)\ge \eta
+\)，
+则必有
+\[
+B\ \ge\ \alpha m+\log_2\eta+o(1).
+\]
+\end{theorem}
+\begin{proof}
+对任意 \(B\ge 0\)，由定义
+\(
+{\rm Succ}_m(B)=\mathbb E\bigl[\min(1,2^B/D_m)\bigr]
+\)。
+令事件 \(E_m:=\{D_m\ge 2^{\alpha m}\}\)，则
+\[
+{\rm Succ}_m(B)
+\le \mathbb P(E_m^c)\cdot 1+\mathbb E\!\left[\frac{2^B}{D_m}\mathbf 1_{E_m}\right]
+\le \mathbb P(E_m^c)+2^{B-\alpha m}.
+\]
+在假设下 \(\mathbb P(E_m^c)\to 0\)；若 \(B=o(m)\) 则 \(2^{B-\alpha m}\to 0\)，故 \({\rm Succ}_m(B)\to 0\)。
+\par
+反之，若 \(\limsup_{m\to\infty}{\rm Succ}_m(B)\ge \eta\)，则由上式取上极限并用 \(\mathbb P(E_m^c)\to 0\) 得
+\(
+\eta\le \limsup_{m\to\infty}2^{B-\alpha m}
+\)，
+从而 \(B-\alpha m\ge \log_2\eta+o(1)\)。
+证毕。
+\end{proof}
+
+\paragraph{连续阈值化与直方图的可逆读出}
+把阈值从 \(2^B\) 连续化。对 \(T>0\) 定义
+\begin{equation}\label{eq:fold-oracle-capacity-continuous-threshold}
+\mathcal{C}_m(T):=\sum_{x\in X_m}\min\bigl(d_m(x),T\bigr),
+\end{equation}
+则 \(\mathcal{C}_m(2^B)=\mathcal{C}_m(B)\)。
+记纤维直方图
+\[
+N_{m,d}:=\#\{x\in X_m:\ d_m(x)=d\}\qquad(d\in\NN_{\ge 1}).
+\]
+
+\begin{proposition}[容量曲线的斜率跳跃完全刻画直方图]\label{prop:fold-oracle-capacity-slope-jumps-determine-histogram}
+函数 \(T\mapsto \mathcal{C}_m(T)\) 连续、分段线性且为凸函数。
+对任意正则点 \(T\notin\{d:\ N_{m,d}>0\}\)，其导数存在并满足
+\[
+\boxed{\;
+\mathcal{C}_m'(T)=\#\{x\in X_m:\ d_m(x)>T\}
+=\sum_{d>T}N_{m,d}.\;}
+\]
+并且对任意整数 \(d\ge 1\)，左右导数的跳跃量给出精确反演公式
+\[
+\boxed{\;
+N_{m,d}=\mathcal{C}_m'(d-0)-\mathcal{C}_m'(d+0).\;}
+\]
+因此 \(\mathcal{C}_m(\cdot)\) 作为 \(T\) 的函数完全决定多重集 \(\{d_m(x)\}_{x\in X_m}\)（等价地决定全部 \(N_{m,d}\)）。
+\end{proposition}
+\begin{proof}
+对单项函数 \(f_d(T):=\min(d,T)\)，当 \(T<d\) 时 \(f_d'(T)=1\)，当 \(T>d\) 时 \(f_d'(T)=0\)；在 \(T=d\) 处不可导且左右导数分别为 \(1,0\)。
+对有限和 \(\mathcal{C}_m(T)=\sum_x f_{d_m(x)}(T)\) 在正则点逐项求导得到
+\(
+\mathcal{C}_m'(T)=\sum_x \mathbf 1_{\{d_m(x)>T\}}
+\)。
+当 \(T\) 穿越整数 \(d\) 时，恰有 \(d_m(x)=d\) 的那些项导数从 \(1\) 跳到 \(0\)，故跳跃量为 \(N_{m,d}\)；从而反演式成立。
+连续性、分段线性与凸性由每个 \(f_d\) 的同类性质以及有限和保持这些性质得到。证毕。
+\end{proof}
+
+\input{subsubsec__fold-oracle-renyi-nonasymptotic}
+
+\begin{corollary}[全态可逆的比特阈值与渐近速率]\label{cor:fold-oracle-full-invertibility-threshold}
+令
+\(
+M_m:=\max_{x\in X_m} d_m(x)
+\)
+为分辨率 \(m\) 的最大纤维。
+则存在对所有微态皆可逆的 \(B\)-比特预言机反演机制（即 \({\rm Succ}_m(B)=1\)）当且仅当
+\begin{equation}\label{eq:fold-oracle-full-invertibility-threshold}
+B\ \ge\ \left\lceil \log_2 M_m\right\rceil.
+\end{equation}
+进一步，若极限 \(\alpha_*=\lim_{m\to\infty}\frac{1}{m}\log M_m\) 存在，则
+\[
+\lim_{m\to\infty}\frac{1}{m}\left\lceil \log_2 M_m\right\rceil=\frac{\alpha_*}{\log 2}.
+\]
+在本文的 Fibonacci 折叠口径下，由最大纤维闭式 \(M_m=D_m\)（定理 \ref{thm:pom-max-fiber}）立得
+\[
+\lim_{m\to\infty}\frac{1}{m}\left\lceil \log_2 M_m\right\rceil=\frac12\log_2\varphi.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:fold-oracle-capacity-closed-form}，
+\({\rm Succ}_m(B)=1\) 等价于 \(\mathcal{C}_m(B)=2^m\)，亦等价于对每个 \(x\in X_m\) 都有 \(\min(d_m(x),2^B)=d_m(x)\)，即 \(2^B\ge M_m\)。
+取二进制对数并取整得到 \eqref{eq:fold-oracle-full-invertibility-threshold}。
+对极限速率，注意
+\(
+0\le \lceil \log_2 M_m\rceil-\log_2 M_m<1
+\)，两端除以 \(m\) 并令 \(m\to\infty\) 即得
+\(\lim \frac{1}{m}\lceil \log_2 M_m\rceil=\lim \frac{1}{m}\log_2 M_m=\alpha_*/\log 2\)。
+最后一式由 \(M_m=D_m\) 的闭式增长率 \(\frac{1}{m}\log D_m\to \frac12\log\varphi\) 得到。证毕。
+\end{proof}
+
+\begin{corollary}[纯鸽巢下界：无结构条件下的必要比特率]\label{cor:fold-oracle-pigeonhole-bound}
+若要求 \({\rm Succ}_m(B)\ge 1-\varepsilon\)，则必有
+\[
+B\ \ge\ m-\log_2|X_m|+\log_2(1-\varepsilon).
+\]
+在 \(|X_m|\sim \varphi^m\) 下，这给出渐近必要比特率下界
+\[
+\liminf_{m\to\infty}\frac{B}{m}\ge \log_2\Bigl(\frac{2}{\varphi}\Bigr).
+\]
+\end{corollary}
+
+\begin{proof}
+由 \(\min(d_m(x),2^B)\le 2^B\) 得 \(\mathcal{C}_m(B)\le |X_m|2^B\)，于是
+\(
+{\rm Succ}_m(B)=\mathcal{C}_m(B)/2^m\le |X_m|2^{B-m}
+\)。
+若 \({\rm Succ}_m(B)\ge 1-\varepsilon\)，则 \(1-\varepsilon\le |X_m|2^{B-m}\)，整理即得第一式。
+第二式由 \(\log_2|X_m|=m\log_2\varphi+o(m)\) 推出。证毕。
+\end{proof}
+
+\paragraph{容量的双测度分解与矩谱对偶}
+令 \(\mu_m\) 为推前分布 \(\mu_m(x):=d_m(x)/2^m\)，并令 \(u_m\) 为稳定层均匀分布 \(u_m(x):=1/|X_m|\)。
+设阈值 \(T:=2^B\)。
+
+\begin{proposition}[容量的双测度恒等式]\label{prop:fold-oracle-capacity-bimeasure-identity}
+有严格恒等式
+\[
+\frac{\mathcal{C}_m(B)}{2^m}
+=\mu_m\bigl(\{x\in X_m:\ d_m(x)\le 2^B\}\bigr)
+\;+\;2^{B-m}|X_m|\,u_m\bigl(\{x\in X_m:\ d_m(x)>2^B\}\bigr),
+\]
+其中 \(\mu_m(E):=\sum_{x\in E}\mu_m(x)\)、\(u_m(E):=\sum_{x\in E}u_m(x)\)。
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:fold-oracle-capacity-closed-form}，
+\[
+\mathcal{C}_m(B)=\sum_{d_m(x)\le T} d_m(x)+\sum_{d_m(x)>T}T.
+\]
+第一项除以 \(2^m\) 即为 \(\sum_{d_m(x)\le T}\mu_m(x)=\mu_m(\{x\in X_m:\ d_m(x)\le T\})\)。
+第二项为 \(T\cdot|\{x\in X_m:\ d_m(x)>T\}|=2^B|X_m|\,u_m(\{x\in X_m:\ d_m(x)>T\})\)，再除以 \(2^m\) 得结论。证毕。
+\end{proof}
+
+\begin{definition}[尾计数函数与连续容量曲线]\label{def:fold-capacity-tail}
+对固定 \(m\) 定义尾计数函数
+\[
+N_m(t):=\bigl|\{x\in X_m:\ d_m(x)\ge t\}\bigr|,\qquad t\ge 0,
+\]
+以及连续化容量曲线
+\[
+\mathcal{C}_m^{\mathrm{cont}}(T):=\sum_{x\in X_m}\min\bigl(d_m(x),T\bigr),\qquad T\ge 0.
+\]
+\end{definition}
+
+\begin{proposition}[容量—尾函数等价]\label{prop:fold-capacity-tail-equivalence}
+对所有 \(T\ge 0\) 有严格恒等式
+\[
+\mathcal{C}_m^{\mathrm{cont}}(T)=\int_{0}^{T} N_m(t)\,\dd t.
+\]
+并且 \(N_m(t)\) 在几乎处处意义下可由 \(\frac{\dd}{\dd T}\mathcal{C}_m^{\mathrm{cont}}(T)\) 恢复。
+\end{proposition}
+
+\begin{proof}
+利用恒等式 \(\min(d,T)=\int_{0}^{T}\ind_{\{t\le d\}}\dd t\)，对 \(x\) 求和并交换求和与积分得
+\[
+\mathcal{C}_m^{\mathrm{cont}}(T)=\int_{0}^{T}\sum_{x\in X_m}\ind_{\{t\le d_m(x)\}}\dd t
+=\int_{0}^{T}N_m(t)\,\dd t.
+\]
+由于 \(N_m\) 为阶梯函数，\(\mathcal{C}_m^{\mathrm{cont}}\) 在几乎处处可微且其导数等于 \(N_m\)。证毕。
+\end{proof}
+
+\begin{proposition}[矩谱的 Mellin--Stieltjes 表达]\label{prop:fold-moment-mellin-stieltjes}
+对任意实 \(q>0\) 有严格恒等式
+\[
+S_q(m):=\sum_{x\in X_m} d_m(x)^q
+=q\int_{0}^{\infty} t^{q-1}N_m(t)\,\dd t,
+\]
+其中积分可按 Riemann--Stieltjes 解释（此处 \(N_m\) 为阶梯函数，积分等价于有限和）。
+\end{proposition}
+
+\begin{proof}
+对每个 \(d\ge 0\) 有 \(d^q=q\int_{0}^{d}t^{q-1}\dd t\)。
+据此
+\[
+\sum_{x\in X_m}d_m(x)^q
+=q\sum_{x\in X_m}\int_{0}^{d_m(x)} t^{q-1}\dd t
+=q\int_{0}^{\infty} t^{q-1}\Bigl|\{x:\ d_m(x)\ge t\}\Bigr|\,\dd t,
+\]
+即所示公式。证毕。
+\end{proof}
+
+\begin{corollary}[完备性：容量曲线与矩谱互为充分统计量]\label{cor:fold-capacity-moment-completeness}
+给定 \(\mathcal{C}_m^{\mathrm{cont}}(\cdot)\) 等价于给定 \(N_m(\cdot)\)，从而由命题 \ref{prop:fold-moment-mellin-stieltjes} 唯一确定全部矩谱 \(\{S_q(m)\}_{q>0}\)。
+反之，若已知足够丰富的矩谱并可重建 \(N_m\)，则 \(\mathcal{C}_m^{\mathrm{cont}}\) 亦可唯一恢复（命题 \ref{prop:fold-capacity-tail-equivalence}）。
+\end{corollary}
+
+\input{subsubsec__fold-fiber-groundstate-freezing-oracle-capacity-part2}
+
+\begin{proposition}[负阶幂和的容量表示与二进夹逼]\label{prop:fold-negative-moments-capacity-mellin}
+对任意实 \(p>0\) 有严格恒等式
+\[
+\sum_{x\in X_m} d_m(x)^{-p}
+=
+-p|X_m|+p(p+1)\int_{1}^{\infty}\mathcal{C}_m^{\mathrm{cont}}(T)\,T^{-p-2}\,\dd T.
+\]
+特别地，对整数 \(g\ge 2\)，取 \(p:=2g-2\) 并记
+\(
+Z_m(\Sigma_g):=\sum_{x\in X_m}d_m(x)^{2-2g}=\sum_x d_m(x)^{-p}
+\)，则上述恒等式给出 \(Z_m(\Sigma_g)\) 的容量表述。
+\par
+进一步，令整数 \(B\ge 0\) 上的二进容量为
+\[
+\mathcal{C}_m(B):=\mathcal{C}_m^{\mathrm{cont}}(2^B)=\sum_{x\in X_m}\min\bigl(d_m(x),2^B\bigr),
+\]
+并令
+\[
+A_p:=p\Bigl(1-2^{-(p+1)}\Bigr).
+\]
+则成立双侧夹逼
+\[
+-p|X_m|+A_p\sum_{B\ge 0}2^{-B(p+1)}\,\mathcal{C}_m(B)
+\ \le\
+\sum_{x\in X_m} d_m(x)^{-p}
+\ \le\
+-p|X_m|+A_p\sum_{B\ge 0}2^{-B(p+1)}\,\mathcal{C}_m(B+1).
+\]
+\end{proposition}
+\begin{proof}
+对每个 \(d\ge 1\) 有
+\(
+d^{-p}=p\int_{d}^{\infty}t^{-p-1}\dd t
+\)，
+故交换求和与积分得
+\[
+\sum_x d_m(x)^{-p}
+=p\int_{1}^{\infty}N_m(t)\,t^{-p-1}\,\dd t.
+\]
+由命题 \ref{prop:fold-capacity-tail-equivalence}，\(\mathcal{C}_m^{\mathrm{cont}}(T)=\int_{0}^{T}N_m(t)\dd t\)。
+对 \(u(T)=\mathcal{C}_m^{\mathrm{cont}}(T)\)、\(v(T)=T^{-p-1}\) 分部积分，并用 \(u(1)=|X_m|\)、\(\lim_{T\to\infty}u(T)\,T^{-p-1}=0\)（因为 \(u(T)\le |X_m|T\) 且 \(p>0\)）得到第一式。
+\par
+对二侧夹逼，将积分拆分为 \(\sum_{B\ge 0}\int_{2^B}^{2^{B+1}}\cdots\)，并用 \(\mathcal{C}_m^{\mathrm{cont}}\) 的单调性在每个二进区间内以端点容量上下界夹逼：
+\[
+\int_{2^B}^{2^{B+1}}\mathcal{C}_m^{\mathrm{cont}}(T)\,T^{-p-2}\dd T
+\in
+\left[\mathcal{C}_m(B),\ \mathcal{C}_m(B+1)\right]\cdot \int_{2^B}^{2^{B+1}}T^{-p-2}\dd T.
+\]
+而
+\(
+\int_{2^B}^{2^{B+1}}T^{-p-2}\dd T
+=\frac{1-2^{-(p+1)}}{p+1}\,2^{-B(p+1)}
+\)。
+代入并乘以 \(p(p+1)\) 得到所示夹逼，其中系数即为 \(A_p\)。证毕。
+\end{proof}
+
+\begin{corollary}[属二配分函数控制的反向 KL 上界]\label{cor:fold-reversekl-controlled-by-genus2-partition}
+令 \(U_m=\mathrm{Unif}(X_m)\) 且 \(w_m(x)=d_m(x)/2^m\) 为折叠推前分布。
+则有不等式
+\[
+D_{\mathrm{KL}}(U_m\|w_m)
+\le
+m\log 2-\frac{3}{2}\log|X_m|+\frac{1}{2}\log Z_m(\Sigma_2),
+\qquad
+Z_m(\Sigma_2)=\sum_{x\in X_m}d_m(x)^{-2}.
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-reverse-kl-bound-by-dispersion}，
+\(
+D_{\mathrm{KL}}(U_m\|w_m)\le \log\mathfrak{D}(w_m)
+\)，其中
+\[
+\mathfrak{D}(w_m)=\frac{1}{|X_m|^2}\sum_{x\in X_m}\frac{1}{w_m(x)}
+=\frac{2^m}{|X_m|^2}\sum_{x\in X_m}\frac{1}{d_m(x)}.
+\]
+由 Cauchy--Schwarz 不等式，
+\(
+\sum_x d_m(x)^{-1}\le \sqrt{|X_m|\sum_x d_m(x)^{-2}}=\sqrt{|X_m|\,Z_m(\Sigma_2)}
+\)。
+代入并取对数得到结论。证毕。
+\end{proof}
+
+\endinput
+

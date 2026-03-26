@@ -1,0 +1,328 @@
+% Spectral curve and Galois phenomena for the real-input-40 arity-charge factor P_7.
+% (LaTeX content intentionally Chinese; code/scripts remain English-only by convention.)
+
+\subsubsection{非平凡谱因子与谱曲线的算术几何}\label{app:real-input-40-arity-charge-spectral-curve}
+定理 \ref{thm:real-input-40-arity-charge-det-closed} 将真实输入核的 arity-charge 加权谱约化到一个七次代数方程
+\(
+P_7(\Lambda,q)=0
+\)。
+该因子不仅控制 \(q>0\) 时的 Perron 根分支 \(\lambda(q)=\rho(M(q))\)，亦给出谱曲线在 \(q\)-方向投影的分歧结构与相应的伽罗瓦一般性。
+在一份内部审计文档中，与该因子对应的谱因子分解与 \(\Lambda\)-判别式恒等式亦以另一编号体系记为命题 \(12.112\)（见 \cite{Internal2026ChiTwistedZetaSeventhInterfaceProp12112}）。
+下述结论均可由计算代数数论的标准算法复核；可审计复现脚本见
+\path{scripts/exp_sync_kernel_real_input_40_p7_spectral_curve_galois_audit.py}。
+
+\begin{theorem}[\texorpdfstring{$P_7(\Lambda,q)$}{P7(Lambda,q)} 的泛伽罗瓦群为 \texorpdfstring{$S_7$}{S7}]\label{thm:real-input-40-p7-generic-galois-s7}
+沿用定理 \ref{thm:real-input-40-arity-charge-det-closed} 的记号，将 \(P_7(\Lambda,q)\in\QQ(q)[\Lambda]\) 视为关于 \(\Lambda\) 的七次多项式。
+则其泛伽罗瓦群满足
+\[
+\Gal\bigl(P_7(\Lambda,q)/\QQ(q)\bigr)\cong S_7.
+\]
+并且除去一个 Hilbert 细集以外，对几乎所有 \(q_0\in\QQ\) 均有
+\[
+\Gal\bigl(P_7(\Lambda,q_0)/\QQ\bigr)\cong S_7.
+\]
+\end{theorem}
+\begin{proof}
+取特化 \(q_0=2\)，并记
+\[
+P_7(\Lambda,2)=\Lambda^7-2\Lambda^6-9\Lambda^5+12\Lambda^4+17\Lambda^3-17\Lambda^2+10\Lambda-2\in\ZZ[\Lambda].
+\]
+对素数 \(p\nmid \Disc\bigl(P_7(\Lambda,2)\bigr)\)，由 Dedekind 分解定理，模 \(p\) 的不可约因子次数分解给出 Frobenius 元在七个根上的循环分解型。
+直接验算可得模 \(23\) 的约化在 \(\FF_{23}[\Lambda]\) 中不可约，故在
+\(
+G_2:=\Gal\bigl(P_7(\Lambda,2)/\QQ\bigr)\subset S_7
+\)
+中存在一个 \(7\)-循环。
+\par
+另一方面，判别式可显式分解为
+\[
+\Disc\bigl(P_7(\Lambda,2)\bigr)=2^3\cdot 3^2\cdot 5\cdot 7\cdot 349\cdot 153607,
+\]
+从而 \(v_5(\Disc)=1\)，即素数 \(5\) 在分裂域中恰为一次分歧。
+同时在 \(\FF_5\) 上有同余分解
+\[
+P_7(\Lambda,2)\equiv (\Lambda-2)(\Lambda-1)^2\bigl(\Lambda^4+2\Lambda^3-\Lambda^2+1\bigr)\pmod 5,
+\]
+因此在模 \(5\) 的约化中恰出现一个二重线性因子且其余因子均平方自由。
+结合 \(v_5(\Disc)=1\) 可知：对应的惯性群在七个根上诱导一个换位。
+于是 \(G_2\) 同时含有 \(7\)-循环与换位，从而必为 \(S_7\)。
+\par
+由于 \(P_7(\Lambda,2)\) 可分，伽罗瓦群特化定理给出
+\(
+\Gal\bigl(P_7(\Lambda,2)/\QQ\bigr)
+\)
+可嵌入泛伽罗瓦群
+\(
+\Gal\bigl(P_7(\Lambda,q)/\QQ(q)\bigr)
+\)
+（将后者视为 \(S_7\) 的一个子群）。
+既然存在一处特化达到 \(S_7\)，便推出泛伽罗瓦群亦为 \(S_7\)。
+最后由 Hilbert 不可约性定理得到“除细集外”的专化结论。证毕。
+\end{proof}
+
+\begin{theorem}[谱曲线的超椭圆模型与亏格]\label{thm:real-input-40-p7-hyperelliptic-genus4}
+令 \(C_0\subset\mathbb{A}^2_{\Lambda,q}\) 为仿射曲线
+\[
+C_0:\quad P_7(\Lambda,q)=0.
+\]
+则 \(C_0\) 在 \(\QQ\) 上双有理等价于一条亏格为 \(4\) 的超椭圆曲线
+\[
+C:\quad Y^2=f(\Lambda),
+\]
+其中
+\[
+\begin{aligned}
+f(\Lambda)=\;&\Lambda^{10}+4\Lambda^9-6\Lambda^8+26\Lambda^7+27\Lambda^6-76\Lambda^5\\
+&\qquad\qquad\qquad\quad +63\Lambda^4-20\Lambda^3+11\Lambda^2-6\Lambda+1\in\ZZ[\Lambda].
+\end{aligned}
+\]
+并且 \(C\) 的标准射影光滑模型为亏格 \(4\) 曲线。
+\end{theorem}
+\begin{proof}
+将 \(P_7(\Lambda,q)\) 视为关于 \(q\) 的二次多项式，写作
+\[
+P_7(\Lambda,q)=A(\Lambda)q^2+B(\Lambda)q+C(\Lambda),
+\]
+其中
+\[
+\begin{aligned}
+A(\Lambda)&=6\Lambda^3-4\Lambda^2+4\Lambda-1,\\
+B(\Lambda)&=-5\Lambda^5+6\Lambda^4-3\Lambda^3-\Lambda^2-3\Lambda+1,\\
+C(\Lambda)&=\Lambda^7-2\Lambda^6+\Lambda^5-\Lambda^3+\Lambda^2.
+\end{aligned}
+\]
+令
+\(
+Y:=2A(\Lambda)q+B(\Lambda)
+\)，
+由二次方程判别式恒等式得
+\[
+Y^2=B(\Lambda)^2-4A(\Lambda)C(\Lambda)=f(\Lambda).
+\]
+反之，若 \((\Lambda,Y)\) 满足 \(Y^2=f(\Lambda)\) 且 \(A(\Lambda)\neq 0\)，则
+\[
+q=\frac{-B(\Lambda)\pm Y}{2A(\Lambda)}
+\]
+满足 \(P_7(\Lambda,q)=0\)。
+因此 \(C_0\) 与 \(C\) 在 \(\QQ\) 上双有理等价。
+\par
+进一步计算可得
+\[
+\Disc\bigl(f\bigr)=-2^{25}\cdot 3^5\cdot 5^2\cdot 929\cdot 12777599761\neq 0,
+\]
+从而 \(f\) 无重根，\(C\) 的射影模型光滑。
+对超椭圆曲线 \(Y^2=f(\Lambda)\) 且 \(\deg f=2g+2=10\) 的标准事实给出 \(g=4\)。证毕。
+\end{proof}
+
+\begin{proposition}[分支十次多项式的满对称伽罗瓦群]\label{prop:real-input-40-p7-branch10-galois-s10}
+令 \(f(\Lambda)\) 如定理 \ref{thm:real-input-40-p7-hyperelliptic-genus4}。
+则
+\[
+\Gal\bigl(f(\Lambda)/\QQ\bigr)\cong S_{10}.
+\]
+\end{proposition}
+\begin{proof}[证明要点]
+模 \(19\) 的约化 \(f(\Lambda)\in\FF_{19}[\Lambda]\) 不可约，故 \(f\) 在 \(\QQ\) 上不可约，从而伽罗瓦群在十个根上作传递作用。
+并且存在素数 \(101\) 使得 \(f\bmod 101\) 的分解型为 \((7,2,1)\)，对应 Frobenius 元含一条 \(7\)-循环；
+由此可知该传递子群不保任何非平凡分块系统，因而为本原群。
+另一方面，由上式判别式分解可知 \(v_{929}(\Disc(f))=1\)，并且模 \(929\) 时 \(\gcd(f,f')\) 的次数为 \(1\)，故惯性群包含一换位。
+本原子群若含换位则必为全对称群，遂 \(\Gal(f/\QQ)\cong S_{10}\)。证毕。
+\end{proof}
+
+\begin{proposition}[Jacobian 的 \texorpdfstring{$2$}{2}-挠点消失]\label{prop:real-input-40-p7-jacobian-2torsion}
+令 \(C:\ Y^2=f(\Lambda)\) 且 \(J:=\Jac(C)\)。
+则
+\[
+J(\QQ)[2]=0.
+\]
+\end{proposition}
+\begin{proof}
+当 \(\deg f=2g+2\) 时，\(C\to\PP^1_\Lambda\) 的分支点为 \(f\) 的十个有限根；
+标准描述给出 \(J[2]\) 同构于“分支点集合的偶子集模补集”的 \(\FF_2\)-向量空间，维数为 \(2g=8\)。
+在该模型下，绝对伽罗瓦群经由对十个分支点的置换作用于 \(J[2]\)。
+由命题 \ref{prop:real-input-40-p7-branch10-galois-s10}，该置换像为 \(S_{10}\)。
+在自然置换表示下，\(S_{10}\) 的不变向量仅由全 \(1\) 向量生成；
+而在“偶和子空间再模去全 \(1\)”之后，不变子空间为零。
+从而
+\(
+J(\QQ)[2]=J[2]^{\Gal(\overline{\QQ}/\QQ)}=0
+\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[绝对单性与端同态环]\label{cor:real-input-40-p7-jacobian-endoZ}
+沿用上述记号。
+则 \(J=\Jac(C)\) 在 \(\overline{\QQ}\) 上绝对单，并且
+\[
+\End_{\overline{\QQ}}(J)=\ZZ.
+\]
+\end{corollary}
+\begin{proof}[证明要点]
+由命题 \ref{prop:real-input-40-p7-branch10-galois-s10}，\(f\) 在 \(\QQ\) 上不可约且其伽罗瓦群为 \(S_{10}\)。
+适用 Zarhin 关于超椭圆 Jacobian 的一般定理：当 \(C:\ y^2=f(x)\) 且 \(f\) 不可约、\(\Gal(f)\in\{S_n,A_n\}\)（此处 \(n=2g+2=10\)）时，
+\(\End_{\overline{\QQ}}(\Jac(C))=\ZZ\)，并推出 \(\Jac(C)\) 绝对单。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$\Lambda$}{Lambda}-判别式分歧多项式的 \texorpdfstring{$S_{17}$}{S17} 现象]\label{thm:real-input-40-p7-discriminant-branch-s17}
+将 \(P_7(\Lambda,q)\) 视为关于 \(\Lambda\) 的七次多项式，则其 \(\Lambda\)-判别式满足恒等式
+\[
+\Disc_{\Lambda}\bigl(P_7(\Lambda,q)\bigr)=-4q\,D(q),
+\]
+其中
+\[
+\begin{aligned}
+D(q)=\;&673920q^{17}-8807616q^{16}-19218432q^{15}+103232785q^{14}+148072644q^{13}\\
+&-579792342q^{12}-358011996q^{11}+1846795172q^{10}-434645304q^{9}-2676443029q^{8}\\
+&+3188769377q^{7}-1494031454q^{6}+306917977q^{5}-22426584q^{4}-1368265q^{3}\\
+&+281543q^{2}-8113q-283\in\ZZ[q].
+\end{aligned}
+\]
+记 \(D_{17}(q):=D(q)\)。
+并且
+\[
+\Gal\bigl(D(q)/\QQ\bigr)\cong S_{17}.
+\]
+因此，投影 \(C_0\to\PP^1_q\) 的有限分支值集合在 \(\overline{\QQ}\) 上由 \(q=0\) 与 \(D(q)=0\) 的 \(17\) 个共轭根构成；
+并且这 \(17\) 个分支值形成一条单一的 \(S_{17}\)-轨道。
+\end{theorem}
+\begin{proof}
+判别式恒等式可由结果式定义直接计算：将 \(P_7(\Lambda,q)\) 视为 \(\ZZ[q]\)-系数的 \(\Lambda\)-多项式，计算 \(\Disc_{\Lambda}(P_7)\in\ZZ[q]\) 并在 \(\ZZ[q]\) 中因式分解，即得所示 \(-4qD(q)\) 形式与 \(D(q)\) 的显式系数。
+\par
+记
+\(
+G:=\Gal\bigl(D(q)/\QQ\bigr)\subset S_{17}
+\)。
+在 \(\FF_{157}[q]\) 上可验算 \(D(q)\) 保持不可约，从而 \(D\) 在 \(\QQ\) 上不可约，并且 \(G\) 在 \(17\) 个根上作传递作用。
+对不分歧素数 \(p\)，Dedekind 分解定理说明：模 \(p\) 的因子次数分解给出 Frobenius 元在 \(17\) 个根上的循环分解型。
+由于 \(157\) 处的不可约性对应循环型 \((17)\)，故 \(G\) 含有一个 \(17\)-循环。
+\par
+另一方面，模 \(29\) 时有平方自由分解
+\[
+D(q)\equiv \bigl(q^3+2q^2-12q+3\bigr)\cdot g_{14}(q)\pmod{29},
+\]
+其中 \(g_{14}(q)\in\FF_{29}[q]\) 为不可约 \(14\) 次因子。
+因此在 \(G\) 中存在一个 Frobenius 元，其循环分解型为 \((3)(14)\)。
+该置换无不动点但并非 \(17\)-循环。
+\par
+由于 \(17\) 为素数，含 \(17\)-循环的传递子群必为本原群。
+Burnside 关于素数次数传递群的分类断言：若 \(H\subset S_p\) 为次数 \(p\) 的传递子群，则要么 \(H\) 可解并嵌入 \(\mathrm{AGL}(1,p)\)，要么 \(H\) 含有 \(A_p\)。
+对 \(\mathrm{AGL}(1,17)\) 的自然作用，任何无不动点元素必为平移，故其循环型只能为 \((17)\)；
+而 \(G\) 中存在循环型 \((3)(14)\) 的无不动点元素，因而 \(G\) 不可能嵌入 \(\mathrm{AGL}(1,17)\)，于是 \(G\supset A_{17}\)。
+\par
+最后，循环型 \((3)(14)\) 为奇置换（\(14\)-循环为奇置换而 \(3\)-循环为偶置换），从而 \(G\nsubseteq A_{17}\)。
+结合 \(A_{17}\subseteq G\subseteq S_{17}\)，得到 \(G=S_{17}\)。
+关于有限分支集合的陈述由 \(\Disc_{\Lambda}(P_7)=-4qD(q)\) 直接推出：有限分支值恰为 \(q=0\) 及 \(D(q)=0\) 的根。证毕。
+\end{proof}
+
+\begin{theorem}[谱曲线的射影闭包、分歧结构与无穷远奇点]\label{thm:real-input-40-p7-projective-branch-genus-tacnode}
+设 \(\overline C\subset \PP^1_{\Lambda}\times \PP^1_{q}\) 为由方程 \(P_7(\Lambda,q)=0\) 定义的射影闭包，并令 \(C\) 为其规范化。
+记投影 \(\pi:C\to\PP^1_{q}\) 为第二坐标投影的提升。
+则 \(C\) 为光滑射影曲线，并满足如下性质。
+\begin{itemize}
+  \item 有限分支值集合为
+  \[
+  B_{\mathrm{fin}}
+  :=\{q\in\overline{\QQ}:\ \Disc_{\Lambda}(P_7(\Lambda,q))=0\}
+  =\{0\}\cup\{D(q)=0\},
+  \]
+  其中 \(\{D(q)=0\}\) 由 \(17\) 个互异点构成，且 \(B_{\mathrm{fin}}\) 中每一点均为单分歧值。
+  \item 在 \(q=\infty\) 的纤维上，\(\pi\) 恰有两点分歧，分歧指标均为 \(2\)；其余三点非分歧。
+  等价地，\(\pi\) 在 \(q=\infty\) 的分歧型为 \((2,2,1,1,1)\)。
+  \item 曲线 \(\overline C\) 在点 \((\Lambda,q)=(\infty,\infty)\) 处有且仅有一个奇点。
+  在局部坐标 \(x=\Lambda^{-1}\)、\(t=q^{-1}\) 下，清分母后的局部方程
+  \[
+  H(x,t):=x^{7}t^{2}\,P_7(1/x,1/t)\in\ZZ[x,t]
+  \]
+  的权初等部分（取 \(\deg x=1,\ \deg t=2\)）为
+  \[
+  \mathrm{in}(H)=t^{2}-5tx^{2}+6x^{4}=(t-2x^{2})(t-3x^{2}),
+  \]
+  因而该奇点为两条光滑分支二阶相切的 tacnode，\(\delta\)-不变量为 \(2\)。
+  \item \(C\) 的几何亏格为 \(g(C)=4\)。
+\end{itemize}
+\end{theorem}
+\begin{proof}
+由 \(\Disc_{\Lambda}\bigl(P_7(\Lambda,q)\bigr)=-4qD(q)\) 可知：对任意 \(q_0\in\overline{\QQ}\)，多项式 \(P_7(\Lambda,q_0)\) 关于 \(\Lambda\) 存在重根当且仅当 \(q_0\in B_{\mathrm{fin}}\)。
+又由定理 \ref{thm:real-input-40-p7-discriminant-branch-s17}，\(D\) 在 \(\QQ\) 上不可约且可分，故 \(D\) 在 \(\overline{\QQ}\) 上无重根；从而 \(qD(q)\) 为平方自由多项式。
+\par
+设 \(\overline C\) 在仿射片 \(\mathbb{A}^1_{\Lambda}\times\mathbb{A}^1_{q}\) 上有奇点 \((\Lambda_0,q_0)\)。
+则需同时满足
+\[
+P_7(\Lambda_0,q_0)=\partial_{\Lambda}P_7(\Lambda_0,q_0)=\partial_{q}P_7(\Lambda_0,q_0)=0.
+\]
+由 \(\partial_{\Lambda}P_7(\Lambda_0,q_0)=0\) 且 \(P_7(\Lambda_0,q_0)=0\) 得 \(q_0\in B_{\mathrm{fin}}\)。
+若再有 \(\partial_{q}P_7(\Lambda_0,q_0)=0\)，则该重根在 \(q\)-方向上将以更高阶持续，等价地 \(\Disc_{\Lambda}(P_7)\) 在 \(q=q_0\) 处至少二重消失，与 \(qD(q)\) 的平方自由性矛盾。
+因此仿射片无奇点，并且对每个 \(q_0\in B_{\mathrm{fin}}\)，纤维中恰有一对谱根发生简单并合，从而 \(q_0\) 为单分歧值。
+\par
+接着分析无穷远处。
+在局部坐标 \(x=\Lambda^{-1}\)、\(t=q^{-1}\) 下，清分母得到
+\[
+H(x,t)=t^{2}x^{5}-t^{2}x^{4}+t^{2}x^{2}-2t^{2}x+t^{2}+t x^{7}-3t x^{6}-t x^{5}-3t x^{4}+6t x^{3}-5t x^{2}-x^{7}+4x^{6}-4x^{5}+6x^{4}.
+\]
+可见 \(H(0,0)=H_x(0,0)=H_t(0,0)=0\)，故 \((x,t)=(0,0)\) 为 \(\overline C\) 的奇点。
+按权重 \(\deg x=1,\deg t=2\) 取初等部分，得到
+\(
+\mathrm{in}(H)=t^{2}-5tx^{2}+6x^{4}=(t-2x^{2})(t-3x^{2})
+\)，
+从而该奇点具有两条光滑分支 \(t=2x^{2}+\cdots\) 与 \(t=3x^{2}+\cdots\)，并在二阶处相切，故为 tacnode。
+由交数计算
+\[
+\dim_{\overline{\QQ}}\ \overline{\QQ}[[x,t]]/(t-2x^{2},\,t-3x^{2})
+\cong
+\dim_{\overline{\QQ}}\ \overline{\QQ}[[x]]/(x^{2})=2
+\]
+得 \(\delta=2\)。
+\par
+再看 \(\pi\) 在 \(q=\infty\) 的分歧。
+上述两条分支满足 \(t\sim c x^{2}\)（\(c=2,3\)），因此在规范化后 \(t\) 作为局部函数具有二阶零点，故对应两点的分歧指标均为 \(2\)。
+另一方面，将 \(t=0\) 代入 \(H(x,t)\) 得
+\[
+H(x,0)=-x^{4}\bigl(x^{3}-4x^{2}+4x-6\bigr),
+\]
+因此在 \(t=0\) 上除去 \(x=0\) 处的奇点外，还有三点由三次方程 \(x^{3}-4x^{2}+4x-6=0\) 给出；这三点处 \(\partial_t H\neq 0\)，从而 \(\overline C\) 在其处光滑且 \(\pi\) 非分歧。
+由此得到 \(q=\infty\) 的分歧型为 \((2,2,1,1,1)\)。
+\par
+最后计算亏格。
+由于 \(P_7\) 在 \(\PP^1_{\Lambda}\times\PP^1_q\) 中的双次数为 \((7,2)\)，其算术亏格为
+\(
+g_a=(7-1)(2-1)=6
+\)。
+射影闭包唯一奇点为上述 tacnode，且 \(\delta=2\)，故规范化 \(C\) 的几何亏格
+\(
+g(C)=g_a-\delta=4
+\)。
+亦可用 Riemann--Hurwitz：有限处单分歧值共有 \(\card(B_{\mathrm{fin}})=18\) 个，各贡献 \(1\)，并且 \(q=\infty\) 处两点各贡献 \(1\)，总分歧量为 \(20\)，从而
+\(
+2g(C)-2=-2\cdot 7+20
+\) 给出 \(g(C)=4\)。证毕。
+\end{proof}
+
+\begin{theorem}[基底对称的消失与甲板变换群平凡]\label{thm:real-input-40-p7-branch-set-no-base-symmetry-deck-trivial}
+令 \(B:=\{D(q)=0\}\subset\PP^1(\overline{\QQ})\) 为 \(17\) 个非零有限分支值。
+则
+\begin{itemize}
+  \item 若 \(\varphi\in\mathrm{PGL}_2(\QQ)\) 满足 \(\varphi(B)=B\)，则 \(\varphi=\mathrm{id}\)；
+  \item 覆盖 \(\pi:C\to\PP^1_q\) 的甲板变换群（即 \(\Aut_{\PP^1_q}(C)\)）为平凡群。
+\end{itemize}
+\end{theorem}
+\begin{proof}
+设 \(\varphi\in\mathrm{PGL}_2(\QQ)\) 且 \(\varphi(B)=B\)。
+由于 \(\varphi\) 在 \(\QQ\) 上定义，对任意 \(\sigma\in\Gal(\overline{\QQ}/\QQ)\) 与任意 \(b\in B\) 有
+\(
+\sigma(\varphi(b))=\varphi(\sigma(b))
+\)。
+因此 \(\varphi\) 在集合 \(B\) 上诱导的置换与 \(\Gal(\overline{\QQ}/\QQ)\) 的作用可交换。
+由定理 \ref{thm:real-input-40-p7-discriminant-branch-s17}，\(\Gal(D/\QQ)\cong S_{17}\) 在 \(B\) 上的作用为全对称作用，其在 \(S_{17}\) 中的中心化子为平凡群。
+故 \(\varphi\) 在 \(B\) 上诱导的置换只能为恒等，从而 \(\varphi\) 固定 \(B\) 中全部 \(17\) 点。
+任一 Möbius 变换若固定三点则必为恒等，遂 \(\varphi=\mathrm{id}\)。
+\par
+对甲板变换群，注意 \(\Aut_{\PP^1_q}(C)\) 可识别为几何单值化群在 \(S_7\) 中的中心化子。
+而该覆盖的几何单值化群同构于
+\(
+\Gal\bigl(P_7(\Lambda,q)/\overline{\QQ}(q)\bigr)
+\)。
+由定理 \ref{thm:real-input-40-p7-generic-galois-s7}，算术伽罗瓦群为 \(S_7\)，故几何伽罗瓦群只能为 \(S_7\) 或 \(A_7\)。
+又由 \(\Disc_{\Lambda}(P_7)=-4qD(q)\) 可知判别式在 \(\QQ(q)\) 中非平方，因而几何伽罗瓦群不可能包含于 \(A_7\)，遂几何单值化群亦为 \(S_7\)。
+因此其在 \(S_7\) 中的中心化子为 \(\{1\}\)，故甲板变换群平凡。证毕。
+\end{proof}
+

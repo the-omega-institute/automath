@@ -1,0 +1,538 @@
+\paragraph{偏置族中的递归相关证书、状态消元曲线与分歧判别式}
+以下结论在 Bernoulli\((p)\) 基线（\(p\in(0,1)\)）下，沿用
+定理 \ref{thm:fold-bernoulli-p-parry-pressure-chain} 与
+定理 \ref{thm:fold-bernoulli-p-bitpair-gamma-q-closed}
+的记号：平稳四状态链 \((S_t)\)、转移核 \(P(p)\)、平稳分布 \(\pi(p)\)，以及边可观测量
+\[
+g_t:=\mathbf 1_{\{(S_t,S_{t+1})\in\{(a,b),(b,c),(c,a)\}\}}.
+\]
+
+\begin{theorem}[失配指示过程的全自协方差闭式与临界 Jordan 修正]\label{thm:fold-bernoulli-p-full-autocovariance-jordan}
+设
+\[
+r(p):=p(1-p),
+\]
+并定义
+\[
+\alpha(p):=
+-\frac{p^{3}(p^{2}-3p+1)^{2}}{(p+1)^{2}(2p-1)(p^{2}-p+1)},
+\]
+\[
+\beta(p):=
+\frac{p^{2}(1-p)\bigl(p^{5}+4p^{4}-4p^{3}-5p^{2}+7p-2\bigr)}
+{(p+1)(2p-1)(p^{2}-p+1)^{2}},
+\]
+\[
+\delta(p):=
+\frac{p^{2}(1-p)^{2}\bigl(p^{5}-p^{4}-6p^{3}+3p^{2}+2p-1\bigr)}
+{(p+1)(2p-1)(p^{2}-p+1)^{2}}.
+\]
+当 \(p\neq \tfrac12\) 时，对任意整数 \(m\ge 0\) 与 \(m\ge 1\) 分别有
+\[
+\operatorname{Cov}(g_0,g_{2m+1})
+=\alpha(p)\,p^{2m}+\beta(p)\,r(p)^m,
+\]
+\[
+\operatorname{Cov}(g_0,g_{2m})
+=-\alpha(p)\,p^{2m-1}+\delta(p)\,r(p)^{m-1}.
+\]
+在临界点 \(p=\tfrac12\) 处，对任意 \(k\ge 1\) 成立
+\[
+\operatorname{Cov}(g_0,g_k)
+=2^{-(k-1)}
+\left[
+\frac1{16}
++(-1)^{k-1}\!\left(-\frac{13}{1296}-\frac{k-1}{216}\right)
+\right],
+\]
+其中 \((k-1)2^{-k}\) 项对应 \(-\tfrac12\) 处的 Jordan 退化贡献。
+\end{theorem}
+\begin{proof}
+第一部分由推论
+\ref{cor:fold-gauge-anomaly-bernoulli-p-covariance-explicit-even-odd}
+重参数化得到：其偶、奇协方差闭式与上式等价。
+第二部分即定理 \ref{thm:fold-gauge-anomaly-cov-closed} 的协方差闭式重写。
+两式在 \(p\to\tfrac12\) 极限下由特征值并合
+\(
+-p\to-\sqrt{p(1-p)}
+\)
+产生线性多项式修正。证毕。
+\end{proof}
+
+\input{subsubsec__fold-gauge-anomaly-bernoulli-p-jordan-critical-scaling}
+
+\begin{theorem}[自协方差生成函数的完全有理性与临界二重极点]\label{thm:fold-bernoulli-p-autocovariance-generating-rational}
+令
+\[
+s_n:=\operatorname{Cov}(g_0,g_{n+1}),\qquad n\ge 0,
+\]
+并定义生成函数
+\[
+\mathcal S_p(z):=\sum_{n\ge 0}s_n z^n.
+\]
+则
+\[
+\mathcal S_p(z)=
+\frac{s_0+(s_1+p s_0)z+\bigl(s_2+p s_1-p(1-p)s_0\bigr)z^2}
+{(1+p z)\bigl(1-p(1-p)z^2\bigr)}.
+\]
+其中分母在 \(p\neq\tfrac12\) 时分解为一线性因子与一二次因子；在 \(p=\tfrac12\) 时发生并合
+\[
+(1+p z)\bigl(1-p(1-p)z^2\bigr)\Big|_{p=1/2}
+=(1+z/2)^2(1-z/2),
+\]
+故 \(\mathcal S_{1/2}(z)\) 在 \(z=-2\) 处出现二重极点。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-gauge-anomaly-bernoulli-p-covariance-recurrence}，
+\[
+s_{n+3}
+=-p\,s_{n+2}+p(1-p)\,s_{n+1}+p^2(1-p)\,s_n\qquad(n\ge 0).
+\]
+对上式乘以 \(z^n\) 并求和，整理初值项即得所示有理表达。
+当 \(p=\tfrac12\) 时分母因子在 \(-2\) 合并为二重因子，因此出现二重极点。证毕。
+\end{proof}
+
+\begin{theorem}[输出密度--失配密度状态方程与消元曲线]\label{thm:fold-bernoulli-p-output-mismatch-elimination-curve}
+记
+\[
+\mathsf q(p):=\PP(Y_t=1),\qquad
+\gamma(p):=\PP(X_t\neq Y_t).
+\]
+则有状态方程
+\[
+\gamma(p)=(3-2p)\,\bigl(p-\mathsf q(p)\bigr).
+\]
+此外，点 \((\mathsf q(p),\gamma(p))\) 落在平面四次代数曲线
+\[
+\begin{aligned}
+0={}&\gamma^{4}+9\gamma^{3}\mathsf q+4\gamma^{3}
++27\gamma^{2}\mathsf q^{2}+18\gamma^{2}\mathsf q-23\gamma^{2}\\
+&\quad+35\gamma\,\mathsf q^{3}+72\gamma\,\mathsf q^{2}-54\gamma\,\mathsf q+23\gamma
++70\mathsf q^{3}-69\mathsf q^{2}.
+\end{aligned}
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-bernoulli-p-bitpair-gamma-q-closed}，
+\[
+\mathsf q(p)=\frac{p(p^3-p+1)}{1+p^3},\qquad
+\gamma(p)=\frac{p^2(3-2p)}{1+p^3},
+\]
+并且
+\[
+p-\mathsf q(p)=\frac{p^2}{1+p^3},
+\]
+故状态方程立即成立。
+对 \((\mathsf q,\gamma)\) 的多项式关系，取
+\[
+\mathsf q(1+p^3)-p(p^3-p+1)=0,\qquad
+\gamma(1+p^3)-p^2(3-2p)=0
+\]
+对参数 \(p\) 进行 Sylvester 结式消元，得到所示四次曲线。
+把 \((\mathsf q,\gamma)=(\mathsf q(p),\gamma(p))\) 代回可得恒等为零。证毕。
+\end{proof}
+
+\begin{theorem}[失配指示过程的严格三阶 Markov 性与完整转移核]\label{thm:fold-bernoulli-p-mismatch-strict-third-order-markov}
+记 \(G_t:=g_t\in\{0,1\}\)。
+则在平稳分布下，\((G_t)\) 为三阶 Markov 过程：转移核
+\[
+\PP(G_{t+3}=1\mid G_t,G_{t+1},G_{t+2})
+\]
+仅依赖三位历史，且对允许的三比特上下文有闭式
+\[
+\PP(1\mid 001)=1,\qquad \PP(1\mid 010)=1,
+\]
+\[
+\PP(1\mid 000)=\frac{p^{2}(2p+1)}{(1+p)(1+2p-p^{2})},
+\]
+\[
+\PP(1\mid 011)=\frac{2p^{3}-p^{2}-p+1}{1+p-p^{2}},
+\qquad
+\PP(1\mid 100)=\frac{p^{2}}{1+p-p^{2}},
+\]
+\[
+\PP(1\mid 101)=\frac{(1-p)(1+p-p^{2})}{1+p-2p^{2}+p^{3}},
+\qquad
+\PP(1\mid 110)=p,
+\]
+\[
+\PP(1\mid 111)=\frac{p^{2}(3-2p)}{1-p+2p^{2}}.
+\]
+并且该过程不是二阶 Markov：对 \(p\in(0,1)\) 有
+\[
+\PP(1\mid 000)-\PP(1\mid 100)
+=-\frac{p^5}{(1+p)(1+2p-p^2)(1+p-p^2)}\neq 0.
+\]
+\end{theorem}
+\begin{proof}
+令
+\[
+(B_1)_{ij}:=P_{ij}\,\mathbf 1_{\{g(i,j)=1\}},\qquad B_0:=P-B_1.
+\]
+对任意字 \(w=w_1\cdots w_n\in\{0,1\}^n\)，有标准矩阵表示
+\[
+\PP(G_0\cdots G_{n-1}=w)
+=\pi^\top B_{w_1}\cdots B_{w_n}\mathbf 1.
+\]
+故
+\[
+\PP(G_3=d\mid G_0G_1G_2=abc)
+=\frac{\PP(abcd)}{\PP(abc)}
+\]
+可由有限次有理运算显式计算，得到上述八个上下文公式。
+其中 \((001)\) 与 \((010)\) 的后继为确定性，是由不可实现四字模式的分子为零导致。
+最后由
+\(
+\PP(1\mid 000)\neq \PP(1\mid 100)
+\)
+可知同后缀 \((00)\) 不能决定下一位，故二阶 Markov 性不成立。证毕。
+\end{proof}
+
+\begin{theorem}[再生分解与周期二元概率母函数的严格闭式]\label{thm:fold-bernoulli-p-regeneration-bivariate-pgf}
+沿用四态链 \((S_t)_{t\in\ZZ}\) 与边势 \(g_t\) 的记号，并令
+\[
+\tau_0:=0,\qquad \tau_{n+1}:=\inf\{t>\tau_n:\ S_t=d\}\qquad(n\ge 0)
+\]
+为状态 \(d\) 的相继返回时刻。定义第 \(n\) 个再生周期的长度与异常计数
+\[
+L_n:=\tau_{n+1}-\tau_n,\qquad
+X_n:=\sum_{t=\tau_n}^{\tau_{n+1}-1} g_t .
+\]
+则在条件于 \(S_{\tau_n}=d\) 的再生版本下（尤其在初始 \(S_0=d\) 下），序列 \(\bigl(L_n,X_n\bigr)_{n\ge 0}\) 为独立同分布。
+其二元概率母函数在 \(|z|\) 充分小时满足严格闭式
+\begin{equation}\label{eq:fold-bernoulli-p-regeneration-bivariate-pgf}
+\Phi_p(u,z):=\EE\!\left[u^{X_0}z^{L_0}\mid S_0=d\right]
+=\frac{p(1-p)\,z^2\bigl(1-pu z^2\bigr)}
+{\bigl(1-(1-p)z\bigr)\bigl(1-pu z^2\bigr)-p^2(1-p)\,u^3 z^3}.
+\end{equation}
+此外，存在相互独立的随机变量
+\[
+M\sim \mathrm{Geom}(1-p),\qquad
+K_0,K_1,\dots\ \text{i.i.d.}\ \mathrm{Geom}(p),\qquad
+N_1,N_2,\dots\ \text{i.i.d.}\ \mathrm{Geom}(1-p),
+\]
+其中 \(\mathrm{Geom}(q)\) 取值于 \(\NN_0\) 且 \(\PP(G=k)=(1-q)^k q\)，使得同分布意义下
+\begin{equation}\label{eq:fold-bernoulli-p-regeneration-decomposition}
+X_0=\sum_{i=1}^{M}\bigl(3+N_i\bigr),\qquad
+L_0=2+\sum_{j=0}^{M}K_j+3M+2\sum_{i=1}^{M}N_i .
+\end{equation}
+\end{theorem}
+\begin{proof}
+由核 \(P(p)\) 的结构，\(d\to a\) 为确定转移且进入 \(d\) 的唯一方式为 \(a\to d\)；
+故 \(d\) 为再生状态。
+由强马尔可夫性质，\(\{(\tau_{n+1}-\tau_n,(g_t)_{\tau_n\le t<\tau_{n+1}})\}_{n\ge 0}\) 在条件于 \(S_{\tau_n}=d\) 下为 i.i.d.；
+从而 \((L_n,X_n)\) 亦为 i.i.d.。
+
+从 \(d\) 出发第一步必为 \(d\to a\) 且不贡献异常。
+在 \(a\) 处，每一步以概率 \(1-p\) 自环、以概率 \(p\) 离开 \(a\)，故“离开 \(a\) 前自环次数”服从 \(\mathrm{Geom}(p)\)，记为 \(K\)。
+条件于“离开 \(a\)”，离开方向满足
+\[
+\PP(a\to d\mid a\ \text{离开})=1-p,\qquad
+\PP(a\to b\mid a\ \text{离开})=p,
+\]
+因此“在最终 \(a\to d\) 前发生的 \(a\to b\) 次数”服从 \(\mathrm{Geom}(1-p)\)，记为 \(M\)。
+一旦发生 \(a\to b\)，随后 \(b\to c\) 为确定转移并贡献一次异常；
+到达 \(c\) 后，以概率 \(p\) 走 \(c\to b\)（不异常），以概率 \(1-p\) 走 \(c\to a\)（异常并回到 \(a\)）。
+于是“在首次 \(c\to a\) 前 \(c\to b\) 的次数”服从 \(\mathrm{Geom}(1-p)\)，记为 \(N\)。
+该段从 \(a\) 离开并返回 \(a\) 的异常增量为 \(3+N\)，长度增量为 \(3+2N\)。
+对每次返回 \(a\) 之后再次离开之前的自环次数引入独立拷贝 \(K_0,K_1,\dots\)，并对每次 \(a\to b\) 回路引入独立拷贝 \(N_1,N_2,\dots\)，即可得到分解式 \eqref{eq:fold-bernoulli-p-regeneration-decomposition}。
+独立性来自强马尔可夫性质与几何分布的无记忆性。
+
+将分解写为生成函数。
+记
+\[
+\EE[z^K]=\frac{p}{1-(1-p)z},
+\qquad
+\EE\!\left[(u z^2)^N\right]=\frac{1-p}{1-pu z^2}.
+\]
+并对 \(M\) 的几何和求和，即得到 \eqref{eq:fold-bernoulli-p-regeneration-bivariate-pgf}。证毕。
+\end{proof}
+
+\input{subsubsec__fold-gauge-anomaly-bernoulli-p-regeneration-triple-joint-law}
+
+\begin{corollary}[周期异常计数的显式分布、递推与精确指数尾]\label{cor:fold-bernoulli-p-cycle-mismatch-law-tail}
+在定理 \ref{thm:fold-bernoulli-p-regeneration-bivariate-pgf} 的设定下，周期异常计数 \(X_0\) 的一元概率母函数为
+\begin{equation}\label{eq:fold-bernoulli-p-cycle-mismatch-pgf}
+\EE\!\left[u^{X_0}\mid S_0=d\right]
+=\Phi_p(u,1)
+=\frac{(1-p)(1-pu)}{1-pu-p(1-p)u^3}.
+\end{equation}
+令 \(w_k:=\PP(X_0=k\mid S_0=d)\)。
+则 \(w_0=1-p\)、\(w_1=w_2=0\)，并且对所有 \(k\ge 3\) 有严格三阶递推
+\begin{equation}\label{eq:fold-bernoulli-p-cycle-mismatch-recurrence}
+w_k=p\,w_{k-1}+p(1-p)\,w_{k-3}.
+\end{equation}
+进一步，对任意整数 \(k\ge 3\) 有有限求和闭式
+\begin{equation}\label{eq:fold-bernoulli-p-cycle-mismatch-pmf-sum}
+w_k
+=(1-p)^2 \sum_{r=0}^{\lfloor (k-3)/3\rfloor}
+\binom{k-2r-3}{r}\,p^{k-2r-2}\,(1-p)^{r}.
+\end{equation}
+最后，令 \(r(p)>1\) 为三次方程
+\begin{equation}\label{eq:fold-bernoulli-p-cycle-mismatch-tail-root}
+p(1-p)r^3+pr-1=0
+\end{equation}
+在 \((1,\infty)\) 上的唯一实根，则存在常数 \(C(p)>0\) 使
+\begin{equation}\label{eq:fold-bernoulli-p-cycle-mismatch-tail-asymp}
+w_k \sim C(p)\,r(p)^{-k}\qquad(k\to\infty),
+\qquad
+C(p)=\frac{(1-p)\bigl(1-pr(p)\bigr)}{p\,r(p)\bigl(1+3(1-p)r(p)^2\bigr)}.
+\end{equation}
+\end{corollary}
+\begin{proof}
+式 \eqref{eq:fold-bernoulli-p-cycle-mismatch-pgf} 由 \eqref{eq:fold-bernoulli-p-regeneration-bivariate-pgf} 取 \(z=1\) 立得。
+将
+\(
+\sum_{k\ge 0} w_k u^k
+=\frac{(1-p)(1-pu)}{1-pu-p(1-p)u^3}
+\)
+两边清分母并比较系数，得到 \(w_0=1-p\)、\(w_1=w_2=0\) 与递推 \eqref{eq:fold-bernoulli-p-cycle-mismatch-recurrence}。
+
+为得到 \eqref{eq:fold-bernoulli-p-cycle-mismatch-pmf-sum}，使用恒等式（\(|u|\) 充分小时）
+\[
+\frac{1}{1-au-bu^3}=\sum_{k\ge0}\left(\sum_{r=0}^{\lfloor k/3\rfloor}\binom{k-2r}{r}a^{k-3r}b^r\right)u^k,
+\]
+取 \(a=p\)、\(b=p(1-p)\)，并乘以 \((1-p)(1-pu)\) 后整理组合系数差分
+\(
+\binom{n}{r}-\binom{n-1}{r}=\binom{n-1}{r-1}
+\)，即可得到所示有限求和闭式。
+
+对尾部渐近，记分母 \(D(u):=1-pu-p(1-p)u^3\)。
+由 \eqref{eq:fold-bernoulli-p-cycle-mismatch-tail-root}，点 \(u=r(p)\) 为 \(D\) 的简单零点，且由于系数非负，\(r(p)\) 为最小模的正奇点。
+因此 \(u=r(p)\) 为主极点；由留数型系数渐近可得
+\(
+w_k\sim -\frac{N(r(p))}{r(p)D'(r(p))}\,r(p)^{-k}
+\)
+（其中 \(N(u)=(1-p)(1-pu)\)），化简即得常数 \(C(p)\) 的显式形式 \eqref{eq:fold-bernoulli-p-cycle-mismatch-tail-asymp}。证毕。
+\end{proof}
+
+\begin{theorem}[失配指示过程的 Shannon 熵率闭式]\label{thm:fold-bernoulli-p-mismatch-entropy-rate}
+令 \(\nu_p\) 为在平稳链上由观测 \(g_t\) 诱导的平稳二值过程 \((g_t)_{t\in\ZZ}\) 的分布。
+以自然对数计（单位：nats），其 Shannon 熵率存在，并满足显式闭式
+\begin{equation}\label{eq:fold-bernoulli-p-mismatch-entropy-rate}
+h(\nu_p)
+=\lim_{n\to\infty}\frac1n H_{\nu_p}(g_0,g_1,\dots,g_{n-1})
+=\frac{p(1-p)}{1+p^3}\Bigl(H_{\mathrm{geom}}(p)+H_{\mathrm{geom}}(1-p)\Bigr),
+\end{equation}
+其中
+\begin{equation}\label{eq:fold-bernoulli-p-geom-entropy}
+H_{\mathrm{geom}}(q):=-\log q-\frac{1-q}{q}\log(1-q)\qquad(q\in(0,1))
+\end{equation}
+为取值 \(\NN_0\) 的 \(\mathrm{Geom}(q)\) 分布的熵。
+等价地，
+\begin{equation}\label{eq:fold-bernoulli-p-mismatch-entropy-rate-expanded}
+h(\nu_p)=\frac{p(1-p)}{1+p^3}\left[
+-\log\bigl(p(1-p)\bigr)
+-\frac{1-p}{p}\log(1-p)
+-\frac{p}{1-p}\log p
+\right].
+\end{equation}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-bernoulli-p-regeneration-bivariate-pgf} 的再生分解，从 \(d\) 出发时，输出序列可分解为 i.i.d.\ 再生周期的拼接。
+并且由转移图的确定性（\(d\to a\)、\(b\to c\) 为确定；每次出现 \(11\) 之后在 \(c\) 处由下一位 \(g\in\{0,1\}\) 唯一决定 \(c\to b\) 或 \(c\to a\)），每个再生周期的二值字串与随机变量族
+\(
+(M,(K_j)_{j=0}^{M},(N_i)_{i=1}^{M})
+\)
+之间存在一一对应的可测双射；因此周期字串的熵等于这些独立几何变量的总熵。
+条件于 \(M\)，有
+\[
+H(\text{周期字串}\mid M)= (M+1)H_{\mathrm{geom}}(p)+M H_{\mathrm{geom}}(1-p),
+\]
+从而
+\[
+H(\text{周期字串})=H(M)+\EE[M+1]H_{\mathrm{geom}}(p)+\EE[M]H_{\mathrm{geom}}(1-p)
+=\frac{H_{\mathrm{geom}}(p)+H_{\mathrm{geom}}(1-p)}{1-p},
+\]
+其中用到 \(M\sim\mathrm{Geom}(1-p)\) 给出 \(\EE[M]=p/(1-p)\) 以及 \(H(M)=H_{\mathrm{geom}}(1-p)\)。
+另一方面，由 \eqref{eq:fold-bernoulli-p-regeneration-decomposition} 直接求期望得到
+\(
+\EE[L_0]=(1+p^3)/(p(1-p)^2)
+\)。
+对再生拼接体系，熵率等于“单位时间平均信息量”，即
+\(
+h(\nu_p)=H(\text{周期字串})/\EE[L_0]
+\)，代入得到 \eqref{eq:fold-bernoulli-p-mismatch-entropy-rate}，而 \eqref{eq:fold-bernoulli-p-mismatch-entropy-rate-expanded} 由 \eqref{eq:fold-bernoulli-p-geom-entropy} 直接化简得到。证毕。
+\end{proof}
+
+\begin{theorem}[有限时刻异常计数的有理型时间生成函数与四阶递推]\label{thm:fold-bernoulli-p-finite-time-mismatch-rational-recurrence}
+从再生态 \(d\) 出发，令
+\[
+G_m:=\sum_{t=0}^{m-1} g_t \qquad (m\ge 0),
+\qquad
+M_m(u):=\EE\!\left[u^{G_m}\mid S_0=d\right].
+\]
+则其时间变量的常规生成函数为严格有理函数
+\begin{equation}\label{eq:fold-bernoulli-p-finite-time-mgf-gf}
+\sum_{m\ge0} M_m(u)\,z^m=\frac{N_p(u,z)}{D_p(u,z)},
+\end{equation}
+其中
+\begin{align}
+N_p(u,z)&=
+1+pz+\bigl(p^2u-pu\bigr)z^2+\bigl(p^3u^3-p^2u^3+p^2u^2-p^2u\bigr)z^3,\label{eq:fold-bernoulli-p-finite-time-mgf-num}\\[2mm]
+D_p(u,z)&=
+1+(p-1)z+\bigl(p^2-p-pu\bigr)z^2+\bigl(pu-p^2u-p^2u^3+p^3u^3\bigr)z^3+\bigl(p^2u-p^3u\bigr)z^4.\label{eq:fold-bernoulli-p-finite-time-mgf-den}
+\end{align}
+因此对所有 \(m\ge4\)，序列 \(\bigl(M_m(u)\bigr)_{m\ge0}\) 满足齐次四阶线性递推
+\begin{equation}\label{eq:fold-bernoulli-p-finite-time-mgf-recurrence}
+M_m(u)=(1-p)M_{m-1}(u)+p(1+u-p)M_{m-2}(u)-p(1-p)u\bigl(1-pu^2\bigr)M_{m-3}(u)-p^2(1-p)u\,M_{m-4}(u),
+\end{equation}
+并具有显式初值
+\begin{equation}\label{eq:fold-bernoulli-p-finite-time-mgf-initial}
+M_0(u)=1,\quad M_1(u)=1,\quad M_2(u)=1+p^2(u-1),\quad M_3(u)=1+p^2(u-1)(u+2-p).
+\end{equation}
+\end{theorem}
+\begin{proof}
+令倾斜核 \(Q_p(u)\) 为
+\[
+Q_p(u)_{ij}:=P(p)_{ij}\,u^{g(i,j)} .
+\]
+则按定义
+\[
+M_m(u)=e_d^{\mathsf T}Q_p(u)^{m}\mathbf 1,
+\qquad
+\sum_{m\ge0}M_m(u)z^m=e_d^{\mathsf T}(I-zQ_p(u))^{-1}\mathbf 1,
+\]
+从而是矩阵有理函数。
+对 \(4\times4\) 矩阵 \(I-zQ_p(u)\) 直接计算行列式与伴随矩阵，得到
+\eqref{eq:fold-bernoulli-p-finite-time-mgf-gf}--\eqref{eq:fold-bernoulli-p-finite-time-mgf-den}。
+有理函数系数序列满足由分母多项式 \eqref{eq:fold-bernoulli-p-finite-time-mgf-den} 给出的线性递推；
+且因 \(\deg_z N_p\le3\)，从 \(m\ge4\) 起递推齐次化，即得 \eqref{eq:fold-bernoulli-p-finite-time-mgf-recurrence}。
+将 \eqref{eq:fold-bernoulli-p-finite-time-mgf-gf} 在 \(z=0\) 处展开至三阶即可得到初值 \eqref{eq:fold-bernoulli-p-finite-time-mgf-initial}。证毕。
+\end{proof}
+
+\begin{theorem}[二维常系数递推闭合：\texorpdfstring{$G_m$}{Gm} 的全概率质量函数可由有限步精确生成]\label{thm:fold-bernoulli-p-finite-time-pmf-2d-recurrence}
+从再生态 \(d\) 出发，令
+\[
+a_{m,k}:=\PP(G_m=k\mid S_0=d)\qquad(m\ge 0,\ k\ge 0),
+\]
+并约定当 \(m<0\) 或 \(k<0\) 时取 \(a_{m,k}=0\)。
+则对任意 \(m\ge 4\)、\(k\ge 0\) 成立二维齐次递推
+\begin{equation}\label{eq:fold-bernoulli-p-finite-time-pmf-2d-recurrence}
+\begin{aligned}
+a_{m,k}={}&(1-p)\,a_{m-1,k}
++p(1-p)\,a_{m-2,k}
++p\,a_{m-2,k-1}
+-p(1-p)\,a_{m-3,k-1}\\
+&\quad
++p^{2}(1-p)\,a_{m-3,k-3}
+-p^{2}(1-p)\,a_{m-4,k-1}.
+\end{aligned}
+\end{equation}
+其初值由 \eqref{eq:fold-bernoulli-p-finite-time-mgf-initial} 唯一确定，具体为
+\[
+a_{0,0}=1,\quad a_{1,0}=1,
+\]
+\[
+a_{2,0}=1-p^{2},\quad a_{2,1}=p^{2},
+\]
+\[
+a_{3,0}=1-2p^{2}+p^{3},\quad a_{3,1}=p^{2}-p^{3},\quad a_{3,2}=p^{2}.
+\]
+因此格点族 \(\{a_{m,k}\}_{m,k}\) 在上述递推与边界条件下被完全刻画，从而 \(G_m\) 的全概率质量函数可由有限步计算精确生成，而无需矩阵幂或谱分解。
+\end{theorem}
+\begin{proof}
+令
+\(
+M_m(u)=\sum_{k\ge 0}a_{m,k}u^{k}
+\)，并定义二元生成函数
+\[
+F(u,z):=\sum_{m\ge 0}M_m(u)\,z^{m}
+=\sum_{m,k\ge 0}a_{m,k}u^{k}z^{m}.
+\]
+由定理 \ref{thm:fold-bernoulli-p-finite-time-mismatch-rational-recurrence}，
+\(
+F(u,z)=N_p(u,z)/D_p(u,z)
+\)，其中 \(D_p(u,z)\) 由 \eqref{eq:fold-bernoulli-p-finite-time-mgf-den} 给出。
+将恒等式 \(D_p(u,z)F(u,z)=N_p(u,z)\) 的两端按 \(z^{m}u^{k}\) 比较系数：
+由于 \(\deg_z N_p\le 3\)，当 \(m\ge 4\) 时右端系数恒为零，从而得到二维齐次递推 \eqref{eq:fold-bernoulli-p-finite-time-pmf-2d-recurrence}。
+初值由 \(M_0,M_1,M_2,M_3\) 的显式表达展开为 \(u\)-系数即可读出。证毕。
+\end{proof}
+
+\input{subsubsec__fold-gauge-anomaly-bernoulli-p-fibonacci-defect-shadow}
+
+\input{subsubsec__fold-gauge-anomaly-perron-endpoint-expansions}
+
+\input{subsubsec__fold-gauge-anomaly-bernoulli-p-fibonacci-jordan-filter-polejump}
+
+\input{subsubsec__fold-gauge-anomaly-bernoulli-p-renewal-determinant-pressure-doob-tilt}
+
+\begin{theorem}[压力分歧判别式的全分解与 \(u=1\) 临界并合条件]\label{thm:fold-bernoulli-p-pressure-discriminant-degree11}
+令 \(u=e^\theta\)，并记 \(\lambda\) 为特征值变量。
+把特征方程写成四次多项式
+\[
+\begin{aligned}
+F(\lambda;u,p):={}&\lambda^{4}+(p-1)\lambda^{3}
++\bigl(p^{2}-p(u+1)\bigr)\lambda^{2}\\
+&\quad+\bigl(p^{3}u^{3}-p^{2}u^{3}-p^{2}u+pu\bigr)\lambda
++p^{2}u(1-p).
+\end{aligned}
+\]
+则其 \(\lambda\)-判别式满足
+\[
+\Disc_{\lambda}F(\lambda;u,p)=p^{3}u(1-p)\,D(u,p),
+\]
+其中 \(D(u,p)\in\ZZ[p,u]\) 为关于 \(u\) 的 \(11\) 次多项式：
+\[
+\begin{aligned}
+D(u,p)={}&27p^{8}u^{11}-14p^{8}u^{8}+3p^{8}u^{5}-81p^{7}u^{11}-90p^{7}u^{9}+52p^{7}u^{8}
++170p^{7}u^{6}-11p^{7}u^{5}-68p^{7}u^{3}+12p^{7}\\
+&+81p^{6}u^{11}+270p^{6}u^{9}-68p^{6}u^{8}-25p^{6}u^{7}-536p^{6}u^{6}
++14p^{6}u^{5}+36p^{6}u^{4}+252p^{6}u^{3}+24p^{6}u-44p^{6}\\
+&-27p^{5}u^{11}-270p^{5}u^{9}+28p^{5}u^{8}-57p^{5}u^{7}+576p^{5}u^{6}
++126p^{5}u^{5}-68p^{5}u^{4}-328p^{5}u^{3}+36p^{5}u^{2}-40p^{5}u+56p^{5}\\
+&+90p^{4}u^{9}+6p^{4}u^{8}+189p^{4}u^{7}-204p^{4}u^{6}-213p^{4}u^{5}
++176p^{4}u^{3}-36p^{4}u^{2}-16p^{4}u-24p^{4}\\
+&-4p^{3}u^{8}-107p^{3}u^{7}-18p^{3}u^{6}+29p^{3}u^{5}+60p^{3}u^{4}
++20p^{3}u^{3}-16p^{3}u^{2}+48p^{3}u-4p^{3}\\
+&+12p^{2}u^{6}+52p^{2}u^{5}-44p^{2}u^{3}-8p^{2}u+4p^{2}
+-12pu^{4}-8pu^{3}+12pu^{2}-8pu+4u^{2}.
+\end{aligned}
+\]
+并且
+\[
+D(1,p)=4(1+p)^2(2p-1)^2(p^2-p+1)^2.
+\]
+因此在 \(p\in(0,1)\) 内，
+\[
+u=1\ \text{为分歧点}
+\quad\Longleftrightarrow\quad
+p=\frac12.
+\]
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:fold-gauge-anomaly-bernoulli-p-leyang-branch-u1}
+已给出判别式分解结构与 \(u=1\) 判据。
+将四次多项式 \(F\) 代入四次判别式闭式并在 \(\ZZ[p,u]\) 中化简，即得上式中 \(D(u,p)\) 的显式系数。
+代入 \(u=1\) 并因式分解，得到
+\(
+D(1,p)=4(1+p)^2(2p-1)^2(p^2-p+1)^2
+\)。
+由于 \(1+p>0\) 且 \(p^2-p+1>0\) 在 \((0,1)\) 恒正，结论等价于 \(2p-1=0\)。证毕。
+\end{proof}
+
+\begin{conjecture}[主导分歧根唯一性与高阶累积量振荡律的参数族延拓]\label{conj:fold-bernoulli-p-dominant-branch-cumulant-oscillation}
+对每个 \(p\in(0,1)\setminus\{\tfrac12\}\)，记
+\[
+\mathcal B(p):=\{u\in\mathbb C: D(u,p)=0\},
+\]
+其中 \(D(u,p)\) 由定理 \ref{thm:fold-bernoulli-p-pressure-discriminant-degree11} 给出。
+猜想：
+\begin{enumerate}
+  \item \(\mathcal B(p)\) 存在唯一一对共轭根 \(u_\ast(p),\overline{u_\ast(p)}\)，满足
+  \[
+  |u_\ast(p)|=\min\{|u|:u\in\mathcal B(p)\},\qquad \Im u_\ast(p)\neq 0,
+  \]
+  且该根为单根；
+  \item 取分支 \(\theta_\ast(p)=\log u_\ast(p)\)（\(\Re\theta_\ast(p)<0\)），则失配计数每步归一化累积量 \(\kappa_n(p)\) 在 \(n\to\infty\) 时满足
+  \[
+  \kappa_n(p)\sim
+  C(p)\,n!\,|\theta_\ast(p)|^{-n}
+  \cos\!\bigl(n\arg\theta_\ast(p)+\phi(p)\bigr),
+  \]
+  其中 \(C(p)\neq 0\)、\(\phi(p)\in\mathbb R\) 随 \(p\) 实解析变化。
+\end{enumerate}
+\end{conjecture}
+
+\endinput

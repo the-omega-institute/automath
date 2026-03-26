@@ -1,0 +1,436 @@
+\subsection{多轴前缀与可核验语义：从单轴相位到多轴前缀的规范打包}\label{subsec:cdim-three-axis-address}
+在“地址先于取值”的协议语义中，地址并非附加注释，而是读出\emph{可定义性}的前提：若地址对象未给定，则不存在可在对象层引用的评价函数，读出偏函数在该输入处不定义并以内禀空值 \(\mathsf{NULL}\) 表示（\S\ref{sec:recursive-addressing}；并见 \S\ref{subsec:xi-pw-type-safety-null} 的类型化口径）。
+\par
+为把该语义编译为可核验对象，令 \(A_{\mathrm{adm}}\) 为可接受地址集合，并对每个 \(a\in A_{\mathrm{adm}}\) 关联一个柱事件 \(C_a\)（cylinder event）；细化关系 \(b\lhd a\) 对应柱事件包含 \(C_b\subseteq C_a\)，从而 \((A_{\mathrm{adm}},\lhd)\) 形成前缀偏序生成的站点。
+在该站点上，把“协议允许且在类型意义下为单值可核验的局部证书对象”组织为（预）层 \(F\)：对每个地址 \(a\)，令 \(F(a)\) 为在 \(C_a\) 上可接受的局部证书集合；若 \(b\lhd a\) 则存在限制映射 \(F(a)\to F(b)\) 表示证书细化/投影（参见定义 \ref{def:xi-cert-refinement-equivalence} 的可核验等价与共同细化口径）。
+
+\begin{theorem}[有限前缀不导出唯一识别：可计算概念在同阶描述长度下的前缀不可判别性]\label{thm:cdim-computable-prefix-nonidentifiability}
+固定一台前缀自由通用机 \(U\)。
+对可计算无穷二元序列 \(x\in\{0,1\}^{\NN}\)，定义其生成复杂度为
+\[
+K_{\mathrm{gen}}(x):=\min\Bigl\{|p|:\ \forall n\ge 1,\ U(p,n)=x\upharpoonright n\Bigr\},
+\]
+其中 \(U(p,n)\) 表示程序 \(p\) 在输入 \(n\) 时输出 \(x\) 的前 \(n\) 位。
+则对任意 \(n\ge 1\)，存在另一可计算序列 \(y\neq x\) 满足
+\[
+y\upharpoonright n=x\upharpoonright n,
+\qquad
+K_{\mathrm{gen}}(y)\ \le\ K_{\mathrm{gen}}(x)+O(\log n).
+\]
+因此，在可计算概念类内，任何有限前缀一致性都不能推出唯一识别；解除歧义需要额外的对数级索引/证书，而非继续读取同一前缀轴本身。
+\end{theorem}
+\begin{proof}
+取实现 \(K_{\mathrm{gen}}(x)\) 的最短程序 \(p_x\)。
+构造程序 \(p_y\)：在输入 \(m\) 时，先调用 \(p_x\) 计算 \(x\upharpoonright \max\{m,n+1\}\)；
+随后输出前 \(n\) 位保持不变，将第 \(n+1\) 位取反，并把其后位（若 \(m>n+1\)）置为 \(0\)。
+该过程给出一条可计算序列 \(y\)，显然 \(y\upharpoonright n=x\upharpoonright n\) 且 \(y\neq x\)。
+程序 \(p_y\) 仅需在 \(p_x\) 的基础上额外编码整数 \(n\) 与固定改写逻辑，故
+\(
+|p_y|\le |p_x|+O(\log n)
+\)，即得所示不等式。证毕。
+\end{proof}
+
+\begin{theorem}[有限前缀不可判别性的任意有限多重化]\label{thm:cdim-computable-prefix-nonidentifiability-multiplicity}
+在定理 \ref{thm:cdim-computable-prefix-nonidentifiability} 的设定下，对任意可计算无穷二元序列 \(x\in\{0,1\}^{\NN}\)、任意 \(n\ge 1\) 与任意整数 \(t\ge 1\)，存在两两不同的可计算序列
+\[
+y^{(1)},\dots,y^{(t)}
+\]
+满足
+\[
+y^{(j)}\upharpoonright n=x\upharpoonright n
+\qquad
+(1\le j\le t),
+\]
+且
+\[
+K_{\mathrm{gen}}(y^{(j)})
+\le
+K_{\mathrm{gen}}(x)+O(\log n+\log t)
+\qquad
+(1\le j\le t).
+\]
+亦即，共享长度 \(n\) 前缀的语义不可判别类，可以在仅增加 \(O(\log n+\log t)\) 描述开销的条件下扩张到任意预先指定的有限规模 \(t\)。
+\end{theorem}
+\begin{proof}
+固定实现 \(K_{\mathrm{gen}}(x)\) 的最短程序 \(p_x\)。对每个 \(1\le j\le t\)，构造程序 \(p_j\) 如下：在输入 \(m\) 时，先调用 \(p_x\) 计算 \(x\upharpoonright \max\{m,n+j\}\)；随后定义输出序列 \(y^{(j)}\) 为
+\[
+y^{(j)}(r)=
+\begin{cases}
+x(r),& r<n+j,\\
+1-x(n+j),& r=n+j,\\
+0,& r>n+j.
+\end{cases}
+\]
+于是每个 \(y^{(j)}\) 都是可计算序列，并且其前 \(n\) 位与 \(x\) 完全相同。若 \(i\neq j\)，则 \(y^{(i)}\) 与 \(y^{(j)}\) 在位置 \(n+\min\{i,j\}\) 处已经分离，故两两不同。
+\par
+为了生成 \(y^{(j)}\)，程序 \(p_j\) 只需在 \(p_x\) 的基础上额外编码整数 \(n\)、整数 \(j\) 以及一段固定长度的修改规则。因此
+\[
+|p_j|
+\le
+|p_x|+O(\log n+\log j)
+\le
+|p_x|+O(\log n+\log t).
+\]
+取最短描述长度即得
+\[
+K_{\mathrm{gen}}(y^{(j)})
+\le
+K_{\mathrm{gen}}(x)+O(\log n+\log t),
+\]
+结论成立。证毕。
+\end{proof}
+这说明前缀预算不足所导致的语义歧义并非只表现为“存在一个竞争者”，而是能够以对数额外开销支持任意给定规模的有限歧义簇。
+
+\begin{proposition}[\texorpdfstring{$\mathsf{NULL}$}{NULL} 的对象论判据：局部截面存在性]\label{prop:cdim-nonnull-section-criterion}
+在上述站点/（预）层表述下，地址 \(a\) 的读出在类型层非 \(\mathsf{NULL}\) 当且仅当
+\[
+\boxed{\ F(a)\neq\varnothing\ }.
+\]
+并且对任意有限柱覆盖 \(C_a\subseteq \bigcup_{i=1}^{n}C_{a_i}\)，若存在局部对象 \(s_i\in F(a_i)\) 使其在任意交叠 \(C_{a_i}\cap C_{a_j}\) 上相容（在可核验等价意义下具有共同细化），则存在唯一的粘接对象 \(s\in F(a)\) 使其限制回各 \(s_i\)（粘接唯一性）。
+\end{proposition}
+\begin{proof}
+第一条是 \(\mathsf{NULL}\) 的定义性译文：在地址 \(a\) 上，“读出可定义且可核验”被组织为存在某个可接受局部证书对象。
+\par
+第二条为可核验语义的粘接纪律：相容性以“在重叠上存在共同细化”表达（定义 \ref{def:xi-cert-refinement-equivalence}），从而可将 \((s_i)\) 压缩为一个由有限对象编码、能被确定性验证器复核的全局证书对象；唯一性同样由共同细化的可核验等价类唯一确定。证毕。
+\end{proof}
+
+\paragraph{三轴地址的规范打包}
+在第 \ref{subsec:xi-pw-type-safety-null} 节的统一口径下，一个可核对地址被规范打包为多轴前缀
+\[
+a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}})
+\]
+（定义 \ref{def:multi_axis_address}）。
+其中 \(a_{\mathrm{vis}}\) 对齐 unitary slice 的单参相位接口（相位前缀/柱事件），\(a_{\mathrm{res}}\) 承载为避免同像碰撞所需的 residue/逆极限轴外置（prime-register），而 \(a_{\mathrm{mode}}\) 记录协议所允许的正交模式轴（典型包含径向寄存器与最小实现维数轴）；该三轴打包把“地址对象”从单轴相位提升为可编译的最小接口直和，并为后续的预算—失败类型分离提供规范坐标。
+在“统一最小性 + 协议闭包（无未记录轴回流）”假设下，模式轴的完备性可由 Hankel 秩一致有界刻画（定理 \ref{thm:xi-completeness-iff-hankel-bounded}），其可实现的离线核验接口可取为 ACC-Rank 稳定性证书（注 \ref{rem:xi-acc-rank}）。
+
+\subsection{\texorpdfstring{$\mathsf{NULL}$}{NULL} 的三分解与失败证书：语义空值、协议空值、碰撞空值}\label{subsec:cdim-null-three-way}
+在站点/（预）层表述下，\(\mathsf{NULL}\) 的来源可被统一为“局部截面不存在”的结构性失败；并且该失败在体系内可被分解为互不混淆的三类离线可核验见证（定理 \ref{thm:xi-null-complete-trichotomy-offline}）。
+与三轴地址语义对齐，可将其表述为：
+\begin{enumerate}
+  \item \textbf{语义空值：}地址未给定或 \(a\notin A_{\mathrm{adm}}\)。此时 \(C_a\) 不存在（指称缺失），故 \(F(a)\) 无从定义或按约定为空，从而读出为 \(\mathsf{NULL}\)。
+  \item \textbf{协议空值：}地址 \(a\in A_{\mathrm{adm}}\) 但协议/类型系统拒绝在 \(C_a\) 上建立读出（典型为 unitary slice 锁定与 \(\mathbf{PW}\) 闭包下的“无未记录连续轴”原则，定理 \ref{thm:xi-pw-no-continuous-hair}），或因模式轴/最小实现维数门槛被违反而触发维数型 \(\mathsf{NULL}\)（定理 \ref{thm:xi-completeness-iff-hankel-bounded}；注 \ref{rem:xi-acc-rank}），或局部对象虽逐片存在但因二阶一致性失败而无法全球化；其失败可由 \(H^2\) 粘合障碍类 \([\alpha]\neq 0\) 给出可核验见证（命题 \ref{prop:null-as-h2-obstruction}）。
+  \item \textbf{碰撞空值：}地址 \(a\in A_{\mathrm{adm}}\) 且通过检查器，但底层读出存在多对一压缩而未外置足够残差轴使扩展读出单射化，从而仍等价表现为 \(F(a)=\varnothing\)。其最小侧信息预算由地址—缺陷定律（定理 \ref{thm:address-defect-law}）与分位配额阈值（推论 \ref{cor:pom-prime-register-quantile-budget}）给出；端点侧则由二次分辨率屏障（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}）强制。
+\end{enumerate}
+上述三类失败均可输出有限、离线可核验的否定证书（地址缺失/类型拒绝/预算不足或障碍类见证），从而把“不可核验”转换为可证伪接口。
+
+\subsection{正交阈值的不可替代性：预算不能互相抵偿的结构定理}\label{subsec:cdim-orthogonal-threshold-nonsubstitutable}
+在 unitary slice 可见域约束与 \(\mathbf{PW}\) 闭包口径下，失败来源在体系内分解为互不替代的正交见证（定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable}）。
+该不可替代性在三轴地址语义下可解释为：不同失败类型由不同记录轴支撑，其预算门槛位于互不重叠的正交通道上，因而不存在用一类预算覆盖另一类缺口的合法编译路径。
+
+\begin{theorem}[预算—失败类型分离（正交阈值不可替代性）]\label{thm:cdim-budget-failure-separation}
+在三轴地址 \(a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}})\) 与离线编译—核验流程（算法 \ref{alg:cdim-three-axis-address-compile}）下，\(\mathsf{NULL}\) 的三类来源（\S\ref{subsec:cdim-null-three-way}）具有如下分离性质：
+\begin{enumerate}
+  \item 若失败为语义空值（\(a\notin A_{\mathrm{adm}}\)），则任意预算提升均无意义；该失败仅可通过改变指称/地址对象消除。
+  \item 若失败为协议空值（类型拒绝或 \(H^2\) 粘合障碍 \([\alpha]\neq 0\)），则任何 residue/端点/绕数等预算提升均不能消去该失败见证（命题 \ref{prop:null-as-h2-obstruction}）。
+  \item 若失败为碰撞空值（单射化预算不足），则对任意给定置信口径，其修复\emph{必须}发生在相应支撑轴上：prime-register 预算须越过分位门槛（推论 \ref{cor:pom-prime-register-quantile-budget}）且端点分辨率须满足二次门槛（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}）；增加其它正交轴预算不能替代该跨越。
+\end{enumerate}
+因此，在该体系内“预算”与“失败类型”严格正交：每一类失败都有独立的阈值/不变量证书，且预算提升不能跨轴抵偿。
+\end{theorem}
+\begin{proof}
+语义空值、协议空值与碰撞空值的完备性与可离线核验性由定理 \ref{thm:xi-null-complete-trichotomy-offline} 给出；其中协议空值的“不可用预算消去”由 \(H^2\) 障碍见证（命题 \ref{prop:null-as-h2-obstruction}）给出，碰撞空值的“必须跨越相应阈值”由 prime-register 分位门槛（推论 \ref{cor:pom-prime-register-quantile-budget}）与端点二次门槛（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}）联合强制；三类见证的正交与不可替代性由定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable} 封口。证毕。
+\end{proof}
+例如：
+\begin{itemize}
+  \item prime-register 的模积预算只约束碰撞方向的可逆化（定理 \ref{thm:address-defect-law} 与推论 \ref{cor:pom-prime-register-quantile-budget}），不能抵消端点二次分辨率门槛（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}）；
+  \item 任意预算提升都不能消去粘合障碍类 \([\alpha]\neq 0\) 的同调见证（命题 \ref{prop:null-as-h2-obstruction}），其失败属于结构性不可全球化而非资源不足；
+  \item 若试图引入与相位解耦的额外连续坐标以绕过 \(\mathsf{NULL}\)，则在“无未记录连续轴”原则下只能被类型拒绝或被迫因子化到唯一径向寄存器 \(\varrho=\log|u|\)（推论 \ref{cor:xi-unique-continuous-transverse-register} 与定理 \ref{thm:xi-pw-no-continuous-hair}）。
+\end{itemize}
+因此，“信息守恒/不泄漏”的可审计含义被落实为：失败来源在正交分解下各自闭合，并分别携带独立阈值或不变量证书；预算提升只能在其所属轴上发生有效补偿，不能跨轴抵偿。
+
+\paragraph{前缀深度与单射化预算}
+相位前缀过滤在端点紧化下所诱导的二次分辨率门槛见 \S\ref{subsec:cdim-phase-prefix-quadratic-barrier}。
+碰撞方向的单射化预算阈值由 prime-register 分位配额律给出（推论 \ref{cor:pom-prime-register-quantile-budget}；并见 \S\ref{subsec:xi-pw-type-safety-null}）。
+因此，在多轴前缀口径下，\(a_{\mathrm{vis}}\) 的位深不足只能通过 \(a_{\mathrm{res}}\) 与其它正交证书轴外置修复；拒绝外置将以碰撞型 \(\mathsf{NULL}\) 表达。
+
+\subsection{可直接编译的判定流程：从地址 \texorpdfstring{$a$}{a} 到证书对象或 \texorpdfstring{$\mathsf{NULL}$}{NULL} 见证}\label{subsec:cdim-address-compiler}
+在上述结构下，可将“可编译、可核验、可证伪”的证书协议规定为一个完全离线可核验的编译—检查流程；其输入为三轴地址 \(a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}})\)，输出为一个证书对象 \(s\in F(a)\) 或一份 \(\mathsf{NULL}\) 失败见证。
+
+\begin{algorithm}[三轴地址的编译—核验流程（离线可复核）]\label{alg:cdim-three-axis-address-compile}
+在站点 \(A_{\mathrm{adm}}\) 与（预）层 \(F\) 的设定下，定义如下流程：
+\begin{enumerate}
+  \item \textbf{地址合法性检查：}验证 \(a\in A_{\mathrm{adm}}\)。若失败则输出语义空值证书并返回 \(\mathsf{NULL}\)。
+  \item \textbf{类型/可见域检查：}验证协议允许在 \(C_a\) 上建立读出（unitary slice 锁定与模式轴许可；定理 \ref{thm:xi-pw-no-continuous-hair}）。若失败则输出协议空值证书并返回 \(\mathsf{NULL}\)。
+  \item \textbf{单射化预算与障碍检查：}对 \(a_{\mathrm{mode}}\) 核验模式轴完备性（Hankel 秩一致有界或等价的 ACC-Rank 稳定性，定理 \ref{thm:xi-completeness-iff-hankel-bounded}；注 \ref{rem:xi-acc-rank}）；对 \(a_{\mathrm{res}}\) 核验 prime-register 的模积阈值（推论 \ref{cor:pom-prime-register-quantile-budget} 或定理 \ref{thm:address-defect-law} 的硬下界）；对端点精度预算核验二次分辨率门槛（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}）；对绕数/同调障碍核验相应不变量是否为零（定理 \ref{thm:dephys-dirichlet-winding-minimal}，命题 \ref{prop:null-as-h2-obstruction}）。若任一不足则输出对应失败见证并返回 \(\mathsf{NULL}\)。
+  \item \textbf{对象构造与粘接：}在有限柱覆盖上构造局部证书对象族并核验交叠相容性；若相容则由粘接唯一性得到唯一全局对象 \(s\in F(a)\) 并返回 \(s\)（命题 \ref{prop:cdim-nonnull-section-criterion}）。
+\end{enumerate}
+\end{algorithm}
+该流程与最小记录轴定理一致：任何为消除 \(\mathsf{NULL}\) 而引入的新轴，必须在 \(\mathrm{Ext}(\pi)\) 中被识别为规范初对象 \(r_0\) 的因子化；而在连续轴层面，除径向寄存器 \(\varrho(u)=\log|u|\) 的等价类外不存在可接受扩维通道（定理 \ref{thm:cdim-minimal-record-axis}）。
+
+\subsection{边界层盲区闭环：压缩、盲区与外置前缀/可逆层析}\label{subsec:cdim-boundary-blindspot-loop}
+在有限证书口径下，Jensen 缺陷 \(D_{\zeta}(\varrho)\) 作为 \(\log\varrho\) 的函数在 \(\varrho=|w_\rho|\) 处出现折角原子，其斜率跳变等于相应零点的重数（推论 \ref{cor:app-jensen-defect-kink-structure}）。
+因此，任何仅使用有限半径采样族的核验策略都存在结构性盲区：若采样半径上界未越过 \(|w_\rho|\)，则该折角阈值在采样上严格不可见，无法排除相应零点（推论 \ref{cor:app-jensen-finite-sampling-blindspot}）。
+\par
+在端点二次压缩制度下，盲区与位预算门槛同阶出现：固定可见接口若拒绝外置可寻址前缀，则离切片偏移在高高度区间被迫通过端点二次径向通道进入并触发不可约的端点分辨率/位复杂度下界（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}；并见注 \ref{rem:xi-comoving-horizon-localization-address-null} 对制度成本的说明）。
+若允许外置可寻址前缀并取共动局部化，则二次红移可被解除为线性显影，端点层位预算降为与高度窗无关的常数门槛（推论 \ref{cor:xi-comoving-prefix-bit-budget-gain}）。
+在本章的圆盘完成化口径下，幂覆盖/Adams--Norm 折叠门提供了与共动前缀同型的“解压”机制：它把端点边界层中的点状缺陷搬运到预设紧子圆盘并在固定半径处以 Jensen 缺陷证书显影（推论 \ref{cor:xi-adams-norm-fixed-radius-jensen-certificate}；并见 \S\ref{subsec:cdim-adams-norm-folding-jensen}）。
+\par
+上述结构形成一个实现无关的闭环：
+\begin{itemize}
+  \item 固定图表的端点压缩把离切片信息推入边界层，从而产生有限证书的不可判别盲区；
+  \item 解除盲区的两条可审计路径分别是：外置可寻址前缀以共动局部化（消除二次红移），或进入可逆层析通道（把二维参数编码为一维指数谱并可反演，定理 \ref{thm:cdim-comoving-horizon-scan-fourier-inversion}）；
+  \item 因而“地址先于取值”的制度后果可被定量化为：是否外置前缀决定了位预算主项是否包含 \(2\log_2T\)，并决定了边界层盲区是否可被穿透（参见 \S\ref{subsec:discussion-comoving-tomography-prefix-budget-blindspot} 的推广表述）。
+\end{itemize}
+
+\subsection{共动缺陷的降红移机制：从二次端点压缩到一阶可见性}\label{subsec:cdim-comoving-defect-deredshift}
+\subsubsection{共动图表与共动 Jensen 缺陷}
+固定图表制度下，离切片点状缺陷在 Cayley--Busemann 机制中被压入端点边界层并携带二次红移；因此仅以固定半径的 Jensen 缺陷作证书时，排除高度窗上的偏移必须支付与 \(\gamma^2\) 同阶增长的端点分辨率预算（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}）。
+与之相对，移位 Cayley 图表所诱导的平移族完成化 \(F_{\zeta,x_0}\) 及其 Jensen 缺陷 \(D_{\zeta,x_0}\)（式 \eqref{eq:xi-comoving-shifted-Fzeta}--\eqref{eq:xi-comoving-shifted-jensen-defect}）允许把“高度红移”转写为图表选择：在共动选择 \(x_0=\gamma\) 下，离切片零点 \(\rho=\beta+\mathrm{i}\gamma\)（\(\beta<\tfrac12\)）的圆盘像退化为
+\[
+w_{\rho,\gamma}=\mathcal{C}(\mathrm{i}\delta)=\frac{1-\delta}{1+\delta}\in(0,1),
+\qquad
+\delta:=\tfrac12-\beta>0
+\]
+（式 \eqref{eq:xi-comoving-pure-delta}），从而 \(|w_{\rho,\gamma}|\) 仅依赖偏移 \(\delta\) 而与高度无关。
+
+\subsubsection{定量偏移上界：共动缺陷上界推出偏移的显式控制}
+\begin{proposition}[共动缺陷界导出无高度偏移界]\label{prop:cdim-comoving-defect-implies-delta-bound}
+对任意 \(x_0\in\RR\) 令 \(D_{\zeta,x_0}\) 为平移族完成化的 Jensen 缺陷（式 \eqref{eq:xi-comoving-shifted-jensen-defect}）。
+若存在 \(0<\varrho<1\) 与 \(\varepsilon\ge 0\) 使
+\[
+D_{\zeta,x_0}(\varrho)\le \varepsilon,
+\]
+则对任意离切片零点 \(\rho=\beta+\mathrm{i}\gamma\) 满足 \(\beta<\tfrac12\) 且 \(\gamma=x_0\) 时，其偏移 \(\delta=\tfrac12-\beta\) 满足显式上界
+\[
+\boxed{\;
+\delta\ \le\ \frac{1-\varrho e^{-\varepsilon}}{1+\varrho e^{-\varepsilon}}\; }.
+\]
+\end{proposition}
+\begin{proof}
+该命题即定理 \ref{thm:xi-comoving-defect-implies-delta-bound} 在本章符号下的直接表述；其证明以单零点 Jensen 下界（命题 \ref{prop:app-jensen-single-zero-lower-bound}）与共动像 \(|w_{\rho,\gamma}|=\frac{1-\delta}{1+\delta}\) 的代数消元为核心。证毕。
+\end{proof}
+该结论的制度含义在于：在保持 unitary slice 的单参可见轴不变的前提下，外置共动前缀可将“端点二次压缩导致的不可见性”转写为半径阈值上的确定性比较，从而把偏移排除从 \(\gamma^2\)-量纲降为 \(\delta\)-量纲的直接估计（并与共动前缀的位预算收益律相容，推论 \ref{cor:xi-comoving-prefix-bit-budget-gain}）。
+
+\subsubsection{一致小化判别：以 \texorpdfstring{$\sup_{x_0}$}{sup\_{x0}} 消除图表选择}
+共动选择 \(x_0=\gamma\) 的制度含义在于：对任意潜在离切片零点，都存在一条图表使其偏移以一阶尺度进入半径阈值（式 \eqref{eq:xi-comoving-pure-delta}）。
+将该“可随零点移动的图表选择”提升为实现无关的统一证书语法，可得到 RH 的一致小化判别：通过对 \(x_0\) 取上确界，将图表选择消去为一个完全离线可核验的量词结构。
+\begin{theorem}[RH 的共动 Jensen 缺陷一致小化判别]\label{thm:cdim-rh-iff-uniform-comoving-defect}
+下列命题等价：
+\begin{enumerate}
+  \item[(i)] RH 成立；
+  \item[(ii)] 存在 \(\varrho_n\uparrow 1\)、\(\varepsilon_n\downarrow 0\)，使得对所有 \(n\) 有一致界
+  \[
+  \sup_{x_0\in\RR}D_{\zeta,x_0}(\varrho_n)\le \varepsilon_n.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+该定理即定理 \ref{thm:xi-rh-iff-uniform-comoving-defect} 在本章符号下的直接译文。证毕。
+\end{proof}
+
+\paragraph{共动全局积分缺陷与阈值尖点（引用）}
+共动 Jensen 缺陷在平移基点方向上的全局积分分解、阈值尖点律与黄金分辨率链渐近，统一见段落 \ref{par:xi-comoving-integrated-jensen-defect-sumrule} 及定理 \ref{thm:xi-integrated-defect-cusp-reconstruction}。
+
+\input{subsec__circle-dimension-phase-gate-comoving-horizon-scan-tomography}
+\input{subsec__circle-dimension-phase-gate-null-decidability-closure}
+
+\subsection{Jensen 缺陷的完全有限化：盘内零点计数的半径族证书}\label{subsec:cdim-jensen-defect-finiteization}
+令 \(F_\zeta\) 为圆盘化完成化函数（附录 \ref{app:unit-circle-phase-gate}），并对 \(0<\varrho<1\) 定义 Jensen 缺陷 \(D_\zeta(\varrho)\)（定义 \ref{def:app-jensen-defect}）。
+由 Jensen--Blaschke 求和式（命题 \ref{prop:app-jensen-formula-defect}），若 \(\{a_k\}\) 为 \(F_\zeta\) 在 \(|w|<\varrho\) 内的零点（按重数计），则
+\[
+D_\zeta(\varrho)=\sum_{|a_k|<\varrho}\log\!\left(\frac{\varrho}{|a_k|}\right)\ \ge\ 0,
+\qquad
+D_\zeta(\varrho)=0\ \Longleftrightarrow\ F_\zeta\ \text{在 }|w|<\varrho\text{ 内无零点}.
+\]
+因此，“开圆盘内无零点”可被压缩为一族半径参数的圆周平均缺陷约束，且该压缩与零点计数严格等价、不依赖数值近似假设。
+与此同时，有限半径网格核验不可避免地产生结构性盲区：若仅在有限半径集合上评估缺陷，则盘内零点只有在穿越采样阈值后才进入求和项，从而存在不可判别窗口（推论 \ref{cor:app-jensen-finite-sampling-blindspot}）。
+
+\subsection{幂覆盖的缺陷共变性与尺度交换律：重参数化与固定半径显影}\label{subsec:cdim-power-cover-scale-exchange}
+\paragraph{幂半群在 Jensen 层面的严格共变性}
+对圆盘内解析函数 \(F\) 及其幂拉回 \(F^{(m)}(w):=F(w^m)\)，Jensen 缺陷满足严格共变
+\[
+D_{F^{(m)}}(\varrho)=D_F(\varrho^m)
+\qquad(0<\varrho<1,\ m\ge 1)
+\]
+（命题 \ref{prop:app-jensen-defect-power-covariance}）。
+因此幂半群 \(w\mapsto w^m\) 在 Jensen 通道上不引入新的连续自由度，而仅对半径变量施加确定性重参数化 \(\varrho\mapsto \varrho^m\)。
+
+\paragraph{尺度交换律：端点边界层缺陷的固定半径显影}
+当离切片零点被二次压缩到端点边界层时，幂覆盖与 Adams--Norm 折叠门的复合协议可将该不可见缺陷搬运到任意预设的紧子圆盘并在固定半径处显影：对任意 \(r_\star\in(0,1)\) 存在显式尺度 \(m_\star\) 使 \(|w_\rho|^{m_\star}\le r_\star\)（式 \eqref{eq:xi-adams-norm-mstar-def}--\eqref{eq:xi-adams-norm-mstar-radius}），并在任意固定 \(R\in(r_\star,1)\) 处得到高度无关的 Jensen 正缺陷下界
+\[
+D_{\mathrm{Nm}_{m_\star}[F_\zeta]}(R)\ \ge\ \log\!\frac{R}{r_\star}\ >\ 0
+\]
+（推论 \ref{cor:xi-adams-norm-fixed-radius-jensen-certificate}）。
+该交换机制把端点边界层中的径向不可见性外置为尺度参数，从而使“固定半径采样”的盲区可被制度性穿透。
+
+\paragraph{端点通道的线性增益与正交性}
+需要强调的是：幂拉回在 Jensen 缺陷通道仅作半径重参数化，而在端点通道上可出现可核验的尺度放大。
+在“偏移仅由 Blaschke 数据承载”的口径下，端点吸收系数 \(\Phi_{-1}(B)\)（命题 \ref{prop:xi-endpoint-absorption-coefficient}）在奇数 Adams 门下满足线性重标定 \(\Phi_{-1}(B^{(m)})=m\Phi_{-1}(B)\)（定理 \ref{thm:xi-endpoint-absorption-adams-rescaling}），从而同一尺度参数 \(m\) 在径向平均通道上不产生增益而在端点通道上提供独立的放大机制；该对照与尺度交换律的审计口径相容（定理 \ref{thm:xi-symmetry-audit-tension-scaled}）。
+
+\subsection{反演对偶与谱侧共轭退化：幺正切片上的自对偶闭合}\label{subsec:cdim-inversion-duality-spectral-conjugation}
+在乘法 Haar 测度 \(\dd^{\times}x=\dd x/x\) 的 Hilbert 空间 \(L^{2}_{\times}:=L^{2}((0,\infty),\dd^{\times}x)\) 上，定义反演对偶算子
+\[
+(Jf)(x):=\overline{f(1/x)}.
+\]
+由于 \(\dd^{\times}x\) 在 \(x\mapsto 1/x\) 下不变，\(J\) 为反线性等距对合（\(J^{2}=I\)）；Lebesgue 口径下的等距反演仅差一个 Jacobian 归一化因子（备注 \ref{rem:mellin-inversion-jacobian}）。
+与带临界移位的 Mellin 读出 \(\mathcal{M}\) 相容地，反演对偶在谱侧满足如下共轭恒等式。
+
+\begin{proposition}[Mellin 反演对偶：谱侧共轭退化]\label{prop:cdim-mellin-inversion-duality}
+对足够良好的 \(f\) 与任意 \(s\in\CC\)，成立恒等式
+\[
+\boxed{\;(\mathcal{M}(Jf))(s)=\overline{(\mathcal{M}f)(1-\overline{s})}\;}
+\]
+从而在幺正切片 \(s=\tfrac12+\mathrm{i}t\) 上有谱侧逐点共轭退化
+\[
+\boxed{\;(\mathcal{M}_{1/2}(Jf))(t)=\overline{(\mathcal{M}_{1/2}f)(t)}\qquad(t\in\RR).\;}
+\]
+\end{proposition}
+\begin{proof}
+见命题 \ref{prop:mellin-conjugation-identity}。证毕。
+\end{proof}
+
+\subsection{视界熵缺陷的单标量判据：盘内零点事件的边界压缩}\label{subsec:cdim-horizon-defect-scalar-criterion}
+在圆盘完成化口径下，Jensen 缺陷 \(D_{\zeta}(\varrho)\) 将“盘内零点禁入”压缩为单参标量的边界行为（定义 \ref{def:app-jensen-defect}；并见 \S\ref{subsec:cdim-jensen-defect-finiteization}）。
+
+\begin{theorem}[RH 的单标量判据：视界纯度]\label{thm:cdim-horizon-purity-criterion}
+以下命题等价：
+\begin{enumerate}
+  \item[(i)] RH 成立；
+  \item[(ii)] \(\displaystyle \lim_{\varrho\uparrow 1}D_{\zeta}(\varrho)=0\)；
+  \item[(iii)] \(\displaystyle \limsup_{\varrho\uparrow 1}D_{\zeta}(\varrho)=0\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+见定理 \ref{thm:xi-horizon-purity-criterion}。证毕。
+\end{proof}
+
+\subsection{排斥半径与缺陷上界链：证书序列的趋一机制}\label{subsec:cdim-repulsion-radius-chain}
+对任意 \(0<\varrho<1\) 定义排斥半径
+\[
+r_{\ast}(\varrho):=\varrho\exp\!\bigl(-D_{\zeta}(\varrho)\bigr)\in(0,\varrho].
+\]
+
+\begin{theorem}[缺陷诱导的排斥半径]\label{thm:cdim-defect-repulsion-radius}
+对任意 \(0<\varrho<1\)，\(F_{\zeta}\) 在子盘 \(|w|<r_{\ast}(\varrho)\) 内无零点。
+更定量地，若 \(D_{\zeta}(\varrho)\le\varepsilon\)，则 \(r_{\ast}(\varrho)\ge \varrho e^{-\varepsilon}\)。
+并且，若存在 \(\varrho_n\uparrow 1\) 使 \(r_{\ast}(\varrho_n)\uparrow 1\)，则 \(F_{\zeta}\) 在 \(\mathbb{D}\) 内无零点，从而 RH 成立。
+\end{theorem}
+\begin{proof}
+见定理 \ref{thm:dephys-defect-repulsion-radius} 与推论 \ref{cor:app-jensen-repulsion-radius-to-one}。证毕。
+\end{proof}
+
+\subsection{对数半径导数律：缺陷导数即盘内零点计数}\label{subsec:cdim-defect-log-derivative}
+记盘内零点计数函数（按重数计）
+\[
+N_{F_{\zeta}}(\varrho):=\#\{a:\ F_{\zeta}(a)=0,\ |a|<\varrho\}.
+\]
+
+\begin{proposition}[对数半径导数律与驱动律]\label{prop:cdim-jensen-defect-log-derivative}
+对几乎处处的 \(\varrho\in(0,1)\)，有
+\[
+\boxed{\;
+\frac{\dd}{\dd(\log\varrho)}D_{\zeta}(\varrho)=N_{F_{\zeta}}(\varrho)\; }.
+\]
+并且对几乎处处的 \(\varrho\in(0,1)\)，排斥半径满足驱动律
+\[
+\boxed{\;
+\frac{\dd}{\dd(\log\varrho)}\log r_{\ast}(\varrho)=1-N_{F_{\zeta}}(\varrho)\; }.
+\]
+\end{proposition}
+\begin{proof}
+见命题 \ref{prop:app-jensen-defect-log-derivative} 与推论 \ref{cor:dephys-repulsion-radius-zero-count-driving}。证毕。
+\end{proof}
+
+\subsection{盘内零点的不可消去边界印记：阈值化下界与闭式半径律}\label{subsec:cdim-jensen-single-zero-imprint}
+若 \(F_{\zeta}\) 在 \(\mathbb{D}\) 内存在零点 \(a\) 满足 \(|a|<1\)，则对任意 \(\varrho\in(|a|,1)\) 有
+\[
+D_{\zeta}(\varrho)\ge \log\!\left(\frac{\varrho}{|a|}\right),
+\qquad
+\liminf_{\varrho\uparrow 1}D_{\zeta}(\varrho)\ge \log(1/|a|)>0
+\]
+（命题 \ref{prop:app-jensen-single-zero-lower-bound}）。
+特别地，对离临界线零点 \(\rho=\beta+\mathrm{i}\gamma\)（\(\beta<\tfrac12\)）所诱导的圆盘像 \(w_{\rho}\)，对任意 \(\varrho\in(|w_{\rho}|,1)\) 有
+\[
+D_{\zeta}(\varrho)\ge \log\!\left(\frac{\varrho}{|w_{\rho}|}\right).
+\]
+并且 \(|w_{\rho}|\) 具有完全闭式：由 \eqref{eq:app-offcritical-radius-closed} 可得
+\[
+|w_{\rho}|^{2}=\frac{\gamma^{2}+(1-\delta)^{2}}{\gamma^{2}+(1+\delta)^{2}},
+\qquad
+\delta:=\tfrac12-\beta>0,
+\]
+从而端点二次压缩律与阈值化缺陷下界可被显式对齐。
+
+\subsection{谱侧共轭—视界缺陷—排斥半径：一条完全闭合的等价证书链}\label{subsec:cdim-spectral-conjugation-horizon-defect-repulsion-chain}
+本节把幺正切片的谱侧共轭封口（\S\ref{subsec:cdim-inversion-duality-spectral-conjugation}）、视界纯度的单标量压缩（\S\ref{subsec:cdim-horizon-defect-scalar-criterion}）与排斥半径的禁入律（\S\ref{subsec:cdim-repulsion-radius-chain}）组织为一条实现无关的闭合证书链：等距读出锁定切片位置，缺陷的边界极限锁定 RH，而有限半径缺陷上界给出明确的子盘零点排除半径，并可被完全离线复核。
+
+\subsubsection{幺正切片与谱侧共轭退化：范数守恒读出的对偶封口}
+在 \(L^2_{\times}=L^{2}((0,\infty),\dd^{\times}x)\) 上，Mellin--Plancherel 幺正切片定理（定理 \ref{thm:mellin-unitary-slice-unique}）给出唯一等距读出：\(\mathcal{M}_{1/2}:L^{2}_{\times}\to L^{2}(\RR,\dd t/2\pi)\) 幺正。
+并且任意偏离切片 \(\Re(s)=\sigma\) 的读出必然引入权重扭曲 \(x^{\sigma-\frac12}\)（式 \eqref{eq:mellin-sigma-weight-twist}），等价于在连续对象层外置一条额外权重记录轴。
+\par
+在同一语义中，反演对偶算子 \(J\) 的谱侧共轭退化由命题 \ref{prop:cdim-mellin-inversion-duality} 给出；因此，若要求读出既保持 \(L^{2}\)-范数又在对偶下闭合，则协议在调和分析层面被结构性地约束到幺正切片，而无需引入新的连续寄存器。
+
+\subsubsection{视界纯度判据：RH 的单标量极限等价}
+圆盘完成化 \(F_{\zeta}\) 的 Jensen 缺陷 \(D_{\zeta}(\varrho)\) 由定义 \ref{def:app-jensen-defect} 给出，并满足 Jensen--Blaschke 求和式（命题 \ref{prop:app-jensen-formula-defect}），从而 \(D_{\zeta}(\varrho)\ge 0\) 且
+\[
+D_{\zeta}(\varrho)=0\ \Longleftrightarrow\ F_{\zeta}\ \text{在 }|w|<\varrho\text{ 内无零点}.
+\]
+在此基础上，定理 \ref{thm:cdim-horizon-purity-criterion} 把 RH 完全压缩为单参标量函数的视界极限：
+\[
+\mathrm{RH}\ \Longleftrightarrow\ \lim_{\varrho\uparrow 1}D_{\zeta}(\varrho)=0.
+\]
+进一步地，推论 \ref{cor:app-rh-iff-jensen-defect-zero} 给出完全有限化表述：RH 等价于对一切 \(\varrho\in(0,1)\) 皆有 \(D_{\zeta}(\varrho)=0\)；而附录定理 \ref{thm:app-rh-iff-jensen-defect-vanishing-sequence} 表明只需存在一列 \(\varrho_n\uparrow 1\) 使 \(D_{\zeta}(\varrho_n)\to 0\) 即可推出 RH。
+
+\subsubsection{排斥半径与禁入律：缺陷上界推出子盘零点排除}
+由缺陷定义出排斥半径 \(r_{\ast}(\varrho)=\varrho\exp(-D_{\zeta}(\varrho))\)（\S\ref{subsec:cdim-repulsion-radius-chain}）。
+定理 \ref{thm:cdim-defect-repulsion-radius} 给出严格禁入结论：在任意半径层 \(\varrho\) 上，有限数据对 \((\varrho, D_{\zeta}(\varrho))\) 确定一个显式子盘 \(|w|<r_{\ast}(\varrho)\)，其中零点事件被完全排除；并且当 \(D_{\zeta}(\varrho)\le \varepsilon\) 时有定量下界 \(r_{\ast}(\varrho)\ge \varrho e^{-\varepsilon}\)。
+若存在 \(\varrho_n\uparrow 1\) 使 \(r_{\ast}(\varrho_n)\uparrow 1\)，则 \(F_{\zeta}\) 在 \(\mathbb{D}\) 内无零点，从而 RH 成立。
+
+\subsection{缺陷—零点计数的微分等价：折角、重数与排斥半径的驱动律}\label{subsec:cdim-defect-zero-count-differential-equivalence}
+Jensen 缺陷不仅提供半径族的静态禁入证书，还携带盘内零点计数的动态账本信息。
+命题 \ref{prop:cdim-jensen-defect-log-derivative} 给出缺陷对 \(\log\varrho\) 的导数几乎处处等于盘内零点计数 \(N_{F_{\zeta}}(\varrho)\)，从而缺陷曲线的折角、斜率与排斥半径的增长率均可被零点半径分布完全驱动。
+
+\subsubsection{对数半径导数律：缺陷的导数即盘内零点计数}
+命题 \ref{prop:cdim-jensen-defect-log-derivative} 表明对几乎处处的 \(\varrho\in(0,1)\) 有
+\[
+\frac{\dd}{\dd(\log\varrho)}D_{\zeta}(\varrho)=N_{F_{\zeta}}(\varrho),
+\]
+并因此给出缺陷的单调性与零点进入半径层时的可核验跃迁结构（推论 \ref{cor:app-jensen-defect-kink-structure}）。
+
+\subsubsection{折角定位与视界深度：阈值半径的不可去原子}
+对 \(r\in(0,1)\)，记 \(m(r)\) 为满足 \(|a|=r\) 的盘内零点总重数，则推论 \ref{cor:app-jensen-defect-kink-structure} 给出斜率跳变律：把 \(D_{\zeta}\) 视为 \(\log\varrho\) 的函数，则在 \(\varrho=r\) 处左右导数之差等于 \(m(r)\)。
+因此，每个零点在半径轴上留下一个不可去的折角原子，其位置正是阈值半径 \(r=|a|\)。
+\par
+对离临界线零点 \(\rho=\beta+\mathrm{i}\gamma\)（\(\beta<\tfrac12\)）的圆盘像 \(w_{\rho}\)，令 \(r_{\rho}:=|w_{\rho}|\)。
+由 \eqref{eq:app-offcritical-radius-closed} 的闭式，
+\[
+r_{\rho}^{2}=\frac{\gamma^{2}+(1-\delta)^{2}}{\gamma^{2}+(1+\delta)^{2}},
+\qquad
+\delta:=\tfrac12-\beta>0,
+\]
+并定义视界深度
+\[
+h(\rho):=1-r_{\rho}^{2}=\frac{4\delta}{\gamma^{2}+(1+\delta)^{2}}.
+\]
+当 \(|\gamma|\to\infty\) 且 \(\delta\) 有界时，有 \(h(\rho)\sim 4\delta/\gamma^{2}\)，表明离切片信息在圆盘接口中被二次压入边界层，从而其折角阈值半径 \(r_{\rho}\) 趋近于 \(1\) 并触发有限采样盲区（\S\ref{subsec:cdim-boundary-blindspot-loop}）。
+
+\subsubsection{排斥半径的零点计数驱动律：增长率与盘内零点的等价阻塞}
+由 \(r_{\ast}(\varrho)=\varrho e^{-D_{\zeta}(\varrho)}\) 与命题 \ref{prop:cdim-jensen-defect-log-derivative} 的驱动律，几乎处处成立
+\[
+\frac{\dd}{\dd(\log\varrho)}\log r_{\ast}(\varrho)=1-N_{F_{\zeta}}(\varrho).
+\]
+从而一旦盘内出现零点（存在 \(\varrho\) 使 \(N_{F_{\zeta}}(\varrho)\ge 1\)），则在其后的半径层上 \(\log r_{\ast}\) 的增长率不再为正，排斥半径不可能随 \(\varrho\uparrow 1\) 严格趋一；该阻塞机制与定理 \ref{thm:cdim-defect-repulsion-radius} 的“趋一证书 \(\Rightarrow\) RH”结论相容。
+
+\subsection{有限采样盲区、端点二次压缩与可审计的两类破盲路径}\label{subsec:cdim-finite-sampling-blindspot-endpoint-compression-deblind}
+本节将有限半径采样的不可判别性（盲区）与端点二次压缩的标度制度并置，并指出在协议内解除盲区的两条可审计路径：共动前缀局部化与可逆层析通道。
+
+\subsubsection{有限半径采样的结构性盲区：未越过阈值半径则离线零点不可判别}
+给定有限采样半径集合 \(\{\varrho_j\}_{j=1}^{M}\subset(0,1)\)，记 \(\varrho_{\max}:=\max_{1\le j\le M}\varrho_j\)。
+推论 \ref{cor:app-jensen-finite-sampling-blindspot} 表明缺陷采样族 \(\{D_{\zeta}(\varrho_j)\}\) 仅能反映满足 \(|a|<\varrho_{\max}\) 的盘内零点；任何满足 \(|a|>\varrho_{\max}\) 的盘内零点在该有限采样上严格不可见。
+特别地，若存在离临界线零点 \(\rho\) 的圆盘像 \(w_{\rho}\) 满足 \(\varrho_{\max}\le |w_{\rho}|\)，则仅凭该有限采样无法排除该零点；要使其在采样上被强制显现，必须 \(\varrho_{\max}>|w_{\rho}|\)。
+\par
+在高高度区间（\(|\gamma|\to\infty\)、\(\delta\) 有界）下，视界深度满足 \(1-|w_{\rho}|^{2}\sim 4\delta/\gamma^{2}\)（\S\ref{subsec:cdim-defect-zero-count-differential-equivalence}）。
+因此，有限采样的分辨率裕度 \(1-\varrho_{\max}\) 若不达到 \(\delta/\gamma^{2}\) 量纲，则该离线零点在采样上不可检出。
+
+\subsubsection{闭环（压缩 \texorpdfstring{$\Rightarrow$}{=>} 盲区 \texorpdfstring{$\Rightarrow$}{=>} 破盲）：前缀共动或可逆层析}
+端点二次径向压缩把离切片偏移推入边界层，从而在固定图表制度与有限半径采样下不可避免地产生盲区（\S\ref{subsec:cdim-boundary-blindspot-loop}）。
+解除盲区存在两条可审计路径：其一是外置可寻址前缀并实施共动局部化，使高度红移被消解为与偏移 \(\delta\) 同阶的线性可见量（命题 \ref{prop:cdim-comoving-defect-implies-delta-bound}，推论 \ref{cor:xi-comoving-prefix-bit-budget-gain}）；其二是进入可逆层析通道，把二维参数编码为一维指数谱并可由 Fourier 反演恢复（定理 \ref{thm:cdim-comoving-horizon-scan-fourier-inversion}）。
+
+\subsubsection{地址超度量与分辨率屏障：共享前缀深度即半径收缩}
+在 dyadic 地址模型下，地址超度量 \(d_{\mathrm{addr}}\) 的闭球恰为 dyadic 盒：共享 \(b\) 位前缀等价于在深度 \(b\) 的证书层级上不可分离（\S\ref{subsec:cdim-phase-prefix-quadratic-barrier}）。
+在零点密度与端点压缩的合成下，分辨率预算存在不可绕过的下界：命题 \ref{prop:cdim-phase-prefix-occupancy-barrier} 给出，若要求高度带 \((T,2T]\) 上的相位地址映射在 \(b\) 位精度下可达单射，则必须
+\[
+b\ \ge\ 2\log_2 T+\log_2\log T-O(1).
+\]
+该标度由平均零点间距 \(\asymp 2\pi/\log T\) 与相位门端点导数的 \(T^{-2}\) 压缩共同决定；因此，不外置前缀时位预算主项的 \(2\log_2T\) 不可由仅提升固定图表分辨率替代。
+
+\endinput

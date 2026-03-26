@@ -1,0 +1,205 @@
+\paragraph{Poisson--Cauchy 位置混合的四阶熵主项、黄金离散化与桥接判据}
+以下结论在同尺度位置混合子类上给出可审计的主常数与桥接条件，并与本节既有 Poisson 粗粒化框架保持一致。
+
+\begin{theorem}[Poisson--Cauchy 位置混合的 KL 四阶主项与六阶余项]\label{thm:xi-poisson-cauchy-mixture-kl-t4-minimal-third}
+设 \(\mu\in\mathcal P(\RR)\) 满足
+\[
+\int_{\RR} y\,\dd\mu(y)=0,\qquad
+\sigma^2:=\int_{\RR} y^2\,\dd\mu(y),\qquad
+M_6:=\int_{\RR}|y|^6\,\dd\mu(y)<\infty.
+\]
+对 \(t>0\) 定义
+\[
+P_t(x):=\frac{1}{\pi}\frac{t}{x^2+t^2},\qquad
+p_t(x):=(P_t*\mu)(x),\qquad
+q_t(x):=P_t(x).
+\]
+则当 \(t\to\infty\) 时，
+\begin{equation}\label{eq:xi-poisson-cauchy-mixture-kl-t4-minimal-third}
+D_{\mathrm{KL}}(p_t\mid q_t)
+=\frac{\sigma^4}{8t^4}
++O\!\left(\frac{M_6}{t^6}\right).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+对固定 \(x\)，将 \(q_t(x-y)\) 在 \(y=0\) 处作四阶 Taylor 展开并对 \(\mu\) 积分。记中心矩 \(m_k:=\int y^k\,\dd\mu(y)\)（\(k\ge 2\)），则
+\[
+p_t(x)
+=q_t(x)
++\frac{\sigma^2}{2}q_t''(x)
+-\frac{m_3}{6}q_t^{(3)}(x)
++\frac{m_4}{24}q_t^{(4)}(x)
++R_t(x).
+\]
+由 Cauchy 核导数的有理闭式
+\[
+q_t^{(k)}(x)=\pi^{-1}t^{-(k+1)}R_k(x/t)\,(1+(x/t)^2)^{-(k+1)}
+\]
+可得统一余项控制 \(R_t(x)=O(M_6t^{-7})(1+(x/t)^2)^{-1}\)。因此存在有界有理函数 \(f_2,f_3,f_4\)（奇偶性分别为偶、奇、偶）使
+\[
+\frac{p_t(ty)}{q_t(ty)}-1
+=\frac{\sigma^2}{t^2}f_2(y)
++\frac{m_3}{t^3}f_3(y)
++\frac{m_4}{t^4}f_4(y)
++O\!\left(\frac{M_6}{t^5}\right),
+\]
+其中
+\[
+f_2(y)=\frac{-1+3y^2}{(1+y^2)^2},
+\qquad
+\frac{q_t''(x)}{q_t(x)}=\frac{2(-t^2+3x^2)}{(t^2+x^2)^2}.
+\]
+记 \(\varepsilon_t:=p_t/q_t-1\)，则
+\[
+D_{\mathrm{KL}}(p_t\mid q_t)
+=\int_{\RR}q_t(1+\varepsilon_t)\log(1+\varepsilon_t)\,\dd x.
+\]
+由 \(\int q_t\varepsilon_t\,\dd x=0\) 与
+\(
+(1+u)\log(1+u)=u+\frac12u^2+O(u^3)
+\)
+得
+\[
+D_{\mathrm{KL}}(p_t\mid q_t)
+=\frac12\int_{\RR}q_t\varepsilon_t^2\,\dd x
++O\!\left(\int_{\RR}q_t|\varepsilon_t|^3\,\dd x\right).
+\]
+作代换 \(x=ty\) 并利用 \(q_t(ty)\,t\,\dd y=\pi^{-1}(1+y^2)^{-1}\dd y\)。由于权重为偶函数且 \(f_2\) 偶、\(f_3\) 奇，\(t^{-5}\) 的交叉项积分为零，故
+\[
+\frac12\int q_t\varepsilon_t^2\,\dd x
+=\frac{\sigma^4}{2t^4}\cdot
+\frac{1}{\pi}\int_{\RR}\frac{f_2(y)^2}{1+y^2}\,\dd y
++O\!\left(\frac{M_6}{t^6}\right).
+\]
+又
+\[
+\frac{f_2(y)^2}{1+y^2}
+=\frac{1-6y^2+9y^4}{(1+y^2)^5},
+\qquad
+\frac{1}{\pi}\int_{\RR}\frac{f_2(y)^2}{1+y^2}\,\dd y=\frac14.
+\]
+此外 \(\int q_t|\varepsilon_t|^3\,\dd x=O(t^{-6})\)。合并即得
+\eqref{eq:xi-poisson-cauchy-mixture-kl-t4-minimal-third}。证毕。
+\end{proof}
+
+\begin{theorem}[归一化熵能与耗散率极限]\label{cor:xi-poisson-cauchy-mixture-i1-t5-minimal-third}
+在定理 \ref{thm:xi-poisson-cauchy-mixture-kl-t4-minimal-third} 的设定下，定义
+\[
+\mathcal E(t):=t^4D_{\mathrm{KL}}(p_t\mid q_t).
+\]
+则
+\[
+\lim_{t\to\infty}\mathcal E(t)=\frac{\sigma^4}{8},
+\qquad
+\lim_{t\to\infty}\left(-t^5\frac{\dd}{\dd t}D_{\mathrm{KL}}(p_t\mid q_t)\right)=\frac{\sigma^4}{2}.
+\]
+\end{theorem}
+
+\begin{proof}
+由 \eqref{eq:xi-poisson-cauchy-mixture-kl-t4-minimal-third},
+\[
+D_{\mathrm{KL}}(p_t\mid q_t)
+=\frac{\sigma^4}{8t^4}+O(t^{-6}),
+\]
+乘以 \(t^4\) 得第一式。
+上一条证明中的积分余项可逐项求导，故
+\[
+\frac{\dd}{\dd t}D_{\mathrm{KL}}(p_t\mid q_t)
+=-\frac{\sigma^4}{2t^5}+O(t^{-7}),
+\]
+乘以 \(-t^5\) 并取极限即得第二式。证毕。
+\end{proof}
+
+\begin{corollary}[黄金分辨率链上的四阶衰减律]\label{cor:xi-poisson-cauchy-mixture-golden-exponent4-barrier}
+令
+\[
+\varphi:=\frac{1+\sqrt5}{2},\qquad
+a_m:=m\log\varphi,\qquad
+\varrho_m:=\tanh\!\left(\frac{a_m}{2}\right)\uparrow 1.
+\]
+定义 Cayley--Poisson 尺度
+\[
+t_m:=\frac{1+\varrho_m}{1-\varrho_m}.
+\]
+则 \(t_m=e^{a_m}=\varphi^m\)，并且
+\[
+D_{\mathrm{KL}}(p_{t_m}\mid q_{t_m})
+=\frac{\sigma^4}{8\,\varphi^{4m}}
++O\!\left(\varphi^{-6m}\right)
+\qquad(m\to\infty).
+\]
+\end{corollary}
+
+\begin{proof}
+恒等式 \(\frac{1+\tanh(x)}{1-\tanh(x)}=e^{2x}\) 给出 \(t_m=e^{a_m}=\varphi^m\)。
+代入 \eqref{eq:xi-poisson-cauchy-mixture-kl-t4-minimal-third} 即得。
+\end{proof}
+
+\begin{theorem}[四阶尺度的刚性判别]\label{thm:xi-poisson-cauchy-mixture-t4-optimality-rigidity}
+在定理 \ref{thm:xi-poisson-cauchy-mixture-kl-t4-minimal-third} 的条件下，下列命题等价：
+\begin{enumerate}
+  \item \(D_{\mathrm{KL}}(p_t\mid q_t)=o(t^{-4})\)（\(t\to\infty\)）；
+  \item \(\sigma^2=0\)；
+  \item \(\mu=\delta_0\)（从而 \(p_t\equiv q_t\) 对所有 \(t>0\) 成立）。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+由 \eqref{eq:xi-poisson-cauchy-mixture-kl-t4-minimal-third},
+\[
+t^4D_{\mathrm{KL}}(p_t\mid q_t)=\frac{\sigma^4}{8}+O(t^{-2}),
+\]
+故 (1)\(\Rightarrow\)(2)。
+又 \(\sigma^2=0\) 等价于 \(\int y^2\,\dd\mu(y)=0\)，由 \(y^2\ge0\) 得 \(\mu=\delta_0\)，即 (2)\(\Rightarrow\)(3)。
+若 (3) 成立，则 \(p_t=q_t\) 且 KL 恒为零，故 (3)\(\Rightarrow\)(1)。证毕。
+\end{proof}
+
+\begin{corollary}[统一矩界与桥接接口下的条件推导]\label{thm:xi-poisson-kl-bridge-variance-necessary-condition}\label{cor:xi-poisson-kl-bridge-main-channel-dichotomy}
+设对每个 \(x_0\in\RR\) 给定中心化概率测度 \(\mu^{(x_0)}\)（\(\int y\,\dd\mu^{(x_0)}(y)=0\)），且存在统一矩界
+\[
+\sup_{x_0}\int y^2\,\dd\mu^{(x_0)}(y)\le \Sigma^2,
+\qquad
+\sup_{x_0}\int |y|^6\,\dd\mu^{(x_0)}(y)\le M_6<\infty.
+\]
+令
+\[
+p_t^{(x_0)}:=P_t*\mu^{(x_0)},\qquad q_t:=P_t.
+\]
+则
+\[
+\sup_{x_0\in\RR}D_{\mathrm{KL}}(p_t^{(x_0)}\mid q_t)
+\le
+\frac{\Sigma^4}{8t^4}
++O\!\left(\frac{M_6}{t^6}\right),
+\]
+并沿 \(t_m=\varphi^m\) 有
+\[
+\sup_{x_0}D_{\mathrm{KL}}(p_{t_m}^{(x_0)}\mid q_{t_m})
+\le
+\frac{\Sigma^4}{8\varphi^{4m}}
++O(\varphi^{-6m}).
+\]
+进一步，若存在常数 \(C>0\) 使
+\[
+\sup_{x_0\in\RR}D_{\zeta,x_0}(\varrho)
+\le
+C\sup_{x_0\in\RR}D_{\mathrm{KL}}\!\bigl(p_{t(\varrho)}^{(x_0)}\mid q_{t(\varrho)}\bigr)
++o(1)
+\qquad(\varrho\uparrow1),
+\]
+其中 \(t(\varrho):=\frac{1+\varrho}{1-\varrho}\)，则沿 \(\varrho=\varrho_m\) 有
+\[
+\sup_{x_0}D_{\zeta,x_0}(\varrho_m)\to0.
+\]
+于是由定理 \ref{thm:xi-rh-iff-uniform-comoving-defect} 可推出 \(\mathrm{RH}\)。
+\end{corollary}
+
+\begin{proof}
+对每个 \(x_0\) 应用定理 \ref{thm:xi-poisson-cauchy-mixture-kl-t4-minimal-third}，并用统一矩界控制主项与余项常数，即得第一组估计。
+取 \(t=t_m=\varphi^m\) 即得第二组估计。
+若桥接不等式成立，则右端在 \(\varrho_m\uparrow1\) 时趋于零，从而 \(\sup_{x_0}D_{\zeta,x_0}(\varrho_m)\to0\)。
+再由定理 \ref{thm:xi-rh-iff-uniform-comoving-defect} 的等价判据即得结论。
+\end{proof}
+
+\endinput

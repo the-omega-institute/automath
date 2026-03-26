@@ -1,0 +1,480 @@
+\paragraph{块水库编码与纤维内可满足性}
+本段在折叠核 \((011\leftrightarrow 100)\) 的局部可逆重写口径下，抽取一组完全离散且可独立引用的复杂性结论。
+其核心输入是：稳定词 \(x\in X_m\) 的纤维 \(\Fold_m^{-1}(x)\) 由候选位点诱导路径图 \(\Gamma_x\) 的独立集系统刻画（定理 \ref{thm:pom-fiber-indset-factorization}），并且纤维重构图在 \(1/3\) 汉明距离下为 partial cube（推论 \ref{cor:pom-fiber-reconstruction-median-partialcube-cat0}）。
+在此基础上，块水库码把布尔赋值显式注入到单一纤维中，从而把 SAT/\(\#\)SAT 直接编译为“纤维内存在见证/纤维内计数”问题。
+
+\begin{definition}[水库词与块码]\label{def:fold-block-reservoir-code}
+取整数 \(k\ge 1\) 并令 \(m:=4k\)。
+定义稳定水库词
+\[
+\rho_k:=(1000)^k\in X_m.
+\]
+定义编码 \(\mathrm{Enc}_k:\{0,1\}^k\to \Omega_m\) 与译码 \(\mathrm{Dec}_k:\Omega_m\to\{0,1\}^k\)：
+对 \(w=(w_1,\dots,w_k)\in\{0,1\}^k\) 令
+\[
+\mathrm{Enc}_k(w):=B_1B_2\cdots B_k,\qquad
+B_i:=
+\begin{cases}
+1000,& w_i=0,\\
+0110,& w_i=1,
+\end{cases}
+\]
+并对任意 \(\omega\in\Omega_m\) 令
+\[
+(\mathrm{Dec}_k(\omega))_i=1\ \Longleftrightarrow\ \omega_{4i-3}\omega_{4i-2}\omega_{4i-1}\omega_{4i}=0110
+\qquad (1\le i\le k).
+\]
+\end{definition}
+
+\begin{theorem}[块水库编码的纤维注入与三倍等距性]\label{thm:fold-block-reservoir-encoding-constant-radius}
+在定义 \ref{def:fold-block-reservoir-code} 的设定下：
+\begin{enumerate}
+  \item 对一切 \(w\in\{0,1\}^k\)，有 \(\Fold_m(\mathrm{Enc}_k(w))=\rho_k\)；
+  \item 对一切 \(w\in\{0,1\}^k\)，有 \(\mathrm{Dec}_k(\mathrm{Enc}_k(w))=w\)，从而 \(\mathrm{Enc}_k\) 为单射并给出显式注入 \(\{0,1\}^k\hookrightarrow \Fold_m^{-1}(\rho_k)\)；
+  \item 对任意 \(w,w'\in\{0,1\}^k\)，有
+  \[
+  \bigl|\mathrm{Enc}_k(w)\oplus \mathrm{Enc}_k(w')\bigr|_0
+  =3\,|w\oplus w'|_0,
+  \]
+  其中 \(\oplus\) 为逐位异或、\(|\cdot|_0\) 为汉明重量。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{(1)}
+对每个块 \(B_i\)，若 \(B_i=0110\)，则其前 \(3\) 位触发一次局部重写 \(011\mapsto 100\)，从而 \(0110\to 1000\)；
+若 \(B_i=1000\) 则无需重写。
+由于两类块都以 \(0\) 结尾，并且下一块的前两位只能是 \(10\) 或 \(01\)，任何跨块长度 \(3\) 子词都不可能等于 \(011\)，故所有触发严格局限在块内且互不干扰。
+逐块化简得到 \((1000)^k=\rho_k\)。
+又 \(\rho_k\in X_m\) 为稳定正规形（命题 \ref{prop:fold-basic}），故 \(\Fold_m(\mathrm{Enc}_k(w))=\rho_k\)。
+\par
+\textbf{(2)}
+按定义逐块核对即可。
+\par
+\textbf{(3)}
+若 \(w_i=w'_i\)，对应块相同贡献 \(0\)；
+若 \(w_i\neq w'_i\)，则 \(1000\) 与 \(0110\) 在四位中恰有三位不同，贡献 \(3\)。
+对 \(i\) 求和即得。
+该三倍等距性与纤维重构图的规范度量一致：在 \(\rho_k\) 的情形下候选位点分量互不相邻，且推论 \ref{cor:pom-fiber-reconstruction-median-partialcube-cat0} 的归一化距离 \(d_x(\omega,\omega')=\frac13|\omega\oplus\omega'|_0\) 把一次合法开关对应为距离 \(1\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[水库纤维内的常相对距离打包下界]\label{thm:fold-reservoir-fiber-constant-relative-distance-packing}
+取 \(\delta\in(0,\tfrac12)\)，并令 \(m:=4k\) 与 \(\rho_k\in X_m\) 如定义 \ref{def:fold-block-reservoir-code}。
+则存在集合 \(\mathcal C_{m,\delta}\subset \Fold_m^{-1}(\rho_k)\) 使得对任意 \(\omega\neq \omega'\in\mathcal C_{m,\delta}\) 有
+\[
+|\omega\oplus \omega'|_0\ \ge\ \frac{3\delta}{4}\,m,
+\]
+并且其指数规模满足
+\[
+\liminf_{k\to\infty}\frac{1}{m}\log_2|\mathcal C_{m,\delta}|
+\ \ge\
+\frac14\bigl(1-H_2(\delta)\bigr),
+\qquad
+H_2(\delta):=-\delta\log_2\delta-(1-\delta)\log_2(1-\delta).
+\]
+\end{theorem}
+
+\begin{proof}
+先在 \(\{0,1\}^k\) 中构造最小距离 \(\ge \lceil \delta k\rceil\) 的二元码 \(\mathcal B_{k,\delta}\)。
+令 \(t:=\lceil\delta k\rceil-1\) 并记 Hamming 球体积
+\[
+V(k,t):=\sum_{i=0}^{t}\binom{k}{i}.
+\]
+用贪心选取法：每次从剩余集合中取一点并删去其半径 \(t\) 的球，可得
+\[
+|\mathcal B_{k,\delta}|\ \ge\ \frac{2^k}{V(k,t)}.
+\]
+对 \(\delta\in(0,\tfrac12)\)，经典体积渐近给出
+\[
+\frac{1}{k}\log_2 V(k,t)=H_2(\delta)+o(1),
+\]
+从而
+\[
+\liminf_{k\to\infty}\frac{1}{k}\log_2|\mathcal B_{k,\delta}|\ \ge\ 1-H_2(\delta).
+\]
+\par
+令 \(\mathcal C_{m,\delta}:=\mathrm{Enc}_k(\mathcal B_{k,\delta})\subset \Omega_m\)。
+由定理 \ref{thm:fold-block-reservoir-encoding-constant-radius}(1) 得 \(\Fold_m(\mathcal C_{m,\delta})=\{\rho_k\}\)，故 \(\mathcal C_{m,\delta}\subset \Fold_m^{-1}(\rho_k)\)。
+并由定理 \ref{thm:fold-block-reservoir-encoding-constant-radius}(3) 的三倍等距性，对任意 \(\omega=\mathrm{Enc}_k(w)\)、\(\omega'=\mathrm{Enc}_k(w')\) 有
+\[
+|\omega\oplus\omega'|_0=3\,|w\oplus w'|_0\ \ge\ 3\lceil\delta k\rceil\ \ge\ 3\delta k\ =\ \frac{3\delta}{4}\,m,
+\]
+规模估计由 \(|\mathcal C_{m,\delta}|=|\mathcal B_{k,\delta}|\) 与 \(m=4k\) 直接给出。证毕。
+\end{proof}
+
+\paragraph{纤维内可满足性语言}
+固定一个对 CNF 公式的多项式时间可逆二进制编码
+\[
+s(\varphi)\in\{0,1\}^{L(\varphi)}.
+\]
+定义稳定嵌入 \(\sigma:\{0,1\}^{L}\to X_{2L}\) 为
+\[
+\sigma(b_1\cdots b_L):=b_10\,b_20\cdots b_L0.
+\]
+对含 \(n\) 个变量的 CNF 公式 \(\varphi\)，令
+\[
+x(\varphi):=\sigma(s(\varphi))\,00\,\rho_n\ \in\ X_{m(\varphi)},
+\qquad
+m(\varphi):=2L(\varphi)+2+4n,
+\]
+其中 \(\rho_n\) 如定义 \ref{def:fold-block-reservoir-code}。
+
+\begin{definition}[Block--FoldSAT]\label{def:block-foldsat-language}
+定义语言 \(\mathrm{Block}\text{-}\mathrm{FoldSAT}\subseteq\bigcup_m X_m\) 如下。
+输入为稳定词 \(x\in X_m\)。
+若 \(x\) 不能唯一解析为某个 \(\varphi\) 的形式 \(x=x(\varphi)\)，则拒绝。
+否则（令 \(x=x(\varphi)\) 且变量数为 \(n\)），接受当且仅当存在 \(\omega\in\Omega_m\) 满足：
+\begin{enumerate}
+  \item \(\Fold_m(\omega)=x\)；
+  \item \(\omega_{1..(2L(\varphi)+2)}=x_{1..(2L(\varphi)+2)}\)（公式前缀在微态层逐位固定）；
+  \item \(\omega_{m-4n+1..m}\in \mathrm{Enc}_n(\{0,1\}^n)\)；
+  \item 令 \(a:=\mathrm{Dec}_n(\omega_{m-4n+1..m})\)，则 \(\varphi(a)=\mathrm{TRUE}\)。
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Block--FoldSAT 的 NP 完备性]\label{thm:block-foldsat-np-complete}
+\(\mathrm{Block}\text{-}\mathrm{FoldSAT}\) 是 NP 完备语言（Karp 归约意义下）。
+\end{theorem}
+
+\begin{proof}
+\textbf{属于 NP.}
+证据取 \(\omega\in\Omega_m\)。
+验证器在多项式时间内：
+解析 \(x\) 得到 \(\varphi\) 与 \(n\)；
+检查 \(\omega\) 的前缀条件；
+检查尾部是否按块落在 \(\{1000,0110\}^n\) 并用 \(\mathrm{Dec}_n\) 译码；
+评估 \(\varphi(a)\)；
+并计算 \(\Fold_m(\omega)\) 与 \(x\) 比较。
+\(\Fold_m\) 的计算由附录 \ref{app:fold-computability} 的 Zeckendorf 规范化算法给出，时间多项式于 \(m\)。
+\par
+\textbf{NP-hardness.}
+从 SAT 归约。
+给定任意 CNF 公式 \(\varphi\)（含 \(n\) 个变量），构造 \(x(\varphi)\) 如上，显然可在多项式时间完成且输出为稳定词。
+现证
+\[
+\varphi\ \text{可满足}
+\quad\Longleftrightarrow\quad
+x(\varphi)\in \mathrm{Block}\text{-}\mathrm{FoldSAT}.
+\]
+\emph{(\(\Rightarrow\))}
+取满足赋值 \(a\in\{0,1\}^n\)。
+定义 \(\omega\in\Omega_{m(\varphi)}\) 为：其前 \(2L(\varphi)+2\) 位与 \(x(\varphi)\) 相同，而其最后 \(4n\) 位取 \(\mathrm{Enc}_n(a)\)。
+由定理 \ref{thm:fold-block-reservoir-encoding-constant-radius} 得 \(\Fold_{4n}(\mathrm{Enc}_n(a))=\rho_n\)。
+前缀本身稳定且与尾部之间以 \(00\) 分隔；同时尾部块结构保证任何跨边界长度 \(3\) 子词不为 \(011\)，故折叠归约不产生跨段耦合。
+因此 \(\Fold_{m(\varphi)}(\omega)=x(\varphi)\)，并且 \(\mathrm{Dec}_n(\omega_{m-4n+1..m})=a\) 且 \(\varphi(a)=\mathrm{TRUE}\)，满足定义 \ref{def:block-foldsat-language} 的四条条件，故 \(x(\varphi)\in \mathrm{Block}\text{-}\mathrm{FoldSAT}\)。
+\emph{(\(\Leftarrow\))}
+若 \(x(\varphi)\in \mathrm{Block}\text{-}\mathrm{FoldSAT}\)，则存在 \(\omega\) 满足条件 (3)--(4)，从而 \(a:=\mathrm{Dec}_n(\omega_{m-4n+1..m})\) 使 \(\varphi(a)=\mathrm{TRUE}\)，故 \(\varphi\) 可满足。
+综上得到 SAT \(\le_p\) \(\mathrm{Block}\text{-}\mathrm{FoldSAT}\)，从而 NP 完备。证毕。
+\end{proof}
+
+\paragraph{迹判别与条件接受率}
+固定 \(m\) 并令 \(H_m:=\ell^2(\Omega_m)\)。
+对任意 \(x\in X_m\) 定义纤维投影
+\[
+\Pi_x:=\sum_{\omega:\ \Fold_m(\omega)=x}|\omega\rangle\langle\omega|.
+\]
+对满足定义 \ref{def:block-foldsat-language} 的解析条件的 \(x=x(\varphi)\)，令 \(D_x\) 为对角验证投影：\(D_x|\omega\rangle=|\omega\rangle\) 当且仅当 \(\omega\) 通过定义 \ref{def:block-foldsat-language} 的四条判据，否则为 \(0\)。
+定义条件接受率
+\[
+p(x):=\frac{1}{d_m(x)}\Tr(\Pi_xD_x),
+\qquad d_m(x)=|\Fold_m^{-1}(x)|.
+\]
+
+\begin{proposition}[迹判别与中心系数非零性]\label{prop:block-foldsat-trace-criterion}
+对 \(x=x(\varphi)\)：
+\begin{enumerate}
+  \item \(x\in\mathrm{Block}\text{-}\mathrm{FoldSAT}\) 当且仅当 \(\Tr(\Pi_xD_x)>0\)；
+  \item 定义“测量--制备”条件期望
+  \[
+  E_m(\rho):=\sum_{y\in X_m}\frac{\Tr(\Pi_y\rho)}{d_m(y)}\,\Pi_y,
+  \]
+  则 \(E_m(D_x)=\sum_{y\in X_m}\alpha_y\Pi_y\)，且
+  \[
+  \alpha_x=\frac{1}{d_m(x)}\Tr(\Pi_xD_x)=p(x),
+  \]
+  从而 \(x\in\mathrm{Block}\text{-}\mathrm{FoldSAT}\iff \alpha_x>0\)。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\(\Tr(\Pi_xD_x)\) 精确计数纤维 \(\Fold_m^{-1}(x)\) 内通过验证的微态数；
+该计数为正当且仅当存在通过验证的 \(\omega\)，即 \(x\) 被接受。
+第二条由 \(E_m\) 的显式公式直接给出系数读出关系。证毕。
+\end{proof}
+
+\begin{proposition}[Watatani 指标的清分母整数化：对角验证计数的中心系数读出]\label{prop:block-foldsat-watatani-denominator-clearing}
+沿上段记号，令
+\(
+B_m:=\Span\{\Pi_x\}_{x\in X_m}\cong \CC^{X_m}
+\)
+并以 \(\{\Pi_x\}\) 为其极小中心投影基。
+在该交换代数中令
+\[
+\mathrm{Ind}_{\mathrm W}(E_m):=\sum_{x\in X_m} d_m(x)\,\Pi_x\in B_m,
+\qquad
+d_m(x)=|\Fold_m^{-1}(x)|.
+\]
+则对任意在微态基底上对角的正算子 \(D\in\mathcal B(H_m)\)（即 \(D=\sum_{\omega\in\Omega_m}D(\omega)\,|\omega\rangle\langle\omega|\) 且 \(D(\omega)\ge 0\)）有严格恒等式
+\[
+\boxed{\;
+\mathrm{Ind}_{\mathrm W}(E_m)\,E_m(D)
+=\sum_{x\in X_m}\Tr(\Pi_x D)\,\Pi_x.\;}
+\]
+特别地，当 \(D\) 为对角 \(0/1\) 投影时，各系数 \(\Tr(\Pi_xD)\in\ZZ_{\ge 0}\) 为纤维内通过判据的微态计数。
+对构造型输入 \(x=x(\varphi)\) 取 \(D=D_x\) 时，
+\[
+\bigl(\mathrm{Ind}_{\mathrm W}(E_m)\,E_m(D_x)\bigr)\ \text{在}\ \Pi_{x(\varphi)}\ \text{上的系数}
+=\Tr(\Pi_{x(\varphi)}D_{x(\varphi)})
+=\#\mathrm{SAT}(\varphi)
+\]
+（最后一式见定理 \ref{thm:block-foldsat-sharpP-complete}）。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:block-foldsat-trace-criterion}(2) 的显式公式，
+\[
+E_m(D)=\sum_{x\in X_m}\frac{\Tr(\Pi_xD)}{d_m(x)}\,\Pi_x.
+\]
+而在 \(B_m\) 中有 \(\Pi_x\Pi_y=\delta_{xy}\Pi_x\)，故
+\[
+\mathrm{Ind}_{\mathrm W}(E_m)\,E_m(D)
+=\sum_x d_m(x)\Pi_x\cdot \sum_y \frac{\Tr(\Pi_yD)}{d_m(y)}\Pi_y
+=\sum_x \Tr(\Pi_xD)\,\Pi_x.
+\]
+当 \(D\) 为对角 \(0/1\) 投影时，\(\Tr(\Pi_xD)\) 为纤维内满足谓词的点数，故为非负整数。
+最后一条对 \(D_x\) 取 \(x=x(\varphi)\) 并引用定理 \ref{thm:block-foldsat-sharpP-complete} 即得。证毕。
+\end{proof}
+
+\begin{proposition}[\(\ZZ/2\ZZ\) 单角色偏置与 \(\#\mathrm{SAT}\) 的线性读出]\label{prop:block-foldsat-single-character-bias-sharp-sat}
+取群 \(G=\ZZ/2\ZZ\) 并令其非平凡角色 \(\chi:G\to\{\pm 1\}\) 满足 \(\chi(0)=1,\ \chi(1)=-1\)。
+对 \(x=x(\varphi)\) 定义提升标记 \(\ell_x:\Fold_m^{-1}(x)\to G\)：
+\[
+\ell_x(\omega)=1\ \Longleftrightarrow\ D_x|\omega\rangle=|\omega\rangle,
+\qquad
+\ell_x(\omega)=0\ \text{否则}.
+\]
+定义纤维内单角色偏置
+\[
+\mu_{\chi}(x):=\frac{1}{d_m(x)}\sum_{\omega:\ \Fold_m(\omega)=x}\chi(\ell_x(\omega)).
+\]
+则成立精确恒等式
+\[
+\mu_{\chi}(x)=1-2p(x)=1-\frac{2\,N(x)}{d_m(x)},
+\]
+其中 \(p(x)=\frac{1}{d_m(x)}\Tr(\Pi_xD_x)\) 为条件接受率，\(N(x)=\Tr(\Pi_xD_x)\) 为通过验证的微态计数（定理 \ref{thm:block-foldsat-sharpP-complete}）。
+特别地，对任意 CNF 公式 \(\varphi\) 有
+\[
+\mu_{\chi}(x(\varphi))=1-\frac{2\,\#\mathrm{SAT}(\varphi)}{d_m(x(\varphi))}.
+\]
+\end{proposition}
+
+\begin{proof}
+由 \(\chi\) 的取值与 \(\ell_x\) 的定义，纤维求和分裂为
+\[
+\sum_{\Fold_m(\omega)=x}\chi(\ell_x(\omega))
+=(d_m(x)-N(x))\cdot 1+N(x)\cdot(-1)
+=d_m(x)-2N(x).
+\]
+两侧除以 \(d_m(x)\) 得 \(\mu_{\chi}(x)=1-2N(x)/d_m(x)=1-2p(x)\)。
+再由定理 \ref{thm:block-foldsat-sharpP-complete} 的 \(N(x(\varphi))=\#\mathrm{SAT}(\varphi)\) 得最后一式。证毕。
+\end{proof}
+
+\begin{proposition}[指数精度接受率估计的 NP 困难性]\label{prop:block-foldsat-estimation-np-hard}
+考虑估计任务 \(\mathrm{Est}_{1/2}\)：输入为满足解析条件的 \(x\in X_m\)，输出有理数 \(\widehat p(x)\) 满足
+\[
+\bigl|\widehat p(x)-p(x)\bigr|<\frac{1}{2d_m(x)}.
+\]
+若存在多项式时间算法实现 \(\mathrm{Est}_{1/2}\)，则 \(\mathrm{Block}\text{-}\mathrm{FoldSAT}\in\mathrm{P}\)，从而 \(\mathrm{P}=\mathrm{NP}\)。
+因此 \(\mathrm{Est}_{1/2}\) 为 NP-hard。
+\end{proposition}
+
+\begin{proof}
+注意 \(\Tr(\Pi_xD_x)\in\ZZ_{\ge 0}\)。
+若 \(x\notin\mathrm{Block}\text{-}\mathrm{FoldSAT}\)，则 \(\Tr(\Pi_xD_x)=0\) 从而 \(p(x)=0\)；
+若 \(x\in\mathrm{Block}\text{-}\mathrm{FoldSAT}\)，则 \(\Tr(\Pi_xD_x)\ge 1\) 从而 \(p(x)\ge 1/d_m(x)\)。
+因此由误差界得
+\[
+x\in\mathrm{Block}\text{-}\mathrm{FoldSAT}
+\quad\Longleftrightarrow\quad
+\widehat p(x)>\frac{1}{2d_m(x)}.
+\]
+而由定理 \ref{thm:pom-fiber-indset-factorization}，\(d_m(x)\) 可由 \(\Gamma_x\) 的分量长度 \((\ell_i)\) 计算为 \(\prod_i F_{\ell_i+2}\)；
+在固定的规范回放口径下 \(\mathsf{Adm}(x)\) 及分量分解可由一次线性扫描构造，从而 \(d_m(x)\) 在输入规模 \(m\) 上可多项式时间计算。
+因此可多项式时间决定 \(\mathrm{Block}\text{-}\mathrm{FoldSAT}\)。证毕。
+\end{proof}
+
+\begin{theorem}[二值指数权重把指数精度困难提升为常数精度困难]\label{thm:block-foldsat-constant-precision-hardness}
+取 \(x=x(\varphi)\) 并令 \(D_x\) 为验证投影、\(p(x)\) 为条件接受率。
+定义对角算符
+\[
+W_x:=I+(2^m-1)D_x\in\mathcal B(H_m).
+\]
+则由命题 \ref{prop:block-foldsat-trace-criterion} 的条件期望 \(E_m\) 有
+\[
+\|E_m(W_x)\|_{\infty}=1+(2^m-1)p(x).
+\]
+因此存在常数阈值 \(\tau=\tfrac32\) 使得
+\[
+\|E_m(W_{x(\varphi)})\|_{\infty}>\tau
+\quad\Longleftrightarrow\quad
+\varphi\ \text{可满足}.
+\]
+更进一步，若存在多项式时间算法在输入 \(x(\varphi)\) 上以加性误差 \(<\tfrac14\) 近似 \(\|E_m(W_{x(\varphi)})\|_{\infty}\)，则 \(\mathrm{P}=\mathrm{NP}\)。
+\end{theorem}
+
+\begin{proof}
+由 \(D_x\) 的定义知其支撑包含于纤维 \(x\)，故对任意 \(y\neq x\) 有 \(\Tr(\Pi_yD_x)=0\)，而 \(\Tr(\Pi_yI)=d_m(y)\)。
+于是
+\[
+\frac{\Tr(\Pi_yW_x)}{d_m(y)}=
+\begin{cases}
+1,& y\neq x,\\[2mm]
+\dfrac{d_m(x)+(2^m-1)\Tr(\Pi_xD_x)}{d_m(x)}=1+(2^m-1)p(x),& y=x.
+\end{cases}
+\]
+代回 \(E_m\) 的显式公式得到
+\[
+E_m(W_x)=\sum_{y\neq x}\Pi_y+\bigl(1+(2^m-1)p(x)\bigr)\Pi_x
+=I+(2^m-1)p(x)\Pi_x,
+\]
+故 \(\|E_m(W_x)\|_\infty=1+(2^m-1)p(x)\)。
+\par
+若 \(\varphi\) 不可满足，则 \(N(x(\varphi))=\Tr(\Pi_xD_x)=0\)，从而 \(p(x(\varphi))=0\) 且范数为 \(1\)。
+若 \(\varphi\) 可满足，则 \(N(x(\varphi))\ge 1\) 从而 \(p(x(\varphi))\ge 1/d_m(x(\varphi))\)。
+又 \(d_m(x(\varphi))\le |\Omega_m|=2^m\)，故
+\[
+\|E_m(W_{x(\varphi)})\|_\infty
+\ge 1+\frac{2^m-1}{d_m(x(\varphi))}
+\ge 2-2^{-m}
+>\frac32.
+\]
+从而阈值等价性成立。
+若存在加性误差 \(<\tfrac14\) 的多项式时间近似，则可把不可满足实例的输出（位于 \((\tfrac34,\tfrac54)\)）与可满足实例的输出（位于 \((\tfrac74,\infty)\)）在常数间隔上区分，从而多项式时间判定 SAT，推出 \(\mathrm{P}=\mathrm{NP}\)。证毕。
+\end{proof}
+
+\paragraph{拒绝能量的低温配分函数：常数精度近似的 NP 困难性}
+对满足解析条件的输入 \(x=x(\varphi)\)，沿用验证投影 \(D_x\) 并定义拒绝能量算子
+\[
+H_x:=I-D_x.
+\]
+对逆温参数 \(\beta\ge 0\) 定义纤维配分函数
+\[
+Z_x(\beta):=\Tr\!\bigl(\Pi_x e^{-\beta H_x}\bigr).
+\]
+
+\begin{theorem}[低温配分函数的常数加性精度近似强迫 \texorpdfstring{$P=NP$}{P=NP}]\label{thm:block-foldsat-low-temperature-partition-function-additive-hardness}
+对满足解析条件的 \(x\in X_m\) 定义
+\[
+\beta(x):=\left\lceil\log\bigl(4d_m(x)\bigr)\right\rceil.
+\]
+若存在确定性多项式时间算法：对任意输入对 \((x,\beta(x))\) 输出 \(\widehat Z\) 满足
+\[
+\bigl|\widehat Z-Z_x(\beta(x))\bigr|\le \tfrac18,
+\]
+则 \(\mathrm{P}=\mathrm{NP}\)。
+\end{theorem}
+\begin{proof}
+由于 \(H_x\) 在接受微态上取 \(0\)，在拒绝微态上取 \(1\)，故
+\[
+e^{-\beta H_x}=D_x+e^{-\beta}(I-D_x).
+\]
+从而
+\[
+Z_x(\beta)=\Tr(\Pi_xD_x)+e^{-\beta}\bigl(d_m(x)-\Tr(\Pi_xD_x)\bigr).
+\]
+若 \(x\notin\mathrm{Block}\text{-}\mathrm{FoldSAT}\)，则由命题 \ref{prop:block-foldsat-trace-criterion}(1) 有 \(\Tr(\Pi_xD_x)=0\)，故
+\[
+Z_x(\beta(x))=e^{-\beta(x)}d_m(x)\le \frac{1}{4}.
+\]
+若 \(x\in\mathrm{Block}\text{-}\mathrm{FoldSAT}\)，则 \(\Tr(\Pi_xD_x)\ge 1\)，故 \(Z_x(\beta(x))\ge 1\)。
+因此加性误差 \(\le 1/8\) 的估计可在常数间隔上区分两类输入，从而判定 \(\mathrm{Block}\text{-}\mathrm{FoldSAT}\) 的成员资格。
+由定理 \ref{thm:block-foldsat-np-complete}，该语言为 NP 完备，故推出 \(\mathrm{P}=\mathrm{NP}\)。
+此外，由命题 \ref{prop:block-foldsat-estimation-np-hard} 的证明，\(d_m(x)\) 可在输入规模 \(m\) 上多项式时间计算，从而 \(\beta(x)\) 可多项式时间给出。证毕。
+\end{proof}
+
+\begin{corollary}[自由能的常数精度近似亦为 NP 困难]\label{cor:block-foldsat-free-energy-additive-hardness}
+对满足解析条件的 \(x\in X_m\) 定义
+\[
+\beta'(x):=\left\lceil\log\bigl(2d_m(x)\bigr)\right\rceil,
+\qquad
+F_x:=\log Z_x(\beta'(x)).
+\]
+若存在确定性多项式时间算法输出 \(\widehat F\) 使
+\[
+\bigl|\widehat F-F_x\bigr|<\tfrac12\log 2,
+\]
+则 \(\mathrm{P}=\mathrm{NP}\)。
+\end{corollary}
+\begin{proof}
+若 \(x\notin\mathrm{Block}\text{-}\mathrm{FoldSAT}\)，则 \(\Tr(\Pi_xD_x)=0\)，从而
+\(
+Z_x(\beta')=e^{-\beta'}d_m(x)\le 1/2
+\)，故 \(F_x\le -\log 2\)。
+若 \(x\in\mathrm{Block}\text{-}\mathrm{FoldSAT}\)，则 \(Z_x(\beta')\ge 1\)，故 \(F_x\ge 0\)。
+两类情形间间隙至少为 \(\log 2\)，因此误差严格小于 \(\tfrac12\log 2\) 的估计可判定成员资格，进而推出 \(\mathrm{P}=\mathrm{NP}\)（同定理 \ref{thm:block-foldsat-low-temperature-partition-function-additive-hardness} 的归约口径）。证毕。
+\end{proof}
+
+\begin{conjecture}[Block--FoldSAT 的计算温度阈值由 \texorpdfstring{$\log d_m(x)$}{log d} 控制]\label{conj:block-foldsat-computational-temperature-threshold}
+沿用配分函数 \(Z_x(\beta)=\Tr(\Pi_x e^{-\beta(I-D_x)})\) 的记号。
+猜想存在常数 \(c\in(0,1)\) 使得对任意满足解析条件的 Block--FoldSAT 实例族 \(x\)：
+\begin{enumerate}
+\normalfont
+  \item \textbf{高温可近似性（采样区）：}当 \(\beta\le (1-c)\log d_m(x)\) 时，存在一致的随机多项式时间算法在相对误差 \(1/\mathrm{poly}(m)\) 意义下近似 \(Z_x(\beta)\)；
+  \item \textbf{低温不可近似性（困难区）：}当 \(\beta\ge (1+c)\log d_m(x)\) 时，即便对 \(Z_x(\beta)\) 的常数因子近似亦为 NP-困难。
+\end{enumerate}
+该阈值形式把可计算性边界压缩为温度抑制项 \(e^{-\beta}\) 与纤维体积 \(d_m(x)\) 的竞争尺度，并与定理 \ref{thm:block-foldsat-low-temperature-partition-function-additive-hardness} 在 \(\beta\simeq \log d_m(x)\) 的常数精度困难性相容。
+\end{conjecture}
+
+\begin{proposition}[均匀抽样--验证策略的指数下界]\label{prop:block-foldsat-uniform-sampling-exp-lb}
+取 \(x=x(\varphi)\) 并假设 \(\varphi\) 具有唯一满足赋值。
+考虑任意随机化算法：在输入 \(x\) 上仅通过从纤维 \(\Fold_m^{-1}(x)\) 独立均匀抽样 \(q\) 次微态 \(\omega^{(1)},\dots,\omega^{(q)}\)，并对每次抽样调用多项式时间验证器来判定是否存在满足见证。
+则该算法的成功概率至多为 \(q/d_m(x)\)。
+因此若要使成功概率至少 \(2/3\)，必有
+\[
+q\ge \frac23\,d_m(x).
+\]
+并且对构造型实例 \(x(\varphi)\) 总有 \(d_m(x)\ge 2^{n}\)，从而 \(q\ge \frac23\,2^{n}\)。
+\end{proposition}
+
+\begin{proof}
+由“唯一满足”假设与定义 \ref{def:block-foldsat-language} 的前缀固定条件，纤维内通过验证的微态数至多为 \(1\)。
+一次均匀抽样命中该微态的概率至多为 \(1/d_m(x)\)，\(q\) 次独立抽样至少一次命中的概率不超过 \(q/d_m(x)\)。
+\par
+下界 \(d_m(x)\ge 2^{n}\) 由块水库注入给出：对任意 \(w\in\{0,1\}^n\)，令
+\(\omega(w)\) 为“固定公式前缀 + 尾部 \(\mathrm{Enc}_n(w)\)”的拼接微态。
+由定理 \ref{thm:fold-block-reservoir-encoding-constant-radius} 与 \(00\) 分隔的局部性，均有 \(\Fold_m(\omega(w))=x(\varphi)\)，且不同 \(w\) 给出不同 \(\omega(w)\)。
+故 \(|\Fold_m^{-1}(x(\varphi))|\ge 2^n\)。证毕。
+\end{proof}
+
+\begin{theorem}[\(\#\mathrm{Block}\text{-}\mathrm{FoldSAT}\) 的 \(\#\mathrm{P}\) 完备性与 \(\#\mathrm{SAT}\) 的解数保持归约]\label{thm:block-foldsat-sharpP-complete}
+定义计数函数
+\[
+N(x):=\Tr(\Pi_xD_x)
+=\#\{\omega\in\Omega_m:\ \omega\ \text{满足定义 \ref{def:block-foldsat-language} 的判据}\},
+\]
+并把“给定 \(x\) 输出 \(N(x)\)”记为 \(\#\mathrm{Block}\text{-}\mathrm{FoldSAT}\)。
+则：
+\begin{enumerate}
+  \item \(\#\mathrm{Block}\text{-}\mathrm{FoldSAT}\in \#\mathrm{P}\)；
+  \item \(\#\mathrm{Block}\text{-}\mathrm{FoldSAT}\) 为 \(\#\mathrm{P}\) 完备，且从 \(\#\mathrm{SAT}\) 的归约可取为解数保持（parsimonious）归约；
+  \item 更具体地，对任意 CNF 公式 \(\varphi\)，有
+  \[
+  N(x(\varphi))=\#\mathrm{SAT}(\varphi).
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+第一条：由定理 \ref{thm:block-foldsat-np-complete} 的多项式时间验证器，\(N(x)\) 计数一个 NP 关系的见证数，故属于 \(\#\mathrm{P}\)。
+\par
+第二、三条：从 \(\#\mathrm{SAT}\) 做解数保持归约。
+给定 \(\varphi\) 构造 \(x(\varphi)\)。
+对任一赋值 \(a\in\{0,1\}^n\)，令 \(\omega(a)\) 为“固定公式前缀 + 尾部 \(\mathrm{Enc}_n(a)\)”的拼接微态。
+由定义 \ref{def:block-foldsat-language} 的前缀固定与尾部块约束，任何通过验证的 \(\omega\) 必等于某个 \(\omega(a)\)；
+并且 \(\omega(a)\) 通过验证当且仅当 \(\varphi(a)=\mathrm{TRUE}\)。
+故通过验证的微态与满足赋值一一对应，从而 \(N(x(\varphi))=\#\mathrm{SAT}(\varphi)\)。
+因此归约保持解数，\(\#\mathrm{Block}\text{-}\mathrm{FoldSAT}\) 为 \(\#\mathrm{P}\) 完备。证毕。
+\end{proof}
+
+\endinput
+

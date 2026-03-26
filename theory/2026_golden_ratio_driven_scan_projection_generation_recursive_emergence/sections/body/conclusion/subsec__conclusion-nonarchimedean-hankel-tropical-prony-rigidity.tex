@@ -1,0 +1,383 @@
+\subsection{非阿基米德 Hankel 子式的热带主导与 Prony 精度刚度}\label{subsec:conclusion-nonarchimedean-hankel-tropical-prony-rigidity}
+本小节给出一条可直接用于代数化稳定性分析的闭合链：
+Hankel 子式由 Cauchy--Binet--Vandermonde 展开控制其赋值下界，
+热带极小子集给出链式增量律，
+初形消失刻画 \(p\)-进共振，
+并将线性重构所需精度损失压缩为一个显式的判别量。
+与项目内部文档中“刚性理想—非阿基米德极小化”与“Toeplitz--scan Hankel 负块分解”两条主干结构相对齐的统一表述见 \cite{Internal2026HankelRigidityNonarchMinToeplitzScan}.
+
+\begin{theorem}[原子矩 Hankel 子式的 Cauchy--Binet--Vandermonde 展开与主导律]\label{thm:conclusion-nonarch-hankel-cauchy-binet-vandermonde}
+设 \(K\) 为带离散赋值 \(v:K^\times\to\ZZ\) 的域，\(\pi\) 为素元，\(\mathcal O_K\) 为赋值环。
+取
+\[
+b_1,\dots,b_\kappa\in K,\qquad
+w_1,\dots,w_\kappa\in K^\times,
+\]
+并假设 \(b_i\neq b_j\)（\(i\neq j\)）。
+定义矩序列
+\[
+m_n:=\sum_{j=1}^{\kappa}w_j b_j^n\qquad(n\ge 0),
+\]
+及 Hankel 矩阵
+\[
+H_r:=(m_{i+j})_{0\le i,j\le r}\qquad(0\le r\le \kappa-1).
+\]
+则有恒等式
+\[
+\det(H_r)
+=
+\sum_{\substack{I\subseteq\{1,\dots,\kappa\}\\ |I|=r+1}}
+\left(\prod_{j\in I}w_j\right)\Delta(b_I)^2,
+\]
+其中
+\[
+\Delta(b_I):=\prod_{\substack{i<j\\ i,j\in I}}(b_j-b_i).
+\]
+从而
+\[
+v(\det(H_r))
+\ge
+\min_{\substack{I\subseteq\{1,\dots,\kappa\}\\ |I|=r+1}}
+\left(
+\sum_{j\in I}v(w_j)
++
+2\!\!\sum_{\substack{i<j\\ i,j\in I}}v(b_j-b_i)
+\right).
+\]
+若上述最小值由唯一 \(I_\star\) 取得，则等号成立。
+\end{theorem}
+\begin{proof}
+令 \(V_r\in M_{r+1,\kappa}(K)\) 与 \(W=\mathrm{diag}(w_1,\dots,w_\kappa)\)：
+\[
+(V_r)_{i,j}:=b_j^i\qquad(0\le i\le r,\ 1\le j\le \kappa).
+\]
+则
+\[
+(V_r W V_r^{\mathsf T})_{i,j}
+=
+\sum_{\ell=1}^{\kappa}w_\ell b_\ell^i b_\ell^j
+=m_{i+j},
+\]
+故 \(H_r=V_r W V_r^{\mathsf T}\)。
+由 Cauchy--Binet，
+\[
+\det(H_r)
+=
+\sum_{|I|=r+1}
+\det\!\bigl((V_r)_{:,I}\bigr)\,
+\det\!\bigl((W V_r^{\mathsf T})_{I,:}\bigr).
+\]
+而
+\[
+\det\!\bigl((W V_r^{\mathsf T})_{I,:}\bigr)
+=
+\left(\prod_{j\in I}w_j\right)\det\!\bigl((V_r)_{:,I}^{\mathsf T}\bigr),
+\]
+故
+\[
+\det(H_r)
+=
+\sum_{|I|=r+1}
+\left(\prod_{j\in I}w_j\right)\det\!\bigl((V_r)_{:,I}\bigr)^2.
+\]
+\((V_r)_{:,I}\) 为 Vandermonde 型方阵，\(\det((V_r)_{:,I})=\Delta(b_I)\)，得第一式。
+
+对每项
+\[
+t_I:=\left(\prod_{j\in I}w_j\right)\Delta(b_I)^2
+\]
+有
+\[
+v(t_I)=\sum_{j\in I}v(w_j)+2\!\!\sum_{\substack{i<j\\ i,j\in I}}v(b_j-b_i).
+\]
+由非阿基米德不等式 \(v(\sum_I t_I)\ge \min_I v(t_I)\) 得下界。
+若最小值唯一，则最低赋值项不发生抵消，故取等号。证毕。
+\end{proof}
+
+\begin{theorem}[Hankel 热带刚度的链式增量公式]\label{thm:conclusion-nonarch-hankel-tropical-chain-increment}
+沿用定理 \ref{thm:conclusion-nonarch-hankel-cauchy-binet-vandermonde} 记号，进一步假设
+\[
+w_j\in\mathcal O_K^\times,\qquad b_j\in\mathcal O_K.
+\]
+对 \(m\in\{1,\dots,\kappa\}\) 定义
+\[
+\mathcal B_m:=\{I\subseteq\{1,\dots,\kappa\}:|I|=m\},
+\qquad
+\mathfrak c(I):=2\!\!\sum_{\substack{i<j\\ i,j\in I}}v(b_j-b_i),
+\]
+\[
+\mathfrak m_m:=\min_{I\in\mathcal B_m}\mathfrak c(I).
+\]
+若对每个 \(m\)：
+\begin{enumerate}
+  \item 极小子集唯一，记为 \(I_m^\star\)；
+  \item 链式嵌套 \(I_1^\star\subset I_2^\star\subset\cdots\subset I_\kappa^\star\)；
+\end{enumerate}
+则存在唯一排列 \((a_1,\dots,a_\kappa)\)（元素来自 \(\{b_1,\dots,b_\kappa\}\)）使
+\[
+I_m^\star=\{a_1,\dots,a_m\}\qquad(1\le m\le \kappa),
+\]
+并且对每个 \(m\ge 2\) 有
+\[
+v\!\bigl(\det(H_{m-1})\bigr)-v\!\bigl(\det(H_{m-2})\bigr)
+=
+2\,v\!\left(\prod_{i=1}^{m-1}(a_m-a_i)\right),
+\]
+从而
+\[
+v\!\bigl(\det(H_{m-1})\bigr)
+=
+2\sum_{j=2}^{m}
+v\!\left(\prod_{i=1}^{j-1}(a_j-a_i)\right).
+\]
+此外，
+\[
+a_m=
+\arg\min_{b\in\{b_1,\dots,b_\kappa\}\setminus\{a_1,\dots,a_{m-1}\}}
+v\!\left(\prod_{i=1}^{m-1}(b-a_i)\right)
+\qquad(m\ge 2),
+\]
+且该极小元唯一。
+\end{theorem}
+\begin{proof}
+由于 \(w_j\in\mathcal O_K^\times\)，有 \(v(w_j)=0\)。
+故定理 \ref{thm:conclusion-nonarch-hankel-cauchy-binet-vandermonde} 给出
+\[
+v(\det(H_{m-1}))=\mathfrak m_m
+\]
+（唯一极小子集时严格主导取等）。
+由链式嵌套，唯一排列 \((a_1,\dots,a_\kappa)\) 存在且满足 \(I_m^\star=\{a_1,\dots,a_m\}\)。
+
+记
+\[
+\Delta_m:=\Delta(a_1,\dots,a_m).
+\]
+则
+\[
+\Delta_m=\Delta_{m-1}\prod_{i=1}^{m-1}(a_m-a_i),
+\]
+从而
+\[
+v(\Delta_m)-v(\Delta_{m-1})
+=
+v\!\left(\prod_{i=1}^{m-1}(a_m-a_i)\right).
+\]
+再用
+\(
+v(\det(H_{m-1}))=2v(\Delta_m)
+\)
+得到增量式与求和式。
+
+固定前 \(m-1\) 项后，任意候选 \(b\) 的代价满足
+\[
+v\!\bigl(\Delta(a_1,\dots,a_{m-1},b)\bigr)
+=
+v(\Delta_{m-1})
++
+v\!\left(\prod_{i=1}^{m-1}(b-a_i)\right),
+\]
+故最小化 \(\mathfrak c\) 等价于最小化最后一项，唯一性由假设给出。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$p$}{p}-进共振判别：热带间隙、初形消去与精确估值]\label{thm:conclusion-nonarch-hankel-initial-form-resonance}
+沿用定理 \ref{thm:conclusion-nonarch-hankel-cauchy-binet-vandermonde} 记号，固定 \(r\in\{0,\dots,\kappa-1\}\)。
+写
+\[
+\det(H_r)=\sum_{|I|=r+1}t_I,\qquad
+t_I:=\left(\prod_{j\in I}w_j\right)\Delta(b_I)^2.
+\]
+定义热带极小赋值与极小集
+\[
+\mu_r:=\min_{|I|=r+1}v(t_I),\qquad
+\mathcal S_r:=\{I:\ |I|=r+1,\ v(t_I)=\mu_r\}.
+\]
+令次极小赋值与热带间隙为
+\[
+\mu_r^{(2)}:=\min_{\substack{|I|=r+1\\ I\notin\mathcal S_r}}v(t_I)\in\ZZ\cup\{+\infty\},
+\qquad
+g_r:=\mu_r^{(2)}-\mu_r\in\NN\cup\{+\infty\},
+\]
+并在 \(\mathcal O_K\) 中定义极小层首项和
+\[
+S_r:=\sum_{I\in\mathcal S_r}\pi^{-\mu_r}t_I\in\mathcal O_K.
+\]
+则存在 \(R_r\in\mathcal O_K\) 使得分解恒等式成立：
+\[
+\det(H_r)=\pi^{\mu_r}\Bigl(S_r+\pi^{g_r}R_r\Bigr).
+\]
+因此若 \(v(S_r)<g_r\)，则有精确等式
+\[
+\boxed{\;v\!\bigl(\det(H_r)\bigr)=\mu_r+v(S_r).\;}
+\]
+特别地，若 \(g_r\ge 1\) 且 \(S_r\not\equiv 0\pmod{\pi}\)，则 \(v(\det(H_r))=\mu_r\)。
+\end{theorem}
+\begin{proof}
+将和分解为
+\[
+\det(H_r)
+=
+\sum_{I\in\mathcal S_r}t_I
++
+\sum_{I\notin\mathcal S_r}t_I.
+\]
+对第二项，按定义任一项满足 \(v(t_I)\ge \mu_r^{(2)}=\mu_r+g_r\)，故可写成 \(\pi^{\mu_r+g_r}R_r\)（\(R_r\in\mathcal O_K\)）。
+第一项按定义等于 \(\pi^{\mu_r}S_r\)。
+合并即得
+\(
+\det(H_r)=\pi^{\mu_r}(S_r+\pi^{g_r}R_r)
+\)。
+\par
+若 \(v(S_r)<g_r\)，则
+\(
+v(S_r+\pi^{g_r}R_r)=v(S_r)
+\)，
+从而
+\(
+v(\det(H_r))=\mu_r+v(S_r)
+\)。
+当 \(g_r\ge 1\) 且 \(S_r\not\equiv 0\pmod{\pi}\) 时，\(v(S_r)=0<g_r\)，故 \(v(\det(H_r))=\mu_r\)。证毕。
+\end{proof}
+
+\begin{corollary}[唯一极小项的无消去刚性]\label{cor:conclusion-nonarch-hankel-unique-minimizer-no-cancel}
+沿用定理 \ref{thm:conclusion-nonarch-hankel-initial-form-resonance} 的记号。
+若 \(\mathcal S_r=\{I_\star\}\) 为单点集合，则 \(v(\det(H_r))=\mu_r\)，并且同余
+\[
+\frac{\det(H_r)}{\pi^{\mu_r}}
+\equiv
+\frac{t_{I_\star}}{\pi^{\mu_r}}
+\pmod{\pi}
+\]
+在 \(\mathcal O_K\) 中成立。
+\end{corollary}
+\begin{proof}
+此时 \(S_r=\pi^{-\mu_r}t_{I_\star}\in\mathcal O_K^\times\)，故 \(v(S_r)=0\)。
+又对任意 \(I\notin\mathcal S_r\) 有 \(v(t_I)\ge \mu_r+1\)，即 \(g_r\ge 1\)。
+由定理 \ref{thm:conclusion-nonarch-hankel-initial-form-resonance} 得 \(v(\det(H_r))=\mu_r\)，并由
+\(
+\det(H_r)=\pi^{\mu_r}(S_r+\pi^{g_r}R_r)
+\)
+模 \(\pi\) 取像得到所示同余。证毕。
+\end{proof}
+
+\begin{proposition}[有限剩余域上的随机单位扰动与首项去消去]\label{prop:conclusion-nonarch-hankel-random-unit-perturbation}
+沿用定理 \ref{thm:conclusion-nonarch-hankel-initial-form-resonance} 的记号，并假设剩余域 \(k=\mathcal O_K/(\pi)\) 有限，\(\card(k)=q\)。
+固定某个指标 \(j_0\in\{1,\dots,\kappa\}\)，并令权重作单位扰动
+\[
+w_{j_0}\longmapsto w_{j_0}(u):=\widehat u\,w_{j_0},
+\qquad
+u\in k^\times\ \text{均匀随机选取，}\ \widehat u\in\mathcal O_K^\times\ \text{为任一提升}.
+\]
+记相应的极小层首项和为 \(S_r(u)\)。
+若存在 \(I\in\mathcal S_r\) 使得 \(j_0\in I\)，并且
+\[
+A:=\sum_{\substack{I\in\mathcal S_r\\ j_0\in I}}
+\overline{\Bigl(\frac{t_I}{\pi^{\mu_r}}\Bigr)}\ \in k
+\]
+非零，则
+\[
+\mathbb P\bigl[S_r(u)\equiv 0\pmod{\pi}\bigr]\le \frac{1}{q}.
+\]
+在补事件 \(S_r(u)\not\equiv 0\ (\mathrm{mod}\ \pi)\) 上，必有 \(v(\det(H_r))=\mu_r\)。
+\end{proposition}
+\begin{proof}
+将 \(\mathcal S_r\) 按是否包含 \(j_0\) 分拆，并在 \(k\) 中化简得到
+\[
+S_r(u)\equiv uA+B\pmod{\pi}
+\]
+其中 \(B\in k\) 不依赖于 \(u\)。
+当 \(A\neq 0\) 时，方程 \(uA+B=0\) 在 \(k^\times\) 中至多有一个解，故概率不超过 \(1/(q-1)\le 1/q\)。
+在补事件上 \(S_r(u)\not\equiv 0\ (\mathrm{mod}\ \pi)\)，由定理 \ref{thm:conclusion-nonarch-hankel-initial-form-resonance}（取 \(g_r\ge 1\) 的情形）得 \(v(\det(H_r))=\mu_r\)。证毕。
+\end{proof}
+
+\begin{corollary}[Prony 型 Hankel 重构的精度损失上界与可达判据]\label{cor:conclusion-nonarch-prony-precision-loss}
+在定理 \ref{thm:conclusion-nonarch-hankel-cauchy-binet-vandermonde} 设定下，进一步假设
+\[
+H:=H_{\kappa-1}\in M_\kappa(\mathcal O_K),\qquad
+\det(H)\neq 0,\qquad
+s:=v(\det(H)).
+\]
+则对任意 \(b\in\mathcal O_K^\kappa\)，线性系统
+\[
+Hx=b
+\]
+的解满足
+\[
+x\in \pi^{-s}\mathcal O_K^\kappa.
+\]
+记伴随矩阵
+\[
+A=(A_{ij}):=\mathrm{adj}(H),
+\]
+并定义
+\[
+c_{\min}:=\min_{1\le i,j\le \kappa}v(A_{ij}).
+\]
+则存在 \(b\in\mathcal O_K^\kappa\) 使某一解分量达到
+\[
+\min_i v(x_i)=c_{\min}-s.
+\]
+特别地，若某个协因子为单位（\(c_{\min}=0\)），则该下界为 \(-s\) 且可达。
+\end{corollary}
+\begin{proof}
+由伴随公式
+\[
+H^{-1}=\frac{\mathrm{adj}(H)}{\det(H)}.
+\]
+每个 \(A_{ij}\) 是 \((\kappa-1)\times(\kappa-1)\) 子式（带符号），属于 \(\mathcal O_K\)，故
+\[
+v\!\bigl((H^{-1})_{ij}\bigr)=v(A_{ij})-s\ge -s.
+\]
+于是对任意 \(b\in\mathcal O_K^\kappa\)，
+\[
+x=H^{-1}b\in \pi^{-s}\mathcal O_K^\kappa.
+\]
+
+取达到 \(c_{\min}\) 的指标对 \((i_0,j_0)\)，即 \(v(A_{i_0j_0})=c_{\min}\)。
+令 \(b=e_{j_0}\)（标准基向量），则
+\[
+x=H^{-1}e_{j_0}
+\]
+是第 \(j_0\) 列，且其第 \(i_0\) 分量
+\[
+x_{i_0}=\frac{A_{i_0j_0}}{\det(H)}
+\]
+满足
+\[
+v(x_{i_0})=v(A_{i_0j_0})-s=c_{\min}-s.
+\]
+故存在右端项使某分量达到 \(c_{\min}-s\)。
+当 \(c_{\min}=0\) 时即得 \(-s\) 可达。证毕。
+\end{proof}
+
+\begin{theorem}[Prony/最小实现的非阿基米德精度门槛：由 Hankel 热带主导强制]\label{thm:conclusion-nonarch-prony-unavoidable-precision-threshold}
+沿用定理 \ref{thm:conclusion-nonarch-hankel-cauchy-binet-vandermonde} 的设定，并取 \(H:=H_{\kappa-1}\in M_\kappa(\mathcal O_K)\)。
+设 \(\det(H)\neq 0\)，并记 \(s:=v(\det(H))\)。
+则：
+\begin{enumerate}
+  \item 任意在 \(K\) 上由 Hankel 线性系统产生的重构表达（例如 \(H^{-1}\)、或由 \(H^{-1}\) 生成的 Prony/递推系数）必然包含因子 \(\pi^{-s}\)。
+  因此在 \(\mathcal O_K\) 的截断精度口径下，若仅能在模 \(\pi^{E}\) 意义下确定窗口矩量（从而确定 \(H\) 的条目），则一般只能在模 \(\pi^{E-s}\) 意义下确定由 \(H^{-1}\) 生成的重构系数；该损耗在一般情形下不可改进。
+  \item 热带主导下界给出可审计的精度门槛：
+  \[
+  \boxed{\;
+  s=v(\det(H))
+  \ \ge\
+  \min_{\substack{I\subseteq\{1,\dots,\kappa\}\\ |I|=\kappa}}
+  \left(
+  \sum_{j\in I}v(w_j)
+  +2\!\!\sum_{\substack{i<j\\ i,j\in I}}v(b_j-b_i)
+  \right).\;}
+  \]
+  若对 \(r=\kappa-1\) 的热带极小层满足定理 \ref{thm:conclusion-nonarch-hankel-initial-form-resonance} 的非消去条件（例如唯一极小子集，或首项和在 \(\pi\) 上非零），则上式取等。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一条是 Cramer/伴随公式的直接推论：由
+\(
+H^{-1}=\mathrm{adj}(H)/\det(H)
+\)，
+任意由 \(H^{-1}\) 线性生成的量都至少含 \(\det(H)^{-1}\)，从而含 \(\pi^{-s}\)。
+对截断精度的损耗与不可改进性即为推论 \ref{cor:conclusion-nonarch-prony-precision-loss} 的结论在矩阵条目层面的复述。
+\par
+第二条由定理 \ref{thm:conclusion-nonarch-hankel-cauchy-binet-vandermonde} 的赋值下界应用于 \(r=\kappa-1\) 得出。
+当满足定理 \ref{thm:conclusion-nonarch-hankel-initial-form-resonance} 的非消去条件时，\(v(\det(H))=\mu_{\kappa-1}\)（或更一般的 \(v(\det(H))=\mu_{\kappa-1}+v(S_{\kappa-1})\)），从而下界取等。证毕。
+\end{proof}

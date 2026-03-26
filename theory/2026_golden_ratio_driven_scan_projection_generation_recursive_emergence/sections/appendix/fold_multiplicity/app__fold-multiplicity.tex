@@ -1,0 +1,658 @@
+\section{折叠多重度的渐近与"分辨率不足"}\label{app:fold-multiplicity}
+
+平均折叠多重度
+\[
+d_m=\frac{|\Omega_m|}{|X_m|}=\frac{2^m}{F_{m+2}}
+\]
+满足
+\[
+d_m\sim C\left(\frac{2}{\varphi}\right)^m,\quad C=\frac{\sqrt5}{\varphi^2}.
+\]
+因此对固定窗口长度 $m$，观测将大量微态压缩为同一稳定类型；当 $m$ 增大时，稳定类型虽增多，但微态增长更快，从而"可区分细节"在有限分辨率下持续被折叠。这给出"规律不可读出可归因于分辨率不足"的数学版本：不可读出对应不同微态在折叠后不可区分，而稳定规律对应 $X_m$ 上的递归计数与不变分布仍可复核。
+
+\subsection{折叠同余与有限分辨率半环}
+为把折叠多重度与第 \ref{sec:emergent-arithmetic} 节的有限分辨率算术对接，这里给出折叠同余的代数化表述。
+
+\begin{definition}[折叠同余与值模映射]
+记 $\Omega_m:=\{0,1\}^m$，并定义折叠同余
+\[
+\omega\equiv_m\omega'\quad\Longleftrightarrow\quad\Fold_m(\omega)=\Fold_m(\omega').
+\]
+令
+\[
+N(\omega):=\sum_{k=1}^m \omega_k F_{k+1},
+\qquad
+r(\omega):=N(\omega)\bmod F_{m+2}.
+\]
+并记 $w(r):=\pi_m(Z(r))\in X_m\subset\Omega_m$（$0\le r\le F_{m+2}-1$）。
+\end{definition}
+
+\begin{theorem}[折叠同余的模半环表示]
+\label{thm:fold-congruence-mod-semirings}
+映射 $r$ 在 $\equiv_m$ 上良定义并诱导双射
+\[
+\overline r_m:\Omega_m/\!\equiv_m\;\longrightarrow\;\ZZ/(F_{m+2}\ZZ).
+\]
+进一步，若在 $\Omega_m/\!\equiv_m$ 上定义
+\[
+[\omega]\,\boxplus_m\,[\eta]:=[w(\overline r_m([\omega])\!+\!\overline r_m([\eta])\bmod F_{m+2})],
+\]
+\[
+[\omega]\,\boxtimes_m\,[\eta]:=[w(\overline r_m([\omega])\,\overline r_m([\eta])\bmod F_{m+2})],
+\]
+则 $\overline r_m$ 给出半环同构
+\[
+(\Omega_m/\!\equiv_m,\boxplus_m,\boxtimes_m)\cong\bigl(\ZZ/(F_{m+2}\ZZ),+,\times\bigr).
+\]
+\end{theorem}
+
+\textbf{证明：}
+若 $\omega\equiv_m\omega'$，则 $\Fold_m(\omega)=\Fold_m(\omega')=:x\in X_m$。
+由引理 \ref{lem:zeckendorf-range-bijection}，$V_m(x)$ 唯一确定模 $F_{m+2}$ 的剩余类，且
+\(V_m(x)\equiv N(\omega)\equiv N(\omega')\pmod{F_{m+2}}\)。
+故 $r$ 在 $\equiv_m$ 上良定义并诱导 $\overline r_m$。又对任意 $r$，取 $w(r)\in X_m\subset\Omega_m$，有
+\(\overline r_m([w(r)])=r\)，故 $\overline r_m$ 为双射。由定义可见 $\overline r_m$ 保持加法与乘法，故为半环同构。证毕。
+
+\subsection{多重度谱与方差能量恒等式}
+将折叠多重度视为模环上的类函数，并给出其 $\ell^2$ 能量与频谱的精确对应。
+
+\begin{definition}[多重度谱]
+对 $r\in\ZZ/(F_{m+2}\ZZ)$ 定义多重度剖面
+\[
+d_m(r):=\bigl|\{\omega\in\Omega_m:r(\omega)=r\}\bigr|.
+\]
+记其离散 Fourier 变换为
+\[
+\widehat d_m(k):=\sum_{r\in\ZZ/(F_{m+2}\ZZ)} d_m(r)\,e^{-2\pi i kr/F_{m+2}},
+\qquad k\in\ZZ/(F_{m+2}\ZZ).
+\]
+并记均值
+\(
+\overline d_m:=\frac{1}{F_{m+2}}\sum_r d_m(r)=\frac{2^m}{F_{m+2}}.
+\)
+\end{definition}
+
+\begin{theorem}[多重度能量与方差的谱表示]
+\label{thm:fold-multiplicity-energy}
+设 $d_m(r)$ 如上，则有精确恒等式
+\[
+\sum_{r} d_m(r)^2=\frac{1}{F_{m+2}}\sum_{k}|\widehat d_m(k)|^2,
+\]
+并且方差满足
+\[
+\frac{1}{F_{m+2}}\sum_r\bigl(d_m(r)-\overline d_m\bigr)^2
+=\frac{1}{F_{m+2}^2}\sum_{k\ne 0}|\widehat d_m(k)|^2.
+\]
+其中 $k=0$ 项给出 $\widehat d_m(0)=2^m$。
+\end{theorem}
+
+\textbf{证明：}
+在有限交换群 $\ZZ/(F_{m+2}\ZZ)$ 上应用离散 Parseval 恒等式即得
+\(
+\sum_r d_m(r)^2=\frac{1}{F_{m+2}}\sum_k|\widehat d_m(k)|^2
+\)。
+又 $\widehat d_m(0)=\sum_r d_m(r)=|\Omega_m|=2^m$，代入
+\(
+\sum_r(d_m(r)-\overline d_m)^2=\sum_r d_m(r)^2-F_{m+2}\,\overline d_m^2
+\)
+并整理即可。证毕。
+
+\begin{definition}[折叠碰撞概率]
+对独立均匀的 $\omega,\eta\in\Omega_m$，定义
+\[
+\mathsf{Col}_m:=\mathbb{P}\bigl(r(\omega)=r(\eta)\bigr)
+=\frac{1}{2^{2m}}\sum_r d_m(r)^2.
+\]
+称 $\mathsf{Col}_m-1/F_{m+2}$ 为折叠的均匀性缺口，并记作
+\[
+g_{\mathrm{col}}^2(m):=\mathsf{Col}_m-\frac{1}{F_{m+2}}.
+\]
+\end{definition}
+
+\begin{theorem}[碰撞概率的谱恒等式]
+\label{thm:fold-collision-spectrum}
+折叠碰撞概率满足精确恒等式
+\[
+\mathsf{Col}_m
+=\frac{1}{2^{2m}F_{m+2}}\sum_{k}|\widehat d_m(k)|^2
+=\frac{1}{F_{m+2}}+\frac{1}{2^{2m}F_{m+2}}\sum_{k\ne 0}|\widehat d_m(k)|^2.
+\]
+因此 $\mathsf{Col}_m\ge 1/F_{m+2}$，且等号当且仅当 $d_m(r)\equiv 2^m/F_{m+2}$ 为常数。
+\end{theorem}
+
+\textbf{证明：}
+由定理 \ref{thm:fold-multiplicity-energy} 的方差恒等式，
+\(
+\sum_r d_m(r)^2=F_{m+2}\,\overline d_m^2+\frac{1}{F_{m+2}}\sum_{k\ne 0}|\widehat d_m(k)|^2
+\)，
+再代入 $\overline d_m=2^m/F_{m+2}$ 即得结论。
+
+\begin{theorem}[多重度谱的乘积分解：离散 Riesz 乘积结构]
+\label{thm:fold-spectrum-factorization}
+对任意 $k\in\ZZ/(F_{m+2}\ZZ)$，有
+\[
+\widehat d_m(k)=\prod_{j=1}^m\Bigl(1+e^{-2\pi i k F_{j+1}/F_{m+2}}\Bigr).
+\]
+等价地，令归一化测度 \(\mu_m(r):=d_m(r)/2^m\)，并定义其特征函数（离散 Fourier 变换）
+\[
+\widehat\mu_m(k):=\sum_{r\in\ZZ/(F_{m+2}\ZZ)}\mu_m(r)\,e^{-2\pi i kr/F_{m+2}},
+\]
+则
+\[
+\widehat\mu_m(k)=\prod_{j=1}^m\frac{1+e^{-2\pi i k F_{j+1}/F_{m+2}}}{2}.
+\]
+从而
+\[
+|\widehat d_m(k)|=2^m\prod_{j=1}^m\Bigl|\cos\Bigl(\pi k\,F_{j+1}/F_{m+2}\Bigr)\Bigr|.
+\]
+\end{theorem}
+
+\textbf{证明：}
+按定义
+\(
+\widehat d_m(k)=\sum_{\omega\in\Omega_m}e^{-2\pi i k r(\omega)/F_{m+2}}
+\)。
+又 \(r(\omega)\equiv \sum_{j=1}^m \omega_j F_{j+1}\pmod{F_{m+2}}\)，故
+\[
+\widehat d_m(k)=\sum_{\omega\in\Omega_m}\prod_{j=1}^m e^{-2\pi i k\omega_j F_{j+1}/F_{m+2}}
+=\prod_{j=1}^m\bigl(1+e^{-2\pi i k F_{j+1}/F_{m+2}}\bigr).
+\]
+利用 $1+e^{-i\theta}=e^{-i\theta/2}\,2\cos(\theta/2)$ 得到模长公式。证毕。
+
+\begin{corollary}[非平凡频谱的乘性上界]
+\label{cor:fold-spectrum-nontrivial-bound}
+对任意 $k\ne 0$，有
+\[
+|\widehat d_m(k)|\le 2^m\prod_{j=1}^m\Bigl|\cos\Bigl(\pi k\,F_{j+1}/F_{m+2}\Bigr)\Bigr|<2^m.
+\]
+因此碰撞缺口满足
+\[
+\mathsf{Col}_m-\frac{1}{F_{m+2}}=\frac{1}{2^{2m}F_{m+2}}\sum_{k\ne 0}|\widehat d_m(k)|^2
+\le\frac{1}{F_{m+2}}\sum_{k\ne 0}\prod_{j=1}^m\cos^2\Bigl(\pi k\,F_{j+1}/F_{m+2}\Bigr).
+\]
+\end{corollary}
+
+\begin{proposition}[循环子集和计数与群环生成函数恒等式]\label{prop:fold-multiplicity-group-algebra}
+令 \(M:=F_{m+2}\)，并在群环
+\(
+\CC[\ZZ/(M\ZZ)]\cong \CC[x]/(x^{M}-1)
+\)
+中定义生成函数
+\[
+D_m(x):=\sum_{r=0}^{M-1} d_m(r)\,x^r.
+\]
+则有严格恒等式
+\[
+\boxed{\;
+D_m(x)\ \equiv\ \prod_{j=1}^{m}\left(1+x^{F_{j+1}}\right)\qquad(\mathrm{mod}\ x^{M}-1).\;}
+\]
+从而 \(d_m(r)\) 可解释为集合 \(\{F_{2},F_{3},\dots,F_{m+1}\}\) 的子集和在模 \(M\) 意义下落于余类 \(r\) 的计数。
+\end{proposition}
+
+\begin{proof}
+在 \(\CC[x]/(x^{M}-1)\) 中展开乘积得
+\[
+\prod_{j=1}^{m}\left(1+x^{F_{j+1}}\right)
+=\sum_{\omega\in\{0,1\}^m}x^{\sum_{j=1}^m \omega_jF_{j+1}}.
+\]
+按指数在模 \(M\) 下的余类 \(r\in\ZZ/(M\ZZ)\) 分组，系数恰为
+\(
+\#\{\omega\in\Omega_m:\ \sum_j \omega_jF_{j+1}\equiv r\ (\mathrm{mod}\ M)\}
+=d_m(r)
+\)
+（定义 \ref{thm:fold-congruence-mod-semirings}--定义“多重度剖面”）。因此该乘积等于 \(\sum_r d_m(r)x^r=D_m(x)\) 在 \(\CC[x]/(x^M-1)\) 中的像，结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[群环生成函数的自互逆性：补对偶诱导的反演方程]\label{cor:fold-multiplicity-group-algebra-self-reciprocal}
+令 \(M:=F_{m+2}\) 并沿命题 \ref{prop:fold-multiplicity-group-algebra} 定义 \(D_m(x)=\sum_{r=0}^{M-1}d_m(r)x^r\in \CC[x]/(x^M-1)\)。
+令
+\(
+c:=F_{m+1}-2
+\)。
+则在 \(\CC[x]/(x^M-1)\) 的意义下成立严格反演方程
+\[
+\boxed{\;
+D_m(x)\ \equiv\ x^{c}\,D_m(x^{-1})\qquad(\mathrm{mod}\ x^M-1).\;}
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:fold-complement-duality} 的多重度守恒 \(d_m(r)=d_m(\tau_m(r))\) 与 \(\tau_m(r)\equiv c-r\pmod M\)，有
+\[
+D_m(x)=\sum_{r}d_m(\tau_m(r))x^r.
+\]
+令 \(r'=\tau_m(r)\equiv c-r\)，则
+\(
+D_m(x)=\sum_{r'}d_m(r')x^{c-r'}=x^c\sum_{r'}d_m(r')x^{-r'}=x^cD_m(x^{-1})
+\)
+（在模 \(x^M-1\) 的群环中理解 \(x^{-1}=x^{M-1}\)）。证毕。
+\end{proof}
+
+\begin{algorithm}[全向量 FFT：一次性计算 \(d_m(\cdot)\) 与 \(\widehat d_m(\cdot)\)]\label{alg:fold-multiplicity-fft}
+输入分辨率 \(m\)。令 \(M:=F_{m+2}\)，并记 \(\omega:=e^{-2\pi i/M}\)。
+\begin{enumerate}
+  \item 初始化频域向量 \(H(k)\equiv 1\)（\(k=0,1,\dots,M-1\)）。
+  \item 对 \(j=1,2,\dots,m\) 逐步更新：
+  \[
+  H(k)\leftarrow H(k)\cdot \bigl(1+\omega^{kF_{j+1}}\bigr),\qquad k=0,1,\dots,M-1.
+  \]
+  \item 输出 \(\widehat d_m(k):=H(k)\)（于是 \(\widehat d_m(k)=D_m(\omega^k)\)，与定理 \ref{thm:fold-spectrum-factorization} 一致）。
+  \item 以逆离散傅里叶变换复原剖面：
+  \[
+  d_m(r)=\frac{1}{M}\sum_{k=0}^{M-1}\widehat d_m(k)\,\omega^{-kr},
+  \qquad r=0,1,\dots,M-1,
+  \]
+  即可一次性得到全向量 \(d_m(\cdot)\)（可用 FFT 在 \(O(M\log M)\) 时间实现该逆变换）。
+\end{enumerate}
+该实现把“逐频率 \(k\) 扫描乘积”（每个 \(k\) 代价 \(O(m)\)，若取全频则总代价 \(O(mM^2)\)）压缩为“全向量点乘链 \(O(mM)\) + 一次逆 FFT \(O(M\log M)\)”。
+\end{algorithm}
+
+\subsubsection{临界共振角色与黄金比常数}
+\label{subsubsec:fold-critical-resonance}
+
+定理 \ref{thm:fold-spectrum-factorization} 将非平凡频谱写成余弦乘积。本小节给出一族位于
+\(
+k/F_{m+2}\to \varphi^{-2}
+\)
+的“bulk 共振角色”，其归一化幅度不随 $m$ 指数衰减，而是收敛到一个严格正的极限常数 \(C_\varphi\)。
+
+\begin{definition}[归一化频谱幅度]\label{def:fold-normalized-amplitude}
+定义
+\[
+a_m(k):=\frac{|\widehat d_m(k)|}{2^m}
+=\prod_{j=1}^m\Bigl|\cos\Bigl(\pi k\,F_{j+1}/F_{m+2}\Bigr)\Bigr|.
+\]
+则由定理 \ref{thm:fold-collision-spectrum}，
+\[
+\mathsf{Col}_m
+=\frac{1}{2^{2m}}\sum_r d_m(r)^2
+=\frac{1}{F_{m+2}}\sum_{k} a_m(k)^2.
+\]
+\end{definition}
+
+\begin{lemma}[d'Ocagne 型同余压缩恒等式]\label{lem:fold-resonance-docagne}
+对任意整数 \(m\ge 1\) 与 \(1\le j\le m\)，有整式恒等式
+\[
+F_mF_{j+1}-F_{j-1}F_{m+2}=(-1)^{j+1}F_{m+1-j}.
+\]
+从而
+\[
+F_mF_{j+1}\equiv (-1)^{j+1}F_{m+1-j}\pmod{F_{m+2}}.
+\]
+\end{lemma}
+
+\textbf{证明：}
+利用 \(F_{m+2}=F_{m+1}+F_m\) 与 \(F_{j+1}=F_j+F_{j-1}\)，有
+\[
+F_mF_{j+1}-F_{j-1}F_{m+2}
+=F_m(F_j+F_{j-1})-F_{j-1}(F_{m+1}+F_m)
+=F_mF_j-F_{m+1}F_{j-1}.
+\]
+由 d'Ocagne 恒等式
+\(
+F_aF_{b+1}-F_{a+1}F_b=(-1)^bF_{a-b}
+\)
+取 \(a=m\)、\(b=j-1\)，得到
+\(
+F_mF_j-F_{m+1}F_{j-1}=(-1)^{j-1}F_{m-(j-1)}=(-1)^{j+1}F_{m+1-j}
+\)，从而结论成立。证毕。
+
+\begin{theorem}[临界共振常数 \(C_\varphi\)]\label{thm:fold-critical-resonance-constant}
+令 \(\varphi=(1+\sqrt5)/2\)。定义无穷乘积
+\[
+C_\varphi:=\prod_{n=2}^{\infty}\bigl|\cos(\pi \varphi^{-n})\bigr|.
+\]
+则该乘积收敛且 \(C_\varphi>0\)，并且
+\[
+\lim_{m\to\infty}a_m(F_m)=\lim_{m\to\infty}a_m(F_{m+1})=C_\varphi.
+\]
+\end{theorem}
+
+\textbf{证明：}
+由定义 \ref{def:fold-normalized-amplitude}，
+\(
+a_m(F_m)=\prod_{j=1}^m\bigl|\cos(\pi F_mF_{j+1}/F_{m+2})\bigr|
+\)。
+用引理 \ref{lem:fold-resonance-docagne} 将分子在模 \(F_{m+2}\) 下压缩为 \(F_{m+1-j}\)，并利用余弦的偶性得到精确表示
+\[
+a_m(F_m)=\prod_{j=1}^m\Bigl|\cos\Bigl(\pi \frac{F_{m+1-j}}{F_{m+2}}\Bigr)\Bigr|.
+\]
+固定 \(j\) 令 \(m\to\infty\)，由 Binet 渐近 \(F_n=\varphi^n/\sqrt5+O(\varphi^{-n})\) 得
+\[
+\frac{F_{m+1-j}}{F_{m+2}}\to \varphi^{-(j+1)}.
+\]
+另一方面，当 \(j\) 足够大时，上式右端足够小，且存在常数 \(C>0\) 使得对所有充分小的 \(|x|\) 都有
+\(
+|\log|\cos(\pi x)||\le Cx^2
+\)。
+由于 \(\sum_{j\ge 1}\varphi^{-2(j+1)}<\infty\)，可对对数级数使用支配收敛，得到乘积极限存在且等于
+\[
+\prod_{j=1}^{\infty}\bigl|\cos(\pi \varphi^{-(j+1)})\bigr|
+=\prod_{n=2}^{\infty}\bigl|\cos(\pi \varphi^{-n})\bigr|
+=C_\varphi.
+\]
+同理 \(a_m(F_{m+1})=a_m(-F_m)=a_m(F_m)\)（因 \(F_{m+1}\equiv -F_m\pmod{F_{m+2}}\) 且 \(\cos\) 偶），从而两者同收敛到 \(C_\varphi\)。证毕。
+
+\begin{corollary}[不可消除的常数级均匀性缺口]\label{cor:fold-critical-resonance-gap}
+折叠碰撞概率满足下界
+\[
+\mathsf{Col}_m
+\ge
+\frac{1}{F_{m+2}}\Bigl(1+a_m(F_m)^2+a_m(F_{m+1})^2\Bigr).
+\]
+从而
+\[
+\mathsf{Col}_m
+\ge \frac{1+2C_\varphi^2+o(1)}{F_{m+2}},
+\qquad
+\mathsf{Col}_m-\frac{1}{F_{m+2}}
+\ge \frac{2C_\varphi^2+o(1)}{F_{m+2}}.
+\]
+因此
+\[
+\boxed{\;
+\liminf_{m\to\infty}F_{m+2}\!\left(\mathsf{Col}_m-\frac{1}{F_{m+2}}\right)\ \ge\ 2C_\varphi^2\; }.
+\]
+数值近似可由脚本 \texttt{scripts/exp\_fold\_critical\_resonance\_constant.py} 复现：
+\input{sections/generated/eq_fold_critical_resonance_constant_numeric}
+从而 \(\mathsf{Col}_m\) 相对于基线 \(1/F_{m+2}\) 的相对因子至少为 \(1+2C_\varphi^2\)。
+进一步，因 \(F_{m+1}=F_{m+2}-F_m\)（即 \(F_{m+1}\equiv -F_m\ (\mathrm{mod}\ F_{m+2})\)），该常数级缺口由一对共轭的 bulk 共振频率 \(k=F_m\) 与 \(k=F_{m+1}\) 共同产生；其归一化频率分别满足
+\[
+\frac{F_m}{F_{m+2}}\to \varphi^{-2},\qquad
+\frac{F_{m+1}}{F_{m+2}}\to 1-\varphi^{-2}=\varphi^{-1}.
+\]
+\end{corollary}
+
+\textbf{证明：}
+由定义 \ref{def:fold-normalized-amplitude}，
+\[
+\mathsf{Col}_m=\frac{1}{F_{m+2}}\sum_{k}a_m(k)^2
+\ge \frac{1}{F_{m+2}}\Bigl(a_m(0)^2+a_m(F_m)^2+a_m(F_{m+1})^2\Bigr).
+\]
+其中 \(a_m(0)=|\widehat d_m(0)|/2^m=1\)。再用定理 \ref{thm:fold-critical-resonance-constant} 即得结论。证毕。
+
+\begin{remark}[Edge 频率的非衰减极限]\label{rem:fold-edge-nondecay}
+上述共振 \(k=F_m\) 满足 \(k/F_{m+2}\to \varphi^{-2}\)，属于频率空间的 bulk 区域。
+另一方面，对任意固定整数 \(k\ge 1\)（独立于 \(m\)），由
+\(
+a_m(k)=\prod_{j=1}^m|\cos(\pi kF_{j+1}/F_{m+2})|
+\)
+对尾部指标重排可得 \(a_m(k)\) 亦存在极限，并可写为
+\[
+\lim_{m\to\infty}a_m(k)=\prod_{n=1}^{\infty}\bigl|\cos(\pi k\,\varphi^{-n})\bigr|=:C^{\mathrm{edge}}_\varphi(k).
+\]
+因此若要讨论“统一指数谱隙/指数衰减”，必须把频率空间分解为 edge（如 \(k=o(F_{m+2})\)）与 bulk（如 \(k\asymp F_{m+2}\)）两类；全频率意义下的“对所有 \(k\ne 0\) 指数衰减”并不成立。
+\end{remark}
+
+\begin{theorem}[奇偶性诱导的谱零点]
+\label{thm:fold-spectrum-parity-zero}
+若 $F_{m+2}$ 为偶数（等价于 $m+2\equiv 0\pmod 3$），则
+\[
+\widehat d_m\Bigl(\frac{F_{m+2}}{2}\Bigr)=0.
+\]
+换言之，频率 $k=F_{m+2}/2$ 为折叠多重度谱的一个严格零点。
+\end{theorem}
+
+\textbf{证明：}
+由定理 \ref{thm:fold-spectrum-factorization}，
+\[
+\widehat d_m\Bigl(\frac{F_{m+2}}{2}\Bigr)=\prod_{j=1}^m\Bigl(1+e^{-\pi i F_{j+1}}\Bigr)
+=\prod_{j=1}^m\bigl(1+(-1)^{F_{j+1}}\bigr).
+\]
+当 $m+2\equiv 0\pmod 3$ 时，$F_{m+2}$ 为偶数，$k=F_{m+2}/2$ 为整数。又 Fibonacci 数奇偶性以 3 为周期，存在 $j$ 使 $F_{j+1}$ 为奇数，故因子 $1+(-1)^{F_{j+1}}=0$，从而乘积为零。证毕。
+
+\begin{corollary}[严格奇偶平衡律]\label{cor:fold-even-odd-balance}
+当 $m+2\equiv 0\pmod 3$ 时，
+\[
+\#\{\omega\in\Omega_m:\ r(\omega)\equiv 0\ (\mathrm{mod}\ 2)\}
+=
+\#\{\omega\in\Omega_m:\ r(\omega)\equiv 1\ (\mathrm{mod}\ 2)\}
+=2^{m-1}.
+\]
+\end{corollary}
+
+\textbf{证明：}
+记 $M=F_{m+2}$。当 $M$ 为偶数时，频率 $k=M/2$ 的角色为
+\(
+\chi_{M/2}(r)=e^{-2\pi i (M/2)r/M}=(-1)^r
+\)。
+因此
+\[
+\widehat d_m(M/2)=\sum_{r=0}^{M-1} d_m(r)(-1)^r
+=E_m-O_m,
+\]
+其中 $E_m$（resp.\ $O_m$）为偶（resp.\ 奇）余类的总计数。由定理 \ref{thm:fold-spectrum-parity-zero} 得 $\widehat d_m(M/2)=0$，再用 $E_m+O_m=|\Omega_m|=2^m$ 即得结论。证毕。
+
+\begin{theorem}[谱零点的同余判别]
+\label{thm:fold-spectrum-zero-criterion}
+对任意 $k\in\ZZ/(F_{m+2}\ZZ)$，有
+\[
+\widehat d_m(k)=0\quad\Longleftrightarrow\quad\exists\,j\in\{1,\dots,m\}\ \text{s.t.}\ 2kF_{j+1}\equiv F_{m+2}\pmod{2F_{m+2}}.
+\]
+等价地，存在 $j$ 使得
+\(
+e^{-2\pi i k F_{j+1}/F_{m+2}}=-1
+\)。
+\end{theorem}
+
+\textbf{证明：}
+由定理 \ref{thm:fold-spectrum-factorization}，
+\(
+\widehat d_m(k)=\prod_{j=1}^m(1+e^{-2\pi i k F_{j+1}/F_{m+2}})
+\)。
+乘积为零当且仅当存在某个 $j$ 使得因子为零，即
+\(
+e^{-2\pi i k F_{j+1}/F_{m+2}}=-1
+\)。
+将其改写为同余条件得到结论。证毕。
+
+\begin{corollary}[谱零点的配对抵消 involution]\label{cor:fold-spectrum-zero-involution}
+设 $M=F_{m+2}$。若存在 $j$ 使 $e^{-2\pi i k F_{j+1}/M}=-1$，则映射
+\[
+\iota_j:\Omega_m\to\Omega_m,\qquad \iota_j(\omega)=\omega\oplus e_j
+\]
+为无固定点的对合，并满足
+\[
+e^{-2\pi i k N(\omega)/M}+e^{-2\pi i k N(\iota_j(\omega))/M}=0.
+\]
+因此 $\widehat d_m(k)=0$ 可由该配对抵消逐点见证。
+\end{corollary}
+
+\textbf{证明：}
+其中 $e_j$ 为第 $j$ 位为 $1$ 的标准基向量，$\oplus$ 表示逐位异或（翻转第 $j$ 位）。对任意 $\omega$ 有
+\[
+N(\iota_j(\omega))=N(\omega)+(-1)^{\omega_j}F_{j+1},
+\]
+从而
+\[
+e^{-2\pi i k N(\iota_j(\omega))/M}
+=e^{-2\pi i k N(\omega)/M}\cdot e^{-2\pi i k(-1)^{\omega_j}F_{j+1}/M}.
+\]
+由假设 $e^{-2\pi i k F_{j+1}/M}=-1$，两种符号均给出乘子 $-1$，故两项相消；再对 $\Omega_m$ 求和得到 $\widehat d_m(k)=0$。证毕。
+
+\begin{definition}[谱零点集合]\label{def:fold-spectrum-zero-set}
+记 \(M:=F_{m+2}\)，并定义谱零点集合
+\[
+\mathcal{Z}_m:=\{k\in\ZZ/(M\ZZ):\widehat d_m(k)=0\}.
+\]
+\end{definition}
+
+\begin{theorem}[零点余类刚性：解集只依赖于 \texorpdfstring{$\gcd$}{gcd}]\label{thm:fold-zero-coset-rigidity}
+设 \(M\) 为偶数，\(w\in\ZZ\)，令 \(g=\gcd(w,M)\)。
+则
+\[
+e^{-2\pi i k w/M}=-1
+\quad\Longleftrightarrow\quad
+wk\equiv \frac{M}{2}\pmod M.
+\]
+上述同余在 \(\ZZ/(M\ZZ)\) 中可解当且仅当 \(g\mid M/2\)（等价于 \(M/g\) 为偶数）。
+在可解时，其全部解构成一个刚性的等差余类集合
+\[
+S_g(M):=\left\{\frac{M}{2g}+t\frac{M}{g}\ \ (\bmod M):\ t=0,1,\dots,g-1\right\}.
+\]
+特别地，解集只依赖于 \(g=\gcd(w,M)\)，与 \(w\) 在该最大公因子之外的细节无关。
+\end{theorem}
+
+\begin{proof}
+把 \(w=gw_1\)、\(M=gM_1\) 写成既约形式，使得 \(\gcd(w_1,M_1)=1\)。
+同余 \(wk\equiv M/2\pmod M\) 可解当且仅当 \(g\mid M/2\)，即 \(M_1\) 为偶数。
+在此条件下约去 \(g\) 得
+\[
+w_1k\equiv \frac{M_1}{2}\pmod{M_1}.
+\]
+由于 \(\gcd(w_1,M_1)=1\)，存在逆元 \(w_1^{-1}\pmod{M_1}\)。又 \(M_1\) 为偶数蕴含 \(w_1\) 必为奇数，从而 \(w_1^{-1}\) 亦为奇数。
+因此
+\[
+k\equiv \frac{M_1}{2}\,w_1^{-1}\equiv \frac{M_1}{2}\pmod{M_1},
+\]
+其中最后一步使用了“偶模下半模乘奇数仍同余半模”：\(\frac{M_1}{2}(2r+1)\equiv \frac{M_1}{2}\pmod{M_1}\)。
+把模 \(M_1\) 的解提升回模 \(M=gM_1\)，得到
+\[
+k=\frac{M_1}{2}+tM_1=\frac{M}{2g}+t\frac{M}{g},\qquad t=0,1,\dots,g-1,
+\]
+这恰给出集合 \(S_g(M)\)。证毕。
+\end{proof}
+
+\begin{corollary}[Fibonacci 权重下零点集合的余类并结构]\label{cor:fold-zero-coset-union}
+令 \(M:=F_{m+2}\)。若 \(M\) 为偶数，则
+\[
+\mathcal{Z}_m=\bigcup_{j=1}^{m}\Bigl\{k\in\ZZ/(M\ZZ):e^{-2\pi i kF_{j+1}/M}=-1\Bigr\}
+=\bigcup_{\substack{1\le j\le m\\ g_j\mid M/2}} S_{g_j}(M),
+\qquad g_j:=\gcd(F_{j+1},M),
+\]
+并且由 Fibonacci 的最大公因子恒等式 \(\gcd(F_a,F_b)=F_{\gcd(a,b)}\)，有
+\[
+g_j=\gcd(F_{j+1},F_{m+2})=F_{\gcd(j+1,m+2)}.
+\]
+因此 \(\mathcal{Z}_m\) 的可能余类只由 \(m+2\) 的约数格控制：\(g_j\) 只能取形如 \(F_d\) 的值，其中 \(d\mid(m+2)\)、且 \(d<m+2\)。
+\end{corollary}
+
+\begin{proof}
+第一条等号由定理 \ref{thm:fold-spectrum-factorization} 与定理 \ref{thm:fold-spectrum-zero-criterion} 给出：乘积为零当且仅当存在某个因子 \(1+e^{-2\pi i kF_{j+1}/M}\) 为零。
+对每个固定的 \(j\)，令 \(w:=F_{j+1}\)。应用定理 \ref{thm:fold-zero-coset-rigidity}，该因子为零的解集正是 \(S_{\gcd(w,M)}(M)\)（不可解时为空集），从而得到余类并表示。
+最后一式由 \(\gcd(F_a,F_b)=F_{\gcd(a,b)}\) 取 \(a=j+1\)、\(b=m+2\) 得到。证毕。
+\end{proof}
+
+\begin{corollary}[约数驱动的谱零点下界（算术调制的可审计来源）]\label{cor:fold-zero-divisor-lb}
+令 \(M:=F_{m+2}\)。若 \(M\) 为偶数，则对任意满足 \(g_j\mid M/2\) 的指标 \(j\in\{1,\dots,m\}\)，都有
+\[
+\card{\mathcal{Z}_m}\ \ge\ \card{S_{g_j}(M)}\ =\ g_j.
+\]
+进一步，若存在真约数 \(d\mid(m+2)\)、\(d<m+2\) 满足
+\[
+F_d\ \mid\ \frac{F_{m+2}}{2},
+\]
+则必有
+\[
+\boxed{\;\card{\mathcal{Z}_m}\ \ge\ F_d.\;}
+\]
+特别地，当 \(m+2\equiv 0\pmod 3\) 时 \(F_{m+2}\) 为偶数（定理 \ref{thm:fold-spectrum-parity-zero}），从而 \(\card{\mathcal{Z}_m}\ge 1\)；而当这些整除条件在某些 \(d\) 上被触发时，\(\card{\mathcal{Z}_m}\) 会出现由 \((m+2)\) 的约数格驱动的确定性“增量”。
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:fold-zero-coset-union}，当 \(g_j\mid M/2\) 时有 \(S_{g_j}(M)\subseteq \mathcal{Z}_m\)。又 \(\card{S_g(M)}=g\)，因此 \(\card{\mathcal{Z}_m}\ge g_j\)。
+\par
+对第二段，取 \(j=d-1\)。则由推论 \ref{cor:fold-zero-coset-union} 中的恒等式
+\(
+g_{d-1}=\gcd(F_d,F_{m+2})=F_{\gcd(d,m+2)}=F_d
+\)。
+若再假设 \(F_d\mid F_{m+2}/2\)，则 \(g_{d-1}\mid M/2\)，从而 \(S_{F_d}(M)\subseteq \mathcal{Z}_m\)，即 \(\card{\mathcal{Z}_m}\ge F_d\)。证毕。
+\end{proof}
+
+\begin{corollary}[六倍窗的半阶大陪集零点块]\label{cor:fold-zero-half-index-multiple6}
+若 \(m+2\equiv 0\pmod 6\)，令 \(d=(m+2)/2\)。则
+\[
+F_d\ \mid\ \frac{F_{m+2}}{2},
+\]
+从而
+\[
+\boxed{\;\card{\mathcal{Z}_m}\ \ge\ F_d=F_{(m+2)/2}.\;}
+\]
+更具体地，对 \(j=d-1\) 有 \(S_{F_d}(F_{m+2})\subseteq \mathcal{Z}_m\)。
+\end{corollary}
+\begin{proof}
+写 \(m+2=2d\)。利用恒等式 \(F_{2d}=F_d(F_{d-1}+F_{d+1})=:F_dL_d\)（\(L_d\) 为 Lucas 数），只需证明当 \(m+2\equiv 0\pmod 6\) 时 \(L_d\) 为偶数。
+由于 \(m+2\equiv 0\pmod 6\) 等价于 \(d\equiv 0\pmod 3\)，而 Lucas 数递推 \(L_{n+2}=L_{n+1}+L_n\) 在模 \(2\) 下具有三周期（可直接核验），从而 \(L_n\) 在 \(n\equiv 0\pmod 3\) 时为偶数，故 \(L_d\) 偶。
+于是 \(F_d\mid F_{2d}/2=F_{m+2}/2\)。由推论 \ref{cor:fold-zero-divisor-lb} 得 \(\card{\mathcal{Z}_m}\ge F_d\)，且见证余类为 \(S_{g_{d-1}}(F_{m+2})=S_{F_d}(F_{m+2})\subseteq \mathcal{Z}_m\)（其中 \(g_{d-1}=F_d\) 见推论 \ref{cor:fold-zero-divisor-lb} 的证明）。证毕。
+\end{proof}
+
+\begin{remark}[三轴窗上的零点增量：\texorpdfstring{$m=58$}{m=58} 给出 \texorpdfstring{$|\mathcal{Z}_{58}|=839415$}{|Z58|=839415}]\label{rem:fold-zero-lb-m58}
+命题 \ref{prop:crt-235-min-depth} 给出的最小三轴窗为 \(m=58\)，此时 \(m+2=60=2\cdot 30\)。
+利用恒等式
+\(
+F_{2n}=F_n(F_{n-1}+F_{n+1})
+=F_nL_n
+\)
+（其中 \(L_n\) 为 Lucas 数），可得
+\(
+F_{60}=F_{30}L_{30}
+\)。
+又 Lucas 数的奇偶性满足 \(L_n\) 在 \(n\equiv 0\pmod 3\) 时为偶数，
+（由递推 \(L_{n+2}=L_{n+1}+L_n\) 在模 \(2\) 下的三周期可直接核验），
+从而 \(L_{30}\) 为偶数并推出
+\(
+F_{30}\mid F_{60}/2
+\)。
+因此由推论 \ref{cor:fold-zero-divisor-lb}（取 \(d=30\)）得到
+\[
+\boxed{\ |\mathcal{Z}_{58}|=839415\ \ (\ge F_{30}=832040)\ }.
+\]
+其中精确值由注 \ref{rem:fold-zero-coset-algorithm} 的并集计数实现得到（脚本 \texttt{scripts/exp\_fold\_zero\_coset\_union\_count.py}）。
+该结论表明在三轴最小窗上零点集合的\emph{绝对规模}已达到 \( \asymp \varphi^{m/2}\)，
+但其相对密度仍为 \(O(\varphi^{-m/2})\)（与定理 \ref{thm:fold-zero-density-sparse} 相容），
+从而对碰撞缺口的真实 \(O(1/F_{m+2})\) 尺度仍需依赖振幅分布而非仅依赖零点计数（见注 \ref{rem:fold-zero-sparse-necessity}）。
+\end{remark}
+
+\begin{lemma}[余类交集判据与交集大小]\label{lem:fold-zero-coset-intersection}
+设 \(M\) 为偶数且 \(g,h\mid M/2\)。
+则
+\[
+S_g(M)\cap S_h(M)\neq\varnothing
+\quad\Longleftrightarrow\quad
+2\gcd(g,h)\mid (h-g).
+\]
+并且一旦交集非空，就有
+\[
+\card{S_g(M)\cap S_h(M)}=\gcd(g,h).
+\]
+\end{lemma}
+
+\begin{proof}
+由定理 \ref{thm:fold-zero-coset-rigidity} 的构造，集合 \(S_g(M)\) 可等价写为单一同余类
+\[
+S_g(M)=\left\{k\in\ZZ/(M\ZZ): k\equiv \frac{M}{2g}\pmod{M/g}\right\},
+\]
+同理
+\(
+S_h(M)=\{k: k\equiv M/(2h)\pmod{M/h}\}
+\)。
+两条线性同余的兼容性条件为
+\[
+\frac{M}{2g}-\frac{M}{2h}\equiv 0\pmod{\gcd(M/g,M/h)}.
+\]
+注意 \(\gcd(M/g,M/h)=M/\mathrm{lcm}(g,h)=M\gcd(g,h)/(gh)\)，把上式两边同除以 \(M/(gh)\) 得到
+\[
+\frac{h-g}{2}\equiv 0\pmod{\gcd(g,h)},
+\]
+即 \(2\gcd(g,h)\mid(h-g)\)，从而得到非空判据。
+若兼容，则解集模数为 \(\mathrm{lcm}(M/g,M/h)=M/\gcd(g,h)\)，因此在模 \(M\) 下共有 \(\gcd(g,h)\) 个解，即交集大小为 \(\gcd(g,h)\)。证毕。
+\end{proof}
+
+\begin{theorem}[谱零点密度的指数稀疏上界]\label{thm:fold-zero-density-sparse}
+令 \(M:=F_{m+2}\)。若 \(M\) 为偶数，则谱零点集合满足
+\[
+\frac{\card{\mathcal{Z}_m}}{M}
+\le
+\tau(m+2)\,\frac{F_{\lfloor (m+2)/2\rfloor}}{F_{m+2}}
+=\tau(m+2)\,O(\varphi^{-m/2}),
+\]
+其中 \(\tau(\cdot)\) 为约数个数函数。
+\end{theorem}
+
+\begin{proof}
+由推论 \ref{cor:fold-zero-coset-union}，\(\mathcal{Z}_m=\bigcup S_{g}(M)\)，其中 \(g=F_d\) 且 \(d\mid(m+2),\,d<m+2\)，故候选个数至多为 \(\tau(m+2)\)。
+又 \(d<m+2\Rightarrow d\le \lfloor (m+2)/2\rfloor\)，从而 \(g\le F_{\lfloor (m+2)/2\rfloor}\)。
+用并集的平凡上界与 \(\card{S_g(M)}=g\) 得
+\[
+\card{\mathcal{Z}_m}\le \tau(m+2)\,F_{\lfloor (m+2)/2\rfloor}.
+\]
+两边同除以 \(M=F_{m+2}\) 即得；最后由 \(F_n\asymp \varphi^n\) 得 \(O(\varphi^{-m/2})\)。
+\end{proof}

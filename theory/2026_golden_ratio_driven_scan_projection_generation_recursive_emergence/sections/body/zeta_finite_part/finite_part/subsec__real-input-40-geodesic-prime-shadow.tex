@@ -1,0 +1,394 @@
+\subsubsection{Bartholdi 回头 fugacity 变形与真实输入核的无回头（测地）素数影子}\label{subsec:real-input-40-geodesic-prime-shadow}
+本小节把注 \ref{rem:rotation-polytope-bartholdi} 中“排除回溯的 Ihara/Bartholdi prime shadow”在真实输入 \(40\) 状态核上具体化：我们在 essential \(20\) 核心的边空间上构造无回头（non-backtracking）边移位，并得到一个出人意料的低阶行列式闭式与新的 Abel/Mertens 有限部常数。
+更进一步，引入回头 fugacity 参数 \(t\)，得到一个二变量行列式闭式，把标准 prime shadow（\(t=1\)）与测地 prime shadow（\(t=0\)）置于同一条解析曲线上。
+
+\paragraph{边空间与回头算子}
+令 \(\Gamma_{\mathrm{ess}}\) 为命题 \ref{prop:real-input-40-essential-20} 的 essential 有向图（顶点数 \(20\)），并记其有向边集为 \(E\)。
+对本核有 \(|E|=48\)（按输入对 \((x,y)\) 细分后的确定性分支边；可由脚本 \path{scripts/exp_real_input_40_rotation_polytope_exact.py} 的构造链直接核验）。
+把每条边 \(e=(u\to v)\in E\) 视为字母，得到边移位（edge shift）\(X_E\)。
+
+若 \(\bar e:=(v\to u)\in E\) 亦存在，则称 \(\bar e\) 为 \(e\) 的\emph{回头反边}。
+定义作用在边空间 \(\RR^{E}\) 上的 \(48\times 48\) 矩阵族 \(H(t)\)（Bartholdi 回头 fugacity 变形）：
+\[
+H(t)_{e,e'} :=
+\begin{cases}
+1,& \text{若 } e=(u\to v),\,e'=(v\to w)\ \text{且 }w\neq u,\\
+t,& \text{若 } e'=\bar e,\\
+0,& \text{否则},
+\end{cases}
+\qquad (t\in\CC).
+\]
+于是 \(H(0)\) 禁止立即撤销（无回头/测地），而 \(H(1)\) 恰为完整的边--边转移（允许撤销）。
+定义二变量 \(\zeta\) 与行列式分母
+\[
+\zeta_{\mathrm{bt}}(z,t):=\frac{1}{\Delta_{\mathrm{bt}}(z,t)},\qquad
+\Delta_{\mathrm{bt}}(z,t):=\det(I-zH(t)).
+\]
+并把 \(t=0\) 的无回头（测地）\(\zeta\) 记为 \(\zeta_{\mathrm{nb}}(z):=\zeta_{\mathrm{bt}}(z,0)\)。
+
+\begin{theorem}[无回头（测地）素数影子的 15 次行列式闭式]\label{thm:real-input-40-geodesic-det}
+令 \(H_{\mathrm{nb}}:=H(0)\)。则
+\[
+\zeta_{\mathrm{nb}}(z)=\frac{1}{\det(I-zH_{\mathrm{nb}})},
+\]
+并且
+\[
+\boxed{
+\begin{aligned}
+\det(I-zH_{\mathrm{nb}})
+&=1-4z^3-9z^4-12z^5-16z^6-11z^7-11z^8-4z^9-z^{10}\\
+&\qquad +8z^{11}+12z^{12}+10z^{13}+8z^{14}+2z^{15}.
+\end{aligned}
+}
+\]
+因此 \(H_{\mathrm{nb}}\) 有 \(33\) 个零特征值，非零谱由次数 \(15\) 的整系数多项式决定（有效动力学维数从 \(48\) 压缩到 \(15\)）。
+\end{theorem}
+
+\begin{corollary}[测地增长率与测地熵]\label{cor:real-input-40-geodesic-entropy}
+设 \(\rho_{\mathrm{nb}}:=\rho(H_{\mathrm{nb}})\) 为 Perron 根，则 \(\rho_{\mathrm{nb}}\) 为方程
+\[
+\rho^{15}-4\rho^{12}-9\rho^{11}-12\rho^{10}-16\rho^{9}-11\rho^{8}-11\rho^{7}-4\rho^{6}-\rho^{5}+8\rho^{4}+12\rho^{3}+10\rho^{2}+8\rho+2=0
+\]
+的最大实根，数值为
+\[
+\rho_{\mathrm{nb}}\approx 2.295661870047795\ldots,\qquad
+h_{\mathrm{nb}}:=\log\rho_{\mathrm{nb}}\approx 0.831021198469209\ldots.
+\]
+作为对照，真实输入核在周期点口径下的主增长率为 \(\lambda=\varphi^2\)（\ref{subsec:arity-dirichlet-mertens-tensor}）。
+\end{corollary}
+
+\paragraph{测地 primitive 谱与显式起始项}
+记测地周期点数 \(a_n^{\mathrm{nb}}:=\Tr(H_{\mathrm{nb}}^n)\)，以及测地 primitive 轨道数 \(p_n^{\mathrm{nb}}\)（按轨道计）。
+则仍有 necklace 关系与 Möbius 反演
+\[
+a_n^{\mathrm{nb}}=\sum_{d\mid n} d\,p_d^{\mathrm{nb}},
+\qquad
+p_n^{\mathrm{nb}}=\frac1n\sum_{d\mid n}\mu(d)\,a_{n/d}^{\mathrm{nb}}.
+\]
+本核上前 \(15\) 项完全显式：
+\[
+(p_n^{\mathrm{nb}})_{n=1}^{15}=(0,0,4,9,12,22,47,95,196,399,843,1775,3790,8038,17258).
+\]
+
+\begin{corollary}[测地 prime shadow 的严格 Ramanujan 裕度与次指数误差]\label{cor:real-input-40-geodesic-ramanujan-margin}
+令
+\(
+\Delta_{\mathrm{nb}}(z):=\det(I-zH_{\mathrm{nb}})
+\)
+（定理 \ref{thm:real-input-40-geodesic-det}），并将其根按模排序为
+\(
+0<|z_1|\le |z_2|\le\cdots\le |z_{15}|
+\)
+（计重数）。
+则 \(\rho_{\mathrm{nb}}=|z_1|^{-1}\) 且 \(z_1=\rho_{\mathrm{nb}}^{-1}\)；
+并定义
+\[
+\Lambda_{\mathrm{nb}}:=|z_2|^{-1},\qquad
+\delta_{\mathrm{nb}}:=\log\frac{\Lambda_{\mathrm{nb}}^2}{\rho_{\mathrm{nb}}}.
+\]
+数值审计给出
+\[
+|z_2|\approx 0.7346134203,\qquad
+\Lambda_{\mathrm{nb}}\approx 1.3612601844,\qquad
+\frac{\Lambda_{\mathrm{nb}}}{\sqrt{\rho_{\mathrm{nb}}}}\approx 0.8984360744<1,
+\qquad
+\delta_{\mathrm{nb}}\approx -0.2141994446<0.
+\]
+进一步，测地 primitive 轨道数满足渐近式
+\[
+p_n^{\mathrm{nb}}
+=\frac{\rho_{\mathrm{nb}}^n}{n}
++O\!\left(\frac{\max\{\Lambda_{\mathrm{nb}}^{n},\,\rho_{\mathrm{nb}}^{n/2}\}}{n}\right).
+\]
+特别地，当 \(n=p\ge 3\) 为素数时有
+\[
+p_p^{\mathrm{nb}}=\frac{\rho_{\mathrm{nb}}^{p}}{p}+O\!\left(\frac{\Lambda_{\mathrm{nb}}^{p}}{p}\right),
+\]
+其误差指数底严格小于 \(\rho_{\mathrm{nb}}^{1/2}\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:real-input-40-geodesic-det}，
+\(
+\Delta_{\mathrm{nb}}(z)=\prod_{j=1}^{15}(1-z\lambda_j)
+\)
+其中 \(\{\lambda_j\}\) 为 \(H_{\mathrm{nb}}\) 的全部非零特征值，并且 \(\lambda_j=z_j^{-1}\)。
+因此
+\(
+a_n^{\mathrm{nb}}=\Tr(H_{\mathrm{nb}}^n)=\sum_{j=1}^{15}\lambda_j^n
+=\rho_{\mathrm{nb}}^n+O(\Lambda_{\mathrm{nb}}^n)
+\)。
+将其代入 Möbius 反演公式
+\(
+p_n^{\mathrm{nb}}=\frac1n\sum_{d\mid n}\mu(d)\,a_{n/d}^{\mathrm{nb}}
+\)，
+主项来自 \(d=1\) 的 Perron 贡献 \(\rho_{\mathrm{nb}}^n/n\)；
+误差一部分来自 \(d=1\) 的次谱模态，量级为 \(O(\Lambda_{\mathrm{nb}}^n/n)\)；
+另一部分来自 \(d\ge 2\) 的 Perron 次级项 \(\rho_{\mathrm{nb}}^{n/d}\le \rho_{\mathrm{nb}}^{n/2}\)。
+合并即得所示上界。
+当 \(n=p\ge 3\) 为素数时，求和仅含 \(d=1,p\)，从而
+\(
+p_p^{\mathrm{nb}}=(a_p^{\mathrm{nb}}-a_1^{\mathrm{nb}})/p
+=\rho_{\mathrm{nb}}^{p}/p+O(\Lambda_{\mathrm{nb}}^{p}/p)
+\)
+（其中 \(a_1^{\mathrm{nb}}\) 为常数项），得到素数情形。证毕。
+\end{proof}
+
+\begin{theorem}[测地 Mertens 常数（Abel 有限部）]\label{thm:real-input-40-geodesic-mertens}
+定义测地 primitive 生成函数
+\[
+P_{\mathrm{nb}}(z):=\sum_{n\ge 1}p_n^{\mathrm{nb}}z^n.
+\]
+在主极点 \(z_\star=\rho_{\mathrm{nb}}^{-1}\) 处定义 Abel 有限部常数 \(\mathfrak{M}_{\mathrm{nb}}\) 使得
+\[
+P_{\mathrm{nb}}(z)=-\log(1-\rho_{\mathrm{nb}}z)+\log\mathfrak{M}_{\mathrm{nb}}+o(1),
+\qquad z\uparrow z_\star.
+\]
+则数值上
+\[
+\boxed{
+\log\mathfrak{M}_{\mathrm{nb}}\approx -1.465260542946848,\qquad
+\mathfrak{M}_{\mathrm{nb}}\approx 0.231017793578888,
+}
+\]
+并因此
+\[
+\boxed{
+\mathsf{M}_{\mathrm{nb}}:=\gamma+\log\mathfrak{M}_{\mathrm{nb}}\approx -0.888044878045315,
+}
+\]
+与真实输入核在周期点口径下的 \(\mathsf{M}\approx 0.3229030\) 形成鲜明对照（\ref{subsec:arity-dirichlet-mertens-tensor}）。
+\end{theorem}
+
+\paragraph{Bartholdi 型回头 fugacity 变形：二变量行列式闭式}
+令 \(\Delta_{\mathrm{bt}}(z,t)=\det(I-zH(t))\)。
+则存在 \(F(z,t)\in\ZZ[z,t]\)（对 \(z\) 次数 \(20\)，对 \(t\) 次数至多 \(9\)）使得：
+\begin{theorem}[回头 fugacity 变形的二变量行列式闭式]\label{thm:real-input-40-bartholdi-det}
+有严格因式分解
+\[
+\boxed{
+\Delta_{\mathrm{bt}}(z,t)=(1-t^2 z^2)\bigl(1+t(1-t)z^2\bigr)^2\,F(z,t).
+}
+\]
+其中
+\[
+F(z,t)=\sum_{k=0}^{20}f_k(t)\,z^k,\qquad f_k(t)\in\ZZ[t],\quad \deg f_k\le 9,
+\]
+且系数可显式写为
+\[
+\begin{aligned}
+f_0(t)&=1,\\
+f_1(t)&=-t,\\
+f_2(t)&=-2t(2t+1),\\
+f_3(t)&=2(2t^3+t^2-2),\\
+f_4(t)&=6t^4+6t^3+t^2+4t-9,\\
+f_5(t)&=-6t^5-6t^4-t^3+14t^2+9t-12,\\
+f_6(t)&=-4t^6-6t^5-2t^4-14t^3+24t^2+15t-16,\\
+f_7(t)&=4t^7+6t^6+2t^5-18t^4-22t^3+41t^2-t-11,\\
+f_8(t)&=(t-1)(t^7+3t^6+4t^5+22t^4-4t^3-41t^2+21t+11),\\
+f_9(t)&=-(t-1)^2(t^7+4t^6+8t^5+2t^4-24t^3+11t^2+50t+4),\\
+f_{10}(t)&=-(t-1)(10t^6-6t^5-45t^4+46t^3+54t^2-56t-1),\\
+f_{11}(t)&=-(t-1)^2(2t^6+14t^5-15t^4-61t^3+41t^2+36t-8),\\
+f_{12}(t)&=(t-1)^2(2t^7-t^6-25t^5+7t^4+85t^3-36t^2-36t+12),\\
+f_{13}(t)&=(t-1)^3(3t^6-25t^4+22t^3+40t^2-24t-10),\\
+f_{14}(t)&=(t-1)^3(4t^6+t^5-46t^4+6t^3+57t^2-28t-8),\\
+f_{15}(t)&=2(t-1)^4(2t^5-2t^4-6t^3+7t^2+7t+1),\\
+f_{16}(t)&=t(t-1)^4(9t^4+t^3-24t^2+18t+8),\\
+f_{17}(t)&=-2t(t-1)^5(t+2)(t+3),\\
+f_{18}(t)&=2t(t-1)^5(t^3-t^2+2t-4),\\
+f_{19}(t)&=2t^2(t-1)^6(t+3),\\
+f_{20}(t)&=-4t^2(t-1)^7.
+\end{aligned}
+\]
+\end{theorem}
+
+\begin{remark}[两个关键特化]\label{rem:real-input-40-bartholdi-specializations}
+把“标准 prime shadow”与“测地 prime shadow”放到同一条曲线上：
+\begin{itemize}
+  \item \textbf{\(t=0\)}：
+  \[
+  \begin{aligned}
+  \Delta_{\mathrm{bt}}(z,0)&=F(z,0)\\
+  &=\det(I-zH_{\mathrm{nb}}),
+  \end{aligned}
+  \]
+  回到定理 \ref{thm:real-input-40-geodesic-det} 的测地（无回头）\(\zeta\)。
+  \item \textbf{\(t=1\)}：
+  \[
+  \Delta_{\mathrm{bt}}(z,1)=(1-z^2)F(z,1),
+  \]
+  精确化为完整边--边转移的 \(\zeta\) 分母：
+  \[
+  \det(I-zH(1))
+  =-(z-1)^2(z+1)^3(z^2-3z+1)(z^2-z-1).
+  \]
+  其中 \(F(z,1)=(z-1)(z+1)^2(z^2-3z+1)(z^2-z-1)\)（此时 \(f_k(1)=0\) 对所有 \(k\ge 8\)）。
+\end{itemize}
+\end{remark}
+
+\begin{remark}[Bartholdi fugacity 的无穷远根簇：\texorpdfstring{$t\to 1$}{t->1} 时的 \texorpdfstring{$13$}{13} 条必然逸散支]\label{rem:real-input-40-bartholdi-infinite-root-cluster}
+由定理 \ref{thm:real-input-40-bartholdi-det} 的显式系数可见：当 \(k\ge 8\) 时 \(f_k(t)\) 含有 \((t-1)\) 的显式因子（并且 \(f_9(t)\) 甚至含 \((t-1)^2\)），从而
+\[
+\deg_z F(z,1)=7
+\qquad\text{而一般}\qquad
+\deg_z F(z,t)=20\ (t\neq 1).
+\]
+因此在 \(z\)-平面的射影紧化意义下，\(F(\,\cdot\,,t)\) 的根在 \(t\to 1\) 时除去收敛到 \(F(z,1)\) 的有限簇外，必有恰好 \(20-7=13\) 条根支向无穷远逸散；
+等价地，若令 \(\varepsilon=t-1\)，则存在 \(13\) 条 Newton--Puiseux 分支 \(z_j(\varepsilon)\) 满足 \(|z_j(\varepsilon)|\to\infty\)（\(\varepsilon\to 0\)）。
+在倒数变量 \(\lambda:=1/z\) 下，这 \(13\) 条逸散支对应于 \(\lambda\to 0\) 的零特征值簇：它们把 \(t=1\) 的“标准 prime shadow”识别为该二变量谱曲线上的一个结构性退化点，其附加谱支以确定的 Puiseux 斜率塌缩到 \(\lambda=0\)。
+\end{remark}
+
+\begin{proposition}[Bartholdi fugacity 在 \texorpdfstring{$t=1$}{t=1} 的 Newton--Puiseux 逸散指数谱]\label{prop:real-input-40-bartholdi-newton-puiseux-spectrum}
+沿用定理 \ref{thm:real-input-40-bartholdi-det} 的记号，令 \(F(z,t)=\sum_{k=0}^{20}f_k(t)z^k\)。
+写 \(\varepsilon:=t-1\)，并定义 \((t-1)\)-adic 赋值剖面
+\[
+v_k:=\operatorname{ord}_{\varepsilon}\bigl(f_k(1+\varepsilon)\bigr)\in\NN\cup\{0\}.
+\]
+在倒数变量 \(\lambda=z^{-1}\) 下令
+\[
+G(\lambda,\varepsilon):=\lambda^{20}F(\lambda^{-1},1+\varepsilon)
+=\sum_{x=0}^{20}g_x(\varepsilon)\lambda^x,\qquad g_x(\varepsilon):=f_{20-x}(1+\varepsilon).
+\]
+则 \(G(\lambda,\varepsilon)\) 的 Newton 多边形下凸壳包含三段负斜率边
+\[
+(-1,\,-\tfrac12,\,-\tfrac13),
+\qquad
+\text{对应水平长度分别为}\quad (2,\,8,\,3).
+\]
+因此当 \(\varepsilon\to 0\) 时，除去 \(7\) 条保持有界并收敛到 \(F(z,1)\) 的根的分支外，其余 \(13\) 条逸散根 \(z_j(\varepsilon)\) 必分裂为三类 Puiseux 渐近
+\[
+z_j(\varepsilon)=c_j\,\varepsilon^{-\alpha}+o\!\left(\varepsilon^{-\alpha}\right),
+\qquad
+\alpha\in\left\{1,\frac12,\frac13\right\},
+\qquad
+\#\{\alpha=1\}=2,\ \#\{\alpha=\tfrac12\}=8,\ \#\{\alpha=\tfrac13\}=3,
+\]
+其中 \(c_j\neq 0\) 为代数常数。该指数谱完全由 \(v_k\)（等价地：由定理 \ref{thm:real-input-40-bartholdi-det} 中的 \((t-1)\)-因子阶梯）所强制。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:real-input-40-bartholdi-det} 的显式分解，直接读出
+\[
+v_k=
+\begin{cases}
+0,& 0\le k\le 7,\\
+1,& k\in\{8,10\},\\
+2,& k\in\{9,11,12\},\\
+3,& k\in\{13,14\},\\
+4,& k\in\{15,16\},\\
+5,& k\in\{17,18\},\\
+6,& k=19,\\
+7,& k=20.
+\end{cases}
+\]
+因此 \(g_x(\varepsilon)=f_{20-x}(1+\varepsilon)\) 的赋值为 \(\operatorname{ord}_{\varepsilon}g_x=v_{20-x}\)。
+把点 \((x,\operatorname{ord}_{\varepsilon}g_x)\)（\(0\le x\le 20\)）作 Newton 图，其下凸壳恰连接
+\[
+(0,7)\to(2,5)\to(10,1)\to(13,0)\to(20,0),
+\]
+故三段负斜率分别为 \(-1,-\tfrac12,-\tfrac13\)，水平长度分别为 \(2,8,3\)。
+Newton--Puiseux 定理给出：每段斜率 \(-\alpha\) 对应 \(\lambda\sim \varepsilon^{\alpha}\) 的根支数等于该段水平长度；
+等价地 \(z=\lambda^{-1}\sim \varepsilon^{-\alpha}\)，即得到所述指数谱与条数分解。
+剩余 \(7\) 条有界根支来自 \(\varepsilon=0\) 时 \(F(z,1)\) 的次数 \(7\)（见备注 \ref{rem:real-input-40-bartholdi-specializations}）。证毕。
+\end{proof}
+
+\begin{proposition}[逸散簇的初形方程与首项代数常数]\label{prop:real-input-40-bartholdi-escape-initial-forms}
+沿用命题 \ref{prop:real-input-40-bartholdi-newton-puiseux-spectrum} 的记号，并令 \(\alpha\in\{1,\tfrac12,\tfrac13\}\) 为某段 Newton 边对应的指数。
+在缩放 \(\lambda=\varepsilon^{\alpha}\xi\) 下，把 \(G(\varepsilon^{\alpha}\xi,\varepsilon)\) 的边上主导项抽取为 \(\varepsilon\)-最低阶初形，可得到三类逸散簇的首项方程：
+\begin{itemize}
+  \item \textbf{\(\alpha=1\)（两支）：}
+  初形方程为
+  \[
+  \xi^2+1=0,
+  \]
+  从而两条最强逸散分支满足
+  \[
+  z_{\pm}(\varepsilon)=\mp\,\mathrm{i}\,\varepsilon^{-1}+O\!\left(\varepsilon^{-1/2}\right).
+  \]
+  \item \textbf{\(\alpha=\tfrac13\)（三支）：}
+  初形方程为
+  \[
+  \xi^3-2=0,
+  \]
+  从而存在三条分支满足
+  \[
+  z(\varepsilon)=2^{-1/3}\omega^{-1}\varepsilon^{-1/3}+O(1),\qquad \omega^3=1.
+  \]
+  \item \textbf{\(\alpha=\tfrac12\)（八支）：}
+  初形多项式在 \(\xi\) 上仅含偶次幂；令 \(y=\xi^2\)，则剥离共享端点对应的零根后，非零首项满足
+  \[
+  y^4-4y^3+7y^2-6y+2=0,\qquad y=\xi^2,
+  \]
+  每个 \(y\) 的根产生两条 \(\xi=\pm\sqrt{y}\)，共得到 \(8\) 条 \(\alpha=\tfrac12\) 的逸散分支。
+\end{itemize}
+因此三簇逸散首项常数所在的最小代数域分别落在 \(\QQ(\mathrm{i})\)、\(\QQ(2^{1/3},\omega)\) 与上述四次方程的分裂域中；它们均可由定理 \ref{thm:real-input-40-bartholdi-det} 的系数分解在纯代数层面计算得到。
+\end{proposition}
+\begin{proof}
+三条初形方程均由“取 Newton 边上的最低阶项”直接给出。以 \(\alpha=\tfrac12\) 为例：
+该边对应 \(x\in\{2,4,6,8,10\}\)，即 \(f_{18},f_{16},f_{14},f_{12},f_{10}\) 五项。
+由定理 \ref{thm:real-input-40-bartholdi-det} 在 \(t=1\) 处的首项系数分别为
+\[
+f_{18}\sim -4\varepsilon^5,\quad
+f_{16}\sim 12\varepsilon^4,\quad
+f_{14}\sim -14\varepsilon^3,\quad
+f_{12}\sim 8\varepsilon^2,\quad
+f_{10}\sim -2\varepsilon,
+\]
+并在代换 \(\lambda=\varepsilon^{1/2}\xi\) 下同阶出现，从而初形为
+\[
+-4\xi^2+12\xi^4-14\xi^6+8\xi^8-2\xi^{10}
+\,=\,
+-2\xi^2\bigl(y^4-4y^3+7y^2-6y+2\bigr)\quad(y=\xi^2),
+\]
+即得四次方程。
+对 \(\alpha=1\)，在缩放 \(\lambda=\varepsilon\xi\) 下，边端项由
+\[
+f_{20}(t)=-4t^2(t-1)^7,
+\qquad
+f_{18}(t)=2t(t-1)^5(t^3-t^2+2t-4)
+\]
+贡献；取 \(t=1+\varepsilon\) 的首项并代入得到初形 \(-4(1+\xi^2)\)，从而极限方程为 \(\xi^2+1=0\)。
+对 \(\alpha=\tfrac13\)，边端点为 \(x\in\{10,13\}\)，对应 \(f_{10}\sim -2\varepsilon\) 与 \(f_7(1)=1\)；
+代入 \(\lambda=\varepsilon^{1/3}\xi\) 得初形 \(\xi^{10}(\xi^3-2)\)，从而得到 \(\xi^3-2=0\)。
+证毕。
+\end{proof}
+
+\begin{remark}[\texorpdfstring{$(t-1)$}{(t-1)}-adic 关联分级的三尺度谱分解]\label{rem:real-input-40-bartholdi-graded-spectrum}
+令 \(\varepsilon=t-1\)。由定理 \ref{thm:real-input-40-bartholdi-det} 的 \((t-1)\)-因子阶梯，在关联分级环 \(\mathrm{gr}_{(t-1)}\ZZ[t]\) 中，\(F(z,1+\varepsilon)\) 的无穷远谱支分裂可被三种权齐次缩放捕捉：
+\[
+z=\varepsilon^{-1}w,\qquad z=\varepsilon^{-1/2}w,\qquad z=\varepsilon^{-1/3}w.
+\]
+对应的主导初形多项式（在 \(w\neq 0\) 的意义下）分别为
+\[
+w^2+1,\qquad
+y^4-4y^3+7y^2-6y+2\ (y=w^2),\qquad
+w^3-2.
+\]
+它们与 \(t=1\) 留下的有限根多项式 \(F(z,1)\)（次数 \(7\)）互补，因而 \(t\to 1\) 的退化在 \((t-1)\)-adic 意义下严格分裂为
+\[
+20 \;=\; 7\ \oplus\ 3\ \oplus\ 8\ \oplus\ 2,
+\]
+其中 \(7\) 为有限谱层次数，\((3,8,2)\) 分别对应 \(\alpha=\tfrac13,\tfrac12,1\) 三个逸散尺度层。
+\end{remark}
+\begin{theorem}[回头密度与回头方差的闭式]\label{thm:real-input-40-backtracking-cumulants}
+令 \(t=e^{\theta}\)，并记
+\[
+\lambda(\theta):=\rho\!\bigl(H(e^{\theta})\bigr),\qquad
+P(\theta):=\log\lambda(\theta).
+\]
+则在 \(\theta=0\)（即 \(t=1\)）处有闭式
+\[
+\boxed{\;
+P'(0)=\frac{211-93\sqrt5}{20}\approx 0.1522839046\;},
+\]
+\[
+\boxed{\;
+P''(0)=\frac{193219}{100}-\frac{216003}{250}\sqrt5\approx 0.2004346245\; }.
+\]
+其中 \(P'(0)\) 可解释为“最大熵平衡态下，每步出现立即撤销回头片段的频率”，而 \(P''(0)\) 为回头计数的渐近方差密度（Green--Kubo）。
+\end{theorem}
+
+\begin{remark}[可复现计算链]\label{rem:real-input-40-geodesic-repro}
+本小节的行列式闭式、primitive 起始谱、以及 \(\mathfrak{M}_{\mathrm{nb}}\) 与 \(P'(0),P''(0)\) 的闭式，
+均可由脚本 \texttt{scripts/exp\_real\_input\_40\_geodesic\_prime\_shadow.py} 一键复现，
+其输出写入 \texttt{artifacts/export/real\_input\_40\_geodesic\_prime\_shadow.json} 以供审计。
+\end{remark}
+

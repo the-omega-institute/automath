@@ -1,0 +1,206 @@
+\paragraph{单点原子质量的 Fej\'er--Toeplitz 读出与截断可实现包络}
+在 \S\ref{subsubsec:xi-endpoint-heat-kernel-probe-toeplitz} 与 \S\ref{subsubsec:xi-endpoint-heat-kernel-probe-abel-stokes-atom-recovery} 中，端点 \(-1\) 的原子质量已被组织为一族由有限 Toeplitz 数据可计算的热核序列。
+若改用 Ces\`aro--Fej\'er 型探针，则同一主线可以被推广到单位圆上任意指定点 \(\zeta\in\TT\)，并把单点原子质量压缩为 Toeplitz 主子矩阵上一条规范二次型的极限；
+进一步，把全矩问题削弱为“只固定到阶 \(N\) 的截断矩”，则相应单点原子还诱导出一个随 \(N\) 单调收敛的可实现下包络。
+
+\begin{theorem}[单点原子质量的 Fej\'er--Toeplitz 二次型极限]\label{thm:xi-point-atom-fejer-toeplitz-limit}
+设 \(\mu\) 为 \(\TT\) 上有限正 Borel 测度，记其 Fourier 系数为
+\[
+c_h:=\int_{\TT}\xi^{-h}\,\dd\mu(\xi)\qquad(h\in\ZZ),
+\]
+并令
+\[
+\mathbf T_N:=(c_{j-k})_{0\le j,k\le N}.
+\]
+对任意 \(\zeta\in\TT\)，定义向量
+\[
+w_N(\zeta):=\frac{1}{N+1}\,(1,\bar\zeta,\bar\zeta^2,\dots,\bar\zeta^N)^\top\in\CC^{N+1}.
+\]
+则有严格极限公式
+\[
+\boxed{\;
+\mu(\{\zeta\})=\lim_{N\to\infty}w_N(\zeta)^\ast \mathbf T_N\,w_N(\zeta).\;}
+\]
+特别地，当 \(\zeta=-1\) 时，
+\[
+w_N(-1)=\frac{1}{N+1}(1,-1,1,-1,\dots,(-1)^N)^\top,
+\]
+从而 \(-1\) 的原子质量可由同一类有限 Toeplitz 二次型直接恢复。
+\end{theorem}
+
+\begin{proof}
+展开二次型并交换求和与积分，得
+\[
+w_N(\zeta)^\ast \mathbf T_N w_N(\zeta)
+=\frac{1}{(N+1)^2}\sum_{j,k=0}^{N}\zeta^j\bar\zeta^k\,c_{j-k}
+=\int_{\TT}K_N(\xi;\zeta)\,\dd\mu(\xi),
+\]
+其中
+\[
+K_N(\xi;\zeta):=
+\left|
+\frac{1}{N+1}\sum_{k=0}^{N}(\bar\zeta\xi)^k
+\right|^2.
+\]
+显然 \(0\le K_N(\xi;\zeta)\le 1\)。
+当 \(\xi=\zeta\) 时，\((\bar\zeta\xi)^k=1\)，故 \(K_N(\zeta;\zeta)=1\)；
+当 \(\xi\neq \zeta\) 时，\(\bar\zeta\xi\in\TT\setminus\{1\}\)，于是
+\[
+\sum_{k=0}^{N}(\bar\zeta\xi)^k
+=\frac{1-(\bar\zeta\xi)^{N+1}}{1-\bar\zeta\xi},
+\]
+从而
+\[
+K_N(\xi;\zeta)
+=
+\left|
+\frac{1-(\bar\zeta\xi)^{N+1}}{(N+1)(1-\bar\zeta\xi)}
+\right|^2
+\longrightarrow 0.
+\]
+故 \(K_N(\cdot;\zeta)\) 点态收敛到指示函数 \(\ind_{\{\zeta\}}\)，再由支配收敛定理得到
+\[
+\lim_{N\to\infty}w_N(\zeta)^\ast \mathbf T_N w_N(\zeta)
+=\int_{\TT}\ind_{\{\zeta\}}(\xi)\,\dd\mu(\xi)
+=\mu(\{\zeta\}).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[截断可实现性下的单点原子下包络]\label{thm:xi-point-atom-truncated-realizability-envelope}
+沿用定理 \ref{thm:xi-point-atom-fejer-toeplitz-limit} 的记号，并固定 \(\zeta\in\TT\)。
+对每个 \(N\ge 0\)，定义截断矩可实现集
+\[
+\mathcal M_N:=
+\left\{
+\nu\ge 0\ \text{为 }\TT\text{ 上有限正测度}:\ 
+\int_{\TT}\xi^{-h}\,\dd\nu(\xi)=c_h\ \text{对所有 }|h|\le N
+\right\},
+\]
+以及相应的单点原子下包络
+\[
+\alpha_N(\zeta):=\inf_{\nu\in\mathcal M_N}\nu(\{\zeta\}).
+\]
+则成立：
+\begin{enumerate}
+  \item \((\alpha_N(\zeta))_{N\ge 0}\) 单调不减；
+  \item 对所有 \(N\ge 0\)，都有
+  \[
+  \alpha_N(\zeta)\le \mu(\{\zeta\});
+  \]
+  \item 当 \(N\to\infty\) 时，
+  \[
+  \alpha_N(\zeta)\longrightarrow \mu(\{\zeta\}).
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+第 \(1\) 条来自可实现集的嵌套
+\[
+\mathcal M_{N+1}\subseteq \mathcal M_N,
+\]
+故取下确界得到 \(\alpha_{N+1}(\zeta)\ge \alpha_N(\zeta)\)。
+
+第 \(2\) 条显然，因为原始测度 \(\mu\) 本身属于每个 \(\mathcal M_N\)。
+
+设 \(\alpha_\infty(\zeta):=\lim_{N\to\infty}\alpha_N(\zeta)\)，则由前两条知极限存在且
+\[
+\alpha_\infty(\zeta)\le \mu(\{\zeta\}).
+\]
+对每个 \(N\) 取 \(\nu_N\in\mathcal M_N\) 使
+\[
+\nu_N(\{\zeta\})\le \alpha_N(\zeta)+\frac1N.
+\]
+由于总质量
+\[
+\nu_N(\TT)=c_0
+\]
+固定，\((\nu_N)\) 在弱-\(*\) 拓扑下相对紧。
+取任意收敛子列 \(\nu_{N_j}\Rightarrow \nu_\infty\)。
+对任意固定 \(h\in\ZZ\)，当 \(j\) 充分大时有 \(|h|\le N_j\)，故
+\[
+\int_{\TT}\xi^{-h}\,\dd\nu_{N_j}(\xi)=c_h.
+\]
+令 \(j\to\infty\) 并利用连续函数 \(\xi\mapsto \xi^{-h}\) 的弱收敛稳定性，得到
+\[
+\int_{\TT}\xi^{-h}\,\dd\nu_\infty(\xi)=c_h\qquad(\forall h\in\ZZ).
+\]
+因此 \(\nu_\infty\) 与 \(\mu\) 具有全部 Fourier 系数，故由三角多项式在 \(C(\TT)\) 中的稠密性知 \(\nu_\infty=\mu\)。
+
+另一方面，由 \(\{\zeta\}\) 的闭性与 Portmanteau 定理，
+\[
+\mu(\{\zeta\})
+=\nu_\infty(\{\zeta\})
+\ge \limsup_{j\to\infty}\nu_{N_j}(\{\zeta\})
+\ge \limsup_{j\to\infty}\alpha_{N_j}(\zeta)
+=\alpha_\infty(\zeta).
+\]
+结合 \(\alpha_\infty(\zeta)\le \mu(\{\zeta\})\) 即得
+\[
+\alpha_\infty(\zeta)=\mu(\{\zeta\}),
+\]
+从而 \(\alpha_N(\zeta)\to \mu(\{\zeta\})\)。证毕。
+\end{proof}
+
+\begin{theorem}[端点原子质量的有限喷射证书深度呈对数级]\label{thm:xi-point-atom-endpoint-jet-depth-logarithmic}
+沿用 \S\ref{subsubsec:xi-endpoint-heat-kernel-probe-toeplitz} 的记号。设 \(\mu\) 为 \(\TT\) 上有限正 Borel 测度，并假设存在闭集
+\[
+K\subset \TT\setminus\{-1\}
+\]
+使
+\[
+\mu\bigl(\TT\setminus(\{-1\}\cup K)\bigr)=0.
+\]
+定义
+\[
+q(K):=\sup_{\xi\in K}\left|\frac{1-\xi}{2}\right|\in(0,1).
+\]
+对每个 \(N\ge 0\)，令
+\[
+a_N:=4^{-N}(b^{(N)})^\ast \mathbf T_N b^{(N)}
+=\int_{\TT}\left|\frac{1-\xi}{2}\right|^{2N}\,\dd\mu(\xi),
+\]
+并记长度 \(N+2\) 的单点喷射为
+\[
+J_{N+2}:=(\ell_1,\dots,\ell_{N+2}).
+\]
+则对任意 \(\varepsilon>0\)，只要
+\[
+\boxed{\;
+N\ \ge\ \frac{\log(\mu(K)/\varepsilon)}{2\,|\log q(K)|},
+\;}
+\]
+由 \(J_{N+2}\) 所决定的有限 Toeplitz 数据 \(\mathbf T_N\) 与相应热核值 \(a_N\) 就满足
+\[
+\boxed{\;
+0\le a_N-\mu(\{-1\})\le \varepsilon.
+\;}
+\]
+特别地，端点原子质量 \(\mu(\{-1\})\) 的可审计恢复深度关于误差阈值 \(\varepsilon\) 至多呈对数增长。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-local-jet-determines-finite-cmv-and-toeplitz-certificate}，长度 \(N+2\) 的喷射 \(J_{N+2}\) 唯一决定 Toeplitz 主子矩阵 \(\mathbf T_N\)，故也唯一决定
+\[
+a_N=4^{-N}(b^{(N)})^\ast \mathbf T_N b^{(N)}.
+\]
+另一方面，由支撑假设与 \(-1\notin K\) 得
+\[
+a_N-\mu(\{-1\})
+=\int_K\left|\frac{1-\xi}{2}\right|^{2N}\,\dd\mu(\xi)
+\le q(K)^{2N}\mu(K).
+\]
+若
+\[
+q(K)^{2N}\mu(K)\le \varepsilon,
+\]
+则立即得到
+\[
+0\le a_N-\mu(\{-1\})\le \varepsilon.
+\]
+对上式取对数并注意 \(0<q(K)<1\)，便得到所述充要下界
+\[
+N\ge \frac{\log(\mu(K)/\varepsilon)}{2\,|\log q(K)|}.
+\]
+故给定误差阈值 \(\varepsilon\) 时，所需喷射深度只随 \(\log(\varepsilon^{-1})\) 增长。证毕。
+\end{proof}

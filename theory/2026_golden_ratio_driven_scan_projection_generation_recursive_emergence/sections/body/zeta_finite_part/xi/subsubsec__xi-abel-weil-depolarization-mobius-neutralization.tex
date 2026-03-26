@@ -1,0 +1,235 @@
+\subsubsection{幂覆盖去极化与 Möbius 多尺度中和：根单位旋转谱与同余通道滤波}\label{subsubsec:xi-abel-weil-depolarization-mobius-neutralization}
+离散 Abel--Weil 展开式 \eqref{eq:Abel-Weil-decomposition} 将非平凡零点的贡献表示为几何核
+\(
+(1-u)^{-1}
+\)
+之和（\(u=r\,b^{\rho-\frac12}\)），从而把零点谱严格编码到 \(r\)-平面的极点结构中。
+本段给出两类与底数递归兼容的可核验算子：其一沿 \(m\)-进制幂覆盖实现去极化，把 \(u=1\) 的极点推送到根单位旋转轨道；其二沿 Möbius 多尺度完全中和，把几何级数尾项压缩为一阶谱项。
+两者与 residue-class 通道的 \(H^2\) 直和分解共同给出多通道解析滤波框架的统一接口。
+\par
+
+\paragraph{\texorpdfstring{$m$}{m}-进制去极化与根单位旋转极点}
+\begin{theorem}[去极化算子与根单位旋转谱]\label{thm:abel-depolarization-root-unity-rotation}
+固定 \(b>1\) 并令 \(\mathcal A_b\) 与 \(H_b\) 如 \eqref{eq:Abel-Weil-decomposition}。
+对任意整数 \(m\ge 2\) 定义去极化差分
+\[
+\boxed{\ \Delta_m\mathcal A_b(r):=\mathcal A_b(r)-m\,\mathcal A_{b^m}(r^m).\ }
+\]
+则在 \eqref{eq:Abel-Weil-decomposition} 的同一局部收敛域内有分解
+\[
+\boxed{\ \Delta_m\mathcal A_b(r)
+=-\sum_{\rho}\frac{1}{\rho}\,K_m\!\bigl(r\,b^{\rho-\frac12}\bigr)
+\;+\;\bigl(H_b(r)-mH_{b^m}(r^m)\bigr),\ }
+\]
+其中核函数
+\[
+K_m(u):=\frac{1}{1-u}-\frac{m}{1-u^m}.
+\]
+并且 \(K_m\) 在 \(u=1\) 处可去奇点，满足显式值
+\[
+\boxed{\ K_m(1)=-\frac{m-1}{2}.\ }
+\]
+因此 \(\Delta_m\mathcal A_b\) 在每个原始极点 \(r_\rho=b^{-(\rho-\frac12)}\) 处无极点；其可能的极点仅来自 \(u^m=1\) 的非平凡根，即
+\[
+r=\omega\,b^{-(\rho-\frac12)},\qquad \omega^m=1,\ \omega\neq 1.
+\]
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:Abel-Weil-decomposition} 对底数 \(b^m\) 适用同一形式并作代换 \(r\mapsto r^m\)，得到
+\[
+\mathcal A_{b^m}(r^m)
+=-\sum_{\rho}\frac{1}{\rho}\cdot\frac{1}{1-r^m(b^m)^{\rho-\frac12}}+H_{b^m}(r^m)
+=-\sum_{\rho}\frac{1}{\rho}\cdot\frac{1}{1-\bigl(r\,b^{\rho-\frac12}\bigr)^m}+H_{b^m}(r^m),
+\]
+其中使用 \((b^m)^{\rho-\frac12}=(b^{\rho-\frac12})^m\)。
+两式作差并整理即得所述分解。
+\par
+为计算 \(K_m\) 在 \(u=1\) 处的可去值，记
+\[
+1-u^m=(1-u)S_m(u),\qquad S_m(u):=1+u+\cdots+u^{m-1},
+\]
+则
+\[
+K_m(u)=\frac{S_m(u)-m}{(1-u)S_m(u)}=-\frac{P_{m-1}(u)}{S_m(u)},
+\qquad
+P_{m-1}(u):=\frac{S_m(u)-m}{u-1}.
+\]
+由 \(S_m(1)=m\) 且
+\(
+P_{m-1}(1)=S_m'(1)=\sum_{k=1}^{m-1}k=\frac{m(m-1)}{2}
+\)，
+得到
+\(
+K_m(1)=-P_{m-1}(1)/S_m(1)=-(m-1)/2
+\)。
+核函数的极点仅可能来自 \(S_m(u)=0\)，等价于 \(u\) 为非平凡 \(m\) 次根单位。
+证毕。
+\end{proof}
+
+\paragraph{residue-class 重构恒等式与细节能量}
+定义 \ref{def:abel-decimation-operators} 的通道抽取算子满足一个完全重构恒等式。
+\begin{proposition}[polyphase 重构恒等式]\label{prop:abel-polyphase-reconstruction}
+令 \(f(r)=\sum_{n\ge 0}a_nr^n\) 为形式幂级数，取整数 \(m\ge 2\)。
+则恒等式
+\[
+\boxed{\ f(r)=\sum_{j=0}^{m-1}r^j\,(\mathsf D_{m,j}f)(r^m)\ }
+\]
+在形式意义下成立；若 \(f\) 在 \(|r|<1\) 内解析，则该等式在 \(|r|<1\) 内逐点成立。
+\end{proposition}
+\begin{proof}
+按 \(n\bmod m\) 分组：
+\[
+\sum_{n\ge 0}a_nr^n
+=\sum_{j=0}^{m-1}\sum_{q\ge 0}a_{mq+j}r^{mq+j}
+=\sum_{j=0}^{m-1}r^j\Bigl(\sum_{q\ge 0}a_{mq+j}(r^m)^q\Bigr)
+=\sum_{j=0}^{m-1}r^j\,(\mathsf D_{m,j}f)(r^m).
+\]
+\end{proof}
+
+取 \(f=\mathcal A_{b,\delta}\) 并沿用注 \ref{rem:abel-hardy-energy-decimation-applied} 的记号
+\(
+\mathcal A_{b,\delta}^{(m,j)}=\mathsf D_{m,j}\mathcal A_{b,\delta}
+\)，则由命题 \ref{prop:abel-polyphase-reconstruction} 得到
+\[
+\boxed{\ \mathcal A_{b,\delta}(r)=\sum_{j=0}^{m-1}r^j\,\mathcal A_{b,\delta}^{(m,j)}(r^m).\ }
+\]
+
+\begin{definition}[细节能量滤波器]\label{def:abel-detail-energy-filter}
+取 \(\delta>0\) 并假定 \(\mathcal A_{b,\delta}\in H^2(\mathbb D)\)。
+定义
+\[
+\boxed{\ \mathcal D_{b,\delta}^{(m)}:=\sum_{j=1}^{m-1}\|\mathcal A_{b,\delta}^{(m,j)}\|_{H^2(\mathbb D)}^2.\ }
+\]
+\end{definition}
+
+\begin{proposition}[能量预算恒等式与严格耗散]\label{prop:abel-detail-energy-budget}
+沿用定义 \ref{def:abel-detail-energy-filter}。
+则
+\[
+\boxed{\ \mathcal D_{b,\delta}^{(m)}
+=\|\mathcal A_{b,\delta}\|_{H^2(\mathbb D)}^2-\|\mathcal A_{b^m,\delta}\|_{H^2(\mathbb D)}^2\ \ge\ 0.\ }
+\]
+若存在 \(j\in\{1,\dots,m-1\}\) 使得序列 \(\{E_b(mq+j)\}_{q\ge 0}\) 非恒为 \(0\)，则 \(\mathcal D_{b,\delta}^{(m)}>0\)，从而
+\(
+\|\mathcal A_{b^m,\delta}\|_{H^2(\mathbb D)}<\|\mathcal A_{b,\delta}\|_{H^2(\mathbb D)}
+\)。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:abel-hardy-energy-decimation-orthogonal} 的 \(H^2\) 正交分解与
+\(\mathcal A_{b^m,\delta}=\mathcal A_{b,\delta}^{(m,0)}\)（注 \ref{rem:abel-hardy-energy-decimation-applied}）得到恒等式与非负性。
+若某个 \(j\ge 1\) 的通道存在非零系数，则 \(\|\mathcal A_{b,\delta}^{(m,j)}\|_{H^2}^2>0\)，故 \(\mathcal D_{b,\delta}^{(m)}>0\)。
+证毕。
+\end{proof}
+
+\paragraph{Möbius 多尺度完全中和与零点一阶线性化}
+令 \(\mu\) 为 Möbius 函数，并定义去常数项的 Abel 生成函数
+\[
+\mathcal A_b^+(r):=\mathcal A_b(r)-\mathcal A_b(0)=\sum_{n\ge 1}E_b(n)\,r^n.
+\]
+定义 Möbius 多尺度组合
+\[
+\boxed{\ \mathfrak M_b(r):=\sum_{d\ge 1}\mu(d)\,\mathcal A_{b^d}^+(r^d).\ }
+\]
+
+\begin{proposition}[完全中和的形式恒等式]\label{prop:abel-mobius-neutralization-formal}
+作为形式幂级数，有
+\[
+\boxed{\ \mathfrak M_b(r)=E_b(1)\,r.\ }
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:abel-base-recursion-pole-conjugacy} 的 \(E_{b^d}(n)=E_b(dn)\) 得
+\(
+\mathcal A_{b^d}^+(r^d)=\sum_{n\ge 1}E_b(dn)\,r^{dn}
+\)。
+于是
+\[
+\mathfrak M_b(r)
+=\sum_{d\ge 1}\mu(d)\sum_{n\ge 1}E_b(dn)\,r^{dn}
+=\sum_{k\ge 1}E_b(k)\,r^k\sum_{d\mid k}\mu(d)
+=E_b(1)\,r.
+\]
+\end{proof}
+
+\begin{theorem}[RH 下的零点几何尾项线性化]\label{thm:abel-mobius-linearization}
+假设 RH 成立。
+则对 \(|r|<1\) 有恒等式
+\[
+\boxed{\ \mathfrak M_b(r)
+=-r\sum_{\rho}\frac{b^{\rho-\frac12}}{\rho}+\mathfrak H_b(r),
+\qquad
+\mathfrak H_b(r):=\sum_{d\ge 1}\mu(d)\bigl(H_{b^d}(r^d)-H_{b^d}(0)\bigr),\ }
+\]
+其中 \(\mathfrak H_b\) 在 \(|r|<1\) 内解析。
+在该表达中，零点贡献对 \(r\) 的全部依赖被压缩为一阶项 \(r\,b^{\rho-1/2}\)，几何级数尾部被完全消去。
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:Abel-Weil-decomposition} 剔除常数项得到
+\[
+\mathcal A_{b^d}^+(r^d)
+=-\sum_{\rho}\frac{1}{\rho}\Bigl(\frac{1}{1-u^d}-1\Bigr)+\bigl(H_{b^d}(r^d)-H_{b^d}(0)\bigr),
+\qquad u:=r\,b^{\rho-\frac12}.
+\]
+在 RH 下 \(|b^{\rho-1/2}|=1\)，故 \(|u|=|r|<1\)。
+于是
+\(
+\frac{1}{1-u^d}-1=\frac{u^d}{1-u^d}=\sum_{k\ge 1}u^{dk}
+\)
+绝对收敛，并可逐项使用 Möbius 反演恒等式
+\[
+\sum_{d\ge 1}\mu(d)\frac{u^d}{1-u^d}
+=\sum_{d\ge 1}\mu(d)\sum_{k\ge 1}u^{dk}
+=\sum_{n\ge 1}\Bigl(\sum_{d\mid n}\mu(d)\Bigr)u^n
+=u.
+\]
+将其代回得到
+\[
+\sum_{d\ge 1}\mu(d)\,\mathcal A_{b^d}^+(r^d)
+=-\sum_{\rho}\frac{u}{\rho}+\mathfrak H_b(r)
+=-r\sum_{\rho}\frac{b^{\rho-1/2}}{\rho}+\mathfrak H_b(r),
+\]
+即得结论。
+\end{proof}
+
+\paragraph{通道能量的等分预测与字符谱等价}
+\begin{conjecture}[对数尺度粗化下的通道能量等分]\label{conj:abel-channel-energy-equipartition}
+假设 RH 成立。固定 \(b>1\) 与整数 \(m\ge 2\)。
+当 \(\delta\downarrow 0\) 时，猜想
+\[
+\boxed{\ \frac{\|\mathcal A_{b,\delta}^{(m,j)}\|_{H^2(\mathbb D)}^2}{\|\mathcal A_{b,\delta}\|_{H^2(\mathbb D)}^2}\longrightarrow \frac1m,
+\qquad j=0,1,\dots,m-1.\ }
+\]
+\end{conjecture}
+
+\begin{proposition}[字符谱等价刻画]\label{prop:abel-channel-equipartition-character}
+取任意非平凡加性角色 \(\chi:\ZZ/m\ZZ\to\TT\)，并定义
+\[
+\boxed{\ \mathcal F_\chi(\delta):=
+\frac{\sum_{n\ge 0}|E_b(n)|^2\,b^{-2\delta n}\,\chi(n)}
+{\sum_{n\ge 0}|E_b(n)|^2\,b^{-2\delta n}}.\ }
+\]
+则猜想 \ref{conj:abel-channel-energy-equipartition} 等价于
+\[
+\forall\,\chi\neq 1,\qquad \mathcal F_\chi(\delta)\xrightarrow[\delta\downarrow 0]{}0.
+\]
+\end{proposition}
+\begin{proof}
+按同余类分解求和得
+\[
+\sum_{n\ge 0}|E_b(n)|^2b^{-2\delta n}\chi(n)
+=\sum_{j=0}^{m-1}\chi(j)\sum_{q\ge 0}|E_b(mq+j)|^2b^{-2\delta(mq+j)}
+=\sum_{j=0}^{m-1}\chi(j)\,\|\mathcal A_{b,\delta}^{(m,j)}\|_{H^2}^2.
+\]
+分母为 \(\sum_{j=0}^{m-1}\|\mathcal A_{b,\delta}^{(m,j)}\|_{H^2}^2\)。
+故 \(\mathcal F_\chi(\delta)\) 是通道能量向量的离散 Fourier 系数（归一化后）。
+角色正交性表明：归一化向量收敛到常向量 \((1/m,\dots,1/m)\) 当且仅当所有非平凡角色系数极限为 \(0\)。
+证毕。
+\end{proof}
+
+\input{subsubsec__xi-abel-weil-depolarization-hardy-barcode}
+
+\paragraph{多通道解析滤波器的后续任务}
+去极化差分把极点从 \(u=1\) 推送到根单位旋转轨道（定理 \ref{thm:abel-depolarization-root-unity-rotation}），Möbius 多尺度中和把零点模态的几何尾项压缩为一阶谱项（定理 \ref{thm:abel-mobius-linearization}），而 residue-class 通道提供完全确定性的 \(H^2\) 能量预算（命题 \ref{prop:abel-detail-energy-budget}）。
+这些结构为构造一个可稳定估计零点相位密度的多通道解析滤波器提供统一接口：其目标是在 Hardy 能量意义下给出可核验的上、下界，并把递归粗化转写为可计算的误差条形码。
+
+\endinput

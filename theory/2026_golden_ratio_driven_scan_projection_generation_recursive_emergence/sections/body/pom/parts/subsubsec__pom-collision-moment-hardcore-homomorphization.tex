@@ -1,0 +1,182 @@
+% (q)-order collision moments: homomorphization, quasi-multiplicativity, log-convexity.
+
+\paragraph{\texorpdfstring{$q$}{q}-阶碰撞矩的硬核同态化：由纤维独立集到不交目标图}
+定理 \ref{thm:pom-fiber-indset-factorization} 将每个纤维 \(\Fold_m^{-1}(x)\) 与候选位点诱导图 \(\Gamma_x\) 的独立集族 \(\mathsf{Ind}(\Gamma_x)\) 规范对齐，从而
+\(
+d_m(x)=\card{\Fold_m^{-1}(x)}=\mathsf{I}(\Gamma_x)
+:=\card{\mathsf{Ind}(\Gamma_x)}.
+\)
+下面给出一个把“取幂”提升为“同态计数”的严格恒等式：\(q\) 的作用不再表现为数值幂运算，而被转写为一个普适目标图的局部相容性几何。
+
+\begin{proposition}[粗粒化下的碰撞矩严格单调律]\label{prop:pom-coarsegraining-collision-moment-strict-monotonicity}
+令 \(\Omega\) 为有限集合，\(\approx\) 为其等价关系，并记各等价类大小为 \(|[x]|\)。
+对任意实数 \(q>1\) 定义碰撞矩
+\[
+S_q(\approx):=\sum_{[x]\in \Omega/\!\approx}\ |[x]|^{q}.
+\]
+若 \(\approx_1\) 比 \(\approx_2\) 更细（即 \(\approx_1\subseteq \approx_2\)，等价地：\(\approx_2\) 可由 \(\approx_1\) 合并若干等价类得到），则
+\[
+\boxed{\;
+S_q(\approx_1)\le S_q(\approx_2).\;}
+\]
+并且当 \(\approx_1\neq \approx_2\) 时严格不等成立。
+\end{proposition}
+\begin{proof}
+只需考虑一次合并操作：把两类大小为 \(a,b>0\) 的等价类合并为大小 \(a+b\) 的一类，其余类保持不变。
+此时碰撞矩增量为
+\(
+(a+b)^q-a^q-b^q
+\)。
+由于 \(x\mapsto x^q\) 在 \(q>1\) 时严格凸，故对任意 \(a,b>0\) 有 \((a+b)^q>a^q+b^q\)，从而每次合并严格增大 \(S_q\)。
+将任意粗化写为有限次合并的复合，即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[独立集幂与不交目标图同态计数的严格恒等式]\label{prop:pom-indset-power-hom-disj}
+令 \(\Gamma=(V,E)\) 为有限简单图，并记其独立集总数为 \(\mathsf{I}(\Gamma)\)。
+对任意整数 \(q\ge 1\)，令 \([q]:=\{1,2,\dots,q\}\)。
+则有严格恒等式
+\[
+\boxed{\;
+\mathsf{I}(\Gamma)^q
+\;=\;
+\#\Bigl\{\Phi:V\to 2^{[q]}\ \Bigm|\ \forall\,uv\in E,\ \Phi(u)\cap\Phi(v)=\varnothing\Bigr\}\; }.
+\]
+定义不交目标图 \(\mathsf{Disj}_q\) 为：其顶点集为 \(2^{[q]}\)，并令
+\(
+A\sim B \iff A\cap B=\varnothing
+\)
+给出邻接关系（\(A,B\in 2^{[q]}\)）。
+则上式右端恰为同态计数 \(\mathrm{hom}(\Gamma,\mathsf{Disj}_q)\)。
+\end{proposition}
+\begin{proof}
+给定 \(q\) 元组独立集 \((S_1,\dots,S_q)\in\mathsf{Ind}(\Gamma)^q\)，定义
+\[
+\Phi(v):=\{i\in[q]:\ v\in S_i\}\qquad(v\in V).
+\]
+若 \(uv\in E\)，则对每个 \(i\) 不可能同时有 \(u,v\in S_i\)，故 \(\Phi(u)\cap\Phi(v)=\varnothing\)。
+反之，给定任意满足不交约束的映射 \(\Phi:V\to 2^{[q]}\)，令
+\[
+S_i:=\{v\in V:\ i\in\Phi(v)\}\qquad(1\le i\le q).
+\]
+若 \(uv\in E\) 且 \(u,v\in S_i\)，则 \(i\in\Phi(u)\cap\Phi(v)\)，与不交约束矛盾；故每个 \(S_i\) 为独立集。
+上述两构造互为逆映射，给出所述计数恒等式。
+最后，图同态 \(\Gamma\to\mathsf{Disj}_q\) 恰是满足“边 \(\mapsto\) 边”的映射 \(V\to 2^{[q]}\)，即对每条边强制像集不交，因此右端等于 \(\mathrm{hom}(\Gamma,\mathsf{Disj}_q)\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[碰撞矩的同态化重写：普适目标图 \texorpdfstring{$\mathsf{Disj}_q$}{Disj-q}]\label{cor:pom-collision-moment-hom-disj}
+对任意整数 \(q\ge 1\) 与任意分辨率 \(m\ge 1\)，有严格恒等式
+\[
+\boxed{\;
+S_q(m)=\sum_{x\in X_m} d_m(x)^q
+\;=\;
+\sum_{x\in X_m}\mathrm{hom}(\Gamma_x,\mathsf{Disj}_q)\; }.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-indset-factorization} 得 \(d_m(x)=\mathsf{I}(\Gamma_x)\)。
+将命题 \ref{prop:pom-indset-power-hom-disj} 应用于 \(\Gamma=\Gamma_x\) 并对 \(x\in X_m\) 求和即得。
+\end{proof}
+
+\begin{remark}[范畴化入口：由普适目标图的商/轨道结构组织“局部融合”骨架]\label{rem:pom-disj-target-graph-fusion}
+推论 \ref{cor:pom-collision-moment-hom-disj} 把 \(\mathrm{MOM}_q\) 的“\(q\)-阶碰撞统计”从幂和 \(\sum_x d_m(x)^q\) 提升为对固定目标图 \(\mathsf{Disj}_q\) 的同态计数问题。
+因此 \(q\) 的作用可解释为改变目标图的局部相容性几何（顶点为子集、边为不交约束），而非单纯的“取幂”。
+在此口径下，若进一步对 \(\mathsf{Disj}_q\) 作商/轨道分解（例如按子集大小分层），则可将高阶碰撞核的局部通道分解视为一种可组合的“融合矩阵”骨架，并与花环 lift/Artin 因子化的通道化语言自然对齐（参见 \S\ref{subsubsec:pom-wreath-artin-factorization}）。
+\end{remark}
+
+\paragraph{准乘法性：\texorpdfstring{$\log S_q$}{log Sq} 的界面代价仅为 \texorpdfstring{$O(q)$}{O(q)}}
+\begin{proposition}[碰撞矩的准乘法性与近似子加性]\label{prop:pom-sq-quasi-multiplicative}
+对任意整数 \(q\ge 1\)，存在常数 \(K_q\le q\log 2\)（仅依赖 \(q\)，与 \(m,n\) 无关），使得对所有 \(m,n\ge 1\) 有
+\[
+\boxed{\;
+\bigl|\log S_q(m+n)-\log S_q(m)-\log S_q(n)\bigr|\le K_q\; }.
+\]
+等价地，存在显式常数 \(c_q:=2^{-q}\)、\(C_q:=2^{q}\) 使
+\[
+\boxed{\;
+c_q\,S_q(m)S_q(n)\ \le\ S_q(m+n)\ \le\ C_q\,S_q(m)S_q(n)\; }.
+\]
+\end{proposition}
+\begin{proof}
+折叠归一化由局部重写核 \((011\leftrightarrow 100)\) 生成（定理 \ref{thm:fold-suite}），因此将长度 \(m\) 与长度 \(n\) 的窗口拼接为长度 \(m+n\) 时，跨界影响仅来自界面邻域的 \(O(1)\) 个比特：界面处至多引入一个“硬核相容性”约束。
+\par
+在候选位点诱导图口径下，这意味着：对任意拼接得到的类型 \(x\in X_{m+n}\)，其候选图 \(\Gamma_x\) 与“左右两段候选图的无界面并置”相比，只可能在界面处发生一次单边级别的局部修改（等价地，至多加入或删去一条硬核边）。
+而对任意有限图 \(G\) 与其单边扰动 \(G'\)，独立集总数满足
+\(
+\tfrac12\,\mathsf{I}(G)\le \mathsf{I}(G')\le 2\,\mathsf{I}(G)
+\)：
+例如若 \(G'\) 由 \(G\) 加入一条边 \(uv\) 得到，则“删去 \(u\)”给出从 \(G\) 的 \(\{u,v\}\)-同取独立集到 \(G'\) 的独立集族的单射，从而 \(\mathsf{I}(G)\le 2\mathsf{I}(G')\)；反向不等式由对称性得到。
+\par
+由定理 \ref{thm:pom-fiber-indset-factorization}，对任意分辨率 \(k\ge 1\) 与任意 \(x\in X_k\) 都有 \(d_k(x)=\mathsf{I}(\Gamma_x)\)。
+因此界面处的单边扰动使纤维多重度仅发生至多因子 \(2\) 的乘性变化；
+将该变化取 \(q\) 次幂并对类型求和，得到碰撞矩在拼接下至多发生因子 \(2^q\) 的乘性扰动，
+从而可取 \(K_q\le q\log 2\) 与 \((c_q,C_q)=(2^{-q},2^q)\) 使所述不等式成立。
+\end{proof}
+
+\paragraph{\texorpdfstring{$r_q$}{rq} 的离散对数凸性与“自由能序”}
+\begin{proposition}[增长率的离散对数凸性与斜率单调性]\label{prop:pom-rq-logconvex-free-energy-order}
+固定整数 \(q\ge 2\)，并假设极限增长率
+\[
+r_q:=\lim_{m\to\infty}S_q(m)^{1/m}
+\]
+存在且为正（例如由命题 \ref{prop:pom-sq-quasi-multiplicative} 的准乘法性可推出存在性）。
+则：
+\begin{enumerate}
+  \item \textbf{（离散对数凸性）}对所有整数 \(q\ge 2\) 有
+  \[
+  \boxed{\ r_q^{2}\ \le\ r_{q-1}\,r_{q+1}\ }.
+  \]
+  \item \textbf{（斜率单调性）}令 \(\tau_q:=\log r_q\)，则差分斜率 \(\tau_q-\tau_{q-1}\) 随 \(q\) 单调不减。
+  特别地，\(q\mapsto \frac{1}{q}\bigl(\tau_q-\tau_0\bigr)=\frac{1}{q}\log(r_q/r_0)\) 非递减。
+  \item \textbf{（严格性）}若在某个尺度上纤维多重度并非常值（等价于 \(\{d_m(x):x\in X_m\}\) 至少包含两种不同取值），则上述不等式在每个有限 \(q\) 上严格成立。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\textbf{(1)} 对每个固定 \(m\)，由 Hölder 不等式（或 \(q\mapsto \log S_q(m)\) 的凸性）得
+\(
+S_q(m)^2\le S_{q-1}(m)\,S_{q+1}(m)
+\)。
+两边取 \(m\) 次方根并令 \(m\to\infty\) 即得 \(r_q^2\le r_{q-1}r_{q+1}\)。
+\par
+\textbf{(2)} 由 (1) 得 \(\tau_q=\log r_q\) 的离散凸性
+\(
+\tau_{q+1}-\tau_q\ge \tau_q-\tau_{q-1}
+\)。
+对凸序列，差分斜率单调性立得；而
+\(
+\frac{1}{q}(\tau_q-\tau_0)=\frac{1}{q}\sum_{j=1}^{q}(\tau_j-\tau_{j-1})
+\)
+是前 \(q\) 个差分斜率的平均，故随 \(q\) 非递减。
+\par
+\textbf{(3)} 若多重度非常值，则对固定 \(m\) 的序列 \(q\mapsto S_q(m)\) 的 log-sum-exp 凸性严格（在 \(q>0\) 上），从而 \(S_q(m)^2< S_{q-1}(m)S_{q+1}(m)\)；
+再取极限得到严格性。证毕。
+\end{proof}
+
+\begin{corollary}[基态归一化凸序：以 \texorpdfstring{$r_0=\varphi$}{r0=phi} 为基准的自由能缺陷斜率单调性]\label{cor:pom-rq-groundstate-normalized-slope}
+令
+\(
+r_0:=\lim_{m\to\infty}|X_m|^{1/m}=\varphi
+\)，并对整数 \(q\ge 1\) 定义
+\[
+a_q:=\frac{\log r_q-\log r_0}{q}.
+\]
+则 \((a_q)_{q\ge 1}\) 单调不减；在非平凡折叠情形下严格递增。
+并且
+\[
+\lim_{q\to\infty}a_q=\frac12\log\varphi.
+\]
+等价地，对任意整数 \(1\le q_1<q_2\) 有插值不等式链
+\[
+\boxed{\;
+r_{q_2}\ \ge\ r_0^{\,1-q_2/q_1}\,r_{q_1}^{\,q_2/q_1}\; }.
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-rq-logconvex-free-energy-order}，\(\tau_q:=\log r_q\) 为离散凸序列，从而 \(q\mapsto \frac{1}{q}(\tau_q-\tau_0)\) 单调不减；这正是 \((a_q)\) 的单调性。
+若纤维多重度不为常值，则命题 \ref{prop:pom-rq-logconvex-free-energy-order}(3) 给出严格性。
+极限方面，由端点定理 \ref{prop:pom-rq-qinfty-endpoint}（亦见推论 \ref{cor:pom-double-limit-commute-principal-exponent}）有 \(\lim_{q\to\infty}\frac{1}{q}\log r_q=\frac12\log\varphi\)，而 \(\frac{1}{q}\log r_0\to 0\)，故 \(\lim_{q\to\infty}a_q=\frac12\log\varphi\)。
+最后，凸性给出弦不等式
+\(
+\tau_{q_2}\ge (1-q_2/q_1)\tau_0+(q_2/q_1)\tau_{q_1}
+\)，指数化即得所示插值链。证毕。
+\end{proof}

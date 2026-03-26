@@ -1,0 +1,247 @@
+\begin{remark}[局部重写、素数寄存器与 FRACTRAN 语义]\label{rem:fold-fractran-context}
+命题 \ref{prop:fold-rewrite-newman} 已给出折叠局部重写的终止合流与正规形唯一性；\S\ref{subsec:emergent-arithmetic-prime-register-fib-valuation} 将同一重写直接实现到素数指数寄存器并得到外置账本群。
+本小节给出一个等价但更具“程序语义”的表述：把局部重写规则编译为一段显式 FRACTRAN 分数表（\cite{Conway1987FRACTRAN}），其停机终值恰对应折叠正规形，并且执行轨迹在有限深度残差群中给出一份可复算外置账本。
+与 Zeckendorf 规范化的自动机/局部规则实现体系（例如 \cite{AhlbachUsatineFrougnyPippenger2013}）相比，FRACTRAN 口径的差异在于：归约过程被完全外置为“素数分解可审计”的分数乘法轨迹，而非在数字串层面引入额外状态机结构。
+\end{remark}
+
+\paragraph{有限深度素数寄存器与编码}
+令 \((p_k)_{k\ge 1}\) 为递增素数列。对 \(L\ge 2\) 定义 Gödel--素数编码
+\[
+\mathcal G_L:\ZZ^L\to\QQ_{>0},\qquad
+\mathcal G_L(a_1,\dots,a_L):=\prod_{k=1}^{L} p_k^{a_k}.
+\]
+对分辨率 \(m\ge 1\) 与 \(\omega=\omega_1\cdots \omega_m\in\Omega_m\)，以及任意 \(L\ge m+1\)，令
+\[
+\iota_m^{(L)}(\omega):=(\omega_1,\dots,\omega_m,0,\dots,0)\in\NN^L,
+\]
+并记其整数寄存器初值为 \(N_0=\mathcal G_L(\iota_m^{(L)}(\omega))\in\NN_{>0}\)。
+
+\begin{theorem}[FRACTRAN--Fold 编译：停机与正规形一致]\label{thm:fractran-fold-compiler}
+固定 \(m\ge 2\)，取 \(L=m+2\)。令 \(\Pi_L\) 为按如下顺序排列的 FRACTRAN 分数表：先列出底位去重、第二位去重与一般位去重（\(k\) 递增），再列出相邻合并（\(k\) 递增）：
+\[
+\Pi_L:=
+\Bigl(
+\frac{p_2}{p_1^2},\ \frac{p_1p_3}{p_2^2},\
+\Bigl(\frac{p_{k-2}p_{k+1}}{p_k^2}\Bigr)_{k=3}^{L-1},\
+\Bigl(\frac{p_{k+2}}{p_kp_{k+1}}\Bigr)_{k=1}^{L-2}
+\Bigr).
+\]
+对任意 \(\omega\in\Omega_m\)，以初值 \(N_0=\mathcal G_L(\iota_m^{(L)}(\omega))\) 运行 \(\Pi_L\)（每步取首个使 \(Nf\in\NN\) 的分数 \(f\)，令 \(N\leftarrow Nf\)，直至无分数可用即停机），则该过程必停机于
+\[
+N_\star=\mathcal G_L\!\bigl(\mathrm{NF}(\iota_m(\omega))_1,\dots,\mathrm{NF}(\iota_m(\omega))_L\bigr),
+\]
+并且
+\[
+\Fold_m(\omega)=\bigl(v_{p_1}(N_\star),\dots,v_{p_m}(N_\star)\bigr).
+\]
+若执行分数序列为 \((f_1,\dots,f_T)\)，则
+\[
+\frac{N_0}{N_\star}=\Bigl(\prod_{t=1}^{T} f_t\Bigr)^{-1}.
+\]
+\end{theorem}
+
+\begin{proof}
+对任意状态 \(N=\mathcal G_L(a_1,\dots,a_L)\)，FRACTRAN 语义“分母整除即触发”与唯一分解等价于对指数向量执行一次局部变换。
+具体地，分数
+\[
+\frac{p_{k+2}}{p_kp_{k+1}},\quad
+\frac{p_2}{p_1^2},\quad
+\frac{p_1p_3}{p_2^2},\quad
+\frac{p_{k-2}p_{k+1}}{p_k^2}\ (k\ge 3)
+\]
+分别对应于 \S\ref{subsec:fold-local-rewrite} 的四条局部重写
+(\ref{rule:fold:adj})--(\ref{rule:fold:dedupk})（在 \(L\) 维截断上作用）。
+因此 \(\Pi_L\) 的每一步恰对应一次合法归约，并严格保持值同态
+\(
+\mathrm{Val}(a)=\sum_{k\ge 1}a_kF_{k+1}
+\)
+不变（见 \ref{prop:fold-rewrite-newman} 与 \ref{prop:prime-register-rewrite-confluent-normal-form} 的同一恒等式链）。
+
+由命题 \ref{prop:fold-rewrite-newman} 的终止性势能 \(\mu\)（字典序）可知，每一步归约使 \(\mu\) 严格下降，故 FRACTRAN 演化必有限步停机于某个不可归约指数向量 \(\bar a\in\{0,1\}^L\) 且无相邻 \(11\)，即 \(\bar a\in X_\infty\) 的长度-\(L\) 截断。
+又由于初值 \(\iota_m^{(L)}(\omega)\) 的值满足
+\(
+\mathrm{Val}(\iota_m(\omega))\le \sum_{k=1}^{m}F_{k+1}=F_{m+3}-1
+\)
+（引理 \ref{lem:bitlength-fib}），其 Zeckendorf 规范形不需要超过第 \(m+2=L\) 位，故 \(\mathrm{NF}(\iota_m(\omega))\) 在 \(k>L\) 的坐标为 \(0\)。
+因此停机终值必为 \(\mathcal G_L\) 作用下的唯一正规形，并与 \(\mathrm{NF}(\iota_m(\omega))\) 的前 \(L\) 坐标一致，得所述 \(N_\star\)。
+最后，\(\Fold_m(\omega)=\pi_m(\mathrm{NF}(\iota_m(\omega)))\)（推论 \ref{cor:foldm-order-indep}），而素数指数即给出该截断坐标，故得到 \(\Fold_m(\omega)=(v_{p_1}(N_\star),\dots,v_{p_m}(N_\star))\)。
+分数乘积恒等式由 \(N_\star=N_0\prod_{t=1}^{T}f_t\) 直接推出。
+\end{proof}
+
+\begin{theorem}[Fibonacci 估值核的显式基与有限深度残差群]\label{thm:fib-kernel-basis-finite-depth}
+令 \(L\ge 2\)，定义群同态
+\[
+\varphi_L:\ZZ^L\to\ZZ,\qquad \varphi_L(a)=\sum_{k=1}^{L} a_k F_{k+1}.
+\]
+则 \(\ker(\varphi_L)\) 为秩 \(L-1\) 的自由阿贝尔群，并可取一组显式基
+\[
+b_1:=2e_1-e_2,\qquad b_k:=e_{k-1}+e_k-e_{k+1}\quad (2\le k\le L-1).
+\]
+令
+\(
+H_L:=\mathcal G_L(\ker(\varphi_L))\subset\QQ_{>0}
+\)。
+则 \(H_L\) 为秩 \(L-1\) 的自由阿贝尔乘法群，其基可取
+\[
+g_1=\frac{p_1^2}{p_2},\qquad g_k=\frac{p_{k-1}p_k}{p_{k+1}}\quad(2\le k\le L-1),
+\]
+并且若 \(a,a'\in\ZZ^L\) 满足 \(\varphi_L(a)=\varphi_L(a')\)，则存在唯一 \((t_k)_{k=1}^{L-1}\in\ZZ^{L-1}\) 使得
+\[
+\frac{\mathcal G_L(a)}{\mathcal G_L(a')}=\prod_{k=1}^{L-1} g_k^{t_k}.
+\]
+\end{theorem}
+
+\begin{proof}
+由 \(2F_2=F_3\) 与 \(F_{k+2}=F_{k+1}+F_k\) 得 \(\varphi_L(b_1)=0\)，且对 \(2\le k\le L-1\) 有
+\(
+\varphi_L(b_k)=F_k+F_{k+1}-F_{k+2}=0
+\)，故 \(b_k\in\ker(\varphi_L)\)。
+若 \(\sum_{k=1}^{L-1} t_k b_k=0\)，考察第 \(L\) 坐标仅由 \(b_{L-1}\) 的 \(-e_L\) 项贡献，得 \(t_{L-1}=0\)；
+继而考察第 \(L-1\) 坐标推出 \(t_{L-2}=0\)，向左归纳得全体 \(t_k=0\)，故 \(\{b_k\}\) 线性无关。
+由于 \(\varphi_L(e_1)=F_2=1\)，映射 \(\varphi_L\) 满射，故 \(\ker(\varphi_L)\) 的秩为 \(L-1\)，从而 \(\{b_k\}\) 为一组基。
+将其经 \(\mathcal G_L\) 推送到 \(\QQ_{>0}\) 即得到 \(\{g_k\}\)；
+唯一分解由 \(\mathcal G_L\) 的单射性与基展开唯一性推出。
+\end{proof}
+
+\begin{proposition}[势能极小化刻画：Zeckendorf 规范形为唯一极小元]\label{prop:potential-lexmin-zeckendorf}
+固定 \(L\ge 2\)。对 \(N=\prod_{k=1}^{L}p_k^{a_k}\in\NN\) 定义势能
+\[
+\mu(N):=\Bigl(\sum_{k=1}^{L}a_k,\ \sum_{k=1}^{L}k\,a_k,\ a_2\Bigr)\in\NN^3
+\]
+并以字典序比较。
+再定义 Fibonacci 估值
+\[
+\Phi(N):=\sum_{k=1}^{L} a_k F_{k+1}.
+\]
+则对每个 \(n\in\NN\)，集合 \(S(n):=\{N\in\NN:\Phi(N)=n\}\) 中存在唯一 \(\mu\)-字典序极小元 \(N_{\min}(n)\)，且其指数向量恰为 \(n\) 的 Zeckendorf 表示在前 \(L\) 位的补零截断。
+并且对任意 \(N_0\in S(n)\)，只要迭代仅允许执行 \S\ref{subsec:fold-local-rewrite} 的四类“正向归约”，终值必为 \(N_{\min}(n)\)。
+\end{proposition}
+
+\begin{proof}
+将 \(N\) 的指数向量视为 \(\mathcal D\) 的 \(L\) 维截断。命题 \ref{prop:fold-rewrite-newman} 的终止性部分已经说明：每一次归约都严格降低上述 \(\mu\)，并保持值同态不变。
+因此从任意 \(N_0\in S(n)\) 出发沿归约路径必有限步到达某个不可归约元 \(N_\star\)，并且它在 \(S(n)\) 中对 \(\mu\) 极小。
+不可归约性等价于指数向量各坐标均在 \(\{0,1\}\) 且无相邻 \(11\)，即 Zeckendorf 合法性；由 Zeckendorf 唯一性知极小元唯一，且即为该表示的素数寄存器像。
+\end{proof}
+
+\begin{theorem}[Joukowsky 椭圆化的参数公式与有限深度对数谱]\label{thm:joukowsky-ellipse-eccentricity}
+对 \(t>0\) 定义 Joukowsky 型映射
+\[
+J_t:\CC^\times\to\CC,\qquad J_t(z)=z+\frac{t}{z}.
+\]
+则 \(J_t\) 将单位圆 \(S^1=\{e^{\mathrm{i}\theta}\}\) 的像 \(E_t:=J_t(S^1)\) 映为以原点为中心、坐标轴对齐的椭圆（退化情形 \(t=1\) 为线段），且对 \(t\neq 1\) 满足显式方程
+\[
+\frac{x^2}{(1+t)^2}+\frac{y^2}{(1-t)^2}=1.
+\]
+其半长轴 \(a_t=1+t\)、半短轴 \(b_t=\abs{1-t}\)，偏心率满足
+\[
+e_t=\frac{2\sqrt t}{1+t}
+=\operatorname{sech}\!\Bigl(\frac12\abs{\log t}\Bigr).
+\]
+进一步，对定理 \ref{thm:fib-kernel-basis-finite-depth} 的有限深度残差群 \(H_L\) 任取 \(t\in H_L\cap\RR_{>0}\)，写
+\(
+t=\prod_{k=1}^{L-1} g_k^{t_k}
+\)
+则偏心率集合在对数尺度上为由 \(\{\log g_k\}\) 生成的离散格点谱：
+\[
+\Bigl\{e_t:\ t\in H_L\cap\RR_{>0}\Bigr\}
+=\Bigl\{\operatorname{sech}\!\Bigl(\frac12\Bigl|\sum_{k=1}^{L-1} t_k\log g_k\Bigr|\Bigr):\ (t_k)\in\ZZ^{L-1}\Bigr\}.
+\]
+\end{theorem}
+
+\begin{proof}
+取 \(z=e^{\mathrm{i}\theta}\)，则
+\[
+J_t(e^{\mathrm{i}\theta})
+=e^{\mathrm{i}\theta}+t e^{-\mathrm{i}\theta}
+=(1+t)\cos\theta+\mathrm{i}(1-t)\sin\theta,
+\]
+从而像集满足所给椭圆方程。
+偏心率由
+\[
+e_t=\sqrt{1-\Bigl(\frac{b_t}{a_t}\Bigr)^2}
+=\sqrt{1-\Bigl(\frac{\abs{1-t}}{1+t}\Bigr)^2}
+=\frac{2\sqrt t}{1+t}
+\]
+得出。令 \(t=e^{2u}\)（\(u=\tfrac12\log t\)），则
+\(
+\frac{2\sqrt t}{1+t}
+=\frac{2e^u}{1+e^{2u}}
+=\frac{2}{e^u+e^{-u}}
+=\operatorname{sech}(u)
+\)，对 \(t<1\) 取绝对值同理。
+后半部分由对数同态 \(\log t=\sum t_k\log g_k\) 直接推出。
+\end{proof}
+
+\begin{corollary}[折叠丢失信息的有限深度完备化]\label{cor:fold-residual-completion-finite-depth}
+取 \(L=m+2\)。对任意 \(\omega\in\Omega_m\) 记
+\[
+N_0=\mathcal G_L(\iota_m^{(L)}(\omega)),\qquad
+N_\star=\mathcal G_L\!\bigl(\mathrm{NF}(\iota_m(\omega))_1,\dots,\mathrm{NF}(\iota_m(\omega))_L\bigr),
+\]
+并定义有限深度残差
+\[
+\mathrm{Res}_m(\omega):=\frac{N_0}{N_\star}\in H_L.
+\]
+则映射
+\[
+\Psi_m:\Omega_m\to X_m\times H_L,\qquad
+\Psi_m(\omega)=\bigl(\Fold_m(\omega),\mathrm{Res}_m(\omega)\bigr)
+\]
+为单射。
+并且在定理 \ref{thm:fractran-fold-compiler} 的 FRACTRAN 顺序下，
+\(
+\mathrm{Res}_m(\omega)=\bigl(\prod_{t=1}^{T} f_t\bigr)^{-1}
+\)。
+\end{corollary}
+
+\begin{proof}
+设 \(\Psi_m(\omega)=(x,r)\)，其中 \(x=\Fold_m(\omega)\in X_m\) 且 \(r=\mathrm{Res}_m(\omega)\in H_L\)。
+由 \(r\in H_L=\mathcal G_L(\ker\varphi_L)\) 可唯一写为 \(r=\mathcal G_L(\delta)\)（\(\delta\in\ZZ^L\) 有限支撑）。
+于是 \(r=\prod_{k=1}^{L}p_k^{\delta_k}\)。
+由定义 \(N_0=N_\star\cdot r\)，逐素数取指数得到
+\[
+v_{p_k}(N_0)=v_{p_k}(N_\star)+\delta_k\qquad (1\le k\le L).
+\]
+对 \(1\le k\le m\)，有 \(v_{p_k}(N_0)=\omega_k\) 且 \(v_{p_k}(N_\star)=x_k\)，故逐坐标得到
+\[
+\omega_k=x_k+\delta_k\qquad (1\le k\le m),
+\]
+从而 \(\omega\) 由 \((x,r)\) 唯一确定，\(\Psi_m\) 为单射。
+轨迹乘积恒等式由定理 \ref{thm:fractran-fold-compiler} 末式给出。
+\end{proof}
+
+\begin{theorem}[全 \(1\) 输入的归约长度闭式]\label{thm:all-ones-reduction-length}
+采用定理 \ref{thm:fractran-fold-compiler} 的固定顺序。对任意 \(m\ge 2\)，以全 \(1\) 输入
+\[
+\omega^{(m)}:=11\cdots 1\in\Omega_m,\qquad
+N_0=\mathcal G_{m+1}\bigl(\iota_m^{(m+1)}(\omega^{(m)})\bigr)=\prod_{k=1}^{m} p_k
+\]
+为初值运行 \(\Pi_{m+1}\)。
+记停机步数为 \(T(m)\)。
+则
+\[
+T(1)=0,\quad T(2)=1,\quad T(m)=T(m-2)+(m-1)\quad (m\ge 3),
+\]
+从而闭式为
+\[
+T(m)=\Bigl\lfloor\frac{m^2}{4}\Bigr\rfloor.
+\]
+\end{theorem}
+
+\begin{proof}
+由初值可知所有指数均为 \(0/1\)。
+在平方去重对应分数尚不可用时，列表中首个可用分数为 \(\frac{p_3}{p_1p_2}\)，对应 (\ref{rule:fold:adj}) 在 \(k=1\) 的触发，使状态变为
+\[
+\frac{p_3}{p_1p_2}\cdot \prod_{k=1}^{m} p_k= p_3^2\prod_{k=4}^{m} p_k.
+\]
+随后首个可用分数为 \(\frac{p_1p_4}{p_3^2}\)，对应 (\ref{rule:fold:dedupk}) 在 \(k=3\)：它将 \(p_3^2\) 消去并使 \(p_4\) 的指数增加，从而产生平方因子 \(p_4^2\)（同时在低位引入与之配对的素数因子）。
+继续按分数表顺序触发 \((\ref{rule:fold:dedupk})\) 在 \(k=3,4,\dots,m\) 的去重搬运，可得到一段确定的“右移链”，并在共计 \(m-1\) 步后到达状态
+\[
+N_1=\Bigl(\prod_{k=1}^{m-2}p_k\Bigr)\cdot p_{m+1},
+\]
+其中 \(p_{m+1}\) 与前 \(m-2\) 个素数在指数支撑上相距至少两位，因而后续归约与前段不再耦合；余下演化等价于在 \(\Pi_{m-1}\) 下对 \(\prod_{k=1}^{m-2}p_k\) 的归约，步数为 \(T(m-2)\)。
+故 \(T(m)=T(m-2)+(m-1)\)。
+解该递推即得 \(T(m)=\lfloor m^2/4\rfloor\)。
+\end{proof}
+
+\endinput

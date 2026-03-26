@@ -1,0 +1,575 @@
+\begin{theorem}[偶数支第三大纤维闭式]\label{thm:pom-third-max-fiber-even-closed-form}
+当 \(k\ge 6\) 时，偶数分支的第三大纤维多重度满足
+\[
+D_{2k}^{(3)}=F_{k+2}-F_{k-3}.
+\]
+\end{theorem}
+\begin{proof}
+与定理 \ref{thm:pom-second-max-fiber-closed-form} 相同，把“最小缺陷”替换为第二小的端点禁配对即可。由引理 \ref{lem:pom-forbidden-pair-fib-gap}(2)，禁止配对 \(\{1,4\}\) 会削去 \(I_{k-5}=F_{k-3}\)，从而从 \(D_{2k}=I_k=F_{k+2}\) 得到 \(D_{2k}^{(3)}=F_{k+2}-F_{k-3}\)。证毕。
+\end{proof}
+
+\begin{remark}[奇数支第三大纤维的稳定闭式（可审计）]\label{rem:pom-third-max-fiber-odd-closed-form}
+表 \ref{tab:fold_max_fiber_achievers_phase} 的可审计窗口 \(m\le 32\) 已给出第三大纤维多重度 \(D_m^{(3)}\) 的 DP 输出。
+从该表可直接读出：奇数分支从 \(m=19\) 起进入稳定相。
+写 \(m=2k+1\)，则对所有 \(k\ge 9\)（即 \(m\ge 19\)）逐项满足精确闭式
+\[
+\boxed{\;
+D_{2k+1}^{(3)}=2F_{k+1}-\bigl(F_{k-4}+F_{k-8}\bigr).\;}
+\]
+该闭式与偶数支定理 \ref{thm:pom-third-max-fiber-even-closed-form} 一起，把顶端三层谱缺口锁定为显式 Fibonacci 尾项，从而可在不引入任何新假设的前提下继续推演“谱缺口 \(\Rightarrow\) 高阶矩选择”类的定量推断（见注 \ref{rem:pom-third-max-gap-parity}）。
+\end{remark}
+
+\begin{remark}[顶层纤维谱的 Fibonacci 梯级缺口]\label{rem:pom-top-fiber-spectrum-ladder}
+定理 \ref{thm:pom-second-max-fiber-closed-form} 与定理 \ref{thm:pom-third-max-fiber-even-closed-form} 表明顶层纤维谱并非“连续散布”，而是在顶端出现刚性的 Fibonacci 梯级缺口：
+\[
+D_{2k}-D_{2k}^{(2)}=F_{k-4},\qquad
+D_{2k}-D_{2k}^{(3)}=F_{k-3}\qquad(k\ge 6),
+\]
+以及
+\[
+D_{2k+1}-D_{2k+1}^{(2)}=F_{k-4}\qquad(k\ge 5).
+\]
+并且在奇数支第三层稳定相（注 \ref{rem:pom-third-max-fiber-odd-closed-form}）上还有
+\[
+D_{2k+1}-D_{2k+1}^{(3)}=F_{k-4}+F_{k-8}\qquad(k\ge 9).
+\]
+等价地，对所有 \(m\ge 10\)（即 \(\lfloor m/2\rfloor\ge 5\)）有统一式
+\[
+\boxed{\;
+D_m^{(2)}=D_m-F_{\lfloor m/2\rfloor-4}\; }.
+\]
+换言之，离开最大纤维态的最小“空间损失”被 Fibonacci 递推锁定为离散能级。
+\end{remark}
+
+\begin{remark}[最大纤维顶端缺口的 \(12/13\) 步延迟自相似（可审计）]\label{rem:pom-max-fiber-gap-delay-12-13}
+在表 \ref{tab:fold_max_fiber_achievers_phase} 的可审计窗口（\(m\le 32\)）内，顶谱与次谱的缺口满足逐项恒等式
+\[
+D_m-D_m^{(2)}=
+\begin{cases}
+D_{m-12}, & m\ \text{为偶},\\
+D_{m-13}, & m\ \text{为奇}.
+\end{cases}
+\]
+该“延迟同构”与注 \ref{rem:pom-top-fiber-spectrum-ladder} 的 Fibonacci 闭式一致，并与 \(D_m=D_{m-2}+D_{m-4}\) 的二步递推（推论 \ref{cor:pom-D-rec}）共同表明：顶端缺口由同一 \(D_m\) 序列在奇偶上出现 \(12/13\) 步的相对延迟。
+由于 \(D_m\) 的特征方程为 \(r^4-r^2-1=0\)，其指数增长率由 Perron 主根 \(r=\sqrt\varphi\) 锁定（并伴随由虚根 \(\pm\mathrm{i}\sqrt{\varphi^{-1}}\) 引入的 \(4\)-周期复相位校正），从而在指数尺度上有
+\[
+\frac{D_m^{(2)}}{D_m}
+=1-\Theta\!\bigl((\sqrt\varphi)^{-12}\bigr)\quad(m\ \text{偶}),
+\qquad
+\frac{D_m^{(2)}}{D_m}
+=1-\Theta\!\bigl((\sqrt\varphi)^{-13}\bigr)\quad(m\ \text{奇}).
+\]
+因此“最大纤维附近的谱层结构”在指数尺度上表现为一个由 \(\varphi\) 锁定的延迟自相似层级，而非一般组合系统中常见的粗糙退化。
+\end{remark}
+
+\begin{remark}[谱间距比的奇偶双常数：\texorpdfstring{$(D_m^{(2)},D_m^{(3)})$}{(D2,D3)} 的簇化指纹]\label{rem:pom-spectrum-gap-ratio-fingerprint}
+定义顶端三层谱间距
+\[
+g_{1}(m):=D_m-D_m^{(2)},
+\qquad
+g_{2}(m):=D_m^{(2)}-D_m^{(3)}.
+\]
+并定义“二阶缺陷比”（谱簇化指纹）
+\[
+\Psi(m):=\frac{g_2(m)}{g_1(m)}
+=\frac{D_m^{(2)}-D_m^{(3)}}{D_m-D_m^{(2)}}.
+\]
+它只依赖表 \ref{tab:fold_max_fiber_achievers_phase} 中三项整数，因而可作为无需额外计算开销且可直接复算的结构审计：任何把第二/第三层谱顺序或代表 maximizer 类识别错误的实现偏差，往往会在 \(\Psi(m)\) 上被放大（因为它是“二阶差分的比率”）。
+\par
+在偶数支 \(m=2k\) 且 \(k\ge 6\) 的可证闭式下（定理 \ref{thm:pom-second-max-fiber-closed-form} 与定理 \ref{thm:pom-third-max-fiber-even-closed-form}），有
+\[
+g_1(2k)=F_{k-4},\qquad g_2(2k)=F_{k-5},
+\qquad
+\Psi(2k)=\frac{F_{k-5}}{F_{k-4}}
+\longrightarrow \varphi^{-1}\approx 0.618034.
+\]
+在奇数支第三层稳定闭式（注 \ref{rem:pom-third-max-fiber-odd-closed-form}）下，对 \(m=2k+1\) 且 \(k\ge 9\) 有
+\[
+g_1(2k+1)=F_{k-4},\qquad g_2(2k+1)=F_{k-8},
+\qquad
+\Psi(2k+1)=\frac{F_{k-8}}{F_{k-4}}
+\longrightarrow \varphi^{-4}\approx 0.145898.
+\]
+并且二阶隔离在相对尺度上同样具有稳定常数：
+\[
+\boxed{\;
+\frac{D_{2k}^{(2)}-D_{2k}^{(3)}}{D_{2k}}
+=\frac{F_{k-5}}{F_{k+2}}
+\xrightarrow[k\to\infty]{}\varphi^{-7},\qquad
+\frac{D_{2k+1}^{(2)}-D_{2k+1}^{(3)}}{D_{2k+1}}
+=\frac{F_{k-8}}{2F_{k+1}}
+\xrightarrow[k\to\infty]{}\frac{\varphi^{-9}}{2}\; }.
+\]
+因此顶端三层谱并非“均匀掉落”，而是出现稳定的奇偶簇化选择律：在奇数窗上 \((D_m^{(2)},D_m^{(3)})\) 形成紧簇（\(g_2\ll g_1\)），而在偶数窗上两层仍保持同阶分离（\(g_2\asymp g_1\)）。
+例如在窗口顶端，
+\[
+\Psi(30)=\frac{1508-1453}{1597-1508}=\frac{55}{89}\approx 0.61798,\qquad
+\Psi(31)=\frac{1885-1872}{1974-1885}=\frac{13}{89}\approx 0.14607,
+\]
+奇偶分裂清晰可辨。
+\par
+该簇化直接决定了高阶矩里“第三层相对第二层可忽略”的阈值尺度。令
+\[
+\left(\frac{D_m^{(3)}}{D_m^{(2)}}\right)^q\approx e^{-1}
+\quad\Longleftrightarrow\quad
+q_{2\to3}(m):=\frac{1}{-\log\!\bigl(D_m^{(3)}/D_m^{(2)}\bigr)}
+\approx \frac{D_m^{(2)}}{g_2(m)},
+\]
+其中近似用到 \(g_2\ll D_m^{(2)}\) 时的 \(\log(1-x)\approx -x\)。
+于是
+\[
+q_{2\to3}(2k)\approx \frac{F_{k+2}-F_{k-4}}{F_{k-5}}
+\longrightarrow \varphi^7-\varphi=14+6\sqrt5\approx 27.416,
+\]
+而
+\[
+q_{2\to3}(2k+1)\approx \frac{2F_{k+1}-F_{k-4}}{F_{k-8}}
+\longrightarrow 2\varphi^9-\varphi^4=\frac{145+65\sqrt5}{2}\approx 145.171.
+\]
+这给出一个可证伪的二阶段时间表：随 \(q\) 增大，偶数窗更早发生“簇内凝聚”（第三层先于第二层被压下），而奇数窗该效应被推迟到高一个数量级的 \(q\) 才出现；因此奇数窗上即便处在“最大层支配”的高 \(q\) 区间，第二、第三层也会在较长区间内以两相簇的形式共同参与。
+\end{remark}
+
+\begin{remark}[第三层谱缺口平台与 \(q\)-阈值（奇偶分离）]\label{rem:pom-third-max-gap-parity}
+定义第三层抑制因子
+\[
+\gamma_m^{(3)}:=\frac{D_m^{(3)}}{D_m}\in(0,1).
+\]
+偶数支由定理 \ref{thm:pom-max-fiber} 与定理 \ref{thm:pom-third-max-fiber-even-closed-form} 给出精确比值
+\[
+\frac{D_{2k}^{(3)}}{D_{2k}}
+=1-\frac{F_{k-3}}{F_{k+2}}
+\longrightarrow
+1-\varphi^{-5}
+\approx 0.9098300563.
+\]
+奇数支在第三层稳定闭式（注 \ref{rem:pom-third-max-fiber-odd-closed-form}）下，亦有精确比值
+\[
+\frac{D_{2k+1}^{(3)}}{D_{2k+1}}
+=1-\frac{F_{k-4}+F_{k-8}}{2F_{k+1}}
+\longrightarrow
+1-\tfrac12(\varphi^{-5}+\varphi^{-9})
+\approx 0.9483372194.
+\]
+因此第三层在奇数窗上渐近地\textbf{更贴近最大层}，奇偶分离在顶端三层谱中首次显性出现。
+\par
+进一步，若用
+\[
+\left(\gamma_m^{(3)}\right)^q\approx e^{-1}
+\qquad\Longleftrightarrow\qquad
+q\approx \frac{1}{-\log \gamma_m^{(3)}}
+\]
+作为“第三层在 \(q\)-阶矩里变得可忽略”的粗阈值，则由上述两条平台常数可得到两种特征尺度：
+\[
+q_{\mathrm{even}}\approx \frac{1}{-\log(1-\varphi^{-5})}\approx 10.58,
+\qquad
+q_{\mathrm{odd}}\approx \frac{1}{-\log\bigl(1-\tfrac12(\varphi^{-5}+\varphi^{-9})\bigr)}\approx 18.85.
+\]
+这预测了一个新的、无需额外假设的效应：随 \(q\) 增大，“第三层变得不可见”的发生会在偶数窗上显著更早，从而给高阶选择/坍缩现象提供一个可直接对照的奇偶指纹。
+\par
+机制上，该分离可在同一干涉图独立集 DP 框架内解释：最大层对应“缺陷自由”的步长 \(2\) 链（引理 \ref{lem:pom-independence-dp-radius2} 中 \(p(t)=t-2\) 全程成立）因而给出 Fibonacci；第二/第三层对应于最早可触发的 \(p(t)\) 跳跃（禁配对）所剥离的 Fibonacci 尾项（见引理 \ref{lem:pom-forbidden-pair-fib-gap}）。
+奇数窗叠加引理 \ref{lem:pom-one-bit} 的隐藏位端点约束，使第三层缺陷以“配对缺陷”形式在两端耦合地传播，从而出现两段尾损失 \(F_{k-4}+F_{k-8}\) 的叠加。
+\end{remark}
+
+\begin{remark}[常数级的相位/缺陷资源标尺]\label{rem:pom-phase-defect-resource-meters}
+由定理 \ref{thm:pom-max-achievers-phase-stabilization}，最大态不是单点而是有限相位轨道，故可定义相位寄存器开销
+\[
+R_{\mathrm{phase}}(m):=\left\lceil \log_2 \kappa_m^{\mathrm{max}}\right\rceil
+=
+\begin{cases}
+1,& m\ \text{为偶数且充分大},\\
+2,& m\ \text{为奇数且充分大}.
+\end{cases}
+\]
+进一步定义“缺陷分辨开销”
+\[
+R_{\mathrm{defect}}(m):=-\log_2\!\left(1-\frac{D_m^{(2)}}{D_m}\right).
+\]
+由推论 \ref{cor:pom-second-max-gap-constant}，当 \(m\to\infty\) 时 \(R_{\mathrm{defect}}(m)\) 收敛到常数：偶数支极限为 \(-\log_2(\varphi^{-6})\)，奇数支极限为 \(-\log_2\!\bigl(\tfrac12\varphi^{-5}\bigr)\)（后者给出最坏情形）。
+\par
+同理，由第三层抑制因子 \(\gamma_m^{(3)}\)（注 \ref{rem:pom-third-max-gap-parity}）定义第三层缺陷分辨开销
+\[
+R_{\mathrm{defect}}^{(3)}(m)
+:=-\log_2\!\left(1-\gamma_m^{(3)}\right)
+:=-\log_2\!\left(1-\frac{D_m^{(3)}}{D_m}\right).
+\]
+则由
+\(
+1-\gamma_{2k}^{(3)}\to \varphi^{-5}
+\)
+与
+\(
+1-\gamma_{2k+1}^{(3)}\to \tfrac12(\varphi^{-5}+\varphi^{-9})=\tfrac12\varphi^{-5}(1+\varphi^{-4})
+\)
+得到严格极限常数
+\[
+\boxed{\;
+\lim_{k\to\infty}R_{\mathrm{defect}}^{(3)}(2k)=5\log_2\varphi,\qquad
+\lim_{k\to\infty}R_{\mathrm{defect}}^{(3)}(2k+1)=5\log_2\varphi+1-\log_2(1+\varphi^{-4})\; }.
+\]
+\end{remark}
+
+\begin{remark}[最大纤维达到者的隐藏位分裂：\texorpdfstring{$(d_{m,0},d_{m,1})$}{(d0,d1)} 的 Fibonacci 刚性（可复现观察）]\label{rem:pom-max-fiber-achievers-bsplit}
+由引理 \ref{lem:pom-one-bit}（单隐藏位分解），对每个 \(x\in X_m\) 定义
+\[
+d_{m,b}(x):=\#\{\omega\in\Omega_m:\ \Fold_m(\omega)=x,\ b(\omega)=b\}\qquad(b\in\{0,1\}),
+\]
+则 \(d_m(x)=d_{m,0}(x)+d_{m,1}(x)\)。
+由于最大窗口值满足 \(\max_{\omega}N(\omega)=F_{m+3}-2<2F_{m+2}\)（\(m\ge 2\)），隐藏位 \(b(\omega)\) 等价于 \(N(\omega)\) 除以 \(F_{m+2}\) 的商，因此对 \(r=V_m(x)\in[0,F_{m+2})\) 有
+\[
+d_{m,0}(x)=\#\{\omega:\ N(\omega)=r\},\qquad
+d_{m,1}(x)=\#\{\omega:\ N(\omega)=r+F_{m+2}\}.
+\]
+表 \ref{tab:fold_max_fiber_achievers_bsplit} 对 \(m\le 32\) 的可审计窗口直接计算了所有达到者 \(x\) 的分裂对 \((d_{m,0}(x),d_{m,1}(x))\)。
+其输出显示出一组与定理 \ref{thm:pom-max-fiber} 相容、但更细的 Fibonacci 刚性：
+\begin{itemize}
+  \item \textbf{偶数 \(m=2k\)：}当 \(m\ge 10\) 时，达到者恰有两相位，且分裂对为
+  \[
+  (d_{2k,0},d_{2k,1})\in\{(F_{k+1},F_k),(F_k,F_{k+1})\},\qquad d_{2k,0}+d_{2k,1}=F_{k+2}=D_{2k}.
+  \]
+  \item \textbf{奇数 \(m=2k+1\)：}当 \(m\ge 13\) 时，达到者恰有四相位。记交换作用 \(\tau(a,b):=(b,a)\)，则达到者分裂对的多重集合在 \(\tau\) 下分解为一个交换轨道（偏置相）与一个固定点对（平衡相）：
+  \[
+  (d_{2k+1,0},d_{2k+1,1})=(F_{k+1},F_{k+1})\ \text{出现两次}\quad(\tau\text{-固定点，重数 }2),
+  \]
+  \[
+  (d_{2k+1,0},d_{2k+1,1})\in\{(F_{k+1}-F_{k-2},F_{k+1}+F_{k-2}),(F_{k+1}+F_{k-2},F_{k+1}-F_{k-2})\},
+  \]
+  且总和恒为 \(2F_{k+1}=D_{2k+1}\)。
+\end{itemize}
+注意到
+\(
+F_{k+1}-F_{k-2}=2F_{k-1}
+\)、
+\(
+F_{k+1}+F_{k-2}=2F_{k}
+\)，
+故偏置交换轨道亦可等价写为 \((2F_{k-1},2F_k)\) 及其交换；从而偏置两相的 \(p_1\) 取值亦可写为
+\[
+\frac12\pm\frac{F_{k-2}}{2F_{k+1}}
+=\left\{\frac{F_k}{F_{k+1}},\ \frac{F_{k-1}}{F_{k+1}}\right\}.
+\]
+该分裂结构把“最大纤维计数 = 链上独立集计数”（注 \ref{rem:pom-overflow-rec}）进一步细分为“端点约束下的两类独立集计数”，从而在达到者层面强制出现相邻 Fibonacci 数的交换分裂。
+\end{remark}
+\input{parts/cor__pom-max-fiber-achievers-bsplit-gcd-trichotomy}
+
+\begin{corollary}[奇支四相结构的闭式分裂：平衡/黄金偏置与 Fibonacci 比值锁定（224）]\label{cor:pom-max-fiber-achievers-hidden-bit-prob-spectrum}
+对最大纤维达到者 \(x\in X_m\)（即 \(d_m(x)=D_m\)），定义隐藏位 \(1\) 的相对频率
+\[
+p_1(x):=\frac{d_{m,1}(x)}{D_m}.
+\]
+则在稳定阈值区间（注 \ref{rem:pom-max-fiber-achievers-bsplit}）：
+\begin{itemize}
+  \item \textbf{偶数 \(m=2k\ge 10\)：}
+  \[
+  p_1(x)\in\left\{\frac{F_k}{F_{k+2}},\ \frac{F_{k+1}}{F_{k+2}}\right\}
+  \xrightarrow[k\to\infty]{}\left\{\varphi^{-2},\ \varphi^{-1}\right\}.
+  \]
+  \item \textbf{奇数 \(m=2k+1\ge 13\)：}
+  \[
+  p_1(x)\in\left\{\frac12,\ \frac12\pm\frac{F_{k-2}}{2F_{k+1}}\right\}
+  \xrightarrow[k\to\infty]{}\left\{\frac12,\ \frac12\pm\frac{\varphi^{-3}}{2}\right\}
+  =
+  \left\{\frac12,\ \varphi^{-2},\ \varphi^{-1}\right\}.
+  \]
+  并且由定理 \ref{thm:pom-max-achievers-phase-stabilization}，此时最大达到者恰有四相位，其中平衡值 \(p_1=1/2\) 以重数 \(2\) 出现，另两相为互补的黄金偏置相。
+\end{itemize}
+因此在“极限意义”下，最大纤维达到者的隐藏位概率谱只出现三种普适常数：
+\[
+\boxed{\;
+p_1\in\left\{\frac12,\ \varphi^{-1},\ \varphi^{-2}\right\}\quad(\text{聚点集合}).
+\;}
+\]
+\end{corollary}
+\begin{proof}
+由注 \ref{rem:pom-max-fiber-achievers-bsplit} 的闭式分裂对直接相除即可得到上述有限 \(k\) 的取值集合。
+用 Binet 渐近 \(F_{n+a}/F_{n+b}\to \varphi^{a-b}\) 得到
+\(
+F_k/F_{k+2}\to\varphi^{-2}
+\),
+\(
+F_{k+1}/F_{k+2}\to\varphi^{-1}
+\),
+以及
+\(
+F_{k-2}/F_{k+1}\to\varphi^{-3}
+\)；
+代回即可得奇数支的极限等式
+\(
+\tfrac12\pm\tfrac12\varphi^{-3}=\{\varphi^{-1},\varphi^{-2}\}
+\)。
+证毕。
+\end{proof}
+\input{parts/rem__pom-max-fiber-prob-spectrum-mobius-closure}
+
+\input{parts/prop__pom-fib-pell-unit-mobius}
+
+\begin{corollary}[最大达到者的隐藏位相对不平衡度：奇偶一致的普适极限常数]\label{cor:pom-max-fiber-achievers-hidden-bit-imbalance}
+定义最大达到者的隐藏位相对不平衡度
+\[
+\Delta_m^{(b)}:=\max_{x:\ d_m(x)=D_m}\frac{|d_{m,0}(x)-d_{m,1}(x)|}{D_m}.
+\]
+则在稳定阈值区间（注 \ref{rem:pom-max-fiber-achievers-bsplit}）有闭式
+\[
+\Delta_{2k}^{(b)}=\frac{F_{k-1}}{F_{k+2}},
+\qquad
+\Delta_{2k+1}^{(b)}=\frac{F_{k-2}}{F_{k+1}},
+\]
+从而得到与奇偶无关的普适极限：
+\[
+\boxed{\;
+\lim_{m\to\infty}\Delta_m^{(b)}=\varphi^{-3}=\sqrt5-2\approx 0.236068.
+\;}
+\]
+\end{corollary}
+\begin{proof}
+偶数 \(m=2k\)：注 \ref{rem:pom-max-fiber-achievers-bsplit} 给出分裂对为 \((F_{k+1},F_k)\) 与 \((F_k,F_{k+1})\)，故最大差为 \(|F_{k+1}-F_k|=F_{k-1}\)，再除以 \(D_{2k}=F_{k+2}\) 得 \(\Delta_{2k}^{(b)}=F_{k-1}/F_{k+2}\)。
+\par
+奇数 \(m=2k+1\)：偏置分裂对相差 \(2F_{k-2}\)，而 \(D_{2k+1}=2F_{k+1}\)，故 \(\Delta_{2k+1}^{(b)}=F_{k-2}/F_{k+1}\)。
+两式用 Binet 渐近即得极限为 \(\varphi^{-3}\)。
+恒等式 \(\varphi^{-3}=\sqrt5-2\) 由 \(\varphi=\frac{1+\sqrt5}{2}\) 直接化简得到。证毕。
+\end{proof}
+\input{parts/rem__pom-max-fiber-bias-amplitude-cf-acceleration}
+
+\begin{corollary}[最大相位隐藏位熵的两常数律：偶支纯偏置、奇支二点混合及极限常数闭式（225）]\label{cor:pom-max-fiber-achievers-hidden-bit-entropy}
+对最大纤维达到者 \(x\) 定义隐藏位二元熵（bits）
+\[
+H_b(x):=-p_1(x)\log_2 p_1(x)-(1-p_1(x))\log_2(1-p_1(x)).
+\]
+令
+\[
+H_\varphi:=H_b(\varphi^{-1})=H_b(\varphi^{-2})=(3-\varphi)\log_2\varphi\approx 0.9594187\ \text{bits}.
+\]
+则在稳定阈值区间内：
+\begin{itemize}
+  \item \textbf{偶数 \(m\ge 10\)：}两相位最大达到者均为黄金偏置相，且 \(H_b(x)\to H_\varphi\)（不出现 \(1\) bit 的平衡相）；
+  \item \textbf{奇数 \(m\ge 13\)：}四相位中恰有两相位为平衡分裂（\(p_1=1/2\)，故 \(H_b\to 1\) bit），另两相位为黄金偏置分裂（\(H_b\to H_\varphi\)）。
+\end{itemize}
+并且若在最大相位集合 \(\mathcal{M}_m:=\{x\in X_m:\ d_m(x)=D_m\}\) 上取相位均匀随机 \(X\sim\mathrm{Unif}(\mathcal{M}_m)\)，并令
+\[
+H_X:=H_b\!\bigl(p_1(X)\bigr)\quad(\text{bits}),
+\]
+则偶数支有 \(\mathrm{Var}(H_X)=0\)，而奇数支为两点混合并满足极限标准差
+\[
+\lim_{k\to\infty}\mathrm{Std}(H_X)\big|_{m=2k+1}=\frac{1-H_\varphi}{2}\approx 0.0202907\ \text{bits}.
+\]
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:pom-max-fiber-achievers-hidden-bit-prob-spectrum}，达到者的 \(p_1\) 只收敛到 \(\{1/2,\varphi^{-1},\varphi^{-2}\}\)。
+二元熵满足 \(H_b(p)=H_b(1-p)\)，故偏置极限 \(\varphi^{-1}\) 与 \(\varphi^{-2}\) 给出同一常数 \(H_\varphi\)，而 \(p=1/2\) 给出 \(H_b=1\)。
+奇偶相位结构来自注 \ref{rem:pom-max-fiber-achievers-bsplit} 的分裂类型计数。证毕。
+\end{proof}
+
+\begin{corollary}[最大纤维达到者的偶支两相位稳定：隐藏位分裂的 Fibonacci 互补配对（223）]\label{cor:pom-max-fiber-hidden-bit-unbiased}
+设 \(m=2k\ge 10\)。由定理 \ref{thm:pom-max-achievers-phase-stabilization}，最大纤维达到者恰有两相位（\(\kappa^{\mathrm{max}}_{2k}=2\)），记为 \(x^{(1)},x^{(2)}\in X_{2k}\)。
+则由注 \ref{rem:pom-max-fiber-achievers-bsplit} 的闭式分裂对，
+\[
+\bigl(d_{2k,0}(x^{(1)}),d_{2k,1}(x^{(1)})\bigr)=(F_{k+1},F_k),
+\qquad
+\bigl(d_{2k,0}(x^{(2)}),d_{2k,1}(x^{(2)})\bigr)=(F_k,F_{k+1}),
+\]
+从而相位配对在最大纤维族上把隐藏位偏置\emph{严格抵消}：
+\[
+d_{2k,0}(x^{(1)})+d_{2k,0}(x^{(2)})=F_{k+1}+F_k=F_{k+2}=D_{2k},
+\]
+\[
+d_{2k,1}(x^{(1)})+d_{2k,1}(x^{(2)})=F_k+F_{k+1}=D_{2k}.
+\]
+等价地，若在两条最大相位之间取均匀平均，则隐藏位在最大纤维族上精确无偏：
+\[
+\mathbb{E}\!\left[\frac{d_{2k,0}(X)}{D_{2k}}\right]
+=\mathbb{E}\!\left[\frac{d_{2k,1}(X)}{D_{2k}}\right]
+=\frac12,\qquad X\sim\mathrm{Unif}\{x^{(1)},x^{(2)}\}.
+\]
+\end{corollary}
+
+\begin{proof}
+由注 \ref{rem:pom-max-fiber-achievers-bsplit} 的偶数支闭式分裂对与 \(D_{2k}=F_{k+2}=F_{k+1}+F_k\)（定理 \ref{thm:pom-max-fiber}），有
+\[
+d_{2k,0}(x^{(1)})+d_{2k,0}(x^{(2)})=F_{k+1}+F_k=D_{2k},
+\]
+并同理得到 \(d_{2k,1}(x^{(1)})+d_{2k,1}(x^{(2)})=D_{2k}\)。两边同除以 \(2D_{2k}\) 即得无偏结论。证毕。
+\end{proof}
+
+\begin{corollary}[最大纤维相位的隐藏位偏置谱（闭式与黄金常数极限）]\label{cor:pom-max-fiber-hidden-bit-bias-spectrum}
+对每个 \(m\ge 2\) 与 \(x\in X_m\)，在隐藏位分裂下定义归一化偏置
+\[
+\mathrm{Bias}_m(x):=\frac{d_{m,0}(x)-d_{m,1}(x)}{D_m}\in[-1,1].
+\]
+在注 \ref{rem:pom-max-fiber-achievers-bsplit} 的稳定相位范围内，有如下闭式：
+\begin{itemize}
+  \item \textbf{偶数支 \(m=2k\ge 10\)：}两条最大相位满足
+  \[
+  \mathrm{Bias}_{2k}(x)=\pm\frac{F_{k-1}}{F_{k+2}},
+  \]
+  因而 \(\abs{\mathrm{Bias}_{2k}(x)}\to \varphi^{-3}=\sqrt5-2\)。
+  \item \textbf{奇数支 \(m=2k+1\ge 13\)：}四条最大相位中恰有两条为平衡分裂，满足 \(\mathrm{Bias}_{2k+1}(x)=0\)；其余两条为偏置分裂，满足
+  \[
+  \mathrm{Bias}_{2k+1}(x)=\pm\frac{F_{k-2}}{F_{k+1}},
+  \]
+  因而偏置两相的幅度同样满足 \(\abs{\mathrm{Bias}_{2k+1}(x)}\to \varphi^{-3}\)。
+\end{itemize}
+因此奇数最大相位族在偏置口径下呈现出一个\emph{两级谱}：\(\{0,\pm\varphi^{-3}\}\)（渐近意义）。
+\end{corollary}
+\begin{proof}
+直接把注 \ref{rem:pom-max-fiber-achievers-bsplit} 的分裂对代入定义，并用 \(D_{2k}=F_{k+2}\)、\(D_{2k+1}=2F_{k+1}\)（定理 \ref{thm:pom-max-fiber}）化简即可。
+极限由 \(F_{n-3}/F_n\to \varphi^{-3}\) 给出；闭式 \(\varphi^{-3}=\sqrt5-2\) 由 \(\varphi^3=2+\sqrt5\) 立得。证毕。
+\end{proof}
+
+\begin{corollary}[最大相位对隐藏位的信息量：互信息的两条极限常数]\label{cor:pom-max-fiber-phase-hidden-bit-mi}
+令 \(\mathcal{M}_m:=\{x\in X_m:\ d_m(x)=D_m\}\) 为最大纤维达到者集合（相位集合），并取随机变量
+\[
+X\sim\mathrm{Unif}(\mathcal{M}_m).
+\]
+在条件 \(X=x\) 下取
+\(
+\omega\sim\mathrm{Unif}(\Fold_m^{-1}(x))
+\)，并令隐藏位 \(B:=b(\omega)\in\{0,1\}\)。
+则对任意 \(x\in\mathcal{M}_m\) 有
+\[
+\mathbb{P}(B=1\mid X=x)=p_1(x)=\frac{d_{m,1}(x)}{D_m},
+\qquad
+H(B\mid X=x)=H_b(x),
+\]
+其中 \(H_b(x)\) 为推论 \ref{cor:pom-max-fiber-achievers-hidden-bit-entropy} 的二元熵（bits）。
+从而互信息（bits）
+\[
+I(X;B):=H(B)-\mathbb{E}\!\bigl[H(B\mid X)\bigr]
+\]
+在稳定阈值区间（注 \ref{rem:pom-max-fiber-achievers-bsplit}）满足：
+\begin{itemize}
+  \item \textbf{偶数 \(m=2k\ge 10\)：}由推论 \ref{cor:pom-max-fiber-hidden-bit-unbiased}（相位均匀平均下隐藏位精确无偏）得 \(H(B)=1\)。
+  又由推论 \ref{cor:pom-max-fiber-achievers-hidden-bit-prob-spectrum} 的两相位互补性 \(p_1\in\{F_k/F_{k+2},F_{k+1}/F_{k+2}\}\) 以及 \(H_b(p)=H_b(1-p)\)，有
+  \[
+  \boxed{\;
+  I(X;B)=1-H_b\!\left(\frac{F_k}{F_{k+2}}\right)
+  \xrightarrow[k\to\infty]{}
+  1-H_\varphi\;\approx\;0.0405813\ \mathrm{bits}\; }.
+  \]
+  \item \textbf{奇数 \(m=2k+1\ge 13\)：}由注 \ref{rem:pom-max-fiber-achievers-bsplit}，四相位中两相位满足 \(p_1=1/2\)，另两相位满足 \(p_1=\tfrac12\pm \tfrac{F_{k-2}}{2F_{k+1}}\)（互补）；故无论相位均匀平均还是按纤维大小平均（此处两者一致），都有 \(\mathbb{P}(B=1)=1/2\) 从而 \(H(B)=1\)。
+  并且
+  \[
+  \boxed{\;
+  I(X;B)=1-\frac{1}{2}\left(1+H_b\!\left(\frac12+\frac{F_{k-2}}{2F_{k+1}}\right)\right)
+  \xrightarrow[k\to\infty]{}
+  \frac{1-H_\varphi}{2}\;\approx\;0.0202907\ \mathrm{bits}\; }.
+  \]
+\end{itemize}
+\end{corollary}
+
+\begin{remark}[相位 \texorpdfstring{$\Rightarrow$}{=>} 隐藏位的泄露常数闭式：奇偶两条互信息极限（226）]\label{rem:pom-max-fiber-hidden-bit-leakage-constants}
+由 \(\varphi^{-1}+\varphi^{-2}=1\)（且 \(\log_2(\varphi^{-a})=-a\log_2\varphi\)）可把推论 \ref{cor:pom-max-fiber-achievers-hidden-bit-entropy} 中的常数 \(H_\varphi\) 化为闭式：
+\[
+H_\varphi
+=-\varphi^{-1}\log_2(\varphi^{-1})-\varphi^{-2}\log_2(\varphi^{-2})
+=\bigl(\varphi^{-1}+2\varphi^{-2}\bigr)\log_2\varphi
+=(3-\varphi)\log_2\varphi.
+\]
+因此由推论 \ref{cor:pom-max-fiber-phase-hidden-bit-mi} 得到两条可审计的“相位 \(\Rightarrow\) 隐藏位”互信息极限常数：
+\[
+I_{\mathrm{even}}
+:=1-(3-\varphi)\log_2\varphi,
+\qquad
+I_{\mathrm{odd}}
+:=\frac{1-(3-\varphi)\log_2\varphi}{2}.
+\]
+即使最大纤维闭式 \(D_m\) 保持不变，任意修改折叠/归一化规则若改变了最大相位的 \(p_1\)-谱（从而改变 \(H_\varphi\)），上述两条常数应是最先漂移的“信息论指纹”之一。
+\end{remark}
+
+\input{sections/body/pom/parts/thm__pom-leakage-response-universal-law}
+
+\begin{remark}[最大偏置熵常数的线性响应与交替振荡：\texorpdfstring{$H_b'(\varphi^{-1})=-\log_2\varphi$}{Hb'(phi^{-1})=-log2 phi}（227）]\label{rem:pom-max-fiber-hidden-bit-entropy-linear-response}
+在注 \ref{rem:pom-max-fiber-achievers-bsplit} 的稳定范围内，取偏置相的上支概率
+\[
+p_k^{\uparrow}:=
+\begin{cases}
+\frac{F_{k+1}}{F_{k+2}},& m=2k\ge 10,\\
+\frac{F_{k}}{F_{k+1}},& m=2k+1\ge 13,
+\end{cases}
+\qquad\text{则 }p_k^{\uparrow}\to\varphi^{-1}.
+\]
+二元熵满足 \(H_b'(p)=\log_2\!\bigl(\frac{1-p}{p}\bigr)\)，故在 \(p=\varphi^{-1}\) 处有 \(H_b'(\varphi^{-1})=\log_2(\varphi^{-1})=-\log_2\varphi\)。
+由 Binet 公式，\(p_k^{\uparrow}-\varphi^{-1}\) 以符号交替的 \(O(\varphi^{-2k})\) 速度收敛，从而在偏置子序列上存在解析展开
+\[
+H_b(p_k^{\uparrow})
+=H_b(\varphi^{-1})-\log_2\varphi\cdot\bigl(p_k^{\uparrow}-\varphi^{-1}\bigr)+O(\varphi^{-4k}).
+\]
+因此 \(H_b(p_k^{\uparrow})-H_\varphi\) 亦呈交替振荡，其振幅主阶为 \(O(\varphi^{-2k})\)，可作为“最大偏置熵常数”的一阶灵敏度标定律。
+\end{remark}
+
+\begin{remark}[相内选择：\texorpdfstring{$b$}{b}-分裂精细矩在奇数最大相位上向偏置两相坍缩]\label{rem:pom-max-fiber-bsplit-phase-selection}
+标准碰撞矩 \(S_q(m)=\sum_x d_m(x)^q\) 在最大纤维族内部\emph{不会}产生“相内选择”，因为所有最大达到者都有同一 \(d_m(x)=D_m\)。
+但若考虑对隐藏位敏感的精细矩，例如
+\[
+S_q^{\mathrm{split}}(m):=\sum_{x\in X_m}\bigl(d_{m,0}(x)^q+d_{m,1}(x)^q\bigr),
+\]
+或只取每条纤维的最大分支
+\[
+S_q^{\max}(m):=\sum_{x\in X_m}\max\{d_{m,0}(x),d_{m,1}(x)\}^q,
+\]
+则在奇数稳定相位 \(m=2k+1\ge 13\) 的最大达到者四相中，偏置两相的最大分支为 \(F_{k+1}+F_{k-2}\)，平衡两相的最大分支为 \(F_{k+1}\)（注 \ref{rem:pom-max-fiber-achievers-bsplit}）。
+因此最大分支比
+\[
+R_k:=\frac{F_{k+1}+F_{k-2}}{F_{k+1}}=1+\frac{F_{k-2}}{F_{k+1}}\longrightarrow 1+\varphi^{-3}=\sqrt5-1.
+\]
+从而当 \(q\) 增大时，偏置两相在上述 \(\max\)-口径或 \(b\)-分裂口径下对高阶矩的贡献相对平衡两相呈指数放大（尺度为 \(R_k^q\)），表现为“在最大达到者族内部由 \(4\) 相有效坍缩到 \(2\) 相”的选择效应。
+\end{remark}
+
+\begin{corollary}[空间缺陷的夹逼区间]\label{cor:pom-defect-band}
+令平均纤维多重度 $\overline d_m=2^m/F_{m+2}$。则
+\[
+\log \overline d_m\sim m\log\!\left(\frac{2}{\varphi}\right),
+\qquad
+\log D_m\sim \frac{m}{2}\log\varphi.
+\]
+因此空间缺陷在“平均尺度”与“最坏尺度”之间形成硬夹逼区间。
+\end{corollary}
+
+\begin{remark}[最坏尺度与平均尺度的偏离]\label{rem:pom-defect-gap}
+由定理 \ref{thm:pom-max-fiber} 的闭式与 Binet 渐近 \(F_n=\frac{1}{\sqrt5}(\varphi^n-\psi^n)\)（\(\psi=-\varphi^{-1}\)），可得极大放大比的指数律
+\[
+\lim_{m\to\infty}\frac{1}{m}\log\frac{D_m}{\overline d_m}
+=\log\!\left(\frac{\varphi^{3/2}}{2}\right),
+\qquad
+\frac{\varphi^{3/2}}{2}\approx 1.029\ldots
+\]
+并且
+\[
+\frac{D_m}{\overline d_m}
+=
+\Theta\!\left(\left(\frac{\varphi^{3/2}}{2}\right)^m\right).
+\]
+更精细地，奇偶分支具有完全显式的乘性常数：
+\[
+\frac{D_m}{\overline d_m}
+=
+\begin{cases}
+\displaystyle \frac{\varphi^{4}}{5}\Bigl(\frac{\varphi^{3/2}}{2}\Bigr)^{m}\,(1+o(1)),& m\ \text{为偶},\\[1.2ex]
+\displaystyle \frac{2\varphi^{5/2}}{5}\Bigl(\frac{\varphi^{3/2}}{2}\Bigr)^{m}\,(1+o(1)),& m\ \text{为奇}.
+\end{cases}
+\]
+因此最坏纤维相对平均纤维的偏离虽为指数，但基数极小，表明折叠投影在“最坏空间损失”意义下仍保持温和的尺度膨胀，且常数项可被完全审计化。
+\end{remark}
+
+\begin{corollary}[高多重纤维的稀疏性]\label{cor:pom-high-multiplicity-sparse}
+对任意 $\alpha\in(0,1]$，令
+\[
+S_\alpha(m):=\{x\in X_m:\ d_m(x)\ge \alpha D_m\}.
+\]
+则
+\[
+|S_\alpha(m)|\le \frac{2^m}{\alpha D_m},
+\qquad
+\frac{|S_\alpha(m)|}{|X_m|}\le \frac{2^m}{\alpha D_m F_{m+2}}.
+\]
+并且由定理 \ref{thm:pom-max-fiber} 与 $F_{m+2}\sim \varphi^m/\sqrt5$，
+\[
+\frac{|S_\alpha(m)|}{|X_m|}
+=O\!\left(\frac{1}{\alpha}\left(\frac{2}{\varphi^{3/2}}\right)^m\right).
+\]
+\end{corollary}
+\begin{proof}
+由 $\sum_{x\in X_m} d_m(x)=|\Omega_m|=2^m$，有
+\(
+\alpha D_m |S_\alpha(m)|\le \sum_{x\in S_\alpha(m)} d_m(x)\le 2^m
+\)，
+得第一式；再除以 $|X_m|=F_{m+2}$ 得第二式。最后一条由渐近式直接得到。证毕。
+\end{proof}

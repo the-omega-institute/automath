@@ -1,0 +1,185 @@
+\paragraph{有限状态骨架与闭环探针：从机制可解释性到可审计谱--同调指纹}
+机制可解释性研究中，已有工作把 Transformer 的某些状态跟踪与推理行为抽取为有限状态骨架，从而把“电路”提升为有限有向图上的动力系统与加权算子并允许离线核验与可重复审计 \cite{SomvanshiIslamRafeTustiChakrabortyBaitullahChowdhuryAlnawmasiDuttaDas2026BridgingBlackBoxSurveyMechInterp,zhang-etal-2025-finite}。
+在本文的协议接口中，这一抽取对应于“有限状态实现 \(\Rightarrow\) 行列式 \(\zeta\) 指纹 \(\Rightarrow\) 有限部/谱指纹 \(\Rightarrow\) 同调不变量”的闭环；
+其中 \(\ZZ_2\)-余圈扭曲及其跨支激活指数 \(A_{\mathrm{flip}}\)（结论 \ref{con:xi-split-tunneling-zeta-detect-aflip}）给出一个可推广的“分支耦合首阶能量”原型。
+下述结论把该原型从 \(\ZZ_2\) 推进到一般有限群的表示分解，并给出把有限签名进一步压缩为有限条迹数据的完备化准则。
+
+\begin{conclusion}[有限群扭曲 Ihara-\texorpdfstring{$\zeta$}{zeta} 的首激活指数：表示通道的低能不可见性]\label{con:xi-ihara-finite-group-twisted-activation-exponent}
+设 \(\Gamma\) 为有限有向图，并取其 Hashimoto 无回溯边空间上的 Ihara prime 环（tailless、primitive、non-backtracking 闭环）为 \(p\)。
+令 \(\kappa:E(\Gamma)\to\ZZ_{\ge 0}\) 为能量权重，\(\ell:E(\Gamma)\to\ZZ_{>0}\) 为时间权重，并对闭环记总权重 \(\kappa(p),\ell(p)\)。
+
+令 \(H\) 为有限群，并给定一个边上的 holonomy 余圈 \(\beta:E(\Gamma)\to H\)；对闭环定义
+\[
+\beta(p):=\prod_{e\in p}\beta(e)\in H.
+\]
+令 \(\rho:H\to \GL(V_\rho)\) 为复表示，记 \(d_\rho:=\dim V_\rho\)。
+定义表示扭曲的二变量 Ihara-\(\zeta\)（形式幂级数意义）
+\[
+Z_K(u,t;\beta,\rho):=\prod_{p}\det\!\Bigl(I-u^{\kappa(p)}t^{\ell(p)}\,\rho(\beta(p))\Bigr)^{-1},
+\qquad
+Z_K(u,t):=\prod_{p}\bigl(1-u^{\kappa(p)}t^{\ell(p)}\bigr)^{-1}.
+\]
+假设零能量骨架无 holonomy：
+\[
+\forall p,\ \kappa(p)=0\ \Longrightarrow\ \beta(p)=e_H.
+\]
+定义 \(\rho\)-激活指数（约定 \(\min\varnothing:=+\infty\)）
+\[
+A(\rho):=\min\bigl\{\kappa(p):\ p\ \text{为 Ihara prime 环且}\ \rho(\beta(p))\neq I\bigr\}\in\ZZ_{>0}\cup\{+\infty\}.
+\]
+则：
+\begin{enumerate}
+  \item 若 \(A(\rho)=+\infty\)，则 \(Z_K(u,t;\beta,\rho)\equiv Z_K(u,t)^{d_\rho}\)，从而比值
+  \[
+  \frac{Z_K(u,t;\beta,\rho)}{Z_K(u,t)^{d_\rho}}\equiv 1.
+  \]
+  \item 若 \(A(\rho)<+\infty\)，则存在 \(F_\rho(t)\in\CC[[t]]\) 使得
+  \[
+  \frac{Z_K(u,t;\beta,\rho)}{Z_K(u,t)^{d_\rho}}
+  =1+u^{A(\rho)}F_\rho(t)+O\!\bigl(u^{A(\rho)+1}\bigr),
+  \]
+  且可取首项系数的显式表达
+  \[
+  F_\rho(t)=\sum_{\substack{p\ \mathrm{Ihara\ prime}\\ \kappa(p)=A(\rho)}}\bigl(\Tr\rho(\beta(p))-d_\rho\bigr)\,t^{\ell(p)}.
+  \]
+\end{enumerate}
+\end{conclusion}
+\begin{proof}[证明要点]
+对任意矩阵 \(M\) 与形式变量 \(x\) 有恒等式
+\[
+\det(I-xM)^{-1}
+=\exp\!\Bigl(\sum_{m\ge 1}\frac{x^m}{m}\Tr(M^m)\Bigr).
+\]
+对每条 prime 环 \(p\) 令 \(x_p:=u^{\kappa(p)}t^{\ell(p)}\)。
+则
+\[
+\log Z_K(u,t;\beta,\rho)
+=\sum_{p}\sum_{m\ge 1}\frac{x_p^m}{m}\Tr\!\bigl(\rho(\beta(p))^m\bigr),
+\qquad
+\log Z_K(u,t)^{d_\rho}
+=\sum_{p}\sum_{m\ge 1}\frac{x_p^m}{m}\,d_\rho.
+\]
+相减得到
+\[
+\log\frac{Z_K(u,t;\beta,\rho)}{Z_K(u,t)^{d_\rho}}
+=\sum_{p}\sum_{m\ge 1}\frac{u^{m\kappa(p)}t^{m\ell(p)}}{m}\Bigl(\Tr(\rho(\beta(p))^m)-d_\rho\Bigr).
+\]
+由假设，\(\kappa(p)=0\Rightarrow \beta(p)=e_H\Rightarrow \rho(\beta(p))^m=I\)，故零能量项严格消失。
+对任意满足 \(\rho(\beta(p))\neq I\) 的 prime 环，最小的 \(u\)-阶由 \(m=1\) 给出；
+因此对数比值的首个非零 \(u\)-阶为 \(A(\rho)\)，其系数为 \(\sum_{\kappa(p)=A(\rho)}(\Tr\rho(\beta(p))-d_\rho)t^{\ell(p)}\)。
+最后用 \(\exp(u^{A}g+O(u^{A+1}))=1+u^{A}g+O(u^{A+1})\)（\(A\ge 1\)）得到所示展开。证毕。
+\end{proof}
+
+\begin{conclusion}[表示分层的超选结构：低能展开在临界阶前对所有非平凡通道不可见]\label{con:xi-ihara-finite-group-superselection-before-amin}
+沿用结论 \ref{con:xi-ihara-finite-group-twisted-activation-exponent} 的设定。
+定义
+\[
+A_{\min}:=\min\bigl\{A(\rho):\rho\in\widehat H,\ \rho\ \text{为非平凡不可约表示}\bigr\}\in\ZZ_{>0}\cup\{+\infty\}.
+\]
+则对任意整数 \(k<A_{\min}\) 与任意不可约表示 \(\rho\in\widehat H\) 都有
+\[
+[u^k]\left(\frac{Z_K(u,t;\beta,\rho)}{Z_K(u,t)^{d_\rho}}-1\right)=0\qquad\text{于}\ \CC[[t]].
+\]
+换言之，所有非平凡表象通道在 \(u^{A_{\min}}\) 之前严格不可见：低能展开在阶 \(<A_{\min}\) 上形成表示分层的超选结构。
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-ihara-finite-group-twisted-activation-exponent}，任意 \(\rho\) 的首个非零 \(u\)-阶为 \(A(\rho)\)。
+当 \(k<A_{\min}\) 时对所有非平凡不可约 \(\rho\) 均有 \(k<A(\rho)\)，故对应系数恒为零。证毕。
+\end{proof}
+
+\begin{remark}[\texorpdfstring{$\ZZ_2$}{Z/2} 情形的退化]
+取 \(H=\ZZ_2\) 且 \(\rho\) 为其非平凡字符，则 \(d_\rho=1\)，并且
+\[
+\frac{Z_K(u,t;\beta,\rho)}{Z_K(u,t)^{d_\rho}}
+=\frac{Z_K(u,t;\beta)}{Z_K(u,t)}.
+\]
+此时 \(A(\rho)\) 退化为结论 \ref{con:xi-split-tunneling-zeta-detect-aflip} 的 \(A_{\mathrm{flip}}\)，而上述首激活展开与奇次选择律分别对应结论 \ref{con:xi-split-tunneling-zeta-detect-aflip} 与 \ref{con:xi-split-tunneling-odd-power-selection-law}。
+\end{remark}
+
+\begin{proposition}[阿贝尔 holonomy 的严格反演：角色族确定 holonomy 分解族]\label{prop:xi-abelian-holonomy-fourier-inversion}
+在结论 \ref{con:xi-ihara-finite-group-twisted-activation-exponent} 的设定下，进一步假设 \(H\) 为有限阿贝尔群。
+取一类闭走廊集合 \(\mathcal{W}\)（例如无回溯闭走廊或 Hashimoto 边空间上的闭游走），并对闭走廊 \(w\) 定义总权重 \(\kappa(w),\ell(w)\) 与 holonomy \(\beta(w)\)（沿边乘积）。
+对任意字符 \(\chi\in\widehat H\) 定义扭曲生成函数
+\[
+W_\chi(u,t):=\sum_{w\in\mathcal{W}}u^{\kappa(w)}t^{\ell(w)}\chi(\beta(w)).
+\]
+对任意 \(g\in H\) 定义 holonomy 分解生成函数
+\[
+W_g(u,t):=\sum_{\substack{w\in\mathcal{W}\\ \beta(w)=g}}u^{\kappa(w)}t^{\ell(w)}.
+\]
+则成立严格 Fourier 反演公式
+\[
+\boxed{\;
+W_g(u,t)=\frac{1}{|H|}\sum_{\chi\in\widehat H}\chi(g)^{-1}W_\chi(u,t)\qquad(g\in H).\;}
+\]
+因此字符族 \(\{W_\chi\}_{\chi\in\widehat H}\) 在系数层面完整决定 holonomy 分解族 \(\{W_g\}_{g\in H}\)。
+\end{proposition}
+\begin{proof}
+按 holonomy 分解，
+\(
+W_\chi(u,t)=\sum_{g\in H}\chi(g)W_g(u,t)
+\)。
+对有限阿贝尔群，字符满足正交关系
+\(
+\frac1{|H|}\sum_{\chi\in\widehat H}\chi(g)\chi(h)^{-1}=\mathbf 1_{\{g=h\}}
+\)，
+代入即得反演公式。证毕。
+\end{proof}
+
+\begin{conclusion}[迹数据的 Newton 完备性：行列式 \texorpdfstring{$\zeta$}{zeta} 指纹由有限条闭环迹确定]\label{con:xi-newton-trace-completeness-determinant-zeta}
+设 \(R\) 为含 \(\QQ\) 的交换环，\(B\in M_N(R)\)。
+令
+\[
+p_n:=\Tr(B^n)\in R\qquad (1\le n\le N).
+\]
+则首一特征多项式 \(\chi_B(\lambda)=\det(\lambda I-B)\in R[\lambda]\) 的系数由 \(\{p_n\}_{n=1}^{N}\) 唯一确定。
+等价地，
+\[
+\det(I-tB)\in R[t]
+\]
+由 \(\{p_n\}_{n=1}^{N}\) 唯一确定，从而矩阵 \(\zeta\) 指纹
+\[
+\zeta_B(t):=\det(I-tB)^{-1}\in R[[t]]
+\]
+亦由 \(\{p_n\}_{n=1}^{N}\) 唯一确定。
+\end{conclusion}
+\begin{proof}[证明要点]
+Newton 恒等式以有限步将幂和 \(\{p_n\}_{n=1}^{N}\) 反演为基本对称多项式 \(\{e_k\}_{k=1}^{N}\)，而
+\(
+\det(I-tB)=\sum_{k=0}^{N}(-1)^ke_kt^k
+\)。
+故结论成立。证毕。
+\end{proof}
+
+\begin{conclusion}[有限签名的迹化压缩：以有限条迹替代 Perron 根坐标仍保持切片判等完备性]\label{con:xi-trace-compressed-signature-complete}
+在有界复杂度切片 \(\mathbf{PW}^{\ast}_{\le}\) 的设定下，沿用有限签名 \(\Sigma_m(w)\) 的定义（注 \ref{rem:pom-finite-signature-sigmam}）与保守性定理 \ref{thm:pom-sem-conservative}。
+对每个整数 \(q\ge 2\) 与温度参数 \(u\)（落在切片网格 \(\mathcal{G}_{\mathrm{grid}}\) 上），令 \(\widetilde A_q(u)\) 表示该坐标所用的有限维 moment-kernel realization（例如 \S\ref{subsec:pom-mom-rewrite-normal} 的对称幂商核），并记 \(N_q:=\dim \widetilde A_q(u)\)（在切片口径下仅依赖 \(q\)）。
+定义迹化签名
+\[
+\Sigma_m^{\mathrm{tr}}(w):=
+\Bigl(
+G^{\mathrm{BC}}_m(w),\
+\{\mathsf{Anom}_{G}(K;\theta)\}_{\theta\in\Theta_{\mathrm{grid}}},\
+\{\Tr(\widetilde A_q(u)^n)\}_{(q,u)\in\mathcal{G}_{\mathrm{grid}},\ 1\le n\le N_q}
+\Bigr).
+\]
+则在 \(\mathbf{PW}^{\ast}_{\le}\) 上成立严格蕴含：
+\[
+\Sigma_m^{\mathrm{tr}}(w_1)=\Sigma_m^{\mathrm{tr}}(w_2)\quad\Longrightarrow\quad w_1\simeq w_2.
+\]
+\end{conclusion}
+\begin{proof}[证明要点]
+若 \(\Sigma_m^{\mathrm{tr}}(w_1)=\Sigma_m^{\mathrm{tr}}(w_2)\)，则对每个 \((q,u)\in\mathcal{G}_{\mathrm{grid}}\) 有
+\(
+\Tr(\widetilde A_q^{(1)}(u)^n)=\Tr(\widetilde A_q^{(2)}(u)^n)
+\)（\(1\le n\le N_q\)）。
+由结论 \ref{con:xi-newton-trace-completeness-determinant-zeta}（取 \(B=\widetilde A_q(u)\)）可推出
+\(
+\det(I-t\widetilde A_q^{(1)}(u))=\det(I-t\widetilde A_q^{(2)}(u))
+\)，
+从而谱半径（Perron 根）一致：\(r_q^{(1)}(u)=r_q^{(2)}(u)\)。
+因此 \(\Sigma_m(w_1)=\Sigma_m(w_2)\)，再由定理 \ref{thm:pom-sem-conservative} 得 \(w_1\simeq w_2\)。证毕。
+\end{proof}
+
+\endinput
+

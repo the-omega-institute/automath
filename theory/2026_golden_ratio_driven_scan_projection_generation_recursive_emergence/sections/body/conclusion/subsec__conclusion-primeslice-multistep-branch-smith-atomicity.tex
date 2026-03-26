@@ -1,0 +1,371 @@
+\subsection{prime-slice 最优实现计数、多步分支极小字母表与 Smith 核谱原子化}\label{subsec:conclusion-primeslice-multistep-branch-smith-atomicity}
+沿用定理 \ref{thm:killo-layered-prime-slices-finite-depth}、定理 \ref{thm:xi-layered-primeslice-local-alphabet-fibermax}、定理 \ref{thm:killo-natural-extension-branch-register} 与定理 \ref{thm:killo-smith-loss-spectrum} 的记号。前述链条已经分别给出有限深度 prime-slice 外置的逐层可逆化、自然扩张的一阶分支寄存器实现，以及 Smith \(\,p\)-核谱的局部恢复与离散曲率公式。由此还可进一步抽出下列五条彼此闭合的结论：prime-slice 最优实现空间的精确计数、多步前史的极小单符号字母表律、\(p\)-核谱函数的离散凹完全分类、相应原子基 \(\min(k,\ell)\) 的自由交换幺半群结构，以及有限深度精确 prime-slice 外置与有限秩加法账本之间的严格不相容性。
+
+\begin{theorem}[最优分层 prime-slice 外置的实现数具有 falling-factorial 乘积公式]\label{thm:conclusion-primeslice-optimal-implementations-falling-factorial}
+设
+\[
+X_0\xrightarrow{\pi_0}X_1\xrightarrow{\pi_1}\cdots\xrightarrow{\pi_{k-1}}X_k
+\]
+为有限集合上的满射塔。沿用定理 \ref{thm:killo-layered-prime-slices-finite-depth} 的 prime-slice 记号
+\[
+\mathcal P_j:=\{p_{2^j(2n-1)}:n\ge 1\}
+\qquad(0\le j\le k-1),
+\]
+并对每层 \(j\) 与每个 \(y\in X_{j+1}\) 记
+\[
+b_j(y):=\#\pi_j^{-1}(y),
+\qquad
+B_j:=\max_{y\in X_{j+1}}b_j(y).
+\]
+固定每层的最小标签集
+\[
+\Lambda_j\subset \mathcal P_j,
+\qquad
+|\Lambda_j|=B_j.
+\]
+把“第 \(j\) 层精确标签”定义为满足下述条件的映射
+\[
+q_j:X_j\to \Lambda_j,
+\]
+对每个 \(y\in X_{j+1}\)，纤维限制
+\[
+q_j|_{\pi_j^{-1}(y)}:\pi_j^{-1}(y)\to \Lambda_j
+\]
+为单射，从而 \((y,q_j(x_j))\) 唯一确定 \(x_j\)。则恰好使用这组最小标签集的全部精确分层编码族 \((q_j)_{j=0}^{k-1}\) 的总数为
+\[
+N_{\mathrm{opt}}
+=
+\prod_{j=0}^{k-1}\ \prod_{y\in X_{j+1}} (B_j)_{b_j(y)},
+\]
+其中
+\[
+(B)_r:=\prod_{t=0}^{r-1}(B-t)
+\]
+为 falling factorial。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-layered-primeslice-local-alphabet-fibermax}，第 \(j\) 层的最小可逆标签字母表大小恰为 \(B_j\)。在此极小字母表 \(\Lambda_j\) 上，一个映射 \(q_j\) 在层 \(j\) 合法，当且仅当它在每条纤维 \(\pi_j^{-1}(y)\) 上都是单射。
+
+现固定 \(j\) 与 \(y\in X_{j+1}\)。由于
+\[
+\#\pi_j^{-1}(y)=b_j(y),
+\qquad
+|\Lambda_j|=B_j,
+\]
+合法限制
+\[
+q_j|_{\pi_j^{-1}(y)}:\pi_j^{-1}(y)\hookrightarrow \Lambda_j
+\]
+的个数恰为把一个 \(b_j(y)\)-元集合单射到一个 \(B_j\)-元集合中的方式数，即
+\[
+(B_j)_{b_j(y)}.
+\]
+不同纤维之间的标签选择彼此独立，故对固定层 \(j\)，可用精确标签的总数为
+\[
+\prod_{y\in X_{j+1}}(B_j)_{b_j(y)}.
+\]
+再由各层 prime-slice \(\mathcal P_j\) 两两不交，层与层之间的选择亦彼此独立，于是全部精确分层编码族的总数为
+\[
+\prod_{j=0}^{k-1}\ \prod_{y\in X_{j+1}} (B_j)_{b_j(y)}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[自然扩张的 \texorpdfstring{$\ell$}{l}-步前史极小字母表恰等于最大 \texorpdfstring{$\ell$}{l}-步分支数]\label{thm:conclusion-natural-extension-lstep-minimal-alphabet-submultiplicative}
+设 \(X\) 为可数集合，\(T:X\twoheadrightarrow X\) 为有限纤维满射。对每个 \(\ell\ge 1\)，定义最大 \(\ell\)-步分支数
+\[
+D_\ell(T):=\sup_{y\in X}\#(T^{-\ell}(y))\in \NN\cup\{\infty\}.
+\]
+则成立：
+\begin{enumerate}
+  \item 若 \(D_\ell(T)<\infty\)，则存在长度-\(\ell\) 的单符号精确编码
+  \[
+  \mathcal C^{(\ell)}:X^{\leftarrow}\longrightarrow X\times [D_\ell(T)]^{\NN},
+  \]
+  使得每个符号只记录一个 \(\ell\)-步前史块，而由当前状态与该符号可以唯一恢复整段 \(\ell\)-步前史；
+  \item 更一般地，对任意整数 \(M<D_\ell(T)\)，不存在任何以大小 \(M\) 的字母表实现的长度-\(\ell\) 单符号精确编码；特别地，若 \(D_\ell(T)=\infty\)，则不存在任何有限字母表实现；
+  \item 序列 \((D_\ell(T))_{\ell\ge 1}\) 满足次乘法
+  \[
+  D_{\ell+r}(T)\le D_\ell(T)\,D_r(T)
+  \qquad(\ell,r\ge 1),
+  \]
+  因而极限
+  \[
+  h_{\mathrm{br}}(T):=\lim_{\ell\to\infty}\frac{1}{\ell}\log D_\ell(T)
+  =
+  \inf_{\ell\ge 1}\frac{1}{\ell}\log D_\ell(T)
+  \]
+  存在（允许取值 \(+\infty\)）。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+固定 \(\ell\ge 1\)。映射 \(T^\ell:X\twoheadrightarrow X\) 仍为有限纤维满射，且
+\[
+\sup_{y\in X}\#(T^\ell)^{-1}(y)=D_\ell(T).
+\]
+若 \(D_\ell(T)<\infty\)，则可对每个 \(y\in X\) 选取单射
+\[
+\iota^{(\ell)}_y:(T^\ell)^{-1}(y)\hookrightarrow [D_\ell(T)].
+\]
+定义
+\[
+\beta^{(\ell)}(x):=\iota^{(\ell)}_{T^\ell(x)}(x),
+\]
+并对自然扩张点 \((x_0,x_{-1},x_{-2},\dots)\in X^{\leftarrow}\) 置
+\[
+\mathcal C^{(\ell)}((x_0,x_{-1},x_{-2},\dots))
+:=
+\bigl(x_0,(\beta^{(\ell)}(x_{-\ell}),\beta^{(\ell)}(x_{-2\ell}),\beta^{(\ell)}(x_{-3\ell}),\dots)\bigr).
+\]
+由于 \(x_{-n\ell}\in (T^\ell)^{-1}(x_{-(n-1)\ell})\)，已知当前状态 \(x_{-(n-1)\ell}\) 与符号 \(\beta^{(\ell)}(x_{-n\ell})\) 时，可由 \((\iota^{(\ell)}_{x_{-(n-1)\ell}})^{-1}\) 恢复唯一的 \(x_{-n\ell}\)。而整段块
+\[
+(x_{-(n-1)\ell-1},\dots,x_{-n\ell})
+\]
+又由末端点 \(x_{-n\ell}\) 通过向前迭代 \(T\) 唯一确定。故该编码确为长度-\(\ell\) 的单符号精确编码。
+
+反之，若某个字母表大小 \(M\) 满足 \(M<D_\ell(T)\)，则存在 \(y\in X\) 使
+\[
+\#(T^\ell)^{-1}(y)>M.
+\]
+任何长度-\(\ell\) 单符号编码在该 \((T^\ell)\)-纤维上都必须把不同 \(\ell\)-步前史块送入大小仅为 \(M\) 的字母表，故由抽屉原理必有两个不同前史块得到相同符号，从而不能由 \((y,\text{symbol})\) 唯一恢复。这证明了第 \(1\)、\(2\) 条。
+
+对第 \(3\) 条，固定 \(y\in X\)。有不交并
+\[
+T^{-(\ell+r)}(y)
+=
+\bigsqcup_{z\in T^{-r}(y)}T^{-\ell}(z),
+\]
+故
+\[
+\#T^{-(\ell+r)}(y)
+\le
+\Bigl(\sup_{z\in X}\#T^{-\ell}(z)\Bigr)\cdot \#T^{-r}(y)
+\le
+D_\ell(T)D_r(T).
+\]
+对 \(y\) 取上确界即得
+\[
+D_{\ell+r}(T)\le D_\ell(T)D_r(T).
+\]
+于是 \((\log D_\ell(T))_{\ell\ge 1}\) 为次可加序列；Fekete 引理遂给出所示极限存在。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$p$}{p}-核谱函数的离散凹完全表征]\label{thm:conclusion-smith-p-kernel-spectrum-discrete-concave-characterization}
+设 \(f:\ZZ_{\ge 0}\to \ZZ_{\ge 0}\) 满足 \(f(0)=0\)，并对 \(k\ge 1\) 定义
+\[
+\Delta f(k):=f(k)-f(k-1).
+\]
+则下列条件等价：
+\begin{enumerate}
+  \item 存在某个满行秩整数矩阵 \(A\in M_{m\times n}(\ZZ)\) 与某个素数 \(p\)，使
+  \[
+  f(k)=\log_p\#\ker(A\bmod p^k)-k(n-m)
+  \qquad(k\ge 1),
+  \]
+  且 \(f(0)=0\)；
+  \item 序列 \((\Delta f(k))_{k\ge 1}\) 是非负、单调不增且最终为零的整数列；
+  \item \(f\) 是单调不减、离散凹且最终常值的整数值函数。
+\end{enumerate}
+在这些条件成立时，定义
+\[
+m_\ell:=\Delta f(\ell)-\Delta f(\ell+1)
+\qquad(\ell\ge 1).
+\]
+则 \(m_\ell\in \ZZ_{\ge 0}\)，且仅有限多个 \(m_\ell\) 非零，并有唯一表示
+\[
+f(k)=\sum_{\ell\ge 1}m_\ell\min(k,\ell)
+\qquad(k\ge 0).
+\]
+等价地，一个显式实现矩阵可取为
+\[
+A_f=
+\operatorname{diag}\bigl(
+\underbrace{p,\dots,p}_{m_1},
+\underbrace{p^2,\dots,p^2}_{m_2},
+\underbrace{p^3,\dots,p^3}_{m_3},
+\dots
+\bigr),
+\]
+其中只有有限多个对角块非空；若需置于任意给定的满行秩尺寸口径，只需在此对角块外附加单位对角元与零列，而不改变局部谱函数。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:killo-smith-loss-spectrum}，任意满行秩整数矩阵 \(A\) 的 \(p\)-局部核谱函数都可写为
+\[
+f_p(k)=\sum_{i=1}^{m}\min(k,e_i(p)),
+\qquad
+\Delta f_p(k)=\#\{i:e_i(p)\ge k\}.
+\]
+因此 \(\Delta f_p(k)\) 显然非负、单调不增且最终为零，\(f_p\) 亦单调不减、离散凹且最终常值。这证明了 \(1\Rightarrow 2\Rightarrow 3\) 与 \(1\Rightarrow 3\)。
+
+反过来，若 \((\Delta f(k))_{k\ge 1}\) 非负、单调不增且最终为零，则
+\[
+m_\ell=\Delta f(\ell)-\Delta f(\ell+1)\ge 0,
+\]
+并且只有有限多个 \(m_\ell\) 非零。对任意 \(k\ge 1\)，望远镜求和给出
+\[
+\sum_{\ell\ge k}m_\ell=\Delta f(k).
+\]
+于是
+\[
+f(k)
+=
+\sum_{j=1}^{k}\Delta f(j)
+=
+\sum_{j=1}^{k}\sum_{\ell\ge j}m_\ell
+=
+\sum_{\ell\ge 1}m_\ell\min(k,\ell).
+\]
+按重数把每个高度 \(\ell\) 复制 \(m_\ell\) 次，即得一组有限多重集 \(\{e_i\}\)，并令
+\[
+A_f=\operatorname{diag}(p^{e_1},\dots,p^{e_r}).
+\]
+再由定理 \ref{thm:killo-smith-loss-spectrum} 便有
+\[
+\log_p\#\ker(A_f\bmod p^k)=f(k)
+\]
+（此处 \(n=m=r\)），从而得到 \(2\Rightarrow 1\)。
+
+最后，整数值函数的离散凹性恰等价于前向差分单调不增；单调不减恰等价于前向差分非负；最终常值恰等价于前向差分最终为零。因此 \(2\) 与 \(3\) 等价。唯一性则由
+\[
+m_\ell=\Delta f(\ell)-\Delta f(\ell+1)
+\]
+立即得到。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$p$}{p}-核谱函数在直和下形成自由交换幺半群]\label{cor:conclusion-smith-p-kernel-spectrum-free-commutative-monoid}
+对每个 \(\ell\ge 1\) 定义原子谱函数
+\[
+g_\ell(k):=\min(k,\ell)
+\qquad(k\ge 0).
+\]
+则所有 \(p\)-核谱函数在逐点加法下构成一个以 \(\{g_\ell\}_{\ell\ge 1}\) 为自由生成系的交换幺半群。更精确地：
+\begin{enumerate}
+  \item 每个 \(p\)-核谱函数 \(f\) 都唯一分解为
+  \[
+  f=\sum_{\ell\ge 1}m_\ell g_\ell,
+  \qquad
+  m_\ell\in \ZZ_{\ge 0},
+  \]
+  且只有有限多个 \(m_\ell\) 非零；
+  \item 对应 Smith 指数多重集里，“高度 \(\ell\)” 的出现次数恰为 \(m_\ell\)；
+  \item 下列三个不变量可直接由该原子分解读出：
+  \[
+  \Delta f(1)=\sum_{\ell\ge 1}m_\ell,
+  \qquad
+  \min\{k\ge 0:\ f(k)=f(k+1)\}=\max\{\ell:\ m_\ell\neq 0\},
+  \]
+  \[
+  \lim_{k\to\infty}f(k)=\sum_{\ell\ge 1}\ell\,m_\ell.
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+定理 \ref{thm:conclusion-smith-p-kernel-spectrum-discrete-concave-characterization} 已给出唯一表示
+\[
+f(k)=\sum_{\ell\ge 1}m_\ell\min(k,\ell)=\sum_{\ell\ge 1}m_\ell g_\ell(k).
+\]
+因此 \(\{g_\ell\}_{\ell\ge 1}\) 生成全部 \(p\)-核谱函数，且由系数
+\[
+m_\ell=\Delta f(\ell)-\Delta f(\ell+1)
+\]
+的唯一恢复知该生成是自由的。
+
+另一方面，若 \(A\) 与 \(B\) 为两个满行秩整数矩阵，则块对角和 \(A\oplus B\) 的 Smith 指数多重集正是二者的并；等价地，其 \(p\)-核谱函数恰为逐点和
+\[
+f_{A\oplus B,p}=f_{A,p}+f_{B,p}.
+\]
+故上述自由原子分解与矩阵直和完全相容，于是得到交换幺半群结构。
+
+最后三条数值公式都由
+\[
+\Delta g_\ell(k)=
+\begin{cases}
+1,& k\le \ell,\\
+0,& k>\ell
+\end{cases}
+\]
+直接读出：\(\Delta f(1)\) 统计全部原子数，平台起点是最大原子高度，而平台值是所有原子高度之和。证毕。
+\end{proof}
+
+\begin{theorem}[有限深度 prime-slice 精确外置与有限秩加法账本严格不相容]\label{thm:conclusion-primeslice-finite-depth-ledger-incompatibility}
+沿用定理 \ref{thm:killo-layered-prime-slices-finite-depth} 的可数集合塔
+\[
+X_0\xrightarrow{\pi_0}X_1\xrightarrow{\pi_1}\cdots\xrightarrow{\pi_{k-1}}X_k
+\]
+及其单射外置
+\[
+\Phi:X_0\longrightarrow X_k\times \ZZ_{>0}.
+\]
+取任意单射
+\[
+\iota:\NN_{\times}\hookrightarrow X_0
+\]
+与任意集合论单射
+\[
+J:X_k\times \ZZ_{>0}\hookrightarrow \ZZ,
+\]
+并定义
+\[
+e:=J\circ \Phi\circ \iota:\NN_{\times}\to \ZZ.
+\]
+则 \(e\) 为单射，并且不存在有限生成交换群 \(L\) 与映射
+\[
+s:\NN_{\times}\to L
+\]
+使得
+\[
+\Psi(n):=(e(n),s(n))
+\]
+成为单射幺半群同态
+\[
+\Psi:(\NN_{\times},\times)\hookrightarrow (\ZZ\oplus L,+).
+\]
+换言之，有限深度 prime-slice 外置可以严格精确，但任何试图把该精确外置进一步压缩为有限秩加法账本的方案都必然失败。
+\end{theorem}
+\begin{proof}
+由 \(\iota\)、\(\Phi\) 与 \(J\) 的单射性，复合映射
+\[
+e=J\circ \Phi\circ \iota
+\]
+本身是 \(\NN_{\times}\to\ZZ\) 的单射。若存在所述有限生成交换群 \(L\) 与映射 \(s\)，则
+\[
+\Psi(n)=(e(n),s(n))
+\]
+恰给出 \(e\) 的一个有限秩同态化账本。于是定理 \ref{thm:killo-godel-compression-not-finite-rank-homologizable} 直接排除这种可能性。故此类 \(\Psi\) 不存在。证毕。
+\end{proof}
+
+\begin{theorem}[持续分支系统的 \texorpdfstring{$\omega$}{omega}-层最小外置]\label{thm:conclusion-natural-extension-omega-layer-minimal-externalization}
+设 \(T:X\twoheadrightarrow X\) 为可数集合上的有限纤维满射，并假设对每个 \(k\ge 1\) 都存在长度 \(k\) 的向后分支链
+\[
+x_{-k}\xrightarrow{\,T\,}x_{-k+1}\xrightarrow{\,T\,}\cdots\xrightarrow{\,T\,}x_{-1}\xrightarrow{\,T\,}x_0
+\]
+使得每一层都满足
+\[
+\#T^{-1}(x_{-j+1})\ge 2
+\qquad(1\le j\le k).
+\]
+则成立：
+\begin{enumerate}
+  \item 对任意 \(k\ge 1\)，在定理 \ref{thm:xi-layered-prime-register-sharp-natural-extension} 的分层 prime-register 语义下，精确分离全部 \(k\)-步前历史在最坏情形下至少需要 \(k\) 个有效层通道；
+  \item 因而任何有限层外置都不可能精确编码全部无限前历史；
+  \item 定理 \ref{thm:killo-natural-extension-branch-register} 的自然扩张编码
+  \[
+  \mathcal C((x_0,x_{-1},x_{-2},\dots))
+  =
+  \bigl(x_0,(\beta(x_{-1}),\beta(x_{-2}),\dots)\bigr)\in X\times\NN^\NN
+  \]
+  给出精确可逆化，并且“一层一坐标”的使用率在最坏情形下已是最小。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+固定 \(k\ge 1\)。题设正是定理 \ref{thm:xi-layered-prime-register-sharp-natural-extension} 的最坏情形假设，因此任意精确分层外置在深度 \(k\) 上都至少需要 \(k\) 个有效 prime slices；而该定理同时给出逐层写入一枚有效 prime 的可达构造。这证明了第 \(1\) 条。
+
+若存在某个有限层外置能够精确编码全部无限前历史，则其限制到任意深度 \(k\) 都给出一个只使用固定有限层数的 \(k\)-步精确外置。取 \(k\) 大于该层数，便与第 \(1\) 条矛盾，故第 \(2\) 条成立。
+
+最后，第 \(3\) 条的充分性正是定理 \ref{thm:killo-natural-extension-branch-register} 的内容；而其最坏情形最优性则由第 \(1\) 条立即给出。证毕。
+\end{proof}
+
+\noindent
+由此，分层 prime-slice 外置、自然扩张分支寄存器与 Smith 局部核谱在结论层完成了六重闭合：最优局部外置不但存在，而且其实现空间可被精确计数；\(\ell\)-步前史的最小单符号字母表不再需要逐层粗估，而被最大 \(\ell\)-步分支数严格锁定；一旦真实分支沿全部深度持续发生，精确可逆化所需资源便不再是“大而有限”的账本，而被强制提升为 \(\omega\)-层外置流；\(p\)-核谱函数恰由离散凹且最终平坦的整数函数完全刻画，并在直和下以 \(\min(k,\ell)\) 为原子形成自由交换幺半群；同时，有限深度 prime-slice 外置虽然能够严格实现精确恢复，但任何试图把这种精确性同态压缩为有限秩加法账本的方案都会被素数自由度障碍立即排除。因而局部资源的计数、复杂度、分类、原子化、\(\omega\)-层最优性与全局不可线性化之间，被统一压缩为同一条精确而不可退化的 prime-slice 结构链。
+
+\endinput

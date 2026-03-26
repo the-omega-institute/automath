@@ -1,0 +1,584 @@
+\paragraph{有限分支前缀、Smith 曲率谱与几何对象的素数寄存器化}
+在自然扩张的分支指标寄存器、有限深度 prime-slice 外置、Smith 信息亏损谱与整数轴对齐椭圆半群已经分别建立之后，还可把这四条线索压缩成一条更高阶的结构链：有限分支前缀给出 prime-slice 外置的规范前缀模型，Smith 曲率谱把全部模核损失压缩为离散边界函数，而几何对象的素数寄存器化则把这种刚性直接推送到结构层圆维。
+
+\begin{theorem}[有限深度素数片外置是分支寄存器前缀的乘法封装]\label{thm:xi-finite-depth-primeslice-branch-prefix-compression}
+设
+\[
+X_0\xrightarrow{\pi_0}X_1\xrightarrow{\pi_1}\cdots\xrightarrow{\pi_{k-1}}X_k
+\]
+为可数集合之间的有限纤维满射链。对每个 \(j=0,\dots,k-1\) 与每个 \(y\in X_{j+1}\)，固定单射
+\[
+\iota_{j,y}:\pi_j^{-1}(y)\hookrightarrow \NN.
+\]
+对 \(x_0\in X_0\) 递推定义
+\[
+x_{j+1}:=\pi_j(x_j),
+\qquad
+\beta_j(x_0):=\iota_{j,x_{j+1}}(x_j)\in\NN,
+\]
+并记有限深度分支寄存器
+\[
+\Psi_k(x_0):=(x_k,\beta_0(x_0),\dots,\beta_{k-1}(x_0))
+\in X_k\times \NN^k.
+\]
+则 \(\Psi_k\) 为单射。
+
+进一步，沿用定理 \ref{thm:killo-layered-prime-slices-finite-depth} 的两两不交 prime slices \((\mathcal P_j)_{0\le j\le k-1}\)，并为每层固定单射
+\[
+\alpha_j:X_{j+1}\times\NN\hookrightarrow \mathcal P_j.
+\]
+则存在一个定义在 \(\Psi_k(X_0)\) 上的规范映射
+\[
+\mathfrak M_k:\Psi_k(X_0)\longrightarrow X_k\times \ZZ_{>0}
+\]
+使得有限深度 prime-slice 外置
+\[
+\Phi_k(x_0):=
+\left(
+x_k,\ \prod_{j=0}^{k-1}\alpha_j(x_{j+1},\beta_j(x_0))
+\right)
+\]
+满足
+\[
+\boxed{\;
+\Phi_k=\mathfrak M_k\circ \Psi_k.\;}
+\]
+换言之，有限深度的 prime-slice 外置正是分支寄存器前缀的乘法封装；当该链来自某个有限纤维自映射的 \(k\)-步前史截断时，它恰是定理 \ref{thm:killo-natural-extension-branch-register} 与定理 \ref{thm:xi-prime-register-history-inverse-limit} 中自然扩张分支寄存器的长度 \(k\) 前缀压缩。
+\end{theorem}
+\begin{proof}
+先证单射。若给定
+\[
+(x_k,a_0,\dots,a_{k-1})\in \Psi_k(X_0),
+\]
+则可自后向前唯一恢复：
+\[
+x_{k-1}=\iota_{k-1,x_k}^{-1}(a_{k-1}),
+\qquad
+x_{k-2}=\iota_{k-2,x_{k-1}}^{-1}(a_{k-2}),
+\quad \dots,\quad
+x_0=\iota_{0,x_1}^{-1}(a_0).
+\]
+因此 \(\Psi_k\) 在其像上可逆，从而为单射。
+
+现定义 \(\mathfrak M_k\)。对任意 \((x_k,a_0,\dots,a_{k-1})\in \Psi_k(X_0)\)，先按上一步递推恢复唯一的中间态 \(x_{k-1},\dots,x_0\)，再置
+\[
+\mathfrak M_k(x_k,a_0,\dots,a_{k-1})
+:=
+\left(
+x_k,\ \prod_{j=0}^{k-1}\alpha_j(x_{j+1},a_j)
+\right).
+\]
+该定义良好，因为所有 \(x_j\) 已由 \((x_k,a_0,\dots,a_{k-1})\) 唯一确定。对真实输入 \(x_0\in X_0\)，代入 \(a_j=\beta_j(x_0)\) 即得
+\[
+(\mathfrak M_k\circ \Psi_k)(x_0)
+=
+\left(
+x_k,\ \prod_{j=0}^{k-1}\alpha_j(x_{j+1},\beta_j(x_0))
+\right)
+=
+\Phi_k(x_0).
+\]
+故 \(\Phi_k=\mathfrak M_k\circ \Psi_k\)。最后一条只是在 \(T\)-前史链情形下把 \(\Psi_k\) 识别为定理 \ref{thm:xi-prime-register-history-inverse-limit} 中截断分支码 \(\mathcal C_k\) 的一般链版本。证毕。
+\end{proof}
+
+\begin{theorem}[分层素数片复杂度的精确最优值等于活跃分支深度]\label{thm:xi-layered-primeslice-complexity-active-depth}
+在上述有限纤维链设定下，定义活跃分支层集合
+\[
+J:=
+\left\{
+\,0\le j\le k-1:\ \exists\,y\in X_{j+1}\ \text{使}\ \#\pi_j^{-1}(y)\ge 2
+\right\}.
+\]
+在分层 prime-slice 外置语义下，定义其复杂度
+\[
+\mathfrak p(\pi_\bullet)
+\]
+为所有单射编码
+\[
+\Xi(x_0)=\bigl(x_k,H(x_0)\bigr),
+\qquad
+H(x_0)=\prod_{j=0}^{k-1}h_j(x_0),
+\]
+中非平凡 prime slices 的最小可能数目，其中每个 \(h_j(x_0)\) 的全部素因子均限制在某个预先指定的层片 \(\mathcal P_j\)。则有精确公式
+\[
+\boxed{\;
+\mathfrak p(\pi_\bullet)=|J|.\;}
+\]
+特别地，若每一层都存在真正分支，即 \(J=\{0,\dots,k-1\}\)，则
+\[
+\boxed{\;
+\mathfrak p(\pi_\bullet)=k.\;}
+\]
+\end{theorem}
+\begin{proof}
+这正是定理 \ref{thm:xi-prime-slice-nontrivial-layer-exact-minimality} 的内容。该定理证明：任一单射分层 prime-slice 编码的非平凡片数都不小于 \(|J|\)，而且存在构造恰好在每个活跃层使用一枚有效 prime slice、在非活跃层取平凡因子 \(1\) 的单射实现。故最小值正是 \(|J|\)。证毕。
+\end{proof}
+
+\begin{theorem}[Smith 信息亏损谱的离散曲率完全刻画]\label{thm:xi-smith-loss-spectrum-discrete-curvature-complete-characterization}
+设 \(f:\ZZ_{\ge 0}\to \ZZ_{\ge 0}\) 满足 \(f(0)=0\)，并定义一阶差分
+\[
+\Delta(k):=f(k)-f(k-1)\qquad(k\ge 1).
+\]
+则下列两条等价：
+\begin{enumerate}
+\item 存在某个有限多重集 \(E\subset \ZZ_{\ge 1}\) 使
+\[
+f(k)=\sum_{e\in E}\min(k,e)
+\qquad(k\ge 0);
+\]
+\item 序列 \((\Delta(k))_{k\ge 1}\) 非负、单调不增且最终为零。
+\end{enumerate}
+在这些条件成立时，\(E\) 由离散曲率唯一恢复：对每个 \(t\ge 1\)，其重数满足
+\[
+\boxed{\;
+\#\{e\in E:\ e=t\}
+=
+\Delta(t)-\Delta(t+1)
+=
+2f(t)-f(t-1)-f(t+1).\;}
+\]
+因此，任何 \(\,p\)-进 Smith 信息亏损谱都可被视为一个有限 Young 边界函数，而确切的初等因子多重集正是该边界的离散曲率。
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:xi-smith-padic-loss-spectrum-classification} 已证明：函数 \(f\) 可以写成
+\[
+f(k)=\sum_{e\ge 1}m_e\min(k,e)
+\]
+当且仅当其前向差分 \(\Delta(k)\) 非负、非增且有限支撑；并且此时重数 \(m_e\) 唯一确定。推论 \ref{cor:xi-smith-second-discrete-curvature-recovery} 进一步给出
+\[
+m_t=\Delta(t)-\Delta(t+1)=2f(t)-f(t-1)-f(t+1).
+\]
+将 \(m_t\) 解释为 \(E\) 中取值 \(t\) 的重数，即得全部结论。证毕。
+\end{proof}
+
+\begin{corollary}[Smith 核谱函数的离散凹性、平台截断与二阶差分反演]\label{cor:xi-smith-kernel-spectrum-discrete-concavity-plateau-inversion}
+设 \(A\in M_{m\times n}(\ZZ)\) 满足 \(\operatorname{rank}_{\QQ}(A)=m\)，其 Smith 不变量为
+\[
+d_1\mid d_2\mid\cdots\mid d_m.
+\]
+固定素数 \(p\)，并记
+\[
+K_p(k):=\#\ker(A_{p^k})
+\qquad(k\ge 1),
+\]
+\[
+f_p(k):=\log_p K_p(k)-k(n-m)
+\qquad(k\ge 1),
+\qquad
+f_p(0):=0.
+\]
+再记
+\[
+e_i(p):=v_p(d_i),
+\qquad
+E_p:=\max_{1\le i\le m}e_i(p),
+\qquad
+m_{p,\ell}:=\#\{i:\ e_i(p)=\ell\}
+\quad(\ell\ge 1).
+\]
+则成立：
+\begin{enumerate}
+  \item \(f_p\) 是单调不减的离散凹函数，即
+  \[
+  f_p(k+1)-f_p(k)\ge f_p(k+2)-f_p(k+1)
+  \qquad(k\ge 0);
+  \]
+  \item 当 \(k\ge E_p\) 时，\(f_p\) 进入平台：
+  \[
+  f_p(k)=\sum_{i=1}^{m}e_i(p);
+  \]
+  \item 对每个 \(\ell\ge 1\)，精确重数由二阶差分恢复：
+  \[
+  m_{p,\ell}
+  =
+  2f_p(\ell)-f_p(\ell-1)-f_p(\ell+1).
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:killo-smith-loss-spectrum}，
+\[
+f_p(k)=\sum_{i=1}^{m}\min\bigl(k,e_i(p)\bigr)
+\qquad(k\ge 1),
+\]
+并且
+\[
+\Delta_p(k):=f_p(k)-f_p(k-1)=\#\{i:\ e_i(p)\ge k\}
+\qquad(k\ge 1).
+\]
+因此 \(\Delta_p(k)\) 关于 \(k\) 非负且单调不增，故 \(f_p\) 单调不减且离散凹，这证明了第 \(1\) 条。
+
+若 \(k\ge E_p\)，则 \(\min(k,e_i(p))=e_i(p)\) 对所有 \(i\) 都成立，故
+\[
+f_p(k)=\sum_{i=1}^{m}e_i(p),
+\]
+得到第 \(2\) 条。
+
+最后，由上式直接有
+\[
+m_{p,\ell}
+=
+\#\{i:\ e_i(p)\ge \ell\}-\#\{i:\ e_i(p)\ge \ell+1\}
+=
+\Delta_p(\ell)-\Delta_p(\ell+1),
+\]
+从而
+\[
+m_{p,\ell}
+=
+\bigl(f_p(\ell)-f_p(\ell-1)\bigr)-\bigl(f_p(\ell+1)-f_p(\ell)\bigr)
+=
+2f_p(\ell)-f_p(\ell-1)-f_p(\ell+1).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[模数信息亏损是 divisibility 格上的精确 valuation，且具有有理 Euler 因子]\label{thm:xi-kernel-loss-divisibility-valuation-rational-euler}
+设 \(A\in M_{m\times n}(\ZZ)\) 满足 \(\operatorname{rank}_{\QQ}(A)=m\)，其 Smith 不变量为
+\[
+d_1\mid d_2\mid\cdots\mid d_m.
+\]
+对每个 \(b\ge 1\)，记
+\[
+A_b:(\ZZ/b\ZZ)^n\to(\ZZ/b\ZZ)^m
+\]
+为 \(A\) 的模 \(b\) 诱导映射。对任意正整数 \(b\)，定义归一化信息亏损
+\[
+L_A(b):=
+\log \#\ker(A_b)-(n-m)\log b
+=
+\sum_{i=1}^{m}\log \gcd(d_i,b).
+\]
+则成立：
+\begin{enumerate}
+\item 对任意 \(b,c\ge 1\)，有精确 valuation 恒等式
+\[
+\boxed{\;
+L_A(\operatorname{lcm}(b,c))+L_A(\gcd(b,c))
+=
+L_A(b)+L_A(c).\;}
+\]
+\item 定义 Dirichlet 生成函数
+\[
+\Xi_A(s):=\sum_{b\ge 1}\frac{\#\ker(A_b)}{b^{\,n-m+s}}
+\qquad(\Re s>1).
+\]
+若记 \(e_i(p):=v_p(d_i)\)、\(E_p:=\max_i e_i(p)\)、\(\sigma_p:=\sum_i e_i(p)\)，则
+\[
+\boxed{\;
+\Xi_A(s)=\prod_{p}\Xi_{A,p}(s),\qquad
+\Xi_{A,p}(s)=\sum_{k=0}^{\infty}p^{-ks+\sum_{i=1}^{m}\min(k,e_i(p))}.\;}
+\]
+并且每个局部因子都是 \(p^{-s}\) 的有理函数，更精确地，
+\[
+\boxed{\;
+\Xi_{A,p}(s)
+=
+\sum_{k=0}^{E_p-1}p^{-ks+\sum_i\min(k,e_i(p))}
+\;+\;
+\frac{p^{-E_p s+\sigma_p}}{1-p^{-s}}.\;}
+\]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:killo-kernel-size-general-modulus}，
+\[
+L_A(b)=\sum_{p}\left(\sum_{i=1}^{m}\min(v_p(b),e_i(p))\right)\log p.
+\]
+故要证第一式，只需逐素数验证
+\[
+\sum_i \min(\max\{u,v\},e_i)+\sum_i \min(\min\{u,v\},e_i)
+=
+\sum_i \min(u,e_i)+\sum_i \min(v,e_i),
+\]
+其中 \(u=v_p(b)\)、\(v=v_p(c)\)。而对每个固定 \(e\) 都有
+\[
+\min(\max\{u,v\},e)+\min(\min\{u,v\},e)=\min(u,e)+\min(v,e),
+\]
+逐项求和即得 valuation 恒等式。
+
+第二式同样由推论 \ref{cor:killo-kernel-size-general-modulus} 与定理 \ref{thm:xi-kernel-dirichlet-zeta-finite-euler-correction} 直接推出。对 \(b=p^k\)，有
+\[
+\frac{\#\ker(A_{p^k})}{p^{k(n-m)}}
+=
+p^{\sum_i\min(k,e_i(p))},
+\]
+故局部因子为
+\[
+\Xi_{A,p}(s)=\sum_{k\ge 0}p^{-ks+\sum_i\min(k,e_i(p))}.
+\]
+当 \(k\ge E_p\) 时，\(\min(k,e_i(p))=e_i(p)\) 对所有 \(i\) 恒定，尾部即成为几何级数
+\[
+\sum_{k\ge E_p}p^{-ks+\sigma_p}
+=
+\frac{p^{-E_p s+\sigma_p}}{1-p^{-s}},
+\]
+于是得到所示有理表达。证毕。
+\end{proof}
+
+\begin{corollary}[模核大小在整除格上满足精确乘法恒等式]\label{cor:xi-kernel-size-gcd-lcm-exact-multiplicativity}
+沿用定理 \ref{thm:xi-kernel-loss-divisibility-valuation-rational-euler} 的记号。对任意 \(b,c\ge 1\)，都有
+\[
+\#\ker(A_{\gcd(b,c)})\cdot \#\ker(A_{\operatorname{lcm}(b,c)})
+=
+\#\ker(A_b)\cdot \#\ker(A_c).
+\]
+等价地，模核大小函数在除去自由因子 \(b^{\,n-m}\) 之后，正是正整数整除格上的一个严格 valuation。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-kernel-loss-divisibility-valuation-rational-euler}，
+\[
+L_A(\operatorname{lcm}(b,c))+L_A(\gcd(b,c))=L_A(b)+L_A(c).
+\]
+再由定义
+\[
+L_A(t)=\log\#\ker(A_t)-(n-m)\log t
+\qquad(t\ge 1),
+\]
+以及恒等式
+\[
+\log\gcd(b,c)+\log\operatorname{lcm}(b,c)=\log b+\log c,
+\]
+可得
+\[
+\log\#\ker(A_{\gcd(b,c)})+\log\#\ker(A_{\operatorname{lcm}(b,c)})
+=
+\log\#\ker(A_b)+\log\#\ker(A_c).
+\]
+两边取指数即得所示精确乘法关系。证毕。
+\end{proof}
+
+\begin{theorem}[模核 Dirichlet 级数的 Euler--rational 形态与 Smith 完备性]\label{thm:xi-kernel-dirichlet-euler-rational-smith-completeness}
+设 \(A\in M_{m\times n}(\ZZ)\) 满足 \(\operatorname{rank}_{\QQ}(A)=m\)，其 Smith 不变量为
+\[
+d_1\mid d_2\mid\cdots\mid d_m,\qquad d_i>0.
+\]
+对每个正整数 \(b\)，记
+\[
+A_b:(\ZZ/b\ZZ)^n\to(\ZZ/b\ZZ)^m
+\]
+为模 \(b\) 的诱导映射，并定义 Dirichlet 级数
+\[
+\mathcal K_A(s):=\sum_{b\ge 1}\frac{\#\ker(A_b)}{b^s}.
+\]
+则成立：
+\[
+\#\ker(A_b)=b^{\,n-m}\prod_{i=1}^{m}\gcd(d_i,b),
+\]
+从而 \(b\mapsto \#\ker(A_b)\) 为积性函数，故
+\[
+\mathcal K_A(s)=\prod_p \mathcal K_{A,p}(s),
+\]
+其中局部因子为
+\[
+\mathcal K_{A,p}(s)
+=
+\sum_{k\ge 0}p^{-k(s-(n-m))+f_p(k)},
+\qquad
+f_p(k):=\sum_{i=1}^{m}\min\bigl(e_i(p),k\bigr),
+\]
+并记
+\[
+e_i(p):=v_p(d_i),\qquad
+E_p:=\max_i e_i(p),\qquad
+\sigma_p:=\sum_{i=1}^{m}e_i(p).
+\]
+则更精确地，
+\[
+\mathcal K_{A,p}(s)
+=
+\sum_{k=0}^{E_p-1}p^{-k(s-(n-m))+f_p(k)}
+\;+\;
+\frac{p^{-E_p(s-(n-m))+\sigma_p}}{1-p^{-(s-(n-m))}},
+\]
+因此每个局部因子都是 \(p^{-s}\) 的有理函数。
+
+若再记
+\[
+\Delta_A:=\prod_{i=1}^{m}d_i,
+\]
+则
+\[
+\mathcal K_A(s)
+=
+\zeta\!\bigl(s-(n-m)\bigr)
+\prod_{p\mid \Delta_A}
+\Bigl(1-p^{-(s-(n-m))}\Bigr)\mathcal K_{A,p}(s).
+\]
+因而 \(\mathcal K_A(s)\) 的收敛横坐标恰为
+\[
+\sigma_c=n-m+1,
+\]
+并在该点具有唯一简单极点。更进一步，在固定行秩 \(m\) 的口径下，\(\mathcal K_A(s)\) 唯一决定全部 Smith 不变量 \((d_1,\dots,d_m)\)。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:killo-kernel-size-general-modulus}，
+\[
+\#\ker(A_b)=b^{\,n-m}\prod_{i=1}^{m}\gcd(d_i,b).
+\]
+右端关于 \(b\) 为积性函数，故 \(\mathcal K_A\) 具有 Euler 乘积分解。对 \(b=p^k\)，再由同一推论与定理 \ref{thm:killo-smith-loss-spectrum}，
+\[
+\#\ker(A_{p^k})
+=
+p^{k(n-m)}\prod_{i=1}^{m}p^{\min(e_i(p),k)}
+=
+p^{k(n-m)+f_p(k)}.
+\]
+于是
+\[
+\mathcal K_{A,p}(s)
+=
+\sum_{k\ge 0}\frac{\#\ker(A_{p^k})}{p^{ks}}
+=
+\sum_{k\ge 0}p^{-k(s-(n-m))+f_p(k)}.
+\]
+当 \(k\ge E_p\) 时，\(\min(e_i(p),k)=e_i(p)\) 对所有 \(i\) 都成立，故 \(f_p(k)=\sigma_p\)，尾部因而化为几何级数
+\[
+\sum_{k\ge E_p}p^{-k(s-(n-m))+\sigma_p}
+=
+\frac{p^{-E_p(s-(n-m))+\sigma_p}}{1-p^{-(s-(n-m))}}.
+\]
+这就得到局部因子的有理表达式。
+
+若 \(p\nmid \Delta_A\)，则全部 \(e_i(p)=0\)，从而
+\[
+\mathcal K_{A,p}(s)=\sum_{k\ge 0}p^{-k(s-(n-m))}
+=
+\frac{1}{1-p^{-(s-(n-m))}}.
+\]
+把这些好素数因子提出，即得
+\[
+\mathcal K_A(s)
+=
+\zeta\!\bigl(s-(n-m)\bigr)
+\prod_{p\mid \Delta_A}
+\Bigl(1-p^{-(s-(n-m))}\Bigr)\mathcal K_{A,p}(s).
+\]
+右侧修正项是有限 Euler 乘积，因此在 \(s=n-m+1\) 邻域内解析且非零；于是 \(\mathcal K_A\) 的收敛横坐标与 \(\zeta(s-(n-m))\) 相同，恰为 \(n-m+1\)，并在该点具有唯一简单极点。
+
+最后证明 Smith 完备性。Dirichlet 级数 \(\mathcal K_A(s)\) 唯一决定全部系数
+\[
+a_b:=\#\ker(A_b).
+\]
+极点位置给出 \(n-m=\sigma_c-1\)。因此对每个素数 \(p\) 与每个 \(k\ge 1\)，可由
+\[
+a_{p^k}=p^{k(n-m)+f_p(k)}
+\]
+恢复
+\[
+f_p(k)=v_p(a_{p^k})-k(n-m).
+\]
+再由推论 \ref{cor:xi-smith-second-discrete-curvature-recovery}，
+\[
+\#\{i:\ e_i(p)=k\}
+=
+2f_p(k)-f_p(k-1)-f_p(k+1)
+\qquad(k\ge 1),
+\]
+故每个素数 \(p\) 上的赋值多重集 \(\{e_i(p)\}_{i=1}^{m}\) 都被唯一确定。由于行秩 \(m\) 已固定，零赋值的个数亦随之确定。记
+\[
+0\le e_1^{\uparrow}(p)\le \cdots \le e_m^{\uparrow}(p)
+\]
+为该多重集的非降序排列，则逐项合并便唯一恢复整个 Smith 链
+\[
+d_i=\prod_p p^{e_i^{\uparrow}(p)},
+\qquad(1\le i\le m).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[整数轴对齐椭圆半群的结构层同态半圆维发散，而实现层仅为 \texorpdfstring{$1/2$}{1/2}]\label{thm:xi-integer-ellipse-half-circle-dimension-gap}
+沿用定理 \ref{thm:killo-ellipse-diagonal-prime-register-equivalence} 的记号，令
+\[
+\mathsf E_{\NN}
+:=
+\left\{
+E_{a,b}:\ \frac{x^2}{a^2}+\frac{y^2}{b^2}=1,\ a,b\in\NN_{>0}
+\right\},
+\qquad
+E_{a,b}\odot E_{c,d}:=E_{ac,bd}.
+\]
+则
+\[
+\boxed{\;
+\cdim^{\mathrm{hom}}_{+}(\mathsf E_{\NN},\odot)=+\infty,
+\qquad
+\cdim^{\mathrm{impl}}(\mathsf E_{\NN})=\frac12.\;}
+\]
+等价地，不存在任何有限加法寄存器系统 \((\NN^k,+)\) 能对整个整数轴对齐椭圆半群给出严格同态的完整编码；但作为纯集合，\(\mathsf E_{\NN}\) 仍只具有可数无限集的实现层复杂度。
+\end{theorem}
+\begin{proof}
+对任意有限素数集 \(S\subset\mathbb P\)，定义子幺半群
+\[
+\mathsf E_S:=\{E_{a,1}:a\in \NN_S^\times\}\subset \mathsf E_{\NN}.
+\]
+映射
+\[
+\NN_S^\times\longrightarrow \mathsf E_S,\qquad a\longmapsto E_{a,1}
+\]
+是幺半群同构，故 \(\mathsf E_{\NN}\) 对任意 \(|S|=N\) 都包含一份 \(\NN_S^\times\) 的同态拷贝。于是由推论 \ref{cor:xi-unbounded-prime-directions-force-infinite-half-circle-dimension}，
+\[
+\cdim^{\mathrm{hom}}_{+}(\mathsf E_{\NN},\odot)=+\infty.
+\]
+
+另一方面，\(\mathsf E_{\NN}\) 与 \(\NN_{>0}\times \NN_{>0}\) 等势，因而是可数无限集。故存在集合单射
+\[
+\mathsf E_{\NN}\hookrightarrow \NN,
+\]
+从而
+\[
+\cdim^{\mathrm{impl}}(\mathsf E_{\NN})\le \frac12.
+\]
+又实现层半圆维为 \(0\) 当且仅当集合有限（见命题 \ref{prop:killo-implementation-vs-structural-half-circle-dimension} 的定义口径），故
+\[
+\cdim^{\mathrm{impl}}(\mathsf E_{\NN})=\frac12.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[整数轴对齐椭圆半群不存在任何有限加法账本的忠实同态实现]\label{cor:xi-integer-ellipse-no-faithful-finite-additive-ledger}
+沿用定理 \ref{thm:xi-integer-ellipse-half-circle-dimension-gap} 的记号，并记
+\[
+\mathsf E_x:=\{E_{a,1}:a\in\NN_{>0}\}\subset \mathsf E_{\NN}.
+\]
+则不存在任何有限整数 \(k\) 与单射幺半群同态
+\[
+\Phi:(\mathsf E_{\NN},\odot)\hookrightarrow (\NN^k,+).
+\]
+另一方面，\(\mathsf E_{\NN}\) 作为可数集合仍可单射进入 \(\NN\)。因此，对整数轴对齐椭圆半群而言，结构层的忠实同态实现与实现层的可寻址集合压缩发生严格分离。
+\end{corollary}
+\begin{proof}
+映射
+\[
+\NN_{>0}\longrightarrow \mathsf E_x,\qquad
+a\longmapsto E_{a,1}
+\]
+满足
+\[
+E_{a,1}\odot E_{c,1}=E_{ac,1},
+\]
+故给出幺半群同构
+\[
+(\NN_{>0},\times)\cong (\mathsf E_x,\odot).
+\]
+若存在某个有限 \(k\) 与单射幺半群同态
+\[
+\Phi:(\mathsf E_{\NN},\odot)\hookrightarrow (\NN^k,+),
+\]
+则其限制
+\[
+\Phi|_{\mathsf E_x}:(\NN_{>0},\times)\hookrightarrow (\NN^k,+)
+\]
+仍为单射幺半群同态。这与定理 \ref{thm:killo-prime-freedom-non-finitizability} 矛盾，因为 \((\NN^k,+)\) 是有限生成、交换且可消去的幺半群。故这样的 \(\Phi\) 不存在。
+
+另一方面，\(\mathsf E_{\NN}\) 与 \(\NN_{>0}\times \NN_{>0}\) 等势，故是可数无限集，从而存在集合单射
+\[
+\mathsf E_{\NN}\hookrightarrow \NN.
+\]
+这就给出了所述的严格分离。证毕。
+\end{proof}
+
+\noindent
+上述这些结果把附录 \(H\) 的若干局部构造压缩为一条统一刚性链：有限深度 branch register 是 prime-slice 外置的前缀模型，prime-slice 的最小复杂度由活跃分支层精确锁定；进入模数投影后，全部信息亏损不仅被 Smith 曲率谱完全分类，而且在整除格上形成精确 valuation 与原始模核乘法恒等式；最终，这条素数寄存器刚性可以直接投射到整数椭圆半群这样的显式几何对象，迫使其在结构层上表现出无限的加法寄存器秩，而实现层仍停留在可数可寻址的最低非零复杂度。
+
+\endinput

@@ -1,0 +1,397 @@
+\paragraph{bin-fold 位率阈值、尖锐阈值窗、缩放 Mellin 读出与临界 defect 原子谱}
+在 bin-fold 的两态一致渐近、临界容量双折线与末位两块化已经稳定之后，还可把精确恢复位率、临界比特窗的显式跃迁曲线、缩放多重度的 Mellin 结构以及极限容量曲线的原子二阶导数继续压缩为下列四条终端结论。
+
+\begin{theorem}[bin-fold 离散预言机恢复的精确位率阈值]\label{thm:xi-binfold-oracle-success-bitrate-threshold-exact}
+对整数 \(B\ge 0\)，定义 bin-fold 的离散预言机容量与最优恢复成功率
+\[
+C_m^{\mathrm{bin}}(B)
+:=
+\sum_{w\in X_m}\min\bigl(d_m^{\mathrm{bin}}(w),2^B\bigr),
+\qquad
+\mathrm{Succ}_m^{\mathrm{bin}}(B):=\frac{C_m^{\mathrm{bin}}(B)}{2^m}.
+\]
+再记
+\[
+\beta_c:=\log_2\!\Bigl(\frac{2}{\varphi}\Bigr).
+\]
+对任意 \(\beta\ge 0\) 令 \(B_m:=\lfloor \beta m\rfloor\)。则有：
+\begin{enumerate}
+\item 若 \(\beta<\beta_c\)，则
+\[
+\lim_{m\to\infty}\frac{1}{m}\log \mathrm{Succ}_m^{\mathrm{bin}}(B_m)
+=
+-(\beta_c-\beta)\log 2<0.
+\]
+特别地，\(\mathrm{Succ}_m^{\mathrm{bin}}(B_m)\) 指数衰减到 \(0\)。
+\item 若 \(\beta>\beta_c\)，则存在 \(m_0(\beta)\)，使得对一切 \(m\ge m_0(\beta)\) 都有
+\[
+\mathrm{Succ}_m^{\mathrm{bin}}(B_m)=1.
+\]
+\end{enumerate}
+因此 \(\beta_c\) 是 bin-fold 精确微态恢复的严格位率阈值。
+\end{theorem}
+\begin{proof}
+记
+\[
+c_m:=\Bigl(\frac{2}{\varphi}\Bigr)^m,
+\qquad
+\varepsilon_m:=\Bigl(\frac{\varphi}{2}\Bigr)^m.
+\]
+由定理 \ref{thm:fold-bin-two-state-asymptotic}，存在常数 \(C>0\) 使得对充分大 \(m\) 与一切 \(w\in X_m\) 都有一致展开
+\[
+d_m^{\mathrm{bin}}(w)=c_m\varphi^{-w_m}\bigl(1+\delta_{m,w}\bigr),
+\qquad
+|\delta_{m,w}|\le C\varepsilon_m.
+\]
+于是可取常数 \(0<c_1<c_2<\infty\)，使对充分大 \(m\) 与全部 \(w\in X_m\) 都有
+\[
+c_1c_m\le d_m^{\mathrm{bin}}(w)\le c_2c_m.
+\]
+
+若 \(\beta<\beta_c\)，则
+\[
+\frac{2^{B_m}}{c_m}\longrightarrow 0.
+\]
+故当 \(m\) 充分大时，\(2^{B_m}<d_m^{\mathrm{bin}}(w)\) 对全部 \(w\in X_m\) 成立，从而
+\[
+C_m^{\mathrm{bin}}(B_m)=2^{B_m}|X_m|.
+\]
+又由 \(|X_m|=F_{m+2}\)，便有
+\[
+\begin{aligned}
+\frac{1}{m}\log \mathrm{Succ}_m^{\mathrm{bin}}(B_m)
+&=
+\frac{B_m}{m}\log 2-\log 2+\frac{1}{m}\log F_{m+2}\\
+&\longrightarrow
+\beta\log 2-\log 2+\log\varphi\\
+&=
+\beta\log 2-\log\!\Bigl(\frac{2}{\varphi}\Bigr)
+=
+-(\beta_c-\beta)\log 2.
+\end{aligned}
+\]
+
+若 \(\beta>\beta_c\)，则
+\[
+\frac{2^{B_m}}{c_m}\longrightarrow \infty.
+\]
+故对充分大 \(m\) 有 \(2^{B_m}>c_2c_m\ge d_m^{\mathrm{bin}}(w)\) 对全部 \(w\in X_m\) 成立。因此
+\[
+C_m^{\mathrm{bin}}(B_m)=\sum_{w\in X_m}d_m^{\mathrm{bin}}(w)=2^m,
+\]
+亦即
+\[
+\mathrm{Succ}_m^{\mathrm{bin}}(B_m)=1.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[bin-fold 预言机可逆的尖锐阈值窗与显式极限曲线]\label{thm:xi-time-part9m2-binfold-sharp-threshold-window-explicit-curve}
+把定理 \ref{thm:xi-binfold-oracle-success-bitrate-threshold-exact} 的预算沿 dyadic 尺度连续化为实参数 \(B\in\mathbb R\)，定义
+\[
+C_m(B):=
+\sum_{w\in X_m}\min\bigl(d_m^{\mathrm{bin}}(w),2^B\bigr),
+\qquad
+\mathrm{Succ}_m(B):=\frac{C_m(B)}{2^m}.
+\]
+记临界比特率
+\[
+\beta_\star:=\beta_c=\log_2\!\Bigl(\frac{2}{\varphi}\Bigr).
+\]
+则对任意固定 \(b\in\mathbb R\)，在临界缩放
+\[
+B=\beta_\star m+b
+\]
+下有极限
+\[
+\lim_{m\to\infty}\mathrm{Succ}_m(\beta_\star m+b)=\mathcal S(b),
+\]
+其中
+\[
+\mathcal S(b)=
+\begin{cases}
+\dfrac{\varphi^2\,2^b}{\sqrt5}, & b\le -\log_2\varphi,\\[1.2ex]
+\dfrac{\varphi\,2^b+\varphi^{-1}}{\sqrt5}, & -\log_2\varphi\le b\le 0,\\[1.2ex]
+1, & b\ge 0.
+\end{cases}
+\]
+特别地，跃迁窗宽度恰为
+\[
+\log_2\varphi,
+\]
+因为 \(\mathcal S(b)\) 只在
+\[
+b\in[-\log_2\varphi,0]
+\]
+上经历非平凡双段跃迁，并从
+\[
+\mathcal S(-\log_2\varphi)=\frac{\varphi}{\sqrt5}
+\]
+单调上升到
+\[
+\mathcal S(0)=1.
+\]
+\end{theorem}
+\begin{proof}
+记
+\[
+s:=2^b.
+\]
+由 \(\beta_\star=\log_2(2/\varphi)\) 可知
+\[
+2^{\beta_\star m+b}=s\left(\frac{2}{\varphi}\right)^m.
+\]
+因此
+\[
+\mathrm{Succ}_m(\beta_\star m+b)
+=
+2^{-m}\,\mathcal C_m^{\mathrm{bin,cont}}\!\left(
+s\left(\frac{2}{\varphi}\right)^m
+\right)
+=
+\mathcal S_m(s),
+\]
+其中 \(\mathcal S_m\) 正是推论
+\ref{cor:xi-foldbin-critical-scale-success-curve-inversion}
+中的连续化临界成功曲线。于是
+\[
+\mathrm{Succ}_m(\beta_\star m+b)\longrightarrow \mathcal S_\infty(s).
+\]
+再把推论
+\ref{cor:xi-foldbin-critical-scale-success-curve-inversion}
+给出的分段极限
+\[
+\mathcal S_\infty(s)=
+\begin{cases}
+\dfrac{\varphi^2}{\sqrt5}\,s, & 0\le s\le \varphi^{-1},\\[6pt]
+\dfrac{\varphi}{\sqrt5}\,s+\dfrac{1}{\varphi\sqrt5}, & \varphi^{-1}\le s\le 1,\\[8pt]
+1, & s\ge 1
+\end{cases}
+\]
+代入 \(s=2^b\)，便得到所示 \(\mathcal S(b)\)。
+
+最后，
+\[
+2^b\le \varphi^{-1}
+\iff
+b\le -\log_2\varphi,
+\]
+\[
+\varphi^{-1}\le 2^b\le 1
+\iff
+-\log_2\varphi\le b\le 0,
+\]
+\[
+2^b\ge 1
+\iff
+b\ge 0,
+\]
+故非平凡跃迁恰发生在区间 \([-\log_2\varphi,0]\)，其宽度即为 \(\log_2\varphi\)。证毕。
+\end{proof}
+
+\begin{theorem}[bin-fold 缩放多重度的 Mellin 极限与对数累积量]\label{thm:xi-binfold-scaled-multiplicity-mellin-cumulants}
+令
+\[
+U_m\sim \mathrm{Unif}\{0,1,\dots,2^m-1\},
+\qquad
+W_m:=\mathrm{Fold}^{\mathrm{bin}}_m(U_m),
+\]
+并定义缩放多重度随机变量
+\[
+Z_m:=\Bigl(\frac{\varphi}{2}\Bigr)^m d_m^{\mathrm{bin}}(W_m).
+\]
+则存在固定紧区间 \(I\Subset(0,\infty)\)，使得当 \(m\) 充分大时 \(Z_m\in I\) 几乎处处成立，并且对任意连续函数 \(f\in C(I)\) 都有
+\[
+\lim_{m\to\infty}\mathbf E[f(Z_m)]
+=
+\frac{\varphi}{\sqrt5}f(1)+\frac{1}{\varphi\sqrt5}f(\varphi^{-1}).
+\]
+特别地，对每个固定复数 \(s\in\CC\)，都有
+\[
+\lim_{m\to\infty}\mathbf E[Z_m^{\,s}]
+=
+M(s):=\frac{\varphi+\varphi^{-(s+1)}}{\sqrt5}.
+\]
+其中 \(M\) 在整个复平面上解析。又因 \(M(0)=1\)，故可在 \(\theta=0\) 的某邻域内取对数支并定义
+\[
+K(\theta):=\log M(\theta)
+=
+\log\!\Bigl(\frac{\varphi+\varphi^{-(\theta+1)}}{\sqrt5}\Bigr).
+\]
+则 \(K\) 在 \(\theta=0\) 邻域内全纯，且 \(\log Z_m\) 的极限对数矩母函数正是 \(K\)；因此全部极限对数累积量由 \(K^{(r)}(0)\) 显式给出。
+\end{theorem}
+\begin{proof}
+仍记
+\[
+c_m:=\Bigl(\frac{2}{\varphi}\Bigr)^m,
+\qquad
+\varepsilon_m:=\Bigl(\frac{\varphi}{2}\Bigr)^m.
+\]
+由定理 \ref{thm:fold-bin-two-state-asymptotic}，对充分大 \(m\) 与全部 \(w\in X_m\) 有
+\[
+Z_m
+=
+\Bigl(\frac{\varphi}{2}\Bigr)^m d_m^{\mathrm{bin}}(w)
+=
+\varphi^{-w_m}\bigl(1+O(\varepsilon_m)\bigr),
+\]
+其中误差在 \(w\) 上一致。故当 \(m\) 充分大时，
+\[
+Z_m\in \Bigl[\frac{\varphi^{-1}}{2},2\Bigr]=:I
+\]
+几乎处处成立。
+
+把稳定词按末位分成两块
+\[
+X_m^{(b)}:=\{w\in X_m:\ w_m=b\},
+\qquad b\in\{0,1\}.
+\]
+则对 \(w\in X_m^{(b)}\)，有一致极限
+\[
+Z_m(w)=\varphi^{-b}+O(\varepsilon_m).
+\]
+另一方面，\(W_m\) 的分布为 bin-fold 推前分布，因此
+\[
+\mathbf P(W_m\in X_m^{(b)})
+=
+\frac{1}{2^m}\sum_{w\in X_m^{(b)}}d_m^{\mathrm{bin}}(w).
+\]
+再由两态一致展开与
+\[
+\#X_m^{(0)}=F_{m+1},
+\qquad
+\#X_m^{(1)}=F_m,
+\]
+得到
+\[
+\mathbf P(W_m\in X_m^{(0)})
+=
+\frac{F_{m+1}}{\varphi^m}\bigl(1+O(\varepsilon_m)\bigr)
+\longrightarrow
+\frac{\varphi}{\sqrt5},
+\]
+\[
+\mathbf P(W_m\in X_m^{(1)})
+=
+\frac{F_m}{\varphi^{m+1}}\bigl(1+O(\varepsilon_m)\bigr)
+\longrightarrow
+\frac{1}{\varphi\sqrt5}.
+\]
+由于 \(f\) 在紧区间 \(I\) 上一致连续，于是
+\[
+\sup_{w\in X_m^{(b)}}|f(Z_m(w))-f(\varphi^{-b})|\longrightarrow 0
+\qquad(b=0,1).
+\]
+将期望按两块拆分并令 \(m\to\infty\)，便得到
+\[
+\lim_{m\to\infty}\mathbf E[f(Z_m)]
+=
+\frac{\varphi}{\sqrt5}f(1)+\frac{1}{\varphi\sqrt5}f(\varphi^{-1}).
+\]
+
+对每个固定 \(s\in\CC\)，在 \(I\subset(0,\infty)\) 上取实对数主支，函数 \(z\mapsto z^s=e^{s\log z}\) 连续有界，故可取 \(f(z)=z^s\)。于是
+\[
+\begin{aligned}
+\lim_{m\to\infty}\mathbf E[Z_m^{\,s}]
+&=
+\frac{\varphi}{\sqrt5}\cdot 1^s
+\;+\;
+\frac{1}{\varphi\sqrt5}\cdot (\varphi^{-1})^s\\
+&=
+\frac{\varphi+\varphi^{-(s+1)}}{\sqrt5}.
+\end{aligned}
+\]
+这就给出整个函数 \(M\)。又因 \(M(0)=1\neq 0\)，故 \(M\) 在 \(0\) 的某邻域内无零点，从而 \(K=\log M\) 在该邻域内全纯。最后，
+\[
+\mathbf E[e^{\theta\log Z_m}]=\mathbf E[Z_m^\theta]\longrightarrow M(\theta)
+\]
+在 \(\theta=0\) 邻域内成立，于是极限对数矩母函数即为 \(K\)，其各阶导数 \(K^{(r)}(0)\) 正是极限对数累积量。证毕。
+\end{proof}
+
+\begin{theorem}[临界容量曲线的分布二阶导数等于极限 defect law 的加权原子谱]\label{thm:xi-binfold-critical-capacity-defect-atomic-law}
+定义归一化临界容量曲线
+\[
+\mathcal C_\infty(z)
+:=
+\frac{\varphi}{\sqrt5}\min\{1,z\}
++
+\frac{1}{\sqrt5}\min\{\varphi^{-1},z\}
+\qquad(z>0).
+\]
+它等价于定理 \ref{thm:xi-foldbin-critical-capacity-broken-line} 的极限轮廓在变量 \(z=e^s\) 下的写法。再令
+\[
+\nu
+:=
+\frac{\varphi}{\sqrt5}\delta_1
++
+\frac{1}{\varphi\sqrt5}\delta_{\varphi^{-1}}
+\]
+为定理 \ref{thm:xi-binfold-scaled-multiplicity-mellin-cumulants} 给出的极限缩放多重度分布。则有精确表示
+\[
+\mathcal C_\infty(z)
+=
+\int_{(0,\infty)}\min\!\Bigl(1,\frac{z}{u}\Bigr)\,\nu(\dd u).
+\]
+并且在分布意义下，
+\[
+-\frac{\dd^2}{\dd z^2}\mathcal C_\infty
+=
+\frac{1}{\sqrt5}\,\delta_{\varphi^{-1}}
++
+\frac{\varphi}{\sqrt5}\,\delta_1
+=
+z^{-1}\nu(\dd z).
+\]
+因此 \(\mathcal C_\infty\) 不仅给出临界容量轮廓，而且完整编码了极限 defect spectrum；其分布二阶导数可无损恢复 \(\nu\)。
+\end{theorem}
+\begin{proof}
+由 \(\nu\) 的两原子表达，
+\[
+\begin{aligned}
+\int_{(0,\infty)}\min\!\Bigl(1,\frac{z}{u}\Bigr)\,\nu(\dd u)
+&=
+\frac{\varphi}{\sqrt5}\min(1,z)
+\;+\;
+\frac{1}{\varphi\sqrt5}\min(1,\varphi z)\\
+&=
+\frac{\varphi}{\sqrt5}\min(1,z)
+\;+\;
+\frac{1}{\sqrt5}\min(\varphi^{-1},z),
+\end{aligned}
+\]
+即得第一式。
+
+再固定 \(u>0\)，考虑函数
+\[
+h_u(z):=\min\!\Bigl(1,\frac{z}{u}\Bigr).
+\]
+则 \(h_u\) 的分布一阶导数为
+\[
+\frac{\dd}{\dd z}h_u(z)=u^{-1}\mathbf 1_{(0,u)}(z),
+\]
+从而二阶分布导数满足
+\[
+\frac{\dd^2}{\dd z^2}h_u(z)=-u^{-1}\delta_u.
+\]
+对 \(\nu\) 积分便得到
+\[
+-\frac{\dd^2}{\dd z^2}\mathcal C_\infty
+=
+\int_{(0,\infty)}u^{-1}\delta_u\,\nu(\dd u)
+=
+z^{-1}\nu(\dd z).
+\]
+最后把 \(\nu\) 的显式形式代回，便有
+\[
+z^{-1}\nu(\dd z)
+=
+\frac{\varphi}{\sqrt5}\delta_1
+\;+\;
+\frac{1}{\varphi\sqrt5}\cdot\varphi\,\delta_{\varphi^{-1}}
+=
+\frac{\varphi}{\sqrt5}\delta_1+\frac{1}{\sqrt5}\delta_{\varphi^{-1}}.
+\]
+故 \(-\mathcal C_\infty''\) 的原子位置与权重恰与 \(\nu\) 一一对应，从而 \(\nu\) 可由 \(\mathcal C_\infty\) 的分布二阶导数唯一恢复。证毕。
+\end{proof}
+
+\endinput

@@ -1,0 +1,358 @@
+\subsubsection{审计核硬化：KL 正交分解、Chernoff 断点相图与共振谱本体}\label{subsubsec:discussion-audit-kernel-hardening-kl-chernoff-resonance}
+如果上一小节已经说明 \(\varphi\) 不是数值巧合，而是由多通道常数级非均匀性共同暴露出来的主导结构根，那么接下来最关键的问题便是：怎样把这种多通道一致性从解释性判断压缩成一个足够硬的审计核。这里不再满足于说“若干指标都像黄金相”，而要进一步要求：这些指标之间能否被组织成一种分解唯一、相图清楚、谱层可对照的证书结构，使得“进入黄金相”与“仍处于分辨率不足相”之间的差别，不再依赖图像直觉，而依赖可重复的判定流程。
+
+本小节所谓“硬化”，就是把原先分散在不同层的偏差量，诸如分布偏差、窗口偏差、谱偏差与回返偏差，重新装配成一个最小但刚性的三元审计核。它由三部分组成：KL 正交分解，回答偏差究竟分布在哪些统计通道中；Chernoff 断点相图，回答在什么分辨率与样本预算制度下系统从一相切换到另一相；共振谱本体，回答多个表示层读到的谱峰究竟是不是同一个本体模态。只有当这三部分同时对齐时，某个结构常数、某个稳定类型分布或某个 primitive 指纹，才真正可以被提升为硬审计对象。
+
+因此，本小节的任务并不是堆叠更多指标，而是把偏差分解、相变定位与谱本体对齐压缩成一个共同证书。为便于后文记号，可把这一三元对象写成
+\[
+\mathfrak K_m
+:=
+\bigl(
+\mathbf I_m,\,
+\mathcal C_m^\star,s_m^\star,\,
+\Sigma_m
+\bigr),
+\]
+其中 \(\mathbf I_m\) 是 KL 正交通道向量，\((\mathcal C_m^\star,s_m^\star)\) 是 Chernoff 断点数据，而 \(\Sigma_m\) 是跨表示的共振谱簇。在本文现有编号链中，这一理念先由均匀基线下的 KL 勾股分解获得最小实现，再由曲率驱动的断点相图给出换相定位，最后由共振窗的谱根几何给出本体约束。下述陈述均直接引用正文与附录中的已编号结论及生成表，不引入新的证明前提。
+
+\paragraph{KL 勾股分解：把微观残差严格外置为可核验字段}
+在固定分辨率 \(m\) 下，读出算子 \(P_m\) 与纤维均匀提升 \(Q_m\) 构成一个可审计的“宏观—微观”接口（\S\ref{subsec:pom-information-ledger}）。
+以 \(\Omega_m\) 的均匀分布 \(u_{\Omega_m}\) 为微态基线，其稳定推前为
+\(
+w_m:=P_m u_{\Omega_m}
+\)
+且 \(w_m(x)=d_m(x)/2^m\)（定理 \ref{thm:pom-kl-pythagoras-uniform}）。
+对任意微观分布 \(\mu\in\Delta(\Omega_m)\)，令其宏观直方图为 \(\pi:=P_m\mu\)，并令 \(\mu^e:=Q_m\pi\) 为同一宏观约束下的纤维条件均匀提升，则到均匀基线的 KL 散度满足精确三项恒等式
+\[
+\boxed{\;
+D_{\mathrm{KL}}(\mu\|u_{\Omega_m})
+=D_{\mathrm{KL}}(\pi\|w_m)\;+\;D_{\mathrm{KL}}(\mu\|\mu^e)\;}
+\]
+（定理 \ref{thm:pom-kl-pythagoras-uniform}）。
+这把“偏离均匀微态”的代价严格分裂为：
+\begin{itemize}
+  \item \textbf{宏观代价} \(D_{\mathrm{KL}}(\pi\|w_m)\)：只依赖稳定层分布 \(\pi\) 相对均匀微态推前 \(w_m\) 的偏离；
+  \item \textbf{微观残差} \(D_{\mathrm{KL}}(\mu\|\mu^e)\)：在固定 \(\pi\) 的约束类内，\(\mu\) 相对其纤维均匀化版本的偏离（纤维内非均匀的平均；引理 \ref{lem:pom-fiberwise-kl}）。
+\end{itemize}
+并且 \(\mu^e\) 同时具有最大熵与 I-投影的严格刻画：
+它是约束集 \(\mathcal{C}_\pi=\{\nu:P_m\nu=\pi\}\) 中唯一的最大熵元，也等价于到 \(u_{\Omega_m}\) 的 KL 最近点（推论 \ref{cor:pom-Iproj-maxent}）。
+因此 KL 勾股分解可作为“正交记录轴”的最小可核验定义：正交轴并非额外叙事坐标，而是投影 \(\mu\mapsto\mu^e\) 之下的残差项 \(D_{\mathrm{KL}}(\mu\|\mu^e)\)，其差额刻画亦是精确的
+\[
+D_{\mathrm{KL}}(\mu\|u_{\Omega_m})-D_{\mathrm{KL}}(\mu^e\|u_{\Omega_m})
+=D_{\mathrm{KL}}(\mu\|\mu^e)
+\]
+（推论 \ref{cor:pom-Iproj-gap-exact}）。
+
+\paragraph{Chernoff 分位证书：由离散曲率 \texorpdfstring{$A_q$}{Aq} 驱动的断点相图}
+把尾部失败率 \(\varepsilon\)、分辨率 \(m\) 与矩阶 \(q\) 的最优设计写成可审计证书，下包络结构会强制出现断点。
+具体地，对已审计的 \(r_q\) 定义割线斜率 \(\beta_q=(\log r_q-\log2)/(q-1)\) 与证书族
+\(
+\gamma_m^{(q)}(\varepsilon)=\beta_q+\frac{1}{m(q-1)}\log\frac{1}{\varepsilon}
+\)，
+其下包络
+\(
+\gamma_m^{\mathrm{cert}}(\varepsilon)=\inf_{q\ge 2}\gamma_m^{(q)}(\varepsilon)
+\)
+是 \(1/m\) 型双曲线族的分段下包络（注 \ref{rem:pom-qstar-phase-diagram-breakpoints}）。
+命题 \ref{prop:pom-breakpoint-curvature-law-Aq} 表明：最优矩阶的跳变完全由一个离散曲率增量标量 \(A_q\) 控制，
+其断点闭式为
+\[
+m_{q\to q+1}(\varepsilon)=\frac{\log(1/\varepsilon)}{A_q},
+\qquad
+A_q=(q-1)(\log r_{q+1}-\log2)-q(\log r_q-\log2),
+\]
+从而 \(q^\star(m,\varepsilon)\) 随 \(m\) 增大按单位步长单调下降，并在断点处出现两点并列最优（注 \ref{rem:pom-qstar-phase-diagram-breakpoints}）。
+在 \(\varepsilon=10^{-6}\) 且 DP 扩展审计 \(q\le 20\) 的范围内，所有断点可由 \(\{r_q\}\) 唯一计算并汇总为表 \ref{tab:fold_collision_qstar_breakpoints_eps1e6_q2_20}；
+例如 \(m\in[513.01,643.28)\) 时 \(q^\star=7\)，而 \(m\ge 5344.31\) 时 \(q^\star=2\)（同一注与该表）。
+在压力几何的连续插值制度下，\(A_q\) 亦可被解释为解析凸压力面的离散曲率采样（注 \ref{rem:pom-breakpoint-curvature-thermo-realization}），从而把“预算设计相图”的折点机制固定为曲率的几何后果。
+
+\paragraph{点积寻址的双预算律：\texorpdfstring{$\mathsf{NULL}$}{NULL} 门控与球面干扰界}
+定理 \ref{thm:spg-double-budget-address-capacity} 将“未同步（统计型 \(\mathsf{NULL}\)）”与“地址碰撞”拆分为一条可组合的双预算律。
+下述几何模型给出一个同型实例：以阈值门控点积检索描述地址选择，并把失败概率分裂为“自身阈下”与“他者干扰”两类预算。
+
+\begin{lemma}[球面点积的指数尾界]\label{lem:discussion-spherical-cap-subgaussian}
+令 \(K\sim\mathrm{Unif}(\mathbb{S}^{d-1})\)，并取任意确定的单位向量 \(q\in\mathbb{S}^{d-1}\)。
+则对任意 \(\tau\in(0,1)\) 有
+\[
+\mathbb{P}\bigl(\langle q,K\rangle\ge \tau\bigr)\ \le\ \exp\!\left(-\frac{(d-1)\tau^2}{2}\right).
+\]
+\end{lemma}
+\begin{proof}
+该不等式是球面帽体测度的标准上界：\(\langle q,K\rangle\) 的分布与 \(d\) 维单位球面上一点的第一坐标同分布，并满足次高斯尾界。
+证毕。
+\end{proof}
+
+\begin{theorem}[阈值门控点积检索的双预算上界]\label{thm:discussion-null-gated-dotproduct-addressability}
+设 \(d\ge 2\)、\(N\ge 1\)、\(\tau\in(0,1)\)。
+令 \(\{k_i\}_{i=1}^{N}\subset\mathbb{S}^{d-1}\) 为独立同分布的均匀随机单位向量（keys）。
+令 \(\{q_i\}_{i=1}^{N}\subset\mathbb{S}^{d-1}\) 为查询向量（queries），并假设对每个 \(i\)，\(q_i\) 与 \(\{k_j:j\neq i\}\) 独立（允许 \(q_i\) 依赖 \(k_i\) 及额外噪声）。
+定义阈值门控检索算子
+\[
+R_{\tau}(q_i):=
+\begin{cases}
+\mathsf{NULL}, & \max_{1\le j\le N}\langle q_i,k_j\rangle<\tau,\\
+\arg\max_{1\le j\le N}\langle q_i,k_j\rangle, & \text{否则}.
+\end{cases}
+\]
+若存在 \(\varepsilon_{\mathrm{null}}\in[0,1]\) 使得对所有 \(i\),
+\[
+\mathbb{P}\bigl(\langle q_i,k_i\rangle<\tau\bigr)\le \varepsilon_{\mathrm{null}},
+\]
+则“至少一次检索失败”（返回 \(\mathsf{NULL}\) 或返回非目标索引）的概率满足显式上界
+\[
+\boxed{\;
+\mathbb{P}\Big(\exists\, i\in[N]:\ R_{\tau}(q_i)\neq i\Big)
+\ \le\
+N\,\varepsilon_{\mathrm{null}}
+\ +\
+N(N-1)\exp\!\left(-\frac{(d-1)\tau^2}{2}\right)\; }.
+\]
+\end{theorem}
+\begin{proof}
+对每个 \(i\) 定义失败事件
+\[
+F_i:=\{\langle q_i,k_i\rangle<\tau\}\ \cup\ \bigcup_{j\neq i}\{\langle q_i,k_j\rangle\ge \tau\}.
+\]
+显然 \(\{R_{\tau}(q_i)\neq i\}\subseteq F_i\)，故由并集界
+\[
+\mathbb{P}\Big(\exists\, i:\ R_{\tau}(q_i)\neq i\Big)\le \sum_{i=1}^{N}\mathbb{P}(F_i).
+\]
+对固定 \(i\)，第一项由假设得 \(\mathbb{P}(\langle q_i,k_i\rangle<\tau)\le \varepsilon_{\mathrm{null}}\)。
+另一方面，条件于 \(q_i\)，由独立性知 \(\langle q_i,k_j\rangle\)（\(j\neq i\)）与引理 \ref{lem:discussion-spherical-cap-subgaussian} 的情形一致，故
+\[
+\mathbb{P}(\langle q_i,k_j\rangle\ge \tau\mid q_i)\le \exp\!\left(-\frac{(d-1)\tau^2}{2}\right).
+\]
+于是 \(\mathbb{P}(F_i)\le \varepsilon_{\mathrm{null}}+(N-1)\exp(-\frac{(d-1)\tau^2}{2})\)，对 \(i\) 求和得结论。证毕。
+\end{proof}
+
+\begin{corollary}[固定置信度下的最小 key 维数门槛]\label{cor:discussion-null-gated-dotproduct-min-d}
+在定理 \ref{thm:discussion-null-gated-dotproduct-addressability} 的条件下，给定容忍度 \(\delta\in(0,1)\)。
+若
+\[
+\varepsilon_{\mathrm{null}}\le \frac{\delta}{2N},
+\qquad
+d\ \ge\ 1+\frac{2}{\tau^2}\log\!\Big(\frac{2N^2}{\delta}\Big),
+\]
+则
+\[
+\mathbb{P}\bigl(\exists i:\ R_\tau(q_i)\neq i\bigr)\le \delta.
+\]
+当取 \(N=\card{X_m}=F_{m+2}\sim \varphi^m\)（\S\ref{subsec:folding-fibonacci-stable-syntax}）时，上式给出 \(d=\Omega(m)\) 的线性门槛。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:discussion-null-gated-dotproduct-addressability} 及 \(N(N-1)\le N^2\) 得
+\[
+\mathbb{P}(\exists i:\ R_\tau(q_i)\neq i)\le N\varepsilon_{\mathrm{null}}+N^2\exp\!\left(-\frac{(d-1)\tau^2}{2}\right).
+\]
+令两项分别不超过 \(\delta/2\) 得条件与结论。证毕。
+\end{proof}
+
+\paragraph{折叠碰撞矩对“叠加干扰”的矩控制：占用数与内禀碰撞下界}
+沿 \S\ref{subsubsec:pom-collision-kernel-family} 的记号，\(S_q(m)=\sum_{x\in X_m}d_m(x)^q\) 是 Fold 纤维的 \(q\)-重碰撞矩。
+下述陈述把 \(S_q(m)\) 直接转写为“多窗口叠加时的干扰事件”上界，并表明任何只依赖稳定类型的表征都不能降低内禀 \(q\)-碰撞率。
+
+\begin{proposition}[多窗口占用尾界与 \(S_q(m)\) 的精确矩恒等式]\label{prop:discussion-fold-occupancy-tq-moment}
+固定分辨率 \(m\) 并取 \(L\ge 1\)。
+令 \(\omega_1,\dots,\omega_L\) 独立同分布且服从 \(\mathrm{Unif}(\Omega_m)\)，并令 \(X_i:=\Fold_m(\omega_i)\in X_m\)。
+对每个 \(x\in X_m\) 定义占用数 \(C_x:=|\{i\in[L]:X_i=x\}|\)。
+对整数 \(q\ge 2\) 定义
+\[
+T_q:=\sum_{x\in X_m}(C_x)_q,\qquad (n)_q:=n(n-1)\cdots(n-q+1).
+\]
+则有恒等式
+\[
+\boxed{\;\mathbb{E}[T_q]=(L)_q\cdot \frac{S_q(m)}{2^{qm}}\;}
+\]
+并推出尾界
+\[
+\boxed{\;\mathbb{P}\Big(\max_{x\in X_m}C_x\ge q\Big)\ \le\ (L)_q\cdot \frac{S_q(m)}{2^{qm}}\; }.
+\]
+\end{proposition}
+\begin{proof}
+对固定 \(x\)，\((C_x)_q\) 计数满足 \(X_{i_1}=\cdots=X_{i_q}=x\) 的互异有序 \(q\)-元组 \((i_1,\dots,i_q)\)；共有 \((L)_q\) 个有序 \(q\)-元组。
+在均匀微态下 \(\mathbb{P}(X_1=x)=d_m(x)/2^m\)，故
+\[
+\mathbb{E}[(C_x)_q]=(L)_q\Big(\frac{d_m(x)}{2^m}\Big)^q.
+\]
+对 \(x\) 求和得到 \(\mathbb{E}[T_q]=(L)_q\sum_x d_m(x)^q/2^{qm}=(L)_q S_q(m)/2^{qm}\)。
+若 \(\max_x C_x\ge q\)，则必存在 \(x\) 使 \((C_x)_q\ge 1\)，从而 \(T_q\ge 1\)；由 Markov 不等式
+\(\mathbb{P}(\max_x C_x\ge q)\le \mathbb{E}[T_q]\) 得尾界。证毕。
+\end{proof}
+
+\begin{proposition}[稳定表征的不可约碰撞下界]\label{prop:discussion-fold-representation-qcollision-lower-bound}
+在命题 \ref{prop:discussion-fold-occupancy-tq-moment} 的随机模型下，令 \(Z=g(X)\) 为任意可测表征（即 \(Z\) 仅依赖稳定类型 \(X=\Fold_m(\omega)\)）。
+则对任意整数 \(q\ge 2\) 有普适下界
+\[
+\boxed{\;
+\mathbb{P}(Z_1=\cdots=Z_q)\ \ge\ \mathbb{P}(X_1=\cdots=X_q)
+\ =\ \sum_{x\in X_m}\Big(\frac{d_m(x)}{2^m}\Big)^q
+\ =\ \frac{S_q(m)}{2^{qm}}\; }.
+\]
+且当 \(g\) 在 \(X_m\) 上为单射时取等号。
+\end{proposition}
+\begin{proof}
+若 \(X_1=\cdots=X_q\)，则 \(Z_1=\cdots=Z_q\) 必成立，故概率下界由事件包含关系直接得到。
+在均匀微态下 \(\mathbb{P}(X=x)=d_m(x)/2^m\)，从而
+\(\mathbb{P}(X_1=\cdots=X_q)=\sum_x \mathbb{P}(X=x)^q=S_q(m)/2^{qm}\)。
+若 \(g\) 单射，则两事件等价，从而取等号。证毕。
+\end{proof}
+
+\begin{corollary}[内禀 \(q\)-碰撞率的指数律与可存关系数门槛]\label{cor:discussion-fold-intrinsic-qcollision-threshold}
+沿 \S\ref{subsubsec:pom-collision-kernel-family} 记
+\(
+r_q:=\lim_{m\to\infty}S_q(m)^{1/m}
+\)
+与
+\(
+h_q:=\log(2^q/r_q)
+\)。
+则当 \(m\to\infty\) 有渐近指数律
+\[
+\frac{S_q(m)}{2^{qm}}=\exp\bigl(-h_q\,m+o(m)\bigr).
+\]
+进一步，令 \(L=L(m)\) 并考虑事件 \(\{\max_x C_x\ge q\}\)，则命题 \ref{prop:discussion-fold-occupancy-tq-moment} 给出
+\[
+\mathbb{P}\Big(\max_{x\in X_m}C_x\ge q\Big)
+\ \le\
+\exp\Big(q\log L-h_q\,m+o(m)\Big).
+\]
+因此若存在 \(\eta>0\) 使 \(\log L\le (\frac{h_q}{q}-\eta)m\)，则 \(\mathbb{P}(\max_x C_x\ge q)\to 0\)。
+\end{corollary}
+\begin{proof}
+指数律由 \(S_q(m)=r_q^m\cdot e^{o(m)}\) 与 \(h_q=\log(2^q/r_q)\) 直接推出；尾界把 \((L)_q=\exp(q\log L+o(\log L))\) 代入命题 \ref{prop:discussion-fold-occupancy-tq-moment} 即得。证毕。
+\end{proof}
+
+\paragraph{账本残差得分的 Bayes 因子化：地址不变族的互信息分解}
+在固定分辨率 \(m\) 下，若任务族在稳定层的直方图 \(\pi=P_m\mu\) 上保持不变，则任务信息只能通过纤维内残差外置；
+这一点可由账本残差得分给出完全显式的 Bayes 因子化，并把平均残差代价分解为互信息与一个 I-投影缺口项。
+
+\begin{theorem}[地址不变族的后验因子化与残差--互信息恒等式]\label{thm:discussion-ledger-residual-mutualinfo-factorization}
+固定分辨率 \(m\)。
+令 \(\Theta\) 为随机参数，先验为 \(\rho\)。
+对每个 \(\theta\) 令 \(A\in\Omega_m\) 在条件分布 \(\mu_\theta\in\Delta(\Omega_m)\) 下抽样，并记稳定推前 \(\pi_\theta:=P_m\mu_\theta\in\Delta(X_m)\)。
+假设存在 \(\pi\in\Delta(X_m)\) 使得 \(\pi_\theta\equiv \pi\) 与 \(\theta\) 无关，并令 \(\mu^e:=Q_m\pi\) 为纤维条件均匀提升。
+定义账本残差得分
+\[
+\ell_\theta(a):=\log\frac{\mu_\theta(a)}{\mu^e(a)}\qquad(a\in\Omega_m).
+\]
+则：
+\begin{enumerate}
+  \item \textbf{（后验因子化）}对任意 \(a\in\Omega_m\)，Bayes 后验满足
+  \[
+  \rho(d\theta\mid A=a)\ \propto\ \rho(d\theta)\,\exp\!\bigl(\ell_\theta(a)\bigr).
+  \]
+  \item \textbf{（残差--互信息分解）}令混合分布 \(\bar\mu:=\int \mu_\theta\,\rho(d\theta)\)。
+  则有恒等式
+  \[
+  \boxed{\;
+  \mathbb{E}_{\Theta}\bigl[D_{\mathrm{KL}}(\mu_\Theta\ \|\ \mu^e)\bigr]
+  \ =\ I(\Theta;A)\ +\ D_{\mathrm{KL}}(\bar\mu\ \|\ \mu^e)\;}
+  \]
+  其中互信息 \(I(\Theta;A)\) 按联合分布 \(\rho(d\theta)\mu_\theta(a)\) 定义。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(1) 由 Bayes 公式 \(\rho(d\theta\mid a)\propto \rho(d\theta)\mu_\theta(a)\)。
+将 \(\mu_\theta(a)=\mu^e(a)\exp(\ell_\theta(a))\) 代入，且 \(\mu^e(a)\) 与 \(\theta\) 无关，故吸收进比例常数即得。
+\par
+(2) 由定义
+\[
+\mathbb{E}_{\Theta}D_{\mathrm{KL}}(\mu_\Theta\|\mu^e)
+=\mathbb{E}_{\Theta,A}\Big[\log\frac{\mu_\Theta(A)}{\mu^e(A)}\Big].
+\]
+加减 \(\log\bar\mu(A)\) 得
+\[
+\mathbb{E}_{\Theta,A}\Big[\log\frac{\mu_\Theta(A)}{\bar\mu(A)}\Big]
++\mathbb{E}_{\Theta,A}\Big[\log\frac{\bar\mu(A)}{\mu^e(A)}\Big]
+=I(\Theta;A)+D_{\mathrm{KL}}(\bar\mu\|\mu^e).
+\]
+其中第二项与 \(\Theta\) 无关，化为 \(A\sim\bar\mu\) 下的 KL 散度。证毕。
+\end{proof}
+
+\begin{corollary}[稳定可见层对地址不变族的 Bayes 不可能性]\label{cor:discussion-address-invariant-no-bayes-learning-visible-layer}
+在定理 \ref{thm:discussion-ledger-residual-mutualinfo-factorization} 的条件下，令 \(X=\Fold_m(A)\)。
+则 \(\Theta\perp X\)，从而对任意仅依赖稳定类型的表征 \(Z=g(X)\) 都有
+\[
+I(\Theta;Z)=0,\qquad \rho(d\theta\mid Z)=\rho(d\theta).
+\]
+\end{corollary}
+\begin{proof}
+由假设 \(\pi_\theta\equiv\pi\) 得 \(X\) 的分布与 \(\theta\) 无关，故 \(\Theta\perp X\)。
+可测映射保持独立性，因而 \(\Theta\perp Z=g(X)\)，互信息为零且后验等于先验为直接推论。证毕。
+\end{proof}
+
+\begin{proposition}[Zeckendorf 同余一致性诱导的地址刚性]\label{prop:discussion-zeckendorf-congruence-address-rigidity}
+固定分辨率 \(m\) 并沿 \S\ref{subsec:emergent-arithmetic-zeckendorf-value-address} 的记号，对 \(w\in X_m\) 记
+\(
+V_m(w)=\sum_{k=1}^m w_k F_{k+1}
+\)
+。
+设 \(\Phi:\Omega_m\to X_m\) 满足同余一致性约束
+\[
+V_m(\Phi(\omega))\equiv N(\omega)\pmod{F_{m+2}}\qquad(\forall\,\omega\in\Omega_m),
+\]
+其中 \(N(\omega)=\sum_{k=1}^m \omega_k F_{k+1}\) 为定义 \ref{def:fold-word} 的 Fibonacci 加权值。
+则必有
+\[
+\Phi(\omega)=\Fold_m(\omega)\qquad(\forall\,\omega\in\Omega_m).
+\]
+\end{proposition}
+\begin{proof}
+由引理 \ref{lem:zeckendorf-range-bijection}，映射 \(V_m:X_m\to\{0,1,\dots,F_{m+2}-1\}\) 为双射；
+因此对每个 \(\omega\)，同余条件唯一确定 \(\Phi(\omega)\) 必等于 \(w\bigl(N(\omega)\bmod F_{m+2}\bigr)\)（\S\ref{subsec:emergent-arithmetic-zeckendorf-value-address}）。
+另一方面，命题 \ref{prop:pom-fold-as-section} 表明 \(\Fold_m(\omega)\) 正是余数类 \(N(\omega)\bmod F_{m+2}\) 的规范 Zeckendorf 代表在长度 \(m\) 的截断；
+在 \S\ref{subsec:emergent-arithmetic-zeckendorf-value-address} 的记号下即为 \(w(N(\omega)\bmod F_{m+2})\)。
+两者逐点相等即得结论。证毕。
+\end{proof}
+
+\begin{remark}[与外部注意力/精调分析的对接]
+定理 \ref{thm:spg-double-budget-address-capacity}、定理 \ref{thm:discussion-null-gated-dotproduct-addressability} 与命题 \ref{prop:discussion-zeckendorf-congruence-address-rigidity} 给出同一结构图景：地址层的失败可分解为 \(\mathsf{NULL}\) 与碰撞两类预算，而在同余一致性口径下地址映射本身是刚性的。
+在该语义下，任何保持一致性的可变更只能发生在地址之后的残差/值通道；与线性注意力模型中“限制为 value 更新可保留 in-context 能力”的理论结论可并列比较（\cite{LeeSohnLee2026FinetuneNoForgetICLLinearAttention}），并与 ICL 的 Bayes 因子化视角相容（\cite{ReuterRudnerFortuinRugamer2025FullBayesICL}）。
+关系识别任务的容量相图与相变阈值口径可参考 \cite{Adler2026CapacityRationaleMultiHeadAttention}。
+\end{remark}
+
+\begin{conjecture}[Hankel 共振坍缩诱导的头预算相变阈值]\label{conj:discussion-hankel-collapse-head-budget-phase-transition}
+固定整数 \(q\ge 2\)，记 \(d_q\) 为碰撞矩序列 \(m\mapsto S_q(m)\) 的最小整系数递推阶数（等价地 Hankel 最小实现维数；见定理 \ref{thm:hankel-rank-minimal} 与命题 \ref{prop:pom-hankel-realization-protocol}），并记名义模态截断维数为 \(2\lfloor q/2\rfloor+1\)，其坍缩缺陷为
+\[
+\Delta_q:=(2\lfloor q/2\rfloor+1)-d_q\ge 0
+\]
+（例如共振窗口中的显式数据见表 \ref{tab:fold_collision_resonance_gap_delta_q_9_17}）。
+猜想：若学习/推断任务要求模型在 in-context 过程中稳定估计（或隐式保持）\(\{S_q(m)\}_{m}\) 的高阶碰撞统计，则存在以 \(d_q\) 为临界参数的容量相变：
+\begin{itemize}
+  \item 当可独立编码的有效头预算严格低于 \(d_q\) 时，估计误差在 \(m\) 增大下无法保持一致收敛（干扰项不能被消去）；
+  \item 当有效头预算达到或超过 \(d_q\) 时，存在一族实现使误差随 \(m\) 衰减，并且其主指数与内禀碰撞率 \(\exp(-h_q m)\) 同阶对齐（推论 \ref{cor:discussion-fold-intrinsic-qcollision-threshold}）。
+\end{itemize}
+该猜想把“共振坍缩 \(\Delta_q>0\)”解释为：高阶统计的闭合所需的最小可观测维数由 \(d_q\)（而非名义模态数 \(2\lfloor q/2\rfloor+1\)）决定，从而在头预算相图上产生离散阈值点；并与多头注意力容量阈值的相变口径形成可比较框架（\cite{Adler2026CapacityRationaleMultiHeadAttention}）。
+\end{conjecture}
+
+\paragraph{共振窗的本体：谱近退化而非 Hankel 原始退化}
+在共振窗口 \(q=9,\dots,17\) 的已审计设定下，Hankel-null 证书虽非空（表 \ref{tab:fold_collision_resonance_nullmodes_q9_17}），
+但其“原始商空间维数”恒为零：
+\[
+\Delta_{\mathrm{prim}}(q)=0
+\]
+（推论 \ref{cor:pom-hankel-null-no-primitive-residual}；并见注 \ref{rem:pom-nullmodes-recurrence-plus-signature} 与表 \ref{tab:fold_collision_resonance_nullmodes_primitive_quotient_q9_17} 的显式倍乘分解）。
+等价地，任意 NullMode 所诱导的湮灭多项式均可写成 \(A^{(j)}(\lambda)=Q^{(j)}(\lambda)P_q(\lambda)\)（余式为零），不存在任何不由最小递推特征多项式 \(P_q\) 所解释的“原始”零模态。
+因此在该窗口内，共振不应被理解为“额外 Hankel 约束方向”的出现，而应回到谱根几何的近退化机制：
+影子谱包给出 \(|\mu_q|/r_{q-2}\uparrow 1\) 与窄角窗相位漂移（注 \ref{rem:pom-shadow-spectral-packet-q9-17}、注 \ref{rem:pom-resonance-trimodal-phase-lock}），并由代数相位锁定残差 \((\delta\theta_q,\rho_q)\) 形成可复算的一维强度坐标（表 \ref{tab:fold_collision_shadow_spectral_packet_algebraic_phase_residual_q9_17}；并见线性化常数与二次误差界：命题 \ref{prop:pom-phase-residual-linearization-sqrt15}）。
+这一路径在概念上与注 \ref{rem:pom-resonance-spectral-not-hankel-degeneracy} 的总结一致：强共振可以在谱侧显影为贴边慢模态与锁定相位，但在当前窗口内并不产生新的 Hankel 原始约束；
+因此若希望“消解共振”，只能通过改变生成核从而改变 \(P_q\)，或显式外置新通道，而不能依赖在同一 \(P_q\) 下挖掘额外的 Hankel 退化。
+
+\paragraph{审计核的最小字段化输出（硬接口）}
+上述三条线与 \S\ref{subsubsec:discussion-audit-kernel-closed-loop} 的曲率误差条、Hankel 正规形与算术刚性字段可并列组织为一个更硬的审计核输出。就最小字段化口径而言，可把它压缩为
+\[
+\mathfrak K_m
+:=
+\bigl(
+\mathbf I_m,\,
+\mathcal C_m^\star,s_m^\star,\,
+\Sigma_m
+\bigr),
+\]
+并把它理解为三个同时需要通过的字段簇：
+\begin{itemize}
+  \item \textbf{信息正交分解字段：}输出 \(\bigl(D_{\mathrm{KL}}(\mu\|u_{\Omega_m}),D_{\mathrm{KL}}(\pi\|w_m),D_{\mathrm{KL}}(\mu\|\mu^e)\bigr)\) 并强制满足勾股恒等式（定理 \ref{thm:pom-kl-pythagoras-uniform}），同时输出 I-投影/最大熵判据（推论 \ref{cor:pom-Iproj-maxent}）。
+  \item \textbf{矩阶设计字段：}以已审计 \(\{r_q\}\) 为输入，输出离散曲率 \(A_q\)、断点 \(m_{q\to q+1}(\varepsilon)\) 与相图 \(q^\star(m,\varepsilon)\)（命题 \ref{prop:pom-breakpoint-curvature-law-Aq}；注 \ref{rem:pom-qstar-phase-diagram-breakpoints}；表 \ref{tab:fold_collision_qstar_breakpoints_eps1e6_q2_20}）。
+  \item \textbf{共振谱字段与原始性字段：}输出 \(\Delta_{\mathrm{prim}}(q)\) 与倍乘分解核验（推论 \ref{cor:pom-hankel-null-no-primitive-residual}；表 \ref{tab:fold_collision_resonance_nullmodes_primitive_quotient_q9_17}），并并列输出谱包几何与相位残差证书（注 \ref{rem:pom-shadow-spectral-packet-q9-17}；表 \ref{tab:fold_collision_shadow_spectral_packet_algebraic_phase_residual_q9_17}）。
+\end{itemize}
+若某候选机制只在计数比值或单一偏差曲线层面接近黄金相，而 \(\mathbf I_m\) 仍在高阶残差通道弥散、\((\mathcal C_m^\star,s_m^\star)\) 尚未脱离欠分辨锁定区，或 \(\Sigma_m\) 只在某一表示层出现而不能跨表示对齐，则它只能被视为软相似，而不能算作硬审计通过。任一字段稳定失配都给出实现中立的否证接口，从而把“外置、不泄漏、预算设计与共振来源”的解释性表述转写为可复核的证书一致性判据。

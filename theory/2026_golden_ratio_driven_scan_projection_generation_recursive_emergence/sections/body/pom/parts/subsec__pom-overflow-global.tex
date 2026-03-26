@@ -1,0 +1,187 @@
+\subsubsection{全局溢出比特计数：\texorpdfstring{$\#\{b=1\}=\lfloor 2^m/3\rfloor$}{b=1 count = floor(2^m/3)}}\label{subsec:pom-overflow-global}
+引理 \ref{lem:pom-one-bit} 表明：对任意窗口 \(\omega\in\Omega_m\)，超出前 \(m\) 位的“隐藏信息”至多是一位 \(b(\omega)\in\{0,1\}\)（即是否出现权重 \(F_{m+2}\) 的溢出位）。该隐藏位在单条纤维内部解释了“二支分裂/冻结顶端候选位点”的结构来源（注 \ref{rem:pom-overflow-rec}）。下面给出一个更强的全局闭式：在\emph{全部}微态上，\(b=1\) 的出现率满足精确几何级数公式。
+
+\begin{definition}[全局溢出计数]\label{def:pom-overflow-global-count}
+定义
+\[
+B_m:=\#\{\omega\in\Omega_m:\ b(\omega)=1\}.
+\]
+\end{definition}
+
+\begin{theorem}[全局溢出比特的精确闭式]\label{thm:pom-overflow-global-count}
+对所有 \(m\ge 1\)，有
+\[
+\boxed{\;
+B_m=\left\lfloor\frac{2^m}{3}\right\rfloor\;}
+\]
+从而对均匀窗口 \(\omega\sim\mathrm{Unif}(\Omega_m)\) 有
+\[
+\mathbb{P}[b(\omega)=1]=\frac{1}{3}+O(2^{-m}),
+\qquad
+\left|\mathbb{P}[b(\omega)=1]-\frac{1}{3}\right|\le 2^{-m}.
+\]
+\end{theorem}
+\begin{proof}
+由引理 \ref{lem:pom-one-bit}，并用 \(0\le V_m(\Fold_m(\omega))<F_{m+2}\)，可知
+\[
+b(\omega)=1
+\quad\Longleftrightarrow\quad
+N(\omega)\ge F_{m+2}.
+\]
+令 \(\omega=\omega_1\cdots\omega_m\)。
+
+\textbf{(1) 必须 \(\omega_m=1\)。}
+若 \(\omega_m=0\)，则
+\(
+N(\omega)\le \sum_{k=1}^{m-1}F_{k+1}=F_{m+2}-2<F_{m+2}
+\)，不可能溢出。
+
+\textbf{(2) 递推：\(B_m=2^{m-2}+B_{m-2}\)。}
+现令 \(\omega_m=1\)。
+若 \(\omega_{m-1}=1\)，则
+\(
+N(\omega)\ge F_{m+1}+F_m=F_{m+2}
+\)
+必溢出，前 \(m-2\) 位任意，贡献 \(2^{m-2}\)。
+若 \(\omega_{m-1}=0\)，则
+\[
+N(\omega)\ge F_{m+2}
+\ \Longleftrightarrow\
+\sum_{k=1}^{m-2}\omega_kF_{k+1}\ge F_m.
+\]
+右侧条件只涉及长度 \(m-2\) 的窗口值与阈值 \(F_m=F_{(m-2)+2}\)，因此计数恰为 \(B_{m-2}\)。
+合并得 \(B_m=2^{m-2}+B_{m-2}\)，并由直接枚举得初值 \(B_1=0,B_2=1\)。
+
+\textbf{(3) 解出闭式并取整。}
+对 \(m=2k\) 偶数，迭代得
+\[
+B_{2k}=\sum_{j=0}^{k-1}4^j=\frac{4^k-1}{3}=\frac{2^{2k}-1}{3}.
+\]
+对 \(m=2k+1\) 奇数，迭代得
+\[
+B_{2k+1}=2\sum_{j=0}^{k-1}4^j=\frac{2^{2k+1}-2}{3}.
+\]
+两式等价于 \(B_m=\lfloor 2^m/3\rfloor\)（注意 \(2^m\bmod 3\in\{1,2\}\)）。
+概率估计由
+\(
+\bigl|B_m/2^m-1/3\bigr|\le 1/2^m
+\)
+立得。证毕。
+\end{proof}
+
+\begin{proposition}[隐藏位的二步递推与首达门控判别]\label{prop:pom-hidden-bit-first-non10-gate}
+对每个 \(m\ge 1\)，定义（与引理 \ref{lem:pom-one-bit} 的 \(b(\omega)\) 同义的）长度依赖隐藏位
+\[
+b_m(\omega):=\ind_{\{N(\omega)\ge F_{m+2}\}}\qquad(\omega\in\Omega_m).
+\]
+则对任意 \(m\ge 3\) 与任意 \(\omega=\omega_1\cdots\omega_m\in\Omega_m\)，有严格递推
+\[
+\boxed{\;
+b_m(\omega_1,\dots,\omega_m)
+=\omega_m\ \wedge\ \bigl(\ \omega_{m-1}\ \vee\ b_{m-2}(\omega_1,\dots,\omega_{m-2})\ \bigr)\;}
+\]
+并且基例为 \(b_1\equiv 0\)，以及
+\(
+b_2(\omega_1,\omega_2)=\ind_{\{(\omega_2,\omega_1)=(1,1)\}}
+\)。
+\par
+进一步，把 \(\omega\) 自高位起按对分组：
+\[
+(\omega_m,\omega_{m-1}),\ (\omega_{m-2},\omega_{m-3}),\ \dots,
+\]
+并令 \(j\) 为使第 \(j\) 对不等于 \((1,0)\) 的最小指标（若所有对均为 \((1,0)\) 直至用尽，则约定 \(j=\infty\)）。
+则有首达门控判别：
+\[
+\boxed{\;
+b_m(\omega)=1\quad\Longleftrightarrow\quad j<\infty\ \text{且第 \(j\) 对等于 }(1,1).\;}
+\]
+当 \(j=\infty\) 时恒有 \(b_m(\omega)=0\)。
+\end{proposition}
+
+\begin{proof}
+递推式已在定理 \ref{thm:pom-overflow-global-count} 的证明中等价推得：当 \(\omega_m=0\) 时必有 \(N(\omega)<F_{m+2}\)，从而 \(b_m(\omega)=0\)；
+当 \(\omega_m=1\) 时，
+\(
+N(\omega)=F_{m+1}+N(\omega_1,\dots,\omega_{m-1})
+\)
+且 \(F_{m+2}=F_{m+1}+F_m\)，故 \(b_m(\omega)=1\) 当且仅当 \(N(\omega_1,\dots,\omega_{m-1})\ge F_m\)。
+再写
+\(
+N(\omega_1,\dots,\omega_{m-1})=\omega_{m-1}F_m+N(\omega_1,\dots,\omega_{m-2})
+\)，并注意 \(F_m=F_{(m-2)+2}\)，即得所示二步布尔递推与基例。
+\par
+首达门控判别由对该递推迭代展开得到：若最高对为 \((1,1)\) 则立即触发 \(b_m=1\)；
+若最高对首位为 \(0\) 则 \(\omega_m=0\) 强制 \(b_m=0\)；
+唯一的延迟情形为最高对为 \((1,0)\)，此时递推把判定降到余下的长度 \(m-2\) 前缀并保持同型。
+归纳即得。证毕。
+\end{proof}
+
+\begin{corollary}[隐藏位触发位置的几何律与门控局部性]\label{cor:pom-hidden-bit-trigger-geometry-law}
+在均匀微态 \(\omega\sim\mathrm{Unif}(\Omega_m)\) 下，令 \(n:=\lfloor m/2\rfloor\)。
+定义随机变量 \(K\in\{0,1,\dots,n-1\}\cup\{\infty\}\) 为“自最高对起连续出现 \((1,0)\) 的对数”（若全部 \(n\) 对均为 \((1,0)\) 则 \(K=\infty\)）。
+则对每个 \(0\le k\le n-1\) 有精确概率
+\[
+\boxed{\;\PP(K=k,\ b_m=1)=4^{-(k+1)}.\;}
+\]
+从而
+\[
+\PP(b_m=1)=\sum_{k=0}^{n-1}4^{-(k+1)}=\frac13\bigl(1-4^{-n}\bigr),
+\qquad
+\PP(K=\infty)=4^{-n}.
+\]
+并且事件 \(\{b_m=1\}\) 的判定仅依赖于最高端的 \(K+1\) 个比特对；其余低位比特在该事件上不产生影响。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:pom-hidden-bit-first-non10-gate}，
+事件 \(\{K=k,\ b_m=1\}\) 等价于“前 \(k\) 个对均为 \((1,0)\)，而第 \(k+1\) 个对为 \((1,1)\)”。
+在均匀基线下，各对独立且等概率取 \(\{00,01,10,11\}\)，故该事件概率为 \((1/4)^k(1/4)=4^{-(k+1)}\)。
+对 \(k\) 求和给出 \(\PP(b_m=1)\)，而 \(\PP(K=\infty)=4^{-n}\) 为“全部 \(n\) 对均为 \((1,0)\)”。
+门控局部性由同一首达判别直接推出。证毕。
+\end{proof}
+
+\begin{theorem}[隐藏位对远端信息的指数去耦合]\label{thm:pom-hidden-bit-exponential-decoupling-low-bits}
+在均匀微态 \(\omega\sim\mathrm{Unif}(\Omega_m)\) 下，固定 \(k\ge 1\)。
+令 \(\mathcal{F}^{(k)}_{\mathrm{low}}\) 为由最低 \(m-2k\) 位生成的 \(\sigma\)-代数（即去掉最高 \(k\) 个比特对后的剩余坐标）。
+则对任意事件 \(A\in\mathcal{F}^{(k)}_{\mathrm{low}}\)，成立绝对相关界
+\[
+\boxed{\;
+\bigl|\PP(b_m=1,\ A)-\PP(b_m=1)\PP(A)\bigr|\ \le\ 4^{-k}.\;}
+\]
+\end{theorem}
+
+\begin{proof}
+令 \(E_k\) 为“最高 \(k\) 个对全为 \((1,0)\)”事件，则 \(\PP(E_k)=4^{-k}\)。
+在补事件 \(E_k^{\mathrm c}\) 上，\(b_m\) 由不超过第 \(k\) 个对处的首次非 \((1,0)\) 对决定（命题 \ref{prop:pom-hidden-bit-first-non10-gate}），
+从而 \(\ind_{\{b_m=1\}}\ind_{E_k^{\mathrm c}}\) 仅依赖于最高 \(2k\) 位；而 \(A\) 仅依赖低位 \(m-2k\) 位。
+由独立性得
+\(
+\PP(b_m=1,\ A,\ E_k^{\mathrm c})=\PP(b_m=1,\ E_k^{\mathrm c})\PP(A)
+\)。
+因此
+\[
+\PP(b_m=1,A)-\PP(b_m=1)\PP(A)
+=\PP(b_m=1,A,E_k)-\PP(b_m=1,E_k)\PP(A),
+\]
+其绝对值不超过 \(\PP(E_k)\le 4^{-k}\)。证毕。
+\end{proof}
+
+\begin{corollary}[极限密度与"非均匀的一比特"]\label{cor:pom-hidden-bit-entropy}
+在 $\Omega_m$ 上取均匀分布，则
+$$
+\mathbb{P}[b(\omega)=1]=\frac{|B_m|}{2^m}
+=\frac{1}{3}-\frac{\varepsilon_m}{3\cdot 2^m},
+$$
+其中 $\varepsilon_m=1$ 当 $m$ 为偶数、$\varepsilon_m=2$ 当 $m$ 为奇数。因而
+$$
+\lim_{m\to\infty}\mathbb{P}[b(\omega)=1]=\frac{1}{3},\qquad
+\lim_{m\to\infty}\mathbb{P}[b(\omega)=0]=\frac{2}{3}.
+$$
+进一步，其二元熵（以比特计）趋于
+$$
+H_2(b)
+:=-\frac{1}{3}\log_2\frac{1}{3}-\frac{2}{3}\log_2\frac{2}{3}
+\approx 0.9183.
+$$
+\end{corollary}
+

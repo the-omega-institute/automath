@@ -1,0 +1,423 @@
+\paragraph{Replay 可逆化的 prime-register 终端结构：Gödel 编码、CRT 预算与坏素门槛}
+以下结果在折叠--外置范式内，把 replay 证书、Gödel--prime 整数化、分位 CRT 预算、分层投影合成与 Lee--Yang 坏素门槛组织为同一条可审计链条。
+
+\begin{theorem}[Replay-可逆化证书的 Gödel--Prime 终端性]\label{thm:xi-replay-godel-prime-terminality}
+设 \(\mathcal E\) 为可数事件字母表，\(\mathrm{code}:\mathcal E\to\mathbb N_{\ge1}\) 为单射，\((p_t)_{t\ge1}\) 为素数序列。
+定义
+\[
+\mathrm{Enc}_{\mathrm{PR}}:\mathcal E^{<\omega}\to \mathbb N^{(\mathbb P)},
+\qquad
+\mathrm{Enc}_{\mathrm{PR}}(e_1,\dots,e_T)(p_t):=
+\begin{cases}
+\mathrm{code}(e_t),&1\le t\le T,\\
+0,&t>T,
+\end{cases}
+\]
+并记
+\[
+\mathrm{PR}(\mathcal E):=\operatorname{Im}\!\bigl(\mathrm{Enc}_{\mathrm{PR}}\bigr),
+\qquad
+\mathrm{Dec}_{\mathrm{PR}}:=\left.\mathrm{Enc}_{\mathrm{PR}}^{-1}\right|_{\mathrm{PR}(\mathcal E)}.
+\]
+
+设 \(\pi:\Omega\to X\) 为多对一投影，给定规范截面 \(s:X\to\Omega\) 与原子逆操作族 \(\{\psi_e:\Omega\to\Omega\}_{e\in\mathcal E}\)。
+称 \((R,\rho,\mathrm{Dec})\) 为 replay-可逆化证书系统，若 \(\rho:\Omega\to R\)、\(\mathrm{Dec}:R\to\mathcal E^{<\omega}\) 且
+\[
+\mathrm{UNLIFT}(x,c):=\psi_{e_T}\circ\cdots\circ\psi_{e_1}\bigl(s(x)\bigr),
+\qquad
+(e_1,\dots,e_T)=\mathrm{Dec}(c),
+\]
+满足
+\[
+\omega=\mathrm{UNLIFT}\bigl(\pi(\omega),\rho(\omega)\bigr)
+\quad(\forall\,\omega\in\Omega),
+\]
+并且 \(\omega\mapsto(\pi(\omega),\rho(\omega))\) 为单射。
+
+则映射
+\[
+\Phi:R\to \mathrm{PR}(\mathcal E),
+\qquad
+\Phi(c):=\mathrm{Enc}_{\mathrm{PR}}\bigl(\mathrm{Dec}(c)\bigr)
+\]
+是满足
+\[
+\mathrm{Dec}_{\mathrm{PR}}\circ\Phi=\mathrm{Dec}
+\]
+的唯一映射。
+令 \(c\sim c'\iff \mathrm{Dec}(c)=\mathrm{Dec}(c')\)，则 \(\Phi\) 在商集上诱导双射
+\[
+\overline\Phi:\ R/{\sim}\ \xrightarrow{\ \cong\ }\ \operatorname{Im}\!\bigl(\mathrm{Enc}_{\mathrm{PR}}\circ\mathrm{Dec}\bigr).
+\]
+若进一步满足 replay 完备性 \(\mathrm{Dec}(R)=\mathcal E^{<\omega}\)，则
+\[
+\overline\Phi:\ R/{\sim}\ \xrightarrow{\ \cong\ }\ \mathrm{PR}(\mathcal E).
+\]
+\end{theorem}
+
+\begin{proof}
+由定义直接有
+\[
+\mathrm{Dec}_{\mathrm{PR}}(\Phi(c))
+=
+\mathrm{Dec}_{\mathrm{PR}}\!\left(\mathrm{Enc}_{\mathrm{PR}}(\mathrm{Dec}(c))\right)
+=
+\mathrm{Dec}(c),
+\]
+故 \(\mathrm{Dec}_{\mathrm{PR}}\circ\Phi=\mathrm{Dec}\)。
+
+若 \(c\sim c'\)，则 \(\mathrm{Dec}(c)=\mathrm{Dec}(c')\)，故 \(\Phi(c)=\Phi(c')\)，从而 \(\Phi\) 可因子化到商集。
+由像集定义，\(\overline\Phi\) 对 \(\operatorname{Im}(\mathrm{Enc}_{\mathrm{PR}}\circ\mathrm{Dec})\) 显然满射。
+若 \(\overline\Phi([c])=\overline\Phi([c'])\)，则
+\[
+\mathrm{Enc}_{\mathrm{PR}}(\mathrm{Dec}(c))
+=
+\mathrm{Enc}_{\mathrm{PR}}(\mathrm{Dec}(c')),
+\]
+由 \(\mathrm{Enc}_{\mathrm{PR}}\) 单射得 \(\mathrm{Dec}(c)=\mathrm{Dec}(c')\)，即 \([c]=[c']\)，故单射。
+
+唯一性：若 \(\Phi':R\to\mathrm{PR}(\mathcal E)\) 也满足 \(\mathrm{Dec}_{\mathrm{PR}}\circ\Phi'=\mathrm{Dec}\)，则对任意 \(c\),
+\[
+\Phi'(c)
+=
+\mathrm{Enc}_{\mathrm{PR}}\!\left(\mathrm{Dec}_{\mathrm{PR}}(\Phi'(c))\right)
+=
+\mathrm{Enc}_{\mathrm{PR}}(\mathrm{Dec}(c))
+=
+\Phi(c),
+\]
+故 \(\Phi'=\Phi\)。
+若 \(\mathrm{Dec}(R)=\mathcal E^{<\omega}\)，则
+\(\operatorname{Im}(\mathrm{Enc}_{\mathrm{PR}}\circ\mathrm{Dec})=\mathrm{PR}(\mathcal E)\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[算法--素数确定性]\label{cor:xi-replay-algorithm-prime-determinism}
+在定理 \ref{thm:xi-replay-godel-prime-terminality} 的设定下，任何证书 \(c\in R\) 的可逆贡献仅由 \(\mathrm{Dec}(c)\) 决定，并与其 prime-register 规范形式 \(\Phi(c)\) 完全等价。
+因此在 replay-可逆化语义中，投影算法轨迹与素数寄存器位置化 Gödel 代码构成同构表述。
+\end{corollary}
+
+\begin{remark}[与折叠系统实现的对齐]\label{rem:xi-replay-godel-prime-alignment-fold}
+上述抽象结构在定义 \ref{def:pom-fold-prime-lift} 与命题 \ref{prop:pom-fold-prime-lift-injective} 中得到具体实现：\(\omega\mapsto(\Fold_m(\omega),r_{\mathsf S}(\omega))\) 的单射化正是 replay-可逆化证书系统的实例化。
+\end{remark}
+
+\input{subsubsec__xi-time-protocol-conclusions-part9ba-addressable-godel-product-optimality}
+\input{subsubsec__xi-time-protocol-conclusions-part9bb-addressable-godel-chebyshev-witness-barrier}
+\begin{theorem}[Gödel--Prime 外置的不可约比特复杂度下界]\label{thm:xi-godel-prime-bit-complexity-lower-bound}
+在定理 \ref{thm:xi-replay-godel-prime-terminality} 的设定下，对任意 \(r\in\mathrm{PR}(\mathcal E)\)，记
+\[
+T:=\bigl|\mathrm{Dec}_{\mathrm{PR}}(r)\bigr|,
+\qquad
+G(r):=\prod_{t=1}^{T}p_t^{\,r(p_t)+1}.
+\]
+则成立点态下界
+\[
+\log G(r)\ \ge\ \sum_{t=1}^{T}\log p_t
+=
+\vartheta(p_T)
+=
+(1+o(1))\,T\log T.
+\]
+
+进一步，在折叠系统中令 \(r=r_{\mathsf S}(\omega)\)（定义 \ref{def:pom-fold-prime-lift}），\(T=T_{m+1}^{\mathsf S}(\omega)\)，并取 \(\omega\sim\mathrm{Unif}(\Omega_{m+1})\)。
+则有
+\[
+\mathbb E\!\left[\log G\!\bigl(r_{\mathsf S}(\omega)\bigr)\right]
+\ge
+\left(\frac{4}{27}+o(1)\right)m\log m.
+\]
+\end{theorem}
+
+\begin{proof}
+由 \(r(p_t)+1\ge1\) 得
+\[
+\log G(r)=\sum_{t=1}^{T}\bigl(r(p_t)+1\bigr)\log p_t
+\ge
+\sum_{t=1}^{T}\log p_t
+=
+\vartheta(p_T).
+\]
+由素数定理的标准推论 \(\vartheta(p_T)\sim p_T\sim T\log T\)，得首个渐近式。
+
+对期望下界，固定 \(\eta\in(0,1)\)，存在 \(T_0\) 使 \(T\ge T_0\Rightarrow \vartheta(p_T)\ge (1-\eta)T\log T\)。
+因此
+\[
+\mathbb E[\log G(r_{\mathsf S})]
+\ge
+(1-\eta)\,\mathbb E[T\log T]-O(1).
+\]
+又 \(x\mapsto x\log x\) 在 \((0,\infty)\) 上凸，故
+\[
+\mathbb E[T\log T]\ge \mathbb E[T]\log\mathbb E[T].
+\]
+由推论 \ref{cor:pom-prime-residual-linear-lb}，
+\(
+\mathbb E[T]\ge(\frac{4}{27}+o(1))m
+\)。
+代回即得
+\[
+\mathbb E[\log G(r_{\mathsf S})]
+\ge
+\left(\frac{4}{27}+o(1)\right)m\log m.
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[分位-CRT 外置下的最小素数轴数量标度律]\label{prop:xi-quantile-crt-prime-axis-scaling}
+沿用定义 \ref{def:pom-gamma-quantile} 与推论 \ref{cor:pom-prime-register-quantile-budget} 的阈值
+\[
+P_m>2B_m(\varepsilon),
+\qquad
+B_m(\varepsilon):=\exp\!\bigl(m\gamma_m(\varepsilon)\bigr).
+\]
+现约束模轴均为素数：取 \(q_1<\cdots<q_K\) 并记
+\[
+P_{m,K}:=\prod_{i=1}^{K}q_i.
+\]
+在“最小化最大模数 \(q_K\)”的设计准则下，最优方案可取 \(q_i=p_i\)（前 \(K\) 个素数）。
+
+若 \(m\gamma_m(\varepsilon)\to\infty\)，则满足
+\(
+\prod_{i=1}^{K}p_i>2B_m(\varepsilon)
+\)
+的最小 \(K=K(m,\varepsilon)\) 具有渐近
+\[
+K(m,\varepsilon)
+=
+\left(1+o(1)\right)
+\frac{m\gamma_m(\varepsilon)}{\log\!\bigl(m\gamma_m(\varepsilon)\bigr)},
+\]
+\[
+p_{K(m,\varepsilon)}
+=
+\left(1+o(1)\right)\,m\gamma_m(\varepsilon).
+\]
+\end{proposition}
+
+\begin{proof}
+固定 \(K\) 时，任意递增素数组 \(q_1<\cdots<q_K\) 都满足 \(q_i\ge p_i\)，故
+\[
+\prod_{i=1}^{K}q_i\ge \prod_{i=1}^{K}p_i=:p_K\#.
+\]
+因此要以最小 \(q_K\) 达到给定乘积阈值，取 \(q_i=p_i\) 为最优。
+
+阈值条件写为
+\[
+\log(p_K\#)>m\gamma_m(\varepsilon)+\log 2.
+\]
+由 \(\log(p_K\#)=\vartheta(p_K)\sim p_K\)，且 \(m\gamma_m(\varepsilon)\to\infty\)，得
+\[
+p_K\sim m\gamma_m(\varepsilon).
+\]
+再由 \(p_K\sim K\log K\) 得
+\[
+K\log K\sim m\gamma_m(\varepsilon),
+\]
+从而
+\[
+K=
+\left(1+o(1)\right)\frac{m\gamma_m(\varepsilon)}{\log(m\gamma_m(\varepsilon))}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[多级 CRT 阈值的加性控制律：最大素数由总对数预算决定]\label{thm:xi-multistage-crt-max-prime-additive-control}
+给定整数 \(k\ge 1\) 与阈值 \(A_1,\dots,A_k>1\)。
+考虑选择两两不交的素数集合 \(S_1,\dots,S_k\) 使得
+\[
+\prod_{p\in S_i}p\ \ge\ A_i\qquad(1\le i\le k),
+\]
+并最小化全局最大素数
+\[
+p_{\max}:=\max\!\Bigl(\bigcup_{i=1}^{k}S_i\Bigr).
+\]
+记 Chebyshev 函数
+\(
+\vartheta(x):=\sum_{p\le x}\log p
+\)。
+则最优值满足精确刻画
+\[
+\boxed{\;
+p_{\max}^{\ast}
+\ =\
+\inf\!\left\{x\ge 2:\ \vartheta(x)\ge \sum_{i=1}^{k}\log A_i\right\}.
+\;}
+\]
+并且当 \(\sum_{i=1}^{k}\log A_i\to\infty\) 时，由 \(\vartheta(x)\sim x\) 得
+\[
+p_{\max}^{\ast}\sim \sum_{i=1}^{k}\log A_i.
+\]
+\end{theorem}
+\begin{proof}
+必要性：任意可行解满足
+\[
+\sum_{i=1}^{k}\log A_i
+\le
+\sum_{i=1}^{k}\sum_{p\in S_i}\log p
+=
+\sum_{p\in\cup_i S_i}\log p
+\le
+\sum_{p\le p_{\max}}\log p
+=\vartheta(p_{\max}),
+\]
+故若 \(\vartheta(x)<\sum_i\log A_i\)，则不存在可行解，得到下界。
+\par
+充分性：取 \(x\) 使 \(\vartheta(x)\ge\sum_i\log A_i\)，并将所有 \(\le x\) 的素数按从小到大排列，依次分配到 \(S_1,S_2,\dots,S_k\)，使得对每个 \(i\) 都在首次达到
+\(\sum_{p\in S_i}\log p\ge \log A_i\)
+处停止并转入下一组。
+由于总和不少于目标总和，该过程在用完素数前必完成全部 \(k\) 个阈值；且构造保证集合两两不交并满足 \(p_{\max}\le x\)。
+于是最优值等于所示下确界。
+\par
+渐近式由 \(\vartheta(x)\sim x\) 立得。证毕。
+\end{proof}
+
+\begin{corollary}[多级阈值下的素数轴数量标度]\label{cor:xi-multistage-crt-axis-count-scaling}
+在定理 \ref{thm:xi-multistage-crt-max-prime-additive-control} 的设定下，令
+\[
+L:=\sum_{i=1}^{k}\log A_i,
+\]
+并假设 \(L\to\infty\)。
+令 \(K^\ast\) 为达到最优最大素数 \(p_{\max}^\ast\) 所需的总素数轴数量，则
+\[
+K^\ast\sim \pi(p_{\max}^\ast)\sim \frac{L}{\log L}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-multistage-crt-max-prime-additive-control}，\(p_{\max}^\ast\sim L\)。
+而素数轴数量为不超过 \(p_{\max}^\ast\) 的素数个数，即 \(K^\ast=\pi(p_{\max}^\ast)\)。
+由素数定理 \(\pi(x)\sim x/\log x\) 得 \(K^\ast\sim L/\log L\)。证毕。
+\end{proof}
+
+\begin{theorem}[素数轴分解下的可逆化合成与素数张量积结构]\label{thm:xi-prime-axis-tensorized-replay-composition}
+设有两级投影
+\[
+\Omega\xrightarrow{\ \pi_1\ }X\xrightarrow{\ \pi_2\ }Y,
+\]
+并分别给定 replay 提升
+\[
+\Omega\ni\omega\longmapsto\bigl(\pi_1(\omega),r_1(\omega)\bigr),
+\qquad
+X\ni x\longmapsto\bigl(\pi_2(x),r_2(x)\bigr),
+\]
+二者均为单射。
+
+把素数集合固定划分为
+\[
+\mathbb P_{\mathrm{odd}}:=\{p_{2t-1}\}_{t\ge1},
+\qquad
+\mathbb P_{\mathrm{even}}:=\{p_{2t}\}_{t\ge1}.
+\]
+定义重编号嵌入
+\[
+\iota_{\mathrm{odd}}(r)(p_{2t-1})=r(p_t),\ \ \iota_{\mathrm{odd}}(r)(p_{2t})=0,
+\]
+\[
+\iota_{\mathrm{even}}(r)(p_{2t})=r(p_t),\ \ \iota_{\mathrm{even}}(r)(p_{2t-1})=0.
+\]
+令
+\[
+R(\omega):=
+\iota_{\mathrm{odd}}\!\bigl(r_1(\omega)\bigr)
+\oplus
+\iota_{\mathrm{even}}\!\bigl(r_2(\pi_1(\omega))\bigr),
+\]
+其中 \(\oplus\) 为按坐标并合（两项支持互不相交）。
+则组合提升
+\[
+\Omega\ni\omega\longmapsto\bigl(\pi_2(\pi_1(\omega)),R(\omega)\bigr)
+\]
+为单射；并存在显式重建：先由偶素数子支持恢复 \(\pi_1(\omega)\)，再由奇素数子支持恢复 \(\omega\)。
+\end{theorem}
+
+\begin{proof}
+设 \(\omega,\omega'\in\Omega\) 满足
+\[
+\pi_2(\pi_1(\omega))=\pi_2(\pi_1(\omega')),
+\qquad
+R(\omega)=R(\omega').
+\]
+取偶素数子支持，得
+\[
+\iota_{\mathrm{even}}\!\bigl(r_2(\pi_1(\omega))\bigr)
+=
+\iota_{\mathrm{even}}\!\bigl(r_2(\pi_1(\omega'))\bigr),
+\]
+故
+\[
+r_2(\pi_1(\omega))=r_2(\pi_1(\omega')).
+\]
+结合 \(\pi_2(\pi_1(\omega))=\pi_2(\pi_1(\omega'))\) 与第二级提升单射性，得
+\[
+\pi_1(\omega)=\pi_1(\omega').
+\]
+再取奇素数子支持，得
+\[
+r_1(\omega)=r_1(\omega').
+\]
+结合第一级提升单射性，推出 \(\omega=\omega'\)。
+故组合提升单射，且重建顺序即由上述逆推过程给出。证毕。
+\end{proof}
+
+\begin{theorem}[Prime-register 诱导的算法超度量与柱集拓扑]\label{thm:xi-prime-register-ultrametric-cylinder-topology}
+固定确定性策略 \(S\)，并取一状态类 \(\Omega^{(S)}\subseteq\Omega\)，使映射
+\[
+r^S:\Omega^{(S)}\to \mathrm{PR}(\mathcal E)
+\]
+为单射。
+定义
+\[
+d_S(\omega,\omega') :=
+\begin{cases}
+0, & \omega=\omega',\\[2pt]
+2^{-k}, & k=\min\{t\ge1:\ r^S(\omega)(p_t)\neq r^S(\omega')(p_t)\}.
+\end{cases}
+\]
+则：
+\begin{enumerate}
+  \item \(d_S\) 是超度量；
+  \item \((\Omega^{(S)},d_S)\) 的开球恰为 prime-register 有限前缀一致类（柱集），并形成 clopen 基；
+  \item 其完备化同胚于
+  \[
+  \overline{\mathrm{Dec}_{\mathrm{PR}}\!\left(r^S(\Omega^{(S)})\right)}
+  \subseteq
+  \mathcal E^{\mathbb N}
+  \]
+  的乘积拓扑闭包。
+  若进一步满足前缀满性（任意有限前缀均可达），则完备化同胚于 \(\mathcal E^{\mathbb N}\) 的 Baire 拓扑。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+设 \(k_{ij}\) 为 \(\omega_i,\omega_j\) 的首次差异位。
+若 \(\omega_1,\omega_2\) 与 \(\omega_2,\omega_3\) 在前 \(K\) 位一致，则 \(\omega_1,\omega_3\) 亦在前 \(K\) 位一致，故
+\[
+\min\{k_{12},k_{23}\}\le k_{13}.
+\]
+于是
+\[
+d_S(\omega_1,\omega_3)=2^{-k_{13}}
+\le
+\max\{2^{-k_{12}},2^{-k_{23}}\}
+=
+\max\{d_S(\omega_1,\omega_2),d_S(\omega_2,\omega_3)\},
+\]
+得超三角不等式。
+
+对任意 \(K\) 与前缀 \((a_1,\dots,a_K)\)，集合
+\[
+\mathcal C(a_1,\dots,a_K):=
+\{\omega\in\Omega^{(S)}:\ r^S(\omega)(p_t)=a_t,\ 1\le t\le K\}
+\]
+正是半径 \(2^{-K}\) 级别的球；反向任一球都由某前缀一致条件给出，故柱集即 clopen 基。
+
+把 \(\omega\) 映到序列 \(\mathrm{Dec}_{\mathrm{PR}}(r^S(\omega))\) 得到等距嵌入到 \(\mathcal E^{\mathbb N}\)（把有限序列补零/终止符后的标准嵌入）。
+Cauchy 列等价于前缀稳定列，极限对应逐前缀极限序列，故完备化同胚于该像集闭包。
+若前缀满性成立，则闭包即全空间 \(\mathcal E^{\mathbb N}\)。证毕。
+\end{proof}
+
+\begin{conjecture}[Lee--Yang 椭圆化中不可消去坏素数的算法门槛]\label{conj:xi-leyang-badprime37-algorithmic-threshold}
+沿用定理 \ref{thm:xi-terminal-zm-leyang-elliptic-structure} 的四重覆盖 \(\Pi(\lambda,y)=0\) 与既有坏素一致性猜想 \ref{conj:xi-terminal-zm-spectral-compatible-externalization-badprime-minimal}。
+在“外置证书轴 + 可审计重建”的语义下，考虑所有对 \(y\)-线去分歧域给出全局一致分支选择的算法族；若其证书轴被限制为 CRT/prime-register 类型的离散残余轴，则该算法族的必要模轴集合在结构上必须包含素数 \(37\)。
+
+等价表述为：\(37\) 是该类全局分支选择算法不可消去的证书素数门槛。
+\end{conjecture}

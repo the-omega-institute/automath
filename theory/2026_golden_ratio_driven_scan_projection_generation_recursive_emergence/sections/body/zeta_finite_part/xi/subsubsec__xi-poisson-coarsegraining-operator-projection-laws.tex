@@ -1,0 +1,435 @@
+\subsubsection{Poisson 粗化算子的二阶信息保留、符号跃迁与尺度重整}\label{subsubsec:xi-poisson-coarsegraining-operator-projection-laws}
+在命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form} 与
+\S\ref{para:xi-poisson-sixth-order-audit-laws} 的展开链上，
+本段把“粗化后的 KL 领先项”统一写为条件期望投影范数，并据此给出符号粗化的阶次跃迁、Cauchy 尺度重整的最优常数以及交换平方语境下的二阶勾股恒等式。
+
+\begin{theorem}[任意粗化算子下的二阶信息保留定律]\label{thm:xi-poisson-kl-coarsegraining-projection-coefficient}
+设 \(\tilde\nu\) 为 \(\RR\) 上概率测度，均值 \(\bar\gamma\)，方差
+\(
+\sigma^2=\Var(\tilde\nu)\in(0,\infty)
+\)，并假设四阶中心矩有限。
+定义
+\[
+\mathsf P_t(x):=\frac{1}{\pi}\frac{t}{x^2+t^2},\qquad
+\tilde h_t:=\mathsf P_t*\tilde\nu,\qquad
+\tilde g_t(x):=\mathsf P_t(x-\bar\gamma),
+\]
+以及标准 Cauchy 密度与二阶得分
+\[
+G(y):=\frac{1}{\pi(1+y^2)},\qquad
+u(y):=\frac{3y^2-1}{(1+y^2)^2}.
+\]
+取任意可测粗化 \(\Phi:\RR\to(\mathsf Z,\mathcal Z)\)，并定义
+\[
+\Phi_t(x):=\Phi\!\left(\frac{x-\bar\gamma}{t}\right),\qquad
+H_t:=(\Phi_t)_{\#}(\tilde h_t(x)\,\dd x),\qquad
+G_t:=(\Phi_t)_{\#}(\tilde g_t(x)\,\dd x).
+\]
+则
+\begin{equation}\label{eq:xi-poisson-kl-coarsegraining-projection-limit}
+\boxed{
+\lim_{t\to\infty}\frac{t^4}{\sigma^4}\,D_{\mathrm{KL}}(H_t\mid G_t)
+=\frac12\,\EE\!\left[\Bigl(\EE[u(Y)\mid \Phi(Y)]\Bigr)^2\right]
+}
+\end{equation}
+其中 \(Y\sim G\)。
+等价地，
+\[
+\lim_{t\to\infty}\frac{t^4}{\sigma^4}\,D_{\mathrm{KL}}(H_t\mid G_t)
+=\frac12\int_{\mathsf Z}\Bigl(\EE[u(Y)\mid \Phi(Y)=z]\Bigr)^2\,\dd(\Phi_{\#}G)(z).
+\]
+并且
+\begin{equation}\label{eq:xi-poisson-kl-coarsegraining-projection-bounds}
+0\le
+\lim_{t\to\infty}\frac{t^4}{\sigma^4}\,D_{\mathrm{KL}}(H_t\mid G_t)
+\le \frac18.
+\end{equation}
+上界取等当且仅当 \(u(Y)\) 在 \(\sigma(\Phi(Y))\) 上可测（等价于
+\(\Var(u(Y)\mid \Phi(Y))=0\) a.s.）。
+\end{theorem}
+
+\begin{proof}
+令随机变量 \(X_t\sim \tilde g_t(x)\,\dd x\)，\(Z_t:=\Phi_t(X_t)\)。
+并记
+\[
+\delta_t(x):=\frac{\tilde h_t(x)}{\tilde g_t(x)}-1.
+\]
+由命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form} 与
+定理 \ref{thm:xi-poisson-kl-sharp-second-moment-only} 的二阶展开可写为
+\[
+\delta_t(\bar\gamma+ty)=\frac{\sigma^2}{t^2}u(y)+o_{L^2(G)}(t^{-2}).
+\]
+
+对任意有界可测函数 \(\psi\) 有
+\[
+\int_{\mathsf Z}\psi(z)\,\dd H_t(z)
+=\EE\!\left[\psi(Z_t)\,(1+\delta_t(X_t))\right].
+\]
+因此 \(H_t\ll G_t\)，且
+\[
+\frac{\dd H_t}{\dd G_t}(Z_t)
+=\EE[1+\delta_t(X_t)\mid Z_t]
+=1+\eta_t(Z_t),
+\quad
+\eta_t:=\EE[\delta_t(X_t)\mid Z_t].
+\]
+故
+\[
+D_{\mathrm{KL}}(H_t\mid G_t)
+=\EE\!\left[(1+\eta_t)\log(1+\eta_t)\right].
+\]
+又 \(\EE[\eta_t]=0\) 且 \(\|\eta_t\|_{L^2(G_t)}=O(t^{-2})\)，于是
+\[
+D_{\mathrm{KL}}(H_t\mid G_t)
+=\frac12\,\EE[\eta_t^2]+o(t^{-4}).
+\]
+
+在 \(X_t=\bar\gamma+tY_t\)（其中 \(Y_t\sim G\)）下，\(Z_t=\Phi(Y_t)\)。
+由 Cauchy 尺度不变性，\(Y_t\) 的分布与 \(t\) 无关，可记为 \(Y\sim G\)。
+于是
+\[
+\eta_t
+=\frac{\sigma^2}{t^2}\EE[u(Y)\mid \Phi(Y)]+o_{L^2(\Phi_{\#}G)}(t^{-2}),
+\]
+代回即得 \eqref{eq:xi-poisson-kl-coarsegraining-projection-limit}。
+
+最后，由条件期望的 \(L^2\) 投影收缩性，
+\[
+\EE\!\left[\bigl(\EE[u\mid \Phi]\bigr)^2\right]\le \EE[u^2].
+\]
+而 \(\EE[u^2]=1/4\)（见定理 \ref{thm:xi-poisson-kl-sharp-second-moment-only} 的常数积分），
+故 \eqref{eq:xi-poisson-kl-coarsegraining-projection-bounds} 成立。
+取等条件由全方差分解
+\[
+\EE[u^2]
+=\EE\!\left[\bigl(\EE[u\mid\Phi]\bigr)^2\right]
++\EE[\Var(u\mid\Phi)]
+\]
+立即得到。证毕。
+\end{proof}
+
+\begin{theorem}[符号粗化的幂律跃迁与显式常数]\label{thm:xi-poisson-sign-coarsegraining-t6-constant}
+在定理 \ref{thm:xi-poisson-kl-coarsegraining-projection-coefficient} 的设定下，进一步假设四阶中心绝对矩有限，并记
+\[
+\mu_3:=\int_{\RR}(\gamma-\bar\gamma)^3\,\dd\tilde\nu(\gamma).
+\]
+取二值粗化 \(\Phi(y)=\mathrm{sign}(y)\in\{+,-\}\)，即
+\(
+\Phi_t(x)=\mathrm{sign}(x-\bar\gamma)
+\)。
+令
+\[
+H_t^{\pm}:=(\Phi_t)_{\#}(\tilde h_t(x)\,\dd x),\qquad
+G_t^{\pm}:=(\Phi_t)_{\#}(\tilde g_t(x)\,\dd x).
+\]
+则存在极限
+\begin{equation}\label{eq:xi-poisson-sign-coarsegraining-t6-constant}
+\boxed{
+\lim_{t\to\infty}\frac{t^6}{\mu_3^2}\,D_{\mathrm{KL}}(H_t^{\pm}\mid G_t^{\pm})
+=\frac{2}{9\pi^2}
+}.
+\end{equation}
+特别地，符号粗化把二阶主项的 \(t^{-4}\) 衰减结构性消去，并把领先阶提升为 \(t^{-6}\)。
+\end{theorem}
+
+\begin{proof}
+平移后可取 \(\bar\gamma=0\)。
+由三阶展开（见定理 \ref{thm:xi-cauchy-poisson-kl-sharp-asymptotics} 的同阶展开框架）有
+\[
+\tilde h_t(x)
+=\tilde g_t(x)+\frac{\sigma^2}{2}\partial_x^2\tilde g_t(x)-\frac{\mu_3}{6}\partial_x^3\tilde g_t(x)+\rho_t(x),
+\]
+其中 \(\|\rho_t\|_{L^1(\RR)}=o(t^{-3})\)。
+记
+\[
+p_t:=H_t^{\pm}(+)=\int_0^\infty \tilde h_t(x)\,\dd x,\qquad
+\frac12=G_t^{\pm}(+)=\int_0^\infty \tilde g_t(x)\,\dd x.
+\]
+于是
+\[
+p_t-\frac12
+=\frac{\sigma^2}{2}\int_0^\infty \partial_x^2\tilde g_t\,\dd x
+-\frac{\mu_3}{6}\int_0^\infty \partial_x^3\tilde g_t\,\dd x
++o(t^{-3}).
+\]
+由于 \(\int_{\RR}\partial_x^2\tilde g_t\,\dd x=0\)，第一项为 \(0\)。
+并且
+\[
+\int_0^\infty \partial_x^3\tilde g_t(x)\,\dd x
+=-\partial_x^2\tilde g_t(0)
+=\frac{2}{\pi t^3},
+\]
+故
+\[
+\varepsilon_t:=p_t-\frac12
+=-\frac{\mu_3}{3\pi t^3}+o(t^{-3}).
+\]
+因此
+\[
+H_t^{\pm}=\left(\frac12+\varepsilon_t,\frac12-\varepsilon_t\right),\qquad
+G_t^{\pm}=\left(\frac12,\frac12\right).
+\]
+Bernoulli 相对熵展开给出
+\[
+D_{\mathrm{KL}}(H_t^{\pm}\mid G_t^{\pm})
+=\left(\frac12+\varepsilon_t\right)\log(1+2\varepsilon_t)
++\left(\frac12-\varepsilon_t\right)\log(1-2\varepsilon_t)
+=2\varepsilon_t^2+o(\varepsilon_t^2),
+\]
+于是
+\[
+D_{\mathrm{KL}}(H_t^{\pm}\mid G_t^{\pm})
+=\frac{2}{9\pi^2}\frac{\mu_3^2}{t^6}+o(t^{-6}),
+\]
+即 \eqref{eq:xi-poisson-sign-coarsegraining-t6-constant}。证毕。
+\end{proof}
+
+\begin{theorem}[最优 Cauchy 尺度重整与领先常数 \texorpdfstring{$1/16$}{1/16}]\label{thm:xi-poisson-optimal-cauchy-rescaling-kl-constant}
+在定理 \ref{thm:xi-poisson-kl-coarsegraining-projection-coefficient} 的设定下，定义
+\[
+s_t:=t+\frac{\sigma^2}{2t},\qquad
+\tilde g_t^{\star}(x):=\frac{1}{\pi}\frac{s_t}{(x-\bar\gamma)^2+s_t^2}.
+\]
+则
+\begin{equation}\label{eq:xi-poisson-optimal-cauchy-rescaling-kl-constant}
+\boxed{
+\lim_{t\to\infty}\frac{t^4}{\sigma^4}\,
+D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_t^{\star})
+=\frac{1}{16}
+}.
+\end{equation}
+更一般地，若 \(s=t+\Delta_t\) 且 \(\Delta_t=O(\sigma^2/t)\)，并记
+\[
+\alpha:=\lim_{t\to\infty}\frac{t\Delta_t}{\sigma^2},
+\qquad
+v(y):=\frac{y^2-1}{1+y^2},
+\]
+则
+\[
+\lim_{t\to\infty}\frac{t^4}{\sigma^4}D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_s)
+=\frac12\,\|u-\alpha v\|_{L^2(G)}^2.
+\]
+该极限在 \(\alpha=\frac12\) 处唯一最小，最小值为 \(1/16\)。
+\end{theorem}
+
+\begin{proof}
+由二阶正规形可写
+\[
+\frac{\tilde h_t}{\tilde g_t}
+=1+\frac{\sigma^2}{t^2}u\!\left(\frac{x-\bar\gamma}{t}\right)+o(t^{-2})
+\quad\text{于 }L^2(\tilde g_t\,\dd x).
+\]
+对尺度族 \(\tilde g_{t+\Delta}\) 作一阶展开：
+\[
+\log \tilde g_{t+\Delta}(x)
+=\log \tilde g_t(x)+\Delta\,\partial_t\log\tilde g_t(x)+O(\Delta^2t^{-2}),
+\]
+且
+\[
+\partial_t\log\tilde g_t(x)
+=\frac{1}{t}\,v\!\left(\frac{x-\bar\gamma}{t}\right).
+\]
+从而
+\[
+\frac{\tilde g_{t+\Delta}}{\tilde g_t}
+=1+\frac{\Delta}{t}\,v\!\left(\frac{x-\bar\gamma}{t}\right)+o(|\Delta|/t),
+\]
+进而
+\[
+\frac{\tilde h_t}{\tilde g_{t+\Delta}}
+=1+\frac{\sigma^2}{t^2}
+\Bigl(u-\alpha v\Bigr)\!\left(\frac{x-\bar\gamma}{t}\right)
++o(t^{-2}),
+\qquad
+\alpha:=\frac{t\Delta}{\sigma^2}.
+\]
+因此
+\[
+D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_{t+\Delta})
+=\frac12\frac{\sigma^4}{t^4}\,\|u-\alpha v\|_{L^2(G)}^2+o(t^{-4}).
+\]
+直接计算得
+\[
+\langle u,u\rangle_{L^2(G)}=\frac14,\qquad
+\langle v,v\rangle_{L^2(G)}=\frac12,\qquad
+\langle u,v\rangle_{L^2(G)}=\frac14.
+\]
+故二次函数 \(\|u-\alpha v\|_2^2\) 的极小点为
+\[
+\alpha^\star=\frac{\langle u,v\rangle}{\langle v,v\rangle}=\frac12,
+\]
+最小值
+\[
+\|u-\alpha^\star v\|_2^2
+=\frac14-2\cdot\frac12\cdot\frac14+\left(\frac12\right)^2\frac12
+=\frac18.
+\]
+代回即得
+\[
+\lim_{t\to\infty}\frac{t^4}{\sigma^4}D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_t^\star)
+=\frac12\cdot\frac18=\frac{1}{16},
+\]
+且最优尺度对应 \(s_t=t+\sigma^2/(2t)\)。证毕。
+\end{proof}
+
+\begin{theorem}[等尺度 Poisson--Cauchy 粗粒化的六阶最优尺度与最小相对熵展开]\label{thm:xi-poisson-optimal-cauchy-rescaling-sixth-order}
+沿用定理 \ref{thm:xi-poisson-kl-sixth-order-refined-binomials} 的单通道记号。
+设 \(\tilde\nu\) 满足六阶矩条件
+\(
+\int_{\RR}\abs{\gamma-\bar\gamma}^{6}\,\dd\tilde\nu(\gamma)<\infty
+\)，并记中心矩
+\[
+m_k:=\int_{\RR}(\gamma-\bar\gamma)^k\,\dd\tilde\nu(\gamma)\quad(k\ge 2),
+\qquad
+\sigma^2:=m_2>0.
+\]
+定义
+\[
+\tilde h_t:=\mathsf P_t*\tilde\nu,\qquad
+\tilde g_s(x):=\mathsf P_s(x-\bar\gamma)\qquad(t>0,\ s>0).
+\]
+令 \(s^\star(t)\) 为函数 \(s\mapsto D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_s)\) 的极小点。
+则当 \(t\to\infty\) 时，有渐近展开
+\begin{equation}\label{eq:xi-poisson-optimal-scale-expansion-sixth}
+s^\star(t)=t+\frac{\sigma^2}{2t}-\frac{m_4}{8t^3}+o(t^{-3}),
+\end{equation}
+并且最小相对熵具有六阶展开
+\begin{equation}\label{eq:xi-poisson-optimal-scale-min-kl-sixth}
+D_{\mathrm{KL}}\bigl(\tilde h_t\mid \tilde g_{s^\star(t)}\bigr)
+=\frac{\sigma^4}{16t^4}
+\;+\;\frac{\sigma^6-3\sigma^2m_4+3m_3^2}{32t^6}
+\;+\;o(t^{-6}).
+\end{equation}
+\end{theorem}
+\begin{proof}
+平移后不妨设 \(\bar\gamma=0\)，并记 \(\Gamma\sim\tilde\nu\)。
+令 \(F_t(s):=D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_s)\)。
+由参数微分公式，
+\[
+F_t'(s)=-\int_{\RR}\tilde h_t(x)\,\partial_s\log \tilde g_s(x)\,\dd x.
+\]
+而
+\[
+\partial_s\log \tilde g_s(x)=\frac1s-\frac{2s}{x^2+s^2}.
+\]
+因此极值点 \(s=s^\star(t)\) 满足
+\begin{equation}\label{eq:xi-poisson-optimal-scale-euler}
+1=2s^2\int_{\RR}\frac{\tilde h_t(x)}{x^2+s^2}\,\dd x.
+\end{equation}
+利用 \(x\mapsto (x^2+s^2)^{-1}=(\pi/s)\mathsf P_s(x)\) 与 Poisson--Cauchy 半群卷积
+\(\mathsf P_t*\mathsf P_s=\mathsf P_{t+s}\)，对任意 \(\gamma\in\RR\) 有
+\[
+\int_{\RR}\frac{\mathsf P_t(x-\gamma)}{x^2+s^2}\,\dd x
+=\frac{t+s}{s}\cdot\frac{1}{\gamma^2+(t+s)^2}.
+\]
+对 \(\gamma\) 按 \(\tilde\nu\) 积分并代入 \eqref{eq:xi-poisson-optimal-scale-euler}，得到
+\begin{equation}\label{eq:xi-poisson-optimal-scale-u-eq}
+1=2s(t+s)\,\EE\!\left[\frac{1}{\Gamma^2+(t+s)^2}\right].
+\end{equation}
+令 \(u:=t+s\)。
+由六阶矩条件可对 \(u\to\infty\) 作展开：
+\[
+\EE\!\left[\frac{1}{\Gamma^2+u^2}\right]
+=u^{-2}-\sigma^2u^{-4}+m_4u^{-6}+O(u^{-8}).
+\]
+注意 \(s^\star(t)\sim t\)，故 \(u\sim 2t\)。
+将 \(s=t+\alpha t^{-1}+\beta t^{-3}+o(t^{-3})\) 代入 \eqref{eq:xi-poisson-optimal-scale-u-eq} 并按 \(t^{-2}\)、\(t^{-4}\) 配平，得到唯一解
+\[
+\alpha=\frac{\sigma^2}{2},\qquad \beta=-\frac{m_4}{8},
+\]
+即 \eqref{eq:xi-poisson-optimal-scale-expansion-sixth}。
+\par
+为展开最小相对熵，令 \(y=x/t\) 并记
+\[
+H_t(y):=t\,\tilde h_t(ty),\qquad
+G_\varepsilon(y):=t\,\tilde g_{t(1+\varepsilon)}(ty)=\frac{1}{\pi}\frac{1+\varepsilon}{y^2+(1+\varepsilon)^2}.
+\]
+则
+\[
+D_{\mathrm{KL}}(\tilde h_t\mid \tilde g_{t(1+\varepsilon)})
+=\int_{\RR}H_t(y)\log\frac{H_t(y)}{G_\varepsilon(y)}\,\dd y.
+\]
+由对 \(\mathsf P_t(ty-\Gamma)\) 的 Taylor 展开（同定理 \ref{thm:xi-poisson-kl-sixth-order-refined-binomials} 的推导）可得
+\[
+H_t(y)=G_0(y)+\frac{\sigma^2}{2t^2}G_0''(y)-\frac{m_3}{6t^3}G_0^{(3)}(y)+\frac{m_4}{24t^4}G_0^{(4)}(y)+O(t^{-5}),
+\]
+并且
+\(
+\varepsilon(t):=s^\star(t)/t-1=\frac{\sigma^2}{2t^2}-\frac{m_4}{8t^4}+o(t^{-4})
+\)
+由 \eqref{eq:xi-poisson-optimal-scale-expansion-sixth} 给出。
+将 \(H_t\) 与 \(G_{\varepsilon(t)}\) 代入，并对 \(\log\) 作二阶/三阶展开，逐项积分（皆化归为
+\(\int_{\RR}\frac{y^{2k}}{(1+y^2)^n}\dd y\) 的 Beta 闭式），得到
+\eqref{eq:xi-poisson-optimal-scale-min-kl-sixth}。
+证毕。
+\end{proof}
+
+\begin{theorem}[二阶 Petz 判别与交换平方的勾股恒等式]\label{thm:xi-poisson-second-order-petz-commuting-square}
+令 \(Y\sim G\)，并对任意子 \(\sigma\)-代数 \(\mathcal G\subset \sigma(Y)\) 定义
+\[
+\mathcal C(\mathcal G)
+:=\frac12\,\EE\!\left[\bigl(\EE[u(Y)\mid \mathcal G]\bigr)^2\right]
+=\frac18-\frac12\,\EE\!\left[\Var(u(Y)\mid\mathcal G)\right].
+\]
+则成立：
+\begin{enumerate}
+  \item 若 \(\mathcal G_1\subset\mathcal G_2\)，则 \(\mathcal C(\mathcal G_1)\le \mathcal C(\mathcal G_2)\)；
+  取等当且仅当 \(u(Y)\) 在 \(\mathcal G_1\) 上可测。
+  \item 对任意粗化 \(\Phi\)，定理
+  \ref{thm:xi-poisson-kl-coarsegraining-projection-coefficient} 的二阶 KL 领先系数即
+  \(
+  \mathcal C(\sigma(\Phi(Y)))
+  \)。
+  \item 设 \(\mathcal G,\mathcal H\subset \sigma(Y)\) 的条件期望投影在 \(L^2(G)\) 上交换。
+  则
+  \begin{equation}\label{eq:xi-poisson-commuting-square-pythagoras}
+  \boxed{
+  \mathcal C(\mathcal G)+\mathcal C(\mathcal H)
+  =\mathcal C(\mathcal G\cap\mathcal H)+\mathcal C(\sigma(\mathcal G,\mathcal H))
+  }.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+令 \(P_{\mathcal G}\) 表示 \(L^2(G)\) 上对 \(L^2(\mathcal G)\) 的正交投影。
+则
+\[
+\mathcal C(\mathcal G)=\frac12\|P_{\mathcal G}u\|_2^2.
+\]
+第 (1) 条由投影子空间包含关系与
+\(
+\|P_{\mathcal G}u\|_2
+\)
+的单调性得到；取等条件由
+\[
+\|u\|_2^2-\|P_{\mathcal G}u\|_2^2
+=\EE[\Var(u\mid\mathcal G)]
+\]
+给出。
+
+第 (2) 条即定理
+\ref{thm:xi-poisson-kl-coarsegraining-projection-coefficient}
+的重述。
+
+对第 (3) 条，设 \(P:=P_{\mathcal G}\)、\(Q:=P_{\mathcal H}\) 且 \(PQ=QP\)。
+交换正交投影可同时对角化，故 \(L^2(G)\) 分解为四个互正交联合特征子空间
+\[
+\mathcal H_{ab}:=\{f:\ Pf=af,\ Qf=bf\},\qquad a,b\in\{0,1\}.
+\]
+将 \(u=\sum_{a,b}u_{ab}\) 分解后直接计算可得
+\[
+\|Pu\|_2^2+\|Qu\|_2^2
+=\|PQu\|_2^2+\|P_{\vee}u\|_2^2,
+\]
+其中 \(P_{\vee}\) 为 \(\mathrm{Ran}(P)+\mathrm{Ran}(Q)\) 的正交投影。
+在条件期望语境下，
+\[
+PQ=P_{\mathcal G\cap\mathcal H},\qquad
+P_{\vee}=P_{\sigma(\mathcal G,\mathcal H)}.
+\]
+两边乘以 \(1/2\) 即得
+\eqref{eq:xi-poisson-commuting-square-pythagoras}。证毕。
+\end{proof}
+
+\endinput

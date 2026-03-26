@@ -1,0 +1,382 @@
+\paragraph{循环子图与独立集解释：迹矩的图计数展开}
+固定整数 \(m\ge 1\)。
+记 \(C_m\) 为顶点集 \(\ZZ/m\ZZ\) 上的循环图（当 \(m=1\) 允许自环、当 \(m=2\) 允许重边），边集
+\[
+E(C_m):=\{(t,t+1):t\in\ZZ/m\ZZ\}.
+\]
+对任意 \(S\subseteq E(C_m)\)，记 \(C_m[S]\) 为同顶点集的生成子图。
+令 \(\Ind(G)\) 表示图 \(G\) 的独立集全体（含空集），并记
+\[
+I(G):=|\Ind(G)|.
+\]
+
+\begin{conclusion}[全阶迹矩的循环子图独立集展开]\label{con:xi-terminal-replica-softcore-trace-moment-cycle-subgraph-independent-sets}
+对任意整数 \(q\ge 2\) 与 \(m\ge 1\)，成立
+\[
+\boxed{\;
+\Tr\!\bigl((T^{(q)})^m\bigr)
+=\frac1{2^m}\sum_{S\subseteq E(C_m)} I\!\bigl(C_m[S]\bigr)^{\,q}\; } .
+\]
+\end{conclusion}
+\begin{proof}
+按迹的路径展开，
+\[
+\Tr\!\bigl((T^{(q)})^m\bigr)
+=\sum_{u_1,\dots,u_m\in U_q}\ \prod_{t\in\ZZ/m\ZZ}T^{(q)}_{u_t,u_{t+1}},
+\qquad (u_{m+1}:=u_1),
+\]
+而 \(T^{(q)}_{u,v}=\frac12\bigl(1+\mathbf{1}_{\{u\wedge v=0\}}\bigr)\)（由定义）给出
+\[
+\Tr\!\bigl((T^{(q)})^m\bigr)
+=2^{-m}\sum_{S\subseteq E(C_m)}\ \sum_{u_1,\dots,u_m\in U_q}\ \prod_{(t,t+1)\in S}\mathbf{1}_{\{u_t\wedge u_{t+1}=0\}}.
+\]
+对固定 \(S\)，将 \(u_t=(u_t^{(1)},\dots,u_t^{(q)})\) 按坐标分解。
+由于
+\[
+\mathbf{1}_{\{u_t\wedge u_{t+1}=0\}}=\prod_{j=1}^{q}\mathbf{1}_{\{u_t^{(j)}u_{t+1}^{(j)}=0\}},
+\]
+内层求和按坐标完全因子化为
+\[
+\sum_{u_1,\dots,u_m\in U_q}\ \prod_{(t,t+1)\in S}\mathbf{1}_{\{u_t\wedge u_{t+1}=0\}}
+=\left(\sum_{x\in\{0,1\}^{\ZZ/m\ZZ}}\ \prod_{(t,t+1)\in S}\mathbf{1}_{\{x_t x_{t+1}=0\}}\right)^{q}.
+\]
+而对二元赋值 \(x\)，令 \(A(x):=\{t\in\ZZ/m\ZZ:\ x_t=1\}\)。
+乘积约束 \(\mathbf{1}_{\{x_t x_{t+1}=0\}}\)（对每条 \((t,t+1)\in S\)）等价于 \(A(x)\) 不含任何 \(C_m[S]\) 的边，
+即 \(A(x)\in\Ind(C_m[S])\)。
+因此括号内的计数恰为 \(I(C_m[S])\)，从而内层求和为 \(I(C_m[S])^{q}\)。
+代回即得所示恒等式。证毕。
+\end{proof}
+
+\begin{conclusion}[真子图通道的 Fibonacci 乘法分解与分母刚性]\label{con:xi-terminal-replica-softcore-cycle-subgraph-fibonacci-factorization-denominator-rigidity}
+固定整数 \(m\ge 1\)。对任意真子边集 \(S\subsetneq E(C_m)\)，图 \(C_m[S]\) 为森林，且每个连通分量均为路径。
+设其非平凡路径分量的边数为 \(\ell_1,\dots,\ell_r\ge 1\)，并记孤立点数为
+\[
+s:=m-\sum_{i=1}^{r}(\ell_i+1).
+\]
+则有严格分解
+\[
+\boxed{\;
+I\!\bigl(C_m[S]\bigr)=2^{s}\prod_{i=1}^{r}F_{\ell_i+3}\;} .
+\]
+从而对任意 \(q\ge 2\)，成立整性刚性
+\[
+2^m\Tr\!\bigl((T^{(q)})^m\bigr)\in\ZZ,
+\qquad
+2^mS_m(q)\in\ZZ.
+\]
+\end{conclusion}
+\begin{proof}[证明要点]
+当 \(S\subsetneq E(C_m)\) 时，\(C_m[S]\) 不可能包含长度为 \(m\) 的整环，故无环且最大度不超过 \(2\)，于是每个连通分量为路径或孤立点。
+设 \(a_n:=I(P_n)\)（\(P_n\) 为 \(n\) 个顶点路径），按端点是否入选有递推
+\(
+a_n=a_{n-1}+a_{n-2}
+\)
+并由 \(a_1=2,a_2=3\) 得 \(a_n=F_{n+2}\)。
+边数为 \(\ell\) 的路径分量有 \(\ell+1\) 个顶点，贡献 \(F_{\ell+3}\)；孤立点贡献 \(2\)。
+分量独立相乘即得所示分解。
+\par
+再由结论 \ref{con:xi-terminal-replica-softcore-trace-moment-cycle-subgraph-independent-sets} 与
+结论 \ref{con:xi-terminal-replica-softcore-exceptional-power-sum-cycle-sector-replacement}，
+\[
+2^m\Tr\!\bigl((T^{(q)})^m\bigr)=\sum_{S\subseteq E(C_m)}I(C_m[S])^{q},
+\]
+\[
+2^mS_m(q)=\Omega_m(q)+\sum_{S\subsetneq E(C_m)}I(C_m[S])^{q},
+\]
+且 \(\Omega_m(q)\in\ZZ\)（结论 \ref{con:xi-terminal-replica-softcore-lucas-pell-omega-unified}），故整性成立。证毕。
+\end{proof}
+
+\begin{remark}[与二元 word/necklace 展开的同一性]\label{rem:xi-terminal-replica-softcore-trace-moment-cycle-subgraph-word-identification}
+将边子集 \(S\subseteq E(C_m)\) 编码为二元词 \(\omega=\omega_1\cdots\omega_m\in\{0,1\}^m\)：
+\[
+\omega_t:=\mathbf{1}_{\{(t,t+1)\notin S\}}\quad(t\in\ZZ/m\ZZ).
+\]
+则结论 \ref{con:xi-terminal-replica-softcore-binary-necklace-trace-formula} 的词迹值 \(\tau(\omega)\) 满足
+\(\tau(\omega)=I(C_m[S])\)，
+从而结论 \ref{con:xi-terminal-replica-softcore-trace-moment-cycle-subgraph-independent-sets} 与其 word 求和式严格一致。
+\end{remark}
+
+\begin{conclusion}[例外幂和的循环子图展开与对称化替换项]\label{con:xi-terminal-replica-softcore-exceptional-power-sum-cycle-sector-replacement}
+固定 \(q\ge 2\)。记
+\[
+S_m(q):=\sum_{i=0}^{q}\bigl(\lambda_i^{(q)}\bigr)^m,\qquad m\ge1.
+\]
+令
+\[
+M:=\begin{pmatrix}1&1\\[2pt]1&0\end{pmatrix},\qquad
+\Omega_m(q):=\Tr\!\bigl(\mathrm{Sym}^q(M^m)\bigr).
+\]
+则对一切 \(m\ge 1\) 有
+\[
+\boxed{\;
+2^mS_m(q)=\Omega_m(q)+\sum_{S\subsetneq E(C_m)} I\!\bigl(C_m[S]\bigr)^{\,q}\; } ,
+\]
+等价地，
+\[
+\boxed{\;
+S_m(q)=\frac1{2^m}\left(\sum_{S\subsetneq E(C_m)} I\!\bigl(C_m[S]\bigr)^{\,q}+\Omega_m(q)\right)\; }.
+\]
+\end{conclusion}
+\begin{proof}
+设 \(\mathrm{Inv}\subset\RR^{U_q}\) 为 \(S_q\)-不变子空间，\(P\) 为到 \(\mathrm{Inv}\) 的正交投影。由于 \(T^{(q)}\) 与坐标置换作用可交换，
+\[
+S_m(q)=\Tr\!\Bigl(\bigl(T^{(q)}|_{\mathrm{Inv}}\bigr)^m\Bigr)=\Tr\!\bigl(P(T^{(q)})^m\bigr).
+\]
+把 \((T^{(q)})^m\) 按 \(T^{(q)}=\frac12(J+D^{(q)})\) 展开为 \(\varepsilon\in\{0,1\}^m\) 的和。
+若 \(\varepsilon\neq(1,\dots,1)\)，对应字词 \(W_\varepsilon\) 至少含一个 \(J\)。
+由 \(J=\mathbf 1\mathbf 1^{\mathsf T}\) 及 \(J,D^{(q)}\) 与置换作用可交换，任意含 \(J\) 的字词像空间包含于 \(\mathrm{Inv}\)，故
+\[
+\Tr(PW_\varepsilon)=\Tr(W_\varepsilon).
+\]
+这些项与全迹一致，按结论
+\ref{con:xi-terminal-replica-softcore-trace-moment-cycle-subgraph-independent-sets}
+给出
+\[
+\sum_{S\subsetneq E(C_m)}I\!\bigl(C_m[S]\bigr)^q.
+\]
+唯一剩余项为 \(\varepsilon=(1,\dots,1)\)，即 \((D^{(q)})^m\)。
+在按位张量识别 \(\RR^{U_q}\cong(\RR^2)^{\otimes q}\) 下，
+\[
+D^{(q)}=M^{\otimes q},\qquad (D^{(q)})^m=(M^m)^{\otimes q}.
+\]
+投影 \(P\) 即对称化算子，其像同构于 \(\mathrm{Sym}^q(\RR^2)\)，从而
+\[
+\Tr\!\bigl(P(D^{(q)})^m\bigr)=\Tr\!\bigl(\mathrm{Sym}^q(M^m)\bigr)=\Omega_m(q).
+\]
+合并全部项即得结论。
+\end{proof}
+
+\begin{conclusion}[边伯努利形变下的随机环图独立集矩表示]\label{con:xi-terminal-replica-softcore-trace-moment-bernoulli-deformation-random-cycle}
+取参数 \(p\in[0,1]\)，定义形变核
+\[
+T^{(q)}_{p}(u,v):=(1-p)+p\,\mathbf{1}_{\{u\wedge v=0\}},
+\qquad u,v\in U_q.
+\]
+令随机子图 \(G_{m,p}\) 由 \(C_m\) 的每条边独立保留（概率 \(p\)）得到，并记
+\(
+Z(G_{m,p}):=I(G_{m,p})
+\)。
+则对任意整数 \(m\ge 1\) 与 \(q\ge 2\)，有严格恒等式
+\[
+\boxed{\;
+\Tr\!\bigl((T^{(q)}_{p})^m\bigr)
+=\mathbb E\!\bigl[Z(G_{m,p})^{q}\bigr]
+=\sum_{S\subseteq E(C_m)}p^{|S|}(1-p)^{m-|S|}\,I(C_m[S])^{q}\; } .
+\]
+当 \(p=\tfrac12\) 时退化为原核 \(T^{(q)}\) 的迹矩公式。
+\end{conclusion}
+\begin{proof}[证明要点]
+沿迹展开写
+\[
+\Tr\!\bigl((T^{(q)}_{p})^m\bigr)
+=\sum_{u_1,\dots,u_m\in U_q}\prod_{t\in\ZZ/m\ZZ}\Bigl((1-p)+p\,\delta_t\Bigr),
+\qquad
+\delta_t:=\mathbf 1_{\{u_t\wedge u_{t+1}=0\}}.
+\]
+对每个因子按是否取 \(\delta_t\) 展开，即得到
+\[
+\prod_t\bigl((1-p)+p\,\delta_t\bigr)
+=\sum_{S\subseteq E(C_m)}p^{|S|}(1-p)^{m-|S|}\prod_{(t,t+1)\in S}\delta_t.
+\]
+对固定 \(S\)，其内层 \((u_t)\)-求和与
+结论 \ref{con:xi-terminal-replica-softcore-trace-moment-cycle-subgraph-independent-sets} 完全同型，
+给出 \(I(C_m[S])^{q}\)；代回即得第一与第三式。
+第二式仅是把权重 \(p^{|S|}(1-p)^{m-|S|}\) 解释为边独立保留模型的概率。证毕。
+\end{proof}
+
+\begin{conclusion}[固定 \(m\) 下的独立集谱反演与最小递推]\label{con:xi-terminal-replica-softcore-cycle-subgraph-spectrum-inversion-minimal-recurrence}
+固定整数 \(m\ge 1\)，定义取值集合
+\[
+\mathcal A_m:=\{I(C_m[S]):S\subseteq E(C_m)\}\subset\ZZ_{>0}.
+\]
+设其不同元素为 \(a_1<\cdots<a_r\)，并记重数
+\[
+\mu_j:=\bigl|\{S\subseteq E(C_m):I(C_m[S])=a_j\}\bigr|.
+\]
+则对全部 \(q\ge 0\) 有
+\[
+\boxed{\;
+2^m\Tr\!\bigl((T^{(q)})^m\bigr)=\sum_{j=1}^{r}\mu_j\,a_j^{q}\; } .
+\]
+因此 \(q\mapsto \Tr((T^{(q)})^m)\) 满足阶数 \(r\) 的齐次线性递推，其特征多项式可取
+\[
+P_m(x):=\prod_{j=1}^{r}(x-a_j)\in\ZZ[x].
+\]
+并且序列矩 \(\{2^m\Tr((T^{(q)})^m)\}_{q\ge 0}\) 对 \(\{(a_j,\mu_j)\}_{j=1}^{r}\) 具有限矩确定性：当 \(r\) 已知时，前 \(2r\) 项可唯一恢复全部 \((a_j,\mu_j)\)。
+\end{conclusion}
+\begin{proof}[证明要点]
+首式由结论 \ref{con:xi-terminal-replica-softcore-trace-moment-cycle-subgraph-independent-sets}
+对 \(\{S\subseteq E(C_m)\}\) 按同值 \(I(C_m[S])\) 分组即得。
+有限指数和 \(\sum_j\mu_j a_j^q\) 被 \(\prod_j(x-a_j)\) 湮灭，故得递推。
+\par
+对反演性，记矩序列 \(M_q:=\sum_j\mu_j a_j^q\)。
+其生成函数
+\[
+\sum_{q\ge 0}M_q z^q=\sum_{j=1}^{r}\frac{\mu_j}{1-a_j z}
+\]
+为分母次数 \(r\) 的有理函数。
+由前 \(2r\) 项矩可唯一确定该有理函数（Pad\'e/Prony 型重构），
+再由部分分式分解唯一性恢复 \((a_j,\mu_j)\)。证毕。
+\end{proof}
+
+\begin{conclusion}[低阶例外幂和闭式的统一回收：\(m=2\) 与 \(m=6\)]\label{con:xi-terminal-replica-softcore-exceptional-power-sum-m2-m6-recovered}
+对任意 \(q\ge 2\)，有
+\[
+\boxed{\;
+S_2(q)=\frac14\Bigl(4^{q}+2\cdot 3^{q}+\Omega_2(q)\Bigr)
+=\frac14\Bigl(4^{q}+2\cdot 3^{q}+F_{2q+2}\Bigr)\; } ,
+\]
+以及
+\[
+\boxed{\;
+\begin{aligned}
+S_6(q)=\frac1{64}\Big(
+&64^{q}+6\cdot48^{q}+6\cdot40^{q}+9\cdot36^{q}+6\cdot32^{q}+12\cdot30^{q}\\
+&+2\cdot27^{q}+6\cdot26^{q}+3\cdot25^{q}+6\cdot24^{q}+6\cdot21^{q}+\Omega_6(q)
+\Big)\; .
+\end{aligned}
+}
+\]
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-terminal-replica-softcore-exceptional-power-sum-cycle-sector-replacement} 取 \(m=2\)，
+真子边集仅有空集与两条单边：对应 \(I=4\) 与 \(I=3\)（重数 \(2\)），代入得
+\(
+S_2(q)=2^{-2}(4^q+2\cdot 3^q+\Omega_2(q))
+\)；
+再由 \(\Omega_2(q)=F_{2q+2}\)（结论 \ref{con:xi-terminal-replica-softcore-lucas-pell-omega-unified}）即得第一式。
+\par
+第二式与结论 \ref{con:xi-terminal-replica-softcore-exceptional-power-sum-m6} 一致，
+亦可由 \(m=6\) 的子边集按连通型分类并代回同一替换公式得到。证毕。
+\end{proof}
+
+\begin{conclusion}[大复制阶的统一指数分层：次主比率 \(\tfrac34\)]\label{con:xi-terminal-replica-softcore-large-q-two-layer-asymptotics}
+固定整数 \(m\ge 3\)。当 \(q\to\infty\) 时，
+\[
+\Tr\!\bigl((T^{(q)})^m\bigr)
+=2^{m(q-1)}
+\left(
+1+m\Bigl(\frac34\Bigr)^q+O_m\!\Bigl(\Bigl(\frac58\Bigr)^q\Bigr)
+\right),
+\]
+且同一展开对例外幂和成立：
+\[
+S_m(q)
+=2^{m(q-1)}
+\left(
+1+m\Bigl(\frac34\Bigr)^q+O_m\!\Bigl(\Bigl(\frac58\Bigr)^q\Bigr)
+\right).
+\]
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-terminal-replica-softcore-trace-moment-cycle-subgraph-independent-sets}，
+\[
+2^m\Tr\!\bigl((T^{(q)})^m\bigr)=\sum_{S\subseteq E(C_m)}I(C_m[S])^{q}.
+\]
+其中 \(S=\varnothing\) 唯一给出最大值 \(I=2^m\)。
+当 \(|S|=1\) 时 \(I=3\cdot 2^{m-2}\)，重数恰为 \(m\)。
+若 \(|S|\ge 2\)，则要么含相邻两边（出现长度 \(2\) 路径分量），要么至少含两条不交边；
+两种情形统一给出
+\[
+I(C_m[S])\le 5\cdot 2^{m-3}.
+\]
+故
+\[
+2^m\Tr\!\bigl((T^{(q)})^m\bigr)
+=(2^m)^q+m(3\cdot 2^{m-2})^q+O_m\!\bigl((5\cdot 2^{m-3})^q\bigr),
+\]
+化简得第一式。
+\par
+再由结论 \ref{con:xi-terminal-replica-softcore-exceptional-power-sum-cycle-sector-replacement}，
+\[
+S_m(q)=\Tr\!\bigl((T^{(q)})^m\bigr)-2^{-m}\bigl(L_m^q-\Omega_m(q)\bigr).
+\]
+且 \(|L_m^q-\Omega_m(q)|\ll_m \varphi^{mq}\)，故差项为
+\[
+2^{-m}|L_m^q-\Omega_m(q)|
+=2^{m(q-1)}\,O_m\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^{mq}\Bigr)
+=2^{m(q-1)}\,O_m\!\Bigl(\Bigl(\frac58\Bigr)^q\Bigr),
+\]
+其中最后一步用到 \(m\ge 3\) 时 \((\varphi/2)^m<5/8\)。
+于是第二式成立。证毕。
+\end{proof}
+
+\begin{conclusion}[时间纤维分裂的系数定律：Fibonacci 乘积基底与圆周重复指数]\label{con:xi-terminal-replica-softcore-cycle-subgraph-cyclic-composition-coeff-law}
+固定整数 \(m\ge 1\)。
+对任意真子图 \(C_m[S]\)（即 \(S\subsetneq E(C_m)\)），图 \(C_m[S]\) 必为若干条路径的离散并。
+记其路径分量的顶点数依圆周顺序给出圆周分拆（cyclic composition）
+\[
+\boldsymbol n=(n_1,\dots,n_r),\qquad n_i\in\ZZ_{\ge 1},\ \sum_{i=1}^{r}n_i=m,
+\]
+并按圆周旋转等价。
+令 Fibonacci 数列满足 \(F_0=0,F_1=1\) 与递推 \(F_{n+2}=F_{n+1}+F_n\)，并定义
+\[
+B(\boldsymbol n):=\prod_{i=1}^{r}F_{n_i+2}\in\ZZ_{>0}.
+\]
+再令 \(\mathrm{rep}(\boldsymbol n)\) 表示 \(\boldsymbol n\) 作为圆周序列的最大重复次数：存在且仅存在最小块 \(\boldsymbol n_0\) 使得（按圆周意义）
+\(
+\boldsymbol n=\boldsymbol n_0^{\ \mathrm{rep}(\boldsymbol n)}
+\)。
+则：
+\begin{enumerate}
+  \item \textbf{（指数基底）}若 \(S\subsetneq E(C_m)\) 的分量圆周分拆为 \(\boldsymbol n\)，则
+  \[
+  \boxed{\ I\!\bigl(C_m[S]\bigr)=B(\boldsymbol n)\ }.
+  \]
+  \item \textbf{（多重性）}对应于同一圆周分拆类 \(\boldsymbol n\) 的边子集个数严格等于
+  \[
+  \boxed{\ \kappa(\boldsymbol n)=\frac{m}{\mathrm{rep}(\boldsymbol n)}\ } .
+  \]
+  \item \textbf{（分组重写）}因此结论 \ref{con:xi-terminal-replica-softcore-exceptional-power-sum-cycle-sector-replacement} 的循环扇区替换可按圆周分拆分组为
+  \[
+  \boxed{\;
+  2^m S_m(q)=\Omega_m(q)+\sum_{\boldsymbol n\in\mathrm{CycComp}(m)}\kappa(\boldsymbol n)\,B(\boldsymbol n)^{q}\; },
+  \qquad q\ge 2,
+  \]
+  其中 \(\mathrm{CycComp}(m)\) 表示全部圆周分拆类（按圆周旋转取商）。
+\end{enumerate}
+\end{conclusion}
+\begin{proof}[证明要点]
+由于 \(S\subsetneq E(C_m)\)，图 \(C_m[S]\) 无环且每个顶点度数不超过 \(2\)，故其连通分量必为路径。
+设某一分量为顶点数 \(n\) 的路径 \(P_n\)，记 \(a_n:=I(P_n)\)。
+按是否选取端点拆分可得递推 \(a_n=a_{n-1}+a_{n-2}\)（\(n\ge 2\)），且 \(a_0=1,a_1=2\)，故 \(a_n=F_{n+2}\)。
+从而 \(I(C_m[S])\) 由分量相乘得到 \(B(\boldsymbol n)\)。
+\par
+对多重性，令 \(Z:=E(C_m)\setminus S\neq\varnothing\) 为缺边集合，并按圆周顺序列出其元素。
+相邻缺边之间的圆周距离（以顶点数计）给出 \(\boldsymbol n\)。
+循环平移群 \(\ZZ/m\ZZ\) 作用于边子集并保持 \(\boldsymbol n\) 的圆周分拆类；
+其稳定子由把缺边集合整体平移不变的旋转组成，而稳定子阶恰等于重复次数 \(\mathrm{rep}(\boldsymbol n)\)。
+由轨道—稳定子定理得到轨道大小 \(m/\mathrm{rep}(\boldsymbol n)\)，即为出现次数 \(\kappa(\boldsymbol n)\)。
+最后，将结论 \ref{con:xi-terminal-replica-softcore-exceptional-power-sum-cycle-sector-replacement} 中
+\(\sum_{S\subsetneq E(C_m)}I(C_m[S])^{q}\)
+按圆周分拆类分组并代入前两条即得重写式。
+可复现核验脚本：\texttt{scripts/exp\_replica\_softcore\_cycle\_subgraph\_cyccomp\_audit.py}。证毕。
+\end{proof}
+
+\begin{conclusion}[谱泄漏局部化：非对称子空间的迹仅由全循环扇区贡献]\label{con:xi-terminal-replica-softcore-spectral-leakage-localization-full-cycle-sector}
+令 \(\mathcal H_q:=(\CC^2)^{\otimes q}\)，并记 \(S_q\)-不变子空间 \(\mathcal H_q^{S_q}\cong\mathrm{Sym}^q(\CC^2)\)（结论 \ref{con:xi-terminal-replica-softcore-exceptional-spectrum-sympower-model}）。
+则对任意整数 \(m\ge 1\) 与 \(q\ge 2\)，有
+\[
+\boxed{\;
+\Tr\!\left(\left.(T^{(q)})^m\right|_{(\mathcal H_q^{S_q})^{\perp}}\right)
+=2^{-m}\Bigl(I(C_m)^{q}-\Omega_m(q)\Bigr)\;}
+\]
+其中正交补取于 \(\mathcal H_q\) 的自然内积。
+从而非对称方向的全部迹贡献被严格局部化到全循环扇区 \(S=E(C_m)\)（亦即字词 \(K^m\)）所触发的替换差项上。
+\end{conclusion}
+\begin{proof}[证明要点]
+由 \(J=uu^{\top}\)（\(u=(1,1)^{\top}\)），任一含 \(J\) 的字词乘积 \(M(w)\) 皆为秩 \(1\) 矩阵；
+因此 \(M(w)^{\otimes q}\) 的像空间包含于 \(\mathrm{span}\{a(w)^{\otimes q}\}\subset \mathcal H_q^{S_q}\)。
+换言之，除 \(w=K^m\) 外的全部扇区项在 \((\mathcal H_q^{S_q})^{\perp}\) 上限制为零算子。
+因此
+\[
+\Tr\!\left(\left.(T^{(q)})^m\right|_{(\mathcal H_q^{S_q})^{\perp}}\right)
+=2^{-m}\left(\Tr\!\bigl((K^{\otimes q})^m\bigr)-\Tr\!\bigl(\mathrm{Sym}^q(K^m)\bigr)\right)
+=2^{-m}\bigl(L_m^{q}-\Omega_m(q)\bigr),
+\]
+其中 \(\Tr((K^{\otimes q})^m)=\Tr((K^m)^{\otimes q})=(\Tr K^m)^q=L_m^q\)。
+最后用 \(I(C_m)=L_m\) 得到所示形式。证毕。
+\end{proof}
+
+\endinput
+

@@ -1,0 +1,154 @@
+\subsubsection{三阶碰撞矩与 \texorpdfstring{$\mathrm{R\acute{e}nyi}$}{Renyi}--3 投影熵率}\label{subsec:pom-s3}
+二阶碰撞矩 \(S_2(m)\) 描述“成对折叠碰撞”的 \(\ell^2\) 质量；更高阶的碰撞矩把纤维分布的尖锐程度分解为一族 \(\mathrm{R\acute{e}nyi}\) 指纹。下面给出三阶（\(q=3\)）的最小三态实现，其结构与命题 \ref{prop:pom-s2-recurrence} 完全同型。
+
+\begin{definition}[三阶折叠碰撞矩]\label{def:pom-s3}
+定义三阶碰撞和
+$$
+S_3(m):=\sum_{x\in X_m} d_m(x)^3.
+$$
+等价地，从 \(\Omega_m\) 上均匀独立抽取三条窗口 \(\omega_1,\omega_2,\omega_3\)，则
+$$
+\mathbb{P}\bigl[\Fold_m(\omega_1)=\Fold_m(\omega_2)=\Fold_m(\omega_3)\bigr]=\frac{S_3(m)}{8^m}.
+$$
+\end{definition}
+
+\begin{proposition}[三阶碰撞核的三态表示与三阶递推]\label{prop:pom-s3-recurrence}
+存在一个三态的非负整数矩阵
+$$
+A_3:=
+\begin{pmatrix}
+0&2&2\\
+1&0&2\\
+0&1&2
+\end{pmatrix},
+$$
+以及读出向量
+$$
+u_3:=(5,13,34)^{\mathsf T},\qquad v_3:=(1,0,0)^{\mathsf T},
+$$
+使得对一切 \(m\ge 2\),
+$$
+S_3(m)=2\,u_3^{\mathsf T}A_3^{\,m-2}v_3.
+$$
+从而 \(S_3(m)\) 满足精确递推（\(m\ge 5\)）
+$$
+S_3(m)=2S_3(m-1)+4S_3(m-2)-2S_3(m-3),
+$$
+并具有初值 \(S_3(2)=10,S_3(3)=26,S_3(4)=88\)。
+\end{proposition}
+\begin{proof}
+与命题 \ref{prop:pom-s2-recurrence} 相同，本命题以\textbf{可审计构造}给出：三态非负 realization 可由小 \(m\) 的枚举数据恢复，并由脚本 \texttt{scripts/exp\_fold\_collision\_s3.py} 逐项核验（同时核验递推与读出公式）。给定 \(A_3\) 与读出向量，序列
+\(
+a_n:=u_3^{\mathsf T}A_3^{n}v_3
+\)
+自动满足由 Cayley--Hamilton 定理诱导的三阶线性递推，其系数由 \(A_3\) 的特征多项式决定。直接计算得
+$$
+\det(\lambda I-A_3)=\lambda^3-2\lambda^2-4\lambda+2,
+$$
+再乘以常数 \(2\) 并作指标平移即得所述递推式。证毕。
+\end{proof}
+
+\begin{proposition}[$\mathrm{Bool}^3$ 上 $\mathfrak{S}_3$ 置换轨道分解与递推约简]\label{prop:pom-s3-orbit-decomposition}
+三阶碰撞矩 $S_3(m)$ 的递推结构可通过对称群 $\mathfrak{S}_3$ 在三元碰撞类指标空间 $\mathrm{Bool}^3=\{0,1\}^3$ 上的自然置换作用获得组合解释。对每个 $\varepsilon=(\varepsilon_1,\varepsilon_2,\varepsilon_3)\in\{0,1\}^3$，定义混合碰撞辅助量
+$$
+E_\varepsilon(m):=\sum_{x\in X_m}\prod_{j=1}^{3}\bigl[\varepsilon_j\,d_m(x)+(1-\varepsilon_j)\,\overline{d}_m(x)\bigr],
+$$
+其中 $\overline{d}_m(x):=2^m-d_m(x)$ 为补纤维多重度。$\mathfrak{S}_3$ 通过对坐标的置换作用于 $\mathrm{Bool}^3$，将 $8$ 个碰撞类指标分成恰好三条轨道：
+\begin{enumerate}
+  \item \textbf{轨道~1}：$\{(0,0,0),\,(1,1,1)\}$，由位翻转对称性 $\varepsilon\mapsto\mathbf{1}-\varepsilon$ 关联，轨道大小 $2$；
+  \item \textbf{轨道~2}：$\{(0,0,1),\,(0,1,0),\,(1,0,0)\}$，构成 $\mathfrak{S}_3$ 的完整轨道，轨道大小 $3$；
+  \item \textbf{轨道~3}：$\{(0,1,1),\,(1,0,1),\,(1,1,0)\}$，构成 $\mathfrak{S}_3$ 的完整轨道，轨道大小 $3$。
+\end{enumerate}
+由 $d_m(x)+\overline{d}_m(x)=2^m$ 以及 $\sum_{x\in X_m}d_m(x)=2^m$，同一轨道内各 $\varepsilon$ 对应的辅助量关于置换不变，故 $S_3(m+1)$ 的递推可按轨道约简为
+$$
+S_3(m+1)=2\,E_{(0,0,0)}(m)+3\,E_{(0,0,1)}(m)+3\,E_{(0,1,1)}(m),
+$$
+其中系数 $2+3+3=8=|\mathrm{Bool}^3|$ 恰为碰撞类指标总数。此 $2{+}3{+}3$ 分解直接对应 $\mathrm{Bool}^3$ 上 $\mathfrak{S}_3$ 的 Burnside 轨道计数。
+\end{proposition}
+\begin{proof}
+$\mathfrak{S}_3$ 的作用在 $\mathrm{Bool}^3$ 上保持 Hamming 权 $|\varepsilon|$ 不变，因此轨道按 Hamming 权分层：权 $0$ 与权 $3$ 各含一个元素，经位翻转 $\varepsilon\mapsto\mathbf{1}-\varepsilon$ 连接后构成大小为 $2$ 的轨道；权 $1$ 的 $\binom{3}{1}=3$ 个元素构成一条完整 $\mathfrak{S}_3$ 轨道；权 $2$ 的 $\binom{3}{2}=3$ 个元素构成另一条完整 $\mathfrak{S}_3$ 轨道。由混合辅助量的定义，同一轨道内各 $\varepsilon$ 仅为因子排列的重排，故 $E_\varepsilon(m)$ 相同。对 $\mathrm{Bool}^3$ 上全部 $8$ 项求和时，只需取每条轨道的一个代表元并乘以其轨道大小，即得系数 $2,3,3$。证毕。
+\end{proof}
+
+\begin{corollary}[三阶碰撞指数与 \texorpdfstring{$h_3$}{h3}]\label{cor:pom-s3-asymptotic}
+令 \(r_3\) 为多项式
+$$
+x^3-2x^2-4x+2=0
+$$
+的最大实根（\(r_3\approx 3.086130197651\)）。则
+$$
+S_3(m)=\Theta(r_3^m),
+\qquad
+\mathbb{P}\bigl[\Fold_m(\omega_1)=\Fold_m(\omega_2)=\Fold_m(\omega_3)\bigr]
+=\Theta\!\left(\left(\frac{r_3}{8}\right)^m\right).
+$$
+进一步，令 \(w_m(x):=d_m(x)/2^m\) 为均匀微态经折叠后的输出分布，则其 \(\mathrm{R\acute{e}nyi}\)--3 投影熵率存在且为
+$$
+h_3:=\lim_{m\to\infty}\frac{1}{m}\Bigl(-\log\sum_{x\in X_m}w_m(x)^3\Bigr)
+=\log\!\left(\frac{8}{r_3}\right).
+$$
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-s3-recurrence} 得 \(S_3(m)\) 的生成函数分母为 \(1-2z-4z^2+2z^3=\det(I-zA_3)\)，其收敛半径由该分母的最小模零点决定，等价于特征多项式的最大实根 \(r_3\)，故 \(S_3(m)=\Theta(r_3^m)\)。又
+$$
+\sum_{x\in X_m}w_m(x)^3=\sum_x \frac{d_m(x)^3}{8^m}=\frac{S_3(m)}{8^m},
+$$
+代入渐近即得 \(h_3=\log(8/r_3)\)。证毕。
+\end{proof}
+
+\begin{remark}[三阶碰撞核的严格 RH 裕量（\texorpdfstring{$A_3$}{A3}）]\label{rem:pom-collision-rh-margin-a3}
+记 \(\lambda:=\rho(A_3)=r_3\approx 3.086130197651\)。由
+\[
+\det(\lambda I-A_3)=\lambda^3-2\lambda^2-4\lambda+2
+\]
+可得三条特征值均为实数，除 Perron 根外另外两根数值约为
+\[
+\mu_2\approx -1.514136929335,\qquad
+\mu_3\approx 0.428006731684.
+\]
+因此
+\[
+\max\{|\mu_2|,|\mu_3|\}\approx 1.514137\ <\ \sqrt{r_3}\approx 1.756739,
+\]
+即三阶碰撞核同样严格满足核版 RH 不等式并留有裕量。
+\end{remark}
+
+\begin{remark}[等价的三态 \texorpdfstring{$A_3$}{A3} realization：同一递推的不同非负整数实现]\label{rem:pom-a3-alternative-realization}
+三阶碰撞矩序列 \(\{S_3(m)\}_{m\ge 1}\) 的有限维 realization 并不唯一：只要保持同一特征多项式
+\(
+\lambda^3-2\lambda^2-4\lambda+2
+\)
+并匹配读出向量，即可得到同一 \(S_3\)。
+例如取
+$$
+A_3':=
+\begin{pmatrix}
+0&1&0\\
+1&0&1\\
+0&3&2
+\end{pmatrix},
+\qquad
+u_3':=(0,6,2),\qquad
+v_3':=(0,0,1)^{\mathsf T},
+$$
+则对一切 \(m\ge 1\) 有
+$$
+S_3(m)=u_3' \, (A_3')^{\,m-1}\, v_3',
+$$
+并且
+$$
+\det(I-zA_3')=1-2z-4z^2+2z^3.
+$$
+因此 \(A_3'\) 与正文采用的 \(A_3\) 共享同一递推分母与 Perron 根 \(r_3\)，只是给出了一个不同的三态非负整数表示。
+\end{remark}
+
+\begin{definition}[三阶碰撞核的 \texorpdfstring{$\zeta$}{zeta} 与有限部常数]\label{def:pom-collision-zeta-a3}
+对三态核 \(A_3\) 定义
+$$
+\zeta_{A_3}(z):=\exp\!\left(\sum_{n\ge 1}\frac{\mathrm{Tr}(A_3^n)}{n}z^n\right)
+:=\frac{1}{\det(I-zA_3)}.
+$$
+相应的 primitive 轨道数 \(p_n(A_3)\)、以及 Abel/Mertens 有限部常数 \(\log\mathfrak{M}(A_3)\) 与 \(\mathsf{M}(A_3)=\gamma+\log\mathfrak{M}(A_3)\) 可按第 \ref{sec:zeta-finite-part} 节的通用接口抽取；其可复现输出见表 \ref{tab:collision_kernel_A3_primitive} 与 \ref{tab:collision_kernel_A3_finite_part}（脚本 \texttt{scripts/exp\_collision\_kernel\_A3\_primitive.py} 与 \texttt{scripts/exp\_collision\_kernel\_A3\_finite\_part.py}）。
+\end{definition}
+
+\input{sections/generated/tab_collision_kernel_A3_primitive}
+\input{sections/generated/tab_collision_kernel_A3_finite_part}

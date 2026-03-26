@@ -1,0 +1,90 @@
+\begin{proposition}[矩阶选择的离散变分阈值：指数风险预算下的 \texorpdfstring{$q^\star(c)$}{q*(c)} 区间刻画]\label{prop:pom-qstar-discrete-variational-threshold}
+令 \(P(q):=\log r_q\)（整数 \(q\ge 1\)），并记割线斜率
+\[
+\beta_q:=\frac{P(q)-P(1)}{q-1}
+=\frac{\log r_q-\log 2}{q-1}
+\qquad(q\ge 2),
+\]
+其中 \(r_1=2\)。
+对指数风险预算 \(\varepsilon_m=e^{-cm}\)（\(c>0\)），定义证书指数的 \(q\)-族
+\[
+\gamma^{(q)}(c):=\beta_q+\frac{c}{q-1},
+\qquad
+\gamma^{\mathrm{cert}}(c):=\inf_{q\in\ZZ_{\ge 2}}\gamma^{(q)}(c),
+\qquad
+q^\star(c)\in\arg\min_{q\in\ZZ_{\ge 2}}\gamma^{(q)}(c),
+\]
+其与注 \ref{rem:pom-quantile-budget-computable} 的有限 \(m\) 设计式同型（取 \(c=\lim_{m\to\infty}\frac1m\log(1/\varepsilon_m)\)）。
+则对任意满足 \(q^\star(c)=q\ge 2\) 的最优矩阶，必有阈值不等式
+\[
+\boxed{\;
+(q-1)(q-2)\bigl(\beta_q-\beta_{q-1}\bigr)\le c\le q(q-1)\bigl(\beta_{q+1}-\beta_{q}\bigr)\;}
+\]
+其中左端仅对 \(q\ge 3\) 有效（\(q=2\) 时该条件退化为真空）。
+因此 \(c\mapsto q^\star(c)\) 为分段常值且整体单调不减的离散相图。
+\end{proposition}
+\begin{proof}
+由定义，\(q^\star(c)=q\) 等价于同时满足
+\(
+\gamma^{(q)}(c)\le \gamma^{(q-1)}(c)
+\)
+与
+\(
+\gamma^{(q)}(c)\le \gamma^{(q+1)}(c)
+\)
+（后一条对 \(q\ge 2\) 有意义；前一条对 \(q\ge 3\) 有意义）。
+
+\smallskip\noindent\textbf{(i) 与 \(q-1\) 比较（给出下界）}
+当 \(q\ge 3\) 时，
+\[
+\beta_q+\frac{c}{q-1}\le \beta_{q-1}+\frac{c}{q-2}
+\quad\Longleftrightarrow\quad
+\beta_q-\beta_{q-1}\le \frac{c}{(q-1)(q-2)},
+\]
+即 \(c\ge (q-1)(q-2)(\beta_q-\beta_{q-1})\)。
+
+\smallskip\noindent\textbf{(ii) 与 \(q+1\) 比较（给出上界）}
+对任意 \(q\ge 2\)，
+\[
+\beta_q+\frac{c}{q-1}\le \beta_{q+1}+\frac{c}{q}
+\quad\Longleftrightarrow\quad
+\beta_{q+1}-\beta_q\ge \frac{c}{q(q-1)},
+\]
+即 \(c\le q(q-1)(\beta_{q+1}-\beta_q)\)。
+
+\smallskip
+最后由命题 \ref{prop:pom-pressure-convexity} 的离散凸性可知 \(\beta_q\) 随 \(q\) 单调不减（见注 \ref{rem:pom-quantile-budget-computable} 的推导），
+从而这些阈值在 \(q\) 方向有序并给出分段常值的选择图谱；又当 \(c\) 增大时项 \(c/(q-1)\) 倾向推动更大 \(q\)，故 \(q^\star(c)\) 整体单调不减。证毕。
+\end{proof}
+
+\begin{corollary}[最优矩阶的单调比较静态：对 \texorpdfstring{$m$}{m} 与 \texorpdfstring{$\varepsilon$}{epsilon} 的方向性规律]\label{cor:pom-qstar-monotone-comparative-statics-m-epsilon}
+在命题 \ref{prop:pom-qstar-discrete-variational-threshold} 的离散凸性假设下，对任意 \(m\ge 1\)、\(\varepsilon\in(0,1)\) 与整数 \(q\ge 2\) 定义
+\[
+\gamma_m(q;\varepsilon):=\log r_q-\log 2+\frac{1}{m}\cdot\frac{\log(1/\varepsilon)}{q-1},
+\]
+并令 \(q^\star(m,\varepsilon)\) 为 \(\gamma_m(\cdot;\varepsilon)\) 在 \(\ZZ_{\ge 2}\) 上的最小化器（若不唯一取最小者）。
+记
+\[
+\lambda:=\frac{1}{m}\log(1/\varepsilon).
+\]
+则 \(\lambda\mapsto q^\star(m,\varepsilon)\) 仅经由 \(\lambda\) 进入，且满足单调性：
+\begin{enumerate}
+  \item 固定 \(\varepsilon\) 时，\(m\mapsto q^\star(m,\varepsilon)\) 单调不增；
+  \item 固定 \(m\) 时，\(\varepsilon\downarrow 0\) 推动 \(q^\star(m,\varepsilon)\) 单调不减；
+  \item 更一般地，\(\lambda\mapsto q^\star(\lambda)\) 单调不减。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定义
+\(
+\gamma_m(q;\varepsilon)=\log r_q-\log 2+\lambda/(q-1)
+\)，
+故最小化器仅依赖于 \(\lambda\)。
+命题 \ref{prop:pom-qstar-discrete-variational-threshold} 已证明 \(c\mapsto q^\star(c)\) 整体单调不减；取 \(c=\lambda\) 即得第 (3) 点。
+第 (1)(2) 点由 \(\lambda=\frac{1}{m}\log(1/\varepsilon)\) 对 \(m\) 单调递减、对 \(\varepsilon\) 单调递增直接推出。证毕。
+\end{proof}
+
+\input{parts/part__pom-breakpoint-curvature-law-thermo-curvature}
+
+\endinput
+

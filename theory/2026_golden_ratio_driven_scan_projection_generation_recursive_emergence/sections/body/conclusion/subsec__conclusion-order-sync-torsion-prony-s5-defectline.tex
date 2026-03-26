@@ -1,0 +1,274 @@
+\subsection{序投影阈值、同步死区、torsion 平坦崩塌与去载波平方谱层析}\label{subsec:conclusion-order-sync-torsion-prony-s5-defectline}
+沿用定理 \ref{thm:pom-val-polynomial-semantics}、推论 \ref{cor:pom-val-monotone-boolean}、命题 \ref{prop:pom-nand-projorder-budget-one}、定理 \ref{thm:pom-firstfit-extensional-undecidable}、命题 \ref{prop:pom-anom-swap-lowerbound-and-mom-amplify}、定理 \ref{thm:spg-double-budget-address-capacity}、定理 \ref{thm:pom-sync-subtracted-chebotarev-capacity}、推论 \ref{cor:pom-sync-subtracted-chebotarev-zeckendorf}、定理 \ref{thm:pom-torsion-q-residue-class-fourier-rigidity}、推论 \ref{cor:pom-torsion-symmetry-coprime-closure}、定理 \ref{thm:pom-infinite-coprime-torsion-symmetry-rankone}、定理 \ref{thm:pom-torsion-symmetry-order-complete-classification}、定理 \ref{thm:xi-time-part9xb-rigid-branches-odd-even-moment-splitting} 与定理 \ref{thm:conclusion-leyang-rho5-wall-compression-codimension-one-residual} 的记号。把这些原本分散在序投影语言、异常证书、同步预算、torsion 刚性、二维加权核与 \(S_5\) Lee--Yang 层析中的接口并读，可再压缩出如下六条后继结果。
+
+\begin{theorem}[序投影阈值三相定理]\label{thm:conclusion-order-projection-three-phase-trichotomy}
+记
+\[
+\mathsf W_{\mathrm{val}}
+\]
+为仅含 \(\mathrm{EVOLVE}(op)\)、\(\mathrm{PROJ\_NORM}\)、\(\mathrm{CLEAN}\) 的值层语言；
+记
+\[
+\mathsf W_{\mathrm{cmp}}
+\]
+为在 \(\mathsf W_{\mathrm{val}}\) 上加入 \(\mathrm{PROJ\_ORDER}(\mathrm{cmp})\) 与 \(\mathrm{EVOLVE}(\mathrm{sub})\) 的扩展；
+再记
+\[
+\mathsf W_{\mathrm{ff}}
+\]
+为在 prime-register 纤维上进一步允许 \(\mathrm{PROJ\_ORDER}(\mathrm{first\mbox{-}fit})\) 与 \(\mathrm{EVOLVE}(\mathrm{fractran\mbox{-}update})\) 的扩展。则有严格三相分界
+\[
+\mathsf W_{\mathrm{val}}
+\subsetneq
+\mathsf W_{\mathrm{cmp}}
+\subsetneq
+\mathsf W_{\mathrm{ff}},
+\]
+并且：
+\begin{enumerate}
+\normalfont
+  \item 任意 \(w\in\mathsf W_{\mathrm{val}}\) 的外延语义都由逐坐标的非负整系数多项式映射给出，且其外延等价可判定；
+  \item 任意由 \(\mathsf W_{\mathrm{val}}\) 在 \(\{0,1\}^n\) 上实现的布尔函数必为坐标单调，因此 \(\mathrm{NOT}\)、\(\mathrm{NAND}\) 与一切非单调布尔函数都不属于该相；
+  \item \(\mathsf W_{\mathrm{cmp}}\) 中已可实现 \(\mathrm{NAND}\)，故一枚比较型序投影已构成严格表达阈值；
+  \item \(\mathsf W_{\mathrm{ff}}\) 的外延等价不可判定，因此 first-fit 型序门构成普适计算阈值。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第 \(1\) 条是定理 \ref{thm:pom-val-polynomial-semantics} 与定理 \ref{thm:pom-val-extensional-equivalence-decidable} 的直接重述。第 \(2\) 条即推论 \ref{cor:pom-val-monotone-boolean}。第 \(3\) 条由命题 \ref{prop:pom-nand-projorder-budget-one} 给出，因而 \(\mathsf W_{\mathrm{val}}\subsetneq \mathsf W_{\mathrm{cmp}}\)。第 \(4\) 条由定理 \ref{thm:pom-firstfit-extensional-undecidable} 与 FRACTRAN 的 prime-register 编译给出；结合 \(\mathsf W_{\mathrm{cmp}}\) 仅提供比较型序门而不含 first-fit 选择，可知 \(\mathsf W_{\mathrm{cmp}}\subsetneq \mathsf W_{\mathrm{ff}}\)。另外，由定理 \ref{thm:conclusion-val-lawvere-equivalence-firstfit-collapse}，中间 \(\mathrm{PROJ\_NORM}\) 在值层语义中可外提并合并到末端，因此三相分界的真正承载者不是规范投影的次数，而是序投影模态本身。证毕。
+\end{proof}
+
+\begin{theorem}[异常类的证书长度不可压缩定理]\label{thm:conclusion-anomaly-certificate-linear-incompressibility}
+设 \(w\) 为三生成元片段，且其异常类 \(A(w)\neq 0\)。记 \(w^{[q]}\) 为其 \(\mathrm{MOM}_q\) 编译。取异常空间上的任意半范数 \(\|\cdot\|\)，并令
+\[
+\alpha_\ast
+\]
+为单次带异常交换步标签的范数上界。若 \(\pi_q\) 是任一把 \(w^{[q]}\) 规约到接口正规形的证书，\(s(\pi_q)\) 为其中带异常交换步的次数，则
+\[
+s(\pi_q)\ \ge\ \frac{q\,\|A(w)\|}{\alpha_\ast}.
+\]
+特别地，不存在满足
+\[
+s(\pi_q)=o(q)
+\]
+的规约证书族。
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:pom-anom-swap-lowerbound-and-mom-amplify} 已给出：任意规约证书 \(\pi\) 的带异常交换步次数满足
+\[
+s(\pi)\ge \frac{\|\mathrm{anom}(\pi)\|}{\alpha_\ast},
+\]
+而在 moment 编译下异常标签严格线性放大。对 \(w^{[q]}\) 的任一规约证书 \(\pi_q\)，其异常总量至少为 \(q\|A(w)\|\)；将之代回前式即得
+\[
+s(\pi_q)\ge \frac{q\|A(w)\|}{\alpha_\ast}.
+\]
+因此任何统一规约证书族都不可能取得 \(o(q)\) 的异常交换复杂度。证毕。
+\end{proof}
+
+\begin{theorem}[同步死区与预算不可兑换定理]\label{thm:conclusion-sync-deadzone-budget-nonexchangeability}
+定义双预算寻址指数
+\[
+\mathcal E_{\mathrm{addr}}(m,n;u):=
+\min\!\left\{\varepsilon_m n,\ \frac12 h_2(u)\,m\right\},
+\]
+以及同步扣除后的 Chebotarev 可用深度指数
+\[
+\mathcal E_{\mathrm{Cheb}}(m,n):=
+\Bigl(\frac12+\varepsilon_{\mathrm{gap}}\Bigr)\,
+\bigl(n-n_{\mathrm{sync}}(m,\delta_{\mathrm{NULL}})\bigr)_+\,
+\log\lambda_m.
+\]
+若某协议在层级 \(m\)、总扫描预算 \(n\) 下同时要求：
+\begin{enumerate}
+\normalfont
+  \item 统计型 \(\mathsf{NULL}\) 的失败概率不超过 \(\delta_{\mathrm{NULL}}\)；
+  \item 地址碰撞总失败概率受控；
+  \item 对全部非空 cylinder 达到 Chebotarev 级统计清晰度，
+\end{enumerate}
+则必有
+\[
+\log N\ \lesssim\ \mathcal E_{\mathrm{addr}}(m,n;u),
+\qquad
+\log |G_m|
+\ \lesssim\
+\mathcal E_{\mathrm{Cheb}}(m,n)-\log(1/\delta_{\mathrm{Cheb}}).
+\]
+因此：
+\begin{enumerate}
+\normalfont
+  \item 若 \(n<n_{\mathrm{sync}}(m,\delta_{\mathrm{NULL}})\)，则 \(\mathcal E_{\mathrm{Cheb}}(m,n)=0\)，在同步债务付清之前不可能启动任何正指数率的算术均匀化审计；
+  \item 若对无穷多个 \(m\) 都有 \(n<n_{\mathrm{sync}}(m,\delta_{\mathrm{NULL}})\)，则一切满足上述三条件的族都只能满足
+  \[
+  \limsup_{m\to\infty}\frac1m\log |G_m|=0;
+  \]
+  \item 在 Zeckendorf 折叠中，
+  \[
+  n_{\mathrm{sync}}(m,\delta_{\mathrm{NULL}})=m-1,
+  \]
+  因而条带 \(n<m-1\) 构成一条严格的时间死区。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一条不等式正是定理 \ref{thm:spg-double-budget-address-capacity} 的指数口径；第二条则是定理 \ref{thm:pom-sync-subtracted-chebotarev-capacity} 的同步扣除版容量律。由备注 \ref{rem:pom-time-defect-dichotomy} 与定理 \ref{thm:pom-sync-subtracted-chebotarev-capacity} 的可审计性说明，同步延迟是不可空间化的时间不变量，不能通过 residue/prime-register 方向上的额外容量抵消，因此当
+\[
+n<n_{\mathrm{sync}}(m,\delta_{\mathrm{NULL}})
+\]
+时只能有 \(\mathcal E_{\mathrm{Cheb}}(m,n)=0\)。于是若这一情形在无穷多个 \(m\) 上发生，则
+\[
+\log |G_m|\lesssim -\log(1/\delta_{\mathrm{Cheb}})+O(1),
+\]
+从而 \(\frac1m\log|G_m|\to 0\) 沿该子列成立。Zeckendorf 情形下的尖锐线性扣除正是推论 \ref{cor:pom-sync-subtracted-chebotarev-zeckendorf}。证毕。
+\end{proof}
+
+\begin{theorem}[互素剩余平坦的刚性崩塌定理]\label{thm:conclusion-coprime-residue-flatness-rigidity-collapse}
+设
+\[
+a_n=\rho^n\sum_{j=0}^{q-1} c_j\omega_q^{jn}+O(\rho^n\theta^n),
+\qquad 0<\theta<1,
+\]
+并对每个 \(q\ge 2\) 定义 residue-class 主项极限
+\[
+A_r^{(q)}:=\lim_{N\to\infty}\rho^{-(qN+r)}a_{qN+r},
+\qquad
+r=0,\dots,q-1.
+\]
+记
+\[
+\mathcal T_{\mathrm{flat}}
+:=
+\left\{
+q\ge 2:\ A_0^{(q)}=\cdots=A_{q-1}^{(q)}
+\right\}.
+\]
+则：
+\begin{enumerate}
+\normalfont
+  \item \(\mathcal T_{\mathrm{flat}}\) 与非 Perron 因子 \(F(t)\) 的 torsion 对称阶集合完全一致；
+  \item 若 \(q_1,q_2\in \mathcal T_{\mathrm{flat}}\) 且 \(\gcd(q_1,q_2)=1\)，则 \(q_1q_2\in \mathcal T_{\mathrm{flat}}\)；
+  \item 若 \(\mathcal T_{\mathrm{flat}}\) 含有无穷多个两两互素的整数，则
+  \[
+  F(t)\equiv 1,
+  \]
+  即非 Perron 谱完全消失。
+\end{enumerate}
+因此，在任何非退化情形下，\(\mathcal T_{\mathrm{flat}}\) 必为某个整数 \(g(F)\) 的全部约数，因而是有限且向下封闭的约数格。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-torsion-q-residue-class-fourier-rigidity}，
+\[
+A_0^{(q)}=\cdots=A_{q-1}^{(q)}
+\iff
+c_j=0\ (1\le j\le q-1)
+\iff
+F(t)=G_q(t^q).
+\]
+故 \(\mathcal T_{\mathrm{flat}}\) 正是 torsion 对称阶集合。第 \(2\) 条由推论 \ref{cor:pom-torsion-symmetry-coprime-closure} 直接给出。第 \(3\) 条由定理 \ref{thm:pom-infinite-coprime-torsion-symmetry-rankone} 立即推出。最后再用定理 \ref{thm:pom-torsion-symmetry-order-complete-classification}，便知在非退化情形下该集合恰为某个 \(g(F)\) 的全部约数。证毕。
+\end{proof}
+
+\begin{theorem}[去刚性载波后的平方谱有限采样定理]\label{thm:conclusion-decoupled-square-spectrum-finite-sampling}
+在二维加权核的 generic 区域内，设 core 八谱支为
+\[
+\Lambda_1(u,v),\dots,\Lambda_8(u,v),
+\]
+并定义去刚性载波后的偶、奇矩序列
+\[
+e_n:=\Tr(M_{u,v}^{2n})-2v^n,
+\qquad
+o_n:=\Tr(M_{u,v}^{2n+1}).
+\]
+令 \(\beta_1,\dots,\beta_K\) 为集合
+\[
+\{\Lambda_j(u,v)^2:\ 1\le j\le 8\}
+\]
+中的互异值，并记
+\[
+m_\ell:=\#\{j:\ \Lambda_j(u,v)^2=\beta_\ell\},
+\qquad
+s_\ell:=\sum_{\Lambda_j^2=\beta_\ell}\Lambda_j.
+\]
+则有精确分解
+\[
+e_n=\sum_{\ell=1}^{K}m_\ell\beta_\ell^n,
+\qquad
+o_n=\sum_{\ell=1}^{K}s_\ell\beta_\ell^n.
+\]
+从而：
+\begin{enumerate}
+\normalfont
+  \item \(2K\) 个连续偶矩 \(e_0,\dots,e_{2K-1}\) 足以唯一恢复 \(\beta_1,\dots,\beta_K\) 与 \(m_1,\dots,m_K\)；
+  \item 在 \(\beta_\ell\) 已知后，\(K\) 个连续奇矩 \(o_0,\dots,o_{K-1}\) 足以唯一恢复 \(s_1,\dots,s_K\)；
+  \item 因而在 generic 的 \(K=8\) 情形下，至多 \(24\) 个去载波矩值即可恢复完整的 core 八谱平方簇；若进一步无平方碰撞，则这 \(24\) 个矩值还可恢复全部八条 \(\Lambda_j\) 本身（仅差排列）。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9xb-rigid-branches-odd-even-moment-splitting}，
+\[
+\Tr(M_{u,v}^{2n})=2v^n+\sum_{j=1}^{8}\Lambda_j(u,v)^{2n},
+\qquad
+\Tr(M_{u,v}^{2n+1})=\sum_{j=1}^{8}\Lambda_j(u,v)^{2n+1}.
+\]
+按平方值相同的谱支并组，即得
+\[
+e_n=\sum_{\ell=1}^{K}m_\ell\beta_\ell^n,
+\qquad
+o_n=\sum_{\ell=1}^{K}s_\ell\beta_\ell^n.
+\]
+第一式是 \(K\)-项指数和。标准 Prony--Hankel 反演表明，前 \(2K\) 个连续样本唯一决定其最小湮灭多项式
+\[
+Q(z)=\prod_{\ell=1}^{K}(1-\beta_\ell z),
+\]
+从而唯一确定 \(\beta_\ell\) 与权重 \(m_\ell\)。一旦 \(\beta_\ell\) 已知，第二式就成为 Vandermonde 线性系统
+\[
+o_n=\sum_{\ell=1}^{K}s_\ell\beta_\ell^n,
+\qquad 0\le n\le K-1,
+\]
+由于 \(\beta_\ell\) 互异，该系统唯一可解。generic 情形下 \(m_\ell=1\)，故 \(s_\ell=\Lambda_\ell\)。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$S_5$}{S5} Lee--Yang 反演的余维一缺陷线]\label{cor:conclusion-s5-leyang-codimension-one-defect-line}
+在 \(S_5\) 的 Lee--Yang/Chebotarev 框架中，整个反演问题严格分裂为
+\[
+\text{五维 }\rho_5\text{-可见主扇区}
+\ \oplus\
+\text{一维 }\rho_4\text{-专属缺陷线}.
+\]
+更具体地说，仅保留 \(\rho_5\)-通道时，全部剩余不可见性恰压缩为
+\[
+\mathcal L_S
+=
+\left\{
+(x,y)\in\RR_{\ge 0}^2:\ x+y=S
+\right\},
+\]
+其中
+\[
+x=d_{(2\cdot 1^3)},
+\qquad
+y=d_{(2^2\cdot 1)}.
+\]
+而 \(\rho_4\) 在 \(-1\) 点的单一原子质量给出横截坐标
+\[
+T=d_{(2\cdot 1^3)}+2d_{(2^2\cdot 1)},
+\]
+从而唯一恢复
+\[
+d_{(2^2\cdot1)}=T-S,
+\qquad
+d_{(2\cdot1^3)}=2S-T.
+\]
+\end{corollary}
+\begin{proof}
+这正是定理 \ref{thm:conclusion-leyang-rho5-wall-compression-codimension-one-residual} 的内容。其前半部分给出：\(\rho_5\) 壁压缩后残余纤维恰是一条仿射直线；后半部分给出：\(\rho_4\) 在 \(-1\) 点的单一标量横截足以将其压缩为一点。证毕。
+\end{proof}
+
+\input{thm__conclusion-ambiguity-shell-spectral-invisibility-sync-gap}
+
+\input{thm__conclusion-statnull-ambiguity-spectrum-codim-budget}
+
+\input{thm__conclusion-torsion-residue-test-integer-kernel-inheritance}
+
+\paragraph{收束}
+至此，这一组结果把原本分散在序门语义、异常证书、同步预算、torsion 对称、二维加权核谱与 \(S_5\) Lee--Yang 层析中的六条接口压成了同一条刚性链：复杂度首先由允许何种序投影模态决定；异常类随后把语义残差直接转写为线性证书下界；同步债务未清之前，任何正指数率的算术均匀化都无法启动；互素方向上的 residue-class 平坦一旦无限延伸，非 Perron 谱便被强制压扁；而去刚性载波之后，core 谱本身又进入有限采样即可完全重建的 Prony 型层析；最后，在 \(S_5\) 侧，全部剩余不可见性进一步压缩为一条余维一缺陷线，仅需单一横截标量即可消灭。
+
+再加上这里新接入的零均值 residue 层析与 integer moment-kernel torsion 继承链，同一 torsion 骨架还出现了第二重可观测闭包：全部零均值 residue 测试恰好精确读取全部非主 Fourier 模，而一旦把这一判据沿整数退化核 \(L_q|_{H_q}\cong \widetilde A_q\) 传递下去，每一个整数 moment-kernel 都自带一个有限 torsion 约数格；若这一约数格含有无穷多个两两互素的平坦阶，则其非 Perron 部分便在谱意义上整体塌缩为零。与这里进一步抽出的 nilpotent-shell 链并读时，Zeckendorf 歧义壳的角色也被最终固定：它并不是一般 sofic 歧义层中那个带有 Perron 主极点圆与周期星形簇的低熵尾，而是一座仅活在 \(0\)-谱扇区中的纯幂零塔，其高度恰为 \(m\)，未同步生成函数也随之从真有理函数彻底坍缩为次数 \(m-1\) 的多项式。于是这里真正被组织起来的已不再只是单一同步指数，而是一条由 residue 平坦、非 Perron 崩塌、残余多义度、分形余维、扫描预算与纯幂零延迟边界共同张成的分层可见性谱。
+
+\endinput

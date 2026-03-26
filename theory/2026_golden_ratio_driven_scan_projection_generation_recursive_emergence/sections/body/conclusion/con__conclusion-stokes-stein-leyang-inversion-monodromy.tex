@@ -1,0 +1,417 @@
+\paragraph{离散链复形上的 Stokes--Stein 对偶、Lee--Yang 零测度的 Stokes 反演与代数单值化量子化}
+本段给出一条以广义斯托克斯机制为核心的统一定理链：在有限加权图（超立方体或其诱导子图）上得到 Stokes--Stein 完备性与最小能流；在 Lee--Yang 零测度极限口径下，把自由能、零点与大偏差谱组织为 Stokes--Laplacian 反演；当大偏差谱由代数分支承载时，多值性被量子化为整数 Stokes 电荷，并强制导出递归型误差证书结构。
+
+\begin{theorem}[有限加权图上的广义斯托克斯恒等式、Stein 完备性与最小能流]\label{thm:conclusion-stokes-stein-weighted-graph-minflow}
+设 \(G=(V,E)\) 为有限连通无向图，并取顶点权
+\(\pi:V\to(0,1)\)（\(\sum_{x\in V}\pi(x)=1\)）
+与对称导通率 \(c:E\to(0,\infty)\)（记 \(c_{xy}=c_{yx}\) 当 \(\{x,y\}\in E\)）。
+令
+\[
+C^0(G):=\{f:V\to\RR\},
+\qquad
+C^1_{\mathrm{as}}(G):=\{J:V\times V\to\RR:\ J(x,y)=-J(y,x),\ J(x,y)=0\ \text{若}\ \{x,y\}\notin E\}.
+\]
+定义离散外微分 \(d:C^0(G)\to C^1_{\mathrm{as}}(G)\) 与加权余微分（散度算子）\(\delta:C^1_{\mathrm{as}}(G)\to C^0(G)\)：
+\[
+(df)(x,y):=f(y)-f(x),
+\qquad
+(\delta J)(x):=\frac{1}{\pi(x)}\sum_{y:\{x,y\}\in E}c_{xy}\,J(x,y).
+\]
+并引入内积
+\[
+\langle f,g\rangle_\pi:=\sum_{x\in V}\pi(x)f(x)g(x),
+\qquad
+\langle J,K\rangle_c:=\frac12\sum_{\{x,y\}\in E}c_{xy}\,J(x,y)K(x,y).
+\]
+则：
+\begin{enumerate}
+  \item 对任意 \(f\in C^0(G)\) 与 \(J\in C^1_{\mathrm{as}}(G)\)，有精确恒等式
+  \[
+  \langle f,\delta J\rangle_\pi=-\langle df,J\rangle_c.
+  \]
+  \item 令零均值子空间
+  \[
+  C^0_0(G):=\{g\in C^0(G):\langle g,\mathbf 1\rangle_\pi=0\}.
+  \]
+  则
+  \[
+  \mathrm{Im}(\delta)=C^0_0(G).
+  \]
+  特别地，\(\langle \delta J,\mathbf 1\rangle_\pi=0\) 对任意 \(J\) 成立。
+  \item 令加权拉普拉斯算子 \(L:=\delta d:C^0(G)\to C^0(G)\)。
+  对任意 \(g\in C^0_0(G)\)，存在唯一 \(h\in C^0_0(G)\) 满足
+  \[
+  Lh=g.
+  \]
+  并且在全部满足 \(\delta J=g\) 的流中，能量
+  \(
+  \mathcal E(J):=\langle J,J\rangle_c
+  \)
+  的唯一极小元为
+  \[
+  J_\star=dh.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对任意 \(f,J\) 展开
+\[
+\langle f,\delta J\rangle_\pi
+=\sum_{x\in V}\pi(x)f(x)\frac{1}{\pi(x)}\sum_{y:\{x,y\}\in E}c_{xy}J(x,y)
+=\sum_{\{x,y\}\in E}c_{xy}\bigl(f(x)J(x,y)+f(y)J(y,x)\bigr).
+\]
+由 \(J(y,x)=-J(x,y)\) 得
+\[
+\langle f,\delta J\rangle_\pi
+=\sum_{\{x,y\}\in E}c_{xy}\bigl(f(x)-f(y)\bigr)J(x,y)
+=-\frac12\sum_{\{x,y\}\in E}c_{xy}(df)(x,y)J(x,y)
+=-\langle df,J\rangle_c,
+\]
+得 (1)。
+\par
+由 (1) 取 \(f=\mathbf 1\) 得 \(\langle \delta J,\mathbf 1\rangle_\pi=-\langle d\mathbf 1,J\rangle_c=0\)，故 \(\mathrm{Im}(\delta)\subseteq C^0_0(G)\)。
+反向包含：取任意 \(g\in C^0_0(G)\)。选一棵生成树 \(T\subseteq G\) 并取根 \(r\)。
+对树边按父子取向写作 \(e=(p\to q)\)，定义
+\[
+J(p,q):=\frac{1}{c_{pq}}\sum_{x\in \mathrm{subtree}(q)}\pi(x)g(x),
+\qquad
+J(q,p):=-J(p,q),
+\]
+对非树边置零。
+则对子树求和作一次递推可得对每个非根顶点 \(q\) 有 \((\delta J)(q)=g(q)\)；
+根处由 \(\sum_x\pi(x)g(x)=0\) 得同样成立，从而 \(g\in\mathrm{Im}(\delta)\)。
+故 \(\mathrm{Im}(\delta)=C^0_0(G)\)，得 (2)。
+\par
+对 (3)，在仿射空间 \(\{J:\delta J=g\}\) 上极小化严格凸二次型 \(\mathcal E(J)\)。
+取拉格朗日函数
+\[
+\mathcal L(J,\lambda):=\langle J,J\rangle_c+\langle \lambda,\delta J-g\rangle_\pi,
+\qquad \lambda\in C^0(G).
+\]
+对 \(J\) 的一阶变分为零等价于
+\(
+2J+\delta^\ast\lambda=0
+\)。
+由 (1) 可知 \(\delta^\ast=-d\)，故临界点满足 \(J=d\lambda\)。
+代回约束得 \(L\lambda=\delta d\lambda=g\)。
+将 \(\lambda\) 规一到 \(C^0_0(G)\)（加常数不改变 \(d\lambda\)），得到唯一解 \(h\in C^0_0(G)\)，并由严格凸性知极小解唯一且为 \(J_\star=dh\)。证毕。
+\end{proof}
+
+\begin{corollary}[Stokes--Stein 范数的对偶表述与最优证据对象]\label{cor:conclusion-stokes-stein-dual-norm}
+沿用定理 \ref{thm:conclusion-stokes-stein-weighted-graph-minflow} 的记号。
+对任意 \(g\in C^0_0(G)\) 定义
+\[
+\|g\|_{\mathrm{St}}:=\inf\{\|J\|_c:\ J\in C^1_{\mathrm{as}}(G),\ \delta J=g\},
+\qquad
+\|J\|_c:=\sqrt{\langle J,J\rangle_c},
+\]
+并对任意 \(f\in C^0(G)\) 定义 \(\|df\|_c:=\sqrt{\langle df,df\rangle_c}\)。
+则成立严格对偶
+\[
+\|g\|_{\mathrm{St}}
+=\sup\{\langle g,f\rangle_\pi:\ f\in C^0(G),\ \|df\|_c\le 1\}.
+\]
+并且若 \(h\in C^0_0(G)\) 为 Poisson 方程 \(Lh=g\) 的解，则最优值满足
+\[
+\|g\|_{\mathrm{St}}=\|dh\|_c,
+\]
+且极值可由 \(f=h/\|dh\|_c\) 达到。
+\end{corollary}
+\begin{proof}
+对任意满足 \(\delta J=g\) 的 \(J\) 与任意 \(f\)，由定理 \ref{thm:conclusion-stokes-stein-weighted-graph-minflow}(1) 得
+\[
+\langle g,f\rangle_\pi=\langle \delta J,f\rangle_\pi=-\langle J,df\rangle_c
+\le \|J\|_c\,\|df\|_c.
+\]
+若 \(\|df\|_c\le 1\)，则 \(\langle g,f\rangle_\pi\le \|J\|_c\)；对 \(J\) 取下确界得
+\[
+\sup_{\|df\|_c\le 1}\langle g,f\rangle_\pi\le \|g\|_{\mathrm{St}}.
+\]
+反向不等式：取 \(h\in C^0_0(G)\) 满足 \(Lh=g\)，并令 \(J_\star=dh\)。
+则由 (1) 取 \(f=h\)、\(J=dh\) 得
+\[
+\langle g,h\rangle_\pi=\langle Lh,h\rangle_\pi=\langle dh,dh\rangle_c=\|dh\|_c^2.
+\]
+取 \(f=h/\|dh\|_c\) 得 \(\|df\|_c=1\) 且
+\(
+\langle g,f\rangle_\pi=\|dh\|_c
+\)。
+另一方面由定义 \(\|g\|_{\mathrm{St}}\le \|dh\|_c\)。
+两式合并即得对偶恒等式与取等构造。证毕。
+\end{proof}
+
+\begin{theorem}[粗粒化推前下的 Stokes 结构交换律]\label{thm:conclusion-coarsegraining-stokes-beck-chevalley}
+沿用定理 \ref{thm:conclusion-stokes-stein-weighted-graph-minflow} 的设定。
+给定任意满射 \(\Phi:V\twoheadrightarrow \bar V\)，定义粗粒化顶点权与导通率为
+\[
+\bar\pi(\bar x):=\sum_{\Phi(x)=\bar x}\pi(x),
+\qquad
+\bar c_{\bar x\bar y}:=\sum_{\substack{\{x,y\}\in E\\ \Phi(x)=\bar x,\ \Phi(y)=\bar y}}c_{xy}
+\qquad(\bar x,\bar y\in\bar V),
+\]
+并记粗图为 \(\bar G=(\bar V,\bar E)\)，其中 \(\bar E:=\{\{\bar x,\bar y\}:\bar c_{\bar x\bar y}>0,\ \bar x\neq \bar y\}\)。
+对任意 \(J\in C^1_{\mathrm{as}}(G)\)，定义其导通率加权推前流 \(\Phi_!J\in C^1_{\mathrm{as}}(\bar G)\) 为
+\[
+(\Phi_!J)(\bar x,\bar y):=
+\begin{cases}
+\bar c_{\bar x\bar y}^{-1}
+\displaystyle\sum_{\substack{\{x,y\}\in E\\ \Phi(x)=\bar x,\ \Phi(y)=\bar y}}
+c_{xy}\,J(x,y),
+&\bar c_{\bar x\bar y}>0,\\[2ex]
+0,&\bar c_{\bar x\bar y}=0,
+\end{cases}
+\]
+并对任意 \(\bar f\in C^0(\bar G)\) 定义拉回 \(\Phi^\ast\bar f:=\bar f\circ\Phi\in C^0(G)\)。
+则对任意 \(\bar f\in C^0(\bar G)\) 与任意 \(J\in C^1_{\mathrm{as}}(G)\) 成立严格交换恒等式：
+\[
+\langle d(\Phi^\ast\bar f),J\rangle_c=\langle \bar d\,\bar f,\ \Phi_!J\rangle_{\bar c},
+\qquad
+\langle \Phi^\ast\bar f,\delta J\rangle_\pi=\langle \bar f,\ \bar\delta(\Phi_!J)\rangle_{\bar\pi},
+\]
+其中 \((\bar d,\bar\delta,\langle\cdot,\cdot\rangle_{\bar\pi},\langle\cdot,\cdot\rangle_{\bar c})\) 按定理
+\ref{thm:conclusion-stokes-stein-weighted-graph-minflow} 对 \((\bar G,\bar\pi,\bar c)\) 的同式定义给出。
+因此对任意 \(J\) 都有粗层广义斯托克斯恒等式
+\[
+\langle \bar f,\bar\delta(\Phi_!J)\rangle_{\bar\pi}=-\langle \bar d\,\bar f,\Phi_!J\rangle_{\bar c}.
+\]
+\end{theorem}
+\begin{proof}
+由定义展开并按 \((\Phi(x),\Phi(y))\) 分组，有
+\begin{align*}
+\langle d(\Phi^\ast\bar f),J\rangle_c
+&=\frac12\sum_{\{x,y\}\in E}c_{xy}\bigl(\bar f(\Phi(y))-\bar f(\Phi(x))\bigr)J(x,y)\\
+&=\frac12\sum_{\{\bar x,\bar y\}\in\bar E}\bigl(\bar f(\bar y)-\bar f(\bar x)\bigr)
+\sum_{\substack{\{x,y\}\in E\\ \Phi(x)=\bar x,\ \Phi(y)=\bar y}}c_{xy}\,J(x,y)\\
+&=\frac12\sum_{\{\bar x,\bar y\}\in\bar E}\bar c_{\bar x\bar y}\,(\bar d\bar f)(\bar x,\bar y)\,(\Phi_!J)(\bar x,\bar y)
+=\langle \bar d\,\bar f,\Phi_!J\rangle_{\bar c},
+\end{align*}
+得到第一式。
+\par
+第二式由两次应用 Stokes 恒等式得到：由定理 \ref{thm:conclusion-stokes-stein-weighted-graph-minflow}(1) 有
+\[
+\langle \Phi^\ast\bar f,\delta J\rangle_\pi=-\langle d(\Phi^\ast\bar f),J\rangle_c
+=-\langle \bar d\,\bar f,\Phi_!J\rangle_{\bar c},
+\]
+而对粗图 \(\bar G\) 再应用同一定理的 (1)（以 \(\bar f,\Phi_!J\) 代入）得
+\(
+-\langle \bar d\,\bar f,\Phi_!J\rangle_{\bar c}=\langle \bar f,\bar\delta(\Phi_!J)\rangle_{\bar\pi}
+\)，从而得到第二式。
+最后一式即为粗图上的 Stokes 恒等式。证毕。
+\end{proof}
+
+\begin{proposition}[推前约束下的能量下确界：粗能量作为微能量的精确消去]\label{prop:conclusion-coarsegraining-energy-infimum}
+在定理 \ref{thm:conclusion-coarsegraining-stokes-beck-chevalley} 的设定下，定义微观与粗观能量
+\[
+\mathcal E(J):=\langle J,J\rangle_c=\frac12\sum_{\{x,y\}\in E}c_{xy}\,J(x,y)^2,
+\qquad
+\bar{\mathcal E}(\bar J):=\langle \bar J,\bar J\rangle_{\bar c}
+=\frac12\sum_{\{\bar x,\bar y\}\in\bar E}\bar c_{\bar x\bar y}\,\bar J(\bar x,\bar y)^2.
+\]
+对任意给定 \(\bar J\in C^1_{\mathrm{as}}(\bar G)\)，令
+\(
+\mathfrak J(\bar J):=\{J\in C^1_{\mathrm{as}}(G):\ \Phi_!J=\bar J\}
+\)。
+则成立严格等式
+\[
+\inf_{J\in\mathfrak J(\bar J)}\mathcal E(J)=\bar{\mathcal E}(\bar J).
+\]
+并且极小元唯一：对每条粗边 \(\{\bar x,\bar y\}\in\bar E\)，其在全部连接纤维 \(\Phi^{-1}(\bar x)\) 与 \(\Phi^{-1}(\bar y)\) 的微边上取常值
+\[
+J(x,y)=\bar J(\bar x,\bar y)\qquad
+\bigl(\{x,y\}\in E,\ \Phi(x)=\bar x,\ \Phi(y)=\bar y\bigr),
+\]
+且在同一纤维内的边上取 \(J\equiv 0\)。
+\end{proposition}
+\begin{proof}
+固定一条粗边 \(\{\bar x,\bar y\}\in\bar E\)，记其下所有跨纤维微边集合为
+\(
+E_{\bar x\bar y}:=\{\{x,y\}\in E:\Phi(x)=\bar x,\ \Phi(y)=\bar y\}
+\)。
+设 \(j_e:=J(x,y)\)（按 \(\bar x\to\bar y\) 的取向记号）且 \(c_e:=c_{xy}\)。
+推前约束 \(\Phi_!J=\bar J\) 等价于
+\[
+\sum_{e\in E_{\bar x\bar y}}c_e\,j_e=\bar c_{\bar x\bar y}\,\bar J(\bar x,\bar y),
+\qquad
+\bar c_{\bar x\bar y}=\sum_{e\in E_{\bar x\bar y}}c_e.
+\]
+由 Cauchy--Schwarz 不等式，
+\[
+\Bigl(\sum_{e\in E_{\bar x\bar y}}c_e\,j_e\Bigr)^2
+\le
+\Bigl(\sum_{e\in E_{\bar x\bar y}}c_e\Bigr)\Bigl(\sum_{e\in E_{\bar x\bar y}}c_e\,j_e^2\Bigr)
+=\bar c_{\bar x\bar y}\sum_{e\in E_{\bar x\bar y}}c_e\,j_e^2,
+\]
+从而
+\[
+\frac12\sum_{e\in E_{\bar x\bar y}}c_e\,j_e^2
+\ge
+\frac12\,\bar c_{\bar x\bar y}\,\bar J(\bar x,\bar y)^2.
+\]
+对所有粗边求和，并注意同纤维内边不影响推前约束且能量非负，得
+\(
+\mathcal E(J)\ge \bar{\mathcal E}(\bar J)
+\)。
+\par
+当且仅当每个 \(\{\bar x,\bar y\}\) 上等号成立时取到下界；而 Cauchy--Schwarz 取等当且仅当
+\(
+j_e
+\)
+在 \(E_{\bar x\bar y}\) 上为常数。
+由推前约束该常数必为 \(\bar J(\bar x,\bar y)\)。
+同时同纤维内边取 \(J\equiv 0\) 是达到全局最小能量的必要条件。
+于是给出唯一极小元并实现 \(\inf\mathcal E=\bar{\mathcal E}\)。证毕。
+\end{proof}
+
+\begin{remark}[折叠的具体化与粗层导通图]\label{rem:conclusion-fold-stokes-coarsegraining}
+在本文的折叠语义中可取 \(\Phi=\Fold_m:\Omega_m=\{0,1\}^m\twoheadrightarrow X_m\)。
+若以 \(\Omega_m\) 上的超立方体骨架为微观图 \(G\)，并取自然权 \((\pi,c)\)，
+则定理 \ref{thm:conclusion-coarsegraining-stokes-beck-chevalley} 诱导出仅由折叠纤维与跨纤维边计数决定的粗层导通图 \((X_m,\bar c)\)，并在其上得到严格的 Stokes 交换律。
+另一方面，附录 \ref{app:op-algebra-fold-subalgebra} 中 \(L^2(\mathcal A_m,\tau_m)\) 的纤维正交分解与 Jones 投影在每条纤维上为秩一平均投影的结构，为上述“粗层算子是微层算子的函子像”提供了与基本构造一致的算子代数实现接口。
+\end{remark}
+
+\begin{theorem}[Lee--Yang 零测度诱导的大偏差谱 Stokes 反演]\label{thm:conclusion-leyang-zero-measure-stokes-inversion-ldp}
+令 \(\{Z_m(u)\}_{m\ge 1}\) 为非零复多项式序列，\(Z_m\) 的零点（按重数）记为 \(\{\zeta_{m,j}\}_{j=1}^{N_m}\)，并定义归一化零计数测度
+\[
+\nu_m:=\frac{1}{m}\sum_{j=1}^{N_m}\delta_{\zeta_{m,j}}.
+\]
+假设存在有限测度 \(\nu\) 与常数 \(C\in\RR\) 使得 \(\nu_m\Rightarrow \nu\)（弱收敛），并且存在开集
+\(U\subset\CC\)
+（含某条正实射线的邻域），使得对 \(u\in U\) 有极限
+\[
+F(u):=\lim_{m\to\infty}\frac{1}{m}\log|Z_m(u)|,
+\]
+且 \(F\) 在 \(U\setminus \mathrm{supp}(\nu)\) 上为 \(C^2\)，并满足对数势表示
+\[
+F(u)=\int_{\CC}\log|u-\zeta|\,\dd\nu(\zeta)+C
+\qquad (u\in U\setminus \mathrm{supp}(\nu)).
+\]
+令 \(\Lambda(\theta):=F(e^\theta)\)，并假设 \(\Lambda\) 在某实区间上严格凸且可微。
+令 Legendre--Fenchel 变换
+\(
+I(s):=\sup_{\theta}(s\theta-\Lambda(\theta))
+\)
+在可达斜率区间内可微。
+则：
+\begin{enumerate}
+  \item 对任意允许的实 \(\theta\)（令 \(u=e^\theta\)），有斜率公式
+  \[
+  \Lambda'(\theta)=\int_{\CC}\Re\!\left(\frac{u}{u-\zeta}\right)\dd\nu(\zeta).
+  \]
+  \item 对任意内点 \(s\)（即 \(s\in\mathrm{Int}(\Lambda'(\cdot))\)），存在唯一 \(u(s)>0\) 使得
+  \(s=\Lambda'(\log u(s))\)，并且
+  \[
+  I'(s)=\log u(s),
+  \qquad
+  I(s)=s\log u(s)-F(u(s)).
+  \]
+  \item 在分布意义下有
+  \[
+  \frac{1}{2\pi}\Delta F=\nu\qquad\text{于 }U,
+  \]
+  即对任意 \(\varphi\in C_c^\infty(U)\) 有
+  \(
+  \int_U \varphi\,\dd\nu=\frac{1}{2\pi}\int_U F\,\Delta\varphi\,\dd A
+  \)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+在 \(u\in U\setminus\mathrm{supp}(\nu)\) 处，对 \(u\) 微分得到
+\(
+\partial_u\log|u-\zeta|=\Re\frac{1}{u-\zeta}
+\)，故
+\(
+uF'(u)=\int \Re\frac{u}{u-\zeta}\dd\nu
+\)，从而 \(\Lambda'(\theta)=uF'(u)\) 给出 (1)。
+\par
+严格凸性保证 \(\Lambda'\) 在该区间严格单调，故可逆；令 \(u(s)=e^{\theta(s)}\) 为其逆像即可得唯一性与 \(I'(s)=\theta(s)=\log u(s)\)。
+由对偶恒等式 \(I(s)=s\theta(s)-\Lambda(\theta(s))\) 得 (2)。
+\par
+由基本分布恒等式 \(\Delta\log|u-\zeta|=2\pi\delta_\zeta\)，对 \(\nu\) 积分并交换 \(\Delta\) 与积分（以测试函数定义）即得 (3)。证毕。
+\end{proof}
+
+\begin{theorem}[代数谱曲线下的大偏差势单值化障碍与 Stokes 量子化]\label{thm:conclusion-algebraic-ldp-monodromy-stokes-quantization}
+设 \(u(s)\) 为在 \(\CC\setminus B\) 上解析的代数函数分支（\(B\subset\CC\) 有限），并假设 \(u(s)\neq 0\)。
+令 \(\theta(s):=\log u(s)\) 为某个局部对数分支，并设在某连通支上存在解析函数 \(I\) 满足
+\[
+I'(s)=\theta(s).
+\]
+则对任意基点 \(s_0\in\CC\setminus B\) 与任意闭路 \(\gamma\subset\CC\setminus B\)（以 \(s_0\) 为起讫点），沿 \(\gamma\) 解析延拓后有：
+\begin{enumerate}
+  \item 存在整数 \(k(\gamma)\in\ZZ\) 使得
+  \[
+  \theta_{\mathrm{after}}(s_0)=\theta_{\mathrm{before}}(s_0)+2\pi\mathrm{i}\,k(\gamma).
+  \]
+  并且若 \(\widetilde\gamma\) 为 \(\gamma\) 在代数曲线的解析分支覆盖上的提升闭路，则
+  \[
+  k(\gamma)=\frac{1}{2\pi\mathrm{i}}\oint_{\widetilde\gamma}\frac{\dd u}{u}.
+  \]
+  \item 相应地存在常数 \(C(\gamma)\in\CC\) 使得
+  \[
+  I_{\mathrm{after}}(s)=I_{\mathrm{before}}(s)+2\pi\mathrm{i}\,k(\gamma)\,s+C(\gamma)
+  \]
+  在 \(s_0\) 的邻域内成立（作为解析延拓后的分支恒等式）。
+  \item 二阶导数满足
+  \[
+  I''(s)=\frac{u'(s)}{u(s)}
+  \]
+  在 \(\CC\setminus B\) 上为单值解析函数，并且仍为代数函数。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由于 \(u(s)\neq 0\)，沿提升闭路 \(\widetilde\gamma\) 的像落在 \(\CC^\times\)。
+对数微分的周期
+\(
+\frac{1}{2\pi\mathrm{i}}\oint_{\widetilde\gamma}\frac{\dd u}{u}
+\)
+等于该像绕原点的绕数，故为整数，得到 (1)。
+\par
+由 \(I'(s)=\theta(s)\)，延拓后导数改变量为常数 \(2\pi\mathrm{i}k(\gamma)\)，积分得 (2)。
+\par
+对数分支加常数不改变导数，故 \(I''=(\log u)'\) 单值；又 \(u\) 代数则 \(u'/u\) 属于代数函数域中的有理函数，从而仍代数，得 (3)。证毕。
+\end{proof}
+
+\begin{proposition}[代数性强制的递归结构与高阶误差证书化]\label{prop:conclusion-algebraic-forces-precursive-error-control}
+在定理 \ref{thm:conclusion-algebraic-ldp-monodromy-stokes-quantization} 的设定下，
+设 \(u(s)\) 满足不可约代数方程
+\[
+P(u,s)=0,\qquad P\in\CC[u,s],\qquad \deg_u P=d\ge 2,
+\]
+且 \(u(s)\neq 0\)。
+令
+\(
+y(s):=I''(s)=\frac{u'(s)}{u(s)}
+\)。
+则：
+\begin{enumerate}
+  \item 在代数曲线 \(P(u,s)=0\) 上成立有理恒等式
+  \[
+  y(s)=-\frac{P_s(u,s)}{u\,P_u(u,s)},
+  \]
+  从而 \(y(s)\) 为代数函数。
+  \item 存在不全为零的多项式系数 \(a_k(s)\in\CC[s]\)（\(0\le k\le d\)）使得 \(y\) 满足线性常微分方程
+  \[
+  \sum_{k=0}^{d}a_k(s)\,y^{(k)}(s)=0.
+  \]
+  因此对任一正则点 \(s_\ast\notin B\)，\(y\) 的 Taylor 系数序列为 \(P\)-recursive：满足具多项式系数的有限阶线性递推。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+对恒等式 \(P(u(s),s)=0\) 求导得 \(P_u(u,s)u'(s)+P_s(u,s)=0\)，除以 \(u(s)\,P_u(u,s)\) 得 (1)。
+\par
+令 \(K:=\CC(s,u)\)。由 \(\deg_u P=d\) 得 \([K:\CC(s)]\le d\)。
+由 (1) 知 \(y\in K\)，且对代数扩张内元素求导仍落在 \(K\) 中，故 \(y^{(k)}\in K\) 对所有 \(k\ge 0\) 成立。
+于是 \(\{y,y',\dots,y^{(d)}\}\) 作为 \(\CC(s)\)-向量组必线性相关，存在 \(b_k(s)\in\CC(s)\) 不全为零使
+\(\sum_{k=0}^{d}b_k(s)y^{(k)}=0\)。
+通分清分母即可取 \(a_k(s)\in\CC[s]\) 得所示方程，进而得到 \(P\)-recursive 性。证毕。
+\end{proof}
+
+\begin{conjecture}[Stokes--Lee--Yang 量子化电荷的 Langlands 提升]\label{conj:conclusion-stokes-leyang-charge-langlands}
+设一族有限状态传递结构的配分函数在热力学极限中由某条代数谱曲线的支配分支决定，使得 Lee--Yang 分支集与坏约化素集合在算术意义下可同时编码。
+则猜想：定理 \ref{thm:conclusion-algebraic-ldp-monodromy-stokes-quantization} 中的整数 Stokes 电荷 \(k(\gamma)\) 可提升为某个代数环面或半阿贝尔退化几何所关联的 Langlands 参数的同调分量，
+并且围绕分支集的单值化障碍在复解析与 \(\ell\)-进单值化中一致。
+\par
+该提升的可证伪点在于：若存在两种实现使得 Lee--Yang 分支单值化电荷一致而坏约化处的局部因子不一致，则该提升失败；反之，若在可计算实例族中呈现一致性，则支持该提升的结构必然性。
+\end{conjecture}
+
+\endinput
+

@@ -1,0 +1,59 @@
+\begin{theorem}[Bayes--InfoNCE 的二阶碰撞主导与指数尺度]\label{thm:pom-bayes-infonce-second-collision-dominance}
+在分辨率 \(m\) 上取 \(\Omega_m=\{0,1\}^m\) 与折叠 \(\Fold_m:\Omega_m\twoheadrightarrow X_m\)，并令 \(X=\Fold_m(U)\)、\(U\sim\mathrm{Unif}(\Omega_m)\)。
+对固定整数 \(K\ge 2\) 定义 Bayes 最优 InfoNCE 值
+\[
+L_K^\star(m):=\inf_s L_K(s),
+\]
+其中 \(L_K(s)\) 沿用定理 \ref{thm:pom-infonce-partition-optimal-closed-form}。
+则成立精确表示
+\[
+L_K^\star(m)=\EE\bigl[\log(1+J)\bigr],\qquad
+J\mid(X=x)\sim \mathrm{Binomial}\!\left(K-1,w_m(x)\right).
+\]
+记最大原子权重
+\[
+w_{\max}(m):=\max_{x\in X_m} w_m(x).
+\]
+则当 \(m\to\infty\) 时（从而 \(w_{\max}(m)\to 0\)，见推论 \ref{cor:pom-max-fiber-rate-endpoint}）有渐近展开
+\[
+L_K^\star(m)
+=(K-1)\log 2\cdot M_2(m)\Bigl(1+O\bigl(w_{\max}(m)\bigr)\Bigr),
+\qquad
+M_2(m):=\sum_{x\in X_m}w_m(x)^2.
+\]
+特别地，
+\[
+\frac{L_K^\star(m)}{(K-1)\log 2\cdot M_2(m)}\longrightarrow 1.
+\]
+若进一步 \(S_2(m)=\Theta(r_2^m)\)（例如由二阶碰撞核 \(A_2\) 的 Perron--Frobenius 渐近给出），则指数尺度满足
+\[
+\lim_{m\to\infty}\bigl(L_K^\star(m)\bigr)^{1/m}=\frac{r_2}{4}.
+\]
+\end{theorem}
+\begin{proof}
+第一条等式为定理 \ref{thm:pom-infonce-partition-optimal-closed-form} 在 \(g=\Fold_m\) 下的特例。
+令 \(n:=K-1\)。
+对任意 \(p\in[0,1]\) 与 \(J\sim\mathrm{Binomial}(n,p)\)，写
+\[
+\EE[\log(1+J)]
+=\log 2\cdot\PP(J=1)+\EE[\log(1+J)\,\mathbf 1_{\{J\ge 2\}}],
+\]
+并注意 \(\PP(J=1)=np(1-p)^{n-1}=np+O(p^2)\)、\(\PP(J\ge 2)=O(p^2)\)，且 \(\log(1+J)\le \log(n+1)\)。
+于是
+\[
+\EE[\log(1+J)]=np\log 2+O(p^2),
+\]
+其中 \(O(\cdot)\) 的常数仅依赖于 \(n\)。
+将 \(p=w_m(X)\) 代入并取外层期望得到
+\[
+L_K^\star(m)
+=n\log 2\cdot \EE[w_m(X)]+O\!\left(\EE[w_m(X)^2]\right)
+=n\log 2\cdot M_2(m)+O\bigl(M_3(m)\bigr),
+\]
+其中 \(M_3(m):=\sum_x w_m(x)^3\)，并且 \(\EE[w_m(X)]=\sum_x w_m(x)^2=M_2(m)\)。
+再由 \(w_m(x)^3\le w_{\max}(m)w_m(x)^2\) 得 \(M_3(m)\le w_{\max}(m)M_2(m)\)，从而得到所示相对误差。
+最后一式由 \(M_2(m)=S_2(m)/4^m=\Theta((r_2/4)^m)\) 与 \(1+O(w_{\max}(m))\) 的 \(m\)-次根趋于 \(1\) 得出。
+证毕。
+\end{proof}
+
+\endinput

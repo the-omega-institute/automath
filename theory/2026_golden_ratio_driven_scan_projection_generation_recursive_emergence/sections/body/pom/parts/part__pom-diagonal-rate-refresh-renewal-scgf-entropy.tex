@@ -1,0 +1,265 @@
+\paragraph{再生编码、更新极限定理与刷新计数的 Laguerre 世俗 SCGF}
+固定 \(\delta\in(0,\delta_0)\) 并沿用命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 与定理 \ref{thm:pom-diagonal-rate-sturm-cauchy-eigenbasis} 的记号。
+为简洁起见以下记 \(\kappa:=\kappa_\delta\)、\(t_x\) 不变，并令
+\[
+r(x):=\frac{t_x-\kappa}{t_x}\in(0,1),
+\qquad
+\pi(x):=\frac{1}{t_x-\kappa}\in\Delta(X),
+\qquad
+K:=K^\star_\delta.
+\]
+则 \(K\) 具有停留--刷新表示
+\begin{equation}\label{eq:pom-diagonal-rate-refresh-stay-refresh}
+K(y\mid x)=(1-r(x))\,\mathbf 1_{\{y=x\}}+r(x)\pi(y),
+\qquad x,y\in X.
+\end{equation}
+
+\begin{theorem}[再生编码：\texorpdfstring{$(Y_k,H_k)$}{(Y,H)} 的 i.i.d.\ 展开生成停留--刷新链]\label{thm:pom-diagonal-rate-refresh-renewal-coding}
+令 \((Y_k,H_k)_{k\ge 1}\) 为 i.i.d.\ 随机对，满足对任意 \(y\in X\)、\(h\in\{1,2,\dots\}\),
+\[
+\PP(Y_1=y,\ H_1=h)=\pi(y)\,r(y)\,(1-r(y))^{h-1}.
+\]
+记再生时刻 \(\sigma_0:=0\)、\(\sigma_k:=\sum_{j=1}^{k}H_j\)。
+定义展开过程 \((X_m)_{m\ge 0}\) 为
+\[
+X_m:=Y_k\qquad(\sigma_{k-1}\le m<\sigma_k).
+\]
+则 \((X_m)\) 为以核 \(K\) 转移、初始分布为 \(\pi\) 的马尔可夫链。
+并且每个 \(\sigma_k\) 都是刷新时刻：\((X_{\sigma_k})_{k\ge 0}\) 为 i.i.d.\ 且边缘分布为 \(\pi\)，并与 \(\{H_k\}\) 的未来独立。
+\end{theorem}
+\begin{proof}
+由构造，\(X_m\) 在每个块内常值；因此只需计算“从 \(x\) 出发的一步转移”。
+当 \(X_m=x\) 时，事件 \(\{X_{m+1}=x\}\) 等价于“当前块尚未结束”。
+由几何分布的无记忆性，
+\[
+\PP(X_{m+1}=x\mid X_m=x)=\PP(H_1\ge 2\mid H_1\ge 1,\ Y_1=x)=1-r(x).
+\]
+而事件 \(\{X_{m+1}=y,\ y\ne x\}\) 等价于“当前步结束块并刷新到 \(y\)”；
+同样由无记忆性与刷新采样 \(Y_{k+1}\sim\pi\)，有
+\[
+\PP(X_{m+1}=y\mid X_m=x)=r(x)\pi(y)\qquad(y\in X).
+\]
+综上一步转移即为 \eqref{eq:pom-diagonal-rate-refresh-stay-refresh}，从而 \((X_m)\) 为 \(K\)-链。
+刷新时刻的 i.i.d.\ 性与独立性由 \((Y_k,H_k)\) 的 i.i.d.\ 与展开映射的确定性直接给出。证毕。
+\end{proof}
+
+\begin{corollary}[平稳分布的长度偏置形式与 \texorpdfstring{$t$}{t}-闭式]\label{cor:pom-diagonal-rate-refresh-length-biased-stationary}
+记
+\[
+\EE[H]:=\sum_{x\in X}\frac{\pi(x)}{r(x)}=\sum_{x\in X}\frac{t_x}{(t_x-\kappa)^2}\in(1,\infty).
+\]
+则 \(K\) 的唯一平稳分布满足长度偏置恒等式
+\[
+\boxed{\;
+w(x)=\frac{\pi(x)\,\EE[H\mid Y=x]}{\EE[H]}
+=\frac{\pi(x)/r(x)}{\sum_{u\in X}\pi(u)/r(u)}
+=\frac{\dfrac{t_x}{(t_x-\kappa)^2}}{\sum_{u\in X}\dfrac{t_u}{(t_u-\kappa)^2}}\; } .
+\]
+\end{corollary}
+\begin{proof}
+由 \(r(x)\pi(y)>0\)（\(\pi\) 全支撑且 \(r(x)\in(0,1)\)），链不可约且非周期，故平稳分布唯一。
+由定理 \ref{thm:pom-diagonal-rate-refresh-renewal-coding} 的再生编码，每个块的落点为 \(Y\sim\pi\)，并在该落点停留 \(H\mid(Y=x)\sim\mathrm{Geom}(r(x))\)，从而 \(\EE[H\mid Y=x]=1/r(x)\)。
+再生链的占时比例等于“单位块内期望占时”与“单位块期望长度”之比，故
+\(
+w(x)\propto \pi(x)\EE[H\mid Y=x]=\pi(x)/r(x)
+\)；
+归一化即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[刷新间隔的 \texorpdfstring{$\mathcal P_\delta$}{P}-有理母函数与 Hausdorff 完全单调尾]\label{prop:pom-diagonal-rate-refresh-holding-interval-pgf-hausdorff}
+令 \(H\) 表示以 \(Y\sim\pi\) 为块落点时的单块长度（即 \(H\overset{d}{=}H_1\)）。
+则对 \(|s|\) 充分小有严格恒等式
+\[
+\boxed{\;
+\Phi_H(s):=\EE[s^H]
+=\sum_{x\in X}\pi(x)\frac{r(x)s}{1-(1-r(x))s}
+=s\sum_{x\in X}\frac{1}{t_x-\kappa s}
+=-\,s\,\frac{\mathcal P_\delta'(\kappa s)}{\mathcal P_\delta(\kappa s)}\; } .
+\]
+并且对任意整数 \(m\ge 0\) 有尾概率闭式
+\[
+\boxed{\;
+\PP(H>m)=\sum_{x\in X}\pi(x)\,(1-r(x))^{m}
+=\sum_{x\in X}\frac{1}{t_x-\kappa}\left(\frac{\kappa}{t_x}\right)^{m}\; } .
+\]
+因此 \(\{\PP(H>m)\}_{m\ge 0}\) 为 \([0,1)\) 上有限原子测度的 Hausdorff 矩序列，并满足完全单调性
+\[
+(-1)^k(\Delta^k\PP(H>\cdot))_m\ge 0\qquad(k,m\ge 0).
+\]
+\end{proposition}
+\begin{proof}
+由 \(\PP(H=h\mid Y=x)=r(x)(1-r(x))^{h-1}\)（\(h\ge 1\)）直接求和得
+\(
+\EE[s^H\mid Y=x]=\frac{r(x)s}{1-(1-r(x))s}
+\)，
+再对 \(Y\sim\pi\) 取期望得到第一条母函数表示。
+由 \(r(x)\pi(x)=1/t_x\) 与 \(1-(1-r(x))s=(t_x-\kappa s)/t_x\) 化简得
+\(
+\Phi_H(s)=s\sum_x (t_x-\kappa s)^{-1}
+\)。
+最后，由 \(\mathcal P_\delta(z)=\prod_x(t_x-z)\) 的对数导数恒等式
+\(
+\sum_x (t_x-z)^{-1}=-\mathcal P_\delta'(z)/\mathcal P_\delta(z)
+\)
+得到有理闭式。
+\par
+尾概率由 \(\PP(H>m\mid Y=x)=(1-r(x))^m\) 与 \(1-r(x)=\kappa/t_x\) 得到。
+Hausdorff 与完全单调性由离散测度
+\(
+\nu:=\sum_x \pi(x)\delta_{\kappa/t_x}
+\)
+满足
+\(
+\PP(H>m)=\int_0^1 \lambda^m\,\nu(d\lambda)
+\)
+直接推出。证毕。
+\end{proof}
+
+\begin{theorem}[刷新计数的更新 LLN 与 CLT]\label{thm:pom-diagonal-rate-refresh-count-renewal-clt}
+沿用定理 \ref{thm:pom-diagonal-rate-refresh-renewal-coding} 的再生时刻 \((\sigma_k)\)，并定义刷新计数
+\[
+N_m:=\max\{k:\ \sigma_k\le m\}\qquad(m\ge 0).
+\]
+则几乎必然有
+\[
+\frac{N_m}{m}\longrightarrow \frac{1}{\EE[H]}.
+\]
+并且当 \(\EE[H^2]<\infty\)（在本核上必然成立）时有中心极限定理
+\[
+\frac{N_m-\frac{m}{\EE[H]}}{\sqrt m}\ \Longrightarrow\ \mathcal N\!\left(0,\ \frac{\Var(H)}{\EE[H]^3}\right).
+\]
+其中
+\[
+\EE[H^2]=\sum_{x\in X}\pi(x)\,\frac{2-r(x)}{r(x)^2}
+=\sum_{x\in X}\frac{t_x(t_x+\kappa)}{(t_x-\kappa)^3}.
+\]
+\end{theorem}
+\begin{proof}[证明要点]
+由定理 \ref{thm:pom-diagonal-rate-refresh-renewal-coding}，\((H_k)_{k\ge 1}\) 为 i.i.d.\ 且与刷新计数满足标准更新关系 \(N_m=\max\{k:\sum_{j\le k}H_j\le m\}\)。
+因此大数定律与中心极限定理为经典更新过程定理的直接推论。
+二阶矩闭式由 \(\mathrm{Geom}(p)\)（支撑 \(\{1,2,\dots\}\)）满足 \(\EE[H^2]=(2-p)/p^2\) 并对 \(p=r(Y)\) 条件化求期望得到；再代入 \(r(x)=(t_x-\kappa)/t_x\)、\(\pi(x)=1/(t_x-\kappa)\) 化简即得。证毕。
+\end{proof}
+
+\begin{theorem}[再生奖励 CLT：一般加性泛函的显式方差]\label{thm:pom-diagonal-rate-refresh-reward-clt}
+对任意可观测 \(f:X\to\RR\)，记
+\[
+S_m(f):=\sum_{j=0}^{m-1}f(X_j),
+\qquad
+\mu_f:=\sum_{x\in X}w(x)f(x).
+\]
+则在平稳初始 \(X_0\sim w\) 下有
+\[
+\frac{S_m(f)-m\mu_f}{\sqrt m}\ \Longrightarrow\ \mathcal N(0,\sigma_f^2),
+\qquad
+\sigma_f^2=\frac{\Var\!\bigl(H(f(Y)-\mu_f)\bigr)}{\EE[H]},
+\]
+其中 \((Y,H)\) 的联合分布如定理 \ref{thm:pom-diagonal-rate-refresh-renewal-coding}。
+\end{theorem}
+\begin{proof}[证明要点]
+由再生编码，单块奖励为 \(\sum_{j=\sigma_{k-1}}^{\sigma_k-1} f(X_j)=H_k f(Y_k)\)；
+并且在平稳初始下中心化后单块奖励可写为
+\(
+H_k(f(Y_k)-\mu_f)
+\)，其均值为 \(0\) 且二阶矩有限。
+由更新奖励过程的中心极限定理得到所示结论与方差表达。证毕。
+\end{proof}
+
+\begin{theorem}[刷新计数的倾斜算子与 Laguerre 世俗 Perron 根]\label{thm:pom-diagonal-rate-refresh-count-tilt-perron-secular}
+对 \(\theta\in\RR\) 定义正算子
+\[
+K_\theta(y\mid x):=(1-r(x))\,\mathbf 1_{\{y=x\}}+e^{\theta}r(x)\pi(y).
+\]
+则 \(K_\theta\) 的 Perron 根 \(\rho(\theta)>0\) 是方程
+\[
+\boxed{\;
+\sum_{x\in X}\frac{1}{\rho(\theta)\,t_x-\kappa}=e^{-\theta}\;}
+\]
+的唯一正解。
+等价地，令 \(z(\theta):=\kappa/\rho(\theta)\)，则 \(z(\theta)\in(0,\min_x t_x)\) 为多项式
+\[
+\mathcal Q_{\delta,\theta}(z):=z\,\mathcal P_\delta'(z)+\kappa e^{-\theta}\,\mathcal P_\delta(z)
+\]
+在 \((0,\min_x t_x)\) 内的唯一零点，并且 \(\rho(\theta)=\kappa/z(\theta)\)。
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:pom-diagonal-rate-refresh-stay-refresh}，\(K_\theta\) 仍为“对角 \(+\) 秩一”算子：
+\[
+K_\theta=\mathrm{diag}\!\Bigl(\frac{\kappa}{t_x}\Bigr)_{x\in X}+e^{\theta}\,r\,\pi^{\mathsf T}.
+\]
+对特征方程 \(\det(\rho I-K_\theta)=0\) 应用秩一行列式引理并用 \(\pi(x)r(x)=1/t_x\)，得到
+\[
+1=e^{\theta}\sum_{x\in X}\frac{\pi(x)r(x)}{\rho-\kappa/t_x}
+=e^{\theta}\sum_{x\in X}\frac{1}{\rho t_x-\kappa},
+\]
+即所示标量方程。
+函数 \(\rho\mapsto \sum_x(\rho t_x-\kappa)^{-1}\) 在 \((\kappa/\min t_x,\infty)\) 上连续严格递减且取值从 \(+\infty\) 到 \(0\)，故对任意 \(\theta\) 存在唯一正解 \(\rho(\theta)\)，并由 Perron--Frobenius 与正性可知该解即为谱半径。
+\par
+再令 \(z=\kappa/\rho\)，则标量方程等价于
+\(
+\sum_x (t_x-z)^{-1}=\kappa e^{-\theta}/z
+\)。
+将其改写为对数导数形式并乘以 \(\mathcal P_\delta(z)\) 即得 \(\mathcal Q_{\delta,\theta}(z)=0\)；
+唯一性由同一单调性得到。证毕。
+\end{proof}
+
+\begin{corollary}[刷新计数的 SCGF 与二阶导数闭式]\label{cor:pom-diagonal-rate-refresh-count-scgf-derivatives}
+在平稳初始 \(X_0\sim w\) 下，刷新计数满足极限
+\[
+\psi(\theta):=\lim_{m\to\infty}\frac{1}{m}\log \EE_w\!\bigl[e^{\theta N_m}\bigr]=\log\rho(\theta),
+\]
+其中 \(\rho(\theta)\) 为定理 \ref{thm:pom-diagonal-rate-refresh-count-tilt-perron-secular} 的 Perron 根。
+并且 \(\psi\) 在 \(\theta=0\) 的邻域内实解析，且导数满足
+\[
+\psi'(0)=\frac{1}{\EE[H]},
+\qquad
+\psi''(0)=\frac{\Var(H)}{\EE[H]^3}.
+\]
+写
+\[
+T_2:=\sum_{x\in X}\frac{t_x}{(t_x-\kappa)^2}=\EE[H],
+\qquad
+U_3:=\sum_{x\in X}\frac{t_x^{2}}{(t_x-\kappa)^3},
+\]
+则
+\[
+\boxed{\;
+\psi''(0)=\frac{1}{T_2}\left(\frac{2U_3}{T_2^2}-1\right)-\frac{1}{T_2^2}\; } .
+\]
+\end{corollary}
+\begin{proof}[证明要点]
+由 Feynman--Kac 展开，\(\EE_x[e^{\theta N_m}]=\sum_y (K_\theta^m)(y\mid x)\)，故增长率由谱半径控制并给出 \(\psi(\theta)=\log\rho(\theta)\)。
+对定理 \ref{thm:pom-diagonal-rate-refresh-count-tilt-perron-secular} 的标量方程在 \(\theta=0\) 处作隐函数微分，得到
+\(
+\rho'(0)=1/T_2
+\)
+与
+\(
+\rho''(0)=(2U_3/T_2^2-1)/T_2
+\)；
+再用 \(\psi=\log\rho\) 的恒等式 \(\psi''=\rho''/\rho-(\rho'/\rho)^2\) 并代入 \(\rho(0)=1\) 即得所示闭式。
+最后一条 \(\psi''(0)=\Var(H)/\EE[H]^3\) 与定理 \ref{thm:pom-diagonal-rate-refresh-count-renewal-clt} 的方差常数一致。证毕。
+\end{proof}
+
+\begin{proposition}[熵率的再生编码公式]\label{prop:pom-diagonal-rate-refresh-entropy-rate-renewal-coding-secondary}
+记马尔可夫链熵率
+\[
+h(K)=\sum_{x\in X} w(x)\,H\!\bigl(K(\cdot\mid x)\bigr).
+\]
+则沿用定理 \ref{thm:pom-diagonal-rate-refresh-renewal-coding} 的 \((Y,H)\)，有严格恒等式
+\[
+\boxed{\;
+h(K)=\frac{H(Y,H)}{\EE[H]}\; } .
+\]
+\end{proposition}
+\begin{proof}[证明要点]
+定理 \ref{thm:pom-diagonal-rate-refresh-renewal-coding} 给出一个从 i.i.d.\ 块序列 \((Y_k,H_k)\) 到路径 \((X_m)\) 的确定性展开映射。
+块间独立性给出 \(H(Y_1,\dots,Y_n,H_1,\dots,H_n)=n\,H(Y,H)\)。
+另一方面，展开后前 \(m\) 步路径信息量由包含的块数 \(N_m\) 控制，并满足
+\(
+m^{-1}H(X_0,\dots,X_{m-1})\to H(Y,H)/\EE[H]
+\)；
+而平稳马尔可夫链的熵率等于该极限，故结论成立。证毕。
+\end{proof}
+
+\endinput
+

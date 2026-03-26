@@ -1,0 +1,225 @@
+% (User input window)
+
+\paragraph{可解情形、双侧夹逼与协同不等式}
+本段把定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 的一般指数族结构在若干对称场景中完全显式化，并给出仅依赖有限统计量的通用下界与可达上界；最后刻画线性混合耦合的最优性条件与均匀字母表上的协同严格不等式。
+
+\begin{theorem}[二点字母表的闭式与唯一最优耦合]\label{thm:pom-diagonal-rate-binary-closed-form}
+令 \(X=\{0,1\}\)，取 \(w(0)=p\in(0,1)\)、\(w(1)=1-p\)。
+记
+\[
+p_2(w)=p^2+(1-p)^2,\qquad \delta_0:=1-p_2(w)=2p(1-p).
+\]
+则对任意 \(\delta\in[0,1]\) 有
+\[
+R_w(\delta)=
+\begin{cases}
+0, & \delta\ge \delta_0,\\[4pt]
+\displaystyle (p-\tfrac{\delta}{2})\log\frac{p-\delta/2}{p^2}
++\bigl((1-p)-\tfrac{\delta}{2}\bigr)\log\frac{(1-p)-\delta/2}{(1-p)^2}
++\delta\log\frac{\delta/2}{p(1-p)}, & 0\le \delta<\delta_0,
+\end{cases}
+\]
+且当 \(0\le\delta<\delta_0\) 时最优耦合唯一并为
+\[
+P^\star_\delta=
+\begin{pmatrix}
+p-\delta/2 & \delta/2\\
+\delta/2 & (1-p)-\delta/2
+\end{pmatrix}.
+\]
+\end{theorem}
+\begin{proof}
+在 \(2\times 2\) 情形，边缘约束 \(P_X=P_Y=w\) 的耦合集合为一参数族：
+令 \(a:=P(0,0)\)，则
+\[
+P(a)=
+\begin{pmatrix}
+a & p-a\\
+p-a & 1-2p+a
+\end{pmatrix}.
+\]
+其对角质量为 \(\mathbb P(X=Y)=1-2p+2a\)，故约束 \(\mathbb P(X=Y)\ge 1-\delta\) 等价于 \(a\ge p-\delta/2\)。
+由于边缘固定，互信息满足 \(I_{P(a)}(X;Y)=D_{\mathrm{KL}}(P(a)\,\|\,w\otimes w)\)，且作为 \(a\) 的函数严格凸并在独立耦合 \(a=p^2\) 处取唯一极小 \(0\)。
+当 \(\delta\ge \delta_0\) 时有 \(p-\delta/2\le p^2\)，独立耦合可行，故 \(R_w(\delta)=0\)。
+当 \(0\le \delta<\delta_0\) 时可行区间的左端点满足 \(p-\delta/2>p^2\)，严格凸性迫使唯一极小点落在边界 \(a=p-\delta/2\)，从而得到 \(P^\star_\delta\)。
+将 \(P^\star_\delta\) 代入 \(D_{\mathrm{KL}}(P^\star_\delta\,\|\,w\otimes w)=\sum_{x,y}P^\star_\delta(x,y)\log\frac{P^\star_\delta(x,y)}{w(x)w(y)}\) 即得闭式表达。证毕。
+\end{proof}
+
+\begin{corollary}[二点字母表的线性混合结构]\label{cor:pom-diagonal-rate-binary-linear-mixture}
+在定理 \ref{thm:pom-diagonal-rate-binary-closed-form} 的设定下，若 \(0\le\delta<\delta_0\)，则最优耦合可唯一写成
+\[
+P^\star_\delta(x,y)=(1-\varepsilon)\,w(x)w(y)+\varepsilon\,w(x)\mathbf 1_{\{x=y\}},
+\qquad
+\varepsilon:=1-\frac{\delta}{\delta_0}\in(0,1].
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-binary-closed-form} 的矩阵形式直接计算得
+\(
+P^\star_\delta(0,1)=P^\star_\delta(1,0)=\delta/2
+\)。
+另一方面，线性混合右端的非对角项为 \((1-\varepsilon)p(1-p)\)，令其等于 \(\delta/2\) 得 \(\varepsilon=1-\delta/(2p(1-p))=1-\delta/\delta_0\)。
+用该 \(\varepsilon\) 代回对角项即与 \(P^\star_\delta\) 一致。
+若存在另一组系数给出同一分解，则由非对角项立刻推出 \(\varepsilon\) 唯一。证毕。
+\end{proof}
+
+\begin{theorem}[均匀分布的闭式与唯一对称最优耦合]\label{thm:pom-diagonal-rate-uniform-closed-form}
+令有限集 \(X\) 满足 \(|X|=n\ge 2\)，取均匀分布 \(U_n(x)=1/n\)。
+记 \(\delta_0:=1-1/n\)。
+则对任意 \(\delta\in[0,1]\) 有
+\[
+R_{U_n}(\delta)=
+\begin{cases}
+0, & \delta\ge 1-\frac{1}{n},\\[6pt]
+(1-\delta)\log\bigl(n(1-\delta)\bigr)+\delta\log\!\Bigl(\dfrac{\delta n}{n-1}\Bigr), & 0\le\delta<1-\frac{1}{n},
+\end{cases}
+\]
+且当 \(0\le\delta<1-\frac1n\) 时最优耦合唯一并满足
+\[
+P^\star_\delta(x,x)=\frac{1-\delta}{n},\qquad
+P^\star_\delta(x,y)=\frac{\delta}{n(n-1)}\quad(x\ne y).
+\]
+\end{theorem}
+\begin{proof}
+对固定 \(\delta\)，可行集合在 \(X\) 的置换群作用下不变，而 \(P\mapsto I_P(X;Y)\) 在该凸集上严格凸。
+对任意可行 \(P\) 取置换平均 \(\bar P\) 保持边缘与对角质量不变，并使互信息不增；因此最优解必为置换不变耦合。
+在置换不变类中，双边缘均匀迫使对角项为常数、非对角项为常数，并由 \(\sum_x P(x,x)=1-\delta\) 唯一确定 \(P^\star_\delta\)。
+代入
+\(
+I_{P^\star_\delta}(X;Y)=\sum_{x,y}P^\star_\delta(x,y)\log\frac{P^\star_\delta(x,y)}{1/n^2}
+\)
+得到所示闭式。证毕。
+\end{proof}
+
+\begin{corollary}[熵型重写]\label{cor:pom-diagonal-rate-uniform-entropy-rewrite}
+在定理 \ref{thm:pom-diagonal-rate-uniform-closed-form} 的设定下，令二元熵
+\[
+H_2(\delta):=-(1-\delta)\log(1-\delta)-\delta\log\delta.
+\]
+则对 \(0\le\delta<1-\tfrac1n\) 有
+\[
+R_{U_n}(\delta)=\log n-H_2(\delta)-\delta\log(n-1).
+\]
+\end{corollary}
+\begin{proof}
+将定理 \ref{thm:pom-diagonal-rate-uniform-closed-form} 的闭式展开并整理即得。证毕。
+\end{proof}
+
+\begin{theorem}[均匀字母表上的协同严格不等式]\label{thm:pom-diagonal-rate-uniform-synergy-inequality}
+令 \(n\ge 2\)、\(k\ge 2\)，并把 \(U_{n^k}\) 视为 \(n^k\) 元均匀分布。
+对任意 \(\delta\in\bigl(0,1-1/n^k\bigr)\) 有严格不等式
+\[
+R_{U_{n^k}}(\delta)\ <\ k\,R_{U_n}(\delta).
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:pom-diagonal-rate-uniform-entropy-rewrite}，
+\[
+R_{U_{n^k}}(\delta)=k\log n-H_2(\delta)-\delta\log(n^k-1),
+\qquad
+kR_{U_n}(\delta)=k\log n-kH_2(\delta)-k\delta\log(n-1).
+\]
+故差为
+\[
+kR_{U_n}(\delta)-R_{U_{n^k}}(\delta)
+=(k-1)H_2(\delta)+\delta\bigl(\log(n^k-1)-k\log(n-1)\bigr).
+\]
+其中 \((k-1)H_2(\delta)>0\)，且 \(n^k-1>(n-1)^k\) 蕴含 \(\log(n^k-1)-k\log(n-1)>0\)，从而差严格为正。证毕。
+\end{proof}
+
+\begin{theorem}[对角粗粒化下界与线性可达上界]\label{thm:pom-diagonal-rate-bernoulli-lower-and-mixture-upper}
+令 \(X\) 为有限字母表，取全支撑分布 \(w\in\Delta(X)\)，并记
+\[
+p_2(w):=\sum_{x\in X}w(x)^2,\qquad \delta_0:=1-p_2(w),\qquad H(w):=-\sum_{x\in X}w(x)\log w(x).
+\]
+则对任意 \(\delta\in[0,1]\) 成立下界
+\[
+R_w(\delta)\ \ge\ D_{\mathrm{KL}}\!\bigl(\mathrm{Bern}(1-\delta)\,\|\,\mathrm{Bern}(p_2(w))\bigr),
+\]
+其中 \(D_{\mathrm{KL}}(\mathrm{Bern}(a)\|\mathrm{Bern}(b)):=a\log\frac{a}{b}+(1-a)\log\frac{1-a}{1-b}\)。
+\par
+并且对任意 \(\delta\in[0,\delta_0]\)，令
+\[
+\varepsilon(\delta):=1-\frac{\delta}{\delta_0}\in[0,1],\qquad
+P_\delta(x,y):=(1-\varepsilon(\delta))\,w(x)w(y)+\varepsilon(\delta)\,w(x)\mathbf 1_{\{x=y\}},
+\]
+则 \(P_\delta\) 可行且满足
+\[
+R_w(\delta)\ \le\ I_{P_\delta}(X;Y)\ \le\ \varepsilon(\delta)\,H(w)
+=\Bigl(1-\frac{\delta}{1-p_2(w)}\Bigr)H(w).
+\]
+当 \(\delta\ge\delta_0\) 时有 \(R_w(\delta)=0\)。
+\end{theorem}
+\begin{proof}
+对下界，令 \(f(x,y)=\mathbf 1_{\{x=y\}}\) 并记 \(Z=f(X,Y)\)。
+对任意满足 \(P_X=P_Y=w\) 的耦合 \(P\)，有
+\(
+I_P(X;Y)=D_{\mathrm{KL}}(P\|w\otimes w)
+\)；
+由数据处理不等式
+\[
+D_{\mathrm{KL}}(P\|w\otimes w)\ \ge\ D_{\mathrm{KL}}\!\bigl(\mathrm{Law}_P(Z)\,\|\,\mathrm{Law}_{w\otimes w}(Z)\bigr).
+\]
+而 \(\mathrm{Law}_{w\otimes w}(Z)=\mathrm{Bern}(p_2(w))\)，并且可行性给出 \(\mathbb P_P(Z=1)=\mathbb P_P(X=Y)\ge 1-\delta\)。
+当 \(1-\delta\le p_2(w)\) 时右端可取为 \(0\)；当 \(1-\delta>p_2(w)\) 时，\(\mathbb P_P(Z=1)\ge 1-\delta\) 的下确界在边界处取得，得到所示下界。
+\par
+对上界，直接计算得 \(P_\delta\) 的边缘仍为 \(w\)，且其对角质量为
+\(
+\sum_x P_\delta(x,x)=(1-\varepsilon)p_2(w)+\varepsilon=1-\delta
+\)，故可行。
+由于
+\(
+I_{P_\delta}(X;Y)=D_{\mathrm{KL}}(P_\delta\|w\otimes w)
+\)
+且 \(D_{\mathrm{KL}}(\cdot\|w\otimes w)\) 对第一变量凸，有
+\[
+D_{\mathrm{KL}}\!\bigl((1-\varepsilon)(w\otimes w)+\varepsilon\,\mathrm{Diag}(w)\,\big\|\,w\otimes w\bigr)
+\le \varepsilon\,D_{\mathrm{KL}}\!\bigl(\mathrm{Diag}(w)\,\|\,w\otimes w\bigr),
+\]
+其中 \(\mathrm{Diag}(w)(x,y):=w(x)\mathbf 1_{\{x=y\}}\)。
+而
+\(
+D_{\mathrm{KL}}(\mathrm{Diag}(w)\|w\otimes w)=\sum_x w(x)\log\frac{w(x)}{w(x)^2}=H(w)
+\)，
+从而 \(I_{P_\delta}(X;Y)\le \varepsilon H(w)\)。
+最后一句由命题 \ref{prop:pom-diagonal-rate-zero-threshold-collision} 立刻推出。证毕。
+\end{proof}
+
+\begin{theorem}[线性混合耦合的最优性判别]\label{thm:pom-diagonal-rate-mixture-optimality-criterion}
+令 \(X\) 为有限集（\(|X|\ge 2\)），取全支撑分布 \(w\in\Delta(X)\)，并令 \(\delta\in(0,\delta_0)\)（\(\delta_0:=1-p_2(w)\)）。
+令 \(P_\delta\) 为定理 \ref{thm:pom-diagonal-rate-bernoulli-lower-and-mixture-upper} 的线性混合耦合。
+则 \(P_\delta\) 为 \(R_w(\delta)\) 的最优耦合当且仅当满足以下两者之一：
+\[
+|X|=2,\qquad\text{或}\qquad w\ \text{为均匀分布}.
+\]
+在其余情形（即 \(|X|\ge 3\) 且 \(w\) 非均匀）恒有严格不等式 \(I_{P_\delta}(X;Y)>R_w(\delta)\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative}，当 \(\delta\in(0,\delta_0)\) 时最优耦合唯一且必具有结构
+\[
+P^\star_\delta(x,y)=\frac{u_xu_y\bigl(1+\kappa\,\mathbf 1_{\{x=y\}}\bigr)}{Z}
+\qquad(\kappa>0,\ u\in\RR_{>0}^X).
+\]
+若 \(P_\delta\) 为最优，则由唯一性必有 \(P_\delta=P^\star_\delta\)。
+特别地，对任意 \(x\ne y\) 有 \(P_\delta(x,y)=(1-\varepsilon)w(x)w(y)\)，而结构式给出 \(P^\star_\delta(x,y)=u_xu_y/Z\)，从而
+\[
+u_xu_y\ \propto\ w(x)w(y)\qquad(x\ne y).
+\]
+当 \(|X|\ge 3\) 时，取互异 \(x,y,z\) 得
+\(
+u_x^2\propto w(x)^2
+\)，故存在常数 \(c>0\) 使 \(u_x=c\,w(x)\) 对全部 \(x\) 成立。
+代回对角项，结构式要求
+\[
+\frac{P_\delta(x,x)}{w(x)^2}=\frac{(1-\varepsilon)w(x)^2+\varepsilon w(x)}{w(x)^2}
+\]
+对 \(x\) 不变；这等价于 \(w(x)\) 为常数，故 \(w\) 必为均匀分布。
+反之，当 \(w\) 为均匀分布时，定理 \ref{thm:pom-diagonal-rate-uniform-closed-form} 给出的唯一最优耦合恰为该线性混合形式，因而 \(P_\delta\) 最优。
+\par
+当 \(|X|=2\) 时由定理 \ref{thm:pom-diagonal-rate-binary-closed-form} 与推论 \ref{cor:pom-diagonal-rate-binary-linear-mixture} 可知线性混合耦合与最优族重合。
+综上得到充要条件；其余情形由唯一性立刻推出严格次优。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-diagonal-rate-two-orbit-coarsegrain-tensor}
+
+\endinput

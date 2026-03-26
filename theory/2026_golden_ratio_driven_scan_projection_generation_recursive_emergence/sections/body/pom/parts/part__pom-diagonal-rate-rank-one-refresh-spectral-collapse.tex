@@ -1,0 +1,577 @@
+% (User input window)
+
+在命题 \ref{prop:pom-diagonal-rate-keep-resample-channel} 的保持—重采样描述之外，最优核还可等价改写为状态依赖惰性与全局刷新叠加的秩一扰动。
+该表示使特征多项式与有限维 \(\zeta\) 行列式的结构化分解成为直接推论，并在 \(\delta\downarrow 0\) 时导出一类可审计的临界谱算子。
+
+\begin{proposition}[秩一刷新核表示]\label{prop:pom-diagonal-rate-rank-one-refresh-decomposition}
+沿用命题 \ref{prop:pom-diagonal-rate-keep-resample-channel} 的记号，令
+\(
+A:=\sum_{z\in X}u_z
+\)
+并定义刷新率
+\[
+r_\delta(x):=\frac{A}{A+\kappa u_x}\in(0,1),\qquad x\in X.
+\]
+则对一切 \(x,y\in X\) 有严格恒等式
+\[
+K_\delta(y\mid x)
+=r_\delta(x)\,\pi_\delta(y)+\bigl(1-r_\delta(x)\bigr)\mathbf 1_{\{y=x\}}.
+\]
+因此在矩阵形式下
+\[
+K_\delta=\mathrm{diag}(1-r_\delta)+r_\delta\,\pi_\delta^{\mathsf T},
+\]
+其中 \(r_\delta,\pi_\delta\) 均视作列向量。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:pom-diagonal-rate-keep-resample-channel} 的证明，对任意 \(y\ne x\) 有
+\[
+K_\delta(y\mid x)=\frac{u_y}{A+\kappa u_x}
+=\frac{A}{A+\kappa u_x}\cdot \frac{u_y}{A}
+=r_\delta(x)\,\pi_\delta(y).
+\]
+对角项由
+\[
+K_\delta(x\mid x)=\frac{(1+\kappa)u_x}{A+\kappa u_x}
+=1-\frac{A-u_x}{A+\kappa u_x}
+=1-r_\delta(x)\bigl(1-\pi_\delta(x)\bigr)
+=r_\delta(x)\pi_\delta(x)+\bigl(1-r_\delta(x)\bigr)
+\]
+得到所示表示。
+矩阵形式为逐行改写的直接结果。证毕。
+\end{proof}
+
+\begin{theorem}[特征多项式与有限维 \texorpdfstring{$\zeta$}{zeta} 行列式的一维坍缩]\label{thm:pom-diagonal-rate-rank-one-refresh-determinant-collapse}
+在命题 \ref{prop:pom-diagonal-rate-rank-one-refresh-decomposition} 的设定下，记
+\(
+D_\delta:=\mathrm{diag}(1-r_\delta)
+\)。
+则对任意 \(z\in\CC\) 使 \(I-zD_\delta\) 可逆，有行列式分解
+\[
+\det(I-zK_\delta)=\det(I-zD_\delta)\Bigl(1-z\,\pi_\delta^{\mathsf T}(I-zD_\delta)^{-1}r_\delta\Bigr).
+\]
+等价地，
+\[
+\det(I-zK_\delta)
+=\Bigl(\prod_{x\in X}\bigl(1-z(1-r_\delta(x))\bigr)\Bigr)
+\Bigl(1-z\sum_{x\in X}\frac{\pi_\delta(x)r_\delta(x)}{1-z(1-r_\delta(x))}\Bigr).
+\]
+因此在对角部分被剥离后，剩余谱由一个标量世俗方程确定。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-diagonal-rate-rank-one-refresh-decomposition}，有 \(K_\delta=D_\delta+r_\delta\pi_\delta^{\mathsf T}\)。
+对
+\(
+I-zK_\delta=(I-zD_\delta)-z r_\delta\pi_\delta^{\mathsf T}
+\)
+应用秩一行列式引理
+\(
+\det(D+uv^{\mathsf T})=\det(D)\bigl(1+v^{\mathsf T}D^{-1}u\bigr)
+\)
+即得第一式。
+由于 \(I-zD_\delta\) 为对角矩阵，\(\det(I-zD_\delta)=\prod_x(1-z(1-r_\delta(x)))\)，并且
+\[
+\pi_\delta^{\mathsf T}(I-zD_\delta)^{-1}r_\delta
+=\sum_{x\in X}\pi_\delta(x)\frac{r_\delta(x)}{1-z(1-r_\delta(x))},
+\]
+从而得到第二式。证毕。
+\end{proof}
+
+\begin{corollary}[热核迹与有限维 \texorpdfstring{$\zeta$}{zeta} 指纹：有理性与极点实性]\label{cor:pom-diagonal-rate-rank-one-refresh-trace-zeta-fingerprint}
+令 \(n:=|X|\ge 2\)，并记 \(K_\delta\) 的特征值（含重数）为
+\(
+1=\lambda_1(K_\delta),\lambda_2(K_\delta),\dots,\lambda_n(K_\delta)
+\)。
+定义有限维 \(\zeta\) 行列式
+\[
+\zeta_\delta(z):=\det(I-zK_\delta)^{-1}.
+\]
+则 \(\zeta_\delta\) 为有理函数，其极点集合为
+\[
+\mathrm{Pole}(\zeta_\delta)=\Bigl\{\frac{1}{\lambda_i(K_\delta)}:i=1,\dots,n\Bigr\},
+\]
+并且全部极点都落在实轴上；更精确地，由 \(\mathrm{Spec}(K_\delta)\subseteq[0,1]\)（推论 \ref{cor:pom-maxent-markov-no-oscillation-endpoints}）得
+\(
+\mathrm{Pole}(\zeta_\delta)\subseteq [1,\infty]
+\)。
+\par
+此外，在 \(z=0\) 的邻域有迹生成函数恒等式
+\[
+\log \zeta_\delta(z)=\sum_{m\ge 1}\frac{\tr(K_\delta^m)}{m}\,z^m,
+\qquad
+\tr(K_\delta^m)=\sum_{i=1}^{n}\lambda_i(K_\delta)^m\quad(m\ge 1).
+\]
+因此 \((\tr(K_\delta^m))_{m\ge 1}\) 可由定理 \ref{thm:pom-diagonal-rate-rank-one-refresh-determinant-collapse} 的一维行列式闭式通过系数提取逐项回收，
+并作为 \((r_\delta,\pi_\delta)\) 的完全对称指纹（对标签置换不变）。
+\end{corollary}
+\begin{proof}
+由有限维线性代数，\(\det(I-zK_\delta)=\prod_{i=1}^{n}(1-z\lambda_i(K_\delta))\) 为次数 \(n\) 多项式，
+故 \(\zeta_\delta\) 为有理函数且极点为 \(\{1/\lambda_i\}\)。
+谱实性由相似对称化 \(S_\delta=D^{1/2}K_\delta D^{-1/2}\)（定理 \ref{thm:pom-diagonal-rate-critical-line-laplacian-first-order}）与 \(S_\delta\) 对称性给出；
+谱非负与 \(\le 1\) 的界已在推论 \ref{cor:pom-maxent-markov-no-oscillation-endpoints} 中证明。
+\par
+最后，由幂级数恒等式 \(-\log(1-t)=\sum_{m\ge 1}t^m/m\) 与迹的谱表示
+\(
+\tr(K_\delta^m)=\sum_i \lambda_i(K_\delta)^m
+\)
+直接推出迹生成函数公式。
+将 \(\zeta_\delta=\det(I-zK_\delta)^{-1}\) 与定理 \ref{thm:pom-diagonal-rate-rank-one-refresh-determinant-collapse} 的闭式结合，即可按 \(z\) 的 Taylor 系数逐项回收 \(\tr(K_\delta^m)\)，并因表达式在 \(x\) 上完全对称而得到不变性。证毕。
+\end{proof}
+
+\begin{corollary}[去平凡特征值的行列式闭式]\label{cor:pom-diagonal-rate-rank-one-refresh-detprime}
+令 \(n:=|X|\ge 2\)，并令 \(1=\lambda_1(K_\delta),\lambda_2(K_\delta),\dots,\lambda_n(K_\delta)\) 为 \(K_\delta\) 的特征值（含重数）。
+定义
+\[
+\det{}'(I-K_\delta):=\prod_{i=2}^{n}\bigl(1-\lambda_i(K_\delta)\bigr)
+=\lim_{z\to 1}\frac{\det(I-zK_\delta)}{1-z}.
+\]
+则有严格恒等式
+\[
+\det{}'(I-K_\delta)
+=\Bigl(\prod_{x\in X}r_\delta(x)\Bigr)\Bigl(\sum_{x\in X}\frac{\pi_\delta(x)}{r_\delta(x)}\Bigr).
+\]
+并且由边缘自洽关系 \(w(x)=u_x(A+\kappa u_x)/Z\) 推出
+\[
+\sum_{x\in X}\frac{\pi_\delta(x)}{r_\delta(x)}=\frac{Z}{A^2}.
+\]
+若取定理 \ref{thm:pom-diagonal-rate-scalar-collapse} 的规范化缩放（从而 \(Z=1\)），则进一步化简为
+\[
+\det{}'(I-K_\delta)=\frac{\prod_{x\in X}r_\delta(x)}{A^2}.
+\]
+\end{corollary}
+\begin{proof}
+由 \(\det(I-zK_\delta)=\prod_{i=1}^{n}(1-z\lambda_i(K_\delta))\) 且 \(\lambda_1(K_\delta)=1\)，得
+\(
+\det{}'(I-K_\delta)=\lim_{z\to 1}\det(I-zK_\delta)/(1-z)
+\)。
+\par
+将定理 \ref{thm:pom-diagonal-rate-rank-one-refresh-determinant-collapse} 代入，并记
+\[
+g(z):=\det(I-zD_\delta)=\prod_{x\in X}\bigl(1-z(1-r_\delta(x))\bigr),
+\qquad
+s(z):=\pi_\delta^{\mathsf T}(I-zD_\delta)^{-1}r_\delta.
+\]
+则在 \(z\to 1\) 时有 \(g(z)\to g(1)=\prod_x r_\delta(x)\)，而
+\(
+1-zs(z)\to 1-s(1)=0
+\)（因 \(s(1)=\sum_x\pi_\delta(x)=1\)）。
+因此
+\[
+\det{}'(I-K_\delta)=g(1)\cdot\lim_{z\to 1}\frac{1-zs(z)}{1-z}
+=g(1)\cdot\bigl(s(1)+s'(1)\bigr).
+\]
+注意
+\[
+s'(z)=\sum_{x\in X}\pi_\delta(x)\cdot
+\frac{r_\delta(x)\bigl(1-r_\delta(x)\bigr)}{\bigl(1-z(1-r_\delta(x))\bigr)^2},
+\]
+从而
+\(
+s'(1)=\sum_x\pi_\delta(x)\frac{1-r_\delta(x)}{r_\delta(x)}
+=\sum_x\frac{\pi_\delta(x)}{r_\delta(x)}-1
+\)。
+代回即得
+\(
+\det{}'(I-K_\delta)
+=(\prod_x r_\delta(x))\sum_x \pi_\delta(x)/r_\delta(x)
+\)。
+\par
+最后，由 \(\pi_\delta(x)=u_x/A\)、\(r_\delta(x)=A/(A+\kappa u_x)\) 得
+\[
+\frac{\pi_\delta(x)}{r_\delta(x)}
+=\frac{u_x}{A}\cdot \frac{A+\kappa u_x}{A}
+=\frac{u_x(A+\kappa u_x)}{A^2}
+=\frac{Zw(x)}{A^2},
+\]
+求和并用 \(\sum_x w(x)=1\) 得 \(\sum_x\pi_\delta(x)/r_\delta(x)=Z/A^2\)。
+在 \(Z=1\) 的规范化下结论即为所示。证毕。
+\end{proof}
+
+\begin{theorem}[临界线拉普拉斯与 \texorpdfstring{$\delta\downarrow0$}{delta->0} 的首阶谱律]\label{thm:pom-diagonal-rate-critical-line-laplacian-first-order}
+取全支撑分布 \(w\in\Delta(X)\)，令 \(K_\delta\) 为 \(P^\star_\delta\) 诱导的最优核（命题 \ref{prop:pom-diagonal-rate-keep-resample-channel}）。
+记 \(D:=\mathrm{diag}(w)\)，并定义对称化算子
+\[
+S_\delta:=D^{1/2}K_\delta D^{-1/2}=D^{-1/2}P^\star_\delta D^{-1/2},
+\]
+则 \(S_\delta\) 与 \(K_\delta\) 相似，谱相同且 \(S_\delta\) 为实对称矩阵。
+\par
+令
+\[
+A:=A_{1/2}(w)=\sum_{x\in X}\sqrt{w(x)},\qquad
+C:=C_{1/2}(w)=A^2-1\ (>0),
+\]
+并令 \(\sqrt w\in\RR^X\) 表示分量为 \(\sqrt{w(x)}\) 的列向量。
+则当 \(\delta\downarrow 0\) 时存在对称正半定矩阵
+\[
+L_w:=\frac{A\,\mathrm{diag}(w^{-1/2})-\mathbf 1\mathbf 1^{\mathsf T}}{C}\succeq 0,
+\qquad
+L_w\sqrt w=0,
+\]
+使得
+\[
+S_\delta=I-\delta L_w+o(\delta)\qquad(\delta\downarrow 0).
+\]
+若记 \(0=\mu_1<\mu_2\le\cdots\le\mu_n\) 为 \(L_w\) 的特征值，则
+\[
+\lambda_i(K_\delta)=1-\delta\mu_i+o(\delta)\qquad(i=1,\dots,n),
+\]
+其中 \(\lambda_1(K_\delta)\equiv 1\)。
+\end{theorem}
+\begin{proof}
+由 \(w(x)K_\delta(y\mid x)=P^\star_\delta(x,y)=P^\star_\delta(y,x)=w(y)K_\delta(x\mid y)\) 得 \(S_\delta\) 对称。
+\par
+由定理 \ref{thm:pom-diagonal-rate-rare-mismatch-hellinger-universality}，当 \(\delta\downarrow 0\) 时对任意 \(x\ne y\),
+\[
+K_\delta(y\mid x)=\frac{P^\star_\delta(x,y)}{w(x)}
+=\delta\,\frac{\sqrt{w(y)}}{\sqrt{w(x)}\,C}+o(\delta),
+\]
+并且
+\[
+K_\delta(x\mid x)=\frac{P^\star_\delta(x,x)}{w(x)}
+=1-\delta\,\frac{A-\sqrt{w(x)}}{\sqrt{w(x)}\,C}+o(\delta)
+=1-\delta\,\frac{A/\sqrt{w(x)}-1}{C}+o(\delta).
+\]
+从而对 \(x\ne y\),
+\[
+S_\delta(x,y)
+=\frac{\sqrt{w(x)}}{\sqrt{w(y)}}K_\delta(y\mid x)
+=\delta\,\frac{1}{C}+o(\delta),
+\qquad
+S_\delta(x,x)=K_\delta(x\mid x)=1-\delta\,\frac{A/\sqrt{w(x)}-1}{C}+o(\delta).
+\]
+将上述逐元展开合并，恰得 \(S_\delta=I-\delta L_w+o(\delta)\)，其中 \(L_w\) 的对角元为 \(\frac{A/\sqrt{w(x)}-1}{C}\)，非对角元为 \(-\frac{1}{C}\)，即所示矩阵表达。
+\par
+为证 \(L_w\succeq 0\)，记 \(t_x:=A/\sqrt{w(x)}\) 并写
+\(
+CL_w=\mathrm{diag}(t)-\mathbf 1\mathbf 1^{\mathsf T}
+\)。
+对任意 \(v\in\RR^X\)，由加权 Cauchy--Schwarz 不等式得
+\[
+\biggl(\sum_{x\in X}v_x\biggr)^2
+=\biggl(\sum_{x\in X}\sqrt{\frac{1}{t_x}}\cdot \sqrt{t_x}\,v_x\biggr)^2
+\le \biggl(\sum_{x\in X}\frac{1}{t_x}\biggr)\biggl(\sum_{x\in X}t_xv_x^2\biggr).
+\]
+而
+\(
+\sum_x\frac{1}{t_x}=\sum_x\frac{\sqrt{w(x)}}{A}=1
+\)，故
+\(
+v^{\mathsf T}(\mathrm{diag}(t)-\mathbf 1\mathbf 1^{\mathsf T})v
+=\sum_x t_xv_x^2-(\sum_x v_x)^2\ge 0
+\)，即 \(L_w\succeq 0\)。
+等号成立当且仅当 \(\sqrt{t_x}v_x\) 与 \(\sqrt{1/t_x}\) 成比例，即 \(v_x\propto 1/t_x=\sqrt{w(x)}/A\)，从而 \(L_w\sqrt w=0\)。
+\par
+最后，由有限维对称矩阵特征值对算子范数连续且 \(S_\delta=I-\delta L_w+o(\delta)\)，可得
+\(
+\lambda_i(S_\delta)=1-\delta\mu_i+o(\delta)
+\)；
+又因 \(S_\delta\) 与 \(K_\delta\) 相似，二者谱相同，得到所示谱展开。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-diagonal-rate-critical-continuous-time-generator-maxent-cheeger}
+
+\begin{theorem}[临界非零谱的世俗方程与序统计交错]\label{thm:pom-diagonal-rate-critical-spectrum-secular-interlacing}
+沿用定理 \ref{thm:pom-diagonal-rate-critical-line-laplacian-first-order} 的记号，令 \(n:=|X|\ge 2\)，并记
+\[
+t_x:=\frac{A}{\sqrt{w(x)}}\qquad(x\in X).
+\]
+设 \(\tau_1<\cdots<\tau_m\) 为 \(\{t_x:x\in X\}\) 的互异值，且 \(\tau_j\) 的重数为 \(m_j\)（\(\sum_j m_j=n\)）。
+则 \(CL_w=\mathrm{diag}(t)-\mathbf 1\mathbf 1^{\mathsf T}\) 的谱由两类部分组成：
+\begin{enumerate}
+  \item 对每个 \(j\)，特征值 \(\tau_j\) 以重数 \(m_j-1\) 出现；
+  \item 其余 \(m\) 个特征值为世俗方程
+  \[
+  1-\sum_{x\in X}\frac{1}{t_x-\lambda}=0
+  \]
+  的全部实根；其中 \(\lambda_1=0\)，且在每个开区间 \((\tau_j,\tau_{j+1})\) 内恰有唯一根。
+\end{enumerate}
+将 \(\lambda=\mu C\) 代回，即得到 \(L_w\) 的非零特征值的定位；当 \(t_x\) 两两不同（即 \(m=n\)）时，严格交错关系化为
+\[
+\mu_{k+1}\in\Bigl(\frac{t_{(k)}}{C},\frac{t_{(k+1)}}{C}\Bigr)\qquad(k=1,\dots,n-1),
+\]
+其中 \(t_{(1)}<\cdots<t_{(n)}\) 为 \(t_x\) 的升序排列。
+\end{theorem}
+\begin{proof}
+由 \(CL_w=\mathrm{diag}(t)-\mathbf 1\mathbf 1^{\mathsf T}\) 及其对称性，可将问题化为对角矩阵的秩一扰动谱分析。
+\par
+若 \(\tau\) 为某个对角元的取值且其重数为 \(r\ge 2\)，则任取支撑在对应坐标集合上且坐标和为零的非零向量 \(v\)，有 \(\mathbf 1^{\mathsf T}v=0\) 因而 \((\mathrm{diag}(t)-\mathbf 1\mathbf 1^{\mathsf T})v=\tau v\)。
+由维数计数知该特征空间维数为 \(r-1\)，故得到第一类特征值。
+\par
+另一方面，对 \(\lambda\notin\{\tau_1,\dots,\tau_m\}\) 用秩一行列式引理得
+\[
+0=\det\bigl(\mathrm{diag}(t)-\mathbf 1\mathbf 1^{\mathsf T}-\lambda I\bigr)
+=\Bigl(\prod_{x\in X}(t_x-\lambda)\Bigr)\Bigl(1-\sum_{x\in X}\frac{1}{t_x-\lambda}\Bigr).
+\]
+由于 \(\lambda\notin\{t_x\}\)，故根必满足世俗方程。
+记 \(F(\lambda):=1-\sum_x\frac{1}{t_x-\lambda}\)，则 \(F\) 在每个连通区间 \((-\infty,\tau_1)\) 与 \((\tau_j,\tau_{j+1})\) 上连续且严格递减；
+并且当 \(\lambda\uparrow\tau_{j+1}\) 时 \(F(\lambda)\to-\infty\)，当 \(\lambda\downarrow\tau_j\) 时 \(F(\lambda)\to+\infty\)。
+因此在每个 \((\tau_j,\tau_{j+1})\) 内恰有唯一零点；又因
+\(
+\sum_x 1/t_x=\sum_x\sqrt{w(x)}/A=1
+\)，可知 \(F(0)=0\)，从而 \(\lambda_1=0\) 为 \((-\infty,\tau_1)\) 内的唯一零点。
+这给出第二类特征值的完备性。
+最后将 \(\lambda=\mu C\) 复原即得对 \(L_w\) 的定位；当 \(t_x\) 两两不同，上述区间即为 \((t_{(k)},t_{(k+1)})\)，从而得到严格交错式。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-diagonal-rate-critical-spectrum-stieltjes-tensor}
+
+\begin{corollary}[二元与均匀分布的闭式]\label{cor:pom-diagonal-rate-critical-spectrum-binary-uniform}
+沿用定理 \ref{thm:pom-diagonal-rate-critical-line-laplacian-first-order} 的 \(L_w\)。
+\begin{enumerate}
+  \item 若 \(n=2\) 且 \(w=(p,1-p)\)，则唯一非零特征值为
+  \[
+  \mu_2=\frac{1}{2p(1-p)}.
+  \]
+  \item 若 \(w\equiv 1/n\)，则
+  \[
+  \mu_2=\cdots=\mu_n=\frac{n}{n-1}.
+  \]
+\end{enumerate}
+因此在均匀情形 \(1-\lambda_2(K_\delta)=\frac{n}{n-1}\delta+o(\delta)\)，在二元情形 \(1-\lambda_2(K_\delta)=\frac{\delta}{2p(1-p)}+o(\delta)\)。
+\end{corollary}
+\begin{proof}
+\textup{(1)} 由 \(A=\sqrt p+\sqrt{1-p}\)、\(C=A^2-1=2\sqrt{p(1-p)}\) 得
+\(
+t_1=A/\sqrt p,\ t_2=A/\sqrt{1-p}
+\)。
+矩阵 \(CL_w=\mathrm{diag}(t)-\mathbf 1\mathbf 1^{\mathsf T}\) 在二阶情形的非零特征值等于迹
+\[
+\lambda_2=t_1+t_2-2
+=\Bigl(\sqrt p+\sqrt{1-p}\Bigr)\Bigl(\frac{1}{\sqrt p}+\frac{1}{\sqrt{1-p}}\Bigr)-2
+=\frac{1}{\sqrt{p(1-p)}},
+\]
+从而 \(\mu_2=\lambda_2/C=1/(2p(1-p))\)。
+\par
+\textup{(2)} 若 \(w\equiv 1/n\)，则 \(A=\sqrt n\)、\(C=n-1\)、\(t_x=n\) 常数，故 \(CL_w=nI-\mathbf 1\mathbf 1^{\mathsf T}\)。
+其在 \(\mathbf 1^\perp\) 上为 \(nI\)，在 \(\mathrm{span}\{\mathbf 1\}\) 上为零，因而 \(L_w\) 的非零谱为 \(n/(n-1)\)（重数 \(n-1\)）。
+最后的谱隙首阶律由
+\(
+\lambda_2(K_\delta)=1-\delta\mu_2+o(\delta)
+\)
+立即推出。证毕。
+\end{proof}
+
+\begin{theorem}[临界线拉普拉斯的伪行列式闭式]\label{thm:pom-diagonal-rate-critical-laplacian-pseudodeterminant}
+沿用定理 \ref{thm:pom-diagonal-rate-critical-line-laplacian-first-order} 并令 \(n:=|X|\)。
+定义伪行列式（非零谱乘积）
+\[
+\operatorname{pdet}(L_w):=\prod_{i=2}^{n}\mu_i.
+\]
+则有严格恒等式
+\[
+\operatorname{pdet}(L_w)=\frac{A^{\,n-2}}{C^{\,n-1}}\cdot \frac{1}{\sqrt{\prod_{x\in X}w(x)}}.
+\]
+等价地，记几何均值
+\(
+G(w):=\exp\bigl(\frac1n\sum_x\log w(x)\bigr)
+\)
+与 \(H_{1/2}(w)=2\log A\)（命题 \ref{prop:pom-renyi-half-hellinger-identity-tensor-additivity}），则
+\[
+\log\operatorname{pdet}(L_w)
+=\frac{n-2}{2}H_{1/2}(w)
+-(n-1)\log\bigl(e^{H_{1/2}(w)}-1\bigr)
+-\frac{n}{2}\log G(w).
+\]
+\end{theorem}
+\begin{proof}
+记 \(L':=CL_w=\mathrm{diag}(t)-\mathbf 1\mathbf 1^{\mathsf T}\)。
+对 \(\lambda>0\) 用秩一行列式引理得
+\[
+\det(L'+\lambda I)=\Bigl(\prod_{x\in X}(t_x+\lambda)\Bigr)\Bigl(1-\sum_{x\in X}\frac{1}{t_x+\lambda}\Bigr).
+\]
+由 \(\sum_x 1/t_x=1\) 可写
+\[
+1-\sum_{x}\frac{1}{t_x+\lambda}
+=\sum_x\Bigl(\frac{1}{t_x}-\frac{1}{t_x+\lambda}\Bigr)
+=\lambda\sum_x\frac{1}{t_x(t_x+\lambda)}.
+\]
+于是
+\[
+\lim_{\lambda\downarrow 0}\frac{\det(L'+\lambda I)}{\lambda}
+=\Bigl(\prod_x t_x\Bigr)\sum_x\frac{1}{t_x^2}.
+\]
+另一方面，\(\operatorname{pdet}(L')=\prod_{i=2}^n(C\mu_i)=C^{n-1}\operatorname{pdet}(L_w)\)，并且
+\(
+\operatorname{pdet}(L')=\lim_{\lambda\downarrow 0}\det(L'+\lambda I)/\lambda
+\)。
+因此
+\[
+\operatorname{pdet}(L_w)
+=\frac{1}{C^{n-1}}\Bigl(\prod_x t_x\Bigr)\sum_x\frac{1}{t_x^2}.
+\]
+将 \(t_x=A/\sqrt{w(x)}\) 代入，
+\[
+\prod_x t_x=\frac{A^{\,n}}{\sqrt{\prod_x w(x)}},
+\qquad
+\sum_x\frac{1}{t_x^2}=\sum_x\frac{w(x)}{A^2}=\frac{1}{A^2},
+\]
+从而得到 \(\operatorname{pdet}(L_w)=A^{n-2}/(C^{n-1}\sqrt{\prod w})\)。
+对数形式由 \(H_{1/2}(w)=2\log A\)、\(C=e^{H_{1/2}(w)}-1\) 及 \(\sqrt{\prod w}=G(w)^{n/2}\) 直接化简。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-diagonal-rate-critical-laplacian-pdet-tensor-synergy}
+
+\begin{corollary}[均匀极限的自然常数]\label{cor:pom-diagonal-rate-critical-laplacian-pdet-uniform-limit-e}
+若 \(w\equiv 1/n\)，则
+\[
+\operatorname{pdet}(L_w)=\Bigl(\frac{n}{n-1}\Bigr)^{n-1}\xrightarrow[n\to\infty]{}e.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-critical-laplacian-pseudodeterminant} 代入 \(A=\sqrt n\)、\(C=n-1\)、\(\prod_x w(x)=n^{-n}\) 直接得到闭式；极限由 \((1+1/(n-1))^{n-1}\to e\) 给出。证毕。
+\end{proof}
+
+\begin{theorem}[临界多项式的显式闭式与缩放 \texorpdfstring{$\zeta$}{zeta} 极限]\label{thm:pom-diagonal-rate-critical-xi-polynomial-and-zeta-scaling}
+沿用定理 \ref{thm:pom-diagonal-rate-critical-line-laplacian-first-order}，令
+\[
+\Xi_w(s):=\det{}'(L_w+sI)=\prod_{i=2}^{n}(\mu_i+s),\qquad s\in\RR,
+\]
+其中 \(\det{}'\) 表示去除零特征值因子（等价于 \(\det(L_w+sI)/s\)）。
+则对任意 \(s\in\CC\) 有闭式
+\[
+\Xi_w(s)
+=\frac{1}{A\,C^{\,n-1}}\Bigl(\prod_{x\in X}\frac{1}{\sqrt{w(x)}}\Bigr)
+\sum_{x\in X} w(x)\prod_{y\ne x}\bigl(A+sC\sqrt{w(y)}\bigr),
+\]
+从而 \(\Xi_w\) 为次数 \(n-1\) 的一元多项式且满足 \(\Xi_w(0)=\operatorname{pdet}(L_w)\)（与定理 \ref{thm:pom-diagonal-rate-critical-laplacian-pseudodeterminant} 一致）。
+\par
+进一步，记有限维 \(\zeta\) 行列式
+\(
+\zeta_\delta(z):=\det(I-zK_\delta)^{-1}
+\)
+（同推论 \ref{cor:pom-diagonal-rate-rank-one-refresh-trace-zeta-fingerprint}）。
+则对任意固定 \(s\in\CC\) 有缩放极限
+\[
+\lim_{\delta\downarrow 0}\ \delta^{-(n-1)}\,
+\frac{\det(I-e^{-s\delta}K_\delta)}{1-e^{-s\delta}}
+=\Xi_w(s).
+\]
+\end{theorem}
+\begin{proof}
+由 \(L'=CL_w=\mathrm{diag}(t)-\mathbf 1\mathbf 1^{\mathsf T}\) 与秩一行列式引理，
+\[
+\det(L'+sCI)
+=\Bigl(\prod_x(t_x+sC)\Bigr)\Bigl(1-\sum_x\frac{1}{t_x+sC}\Bigr).
+\]
+注意 \(\sum_x 1/t_x=1\)，故
+\[
+1-\sum_x\frac{1}{t_x+sC}
+=\sum_x\Bigl(\frac{1}{t_x}-\frac{1}{t_x+sC}\Bigr)
+=sC\sum_x\frac{1}{t_x(t_x+sC)}.
+\]
+将其代回并用 \(L_w=L'/C\) 得
+\[
+\Xi_w(s)=\frac{\det(L_w+sI)}{s}
+=\frac{1}{C^{n}}\cdot \frac{1}{s}\,\det(L'+sCI)
+=\frac{1}{C^{n-1}}\Bigl(\prod_x(t_x+sC)\Bigr)\sum_x\frac{1}{t_x(t_x+sC)}.
+\]
+代入 \(t_x=A/\sqrt{w(x)}\) 并将分母通分，得到
+\[
+\Xi_w(s)=\frac{1}{A\,C^{n-1}}\Bigl(\prod_{x}\frac{1}{\sqrt{w(x)}}\Bigr)\sum_{x}w(x)\prod_{y\ne x}\bigl(A+sC\sqrt{w(y)}\bigr),
+\]
+从而为一元多项式且常数项由 \(s=0\) 与定理 \ref{thm:pom-diagonal-rate-critical-laplacian-pseudodeterminant} 一致性立即给出。
+\par
+缩放极限由相似不变性
+\(
+S_\delta=I-\delta L_w+o(\delta)
+\)
+（定理 \ref{thm:pom-diagonal-rate-critical-line-laplacian-first-order}）及
+\(
+e^{-s\delta}=1-s\delta+O(\delta^2)
+\)
+推出：
+\[
+I-e^{-s\delta}S_\delta
+=I-\bigl(1-s\delta+O(\delta^2)\bigr)\bigl(I-\delta L_w+o(\delta)\bigr)
+=\delta(L_w+sI)+o(\delta),
+\]
+从而
+\(
+\det(I-e^{-s\delta}K_\delta)=\det(I-e^{-s\delta}S_\delta)=\delta^{n}\det(L_w+sI)+o(\delta^{n})
+\)
+且
+\(
+1-e^{-s\delta}=s\delta+O(\delta^2)
+\)。
+二者相除并乘以 \(\delta^{-(n-1)}\) 得到极限 \(\Xi_w(s)=\det(L_w+sI)/s\)。证毕。
+\end{proof}
+
+\begin{corollary}[临界谱的交错与首个谱隙夹逼]\label{cor:pom-diagonal-rate-critical-spectrum-gap-bounds}
+沿用定理 \ref{thm:pom-diagonal-rate-critical-spectrum-secular-interlacing} 并令 \(w_{\max}:=\max_x w(x)\)，\(w_{\mathrm{2nd}}\) 为第二大质量（当存在并列最大时取 \(w_{\mathrm{2nd}}=w_{\max}\)）。
+则最小非零特征值满足
+\[
+\frac{A}{C\sqrt{w_{\max}}}\ \le\ \mu_2\ \le\ \frac{A}{C\sqrt{w_{\mathrm{2nd}}}},
+\]
+且当最大质量唯一时两端为严格不等式。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-critical-spectrum-secular-interlacing} 的交错定位，\(\mu_2 C\) 位于最小两级互异对角值之间。
+而 \(t_x=A/\sqrt{w(x)}\) 随 \(w(x)\) 严格递减，故最小对角值对应 \(w_{\max}\)，次小对角值对应 \(w_{\mathrm{2nd}}\)。
+将区间端点除以 \(C\) 即得。证毕。
+\end{proof}
+
+\begin{proposition}[临界本征向量的显式形状与符号分离]\label{prop:pom-diagonal-rate-critical-eigenvector-shape-sign-separation}
+设 \(t_x\) 两两不同，并令 \(\mu_{k+1}\) 为定理 \ref{thm:pom-diagonal-rate-critical-spectrum-secular-interlacing} 中由区间 \((t_{(k)}/C,t_{(k+1)}/C)\) 对应的非零特征值。
+记 \(\lambda_{k+1}:=\mu_{k+1}C\in(t_{(k)},t_{(k+1)})\)，并令 \(v^{(k+1)}\) 为矩阵 \(L':=CL_w=\mathrm{diag}(t)-\mathbf 1\mathbf 1^{\mathsf T}\) 的对应本征向量（\(\lambda_{k+1}\)-本征向量）。
+则存在常数 \(\sigma\ne 0\) 使对所有 \(x\in X\) 有
+\[
+v^{(k+1)}_x=\frac{\sigma}{t_x-\lambda_{k+1}}.
+\]
+并且在按 \(t_{(1)}<\cdots<t_{(n)}\) 排序后的坐标中，\(\bigl(v^{(k+1)}_{(i)}\bigr)_{i=1}^n\) 的符号在 \(k\) 与 \(k+1\) 之间发生唯一翻转：即分量在 \(i\le k\) 与 \(i\ge k+1\) 两侧同号且符号相反（整体符号可由 \(\sigma\) 选择）。
+\end{proposition}
+\begin{proof}
+由 \((\mathrm{diag}(t)-\mathbf 1\mathbf 1^{\mathsf T})v=\lambda v\) 得
+\[
+(t_x-\lambda)v_x=\sum_{y\in X}v_y=:S,
+\]
+右端与 \(x\) 无关，从而 \(v_x=S/(t_x-\lambda)\)。
+若 \(S=0\)，则 \((t_x-\lambda)v_x=0\) 对所有 \(x\) 成立，因 \(t_x\) 两两不同且 \(\lambda\notin\{t_x\}\)（由定理 \ref{thm:pom-diagonal-rate-critical-spectrum-secular-interlacing}），迫使 \(v=0\)，矛盾。
+故 \(S\ne 0\)，取 \(\sigma:=S\) 得显式形状。
+\par
+对符号分离，因 \(\lambda_{k+1}\in(t_{(k)},t_{(k+1)})\)，有 \(t_{(i)}-\lambda_{k+1}<0\) 当 \(i\le k\)，而 \(t_{(i)}-\lambda_{k+1}>0\) 当 \(i\ge k+1\)。
+故 \(v_{(i)}\propto (t_{(i)}-\lambda_{k+1})^{-1}\) 在两侧符号相反，且除整体符号外不存在额外翻转。证毕。
+\end{proof}
+
+\begin{proposition}[临界谱不变量的闭式表达]\label{prop:pom-diagonal-rate-critical-spectrum-invariants-closed}
+沿用定理 \ref{thm:pom-diagonal-rate-critical-line-laplacian-first-order} 并令 \(n:=|X|\)。
+定义逆平方根和
+\[
+B(w):=\sum_{x\in X}w(x)^{-1/2},
+\qquad
+p_{-1}(w):=\sum_{x\in X}w(x)^{-1}.
+\]
+则临界谱 \(\{\mu_i\}_{i=2}^n\) 满足下列严格恒等式：
+\[
+\sum_{i=2}^{n}\mu_i=\tr(L_w)=\frac{A\,B(w)-n}{C},
+\qquad
+\prod_{i=2}^{n}\mu_i=\operatorname{pdet}(L_w)=\frac{A^{\,n-2}}{C^{\,n-1}\sqrt{\prod_x w(x)}},
+\]
+并且二次幂和满足
+\[
+\sum_{i=2}^{n}\mu_i^2=\tr(L_w^2)=\frac{A^2\,p_{-1}(w)-2A\,B(w)+n^2}{C^2}.
+\]
+因此，多项式 \(\Xi_w(s)=\prod_{i=2}^{n}(\mu_i+s)\) 的低阶系数同时编码 \(A\)（等价于 \(H_{1/2}(w)\)）、几何均值 \(\prod_x w(x)\) 以及 \(B(w),p_{-1}(w)\) 等逆矩量信息。
+\end{proposition}
+\begin{proof}
+由 \(L_w=(A\,\mathrm{diag}(w^{-1/2})-\mathbf 1\mathbf 1^{\mathsf T})/C\)，其迹为
+\[
+\tr(L_w)=\frac{1}{C}\Bigl(A\sum_x w(x)^{-1/2}-\tr(\mathbf 1\mathbf 1^{\mathsf T})\Bigr)
+=\frac{A\,B(w)-n}{C}.
+\]
+伪行列式恒等式已由定理 \ref{thm:pom-diagonal-rate-critical-laplacian-pseudodeterminant} 给出。
+\par
+为计算 \(\tr(L_w^2)\)，记 \(D:=\mathrm{diag}(w^{-1/2})\)、\(J:=\mathbf 1\mathbf 1^{\mathsf T}\)，则
+\(
+L_w=\frac{1}{C}(AD-J)
+\)。
+展开并取迹得
+\[
+\tr(L_w^2)
+=\frac{1}{C^2}\tr\bigl(A^2D^2-A(DJ+JD)+J^2\bigr).
+\]
+注意 \(\tr(D^2)=\sum_x w(x)^{-1}=p_{-1}(w)\)，且 \(\tr(DJ)=\tr(JD)=\sum_x w(x)^{-1/2}=B(w)\)，并且 \(J^2=nJ\) 从而 \(\tr(J^2)=n\tr(J)=n^2\)。
+代回即得所示二次幂和恒等式。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-diagonal-rate-rank-one-refresh-hitting-network-closures}
+

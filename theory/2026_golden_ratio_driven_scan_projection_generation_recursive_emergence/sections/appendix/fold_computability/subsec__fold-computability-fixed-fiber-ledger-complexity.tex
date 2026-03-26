@@ -1,0 +1,370 @@
+\paragraph{固定纤维中的复杂性浓缩与信息账本极限}
+在定义 \ref{def:fold-word} 的折叠框架中，纤维多重度
+\(
+d_m(x)=\card{\Fold_m^{-1}(x)}
+\)
+不仅控制信息账本中的体积项（定理 \ref{thm:pom-kl-ledger}），也可承载判定复杂性的全部难度。
+以下给出一个在单一稳定型上完成复杂性浓缩的严格构造。
+
+\begin{definition}[三元块稳定型与纤维可满足性语言]\label{def:fold-fibre-3sat}
+对任意 \(n\ge 1\)，令 \(m:=3n\)，并定义稳定型 \(x^\star_m\in X_m\) 为
+\[
+x^\star_{m,k}:=
+\begin{cases}
+1,& 3\mid k,\\
+0,& 3\nmid k,
+\end{cases}
+\qquad (1\le k\le m).
+\]
+定义语言
+\[
+\textsf{Fibre-3SAT}
+:=
+\Bigl\{
+\langle \Psi,1^n\rangle:\ 
+\Psi\ \text{是关于}\ u_1,\dots,u_{3n}\ \text{的 3CNF，且}
+\]
+\[
+\exists\,\omega\in\Omega_{3n}\ \text{使}\ 
+\Psi(\omega)=1\ \wedge\ \Fold_{3n}(\omega)=x^\star_{3n}
+\Bigr\}.
+\]
+\end{definition}
+
+\begin{theorem}[固定折叠纤维上的 NP 完备性]\label{thm:fold-fibre-3sat-np-complete}
+语言 \(\textsf{Fibre-3SAT}\) 为 NP 完备。
+\end{theorem}
+
+\begin{proof}
+\textbf{属于 NP。}
+证据取 \(\omega\in\Omega_{3n}\)。
+验证器在多项式时间内可检查 \(\Psi(\omega)\) 并计算 \(\Fold_{3n}(\omega)\) 与 \(x^\star_{3n}\) 的一致性；
+\(\Fold_m\) 的可计算性见附录 \ref{app:fold-computability}。
+\par
+\textbf{NP-hardness。}
+从 \(\textsc{3SAT}\) 归约。
+给定 \(n\) 变量 3CNF 公式
+\[
+\Phi(y_1,\dots,y_n),
+\]
+构造 \(3n\) 变量公式 \(\Psi(u_1,\dots,u_{3n})\)。
+对每个 \(i\in\{1,\dots,n\}\)，记
+\[
+(a_i,b_i,c_i):=(u_{3i},u_{3i-1},u_{3i-2}),
+\]
+并定义局域约束
+\[
+G_i:=
+(a_i\vee b_i)\wedge(\neg a_i\vee\neg b_i)
+\wedge(\neg c_i\vee b_i)\wedge(c_i\vee\neg b_i).
+\]
+该约束等价于 \(a_i=\neg b_i,\ c_i=b_i\)，故仅允许两种模式：
+\[
+(a_i,b_i,c_i)\in\{(1,0,0),(0,1,1)\}.
+\]
+把 \(\Phi\) 中每个 \(y_i\) 代换为 \(b_i\)，得到 \(\Phi^\uparrow\)。
+令
+\[
+\Psi:=\Bigl(\bigwedge_{i=1}^{n}G_i\Bigr)\wedge \Phi^\uparrow.
+\]
+若采用“每子句恰含 3 个文字”的 3CNF 口径，可把 \(G_i\) 中的 2-子句按重复文字补齐为 3-子句，不改变真值，且规模仍为多项式。
+
+对任意满足 \(\bigwedge_i G_i\) 的赋值 \(\omega\)，按定义 \ref{def:fold-word} 写
+\[
+N(\omega)=\sum_{k=1}^{3n}\omega_kF_{k+1}
+=\sum_{i=1}^{n}\bigl(a_iF_{3i+1}+b_iF_{3i}+c_iF_{3i-1}\bigr).
+\]
+若块为 \((1,0,0)\)，其贡献为 \(F_{3i+1}\)；
+若块为 \((0,1,1)\)，其贡献为 \(F_{3i}+F_{3i-1}=F_{3i+1}\)。
+故
+\[
+N(\omega)=\sum_{i=1}^{n}F_{3i+1}=:N_0.
+\]
+而 \(x^\star_{3n}\) 本身是合法 Zeckendorf 词，且
+\[
+N(x^\star_{3n})=\sum_{i=1}^{n}F_{3i+1}=N_0.
+\]
+由 Zeckendorf 唯一性，\(Z(N_0)\) 的前 \(3n\) 位即 \(x^\star_{3n}\)，因此
+\[
+\Fold_{3n}(\omega)=\pi_{3n}(Z(N_0))=x^\star_{3n}.
+\]
+
+于是得到等价：
+\begin{itemize}
+  \item 若 \(\Phi\) 可满足，取满足赋值 \(y\)，并令
+  \[
+  (a_i,b_i,c_i)=
+  \begin{cases}
+  (1,0,0),& y_i=0,\\
+  (0,1,1),& y_i=1,
+  \end{cases}
+  \]
+  则 \(\bigwedge_i G_i\) 与 \(\Phi^\uparrow\) 同时成立，故存在 \(\omega\) 使
+  \(
+  \Psi(\omega)=1
+  \)
+  且
+  \(
+  \Fold_{3n}(\omega)=x^\star_{3n}
+  \)，即
+  \(
+  \langle\Psi,1^n\rangle\in\textsf{Fibre-3SAT}
+  \)。
+  \item 若 \(\langle\Psi,1^n\rangle\in\textsf{Fibre-3SAT}\)，则存在 \(\omega\) 使 \(\Psi(\omega)=1\)。
+  由 \(\Psi\) 的定义，\(\Phi^\uparrow(\omega)=1\) 且 \(\bigwedge_i G_i\) 成立。
+  令 \(y_i:=b_i(\omega)\)，即得 \(\Phi(y)=1\)。
+\end{itemize}
+故
+\[
+\Phi\in\textsc{3SAT}
+\iff
+\langle\Psi,1^n\rangle\in\textsf{Fibre-3SAT},
+\]
+归约成立，\(\textsf{Fibre-3SAT}\) NP 完备。证毕。
+\end{proof}
+
+\begin{corollary}[单一稳定型的显式指数纤维下界]\label{cor:fold-fibre-star-exp-lb}
+对 \(m=3n\) 与定义 \ref{def:fold-fibre-3sat} 的 \(x^\star_m\)，有
+\[
+d_m(x^\star_m)\ge 2^n=2^{m/3}.
+\]
+从而最大纤维多重度 \(D_m:=\max_{x\in X_m}d_m(x)\) 满足
+\[
+D_{3n}\ge 2^n.
+\]
+\end{corollary}
+
+\begin{proof}
+定义编码 \(E_n:\{0,1\}^n\to\Omega_{3n}\)：
+对每个 \(i\in\{1,\dots,n\}\)，令
+\[
+\bigl(E_n(w)\bigr)_{3i},\bigl(E_n(w)\bigr)_{3i-1},\bigl(E_n(w)\bigr)_{3i-2}
+=
+\begin{cases}
+(1,0,0),& w_i=0,\\
+(0,1,1),& w_i=1.
+\end{cases}
+\]
+不同 \(w\) 给出不同 \(E_n(w)\)，故 \(\card{\mathrm{im}(E_n)}=2^n\)。
+并且每个 \(E_n(w)\) 都满足定理 \ref{thm:fold-fibre-3sat-np-complete} 证明中的块约束 \(\bigwedge_i G_i\)，因此
+\(
+\Fold_{3n}(E_n(w))=x^\star_{3n}
+\)。
+故
+\[
+d_{3n}(x^\star_{3n})
+\ge
+\card{\mathrm{im}(E_n)}
+=2^n.
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[长度层折叠退化下的复杂性保真编码]\label{prop:fold-layerwise-degenerate-hardness}
+设语言 \(L\subseteq\{0,1\}^{\ge 1}\)，并给定一条固定拒绝串 \(z_0\notin L\)。
+对每个 \(n\) 取编码 \(E_n\) 如推论 \ref{cor:fold-fibre-star-exp-lb}，并定义
+\[
+L^\dagger:=\bigcup_{n\ge 1}E_n\!\bigl(L\cap\{0,1\}^n\bigr)\subseteq\{0,1\}^\ast.
+\]
+则：
+\begin{enumerate}
+  \item \(L\le_m^p L^\dagger\) 且 \(L^\dagger\le_m^p L\)；
+  \item 对每个 \(n\) 与每个 \(w\in\{0,1\}^n\)，有
+  \[
+  \Fold_{3n}(E_n(w))=x^\star_{3n}.
+  \]
+\end{enumerate}
+因此，对任一带有显式拒绝串的 NP 完全语言（例如标准编码下的 \(\text{\normalfont\textsc{3SAT}}\)），其对应的 \(L^\dagger\) 仍为 NP 完全，且每个长度层在折叠稳定型层面退化为单点 \(x^\star_{3n}\)。
+\end{proposition}
+
+\begin{proof}
+\textbf{(1) \(L\le_m^p L^\dagger\)。}
+归约 \(f\) 定义为
+\[
+f(w):=E_{|w|}(w).
+\]
+显然 \(w\in L\iff f(w)\in L^\dagger\)，且 \(f\) 多项式时间可计算。
+\par
+\textbf{(2) \(L^\dagger\le_m^p L\)。}
+定义译码 \(D_n\) 于 \(\mathrm{im}(E_n)\) 上为
+\[
+\bigl(D_n(\omega)\bigr)_i:=\omega_{3i-1}.
+\]
+再定义归约 \(g:\{0,1\}^\ast\to\{0,1\}^\ast\)：
+给定输入 \(z\)，若 \(|z|=0\)、\(|z|\) 不是 \(3\) 的倍数，或某个三元块
+\(
+(z_{3i},z_{3i-1},z_{3i-2})
+\)
+不在 \(\{(1,0,0),(0,1,1)\}\)，则令 \(g(z)=z_0\)；
+否则令 \(|z|=3n\) 且 \(g(z):=D_n(z)\)。
+于是：
+\begin{itemize}
+  \item 若 \(z\in L^\dagger\)，则 \(z=E_n(w)\) 且 \(w\in L\)，故 \(g(z)=w\in L\)；
+  \item 若 \(z\notin L^\dagger\)，则要么 \(z\notin\mathrm{im}(E_n)\)（此时 \(g(z)=z_0\notin L\)），要么 \(z=E_n(w)\) 且 \(w\notin L\)（此时 \(g(z)=w\notin L\)）。
+\end{itemize}
+故 \(z\in L^\dagger\iff g(z)\in L\)，且 \(g\) 多项式时间可计算。
+\par
+\textbf{(3) 折叠退化。}
+由定理 \ref{thm:fold-fibre-3sat-np-complete} 证明中的块和恒等式，对每个 \(w\) 均有
+\(
+\Fold_{3n}(E_n(w))=x^\star_{3n}
+\)。
+证毕。
+\end{proof}
+
+\begin{proposition}[宏观熵为零与微观线性熵的账本并存]\label{prop:fold-fiber-ledger-zero-macro-linear-micro}
+令
+\[
+S_n:=E_n(\{0,1\}^n)\subset\Omega_{3n},
+\qquad
+\mu_n:=\mathrm{Unif}(S_n),
+\]
+并记
+\[
+\pi_n:=P_{3n}\mu_n\in\Delta(X_{3n}),
+\qquad
+\mu_n^e:=Q_{3n}\pi_n\in\Delta(\Omega_{3n}).
+\]
+则：
+\begin{enumerate}
+  \item \(\pi_n=\delta_{x^\star_{3n}}\)，故 \(H(\pi_n)=0\)；
+  \item \(H(\mu_n)=n\log 2\)；
+  \item 有恒等式
+  \[
+  n\log 2
+  =
+  \log d_{3n}(x^\star_{3n})
+  -
+  D_{\mathrm{KL}}(\mu_n\|\mu_n^e).
+  \]
+\end{enumerate}
+特别地，
+\[
+d_{3n}(x^\star_{3n})\ge 2^n.
+\]
+\end{proposition}
+
+\begin{proof}
+由命题 \ref{prop:fold-layerwise-degenerate-hardness}，\(\Fold_{3n}\) 在 \(S_n\) 上恒等于 \(x^\star_{3n}\)，故
+\(
+\pi_n=P_{3n}\mu_n=\delta_{x^\star_{3n}}
+\)
+且 \(H(\pi_n)=0\)。
+又 \(\card{S_n}=2^n\)，均匀分布熵为 \(H(\mu_n)=\log\card{S_n}=n\log 2\)。
+\par
+将 \((m,\mu)=(3n,\mu_n)\) 代入信息账本恒等式（定理 \ref{thm:pom-kl-ledger}）：
+\[
+H(\mu_n)
+=
+H(\pi_n)+\EE_{\pi_n}[\log d_{3n}(X)]
+-D_{\mathrm{KL}}(\mu_n\|\mu_n^e).
+\]
+利用 \(\pi_n=\delta_{x^\star_{3n}}\) 与 \(H(\pi_n)=0\) 得
+\[
+n\log 2
+=
+\log d_{3n}(x^\star_{3n})
+-D_{\mathrm{KL}}(\mu_n\|\mu_n^e).
+\]
+由 \(D_{\mathrm{KL}}\ge 0\) 立即得到 \(d_{3n}(x^\star_{3n})\ge 2^n\)。证毕。
+\end{proof}
+
+\begin{theorem}[固定稳定型上的算法信息坍缩尺度]\label{thm:fold-fixed-fiber-kolmogorov-collapse}
+存在序列 \((\omega_n)_{n\ge 1}\) 满足 \(\omega_n\in\Omega_{3n}\) 且
+\[
+\Fold_{3n}(\omega_n)=x^\star_{3n},
+\qquad
+K(\omega_n\mid 3n)\ge n-O(1),
+\qquad
+K(x^\star_{3n}\mid 3n)=O(1).
+\]
+并且
+\[
+\log_2 d_{3n}(x^\star_{3n})\ge n-O(\log n).
+\]
+\end{theorem}
+
+\begin{proof}
+对每个 \(n\)，取一条长度为 \(n\) 的不可压缩串 \(y_n\in\{0,1\}^n\)，使
+\(
+K(y_n\mid n)\ge n
+\)（计数法）。
+定义
+\[
+\omega_n:=E_n(y_n)\in\Omega_{3n}.
+\]
+由命题 \ref{prop:fold-layerwise-degenerate-hardness}，有
+\(
+\Fold_{3n}(\omega_n)=x^\star_{3n}
+\)。
+\par
+由于 \(E_n\) 与其逆译码 \(D_n\)（在像上）均为统一可计算过程，且 \(n\leftrightarrow 3n\) 可常数开销互算，故
+\[
+K(\omega_n\mid 3n)\ge K(y_n\mid n)-O(1)\ge n-O(1).
+\]
+另一方面，\(x^\star_{3n}\) 由“每三位取一位为 \(1\)”的固定规则生成，因此
+\(
+K(x^\star_{3n}\mid 3n)=O(1)
+\)（无条件复杂度为 \(O(\log n)\)）。
+\par
+再应用算法全息账本上界（定理 \ref{thm:xi-fold-algorithmic-holographic-ledger}）：
+\[
+K(\omega\mid m)\le K(\Fold_m(\omega)\mid m)+\lceil\log_2 d_m(\Fold_m(\omega))\rceil + O(\log m).
+\]
+代入 \(m=3n,\ \omega=\omega_n\) 并整理得
+\[
+\log_2 d_{3n}(x^\star_{3n})
+\ge
+K(\omega_n\mid 3n)-K(x^\star_{3n}\mid 3n)-O(\log n)
+\ge
+n-O(\log n).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[单射化外置账本的线性位数下界]\label{cor:fold-fixed-fiber-external-ledger-linear}
+取 \(m=3n\)。
+若映射 \(r:\Omega_m\to\mathcal R\) 使 \((\Fold_m,r)\) 在 \(\Omega_m\) 上单射，则
+\[
+\card{r(\Fold_m^{-1}(x^\star_m))}
+\ge
+d_m(x^\star_m)
+\ge
+2^n.
+\]
+因此，任何在该纤维上实现单射化的二进制记录轴都至少需要 \(n\) 比特容量。
+\end{corollary}
+
+\begin{proof}
+由 \((\Fold_m,r)\) 的单射性，\(r\) 在每条纤维上的限制必须单射，故
+\[
+\card{r(\Fold_m^{-1}(x))}\ge d_m(x)\qquad(\forall x\in X_m),
+\]
+这与命题 \ref{prop:pom-injectivization-sideinfo-exact-alphabet} 的必要性方向一致。
+取 \(x=x^\star_m\)，并代入推论 \ref{cor:fold-fibre-star-exp-lb} 的下界 \(d_m(x^\star_m)\ge 2^n\)，即得结论。证毕。
+\end{proof}
+
+\begin{conjecture}[局域注入块码的单纤维信息率上界]\label{conj:fold-local-injective-code-rate-cap}
+设 \(E_n:\{0,1\}^n\to\{0,1\}^{m(n)}\) 为一族注入滑动块码：存在常数半径 \(R\)，使每个输出坐标仅依赖于输入中长度 \(2R+1\) 的局域窗口。
+若存在稳定型 \(x_{m(n)}\in X_{m(n)}\) 使
+\[
+\Fold_{m(n)}(E_n(w))\equiv x_{m(n)}
+\qquad(\forall\,w\in\{0,1\}^n),
+\]
+则
+\[
+\limsup_{n\to\infty}\frac{n}{m(n)}\le \frac13.
+\]
+并且 \(\frac13\) 的极值由三元块码
+\(
+0\mapsto 100,\ 1\mapsto 011
+\)
+达到（允许有限前后缀修正与整体位移）。
+\end{conjecture}
+
+\begin{remark}[方法学边界]
+定理 \ref{thm:fold-fibre-3sat-np-complete} 与命题 \ref{prop:fold-layerwise-degenerate-hardness} 表明：在固定长度层上，即使折叠稳定型完全退化为单点，NP 难度仍可完整驻留于单一纤维的微观残差。
+因此，任何仅依赖 \(\Fold_m\) 或其宏观可测函数的判据，在一般性上都不足以区分纤维内部的复杂性结构。
+\end{remark}
+
+\endinput

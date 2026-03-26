@@ -1,0 +1,476 @@
+% Collision-conditioned parity energies over Fibonacci residues.
+
+\paragraph{碰撞条件下的 Walsh 奇偶能量分解}
+沿用本段的残差映射 \(r:\Omega_m\to \ZZ/(M\ZZ)\)（\(M=F_{m+2}\)）与推前分布 \(\mu_m(r)=d_m(r)/2^m\)。
+
+\begin{corollary}[切片碰撞分解：能量即切片碰撞超额的一半]\label{cor:fold-fiber-slice-collision-decomposition}
+固定 \(k\in\{1,\dots,m\}\)，沿用命题 \ref{prop:fold-fiber-bias-energy-decision-theoretic} 的两条件分布
+\[
+\mu_{m,k}^{(1)}(r):=\PP\bigl(r(\omega)=r\mid \omega_k=1\bigr),
+\qquad
+\mu_{m,k}^{(0)}(r):=\PP\bigl(r(\omega)=r\mid \omega_k=0\bigr).
+\]
+定义对应切片碰撞概率
+\[
+\mathsf{Col}^{(b)}_{m,k}:=\sum_{r\in\ZZ/(M\ZZ)}\bigl(\mu^{(b)}_{m,k}(r)\bigr)^2
+\qquad(b\in\{0,1\}).
+\]
+则有严格恒等式
+\[
+\boxed{\;
+E_{m,k}=\frac12\Bigl(\mathsf{Col}^{(0)}_{m,k}+\mathsf{Col}^{(1)}_{m,k}\Bigr)-\mathsf{Col}_m\;}
+\]
+其中 \(\mathsf{Col}_m=\sum_r\mu_m(r)^2\) 为碰撞概率（见定理 \ref{thm:fold-fiber-bias-energy-erasure-identity}），而 \(E_{m,k}=\sum_r\nu_{m,k}(r)^2\) 为条件偏置能量（见定理 \ref{thm:fold-fiber-bias-frequency-transport-identity}）。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:fold-fiber-bias-energy-decision-theoretic}，
+\(
+\mu_{m,k}^{(1)}-\mu_{m,k}^{(0)}=2\nu_{m,k}
+\)
+且
+\(
+\mu_m=\frac12(\mu_{m,k}^{(1)}+\mu_{m,k}^{(0)})
+\)。
+因此逐点可写
+\(
+\mu_{m,k}^{(1)}=\mu_m+\nu_{m,k}
+\)、
+\(
+\mu_{m,k}^{(0)}=\mu_m-\nu_{m,k}
+\)。
+于是
+\[
+\mathsf{Col}^{(1)}_{m,k}+\mathsf{Col}^{(0)}_{m,k}
+=\sum_r(\mu_m+\nu_{m,k})^2+\sum_r(\mu_m-\nu_{m,k})^2
+=2\sum_r\mu_m(r)^2+2\sum_r\nu_{m,k}(r)^2
+=2\mathsf{Col}_m+2E_{m,k},
+\]
+整理即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[任意 Walsh 奇偶字符的偏置密度与 Riesz--Parseval 能量公式]\label{thm:fold-fiber-parity-bias-riesz-parseval-energy}
+对任意子集 \(I\subseteq[m]:=\{1,\dots,m\}\)，定义 Walsh 字符
+\[
+\chi_I(\omega):=(-1)^{\sum_{i\in I}\omega_i}\qquad(\omega\in\Omega_m),
+\]
+并定义 \(I\)-偏置密度与能量
+\[
+\nu_{m,I}(r):=2^{-m}\sum_{\omega\in\Omega_m:\ r(\omega)=r}\chi_I(\omega)
+=\mu_m(r)\,\EE\!\bigl[\chi_I(\omega)\mid r(\omega)=r\bigr],
+\qquad
+E_{m,I}:=\sum_{r\in\ZZ/(M\ZZ)}\nu_{m,I}(r)^2.
+\]
+令离散 Fourier 变换取为
+\(
+\widehat f(t)=\sum_{r\in\ZZ/(M\ZZ)} f(r)\,e^{-2\pi i tr/M}
+\)。
+则：
+\begin{enumerate}
+  \item \textbf{（乘积分解）}对任意 \(t\in\ZZ/(M\ZZ)\) 有
+  \[
+  \boxed{\;
+  \widehat{\nu}_{m,I}(t)
+  =2^{-m}\prod_{j=1}^{m}\Bigl(1+s_j\,e^{-2\pi i tF_{j+1}/M}\Bigr),\qquad
+  s_j:=\begin{cases}-1,& j\in I,\\ +1,& j\notin I.\end{cases}\;}
+  \]
+  \item \textbf{（Riesz--Parseval 能量）}能量具有显式有限乘积表示
+  \[
+  \boxed{\;
+  E_{m,I}
+  =\frac1{M}\sum_{t\in\ZZ/(M\ZZ)}
+  \Biggl(\prod_{j\in I}\sin^2\!\Bigl(\pi tF_{j+1}/M\Bigr)\Biggr)
+  \Biggl(\prod_{j\notin I}\cos^2\!\Bigl(\pi tF_{j+1}/M\Bigr)\Biggr).\;}
+  \]
+\end{enumerate}
+特别地，\(I=\varnothing\) 时 \(E_{m,\varnothing}=\mathsf{Col}_m\)；而当 \(I=\{k\}\) 时，\(E_{m,\{k\}}=E_{m,k}\) 且与命题 \ref{prop:fold-fiber-bias-fourier-multiplier-energy} 的单坐标公式一致（两者的 \(\nu\) 仅差一个符号）。
+\end{theorem}
+\begin{proof}
+由定义，
+\[
+\widehat{\nu}_{m,I}(t)
+=\sum_r \nu_{m,I}(r)e^{-2\pi i tr/M}
+=2^{-m}\sum_{\omega\in\Omega_m}\chi_I(\omega)\,e^{-2\pi i t r(\omega)/M}.
+\]
+并且
+\(
+r(\omega)\equiv\sum_{j=1}^m\omega_jF_{j+1}\ (\mathrm{mod}\ M)
+\)
+与
+\(
+\chi_I(\omega)=\prod_{j=1}^{m}s_j^{\omega_j}
+\)
+（其中 \(s_j=-1\iff j\in I\)）给出坐标分解：
+\[
+\widehat{\nu}_{m,I}(t)
+=2^{-m}\prod_{j=1}^{m}\sum_{\omega_j\in\{0,1\}} s_j^{\omega_j}\,e^{-2\pi i t\omega_jF_{j+1}/M}
+=2^{-m}\prod_{j=1}^{m}\Bigl(1+s_j e^{-2\pi i tF_{j+1}/M}\Bigr),
+\]
+得到乘积分解。
+\par
+再由离散 Parseval 恒等式
+\(
+E_{m,I}=\sum_r\nu_{m,I}(r)^2=\frac1M\sum_t|\widehat\nu_{m,I}(t)|^2
+\)，
+并使用
+\(
+|1+e^{-i\theta}|^2=4\cos^2(\theta/2)
+\)、
+\(
+|1-e^{-i\theta}|^2=4\sin^2(\theta/2)
+\)
+化简即得乘积能量公式。
+最后两条特例分别取 \(I=\varnothing\) 与 \(I=\{k\}\) 并对照命题 \ref{prop:fold-fiber-bias-fourier-multiplier-energy} 即得。证毕。
+\end{proof}
+
+\begin{corollary}[全体奇偶能量的概率单纯形分解]\label{cor:fold-fiber-parity-energy-simplex}
+在定理 \ref{thm:fold-fiber-parity-bias-riesz-parseval-energy} 的设定下，成立严格归一化恒等式
+\[
+\sum_{I\subseteq[m]}E_{m,I}=1.
+\]
+从而
+\[
+E_{m,\varnothing}=\mathsf{Col}_m,
+\qquad
+\sum_{\varnothing\neq I\subseteq[m]}E_{m,I}=1-\mathsf{Col}_m.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:fold-fiber-parity-bias-riesz-parseval-energy} 的能量公式，对每个固定 \(t\) 令 \(\theta_{j,t}:=\pi tF_{j+1}/M\)，则
+\[
+\sum_{I\subseteq[m]}
+\Bigl(\prod_{j\in I}\sin^2\theta_{j,t}\Bigr)\Bigl(\prod_{j\notin I}\cos^2\theta_{j,t}\Bigr)
+=\prod_{j=1}^{m}\bigl(\sin^2\theta_{j,t}+\cos^2\theta_{j,t}\bigr)=1.
+\]
+对 \(t\) 作平均即得 \(\sum_I E_{m,I}=1\)。
+而 \(I=\varnothing\) 时 \(E_{m,\varnothing}=\mathsf{Col}_m\) 已在定理 \ref{thm:fold-fiber-parity-bias-riesz-parseval-energy} 中说明，故其余结论立得。证毕。
+\end{proof}
+
+\begin{corollary}[碰撞条件下的任意奇偶相关由 \texorpdfstring{$(E_{m,I})$}{E_{m,I}} 完全刻画]\label{cor:fold-fiber-collision-parity-correlation}
+取 \(\omega,\omega'\overset{\mathrm{i.i.d.}}{\sim}\mathrm{Unif}(\Omega_m)\) 并令碰撞事件 \(\mathsf C:=\{r(\omega)=r(\omega')\}\)。
+则对任意 \(I\subseteq[m]\) 有
+\[
+\EE\!\left[\chi_I(\omega)\chi_I(\omega')\mid \mathsf C\right]
+=\frac{E_{m,I}}{\mathsf{Col}_m},
+\qquad
+\PP\!\left(\chi_I(\omega)=\chi_I(\omega')\mid \mathsf C\right)
+=\frac12\Bigl(1+\frac{E_{m,I}}{\mathsf{Col}_m}\Bigr).
+\]
+特别地，对任意 \(k\in[m]\) 有
+\[
+\PP(\omega_k=\omega'_k\mid \mathsf C)
+=\frac12\Bigl(1+\frac{E_{m,k}}{\mathsf{Col}_m}\Bigr),
+\qquad
+\PP(\omega_k\neq \omega'_k\mid \mathsf C)
+=\frac12\Bigl(1-\frac{E_{m,k}}{\mathsf{Col}_m}\Bigr).
+\]
+\end{corollary}
+\begin{proof}
+对任意 \(r\in\ZZ/(M\ZZ)\)，在条件 \(\{r(\omega)=r(\omega')=r\}\) 下，\(\omega,\omega'\) 条件独立且同分布，从而
+\[
+\EE\!\left[\chi_I(\omega)\chi_I(\omega')\mid r(\omega)=r(\omega')=r\right]
+=\EE[\chi_I(\omega)\mid r(\omega)=r]^2.
+\]
+再用 Bayes 分解 \(\PP(r(\omega)=r(\omega')=r)=\mu_m(r)^2\) 与 \(\PP(\mathsf C)=\sum_r\mu_m(r)^2=\mathsf{Col}_m\)，得
+\[
+\EE\!\left[\chi_I(\omega)\chi_I(\omega')\mid \mathsf C\right]
+=\sum_r\frac{\mu_m(r)^2}{\mathsf{Col}_m}\,\EE[\chi_I(\omega)\mid r(\omega)=r]^2
+=\frac{1}{\mathsf{Col}_m}\sum_r\nu_{m,I}(r)^2
+=\frac{E_{m,I}}{\mathsf{Col}_m}.
+\]
+由于 \(\chi_I(\omega)\chi_I(\omega')\in\{\pm 1\}\) 且取值为 \(+1\) 当且仅当二者相等，故第二式由
+\(
+\PP(\chi_I(\omega)=\chi_I(\omega')\mid \mathsf C)=\frac12(1+\EE[\chi_I(\omega)\chi_I(\omega')\mid \mathsf C])
+\)
+立得。证毕。
+\end{proof}
+
+\begin{proposition}[奇偶能量的生成函数与频率混合的独立模型]\label{prop:fold-fiber-parity-energy-partition-function-mixture}
+定义生成函数
+\[
+G_m(z):=\sum_{I\subseteq[m]}E_{m,I}\,z^{|I|}.
+\]
+则有闭式表示
+\[
+\boxed{\;
+G_m(z)=\frac1{M}\sum_{t\in\ZZ/(M\ZZ)}
+\prod_{j=1}^{m}\Bigl(\cos^2\theta_{j,t}+z\,\sin^2\theta_{j,t}\Bigr),\qquad
+\theta_{j,t}:=\pi t\frac{F_{j+1}}{M}.\;}
+\]
+从而在 \(\mathcal P([m])\) 上按 \(\PP(I)=E_{m,I}\) 取随机子集 \(I\) 时，其分布可写为“频率混合的独立模型”：先取 \(t\) 在 \(\ZZ/(M\ZZ)\) 上均匀，再在给定 \(t\) 时令各坐标 \(j\) 独立地以概率 \(\sin^2\theta_{j,t}\) 被纳入 \(I\)。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:fold-fiber-parity-bias-riesz-parseval-energy} 的能量公式，
+\[
+E_{m,I}=\frac1M\sum_{t\in\ZZ/(M\ZZ)}\Bigl(\prod_{j\in I}\sin^2\theta_{j,t}\Bigr)\Bigl(\prod_{j\notin I}\cos^2\theta_{j,t}\Bigr),
+\qquad
+\theta_{j,t}:=\pi t\frac{F_{j+1}}{M}.
+\]
+乘以 \(z^{|I|}\) 并对 \(I\subseteq[m]\) 求和，利用逐坐标展开得到
+\[
+\sum_{I\subseteq[m]}z^{|I|}\Bigl(\prod_{j\in I}\sin^2\theta_{j,t}\Bigr)\Bigl(\prod_{j\notin I}\cos^2\theta_{j,t}\Bigr)
+=\prod_{j=1}^{m}\bigl(\cos^2\theta_{j,t}+z\,\sin^2\theta_{j,t}\bigr).
+\]
+再对 \(t\) 作平均即得闭式表达。
+最后的混合表述由 \(E_{m,I}\) 的表示
+\(
+E_{m,I}=\frac1M\sum_t \prod_{j\in I}\sin^2\theta_{j,t}\prod_{j\notin I}\cos^2\theta_{j,t}
+\)
+直接识别为对 \(t\) 的均匀混合与条件 Bernoulli 乘积测度的乘积分解。证毕。
+\end{proof}
+
+\paragraph{能量单纯形的边缘律与相关结构}
+沿用命题 \ref{prop:fold-fiber-parity-energy-partition-function-mixture} 的混合表述，并令 \(\mathcal I\subseteq[m]\) 为取值于 \(\mathcal P([m])\) 的随机子集，满足
+\[
+\PP(\mathcal I=I)=E_{m,I}\qquad(I\subseteq[m]).
+\]
+
+\begin{proposition}[能量单纯形的单点边缘严格无偏]\label{prop:fold-fiber-parity-energy-simplex-unbiased-marginal}
+对任意 \(m\ge 1\) 与任意 \(k\in[m]\)，成立
+\[
+\PP(k\in\mathcal I)=\frac12.
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:fold-fiber-parity-energy-partition-function-mixture} 的条件独立混合表述，
+\[
+\PP(k\in\mathcal I)
+=\frac1M\sum_{t\in\ZZ/(M\ZZ)}\sin^2\theta_{k,t},
+\qquad
+\theta_{k,t}:=\pi t\frac{F_{k+1}}{M}.
+\]
+再用恒等式 \(\sin^2u=\frac12(1-\cos(2u))\) 与离散正交性
+\[
+\frac1M\sum_{t\in\ZZ/(M\ZZ)}\cos\Bigl(2\pi t\frac{a}{M}\Bigr)=0
+\qquad(a\not\equiv 0\ (\mathrm{mod}\ M)),
+\]
+并注意 \(1\le F_{k+1}<M\)（因 \(k\le m\) 且 \(M=F_{m+2}\)），得
+\(
+\frac1M\sum_t\sin^2\theta_{k,t}=\frac12
+\)，从而 \(\PP(k\in\mathcal I)=1/2\)。证毕。
+\end{proof}
+
+\begin{theorem}[除唯一末端对外的两点相关消失]\label{thm:fold-fiber-parity-energy-simplex-pairwise-independence-except-terminal}
+设 \(m\ge 2\)。则对任意不同 \(i\neq j\in[m]\)，有
+\[
+\PP(i\in\mathcal I,\ j\in\mathcal I)=
+\begin{cases}
+\frac38, & \{i,j\}=\{m-1,m\},\\[4pt]
+\frac14, & \text{其余情形},
+\end{cases}
+\]
+从而
+\[
+\Cov(\mathbf 1_{i\in\mathcal I},\mathbf 1_{j\in\mathcal I})=
+\begin{cases}
+\frac18, & \{i,j\}=\{m-1,m\},\\[4pt]
+0, & \text{其余情形}.
+\end{cases}
+\]
+特别地，除 \((m-1,m)\) 这一对外，\(\{\mathbf 1_{k\in\mathcal I}\}_{k=1}^m\) 两两独立。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-fiber-parity-energy-partition-function-mixture} 的条件独立混合表述，
+\[
+\PP(i\in\mathcal I,\ j\in\mathcal I)
+=\frac1M\sum_{t\in\ZZ/(M\ZZ)}\sin^2\theta_{i,t}\sin^2\theta_{j,t},
+\qquad
+\theta_{k,t}:=\pi t\frac{F_{k+1}}{M}.
+\]
+展开 \(\sin^2\theta=\frac12(1-\cos(2\theta))\) 得
+\[
+\sin^2\theta_{i,t}\sin^2\theta_{j,t}
+=\frac14\Bigl(1-\cos(2\theta_{i,t})-\cos(2\theta_{j,t})+\cos(2\theta_{i,t})\cos(2\theta_{j,t})\Bigr).
+\]
+对 \(t\) 作平均时，单余弦项由离散正交性消失（因 \(1\le F_{i+1},F_{j+1}<M\)）。
+因此问题归结为计算
+\[
+\frac1M\sum_{t\in\ZZ/(M\ZZ)}\cos(2\theta_{i,t})\cos(2\theta_{j,t})
+=\frac1M\sum_{t\in\ZZ/(M\ZZ)}
+\cos\Bigl(2\pi t\frac{F_{i+1}}{M}\Bigr)\cos\Bigl(2\pi t\frac{F_{j+1}}{M}\Bigr).
+\]
+由恒等式 \(\cos A\cos B=\frac12(\cos(A-B)+\cos(A+B))\) 与离散正交性可知，上式仅当
+\(
+F_{i+1}\equiv \pm F_{j+1}\ (\mathrm{mod}\ M)
+\)
+时非零。
+由于 \(1\le F_{i+1},F_{j+1}<M\) 且 \(i\neq j\)，差同余不可能发生；因而必须有
+\(
+F_{i+1}+F_{j+1}=M
+\)。
+又 \(M=F_{m+2}=F_{m+1}+F_m\) 且 Fibonacci 严格递增，强制
+\(
+\{F_{i+1},F_{j+1}\}=\{F_m,F_{m+1}\}
+\)，即 \(\{i,j\}=\{m-1,m\}\)。
+在该情形下，
+\(
+\frac1M\sum_t\cos(2\theta_{i,t})\cos(2\theta_{j,t})=\frac12
+\)，从而
+\[
+\PP(i\in\mathcal I,\ j\in\mathcal I)
+=\frac14\Bigl(1+\frac12\Bigr)=\frac38.
+\]
+其余情形该平均值为 \(0\)，于是 \(\PP(i,j\in\mathcal I)=1/4\)。
+协方差由命题 \ref{prop:fold-fiber-parity-energy-simplex-unbiased-marginal} 的 \(\PP(k\in\mathcal I)=1/2\) 代入
+\(
+\Cov(\mathbf 1_{i\in\mathcal I},\mathbf 1_{j\in\mathcal I})=\PP(i,j\in\mathcal I)-\PP(i\in\mathcal I)\PP(j\in\mathcal I)
+\)
+即得。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$|\mathcal I|$}{|I|} 的均值与方差闭式]\label{cor:fold-fiber-parity-energy-simplex-size-mean-variance}
+设 \(m\ge 2\)。则
+\[
+\EE|\mathcal I|=\frac m2,
+\qquad
+\Var(|\mathcal I|)=\frac m4+\frac14.
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:fold-fiber-parity-energy-simplex-unbiased-marginal}，
+\(
+\EE|\mathcal I|=\sum_{k=1}^m\PP(k\in\mathcal I)=m/2
+\)。
+再用
+\(
+|\mathcal I|=\sum_{k=1}^m\mathbf 1_{k\in\mathcal I}
+\)
+与方差分解
+\[
+\Var(|\mathcal I|)
+=\sum_{k=1}^m\Var(\mathbf 1_{k\in\mathcal I})
++2\sum_{1\le i<j\le m}\Cov(\mathbf 1_{i\in\mathcal I},\mathbf 1_{j\in\mathcal I}),
+\]
+并注意 \(\Var(\mathbf 1_{k\in\mathcal I})=\frac14\)。
+由定理 \ref{thm:fold-fiber-parity-energy-simplex-pairwise-independence-except-terminal}，协方差仅在 \((i,j)=(m-1,m)\) 时取 \(1/8\)，故协方差总贡献为 \(2\cdot\frac18=\frac14\)。证毕。
+\end{proof}
+
+\paragraph{自旋变量与区间偶奇相关}
+令自旋变量 \(\sigma_j:=(-1)^{\mathbf 1_{j\in\mathcal I}}\in\{\pm1\}\)。
+对任意 \(S\subseteq[m]\) 定义高阶相关
+\[
+C_m(S):=\EE\Bigl[\prod_{j\in S}\sigma_j\Bigr]
+=\PP\bigl(|\mathcal I\cap S|\ \text{为偶}\bigr)-\PP\bigl(|\mathcal I\cap S|\ \text{为奇}\bigr).
+\]
+
+\begin{theorem}[连续区间偶奇相关的完全分类]\label{thm:fold-fiber-parity-energy-simplex-interval-correlation-classification}
+对任意 \(m\ge 1\) 与任意连续区间 \(J=[s,s+L-1]\subseteq[m]\)，有如下严格分类：
+\begin{enumerate}
+  \item 若 \(L\equiv 1\ (\mathrm{mod}\ 3)\)，则 \(C_m(J)=0\)；
+  \item 若 \(L=3k\)，则对一切起点 \(s\) 均有 \(C_m(J)=2^{-2k}\)；
+  \item 若 \(L=3k+2\)，则
+  \[
+  C_m(J)=
+  \begin{cases}
+  2^{-(2k+1)}, & s+L-1=m,\\[4pt]
+  0, & s+L-1<m.
+  \end{cases}
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-fiber-parity-energy-partition-function-mixture}，在给定 \(t\) 时各坐标独立且
+\(
+\EE[\sigma_j\mid t]=\cos^2\theta_{j,t}-\sin^2\theta_{j,t}=\cos(2\theta_{j,t})
+\)。
+因此
+\[
+C_m(J)
+=\frac1M\sum_{t\in\ZZ/(M\ZZ)}\prod_{r=0}^{L-1}\cos\!\Bigl(2\theta_{s+r,t}\Bigr)
+=\frac1M\sum_{t\in\ZZ/(M\ZZ)}\prod_{r=0}^{L-1}\cos\!\Bigl(2\pi t\frac{F_{s+r+1}}{M}\Bigr),
+\]
+其中 \(M=F_{m+2}\)。
+用 \(\cos x=\frac12(e^{ix}+e^{-ix})\) 展开并对 \(t\) 作平均，得到
+\[
+C_m(J)=\frac{N_m(J)}{2^L},
+\qquad
+N_m(J):=
+\card{\Bigl\{\varepsilon\in\{\pm1\}^{L}:\ \sum_{r=0}^{L-1}\varepsilon_rF_{s+r+1}\equiv 0\ (\mathrm{mod}\ M)\Bigr\}}.
+\]
+
+先设 \(s+L-1<m\)。此时
+\[
+\sum_{r=0}^{L-1}F_{s+r+1}=F_{s+L+2}-F_{s+2}<F_{m+2}=M,
+\]
+从而对任意 \(\varepsilon\) 都有
+\(
+\bigl|\sum_{r=0}^{L-1}\varepsilon_rF_{s+r+1}\bigr|<M
+\)，故同余条件等价于整数等式 \(\sum_r\varepsilon_rF_{s+r+1}=0\)。
+对该零和方程作末端消去：令 \(a:=s+1\) 并考虑
+\(
+\sum_{r=0}^{L-1}\varepsilon_rF_{a+r}=0
+\)。
+当 \(L\le 2\) 时无解；当 \(L\ge 3\) 时，利用
+\[
+\sum_{r=0}^{L-3}F_{a+r}=F_{a+L-1}-F_{a+1}<F_{a+L-1}
+\]
+可知末两项符号必须相反，否则其和的绝对值超过其余项可达的上界。
+于是 \(\varepsilon_{L-2}=-\varepsilon_{L-1}\)，并将末两项合并为 \(\varepsilon_{L-1}F_{a+L-3}\)。
+再用
+\(
+\sum_{r=0}^{L-4}F_{a+r}=F_{a+L-2}-F_{a+1}<2F_{a+L-3}
+\)
+排除系数 \(\pm2\) 的可能性，得到 \(\varepsilon_{L-3}=-\varepsilon_{L-1}\)。
+因此末三项符号必为 \((+,+,-)\) 或 \((-,-,+)\)，并把方程降阶为长度 \(L-3\) 的同型零和方程。
+归纳得到：零和解存在当且仅当 \(L\equiv 0\ (\mathrm{mod}\ 3)\)，且当 \(L=3k\) 时解数为 \(N_m(J)=2^k\)。
+代回 \(C_m(J)=N_m(J)/2^L\) 得出当 \(s+L-1<m\) 时的分类。
+
+再设 \(s+L-1=m\)。注意到对任意 \(\varepsilon\) 都有
+\[
+\left|\sum_{r=0}^{L-1}\varepsilon_rF_{s+r+1}\right|
+\le \sum_{r=0}^{L-1}F_{s+r+1}
+=F_{m+3}-F_{s+2}
+<2F_{m+2}=2M,
+\]
+故同余条件等价于整数等式
+\(
+\sum_r\varepsilon_rF_{s+r+1}\in\{0,\pm M\}
+\)。
+零和情形仍由上一段的末端消去给出：当且仅当 \(L=3k\) 有 \(2^k\) 个零和解，从而 \(C_m(J)=2^{-2k}\)。
+若 \(L=3k+1\)，则零和无解；而 \(\pm M\) 情形强制末两项同号以给出
+\(
+\pm M=\pm(F_{m+1}+F_m)
+\)，其余 \(L-2\) 项必须零和，但 \(L-2=3k-1\not\equiv 0\ (\mathrm{mod}\ 3)\) 亦无解，故 \(C_m(J)=0\)。
+若 \(L=3k+2\)，则零和无解，而 \(\pm M\) 情形把问题归约为长度 \(L-2=3k\) 的零和子问题，其解数为 \(2^k\)；再乘以 \(\pm\) 两种符号选择，得 \(N_m(J)=2^{k+1}\)，从而
+\(
+C_m(J)=2^{k+1}/2^{3k+2}=2^{-(2k+1)}
+\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[全局偶奇质量差的模 \(3\) 刚性与闭式]\label{cor:fold-fiber-parity-energy-simplex-global-parity-mod3}
+令
+\[
+\Delta_m:=\EE\big[(-1)^{|\mathcal I|}\big]
+=\sum_{I\subseteq[m]}(-1)^{|I|}E_{m,I}.
+\]
+则对一切 \(m\ge 1\) 成立
+\[
+\Delta_m=
+\begin{cases}
+0, & m\equiv 1\ (\mathrm{mod}\ 3),\\[4pt]
+2^{-\lfloor 2m/3\rfloor}, & m\equiv 0,2\ (\mathrm{mod}\ 3).
+\end{cases}
+\]
+等价地，令 \(p_m^{\mathrm{even}}:=\sum_{|I|\ \mathrm{even}}E_{m,I}\)、\(p_m^{\mathrm{odd}}:=\sum_{|I|\ \mathrm{odd}}E_{m,I}\)，则 \(p_m^{\mathrm{even}}-p_m^{\mathrm{odd}}=\Delta_m\)。
+\end{corollary}
+\begin{proof}
+取定理 \ref{thm:fold-fiber-parity-energy-simplex-interval-correlation-classification} 中的区间 \(J=[1,m]\)。
+注意到 \(\prod_{j=1}^m\sigma_j=(-1)^{|\mathcal I|}\)，故 \(\Delta_m=C_m([1,m])\)。
+将 \(L=m\)、\(s=1\) 代入定理 \ref{thm:fold-fiber-parity-energy-simplex-interval-correlation-classification} 即得所示闭式。证毕。
+\end{proof}
+
+\begin{conjecture}[任意高阶相关的二幂律]\label{conj:fold-fiber-parity-energy-simplex-dyadic-correlation}
+对任意 \(m\ge 1\) 与任意子集 \(S\subseteq[m]\)，高阶相关 \(C_m(S)\) 满足
+\[
+C_m(S)\in \{0\}\ \cup\ \{2^{-r}: r\in\ZZ_{\ge 0}\}.
+\]
+等价地，令 \(M:=F_{m+2}\) 并定义计数
+\[
+N_m(S):=\card{\Bigl\{\varepsilon\in\{\pm1\}^{S}:\ \sum_{j\in S}\varepsilon_jF_{j+1}\equiv 0\ (\mathrm{mod}\ M)\Bigr\}},
+\]
+并注意恒等式 \(C_m(S)=N_m(S)/2^{|S|}\) 成立，从而上述断言等价于：\(N_m(S)\) 或为 \(0\)，或为 \(2\) 的幂。
+定理 \ref{thm:fold-fiber-parity-energy-simplex-interval-correlation-classification} 给出该断言在连续区间族上的完全证明与闭式。
+\end{conjecture}
+
+\endinput
+

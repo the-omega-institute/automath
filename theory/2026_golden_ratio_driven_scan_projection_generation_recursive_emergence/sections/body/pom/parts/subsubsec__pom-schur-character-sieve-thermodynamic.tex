@@ -1,0 +1,380 @@
+% (User input window)
+
+\paragraph{特征标筛—热力学指数率：分拆共振、钩型通道与 Perron 纯性阻碍}\label{subsubsec:pom-schur-character-sieve-thermodynamic}
+本段在 Schur 断层成像公式（定理 \ref{thm:pom-schur-cycle-index-tomography}）的基础上，对 \(m\to\infty\) 的指数率作一个纯代数的压缩：
+将通道迹 \(T_{q,\lambda}(m)=\Tr(B_{q,\lambda}^m)\) 写成按分拆（循环类型）分组的有限线性组合，并用各矩阶压力 \(P(r)\) 的有限组合优化给出通道谱半径的闭式。
+在该口径下，钩型通道的“Perron 纯性”（主指数项不允许出现在非平凡通道）要求出现分拆共振并满足一个可机器核验的主项消去约束。
+
+\paragraph{设定：矩阶压力与分拆单项式}
+固定 \(q\ge 2\)，并假设对每个 \(1\le r\le q\) 存在原始非负矩阵 \(A_r\) 与向量 \(u_r,v_r\ge 0\) 使得
+\[
+S_r(m)=u_r^{\top}A_r^{\,m}v_r,
+\qquad
+\rho_r:=\rho(A_r),
+\qquad
+P(r):=\log\rho_r.
+\]
+由 Perron--Frobenius 理论存在常数 \(\kappa_r>0\) 与 \(0<\theta_r<\rho_r\) 使
+\begin{equation}\label{eq:pom-sr-main-term-kappa}
+S_r(m)=\kappa_r\,e^{mP(r)}+O(\theta_r^{\,m})\qquad(m\to\infty).
+\end{equation}
+对任意分拆 \(\nu\vdash q\)，记其循环计数为 \(c_r(\nu)\)（即循环类型为 \(1^{c_1}2^{c_2}\cdots\)），并定义分拆单项式
+\[
+\mathsf{M}_\nu(m):=\prod_{r\ge 1} S_r(m)^{\,c_r(\nu)}\qquad(\text{实际仅需 }1\le r\le q).
+\]
+并记
+\[
+z_\nu:=\prod_{r\ge 1} r^{c_r(\nu)}\,c_r(\nu)!\,,
+\]
+从而共轭类大小为 \(|\mathrm{Cl}(\nu)|=q!/z_\nu\)。
+
+\begin{proposition}[按共轭类压缩的 Schur 断层成像]\label{prop:pom-schur-tomography-by-partitions}
+沿用定理 \ref{thm:pom-schur-cycle-index-tomography} 的记号，则对任意 \(\lambda\vdash q\) 与任意 \(m\ge 1\) 有
+\[
+\boxed{\;
+T_{q,\lambda}(m)
+=
+f^\lambda\sum_{\nu\vdash q}\frac{\chi^\lambda(\nu)}{z_\nu}\,\mathsf{M}_\nu(m)\; }.
+\]
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:pom-schur-cycle-index-tomography}，
+\(
+T_{q,\lambda}(m)
+=\frac{f^\lambda}{q!}\sum_{\sigma\in S_q}\chi^\lambda(\sigma)\,\mathcal{C}_\sigma(m)
+\)。
+按共轭类分组，并用 \(\mathcal{C}_\sigma(m)=\mathsf{M}_{\nu(\sigma)}(m)\) 与 \(|\mathrm{Cl}(\nu)|=q!/z_\nu\) 得
+\[
+\sum_{\sigma\in S_q}\chi^\lambda(\sigma)\,\mathcal{C}_\sigma(m)
+=\sum_{\nu\vdash q}\frac{q!}{z_\nu}\,\chi^\lambda(\nu)\,\mathsf{M}_\nu(m),
+\]
+代回即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[Schur 断层成像的严格逆变换：由通道迹完全恢复分拆单项式]\label{thm:pom-schur-tomography-inverse-partition-monomials}
+在命题 \ref{prop:pom-schur-tomography-by-partitions} 的设定下，对任意分拆 \(\nu\vdash q\) 有严格恒等式
+\[
+\boxed{\;
+\mathsf{M}_\nu(m)
+=\sum_{\lambda\vdash q}\frac{\chi^\lambda(\nu)}{f^\lambda}\,T_{q,\lambda}(m)\; }.
+\]
+因此固定 \(q\) 时，\(\{T_{q,\lambda}(m)\}_{\lambda\vdash q}\) 在每个分辨率 \(m\) 上等价编码全部循环型单项式 \(\{\mathsf{M}_\nu(m)\}_{\nu\vdash q}\)。
+\end{theorem}
+\begin{proof}
+将命题 \ref{prop:pom-schur-tomography-by-partitions} 的等式两边乘以 \(\chi^\lambda(\nu)/f^\lambda\) 并对 \(\lambda\vdash q\) 求和，得
+\[
+\sum_{\lambda\vdash q}\frac{\chi^\lambda(\nu)}{f^\lambda}\,T_{q,\lambda}(m)
+=\sum_{\mu\vdash q}\frac{\mathsf{M}_\mu(m)}{z_\mu}\sum_{\lambda\vdash q}\chi^\lambda(\nu)\chi^\lambda(\mu).
+\]
+由 \(S_q\) 特征标的列正交关系
+\(
+\sum_{\lambda\vdash q}\chi^\lambda(\nu)\chi^\lambda(\mu)=z_\nu\,\mathbf 1_{\{\mu=\nu\}}
+\)
+（注意 \(S_q\) 的特征标取实值，故无共轭项），右端化为 \(\mathsf{M}_\nu(m)\)，结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[单循环型读出全部低阶碰撞矩：固定 \(q\) 的通道迹决定 \(\{S_r(m)\}_{r\le q}\)]\label{cor:pom-schur-traces-determine-low-moments}
+对任意 \(1\le r\le q\)，令 \(\nu_r:=(r,1^{q-r})\vdash q\) 为“单 \(r\)-循环”分拆。
+则
+\[
+S_r(m)
+=\frac{\mathsf{M}_{\nu_r}(m)}{S_1(m)^{\,q-r}}
+=\frac{1}{S_1(m)^{\,q-r}}
+\sum_{\lambda\vdash q}\frac{\chi^\lambda(\nu_r)}{f^\lambda}\,T_{q,\lambda}(m),
+\]
+其中 \(S_1(m)=\sum_{x\in X_m}d_m(x)=2^m\)。
+从而固定 \(q\) 时，通道迹向量 \(\mathbf T_q(m):=(T_{q,\lambda}(m))_{\lambda\vdash q}\) 在每个 \(m\) 上完全决定 \(\mathbf S_{\le q}(m):=(S_1(m),\dots,S_q(m))\)。
+\end{corollary}
+\begin{proof}
+由 \(\nu_r\) 的循环计数 \(c_r(\nu_r)=1\)、\(c_1(\nu_r)=q-r\) 得
+\(
+\mathsf{M}_{\nu_r}(m)=S_r(m)\,S_1(m)^{q-r}
+\)。
+代入定理 \ref{thm:pom-schur-tomography-inverse-partition-monomials} 即得。证毕。
+\end{proof}
+
+\begin{corollary}[矩阶--通道双向等价：固定 \(q\) 的 Schur 迹表与低阶碰撞矩表逐 \(m\) 互译]\label{cor:pom-schur-traces-moments-bijection}
+在定理 \ref{thm:pom-schur-cycle-index-tomography}（正向成像）成立的前提下，对每个固定 \(m\)：
+\begin{enumerate}
+  \item \(\mathbf S_{\le q}(m)\mapsto \mathbf T_q(m)\) 由 \(\lambda\mapsto T_{q,\lambda}(m)\) 的显式成像式给出；
+  \item 其逆映射由推论 \ref{cor:pom-schur-traces-determine-low-moments} 的闭式恢复给出。
+\end{enumerate}
+因此在每个分辨率 \(m\) 上，固定 \(q\) 的 Schur 通道迹表与低阶碰撞矩表严格等价。
+\end{corollary}
+
+\begin{theorem}[MOM\texorpdfstring{$_q$}{q} 的 Schur--Plancherel 能量恒等式：循环型单项式的 \texorpdfstring{$L^2$}{L2} 质量等于归一化通道迹平方和]\label{thm:pom-schur-plancherel-energy-identity}
+固定 \(q\ge 2\)。
+对每个 \(m\) 视类函数 \(\sigma\mapsto \mathcal{C}_\sigma(m)\)（定理 \ref{thm:pom-schur-cycle-index-tomography}）为 \(S_q\) 上的共轭不变函数，并定义其均方能量
+\[
+\mathcal{E}_q(m):=\frac{1}{q!}\sum_{\sigma\in S_q}\bigl|\mathcal{C}_\sigma(m)\bigr|^2
+=\sum_{\nu\vdash q}\frac{1}{z_\nu}\,\bigl|\mathsf{M}_\nu(m)\bigr|^2.
+\]
+则有严格恒等式
+\[
+\boxed{\;
+\mathcal{E}_q(m)=\sum_{\lambda\vdash q}\left|\frac{T_{q,\lambda}(m)}{f^\lambda}\right|^2
+=\sum_{\lambda\vdash q}\frac{1}{(f^\lambda)^2}\,\bigl|T_{q,\lambda}(m)\bigr|^2\; }.
+\]
+\end{theorem}
+\begin{proof}
+第一条等号由 \(|\mathrm{Cl}(\nu)|=q!/z_\nu\) 与 \(\mathcal{C}_\sigma(m)=\mathsf{M}_{\nu(\sigma)}(m)\) 的共轭类常值性立得。
+\par
+由命题 \ref{prop:pom-schur-tomography-by-partitions} 可写
+\[
+\frac{T_{q,\lambda}(m)}{f^\lambda}
+=\sum_{\nu\vdash q}\frac{\chi^\lambda(\nu)}{z_\nu}\,\mathsf{M}_\nu(m).
+\]
+对其取平方模并对 \(\lambda\vdash q\) 求和，交换求和次序，得到
+\[
+\sum_{\lambda\vdash q}\left|\frac{T_{q,\lambda}(m)}{f^\lambda}\right|^2
+=\sum_{\nu,\mu\vdash q}\frac{\mathsf{M}_\nu(m)\overline{\mathsf{M}_\mu(m)}}{z_\nu z_\mu}
+\sum_{\lambda\vdash q}\chi^\lambda(\nu)\chi^\lambda(\mu).
+\]
+由列正交 \(\sum_{\lambda}\chi^\lambda(\nu)\chi^\lambda(\mu)=z_\nu\,\mathbf 1_{\{\nu=\mu\}}\)，右端化为
+\(
+\sum_{\nu\vdash q}\frac{1}{z_\nu}|\mathsf{M}_\nu(m)|^2=\mathcal E_q(m)
+\)，证毕。
+\end{proof}
+
+\begin{theorem}[Schur 方差分解：非平凡通道能量之和恰等于循环型单项式的方差]\label{thm:pom-schur-variance-decomposition}
+固定 \(q\ge 2\)，并令
+\[
+\overline{\mathcal C}(m):=\frac{1}{q!}\sum_{\sigma\in S_q}\mathcal{C}_\sigma(m).
+\]
+则有严格恒等式
+\[
+\boxed{\;
+\frac{1}{q!}\sum_{\sigma\in S_q}\bigl|\mathcal{C}_\sigma(m)-\overline{\mathcal C}(m)\bigr|^2
+=\sum_{\lambda\vdash q,\ \lambda\ne(q)}\left|\frac{T_{q,\lambda}(m)}{f^\lambda}\right|^2\; }.
+\]
+其中平凡表征满足 \(T_{q,(q)}(m)=\overline{\mathcal C}(m)\)。
+\end{theorem}
+\begin{proof}
+由 \(\chi^{(q)}(\sigma)\equiv 1\) 与 \(f^{(q)}=1\)，定理 \ref{thm:pom-schur-cycle-index-tomography} 给出
+\(
+T_{q,(q)}(m)=\frac{1}{q!}\sum_{\sigma\in S_q}\mathcal C_\sigma(m)=\overline{\mathcal C}(m)
+\)。
+\par
+将定理 \ref{thm:pom-schur-plancherel-energy-identity} 应用于中心化类函数
+\(\sigma\mapsto \mathcal C_\sigma(m)-\overline{\mathcal C}(m)\)。
+由于平凡通道的 Fourier 系数被精确消去（等价于与常值函数正交），故右端求和可限制在 \(\lambda\ne(q)\)，得到所示恒等式。证毕。
+\end{proof}
+
+\begin{corollary}[非均匀性 \texorpdfstring{$\Longleftrightarrow$}{<->} 非平凡 Schur 通道必激活]\label{cor:pom-schur-nontrivial-channel-activation}
+在定理 \ref{thm:pom-schur-variance-decomposition} 的设定下，以下命题等价：
+\begin{enumerate}
+  \item \(\sigma\mapsto \mathcal C_\sigma(m)\) 非常值（等价地，左端方差 \(>0\)）；
+  \item 存在某个 \(\lambda\vdash q\) 且 \(\lambda\ne(q)\) 使 \(T_{q,\lambda}(m)\ne 0\)。
+\end{enumerate}
+更定量地，若记 \(p(q)\) 为 \(q\) 的分拆数，则
+\[
+\max_{\lambda\vdash q,\ \lambda\ne(q)}\left|\frac{T_{q,\lambda}(m)}{f^\lambda}\right|
+\ \ge\
+\frac{1}{\sqrt{p(q)-1}}\left(\frac{1}{q!}\sum_{\sigma\in S_q}\bigl|\mathcal{C}_\sigma(m)-\overline{\mathcal C}(m)\bigr|^2\right)^{1/2}.
+\]
+\end{corollary}
+
+\paragraph{分拆共振间隙与钩型通道的必要条件}
+定义分拆共振间隙（以 \((q)\) 为基准）：
+\[
+\Delta_{\mathrm{part}}(q)
+:=
+P(q)-\max_{\substack{\nu\vdash q\\ \nu\neq (q)}}\ \sum_{r\ge 1}c_r(\nu)\,P(r).
+\]
+
+\begin{theorem}[钩型通道 \texorpdfstring{$\Rightarrow$}{=>} 共振间隙闭合]\label{thm:pom-hook-channel-implies-partition-gap-closed}
+进一步假设 \(A_q\) 原始，且其 Perron 根 \(\rho_q\) 简单并仅出现在平凡通道 \(\lambda=(q)\)（即对所有 \(\lambda\neq(q)\) 有 \(\rho(B_{q,\lambda})<\rho_q\)）。
+若存在钩型分拆 \(\lambda=(q-k,1^k)\)（\(1\le k\le q-1\)）使对应通道非零（\(B_{q,\lambda}\neq 0\)），则必有
+\[
+\boxed{\ \Delta_{\mathrm{part}}(q)=0\ }.
+\]
+等价地，存在某个非平凡分拆 \(\nu\neq(q)\) 使
+\[
+P(q)=\sum_{r\ge 1}c_r(\nu)\,P(r).
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-schur-tomography-by-partitions}，
+\[
+T_{q,\lambda}(m)
+=
+f^\lambda\left(\frac{\chi^\lambda((q))}{q}\,S_q(m)+\sum_{\nu\vdash q,\ \nu\neq(q)}\frac{\chi^\lambda(\nu)}{z_\nu}\,\mathsf{M}_\nu(m)\right).
+\]
+对钩型 \(\lambda=(q-k,1^k)\)，由 Murnaghan--Nakayama 规则知 \(\chi^\lambda((q))=(-1)^k\neq 0\)，故 \(S_q(m)\) 项必出现。
+若 \(\Delta_{\mathrm{part}}(q)>0\)，则对一切 \(\nu\neq(q)\) 有
+\(
+\sum_r c_r(\nu)P(r)\le P(q)-\Delta_{\mathrm{part}}(q)
+\)。
+由 \eqref{eq:pom-sr-main-term-kappa} 得
+\[
+\mathsf{M}_\nu(m)
+=
+\Bigl(\prod_r \kappa_r^{c_r(\nu)}\Bigr)\exp\!\Bigl(m\sum_r c_r(\nu)P(r)\Bigr)\cdot(1+o(1)),
+\]
+从而所有 \(\nu\neq(q)\) 的项在指数尺度上严格低于 \(S_q(m)\sim \kappa_q e^{mP(q)}\)。
+因此
+\[
+T_{q,\lambda}(m)
+=
+f^\lambda\frac{\chi^\lambda((q))}{q}\,\kappa_q e^{mP(q)}\cdot(1+o(1)),
+\]
+推出
+\(
+\limsup_{m\to\infty}\frac{1}{m}\log|T_{q,\lambda}(m)|=P(q)
+\)。
+另一方面，对任意有限矩阵 \(B\) 有
+\(
+\limsup_{m\to\infty}\frac{1}{m}\log|\Tr(B^m)|=\log\rho(B)
+\)
+（见定理 \ref{thm:pom-schur-channel-radius-character-sieve} 的证明中的引理），故得 \(\rho(B_{q,\lambda})=\rho_q\)，与“Perron 根仅出现在平凡通道”的假设矛盾。
+故必有 \(\Delta_{\mathrm{part}}(q)=0\)。证毕。
+\end{proof}
+
+\begin{theorem}[严格分拆间隙 \texorpdfstring{$\Rightarrow$}{=>} 钩型通道湮灭]\label{thm:pom-partition-gap-positive-kills-hooks}
+在定理 \ref{thm:pom-hook-channel-implies-partition-gap-closed} 的假设下，若 \(\Delta_{\mathrm{part}}(q)>0\)，则对所有非平凡钩型 \(\lambda=(q-k,1^k)\)（\(1\le k\le q-1\)）均有
+\[
+\boxed{\ B_{q,\lambda}=0\ },
+\]
+等价地 \(T_{q,\lambda}(m)=0\) 对一切 \(m\ge 1\) 成立。
+\end{theorem}
+\begin{proof}
+取任意钩型 \(\lambda\neq(q)\)。若 \(B_{q,\lambda}\neq 0\)，由定理 \ref{thm:pom-hook-channel-implies-partition-gap-closed} 立得 \(\Delta_{\mathrm{part}}(q)=0\)，与假设矛盾。
+故 \(B_{q,\lambda}=0\)，并由 \(T_{q,\lambda}(m)=\Tr(B_{q,\lambda}^m)\) 得等价表述。证毕。
+\end{proof}
+
+\paragraph{共振相的主项消去与可判定性}
+在 \eqref{eq:pom-sr-main-term-kappa} 的主项制度下，定义共振分拆族
+\[
+\mathcal{R}_q:=\left\{\nu\vdash q:\ \sum_{r\ge 1}c_r(\nu)\,P(r)=P(q)\right\}.
+\]
+
+\begin{theorem}[钩型通道主项消去的代数约束]\label{thm:pom-hook-channel-leading-term-cancellation}
+在定理 \ref{thm:pom-hook-channel-implies-partition-gap-closed} 的设定下，若存在非平凡钩型 \(\lambda=(q-k,1^k)\)（\(k\ge 1\)）满足 \(B_{q,\lambda}\neq 0\)，
+则必有严格恒等式
+\[
+\boxed{\;
+\frac{\chi^\lambda((q))}{q}\,\kappa_q
++\sum_{\nu\in\mathcal{R}_q\setminus\{(q)\}}
+\frac{\chi^\lambda(\nu)}{z_\nu}\,
+\prod_{r\ge 1}\kappa_r^{\,c_r(\nu)}
+=0\; }.
+\]
+在给定 \(\{P(r)\}_{1\le r\le q}\) 与 \(\{\kappa_r\}_{1\le r\le q}\) 的指数主阶层面，该恒等式等价于“Perron 纯性”要求：非平凡钩型通道的指数率严格小于 \(P(q)\)。
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:pom-sr-main-term-kappa} 与命题 \ref{prop:pom-schur-tomography-by-partitions}，有渐近展开
+\[
+\begin{aligned}
+T_{q,\lambda}(m)
+&=
+f^\lambda\sum_{\nu\vdash q}\frac{\chi^\lambda(\nu)}{z_\nu}
+\Bigl(\prod_r \kappa_r^{c_r(\nu)}\Bigr)
+\exp\!\Bigl(m\sum_r c_r(\nu)P(r)\Bigr)\cdot(1+o(1)).
+\end{aligned}
+\]
+将指数率按大小分层；当 \(\Delta_{\mathrm{part}}(q)=0\) 时，指数率最大的层恰为 \(\mathcal{R}_q\)，且其公共指数为 \(P(q)\)。
+因此 \(T_{q,\lambda}(m)\) 的 \(e^{mP(q)}\) 系数（乘去公共因子 \(f^\lambda\)）正是所示和式。
+若该系数非零，则 \(\limsup \frac1m\log|T_{q,\lambda}(m)|=P(q)\)，从而 \(\rho(B_{q,\lambda})=\rho_q\)，违背 Perron 纯性假设；
+反之，若该系数为零，则最大指数层被精确消去，剩余项指数率严格小于 \(P(q)\)，从而满足 \(\rho(B_{q,\lambda})<\rho_q\) 的指数主阶必要条件。
+证毕。
+\end{proof}
+
+\begin{theorem}[分拆共振的比值判别（可核验）]\label{thm:pom-partition-resonance-ratio-test}
+对任意 \(q\ge 2\) 与任意分拆 \(\nu\vdash q\)，令 \(\mathsf{M}_\nu(m)=\prod_r S_r(m)^{c_r(\nu)}\)。
+则在上述主项制度下有
+\[
+\boxed{\;
+\limsup_{m\to\infty}\frac{1}{m}\log\frac{S_q(m)}{\mathsf{M}_\nu(m)}
+=P(q)-\sum_{r\ge 1}c_r(\nu)\,P(r)\; }.
+\]
+特别地，
+\[
+P(q)=\sum_{r}c_r(\nu)P(r)
+\quad\Longleftrightarrow\quad
+\lim_{m\to\infty}\frac{S_q(m)}{\mathsf{M}_\nu(m)}
+=\frac{\kappa_q}{\prod_{r}\kappa_r^{c_r(\nu)}}\in(0,\infty).
+\]
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:pom-sr-main-term-kappa} 得
+\(
+\frac{1}{m}\log S_r(m)\to P(r)
+\)
+并且
+\(
+\frac{S_r(m)}{\kappa_r e^{mP(r)}}\to 1
+\)。
+因此
+\[
+\frac{1}{m}\log \mathsf{M}_\nu(m)
+=\sum_r c_r(\nu)\cdot \frac{1}{m}\log S_r(m)\ \longrightarrow\ \sum_r c_r(\nu)P(r),
+\]
+从而
+\(
+\limsup\frac1m\log\frac{S_q(m)}{\mathsf{M}_\nu(m)}
+=P(q)-\sum_r c_r(\nu)P(r)
+\)。
+若再用主项比例极限 \(S_r(m)\sim \kappa_r e^{mP(r)}\)，则比值极限的常数亦立即得到。证毕。
+\end{proof}
+
+\paragraph{Schur 通道谱半径的“特征标筛—热力学”公式}
+对任意 \(\lambda\vdash q\)，定义特征标支持集
+\[
+\mathrm{Supp}(\lambda):=\{\nu\vdash q:\ \chi^\lambda(\nu)\neq 0\},
+\]
+以及筛后压力
+\[
+\mathcal{P}_\lambda:=\max_{\nu\in\mathrm{Supp}(\lambda)}\ \sum_{r\ge 1}c_r(\nu)\,P(r).
+\]
+并令极大值集合
+\[
+\mathcal{M}_\lambda:=\left\{\nu\in\mathrm{Supp}(\lambda):\ \sum_{r}c_r(\nu)P(r)=\mathcal{P}_\lambda\right\}.
+\]
+
+\begin{theorem}[通道谱半径的特征标筛公式（非退化主项支配）]\label{thm:pom-schur-channel-radius-character-sieve}
+在上述设定下，假设极大值集合上的主系数加权和非零：
+\[
+\sum_{\nu\in\mathcal{M}_\lambda}\frac{\chi^\lambda(\nu)}{z_\nu}\prod_{r\ge 1}\kappa_r^{c_r(\nu)}\neq 0.
+\]
+则通道谱半径满足严格等式
+\[
+\boxed{\ \rho(B_{q,\lambda})=\exp(\mathcal{P}_\lambda)\ }.
+\]
+从而 near-RH 型平方根门槛在该通道上等价于纯标量不等式
+\[
+\boxed{\ 2\mathcal{P}_\lambda\le P(q)\ }.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-schur-tomography-by-partitions} 与主项展开 \eqref{eq:pom-sr-main-term-kappa}，
+\[
+T_{q,\lambda}(m)
+=
+f^\lambda\sum_{\nu\vdash q}\frac{\chi^\lambda(\nu)}{z_\nu}
+\Bigl(\prod_r \kappa_r^{c_r(\nu)}\Bigr)
+\exp\!\Bigl(m\sum_r c_r(\nu)P(r)\Bigr)\cdot(1+o(1)).
+\]
+在“非退化”假设下，指数率最大的 \(\mathcal{P}_\lambda\) 层不发生完全消去，因此
+\(
+\limsup_{m\to\infty}\frac{1}{m}\log|T_{q,\lambda}(m)|=\mathcal{P}_\lambda
+\)。
+另一方面，对任意有限维矩阵 \(B\) 记其特征值为 \(\{\mu_j\}\)，则
+\(
+\Tr(B^m)=\sum_j \mu_j^m
+\)。
+令 \(\rho=\rho(B)=\max_j|\mu_j|\)，并记 \(\eta_j=\mu_j/\rho\)（使得 \(|\eta_j|\le 1\) 且至少一个满足 \(|\eta_j|=1\)），则
+\[
+\Tr(B^m)=\rho^m\Bigl(\sum_{|\eta_j|=1}\eta_j^m+O((\rho'/\rho)^m)\Bigr),
+\]
+其中 \(0\le \rho'<\rho\) 为次级谱半径。与定理 \ref{thm:finite-part-cyclic-lift-limsup-spectral-gap} 中同型的 Ces\`aro 平方模论证可得
+\(\limsup_{m\to\infty}\bigl|\sum_{|\eta_j|=1}\eta_j^m\bigr|>0\)，
+从而
+\[
+\limsup_{m\to\infty}\frac{1}{m}\log|\Tr(B^m)|=\log\rho(B).
+\]
+应用于 \(B=B_{q,\lambda}\) 并与上一段的指数率识别合并，即得 \(\log\rho(B_{q,\lambda})=\mathcal{P}_\lambda\)。
+最后，\(2\mathcal{P}_\lambda\le P(q)\) 等价于 \(\rho(B_{q,\lambda})^2\le \rho_q\)（其中 \(\rho_q=e^{P(q)}\)），即平方根门槛。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/subsubsec__pom-schur-character-sieve-thermodynamic__finite-laplace-phase-gibbs}
+

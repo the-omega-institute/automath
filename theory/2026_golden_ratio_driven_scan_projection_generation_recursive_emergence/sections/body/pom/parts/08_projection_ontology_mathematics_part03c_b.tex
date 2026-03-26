@@ -1,0 +1,496 @@
+
+进一步，把核版 RH/GRH 的平方根界（定义 \ref{def:kernel-rh}）移植到碰撞核 \(A_q\)：令
+\[
+\Lambda_q:=\max_{\mu\in\sigma(A_q)\setminus\{r_q\}}|\mu|,
+\qquad
+R_q:=\frac{\Lambda_q}{\sqrt{r_q}},
+\qquad
+\beta^{\mathrm{RH}}_q:=\frac{\log \Lambda_q}{\log r_q},
+\qquad
+\delta_q:=\log\!\left(\frac{\Lambda_q^2}{r_q}\right)=2\log R_q.
+\]
+表 \ref{tab:fold_collision_kernel_rh_scan_q2_17} 给出 \(q=2,\dots,17\) 的可复算输出（脚本 \path{scripts/exp_fold_collision_kernel_rh_scan_q2_17.py} 一键生成）。
+表 \ref{tab:fold_collision_kernel_rh_scan_q18_23} 给出 \(q=18,\dots,23\) 的扩展输出（数据可由脚本 \path{scripts/exp_fold_collision_moment_signature_q18_25.py} 导出）。
+\input{sections/generated/tab_fold_collision_kernel_rh_scan_q2_17}
+\input{sections/generated/tab_fold_collision_kernel_rh_scan_q18_23}
+
+\begin{remark}[从 \texorpdfstring{$q=4$}{q=4} 起的系统性越线与快速劣化]\label{rem:pom-collision-kernel-rh-phase}
+由表 \ref{tab:fold_collision_kernel_rh_scan_q2_17} 与表 \ref{tab:fold_collision_kernel_rh_scan_q18_23} 可见：在已核验范围内，\(\delta_q<0\) 仅发生在 \(q=2,3\)，而从 \(q=4\) 起即出现严格越线 \(\delta_q>0\)（其中 \(q=4\) 为贴线量级）。
+并且 \(\beta^{\mathrm{RH}}_q\) 与 \(\delta_q\) 在 \(q\le 23\) 的已核验范围内随 \(q\) 单调上升，表现为“误差指数”从平方根相（\(\beta^{\mathrm{RH}}_q\le\frac12\)）向主项同阶（\(\beta^{\mathrm{RH}}_q\to 1\)）快速劣化的谱相变。
+此外，在 \(q\le 17\) 的范围内达到 \(\Lambda_q\) 的主导非 Perron 根恒为负实根，从而存在稳定的反相慢模态主导越线。
+\end{remark}
+
+\begin{remark}[高阶 \texorpdfstring{$\delta_q$}{deltaq} 的近线性律（\(q=18,\dots,23\)）]\label{rem:pom-collision-kernel-rh-linear}
+由表 \ref{tab:fold_collision_kernel_rh_scan_q18_23} 的 \(\delta_q\) 可见，在 \(q=18,\dots,23\) 上增量
+\(\delta_{q+1}-\delta_q\) 近似为常数（约 \(0.26\) 且缓慢递减），呈近线性增长。
+对 \((q,\delta_q)\) 做最小二乘拟合得到可复算的近似律（输出见式 \eqref{eq:fold-collision-delta-linear-fit-q18-23}）：
+\input{sections/generated/eq_fold_collision_delta_linear_fit_q18_23}
+等价地，
+\[
+\frac{\Lambda_{q+1}^2/r_{q+1}}{\Lambda_q^2/r_q}\approx e^{0.263694}\approx 1.30174,
+\qquad
+\frac{R_{q+1}}{R_q}\approx e^{0.131847}\approx 1.14094,
+\]
+即“超越线强度”在该高阶区间内呈近似固定倍率增长。
+\par
+该经验律提示：若以 \(q\to\infty\) 作为极限路线逼近更复杂对象，则在未引入额外重整化/对称约束以抑制稳定慢模之前，\(A_q\) 族将呈指数级偏离平方根相（\(\delta_q\) 远离 \(0\)）。
+\end{remark}
+
+\input{08_projection_ontology_mathematics_part03c_shadow_spectral_packet_q9_17}
+
+\begin{remark}[高阶递推的最短初值（\(q=9,10,11,12\)）]\label{rem:pom-moment-init-9-12}
+为便于复核，列出最短初值（\(S_q(2),\dots,S_q(1+d_q)\)）：
+$$
+\begin{aligned}
+&(S_9(2),\dots,S_9(8))=(514,1538,41416,382292,5376484,54810488,707836456),\\
+&(S_{10}(2),\dots,S_{10}(10))=(1026,3074,122196,1406968,25250620,\\
+&\qquad 311420704,5187436232,72412721272,1102141254640),\\
+&(S_{11}(2),\dots,S_{11}(10))=(2050,6146,362488,5265380,120053140,\\
+&\qquad 1787525384,38572713688,667461412712,12816890401888),\\
+&(S_{12}(2),\dots,S_{12}(14))=(4098,12290,1079268,19982248,576435244,10344013168,\\
+&\qquad 290291967800,6227618870536,150911581885024,3397767385301568,\\
+&\qquad 81304379149198128,1859608501854266944,43678793149065441920).
+\end{aligned}
+$$
+其余 \(q=13,14,15,16,17\) 的初值与系数由脚本 \path{scripts/exp_fold_collision_moment_recursions_mod_dp.py} 的 \texttt{--precomputed} 导出记录给出。
+\end{remark}
+
+\begin{theorem}[坍缩/共振判别：模态约束导致 Hankel 秩下降]\label{thm:pom-moment-resonance}
+设 \(q\ge 2\)，记 \(h=\lfloor q/2\rfloor\)。在差分模态截断下（注 \ref{rem:pom-closure-dim-mode-trunc}），令 \(M_{q,\ell}(m)\) 表示净偏置 \(\ell=a-b\) 的模态贡献，则
+$$
+S_q(m)=\sum_{\ell=-h}^{h} M_{q,\ell}(m).
+$$
+并假设这些模态贡献可组织为一个以 \(\{M_{q,\ell}\}\) 为坐标的 \(2h+1\) 维线性 realization（非共振情形下正是“模态闭合递推”的标准实现）。
+设存在从某个 \(m_0\) 起成立的整系数线性递推
+$$
+S_q(m)=\sum_{i=1}^{d} c_i S_q(m-i)\qquad(m\ge m_0),
+$$
+其特征多项式
+$$
+P_q(\lambda)=\lambda^d-\sum_{i=1}^d c_i\lambda^{d-i}.
+$$
+若 \(d<2h+1\)，则：
+\begin{enumerate}
+  \item \(S_q\) 的 Hankel 秩满足 \(\mathrm{rank}(H)\le d<2h+1\)；
+  \item 该 \(2h+1\) 维线性 realization 必非最小，从而存在非零系数 \(\alpha_{-h},\dots,\alpha_h\) 使
+  $$
+  \sum_{\ell=-h}^{h}\alpha_\ell M_{q,\ell}(m)=0\qquad(m\ge m_0),
+  $$
+  即出现一个\textbf{模态约束}，导致“坍缩/共振”。
+\end{enumerate}
+在 \(q=9,\dots,17\) 的已核验递推（表 \ref{tab:fold_collision_moment_recursions_9_17}）下，对 \(q=9,\dots,15\) 的特征多项式为
+$$
+\begin{aligned}
+P_9(\lambda)&=\lambda^7-2\lambda^6-62\lambda^5-386\lambda^4-2819\lambda^3-62\lambda^2-900\lambda+450,\\
+P_{10}(\lambda)&=\lambda^9-2\lambda^8-96\lambda^7-830\lambda^6-7945\lambda^5-2\lambda^4-1852\lambda^3+830\lambda^2-4\lambda+4,\\
+P_{11}(\lambda)&=\lambda^9-2\lambda^8-153\lambda^7-1740\lambda^6-21249\lambda^5+9432\lambda^4+86213\lambda^3+1484\lambda^2+18348\lambda-9174,
+\\
+P_{12}(\lambda)&=\lambda^{13}-2\lambda^{12}-243\lambda^{11}-3608\lambda^{10}-56447\lambda^9+61236\lambda^8+667319\lambda^7-3608\lambda^6\\
+&\quad+9582\lambda^5-61242\lambda^4-15404\lambda^3+7216\lambda^2-8\lambda+8,\\
+P_{13}(\lambda)&=\lambda^{11}-2\lambda^{10}-388\lambda^9-7414\lambda^8-148038\lambda^7+317916\lambda^6+4165856\lambda^5\\
+&\quad-136252\lambda^4-1565891\lambda^3-318938\lambda^2-289380\lambda+144690,\\
+P_{14}(\lambda)&=\lambda^{13}-2\lambda^{12}-621\lambda^{11}-15140\lambda^{10}-385463\lambda^9+1443744\lambda^8+22761161\lambda^7\\
+&\quad-15140\lambda^6+2116566\lambda^5-1443750\lambda^4-63044\lambda^3+30280\lambda^2-8\lambda+8,\\
+P_{15}(\lambda)&=\lambda^{11}-2\lambda^{10}-1000\lambda^9-30766\lambda^8-994458\lambda^7+6188172\lambda^6+119408756\lambda^5\\
+&\quad-8289820\lambda^4-134208623\lambda^3-6186122\lambda^2-16637076\lambda+8318538,
+\end{aligned}
+$$
+并且 \(q=16,17\) 的递推阶数均为 \(d=13<2\lfloor q/2\rfloor+1\)（系数见表 \ref{tab:fold_collision_moment_recursions_9_17}）。因此 \(q=9,\dots,17\) 均满足 \(d<2h+1\)，Hankel 秩下降并触发模态约束。
+\end{theorem}
+\begin{proof}
+由递推得 \(S_q\) 的 Hankel 秩不超过递推阶数 \(d\)（定理 \ref{thm:hankel-rank-minimal}），若 \(d<2h+1\) 则存在秩下降。
+另一方面，差分模态截断提供一个以 \(\{M_{q,\ell}\}\) 为坐标的 \(2h+1\) 维线性表示；既然最小线性表示维数不超过 \(d\)，该表示必非最小，因此存在非零线性关系 \(\sum_{\ell}\alpha_\ell M_{q,\ell}(m)\equiv 0\)。
+最后一段直接由表中的递推系数写出特征多项式并比较阶数即可。证毕。
+\end{proof}
+
+\input{08_projection_ontology_mathematics_part03c_resonance_aitken_certificate}
+
+\begin{remark}[2-进影子律：\texorpdfstring{$P_q(\lambda)$}{Pq} 在模 \texorpdfstring{$2$}{2} 下坍缩为 \texorpdfstring{$\lambda^a(\lambda+1)^b$}{lambda^a(lambda+1)^b}（可审计）]\label{rem:pom-charpoly-mod2-shadow}
+对共振窗口 \(q=9,\dots,17\) 的已核验最小递推（表 \ref{tab:fold_collision_moment_recursions_9_17}；定理 \ref{thm:pom-moment-resonance}），把特征多项式 \(P_q(\lambda)\) 的系数按奇偶性约化到 \(\mathbb{F}_2\) 上，会出现一个完全内部的“2-进影子坍缩”：
+\[
+P_q(\lambda)\equiv \lambda^{a_q}(\lambda+1)^{b_q}\pmod 2,
+\qquad a_q+b_q=d_q.
+\]
+其具体 \((a_q,b_q)\) 与对应的稀疏模 \(2\) 表达式见表 \ref{tab:fold_collision_charpoly_mod2_shadow_q9_17}（脚本 \texttt{scripts/exp\_fold\_collision\_charpoly\_mod2\_shadow\_q9\_17.py} 一键生成）。
+特别地，从定理 \ref{thm:pom-moment-resonance} 列出的系数可直接读出
+\[
+P_{13}(\lambda)\equiv \lambda^3(\lambda+1)^8,\qquad
+P_{14}(\lambda)\equiv \lambda^7(\lambda+1)^6,\qquad
+P_{15}(\lambda)\equiv \lambda^3(\lambda+1)^8\pmod 2.
+\]
+\par
+机制上，这意味着在特征 \(2\) 的世界里递推算子的谱点只落在 \(0\) 与 \(-1\)（注意 \(-1\equiv 1\in\mathbb{F}_2\)）两处：伴随矩阵在 \(\mathbb{F}_2\) 上呈现“幂零 + 幺正（unipotent）”的极端刚性形态。
+等价地，令前移算子 \(E\) 作用于序列 \(S\) 为 \((ES)(m):=S(m+1)\)，则递推在模 \(2\) 下满足完全显式的差分湮灭律：
+\[
+P_q(E)S_q\equiv 0\pmod 2
+\qquad\Longrightarrow\qquad
+E^{a_q}(E+1)^{b_q}S_q\equiv 0\pmod 2.
+\]
+把差分算子记为 \(\mathsf{D}:=E+1\)（特征 \(2\) 下等同于前向差分），即得一个“内生的奇偶选择定则”：对每个 \(q=9,\dots,17\)，都有
+\[
+\mathsf{D}^{b_q}S_q(m+a_q)\equiv 0\pmod 2.
+\]
+\par
+\textbf{推论（奇偶序列的有限阶差分多项式与周期上界）.}
+在 \(\mathbb{F}_2\) 上，\(\mathsf{D}^{b_q}f\equiv 0\) 等价于 \(f(m)\) 是阶 \(<b_q\) 的离散多项式（以 \(\binom{m}{k}\) 为基底），因此 \(S_q(m+a_q)\bmod 2\) 由前 \(b_q\) 个值完全确定。
+又由 Lucas 定理可知 \(\binom{m}{k}\bmod 2\) 仅依赖 \(m\) 的低位二进制位，故
+\[
+S_q(m+a_q)\bmod 2\ \text{的周期}\ \mid\ T_q:=2^{\lceil\log_2 b_q\rceil}.
+\]
+由表 \ref{tab:fold_collision_charpoly_mod2_shadow_q9_17} 得到
+\[
+T_q\mid 4\ (q=9,10),\qquad
+T_q\mid 8\ (q=11,\dots,16),\qquad
+T_q\mid 16\ (q=17).
+\]
+\end{remark}
+
+\input{sections/generated/tab_fold_collision_charpoly_mod2_shadow_q9_17}
+
+\input{08_projection_ontology_mathematics_part03c_charpoly_mod3_mod5_selection_q13_15}
+\input{08_projection_ontology_mathematics_part03c_charpoly_mod7_mod11_mod13_selection_q12_15}
+
+\begin{remark}[最小递推的端点刚性：首系数 \(2\) 与偶阶的 \texorpdfstring{$\pm 8$}{±8} 尾差分块]\label{rem:pom-recurrence-endpoint-rigidity}
+在已核验的最小整系数递推中（表 \ref{tab:fold_collision_moment_recursions}、\ref{tab:fold_collision_moment_recursions_9_17}、\ref{tab:fold_collision_moment_recursions_18_23}），始终有
+\[
+c_1=2,
+\qquad\text{即}\qquad
+P_q(\lambda)=\lambda^{d_q}-2\lambda^{d_q-1}+\cdots.
+\]
+这表明“向后一步”的系数在做完 fiber-product 约束与最小化之后仍保持一个刚性的二元步进结构。
+\par
+更进一步地，在定理 \ref{thm:pom-moment-resonance} 列出的偶阶多项式 \(P_{12},P_{14}\) 中（以及表 \ref{tab:fold_collision_moment_recursions_9_17} 的 \(q=16\) 最小递推系数中），末端两项的系数固定为
+\[
+(c_{d_q-1},c_{d_q})=(8,-8),
+\qquad\text{等价地}\qquad
+P_q(\lambda)=\cdots+(\cdots)\lambda^2-8\lambda+8.
+\]
+因此最深滞后只以一个“尾差分块”的形式出现：
+\[
+8\bigl(S_q(m-d_q+1)-S_q(m-d_q)\bigr).
+\]
+若令后向差分 \(T_q(m):=S_q(m)-S_q(m-1)\)，则上述偶阶递推可改写为
+\[
+S_q(m)=\sum_{i=1}^{d_q-2}c_i\,S_q(m-i)\ +\ 8\,T_q(m-d_q+1),
+\]
+把最深一层历史的进入方式压缩为差分信道。
+该端点块在一般线性递推中并非必然，因而可作为后续重写 realization/提取隐藏模态约束的一个结构把手。
+\end{remark}
+
+\begin{proposition}[奇滞后中性（odd-lag neutrality；可审计）]\label{prop:pom-moment-odd-lag-neutrality}
+在已核验范围 \(q=2,\dots,23\) 内（表 \ref{tab:fold_collision_moment_recursions}、表 \ref{tab:fold_collision_moment_recursions_9_17} 与表 \ref{tab:fold_collision_moment_recursions_18_23}），\(S_q(m)\) 的最小整系数递推可写为
+\[
+S_q(m)=\sum_{i=1}^{d_q} c_i\,S_q(m-i)\qquad(m\ge m_0),
+\]
+其中阶数 \(d_q\) 皆为奇数，并满足\textbf{奇滞后系数零和}：
+\[
+\sum_{\substack{1\le i\le d_q\\ i\ \mathrm{odd}}} c_i=0.
+\]
+等价地，若按约定
+\[
+P_q(\lambda)=\lambda^{d_q}-\sum_{i=1}^{d_q}c_i\,\lambda^{d_q-i},
+\]
+则有
+\[
+P_q(1)+P_q(-1)=0.
+\]
+亦即 \(P_q\) 的\textbf{偶次幂系数和为 \(0\)}（因为 \(d_q\) 为奇数时，偶次幂项恰对应递推中的奇滞后项）。
+\end{proposition}
+
+\begin{proof}
+由于 \(d_q\) 为奇数，\(1^{d_q}+(-1)^{d_q}=0\)，从而
+\[
+P_q(1)+P_q(-1)
+= -\sum_{i=1}^{d_q} c_i\bigl(1^{d_q-i}+(-1)^{d_q-i}\bigr)
+= -2\sum_{\substack{1\le i\le d_q\\ i\ \mathrm{odd}}}c_i,
+\]
+故 \(\sum_{i\ \mathrm{odd}}c_i=0\iff P_q(1)+P_q(-1)=0\)。
+在上述三张表中，\((c_1,\dots,c_{d_q})\) 已逐项显式给出；对每个 \(q\) 直接把奇指标项相加即可得到零和恒等式，从而命题成立。证毕。
+\end{proof}
+
+\begin{remark}[机制解释：奇通道的“直流中性”与差分型投影门]\label{rem:pom-moment-odd-lag-neutrality-gate}
+把递推按奇偶滞后拆开：
+\[
+S_q(m)=\sum_{i\ \mathrm{even}}c_i\,S_q(m-i)\ +\ \sum_{i\ \mathrm{odd}}c_i\,S_q(m-i).
+\]
+由命题 \ref{prop:pom-moment-odd-lag-neutrality} 的零和条件，并注意 \(d_q\) 为奇数（因此 \(d_q\) 本身属于奇滞后集合），可将奇滞后部分改写为“锚定差分”：
+\[
+\sum_{i\ \mathrm{odd}}c_i\,S_q(m-i)
+=\sum_{\substack{i\ \mathrm{odd}\\ i<d_q}}c_i\bigl(S_q(m-i)-S_q(m-d_q)\bigr).
+\]
+因此\textbf{奇滞后通道对常数模态（直流）完全中性}，只能读取历史窗口中的相对差分。
+等价地，把 \(P_q\) 分解为偶/奇部分
+\(
+E_q(\lambda):=\frac{P_q(\lambda)+P_q(-\lambda)}{2}=Q_q(\lambda^2)
+\)
+与
+\(
+O_q(\lambda):=\frac{P_q(\lambda)-P_q(-\lambda)}{2}
+\)，
+则奇滞后中性 \(P_q(1)+P_q(-1)=0\) 即 \(E_q(1)=0\)，从而 \(Q_q(1)=0\) 并推出 \((\lambda^2-1)\mid E_q(\lambda)\)。
+上述“两步尺度（\(\lambda^2\)）升维与投影门消元”的解释性构造，在此被严格化为一个纯代数、可审计的因子整除约束。
+在“先升维再投影”的口径下，这等价于：递推算子在奇滞后子通道上内生地携带一个差分型投影门（消去一个不可见方向），从而提供一个不引入额外计算开销且具备确定性可复算性的一致性审计抓手：在已核验范围内，只需检查 \(\sum_{i\ \mathrm{odd}}c_i\) 是否为 \(0\) 即可。
+\end{remark}
+
+\begin{conjecture}[Fourier 零点簇驱动的 Hankel 共振（可证伪机制假说）]\label{conj:pom-fourier-zero-driven-resonance}
+附录 \ref{app:fold-multiplicity} 将折叠多重度剖面 \(d_m(r)\) 的频谱写成 Riesz 乘积并定义谱零点集合
+\(
+\mathcal{Z}_m=\{k:\widehat d_m(k)=0\}
+\)
+（定义 \ref{def:fold-spectrum-zero-set}）。当 \(m+2\equiv 0\pmod 3\) 时，存在强制零点 \(k=F_{m+2}/2\in\mathcal{Z}_m\)（定理 \ref{thm:fold-spectrum-parity-zero}），并且更一般地 \(\mathcal{Z}_m\) 具有由 \(\gcd\)/余类并决定的刚性结构（推论 \ref{cor:fold-zero-coset-union}）。
+\par
+\textbf{假说：}这些“可定位的谱删去”（尤其是 \(m+2\equiv 0\pmod 3\) 的算术节拍点）会在 moment-kernel 的模态递推中诱发额外的线性约束，使得可见模态空间出现更稳定/更强的秩缺口，从而在 \(q\ge 9\) 的窗口内触发（或放大）定理 \ref{thm:pom-moment-resonance} 中的 Hankel 共振坍缩。
+\par
+\textbf{可证伪检验：}在用于审计 \(d_q\) 的 \(m\)-窗口内，对每个 \(m\) 计算局部 Hankel 块的数值条件数/奇异值剖面，并把 \(m+2\equiv 0\pmod 3\) 的点标注出来；若这些点并不呈现系统性的“更易坍缩/更稳定缺口”，则该机制解释应被否定。相应的对齐输出可由脚本 \texttt{scripts/exp\_fold\_collision\_col\_hankel\_alignment.py} 生成（见实现说明）。
+\end{conjecture}
+
+\input{08_projection_ontology_mathematics_part03c_charpoly_q16_q17}
+
+\begin{corollary}[模态约束的维数缺口]\label{cor:pom-resonance-deficit}
+在定理 \ref{thm:pom-moment-resonance} 的假设下，存在至少
+\(
+2h+1-d
+\)
+条线性无关的系数向量 $\alpha$ 使
+\[
+\sum_{\ell=-h}^{h}\alpha_\ell M_{q,\ell}(m)=0\qquad(m\ge m_0).
+\]
+因此共振的“约束维数缺口”为 $2h+1-d$。
+\end{corollary}
+\begin{proof}
+以 $\{M_{q,\ell}\}$ 为坐标的线性表示的像空间维数至多为最小实现维数 $d$，因此在 $2h+1$ 维坐标空间中，产生零序列的线性组合构成的核空间维数至少为 $2h+1-d$。取其一组基即得线性无关的约束族。证毕。
+\end{proof}
+
+\begin{definition}[共振缺口函数 \texorpdfstring{$\Delta(q)$}{Delta(q)}]\label{def:pom-resonance-gap-delta}
+对整数 \(q\ge 2\)，令 \(h=\lfloor q/2\rfloor\)，并令 \(d_q\) 表示 \(S_q(m)\) 的最小整系数递推阶数（等价地最小线性 realization 维数）。定义共振缺口函数
+$$
+\Delta(q):=\bigl(2\lfloor q/2\rfloor+1\bigr)-d_q.
+$$
+\end{definition}
+
+\begin{proposition}[缺口即约束维数：\texorpdfstring{$\Delta(q)$}{Delta(q)} 条线性无关的不可激发约束]\label{prop:pom-delta-counts-constraints}
+在定理 \ref{thm:pom-moment-resonance} 的假设下，若递推阶数为 \(d=d_q\)，则至少存在 \(\Delta(q)\) 条线性无关的系数向量 \(\alpha\) 使
+\[
+\sum_{\ell=-h}^{h}\alpha_\ell M_{q,\ell}(m)=0\qquad(m\ge m_0).
+\]
+因此 \(\Delta(q)\) 可作为“共振强度”的整数指纹：其数值等于至少可见的不可激发模态约束的维数下界。
+\end{proposition}
+
+\begin{proof}
+由推论 \ref{cor:pom-resonance-deficit} 立得：缺口为 \(2h+1-d_q=\Delta(q)\)。证毕。
+\end{proof}
+
+\begin{corollary}[缺口作为最小额外读出轴/纤维数下界]\label{cor:pom-delta-min-extra-readouts}
+沿用命题 \ref{prop:pom-delta-counts-constraints} 的记号。把
+\[
+M_q(m):=\bigl(M_{q,-h}(m),\ldots,M_{q,h}(m)\bigr)\in\RR^{2h+1}
+\]
+视为名义“模态坐标向量”。若在当前读出/编译接口下，\(S_q\) 的最小线性 realization 维数为 \(d_q\)，则
+存在一个秩至多为 \(d_q\) 的线性像空间，使得所有 \(m\ge m_0\) 的模态向量 \(M_q(m)\) 都落在一个至多 \(d_q\) 维的可见子空间中。
+因此不可见核的维数至少为
+\(
+\Delta(q)=2h+1-d_q
+\)，并且要在同一时间侧数据预算下把该核方向区分开来，至少需要引入 \(\Delta(q)\) 个额外线性独立的读出函数
+（等价地：\(\Delta(q)\) 条额外独立投影轴/纤维坐标）。
+\end{corollary}
+
+\begin{proof}
+线性代数事实：若线性映射 \(\Phi:\RR^{2h+1}\to\RR^{d_q}\) 的秩 \(\le d_q\)，则 \(\ker(\Phi)\) 的维数 \(\ge 2h+1-d_q\)。
+要使扩展读出 \((\Phi,\psi_1,\ldots,\psi_k)\) 在 \(\RR^{2h+1}\) 上对 \(\ker(\Phi)\) 的方向变为可区分，必要条件是
+\(\{\psi_i\}_{i=1}^k\) 在 \(\ker(\Phi)\) 上的限制张成其对偶空间，故 \(k\ge \dim\ker(\Phi)\ge \Delta(q)\)。
+将 \(\psi_i\) 解释为额外的独立线性可观测/读出轴（或本体语义下的额外纤维坐标）即得结论。
+\end{proof}
+
+\begin{definition}[共振 syndrome（校验子）]\label{def:pom-resonance-syndrome}
+沿用推论 \ref{cor:pom-delta-min-extra-readouts} 的模态向量
+\(
+M_q(m)\in\RR^{2h+1}
+\)。
+在共振假设下，存在一个维数至多为 \(d_q\) 的可见子空间 \(V_q^{\mathrm{vis}}\subseteq\RR^{2h+1}\)，使得对所有 \(m\ge m_0\) 有 \(M_q(m)\in V_q^{\mathrm{vis}}\)，并且其余维数缺口为 \(\Delta(q)=2h+1-d_q\)（定义 \ref{def:pom-resonance-gap-delta}）。
+\par
+取一组\textbf{线性无关}的线性泛函 \(L_{q,1},\dots,L_{q,\Delta(q)}\in(\RR^{2h+1})^\ast\)，它们均在 \(V_q^{\mathrm{vis}}\) 上消失（即对任意 \(v\in V_q^{\mathrm{vis}}\) 都有 \(L_{q,j}(v)=0\)），并定义线性映射
+\[
+L_q:\RR^{2h+1}\to\RR^{\Delta(q)},\qquad
+L_q(v):=\bigl(L_{q,1}(v),\dots,L_{q,\Delta(q)}(v)\bigr).
+\]
+定义\textbf{syndrome} 为向量值序列
+\[
+R_q(m):=L_q\bigl(M_q(m)\bigr)\in\RR^{\Delta(q)},
+\qquad
+R_{q,j}(m):=\bigl(R_q(m)\bigr)_j.
+\]
+\end{definition}
+
+\begin{corollary}[syndrome 的自洽零律与可证伪审计]\label{cor:pom-resonance-syndrome-audit}
+在定义 \ref{def:pom-resonance-syndrome} 的设定下，对所有 \(m\ge m_0\) 都有
+\[
+\boxed{\;R_q(m)\equiv 0\;}
+\qquad\text{（即 }R_{q,j}(m)=0,\ j=1,\dots,\Delta(q)\text{）}.
+\]
+因此：对任意来自模拟或真实输入的模态观测 \(\widehat M_q(m)\in\RR^{2h+1}\)，若存在某个 \(m\) 使 \(L_q(\widehat M_q(m))\neq 0\)，则该观测不满足共振窗口内的模态约束（定理 \ref{thm:pom-moment-resonance} 与命题 \ref{prop:pom-delta-counts-constraints} 的口径），从而在严格意义下不可由同一投影门实现的可见 realization 产生。
+\end{corollary}
+\begin{proof}
+由 \(M_q(m)\in V_q^{\mathrm{vis}}\) 以及 \(L_{q,j}|_{V_q^{\mathrm{vis}}}\equiv 0\)，立得 \(R_q(m)=L_q(M_q(m))=0\)。
+反向的“可证伪”陈述只是该零律的逆否命题表述。证毕。
+\end{proof}
+
+\begin{corollary}[寄存器意义：共振缺口 \texorpdfstring{$\Delta(q)$}{Delta(q)} 等于可省寄存器数]\label{cor:pom-resonance-register-savings}
+在共振假设下，存在一个可逆线性变换 \(T_q\in\mathrm{GL}_{2h+1}(\RR)\)，使得对所有 \(m\ge m_0\) 都有
+\[
+\boxed{\;
+T_q\,M_q(m)=\bigl(\widetilde M_q(m),\,0_{\Delta(q)}\bigr),\qquad
+\widetilde M_q(m)\in\RR^{d_q}\; }.
+\]
+因此：
+\begin{itemize}
+  \item 若非共振（\(d_q=2h+1\)），递推/存储模态向量一般需要 \(2h+1\) 个自由寄存器；
+  \item 若共振且 \(d_q<2h+1\)，则可将模态递推压缩到 \(d_q\) 维，名义坐标中多出的 \(\Delta(q)=2h+1-d_q\) 个寄存器在严格模型下被强制为零（可用作 syndrome 校验子）。
+\end{itemize}
+\end{corollary}
+\begin{proof}
+由定义 \ref{def:pom-resonance-syndrome}，存在线性映射 \(L_q:\RR^{2h+1}\to\RR^{\Delta(q)}\) 使得 \(\ker(L_q)\supseteq V_q^{\mathrm{vis}}\) 且 \(\mathrm{rank}(L_q)=\Delta(q)\)。
+取 \(\Delta(q)\) 个线性无关的行向量作为 \(L_q\) 的行，并再补上 \(d_q\) 个线性无关的行向量，使得合起来构成 \((\RR^{2h+1})^\ast\) 的一组基；将这 \(2h+1=d_q+\Delta(q)\) 个行向量堆叠成矩阵即得可逆的 \(T_q\in\mathrm{GL}_{2h+1}(\RR)\)。
+由于对所有 \(m\ge m_0\) 有 \(M_q(m)\in V_q^{\mathrm{vis}}\subseteq\ker(L_q)\)，故
+\(
+L_q(M_q(m))=0
+\)，等价于 \(T_q M_q(m)\) 的最后 \(\Delta(q)\) 个坐标恒为零；前 \(d_q\) 个坐标记为 \(\widetilde M_q(m)\) 即得所示形式。
+寄存器表述只是该坐标压缩的直接翻译。证毕。
+\end{proof}
+
+\begin{remark}[共振作为资源：约束缺口 \texorpdfstring{$\Delta(q)$}{Delta(q)} 增强审计性]\label{rem:pom-resonance-as-resource}
+当 \(\Delta(q)>0\) 时，共振不仅意味着“名义模态数过多”，更意味着存在 \(\Delta(q)\) 条独立的线性校验律可用于一致性审计：syndrome \(R_q(m)=L_q(M_q(m))\) 在严格模型下恒为零（推论 \ref{cor:pom-resonance-syndrome-audit}）。
+因此在已知最小递推/最小 realization 的口径下，高阶矩并不必然更“昂贵”：一方面其演化可由低维递推完成（维数 \(d_q\)），另一方面其额外的缺口 \(\Delta(q)\) 反而提供更多可证伪的自洽约束方向。
+这把共振从“观察现象”转写为“可用校验码”：缺口越大，可用的 syndrome 方程越多。
+\end{remark}
+
+\begin{remark}[已核验窗口内的 \texorpdfstring{$\Delta(q)$}{Delta(q)} 读数（\(q=9,\dots,17\)）]\label{rem:pom-delta-q9-17}
+在已核验的最小递推阶数 \(d_q\)（表 \ref{tab:fold_collision_moment_recursions_9_17}）下，可直接计算 \(\Delta(q)\) 并得到一个可跨版本对比的整数指纹序列。
+下表由脚本 \texttt{scripts/exp\_fold\_collision\_resonance\_nullmodes\_hankel.py} 一键生成：
+\end{remark}
+
+\input{sections/generated/tab_fold_collision_resonance_gap_delta_q_9_17}
+
+\begin{conjecture}[秩缺口阶梯：\texorpdfstring{$\Delta(q)$}{Delta(q)} 的阶梯像与偶性]\label{conj:pom-delta-staircase}
+在定义 \ref{def:pom-resonance-gap-delta} 的记号下，随着 \(q\) 增大，共振缺口 \(\Delta(q)\)（即名义模态上界与最小实现维数之间的秩缺口）应呈现稳定的阶梯结构：
+\begin{enumerate}
+  \item \textbf{偶性：}\(\Delta(q)\in 2\mathbb{Z}_{\ge 0}\)；
+  \item \textbf{阶梯像：}\(\Delta(q)\) 在宽 \(q\)-区间内保持常值，偶尔以步长 \(2\)（或其倍数）跳变。
+\end{enumerate}
+在已核验范围 \(q\le 23\) 内，\(\Delta(q)\) 的读数确实只出现 \(0,2,4,6\)，并显示出“长平台 + 偶数跃迁”的稳定迹象（见表 \ref{tab:fold_collision_resonance_gap_delta_q_9_17} 与推论 \ref{cor:pom-moment-dim-collapse} 的 \(d_q\) 列表）。
+\end{conjecture}
+
+\begin{remark}[双层降维框架：对称性降维与 Fibonacci 共振坍缩的来源可分解]\label{rem:pom-two-layer-dim-reduction}
+对固定的 \(q\)-重 moment-kernel，存在两类互不混淆的降维机制：
+\begin{itemize}
+  \item \textbf{普适层（群对称）：}由 \(S_q\)-置换对称，对称商核 \(\widetilde A_q\) 的维数满足
+  \(
+  \dim(\widetilde A_q)\le \binom{q+9}{9}=O(q^9)
+  \)
+  且保持同一 Perron 主尺度 \(r_q\)（命题 \ref{prop:pom-ak-symmetric-compression}）；
+  \item \textbf{特异层（算术共振）：}当 \(d_q<2\lfloor q/2\rfloor+1\) 时，由差分模态口径出现额外线性约束，其强度由缺口 \(\Delta(q)\) 量化（定义 \ref{def:pom-resonance-gap-delta} 与命题 \ref{prop:pom-delta-counts-constraints}）。
+\end{itemize}
+因此“从 \(Q^q\) 到多项式规模”的压缩可以被拆解为：先由群对称完成普适的直方图化降维，再由 Fibonacci 同余结构诱发的代数退化触发额外的算术坍缩（其可审计指纹即 \(\Delta(q)\) 与相应的线性证书）。
+\end{remark}
+
+\begin{remark}[可执行共振证书：Hankel-null 的 \texorpdfstring{$\mathrm{NullModes}(q)$}{NullModes(q)} 输出]\label{rem:pom-nullmodes-algorithm}
+对固定 \(q\)（例如 \(q=9,\dots,17\)），脚本 \texttt{scripts/exp\_fold\_collision\_resonance\_nullmodes\_hankel.py} 在审计窗口上计算序列 \(a_n:=S_q(n+2)\)，并构造尺寸 \((2h+1)\times L\) 的 Hankel 截断块 \(H=(a_{i+j})\)。
+当 \(d_q<2h+1\) 时，向量空间 \(\ker(H^{\mathsf T})\) 的维数至少为 \(\Delta(q)\)，其任意一组基
+\[
+\mathrm{NullModes}(q)=\{\alpha^{(j)}\}_{j=1}^{\Delta(q)}\subset\ZZ^{2h+1}
+\]
+给出一族可机读的“共振证书”：对审计窗口内所有可用的平移 \(t\)，都有
+\(
+\sum_{i=0}^{2h}\alpha^{(j)}_i\,a_{i+t}=0
+\)。
+该输出把“阶数下降/秩缺口”升级为可复现的显式线性组合证书，并可作为跨实现/跨版本的对比对象。
+\end{remark}
+
+\input{sections/generated/tab_fold_collision_resonance_nullmodes_q9_17}
+
+\input{sections/generated/tab_fold_collision_resonance_nullmodes_primitive_quotient_q9_17}
+
+\begin{remark}[Hankel-null 的递推向量与倍乘冗余：\texorpdfstring{$\Delta_{\mathrm{prim}}(q)$}{Delta_prim(q)} 的原始商空间（可复算）]\label{rem:pom-nullmodes-recurrence-plus-signature}
+在共振窗口 \(\Delta(q)>0\) 下，表 \ref{tab:fold_collision_resonance_nullmodes_q9_17} 给出的
+\(
+\mathrm{NullModes}(q)\subset\ZZ^{2\lfloor q/2\rfloor+1}
+\)
+是一组 Hankel-null 证书的整数基，其维数为 \(\Delta(q)\)。
+其中存在一个天然可识别的“递推向量”方向：将最小递推的特征多项式
+\[
+P_q(\lambda)=p_0+p_1\lambda+\cdots+p_{d_q}\lambda^{d_q}\qquad(p_{d_q}=1)
+\]
+的系数按低次到高次排列，并补零嵌入到长度 \(2\lfloor q/2\rfloor+1\) 的坐标中，
+\[
+\alpha^{\mathrm{rec}}_q:=(p_0,p_1,\ldots,p_{d_q},0,\ldots,0),
+\]
+则该向量必落在 Hankel-null 中（其代数机制与多项式倍乘结构见注 \ref{rem:pom-nullmodes-q14-poly-alignment}）。
+在已审计输出里，这一对齐甚至可直接\emph{逐项对照}：例如 \(q=9\) 时，定理 \ref{thm:pom-moment-resonance} 给出
+\(
+P_9(\lambda)=\lambda^7-2\lambda^6-\cdots-900\lambda+450
+\)，而表 \ref{tab:fold_collision_resonance_nullmodes_q9_17} 的首条证书向量正是
+\(
+\alpha^{(1)}=(450,-900,-62,-2819,-386,-62,-2,1,0)
+\)
+（即 \(\alpha^{\mathrm{rec}}_9\)）。
+\par
+然而，除 \(\alpha^{\mathrm{rec}}_q\) 外的其余 Hankel-null 向量往往并不对应新的“不可激发模态”独立约束：如注 \ref{rem:pom-nullmodes-q14-poly-alignment} 所述，低次倍乘 \(Q(\lambda)P_q(\lambda)\) 会自动生成额外的 Hankel-null 证书（只要窗口行数允许）。
+因此若要把 Hankel-null 的“额外向量”解释为结构信息，需要先剥离这一倍乘冗余。
+令 \(\mathcal{M}(P_q)\subseteq\ker(H^{\mathsf T})\) 表示由所有可容纳于窗口长度（即满足 \(\deg(QP_q)\le 2\lfloor q/2\rfloor\)）的倍乘 \(Q(\lambda)P_q(\lambda)\) 的系数向量生成的子空间，并定义原始缺口（primitive quotient）
+\[
+\boxed{
+\Delta_{\mathrm{prim}}(q):=\dim\Bigl(\ker(H^{\mathsf T})\ \big/\ \mathcal{M}(P_q)\Bigr).
+}
+\]
+在当前已审计的共振窗口 \(q=9,\dots,17\) 内，我们得到 \(\Delta_{\mathrm{prim}}(q)=0\)，并且表 \ref{tab:fold_collision_resonance_nullmodes_q9_17} 的每条 NullMode 都可显式分解为
+\(
+A^{(j)}(\lambda)=Q^{(j)}(\lambda)P_q(\lambda)
+\)；
+其乘子 \(Q^{(j)}\) 的系数向量列于表 \ref{tab:fold_collision_resonance_nullmodes_primitive_quotient_q9_17}。
+因此在该窗口内，Hankel-null 的多条“额外向量”应理解为同一最小递推在固定长度下的倍乘展开证书，而非额外独立约束。
+\end{remark}
+
+\input{parts/resonance/subsubsec__pom-resonance-hankel-null-integral-principalization}
+
+\begin{remark}[Hankel-null 与特征多项式的对齐：以 \texorpdfstring{$q=14$}{q=14} 为例]\label{rem:pom-nullmodes-q14-poly-alignment}
+对任一满足整系数线性递推的序列 \(a_n\)，若其特征多项式写成
+\[
+P(\lambda)=p_0+p_1\lambda+\cdots+p_d\lambda^d\qquad(p_d=1),
+\]
+则对所有可用平移 \(t\) 都有线性关系
+\(
+\sum_{j=0}^{d} p_j\,a_{t+j}=0
+\)。
+因此当 Hankel 块的行数 \(\ge d+1\) 时，系数向量 \((p_0,\dots,p_d,0,\dots,0)\) 必属于 \(\ker(H^{\mathsf T})\)；
+更一般地，任意低次多项式倍乘 \(Q(\lambda)P(\lambda)\) 也会给出额外的 Hankel-null 向量（只要行数允许）。
+\par
+在共振例 \(q=14\) 中，名义行数 \(2h+1=15\) 而最小阶 \(d_{14}=13\)，故 \(\Delta(14)=2\)。
+写
+\(
+P_{14}(\lambda)=\sum_{j=0}^{13}p_j\lambda^j
+\)
+与
+\(
+(\lambda+2)P_{14}(\lambda)=\sum_{j=0}^{14}\widetilde p_j\lambda^j
+\)。
+则表 \ref{tab:fold_collision_resonance_nullmodes_q9_17} 给出的两条 \(\mathrm{NullModes}(14)\) 可直接对齐为
+\[
+\alpha^{(1)}=(p_0,p_1,\ldots,p_{13},0),
+\qquad
+\alpha^{(2)}=(\widetilde p_0,\widetilde p_1,\ldots,\widetilde p_{14}),
+\]
+从而提供一个计算代价极低的审计一致性检查：只要把定理 \ref{thm:pom-moment-resonance} 中的 \(P_{14}\) 系数与表向量逐项对照即可。
+同时它也提示：\(\mathrm{NullModes}(q)\) 的某些“形状特征”往往更多反映了最小递推多项式的系数剖面，而不应被过早解释为差分模态索引 \(\ell\) 上的局部化效应；
+若要研究 \(\ell\)-方向的支撑/集中性，需要回到具体的模态 realization 上直接求解约束。
+\end{remark}
+
+\begin{remark}[算术节拍标注：\texorpdfstring{$m+2\equiv 0\pmod 3$}{m+2=0 mod 3} 点与 Hankel 证书对齐（可证伪）]\label{rem:pom-mod3-beat-alignment}
+附录 \ref{app:fold-multiplicity} 中定理 \ref{thm:fold-spectrum-parity-zero} 表明：当 \(m+2\equiv 0\pmod 3\)（等价于 \(F_{m+2}\) 为偶数）时，折叠多重度谱存在严格 Fourier 零点（从而零点集合 \(\mathcal{Z}_m\) 非空）。
+这给出一个无需拟合的、纯算术驱动的“节拍点集”。
+为检验“Fourier 零点簇驱动共振坍缩/递推阶数下降”的机制假说，我们在同一 \(m\) 轴上对齐
+\(\,F_{m+2}\mathrm{Col}_m\)（碰撞常数代理；附录 \ref{app:fold-multiplicity}）与
+共振区 \(q=9\) 的 Hankel 证书代理（固定 \(d_q\times d_q\) Hankel 子式的行列式规模），并用红点标注上述节拍点（图 \ref{fig:fold_collision_col_hankel_mod3_alignment_q9}；脚本 \texttt{scripts/exp\_fold\_collision\_col\_hankel\_mod3\_alignment.py} 一键生成）。
+若节拍点系统性对应子式规模的下凹/条件数劣化，则支持该机制；反之则给出直接的证伪信号。
+\end{remark}
+
+\input{sections/generated/fig_fold_collision_col_hankel_mod3_alignment_q9}
+

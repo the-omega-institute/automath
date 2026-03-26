@@ -1,0 +1,302 @@
+\paragraph{折叠纤维不可压缩性的编码、状态与步数统一律}
+以下陈述在本文既定符号与接口公理下成立。
+默认 \(m\ge 1\)，\(\Omega_m=\{0,1\}^m\)，\(\Fold_m:\Omega_m\twoheadrightarrow X_m\)，
+\[
+d_m(x):=\bigl|\Fold_m^{-1}(x)\bigr|,\qquad x\in X_m.
+\]
+
+\begin{theorem}[熵账本诱导的侧信息期望码长下界]\label{thm:xi-time-part9f-sideinfo-expected-length-lower-bound}
+取有限字母表 \(\Sigma\) 且 \(|\Sigma|=M\ge 2\)。
+设
+\[
+\Psi_m:\Omega_m\to X_m\times\Sigma^{\ast},\qquad
+\Psi_m(\omega)=\bigl(\Fold_m(\omega),R(\omega)\bigr),
+\]
+满足：
+\begin{enumerate}
+  \item \(\Psi_m\) 为单射；
+  \item 对每个 \(x\in X_m\)，码字族
+  \(
+  \{R(\omega):\Fold_m(\omega)=x\}
+  \)
+  在给定 \(x\) 的条件解码意义下为前缀码。
+\end{enumerate}
+则对任意 \(\mu\in\Delta(\Omega_m)\)，记 \(\pi:=(\Fold_m)_{\ast}\mu\)，并定义纤维均匀提升
+\[
+\mu^{\mathrm e}(\omega):=
+\frac{\pi(x)}{d_m(x)},
+\qquad x=\Fold_m(\omega),
+\]
+有
+\[
+\mathbb E_{\omega\sim\mu}\!\bigl[|R(\omega)|\bigr]
+\ge
+\frac{H(\mu)-H(\pi)}{\log M}
+=
+\frac{\mathbb E_{X\sim\pi}\!\bigl[\log d_m(X)\bigr]-D_{\mathrm{KL}}(\mu\Vert\mu^{\mathrm e})}{\log M}.
+\]
+\end{theorem}
+\begin{proof}
+固定 \(x\in X_m\)，令 \(l(\omega):=|R(\omega)|\)。
+由条件前缀码的 Kraft 不等式与标准熵--码长下界，
+\[
+\mathbb E\!\bigl[l(\omega)\mid X=x\bigr]
+\ge
+\frac{H(\mu(\cdot\mid X=x))}{\log M}.
+\]
+对 \(x\sim\pi\) 取期望得到
+\[
+\mathbb E[l(\omega)]
+\ge
+\frac{H(\mu\mid X)}{\log M}
+=
+\frac{H(\mu)-H(\pi)}{\log M}.
+\]
+另一方面，
+\[
+\log\mu^{\mathrm e}(\omega)=\log\pi(X)-\log d_m(X),
+\]
+故
+\[
+D_{\mathrm{KL}}(\mu\Vert\mu^{\mathrm e})
+=
+\mathbb E_{\mu}\!\left[\log\frac{\mu(\omega)}{\mu^{\mathrm e}(\omega)}\right]
+=
+-H(\mu)+H(\pi)+\mathbb E_{\pi}\!\bigl[\log d_m(X)\bigr].
+\]
+整理即得第二个等式。
+\end{proof}
+
+\begin{corollary}[可逆外置平均码长的线性下界]\label{cor:xi-time-part9f-no-constant-memory}
+沿用定理 \ref{thm:xi-time-part9f-sideinfo-expected-length-lower-bound}。
+取均匀微态基线 \(\mu=u_{\Omega_m}\)，则 \(H(\mu)=m\log 2\)。
+若 \(|X_m|=F_{m+2}\)，则
+\[
+\mathbb E_{\omega\sim u_{\Omega_m}}|R(\omega)|
+\ge
+\frac{m\log 2-\log F_{m+2}}{\log M}
+=
+\frac{m\log(2/\varphi)+O(1)}{\log M},
+\]
+其中 \(\varphi\) 为黄金比例。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9f-sideinfo-expected-length-lower-bound} 第一式，
+\[
+\mathbb E|R|
+\ge
+\frac{H(\mu)-H(\pi)}{\log M}.
+\]
+又 \(H(\pi)\le \log|X_m|=\log F_{m+2}\)，代入即得第一不等式。
+由 \(F_{m+2}=\Theta(\varphi^m)\) 得到渐近式。
+\end{proof}
+
+\begin{theorem}[算法信息坍缩的纤维对数体积上界与指数尾]\label{thm:xi-time-part9f-kolmogorov-fiber-saturation}
+设存在可计算外置
+\[
+\widetilde F_{m,S}(\omega):=
+\bigl(\Fold_m(\omega),\,r_{m,S}(\omega)\bigr),
+\]
+以及可计算恢复映射 \(R_{m,S}\) 使
+\(
+R_{m,S}\circ \widetilde F_{m,S}=\mathrm{id}_{\Omega_m}
+\)。
+则存在常数 \(c_S\)（仅依赖模板 \(S\)）使对所有 \(\omega\in\Omega_m\)：
+\[
+K\!\bigl(\omega\mid X\bigr)
+\le
+\left\lceil\log_2 d_m(X)\right\rceil+c_S,
+\qquad
+X:=\Fold_m(\omega).
+\]
+并且在 \(\omega\sim\mathrm{Unif}(\Omega_m)\) 下，对任意 \(t\ge 0\) 有
+\[
+\mathbb P\!\left(
+K(\omega\mid X)\le \log_2 d_m(X)-t
+\right)
+\le
+2^{-t+c_S}.
+\]
+\end{theorem}
+\begin{proof}
+由可计算恢复，给定 \((X,r_{m,S}(\omega))\) 可重构 \(\omega\)，故
+\[
+K(\omega\mid X)\le K(r_{m,S}(\omega)\mid X)+O_S(1).
+\]
+对固定 \(X=x\)，可区分候选数最多 \(d_m(x)\)，于是
+\[
+K(r_{m,S}(\omega)\mid X=x)\le \lceil \log_2 d_m(x)\rceil+O_S(1),
+\]
+得到上界。
+对尾界，固定 \(x\) 时满足
+\(
+K(\omega\mid x)\le \log_2 d_m(x)-t
+\)
+的对象个数至多 \(2^{\log_2 d_m(x)-t+O_S(1)}\)，在纤维均匀分布下概率至多 \(2^{-t+O_S(1)}\)。
+再对 \(x\) 按 \(\mathrm{Unif}(\Omega_m)\) 诱导分布平均，得到全局界。
+\end{proof}
+
+\begin{proposition}[线性预算下的字母表指数阈值]\label{prop:xi-time-part9f-alphabet-threshold}
+设存在可逆提升
+\[
+\Psi_m:\Omega_m\to X_m\times\Sigma^{\le L_m},
+\qquad
+\mathrm{pr}_{X_m}\circ\Psi_m=\Fold_m,
+\]
+且 \(\Psi_m\) 单射。
+若要求最坏情形长度满足
+\[
+L_m\le (\alpha+o(1))m,\qquad m\to\infty,
+\]
+则必有
+\[
+M\ge \exp\!\left(\frac{\log(2/\varphi)}{\alpha}\right).
+\]
+\end{proposition}
+\begin{proof}
+由 \(|R(\omega)|\le L_m\) 得 \(\mathbb E|R|\le L_m\)。
+结合推论 \ref{cor:xi-time-part9f-no-constant-memory}：
+\[
+\frac{L_m}{m}\ge \frac{\log(2/\varphi)}{\log M}+o(1).
+\]
+取 \(m\to\infty\) 并移项即得结论。
+\end{proof}
+
+\begin{theorem}[微正则模型空间中的有限描述搜索失效率]\label{thm:xi-time-part9f-microcanonical-search-failure}
+固定纤维谱 \(d\)，令
+\[
+\mathcal M_m(d):=
+\left\{
+F:\Omega_m\twoheadrightarrow X_m:\ |F^{-1}(x)|=d(x)\ \forall x
+\right\}.
+\]
+取先验 \(F\sim\mathrm{Unif}(\mathcal M_m(d))\)。
+记
+\(
+N:=|\Omega_m|,\ n:=|X_m|,\ w(x):=d(x)/N
+\)。
+若满足
+\[
+\log|\mathcal M_m(d)|=N\,H(w)+O(n\log N),\qquad
+n\log N=o(N),
+\]
+且 \(H(w)\) 不退化（例如 \(\inf_m H(w)>0\)），则对任意候选族 \(\mathcal C_m\subseteq\mathcal M_m(d)\) 满足
+\(
+\log|\mathcal C_m|=\mathrm{poly}(m)
+\)
+有
+\[
+\mathbb P(F\in\mathcal C_m)\le \exp\!\bigl(-\Theta(N)\bigr).
+\]
+在主线 \(N=2^m\) 下，失败概率为 \(\exp(-\Theta(2^m))\)。
+\end{theorem}
+\begin{proof}
+均匀先验下
+\[
+\mathbb P(F\in\mathcal C_m)=\frac{|\mathcal C_m|}{|\mathcal M_m(d)|}.
+\]
+取对数并代入规模展开：
+\[
+\log\mathbb P(F\in\mathcal C_m)
+\le
+\log|\mathcal C_m|-N\,H(w)+O(n\log N).
+\]
+由 \(n\log N=o(N)\)、\(\log|\mathcal C_m|=\mathrm{poly}(m)\)、\(\inf_m H(w)>0\)，右端为 \(-\Theta(N)\)。
+指数化即得结论。
+\end{proof}
+
+\begin{theorem}[有限状态流式实现的指数稀有性与典型最小宽度]\label{thm:xi-time-part9f-streaming-width-rarity}
+设 \(N^{\mathrm{bp}}_{m,S}(n)\) 为长度 \(m\)、宽度至多 \(S\) 的只读一次流式分支程序在 \(n\) 元输出上的可实现函数数，且
+\[
+N^{\mathrm{bp}}_{m,S}(n)\le n^{S}S^{2Sm}.
+\]
+在定理 \ref{thm:xi-time-part9f-microcanonical-search-failure} 的微正则先验下，
+\[
+\mathbb P\!\left(
+F\ \text{可由某个宽度}\le S\ \text{程序实现}
+\right)
+\le
+\exp\!\Bigl(
+2Sm\log S+S\log n-\log|\mathcal M_m(d)|
+\Bigr).
+\]
+特别地，在 \(N=2^m\) 主线下，存在常数 \(c>0\) 使
+\[
+\mathbb P\!\left(
+\min\{S:\ F\ \text{可由宽度}\le S\ \text{程序实现}\}
+\le
+c\,\frac{2^m}{m^2}
+\right)
+\le
+\exp(-\Theta(2^m)),
+\]
+即典型最小宽度为 \(\Omega(2^m/m^2)\)。
+\end{theorem}
+\begin{proof}
+第一式由可实现函数计数与并联合并直接得到。
+在 \(N=2^m\) 下取 \(S=c2^m/m^2\)。
+分子指数项 \(2Sm\log S+S\log n\) 为 \(O(c\,2^m)\)；
+分母主项 \(\log|\mathcal M_m(d)|\) 为 \(\Theta(2^m)\)。
+取 \(c\) 充分小即可使总指数为 \(-\Theta(2^m)\)，得到所述概率界与宽度下界。
+\end{proof}
+
+\begin{proposition}[高维极限下的边界全息饱和]\label{prop:xi-time-part9f-boundary-holographic-saturation}
+设 \(A\subset[0,1]^n\)，体 Gödel 维与边界 Gödel 维分别记为 \(d_G(A)\)、\(d_{\partial G}(A)\)。
+若满足
+\[
+\frac{n-1}{n}d_G(A)\le d_{\partial G}(A)\le d_G(A),
+\]
+则
+\[
+0\le d_G(A)-d_{\partial G}(A)\le \frac{1}{n}d_G(A).
+\]
+故在 \(d_G(A)\) 有界族上，\(n\to\infty\) 时边界尺度对体维的双对数信息损失消失。
+\end{proposition}
+\begin{proof}
+由夹逼式两端同减 \(d_{\partial G}(A)\) 立得不等式。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part9fa-dyadic-screen-ldpc-moment-median}
+
+\begin{theorem}[局部归一化步数的线性下界与指数左尾]\label{thm:xi-time-part9f-local-normalization-step-lower-bound}
+设 \(G_m(\omega)\) 为长度 \(m\) 的规范差总量，并假定存在密度极限
+\[
+g^{\ast}:=\lim_{m\to\infty}\frac{\mathbb E[G_m]}{m}=\frac49.
+\]
+设局部重写算法 \(S\) 在每一步至多消去 \(R\) 个单位规范差，且总步数 \(T_m(S)\) 满足
+\[
+G_m(\omega)\le R\,T_m(S)(\omega)\qquad(\forall\,\omega,m).
+\]
+若对任意 \(b<g^{\ast}\) 存在 \(c_b>0\) 使
+\[
+\mathbb P\!\left(\frac{G_m}{m}\le b\right)\le e^{-c_b m},
+\]
+则
+\[
+\liminf_{m\to\infty}\frac{T_m(S)}{m}\ge \frac{g^{\ast}}{R}
+=\frac{4}{9R}
+\quad\text{a.s.},
+\]
+并且对任意 \(a<4/(9R)\) 有
+\[
+\limsup_{m\to\infty}\frac1m\log
+\mathbb P\!\left(\frac{T_m(S)}{m}\le a\right)<0.
+\]
+\end{theorem}
+\begin{proof}
+由 \(G_m\le RT_m\) 得事件包含
+\[
+\left\{\frac{T_m}{m}\le a\right\}\subseteq
+\left\{\frac{G_m}{m}\le aR\right\}.
+\]
+若 \(a<g^{\ast}/R\)，则 \(aR<g^{\ast}\)，由左尾指数界得
+\[
+\mathbb P\!\left(\frac{T_m}{m}\le a\right)\le e^{-c_{aR}m},
+\]
+从而得到第二式。
+又由 \(\sum_m e^{-c_{aR}m}<\infty\) 与 Borel--Cantelli，几乎处处仅有限多个 \(m\) 使 \(T_m/m\le a\)。
+令 \(a\uparrow g^{\ast}/R\) 即得 \(\liminf\) 下界。
+\end{proof}
+
+\paragraph{统一解释}
+在折叠纤维语义下，受限于有限字母表、有限状态与局部重写半径的实现机制，未被消除的微观自由度将以侧信息密度、状态宽度与归一化步数三类量纲被强制外置，且其主尺度均由纤维体积与其熵账本决定。

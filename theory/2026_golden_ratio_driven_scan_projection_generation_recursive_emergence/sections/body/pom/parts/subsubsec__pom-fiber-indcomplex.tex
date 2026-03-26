@@ -1,0 +1,602 @@
+% Auto-split to keep each TeX source < 800 lines.
+%
+% Continuation of the POM fiber results (Part 03a):
+% - fiber topology (independence complexes),
+% - cubical/median geometry of fiber reconstruction graphs,
+% - and hypercube → Fold factor-chain audits.
+
+\subsubsection{纤维独立集复形的同伦型：球面—可缩二分律}\label{subsubsec:pom-fiber-indcomplex}
+
+本节在以局部重写核 \((011\leftrightarrow 100)\) 生成的折叠映射 \(\Fold_m:\Omega_m=\{0,1\}^m\twoheadrightarrow X_m\) 为唯一结构输入的前提下，抽取一组可独立成文的结果：
+其陈述不依赖退化谱直方图等外加锚点，亦不依赖解释性层；仅依赖折叠核的可逆位点结构（诱导图 \(\Gamma_x\)）与超立方体邻接（随机游走基线）。
+首先，把定理 \ref{thm:pom-fiber-indset-factorization} 中的独立集系统提升到拓扑层：把独立集族视为抽象单纯复形，以同伦型/同调压缩纤维的拓扑复杂度。
+在该核下，候选位点诱导图 \(\Gamma_x\) 的分量均为路径，因此独立集复形出现极强二分律：\emph{要么可缩，要么同伦等价于单一球面}，
+且球面维数由分量长度 \((\ell_i)\) 的闭式参数 \(\tau(x)\) 给出（定理 \ref{thm:pom-fiber-independence-complex-classification}）。
+
+\begin{definition}[独立集复形（independence complex）]\label{def:pom-independence-complex}
+对有限简单图 \(G=(V,E)\)，定义其\textbf{独立集复形}为抽象单纯复形
+\[
+\mathrm{Ind}^{\Delta}(G):=\{S\subseteq V:\ S\ \text{为}\ G\ \text{的独立集}\},
+\]
+其几何实现记为 \(|\mathrm{Ind}^{\Delta}(G)|\)。
+注意：按定义，\(\mathrm{Ind}^{\Delta}(G)\) 的面集合与独立集族 \(\mathsf{Ind}(G)\) 相同，
+但本节将其作为单纯复形（而非纯集合）来讨论同伦型与同调。
+\end{definition}
+
+\begin{lemma}[路径的独立集复形：\(\bmod 3\) 三周期二分律]\label{lem:pom-independence-complex-path}
+令 \(P_{\ell}\) 为含 \(\ell\) 个顶点的路径图（\(\ell\ge 0\)）。
+则 \(|\mathrm{Ind}^{\Delta}(P_{\ell})|\) 的同伦型满足如下完备分类：
+\[
+|\mathrm{Ind}^{\Delta}(P_{\ell})|
+\ \simeq\
+\begin{cases}
+\ast, & \ell\equiv 1\ (\mathrm{mod}\ 3),\\[2pt]
+S^{\lfloor(\ell+1)/3\rfloor-1}, & \ell\not\equiv 1\ (\mathrm{mod}\ 3),
+\end{cases}
+\]
+其中 \(\ast\) 表示可缩空间（contractible），并约定 \(S^{-1}\) 表示空复形的 \((-1)\)-维球面型端点记号（仅用于统一书写）。
+\end{lemma}
+
+\begin{proof}
+该结论可由如下递归削减得到；这里给出一条可审计的递归证明思路（证明细节可用离散 Morse 匹配补全）。
+\par
+\textbf{(1) 递归削减。}
+对路径 \(P_{\ell}\) 取端点 \(v_1\) 及其邻点 \(v_2\)。按是否包含端点分解独立集复形得到分解：
+\[
+\mathrm{Ind}^{\Delta}(P_{\ell})
+\ =\
+\mathrm{Ind}^{\Delta}(P_{\ell}\setminus v_1)\ \cup\
+\bigl(v_1\ast \mathrm{Ind}^{\Delta}(P_{\ell}\setminus\{v_1,v_2\})\bigr),
+\]
+且交为
+\(
+\mathrm{Ind}^{\Delta}(P_{\ell}\setminus\{v_1,v_2\})
+\)。
+对该三项分解施行一次可构造的同伦等价（把右侧锥体视作“附加一条可收缩胞腔”），
+可将 \(\mathrm{Ind}^{\Delta}(P_{\ell})\) 的同伦型递归地化为对 \(\mathrm{Ind}^{\Delta}(P_{\ell-3})\) 的一次悬挂（suspension），从而得到三周期现象。
+\par
+\textbf{(2) 初值核对。}
+直接枚举可得 \(\ell=0,1,2\) 的三种同伦型分别为
+\(
+S^{-1},\ \ast,\ S^{0}
+\)，
+与所述分类一致。
+\par
+\textbf{(3) 归纳闭合。}
+由 (1) 的“每推进 \(3\) 步则做一次悬挂”的递归规律与 (2) 的初值，
+即可得到 \(\ell\bmod 3\) 的完备二分律与球面维数闭式。
+证毕。
+\end{proof}
+
+\begin{lemma}[不交并与 join：独立集复形的乘法结构]\label{lem:pom-independence-complex-join}
+若 \(G=\bigsqcup_{i=1}^r G_i\) 为图的不交并，则
+\[
+\mathrm{Ind}^{\Delta}(G)\ \cong\ \mathrm{Ind}^{\Delta}(G_1)\ast\cdots\ast \mathrm{Ind}^{\Delta}(G_r),
+\]
+其中 \(\ast\) 为单纯 join。
+\end{lemma}
+\begin{proof}
+对不交并 \(G=\bigsqcup_i G_i\)，独立集 \(S\subseteq V(G)\) 等价于对每个分量选取独立集 \(S_i\subseteq V(G_i)\) 并取并 \(S=\bigsqcup_i S_i\)。
+这正是 join 的面描述：\(\sigma\in K_1\ast\cdots\ast K_r\) 当且仅当 \(\sigma=\bigsqcup_i \sigma_i\) 且 \(\sigma_i\in K_i\)。
+故得同构。证毕。
+\end{proof}
+
+\begin{theorem}[纤维独立集复形的完备分类：单球面或可缩]\label{thm:pom-fiber-independence-complex-classification}
+取任意 \(x\in X_m\)，并沿用定理 \ref{thm:pom-fiber-indset-factorization} 的候选位点诱导图
+\(\Gamma_x\)。
+设其连通分量依次同构于路径 \(P_{\ell_1},\dots,P_{\ell_r}\)。
+定义
+\[
+\tau(x):=\sum_{i=1}^r \left\lfloor\frac{\ell_i+1}{3}\right\rfloor.
+\]
+令
+\(
+K_x:=\mathrm{Ind}^{\Delta}(\Gamma_x)
+\)
+为 \(\Gamma_x\) 的独立集复形，则有如下二分律：
+\begin{enumerate}
+  \item 若存在某个分量满足 \(\ell_i\equiv 1\pmod 3\)，则 \(|K_x|\) 可缩；
+  \item 否则 \(|K_x|\simeq S^{\tau(x)-1}\)，即与单一球面同伦等价，且球面维数由 \(\tau(x)\) 给出闭式。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由引理 \ref{lem:pom-independence-complex-join}，
+\(
+K_x\cong \mathrm{Ind}^{\Delta}(P_{\ell_1})\ast\cdots\ast \mathrm{Ind}^{\Delta}(P_{\ell_r})
+\)。
+若某个分量 \(\ell_i\equiv 1\pmod 3\)，则由引理 \ref{lem:pom-independence-complex-path} 该分量可缩，而可缩空间与任何空间的 join 仍可缩，
+故 \(|K_x|\) 可缩。
+\par
+否则每个分量均同伦等价于球面 \(S^{\lfloor(\ell_i+1)/3\rfloor-1}\)。
+而球面的 join 满足
+\(
+S^{a}\ast S^{b}\simeq S^{a+b+1}
+\)；
+对 \(r\) 个分量迭代得到
+\[
+|K_x|\ \simeq\ S^{\sum_i(\lfloor(\ell_i+1)/3\rfloor-1)+(r-1)}
+\ =\ S^{\tau(x)-1}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[纤维单纯同调刚性：唯一维度、秩为 \(1\)]\label{cor:pom-fiber-independence-complex-homology}
+在定理 \ref{thm:pom-fiber-independence-complex-classification} 的设定下，
+若 \(|K_x|\) 非可缩，则其约化同调满足
+\[
+\widetilde H_j\bigl(|K_x|;\mathbb Z\bigr)\ \cong\
+\begin{cases}
+\mathbb Z,& j=\tau(x)-1,\\
+0,& j\neq \tau(x)-1.
+\end{cases}
+\]
+特别地，当 \(|K_x|\) 非可缩时，其约化 Euler 特征为 \(\widetilde\chi(|K_x|)=(-1)^{\tau(x)-1}\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-independence-complex-classification}，非可缩情形下 \(|K_x|\simeq S^{\tau(x)-1}\)；
+球面的约化同调与 Euler 特征为标准结论。证毕。
+\end{proof}
+
+\begin{remark}[window-\(6\) 有限窗审计]\label{rem:pom-fiber-indcomplex-audit-m6}
+在最小窗 \(m=6\) 上，纤维独立集复形的二分律与 \(\tau(x)\) 的闭式可直接枚举核验。
+相应审计表由脚本生成如下：
+\input{sections/generated/tab_fold_fiber_homotopy_m6}
+\end{remark}
+
+\subsubsection{逆代换次数分布：分量独立、\texorpdfstring{$\varphi$}{phi}-闭式密度与实根性}\label{subsubsec:pom-fiber-rewrite-statistics}
+
+定理 \ref{thm:pom-fiber-indset-factorization} 把纤维 \(\Fold_m^{-1}(x)\) 完全等价为诱导图 \(\Gamma_x\) 的独立集系统，
+并给出生成函数 \(Z_x(t)\) 的乘法分解。
+本节将其读作一条“纤维内统计力学”接口：在纤维上取均匀分布时，
+逆代换次数 \(r(\omega)\)（等价于独立集大小）出现严格的分量独立性，
+并在大路径极限中给出 \(\varphi\)-代数的均值/方差密度。
+
+\begin{definition}[纤维内逆代换次数随机变量]\label{def:pom-fiber-rewrite-rv}
+固定 \(x\in X_m\)，在纤维 \(\Fold_m^{-1}(x)\) 上取均匀分布。
+记随机变量
+\[
+R_x(\omega):=r(\omega)\qquad(\omega\in\Fold_m^{-1}(x)),
+\]
+即从 \(x\) 生成 \(\omega\) 所用逆代换 \(100\mapsto 011\) 的次数。
+在定理 \ref{thm:pom-fiber-indset-factorization} 的规范双射下，\(R_x\) 等于对应独立集的大小。
+\end{definition}
+
+\begin{proposition}[分量独立分解：\(R_x\) 为独立和]\label{prop:pom-fiber-rewrite-independent-sum}
+设 \(\Gamma_x\cong\bigsqcup_{i=1}^r P_{\ell_i}\)。
+令 \(R_{\ell}\) 表示在路径 \(P_{\ell}\) 的独立集族 \(\mathsf{Ind}(P_{\ell})\) 上取均匀分布时的独立集大小。
+则存在相互独立的随机变量 \(R_{\ell_1},\dots,R_{\ell_r}\) 使得
+\[
+R_x\ \overset{d}{=}\ \sum_{i=1}^r R_{\ell_i}.
+\]
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-indset-factorization}，
+\(
+\Fold_m^{-1}(x)\cong \mathsf{Ind}(\Gamma_x)
+\)，
+且当 \(\Gamma_x=\bigsqcup_i P_{\ell_i}\) 时有集合分解
+\(
+\mathsf{Ind}(\Gamma_x)\cong \prod_i \mathsf{Ind}(P_{\ell_i})
+\)。
+因此在纤维上的均匀分布等价于在该笛卡尔乘积上的均匀分布，从而各分量投影独立且均匀；
+而独立集大小在分量上可加，结论成立。证毕。
+\end{proof}
+
+\begin{proposition}[路径分量的热力学闭式：主特征值 \(\lambda(t)\) 与密度常数]\label{prop:pom-path-indset-thermo-constants}
+对路径独立集多项式 \(I_{\ell}(t)\)（定义 \ref{def:pom-fiber-adm-path}），有递推
+\[
+I_{\ell}(t)=I_{\ell-1}(t)+t\,I_{\ell-2}(t)\qquad(\ell\ge 2),
+\qquad
+I_0(t)=1,\ I_1(t)=1+t.
+\]
+令
+\[
+\lambda(t):=\frac{1+\sqrt{1+4t}}{2}\qquad(t>0),
+\]
+则对固定 \(t>0\)，有 \(I_{\ell}(t)=\lambda(t)^{\ell+O(1)}\)。
+在 hard-core 权重分布
+\(
+\mathbb P_t(S)\propto t^{|S|}
+\)
+下（\(S\in\mathsf{Ind}(P_{\ell})\)），独立集大小 \(R_{\ell}^{(t)}:=|S|\) 满足线性定标律
+\[
+\mathbb{E}_t[R_{\ell}^{(t)}]=\rho(t)\,\ell+O(1),\qquad
+\mathrm{Var}_t(R_{\ell}^{(t)})=\sigma^2(t)\,\ell+O(1),
+\]
+其中密度常数为
+\[
+\rho(t)=\frac{t\lambda'(t)}{\lambda(t)},\qquad
+\sigma^2(t)=\bigl(t\partial_t\bigr)^2\log\lambda(t).
+\]
+特别地，对均匀独立集分布（\(t=1\)）有闭式
+\[
+\rho=\rho(1)=\frac{1}{\varphi^2+1},
+\qquad
+\sigma^2=\sigma^2(1)=\frac{3}{5\sqrt5\,\varphi}-\frac{1}{5\varphi^2},
+\]
+其中 \(\varphi=(1+\sqrt5)/2\)。
+\end{proposition}
+\begin{proof}
+递推来自对末端顶点“选/不选”的分类讨论（亦见定理 \ref{thm:pom-fiber-signed-index-periodicity} 的证明）。
+其特征方程为 \(z^2=z+t\)，主根正是 \(\lambda(t)\)，从而
+\(
+I_{\ell}(t)=A(t)\lambda(t)^{\ell}+B(t)\lambda_-(t)^{\ell}
+\)
+且 \(|\lambda_-(t)|<\lambda(t)\)（\(t>0\)），故 \(\log I_{\ell}(t)=\ell\log\lambda(t)+O(1)\)。
+\par
+对分布 \(\mathbb P_t\)，由标准恒等式
+\(
+\mathbb E_t[|S|]=t(\partial_t\log I_{\ell})(t)
+\)、
+\(
+\mathrm{Var}_t(|S|)=(t\partial_t)^2\log I_{\ell}(t)
+\)
+得
+\(
+\mathbb E_t[|S|]=\ell\,t(\partial_t\log\lambda)(t)+O(1)
+\)、
+\(
+\mathrm{Var}_t(|S|)=\ell\,(t\partial_t)^2\log\lambda(t)+O(1)
+\)，
+即所示密度形式。
+最后把 \(\lambda'(t)=1/\sqrt{1+4t}\) 代入并取 \(t=1\) 即得闭式常数；证毕。
+\end{proof}
+
+\begin{corollary}[一般纤维的均值/方差主项由 \(\sum \ell_i\) 控制]\label{cor:pom-fiber-rewrite-mean-var-density}
+在定义 \ref{def:pom-fiber-rewrite-rv} 的均匀纤维测度下，若 \(\Gamma_x\cong\bigsqcup_{i=1}^r P_{\ell_i}\)，则
+\[
+\mathbb E[R_x]=\rho\sum_{i=1}^r \ell_i+O(r),
+\qquad
+\mathrm{Var}(R_x)=\sigma^2\sum_{i=1}^r \ell_i+O(r),
+\]
+其中 \(\rho,\sigma^2\) 为命题 \ref{prop:pom-path-indset-thermo-constants} 的常数（\(t=1\)）。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-fiber-rewrite-independent-sum} 的独立和分解，以及命题 \ref{prop:pom-path-indset-thermo-constants} 的线性定标律，对各分量求和即得。证毕。
+\end{proof}
+
+\begin{theorem}[实根性 \(\Rightarrow\) 超对数凹：纤维逆代换次数分布的强单峰性]\label{thm:pom-fiber-rewrite-realroot-ulc}
+对任意 \(\ell\ge 0\)，路径独立集多项式 \(I_{\ell}(t)\) 仅有实负根。
+从而对任意 \(x\in X_m\)，其纤维生成函数
+\(
+Z_x(t)=\prod_{i=1}^r I_{\ell_i}(t)
+\)
+亦仅有实负根。
+因此系数序列 \(\bigl([t^k]Z_x(t)\bigr)_{k\ge 0}\) 为\textbf{超对数凹}（ultra log-concave）序列，
+特别地满足 Newton 型不等式并且（在非退化情形下）严格单峰。
+\end{theorem}
+\begin{proof}
+对路径 \(P_{\ell}\)，独立集多项式的实根性可由多条等价路线给出：
+一条标准路径是利用“独立集多项式 = 线图上的匹配多项式”并调用匹配多项式的实根性定理；
+亦可直接引用 claw-free 图独立集多项式的实根性结论（路径为其特例）。
+因此 \(I_{\ell}(t)\) 仅有实负根。
+\par
+由定理 \ref{thm:pom-fiber-indset-factorization} 的分解 \(Z_x(t)=\prod_i I_{\ell_i}(t)\)，
+多项式的根集合并集性质立得 \(Z_x(t)\) 亦仅有实负根。
+最后，带非负系数的实根多项式在负轴根假设下，其系数满足 Newton 不等式，从而超对数凹与单峰性成立。证毕。
+\end{proof}
+
+\input{parts/cor__pom-fiber-rewrite-poisson-binomial}
+
+\begin{corollary}[局部 CLT（纤维内）：中心区间的正态离散逼近]\label{cor:pom-fiber-rewrite-local-clt}
+沿用定义 \ref{def:pom-fiber-rewrite-rv}。
+若 \(\mathrm{Var}(R_x)\to\infty\)（例如当 \(\sum_i \ell_i\to\infty\) 且分量规模不退化时），
+则 \(R_x\) 的中心化标准化满足中心极限定理；并且在中心窗口内满足局部极限定理：
+存在误差界使得 \(\mathbb P(R_x=k)\) 可由对应正态密度的离散化一致逼近，
+其主阶误差为 \(O(\mathrm{Var}(R_x)^{-1/2})\)。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-fiber-rewrite-independent-sum}，\(R_x\) 为独立分量和；
+而命题 \ref{prop:pom-path-indset-thermo-constants} 给出方差的线性增长密度。
+在 \(\mathrm{Var}(R_x)\to\infty\) 的 regime 下，
+可对独立和应用 CLT/局部 CLT 判据；
+亦可利用定理 \ref{thm:pom-fiber-rewrite-realroot-ulc} 给出的实根性，
+将分布视为实根生成函数系数并调用相应的实根多项式局部极限定理。
+证毕。
+\end{proof}
+
+\subsubsection{纤维重构图与 Fibonacci cube：Cartesian 分解、立方面计数与 Gray--Hamilton 结构}\label{subsubsec:pom-fiber-reconstruction-cubical}
+
+独立集模型不仅给出纤维的计数与分布，还给出一个\emph{可审计的内部几何对象}：
+把“单次逆代换开关”作为边关系，纤维自然携带一张立方图结构。
+在 \((011\leftrightarrow 100)\) 核下，该结构严格分解为 Fibonacci cube 的 Cartesian 乘积，
+从而自动获得 median/CAT(0) 立方几何与可枚举的 Hamilton 结构。
+
+\begin{definition}[纤维重构图]\label{def:pom-fiber-reconstruction-graph}
+固定 \(x\in X_m\)。在定理 \ref{thm:pom-fiber-indset-factorization} 的规范同构
+\(\Fold_m^{-1}(x)\cong \mathsf{Ind}(\Gamma_x)\)
+下，定义\textbf{纤维重构图} \(\mathcal F_x\) 为如下无向图：
+顶点集为 \(\mathsf{Ind}(\Gamma_x)\)，两顶点 \(S,S'\) 相邻当且仅当其对称差满足
+\(
+|S\triangle S'|=1
+\)
+（即一次合法的“开关”只改变一个候选位点的选取状态）。
+通过上述同构，亦可将 \(\mathcal F_x\) 视为定义在 \(\Fold_m^{-1}(x)\) 上的相邻结构。
+\end{definition}
+
+\begin{definition}[Fibonacci cube]\label{def:pom-fibonacci-cube}
+对整数 \(n\ge 0\)，定义 \textbf{Fibonacci cube}（Fibonacci 立方图）\(\Gamma_n\) 为如下图：
+其顶点为长度 \(n\) 的二元词 \(b_1\cdots b_n\in\{0,1\}^n\) 且禁止相邻 \(11\)；
+两顶点相邻当且仅当它们恰在一位不同（Hamming 距离 \(1\)），且翻转后仍合法。
+\end{definition}
+
+\begin{theorem}[Cartesian 乘积分解与立方几何闭式]\label{thm:pom-fiber-reconstruction-cartesian-product}
+设 \(\Gamma_x\cong\bigsqcup_{i=1}^r P_{\ell_i}\)。
+则纤维重构图满足自然同构
+\[
+\mathcal F_x\ \cong\ \prod_{i=1}^r \Gamma_{\ell_i},
+\]
+其中右端为图的 Cartesian 乘积。
+进一步，若记 \(\dim_{\square}(G)\) 为图 \(G\) 中最大立方子图的维数（最大 \(k\) 使 \(Q_k\) 为其诱导子图），则有闭式
+\[
+\dim_{\square}(\mathcal F_x)=\sum_{i=1}^r \left\lceil\frac{\ell_i}{2}\right\rceil,
+\qquad
+\mathrm{diam}(\mathcal F_x)=\sum_{i=1}^r \ell_i.
+\]
+\end{theorem}
+\begin{proof}
+对不交并 \(\Gamma_x=\bigsqcup_i P_{\ell_i}\)，独立集族分解为笛卡尔乘积，
+而“对称差为 \(1\)”的相邻关系恰对应在某一个分量上翻转一位、其余分量保持不变；
+故 \(\mathcal F_x\) 为各分量独立集图的 Cartesian 乘积。
+另一方面，路径 \(P_{\ell}\) 的独立集可编码为长度 \(\ell\) 的合法二元词（是否选取该顶点），且相邻当且仅当翻转一位并保持合法，
+因此分量图同构于 \(\Gamma_{\ell}\)，从而得到所示分解。
+\par
+对维数：\(\Gamma_{\ell}\) 的 \(k\)-立方子图等价于在路径 \(P_{\ell}\) 中选取 \(k\) 个两两不相邻的顶点作为“可独立开关坐标”，
+故最大 \(k\) 为路径的最大独立集大小 \(\lceil \ell/2\rceil\)。
+Cartesian 乘积的立方维数可加，得 \(\dim_{\square}(\mathcal F_x)=\sum_i\lceil\ell_i/2\rceil\)。
+\par
+对直径：\(\Gamma_{\ell}\) 的两端点可取为交错词 \(1010\cdots\) 与 \(0101\cdots\)，二者在 \(\ell\) 位上全异，
+并可通过逐位翻转构造一条长度 \(\ell\) 的合法路径，从而 \(\mathrm{diam}(\Gamma_{\ell})=\ell\)；
+Cartesian 乘积的直径为各分量直径之和，得 \(\mathrm{diam}(\mathcal F_x)=\sum_i\ell_i\)。
+证毕。
+\end{proof}
+
+\begin{definition}[Fibonacci cube 的 \(f\)-向量与 \(f\)-多项式]\label{def:pom-fibcube-fvector}
+令 \(C(n,k)\) 表示 \(\Gamma_n\) 中的 \(k\)-维子立方体个数（\(k=0\) 为顶点数，\(k=1\) 为边数）。
+定义其 \(f\)-多项式为
+\[
+C_n(u):=\sum_{k\ge 0} C(n,k)\,u^k.
+\]
+对一般纤维 \(\mathcal F_x\)，同理令
+\(
+F_x(u):=\sum_{k\ge 0} f_k(\mathcal F_x)\,u^k
+\)
+为其 \(f\)-多项式。
+\end{definition}
+
+\begin{theorem}[Fibonacci cube 的 \(f\)-向量闭式：二维递推、母函数与系数公式]\label{thm:pom-fibcube-fvector-closed}
+对一切 \(n\ge 2\)、\(k\ge 0\)，有二维递推
+\[
+C(n,k)=C(n-1,k)+C(n-2,k)+C(n-2,k-1),
+\]
+并配以初值 \(C(0,0)=1\)、\(C(1,0)=2\)、\(C(1,1)=1\)（其余为 \(0\)）。
+其双变量生成函数为有理函数，并且 \(C(n,k)\) 具有显式系数公式。
+相应的闭式输出由可复现脚本生成如下片段给出：
+\input{sections/generated/eq_fibonacci_cube_bivariate_gf}
+\input{sections/generated/eq_fibonacci_cube_coeff_formula}
+并在小 \(n\) 上给出可核验的 \(f\)-向量表（含 \(n=6\) 行）：
+\input{sections/generated/tab_fibonacci_cube_fvector_small_n}
+\end{theorem}
+
+\begin{proof}
+递推由末两位分解得到：对 \(\Gamma_n\) 的顶点合法性，末位为 \(0\) 与末两位为 \(10\) 两类互补且不交；
+对每一类，子立方体计数分别与 \(\Gamma_{n-1}\)、\(\Gamma_{n-2}\) 的计数同型，
+并在“末两位为 \(10\)”分支中额外出现一条可自由翻转的末位坐标，贡献 \(C(n-2,k-1)\)。
+其余两条闭式（生成函数与系数公式）可由递推在 \((n,k)\) 平面上作标准生成函数求解与系数提取得到。
+证毕。
+\end{proof}
+\input{parts/cor__pom-fiber-reconstruction-cubical-addenda}
+\begin{corollary}[纤维 \(f\)-多项式的乘积因子化]\label{cor:pom-fiber-fpoly-factorization}
+若 \(\Gamma_x\cong\bigsqcup_{i=1}^r P_{\ell_i}\)，则纤维重构图 \(\mathcal F_x\) 的 \(f\)-多项式满足严格因子化
+\[
+F_x(u)=\prod_{i=1}^r C_{\ell_i}(u).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-reconstruction-cartesian-product}，
+\(
+\mathcal F_x\cong \prod_i \Gamma_{\ell_i}
+\)。
+而 Cartesian 乘积的立方子图结构在分量上独立，故 \(k\)-立方体计数的母函数在分量上乘法因子化，即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[Fibonacci cube 的 Gray--Hamilton 路径]\label{thm:pom-fibcube-gray-hamilton}
+定义序列 \((\mathcal G_n)_{n\ge 0}\) 为如下递归构造的顶点序列（以二元词表示顶点）：
+\[
+\mathcal G_0=(\epsilon),\qquad
+\mathcal G_1=(0,1),\qquad
+\mathcal G_n=\ 0\,\mathrm{rev}(\mathcal G_{n-1})\ \cdot\ 10\,\mathrm{rev}(\mathcal G_{n-2})\quad(n\ge 2),
+\]
+其中 \(\epsilon\) 为空词，\(\mathrm{rev}\) 为逆序，
+而 \(0\,\mathrm{rev}(\mathcal G_{n-1})\)（或 \(10\,\mathrm{rev}(\mathcal G_{n-2})\)）表示先取逆序再对序列中每个词添加共同前缀；
+连接符号“\(\cdot\)”表示串接。
+则 \(\mathcal G_n\) 给出 \(\Gamma_n\) 的一条 Hamilton 路径：序列覆盖全部顶点且相邻两项恰差一位。
+相应的有限窗审计表由脚本输出如下：
+\input{sections/generated/tab_fibonacci_cube_gray_hamilton_audit}
+\end{theorem}
+
+\begin{proof}
+对 \(n\) 归纳。递归构造把 \(\Gamma_n\) 的顶点按首两位分解为两块不交集合
+\(
+\{0\}\times V(\Gamma_{n-1})
+\)
+与
+\(
+\{10\}\times V(\Gamma_{n-2})
+\)：
+前者给出所有首位为 \(0\) 的合法词，后者给出所有首两位为 \(10\) 的合法词。
+\par
+在两块内部，归纳假设给出 \(\Gamma_{n-1}\)、\(\Gamma_{n-2}\) 的 Hamilton 路径；
+由于图无向，逆序不改变“相邻仅差一位”的性质，
+而添加共同前缀亦保持相邻只差一位。
+因此两段
+\(
+0\,\mathrm{rev}(\mathcal G_{n-1})
+\)
+与
+\(
+10\,\mathrm{rev}(\mathcal G_{n-2})
+\)
+分别是两块子图上的 Hamilton 路径。
+\par
+剩余只需验证拼接处的相邻性。
+记 \(\mathrm{first}(\mathcal G_n)\)、\(\mathrm{last}(\mathcal G_n)\) 为序列首/末项。
+由递归式与基例 \(\mathcal G_0=(\epsilon)\)、\(\mathcal G_1=(0,1)\) 可归纳得到端点恒等式
+\(
+\mathrm{first}(\mathcal G_{n-1})=0\,\mathrm{last}(\mathcal G_{n-2})
+\)。
+因此第一段的末项为
+\(
+0\,\mathrm{first}(\mathcal G_{n-1})=00\,\mathrm{last}(\mathcal G_{n-2})
+\)，
+第二段的首项为
+\(
+10\,\mathrm{last}(\mathcal G_{n-2})
+\)，
+二者仅首位不同，故 Hamming 距离为 \(1\)。
+于是串接后得到覆盖全部顶点且相邻差一位的 Hamilton 路径。证毕。
+\end{proof}
+
+\begin{corollary}[纤维的常延迟遍历：一位开关的全预像枚举]\label{cor:pom-fiber-constant-delay-traversal}
+对任意 \(x\in X_m\)，纤维重构图 \(\mathcal F_x\) 存在 Hamilton 路径。
+等价地，纤维 \(\Fold_m^{-1}(x)\) 的全部预像可按“每步仅施行一次局部逆代换开关”的方式常延迟枚举。
+在 \(m=6\) 的最小窗上，分量分解、立方维数与代表性纤维的内部几何审计表由脚本生成如下：
+\input{sections/generated/tab_fold_fiber_reconstruction_invariants_m6}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-reconstruction-cartesian-product} 的 Cartesian 分解，
+\(
+\mathcal F_x\cong \prod_i \Gamma_{\ell_i}
+\)。
+对每个分量 \(\Gamma_{\ell_i}\) 取定理 \ref{thm:pom-fibcube-gray-hamilton} 的 Hamilton 路径，
+其 Cartesian 乘积可用标准“外层 Gray 码 \(\times\) 内层 Gray 码”构造得到 Hamilton 路径；
+从而 \(\mathcal F_x\) 亦存在 Hamilton 路径，并在每一步仅翻转一个坐标位点（一次开关）。
+证毕。
+\end{proof}
+
+\subsubsection{超立方体随机游走的折叠因子链：可逆性、零自环与谱常数下界}\label{subsubsec:pom-fold-factor-chain}
+
+本节给出一条与“折叠细节”解耦的概率论接口：以 \(\Omega_m=\{0,1\}^m\) 上的简单随机游走为微观基线，
+把折叠 \(\Fold_m\) 视为观测映射并在稳定层 \(X_m\) 上定义其因子链。
+结论表明：在自然的纤维均匀条件化下，该因子链不仅可逆且无自环，
+并且其 Poincar\'e/对数 Sobolev 常数在严格意义上\emph{不劣于}超立方体随机游走本身。
+
+\begin{definition}[超立方体简单随机游走与折叠因子链]\label{def:pom-fold-factor-chain}
+在微态空间 \(\Omega_m=\{0,1\}^m\) 上取无自环的简单随机游走核 \(P^{\square}_m\)：
+对 \(\omega,\omega'\in\Omega_m\)，令
+\[
+P^{\square}_m(\omega,\omega')
+:=
+\begin{cases}
+1/m,& \mathrm{Ham}(\omega,\omega')=1,\\
+0,& \text{否则}.
+\end{cases}
+\]
+该链以均匀分布 \(\mu_m(\omega)=2^{-m}\) 为平稳分布并可逆。
+\par
+定义稳定层上的\textbf{折叠因子链}为推前—纤维均匀提升的压缩核
+\[
+\overline P^{\square}_m\ :=\ P_m\circ P^{\square}_m\circ Q_m:\Delta(X_m)\to\Delta(X_m),
+\]
+其中 \(P_m=(\Fold_m)_*\)、\(Q_m\) 为纤维均匀提升（见 \S\ref{subsec:pom-information-ledger}）。
+在转移概率层面，这等价于：先在当前稳定类型 \(x\) 的纤维上取均匀微态 \(\omega\in\Fold_m^{-1}(x)\)，
+做一步超立方体翻转，再读出下一步的稳定类型。
+\end{definition}
+
+\begin{proposition}[可逆性与零自环]\label{prop:pom-fold-factor-chain-reversible-noloop}
+令
+\(
+\pi_m(x):=d_m(x)/2^m
+\)
+为均匀微态的折叠推前分布。
+则 \(\pi_m\) 为 \(\overline P^{\square}_m\) 的平稳分布并满足细致平衡（可逆性）。
+此外，对任意 \(x\in X_m\) 有
+\[
+\overline P^{\square}_m(x,x)=0.
+\]
+\end{proposition}
+\begin{proof}
+由定义 \ref{def:pom-fold-factor-chain}，
+\(
+Q_m\pi_m
+\)
+恰为 \(\Omega_m\) 上的均匀分布：对任意 \(\omega\)，
+\(
+(Q_m\pi_m)(\omega)=\pi_m(\Fold_m(\omega))/d_m(\Fold_m(\omega))=(d_m/2^m)/d_m=2^{-m}
+\)。
+因此
+\[
+\pi_m\overline P^{\square}_m
+=
+P_m\bigl((Q_m\pi_m)P^{\square}_m\bigr)
+=
+P_m(Q_m\pi_m)
+=\pi_m,
+\]
+即 \(\pi_m\) 平稳。
+同理，由 \(\mu_m\) 下 \(P^{\square}_m\) 的可逆性与压缩形式 \(\overline P^{\square}_m=P_mP^{\square}_mQ_m\)，
+对任意 \(x,y\) 可将流量 \(\pi_m(x)\overline P^{\square}_m(x,y)\) 写成跨纤维的无向边计数并利用对称性，
+得到细致平衡。
+\par
+对零自环：若 \(\omega,\omega'\in\Omega_m\) 为超立方体相邻（Hamming 距离 \(1\)），则
+\(
+N(\omega')-N(\omega)=\pm F_{k+1}
+\)
+对某个 \(1\le k\le m\)。
+由引理 \ref{lem:pom-one-bit}（单隐藏位分解），同一稳定类型 \(x\) 的纤维内两点的值差只能为 \(0\) 或 \(\pm F_{m+2}\)。
+由于 \(F_{k+1}<F_{m+2}\)，故不可能出现 \(\Fold_m(\omega')=\Fold_m(\omega)\)。
+因此一步超立方体翻转必改变稳定类型，等价于 \(\overline P^{\square}_m(x,x)=0\)。证毕。
+\end{proof}
+
+\begin{definition}[谱隙与对数 Sobolev 常数]\label{def:pom-gap-lsi}
+对有限状态可逆 Markov 核 \(P\)（平稳分布 \(\pi\)），定义 Dirichlet 形式
+\[
+\mathcal E_P(f,f):=\frac12\sum_{x,y}\pi(x)P(x,y)\bigl(f(x)-f(y)\bigr)^2.
+\]
+其\textbf{谱隙}与\textbf{对数 Sobolev 常数}定义为
+\[
+\mathrm{gap}(P):=\inf_{f\not\equiv \mathrm{const}}\frac{\mathcal E_P(f,f)}{\mathrm{Var}_{\pi}(f)},
+\qquad
+\alpha(P):=\inf_{f\not\equiv \mathrm{const}}\frac{\mathcal E_P(f,f)}{\mathrm{Ent}_{\pi}(f^2)},
+\]
+其中
+\(
+\mathrm{Ent}_{\pi}(g):=\mathbb E_{\pi}[g\log g]-\mathbb E_{\pi}[g]\log\mathbb E_{\pi}[g]
+\)。
+\end{definition}
+
+\begin{theorem}[因子链的谱常数支配：不劣于超立方体]\label{thm:pom-fold-factor-chain-gap-lsi}
+在定义 \ref{def:pom-fold-factor-chain} 的设定下，
+\[
+\mathrm{gap}(\overline P^{\square}_m)\ \ge\ \mathrm{gap}(P^{\square}_m)=\frac{2}{m},
+\qquad
+\alpha(\overline P^{\square}_m)\ \ge\ \alpha(P^{\square}_m)=\frac{1}{m}.
+\]
+相应的有限窗数值审计表由脚本生成如下：
+\input{sections/generated/tab_fold_factor_chain_gap_m6_m12}
+\end{theorem}
+\begin{proof}
+取任意 \(f:X_m\to\mathbb R\)，定义其纤维常值提升 \(\widetilde f:=f\circ \Fold_m:\Omega_m\to\mathbb R\)。
+由 \(\mu_m=Q_m\pi_m\) 以及压缩核 \(\overline P^{\square}_m=P_mP^{\square}_mQ_m\) 的定义，
+可直接核对（按纤维分组展开求和）：
+\[
+\mathrm{Var}_{\pi_m}(f)=\mathrm{Var}_{\mu_m}(\widetilde f),\qquad
+\mathrm{Ent}_{\pi_m}(f^2)=\mathrm{Ent}_{\mu_m}(\widetilde f^{\,2}),
+\qquad
+\mathcal E_{\overline P^{\square}_m}(f,f)=\mathcal E_{P^{\square}_m}(\widetilde f,\widetilde f).
+\]
+因此对任意 \(f\not\equiv \mathrm{const}\)，其 Rayleigh 商满足
+\[
+\frac{\mathcal E_{\overline P^{\square}_m}(f,f)}{\mathrm{Var}_{\pi_m}(f)}
+=
+\frac{\mathcal E_{P^{\square}_m}(\widetilde f,\widetilde f)}{\mathrm{Var}_{\mu_m}(\widetilde f)}
+\ \ge\
+\inf_{g\not\equiv \mathrm{const}}\frac{\mathcal E_{P^{\square}_m}(g,g)}{\mathrm{Var}_{\mu_m}(g)}
+=\mathrm{gap}(P^{\square}_m),
+\]
+其中不等式仅因为取 \(\inf\) 时把可选函数类从“全部 \(g\)”限制到“纤维常值的 \(\widetilde f\)”。
+对 \(\alpha(\cdot)\) 的结论同理，把 \(\mathrm{Var}\) 换为 \(\mathrm{Ent}\) 即得。
+最后，超立方体简单随机游走的常数 \(\mathrm{gap}(P^{\square}_m)=2/m\) 与 \(\alpha(P^{\square}_m)=1/m\) 为标准结论（参见 \cite{LevinPeresWilmer2009MarkovMixing}）。证毕。
+\end{proof}
+
+\input{parts/cor__pom-fold-factor-chain-derived-invariants}

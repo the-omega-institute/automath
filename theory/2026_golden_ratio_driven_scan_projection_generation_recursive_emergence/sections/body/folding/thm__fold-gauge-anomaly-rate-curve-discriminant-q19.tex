@@ -1,0 +1,69 @@
+在率曲线消元证书 \(R(\alpha,u)=0\) 之上，可以进一步抽取“反解病态”与“分歧支撑”的严格代数指纹。
+其核心在于：把 \(R\) 视为关于 \(\alpha\) 的四次多项式，其判别式不仅携带谱曲线分歧十次 \(P_{10}\)，而且出现一个额外的平方因子，对应于 \(\alpha\)-投影的非单值化壁。
+
+\begin{theorem}[率曲线消元判别式的分歧分解与同域因子]\label{thm:fold-gauge-anomaly-rate-curve-disc-factorization-q19}
+沿用命题 \ref{prop:fold-gauge-anomaly-rate-curve-param} 的谱四次
+\(
+F(\mu,u)=0
+\)
+与率曲线消元多项式 \(R(\alpha,u)\in\ZZ[\alpha,u]\)（\(\deg_\alpha R=4,\deg_u R=11\)）。
+记分歧十次 \(P_{10}(u)\) 由
+\[
+\mathrm{Disc}_{\mu}\!\bigl(F(\mu,u)\bigr)=-u(u-1)P_{10}(u)
+\]
+给出（命题 \ref{prop:fold-gauge-anomaly-P10-galois-discriminant}）。
+则 \(R(\alpha,u)\) 关于 \(\alpha\) 的判别式在 \(\ZZ[u]\) 中满足严格分解
+\begin{equation}\label{eq:fold-gauge-anomaly-rate-curve-disc-alpha-factorization}
+\boxed{\;
+\mathrm{Disc}_{\alpha}\!\bigl(R(\alpha,u)\bigr)
+=-u^{11}(u-1)\,P_{10}(u)\cdot Q_{19}(u)^{2}\;},
+\end{equation}
+其中 \(Q_{19}(u)\in\ZZ[u]\) 为次数 \(19\) 的不可约多项式
+\[
+\begin{aligned}
+Q_{19}(u)=\;&137781u^{19}+629856u^{18}+934578u^{17}-1546209u^{16}-6187752u^{15}+1402704u^{14}\\
+&+15349014u^{13}-3368736u^{12}-17688806u^{11}+2216732u^{10}+17425320u^9-4765670u^8\\
+&-11620472u^7+7448180u^6+2529720u^5-4736240u^4+2386300u^3-612800u^2+81800u-4500.
+\end{aligned}
+\]
+\end{theorem}
+
+\begin{proof}
+由定义 \(R(\alpha,u)=\Res_{\mu}\bigl(F(\mu,u),\ \alpha\mu F_{\mu}(\mu,u)+uF_u(\mu,u)\bigr)\)（脚本 \texttt{scripts/exp\_fold\_gauge\_anomaly\_rate\_curve\_elimination.py}），故 \(\mathrm{Disc}_{\alpha}(R)\) 可在 \(\ZZ[u]\) 中以判别式--结果式恒等式显式计算。
+把生成的原始规范化多项式 \(R\) 代入并在 \(\ZZ[u]\) 中完全因式分解，即得 \eqref{eq:fold-gauge-anomaly-rate-curve-disc-alpha-factorization}；其中 \(P_{10}\) 以一次幂出现，余下非平凡部分为一个不可约因子 \(Q_{19}\) 的平方。
+可复现核验脚本：\texttt{scripts/exp\_fold\_gauge\_anomaly\_rate\_curve\_discriminant\_q19\_audit.py}。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$Q_{19}$}{Q19} 的满对称伽罗瓦性]\label{thm:fold-gauge-anomaly-q19-galois-s19}
+令 \(Q_{19}(u)\) 如定理 \ref{thm:fold-gauge-anomaly-rate-curve-disc-factorization-q19}。
+则
+\[
+\mathrm{Gal}\bigl(Q_{19}/\QQ\bigr)\cong S_{19}.
+\]
+\end{theorem}
+
+\begin{proof}
+取素数 \(p=73\)。模 \(73\) 约化后 \(Q_{19}\bmod 73\) 在 \(\FF_{73}[u]\) 中保持次数 \(19\) 不可约，故 \(Q_{19}\) 在 \(\QQ[u]\) 上不可约；
+其伽罗瓦群在 \(19\) 个根上作用传递。
+由于 \(19\) 为素数，传递即推出本原性。
+\par
+再取素数 \(p=17\)。可计算 \(Q_{19}\bmod 17\) 的次数分解型为 \((11,8)\)；
+对不整除判别式的素数，Dedekind--Frobenius 对应原理给出 Frobenius 元在根集合上的循环型与该次数型一致，
+从而伽罗瓦群含有一条 \(11\)-循环。
+由于 \(11\) 为素数且 \(11\le 19-3\)，Jordan 定理断言：本原子群若含 \(11\)-循环，则必包含 \(A_{19}\)。
+\par
+最后，若伽罗瓦群包含于 \(A_{19}\)，则判别式应为 \(\ZZ\) 中平方。
+但计算 \(\mathrm{Disc}(Q_{19})\bmod 13\equiv 8\)，而 \(8\) 在 \(\FF_{13}\) 中为二次非剩余，
+从而判别式非平方，伽罗瓦群不含于 \(A_{19}\)。
+结合 \(A_{19}\subseteq \mathrm{Gal}(Q_{19}/\QQ)\) 得
+\(\mathrm{Gal}(Q_{19}/\QQ)=S_{19}\)。
+可复现核验脚本：\texttt{scripts/exp\_fold\_gauge\_anomaly\_rate\_curve\_discriminant\_q19\_audit.py}。证毕。
+\end{proof}
+
+\begin{corollary}[根的不可根式性]\label{cor:fold-gauge-anomaly-q19-nonradical}
+\(Q_{19}\) 的任一根均不可由有理数经有限次四则运算与开方表示。
+因此定理 \ref{thm:fold-gauge-anomaly-rate-curve-disc-factorization-q19} 中由 \(Q_{19}(u)=0\) 给出的额外判别式零点集合在可解性意义上达到最大对称情形。
+\end{corollary}
+
+\endinput
+

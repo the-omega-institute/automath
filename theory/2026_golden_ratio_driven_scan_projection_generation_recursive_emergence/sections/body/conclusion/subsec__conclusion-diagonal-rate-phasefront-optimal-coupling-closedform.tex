@@ -1,0 +1,195 @@
+\subsection{对角自耦合速率的相变前沿与最优矩阵闭式}\label{subsec:conclusion-diagonal-rate-phasefront-optimal-coupling-closedform}
+本小节把对角约束自耦合速率函数 \(R_w(\delta)\) 的主序极值链与最优耦合的指数族结构压缩为两条可直接调用的终端结论。前者把“固定最大原子质量时何处仍处于活跃区间、何处已经冻结”写成一条显式二次前沿；后者则把最优自耦合矩阵的主子式、逆矩阵与规范化谱条件数全部闭式化，从而把原本局限于 \(2\times2\) 子式符号的局部刚性提升到全维线性代数层面。
+
+\begin{theorem}[固定最大原子质量的活跃区间具有显式相变前沿]\label{thm:conclusion-diagonal-rate-maxatom-phasefront}
+固定整数 \(n\ge 2\) 与失真阈值 \(\delta\in[0,1)\)。对 \(m\in[1/n,1)\) 定义
+\[
+\mathcal W_n(m):=\Bigl\{w\in\Delta_n:\ \|w\|_\infty=m\Bigr\},
+\qquad
+w^{(m)}:=\left(m,\frac{1-m}{n-1},\dots,\frac{1-m}{n-1}\right).
+\]
+再定义临界曲线
+\[
+\delta_c(n,m)
+:=
+1-p_2\!\bigl(w^{(m)}\bigr)
+=
+1-\left(m^2+\frac{(1-m)^2}{n-1}\right)
+=
+\frac{n-2+2m-nm^2}{n-1}.
+\]
+则成立：
+\begin{enumerate}
+  \item \(m\mapsto \delta_c(n,m)\) 在 \([1/n,1)\) 上严格递减且严格凹；
+  \item 对任意 \(m\in[1/n,1)\)，有
+  \[
+  \sup_{w\in\mathcal W_n(m)}R_w(\delta)
+  \begin{cases}
+  >0,& 0\le \delta<\delta_c(n,m),\\[3pt]
+  =0,& \delta\ge \delta_c(n,m);
+  \end{cases}
+  \]
+  \item 对任意固定 \(\delta\in[0,1-1/n)\)，存在唯一临界最大原子质量
+  \[
+  m_c(n,\delta):=\frac{1+\sqrt{(n-1)(n-1-n\delta)}}{n}\in[1/n,1),
+  \]
+  使得对每个 \(m\in[1/n,1)\) 都有
+  \[
+  \sup_{w\in\mathcal W_n(m)}R_w(\delta)>0
+  \iff
+  m<m_c(n,\delta),
+  \]
+  且在 \(m=m_c(n,\delta)\) 恰发生冻结。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-max-atom-extremizer}，
+\[
+\sup_{w\in\mathcal W_n(m)}R_w(\delta)=R_{w^{(m)}}(\delta).
+\]
+另一方面，命题 \ref{prop:pom-diagonal-rate-zero-threshold-collision} 给出
+\[
+R_{w^{(m)}}(\delta)>0
+\iff
+\delta<1-p_2\!\bigl(w^{(m)}\bigr),
+\qquad
+R_{w^{(m)}}(\delta)=0
+\iff
+\delta\ge 1-p_2\!\bigl(w^{(m)}\bigr).
+\]
+直接计算
+\[
+p_2\!\bigl(w^{(m)}\bigr)
+=
+m^2+(n-1)\left(\frac{1-m}{n-1}\right)^2
+=
+m^2+\frac{(1-m)^2}{n-1},
+\]
+便得到所示 \(\delta_c(n,m)\) 公式，并随即得到第二条。
+
+再对 \(m\) 求导：
+\[
+\frac{\partial}{\partial m}\delta_c(n,m)=\frac{2-2nm}{n-1}<0
+\qquad
+\bigl(m>1/n\bigr),
+\]
+\[
+\frac{\partial^2}{\partial m^2}\delta_c(n,m)=-\frac{2n}{n-1}<0.
+\]
+故第一条成立。
+
+最后，对固定 \(\delta\in[0,1-1/n)\)，方程 \(\delta=\delta_c(n,m)\) 等价于
+\[
+nm^2-2m+\bigl((n-1)\delta-(n-2)\bigr)=0.
+\]
+其在区间 \([1/n,1)\) 上的唯一相关根为
+\[
+m_c(n,\delta)=\frac{1+\sqrt{(n-1)(n-1-n\delta)}}{n}.
+\]
+结合 \(\delta_c(n,m)\) 的严格单调性便得
+\[
+\delta<\delta_c(n,m)\iff m<m_c(n,\delta),
+\]
+而在 \(m=m_c(n,\delta)\) 时恰有 \(\delta=\delta_c(n,m)\)，故相应最优值降到零。证毕。
+\end{proof}
+
+\begin{theorem}[最优自耦合矩阵的主子式、逆矩阵与规范化条件数具有闭式]\label{thm:conclusion-diagonal-rate-optimal-coupling-principal-minor-inverse}
+设 \(\delta<1-p_2(w)\) 且 \(w\in\Delta_n\) 全支撑。令 \(P_\delta^\star\) 为实现 \(R_w(\delta)\) 的唯一最优耦合。由定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative}，存在唯一参数 \(\kappa>0\)、向量 \(u=(u_1,\dots,u_n)\in(0,\infty)^n\) 与归一化常数 \(Z>0\) 使
+\[
+P_\delta^\star(i,j)=\frac{u_i u_j}{Z}\bigl(1+\kappa\,\mathbf 1_{\{i=j\}}\bigr)
+\qquad
+(1\le i,j\le n).
+\]
+则对任意非空子集 \(S\subseteq[n]\)（记 \(r:=|S|\)）都有
+\[
+\boxed{\;
+\det P_\delta^\star[S]
+=
+\frac{\kappa^{r-1}(\kappa+r)}{Z^r}\prod_{i\in S}u_i^2.\;}
+\]
+特别地，
+\[
+\boxed{\;
+\det P_\delta^\star
+=
+\frac{\kappa^{n-1}(\kappa+n)}{Z^n}\prod_{i=1}^{n}u_i^2.\;}
+\]
+并且逆矩阵显式为
+\[
+\boxed{\;
+(P_\delta^\star)^{-1}
+=
+\frac{Z}{\kappa}\,\diag(u_1^{-2},\dots,u_n^{-2})
+-\frac{Z}{\kappa(\kappa+n)}\,(u_i^{-1}u_j^{-1})_{i,j=1}^n.\;}
+\]
+若记 \(U:=\diag(u_1,\dots,u_n)\)，则规范化矩阵满足
+\[
+U^{-1}P_\delta^\star U^{-1}=\frac{1}{Z}\,(\kappa I_n+J_n),
+\]
+其中 \(J_n\) 为全 \(1\) 矩阵。因而
+\[
+\operatorname{spec}\!\bigl(U^{-1}P_\delta^\star U^{-1}\bigr)
+=
+\left\{\frac{\kappa+n}{Z}\ \text{（重数 }1\text{）},\ \frac{\kappa}{Z}\ \text{（重数 }n-1\text{）}\right\},
+\qquad
+\operatorname{cond}_2\!\bigl(U^{-1}P_\delta^\star U^{-1}\bigr)=1+\frac{n}{\kappa}.
+\]
+因此：
+\begin{enumerate}
+  \item \(P_\delta^\star\) 的全部主子式均严格为正，从而 \(P_\delta^\star\) 为对称正定矩阵；
+  \item \((P_\delta^\star)^{-1}\) 的全部非对角元均严格为负；
+  \item 任意主子式仅通过 \(|S|\) 与 \(\prod_{i\in S}u_i^2\) 依赖于指标集合，而不依赖于 \(S\) 的更细排列结构。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+令 \(U:=\diag(u_1,\dots,u_n)\)。由给定结构式，
+\[
+P_\delta^\star
+=
+\frac{1}{Z}\,U(\kappa I_n+J_n)U,
+\]
+其中 \(J_n=\mathbf 1\mathbf 1^{\mathsf T}\)。
+于是对任意 \(S\subseteq[n]\)、\(|S|=r\)，有
+\[
+P_\delta^\star[S]=\frac{1}{Z}\,U_S(\kappa I_r+J_r)U_S,
+\]
+故
+\[
+\det P_\delta^\star[S]
+=
+\frac{1}{Z^r}\det(U_S)^2\det(\kappa I_r+J_r).
+\]
+而 \(\kappa I_r+J_r\) 的特征值为 \(\kappa+r\)（重数 \(1\)）与 \(\kappa\)（重数 \(r-1\)），因此
+\[
+\det(\kappa I_r+J_r)=\kappa^{r-1}(\kappa+r).
+\]
+代入 \(\det(U_S)^2=\prod_{i\in S}u_i^2\) 即得主子式公式；取 \(S=[n]\) 便得到全行列式公式。
+
+对逆矩阵，利用
+\[
+(\kappa I_n+J_n)^{-1}
+=
+\frac1\kappa I_n-\frac{1}{\kappa(\kappa+n)}\,J_n,
+\]
+便有
+\[
+(P_\delta^\star)^{-1}
+=
+Z\,U^{-1}(\kappa I_n+J_n)^{-1}U^{-1}
+=
+\frac{Z}{\kappa}\,\diag(u_1^{-2},\dots,u_n^{-2})
+-\frac{Z}{\kappa(\kappa+n)}\,(u_i^{-1}u_j^{-1})_{i,j=1}^n.
+\]
+规范化后的谱与条件数亦由 \(\kappa I_n+J_n\) 的特征值立即读出。
+
+最后，\(\kappa>0\) 且 \(u_i>0\) 对所有 \(i\) 成立，故全部主子式严格为正；对称矩阵的 Sylvester 判别准则因此给出正定性。逆矩阵的非对角项显式为
+\[
+-\frac{Z}{\kappa(\kappa+n)}u_i^{-1}u_j^{-1}<0
+\qquad(i\ne j),
+\]
+其余结论直接由上述闭式读取。证毕。
+\end{proof}
+
+上述两条结论把对角自耦合速率的两类结构压缩为同一条可审计链：一方面，固定最大原子质量的主序极值链不只给出极大分布 \(w^{(m)}\)，而且给出一条显式的活跃/冻结相变前沿 \(m\mapsto\delta_c(n,m)\)；另一方面，最优自耦合 \(P_\delta^\star\) 不只在 \(2\times2\) 子式层面保持符号刚性，而是在全部主子式、逆矩阵与规范化谱条件数层面都可完全闭式求解。于是，“何时仍有正速率”与“达到该速率的最优矩阵如何线性代数化”便被统一到同一组显式公式之下。
+
+\endinput

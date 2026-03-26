@@ -1,0 +1,170 @@
+\begin{theorem}[Fibonacci 同余扩散的完全可解性与逆扩散闭式]\label{thm:xi-fib-congruence-diffusion-inverse-closed}
+取整数 \(m\ge 1\)，令 Fibonacci 数列满足 \(F_1=F_2=1\)，并记
+\[
+M:=F_{m+2},\qquad G_m:=\ZZ/(M\ZZ),\qquad \widehat G_m:=\operatorname{Hom}(G_m,\mathbb T).
+\]
+对 \(\Omega_t:=\{0,1\}^t\) 中的微态 \(\omega=(\omega_1,\dots,\omega_t)\) 定义
+\[
+N(\omega):=\sum_{j=1}^{t}\omega_jF_{j+1}\in\ZZ,
+\qquad
+r(\omega):=N(\omega)\bmod M\in G_m,
+\]
+并令
+\[
+d_t(r):=\bigl|\{\omega\in\Omega_t:\ r(\omega)=r\}\bigr|,
+\qquad
+p_t(r):=\frac{d_t(r)}{2^t}\qquad(r\in G_m).
+\]
+考虑随机过程 \((R_t)_{t=0}^{m}\)：
+\[
+R_0=0,\qquad
+R_t\equiv R_{t-1}+B_tF_{t+1}\pmod M,
+\qquad
+B_t\stackrel{\mathrm{i.i.d.}}{\sim}\mathrm{Bernoulli}\!\left(\tfrac12\right).
+\]
+则对每个 \(t\in\{0,\dots,m\}\)：
+\begin{enumerate}
+  \item \(\mathcal L(R_t)=p_t\)。
+  \item 对任意角色 \(\chi\in\widehat G_m\)，Fourier 系数满足完全因子化
+  \[
+  \widehat p_t(\chi):=\EE[\chi(R_t)]
+  =2^{-t}\prod_{j=1}^{t}\bigl(1+\chi(F_{j+1})\bigr).
+  \]
+  \item 令 \(u(r):=\frac{1}{M}\) 为 \(G_m\) 上均匀分布，则有 Parseval 恒等式
+  \[
+  \|p_t-u\|_2^2=\frac1M\sum_{\chi\neq 1}\bigl|\widehat p_t(\chi)\bigr|^2,
+  \qquad
+  \mathrm{TV}(p_t,u)\le \frac12\sqrt{M}\,\|p_t-u\|_2.
+  \]
+  并且由 Rényi--\(2\) 熵下界推出
+  \[
+  D_{\mathrm{KL}}(p_t\mid u)\le \log\!\left(1+\sum_{\chi\neq 1}\bigl|\widehat p_t(\chi)\bigr|^2\right).
+  \]
+  \item 逆扩散的一步后验具有闭式 logistic 比值：对任意 \(r\in G_m\)，
+  \[
+  \PP(B_t=1\mid R_t=r)
+  =\frac{p_{t-1}(r-F_{t+1})}{p_{t-1}(r)+p_{t-1}(r-F_{t+1})}
+  =\sigma\!\Bigl(\log p_{t-1}(r-F_{t+1})-\log p_{t-1}(r)\Bigr),
+  \]
+  其中 \(\sigma(x)=\frac{1}{1+e^{-x}}\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由一步递推 \(R_t\equiv R_{t-1}\) 或 \(R_t\equiv R_{t-1}+F_{t+1}\ (\mathrm{mod}\ M)\)（对应 \(B_t=0,1\)）得到
+\[
+p_t(r)=\frac12p_{t-1}(r)+\frac12p_{t-1}(r-F_{t+1}),
+\qquad p_0=\delta_0,
+\]
+其与 \(d_t/2^t\) 的组合递推一致，故 \(\mathcal L(R_t)=p_t\)。
+对 \(\chi\in\widehat G_m\)，由独立性与 \(\chi(B_tF_{t+1})\in\{1,\chi(F_{t+1})\}\) 得
+\[
+\widehat p_t(\chi)=\EE[\chi(R_{t-1})]\cdot \EE[\chi(B_tF_{t+1})]
+=\widehat p_{t-1}(\chi)\cdot \frac12\bigl(1+\chi(F_{t+1})\bigr),
+\]
+归纳得乘积公式。
+\par
+令 Fourier 变换约定为 \(\widehat f(\chi)=\sum_{r\in G_m}f(r)\chi(r)\)，则 \(\widehat p_t(\chi)=\EE[\chi(R_t)]\) 且 \(\widehat u(1)=1,\widehat u(\chi)=0(\chi\neq 1)\)。
+由 Parseval 得
+\(
+\|p_t-u\|_2^2=\frac1M\sum_{\chi\neq 1}|\widehat p_t(\chi)|^2
+\)。
+全变差界由 \(\|f\|_1\le \sqrt{M}\|f\|_2\) 立即推出。
+又由 \(H(p)\ge H_2(p)=-\log\sum_r p(r)^2\) 得
+\[
+D_{\mathrm{KL}}(p_t\mid u)=\log M-H(p_t)\le \log\!\bigl(M\sum_r p_t(r)^2\bigr)
+=\log\!\bigl(1+M\|p_t-u\|_2^2\bigr),
+\]
+代入 Parseval 恒等式即得 KL 上界。
+\par
+最后由 Bayes 公式
+\[
+\PP(B_t=1\mid R_t=r)
+=\frac{\PP(R_{t-1}=r-F_{t+1},B_t=1)}{\PP(R_t=r)}
+=\frac{\frac12p_{t-1}(r-F_{t+1})}{\frac12(p_{t-1}(r)+p_{t-1}(r-F_{t+1}))},
+\]
+化简得到所示比值与 logistic 表达。
+\end{proof}
+
+\begin{proposition}[角色截断投影的最优秩逼近与误差尾能量闭式]\label{prop:xi-fib-congruence-fourier-rankk-optimal}
+沿用定理 \ref{thm:xi-fib-congruence-diffusion-inverse-closed} 的 \(G_m,\widehat G_m\) 与分布 \(p_m\)。
+对任意子集 \(S\subset\widehat G_m\)（并约定 \(1\in S\)），定义 Fourier 截断
+\[
+p_m^{(S)}(r):=\frac1M\sum_{\chi\in S}\widehat p_m(\chi)\,\overline{\chi(r)}.
+\]
+则 \(p_m^{(S)}\) 是 \(p_m\) 在 Hilbert 空间 \(L^2(G_m)\) 上到子空间 \(\operatorname{span}S\) 的正交投影，因而在所有形如
+\(
+f(r)=\frac1M\sum_{\chi\in S}c_\chi\overline{\chi(r)}
+\)
+的函数中唯一最小化 \(\|p_m-f\|_2\)。
+并且最小误差满足闭式
+\[
+\|p_m-p_m^{(S)}\|_2^2=\frac1M\sum_{\chi\notin S}\bigl|\widehat p_m(\chi)\bigr|^2.
+\]
+特别地，在约束 \(|S|=k\) 下，最优秩-\(k\) 逼近由选取 \(|\widehat p_m(\chi)|\) 最大的 \(k\) 个角色实现，其最小误差等于对应 Fourier 能量尾和。
+\end{proposition}
+\begin{proof}
+有限阿贝尔群上角色构成 \(L^2(G_m)\) 的正交基。
+故 \(p_m^{(S)}\) 为正交投影并由投影定理给出最优性；误差平方由 Parseval 对被截去系数求和得到。
+最后在 \(|S|=k\) 约束下，误差尾和显然由保留最大的 \(k\) 项最小化。
+\end{proof}
+
+\begin{remark}[与可解析扩散、线性状态空间与有限证书的外部镜像]\label{rem:xi-fib-congruence-external-mirror-diffusion-attention}
+定理 \ref{thm:xi-fib-congruence-diffusion-inverse-closed} 给出一个可完全解析的离散扩散--逆扩散对偶模型：逆扩散的“score”退化为对数密度差，收敛误差由非平凡角色能量闭式控制。
+命题 \ref{prop:xi-fib-congruence-fourier-rankk-optimal} 则把低秩截断的最优误差精确压缩为 Fourier 尾能量。
+这些结构与近期对线性注意力、掩码扩散与可验证机制证书的解析研究在形式上同型，可作为本文同余口径的一个可比参照系。\cite{LeeSohnLee2026LinearAttentionICLNoForgetting,LiangTanShroffLiang2026MaskedDiffusionSharpTV,HadadKatzBassan2026AutomatedCircuitDiscoveryProvable}
+\end{remark}
+
+\begin{theorem}[黄金均值稳定类型上的掩码后验计数与转移矩阵闭式]\label{thm:xi-masked-posterior-golden-mean-transfer-matrix}
+令 \(m\ge 1\)，并令
+\(
+X_m\subset\{0,1\}^m
+\)
+为黄金均值稳定类型集合（禁止相邻子词 \(11\)，从而 \(|X_m|=F_{m+2}\)，见附录 \ref{subsec:sync-kernel-counting}）。
+取 \(U_m\) 为 \(X_m\) 上的均匀分布。
+对任意掩码观测 \(y\in\{0,1,\bot\}^m\)（\(\bot\) 表示未知位），定义一致集合
+\[
+X_m(y):=\{x\in X_m:\ \forall i,\ y_i\in\{0,1\}\Rightarrow x_i=y_i\},
+\]
+则后验 \(U_m(\cdot\mid y)\) 为 \(X_m(y)\) 上的均匀分布。
+令黄金均值约束的转移矩阵为
+\[
+A:=
+\begin{pmatrix}
+1&1\\
+1&0
+\end{pmatrix},
+\]
+其行/列分别以状态 \(0,1\) 编号（允许转移 \(0\to 0,1\) 与 \(1\to 0\)）。
+设 \(I\subseteq\{1,\dots,m\}\) 为一段极大掩码块（连续 \(\bot\)）的指标区间，长度为 \(L:=|I|\)；
+令该块左右相邻的已知边界位为 \(a,b\in\{0,1\}\)（若块触及端点，则约定端点之外的边界位为 \(0\)）。
+则：
+\begin{enumerate}
+  \item 该掩码块的可补全数为
+  \[
+  \#\{\text{补全}\}=(A^{L+1})_{a,b}.
+  \]
+  \item 对块内第 \(j\) 个位置（\(1\le j\le L\)），其后验边缘概率满足
+  \[
+  \boxed{\;
+  \PP(x_{I_0+j-1}=1\mid y)=
+  \frac{(A^{j})_{a,1}\,(A^{L+1-j})_{1,b}}{(A^{L+1})_{a,b}}\;},
+  \]
+  其中 \(I_0\) 为该块的起始指标（即 \(I=\{I_0,\dots,I_0+L-1\}\)）。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+黄金均值约束等价于在二状态有向图 \(0\rightleftarrows 1\)（删除 \(1\to 1\)）上的路径约束。
+因此长度为 \(L\) 的补全过程 \((z_1,\dots,z_L)\) 连同边界 \(z_0=a,z_{L+1}=b\) 与约束 \(z_i z_{i+1}=0\) 等价于从顶点 \(a\) 到 \(b\) 的长度 \(L+1\) 路径计数，给出 (1)。
+若进一步固定块内第 \(j\) 位为 \(1\)，则路径必须在第 \(j\) 步到达顶点 \(1\)，其计数由路径拼接分解为 \((A^{j})_{a,1}(A^{L+1-j})_{1,b}\)。
+在均匀后验下，边缘概率即为“固定为 \(1\) 的计数 / 总计数”，得到 (2)。证毕。
+\end{proof}
+
+\begin{remark}[与逆扩散 logistic 比值的一致形式]\label{rem:xi-masked-posterior-logistic-parallel}
+定理 \ref{thm:xi-masked-posterior-golden-mean-transfer-matrix} 的边缘闭式可视为“按端点条件计数的局部桥分解”，其分子/分母均为有限步转移计数。
+与定理 \ref{thm:xi-fib-congruence-diffusion-inverse-closed} 的逆扩散后验
+\(\PP(B_t=1\mid R_t=r)=\sigma(\log p_{t-1}(r-F_{t+1})-\log p_{t-1}(r))\)
+同型：两者均把 Bayes 去噪器压缩为对数计数差（或对数密度差）的 logistic 形式，只是一个发生在稳定语法 \(X_m\) 的局部桥约束上，另一个发生在同余群 \(G_m\) 的加性扩散上。
+\end{remark}
+
+\endinput
+

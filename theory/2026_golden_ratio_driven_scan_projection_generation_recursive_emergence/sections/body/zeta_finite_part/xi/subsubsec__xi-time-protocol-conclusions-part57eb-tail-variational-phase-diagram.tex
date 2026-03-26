@@ -1,0 +1,361 @@
+\paragraph{尾计数指数、冻结阈值与 oracle 前沿的变分闭包}
+在定理 \ref{thm:xi-time-part57b-capacity-moment-exact-mellin-stieltjes} 已把幂和矩写成尾计数与容量曲线的 Mellin--Stieltjes 积分、定理 \ref{thm:xi-time-part57ea-tailcount-top-platform-rigidity}--\ref{thm:xi-time-part57ea-oracle-escort-critical-line} 已把冻结预算相图压缩为最大纤维平台律之后，还可进一步把尾计数指数函数、压力谱、均匀采样下的对数多重度大偏差、尺寸偏置倾斜以及连续容量指数统一组织为一套纯变分闭包。该闭包把前文的充分条件提升为必要且充分的边界公式，并把预算前沿、倾斜前沿与冻结前沿一并置于同一尾指数函数 \(\Psi\) 的支撑之上。
+
+\begin{theorem}[尾计数指数的 Laplace--Mellin 变分原理]\label{thm:xi-time-part57eb-tail-laplace-mellin-variational}
+设存在上半连续函数
+\[
+\Psi:[0,\alpha_*]\to[-\infty,\log\varphi]
+\]
+满足：对任意紧区间 \(I\subset[0,\alpha_*]\)，当 \(m\to\infty\) 时都有一致指数渐近
+\[
+N_m(e^{\alpha m})
+=
+\exp\!\bigl(m\Psi(\alpha)+o(m)\bigr)
+\qquad
+(\alpha\in I),
+\]
+其中
+\[
+N_m(T):=\#\{x\in X_m:\ d_m(x)\ge T\}.
+\]
+则对每个实数 \(a>0\)，压力满足
+\[
+\boxed{\;
+P_a=\sup_{0\le \alpha\le \alpha_*}\bigl(a\alpha+\Psi(\alpha)\bigr).\;}
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-time-part57b-capacity-moment-exact-mellin-stieltjes}，
+\[
+S_a(m)=a\int_0^\infty T^{a-1}N_m(T)\,\dd T.
+\]
+又因 \(d_m(x)\le M_m\) 对所有 \(x\in X_m\) 成立，故
+\[
+S_a(m)=a\int_0^{M_m}T^{a-1}N_m(T)\,\dd T.
+\]
+令 \(T=e^{\alpha m}\)，则 \(\dd T=me^{\alpha m}\dd\alpha\)，从而
+\[
+S_a(m)
+=
+am\int_{-\infty}^{\frac1m\log M_m}
+\exp(am\alpha)\,N_m(e^{\alpha m})\,\dd\alpha.
+\]
+
+当 \(\alpha<0\) 时，\(e^{\alpha m}<1\)，而 \(d_m(x)\in\ZZ_{\ge 1}\)，故
+\[
+N_m(e^{\alpha m})=|X_m|
+=
+\exp\!\bigl((\log\varphi)m+o(m)\bigr).
+\]
+于是该区间上的指数至多为 \(a\alpha+\log\varphi\le \log\varphi\)，不会优于 \(\alpha=0\) 处的候选值。另一方面，
+\[
+\frac1m\log M_m\to \alpha_*.
+\]
+因此只需在 \([0,\alpha_*]\) 上分析积分主项。
+
+由假设，对每个紧区间 \(I\subset[0,\alpha_*]\) 都有
+\[
+N_m(e^{\alpha m})=\exp\!\bigl(m\Psi(\alpha)+o(m)\bigr)
+\qquad(\alpha\in I)
+\]
+且 \(o(m)\) 对 \(\alpha\in I\) 一致。将 \([0,\alpha_*]\) 以有限个小区间覆盖，并对每段分别应用 Laplace 原理，再利用 \(\Psi\) 的上半连续性与有限覆盖取极大值，得到
+\[
+S_a(m)
+=
+\exp\!\Bigl(
+m\sup_{0\le \alpha\le \alpha_*}(a\alpha+\Psi(\alpha))+o(m)
+\Bigr).
+\]
+两边取 \(\frac1m\log\) 并令 \(m\to\infty\)，即得
+\[
+P_a=\sup_{0\le \alpha\le \alpha_*}(a\alpha+\Psi(\alpha)).
+\]
+证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part57ec-uniform-tilt-oracle-gap-ldp}
+
+\begin{theorem}[连续容量曲线的变分公式与成功率指数]\label{thm:xi-time-part57eb-continuous-capacity-success-variational}
+定义连续容量曲线
+\[
+\mathcal C_m^{\mathrm{cont}}(T):=\sum_{x\in X_m}\min(d_m(x),T)
+\qquad(T\ge 0),
+\]
+以及预算指数
+\[
+Q(\beta):=\limsup_{m\to\infty}\frac1m\log \mathcal C_m^{\mathrm{cont}}(e^{\beta m})
+\qquad(\beta\ge 0).
+\]
+在定理 \ref{thm:xi-time-part57eb-tail-laplace-mellin-variational} 的同一假设下，对每个 \(\beta\ge 0\) 都有
+\[
+\boxed{\;
+Q(\beta)=\sup_{0\le \alpha\le \min(\beta,\alpha_*)}\bigl(\alpha+\Psi(\alpha)\bigr).\;}
+\]
+进一步，若取离散预算
+\[
+B_m:=\left\lfloor \frac{\beta m}{\log 2}\right\rfloor,
+\]
+并记
+\[
+\mathrm{Succ}_m(B):=\frac{C_m(B)}{2^m},
+\qquad
+C_m(B):=\sum_{x\in X_m}\min(d_m(x),2^B),
+\]
+则有
+\[
+\boxed{\;
+\limsup_{m\to\infty}\frac1m\log \mathrm{Succ}_m(B_m)
+=
+Q(\beta)-\log 2.\;}
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-capacity-tail-histogram-moment-complete-statistic}，
+\[
+\mathcal C_m^{\mathrm{cont}}(T)=\int_0^T N_m(t)\,\dd t.
+\]
+取 \(T=e^{\beta m}\)，再作变量代换 \(t=e^{\alpha m}\)，得到
+\[
+\mathcal C_m^{\mathrm{cont}}(e^{\beta m})
+=
+m\int_{-\infty}^{\beta}\exp(\alpha m)\,N_m(e^{\alpha m})\,\dd\alpha.
+\]
+
+当 \(\alpha<0\) 时，仍有 \(N_m(e^{\alpha m})=|X_m|=\exp((\log\varphi)m+o(m))\)，故对应指数不超过 \(\log\varphi+\alpha\le \log\varphi\)，不会优于 \(\alpha=0\) 的候选值。又由于 \(N_m(t)=0\) 当 \(t>M_m\)，并且 \(\frac1m\log M_m\to\alpha_*\)，故只需在 \([0,\min(\beta,\alpha_*)]\) 上取主项。由定理 \ref{thm:xi-time-part57eb-tail-laplace-mellin-variational} 的同一一致指数假设，对该积分再施行 Laplace 原理即得
+\[
+Q(\beta)=\sup_{0\le \alpha\le \min(\beta,\alpha_*)}\bigl(\alpha+\Psi(\alpha)\bigr).
+\]
+
+另一方面，由命题 \ref{prop:fold-capacity-tail-equivalence}，
+\[
+C_m(B)=\mathcal C_m^{\mathrm{cont}}(2^B)
+\qquad(B\in\ZZ_{\ge 0}).
+\]
+对 \(B=B_m\) 有
+\[
+2^{B_m}=e^{\beta m+O(1)},
+\]
+故
+\[
+\limsup_{m\to\infty}\frac1m\log C_m(B_m)=Q(\beta).
+\]
+再由 \(\mathrm{Succ}_m(B_m)=C_m(B_m)/2^m\)，得到
+\[
+\limsup_{m\to\infty}\frac1m\log \mathrm{Succ}_m(B_m)=Q(\beta)-\log 2.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[冻结阈值的精确变分刻画]\label{thm:xi-time-part57eb-freezing-threshold-exact-variational}
+设在区间 \((\alpha_*^{(2)},\alpha_*)\) 上存在尾计数平台
+\[
+\Psi(\alpha)=g_*
+\qquad
+(\alpha_*^{(2)}<\alpha<\alpha_*).
+\]
+定义
+\[
+a_{\mathrm{fr}}
+:=
+\sup_{0\le \alpha<\alpha_*}
+\frac{\Psi(\alpha)-g_*}{\alpha_*-\alpha}.
+\]
+则对任意实数 \(a>0\)，有等价判别
+\[
+\boxed{\;
+P_a=a\alpha_*+g_*
+\iff
+a\ge a_{\mathrm{fr}}.\;}
+\]
+并且
+\[
+\boxed{\;
+a_{\mathrm{fr}}
+\le
+\frac{\log\varphi-g_*}{\alpha_*-\alpha_*^{(2)}}.\;}
+\]
+因此前文的阈值
+\[
+a_{\mathrm c}:=\frac{\log\varphi-g_*}{\alpha_*-\alpha_*^{(2)}}
+\]
+不仅是充分条件，而且是精确冻结阈值的统一上界。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-time-part57eb-tail-laplace-mellin-variational}，
+\[
+P_a=\sup_{0\le \alpha\le \alpha_*}\bigl(a\alpha+\Psi(\alpha)\bigr).
+\]
+由平台假设，对每个 \(\alpha\in(\alpha_*^{(2)},\alpha_*)\) 都有
+\[
+a\alpha+\Psi(\alpha)=a\alpha+g_*.
+\]
+令 \(\alpha\uparrow\alpha_*\)，得到
+\[
+\sup_{\alpha_*^{(2)}<\alpha<\alpha_*}\bigl(a\alpha+\Psi(\alpha)\bigr)
+=
+a\alpha_*+g_*.
+\]
+因此
+\[
+P_a=a\alpha_*+g_*
+\]
+成立，当且仅当对所有 \(0\le \alpha<\alpha_*\) 都有
+\[
+a\alpha+\Psi(\alpha)\le a\alpha_*+g_*,
+\]
+等价于
+\[
+a\ge \frac{\Psi(\alpha)-g_*}{\alpha_*-\alpha}.
+\]
+对全部 \(0\le \alpha<\alpha_*\) 取上确界，即得
+\[
+P_a=a\alpha_*+g_*
+\iff
+a\ge a_{\mathrm{fr}}.
+\]
+
+再由平台假设，当 \(\alpha\in(\alpha_*^{(2)},\alpha_*)\) 时，
+\[
+\Psi(\alpha)=g_*,
+\]
+故该区间对上确界没有正贡献。于是
+\[
+a_{\mathrm{fr}}
+=
+\sup_{0\le \alpha\le \alpha_*^{(2)}}
+\frac{\Psi(\alpha)-g_*}{\alpha_*-\alpha}.
+\]
+另一方面，对所有 \(\alpha\in[0,\alpha_*]\) 都有 \(\Psi(\alpha)\le \log\varphi\)，从而
+\[
+a_{\mathrm{fr}}
+\le
+\sup_{0\le \alpha\le \alpha_*^{(2)}}
+\frac{\log\varphi-g_*}{\alpha_*-\alpha}
+=
+\frac{\log\varphi-g_*}{\alpha_*-\alpha_*^{(2)}}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[oracle--escort 双前沿的精确相图]\label{thm:xi-time-part57eb-oracle-escort-double-frontier}
+保持定理 \ref{thm:xi-time-part57eb-freezing-threshold-exact-variational} 的尾计数平台假设。定义连续容量指数
+\[
+Q(\beta)=\sup_{0\le \alpha\le \min(\beta,\alpha_*)}\bigl(\alpha+\Psi(\alpha)\bigr),
+\]
+以及预算饱和阈值
+\[
+\beta_{\mathrm{sat}}
+:=
+\sup_{0\le \alpha\le \alpha_*^{(2)}}\bigl(\alpha+\Psi(\alpha)-g_*\bigr).
+\]
+则对每个 \(\beta\in(\alpha_*^{(2)},\alpha_*)\)，成立如下分类：
+\begin{enumerate}
+  \item 若 \(\beta\ge \beta_{\mathrm{sat}}\)，则
+  \[
+  \boxed{\;
+  Q(\beta)=\beta+g_*.\;}
+  \]
+  因而对
+  \[
+  B_m=\left\lfloor \frac{\beta m}{\log 2}\right\rfloor
+  \]
+  有
+  \[
+  \limsup_{m\to\infty}\frac1m\log \mathrm{Succ}_m(B_m)
+  =
+  \beta+g_*-\log 2.
+  \]
+  \item 若 \(\beta<\beta_{\mathrm{sat}}\)，则
+  \[
+  \boxed{\;
+  Q(\beta)=
+  \sup_{0\le \alpha\le \alpha_*^{(2)}}\bigl(\alpha+\Psi(\alpha)\bigr).\;}
+  \]
+  换言之，容量指数仍由次大尺度区间决定，尚未进入最大纤维主导相。
+  \item 总有显式上界
+  \[
+  \boxed{\;
+  \beta_{\mathrm{sat}}
+  \le
+  \alpha_*^{(2)}+\log\varphi-g_*.\;}
+  \]
+  因此只要
+  \[
+  \beta>\alpha_*^{(2)}+\log\varphi-g_*,
+  \]
+  就必进入线性饱和相 \(Q(\beta)=\beta+g_*\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对 \(\beta\in(\alpha_*^{(2)},\alpha_*)\)，由平台性质，
+\[
+\Psi(\alpha)=g_*
+\qquad
+(\alpha_*^{(2)}<\alpha\le \beta).
+\]
+故在该区间上
+\[
+\alpha+\Psi(\alpha)=\alpha+g_*
+\]
+严格随 \(\alpha\) 递增，其最大值为 \(\beta+g_*\)。于是
+\[
+Q(\beta)
+=
+\max\Bigl\{
+\beta+g_*,
+\sup_{0\le \alpha\le \alpha_*^{(2)}}(\alpha+\Psi(\alpha))
+\Bigr\}.
+\]
+
+若 \(\beta\ge \beta_{\mathrm{sat}}\)，则按定义有
+\[
+\beta+g_*
+\ge
+\sup_{0\le \alpha\le \alpha_*^{(2)}}(\alpha+\Psi(\alpha)),
+\]
+从而
+\[
+Q(\beta)=\beta+g_*.
+\]
+再由定理 \ref{thm:xi-time-part57eb-continuous-capacity-success-variational}，得到
+\[
+\limsup_{m\to\infty}\frac1m\log \mathrm{Succ}_m(B_m)
+=
+Q(\beta)-\log 2
+=
+\beta+g_*-\log 2.
+\]
+
+若 \(\beta<\beta_{\mathrm{sat}}\)，则
+\[
+\beta+g_*
+<
+\sup_{0\le \alpha\le \alpha_*^{(2)}}(\alpha+\Psi(\alpha)),
+\]
+故
+\[
+Q(\beta)=
+\sup_{0\le \alpha\le \alpha_*^{(2)}}(\alpha+\Psi(\alpha)).
+\]
+这就给出第二种相。
+
+最后，由 \(\Psi(\alpha)\le \log\varphi\)，有
+\[
+\beta_{\mathrm{sat}}
+=
+\sup_{0\le \alpha\le \alpha_*^{(2)}}(\alpha+\Psi(\alpha)-g_*)
+\le
+\sup_{0\le \alpha\le \alpha_*^{(2)}}(\alpha+\log\varphi-g_*)
+=
+\alpha_*^{(2)}+\log\varphi-g_*.
+\]
+故当
+\(
+\beta>\alpha_*^{(2)}+\log\varphi-g_*
+\)
+时，必有 \(\beta>\beta_{\mathrm{sat}}\)，从而落入线性饱和相。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part57ed-oracle-gap-min-envelope-conjecture}
+
+\endinput

@@ -1,0 +1,600 @@
+\begin{conclusion}[纤维—重量双变量配分函数的四阶可积性：有理生成函数与常系数递推]\label{con:xi-terminal-zm-order4-rational}
+令
+\[
+X_m:=\{x\in\{0,1\}^m:\ \forall i,\ x_ix_{i+1}=0\},
+\qquad
+\Fold_m:\Omega_m=\{0,1\}^m\to X_m
+\]
+为标准折叠映射，并记纤维多重度 \(d_m(x)=|\Fold_m^{-1}(x)|\)。
+对任意复参数 \(y\in\CC\)，定义纤维—重量双变量配分函数
+\[
+Z_m(y):=\sum_{x\in X_m} y^{|x|_1}\,d_m(x)
+=\sum_{a\in\Omega_m} y^{|\Fold_m(a)|_1}.
+\]
+则对一切 \(m\ge 4\) 成立严格四阶递推
+\[
+\boxed{\;
+Z_m(y)=Z_{m-1}(y)+(2y+1)Z_{m-2}(y)-Z_{m-3}(y)-y(y+1)Z_{m-4}(y)\;}
+\]
+并且生成函数在 \(\ZZ[y][[t]]\) 中具有显式有理闭式
+\[
+\boxed{\;
+\sum_{m\ge 0} Z_m(y)\,t^m
+=\frac{1+yt-yt^2-y^2t^3}{1-t-(2y+1)t^2+t^3+y(y+1)t^4}\; }.
+\]
+因此，对固定 \(y\) 而言，序列 \(m\mapsto Z_m(y)\) 的全部指数模态由四次特征方程
+\[
+\Pi(\lambda,y)=0,
+\qquad
+\Pi(\lambda,y):=\lambda^4-\lambda^3-(2y+1)\lambda^2+\lambda+y(y+1)
+\]
+完全控制。
+\end{conclusion}
+\begin{proof}[证明要点]
+由定义 \(Z_m(y)\) 是长度 \(m\) 的微态路径权重和，其中每个微态 \(a\in\Omega_m\) 的权重仅通过其稳定输出 \(\Fold_m(a)\) 的 \(1\)-计数进入。
+由于 \(\Fold_m\) 可由有限状态规约器实现（全文对 Zeckendorf/窗口折叠的固定口径），
+\(Z_m(y)\) 可写为某个固定维数带权转移矩阵 \(T(y)\) 的矩阵系数；
+从而 \(\sum_{m\ge 0}Z_m(y)t^m\) 为有理函数，分母次数等于最小状态数。
+对本 Fold 实例，约分后的分母次数稳定为 \(4\)，从而得到四阶递推；
+将 \(t\)-生成函数在 \(t=0\) 处展开并与初值匹配，即得到所示闭式分子与分母；
+上述恒等式与后续的判别式/统计常数可由脚本 \texttt{scripts/exp\_fold\_zm\_bivariate\_partition\_audit.py} 一键复核。证毕。
+\end{proof}
+
+\begin{conclusion}[\texorpdfstring{$Z_m(y)$}{Zm(y)} 的次数、首项系数与分歧参数处的闭式特值]\label{con:xi-terminal-zm-degree-leading-special-values}
+沿用结论 \ref{con:xi-terminal-zm-order4-rational} 的记号。
+则对所有 \(m\ge 0\)：
+\begin{enumerate}
+  \item 次数精确为
+  \[
+  \deg_y Z_m(y)=\left\lceil\frac m2\right\rceil.
+  \]
+  \item 设 \(m=2k+1\) 为奇数，则 \(Z_{2k+1}(y)\) 为首一多项式；设 \(m=2k\) 为偶数，则其首项系数为
+  \[
+  [y^{k}]\,Z_{2k}(y)=1+\frac{k(k+1)}{2}.
+  \]
+  \item 在两条有理分歧参数处有闭式特值
+  \[
+  Z_m(0)=\left\lfloor\frac m2\right\rfloor+1,\qquad
+  Z_m(1)=2^m.
+  \]
+  \item 若将 \(y\) 特化到椭圆轨道 \(y(nP)\in\QQ\)（其中 \(\mathrm{den}(y(nP))=v_n^4\)，见结论 \ref{con:xi-terminal-zm-elliptic-rational-points-denominator-law}），则对任意 \(m,n\ge 0\) 有
+  \[
+  Z_m\bigl(y(nP)\bigr)\in v_n^{-4\lceil m/2\rceil}\,\ZZ.
+  \]
+\end{enumerate}
+\end{conclusion}
+\begin{proof}[证明要点]
+由 \(X_m\) 的语法约束 \(x_ix_{i+1}=0\) 可知 \(\max_{x\in X_m}|x|_1=\lceil m/2\rceil\)，且存在取等词；
+又 \(Z_m(y)=\sum_{x\in X_m}d_m(x)y^{|x|_1}\) 且 \(d_m(x)\in\ZZ_{>0}\)，故次数结论成立。
+首项系数由最大重量层的谱与纤维闭式给出（结论 \ref{con:xi-terminal-max-weight-layer-fiber-spectrum-closed}，亦即结论 \ref{con:xi-terminal-zq-top-coefficient-faulhaber} 在 \(q=1\) 的特例）。
+\(Z_m(0)=d_m(0^m)=\lfloor(m+2)/2\rfloor=\lfloor m/2\rfloor+1\)（结论 \ref{con:xi-terminal-zero-weight-fiber-closed}），而 \(Z_m(1)=\sum_x d_m(x)=|\Omega_m|=2^m\)。
+最后一条由 \(Z_m\in\ZZ[y]\) 且 \(\deg_y Z_m=\lceil m/2\rceil\)，结合 \(\mathrm{den}(y(nP))=v_n^4\) 直接推出。证毕。
+\end{proof}
+
+\begin{conclusion}[有限窗 Sturm 实根交错：\texorpdfstring{$m\le 100$}{m<=100} 时 \texorpdfstring{$Z_m(y)$}{Z_m(y)} 的负实根性]\label{con:xi-terminal-zm-sturm-real-roots-interlacing-m100}
+对每个整数 \(1\le m\le 100\)，多项式 \(Z_m(y)\in\ZZ[y]\) 具有 \(\lceil m/2\rceil\) 个互异实根，且全部位于 \((-\infty,0)\)。
+并且对每个 \(0\le m\le 98\)，\(Z_m\) 与 \(Z_{m+2}\) 的零点集合严格交错；因此固定奇偶类的两条子序列 \(\{Z_{2k}\}_{k\ge 0}\) 与 \(\{Z_{2k+1}\}_{k\ge 0}\)（在该核验窗内）各自形成一条 Sturm 实根链。
+\par
+上述核验可由脚本 \texttt{scripts/exp\_fold\_zm\_sturm\_real\_roots\_audit.py} 复算，其输出证书为 \texttt{artifacts/export/fold\_zm\_sturm\_real\_roots\_audit.json}。
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-terminal-zm-order4-rational} 的四阶递推可在 \(\ZZ[y]\) 中逐步生成 \(Z_m(y)\)。
+脚本对核验窗内每个 \(Z_m\) 作高精度求根并检查：
+（i）全部根的虚部在数值容许阈值内消失，从而根全为实数；
+（ii）由于系数非负且常数项非零，实根必落在 \((-\infty,0)\)，并进一步核验互异性；
+（iii）对同奇偶类的 \(m\mapsto m+2\) 根集逐项检验严格交错不等式链。证毕。
+\end{proof}
+
+\begin{conjecture}[负实轴完全性与全尺度交错]\label{conj:xi-terminal-zm-sturm-real-roots-interlacing}
+对任意 \(m\ge 1\)，多项式 \(Z_m(y)\) 的零点全部为互异负实根，并且对任意 \(m\ge 0\)，\(Z_m\) 与 \(Z_{m+2}\) 的零点集合严格交错。
+\end{conjecture}
+
+\begin{remark}[一种结构性证明路线]\label{rem:xi-terminal-zm-sturm-proof-route}
+记系数表 \(a_{m,k}:=[y^k]Z_m(y)\)。
+若猜想 \ref{conj:xi-terminal-zm-sturm-real-roots-interlacing} 成立，则对每个 \(m\) 系数列 \(\bigl([y^k]Z_m(y)\bigr)_k\) 严格对数凹，因而严格单峰；若进一步可提升为 P\'olya--frequency（PF）序列，则全体阶 Hankel 行列式非负并蕴含多重总正性。结合结论 \ref{con:xi-terminal-zm-double-root-diffusive-sinc-limit} 与结论 \ref{con:xi-terminal-zm-diffusive-edge-weyl-spectral-determinant} 的边缘扩散谱刚性，可把“近零量子化”与“全局负实轴束缚”视为同一 Sturm/全正性机制在边缘与全域的两种投影。
+本体系中已核验的二维局域递推
+\[
+a_{m,k}=a_{m-1,k}+a_{m-2,k}+2a_{m-2,k-1}-a_{m-3,k}-a_{m-4,k-1}-a_{m-4,k-2}
+\]
+为构造上述网络/矩阵实现提供直接代数入口。
+\end{remark}
+
+\begin{conclusion}[最小状态复杂度与退化点：除 \(y\in\{0,-1,1\}\) 外 Hankel 秩恰为 \(4\)]\label{con:xi-terminal-zm-hankel-rank4}
+沿用结论 \ref{con:xi-terminal-zm-order4-rational} 的记号，并记
+\(
+\Pi(\lambda,y)=\lambda^4-\lambda^3-(2y+1)\lambda^2+\lambda+y(y+1)
+\)。
+若 \(y\in\CC\setminus\{0,-1,1\}\)，则
+序列 \(\{Z_m(y)\}_{m\ge 0}\) 的最小湮灭多项式恰为 \(\Pi(\lambda,y)\)；
+等价地，\(\{Z_m(y)\}\) 的 Hankel 秩为 \(4\)，不存在三阶及以下的常系数递推能够对所有 \(m\) 成立。
+\par
+当 \(y\in\{0,-1\}\) 时，系数 \(y(y+1)=0\) 使四阶递推在结构上退化为三阶递推，最小阶严格下降；
+当 \(y=1\) 时，归一化恒等式 \(Z_m(1)=\sum_x d_m(x)=2^m\) 使生成函数发生完全抵消，从而 Hankel 秩塌缩为 \(1\)。
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-terminal-zm-order4-rational}，\(\sum_{m\ge 0}Z_m(y)t^m\) 的分母为
+\(
+D(t)=1-t-(2y+1)t^2+t^3+y(y+1)t^4
+\)。
+当 \(y\in\{0,-1\}\) 时，\(D(t)\) 的四次项消失，递推阶数相应降低。
+当 \(y=1\) 时，分子与分母共享因子 \((1-t)(1+t)^2\)，从而生成函数约化为 \(\sum_{m\ge 0}2^m t^m=(1-2t)^{-1}\)，最小阶降为 \(1\)。
+对任意 \(y\in\CC\setminus\{0,-1,1\}\)，\(\deg_t D=4\) 且分子分母无非平凡公因子，
+故约分后分母次数仍为 \(4\)，从而最小递推阶数为 \(4\)；Hankel 秩表述与之等价。证毕。
+\end{proof}
+
+\input{con__xi-terminal-zm-double-root-diffusive-sinc-limit}
+
+\begin{conclusion}[谱分歧轨迹的完全因式分解：Lee--Yang 边界由一元三次给出]\label{con:xi-terminal-zm-discriminant-leyang}
+视 \(\Pi(\lambda,y)\) 为关于 \(\lambda\) 的四次多项式，则其判别式在 \(\ZZ[y]\) 中精确分解为
+\[
+\boxed{\;
+\mathrm{Disc}_{\lambda}\bigl(\Pi(\lambda,y)\bigr)
+=-y\,(y-1)\,\bigl(256y^3+411y^2+165y+32\bigr)\; }.
+\]
+为后续引用，记
+\(
+\mathrm{disc}^{\ast}_{\lambda}\Pi:=\mathrm{Disc}_{\lambda}\bigl(\Pi(\lambda,y)\bigr)
+\)。
+在该记号下，Lee--Yang 型边界即为 \(\mathrm{disc}^{\ast}_{\lambda}\Pi\) 在 \(\mathbb P^1_y\) 上的零点集合。
+因此，\(\lambda\)-谱作为 \(y\) 的代数函数仅在
+\(
+y\in\{0,1\}
+\)
+与三次方程
+\(
+256y^3+411y^2+165y+32=0
+\)
+的根处发生分歧。
+其中该三次多项式恰有一个实根
+\[
+y_{\mathrm{LY}}\approx-1.1344520030,
+\]
+并给出双变量自由能
+\[
+f(y):=\lim_{m\to\infty}\frac{1}{m}\log Z_m(y)
+\]
+在实轴上的最近边界奇点；从而 \(y\) 作为复变量时，\(f\) 的最小非平凡解析半径由 \(y_{\mathrm{LY}}\) 所决定（Lee--Yang 型边界机制；参见 \cite{XuZamolodchikov2022IsingYangLee}）。
+\end{conclusion}
+\begin{proof}[证明要点]
+对四次多项式 \(\Pi(\lambda,y)\) 计算 \(\lambda\)-判别式并在 \(\ZZ[y]\) 中因式分解即可得到所示公式。
+判别式为零当且仅当存在重根，亦即代数分支在该参数处发生分歧；三次因子的实根可由标准数值求根获得。证毕。
+\end{proof}
+
+\subsubsection{Lee--Yang 零点的射影消混合：交比不变量与 crossing 渐近}\label{subsubsec:xi-leyang-projective-demixing-crossing}
+\input{para__xi-leyang-crossratio-projective-demixing}
+
+\subsubsection{谱曲线的椭圆化与分歧单值化}\label{subsubsec:xi-spectral-elliptic-ramification-monodromy}
+\input{para__xi-terminal-zm-leyang-elliptic-langlands-s4-synthesis}
+
+\input{thm__xi-terminal-zm-leyang-elliptic-structure}
+\input{thm__xi-elliptic-torsion-stokes-weil-pairing}
+\input{con__xi-terminal-zm-elliptic-normalization}
+\input{thm__xi-terminal-zm-leyang-elliptic-37-modularity-monodromy-langlands}
+\input{conj__xi-terminal-zm-spectral-compatible-externalization-badprime-minimal}
+\input{con__xi-terminal-zm-timefiber-cusp-depth}
+\input{con__xi-terminal-zm-elliptic-lattes-trace-galois}
+\input{con__xi-terminal-zm-leyang-lattes-chebotarev-independence}
+\input{con__xi-terminal-zm-resolvent-cubic-plane-cubic-geometry}
+\input{con__xi-terminal-zm-leyang-ramification-critical-values}
+\input{con__xi-terminal-zm-elliptic-rational-specialization-cubic-factor}
+\input{con__xi-terminal-zm-s4-visible-jacobian-factorization}
+\input{con__xi-terminal-zm-elliptic-leyang-weight-doubling-audit-chain}
+\input{prop__xi-terminal-zm-branch-puiseux-coefficient-cubic}
+\input{con__xi-terminal-zm-pi-real-bifurcation-asymptotics}
+
+\begin{conclusion}[推前分布下的重量大数律与中心极限定律：均值与方差为有理常数]\label{con:xi-terminal-zm-lln-clt}
+令 \(w_m(x)=d_m(x)/2^m\) 为均匀微态推前分布，并令 \(X\sim w_m\)。
+记 \(H_m:=|X|_1\)，则对一切 \(y\in\CC\) 有概率母函数恒等式
+\[
+\EE\!\left[y^{H_m}\right]=\frac{Z_m(y)}{2^m}.
+\]
+令 \(\lambda_+(y)\) 表示 \(\Pi(\lambda,y)=0\) 在 \(y=1\) 的邻域内、满足 \(\lambda_+(1)=2\) 的解析特征支，则存在极限对数母函数
+\[
+\lim_{m\to\infty}\frac{1}{m}\log \EE\!\left(e^{sH_m}\right)
+=\log\lambda_+(e^s)-\log 2.
+\]
+由此推出：
+\begin{enumerate}
+  \item \(m^{-1}H_m\to 5/18\)（依概率收敛）；
+  \item \(\frac{H_m-\frac{5}{18}m}{\sqrt{m}}\Rightarrow \mathcal N\!\bigl(0,\frac{67}{972}\bigr)\)。
+\end{enumerate}
+上述常数由 \(\Pi(\lambda,y)\) 在点 \((\lambda,y)=(2,1)\) 的隐式微分唯一确定，并不依赖任何外部输入或额外归一化选择。
+\end{conclusion}
+\begin{proof}[证明要点（隐式微分）]
+由定义
+\(
+\EE[y^{H_m}]
+=\sum_{x\in X_m}y^{|x|_1}w_m(x)
+=2^{-m}Z_m(y)
+\)。
+又由于 \(\Pi(\lambda,y)\) 在 \((2,1)\) 处满足 \(\partial_\lambda\Pi(2,1)\neq 0\)，
+由隐函数定理得 \(\lambda_+(y)\) 在 \(y=1\) 的邻域内解析。
+记 \(y=e^s\) 并令 \(\psi(s)=\log\lambda_+(e^s)-\log 2\)，则 \(\psi'(0)\) 与 \(\psi''(0)\) 分别给出线性漂移与方差率。
+\par
+对 \(\Pi(\lambda_+(y),y)=0\) 作一次与二次隐式微分，在点 \((\lambda,y)=(2,1)\) 代入可得
+\[
+\lambda_+'(1)=\frac{5}{9},
+\qquad
+\lambda_+''(1)=-\frac{64}{243}.
+\]
+于是
+\(
+\psi'(0)=\lambda_+'(1)/\lambda_+(1)=5/18
+\)，并且
+\[
+\psi''(0)=\frac{\lambda_+'(1)}{\lambda_+(1)}+\frac{\lambda_+''(1)}{\lambda_+(1)}-\frac{\lambda_+'(1)^2}{\lambda_+(1)^2}
+=\frac{67}{972}.
+\]
+大数律与中心极限定律由有限状态加权转移矩阵的解析谱扰动与标准准幂型定理推出。证毕。
+\end{proof}
+
+\begin{conclusion}[推前重量的一阶矩闭式：线性主项、常数漂移与交替相位]\label{con:xi-terminal-zm-m1-closed}
+沿用结论 \ref{con:xi-terminal-zm-lln-clt} 的记号，并定义一阶矩分子
+\[
+M_1(m):=\sum_{x\in X_m}|x|_1\,d_m(x)=Z_m'(1).
+\]
+则对一切整数 \(m\ge 1\) 有严格恒等式
+\[
+\boxed{\;
+M_1(m)=\Bigl(\frac{5}{18}m-\frac{1}{27}\Bigr)2^m+\frac14-\Bigl(\frac{m}{18}+\frac{23}{108}\Bigr)(-1)^m\;}
+\]
+从而均值具有精确展开
+\[
+\boxed{\;
+\EE[H_m]=\frac{M_1(m)}{2^m}
+=\frac{5}{18}m-\frac{1}{27}
++2^{-m}\Bigl(\frac14-\Bigl(\frac{m}{18}+\frac{23}{108}\Bigr)(-1)^m\Bigr)\;}
+\]
+其中有限尺寸偏离同时包含一个非零常数漂移与携带严格交替相位的 \(2^{-m}\) 层修正。
+\end{conclusion}
+\begin{proof}[证明要点（对 \(Z_m(y)\) 递推作一次微分）]
+由结论 \ref{con:xi-terminal-zm-order4-rational}，\(Z_m(y)\) 满足四阶递推。
+对该递推关于 \(y\) 微分并在 \(y=1\) 处取值，结合恒等式 \(Z_m(1)=2^m\)，得到 \(M_1(m)=Z_m'(1)\) 的常系数递推；
+其特征多项式由 \(\Pi(\lambda,1)=(\lambda-2)(\lambda-1)(\lambda+1)^2\) 决定，从而解必可写为 \(2^m\) 通道与 \(\pm 1\) 通道的有限阶 Jordan 叠加。
+用小 \(m\) 初值定出系数即可得到所示闭式；可由脚本 \texttt{scripts/exp\_fold\_zm\_bivariate\_partition\_audit.py} 复核。证毕。
+\end{proof}
+
+\begin{conclusion}[推前重量的二阶矩与方差闭式：线性涨落系数、常数项与双尺度交替修正]\label{con:xi-terminal-zm-m2-var-closed}
+沿用结论 \ref{con:xi-terminal-zm-lln-clt} 的记号，并定义二阶矩分子
+\[
+M_2(m):=\sum_{x\in X_m}|x|_1^2\,d_m(x).
+\]
+则对一切整数 \(m\ge 1\) 有严格恒等式
+\[
+\boxed{\;
+M_2(m)=\Bigl(\frac{25}{324}m^2+\frac{47}{972}m+\frac{113}{729}\Bigr)2^m+\frac{m}{8}
++\Bigl(\frac{m^3}{324}-\frac{m^2}{54}-\frac{31m}{216}-\frac{113}{729}\Bigr)(-1)^m\;}
+\]
+并因此得到方差的全量闭式分解
+\[
+\Var(H_m)=\frac{67}{972}m+\frac{112}{729}
++2^{-m}\Bigl(\frac{1}{54}-\frac{m}{72}+\Bigl(\frac{m^3}{324}+\frac{m^2}{81}-\frac{19m}{648}-\frac{83}{486}\Bigr)(-1)^m\Bigr)
+\]
+\[
+\qquad\qquad
+-2^{-2m}\Bigl(\frac{1}{16}-\Bigl(\frac{m}{36}+\frac{23}{216}\Bigr)(-1)^m+\Bigl(\frac{m}{18}+\frac{23}{108}\Bigr)^2\Bigr),
+\]
+其中主导涨落项为 \(\frac{67}{972}m+\frac{112}{729}\)，而全部有限尺寸偏离被压缩为两条严格指数尺度 \(2^{-m}\) 与 \(2^{-2m}\) 并携带交替相位。
+\end{conclusion}
+\begin{proof}[证明要点（对 \(Z_m(y)\) 递推作二次微分）]
+注意 \(M_2(m)=Z_m''(1)+Z_m'(1)\)。
+对结论 \ref{con:xi-terminal-zm-order4-rational} 的递推作二次微分并在 \(y=1\) 处取值，即得到 \(Z_m''(1)\) 的常系数递推；
+再结合结论 \ref{con:xi-terminal-zm-m1-closed} 给出的 \(Z_m'(1)\) 闭式，可推出 \(M_2(m)\) 与 \(\Var(H_m)\) 的所示表达。
+上述恒等式可由脚本 \texttt{scripts/exp\_fold\_zm\_bivariate\_partition\_audit.py} 复核。证毕。
+\end{proof}
+
+\begin{conclusion}[任意阶原始矩的湮灭律：\texorpdfstring{$(E-2)^{r+1}(E-1)^r(E+1)^{2r}$}{(E-2)^{r+1}(E-1)^r(E+1)^{2r}}]\label{con:xi-terminal-zm-mr-annihilator}
+对整数 \(r\ge 0\)，定义原始矩分子
+\[
+M_r(m):=\sum_{x\in X_m}|x|_1^r\,d_m(x)\in\ZZ\qquad(m\ge 0).
+\]
+则序列 \(m\mapsto M_r(m)\) 满足常系数齐次递推，其最小湮灭多项式整除
+\[
+(E-2)^{r+1}(E-1)^r(E+1)^{2r},
+\]
+其中 \(E\) 为右移算子 \((Ea)(m)=a(m+1)\)。
+等价地，存在多项式 \(P_r,Q_r,R_r\in\QQ[m]\) 使得对所有 \(m\ge 0\)
+\[
+M_r(m)=2^m P_r(m)+Q_r(m)+(-1)^m R_r(m),
+\]
+并且次数界为
+\[
+\deg P_r=r,\qquad \deg Q_r\le r-1,\qquad \deg R_r\le 2r-1.
+\]
+该结构把全部有限尺寸复杂性压缩为三条谱通道 \(2,1,-1\) 的有限阶 Jordan 叠加，从而任意阶矩在 \(m\) 上不仅存在极限律，而且具有全阶有限闭式展开。
+\end{conclusion}
+\begin{proof}[证明要点（谱通道与有限维扰动）]
+由结论 \ref{con:xi-terminal-zm-order4-rational} 的“有限维带权转移矩阵”表示，
+\(\{Z_m(y)\}\) 可写为固定维数矩阵 \(T(y)\) 的矩阵元；于是 \(M_r(m)\) 是该表示在 \(y=1\) 的有限阶导数所产生的线性组合。
+在 \(y=1\) 时主多项式分解 \(\Pi(\lambda,1)=(\lambda-2)(\lambda-1)(\lambda+1)^2\) 给出三条谱通道；
+有限阶导数仅提升相应 Jordan 阶数，从而得到所示湮灭多项式整除关系与三通道分解。
+对 \(r\le 3\) 的直接代入核验与符号回归可由脚本 \texttt{scripts/exp\_fold\_zm\_bivariate\_partition\_audit.py} 完成。证毕。
+\end{proof}
+
+\begin{conclusion}[单位长度累积量的有理累积塔：所有极限累积量皆属 \texorpdfstring{$\QQ$}{Q}]\label{con:xi-terminal-zm-cumulant-rational}
+令 \(\kappa_r(H_m)\) 为 \(H_m\) 的第 \(r\) 阶累积量（cumulant）。
+则极限
+\[
+\kappa_r^\infty:=\lim_{m\to\infty}\frac{1}{m}\kappa_r(H_m)
+\]
+对每个整数 \(r\ge 1\) 存在，且满足 \(\kappa_r^\infty\in\QQ\)。
+其生成机制可取为：令 \(\lambda_+(y)\) 表示特征方程 \(\Pi(\lambda,y)=0\) 在 \(y=1\) 的邻域内满足 \(\lambda_+(1)=2\) 的解析特征支，
+并定义
+\[
+\psi(s):=\log\lambda_+(e^s)-\log 2.
+\]
+则 \(\psi\) 在 \(s=0\) 的泰勒系数全为有理数，且
+\(
+\kappa_r^\infty=\psi^{(r)}(0)
+\)。
+前四阶显式为
+\[
+\kappa_1^\infty=\frac{5}{18},\qquad
+\kappa_2^\infty=\frac{67}{972},\qquad
+\kappa_3^\infty=-\frac{22}{2187},\qquad
+\kappa_4^\infty=-\frac{1763}{157464}.
+\]
+因此标准化极限偏度与超额峰度分别为
+\[
+\gamma_1=\frac{\kappa_3^\infty}{(\kappa_2^\infty)^{3/2}}\approx -0.5558544555,\qquad
+\gamma_2=\frac{\kappa_4^\infty}{(\kappa_2^\infty)^2}\approx -2.3564268211.
+\]
+\end{conclusion}
+\begin{proof}[证明要点（隐函数定理与系数域闭合）]
+由结论 \ref{con:xi-terminal-zm-lln-clt}，极限对数矩母函数为 \(\psi(s)\)。
+由于 \(\Pi(\lambda,y)\in\ZZ[\lambda,y]\) 且 \(\partial_\lambda\Pi(2,1)\neq 0\)，隐函数定理给出 \(\lambda_+(y)\) 在 \(y=1\) 邻域的解析展开；
+逐阶比较系数可知其系数落在 \(\QQ\) 中，进而 \(\psi(s)=\log\lambda_+(e^s)-\log 2\) 的泰勒系数同属 \(\QQ\)。
+累积量密度 \(\kappa_r^\infty\) 等于 \(\psi^{(r)}(0)\) 为标准结论；显式分数可由符号微分回收，
+并可由脚本 \texttt{scripts/exp\_fold\_zm\_bivariate\_partition\_audit.py} 复核。证毕。
+\end{proof}
+
+\begin{conclusion}[三阶累积量的有限尺寸闭式：仿射主项与三层指数修正]\label{con:xi-terminal-zm-kappa3-finite-closed}
+令 \(\kappa_3(H_m)\) 为 \(H_m\) 的第三阶累积量，则对一切整数 \(m\ge 1\) 有精确分解
+\[
+\kappa_3(H_m)= -\frac{22}{2187}m+\frac{52}{19683}
++2^{-m}\mathcal P_1\!\bigl(m,(-1)^m\bigr)
++2^{-2m}\mathcal P_2\!\bigl(m,(-1)^m\bigr)
++2^{-3m}\mathcal P_3\!\bigl(m,(-1)^m\bigr),
+\]
+其中每个 \(\mathcal P_j(\cdot,\cdot)\) 都可写成“偶/奇”二扇区可分离的形式
+\(
+\mathcal P_j(m,\varepsilon)=A_j(m)+\varepsilon B_j(m)
+\)
+（\(A_j,B_j\) 为有理系数多项式）。
+三层修正可取为
+\[
+\mathcal P_1(m,\varepsilon)=\Bigl(\frac{m^2}{1728}+\frac{151m}{1728}-\frac{293}{10368}\Bigr)
++\varepsilon\Bigl(-\frac{m^5}{12960}+\frac{7m^4}{15552}+\frac{41m^3}{11664}-\frac{487m^2}{46656}-\frac{2699m}{77760}+\frac{2407}{279936}\Bigr),
+\]
+\[
+\mathcal P_2(m,\varepsilon)=\Bigl(\frac{m^4}{1944}+\frac{47m^3}{11664}+\frac{35m^2}{11664}-\frac{143m}{3888}-\frac{269}{2187}\Bigr)
++\varepsilon\Bigl(-\frac{m^3}{432}-\frac{5m^2}{432}+\frac{7m}{432}+\frac{34}{243}\Bigr),
+\]
+\[
+\mathcal P_3(m,\varepsilon)=\Bigl(\frac{m^2}{216}+\frac{23m}{648}+\frac{193}{1944}\Bigr)
++\varepsilon\Bigl(-\frac{m^3}{2916}-\frac{23m^2}{5832}-\frac{629m}{17496}-\frac{15617}{157464}\Bigr).
+\]
+因此三阶非高斯性在单位长度尺度上呈严格线性斜率 \(-22/2187\)，且其全部有限尺寸偏离被压缩为三层指数尺度 \(2^{-m},2^{-2m},2^{-3m}\) 的代数可审计修正。
+\end{conclusion}
+\begin{proof}[证明要点（由闭式矩回收累积量并分层收集）]
+由结论 \ref{con:xi-terminal-zm-m1-closed} 与结论 \ref{con:xi-terminal-zm-m2-var-closed} 得到 \(\EE[H_m]\) 与 \(\EE[H_m^2]\) 的闭式；
+并由结论 \ref{con:xi-terminal-zm-mr-annihilator} 在 \(r=3\) 的特例得到 \(\EE[H_m^3]\) 的三通道闭式。
+将三者代入
+\(\kappa_3(H_m)=\EE[H_m^3]-3\EE[H_m^2]\EE[H_m]+2\EE[H_m]^3\)，
+并把 \(2^{-m}\) 的幂次与 \((-1)^m\) 的相位逐层收集，即得到所示分解与多项式系数。
+恒等式可由脚本 \texttt{scripts/exp\_fold\_zm\_bivariate\_partition\_audit.py} 复核。证毕。
+\end{proof}
+
+\begin{conclusion}[重量分布的全局大偏差：速率函数为四次代数谱的 Legendre 变换]\label{con:xi-terminal-zm-ldp}
+定义压力函数
+\[
+\psi(s):=\log\lambda_+(e^s)-\log 2.
+\]
+则 \(H_m/m\) 满足大偏差原理，其速率函数为
+\[
+I(\alpha)=\sup_{s\in\RR}\bigl(s\alpha-\psi(s)\bigr).
+\]
+其中 \(\psi\) 在实轴上严格凸且实解析；
+其复解析延拓的最近实轴障碍由结论 \ref{con:xi-terminal-zm-discriminant-leyang} 的 \(y_{\mathrm{LY}}\) 所决定（经 \(y=e^s\) 的复对数支提升）。
+因此重量统计的多分形谱可在不引入任何额外热力学形式体系的前提下，直接由 \(\Pi(\lambda,y)\) 的主特征支给出。
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-terminal-zm-lln-clt}，\(\psi\) 给出极限对数矩母函数。
+在 \(\psi\) 的可微与严格凸条件下，G\"artner--Ellis 定理推出大偏差原理及其 Legendre 变换形式。
+最近解析障碍由 \(\lambda_+(y)\) 的分歧点决定，而分歧点由判别式为零刻画，见结论 \ref{con:xi-terminal-zm-discriminant-leyang}。证毕。
+\end{proof}
+
+\input{rem__xi-terminal-zm-lambda-plus-elliptic-uniformization}
+\input{con__xi-terminal-zm-leyang-abel-jacobi-ode}
+\input{con__xi-terminal-zm-leyang-exponential-time-differential-closure}
+
+\begin{conclusion}[重量大偏差的代数鞍点方程：倾斜参数的五次消元证书]\label{con:xi-terminal-zm-ldp-saddle-quintic}
+对 \(\alpha\in(0,\tfrac12)\)，令 \(y(\alpha)>0\) 为满足鞍点条件
+\[
+\alpha=\frac{y\,\lambda_+'(y)}{\lambda_+(y)}
+\]
+的唯一正解（\(\lambda_+\) 为结论 \ref{con:xi-terminal-zm-lln-clt} 中 \(\Pi(\lambda,y)=0\) 的主特征支）。
+则 \(y(\alpha)\) 必满足关于 \((\alpha,y)\) 的显式五次代数方程
+\[
+\begin{aligned}
+0=&\ 256\alpha^4y^5+411\alpha^4y^4-91\alpha^4y^3-379\alpha^4y^2-165\alpha^4y-32\alpha^4\\
+&-512\alpha^3y^5-566\alpha^3y^4+337\alpha^3y^3+512\alpha^3y^2+197\alpha^3y+32\alpha^3\\
+&+384\alpha^2y^5+228\alpha^2y^4-298\alpha^2y^3-214\alpha^2y^2-28\alpha^2y\\
+&-128\alpha y^5-8\alpha y^4+86\alpha y^3+16\alpha y^2-4\alpha y\\
+&+16y^5-8y^4-4y^3+y^2,
+\end{aligned}
+\]
+并且速率函数在该支上可写为
+\[
+I(\alpha)=\alpha\log y(\alpha)-\log \lambda_+\!\bigl(y(\alpha)\bigr)+\log 2.
+\]
+因此该 LDP 的鞍点求解与速率函数评估在严格意义下为有限代数可计算对象。
+\end{conclusion}
+\begin{proof}[证明要点（隐式微分 + 消元）]
+鞍点条件等价于 \(\alpha=\psi'(s)\) 与 \(y=e^s\) 的联立，从而可写为
+\(\alpha=-y\,\partial_y\Pi(\lambda,y)/(\lambda\,\partial_\lambda\Pi(\lambda,y))\) 与 \(\Pi(\lambda,y)=0\) 的共同解（其中 \(\lambda=\lambda_+(y)\)）。
+对变量 \(\lambda\) 作消元（例如取关于 \(\lambda\) 的 resultant）即可得到所示五次多项式；
+并由结论 \ref{con:xi-terminal-zm-ldp} 的 Legendre 形式推出 \(I(\alpha)\) 的鞍点表达。
+上述消元证书可由脚本 \texttt{scripts/exp\_fold\_zm\_bivariate\_partition\_audit.py} 复核。证毕。
+\end{proof}
+
+\begin{conclusion}[自反型同余通道的唯一性：仅 \(y^2+y+1=0\) 触发单位圆对称]\label{con:xi-terminal-zm-self-inversive-unique}
+对 \(|y|=1\)，称 \(\Pi(\lambda,y)\) 为自反（self-inversive）多项式，
+若存在常数 \(c\in\CC\)（\(|c|=1\)）使得
+\[
+\lambda^4\,\overline{\Pi\!\left(\frac{1}{\overline{\lambda}},y\right)}=c\,\Pi(\lambda,y).
+\]
+则当且仅当 \(y(y+1)=-1\)，亦即 \(y\) 为本原三次单位根（满足 \(y^2+y+1=0\)），\(\Pi(\lambda,y)\) 才具有该自反性。
+在且仅在此情形，\(\Pi(\lambda,y)\) 的根集关于单位圆满足严格对称：要么位于单位圆上，要么以
+\(\lambda\mapsto 1/\overline{\lambda}\) 成对出现；并且必存在一对互为倒共轭的根，其模长严格大于 \(1\)。
+因此“同余权重的单位圆对称”在该体系中是严格量子化的：模 \(3\) 为唯一触发自反对称的非平凡同余通道。
+\end{conclusion}
+\begin{proof}[证明要点]
+写
+\(
+\Pi(\lambda,y)=\sum_{k=0}^{4}a_k(y)\lambda^k
+\)，其中
+\(
+a_4=1,\ a_3=-1,\ a_2=-(2y+1),\ a_1=1,\ a_0=y(y+1)
+\)。
+自反性等价于存在 \(|c|=1\) 使 \(a_k(y)=c\,\overline{a_{4-k}(y)}\) 对所有 \(k\) 成立。
+由 \(a_3=-1=c\,\overline{a_1}=c\) 得 \(c=-1\)。
+再由 \(a_4=1=c\,\overline{a_0}=-\overline{y(y+1)}\) 得 \(\overline{y(y+1)}=-1\)；
+当 \(|y|=1\) 时 \(\overline{y(y+1)}=(1+y)/y^2\)，故等价于 \(y^2+y+1=0\)。
+根集的单位圆对称为自反多项式的标准结论。证毕。
+\end{proof}
+
+\begin{conclusion}[重量细分系数的二维线性动力：\((m,k)\) 平面上的有限邻域闭合递推]\label{con:xi-terminal-zm-2d-recurrence-amk}
+令
+\[
+a_{m,k}:=\sum_{\substack{x\in X_m\\ |x|_1=k}} d_m(x),
+\qquad
+Z_m(y)=\sum_{k\in\ZZ} a_{m,k}y^k .
+\]
+则由结论 \ref{con:xi-terminal-zm-order4-rational} 的四阶递推在 \(y\) 上的多项式结构，得到 \(a_{m,k}\) 的闭合二维递推：
+对一切 \(m\ge 4\) 与 \(k\in\ZZ\)，
+\[
+\boxed{\;
+a_{m,k}=a_{m-1,k}+a_{m-2,k}+2a_{m-2,k-1}-a_{m-3,k}-a_{m-4,k-1}-a_{m-4,k-2}\;}
+\]
+并以边界条件 \(a_{m,k}=0\)（当 \(k<0\) 或 \(k>\lceil m/2\rceil\)）封闭。
+该二维递推把“推前分布的重量剖分”转写为一个完全局域的线性动力系统，使得重量层（固定 \(k\)）与长度层（固定 \(m\)）之间的耦合仅通过有限邻域发生；
+因此重量分布的全体精细信息可在不显式构造任何高维碰撞核的前提下，由 \((m,k)\) 层级递推直接生成并审计。
+\end{conclusion}
+\begin{proof}
+将结论 \ref{con:xi-terminal-zm-order4-rational} 的递推式写成 \(y\)-幂级数，并比较 \(y^k\) 的系数即可得到所示二维递推；
+边界条件由黄金均值合法语法的最大 \(1\)-计数 \(\max_{x\in X_m}|x|_1=\lceil m/2\rceil\) 直接给出。证毕。
+\end{proof}
+
+\input{con__xi-terminal-zm-low-weight-quasipolynomial}
+
+\paragraph{硬边界层的精确层级：二项式基整数证书与纯极点生成函数}
+结论 \ref{con:xi-terminal-zm-2d-recurrence-amk} 的二维递推在硬边界方向（\(k\) 贴近 \(\lceil m/2\rceil\)）发生进一步的差分退化：
+固定层深 \(j\) 后，偶长与奇长的边界系数在长度参数 \(k\) 上不仅具有渐近展开，
+而是给出\emph{逐点成立}的精确多项式结构；并且其 Newton 二项式基展开自动产生可审计的整系数证书。
+
+\begin{conclusion}[硬边界系数的精确多项式化：偶长 \texorpdfstring{$m=2k$}{m=2k} 的近最大重量层仅呈代数级增长]\label{con:xi-terminal-zm-hard-boundary-even-polynomial}
+沿用结论 \ref{con:xi-terminal-zm-order4-rational} 的 \(Z_m(y)\) 记号。
+对固定整数 \(j\ge 0\)，定义偶长硬边界系数
+\[
+A_j(k):=[y^{k-j}]\,Z_{2k}(y)\qquad(k\ge 0),
+\]
+其中约定当 \(k<j\) 时 \(A_j(k)=0\)。
+则 \(A_j(k)\) 在所有整数 \(k\ge 0\) 上为精确多项式，其次数恰为 \(4j+2\)，且首项系数严格为 \(1/(4j+2)!\)。
+更进一步，\(A_j(k)\) 存在唯一的二项式基展开
+\[
+A_j(k)=\sum_{r=j}^{4j+2}c_{j,r}\binom{k}{r},\qquad c_{j,r}\in\ZZ,\ \ c_{j,4j+2}=1,
+\]
+其中约定 \(\binom{k}{r}=0\)（当 \(r>k\)）。
+因此在硬边界方向 \(k-j\) 处，推前重量剖分的每一固定层深 \(j\) 仅携带代数级前因子；
+并且当 \(j\mapsto j+1\) 时，多项式次数严格增加 \(4\)。
+\end{conclusion}
+
+\begin{conclusion}[偶长硬边界系数的前三层闭式：二项式基展开给出完全可审计的整系数证书]\label{con:xi-terminal-zm-hard-boundary-even-first3}
+在结论 \ref{con:xi-terminal-zm-hard-boundary-even-polynomial} 的记号下，前三个非平凡层（\(j=1,2,3\)）满足下列逐点恒等式（对所有整数 \(k\ge 0\) 成立）：
+\[
+\boxed{\ A_1(k)=2\binom{k}{1}+5\binom{k}{2}+9\binom{k}{3}+7\binom{k}{4}+4\binom{k}{5}+\binom{k}{6}\ }
+\]
+等价地，
+\[
+A_1(k)=\frac{k^6+9k^5+55k^4+435k^3-56k^2+996k}{720}.
+\]
+\[
+\boxed{\ A_2(k)=3\binom{k}{2}+14\binom{k}{3}+39\binom{k}{4}+59\binom{k}{5}+63\binom{k}{6}+45\binom{k}{7}+22\binom{k}{8}+7\binom{k}{9}+\binom{k}{10}\ }
+\]
+\[
+\boxed{\ A_3(k)=4\binom{k}{3}+30\binom{k}{4}+119\binom{k}{5}+273\binom{k}{6}+439\binom{k}{7}+507\binom{k}{8}+437\binom{k}{9}+283\binom{k}{10}+135\binom{k}{11}+46\binom{k}{12}+10\binom{k}{13}+\binom{k}{14}\ }.
+\]
+上述二项式基系数可由 forward-difference（Newton 级数）直接回收，因而给出无需谱计算的整数证书；
+并可由脚本 \texttt{scripts/exp\_fold\_zm\_hard\_boundary\_coeffs\_audit.py} 一键复核。
+\end{conclusion}
+
+\begin{conclusion}[硬边界系数的精确多项式化：奇长 \texorpdfstring{$m=2k+1$}{m=2k+1} 的层次数严格量子化为 \texorpdfstring{$4j$}{4j}]\label{con:xi-terminal-zm-hard-boundary-odd-polynomial}
+沿用结论 \ref{con:xi-terminal-zm-order4-rational} 的 \(Z_m(y)\) 记号。
+对固定整数 \(j\ge 0\)，定义奇长硬边界系数
+\[
+B_j(k):=[y^{k+1-j}]\,Z_{2k+1}(y)\qquad(k\ge 0),
+\]
+其中约定当 \(k<j-1\) 时 \(B_j(k)=0\)。
+则 \(B_j(k)\) 在所有整数 \(k\ge 0\) 上为精确多项式，其次数恰为 \(4j\)，且首项系数严格为 \(1/(4j)!\)。
+并且存在唯一的二项式基展开
+\[
+B_j(k)=\sum_{r=j-1}^{4j}d_{j,r}\binom{k}{r},\qquad d_{j,r}\in\ZZ,\ \ d_{j,4j}=1,
+\]
+其中约定 \(\binom{k}{r}=0\)（当 \(r>k\)）。
+在 \(j=1,2\) 时可给出完全闭式：
+\[
+\boxed{\ B_1(k)=\binom{k}{0}+4\binom{k}{1}+4\binom{k}{2}+3\binom{k}{3}+\binom{k}{4}
+=\frac{k^4+6k^3+23k^2+66k+24}{24}\ }
+\]
+\[
+\boxed{\ B_2(k)=2\binom{k}{1}+11\binom{k}{2}+23\binom{k}{3}+32\binom{k}{4}+28\binom{k}{5}+16\binom{k}{6}+6\binom{k}{7}+\binom{k}{8}\ }.
+\]
+\end{conclusion}
+
+\begin{conclusion}[硬边界大偏差的闭式前因子：边界层概率质量的严格多项式—指数分解]\label{con:xi-terminal-zm-hard-boundary-ldp-prefactor}
+令 \(w_m(x)=d_m(x)/2^m\) 为均匀微态推前分布，并令 \(X\sim w_m\)、\(H_m:=|X|_1\)。
+对固定整数 \(j\ge 1\)，存在严格闭式：
+\begin{itemize}
+  \item 偶长 \(m=2k\)：
+  \[
+  \mathbb{P}(H_{2k}=k-j)=\frac{A_j(k)}{4^k},
+  \]
+  其中 \(A_j(k)\) 为结论 \ref{con:xi-terminal-zm-hard-boundary-even-polynomial} 的次数 \(4j+2\) 多项式。
+  因而
+  \[
+  \mathbb{P}(H_{2k}=k-j)=\frac{k^{4j+2}}{(4j+2)!\,4^k}\Bigl(1+O(k^{-1})\Bigr).
+  \]
+  \item 奇长 \(m=2k+1\)：
+  \[
+  \mathbb{P}(H_{2k+1}=k+1-j)=\frac{B_j(k)}{2^{2k+1}},
+  \]
+  其中 \(B_j(k)\) 为结论 \ref{con:xi-terminal-zm-hard-boundary-odd-polynomial} 的次数 \(4j\) 多项式。
+  因而
+  \[
+  \mathbb{P}(H_{2k+1}=k+1-j)=\frac{k^{4j}}{(4j)!\,2^{2k+1}}\Bigl(1+O(k^{-1})\Bigr).
+  \]
+\end{itemize}
+上述分解表明：在最大密度边界附近，推前重量分布的指数速率保持为纯几何项 \(4^{-k}\)（或 \(2^{-(2k+1)}\)），
+而全部非平凡算术结构被压缩到一个阶乘归一化的多项式前因子之中。
+\end{conclusion}
+
+\begin{conclusion}[硬边界层生成函数的纯极点结构：极点阶恰为 \texorpdfstring{$4j+3$}{4j+3} 与 \texorpdfstring{$4j+1$}{4j+1}]\label{con:xi-terminal-zm-hard-boundary-pure-pole}
+令 \(A_j(k)\)、\(B_j(k)\) 如结论 \ref{con:xi-terminal-zm-hard-boundary-even-polynomial} 与结论 \ref{con:xi-terminal-zm-hard-boundary-odd-polynomial}，
+并记其普通生成函数
+\[
+\mathcal A_j(t):=\sum_{k\ge 0}A_j(k)t^k,\qquad \mathcal B_j(t):=\sum_{k\ge 0}B_j(k)t^k.
+\]
+则二者均为有理函数，且极点阶严格量子化为
+\[
+\mathcal A_j(t)=\frac{P_j(t)}{(1-t)^{4j+3}},\qquad
+\mathcal B_j(t)=\frac{Q_j(t)}{(1-t)^{4j+1}},
+\]
+其中 \(P_j,Q_j\in\ZZ[t]\)。
+例如对 \(j=1\)（偶长第一硬边界层）有完全闭式
+\[
+\boxed{\ \mathcal A_1(t)=\frac{2t-5t^2+9t^3-10t^4+7t^5-2t^6}{(1-t)^7}\ }.
+\]
+因此硬边界层不仅在系数层面为精确多项式，其整生成函数亦呈现单一纯极点的最简解析结构。
+\end{conclusion}
+

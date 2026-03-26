@@ -1,0 +1,327 @@
+\subsection{圆维秩刻画、外置最小预算与单相位精度指数}\label{subsec:conclusion-cdim-externalization-signature-singlephase-precision}
+\begin{remark}[结构层与实现层的语义边界]\label{rem:conclusion-cdim-implementation-structure-boundary}
+本小节沿用既定的圆维 \(\cdim\) 与半圆维 \(\cdim^+\) 口径。
+凡出现编码、寄存器与账本，均指实现层外置轴；其作用是把读出流程单射化，不等同于结构层圆维的坍缩。
+\end{remark}
+
+\begin{theorem}[圆维的秩刻画与短正合严格可加]\label{thm:conclusion-cdim-rank-and-short-exact-additivity}
+设 \(G\) 为有限生成离散交换群，则
+\[
+\cdim(G)=\operatorname{rank}_{\ZZ}(G)=\dim_{\QQ}(G\otimes_{\ZZ}\QQ).
+\]
+并且对任意有限生成离散交换群的短正合列
+\[
+0\to A\to B\to C\to 0
+\]
+有
+\[
+\cdim(B)=\cdim(A)+\cdim(C).
+\]
+\end{theorem}
+\begin{proof}
+由有限生成交换群结构定理，
+\[
+G\simeq \ZZ^r\oplus T,\qquad T\ \text{有限}.
+\]
+Pontryagin 对偶给出
+\[
+\widehat G\simeq \widehat{\ZZ^r}\times \widehat T\simeq \TT^r\times \widehat T.
+\]
+其中 \(\widehat T\) 有限，故不贡献连通环面维；于是 \((\widehat G)^0\simeq \TT^r\)，从而 \(\cdim(G)=r=\operatorname{rank}_{\ZZ}(G)\)。
+
+另一方面，\(\QQ\) 作为 \(\ZZ\)-模平坦，故短正合列张量 \(\QQ\) 仍短正合：
+\[
+0\to A\otimes\QQ\to B\otimes\QQ\to C\otimes\QQ\to 0.
+\]
+三者均为有限维 \(\QQ\)-向量空间，故维数可加：
+\[
+\dim_{\QQ}(B\otimes\QQ)=\dim_{\QQ}(A\otimes\QQ)+\dim_{\QQ}(C\otimes\QQ).
+\]
+再由 \(\cdim(\cdot)=\dim_{\QQ}((\cdot)\otimes\QQ)\) 得结论。证毕。
+\end{proof}
+
+\begin{theorem}[读出单射化的最小外置圆维成本]\label{thm:conclusion-minimal-external-cdim-equals-kernel-cdim}
+设 \(f:G\to H\) 为有限生成离散交换群同态，记
+\[
+K:=\ker f,\qquad r:=\cdim(K),\qquad T:=\operatorname{Tor}(K).
+\]
+则存在有限群 \(F\) 与同态
+\[
+\rho:G\to \ZZ^r\oplus F
+\]
+使扩展读出
+\[
+\widetilde f:=(f,\rho):G\to H\oplus\ZZ^r\oplus F
+\]
+为单射。
+
+此外，在所有满足“投影回 \(H\) 等于 \(f\)”的单射扩展
+\[
+(f,\rho'):G\to H\oplus R
+\]
+中（其中 \(R\) 取有限生成离散交换群），必有
+\[
+\cdim(R)\ge r.
+\]
+该下界可达，故最小外置圆维成本恰为 \(\cdim(\ker f)\)。
+\end{theorem}
+\begin{proof}
+先证可达性。取分解
+\[
+G\simeq \ZZ^m\oplus T_G,\qquad H\simeq \ZZ^n\oplus T_H.
+\]
+记自由商映射为 \(q_G:G\to \ZZ^m,\ q_H:H\to \ZZ^n\)，并令 \(\bar f:\ZZ^m\to\ZZ^n\) 满足
+\[
+q_H\circ f=\bar f\circ q_G.
+\]
+取 Smith 正规形
+\[
+V\bar f U=\operatorname{diag}(d_1,\dots,d_k,0,\dots,0),\qquad U\in\mathrm{GL}_m(\ZZ),\ V\in\mathrm{GL}_n(\ZZ).
+\]
+于是 \(\ker\bar f\) 自由秩为 \(m-k\)，并且
+\[
+r=\operatorname{rank}_{\ZZ}(K)=\operatorname{rank}_{\ZZ}(\ker\bar f)=m-k
+\]
+（由定理 \ref{thm:conclusion-cdim-rank-and-short-exact-additivity}）。
+
+设 \(\pi_{\mathrm{last}}:\ZZ^m\to\ZZ^{m-k}\) 为对 \(U^{-1}\)-坐标下后 \(m-k\) 坐标的投影，定义
+\[
+\rho_{\mathrm{free}}:=\pi_{\mathrm{last}}\circ U^{-1}\circ q_G:G\to \ZZ^{m-k}.
+\]
+若 \(x\in K\) 且 \(\rho_{\mathrm{free}}(x)=0\)，则 \(q_G(x)\in\ker\bar f\) 且其后 \(m-k\) 坐标为零，故 \(q_G(x)=0\)，即 \(x\in T_G\)。
+因此
+\[
+\ker(\rho_{\mathrm{free}}|_K)=T.
+\]
+
+再取一组分裂 \(G\simeq \ZZ^m\oplus T_G\) 的投影 \(\tau:G\to T_G\)，并令 \(F:=T_G\)，定义
+\[
+\rho:=(\rho_{\mathrm{free}},\tau):G\to \ZZ^{m-k}\oplus F.
+\]
+对 \(x\in K\)，若 \(\rho(x)=0\)，则 \(\tau(x)=0\) 且 \(\rho_{\mathrm{free}}(x)=0\)。
+后者给出 \(x\in T\)，前者给出 \(x\) 的 torsion 分量为零，故 \(x=0\)。
+即 \(\rho|_K\) 单射，从而
+\[
+\ker(f,\rho)=\{0\},
+\]
+故 \((f,\rho)\) 单射。
+又 \(m-k=r\)，故目标为 \(\ZZ^r\oplus F\)。
+
+再证下界。设 \((f,\rho'):G\to H\oplus R\) 单射。
+则对 \(x\in K\)，若 \(\rho'(x)=0\)，则 \((f(x),\rho'(x))=(0,0)\)，由单射得 \(x=0\)，故 \(\rho'|_K\) 单射。
+张量 \(\QQ\) 后仍单射，故
+\[
+\dim_{\QQ}(K\otimes\QQ)\le \dim_{\QQ}(R\otimes\QQ).
+\]
+由定理 \ref{thm:conclusion-cdim-rank-and-short-exact-additivity}，
+\[
+\cdim(R)\ge \cdim(K)=r.
+\]
+结合前半部分可达性，下界即最小值。证毕。
+\end{proof}
+
+\begin{proposition}[模读出的实现层外置轴预算]\label{prop:conclusion-mod-readout-external-half-circle-budget}
+设 \(b\ge 2\)，定义实现层读出
+\[
+\rho_b:\NN\to \ZZ/b\ZZ,\qquad \rho_b(n)=n\bmod b.
+\]
+则存在规范单射化扩展
+\[
+\widetilde\rho_b:\NN\hookrightarrow (\ZZ/b\ZZ)\times\NN,\qquad
+\widetilde\rho_b(n)=\bigl(n\bmod b,\lfloor n/b\rfloor\bigr),
+\]
+其逆映射为
+\[
+(r,q)\longmapsto bq+r,\qquad 0\le r<b.
+\]
+在既定圆维/半圆维口径下，余数轴圆维为 \(0\)，商轴预算为
+\[
+\cdim^+(\NN)=\frac12.
+\]
+因此该单射化仅引入实现层外置半圆维，不造成结构圆维坍缩。
+\end{proposition}
+\begin{proof}
+欧几里得除法给出唯一分解 \(n=bq+r\)（\(0\le r<b\)），故 \(\widetilde\rho_b\) 与所示逆互逆，因而单射化成立。
+有限余数轴 \(\ZZ/b\ZZ\) 不贡献圆维；按既定口径 \(\NN\) 的商轴对应半圆维 \(\frac12\)。证毕。
+\end{proof}
+
+\begin{definition}[数域的二元圆维签名]\label{def:conclusion-number-field-two-cdim-signature}
+设 \(K/\QQ\) 为数域，\(\mathcal O_K\) 为整数环。定义
+\[
+\mathbf\Sigma(K):=(a(K),u(K))
+:=
+\left(\cdim(\mathcal O_K,+),\ \cdim(\mathcal O_K^\times)\right).
+\]
+\end{definition}
+
+\begin{theorem}[数域两类圆维决定阿基米德签名]\label{thm:conclusion-number-field-signature-from-two-cdims}
+沿用定义 \ref{def:conclusion-number-field-two-cdim-signature}。
+则 \(\mathbf\Sigma(K)=(a(K),u(K))\) 唯一决定签名 \((r_1,r_2)\)，且
+\[
+r_2=a(K)-u(K)-1,\qquad
+r_1=2u(K)+2-a(K).
+\]
+\end{theorem}
+\begin{proof}
+作为 \(\ZZ\)-模，
+\[
+\mathcal O_K\simeq \ZZ^{[K:\QQ]},
+\]
+故由定理 \ref{thm:conclusion-cdim-rank-and-short-exact-additivity}
+\[
+a(K)=[K:\QQ]=:n.
+\]
+Dirichlet 单位定理给出
+\[
+\mathcal O_K^\times\simeq \mu(K)\times \ZZ^{r_1+r_2-1},
+\]
+其中 \(\mu(K)\) 有限，故
+\[
+u(K)=r_1+r_2-1=:u.
+\]
+与
+\[
+n=r_1+2r_2,\qquad u=r_1+r_2-1
+\]
+联立解得
+\[
+r_2=n-u-1,\qquad r_1=2u+2-n.
+\]
+代回 \(n=a(K),u=u(K)\) 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[全实/全复判别与复嵌入缺口]\label{cor:conclusion-real-complex-signature-gap-criterion}
+沿用定理 \ref{thm:conclusion-number-field-signature-from-two-cdims} 的记号：
+\begin{enumerate}
+  \item \(K\) 全实（\(r_2=0\)）当且仅当
+  \[
+  a(K)=u(K)+1.
+  \]
+  \item \(K\) 全复（\(r_1=0\)）当且仅当
+  \[
+  a(K)=2u(K)+2.
+  \]
+  \item 复嵌入数满足
+  \[
+  r_2=a(K)-u(K)-1.
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-number-field-signature-from-two-cdims} 的显式公式直接得到。证毕。
+\end{proof}
+
+\begin{theorem}[\(S\)-单位圆维线性增长律]\label{thm:conclusion-sunit-cdim-linear-growth}
+设 \(K/\QQ\) 为数域，\(S\) 为有限个非阿基米德素点集合，\(\mathcal O_{K,S}^\times\) 为 \(S\)-单位群。
+则
+\[
+\cdim(\mathcal O_{K,S}^\times)=\cdim(\mathcal O_K^\times)+|S|.
+\]
+特别地，当 \(K=\QQ\) 时，
+\[
+\ZZ_S^\times\simeq \{\pm1\}\times \ZZ^{|S|},
+\qquad
+\cdim(\ZZ_S^\times)=|S|.
+\]
+\end{theorem}
+\begin{proof}
+\(S\)-单位定理给出自由秩
+\[
+\operatorname{rank}_{\ZZ}(\mathcal O_{K,S}^\times)=r_1+r_2-1+|S|.
+\]
+有限扭部分不贡献圆维，故
+\[
+\cdim(\mathcal O_{K,S}^\times)=r_1+r_2-1+|S|
+=\cdim(\mathcal O_K^\times)+|S|.
+\]
+当 \(K=\QQ\) 时，
+\[
+\ZZ_S^\times=\left\{\pm\prod_{p\in S}p^{n_p}:\ n_p\in\ZZ\right\}
+\simeq\{\pm1\}\times\ZZ^{|S|},
+\]
+从而 \(\cdim(\ZZ_S^\times)=|S|\)。证毕。
+\end{proof}
+
+\begin{theorem}[高圆维格点可单相位单射压入且像必稠密]\label{thm:conclusion-zn-to-circle-injective-dense}
+对任意 \(n\ge 1\)，存在群单射
+\[
+\Phi:\ZZ^n\hookrightarrow \TT
+\]
+使 \(\Phi(\ZZ^n)\) 在 \(\TT\) 中稠密。
+并且对任意群同态 \(\Psi:\ZZ^n\to\TT\)，若 \(\Psi(\ZZ^n)\) 无限，则其像必稠密。
+\end{theorem}
+\begin{proof}
+取 \(\alpha=(\alpha_1,\dots,\alpha_n)\in\RR^n\) 使 \(1,\alpha_1,\dots,\alpha_n\) 在 \(\QQ\) 上线性无关，定义
+\[
+\Phi(k):=\exp\!\bigl(2\pi i\langle k,\alpha\rangle\bigr),\qquad k\in\ZZ^n.
+\]
+若 \(\Phi(k)=1\)，则 \(\langle k,\alpha\rangle\in\ZZ\)，由有理线性无关性得 \(k=0\)，故 \(\Phi\) 单射。
+
+又 \(\Phi(\ZZ^n)\) 为 \(\TT\) 的无限子群。圆群的闭子群仅为有限循环群或整个 \(\TT\)，故无限子群的闭包只能是 \(\TT\)，于是 \(\Phi(\ZZ^n)\) 稠密。
+
+一般情形下，对任意 \(\Psi\)，若 \(\Psi(\ZZ^n)\) 无限，同理其闭包为 \(\TT\)，故像稠密。证毕。
+\end{proof}
+
+\begin{theorem}[单相位压缩的精度指数等于圆维]\label{thm:conclusion-singlephase-precision-exponent-equals-cdim}
+在定理 \ref{thm:conclusion-zn-to-circle-injective-dense} 的构造下，定义
+\[
+\Phi_\alpha(k):=\exp\!\bigl(2\pi i\langle k,\alpha\rangle\bigr),
+\]
+\[
+\delta_\alpha(Q):=\min_{0<\|k\|_\infty\le Q}\ \|\langle k,\alpha\rangle\|_{\RR/\ZZ},
+\qquad
+\|x\|_{\RR/\ZZ}:=\min_{m\in\ZZ}|x-m|.
+\]
+若 \(1,\alpha_1,\dots,\alpha_n\) 在 \(\QQ\) 上线性无关，则：
+\begin{enumerate}
+  \item 对任意 \(Q\ge 1\)，有普适上界
+  \[
+  \delta_\alpha(Q)\le Q^{-n}.
+  \]
+  \item 存在某些 \(\alpha\) 与常数 \(c(\alpha)>0\) 使对任意 \(Q\ge 1\)，
+  \[
+  \delta_\alpha(Q)\ge c(\alpha)\,Q^{-n}.
+  \]
+\end{enumerate}
+从而最优可分离幂指数为 \(n\)：
+\[
+\delta_\alpha(Q)\asymp Q^{-n},
+\]
+并且该指数与结构圆维一致：
+\[
+n=\cdim(\ZZ^n).
+\]
+\end{theorem}
+\begin{proof}
+第一条由抽屉原理。考虑整数盒
+\[
+\mathcal B_Q:=\{0,1,\dots,Q\}^n,\qquad |\mathcal B_Q|=(Q+1)^n>Q^n.
+\]
+考察点集
+\[
+\{\langle k,\alpha\rangle\bmod 1:\ k\in\mathcal B_Q\}\subset [0,1).
+\]
+将 \([0,1)\) 分成 \(Q^n\) 个等长区间（长度 \(Q^{-n}\)），必有两点 \(k\neq k'\) 落入同一区间，故
+\[
+\|\langle k-k',\alpha\rangle\|_{\RR/\ZZ}\le Q^{-n}.
+\]
+又 \(\|k-k'\|_\infty\le Q\)，\(k-k'\neq 0\)，故 \(\delta_\alpha(Q)\le Q^{-n}\)。
+
+第二条由经典坏逼近向量存在性：存在 \(\alpha\in\RR^n\) 使
+\[
+\|\langle k,\alpha\rangle\|_{\RR/\ZZ}\ge c(\alpha)\|k\|_\infty^{-n}\qquad(\forall\,0\neq k\in\ZZ^n).
+\]
+对 \(0<\|k\|_\infty\le Q\) 取最小值得
+\[
+\delta_\alpha(Q)\ge c(\alpha)Q^{-n}.
+\]
+两条合并即得 \(\delta_\alpha(Q)\asymp Q^{-n}\)。
+最后由定理 \ref{thm:conclusion-cdim-rank-and-short-exact-additivity}，\(\cdim(\ZZ^n)=n\)。证毕。
+\end{proof}
+
+\begin{remark}[圆维与精度势的操作学对应]\label{rem:conclusion-cdim-singlephase-precision-ledger}
+定理 \ref{thm:conclusion-singlephase-precision-exponent-equals-cdim} 表明：若坚持单相位通道承载 \(\ZZ^n\) 的无歧义读出，则幅度 \(Q\) 上最优可分离尺度必为 \(Q^{-n}\) 量级；其指数正是 \(\cdim(\ZZ^n)\)。
+因此“维度信息”在单通道实现中等价转写为精度势账本的指数成本。
+\end{remark}
+
+\input{subsubsec__conclusion-phase-channel-crowding-singlephase-ucdim}

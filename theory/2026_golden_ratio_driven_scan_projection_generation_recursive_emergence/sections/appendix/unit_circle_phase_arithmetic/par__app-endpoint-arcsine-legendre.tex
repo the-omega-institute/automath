@@ -1,0 +1,179 @@
+\paragraph{端点视界的测度学正规形：Cayley 圆周采样的 arcsine 对偶与 Legendre 瞬时}\label{par:app-endpoint-arcsine-legendre}
+本段把“端点 \(w\approx-1\) 的高虚部采样”写成一条完全闭式的概率论对象。
+固定 \(0<\varrho<1\)，令 \(\Theta\sim\mathrm{Unif}[0,2\pi)\)，并定义
+\[
+t(\varrho,\Theta):=\mathcal{C}^{-1}(\varrho e^{\mathrm{i}\Theta})\in\mathbb{H},
+\qquad
+Y_{\varrho}:=\Im\,t(\varrho,\Theta)\in(0,\infty).
+\]
+由 \eqref{eq:app-t-rho-theta-explicit}，\(Y_{\varrho}\) 的显式表达为
+\[
+Y_{\varrho}
+=\frac{1-\varrho^2}{1+\varrho^2+2\varrho\cos\Theta}.
+\]
+记端点
+\[
+y_{-}(\varrho):=\frac{1-\varrho}{1+\varrho},
+\qquad
+y_{+}(\varrho):=\frac{1+\varrho}{1-\varrho},
+\qquad
+y_{-}(\varrho)\,y_{+}(\varrho)=1
+\]
+（命题 \ref{prop:app-cayley-preimage-modulus-circle}）。
+
+\begin{theorem}[端点视界的对偶 arcsine 密度]\label{thm:app-endpoint-arcsine-duality}
+在上述设定下，随机变量 \(Y_{\varrho}\) 的支持为区间 \([y_{-}(\varrho),y_{+}(\varrho)]\)，并且在开区间 \((y_{-}(\varrho),y_{+}(\varrho))\) 上具有连续密度
+\begin{equation}\label{eq:app-endpoint-y-density-tilted-arcsine}
+\boxed{\quad
+f_{\varrho}(y)
+=\frac{1}{\pi\,y\,\sqrt{(y-y_{-}(\varrho))(y_{+}(\varrho)-y)}},
+\qquad y\in\bigl(y_{-}(\varrho),y_{+}(\varrho)\bigr).
+\quad}
+\end{equation}
+并且其倒数
+\[
+Z_{\varrho}:=Y_{\varrho}^{-1}
+=\frac{1+\varrho^2+2\varrho\cos\Theta}{1-\varrho^2}
+\]
+在同一区间上服从标准 arcsine 密度
+\begin{equation}\label{eq:app-endpoint-z-density-arcsine}
+\boxed{\quad
+g_{\varrho}(z)
+=\frac{1}{\pi\,\sqrt{(z-y_{-}(\varrho))(y_{+}(\varrho)-z)}},
+\qquad z\in\bigl(y_{-}(\varrho),y_{+}(\varrho)\bigr).
+\quad}
+\end{equation}
+两者满足简单的对偶关系
+\[
+\boxed{\ f_{\varrho}(y)=\frac{g_{\varrho}(y)}{y}\ }.
+\]
+此外，
+\[
+\mathbb{E}[Y_{\varrho}]=1,
+\qquad
+\mathbb{E}[\log Y_{\varrho}]=\log(1-\varrho^{2}),
+\qquad
+\mathbb{P}(Y_{\varrho}\ge 1)=\frac{\arccos(\varrho)}{\pi}.
+\]
+\end{theorem}
+
+\begin{proof}
+令 \(U:=\cos\Theta\)。则 \(U\in[-1,1]\) 且具有 arcsine 密度
+\(
+\frac{1}{\pi\sqrt{1-u^{2}}}\,\dd u
+\)。
+由 \(Z_{\varrho}=\frac{1+\varrho^{2}+2\varrho U}{1-\varrho^{2}}\) 可知 \(Z_{\varrho}\) 是 \(U\) 的仿射变换，
+其端点取值分别对应 \(U=\pm 1\)，从而 \(\mathrm{supp}(Z_{\varrho})=[y_{-}(\varrho),y_{+}(\varrho)]\)，并且直接由换元得到密度 \eqref{eq:app-endpoint-z-density-arcsine}。
+由于 \(Y_{\varrho}=1/Z_{\varrho}\)，由密度变换公式 \(f_{\varrho}(y)=g_{\varrho}(1/y)\,y^{-2}\) 并利用 \(y_{-}y_{+}=1\)，化简得到 \eqref{eq:app-endpoint-y-density-tilted-arcsine}，并给出 \(f_{\varrho}(y)=g_{\varrho}(y)/y\)。
+\par
+\(\mathbb{E}[Y_{\varrho}]=1\) 可由 Poisson 核的标准恒等式直接验证：
+\[
+\frac{1}{2\pi}\int_{0}^{2\pi}\frac{1-\varrho^{2}}{1+\varrho^{2}+2\varrho\cos\theta}\,\dd\theta=1.
+\]
+并且
+\(
+\log Y_{\varrho}
+=\log(1-\varrho^{2})-\log|1+\varrho e^{\mathrm{i}\Theta}|^{2}
+\)；
+由 Jensen 公式（命题 \ref{prop:app-jensen-formula-defect} 的标准推论）知
+\(
+\frac{1}{2\pi}\int_{0}^{2\pi}\log|1+\varrho e^{\mathrm{i}\theta}|\,\dd\theta=0
+\)（\(\varrho<1\) 时零点在圆外），故 \(\mathbb{E}[\log Y_{\varrho}]=\log(1-\varrho^{2})\)。
+最后，事件 \(Y_{\varrho}\ge 1\) 等价于 \(\cos\Theta\le -\varrho\)，从而
+\[
+\mathbb{P}(Y_{\varrho}\ge 1)=\frac{1}{2\pi}\,\mathrm{meas}\{\theta:\cos\theta\le-\varrho\}
+=\frac{\arccos(\varrho)}{\pi}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[Legendre 瞬时：时间纤维的球函数对角化]\label{thm:app-legendre-moment-timefiber}
+令双曲半径参量
+\[
+a:=2\,\operatorname{artanh}\varrho\in(0,\infty),
+\qquad
+\varrho=\tanh\frac{a}{2},
+\qquad
+\cosh a=\frac{1+\varrho^{2}}{1-\varrho^{2}},
+\quad
+\sinh a=\frac{2\varrho}{1-\varrho^{2}}.
+\]
+则 \(y_{\pm}(\varrho)=e^{\pm a}\)，并且
+\(
+Z_{\varrho}=\cosh a+\sinh a\cos\Theta
+\)。
+对任意复数 \(\nu\in\CC\)（取实对数分支定义 \(z^{\nu}:=\exp(\nu\log z)\)），有严格恒等式
+\begin{equation}\label{eq:app-legendre-moment}
+\boxed{\quad
+\mathbb{E}\bigl[Z_{\varrho}^{\,\nu}\bigr]
+=\frac{1}{\pi}\int_{e^{-a}}^{e^{a}}
+\frac{z^{\,\nu}}{\sqrt{(z-e^{-a})(e^{a}-z)}}\,\dd z
+=\frac{1}{\pi}\int_{0}^{\pi}\bigl(\cosh a+\sinh a\cos\varphi\bigr)^{\nu}\,\dd\varphi
+=:P_{\nu}(\cosh a).
+\quad}
+\end{equation}
+其中右端给出 Legendre 第一类函数 \(P_{\nu}\) 在 \(x=\cosh a>1\) 的标准积分表示；特别地，当 \(\nu=-\tfrac12+\mathrm{i}r\)（\(r\in\RR\)）时，
+\(
+P_{-\frac12+\mathrm{i}r}(\cosh a)
+\)
+恰为双曲平面 \(\mathbb{D}\simeq SL_{2}(\RR)/SO(2)\) 的 \(SO(2)\)-球函数（径向特征函数）。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:app-endpoint-arcsine-duality}，\(Z_{\varrho}\) 在 \((e^{-a},e^{a})\) 上服从 arcsine 密度 \eqref{eq:app-endpoint-z-density-arcsine}（注意 \(y_{\pm}=e^{\pm a}\)），故第一条积分式直接由定义得出。
+\par
+再作代换 \(z=\cosh a+\sinh a\cos\varphi\)（\(\varphi\in[0,\pi]\)）。
+此时代数恒等式 \(\cosh a\pm\sinh a=e^{\pm a}\) 给出端点，
+并且
+\[
+(z-e^{-a})(e^{a}-z)=(\sinh a)^{2}\sin^{2}\varphi,
+\qquad
+\dd z=-\sinh a\,\sin\varphi\,\dd\varphi,
+\]
+从而
+\(
+\dd z/\sqrt{(z-e^{-a})(e^{a}-z)}=-\dd\varphi
+\)，得到第二条积分式。
+最后，记号 \(P_{\nu}(\cosh a)\) 由该积分表示定义（其与 Legendre 第一类函数一致）。证毕。
+\end{proof}
+
+\begin{corollary}[端点角窗的 \texorpdfstring{$e^{-a/2}$}{e^{-a/2}} 级压缩]\label{cor:app-endpoint-window-exp-half}
+固定阈值 \(Y>0\)。
+当 \(a=2\,\operatorname{artanh}\varrho\uparrow\infty\)（等价于 \(\varrho\uparrow 1\)）时，
+\[
+\mathbb{P}(Y_{\varrho}\ge Y)
+=\frac{\mathrm{meas}\,A_{Y}(\varrho)}{2\pi}
+=\frac{2}{\pi}\,e^{-a/2}\,Y^{-1/2}\,\bigl(1+o(1)\bigr),
+\]
+其中 \(A_Y(\varrho)=\{\theta:\Im\,t(\varrho,\theta)\ge Y\}\) 见命题 \ref{prop:app-jensen-endpoint-angle-window}。
+因此在端点极限中，任何固定高度阈值的可见贡献都被压缩到 \(e^{-a/2}\) 级别的窄角窗口上。
+\end{corollary}
+
+\begin{proof}
+命题 \ref{prop:app-jensen-endpoint-angle-window} 的边界层渐近给出
+\(
+\mathrm{meas}\,A_Y(\varrho)=2\sqrt{2(1-\varrho)/Y}\,(1+o(1))
+\)（\(\varrho\uparrow 1\)）。
+另一方面，\(\varrho=\tanh(a/2)\) 蕴含
+\(
+1-\varrho=1-\tanh(a/2)=2e^{-a}\,(1+o(1))
+\)（\(a\uparrow\infty\)）。
+代回并除以 \(2\pi\) 即得所示概率渐近。证毕。
+\end{proof}
+
+\begin{remark}[球面滤波器视角（条件口径）]\label{rem:app-jensen-spherical-filter-view}
+定理 \ref{thm:app-legendre-moment-timefiber} 表明：在双曲半径参量 \(a\) 下，沿“时间纤维”（固定 \(|w|=\varrho\)）的可见抽样由 Legendre 球函数 \(P_{\nu}(\cosh a)\) 封装。
+另一方面，若取 \(U(w):=\log|F(w)|\) 并作 \(SO(2)\)-平均（径向化）
+\(
+U^{\sharp}(a):=\frac{1}{2\pi}\int_{0}^{2\pi}U(\tanh(a/2)e^{\mathrm{i}\theta})\,\dd\theta
+\)，则 Jensen 缺陷满足 \(D_F(\varrho)=U^{\sharp}(a)-U(0)\)。
+在双曲调和分析的标准口径中，径向函数可在球函数族
+\(
+\phi_{r}(a):=P_{-\frac12+\mathrm{i}r}(\cosh a)
+\)
+上作球面变换分解；因此 \(a\) 的作用可被理解为一维球面滤波。
+本稿对 RH 的可数审计与端点分辨率门槛（定理 \ref{thm:app-jensen-countable-criterion}、命题 \ref{prop:app-jensen-endpoint-angle-window}、推论 \ref{cor:app-endpoint-window-exp-half}）在该视角下可解释为：
+若存在不可约的非平凡球面谱成分，则其可见性只能通过端点窗口的极限账本被稳定捕获；否则在纯相位制度下将触发不可寻址/空值语义（见 \S\ref{subsec:xi-pw-type-safety-null}）。
+\end{remark}
+
+\endinput

@@ -1,0 +1,234 @@
+\paragraph{Jensen 缺陷的递归帽核表象与误差鲁棒证书链}
+本段在附录命题 \ref{prop:app-jensen-formula-defect} 的 Jensen 求和公式口径下，
+把圆盘解析函数的零点半径分布改写为可递归细化的二阶差分反演问题。
+核心对象是对数半径坐标中的 Jensen 缺陷序列，其局部二阶差分给出窗口化“帽核”积分，从而可在噪声下形成可执行的存在性与重数证书。
+
+\begin{theorem}[Jensen 缺陷的帽核二阶差分表示]\label{thm:xi-jensen-defect-hat-kernel-second-difference}
+设 \(F\) 在单位圆盘 \(\mathbb D\) 内解析，且 \(F(0)\neq 0\)。
+定义 Jensen 缺陷
+\[
+D_F(r):=\frac{1}{2\pi}\int_0^{2\pi}\log|F(re^{i\theta})|\,\dd\theta-\log|F(0)|,
+\qquad 0<r<1.
+\]
+令 \(x:=\log r\in(-\infty,0)\)，并记
+\[
+J_F(x):=D_F(e^x).
+\]
+设 \(F\) 在 \(\mathbb D\) 内的零点为 \(\{a_k\}\)（按重数 \(m_k\) 计），定义
+\[
+t_k:=\log|a_k|\in(-\infty,0),
+\qquad
+\mu_F:=\sum_k m_k\,\delta_{t_k}.
+\]
+则对任意 \(h>0\) 与 \(x\pm h<0\)，二阶差分
+\[
+\Delta_h^2J_F(x):=J_F(x+h)-2J_F(x)+J_F(x-h)
+\]
+满足精确恒等式
+\[
+\boxed{\;
+\Delta_h^2J_F(x)=\int_{\mathbb R}(h-|x-t|)_+\,\dd\mu_F(t)
+=\sum_k m_k\,(h-|x-t_k|)_+\; }.
+\]
+其中 \((u)_+:=\max\{u,0\}\)。
+特别地，
+\[
+\Delta_h^2J_F(x)=0
+\quad\Longleftrightarrow\quad
+\mu_F\bigl((x-h,x+h)\bigr)=0.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:app-jensen-formula-defect}，
+\[
+D_F(r)=\sum_{|a_k|<r}m_k\log\frac{r}{|a_k|}.
+\]
+代入 \(r=e^x\) 得
+\[
+J_F(x)=\sum_k m_k\,(x-t_k)_+.
+\]
+对固定 \(x\pm h<0\)，仅有有限个 \(|a_k|<e^{x+h}\) 贡献非零项，故可逐项作二阶差分：
+\[
+\Delta_h^2J_F(x)
+=\sum_k m_k\Bigl[(x+h-t_k)_+-2(x-t_k)_++(x-h-t_k)_+\Bigr].
+\]
+记 \(\phi_t(x):=(x-t)_+\)。
+分段计算可得
+\[
+\phi_t(x+h)-2\phi_t(x)+\phi_t(x-h)=(h-|x-t|)_+.
+\]
+故得主恒等式。
+又 \((h-|x-t|)_+\ge 0\)，且其为零当且仅当 \(|x-t|\ge h\)。
+于是 \(\Delta_h^2J_F(x)=0\) 当且仅当窗口 \((x-h,x+h)\) 内无原子质量，即
+\(\mu_F((x-h,x+h))=0\)。证毕。
+\end{proof}
+
+\begin{corollary}[带噪声三点采样下的存在性证书与重数下界]\label{cor:xi-jensen-defect-noisy-threepoint-certificate}
+在定理 \ref{thm:xi-jensen-defect-hat-kernel-second-difference} 设定下，
+若仅能观测到近似值
+\[
+\widetilde J(x-h),\ \widetilde J(x),\ \widetilde J(x+h),
+\]
+并满足
+\[
+|\widetilde J(\xi)-J_F(\xi)|\le \varepsilon,
+\qquad
+\xi\in\{x-h,x,x+h\},
+\]
+定义可计算量
+\[
+\widetilde W_h(x):=\widetilde J(x+h)-2\widetilde J(x)+\widetilde J(x-h).
+\]
+则
+\[
+\bigl|\widetilde W_h(x)-\Delta_h^2J_F(x)\bigr|\le 4\varepsilon.
+\]
+进一步成立：
+\begin{enumerate}
+  \item 若 \(\widetilde W_h(x)>4\varepsilon\)，则
+  \[
+  \mu_F((x-h,x+h))\ge 1,
+  \]
+  即窗口对应半径带内必有盘内零点；
+  \item 记窗口内总重数
+  \[
+  M_{x,h}:=\mu_F((x-h,x+h)),
+  \]
+  则
+  \[
+  M_{x,h}\ge
+  \max\!\left\{0,\left\lceil\frac{\widetilde W_h(x)-4\varepsilon}{h}\right\rceil\right\}.
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+误差估计由三角不等式：
+\[
+\begin{aligned}
+|\widetilde W_h-\Delta_h^2J_F|
+&\le |\widetilde J(x+h)-J_F(x+h)|
++2|\widetilde J(x)-J_F(x)|\\
+&\quad +|\widetilde J(x-h)-J_F(x-h)|
+\le 4\varepsilon.
+\end{aligned}
+\]
+若 \(\widetilde W_h>4\varepsilon\)，则 \(\Delta_h^2J_F\ge \widetilde W_h-4\varepsilon>0\)。
+由定理 \ref{thm:xi-jensen-defect-hat-kernel-second-difference}，窗口内必有原子，故第一条成立。
+第二条由
+\[
+\Delta_h^2J_F
+=\sum_{t_k\in(x-h,x+h)}m_k(h-|x-t_k|)\le h\,M_{x,h}
+\]
+与 \(\Delta_h^2J_F\ge \widetilde W_h-4\varepsilon\) 合并得到。证毕。
+\end{proof}
+
+\begin{theorem}[递归细化中的误差--分辨率耦合阈值]\label{thm:xi-jensen-recursive-resolution-noise-coupling}
+在定理 \ref{thm:xi-jensen-defect-hat-kernel-second-difference} 框架下，考虑以
+\[
+\widetilde W_h(x)=\widetilde J(x+h)-2\widetilde J(x)+\widetilde J(x-h)
+\]
+作为递归触发量的中心化判据（以 \(\widetilde W_h(x)>0\) 作为下一层细化触发条件）。
+若目标情形为“窗口中心 \(x\) 处存在单重零点”（即 \(\mu_F\) 在 \(t=x\) 处有一个单位原子），则：
+\begin{enumerate}
+  \item 触发充分条件为
+  \[
+  \varepsilon<\frac{h}{4}.
+  \]
+  在该条件下，对所有满足误差界的噪声实现，均有 \(\widetilde W_h(x)>0\)；
+  \item 该门槛在上述触发规则下是尖锐的：若 \(\varepsilon\ge h/4\)，则存在合法样本与合法噪声使 \(\widetilde W_h(x)\le 0\)，从而本层触发可失败；
+  \item 因此在递归细化 \(h\mapsto h/2\) 下，若保持同一触发机制，则噪声预算须同步线性收缩
+  \[
+  \varepsilon\mapsto \varepsilon/2.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-jensen-defect-hat-kernel-second-difference}，中心单重零点在尺度 \(h\) 的理想信号为
+\[
+\Delta_h^2J_F(x)=(h-|x-x|)_+=h.
+\]
+由推论 \ref{cor:xi-jensen-defect-noisy-threepoint-certificate}，
+\[
+\widetilde W_h(x)=\Delta_h^2J_F(x)+\eta_h,\qquad |\eta_h|\le 4\varepsilon.
+\]
+故最坏情形下
+\[
+\widetilde W_h(x)\ge h-4\varepsilon.
+\]
+若 \(\varepsilon<h/4\)，则 \(h-4\varepsilon>0\)，得到第一条。
+
+为证尖锐性，取 \(F_1(w):=1-w/a\) 且 \(a=e^x\in(0,1)\)，则 \(F_1(0)=1\)，并在 \(w=a\) 处有单重零点。
+由 Jensen 公式
+\[
+J_{F_1}(x-h)=0,\quad J_{F_1}(x)=0,\quad J_{F_1}(x+h)=h,
+\]
+因此 \(\Delta_h^2J_{F_1}(x)=h\)。
+当 \(\varepsilon\ge h/4\) 时，取允许噪声 \(\eta_h=-4\varepsilon\)，得到
+\[
+\widetilde W_h(x)=h-4\varepsilon\le 0,
+\]
+触发失败，证得第二条。
+
+第三条由第一条在尺度 \(h_n=h_0\,2^{-n}\) 上逐层套用：
+\(
+\varepsilon_n<h_n/4
+\)
+等价于 \(\varepsilon_{n+1}<\varepsilon_n/2\)。证毕。
+\end{proof}
+
+\begin{theorem}[全域误差下的边界层不可判别性]\label{thm:xi-jensen-boundary-layer-indistinguishability}
+设
+\[
+\mathcal A:=\{F:\mathbb D\to\mathbb C\ \text{解析},\ F(0)=1\}.
+\]
+给定任意 \(\varepsilon>0\) 与任意 \(\eta\in(0,\varepsilon]\)，存在 \(F_0,F_1\in\mathcal A\) 满足：
+\begin{enumerate}
+  \item \(F_0\) 在 \(\mathbb D\) 内无零点；
+  \item \(F_1\) 在 \(\mathbb D\) 内有单重零点 \(a\)，且 \(|a|=e^{-\eta}\)；
+  \item 两者 Jensen 缺陷在全半径上不可分辨：
+  \[
+  \sup_{0<r<1}|D_{F_1}(r)-D_{F_0}(r)|=\eta\le\varepsilon.
+  \]
+\end{enumerate}
+因此在统一加性误差 \(\varepsilon\) 下，任何仅基于 \(D_F(r)\) 全域观测的确定性核验流程都不能排除 \(\log\)-深度不超过 \(\varepsilon\) 的边界层内部零点。
+\end{theorem}
+\begin{proof}
+取
+\[
+F_0(w)\equiv 1,\qquad
+F_1(w):=1-\frac{w}{a},
+\qquad |a|=e^{-\eta}.
+\]
+则 \(F_0,F_1\in\mathcal A\)，且 \(F_1\) 在 \(w=a\) 处有单重零点。
+由 Jensen 公式，
+\[
+D_{F_1}(r)=
+\begin{cases}
+0, & 0<r\le |a|,\\[1mm]
+\log\!\frac{r}{|a|}, & |a|<r<1.
+\end{cases}
+\]
+于是
+\[
+\sup_{0<r<1}D_{F_1}(r)=\log\frac{1}{|a|}=\eta.
+\]
+又 \(D_{F_0}(r)\equiv 0\)，故
+\[
+\sup_{0<r<1}|D_{F_1}(r)-D_{F_0}(r)|=\eta\le\varepsilon.
+\]
+结论成立。证毕。
+\end{proof}
+
+\paragraph{与圆盘化 RH 核验链的对齐}
+由附录定理 \ref{thm:app-rh-iff-disk-zero-free}，完成后的 \(\xi\)-函数经右半平面到圆盘的双全纯变换后，
+“右半平面离线零点存在性”与“圆盘内零点存在性”等价。
+定理 \ref{thm:xi-jensen-defect-hat-kernel-second-difference}--\ref{thm:xi-jensen-boundary-layer-indistinguishability}
+因此把该判定问题转化为：
+\[
+\text{零点计数测度}\ \mu_F
+\quad\Longleftrightarrow\quad
+\text{Jensen 缺陷的帽核二阶差分多尺度反演}
+\]
+并给出显式噪声门槛与边界层硬下界，从而把“零点递归—误差控制”写成可审计的尺度耦合律。
+
+\endinput

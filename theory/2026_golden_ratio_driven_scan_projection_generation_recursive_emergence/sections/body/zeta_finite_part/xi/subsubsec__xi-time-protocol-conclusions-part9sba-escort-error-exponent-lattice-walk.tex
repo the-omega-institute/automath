@@ -1,0 +1,135 @@
+\begin{corollary}[等先验温度判别的最优误差指数与顺序对数似然步长都具有闭式]\label{cor:xi-time-part9sb-escort-error-exponent-lattice-walk}
+固定 \(p\neq q\)。令
+\[
+P_{e,m}^{\ast}(n;p,q)
+\]
+表示在等先验 \((1/2,1/2)\) 下、基于 \(n\) 个独立样本区分 \(\pi_{m,p}\) 与 \(\pi_{m,q}\) 的最优 Bayes 错误概率。则
+\[
+\lim_{n\to\infty}
+-\frac1n
+\log\!\Bigl(
+\lim_{m\to\infty}P_{e,m}^{\ast}(n;p,q)
+\Bigr)
+=
+C_{\mathrm{Ch}}(p,q),
+\]
+其中 \(C_{\mathrm{Ch}}(p,q)\) 为定理 \ref{thm:xi-time-part9sb-escort-chernoff-saddle} 中的 Chernoff 信息。
+
+再记
+\[
+\beta_s:=\mathrm{Bernoulli}(\theta(s)),
+\qquad s\ge 0,
+\]
+并在真参数 \(q\) 下定义一步对数似然增量
+\[
+L_{p,q}:=\log\frac{\dd\beta_q}{\dd\beta_p}(B),
+\qquad
+B\sim\beta_q.
+\]
+则
+\[
+L_{p,q}
+=
+\begin{cases}
+\log\dfrac{\theta(q)}{\theta(p)}, & \text{概率 }\theta(q),\\[1.2ex]
+\log\dfrac{1-\theta(q)}{1-\theta(p)}, & \text{概率 }1-\theta(q).
+\end{cases}
+\]
+因此
+\[
+\mathbb E_q[L_{p,q}]
+=
+D_{\mathrm{KL}}(\beta_q\Vert \beta_p),
+\]
+\[
+\operatorname{Var}_q(L_{p,q})
+=
+\theta(q)\bigl(1-\theta(q)\bigr)
+\left[
+\log\frac{\theta(q)(1-\theta(p))}{\theta(p)(1-\theta(q))}
+\right]^2.
+\]
+更具体地，若 \((L_{p,q}^{(j)})_{j\ge 1}\) 为独立同分布拷贝，则
+\[
+\sum_{j=1}^n L_{p,q}^{(j)}
+=
+n\log\frac{1-\theta(q)}{1-\theta(p)}
++
+N_n\log\frac{\theta(q)(1-\theta(p))}{\theta(p)(1-\theta(q))},
+\]
+故其取值落在一条严格仿射格上。
+\end{corollary}
+\begin{proof}
+取 \(Q>\max\{p,q\}\)。由定理
+\ref{thm:xi-time-part9sb-escort-fixed-n-binomial-blackwell}，对每个固定 \(n\)，\(n\)-样本 escort 试验与极限二项试验在 \(m\to\infty\) 时的 Le Cam 距离趋于 \(0\)。因此，等先验 Bayes 最优风险收敛到二项极限试验中的对应风险：
+\[
+\lim_{m\to\infty}P_{e,m}^{\ast}(n;p,q)
+=
+P_{e,\infty}^{\ast}(n;p,q),
+\]
+其中右端为区分 \(\mathrm{Binomial}(n,\theta(p))\) 与 \(\mathrm{Binomial}(n,\theta(q))\) 的最优 Bayes 错误概率。对该 i.i.d. Bernoulli 模型应用经典 Chernoff 定理，即得
+\[
+\lim_{n\to\infty}
+-\frac1n\log P_{e,\infty}^{\ast}(n;p,q)
+=
+C_{\mathrm{Ch}}(p,q).
+\]
+这就证明了第一式。
+
+再看一步对数似然增量。由于 \(B\in\{0,1\}\)，直接计算可得
+\[
+\log\frac{\dd\beta_q}{\dd\beta_p}(1)=\log\frac{\theta(q)}{\theta(p)},
+\qquad
+\log\frac{\dd\beta_q}{\dd\beta_p}(0)=\log\frac{1-\theta(q)}{1-\theta(p)}.
+\]
+故 \(L_{p,q}\) 只取上述两值，其分布即由 \(B\sim\beta_q\) 给出。于是
+\[
+\mathbb E_q[L_{p,q}]
+=
+\theta(q)\log\frac{\theta(q)}{\theta(p)}
++
+\bigl(1-\theta(q)\bigr)\log\frac{1-\theta(q)}{1-\theta(p)}
+=
+D_{\mathrm{KL}}(\beta_q\Vert \beta_p).
+\]
+若记
+\[
+a:=\log\frac{\theta(q)}{\theta(p)},
+\qquad
+b:=\log\frac{1-\theta(q)}{1-\theta(p)},
+\]
+则二点分布方差公式给出
+\[
+\operatorname{Var}_q(L_{p,q})
+=
+\theta(q)\bigl(1-\theta(q)\bigr)(a-b)^2,
+\]
+即
+\[
+\operatorname{Var}_q(L_{p,q})
+=
+\theta(q)\bigl(1-\theta(q)\bigr)
+\left[
+\log\frac{\theta(q)(1-\theta(p))}{\theta(p)(1-\theta(q))}
+\right]^2.
+\]
+最后，由定理 \ref{thm:xi-time-part9sb-escort-fixed-n-binomial-blackwell} 中的似然比公式，
+\[
+\sum_{j=1}^n L_{p,q}^{(j)}
+=
+N_n a+(n-N_n)b
+=
+n b+N_n(a-b),
+\]
+故其状态空间是仿射格
+\[
+n\log\frac{1-\theta(q)}{1-\theta(p)}
++
+\log\frac{\theta(q)(1-\theta(p))}{\theta(p)(1-\theta(q))}\,\ZZ.
+\]
+因此极限顺序对数似然过程是一条严格二点格随机游走。证毕。
+\end{proof}
+
+由此，escort 温度半轴的极限模型不再只是一个抽象的一维 logistic 族；在 Fisher--Rao 度量下，它是一条带唯一完备端点的平坦线段，在平方根嵌入下，它是一段单位圆弧，而在判别论上又同时呈现 Chernoff 极小点闭式、固定样本二项充分化与严格二点格对数似然过程。于是几何、Blackwell 缺损与顺序检验三者被压缩到同一组显式公式之中。
+
+\endinput

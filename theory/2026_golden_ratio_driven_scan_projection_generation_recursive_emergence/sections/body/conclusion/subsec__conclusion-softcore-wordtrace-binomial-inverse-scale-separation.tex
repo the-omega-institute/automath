@@ -1,0 +1,526 @@
+\subsection{软核例外谱的字迹分解、二项逆矩阵与尺度分层}\label{subsec:conclusion-softcore-wordtrace-binomial-inverse-scale-separation}
+本小节在 \(q\)-体软核矩阵的对称幂框架下，给出 Kronecker 分解、全阶例外幂和的字迹闭式、Fibonacci 乘积律、重量表示矩阵的显式逆与行列式符号律，以及固定 \(m\) 时 \(q\)-方向递推和谱尺度分离估计。
+设 \(q\ge 2\)，\(U_q:=\{0,1\}^q\)，并定义
+\[
+T^{(q)}_{u,v}:=\frac12\Bigl(1+\mathbf 1_{\{u\wedge v=0\}}\Bigr)\qquad (u,v\in U_q).
+\]
+记
+\[
+J:=\begin{pmatrix}1&1\\[2pt]1&1\end{pmatrix},
+\qquad
+K:=\begin{pmatrix}1&1\\[2pt]1&0\end{pmatrix},
+\]
+以及 \(\operatorname{Sym}^q(\CC^2)\subset(\CC^2)^{\otimes q}\) 为 \(S_q\)-不变对称张量子空间。
+
+\begin{theorem}[Kronecker 与对称幂双分解]\label{thm:conclusion-softcore-kronecker-sympower-decomposition}
+在上述记号下有严格恒等式
+\[
+T^{(q)}=\frac12\bigl(J^{\otimes q}+K^{\otimes q}\bigr).
+\]
+并且其在对称子空间上的限制满足
+\[
+T^{(q)}\big|_{\operatorname{Sym}^q(\CC^2)}
+=\frac12\bigl(\operatorname{Sym}^q(J)+\operatorname{Sym}^q(K)\bigr).
+\]
+\end{theorem}
+\begin{proof}
+对任意单坐标 \((a,b)\in\{0,1\}^2\)，\(K_{a,b}=1\) 当且仅当 \((a,b)\neq(1,1)\)。
+故
+\[
+\bigl(K^{\otimes q}\bigr)_{u,v}
+=\prod_{t=1}^{q}K_{u_t,v_t}
+=\mathbf 1_{\forall t,\,(u_t,v_t)\neq(1,1)}
+=\mathbf 1_{\{u\wedge v=0\}}.
+\]
+又 \(\bigl(J^{\otimes q}\bigr)_{u,v}\equiv 1\)。
+代入 \(T^{(q)}_{u,v}\) 的定义即得第一式。
+
+由于 \(J^{\otimes q}\) 与 \(K^{\otimes q}\) 均与张量因子置换作用交换，故保持 \(\operatorname{Sym}^q(\CC^2)\)；
+其在该子空间的限制分别为 \(\operatorname{Sym}^q(J)\) 与 \(\operatorname{Sym}^q(K)\)，第二式成立。证毕。
+\end{proof}
+
+\begin{theorem}[例外幂和的字迹展开]\label{thm:conclusion-softcore-exceptional-word-trace-expansion}
+记 \(\{\lambda_i^{(q)}\}_{i=0}^{q}\) 为
+\(
+T^{(q)}|_{\operatorname{Sym}^q(\CC^2)}
+\)
+的全部特征值，并定义
+\[
+S_m(q):=\sum_{i=0}^{q}\bigl(\lambda_i^{(q)}\bigr)^m
+=\Tr_{\operatorname{Sym}^q(\CC^2)}\!\Bigl(\bigl(T^{(q)}\bigr)^m\Bigr),
+\qquad m\ge 1.
+\]
+令 \(\mathcal W_m:=\{J,K\}^m\)，对 \(w=(w_1,\dots,w_m)\in\mathcal W_m\) 记
+\[
+M(w):=w_1w_2\cdots w_m\in M_2(\ZZ).
+\]
+再定义
+\[
+\Omega_m(q):=\Tr\!\bigl(\operatorname{Sym}^q(K^m)\bigr).
+\]
+则有恒等式
+\[
+S_m(q)
+=2^{-m}\left(
+\sum_{w\in\mathcal W_m\setminus\{K^m\}}
+\bigl(\Tr M(w)\bigr)^q
+\,+\,\Omega_m(q)\right).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-softcore-kronecker-sympower-decomposition}，
+\[
+\bigl(T^{(q)}\bigr)^m\big|_{\operatorname{Sym}^q}
+=2^{-m}\bigl(\operatorname{Sym}^q(J)+\operatorname{Sym}^q(K)\bigr)^m
+=2^{-m}\sum_{w\in\mathcal W_m}\operatorname{Sym}^q\!\bigl(M(w)\bigr),
+\]
+其中使用了表示同态性
+\(
+\operatorname{Sym}^q(AB)=\operatorname{Sym}^q(A)\operatorname{Sym}^q(B)
+\)。
+取迹得到
+\[
+S_m(q)=2^{-m}\sum_{w\in\mathcal W_m}
+\Tr\!\bigl(\operatorname{Sym}^q(M(w))\bigr).
+\]
+
+若 \(w\neq K^m\)，则 \(M(w)\) 含因子 \(J\)，故 \(\det M(w)=0\)。
+于是 \(M(w)\) 的特征值为 \(\{0,\Tr M(w)\}\)，从而
+\(
+\operatorname{Sym}^q(M(w))
+\)
+仅有一个非零特征值 \((\Tr M(w))^q\)，故
+\[
+\Tr\!\bigl(\operatorname{Sym}^q(M(w))\bigr)=(\Tr M(w))^q.
+\]
+唯一的非零行列式词 \(w=K^m\) 贡献
+\(
+\Omega_m(q)=\Tr(\operatorname{Sym}^q(K^m))
+\)。
+合并即得。证毕。
+\end{proof}
+
+\begin{proposition}[含 \texorpdfstring{$J$}{J} 词的 Fibonacci 乘积律]\label{prop:conclusion-softcore-wordtrace-fibonacci-factorization}
+对任意 \(m\ge 1\) 与任意 \(w\in\mathcal W_m\setminus\{K^m\}\)，存在唯一分解
+\[
+w=K^{b_0}J K^{b_1}J\cdots J K^{b_r},
+\qquad
+r\ge 1,\ \ b_0,\dots,b_r\in\ZZ_{\ge 0},\
+\sum_{i=0}^{r}b_i+r=m.
+\]
+则
+\[
+\Tr M(w)=F_{b_0+b_r+3}\prod_{i=1}^{r-1}F_{b_i+3},
+\]
+其中 \(\{F_n\}\) 为 Fibonacci 数列。
+并且对纯 \(K\)-词有
+\[
+\Tr(K^m)=L_m,
+\]
+其中 \(\{L_m\}\) 为 Lucas 数列。
+\end{proposition}
+\begin{proof}
+记 \(u:=(1,1)^{\mathsf T}\)，则 \(J=uu^{\mathsf T}\)。
+对 \(b\ge 0\)，有
+\[
+u^{\mathsf T}K^b u=F_{b+3}.
+\]
+因此
+\[
+J K^b J
+=(uu^{\mathsf T})K^b(uu^{\mathsf T})
+=(u^{\mathsf T}K^b u)\,uu^{\mathsf T}
+=F_{b+3}J.
+\]
+
+将 \(w\) 的分块表达代入并逐段收缩内部片段 \(JK^{b_i}J\)（\(1\le i\le r-1\)）：
+\[
+M(w)=\left(\prod_{i=1}^{r-1}F_{b_i+3}\right)K^{b_0}JK^{b_r}.
+\]
+再由迹循环性，
+\[
+\Tr\!\bigl(K^{b_0}JK^{b_r}\bigr)
+=\Tr\!\bigl(JK^{b_0+b_r}\bigr)
+=u^{\mathsf T}K^{b_0+b_r}u
+=F_{b_0+b_r+3}.
+\]
+相乘即得所述因子分解。最后 \(\Tr(K^m)=L_m\) 为标准恒等式。证毕。
+\end{proof}
+
+\begin{theorem}[全阶例外幂和的组合闭式]\label{thm:conclusion-softcore-exceptional-moments-combinatorial-closed-form}
+对任意整数 \(m\ge 1\) 与 \(q\ge 2\)，有
+\[
+S_m(q)=2^{-m}\left(
+\Omega_m(q)+
+\sum_{r=1}^{m}\ 
+\sum_{\substack{b_0,\dots,b_r\ge 0\\ b_0+\cdots+b_r=m-r}}
+\left(
+F_{b_0+b_r+3}\prod_{i=1}^{r-1}F_{b_i+3}
+\right)^q
+\right).
+\]
+特别地，
+\[
+2^m S_m(q)\in\ZZ.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-softcore-exceptional-word-trace-expansion}，
+\[
+2^m S_m(q)=\Omega_m(q)+
+\sum_{w\in\mathcal W_m\setminus\{K^m\}}\bigl(\Tr M(w)\bigr)^q.
+\]
+对任意 \(w\neq K^m\)，其 \(J\)-段数 \(r\) 与参数 \((b_0,\dots,b_r)\) 给出无重计数；
+再代入命题 \ref{prop:conclusion-softcore-wordtrace-fibonacci-factorization} 的迹因子化即得所示双重求和。
+每个底数为整数，且 \(\Omega_m(q)=\Tr(\operatorname{Sym}^q(K^m))\in\ZZ\)，故 \(2^mS_m(q)\in\ZZ\)。证毕。
+\end{proof}
+
+\begin{theorem}[重量表示矩阵的显式整数逆]\label{thm:conclusion-softcore-weight-matrix-explicit-inverse}
+令 \(B^{(q)}\in M_{q+1}(\QQ)\) 为
+\(
+T^{(q)}|_{\operatorname{Sym}^q(\CC^2)}
+\)
+在重量基 \((k=0,\dots,q)\) 下的矩阵，即
+\[
+B^{(q)}_{k,j}
+=\frac12\binom{q}{j}+\frac12\binom{q-k}{j},
+\qquad 0\le k,j\le q,
+\]
+并约定 \(\binom{n}{j}=0\)（当 \(j>n\)）。
+则 \(B^{(q)}\) 可逆，且其逆矩阵满足
+\[
+\bigl(B^{(q)}\bigr)^{-1}_{r,j}=
+\begin{cases}
+-1,&(r,j)=(0,0),\\[3pt]
+2,&(r,j)=(0,q),\\[3pt]
+0,&r=0,\ 1\le j\le q-1,\\[3pt]
+0,&1\le r\le q,\ j<q-r,\\[4pt]
+2(-1)^{j-q+r}\binom{r}{q-j},&1\le r\le q,\ j\ge q-r.
+\end{cases}
+\]
+\end{theorem}
+\begin{proof}
+设 Pascal 矩阵 \(P\) 与反序矩阵 \(R\) 为
+\[
+P_{n,j}:=\binom{n}{j},\qquad
+(Rv)_k:=v_{q-k},
+\]
+并记 \(e_q\) 为第 \(q\) 个标准基向量、\(\mathbf 1\) 为全 \(1\) 向量。
+对任意列向量 \(f\)，有
+\[
+(Pf)_n=\sum_{j=0}^{q}\binom{n}{j}f_j,\qquad
+(RPf)_k=\sum_{j=0}^{q}\binom{q-k}{j}f_j,
+\]
+\[
+\bigl(\mathbf 1\,e_q^{\mathsf T}Pf\bigr)_k
+=\sum_{j=0}^{q}\binom{q}{j}f_j.
+\]
+故
+\[
+2B^{(q)}=(R+\mathbf 1 e_q^{\mathsf T})P.
+\]
+
+又 \(P^{-1}_{n,j}=(-1)^{n-j}\binom{n}{j}\)（\(n\ge j\)），\(R^{-1}=R\)，且 \(P^{-1}\mathbf 1=e_0\)。
+对 \(R+\mathbf 1e_q^{\mathsf T}\) 使用 Sherman--Morrison 公式：
+\[
+(R+\mathbf 1e_q^{\mathsf T})^{-1}
+=R-\frac12\,\mathbf 1e_0^{\mathsf T}.
+\]
+于是
+\[
+\bigl(B^{(q)}\bigr)^{-1}
+=2P^{-1}\!\left(R-\frac12\,\mathbf 1e_0^{\mathsf T}\right)
+=2P^{-1}R-e_0e_0^{\mathsf T}.
+\]
+逐项展开即得分段条目公式。证毕。
+\end{proof}
+
+\begin{corollary}[例外谱乘积的 \texorpdfstring{$4$}{4} 周期符号律]\label{cor:conclusion-softcore-spectrum-product-sign-law}
+记 \(\{\lambda_i^{(q)}\}_{i=0}^{q}\) 为
+\(
+T^{(q)}|_{\operatorname{Sym}^q(\CC^2)}
+\)
+的特征值，则
+\[
+\prod_{i=0}^{q}\lambda_i^{(q)}
+=\det\bigl(B^{(q)}\bigr)
+=(-1)^{\frac{q(q+1)}{2}}\,2^{-q}.
+\]
+因此其符号由 \(q\bmod 4\) 决定：
+\[
+q\equiv 0,3\pmod 4\Rightarrow +2^{-q},
+\qquad
+q\equiv 1,2\pmod 4\Rightarrow -2^{-q}.
+\]
+\end{corollary}
+\begin{proof}
+由
+\(
+2B^{(q)}=(R+\mathbf 1e_q^{\mathsf T})P
+\)
+与 \(\det(P)=1\)，得
+\[
+\det(2B^{(q)})
+=\det(R)\det(I+R\mathbf 1e_q^{\mathsf T})
+=\det(R)\bigl(1+e_q^{\mathsf T}R\mathbf 1\bigr)
+=2\,\det(R).
+\]
+又 \(\det(R)=(-1)^{q(q+1)/2}\)，且 \(\det(2B^{(q)})=2^{q+1}\det(B^{(q)})\)，故
+\[
+\det(B^{(q)})
+=(-1)^{\frac{q(q+1)}{2}}\,2^{-q}.
+\]
+即得结论。证毕。
+\end{proof}
+
+\input{thm__conclusion_temperature_kernel_free_energy_halting_embedding}
+
+\begin{proposition}[固定 \texorpdfstring{$m$}{m} 的 \texorpdfstring{$q$}{q} 向有限阶线性递推]\label{prop:conclusion-softcore-fixedm-qrecurrence-annihilator}
+固定 \(m\ge 1\)，定义
+\[
+\mathcal T_m:=\{\Tr M(w):\ w\in\mathcal W_m,\ w\neq K^m\}\subset\ZZ_{>0},
+\]
+并记其去重集合为 \(\mathcal T_m^{\mathrm{dist}}\)。
+设右移算子 \(E\) 作用为 \((Ef)(q)=f(q+1)\)，再记 \(L_m:=\Tr(K^m)\)。
+则序列 \(q\mapsto S_m(q)\) 满足常系数线性递推；一条可取湮灭多项式为
+\[
+\mathcal P_m(x):=
+\bigl(x^2-L_mx+(-1)^m\bigr)
+\prod_{\tau\in\mathcal T_m^{\mathrm{dist}}}(x-\tau)\in\ZZ[x],
+\]
+并且
+\[
+\mathcal P_m(E)\,S_m(q)=0\qquad(q\ge 2).
+\]
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:conclusion-softcore-exceptional-word-trace-expansion}，
+\[
+S_m(q)
+=2^{-m}\left(
+\Omega_m(q)+
+\sum_{\tau\in\mathcal T_m^{\mathrm{dist}}}\mu_m(\tau)\tau^q
+\right),
+\]
+其中 \(\mu_m(\tau)\in\ZZ_{\ge 0}\) 为词迹重数。
+每个几何项 \(\tau^q\) 被 \(E-\tau\) 湮灭。
+
+另一方面，\(\Omega_m(q)=\Tr(\operatorname{Sym}^q(K^m))\) 的特征根为
+\(\varphi^m\) 与 \((-1)^m\varphi^{-m}\)，故满足二阶递推
+\[
+\Omega_m(q+2)-L_m\Omega_m(q+1)+(-1)^m\Omega_m(q)=0.
+\]
+因此 \(\Omega_m\) 被 \(E^2-L_mE+(-1)^m\) 湮灭。
+各算子互相交换，乘积算子即湮灭其和，结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[主谱与余谱的尺度分离]\label{thm:conclusion-softcore-spectral-scale-separation}
+将
+\(
+T^{(q)}|_{\operatorname{Sym}^q(\CC^2)}
+\)
+的特征值按降序记为
+\[
+\lambda_0^{(q)}\ge\lambda_1^{(q)}\ge\cdots\ge\lambda_q^{(q)}.
+\]
+则对任意 \(q\ge 2\) 有
+\[
+\lambda_0^{(q)}\le 2^{q-1}+\frac12\varphi^q,
+\qquad
+\lambda_i^{(q)}\le\frac12\varphi^q\ \ (1\le i\le q),
+\]
+并且
+\[
+\lambda_q^{(q)}\ge
+\frac12\min \sigma\!\bigl(\operatorname{Sym}^q(K)\bigr).
+\]
+因此除主特征值外，其余谱均受 \(\varphi^q\) 量级控制。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-softcore-kronecker-sympower-decomposition} 写成
+\[
+T^{(q)}\big|_{\operatorname{Sym}^q}
+=A_q+B_q,
+\quad
+A_q:=\frac12\operatorname{Sym}^q(J),\ 
+B_q:=\frac12\operatorname{Sym}^q(K).
+\]
+\(J\) 的特征值为 \(\{2,0\}\)，故 \(A_q\) 的特征值为
+\(\{2^{q-1},0,\dots,0\}\)。
+又 \(K\) 的特征值为 \(\{\varphi,-\varphi^{-1}\}\)，故
+\[
+\sigma\!\bigl(\operatorname{Sym}^q(K)\bigr)
+=\left\{(-1)^i\varphi^{q-2i}:0\le i\le q\right\},
+\]
+从而 \(\|B_q\|_{\mathrm{op}}=\frac12\varphi^q\)。
+
+对 \(A_q+B_q\) 应用 Weyl 不等式，
+\[
+\lambda_0^{(q)}\le \lambda_0(A_q)+\|B_q\|_{\mathrm{op}}
+=2^{q-1}+\frac12\varphi^q,
+\]
+\[
+\lambda_i^{(q)}\le \lambda_i(A_q)+\|B_q\|_{\mathrm{op}}
+=\frac12\varphi^q\qquad(1\le i\le q).
+\]
+又 \(A_q\succeq 0\)，故 \(A_q+B_q\succeq B_q\)，于是
+\[
+\lambda_q^{(q)}\ge \lambda_q(B_q)
+=\frac12\min \sigma\!\bigl(\operatorname{Sym}^q(K)\bigr).
+\]
+证毕。
+\end{proof}
+
+\input{thm__conclusion-softcore-fixedm-qwindow-rational-recovery}
+
+\paragraph{两参数不交核的二尺度自相似与例外因子拼接律}
+为把 \(\operatorname{Sym}^q\)-例外谱的字迹机制与两参数不交核的世俗方程对齐，以下断言将 \(q\)-方向的缩放结构压缩为一组完全显式的函子恒等式。
+沿用 \eqref{eq:xi-two-param-disjointness-definition}--\eqref{eq:xi-two-param-disjointness-secular} 的记号：令 \(B^{(q)}(a,b)\) 为两参数不交矩阵，\(d=a-b\)，并令
+\[
+\mu_i^{(q)}:=\varphi^{\,q-i}\psi^{\,i}\qquad(0\le i\le q),
+\qquad
+\alpha:=1+\frac{2}{\sqrt5},\ \beta:=1-\frac{2}{\sqrt5},
+\qquad
+w_i:=\binom{q}{i}\alpha^{q-i}\beta^{i},
+\]
+以及
+\[
+G_{q,d}(\lambda):=\prod_{i=0}^{q}\bigl(\lambda-d\mu_i^{(q)}\bigr),\qquad
+\mathcal F_q(\lambda):=\sum_{i=0}^{q}\frac{w_i}{\lambda-d\mu_i^{(q)}},
+\qquad
+P_{q,a,b}(\lambda)=G_{q,d}(\lambda)\bigl(1-b\mathcal F_q(\lambda)\bigr).
+\]
+
+\input{thm__conclusion-disjointness-word-decomposition-rankone-resultant-inverse}
+
+\begin{proposition}[割线函数的二尺度自相似递推]\label{prop:conclusion-disjointness-secant-selfsimilar-recurrence}
+对任意 \(q\ge 0\) 与任意 \(\lambda\)（避开极点）成立严格恒等式
+\[
+\mathcal F_{q+1}(\lambda)
+=\frac{\alpha}{\varphi}\,\mathcal F_q\!\left(\frac{\lambda}{\varphi}\right)
+\frac{\beta}{\psi}\,\mathcal F_q\!\left(\frac{\lambda}{\psi}\right).
+\]
+等价地，利用
+\(
+\frac{\alpha}{\varphi}=\frac12+\frac{3\sqrt5}{10}
+\)
+与
+\(
+\frac{\beta}{\psi}=\frac12-\frac{3\sqrt5}{10}
+\)，可将递推写为无 \((\alpha,\beta)\) 形式。
+\end{proposition}
+\begin{proof}
+利用节点缩放分裂
+\[
+\mu_i^{(q+1)}=\varphi\,\mu_i^{(q)}\ (0\le i\le q),
+\qquad
+\mu_{i+1}^{(q+1)}=\psi\,\mu_i^{(q)}\ (0\le i\le q),
+\]
+以及权重的 Pascal 分解
+\[
+w_i^{(q+1)}
+=\binom{q+1}{i}\alpha^{q+1-i}\beta^i
+=\alpha\,w_i^{(q)}+\beta\,w_{i-1}^{(q)}
+\qquad(0\le i\le q+1),
+\]
+将 \(\mathcal F_{q+1}(\lambda)=\sum_{i=0}^{q+1}w_i^{(q+1)}/(\lambda-d\mu_i^{(q+1)})\) 分拆为两段并作指标平移：
+第一段对应 \(\varphi\mu_i^{(q)}\)，得到
+\[
+\sum_{i=0}^{q}\frac{\alpha\,w_i^{(q)}}{\lambda-d\varphi\mu_i^{(q)}}
+=\frac{\alpha}{\varphi}\sum_{i=0}^{q}\frac{w_i^{(q)}}{\lambda/\varphi-d\mu_i^{(q)}}
+=\frac{\alpha}{\varphi}\,\mathcal F_q(\lambda/\varphi).
+\]
+第二段对应 \(\psi\mu_i^{(q)}\)，得到
+\[
+\sum_{i=0}^{q}\frac{\beta\,w_i^{(q)}}{\lambda-d\psi\mu_i^{(q)}}
+=\frac{\beta}{\psi}\sum_{i=0}^{q}\frac{w_i^{(q)}}{\lambda/\psi-d\mu_i^{(q)}}
+=\frac{\beta}{\psi}\,\mathcal F_q(\lambda/\psi).
+\]
+相加即得所述递推。证毕。
+\end{proof}
+
+\begin{proposition}[例外特征因子的缩放--拼接递推]\label{prop:conclusion-disjointness-exceptional-poly-scaling-splice}
+对任意 \(q\ge 0\)，例外因子多项式 \(P_{q,a,b}\) 满足严格泛函递推
+\[
+P_{q+1,a,b}(\lambda)
+=\alpha\,\varphi^{q}\bigl(\lambda-d\psi^{q+1}\bigr)\,
+P_{q,a,b}\!\left(\frac{\lambda}{\varphi}\right)
+\beta\,\psi^{q}\bigl(\lambda-d\varphi^{q+1}\bigr)\,
+P_{q,a,b}\!\left(\frac{\lambda}{\psi}\right),
+\qquad q\ge 0,
+\]
+其初值为 \(P_{0,a,b}(\lambda)=\lambda-a\)。
+\end{proposition}
+\begin{proof}
+由 \(G_{q,d}(\lambda)=\prod_{i=0}^{q}(\lambda-d\mu_i^{(q)})\) 的节点缩放分裂，有恒等式
+\[
+G_{q+1,d}(\lambda)
+=\varphi^{q+1}\bigl(\lambda-d\psi^{q+1}\bigr)\,G_{q,d}(\lambda/\varphi)
+=\psi^{q+1}\bigl(\lambda-d\varphi^{q+1}\bigr)\,G_{q,d}(\lambda/\psi).
+\]
+另一方面，由命题 \ref{prop:conclusion-disjointness-secant-selfsimilar-recurrence} 与
+\(\frac{\alpha}{\varphi}+\frac{\beta}{\psi}=1\)，得到
+\[
+1-b\mathcal F_{q+1}(\lambda)
+=\frac{\alpha}{\varphi}\bigl(1-b\mathcal F_q(\lambda/\varphi)\bigr)
+\frac{\beta}{\psi}\bigl(1-b\mathcal F_q(\lambda/\psi)\bigr).
+\]
+将两式代回
+\(
+P_{q+1,a,b}=G_{q+1,d}(1-b\mathcal F_{q+1})
+\)
+并分别用 \(P_{q,a,b}(\lambda/\varphi)=G_{q,d}(\lambda/\varphi)(1-b\mathcal F_q(\lambda/\varphi))\)、
+\(P_{q,a,b}(\lambda/\psi)=G_{q,d}(\lambda/\psi)(1-b\mathcal F_q(\lambda/\psi))\) 代换，即得所示递推。
+初值由 \(q=0\) 时 \(B^{(0)}(a,b)=[a]\) 直接给出。证毕。
+\end{proof}
+
+\begin{proposition}[逐对刚性结果式：\texorpdfstring{$\sqrt5$}{sqrt5} 与 \texorpdfstring{$(\alpha,\beta)$}{(alpha,beta)} 的消隐]\label{prop:conclusion-disjointness-pairwise-resultant-rigidity}
+设 \(q\ge 2\) 且 \(0\le i\le \lfloor (q-1)/2\rfloor\)。
+定义二次因子
+\[
+Q_{q,i}(\lambda):=\lambda^2-d(-1)^iL_{q-2i}\lambda+d^2(-1)^q,
+\]
+其根恰为 \(d\mu_i^{(q)}\) 与 \(d\mu_{q-i}^{(q)}\)（命题 \ref{prop:conclusion-lucas-quadratic-factorization} 在 \((S,P)=(1,-1)\) 的特化）。
+则有严格闭式
+\[
+\Res\bigl(P_{q,a,b},Q_{q,i}\bigr)
+=(-1)^{\frac{i(i+1)+(q-i)(q-i+1)}{2}}\,
+b^{2}\,d^{2q}\,\binom{q}{i}^{2}\,
+\left(\prod_{k=1}^{i}F_k\prod_{k=1}^{q-i}F_k\right)^{\!2}.
+\]
+若 \(q\) 为偶数，则 \(G_{q,d}\) 另含一次因子 \((\lambda-d(-1)^{q/2})\)，并且
+\[
+P_{q,a,b}\bigl(d(-1)^{q/2}\bigr)
+=-(-1)^{\,\frac{q}{2}(q+1)-\binom{\frac{q}{2}+1}{2}}\,
+b\,d^{q}\,\binom{q}{q/2}\,
+\left(\prod_{k=1}^{q/2}F_k\right)^{\!2}.
+\]
+\end{proposition}
+\begin{proof}
+由节点取值公式 \eqref{eq:xi-two-param-disjointness-exceptional-poly-nodes}，
+\[
+P_{q,a,b}(d\mu_r^{(q)})
+=-b\,d^{q}\,w_r\prod_{j\ne r}\bigl(\mu_r^{(q)}-\mu_j^{(q)}\bigr).
+\]
+对 \(r=i\) 与 \(r=q-i\) 相乘，并用
+\(
+w_iw_{q-i}=\binom{q}{i}^2(\alpha\beta)^q=\binom{q}{i}^2 5^{-q}
+\)；
+同时对差积使用 \eqref{eq:xi-two-param-disjointness-mu-vandermonde-fibonacci}，可得
+\[
+\prod_{j\ne i}\bigl(\mu_i^{(q)}-\mu_j^{(q)}\bigr)\,
+\prod_{j\ne q-i}\bigl(\mu_{q-i}^{(q)}-\mu_j^{(q)}\bigr)
+=(-1)^{\frac{i(i+1)+(q-i)(q-i+1)}{2}}\,
+5^{q}\,
+\left(\prod_{k=1}^{i}F_k\prod_{k=1}^{q-i}F_k\right)^{\!2},
+\]
+其中 \(\varphi\)-幂在共轭配对下抵消。
+代回即得结果式闭式，并且 \(5^{q}\) 与 \(5^{-q}\) 精确相消，从而消去 \(\sqrt5\) 与 \((\alpha,\beta)\)。
+\par
+若 \(q\) 为偶数，取 \(r=q/2\) 则 \(\mu_{q/2}^{(q)}=(\varphi\psi)^{q/2}=(-1)^{q/2}\in\ZZ\)。
+对该节点直接应用同一节点取值公式并使用 \(w_{q/2}=\binom{q}{q/2}(\alpha\beta)^{q/2}=\binom{q}{q/2}5^{-q/2}\)，
+再与差积的 \((\sqrt5)^{q}\) 因子抵消，即得所示一次节点闭式。证毕。
+\end{proof}
+
+\input{thm__conclusion-disjointness-background-exceptional-hankel-krylov-largecoupling}
+\input{thm__conclusion-wordtrace-elliptic-trace-host-nonequivalence}

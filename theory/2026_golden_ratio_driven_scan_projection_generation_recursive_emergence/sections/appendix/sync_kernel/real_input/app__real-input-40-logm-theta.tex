@@ -1,0 +1,232 @@
+\subsubsection{从标量到相图：加权常数函数 logM(theta)}\label{app:real-input-40-logm-theta}
+令 $\Phi$ 为边函数向量（可取 \S\ref{app:vector-potential} 的 $\varphi_e,\varphi_-,\varphi_2$，亦可继续加维），
+定义加权矩阵
+\[
+(M_\theta)_{ij}:=\sum_{i\to j}\exp\bigl(\langle\theta,\Phi(e)\rangle\bigr),\qquad \theta\in\RR^d,
+\]
+并令
+\[
+\lambda(\theta):=\rho(M_\theta),\qquad P(\theta):=\log\lambda(\theta),\qquad z_\star(\theta):=\lambda(\theta)^{-1},
+\qquad
+\zeta_\theta(z):=\frac{1}{\det(I-zM_\theta)}.
+\]
+定义加权 primitive 轨道生成函数
+\[
+P_\theta(z):=\sum_{n\ge 1}p_n(\theta)z^n,\qquad
+p_n(\theta):=\sum_{\substack{\tau\ \mathrm{primitive}\\|\tau|=n}}\exp\bigl(\langle\theta,S_\tau\Phi\rangle\bigr).
+\]
+则在 $z\to z_\star(\theta)$ 时有
+\[
+P_\theta(z)=-\log(1-\lambda(\theta)z)+\log\mathfrak{M}(\theta)+o(1),
+\]
+并由 Abel 有限部定义
+\[
+\log\mathfrak{M}(\theta)=\mathrm{fp}_{r=1}\Bigl(\sum_{n\ge 1}\frac{p_n(\theta)}{\lambda(\theta)^n}r^n+\log(1-r)\Bigr).
+\]
+在 $z_\star(\theta)$ 为简单极点时，上式亦可写为一条“主留数 + Möbius 尾”的单级数（与 \S\ref{app:real-input-40-finite-part} 同口径）：
+\[
+\log\mathfrak{M}(\theta)
+=\log C(\theta)+\sum_{m\ge 2}\frac{\mu(m)}{m}\log\zeta_\theta\bigl(z_\star(\theta)^{\,m}\bigr)
+=\log C(\theta)+\sum_{m\ge 2}\frac{\mu(m)}{m}\log\zeta_\theta\bigl(\lambda(\theta)^{-m}\bigr).
+\]
+同理，若定义加权 primitive 轨道的累计计数
+\[
+\Pi_\theta(N):=\sum_{n\le N}p_n(\theta),
+\]
+则由 $p_n(\theta)\sim \lambda(\theta)^n/n$ 得到离散“素数定理形状”的常数修正：
+\[
+\Pi_\theta(N)\sim \frac{\lambda(\theta)}{\lambda(\theta)-1}\cdot\frac{\lambda(\theta)^N}{N}.
+\]
+若以轨道范数 $N(\tau)=\lambda(\theta)^{|\tau|}$ 定义 $\pi_\theta(x):=\#\{\tau\ \mathrm{primitive}:N(\tau)\le x\}$，则
+\[
+\pi_\theta(x)\sim \frac{\lambda(\theta)\log\lambda(\theta)}{\lambda(\theta)-1}\cdot\frac{x}{\log x}.
+\]
+进一步由 primitive 分解（欧拉乘积/幂展开口径）与 Möbius 反演得到一组可直接数值评估的接口式：
+\[
+\log\mathfrak{M}(\theta)
+:=\log C(\theta)-\sum_{m\ge 2}\frac{P_\theta(\lambda(\theta)^{-m})}{m},
+\]
+\[
+P_\theta(z)=\sum_{k\ge 1}\frac{\mu(k)}{k}\log\zeta_\theta(z^k),
+\]
+从而得到双重 Möbius--Abel 级数；由于 $m\ge 2$，故 $\lambda(\theta)^{-mk}$ 以指数速度趋零，从而该双和在数值上高度稳定。
+\[
+\log\mathfrak{M}(\theta)
+=\log C(\theta)-\sum_{m\ge 2}\frac{1}{m}\sum_{k\ge 1}\frac{\mu(k)}{k}\log\zeta_\theta\bigl(\lambda(\theta)^{-mk}\bigr).
+\]
+其中 $C(\theta)$ 为主极点留数常数
+\[
+C(\theta):=\lim_{z\to z_\star(\theta)}(1-\lambda(\theta)z)\,\zeta_\theta(z).
+\]
+当 $z_\star(\theta)$ 为简单极点时，还可用行列式导数把 $C(\theta)$ 写成只依赖 $\det(I-zM_\theta)$ 的闭式：
+\[
+C(\theta)=\frac{1}{-z_\star(\theta)\,\partial_z\det(I-zM_\theta)\big|_{z=z_\star(\theta)}}.
+\]
+数值相图复现见脚本 \texttt{scripts/exp\_sync\_kernel\_real\_input\_40\_logM\_theta.py}。
+
+\paragraph{arity-charge 的线性并入（无需重建核）}
+取最小 arity-charge
+\[
+\chi:=\varphi_e-\varphi_2\in\{-1,0,1\},
+\]
+则对 $\chi$ 的线性加权 $\exp(\theta_\chi\chi)$ 等价于参数替换
+\[
+(\theta_e,\theta_2)\mapsto(\theta_e+\theta_\chi,\ \theta_2-\theta_\chi),
+\]
+等价地，在三参数压力 $P(\theta_e,\theta_-,\theta_2)=\log\rho(M_\theta)$ 上这是一维切线
+\[
+P_\chi(t):=P(t,0,-t).
+\]
+因此 $\chi$ 的均值/协方差与 $\log\mathfrak{M}(\theta)$ 沿该方向的切片均可直接从同一族加权核 $M_\theta$ 读出，而无需引入新的状态扩张。
+
+\begin{definition}[四维观测向量与 $\chi$ 维度]\label{def:real-input-40-observables-4d}
+在真实输入 40 状态核的边上，取三条基础可加观测量
+\[
+\varphi_e=e,\qquad
+\varphi_-=\mathbf{1}_{\{t\in Q_-\}},\qquad
+\varphi_2=\mathbf{1}_{\{d=2\}},
+\]
+并定义最小 arity-charge
+\[
+\chi:=\varphi_e-\varphi_2\in\{-1,0,1\}.
+\]
+记四维观测向量为
+\(
+\Psi:=(\varphi_e,\varphi_-,\varphi_2,\chi)
+\)
+并对参数 $\vartheta=(\theta_e,\theta_-,\theta_2,\theta_\chi)\in\RR^4$ 定义加权矩阵族
+\[
+(M_\vartheta)_{ij}:=\sum_{i\to j}\exp\bigl(\theta_e\varphi_e+\theta_-\varphi_-+\theta_2\varphi_2+\theta_\chi\chi\bigr).
+\]
+\end{definition}
+
+\begin{proposition}[$\chi$ 作为第四维并不引入新自由度（线性重参数化）]\label{prop:chi-reparam-4d}
+对任意 $\vartheta=(\theta_e,\theta_-,\theta_2,\theta_\chi)$，有恒等式
+\[
+M_{(\theta_e,\theta_-,\theta_2,\theta_\chi)}\;=\;M_{(\theta_e+\theta_\chi,\ \theta_-,\ \theta_2-\theta_\chi,\ 0)},
+\]
+从而对所有“素数影子”接口量（压力、$\zeta$、Abel 有限部常数）都有同一重参数化：
+\[
+\lambda(\theta_e,\theta_-,\theta_2,\theta_\chi)=\lambda(\theta_e+\theta_\chi,\theta_-,\theta_2-\theta_\chi),
+\]
+\[
+\zeta_{\vartheta}(z)=\frac{1}{\det(I-zM_\vartheta)}=\zeta_{(\theta_e+\theta_\chi,\theta_-,\theta_2-\theta_\chi)}(z),
+\]
+\[
+\log\mathfrak{M}(\vartheta)=\log\mathfrak{M}(\theta_e+\theta_\chi,\theta_-,\theta_2-\theta_\chi).
+\]
+\end{proposition}
+
+\begin{proof}
+由定义 \ref{def:real-input-40-observables-4d}，$\chi=\varphi_e-\varphi_2$，故
+\[
+\theta_e\varphi_e+\theta_2\varphi_2+\theta_\chi\chi
+=(\theta_e+\theta_\chi)\varphi_e+(\theta_2-\theta_\chi)\varphi_2.
+\]
+把该恒等式代入每条边的权重定义即可得 $M_\vartheta$ 的逐项相等；其余结论由 $\lambda=\rho(M)$、$\zeta=1/\det(I-zM)$ 与 Abel 有限部定义在同一矩阵族上的函子性直接推出。
+\end{proof}
+
+\begin{corollary}[$\chi$ 引入的是规范对称：全阶 Ward 恒等式与四维 Hessian 的零模]\label{cor:chi-gauge-ward-nullmode}
+令
+$$
+a:=\theta_e+\theta_\chi,\qquad b:=\theta_-,\qquad c:=\theta_2-\theta_\chi.
+$$
+对任意标量接口泛函
+$$
+F\in\{P,\ \log\lambda,\ \log\mathfrak{M},\ \log\zeta_\vartheta(z)\ \ (\text{$z$ 固定})\},
+$$
+存在三变量函数 \(\widetilde F\) 使得
+$$
+F(\theta_e,\theta_-,\theta_2,\theta_\chi)=\widetilde F(a,b,c).
+$$
+从而成立如下两类结构恒等式。
+\begin{enumerate}
+  \item \textbf{Ward 恒等式（任意阶）}：
+  $$
+  \boxed{\ \partial_{\theta_\chi}F=\partial_{\theta_e}F-\partial_{\theta_2}F\ }
+  $$
+  并且对任意整数 \(m\ge 1\)，有更强的高阶形式
+  $$
+  \boxed{\ \partial_{\theta_\chi}^{\,m}F
+  =\sum_{j=0}^{m}\binom{m}{j}(-1)^{m-j}\,
+  \partial_{\theta_e}^{\,j}\partial_{\theta_2}^{\,m-j}F\ }.
+  $$
+  \item \textbf{四维零模（gauge null mode）}：令
+  $$
+  v_0:=(1,0,-1,-1)\in\RR^4,
+  $$
+  则沿 \(v_0\) 的变化保持 \((a,b,c)\) 不变，因此
+  $$
+  \boxed{\ \nabla_\vartheta F\cdot v_0=0\ }
+  $$
+  且四维 Hessian \( \nabla_\vartheta^2F \) 具有精确零特征方向
+  $$
+  \boxed{\ (\nabla_\vartheta^2F)\,v_0=0\ }.
+  $$
+  因而把 \(\theta_\chi\) 计入后，\(\nabla_\vartheta^2F\) 的秩至多为 \(3\)。
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:chi-reparam-4d} 可知 \(F(\theta_e,\theta_-,\theta_2,\theta_\chi)\) 仅通过组合变量 \((a,b,c)\) 进入。
+对一阶 Ward 恒等式，链式法则给出
+$$
+\partial_{\theta_\chi}F
+=(\partial_a\widetilde F)\,\partial_{\theta_\chi}a+(\partial_c\widetilde F)\,\partial_{\theta_\chi}c
+=\partial_a\widetilde F-\partial_c\widetilde F
+=\partial_{\theta_e}F-\partial_{\theta_2}F.
+$$
+高阶公式由算子恒等式 \(\partial_{\theta_\chi}=\partial_{\theta_e}-\partial_{\theta_2}\) 反复作用并用二项式展开得到。
+\par
+对零模，取方向微分算子
+\(
+D_{v_0}:=\partial_{\theta_e}-\partial_{\theta_2}-\partial_{\theta_\chi}
+\)
+并注意到
+$$
+D_{v_0}a=1-0-1=0,\qquad
+D_{v_0}b=0,\qquad
+D_{v_0}c=0-1-(-1)=0,
+$$
+因此 \(D_{v_0}F=0\)；这等价于 \(\nabla_\vartheta F\cdot v_0=0\)。
+再对任意标准基向量 \(e_i\) 微分得 \(D_{e_i}(D_{v_0}F)=0\)，即 \((\nabla_\vartheta^2F)v_0=0\)。
+秩上界由存在非零核向量立即推出。
+\end{proof}
+
+\begin{corollary}[$\chi$ 的均值与协方差密度（由三维 Hessian 线性组合读出）]\label{cor:chi-moments-from-hessian}
+令 $P(\theta_e,\theta_-,\theta_2)=\log\rho(M_\theta)$。则
+\[
+\mathbb{E}[\chi]=\partial_{\theta_e}P(0)-\partial_{\theta_2}P(0)=\frac{17-5\sqrt5}{20},
+\]
+并且协方差密度满足
+\[
+\mathrm{Var}_\infty(\chi)=\partial_{\theta_e\theta_e}^2P(0)+\partial_{\theta_2\theta_2}^2P(0)-2\partial_{\theta_e\theta_2}^2P(0),
+\qquad
+\mathrm{Cov}_\infty(\chi,\varphi_-)=\partial_{\theta_e\theta_-}^2P(0)-\partial_{\theta_2\theta_-}^2P(0).
+\]
+\end{corollary}
+
+\begin{corollary}[$\chi$ 切片上 $\log\mathfrak{M}_\chi$ 的二阶导数与一个无量纲耦合比]\label{cor:chi-slice-logm-derivatives-and-W}
+令 \(\log\mathfrak{M}(\theta_e,\theta_-,\theta_2)\) 为三维 Abel 有限部常数函数，并定义 \(\chi\) 切片
+$$
+\log\mathfrak{M}_\chi(t):=\log\mathfrak{M}(t,0,-t).
+$$
+则在 \(t=0\) 处有导数投影公式（令 \(v=(1,0,-1)\)）：
+$$
+(\log\mathfrak{M}_\chi)'(0)
+=\nabla\log\mathfrak{M}(0)\cdot v
+=\partial_{\theta_e}\log\mathfrak{M}(0)-\partial_{\theta_2}\log\mathfrak{M}(0),
+$$
+$$
+(\log\mathfrak{M}_\chi)''(0)
+=v^{\mathsf T}\bigl(\nabla^2\log\mathfrak{M}(0)\bigr)v
+=\partial_{\theta_e\theta_e}^2\log\mathfrak{M}(0)+\partial_{\theta_2\theta_2}^2\log\mathfrak{M}(0)-2\partial_{\theta_e\theta_2}^2\log\mathfrak{M}(0).
+$$
+进一步地，定义无量纲耦合比
+$$
+W_\chi:=\frac{(\log\mathfrak{M}_\chi)''(0)}{\mathrm{Var}_\infty(\chi)}.
+$$
+其中 \(\mathrm{Var}_\infty(\chi)=P_\chi''(0)\) 可由推论 \ref{cor:chi-moments-from-hessian} 的三维压力 Hessian 线性组合读出。
+\end{corollary}
+
+\input{sections/generated/tab_real_input_40_logM_chi_local_derivatives}

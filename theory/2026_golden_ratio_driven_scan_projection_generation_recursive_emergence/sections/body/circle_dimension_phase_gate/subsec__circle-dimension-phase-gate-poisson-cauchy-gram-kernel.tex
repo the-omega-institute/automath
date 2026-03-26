@@ -1,0 +1,494 @@
+\paragraph{高阶 Gram 核与核化二次型：从导数闭式到矩差谱能量与双通道反演}
+本段把 Poisson--Cauchy 核导数的二次型从对角能量推广为全二元 Gram 闭式，并据此给出一个由差核 \(\frac{2}{4+(a-b)^2}\) 完全控制的“全矩差”二次型接口；该接口既提供 \(D_{\mathrm{KL}}\) 的二次主项，也给出与 \(e^{-2|\xi|}\) 权重相匹配的 Plancherel 谱表示。
+最后，将中心单点剖面与中心导数视为互补的双通道读出，给出虚轴 Cauchy 变换的显式恢复公式，从而在可反演意义下确定全分布。
+
+\begin{proposition}[Cauchy 核高阶导数的全 Gram 闭式：二元精确公式]\label{prop:cdim-cauchy-kernel-derivative-gram-closed-form}
+令
+\[
+P_t(x):=\frac{1}{\pi}\frac{t}{x^2+t^2}\qquad(t>0).
+\]
+对整数 \(n,m\ge 1\) 定义双线性型
+\[
+\mathcal G_{n,m}(t)
+:=\int_{\RR}\frac{\bigl(\partial_x^{\,n}P_t(x)\bigr)\bigl(\partial_x^{\,m}P_t(x)\bigr)}{P_t(x)}\,\dd x.
+\]
+则成立严格闭式
+\[
+\boxed{\;
+\mathcal G_{n,m}(t)=
+\begin{cases}
+(-1)^{\frac{m-n}{2}}\,
+\dfrac{n!\,m!}{2^{n+m-1}}\binom{n+m-2}{n-1}\,t^{-(n+m)}, & n\equiv m\pmod 2,\\[6pt]
+0, & n\not\equiv m\pmod 2.
+\end{cases}
+\;}
+\]
+特别地，\(n=m\) 时恢复命题 \ref{prop:cdim-cauchy-kernel-higher-order-fisher-energy} 的对角能量常数；\(n=m=2\) 时恢复 \eqref{eq:cdim-poisson-pt-second-energy}。
+\end{proposition}
+\begin{proof}
+由缩放 \(P_t(x)=t^{-1}P_1(x/t)\) 得
+\(
+\mathcal G_{n,m}(t)=t^{-(n+m)}\mathcal G_{n,m}(1)
+\)，故只需处理 \(t=1\)。
+\par
+令 \(f(x):=(1+x^2)^{-1}\)，则 \(P_1=\pi^{-1}f\) 且
+\[
+f(x)=\frac{1}{2\mathrm{i}}\Bigl((x-\mathrm{i})^{-1}-(x+\mathrm{i})^{-1}\Bigr),
+\qquad
+f^{(n)}(x)=\frac{(-1)^n n!}{2\mathrm{i}}\Bigl((x-\mathrm{i})^{-(n+1)}-(x+\mathrm{i})^{-(n+1)}\Bigr).
+\]
+令 \(z=x+\mathrm{i}\) 并写 \(z=re^{\mathrm{i}\theta}\)（\(\theta\in(0,\pi)\)）；由 \(\Im(z)=1=r\sin\theta\) 得 \(r=\csc\theta\)、\(x=\cot\theta\)、\(\dd x=-\csc^2\theta\,\dd\theta\)。
+并且
+\[
+\frac{1}{2\mathrm{i}}\bigl(\overline z^{-(n+1)}-z^{-(n+1)}\bigr)
+=r^{-(n+1)}\sin\bigl((n+1)\theta\bigr).
+\]
+代入并化简得到
+\[
+\mathcal G_{n,m}(1)
+=\frac{(-1)^{n+m}n!\,m!}{\pi}
+\int_{0}^{\pi}\sin^{n+m-2}\theta\;
+\sin\bigl((n+1)\theta\bigr)\sin\bigl((m+1)\theta\bigr)\,\dd\theta.
+\]
+用恒等式 \(\sin A\sin B=\tfrac12(\cos(A-B)-\cos(A+B))\) 将其写为两项余弦积分。
+其中 \(\cos((m+n+2)\theta)\) 项与 \(\sin^{N}\theta\)（\(N=n+m-2\)）在 \([0,\pi]\) 上正交：\(\sin^{N}\theta\) 的余弦级数仅含频率 \(\le N\)，而 \(m+n+2=N+4\)，故该项积分为 \(0\)。
+因此
+\[
+\mathcal G_{n,m}(1)
+=\frac{(-1)^{n+m}n!\,m!}{2\pi}\int_{0}^{\pi}\sin^{N}\theta\;\cos((m-n)\theta)\,\dd\theta.
+\]
+当 \(n\not\equiv m\pmod 2\) 时，\((m-n)\) 为奇数，积分为 \(0\)。
+当 \(n\equiv m\pmod 2\) 时，设 \(m-n=2k\)。
+由 \(\sin^{N}\theta\) 的显式余弦展开（等价于其 Fourier 系数闭式）可得
+\[
+\int_{0}^{\pi}\sin^{N}\theta\;\cos(2k\theta)\,\dd\theta
+=\pi(-1)^k\,2^{-N}\binom{N}{\frac{N-2k}{2}}
+=\pi(-1)^{\frac{m-n}{2}}\,2^{-N}\binom{N}{n-1}.
+\]
+又 \(n+m\) 为偶数，故 \((-1)^{n+m}=1\)，代入并用 \(N=n+m-2\) 即得
+\[
+\mathcal G_{n,m}(1)=(-1)^{\frac{m-n}{2}}\frac{n!\,m!}{2^{N+1}}\binom{N}{n-1}
+=(-1)^{\frac{m-n}{2}}\frac{n!\,m!}{2^{n+m-1}}\binom{n+m-2}{n-1}.
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[指数生成核的闭式：差核 \texorpdfstring{$\frac{2}{4+(a-b)^2}$}{2/(4+(a-b)^2)}]\label{prop:cdim-cauchy-derivative-gram-exponential-kernel}
+令 \(\mathcal G_{n,m}(1)\) 如命题 \ref{prop:cdim-cauchy-kernel-derivative-gram-closed-form}。
+则对形式变量 \(a,b\) 的指数生成函数满足严格恒等式
+\[
+\boxed{\;
+\sum_{n\ge 1}\sum_{m\ge 1}\frac{\mathcal G_{n,m}(1)}{n!\,m!}\,a^{n-1}b^{m-1}
+=\frac{2}{4+(a-b)^2}\; }.
+\]
+因此矩阵 \(\bigl(\mathcal G_{n,m}(1)/(n!\,m!)\bigr)_{n,m\ge 1}\) 由一个显式的 Cauchy 型差核生成，并在实参数上给出严格正定核。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:cdim-cauchy-kernel-derivative-gram-closed-form}，仅有 \(n\equiv m\pmod 2\) 的项非零。
+令 \(i=n-1\)、\(j=m-1\)，则
+\[
+\frac{\mathcal G_{n,m}(1)}{n!\,m!}
+=\mathbf 1_{i\equiv j\ (2)}\,(-1)^{\frac{j-i}{2}}\,2^{-(i+j+1)}\binom{i+j}{i}.
+\]
+利用奇偶筛选恒等式
+\(
+\mathbf 1_{i\equiv j\ (2)}\,(-1)^{\frac{j-i}{2}}=\frac12\bigl(\mathrm{i}^{\,j-i}+(-\mathrm{i})^{\,j-i}\bigr)
+\)，将双和化为两项复参数二项生成函数的平均。
+再用标准恒等式
+\[
+\sum_{i\ge 0}\sum_{j\ge 0}\binom{i+j}{i}A^iB^j=\frac{1}{1-A-B}
+\]
+（形式幂级数意义成立），分别代入 \(A=a/(2\mathrm{i})\)、\(B=b\mathrm{i}/2\) 及其共轭替换并平均，化简即得右端 \(\frac{2}{4+(a-b)^2}\)。证毕。
+\end{proof}
+
+\begin{proposition}[Poisson--Cauchy 粗粒化的全矩差二次型：\texorpdfstring{$D_{\mathrm{KL}}$}{D_KL} 的二次主项]\label{prop:cdim-poisson-kl-all-moment-quadratic-form}
+令 \(\nu,\widetilde\nu\) 为 \(\RR\) 上概率测度并具有共同重心 \(\bar\gamma\)。
+设存在 \(r>0\) 使中心矩差满足指数生成收敛性
+\[
+\sum_{k\ge 1}\frac{|\Delta\kappa_k|}{k!}\,r^k<\infty,
+\qquad
+\Delta\kappa_k
+:=\int_{\RR}(\gamma-\bar\gamma)^k\,\dd\nu(\gamma)
+-\int_{\RR}(\gamma-\bar\gamma)^k\,\dd\widetilde\nu(\gamma).
+\]
+令
+\(
+h_t:=P_t*\nu
+\)、
+\(
+g_t:=P_t*\widetilde\nu
+\)
+（\(t>0\)）。
+则当 \(t\to\infty\) 有二次型主项表示
+\begin{equation}\label{eq:cdim-poisson-kl-all-moment-quadratic-form}
+\boxed{\;
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{1}{2t^{2}}\mathbf Q_t(\Delta\kappa)+o(t^{-2})\; }.
+\end{equation}
+其中 \(\mathbf Q_t(\Delta\kappa)\) 为严格正定二次型，可取如下等价形式：
+\begin{enumerate}
+  \item 令 \(\Delta\kappa^{(t)}_n:=\Delta\kappa_n/t^{n-1}\)（\(n\ge 1\)），则
+  \[
+  \mathbf Q_t(\Delta\kappa)
+  =\sum_{n\ge 1}\sum_{m\ge 1}\frac{\Delta\kappa^{(t)}_n\,\Delta\kappa^{(t)}_m}{n!\,m!}\,\mathcal G_{n,m}(1),
+  \]
+  其中 \(\mathcal G_{n,m}(1)\) 由命题 \ref{prop:cdim-cauchy-kernel-derivative-gram-closed-form} 给出；
+  \item 令
+  \(
+  F_t(a):=\sum_{n\ge 1}\Delta\kappa^{(t)}_n\,a^{n-1}/n!
+  \)
+  为指数生成函数，则在由差核 \(\frac{2}{4+(a-b)^2}\) 所生成的再生核 Hilbert 空间意义下有
+  \[
+  \mathbf Q_t(\Delta\kappa)
+  =\int_{\RR}\int_{\RR}F_t(a)F_t(b)\,\frac{2}{4+(a-b)^2}\,\dd a\,\dd b,
+  \]
+  并与上一式完全等价（命题 \ref{prop:cdim-cauchy-derivative-gram-exponential-kernel}）。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+记 \(\Delta:=\gamma-\bar\gamma\)。
+对每个固定 \(x\)，函数 \(\Delta\mapsto P_t(x-\bar\gamma-\Delta)\) 在复邻域内解析；由假设的指数生成收敛性可交换期望与级数，得到一致展开
+\[
+h_t(x)-g_t(x)
+=\sum_{n\ge 1}\frac{(-1)^n}{n!}\Delta\kappa_n\,\partial_x^{\,n}P_t(x-\bar\gamma)+\mathcal R_t(x),
+\qquad
+\|\mathcal R_t\|_{L^1(\RR)}=o(t^{-1}).
+\]
+令 \(\delta_t:=h_t-g_t\) 并置 \(u_t:=\delta_t/g_t\)。
+当 \(t\) 足够大时有 \(\|u_t\|_\infty\to 0\)，故可使用
+\(
+(1+u)\log(1+u)=u+\frac{u^2}{2}+O(|u|^3)
+\)
+并以 \(g_t\) 加权积分得到
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac12\int_{\RR}\frac{\delta_t(x)^2}{g_t(x)}\,\dd x+o(t^{-2}).
+\]
+将 \(\delta_t\) 的级数表示代入，并用 \(\int \delta_t=0\) 与绝对收敛交换求和与积分，主项化为
+\[
+\frac12\sum_{n,m\ge 1}\frac{\Delta\kappa_n\Delta\kappa_m}{n!\,m!}
+\int_{\RR}\frac{(\partial_x^{\,n}P_t)(\partial_x^{\,m}P_t)}{P_t}\,\dd x.
+\]
+由缩放律与命题 \ref{prop:cdim-cauchy-kernel-derivative-gram-closed-form}，
+\(
+\int \frac{(\partial^{\,n}P_t)(\partial^{\,m}P_t)}{P_t}
+=t^{-(n+m)}\mathcal G_{n,m}(1)
+\)。
+将 \(t^{-(n+m)}=t^{-2}\cdot t^{-(n+m-2)}\) 并吸收到 \(\Delta\kappa^{(t)}_n=\Delta\kappa_n/t^{n-1}\) 即得 \eqref{eq:cdim-poisson-kl-all-moment-quadratic-form} 的第一种形式。
+第二种形式由命题 \ref{prop:cdim-cauchy-derivative-gram-exponential-kernel} 的生成核恒等式给出。证毕。
+\end{proof}
+
+\begin{proposition}[谱表示：二次型 \texorpdfstring{$\mathbf Q_t$}{Qt} 等价于 \texorpdfstring{$e^{-2|\xi|}$}{exp(-2|xi|)} 权重 Plancherel 能量]\label{prop:cdim-poisson-kl-quadratic-form-spectral}
+在命题 \ref{prop:cdim-poisson-kl-all-moment-quadratic-form} 的设定下，令 \(F_t\) 为其指数生成函数并记 Fourier 变换
+\[
+\widehat F_t(\xi):=\int_{\RR}F_t(a)\,e^{-\mathrm{i}\xi a}\,\dd a
+\]
+（以再生核空间意义解释）。
+则有严格等式
+\[
+\boxed{\;
+\mathbf Q_t(\Delta\kappa)=\pi\int_{\RR}|\widehat F_t(\xi)|^2\,e^{-2|\xi|}\,\dd\xi\; }.
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:cdim-cauchy-derivative-gram-exponential-kernel}，\(\mathbf Q_t\) 的核为差核 \(K(x)=\frac{2}{4+x^2}\)。
+其 Fourier 变换满足经典恒等式
+\[
+\int_{\RR}\frac{2}{4+x^2}\,e^{-\mathrm{i}\xi x}\,\dd x=\pi e^{-2|\xi|}.
+\]
+将 \(\mathbf Q_t\) 视为卷积型二次型并应用 Plancherel 定理即得所示谱表示。证毕。
+\end{proof}
+
+\begin{proposition}[双通道中心读出决定全分布：虚轴 Cauchy 变换的显式恢复]\label{prop:cdim-poisson-central-two-channel-reconstruction}
+令 \(\nu\) 为 \(\RR\) 上概率测度，重心 \(\bar\gamma\)，并假设 \(\int_{\RR}|\gamma-\bar\gamma|\,\dd\nu(\gamma)<\infty\)。
+令
+\[
+h_t(x):=\int_{\RR}P_t(x-\gamma)\,\dd\nu(\gamma)\qquad(t>0),
+\]
+并定义两条中心读出曲线
+\[
+A(t):=\pi\,h_t(\bar\gamma),
+\qquad
+B(t):=\pi\,\partial_x h_t(x)\big|_{x=\bar\gamma}.
+\]
+则仅给定 \(A(t)\) 与 \(B(t)\)（\(t>0\)）即可唯一确定 \(\nu\)。
+更具体地，令
+\[
+G(\mathrm{i}t):=\int_{\RR}\frac{1}{\mathrm{i}t-(\gamma-\bar\gamma)}\,\dd\nu(\gamma)\qquad(t>0)
+\]
+为中心化 Cauchy 变换在正虚轴上的取值，则有显式恢复公式
+\[
+\boxed{\;
+G(\mathrm{i}t)
+=\mathrm{i}\,A(t)+\int_t^\infty B(s)\,\dd s\qquad(t>0).\;}
+\]
+从而由解析延拓与 Stieltjes 反演可恢复 \(\nu\)。
+\end{proposition}
+\begin{proof}
+记 \(\Delta:=\gamma-\bar\gamma\)。
+由定义
+\[
+h_t(\bar\gamma)=\frac{1}{\pi}\int_{\RR}\frac{t}{\Delta^2+t^2}\,\dd\nu(\gamma),
+\]
+故 \(\Im\,G(\mathrm{i}t)=\int \frac{t}{\Delta^2+t^2}\,\dd\nu=A(t)\)。
+\par
+另一方面，
+\[
+\partial_x h_t(x)\big|_{x=\bar\gamma}
+=\int_{\RR}P_t'(\bar\gamma-\gamma)\,\dd\nu(\gamma)
+=\frac{2}{\pi}\int_{\RR}\frac{t\,\Delta}{(\Delta^2+t^2)^2}\,\dd\nu(\gamma),
+\]
+从而
+\[
+B(t)=2t\int_{\RR}\frac{\Delta}{(\Delta^2+t^2)^2}\,\dd\nu(\gamma).
+\]
+令
+\(
+H(t):=\int \frac{\Delta}{\Delta^2+t^2}\,\dd\nu
+\)，
+则由可微性与绝对可积性（由 \(\int|\Delta|<\infty\) 保证）得
+\[
+H'(t)=\int_{\RR}\frac{-2t\,\Delta}{(\Delta^2+t^2)^2}\,\dd\nu(\gamma)=-B(t).
+\]
+又因 \(\int|\Delta|<\infty\) 得 \(H(t)\to 0\)（\(t\to\infty\)），故
+\(
+H(t)=\int_t^\infty B(s)\,\dd s
+\)。
+\par
+最后分解
+\[
+G(\mathrm{i}t)
+=\int_{\RR}\frac{\mathrm{i}t+\Delta}{\Delta^2+t^2}\,\dd\nu(\gamma)
+=\mathrm{i}\int_{\RR}\frac{t}{\Delta^2+t^2}\,\dd\nu(\gamma)+\int_{\RR}\frac{\Delta}{\Delta^2+t^2}\,\dd\nu(\gamma)
+=\mathrm{i}A(t)+H(t),
+\]
+即得所示恢复公式。
+由于 \(G\) 在上半平面解析，正虚轴上的取值确定其解析延拓；再由标准 Stieltjes 反演恢复 \(\nu\)。证毕。
+\end{proof}
+
+\begin{corollary}[局部双通道中心观测的唯一性：任意开区间的 \texorpdfstring{$t$}{t}-数据决定整测度]\label{cor:cdim-poisson-central-two-channel-local-uniqueness}
+沿用命题 \ref{prop:cdim-poisson-central-two-channel-reconstruction} 的设定。
+设 \(I\subset(0,\infty)\) 为任意非空开区间。
+若两测度 \(\nu,\widetilde\nu\) 满足在 \(t\in I\) 上同时有
+\[
+\pi\,h_t^{\nu}(\bar\gamma)=\pi\,h_t^{\widetilde\nu}(\bar\gamma),
+\qquad
+\pi\,\partial_x h_t^{\nu}(x)\big|_{x=\bar\gamma}
+=\pi\,\partial_x h_t^{\widetilde\nu}(x)\big|_{x=\bar\gamma},
+\]
+则 \(\nu=\widetilde\nu\)。
+\end{corollary}
+\begin{proof}
+令 \(G_{\nu}(\mathrm{i}t)\)、\(G_{\widetilde\nu}(\mathrm{i}t)\) 为命题 \ref{prop:cdim-poisson-central-two-channel-reconstruction} 中的中心化 Cauchy 变换在正虚轴上的取值，并写
+\[
+G_{\nu}(\mathrm{i}t)=U_{\nu}(t)+\mathrm{i}A(t),
+\qquad
+G_{\widetilde\nu}(\mathrm{i}t)=U_{\widetilde\nu}(t)+\mathrm{i}A(t),
+\]
+其中 \(A(t)=\pi\,h_t(\bar\gamma)\) 由假设在 \(I\) 上相同。
+命题 \ref{prop:cdim-poisson-central-two-channel-reconstruction} 的推导给出
+\(
+U_{\nu}'(t)=-B(t)
+\)、
+\(
+U_{\widetilde\nu}'(t)=-B(t)
+\)
+（其中 \(B(t)=\pi\,\partial_x h_t(x)|_{x=\bar\gamma}\)），因此在 \(I\) 上差值 \(U_{\nu}(t)-U_{\widetilde\nu}(t)\) 为常数 \(C\)。
+从而在集合 \(\{\mathrm{i}t:\ t\in I\}\subset\mathbb{H}\) 上有
+\[
+G_{\nu}(\mathrm{i}t)-G_{\widetilde\nu}(\mathrm{i}t)=C.
+\]
+由于 \(G_{\nu}-G_{\widetilde\nu}\) 在上半平面解析，恒等定理给出 \(G_{\nu}(z)-G_{\widetilde\nu}(z)\equiv C\)（\(z\in\mathbb{H}\)）。
+另一方面，由 \(\int|\gamma-\bar\gamma|\,\dd\nu<\infty\) 与 \(\int|\gamma-\bar\gamma|\,\dd\widetilde\nu<\infty\) 得
+\(
+G_{\nu}(z)=O(|z|^{-1})
+\)、
+\(
+G_{\widetilde\nu}(z)=O(|z|^{-1})
+\)
+（\(|z|\to\infty\) 于 \(\mathbb{H}\) 内），故常数项必为 \(C=0\)。
+因此 \(G_{\nu}\equiv G_{\widetilde\nu}\)，再由 Stieltjes 反演得 \(\nu=\widetilde\nu\)。证毕。
+\end{proof}
+
+\paragraph{差核 \texorpdfstring{$\frac{2}{4+(a-b)^2}$}{2/(4+(a-b)^2)} 的再生核结构与离散证书}
+命题 \ref{prop:cdim-cauchy-derivative-gram-exponential-kernel} 表明差核
+\(
+K(a,b)=\frac{2}{4+(a-b)^2}
+\)
+为 Poisson--Cauchy 导数 Gram 二次型的指数生成核。
+下述命题给出该核的显式特征映射、完整 Mercer 展开与由 Laguerre 正交分解诱导的离散能量证书；其作用是将 \(\mathbf Q_t\) 的连续谱表示进一步编译为可核验的有限系数序列与确定性截断下界。
+
+\begin{proposition}[差核的显式特征映射与 \texorpdfstring{$\mathcal H_K$}{HK} 完全刻画]\label{prop:cdim-kernel-rkhs-feature-map}
+令
+\[
+K(a,b):=\frac{2}{4+(a-b)^2}\qquad(a,b\in\RR),
+\]
+并令特征空间 \(\mathfrak F:=L^2(\RR,\dd\xi)\)。
+定义特征映射 \(\Phi:\RR\to\mathfrak F\) 为
+\[
+\Phi(a)(\xi):=2^{-1/2}e^{-|\xi|}e^{\mathrm{i}a\xi}.
+\]
+则对任意 \(a,b\in\RR\) 有严格恒等式
+\[
+\boxed{\;
+K(a,b)=\langle \Phi(a),\Phi(b)\rangle_{\mathfrak F}\;}
+\]
+从而由 Moore--Aronszajn 构造得到 \(K\) 的再生核 Hilbert 空间 \(\mathcal H_K\)。
+并且 \(\mathcal H_K\) 可刻画为
+\[
+\mathcal H_K=\{\,f_w(\cdot):=\langle w,\Phi(\cdot)\rangle_{\mathfrak F}:\ w\in\mathfrak F\,\},
+\]
+且其范数满足
+\[
+\|f_w\|_{\mathcal H_K}
+=\inf\{\ \|u\|_{\mathfrak F}:\ f_u=f_w\ \}
+=\bigl\|P_{\overline{\mathrm{span}\{\Phi(a):a\in\RR\}}}w\bigr\|_{\mathfrak F}.
+\]
+特别地，对每个 \(b\in\RR\) 有 \(K(\cdot,b)\in\mathcal H_K\) 且再生性质 \(f(b)=\langle f,K(\cdot,b)\rangle_{\mathcal H_K}\) 成立。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:cdim-poisson-kl-quadratic-form-spectral} 中核的 Fourier 表示，
+\[
+K(a,b)=\frac12\int_{\RR}e^{-2|\xi|}e^{\mathrm{i}\xi(a-b)}\,\dd\xi,
+\]
+从而
+\[
+\langle \Phi(a),\Phi(b)\rangle_{\mathfrak F}
+=\frac12\int_{\RR}e^{-2|\xi|}e^{\mathrm{i}\xi(a-b)}\,\dd\xi
+=K(a,b).
+\]
+其余结论为 RKHS 的标准构造与 Riesz 表示的直接推论：\(\mathcal H_K\) 同构于 \(\overline{\mathrm{span}\{\Phi(a)\}}\subset\mathfrak F\)，并且 \(K(\cdot,b)\) 对应向量 \(\Phi(b)\)。证毕。
+\end{proof}
+
+\begin{proposition}[差核的 Mercer 展开：显式有理正交基与闭式求和]\label{prop:cdim-kernel-mercer-rational-basis}
+在命题 \ref{prop:cdim-kernel-rkhs-feature-map} 的设定下，定义两列函数（\(n\in\NN_0\)）
+\[
+e_n^+(a):=\frac{1}{2-\mathrm{i}a}\Bigl(\frac{-\mathrm{i}a}{2-\mathrm{i}a}\Bigr)^n,
+\qquad
+e_n^-(a):=\frac{1}{2+\mathrm{i}a}\Bigl(\frac{\mathrm{i}a}{2+\mathrm{i}a}\Bigr)^n.
+\]
+则 \(\{e_n^+\}_{n\ge 0}\cup\{e_n^-\}_{n\ge 0}\) 构成 \(\mathcal H_K\) 的一组正交归一完备基，并且 \(K\) 具有逐点绝对收敛的 Mercer 展开
+\[
+\boxed{\;
+K(a,b)=\sum_{n\ge 0} e_n^+(a)\overline{e_n^+(b)}+\sum_{n\ge 0} e_n^-(a)\overline{e_n^-(b)}\; }.
+\]
+\end{proposition}
+\begin{proof}
+将特征空间分解为正负频率子空间 \(\mathfrak F=L^2((0,\infty))\oplus L^2((-\infty,0))\)。
+在 \(L^2((0,\infty),\dd\xi)\) 上取归一化 Laguerre 基
+\(
+w_n^-(\xi):=\sqrt{2}\,e^{-\xi}\mathrm{Lag}_n(2\xi)\mathbf 1_{\xi\ge 0}
+\)，
+在 \(L^2((-\infty,0),\dd\xi)\) 上取
+\(
+w_n^+(\xi):=\sqrt{2}\,e^{\xi}\mathrm{Lag}_n(-2\xi)\mathbf 1_{\xi\le 0}
+\)，
+其中 \(\mathrm{Lag}_n\) 为标准 Laguerre 多项式。
+由 Laguerre 正交性 \(\int_0^\infty e^{-x}\mathrm{Lag}_n(x)\mathrm{Lag}_m(x)\,\dd x=\delta_{nm}\) 可得 \(\{w_n^\pm\}\) 为 \(\mathfrak F\) 的正交归一基。
+\par
+令 \(e_n^\pm(a):=\langle w_n^\pm,\Phi(a)\rangle_{\mathfrak F}\)，则 \(\{e_n^\pm\}\) 在 \(\mathcal H_K\) 中正交归一且完备。
+利用 Laguerre 的 Laplace 变换恒等式
+\(
+\int_0^\infty e^{-sx}\mathrm{Lag}_n(x)\,\dd x=(s-1)^n/s^{n+1}
+\)
+（\(\Re s>0\)）并代入 \(s=1\pm \mathrm{i}a/2\) 可将 \(\langle w_n^\pm,\Phi(a)\rangle\) 化简为所给的有理闭式。
+\par
+最后由 \(\Phi(a)\) 在 \(\mathfrak F\) 中的正交展开 \(\Phi(a)=\sum_{n\ge 0}\langle\Phi(a),w_n^+\rangle w_n^+ +\sum_{n\ge 0}\langle\Phi(a),w_n^-\rangle w_n^-\) 与
+\(
+K(a,b)=\langle\Phi(a),\Phi(b)\rangle
+\)
+得到 Mercer 展开；逐点绝对收敛由系数几何衰减立得。证毕。
+\end{proof}
+
+\begin{proposition}[奇指标 Gram 主子式的 \texorpdfstring{$2$}{2}-进赋值：精确分母指数与奇性]\label{prop:cdim-kernel-odd-gram-v2-determinant}
+令 \(\mathcal G_{n,m}(1)\) 如命题 \ref{prop:cdim-cauchy-kernel-derivative-gram-closed-form}，并考虑奇指标子矩阵
+\[
+A_k^{\mathrm{odd}}
+:=\Bigl(\frac{\mathcal G_{2i-1,2j-1}(1)}{(2i-1)!\,(2j-1)!}\Bigr)_{1\le i,j\le k}.
+\]
+则其行列式的 \(2\)-进赋值满足精确公式
+\[
+\boxed{\;
+v_2\!\bigl(\det(A_k^{\mathrm{odd}})\bigr)=k(2k-1)\;}
+\]
+并且 \(2^{k(2k-1)}\det(A_k^{\mathrm{odd}})\) 为奇整数。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:cdim-cauchy-kernel-derivative-gram-closed-form}，对 \(n=2i-1\)、\(m=2j-1\) 有
+\[
+\frac{\mathcal G_{2i-1,2j-1}(1)}{(2i-1)!\,(2j-1)!}
+=2^{-(2i+2j-3)}(-1)^{j-i}\binom{2(i+j-2)}{2i-2}.
+\]
+对行作缩放 \(r_i:=2^{2i-2}\)，对列作缩放 \(c_j:=2^{2j-1}\)，得到整数矩阵
+\(
+\widetilde C_{i,j}:=(-1)^{j-i}\binom{2(i+j-2)}{2i-2}
+\)
+并有 \(\det(A_k^{\mathrm{odd}})=2^{-k(2k-1)}\det(\widetilde C)\)。
+\par
+由 Lucas 定理与二进制位移性质得 \(\binom{2N}{2M}\equiv \binom{N}{M}\pmod 2\)，从而
+\[
+\widetilde C_{i,j}\equiv \binom{i+j-2}{i-1}\pmod 2.
+\]
+右端为 Pascal 矩阵的一个主子式，其行列式模 \(2\) 等于 \(1\)，故 \(\det(\widetilde C)\) 为奇数。
+于是 \(v_2(\det(\widetilde C))=0\)，从而得到所示赋值与奇性结论。证毕。
+\end{proof}
+
+\begin{proposition}[Laguerre--Parseval 离散证书：核能量的全正交分解与截断下界]\label{prop:cdim-kernel-energy-laguerre-parseval}
+令 \(F\in L^2(\RR)\)，并定义核能量
+\[
+\mathcal E(F):=\int_{\RR}\int_{\RR}F(a)\overline{F(b)}\,K(a,b)\,\dd a\,\dd b,
+\qquad
+K(a,b)=\frac{2}{4+(a-b)^2}.
+\]
+则存在唯一系数列 \(\{c_n^\pm\}_{n\ge 0}\subset\CC\) 使得在 \(L^2([0,\infty),e^{-2\xi}\dd\xi)\) 中成立正交展开
+\[
+\widehat F(\xi)\mathbf 1_{\xi\ge 0}=\sum_{n\ge 0}c_n^+\,\varphi_n(\xi),
+\qquad
+\widehat F(-\xi)\mathbf 1_{\xi\ge 0}=\sum_{n\ge 0}c_n^-\,\varphi_n(\xi),
+\]
+其中 \(\widehat F\) 为 Fourier 变换（与命题 \ref{prop:cdim-poisson-kl-quadratic-form-spectral} 同一约定），并取归一化 Laguerre 基
+\[
+\varphi_n(\xi):=\sqrt{2}\,\mathrm{Lag}_n(2\xi)\qquad(\xi\ge 0).
+\]
+在此分解下，能量满足精确 Parseval 恒等式
+\[
+\boxed{\;
+\mathcal E(F)=\pi\sum_{n\ge 0}\bigl(|c_n^+|^2+|c_n^-|^2\bigr)\;}
+\]
+从而截断和
+\(
+\mathcal E_N(F):=\pi\sum_{n=0}^{N-1}(|c_n^+|^2+|c_n^-|^2)
+\)
+给出严格单调的有限证书下界 \(\mathcal E_N(F)\uparrow \mathcal E(F)\)。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:cdim-poisson-kl-quadratic-form-spectral} 的核 Fourier 表示可得
+\[
+\mathcal E(F)=\pi\int_{\RR}|\widehat F(\xi)|^2e^{-2|\xi|}\,\dd\xi.
+\]
+将积分分解为正负半轴，并在 \(L^2([0,\infty),e^{-2\xi}\dd\xi)\) 中用归一化基 \(\{\varphi_n\}\) 作正交展开，Parseval 恒等式给出
+\(
+\int_0^\infty |\widehat F(\pm\xi)|^2e^{-2\xi}\dd\xi=\sum_{n\ge 0}|c_n^\pm|^2
+\)。
+代回即得结论；截断下界与单调收敛由正交投影性质立得。证毕。
+\end{proof}
+
+\begin{proposition}[核能量的最优 \texorpdfstring{$N$}{N}-项逼近律：Laguerre 截断为最佳近似]\label{prop:cdim-kernel-energy-best-nterm}
+在命题 \ref{prop:cdim-kernel-energy-laguerre-parseval} 的设定下，令 \(\mathcal S_N\) 为所有满足“正负半轴 Laguerre 展开仅含前 \(N\) 项”的函数构成的线性子空间。
+则对任意 \(F\in L^2(\RR)\)，其在核能量范数 \(\|F\|_{\mathcal E}:=\mathcal E(F)^{1/2}\) 下到 \(\mathcal S_N\) 的最佳逼近误差满足
+\[
+\boxed{\;
+\inf_{G\in\mathcal S_N}\|F-G\|_{\mathcal E}^{2}
+=\mathcal E(F)-\mathcal E_N(F)\;}
+\]
+且极小元由 Laguerre 系数的前 \(N\) 项截断唯一给出。
+\end{proposition}
+\begin{proof}
+命题 \ref{prop:cdim-kernel-energy-laguerre-parseval} 表明 \(\mathcal E\) 诱导的范数等价于正负半轴 Laguerre 系数的 \(\ell^2\) 范数。
+因此 \(\mathcal S_N\) 为该 Hilbert 空间中由前 \(N\) 项基向量张成的闭子空间，最佳逼近由正交投影给出；误差平方等于尾能量 \(\mathcal E(F)-\mathcal E_N(F)\)，唯一性由正交投影唯一性得到。证毕。
+\end{proof}
+
+\input{subsec__circle-dimension-phase-gate-cauchy-kernel-rkhs-affine-translate}
+
+\endinput
+

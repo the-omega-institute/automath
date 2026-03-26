@@ -1,0 +1,341 @@
+\subsection{相位前缀预算、Mellin 幺正切片与 Gabcke 认证增益的刚性接口}\label{subsec:conclusion-phase-prefix-mellin-transverse-gabcke-rigidity}
+本小节把相位前缀的二次分辨率屏障、Mellin--Plancherel 幺正切片的唯一性、连续横截方向的因子唯一性以及 Riemann--Siegel--Gabcke 零点证书的紧化增益压缩为同一条预算--读出--证书链。
+其共同特征是：相位前缀深度与外置残差容量只能在一条固定总比特下界之上重新分配；临界线不是许多等距切片的平均，而是 Mellin 读出的唯一等距轨道；连续横截寄存器的有限联合仍然塌缩在唯一径向轴上；而 Gabcke 阶数则以显式的对数律转换为可认证的 dyadic 精度。
+
+\begin{theorem}[地址--残差总比特预算守恒律]\label{thm:conclusion-address-residual-total-bit-budget}
+沿用命题 \ref{prop:cdim-phase-prefix-occupancy-barrier} 与推论 \ref{cor:cdim-prefix-residual-register-capacity} 的记号。令
+\[
+\Gamma(T):=\{\gamma\in(T,2T]:\ \exists\,\rho=\beta+\mathrm{i}\gamma\ \text{为非平凡零点}\}.
+\]
+固定 dyadic 相位前缀深度 \(m\ge 1\)。若存在有限残差寄存器 \(R_m\) 与映射 \(r_m:\Gamma(T)\to R_m\)，使扩展地址
+\[
+\gamma\longmapsto \bigl(A_m(\gamma),r_m(\gamma)\bigr)\in \{0,\dots,2^m-1\}\times R_m
+\]
+在 \(\Gamma(T)\) 上单射，则总比特预算
+\[
+\mathcal B_{\mathrm{tot}}(m):=m+\log_2|R_m|
+\]
+满足
+\[
+\boxed{\;
+\mathcal B_{\mathrm{tot}}(m)\ \ge\ 2\log_2 T+\log_2\log T+\log_2 c,\;}
+\]
+其中 \(c>0\) 为推论 \ref{cor:cdim-prefix-residual-register-capacity} 中的常数。
+因此，在相位前缀深度与外置残差容量之间作任何重新分配，都不可能把总比特下界压低到
+\(
+2\log_2 T+\log_2\log T+O(1)
+\)
+之下。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:cdim-prefix-residual-register-capacity}，
+\[
+|R_m|\ge c\,\frac{T^2\log T}{2^m}.
+\]
+两边取 \(\log_2\) 得
+\[
+\log_2|R_m|
+\ge
+\log_2 c+2\log_2 T+\log_2\log T-m.
+\]
+移项即得所示不等式。证毕。
+\end{proof}
+
+\begin{theorem}[联合门槛下的最优预算分裂律]\label{thm:conclusion-address-residual-optimal-budget-splitting}
+沿用定理 \ref{thm:conclusion-address-residual-total-bit-budget} 的记号，并令
+\[
+P_m:=|R_m|.
+\]
+进一步假设该残差寄存器还必须满足 \((\mathrm{RCRT}_{\varepsilon})\) 型可逆化，且在所考虑深度范围内有
+\[
+P_m\ge \max\!\left\{\,c\,\frac{T^2\log T}{2^m},\ 2B_m(\varepsilon)\,\right\},
+\qquad
+B_m(\varepsilon)\ge e^{m\gamma(\varepsilon)}
+\]
+其中 \(\gamma(\varepsilon)>0\) 与 \(m\) 无关。定义残差比特预算
+\[
+b_m:=\log_2 P_m,
+\qquad
+\Gamma_{\varepsilon}:=\frac{\gamma(\varepsilon)}{\log 2},
+\qquad
+L_T:=\log_2(cT^2\log T).
+\]
+则任意可行分裂都满足
+\[
+\boxed{\;
+b_m\ge \max\bigl\{\,L_T-m,\ 1+\Gamma_{\varepsilon}m\,\bigr\}.\;}
+\]
+把 \(m\) 连续放松为实变量后，上述分段线性下包络在唯一平衡点
+\[
+\boxed{\;
+m_{\ast}=\frac{L_T-1}{1+\Gamma_{\varepsilon}}\;}
+\]
+处达到最小；相应最小残差比特为
+\[
+\boxed{\;
+b_{\ast}=\frac{\Gamma_{\varepsilon}L_T+1}{1+\Gamma_{\varepsilon}}.\;}
+\]
+特别地，
+\[
+m_{\ast}+b_{\ast}=L_T=\log_2(cT^2\log T).
+\]
+并且当 \(T\to\infty\) 时有比例极限
+\[
+\boxed{\;
+\frac{m_{\ast}}{\log_2(cT^2\log T)}\to \frac{1}{1+\Gamma_{\varepsilon}},
+\qquad
+\frac{b_{\ast}}{\log_2(cT^2\log T)}\to \frac{\Gamma_{\varepsilon}}{1+\Gamma_{\varepsilon}}.\;}
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:cdim-prefix-quantile-crt-joint-modulus}，
+\[
+P_m\ge c\,T^2\log T\cdot 2^{-m},
+\qquad
+P_m\ge 2B_m(\varepsilon)\ge 2e^{m\gamma(\varepsilon)}.
+\]
+取二进对数即得
+\[
+b_m\ge L_T-m,
+\qquad
+b_m\ge 1+\Gamma_{\varepsilon}m.
+\]
+记
+\[
+\ell_1(m):=L_T-m,
+\qquad
+\ell_2(m):=1+\Gamma_{\varepsilon}m.
+\]
+则 \(\ell_1\) 严格递减，\(\ell_2\) 严格递增，故 \(\max\{\ell_1,\ell_2\}\) 在唯一交点达到最小。解方程
+\(
+\ell_1(m)=\ell_2(m)
+\)
+即得
+\[
+m_{\ast}=\frac{L_T-1}{1+\Gamma_{\varepsilon}},
+\qquad
+b_{\ast}=\ell_1(m_{\ast})=\ell_2(m_{\ast})=\frac{\Gamma_{\varepsilon}L_T+1}{1+\Gamma_{\varepsilon}}.
+\]
+将两式相加即得 \(m_{\ast}+b_{\ast}=L_T\)。
+最后除以 \(L_T\) 并令 \(T\to\infty\)；由于 \(L_T\to\infty\)，常数项 \(1/L_T\to 0\)，故得所示比例极限。证毕。
+\end{proof}
+
+\begin{theorem}[Mellin 等距切片的有限混合刚性]\label{thm:conclusion-mellin-finite-mixture-rigidity}
+沿用 \S\ref{subsubsec:xi-mellin-unitary-slice} 的记号。取 \(\sigma_1,\dots,\sigma_N\in\RR\) 与 \(c_1,\dots,c_N\in\RR\)。
+若对一切 \(f\in C_c^\infty(\RR_{>0})\) 都有
+\[
+\sum_{j=1}^N c_j\,\|\mathcal M_{\sigma_j}f\|_{L^2(\mathrm{d}t/2\pi)}^2
+=
+\|f\|_{L^2_{\times}}^2,
+\]
+则把相同切片参数合并后，必有
+\[
+\sum_{\sigma_j=\sigma}c_j=
+\begin{cases}
+1,& \sigma=\tfrac12,\\
+0,& \sigma\neq \tfrac12.
+\end{cases}
+\]
+特别地，若 \(c_j\ge 0\) 且并非全零，则所有非零权重只能集中在临界线 \(\Re(s)=\tfrac12\) 上。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:mellin-unitary-slice-unique} 的权重扭曲恒等式 \eqref{eq:mellin-sigma-weight-twist}，
+\[
+\|\mathcal M_{\sigma_j}f\|_{L^2(\mathrm{d}t/2\pi)}^2
+=
+\int_0^\infty |f(x)|^2\,x^{2\sigma_j-1}\,\mathrm{d}^{\times}x.
+\]
+故假设等价于
+\[
+\int_0^\infty |f(x)|^2
+\left(
+\sum_{j=1}^N c_j x^{2\sigma_j-1}-1
+\right)\mathrm{d}^{\times}x
+=
+0
+\qquad
+\forall f\in C_c^\infty(\RR_{>0}).
+\]
+由于括号中的函数连续，且测试函数支撑可任意局域化，遂得
+\[
+\sum_{j=1}^N c_j x^{2\sigma_j-1}=1
+\qquad
+\forall x>0.
+\]
+把相同 \(\sigma_j\) 项合并后，令 \(\tau_1,\dots,\tau_M\) 为互异切片位置，对应系数为 \(d_1,\dots,d_M\)。则
+\[
+\sum_{\nu=1}^M d_\nu x^{2\tau_\nu-1}=1
+\qquad
+\forall x>0.
+\]
+作变量代换 \(x=e^y\) 得
+\[
+\sum_{\nu=1}^M d_\nu e^{(2\tau_\nu-1)y}=1
+\qquad
+\forall y\in\RR.
+\]
+有限个不同指数的指数函数在线性空间上彼此独立，故只有指数 \(2\tau_\nu-1=0\) 的项可以保留，即 \(\tau_\nu=\tfrac12\)；其对应系数总和必须为 \(1\)。这正是所示结论。
+最后一条是对 \(c_j\ge 0\) 情形的直接重述。证毕。
+\end{proof}
+
+\begin{theorem}[连续横截寄存器范畴的单轴塌缩]\label{thm:conclusion-continuous-transverse-category-collapse}
+在纯相位制度下取
+\[
+U:=\CC^\times,
+\qquad
+\operatorname{proj}_{\mathsf{Phase}}(u):=\frac{u}{|u|}\in\mathsf{Phase}.
+\]
+定义连续横截寄存器类
+\[
+\mathcal R_{\mathrm{cont}}
+:=
+\left\{
+r:U\to Y\ \middle|\
+Y\ \text{为 Hausdorff 空间},\ r\ \text{连续},\
+u\mapsto\bigl(\operatorname{proj}_{\mathsf{Phase}}(u),r(u)\bigr)\ \text{单射}
+\right\}.
+\]
+沿用推论 \ref{cor:xi-unique-continuous-transverse-register} 与定理 \ref{thm:cdim-minimal-record-axis} 的因子唯一性：对每个 \(r\in\mathcal R_{\mathrm{cont}}\)，存在拓扑嵌入
+\[
+\psi_r:\RR\hookrightarrow \operatorname{Im}(r)
+\]
+使得
+\[
+r=\psi_r\circ \varrho,
+\qquad
+\varrho(u):=\log|u|.
+\]
+则对任意有限族 \(r_1,\dots,r_k\in\mathcal R_{\mathrm{cont}}\)，存在连续嵌入
+\[
+\Psi:\RR\hookrightarrow \prod_{j=1}^k \operatorname{Im}(r_j)
+\]
+使得
+\[
+\boxed{\;
+\bigl(r_1,\dots,r_k\bigr)=\Psi\circ \varrho.\;}
+\]
+特别地，任意有限个连续横截寄存器的联合信息量仍然不超过一条连续轴；连续横截范畴在有限乘积下塌缩为由径向寄存器 \(\varrho\) 生成的单轴范畴。
+\end{theorem}
+\begin{proof}
+由假设，对每个 \(j\) 都存在拓扑嵌入
+\[
+\psi_j:=\psi_{r_j}:\RR\hookrightarrow \operatorname{Im}(r_j)
+\]
+使得
+\[
+r_j=\psi_j\circ \varrho.
+\]
+定义
+\[
+\Psi(x):=\bigl(\psi_1(x),\dots,\psi_k(x)\bigr)
+\qquad
+(x\in\RR).
+\]
+则 \(\Psi\) 连续，且对任意 \(u\in U\) 有
+\[
+\Psi(\varrho(u))
+=
+\bigl(\psi_1(\varrho(u)),\dots,\psi_k(\varrho(u))\bigr)
+=
+\bigl(r_1(u),\dots,r_k(u)\bigr),
+\]
+从而得到所示分解。
+又由于第一坐标投影满足
+\[
+\operatorname{pr}_1\circ \Psi=\psi_1,
+\]
+而 \(\psi_1\) 为拓扑嵌入，故 \(\Psi\) 亦为拓扑嵌入：其在像上的逆由
+\[
+\Psi^{-1}=\psi_1^{-1}\circ \operatorname{pr}_1
+\]
+给出。
+因此，有限族 \((r_1,\dots,r_k)\) 的联合像仍由 \(\RR\) 的一个嵌入参数化，也即仍只占据一条连续轴。证毕。
+\end{proof}
+
+\begin{theorem}[Gabcke 阶数与紧化 dyadic 认证位数下界的对数增益]\label{thm:conclusion-gabcke-compactified-dyadic-bit-gain}
+沿用推论 \ref{cor:cdim-rs-gabcke-compactified-quadratic-gain} 的记号。设 \(\gamma>0\) 为 \(Z_{\zeta}\) 的单零点，\(I=[\gamma-\rho,\gamma+\rho]\) 满足
+\[
+\inf_{t\in I}|Z_{\zeta}'(t)|\ge m_0>0,
+\]
+并令 \(\gamma^{(K)}\) 为第 \(K\) 阶 Riemann--Siegel--Gabcke 截断 \(Z_{\zeta,K}\) 在 \(I\) 内的唯一零点。定义紧化相位坐标
+\[
+u(t):=\frac{1}{\pi}\arctan t
+\]
+以及可认证 dyadic 精度
+\[
+b_K(\gamma):=
+\sup\Bigl\{\,b\in\NN:\ |u(\gamma^{(K)})-u(\gamma)|\le 2^{-b}\Bigr\}.
+\]
+若 \(\rho=o(\gamma)\) 且 \(\gamma\to\infty\)，则有显式下界
+\[
+\boxed{\;
+b_K(\gamma)\ \ge\
+\left(\frac{K}{2}+\frac{11}{4}\right)\log_2\gamma
+-\log_2\!\left(\frac{A_K}{m_0\pi}\right)
++O(1).\;}
+\]
+进一步，定义由显式误差证书给出的保证位数
+\[
+\underline b_K(\gamma):=
+\sup\Bigl\{\,b\in\NN:\ \frac{A_K}{m_0\pi(1+(\gamma-\rho)^2)}\,(\gamma-\rho)^{-1/4-(K+1)/2}\le 2^{-b}\Bigr\}.
+\]
+则 \(b_K(\gamma)\ge \underline b_K(\gamma)\)，并且若 \(\frac{A_{K+1}}{A_K}\) 有界，则
+\[
+\boxed{\;
+\underline b_{K+1}(\gamma)-\underline b_K(\gamma)
+\ \ge\
+\frac12\log_2\gamma+O(1).\;}
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:cdim-rs-gabcke-compactified-quadratic-gain}，
+\[
+|u(\gamma^{(K)})-u(\gamma)|
+\le
+\frac{A_K}{m_0\pi(1+(\gamma-\rho)^2)}\,(\gamma-\rho)^{-1/4-(K+1)/2}.
+\]
+在 \(\rho=o(\gamma)\) 的假设下，
+\[
+\frac{1}{1+(\gamma-\rho)^2}\,(\gamma-\rho)^{-1/4-(K+1)/2}
+=
+\gamma^{-9/4-(K+1)/2}\bigl(1+o(1)\bigr),
+\]
+故存在与 \(\gamma\) 无关的常数 \(C>0\)，使充分大 \(\gamma\) 时
+\[
+|u(\gamma^{(K)})-u(\gamma)|
+\le
+C\,\frac{A_K}{m_0\pi}\,\gamma^{-9/4-(K+1)/2}
+\]
+成立。
+于是凡满足
+\[
+2^{-b}\ge C\,\frac{A_K}{m_0\pi}\,\gamma^{-9/4-(K+1)/2}
+\]
+的整数 \(b\) 都被 \(b_K(\gamma)\) 所容纳。取二进对数即得
+\[
+b_K(\gamma)\ge
+\left(\frac94+\frac{K+1}{2}\right)\log_2\gamma
+-\log_2\!\left(\frac{A_K}{m_0\pi}\right)
+-\log_2 C,
+\]
+亦即所示下界。
+
+另一方面，\(\underline b_K(\gamma)\) 正是由推论 \ref{cor:cdim-rs-gabcke-compactified-quadratic-gain} 的显式上界
+\(
+\frac{A_K}{m_0\pi(1+(\gamma-\rho)^2)}\,(\gamma-\rho)^{-1/4-(K+1)/2}
+\)
+所定义的保证位数，故显然 \(b_K(\gamma)\ge \underline b_K(\gamma)\)。
+再直接计算得
+\[
+\underline b_{K+1}(\gamma)-\underline b_K(\gamma)
+\ge
+\frac12\log_2\gamma
+-\log_2\!\left(\frac{A_{K+1}}{A_K}\right)
++O(1).
+\]
+若 \(\frac{A_{K+1}}{A_K}\) 一致有界，则第二项并入 \(O(1)\) 即得结论。证毕。
+\end{proof}
+
+上述结果把相位前缀制度中的三条定量主线压缩为同一闭合接口：在预算层，地址位与残差位只能沿精确的线性包络分裂，总预算下界保持不变；在读出层，Mellin 幺正切片与连续横截寄存器分别塌缩为唯一的临界线与唯一的径向轴，从而排除了任何有限非临界平均或有限连续横截并联所带来的额外等距自由度；在证书层，Riemann--Siegel--Gabcke 余项阶数通过紧化相位坐标直接换算为显式可认证的 dyadic 位数，并以每阶 \(\frac12\log_2\gamma\) 的主量级持续增益。于是，相位地址、残差账本、幺正切片与零点证书之间的耦合便获得了同一条可审计的刚性定标。
+
+\endinput

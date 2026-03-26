@@ -1,0 +1,131 @@
+\begin{theorem}[单参对数读出与对角多通道读出的分辨率分岔：常数精度的必要代价]\label{thm:spg-single-parameter-log-readout-vs-diagonal-multichannel-bifurcation}
+取互异素数 \(p_1,\dots,p_k\) 并令 \(b\in\{0,1\}^k\) 表示 \(k\)-比特 Gödel 寄存器。
+定义单参对数读出
+\[
+u(b):=\sum_{i=1}^k b_i\log p_i.
+\]
+则存在 \(b\neq b'\) 使得
+\[
+\abs{u(b)-u(b')}
+\ \le\
+\frac{1}{2^k-1}\sum_{i=1}^k \log p_i.
+\]
+因此，任何仅观测单标量 \(u(b)\) 且具有误差尺度不小于上述最小间距量级的机制，都不可能对全部 \(b\in\{0,1\}^k\) 保证唯一译码；若要求无碰撞译码，则精度预算必随 \(k\) 指数增长。
+\par
+相对地，在推论 \ref{cor:spg-godel-axis-boundary-invertibility} 与定理 \ref{thm:spg-godel-boundary-decoding-relative-error-threshold} 的设定下，若可获得对角多通道比值
+\[
+r_i:=\frac{dB_{ii}}{B_0}=p_i^{2b_i},
+\]
+并满足相对误差模型
+\(
+\widetilde B_0=B_0(1+\delta_0),\ 
+\widetilde B_{ii}=B_{ii}(1+\delta_i)
+\)
+且 \(|\delta_0|,|\delta_i|\le\varepsilon\)，则当
+\[
+\varepsilon<\frac{p_{\min}-1}{p_{\min}+1},
+\qquad
+p_{\min}:=\min_i p_i,
+\]
+最近整数译码
+\[
+\widetilde b_i:=\left\lfloor \frac{1}{2\log p_i}\log\!\left(\frac{d\,\widetilde B_{ii}}{\widetilde B_0}\right)\right\rceil
+\]
+可保证对所有 \(i\) 精确恢复 \(b_i\)。
+从而，在“单参坐标”与“多通道对角坐标”之间存在严格分岔：前者的无碰撞译码要求指数级精度，后者可在与 \(k\) 无关的常数相对误差阈值下实现逐坐标精确译码。
+\end{theorem}
+\begin{proof}
+把集合 \(\{u(b):b\in\{0,1\}^k\}\) 视为实轴上的 \(2^k\) 个点，且
+\(
+0\le u(b)\le \sum_{i=1}^k\log p_i
+\)。
+由鸽巢原理，区间 \([0,\sum_i\log p_i]\) 被这 \(2^k\) 个点划分出的相邻间距最小值不超过区间长度除以 \(2^k-1\)，从而存在 \(b\neq b'\) 满足所示不等式。
+对单参读出的不可唯一性结论由“误差大于最小间距则发生碰撞”直接推出。
+\par
+多通道情形由定理 \ref{thm:spg-godel-boundary-decoding-relative-error-threshold} 直接给出。证毕。
+\end{proof}
+
+\par
+上述单参对数读出的鸽巢论证可抽象为：在单标量投影下，离散态集的最小间距由其取值区间长度与点数之比控制。
+对一般加权能量壳上的回路格点，同一机制给出由回路圆维驱动的幂律碰撞阈值，并可与附录的椭球格点计数定理严格对齐。
+
+\begin{theorem}[Stokes--Gödel 椭球投影的最小间距律：单椭圆门的必然碰撞阈值]\label{thm:spg-stokes-godel-ellipsoid-min-spacing-single-gate}
+令 \(G=(V,E)\) 为有限连通无自环多重图，并记回路圆维
+\[
+r:=\operatorname{rank}_{\ZZ}H_1(G;\ZZ)=|E|-|V|+1.
+\]
+给定正权 \(w:E\to(0,\infty)\)，令能量二次型为
+\(
+\mathcal E_w(\varphi):=\sum_{e\in E}w_e\varphi_e^2
+\)。
+取回路格 \(\Lambda(G)=\ker(\partial)\subset \ZZ^{E}\) 的任一 \(\ZZ\)-基坐标 \(k\in\ZZ^r\)，并令 \(A\in\mathrm{Sym}_r^{+}(\RR)\) 为该能量在回路坐标上的 Gram 矩阵（例如由定理 \ref{thm:graph-energy-shell-lattice-counting} 的构造给出）。
+对能量预算 \(E>0\) 定义椭球格点集
+\[
+\mathcal M_A(E):=\left\{k\in\ZZ^r:\ k^{\mathsf T}Ak\le E\right\}.
+\]
+取任意非零线性观测 \(\ell(k):=\langle a,k\rangle\)（\(a\in\RR^r\setminus\{0\}\)）。
+在 Gödel--Stokes 字典下，\(\mathcal M_A(E)\) 可被视为能量预算内的回路可行域，而 \(\ell\) 可取为 Gödel 码长的对数线性泛函（例如取 \(a=\log p\)）。
+则存在常数 \(C(a,A)>0\) 使得当 \(E\to\infty\) 时，必存在不同 \(k\neq k'\in\mathcal M_A(E)\) 满足
+\[
+\abs{\ell(k)-\ell(k')}
+\le
+C(a,A)\,E^{\frac{1-r}{2}}+O\!\left(E^{-\frac r2}\right),
+\]
+其中可取显式
+\[
+C(a,A)=\frac{2\sqrt{\det A}}{\operatorname{Vol}(B_r)}\,
+\sqrt{a^{\mathsf T}A^{-1}a}.
+\]
+特别地，当 \(r\ge 2\) 时最小间距呈 \(\asymp E^{(1-r)/2}\) 的衰减；因此任何仅通过单标量 \(\ell\)（等价地：单个对数尺度参数）进行的读出，一旦精度不优于该量级，则在能量预算 \(E\) 内不可避免地产生碰撞。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:graph-energy-shell-lattice-counting}（取 \(\delta=0\)）的体积主项，有
+\[
+|\mathcal M_A(E)|
+=
+\frac{\operatorname{Vol}(B_r)}{\sqrt{\det A}}\,E^{r/2}
++O\!\left(E^{(r-1)/2}\right).
+\]
+另一方面，由命题 \ref{prop:graph-energy-ellipsoid-godel-codelength-dual} 的对偶极值公式，
+\[
+\sup\{|\ell(x)|:\ x^{\mathsf T}Ax\le E\}
+=
+\sqrt E\,\sqrt{a^{\mathsf T}A^{-1}a}
+\,=:\,R(E),
+\]
+从而 \(\ell(\mathcal M_A(E))\subset[-R(E),R(E)]\)。
+将区间 \([-R(E),R(E)]\) 等分为 \(|\mathcal M_A(E)|-1\) 个子区间并应用鸽巢原理，存在 \(k\neq k'\) 使
+\[
+\abs{\ell(k)-\ell(k')}
+\le
+\frac{2R(E)}{|\mathcal M_A(E)|-1}.
+\]
+代入 \(|\mathcal M_A(E)|\) 的渐近式并整理即得
+\[
+\abs{\ell(k)-\ell(k')}
+\le
+\frac{2\sqrt{\det A}}{\operatorname{Vol}(B_r)}\sqrt{a^{\mathsf T}A^{-1}a}\,E^{\frac{1-r}{2}}
+\Bigl(1+O(E^{-1/2})\Bigr),
+\]
+从而得到所示常数与余项阶。证毕。
+\end{proof}
+
+\begin{corollary}[单椭圆门的可辨识临界预算：由圆维控制的精度--能量反演]\label{cor:spg-single-gate-identifiability-critical-energy}
+在定理 \ref{thm:spg-stokes-godel-ellipsoid-min-spacing-single-gate} 的设定下，令 \(\varepsilon>0\) 为 \(\ell\) 的绝对误差容忍阈值。
+若要求 \(\ell\) 在 \(\mathcal M_A(E)\) 上实现 \(\varepsilon\)-可辨识（即对任意 \(k\neq k'\) 有 \(|\ell(k)-\ell(k')|\ge \varepsilon\)），则当 \(E\to\infty\) 时必须满足
+\[
+E\ \le\ \left(\frac{C(a,A)}{\varepsilon}\right)^{\!\frac{2}{r-1}}\,(1+o(1)).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:spg-stokes-godel-ellipsoid-min-spacing-single-gate}，存在 \(k\neq k'\in\mathcal M_A(E)\) 使
+\(
+|\ell(k)-\ell(k')|
+\le
+C(a,A)E^{(1-r)/2}+o(E^{(1-r)/2})
+\)。
+若要求所有不同对都满足 \(|\ell(k)-\ell(k')|\ge \varepsilon\)，则必有 \(C(a,A)E^{(1-r)/2}\gtrsim \varepsilon\)，等价于所示预算上界。证毕。
+\end{proof}
+
+\endinput
+

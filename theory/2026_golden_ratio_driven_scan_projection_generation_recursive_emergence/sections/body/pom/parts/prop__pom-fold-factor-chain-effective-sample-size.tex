@@ -1,0 +1,80 @@
+\begin{proposition}[谱隙控制的有效样本量：平稳经验均值的方差上界]\label{prop:pom-fold-factor-chain-effective-sample-size}
+沿用定义 \ref{def:pom-fold-factor-chain} 与定义 \ref{def:pom-gap-lsi}。
+令 \(P:=\overline P^{\square}_m\) 为折叠因子链，\(\pi_m(x)=d_m(x)/2^m\) 为其平稳分布（命题 \ref{prop:pom-fold-factor-chain-reversible-noloop}）。
+定义惰性化核
+\[
+P^{\mathrm{lazy}}:=\frac12(I+P).
+\]
+设 \((X_t)_{t\ge 0}\) 为以 \(P^{\mathrm{lazy}}\) 转移且以 \(\pi_m\) 起始的平稳 Markov 链。
+对任意 \(f:X_m\to\RR\) 令 \(\mu:=\EE_{\pi_m}[f]\)，并定义经验均值
+\[
+\widehat\mu_n:=\frac{1}{n}\sum_{t=0}^{n-1} f(X_t).
+\]
+则有方差上界
+\[
+\boxed{\;
+\mathrm{Var}(\widehat\mu_n)\ \le\ \frac{2}{n\,\mathrm{gap}(P^{\mathrm{lazy}})}\,\mathrm{Var}_{\pi_m}(f)\; }.
+\]
+特别地，由定理 \ref{thm:pom-fold-factor-chain-gap-lsi} 的谱隙下界 \(\mathrm{gap}(P)\ge 2/m\) 得
+\[
+\mathrm{gap}(P^{\mathrm{lazy}})\ \ge\ \frac12\,\mathrm{gap}(P)\ \ge\ \frac{1}{m},
+\qquad\Longrightarrow\qquad
+\mathrm{Var}(\widehat\mu_n)\ \le\ \frac{2m}{n}\,\mathrm{Var}_{\pi_m}(f).
+\]
+当 \(0\le f\le 1\) 时有 \(\mathrm{Var}_{\pi_m}(f)\le 1/4\)，从而
+\[
+\EE\bigl[(\widehat\mu_n-\mu)^2\bigr]\le \frac{m}{2n}.
+\]
+若取
+\[
+f_B(x):=\min\!\left(1,\frac{2^B}{d_m(x)}\right)=\frac{\min(d_m(x),2^B)}{d_m(x)}\in[0,1],
+\]
+则 \(\mu=\EE_{\pi_m}[f_B]={\rm Succ}_m(B)\)（命题 \ref{prop:fold-oracle-watatani-index-trace-formula}）。
+\end{proposition}
+\begin{proof}
+令 \(g:=f-\mu\)。
+平稳性与可逆性给出协方差表示
+\[
+\mathrm{Cov}\bigl(g(X_0),g(X_k)\bigr)=\langle g,(P^{\mathrm{lazy}})^k g\rangle_{L^2(\pi_m)}.
+\]
+由于 \(P^{\mathrm{lazy}}\) 的谱位于 \([0,1]\)，并且在均值零子空间上的算子范数满足
+\[
+\bigl\|(P^{\mathrm{lazy}})^k g\bigr\|_2\ \le\ (1-\mathrm{gap}(P^{\mathrm{lazy}}))^k\,\|g\|_2,
+\]
+从而
+\[
+\bigl|\mathrm{Cov}(g(X_0),g(X_k))\bigr|
+\le (1-\mathrm{gap}(P^{\mathrm{lazy}}))^k\,\mathrm{Var}_{\pi_m}(f).
+\]
+因此
+\[
+\mathrm{Var}\!\left(\sum_{t=0}^{n-1}g(X_t)\right)
+=n\,\mathrm{Var}_{\pi_m}(f)+2\sum_{k=1}^{n-1}(n-k)\,\mathrm{Cov}(g(X_0),g(X_k))
+\le n\,\mathrm{Var}_{\pi_m}(f)\Bigl(1+2\sum_{k\ge 1}(1-\mathrm{gap})^k\Bigr)
+\le \frac{2n}{\mathrm{gap}(P^{\mathrm{lazy}})}\,\mathrm{Var}_{\pi_m}(f),
+\]
+其中最后一步用 \(\sum_{k\ge 1}(1-\mathrm{gap})^k=(1-\mathrm{gap})/\mathrm{gap}\le 1/\mathrm{gap}\)。
+两边除以 \(n^2\) 得第一条不等式。
+惰性化谱隙下界 \(\mathrm{gap}(P^{\mathrm{lazy}})\ge \frac12\,\mathrm{gap}(P)\) 为标准事实；结合定理 \ref{thm:pom-fold-factor-chain-gap-lsi} 得到 \(m/n\) 量级界。
+最后一段由 \(f_B\) 的定义与 \(\pi_m(x)=d_m(x)/2^m\) 的展开直接得到。证毕。
+\end{proof}
+
+\begin{corollary}[折叠因子链的总变差混合时间上界]\label{cor:pom-fold-factor-chain-mixing-time-bound}
+在命题 \ref{prop:pom-fold-factor-chain-effective-sample-size} 的设定下，
+记 \(\pi_\ast:=\min_{x\in X_m}\pi_m(x)\)。
+则任意 \(\varepsilon\in(0,1/2)\) 的总变差混合时间满足
+\[
+t_{\mathrm{mix}}(\varepsilon)\ \le\ \frac{1}{\mathrm{gap}(P)}\left(\log\frac{1}{2\varepsilon}+\frac{1}{2}\log\frac{1}{\pi_\ast}\right).
+\]
+特别地，由定理 \ref{thm:pom-fold-factor-chain-gap-lsi} 的谱隙下界 \(\mathrm{gap}(P)\ge 2/m\) 与平凡下界 \(\pi_\ast\ge 2^{-m}\)（因为 \(d_m(x)\ge 1\)），有显式二次上界
+\[
+t_{\mathrm{mix}}(\varepsilon)\ \le\ \frac{m^2\log 2}{4}\ +\ \frac{m}{2}\log\frac{1}{2\varepsilon}.
+\]
+\end{corollary}
+\begin{proof}
+谱隙控制混合时间的标准不等式给出第一式。
+再代入 \(\mathrm{gap}(P)\ge 2/m\) 与 \(\pi_\ast\ge 2^{-m}\) 即得第二式。证毕。
+\end{proof}
+
+\endinput
+

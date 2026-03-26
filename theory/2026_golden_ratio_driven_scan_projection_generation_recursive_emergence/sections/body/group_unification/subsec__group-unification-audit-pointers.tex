@@ -1,0 +1,598 @@
+\subsection{审计落脚点：统一命题的可复现接口}\label{subsec:group-unification-audit-pointers}
+
+本节不引入新的证明前提，而是将本章中关于统一的关键结论逐条落实到仓库内的可复现输出与可证伪检查上，
+从而读者无需诉诸解释层即可定位相应脚本、生成片段与审计证书。
+
+\paragraph{可复核算术事实：Fibonacci--Lie 共振梯（可复现穷举）}
+稳定类型计数律 \(|X_m|=F_{m+2}\)（本章口径）在小窗口上出现对紧李代数维数的精确共振（小节 \ref{subsec:fib-lie-resonance}）。
+其关键部分是将等式写成丢番图方程并作有限窗口穷举，从而得到可复现的解集（与解释层叙述无关）：
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_fibonacci_lie_resonance_ladder.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/tab_fibonacci_lie_resonance_ladder.tex}}，
+  \texttt{\detokenize{sections/generated/eq_fib_lie_resonance_solutions.tex}}。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/fibonacci_lie_resonance_ladder.json}}。
+\end{itemize}
+任何对共振点/解集的修改，都必须能通过上述脚本在声明的扫描窗口上复现。
+
+\paragraph{可复核接口：Zeckendorf 截断折叠的时间因子（唯一分支/复位事件）}
+终端命题 \ref{thm:terminal-succ-unique-branch-merge}--\ref{thm:terminal-reset-events-sturmian} 将时间推进 \(N\mapsto N+1\) 在有限窗口 \(m\) 下诱导的因子动力学落实为有限证书链：唯一分支点 \(b_m\)、唯一汇聚点 \(0^m\)，以及复位事件集合 \(\mathcal R_m\) 的二值返回时间谱与计数偏差界。
+对应的可复核输出由单一脚本生成：
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_fold_zeck_time_factor_succ_reset_audit.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/tab_fold_zeck_succ_unique_branch_audit_m2_m10.tex}}，
+  \texttt{\detokenize{sections/generated/tab_fold_zeck_reset_event_audit_m2_m10.tex}}，
+  \texttt{\detokenize{sections/generated/tab_fold_zeck_reset_event_gaps_m6.tex}}。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/fold_zeck_time_factor_succ_reset_audit.json}}。
+\end{itemize}
+
+\paragraph{可复核接口：\texorpdfstring{$\mathrm{Fold}^{\mathrm{bin}}_6$}{Foldbin6} 的信息论常数（失信息量/熵标尺）}
+在均匀微态基线 \(U\sim\mathrm{Unif}(\{0,\dots,63\})\) 下，令 \(W=\mathrm{Fold}^{\mathrm{bin}}_6(U)\)。
+终端命题 \ref{thm:terminal-foldbin6-information-loss-constants} 将单步“失信息量” \(I_{\mathrm{lost}}=\mathbb{E}[\log_2 d^{\mathrm{bin}}_6(W)]\)、输出熵 \(H_2(W)\) 与对均匀分布的 KL 缺口写成仅依赖纤维退化谱的闭式常数，并由有限枚举给出证书输出：
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_foldbin6_information_loss_constants.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/eq_foldbin6_information_loss_constants.tex}}。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/foldbin6_information_loss_constants.json}}。
+\end{itemize}
+
+\paragraph{可复核接口：\texorpdfstring{$\mathbb{F}_2^6$}{F2^6} 视角下的纤维仿射几何分类}
+终端命题 \ref{thm:terminal-foldbin6-fiber-affine-geometry} 将 \(F_w=F_6^{-1}(w)\subset\mathbb{F}_2^6\) 的仿射几何型作为一个独立的可审计刚性接口：在 window-\(6\) 上仅 \(11/21\) 条纤维为仿射平坦（其中 \(8\) 条为 \(1\)-平坦、\(3\) 条为 \(2\)-平坦），其余纤维为非线性子集（并据此否定任何“线性核”简化，推论 \ref{cor:terminal-foldbin6-no-linear-kernel}）。
+对应的逐纤维证书输出由单一脚本生成：
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_foldbin6_fiber_affine_geometry.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/tab_foldbin6_fiber_affine_geometry.tex}}。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/foldbin6_fiber_affine_geometry.json}}。
+\end{itemize}
+
+\paragraph{可复核接口：\(m=6\) 的 \(18\oplus 3\) 分裂与 \(B_3/C_3\) 统一种子}
+在边界词塔口径下，\(m=6\) 的端点纤维给出三条边界词（见 \texttt{\detokenize{sections/generated/eq_boundary_tower_sm12.tex}}），并由 \(X_6=X_6^{\mathrm{cyc}}\sqcup X_6^{\mathrm{bdry}}\) 的 \(18\oplus 3\) 分裂将 \(21\) 维统一种子限定为 \(B_3/C_3\)（小节 \ref{subsec:bdry-tower-zeck-gut}）。
+为避免人工配对，本文将该种子进一步落实为根字典与 Weyl 群轨道大小的核验输出：
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_fold6_b3c3_seed.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/eq_fold6_b3c3_seed.tex}}，
+  \texttt{\detokenize{sections/generated/tab_fold6_b3c3_root_dictionary_B3.tex}}，
+  \texttt{\detokenize{sections/generated/tab_fold6_b3c3_root_dictionary_C3.tex}}。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/fold6_b3c3_seed.json}}（含 \(18\oplus 3\)、\(6+12\) 指纹、两套字典与 \(|W|=48\) 的轨道核验直方图）。
+\end{itemize}
+
+\begin{corollary}[边界塔的最小共振三元组对 \texorpdfstring{$\mathfrak g_{\mathrm{SM}}$}{gSM} 的刚性选出]\label{cor:bdry-tower-minimal-resonance-triple-sm}
+在边界词三层塔 \(m=4,6,8\) 上，有限穷举输出给出
+\[
+\bigl(|X^{\mathrm{bdry}}_4|,\ |X^{\mathrm{bdry}}_6|,\ |X^{\mathrm{bdry}}_8|\bigr)=(1,3,8)
+\]
+（见 \texttt{\detokenize{sections/generated/eq_boundary_tower_sm12.tex}}）。
+若要求边界模态的连续包络为紧连通约化 Lie 群，并且其 Lie 代数分解为三个约化直和因子且维数逐层对应 \((1,3,8)\)，
+则该 Lie 代数在同构意义下唯一，且必为
+\[
+\mathfrak g_{\mathrm{SM}}\ \cong\ \mathfrak u(1)\ \oplus\ \mathfrak{su}(2)\ \oplus\ \mathfrak{su}(3).
+\]
+\end{corollary}
+\begin{proof}
+紧约化 Lie 代数分解为中心直和半单部分。
+维数为 \(3\) 的紧简单因子在同构意义下唯一为 \(\mathfrak{su}(2)\)，维数为 \(8\) 的紧简单因子唯一为 \(\mathfrak{su}(3)\)，而维数为 \(1\) 的交换因子只能为 \(\mathfrak u(1)\)。
+将三块维数并置即得结论。证毕。
+\end{proof}
+
+\begin{remark}[由 Coxeter/Weyl 数据对 \texorpdfstring{$\mathfrak{su}(3)$}{su3} 与 \texorpdfstring{$\mathfrak{su}(2)$}{su2} 的非循环选出]\label{rem:window6-coxeter-weyl-select-su3-su2}
+在 \S\ref{subsec:bdry-tower-zeck-gut} 的根字典口径下，window-\(6\) 的 Weyl 群满足
+\(
+W\cong W(B_3)\cong W(C_3)\cong (\ZZ_2)^3\rtimes S_3
+\)。
+Coxeter 分类表明：秩 \(2\) 的不可约反射群中，群 \(S_3\) 唯一对应 \(A_2\) 型 Weyl 数据；秩 \(1\) 的反射群 \(\ZZ_2\) 唯一对应 \(A_1\) 型 Weyl 数据。
+因此，一旦 \(S_3\) 与 \(\ZZ_2\) 作为可审计的有限反射对称内禀地产生，则与推论 \ref{cor:bdry-tower-minimal-resonance-triple-sm} 的维数接口并置即可得到 \(\mathfrak{su}(3)\) 与 \(\mathfrak{su}(2)\) 的非循环定位。
+\end{remark}
+
+\begin{remark}[Weyl 二轨道压缩与“耦合归一化”的两自由度（window-\(6\)）]\label{rem:fold6-weyl-two-orbit-two-dof}
+推论 \ref{cor:fold6-weyl-two-orbit-compression} 表明：任意 Weyl-不变可观测量在 cyclic 扇区 \(X^{\mathrm{cyc}}_6\) 上仅由短根/长根两条轨道的常值决定。
+因此，若把根方向上的权函数、或等价的 \(W\)-不变二次型参数化视为“规范耦合归一化选择”的抽象模型，
+则 window-\(6\) 的统一种子在该层面至多允许两自由度（short/long 两类）。
+进一步地，当该权函数还需与 boundary 扇区、或与 orbit--Levi 分块的共同细化兼容时，
+任何“对齐/统一”约束都必归约为这两自由度之间的关系，而非外加的连续微调假设。
+\end{remark}
+
+\paragraph{并列可复核接口：\(m=6\) 的 \texorpdfstring{$C_6$}{C6} 轨道分解与 \texorpdfstring{$21=15\oplus 3\oplus 3$}{21=15+3+3} Levi 骨架候选}
+在同一 window-6 锚点上，环旋转 \(C_6\) 在 cyclic 扇区 \(X_6^{\mathrm{cyc}}\) 上封闭并诱导一个刚性的轨道多重集合 \(\{1,2,3,6,6\}\)（见小节 \ref{subsec:bdry-tower-zeck-gut} 中关于 \texorpdfstring{$C_6$}{C6} 轨道刚性的段落）。
+该刚性轨道分解给出一个规范的 \(15\oplus 3\) 细分，并与 boundary 扇区的 \(3\) 一起形成 \(21=15\oplus 3\oplus 3\) 的维数骨架，
+从而把一个 Pati--Salam 型的最小半单 Levi 包络作为并列候选落到可审计输出上。
+此外，dyadic 折叠 \(\mathrm{Fold}^{\mathrm{bin}}_6\) 在 boundary 扇区上强迫 \(\delta=34\) 的二层覆盖并诱导一个可复核的 \(\ZZ_2\) sheet parity（见小节 \ref{subsec:bdry-tower-zeck-gut} 中 boundary 扇区双层覆盖的构造）。
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_window6_c6_orbit_patisalam_seed.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/eq_window6_c6_orbit_decomposition.tex}}，
+  \texttt{\detokenize{sections/generated/eq_window6_c6_character_decomposition.tex}}，
+  \texttt{\detokenize{sections/generated/tab_window6_c6_orbit_decomposition.tex}}，
+  \texttt{\detokenize{sections/generated/tab_window6_patisalam_9633_partition.tex}}，
+  \texttt{\detokenize{sections/generated/eq_fold6_bin_uplift_delta_set.tex}}，
+  \texttt{\detokenize{sections/generated/tab_fold6_bin_uplift_choice_collapse.tex}}，
+  \texttt{\detokenize{sections/generated/tab_fold6_boundary_sheet_pairs.tex}}，
+  \texttt{\detokenize{sections/generated/tab_foldbin_boundary_lift_m6_m8.tex}}。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/window6_c6_orbit_patisalam_seed.json}}（含 \(C_6\) 轨道、\(9+6+3+3\) 四块分解、\(\Delta_6=\{0,21,34,55\}\)、uplift-choice collapse 的 \(\Xi(w)\in\{2,3,4\}\) 分区、\(w_6=1\Rightarrow\{0,34\}\)、三条边界词的显式 preimage 对，以及 \(m=6,7,8\) 的 boundary-lift 三层/二层稳定性扫描输出）。
+\end{itemize}
+
+\begin{remark}[sheet parity 的跨分辨率延拓并非自动成立：需要额外协议门重锁定二层覆盖]\label{rem:window6-sheet-parity-nonpersistent}
+由表 \ref{tab:foldbin_boundary_lift_m6_m8}，boundary 扇区在 \(m=6\) 的 dyadic uplift 呈现二层覆盖模式 \(\{0,34\}\)；
+但在同一口径下当分辨率升至 \(m=7,8\) 时 uplift deltas 分别变为 \(\{0,55,89\}\) 与 \(\{0,89,144\}\)，覆盖层数转为三层。
+因此 window-\(6\) 的 \(\ZZ_2\) sheet parity 属于最小锚点特有的硬结构事实；若欲将其提升为跨尺度的残余选择律，则必须额外施加可审计的协议门以重新锁定二层覆盖（例如对 uplift-choice 的进一步约束或引入额外读出寄存器）。
+\end{remark}
+
+\begin{remark}[局域 uplift 口径下的可证伪分界：\texorpdfstring{$\delta\neq 34$}{delta!=34} 必迫使非局域外置]\label{rem:window6-local-uplift-falsifiable-boundary}
+推论 \ref{cor:terminal-window6-local-uplift-admissibility} 表明：在“uplift 由保持标签的几何自同构实现”的强局域口径下，除平凡位移外仅允许 \(\delta=34\)。
+因此，任何需要 \(\delta=21\) 或 \(\delta=55\) 型尾部分支触发的候选扩展，若仍声称处于该局域几何 uplift 口径，则与几何稳定子刚性矛盾；
+要实现之，必须在下列代价中择一：放弃“保持标签不变且由 \(\mathrm{Aut}(Q_6)\) 实现”的局域性，或引入额外投影门/协议约束以改变 uplift 的可实现集合。
+\end{remark}
+
+\begin{remark}[维数 \(21\) 的“双种子分岔”与可证伪判别量]\label{rem:window6-dim21-double-seed-bifurcation}
+window-\(6\) 在同一 \(m=6\) 锚点上同时输出两套彼此独立、且均可由有限穷举证书核验的 \(21\) 维连续包络候选：
+其一由 \(18\oplus 3\) 的根--Cartan 字典把简单型种子锁定到 \(B_3/C_3\)；
+其二由 \(C_6\) 轨道刚性把 Levi 型骨架锁定到 \(\mathfrak{su}(4)\oplus\mathfrak{su}(2)_L\oplus\mathfrak{su}(2)_R\)。
+因此“统一候选的选择”在本文口径下不是解释性先验，而是一个可证伪的判别任务：必须引入额外的、同样可审计的判别量（例如更高分辨率的扭曲谱/异常签名与分块对齐约束，参见 \S\ref{subsec:group-unification-spectral-alignment} 及其脚本/证书链）以区分两类种子。
+\end{remark}
+
+\begin{corollary}[Levi 刚性锁定：由 \texorpdfstring{$21=15\oplus 3\oplus 3$}{21=15+3+3} 强制的 Pati--Salam 型骨架]\label{cor:window6-levi-rigidity-pati-salam}
+在 \S\ref{subsec:bdry-tower-zeck-gut} 的 orbit--Levi 口径下，若进一步施加最小连续假设：window-\(6\) 的连续包络仅允许紧半单 Lie 代数，
+并且 \(21=15\oplus 3\oplus 3\) 的维数骨架对应于三个紧简单理想的直和分解，
+则该 Levi 骨架在同构意义下唯一，且必同构于
+\[
+\mathfrak g^{\mathrm{Levi}}_6\ \cong\ \mathfrak{su}(4)\ \oplus\ \mathfrak{su}(2)_L\ \oplus\ \mathfrak{su}(2)_R.
+\]
+\end{corollary}
+\begin{proof}
+维数为 \(3\) 的紧简单 Lie 代数在同构意义下唯一，即 \(\mathfrak{su}(2)\cong\mathfrak{so}(3)\)。
+另一方面，紧简单 Lie 代数的维数只能取经典型
+\(\dim\mathfrak{su}(n)=n^2-1\)、\(\dim\mathfrak{so}(n)=\frac{n(n-1)}2\)、\(\dim\mathfrak{sp}(n)=n(2n+1)\)
+及例外型 \(14,52,78,133,248\) 等值。
+由此可直接检验：唯一满足 \(\dim=15\) 的紧简单同构类为 \(\mathfrak{su}(4)\cong\mathfrak{so}(6)\)。
+将三块维数并置即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[Levi 刚性（群层版）：Pati--Salam 连续包络的同源唯一性]\label{cor:window6-levi-rigidity-pati-salam-isogeny}
+在推论 \ref{cor:window6-levi-rigidity-pati-salam} 的设定下，若 \(\mathcal{G}\) 为任意紧连通半单 Lie 群且其 Lie 代数同构于
+\(
+\mathfrak{su}(4)\oplus\mathfrak{su}(2)_L\oplus\mathfrak{su}(2)_R
+\)，
+则 \(\mathcal{G}\) 在同源（isogeny）意义下唯一：存在有限中心子群 \(Z\subseteq SU(4)\times SU(2)\times SU(2)\) 使
+\[
+\boxed{\;
+\mathcal{G}\ \cong\ \frac{SU(4)\times SU(2)\times SU(2)}{Z}\; }.
+\]
+因此 window-\(6\) 的 \(21=15\oplus 3\oplus 3\) Levi 刚性不仅锁定 Lie 代数同构类，也锁定其紧连通半单连续实现的同源类（差异仅可能来自有限中心商）。
+\end{corollary}
+\begin{proof}
+对紧半单 Lie 代数 \(\mathfrak g\)，存在唯一（同构意义下）单连通紧 Lie 群 \(\widetilde{\mathcal{G}}\) 使 \(\mathrm{Lie}(\widetilde{\mathcal{G}})\cong\mathfrak g\)，并且任意紧连通半单 Lie 群 \(\mathcal{G}\) 满足 \(\mathrm{Lie}(\mathcal{G})\cong\mathfrak g\) 时，都可表为 \(\mathcal{G}\cong \widetilde{\mathcal{G}}/Z\)（\(Z\subseteq Z(\widetilde{\mathcal{G}})\) 有限中心）。
+将 \(\mathfrak g=\mathfrak{su}(4)\oplus\mathfrak{su}(2)\oplus\mathfrak{su}(2)\) 代入，并用 \(\widetilde{SU(n)}\cong SU(n)\) 得 \(\widetilde{\mathcal{G}}\cong SU(4)\times SU(2)\times SU(2)\)，即得结论。证毕。
+\end{proof}
+
+\begin{remark}[中心三轴与类型邻接刚性对 Levi 骨架的“非拼接”强迫]\label{rem:window6-levi-rigidity-center-autgamma6}
+推论 \ref{cor:window6-levi-rigidity-pati-salam} 与推论 \ref{cor:window6-levi-rigidity-pati-salam-isogeny} 仅使用 \(21=15\oplus 3\oplus 3\) 的维数骨架与“紧半单”最小连续假设来锁定 Pati--Salam 型 Levi 骨架及其同源类。
+在 window-\(6\) 的审计闭环中，还存在两条与该维数锁定正交、但与其\emph{共同}收束“连续包络自由度”的离散刚性接口：
+\begin{enumerate}
+  \item \textbf{（中心三轴的 \(2\)-挠约束）}boundary 三条纤维的纤维内 involution 给出规范中心嵌入 \((\ZZ_2)^3\hookrightarrow Z(\mathcal{G}^{\mathrm{bin}}_6)\)，从而任何连续包络 \(\mathcal{G}\) 若要在离散读出层面实现三轴独立 sheet-flip，必须满足 \((\ZZ_2)^3\subset Z(\mathcal{G})[2]\)（注 \ref{rem:bdry-center-z2-global-compatibility}）；
+  \item \textbf{（类型层超选择）}类型邻接图刚性 \(\mathrm{Aut}(\Gamma_6)=\{1\}\) 排除任何“通过类型重标号吸收非唯一性”的连续自由度（命题 \ref{prop:terminal-gamma6-rigidity}）。
+\end{enumerate}
+因此，在同时要求“中心三轴可实现”与“类型邻接兼容”的连续化尝试中，Pati--Salam 型 Levi 骨架可被视为由离散窗口输出在两条正交方向上\emph{共同强迫}的最小半单骨架，而非拼接式的外加命名。
+\end{remark}
+
+\begin{remark}[\texorpdfstring{$15=1\oplus 2\oplus 6\oplus 6$}{15=1+2+6+6} 轨道字典与 \texorpdfstring{$\mathfrak{su}(4)\supset\mathfrak{su}(3)\oplus\mathfrak u(1)$}{su4 contains su3+u1} 的非外加对齐]\label{rem:window6-su4-su3u1-orbit-dictionary}
+在推论 \ref{cor:window6-levi-rigidity-pati-salam} 的设定下，\(15\) 维块可在同构意义下识别为 \(\mathfrak{su}(4)\) 的伴随分量。
+其标准极大子代数 \(\mathfrak{su}(3)\oplus\mathfrak u(1)\subset\mathfrak{su}(4)\) 诱导伴随分解
+\[
+\mathfrak{su}(4)\ \cong\ (\mathfrak{su}(3)\oplus\mathfrak u(1))\ \oplus\ (\mathbf3\oplus\bar{\mathbf3}),
+\]
+并进一步将 \(\mathfrak{su}(3)\) 的伴随分解为 Cartan 与阶梯方向
+\(
+\mathfrak{su}(3)=\mathfrak h\oplus\mathfrak n,\ \dim\mathfrak h=2,\ \dim\mathfrak n=6
+\)。
+因此在纯维数层面得到
+\[
+15\ =\ 1\ \oplus\ 2\ \oplus\ 6\ \oplus\ 6,
+\]
+与 window-\(6\) 上由 \(C_6\) 轨道刚性读出的 \(15\) 元 cyclic 块的轨道大小多重集合一致（见上段与生成表 \ref{tab:window6_c6_orbit_decomposition}）。
+在本文口径中，这一对齐意味着：一旦要求“轨道尺寸字典”与“紧半单 Levi 骨架”兼容，则 \(\mathfrak{su}(4)\supset\mathfrak{su}(3)\oplus\mathfrak u(1)\) 的出现不需要额外嵌入选择。
+\end{remark}
+
+\begin{remark}[模 \texorpdfstring{$p_\star=571$}{p*=571} 的平方滤过指数与 \texorpdfstring{$\dim\mathfrak{su}(4)$}{dim su4} 的同值性]\label{rem:window6-modpstar-square-filtration-index15-su4}
+在 \(p_\star=571\) 上，三点权 \(\{21,34,55\}\) 在 \(\FF_{p_\star}^\times\) 内诱导的严格滤过满足
+\(
+Q:=(\FF_{p_\star}^\times)^2=\langle 34\rangle\supset \langle 55\rangle
+\)
+且指数 \([Q:\langle 55\rangle]=15\)（推论 \ref{cor:window6-three-point-weight-residue-filtration}）。
+另一方面，Levi 骨架中主因子 \(\mathfrak{su}(4)\) 的维数为 \(\dim\mathfrak{su}(4)=15\)。
+因此在同一 window-\(6\) 锚点上，离散侧的平方剩余滤过指数与连续侧的主半单维数以同一整数同时出现，并可由有限证书分别核验。
+\end{remark}
+
+\begin{corollary}[\texorpdfstring{$\mathfrak{su}(4)\supset \mathfrak{su}(3)\oplus\mathfrak u(1)$}{su4 contains su3+u1} 的嵌入刚性（共轭唯一性）]\label{cor:window6-su4-embedding-rigidity}
+在推论 \ref{cor:window6-levi-rigidity-pati-salam} 的设定下，将 \(15\) 维块同构为 \(\mathfrak{su}(4)\) 的伴随分量。
+则与轨道字典 \(15=1\oplus 2\oplus 6\oplus 6\) 相容的极大秩子代数链
+\[
+\mathfrak{su}(3)\oplus\mathfrak u(1)\ \subset\ \mathfrak{su}(4)
+\]
+在 \(\mathrm{Aut}(\mathfrak{su}(4))\) 的作用下共轭唯一。
+因此 \(\mathfrak u(1)\) 方向作为 \(\mathfrak{su}(3)\) 的交换子方向（亦即二者在 \(\mathfrak{su}(4)\) 内的相对位置）在该离散--连续对齐口径下属于刚性数据，而非可自由调换的外加选择。
+\end{corollary}
+\begin{proof}
+在 \(\mathfrak{su}(4)\) 中，\(\mathfrak{su}(3)\oplus\mathfrak u(1)\) 的标准嵌入可取为对角块稳定子（等价地：\(SU(4)\) 作用于 \(\mathbb{C}^4\) 的某一复直线的稳定子之 Lie 代数）。
+由于 \(SU(4)\) 对复射影空间 \(\mathbb{CP}^3\) 传递作用，所有此类子代数在内自同构下共轭；从而在 \(\mathrm{Aut}(\mathfrak{su}(4))\) 下共轭唯一。证毕。
+\end{proof}
+
+\begin{corollary}[6D window-\(6\) 的 Levi 刚性强制产生标准模型型残余代数]\label{cor:window6-levi-rigidity-sm-residual}
+在推论 \ref{cor:window6-levi-rigidity-pati-salam} 的 Levi 骨架
+\(
+\mathfrak g^{\mathrm{Levi}}_6\cong \mathfrak{su}(4)\oplus\mathfrak{su}(2)_L\oplus\mathfrak{su}(2)_R
+\)
+之上，并置 \(\mathfrak{su}(4)\supset \mathfrak{su}(3)\oplus\mathfrak u(1)\) 的嵌入刚性（推论 \ref{cor:window6-su4-embedding-rigidity}）
+与 window-\(6\) 的几何 \(\ZZ_2\)（推论 \ref{cor:terminal-foldbin6-geo-stabilizer-z2}，亦见推论 \ref{cor:terminal-window6-local-uplift-admissibility} 的 \(\delta=34\) 选择律）。
+则在不引入额外连续自由度的最小化口径下，存在一维不动点方向 \(\mathfrak u(1)_{\mathrm{eff}}\subset \mathfrak{su}(2)_R\)，使得
+\[
+\mathfrak{su}(3)\ \oplus\ \mathfrak{su}(2)_L\ \oplus\ \mathfrak u(1)_{\mathrm{eff}}
+\subseteq \mathfrak g^{\mathrm{Levi}}_6.
+\]
+从而标准模型型的非阿贝尔骨架 \(\mathfrak{su}(3)\oplus\mathfrak{su}(2)_L\) 与一条有效阿贝尔方向可由 window-\(6\) 的组合/表示论刚性内生选出，而不依赖外部“先验指定标准模型”的循环前提。
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:window6-su4-embedding-rigidity}，在 \(\mathfrak{su}(4)\) 内与 orbit 字典相容的 \(\mathfrak{su}(3)\oplus\mathfrak u(1)\) 极大秩嵌入共轭唯一；
+因此在 \(\mathfrak g^{\mathrm{Levi}}_6\) 内存在由离散输出锁定的子代数
+\(
+\mathfrak{su}(3)\oplus\mathfrak u(1)\oplus\mathfrak{su}(2)_L\oplus\mathfrak{su}(2)_R
+\)。
+另一方面，定理 \ref{thm:foldbin6-geo-stabilizer-z2} 给出 window-\(6\) 上唯一非平凡几何对合 \(\sigma_{\mathrm{geo}}\)，而推论 \ref{cor:terminal-delta-parity-rule} 将其在 boundary uplift 上的效应压缩为 \(\delta=34\) 的二层选择律。
+由于类型邻接图刚性 \(\mathrm{Aut}(\Gamma_6)=\{1\}\)（命题 \ref{prop:terminal-gamma6-rigidity}）排除了通过类型重标号吸收该 \(\ZZ_2\) 的可能性，故在“连续包络仅允许依赖上述离散审计数据且不引入额外连续自由度”的最小化口径下，
+该几何 \(\ZZ_2\) 必须在 \(\mathfrak g^{\mathrm{Levi}}_6\) 上诱导一个非平凡的 Lie 代数对合自同构 \(\theta\)。
+\par
+在推论 \ref{cor:window6-su4-embedding-rigidity} 已将 \(\mathfrak{su}(4)\supset \mathfrak{su}(3)\oplus\mathfrak u(1)\) 的相对位置锁定为刚性数据、且 \(\mathfrak{su}(2)_L\) 因子由 Levi 骨架分块作为可审计锚点的前提下，
+可在同构意义（允许对 \(\mathfrak g^{\mathrm{Levi}}_6\) 作保持 Levi 分块的内自同构共轭）下把 \(\theta\) 规范化为：其在 \(\mathfrak{su}(4)\oplus\mathfrak{su}(2)_L\) 上作用为恒等，而在右手因子 \(\mathfrak{su}(2)_R\) 上作用为非恒等对合。
+于是 \((\mathfrak{su}(2)_R)^{\theta}\) 为一维固定子代数。
+\par
+最后，\(\mathrm{Aut}(\mathfrak{su}(2))\cong SO(3)\)，其中非恒等对合对应于 \(SO(3)\) 中旋转角为 \(\pi\) 的旋转；其在伴随表示（\(\mathfrak{su}(2)\simeq\RR^3\)）上固定且仅固定一条轴线。
+因此 \((\mathfrak{su}(2)_R)^{\theta}\cong \mathfrak u(1)\)。
+取该固定子为 \(\mathfrak u(1)_{\mathrm{eff}}\subset \mathfrak{su}(2)_R\)，即得
+\(
+\mathfrak{su}(3)\oplus\mathfrak{su}(2)_L\oplus \mathfrak u(1)_{\mathrm{eff}}\subseteq \mathfrak g^{\mathrm{Levi}}_6
+\)。
+证毕。
+\end{proof}
+
+\paragraph{可复核接口：window-6 的 edge--flux skeleton（6D 立方体局部扰动 \(\times\) \(9+6+3+3\) 四块分解）}
+终端命题 \ref{thm:terminal-window6-edge-flux-skeleton} 将超立方体图 \(Q_6\) 的一步局部扰动推送到 \(X_6\) 的四块 Levi 骨架上，
+得到一个完全显式且可复核的四块边计数矩阵 \(E\)，并由此构造粗粒化四状态 Markov 核 \(T\) 及其谱指纹（特征多项式的 \((t-1)\) 因子分解）。
+同一证书还给出 boundary 扇区 \(U_R\) 的割大小与稳态通量常数 \(\Phi_R=\frac1{12}\)，并输出 \(X_6\) 上推送 Markov 核 \(P_6\) 的平稳分布/详细平衡证书（定理 \ref{thm:terminal-foldbin6-pushforward-markov}）：
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_window6_edge_flux_skeleton.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/eq_window6_pushforward_markov_kernel.tex}}，
+  \texttt{\detokenize{sections/generated/eq_window6_edge_flux_skeleton.tex}}。
+  \item \textbf{谱隙审计（\(\lambda_2\) 与 \(\lambda_\star\)）：}
+  \texttt{\detokenize{scripts/exp_window6_pushforward_markov_spectral_gap.py}} 生成片段
+  \texttt{\detokenize{sections/generated/eq_window6_pushforward_markov_spectral_gap.tex}}
+  与证书 \texttt{\detokenize{artifacts/export/window6_pushforward_markov_spectral_gap.json}}。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/window6_pushforward_markov_kernel.json}}，
+  \texttt{\detokenize{artifacts/export/window6_edge_flux_skeleton.json}}。
+\end{itemize}
+
+\begin{remark}[edge--flux skeleton 作为可迭代粗粒化算子候选]\label{rem:window6-edge-flux-coarse-graining-iterable}
+定理 \ref{thm:terminal-window6-edge-flux-skeleton} 在 \(m=6\) 上给出从微观边扰动到 \(9\oplus 6\oplus 3\oplus 3\) Levi 分块的显式推送/粗粒化。
+在多分辨率框架中，可将其理解为一个“从微观到块级”的有限函子原型：其输入为可审计的边计数，输出为块级核 \(T\) 及其谱指纹；
+该构造的可移植性与可迭代性（跨 \(m\) 的 renormalization 结构）可进一步通过在更高 \(m\) 上保持分块兼容与谱指纹稳定性来检验与证伪。
+\end{remark}
+
+\begin{remark}[boundary 通量常数 \texorpdfstring{$\Phi_R=\tfrac1{12}$}{PhiR=1/12} 的规范不变量地位]\label{rem:window6-boundary-flux-phiR-normalization}
+定理 \ref{thm:terminal-window6-edge-flux-skeleton} 给出的稳态通量常数 \(\Phi_R=\frac1{12}\) 完全由有限边计数证书决定，
+并在标号刚性（推论 \ref{cor:terminal-gamma6-multiplicity-rigidity}）下不具有重标号自由度。
+因此 \(\Phi_R\) 可作为 window-\(6\) 粗粒化动力学的一条规范化不变量：任一声称与该 edge--flux 接口同构的实现若无法复现 \(\Phi_R\)，则可被有限证书直接证伪。
+\end{remark}
+
+\begin{corollary}[由可逆详细平衡核导出的紧性原则（window-\(6\)）]\label{cor:window6-p6-compactness-principle}
+在定理 \ref{thm:terminal-foldbin6-pushforward-markov} 的记号下，\(P_6\) 关于平稳分布 \(\pi_6\) 满足详细平衡，从而诱导的 Markov 算子
+\[
+(\mathsf{T}_6 f)(w):=\sum_{w'\in X_6} P_6(w,w')\,f(w')
+\]
+在 Hilbert 空间 \(\ell^2(X_6,\pi_6)\) 上自伴。
+令其交换子代数为
+\[
+\mathcal{C}_6:=\bigl\{U\in \mathrm{End}(\ell^2(X_6,\pi_6)):\ U\mathsf{T}_6=\mathsf{T}_6U\bigr\}.
+\]
+则 \(\mathcal{C}_6\) 为有限维 \(*\)-代数，并且其酉群
+\(
+\mathrm{U}(\mathcal{C}_6):=\{U\in\mathcal{C}_6:\ U^*U=\mathrm{id}\}
+\)
+为紧 Lie 群。
+特别地，任何以“保持可逆读出核 \(P_6\)”定义的连续规范对称必为紧群。
+\end{corollary}
+\begin{proof}
+详细平衡等价于 \(\mathsf{T}_6\) 关于内积 \(\langle f,g\rangle_{\pi_6}:=\sum_{w\in X_6} f(w)\overline{g(w)}\,\pi_6(w)\) 自伴。
+由于 \(|X_6|=21\)，空间 \(\ell^2(X_6,\pi_6)\) 有限维，故 \(\mathrm{U}(\mathcal{C}_6)\) 为 \(U(21)\) 的闭子群，因而紧。证毕。
+\end{proof}
+
+\paragraph{可复核接口：\texorpdfstring{$\mathrm{Aut}(Q_6)$}{Aut(Q6)} 几何稳定子（唯一 \texorpdfstring{$\ZZ_2$}{Z2}）与 \texorpdfstring{$\delta=34$}{δ=34} 掩码指纹}
+除“纤维内任意置换”的 fold-gauge 群外，正文在小节 \ref{subsec:bdry-tower-zeck-gut} 进一步引入了一个几何层的稳定子：
+将 \(F_6(\omega)=\mathrm{Fold}^{\mathrm{bin}}_6(\mathrm{int}_6(\omega))\) 视为超立方体图 \(Q_6\) 顶点集上的标签函数，并在 \(\mathrm{Aut}(Q_6)\) 内筛选与之交换者，得到唯一残存的非平凡 \(\ZZ_2\) 对称（定理 \ref{thm:foldbin6-geo-stabilizer-z2}），其在二进制编号上携带掩码整数 \(34=100010_2\) 并在半立方体上诱导 \(\pm 34\) 偏移（推论 \ref{cor:foldbin6-geo-mask-34}）。
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_foldbin6_geo_stabilizer.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/eq_foldbin6_geo_stabilizer.tex}}。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/foldbin6_geo_stabilizer.json}}（含 \(|\mathrm{Stab}_{\mathrm{geo}}|=2\) 的穷举证书、生成元的 \((\mathrm{mask},\mathrm{perm})\) 参数化、固定点/支撑计数、以及二进制编号差值直方图）。
+  \item \textbf{几何审计接口（\(\sigma_{\mathrm{geo}}\) 在纤维内的轨道电荷分裂）。}
+  \texttt{\detokenize{scripts/exp_foldbin6_geo_orbit_charge.py}} 生成表
+  \texttt{\detokenize{sections/generated/tab_foldbin6_geo_orbit_charge.tex}}
+  与证书 \texttt{\detokenize{artifacts/export/foldbin6_geo_orbit_charge.json}}，
+  给出对每个 \(x\in X_6\) 的 \((f_x,p_x)\)（不动点数/二循环数）与七类直方图，可直接核验推论 \ref{cor:terminal-foldbin6-geo-orbit-charge}。
+  \item \textbf{动力学审计接口（强可并性失败的显式反例）。}
+  \path{scripts/exp_foldbin6_strong_lumpability_counterexample.py} 生成片段
+  \texttt{\detokenize{sections/generated/eq_foldbin6_strong_lumpability_counterexample.tex}}
+  与证书 \texttt{\detokenize{artifacts/export/foldbin6_strong_lumpability_counterexample.json}}，
+  给出同纤维两点的一步邻域稳定类型计数分布差异，可直接核验“Foldbin6 纤维分割不具强可并（lumpability）”的断言。
+  \item \textbf{几何审计接口（纤维内部最小汉明距离三值律）。}
+  \path{scripts/exp_foldbin6_fiber_hamming_min_distance.py} 生成表
+  \path{sections/generated/tab_foldbin6_fiber_hamming_min_distance.tex}
+  与计数直方图片段 \path{sections/generated/eq_foldbin6_fiber_hamming_min_distance_value_counts.tex}
+  与证书 \path{artifacts/export/foldbin6_fiber_hamming_min_distance.json}，
+  给出逐 \(w\in X_6\) 的 \(\delta_{\min}(w)\) 与预像清单，可直接核验定理 \ref{thm:terminal-foldbin6-fiber-hamming-three-valued} 的 \(\{2,3,5\}\) 三值律。
+  \item \textbf{几何审计接口（类型邻接图 \texorpdfstring{$\Gamma_6$}{Gamma6} 的刚性）。}
+  \texttt{\detokenize{scripts/exp_window6_type_adjacency_graph_rigidity.py}} 生成片段
+  \texttt{\detokenize{sections/generated/eq_window6_type_adjacency_graph_rigidity.tex}}
+  与证书 \texttt{\detokenize{artifacts/export/window6_type_adjacency_graph_rigidity.json}}，
+  给出 \(|V|,|E|\)、度直方图、连通性、直径、单谱性与 \(\mathrm{Aut}(\Gamma_6)=\{1\}\) 的可复核结论（命题 \ref{prop:terminal-gamma6-rigidity} 与推论 \ref{cor:terminal-gamma6-diameter-simple-spectrum}）。
+\end{itemize}
+
+\begin{corollary}[6D 可观测判定的有限完备性：由 \texorpdfstring{$(\pi_6,P_6,\sigma_{\mathrm{geo}})$}{(pi6,P6,sigma_geo)} 给出的可判定同构模板]\label{cor:terminal-window6-finite-completeness-template}
+在 window-\(6\) 的审计口径下，令
+\[
+\mathfrak{A}_6:=(X_6,\pi_6,P_6,\langle\sigma_{\mathrm{geo}}\rangle),
+\]
+其中 \(\pi_6\) 与 \(P_6\) 由定理 \ref{thm:terminal-foldbin6-pushforward-markov} 给出，\(\langle\sigma_{\mathrm{geo}}\rangle\) 由定理 \ref{thm:foldbin6-geo-stabilizer-z2} 给出。
+则对任何另一套在 \(m=6\) 层级输出同构数据的实现（例如来自任意满足命题 \ref{prop:terminal-cut-project-to-fold-hist} 的 6D cut-and-project 实例），
+若其在某个标号下给出同一三元组 \((\pi_6,P_6,\langle\sigma_{\mathrm{geo}}\rangle)\)，则该标号由加权邻接刚性推论 \ref{cor:terminal-gamma6-multiplicity-rigidity} 唯一确定；
+从而“是否同构”为有限可判定问题，并且任一偏离都可由有限证书直接证伪。
+\end{corollary}
+\begin{proof}
+给定 \(\pi_6\) 与 \(P_6\) 可恢复推送邻接计数 \(A_6\) 以及相应的加权邻接多重度矩阵 \(A=(A_{uv})\)（见定理 \ref{thm:terminal-foldbin6-pushforward-markov} 的定义式）。
+推论 \ref{cor:terminal-gamma6-multiplicity-rigidity} 排除任何保持 \(A\) 的非平凡重标号，从而标号唯一。
+几何 \(\ZZ_2\) 稳定子由定理 \ref{thm:foldbin6-geo-stabilizer-z2} 唯一给出。
+因此比较两套实现时，只需对有限对象作等式核验即可，结论成立。证毕。
+\end{proof}
+
+\begin{remark}[结构定义的可审计唯一性（window-\(6\)）]\label{rem:terminal-window6-structure-defined-uniqueness}
+由命题 \ref{prop:terminal-gamma6-rigidity} 与推论 \ref{cor:terminal-gamma6-multiplicity-rigidity}，任何仅依赖于 \(Q_6\) 的边推送数据（等价地：仅依赖于加权邻接多重度矩阵 \(A\)，或由其构造出的 \(P_6\)、edge--flux skeleton 等）的结构，在同构意义下均无非平凡重标号自由度。
+因此，凡以“由 \(Q_6\) 局部扰动推送到 \(X_6\)”为函子性约束所定义的附加对象（分块、粗粒化、谱指纹、算术不变量等），都可被视为标签规范且可审计的有限对象；任一声称的替代实现若在这些有限输出上不一致，即可被有限证书直接证伪。
+\end{remark}
+
+\begin{remark}[几何刚性消除重标号自由：三因子的规范定位（window-\(6\)）]\label{rem:window6-no-relabeling-factor-localization}
+命题 \ref{prop:terminal-gamma6-rigidity} 给出 \(\mathrm{Aut}(\Gamma_6)=\{1\}\)，从而任何保持局部邻接结构的类型重标号均为恒等；
+因此由 \(Q_6\) 边推送所定义的 boundary/cyclic 划分、根字典与 \(P_6\) 等输出在标号意义下皆为规范（亦见备注 \ref{rem:terminal-window6-structure-defined-uniqueness}）。
+与定理 \ref{thm:foldbin6-geo-stabilizer-z2} 的唯一几何稳定子 \(\langle\sigma_{\mathrm{geo}}\rangle\cong\ZZ_2\) 并置可知：
+\(\sigma_{\mathrm{geo}}\) 不能被任何重标号吸收。
+故边界词塔给出的 \((1,3,8)\) 维数接口与推论 \ref{cor:bdry-tower-minimal-resonance-triple-sm} 的
+\(\mathfrak u(1)\oplus\mathfrak{su}(2)\oplus\mathfrak{su}(3)\) 分解在本审计口径下具有规范定位：
+任一声称的“因子互换/层级重新分配”若保持局部邻接与推送核数据，则必与 \(\mathrm{Aut}(\Gamma_6)=\{1\}\) 冲突。
+\par
+进一步地，由于几何层的稳定子仅为 \(\langle\sigma_{\mathrm{geo}}\rangle\cong\ZZ_2\)（定理 \ref{thm:foldbin6-geo-stabilizer-z2}），
+几何侧无法在类型层诱导任何非平凡重标号自由度；
+因此凡在 \(m=6\) 的读出层面出现的非平凡对称（例如 boundary sheet-flip 与其中心嵌入，推论 \ref{cor:terminal-delta-parity-rule} 与推论 \ref{cor:fold-bin-boundary-center-z2}），
+只能来自 fold-gauge 群 \(\mathcal{G}^{\mathrm{bin}}_6\) 的纤维内置换，而非来自 \(\mathrm{Aut}(Q_6)\) 的几何自同构。
+\end{remark}
+
+\paragraph{可复核接口：独立位翻转噪声下的 \texorpdfstring{$\mathrm{Fold}^{\mathrm{bin}}_6$}{Foldbin6} 精确稳定多项式}
+终端命题定理 \ref{thm:terminal-foldbin6-bitflip-stability-polynomial} 将 window-\(6\) 的稳定类型读出在 i.i.d.\ 位翻转信道下的稳定概率写成关于翻转率 \(p\) 的闭式多项式；其系数由 \(64\) 微态的有限穷举严格确定：
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_foldbin6_bitflip_stability_polynomial.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/eq_foldbin6_bitflip_stability_polynomial.tex}}。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/foldbin6_bitflip_stability_polynomial.json}}（含按噪声重量分层的稳定对数与多项式系数）。
+\end{itemize}
+
+\paragraph{可复核接口：纤维加权耦合矩阵 \(M\) 的可逆性与 \texorpdfstring{$\det(M)$}{det(M)} 素因子分解}
+终端命题定理 \ref{thm:terminal-window6-fiber-edge-coupling-det} 在 \(X_6\) 上以 \(Q_6\) 的边诱导加权耦合矩阵 \(M\in\mathbb{Z}^{21\times 21}\)（纤维间边数），并给出行和可观测性恒等式与 \(\det(M)\neq 0\) 的整因子分解证书：
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_window6_fiber_edge_coupling_matrix.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/eq_window6_fiber_edge_coupling_det.tex}}。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/window6_fiber_edge_coupling_matrix.json}}（含 \(M\) 的全矩阵、纤维大小与行和核验）。
+\end{itemize}
+
+\paragraph{可复核接口：\texorpdfstring{$X_6$}{X6} 的 \(1+8+12\) 字典与 \(12=8+4\) 两档重谱}
+“\(1+8+12\)” 与 “\(12=8+4\)” 的两条离散分块结论无需另写脚本：
+它们可直接从表 \ref{tab:fold6_bin_uplift_choice_collapse} 的三行词表读出。
+第一行给出 \(S_{\mathrm{low}}\) 的 \(9\) 词（其中 \(\texttt{000000}\) 为唯一零词、其余 \(8\) 词构成 \(1+8\) 的轻块），
+第二行与第三行合并为 \(12\) 的重块，并按 \(w_6=1\)（\(\Xi=2\)，\(8\) 词）与 \(w_6=0,\ V_6(w)>8\)（\(\Xi=3\)，\(4\) 词）自动分成两档。
+由此可直接计算熵权重 \(h(w)=\log\Xi(w)\) 并作为谱隙对齐的分块权重（\S\ref{subsec:group-unification-spectral-alignment}）。
+对应的可复核输出与脚本沿用上文关于 \(C_6\) 轨道与 dyadic uplift 证书的生成链（表 \ref{tab:fold6_bin_uplift_choice_collapse} 与
+\texttt{\detokenize{artifacts/export/window6_c6_orbit_patisalam_seed.json}}）。
+
+\paragraph{可复核接口：bin-fold 退化谱的双尺度选择律与 \texorpdfstring{$\dim=55$}{dim=55} 统一锚点}
+bin-fold 退化谱的双尺度选择律将二进制区间折叠 \(\mathrm{Fold}^{\mathrm{bin}}_m\) 的退化度谱
+\(
+d^{\mathrm{bin}}_m(w)=|\mathrm{Fold}^{\mathrm{bin}}_m{}^{-1}(w)|
+\)
+作为独立于 Zeckendorf--GUT 签名与 NAP 选择器的第三条审计通道：
+在 \(m=6\) 上由低退化扇区读出 \(12\) 的计数接口，并以 ghost 容量 \(H^{\mathrm{bin}}_6=2^6-|X_6|=43\) 补全得到 \(55\) 的统一维数锚点；
+在更高分辨率 \(m=10\) 上，最小退化扇区计数再次精确等于 \(55\)，从而形成两路锁定。
+其生成链已脚本化并纳入一键流水线：
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_fold_bin_degeneracy_spectrum_m6_m12.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/tab_fold_bin_degeneracy_spectrum_m6_m12.tex}}（表 \ref{tab:fold_bin_degeneracy_spectrum_m6_m12}）。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/fold_bin_degeneracy_spectrum_m6_m12.json}}（含各 \(m\) 的直方图、\(d_{\min}\)、最小扇区大小与墙钟时间）。
+\end{itemize}
+
+\paragraph{交叉审计接口：\texorpdfstring{$\mathrm{Fold}^{\mathrm{bin}}$}{Foldbin}–\texorpdfstring{$\mathrm{Fold}$}{Fold} 的跨尺度补余恒等式}
+接口化结论 \ref{par:gut-foldbin-fold-complement-identity} 给出一条把“低分辨率最刚性扇区补余容量”与“高分辨率最大纤维极值模尺度”直接锁定的交叉审计恒等式；
+其核对式为独立的派生输出（不重新枚举谱数据），并已纳入一键流水线：
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_foldbin_fold_complement_identity_m6_m12.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/eq_foldbin_fold_complement_identity_m6_m12.tex}}。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/foldbin_fold_complement_identity_m6_m12.json}}（含逐 \(m\) 核对项与通过/失败标记）。
+\end{itemize}
+
+\paragraph{可复核接口：四步平移 uplift 同构与 \texorpdfstring{$m=10$}{m=10} 的 \(6+6+6+3\) 根型分块}
+四步平移 uplift 同构把 \(X_{10}^{\mathrm{bdry}}\) 与 \(X_6\) 规范同构，并以 \(B_3\) 根字典细化为
+\(6\) 个短根、\(6\) 个 \(A_2(+)\)、\(6\) 个 \(A_2(-)\) 与 \(3\) 个 Cartan 方向。
+对应的 \(21\) 词 uplift 字典与分块清单由脚本自动生成：
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_boundary_uplift_m10_b3c3_dictionary.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/eq_boundary_uplift_m10_isomorphism.tex}}，
+  \texttt{\detokenize{sections/generated/tab_boundary_uplift_m10_dictionary.tex}}。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/boundary_uplift_m10_b3c3_dictionary.json}}（含 \(\iota_n\) 的有限窗双射核验、\(m=10\) 的 21 词字典与 \(A_2(\pm)\) 分块清单）。
+\end{itemize}
+
+\begin{remark}[长根的双 \texorpdfstring{$A_2$}{A2} 子系分裂与符号刚性]\label{rem:boundary-m10-longroot-double-a2-sign-rigidity}
+在定理 \ref{thm:boundary-m10-b3c3-rigid-four-block-split} 的口径下，
+\(m=10\) 的 \(18\) 条根方向严格分解为
+\(
+6(\mathrm{short})\ \sqcup\ 6(A_2(+))\ \sqcup\ 6(A_2(-))
+\)，且两套 \(A_2(\pm)\) 仅由“两个非零分量同号/异号”的符号条件区分。
+因此该分裂在字典层面不引入额外选择参数，可作为 \(\mathfrak{su}(3)\) 型子数据的内生二分机制。
+\end{remark}
+
+\paragraph{可复核接口：NAP 选择器与 \texorpdfstring{$m=11$}{m=11} 的 \texorpdfstring{$\ZZ_{34}$}{Z34} Fourier 分解证书}
+小节 \ref{subsec:bdry-tower-zeck-gut} 在 Zeckendorf--GUT 签名字典之上引入了一个新的离散选择律：
+要求非阿贝尔共振层 \(\{6,8\}\) 必须作为独立层保留（NAP），并在所有简单李代数中最小化 \(D=\dim\mathfrak g\)。
+该选择器把 \(SO(10)\) 作为最小解离散地挑出，并给出“\(4\to 11\)”的单次签名替换与 \(34-1=33\) 的刚性计数接口。
+与此同时，\(m=11\) 的 \(34\) 个边界模态在规范编号下携带 \(\ZZ_{34}\) 平移作用，从而强制一个
+\(34=1\oplus 33\) 且 \(33=1\oplus 16\times 2\) 的实表示分解模板（为后续投影门/核谱的谱并群提供可审计靶标）。
+\begin{itemize}
+  \item \textbf{NAP 选择器脚本：}\texttt{\detokenize{scripts/exp_nap_selector_so10.py}}。
+  \item \textbf{NAP LaTeX 生成物：}\texttt{\detokenize{sections/generated/tab_nap_selector_so10.tex}}，
+  \texttt{\detokenize{sections/generated/eq_nap_selector_so10.tex}}。
+  \item \textbf{NAP 审计 JSON：}\texttt{\detokenize{artifacts/export/nap_selector_so10.json}}（含扫描参数、候选表与最小解证书）。
+  \item \textbf{\(\ZZ_{34}\) Fourier 分解脚本：}\texttt{\detokenize{scripts/exp_m11_boundary_z34_fourier_decomposition.py}}。
+  \item \textbf{\(\ZZ_{34}\) LaTeX 生成物：}\texttt{\detokenize{sections/generated/eq_m11_boundary_z34_decomposition.tex}}。
+  \item \textbf{\(\ZZ_{34}\) 审计 JSON：}\texttt{\detokenize{artifacts/export/m11_boundary_z34_fourier_decomposition.json}}（含规范编号 \(j\mapsto (v_7,u_{11})\) 与正交/旋转校验残差）。
+\end{itemize}
+
+\input{subsubsec__m11_boundary_z34_cyclotomic_representation_rigidity}
+
+\begin{remark}[局域 uplift 的唯一性与 \texorpdfstring{$SU(5)$}{SU(5)}/\texorpdfstring{$E_6$}{E6} 分支的非局域性]\label{rem:window6-local-uplift-excludes-su5-e6}
+由推论 \ref{cor:terminal-window6-local-uplift-admissibility}，
+在保持稳定类型标签 \(F_6\) 且由 \(\mathrm{Aut}(Q_6)\) 实现的局域 uplift 中，除 \(0\) 外唯一可实现的整数位移为 \(\pm 34\)；
+从而在三分支 \(\{F_8,F_9,F_{10}\}=\{21,34,55\}\) 中仅 \(F_9\) 与该局域性相容。
+另一方面，定理 \ref{thm:terminal-window6-tail-three-branch} 给出 \((SU(5),SO(10),E_6)\) 的顶层 Zeckendorf 项分别对齐 \((F_8,F_9,F_{10})\)。
+因此在额外施加“uplift 必须由局域几何稳定子实现”的协议约束时，
+\(SU(5)\) 与 \(E_6\) 的顶层分支只能通过非局域机制出现，而 \(SO(10)\) 分支是唯一保留局域可实现性的候选。
+\end{remark}
+
+\begin{corollary}[“为何是标准模型而非循环引用”的三重刚性闭包（window-\(6\)）]\label{cor:window6-threefold-rigidity-closure-sm-so10}
+在 window-\(6\) 锚点上，同时并置以下三条可审计输入：
+\begin{enumerate}
+  \item \textbf{几何刚性：}局域 uplift 除 \(0\) 外仅允许 \(\delta=34\)（推论 \ref{cor:terminal-window6-local-uplift-admissibility}）。
+  \item \textbf{边界塔可观测性：}最小三层边界塔给出 \((1,3,8)\) 维数接口（\texttt{\detokenize{sections/generated/eq_boundary_tower_sm12.tex}}），并刚性选出 \(\mathfrak u(1)\oplus\mathfrak{su}(2)\oplus\mathfrak{su}(3)\)（推论 \ref{cor:bdry-tower-minimal-resonance-triple-sm}）。
+  \item \textbf{组合刚性：}\(\mathrm{Aut}(\Gamma_6)=\{1\}\) 排除非平凡重标号（命题 \ref{prop:terminal-gamma6-rigidity} 与推论 \ref{cor:terminal-gamma6-multiplicity-rigidity}）。
+\end{enumerate}
+则低分辨率可见规范代数在同构意义下被规范定位为
+\[
+\mathfrak g_{\mathrm{vis}}\ \cong\ \mathfrak u(1)\ \oplus\ \mathfrak{su}(2)\ \oplus\ \mathfrak{su}(3),
+\]
+且不依赖任何先验“手工指定规范群”的输入。
+进一步地，在施加 NAP 约束 \(\{6,8\}\subseteq \Sigma(\mathfrak g)\) 并最小化统一代价时，
+脚本化扫描把最小简单补全离散地锁定为 \(SO(10)\)，并给出单层替换证书
+\(
+\Sigma_{SO(10)}=\Sigma_{\mathrm{SM}}\setminus\{4\}\cup\{11\}
+\)
+与 \(34-1=45-12\)（见 \eqref{eq_nap_selector_so10}）；
+该替换的顶层项 \(F_9=34\) 与局域 uplift 的唯一整数指纹一致，从而在同一整数证书上闭合“几何局域性—边界塔最小性—统一补全”的非循环推理链。
+\end{corollary}
+\begin{proof}
+第一部分由推论 \ref{cor:terminal-window6-local-uplift-admissibility}、推论 \ref{cor:bdry-tower-minimal-resonance-triple-sm} 与命题 \ref{prop:terminal-gamma6-rigidity}（及其推论）并置即得。
+第二部分由 NAP 选择器的生成等式 \eqref{eq_nap_selector_so10} 给出。证毕。
+\end{proof}
+
+\paragraph{可复核检验：三通道势—响应辛相空间的 \texorpdfstring{$\mathrm{Sp}(6)$}{Sp(6)} 各向同性点扫描}
+注 \ref{rem:sp6-minimal-continuous-envelope} 给出一个把 \(B_3/C_3\) 的离散统一种子“提升为连续包络”的最小口径：在压力 \(P(\theta)\) 的 Legendre 对偶坐标下，
+\((\theta;J=\nabla P)\) 诱导标准辛形式，保持三通道共轭结构的最小连续群为 \(\mathrm{Sp}(6)\)。
+对应的一个严格可核对任务是：在某个“统一点”上，二次涨落尺度应趋于单尺度（各向同性），其完全可审计的分数为
+\(
+\mathcal{I}(\theta)=\log(\lambda_{\max}/\lambda_{\min})
+\)
+（见附录注 \ref{rem:sync-kernel-3d-sp6-isotropy-scan}）。
+该扫描已被脚本化并纳入一键流水线：
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_sync_kernel_weighted_sp6_isotropy_scan.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/tab_sync_kernel_weighted_sp6_isotropy_scan.tex}}（表 \ref{tab:sync_kernel_weighted_sp6_isotropy_scan}）。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/sync_kernel_weighted_sp6_isotropy_scan.json}}（含扫描网格、\(\Sigma=\nabla^2P\)、特征值与最优候选点列表）。
+  \item \textbf{根型分裂比率脚本：}\texttt{\detokenize{scripts/exp_sp6_isotropy_root_split_ratio.py}}（读取上条 JSON 并计算 \(R_{ls},R_{pm}\)）。
+  \item \textbf{根型分裂 LaTeX 生成物：}\texttt{\detokenize{sections/generated/tab_sp6_isotropy_root_split_ratio.tex}}。
+  \item \textbf{根型分裂审计 JSON：}\texttt{\detokenize{artifacts/export/sp6_isotropy_root_split_ratio.json}}。
+\end{itemize}
+
+\paragraph{接口延拓：将外部时间缩放、折叠缺陷与耦合漂移归约到同一主标量变量}
+本章在注 \ref{rem:lapse-modulated-tau-mix} 中已将外部时间重标定写成一个最小的外部时间缩放代理
+\(
+N:=\kappa_0/\kappa
+\)
+（其中 \(\kappa\) 是背景依赖的路由/逆搜索开销，单位为“每内部步的外部代价”）。
+另一方面，折叠侧已经定义了纤维缺陷标量
+\begin{equation}\label{eq:gut_kappa_m_defect}
+\kappa_m(\pi):=\mathbb{E}_{\pi}[\log d_m(X)]
+\qquad(\text{定义 \ref{def:pom-kappa}；其中 }d_m(x)=|\Fold_m^{-1}(x)|).
+\end{equation}
+因此可以引入一个统一的主标量变量（纯定义，不引入额外指称）：
+\[
+u:=\log\frac{\kappa}{\kappa_0}=-\log N.
+\]
+\emph{接口级}假设是：在带空间索引的读出（例如 Hilbert 地址化窗口）下，局部开销场 \(u(x)\) 与某个局部折叠统计的缺陷量同构，
+例如以局部分布 \(\pi_{m,x}\in\Delta(X_m)\) 读出
+\(
+\kappa_m(\pi_{m,x})
+\)
+并设
+\[
+u(x)\ \approx\ c\,\kappa_m(\pi_{m,x})
+\qquad(c>0\ \text{为标定常数}).
+\]
+一旦将任意有效耦合或有效常数的漂移写成主标量的函数（线性化形式）
+\[
+g_i^{-2}(x)=a_i+b_i\,u(x)+\cdots,
+\]
+就得到一个\textbf{可证伪的相关性}：
+\[
+\Delta g_i^{-2}\ \approx\ b_i\,\Delta u\ =\ -b_i\,\Delta\log N.
+\]
+进一步地，对任意两指标 \(i,j\)（且 \(b_j\neq 0\)），由同一线性化立即得到漂移比值不变量
+\[
+\frac{\Delta g_i^{-2}}{\Delta g_j^{-2}}\ \approx\ \frac{b_i}{b_j},
+\]
+从而“多耦合漂移”在该口径下被压缩为由单一潜变量 \(u\) 参数化的一条仿射共线族：所有 \((\Delta g_i^{-2})_i\) 在一阶近似上落在同一秩 \(1\) 方向上。
+该相关性与比值不变量本身不依赖连续极限；它们只要求在同一数据/同一协议族上同时输出 \(N\) 与 \(\{g_i\}\) 的代理量并做联合检验。
+\par
+更完整的 overhead\(\to\)外部时间缩放\(\to\)线性化闭合，以及从地址化窗口与折叠退化统计重建空间代价标量变量的可执行协议，属于接口层的进一步构造；
+本稿在此仅记录其在本章变量上的最小同构关系与可证伪相关性形式。
+
+\begin{corollary}[纤维缺陷标量作为单潜变量：漂移的仿射共线性与比值不变量]\label{cor:gut-fiber-defect-single-latent-affine-collinearity}
+沿用上段的主标量 \(u=-\log N\) 与一阶线性化 \(g_i^{-2}(x)=a_i+b_i\,u(x)+\cdots\)。
+则对任意两观测点（或两组协议设定）\(x_1,x_2\) 的差分 \(\Delta(\cdot):=(\cdot)(x_2)-(\cdot)(x_1)\)，有
+\[
+\Delta g_i^{-2}\ \approx\ b_i\,\Delta u,
+\qquad
+\frac{\Delta g_i^{-2}}{\Delta g_j^{-2}}\ \approx\ \frac{b_i}{b_j}\ (b_j\neq 0),
+\]
+从而多耦合漂移在一阶近似上必落在同一秩 \(1\) 的共线方向上；该比值不变量可作为与连续极限无关的联合可证伪检验。
+\end{corollary}
+\begin{proof}
+由线性化形式对 \(x\) 作差分立得第一式；对两指标取比即得第二式。证毕。
+\end{proof}
+
+\paragraph{有限检验模板：Hecke 刚性与 Sturm 界的有限素数骨架判定}
+\begin{theorem}[审计化 Langlands 型识别的有限可判定性：Sturm 有界性 \(\times\) finite-layer closure \(\times\) counterterm strictification]\label{thm:audit-finite-decidability-sturm-finite-layer}
+设某一候选“统一对象”的读出被组织为一组可比的系数/局部因子数据（例如模形式的 \(q\)-展开系数、Hecke 本征值 \(a_p\)，或等价的素数局部因子/特征多项式），并且其实现链允许同时输出 Dirichlet 扭曲通道与有限部漂移预算。
+则在本文的可审计口径下，Langlands 型“识别/匹配”（是否属于给定的 Hecke 本征包/等价类）可归约为\textbf{有限}核验问题，其有限性来源可明确分解为三条：
+\begin{enumerate}
+  \item \textbf{（模形式端：Sturm 有界性）}在给定权 \(k\) 与水平 \(N\) 后，Sturm 界 \(B_{k,N}\) 给出有限截断判定：只需核验至 \(B_{k,N}\) 的有限个 Fourier/Hecke 数据即可判定等同性（从而把“无限条件”替换为有限素数骨架的检查）。
+  \item \textbf{（Dirichlet 端：有限层闭包）}任何有限投影词/有限实现对 Dirichlet 轴束的依赖必在某个有限层 \(m_\ast\) 上闭合；因而“全角色扫描/最坏通道”可归约为对有限集合 \(\widehat{G_{m_\ast}}\) 的穷举核验（命题 \ref{prop:pom-finite-modulus-stability}，亦见推论 \ref{cor:pom-local-finite-dirichlet-action}）。
+  \item \textbf{（接口严格化端：counterterm 消去有限部漂移）}中心扩张口径下的交换失败完全落在有限部/常数层，并可由纯常数 counterterm 门严格消去，从而把残差交换提升为严格相容性条件（命题 \ref{prop:pom-counterterm-anom-cancel}，亦见定理 \ref{thm:pom-strictification-splitting}）。
+\end{enumerate}
+因此，在既定的误差预算结构（有限样本/截断/strictification）下，上述识别问题不再是开放式的无穷验证，而是一个由 \((B_{k,N},m_\ast)\) 与有限部 counterterm 预算共同控制规模的有限判定问题。
+\end{theorem}
+
+\begin{remark}[总结性结论：lapse--Dirichlet--Adams--counterterm--Sturm 的闭合主线]\label{rem:audit-summary-lapse-dirichlet-adams-sturm}
+本稿把“可审计计算”系统性地压缩为有限证书链：lapse（测度变换/外部时间缩放）可内化为加权周期读出并给出显式有限样本上界（定理 \ref{thm:op-algebra-lapse-weighted-wish-koksma}）；Dirichlet 扭曲通道在有限层闭包下局部有限并可穷举核验（命题 \ref{prop:pom-finite-modulus-stability} 与推论 \ref{cor:pom-local-finite-dirichlet-action}）；Adams--Dirichlet 的算术伸缩门把 \((\chi,u)\) 的幂半群作用统一为重整化单子（定义 \ref{def:witt-adams-dirichlet-renorm-gate} 与命题 \ref{prop:witt-renorm-monoid}）；异常通过中心扩张分裂与 counterterm strictification 被严格化为常数层可控漂移（定理 \ref{thm:pom-strictification-splitting}）。
+在此基础上，Sturm 有界性把 Hecke 刚性落实为有限素数骨架判定（定理 \ref{thm:audit-finite-decidability-sturm-finite-layer}），从而形成一条无需手工编号、可逐条引用的闭合结构主线。
+现有脚本 \texttt{\detokenize{scripts/exp_hecke_e4_prime_audit.py}} 即提供该模板的最小可复核实例：在零参数基准情形下，以有限素数点的 Hecke 系数表/JSON 输出作为快速否定检验。
+\end{remark}
+
+\begin{corollary}[Sturm--Hecke 有界性下的有限素数骨架否定判据：三素数即可排除标量 \texorpdfstring{$X(1)$}{X(1)} 权 \texorpdfstring{$4$}{4} 情形]\label{cor:hecke-e4-three-prime-refutation}
+若顶层统一对象被声明为 \emph{level-1（\(X(1)\)）标量权 \(4\) Hecke-闭合}的模形式，
+则该空间一维且由 Eisenstein 级数 \(E_4\) 张成，因此其素数 Hecke 系数必须满足
+\[
+\boxed{\ a_p=240(1+p^3)\qquad(p\ \text{素})\ }.
+\]
+从而在最小否定口径下，仅需在 \(p\in\{2,3,5\}\) 三个素数点比对系数即可形成快速否定检验：
+任一显著偏离即推出“顶层统一不可能仍停留在 \(X(1)\) 标量一维 + Hecke 刚性”层级，必须进入向量值/同余层提升分支。
+\end{corollary}
+\par
+我们将最小否定判据素数点 \(p\in\{2,3,5\}\) 的数值表与 JSON 封装为可复现输出（作为“零拟合必要条件”的快速否定检验）：
+\begin{itemize}
+  \item \textbf{生成脚本：}\texttt{\detokenize{scripts/exp_hecke_e4_prime_audit.py}}。
+  \item \textbf{LaTeX 生成物：}\texttt{\detokenize{sections/generated/tab_hecke_e4_prime_audit_p235.tex}}。
+  \item \textbf{审计 JSON：}\texttt{\detokenize{artifacts/export/hecke_e4_prime_audit_p235.json}}。
+\end{itemize}

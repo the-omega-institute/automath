@@ -1,0 +1,450 @@
+% (User input window)
+
+\begin{theorem}[单标量坍缩：最优耦合由“重叠幅度”完全参数化]\label{thm:pom-diagonal-rate-scalar-collapse}
+设 \(X\) 为有限集，取全支撑分布 \(w\in\Delta(X)\)，并记
+\[
+p_2(w):=\sum_{x\in X}w(x)^2,
+\qquad
+\delta_0:=1-p_2(w).
+\]
+当 \(\delta\ge \delta_0\) 时有 \(R_w(\delta)=0\)（命题 \ref{prop:pom-diagonal-rate-zero-threshold-collision}）。
+下设 \(\delta\in(0,\delta_0)\)，并沿用定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 的最优耦合指数族表示。
+\par
+对任意 \(\kappa>0\) 与任意 \(A>0\)，定义
+\[
+u_{\kappa,A}(x):=\frac{\sqrt{A^2+4\kappa\,w(x)}-A}{2\kappa}\qquad(x\in X),
+\qquad
+\Phi_\kappa(A):=\sum_{x\in X}u_{\kappa,A}(x).
+\]
+则成立：
+\begin{enumerate}
+  \item \textbf{（唯一不动点与规范化缩放）}
+  对每个 \(\kappa>0\)，方程 \(A=\Phi_\kappa(A)\) 在 \(A>0\) 上存在唯一解，记为 \(A(\kappa)\in(0,1)\)。
+  令 \(u_\kappa(x):=u_{\kappa,A(\kappa)}(x)\)，并定义耦合
+  \[
+  P_\kappa(x,y):=
+  \begin{cases}
+  (1+\kappa)\,u_\kappa(x)^2, & x=y,\\
+  u_\kappa(x)u_\kappa(y), & x\ne y.
+  \end{cases}
+  \]
+  则 \(P_\kappa\) 为概率分布且满足双边缘约束 \((P_\kappa)_X=(P_\kappa)_Y=w\)。
+
+  \item \textbf{（\(\kappa\)-失真双射）}
+  令
+  \[
+  \delta(\kappa):=1-\sum_{x\in X}P_\kappa(x,x)\in(0,\delta_0).
+  \]
+  则映射 \(\kappa\mapsto \delta(\kappa)\) 在 \((0,\infty)\) 上连续且严格递减，并把 \((0,\infty)\) 双射到 \((0,\delta_0)\)；
+  其端点极限为
+  \[
+  \kappa\downarrow 0\ \Longrightarrow\ \delta(\kappa)\uparrow\delta_0,
+  \qquad
+  \kappa\uparrow\infty\ \Longrightarrow\ \delta(\kappa)\downarrow 0.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}[证明要点]
+对固定 \(\kappa>0\)，函数 \(A\mapsto u_{\kappa,A}(x)\) 连续且严格递减，因而 \(\Phi_\kappa\) 连续且严格递减。
+同时 \(A\mapsto A-\Phi_\kappa(A)\) 连续严格递增，并满足：
+当 \(A\downarrow 0\) 时 \(\Phi_\kappa(A)\to \kappa^{-1/2}\sum_x\sqrt{w(x)}>0\) 从而 \(A-\Phi_\kappa(A)<0\)；
+当 \(A\uparrow\infty\) 时 \(u_{\kappa,A}(x)=w(x)/A+O(A^{-3})\) 从而 \(\Phi_\kappa(A)=A^{-1}+o(A^{-1})\) 且 \(A-\Phi_\kappa(A)>0\)。
+故存在唯一不动点 \(A(\kappa)\)。
+\par
+由二次方程 \(\kappa u^2+Au-w=0\) 的正根公式可得
+\(
+w(x)=A(\kappa)\,u_\kappa(x)+\kappa u_\kappa(x)^2
+\)，并由不动点条件 \(\sum_x u_\kappa(x)=A(\kappa)\) 得
+\[
+\sum_{y\in X}P_\kappa(x,y)=u_\kappa(x)\bigl(A(\kappa)+\kappa u_\kappa(x)\bigr)=w(x),
+\]
+从而双边缘为 \(w\)。
+再由 \(\sum_x w(x)=1\) 推出
+\(
+1=A(\kappa)^2+\kappa\sum_x u_\kappa(x)^2
+=\sum_{x,y}P_\kappa(x,y)
+\)，故 \(P_\kappa\) 为概率分布。
+\par
+\(\delta(\kappa)=1-(1+\kappa)\sum_x u_\kappa(x)^2\)。
+当 \(\kappa\downarrow 0\) 时，上述缩放退化到独立耦合并给出 \(\delta\uparrow \delta_0\)；
+当 \(\kappa\uparrow\infty\) 时对角增强趋于同一耦合并给出 \(\delta\downarrow 0\)。
+严格单调性可由严格凸性与对偶斜率表示推出：由命题 \ref{prop:pom-diagonal-rate-analytic-strict-convexity-curvature}，
+\(\delta\mapsto\kappa(\delta)\) 在 \((0,\delta_0)\) 上严格递减，故其逆映射 \(\kappa\mapsto\delta(\kappa)\) 严格递减。证毕。
+\end{proof}
+
+\begin{corollary}[一维闭式速率与代数回收：\texorpdfstring{$\kappa=\frac{1-A^2}{A^2-\delta}$}{kappa=(1-A^2)/(A^2-delta)}]\label{cor:pom-diagonal-rate-scalar-collapse-rate}
+设 \(\delta\in(0,\delta_0)\)，并令 \(\kappa(\delta)\) 为定理 \ref{thm:pom-diagonal-rate-scalar-collapse} 的双射反函数（满足 \(\delta(\kappa(\delta))=\delta\)）。
+记 \(A:=A(\kappa(\delta))\) 与 \(u:=u_{\kappa(\delta)}\)。
+则 \(R_w(\delta)\) 的唯一极小耦合为 \(P_{\kappa(\delta)}\)，并且速率具有显式一维表示
+\[
+\boxed{\;
+R_w(\delta)=2\sum_{x\in X}w(x)\log\frac{u(x)}{w(x)}+(1-\delta)\log\bigl(1+\kappa(\delta)\bigr)\; }.
+\]
+此外 \(A\in(\sqrt\delta,1)\)，并满足显式代数关系
+\[
+\boxed{\;
+\kappa(\delta)=\frac{1-A^2}{A^2-\delta}\; } .
+\]
+\end{corollary}
+\begin{proof}[证明要点]
+由定理 \ref{thm:pom-diagonal-rate-scalar-collapse}，对给定 \(\delta\in(0,\delta_0)\) 存在唯一 \(\kappa(\delta)\) 使 \(P_{\kappa(\delta)}\) 可行且满足 \(\mathbb P(X=Y)=1-\delta\)；
+由严格凸性（定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative}）知其即为唯一最优耦合。
+\par
+由 \(\sum_{x,y}P_{\kappa}(x,y)=1\)（证明中已得）可取规范化常数 \(Z\equiv 1\)，
+于是定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 的闭式
+\(
+R_w(\delta)=2\sum_x w(x)\log\frac{u_x}{w(x)}-\log Z+(1-\delta)\log(1+\kappa)
+\)
+化为所示一维表示。
+\par
+最后由恒等式
+\[
+1-\delta=\sum_x P_\kappa(x,x)=(1+\kappa)\sum_x u_\kappa(x)^2,
+\qquad
+1=\sum_x w(x)=A^2+\kappa\sum_x u_\kappa(x)^2,
+\]
+消去 \(\sum_x u_\kappa(x)^2\) 得
+\(
+\delta=A^2-\frac{1-A^2}{\kappa}
+\)，即 \(\kappa=(1-A^2)/(A^2-\delta)\)；并且 \(\kappa>0\) 迫使 \(A^2>\delta\)，又由 \(1=A^2+\kappa\sum u^2\) 得 \(A<1\)。证毕。
+\end{proof}
+
+\paragraph{阈值邻域的局部律与有限层代数闭合}
+
+\begin{theorem}[碰撞阈值处的二次律与显式信息曲率]\label{thm:pom-diagonal-rate-collision-threshold-quadratic-law}
+设 \(X\) 为有限集，取全支撑分布 \(w\in\Delta(X)\)，并记碰撞阈值
+\[
+\delta_0:=1-\sum_{x\in X}w(x)^2.
+\]
+定义
+\[
+\sigma_w^2
+:=\sum_{x\in X}w(x)^2-2\sum_{x\in X}w(x)^3+\Bigl(\sum_{x\in X}w(x)^2\Bigr)^2.
+\]
+则 \(\sigma_w^2>0\)，且当 \(\delta\uparrow\delta_0\) 时有二次展开
+\[
+\boxed{\;
+R_w(\delta)=\frac{(\delta_0-\delta)^2}{2\sigma_w^2}+o\!\bigl((\delta_0-\delta)^2\bigr)\; }.
+\]
+更进一步，令 \(\varepsilon:=\delta_0-\delta\downarrow 0\)，则存在一族可行耦合 \(P_\varepsilon\) 满足
+\[
+I_{P_\varepsilon}(X;Y)=\frac{\varepsilon^2}{2\sigma_w^2}+O(\varepsilon^3),
+\qquad
+\PP_{P_\varepsilon}(X=Y)=\sum_{x\in X}w(x)^2+\varepsilon,
+\]
+并且任何实现 \(R_w(\delta)\) 的最优耦合亦具有同一主项系数。
+\end{theorem}
+\begin{proof}[证明要点]
+令基准独立耦合 \(P_0:=w\otimes w\)。由于 \(I_P(X;Y)=D_{\mathrm{KL}}(P\|w\otimes w)=D_{\mathrm{KL}}(P\|P_0)\)，故
+\[
+R_w(\delta)=\min\Bigl\{D_{\mathrm{KL}}(P\|P_0):\ P_X=P_Y=w,\ \EE_P[\mathbf 1_{\{X=Y\}}]\ge 1-\delta\Bigr\}.
+\]
+注意 \(\EE_{P_0}[\mathbf 1_{\{X=Y\}}]=\sum_x w(x)^2=1-\delta_0\)，从而当 \(\delta\ge \delta_0\) 时最优值为 \(0\)；以下仅考虑 \(\delta<\delta_0\) 的邻域。
+\par
+在 \(X\times X\) 上定义中心化统计量
+\[
+R(x,y):=\mathbf 1_{\{x=y\}}-w(x)-w(y)+\sum_{z\in X}w(z)^2.
+\]
+直接计算得到 \(\EE_{P_0}[R\mid X]=\EE_{P_0}[R\mid Y]=0\)，并且
+\[
+\EE_{P_0}[R]=0,
+\qquad
+\EE_{P_0}\!\bigl[R(X,Y)^2\bigr]=\sigma_w^2.
+\]
+由于 \(w\) 全支撑且 \(|X|\ge 2\)，\(R\) 非零非常值，故 \(\sigma_w^2=\Var_{P_0}(R(X,Y))>0\)。
+\par
+取 \(\varepsilon>0\) 充分小，并构造扰动耦合
+\[
+P_\varepsilon(x,y):=P_0(x,y)\Bigl(1+\frac{\varepsilon}{\sigma_w^2}R(x,y)\Bigr).
+\]
+由 \(\EE_{P_0}[R\mid X]=\EE_{P_0}[R\mid Y]=0\) 得两边缘仍为 \(w\)；又由
+\[
+\EE_{P_0}\!\bigl[\mathbf 1_{\{X=Y\}}R(X,Y)\bigr]=\sigma_w^2
+\]
+得到 \(\PP_{P_\varepsilon}(X=Y)=\PP_{P_0}(X=Y)+\varepsilon\)，从而 \(\PP_{P_\varepsilon}(X=Y)=1-\delta\)。当 \(\varepsilon\) 足够小时 \(P_\varepsilon\ge 0\)，故其可行。
+\par
+令 \(Z:=\frac{\varepsilon}{\sigma_w^2}R(X,Y)\)，则 \(\EE_{P_0}[Z]=0\) 且 \(\EE_{P_0}[Z^2]=\varepsilon^2/\sigma_w^2\)。对相对熵作泰勒展开：
+\[
+D_{\mathrm{KL}}(P_\varepsilon\|P_0)
+=\EE_{P_0}\bigl[(1+Z)\log(1+Z)\bigr]
+=\frac12\EE_{P_0}[Z^2]+O\!\bigl(\EE_{P_0}[|Z|^3]\bigr)
+=\frac{\varepsilon^2}{2\sigma_w^2}+O(\varepsilon^3),
+\]
+从而给出上界。
+\par
+反向下界由 KL 在 \(P_0\) 邻域的二次型主导给出：在边缘约束与线性约束 \(\sum_x(P(x,x)-P_0(x,x))=\varepsilon\) 下，
+\(
+D_{\mathrm{KL}}(P\|P_0)
+\)
+的二阶变分是加权 \(\ell^2(P_0^{-1})\) 范数，其最小方向与 \(P_0R\) 共线，极小二次值恰为 \(\varepsilon^2/(2\sigma_w^2)\)；
+结合上界即得二次律与主项系数的唯一性。证毕。
+\end{proof}
+
+\begin{theorem}[有限层分布的代数闭合：最优耦合由有限次开方确定]\label{thm:pom-diagonal-rate-finite-layer-algebraic}
+设 \(w\) 仅取 \(r\) 个不同概率值 \(p_1,\dots,p_r\in(0,1)\)，其中 \(p_\ell\) 的重数为 \(m_\ell\)（\(\sum_{\ell=1}^r m_\ell=|X|\)）。
+取任意 \(\delta\in(0,\delta_0)\)（\(\delta_0:=1-\sum_x w(x)^2\)）。
+则达到 \(R_w(\delta)\) 的唯一最优耦合 \(P^\star_\delta\) 可写成如下闭式：存在唯一 \(t>1\) 与唯一向量 \(v\in(0,\infty)^X\) 使得
+\[
+\boxed{\;
+P^\star_\delta(x,y)=
+\begin{cases}
+v(x)v(y), & x\ne y,\\[2mm]
+t\,v(x)^2, & x=y,
+\end{cases}
+\qquad
+\sum_{y\in X}P^\star_\delta(x,y)=w(x)\ \ (\forall x\in X).\;}
+\]
+并且 \(v(x)\) 仅依赖于 \(w(x)\)，因而 \(v\) 亦仅取 \(r\) 个不同数值 \(x_1,\dots,x_r\)（分别对应各概率层）。
+记
+\[
+V:=\sum_{x\in X}v(x)=\sum_{\ell=1}^r m_\ell x_\ell,
+\]
+则 \((t,V)\) 必满足系统
+\[
+\boxed{\;
+V^2=\frac{1+\delta(t-1)}{t},\qquad
+\sum_{\ell=1}^r m_\ell\sqrt{V^2+4(t-1)p_\ell}=(|X|+2t-2)V.\;}
+\]
+因此 \(t\) 为一元代数方程的唯一实根：存在系数属于 \(\QQ(\delta,p_1,\dots,p_r)\) 的多项式 \(P_{w,\delta}\) 使
+\[
+\deg P_{w,\delta}\le 2^r,\qquad P_{w,\delta}(t)=0,\qquad t\in(1,\infty)\ \text{唯一}.
+\]
+特别地，在 \(\delta\in(0,\delta_0)\) 上，\(\delta\mapsto R_w(\delta)\) 作为复解析延拓意义下的一支代数函数，其代数度不超过 \(2^r\)。
+\end{theorem}
+\begin{proof}[证明要点]
+由定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative}，在 \(\delta\in(0,\delta_0)\) 上最优耦合唯一且具有对角增强的指数族形状；
+在 \(Z\equiv 1\) 的规范下可写为 \(P^\star_\delta(x,y)=v(x)v(y)\)（\(x\ne y\)）与 \(P^\star_\delta(x,x)=t\,v(x)^2\)（\(t>1\)），并满足行和约束。
+行和方程等价于
+\[
+w(x)=v(x)\bigl(V+(t-1)v(x)\bigr),
+\]
+故 \(v(x)\) 是关于 \(w(x)\) 的二次方程正根；因此同一概率层上的 \(v(x)\) 取同一常数 \(x_\ell\)。
+由正根公式得到
+\[
+x_\ell=\frac{-V+\sqrt{V^2+4(t-1)p_\ell}}{2(t-1)}.
+\]
+将其代入 \(V=\sum_\ell m_\ell x_\ell\) 即得含 \(r\) 个平方根的方程。
+\par
+另一方面，由 \(\sum_x w(x)=1\) 与对角和约束 \(1-\delta=\sum_x P^\star_\delta(x,x)\) 消去 \(\sum_x v(x)^2\) 可得
+\(
+V^2=\frac{1+\delta(t-1)}{t}
+\)。
+将 \(V^2\) 的有理表达代入根号方程，并反复平方消元（至多 \(r\) 次）即可得到关于 \(t\) 的多项式方程，次数不超过 \(2^r\)；
+唯一性来自原问题严格凸导致的最优解唯一性。证毕。
+\end{proof}
+
+\begin{corollary}[两层分布的四次闭合解与显式最优耦合]\label{cor:pom-diagonal-rate-two-layer-quartic}
+在定理 \ref{thm:pom-diagonal-rate-finite-layer-algebraic} 的设定下取 \(r=2\)，记两层概率为 \(p_1\ne p_2\)，重数分别为 \(m_1,m_2\)（\(m:=|X|=m_1+m_2\)）。
+令 \(s:=t-1>0\) 并记
+\[
+V^2=\frac{1+s\delta}{1+s},
+\qquad
+A:=V^2+4sp_1,\qquad B:=V^2+4sp_2.
+\]
+则最优参数 \(s\) 等价于满足四次方程
+\[
+\boxed{\;
+\Bigl((m+2s)^2V^2-m_1^2A-m_2^2B\Bigr)^2=4m_1^2m_2^2AB.\;}
+\]
+该方程在 \(s>0\) 上存在唯一解 \(s^\star\)。
+由此唯一确定
+\[
+x_\ell=\frac{-V+\sqrt{V^2+4s^\star p_\ell}}{2s^\star}\quad(\ell=1,2),
+\]
+并得到唯一最优耦合：若 \(x\) 属于第 \(\ell\) 层，则 \(v(x)=x_\ell\)，且
+\[
+P^\star_\delta(x,y)=
+\begin{cases}
+v(x)v(y), & x\ne y,\\
+(1+s^\star)v(x)^2, & x=y.
+\end{cases}
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-finite-layer-algebraic} 的根号方程在 \(r=2\) 情形化为
+\(
+m_1\sqrt{A}+m_2\sqrt{B}=(m+2s)V
+\)。
+两侧平方并再平方以消去 \(\sqrt{AB}\) 即得四次方程；唯一性由最优解唯一性推出。证毕。
+\end{proof}
+
+\begin{proposition}[有限层情形的代数相图：奇点集合有限且具 Puiseux 展开]\label{prop:pom-diagonal-rate-finite-layer-algebraic-phase-diagram}
+在定理 \ref{thm:pom-diagonal-rate-finite-layer-algebraic} 的 \(r\)-层设定下，存在有限集合 \(\Sigma\subset(0,\delta_0)\) 使得：
+\begin{enumerate}
+  \item \(\delta\mapsto R_w(\delta)\) 在每个连通分支 \((0,\delta_0)\setminus\Sigma\) 上为实解析函数；
+  \item 对每个 \(\delta_*\in\Sigma\)，\(R_w\) 在 \(\delta_*\) 的邻域内存在 Puiseux 型展开
+  \[
+  R_w(\delta)=\sum_{k\ge k_0} c_k(\delta-\delta_*)^{k/q},
+  \]
+  其中 \(q\in\NN\) 且 \(q\le 2^r\)。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-finite-layer-algebraic}，\(R_w(\delta)\) 为代数函数，满足某一不可约多项式关系 \(F(\delta,R)=0\)。
+代数函数的分歧仅可能发生在同时满足 \(\partial_R F=\partial_\delta F=0\) 的投影处，等价地由判别式 \(\Disc_R F(\delta)=0\) 的有限根集合给出；
+在其补集上由隐函数定理得实解析性。
+分歧点的 Puiseux 展开是代数函数的经典局部结构定理之直接推论，且指数分母可由代数度界定（不超过 \(2^r\)）。证毕。
+\end{proof}
+
+\begin{theorem}[矩阵缩放对偶：\texorpdfstring{$R_w(\delta)$}{R} 的单参数极大与最优耦合回收]\label{thm:pom-diagonal-rate-scaling-duality}
+设 \(X\) 为有限集，取全支撑分布 \(w\in\Delta(X)\)。
+对 \(\kappa\ge 0\) 定义对角增强核
+\[
+K_\kappa(x,y):=1+\kappa\,\mathbf 1_{\{x=y\}},
+\]
+并对 \(u\in\RR_{>0}^{X}\) 定义
+\[
+Z_\kappa(u):=\sum_{x,y\in X}u(x)K_\kappa(x,y)u(y)
+=(\sum_x u(x))^2+\kappa\sum_x u(x)^2.
+\]
+定义缩放能量泛函
+\[
+\mathcal G_\kappa(w):=\inf_{u\succ 0}\Bigl(\log Z_\kappa(u)-2\sum_{x\in X}w(x)\log u(x)\Bigr),
+\]
+其极小点在整体伸缩（\(u\mapsto cu\)）下唯一。
+则对任意 \(\delta\in[0,1]\) 有对偶极大表示
+\[
+\boxed{\;
+R_w(\delta)=\sup_{\kappa\ge 0}\Bigl(2H(w)-\mathcal G_\kappa(w)+(1-\delta)\log(1+\kappa)\Bigr)\;},
+\qquad
+H(w):=-\sum_x w(x)\log w(x).
+\]
+并且当 \(\delta\in(0,\delta_0)\)（\(\delta_0:=1-p_2(w)\)）时，上确界由唯一 \(\kappa^\star(\delta)>0\) 达到；
+若 \(u^\star\) 为实现 \(\mathcal G_{\kappa^\star}(w)\) 的极小点之一，则
+\[
+\boxed{\;
+P^\star_\delta(x,y):=\frac{u^\star(x)K_{\kappa^\star}(x,y)u^\star(y)}{Z_{\kappa^\star}(u^\star)}\;}
+\]
+即为 \(R_w(\delta)\) 的唯一极小耦合。
+\end{theorem}
+\begin{proof}[证明要点]
+对固定 \(\kappa\ge 0\)，函数
+\(
+u\mapsto \log Z_\kappa(u)-2\langle w,\log u\rangle
+\)
+在变量 \(\log u\) 上凸，并在模去常数方向上严格凸，从而极小点在整体伸缩下唯一。
+其一阶条件等价于存在常数 \(Z>0\) 使
+\[
+w(x)=\frac{u(x)\bigl(A+\kappa u(x)\bigr)}{Z},
+\qquad A:=\sum_y u(y),
+\]
+并因此诱导一个满足双边缘为 \(w\) 的耦合
+\(
+P(x,y)\propto u(x)K_\kappa(x,y)u(y)
+\)；
+该结构与定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 的指数族同型。
+\par
+对该耦合 \(P\) 展开相对熵并用
+\(
+\mathcal G_\kappa(w)=\log Z_\kappa(u)-2\sum_x w(x)\log u(x)
+\)
+消去 \(\log Z_\kappa\) 与 \(\sum w\log u\)，得到
+\[
+D(P\|w\otimes w)=2H(w)-\mathcal G_\kappa(w)+\mathbb P_P(X=Y)\log(1+\kappa).
+\]
+将约束 \(\mathbb P_P(X=Y)\ge 1-\delta\) 以乘子 \(\log(1+\kappa)\) 外提并取上确界，即得所示对偶形式；强对偶、唯一性与 \(\kappa^\star>0\) 由原问题严格凸与 Slater 条件给出。
+把 \(\kappa^\star\) 与任一对应极小点 \(u^\star\) 回代即可回收唯一最优耦合。证毕。
+\end{proof}
+
+\paragraph{速率曲线的指纹化与分布可识别性}
+定理 \ref{thm:pom-diagonal-rate-scalar-collapse} 与定理 \ref{thm:pom-diagonal-rate-scaling-duality} 表明：在 \(\delta\in(0,\delta_0)\) 上，最优耦合由单一对偶标量 \(\kappa(\delta)\) 及其规范化缩放向量 \(u_\delta\) 完全刻画。
+以下给出一个更强的结论：若把 \(\delta\mapsto R_w(\delta)\) 视为函数级观测，则它本身已构成 \(w\) 的完备指纹（除去标签置换的不变性）。
+
+\begin{theorem}[单曲线可识别性：\texorpdfstring{$\delta\mapsto R_w(\delta)$}{R(delta)} 唯一决定 \texorpdfstring{$w$}{w}（至置换）]\label{thm:pom-diagonal-rate-rate-curve-identifiability}
+令 \(X\) 为有限集，\(|X|=n\ge 2\)，并取全支撑分布 \(w\in\Delta(X)\)。
+记 \(\delta_0(w):=1-\sum_{x\in X}w(x)^2\)。
+若另一全支撑分布 \(v\in\Delta(X)\) 满足：存在 \((0,\delta_1)\subset\bigl(0,\min\{\delta_0(w),\delta_0(v)\}\bigr)\) 使
+\[
+R_w(\delta)=R_v(\delta)\qquad(\forall \delta\in(0,\delta_1)),
+\]
+则两分布的权重多重集一致：
+\[
+\{w(x):x\in X\}=\{v(x):x\in X\},
+\]
+从而 \(w=v\)（至标签置换）。
+\end{theorem}
+\begin{proof}[证明要点]
+由命题 \ref{prop:pom-diagonal-rate-analytic-strict-convexity-curvature}，\(\delta\mapsto R_w(\delta)\) 与 \(\delta\mapsto R_v(\delta)\) 在各自的 \((0,\delta_0)\) 上实解析。
+因此在含聚点区间 \((0,\delta_1)\) 上的恒等式迫使二者在公共定义域上处处相等。
+\par
+由定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 的对偶敏感性，
+\[
+R_w'(\delta)=-\log\bigl(1+\kappa_w(\delta)\bigr),
+\qquad
+R_v'(\delta)=-\log\bigl(1+\kappa_v(\delta)\bigr),
+\]
+从而由 \(R_w\equiv R_v\) 得 \(\kappa_w(\delta)\equiv \kappa_v(\delta)\)。
+再由定理 \ref{thm:pom-diagonal-rate-scalar-collapse}，映射 \(\kappa\mapsto\delta(\kappa)\) 严格递减并在 \((0,\infty)\) 与 \((0,\delta_0)\) 间成双射，
+故其反函数 \(\delta\mapsto \kappa(\delta)\) 唯一；于是两者诱导的 \(\delta(\kappa)\) 在 \(\kappa>0\) 上一致。
+\par
+令 \(A(\kappa)\) 为定理 \ref{thm:pom-diagonal-rate-scalar-collapse} 的唯一不动点解，并取规范化缩放 \(Z\equiv 1\)（同定理）。
+由推论 \ref{cor:pom-diagonal-rate-scalar-collapse-rate} 的代数关系可得
+\[
+A(\kappa)^2=\frac{1+\kappa\,\delta(\kappa)}{1+\kappa}\qquad(\kappa>0),
+\]
+从而由已知的 \(\delta(\kappa)\) 唯一确定函数 \(\kappa\mapsto A(\kappa)\)。
+\par
+在 \(\kappa\downarrow 0\) 时有 \(A(\kappa)\uparrow 1\) 且 \(A\) 可解析延拓到 \(\kappa=0\) 的邻域。
+将定理 \ref{thm:pom-diagonal-rate-scalar-collapse} 的不动点方程
+\(
+A=\Phi_\kappa(A)=\sum_x u_{\kappa,A}(x)
+\)
+视为关于 \(\kappa\) 的解析恒等式，并对
+\(
+u_{\kappa,A}(x)=(\sqrt{A^2+4\kappa w(x)}-A)/(2\kappa)
+\)
+在 \(\kappa=0\) 处作 Taylor 展开，可得到
+\[
+\Phi_\kappa(A)=\frac{1}{A}-\kappa\,\frac{p_2(w)}{A^3}+O(\kappa^2),
+\qquad p_2(w):=\sum_x w(x)^2,
+\]
+从而由系数比较给出 \(p_2(w)=-2A'(0)\)。
+更一般地，\(\Phi_\kappa(A)\) 的 \(\kappa^{q-1}\) 系数线性包含幂和 \(p_q(w)=\sum_x w(x)^q\) 且仅依赖于 \(A\) 的低阶导数与 \(\{p_j(w)\}_{2\le j\le q-1}\)；
+因此由归纳可从 \(\kappa\mapsto A(\kappa)\) 在 \(\kappa=0\) 的 Taylor jet 逐阶恢复 \(\{p_q(w)\}_{q=2}^{n}\)。
+\par
+最后，由 Newton 恒等式，已知幂和 \(\{p_q(w)\}_{q=1}^{n}\)（其中 \(p_1\equiv 1\)）等价于已知基本对称多项式 \(\{e_k(w)\}_{k=1}^{n}\)，从而确定一元多项式
+\(
+t^n-e_1 t^{n-1}+\cdots+(-1)^n e_n
+\)
+的全部根；该根多重集恰为 \(\{w(x):x\in X\}\)。
+因此 \(R_w\) 唯一决定 \(w\) 的权重多重集（至置换）。证毕。
+\end{proof}
+
+\begin{corollary}[两标量证书的完备性：\texorpdfstring{$R_w(\delta)$}{R(delta)} 与 \texorpdfstring{$\lambda_2(K^\star_\delta)$}{lambda2}]\label{cor:pom-diagonal-rate-two-curve-identifiability}
+令 \(X\) 为有限集，\(w\in\Delta(X)\) 全支撑。
+对 \(\delta\in(0,\delta_0(w))\) 令 \(K^\star_\delta\) 为定理 \ref{thm:pom-maxent-markov-unique-optimal-kernel} 的唯一最优核，并令 \(\lambda_2(K^\star_\delta)\) 为其第二特征值（按 \(\lambda_1=1\ge \lambda_2\ge\cdots\ge \lambda_n\) 排序）。
+若已知两条曲线
+\(
+\delta\mapsto R_w(\delta)
+\)
+与
+\(
+\delta\mapsto \lambda_2(K^\star_\delta)
+\)
+在某个含聚点区间上的全部值，则可唯一确定 \(\{w(x)\}\)（至置换）。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-rate-curve-identifiability}，\(\delta\mapsto R_w(\delta)\) 已足以唯一确定 \(\{w(x)\}\)；
+因此在此基础上再给出 \(\lambda_2(K^\star_\delta)\) 不会引入额外歧义。证毕。
+\end{proof}
+
+\begin{proposition}[从速率曲线回收权重多重集：幂和--Newton 重构]\label{prop:pom-diagonal-rate-reconstruct-w-from-rate-curve}
+在定理 \ref{thm:pom-diagonal-rate-rate-curve-identifiability} 的设定下，给定 \(n=|X|\) 与函数 \(\delta\mapsto R_w(\delta)\) 在任意含聚点区间上的全部值，可按如下程序回收权重多重集 \(\{w(x)\}\)：
+\begin{enumerate}
+  \item 由实解析性将 \(R_w\) 延拓到 \((0,\delta_0)\) 的全域，并由对偶敏感性计算
+  \[
+  \kappa(\delta):=\exp\bigl(-R_w'(\delta)\bigr)-1.
+  \]
+  \item 反解 \(\delta\mapsto\kappa(\delta)\) 得到 \(\delta(\kappa)\)（\(\kappa\downarrow 0\) 对应 \(\delta\uparrow\delta_0\)），并定义
+  \[
+  A(\kappa):=\sqrt{\frac{1+\kappa\,\delta(\kappa)}{1+\kappa}}.
+  \]
+  \item 由不动点方程 \(A(\kappa)=\Phi_\kappa(A(\kappa))\) 在 \(\kappa=0\) 的 Taylor 展开逐阶恢复幂和 \(\{p_q(w)\}_{q=2}^{n}\)（例如 \(p_2(w)=-2A'(0)\)）。
+  \item 由 Newton 恒等式由 \(\{p_q(w)\}_{q=1}^{n}\) 计算基本对称多项式 \(\{e_k(w)\}_{k=1}^{n}\)，并以
+  \[
+  t^n-e_1 t^{n-1}+\cdots+(-1)^n e_n
+  \]
+  的根多重集作为 \(\{w(x)\}\) 的输出。
+\end{enumerate}
+该过程仅依赖于 \(\delta\mapsto R_w(\delta)\) 作为函数输入，并在理论上实现对 \(w\) 的排序谱回收。
+\end{proposition}

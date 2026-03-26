@@ -1,0 +1,83 @@
+\begin{theorem}[一维 prime-register 轮廓的峰值尺度与形状熵]\label{thm:conclusion-onedim-max-coefficient-entropy-profile}
+取
+\(
+f(z)=\sum_{j=0}^{d}a_j z^j\in\NN[z]
+\)
+且 \(A:=f(1)\ge 2\)。
+令
+\(
+c_{n,k}:=[z^k]f(z)^n
+\)。
+令随机变量 \(J\in\{0,1,\dots,d\}\) 满足 \(\PP(J=j)=a_j/A\)，并令
+\(
+S_n:=J_1+\cdots+J_n
+\)
+为独立同分布和。
+设
+\[
+\mu:=\EE[J],\qquad \sigma^2:=\Var(J)>0,
+\qquad
+\gcd\{j-\ell:\ a_ja_\ell\neq 0\}=1.
+\]
+则成立：
+\begin{enumerate}
+  \item \textbf{峰值尺度.}
+        令 \(M_n:=\max_{k}c_{n,k}\)。则
+        \[
+        \boxed{\ M_n\sim \frac{A^n}{\sqrt{2\pi\sigma^2 n}}\ }.
+        \]
+        并且最大值在 \(k=\lfloor \mu n\rfloor+O(1)\) 处取得。
+  \item \textbf{形状熵.}
+        令
+        \[
+        H_n:=-\sum_{k\ge 0}\frac{c_{n,k}}{A^n}\log\!\left(\frac{c_{n,k}}{A^n}\right)
+        \]
+        为归一化系数分布（即 \(S_n\) 的分布）的 Shannon 熵，则
+        \[
+        \boxed{\ H_n=\frac12\log(2\pi e\sigma^2 n)+o(1)\ }.
+        \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-multishift-random-walk-profile} 的 \(d=1\) 特化，有
+\(
+c_{n,k}=A^n\PP(S_n=k)
+\)。
+\par
+\textbf{局部高斯逼近.}
+记特征函数 \(\phi(t):=\EE[e^{itJ}]=A^{-1}\sum_{j=0}^d a_j e^{itj}\)（\(t\in[-\pi,\pi]\)）。
+由非格化假设（支撑的最大公因子为 \(1\)）知：存在 \(\eta\in(0,1)\) 与 \(\varepsilon\in(0,\pi)\) 使对所有 \(|t|\in[\varepsilon,\pi]\) 有 \(|\phi(t)|\le \eta\)。
+又由二阶矩存在性，\(t\to 0\) 时有展开
+\[
+\phi(t)=1+i\mu t-\frac{\sigma^2 t^2}{2}+o(t^2).
+\]
+由反演公式，
+\[
+\PP(S_n=k)=\frac{1}{2\pi}\int_{-\pi}^{\pi}\phi(t)^n e^{-ikt}\,dt.
+\]
+将积分分解为 \(|t|\le \varepsilon\) 与 \(|t|>\varepsilon\) 两段。
+第二段由 \(|\phi(t)|\le\eta\) 得到指数小量 \(O(\eta^n)\)。
+在第一段作变换 \(t=u/\sqrt n\) 并将相位中心化到 \(k\approx \mu n\)，即可得到
+\[
+\PP(S_n=k)=\frac{1}{\sqrt{2\pi\sigma^2 n}}
+\exp\!\left(-\frac{(k-\mu n)^2}{2\sigma^2 n}\right)+o(n^{-1/2}),
+\]
+且误差在 \(|k-\mu n|=O(\sqrt n)\) 的窗口内一致成立。
+\par
+\textbf{(1)} 上式在 \(k=\lfloor\mu n\rfloor+O(1)\) 处取最大，且最大概率渐近为 \((2\pi\sigma^2 n)^{-1/2}\)。
+乘以 \(A^n\) 得 \(M_n\) 的渐近。
+\par
+\textbf{(2)} 令 \(p_{n,k}:=\PP(S_n=k)=c_{n,k}/A^n\)。
+由上述局部高斯逼近与尾部高斯衰减（例如由 \(J\) 有界的 Chernoff 界），可将离散和
+\(
+H_n=-\sum_k p_{n,k}\log p_{n,k}
+\)
+按尺度 \(k=\mu n+u\sqrt n\) 作 Riemann 和逼近到 \(N(0,\sigma^2 n)\) 的连续密度熵。
+高斯微分熵满足
+\(
+h(N(0,\sigma^2 n))=\frac12\log(2\pi e\sigma^2 n)
+\)，
+而离散化误差在该尺度下为 \(o(1)\)，从而得到所示展开。证毕。
+\end{proof}
+
+\endinput

@@ -1,0 +1,133 @@
+\paragraph{固定正温软序门的语义障碍与零温相变图景}
+沿用 FRACTRAN 一步语义（定义 \ref{def:pom-fractran}、命题 \ref{prop:pom-fractran-prime-translation}）与软 first-fit 族（注 \ref{rem:pom-fractran-zero-temp}、命题 \ref{prop:pom-fractran-soft-firstfit-analytic-dominance}）。
+
+\begin{theorem}[固定正温软序门对硬 first-fit 的零误差实现不可能性]\label{thm:xi-time-part9j-fixed-temp-impossibility}
+固定 \(u_0\in(0,1)\)。
+考虑二指令 FRACTRAN 程序
+\[
+f_1=\frac1p,\qquad f_2=p,
+\]
+其中 \(p\) 为任意素数。
+记 \(r=v(N)\) 为素数指数向量，\(I(r):=\{i:\ r\ge \beta_i\}\)，\(i^\ast(r):=\min I(r)\)（若 \(I(r)=\varnothing\) 则停机）。
+则有
+\[
+I\bigl(v(1)\bigr)=\{2\},\qquad I\bigl(v(p)\bigr)=\{1,2\},
+\]
+故硬 first-fit 在 \(N=1\) 上输出 \(2\)，在 \(N=p\) 上输出 \(1\)。
+
+设 \(\mathcal A\) 为如下控制层：给定输入 \(r\)，其对 \(r\) 的随机访问仅通过黑盒调用
+\[
+\mathrm{PROJ}_{u_0}(\cdot\mid r),
+\]
+其余更新为确定性，并在 \(I(r)\neq\varnothing\) 时几乎处处终止并输出一个索引。
+若 \(\mathcal A\) 在 \(N=1\) 上以概率 \(1\) 输出 \(2\)，则 \(\mathcal A\) 在 \(N=p\) 上必以正概率输出错误索引 \(2\)；因此不存在在全部输入上零误差复现硬 first-fit 的此类控制层。
+\end{theorem}
+\begin{proof}
+在 \(N=1\) 上，因 \(I(v(1))=\{2\}\)，每次调用 \(\mathrm{PROJ}_{u_0}(\cdot\mid v(1))\) 都确定返回 \(2\)。
+于是 \(\mathcal A\) 所见黑盒输出串为确定串，且由“几乎处处终止”可得存在确定调用次数 \(n_0\in\NN\)，使其在前缀 \(2^{n_0}\) 后终止并输出 \(2\)。
+
+在 \(N=p\) 上，有
+\[
+\Pr_{u_0}(2\mid v(p))
+=
+\frac{u_0^2}{u_0+u_0^2}
+=
+\frac{u_0}{1+u_0}.
+\]
+故事件
+\[
+E_{n_0}:=\{\text{前 }n_0\text{ 次黑盒调用均返回 }2\}
+\]
+满足
+\[
+\Pr(E_{n_0})=\left(\frac{u_0}{1+u_0}\right)^{n_0}>0.
+\]
+在黑盒查询模型下，\(\mathcal A\) 的控制分支仅依赖已观测输出前缀；因此在事件 \(E_{n_0}\) 上，其执行与 \(N=1\) 情形共享同一长度-\(n_0\) 前缀并输出 \(2\)。
+但硬 first-fit 在 \(N=p\) 上应输出 \(1\)。
+故 \(\mathcal A\) 在 \(N=p\) 上有正错误概率，矛盾于“全输入零误差”。
+\end{proof}
+
+\begin{corollary}[固定温度猜想在 soft first-fit 黑盒实例中的成立]\label{cor:xi-time-part9j-soft-firstfit-conjecture-instance}
+在定理 \ref{thm:xi-time-part9j-fixed-temp-impossibility} 的黑盒语义下，猜想
+\ref{conj:pom-soft-order-fixed-temp-not-deterministic}
+的核心断言在 soft first-fit 实例中成立：固定 \(u_0\in(0,1)\) 时，无法在全部输入上实现硬 first-fit 的零误差语义。
+此外，若要求输入无关且几乎处处终止，则不存在把总失败概率压到 \(0\) 的固定正温控制层。
+\end{corollary}
+\begin{proof}
+第一部分即定理 \ref{thm:xi-time-part9j-fixed-temp-impossibility}。
+第二部分来自同一定理给出的单输入正失败下界：一旦某输入的单步失败概率为正，则“全输入零失败”不可能。
+\end{proof}
+
+\begin{proposition}[固定温度下的可靠性--资源对数下界]\label{prop:xi-time-part9j-log-budget-lower-bound}
+沿用定理 \ref{thm:xi-time-part9j-fixed-temp-impossibility} 的记号，设 \(\mathcal A\) 在 \(N=1\) 上对应确定调用次数 \(n_0\)。
+则在输入 \(N=p\) 上有显式下界
+\[
+\Pr\bigl(\mathcal A\text{ 输出 }2\bigr)
+\ge
+\left(\frac{u_0}{1+u_0}\right)^{n_0}.
+\]
+因此，对任意目标 \(\varepsilon\in(0,1)\)，若要求该错误概率不超过 \(\varepsilon\)，必须满足
+\[
+n_0\ \ge\ \frac{\log(1/\varepsilon)}{\log\!\bigl((1+u_0)/u_0\bigr)}.
+\]
+特别地，在固定 \(u_0>0\) 且 \(n_0<\infty\) 时错误概率严格为正；零误差仅可能在 \(u_0=0\) 的硬化极限中实现。
+\end{proposition}
+\begin{proof}
+第一式为定理 \ref{thm:xi-time-part9j-fixed-temp-impossibility} 中事件 \(E_{n_0}\) 的概率下界。
+第二式由
+\(
+(u_0/(1+u_0))^{n_0}\le \varepsilon
+\)
+取对数并整理得到。
+最后一条由 \((u_0/(1+u_0))^{n_0}>0\)（\(u_0>0,n_0<\infty\)）直接推出。
+\end{proof}
+
+\begin{theorem}[二指令分支循环的长期正确率指数塌缩]\label{thm:xi-time-part9j-two-cycle-exponential-collapse}
+沿用程序 \((1/p,p)\) 与温度 \(u_0\in(0,1)\)。
+硬 first-fit 轨道从 \(N_0=1\) 出发满足
+\[
+1\longleftrightarrow p
+\]
+的周期 \(2\) 循环。
+设每一步都独立调用同一黑盒控制层 \(\mathcal A\)，并令
+\[
+\varepsilon:=\left(\frac{u_0}{1+u_0}\right)^{n_0},
+\]
+其中 \(n_0\) 为定理 \ref{thm:xi-time-part9j-fixed-temp-impossibility} 中的确定调用次数。
+若 \(\widehat N_t\) 为 \(\mathcal A\) 产生的随机轨道，则对任意 \(T\ge 1\),
+\[
+\Pr\!\bigl(\forall\,0\le t<T,\ \widehat N_t=N_t\bigr)
+\le
+(1-\varepsilon)^{\lfloor T/2\rfloor}.
+\]
+特别地，
+\[
+\Pr\!\bigl(\forall\,t\ge 0,\ \widehat N_t=N_t\bigr)=0.
+\]
+\end{theorem}
+\begin{proof}
+每次访问状态 \(N_t=p\) 时，定理 \ref{thm:xi-time-part9j-fixed-temp-impossibility} 给出“该步输出错误索引 \(2\)”的条件概率下界 \(\varepsilon\)。
+因此，在一次 \(p\)-访问上保持与硬轨道一致的概率至多 \(1-\varepsilon\)。
+前 \(T\) 步中访问 \(p\) 的次数为 \(\lfloor T/2\rfloor\)。
+在“每步独立调用”假设下，连乘即得
+\[
+\Pr(\text{前 }T\text{ 步全程一致})
+\le
+(1-\varepsilon)^{\lfloor T/2\rfloor}.
+\]
+令 \(T\to\infty\)，右端收敛到 \(0\)，得到全程一致事件概率为 \(0\)。
+\end{proof}
+
+\begin{conjecture}[正温软序门的零误差语义相变]\label{conj:xi-time-part9j-soft-order-phase-transition}
+在最小生成片段 \(\mathbf{PW}^{\ast}\)（注 \ref{rem:pom-pw-star-fragment}）中，考虑“输入无关、几乎处处终止、全输入零误差”的控制流语义。
+猜想存在位于 \(u=0\) 的结构相变：
+\begin{enumerate}
+  \item 当 \(u>0\) 固定时，\(\mathrm{PROJ}_u\) 不可承载可复用的无界可靠优先级控制；硬 first-fit 语义不可在该约束下被零误差实现；
+  \item 当 \(u=0\)（硬化）可用时，序门 \(P_{\le}\) 恢复确定优先级选择，并与 FRACTRAN-step 的控制流外置接口相容。
+\end{enumerate}
+定理 \ref{thm:xi-time-part9j-fixed-temp-impossibility}--定理 \ref{thm:xi-time-part9j-two-cycle-exponential-collapse} 给出该相变在 soft first-fit 最小二指令回路上的证据链。
+\end{conjecture}
+
+\begin{remark}[门深预算与温度障碍的同阶化接口]\label{rem:xi-time-part9j-log-budget-gate-depth}
+命题 \ref{prop:xi-time-part9j-log-budget-lower-bound} 给出的对数级预算下界可与序门瓶颈刻画（\S\ref{subsec:pom-order-bottleneck}）并置为同一资源不等式：固定正温下，可靠性提升所需调用深度与失败预算的对数阶同向增长，且不可由确定性后处理消去。
+\end{remark}

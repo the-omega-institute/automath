@@ -1,0 +1,284 @@
+\subsubsection{停机时间的分形/谱/账本等价刻画}\label{subsubsec:conclusion-godel-leyang-halting-time-dichotomies}
+
+本小节在定理 \ref{thm:conclusion-godel-leyang-2adic-ifs-exact-dimension} 的 Gödel--Lee--Yang \(2\)-进仿射 IFS 口径下，
+给出一组把“停机行为”转写为“维数、原子性、Fourier--Walsh 谱断点、有限分辨率不可分辨性、局部因子误差壁垒以及纤维账本断点”的等价刻画。
+下述构造仅依赖于有限步模拟所生成的可计算序列，并与 \(T_2(E_{\min})\cong \ZZ_2^2\) 的地址化兼容。
+
+\paragraph{停机的 \(2\)-进 Gödel 标量与二元数字集。}
+固定整数 \(L\ge 1\)，令 \(B:=2^L\)，并取
+\(
+T:=T_2(E_{\min})\cong \ZZ_2^2
+\)。
+固定一个非零元 \(e\in T\)。
+对任意图灵机 \(M\) 与输入 \(x\)，令
+\[
+t_n=t_n(M,x):=\ind_{\{\text{\(M(x)\) 在不超过 \(n\) 步内停机}\}}\in\{0,1\}\qquad(n\ge 0),
+\]
+并定义 \(2\)-进标量
+\begin{equation}\label{eq:conclusion-halting-alpha-def}
+\alpha_{M,x}:=\sum_{n\ge 0} t_n\,B^n\in \ZZ_2.
+\end{equation}
+定义二元数字集
+\begin{equation}\label{eq:conclusion-halting-digit-set}
+D_{M,x}:=\{0,\ \alpha_{M,x}e\}\subset T,
+\end{equation}
+并令 \(K_{D_{M,x}}\subset T\) 与 \(\mu_{D_{M,x}}\) 分别为 \eqref{eq:conclusion-godel-leyang-kd-def} 的吸引子与定理 \ref{thm:conclusion-godel-leyang-2adic-ifs-exact-dimension}(4) 的等权 Bernoulli 推前测度。
+
+\begin{lemma}[停机时间的代数化]\label{lem:conclusion-halting-alpha-algebraic-form}
+若 \(M(x)\) 不停机，则 \(\alpha_{M,x}=0\)。
+若 \(M(x)\) 在第 \(N\) 步停机（取 \(N\) 为首次停机时间），则
+\[
+\alpha_{M,x}=-B^N\neq 0.
+\]
+并且 \(\alpha_{M,x}\) 在可计算分析意义下可计算：对任意 \(m\ge 1\)，\(\alpha_{M,x}\bmod B^m\) 仅依赖于 \(t_0,\dots,t_{m-1}\)，从而可由有限步模拟确定。
+\end{lemma}
+
+\begin{proof}
+若不停机则 \(t_n=0\)（\(\forall n\)），故 \(\alpha_{M,x}=0\)。
+若首次停机时间为 \(N\)，则 \(t_n=0\) 当 \(n<N\)，且 \(t_n=1\) 当 \(n\ge N\)，从而
+\[
+\alpha_{M,x}=\sum_{n\ge N}B^n
+=B^N(1+B+B^2+\cdots)
+=\frac{B^N}{1-B}
+=-B^N,
+\]
+其中 \(1-B\) 为 \(\ZZ_2\) 的单位。最后一条“可计算性”由定义 \eqref{eq:conclusion-halting-alpha-def} 直接给出。证毕。
+\end{proof}
+
+\begin{theorem}[停机--Hausdorff 维数二值律：二元 Gödel--Lee--Yang 数字吸引子]\label{thm:conclusion-halting-dimension-binary-law}
+沿用上述记号。
+则
+\[
+\dim_H(K_{D_{M,x}})=
+\begin{cases}
+0,& M(x)\ \text{不停机},\\[2pt]
+1/L,& M(x)\ \text{停机}.
+\end{cases}
+\]
+\end{theorem}
+
+\begin{proof}
+若 \(M(x)\) 不停机，则由引理 \ref{lem:conclusion-halting-alpha-algebraic-form} 有 \(\alpha_{M,x}=0\)，从而
+\(
+D_{M,x}=\{0\}
+\) 且 \(K_{D_{M,x}}=\{0\}\)，故 \(\dim_H=0\)。
+\par
+若 \(M(x)\) 停机，则 \(\alpha_{M,x}\neq 0\)。
+注意到 \(K_{D_{M,x}}\subset \ZZ_2 e\)（一维闭子模）且满足严格分解
+\[
+K_{D_{M,x}}
+=\left\{\sum_{n\ge 0}\varepsilon_n B^n\,\alpha_{M,x}e:\ \varepsilon_n\in\{0,1\}\right\}
+=\alpha_{M,x}e\cdot C_B,
+\]
+其中
+\(
+C_B:=\{\sum_{n\ge 0}\varepsilon_n B^n:\ \varepsilon_n\in\{0,1\}\}\subset \ZZ_2
+\)
+为固定的 \(B\)-进二元 Cantor 子集。
+\par
+集合 \(C_B\) 满足强分离（数字 \(\{0,1\}\) 在模 \(B\) 意义下互异），故由定理 \ref{thm:conclusion-godel-leyang-2adic-ifs-exact-dimension} 在一维情形的同一证明可得
+\(
+\dim_H(C_B)=\log_2 2/L=1/L
+\)。
+而映射 \(z\mapsto \alpha_{M,x}z\) 在 \(\ZZ_2\) 上为相似变换（超度量下 \(|\alpha z|_2=|\alpha|_2|z|_2\)），嵌入 \(z\mapsto ze\) 亦为双 Lipschitz，
+故 \(\dim_H(\alpha_{M,x}e\cdot C_B)=\dim_H(C_B)=1/L\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[Bernoulli 自相似测度的原子--非原子停机分岔]\label{cor:conclusion-halting-measure-atomic-branch}
+沿用上述记号。
+则 \(\mu_{D_{M,x}}\) 为纯原子测度当且仅当 \(M(x)\) 不停机。
+在停机情形下，\(\mu_{D_{M,x}}\) 非原子且为精确维数测度，并满足
+\[
+\dim(\mu_{D_{M,x}})=\dim_H(K_{D_{M,x}})=\frac{1}{L}.
+\]
+\end{corollary}
+
+\begin{proof}
+不停机时 \(K_{D_{M,x}}=\{0\}\) 且 \(\mu_{D_{M,x}}=\delta_0\)。
+停机时 \(K_{D_{M,x}}=\alpha_{M,x}e\cdot C_B\) 且 \(\mu_{D_{M,x}}\) 为 \(C_B\) 上等权 Bernoulli 测度的双 Lipschitz 推前；
+由定理 \ref{thm:conclusion-godel-leyang-2adic-ifs-exact-dimension}（一维版本）知其为精确维数且维数为 \(1/L\)，并且不含原子。证毕。
+\end{proof}
+
+\paragraph{Fourier--Walsh 断点。}
+令 \(\widehat{\ZZ_2e}\) 为紧群 \(\ZZ_2e\) 的 Pontryagin 对偶。
+称连续角色 \(\chi\in\widehat{\ZZ_2e}\) 的\textbf{导子}为最小整数 \(k\ge 0\) 使得 \(\chi\) 在 \(2^k\ZZ_2e\) 上平凡。
+
+\begin{theorem}[Fourier--Walsh 谱断点读出停机时间尺度]\label{thm:conclusion-halting-walsh-breakpoint}
+设 \(M(x)\) 的首次停机时间为 \(N\in\NN\)，并约定不停机情形为 \(N=\infty\)。
+则对测度 \(\mu_{D_{M,x}}\)：
+\begin{enumerate}
+\normalfont
+  \item 若 \(N<\infty\)，则对任意导子 \(k\le LN\) 的角色 \(\chi\) 有
+  \[
+  \widehat{\mu_{D_{M,x}}}(\chi)=1;
+  \]
+  \item 若 \(N<\infty\)，则存在导子 \(k=LN+1\) 的角色 \(\chi^\star\) 使
+  \[
+  \widehat{\mu_{D_{M,x}}}(\chi^\star)=0;
+  \]
+  \item 若 \(N=\infty\)，则 \(\mu_{D_{M,x}}=\delta_0\) 且对一切 \(\chi\) 有 \(\widehat{\mu_{D_{M,x}}}(\chi)=1\)。
+\end{enumerate}
+因此当 \(N<\infty\) 时，从 \(\widehat{\mu_{D_{M,x}}}\) 首次偏离 \(1\) 的最小导子可恢复 \(LN+1\)。
+\end{theorem}
+
+\begin{proof}
+若 \(N=\infty\) 则结论平凡。
+设 \(N<\infty\)。由引理 \ref{lem:conclusion-halting-alpha-algebraic-form}，\(\alpha_{M,x}=-B^N=-2^{LN}\)，从而
+\(
+\operatorname{supp}(\mu_{D_{M,x}})\subset 2^{LN}\ZZ_2e
+\)。
+故对任意导子 \(k\le LN\) 的 \(\chi\)，在 \(\operatorname{supp}(\mu_{D_{M,x}})\) 上有 \(\chi\equiv 1\)，从而 \(\widehat\mu(\chi)=1\)。
+\par
+取 \(\chi^\star\) 为导子 \(LN+1\) 的角色，使其在 \(2^{LN}\ZZ_2e\) 上恰依赖于商 \((2^{LN}\ZZ_2e)/(2^{LN+1}\ZZ_2e)\cong \ZZ/2\ZZ\) 的奇偶类；
+例如可取
+\(
+\chi^\star(2^{LN}ye)=(-1)^{y\bmod 2}
+\)。
+又由 \(K_{D_{M,x}}=\alpha_{M,x}e\cdot C_B\) 与 \(C_B\) 的最低位 \(\varepsilon_0\) 等权可知
+\(
+(Y\bmod 2)
+\)
+为均匀 Bernoulli，其中 \(Y\sim \sum_{n\ge 0}\varepsilon_n B^n\)。
+因此
+\[
+\widehat{\mu_{D_{M,x}}}(\chi^\star)
+=\EE\bigl[\chi^\star(-2^{LN}Ye)\bigr]
+=\EE[(-1)^{Y\bmod 2}]
+=0.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[有限分辨率学习的不可分辨下界]\label{thm:conclusion-halting-finite-resolution-indistinguishability}
+固定分辨率 \(m\ge 1\)，并考虑仅能观测样本 \(X\sim \mu_{D_{M,x}}\) 的截断信息 \(X\bmod 2^m\ZZ_2e\) 的任意随机化算法。
+则不存在一条对所有 \((M,x)\) 同时成立的有界错误率判定规则来区分“停机”与“不停机”。
+更精确地：对任意固定 \(m\)，存在停机实例 \((M,x)\) 具有首次停机时间 \(N\ge \lceil m/L\rceil\)，使得
+\[
+X\bmod 2^m\ZZ_2e\equiv 0
+\quad\text{几乎处处},
+\]
+从而其观测分布与不停机情形 \(\delta_0\) 完全一致。
+\end{theorem}
+
+\begin{proof}
+取任意停机时间 \(N\ge \lceil m/L\rceil\) 的实例。
+由 \(\alpha_{M,x}=-2^{LN}\) 可知 \(\operatorname{supp}(\mu_{D_{M,x}})\subset 2^{LN}\ZZ_2e\subset 2^m\ZZ_2e\)，
+故任意样本截断后恒为 \(0\)。
+不停机情形同样恒为 \(0\)，因此任何仅依赖该截断信息的判定在这两类输入上不可区分。证毕。
+\end{proof}
+
+\paragraph{Lee--Yang 因子与局部因子的误差壁垒。}
+在 \(LG=\mathrm{SL}_2(\CC)\) 上取标准表示 \(V_{\mathrm{std}}\)，并对半单元 \(g\in LG\) 定义 Lee--Yang 因子
+\(
+LY_g(V_{\mathrm{std}}):=\operatorname{div}(\det(zI-g))
+\)。
+对实数 \(s>0\) 与素数 \(p\)，定义形式化局部因子
+\(
+L_p(s,g):=\det(I-p^{-s}g)^{-1}
+\)。
+
+\begin{theorem}[Langlands 参数退化的停机障碍与误差壁垒]\label{thm:conclusion-halting-langlands-parameter-degeneration-barrier}
+存在一个从 \((M,x)\) 到半单元素 \(g_{M,x}\in\mathrm{SL}_2(\CC)\) 的可计算构造，使得：
+\begin{enumerate}
+\normalfont
+  \item \(g_{M,x}=I\) 当且仅当 \(M(x)\) 不停机；
+  \item 若 \(M(x)\) 的首次停机时间为 \(N<\infty\)，则 \(g_{M,x}\) 的特征值为一对 \(2^{N+1}\) 次单位根 \((\lambda,\lambda^{-1})\) 且 \(\lambda\neq 1\)；
+  \item 对任意固定 \(s>0\) 与素数 \(p\)，存在常数 \(C(s,p)>0\) 使得当首次停机时间为 \(N<\infty\) 时有
+  \[
+  \bigl|L_p(s,g_{M,x})-(1-p^{-s})^{-2}\bigr|
+  \le C(s,p)\,2^{-N}.
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+令
+\[
+b_n=b_n(M,x):=\ind_{\{\text{\(M(x)\) 恰在第 \(n\) 步停机}\}}\in\{0,1\},
+\qquad
+r_{M,x}:=\sum_{n\ge 0}2^{-n-1}b_n\in[0,1].
+\]
+由于“恰在第 \(n\) 步停机”可由有限步模拟判定，\(r_{M,x}\) 为可计算实数。
+定义
+\[
+\lambda_{M,x}:=e^{2\pi i r_{M,x}}\in S^1,
+\qquad
+g_{M,x}:=\mathrm{diag}(\lambda_{M,x},\lambda_{M,x}^{-1})\in \mathrm{SL}_2(\CC).
+\]
+若不停机，则 \(b_n=0\)（\(\forall n\)），故 \(r_{M,x}=0\)、\(\lambda_{M,x}=1\)、\(g_{M,x}=I\)。
+若首次停机时间为 \(N\)，则 \(r_{M,x}=2^{-N-1}\) 且 \(\lambda_{M,x}\) 为 \(2^{N+1}\) 次单位根且不为 \(1\)。
+\par
+对误差估计，记 \(q:=p^{-s}\in(0,1)\)。
+则
+\[
+L_p(s,g_{M,x})=\frac{1}{(1-\lambda_{M,x}q)(1-\lambda_{M,x}^{-1}q)}.
+\]
+函数
+\(
+F(\lambda):=\bigl((1-\lambda q)(1-\lambda^{-1}q)\bigr)^{-1}
+\)
+在单位圆上解析且在 \(\lambda=1\) 的邻域 Lipschitz，
+从而存在常数 \(C(s,p)\) 使
+\(
+|F(\lambda)-F(1)|\le C(s,p)|\lambda-1|
+\)。
+又当 \(\lambda=e^{2\pi i/2^{N+1}}\) 时，
+\[
+|\lambda-1|\le 2\sin\!\left(\frac{\pi}{2^{N+1}}\right)\le \pi\,2^{-N}.
+\]
+合并即得所示界。证毕。
+\end{proof}
+
+\paragraph{纤维账本断点。}
+对 \(m\ge 1\)，令 \(\Omega_m:=\{0,1\}^m\)，并定义“分辨率 \(m\) 观测”投影
+\begin{equation}\label{eq:conclusion-halting-ledger-pi-m}
+\pi_m:\Omega_m\to (\ZZ_2e)/(B^m\ZZ_2e),\qquad
+\pi_m(\varepsilon_0,\dots,\varepsilon_{m-1})
+=\sum_{k=0}^{m-1}\varepsilon_k B^k\,\alpha_{M,x}e\pmod{B^m\ZZ_2e}.
+\end{equation}
+
+\begin{proposition}[账本缺陷的断点剖面]\label{prop:conclusion-halting-ledger-defect-kink}
+设 \(M(x)\) 的首次停机时间为 \(N\in\NN\cup\{\infty\}\)（不停机取 \(N=\infty\)）。
+则对任意 \(m\ge 1\) 与任意 \(y\in \pi_m(\Omega_m)\) 有
+\[
+\card{\pi_m^{-1}(y)}=2^{\min(m,N)},
+\]
+从而纤维对数体积缺陷
+\[
+\kappa_m:=\EE\bigl[\log \card{\pi_m^{-1}(Y)}\bigr]
+\qquad(Y\ \text{为}\ \pi_m(\Omega_m)\ \text{上的任意随机元})
+\]
+满足
+\[
+\kappa_m=\min(m,N)\log 2,
+\qquad
+\frac{\kappa_{m+1}-\kappa_m}{\log 2}=
+\begin{cases}
+1,& m<N,\\
+0,& m\ge N.
+\end{cases}
+\]
+\end{proposition}
+
+\begin{proof}
+若 \(N=\infty\)，则 \(\alpha_{M,x}=0\)，\(\pi_m\) 为常值映射，纤维大小为 \(2^m\)，结论成立。
+设 \(N<\infty\)，则 \(\alpha_{M,x}=-B^N\)。
+\par
+若 \(m\le N\)，则 \(\alpha_{M,x}\equiv 0\pmod{B^m}\)，故 \(\pi_m\) 常值，纤维大小 \(2^m\)。
+若 \(m>N\)，则对任意 \(\varepsilon\in\Omega_m\) 有
+\[
+\pi_m(\varepsilon)
+=-B^N\sum_{k=0}^{m-1}\varepsilon_k B^k e
+\equiv
+-B^N\sum_{k=0}^{m-N-1}\varepsilon_k B^k e
+\pmod{B^m},
+\]
+因为 \(B^N\cdot B^{m-N}=B^m\) 的项在模 \(B^m\) 下消失。
+因此像值仅依赖于前 \(m-N\) 个比特 \(\varepsilon_0,\dots,\varepsilon_{m-N-1}\)，而其余 \(N\) 个比特自由变化，故每条纤维大小恒为 \(2^N\)。
+将两种情形合并得到 \(\card{\pi_m^{-1}(y)}=2^{\min(m,N)}\)。
+其余公式由取对数与差分直接推出。证毕。
+\end{proof}
+
+\endinput
+

@@ -1,0 +1,515 @@
+\paragraph{stop-loss 容量曲线、幂散度单标量刚性、平衡剖面与最小扇区 Witten 电荷}
+在临界预言机容量双折线、二原子极限似然比、\(\chi^2\)-型极限常数对幂散度族的坐标化、折叠多重度的 Robin--Hood 调平机制以及审计偶窗最小退化扇区的同伦相位都已建立之后，还可把这些链条进一步压缩为下列七条彼此衔接的对象层后果。
+
+\begin{theorem}[临界 oracle 曲线恰为极限似然比的 stop-loss 变换]\label{thm:xi-time-part64ba-critical-oracle-stoploss-transform}
+沿用定理 \ref{thm:xi-foldbin-dyadic-capacity-critical-window-limit} 与定理 \ref{thm:xi-time-part64b-fold-information-geometry-two-point-collapse} 的记号。定义
+\[
+r_0:=\frac{\varphi^2}{\sqrt5},
+\qquad
+r_1:=\frac{\varphi}{\sqrt5},
+\]
+并令 \(R_\infty\) 为二原子随机变量
+\[
+R_\infty=
+\begin{cases}
+r_0,& \text{概率 } \varphi^{-1},\\[1mm]
+r_1,& \text{概率 } \varphi^{-2}.
+\end{cases}
+\]
+再记临界尺度下的最优成功率极限曲线为
+\[
+S(\tau):=\mathcal S_{\mathrm{bin}}(\tau)
+\qquad (\tau\ge 0),
+\]
+即
+\[
+S(\tau)=
+\begin{cases}
+\dfrac{\varphi^2}{\sqrt5}\,\tau,& 0\le \tau\le \varphi^{-1},\\[3mm]
+\dfrac{1}{\varphi\sqrt5}+\dfrac{\varphi}{\sqrt5}\,\tau,& \varphi^{-1}\le \tau\le 1,\\[3mm]
+1,& \tau\ge 1.
+\end{cases}
+\]
+则对一切 \(\tau\ge 0\)，成立精确恒等式
+\[
+\boxed{\;
+S(\tau)=\EE\!\left[\min\{R_\infty,\tau r_0\}\right]
+=
+\int_{0}^{\tau r_0}\PP(R_\infty>t)\,\dd t.\;}
+\]
+特别地，当 \(\tau\notin\{\varphi^{-1},1\}\) 时，
+\[
+\boxed{\;
+S'(\tau)=r_0\,\PP(R_\infty>\tau r_0).\;}
+\]
+因此，临界 oracle 曲线的全部折点恰由极限似然比尾分布的 stop-loss 变换完全产生。
+\end{theorem}
+\begin{proof}
+记
+\[
+\lambda:=\tau r_0.
+\]
+分三段讨论。
+
+若 \(0\le \tau\le \varphi^{-1}\)，则
+\[
+\lambda\le r_1,
+\]
+故
+\[
+\EE[\min\{R_\infty,\lambda\}]=\lambda=\frac{\varphi^2}{\sqrt5}\tau.
+\]
+
+若 \(\varphi^{-1}\le \tau\le 1\)，则
+\[
+r_1\le \lambda\le r_0,
+\]
+于是
+\[
+\EE[\min\{R_\infty,\lambda\}]
+=
+\varphi^{-2}r_1+\varphi^{-1}\lambda
+=
+\frac{1}{\varphi\sqrt5}+\frac{\varphi}{\sqrt5}\tau.
+\]
+
+若 \(\tau\ge 1\)，则
+\[
+\lambda\ge r_0,
+\]
+故
+\[
+\EE[\min\{R_\infty,\lambda\}]
+=
+\EE[R_\infty]
+=
+\varphi^{-1}r_0+\varphi^{-2}r_1
+=1.
+\]
+这与 \(S(\tau)\) 的三段闭式完全一致。
+
+第二个等式是 stop-loss 变换的标准层蛋糕恒等式
+\[
+\EE[\min\{X,\lambda\}]=\int_0^\lambda \PP(X>t)\,\dd t
+\qquad (X\ge 0),
+\]
+应用于 \(X=R_\infty\) 即得。对 \(\tau\) 在非折点处求导，链式法则给出
+\[
+S'(\tau)=r_0\,\PP(R_\infty>\tau r_0).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[单个 \texorpdfstring{$\chi^2$}{chi2} 型极限常数决定整个 power-divergence 谱，并满足二阶常系数微分方程]\label{thm:xi-time-part64ba-chi2-rigid-powerdivergence-ode}
+记
+\[
+\chi:=D_{f_2}^\infty.
+\]
+则对每个 \(\alpha>1\)，全部极限 power-divergence 常数都可由 \(\chi\) 显式恢复：
+\[
+\boxed{\;
+D_{f_\alpha,\infty}
+=
+5^{-\alpha/2}
+\left[
+\left(\frac{5\chi+3}{2}\right)^{2\alpha-1}
++
+\left(\frac{5\chi+3}{2}\right)^{\alpha-2}
+\right]-1.\;}
+\]
+若再令
+\[
+E(\alpha):=D_{f_\alpha,\infty}+1,
+\]
+\[
+c_\chi:=\log\frac{(5\chi+3)^2}{4\sqrt5},
+\qquad
+d_\chi:=\log\frac{5\chi+3}{2\sqrt5},
+\]
+则 \(E\) 满足精确线性常微分方程
+\[
+\boxed{\;
+E''(\alpha)-(c_\chi+d_\chi)E'(\alpha)+c_\chi d_\chi\,E(\alpha)=0.\;}
+\]
+因此，整个极限 power-divergence 族并非自由函数，而是由单个二阶统计常数 \(\chi\) 刚性锁定的二维指数簇。
+\end{theorem}
+\begin{proof}
+由结论 \ref{con:xi-time-part9l-chi2-generates-power-divergence-and-cumulants}，
+\[
+D_{f_2}^\infty=\frac{2\varphi-3}{5},
+\qquad
+\varphi=\frac{5D_{f_2}^\infty+3}{2}.
+\]
+代入 \(\chi=D_{f_2}^\infty\) 后得到
+\[
+\varphi=\frac{5\chi+3}{2}.
+\]
+同一结论又给出一般公式
+\[
+D_{f_\alpha}^\infty
+=
+\frac{1}{5^{\alpha/2}}\bigl(\varphi^{2\alpha-1}+\varphi^{\alpha-2}\bigr)-1.
+\]
+把 \(\varphi=(5\chi+3)/2\) 代入，即得第一条闭式。
+
+现看 \(E(\alpha)=D_{f_\alpha,\infty}+1\)。由上式，
+\[
+E(\alpha)
+=
+5^{-\alpha/2}\bigl(\varphi^{2\alpha-1}+\varphi^{\alpha-2}\bigr)
+=
+\varphi^{-1}\left(\frac{\varphi^2}{\sqrt5}\right)^\alpha
++
+\varphi^{-2}\left(\frac{\varphi}{\sqrt5}\right)^\alpha.
+\]
+再用
+\[
+\varphi=\frac{5\chi+3}{2}
+\]
+重写两条指数率，便得
+\[
+\frac{\varphi^2}{\sqrt5}
+=
+\frac{(5\chi+3)^2}{4\sqrt5}
+=
+e^{c_\chi},
+\qquad
+\frac{\varphi}{\sqrt5}
+=
+\frac{5\chi+3}{2\sqrt5}
+=
+e^{d_\chi}.
+\]
+故
+\[
+E(\alpha)=A e^{c_\chi\alpha}+B e^{d_\chi\alpha},
+\qquad
+A=\varphi^{-1},
+\qquad
+B=\varphi^{-2}.
+\]
+任意两指数和都满足
+\[
+(\partial_\alpha-c_\chi)(\partial_\alpha-d_\chi)E=0,
+\]
+亦即
+\[
+E''-(c_\chi+d_\chi)E'+c_\chi d_\chi E=0.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[黄金几何审计常数由同一个 \texorpdfstring{$\chi^2$}{chi2} 型极限标量完全恢复]\label{cor:xi-time-part64ba-chi2-recovers-golden-geometric-audits}
+仍记 \(\chi=D_{f_2}^\infty\)。则黄金分支上既有 Wasserstein/星差异审计常数可全部写成 \(\chi\) 的有理分式：
+\[
+\boxed{\;
+\lim_{\substack{n\to\infty\\ n\ \mathrm{even}}}F_n D_n^\ast
+=
+1+\frac{1}{5\chi+2}.\;}
+\]
+\[
+\boxed{\;
+\lim_{\substack{n\to\infty\\ n\ \mathrm{even}}}F_n T_n
+=
+\frac12+\frac{1}{2(5\chi+2)}.\;}
+\]
+\[
+\boxed{\;
+\lim_{\substack{n\to\infty\\ n\ \mathrm{odd}}}F_n T_n
+=
+\frac{17}{30}-\frac{1}{2(5\chi+2)}.\;}
+\]
+故同一个 \(\chi^2\)-型极限常数不仅决定信息散度族，而且刚性控制黄金分支的几何审计常数。
+\end{corollary}
+\begin{proof}
+文稿在黄金分支上已给出
+\[
+\lim_{\substack{n\to\infty\\ n\ \mathrm{even}}}F_nT_n
+=
+\frac12+\frac{1}{2\sqrt5},
+\]
+\[
+\lim_{\substack{n\to\infty\\ n\ \mathrm{odd}}}F_nT_n
+=
+\frac12-\frac{1}{2\sqrt5}+\frac{1}{15}
+=
+\frac{17}{30}-\frac{1}{2\sqrt5},
+\]
+并且偶数支上满足
+\[
+T_n=\frac12 D_n^\ast.
+\]
+另一方面，由结论 \ref{con:xi-time-part9l-chi2-generates-power-divergence-and-cumulants}，
+\[
+\sqrt5=5\chi+2.
+\]
+把该恒等式代入上面三条公式，便得到所示全部闭式。证毕。
+\end{proof}
+
+\begin{theorem}[每一级折叠多重度剖面都可由有限 Robin--Hood 链严格平衡化；平衡剖面位于其双随机轨道中]\label{thm:xi-time-part64ba-fold-multiplicity-majorization-balancing}
+记
+\[
+F:=F_{m+2},
+\qquad
+M:=2^m,
+\qquad
+M=aF+\rho,
+\qquad
+0\le \rho<F.
+\]
+将折叠多重度剖面写为
+\[
+d^{(m)}:=(d_m(u))_{u\in \ZZ/(F\ZZ)}\in \ZZ_{\ge 0}^{F},
+\]
+并定义平衡剖面
+\[
+b^{(m)}:=
+(\underbrace{a+1,\dots,a+1}_{\rho\text{ 个}},
+\underbrace{a,\dots,a}_{F-\rho\text{ 个}}).
+\]
+则在按非增序重排后，有主序关系
+\[
+\boxed{\;
+d^{(m),\downarrow}\succ b^{(m)}.\;}
+\]
+等价地，存在一个 \(F\times F\) 双随机矩阵 \(\Pi_m\) 使
+\[
+\boxed{\;
+b^{(m)}=\Pi_m\,d^{(m)}.\;}
+\]
+更强地，可由有限次平衡化操作
+\[
+(v_{u_1},v_{u_2})\longmapsto (v_{u_1}-1,v_{u_2}+1)
+\qquad (v_{u_1}\ge v_{u_2}+2)
+\]
+把 \(d^{(m)}\) 明确送到 \(b^{(m)}\)。
+\end{theorem}
+\begin{proof}
+结论 \ref{con:xi-time-part9l-fold-fourier-energy-arithmetic-lower-bound} 的证明已经给出如下严格调平机制：若某个整数向量 \(v\in\ZZ_{\ge 0}^{F}\) 满足
+\[
+\sum_u v_u=M
+\]
+且存在指标 \(u_1,u_2\) 使
+\[
+v_{u_1}\ge v_{u_2}+2,
+\]
+则执行一步 Robin--Hood 操作
+\[
+(v_{u_1},v_{u_2})\mapsto (v_{u_1}-1,v_{u_2}+1)
+\]
+会严格降低平方偏差和，因此有限步之后必然终止于某个任意两坐标相差至多 \(1\) 的向量。
+
+由于总和固定为
+\[
+M=aF+\rho,
+\]
+满足“任意两坐标相差至多 \(1\)” 的整数向量只能是恰有 \(\rho\) 个分量等于 \(a+1\)、其余 \(F-\rho\) 个分量等于 \(a\) 的排列，也就是 \(b^{(m)}\) 的一个置换。把这些分量按非增序排列，唯一得到
+\[
+b^{(m)}.
+\]
+因此 \(d^{(m)}\) 经过有限次 Robin--Hood 调平后确实到达 \(b^{(m)}\)。
+
+而 Hardy--Littlewood--Pólya 判别表明：一个向量可经有限次 Robin--Hood 操作被送到另一个向量，当且仅当前者 majorize 后者。故
+\[
+d^{(m),\downarrow}\succ b^{(m)}.
+\]
+再由 Hardy--Littlewood--Pólya 定理与 Birkhoff--von Neumann 定理，主序关系等价于存在双随机矩阵 \(\Pi_m\) 使
+\[
+b^{(m)}=\Pi_m d^{(m)}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[平衡剖面给出全阶 Rényi 熵的统一上包络]\label{cor:xi-time-part64ba-balanced-profile-universal-renyi-envelope}
+在定理 \ref{thm:xi-time-part64ba-fold-multiplicity-majorization-balancing} 的记号下，定义
+\[
+p_m(u):=\frac{d_m(u)}{2^m},
+\qquad
+p_m^{\mathrm{bal}}:=\frac{b^{(m)}}{2^m}.
+\]
+则对任意 \(\alpha>0\)，Rényi 熵满足
+\[
+\boxed{\;
+H_\alpha(p_m)\le H_\alpha(p_m^{\mathrm{bal}}).\;}
+\]
+其中当 \(\alpha\neq 1\) 时，
+\[
+H_\alpha(p):=\frac{1}{1-\alpha}\log\sum_u p(u)^\alpha,
+\]
+而上包络显式为
+\[
+\boxed{\;
+H_\alpha(p_m)
+\le
+\frac{1}{1-\alpha}
+\log\!\left(
+\frac{(F-\rho)a^\alpha+\rho(a+1)^\alpha}{(aF+\rho)^\alpha}
+\right).\;}
+\]
+在 Shannon 极限 \(\alpha\to 1\) 下，
+\[
+\boxed{\;
+H(p_m)\le
+-\frac{(F-\rho)a}{M}\log\frac{a}{M}
+-\frac{\rho(a+1)}{M}\log\frac{a+1}{M}.\;}
+\]
+并且上述各式取等当且仅当多重度剖面本身已经平衡。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-time-part64ba-fold-multiplicity-majorization-balancing}，
+\[
+d^{(m),\downarrow}\succ b^{(m)}.
+\]
+归一化后仍有
+\[
+p_m\succ p_m^{\mathrm{bal}}.
+\]
+而 Rényi 熵对一切 \(\alpha>0\) 都是 Schur--凹函数，故
+\[
+H_\alpha(p_m)\le H_\alpha(p_m^{\mathrm{bal}}).
+\]
+把平衡剖面
+\[
+p_m^{\mathrm{bal}}=
+\left(
+\underbrace{\frac{a+1}{M},\dots,\frac{a+1}{M}}_{\rho\text{ 个}},
+\underbrace{\frac{a}{M},\dots,\frac{a}{M}}_{F-\rho\text{ 个}}
+\right)
+\]
+直接代入 Rényi 熵定义，便得到
+\[
+H_\alpha(p_m^{\mathrm{bal}})
+=
+\frac{1}{1-\alpha}
+\log\!\left(
+\frac{(F-\rho)a^\alpha+\rho(a+1)^\alpha}{M^\alpha}
+\right).
+\]
+其中 \(M=aF+\rho\)，故即为题述上界。令 \(\alpha\to 1\) 即得 Shannon 形式。
+
+最后，由定理 \ref{thm:xi-time-part64ba-fold-multiplicity-majorization-balancing} 中 Robin--Hood 降平过程的严格性可知，若 \(d^{(m)}\) 不是平衡剖面，则主序关系严格；而 Rényi 熵在此情形下严格 Schur--凹，故等号仅当 \(d^{(m)}\) 本身已平衡时成立。证毕。
+\end{proof}
+
+\begin{theorem}[已审计偶窗的最小退化扇区携带一条显式可求的总 Witten 电荷]\label{thm:xi-time-part64ba-audited-even-minsector-total-witten-charge}
+对审计偶窗
+\[
+m\in\{6,8,10,12\},
+\]
+定义最小退化扇区
+\[
+S_{m,\min}:=\{x\in X_m:\ d_m(x)=d_{\min}(m)\},
+\]
+以及交错 Witten 指数
+\[
+W_x:=\sum_{S\in \mathsf{Ind}(\Gamma_x)}(-1)^{|S|}.
+\]
+再定义总 Witten 电荷
+\[
+\mathcal W_{\min}(m):=\sum_{x\in S_{m,\min}}W_x.
+\]
+则有精确公式
+\[
+\boxed{\;
+\mathcal W_{\min}(m)=
+\begin{cases}
+0,& m=6,12,\\[1mm]
+-F_m,& m=8,10.
+\end{cases}\;}
+\]
+特别地，
+\[
+\boxed{\;
+\frac{\mathcal W_{\min}(m)}{|S_{m,\min}|}=
+\begin{cases}
+0,& m=6,12,\\[1mm]
+-1,& m=8,10.
+\end{cases}\;}
+\]
+因此，最小退化扇区在审计偶窗上并不只是经历“可缩/不可缩”二分，而且携带一条从 \(0\) 到 \(-F_m\) 的整扇区总电荷跃迁。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-bin-min-degeneracy-fib-audited}，
+\[
+d_{\min}(6)=2,\qquad d_{\min}(8)=3,\qquad d_{\min}(10)=5,\qquad d_{\min}(12)=8,
+\]
+且
+\[
+|S_{m,\min}|=F_m.
+\]
+
+另一方面，附录定理 \ref{thm:derived-fiber-indcomplex-alternating-witten-parity} 给出
+\[
+W_x=
+\begin{cases}
+0,& d_m(x)\ \text{为偶},\\[1mm]
+(-1)^{\tau(x)},& d_m(x)\ \text{为奇}.
+\end{cases}
+\]
+故当 \(m=6,12\) 时，\(d_{\min}(m)=2,8\) 为偶，于是对每个
+\[
+x\in S_{m,\min}
+\]
+都有
+\[
+W_x=0.
+\]
+因此
+\[
+\mathcal W_{\min}(m)=0.
+\]
+
+当 \(m=8,10\) 时，\(d_{\min}(m)=3,5\) 为奇。又由定理 \ref{thm:xi-audited-even-minsector-homotopy-mod6-phase} 的证明，在这两种情形中都必有
+\[
+\tau(x)=1
+\qquad (x\in S_{m,\min}),
+\]
+因为
+\[
+3=F_4,\qquad 5=F_5
+\]
+分别只对应单一非平凡 Fibonacci 因子。于是
+\[
+W_x=(-1)^{\tau(x)}=-1
+\qquad (x\in S_{m,\min}).
+\]
+故
+\[
+\mathcal W_{\min}(m)= -|S_{m,\min}|=-F_m.
+\]
+最后再除以 \(|S_{m,\min}|=F_m\)，便得到平均电荷公式。证毕。
+\end{proof}
+
+\begin{corollary}[最小退化扇区的非平凡拓扑质量密度在审计偶窗上仅取两值 \(0\) 与 \(1\)]\label{cor:xi-time-part64ba-audited-even-minsector-topological-mass-density}
+定义
+\[
+\mathfrak m_{\min}(m)
+:=
+\frac{1}{|S_{m,\min}|}\sum_{x\in S_{m,\min}}|W_x|.
+\]
+则对审计偶窗 \(m\in\{6,8,10,12\}\) 有
+\[
+\boxed{\;
+\mathfrak m_{\min}(m)=
+\begin{cases}
+0,& m=6,12,\\[1mm]
+1,& m=8,10.
+\end{cases}\;}
+\]
+换言之，在这些审计偶窗上，最小退化扇区要么整体拓扑平凡，要么每条纤维都携带单位绝对 Witten 电荷；不存在混合相。
+\end{corollary}
+\begin{proof}
+由附录定理 \ref{thm:derived-fiber-indcomplex-alternating-witten-parity}，
+\[
+|W_x|=
+\begin{cases}
+0,& d_m(x)\ \text{为偶},\\[1mm]
+1,& d_m(x)\ \text{为奇}.
+\end{cases}
+\]
+再结合定理 \ref{thm:xi-time-part64ba-audited-even-minsector-total-witten-charge} 中对四个审计偶窗的逐窗判定，便立即得到所示两值结论。证毕。
+\end{proof}
+
+\noindent
+由此，临界 oracle 曲线、幂散度谱、折叠多重度剖面与最小退化扇区的拓扑相位不再是彼此平行的局部现象：一方面，临界容量双折线正是极限似然比的 stop-loss 影像，而整个 power-divergence 族又由单个 \(\chi^2\)-型极限常数刚性锁定；另一方面，Robin--Hood 调平把任意多重度剖面推向唯一平衡端点，并使这一平衡端点同时成为全阶 Rényi 熵的统一上包络；最后，审计偶窗上的最小退化扇区不只在同伦型上区分为可缩相与球面相，而且在交错 Witten 电荷层面进一步裂解为零电荷相与满密度单位电荷相。于是，统计 stop-loss、二阶信息坐标、双随机平衡化与拓扑电荷跃迁最终被压缩进同一条可审计主线。
+
+\endinput

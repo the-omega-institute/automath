@@ -1,0 +1,95 @@
+\subsection{精度势与微分熵账本：精度作为纤维代价}\label{subsec:unit-circle-phase-precision-ledger}
+本小节把 \eqref{eq:unit-circle-phase-derivative} 的 Jacobian 解释为一个\textbf{精度势}，并给出一个与正文“信息账本”同型的连续版恒等式：在可逆紧化下，原变量的尾部尺度以“精度负载”的期望形式进入账本。
+
+\begin{definition}[精度势]\label{def:unit-circle-phase-precision-potential}
+定义无参紧化门 \(\upsilon(x)=\frac{1}{\pi}\arctan(x)\) 的精度势为
+\begin{equation}\label{eq:unit-circle-phase-precision-potential}
+\boxed{\;
+\mathcal{P}(x):=-\log\left|\frac{\dd \upsilon}{\dd x}\right|
+=\log\pi+\log(1+x^2)\; }.
+\end{equation}
+\end{definition}
+
+\begin{proposition}[微分熵账本恒等式：压缩 \(\Leftrightarrow\) 精度负载]\label{prop:unit-circle-phase-diff-entropy-ledger}
+设 \(X\) 为 \(\RR\) 上具有密度的随机变量，定义 \(U=\upsilon(X)\in(-\tfrac12,\tfrac12)\)。
+记微分熵为
+\[
+h_{\mathrm{diff}}(X):=-\int_{\RR} f_X(x)\log f_X(x)\,\dd x,\qquad
+h_{\mathrm{diff}}(U):=-\int_{\mathbb{U}} f_U(u)\log f_U(u)\,\dd u.
+\]
+则有严格恒等式
+\begin{equation}\label{eq:unit-circle-phase-diff-entropy-ledger}
+\boxed{\;
+h_{\mathrm{diff}}(X)=h_{\mathrm{diff}}(U)+\mathbb{E}\bigl[\mathcal{P}(X)\bigr]\; }.
+\end{equation}
+\end{proposition}
+\begin{proof}
+由 \(u=\upsilon(x)\) 的可逆性与密度换元公式，
+\(
+f_U(u)=f_X(x)\left|\frac{\dd x}{\dd u}\right|
+\)
+其中 \(x=\upsilon^{-1}(u)\)。
+故
+\[
+\log f_U(u)=\log f_X(x)-\log\left|\frac{\dd \upsilon}{\dd x}\right|
+=\log f_X(x)+\mathcal{P}(x).
+\]
+两侧乘以 \(f_U(u)\dd u=f_X(x)\dd x\) 并积分，得到
+\[
+-h_{\mathrm{diff}}(U)
+=\int_{\RR} f_X(x)\log f_X(x)\,\dd x+\mathbb{E}[\mathcal{P}(X)]
+=-h_{\mathrm{diff}}(X)+\mathbb{E}[\mathcal{P}(X)],
+\]
+移项即得 \eqref{eq:unit-circle-phase-diff-entropy-ledger}。证毕。
+\end{proof}
+
+\begin{remark}[与正文信息账本的同型关系]\label{rem:unit-circle-phase-precision-ledger-vs-pom}
+命题 \ref{prop:unit-circle-phase-diff-entropy-ledger} 的结构与正文“折叠信息账本”同型：在窗口层，粗粒化 \(\Fold_m\) 的纤维体积缺陷以 \(\kappa_m(\pi)=\mathbb{E}_\pi[\log d_m(X)]\) 进入熵分解（定理 \ref{thm:pom-kl-ledger}）；
+在连续紧化门 \(\upsilon\) 下，对应的缺陷项由精度势 \(\mathcal{P}(x)=\log\pi+\log(1+x^2)\) 给出。
+在两种口径中，“可逆压缩”并不消灭信息，而是把不可见自由度迁移为一个可审计的代价项：离散情形为纤维对数体积，连续情形为 Jacobian 的负对数。
+\end{remark}
+
+\begin{proposition}[相位算术的对数条件数恒等式（雅可比账本）]\label{prop:unit-circle-phase-log-condition-numbers}
+取 \(u,v\in\mathbb{U}\)，并记
+\[
+x:=\tan(\pi u),\qquad y:=\tan(\pi v).
+\]
+则相位加法 \(u\boxplus v=\upsilon(x+y)\) 与相位乘法 \(u\boxtimes v=\upsilon(xy)\) 的输入端导数满足
+\begin{align}
+\left|\frac{\partial(u\boxplus v)}{\partial u}\right|
+&=\frac{1+x^2}{1+(x+y)^2},
+&
+\left|\frac{\partial(u\boxplus v)}{\partial v}\right|
+&=\frac{1+y^2}{1+(x+y)^2},\label{eq:unit-circle-phase-addition-jacobian}\\[4pt]
+\left|\frac{\partial(u\boxtimes v)}{\partial u}\right|
+&=\frac{|y|\,(1+x^2)}{1+x^2y^2},
+&
+\left|\frac{\partial(u\boxtimes v)}{\partial v}\right|
+&=\frac{|x|\,(1+y^2)}{1+x^2y^2}.\label{eq:unit-circle-phase-multiplication-jacobian}
+\end{align}
+若以定义 \ref{def:unit-circle-phase-precision-potential} 的精度势 \(\mathcal{P}(t)=\log\pi+\log(1+t^2)\) 表示对数账本，则有严格恒等式
+\begin{align}
+\log\left|\frac{\partial(u\boxplus v)}{\partial u}\right|
+&=\mathcal{P}(x)-\mathcal{P}(x+y),
+&
+\log\left|\frac{\partial(u\boxplus v)}{\partial v}\right|
+&=\mathcal{P}(y)-\mathcal{P}(x+y),\label{eq:unit-circle-phase-addition-log-ledger}\\[4pt]
+\log\left|\frac{\partial(u\boxtimes v)}{\partial u}\right|
+&=\log|y|+\mathcal{P}(x)-\mathcal{P}(xy),
+&
+\log\left|\frac{\partial(u\boxtimes v)}{\partial v}\right|
+&=\log|x|+\mathcal{P}(y)-\mathcal{P}(xy).\label{eq:unit-circle-phase-mul-log-ledger}
+\end{align}
+\end{proposition}
+\begin{proof}
+由定义 \ref{def:unit-circle-phase-transport-arith}，
+\(
+u\boxplus v=\upsilon(x+y)
+\)
+与
+\(
+u\boxtimes v=\upsilon(xy)
+\)。
+又由 \(\upsilon'(t)=\bigl(\pi(1+t^2)\bigr)^{-1}\) 及 \(x=\tan(\pi u)\Rightarrow \frac{\dd x}{\dd u}=\pi(1+x^2)\)，链式法则立得 \eqref{eq:unit-circle-phase-addition-jacobian}--\eqref{eq:unit-circle-phase-multiplication-jacobian}。
+将 \(\mathcal{P}(t)=\log\pi+\log(1+t^2)\) 代入并取对数可得 \eqref{eq:unit-circle-phase-addition-log-ledger}--\eqref{eq:unit-circle-phase-mul-log-ledger}；其中常数 \(\log\pi\) 在势差中消去。证毕。
+\end{proof}

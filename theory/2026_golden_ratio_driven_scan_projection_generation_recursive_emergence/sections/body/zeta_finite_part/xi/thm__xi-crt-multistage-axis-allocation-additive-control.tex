@@ -1,0 +1,76 @@
+% Multi-stage prime-axis allocation under disjointness constraint.
+
+\begin{theorem}[多阶段 CRT 素数轴分配的加性控制律]\label{thm:xi-crt-multistage-axis-allocation-additive-control}
+设 \(k\ge 1\)，并给定阈值 \(A_1,\dots,A_k>1\)。
+要求选择两两不交的素数集合 \(S_1,\dots,S_k\subset\mathbb P\) 使得
+\[
+\prod_{p\in S_i}p\ \ge\ A_i\qquad(1\le i\le k),
+\]
+并最小化全局最大素数
+\[
+p_{\max}:=\max\Bigl(\bigcup_{i=1}^k S_i\Bigr).
+\]
+记 Chebyshev 函数
+\[
+\vartheta(x):=\sum_{p\le x}\log p.
+\]
+则最优值满足精确刻画
+\[
+\boxed{\;
+p_{\max}^\ast
+=\inf\left\{x\ge 2:\ \vartheta(x)\ge \sum_{i=1}^k\log A_i\right\}. \;}
+\]
+并且当 \(\sum_i\log A_i\to\infty\) 时有渐近
+\[
+p_{\max}^\ast\ \sim\ \sum_{i=1}^k\log A_i,
+\]
+其中 \(\sim\) 取在实数意义下。
+\end{theorem}
+\begin{proof}
+\textbf{必要性。}
+任取可行的 \((S_i)\)。
+取对数并求和得
+\[
+\sum_{i=1}^k\log A_i
+\le
+\sum_{i=1}^k\sum_{p\in S_i}\log p
+=
+\sum_{p\in\cup_i S_i}\log p
+\le
+\sum_{p\le p_{\max}}\log p
+=\vartheta(p_{\max}),
+\]
+从而若 \(\vartheta(x)<\sum_i\log A_i\) 则任何满足 \(p_{\max}\le x\) 的方案均不可能可行，得到下确界形式的下界。
+\par
+\textbf{充分性。}
+若 \(\vartheta(x)\ge \sum_i\log A_i\)，将全部不超过 \(x\) 的素数按从小到大排列并依次分配：
+先把素数逐个加入 \(S_1\) 直至 \(\sum_{p\in S_1}\log p\ge \log A_1\)，再继续向 \(S_2\) 分配直至满足 \(\log A_2\)，依此类推。
+由于总和 \(\sum_{p\le x}\log p\) 足以覆盖 \(\sum_i\log A_i\)，该过程必在用尽全部 \(\le x\) 的素数前完成 \(k\) 个阈值，因此得到一组可行解并满足 \(p_{\max}\le x\)。
+故最小可能的 \(p_{\max}\) 恰为所示下确界。
+\par
+渐近式由素数定理等价形式 \(\vartheta(x)\sim x\) 直接推出。
+证毕。
+\end{proof}
+
+\begin{corollary}[多阶段 prime-axis 数量的统一标度]\label{cor:xi-crt-multistage-axis-count-scaling}
+在定理 \ref{thm:xi-crt-multistage-axis-allocation-additive-control} 的设定下，令
+\(
+L:=\sum_{i=1}^k\log A_i
+\)。
+当 \(L\to\infty\) 时，达到最优最大素数标度 \(p_{\max}^\ast\sim L\) 所需的最小总素数轴数 \(K^\ast\) 满足
+\[
+K^\ast\ \sim\ \frac{L}{\log L}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-crt-multistage-axis-allocation-additive-control} 得 \(p_{\max}^\ast\sim L\)。
+取最小轴数时，可取全部不超过 \(p_{\max}^\ast\) 的素数（不重复），于是 \(K^\ast=\pi(p_{\max}^\ast)\)。
+由素数定理 \(\pi(x)\sim x/\log x\) 得
+\(
+K^\ast\sim p_{\max}^\ast/\log p_{\max}^\ast\sim L/\log L
+\)。
+证毕。
+\end{proof}
+
+\endinput
+

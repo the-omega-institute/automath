@@ -1,0 +1,277 @@
+% (User input window)
+
+\subsubsection{Dirichlet 角色分解：primitive 扭点表的角色分辨与同余类切片幂和}\label{subsubsec:finite-part-dirichlet-character-torsion-spectral-slices}
+上一段把 cyclotomic 原子解释为 primitive 扭点平均（推论 \ref{cor:finite-part-cyclotomic-atom-ramanujan-projection}）。
+本段进一步引入模 \(q\) 的 Dirichlet 角色权重，把单层 primitive 扭点表提升为“角色分辨”的谱幂和接口；
+在素数模情形下，该接口可与常数层的 \(q\)-轴压缩（\S\ref{subsec:finite-part-cyclic-lift-cyclotomic-microscope}）拼接为完全可逆的同余类切片重构。
+
+\paragraph{设定：约化谱多项式与角色扭点泛函}
+沿用 \S\ref{subsubsec:finite-part-ramanujan-parseval-nyquist} 的记号：
+设 \(M\in\ZZ_{\ge0}^{d\times d}\) primitive，\(\rho=\rho(M)>0\)，并记归一化非 Perron 谱点 \(\lambda_k=\mu_k/\rho\ (k=2,\dots,d)\)，从而 \(|\lambda_k|<1\)。
+定义
+\[
+F_M(t):=\frac{\det(I-tM/\rho)}{1-t}=\prod_{k=2}^{d}(1-\lambda_k t),
+\qquad
+u_n(M):=\sum_{k=2}^{d}\lambda_k^{n}\quad(n\ge1).
+\]
+固定整数 \(q\ge2\)，记 \(U(q):=(\ZZ/q\ZZ)^\times\)、\(\omega_q:=e^{2\pi i/q}\)。
+对任意 Dirichlet 角色 \(\chi\)（模 \(q\)，允许非本原，视作 \(U(q)\) 的角色）定义角色扭点泛函
+\[
+\mathcal{L}_M(\chi;q):=-\sum_{a\in U(q)}\chi(a)\,\log F_M(\omega_q^{\,a})\in\CC/2\pi i\ZZ,
+\]
+其中 \(\log F_M\) 取 \(|t|\le1\) 上由 \(F_M(0)=1\) 所诱导的解析分支（因 \(|\lambda_k|<1\)，该分支在各 \(\omega_q^{\,a}\) 处良定义）。
+当 \(\chi=\chi_0\) 为平凡角色时，由定理 \ref{thm:finite-part-cyclotomic-atom-primitive-torsion-average} 有 \(\mathcal{L}_M(\chi_0;q)=\mathcal{C}_q(M)\)。
+
+\begin{theorem}[Gauss--Dirichlet 展开与角色分辨的谱幂和]\label{thm:finite-part-dirichlet-torsion-gauss-expansion}
+令
+\[
+G(\chi;n):=\sum_{a\in U(q)}\chi(a)\,\omega_q^{\,an}\qquad(n\ge1),
+\qquad
+\tau(\chi):=G(\chi;1)=\sum_{a\in U(q)}\chi(a)\omega_q^{\,a}.
+\]
+则有绝对收敛恒等式
+\[
+\boxed{\;
+\mathcal{L}_M(\chi;q)=\sum_{n\ge1}\frac{u_n(M)}{n}\,G(\chi;n)\;}
+\]
+并且对一切满足 \((n,q)=1\) 的 \(n\) 有
+\[
+G(\chi;n)=\overline{\chi}(n)\,\tau(\chi).
+\]
+若 \(\chi\) 为本原 Dirichlet 角色（导子为 \(q\)），则 \(\tau(\chi)\neq0\)，且以 Dirichlet 约定 \(\chi(n)=0\)（当 \((n,q)>1\)）时，
+\[
+G(\chi;n)=\overline{\chi}(n)\,\tau(\chi)\qquad(n\ge1),
+\]
+从而
+\[
+\boxed{\;
+\mathcal{L}_M(\chi;q)
+=\tau(\chi)\sum_{\substack{n\ge1\\(n,q)=1}}\frac{u_n(M)}{n}\,\overline{\chi}(n)\;}
+\]
+给出同余类切片幂和的 Dirichlet--Fourier 读出。
+\end{theorem}
+\begin{proof}
+由 \(-\log(1-x)=\sum_{n\ge1}x^n/n\)（\(|x|<1\)）与 \(|\lambda_k|<1\) 得
+\[
+-\log F_M(\omega_q^{\,a})
+=\sum_{n\ge1}\frac{u_n(M)}{n}\,\omega_q^{\,an},
+\]
+且该级数绝对收敛允许逐项求和。
+将其乘以 \(\chi(a)\) 并对 \(a\in U(q)\) 求和，交换求和次序即得第一式。
+\par
+当 \((n,q)=1\) 时，乘法 \(a\mapsto an\) 在群 \(U(q)\) 上为置换，故
+\[
+G(\chi;n)=\sum_{a\in U(q)}\chi(a)\omega_q^{\,an}
+=\sum_{a\in U(q)}\chi(an^{-1})\omega_q^{\,a}
+=\overline{\chi}(n)\,G(\chi;1)
+=\overline{\chi}(n)\,\tau(\chi).
+\]
+本原情形下对 \((n,q)>1\) 有 \(G(\chi;n)=0\) 为标准 Gauss 和性质（亦可视作 \(\chi(n)=0\) 时的同一公式）。证毕。
+\end{proof}
+
+\begin{corollary}[角色分辨的同余类投影：一层 primitive 扭点表的 Dirichlet--Fourier 读出]\label{cor:finite-part-dirichlet-character-projection}
+设 \(q\) 固定且 \(\chi\) 为本原非平凡角色。
+则 \(\mathcal{L}_M(\chi;q)/\tau(\chi)\) 仅依赖于序列 \(\{u_n(M)/n\}\) 在 \(U(q)\) 上的 Dirichlet--Fourier 分量，
+并给出按同余类 \((n\bmod q)\) 的“角色分辨”谱投影。
+\end{corollary}
+
+\paragraph{素数模的完备反演：由一层 \(q\) 的角色扭点表恢复全部单位同余类切片}
+对一般合数模数，primitive 扭点表仅覆盖 \(\omega_q\) 的 primitive 轨道，需结合除数格上的常数层压缩做去混叠归约。
+在 \(q\) 为素数时，该归约可写成一条完全显式的反演。
+
+\begin{theorem}[素数模的角色正交反演：固定 \(q\) 上的角色扭点表唯一决定单位切片势能]\label{thm:finite-part-dirichlet-character-inversion-prime}
+设 \(q\ge3\) 为素数，记 \(U(q)=\{1,\dots,q-1\}\)。
+对每个 \(r\in U(q)\) 定义单位同余类切片势能
+\[
+V_{q,r}(M):=\sum_{m\ge0}\frac{u_{r+mq}(M)}{r+mq}.
+\]
+令 \(\widehat{U(q)}\) 为 \(U(q)\) 的全部角色（等同于模 \(q\) 的全部 Dirichlet 角色），并对每个角色 \(\chi\in\widehat{U(q)}\) 定义
+\[
+A(\chi):=
+\begin{cases}
+\dfrac{\mathcal{L}_M(\chi;q)}{\tau(\chi)}, & \chi\neq\chi_0,\\[10pt]
+\displaystyle \sum_{\substack{n\ge1\\(n,q)=1}}\frac{u_n(M)}{n}
+=-\log F_M(1)-\sum_{m\ge1}\frac{u_{qm}(M)}{qm}
+=\log C(M)-B_q(M), & \chi=\chi_0,
+\end{cases}
+\]
+其中 \(B_q(M):=\Psi_q(M)/q\) 见命题 \ref{prop:finite-part-cyclic-lift-mobius-inversion} 的记号。
+则对每个 \(r\in U(q)\) 有严格反演式
+\[
+\boxed{\;
+V_{q,r}(M)=\frac{1}{q-1}\sum_{\chi\in\widehat{U(q)}}A(\chi)\,\chi(r)\; }.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:finite-part-dirichlet-torsion-gauss-expansion}，
+对每个非平凡角色 \(\chi\neq\chi_0\)（其导子必为 \(q\)）有
+\[
+A(\chi)
+=\sum_{\substack{n\ge1\\(n,q)=1}}\frac{u_n(M)}{n}\,\overline{\chi}(n)
+=\sum_{r\in U(q)}\overline{\chi}(r)\,V_{q,r}(M),
+\]
+其中最后一步按 \(n\equiv r\pmod q\) 分组。
+而 \(A(\chi_0)\) 为 \((n,q)=1\) 的无权系数，已由 \(-\log F_M(1)=\sum_{n\ge1}u_n(M)/n\) 与倍数求和 \(\sum_{m\ge1}u_{qm}(M)/(qm)=B_q(M)\) 给出。
+于是 \(\{A(\chi)\}_{\chi\in\widehat{U(q)}}\) 恰为函数 \(r\mapsto V_{q,r}\) 在紧群 \(U(q)\) 上的 Fourier 系数族，
+由角色正交性立即得到所示反演。证毕。
+\end{proof}
+
+\begin{corollary}[固定素数模的“单层可逆接口”]\label{cor:finite-part-dirichlet-character-single-layer-complete-prime}
+在定理 \ref{thm:finite-part-dirichlet-character-inversion-prime} 的设定下，
+固定素数 \(q\) 上的有限数据
+\[
+\bigl\{\mathcal{L}_M(\chi;q)\bigr\}_{\chi\in\widehat{U(q)}}\ \cup\ \{C(M),C(M^{\langle q\rangle})\}
+\]
+唯一决定全部单位切片势能 \(\{V_{q,r}(M)\}_{r\in U(q)}\)，从而给出按同余类分层的谱幂和投影接口。
+\end{corollary}
+
+\paragraph{角色消失与 cyclotomic 对称刚性}
+\begin{theorem}[非主角色消失当且仅当 cyclotomic 对称闭合]\label{thm:finite-part-dirichlet-vanishing-cyclotomic-symmetry}
+固定整数 \(q\ge2\)。
+称归一化非 Perron 谱多重集 \(\{\lambda_k\}_{k=2}^d\) 具有 \(\omega_q\)-闭合性，若对每个谱点 \(\lambda\)（含重数）均有
+\(\{\lambda\omega_q^j:0\le j\le q-1\}\)（按重数）包含于谱多重集。
+则以下两命题等价：
+\begin{enumerate}
+  \item 对所有本原非平凡 Dirichlet 角色 \(\chi\ (\bmod q)\) 有 \(\mathcal{L}_M(\chi;q)=0\)；
+  \item 存在多项式 \(G(t)\in\CC[t]\) 使
+  \[
+  F_M(t)=G(t^q),
+  \]
+  等价地，\(\{\lambda_k\}\) 具有 \(\omega_q\)-闭合性。
+\end{enumerate}
+在该情形下，幂和满足严格稀疏性：
+\(u_n(M)=0\) 当 \((n,q)=1\)，且对 \(n\ge1\) 有 \(u_{qn}(M)=q\,u_n'(G)\)，其中 \(u_n'(G)\) 为 \(G\) 的根幂和。
+\end{theorem}
+\begin{proof}[证明要点]
+若 \(F_M(t)=G(t^q)\)，则对任意 \(a\in U(q)\) 有 \(F_M(\omega_q^{\,a})=G(1)\) 为常数；
+对任意非平凡角色 \(\chi\)，因 \(\sum_{a\in U(q)}\chi(a)=0\)，故 \(\mathcal{L}_M(\chi;q)=0\)。
+\par
+反向，若对所有本原非平凡 \(\chi\) 有 \(\mathcal{L}_M(\chi;q)=0\)，则由角色正交性得到函数
+\(a\mapsto \log F_M(\omega_q^{\,a})\) 在 \(U(q)\) 上为常数，从而
+\(\sum_{a\in U(q)}\omega_q^{\,an}\log F_M(\omega_q^{\,a})=0\) 对所有 \((n,q)=1\) 成立。
+结合
+\(
+-\log F_M(t)=\sum_{n\ge1}u_n(M)t^n/n
+\)
+的绝对收敛展开与 \(|\lambda_k|<1\) 的指数衰减，
+可将“单位同余类切片完全退化”提升为幂和稀疏性 \(u_n(M)=0\)（当 \((n,q)=1\)），
+继而推出 \(-\log F_M(t)\) 仅含 \(t^{qm}\) 项，故 \(F_M(t)=G(t^q)\)。
+\end{proof}
+
+\paragraph{常数 \(q\)-轴与 primitive 轨道：双重 Möbius 反演同构（接口化重述）}
+\begin{corollary}[循环 lift 常数序列唯一确定 primitive 轨道序列]\label{cor:finite-part-cyclic-constant-determines-prime-orbits}
+给定全体循环 lift 留数常数序列 \(\{C(M^{\langle q\rangle})\}_{q\ge1}\)，可由命题 \ref{prop:finite-part-cyclic-lift-mobius-inversion} 精确恢复幂和序列 \(\{u_n(M)\}_{n\ge1}\)，从而恢复
+\[
+\Tr(M^n)=\rho^n\bigl(1+u_n(M)\bigr)\qquad(n\ge1),
+\]
+并进一步由 Witt/Möbius 反演得到 primitive 轨道数
+\[
+p_n(M)=\frac{1}{n}\sum_{m\mid n}\mu(m)\,\Tr\!\bigl(M^{n/m}\bigr)\qquad(n\ge1).
+\]
+因此，“循环 lift 常数序列”与“primitive 轨道序列”在纯代数意义下严格等价。
+\end{corollary}
+
+\paragraph{near-RH 的 \(q\)-轴判别：平方根谱界与常数层包络的统一压制}
+\begin{corollary}[kernel-RH 等价于常数层包络的指数压制]\label{cor:finite-part-near-rh-q-axis-envelope}
+沿用定义 \ref{def:finite-part-cyclic-lift-psi} 的记号，记
+\(
+\Lambda_{\mathrm{rel}}(M):=\max_{k\ge2}|\lambda_k|.
+\)
+则 kernel-RH（\(\Lambda_{\mathrm{rel}}(M)\le\rho^{-1/2}\)）等价于存在常数 \(K>0\) 使对一切 \(q\ge1\) 有
+\[
+|\Psi_q(M)|\le K\,\rho^{-q/2}.
+\]
+更强地，若 \(\Lambda_{\mathrm{rel}}(M)>\rho^{-1/2}\)，则存在无穷多 \(q\) 使
+\(
+|\Psi_q(M)|\ge c\,\Lambda_{\mathrm{rel}}(M)^q
+\)
+（某个常数 \(c>0\)）。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:finite-part-cyclic-lift-limsup-spectral-gap}
+\(
+\limsup_{q\to\infty}|\Psi_q(M)|^{1/q}=\Lambda_{\mathrm{rel}}(M)
+\)
+立得。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$q$}{q}-轴能量提取边界模长多重度]\label{thm:finite-part-boundary-multiplicity-qaxis-energy}
+令
+\(
+\Lambda:=\Lambda_{\mathrm{rel}}(M)=\max_{k\ge2}|\lambda_k|\in(0,1)
+\)，
+并令达到最大模长的谱点集合为
+\[
+\mathcal{E}_\Lambda:=\{\lambda_k:\ |\lambda_k|=\Lambda\},
+\qquad
+r:=|\mathcal{E}_\Lambda|\ \ (\text{按代数重数计}).
+\]
+将 \(\mathcal{E}_\Lambda\) 写为 \(\lambda_k=\Lambda\,\eta_k\)（\(|\eta_k|=1\)，\(k=1,\dots,r\)，按重数列出）。
+则存在 \(0\le \Lambda'<\Lambda\) 使
+\[
+u_q(M)=\Lambda^{q}\sum_{k=1}^{r}\eta_k^{q}+O\!\bigl((\Lambda')^{q}\bigr)\qquad(q\to\infty).
+\]
+因此对 Ces\`aro 能量平均成立极限
+\[
+\boxed{\;
+\lim_{N\to\infty}\frac{1}{N}\sum_{q=1}^{N}\frac{|u_q(M)|^2}{\Lambda^{2q}}
+=\sum_{\zeta\in\mathbb{T}} m(\zeta)^2\; },
+\]
+其中 \(m(\zeta)\) 为 \(\eta_k\) 中等于 \(\zeta\) 的重数（故 \(\sum_\zeta m(\zeta)=r\)）。
+特别地，若边界谱角满足一般位置条件（\(\eta_i\overline{\eta_j}\) 非单位根当 \(i\neq j\)），则上式右端退化为 \(r\)，并且一般总有夹逼
+\[
+\boxed{\;
+r\ \le\ \limsup_{N\to\infty}\frac{1}{N}\sum_{q=1}^{N}\frac{|u_q(M)|^2}{\Lambda^{2q}}\ \le\ r^2\; }.
+\]
+同样的结论对 \(\Psi_q(M)\) 亦成立：因为由命题 \ref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum} 有
+\(
+\Psi_q(M)=u_q(M)+O(\Lambda^{2q})
+\)，
+从而用 \(\Psi_q\) 代替 \(u_q\) 不改变上述能量极限与夹逼。
+\end{theorem}
+\begin{proof}
+将
+\(
+t_q:=\sum_{k=1}^{r}\eta_k^{q}
+\)
+代入 \(u_q(M)=\Lambda^{q}t_q+O((\Lambda')^{q})\)。
+则
+\[
+\frac{|u_q(M)|^2}{\Lambda^{2q}}
+=|t_q|^2+O\!\left(\left(\frac{\Lambda'}{\Lambda}\right)^{q}\right),
+\]
+且误差在 Ces\`aro 平均下趋于 \(0\)。
+另一方面，
+\[
+|t_q|^2=\sum_{i,j=1}^{r}(\eta_i\overline{\eta_j})^{q}.
+\]
+对每个复数 \(\xi\) 满足 \(|\xi|=1\)，有
+\(
+\lim_{N\to\infty}\frac{1}{N}\sum_{q=1}^{N}\xi^{q}=1
+\)
+当且仅当 \(\xi=1\)，否则极限为 \(0\)。
+因此
+\[
+\lim_{N\to\infty}\frac{1}{N}\sum_{q=1}^{N}|t_q|^2
+=\#\{(i,j):\ \eta_i=\eta_j\}
+=\sum_{\zeta} m(\zeta)^2.
+\]
+一般位置条件下 \(m(\zeta)\in\{0,1\}\)，故极限为 \(r\)；一般夹逼 \(r\le \sum_\zeta m(\zeta)^2\le r^2\) 由 Cauchy--Schwarz 直接推出。
+最后，用 \(\Psi_q=u_q+O(\Lambda^{2q})\) 代入即可得到对 \(\Psi_q\) 的同型结论。证毕。
+\end{proof}
+
+\begin{remark}[对数分支的规范化与代数可核验性]\label{rem:finite-part-torsion-log-branch-normalization}
+由于 \(|\lambda_k|<1\)，约化谱多项式 \(F_M(t)=\prod_{k\ge2}(1-\lambda_k t)\) 在闭单位盘 \(\{|t|\le1\}\) 内无零点，
+从而存在唯一的全纯对数 \(\log F_M\) 满足 \(\log F_M(0)=0\)；因此 \(\log F_M(\omega_q^{\,a})\) 的取值在本文制度下是\emph{规范确定}的（无需额外分支选择）。
+在此规范下，\(\mathcal{L}_M(\chi;q)\) 实际上给出确定的复数；将其写成 \(\CC/2\pi i\ZZ\) 仅是为了强调其对多值对数的分支不变性。
+\par
+若进一步 \(F_M(t)\) 的系数属于某个数域 \(K\)（例如由 \(\rho\) 所生成的代数扩张），则对任意 \(q\) 与任意 \(a\in U(q)\) 有
+\(
+F_M(\omega_q^{\,a})\in K(\omega_q)
+\)；
+从而单层 torsion 表 \(\{F_M(\omega_q^{\,a})\}_{a\in U(q)}\) 与其 Dirichlet 角色分解
+\(\{\mathcal{L}_M(\chi;q)\}_\chi\)
+在原则上都可在有限扩张域 \(K(\omega_q)\) 的 Galois 作用下被一致追踪（在对数层面通过上述规范化消除全局 \(2\pi i\ZZ\) 不定性）。
+同样的规范化亦适用于 Schur 通道的扭点多项式与扭点角色泛函（见 \S\ref{subsubsec:pom-wreath-artin-factorization} 中的定义 \ref{def:pom-schur-dirichlet-torsion-functional}）。
+\end{remark}
+

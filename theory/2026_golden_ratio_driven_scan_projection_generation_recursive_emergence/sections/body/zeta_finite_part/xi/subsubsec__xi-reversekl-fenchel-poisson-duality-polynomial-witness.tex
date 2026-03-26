@@ -1,0 +1,260 @@
+\subsubsection{Fenchel 对偶与外多项式证书：反向相对熵的线性化接口与单频封口}\label{subsubsec:xi-reversekl-fenchel-poisson-duality-polynomial-witness}
+本段沿用 \S\ref{subsubsec:xi-reversekl-variance-poisson-carath-energy} 的记号。
+对任意 \(0<r<1\) 与 \(\mu\in\mathrm{Prob}(\TT)\)，令
+\[
+P_r(\theta):=\frac{1-r^2}{1-2r\cos\theta+r^2}
+=\sum_{n\in\ZZ}r^{|n|}e^{in\theta},
+\qquad
+p_r(\theta):=(P_r*\mu)(\theta),
+\qquad
+\mathcal H_r(\mu):=\int_{\TT}-\log p_r(\theta)\,\dd m(\theta),
+\]
+其中 \(m(\dd\theta)=\dd\theta/(2\pi)\)。
+关于 Poisson 核的显式形式与 Fourier 表示可参见 \cite{Duren1970TheoryHp,Garnett2007BoundedAnalyticFunctions}。
+
+\begin{theorem}[Fenchel--Poisson 对偶与线性化上确界表示]\label{thm:xi-reversekl-fenchel-poisson-duality}
+对任意 \(0<r<1\) 与 \(\mu\in\mathrm{Prob}(\TT)\)，成立精确对偶公式
+\begin{equation}\label{eq:xi-reversekl-fenchel-poisson-duality}
+\boxed{\;
+\mathcal H_r(\mu)
+=1+\sup_{y:\TT\to(0,\infty)}
+\left\{\int_{\TT}\log y(\theta)\,\dd m(\theta)\;-\;\int_{\TT}(P_r*y)(\varphi)\,\dd\mu(\varphi)\right\}.
+\;}
+\end{equation}
+上确界在 \(y^\star(\theta)=1/p_r(\theta)\) 处取到（\(m\)-a.e.）。
+\end{theorem}
+\begin{proof}
+对任意 \(x>0\) 有逐点恒等式
+\[
+-\log x=\sup_{y>0}\bigl(\log y-yx+1\bigr),
+\]
+其最优点由一阶条件给出 \(y=1/x\)。
+令 \(x=p_r(\theta)\) 并对 \(\theta\sim m\) 积分，利用逐点可分性可将上确界与积分交换，得到
+\[
+\mathcal H_r(\mu)
+=1+\sup_{y>0}\left(\int_{\TT}\log y\,\dd m-\int_{\TT}y(\theta)p_r(\theta)\,\dd m(\theta)\right).
+\]
+再由 Fubini 与 Poisson 核的对称性
+\[
+\int_{\TT}y(\theta)p_r(\theta)\,\dd m(\theta)
+=\int_{\TT}\int_{\TT}y(\theta)P_r(\theta-\varphi)\,\dd m(\theta)\,\dd\mu(\varphi)
+=\int_{\TT}(P_r*y)(\varphi)\,\dd\mu(\varphi),
+\]
+得 \eqref{eq:xi-reversekl-fenchel-poisson-duality}。
+取 \(y^\star=1/p_r\) 即取到上确界。证毕。
+\end{proof}
+
+\begin{proposition}[外多项式证书族与显式可核验下界]\label{prop:xi-reversekl-exterior-polynomial-witness-lower}
+令 \(Q(z)=\sum_{k=0}^N q_k z^k\) 为多项式，满足 \(Q(0)\neq 0\) 且 \(Q\) 在闭单位圆盘 \(\abs{z}\le 1\) 内无零点。
+定义三角多项式
+\[
+y_Q(\theta):=\abs{Q(e^{i\theta})}^2,
+\qquad
+c_n(Q):=\int_{\TT}y_Q(\theta)e^{-in\theta}\,\dd m(\theta)
+=\sum_{k=0}^{N-n}q_{k+n}\overline{q_k}\qquad(0\le n\le N).
+\]
+则对任意 \(0<r<1\) 与 \(\mu\in\mathrm{Prob}(\TT)\)，成立显式下界
+\begin{equation}\label{eq:xi-reversekl-exterior-polynomial-witness-lower}
+\boxed{\;
+\mathcal H_r(\mu)\ \ge\ 1+2\log\abs{Q(0)}
+-\left(c_0(Q)+2\Re\sum_{n=1}^N r^n c_n(Q)\,\overline{\widehat\mu(n)}\right),
+\;}
+\end{equation}
+其中 \(\widehat\mu(n):=\int_{\TT}e^{-in\theta}\,\dd\mu(\theta)\)。
+\end{proposition}
+\begin{proof}
+将定理 \ref{thm:xi-reversekl-fenchel-poisson-duality} 中的对偶变量取为 \(y=y_Q\)，得
+\[
+\mathcal H_r(\mu)\ge 1+\int_{\TT}\log y_Q\,\dd m-\int_{\TT}(P_r*y_Q)\,\dd\mu.
+\]
+由 \(Q\) 在闭单位圆盘内无零点，Jensen 公式给出（参见 \cite{Ahlfors1979ComplexAnalysis}）
+\[
+\int_{\TT}\log\abs{Q(e^{i\theta})}\,\dd m(\theta)=\log\abs{Q(0)},
+\]
+从而 \(\int_{\TT}\log y_Q\,\dd m=2\log\abs{Q(0)}\)。
+另一方面，\(P_r\) 在 Fourier 基上对角化，且 \(y_Q\) 为有限阶三角多项式，故
+\[
+(P_r*y_Q)(\varphi)=\sum_{|n|\le N}r^{|n|}c_n(Q)e^{in\varphi},
+\qquad
+c_{-n}(Q)=\overline{c_n(Q)}.
+\]
+对 \(\mu\) 积分得到
+\[
+\int_{\TT}(P_r*y_Q)\,\dd\mu
+=c_0(Q)+2\Re\sum_{n=1}^N r^n c_n(Q)\overline{\widehat\mu(n)}.
+\]
+合并即得 \eqref{eq:xi-reversekl-exterior-polynomial-witness-lower}。证毕。
+\end{proof}
+
+\begin{theorem}[测度仿射线上的二阶变分与强凸夹逼]\label{thm:xi-reversekl-affine-second-variation-strong-convex}
+给定 \(\mu_0,\mu_1\in\mathrm{Prob}(\TT)\)，令 \(\mu_t:=(1-t)\mu_0+t\mu_1\)（\(0\le t\le 1\)），并记
+\[
+p_t:=P_r*\mu_t,\qquad q:=p_1-p_0=P_r*(\mu_1-\mu_0).
+\]
+则 \(t\mapsto \mathcal H_r(\mu_t)\) 二次可微，且满足
+\[
+\frac{\dd}{\dd t}\mathcal H_r(\mu_t)=-\int_{\TT}\frac{q(\theta)}{p_t(\theta)}\,\dd m(\theta),
+\qquad
+\frac{\dd^2}{\dd t^2}\mathcal H_r(\mu_t)=\int_{\TT}\left(\frac{q(\theta)}{p_t(\theta)}\right)^2\,\dd m(\theta)\ \ge 0.
+\]
+并且对任意 \(\lambda\in(0,1)\) 成立严格弦差恒等式
+\[
+(1-\lambda)\mathcal H_r(\mu_0)+\lambda\mathcal H_r(\mu_1)-\mathcal H_r(\mu_\lambda)
+=(1-\lambda)\int_0^\lambda s\,\Xi(s)\,\dd s+\lambda\int_\lambda^1(1-s)\,\Xi(s)\,\dd s,
+\]
+其中 \(\Xi(s):=\displaystyle\int_{\TT}\left(\frac{q}{p_s}\right)^2\dd m\)。
+进一步记
+\[
+a_r:=\frac{1-r}{1+r},\qquad b_r:=\frac{1+r}{1-r},\qquad
+\|\nu\|_{r}^2:=\|P_r*\nu\|_{L^2(m)}^2,
+\]
+则对一切 \(\lambda\in(0,1)\) 有双边夹逼
+\begin{equation}\label{eq:xi-reversekl-strong-convex-smooth-chord-gap}
+\boxed{\;
+\frac{\lambda(1-\lambda)}{2b_r^{2}}\|\mu_1-\mu_0\|_{r}^{2}
+\ \le\
+(1-\lambda)\mathcal H_r(\mu_0)+\lambda\mathcal H_r(\mu_1)-\mathcal H_r(\mu_\lambda)
+\ \le\
+\frac{\lambda(1-\lambda)}{2a_r^{2}}\|\mu_1-\mu_0\|_{r}^{2}.
+\;}
+\end{equation}
+\end{theorem}
+\begin{proof}
+由 \(p_t=p_0+tq\) 且 \(p_t>0\)（Poisson 平滑的严格正性）可逐点微分并交换微分与积分：
+\[
+\frac{\dd}{\dd t}\mathcal H_r(\mu_t)
+=-\int_{\TT}\frac{q}{p_t}\,\dd m,\qquad
+\frac{\dd^2}{\dd t^2}\mathcal H_r(\mu_t)
+=\int_{\TT}\left(\frac{q}{p_t}\right)^2\,\dd m.
+\]
+弦差恒等式为一维 \(C^2\) 函数的积分余项形式，取 \(\Phi(t)=\mathcal H_r(\mu_t)\) 即得。
+\par
+由 Poisson 核显式公式有 \(a_r\le P_r\le b_r\)，从而 \(a_r\le p_s\le b_r\)（逐点）。
+于是
+\[
+\frac{1}{b_r^2}\int_{\TT}q^2\,\dd m\ \le\ \Xi(s)\ \le\ \frac{1}{a_r^2}\int_{\TT}q^2\,\dd m.
+\]
+并且
+\(
+\int_{\TT}q^2\,\dd m=\|P_r*(\mu_1-\mu_0)\|_{L^2(m)}^2=\|\mu_1-\mu_0\|_r^2
+\)。
+将上述夹逼代入弦差恒等式，并利用权函数积分
+\[
+(1-\lambda)\int_0^\lambda s\,\dd s+\lambda\int_\lambda^1(1-s)\,\dd s=\frac{\lambda(1-\lambda)}{2},
+\]
+得到 \eqref{eq:xi-reversekl-strong-convex-smooth-chord-gap}。证毕。
+\end{proof}
+
+\begin{corollary}[凸约束下的唯一极小与可证伪稳定缺口]\label{cor:xi-reversekl-strict-convex-unique-minimizer}
+固定 \(0<r<1\)。
+映射 \(\mu\mapsto \mathcal H_r(\mu)\) 在 \(\mathrm{Prob}(\TT)\) 的任意凸子集上严格凸。
+特别地，对任意凸集 \(\mathcal C\subset \mathrm{Prob}(\TT)\)，若 \(\mathcal H_r\) 在 \(\mathcal C\) 上存在极小点，则该极小点必唯一。
+并且对任意 \(\mu_0\neq\mu_1\) 与 \(\lambda\in(0,1)\)，由 \eqref{eq:xi-reversekl-strong-convex-smooth-chord-gap} 得定量缺口
+\[
+(1-\lambda)\mathcal H_r(\mu_0)+\lambda\mathcal H_r(\mu_1)-\mathcal H_r(\mu_\lambda)
+\ \ge\
+\frac{\lambda(1-\lambda)}{2b_r^2}\,\|\mu_1-\mu_0\|_r^2\ >\ 0.
+\]
+\end{corollary}
+\begin{proof}
+若 \(\mu_0\neq \mu_1\)，则存在 \(n\in\ZZ\) 使 \(\widehat\mu_1(n)\neq \widehat\mu_0(n)\)。
+由于 \(P_r\) 的 Fourier 乘子为 \(r^{|n|}>0\)，得 \(\widehat q(n)=r^{|n|}(\widehat\mu_1(n)-\widehat\mu_0(n))\neq 0\)，从而 \(q\not\equiv 0\) 且 \(\|\mu_1-\mu_0\|_r^2=\int q^2\,\dd m>0\)。
+代入定理 \ref{thm:xi-reversekl-affine-second-variation-strong-convex} 的下界即得严格凸与定量缺口。
+凸集上严格凸函数的极小点唯一性为直接推论。证毕。
+\end{proof}
+
+\begin{theorem}[Poisson 平滑下的 KL 变分刻画]\label{thm:xi-reversekl-dv-poisson-variational}
+对任意 \(0<r<1\) 与 \(\mu\in\mathrm{Prob}(\TT)\)，有变分表示
+\begin{equation}\label{eq:xi-reversekl-dv-poisson-variational}
+\boxed{\;
+\mathcal H_r(\mu)
+=\sup_{f\in L^\infty(m)}
+\left\{\int_{\TT} f(\theta)\,\dd m(\theta)\;-\;\log\int_{\TT}(P_r*e^{f})(\varphi)\,\dd\mu(\varphi)\right\}.
+\;}
+\end{equation}
+上确界在 \(f^\star(\theta)=-\log p_r(\theta)\)（加常数）处取到。
+\end{theorem}
+\begin{proof}
+相对熵的标准变分刻画给出：对任意概率测度 \(P,Q\) 有
+\(
+D_{\mathrm{KL}}(P\mid Q)=\sup_f\{\int f\,\dd P-\log\int e^f\,\dd Q\}
+\)（参见 \cite{CoverThomas2006}）。
+取 \(P=m\)、\(Q=p_r m\) 得
+\[
+\mathcal H_r(\mu)=\sup_f\left\{\int_{\TT} f\,\dd m-\log\int_{\TT}e^f(\theta)p_r(\theta)\,\dd m(\theta)\right\}.
+\]
+再由 \(p_r=P_r*\mu\) 与 Fubini 得
+\[
+\int_{\TT}e^f(\theta)p_r(\theta)\,\dd m(\theta)
+=\int_{\TT}(P_r*e^f)(\varphi)\,\dd\mu(\varphi),
+\]
+从而得到 \eqref{eq:xi-reversekl-dv-poisson-variational}。
+取 \(f^\star=-\log p_r\) 为标准等号条件。证毕。
+\end{proof}
+
+\begin{theorem}[外多项式证人给出的封闭下界]\label{thm:xi-reversekl-exterior-analytic-witness-log}
+设 \(Q\) 为解析多项式，满足 \(Q(0)=1\) 且在闭单位圆盘 \(\abs{z}\le 1\) 内无零点。
+则对任意 \(0<r<1\) 与 \(\mu\in\mathrm{Prob}(\TT)\)，成立
+\begin{equation}\label{eq:xi-reversekl-exterior-analytic-witness-log}
+\boxed{\;
+\mathcal H_r(\mu)\ \ge\ -\log\int_{\TT}\bigl(P_r*\abs{Q(e^{i\cdot})}^2\bigr)(\varphi)\,\dd\mu(\varphi).
+\;}
+\end{equation}
+右端仅依赖 \(Q\) 的有限 Fourier 系数与 \(\{\widehat\mu(n)\}\) 的有限段。
+\end{theorem}
+\begin{proof}
+在定理 \ref{thm:xi-reversekl-dv-poisson-variational} 中取
+\(
+f(\theta)=\log\abs{Q(e^{i\theta})}^2
+\)。
+由 Jensen 公式与 \(Q(0)=1\) 得（参见 \cite{Ahlfors1979ComplexAnalysis}）
+\[
+\int_{\TT} f\,\dd m=2\int_{\TT}\log\abs{Q(e^{i\theta})}\,\dd m(\theta)=2\log\abs{Q(0)}=0.
+\]
+代入 \eqref{eq:xi-reversekl-dv-poisson-variational} 即得 \eqref{eq:xi-reversekl-exterior-analytic-witness-log}。
+有限性断言来自 \(\abs{Q(e^{i\theta})}^2\) 为有限阶三角多项式且 \(P_r\) 在 Fourier 侧仅作乘子 \(r^{|n|}\)。证毕。
+\end{proof}
+
+\begin{corollary}[单 Fourier 系数的封闭下界]\label{cor:xi-reversekl-single-frequency-closed-lower}
+对任意整数 \(n\ge 1\)、任意 \(0<r<1\) 与 \(\mu\in\mathrm{Prob}(\TT)\)，成立
+\begin{equation}\label{eq:xi-reversekl-single-frequency-closed-lower}
+\boxed{\;
+\mathcal H_r(\mu)\ \ge\ -\log\bigl(1-r^{2n}\abs{\widehat\mu(n)}^2\bigr).
+\;}
+\end{equation}
+从而等价地，
+\[
+\abs{\widehat\mu(n)}^2\ \le\ r^{-2n}\bigl(1-e^{-\mathcal H_r(\mu)}\bigr).
+\]
+\end{corollary}
+\begin{proof}
+在定理 \ref{thm:xi-reversekl-exterior-analytic-witness-log} 中取 \(Q(z)=1-a z^n\)（\(0<a<1\)）。
+其唯一零点满足 \(\abs{z}=a^{-1/n}>1\)，故满足假设。
+并且
+\[
+\abs{Q(e^{i\theta})}^2=\abs{1-ae^{in\theta}}^2=1+a^2-2a\cos(n\theta).
+\]
+由于 Poisson 平滑仅将 Fourier 系数乘以 \(r^{|n|}\)，有
+\[
+\bigl(P_r*\abs{Q(e^{i\cdot})}^2\bigr)(\varphi)=1+a^2-2a r^n\cos(n\varphi).
+\]
+存在相位 \(\theta_0\) 使 \(\Re(e^{-in\theta_0}\widehat\mu(n))=\abs{\widehat\mu(n)}\)，从而
+\[
+\int_{\TT}\bigl(P_r*\abs{Q(e^{i\cdot})}^2\bigr)\,\dd\mu
+=1+a^2-2a r^n\,\Re\bigl(e^{-in\theta_0}\widehat\mu(n)\bigr)
+\le 1+a^2-2a r^n\abs{\widehat\mu(n)}.
+\]
+代入 \eqref{eq:xi-reversekl-exterior-analytic-witness-log} 得
+\[
+\mathcal H_r(\mu)\ge -\log\bigl(1+a^2-2a r^n\abs{\widehat\mu(n)}\bigr).
+\]
+对 \(a\in(0,1)\) 优化右端：取 \(a=r^n\abs{\widehat\mu(n)}\in(0,1]\) 得
+\(
+1+a^2-2a r^n\abs{\widehat\mu(n)}=1-r^{2n}\abs{\widehat\mu(n)}^2
+\)，
+即得 \eqref{eq:xi-reversekl-single-frequency-closed-lower}。
+第二式由指数变形得到。证毕。
+\end{proof}
+
+\input{thm__xi-reversekl-single-frequency-extremal-legendre-fenchel}
+

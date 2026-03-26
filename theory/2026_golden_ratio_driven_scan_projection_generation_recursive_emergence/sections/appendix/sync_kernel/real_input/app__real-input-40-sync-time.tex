@@ -1,0 +1,77 @@
+\subsubsection{随机真实输入下的同步时间：子集--记忆吸收马尔可夫链（闭式）}\label{app:real-input-40-sync-time}
+本节把命题 \ref{prop:real-input-40-reset-word} 的“存在最短复位词 $0^5$”提升为一个随机性能指标：在真实输入 $X\times X$ 的 Parry 最大熵测度下，观测输入流 $(x_k,y_k)$ 时，内部同步态在多快的尺度上被强制唯一化？
+
+\begin{definition}[子集--记忆吸收链与同步时刻]\label{def:real-input-40-sync-time-absorbing}
+把同步核视为确定自动机 \(\delta:Q\times\{0,1,2\}\to Q\)（忘掉输出）。令输入为两条黄金均值轨道 \(x,y\in X\) 的逐位和 \(d_k=x_k+y_k\)，并记输入记忆为 \(m_k:=(x_{k-1},y_{k-1})\in\{00,01,10,11\}\)。
+\par
+若初始同步态未知但只知道其落在某个集合 \(S_0\subseteq Q\)，则读入长度为 \(n\) 的输入块后，“可能同步态集合”按子集构造确定性更新为
+\[
+S_n=\delta(S_0,d_1d_2\cdots d_n)\subseteq Q.
+\]
+称达到 \(|S_n|=1\) 的最小步数
+\[
+\tau:=\min\{n\ge 1:\ |S_n|=1\}
+\]
+为\textbf{同步时刻}（吸收时间）。
+在 Parry 测度下，\((S_n,m_n)\) 构成有限状态吸收马尔可夫链：\(m_n\) 为 \(X\times X\) 的 4 状态骨架链，而 \(S_{n+1}\) 由 \(d_{n+1}\) 对 \(S_n\) 的确定映射给出。
+\end{definition}
+
+\begin{proposition}[同步复位词诱导的几何尾界与均值上界]\label{prop:sync-reset-word-geometric-tail}
+令 \(\mathcal A=(Q,\Sigma,\delta)\) 为任意同步确定自动机，并设存在复位词 \(w_0\in\Sigma^L\) 使 \(\delta(Q,w_0)\) 为单点。
+令输入为 i.i.d.\ 字母流 \((X_k)_{k\ge 1}\) 且字母分布为 \(\nu\)，并记
+\[
+p:=\nu([w_0])=\prod_{i=1}^{L}\nu(w_{0,i}).
+\]
+令 \(\tau\) 为首次出现一个长度 \(L\) 的对齐块等于 \(w_0\) 的时刻（从而状态被强制复位）。
+则对一切 \(t\ge 0\) 有
+\[
+\PP(\tau>t)\le (1-p)^{\lfloor t/L\rfloor},
+\qquad
+\EE[\tau]\le \frac{L}{p}.
+\]
+\end{proposition}
+
+\begin{proof}
+把时间轴按不相交块分割为 \(B_k:=(X_{(k-1)L+1},\dots,X_{kL})\)（\(k\ge 1\)）。
+则事件 \(\{B_k=w_0\}\) 的概率为 \(p\)，且不同块之间独立。
+若前 \(k\) 块均不等于 \(w_0\)，则 \(\tau>kL\)。
+因此
+\(
+\PP(\tau>kL)\le (1-p)^k
+\)，
+对一般 \(t\) 取 \(k=\lfloor t/L\rfloor\) 得尾界。
+再由尾和公式 \(\EE[\tau]=\sum_{n\ge 0}\PP(\tau>n)\) 并用上述块界估计得到
+\(
+\EE[\tau]\le \sum_{k\ge 0}L(1-p)^k=L/p
+\)。
+证毕。
+\end{proof}
+
+\begin{proposition}[同步时间的均值/方差、指数尾率与分位数]\label{prop:real-input-40-sync-time-moments}
+在定义 \ref{def:real-input-40-sync-time-absorbing} 的吸收链下，考虑两种自然初始不确定性：
+\begin{itemize}
+  \item \textbf{worst}：仅知初始同步态在 \(Q\) 中任意，故 \(S_0=Q\)；
+  \item \textbf{essential}：仅知初始 $(s,m)$ 落在命题 \ref{prop:real-input-40-essential-20} 的本质 $20$ 状态核心中，因此 \(S_0\) 随记忆类 \(m\) 取相应的允许同步态集合（$6/5/5/4$ 分层）。
+\end{itemize}
+并取 \(m_0\) 为 \(X\times X\) 的 Parry 稳态边缘分布（命题 \ref{prop:real-input-40-input-memory-marginal}）。
+则 \(\mathbb{E}[\tau]\) 与 \(\mathrm{Var}(\tau)\) 在 \(\mathbb{Q}(\sqrt5)\) 中给出，并且吸收尾部满足指数衰减，其瞬态谱半径为
+\[
+\rho=\varphi^{-1}=\frac{\sqrt5-1}{2}.
+\]
+具体数值与分位数摘要见表 \ref{tab:real-input-40-sync-time-absorbing-chain}（由脚本自动生成，包含 exact 闭式与可复现的量化）。
+\end{proposition}
+
+\input{sections/generated/tab_real_input_40_sync_time_absorbing_chain}
+
+\begin{remark}[可复现输出与计算口径]\label{rem:real-input-40-sync-time-repro}
+表 \ref{tab:real-input-40-sync-time-absorbing-chain} 由脚本 \path{scripts/exp_real_input_40_sync_time_absorbing_chain.py} 生成。
+其中 \(\mathbb{E}[\tau]\)、\(\mathrm{Var}(\tau)\) 通过吸收链的线性方程
+\(
+(I-Q)t=\mathbf{1}
+\)
+与
+\(
+(I-Q)u=\mathbf{1}+2Qt
+\)
+在 \(\mathbb{Q}(\sqrt5)\) 上精确求解得到（\(Q\) 为瞬态子矩阵），而分位数由对瞬态链的数值递推 \(v_{n+1}=v_n Q\) 得到。
+\end{remark}

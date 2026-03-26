@@ -1,0 +1,189 @@
+\subsubsection{圆维核算律：秩--零度、最小补账、链式缺陷与零维不可替代性}\label{subsubsec:cdim-kernel-defect-incompressibility}
+
+本小节在定义 \ref{def:circle-dimension}--\ref{def:half-circle-dimension} 的口径下，给出一组可直接用于“投影--补账--外置轴”审计链的核算公式。其结构要点是：核的自由秩既给出可逆化所需的最小圆维成本，也给出复合读出的严格链式守恒；此外，在连续语义中，零维账本无法替代相位圆因子。
+
+\begin{theorem}[圆维秩--零度公式]\label{thm:cdim-rank-nullity-formula}
+设 \(f:G\to H\) 为有限生成离散交换群同态，则
+\[
+\cdim(G)=\cdim(\ker f)+\cdim(\operatorname{im}f).
+\]
+等价地，
+\[
+\cdim(\ker f)=\cdim(G)-\cdim(\operatorname{im}f),\qquad
+\cdim(\operatorname{im}f)=\cdim(G)-\cdim(\ker f).
+\]
+\end{theorem}
+\begin{proof}
+短正合列
+\[
+0\longrightarrow \ker f\longrightarrow G\longrightarrow \operatorname{im}f\longrightarrow 0
+\]
+代入定理 \ref{thm:cdim-short-exact-additivity} 即得结论。
+\end{proof}
+
+\begin{definition}[单射化补账]\label{def:cdim-injectivization-ledger}
+给定同态 \(f:G\to H\)。称一对 \((R,r)\) 为 \(f\) 的单射化补账，若 \(R\) 为有限生成离散交换群且 \(r:G\to R\) 为同态，使
+\[
+(f,r):G\longrightarrow H\oplus R,\qquad
+g\longmapsto (f(g),r(g))
+\]
+为单射。
+\end{definition}
+
+\begin{theorem}[最小圆维补账成本]\label{thm:cdim-minimal-ledger-cost-kernel}
+设 \(f:G\to H\) 为有限生成离散交换群同态，记 \(K:=\ker f\)。则：
+\begin{enumerate}
+  \item 对任意单射化补账 \((R,r)\)，有
+  \[
+  \cdim(R)\ge \cdim(K).
+  \]
+  \item 存在单射化补账 \((R_{\min},r_{\min})\) 使
+  \[
+  \cdim(R_{\min})=\cdim(K).
+  \]
+  并可取
+  \[
+  R_{\min}\cong \ZZ^{\cdim(K)}\oplus T
+  \]
+  其中 \(T\) 为有限群（例如可取 \(T=\operatorname{Tor}(G)\)）。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\textbf{下界：}
+若 \((f,r)\) 单射，则 \(r|_K:K\hookrightarrow R\) 单射。
+对有限生成交换群，子群自由秩不超过母群自由秩，故
+\[
+\cdim(K)\le \cdim(R).
+\]
+
+\textbf{可达性：}
+由定理 \ref{thm:cdim-minimal-audit-completion}，最小圆维补全成本等于
+\[
+\mathcal L(f):=\cdim(G)-\cdim(\operatorname{im}f),
+\]
+且可由 \(R\cong \ZZ^{\mathcal L(f)}\oplus \operatorname{Tor}(G)\) 达到。
+再由定理 \ref{thm:cdim-rank-nullity-formula}，\(\mathcal L(f)=\cdim(\ker f)=\cdim(K)\)，故结论成立。
+\end{proof}
+
+\begin{definition}[圆维缺陷]\label{def:cdim-defect}
+对有限生成离散交换群同态 \(f:G\to H\)，定义
+\[
+\delta(f):=\cdim(\ker f)\in\NN\cup\{0\}.
+\]
+\end{definition}
+
+\begin{theorem}[圆维缺陷的链式法则]\label{thm:cdim-defect-chain-rule}
+设
+\[
+G\xrightarrow{f}H\xrightarrow{g}K
+\]
+为有限生成离散交换群同态。则存在短正合列
+\[
+0\longrightarrow \ker f
+\longrightarrow \ker(g\circ f)
+\longrightarrow \ker\!\bigl(g|_{\operatorname{im}f}\bigr)
+\longrightarrow 0,
+\]
+从而
+\[
+\delta(g\circ f)=\delta(f)+\delta\!\bigl(g|_{\operatorname{im}f}\bigr).
+\]
+特别地，
+\[
+\delta(g\circ f)\le \delta(f)+\delta(g).
+\]
+\end{theorem}
+\begin{proof}
+定义
+\[
+\pi:\ker(g\circ f)\to \ker\!\bigl(g|_{\operatorname{im}f}\bigr),\qquad
+\pi(x):=f(x).
+\]
+若 \(x\in\ker(g\circ f)\)，则 \(g(f(x))=0\)，且 \(f(x)\in\operatorname{im}f\)，故 \(\pi\) 良定义。
+显然 \(\pi\) 满射：对任意 \(y\in \ker(g|_{\operatorname{im}f})\)，取 \(x\in G\) 使 \(f(x)=y\)，则 \(g(f(x))=0\) 故 \(x\in\ker(g\circ f)\) 且 \(\pi(x)=y\)。
+其核为
+\[
+\ker \pi=\{x\in\ker(g\circ f):f(x)=0\}=\ker f.
+\]
+故短正合列成立。
+由定理 \ref{thm:cdim-short-exact-additivity} 得
+\[
+\cdim(\ker(g\circ f))
+=\cdim(\ker f)+\cdim\!\bigl(\ker(g|_{\operatorname{im}f})\bigr),
+\]
+即链式法则。又 \(\ker(g|_{\operatorname{im}f})\subseteq \ker g\)，故
+\[
+\delta\!\bigl(g|_{\operatorname{im}f}\bigr)\le \delta(g),
+\]
+从而得到次可加不等式。
+\end{proof}
+
+\begin{theorem}[相位折叠核的最小证书秩]\label{thm:cdim-phase-fold-kernel-minimal-certificate-rank}
+取 \(B\in M_{k\times n}(\RR)\)，定义同态
+\[
+\chi_B:\ZZ^n\longrightarrow \TT^k,\qquad
+\chi_B(x):=\exp\!\bigl(2\pi\mathrm{i}\,Bx\bigr),
+\]
+并记
+\[
+K_B:=\ker \chi_B=\{x\in\ZZ^n:\ Bx\in\ZZ^k\},
+\qquad
+r_B:=\operatorname{rank}(K_B).
+\]
+则：
+\begin{enumerate}
+  \item 若 \(r':\ZZ^n\to \ZZ^m\) 满足 \((\chi_B,r'):\ZZ^n\to \TT^k\times\ZZ^m\) 单射，则必有 \(m\ge r_B\)；
+  \item 存在 \(r_{\min}:\ZZ^n\to\ZZ^{r_B}\) 使 \((\chi_B,r_{\min})\) 单射。
+\end{enumerate}
+因此，相位折叠的最小整数证书秩恰为 \(r_B\)。
+\end{theorem}
+\begin{proof}
+若 \((\chi_B,r')\) 单射，则其在 \(K_B\) 上的限制 \(r'|_{K_B}\) 亦单射。
+因 \(K_B\le \ZZ^n\) 为自由交换群，秩为 \(r_B\)，单射 \(K_B\hookrightarrow \ZZ^m\) 强制 \(m\ge r_B\)。
+
+反向构造：由子群标准形（Smith 正规形），存在 \(\ZZ^n\) 的基 \(e_1,\dots,e_n\) 与正整数 \(d_1,\dots,d_{r_B}\)，使
+\[
+K_B=\langle d_1e_1,\dots,d_{r_B}e_{r_B}\rangle.
+\]
+定义
+\[
+r_{\min}\!\left(\sum_{i=1}^{n}a_i e_i\right):=(a_1,\dots,a_{r_B})\in\ZZ^{r_B}.
+\]
+若 \(x\in K_B\) 且 \(r_{\min}(x)=0\)，则 \(x=\sum_{j=1}^{r_B}m_jd_j e_j\) 且前 \(r_B\) 坐标全零，
+故 \(m_jd_j=0\) 进而 \(m_j=0\)，从而 \(x=0\)。
+即 \(r_{\min}|_{K_B}\) 单射。
+于是若 \((\chi_B,r_{\min})(x)=0\)，先由 \(\chi_B(x)=0\) 得 \(x\in K_B\)，再由 \(r_{\min}(x)=0\) 得 \(x=0\)，故整体单射。
+\end{proof}
+
+\begin{theorem}[零维账本不能替代相位圆因子]\label{thm:cdim-zero-dimensional-ledger-no-circle-replacement}
+设 \(D\) 为紧致零维空间。
+若存在连续单射
+\[
+\iota:\TT^d\hookrightarrow \TT^k\times D,
+\]
+则必有 \(d\le k\)。
+\end{theorem}
+\begin{proof}
+\(\TT^d\) 紧且 \(\TT^k\times D\) 为 Hausdorff，故 \(\iota\) 为拓扑嵌入。
+覆盖维数在嵌入下单调，故
+\[
+\dim(\TT^d)\le \dim(\TT^k\times D).
+\]
+又 \(\dim(\TT^d)=d\)，且 \(\dim(D)=0\)。
+由维数不等式 \(\dim(X\times Y)\le \dim X+\dim Y\) 得
+\[
+\dim(\TT^k\times D)\le k.
+\]
+另一方面 \(\TT^k\times\{d_0\}\subseteq \TT^k\times D\)（任取 \(d_0\in D\)），由单调性得
+\[
+\dim(\TT^k\times D)\ge \dim(\TT^k)=k.
+\]
+故 \(\dim(\TT^k\times D)=k\)，从而 \(d\le k\)。
+\end{proof}
+
+\begin{remark}[与扩展保存口径的接口]\label{rem:cdim-kernel-defect-extpi-interface}
+定理 \ref{thm:cdim-minimal-ledger-cost-kernel} 与定理 \ref{thm:cdim-defect-chain-rule} 共同给出“核圆维 \(\leftrightarrow\) 最小补账成本”的可加守恒律；定理 \ref{thm:cdim-zero-dimensional-ledger-no-circle-replacement} 则给出连续语义下的禁止性边界：离散或零维账本只能补充标签复杂度，不能减少必要相位圆因子数。
+该接口可直接并入 \(\mathrm{Ext}(\pi)\) 的预算--NULL--外置轴三分律。
+\end{remark}
+
+\endinput

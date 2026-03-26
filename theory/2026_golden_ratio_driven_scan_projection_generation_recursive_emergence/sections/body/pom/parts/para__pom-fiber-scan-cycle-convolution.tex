@@ -1,0 +1,99 @@
+\paragraph{一般纤维扫描的循环型卷积公式}
+设可逆位点诱导图分解为路径分量直并 \(\Gamma_x=\bigsqcup_{j=1}^r P_{\ell_j}\)，从而
+\(
+F_x\cong \prod_{j=1}^r \mathsf{Ind}(P_{\ell_j})
+\)
+且扫描元在分量坐标下按坐标逐因子作用（定义 \ref{def:pom-toggle-coxeter-element}）。
+定理 \ref{thm:pom-toggle-scan-lcm-tensorization} 给出点周期的 \(\mathrm{lcm}\) 规律；下面给出循环分解层面的精确计数卷积。
+
+\begin{proposition}[循环条数的 \(\mathrm{lcm}\)-卷积闭式]\label{prop:pom-toggle-scan-cycle-convolution}
+对整数 \(m\ge 1\) 与路径长度 \(n\ge 0\)，记
+\[
+a_m(n):=\#\{\text{在 }\mathsf{Ind}(P_n)\text{ 上由 }c_n\text{ 生成的长度 }m\text{ 的循环}\}.
+\]
+对一般 \(x\)，同理记
+\[
+A_m(x):=\#\{\text{在纤维 }F_x\text{ 上由 }c_x\text{ 生成的长度 }m\text{ 的循环}\}.
+\]
+则对任意 \(m\ge 1\) 有精确公式
+\[
+A_m(x)=\sum_{\substack{m_1,\dots,m_r\ge 1\\ \mathrm{lcm}(m_1,\dots,m_r)=m}}
+\Biggl(\ \prod_{j=1}^r a_{m_j}(\ell_j)\ \Biggr)\cdot \frac{\prod_{j=1}^r m_j}{m}.
+\]
+特别地，由定理 \ref{thm:pom-toggle-scan-cycle-type-closed} 的闭式 \(a_m(n)\) 可显式计算，从而 \(c_x\) 的全循环分解在分量数据 \((\ell_j)\) 下完全可计算。
+\end{proposition}
+\begin{proof}
+固定一组分量循环 \(C_j\subset \mathsf{Ind}(P_{\ell_j})\)，其长度分别为 \(m_j\)。
+则在 \(C_1\times\cdots\times C_r\) 上，\(c_x\) 同构于有限交换群
+\(
+\mathbb Z/m_1\mathbb Z\times\cdots\times \mathbb Z/m_r\mathbb Z
+\)
+上的平移
+\[
+(t_1,\dots,t_r)\longmapsto (t_1+1,\dots,t_r+1).
+\]
+该平移的步长元 \((1,\dots,1)\) 的阶为 \(\mathrm{lcm}(m_1,\dots,m_r)=m\)，故每条轨道长度为 \(m\)。
+同时轨道条数等于
+\[
+\frac{|C_1\times\cdots\times C_r|}{m}=\frac{\prod_{j=1}^r m_j}{m}.
+\]
+对固定的 \((m_1,\dots,m_r)\)，从各分量中选择长度 \(m_j\) 的循环共有 \(\prod_{j=1}^r a_{m_j}(\ell_j)\) 种；
+每一种选择贡献 \((\prod_j m_j)/m\) 条长度为 \(m\) 的循环。
+对所有满足 \(\mathrm{lcm}(m_1,\dots,m_r)=m\) 的 \((m_1,\dots,m_r)\) 求和即得公式。证毕。
+\end{proof}
+
+\begin{theorem}[ghost 坐标的乘法化：\(\mathrm{lcm}\)-卷积的除子和线性化]\label{thm:pom-toggle-scan-cycle-ghost-multiplicativity}
+沿用命题 \ref{prop:pom-toggle-scan-cycle-convolution} 的记号。
+定义“循环质量”算术函数
+\[
+f_\ell(m):=m\,a_m(\ell),\qquad
+f_x(m):=m\,A_m(x),
+\]
+并定义 \(\mathrm{lcm}\)-卷积
+\[
+(f\star_{\mathrm{lcm}}h)(n):=\sum_{\mathrm{lcm}(a,b)=n} f(a)\,h(b),
+\]
+以及 ghost 变换（除子和）
+\[
+g_\ell(n):=\sum_{d\mid n} f_\ell(d),\qquad
+g_x(n):=\sum_{d\mid n} f_x(d).
+\]
+则：
+\begin{enumerate}
+  \item \(f_x\) 是 \((f_{\ell_1},\dots,f_{\ell_r})\) 的迭代 \(\mathrm{lcm}\)-卷积：
+  \[
+  f_x=f_{\ell_1}\star_{\mathrm{lcm}}\cdots\star_{\mathrm{lcm}} f_{\ell_r}.
+  \]
+  \item ghost 变换将 \(\mathrm{lcm}\)-卷积线性化为点乘：对任意 \(n\ge 1\)，
+  \[
+  \boxed{\;
+  g_x(n)=\prod_{j=1}^r g_{\ell_j}(n)\; }.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-toggle-scan-cycle-convolution} 的闭式，两端同乘 \(m\) 得
+\[
+f_x(m)
+=\sum_{\substack{m_1,\dots,m_r\ge 1\\ \mathrm{lcm}(m_1,\dots,m_r)=m}}
+\prod_{j=1}^r f_{\ell_j}(m_j),
+\]
+这正是迭代 \(\mathrm{lcm}\)-卷积，得 (1)。
+\par
+对 (2)，对任意 \(n\ge 1\) 有
+\[
+g_x(n)
+=\sum_{d\mid n} f_x(d)
+=\sum_{\mathrm{lcm}(m_1,\dots,m_r)\mid n}\ \prod_{j=1}^r f_{\ell_j}(m_j).
+\]
+而 \(\mathrm{lcm}(m_1,\dots,m_r)\mid n\) 当且仅当对所有 \(j\) 都有 \(m_j\mid n\)。
+因此
+\[
+g_x(n)
+=\sum_{m_1\mid n}\cdots\sum_{m_r\mid n}\prod_{j=1}^r f_{\ell_j}(m_j)
+=\prod_{j=1}^r\left(\sum_{m_j\mid n} f_{\ell_j}(m_j)\right)
+=\prod_{j=1}^r g_{\ell_j}(n),
+\]
+证毕。
+\end{proof}
+

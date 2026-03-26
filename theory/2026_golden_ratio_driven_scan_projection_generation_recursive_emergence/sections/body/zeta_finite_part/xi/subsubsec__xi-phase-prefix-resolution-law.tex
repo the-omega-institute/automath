@@ -1,0 +1,332 @@
+\subsubsection{相位前缀过滤与二次分辨率门槛：端点压缩诱导的强制碰撞律}\label{subsubsec:xi-phase-prefix-resolution-law}
+本段把“unitary slice / legal address / scan-to-clarify”的一参数读出语义具体化为：在可见轴仅允许相位紧化坐标的前提下，读出精细化由一个离散的\emph{分辨率深度}（前缀长度）度量，而非由额外连续坐标轴提供；任何离切片信息若未被外置到正交寄存器，则在对象层被迫塌缩为不可唯一读出（在本文语义中表现为碰撞型 \(\mathsf{NULL}\)，见定义 \ref{def:xi-visible-read-null} 与命题 \ref{prop:xi-null-three-way}）。
+\par
+关键结构事实在于：相位紧化把高高度区间压入端点邻域并产生二次压缩；当零点密度随高度以 \(T\log T\) 增长时，该二次压缩强制产生一个不可绕过的“二次分辨率屏障”。本段给出该屏障的可核验形式，并说明所谓“一个零点是另一个零点的地址”只能被严格化为“共享前缀所诱导的柱事件聚类”，而非点对点寻址。
+
+\paragraph{相位盒与 dyadic 柱前缀}
+取无参相位盒紧化门（附录 \ref{app:unit-circle-phase-gate}）
+\[
+u=\upsilon(t):=\frac{1}{\pi}\arctan(t)\in\Bigl(-\tfrac12,\tfrac12\Bigr),
+\qquad
+\widetilde u(t):=u+\tfrac12\in(0,1).
+\]
+对整数 \(m\ge 1\)，定义 \textbf{\(m\)-比特相位地址（合法读出前缀）}为 dyadic 柱单元
+\[
+I_m(t):=\Bigl[\frac{\lfloor 2^m\widetilde u(t)\rfloor}{2^m},\frac{\lfloor 2^m\widetilde u(t)\rfloor+1}{2^m}\Bigr)\subset(0,1),
+\]
+并记地址值
+\(
+A_m(t):=\lfloor 2^m\widetilde u(t)\rfloor\in\{0,1,\dots,2^m-1\}.
+\)
+在“地址先于取值”的语义下，\(m\) 即为\textbf{分辨率深度}：读出接口不引入新的连续自由度，只允许沿 \(m\uparrow\) 的柱过滤细化。
+
+\paragraph{端点压缩下的地址碰撞强制律}
+记 \(N_\zeta(T)\) 为 \(\zeta\) 在临界带 \(0<\Re(s)<1\) 内、满足 \(0<\Im(s)\le T\) 的非平凡零点计数（按重数计）。其经典主项满足
+\[
+N_\zeta(T)=\frac{T}{2\pi}\log\Bigl(\frac{T}{2\pi}\Bigr)-\frac{T}{2\pi}+O(\log T),
+\qquad(T\to\infty).
+\]
+
+\begin{theorem}[端点压缩的地址碰撞下界：二次分辨率门槛]\label{thm:xi-phase-prefix-collision-lower-bound}
+存在常数 \(T_0>0\) 与 \(c>0\)，使得对所有 \(T\ge T_0\) 与任意整数 \(m\ge 1\)，在高度带
+\[
+\Gamma(T):=\{\gamma>0:\ \exists\,\rho=\beta+\mathrm{i}\gamma\ \text{为非平凡零点}\ \text{且}\ T<\gamma\le 2T\}
+\]
+中，必存在某一相位地址值 \(a\in\{0,1,\dots,2^m-1\}\) 满足
+\[
+\#\{\gamma\in\Gamma(T):A_m(\gamma)=a\}\ \ge\ c\,\frac{T^2\log T}{2^m}.
+\]
+特别地，若希望高度带 \((T,2T]\) 上的相位地址映射 \(\gamma\mapsto A_m(\gamma)\) 不发生碰撞（单射），则必须满足
+\[
+2^m\ \gtrsim\ T^2\log T,
+\qquad\text{等价地}\qquad
+m\ \ge\ 2\log_2 T+\log_2\log T+O(1).
+\]
+\end{theorem}
+
+\begin{proof}
+首先，带 \([T,2T]\) 在 \(\upsilon\)-轴上的像长度满足
+\[
+\upsilon(2T)-\upsilon(T)=\frac{1}{\pi}\int_T^{2T}\frac{\dd t}{1+t^2}
+\le \frac{1}{\pi}\int_T^{2T}\frac{\dd t}{t^2}
+=\frac{1}{2\pi T}.
+\]
+因此深度为 \(m\) 的 dyadic 划分在该像带内能提供的不同地址单元个数至多为
+\[
+M_m(T)\le 2^m\bigl(\upsilon(2T)-\upsilon(T)\bigr)+2\ \le\ \frac{2^m}{2\pi T}+2.
+\]
+另一方面，由零点计数主项可得 \(N_\zeta(2T)-N_\zeta(T)\asymp T\log T\)（\(T\to\infty\)）。
+将 \(\#\Gamma(T)=N_\zeta(2T)-N_\zeta(T)\) 个零点高度投入至多 \(M_m(T)\) 个地址盒，鸽巢原理给出存在某一盒占用数至少为
+\[
+\frac{\#\Gamma(T)}{M_m(T)}\ \gtrsim\ \frac{T\log T}{2^m/T}\ =\ \frac{T^2\log T}{2^m},
+\]
+即得第一式。单射必要条件由“最大占用数 \(\le 1\)”立得。
+\end{proof}
+
+\begin{corollary}[清晰度视界：固定分辨率深度的可分辨高度尺度]\label{cor:xi-phase-prefix-clarity-horizon}
+固定 \(m\ge 1\)。若要求高度带 \((T,2T]\) 内相位地址无碰撞，则必有
+\[
+T^2\log T\ \lesssim\ 2^m.
+\]
+因此在忽略对数修正的主尺度下，可分辨高度视界满足 \(T\approx 2^{m/2}\)（并带 \(1/\sqrt{\log T}\) 级修正）。
+\end{corollary}
+
+\input{cor__xi-address-prime-ledger-joint-budget}
+
+\paragraph{“零点互为地址”的严格化：共享前缀而非点对点寻址}
+对 \(u,v\in(0,1)\) 定义 dyadic 前缀共享长度
+\[
+L(u,v):=\max\{m\ge 0:\ \lfloor 2^m u\rfloor=\lfloor 2^m v\rfloor\}.
+\]
+令 \((\gamma_n)_{n\ge 1}\) 为非平凡零点的正虚部按递增排列（按重数计），并写 \(u_n:=\widetilde u(\gamma_n)\in(0,1)\)。
+
+\begin{proposition}[共享前缀的二次阈值：相邻零点在端点层形成稳定簇]\label{prop:xi-phase-adjacent-prefix-sharing}
+存在常数 \(T_1>0\) 与 \(C>0\)，使得对所有 \(T\ge T_1\)，在满足 \(T<\gamma_n\le 2T\) 的相邻零点对 \((\gamma_n,\gamma_{n+1})\) 中，至少有一半满足
+\[
+L(u_n,u_{n+1})\ \ge\ 2\log_2 T+\log_2\log T - C.
+\]
+\end{proposition}
+
+\begin{proof}
+考虑相位窗 \([\upsilon(T),\upsilon(2T)]\)。
+其总长度由上证得 \(\upsilon(2T)-\upsilon(T)\ll 1/T\)。
+而窗内相邻对的相位间隔之和恰为该总长度，故平均相位间隔满足
+\[
+\overline{\Delta u}(T)\ :=\ \frac{\upsilon(2T)-\upsilon(T)}{N_\zeta(2T)-N_\zeta(T)}\ \ll\ \frac{1/T}{T\log T}\ =\ \frac{1}{T^2\log T}.
+\]
+若超过一半的相邻对满足 \(|u_{n+1}-u_n|>2\overline{\Delta u}(T)\)，则总和将超过相位窗长度，矛盾。
+因此至少一半相邻对满足 \(|u_{n+1}-u_n|\ll (T^2\log T)^{-1}\)。
+对这样的 \(u\neq v\)，由 dyadic 前缀定义有 \(L(u,v)\ge \lfloor \log_2(1/|u-v|)\rfloor -1\)，代入即得结论。
+\end{proof}
+
+\paragraph{Lambert--W 基准的序号定位：显式主尺度与全局误差证书}
+在仅允许“序号 \(n\)”作为离散外置证书轴的设定下，\(N_\zeta(T)\) 的显式误差界可被直接编译为 \(\gamma_n\) 的可审计定位上界，从而给出一条无需额外连续坐标轴的全局种子。
+下述结果把 Riemann--von Mangoldt 主尺度的反函数显式化为 Lambert--\(W\) 形式，并在不额外假设零点简单性的前提下给出绝对误差证书（将计数函数的跳跃端点差异吸收为常数余量）。
+
+\begin{theorem}[Lambert--W 基准的零点递归定位与显式误差上界]\label{thm:xi-lambertW-zero-indexing-explicit}
+令
+\[
+N_0(T):=\frac{T}{2\pi}\log\!\Bigl(\frac{T}{2\pi e}\Bigr),
+\qquad
+E(T):=0.10076\,\log T+0.24460\,\log\log T+8.08344\qquad(T\ge e),
+\]
+并假设对一切 \(T\ge e\) 成立显式估计（参见 \cite{BellottiWong2024ImprovedNT} 的可取常数形式）
+\begin{equation}\label{eq:xi-explicit-zero-counting-bound}
+\abs{N_\zeta(T)-N_0(T)}\ \le\ E(T).
+\end{equation}
+对每个整数 \(n\ge 1\)，令 \(T_n\) 为方程 \(N_0(T)=n\) 的唯一正解，则
+\begin{equation}\label{eq:xi-Tn-lambertW}
+T_n=\frac{2\pi n}{\mathscr{W}(n/e)},
+\end{equation}
+其中 \(\mathscr{W}\) 为 Lambert--\(W\) 函数主支（\(\mathscr{W}(x)e^{\mathscr{W}(x)}=x\)）。
+记 \((\gamma_n)_{n\ge 1}\) 为非平凡零点的正虚部按递增排列（按重数计）。
+则存在阈值 \(n_\ast\) 使得对所有 \(n\ge n_\ast\) 有
+\begin{equation}\label{eq:xi-lambertW-gamman-bound}
+\abs{\gamma_n-T_n}
+\ \le\
+\frac{2\pi\bigl(E(2T_n)+1\bigr)}{\log\!\bigl(T_n/(4\pi)\bigr)}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+首先注意 \(N_0\) 在 \(T>0\) 上严格递增且严格凸，并满足
+\[
+N_0'(T)=\frac{1}{2\pi}\log\!\Bigl(\frac{T}{2\pi}\Bigr).
+\]
+由 \(N_0(T_n)=n\) 及 Lambert--\(W\) 的定义可得 \eqref{eq:xi-Tn-lambertW}。
+\par
+由于 \(E(T)=O(\log T)\) 而 \(N_0(T)\asymp T\log T\)，存在 \(n_\ast\) 使得对所有 \(n\ge n_\ast\) 同时成立
+\[
+N_\zeta(T_n/2)\le n-1,
+\qquad
+N_\zeta(2T_n)\ge n.
+\]
+于是对 \(n\ge n_\ast\) 有
+\begin{equation}\label{eq:xi-lambertW-gamman-bracket}
+\gamma_n\in[T_n/2,\,2T_n].
+\end{equation}
+\par
+固定 \(n\ge n_\ast\)。
+由定义知存在 \(\varepsilon>0\) 使得 \(N_\zeta(\gamma_n-\varepsilon)\le n-1\) 且 \(N_\zeta(\gamma_n)\ge n\)。
+结合 \eqref{eq:xi-explicit-zero-counting-bound} 与 \(E\) 的单调性，并注意 \(N_0\) 的连续性，得到
+\[
+N_0(\gamma_n)
+=N_0(\gamma_n-\varepsilon)
+\le N_\zeta(\gamma_n-\varepsilon)+E(\gamma_n-\varepsilon)
+\le n-1+E(\gamma_n)
+\le n-1+E(2T_n),
+\]
+以及
+\[
+N_0(\gamma_n)\ge N_\zeta(\gamma_n)-E(\gamma_n)\ge n-E(2T_n).
+\]
+因此
+\begin{equation}\label{eq:xi-lambertW-N0-at-gamman}
+\abs{N_0(\gamma_n)-n}\ \le\ E(2T_n)+1.
+\end{equation}
+\par
+对 \(N_0\) 在 \([\min\{\gamma_n,T_n\},\max\{\gamma_n,T_n\}]\) 上应用中值定理，存在 \(\xi_n\) 介于 \(\gamma_n\) 与 \(T_n\) 之间，使
+\[
+\abs{N_0(\gamma_n)-N_0(T_n)}=N_0'(\xi_n)\,\abs{\gamma_n-T_n}.
+\]
+由 \(N_0(T_n)=n\) 与 \eqref{eq:xi-lambertW-N0-at-gamman} 得
+\(
+N_0'(\xi_n)\,\abs{\gamma_n-T_n}\le E(2T_n)+1
+\)。
+再由 \eqref{eq:xi-lambertW-gamman-bracket} 与 \(N_0'\) 的单调性，得
+\[
+N_0'(\xi_n)\ \ge\ \inf_{T\in[T_n/2,\,2T_n]}N_0'(T)
+\ \ge\ \frac{1}{2\pi}\log\!\Bigl(\frac{T_n}{4\pi}\Bigr),
+\]
+代回即得 \eqref{eq:xi-lambertW-gamman-bound}。证毕。
+\end{proof}
+
+\begin{corollary}[常数级绝对误差上界的极限常数]\label{cor:xi-lambertW-constant-limsup}
+在定理 \ref{thm:xi-lambertW-zero-indexing-explicit} 的假设下，有
+\begin{equation}\label{eq:xi-lambertW-limsup-constant}
+\limsup_{n\to\infty}\abs{\gamma_n-T_n}\ \le\ 2\pi\cdot 0.10076\ =\ 0.63309\ldots,
+\end{equation}
+并且更精细地，
+\begin{equation}\label{eq:xi-lambertW-constant-plus-o1}
+\abs{\gamma_n-T_n}\ \le\ 2\pi\cdot 0.10076+o(1)\qquad(n\to\infty).
+\end{equation}
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:xi-lambertW-gamman-bound}，
+\[
+\abs{\gamma_n-T_n}
+\le
+2\pi\cdot \frac{E(2T_n)+1}{\log(T_n/(4\pi))}.
+\]
+注意 \(T_n\to\infty\)，且
+\(
+E(2T_n)+1
+=0.10076\,\log(2T_n)+0.24460\,\log\log(2T_n)+O(1)
+\)，而 \(\log(T_n/(4\pi))=\log T_n+O(1)\)。
+因此 \(\frac{\log\log T_n}{\log T_n}\to 0\)，并有
+\[
+\frac{E(2T_n)+1}{\log(T_n/(4\pi))}=0.10076+o(1),
+\]
+代回即得 \eqref{eq:xi-lambertW-limsup-constant} 与 \eqref{eq:xi-lambertW-constant-plus-o1}。证毕。
+\end{proof}
+
+\begin{proposition}[平均间距递归轨迹与误差可控的累积稳定性]\label{prop:xi-lambertW-recursive-trajectory-stability}
+定义
+\[
+f(T):=\frac{2\pi}{\log(T/(2\pi))}\qquad(T>2\pi).
+\]
+取某个 \(n_0\ge n_\ast\) 并设 \(u_{n_0}=T_{n_0}\)。
+定义递归序列
+\begin{equation}\label{eq:xi-lambertW-un-recursion}
+u_{n+1}=u_n+f(u_n),\qquad n\ge n_0.
+\end{equation}
+则：
+\begin{enumerate}
+  \item 序列 \((u_n)_{n\ge n_0}\) 严格递增且 \(u_n\to\infty\)；
+  \item 存在常数 \(C_{n_0}<\infty\) 使得对所有 \(n\ge n_0\) 均有
+  \begin{equation}\label{eq:xi-lambertW-un-Tn-uniform}
+  \abs{u_n-T_n}\le C_{n_0},
+  \end{equation}
+  并且更强地，
+  \begin{equation}\label{eq:xi-lambertW-un-Tn-rate}
+  \abs{u_n-T_n}=O\!\Bigl(\frac{1}{\log n}\Bigr)\qquad(n\to\infty);
+  \end{equation}
+  \item 与定理 \ref{thm:xi-lambertW-zero-indexing-explicit} 合并，得到对所有 \(n\ge n_0\) 的复合误差证书
+  \begin{equation}\label{eq:xi-lambertW-gamman-un-composite}
+  \abs{\gamma_n-u_n}
+  \ \le\
+  \frac{2\pi\bigl(E(2T_n)+1\bigr)}{\log\!\bigl(T_n/(4\pi)\bigr)}
+  \;+\;C_{n_0}.
+  \end{equation}
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\textbf{（1）}当 \(T>2\pi\) 时 \(f(T)>0\)，故 \((u_n)\) 严格递增。
+若 \((u_n)\) 有界，则存在收敛子列 \(u_{n_k}\to u_\infty>2\pi\)，但由递归式
+\(
+u_{n_k+1}-u_{n_k}=f(u_{n_k})\to f(u_\infty)>0
+\)
+与 \(u_{n_k}\to u_\infty\) 矛盾，故 \(u_n\to\infty\)。
+\par
+\textbf{（2）}由 \(N_0(T_n)=n\) 与中值定理，存在 \(\xi_n\in(T_n,T_{n+1})\) 使
+\[
+1=N_0(T_{n+1})-N_0(T_n)=N_0'(\xi_n)\,(T_{n+1}-T_n),
+\]
+从而
+\begin{equation}\label{eq:xi-lambertW-Tn-increment}
+T_{n+1}-T_n=\frac{2\pi}{\log(\xi_n/(2\pi))}.
+\end{equation}
+将 \eqref{eq:xi-lambertW-Tn-increment} 与 \(f(T_n)=2\pi/\log(T_n/(2\pi))\) 比较，定义局部截断误差
+\[
+\delta_n:=f(T_n)-(T_{n+1}-T_n)
+=2\pi\Bigl(\frac{1}{\log(T_n/(2\pi))}-\frac{1}{\log(\xi_n/(2\pi))}\Bigr).
+\]
+注意 \(\xi_n-T_n=T_{n+1}-T_n\)。
+由 \(f'(T)=-\frac{2\pi}{T\log^2(T/(2\pi))}\) 与中值定理，存在 \(\eta_n\in(T_n,\xi_n)\) 使
+\[
+\abs{\delta_n}=\abs{f'( \eta_n)}\,(\xi_n-T_n)
+\ll
+\frac{1}{T_n\log^2 T_n}\cdot (T_{n+1}-T_n)
+\ll
+\frac{1}{T_n\log^3 T_n}.
+\]
+而 \(T_n\asymp n/\log n\)，故 \(\abs{\delta_n}=O(1/(n\log^2 n))\) 且 \(\sum_{n\ge n_0}\abs{\delta_n}<\infty\)。
+\par
+令 \(e_n:=u_n-T_n\)。
+由 \eqref{eq:xi-lambertW-un-recursion} 与 \(T_{n+1}=T_n+f(T_n)-\delta_n\) 得
+\begin{equation}\label{eq:xi-lambertW-en-recursion}
+e_{n+1}=e_n+\bigl(f(u_n)-f(T_n)\bigr)+\delta_n.
+\end{equation}
+再由中值定理，存在 \(\zeta_n\) 介于 \(u_n\) 与 \(T_n\) 之间使
+\(
+f(u_n)-f(T_n)=f'(\zeta_n)\,e_n
+\)。
+代回 \eqref{eq:xi-lambertW-en-recursion} 得
+\begin{equation}\label{eq:xi-lambertW-en-contraction}
+e_{n+1}=\bigl(1+f'(\zeta_n)\bigr)e_n+\delta_n.
+\end{equation}
+当 \(n\) 足够大时，\(\zeta_n\to\infty\) 且 \(f'(\zeta_n)\to 0\)，故可取 \(n_0\) 使 \(1+f'(\zeta_n)\in(0,1)\) 对所有 \(n\ge n_0\) 成立。
+由 \eqref{eq:xi-lambertW-en-contraction} 的逐步收缩结构与 \(\sum_{n\ge n_0}\abs{\delta_n}<\infty\)，推出 \((e_n)\) 有界，从而得到 \eqref{eq:xi-lambertW-un-Tn-uniform}。
+进一步地，由
+\(
+1+f'(\zeta_n)=1-\Theta\!\bigl(1/(T_n\log^2 T_n)\bigr)
+=1-\Theta\!\bigl(1/(n\log n)\bigr)
+\)
+及 \(\sum_{k\ge n}\abs{\delta_k}=O(1/\log n)\)，对 \eqref{eq:xi-lambertW-en-contraction} 迭代展开可得 \eqref{eq:xi-lambertW-un-Tn-rate}。
+\par
+\textbf{（3）}由三角不等式
+\(
+\abs{\gamma_n-u_n}\le \abs{\gamma_n-T_n}+\abs{T_n-u_n}
+\)
+并结合 \eqref{eq:xi-lambertW-gamman-bound} 与 \eqref{eq:xi-lambertW-un-Tn-uniform} 即得 \eqref{eq:xi-lambertW-gamman-un-composite}。证毕。
+\end{proof}
+
+\begin{conjecture}[Lambert--W 主尺度的常数级误差不可消去性]\label{conj:xi-lambertW-constant-sharpness}
+在定理 \ref{thm:xi-lambertW-zero-indexing-explicit} 的框架下，记
+\[
+\Delta_n:=\gamma_n-\frac{2\pi n}{\mathscr{W}(n/e)}.
+\]
+猜想存在常数 \(c_0>0\) 使得
+\[
+\limsup_{n\to\infty}\abs{\Delta_n}\ \ge\ c_0,
+\]
+亦即由 \(N_0\) 诱导的 Lambert--\(W\) 主尺度无法将绝对误差推进到 \(o(1)\)。
+更进一步，猜想 \(\limsup_{n\to\infty}\abs{\Delta_n}\) 的量级与显式误差界 \eqref{eq:xi-explicit-zero-counting-bound} 中 \(\log T\) 主系数同阶，从而推论 \ref{cor:xi-lambertW-constant-limsup} 的常数上界在系数层面不可改进。
+\end{conjecture}
+
+\begin{remark}[共享前缀 \(\neq\) 互为寻址：地址对象是柱事件而非点指针]\label{rem:xi-phase-prefix-not-pointer}
+对固定深度 \(m\)，关系
+\[
+\gamma\sim_m\gamma'\quad:\Longleftrightarrow\quad A_m(\gamma)=A_m(\gamma')
+\]
+刻画的是“同一柱事件（同一 dyadic 地址盒）”，而非“点对点指针”。
+定理 \ref{thm:xi-phase-prefix-collision-lower-bound} 表明：当 \(m<2\log_2T+\log_2\log T-O(1)\) 时，高度带 \((T,2T]\) 内该等价类在结构上必为高重数；因此任何将“一个零点可作为另一个零点的地址”理解为\emph{有限前缀的确定性寻址}的命题都不良定。
+\par
+在本文多轴前缀打包 \(a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}})\)（定义 \ref{def:multi_axis_address}）中，上述结论可被解释为：当可见轴 \(a_{\mathrm{vis}}\) 仅取相位前缀且深度不足时，残差轴 \(a_{\mathrm{res}}\) 的最小预算被强制为 \(\Theta(2\log T)\) 级（否则必发生碰撞型 \(\mathsf{NULL}\)）；这与离线方向的端点二阶径向通道门槛同阶（推论 \ref{cor:xi-null-second-order-radial-channel}）。
+\end{remark}
+
+\begin{remark}[解释性叙述（非推理前提）：强混合极限下跨窗寻址的结构否定]\label{rem:xi-phase-mixing-no-addressing}
+若将归一化零点过程（以单位平均间距归一化）假设为在有限维分布意义下趋于某个平移不变且混合的极限点过程（例如 \(\operatorname{Sine}_2\) 或更一般的 \(\operatorname{Sine}_\beta\) 过程；参见 \cite{AriasDeReynaRodgers2024ConvergencePointsZetaZeros,ChhaibiNajnudel2018RigiditySineBeta} 的相关极限框架），则任意仅依赖有限局部窗口配置的“地址函数”对远距窗口配置的条件信息增益在距离 \(R\to\infty\) 时消失。
+该混合性语义上对应：跨尺度、跨窗口的确定性“零点互寻址”与强随机混合范式不相容；能稳定存在的仅是由有限分辨率前缀诱导的局部聚类（命题 \ref{prop:xi-phase-adjacent-prefix-sharing}）以及由端点通道门槛诱导的可见/不可见分层（定理 \ref{thm:app-jensen-offcritical-kink-localization} 与推论 \ref{cor:xi-null-second-order-radial-channel}）。
+\end{remark}
+
+\endinput

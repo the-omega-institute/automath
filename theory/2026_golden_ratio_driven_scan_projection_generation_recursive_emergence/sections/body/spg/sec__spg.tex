@@ -1,0 +1,589 @@
+\section{扫描—投影生成器：群作用与二元读出}\label{sec:spg}
+
+\paragraph{单生成群作用}
+
+设 $\Gamma=\langle g\rangle$ 为单生成（半）群。给定相空间 $X$ 上的作用并记
+\[
+T^t:X\to X,\quad T^t(x)=g^t\cdot x,\qquad t\in\ZZ\ (\text{或 }t\in\NN),
+\]
+则本文中的“时间”即迭代计数 $t$。
+
+\paragraph{投影读出与二元记录}
+
+给定可测集 $W\subseteq X$，定义二元读出（事件指示函数）
+\[
+s_t(x)=\ind_W(T^t x)\in\{0,1\}.
+\]
+对固定初值 $x$，长度 $m$ 的局部读出窗口产生微态词
+\[
+\omega_m(x;t)=s_t(x)s_{t+1}(x)\cdots s_{t+m-1}(x)\in \Omega_m:=\{0,1\}^m.
+\]
+$\Omega_m$ 是分辨率 $m$ 下可观测的全部微态集合，其基数为 $\abs{\Omega_m}=2^m$。
+
+该接口在紧群/算子代数语言中的等价表述仅作为桥接接口使用，见附录 \ref{app:op-algebra}。
+
+\paragraph{概念的空值投影范式}
+
+在此框架中，概念不被视为先验对象，而被视为“可寻址事件”。
+\begin{itemize}
+  \item \textbf{地址（address）：}任意有限词 $a\in\{0,1\}^k$ 作为索引。
+  \item \textbf{概念（concept）：}由地址 $a$ 指定的事件
+  \[
+  C_a=\{x\in X:\omega_k(x;0)=a\}.
+  \]
+  \item \textbf{时间平移的柱事件：}对任意 $t\in\ZZ$ 定义 $C_{a,t}:=\{x\in X:\omega_k(x;t)=a\}=T^{-t}C_a$。
+  \item \textbf{读出（evaluation）：}对给定 $x$，概念值为二元投影 $\ind_{C_a}(x)\in\{0,1\}$。
+\item \textbf{空值：}在未给定地址 $a$ 之前，$\ind_{C_a}$ 不定义；该“不定义”并非取值为 $0$，而是缺乏指称。
+\end{itemize}
+
+关键结论是：\textbf{地址先于概念值}。并且在递归机制中，新概念的地址由旧概念的读出序列构造（见第 \ref{sec:recursive-addressing} 节）。
+
+柱事件的可测性与平移关系 $C_{a,t}=T^{-t}C_a$ 均由定义直接给出。
+
+\input{subsubsec__spg-cylinder-information-time-sturmian}
+
+\paragraph{前缀超度量与柱拓扑}\label{par:spg-prefix-ultrametric}
+把无限读出词视为符号空间上的点。定义
+\[
+\omega_\infty(x):=s_0(x)s_1(x)s_2(x)\cdots\in\Omega_\infty:=\{0,1\}^{\NN},
+\]
+并对任意有限词（地址）$a\in\{0,1\}^k$ 定义其对应的\textbf{符号柱集}
+\[
+[a]:=\{\xi\in\Omega_\infty:\ \xi_0\xi_1\cdots\xi_{k-1}=a\}.
+\]
+则柱事件可写为 $C_a=\omega_\infty^{-1}([a])$。
+\par
+对 $\xi,\eta\in\Omega_\infty$ 定义共同前缀深度
+\[
+\ell(\xi,\eta):=\sup\{k\ge 0:\ \xi_0\cdots\xi_{k-1}=\eta_0\cdots\eta_{k-1}\}\in\NN\cup\{\infty\},
+\]
+并定义前缀超度量（取约定 $2^{-\infty}=0$）
+\[
+d_{\mathrm{pre}}(\xi,\eta):=2^{-\ell(\xi,\eta)}.
+\]
+该超度量的球与柱集一致：对任意 $a$ 与任意 $\xi\in[a]$，
+\[
+[a]=\overline{B}\bigl(\xi,2^{-|a|}\bigr)\qquad(|a|=k).
+\]
+参见 \cite{LindMarcus1995}。因此地址前缀细化对应半径的单调收缩。把该超度量通过 $\omega_\infty$ 拉回到相空间，得到伪超度量 $d_X(x,y):=d_{\mathrm{pre}}(\omega_\infty(x),\omega_\infty(y))$；若读出不单射则可能出现 $d_X(x,y)=0$ 的碰撞，这与后文“单值可核验读出/单射化记录轴/空值 $\mathsf{NULL}$”口径相容。
+
+\subsection{扫描深度与清晰度：可判定性、误差剖面与边界柱}\label{subsec:spg-scan-clarity}
+本小节在“地址先于概念值”的接口上，把“扫描越深越清晰”压缩为可审计的定量律：分辨率 $m$ 给出一个有限信息层；对任意命题 $\mathsf P$，其在该信息层的最优判错概率构成一条单调剖面 $m\mapsto \varepsilon_m(\mathsf P;\mu)$。后续关于同步扣除与 Chebotarev 预算的联立，将把该剖面作为“定义性清晰度”的输入（见备注 \ref{rem:spg-sync-null-interface} 与定理 \ref{thm:pom-sync-subtracted-chebotarev-capacity}）。
+
+\paragraph{柱代数与闭开性}
+令 $\tau$ 为 $\Omega_\infty$ 的积拓扑。对 $m\ge 1$ 记
+\[
+\mathcal{A}_m:=\sigma([a]:a\in\{0,1\}^m),
+\qquad
+\mathcal{A}_\infty:=\sigma\!\left(\bigcup_{m\ge 1}\mathcal{A}_m\right).
+\]
+并令
+\[
+\mathcal{F}_m:=\omega_\infty^{-1}(\mathcal{A}_m),
+\qquad
+\mathcal{F}_\infty:=\omega_\infty^{-1}(\mathcal{A}_\infty),
+\]
+它们给出“仅允许访问长度-$m$ 地址前缀信息”的可观测闭包；其与第 \ref{sec:preliminaries} 节“有限窗口事件生成的 $\sigma$-代数”口径一致。
+
+\begin{proposition}[可判定性与闭开性]\label{prop:spg-decidable-clopen}
+令 $P\subseteq\Omega_\infty$ 为 Borel 集。以下条件等价：
+\begin{enumerate}
+  \item $P\in\mathcal{A}_m$（即仅由长度 $m$ 前缀决定）；
+  \item 存在 $A\subseteq\{0,1\}^m$ 使得 $P=\bigcup_{a\in A}[a]$；
+  \item $P$ 在拓扑 $\tau$ 下为闭开集，且在前缀超度量 $d_{\mathrm{pre}}$ 下可写为若干半径 $2^{-m}$ 闭球的并。
+\end{enumerate}
+从而对 $X$ 上的事件 $\mathsf P\in\mathcal{F}_\infty$，若 $\mathsf P\in\mathcal{F}_m$，则其读出仅依赖分辨率 $m$ 的地址前缀。
+\end{proposition}
+
+\paragraph{扫描误差剖面}
+\begin{definition}[扫描误差剖面]\label{def:spg-scan-error-profile}
+在给定 $T$-不变概率测度 $\mu$ 下，对任意 $\mathsf P\in\mathcal{F}_\infty$ 定义
+\[
+\varepsilon_m(\mathsf P;\mu)
+:=\inf\left\{\mu(g\neq \ind_{\mathsf P}): g\in L^\infty(\mathcal{F}_m),\ g(X)\subseteq\{0,1\}\right\}.
+\]
+\end{definition}
+
+令 $\mathcal{C}_m:=\{C_a:a\in\{0,1\}^m\}$ 为分辨率 $m$ 的柱划分（空集允许）。则有柱分解表达式：
+
+\begin{proposition}[柱分解的精确表达]\label{prop:spg-scan-error-cylinder}
+沿用定义 \ref{def:spg-scan-error-profile} 的记号，有
+\[
+\varepsilon_m(\mathsf P;\mu)
+=\sum_{C\in\mathcal{C}_m}\min\{\mu(\mathsf P\cap C),\mu(C\setminus \mathsf P)\}.
+\]
+等价地，令 $p_C:=\mu(\mathsf P\,|\,C)$（当 $\mu(C)=0$ 时取 $p_C:=0$），则
+\[
+\varepsilon_m(\mathsf P;\mu)
+=\sum_{C\in\mathcal{C}_m}\mu(C)\min\{p_C,1-p_C\}
+=\mathbb{E}_\mu\bigl[\min\{p_m,1-p_m\}\bigr],
+\qquad
+p_m:=\mu(\mathsf P\,|\,\mathcal{F}_m).
+\]
+\end{proposition}
+
+\input{prop__spg-clarity-bayes-optimality}
+
+\begin{theorem}[扫描误差的 Tanaka--Stokes 表示]\label{thm:spg-scan-tanaka-stokes}
+沿用命题 \ref{prop:spg-scan-error-cylinder} 的记号，并令 \(p_0:=\mu(\mathsf P)\)。
+定义阈值 \(1/2\) 的离散局部时间
+\[
+L_m^{1/2}
+:=\sum_{k=0}^{m-1}\left(
+\abs{p_{k+1}-\tfrac12}-\abs{p_k-\tfrac12}-\operatorname{sgn}(p_k-\tfrac12)\,(p_{k+1}-p_k)
+\right),
+\qquad
+\operatorname{sgn}(0):=0.
+\]
+则对所有 \(m\ge 1\) 成立 \(L_m^{1/2}\ge 0\) 且 \(m\mapsto L_m^{1/2}\) 单调不减，并且精确恒等式
+\[
+\boxed{\;
+\varepsilon_m(\mathsf P;\mu)=\varepsilon_0(\mathsf P;\mu)-\EE_\mu\!\left[L_m^{1/2}\right]\; },
+\qquad
+\varepsilon_0(\mathsf P;\mu)=\min\{\mu(\mathsf P),1-\mu(\mathsf P)\}.
+\]
+若 \(\ind_{\mathsf P}\) 关于 \(\bigvee_{m\ge 1}\mathcal F_m\) 可测，则 \(\varepsilon_m(\mathsf P;\mu)\to 0\)，从而 \(L_m^{1/2}\uparrow L_\infty^{1/2}\) 且
+\[
+\boxed{\;
+\EE_\mu\!\left[L_\infty^{1/2}\right]=\varepsilon_0(\mathsf P;\mu)\; }.
+\]
+\end{theorem}
+
+\begin{proof}
+由 \(\min\{p,1-p\}=\tfrac12-\abs{p-\tfrac12}\)（\(p\in[0,1]\)）得
+\[
+\varepsilon_m(\mathsf P;\mu)=\frac12-\EE_\mu\abs{p_m-\tfrac12}.
+\]
+对任意实序列 \((x_k)\) 与阈值 \(a\) 有离散 Tanaka 分解
+\[
+\abs{x_m-a}
+=\abs{x_0-a}+\sum_{k=0}^{m-1}\operatorname{sgn}(x_k-a)\,(x_{k+1}-x_k)
+\ +\ \sum_{k=0}^{m-1}\left(\abs{x_{k+1}-a}-\abs{x_k-a}-\operatorname{sgn}(x_k-a)\,(x_{k+1}-x_k)\right).
+\]
+取 \(x_k=p_k\)、\(a=\tfrac12\) 即得
+\(
+\abs{p_m-\tfrac12}=\abs{p_0-\tfrac12}+\sum_{k=0}^{m-1}\operatorname{sgn}(p_k-\tfrac12)(p_{k+1}-p_k)+L_m^{1/2}
+\)。
+\par
+\(p_m=\mu(\mathsf P\,|\,\mathcal F_m)\) 为 \([0,1]\)-值鞅，且 \(\operatorname{sgn}(p_k-\tfrac12)\) 为 \(\mathcal F_k\)-可测，故
+\(
+\EE_\mu[\operatorname{sgn}(p_k-\tfrac12)(p_{k+1}-p_k)]=0
+\)。
+取期望得
+\(
+\EE_\mu\abs{p_m-\tfrac12}=\abs{p_0-\tfrac12}+\EE_\mu[L_m^{1/2}]
+\)。
+代回 \(\varepsilon_m=\tfrac12-\EE_\mu\abs{p_m-\tfrac12}\) 并注意 \(\abs{p_0-\tfrac12}=\tfrac12-\varepsilon_0\)，即得所示恒等式。
+\par
+由绝对值函数的凸性可知每一加数非负，从而 \(L_m^{1/2}\ge 0\) 且随 \(m\) 单调不减。
+最后，若 \(\ind_{\mathsf P}\) 关于 \(\bigvee_m\mathcal F_m\) 可测，则 \(p_m\to \ind_{\mathsf P}\) 几乎处处，因而 \(\varepsilon_m=\EE_\mu[\min\{p_m,1-p_m\}]\to 0\)；由单调收敛定理得到 \(\EE_\mu[L_\infty^{1/2}]=\varepsilon_0\)。证毕。
+\end{proof}
+
+\begin{corollary}[清晰度的基本性质]\label{cor:spg-clarity-basic}
+$m\mapsto\varepsilon_m(\mathsf P;\mu)$ 单调不增；并且 $\varepsilon_m(\mathsf P;\mu)=0$ 当且仅当 $\mathsf P\in\mathcal{F}_m$。
+\end{corollary}
+
+\paragraph{边界柱与收敛指数}
+\begin{definition}[边界柱覆盖数与柱 Minkowski 维数]\label{def:spg-boundary-cylinder-dimension}
+定义分辨率 $m$ 的边界柱覆盖数
+\[
+N_m(\partial\mathsf P)
+:=\#\left\{C\in\mathcal{C}_m:\ \mu(\mathsf P\cap C)>0\ \text{且}\ \mu(C\setminus \mathsf P)>0\right\}.
+\]
+若存在常数 $\lambda_{\mathrm{cyl}}>1$ 使得柱复杂度满足
+\[
+\#\{C\in\mathcal{C}_m:\mu(C)>0\}\asymp \lambda_{\mathrm{cyl}}^m,
+\]
+则定义上柱维数
+\[
+\overline{\dim}_B(\partial\mathsf P)
+:=\limsup_{m\to\infty}\frac{\log N_m(\partial\mathsf P)}{m\log\lambda_{\mathrm{cyl}}}\in[0,1].
+\]
+\end{definition}
+
+\begin{theorem}[边界维数控制的清晰度收敛]\label{thm:spg-clarity-boundary-dimension}
+设存在常数 $K<\infty$ 与 $\lambda_{\mathrm{cyl}}>1$ 使得对所有 $m$ 与所有 $C\in\mathcal{C}_m$ 有
+\[
+\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}.
+\]
+则对任意 $\mathsf P\in\mathcal{F}_\infty$，
+\[
+\varepsilon_m(\mathsf P;\mu)\le K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf P).
+\]
+特别地，若 $\overline{\dim}_B(\partial\mathsf P)=d<1$，则
+\[
+\varepsilon_m(\mathsf P;\mu)\le \lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}.
+\]
+\end{theorem}
+
+\begin{theorem}[边界柱厚度与体--边界标度律]\label{thm:spg-clarity-volume-boundary-scaling}
+设存在常数 \(0<c_-\le c_+<\infty\) 与 \(\lambda_{\mathrm{cyl}}>1\)，使得对所有 \(m\) 与所有满足 \(\mu(C)>0\) 的 \(C\in\mathcal C_m\) 有
+\[
+c_-\,\lambda_{\mathrm{cyl}}^{-m}\ \le\ \mu(C)\ \le\ c_+\,\lambda_{\mathrm{cyl}}^{-m}.
+\]
+并设存在 \(\theta\in(0,\tfrac12]\) 与 \(m_0\) 使得对所有 \(m\ge m_0\) 与所有集合
+\[
+\partial_m\mathsf P:=\left\{C\in\mathcal C_m:\mu(\mathsf P\cap C)>0\ \text{且}\ \mu(C\setminus \mathsf P)>0\right\}
+\]
+中的 \(C\) 有
+\[
+\min\{\mu(\mathsf P\,|\,C),1-\mu(\mathsf P\,|\,C)\}\ge \theta.
+\]
+则对所有 \(m\ge m_0\) 成立双边估计
+\[
+\boxed{\;
+\theta\,c_-\,\lambda_{\mathrm{cyl}}^{-m}\,N_m(\partial\mathsf P)
+\ \le\ \varepsilon_m(\mathsf P;\mu)
+\ \le\ \frac{c_+}{2}\,\lambda_{\mathrm{cyl}}^{-m}\,N_m(\partial\mathsf P)\; }.
+\]
+若 \(N_m(\partial\mathsf P)=\lambda_{\mathrm{cyl}}^{dm+o(m)}\) 且极限指数 \(d\) 存在，则
+\[
+\boxed{\;
+\lim_{m\to\infty}-\frac1m\log_{\lambda_{\mathrm{cyl}}}\varepsilon_m(\mathsf P;\mu)=1-d\; }.
+\]
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{prop:spg-scan-error-cylinder}，
+\[
+\varepsilon_m(\mathsf P;\mu)
+=\sum_{C\in\mathcal C_m}\mu(C)\min\{\mu(\mathsf P\,|\,C),1-\mu(\mathsf P\,|\,C)\}
+=\sum_{C\in\partial_m\mathsf P}\mu(C)\min\{\mu(\mathsf P\,|\,C),1-\mu(\mathsf P\,|\,C)\}.
+\]
+厚度条件给出下界
+\[
+\varepsilon_m(\mathsf P;\mu)
+\ge \sum_{C\in\partial_m\mathsf P}\mu(C)\,\theta
+\ge \theta\,N_m(\partial\mathsf P)\,c_-\,\lambda_{\mathrm{cyl}}^{-m}.
+\]
+另一方面恒有 \(\min\{p,1-p\}\le\tfrac12\)，从而
+\[
+\varepsilon_m(\mathsf P;\mu)
+\le \sum_{C\in\partial_m\mathsf P}\mu(C)\,\frac12
+\le \frac12\,N_m(\partial\mathsf P)\,c_+\,\lambda_{\mathrm{cyl}}^{-m}.
+\]
+指数结论由两端同阶估计直接推出。证毕。
+\end{proof}
+
+\input{subsec__spg-boundary-cylinder-godelization-clarity}
+
+\input{subsubsec__spg-boundary-affine-residual-freedom}
+
+\input{thm__spg-walsh-holographic-discrete-stokes}
+
+\begin{remark}[黄金均值稳定语法的专门化]\label{rem:spg-golden-mean-specialization}
+当可见符号系统为黄金均值子移位（禁止相邻 $11$）且取其最大熵（Parry）测度时，有 $\lambda_{\mathrm{cyl}}=\varphi$；
+因此定理 \ref{thm:spg-clarity-boundary-dimension} 的指数率由 $(1-d)\log\varphi$ 控制。
+\end{remark}
+
+\paragraph{超立方体上的同伦逆算子与 dyadic 外近似的通量读出}
+为把“边界复杂度的尺度律”与“边界通量的可读出性”置于同一可核验接口中，回到欧氏超立方体上的外微分同伦分解与其最优常数。
+记 \(I^n:=[0,1]^n\)（\(n\ge 1\)）。
+令 \(\Omega^k_{\mathrm{sm}}(I^n)\) 表示在 \(I^n\) 邻域上定义的光滑 \(k\)-形式并限制到 \(I^n\) 的空间。
+对
+\(
+\omega=\sum_{|I|=k}a_I(x)\,\dd x_I\in\Omega^k_{\mathrm{sm}}(I^n)
+\)
+定义系数 \(L^\infty\) 范数
+\[
+\|\omega\|_\infty:=\max_{x\in I^n}\max_{|I|=k}|a_I(x)|.
+\]
+取中心 \(c:=(\tfrac12,\dots,\tfrac12)\)，并定义线性同伦
+\[
+H:[0,1]\times I^n\to I^n,\qquad H(t,x)=c+t(x-c),
+\qquad H_t(x):=H(t,x),
+\]
+以及向量场 \(X(x):=x-c\)。
+对 \(k\ge 1\) 定义线性算子
+\begin{equation}\label{eq:spg-cube-homotopy-operator-Kk}
+(K_k\omega)(x):=\int_0^1 t^{k-1}\bigl(\iota_X\omega\bigr)\bigl(H_t(x)\bigr)\,\dd t,
+\qquad
+K_k:\Omega^k_{\mathrm{sm}}(I^n)\to\Omega^{k-1}_{\mathrm{sm}}(I^n).
+\end{equation}
+
+\begin{theorem}[超立方体上的最优有界 Poincar\'e--Stokes 逆算子]\label{thm:spg-cube-optimal-bounded-poincare-stokes-inverse}
+在定义 \eqref{eq:spg-cube-homotopy-operator-Kk} 的设定下：
+\begin{enumerate}
+  \item 对任意 \(\omega\in\Omega^k_{\mathrm{sm}}(I^n)\)（\(k\ge 1\)）成立严格同伦恒等式
+  \begin{equation}\label{eq:spg-cube-homotopy-identity}
+  \dd(K_k\omega)+K_{k+1}(\dd\omega)=\omega.
+  \end{equation}
+  特别地，若 \(\dd\omega=0\)，则 \(\omega=\dd(K_k\omega)\)。
+  \item 存在与 \(n\) 无关的最优常数界
+  \begin{equation}\label{eq:spg-cube-Kk-supnorm-bound}
+  \|K_k\omega\|_\infty\le \frac{1}{2k}\,\|\omega\|_\infty.
+  \end{equation}
+  并且常数 \(\frac{1}{2k}\) 在如下意义下最优：若 \(R:Z^k_{\mathrm{sm}}(I^n)\to\Omega^{k-1}_{\mathrm{sm}}(I^n)\) 为线性算子（\(Z^k_{\mathrm{sm}}(I^n):=\{\omega\in\Omega^k_{\mathrm{sm}}(I^n):\dd\omega=0\}\)），满足对所有闭 \(k\)-形式 \(\omega\) 有 \(\dd(R\omega)=\omega\)，则其算子范数满足
+  \begin{equation}\label{eq:spg-cube-optimal-lower-bound}
+  \|R\|_{\infty\to\infty}\ge \frac{1}{2k}.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由 Cartan 公式，对任意 \(\omega\) 有
+\[
+\frac{\dd}{\dd t}(H_t^*\omega)=H_t^*(\mathcal{L}_{\dot H_t}\omega)
+=H_t^*\bigl(\dd\,\iota_{\dot H_t}\omega+\iota_{\dot H_t}\dd\omega\bigr),
+\qquad
+\dot H_t=\partial_tH(t,\cdot)=X\circ H_t.
+\]
+对 \(t\in[0,1]\) 积分得
+\[
+H_1^*\omega-H_0^*\omega
+=\dd\int_0^1 H_t^*(\iota_{\dot H_t}\omega)\,\dd t+\int_0^1 H_t^*(\iota_{\dot H_t}\dd\omega)\,\dd t.
+\]
+由于 \(H_1=\mathrm{id}\) 且 \(H_0\) 为常值映射到点 \(c\)，当 \(k\ge 1\) 时有 \(H_0^*\omega=0\)。
+对线性同伦 \(H_t\)，拉回与收缩在次数 \(k\) 上给出 \(t^{k-1}\) 权重，从而上述两项分别化为 \(\dd(K_k\omega)\) 与 \(K_{k+1}(\dd\omega)\)，得到 \eqref{eq:spg-cube-homotopy-identity}。
+\par
+为证 \eqref{eq:spg-cube-Kk-supnorm-bound}，注意 \(\iota_X\omega\) 的任一系数至多为某个 \((x_j-c_j)\) 乘以某个 \(a_I(x)\)。
+在 \(I^n\) 上恒有 \(|x_j-c_j|\le \tfrac12\)，故 \(\|\iota_X\omega\|_\infty\le \tfrac12\|\omega\|_\infty\)，从而
+\[
+\|K_k\omega\|_\infty
+\le \int_0^1 t^{k-1}\,\dd t\cdot \|\iota_X\omega\|_\infty
+\le \frac{1}{k}\cdot\frac12\|\omega\|_\infty
+=\frac{1}{2k}\|\omega\|_\infty.
+\]
+\par
+最优性取常数 \(k\)-形式 \(\omega_0:=\dd x_1\wedge\cdots\wedge \dd x_k\)。
+令 \(F:=[0,1]^k\times\{0\}^{n-k}\subset I^n\)。
+任取 \(\eta\in\Omega^{k-1}_{\mathrm{sm}}(I^n)\) 满足 \(\dd\eta=\omega_0\)，由 Stokes 定理得
+\[
+1=\int_F\omega_0=\int_{\partial F}\eta.
+\]
+而 \(\partial F\) 由 \(2k\) 个 \((k-1)\)-面组成，每个面的 \((k-1)\)-维体积为 \(1\)，因此
+\[
+\left|\int_{\partial F}\eta\right|
+\le 2k\,\|\eta\|_\infty,
+\qquad\text{从而}\qquad
+\|\eta\|_\infty\ge \frac{1}{2k}.
+\]
+取 \(\eta=R\omega_0\) 即得 \eqref{eq:spg-cube-optimal-lower-bound}。证毕。
+\end{proof}
+
+\begin{theorem}[同伦分解与 Stokes 缺陷的最优控制]\label{thm:spg-cube-homotopy-decomposition-and-stokes-defect}
+取 \(1\le k\le n-1\)。
+对任意 \(\omega\in\Omega^k_{\mathrm{sm}}(I^n)\) 定义
+\[
+\eta:=K_k\omega\in\Omega^{k-1}_{\mathrm{sm}}(I^n),
+\qquad
+\mathcal{E}:=K_{k+1}(\dd\omega)\in\Omega^{k}_{\mathrm{sm}}(I^n).
+\]
+则有严格分解
+\begin{equation}\label{eq:spg-cube-homotopy-decomposition}
+\omega=\dd\eta+\mathcal{E},
+\qquad
+\dd\mathcal{E}=\dd\omega,
+\end{equation}
+并且误差项满足
+\begin{equation}\label{eq:spg-cube-stokes-defect-optimal-bound}
+\|\mathcal{E}\|_\infty\le \frac{1}{2(k+1)}\,\|\dd\omega\|_\infty.
+\end{equation}
+此外，在“误差仅依赖于 \(\dd\omega\)”的线性框架中常数 \(\frac{1}{2(k+1)}\) 不可降低：若存在常数 \(C\) 与线性算子 \(T:\Omega^k_{\mathrm{sm}}(I^n)\to\Omega^{k-1}_{\mathrm{sm}}(I^n)\) 使得对所有 \(\omega\) 有 \(\omega-\dd(T\omega)\) 仅由 \(\dd\omega\) 决定且
+\(
+\|\omega-\dd(T\omega)\|_\infty\le C\|\dd\omega\|_\infty
+\)，则必有 \(C\ge \frac{1}{2(k+1)}\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:spg-cube-optimal-bounded-poincare-stokes-inverse} 的 \eqref{eq:spg-cube-homotopy-identity} 得 \(\omega=\dd(K_k\omega)+K_{k+1}(\dd\omega)\)，即 \eqref{eq:spg-cube-homotopy-decomposition}。
+再将 \eqref{eq:spg-cube-Kk-supnorm-bound} 应用于 \(K_{k+1}\) 即得 \eqref{eq:spg-cube-stokes-defect-optimal-bound}。
+\par
+为证最优性，取常数 \((k+1)\)-形式 \(\nu_0:=\dd x_1\wedge\cdots\wedge \dd x_{k+1}\)，并令 \(\omega_0:=K_{k+1}\nu_0\)。
+则 \(\dd\omega_0=\nu_0\) 且 \(\|\dd\omega_0\|_\infty=1\)。
+对任意满足“误差仅依赖于 \(\dd\omega\)”的分解 \(\omega_0=\dd\phi+\widetilde{\mathcal{E}}\)，必有 \(\dd\widetilde{\mathcal{E}}=\nu_0\)。
+由定理 \ref{thm:spg-cube-optimal-bounded-poincare-stokes-inverse} 的最优性在阶数 \(k+1\) 的情形可得
+\(
+\|\widetilde{\mathcal{E}}\|_\infty\ge \frac{1}{2(k+1)}
+\)，从而 \(C\ge \frac{1}{2(k+1)}\)。证毕。
+\end{proof}
+
+\begin{corollary}[旋度控制下的势函数重构与最优常数]\label{cor:spg-cube-potential-reconstruction-by-curl}
+设 \(v\in C^1(I^n;\RR^n)\)，并令对应 \(1\)-形式
+\(
+\omega:=\sum_{i=1}^n v_i\,\dd x_i
+\)。
+则存在 \(U\in C^2(I^n)\) 使得
+\begin{equation}\label{eq:spg-cube-vectorfield-gradient-approx}
+\|v-\nabla U\|_\infty\le \frac14\,\|\dd\omega\|_\infty,
+\end{equation}
+其中 \(\dd\omega\) 为 \(2\)-形式（外微分意义下的旋度张量）。
+并且常数 \(\frac14\) 为最优：对任意 \(C<\frac14\)，存在某个 \(v\) 使得对所有 \(U\in C^1(I^n)\) 均有 \(\|v-\nabla U\|_\infty> C\,\|\dd\omega\|_\infty\)。
+\end{corollary}
+\begin{proof}
+取 \(U:=K_1\omega\)（注意 \(K_1\omega\) 为 \(0\)-形式，即函数）。
+由 \eqref{eq:spg-cube-homotopy-identity}（取 \(k=1\)）得 \(\omega=\dd U+K_2(\dd\omega)\)。
+令 \(\mathcal{E}:=K_2(\dd\omega)\)，则 \(\omega-\dd U\) 的系数向量即为 \(v-\nabla U\)。
+由 \eqref{eq:spg-cube-Kk-supnorm-bound}（取 \(k=2\)）得 \(\|\mathcal{E}\|_\infty\le \frac14\|\dd\omega\|_\infty\)，从而得到 \eqref{eq:spg-cube-vectorfield-gradient-approx}。
+\par
+最优性取 \(n\ge 2\)，令 \(\nu_0:=\dd x_1\wedge \dd x_2\) 并取 \(\alpha:=K_2\nu_0\)，则 \(\dd\alpha=\nu_0\) 且 \(\|\nu_0\|_\infty=1\)。
+对任意 \(U\) 有 \(\dd(\alpha-\dd U)=\nu_0\)，由定理 \ref{thm:spg-cube-optimal-bounded-poincare-stokes-inverse} 在阶数 \(2\) 的最优性得到 \(\|\alpha-\dd U\|_\infty\ge \frac14\)，故不存在更小统一常数。证毕。
+\end{proof}
+
+\input{subsubsec__spg-cubical-cochain-quantized-stokes}
+
+\input{prop__spg-cheeger-stokes-duality}
+
+\begin{theorem}[分形外近似上的降一维 Stokes 增益与 Minkowski 维的通量读出]\label{thm:spg-dyadic-outer-approx-stokes-gain-minkowski-readout}
+令 \(A\subset I^n\) 为紧集。
+对 \(m\ge 1\) 定义其 dyadic 外近似
+\[
+U_m(A):=\bigcup\left\{Q:\ Q\ \text{为边长 }2^{-m}\text{ 的 dyadic }n\text{-立方体且 }Q\cap A\neq\varnothing\right\},
+\]
+并以自然取向理解分片光滑边界 \(\partial U_m(A)\)。
+设 \(d:=\overline{\dim}_{\mathrm M}(A)<n\) 为上 Minkowski 维，等价地，存在常数 \(C_A<\infty\) 使得当 \(\varepsilon\downarrow 0\) 时
+\[
+\operatorname{Vol}(A_\varepsilon)\le C_A\,\varepsilon^{n-d},
+\qquad
+A_\varepsilon:=\{x\in I^n:\ \mathrm{dist}(x,A)\le \varepsilon\}.
+\]
+则对任意光滑 \((n-1)\)-形式 \(\omega\) 有
+\begin{equation}\label{eq:spg-dyadic-stokes-gain}
+\left|\int_{\partial U_m(A)}\omega\right|
+\le C_A'\,2^{-m(n-d)}\,\|\dd\omega\|_\infty
+\end{equation}
+对某个常数 \(C_A'<\infty\) 成立。
+该指数为 \(n-d\)（与余维一致），相较于基于 \((n-1)\)-维面积的朴素界呈现额外一因子 \(2^{-m}\) 的降一维增益。
+\par
+进一步定义普适 \((n-1)\)-形式
+\begin{equation}\label{eq:spg-universal-stokes-probe-form}
+\omega_0:=\frac1n\sum_{i=1}^n (-1)^{i-1} x_i\,\dd x_1\wedge\cdots\wedge\widehat{\dd x_i}\wedge\cdots\wedge \dd x_n.
+\end{equation}
+则 \(\dd\omega_0=\dd x_1\wedge\cdots\wedge \dd x_n\)，从而对所有 \(m\) 有恒等式
+\begin{equation}\label{eq:spg-probe-volume-identity}
+\int_{\partial U_m(A)}\omega_0=\operatorname{Vol}\bigl(U_m(A)\bigr).
+\end{equation}
+并且上 Minkowski 维可由单一探针的通量序列读出为
+\begin{equation}\label{eq:spg-minkowski-dimension-single-probe}
+\overline{\dim}_{\mathrm M}(A)
+=
+n+\limsup_{m\to\infty}\frac{\log\!\left(\int_{\partial U_m(A)}\omega_0\right)}{m\log 2}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+由广义 Stokes 定理对多面体域 \(U_m(A)\) 适用，
+\(
+\int_{\partial U_m(A)}\omega=\int_{U_m(A)}\dd\omega
+\)，故
+\[
+\left|\int_{\partial U_m(A)}\omega\right|
+\le \|\dd\omega\|_\infty\,\operatorname{Vol}\bigl(U_m(A)\bigr).
+\]
+另一方面，\(U_m(A)\subset A_{\sqrt n\,2^{-m}}\)，从而
+\[
+\operatorname{Vol}\bigl(U_m(A)\bigr)\le \operatorname{Vol}(A_{\sqrt n\,2^{-m}})
+\le C_A(\sqrt n\,2^{-m})^{n-d},
+\]
+合并即得 \eqref{eq:spg-dyadic-stokes-gain}。
+\par
+\eqref{eq:spg-probe-volume-identity} 由 \(\dd\omega_0=\dd x_1\wedge\cdots\wedge \dd x_n\) 与 Stokes 定理直接推出。
+最后，dyadic 外近似体积的指数率刻画给出
+\(
+\overline{\dim}_{\mathrm M}(A)
+=n+\limsup_{m\to\infty}\frac{\log\operatorname{Vol}(U_m(A))}{m\log 2}
+\)，结合 \eqref{eq:spg-probe-volume-identity} 即得 \eqref{eq:spg-minkowski-dimension-single-probe}。证毕。
+\end{proof}
+
+\input{subsubsec__spg-dyadic-holography-godelization}
+
+\input{subsubsec__spg-godel-rt-mincut-kirchhoff-bridge}
+
+\input{prop__spg-regular-language-stokes-dyadic-zeta-rationality}
+
+\input{prop__spg-dyadic-flux-zeta-weighted-vanishing}
+
+
+\begin{conjecture}[Stokes--通量生成函数的自守谱控制：薄群极限集的 Mellin 型接口]\label{conj:spg-stokes-flux-current-automorphic-spectral-modularity}
+令 \(\Gamma<\mathrm{SL}_2(\ZZ)\) 为几何有限、无限指数且 Zariski 稠密之薄群，\(\Lambda_\Gamma\subset \partial\mathbb{H}\cong S^1\) 为其极限集，Hausdorff 维为 \(\delta\in(0,1)\)。
+将 \(S^1\) 视为 \(\RR^2\) 中单位圆，并在某个固定坐标盒内把 \(\Lambda_\Gamma\) 识别为 \([0,1]^2\) 的紧子集。
+对 \(m\ge 1\) 取 dyadic 外近似 \(U_m(\Lambda_\Gamma)\subset[0,1]^2\)，并令 \(\omega_0\) 为 \eqref{eq:spg-universal-stokes-probe-form} 在 \(n=2\) 时的普适探针。
+记
+\[
+V_m:=\int_{\partial U_m(\Lambda_\Gamma)}\omega_0=\operatorname{Area}\bigl(U_m(\Lambda_\Gamma)\bigr),
+\]
+并定义 Mellin 型生成函数（当 \(\Re(s)\) 足够大时收敛）
+\[
+\mathcal{M}_\Gamma(s):=\sum_{m\ge 1}2^{m(s-2)}V_m.
+\]
+则：
+\begin{enumerate}
+  \item \(\mathcal{M}_\Gamma(s)\) 可亚纯延拓至 \(\CC\)，其极点集合由 \(\Gamma\backslash\mathbb{H}\) 的谱/共振（尤其是拉普拉斯算子 resolvent 的极点）控制，并且主极点位于 \(s=\delta\)；
+  \item 若 \(\Gamma\) 携带自然的算术 Hecke 对称（例如来自代数群的薄子群并诱导 Hecke 作用），则 \(\mathcal{M}_\Gamma(s)\) 的留数满足 Hecke 特征关系，并可视为某个 \(\mathrm{GL}_2\) 自守表示的 Langlands 参数在该通量侧接口上的实现。
+\end{enumerate}
+\end{conjecture}
+
+\begin{remark}[与同步门与空值语义的接口]\label{rem:spg-sync-null-interface}
+上述剖面将“清晰度”定义为在给定 $\mathcal{F}_m$ 信息层上的最优判错概率。
+在 sofic 因子读出下，若长度前缀尚未同步，则同一前缀可能对应多个内部后缀，按“地址先于概念值”的约定可被等价视为时间层统计型 $\mathsf{NULL}$；
+其时间层刻画见备注 \ref{rem:Ym-stat-null-unsync}，同步时间预算与尾界见定理 \ref{thm:Ym-sync-tail}。
+该“同步门”对 Chebotarev 容量条件造成的扣除修正见定理 \ref{thm:pom-sync-subtracted-chebotarev-capacity}。
+\end{remark}
+
+\begin{theorem}[双预算寻址容量：统计型 \texorpdfstring{$\mathsf{NULL}$}{NULL} 与去碰撞的合成清晰度律]\label{thm:spg-double-budget-address-capacity}
+固定分辨率 \(m\) 并考虑“地址先于取值”的语义约定：未同步即无地址（时间层统计型 \(\mathsf{NULL}\)，见备注 \ref{rem:Ym-stat-null-unsync}）。
+令 \(T_m\) 为确定化右解析表示下的同步时间（定义 \ref{def:Ym-sync-time}），并令 \(\nu_m\) 为相应最大熵测度。
+另一方面，令 \(\nu_{u,m}\) 为温度门 \(\mathrm{PROJ}_u\) 在长度-\(m\) 地址空间 \(A_{\mathrm{out}}^m\) 上的推前分布（命题 \ref{prop:pom-proj-mom-psi-law}），并记二阶碰撞概率
+\[
+\mathrm{Col}_u(m):=\sum_{x\in A_{\mathrm{out}}^m}\nu_{u,m}(x)^2
+\]
+（定义 \ref{def:pom-col-u-h2}）。
+\par
+对 \(N\) 个独立对象，采用“时间预算 \(n\)”以消除统计型 \(\mathsf{NULL}\) 并采用“分辨率预算 \(m\)”产生地址；记失败事件 \(\mathsf{Fail}_{m,n,N}\) 为“存在 \(\mathsf{NULL}\) 或存在地址碰撞”。
+则有严格上界
+\begin{equation}\label{eq:spg-double-budget-fail-bound}
+\boxed{\;
+\mathbb{P}(\mathsf{Fail}_{m,n,N})
+\ \le\
+N\,\nu_m(T_m>n)\ +\ \binom{N}{2}\,\mathrm{Col}_u(m)\; }.
+\end{equation}
+\par
+进一步，若 \(Y_m^{\mathrm{amb}}\neq\varnothing\) 且 \(\varepsilon_m=\log 2-h_{\mathrm{top}}(Y_m^{\mathrm{amb}})\)（定理 \ref{thm:Ym-sync-tail}），则存在常数 \(C_m>0\) 使 \(\nu_m(T_m>n)\le C_m e^{-\varepsilon_m n}\)；
+并且由 \(h_2(u):=-\Psi(2,u)\)（定义 \ref{def:pom-col-u-h2}）有
+\(
+\mathrm{Col}_u(m)=\exp(-h_2(u)\,m+o(m))
+\)。
+因此对任意目标失败概率 \(\delta\in(0,1)\)，当 \(n\) 与 \(m\) 满足
+\[
+n\ \ge\ \frac{1}{\varepsilon_m}\Bigl(\log(NC_m)+\log\frac{2}{\delta}\Bigr),
+\qquad
+\binom{N}{2}\,\mathrm{Col}_u(m)\ \le\ \frac{\delta}{2},
+\]
+即可保证 \(\mathbb{P}(\mathsf{Fail}_{m,n,N})\le\delta\)。
+并且在 \(m\to\infty\) 的指数标度下，由 \(\mathrm{Col}_u(m)=\exp(-h_2(u)m+o(m))\) 可知：对充分大的 \(m\)，后一不等式可由显式预算
+\[
+m\ \ge\ \frac{2}{h_2(u)}\Bigl(\log N+\log\frac{2}{\delta}\Bigr)
+\]
+保证（把 \(o(m)\) 吸收进“充分大”的门槛）。
+在指数标度上，上述双预算律等价给出可寻址规模的清晰度上限
+\[
+\log N\ \lesssim\ \min\Bigl\{\varepsilon_m\,n,\ \tfrac12 h_2(u)\,m\Bigr\}.
+\]
+\end{theorem}
+
+\begin{proof}
+对第 \(i\) 个对象记“未同步”事件为 \(\mathsf{Null}_i:=\{T_m^{(i)}>n\}\)，并记“发生碰撞”事件为
+\(
+\mathsf{Col}:=\bigcup_{1\le i<j\le N}\{X_i=X_j\}
+\)，其中 \(X_i\sim\nu_{u,m}\) 独立同分布。
+则
+\(
+\mathsf{Fail}_{m,n,N}\subseteq \bigcup_{i=1}^N \mathsf{Null}_i\ \cup\ \mathsf{Col}
+\)。
+由并合界（union bound）得
+\[
+\mathbb{P}(\mathsf{Fail}_{m,n,N})
+\le
+\sum_{i=1}^N \mathbb{P}(\mathsf{Null}_i)
+\ +\
+\sum_{1\le i<j\le N}\mathbb{P}(X_i=X_j).
+\]
+在独立同分布假设下，\(\mathbb{P}(\mathsf{Null}_i)=\nu_m(T_m>n)\)，且
+\(
+\mathbb{P}(X_i=X_j)=\sum_x\nu_{u,m}(x)^2=\mathrm{Col}_u(m)
+\)，代回即得 \eqref{eq:spg-double-budget-fail-bound}。
+\par
+后续预算条件由 \(\nu_m(T_m>n)\le C_m e^{-\varepsilon_m n}\)（定理 \ref{thm:Ym-sync-tail}）与对碰撞项的显式不等式 \(\binom{N}{2}\mathrm{Col}_u(m)\le \delta/2\) 直接推出；指数标度的 \(\min\{\varepsilon_m n,\tfrac12 h_2(u)m\}\) 由取对数并忽略常数项得到。证毕。
+\end{proof}
+
+\begin{remark}[与折叠可见度的接口]\label{rem:spg-visibility-interface}
+若将信息层从 $\mathcal{F}_m$ 替换为 $\sigma(\Fold_m)$（稳定类型可见域），则同样可定义相应的判错剖面；
+其与 $L^2$ 口径的“折叠可见度” $\mathcal{R}_{m,\mu}(f)$（定义 \ref{def:pom-fold-visibility}）之间存在无参数的二侧估计，见定理 \ref{thm:pom-visibility-to-error-two-sided}。
+\end{remark}

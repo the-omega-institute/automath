@@ -1,0 +1,568 @@
+\subsection{素数可逆性与 solenoid 终对象：把实现层因子化到最小完备相位系统}\label{subsec:cdim-solenoid-terminal-phase-system}
+上一小节以 dyadic 前缀读出给出半圆维的操作型缩放律。
+在更抽象的协议层面，“可逆素集合”提供另一条与实现无关的最小性机制：当某些素数被声明为可逆门（允许无损除法/提升），则所有实现必须因子化到同一紧阿贝尔终对象，从而把“可编码性”与“结构圆维”严格分离。
+
+\paragraph{离散侧：局部化的初对象}
+固定一个素数集合 \(S\)。
+记
+\[
+\ZZ[S^{-1}]
+:=\left\{\frac{a}{b}\in\QQ:\ a\in\ZZ,\ b\in\NN,\ \text{\(b\) 的素因子全在 \(S\)}\right\},
+\]
+并令 \(\iota:\ZZ\hookrightarrow \ZZ[S^{-1}]\) 为自然嵌入。
+该群满足：对每个 \(p\in S\)，乘 \(p\) 映射 \([p]_{\ZZ[S^{-1}]}:\ZZ[S^{-1}]\to\ZZ[S^{-1}]\) 为双射。
+
+\input{para__circle-dimension-phase-gate-denominator-spectrum-exponent}
+
+\begin{proposition}[局部化的泛性质]\label{prop:cdim-localization-universal-property}
+设 \(A\) 为离散交换群，且给定嵌入 \(j:\ZZ\hookrightarrow A\)。
+若对每个 \(p\in S\)，乘 \(p\) 映射 \([p]_A\) 为双射，则存在唯一群同态
+\[
+\phi:\ZZ[S^{-1}]\longrightarrow A
+\]
+使 \(\phi\circ\iota=j\)。
+\end{proposition}
+\begin{proof}
+对任意 \(a/b\in\ZZ[S^{-1}]\)，由假设 \(b=\prod_{p\in S}p^{\alpha_p}\) 在 \(A\) 上可逆，故可定义
+\(
+\phi(a/b):=a\cdot [b]_A^{-1}(j(1))
+\)；
+该定义与表示无关并给出同态。
+唯一性由 \(\ZZ[S^{-1}]\) 由 \(\iota(\ZZ)\) 与对 \(p\in S\) 的除法闭包生成立得。证毕。
+\end{proof}
+
+\paragraph{紧侧：\texorpdfstring{$S$}{S}-solenoid 与终对象}
+令 \(\Sigma_S:=\widehat{\ZZ[S^{-1}]}\) 为其 Pontryagin 对偶紧群。
+由嵌入 \(\iota:\ZZ\hookrightarrow \ZZ[S^{-1}]\) 的对偶得到满射
+\[
+\pi_S:\Sigma_S\twoheadrightarrow \TT.
+\]
+
+\begin{theorem}[\texorpdfstring{$S$}{S}-solenoid 的终对象性质]\label{thm:cdim-s-solenoid-terminal-object}
+设 \(\Sigma\) 为紧阿贝尔群并给定满射 \(\pi:\Sigma\twoheadrightarrow \TT\)。
+记其对偶离散群为 \(A:=\widehat{\Sigma}\)，并令 \(j:\ZZ\hookrightarrow A\) 为 \(\pi\) 的对偶嵌入。
+若对每个 \(p\in S\)，\([p]_A\) 为双射，则存在唯一连续群同态
+\[
+f:\Sigma\longrightarrow \Sigma_S
+\]
+使得
+\[
+\pi_S\circ f=\pi.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:cdim-localization-universal-property}，存在唯一 \(\phi:\ZZ[S^{-1}]\to A\) 使 \(\phi\circ\iota=j\)。
+取 Pontryagin 对偶得到唯一同态 \(f:=\widehat{\phi}:\Sigma\to\Sigma_S\)。
+对偶化保持交换图表，故 \(f\) 与 \(\pi,\pi_S\) 满足 \(\pi_S\circ f=\pi\)。
+唯一性同理由对偶化的反变等价给出。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$S$}{S}-solenoid 的泛单轨道生成]\label{thm:cdim-s-solenoid-generic-monothetic}
+设 \(S\subset\mathbb P\) 为有限素数集，并记
+\[
+G_S:=\ZZ[S^{-1}],
+\qquad
+\Sigma_S:=\widehat{G_S}.
+\]
+则 \(\Sigma_S\) 是 monothetic：存在 \(x\in \Sigma_S\) 使
+\[
+\overline{\langle x\rangle}=\Sigma_S.
+\]
+更强地，拓扑生成元集合
+\[
+\operatorname{Gen}(\Sigma_S)
+:=
+\{x\in \Sigma_S:\ \overline{\langle x\rangle}=\Sigma_S\}
+\]
+是 \(\Sigma_S\) 中的稠密 \(G_\delta\) 集，并且具有 Haar 满测度。
+\end{theorem}
+\begin{proof}
+由于 \(G_S\) 可数离散，\(\Sigma_S\) 为紧可度量交换群。
+对每个非零 \(a\in G_S\)，定义角色
+\[
+\chi_a:\Sigma_S\to \TT,
+\qquad
+\chi_a(x):=x(a),
+\]
+并记
+\[
+K_a:=\ker \chi_a.
+\]
+由于子群 \(\langle a\rangle\le G_S\) 同构于 \(\ZZ\)，对短正合列
+\[
+0\longrightarrow \langle a\rangle
+\longrightarrow G_S
+\longrightarrow G_S/\langle a\rangle
+\longrightarrow 0
+\]
+作 Pontryagin 对偶，可得满射
+\[
+\Sigma_S\longrightarrow \widehat{\langle a\rangle}\cong \TT
+\]
+且其核正是 \(K_a\)。因此 \(K_a\) 是 proper closed subgroup，且
+\[
+\Sigma_S/K_a\cong \TT
+\]
+非离散，所以 \(K_a\) 不是开子群。
+
+若紧群中的闭子群 \(H\) 具有正 Haar 测度，则由 Steinhaus 引理，\(H\cdot H^{-1}=H\) 含单位元邻域，从而 \(H\) 必为开子群。故每个 \(K_a\) 都 Haar 零测。又闭子群若具有非空内点，则必为开子群，故每个 \(K_a\) 还都是 nowhere dense。
+记
+\[
+\mathcal N:=\bigcup_{0\neq a\in G_S}K_a.
+\]
+因为 \(G_S\) 可数，\(\mathcal N\) 是可数个闭零测稀疏集的并，所以
+\[
+\Sigma_S\setminus \mathcal N
+\]
+是稠密 \(G_\delta\) 且 Haar 满测。
+
+现取 \(x\in \Sigma_S\setminus \mathcal N\)，并记
+\[
+H_x:=\overline{\langle x\rangle}.
+\]
+若 \(a\in H_x^\perp\)，则角色 \(\chi_a\) 在 \(H_x\) 上恒等于 \(1\)，特别有 \(\chi_a(x)=1\)，故 \(x\in K_a\subset \mathcal N\)。由 \(x\notin \mathcal N\) 只能推出 \(a=0\)，因此
+\[
+H_x^\perp=\{0\}.
+\]
+再由湮没子对偶律 \(H_x=(H_x^\perp)^\perp\)，得到
+\[
+H_x=\Sigma_S.
+\]
+因此每个 \(x\in \Sigma_S\setminus \mathcal N\) 都是拓扑生成元，亦即
+\[
+\operatorname{Gen}(\Sigma_S)=\Sigma_S\setminus \mathcal N.
+\]
+结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[单轨道致密生成与有限加法账本障碍的严格分界]\label{cor:cdim-solenoid-versus-finite-additive-linearization}
+设 \(S\subset\mathbb P\) 为有限素数集，记 \(\Sigma_S=\widehat{\ZZ[S^{-1}]}\)。
+则一方面，\(\Sigma_S\) 由稠密 \(G_\delta\) 且 Haar 满测的一族单点致密生成；另一方面，
+\[
+\NN_{\times}
+\]
+既不能单射同态嵌入任何有限维加法账本 \((\NN^k,+)\)，也不能借助有限生成交换群 \(L\) 完成任何 Gödel 式同态化账本
+\[
+\Phi:\NN_{\times}\to \ZZ\oplus L,
+\qquad
+\Phi(ab)=\Phi(a)+\Phi(b).
+\]
+更精确地，
+\[
+\cdim^{\mathrm{hom}}_{+}(\NN_{\times})=+\infty,
+\qquad
+\cdim^{\mathrm{impl}}(\NN_{\times})=\frac12.
+\]
+因此，局部化加法对象的紧对偶确可把全局相位运动压缩进单轨道致密生成的拓扑壳层，但这并不意味着乘法结构已被有限秩加法账本线性化；算术复杂性仍滞留在角色湮没与有限秩障碍之中。
+\end{corollary}
+\begin{proof}
+关于 \(\Sigma_S\) 的泛单轨道生成，正是定理 \ref{thm:cdim-s-solenoid-generic-monothetic} 的内容。
+另一方面，\(\NN_{\times}\) 不能嵌入任何有限维加法账本，见推论 \ref{cor:killo-no-finite-additive-register-linearization}；任意 Gödel 式压缩都不能由有限生成交换群同态化，见定理 \ref{thm:killo-godel-compression-not-finite-rank-homologizable}；而
+\[
+\cdim^{\mathrm{hom}}_{+}(\NN_{\times})=+\infty,
+\qquad
+\cdim^{\mathrm{impl}}(\NN_{\times})=\frac12
+\]
+则由命题 \ref{prop:killo-implementation-vs-structural-half-circle-dimension} 给出。合并这些结论即得所述严格分界。证毕。
+\end{proof}
+
+\begin{remark}[实现层编码与结构圆维的严格分离]\label{rem:cdim-solenoid-terminal-separation}
+定理 \ref{thm:cdim-s-solenoid-terminal-object} 将“可逆素集合 \(S\)”提升为一个实现无关的最小性断言：
+在固定 \(S\) 的约束下，任何满足该可逆性纪律的实现都只能通过唯一因子化映射落入同一个 \(\Sigma_S\)，从而“最小完备相位系统”在范畴意义下由终对象唯一确定。
+因此，实现层的可编码性（例如把有限描述序列化为自然数）不携带可用于改变结构圆维的自由度；
+结构层的不变量仍由对偶连通部分/秩所控制（定义 \ref{def:circle-dimension} 与命题 \ref{prop:circle-dimension-laws}），而实现差异只能以残差寄存器与证书轴的外置形式进入账本（\S\ref{subsec:cdim-residual-circle-dimension}）。
+\end{remark}
+
+\input{parts/para__cdim-solenoid-kernel-certificate-axis}
+
+\subsubsection{\texorpdfstring{$S$}{S}-相位纤维积与算术奇异环：多素相位粘合的对偶刻画}\label{subsubsec:cdim-solenoid-arithmetic-singular-ring}
+上一段将“可逆素集合 \(S\)”编译为终对象 \(\Sigma_S\) 与其到相位圆 \(\TT\) 的标准满射 \(\pi_S\)。
+当协议同时追踪每个 \(p\in S\) 的独立相位通道时，自然出现一类纤维积紧群：它以最小方式强制“全局相位”等于各素数相位的乘积，并在对偶端给出一个显式的粘合关系。
+
+\paragraph{多素相位粘合的纤维积对象}
+记
+\[
+\TT^{S}:=\prod_{p\in S}\TT,
+\qquad
+\mu_S:\TT^{S}\longrightarrow \TT,
+\qquad
+\mu_S\bigl((t_p)_{p\in S}\bigr):=\prod_{p\in S} t_p.
+\]
+定义\textbf{算术奇异环}为纤维积
+\begin{equation}\label{eq:cdim-arithmetic-singular-ring-definition}
+\mathfrak{R}_S
+:=\Sigma_S\times_{\TT}\TT^{S}
+=\bigl\{(x,(t_p))\in\Sigma_S\times\TT^{S}:\ \pi_S(x)=\mu_S((t_p))\bigr\}.
+\end{equation}
+
+\begin{theorem}[算术奇异环的对偶刻画与连通性]\label{thm:cdim-arithmetic-singular-ring-dual-connected}
+设 \(S\) 为有限素数集，令 \(\mathfrak{R}_S\) 如 \eqref{eq:cdim-arithmetic-singular-ring-definition} 定义，并记其 Pontryagin 对偶离散群为
+\(
+\Gamma_S:=\widehat{\mathfrak{R}_S}
+\)。
+则：
+\begin{enumerate}
+  \item \(\mathfrak{R}_S\) 为紧交换拓扑群；
+  \item 取 \(\ZZ^{S}\) 表示以 \(S\) 为指标集的自由阿贝尔群，并记常值函数 \(\mathbf{1}_S\in\ZZ^{S}\) 为 \(\mathbf{1}_S(p)=1\)，则存在自然同构
+  \[
+  \Gamma_S
+  \cong
+  \frac{\ZZ[S^{-1}]\oplus \ZZ^{S}}{\langle(1,-\mathbf{1}_S)\rangle}
+  \cong
+  \ZZ[S^{-1}]\ \oplus_{\ZZ}\ \bigoplus_{p\in S}\ZZ;
+  \]
+  \item \(\Gamma_S\) 无挠，因而 \(\mathfrak{R}_S\) 连通；并且 \(\rank(\Gamma_S)=|S|\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+令
+\[
+\psi:\Sigma_S\times \TT^{S}\longrightarrow \TT,
+\qquad
+\psi(x,t):=\pi_S(x)\cdot \mu_S(t)^{-1}.
+\]
+则 \(\mathfrak{R}_S=\ker\psi\) 为紧群的闭子群，故为紧交换群。
+由 \(\pi_S\) 与 \(\mu_S\) 皆满射，\(\psi\) 亦为满射，从而得到短正合列
+\[
+0\longrightarrow \mathfrak{R}_S
+\longrightarrow \Sigma_S\times \TT^{S}
+\xrightarrow{\ \psi\ }
+\TT
+\longrightarrow 0.
+\]
+Pontryagin 对偶为反变等价，并对紧交换群短正合列保持正合性，故对偶化得
+\[
+0\longrightarrow \ZZ
+\xrightarrow{\ (\iota_S,-\Delta)\ }
+\ZZ[S^{-1}]\oplus \ZZ^{S}
+\longrightarrow \Gamma_S
+\longrightarrow 0,
+\]
+其中 \(\iota_S:\ZZ\hookrightarrow\ZZ[S^{-1}]\) 为自然嵌入，\(\Delta(1)=\mathbf{1}_S\) 为对角嵌入。
+因此
+\[
+\Gamma_S\cong (\ZZ[S^{-1}]\oplus \ZZ^{S})/\langle(1,-\mathbf{1}_S)\rangle.
+\]
+为证无挠性，设 \([a,n]\in\Gamma_S\) 满足 \(k[a,n]=0\)。
+则 \((ka,kn)\in\langle(1,-\mathbf{1}_S)\rangle\)，从而存在 \(m\in\ZZ\) 使
+\(
+ka=m
+\)
+且
+\(
+kn=-m\mathbf{1}_S
+\)。
+由于 \(n\in\ZZ^{S}\)，必有 \(k\mid m\)，写 \(m=k\ell\) 得 \(a=\ell\)、\(n=-\ell\mathbf{1}_S\)，故 \((a,n)\in\langle(1,-\mathbf{1}_S)\rangle\)，即 \([a,n]=0\)。
+于是 \(\Gamma_S\) 无挠。
+紧交换群连通当且仅当其对偶无挠，故 \(\mathfrak{R}_S\) 连通。
+秩的计算由 \(\rank(\ZZ[S^{-1}])=1\)、\(\rank(\ZZ^{S})=|S|\) 并减去一条秩 \(1\) 关系得到 \(|S|\)。证毕。
+\end{proof}
+
+\input{thm__cdim-arithmetic-singular-ring-one-parameter-subgroups}
+\input{subsubsec__circle-dimension-phase-gate-lissajous-joukowsky-prime-register-lift}
+\input{subsubsec__circle-dimension-phase-gate-biphase-disk-singular-ring-haar-record}
+\input{subsubsec__circle-dimension-phase-gate-biphase-fiber-laurent-lissajous-node-ledger}
+
+\begin{corollary}[圆因子核与非典范分裂]\label{cor:cdim-arithmetic-singular-ring-splitting}
+设 \(s:=|S|\)。
+投影 \(\mathrm{pr}_1:\mathfrak{R}_S\to \Sigma_S\) 给出短正合列
+\[
+0\longrightarrow \ker(\mu_S)\longrightarrow \mathfrak{R}_S
+\xrightarrow{\ \mathrm{pr}_1\ }\Sigma_S\longrightarrow 0,
+\]
+其中 \(\ker(\mu_S)\cong \TT^{s-1}\)。
+并且该扩张在交换群范畴中分裂，故存在（非典范）同构
+\[
+\mathfrak{R}_S\cong \Sigma_S\times \TT^{s-1}.
+\]
+\end{corollary}
+\begin{proof}
+\(\mathrm{pr}_1\) 连续且满：给定 \(x\in\Sigma_S\)，由 \(\mu_S\) 满射可取 \(t\in\TT^{S}\) 满足 \(\mu_S(t)=\pi_S(x)\)，则 \((x,t)\in\mathfrak{R}_S\)。
+其核为 \(\{(0,t):\mu_S(t)=1\}\cong\ker(\mu_S)\)。
+\par
+对偶化该短正合列得
+\[
+0\longrightarrow \ZZ[S^{-1}]
+\longrightarrow \Gamma_S
+\longrightarrow \ZZ^{s-1}
+\longrightarrow 0,
+\]
+其中右端为自由阿贝尔群，因而为射影对象，短正合列分裂。
+再对偶化回紧侧即得到所述分裂；分裂选择不唯一，故同构为非典范。证毕。
+\end{proof}
+
+\input{thm__cdim-arithmetic-singular-ring-equivariant-splitting-criterion}
+\input{thm__cdim-solenoid-arithmetic-singular-ring-torsion-kernel-formula}
+\input{cor__cdim-arithmetic-singular-ring-periodic-point-count-artin-mazur-zeta}
+
+\begin{proposition}[纤维积的终端性质]\label{prop:cdim-arithmetic-singular-ring-universal}
+设 \(G\) 为紧交换群，并给定连续群同态
+\[
+\alpha:G\to \Sigma_S,\qquad \beta:G\to \TT^{S}
+\]
+满足兼容条件
+\[
+\pi_S\circ \alpha=\mu_S\circ \beta\qquad(\text{作为 }G\to\TT\text{ 的同态}).
+\]
+则存在唯一连续群同态 \(\gamma:G\to \mathfrak{R}_S\) 使得
+\[
+\mathrm{pr}_1\circ \gamma=\alpha,\qquad \mathrm{pr}_2\circ \gamma=\beta.
+\]
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:cdim-arithmetic-singular-ring-definition}，若兼容条件成立，则映射 \(\gamma(g):=(\alpha(g),\beta(g))\) 的值域落在 \(\mathfrak{R}_S\) 中。
+该构造显然给出连续群同态且满足投影条件；唯一性由投影的确定性立即推出。证毕。
+\end{proof}
+
+\begin{theorem}[二阶相位扭结的可解性]\label{thm:cdim-arithmetic-singular-ring-h2}
+令 \(\Gamma_S=\widehat{\mathfrak{R}_S}\) 如定理 \ref{thm:cdim-arithmetic-singular-ring-dual-connected}，并定义
+\[
+\mathcal{A}(\Gamma_S):=H^2(\Gamma_S,\TT)
+\]
+（平凡作用）。
+则存在自然同构
+\[
+\mathcal{A}(\Gamma_S)\cong \Hom\!\left(\bigwedge\nolimits^2 \Gamma_S,\TT\right),
+\]
+且写 \(s=|S|\) 时有（非典范）同构
+\[
+\mathcal{A}(\Gamma_S)\cong \Sigma_S^{\,s-1}\times \TT^{\binom{s-1}{2}}.
+\]
+\end{theorem}
+\begin{proof}
+对任意离散交换群 \(\Gamma\)，有分解
+\[
+H^2(\Gamma,\TT)\cong \Hom(\wedge^2\Gamma,\TT)\oplus \Ext^1_{\ZZ}(\Gamma,\TT).
+\]
+由于 \(\TT\) 为可除群，从而为注入 \(\ZZ\)-模，故 \(\Ext^1_{\ZZ}(\Gamma,\TT)=0\)，得到第一条同构。
+\par
+由推论 \ref{cor:cdim-arithmetic-singular-ring-splitting} 的对偶端分裂，可取（非典范）同构
+\(
+\Gamma_S\cong \ZZ[S^{-1}]\oplus \ZZ^{s-1}
+\)。
+又 \(\wedge^2(\ZZ[S^{-1}])=0\)（秩 \(1\)），故
+\[
+\wedge^2\Gamma_S
+\cong
+\bigl(\ZZ[S^{-1}]\otimes \ZZ^{s-1}\bigr)\ \oplus\ \wedge^2(\ZZ^{s-1})
+\cong
+\ZZ[S^{-1}]^{\,s-1}\ \oplus\ \ZZ^{\binom{s-1}{2}}.
+\]
+从而
+\[
+\Hom(\wedge^2\Gamma_S,\TT)
+\cong
+\Hom(\ZZ[S^{-1}],\TT)^{\,s-1}\times \Hom(\ZZ,\TT)^{\binom{s-1}{2}}
+\cong
+\Sigma_S^{\,s-1}\times \TT^{\binom{s-1}{2}},
+\]
+其中 \(\Hom(\ZZ[S^{-1}],\TT)\cong \widehat{\ZZ[S^{-1}]}=\Sigma_S\)。证毕。
+\end{proof}
+
+\paragraph{全素可逆性的极端：通用 solenoid}
+当 \(S\) 取所有素数时，\(\ZZ[S^{-1}]=\QQ\)，从而 \(\Sigma_S=\widehat{\QQ}\) 为一维通用 solenoid。
+这与 \eqref{eq:pom-universal-solenoid-quotient}--\eqref{eq:pom-universal-solenoid-ses} 的定义一致，记为 \(\Sol\)。
+
+\begin{theorem}[圆维为 \(1\) 且全素可逆的离散群必为 \texorpdfstring{$\QQ$}{Q}]\label{thm:cdim-cdim1-divisible-implies-Q}
+设 \(A\) 为离散交换群并满足：
+\begin{enumerate}
+  \item \textbf{无挠：}\(A\) torsion-free；
+  \item \textbf{全素可逆：}对每个素数 \(p\)，乘 \(p\) 映射 \([p]_A\) 为双射；
+  \item \textbf{秩为 \(1\)：}\(\dim_{\QQ}(A\otimes_{\ZZ}\QQ)=1\)；
+  \item \textbf{含整数：}存在嵌入 \(\ZZ\hookrightarrow A\)。
+\end{enumerate}
+则 \(A\cong\QQ\)。
+因此其对偶紧群同构于 \(\widehat{\QQ}\cong\Sol\)，并且存在短正合列
+\[
+0\to \widehat{\ZZ}\to \Sol\to \TT\to 0,
+\]
+与备注 \ref{rem:pom-solenoid-extension} 的接口一致。
+\end{theorem}
+\begin{proof}
+由 (2) 得 \(A\) 为可除群；与 (1) 合并得 \(A\) 为 \(\QQ\)-向量空间。
+由 (3) 得其 \(\QQ\)-维数为 \(1\)，故 \(A\cong\QQ\) 作为 \(\QQ\)-向量空间，从而作为交换群同构于 \(\QQ\)。
+(4) 排除平凡零群并固定嵌入类型。
+对偶与短正合列由对 \(\ZZ\hookrightarrow\QQ\) 的对偶化与 \(\Sol\) 的定义给出。证毕。
+\end{proof}
+
+\subsubsection{prime-register 轴的 pro-圆维：终对象性、CRT 复用与有限纤维的外置下界}\label{subsubsec:cdim-prime-register-pro-cdim}
+短正合列 \(0\to \widehat{\ZZ}\to\Sol\to\TT\to 0\) 将 prime-register 的核心对象 \(\widehat{\ZZ}\) 作为一个完全不连通紧因子显式化：它不改变结构圆维（定义 \ref{def:circle-dimension}），但承载了全部同余/逆极限读出所需的可核验 residue 信息。
+为将“需要多少条 residue/逆极限轴”这一实现约束提升为结构化预算，本小节引入 pro-圆维并给出其 CRT 复用律与有限纤维的结构性外置下界。
+
+\begin{theorem}[residue/逆极限轴的终对象性]\label{thm:cdim-zhatZ-terminal-residue-axis}
+记
+\[
+\widehat{\ZZ}:=\varprojlim_{n\ge 1}\ZZ/n\ZZ,
+\]
+并令 \(\pi_n:\widehat{\ZZ}\twoheadrightarrow \ZZ/n\ZZ\) 为典范投影。
+设 \(P\) 为紧阿贝尔群，且给定一族连续满射 \((\psi_n:P\twoheadrightarrow \ZZ/n\ZZ)_{n\ge 1}\) 满足兼容性
+\[
+\psi_m=\rho_{m,n}\circ \psi_n\qquad(m\mid n),
+\]
+其中 \(\rho_{m,n}:\ZZ/n\ZZ\twoheadrightarrow \ZZ/m\ZZ\) 为自然约化。
+则存在唯一连续群同态
+\[
+f:P\longrightarrow \widehat{\ZZ}
+\]
+使得对一切 \(n\ge 1\) 有 \(\pi_n\circ f=\psi_n\)。
+等价地：在以此类 \((P,(\psi_n))\) 为对象、以保持全部 \(\psi_n\) 的连续同态为态射的范畴中，\((\widehat{\ZZ},(\pi_n))\) 为终对象。
+\end{theorem}
+\begin{proof}
+由逆极限的泛性质，兼容锥 \((\psi_n)_n\) 唯一诱导连续同态 \(f:P\to\varprojlim_n \ZZ/n\ZZ=\widehat{\ZZ}\)，并满足 \(\pi_n\circ f=\psi_n\)。
+唯一性同理由泛性质给出。证毕。
+\end{proof}
+
+\input{parts/prop__cdim-dyadic-kernel-cube-inverse-limit}
+
+\begin{theorem}[solenoid 相位与 residue 轴的双终对象合成]\label{thm:cdim-solenoid-residue-double-terminal-synthesis}
+固定有限素数集 \(S\)。
+设 \((\Sigma,\pi)\) 为紧阿贝尔群及满射 \(\pi:\Sigma\twoheadrightarrow\TT\)，并令 \(A:=\widehat{\Sigma}\)、\(j:\ZZ\hookrightarrow A\) 为其对偶嵌入。
+假设对每个 \(p\in S\)，乘法同态 \([p]_A:A\to A\) 为双射。
+设 \(P\) 为紧阿贝尔群，并给定兼容的满射族 \((\psi_n:P\twoheadrightarrow \ZZ/n\ZZ)_{n\ge 1}\) 满足
+\[
+\psi_m=\rho_{m,n}\circ\psi_n\qquad(m\mid n).
+\]
+则存在唯一连续群同态
+\[
+F:\Sigma\times P\longrightarrow \Sigma_S\times \widehat{\ZZ}
+\]
+使得
+\[
+\pi_S\circ \mathrm{pr}_1\circ F=\pi\circ \mathrm{pr}_1,
+\qquad
+\pi_n\circ \mathrm{pr}_2\circ F=\psi_n\circ \mathrm{pr}_2\quad(\forall n\ge 1),
+\]
+其中 \(\Sigma_S=\widehat{\ZZ[S^{-1}]}\) 为 \(S\)-solenoid、\(\pi_S:\Sigma_S\twoheadrightarrow\TT\) 为标准投影，且 \(\pi_n:\widehat{\ZZ}\twoheadrightarrow\ZZ/n\ZZ\) 为典范投影。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:cdim-s-solenoid-terminal-object}，存在唯一连续同态 \(f:\Sigma\to\Sigma_S\) 使 \(\pi_S\circ f=\pi\)。
+由定理 \ref{thm:cdim-zhatZ-terminal-residue-axis}，存在唯一连续同态 \(g:P\to\widehat{\ZZ}\) 使 \(\pi_n\circ g=\psi_n\)（\(\forall n\)）。
+令 \(F:=f\times g\)，则所述交换关系逐分量成立，故存在性成立。
+若 \(F'\) 亦满足同一交换关系，则 \(\mathrm{pr}_1\circ F'\) 与 \(\mathrm{pr}_2\circ F'\) 分别满足上述两类终对象的泛性质，因而必为 \(f\circ\mathrm{pr}_1\) 与 \(g\circ\mathrm{pr}_2\)，从而 \(F'=F\)。证毕。
+\end{proof}
+
+\begin{definition}[pro-圆维]\label{def:cdim-pro-circle-dimension}
+令 \(P\) 为拓扑有限生成的 profinite 交换群（等价地：紧、全不连通、交换群且存在有限拓扑生成集）。
+定义其\textbf{pro-圆维}为
+\[
+\boxed{\;
+\pcdim(P):=\min\Bigl\{|S|:\ S\subseteq P,\ \overline{\langle S\rangle}=P\Bigr\}\ \in\ \NN\cup\{0\}\; }.
+\]
+\end{definition}
+
+\begin{remark}[生成元与 \texorpdfstring{$\widehat{\ZZ}^k$}{Zhat^k} 的满射口径]\label{rem:cdim-pro-cdim-zhat-surjection}
+若 \(P\) 为 profinite 交换群，则 \(\pcdim(P)\) 等于使得存在连续满射 \(\widehat{\ZZ}^{k}\twoheadrightarrow P\) 的最小 \(k\)：
+由 \(k\) 个拓扑生成元可定义 \(\widehat{\ZZ}^{k}\) 上的连续同态，其像的闭包恰为所生成闭包；反之，满射的坐标像给出生成集。
+\end{remark}
+
+\begin{theorem}[无挠情形下 pro-圆维的嵌入刻画]\label{thm:cdim-pro-cdim-zhat-embedding-characterization}
+令 \(P\) 为无挠且拓扑有限生成的 profinite 交换群。
+则
+\[
+\pcdim(P)
+=
+\min\Bigl\{d\in\NN:\ \exists\ \text{连续单射同态}\ \iota:P\hookrightarrow \widehat{\ZZ}^{\,d}\Bigr\}.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:cdim-pro-cdim-crt-reuse}(1)，有 Sylow 分解 \(P\simeq\prod_{p}P_p\)。
+无挠且拓扑有限生成推出每个 \(P_p\) 为有限生成的 \(\ZZ_p\)-模且无挠，从而同构于 \(\ZZ_p^{d_p}\)（某个 \(d_p\in\NN\cup\{0\}\)）。
+令 \(d:=\max_p d_p\)。
+\par
+对每个 \(p\) 取自然嵌入 \(\ZZ_p^{d_p}\hookrightarrow \ZZ_p^{d}\)（以零填充），直积得到连续单射
+\[
+P=\prod_p \ZZ_p^{d_p}\ \hookrightarrow\ \prod_p \ZZ_p^{d}\ \cong\ \widehat{\ZZ}^{\,d}.
+\]
+故右侧最小值不超过 \(d\)。
+\par
+反之，若存在连续单射 \(P\hookrightarrow \widehat{\ZZ}^{\,d}\)，则对每个 \(p\) 取 Sylow pro-\(p\) 分量得到连续单射
+\[
+P_p\hookrightarrow (\widehat{\ZZ}^{\,d})_p\cong \ZZ_p^{d},
+\]
+从而 \(d_p\le d\) 对所有 \(p\) 成立，故 \(\max_p d_p\le d\)。
+\par
+最后，由命题 \ref{prop:cdim-pro-cdim-crt-reuse}(2) 与 \(P_p\cong \ZZ_p^{d_p}\) 的生成元数等于 \(d_p\) 得
+\(
+\pcdim(P)=\max_p d_p
+\)。
+合并两向不等式即得等式。证毕。
+\end{proof}
+
+\begin{proposition}[Sylow 分解与 CRT 复用律]\label{prop:cdim-pro-cdim-crt-reuse}
+令 \(P\) 为拓扑有限生成的 profinite 交换群。则：
+\begin{enumerate}
+  \item 存在唯一分解 \(P\simeq \prod_{p}P_p\)，其中 \(P_p\) 为 \(P\) 的 Sylow pro-\(p\) 分量；
+  \item \(\displaystyle \pcdim(P)=\max_{p}\pcdim(P_p)\)；
+  \item 对任意同类 \(P,Q\)，有
+  \[
+  \pcdim(P\times Q)=\max_{p}\bigl(\pcdim(P_p)+\pcdim(Q_p)\bigr).
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\textbf{(1)} 对 profinite 交换群，Sylow pro-\(p\) 子群唯一且随 \(p\) 变化两两直积，从而得到分解 \(P\simeq\prod_p P_p\)。
+\par
+\textbf{(2)} 设 \(d:=\max_p\pcdim(P_p)\)。
+对每个 \(p\) 取 \(P_p\) 的 \(d\) 元拓扑生成集并在不足处用单位元补齐，得到 \(d\) 个元素 \((g_{i,p})_{p}\in\prod_p P_p\)（\(1\le i\le d\)）。
+其在每个分量 \(P_p\) 上的投影闭包为全体 \(P_p\)，故在乘积 \(P\) 上的生成闭包为全体 \(P\)，从而 \(\pcdim(P)\le d\)。
+反向不等式由投影保持生成闭包给出：任一生成集投影到每个 \(P_p\) 仍生成 \(P_p\)，故 \(\pcdim(P)\ge \pcdim(P_p)\) 对所有 \(p\) 成立，取最大值得到 \(\pcdim(P)\ge d\)。
+\par
+\textbf{(3)} 由 \((P\times Q)_p\simeq P_p\times Q_p\)。
+对 abelian pro-\(p\) 群 \(R\)，其最小拓扑生成元数等于
+\(\dim_{\FF_p}(R/pR)\)；特别地对直积满足可加性
+\(
+\pcdim(P_p\times Q_p)=\pcdim(P_p)+\pcdim(Q_p)
+\)。
+将该等式与 (2) 的 \(\max_p\) 公式合并即得所示结论。证毕。
+\end{proof}
+
+\begin{proposition}[有限纤维的最小 residue 轴数]\label{prop:cdim-finite-fiber-min-prime-register-axes}
+设 \(F\) 为有限交换群。定义其最小生成元数
+\[
+d(F):=\min\bigl\{k:\exists\ \text{满射}\ \ZZ^{k}\twoheadrightarrow F\bigr\}.
+\]
+则 \(d(F)=\max_{p}\dim_{\FF_p}(F/pF)\)，并且
+\[
+d(F)=\min\bigl\{k:\exists\ \text{连续满射}\ \widehat{\ZZ}^{k}\twoheadrightarrow F\bigr\}
+=\pcdim(F).
+\]
+\end{proposition}
+\begin{proof}
+等式 \(d(F)=\max_{p}\dim_{\FF_p}(F/pF)\) 为有限交换群的标准生成元刻画。
+\par
+若存在连续满射 \(\widehat{\ZZ}^{k}\twoheadrightarrow F\)，则其像包含稠密子群 \(\ZZ^{k}\subset\widehat{\ZZ}^{k}\) 的像；由于 \(F\) 有限离散，稠密像必为全体，故诱导满射 \(\ZZ^{k}\twoheadrightarrow F\)，从而 \(d(F)\le k\)。
+反之，若 \(\ZZ^{d(F)}\twoheadrightarrow F\)，则对其作 profinite 完备化并利用 \(F\) 的 profinite 性，可唯一延拓为连续满射 \(\widehat{\ZZ}^{d(F)}\twoheadrightarrow F\)。
+因此上述最小 \(k\) 等于 \(d(F)\)，再由备注 \ref{rem:cdim-pro-cdim-zhat-surjection} 得其亦等于 \(\pcdim(F)\)。证毕。
+\end{proof}
+
+\begin{corollary}[有限扩张的圆维不变与结构性外置下界]\label{cor:cdim-finite-extension-pro-cdim-lower-bound}
+设 \(0\to F\to E\to G\to 0\) 为有限生成离散交换群的短正合列且 \(F\) 有限，则 \(\cdim(E)=\cdim(G)\)（命题 \ref{prop:circle-dimension-laws}）。
+若进一步要求将纤维 \(F\) 以交换群结构外置到 prime-register 上，即存在连续满射 \(\widehat{\ZZ}^{k}\twoheadrightarrow F\)，则必有
+\[
+k\ge d(F)=\pcdim(F).
+\]
+\end{corollary}
+\begin{proof}
+圆维不变性由命题 \ref{prop:circle-dimension-laws}(3) 给出；外置下界由命题 \ref{prop:cdim-finite-fiber-min-prime-register-axes} 立即推出。证毕。
+\end{proof}
+
+\begin{remark}[连续圆维--pro圆维二元签名]\label{rem:cdim-cont-pro-signature}
+圆维 \((\cdim,\cdim_+)\) 计数可见连续相位圆因子，而 pro-圆维 \(\pcdim\) 计数 residue/逆极限轴的最小数目。
+在寄存器语义下可将二者合并为二元签名
+\[
+\Sigma_{\circ,\mathrm{pro}}(\cdot):=\bigl(\cdim_{\mathrm{cont}}(\cdot),\ \pcdim(\cdot)\bigr),
+\]
+其中约定：对有限生成可消去交换幺半群 \(M\) 取 \(\cdim_{\mathrm{cont}}(M)=\cdim_+(M)\)（定义 \ref{def:half-circle-dimension}）且 \(\pcdim(M)=0\)；
+对有限生成离散交换群取 \(\cdim_{\mathrm{cont}}=\cdim\) 且 \(\pcdim=0\)；
+对 profinite 交换群取 \(\cdim_{\mathrm{cont}}=0\)。
+于是基本轴对象满足
+\[
+\Sigma_{\circ,\mathrm{pro}}(\NN)=\bigl(\tfrac12,0\bigr),\qquad
+\Sigma_{\circ,\mathrm{pro}}(\ZZ)=(1,0),\qquad
+\Sigma_{\circ,\mathrm{pro}}(\widehat{\ZZ})=(0,1),
+\qquad
+\Sigma_{\circ,\mathrm{pro}}(F)=\bigl(0,d(F)\bigr).
+\]
+\end{remark}
+
+\endinput

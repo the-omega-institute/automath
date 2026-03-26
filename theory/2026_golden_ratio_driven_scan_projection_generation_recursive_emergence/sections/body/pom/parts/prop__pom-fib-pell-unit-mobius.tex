@@ -1,0 +1,136 @@
+\begin{proposition}[最大分裂对的 Pell 型二次型刻画]\label{prop:pom-fib-pell-quadratic-characterization}
+设 \((u,v)\in\NN^2\) 且 \(\gcd(u,v)=1\)、\(v>u\)。
+则下列命题等价：
+\begin{enumerate}
+  \item 存在整数 \(k\ge 1\) 使 \((u,v)=(F_k,F_{k+1})\)；
+  \item Pell 型二次型方程成立：
+  \[
+  \boxed{\;v^2-uv-u^2=\pm 1.\;}
+  \]
+\end{enumerate}
+并且若 \((u,v)=(F_k,F_{k+1})\)，则缩放对 \((2u,2v)\) 满足同一二次型的右端变为 \(\pm 4\)：
+\[
+(2v)^2-(2u)(2v)-(2u)^2=\pm 4.
+\]
+\end{proposition}
+\begin{proof}
+\textbf{(1)\(\Rightarrow\)(2):}
+令
+\(
+S_k:=F_{k+1}^2-F_{k+1}F_k-F_k^2
+\)。
+由 \(F_{k+2}=F_{k+1}+F_k\) 直接计算得递推
+\[
+S_{k+1}=F_{k+2}^2-F_{k+2}F_{k+1}-F_{k+1}^2=-S_k.
+\]
+且 \(S_1=F_2^2-F_2F_1-F_1^2=1-1-1=-1\)，故 \(S_k=(-1)^k\)，从而 \(v^2-uv-u^2=\pm 1\)。
+\par
+\textbf{(2)\(\Rightarrow\)(1):}
+令 \(\varphi=\frac{1+\sqrt5}{2}\) 并记其共轭 \(\widehat\varphi=\frac{1-\sqrt5}{2}=-\varphi^{-1}\)。
+定义
+\(
+\alpha:=v-u\varphi\in\mathbb{Z}[\varphi]
+\)，则其范数为
+\[
+N(\alpha):=\alpha\,\widehat\alpha=(v-u\varphi)(v-u\widehat\varphi)=v^2-uv-u^2.
+\]
+由 (2) 得 \(|N(\alpha)|=1\)，故 \(\alpha\) 为 \(\mathbb{Z}[\varphi]\) 的单位元。
+又因
+\(
+|\alpha|=\frac{|N(\alpha)|}{|v-u\widehat\varphi|}=\frac{1}{v+u/\varphi}<1
+\)，
+单位群结构（\(\mathbb{Z}[\varphi]^\times=\{\pm\varphi^n:\ n\in\mathbb{Z}\}\)）推出 \(\alpha=\pm\varphi^{-k}\) 对某个 \(k\ge 1\) 成立。
+将 \(\varphi^{-k}\) 的 Fibonacci 展开（推论 \ref{cor:pom-zphi-unit-certificate-error}）代入即可得到 \((u,v)=(F_k,F_{k+1})\)。
+缩放结论由二次型的齐次性直接得到。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$\mathbb{Z}[\varphi]$}{Z[phi]} 中的单位元证书：误差即为 \texorpdfstring{$\varphi$}{phi} 的负幂]\label{cor:pom-zphi-unit-certificate-error}
+若 \((u,v)=(F_k,F_{k+1})\)，则在二次数域 \(\mathbb{Q}(\sqrt5)\) 中成立精确恒等式
+\[
+\boxed{\;v-u\varphi=(-1)^k\varphi^{-k}.\;}
+\]
+等价地，元素 \(v-u\varphi\in\mathbb{Z}[\varphi]\) 为单位元，且其范数满足
+\[
+\boxed{\;N(v-u\varphi)=v^2-uv-u^2=(-1)^k.\;}
+\]
+由此得到严格的有理逼近误差公式
+\[
+\boxed{\;\left|\varphi-\frac{v}{u}\right|=\frac{\varphi^{-k}}{u}.\;}
+\]
+\end{corollary}
+\begin{proof}
+令 \(A_k:=F_{k+1}-F_k\varphi\)。
+由 \(\varphi^{-1}=\varphi-1\) 与 Fibonacci 递推，
+\[
+-\varphi^{-1}A_k=-(\varphi-1)(F_{k+1}-F_k\varphi)
+=-F_{k+1}\varphi+F_{k+1}+F_k\varphi^2
+=F_{k+2}-F_{k+1}\varphi
+=A_{k+1}.
+\]
+又 \(A_1=F_2-F_1\varphi=1-\varphi=-\varphi^{-1}\)，故
+\(
+A_k=(-\varphi^{-1})^{k}=(-1)^k\varphi^{-k}
+\)，即得第一式。
+范数恒等式由 \(N(v-u\varphi)=(v-u\varphi)(v-u\widehat\varphi)\) 与 \(\widehat\varphi=-\varphi^{-1}\) 直接化简得到。
+最后把 \(v/u-\varphi=(v-u\varphi)/u\) 取绝对值即可得误差公式。证毕。
+\end{proof}
+
+\begin{corollary}[由单个分裂对恢复尺度指数的可逆读出]\label{cor:pom-recover-k-from-unit-error}
+若整数对 \((u,v)\) 满足 \(v^2-uv-u^2=\pm 1\)，则存在唯一 \(k\ge 1\) 使 \((u,v)=(F_k,F_{k+1})\)，且该 \(k\) 可由代数误差幅度直接读出：
+\[
+\boxed{\;k=-\log_\varphi|v-u\varphi|.\;}
+\]
+因此“分裂对 \(\mapsto\) 尺度指数”在算术意义下可逆且具封闭形式。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-fib-pell-quadratic-characterization}，存在 \(k\ge 1\) 使 \((u,v)=(F_k,F_{k+1})\)。
+由推论 \ref{cor:pom-zphi-unit-certificate-error}，
+\(
+|v-u\varphi|=\varphi^{-k}
+\)，取 \(-\log_\varphi\) 即得；唯一性由对数函数单调性给出。证毕。
+\end{proof}
+
+\begin{proposition}[Pell 圆锥上的自同构动力学与投影 Möbius 递推]\label{prop:pom-pell-cone-automorphism-mobius}
+令
+\[
+Q:=\begin{pmatrix}0&1\\ 1&1\end{pmatrix},
+\qquad
+(u',v'):=Q(u,v)=(v,u+v).
+\]
+则 \(Q\) 在整数点上诱导变换 \((u,v)\mapsto(v,u+v)\)，并将二次型
+\(
+\mathcal{Q}(u,v):=v^2-uv-u^2
+\)
+的符号翻转：若 \(\mathcal{Q}(u,v)=\epsilon\)（\(\epsilon=\pm 1\)），则
+\[
+\boxed{\;\mathcal{Q}(u',v')=-\epsilon.\;}
+\]
+在射影坐标
+\(
+p:=\frac{v}{u+v}\in(0,1)
+\)
+下，该线性变换诱导严格 Möbius 递推
+\[
+\boxed{\;p\ \longmapsto\ \frac{1}{1+p}.\;}
+\]
+因此“最大分裂对的尺度推进”可同一化为 Pell 圆锥的整点自同构流与其射影动力系统；
+这与注 \ref{rem:pom-max-fiber-prob-spectrum-mobius-closure} 中 \(p_{k+1}=\frac{1}{1+p_k}\) 的重整化递推在结构上完全一致。
+\end{proposition}
+\begin{proof}
+将 \((u',v')=(v,u+v)\) 代入 \(\mathcal{Q}\) 得
+\[
+\mathcal{Q}(u',v')
+=(u+v)^2-v(u+v)-v^2
+=u^2+uv-v^2
+=-(v^2-uv-u^2)
+=-\mathcal{Q}(u,v).
+\]
+对 Möbius 递推，注意
+\[
+p'=\frac{v'}{u'+v'}=\frac{u+v}{v+u+v}=\frac{u+v}{u+2v}
+=\frac{1}{1+\frac{v}{u+v}}=\frac{1}{1+p}.
+\]
+证毕。
+\end{proof}
+
+\endinput

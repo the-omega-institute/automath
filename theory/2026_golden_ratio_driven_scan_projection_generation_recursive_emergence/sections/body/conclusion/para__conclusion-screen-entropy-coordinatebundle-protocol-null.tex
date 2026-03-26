@@ -1,0 +1,516 @@
+\paragraph{屏幕亏秩的熵恒等式、坐标束板层基与协议型 \texorpdfstring{$\mathsf{NULL}$}{NULL} 的相对同调实现}
+在 screen deficit 的 cut-space 识别、屏幕核的 solenoid 完备化以及 Kolmogorov 缺损的精确核坐标都已经建立之后，还可把部分屏幕的几何亏秩进一步压成一条更紧的链：其一，均匀 bulk 在部分屏幕下所损失的 Shannon 条件熵，恰与最小二进审计位数完全重合；其二，内部坐标束屏幕的核不仅有闭式秩，而且具有由板层示性链给出的显式整数基，并在坐标幂集格上退化为精确模律；其三，在只允许访问可见屏幕而禁止隐式侧信息泄漏的类型化读出中，协议型 \(\mathsf{NULL}\) 恰对应相对顶维同调亏秩为正的情形。于是，entropy、audit、coordinate bundle 与 typed \(\mathsf{NULL}\) 被压缩为同一相对亏秩不变量的不同投影。
+
+\begin{theorem}[部分屏幕的精确熵--审计恒等式]\label{thm:conclusion-screen-entropy-audit-identity}
+固定 \(m,n\ge 1\)，令 \(\mathcal Q_m\) 为 \(I^n\) 的 \(m\)-级 dyadic 立方复形，并取任意部分屏幕
+\[
+S\subseteq \overrightarrow{\mathcal F_m^{n-1}}.
+\]
+设
+\[
+f_S:C_n(\mathcal Q_m;\FF_2)\longrightarrow \FF_2^{\,S}
+\]
+为部分边界观测算子，\(X\) 为 \(C_n(\mathcal Q_m;\FF_2)\) 上的均匀分布随机变量，且 \(Y:=f_S(X)\)。再记
+\[
+r_S:=\beta_n(\mathcal Q_m,A_{\neg S};\FF_2)=c(\Gamma_S)-1.
+\]
+则有精确恒等式
+\[
+H(X\mid Y)=r_S.
+\]
+并且，这一共同整数恰等于使 \(f_S\) 成为精确读出的最小二进审计位数，即
+\[
+\min\Bigl\{
+b:\exists\ \iota,\ \iota:C_n(\mathcal Q_m;\FF_2)\hookrightarrow \FF_2^{\,S}\times \FF_2^{\,b},\
+\operatorname{pr}_1\circ \iota=f_S
+\Bigr\}=r_S.
+\]
+\end{theorem}
+
+\begin{proof}
+由推论 \ref{cor:spg-partial-boundary-fiber-cardinality-f2}，
+对任意 \(y\in \operatorname{im}(f_S)\)，其非空纤维大小恒为
+\[
+\#f_S^{-1}(y)=2^{\beta_n(\mathcal Q_m,A_{\neg S};\FF_2)}=2^{r_S}.
+\]
+因此，在均匀先验下，条件分布 \(X\mid(Y=y)\) 在该纤维上均匀，从而
+\[
+H(X\mid Y=y)=\log_2 \#f_S^{-1}(y)=r_S
+\]
+对一切 \(y\in\operatorname{im}(f_S)\) 恒成立。再对 \(Y\) 取平均，便得
+\[
+H(X\mid Y)=r_S.
+\]
+
+另一方面，若附加 \(b\) 个二进审计位并得到一个单射提升
+\[
+\iota:C_n(\mathcal Q_m;\FF_2)\hookrightarrow \FF_2^{\,S}\times \FF_2^{\,b},
+\qquad
+\operatorname{pr}_1\circ\iota=f_S,
+\]
+则在任一固定纤维 \(f_S^{-1}(y)\) 内，第二坐标至多可区分 \(2^b\) 个候选；故必须有
+\[
+2^b\ge \#f_S^{-1}(y)=2^{r_S},
+\]
+从而 \(b\ge r_S\)。反之，取 \(\ker f_S\) 的一组 \(\FF_2\)-基，把每个元素相对于某个直和分裂的核坐标输出为 \(r_S\) 个比特，便得到一个恰用 \(r_S\) 位的单射补全。故最小审计位数正是 \(r_S\)。证毕。
+\end{proof}
+
+\begin{theorem}[最优部分审计的 Kolmogorov 等距性]\label{thm:conclusion-screen-optimal-audit-kolmogorov-isometry}
+沿用定理 \ref{thm:conclusion-screen-entropy-audit-identity} 的记号。固定 \(S\) 的一组可计算核基，并取一个可计算直和分解
+\[
+C_n(\mathcal Q_m;\FF_2)=L_S\oplus \ker f_S.
+\]
+定义最优二进审计编码
+\[
+\mathrm{Enc}_S(x):=\bigl(f_S(x),\kappa_S(x)\bigr),
+\]
+其中 \(\kappa_S(x)\in \FF_2^{\,r_S}\) 表示 \(x\) 在上述分解下的核坐标。则存在仅依赖于 \(S,m,n\) 与所选通用机/分解的常数 \(C_S\)，使得对任意 \(x\in C_n(\mathcal Q_m;\FF_2)\) 都有
+\[
+\bigl|K(x\mid m,n,S)-K(\mathrm{Enc}_S(x)\mid m,n,S)\bigr|\le C_S,
+\]
+并且
+\[
+K\bigl(x\mid \mathrm{Enc}_S(x),m,n,S\bigr)\le C_S.
+\]
+反之，任何少于 \(r_S\) 位的可计算补全，都不可能在全域上同时满足单射性与上述 \(O(1)\)-级可逆复杂度。
+\end{theorem}
+
+\begin{proof}
+由构造，\(\mathrm{Enc}_S\) 是可计算映射，故
+\[
+K(\mathrm{Enc}_S(x)\mid m,n,S)\le K(x\mid m,n,S)+O(1).
+\]
+另一方面，由直和分解，任意 \(x\) 都可唯一写成
+\[
+x=s_S\bigl(f_S(x)\bigr)+\sum_{j=1}^{r_S}\varepsilon_j k_j,
+\]
+其中 \(s_S:\operatorname{im}(f_S)\to L_S\) 为可计算截面，\(\{k_j\}_{j=1}^{r_S}\) 为所固定的核基，而
+\[
+\kappa_S(x)=(\varepsilon_1,\dots,\varepsilon_{r_S}).
+\]
+故从 \(\mathrm{Enc}_S(x)\) 恢复 \(x\) 只需执行固定的有限维线性代数运算，因而其逆映射在像上可计算。于是
+\[
+K(x\mid m,n,S)\le K(\mathrm{Enc}_S(x)\mid m,n,S)+O(1),
+\qquad
+K\bigl(x\mid \mathrm{Enc}_S(x),m,n,S\bigr)\le O(1).
+\]
+合并即得前两式。
+
+若存在某个使用 \(b<r_S\) 位的可计算补全在全域上仍为单射，则这会给出定理 \ref{thm:conclusion-screen-entropy-audit-identity} 中更短的单射提升，与最小审计位数等于 \(r_S\) 相矛盾。因而此类更短补全不可能同时拥有全域单射性与 \(O(1)\)-级逆复杂度。证毕。
+\end{proof}
+
+\begin{theorem}[内部坐标束屏幕核的板层分解]\label{thm:conclusion-coordinate-bundle-kernel-slab-decomposition}
+对任意
+\[
+J\subseteq [n]:=\{1,\dots,n\},
+\qquad
+s:=|J|,
+\]
+令 \(S_J^{\mathrm{int}}\) 为全部法向平行于某个 \(e_j\)（\(j\in J\)）的内部共享面所组成之屏幕。对每个补坐标
+\[
+a_{J^c}\in\{0,\dots,2^m-1\}^{J^c},
+\]
+定义相应的 \(J\)-板层
+\[
+\Sigma_{a_{J^c}}
+:=
+\bigcup_{a_J\in \{0,\dots,2^m-1\}^{J}} C_{(a_J,a_{J^c})},
+\]
+并记其顶维示性链为 \([\Sigma_{a_{J^c}}]\)。则有自然直和分解
+\[
+\ker f_{S_J^{\mathrm{int}}}
+\cong
+\bigoplus_{a_{J^c}\in \{0,\dots,2^m-1\}^{J^c}}
+\ZZ\,[\Sigma_{a_{J^c}}].
+\]
+特别地，
+\[
+\rank_{\ZZ}\ker f_{S_J^{\mathrm{int}}}=2^{m(n-s)}.
+\]
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:spg-internal-coordinate-bundle-screen-cost-closed-form} 的证明，
+\(\Gamma_{S_J^{\mathrm{int}}}\) 的每一个内部连通分量都恰由固定补坐标 \(a_{J^c}\) 的全部顶维胞腔组成，而沿 \(J\) 中坐标变化的网格图在该分量内连通。故内部连通分量与所有 \(a_{J^c}\in\{0,\dots,2^m-1\}^{J^c}\) 一一对应。
+
+另一方面，由定理 \ref{thm:spg-screen-kernel-connected-components}，
+\[
+\ker f_{S_J^{\mathrm{int}}}\cong \ZZ^{\,c(\Gamma_{S_J^{\mathrm{int}}})-1}.
+\]
+其构造性证明已表明：核中的一组自然基可取为“在某个内部连通分量上取常值、在其余分量上取零”的顶维链。将这一描述翻译回 dyadic 胞腔地址，便恰得到各个板层的示性链 \([\Sigma_{a_{J^c}}]\)。由于不同板层支撑互不相交，所得到的子群和为直和。最后由
+\[
+c(\Gamma_{S_J^{\mathrm{int}}})=2^{m(n-s)}+1
+\]
+即得秩公式
+\[
+\rank_{\ZZ}\ker f_{S_J^{\mathrm{int}}}=2^{m(n-s)}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[坐标束室中的对数模性与显式可见秩]\label{thm:conclusion-coordinate-bundle-logmodularity-visible-rank}
+定义内部坐标束屏幕的亏秩函数
+\[
+\Delta_m(J):=\rank_{\ZZ}\ker f_{S_J^{\mathrm{int}}}
+\qquad (J\subseteq [n]).
+\]
+则对任意 \(J,K\subseteq [n]\)，有精确乘法模性
+\[
+\Delta_m(J\cap K)\,\Delta_m(J\cup K)=\Delta_m(J)\,\Delta_m(K),
+\]
+等价地，
+\[
+\log_2\Delta_m(J)=m(n-|J|)
+\]
+是幂集格 \(\mathcal P([n])\) 上的模函数。并且相应可见秩满足
+\[
+\rank_{\QQ}\operatorname{im}\bigl(f_{S_J^{\mathrm{int}}}\otimes \QQ\bigr)
+=
+2^{mn}-2^{m(n-|J|)}.
+\]
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-coordinate-bundle-kernel-slab-decomposition}，
+\[
+\Delta_m(J)=2^{m(n-|J|)}.
+\]
+于是
+\[
+\Delta_m(J\cap K)\,\Delta_m(J\cup K)
+=
+2^{m(n-|J\cap K|)}2^{m(n-|J\cup K|)}
+=
+2^{m(2n-|J|-|K|)}
+=
+\Delta_m(J)\,\Delta_m(K),
+\]
+其中用到了集合恒等式
+\[
+|J\cap K|+|J\cup K|=|J|+|K|.
+\]
+这便证明了乘法模性与对数模性。
+
+另一方面，顶维链空间 \(C_n(\mathcal Q_m;\QQ)\) 的维数为 \(2^{mn}\)。由秩--零度公式，
+\[
+\rank_{\QQ}\operatorname{im}\bigl(f_{S_J^{\mathrm{int}}}\otimes \QQ\bigr)
+=
+2^{mn}-\rank_{\QQ}\ker\bigl(f_{S_J^{\mathrm{int}}}\otimes \QQ\bigr)
+=
+2^{mn}-2^{m(n-|J|)},
+\]
+其中最后一步利用了整数核是自由的，故张量到 \(\QQ\) 后秩保持不变。证毕。
+\end{proof}
+
+\begin{theorem}[全内部可见时的唯一残余全局模]\label{thm:conclusion-full-internal-visibility-unique-global-mode}
+令 \(J=[n]\)，并记
+\[
+\Omega_m:=\sum_{a\in \{0,\dots,2^m-1\}^n} C_a
+\]
+为全部顶维 dyadic 立方体之和。则
+\[
+\ker f_{S_{[n]}^{\mathrm{int}}}=\ZZ\,\Omega_m.
+\]
+换言之，在全部内部坐标方向都已可见时，部分边界观测只剩一个一维全局模。进一步，若 \(B\subseteq \overrightarrow{\mathcal F_m^{n-1}}\) 为任意非空外边界面族，则
+\[
+f_{S_{[n]}^{\mathrm{int}}\cup B}
+\]
+已经单射；亦即任意一个外边界参照都足以消灭该唯一残余模。
+\end{theorem}
+
+\begin{proof}
+把定理 \ref{thm:conclusion-coordinate-bundle-kernel-slab-decomposition} 应用于 \(J=[n]\)。此时 \(J^c=\varnothing\)，故只剩下唯一板层，而其示性链恰为
+\[
+\Omega_m=\sum_{a} C_a.
+\]
+因此
+\[
+\ker f_{S_{[n]}^{\mathrm{int}}}=\ZZ\,\Omega_m.
+\]
+
+至于第二条，则正是推论 \ref{cor:spg-full-internal-screen-one-defect-boundary-closure} 的结论：全内部屏幕本身亏秩为 \(1\)，而任意非空外边界面族都足以把内部唯一连通分量与 \(\infty\) 接通，从而使扩张屏幕成为精确屏幕，即对应算子单射。证毕。
+\end{proof}
+
+\begin{corollary}[可见面的审计边际收益递减律]\label{cor:conclusion-screen-audit-marginal-diminishing-returns}
+对任意屏幕 \(S\subseteq \overrightarrow{\mathcal F_m^{n-1}}\)，记其最小审计成本为
+\[
+C(S):=\rank_{\ZZ}\ker f_S.
+\]
+则 \(C\) 单调不增且满足边际收益递减：对任意
+\[
+A\subseteq B\subseteq \overrightarrow{\mathcal F_m^{n-1}},
+\qquad
+e\notin B,
+\]
+都有
+\[
+C(A)-C(A\cup\{e\})
+\ge
+C(B)-C(B\cup\{e\}).
+\]
+亦即：同一张新可见面在贫乏屏幕上所带来的审计成本下降，不小于它在富足屏幕上所带来的下降。
+\end{corollary}
+
+\begin{proof}
+由推论 \ref{cor:spg-partial-boundary-min-audit-cost-kernel-rank}，
+\[
+C(S)=\min_{(R,r_S)}\cdim(R).
+\]
+而定理 \ref{thm:conclusion-screen-rank-gain-closure-diminishing-returns} 已经表明最小审计成本的边际收益严格满足递减律。直接代入即可。证毕。
+\end{proof}
+
+\begin{theorem}[相对线性全息的精确补充维数]\label{thm:conclusion-relative-linear-holography-exact-supplement-dimension}
+将 fixed-resolution 的分段常数空间
+\[
+V_m:=\operatorname{span}\{1_{C_a}:a\in \{0,\dots,2^m-1\}^n\}
+\]
+与顶维链空间 \(C_n(\mathcal Q_m;\QQ)\) 通过标准基识别。记 \(T_J\) 为由内部坐标束屏幕 \(S_J^{\mathrm{int}}\) 诱导的线性观测。若再附加 \(L\) 个标量线性泛函
+\[
+\ell_1,\dots,\ell_L\in V_m^\ast
+\]
+并要求联合映射
+\[
+x\longmapsto \bigl(T_Jx,\ell_1(x),\dots,\ell_L(x)\bigr)
+\]
+在整个 \(V_m\) 上单射，则必有
+\[
+L\ge 2^{m(n-|J|)}.
+\]
+并且此下界可达：取定理 \ref{thm:conclusion-coordinate-bundle-kernel-slab-decomposition} 中全部板层坐标作为附加泛函，即得恰用 \(2^{m(n-|J|)}\) 个标量的单射补全。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-coordinate-bundle-logmodularity-visible-rank}，
+\[
+\rank T_J=2^{mn}-2^{m(n-|J|)}.
+\]
+因此其秩亏恰为
+\[
+\dim V_m-\rank T_J=2^{m(n-|J|)}.
+\]
+每附加一个标量线性泛函，联合映射的秩至多增加 \(1\)。若
+\[
+L<2^{m(n-|J|)},
+\]
+则联合秩仍严格小于 \(\dim V_m\)，故不可能单射。于是下界成立。
+
+反过来，定理 \ref{thm:conclusion-coordinate-bundle-kernel-slab-decomposition} 已给出 \(\ker T_J\) 的一组显式板层基；取相应坐标泛函作为附加观测后，联合映射在核上成为单射，并与原可见部分互补，故整体单射。于是该下界可达。证毕。
+\end{proof}
+
+\begin{theorem}[相对同调亏秩对协议型 \texorpdfstring{$\mathsf{NULL}$}{NULL} 的实现]\label{thm:conclusion-relative-homology-corank-protocol-null}
+沿用第 \ref{sec:logic-expansion-chain} 节把 \(\mathsf{NULL}\) 视为结构性失败标签的约定。固定部分屏幕 \(S\)，并在“显式精度索引且禁止隐式侧信息泄漏”的类型化制度下，定义确定性偏读出协议
+\[
+\mathrm{Read}_S
+\]
+为仅允许访问可见综合征
+\[
+y=f_S(x)
+\]
+而不允许访问任何额外审计坐标的读出。则以下三条件等价：
+\begin{enumerate}
+  \item \(\beta_n(\mathcal Q_m,A_{\neg S};\FF_2)>0\)；
+  \item 存在 \(y\in \operatorname{im}(f_S)\) 使得
+        \[
+        \#f_S^{-1}(y)>1;
+        \]
+  \item \(\mathrm{Read}_S\) 在某个可见地址类上必返回协议型 \(\mathsf{NULL}\)。
+\end{enumerate}
+相反，若
+\[
+\beta_n(\mathcal Q_m,A_{\neg S};\FF_2)=0,
+\]
+则 \(f_S\) 单射，从而该读出协议中不存在由屏幕不足所导致的协议型 \(\mathsf{NULL}\)。
+\end{theorem}
+
+\begin{proof}
+第一条与第二条的等价由定理 \ref{thm:conclusion-screen-entropy-audit-identity} 立即得到：\(\beta_n>0\) 当且仅当某个纤维大小大于 \(1\)。
+
+现设存在 \(y\in \operatorname{im}(f_S)\) 使
+\[
+\#f_S^{-1}(y)>1.
+\]
+在所规定的类型纪律下，\(\mathrm{Read}_S\) 只能依赖于 \(y\) 本身，而不能额外访问任何 hidden audit 坐标。因此它不可能在同一可见综合征下，对两个不同的前像同时给出唯一且可核验的对象级回放。另一方面，该纤维非空，故失败并非来自不可实现的空纤维，也不是第 \ref{sec:logic-expansion-chain} 节意义下的 \(\mathsf{Undef}\)；它只可能被记录为由协议侧信息不足所导致的结构性失败，即协议型 \(\mathsf{NULL}\)。这便证明了第二条推出第三条。
+
+反过来，若 \(\beta_n=0\)，则由定理 \ref{thm:conclusion-screen-entropy-audit-identity}，
+\[
+\#f_S^{-1}(y)=1
+\qquad
+\text{对一切 }y\in \operatorname{im}(f_S).
+\]
+故 \(f_S\) 为单射，存在仅依赖于可见综合征 \(y\) 的确定性逆译码，从而不再会出现由屏幕不足所导致的协议型 \(\mathsf{NULL}\)。于是第三条不能发生，得到其逆否命题。证毕。
+\end{proof}
+
+\begin{theorem}[线性屏幕实现中的 \texorpdfstring{$\mathsf{NULL}$}{NULL} 三分律塌缩]\label{thm:conclusion-screen-linear-readout-null-trichotomy-collapse}
+固定分辨率 \(m,n\)，并在 \(\FF_2\)-系数下考虑部分屏幕观测
+\[
+f_S:C_n(\mathcal Q_m;\FF_2)\longrightarrow \FF_2^{\,S},
+\qquad
+S\subseteq \overrightarrow{\mathcal F_m^{n-1}}.
+\]
+对任意可见数据 \(y\in \FF_2^{\,S}\)，定义三值读出
+\[
+\mathrm{Read}_S(y)\in \{\mathrm{Tot},\mathrm{ProtNULL},\mathrm{CollNULL}\}
+\]
+为
+\[
+\mathrm{Read}_S(y)=
+\begin{cases}
+\mathrm{Tot}, & f_S^{-1}(y)\ \text{为单点},\\
+\mathrm{ProtNULL}, & f_S^{-1}(y)=\varnothing,\\
+\mathrm{CollNULL}, & \#f_S^{-1}(y)\ge 2.
+\end{cases}
+\]
+则有严格分类：
+\[
+\mathrm{Read}_S(y)=\mathrm{ProtNULL}
+\iff
+y\notin \operatorname{im}f_S,
+\]
+\[
+\mathrm{Read}_S(y)=\mathrm{CollNULL}
+\iff
+y\in \operatorname{im}f_S
+\ \text{且}\
+\beta_n(\mathcal Q_m,A_{\neg S};\FF_2)>0,
+\]
+\[
+\mathrm{Read}_S(y)=\mathrm{Tot}
+\iff
+y\in \operatorname{im}f_S
+\ \text{且}\
+\beta_n(\mathcal Q_m,A_{\neg S};\FF_2)=0.
+\]
+并且在第二种情形中，
+\[
+\#f_S^{-1}(y)=2^{\beta_n(\mathcal Q_m,A_{\neg S};\FF_2)}.
+\]
+\end{theorem}
+
+\begin{proof}
+由线性代数，\(f_S^{-1}(y)=\varnothing\) 当且仅当 \(y\notin \operatorname{im}f_S\)，故第一条成立。
+
+若 \(y\in \operatorname{im}f_S\)，则纤维 \(f_S^{-1}(y)\) 是 \(\ker f_S\) 的一个仿射空间，因此
+\[
+\#f_S^{-1}(y)=2^{\dim_{\FF_2}\ker f_S}.
+\]
+而由本文前面已经反复使用的相对顶维同调刻画，
+\[
+\ker f_S\cong H_n(\mathcal Q_m,A_{\neg S};\FF_2),
+\]
+故
+\[
+\dim_{\FF_2}\ker f_S=\beta_n(\mathcal Q_m,A_{\neg S};\FF_2).
+\]
+于是，当该 Betti 数为零时，纤维为单点，读出为 \(\mathrm{Tot}\)；当其严格大于零时，纤维含至少两个点，读出为 \(\mathrm{CollNULL}\)。证毕。
+\end{proof}
+
+\begin{theorem}[延迟观测的几何决定时刻]\label{thm:conclusion-screen-delayed-observation-geometric-decision-time}
+在定理 \ref{thm:conclusion-screen-linear-readout-null-trichotomy-collapse} 的设定下，取一条单调屏幕链
+\[
+S_0\subseteq S_1\subseteq S_2\subseteq \cdots \subseteq \overrightarrow{\mathcal F_m^{n-1}}.
+\]
+对任意固定的隐藏顶维链 \(x\in C_n(\mathcal Q_m;\FF_2)\)，记
+\[
+y_t:=f_{S_t}(x).
+\]
+定义其决定时刻
+\[
+\tau:=\inf\{t\ge 0:\mathrm{Read}_{S_t}(y_t)=\mathrm{Tot}\}.
+\]
+则 \(\tau\) 与 \(x\) 无关，并且有显式公式
+\[
+\tau=\inf\{t\ge 0:\ c(\Gamma_{S_t})=1\}.
+\]
+更精确地，对一切 \(t\)：
+\begin{enumerate}
+  \item 若 \(t<\tau\)，则
+        \[
+        \mathrm{Read}_{S_t}(y_t)=\mathrm{CollNULL},
+        \qquad
+        \#f_{S_t}^{-1}(y_t)=2^{\,c(\Gamma_{S_t})-1};
+        \]
+  \item 若 \(t\ge \tau\)，则
+        \[
+        \mathrm{Read}_{S_t}(y_t)=\mathrm{Tot},
+        \qquad
+        f_{S_t}^{-1}(y_t)=\{x\};
+        \]
+  \item 一旦 \(t\ge \tau\)，则对所有 \(u\ge t\)，由 \(y_u\) 反演得到的唯一 bulk completion 仍为同一 \(x\)。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+由于 \(y_t=f_{S_t}(x)\)，故 \(y_t\in \operatorname{im}f_{S_t}\) 对所有 \(t\) 恒成立；因此 \(\mathrm{ProtNULL}\) 在这条观测轨道上不会出现。
+
+由相对顶维同调核的闭式，
+\[
+\dim_{\FF_2}\ker f_{S_t}=c(\Gamma_{S_t})-1.
+\]
+再联用定理 \ref{thm:conclusion-screen-linear-readout-null-trichotomy-collapse}，可得
+\[
+\mathrm{Read}_{S_t}(y_t)=\mathrm{Tot}
+\iff
+\ker f_{S_t}=0
+\iff
+c(\Gamma_{S_t})=1.
+\]
+因此 \(\tau\) 只由屏幕几何决定，与具体的 \(x\) 无关；第一、第二条随即成立。
+
+又因 \(S_t\subseteq S_u\) 蕴含 \(f_{S_u}\) 是在 \(f_{S_t}\) 之上增加若干坐标而得，故
+\[
+\ker f_{S_u}\subseteq \ker f_{S_t}.
+\]
+于是当某个时刻 \(t\) 已有 \(\ker f_{S_t}=0\) 时，对一切 \(u\ge t\) 仍有 \(\ker f_{S_u}=0\)。这就说明后续观测不会改写已经唯一决定的 bulk completion，第三条得证。证毕。
+\end{proof}
+
+\begin{theorem}[精确二元审计的同调比特下界]\label{thm:conclusion-screen-exact-binary-audit-homological-bit-bound}
+沿用定理 \ref{thm:conclusion-screen-linear-readout-null-trichotomy-collapse} 的设定。记
+\[
+\beta:=\beta_n(\mathcal Q_m,A_{\neg S};\FF_2).
+\]
+称一个 \(b\)-比特审计补充为映射
+\[
+a:C_n(\mathcal Q_m;\FF_2)\longrightarrow \{0,1\}^b
+\]
+使得组合编码
+\[
+x\longmapsto \bigl(f_S(x),a(x)\bigr)
+\]
+为单射。则必有
+\[
+b\ge \beta.
+\]
+反之，存在恰好 \(b=\beta\) 的审计补充使上式单射。换言之，\(\beta\) 正是该屏幕上精确二元审计的最小比特成本。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-screen-linear-readout-null-trichotomy-collapse}，对任意 \(y\in \operatorname{im}f_S\)，纤维 \(f_S^{-1}(y)\) 的基数恒为 \(2^\beta\)。若 \((f_S,a)\) 为单射，则对任意固定 \(y\)，其限制
+\[
+a|_{f_S^{-1}(y)}:f_S^{-1}(y)\to \{0,1\}^b
+\]
+也必须为单射。故必有
+\[
+2^\beta\le 2^b,
+\]
+即 \(b\ge \beta\)。
+
+反过来，取 \(\ker f_S\) 的一组 \(\FF_2\)-基，并选择一补空间
+\[
+C_n(\mathcal Q_m;\FF_2)=\ker f_S\oplus W.
+\]
+任意 \(x\) 可唯一写成
+\[
+x=k+w,
+\qquad
+k\in \ker f_S,\ w\in W.
+\]
+定义 \(a(x)\) 为 \(k\) 在上述基下的坐标向量，则 \(a(x)\in \{0,1\}^{\beta}\)。若
+\[
+f_S(x)=f_S(x'),
+\qquad
+a(x)=a(x'),
+\]
+则 \(x-x'\in \ker f_S\)，且二者具有相同核坐标，故 \(x-x'=0\)，从而 \(x=x'\)。因此当 \(b=\beta\) 时该编码已经单射，下界可达。证毕。
+\end{proof}
+
+\endinput

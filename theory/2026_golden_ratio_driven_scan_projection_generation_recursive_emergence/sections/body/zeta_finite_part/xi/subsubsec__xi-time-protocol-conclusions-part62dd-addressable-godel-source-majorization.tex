@@ -1,0 +1,241 @@
+\paragraph{可寻址 Gödel 外置的源依赖最优复杂度与 majorization 序结构}
+在全息地址像的精确维度测度已经取得闭式、而逐坐标可寻址 Gödel 整数化的纯估值极小化器也已完成分类之后，同一 prime-address 框架还可进一步给出任意源分布下的期望复杂度闭式，以及由 majorization 完全控制的复杂度序结构。
+
+\begin{theorem}[可寻址 Gödel 整数化在任意源分布下的最小期望复杂度闭式]\label{thm:xi-time-part62dd-addressable-godel-expected-complexity-source-optimality}
+沿用定理 \ref{thm:xi-addressable-godel-product-lower-bound-classification} 的设定。设 \(\mathbb P\) 为 \(\Sigma^T\) 上任意概率分布，记随机字
+\[
+S=(S_1,\dots,S_T)\sim \mathbb P,
+\]
+并对每个 \(1\le t\le T\) 记其边缘分布
+\[
+\pi_t(a):=\mathbb P(S_t=a)
+\qquad (a\in\Sigma).
+\]
+把 \(\pi_t\) 的坐标按非增序排列为
+\[
+\pi_t^\downarrow(0)\ge \pi_t^\downarrow(1)\ge \cdots \ge \pi_t^\downarrow(q-1).
+\]
+对任意逐坐标可寻址编码
+\[
+E_T:\Sigma^T\hookrightarrow \NN_{\ge 1},
+\]
+定义期望对数复杂度
+\[
+\mathcal L(E_T;\mathbb P):=\mathbb E_{\mathbb P}\bigl[\log E_T(S)\bigr].
+\]
+则有精确闭式
+\[
+\inf_{E_T}\mathcal L(E_T;\mathbb P)
+=
+\sum_{t=1}^{T}
+\left(
+\sum_{j=0}^{q-1}j\,\pi_t^\downarrow(j)
+\right)\log p_t.
+\]
+
+该下界总可由纯估值编码达到：若对每个 \(t\) 选取双射
+\[
+\iota_t:\Sigma\xrightarrow{\sim}\{0,1,\dots,q-1\}
+\]
+满足
+\[
+\pi_t(a)>\pi_t(b)\Longrightarrow \iota_t(a)<\iota_t(b),
+\]
+则
+\[
+E_T^{\min}(s):=\prod_{t=1}^{T}p_t^{\,\iota_t(s_t)}
+\qquad (s\in\Sigma^T)
+\]
+满足
+\[
+\mathcal L(E_T^{\min};\mathbb P)
+=
+\sum_{t=1}^{T}
+\left(
+\sum_{j=0}^{q-1}j\,\pi_t^\downarrow(j)
+\right)\log p_t.
+\]
+
+更一般地，任一极小化器都必须在 \(\mathbb P\)-几乎处处与某个上述纯估值编码一致。若进一步假设 \(\mathbb P\) 在 \(\Sigma^T\) 上满支撑，则全部极小化器恰为这类按边缘概率逆序排列的纯估值编码。
+\end{theorem}
+\begin{proof}
+对每个 \(t\) 与 \(a\in\Sigma\)，定义估值支持
+\[
+\mathcal V_{t,a}:=
+\{v_{p_t}(E_T(s)):\ s_t=a\}\subset \ZZ_{\ge 0},
+\qquad
+m_{t,a}:=\min \mathcal V_{t,a}.
+\]
+由于 \(s_t\) 由 \(v_{p_t}(E_T(s))\) 经 \(\delta_t\) 单独解码，不同字母 \(a\neq b\) 的估值支持必两两不交。故
+\[
+\{m_{t,a}:a\in\Sigma\}
+\]
+由 \(q\) 个互异的非负整数组成。
+
+于是对任意 \(s\in\Sigma^T\)，有
+\[
+v_{p_t}(E_T(s))\ge m_{t,s_t}
+\qquad (1\le t\le T),
+\]
+从而
+\[
+\begin{aligned}
+\mathcal L(E_T;\mathbb P)
+&=
+\sum_{s\in\Sigma^T}\mathbb P(s)\log E_T(s)\\
+&=
+\sum_{s\in\Sigma^T}\mathbb P(s)\sum_{p}v_p(E_T(s))\log p\\
+&\ge
+\sum_{t=1}^{T}\log p_t
+\sum_{s\in\Sigma^T}\mathbb P(s)\,v_{p_t}(E_T(s))\\
+&\ge
+\sum_{t=1}^{T}\log p_t
+\sum_{a\in\Sigma}\pi_t(a)\,m_{t,a}.
+\end{aligned}
+\]
+
+现固定 \(t\)。把 \(\{m_{t,a}:a\in\Sigma\}\) 递增排列为
+\[
+n_{t,0}<n_{t,1}<\cdots <n_{t,q-1}.
+\]
+由于它们是 \(q\) 个互异非负整数，必有
+\[
+n_{t,j}\ge j
+\qquad (0\le j\le q-1).
+\]
+对给定的递增序列 \((n_{t,j})\)，重排不等式表明
+\[
+\sum_{a\in\Sigma}\pi_t(a)\,m_{t,a}
+\ge
+\sum_{j=0}^{q-1}\pi_t^\downarrow(j)\,n_{t,j}
+\ge
+\sum_{j=0}^{q-1}j\,\pi_t^\downarrow(j).
+\]
+代回即可得到
+\[
+\mathcal L(E_T;\mathbb P)
+\ge
+\sum_{t=1}^{T}
+\left(
+\sum_{j=0}^{q-1}j\,\pi_t^\downarrow(j)
+\right)\log p_t.
+\]
+
+反过来，若取满足概率逆序条件的双射 \(\iota_t\)，并定义
+\[
+E_T^{\min}(s)=\prod_{t=1}^{T}p_t^{\,\iota_t(s_t)},
+\]
+则显然仍满足逐坐标可寻址性，只需取
+\[
+\delta_t=\iota_t^{-1}.
+\]
+并且
+\[
+\log E_T^{\min}(s)=\sum_{t=1}^{T}\iota_t(s_t)\log p_t.
+\]
+对 \(\mathbb P\) 取期望，得到
+\[
+\mathcal L(E_T^{\min};\mathbb P)
+=
+\sum_{t=1}^{T}
+\left(
+\sum_{a\in\Sigma}\pi_t(a)\iota_t(a)
+\right)\log p_t
+=
+\sum_{t=1}^{T}
+\left(
+\sum_{j=0}^{q-1}j\,\pi_t^\downarrow(j)
+\right)\log p_t.
+\]
+故上述下界可达。
+
+若某个编码达到极小值，则上面链中的全部不等式都必须取等。于是首先，所有非指定素数的估值贡献在 \(\mathbb P\)-几乎处处都必须消失；其次，对每个 \(t\)，随机变量
+\[
+v_{p_t}(E_T(S))-m_{t,S_t}
+\]
+在 \(\mathbb P\)-几乎处处都必须为零。故任一极小化器都在 \(\mathbb P\)-几乎处处与某个纯估值编码一致。若 \(\mathbb P\) 在 \(\Sigma^T\) 上满支撑，则上述等式事实上对每个 \(s\in\Sigma^T\) 都成立；于是编码在每个坐标上只能依赖于单个字母，并且其指数集合必为 \(\{0,\dots,q-1\}\) 的某个按边缘概率逆序排列，故全部极小化器恰为所述纯估值编码。证毕。
+\end{proof}
+
+\begin{corollary}[最小期望复杂度关于 majorization 为 Schur--凹]\label{cor:xi-time-part62dd-addressable-godel-majorization-schur-concavity}
+在定理 \ref{thm:xi-time-part62dd-addressable-godel-expected-complexity-source-optimality} 的记号下，定义单坐标代价泛函
+\[
+\mathfrak c_q(\pi):=\sum_{j=0}^{q-1}j\,\pi^\downarrow(j),
+\qquad
+\pi\in\Delta(\Sigma),\ |\Sigma|=q.
+\]
+则 \(\mathfrak c_q\) 关于 majorization 是 Schur--凹的：若
+\[
+\pi\succ \sigma,
+\]
+则
+\[
+\mathfrak c_q(\pi)\le \mathfrak c_q(\sigma).
+\]
+因此
+\[
+\mathcal L_{\min}(\mathbb P)
+:=
+\inf_{E_T}\mathcal L(E_T;\mathbb P)
+=
+\sum_{t=1}^{T}\mathfrak c_q(\pi_t)\log p_t
+\]
+在每个边缘变量上都是 Schur--凹函数。
+
+特别地：
+\begin{enumerate}
+  \item 若每个 \(\pi_t\) 都是点质量，则
+  \[
+  \mathcal L_{\min}(\mathbb P)=0.
+  \]
+  \item 若每个 \(\pi_t\) 都是均匀分布 \(u_q\)，则
+  \[
+  \mathcal L_{\min}(\mathbb P)
+  =
+  \frac{q-1}{2}\sum_{t=1}^{T}\log p_t,
+  \]
+  并且这在同字母表大小的全部源中取得最大值。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+把 \(\mathfrak c_q\) 改写为
+\[
+\mathfrak c_q(\pi)
+=
+\sum_{j=0}^{q-1}j\,\pi^\downarrow(j)
+=
+\sum_{k=1}^{q-1}\sum_{j=k}^{q-1}\pi^\downarrow(j)
+=
+\sum_{k=1}^{q-1}\left(1-\sum_{j=0}^{k-1}\pi^\downarrow(j)\right).
+\]
+若 \(\pi\succ \sigma\)，则按 majorization 的定义，
+\[
+\sum_{j=0}^{k-1}\pi^\downarrow(j)\ge \sum_{j=0}^{k-1}\sigma^\downarrow(j)
+\qquad (1\le k\le q-1).
+\]
+逐项相减并求和即得
+\[
+\mathfrak c_q(\pi)\le \mathfrak c_q(\sigma).
+\]
+故 \(\mathfrak c_q\) 为 Schur--凹函数。
+
+由定理 \ref{thm:xi-time-part62dd-addressable-godel-expected-complexity-source-optimality} 的闭式，
+\[
+\mathcal L_{\min}(\mathbb P)=\sum_{t=1}^{T}\mathfrak c_q(\pi_t)\log p_t,
+\]
+且 \(\log p_t>0\)，故 \(\mathcal L_{\min}\) 在每个边缘分布上同样是 Schur--凹的。
+
+若 \(\pi\) 为点质量，则 \(\pi^\downarrow=(1,0,\dots,0)\)，故
+\[
+\mathfrak c_q(\pi)=0.
+\]
+若 \(\pi=u_q\) 为均匀分布，则
+\[
+\mathfrak c_q(u_q)=\frac1q\sum_{j=0}^{q-1}j=\frac{q-1}{2}.
+\]
+又点质量 majorize 任意分布，而任意分布都 majorize 均匀分布，故 Schur--凹性说明点质量给出最小值，均匀分布给出最大值。将其代回上式即得全部结论。证毕。
+\end{proof}
+
+\noindent
+至此，可寻址 Gödel 外置在源依赖口径下也达到终端闭式：最优期望复杂度不再只在均匀源上可算，而是对任意 \(\mathbb P\) 都完全分解为各坐标边缘的 Schur--凹代价之和。由此，prime-register 地址化的最优复杂度理论从均匀平均律提升为一条完整的 source-dependent 序结构。
+
+\endinput

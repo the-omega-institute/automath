@@ -1,0 +1,472 @@
+% (User input window)
+%
+% 本段将 logistic 尺度核的平移族组织为一组可直接嵌入层析与判别论的闭式字典：
+% 首先给出若干核心 \(f\)-散度的完全显式表达及其局部常数链；
+% 随后把该核诱导的多类别 MAP 判决、最优布局、互信息与 Fisher 亏损写成可审计公式。
+
+在命题 \ref{prop:xi-bulk-curvature-logistic-kernel-decomposition} 的尺度曲率接口中，深度原子以 logistic 核的平移族出现。
+因此，平移族 \(\{\phi_a\}_{a\in\RR}\) 的散度、判决误差与信息几何常数可被视为“尺度可见性阈值”的原型账本。
+
+\begin{proposition}[尺度曲率核的散度字典：\texorpdfstring{$1/4$}{1/4}、\texorpdfstring{$4$}{4}、\texorpdfstring{$1/3$}{1/3} 的同源封口]\label{prop:xi-logistic-divergence-dictionary}
+令
+\[
+\phi(s)=\frac{1}{4\cosh^{2}(s/2)}=\frac{e^{s}}{(1+e^{s})^{2}},
+\qquad
+\phi_a(s):=\phi(s-a),
+\qquad
+\Delta:=b-a.
+\]
+则对任意 \(a,b\in\RR\) 下列散度均存在完全闭式：
+\begin{enumerate}
+  \item \textup{（总变差距离）}
+  \[
+  \|\phi_a-\phi_b\|_{\mathrm{TV}}
+  :=\frac12\int_{\RR}|\phi_a(s)-\phi_b(s)|\,\dd s
+  =\tanh\!\Bigl(\frac{|\Delta|}{4}\Bigr).
+  \]
+  \item \textup{（二元等先验 Bayes 最小错误率）}
+  \[
+  P_{\mathrm e}(\Delta)
+  =\frac{1-\|\phi_a-\phi_b\|_{\mathrm{TV}}}{2}
+  =\frac{1}{1+e^{|\Delta|/2}}.
+  \]
+  \item \textup{（Hellinger 亲和度与平方 Hellinger 距离）}
+  \[
+  \int_{\RR}\sqrt{\phi_a(s)\phi_b(s)}\,\dd s
+  =\frac{|\Delta|}{2\sinh(|\Delta|/2)},
+  \qquad
+  H^{2}(\phi_a,\phi_b)
+  :=1-\int_{\RR}\sqrt{\phi_a\phi_b}
+  =1-\frac{|\Delta|}{2\sinh(|\Delta|/2)}.
+  \]
+  \item \textup{（Kullback--Leibler 散度的严格对称性）}
+  \[
+  D_{\mathrm{KL}}(\phi_a\|\phi_b)
+  :=\int_{\RR}\phi_a(s)\log\frac{\phi_a(s)}{\phi_b(s)}\,\dd s
+  =|\Delta|\coth(|\Delta|/2)-2,
+  \qquad
+  D_{\mathrm{KL}}(\phi_a\|\phi_b)=D_{\mathrm{KL}}(\phi_b\|\phi_a).
+  \]
+  \item \textup{（\(\chi^2\) 散度与 Rényi-\(2\) 散度）}
+  \[
+  \chi^2(\phi_a\|\phi_b)
+  :=\int_{\RR}\frac{(\phi_a-\phi_b)^2}{\phi_b}\,\dd s
+  =\frac{4}{3}\sinh^{2}(|\Delta|/2),
+  \qquad
+  D_2(\phi_a\|\phi_b)
+  :=\log\!\int_{\RR}\frac{\phi_a(s)^2}{\phi_b(s)}\,\dd s
+  =\log\!\Bigl(\frac{2\cosh|\Delta|+1}{3}\Bigr).
+  \]
+\end{enumerate}
+并且在 \(|\Delta|\downarrow 0\) 时存在统一的局部量子化展开
+\[
+\|\phi_a-\phi_b\|_{\mathrm{TV}}=\frac{|\Delta|}{4}+O(|\Delta|^{3}),
+\qquad
+H^{2}(\phi_a,\phi_b)=\frac{\Delta^{2}}{24}+O(\Delta^{4}),
+\qquad
+D_{\mathrm{KL}}(\phi_a\|\phi_b)=\frac{\Delta^{2}}{6}+O(\Delta^{4}),
+\]
+从而出现严格的局部比例律
+\[
+D_{\mathrm{KL}}(\phi_a\|\phi_b)=4\,H^{2}(\phi_a,\phi_b)+O(\Delta^{4}),
+\qquad
+\|\phi_a-\phi_b\|_{\mathrm{TV}}\sim\frac{|\Delta|}{4}.
+\]
+该常数链把后续尺度可见性阈值固定到同一组不可消去的普适常数上。
+\end{proposition}
+\begin{proof}
+由平移不变性，只需取 \(a=0\)、\(b=\Delta>0\)。
+记 \(F(s)=\int_{-\infty}^{s}\phi(u)\dd u=(1+e^{-s})^{-1}\) 为 logistic 分布函数。
+因为 \(\phi\) 为偶函数且关于 \(0\) 单峰，\(\phi(s)\) 与 \(\phi(s-\Delta)\) 的唯一交点为 \(s=\Delta/2\)，故
+\[
+\|\phi-\phi_{\Delta}\|_{\mathrm{TV}}
+=\int_{\Delta/2}^{\infty}\bigl(\phi(s-\Delta)-\phi(s)\bigr)\dd s
+=F(\Delta/2)-F(-\Delta/2)
+=\tanh(\Delta/4),
+\]
+并由二元 Bayes 公式得到 \(P_{\mathrm e}(\Delta)\)。
+\par
+对 Hellinger 亲和度，写 \(\phi(s)=e^{s}(1+e^{s})^{-2}\) 并作代换 \(x=e^{s}\)（\(\dd s=\dd x/x\)）得
+\[
+\int_{\RR}\sqrt{\phi(s)\phi(s-\Delta)}\,\dd s
+=e^{-\Delta/2}\int_{0}^{\infty}\frac{1}{(1+x)(1+e^{-\Delta}x)}\,\dd x
+=\frac{\Delta}{2\sinh(\Delta/2)}.
+\]
+对 \(D_{\mathrm{KL}}\)，同样代换得到
+\[
+D_{\mathrm{KL}}(\phi\|\phi_{\Delta})
+=\int_{0}^{\infty}\frac{\Delta+2\log(1+e^{-\Delta}x)-2\log(1+x)}{(1+x)^{2}}\,\dd x.
+\]
+对
+\(
+I(\alpha):=\int_{0}^{\infty}\frac{\log(1+\alpha x)}{(1+x)^{2}}\,\dd x
+\)
+作分部积分可得
+\(
+I(\alpha)=\alpha\int_{0}^{\infty}\frac{1}{(1+x)(1+\alpha x)}\dd x
+=\frac{\alpha\log(1/\alpha)}{1-\alpha}
+\)；
+取 \(\alpha=e^{-\Delta}\) 并用 \(I(1)=1\) 得
+\[
+D_{\mathrm{KL}}(\phi\|\phi_{\Delta})
+=\Delta+2(I(e^{-\Delta})-I(1))
+=\Delta\coth(\Delta/2)-2,
+\]
+从而对称性由 \(\Delta\mapsto-\Delta\) 的偶性得到。
+\par
+对 \(\chi^2\) 与 \(D_2\)，由
+\(
+\chi^2(\phi\|\phi_{\Delta})=\int \phi^2/\phi_{\Delta}-1
+\)，同样代换得到
+\[
+\int_{\RR}\frac{\phi(s)^2}{\phi(s-\Delta)}\,\dd s
+=e^{\Delta}\int_{0}^{\infty}\frac{(1+e^{-\Delta}x)^{2}}{(1+x)^{4}}\,\dd x
+=\frac{e^{\Delta}+1+e^{-\Delta}}{3}
+=\frac{2\cosh\Delta+1}{3},
+\]
+其中最后一步使用 Beta 积分
+\(
+\int_{0}^{\infty}\frac{x^{m}}{(1+x)^{4}}\dd x=B(m+1,3-m)
+\)
+（\(m=0,1,2\)）。
+因此
+\(
+\chi^2(\phi\|\phi_{\Delta})=\frac{2}{3}(\cosh\Delta-1)=\frac{4}{3}\sinh^{2}(\Delta/2)
+\)
+且 \(D_2=\log(1+\chi^2)\)。
+局部展开由 \(\tanh\)、\(\sinh\)、\(\coth\) 的 Taylor 展开直接得到。证毕。
+\end{proof}
+
+% (User input window)
+
+\begin{proposition}[Hellinger--Gram 体积势：平方根嵌入的闭式核与碰撞发散律]\label{prop:xi-logistic-hellinger-gram-determinant}
+沿用命题 \ref{prop:xi-logistic-divergence-dictionary} 的记号并取深度谱 \(\sigma_1,\dots,\sigma_\kappa\in\RR\) 两两不同。
+令
+\[
+\psi_j(s):=\sqrt{\phi(s-\sigma_j)}\in L^2(\RR),
+\qquad
+G^{(1/2)}_{jk}:=\langle \psi_j,\psi_k\rangle=\int_{\RR}\sqrt{\phi(s-\sigma_j)\phi(s-\sigma_k)}\,\dd s.
+\]
+则 \(G^{(1/2)}\) 正定，并且其核具有完全闭式
+\[
+\boxed{\;
+G^{(1/2)}_{jk}=\frac{|\sigma_j-\sigma_k|}{2\sinh\!\bigl(|\sigma_j-\sigma_k|/2\bigr)}\;}
+\qquad(1\le j,k\le\kappa),
+\]
+其中对角线取连续延拓值 \(G^{(1/2)}_{jj}=1\)。
+定义体积与熵势
+\[
+V_{1/2}:=\sqrt{\det G^{(1/2)}},
+\qquad
+S_{1/2}:=-\log\det G^{(1/2)}.
+\]
+当发生尺度碰撞 \(\sigma_j=\sigma_\star+\varepsilon t_j\) 且 \(\varepsilon\downarrow 0\)（\(t_j\) 两两不同）时，有普适 Vandermonde 发散律
+\[
+\boxed{\;
+S_{1/2}(\boldsymbol{\sigma})
+=\kappa(\kappa-1)\log\frac{1}{\varepsilon}
++2\sum_{1\le j<k\le \kappa}\log\frac{1}{|t_k-t_j|}
+-\log\Bigl(\mathfrak H_\kappa\prod_{j=0}^{\kappa-1}\frac{1}{(j!)^{2}}\Bigr)
++o(1).\;}
+\]
+其中 \(\mathfrak H_\kappa\) 为定理 \ref{thm:xi-hellinger-gram-collision-hankel-constant} 所定义的普适 Hankel 常数（仅依赖于 \(\kappa\) 与谱密度 \(w(\xi)=\pi^2\mathrm{sech}^2(\pi\xi)\)）。
+其中二体对数项系数恒为 \(2\)，与谱点权重及其余构型细节无关。
+\end{proposition}
+\begin{proof}
+正定性由 \(G^{(1/2)}\) 的 Gram 表示直接得到。
+闭式由命题 \ref{prop:xi-logistic-divergence-dictionary} 第 \textup{(3)} 条（Hellinger 亲和度闭式）取 \(a=\sigma_j\)、\(b=\sigma_k\) 立即推出。
+\par
+对碰撞渐近，定理 \ref{thm:xi-hellinger-gram-collision-hankel-constant} 给出更精确的行列式渐近：
+\[
+\det G^{(1/2)}
+=\varepsilon^{\kappa(\kappa-1)}
+\Bigl(\prod_{j=0}^{\kappa-1}\frac{1}{(j!)^{2}}\Bigr)\,
+\mathfrak H_\kappa\,
+\prod_{1\le j<k\le\kappa}(t_k-t_j)^{2}\,\bigl(1+o(1)\bigr).
+\]
+取负对数即得所示展开。证毕。
+\end{proof}
+
+\input{para__xi-hellinger-kernel-spectral-rkhs-loggas-toeplitz}
+
+\begin{proposition}[logistic 噪声下的多类别最优判决：最近邻规则与显式平均错误率]\label{prop:xi-logistic-multiclass-map-error}
+令 \(\kappa\ge 2\)，并取有序深度对数谱
+\(
+\sigma_1<\sigma_2<\cdots<\sigma_\kappa
+\)。
+令离散输入 \(J\sim\mathrm{Unif}\{1,\dots,\kappa\}\)，观测信道为
+\[
+S=\sigma_J+U,
+\qquad
+U\sim\phi.
+\]
+则在等先验下最优 MAP（等价于最大似然）判决为最近邻规则
+\[
+\widehat J(S)\in\arg\min_{1\le j\le\kappa}|S-\sigma_j|,
+\]
+其决策边界为相邻中点 \((\sigma_j+\sigma_{j+1})/2\)。
+并且等先验平均 Bayes 最小错误率具有严格闭式
+\[
+\boxed{\;
+P_{\mathrm e}^{(\kappa)}
+=\mathbb P(\widehat J(S)\neq J)
+=\frac{2}{\kappa}\sum_{j=1}^{\kappa-1}\frac{1}{1+\exp\!\bigl((\sigma_{j+1}-\sigma_j)/2\bigr)}\; }.
+\]
+因此多类别可分性完全由相邻间隔 \(\Delta_j:=\sigma_{j+1}-\sigma_j\) 的 logistic 尾项决定。
+\end{proposition}
+\begin{proof}
+因为 \(\phi\) 为偶函数且在 \([0,\infty)\) 上严格递减，故对固定 \(s\) 最大化 \(j\mapsto \phi(s-\sigma_j)\) 等价于最小化 \(j\mapsto |s-\sigma_j|\)，从而得到最近邻判决与中点边界。
+\par
+令 \(\Delta_j=\sigma_{j+1}-\sigma_j\)。
+当 \(J=j\)（\(1<j<\kappa\)）时，误判事件等价于
+\(
+U\ge \Delta_j/2
+\)
+或
+\(
+U\le -\Delta_{j-1}/2
+\)；
+端点类 \(j=1,\kappa\) 仅有一侧尾部。
+对称性给出
+\(
+\mathbb P(U\le -x)=\mathbb P(U\ge x)=1/(1+e^{x})
+\)（\(x\ge 0\)），
+对 \(j\) 求平均并将每个间隔的尾部贡献计数两次，即得所示闭式。证毕。
+\end{proof}
+
+% (User input window)
+
+\begin{corollary}[由局部边界质量可逆重建深度间隔：错误剖面与间隔剖面一一对应]\label{cor:xi-logistic-boundary-mass-inverts-spacing}
+在命题 \ref{prop:xi-logistic-multiclass-map-error} 的设定下，令相邻间隔 \(\Delta_j:=\sigma_{j+1}-\sigma_j>0\)。
+定义局部边界质量（单侧尾概率）
+\[
+e_j:=\mathbb P\bigl(U\ge \Delta_j/2\bigr)=\frac{1}{1+e^{\Delta_j/2}}\in(0,1/2).
+\]
+则映射 \(\Delta_j\mapsto e_j\) 严格单调且显式可逆：
+\[
+\boxed{\;
+\Delta_j=2\log\Bigl(\frac{1-e_j}{e_j}\Bigr).\;}
+\]
+因此一旦可观测到每个相邻切割的尾质量 \((e_j)_{j=1}^{\kappa-1}\)，深度间隔序列 \((\Delta_j)\) 可逐点无损恢复；并且
+\(
+P_{\mathrm e}^{(\kappa)}=\frac{2}{\kappa}\sum_{j=1}^{\kappa-1}e_j
+\)
+给出总错误率作为局部边界质量的线性汇总。
+\end{corollary}
+\begin{proof}
+由 \(\mathbb P(U\ge x)=1/(1+e^{x})\)（\(x\ge 0\)）直接得到 \(e_j=(1+e^{\Delta_j/2})^{-1}\)，并由代数变形得到反演公式。
+最后一式是命题 \ref{prop:xi-logistic-multiclass-map-error} 的误差闭式在记号 \(e_j\) 下的重写。证毕。
+\end{proof}
+
+\begin{corollary}[固定跨度下的最优深度布局：等距为误差极小解与必要跨度律]\label{cor:xi-logistic-optimal-spacing-span-law}
+在命题 \ref{prop:xi-logistic-multiclass-map-error} 的设定下，令总跨度
+\[
+L:=\sigma_\kappa-\sigma_1=\sum_{j=1}^{\kappa-1}\Delta_j.
+\]
+则有严格下界
+\[
+\boxed{\;
+P_{\mathrm e}^{(\kappa)}
+\ \ge\
+\frac{2(\kappa-1)}{\kappa}\cdot\frac{1}{1+\exp\!\bigl(L/(2(\kappa-1))\bigr)}\; }.
+\]
+并且等号成立当且仅当
+\(
+\Delta_1=\cdots=\Delta_{\kappa-1}=L/(\kappa-1)
+\)，即深度对数谱等距排列为唯一的误差极小解。
+从而若要求 \(P_{\mathrm e}^{(\kappa)}\le \varepsilon\in(0,1)\)，则必有
+\[
+\boxed{\;
+L\ \ge\ 2(\kappa-1)\log\!\Bigl(\frac{2(\kappa-1)}{\kappa\varepsilon}-1\Bigr)
+=2(\kappa-1)\log\frac{1}{\varepsilon}+O(\kappa)\qquad(\varepsilon\downarrow0).\;}
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:xi-logistic-multiclass-map-error}，
+\(
+P_{\mathrm e}^{(\kappa)}=\frac{2}{\kappa}\sum_{j=1}^{\kappa-1}g(\Delta_j)
+\)
+其中 \(g(x)=(1+e^{x/2})^{-1}\)。
+对 \(x>0\)，函数 \(g\) 可写为 \(g(x)=\bigl(1+e^{x/2}\bigr)^{-1}\) 并满足 \(g''(x)>0\)，故严格凸。
+由 Jensen 不等式得到
+\(
+\frac{1}{\kappa-1}\sum_{j}g(\Delta_j)\ge g(L/(\kappa-1))
+\)，
+从而得到误差下界；严格性与等号条件给出唯一性。
+跨度律由下界反解 \(L\) 得到。证毕。
+\end{proof}
+
+\begin{proposition}[互信息的熵差表示与低分辨率二次律：常数 \texorpdfstring{$1/6$}{1/6} 的刚性出现]\label{prop:xi-logistic-mutual-information-low-resolution}
+在命题 \ref{prop:xi-logistic-multiclass-map-error} 的设定下，令输出混合密度
+\[
+p(s)=\frac{1}{\kappa}\sum_{j=1}^{\kappa}\phi(s-\sigma_j),
+\]
+并以自然对数定义微分熵 \(h(f):=-\int_{\RR}f\log f\)。
+则互信息满足严格恒等式
+\[
+\boxed{\;I(J;S)=h(p)-h(\phi)=h(p)-2.\;}
+\]
+并且在低分辨率 regime（例如令中心化输入 \(X:=\sigma_J-\frac{1}{\kappa}\sum_{j}\sigma_j\) 且 \(\mathbb E[X^{2}]\) 足够小）存在二次近似律
+\[
+\boxed{\;
+I(J;S)=\frac{1}{6}\,\Var(\sigma_J)+O\!\bigl(\mathbb E[|X|^{4}]\bigr).\;}
+\]
+其中系数 \(1/6\) 由核 \(\phi\) 的位置 Fisher 信息常数 \(\mathcal I_{\mathrm{loc}}(\phi)=1/3\) 强制确定，独立于 \(\kappa\) 与具体构型。
+\end{proposition}
+\begin{proof}
+加性噪声信道给出 \(I(J;S)=h(S)-h(U)=h(p)-h(\phi)\)。
+对 \(h(\phi)\)，作代换 \(x=e^{s}\) 得 \(\phi(s)\dd s=\dd x/(1+x)^{2}\) 且
+\(
+\log\phi(s)=\log x-2\log(1+x)
+\)；
+由 \(x\mapsto 1/x\) 的对称性可得
+\(
+\int_{0}^{\infty}\frac{\log x}{(1+x)^{2}}\dd x=0
+\)，并且
+\(
+\int_{0}^{\infty}\frac{\log(1+x)}{(1+x)^{2}}\dd x=1
+\)，故 \(h(\phi)=2\)。
+\par
+二次近似律属于加性噪声信道的小扰动展开：当输入尺度趋于零时，
+\(
+I(J;S)=\frac{\mathcal I_{\mathrm{loc}}(\phi)}{2}\Var(\sigma_J)+O(\mathbb E[|X|^4])
+\)。
+对 logistic 核，\(\phi'(u)/\phi(u)=-\tanh(u/2)\)，故
+\(
+\mathcal I_{\mathrm{loc}}(\phi)=\mathbb E[\tanh^{2}(U/2)]
+\)。
+令 \(T=\tanh(U/2)\in(-1,1)\)，则代换 \(u=2\,\operatorname{artanh}(t)\) 给出
+\[
+\phi(u)\,\dd u=\frac{1}{4\cosh^{2}(u/2)}\,\dd u=\frac12\,\dd t,
+\]
+从而 \(T\sim\mathrm{Unif}(-1,1)\) 且 \(\mathcal I_{\mathrm{loc}}(\phi)=\mathbb E[T^{2}]=1/3\)，得到系数 \(1/6\)。证毕。
+\end{proof}
+
+\begin{corollary}[由显式平均错误率导出的 Fano 型可计算下界]\label{cor:xi-logistic-fano-lower-bound-from-error}
+在命题 \ref{prop:xi-logistic-multiclass-map-error} 的设定下，有
+\[
+I(J;S)\ \ge\ \log\kappa\ -\ h_{\mathrm b}\!\bigl(P_{\mathrm e}^{(\kappa)}\bigr)\ -\ P_{\mathrm e}^{(\kappa)}\log(\kappa-1),
+\]
+其中 \(h_{\mathrm b}(u)=-u\log u-(1-u)\log(1-u)\) 为二元熵函数。
+\end{corollary}
+\begin{proof}
+由 Fano 不等式。证毕。
+\end{proof}
+
+\begin{proposition}[位置 Fisher 信息的严格亏损：由后验方差给出的深度分散度证书]\label{prop:xi-logistic-fisher-information-deficit}
+仍取
+\(
+p(s)=\frac{1}{\kappa}\sum_{j=1}^{\kappa}\phi(s-\sigma_j)
+\)，并定义位置族 \(p_\theta(s)=p(s-\theta)\) 的 Fisher 信息
+\[
+\mathcal I_{\mathrm{loc}}(p):=\int_{\RR}\frac{(p'(s))^{2}}{p(s)}\,\dd s.
+\]
+令 \(J\sim\mathrm{Unif}\{1,\dots,\kappa\}\)、\(S=\sigma_J+U\)（\(U\sim\phi\)），并记
+\[
+T:=\tanh\!\Bigl(\frac{S-\sigma_J}{2}\Bigr),
+\qquad
+m(S):=\mathbb E[T\mid S].
+\]
+则存在严格恒等式
+\[
+\boxed{\;
+\mathcal I_{\mathrm{loc}}(p)=\mathbb E[m(S)^{2}]
+=\frac{1}{3}-\mathbb E\!\bigl[\Var(T\mid S)\bigr]
+\ \le\ \frac{1}{3}\; }.
+\]
+并且等号成立当且仅当 \(\sigma_1=\cdots=\sigma_\kappa\)。
+因此 \( \frac{1}{3}-\mathcal I_{\mathrm{loc}}(p)\) 是尺度曲率混合所引入的不可逆信息亏损，并以条件方差形式给出无拟合的可审计分散度证书。
+\end{proposition}
+\begin{proof}
+由 \(\phi'(x)=-\tanh(x/2)\phi(x)\) 得
+\[
+p'(s)=-\frac{1}{\kappa}\sum_{j=1}^{\kappa}\tanh\!\Bigl(\frac{s-\sigma_j}{2}\Bigr)\phi(s-\sigma_j).
+\]
+因此
+\(
+-p'(s)/p(s)=\mathbb E[T\mid S=s]=m(s)
+\)，从而
+\(
+\mathcal I_{\mathrm{loc}}(p)=\mathbb E[m(S)^{2}]
+\)。
+又因 \(T=\tanh(U/2)\)，同上代换 \(u=2\,\operatorname{artanh}(t)\) 得 \(T\sim\mathrm{Unif}(-1,1)\)，故 \(\mathbb E[T^{2}]=1/3\)（亦即 \(\mathcal I_{\mathrm{loc}}(\phi)=1/3\)），
+由全方差分解
+\(
+\mathbb E[T^{2}]=\mathbb E[m(S)^{2}]+\mathbb E[\Var(T\mid S)]
+\)
+得到所示恒等式与上界。
+若等号成立，则 \(\Var(T\mid S)=0\) 几乎处处，迫使 \(T\) 为 \(S\) 的确定函数；
+在均匀先验的有限混合下，这等价于全部平移参数相同。证毕。
+\end{proof}
+
+\begin{remark}[信息几何的一维坍缩：以 \(\mathrm{TV}\) 为坐标的初等参数化]\label{rem:xi-logistic-tv-coordinate-parametrization}
+令 \(v:=\|\phi_a-\phi_b\|_{\mathrm{TV}}\in[0,1)\)。
+由命题 \ref{prop:xi-logistic-divergence-dictionary} 有严格反演
+\[
+|\Delta|=4\,\operatorname{artanh}(v)=2\log\!\Bigl(\frac{1+v}{1-v}\Bigr).
+\]
+并且
+\[
+H^{2}(\phi_a,\phi_b)
+=1-\frac{(1-v^{2})\,\operatorname{artanh}(v)}{v},
+\qquad
+D_{\mathrm{KL}}(\phi_a\|\phi_b)
+=2\frac{1+v^{2}}{v}\operatorname{artanh}(v)-2,
+\]
+\[
+\chi^{2}(\phi_a\|\phi_b)
+=\frac{16}{3}\frac{v^{2}}{(1-v^{2})^{2}},
+\qquad
+D_{2}(\phi_a\|\phi_b)
+=\log\!\bigl(1+\chi^{2}(\phi_a\|\phi_b)\bigr).
+\]
+因此该平移族的若干核心散度可由单一标量坐标 \(v\) 完全参数化。
+\end{remark}
+
+\begin{remark}[Fisher--Rao 度量的显式化与二次近似偏离函数]\label{rem:xi-logistic-fisher-rao-and-curvature}
+尺度核平移族 \(\{\phi_a\}\) 的位置 Fisher 信息为常数 \(\mathcal I_{\mathrm{loc}}(\phi)=1/3\)，故 Fisher--Rao 度量在参数 \(a\) 上为常系数，
+任意两点的 Fisher--Rao 距离满足
+\[
+d_{\mathrm{FR}}(\phi_a,\phi_b)=\sqrt{\mathcal I_{\mathrm{loc}}(\phi)}\,|a-b|=\frac{|\Delta|}{\sqrt3}.
+\]
+并且由命题 \ref{prop:xi-logistic-divergence-dictionary} 的闭式可定义偏离函数
+\[
+\Psi(\Delta):=D_{\mathrm{KL}}(\phi_a\|\phi_b)-\frac{1}{2}d_{\mathrm{FR}}(\phi_a,\phi_b)^{2}
+=|\Delta|\coth(|\Delta|/2)-2-\frac{\Delta^{2}}{6},
+\]
+其在 \(\Delta\to 0\) 时满足 \(\Psi(\Delta)=O(\Delta^{4})\)，并刻画 KL 与 Fisher--Rao 二次型在非线性可见尺度上的偏离。
+\end{remark}
+
+\begin{corollary}[多深度判别的边界质量表示：平均错误率的相邻切割分解]\label{cor:xi-logistic-boundary-mass-error}
+在命题 \ref{prop:xi-logistic-multiclass-map-error} 的设定下，令 \(\Delta_j=\sigma_{j+1}-\sigma_j\)。
+则平均错误率具有严格边界质量形式
+\[
+P_{\mathrm e}^{(\kappa)}
+=\frac{2}{\kappa}\sum_{j=1}^{\kappa-1}\mathbb P\!\Bigl(U\ge \frac{\Delta_j}{2}\Bigr),
+\qquad
+\mathbb P(U\ge x)=\frac{1}{1+e^{x}}\quad(x\ge 0).
+\]
+因此 logistic 尺度核下的多类别误差不存在高维干涉项，仅由相邻间隔诱导的边界尾质量线性叠加给出。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:xi-logistic-multiclass-map-error} 的推导，误判等价于噪声落入相邻中点切割的两侧外尾，并由对称性化为单侧尾概率之和。证毕。
+\end{proof}
+
+\begin{remark}[\texorpdfstring{$4$}{4} 阶闭合阈值的散度表征]\label{rem:xi-logistic-fourth-order-closure}
+命题 \ref{prop:xi-logistic-divergence-dictionary} 的小间隔展开显示：\(\mathrm{TV}\) 首项为线性（系数 \(1/4\)），而 \(H^{2}\) 与 \(D_{\mathrm{KL}}\) 的首个非平凡项为二次；
+并且 \(D_{\mathrm{KL}}=4H^{2}+O(\Delta^{4})\) 把二者在四阶精度内锁定为同一局部几何。
+因此当同时关注边界切割（由 \(\mathrm{TV}\) 的线性尾控制）与熵势涨落（由 \(H^{2}\)、\(D_{\mathrm{KL}}\) 的二次项控制）时，四阶项成为最小的闭合阶。
+\end{remark}
+
+\begin{corollary}[以信息可见性为目标的深度谱设计律：最优构型收缩到等距族]\label{cor:xi-logistic-depth-design-law}
+在固定 \(\kappa\) 与总跨度 \(L\) 的约束下，使命题 \ref{prop:xi-logistic-multiclass-map-error} 的平均错误率 \(P_{\mathrm e}^{(\kappa)}\) 最小的构型唯一地由等距谱实现：
+\[
+\sigma_j=\sigma_1+\frac{j-1}{\kappa-1}L\qquad(1\le j\le\kappa).
+\]
+并且该构型同时使推论 \ref{cor:xi-logistic-fano-lower-bound-from-error} 给出的互信息下界达到最大值。
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:xi-logistic-optimal-spacing-span-law}，在固定跨度下 \(P_{\mathrm e}^{(\kappa)}\) 的下界由 Jensen 取等条件唯一实现；
+而 Fano 下界对 \(P_{\mathrm e}^{(\kappa)}\) 单调递减，故同一构型也最大化该下界。证毕。
+\end{proof}
+

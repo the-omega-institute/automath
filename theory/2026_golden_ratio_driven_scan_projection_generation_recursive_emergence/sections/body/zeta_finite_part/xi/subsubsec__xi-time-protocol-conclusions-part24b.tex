@@ -1,0 +1,325 @@
+\paragraph{Gödel--素数寄存器的时间移位初对象、平方自由外置与椭圆同态链}
+为与定义 \ref{def:pom-fold-prime-lift}、命题 \ref{prop:pom-fold-prime-lift-injective} 及定理 \ref{thm:pom-fiber-indset-factorization} 的既有接口保持一致，本段把 prime-register 外置、Fold 纤维自由度与面积守恒椭圆化组织为同一条代数链。
+
+\begin{definition}[时间移位相容的可加编码器范畴]\label{def:xi-godel-shift-additive-encoder-category}
+记 \(\mathsf{Seq}(\NN_{\ge 1})\) 为有限正整数序列集合。称五元组
+\[
+(M,+,0;\sigma,u)
+\]
+为时间移位相容的可加编码器，若满足：
+\begin{enumerate}
+  \item \((M,+,0)\) 为交换幺半群；
+  \item \(\sigma:M\to M\) 为单射幺半群自同态；
+  \item 映射
+  \[
+  G_M(k_1,\dots,k_T):=\sum_{t=1}^T k_t\,\sigma^{t-1}(u)
+  \]
+  从 \(\mathsf{Seq}(\NN_{\ge 1})\) 到 \(M\) 为单射。
+\end{enumerate}
+记 \(\mathbf{Enc}_\sigma\) 为如下范畴：对象为上述编码器；态射
+\[
+\Phi:(M,+,0;\sigma,u)\to(M',+,0;\sigma',u')
+\]
+满足 \(\Phi\) 为幺半群同态，且
+\[
+\Phi(u)=u',\qquad \Phi\circ\sigma=\sigma'\circ\Phi.
+\]
+\end{definition}
+
+\begin{theorem}[Gödel--素数寄存器的时间移位初对象]\label{thm:xi-godel-prime-register-initial-object}
+令
+\[
+\mathsf P:=\NN^{(\mathbb P)}
+\]
+为有限支撑素数指数向量幺半群，\(\{\delta_{p_t}\}_{t\ge 1}\) 为标准基。
+定义
+\[
+\sigma_{\mathsf P}(\delta_{p_t})=\delta_{p_{t+1}},\qquad u_{\mathsf P}:=\delta_{p_1}.
+\]
+则有：
+\begin{enumerate}
+  \item \((\mathsf P,+,0;\sigma_{\mathsf P},u_{\mathsf P})\) 是定义 \ref{def:xi-godel-shift-additive-encoder-category} 的对象；
+  \item 该对象在 \(\mathbf{Enc}_\sigma\) 中为初对象：对任意 \((M,+,0;\sigma,u)\in\mathbf{Enc}_\sigma\)，存在唯一态射
+  \[
+  \Phi:\mathsf P\to M
+  \]
+  使得 \(\Phi(u_{\mathsf P})=u\) 且 \(\Phi\circ\sigma_{\mathsf P}=\sigma\circ\Phi\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+首先验证对象性。对任意序列 \((k_1,\dots,k_T)\)，有
+\[
+G_{\mathsf P}(k_1,\dots,k_T)=\sum_{t=1}^T k_t\,\delta_{p_t}.
+\]
+由于 \(\{\delta_{p_t}\}\) 在 \(\NN\)-系数下线性无关，\(G_{\mathsf P}\) 单射，故 (1) 成立。
+
+再证初对象性。固定任意对象 \((M,+,0;\sigma,u)\)。由 \(\mathsf P\) 的自由交换幺半群结构，先在基上定义
+\[
+\Phi(\delta_{p_t})=\sigma^{t-1}(u),
+\]
+再唯一加法延拓到 \(\mathsf P\)。于是 \(\Phi(u_{\mathsf P})=u\) 且
+\[
+\Phi(\sigma_{\mathsf P}(\delta_{p_t}))
+=\Phi(\delta_{p_{t+1}})
+=\sigma^t(u)
+=\sigma(\sigma^{t-1}(u))
+=\sigma(\Phi(\delta_{p_t})),
+\]
+故 \(\Phi\circ\sigma_{\mathsf P}=\sigma\circ\Phi\)。
+
+若 \(\Psi:\mathsf P\to M\) 也是同样态射，则由 \(\Psi(u_{\mathsf P})=u\) 与交换关系递推得
+\[
+\Psi(\delta_{p_t})=\sigma^{t-1}(u)=\Phi(\delta_{p_t}),
+\]
+再由自由性推出 \(\Psi=\Phi\)。唯一性成立。证毕。
+\end{proof}
+
+\begin{theorem}[Fold 纤维的平方自由素数外置与自由度刻画]\label{thm:xi-fold-fiber-squarefree-prime-externalization}
+固定分辨率 \(m\)。令 \(\Fold_m:\Omega_m\to X_m\) 为折叠映射。由定理 \ref{thm:pom-fiber-indset-factorization} 与定义 \ref{def:pom-fiber-adm-path}，对每个 \(x\in X_m\) 存在候选位点图
+\[
+\Gamma_x=P_{k_+}[\mathsf{Adm}(x)]
+\]
+及规范双射
+\[
+\Theta_x:\Fold_m^{-1}(x)\xrightarrow{\sim}\mathsf{Ind}(\Gamma_x).
+\]
+再令 \(b(\omega)\in\{0,1\}\) 为引理 \ref{lem:pom-one-bit} 的隐藏位。对每个 \(x\) 任选互异素数族 \(\{q_v:v\in\mathsf{Adm}(x)\}\)，定义平方自由编码
+\[
+\mathcal G_x(I):=\prod_{v\in I} q_v,\qquad I\in\mathsf{Ind}(\Gamma_x).
+\]
+并定义
+\[
+\Psi_m:\Omega_m\to \bigsqcup_{x\in X_m}\bigl(\{x\}\times\{0,1\}\times\NN_{\mathrm{sf}}\bigr),\qquad
+\Psi_m(\omega):=\Bigl(\Fold_m(\omega),\,b(\omega),\,\mathcal G_{\Fold_m(\omega)}\!\bigl(\Theta_{\Fold_m(\omega)}(\omega)\bigr)\Bigr).
+\]
+则 \(\Psi_m\) 为单射；若把值域限制到可实现像
+\[
+\mathcal R_m:=\Psi_m(\Omega_m),
+\]
+则 \(\Psi_m:\Omega_m\to\mathcal R_m\) 为显式双射。
+\end{theorem}
+\begin{proof}
+设 \(\Psi_m(\omega)=\Psi_m(\omega')\)。则第一坐标给出
+\[
+\Fold_m(\omega)=\Fold_m(\omega')=:x.
+\]
+第三坐标给出
+\[
+\mathcal G_x(\Theta_x(\omega))=\mathcal G_x(\Theta_x(\omega')).
+\]
+由于 \(\mathcal G_x\) 由互异素数的平方自由乘积定义，唯一分解定理蕴含
+\[
+\Theta_x(\omega)=\Theta_x(\omega').
+\]
+再由 \(\Theta_x\) 为双射，得 \(\omega=\omega'\)。故 \(\Psi_m\) 单射。
+限制到 \(\mathcal R_m\) 后满射按定义成立，故得到双射。证毕。
+\end{proof}
+
+\begin{corollary}[平方自由素数外置的最坏码长下界与对数乘性胀量]\label{cor:xi-squarefree-externalization-log-overhead}
+在定理 \ref{thm:xi-fold-fiber-squarefree-prime-externalization} 的设定下，固定某个 \(x\in X_m\) 并记 \(s:=|\mathsf{Adm}(x)|\)。
+把 \(\mathcal G_x(I)=\prod_{v\in I}q_v\) 视为平方自由外置码字，并令
+\[
+L_{\max}(x):=\max_{I\in\mathsf{Ind}(\Gamma_x)}\log_2 \mathcal G_x(I).
+\]
+则在最有利的选择意义下（允许在 \(\mathsf{Adm}(x)\) 上自由选取互异素数以最小化最坏码长），存在绝对常数 \(c_1,c_2>0\) 使对充分大的 \(s\) 有
+\[
+L_{\max}(x)\ \ge\ c_1\, s\log_2 s.
+\]
+并且当 \(\Gamma_x\) 含有一条长度 \(\Theta(s)\) 的路径分量（例如 \(\Gamma_x\simeq P_s\)）时，
+\[
+\frac{L_{\max}(x)}{\log_2 d_m(x)}\ \ge\ c_2\,\log s,
+\]
+从而平方自由素数外置在该类纤维上相对于信息论极限 \(\log_2 d_m(x)\) 具有不可消去的对数乘性开销。
+\end{corollary}
+\begin{proof}
+由定义，\(\mathsf{Ind}(\Gamma_x)\) 至少包含“取一路径分量的奇数位顶点”的独立集，其规模为 \(\Theta(s)\)。
+对任意互异素数族，最坏码长至少为该独立集所对应素数的对数和。
+在最小化最坏码长的意义下，应取最小的 \(s\) 个互异素数；于是
+\[
+L_{\max}(x)\ \ge\ \sum_{j\le c s}\log_2 p_j\ =\ \Theta(s\log_2 s),
+\]
+其中 \(p_j\) 为第 \(j\) 个素数，最后一步由 primorial 渐近 \(\log(p_k\#)\sim k\log k\) 得到（并见推论 \ref{cor:xi-squarefree-prime-support-min-growth} 的同型估计口径）。
+\par
+若 \(\Gamma_x\simeq P_s\)，则 \(d_m(x)=\card{\mathsf{Ind}(P_s)}=F_{s+2}\)，从而 \(\log_2 d_m(x)=\Theta(s)\)；
+与上式合并即得比值下界。证毕。
+\end{proof}
+
+\begin{theorem}[非相邻素数平方自由 Dirichlet 级数与递归比值表征]\label{thm:xi-gap-prime-squarefree-dirichlet-fraction}
+记 \(p_n\) 为第 \(n\) 个素数。定义
+\[
+\mathcal I:=\{S\subset\NN\ \text{有限}:\ \forall i\in S,\ i+1\notin S\},
+\]
+并在 \(\Re(s)>1\) 上定义
+\[
+Z_{\mathrm{gap}}(s):=\sum_{S\in\mathcal I}\ \prod_{i\in S} p_i^{-s}.
+\]
+再设
+\[
+\mathcal I_n:=\{S\subseteq\{1,\dots,n\}:\ \forall i\in S,\ i+1\notin S\},
+\qquad
+Z_n(s):=\sum_{S\in\mathcal I_n}\prod_{i\in S}p_i^{-s}.
+\]
+则有：
+\begin{enumerate}
+  \item \(Z_{\mathrm{gap}}(s)\) 在 \(\Re(s)>1\) 绝对收敛，并定义解析函数；
+  \item 对任意实数 \(\sigma>1\)，\(\{Z_n(\sigma)\}_{n\ge 0}\) 单调递增且有界，且
+  \[
+  Z_{\mathrm{gap}}(\sigma)=\lim_{n\to\infty} Z_n(\sigma);
+  \]
+  \item 初值 \(Z_0(s)=1\)、\(Z_1(s)=1+p_1^{-s}\)，并满足递推
+  \[
+  Z_n(s)=Z_{n-1}(s)+p_n^{-s}Z_{n-2}(s)\qquad(n\ge 2);
+  \]
+  若记 \(R_n(s):=Z_n(s)/Z_{n-1}(s)\)，则
+  \[
+  R_1(s)=1+p_1^{-s},\qquad
+  R_n(s)=1+\frac{p_n^{-s}}{R_{n-1}(s)}\quad(n\ge 2);
+  \]
+  \item 对实数 \(\sigma>1\) 有夹逼
+  \[
+  1+\sum_{p}p^{-\sigma}\ \le\ Z_{\mathrm{gap}}(\sigma)\ \le\ \prod_{p}(1+p^{-\sigma})=\frac{\zeta(\sigma)}{\zeta(2\sigma)}.
+  \]
+  并且对复数 \(s\)（\(\Re(s)>1\)）有
+  \[
+  |Z_{\mathrm{gap}}(s)|\le Z_{\mathrm{gap}}(\Re s)\le \frac{\zeta(\Re s)}{\zeta(2\Re s)}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+记 \(\sigma:=\Re(s)\)。有
+\[
+\sum_{S\in\mathcal I}\left|\prod_{i\in S}p_i^{-s}\right|
+=\sum_{S\in\mathcal I}\prod_{i\in S}p_i^{-\sigma}
+\le \sum_{S\subset\NN,\text{有限}}\prod_{i\in S}p_i^{-\sigma}
+=\prod_{i\ge 1}(1+p_i^{-\sigma}).
+\]
+当 \(\sigma>1\) 时，\(\sum_i p_i^{-\sigma}<\infty\)，故右侧收敛，绝对收敛得证。
+并且在任意紧集 \(\Re(s)\ge 1+\varepsilon\) 上同样由 \(\prod_i(1+p_i^{-1-\varepsilon})\) 支配，故级数正规收敛，\(Z_{\mathrm{gap}}\) 解析。
+
+对递推式，将 \(\mathcal I_n\) 按 \(n\in S\) 与 \(n\notin S\) 分拆即可得
+\[
+Z_n=Z_{n-1}+p_n^{-s}Z_{n-2}.
+\]
+比值公式由代数整理直接得到。
+
+对实数 \(\sigma>1\)，\(Z_n(\sigma)\) 为正项和，故随 \(n\) 单调递增；
+又
+\[
+Z_n(\sigma)\le \prod_{i=1}^n(1+p_i^{-\sigma})\le \prod_p(1+p^{-\sigma})<\infty,
+\]
+故极限存在，且等于 \(Z_{\mathrm{gap}}(\sigma)\)。
+
+下界来自空集与单点集贡献；上界来自去除“非相邻”约束并取全平方自由子集乘积。证毕。
+\end{proof}
+
+\begin{theorem}[面积守恒椭圆族与素数寄存器同态实现]\label{thm:xi-prime-register-ellipse-monoid-homomorphism}
+定义面积为 \(\pi\) 的轴对齐椭圆族
+\[
+\mathcal E:=\{E(a):a>0,\ E(a)=\{(x,y):x^2/a^2+y^2a^2=1\}\},
+\]
+并定义乘法型组合
+\[
+E(a)\odot E(b):=E(ab).
+\]
+记
+\[
+N:\mathsf P\to\NN_{>0},\qquad N(r):=\prod_{p}p^{r(p)},
+\qquad
+\Xi:\mathsf P\to\mathcal E,\quad \Xi(r):=E(N(r)).
+\]
+则：
+\begin{enumerate}
+  \item \(\Xi\) 为单射幺半群同态，即
+  \[
+  \Xi(r+r')=\Xi(r)\odot\Xi(r'),\qquad
+  \Xi(r)=\Xi(r')\Rightarrow r=r';
+  \]
+  \item 若定义
+  \[
+  d_{\mathcal E}(E(a),E(b)):=2|\log(a/b)|,
+  \]
+  则
+  \[
+  d_{\mathcal E}\bigl(\Xi(r),\Xi(r')\bigr)
+  =2\left|\sum_p\bigl(r(p)-r'(p)\bigr)\log p\right|.
+  \]
+  因而每个素数生成元 \(\delta_p\) 对应基本步长 \(2\log p\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定义，
+\[
+N(r+r')=\prod_p p^{r(p)+r'(p)}=N(r)N(r'),
+\]
+故
+\[
+\Xi(r+r')=E(N(r+r'))=E(N(r)N(r'))=\Xi(r)\odot\Xi(r').
+\]
+若 \(\Xi(r)=\Xi(r')\)，则 \(N(r)=N(r')\)，由算术基本定理得 \(r=r'\)，故单射。
+
+第二式由 \(a=N(r)\)、\(b=N(r')\) 直接代入 \(d_{\mathcal E}\) 的定义即得。证毕。
+\end{proof}
+
+\begin{proposition}[信息守恒外置与范数一致性]\label{prop:xi-prime-externalization-norm-one-consistency}
+对任意 \(r\in\mathsf P\)，定义
+\[
+a_\infty:=N(r),\qquad a_p:=p^{-r(p)}\ \ (p\ \text{素数}).
+\]
+则满足归一化乘积公式
+\[
+|a_\infty|_\infty^{-1}\cdot\prod_p |a_p|_p=1.
+\]
+反之，若给定一组赋值数据满足：仅有限多个 \(p\) 有 \(a_p\neq 1\)，且每个 \(a_p\) 可写为 \(p^{-e_p}\)（\(e_p\in\NN\)），并满足
+\[
+|a_\infty|_\infty^{-1}\cdot\prod_p |a_p|_p=1,
+\]
+则存在唯一 \(r\in\mathsf P\) 使 \(r(p)=e_p\) 且 \(a_\infty=N(r)\)。
+\end{proposition}
+\begin{proof}
+由 \(|p^{-r(p)}|_p=p^{r(p)}\) 得
+\[
+|a_\infty|_\infty^{-1}\prod_p |a_p|_p
+=N(r)^{-1}\prod_p p^{r(p)}
+=1.
+\]
+反向由有限支撑给出唯一指数向量 \(e_p\)，令 \(r(p):=e_p\) 即得唯一 \(r\in\mathsf P\)；
+乘积公式强制 \(a_\infty=\prod_p p^{e_p}=N(r)\)。证毕。
+\end{proof}
+
+\begin{corollary}[Fold 信息亏损的三重同态表述]\label{cor:xi-fold-loss-prime-ellipse-triple-correspondence}
+在定理 \ref{thm:xi-fold-fiber-squarefree-prime-externalization} 与定理 \ref{thm:xi-prime-register-ellipse-monoid-homomorphism} 的设定下，定义
+\[
+\Xi_{\mathrm{sf}}:\NN_{\mathrm{sf}}\to\mathcal E,\qquad \Xi_{\mathrm{sf}}(n):=E(n).
+\]
+则存在链式单射
+\[
+\Omega_m
+\xhookrightarrow{\ \Psi_m\ }
+\bigsqcup_{x\in X_m}\bigl(\{x\}\times\{0,1\}\times\NN_{\mathrm{sf}}\bigr)
+\xhookrightarrow{\ \mathrm{id}\times\mathrm{id}\times\Xi_{\mathrm{sf}}\ }
+\bigsqcup_{x\in X_m}\bigl(\{x\}\times\{0,1\}\times\mathcal E\bigr).
+\]
+因此每个微态的纤维区分信息可等价表述为：独立集选择、平方自由素数外置、面积守恒椭圆参数三种同态像。
+\end{corollary}
+\begin{proof}
+第一箭头由定理 \ref{thm:xi-fold-fiber-squarefree-prime-externalization} 给出单射。
+第二箭头由 \(\Xi_{\mathrm{sf}}(n)=E(n)\) 的单射性（参数 \(n\) 唯一）给出。
+复合仍为单射，结论成立。证毕。
+\end{proof}
+
+\begin{conjecture}[非相邻素数 Dirichlet 级数的自然边界]\label{conj:xi-gap-prime-dirichlet-natural-boundary}
+对定理 \ref{thm:xi-gap-prime-squarefree-dirichlet-fraction} 的
+\(
+Z_{\mathrm{gap}}(s)
+\)，预期：
+\begin{enumerate}
+  \item \(Z_{\mathrm{gap}}(s)\) 可亚纯延拓至半平面 \(\Re(s)>0\)；
+  \item 直线 \(\Re(s)=0\) 构成自然边界，不存在跨越该边界的单值亚纯延拓。
+\end{enumerate}
+其机制预期来自递归比值
+\[
+R_n(s)=1+\frac{p_n^{-s}}{R_{n-1}(s)}
+\]
+在 \(\Re(s)\downarrow 0\) 时的相位耦合累积：与 Euler 乘积由乘法独立性主导的情形不同，此处解析障碍由“素数序位上的相邻排斥约束”驱动。
+\end{conjecture}
+

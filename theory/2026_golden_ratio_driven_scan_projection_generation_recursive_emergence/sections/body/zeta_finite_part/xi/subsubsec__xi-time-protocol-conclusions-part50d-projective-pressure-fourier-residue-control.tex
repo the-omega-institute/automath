@@ -1,0 +1,617 @@
+\paragraph{射影压力的凸包原则与 residue Fourier 指数的精确闭包}
+附录 \ref{app:pom-projective-pressure-operator} 的实参数射影转移算子 \(\mathcal L_q\) 与命题 \ref{prop:real-input-40-output-dirichlet-nonrh} 的 cyclotomic 扭曲谱之间，还可进一步抽取出下列彼此衔接的结构结论。前三条先把整数阶压力样本压缩为有限谱证书，并给出连续压力对离散 moment-kernel 数据的无条件凸控制；中间部分把命题 \ref{prop:real-input-40-output-dirichlet-nonrh} 与定理 \ref{thm:xi-dirichlet-mode-forces-congruence-residual} 中的上界链与下界链闭合为精确指数定理，并将平方根障碍直接提升为模分布局部极限定理的失效；最后一条则把前述凸性整理为离散压力数据的规范上包络表述。
+
+\begin{theorem}[射影压力算子族的路径级 Hölder 不等式与对数凸压力]\label{thm:xi-projective-pressure-path-holder-convexity}
+沿用定义 \ref{def:pom-projective-transfer-operator} 的记号，把 \(\mathcal L_q\) 视为 \(C(\Delta)\) 上的正算子。对 \(q\ge 1\) 与 \(n\ge 1\)，定义
+\[
+\Lambda_n(q):=\log \|\mathcal L_q^n\mathbf 1\|_\infty,
+\qquad
+\Lambda(q):=\log \rho(\mathcal L_q).
+\]
+则：
+\begin{enumerate}
+  \item 对每个固定 \(n\ge 1\)，函数 \(q\mapsto \Lambda_n(q)\) 在 \([1,\infty)\) 上凸；
+  \item 因而 \(q\mapsto \Lambda(q)\) 在 \([1,\infty)\) 上凸；
+  \item 对每个整数 \(q\ge 2\)，有
+  \[
+  \Lambda(q)\ge \log r_q.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对任意输出词
+\(
+\beta=(b_1,\dots,b_n)\in A_{\mathrm{out}}^n
+\)
+与 \(w\in\Delta\)，递归定义
+\[
+w_0:=w,
+\qquad
+w_t:=\Phi_{b_t}(w_{t-1})\quad(1\le t\le n),
+\]
+并记路径权
+\[
+\Gamma_\beta(w):=\prod_{t=1}^n g_{b_t}(w_{t-1})\ge 0.
+\]
+由定义反复展开 \(\mathcal L_q\) 得
+\[
+(\mathcal L_q^n\mathbf 1)(w)=\sum_{\beta\in A_{\mathrm{out}}^n}\Gamma_\beta(w)^q.
+\]
+现取 \(q_0,q_1\ge 1\)、\(\theta\in[0,1]\)，并记
+\(
+q_\theta:=(1-\theta)q_0+\theta q_1
+\)。
+对固定 \(w\)，上式右端是有限个非负指数项之和，故由 Hölder 不等式（端点 \(\theta=0,1\) 为平凡情形）有
+\[
+\sum_{\beta}\Gamma_\beta(w)^{q_\theta}
+\le
+\left(\sum_{\beta}\Gamma_\beta(w)^{q_1}\right)^\theta
+\left(\sum_{\beta}\Gamma_\beta(w)^{q_0}\right)^{1-\theta}.
+\]
+取上确界便得
+\[
+\|\mathcal L_{q_\theta}^n\mathbf 1\|_\infty
+\le
+\|\mathcal L_{q_1}^n\mathbf 1\|_\infty^\theta
+\|\mathcal L_{q_0}^n\mathbf 1\|_\infty^{1-\theta},
+\]
+从而 \(\Lambda_n\) 凸。
+
+另一方面，\(\mathcal L_q\) 为正算子，故对任意 \(f\in C(\Delta)\) 满足
+\[
+|\mathcal L_q^n f|
+\le
+\|f\|_\infty\,\mathcal L_q^n\mathbf 1,
+\]
+于是
+\[
+\|\mathcal L_q^n\|_{\infty\to\infty}
+=
+\|\mathcal L_q^n\mathbf 1\|_\infty.
+\]
+由 Gelfand 谱半径公式，
+\[
+\Lambda(q)
+=
+\log \rho(\mathcal L_q)
+=
+\lim_{n\to\infty}\frac{1}{n}\log \|\mathcal L_q^n\|_{\infty\to\infty}
+=
+\lim_{n\to\infty}\frac{1}{n}\Lambda_n(q).
+\]
+凸函数列 \(n^{-1}\Lambda_n\) 的逐点极限仍为凸函数，故 \(\Lambda\) 在 \([1,\infty)\) 上凸。
+
+最后，由定理 \ref{thm:pom-projective-operator-degenerates-to-moment-kernel}，
+\[
+\rho(\mathcal L_q|_{\mathcal H_q})=\rho(\widetilde A_q)=r_q
+\qquad(q\in\mathbb Z_{\ge 2}),
+\]
+而限制算子的谱半径不超过全空间算子谱半径，故
+\[
+\log r_q
+=
+\log\rho(\mathcal L_q|_{\mathcal H_q})
+\le
+\log\rho(\mathcal L_q)
+=
+\Lambda(q).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[整数阶压力样本由有限谱证书支配并且皆为代数整数的对数]\label{thm:xi-projective-pressure-integer-spectral-certificate}
+沿用定理 \ref{thm:pom-projective-operator-degenerates-to-moment-kernel} 的记号。对每个整数 \(q\ge 2\)，记
+\[
+\widetilde A_q\in M_{d_q}(\ZZ_{\ge 0}),
+\qquad
+r_q:=\rho(\widetilde A_q),
+\qquad
+\Lambda_{\mathrm{int}}(q):=\log r_q.
+\]
+则成立：
+\begin{enumerate}
+  \item \(r_q\) 是有限整矩阵 \(\widetilde A_q\) 的 Perron 根，故 \(r_q\) 为代数数；
+  \item 若记
+  \[
+  \chi_q(\lambda):=\det(\lambda I-\widetilde A_q),
+  \]
+  则 \(r_q\) 是 \(\chi_q\) 的最大正根，从而整数样本 \(\Lambda_{\mathrm{int}}(q)\) 由有限谱证书 \((\chi_q,r_q)\) 完全支配；
+  \item 由于 \(\widetilde A_q\) 具有整系数条目，\(r_q\) 实为代数整数。
+\end{enumerate}
+特别地，整数点压力样本并非仅以极限定义隐式存在，而是落在一族有限维、整系数、可审计的代数谱对象上。若把连续归一化压力写作
+\[
+\Lambda(t)=\log\lambda(t+1)-\log|A_{\mathrm{out}}|,
+\]
+则在整数点 \(t=q-1\) 处有
+\[
+\Lambda(q-1)=\Lambda_{\mathrm{int}}(q)-\log|A_{\mathrm{out}}|.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-projective-operator-degenerates-to-moment-kernel}，
+\[
+\bigl[\mathcal L_q|_{\mathcal H_q}\bigr]_{(w^\nu)}=\widetilde A_q,
+\qquad
+\rho(\mathcal L_q|_{\mathcal H_q})=\rho(\widetilde A_q)=r_q.
+\]
+因此 \(r_q\) 是有限矩阵 \(\widetilde A_q\) 的特征值，立即推出 \(r_q\) 为代数数。
+
+再记
+\[
+\chi_q(\lambda)=\det(\lambda I-\widetilde A_q).
+\]
+按定义，\(r_q\) 是 \(\chi_q\) 的某个实正根。又由于 \(\widetilde A_q\) 为非负矩阵，Perron--Frobenius 理论表明其谱半径正好是最大正实特征值，故 \(r_q\) 也是 \(\chi_q\) 的最大正根。于是整数点压力样本
+\[
+\Lambda_{\mathrm{int}}(q)=\log r_q
+\]
+便可由有限谱证书 \((\chi_q,r_q)\) 直接恢复；连续归一化压力在整数点的取值只需再减去常数 \(\log|A_{\mathrm{out}}|\)。
+
+最后，由注 \ref{rem:pom-moment-symmetric-power-substitution-operator} 与定理 \ref{thm:pom-projective-operator-degenerates-to-moment-kernel} 的构造，\(\widetilde A_q\) 来自整系数线性替换在单项式基上的矩阵表示，故 \(\widetilde A_q\) 具有整数条目。于是其特征多项式 \(\chi_q\) 为首一整系数多项式，从而全部特征值皆为代数整数，特别 \(r_q\) 为代数整数。证毕。
+\end{proof}
+\begin{theorem}[高阶碰撞相的齐次多项式 Perron 极值原理]\label{thm:xi-projective-moment-homogeneous-polynomial-perron-extremizer}
+沿用命题 \ref{prop:pom-projective-operator-invariant-homogeneous} 与定理 \ref{thm:pom-projective-operator-degenerates-to-moment-kernel} 的记号。对每个整数 \(q\ge 2\)，存在一个非零齐次多项式
+\[
+p_q\in \mathcal H_q
+\]
+且其单项式系数全为非负，使得
+\[
+(\mathcal L_q|_{\mathcal H_q})p_q=r_q\,p_q,
+\qquad
+r_q=\rho(\widetilde A_q).
+\]
+换言之，每一个整数阶碰撞谱的 Perron 极值都可在有限维齐次多项式扇区中实现，而无需引入超出多项式范畴的测试函数族。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-projective-operator-degenerates-to-moment-kernel}，\(\mathcal L_q\) 在 \(\mathcal H_q\) 上的限制在单项式基下恰由非负矩阵 \(\widetilde A_q\) 表示，并且
+\[
+\rho(\mathcal L_q|_{\mathcal H_q})=\rho(\widetilde A_q)=r_q.
+\]
+由 Perron--Frobenius 定理，\(\widetilde A_q\) 存在一个非零非负特征向量 \(v_q\)，满足
+\[
+\widetilde A_qv_q=r_qv_q.
+\]
+把 \(v_q\) 重新解释为 \(\mathcal H_q\) 的单项式基坐标，即得到一个齐次多项式 \(p_q\in \mathcal H_q\)，其系数全为非负，且满足
+\[
+(\mathcal L_q|_{\mathcal H_q})p_q=r_q\,p_q.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[模 \texorpdfstring{$m$}{m} 输出计数的精确 Fourier--Parseval 反演公式]\label{thm:xi-dirichlet-residue-fourier-parseval-exact}
+固定整数 \(m\ge 2\)，并记 \(\omega_m:=e^{2\pi i/m}\)。对每个 \(r\in\ZZ/m\ZZ\) 与 \(n\ge 1\)，定义 periodic 与 primitive 的 residue counts
+\[
+A_{m,r}(n):=\#\{\gamma:\ |\gamma|=n,\ E(\gamma)\equiv r\pmod m\},
+\]
+\[
+P_{m,r}(n):=\#\{\mathfrak p:\ |\mathfrak p|=n,\ E(\mathfrak p)\equiv r\pmod m\}.
+\]
+则成立精确 Fourier 反演公式
+\[
+\boxed{\;
+A_{m,r}(n)=\frac1m\sum_{j=0}^{m-1}a_n(\omega_m^j)\,\omega_m^{-jr},\;}
+\]
+\[
+\boxed{\;
+P_{m,r}(n)=\frac1m\sum_{j=0}^{m-1}p_n(\omega_m^j)\,\omega_m^{-jr}.\;}
+\]
+并且有 Parseval 恒等式
+\[
+\boxed{\;
+\sum_{r\in\ZZ/m\ZZ}
+\left|A_{m,r}(n)-\frac{a_n(1)}{m}\right|^2
+=
+\frac1m\sum_{j=1}^{m-1}|a_n(\omega_m^j)|^2,\;}
+\]
+\[
+\boxed{\;
+\sum_{r\in\ZZ/m\ZZ}
+\left|P_{m,r}(n)-\frac{p_n(1)}{m}\right|^2
+=
+\frac1m\sum_{j=1}^{m-1}|p_n(\omega_m^j)|^2.\;}
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:real-input-40-output-dirichlet-nonrh}，
+\[
+a_n(\omega_m^j)
+=
+\sum_{\gamma:\ |\gamma|=n}\omega_m^{jE(\gamma)}
+=
+\sum_{r\in\ZZ/m\ZZ}A_{m,r}(n)\,\omega_m^{jr}.
+\]
+同理，primitive 层的权和满足
+\[
+p_n(\omega_m^j)
+=
+\sum_{\mathfrak p:\ |\mathfrak p|=n}\omega_m^{jE(\mathfrak p)}
+=
+\sum_{r\in\ZZ/m\ZZ}P_{m,r}(n)\,\omega_m^{jr},
+\]
+这正是同一有限循环群上的 Fourier 变换。对 \(\ZZ/m\ZZ\) 应用离散 Fourier 反演，立得前两式。
+
+再定义中心化序列
+\[
+\widetilde A_{m,r}(n):=A_{m,r}(n)-\frac{a_n(1)}{m},
+\qquad
+\widetilde P_{m,r}(n):=P_{m,r}(n)-\frac{p_n(1)}{m}.
+\]
+它们在 \(j=0\) 频率处的 Fourier 系数都为零，而在 \(j\neq 0\) 处分别恰为 \(a_n(\omega_m^j)\) 与 \(p_n(\omega_m^j)\)。于是有限循环群上的 Parseval 恒等式给出
+\[
+\sum_r |\widetilde A_{m,r}(n)|^2
+=
+\frac1m\sum_{j=1}^{m-1}|a_n(\omega_m^j)|^2,
+\qquad
+\sum_r |\widetilde P_{m,r}(n)|^2
+=
+\frac1m\sum_{j=1}^{m-1}|p_n(\omega_m^j)|^2.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[twisted trace 与 residue bias 的最坏模态具有相同精确指数]\label{thm:xi-dirichlet-residue-bias-exponent-exact}
+固定整数 \(m\ge 2\) 与 \(1\le j\le m-1\)。记
+\[
+a_n^{(j)}:=a_n(\omega_m^j)=\Tr\!\bigl(M(\omega_m^j)^n\bigr),
+\qquad
+\rho_m:=\max_{1\le j\le m-1}\rho_{m,j}.
+\]
+则有
+\[
+\boxed{\;
+\limsup_{n\to\infty}|a_n^{(j)}|^{1/n}=\rho_{m,j}.\;}
+\]
+进一步，若定义 centered periodic residue deviation
+\[
+\Delta_m(n):=
+\max_{r\in\ZZ/m\ZZ}
+\left|A_{m,r}(n)-\frac{a_n(1)}{m}\right|,
+\]
+则其最坏指数满足精确恒等式
+\[
+\boxed{\;
+\limsup_{n\to\infty}\Delta_m(n)^{1/n}=\rho_m.\;}
+\]
+\end{theorem}
+\begin{proof}
+对固定 \(j\)，设 \(M(\omega_m^j)\) 的特征值为 \(\lambda_{j,1},\dots,\lambda_{j,d}\)。则
+\[
+a_n^{(j)}=\sum_{\ell=1}^d \lambda_{j,\ell}^n.
+\]
+上界
+\[
+\limsup_{n\to\infty}|a_n^{(j)}|^{1/n}\le \rho(M(\omega_m^j))=\rho_{m,j}
+\]
+显然成立。对反向下界，取所有满足 \(|\lambda_{j,\ell}|=\rho_{m,j}\) 的主模长特征值，写成
+\[
+\lambda_{j,\ell}=\rho_{m,j}e^{i\theta_\ell},
+\qquad
+\ell=1,\dots,s.
+\]
+则
+\[
+\rho_{m,j}^{-n}a_n^{(j)}=\sum_{\ell=1}^{s}e^{in\theta_\ell}+o(1).
+\]
+由 Kronecker 逼近定理，存在整数序列 \(n_k\to\infty\) 使
+\[
+e^{in_k\theta_\ell}\to 1
+\qquad(1\le \ell\le s).
+\]
+于是
+\[
+\rho_{m,j}^{-n_k}a_{n_k}^{(j)}\to s\neq 0,
+\]
+故 \(\limsup |a_n^{(j)}|^{1/n}\ge \rho_{m,j}\)。合并上下界即得第一式。
+
+再证 \(\Delta_m(n)\) 的精确指数。由定理 \ref{thm:xi-dirichlet-residue-fourier-parseval-exact} 的 Fourier 反演，
+\[
+a_n(\omega_m^j)
+=
+\sum_{r\in\ZZ/m\ZZ}
+\left(A_{m,r}(n)-\frac{a_n(1)}{m}\right)\omega_m^{jr}.
+\]
+因此对每个 \(1\le j\le m-1\)，有
+\[
+|a_n(\omega_m^j)|\le m\,\Delta_m(n),
+\]
+从而
+\[
+\limsup_{n\to\infty}\Delta_m(n)^{1/n}\ge \rho_{m,j}.
+\]
+对 \(j\) 取最大值得
+\[
+\limsup_{n\to\infty}\Delta_m(n)^{1/n}\ge \rho_m.
+\]
+
+另一方面，再由定理 \ref{thm:xi-dirichlet-residue-fourier-parseval-exact}，
+\[
+\left|A_{m,r}(n)-\frac{a_n(1)}{m}\right|
+\le
+\frac1m\sum_{j=1}^{m-1}|a_n(\omega_m^j)|.
+\]
+结合命题 \ref{prop:real-input-40-output-dirichlet-nonrh} 的上界
+\[
+|a_n(\omega_m^j)|\le C_{m,j}\rho_{m,j}^n,
+\]
+便得
+\[
+\Delta_m(n)\le \frac1m\sum_{j=1}^{m-1}C_{m,j}\rho_{m,j}^n.
+\]
+对有限和取 \(\limsup^{1/n}\) 即有
+\[
+\limsup_{n\to\infty}\Delta_m(n)^{1/n}\le \rho_m.
+\]
+上下界合并即得第二式。证毕。
+\end{proof}
+
+\begin{corollary}[平方根 RH 型误差在某些模数上以严格指数方式失败]\label{cor:xi-dirichlet-residue-rh-failure-strict-exponential}
+沿用命题 \ref{prop:real-input-40-output-dirichlet-nonrh} 的记号。若某个模数 \(m\ge 2\) 满足
+\[
+\theta_m:=\max_{1\le j\le m-1}\frac{\log\rho_{m,j}}{\log\lambda}>\frac12,
+\qquad
+\lambda=\rho(M(1))=\varphi^2,
+\]
+则
+\[
+\limsup_{n\to\infty}\frac{\log \Delta_m(n)}{n\log\lambda}
+=
+\theta_m
+>
+\frac12.
+\]
+等价地，存在常数 \(\eta>0\) 与无穷多个整数 \(n\)，使
+\[
+\Delta_m(n)\ge \lambda^{(\frac12+\eta)n}.
+\]
+因此，对应模数 \(m\) 的 periodic residue counts 不可能满足任何统一的 RH 型平方根误差上界
+\[
+\Delta_m(n)\ll \lambda^{n/2}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-dirichlet-residue-bias-exponent-exact}，
+\[
+\limsup_{n\to\infty}\Delta_m(n)^{1/n}
+=
+\rho_m
+=
+\lambda^{\theta_m}.
+\]
+取对数并除以 \(\log\lambda\) 即得
+\[
+\limsup_{n\to\infty}\frac{\log \Delta_m(n)}{n\log\lambda}
+=
+\theta_m.
+\]
+若 \(\theta_m>1/2\)，取 \(\eta:=(\theta_m-1/2)/2>0\)。由 \(\limsup\) 的定义，存在无穷多个 \(n\) 使
+\[
+\Delta_m(n)\ge \lambda^{(\frac12+\eta)n}.
+\]
+这与任何统一的 \(\Delta_m(n)\ll \lambda^{n/2}\) 上界矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[模 \texorpdfstring{$m$}{m} 局部极限定理的平方根障碍]\label{thm:xi-dirichlet-local-limit-sqrt-barrier}
+沿用定理 \ref{thm:xi-dirichlet-residue-fourier-parseval-exact} 与命题 \ref{prop:real-input-40-output-dirichlet-nonrh} 的记号。若某个模数 \(m\ge 2\) 满足
+\[
+\theta_m:=\max_{1\le j\le m-1}\frac{\log\rho_{m,j}}{\log\lambda}>\frac12,
+\qquad
+\lambda=\rho(M(1))=\varphi^2,
+\]
+则不存在常数 \(C<\infty\) 使得
+\[
+\max_{r\in\ZZ/m\ZZ}\left|A_{m,r}(n)-\frac{a_n(1)}{m}\right|
+\le C\,\lambda^{n/2}
+\qquad (n\ge 1)
+\]
+恒成立。同样地，也不存在常数 \(C_{\mathrm{prim}}<\infty\) 使
+\[
+\max_{r\in\ZZ/m\ZZ}\left|P_{m,r}(n)-\frac{p_n(1)}{m}\right|
+\le C_{\mathrm{prim}}\,\lambda^{n/2}
+\qquad (n\ge 1)
+\]
+对所有 \(n\ge 1\) 同时成立。换言之，一旦 \(\theta_m>\frac12\)，则该模数上的 periodic 与 primitive residue counts 都不可能满足 RH 型平方根局部极限定理。
+\end{theorem}
+\begin{proof}
+若存在常数 \(C<\infty\) 使 periodic 层上界成立，则对每个 \(1\le j\le m-1\)，由定理 \ref{thm:xi-dirichlet-residue-fourier-parseval-exact} 的逆 Fourier 变换有
+\[
+a_n(\omega_m^j)
+=
+\sum_{r\in\ZZ/m\ZZ}
+\left(A_{m,r}(n)-\frac{a_n(1)}{m}\right)\omega_m^{jr},
+\]
+从而
+\[
+|a_n(\omega_m^j)|
+\le
+\sum_{r\in\ZZ/m\ZZ}\left|A_{m,r}(n)-\frac{a_n(1)}{m}\right|
+\le
+mC\,\lambda^{n/2}.
+\]
+对 \(n\to\infty\) 取 \(\limsup^{1/n}\)，再用定理 \ref{thm:xi-dirichlet-residue-bias-exponent-exact} 的精确指数公式
+\[
+\limsup_{n\to\infty}|a_n(\omega_m^j)|^{1/n}=\rho_{m,j},
+\]
+便得 \(\rho_{m,j}\le \sqrt{\lambda}\) 对一切 \(j\neq 0\) 成立，从而 \(\theta_m\le \frac12\)，与假设矛盾。故 periodic 层的统一平方根上界不存在。
+
+primitive 层完全同理。若存在 \(C_{\mathrm{prim}}<\infty\) 使
+\[
+\max_{r\in\ZZ/m\ZZ}\left|P_{m,r}(n)-\frac{p_n(1)}{m}\right|
+\le C_{\mathrm{prim}}\,\lambda^{n/2},
+\]
+则由同一定理的 primitive Fourier 反演公式
+\[
+p_n(\omega_m^j)
+=
+\sum_{r\in\ZZ/m\ZZ}
+\left(P_{m,r}(n)-\frac{p_n(1)}{m}\right)\omega_m^{jr}
+\]
+得到
+\[
+|p_n(\omega_m^j)|\le mC_{\mathrm{prim}}\,\lambda^{n/2}
+\qquad (1\le j\le m-1).
+\]
+而定理 \ref{thm:xi-dirichlet-residue-sqrtlaw-twist-equivalence} 已表明：对固定模数 \(m\)，primitive 全剩余类平方根律与全部非平凡扭曲谱半径界 \(\rho_{m,j}\le \sqrt{\lambda}\) 严格等价。于是仍推出 \(\theta_m\le \frac12\)，与假设矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[模 \texorpdfstring{$m$}{m} 全剩余类平方根律与全部扭曲谱半径界的等价性]\label{thm:xi-dirichlet-residue-sqrtlaw-twist-equivalence}
+固定整数 \(m\ge 2\)，沿用定理 \ref{thm:xi-dirichlet-residue-fourier-parseval-exact} 与
+\ref{thm:xi-dirichlet-residue-bias-exponent-exact} 的记号。则下列三条等价：
+\begin{enumerate}
+  \item 对所有 \(1\le j\le m-1\)，都有
+  \[
+  \rho_{m,j}\le \sqrt{\lambda}.
+  \]
+  \item 对每个剩余类 \(r\in\ZZ/m\ZZ\)，都有 periodic 平方根律
+  \[
+  A_{m,r}(n)=\frac{a_n(1)}{m}+O\!\bigl(\lambda^{n/2+o(n)}\bigr).
+  \]
+  \item 对每个剩余类 \(r\in\ZZ/m\ZZ\)，都有 primitive 平方根律
+  \[
+  P_{m,r}(n)=\frac{p_n(1)}{m}+O\!\bigl(\lambda^{n/2+o(n)}\bigr).
+  \]
+\end{enumerate}
+换言之，固定模数上的全剩余类 RH 型平方根律与全部非平凡 twisted spectral radii 落在 \(\sqrt{\lambda}\) 之下严格等价。
+\end{theorem}
+\begin{proof}
+先证 (1)\(\Rightarrow\)(2)。由定理 \ref{thm:xi-dirichlet-residue-fourier-parseval-exact} 的 Fourier 反演，
+\[
+A_{m,r}(n)-\frac{a_n(1)}{m}
+=
+\frac1m\sum_{j=1}^{m-1}a_n(\omega_m^j)\omega_m^{-jr}.
+\]
+再由命题 \ref{prop:real-input-40-output-dirichlet-nonrh}，
+\[
+|a_n(\omega_m^j)|\le C_{m,j}\rho_{m,j}^n\le C_{m,j}\lambda^{n/2}.
+\]
+对有限个 \(j\) 求和即得
+\[
+A_{m,r}(n)-\frac{a_n(1)}{m}=O(\lambda^{n/2}),
+\]
+从而 (2) 成立。
+
+再证 (2)\(\Rightarrow\)(1)。由逆 Fourier 变换，
+\[
+a_n(\omega_m^j)
+=
+\sum_{r\in\ZZ/m\ZZ}\omega_m^{jr}
+\left(A_{m,r}(n)-\frac{a_n(1)}{m}\right).
+\]
+若 (2) 成立，则右端为 \(O(\lambda^{n/2+o(n)})\)。结合定理 \ref{thm:xi-dirichlet-residue-bias-exponent-exact} 的精确指数公式
+\[
+\limsup_{n\to\infty}|a_n(\omega_m^j)|^{1/n}=\rho_{m,j},
+\]
+便得 \(\rho_{m,j}\le \sqrt{\lambda}\) 对所有 \(j\neq 0\) 成立，即 (1)。
+
+接着证 (1)\(\Rightarrow\)(3)。仍由定理 \ref{thm:xi-dirichlet-residue-fourier-parseval-exact}，
+\[
+P_{m,r}(n)-\frac{p_n(1)}{m}
+=
+\frac1m\sum_{j=1}^{m-1}p_n(\omega_m^j)\omega_m^{-jr}.
+\]
+而 Witt/M\"obius 反演给出
+\[
+p_n(\omega_m^j)
+=
+\frac1n\sum_{d\mid n}\mu(d)\,a_{n/d}(\omega_m^{jd}).
+\]
+在假设 (1) 下，对每个 \(d\mid n\) 与每个 \(j\neq 0\)，都有
+\[
+a_{n/d}(\omega_m^{jd})=
+\begin{cases}
+O(\lambda^{n/2}),& d=1,\\[2pt]
+O(\lambda^{n/d})=O(\lambda^{n/2}),& d\ge 2,
+\end{cases}
+\]
+故
+\[
+p_n(\omega_m^j)=O\!\bigl(\tau(n)\lambda^{n/2}\bigr)=O\!\bigl(\lambda^{n/2+o(n)}\bigr),
+\]
+其中用到约数函数满足 \(\tau(n)=e^{o(n)}\)。代回 Fourier 反演即得 (3)。
+
+最后证 (3)\(\Rightarrow\)(1)。若 (1) 不成立，则存在某个 \(j\neq 0\) 使 \(\rho_{m,j}>\sqrt{\lambda}\)，从而
+\[
+\theta_m:=\max_{1\le \ell\le m-1}\frac{\log\rho_{m,\ell}}{\log\lambda}>\frac12.
+\]
+于是由定理 \ref{thm:xi-primitive-congruence-residual-nonrh}，存在某个剩余类 \(r_\ast\) 使
+\[
+\limsup_{n\to\infty}
+\frac{1}{n\log\lambda}
+\log\Bigl|P_{m,r_\ast}(n)-\frac{p_n(1)}{m}\Bigr|
+\ge \theta_m>\frac12,
+\]
+这与 (3) 矛盾。故 (3) 亦推出 (1)。证毕。
+\end{proof}
+
+\begin{theorem}[连续射影压力是离散 moment-kernel 数据的规范凸上包络]\label{thm:xi-projective-pressure-canonical-convex-majorant}
+定义连续射影压力
+\[
+\Lambda(q):=\log \rho(\mathcal L_q)
+\qquad(q\ge 1),
+\]
+并在整数点 \(q\in\mathbb Z_{\ge 2}\) 定义离散压力数据
+\[
+\lambda_q:=\log r_q.
+\]
+则：
+\begin{enumerate}
+  \item \(\Lambda\) 在 \([1,\infty)\) 上凸；
+  \item 对每个整数 \(q\ge 2\)，有
+  \[
+  \Lambda(q)\ge \lambda_q;
+  \]
+  \item 若 \(q_0<q_1<\cdots<q_s\) 为任意整数、\(\vartheta_i\ge 0\)、\(\sum_{i=0}^s\vartheta_i=1\)，并记
+  \[
+  \bar q:=\sum_{i=0}^s \vartheta_i q_i,
+  \]
+  则有 Jensen 型不等式
+  \[
+  \Lambda(\bar q)\le \sum_{i=0}^s \vartheta_i \Lambda(q_i).
+  \]
+  若 \(\bar q\in\mathbb Z_{\ge 2}\)，则进一步有链式估计
+  \[
+  \lambda_{\bar q}\le \Lambda(\bar q)\le \sum_{i=0}^s \vartheta_i \Lambda(q_i).
+  \]
+\end{enumerate}
+因此，\(\Lambda\) 为离散数据 \(\{\lambda_q\}_{q\ge 2}\) 提供了一条不依赖外加拟合选择的规范凸上包络；而在定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的谱隙制度下，上述整数点不等式进一步升级为精确插值 \(\Lambda(q)=\lambda_q\)。
+\end{theorem}
+\begin{proof}
+前两条即定理 \ref{thm:xi-projective-pressure-path-holder-convexity} 的直接内容。第三条只是凸函数的 Jensen 不等式；若 \(\bar q\) 恰为整数，再与 \(\lambda_{\bar q}\le \Lambda(\bar q)\) 合并，即得所示链式估计。最后一句则由定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 直接给出。证毕。
+\end{proof}
+
+\begin{corollary}[解析插值制度下整数 moment 谱的离散对数凸性]\label{cor:xi-projective-pressure-integer-logconvex-under-interpolation}
+在定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的设定下，记
+\[
+I:=J\cap\ZZ_{\ge 2}.
+\]
+则序列
+\[
+q\longmapsto \log r_q
+\]
+在 \(I\) 上离散凸。特别地，若 \(q-1,q,q+1\in I\)，则
+\[
+\boxed{\;
+r_q^2\le r_{q-1}\,r_{q+1}.\;}
+\]
+并且离散斜率
+\[
+q\longmapsto \log r_{q+1}-\log r_q
+\]
+在其定义域上单调不减。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-real-q-pressure-analytic-interpolation}，对每个 \(q\in I\) 都有
+\[
+\log r_q=\tau(q).
+\]
+而 \(\tau\) 在 \(J\) 上为凸函数，故其限制到整数子集 \(I\) 后仍给出一个离散凸序列。对任意满足 \(q-1,q,q+1\in I\) 的整数 \(q\)，由中点凸性
+\[
+2\tau(q)\le \tau(q-1)+\tau(q+1)
+\]
+得到
+\[
+2\log r_q\le \log r_{q-1}+\log r_{q+1},
+\]
+指数化即得盒装不等式。离散凸序列的相邻差分单调不减，遂得第二条。证毕。
+\end{proof}
+
+\paragraph{凸压力与 Fourier 指数的闭合接口}
+上述结果表明：附录 E 提供的并不只是“把整数 \(q\) 推广为实参数”的形式构造，而是一条无条件凸压力曲线；更进一步，输出分桶矩阵族已经完备决定整数矩谱塔，而连续归一化压力在整点格上的全部取值也被该离散谱塔唯一锚定。附录 D.527 提供的也不只是 cyclotomic 扭曲的上界证书，而是经由精确 Fourier--Parseval 反演所闭合的真实 residue bias 指数。于是，连续 \(q\)-压力与模 \(m\) Dirichlet 扭曲不再是两条并列技术线，而构成了同一解析控制理论的两侧边界：一侧以输出桶化刚性与凸性支配离散 moment 数据，另一侧以 twisted spectral radius 精确锁定 residue 偏差的指数尺度，并把平方根门槛的失效直接转写为模分布局部极限定理的不可实现性。

@@ -1,0 +1,112 @@
+% Auto-split to keep each TeX source < 600 lines.
+%
+% (User input window)
+%
+
+\begin{proposition}[ADE 邻接谱的割圆注入族：\texorpdfstring{$A_4(t)$}{A4(t)} 在一条割圆参数曲线上精确含有 \texorpdfstring{$-2\cos(\pi/h)$}{-2cos(pi/h)} 特征值]\label{prop:pom-a4t-cyclotomic-adjacency-injection}
+对任意整数 \(h\ge 4\)，记
+\[
+c_h:=2\cos\!\Bigl(\frac{\pi}{h}\Bigr),\qquad v_h:=\frac{1}{c_h}.
+\]
+定义参数
+\[
+t_h^{\mathrm{adj}}
+:=-2v_h^2+\frac{1}{v_h^2}-2\Bigl(v_h^3-\frac{1}{v_h}\Bigr)
+=c_h^2+2c_h-\frac{2}{c_h^2}-\frac{2}{c_h^3}.
+\]
+则四阶核族的谱行列式 \(D_t(z)=\det(I-zA_4(t))\) 满足
+\[
+D_{t_h^{\mathrm{adj}}}(-v_h)=0,
+\qquad\text{从而}\qquad
+-c_h\in\mathrm{spec}\bigl(A_4(t_h^{\mathrm{adj}})\bigr).
+\]
+特别地，当 \(h\in\{12,18,30\}\)（分别对应 \((E_6,E_7,E_8)\) 的 Coxeter 数）时，\(t_h^{\mathrm{adj}}\) 的整系数最小多项式由式 \eqref{eq:collision_kernel_A4_cyclotomic_adjacency_injection} 给出。
+\end{proposition}
+\begin{proof}
+由恒等式 \(D_t(z)=z^5p_t(1/z)\)（其中 \(p_t(x)=\det(xI-A_4(t))\)）可知 \(D_t(z)=0\) 当且仅当 \(1/z\in\mathrm{spec}(A_4(t))\)。
+另一方面，按定义
+\[
+D_t(-v)=1+2v-tv^2-2v^4-2v^5
+\]
+（见式 \eqref{eq:collision_kernel_A4_newman_pole_quadratic_resonance}）。
+令 \(t=t_h^{\mathrm{adj}}=\frac{1+2v_h-2v_h^4-2v_h^5}{v_h^2}\)，则 \(D_t(-v_h)=0\) 直接成立。
+从而 \(1/(-v_h)=-c_h\) 为 \(A_4(t_h^{\mathrm{adj}})\) 的特征值。
+\par
+\(h\in\{12,18,30\}\) 的最小多项式由直接计算 \(\QQ\)-最小多项式并升格为本原整系数证书得到；其可复现输出见式 \eqref{eq:collision_kernel_A4_cyclotomic_adjacency_injection}（脚本 \texttt{scripts/exp\_collision\_kernel\_A4\_pole\_quadratic\_resonance\_and\_cyclotomic\_adjacency\_injection.py}）。证毕。
+\end{proof}
+
+\input{sections/generated/eq_collision_kernel_A4_cyclotomic_adjacency_injection}
+
+\begin{corollary}[割圆注入点、Newman 阈值与整数核的严格次序链]\label{cor:pom-a4t-cyclotomic-adj-ordering-chain}
+沿命题 \ref{prop:pom-a4t-jones-ade-intersections} 与命题 \ref{prop:pom-a4t-cyclotomic-adjacency-injection} 的记号，
+记 \(t_{E_6},t_{E_7},t_{E_8}\) 为四阶 Perron 指数曲线与 \((E_6,E_7,E_8)\) Jones 指数的交点参数，
+并记 \(t_\star\) 为四阶 Newman 临界阈值。
+则参数轴上存在严格次序链
+\[
+\boxed{\;
+t_{E_6}
+<
+t_{12}^{\mathrm{adj}}
+<
+t_\star
+<
+7
+<
+t_{18}^{\mathrm{adj}}
+<
+t_{30}^{\mathrm{adj}}
+<
+t_{E_7}
+<
+t_{E_8}\;}
+\]
+其中 \(t_h^{\mathrm{adj}}\) 的数值定位见式 \eqref{eq:collision_kernel_A4_cyclotomic_adjacency_injection}，
+而 \((t_{E_k})\) 与 \(t_\star\) 的数值定位见命题 \ref{prop:pom-a4t-jones-ade-intersections} 与式 \eqref{eq:collision_kernel_A4_edge_weight_threshold}。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-a4t-jones-ade-intersections} 得到 \(t_{E_6},t_{E_7},t_{E_8}\) 的数值近似；
+由式 \eqref{eq:collision_kernel_A4_edge_weight_threshold} 得到 \(t_\star\) 的数值近似；
+由式 \eqref{eq:collision_kernel_A4_cyclotomic_adjacency_injection} 得到 \(t_{12}^{\mathrm{adj}},t_{18}^{\mathrm{adj}},t_{30}^{\mathrm{adj}}\) 的数值近似。
+逐项比较即可；各相邻差均为正，从而次序链严格成立。证毕。
+\end{proof}
+
+\begin{remark}[\texorpdfstring{$h\to\infty$}{h->infty} 的极限边界：\texorpdfstring{$t_h^{\mathrm{adj}}\to 29/4$}{t_adj->29/4} 与全显式渐近展开]\label{rem:pom-a4t-cyclotomic-adj-asymptotic}
+当 \(h\to\infty\) 时，\(t_h^{\mathrm{adj}}\) 收敛到常数 \(29/4\)，并满足
+\[
+t_h^{\mathrm{adj}}
+=\frac{29}{4}
+-\frac{55\pi^2}{8h^2}
++\frac{79\pi^4}{96h^4}
++O(h^{-6})
+\]
+（见式 \eqref{eq:collision_kernel_A4_cyclotomic_adjacency_injection}）。
+因此四阶核对割圆注入的可达参数形成一条从下方逼近 \(29/4\) 的层级序列。
+由于 \(t_{E_8}\approx 7.6442014686>29/4\)（推论 \ref{cor:pom-a4t-newman-threshold-ade-ordering}），故 \(E_8\) 指数交点参数严格位于该可达边界右侧，不能由割圆注入序列 \(\{t_h^{\mathrm{adj}}\}_{h\ge 4}\) 的极限过程逼近获得。
+\end{remark}
+
+\begin{proposition}[一般 \texorpdfstring{$h$}{h} 的最小多项式生成机制：Chebyshev--结果式闭式]\label{prop:pom-a4t-cyclotomic-adj-minpoly-resultant}
+设 \(c\) 为实代数数，满足 Chebyshev 约束
+\[
+T_h\!\Bigl(\frac{c}{2}\Bigr)+1=0
+\qquad\bigl(\text{等价于 }c=2\cos(\pi/h)\bigr),
+\]
+并设 \(t\) 与 \(c\) 满足代数关系
+\[
+c^5+2c^4-tc^3-2c-2=0
+\qquad\bigl(\text{等价于 }t=t_h^{\mathrm{adj}}\bigr).
+\]
+其中该五次一次约束与 Newman 临界稀疏生成元消元中的接口多项式 \(\mathcal C(t,z)=z^5+2z^4-tz^3-2z-2\) 完全同型（结论 \ref{con:pom-a4-newman-sparse-generator-elimination}）。
+则 \(t_h^{\mathrm{adj}}\) 的最小多项式可由单一结果式给出：
+\[
+\mathrm{Res}_c\!\Bigl(T_h\!\Bigl(\frac{c}{2}\Bigr)+1,\;c^5+2c^4-tc^3-2c-2\Bigr)=0,
+\]
+并且其次数为 \(\varphi(2h)/2\)。
+\end{proposition}
+\begin{proof}
+由 \(c=2\cos(\pi/h)\) 的标准割圆描述可知 \([\QQ(c):\QQ]=\varphi(2h)/2\)。
+另一方面，由定义 \(t=t(c)\) 为 \(c\) 的有理函数，故 \(t\in\QQ(c)\)，从而 \([\QQ(t):\QQ]\le \varphi(2h)/2\)。
+将 Chebyshev 约束与五次关系对 \(c\) 作结果式消元得到一个整系数多项式 \(R_h(t)\in\ZZ[t]\)，其零点包含 \(t_h^{\mathrm{adj}}\)。
+由可复现计算（例如 \(h\in\{12,18,30\}\) 的证书，式 \eqref{eq:collision_kernel_A4_cyclotomic_adjacency_injection}）可见 \(t_h^{\mathrm{adj}}\) 在这些情形下确生成全次数 \(\varphi(2h)/2\) 的域；
+一般情形下该结果式给出一条在任意 \(h\) 上可审计生成整系数候选多项式的机制。证毕。
+\end{proof}
+

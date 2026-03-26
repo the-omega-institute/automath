@@ -1,0 +1,552 @@
+\paragraph{常数与剖面证书：Poisson--Cauchy 导数闭式、高阶 Fisher--能量、相对熵主项与中心单点可识别性}
+为将 \S\ref{subsec:cdim-poisson-cauchy} 的粗粒化正规形与信息损失阶提升为可直接离线复核的证书对象，本段给出 Poisson--Cauchy 核的导数范数与高阶 Fisher--能量恒等式的闭式常数，并在矩匹配口径下推出相对熵主项系数与衰减指数；同时刻画中心单点剖面的可识别性与由此诱导的方差单调下界。
+
+\begin{proposition}[Poisson--Cauchy 核导数的 \texorpdfstring{$L^{1}$}{L1} 常数与能量恒等式]\label{prop:cdim-poisson-kernel-derivative-l1-energy}
+设 \(t>0\) 且
+\[
+P_t(x):=\frac{1}{\pi}\frac{t}{x^2+t^2}\qquad(x\in\RR).
+\]
+则其前三阶导数为
+\[
+P_t'(x)=-\frac{2}{\pi}\frac{t\,x}{(x^2+t^2)^2},\qquad
+P_t''(x)=\frac{2}{\pi}\frac{t(3x^2-t^2)}{(x^2+t^2)^3},\qquad
+P_t'''(x)=\frac{24}{\pi}\frac{t\,x(t^2-x^2)}{(x^2+t^2)^4}.
+\]
+并且成立四个与 \(t\) 无关的闭式常数律：
+\begin{align}
+\|P_t'\|_{L^{1}(\RR)}&=\frac{2}{\pi t},\label{eq:cdim-poisson-pt-prime-l1}\\
+\|P_t''\|_{L^{1}(\RR)}&=\frac{3\sqrt3}{2\pi}\,t^{-2},\label{eq:cdim-poisson-pt-second-l1}\\
+\|P_t'''\|_{L^{1}(\RR)}&=\frac{6}{\pi}\,t^{-3},\label{eq:cdim-poisson-pt-third-l1}\\
+\int_{\RR}\frac{(P_t''(x))^{2}}{P_t(x)}\,\dd x&=t^{-4}.\label{eq:cdim-poisson-pt-second-energy}
+\end{align}
+\end{proposition}
+\begin{proof}
+前三个导数公式由直接微分得到。
+\par
+\emph{(i) \eqref{eq:cdim-poisson-pt-prime-l1}.}
+由奇偶性与代换 \(u=x^2\) 得
+\[
+\|P_t'\|_{1}
+=\frac{4}{\pi}\int_0^\infty \frac{t\,x}{(x^2+t^2)^2}\,\dd x
+=\frac{2}{\pi}\int_0^\infty \frac{t}{(u+t^2)^2}\,\dd u
+=\frac{2}{\pi t}.
+\]
+\par
+\emph{(ii) \eqref{eq:cdim-poisson-pt-second-l1}.}
+由缩放 \(x=ty\) 得
+\[
+\|P_t''\|_{1}
+=\frac{2}{\pi}t^{-2}\int_{\RR}\frac{|3y^2-1|}{(1+y^2)^3}\,\dd y.
+\]
+再取 \(y=\tan\theta\)（\(\theta\in(-\tfrac\pi2,\tfrac\pi2)\)），得到
+\[
+\int_{\RR}\frac{|3y^2-1|}{(1+y^2)^3}\,\dd y
+=\int_{-\pi/2}^{\pi/2}|3-4\cos^2\theta|\,\cos^2\theta\,\dd\theta
+=2\!\left(\int_0^{\pi/6}(4\cos^4\theta-3\cos^2\theta)\,\dd\theta
+\int_{\pi/6}^{\pi/2}(3\cos^2\theta-4\cos^4\theta)\,\dd\theta\right)
+=\frac{3\sqrt3}{4},
+\]
+其中对 \(\cos^2\theta=3/4\)（即 \(\theta=\pi/6\)）分段并用初等三角积分即可得到末式。
+代回即得 \eqref{eq:cdim-poisson-pt-second-l1}。
+\par
+\emph{(iii) \eqref{eq:cdim-poisson-pt-third-l1}.}
+同理缩放 \(x=ty\) 并利用奇偶性得
+\[
+\|P_t'''\|_{1}
+=\frac{48}{\pi}t^{-3}\int_{0}^{\infty}\frac{y|1-y^{2}|}{(1+y^2)^4}\,\dd y.
+\]
+在 \(y=1\) 处分段并作代换 \(u=y^2\) 可将积分化为有理函数的初等积分，从而
+\(
+\int_{0}^{\infty}\frac{y|1-y^{2}|}{(1+y^2)^4}\,\dd y=\frac18
+\)，
+得到 \eqref{eq:cdim-poisson-pt-third-l1}。
+\par
+\emph{(iv) \eqref{eq:cdim-poisson-pt-second-energy}.}
+直接代入并缩放 \(x=ty\) 得
+\[
+\int_{\RR}\frac{(P_t'')^{2}}{P_t}\,\dd x
+=\frac{1}{\pi}t^{-4}\int_{\RR}\frac{(3y^2-1)^2}{(1+y^2)^5}\,\dd y.
+\]
+取 \(y=\tan\theta\) 将其化为三角多项式积分并计算得
+\(
+\int_{\RR}\frac{(3y^2-1)^2}{(1+y^2)^5}\,\dd y=\frac{\pi}{4}
+\)，
+故积分等于 \(t^{-4}\)。证毕。
+\end{proof}
+
+\begin{proposition}[Cauchy 核的高阶 Fisher--能量闭式：全阶常数的可离线复核]\label{prop:cdim-cauchy-kernel-higher-order-fisher-energy}
+设 \(t>0\) 且 \(P_t(x)=\frac{1}{\pi}\frac{t}{x^2+t^2}\)。
+对整数 \(n\ge 1\)，定义高阶 Fisher--能量
+\[
+\mathcal I_n(t):=\int_{\RR}\frac{\bigl(\partial_x^{\,n}P_t(x)\bigr)^2}{P_t(x)}\,\dd x.
+\]
+则成立严格闭式
+\begin{equation}\label{eq:cdim-cauchy-higher-order-fisher-energy}
+\boxed{\;
+\mathcal I_n(t)
+=\frac{n(2n)!}{(2n-1)4^{n}}\,t^{-2n}\; }.
+\end{equation}
+特别地，当 \(n=2\) 时恢复 \eqref{eq:cdim-poisson-pt-second-energy}。
+\end{proposition}
+\begin{proof}
+由缩放恒等式 \(P_t(x)=t^{-1}P_1(x/t)\) 得 \(\partial_x^{\,n}P_t(x)=t^{-n-1}(\partial_x^{\,n}P_1)(x/t)\)，从而
+\(
+\mathcal I_n(t)=t^{-2n}\mathcal I_n(1)
+\)。
+下证 \(\mathcal I_n(1)=\frac{n(2n)!}{(2n-1)4^n}\)。
+\par
+记 \(f(x):=(1+x^2)^{-1}\)，则 \(P_1(x)=\pi^{-1}f(x)\) 且
+\[
+f(x)=\frac{1}{2\mathrm{i}}\Bigl((x-\mathrm{i})^{-1}-(x+\mathrm{i})^{-1}\Bigr),
+\qquad
+f^{(n)}(x)=\frac{(-1)^n n!}{2\mathrm{i}}\Bigl((x-\mathrm{i})^{-(n+1)}-(x+\mathrm{i})^{-(n+1)}\Bigr).
+\]
+因此
+\[
+\mathcal I_n(1)
+=\int_{\RR}\frac{(P_1^{(n)})^2}{P_1}\,\dd x
+=\frac{1}{\pi}\int_{\RR}\frac{(f^{(n)}(x))^2}{f(x)}\,\dd x.
+\]
+令 \(z:=x+\mathrm{i}\)，则对实 \(x\) 有 \(x-\mathrm{i}=\overline z\)、\(|z|^2=1+x^2\)。
+写 \(z=re^{\mathrm{i}\theta}\)（\(\theta\in(0,\pi)\)），由 \(\Im(z)=1=r\sin\theta\) 得 \(r=\csc\theta\)、\(x=\cot\theta\)、\(\dd x=-\csc^2\theta\,\dd\theta\)。
+并且
+\[
+\frac{1}{2\mathrm{i}}\Bigl(\overline z^{-(n+1)}-z^{-(n+1)}\Bigr)
+=\Im\bigl(z^{-(n+1)}\bigr)
+=r^{-(n+1)}\sin\bigl((n+1)\theta\bigr).
+\]
+代入并化简得到
+\[
+\mathcal I_n(1)
+=\frac{(n!)^2}{\pi}\int_{0}^{\pi}\sin^{2n-2}\theta\;\sin^2\bigl((n+1)\theta\bigr)\,\dd\theta.
+\]
+用 \(\sin^2((n+1)\theta)=\frac12\bigl(1-\cos(2(n+1)\theta)\bigr)\)。
+注意 \(\sin^{2n-2}\theta\) 的余弦级数仅含频率 \(\le 2(n-1)\)，故与 \(\cos(2(n+1)\theta)\) 在 \([0,\pi]\) 上正交，从而
+\[
+\int_{0}^{\pi}\sin^{2n-2}\theta\;\cos(2(n+1)\theta)\,\dd\theta=0,
+\qquad
+\int_{0}^{\pi}\sin^{2n-2}\theta\;\sin^2\bigl((n+1)\theta\bigr)\,\dd\theta
+=\frac12\int_{0}^{\pi}\sin^{2n-2}\theta\,\dd\theta.
+\]
+经典积分恒等式给出 \(\int_{0}^{\pi}\sin^{2m}\theta\,\dd\theta=\pi\binom{2m}{m}4^{-m}\)。
+取 \(m=n-1\) 并整理得
+\[
+\mathcal I_n(1)
+=\frac{(n!)^2}{\pi}\cdot\frac12\cdot\pi\binom{2n-2}{n-1}4^{-(n-1)}
+=\frac{n(2n)!}{(2n-1)4^n}.
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[Poisson--Cauchy 粗粒化的二阶 \texorpdfstring{$L^{1}$}{L1} 精确常数与余项界]\label{prop:cdim-poisson-l1-second-order-constant}
+令 \(\nu\) 为 \(\RR\) 上概率测度，记
+\[
+\bar\gamma:=\int_{\RR}\gamma\,\dd\nu(\gamma),
+\qquad
+\Delta:=\gamma-\bar\gamma,
+\qquad
+\Var(\nu):=\EE[\Delta^2].
+\]
+设 \(\EE[|\Delta|^3]<\infty\)，并定义
+\[
+h_t(x):=\int_{\RR}P_t(x-\gamma)\,\dd\nu(\gamma),
+\qquad
+g_t(x):=P_t(x-\bar\gamma).
+\]
+则对一切 \(t>0\) 成立可审计的二阶误差上界
+\begin{equation}\label{eq:cdim-poisson-l1-second-order-bound}
+\boxed{\;
+\|h_t-g_t\|_{L^{1}(\RR)}
+\le
+\frac{3\sqrt3}{4\pi}\frac{\Var(\nu)}{t^{2}}
+\;+\;\frac{\EE[|\Delta|^{3}]}{\pi t^{3}}\; }.
+\end{equation}
+并且当 \(t\to\infty\) 时有精确主项
+\[
+\|h_t-g_t\|_{L^{1}(\RR)}
+=\frac{3\sqrt3}{4\pi}\frac{\Var(\nu)}{t^{2}}+O(t^{-3}).
+\]
+\end{proposition}
+\begin{proof}
+对每个固定 \(x\) 以三阶 Taylor 公式（积分余项）展开
+\[
+P_t(x-\bar\gamma-\Delta)
+=P_t(x-\bar\gamma)-\Delta P_t'(x-\bar\gamma)+\frac{\Delta^2}{2}P_t''(x-\bar\gamma)+R_t(x,\Delta),
+\]
+其中
+\(
+|R_t(x,\Delta)|
+\le
+\frac{|\Delta|^3}{6}\int_0^1(1-\theta)^2\,|P_t'''(x-\bar\gamma-\theta\Delta)|\,\dd\theta
+\)。
+对 \(\Delta\) 取期望并用 \(\EE[\Delta]=0\) 得
+\[
+h_t(x)-g_t(x)=\frac{\Var(\nu)}{2}P_t''(x-\bar\gamma)+\mathcal R_t(x),
+\qquad
+\|\mathcal R_t\|_{1}\le \frac{\EE[|\Delta|^3]}{6}\|P_t'''\|_{1}.
+\]
+由命题 \ref{prop:cdim-poisson-kernel-derivative-l1-energy} 的
+\(\|P_t''\|_{1}=\frac{3\sqrt3}{2\pi}t^{-2}\) 与 \(\|P_t'''\|_{1}=\frac{6}{\pi}t^{-3}\)，得到
+\[
+\|h_t-g_t\|_{1}
+\le \frac{\Var(\nu)}{2}\|P_t''\|_{1}+\|\mathcal R_t\|_{1}
+=\frac{3\sqrt3}{4\pi}\frac{\Var(\nu)}{t^{2}}+\frac{\EE[|\Delta|^3]}{\pi t^{3}},
+\]
+即 \eqref{eq:cdim-poisson-l1-second-order-bound}。
+主项等式由同一分解与 \(\|\mathcal R_t\|_{1}=O(t^{-3})\) 立得。证毕。
+\end{proof}
+
+\begin{proposition}[三阶中心矩主导的二阶校正残差：\texorpdfstring{$L^1$}{L1} 锐极限与剖面收敛]\label{prop:cdim-poisson-third-moment-residual-l1-sharp}
+沿用命题 \ref{prop:cdim-poisson-l1-second-order-constant} 的设定，并进一步假设四阶中心绝对矩有限 \(\EE[|\Delta|^{4}]<\infty\)。
+记
+\[
+\sigma^2:=\EE[\Delta^2]\in(0,\infty),
+\qquad
+\mu_3:=\EE[\Delta^3]\in\RR,
+\]
+并令二阶校正残差（即命题 \ref{prop:cdim-poisson-l1-second-order-constant} 中的余项）
+\[
+\mathcal R_t(x):=h_t(x)-g_t(x)-\frac{\sigma^2}{2}P_t''(x-\bar\gamma).
+\]
+若 \(\mu_3\neq 0\)，则当 \(t\to\infty\) 有锐极限
+\begin{equation}\label{eq:cdim-poisson-third-moment-residual-l1-sharp}
+\boxed{\;
+\lim_{t\to\infty}\frac{t^3}{|\mu_3|}\,\|\mathcal R_t\|_{L^1(\RR)}=\frac{1}{\pi}\; }.
+\end{equation}
+并且在剖面意义下成立
+\begin{equation}\label{eq:cdim-poisson-third-moment-residual-profile-l1}
+\boxed{\;
+\frac{t^4}{\mu_3}\,\mathcal R_t(\bar\gamma+t\,\cdot)\ \longrightarrow\
+\Psi(\cdot):=\frac{4}{\pi}\frac{y(y^2-1)}{(1+y^2)^4}
+\quad\text{于 }L^1(\RR,\dd y)\; }.
+\end{equation}
+\end{proposition}
+\begin{proof}[证明要点]
+以 \(\Delta\) 为变量对 \(\Delta\mapsto P_t(x-\bar\gamma-\Delta)\) 在 \(\Delta=0\) 处作四阶 Taylor 展开并取期望。
+由 \(\EE[\Delta]=0\) 消去一次项，得到
+\[
+h_t(x)
+=g_t(x)+\frac{\sigma^2}{2}P_t''(x-\bar\gamma)-\frac{\mu_3}{6}P_t'''(x-\bar\gamma)+\eta_t(x),
+\qquad
+\|\eta_t\|_{L^1(\RR)}=O(t^{-4}),
+\]
+其中余项界由 \(\EE[|\Delta|^{4}]<\infty\) 与缩放律 \(\|P_t^{(4)}\|_{L^1(\RR)}\asymp t^{-4}\) 给出。
+故
+\[
+\mathcal R_t(x)=-\frac{\mu_3}{6}P_t'''(x-\bar\gamma)+\eta_t(x).
+\]
+由命题 \ref{prop:cdim-poisson-kernel-derivative-l1-energy} 的 \(\|P_t'''\|_{L^1(\RR)}=\frac{6}{\pi}t^{-3}\) 得
+\[
+t^3\|\mathcal R_t\|_{L^1(\RR)}
+=\frac{|\mu_3|}{6}\,t^3\|P_t'''\|_{L^1(\RR)}+o(1)
+=\frac{|\mu_3|}{\pi}+o(1),
+\]
+从而得到 \eqref{eq:cdim-poisson-third-moment-residual-l1-sharp}。
+\par
+另一方面，利用 \(P_t'''(x)=t^{-4}P_1'''(x/t)\) 并把 \(x=\bar\gamma+ty\) 代入，可得
+\[
+-\frac{t^4}{\mu_3}\cdot\frac{\mu_3}{6}P_t'''(ty)
+=\frac{4}{\pi}\frac{y(y^2-1)}{(1+y^2)^4}
+=\Psi(y).
+\]
+并且
+\(
+\left\|\frac{t^4}{\mu_3}\eta_t(\bar\gamma+t\,\cdot)\right\|_{L^1(\RR,\dd y)}
+=\frac{t^3}{|\mu_3|}\|\eta_t\|_{L^1(\RR)}\to 0
+\)。
+故 \eqref{eq:cdim-poisson-third-moment-residual-profile-l1} 成立。证毕。
+\end{proof}
+
+\begin{proposition}[相对熵主项系数 \texorpdfstring{$1/8$}{1/8} 的普适性与误差阶]\label{prop:cdim-poisson-kl-constant-one-eighth}
+沿用命题 \ref{prop:cdim-poisson-l1-second-order-constant} 的设定。
+则存在 \(t_\ast>0\)（仅依赖于 \(\Var(\nu)\) 与 \(\EE[|\Delta|^3]\)）使对所有 \(t\ge t_\ast\) 有
+\begin{equation}\label{eq:cdim-poisson-kl-one-eighth}
+\boxed{\;
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{\Var(\nu)^{2}}{8t^{4}}
+O\!\left(\frac{\Var(\nu)\,\EE[|\Delta|^{3}]}{t^{5}}+\frac{\EE[|\Delta|^{3}]^{2}}{t^{6}}\right)\;}
+\end{equation}
+从而极限 \(\lim_{t\to\infty}t^{4}D_{\mathrm{KL}}(h_t\mid g_t)=\Var(\nu)^{2}/8\) 存在且主项系数与 \(\nu\) 的细节无关。
+\end{proposition}
+\begin{proof}[证明要点]
+写作 \(h_t=g_t+\delta_t\)，并置 \(u_t:=\delta_t/g_t\)。
+由命题 \ref{prop:cdim-poisson-l1-second-order-constant} 的分解，
+\[
+\delta_t(x)=\frac{\Var(\nu)}{2}P_t''(x-\bar\gamma)+\mathcal R_t(x),
+\qquad
+\int_{\RR}\delta_t(x)\,\dd x=0.
+\]
+并且由 \(\frac{|P_t''(x)|}{P_t(x)}=2\frac{|3x^2-t^2|}{(x^2+t^2)^2}\le 2/t^2\) 得
+\(
+\bigl\|\tfrac{P_t''}{P_t}\bigr\|_\infty\le 2/t^2
+\)，
+结合 \(\|\mathcal R_t\|_1=O(t^{-3})\) 与 Cauchy 尾部的同阶性，可取 \(t_\ast\) 使当 \(t\ge t_\ast\) 时 \(\|u_t\|_\infty\le 1/2\)。
+于是对 \(|u|\le 1/2\) 的展开
+\(
+(1+u)\log(1+u)=u+\frac{u^2}{2}+O(|u|^3)
+\)
+逐点成立，并以 \(g_t\) 加权积分得到
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\int_{\RR}g_t(1+u_t)\log(1+u_t)\,\dd x
+=\frac12\int_{\RR}\frac{\delta_t(x)^2}{g_t(x)}\,\dd x
+O\!\left(\|u_t\|_\infty\int_{\RR}\frac{\delta_t(x)^2}{g_t(x)}\,\dd x\right).
+\]
+将 \(\delta_t=\frac{\Var(\nu)}{2}P_t''+\mathcal R_t\) 代入并展开二次项，
+用 Cauchy--Schwarz 与 \(\|\mathcal R_t\|_1=O(t^{-3})\) 得交叉项与余项分别为
+\(
+O(\Var(\nu)\EE[|\Delta|^3]t^{-5})
+\)
+与
+\(
+O(\EE[|\Delta|^3]^2t^{-6})
+\)；
+而主项由命题 \ref{prop:cdim-poisson-kernel-derivative-l1-energy} 的能量恒等式 \eqref{eq:cdim-poisson-pt-second-energy} 给出
+\[
+\frac12\cdot\frac{\Var(\nu)^2}{4}\int_{\RR}\frac{(P_t'')^2}{P_t}\,\dd x
+=\frac{\Var(\nu)^2}{8t^4}.
+\]
+合并即得 \eqref{eq:cdim-poisson-kl-one-eighth}。证毕。
+\end{proof}
+
+\begin{proposition}[矩匹配下的相对熵主项：普适系数与衰减指数]\label{prop:cdim-poisson-kl-moment-matching-leading-term}
+令 \(\nu,\widetilde\nu\) 为 \(\RR\) 上概率测度，且具有共同重心 \(\bar\gamma\)。
+设存在整数 \(m\ge 2\) 使得中心矩满足
+\[
+\int_{\RR}(\gamma-\bar\gamma)^k\,\dd\nu(\gamma)
+=\int_{\RR}(\gamma-\bar\gamma)^k\,\dd\widetilde\nu(\gamma)
+\qquad(1\le k\le m-1),
+\]
+并且
+\[
+\Delta\kappa_m
+:=\int_{\RR}(\gamma-\bar\gamma)^m\,\dd\nu(\gamma)
+-\int_{\RR}(\gamma-\bar\gamma)^m\,\dd\widetilde\nu(\gamma)
+\neq 0.
+\]
+定义 Poisson--Cauchy 粗粒化
+\[
+h_t:=P_t*\nu,
+\qquad
+g_t:=P_t*\widetilde\nu.
+\]
+若 \(\nu,\widetilde\nu\) 具有有限 \((m+1)\) 阶绝对中心矩，则当 \(t\to\infty\) 有
+\begin{equation}\label{eq:cdim-poisson-kl-moment-matching-leading-term}
+\boxed{\;
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{(\Delta\kappa_m)^2}{2(m!)^2}\cdot \frac{m(2m)!}{(2m-1)4^m}\,t^{-2m}
+O(t^{-(2m+1)})\; }.
+\end{equation}
+其中余项常数可取为仅依赖于 \(\EE_\nu[|\gamma-\bar\gamma|^{m+1}]+\EE_{\widetilde\nu}[|\gamma-\bar\gamma|^{m+1}]\) 的显式多项式。
+\end{proposition}
+\begin{proof}
+记 \(\Delta:=\gamma-\bar\gamma\)。
+对任意固定 \(x\)，把函数 \(\Delta\mapsto P_t(x-\bar\gamma-\Delta)\) 在 \(\Delta=0\) 处作 \(m\) 阶 Taylor 展开并取积分余项，得到
+\[
+P_t(x-\bar\gamma-\Delta)
+=\sum_{k=0}^{m}\frac{(-\Delta)^k}{k!}\,\partial_x^{\,k}P_t(x-\bar\gamma)
+R_{t,m}(x,\Delta),
+\]
+其中余项满足
+\[
+|R_{t,m}(x,\Delta)|
+\le \frac{|\Delta|^{m+1}}{m!}\int_0^1(1-\theta)^m\,
+\bigl|\partial_x^{\,m+1}P_t(x-\bar\gamma-\theta\Delta)\bigr|\,\dd\theta.
+\]
+分别对 \(\nu,\widetilde\nu\) 取期望并作差。
+由矩匹配假设，\(0\le k\le m-1\) 的项完全抵消，从而
+\[
+h_t(x)-g_t(x)
+=\frac{(-1)^m}{m!}\Delta\kappa_m\,\partial_x^{\,m}P_t(x-\bar\gamma)+\mathcal R_t(x),
+\]
+且由 \(\|\partial_x^{\,m+1}P_t\|_{L^1(\RR)}\asymp t^{-(m+1)}\) 的缩放律可得
+\(
+\|\mathcal R_t\|_{L^1(\RR)}=O(t^{-(m+1)})
+\)。
+另一方面，对 \(t\) 足够大有 \(\| (h_t-g_t)/g_t\|_\infty\to 0\)，故可在 \(|u|\le 1/2\) 区间上使用
+\(
+(1+u)\log(1+u)=u+\frac{u^2}{2}+O(|u|^3)
+\)
+并以 \(g_t\) 加权积分得到
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac12\int_{\RR}\frac{(h_t-g_t)^2}{g_t}\,\dd x+O(t^{-(2m+1)}).
+\]
+将 \(h_t-g_t=\frac{(-1)^m}{m!}\Delta\kappa_m\,\partial_x^{\,m}P_t(\cdot-\bar\gamma)+\mathcal R_t\) 代入，
+主项为
+\[
+\frac12\cdot\frac{(\Delta\kappa_m)^2}{(m!)^2}
+\int_{\RR}\frac{(\partial_x^{\,m}P_t(x))^2}{P_t(x)}\,\dd x
+=\frac{(\Delta\kappa_m)^2}{2(m!)^2}\,\mathcal I_m(t),
+\]
+再由命题 \ref{prop:cdim-cauchy-kernel-higher-order-fisher-energy} 的闭式 \eqref{eq:cdim-cauchy-higher-order-fisher-energy} 得到 \eqref{eq:cdim-poisson-kl-moment-matching-leading-term}。
+余项阶由 \(\|\mathcal R_t\|_1=O(t^{-(m+1)})\) 与 \(g_t\) 的尾部同阶性控制。证毕。
+\end{proof}
+
+\begin{proposition}[主项常数的最优性：二点对称缺陷达到 \texorpdfstring{$3\sqrt3/(4\pi)$}{3sqrt3/(4pi)} 与 \texorpdfstring{$1/8$}{1/8}]\label{prop:cdim-poisson-constants-sharpness}
+取任意 \(a>0\) 并令
+\(
+\nu_a:=\frac12(\delta_{\bar\gamma+a}+\delta_{\bar\gamma-a})
+\)。
+则 \(\Var(\nu_a)=a^2\)，且当 \(t\to\infty\) 时满足
+\[
+\|h_t-g_t\|_{L^{1}(\RR)}=\frac{3\sqrt3}{4\pi}\frac{a^2}{t^2}+O(t^{-4}),
+\qquad
+D_{\mathrm{KL}}(h_t\mid g_t)=\frac{a^4}{8t^4}+O(t^{-6}).
+\]
+从而命题 \ref{prop:cdim-poisson-l1-second-order-constant} 与命题 \ref{prop:cdim-poisson-kl-constant-one-eighth} 的主项系数不可再改进。
+\end{proposition}
+\begin{proof}[证明要点]
+此时
+\(
+h_t=\frac12(P_t(\cdot-\bar\gamma-a)+P_t(\cdot-\bar\gamma+a))
+\)。
+对 \(\Delta=\pm a\) 作 Taylor 展开并相加，奇阶项严格抵消，得到
+\[
+h_t(x)-g_t(x)=\frac{a^2}{2}P_t''(x-\bar\gamma)+O(t^{-4})
+\]
+（其中 \(O(t^{-4})\) 由 \(P_t^{(4)}\) 的缩放与 \(L^{1}\) 阶给出）。
+再用命题 \ref{prop:cdim-poisson-kernel-derivative-l1-energy} 的 \(\|P_t''\|_{1}\) 与 \(\int (P_t'')^2/P_t\) 闭式，分别得到 \(L^{1}\) 与 \(D_{\mathrm{KL}}\) 的主项常数；
+余项阶由偶次展开的下一非零项给出。证毕。
+\end{proof}
+
+\begin{proposition}[中心值矩谱：由单点剖面恢复偶中心矩的可判定公式]\label{prop:cdim-poisson-center-moment-spectrum}
+仍令 \(h_t=P_t*\nu\) 且 \(\Delta=\gamma-\bar\gamma\)。
+若 \(\nu\) 具有有限 \(2m\) 阶中心矩 \(\mu_{2k}:=\EE[\Delta^{2k}]\)（\(1\le k\le m\)），则当 \(t\to\infty\) 时有渐近矩展开
+\begin{equation}\label{eq:cdim-poisson-center-moment-expansion}
+\boxed{\;
+\pi t\,h_t(\bar\gamma)
+=\EE\!\left[\frac{1}{1+(\Delta/t)^2}\right]
+=1-\frac{\mu_2}{t^2}+\frac{\mu_4}{t^4}-\cdots+(-1)^m\frac{\mu_{2m}}{t^{2m}}+o(t^{-2m})\; }.
+\end{equation}
+因此偶中心矩可由单点剖面的可审计极限逐级恢复，例如
+\[
+\mu_{2}=\lim_{t\to\infty}t^{2}\bigl(1-\pi t\,h_t(\bar\gamma)\bigr),\qquad
+\mu_{4}=\lim_{t\to\infty}t^{4}\Bigl(1-\pi t\,h_t(\bar\gamma)-\frac{\mu_{2}}{t^{2}}\Bigr),
+\]
+并依此递推得到全部 \(\mu_{2k}\)。
+\end{proposition}
+\begin{proof}
+由定义，
+\[
+\pi t\,h_t(\bar\gamma)
+=\int_{\RR}\frac{t^2}{\Delta^2+t^2}\,\dd\nu(\gamma)
+=\EE\!\left[\frac{1}{1+(\Delta/t)^2}\right].
+\]
+令 \(z:=(\Delta/t)^2\ge 0\)。当 \(t\to\infty\) 时 \(z\to 0\)，且
+\(
+(1+z)^{-1}=\sum_{k=0}^{m}(-1)^k z^k+O(z^{m+1})
+\)。
+对该展开取期望并用 \(\EE[z^k]=\mu_{2k}t^{-2k}\) 得 \eqref{eq:cdim-poisson-center-moment-expansion}；
+余项由有限 \(2m\) 阶矩保证 \(\EE[z^{m+1}]=o(t^{-2m})\)。证毕。
+\end{proof}
+
+\begin{proposition}[中心单点剖面的可识别性：Stieltjes 反演与对称化唯一性]\label{prop:cdim-poisson-central-slice-stieltjes-identifiability}
+令 \(\nu\) 为 \(\RR\) 上概率测度，重心 \(\bar\gamma\)。
+记 \(Z:=(\gamma-\bar\gamma)^2\) 的分布为 \(\mu_Z\)。
+定义中心单点剖面
+\begin{equation}\label{eq:cdim-poisson-central-slice-profile}
+\Phi_\nu(t):=\pi t\,h_t(\bar\gamma)
+=\int_{\RR}\frac{t^2}{(\gamma-\bar\gamma)^2+t^2}\,\dd\nu(\gamma)
+\qquad(t>0).
+\end{equation}
+则对 \(s=t^2\) 有
+\[
+m_\nu(s):=\int_{[0,\infty)}\frac{1}{z+s}\,\dd\mu_Z(z)
+=\frac{\Phi_\nu(\sqrt s)}{s}
+\qquad(s>0),
+\]
+从而 \(\Phi_\nu\) 在 \((0,\infty)\) 上的取值唯一决定 \(\mu_Z\)，并因此唯一决定 \(\nu\) 关于 \(\bar\gamma\) 的中心对称化
+\[
+\nu^{\mathrm{sym}}:=\frac12(\nu+\check\nu),
+\qquad
+\check\nu(A):=\nu(2\bar\gamma-A).
+\]
+若 \(\mu_Z\) 具有密度 \(\rho\)，则对几乎处处 \(z>0\) 有 Stieltjes 反演公式
+\[
+\rho(z)=\frac{1}{\pi}\lim_{\varepsilon\downarrow 0}\Im\,m_\nu(-z+\mathrm{i}\varepsilon),
+\]
+其中右侧由 \(m_\nu\) 在割线 \((-\infty,0]\) 两侧的边界值给出。
+\end{proposition}
+\begin{proof}
+由定义，
+\[
+h_t(\bar\gamma)=\int_{\RR}P_t(\bar\gamma-\gamma)\,\dd\nu(\gamma)
+=\frac{1}{\pi}\int_{\RR}\frac{t}{(\gamma-\bar\gamma)^2+t^2}\,\dd\nu(\gamma),
+\]
+故 \eqref{eq:cdim-poisson-central-slice-profile} 成立。
+令 \(Z=(\gamma-\bar\gamma)^2\)，则
+\[
+\Phi_\nu(t)=\int_{[0,\infty)}\frac{t^2}{z+t^2}\,\dd\mu_Z(z)
+=t^2\int_{[0,\infty)}\frac{1}{z+t^2}\,\dd\mu_Z(z),
+\]
+取 \(s=t^2\) 即得 \(m_\nu(s)=\Phi_\nu(\sqrt s)/s\)。
+而 Stieltjes 变换在 \((0,\infty)\) 上的取值唯一决定测度 \(\mu_Z\)，反演公式给出密度情形的显式恢复。
+最后注意 \(\mu_Z\) 正是 \(\nu\) 的中心对称化在映射 \(\gamma\mapsto(\gamma-\bar\gamma)^2\) 下的推前不变量，故 \(\mu_Z\) 唯一确定 \(\nu^{\mathrm{sym}}\)。证毕。
+\end{proof}
+
+\begin{corollary}[中心剖面映射的核：同中心同剖面当且仅当中心对称化相同]\label{cor:cdim-poisson-central-slice-kernel}
+令 \(\nu,\widetilde\nu\) 为 \(\RR\) 上概率测度，且具有共同重心 \(\bar\gamma\)。
+则
+\[
+\Phi_\nu(t)\equiv \Phi_{\widetilde\nu}(t)\quad(t>0)
+\quad\Longleftrightarrow\quad
+\nu^{\mathrm{sym}}=\widetilde\nu^{\mathrm{sym}}.
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:cdim-poisson-central-slice-stieltjes-identifiability}，\(\Phi_\nu\equiv\Phi_{\widetilde\nu}\) 等价于 \(\mu_Z=\widetilde\mu_Z\)，而该推前测度完全刻画中心对称化。证毕。
+\end{proof}
+
+\begin{proposition}[方差的单调可审计恢复：中心剖面给出单调收敛的下界序列]\label{prop:cdim-poisson-variance-monotone-lower-bound}
+沿用命题 \ref{prop:cdim-poisson-central-slice-stieltjes-identifiability} 的设定，并令
+\[
+\mathcal V(t):=t^2\left(\frac{1}{\Phi_\nu(t)}-1\right)
+\qquad(t>0).
+\]
+则 \(\mathcal V(t)\) 在 \(t>0\) 上单调不减，并且
+\[
+\lim_{t\to\infty}\mathcal V(t)=\Var(\nu)=\int_{\RR}(\gamma-\bar\gamma)^2\,\dd\nu(\gamma).
+\]
+从而对每个有限尺度 \(t\) 都有显式下界 \(\Var(\nu)\ge \mathcal V(t)\)，且该下界随 \(t\) 增大单调改进并收敛到真值。
+\end{proposition}
+\begin{proof}
+令 \(s=t^2\) 并写 \(m(s)=m_\nu(s)=\int(z+s)^{-1}\,\dd\mu_Z(z)\)。
+由 \(\Phi_\nu(t)=t^2 m(t^2)=s\,m(s)\) 得
+\[
+\mathcal V(t)=\frac{1}{m(s)}-s.
+\]
+对 \(s>0\) 求导，
+\[
+\frac{d}{ds}\Bigl(\frac{1}{m(s)}-s\Bigr)
+=-\frac{m'(s)}{m(s)^2}-1
+=\frac{\int (z+s)^{-2}\,\dd\mu_Z(z)}{\bigl(\int (z+s)^{-1}\,\dd\mu_Z(z)\bigr)^2}-1.
+\]
+由 Cauchy--Schwarz 不等式，
+\(
+\bigl(\int (z+s)^{-1}\,\dd\mu_Z(z)\bigr)^2\le \int (z+s)^{-2}\,\dd\mu_Z(z)
+\)，
+故导数非负，\(\mathcal V(t)\) 单调不减。
+\par
+另一方面，\(s\to\infty\) 时有
+\(
+m(s)=s^{-1}-s^{-2}\int z\,\dd\mu_Z(z)+o(s^{-2})
+\)，
+从而
+\(
+\frac{1}{m(s)}=s+\int z\,\dd\mu_Z(z)+o(1)
+\)。
+注意 \(\int z\,\dd\mu_Z(z)=\EE[Z]=\Var(\nu)\)，故极限成立。证毕。
+\end{proof}
+
+\input{subsec__circle-dimension-phase-gate-poisson-cauchy-higher-order-corrections}
+\input{subsec__circle-dimension-phase-gate-poisson-cauchy-higher-order-corrections-extension}
+
+\input{para__circle-dimension-phase-gate-poisson-cauchy-phase-fourierization}
+
+\input{subsec__circle-dimension-phase-gate-poisson-cauchy-bivariate-uplift}
+
+\input{subsec__circle-dimension-phase-gate-poisson-cauchy-gram-kernel}
+
+\endinput
+

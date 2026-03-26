@@ -1,0 +1,142 @@
+\begin{proposition}[碰撞条件下汉明距离的闭式母函数与子集能量展开]\label{prop:fold-collision-conditional-hamming-mgf}
+取 \(\omega,\eta\overset{\mathrm{i.i.d.}}{\sim}\mathrm{Unif}(\Omega_m)\) 并令 \(M:=F_{m+2}\)。
+设碰撞事件
+\[
+\mathcal C_m:=\{\Fold_m(\omega)=\Fold_m(\eta)\}.
+\]
+记汉明距离
+\[
+D_m:=\card{\{1\le k\le m:\ \omega_k\neq \eta_k\}}.
+\]
+对 \(0\le t\le M-1\) 与 \(1\le k\le m\) 定义角变量
+\[
+\theta_{k,t}:=\frac{\pi t F_{k+1}}{M}.
+\]
+则对任意复数 \(u\) 成立严格恒等式
+\[
+\boxed{\;
+\EE\bigl[u^{D_m}\mathbf 1_{\mathcal C_m}\bigr]
+=\frac1M\sum_{t=0}^{M-1}\prod_{k=1}^m \frac{1+u\cos(2\theta_{k,t})}{2}.\;}
+\]
+从而碰撞概率满足
+\[
+\boxed{\;
+\mathsf{Col}_m:=\PP(\mathcal C_m)
+=\frac1M\sum_{t=0}^{M-1}\prod_{k=1}^m \cos^2(\theta_{k,t}),\;}
+\]
+并且条件母函数具有闭式
+\[
+\boxed{\;
+\EE\bigl[u^{D_m}\mid \mathcal C_m\bigr]
+=\frac{\displaystyle \frac1M\sum_{t=0}^{M-1}\prod_{k=1}^m \frac{1+u\cos(2\theta_{k,t})}{2}}
+{\displaystyle \mathsf{Col}_m}.\;}
+\]
+\par
+进一步，对任意子集 \(I\subseteq[m]\) 定义子集能量
+\[
+E_{m,I}:=\frac1M\sum_{t=0}^{M-1}\Bigl(\prod_{k\in I}\sin^2(\theta_{k,t})\Bigr)\Bigl(\prod_{k\notin I}\cos^2(\theta_{k,t})\Bigr).
+\]
+则有完全等价的多项式展开
+\[
+\boxed{\;
+\EE\bigl[u^{D_m}\mid \mathcal C_m\bigr]
+=\frac{1}{2^m\,\mathsf{Col}_m}\sum_{I\subseteq[m]} E_{m,I}\,(u+1)^{m-|I|}(1-u)^{|I|}.\;}
+\]
+\end{proposition}
+
+\begin{proof}
+由引理 \ref{lem:pom-fold-congruence}，\(\mathcal C_m\) 等价于同余 \(N(\omega)\equiv N(\eta)\pmod M\)。
+因此对任意 \(a\in\ZZ/M\ZZ\) 的角色恒等式
+\(
+\mathbf 1_{\{a=0\}}=\frac1M\sum_{t=0}^{M-1}e^{2\pi i ta/M}
+\)
+给出
+\[
+\mathbf 1_{\mathcal C_m}
+=\frac1M\sum_{t=0}^{M-1}
+e^{\frac{2\pi i t}{M}(N(\omega)-N(\eta))}.
+\]
+注意到
+\(
+N(\omega)-N(\eta)=\sum_{k=1}^m(\omega_k-\eta_k)F_{k+1}
+\)
+且坐标独立，于是
+\[
+\EE\bigl[u^{D_m}\mathbf 1_{\mathcal C_m}\bigr]
+=\frac1M\sum_{t=0}^{M-1}\prod_{k=1}^m
+\EE\Bigl[u^{\mathbf 1_{\{\omega_k\neq\eta_k\}}}e^{\frac{2\pi i t}{M}(\omega_k-\eta_k)F_{k+1}}\Bigr].
+\]
+对固定 \((k,t)\) 枚举 \((\omega_k,\eta_k)\in\{0,1\}^2\) 得内层期望等于
+\[
+\frac{1}{4}\Bigl(2+u e^{2i\theta_{k,t}}+u e^{-2i\theta_{k,t}}\Bigr)=\frac{1+u\cos(2\theta_{k,t})}{2},
+\]
+从而得到第一条闭式。
+取 \(u=1\) 得碰撞概率的 \(\cos^2\) 乘积表示；再以比值给出条件母函数。
+\par
+最后用恒等式
+\[
+\frac{1+u\cos(2\theta)}{2}
+=\frac{u+1}{2}\cos^2\theta+\frac{1-u}{2}\sin^2\theta
+\]
+逐坐标展开乘积，并对 \(t\) 取平均定义 \(E_{m,I}\)，即得多项式形式。证毕。
+\end{proof}
+
+\begin{proposition}[碰撞条件下差异场的二阶结构：协方差闭式]\label{prop:fold-collision-conditional-hamming-covariance}
+沿用命题 \ref{prop:fold-collision-conditional-hamming-mgf} 的记号。
+令 \(\delta_k:=\mathbf 1_{\{\omega_k\neq\eta_k\}}\) 并令
+\(
+S_k:=(-1)^{\omega_k}(-1)^{\eta_k}\in\{\pm1\}
+\)。
+则对任意 \(i\neq j\) 有精确协方差公式
+\[
+\boxed{\;
+\mathrm{Cov}(\delta_i,\delta_j\mid \mathcal C_m)
+=\frac14\left(\frac{E_{m,\{i,j\}}}{\mathsf{Col}_m}-\frac{E_{m,\{i\}}E_{m,\{j\}}}{\mathsf{Col}_m^{\,2}}\right).\;}
+\]
+并且条件方差具有闭式分解
+\[
+\boxed{\;
+\mathrm{Var}(D_m\mid\mathcal C_m)
+=\frac14\sum_{k=1}^m\left(1-\Bigl(\frac{E_{m,\{k\}}}{\mathsf{Col}_m}\Bigr)^2\right)
+\;+\;\frac12\sum_{1\le i<j\le m}\left(\frac{E_{m,\{i,j\}}}{\mathsf{Col}_m}-\frac{E_{m,\{i\}}E_{m,\{j\}}}{\mathsf{Col}_m^{\,2}}\right).\;}
+\]
+\end{proposition}
+
+\begin{proof}
+恒等式 \(\delta_k=\frac{1-S_k}{2}\) 给出
+\(
+\mathrm{Cov}(\delta_i,\delta_j\mid\mathcal C_m)=\frac14\,\mathrm{Cov}(S_i,S_j\mid\mathcal C_m)
+\)。
+由命题 \ref{prop:fold-collision-conditional-hamming-mgf} 的 Fourier 表示，内层坐标期望满足
+\[
+\EE\bigl[S_k\,\mathbf 1_{\mathcal C_m}\bigr]
+=\frac1M\sum_{t=0}^{M-1}\sin^2(\theta_{k,t})\prod_{\ell\ne k}\cos^2(\theta_{\ell,t})
+=E_{m,\{k\}},
+\]
+并且类似地
+\(
+\EE[S_iS_j\,\mathbf 1_{\mathcal C_m}]=E_{m,\{i,j\}}
+\)。
+除以 \(\PP(\mathcal C_m)=\mathsf{Col}_m\) 得
+\(
+\EE[S_k\mid\mathcal C_m]=E_{m,\{k\}}/\mathsf{Col}_m
+\)、
+\(
+\EE[S_iS_j\mid\mathcal C_m]=E_{m,\{i,j\}}/\mathsf{Col}_m
+\)，
+代入协方差定义即得第一式。
+\par
+对方差分解，使用
+\(
+D_m=\sum_{k=1}^m\delta_k
+\)
+与
+\(
+\mathrm{Var}(\sum_k\delta_k)=\sum_k\mathrm{Var}(\delta_k)+2\sum_{i<j}\mathrm{Cov}(\delta_i,\delta_j)
+\)，
+并注意 \(\mathrm{Var}(\delta_k\mid\mathcal C_m)=\frac14\bigl(1-\EE[S_k\mid\mathcal C_m]^2\bigr)\)。
+代入并整理即得所示闭式。证毕。
+\end{proof}
+
+\endinput
+

@@ -1,0 +1,490 @@
+\subsubsection{Schur--Poisson 二体完备、Toeplitz 簇极限与 Smith--Ward 审计闭环}\label{subsubsec:xi-time-protocol-conclusions-part47}
+
+\begin{theorem}[Schur--Poisson 互能同一性：局部冗余的链式守恒分解]\label{thm:xi-schur-poisson-mutual-energy-ledger-identity}
+设 \(A=\{a_1,\dots,a_\kappa\}\subset\mathbb D\) 为有限点状缺陷多重集，\(\mathsf P=\mathsf P(A)\) 为对应 Pick--Poisson Gram 矩阵。
+记
+\[
+p_m:=\mathsf P_{mm}=P_{a_m}(-1),\qquad
+\rho_{jk}:=\rho(a_j,a_k).
+\]
+对固定点序 \(1,\dots,\kappa\)，令 Schur 补通量
+\[
+\pi_m:=\mathsf P_{mm}-\mathsf P_{m,1:m-1}\,(\mathsf P^{(m-1)})^{-1}\,\mathsf P_{1:m-1,m}\qquad(1\le m\le \kappa),
+\]
+则成立严格恒等式
+\[
+2\sum_{1\le j<k\le \kappa}\bigl(-\log\rho_{jk}\bigr)
+=\sum_{m=1}^{\kappa}\log\frac{p_m}{\pi_m}.
+\]
+特别地，每一项 \(\log(p_m/\pi_m)\ge 0\)，总和与点序无关；并且存在某个 \(m_\star\) 使
+\[
+\log\frac{p_{m_\star}}{\pi_{m_\star}}
+\ge
+\frac{2}{\kappa}\sum_{1\le j<k\le \kappa}\bigl(-\log\rho_{jk}\bigr).
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:xi-pick-poisson-energy-coulomb-decomposition}，
+\[
+-\log\det\mathsf P
+=\sum_{m=1}^{\kappa}(-\log p_m)
++2\sum_{j<k}(-\log\rho_{jk}).
+\]
+由结论 \ref{con:xi-terminal-pick-poisson-schur-ledger}，
+\[
+-\log\det\mathsf P=\sum_{m=1}^{\kappa}(-\log\pi_m),\qquad 0<\pi_m\le p_m.
+\]
+两式相减即得
+\[
+2\sum_{j<k}(-\log\rho_{jk})
+=\sum_{m=1}^{\kappa}\bigl(-\log\pi_m+\log p_m\bigr)
+=\sum_{m=1}^{\kappa}\log\frac{p_m}{\pi_m}.
+\]
+由 \(\pi_m\le p_m\) 得每项非负。
+右端虽依赖点序分配到各步，但其总和等于左端的对称二体互能，故与点序无关。
+最后由 \(\max_m x_m\ge \frac1\kappa\sum_m x_m\)（取 \(x_m=\log(p_m/\pi_m)\)）即得所示下界。证毕。
+\end{proof}
+
+\begin{theorem}[二体完备性：\texorpdfstring{$-\log\det\mathsf P$}{-log det P} 的三集合二阶 Möbius 恒等式]\label{thm:xi-pick-poisson-three-set-mobius-identity}
+设 \(A,B,C\subset\mathbb D\) 为按重数计两两不交的有限点集。
+定义
+\[
+\Phi(S):=-\log\det\mathsf P(S).
+\]
+则有严格恒等式
+\[
+\Phi(A\sqcup B\sqcup C)-\Phi(A\sqcup B)-\Phi(B\sqcup C)+\Phi(B)
+=2\sum_{a\in A}\sum_{c\in C}\bigl(-\log\rho(a,c)\bigr).
+\]
+等价地，
+\[
+\det\mathsf P(A\sqcup B\sqcup C)\cdot \det\mathsf P(B)
+=\det\mathsf P(A\sqcup B)\cdot \det\mathsf P(B\sqcup C)\cdot
+\prod_{a\in A,c\in C}\rho(a,c)^2.
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:xi-pick-poisson-energy-coulomb-decomposition}，对任意有限 \(S\) 有
+\[
+\Phi(S)=\sum_{x\in S}(-\log p_x)+2\sum_{\{x,y\}\subset S}(-\log\rho(x,y)).
+\]
+将该展开代入
+\[
+\Phi(A\sqcup B\sqcup C)-\Phi(A\sqcup B)-\Phi(B\sqcup C)+\Phi(B)
+\]
+后，所有单点项、块内点对项与经由 \(B\) 的交叉项逐项抵消，仅剩 \(A\)--\(C\) 交叉点对，遂得第一式。
+对第一式取指数并整理即得第二式。证毕。
+\end{proof}
+
+\begin{corollary}[任意分块的严格簇分解：并集体积势的有限 Mayer 展开]\label{cor:xi-pick-poisson-finite-mayer-cluster-factorization}
+设 \(A=\bigsqcup_{r=1}^{R}A_r\) 为按重数计的不交并。
+则
+\[
+\det\mathsf P(A)
+=\left(\prod_{r=1}^{R}\det\mathsf P(A_r)\right)
+\prod_{1\le r<s\le R}\ \prod_{a\in A_r,\ b\in A_s}\rho(a,b)^2,
+\]
+等价地，
+\[
+\Phi(A)
+=\sum_{r=1}^{R}\Phi(A_r)
++2\sum_{1\le r<s\le R}\ \sum_{a\in A_r,\ b\in A_s}(-\log\rho(a,b)).
+\]
+因此 \(\Phi\) 的并集复合严格止于二体项，不存在三体及更高阶簇修正。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:xi-pick-poisson-det-factorization}，
+\[
+\det\mathsf P(A)
+=\left(\prod_{a\in A}p_a\right)
+\left(\prod_{\{x,y\}\subset A}\rho(x,y)^2\right).
+\]
+将点对乘积按“块内对 + 跨块对”分解，即得所示乘积闭式；取负对数得到加法形式。
+全部修正项仅由点对贡献，故高阶簇项不存在。证毕。
+\end{proof}
+
+\begin{theorem}[Toeplitz 负谱正则化行列式的几何簇极限律]\label{thm:xi-toeplitz-negative-regularized-det-geometric-cluster-limit}
+在稳定显影区间与半经典极限 \(N\to\infty\)、\(N(1-|a_j|)\to\infty\) 下，定义
+\[
+\mathrm{Det}_{-}\!\bigl(\mathbf T_N(A)\bigr)
+:=\prod_{j=1}^{\kappa}\bigl(-\lambda_j^{-}(\mathbf T_N(A))\bigr).
+\]
+设 \(A=\bigsqcup_{r=1}^{R}A_r\)，并对每个 \(A_r\) 取同一构造口径下的稳定 Toeplitz 证书序列 \(\mathbf T_N^{(r)}(A_r)\)。
+则成立极限簇分解
+\[
+\lim_{N\to\infty}
+\frac{\mathrm{Det}_{-}\!\bigl(\mathbf T_N(A)\bigr)}
+{\prod_{r=1}^{R}\mathrm{Det}_{-}\!\bigl(\mathbf T_N^{(r)}(A_r)\bigr)}
+=
+\prod_{1\le r<s\le R}\ \prod_{a\in A_r,\ b\in A_s}\rho(a,b)^2.
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:xi-toeplitz-negative-regularized-determinant-limit}，
+\[
+\lim_{N\to\infty}\mathrm{Det}_{-}\!\bigl(\mathbf T_N(A)\bigr)=\det\mathsf P(A),
+\qquad
+\lim_{N\to\infty}\mathrm{Det}_{-}\!\bigl(\mathbf T_N^{(r)}(A_r)\bigr)=\det\mathsf P(A_r).
+\]
+故极限比值等于 \(\det\mathsf P(A)/\prod_r\det\mathsf P(A_r)\)。
+再由推论 \ref{cor:xi-pick-poisson-finite-mayer-cluster-factorization} 即得右端跨块伪双曲 Vandermonde 因子。证毕。
+\end{proof}
+
+\begin{proposition}[阿贝尔多通道否证的单通道局域化与候选极点并集定理]\label{prop:xi-abelian-single-channel-localization-and-pencil-union}
+设 \(H\) 为有限阿贝尔群，\(\mathcal A:=\mathbb C[H]\)。
+对解析 \(F:\mathbb D\to\mathcal A\)，记角色通道分量为 \(\{F_\chi\}_{\chi\in\widehat H}\)。
+则对每个 \(N\ge 0\)，
+\[
+\mathbf T_N^{\mathcal A}(F)\sim_{\mathrm U}\bigoplus_{\chi\in\widehat H}\mathbf T_N(F_\chi),
+\qquad
+\nu_-\!\bigl(\mathbf T_N^{\mathcal A}(F)\bigr)
+=\sum_{\chi\in\widehat H}\nu_-\!\bigl(\mathbf T_N(F_\chi)\bigr).
+\]
+特别地，若 \(\nu_-(\mathbf T_N^{\mathcal A}(F))>0\)，则必存在某个 \(\chi\) 使 \(\mathbf T_N(F_\chi)\nsucceq 0\)，并且可取否证向量在通道直和分解下完全支撑于该单一通道。
+\par
+进一步，定义通道候选集合
+\[
+\Lambda_{N,\chi}
+:=\Spec\!\bigl(\mathbf T_N(F_\chi),\mathbf T_N^{(1)}(F_\chi)\bigr)\cap\mathbb D,
+\]
+并记 \(\mathbf T_N^{\mathcal A,(1)}(F)\) 为对应的一阶移位块 Toeplitz 矩阵。
+以及块候选集合
+\[
+\Lambda_N^{\mathrm{block}}
+:=\Spec\!\bigl(\mathbf T_N^{\mathcal A}(F),\mathbf T_N^{\mathcal A,(1)}(F)\bigr)\cap\mathbb D.
+\]
+则按重数计有
+\[
+\Lambda_N^{\mathrm{block}}=\bigcup_{\chi\in\widehat H}\Lambda_{N,\chi}.
+\]
+由结论 \ref{con:xi-finite-falsifier-offline-fiber-readout} 的 Cayley 读出规则，离线零点纤维多重集亦按同一并集律分解。
+\end{proposition}
+\begin{proof}
+第一部分由推论 \ref{cor:xi-abelian-block-toeplitz-directsum} 与定理 \ref{thm:xi-abelian-channel-kappaCar-additivity} 直接得到；
+单通道局域化即推论 \ref{cor:xi-abelian-channel-negativity-localization}。
+\par
+对候选极点，移位块 Toeplitz 同样在 Fourier--Pontryagin 分解下按通道直和对角化，故
+\[
+\bigl(\mathbf T_N^{\mathcal A}(F),\mathbf T_N^{\mathcal A,(1)}(F)\bigr)
+\sim_{\mathrm U}
+\bigoplus_{\chi\in\widehat H}
+\bigl(\mathbf T_N(F_\chi),\mathbf T_N^{(1)}(F_\chi)\bigr).
+\]
+广义谱在有限直和下按重数并合，遂得
+\(\Lambda_N^{\mathrm{block}}=\bigcup_\chi \Lambda_{N,\chi}\)。
+最后把结论 \ref{con:xi-finite-falsifier-offline-fiber-readout} 的候选纤维构造逐通道应用并并合即可。证毕。
+\end{proof}
+
+\begin{theorem}[多通道有限型的稳定阈值：全局稳定阶等于通道稳定阶的最大值]\label{thm:xi-abelian-global-stability-threshold-max-channel}
+在命题 \ref{prop:xi-abelian-single-channel-localization-and-pencil-union} 的设定下，进一步假设每个通道 \(F_\chi\) 处于有限型口径（盘内极点有限且边界无极点）。
+记
+\[
+\kappa_\chi:=\mathrm{sq}_-(F_\chi),
+\]
+并定义通道稳定阶
+\[
+N_0(\chi):=\min\Bigl\{N:\ \nu_-\!\bigl(\mathbf T_n(F_\chi)\bigr)=\kappa_\chi,\ \forall n\ge N\Bigr\}.
+\]
+则块 Toeplitz 的全局稳定阶
+\[
+N_0^{\mathrm{block}}
+:=\min\Bigl\{N:\ \nu_-\!\bigl(\mathbf T_n^{\mathcal A}(F)\bigr)=\sum_{\chi}\kappa_\chi,\ \forall n\ge N\Bigr\}
+\]
+满足
+\[
+N_0^{\mathrm{block}}=\max_{\chi\in\widehat H}N_0(\chi),
+\]
+并且对所有 \(N\ge N_0^{\mathrm{block}}\) 有
+\[
+\nu_-\!\bigl(\mathbf T_N^{\mathcal A}(F)\bigr)=\sum_{\chi\in\widehat H}\kappa_\chi.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-toeplitz-inertia-stabilizes-to-kappa}，每个通道存在稳定阶 \(N_0(\chi)\)，且
+\(\nu_-(\mathbf T_N(F_\chi))=\kappa_\chi\)（\(N\ge N_0(\chi)\)）。
+令 \(N_\star:=\max_\chi N_0(\chi)\)，则当 \(N\ge N_\star\) 时所有通道同时稳定。
+由定理 \ref{thm:xi-abelian-channel-kappaCar-additivity}，
+\[
+\nu_-\!\bigl(\mathbf T_N^{\mathcal A}(F)\bigr)
+=\sum_{\chi}\nu_-\!\bigl(\mathbf T_N(F_\chi)\bigr)
+=\sum_{\chi}\kappa_\chi,
+\]
+故 \(N_0^{\mathrm{block}}\le N_\star\)。
+\par
+反向地，若 \(N<N_\star\)，取 \(\chi_0\) 使 \(N<N_0(\chi_0)\)。
+由 \(N_0(\chi_0)\) 的最小性，存在 \(n\ge N\) 使
+\(\nu_-(\mathbf T_n(F_{\chi_0}))\neq \kappa_{\chi_0}\)；
+而同一定理给出 \(\nu_-(\mathbf T_n(F_{\chi_0}))\le \kappa_{\chi_0}\)，故该值严格小于 \(\kappa_{\chi_0}\)。
+再用逐通道可加性得
+\[
+\nu_-\!\bigl(\mathbf T_n^{\mathcal A}(F)\bigr)
+=\sum_{\chi}\nu_-\!\bigl(\mathbf T_n(F_\chi)\bigr)
+<\sum_{\chi}\kappa_\chi.
+\]
+因此任何 \(N<N_\star\) 均不能成为全局稳定阶，故 \(N_0^{\mathrm{block}}\ge N_\star\)。
+综上 \(N_0^{\mathrm{block}}=N_\star\)。证毕。
+\end{proof}
+
+\begin{theorem}[Hankel--Smith 模审计的 primorial 最优性：最小 Gödel 成本的素数实现]\label{thm:xi-hankel-smith-mod-audit-primorial-optimality}
+设 \(H_0,H_1\in M_d(\mathbb Z)\) 且 \(\det(H_0)\neq 0\)，令
+\[
+A:=H_0^{-1}H_1\in M_d(\mathbb Q).
+\]
+由定理 \ref{thm:pom-hankel-smith-minimal-denominator}，存在最小整化因子 \(N_\ast\) 使 \(N_\ast A\in M_d(\mathbb Z)\)，并满足 \(N_\ast\mid \det(H_0)\)。
+给定候选 \(\widehat A\in M_d(\mathbb Q)\) 满足 \(N_\ast\widehat A\in M_d(\mathbb Z)\)，定义
+\[
+F:=N_\ast(H_0\widehat A-H_1)\in M_d(\mathbb Z),\qquad M:=2\|F\|_\infty.
+\]
+若取有限素数集 \(\mathcal P\) 使
+\[
+\gcd\!\Bigl(\prod_{p\in\mathcal P}p,\ N_\ast\Bigr)=1,\qquad
+F\equiv 0\pmod p\ \ (\forall p\in\mathcal P),\qquad
+\prod_{p\in\mathcal P}p>M,
+\]
+则必有 \(\widehat A=A\)。
+\par
+进一步，定义对数成本
+\[
+\mathcal C(\mathcal P):=\sum_{p\in\mathcal P}\log p=\log\!\Bigl(\prod_{p\in\mathcal P}p\Bigr).
+\]
+在无互素约束的情形，令 \(n\) 为满足 \(p_n^\#>M\) 的最小整数（\(p_n^\#:=\prod_{i=1}^{n}p_i\)），则
+\[
+\min_{\mathcal P:\ \prod_{p\in\mathcal P}p>M}\ \mathcal C(\mathcal P)=\log(p_n^\#).
+\]
+在互素约束 \(\gcd(\prod_{p\in\mathcal P}p,N_\ast)=1\) 下，极小集合可由“删去与 \(N_\ast\) 冲突的有限素数后，按从小到大取素数”的贪心方案实现。
+\end{theorem}
+\begin{proof}
+第一部分正是定理 \ref{thm:pom-hankel-deterministic-mod-audit-threshold} 在 \(n=d\) 情形的直接应用。
+\par
+对最优性，先看无约束情形。
+取任意由 \(n\) 个互异素数组成的集合 \(\mathcal P\)，按升序写为 \(q_1<\cdots<q_n\)。
+由于 \(q_i\ge p_i\)（第 \(i\) 小素数的最小性），有
+\[
+\prod_{p\in\mathcal P}p=\prod_{i=1}^{n}q_i\ge \prod_{i=1}^{n}p_i=p_n^\#,
+\qquad
+\mathcal C(\mathcal P)\ge \log(p_n^\#).
+\]
+故要使乘积超过 \(M\)，所需最小规模由 \(p_n^\#>M\) 的最小 \(n\) 决定，且该 \(n\) 下最小成本即 \(\log(p_n^\#)\)。
+\par
+在互素约束下，只需把可选素数集限制为
+\(
+\mathbb P_{N_\ast}:=\{p\in\mathbb P:\ p\nmid N_\ast\}
+\)。
+按升序记其元素 \(\ell_1<\ell_2<\cdots\)。
+与上同理，任何可行集合 \(\mathcal P\subset\mathbb P_{N_\ast}\) 的升序元素逐项不小于 \(\ell_i\)，故在给定元素个数下，\(\prod_{p\in\mathcal P}p\) 与 \(\mathcal C(\mathcal P)\) 同时由前缀 \(\{\ell_1,\dots,\ell_n\}\) 最小化。
+因此约束问题的极小解由该递增前缀贪心得到，这恰是“去除有限冲突素数后的素数前缀”。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$p$}{p}-进分支熵的饱和律：\texorpdfstring{$\mathrm{Stiff}_p$}{Stiffp} 作为模解空间增长率]\label{prop:xi-padic-branch-entropy-saturation-law}
+设 \(H_0\in M_d(\mathbb Z)\) 满秩，Smith 正规形不变量为
+\[
+s_1\mid s_2\mid\cdots\mid s_d.
+\]
+对素数 \(p\) 与 \(k\ge 1\)，定义 Smith 精度势
+\[
+H_p(k):=\sum_{i=1}^{d}\min\bigl(v_p(s_i),k\bigr).
+\]
+则有
+\[
+\#\ker\!\Bigl(H_0:(\mathbb Z/p^k\mathbb Z)^d\to(\mathbb Z/p^k\mathbb Z)^d\Bigr)=p^{H_p(k)}.
+\]
+并且对矩阵同余方程
+\[
+H_0X\equiv H_1\pmod{p^k},
+\]
+若可解，则解集为仿射空间且基数严格为
+\[
+\#\{X\bmod p^k:\ H_0X\equiv H_1\}=p^{dH_p(k)}.
+\]
+因此在可解层级上有增长极限
+\[
+\lim_{k\to\infty}\frac1d\log_p\#\{X\bmod p^k:\ H_0X\equiv H_1\}
+=\lim_{k\to\infty}H_p(k)
+=v_p(\det H_0)
+=:\mathrm{Stiff}_p.
+\]
+\end{proposition}
+\begin{proof}
+核规模公式由命题 \ref{prop:xi-hankel-normalform-hp-discrete-concave-invert}（取 \(H_1=0\)）给出。
+同余方程解数公式由命题 \ref{prop:xi-smith-pk-congruence-solvability-count} 给出。
+最后 \(\min(v,k)\to v\)（\(k\to\infty\)）逐项收敛，故
+\[
+\lim_{k\to\infty}H_p(k)=\sum_{i=1}^{d}v_p(s_i)=v_p\!\Bigl(\prod_{i=1}^{d}s_i\Bigr)=v_p(\det H_0),
+\]
+遂得所示极限。证毕。
+\end{proof}
+
+\begin{theorem}[Toeplitz 层级的一致收敛可证伪性：固定阶谱裕度给出显式扰动半径]\label{thm:xi-toeplitz-fixed-order-margin-perturbation-radius}
+令 \(0<r<1\)、\(N\ge 0\)。
+设 \(C,\widetilde C\in\mathrm{Hol}(\{|w|<1\})\)，且
+\[
+\|C-\widetilde C\|_{L^\infty(\{|w|\le r\})}\le \varepsilon.
+\]
+记 \(\mathbf T_N(C),\mathbf T_N(\widetilde C)\) 为对应系数生成的 Toeplitz 主子矩阵（在本文 Carath\'eodory 口径下为 Hermitian）。
+则存在显式常数
+\[
+L_N(r):=1+2\sum_{m=1}^{N}r^{-m}
+\]
+使
+\[
+\|\mathbf T_N(C)-\mathbf T_N(\widetilde C)\|_{\mathrm{op}}
+\le L_N(r)\,\varepsilon.
+\]
+因而：
+\begin{enumerate}
+  \item 若 \(\mathbf T_N(C)\succeq 0\) 且 \(\lambda_{\min}(\mathbf T_N(C))\ge \delta>0\)，当 \(\varepsilon<\delta/L_N(r)\) 时必有 \(\mathbf T_N(\widetilde C)\succeq 0\)。
+  \item 若 \(\lambda_{\min}(\mathbf T_N(C))\le -\delta<0\)，当 \(\varepsilon<\delta/L_N(r)\) 时必有 \(\lambda_{\min}(\mathbf T_N(\widetilde C))<0\)。
+\end{enumerate}
+故固定阶稳定负谱裕度给出可审计的有限否证半径，与猜想 \ref{conj:discussion-kernel-zeta-toeplitz-convergence} 的“有限证书可证伪接口”一致。
+\end{theorem}
+\begin{proof}
+写
+\[
+C(w)=\sum_{n\ge 0}c_n w^n,\qquad
+\widetilde C(w)=\sum_{n\ge 0}\widetilde c_n w^n.
+\]
+由 Cauchy 系数估计，
+\[
+|c_n-\widetilde c_n|
+\le \varepsilon\,r^{-n}\qquad(n\ge 0).
+\]
+故对 \(\Delta_N:=\mathbf T_N(C)-\mathbf T_N(\widetilde C)\)，其偏移 \(|j-k|=m\) 处条目满足
+\[
+|(\Delta_N)_{jk}|\le \varepsilon\,r^{-m}\le \varepsilon\,r^{-N}.
+\]
+逐行求和得
+\[
+\|\Delta_N\|_{\infty}
+\le \varepsilon\!\left(1+2\sum_{m=1}^{N}r^{-m}\right)
+=L_N(r)\varepsilon.
+\]
+于是
+\[
+\|\Delta_N\|_{\mathrm{op}}\le \|\Delta_N\|_{\infty}\le L_N(r)\varepsilon.
+\]
+再由 Weyl 特征值扰动不等式，
+\[
+\lambda_{\min}\!\bigl(\mathbf T_N(\widetilde C)\bigr)
+\ge \lambda_{\min}\!\bigl(\mathbf T_N(C)\bigr)-\|\Delta_N\|_{\mathrm{op}},
+\]
+\[
+\lambda_{\min}\!\bigl(\mathbf T_N(\widetilde C)\bigr)
+\le \lambda_{\min}\!\bigl(\mathbf T_N(C)\bigr)+\|\Delta_N\|_{\mathrm{op}}.
+\]
+代入上界 \(\|\Delta_N\|_{\mathrm{op}}\le L_N(r)\varepsilon\) 即得两条结论。证毕。
+\end{proof}
+
+\begin{proposition}[尺度中心化账本的 Cholesky 释义：\texorpdfstring{$\eta_m$}{eta_m} 为归一化条件体积的对数密度]\label{prop:xi-centered-ledger-cholesky-conditional-volume-density}
+在统一伸缩流 \(\phi_m\) 下，Schur 补通量满足
+\[
+\pi_r(m)=m^{-1}\pi_r(1).
+\]
+定义尺度中心化增量
+\[
+\eta_r:=-\log\pi_r+V_\partial\qquad(1\le r\le\kappa),
+\]
+则 \(\eta_r(m)\equiv \eta_r(1)\)，且
+\[
+\sum_{r=1}^{\kappa}\eta_r=I_\partial
+\]
+为严格不变量。
+\par
+此外，若 \(\mathsf P\succ 0\) 且 \(\mathsf P=LL^\ast\) 为与点序一致的 Cholesky 分解，则
+\[
+L_{rr}^2=\pi_r\qquad(1\le r\le\kappa),
+\]
+从而
+\[
+\eta_r=-2\log L_{rr}+V_\partial.
+\]
+即 \(\eta_r\) 精确刻画第 \(r\) 步条件体积元相对边界势的归一化对数密度，并在统一伸缩下保持不变。
+\end{proposition}
+\begin{proof}
+伸缩律 \(\pi_r(m)=m^{-1}\pi_r(1)\) 见结论 \ref{con:xi-terminal-pick-poisson-schur-ledger-homothetic-scaling}；
+\(\eta_r\) 的尺度不变性与总和分解见结论 \ref{con:xi-terminal-pick-poisson-centered-ledger-invariants}。
+对 Cholesky 部分，由定理 \ref{thm:xi-schur-ledger-subprobability-offdiagonal-gap}(3) 有 \(\pi_r=|L_{rr}|^2\)。
+在正定情形可取 \(L_{rr}>0\)，故 \(L_{rr}^2=\pi_r\)，代入定义即得 \(\eta_r=-2\log L_{rr}+V_\partial\)。证毕。
+\end{proof}
+
+\begin{theorem}[Ward 型双线性递推的符号因子不可规约：\texorpdfstring{$(-1)^{\lfloor n/2\rfloor}$}{(-1)^{floor(n/2)} 为非平凡二阶扭结}]\label{thm:xi-ward-sign-factor-gauge-irreducible}
+沿用结论 \ref{con:xi-terminal-zm-elliptic-denominator-ward-bilinear-recurrence} 的分母序列 \((v_n)_{n\ge 0}\)：
+\[
+v_{n+2}v_{n-2}=29\,v_n^2+(-1)^{\lfloor n/2\rfloor}\,25\,v_{n+1}v_{n-1}\qquad(n\ge 2).
+\]
+不存在任意符号规约 \(\varepsilon_n\in\{\pm1\}\) 使
+\[
+u_n:=\varepsilon_n v_n
+\]
+满足无符号递推
+\[
+u_{n+2}u_{n-2}=29\,u_n^2+25\,u_{n+1}u_{n-1}\qquad(n\ge 2).
+\]
+换言之，因子 \((-1)^{\lfloor n/2\rfloor}\) 不能被逐项重定相消去。
+\end{theorem}
+\begin{proof}
+反设存在 \((\varepsilon_n)\) 使上述无符号递推成立。
+把 \(u_n=\varepsilon_n v_n\) 代入并与原递推逐项比较，得到对一切 \(n\ge 2\)
+\[
+\varepsilon_{n+2}\varepsilon_{n-2}=1,
+\qquad
+(-1)^{\lfloor n/2\rfloor}\varepsilon_{n+2}\varepsilon_{n-2}
+=\varepsilon_{n+1}\varepsilon_{n-1}.
+\]
+第一式给出 \(\varepsilon_{n+2}=\varepsilon_{n-2}\)，故 \((\varepsilon_n)\) 在模 \(4\) 意义下周期。
+令 \(e_j:=\varepsilon_j\)（\(j=0,1,2,3\)）。
+由第二式：
+\[
+n\equiv 0\pmod 4\ \Longrightarrow\ e_1e_3=+1,
+\]
+\[
+n\equiv 2\pmod 4\ \Longrightarrow\ e_1e_3=-1,
+\]
+矛盾。
+故不存在此类规约。证毕。
+\end{proof}
+
+\begin{corollary}[标准高度的二阶差分读出：分母增长率的可审计极限公式]\label{cor:xi-elliptic-denominator-second-difference-height-readout}
+在结论 \ref{con:xi-terminal-zm-elliptic-denominator-growth-nt-height} 的设定下，分母增长满足
+\[
+\log v_n=\hat h(P)\,n^2+o(n^2).
+\]
+若进一步记
+\[
+r_n:=\log v_n-\hat h(P)\,n^2
+\]
+并满足离散二阶可差分条件
+\[
+r_{n+1}+r_{n-1}-2r_n\to 0\qquad(n\to\infty),
+\]
+则有
+\[
+\lim_{n\to\infty}\Bigl(\log v_{n+1}+\log v_{n-1}-2\log v_n\Bigr)=2\hat h(P),
+\]
+等价地，
+\[
+\lim_{n\to\infty}\frac{v_{n+1}v_{n-1}}{v_n^2}=e^{2\hat h(P)}.
+\]
+因此 \(\hat h(P)\) 可由分母序列的离散二阶差分直接读出；结合定理 \ref{thm:xi-ward-sign-factor-gauge-irreducible}，该读出对符号规约保持刚性。
+\end{corollary}
+\begin{proof}
+由定义，
+\[
+\log v_n=\hat h(P)\,n^2+r_n.
+\]
+于是
+\[
+\log v_{n+1}+\log v_{n-1}-2\log v_n
+=\hat h(P)\bigl((n+1)^2+(n-1)^2-2n^2\bigr)
++(r_{n+1}+r_{n-1}-2r_n).
+\]
+由假设 \(r_{n+1}+r_{n-1}-2r_n\to 0\)，得
+\[
+\log v_{n+1}+\log v_{n-1}-2\log v_n\to 2\hat h(P).
+\]
+取极限即得第一式。
+第二式由指数化立即推出。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part47b-toeplitz-scale-holography-moment-partition}
+
+\endinput

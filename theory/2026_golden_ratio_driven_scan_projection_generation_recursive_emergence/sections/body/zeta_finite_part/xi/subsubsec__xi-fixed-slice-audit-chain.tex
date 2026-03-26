@@ -1,0 +1,139 @@
+\subsubsection{固定切片承载下的证书链闭合：有限前沿、缺陷账本与端点退化}\label{subsubsec:xi-fixed-slice-audit-chain}
+在 \S\ref{subsubsec:selfdual-blaschke-defect-fixed-slice} 中，本文已将“偏离固定切片的离散正交残差轴”严格化为圆盘因子分解中的 Blaschke 缺陷，并将其解释为最小 realization 的点谱残差。
+进一步地，\S\ref{subsubsec:xi-offslice-quantitative-indicators} 把离切片点状数据压缩为残差维数/残差权重，并给出原点模封装与实部偏差的精确求和律。
+本小节在同一“可审计演算学”口径下进一步抽取一组结构性结果：其核心并非在解析层直接追逐零点，而是在\emph{有限切片上的保守语义}与\emph{跨尺度缺陷泛函}之间建立闭合的、实现无关的证书链，并给出“平均—最坏”两端一致的组合化端点。
+
+\paragraph{有界切片、保守语义与代价预序}
+在本文的投影词演算中，有界复杂度切片 \(\mathbf{PW}^{\ast}_{\le}\)（定义 \ref{def:pom-bounded-slice}）由最小片段
+\(
+\mathbf{PW}^{\ast}=\langle E_m,\mathrm{PROJ}_u,\mathrm{LIFT}_G,\mathrm{TWIST}(\chi),\mathrm{MOM}_q\rangle
+\)
+在参数上界与有限采样网格内生成。
+切片上的可审计语义由保守函子
+\(
+\mathsf{Sem}:\mathbf{PW}^{\ast}_{\le}\to \mathbf{Sig}_{\le}\times\mathbf{Spec}_{\le}
+\)
+给出（定义 \ref{def:pom-sem-functor}；定理 \ref{thm:pom-sem-conservative}）。
+资源侧以热带半环 \(\mathbb{T}^{(2)}\) 上的点wise 预序为代价域，并以代价函子 \(\mathcal{C}:\mathbf{PW}\to\mathbf{Res}\) 把“编译型改写”的单调性固化为可核对证书（定义 \ref{def:pom-cost-functor}；注 \ref{rem:pom-cost-invariant-vs-monotone}）。
+
+\begin{theorem}[有界切片的有限前沿原理：证书搜索在每一分辨率上可收束为有限枚举]\label{thm:xi-finite-frontier-certificate}
+在定义 \ref{def:pom-bounded-slice} 的任意固定切片 \(\mathbf{PW}^{\ast}_{\le}\) 内，取保守语义函子 \(\mathsf{Sem}\)（定义 \ref{def:pom-sem-functor}）与任一代价函子 \(\mathcal{C}\)（定义 \ref{def:pom-cost-functor}）。
+则对任意投影词 \(w\in \mathbf{PW}^{\ast}_{\le}\)，其语义等价类
+\(
+[w]=\{w'\in\mathbf{PW}^{\ast}_{\le}:w'\simeq w\}
+\)
+在代价域中的像 \(\mathcal{C}([w])\subseteq \mathbb{T}^{(2)}\) 具有有限帕累托前沿，并可由有限枚举构造。
+因此，任何以“接口正规形参数—异常签名—谱指纹”为核对输出的证书目标（包括 \(\zeta\)/primitive/有限部常数的抽取目标），在每一固定分辨率层级上必然退化为有限枚举与有限核对；其困难被严格集中到“切片上界随分辨率如何增长”的数学问题，而与实现细节无关。
+\end{theorem}
+
+\begin{proof}
+由 \(\mathsf{Sem}\) 的切片保守性（定理 \ref{thm:pom-sem-conservative}）与“有界切片上帕累托前沿有限且可由枚举构造”的命题 \ref{prop:pom-cost-optimization-decidable} 直接推出。
+\end{proof}
+
+\begin{theorem}[切片枚举边界不存在可计算增长律]\label{thm:xi-no-computable-slice-bound-for-semantic-equivalence}
+不存在可计算函数 \(B:\NN\to\NN\) 具有如下性质：对任意可计算对象族 \(\mathcal A\) 中的任意两实例 \(A,B\)（其描述长度至多为 \(n\)），语义等价判定 \(A\equiv B\) 都可仅通过枚举并核对切片 \(\mathbf{PW}^{\ast}_{\le B(n)}\) 内的证书链而保证在有限步内终止并给出正确结论。
+\end{theorem}
+
+\begin{proof}
+反设存在这样的可计算 \(B\)。
+给定输入规模 \(n\) 的两实例 \(A,B\)，先计算 \(B(n)\)。
+由定理 \ref{thm:xi-finite-frontier-certificate}，在固定切片 \(\mathbf{PW}^{\ast}_{\le B(n)}\) 内，对任意候选投影词的语义等价类，其代价前沿可由有限枚举构造并可终止核对。
+于是可据此得到一个对任意输入都停机的语义等价判定程序。
+这与定理 \ref{thm:conclusion-semantic-equivalence-undecidable} 的不可判定性矛盾。证毕。
+\end{proof}
+
+定理 \ref{thm:xi-finite-frontier-certificate} 的“有限枚举收束”与 \S\ref{subsec:dephysicalized-horizon-timefiber-nohair} 中的离散曲率归约（定理 \ref{thm:dephys-offline-hair-curvature-reduction}）同型：在每一分辨率层级，将异常曲率 strictification（或其支撑最小化）视为证书化重写的目标时，均可在语义桶内以 \(\mathbb{T}^{(2)}\) 的帕累托极小实现表示，并因而可被有限搜索完全覆盖。
+
+\begin{theorem}[\texorpdfstring{$\zeta$}{zeta}-接口的可审计唯一化：迹 \texorpdfstring{$\to$}{->} primitive \texorpdfstring{$\to$}{->} Euler/\texorpdfstring{$\zeta$}{zeta} \texorpdfstring{$\to$}{->} 有限部的固定编译目标]\label{thm:xi-zeta-interface-auditable-uniqueness}
+在两变量 \(\zeta_K(z,u)\) 的行列式/迹口径下（定义 \ref{def:zetaK-zu}），迹序列、primitive 分层谱与 Euler 乘积之间存在严格交换的桥包（命题 \ref{prop:zetaK-mobius-primitive}；注 \ref{rem:zetaK-commuting-diagram}）。
+在有界切片内，任意投影词可规约到接口正规形（命题 \ref{prop:pom-three-gen-interface-normal-form}、命题 \ref{prop:pom-mom-interface-normal-form}），从而把“迹 \(\to\) primitive \(\to\) Euler/\(\zeta\)”以及由 \(\zeta\) 导出的有限部指纹（例如 Abel 有限部常数 \(\log\mathfrak{M}(\theta)\)，见附录 \ref{app:real-input-40-logm-theta}）固定为可复算不变量族。
+因而在“exact 判等交给签名 \(\times\) 谱输出”的口径下，若两实现经正规化后在该指纹族上一致，则其差异只能落入保持语义而允许代价单调改变的编译类改写（注 \ref{rem:pom-cost-invariant-vs-monotone}），而不可能改变 \(\zeta\)/有限部层面的结论。
+\end{theorem}
+
+\begin{proof}
+接口正规形将候选实现收束为切片内的有限可枚举族（命题 \ref{prop:pom-three-gen-interface-normal-form}、\ref{prop:pom-mom-interface-normal-form}；并见推论 \ref{cor:pom-three-gen-normal-form-decidable}）。
+而注 \ref{rem:zetaK-commuting-diagram} 表明：在有限核口径下，\(\zeta\) 及其 Euler/primitive 展开严格由迹序列决定。
+结合切片保守性（定理 \ref{thm:pom-sem-conservative}）与代价函子对编译改写的单调证书化（定义 \ref{def:pom-cost-functor}），结论成立。
+\end{proof}
+
+\begin{corollary}[有限骨架唯一性（审计版）：Dirichlet 有限层闭包 \texorpdfstring{$+$}{+} 最大 strictification 商 \texorpdfstring{$+$}{+} Dwork 整性]\label{cor:xi-finite-skeleton-euler-uniqueness}
+在定理 \ref{thm:xi-zeta-interface-auditable-uniqueness} 的“接口指纹一致 \(\Rightarrow\) \(\zeta\)/Euler/有限部结论一致”口径下，
+对任一固定的有界切片审计任务（有限参数网格、有限截断阶与有限误差门槛），其所需的核对数据可被严格压缩为一组\emph{有限骨架}：
+\begin{enumerate}
+  \item \textbf{（Dirichlet 端：有限层闭包）}任一有限实现对 Dirichlet/同余轴束的依赖在某个有限层 \(m_\ast\) 上闭合，因此“全角色扫描/最坏通道”的核验可归约为对有限集合 \(\widehat{G_{m_\ast}}\) 的穷举（命题 \ref{prop:pom-finite-modulus-stability}；推论 \ref{cor:pom-local-finite-dirichlet-action}）；
+  \item \textbf{（strictification 端：最大可见商）}在闭环接口意义下的严格交换可由普适 strictification 商 \(G\twoheadrightarrow G^{\mathrm{BC}}_{m}\) 实现，并且任意能严格交换的群商必唯一因子化通过该商（命题 \ref{prop:pom-bc-quotient-strictify}、\ref{prop:pom-bc-quotient-universal}）；
+  \item \textbf{（\(p\)-进端：局部因子整性闭合）}核版 Dwork 引理给出局部 \(p\)-因子在 \(1+T\,\ZZ_p[u][[T]]\) 内的 \(p\)-典型整性闭合（定理 \ref{thm:witt-dwork-zp-integrality}），从而在给定精度门槛下局部数据可由有限模 \(p^k\) 证书完全核验。
+\end{enumerate}
+因此，在允许纯常数 counterterm 对齐有限部漂移的审计等价关系下，
+若两条实现链在上述有限骨架上给出一致的可见输出（含严格化规范）并在 Euler 补丁的同一截断/误差口径下通过核对，
+则其诱导的 Euler 乘积（从而 bounded-type 内函数 \(D\)）在审计等价意义下唯一确定；差异只能表现为整体相位常数（可通过端点/高能归一化固定）。
+\end{corollary}
+\begin{proof}
+第 (1)–(3) 点分别为所引结果的直接重述。
+将其与定理 \ref{thm:xi-zeta-interface-auditable-uniqueness} 的“指纹一致 \(\Rightarrow\) \(\zeta\)/Euler/有限部不变量族一致”合并，即得有限骨架核验足以固定审计输出；整体相位常数的剩余自由度由常见归一化（例如散射/端点归一化）消去。证毕。
+\end{proof}
+
+\begin{theorem}[不可见容量的唯一承载：窗口缺陷 \texorpdfstring{$\kappa_m$}{kappa_m} 的精确熵账本]\label{thm:xi-kappa-unique-carrier}
+固定分辨率 \(m\ge 1\) 与折叠读出 \(\Fold_m:\Omega_m\to X_m\)，并令纤维多重度为 \(d_m(x)=|\Fold_m^{-1}(x)|\)。
+对任意宏观边缘分布 \(\pi\in\Delta(X_m)\)，定义不可见容量
+\[
+\kappa_m(\pi):=\mathbb{E}_{\pi}[\log d_m(X)]
+\]
+（定义 \ref{def:pom-kappa}）。
+在 unitary slice 的可见域约束与 \(\mathbf{PW}\) 闭包类型约束下（定义 \ref{def:xi-visible-read-null}），若拒绝外置额外记录轴，则折叠纤维内部标签在可见语义中无地址；此时对固定 \(\pi\)，任何实现所能“压掉”的最大信息量恰等于 \(\kappa_m(\pi)\)，且该量可由熵账本恒等式在完全不依赖实现细节的意义下复算。
+\end{theorem}
+
+\begin{proof}
+该结论是定理 \ref{thm:xi-null-fiber-entropy-window} 的直接重述：在固定宏观 \(\pi\) 下微观熵窗宽严格等于 \(\kappa_m(\pi)\)，并由精确 KL 账本恒等式给出实现无关的复算口径。
+\end{proof}
+
+\begin{theorem}[跨尺度缺陷同型：窗口缺陷与轨道有限部的统一接口]\label{thm:xi-defect-window-orbit-bridge}
+在 \(\zeta\)-接口的“迹 \(\to\) primitive \(\to\) Euler”严格交换桥包（注 \ref{rem:zetaK-commuting-diagram}）之上，纤维反射子 \(K_m\) 给出一个可审计的“反射压缩”接口：对任意微观算子 \(T\) 的稳定层压缩 \(\overline T_m=P_mTQ_m\) 与反射后可见部分 \(T_m^{\mathrm{aud}}=K_mTK_m\) 具有一致的非零谱与一致的迹序列（注 \ref{rem:reflected-witt-euler-bridge}）。
+因此：
+\begin{enumerate}
+  \item \textbf{（交换桥包）}
+  任何由迹序列函子性导出的 \(\zeta\)/primitive/Euler 指纹，在反射压缩接口下保持不变；
+  \item \textbf{（有限部指纹的实现无关性）}
+  Abel 有限部常数 \(\log\mathfrak{M}(\theta)\) 是 \(\zeta_\theta\) 的函子性有限部输出（附录 \ref{app:real-input-40-logm-theta}；并见 \S\ref{subsec:logM-analyticity}），故在迹序列一致的意义下其输出在可审计口径下同型；
+  \item \textbf{（缺陷的可核对承载）}
+  因而“隐藏自由度”若要跨尺度存续并影响审计结论，必须表现为窗口端的不可见容量 \(\kappa_m\) 或轨道端的有限部指纹 \(\log\mathfrak{M}(\theta)\) 的可核对偏移；若二者均不变，则该自由度在切片语义中被反射压缩所吸收，不能作为实现细节隐蔽进入可审计输出。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+第 (1) 点由注 \ref{rem:reflected-witt-euler-bridge} 给出的迹序列保持与注 \ref{rem:zetaK-commuting-diagram} 的严格交换性合成得到。
+第 (2) 点由 \(\log\mathfrak{M}(\theta)\) 的定义式（附录 \ref{app:real-input-40-logm-theta}）及其在有限维口径下作为 \(\zeta_\theta\) 的有限部输出的函子性推出。
+第 (3) 点是前两点与“拒绝外置记录轴 \(\Rightarrow\) 纤维内部标签无地址”的 \(\mathsf{NULL}\) 语义（定理 \ref{thm:xi-null-fiber-entropy-window} 的解释口径）之合并推论。
+\end{proof}
+
+\begin{theorem}[零温可比性：热带化端点将平均语义强制退化为 min-plus 组合本征值]\label{thm:xi-zero-temp-comparability}
+沿温度化序投影 \(\mathrm{PROJ}_u\) 的矩阵实现，对带势核的加权邻接矩阵 \(M_E(u)\) 取热带化代价
+\(
+c_{\mathrm{trop}}(E)=\lim_{u\downarrow 0}\frac{\log\rho(M_E(u))}{\log u}
+\)
+（定义 \ref{def:pom-proj-tropical-cost}）。
+则在有限图核与非负整数边势的设定下，零温极限存在且满足
+\[
+c_{\mathrm{trop}}(E)=\min_{\gamma\ \mathrm{cycle}}\frac{E(\gamma)}{|\gamma|}
+\]
+（命题 \ref{prop:pom-proj-tropical-minmean}）。
+因此，任何以 Perron 根/谱半径为谱指纹的审计链在 \(u\downarrow 0\) 极限中均存在组合化退化：其主尺度斜率被 \(c_{\mathrm{trop}}(E)\) 钉死，从而把“平均—最坏”的比较语义在端点处统一到可多项式时间核验的组合不变量。
+\end{theorem}
+
+\begin{proof}
+命题 \ref{prop:pom-proj-tropical-minmean} 给出热带化极限的存在性与 min-mean-cycle 表达；其“平均—最坏”的统一解释由注 \ref{rem:pom-proj-avg-worst-unified} 直接给出。
+\end{proof}
+
+\begin{theorem}[二维前沿与硬化时间下界：由联合速率函数给出不可绕过的资源刚性]\label{thm:xi-hardening-time-frontier-rigidity}
+在混合压力 \(\Psi(q,u)\) 的口径下（定义 \ref{def:pom-psi-mixed-pressure}），二维 Legendre--Fenchel 变换给出空间--能量联合谱前沿（速率函数）\(I(\gamma,\mathcal{E})\)（注 \ref{rem:pom-psi-2d-legendre-front}）。
+若序门读出采用扭曲谱隙刻度 \(\Gamma(u)=\log(\lambda_1(u)/\Lambda(u))\)（推论 \ref{cor:pom-pressure-delay-lower-bound}），并令分辨率 \(m\) 上的失败概率预算满足 \(\varepsilon_m\le e^{-\alpha m}\)，则把“软序门 \(\Rightarrow\) 硬序门”的硬化视为审计链的必要步骤时，其最小迭代深度满足线性下界
+\[
+n_{\min}(m)\ \gtrsim\ \frac{\log(1/\varepsilon_m)}{\Gamma(u)}\ \ge\ \frac{\alpha}{\Gamma(u)}\,m,
+\]
+并且当 \(\alpha\) 可由速率函数前沿给出（例如取 \(\alpha=I(\gamma,\mathcal{E})\)）时，该最小时间增长被联合谱前沿刚性约束。
+\end{theorem}
+
+\begin{proof}
+该结论即推论 \ref{cor:pom-pressure-delay-lower-bound} 的“前沿驱动”重述；其中 \(\alpha\) 与速率函数 \(I\) 的联系由注 \ref{rem:pom-psi-2d-legendre-front} 给出。
+\end{proof}
+

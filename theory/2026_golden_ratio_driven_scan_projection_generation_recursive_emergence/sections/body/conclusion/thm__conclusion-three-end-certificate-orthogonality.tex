@@ -1,0 +1,32 @@
+\begin{proposition}[三端证书语义的正交分裂与不可补偿性]\label{prop:conclusion-three-end-certificate-orthogonality}
+设
+\[
+\mathfrak C_{\mathrm{addr}},\qquad
+\mathfrak C_{\mathrm{def}},\qquad
+\mathfrak C_{\mathrm{lin}}
+\]
+分别表示地址端、缺陷端与线性代数端证书对象类。则任何与 \(\mathrm{Read}_{\mathrm{US}}\) 的 typed semantics、\(\mathsf{NULL}\) 的三分解以及盲区预算协议相容的 sound offline verifier，必经由积范畴
+\[
+\mathfrak C_{\mathrm{addr}}\times \mathfrak C_{\mathrm{def}}\times \mathfrak C_{\mathrm{lin}}
+\]
+因子化。
+
+并且三条证书轴上的阈值失败彼此正交：任一轴上的预算提升，都不能替代另一轴上的修复。
+\end{proposition}
+\begin{proof}
+首先，主文与结论链已经把离线核验所允许调用的对象压缩为三类互异证书。
+
+地址端证书由 typed 读出与显式前缀制度给出；在该制度下，若可寻址前缀未被外置，则对象层读出不定义并返回 \(\mathsf{NULL}\)。这一点在定理 \ref{thm:conclusion-comoving-address-endpoint-budget-transfer} 中已被表述为端点预算向地址前缀的制度性转移。
+
+缺陷端证书由协议型 \(\mathsf{NULL}\)、Čech 粘合障碍与 Beck--Chevalley 缺陷给出。定理 \ref{thm:conclusion-relative-homology-corank-protocol-null} 与定理 \ref{thm:conclusion-screen-linear-readout-null-trichotomy-collapse} 把 typed \(\mathsf{NULL}\) 的三分解压到相对亏秩与纤维基数上；而定理 \ref{thm:conclusion-observer-holonomy-exact-cohomological-splitting} 与定理 \ref{thm:conclusion-bc-curvature-no-cancellation} 又说明，cohomological 异常与 Beck--Chevalley 曲率不能在闭链或层级求和中被其他方向抵消。
+
+线性代数端证书则由 Toeplitz--PSD、端点热核探针与完全正可见实现组成。定理 \ref{thm:conclusion-toeplitz-gauge-blindness-zero-dimensional-ledger-necessity} 已表明，该端只能恢复其自身可见的负几何与正性层级，而对外加 strictification 账本严格失明；因此它不能代替地址端或缺陷端的外置数据。
+
+于是，任何 sound verifier 若要与上述 typed semantics 和预算协议相容，就必须把输入首先拆成这三类对象，再在其乘积上作判定；亦即它必经由
+\[
+\mathfrak C_{\mathrm{addr}}\times \mathfrak C_{\mathrm{def}}\times \mathfrak C_{\mathrm{lin}}
+\]
+因子化。
+
+最后证明不可补偿性。地址预算只能消去地址未定所导致的 \(\mathsf{NULL}\)，不能消去 \([\alpha]\neq 0\) 或 \( \mathcal E_i>0\) 所代表的缺陷端失败；缺陷端的补救也不能替代 Toeplitz--PSD 或端点热核证书中的正性/谱学门槛；而线性代数端的任何加深核验又无法补足被 typed 制度排除的隐藏前缀与 cohomological 粘合数据。主文在盲区预算协议中已把这种“异轴失败不可由同层预算跨补”写成最小联合充分条件的分裂形式。故三轴阈值失败在语义上彼此正交，任一轴上的预算提升都不能替代另一轴上的修复。证毕。
+\end{proof}

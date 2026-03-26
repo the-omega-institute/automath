@@ -1,0 +1,473 @@
+\subsection{预言机容量包络、bin-fold 相图与判别常数}
+
+附录 \ref{subsubsec:fold-fiber-groundstate-freezing-oracle-capacity} 已分别给出预言机容量的闭式表达、容量--尾函数等价与矩谱的 Mellin--Stieltjes 表达；附录 \ref{app:fold-multiplicity} 则已建立 bin-fold 的两态一致渐近、线性预算阈值与临界舍入行为。把这些接口重新拼接后，还可压缩出下列几条互补的派生后果。
+
+\begin{theorem}[预言机容量指数的矩谱上包络与冻结下支]\label{thm:derived-oracle-capacity-moment-envelope}
+沿用定理 \ref{thm:fold-oracle-capacity-closed-form}、命题 \ref{prop:fold-capacity-tail-equivalence} 与命题 \ref{prop:fold-moment-mellin-stieltjes} 的记号。对 \(q\in(0,1]\) 定义
+\[
+P^{+}(q):=\limsup_{m\to\infty}\frac1m\log S_q(m),
+\]
+并对 \(\beta\ge 0\) 定义离散容量指数
+\[
+\Gamma(\beta):=\limsup_{m\to\infty}\frac1m\log \mathcal C_m(\lfloor \beta m\rfloor).
+\]
+若再设
+\[
+\alpha_*:=\lim_{m\to\infty}\frac1m\log M_m,
+\qquad
+g_*:=\lim_{m\to\infty}\frac1m\log K_m
+\]
+存在，则有双侧夹逼
+\[
+\boxed{\;
+g_*+\min\{\alpha_*,\beta\log 2\}
+\le
+\Gamma(\beta)
+\le
+\inf_{0<q\le 1}\Bigl(P^{+}(q)+(1-q)\beta\log 2\Bigr).\;}
+\]
+\end{theorem}
+\begin{proof}
+对任意 \(d,T>0\) 与 \(0<q\le 1\)，恒有
+\[
+\min(d,T)\le d^qT^{1-q}.
+\]
+确实，若 \(d\le T\)，则
+\(
+\min(d,T)=d=d^qd^{1-q}\le d^qT^{1-q}
+\)；
+若 \(d\ge T\)，则
+\(
+\min(d,T)=T=T^qT^{1-q}\le d^qT^{1-q}
+\)。
+
+于是对任意 \(m\) 都有
+\[
+\mathcal C_m(\lfloor \beta m\rfloor)
+=
+\sum_{x\in X_m}\min\bigl(d_m(x),2^{\lfloor \beta m\rfloor}\bigr)
+\le
+2^{(1-q)\lfloor \beta m\rfloor}\sum_{x\in X_m}d_m(x)^q
+=
+2^{(1-q)\lfloor \beta m\rfloor}S_q(m).
+\]
+取对数、除以 \(m\)、再取 \(\limsup\)，得到
+\[
+\Gamma(\beta)\le P^{+}(q)+(1-q)\beta\log 2.
+\]
+对 \(q\in(0,1]\) 取下确界即得上界。
+
+另一方面，由最大纤维层的逐项贡献，
+\[
+\mathcal C_m(\lfloor \beta m\rfloor)\ge K_m\min\bigl(M_m,2^{\lfloor \beta m\rfloor}\bigr).
+\]
+由于
+\[
+\frac1m\log \min\bigl(M_m,2^{\lfloor \beta m\rfloor}\bigr)
+=
+\min\!\left\{\frac1m\log M_m,\frac{\lfloor \beta m\rfloor}{m}\log 2\right\}
+\longrightarrow
+\min\{\alpha_*,\beta\log 2\},
+\]
+故
+\[
+\Gamma(\beta)\ge g_*+\min\{\alpha_*,\beta\log 2\}.
+\]
+证毕。
+\end{proof}
+
+\begin{remark}[冻结基态与分数矩的双包络]\label{rem:derived-oracle-capacity-moment-envelope}
+定理 \ref{thm:derived-oracle-capacity-moment-envelope} 把离散预算下的容量指数夹在两条彼此独立的控制机制之间：下支由最大纤维层的冻结数据 \((\alpha_*,g_*)\) 强制，上支则由全部分数矩 \(S_q(m)\) 的指数增长率给出。因而预言机容量不再只是尾谱或最大纤维的单轴读出，而成为“冻结基态--分数矩”之间的一条变分包络。
+\end{remark}
+
+\begin{theorem}[bin-fold 预言机容量的精确指数相图]\label{thm:derived-binfold-oracle-capacity-phase-diagram}
+在 bin-fold 口径下，记
+\[
+\mathcal C_m^{\mathrm{bin}}(B):=\sum_{w\in X_m}\min\bigl(d_m^{\mathrm{bin}}(w),2^B\bigr),
+\qquad
+\mathrm{Succ}^{\mathrm{bin}}_m(B):=\frac{\mathcal C_m^{\mathrm{bin}}(B)}{2^m},
+\]
+并定义临界位率
+\[
+\beta_c:=\log_2\!\Bigl(\frac{2}{\varphi}\Bigr).
+\]
+再令
+\[
+\Gamma_{\mathrm{bin}}(\beta):=
+\lim_{m\to\infty}\frac1m\log \mathcal C_m^{\mathrm{bin}}(\lfloor \beta m\rfloor).
+\]
+则该极限存在，且满足显式相图
+\[
+\boxed{
+\Gamma_{\mathrm{bin}}(\beta)=
+\begin{cases}
+\log\varphi+\beta\log 2, & 0\le \beta\le \beta_c,\\[2mm]
+\log 2, & \beta\ge \beta_c.
+\end{cases}}
+\]
+等价地，
+\[
+\boxed{
+\lim_{m\to\infty}\frac1m\log \mathrm{Succ}^{\mathrm{bin}}_m(\lfloor \beta m\rfloor)
+=
+\begin{cases}
+-(\beta_c-\beta)\log 2, & 0\le \beta\le \beta_c,\\[2mm]
+0, & \beta\ge \beta_c.
+\end{cases}}
+\]
+\end{theorem}
+\begin{proof}
+由恒等式
+\[
+\mathcal C_m^{\mathrm{bin}}(B)=2^m\,\mathrm{Succ}^{\mathrm{bin}}_m(B)
+\]
+可把容量指数与成功率指数互相转化。
+
+若 \(0\le \beta<\beta_c\)，则定理 \ref{thm:fold-bin-oracle-linear-threshold-exponent} 给出
+\[
+\lim_{m\to\infty}\frac1m\log_2 \mathrm{Succ}^{\mathrm{bin}}_m(\lfloor \beta m\rfloor)
+=
+\beta-\beta_c.
+\]
+故
+\[
+\lim_{m\to\infty}\frac1m\log \mathrm{Succ}^{\mathrm{bin}}_m(\lfloor \beta m\rfloor)
+=
+(\beta-\beta_c)\log 2
+=
+-(\beta_c-\beta)\log 2.
+\]
+于是
+\[
+\Gamma_{\mathrm{bin}}(\beta)
+=
+\log 2+(\beta-\beta_c)\log 2
+=
+\log\varphi+\beta\log 2,
+\]
+其中最后一步用到 \(\beta_c\log 2=\log(2/\varphi)\)。
+
+若 \(\beta>\beta_c\)，同一定理给出
+\(
+\mathrm{Succ}^{\mathrm{bin}}_m(\lfloor \beta m\rfloor)=1
+\)
+对充分大 \(m\) 成立，从而
+\[
+\Gamma_{\mathrm{bin}}(\beta)=\log 2,
+\qquad
+\lim_{m\to\infty}\frac1m\log \mathrm{Succ}^{\mathrm{bin}}_m(\lfloor \beta m\rfloor)=0.
+\]
+
+若 \(\beta=\beta_c\)，则定理 \ref{thm:fold-bin-critical-rounding-logperiodic} 表明
+\(
+\mathrm{Succ}^{\mathrm{bin}}_m(\lfloor \beta_c m\rfloor)
+\)
+虽不收敛，但其全部子列极限均落在闭区间
+\[
+\left[\frac{\varphi^2}{2\sqrt5},\,1\right].
+\]
+因此存在常数 \(c_0>0\) 使对充分大 \(m\) 有
+\[
+c_0\le \mathrm{Succ}^{\mathrm{bin}}_m(\lfloor \beta_c m\rfloor)\le 1.
+\]
+两端取 \(\frac1m\log\) 并令 \(m\to\infty\)，得到
+\[
+\lim_{m\to\infty}\frac1m\log \mathrm{Succ}^{\mathrm{bin}}_m(\lfloor \beta_c m\rfloor)=0.
+\]
+故
+\[
+\Gamma_{\mathrm{bin}}(\beta_c)=\log 2.
+\]
+综上即得所示分段公式。证毕。
+\end{proof}
+
+\begin{corollary}[bin-fold 推前分布相对均匀基线的 TV/Bayes 常数]\label{cor:derived-binfold-tv-bayes-constants}
+沿用定理 \ref{thm:xi-foldbin-pushforward-uniform-two-atom-ledger} 的记号，令 \(p_m^{\mathrm{bin}}\) 为 bin-fold 推前分布，\(u_m\) 为稳定层均匀分布，并定义
+\[
+P_e^\star(p,u):=\frac12\sum_{w}\min\{p(w),u(w)\}.
+\]
+则有极限常数
+\[
+\boxed{\;
+\lim_{m\to\infty}D_{\mathrm{TV}}\bigl(p_m^{\mathrm{bin}}\Vert u_m\bigr)
+=
+1-\frac{2}{\sqrt5},
+\qquad
+\lim_{m\to\infty}P_e^\star\bigl(p_m^{\mathrm{bin}},u_m\bigr)
+=
+\frac1{\sqrt5}.\;}
+\]
+并且两式误差均为 \(O((\varphi/2)^m)\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-foldbin-pushforward-uniform-two-atom-ledger}，
+\[
+D_{\mathrm{TV}}\bigl(p_m^{\mathrm{bin}}\Vert u_m\bigr)
+=
+\frac12\Bigl(\frac1{\sqrt5}-\varphi^{-3}\Bigr)
++O\!\bigl((\varphi/2)^m\bigr).
+\]
+又因 \(\varphi^{-3}=\sqrt5-2\)，故
+\[
+\frac12\Bigl(\frac1{\sqrt5}-\varphi^{-3}\Bigr)
+=
+\frac12\Bigl(\frac1{\sqrt5}-\sqrt5+2\Bigr)
+=
+1-\frac{2}{\sqrt5}.
+\]
+这就得到总变差极限。
+
+另一方面，对任意有限分布 \(p,u\) 都有恒等式
+\[
+\sum_w \min\{p(w),u(w)\}=1-D_{\mathrm{TV}}(p\Vert u),
+\]
+因为
+\[
+\sum_w \max\{p(w),u(w)\}=1+D_{\mathrm{TV}}(p\Vert u),
+\]
+而 \(\min+\max=p+u\) 逐点相加后总和为 \(2\)。因此
+\[
+P_e^\star(p,u)=\frac12\bigl(1-D_{\mathrm{TV}}(p\Vert u)\bigr).
+\]
+将上式应用于 \((p,u)=\bigl(p_m^{\mathrm{bin}},u_m\bigr)\) 并代入前述极限，得到
+\[
+\lim_{m\to\infty}P_e^\star\bigl(p_m^{\mathrm{bin}},u_m\bigr)
+=
+\frac12\left(1-1+\frac{2}{\sqrt5}\right)
+=
+\frac1{\sqrt5}.
+\]
+误差阶同样由总变差误差直接传递。证毕。
+\end{proof}
+
+同一两态机制还允许把 bin-fold 推前下的对数纤维指数偏差与 escort 温度几何同时压缩到单比特极限对象上。
+
+\begin{theorem}[bin-fold 尺度化对数纤维指数的二点极限律]\label{thm:derived-binfold-logfiber-two-point-law}
+沿用推论 \ref{cor:fold-bin-two-point-limit-law} 与定理 \ref{thm:fold-bin-renyi-rate-collapse} 的记号，令
+\[
+W_m\sim \mu_m,
+\qquad
+\gamma_m:=\frac1m\log d_m^{\mathrm{bin}}(W_m),
+\qquad
+Y_m:=m\left(\log\frac{2}{\varphi}-\gamma_m\right).
+\]
+则 \(Y_m\) 依分布收敛到两点随机变量 \(Y\)：
+\[
+\mathbb P(Y=0)=\frac{\varphi}{\sqrt5},
+\qquad
+\mathbb P(Y=\log\varphi)=\frac{1}{\varphi\sqrt5}.
+\]
+等价地，对任意 \(t\in \mathbb R\)，其矩母函数满足
+\[
+\lim_{m\to\infty}\mathbb E[e^{tY_m}]
+=
+\frac{\varphi+\varphi^{t-1}}{\sqrt5}.
+\]
+\end{theorem}
+\begin{proof}
+记
+\[
+Z_m:=\left(\frac{\varphi}{2}\right)^m d_m^{\mathrm{bin}}(W_m).
+\]
+则由定义
+\[
+Y_m
+=
+m\log\frac{2}{\varphi}-\log d_m^{\mathrm{bin}}(W_m)
+=
+-\log Z_m.
+\]
+推论 \ref{cor:fold-bin-two-point-limit-law} 给出
+\[
+Z_m\Longrightarrow Z,
+\qquad
+\mathbb P(Z=1)=\frac{\varphi}{\sqrt5},
+\qquad
+\mathbb P(Z=\varphi^{-1})=\frac{1}{\varphi\sqrt5}.
+\]
+另一方面，由定理 \ref{thm:fold-bin-two-state-asymptotic} 的一致展开，
+\[
+Z_m=\varphi^{-W_m(m)}+O\!\left(\left(\frac{\varphi}{2}\right)^m\right),
+\]
+故当 \(m\) 充分大时有
+\[
+Z_m\in \left[\frac{1}{2\varphi},\,2\right]
+\]
+几乎处处成立。于是映射 \(z\mapsto -\log z\) 在该紧区间上连续，连续映射定理给出
+\[
+Y_m=-\log Z_m\Longrightarrow -\log Z.
+\]
+而 \(-\log Z\) 正取值于 \(\{0,\log\varphi\}\)，且继承上述两点概率。
+
+再对任意固定 \(t\in\mathbb R\)，函数 \(z\mapsto z^{-t}\) 在 \([1/(2\varphi),2]\) 上有界连续，故
+\[
+\lim_{m\to\infty}\mathbb E[e^{tY_m}]
+=
+\lim_{m\to\infty}\mathbb E[Z_m^{-t}]
+=
+\mathbb E[Z^{-t}]
+=
+\frac{\varphi}{\sqrt5}
++\frac{1}{\varphi\sqrt5}\varphi^t
+=
+\frac{\varphi+\varphi^{t-1}}{\sqrt5}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[escort 温度族的 \texorpdfstring{$f$}{f}-散度塌缩与 Bernoulli 指数族刚性]\label{thm:derived-binfold-escort-fdiv-bernoulli-exponential-family}
+设 \(f:(0,\infty)\to \mathbb R\) 连续且凸，并满足 \(f(1)=0\)。对 \(p,q\ge 0\) 记
+\[
+D_f(P\Vert Q):=\sum_x Q(x)\,f\!\left(\frac{P(x)}{Q(x)}\right),
+\qquad
+\nu_q:=\mathrm{Bernoulli}(\theta(q)),
+\qquad
+\theta(q):=\frac{1}{1+\varphi^{q+1}}.
+\]
+则
+\[
+\lim_{m\to\infty}D_f(\pi_{m,q}\Vert \pi_{m,p})
+=
+D_f(\nu_q\Vert \nu_p)
+=
+\bigl(1-\theta(p)\bigr)
+f\!\left(\frac{1-\theta(q)}{1-\theta(p)}\right)
++\theta(p)
+f\!\left(\frac{\theta(q)}{\theta(p)}\right).
+\]
+并且
+\[
+\frac{\theta(q)}{1-\theta(q)}=\varphi^{-(q+1)},
+\]
+\[
+\nu_q(\{b\})
+=
+\exp\!\Bigl(\eta(q)\,b-\log\bigl(1+e^{\eta(q)}\bigr)\Bigr)
+\qquad (b\in\{0,1\}),
+\]
+其中
+\[
+\eta(q):=-(q+1)\log\varphi.
+\]
+因此 \(\{\nu_q:q\ge 0\}\) 构成严格的一参数指数族，escort 温度族的渐近信息几何完全由这一 Bernoulli 模型支配。
+\end{theorem}
+\begin{proof}
+第一条等式正是结论 \ref{con:xi-time-part9o-escort-fdiv-collapse} 的内容。故只需验证指数族表述。
+
+由
+\[
+\theta(q)=\frac{1}{1+\varphi^{q+1}}
+\]
+直接计算得
+\[
+\frac{\theta(q)}{1-\theta(q)}=\varphi^{-(q+1)}=e^{\eta(q)}.
+\]
+于是对 \(b\in\{0,1\}\)，Bernoulli 质量函数可写成
+\[
+\nu_q(\{b\})
+=
+\frac{e^{\eta(q)b}}{1+e^{\eta(q)}}
+=
+\exp\!\Bigl(\eta(q)\,b-\log\bigl(1+e^{\eta(q)}\bigr)\Bigr).
+\]
+由于 \(q\mapsto \eta(q)=-(q+1)\log\varphi\) 是斜率非零的仿射函数，参数 \(q\) 与自然参数 \(\eta\) 一一对应，从而 \(\{\nu_q:q\ge 0\}\) 是严格的一参数指数族。证毕。
+\end{proof}
+
+\subsection{实参数射影压力的凸包控制}
+
+附录 \ref{app:pom-projective-pressure-operator} 与正文的 moment-kernel 接口已经把整数 \(q\) 的离散谱数据嵌入到连续射影压力曲线中。把路径展开与谱半径比较再压缩一步，可得到一条可直接用于审计整数锚点表的凸包判据。
+
+\begin{theorem}[射影压力的路径级 log-凸性与离散压力凸包]\label{thm:derived-projective-pressure-logconvex-convex-hull}
+沿用定义 \ref{def:pom-projective-transfer-operator} 的记号。对 \(n\ge 1\)、\(w\in\Delta\) 与 \(q\ge 1\) 定义
+\[
+Z_n(q,w):=(\mathcal L_q^n\mathbf 1)(w),
+\qquad
+\tau_n(q):=\log\sup_{w\in\Delta}Z_n(q,w),
+\qquad
+\tau(q):=\limsup_{n\to\infty}\frac1n\tau_n(q).
+\]
+则有：
+\begin{enumerate}
+  \item 对每个固定 \(n\ge 1\) 与 \(w\in\Delta\)，函数 \(q\mapsto Z_n(q,w)\) 在 \([1,\infty)\) 上 log-凸；
+  \item 因而 \(\tau_n\) 与 \(\tau\) 都是凸函数；
+  \item 对任意 \(q_0,q_1\ge 1\)、\(\theta\in[0,1]\) 及
+  \[
+  q=(1-\theta)q_0+\theta q_1,
+  \]
+  有
+  \[
+  \tau(q)\le (1-\theta)\tau(q_0)+\theta\tau(q_1).
+  \]
+  若另外 \(q\in\mathbb Z_{\ge 2}\) 且记 \(r_q:=\rho(\widetilde A_q)\)，则进一步有
+  \[
+  \boxed{\;
+  \log r_q
+  \le
+  \tau(q)
+  \le
+  (1-\theta)\tau(q_0)+\theta\tau(q_1).\;}
+  \]
+\end{enumerate}
+因此，离散整数点压力数据 \(\{\log r_q\}_{q\ge 2}\) 必受连续射影压力曲线的凸包控制。
+\end{theorem}
+\begin{proof}
+对任意输出词
+\(
+\mathbf b=(b_1,\dots,b_n)\in A_{\mathrm{out}}^n
+\)
+与 \(w\in\Delta\)，递归记
+\[
+w_0:=w,
+\qquad
+w_t:=\Phi_{b_t}(w_{t-1})\quad(1\le t\le n),
+\]
+并定义路径权
+\[
+G_{\mathbf b}(w):=\prod_{t=1}^{n} g_{b_t}(w_{t-1})\ge 0.
+\]
+由射影转移算子的迭代展开，
+\[
+Z_n(q,w)=\sum_{\mathbf b\in A_{\mathrm{out}}^n}G_{\mathbf b}(w)^q.
+\]
+对固定 \(n,w\)，右端是有限个指数函数 \(e^{q\log G_{\mathbf b}(w)}\) 的和，因此 \(q\mapsto Z_n(q,w)\) 为 log-sum-exp 型函数，从而 log-凸。这证明了第一条。
+
+于是 \(q\mapsto \log Z_n(q,w)\) 为凸函数。对 \(w\in\Delta\) 取上确界后，\(\tau_n(q)=\log\sup_w Z_n(q,w)\) 仍为凸函数。再由
+\[
+\frac1n\tau_n(q)\le (1-\theta)\frac1n\tau_n(q_0)+\theta\frac1n\tau_n(q_1)
+\]
+对 \(n\to\infty\) 取 \(\limsup\)，即得
+\[
+\tau(q)\le (1-\theta)\tau(q_0)+\theta\tau(q_1),
+\]
+故 \(\tau\) 亦凸。
+
+另一方面，\(\mathcal L_q\) 为 \(C(\Delta)\) 上的正算子，故
+\[
+\|\mathcal L_q^n\|_{\infty\to\infty}
+=
+\|\mathcal L_q^n\mathbf 1\|_\infty
+=
+\sup_{w\in\Delta}Z_n(q,w).
+\]
+于是由 Gelfand 谱半径公式，
+\[
+\tau(q)
+=
+\lim_{n\to\infty}\frac1n\log \|\mathcal L_q^n\|_{\infty\to\infty}
+=
+\log \rho(\mathcal L_q).
+\]
+若 \(q\in\mathbb Z_{\ge 2}\)，则由定理 \ref{thm:pom-projective-operator-degenerates-to-moment-kernel}，
+\[
+\rho(\mathcal L_q|_{\mathcal H_q})=\rho(\widetilde A_q)=r_q.
+\]
+限制算子的谱半径不超过全空间算子谱半径，故
+\[
+\log r_q\le \log \rho(\mathcal L_q)=\tau(q).
+\]
+与前述凸性不等式合并，即得最后一条。证毕。
+\end{proof}
+
+\begin{remark}[整数压力表的可实现性判据]\label{rem:derived-projective-pressure-realizability}
+若一张整数锚点表 \(\{(q,\log r_q)\}\) 在某区间上越出定理 \ref{thm:derived-projective-pressure-logconvex-convex-hull} 给出的连续凸上包络，则它不可能来自任何真实的射影压力算子族。换言之，凸包约束为离散 moment-kernel 数据提供了一条无需额外拟合选择的结构性审计准则。
+\end{remark}

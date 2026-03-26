@@ -1,0 +1,561 @@
+\paragraph{Gödel 纤维索引的模均匀化、profinite 极限与 Koenigs--Joukowsky 参数化}
+在满射折叠与外置寄存器语义下，纤维内的均匀索引可在有限模层面给出统一的均匀化与去耦误差界；该误差在 \(\Fold_m\) 的 Fibonacci 规模律下呈指数衰减，并提升为 \(\widehat{\mathbb Z}\) 上的 Haar 极限。与此同时，Witt 伸缩在 Koenigs 坐标中的平移化与素数寄存器分解共同给出一条从“算术生成元”到“Joukowsky 椭圆族”的可审计同构通道。
+
+\begin{theorem}[Gödel 纤维索引的模均匀性与输出独立性定量界]\label{thm:xi-godel-fiber-index-mod-uniformity-independence}
+设 \(\Omega,X\) 为有限集合，\(f:\Omega\twoheadrightarrow X\) 为满射。
+记
+\[
+d(x):=\bigl|f^{-1}(x)\bigr|,\qquad x\in X.
+\]
+对每个 \(x\in X\) 固定一个双射
+\[
+\iota_x:f^{-1}(x)\stackrel{\sim}{\longrightarrow}\{0,1,\dots,d(x)-1\}.
+\]
+令 \(\omega\sim\mathrm{Unif}(\Omega)\)，设 \(X_\ast:=f(\omega)\)，并定义
+\[
+I:=\iota_{X_\ast}(\omega),\qquad
+R_q:=I\bmod q\in\mathbb Z/q\mathbb Z
+\]
+（\(q\ge 2\)）。
+记 \(U_q:=\mathrm{Unif}(\mathbb Z/q\mathbb Z)\)。
+则总变差距离满足
+\begin{equation}\label{eq:xi-godel-mod-uniform-tv-bound}
+\bigl\|\mathcal L(R_q)-U_q\bigr\|_{\mathrm{TV}}
+\le
+\min\!\left\{1,\frac{q\,|X|}{4\,|\Omega|}\right\},
+\end{equation}
+以及
+\begin{equation}\label{eq:xi-godel-joint-independence-tv-bound}
+\bigl\|\mathcal L(X_\ast,R_q)-\mathcal L(X_\ast)\otimes U_q\bigr\|_{\mathrm{TV}}
+\le
+\min\!\left\{1,\frac{q\,|X|}{4\,|\Omega|}\right\}.
+\end{equation}
+特别地，误差仅由规模比 \(|X|/|\Omega|\) 控制，与纤维形状 \(\{d(x)\}_{x\in X}\) 的细节无关。
+\end{theorem}
+\begin{proof}
+固定 \(x\in X\)，写 \(d(x)=a_xq+b_x\)（\(0\le b_x<q\)）。
+在条件 \(X_\ast=x\) 下，\(I\) 在 \(\{0,\dots,d(x)-1\}\) 上均匀，故
+\(
+R_q
+\)
+在 \(b_x\) 个剩余类上概率为 \((a_x+1)/d(x)\)，在其余 \(q-b_x\) 个类上概率为 \(a_x/d(x)\)。
+于是
+\[
+\left\|\mathcal L(R_q\mid X_\ast=x)-U_q\right\|_{\mathrm{TV}}
+=\frac{b_x(q-b_x)}{q\,d(x)}
+\le \frac{q}{4\,d(x)}.
+\]
+又 \(\mathbb P(X_\ast=x)=d(x)/|\Omega|\)。
+利用总变差对混合的凸性可得
+\[
+\|\mathcal L(R_q)-U_q\|_{\mathrm{TV}}
+\le
+\sum_{x\in X}\frac{d(x)}{|\Omega|}\cdot\frac{q}{4d(x)}
+=\frac{q|X|}{4|\Omega|},
+\]
+并与平凡上界 \(1\) 取最小得到
+\eqref{eq:xi-godel-mod-uniform-tv-bound}。
+
+对联合分布，按 \(X_\ast\) 分层有精确分解
+\[
+\left\|\mathcal L(X_\ast,R_q)-\mathcal L(X_\ast)\otimes U_q\right\|_{\mathrm{TV}}
+=
+\sum_{x\in X}\mathbb P(X_\ast=x)
+\left\|\mathcal L(R_q\mid X_\ast=x)-U_q\right\|_{\mathrm{TV}},
+\]
+代入同一单纤维界即得
+\eqref{eq:xi-godel-joint-independence-tv-bound}。证毕。
+\end{proof}
+
+\begin{corollary}[\(\Fold_m\) 的 profinite Haar 极限与指数收敛率]\label{cor:xi-fold-profinite-haar-exponential-rate}
+令 \(\Fold_m:\Omega_m\twoheadrightarrow X_m\) 为折叠算子，\(\Omega_m=\{0,1\}^m\)，并令 \(\omega\sim\mathrm{Unif}(\Omega_m)\)。
+在每条纤维上任选双射索引，定义 \(I_m\) 与 \(R_{m,q}:=I_m\bmod q\)（\(q\ge 2\)）。
+则
+\begin{equation}\label{eq:xi-fold-mod-tv-rate-general}
+\bigl\|\mathcal L(R_{m,q})-U_q\bigr\|_{\mathrm{TV}}
+\le
+\min\!\left\{1,\frac{q\,|X_m|}{4\cdot 2^m}\right\},
+\end{equation}
+且
+\begin{equation}\label{eq:xi-fold-joint-mod-tv-rate-general}
+\bigl\|\mathcal L(\Fold_m(\omega),R_{m,q})-\mathcal L(\Fold_m(\omega))\otimes U_q\bigr\|_{\mathrm{TV}}
+\le
+\min\!\left\{1,\frac{q\,|X_m|}{4\cdot 2^m}\right\}.
+\end{equation}
+若 \(|X_m|=F_{m+2}\)（无相邻 \(1\) 的二进制词计数），则
+\begin{equation}\label{eq:xi-fold-mod-tv-rate-fibonacci}
+\bigl\|\mathcal L(R_{m,q})-U_q\bigr\|_{\mathrm{TV}}
+=
+O\!\left(q\left(\frac{\varphi}{2}\right)^m\right),
+\qquad
+\varphi=\frac{1+\sqrt5}{2}.
+\end{equation}
+并且把 \(I_m\) 经自然嵌入 \(\mathbb Z\hookrightarrow\widehat{\mathbb Z}\) 记为 \(\widehat I_m\)，则
+\begin{equation}\label{eq:xi-fold-profinite-haar-limit}
+\widehat I_m \Longrightarrow \mathrm{Haar}_{\widehat{\mathbb Z}},
+\qquad m\to\infty.
+\end{equation}
+\end{corollary}
+\begin{proof}
+\eqref{eq:xi-fold-mod-tv-rate-general} 与
+\eqref{eq:xi-fold-joint-mod-tv-rate-general}
+由定理 \ref{thm:xi-godel-fiber-index-mod-uniformity-independence}
+直接代入 \(|\Omega_m|=2^m\) 得到。
+\eqref{eq:xi-fold-mod-tv-rate-fibonacci}
+由 \(|X_m|=F_{m+2}\sim \varphi^{m+2}/\sqrt5\) 立得。
+
+对
+\eqref{eq:xi-fold-profinite-haar-limit}，
+只需检验每个有限商 \(\pi_q:\widehat{\mathbb Z}\to\mathbb Z/q\mathbb Z\) 的推前分布收敛到 \(U_q\)。
+而 \(\pi_q(\widehat I_m)=R_{m,q}\)，其收敛已由
+\eqref{eq:xi-fold-mod-tv-rate-general} 给出。
+由于 \(\widehat{\mathbb Z}\) 的柱集合由有限模投影生成，故得到弱收敛到 Haar 测度。证毕。
+\end{proof}
+
+\begin{theorem}[外置寄存器的信息屏蔽上界]\label{thm:xi-godel-register-mutual-information-bound}
+在定理 \ref{thm:xi-godel-fiber-index-mod-uniformity-independence} 的设定下，令
+\[
+P_x:=\mathcal L(R_q\mid X_\ast=x),\qquad
+\eta_x:=\|P_x-U_q\|_{\mathrm{TV}},
+\qquad
+h(t):=-t\log t-(1-t)\log(1-t).
+\]
+则
+\begin{equation}\label{eq:xi-godel-mutual-information-bound-general}
+\mathbf I(X_\ast;R_q)
+\le
+\varepsilon_q\log(q-1)+h(\varepsilon_q),
+\qquad
+\varepsilon_q:=\min\!\left\{1-\frac1q,\frac{q|X|}{4|\Omega|}\right\}.
+\end{equation}
+尤其在
+\(
+\frac{q|X|}{4|\Omega|}\le \frac12
+\)
+的制度下，
+\[
+\mathbf I(X_\ast;R_q)
+\le
+\frac{q|X|}{4|\Omega|}\log(q-1)
++h\!\left(\frac{q|X|}{4|\Omega|}\right).
+\]
+对 \(\Fold_m\) 且 \(|X_m|=F_{m+2}\) 的情形，任意固定 \(q\) 有
+\begin{equation}\label{eq:xi-fold-register-mutual-information-rate}
+\mathbf I\!\bigl(\Fold_m(\omega);\,I_m\bmod q\bigr)
+=
+O\!\left(q\left(\frac{\varphi}{2}\right)^m\log q\right).
+\end{equation}
+\end{theorem}
+\begin{proof}
+由 \(H(R_q)\le\log q\) 得
+\[
+\mathbf I(X_\ast;R_q)
+=H(R_q)-H(R_q\mid X_\ast)
+\le \log q-\sum_{x}\mathbb P(X_\ast=x)H(P_x).
+\]
+对每个 \(x\)，Fannes--Audenaert 不等式给出
+\[
+\log q-H(P_x)\le \eta_x\log(q-1)+h(\eta_x),
+\qquad
+\eta_x\in\left[0,1-\frac1q\right].
+\]
+故
+\[
+\mathbf I(X_\ast;R_q)
+\le
+\sum_x\mathbb P(X_\ast=x)\bigl[\eta_x\log(q-1)+h(\eta_x)\bigr].
+\]
+利用 \(h\) 的凹性与 Jensen，不等式右侧至多为
+\[
+\bar\eta\,\log(q-1)+h(\bar\eta),
+\qquad
+\bar\eta:=\sum_x\mathbb P(X_\ast=x)\eta_x.
+\]
+由定理 \ref{thm:xi-godel-fiber-index-mod-uniformity-independence} 的单纤维界，
+\(
+\bar\eta\le q|X|/(4|\Omega|)
+\)，并且 \(\bar\eta\le 1-1/q\) 总成立。
+函数 \(t\mapsto t\log(q-1)+h(t)\) 在 \([0,1-1/q]\) 单调递增，故可把 \(\bar\eta\) 以 \(\varepsilon_q\) 替换，得到
+\eqref{eq:xi-godel-mutual-information-bound-general}。
+\eqref{eq:xi-fold-register-mutual-information-rate}
+由 \(|\Omega_m|=2^m\)、\(|X_m|=F_{m+2}\) 与
+\eqref{eq:xi-godel-mutual-information-bound-general}
+直接推出。证毕。
+\end{proof}
+
+\begin{proposition}[Koenigs 平移化与素数生成元的谱分解]\label{prop:xi-koenigs-prime-generator-spectral-factorization}
+设 Koenigs 深度坐标满足 Witt 伸缩平移律
+\begin{equation}\label{eq:xi-koenigs-witt-translation-law}
+y(ms)=y(s)+\log m,\qquad m\ge 1.
+\end{equation}
+设素数寄存器半群为
+\[
+\mathsf P:=\bigoplus_{p\ \mathrm{prime}}\mathbb Z_{\ge 0},
+\]
+并定义值映射
+\begin{equation}\label{eq:xi-prime-register-value-map}
+N:\mathsf P\to\mathbb N_{\ge 1},
+\qquad
+N(r):=\prod_{p}p^{r(p)}.
+\end{equation}
+则对任意 \(r\in\mathsf P\) 有
+\begin{equation}\label{eq:xi-koenigs-prime-register-translation}
+y\!\bigl(N(r)s\bigr)
+=
+y(s)+\sum_{p}r(p)\log p.
+\end{equation}
+进一步，在 \(L^2(\mathbb R,dy)\) 上定义 Koopman 表示
+\[
+(T_m f)(y):=f(y+\log m).
+\]
+其傅里叶像满足
+\begin{equation}\label{eq:xi-koopman-fourier-diagonalization}
+\widehat{T_m f}(t)=e^{it\log m}\,\widehat f(t)
+=m^{it}\widehat f(t)
+=\left(\prod_{p}p^{it\,r_m(p)}\right)\widehat f(t),
+\end{equation}
+其中 \(m=\prod_p p^{r_m(p)}\)。
+故伸缩半群在频域上完全对角化，且相位谱值位于单位圆 \(\mathbb S^1\) 并按素数生成元乘法分离。
+\end{proposition}
+\begin{proof}
+\eqref{eq:xi-koenigs-prime-register-translation}
+由
+\eqref{eq:xi-koenigs-witt-translation-law}
+与
+\eqref{eq:xi-prime-register-value-map}
+及
+\(
+\log N(r)=\sum_p r(p)\log p
+\)
+直接得到。
+对 \(T_m\) 取傅里叶变换即得
+\eqref{eq:xi-koopman-fourier-diagonalization}，
+最后代入 \(m\) 的素因子分解完成证明。证毕。
+\end{proof}
+
+\begin{corollary}[Joukowsky 椭圆族的素数寄存器参数化]\label{cor:xi-joukowsky-prime-register-ellipse-parameterization}
+令
+\[
+S=y+y^{-1},\qquad
+|y|=\sqrt L,\quad L>0.
+\]
+写 \(y=\sqrt L\,e^{i\theta}\)（\(\theta\in[0,2\pi)\)），则
+\begin{equation}\label{eq:xi-joukowsky-ellipse-param}
+S(\theta)
+=
+\left(\sqrt L+\frac{1}{\sqrt L}\right)\cos\theta
++i\left(\sqrt L-\frac{1}{\sqrt L}\right)\sin\theta,
+\end{equation}
+对应椭圆半轴
+\[
+a(L)=\sqrt L+\frac{1}{\sqrt L},
+\qquad
+b(L)=\sqrt L-\frac{1}{\sqrt L}.
+\]
+若 \(L=N(r)\)（\(r\in\mathsf P\)），则
+\begin{equation}\label{eq:xi-joukowsky-prime-register-semiaxes}
+a(r)=\sqrt{N(r)}+\frac{1}{\sqrt{N(r)}},
+\qquad
+b(r)=\sqrt{N(r)}-\frac{1}{\sqrt{N(r)}}.
+\end{equation}
+并且对应 Koenigs 平移长度为
+\begin{equation}\label{eq:xi-joukowsky-koenigs-prime-shift}
+\Delta y(r)=\log\sqrt{N(r)}
+=\frac12\sum_{p}r(p)\log p.
+\end{equation}
+因此，选择寄存器状态 \(r\) 与选择椭圆尺度参数 \(L\)（等价地 \(\Delta y\)）一一对应；椭圆族由素数生成元坐标唯一标定。
+\end{corollary}
+\begin{proof}
+\eqref{eq:xi-joukowsky-ellipse-param}
+由 \(y=\sqrt L\,e^{i\theta}\) 直接代入 \(S=y+y^{-1}\) 得到。
+再以 \(L=N(r)\) 代入即得
+\eqref{eq:xi-joukowsky-prime-register-semiaxes}。
+式
+\eqref{eq:xi-joukowsky-koenigs-prime-shift}
+由
+\(
+\log\sqrt{N(r)}=\frac12\log N(r)=\frac12\sum_p r(p)\log p
+\)
+与命题 \ref{prop:xi-koenigs-prime-generator-spectral-factorization}
+一致。证毕。
+\end{proof}
+
+\paragraph{Joukowsky--Gödel 椭圆输运的结式闭式、二次分支核与可逆性}
+本段把椭圆输运的结式消元写成二次扩张上的范数，并据此把“不可见相位”精确压缩为二次分支生成的二幂核；同时给出单个非退化椭圆零点对尺度参数的代数可逆性。
+
+\begin{theorem}[Joukowsky--Gödel 输运结式的二次扩张闭式]\label{thm:xi-joukowsky-godel-resultant-quadratic-norm-closed}
+设 \(K\subset\mathbb C\) 为一子域且 \(\mathrm{char}(K)\neq 2\)。
+取 \(P(z)\in K[z]\) 为次数 \(n\) 的多项式，并取 \(r\in K^{\times}\)。
+定义
+\[
+Q_r(w):=\operatorname{Res}_z\!\bigl(P(z),\,rz^2-wz+r^{-1}\bigr)\in K[w].
+\]
+则在二次扩张 \(K\bigl(w,\sqrt{w^2-4}\bigr)\) 中恒有恒等式
+\[
+Q_r(w)
+=
+r^n\,
+P\!\Bigl(\frac{w+\sqrt{w^2-4}}{2r}\Bigr)\,
+P\!\Bigl(\frac{w-\sqrt{w^2-4}}{2r}\Bigr).
+\]
+等价地，若记
+\[
+\zeta_{\pm}(w):=\frac{w\pm\sqrt{w^2-4}}{2},
+\]
+则
+\[
+Q_r(w)
+=
+r^n\,
+\operatorname{Norm}_{K(w,\sqrt{w^2-4})/K(w)}\!\Bigl(P\bigl(\zeta_+(w)/r\bigr)\Bigr).
+\]
+\end{theorem}
+\begin{proof}
+记
+\[
+B(z):=rz^2-wz+r^{-1}\in K[w][z].
+\]
+在 \(K\bigl(w,\sqrt{w^2-4}\bigr)\) 中有分解
+\[
+B(z)=r\,(z-\beta_+)(z-\beta_-),
+\qquad
+\beta_{\pm}=\frac{w\pm\sqrt{w^2-4}}{2r}.
+\]
+由结式的基本恒等式（以 \(B\) 的首项系数表达），得到
+\[
+\operatorname{Res}_z(P,B)
+=
+\bigl(\mathrm{lc}_z(B)\bigr)^n\prod_{B(\beta)=0}P(\beta)
+=
+r^n\,P(\beta_+)\,P(\beta_-).
+\]
+这给出第一条闭式。
+由于右端在 \(\sqrt{w^2-4}\mapsto-\sqrt{w^2-4}\) 下不变，故其系数落回 \(K(w)\)，并因其作为结式已属于 \(K[w]\)，结论成立。
+范数形式由二次扩张的范数定义
+\(
+\operatorname{Norm}(\xi)=\xi\cdot\xi^{\sigma}
+\)
+（\(\sigma\) 为非平凡自同构）直接改写得到。证毕。
+\end{proof}
+
+\begin{corollary}[输运的二次分支核与二幂扩张]\label{cor:xi-transport-quadratic-branch-2power-kernel}
+沿用定理 \ref{thm:xi-joukowsky-godel-resultant-quadratic-norm-closed} 的记号，并假设 \(\mathrm{char}(K)=0\) 且 \(P\) 可分。
+把 \(r\) 视为超越元并在基域 \(K(r)\) 上工作。
+令 \(L_P\) 为 \(P\) 在 \(K(r)\) 上的分裂域，\(L_Q\) 为 \(Q_r\) 在 \(K(r)\) 上的分裂域。
+则有包含 \(L_Q\subseteq L_P\)，并存在有限集合 \(\mathcal W\subset L_Q\)（可取为 \(Q_r\) 的全体根）使
+\[
+L_P
+=
+L_Q\Bigl(\,\sqrt{w^2-4}\;:\; w\in\mathcal W\,\Bigr),
+\qquad
+[L_P:L_Q]=2^m\ \text{对某个 }m\ge 0.
+\]
+\end{corollary}
+\begin{proof}
+任取 \(P\) 的根 \(z\in L_P\)。
+定义
+\[
+w:=rz+r^{-1}z^{-1}.
+\]
+由结式零化的定义，存在同一 \(z\) 使 \(P(z)=0\) 且 \(rz^2-wz+r^{-1}=0\) 同时成立，故 \(w\) 是 \(Q_r\) 的根，因而 \(w\in L_Q\subseteq L_P\)。
+又由二次方程
+\(
+rz^2-wz+r^{-1}=0
+\)
+可知 \(z\) 落在 \(L_Q(\sqrt{w^2-4})\) 中。
+对全部根重复该过程，得到
+\[
+L_P\subseteq L_Q\Bigl(\,\sqrt{w^2-4}\;:\; w\in\mathcal W\,\Bigr).
+\]
+反向包含显然，故等号成立。
+由于每一步均为至多二次扩张，故 \([L_P:L_Q]\) 为二的幂。证毕。
+\end{proof}
+
+\begin{theorem}[超立方体 Lee--Yang 提升的完全二次分解与尺度不增分裂域]\label{thm:xi-hypercube-leyang-lift-complete-quadratic-factorization-scale-invariant-splitting}
+令 \(H_d\) 为 \(d\)-维超立方体图，\(A_d\) 为其邻接矩阵，并令
+\[
+\chi_d(\lambda):=\det(\lambda I-A_d),
+\qquad
+P_d(u):=\chi_d\!\Bigl(\frac d2\,u\Bigr).
+\]
+定义 Lee--Yang 提升多项式
+\[
+L_d(z):=z^{2^d}\,P_d\!\bigl(z+z^{-1}\bigr)\in\mathbb Z[z],
+\]
+以及其椭圆输运结式
+\[
+Q_{d,r}(w):=\operatorname{Res}_z\!\bigl(L_d(z),\,rz^2-wz+r^{-1}\bigr).
+\]
+记
+\[
+u_k:=2-\frac{4k}{d}\qquad(k=0,1,\dots,d).
+\]
+则成立：
+\begin{enumerate}
+  \item 在单位圆侧有完全二次分解
+  \[
+  L_d(z)=\prod_{k=0}^{d}\bigl(z^2-u_k z+1\bigr)^{\binom{d}{k}}.
+  \]
+  \item 对任意 \(r\in\mathbb C^{\times}\)，在椭圆侧有完全二次分解
+  \[
+  Q_{d,r}(w)=\prod_{k=0}^{d}
+  \Bigl(w^2-(r+r^{-1})u_k\,w+\bigl(u_k^2+(r-r^{-1})^2\bigr)\Bigr)^{\binom{d}{k}}.
+  \]
+  \item 若 \(r\in\mathbb Q_{>0}\)，则 \(Q_{d,r}\) 的全部根均落在固定的多二次扩张
+  \[
+  K_d:=\mathbb Q\bigl(\sqrt{u_k^2-4}\;:\;1\le k\le d-1\bigr),
+  \]
+  从而 \(Q_{d,r}\) 在 \(K_d\) 上分裂，且该分裂域不依赖于 \(r\) 的取值。
+\end{enumerate}
+并且当 \(d=6\) 时有
+\[
+K_6=\mathbb Q(i,\sqrt2,\sqrt5).
+\]
+\end{theorem}
+\begin{proof}
+超立方体 \(H_d\) 的谱为 \(\lambda_k=d-2k\)（重数 \(\binom{d}{k}\)），故
+\[
+\chi_d(\lambda)=\prod_{k=0}^d(\lambda-(d-2k))^{\binom{d}{k}},
+\qquad
+P_d(u)=\prod_{k=0}^d(u-u_k)^{\binom{d}{k}}.
+\]
+于是
+\[
+L_d(z)=z^{2^d}\prod_{k=0}^d\bigl(z+z^{-1}-u_k\bigr)^{\binom{d}{k}}
+=\prod_{k=0}^d\bigl(z^2-u_k z+1\bigr)^{\binom{d}{k}},
+\]
+得到第一条。
+
+由结式对乘积的乘法性，第二条化归为计算
+\(
+\operatorname{Res}_z(z^2-uz+1,\,rz^2-wz+r^{-1})
+\)。
+若 \(z^2-uz+1=0\)，则 \(z^{-1}=u-z\)。
+代入 \(w=rz+r^{-1}z^{-1}\) 得
+\[
+w=(r-r^{-1})z+r^{-1}u,\qquad
+z=\frac{w-r^{-1}u}{r-r^{-1}}.
+\]
+将该式代回 \(z^2-uz+1=0\) 并整理，得到关于 \(w\) 的二次方程
+\[
+w^2-(r+r^{-1})u\,w+\bigl(u^2+(r-r^{-1})^2\bigr)=0.
+\]
+故所求结式即为该二次多项式；取 \(u=u_k\) 并按重数相乘即得第二条。
+
+对第三条，二次因子的判别式为
+\[
+\Delta_k=(r+r^{-1})^2u_k^2-4\bigl(u_k^2+(r-r^{-1})^2\bigr)
+=(r-r^{-1})^2(u_k^2-4).
+\]
+若 \(r\in\mathbb Q\)，则 \(r-r^{-1}\in\mathbb Q\)，故每个根均属于 \(\mathbb Q(\sqrt{u_k^2-4})\)，从而全体根属于 \(K_d\)。
+当 \(d=6\) 时，
+\(
+u_k\in\{\pm\frac43,\pm\frac23,0,\pm2\}
+\)，
+故 \(\sqrt{u_k^2-4}\) 生成的多二次数域等价于 \(\mathbb Q(i,\sqrt2,\sqrt5)\)。
+证毕。
+\end{proof}
+
+\begin{proposition}[诱导子图类的 Lee--Yang 闭包在椭圆输运下保持]\label{prop:xi-induced-subgraph-leyang-to-elliptic-closure}
+令 \(G\) 为 \(H_d\) 的任一诱导子图，\(A_G\) 为其邻接矩阵。
+定义缩放特征多项式
+\[
+P_G(u):=\det\!\Bigl(\frac d2\,u\,I-A_G\Bigr),
+\qquad
+L_G(z):=z^{|V(G)|}\,P_G\!\bigl(z+z^{-1}\bigr).
+\]
+则：
+\begin{enumerate}
+  \item \(P_G\) 的全部零点均落在实区间 \([-2,2]\)；
+  \item \(L_G\) 的全部非零零点均落在单位圆 \(\mathbb T\)；
+  \item 对任意 \(r>0\)，若定义
+  \[
+  Q_{G,r}(w):=\operatorname{Res}_z\!\bigl(L_G(z),\,rz^2-wz+r^{-1}\bigr),
+  \]
+  则 \(Q_{G,r}\) 的全部零点均落在椭圆 \(E_r=J_r(\mathbb T)\) 上。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+因 \(G\) 为诱导子图，\(A_G\) 为 \(A_d\) 的主子矩阵。
+由 Cauchy 交错定理与 \(\sigma(A_d)\subset[-d,d]\)，得 \(\sigma(A_G)\subset[-d,d]\)。
+于是 \(P_G(u)=0\) 的根为 \(u=2\lambda/d\)（\(\lambda\in\sigma(A_G)\)），故落在 \([-2,2]\)，得到第一条。
+第二条由恒等式
+\(
+z+z^{-1}\in[-2,2]\iff |z|=1
+\)
+与 \(L_G(z)=0\iff P_G(z+z^{-1})=0\)（忽略平凡因子 \(z^{|V(G)|}\)）推出。
+第三条由结式零化定义与第二条：若 \(w\) 为 \(Q_{G,r}\) 的根，则存在 \(z\in\mathbb T\) 使 \(w=J_r(z)=rz+r^{-1}z^{-1}\)，故 \(w\in E_r\)。证毕。
+\end{proof}
+
+\begin{theorem}[单个非退化椭圆零点对尺度参数的代数可逆性]\label{thm:xi-single-elliptic-zero-reconstructs-scale}
+取 \(u\in K\) 满足 \(u^2\neq 4\)，并令未知 \(r\in K^{\times}\) 与未知 \(w\in\overline K\) 满足
+\begin{equation}\label{eq:xi-elliptic-transport-quadratic-relation}
+w^2-(r+r^{-1})u\,w+\bigl(u^2+(r-r^{-1})^2\bigr)=0.
+\end{equation}
+令
+\[
+\Delta_u:=u^2-4,\qquad \Delta_w:=w^2-4.
+\]
+则 \(a:=r+r^{-1}\) 为二次方程
+\[
+a^2-(uw)a+\bigl(w^2+u^2-4\bigr)=0
+\]
+的根，从而
+\[
+a=\frac{uw\pm\sqrt{\Delta_u\Delta_w}}{2}.
+\]
+进而 \(r\) 为
+\(
+t^2-a t+1=0
+\)
+的根，即
+\[
+r=\frac{a\pm\sqrt{a^2-4}}{2}.
+\]
+\end{theorem}
+\begin{proof}
+把 \eqref{eq:xi-elliptic-transport-quadratic-relation} 视为关于
+\(
+a=r+r^{-1}
+\)
+与
+\(
+b=r-r^{-1}
+\)
+的约束，并注意 \(a^2-b^2=4\)。
+由 \eqref{eq:xi-elliptic-transport-quadratic-relation} 得
+\[
+w^2-auw+u^2+b^2=0
+\quad\Rightarrow\quad
+b^2=auw-w^2-u^2.
+\]
+代入 \(a^2-b^2=4\) 得
+\[
+a^2-(uw)a+(w^2+u^2-4)=0,
+\]
+从而
+\[
+a=\frac{uw\pm\sqrt{u^2w^2-4(w^2+u^2-4)}}{2}
+=\frac{uw\pm\sqrt{(u^2-4)(w^2-4)}}{2}.
+\]
+给定 \(a\) 后，由 \(r+r^{-1}=a\) 可得 \(r\) 为 \(t^2-a t+1=0\) 的根，公式成立。证毕。
+\end{proof}
+
+\begin{conjecture}[输运二次分支的典型满秩独立性]\label{conj:xi-transport-quadratic-branches-typical-full-rank}
+设 \(K\) 为特征 \(0\) 的数域，\(r\) 为超越元，\(P(z)\in K[z]\) 为次数 \(n\) 的可分多项式，并满足 Lee--Yang 单位圆零点条件且无额外对称性退化。
+令
+\[
+Q_r(w):=\operatorname{Res}_z\!\bigl(P(z),\,rz^2-wz+r^{-1}\bigr).
+\]
+记 \(L_P,L_Q\) 分别为 \(P,Q_r\) 在 \(K(r)\) 上的分裂域。
+猜想：由推论 \ref{cor:xi-transport-quadratic-branch-2power-kernel} 给出的二次分支元
+\(\sqrt{w^2-4}\)（\(w\) 遍历 \(Q_r\) 的根）在 \(L_P\) 中达到最大独立秩，从而在自然作用下
+\[
+\operatorname{Gal}(L_P/K(r))
+\cong
+(\mathbb Z/2\mathbb Z)^n\rtimes \operatorname{Gal}(L_Q/K(r)),
+\]
+且该半直积中的 \(2\)-核秩达到理论上界 \(n\)。
+\end{conjecture}
+
+\endinput

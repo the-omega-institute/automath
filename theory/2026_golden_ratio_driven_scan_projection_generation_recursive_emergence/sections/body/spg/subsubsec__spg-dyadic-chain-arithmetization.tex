@@ -1,0 +1,436 @@
+% Dyadic chain-level arithmetization: square classes, syndromes, decoding, moments, LDPC.
+
+\paragraph{胞腔链的平方类算术实现与边界综合征}\label{par:spg-dyadic-squareclass-syndrome}
+在固定 dyadic 立方复形中，边界链不仅可由素因子集合编码为整数（定理 \ref{thm:spg-boundary-godelization-holographic-dictionary}），且其模 \(2\) 的链复形结构可完全由平方类群的乘法结构实现。
+该口径把 \(\partial\circ\partial=0\) 译为“综合征为 \(1\)”的局部闭合约束，并给出显式的线性时间 bulk 译码与由单一边界整数读出任意单项式体积分的表列方案。
+
+\begin{theorem}[素数平方类实现的胞腔链复形：边界--算术同构]\label{thm:spg-dyadic-squareclass-chain-complex}
+固定 \(m\ge 1\) 并记 \(\mathcal Q_m\) 为 \(I^n=[0,1]^n\) 的 \(m\)-dyadic 立方剖分所诱导的 \(n\)-维立方复形。
+对每一维 \(k\in\{0,\dots,n\}\) 取定取向的 \(k\)-胞腔集合 \(\mathcal F_k(\mathcal Q_m)\)。
+对每个 \(k\) 选取一族两两不同的素数 \(\{p_\sigma:\sigma\in\mathcal F_k(\mathcal Q_m)\}\)，并令
+\[
+\mathcal G_k:=\Big\langle [p_\sigma]\ :\ \sigma\in\mathcal F_k(\mathcal Q_m)\Big\rangle\ \le\ \QQ^\times/(\QQ^\times)^2
+\]
+为其生成的平方类群，其中 \([r]\) 表示 \(r\in\QQ^\times\) 在 \(\QQ^\times/(\QQ^\times)^2\) 中的平方类。
+定义映射
+\[
+\mathbf G_k:\ C_k(\mathcal Q_m;\FF_2)\longrightarrow \mathcal G_k,\qquad
+\mathbf G_k\Bigl(\sum_{\sigma\in\mathcal F_k(\mathcal Q_m)}\varepsilon_\sigma\,\sigma\Bigr)
+:=\prod_{\sigma\in\mathcal F_k(\mathcal Q_m)} [p_\sigma]^{\varepsilon_\sigma},
+\]
+其中 \(\varepsilon_\sigma\in\{0,1\}\)。
+则 \(\mathbf G_k\) 为 \(\FF_2\)-线性同构；并且存在唯一群同态 \(\delta_k:\mathcal G_k\to\mathcal G_{k-1}\) 使得对任意 \(\sigma\in\mathcal F_k(\mathcal Q_m)\) 有
+\[
+\delta_k([p_\sigma])=\prod_{\tau\prec\sigma}[p_\tau]^{[\tau:\sigma]\bmod 2},
+\]
+其中 \([\tau:\sigma]\in\{0,\pm 1\}\) 为胞腔边界的符号系数，\(\tau\prec\sigma\) 表示 \((k-1)\)-胞腔 \(\tau\) 为 \(\sigma\) 的面。
+此外交换关系成立：
+\[
+\mathbf G_{k-1}\circ \partial_k=\delta_k\circ \mathbf G_k.
+\]
+\end{theorem}
+\begin{proof}
+\(\mathbf G_k\) 将链群 \(C_k(\mathcal Q_m;\FF_2)\cong \FF_2^{|\mathcal F_k|}\) 的标准基元 \(\sigma\) 送至平方类基元 \([p_\sigma]\)，故为同构。
+对基元 \(\sigma\)，有
+\(
+\partial_k\sigma=\sum_{\tau\prec\sigma}[\tau:\sigma]\tau
+\)，模 \(2\) 后系数为 \([\tau:\sigma]\bmod 2\)，从而
+\[
+\mathbf G_{k-1}(\partial_k\sigma)
+=\prod_{\tau\prec\sigma}[p_\tau]^{[\tau:\sigma]\bmod 2}
+=\delta_k([p_\sigma]).
+\]
+对任意链作线性延拓即得交换性。
+唯一性由 \(\mathcal G_k\) 由 \([p_\sigma]\) 生成且乘法关系仅来自指数模 \(2\) 加法给出。证毕。
+\end{proof}
+
+\begin{proposition}[平方类支撑距离与 Hamming 距离的一致性]\label{prop:spg-squareclass-support-hamming-isometry}
+沿用定理 \ref{thm:spg-dyadic-squareclass-chain-complex} 的记号，固定 \(k\in\{0,\dots,n\}\)。
+对 \(H\in\mathcal G_k\) 定义其素支撑
+\[
+\mathrm{supp}(H):=\{\sigma\in\mathcal F_k(\mathcal Q_m):\ [p_\sigma]\ \text{在 }H\text{ 的平方自由代表中出现}\}.
+\]
+并定义平方类支撑距离
+\[
+d_{\square}(H_1,H_2):=\card{\mathrm{supp}(H_1H_2^{-1})}.
+\]
+则对任意 \(c_1,c_2\in C_k(\mathcal Q_m;\FF_2)\) 有
+\[
+\boxed{\;
+d_{\square}\bigl(\mathbf G_k(c_1),\mathbf G_k(c_2)\bigr)
+\ =\
+d_H(c_1,c_2)\;},
+\]
+其中 \(d_H\) 为系数向量的 Hamming 距离。
+\end{proposition}
+\begin{proof}
+写 \(c_i=\sum_{\sigma}\varepsilon^{(i)}_\sigma\,\sigma\)（\(\varepsilon^{(i)}_\sigma\in\{0,1\}\)）。
+由定义
+\[
+\mathbf G_k(c_1)\mathbf G_k(c_2)^{-1}
+=\prod_{\sigma}[p_\sigma]^{\varepsilon^{(1)}_\sigma-\varepsilon^{(2)}_\sigma}
+=\prod_{\sigma}[p_\sigma]^{\varepsilon^{(1)}_\sigma\oplus\varepsilon^{(2)}_\sigma}.
+\]
+因此 \(\mathrm{supp}(\mathbf G_k(c_1)\mathbf G_k(c_2)^{-1})=\{\sigma:\varepsilon^{(1)}_\sigma\neq \varepsilon^{(2)}_\sigma\}\)，其基数即为 Hamming 距离 \(d_H(c_1,c_2)\)。证毕。
+\end{proof}
+
+\begin{corollary}[边界 Gödel 比值的平方类等距性]\label{cor:spg-boundary-godel-ratio-squareclass-isometry}
+取 \(k=n-1\)。
+对 dyadic polycube \(U,V\subset I^n\)，令 \(H_m(U),H_m(V)\) 为定理 \ref{thm:spg-boundary-godelization-holographic-dictionary} 的边界 Gödel 整数，并以 \([\cdot]\) 表示其在 \(\QQ^\times/(\QQ^\times)^2\) 中的平方类。
+定义平方类比值
+\[
+R_m(U,V):=[H_m(U)]\,[H_m(V)]^{-1}.
+\]
+则有
+\[
+\boxed{\;
+d_{\square}\bigl([H_m(U)],[H_m(V)]\bigr)
+\ =\
+\card{\mathrm{supp}(R_m(U,V))}
+\ =\
+d_H\bigl(\partial_n[U],\partial_n[V]\bigr)\; }.
+\]
+\end{corollary}
+\begin{proof}
+定理 \ref{thm:spg-boundary-godelization-holographic-dictionary} 的编码恰对应于定理 \ref{thm:spg-dyadic-squareclass-chain-complex} 在 \(k=n-1\) 的情形：\([H_m(U)]=\mathbf G_{n-1}(\partial_n[U])\)。
+因此由命题 \ref{prop:spg-squareclass-support-hamming-isometry} 立得。证毕。
+\end{proof}
+
+\begin{theorem}[边界 Gödel 码的算术化差分距离与 Stokes 读出的 Lipschitz 稳定性]\label{thm:spg-godel-boundary-gcd-lipschitz-stability}
+沿用定理 \ref{thm:spg-boundary-godelization-holographic-dictionary} 的边界 Gödel 编码并固定 \(m,n\ge 1\)。
+记 \(\omega(N)\) 为正整数 \(N\) 的互异素因子个数。
+对任意 dyadic polycube \(U,V\subset I^n\)，定义 Gödel 对称差计数
+\[
+\operatorname{Dist}_m(U,V)
+:=\omega\!\left(\frac{H_m(U)\,H_m(V)}{\gcd\!\bigl(H_m(U),H_m(V)\bigr)^2}\right).
+\]
+则成立：
+\begin{enumerate}
+  \item \textbf{（边界差的面积等式）}
+        若将 \(\partial U-\partial V\) 视为取向 \((n-1)\)-面上的整数链并令
+        \[
+        \operatorname{Area}(\partial U-\partial V)
+        :=2^{-m(n-1)}\bigl\|\partial_n[U]-\partial_n[V]\bigr\|_{\ell^1},
+        \]
+        则有精确恒等式
+        \[
+        \operatorname{Area}(\partial U-\partial V)=2^{-m(n-1)}\,\operatorname{Dist}_m(U,V).
+        \]
+  \item \textbf{（体积读出的 Lipschitz 控制）}
+        令 \(\omega_0\) 为 \eqref{eq:spg-universal-stokes-probe-form} 中满足 \(\dd\omega_0=\dd x_1\cdots\dd x_n\) 的通用 Stokes 探针，则
+        \[
+        \bigl|\operatorname{Vol}(U)-\operatorname{Vol}(V)\bigr|
+        =\left|\int_{\partial U-\partial V}\omega_0\right|
+        \le 2^{-m(n-1)}\,\operatorname{Dist}_m(U,V).
+        \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由于 \(H_m(U)\) 与 \(H_m(V)\) 皆为平方自由整数，其最大公因子 \(\gcd(H_m(U),H_m(V))\) 的素因子集合恰为两者边界支撑的交；
+因而
+\(
+H_m(U)H_m(V)/\gcd(H_m(U),H_m(V))^2
+\)
+的素因子集合恰为两者边界支撑的对称差。
+另一方面，\(\partial_n[U]-\partial_n[V]\) 在每个取向 \((n-1)\)-面上的系数属于 \(\{-1,0,1\}\)，其 \(\ell^1\) 范数正是该对称差的基数。
+由推论 \ref{cor:spg-boundary-godel-ratio-squareclass-isometry}，该基数也等于 \(\card{\mathrm{supp}(R_m(U,V))}\)，从而
+\(
+\|\partial_n[U]-\partial_n[V]\|_{\ell^1}=\operatorname{Dist}_m(U,V)
+\)。
+乘以单个 dyadic \((n-1)\)-面的面积 \(2^{-m(n-1)}\) 即得第一式。
+\par
+第二式由 Stokes 读出恒等式 \(\operatorname{Vol}(W)=\int_{\partial W}\omega_0\)（见 \eqref{eq:spg-probe-volume-identity}）给出
+\[
+\operatorname{Vol}(U)-\operatorname{Vol}(V)=\int_{\partial U-\partial V}\omega_0.
+\]
+又由 \eqref{eq:spg-universal-stokes-probe-form} 可取 \(\|\omega_0\|_\infty\le 1\)，故对任意取向面 \(\vec f\) 有
+\(
+\bigl|\int_{\vec f}\omega_0\bigr|\le \int_{\vec f}1\,\dd S=2^{-m(n-1)}
+\)。
+将 \(\partial U-\partial V\) 分解为取向面之和并用三角不等式即得
+\[
+\left|\int_{\partial U-\partial V}\omega_0\right|
+\le 2^{-m(n-1)}\bigl\|\partial_n[U]-\partial_n[V]\bigr\|_{\ell^1}
+=2^{-m(n-1)}\,\operatorname{Dist}_m(U,V).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[Gödel--Stokes 边界距离下的通量维读出稳定性]\label{cor:spg-godel-stokes-distance-dimension-stability}
+令 \(A\subset I^n\) 为紧集，\(U_m(A)\) 为定理 \ref{thm:spg-dyadic-outer-approx-stokes-gain-minkowski-readout} 的 dyadic 外近似。
+令 \((V_m)_{m\ge 1}\) 为任意 dyadic polycube 序列，并沿用定理 \ref{thm:spg-godel-boundary-gcd-lipschitz-stability} 的 \(\omega_0\) 与 \(\operatorname{Dist}_m\) 记号。
+设存在 \(d\in(0,n]\) 与常数 \(C_->0\) 使对充分大 \(m\) 有
+\[
+\operatorname{Vol}\bigl(U_m(A)\bigr)\ \ge\ C_-\,2^{-m(n-d)}.
+\]
+若进一步满足
+\[
+\operatorname{Dist}_m\bigl(U_m(A),V_m\bigr)=o\!\bigl(2^{m(d-1)}\bigr),
+\]
+则体积/通量读出在该误差下渐近稳定：
+\[
+\lim_{m\to\infty}\left|\frac{\int_{\partial V_m}\omega_0}{\int_{\partial U_m(A)}\omega_0}-1\right|=0,
+\]
+并且
+\[
+\limsup_{m\to\infty}\frac{\log\!\left(\int_{\partial V_m}\omega_0\right)}{m\log 2}
+=
+\limsup_{m\to\infty}\frac{\log\!\left(\int_{\partial U_m(A)}\omega_0\right)}{m\log 2}.
+\]
+因此，单一探针的 dyadic 维读出
+\(
+d_A:=n+\limsup_{m\to\infty}\frac{\log\!\left(\int_{\partial U_m(A)}\omega_0\right)}{m\log 2}
+\)
+在 \(V_m\) 上保持不变：
+\[
+d_A
+=
+n+\limsup_{m\to\infty}\frac{\log\!\left(\int_{\partial V_m}\omega_0\right)}{m\log 2}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:spg-godel-boundary-gcd-lipschitz-stability}(2) 及 \eqref{eq:spg-probe-volume-identity}，
+\[
+\left|\int_{\partial V_m}\omega_0-\int_{\partial U_m(A)}\omega_0\right|
+=\bigl|\operatorname{Vol}(V_m)-\operatorname{Vol}(U_m(A))\bigr|
+\le 2^{-m(n-1)}\operatorname{Dist}_m\bigl(U_m(A),V_m\bigr).
+\]
+两边除以 \(\operatorname{Vol}(U_m(A))\ge C_-2^{-m(n-d)}\) 得
+\[
+\left|\frac{\operatorname{Vol}(V_m)}{\operatorname{Vol}(U_m(A))}-1\right|
+\le \frac{1}{C_-}\,\operatorname{Dist}_m\bigl(U_m(A),V_m\bigr)\,2^{-m(d-1)}
+\xrightarrow[m\to\infty]{}0,
+\]
+从而得到通量比值收敛到 \(1\)。
+由于 \(\log(1+o(1))=o(1)\)，对数化并除以 \(m\log 2\) 即得两条 \(\limsup\) 恒等式。证毕。
+\end{proof}
+
+\begin{corollary}[边界 Gödel 码的局部综合征刻画：可填充当且仅当局部闭合，且填充唯一]\label{cor:spg-dyadic-boundary-syndrome-fillability}
+沿用定理 \ref{thm:spg-dyadic-squareclass-chain-complex} 的记号，并取 \(k=n-1\)。
+令 \(H\in\mathcal G_{n-1}\) 对应 \((n-1)\)-链 \(b=\mathbf G_{n-1}^{-1}(H)\in C_{n-1}(\mathcal Q_m;\FF_2)\)。
+则以下条件等价：
+\begin{enumerate}
+  \item 存在 \(x\in C_n(\mathcal Q_m;\FF_2)\) 使得 \(b=\partial_n x\)；
+  \item \(\delta_{n-1}(H)=1\)，等价地 \(\partial_{n-1}b=0\)。
+\end{enumerate}
+并且在上述等价条件成立时，满足 \(b=\partial_n x\) 的 \(x\) 唯一。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:spg-dyadic-squareclass-chain-complex} 的交换性，
+\[
+\delta_{n-1}(H)=1
+\iff
+\mathbf G_{n-2}(\partial_{n-1}b)=1
+\iff
+\partial_{n-1}b=0,
+\]
+其中最后一步用 \(\mathbf G_{n-2}\) 为同构。
+若 \(b=\partial_n x\)，则 \(\partial_{n-1}b=\partial_{n-1}\partial_n x=0\)，故 (1)\(\Rightarrow\)(2)。
+反之，\(|\mathcal Q_m|=I^n\) 可缩，故 \(H_{n-1}(\mathcal Q_m;\FF_2)=0\) 且任意 \((n-1)\)-循环皆为 \(\partial_n\) 的像，故 (2)\(\Rightarrow\)(1)。
+唯一性由 \(\partial_n\) 的单射性（定理 \ref{thm:spg-dyadic-cubical-boundary-injective}）推出。证毕。
+\end{proof}
+
+\begin{theorem}[线性时间 bulk 译码：由边界素因子分解显式重构 dyadic polycube]\label{thm:spg-linear-time-bulk-decode-from-boundary}
+设 \(U\subset I^n\) 为 dyadic polycube，并以 \(\FF_2\) 系数识别其占据链 \([U]\in C_n(\mathcal Q_m;\FF_2)\)。
+令 \(\Gamma\) 为 \(\mathcal Q_m\) 的 \(n\)-胞腔邻接图：顶点为全部 \(n\)-胞腔并附加一顶点 \(\infty\) 表示外部；若两 \(n\)-胞腔共用一张 \((n-1)\)-面，则连一条边；对贴边 \(n\)-胞腔，再以其外侧 \((n-1)\)-面与 \(\infty\) 连边。
+由边界链 \(\partial_n[U]\) 在 \(\Gamma\) 上定义边标记 \(\eta:E(\Gamma)\to\FF_2\)：若对应的 \((n-1)\)-面在 \(\partial_n[U]\) 的支撑中出现，则 \(\eta(e)=1\)，否则 \(\eta(e)=0\)。
+则存在显式算法在时间 \(O(|V(\Gamma)|+|E(\Gamma)|)\) 内重构 \(U\)：
+固定 \(x(\infty)=0\)，任取生成树 \(T\subset\Gamma\) 并沿树边递推赋值
+\[
+x(v)=x(u)+\eta(uv)\quad(\bmod 2),
+\]
+从而得到唯一 \(x\in C_n(\mathcal Q_m;\FF_2)\) 满足 \(\partial_n x=\partial_n[U]\)，且该 \(x\) 等于 \([U]\)。
+\end{theorem}
+\begin{proof}
+对任意 \(x\in C_n(\mathcal Q_m;\FF_2)\)，其边界满足：若 \(uv\) 为内部相邻边，则 \(\eta(uv)=x(u)+x(v)\)；若为外边 \(v\infty\)，则 \(\eta(v\infty)=x(v)\)。
+因此在生成树上由 \(x(\infty)=0\) 递推得到的 \(x\) 在每条树边满足对应约束。
+需证该赋值与路径选择无关。
+由 \(\partial_{n-1}\partial_n[U]=0\) 得到 \(\partial_n[U]\) 为 \((n-1)\)-循环；在图论语言下等价于任一回路上 \(\sum_{e\in\mathrm{cycle}}\eta(e)=0\)（\(\FF_2\)）。
+于是沿回路递推无矛盾，故所得 \(x\) 与生成树选择无关并满足全体边约束，进而满足 \(\partial_n x=\partial_n[U]\)。
+最后由 \(\partial_n\) 的单射性（定理 \ref{thm:spg-dyadic-cubical-boundary-injective}）可知满足该边界的顶维链唯一，故 \(x=[U]\)。证毕。
+\end{proof}
+
+\begin{theorem}[整系数体--界回放的线性时间算法与不一致证书]\label{thm:spg-integer-bulk-decode-or-cycle-certificate}
+令 \(\partial_n:C_n(\mathcal Q_m;\ZZ)\to C_{n-1}(\mathcal Q_m;\ZZ)\) 为 dyadic \(n\)-立方复形上的边界算子，并令 \(\Gamma\) 为定理 \ref{thm:spg-linear-time-bulk-decode-from-boundary} 中的 \(n\)-胞腔邻接图（含外部顶点 \(\infty\)）。
+则存在确定性算法：输入任意 \((n-1)\)-链 \(b\in C_{n-1}(\mathcal Q_m;\ZZ)\)，在时间 \(O(|E(\Gamma)|)\) 内输出下列二者之一：
+\begin{enumerate}
+  \item 唯一的 \(n\)-链 \(c\in C_n(\mathcal Q_m;\ZZ)\) 使 \(\partial_n c=b\)；
+  \item 一条显式闭回路 \(\gamma\subset\Gamma\)（由 \((n-1)\)-面对应的边组成），满足
+  \[
+  \sum_{e\in\gamma}\operatorname{sgn}_\gamma(e)\,\eta_b(e)\neq 0,
+  \]
+  从而推出 \(b\notin \mathrm{im}(\partial_n)\)。
+\end{enumerate}
+其中 \(\eta_b:E(\Gamma)\to\ZZ\) 为由 \(b\) 诱导的边标记（见证明中的定义），\(\operatorname{sgn}_\gamma(e)\in\{\pm1\}\) 为回路行进方向与边定向的一致性符号。
+此外，在情形 (1) 中所得 \(c\) 唯一性由 \(\partial_n\) 的单射性（定理 \ref{thm:spg-dyadic-cubical-boundary-injective}）保证。
+\end{theorem}
+\begin{proof}
+对每条边 \(e\in E(\Gamma)\)（对应某个有向 \((n-1)\)-面 \(\vec f\)），令 \(\eta_b(e)\in\ZZ\) 为 \(b\) 在该有向面上的系数；对外边 \(v\infty\) 亦同样以外侧面取向定义 \(\eta_b(v\infty)\)。
+设 \(c=\sum_{Q}u(Q)\,Q\in C_n(\mathcal Q_m;\ZZ)\)（\(Q\) 遍历 \(n\)-胞腔）为未知体链。
+由立方复形的定向约定，若 \(e=(Q\to Q')\) 为内部相邻边（两胞腔共用同一 \((n-1)\)-面），则对应面在 \(\partial_n Q\) 与 \(\partial_n Q'\) 中符号相反，从而
+\[
+(\partial_n c)(e)=u(Q)-u(Q').
+\]
+若 \(e=(Q\to\infty)\) 为外边，则
+\(
+(\partial_n c)(e)=u(Q)
+\)。
+因此方程 \(\partial_n c=b\) 等价于在图 \(\Gamma\) 上求势函数 \(u:V(\Gamma)\to\ZZ\)（约定 \(u(\infty)=0\)）使得对每条有向边 \(e=(x\to y)\) 满足
+\[
+u(x)-u(y)=\eta_b(e).
+\]
+\par
+取 \(\Gamma\) 的一棵生成树 \(T\)，以 \(\infty\) 为根；沿 \(T\) 自根递推定义 \(u\)：若 \(e=(x\to y)\in T\) 且 \(u(x)\) 已定，则令 \(u(y):=u(x)-\eta_b(e)\)。
+该过程访问每条树边一次，时间 \(O(|T|)\)。
+\par
+随后对每条非树边 \(e=(x\to y)\notin T\) 检验一致性。
+若发现 \(u(x)-u(y)\neq \eta_b(e)\)，则令 \(\gamma\) 为由树中唯一路径 \(x\rightsquigarrow y\) 与边 \(e\) 拼成的基本回路，并按回路行进方向赋予 \(\operatorname{sgn}_\gamma(\cdot)\)。
+沿回路求和得到
+\[
+\sum_{e'\in\gamma}\operatorname{sgn}_\gamma(e')\,\eta_b(e')
+=u(x)-u(y)-\eta_b(e)\neq 0,
+\]
+从而 \(\gamma\) 为不一致证书；由于任意势函数的环路差分和必须为 \(0\)，可知无解，亦即 \(b\notin\mathrm{im}(\partial_n)\)。
+\par
+若所有非树边均通过检验，则差分约束在全图成立，故由 \(u\) 构造的 \(c=\sum_Q u(Q)Q\) 满足 \(\partial_n c=b\)。
+总时间为树递推 \(O(|T|)\) 加非树边检验 \(O(|E(\Gamma)|)\)，即 \(O(|E(\Gamma)|)\)。
+最后，若存在解则由定理 \ref{thm:spg-dyadic-cubical-boundary-injective} 的单射性知解唯一。证毕。
+\end{proof}
+
+\begin{theorem}[边界 Gödel 整数的多项式矩全读出：边界一整数确定任意单项式体积分]\label{thm:spg-boundary-godel-moment-readout}
+设 \(U\subset I^n\) 为 dyadic polycube。
+对任意多重指标 \(\alpha=(\alpha_1,\dots,\alpha_n)\in\NN^n\)，定义 \((n-1)\)-形式
+\[
+\omega_\alpha
+:=\frac1n\sum_{i=1}^n (-1)^{i-1}\frac{x^{\alpha+e_i}}{\alpha_i+1}\,
+\dd x_1\wedge\cdots\wedge\widehat{\dd x_i}\wedge\cdots\wedge \dd x_n,
+\]
+其中 \(e_i\) 为第 \(i\) 个标准基。
+则有恒等式
+\[
+\int_U x^\alpha\,\dd x_1\cdots \dd x_n
+=\int_{\partial U}\omega_\alpha.
+\]
+进一步，若以两两不同的素数 \(\{q_{\vec f}\}\) 对 \(\partial U\) 的有向 \((n-1)\)-面 \(\vec f\) 作平方自由编码
+\(
+H_m(U)=\prod_{\vec f} q_{\vec f}^{\varepsilon_{\vec f}}
+\)
+（定理 \ref{thm:spg-boundary-godelization-holographic-dictionary}），则存在仅依赖于 dyadic 坐标与取向的权重
+\[
+w_\alpha(\vec f):=\int_{\vec f}\omega_\alpha
+\]
+使得
+\[
+\int_{\partial U}\omega_\alpha=\sum_{\vec f:\ \varepsilon_{\vec f}=1} w_\alpha(\vec f).
+\]
+因此，\(H_m(U)\) 的素因子支撑确定任意单项式矩 \(\int_U x^\alpha\).
+\end{theorem}
+\begin{proof}
+直接计算可得 \( \dd\omega_\alpha=x^\alpha\,\dd x_1\cdots \dd x_n \)。
+由 Stokes 定理 \(\int_U \dd\omega_\alpha=\int_{\partial U}\omega_\alpha\) 即得第一式。
+第二式由积分的线性性与 \(\partial U\) 的面分解推出；而 \(\varepsilon_{\vec f}\) 的支撑与 \(H_m(U)\) 的素因子支撑一一对应。证毕。
+\end{proof}
+
+\input{thm__spg-boundary-godel-finite-moment-completeness}
+
+\begin{corollary}[单项式矩的抗扰动误差界：由 \texorpdfstring{$\gcd$}{gcd} 显式读出]\label{cor:spg-godel-moment-robust-gcd-bound}
+在定理 \ref{thm:spg-godel-boundary-gcd-lipschitz-stability} 的设定下，固定 \(\alpha=(\alpha_1,\dots,\alpha_n)\in\NN^n\) 并令
+\[
+\omega_{\alpha}^{(1)}:=\frac{x^{\alpha+e_1}}{\alpha_1+1}\,\dd x_2\wedge\cdots\wedge \dd x_n,
+\qquad
+\dd\omega_{\alpha}^{(1)}=x^\alpha\,\dd x_1\cdots\dd x_n.
+\]
+则对任意 dyadic polycube \(U,V\subset I^n\) 有
+\[
+\left|\int_U x^\alpha\,\dd x_1\cdots\dd x_n-\int_V x^\alpha\,\dd x_1\cdots\dd x_n\right|
+=\left|\int_{\partial U-\partial V}\omega_{\alpha}^{(1)}\right|
+\le \frac{2^{-m(n-1)}}{\alpha_1+1}\,\operatorname{Dist}_m(U,V),
+\]
+其中 \(\operatorname{Dist}_m(U,V)\) 由定理 \ref{thm:spg-godel-boundary-gcd-lipschitz-stability} 中的 \(\gcd\)-算术表达显式给出。
+\end{corollary}
+\begin{proof}
+由 Stokes 定理得
+\(
+\int_U x^\alpha\,\dd x-\int_V x^\alpha\,\dd x=\int_{\partial U-\partial V}\omega_{\alpha}^{(1)}
+\)。
+对任意 dyadic 取向 \((n-1)\)-面 \(\vec f\)，有 \(|x^{\alpha+e_1}|\le 1\) 且 \(\vec f\) 的 \((n-1)\)-测度为 \(2^{-m(n-1)}\)，从而
+\[
+\left|\int_{\vec f}\omega_{\alpha}^{(1)}\right|
+\le \frac{1}{\alpha_1+1}\int_{\vec f}1\,\dd S
+=\frac{2^{-m(n-1)}}{\alpha_1+1}.
+\]
+将 \(\partial U-\partial V\) 分解为取向面之和并用三角不等式得到
+\[
+\left|\int_{\partial U-\partial V}\omega_{\alpha}^{(1)}\right|
+\le \frac{2^{-m(n-1)}}{\alpha_1+1}\bigl\|\partial_n[U]-\partial_n[V]\bigr\|_{\ell^1}
+=\frac{2^{-m(n-1)}}{\alpha_1+1}\,\operatorname{Dist}_m(U,V),
+\]
+其中最后一步用定理 \ref{thm:spg-godel-boundary-gcd-lipschitz-stability}。证毕。
+\end{proof}
+
+\begin{theorem}[dyadic 边界像的 LDPC 码结构：局部校验子为共面四元关系]\label{thm:spg-dyadic-boundary-image-ldpc}
+令
+\[
+\mathcal C_{m,n}:=\mathrm{im}\bigl(\partial_n:C_n(\mathcal Q_m;\FF_2)\to C_{n-1}(\mathcal Q_m;\FF_2)\bigr)
+\]
+为 dyadic 顶维 \(0/1\) 链的模 \(2\) 边界像集合。
+则：
+\begin{enumerate}
+  \item \(\mathcal C_{m,n}\) 为长度
+        \[
+        N_{m,n}:=\#\mathcal F_{n-1}(\mathcal Q_m)=n(2^m+1)\,2^{m(n-1)}
+        \]
+        的线性码，且
+        \[
+        \dim \mathcal C_{m,n}=2^{mn},
+        \qquad
+        R_{m,n}:=\frac{\dim \mathcal C_{m,n}}{N_{m,n}}
+        =\frac{2^m}{n(2^m+1)}\xrightarrow[m\to\infty]{}\frac1n.
+        \]
+  \item 以 \(\partial_{n-1}\) 作为校验算子，则每一条校验方程恰涉及 \(4\) 个 \((n-1)\)-胞腔坐标；因此 \(\mathcal C_{m,n}\) 构成一族规则 LDPC 码，其校验度为 \(4\)，变量度为 \(2(n-1)\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\textbf{(1)}
+\(\mathcal C_{m,n}\) 为 \(\FF_2\)-线性子空间由定义即得。
+计数 \(N_{m,n}\) 来自：每个坐标方向有 \(2^m+1\) 个切片超平面，每个切片上有 \(2^{m(n-1)}\) 个 \((n-1)\)-胞腔，共 \(n\) 个方向。
+又由定理 \ref{thm:spg-dyadic-cubical-boundary-injective}，\(\partial_n\) 在顶维链群上单射，故
+\[
+\dim \mathcal C_{m,n}=\rank(\partial_n)=\dim C_n(\mathcal Q_m;\FF_2)=2^{mn}.
+\]
+码率公式随即得到。
+\par
+\textbf{(2)}
+在立方格点局部，一个 \((n-2)\)-胞腔位于两条坐标方向的交叉处，恰被四个 \((n-1)\)-胞腔围绕；因此 \(\partial_{n-1}\) 的对应一行支撑大小为 \(4\)。
+另一方面，每个 \((n-1)\)-胞腔的边界含 \(2(n-1)\) 个 \((n-2)\)-胞腔，故变量度为 \(2(n-1)\)。证毕。
+\end{proof}
+
+\begin{corollary}[dyadic 边界像的最小距离]\label{cor:spg-dyadic-boundary-image-min-distance}
+在定理 \ref{thm:spg-dyadic-boundary-image-ldpc} 的记号下，以 Hamming 重量
+\[
+\mathrm{wt}(b):=\#\{\sigma\in\mathcal F_{n-1}(\mathcal Q_m):\ b(\sigma)=1\}
+\qquad\bigl(b\in C_{n-1}(\mathcal Q_m;\FF_2)\bigr)
+\]
+定义 \(\mathcal C_{m,n}\) 的最小距离
+\(
+d_{\min}(\mathcal C_{m,n}):=\min\{\mathrm{wt}(b):b\in\mathcal C_{m,n}\setminus\{0\}\}
+\)。
+则对一切 \(m\ge 1\) 与 \(n\ge 1\) 有
+\[
+\boxed{\ d_{\min}(\mathcal C_{m,n})=2n\ }.
+\]
+\end{corollary}
+\begin{proof}
+取任一 \(n\)-胞腔 \(Q\in\mathcal F_n(\mathcal Q_m)\)，则 \(\partial_n Q\in\mathcal C_{m,n}\setminus\{0\}\) 且其支撑恰由 \(Q\) 的 \(2n\) 张 \((n-1)\)-面构成，故 \(d_{\min}(\mathcal C_{m,n})\le 2n\)。
+\par
+反之，取任意非零 \(b=\partial_n x\in\mathcal C_{m,n}\) 且 \(x\in C_n(\mathcal Q_m;\FF_2)\) 非零。
+把 \(x\) 的支撑视为非空 \(n\)-胞腔集合 \(S\subset\mathcal F_n(\mathcal Q_m)\)。
+对每个坐标方向 \(i\in\{1,\dots,n\}\)，取 \(S\) 中在第 \(i\) 坐标上达到最小值的一个胞腔 \(Q_i^{-}\)；
+则其 \((-e_i)\)-外侧面不可能与另一胞腔相邻（否则第 \(i\) 坐标还能更小），因而在 \(\partial_n x\) 中出现。
+同理取达到最大值的一个胞腔 \(Q_i^{+}\) 得到一张 \((+e_i)\)-外侧面亦在 \(\partial_n x\) 中出现。
+对不同的 \(i\) 与不同符号得到的外侧面两两不同，故 \(\mathrm{wt}(b)\ge 2n\)。
+于是 \(d_{\min}(\mathcal C_{m,n})\ge 2n\)，合并得等号。证毕。
+\end{proof}
+
+\endinput
+

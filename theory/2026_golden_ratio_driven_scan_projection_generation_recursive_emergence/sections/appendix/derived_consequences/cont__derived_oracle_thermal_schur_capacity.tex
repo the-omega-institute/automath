@@ -1,0 +1,409 @@
+\subsection{热相预言机容量的微分结构与条件描述谱}
+
+定理 \ref{thm:pom-oracle-capacity-thermal-cut}、推论 \ref{cor:pom-oracle-capacity-slope-readout}、定理 \ref{thm:pom-microcanonical-escort-kl-rate-zero} 与定理 \ref{thm:pom-oracle-critical-window-gaussian} 已分别给出热相切割恒等式、共轭参数读出、微正则条件化与 escort 的信息等价，以及临界预算窗的高斯极限。把这些接口与条件描述谱的聚合计数合并后，可得到如下微分几何与指数同构。
+
+\begin{theorem}[热相预言机容量指数的微分几何]\label{thm:derived-oracle-thermal-differential-geometry}
+沿用定理 \ref{thm:pom-oracle-capacity-thermal-cut} 的记号，设
+\[
+B_m(a):=\left\lfloor \frac{a}{\log 2}\,m\right\rfloor,
+\qquad
+\Gamma_{\mathrm{orc}}(a):=\lim_{m\to\infty}\frac1m\log \mathcal{C}^{\mathrm{orc}}_m\bigl(B_m(a)\bigr).
+\]
+进一步设 \(\tau\) 在 \((0,1)\) 上严格凸且属于 \(C^3\)，并记
+\[
+a_0:=\tau'(0^+),
+\qquad
+a_1:=\tau'(1^-).
+\]
+对每个 \(a\in(a_0,a_1)\)，令 \(q_*(a)\in(0,1)\) 为唯一满足
+\[
+\tau'(q_*(a))=a
+\]
+的共轭参数。则 \(\Gamma_{\mathrm{orc}}\) 在 \((a_0,a_1)\) 上属于 \(C^3\)，且满足
+\[
+\Gamma_{\mathrm{orc}}'(a)=1-q_*(a),
+\]
+\[
+\Gamma_{\mathrm{orc}}''(a)=-\frac{1}{\tau''(q_*(a))}<0,
+\]
+\[
+\Gamma_{\mathrm{orc}}'''(a)=\frac{\tau'''(q_*(a))}{\tau''(q_*(a))^3}.
+\]
+此外，
+\[
+\Gamma_{\mathrm{orc}}'(a_0+)=1,
+\qquad
+\Gamma_{\mathrm{orc}}'(a_1-)=0.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-oracle-capacity-thermal-cut}，热相区间内有
+\[
+\Gamma_{\mathrm{orc}}(a)=f(a)+a.
+\]
+再由推论 \ref{cor:pom-oracle-capacity-slope-readout}，
+\[
+f'(a)=-q_*(a),
+\qquad
+q_*(a)=1-\Gamma_{\mathrm{orc}}'(a),
+\]
+从而得到
+\[
+\Gamma_{\mathrm{orc}}'(a)=1-q_*(a).
+\]
+
+由于 \(\tau''>0\)，隐函数定理表明 \(q_*\) 在 \((a_0,a_1)\) 上属于 \(C^2\)。对驻点方程
+\[
+\tau'(q_*(a))=a
+\]
+关于 \(a\) 微分，得到
+\[
+\tau''(q_*(a))\,q_*'(a)=1,
+\qquad\text{即}\qquad
+q_*'(a)=\frac{1}{\tau''(q_*(a))}.
+\]
+代回 \(\Gamma_{\mathrm{orc}}'(a)=1-q_*(a)\) 即得
+\[
+\Gamma_{\mathrm{orc}}''(a)=-q_*'(a)=-\frac{1}{\tau''(q_*(a))}<0.
+\]
+
+再对上式微分一次，
+\[
+\Gamma_{\mathrm{orc}}'''(a)
+=-\frac{\dd}{\dd a}\left(\frac{1}{\tau''(q_*(a))}\right)
+=\frac{\tau'''(q_*(a))\,q_*'(a)}{\tau''(q_*(a))^2}
+=\frac{\tau'''(q_*(a))}{\tau''(q_*(a))^3}.
+\]
+
+最后，由 \(\tau'\) 在 \((0,1)\) 上严格递增且值域为 \((a_0,a_1)\)，有
+\[
+q_*(a)\downarrow 0 \quad (a\downarrow a_0),
+\qquad
+q_*(a)\uparrow 1 \quad (a\uparrow a_1).
+\]
+将其代入 \(\Gamma_{\mathrm{orc}}'(a)=1-q_*(a)\) 即得端点斜率。证毕。
+\end{proof}
+
+\begin{theorem}[条件 Kolmogorov 描述谱与预言机容量谱的指数同构]\label{thm:derived-kolmogorov-oracle-exponent-isomorphism}
+固定一台通用前缀自由机 \(U\)。对每个分辨率 \(m\ge 1\)、每个 \(x\in X_m\) 与每个 \(B\in\ZZ_{\ge 0}\)，定义
+\[
+\mathcal K_x(B):=\left\{\omega\in\Fold_m^{-1}(x):\ K_U(\omega\mid x,m)\le B\right\},
+\qquad
+\mathcal K_m(B):=\sum_{x\in X_m}\card{\mathcal K_x(B)}.
+\]
+则存在与 \(m\) 无关的常数 \(c\in\NN\) 使得对所有 \(m\ge 1\) 与 \(B\ge 0\) 都有
+\[
+\mathcal{C}^{\mathrm{orc}}_m(B)\le \mathcal K_m(B+c)\le 2^c\,\mathcal{C}^{\mathrm{orc}}_m(B).
+\]
+因此，对每个 \(a\in(0,\log 2]\)，若 \(\Gamma_{\mathrm{orc}}(a)\) 存在，则极限
+\[
+\Gamma_K(a):=\lim_{m\to\infty}\frac1m\log \mathcal K_m\bigl(B_m(a)\bigr)
+\]
+亦存在，且满足严格等式
+\[
+\Gamma_K(a)=\Gamma_{\mathrm{orc}}(a)
+\qquad
+\bigl(a\in(0,\log 2]\bigr).
+\]
+特别地，在热相区间 \((a_0,a_1)\) 内有
+\[
+\Gamma_K(a)=f(a)+a,
+\]
+并且 \(\Gamma_K\) 与 \(\Gamma_{\mathrm{orc}}\) 共享定理 \ref{thm:derived-oracle-thermal-differential-geometry} 的全部微分恒等式：
+\[
+\Gamma_K'(a)=1-q_*(a),
+\qquad
+\Gamma_K''(a)=-\frac{1}{\tau''(q_*(a))},
+\qquad
+\Gamma_K'''(a)=\frac{\tau'''(q_*(a))}{\tau''(q_*(a))^3}.
+\]
+\end{theorem}
+\begin{proof}
+由前缀 Kolmogorov 复杂度的计数性质，对固定 \(x,m\) 而言，满足
+\(
+K_U(\omega\mid x,m)\le B+c
+\)
+的字符串个数至多为 \(2^{B+c}\)，而其本身又不可能超过纤维大小 \(d_m(x)\)。因此
+\[
+\card{\mathcal K_x(B+c)}
+\le
+\min\bigl(d_m(x),2^{B+c}\bigr)
+\le
+2^c\min\bigl(d_m(x),2^B\bigr).
+\]
+对 \(x\in X_m\) 求和并用
+\[
+\mathcal{C}^{\mathrm{orc}}_m(B)=\sum_{x\in X_m}\min\bigl(d_m(x),2^B\bigr)
+\]
+可得
+\[
+\mathcal K_m(B+c)\le 2^c\,\mathcal{C}^{\mathrm{orc}}_m(B).
+\]
+
+下界利用 fold 族的统一可计算性。给定 \(x,m\)，可由一条与 \(m\) 无关的固定解释程序枚举 \(\{0,1\}^m\) 并筛选满足 \(\Fold_m(\omega)=x\) 的字串，从而按字典序输出纤维 \(\Fold_m^{-1}(x)\) 的第 \(i\) 个元素。故存在常数 \(c\)（仅依赖于 \(U\) 与该统一解释程序）使得对每个
+\[
+0\le i<\min\bigl(d_m(x),2^B\bigr)
+\]
+相应元素 \(\omega_{x,i}\in\Fold_m^{-1}(x)\) 满足
+\[
+K_U(\omega_{x,i}\mid x,m)\le B+c.
+\]
+于是
+\[
+\card{\mathcal K_x(B+c)}\ge \min\bigl(d_m(x),2^B\bigr).
+\]
+对 \(x\) 求和即得
+\[
+\mathcal{C}^{\mathrm{orc}}_m(B)\le \mathcal K_m(B+c)\le 2^c\,\mathcal{C}^{\mathrm{orc}}_m(B).
+\]
+
+令 \(B=B_m(a)-c\)。对充分大的 \(m\) 有 \(B\ge 0\)，故
+\[
+\mathcal{C}^{\mathrm{orc}}_m\bigl(B_m(a)-c\bigr)
+\le
+\mathcal K_m\bigl(B_m(a)\bigr)
+\le
+2^c\,\mathcal{C}^{\mathrm{orc}}_m\bigl(B_m(a)-c\bigr).
+\]
+另一方面，对任意 \(D\ge c\) 都有逐项不等式
+\[
+\min(d,2^D)\le 2^c\min(d,2^{D-c}),
+\]
+从而
+\[
+\mathcal{C}^{\mathrm{orc}}_m\bigl(B_m(a)-c\bigr)
+\le
+\mathcal{C}^{\mathrm{orc}}_m\bigl(B_m(a)\bigr)
+\le
+2^c\,\mathcal{C}^{\mathrm{orc}}_m\bigl(B_m(a)-c\bigr).
+\]
+因此
+\[
+\lim_{m\to\infty}\frac1m\log \mathcal K_m\bigl(B_m(a)\bigr)
+=
+\lim_{m\to\infty}\frac1m\log \mathcal{C}^{\mathrm{orc}}_m\bigl(B_m(a)\bigr)
+=
+\Gamma_{\mathrm{orc}}(a).
+\]
+这就证明了 \(\Gamma_K(a)=\Gamma_{\mathrm{orc}}(a)\)。
+
+热相区间上的恒等式 \(\Gamma_K(a)=f(a)+a\) 由定理 \ref{thm:pom-oracle-capacity-thermal-cut} 立即得到；微分恒等式则由上式与定理 \ref{thm:derived-oracle-thermal-differential-geometry} 直接传递。证毕。
+\end{proof}
+
+\begin{remark}[热相几何向条件描述谱的迁移]\label{rem:derived-kolmogorov-oracle-geometry-transfer}
+定理 \ref{thm:derived-kolmogorov-oracle-exponent-isomorphism} 表明，热相区间上的 Legendre 对偶、共轭参数、曲率与三阶扭率并非只属于预言机容量的几何，而是在指数尺度上完整迁移到条件 Kolmogorov 描述谱。
+\end{remark}
+
+\subsection{Schur 断层的主相可见性与容量坐标化}
+
+定理 \ref{thm:pom-schur-trace-finite-laplace-principle}、命题 \ref{prop:pom-schur-resonant-layer-total-cancellation}、推论 \ref{cor:pom-schur-trace-frobenius-character-identification} 与命题 \ref{prop:pom-schur-trace-jacobi-trudi-euler-primitive-fiber} 已分别把 Schur 通道迹写成按分拆压力分层的有限指数和，给出共振层 Fourier 系数的反演公式，并建立了通道迹与纤维多重度坐标之间的 Frobenius/Jacobi--Trudi 对应。由此可进一步抽取主相可见性的充要判据，以及连续容量曲线与全 Schur 断层之间的完备等价。
+
+\begin{theorem}[非平凡 Schur 通道获得顶层指数的充要判据]\label{thm:derived-schur-top-layer-criterion}
+固定 \(q\ge 2\)。沿用定理 \ref{thm:pom-schur-trace-finite-laplace-principle} 与命题 \ref{prop:pom-schur-resonant-layer-total-cancellation} 的记号，对每个分拆 \(\nu\vdash q\) 记
+\[
+\mathcal P(\nu):=\sum_{r\ge 1} c_r(\nu)\,P(r),
+\qquad
+\mathcal P_{\max}:=\max_{\nu\vdash q}\mathcal P(\nu),
+\qquad
+\mathcal R_{\max}:=\{\nu\vdash q:\ \mathcal P(\nu)=\mathcal P_{\max}\}.
+\]
+定义共振层权函数
+\[
+w(\nu):=K(\nu)\,\mathbf 1_{\{\nu\in\mathcal R_{\max}\}},
+\]
+并对每个 \(\lambda\vdash q\) 定义 Fourier--Schur 系数
+\[
+b_\lambda:=
+\sum_{\nu\vdash q}\frac{\chi^\lambda(\nu)}{z_\nu}\,w(\nu)
+=
+\sum_{\nu\in\mathcal R_{\max}}\frac{\chi^\lambda(\nu)}{z_\nu}\,K(\nu).
+\]
+则对任意 \(\lambda\vdash q\)，有等价关系
+\[
+\limsup_{m\to\infty}\frac1m\log\bigl|T_{q,\lambda}(m)\bigr|
+=
+\mathcal P_{\max}
+\quad\Longleftrightarrow\quad
+b_\lambda\neq 0.
+\]
+此外，
+\[
+\max_{\lambda\vdash q,\ \lambda\neq(q)}
+\limsup_{m\to\infty}\frac1m\log\bigl|T_{q,\lambda}(m)\bigr|
+=
+\mathcal P_{\max}
+\]
+当且仅当 \(w\) 不是常值类函数。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-schur-trace-finite-laplace-principle}，指数层 \(v=\mathcal P_{\max}\) 的层系数为
+\[
+A_\lambda(\mathcal P_{\max})
+=
+f^\lambda
+\sum_{\substack{\nu\vdash q\\ \mathcal P(\nu)=\mathcal P_{\max}}}
+\frac{\chi^\lambda(\nu)}{z_\nu}\,K(\nu)
+=
+f^\lambda b_\lambda.
+\]
+由于 \(f^\lambda>0\)，故
+\[
+A_\lambda(\mathcal P_{\max})\neq 0
+\quad\Longleftrightarrow\quad
+b_\lambda\neq 0.
+\]
+
+若 \(b_\lambda\neq 0\)，则顶层系数非零，定理 \ref{thm:pom-schur-trace-finite-laplace-principle} 立即给出
+\[
+\limsup_{m\to\infty}\frac1m\log|T_{q,\lambda}(m)|=\mathcal P_{\max}.
+\]
+反之，若 \(b_\lambda=0\)，则或者 \(\mathcal P_{\max}\notin\mathcal V_\lambda\)，或者顶层在 \(\mathcal P_{\max}\) 处完全消去；两种情形下定理 \ref{thm:pom-schur-trace-finite-laplace-principle} 都给出
+\[
+\limsup_{m\to\infty}\frac1m\log|T_{q,\lambda}(m)|<\mathcal P_{\max}.
+\]
+这就证明了第一条。
+
+第二条由命题 \ref{prop:pom-schur-resonant-layer-total-cancellation} 直接推出：所有非平凡 \(\lambda\neq(q)\) 的 \(b_\lambda\) 同时为零，当且仅当 \(w\) 为常值类函数；因此存在某个非平凡通道达到顶层指数，当且仅当 \(w\) 不是常值类函数。证毕。
+\end{proof}
+
+\begin{corollary}[唯一主分拆时的角色选择律]\label{cor:derived-schur-unique-dominant-partition-selection}
+在定理 \ref{thm:derived-schur-top-layer-criterion} 的设定下，若 \(\mathcal R_{\max}=\{\nu_*\}\) 为单点，则对任意 \(\lambda\vdash q\) 有
+\[
+\limsup_{m\to\infty}\frac1m\log\bigl|T_{q,\lambda}(m)\bigr|
+=
+\mathcal P(\nu_*)
+\quad\Longleftrightarrow\quad
+\chi^\lambda(\nu_*)\neq 0.
+\]
+特别地，若唯一主分拆为单个 \(q\)-循环
+\[
+\nu_*=(q),
+\]
+则
+\[
+\chi^\lambda((q))\neq 0
+\quad\Longleftrightarrow\quad
+\lambda=(q-k,1^k)\ \text{为钩型分拆}\ (0\le k\le q-1).
+\]
+因而在该情形下，达到顶层指数的非平凡 Schur 通道恰为全部非平凡钩型通道。
+\end{corollary}
+\begin{proof}
+当 \(\mathcal R_{\max}=\{\nu_*\}\) 时，
+\[
+b_\lambda=\frac{K(\nu_*)}{z_{\nu_*}}\chi^\lambda(\nu_*).
+\]
+由于 \(K(\nu_*)>0\) 且 \(z_{\nu_*}>0\)，定理 \ref{thm:derived-schur-top-layer-criterion} 立即给出
+\[
+\limsup_{m\to\infty}\frac1m\log|T_{q,\lambda}(m)|=\mathcal P(\nu_*)
+\quad\Longleftrightarrow\quad
+\chi^\lambda(\nu_*)\neq 0.
+\]
+
+若 \(\nu_*=(q)\)，则 Murnaghan--Nakayama 规则表明
+\[
+\chi^\lambda((q))\neq 0
+\quad\Longleftrightarrow\quad
+\lambda=(q-k,1^k)
+\]
+为钩型分拆。代回上式即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[连续容量曲线与全 Schur 断层的双向完备等价]\label{thm:derived-continuous-capacity-schur-equivalence}
+固定分辨率 \(m\)，并记
+\[
+C_m^{\mathrm{cont}}(T):=\sum_{x\in X_m}\min\bigl(d_m(x),T\bigr)
+\qquad (T\ge 0).
+\]
+对每个整数 \(t\ge 1\)，令
+\[
+n_t:=\card{\{x\in X_m:\ d_m(x)=t\}}.
+\]
+则数据
+\[
+C_m^{\mathrm{cont}}(\cdot)
+\qquad\Longleftrightarrow\qquad
+\bigl\{T_{q,\lambda}(m):\ q\ge 1,\ \lambda\vdash q\bigr\}
+\]
+在固定 \(m\) 上彼此完全决定。更精确地：
+\begin{enumerate}
+  \item 由连续容量曲线可恢复全部纤维直方图：
+  \[
+  n_t
+  =
+  2C_m^{\mathrm{cont}}(t)-C_m^{\mathrm{cont}}(t-1)-C_m^{\mathrm{cont}}(t+1)
+  \qquad (t\ge 1).
+  \]
+  因而可恢复全部幂和
+  \[
+  S_r(m)=\sum_{t\ge 1} t^r n_t
+  \qquad (r\ge 1).
+  \]
+  再由推论 \ref{cor:pom-schur-trace-frobenius-character-identification}，
+  \[
+  T_{q,\lambda}(m)=f^\lambda\,s_\lambda(D_m),
+  \qquad
+  p_r(D_m)=S_r(m),
+  \]
+  从而恢复全部 Schur 通道迹。
+  \item 反之，仅凭平凡通道序列
+  \[
+  T_{q,(q)}(m)=h_q(D_m)
+  \qquad (q\ge 0)
+  \]
+  即可恢复 \(C_m^{\mathrm{cont}}\)。确实，其生成函数
+  \[
+  H_m(z):=\sum_{q\ge 0}h_q(D_m)\,z^q
+  =\prod_{t\ge 1}(1-tz)^{-n_t}
+  \]
+  的极点位置与阶数唯一确定全部 \(n_t\)；于是
+  \[
+  C_m^{\mathrm{cont}}(T)=\sum_{t\ge 1} n_t\,\min(t,T)
+  \]
+  被完全恢复。因而全部 Schur 通道迹亦随之确定。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对任意固定整数 \(d\ge 1\) 与任意 \(t\ge 1\)，直接计算得
+\[
+2\min(d,t)-\min(d,t-1)-\min(d,t+1)=\mathbf 1_{\{d=t\}}.
+\]
+对所有 \(x\in X_m\) 求和便得
+\[
+2C_m^{\mathrm{cont}}(t)-C_m^{\mathrm{cont}}(t-1)-C_m^{\mathrm{cont}}(t+1)
+=
+\sum_{x\in X_m}\mathbf 1_{\{d_m(x)=t\}}
+=
+n_t.
+\]
+因此全部 \(n_t\) 由 \(C_m^{\mathrm{cont}}\) 唯一恢复，并进一步得到全部幂和
+\[
+S_r(m)=\sum_{t\ge 1} t^r n_t.
+\]
+由推论 \ref{cor:pom-schur-trace-frobenius-character-identification}，Schur 通道满足
+\[
+T_{q,\lambda}(m)=f^\lambda s_\lambda(D_m),
+\qquad
+p_r(D_m)=S_r(m),
+\]
+从而第一方向成立。
+
+反过来，平凡通道序列给出全部完全对称函数值 \(h_q(D_m)\)，因此生成函数
+\[
+H_m(z)=\sum_{q\ge 0}h_q(D_m)\,z^q
+\]
+被完全确定。由命题 \ref{prop:pom-schur-trace-jacobi-trudi-euler-primitive-fiber}，
+\[
+H_m(z)=\prod_{x\in X_m}(1-d_m(x)z)^{-1}
+=
+\prod_{t\ge 1}(1-tz)^{-n_t}.
+\]
+右端是具有互异线性因子 \((1-tz)\) 的有理函数分解，其极点位置 \(z=1/t\) 与极点阶数 \(n_t\) 唯一，因此全部 \(n_t\) 可由 \(H_m\) 完全恢复。于是
+\[
+C_m^{\mathrm{cont}}(T)=\sum_{t\ge 1} n_t\,\min(t,T)
+\]
+亦被确定。最后再由第一方向中的恢复链条即可得到全体 Schur 通道迹。证毕。
+\end{proof}
+
+\begin{remark}[容量曲线与 Schur 断层的完备坐标化]\label{rem:derived-capacity-schur-complete-coordinates}
+定理 \ref{thm:derived-continuous-capacity-schur-equivalence} 表明，连续容量曲线与全 Schur 断层并非两套平行不变量，而是同一纤维多重度直方图的两组完备坐标。
+\end{remark}

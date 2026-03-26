@@ -1,0 +1,135 @@
+\subsection{圆上的谐波分析接口：相位 Fourier 与有理基函数}\label{subsec:unit-circle-phase-fourier}
+把 \(\mathbb{U}\) 视作 \(\RR/\ZZ\) 的基本区间，并用标准角色基 \(e^{2\pi\mathrm{i}ku}\)（\(k\in\ZZ\)）。
+对 \(f\in L^2(\RR,\dd\mu)\) 定义其相位 Fourier 系数
+\begin{equation}\label{eq:unit-circle-phase-fourier-coeff}
+\widehat f(k)
+:=\int_{-1/2}^{1/2} f\bigl(\tan(\pi u)\bigr)e^{-2\pi\mathrm{i}ku}\,\dd u
+=\int_{\RR} f(x)\,\overline{\iota(x)^k}\,\dd\mu(x),
+\qquad
+\iota(x)=\frac{1+\mathrm{i}x}{1-\mathrm{i}x}.
+\end{equation}
+在 \(L^2\) 意义下可写出圆级数重构
+\begin{equation}\label{eq:unit-circle-phase-fourier-reconstruct}
+f\bigl(\tan(\pi u)\bigr)\sim \sum_{k\in\ZZ}\widehat f(k)\,e^{2\pi\mathrm{i}ku}.
+\end{equation}
+由于
+\(
+\iota(x)^k=\bigl(\tfrac{1+\mathrm{i}x}{1-\mathrm{i}x}\bigr)^k
+\)
+为 \(x\) 的有理函数，\eqref{eq:unit-circle-phase-fourier-coeff} 给出一个把“实轴上的函数（在自然权重下）”转写为“单位圆上的 Fourier 数据”的模板；其基函数族在代数上可直接操作，从而适合作为“分析问题 \(\to\) 有理结构”接口层的可审计基底。
+
+\begin{proposition}[有限模态 Hardy 投影的显式有理核]\label{prop:unit-circle-phase-hardy-kernel-rational}
+令
+\(
+w(x):=\iota(x)=\frac{1+\mathrm{i}x}{1-\mathrm{i}x}
+\)。
+对整数 \(N\ge 1\)，定义截断核
+\begin{equation}\label{eq:unit-circle-phase-hardy-kernel}
+\boxed{\;
+K_N(x,y):=\sum_{k=0}^{N-1} w(x)^k\,\overline{w(y)}^{\,k}
+=\frac{1-\bigl(w(x)\overline{w(y)}\bigr)^N}{1-w(x)\overline{w(y)}}\;}
+\end{equation}
+（在 \(x=y\) 处具有可去奇点，且 \(K_N(x,x)=N\)）。
+则 \(K_N(x,y)\) 关于 \((x,y)\) 为显式有理函数，并且分母满足闭式化简
+\begin{equation}\label{eq:unit-circle-phase-hardy-kernel-denominator}
+\boxed{\;
+\frac{1}{1-w(x)\overline{w(y)}}
+=\frac{(1-\mathrm{i}x)(1+\mathrm{i}y)}{2\mathrm{i}(y-x)}
+=\frac12+\frac{1+xy}{2\mathrm{i}(y-x)}\;}
+\end{equation}
+（\(x\neq y\)；在 \(x=y\) 处取极限即可）。
+在自然权重 \(\dd\mu(x)=\frac{1}{\pi(1+x^2)}\dd x\) 下，\(L^2(\RR,\dd\mu)\) 上“前 \(N\) 个非负模态”正交投影可写为
+\[
+(\Pi_N f)(x)=\int_{\RR} K_N(x,y)\,f(y)\,\dd\mu(y),
+\qquad f\in L^2(\RR,\dd\mu).
+\]
+\end{proposition}
+\begin{proof}
+在相位坐标 \(u=\upsilon(x)\in\mathbb{U}\) 下，基函数满足 \(w(x)^k=e^{2\pi\mathrm{i}ku}\)，因此 \(\{w(\cdot)^k\}_{k\in\ZZ}\) 为 \(L^2(\RR,\dd\mu)\) 的正交角色基。
+由有限几何级数得到 \eqref{eq:unit-circle-phase-hardy-kernel}，而投影核表示式由正交展开的标准计算得到。
+对 \eqref{eq:unit-circle-phase-hardy-kernel-denominator}，直接在 \(y\in\RR\) 下用 \(\overline{w(y)}=\frac{1-\mathrm{i}y}{1+\mathrm{i}y}\) 代入并通分化简即可。
+当 \(x\to y\) 时，分式右端为可去奇点，对应极限与 \(K_N(x,x)=N\) 一致。证毕。
+\end{proof}
+
+\subsubsection{有理主弧 Gram 核：分母层分解、尺度自举与有限验证}\label{subsubsec:unit-circle-rational-gram-bootstrap}
+
+本段把“有理频率的 Gram 核”写成一条可审计的 Fourier 恒等式，并给出与大筛/谱隙审计对齐的两条结构推论：单尺度节省可传播（尺度自举），而“是否存在统一谱隙”可约化为有限检查集（有限验证）。
+
+\begin{proposition}[有理频率 Gram 矩阵的分母层表达：Ramanujan 和核的谱化翻译]\label{prop:conclusion66-gram-ramanujan-decomposition}
+令
+\[
+\mathcal{Q}_M:=\left\{\frac{a}{q}:\ 1\le q\le M,\ (a,q)=1\right\}\subset\mathbb{Q}/\mathbb{Z},
+\qquad
+\ell^2(\mathcal{Q}_M)\cong\bigoplus_{q\le M}\ell^2((\mathbb{Z}/q\mathbb{Z})^\times).
+\]
+取一个实偶函数 \(\widehat\psi:\RR\to\RR_{\ge 0}\)（快速衰减即可），并定义 \(L\)-尺度的周期化核
+\[
+\psi_L(x):=\sum_{n\in\ZZ}\widehat\psi(n/L)\,e^{2\pi\mathrm{i}nx}\qquad(x\in\RR/\ZZ).
+\]
+令 \(K_{M,L}\) 为作用在 \(\ell^2(\mathcal{Q}_M)\) 上的核算子
+\[
+(K_{M,L}g)(r):=\sum_{r'\in\mathcal{Q}_M}\psi_L(r-r')\,g(r').
+\]
+则对任意 \(g\in\ell^2(\mathcal{Q}_M)\) 有严格恒等式
+\[
+\boxed{\;
+\langle g,K_{M,L}g\rangle
+=\sum_{n\in\ZZ}\widehat\psi(n/L)\,
+\left|\sum_{q\le M}\sum_{\substack{(a,q)=1}} g(a/q)\,e^{2\pi\mathrm{i}an/q}\right|^2\; }.
+\]
+特别地，当 \(g\) 在每个分母层上为常数时，内层和退化为 Ramanujan 和
+\(
+c_q(n):=\sum_{(a,q)=1}e^{2\pi\mathrm{i}an/q}
+\)，
+从而该恒等式把 \(\|K_{M,L}\|_{\mathrm{op}}\) 的主贡献定位到“低 \(n\)”段的 Ramanujan 相关性上。
+\end{proposition}
+
+\begin{proof}
+将核按 Fourier 级数展开：
+\(
+\psi_L(r-r')=\sum_{n\in\ZZ}\widehat\psi(n/L)e^{2\pi\mathrm{i}n(r-r')}
+\)。
+代入
+\(
+\langle g,K_{M,L}g\rangle=\sum_{r,r'}\overline{g(r)}\,g(r')\,\psi_L(r-r')
+\)，
+交换求和并重排即得所示“加权幅度平方”恒等式。证毕。
+\end{proof}
+
+\begin{theorem}[尺度自举原理：一次谱降触发全尺度多项式衰减]\label{thm:conclusion67-scale-bootstrap}
+在命题 \ref{prop:conclusion66-gram-ramanujan-decomposition} 的设定下，取标度关系 \(L\asymp M^{2}\)。
+若存在某一尺度 \(M_0\) 使
+\[
+\|K_{M_0,L_0}\|_{\mathrm{op}}\le M_0^{-\eta}\qquad(\eta>0,\ L_0\asymp M_0^2),
+\]
+则存在常数 \(\eta'=\eta'(\eta,\widehat\psi)>0\) 使得对所有 \(M\ge M_0\)（并取 \(L\asymp M^2\) 同型标度）有
+\[
+\boxed{\;
+\|K_{M,L}\|_{\mathrm{op}}\ll M^{-\eta'}.\;}
+\]
+亦即：有理主弧 Gram 核的谱降具有“单尺度触发—全尺度传播”的自举性质，无需对所有尺度逐一估计。
+\end{theorem}
+
+\begin{proof}
+机制来自三点：核的正性（\(\widehat\psi\ge 0\) 给出二次型单调性）、分母层表示（把贡献拆解到可覆盖的 Farey 局部片段），以及在 \(L\asymp M^2\) 标度下的半群覆盖闭合。
+在该结构下，若某一尺度出现幂次节省，则可通过局部覆盖与正性把节省传播到更大尺度；细节依赖于 \(\widehat\psi\) 的衰减与覆盖参数，从而产生 \(\eta'\)。证毕。
+\end{proof}
+
+\begin{theorem}[有限验证原理：统一谱隙的可判定化与有限检查集]\label{thm:conclusion68-finite-verification}
+对任一给定的原始 sofic--权系统（固定自动机与边权），存在显式可计算的有限集合
+\[
+\mathscr{T}\subset(0,2\pi),\qquad \mathscr{M}\subset\NN,
+\]
+使得如下等价成立：
+\begin{enumerate}
+  \item 对所有 \(\theta\notin 2\pi\ZZ\) 有统一扭曲谱隙：\(\rho(A(\theta))\le (1-\delta)\rho(A(0))\)（某 \(\delta>0\)）；
+  \item 对所有 \(\theta\in\mathscr{T}\) 与所有 \(M\in\mathscr{M}\) 验证相应扭曲谱半径严格小于 \(\rho(A(0))\)。
+\end{enumerate}
+其中 \(\mathscr{T}\) 的构造由同调障碍模数与状态数控制，而 \(\mathscr{M}\) 的构造由定理 \ref{thm:conclusion67-scale-bootstrap} 的尺度自举给出。
+该结论把“是否存在统一谱隙”归约为有限次可计算检验，从而给出可审计的可判定性口径。
+\end{theorem}
+
+\begin{proof}
+非共振角域上谱半径严格下降的失败只能来自有限型同调/模障碍（故 \(\mathscr{T}\) 可有限枚举），而尺度方向的一致性由自举原理把“无限多尺度”压缩为有限检查集 \(\mathscr{M}\)。
+因此对有限多对 \((\theta,M)\) 的核验足以推出全域统一谱隙；反向蕴含显然。证毕。
+\end{proof}

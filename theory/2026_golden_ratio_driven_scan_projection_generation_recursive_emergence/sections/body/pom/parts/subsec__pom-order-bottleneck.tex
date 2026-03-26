@@ -1,0 +1,550 @@
+\subsection{结论簇 V：序投影作为结构分界}\label{subsec:pom-order-bottleneck}
+\begin{corollary}[序投影的不可约读出性]\label{cor:pom-order-bottleneck}
+在分辨率 $m$ 固定且不引入额外纤维坐标的条件下，若某读出量 $g:\Omega_m\to\mathbb{R}$ 不属于折叠不变量子代数 $\mathcal{B}_m$，则仅靠规范投影 $P_Z$ 不能判定 $g$；要获得该读出，必须提高分辨率或引入序投影 $P_{\le}$（或等价的全局聚合机制）。该结论是命题 \ref{prop:pom-fiber-invariance} 的直接结构性推论。
+\end{corollary}
+
+\begin{corollary}[序投影的混合时间尺度]\label{cor:pom-order-mixing}
+设分类读出由有限群标记扩展给出，并令 $\lambda_1(u)$ 为主谱半径、$\Lambda(u)$ 为最坏非平凡扭曲谱半径（定理 \ref{thm:kernel-chebotarev-exp}）。则分类计数的误差以指数率 $(\Lambda(u)/\lambda_1(u))^n$ 衰减，从而达到精度 $\varepsilon$ 的迭代深度满足
+\[
+n\ \gtrsim\ \frac{\log(1/\varepsilon)}{\log\!\bigl(\lambda_1(u)/\Lambda(u)\bigr)}.
+\]
+因此序投影的时间代价可由扭曲谱隙显式量化。
+\end{corollary}
+
+\begin{remark}[序投影的谱量刻度（谱隙=本体时间尺度）]\label{rem:pom-order-mixing-scale}
+该结论表明：$P_{\le}$ 的时间代价不应仅以输入规模刻画，而应以“最坏扭曲比”
+\[
+\eta_\infty(u):=\frac{\Lambda(u)}{\lambda_1(u)}
+=\sup_{\chi\neq 1}\frac{\rho(M_\chi(u))}{\rho(M_1(u))}
+\in(0,1)
+\]
+为基本尺度（定理 \ref{thm:kernel-chebotarev-exp} 的扭曲块口径；或命题 \ref{prop:pom-profinite-artin-hilbert} 的 profinite 角色对角化形式）。
+等价地，可取
+\[
+\tau_{\mathrm{mix}}(u):=\frac{1}{-\log \eta_\infty(u)}=\frac{1}{\log(\lambda_1(u)/\Lambda(u))}
+\]
+作为序投影门的内禀时间单位，并随误差门槛 $\varepsilon$ 作对数放大：
+\(
+n\gtrsim \tau_{\mathrm{mix}}(u)\log(1/\varepsilon)
+\)
+（由推论 \ref{cor:pom-order-mixing}）。
+\end{remark}
+
+\begin{remark}[角色投影的混合尺度与数值锚点]\label{rem:pom-chi-mixing}
+对角色投影 $P_\chi$，可定义混合尺度
+\[
+\tau_{\mathrm{mix}}:=\frac{1}{-\log(\rho/\lambda)},
+\]
+其中 $\rho$ 为最坏非平凡角色的谱半径，$\lambda$ 为 Perron 根。对 40 状态真实输入核的 $(2,2,2)$ 分层，生成表给出
+\(
+\rho_{2,2,2}/\lambda\approx 0.927372804879
+\)
+（见 \ref{subsec:arity-dirichlet-mertens-tensor}），从而 $\tau_{\mathrm{mix}}\approx 13.2$。该尺度给出 $P_\chi$ 的内禀读出时间标尺，与 $P_Z$ 的常数延迟形成正交的时间投影量。
+更完整的素数模扫描与跑动诊断见表 \ref{tab:real-input-40-rho-ppp-prime-scan}。
+\end{remark}
+
+\begin{remark}[分层常数的总和守恒]\label{rem:pom-chi-sum}
+对 residue 分层的 Dirichlet--Mertens 常数张量 $C_{r_1r_2r_3}$，有
+\[
+\sum_{r_1,r_2,r_3} C_{r_1r_2r_3}=\mathsf{M}.
+\]
+这并非偶然数值现象，而是角色投影 $P_\chi$ 的一致性约束：分层切片合并必须恢复总体有限部常数。生成表中的总和误差已达 $10^{-16}$ 量级（见 \ref{subsec:arity-dirichlet-mertens-tensor}）。
+\end{remark}
+
+\begin{remark}[有限核的素数影子与算术素数的分界]
+在有限核框架中，Euler 乘积与 Möbius 反演给出的 prime-like 对象为 primitive 轨道谱（命题 \ref{prop:time-space-commuting-diagram}）。这类素性与整数素数不同（见注 \ref{rem:prime-shadow-vs-primes}），其差异提示了“序投影/额外纤维”作为结构分界的必然性：若要在本体层表达\emph{算术素数}，需要引入额外的轴束或新的投影机制。一个极端但干净的例子是 Conway 的 FRACTRAN：它把“素数=寄存器”字面化，并以 first-fit 的序门控实现确定性演化；见小节 \ref{subsec:pom-fractran}。
+\end{remark}
+
+\subsection{序投影的空间化}\label{subsec:pom-order-spatialization}
+\begin{theorem}[序投影的空间化定律]\label{thm:pom-order-spatialization}
+设 $B\ge 1$，取两两互素的模 $p_1,\dots,p_m$，令 $P=\prod_{i=1}^m p_i$。若 $P>2B$，则任意 $x\in[-B,B]$ 由其在模 $p_i$ 下的剩余类唯一确定。因而比较、符号与区间约束等序投影可以先在各模轴上点wise 计算，再通过 CRT 重建完成（参见 \cite{Apostol1976}）。
+\end{theorem}
+\begin{proof}
+由中国剩余定理，模 $P$ 的剩余类与模 $\{p_i\}$ 的剩余类一一对应。若 $P>2B$，则区间 $[-B,B]$ 中的整数在模 $P$ 下唯一代表，故由模轴信息即可恢复 $x$ 并完成序判定。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/cor__pom-order-spatialization-prime-budget}
+
+\begin{remark}[时间—空间转移的结构后果]
+定理 \ref{thm:pom-order-spatialization} 表明：序投影的时间瓶颈可通过增加模轴束转移为可并行的空间代价。在并行 CRT 口径下，序判定的深度由重建电路决定，而非随位长线性增长；因此 $P_{\le}$ 的“不可并行增长”可被视为\emph{未激活足够模轴时}的结构性症状。
+\end{remark}
+
+\begin{remark}[素数支持计数：模寄存器占用的自然分解]\label{rem:pom-mod-support-count}
+令 \(m=\prod_{p\mid m}p^{k_p}\)。
+把同余轴 \(\widehat{\ZZ}\cong\prod_p\ZZ_p\)（定义 \ref{def:pom-profinite}）截断到模 \(m\) 等价于：只触及有限多条 \(p\)-轴，并在每条轴上只需 \(k_p\) 位的 \(p\)-进深度。
+因此可把“模寄存器占用”分解为两项可审计计数：
+\[
+S_{\mathrm{mod}}(m):=\#\{p:\ p\mid m\},\qquad
+R_{\mathrm{mod}}(m):=\sum_{p\mid m}k_p.
+\]
+前者刻画并行需要激活多少条素数轴，后者刻画在这些轴上需要多少总深度（与 prime-fiber 的有限支撑口径同构；定义 \ref{def:pom-prime-fiber}）。
+在 ISA 资源口径下，\(P_\chi(\bmod m)\) 的空间开销在结构上受 \((S_{\mathrm{mod}}(m),R_{\mathrm{mod}}(m))\) 控制；
+而一旦需要从同余类中选取\emph{规范代表}（如最小非负余数），问题即回到序投影 \(P_{\le}\) 的不可约读出（推论 \ref{cor:pom-order-bottleneck}）。
+\end{remark}
+
+\subsection{熵—延迟互补的结构猜想}\label{subsec:pom-entropy-delay}
+\begin{conjecture}[延迟与 carry-free 复杂度的互补]\label{conj:pom-entropy-delay}
+对固定基数与同一值不变量模板（零式 $+$ $q$-场），若在线归一化核的延迟 $\delta_Z$ 被压低，则其 carry-free 骨架的分支复杂度（例如 $\rho(A_0)$ 或对应 $\zeta$ 的谱指纹）必须上升；反之，若要求 carry-free 骨架更紧（低熵），则必须付出更长的延迟。该趋势与 $9/13/21$-local 三核的 carry-free $\zeta$ 三分分类一致（定理 \ref{thm:carry-free-zeta-trichotomy}）。
+\end{conjecture}
+
+\subsection{闭环总结：三条核心结论}\label{subsec:pom-summary}
+以下三条结论构成本文在 POM 语境下的核心收束：
+\begin{enumerate}
+  \item \textbf{投影熵率由 $\varphi$ 锁定：}规范投影的空间代价由折叠指标 $I_m$ 控制，且单位分辨率熵率为
+  \[
+  h_Z=\log\!\left(\frac{2}{\varphi}\right)
+  \]
+  （命题 \ref{prop:pom-projection-entropy}）。
+  \item \textbf{半环闭包的一次投影正规形：}任何由 $\oplus,\otimes$ 生成的项均可写为值层多项式后经一次 $P_Z$ 回到稳定地址（定理 \ref{thm:pom-one-fold-normal-form}）。
+  \item \textbf{增长分界在序投影：}一旦读出量不再是折叠纤维不变量，必须引入 $P_{\le}$ 或增加纤维/分辨率（推论 \ref{cor:pom-order-bottleneck}）；其时间瓶颈可通过模轴束空间化转移（定理 \ref{thm:pom-order-spatialization}）。
+\end{enumerate}
+\paragraph{结构归约（摘要）}
+数学的本体结构是“局部演化 $U$ + 三个投影门”：$P_Z$ 把值纤维群胚轨道投影到 Zeckendorf 横截面，其空间缺陷由 $d_m$ 与 $E_m$ 描述并在 primitive 循环尺度上重整化为 $\log\mathfrak{M}$ 与 Dirichlet--Mertens 常数张量；$P_{\mathrm{prim}}$ 把时间迹投影到 primitive 原子层并与 $Z=E\circ M\circ T$ 的交换图严格对齐；$P_{\le,b}$ 把平移纤维轨道投影到基本域横截面并给出商余，角色/同余读出则由 $P_\chi$（扭曲矩阵与常数张量实现）统一编码，其时间尺度由 $\rho/\lambda$ 给出。加减乘除商余的差异只体现在投影词组合方式与线性化深度（素数纤维或相位纤维路线）的选择上。
+
+\paragraph{加减乘除商余的非并行开销是同一类投影门的不可约成本}
+在成本模型
+\(
+T_I(n;m)=k_Z\delta_Z+k_{\le}T_{\le}(n)+k_{\downarrow}T_{\downarrow}(m)+D_U(n)
+\)
+（定义 \ref{def:pom-cost}）下，“六种算术”的差异并不来自新的本体原语，而来自两点：
+\begin{enumerate}
+  \item \textbf{线性化放在哪条先验纤维：}同一语义可选择在尺度纤维/相位纤维/素数寄存器/同余轴上完成线性化（\(\mathcal{S}_\varphi,\mathcal{T},\mathcal{P},\widehat{\ZZ}\)；定义 \ref{def:pom-fiber-kernel-choice}），从而把增长项留在演化深度 \(D_U\) 中，或外置为轴束的空间占用（例如 \((S_{\mathrm{mod}},R_{\mathrm{mod}})\)，注 \ref{rem:pom-mod-support-count}）。
+  \item \textbf{投影词中是否不可避免地出现序门：}一旦语义包含最小性/唯一性/不等式等全局约束，序投影 \(P_{\le}\)（或其软化 \(\mathrm{PROJ}_u\)）不可约地出现（推论 \ref{cor:pom-order-bottleneck}），并引入由最坏扭曲谱隙控制的本体时间尺度 \(\tau_{\mathrm{mix}}(u)\)（推论 \ref{cor:pom-order-mixing} 与注 \ref{rem:pom-order-mixing-scale}）。
+\end{enumerate}
+特别地：若 \(k_{\le}=0\)，则非并行延迟只含常数级的 \(\delta_Z\)（规范投影门），与输入规模无关；若 \(k_{\le}>0\)，则必须付出由 \(\tau_{\mathrm{mix}}(u)\) 刻度的时间成本，并可按定理 \ref{thm:pom-order-spatialization} 用模轴束把该时间瓶颈空间化转移。
+
+\begin{remark}[序门的 \texorpdfstring{$(m,n,N)$}{(m,n,N)} 三预算证书（时间尾项 \texorpdfstring{$+$}{+} 采样投影项）]\label{rem:pom-order-three-budget}
+当把序投影 \(P_{\le}\)（或其角色/同余化读出 \(P_\chi\)）落实为“在层 \(m\) 的同余 cylinder 上做等分布判定”时，其有限精度证书可分解为两条正交预算轴：primitive 深度 \(n\) 的动力学尾项，以及样本量 \(N\) 的投影/采样项。
+具体地，对任意 cylinder \(C\subseteq G_m\)，有限误差满足（定理 \ref{thm:auditable-profinite-chebotarev-finite}；旋转扫描下的确定性版本见推论 \ref{cor:auditable-profinite-chebotarev-three-budget-deterministic}）
+\[
+\left|\Pi_{n,m}(C)-\frac{|C|}{|G_m|}\right|
+\ \le\
+K_1\,\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}
+\ +\
+K_2\cdot D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})
+\ \le\
+K_1\,\frac{|G_m|}{\lambda^{(1/2+\varepsilon)n}}
+\ +\
+K_2(m+1)D_N^*(\alpha;x_0).
+\]
+因此当语义必须包含序门（如除法/商余的 \(0\le r<b\) 约束）时，非并行开销不可约地同时受 \(n\)（时间尾项）与 \(N\)（采样投影项）约束，二者在结构上不可互替。
+\end{remark}
+素数轴在此处扮演公共索引：它既是乘法线性化的坐标轴（素数寄存器纤维 \(\mathcal{P}\)，定义 \ref{def:pom-prime-fiber}），也是同余/角色读出的完备化轴（\(\widehat{\ZZ}\cong\prod_p\ZZ_p\)，定义 \ref{def:pom-profinite}）；相位/角色坐标化则必然引入 \(u=e^\theta\) 的指数权重与 \(e^{2\pi i\langle k,x\rangle}\) 的归一化常数（注 \ref{rem:pom-congruence-invlimit}）。
+表 \ref{tab:pom-isa-minsig} 将这一原则落实为一张 ISA 级最小签名表：只要出现 \(P_{\le}\)，就必然出现由谱隙刻度的混合时间；只要显式调用 \(\mathrm{RESCALE}\downarrow\)，就必然出现由规范差 \(G_m\) 刻度的支持写回预算；其余不可并行项均为规范投影门的常数在线延迟。
+
+\subsection{ISA 与微码：投影词的抽象层实现}\label{subsec:pom-isa}
+\paragraph{可见寄存器（外表）}
+抽象层可取可数无限寄存器 $\{Z_i\}_{i\in\mathbb N}$；具体实现可截断为有限集合（例如 $Z_0,\dots,Z_{31}$）。可见寄存器内容始终保持在 $X_\infty$ 的规范地址上；写回时默认触发 $P_Z$。
+
+\begin{remark}[可复现：32-bit ISA/微码参考模拟器]\label{rem:pom-isa-sim}
+为把本节的 ISA/微码口径落到\emph{可执行}层面，仓库在本文论文目录下提供参考脚本
+\texttt{scripts/pom\_isa\_sim\_v2.py}（实验层版本；本文仅保留该最新版）：
+它实现 32 个可见寄存器 $Z0\ldots Z31$（写回默认触发 $P_Z\equiv\Fold_\infty$，并计入 $k_Z$），并给出两类程序不可见的微态寄存器：
+窗口寄存器 $W0\ldots W31$（保存 $\Omega_m$ 原始比特串，用于 $\Fold_m$、fold-aware restriction
+\(\widetilde r_{m+1\to m}=\pi_{m+1\to m}\circ \Fold_{m+1}\)
+与规范差 \(G_m=|r_{m+1\to m}\oplus \widetilde r_{m+1\to m}|_0\)）
+以及素数指数寄存器 $P0\ldots P31$（可选，用于把乘除线性化为指数向量的逐坐标加减；与 \(\mathcal P\) 纤维口径对齐）。
+\par
+脚本采用固定的 32-bit 编码，并在执行时维护成本计数器
+\((k_Z,k_{\le},k_\chi,D_U)\)，
+以及跨分辨率降阶的写回支持预算
+\(\mathrm{support}:=\sum G_m\)
+（对应成本模型中的 \(k_{\downarrow}T_{\downarrow}(m)\) 这一独立空间项）。
+\par
+此外脚本引入乘法线性化深度模型 \texttt{--mulmode}（\texttt{const|log|serial}），用于把“素数纤维点wise / 相位纤维 FFT-ish / 串行最坏”三种乘法深度口径落实为 \(D_U\) 的可对照计数。
+\par
+编码格式与运行示例如下：
+\begin{verbatim}
+32-bit formats:
+  R: opcode(6) | rd(5) | rs1(5) | rs2(5) | imm11(11)
+  I: opcode(6) | rd(5) | rs1(5) | imm16(16)
+  J: opcode(6) | imm26(26)
+
+python3 scripts/pom_isa_sim_v2.py --demo --capbits 32 --mulmode log
+python3 scripts/pom_isa_sim_v2.py --bench-div --bits-a 1024 --bits-b 256 --iters 120 --mulmode log
+python3 scripts/pom_isa_sim_v2.py --bench-div --bits-a 1024 --bits-b 256 --iters 120 --mulmode const
+python3 scripts/pom_isa_sim_v2.py --gauge --m 10 --trials 20000
+python3 scripts/pom_isa_sim_v2.py --workload --len 6000 --seed 7 --capbits 32 --mulmode log --divmode mixed
+python3 scripts/pom_isa_sim_v2.py --workload --len 6000 --seed 7 --capbits 32 --mulmode log --divmode ld
+python3 scripts/pom_isa_sim_v2.py --workload --len 6000 --seed 7 --capbits 32 --mulmode log --divmode rec
+python3 scripts/pom_isa_sim_v2.py --chi-bench 5000 --tauMix 200
+python3 scripts/pom_isa_sim_v2.py --support-bench 1000 --m-support 15 --capbits 32 --mulmode log
+\end{verbatim}
+其中 \texttt{--gauge} 采样 \(\omega\sim\mathrm{Unif}(\Omega_{m+1})\) 并估计 \(\mathbb{E}[G_m]/m\)，用于核验
+定理 \ref{thm:fold-gauge-anomaly-density} 的 \(4/9\) 密度常数（亦可与表 \ref{tab:fold_gauge_anomaly_mc} 的 Monte Carlo 审计对照）。
+\par
+脚本中 \texttt{ZDIVMOD\_LD} 与 \texttt{ZDIVMOD\_REC} 在真值层都实现 \(\mathrm{divmod}(a,b)\)，但微码路线不同：
+\texttt{LD} 为二进制长除（每一位商决策触发一次 \(P_{\le}\)，故 \(k_{\le}^{LD}\sim \mathrm{qbits}\)），
+\texttt{REC} 为定点倒数牛顿迭代（\(P_{\le}\) 仅用于常数次末端区间校正，故 \(k_{\le}^{REC}=O(1)\)，增长转移到 \(D_U\)；其常数因子由 \texttt{--mulmode} 校准），并可按
+\[
+T\;=\;k_Z\delta_Z\;+\;k_{\le}T_{\le}\;+\;k_\chi\,\tau_{\mathrm{mix}}\;+\;D_U\;+\;w_{\mathrm{sup}}\cdot \mathrm{support}
+\]
+输出一条可审计的成本分解（各标尺参数可由命令行覆盖）。
+\par
+由此同一语义的两条路线给出一条可写成编译/调度律的边界：
+\[
+\mathrm{qbits}\cdot T_{\le}\ \gtrsim\ C_{\times}\log \max\bigl(\mathrm{bitlen}(a),\mathrm{bitlen}(b)\bigr)\quad\Longrightarrow\quad \text{选 REC；否则选 LD.}
+\]
+其中 \(\mathrm{qbits}:=\max(0,\mathrm{bitlen}(a)-\mathrm{bitlen}(b))\)，\(C_{\times}\) 为由 \texttt{mulmode} 校准的乘法深度常数。
+\par
+在该可执行口径下，DIVMOD 路线的三条可复现结论（与正文“增长分界在序投影”的结构命题对齐）可直接跑出：
+\begin{itemize}
+  \item \textbf{当 \(\mathrm{bitlen}(a)\approx \mathrm{bitlen}(b)\) 时长除更优；当 \(\mathrm{qbits}\) 变大时倒数路线碾压。}
+  \item \textbf{\(k_{\le}^{LD}\sim \mathrm{qbits}\)，而 \(k_{\le}^{REC}=O(1)\)：}增长项确实落在序门调用次数上。
+  \item \textbf{\texttt{mulmode} 只改变 REC 的 \(D_U\) 常数因子，而不改变分界主导因子：}路线相图主要由 \(k_{\le}T_{\le}\) 与 \(D_U\) 的交换决定。
+\end{itemize}
+脚本亦保留 \texttt{PROJ\_CHI}（\(k_\chi\)）与 \(\mathrm{support}=\sum G_m\) 两条正交审计轴，可用 \texttt{--chi-bench}/\texttt{--support-bench} 直接观测 \(\tau_{\mathrm{mix}}\) 与触及规模项的线性放大。
+\end{remark}
+
+\paragraph{隐纤维（程序不可见）}
+隐纤维包含尺度纤维 $\mathcal{S}_\varphi$、相位纤维 $\mathcal{T}$、素数纤维 $\mathcal{P}$，以及同步核状态与余量（例如 $|\Sigma|=40$ 的真实输入核，见附录关于真实输入核的构造）。
+其中实现规范投影 \(P_Z\) 的单趟在线归一化核携带一个有限状态同步变量（定理 \ref{thm:online-delay-fold}），可抽象为程序不可见的同步寄存器 \(Q\)；其最小在线延迟刚性为 \(\delta_{\min}(\Fold_\infty)=3\)（命题 \ref{prop:pom-delay-min}）。
+\par
+\begin{remark}[时间缺陷二分：同步延迟与可空间化序深度]\label{rem:pom-time-defect-dichotomy}
+在本文体系中，“时间复杂度”至少分裂为两类互不等价来源：
+\begin{enumerate}
+  \item \textbf{同步延迟类（不可空间化时间）：}以 \(\delta_{\min}(\Fold_\infty)=3\) 为代表，它由局部依赖（余量守恒/同步状态）强制产生，并与 prime-register / 模轴束的扩展正交；因此单纯增加模轴不能消去该类延迟，只能改变并行展开的\emph{空间}分配。
+  \item \textbf{序投影类（可空间化时间）：}比较、符号与区间约束等全序聚合所带来的串行瓶颈，可按定理 \ref{thm:pom-order-spatialization} 与重写模式 (RCRT)（定义 \ref{def:pom-order-elimination-rewrite}；命题 \ref{prop:pom-rcrt-epsilon}）编译为空间化的 residue 并行读出与 CRT 重建；其代价被转移为 prime-register 的容量预算 \(\log P_m\)，并由分位配额律（推论 \ref{cor:pom-prime-register-quantile-budget}）定标。
+\end{enumerate}
+因此，“空间/时间对偶”并非全域成立：成立的仅是序投影类时间的空间化转移；同步延迟则构成一个独立且不可空间化的时间不变量。
+在抽象 ISA 层，亦可把先验纤维的“坐标账本”显式化为两组可选寄存器文件：素数指数寄存器 \texttt{P[i]}（\(\mathcal{P}\) 上的有限支撑指数向量，用于把乘除线性化为逐坐标加减），以及相位/角色寄存器 \texttt{T[i]}（\(\mathcal{T}\) 上的相位/字符坐标，用于对角化线性部分与相位/角色读出）。在本文口径下，它们仅改变空间预算 \(S(n)\) 与线性化深度 \(D_U(n)\) 的分配，而不引入新的不可并行读出门：不可并行开销仍由 \(P_Z,P_{\le}\) 与 \(\mathrm{RESCALE}\downarrow\) 的三指纹完全锁定。
+\end{remark}
+
+\paragraph{指令层（投影词标注）}
+\begin{itemize}
+  \item \texttt{ZADD rd,ra,rb}：$W=(1,0)$。
+  \item \texttt{ZMUL rd,ra,rb}：$W=(1,0)$（$D_U$ 由线性化纤维选择决定）。
+  \item \texttt{ZSUB rd,ra,rb}（比较路线）：$W=(1,1)$。
+  \item \texttt{ZSUBR rd,ra,rb}（符号内化路线）：$W=(1,0)$ 但 $\delta_Z$ 增大。
+  \item \texttt{ZCMP rt,ra,rb}：$W=(0,1)$。
+  \item \texttt{ZMOD rt,ra,m}（纯 residue 读出）：$W=(0,0)$，但激活 $\widehat{\ZZ}$；其空间占用由 $(S_{\mathrm{mod}}(m),R_{\mathrm{mod}}(m))$ 计数（注 \ref{rem:pom-mod-support-count}）。
+  \item \texttt{ZMODN rd,ra,m}（规范代表/最小非负余数）：$W=(0,1)$（需要 $P_{\le}$）。
+  \item \texttt{ZDIVMOD rq,rr,ra,rb}：依实现可取 $W\approx(2,\Theta(n))$ 或 $W\approx(2,2)$。
+  \item \texttt{ZNORM rd,rs}：显式 $P_Z$，$W=(1,0)$。
+  \item \texttt{ZRESCALE rd,rs}：显式 $\mathrm{RESCALE}\downarrow$，$W=(0,0)$ 但 $k_{\downarrow}=1$。
+  \item \texttt{ZPRIM rs}：原子层读出，$W^{\mathrm{full}}=(0,1,0)$。
+  \item \texttt{FSTEP rs,prog}（FRACTRAN 一步）：$W=(0,1)$（prime-core first-fit 更新；见小节 \ref{subsec:pom-fractran}）。
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{6pt}
+\caption{算术 ISA 的最小投影门签名：在“纤维内线性化可并行展开”的口径下，规模相关且不可并行化的读出开销仅来自投影门本身，可由三类正交指纹审计（注 \ref{rem:pom-nonparallel-three-meters}）：规范门 \(P_Z\) 的常数在线延迟 \(\delta_Z\)，序门 \(P_{\le}\) 的混合尺度 \(\tau_{\mathrm{mix}}(u)\log(1/\varepsilon)\)（推论 \ref{cor:pom-order-mixing}），以及跨分辨率降阶门 \(\mathrm{RESCALE}\downarrow\) 的支持尺度 \(T_{\downarrow}(m)\asymp (4/9)m\)（注 \ref{rem:pom-rescale-space-constant}）。表中以 \(W_{\min}=(k_Z,k_{\le})\) 记录前两类门的最小调用次数；若指令显式涉及 \(\mathrm{RESCALE}\downarrow\)，则需另记 \(k_{\downarrow}\) 与支持预算 \(\sum G_m\)。}
+\label{tab:pom-isa-minsig}
+\begin{tabular}{p{0.18\linewidth} p{0.20\linewidth} p{0.12\linewidth} p{0.18\linewidth} p{0.26\linewidth}}
+\toprule
+语义指令 & 典型纤维路线 & $W_{\min}=(k_Z,k_{\le})$ & 激活纤维 $\mathcal{F}$ & 不可约时间标尺（非并行）\\
+\midrule
+\texttt{ZADD}（ADD） & scale-route & $(1,0)$ & $\{\mathcal{S}_\varphi\}$ & $\delta_Z$\\
+\texttt{ZSUB}（SUB, cmp） & chi/CRT-route & $(1,1)$ & $\{\widehat{\ZZ}\}$ & $\delta_Z+\tau_{\mathrm{mix}}(u)\log(1/\varepsilon)$\\
+\texttt{ZSUBR}（SUB, signed） & scale-route & $(1,0)$ & $\{\mathcal{S}_\varphi\}$ & 常数（较大 $\delta_Z$，以表示换序门）\\
+\texttt{ZMUL}（MUL） & phase/prime-route & $(1,0)$ & $\{\mathcal{T}\}$ 或 $\{\mathcal{P}\}$ & $\delta_Z + D_U(n)$（增长项留在 $D_U$）\\
+\texttt{ZDIVMOD}（DIVMOD） & order-hard/退火 & $(2,1)$ & 依实现（常含 $\widehat{\ZZ}$） & $\ge 2\delta_Z+\tau_{\mathrm{mix}}(u)\log(1/\varepsilon)$\\
+\texttt{ZMOD}（MOD, residue） & profinite readout & $(0,0)$ & $\{\widehat{\ZZ}\}$ & 时间常数；空间占用 $(S_{\mathrm{mod}},R_{\mathrm{mod}})$\\
+\texttt{ZMODN}（MOD, norm） & canonical rep & $(0,1)$ & $\{\widehat{\ZZ}\}$ & $\tau_{\mathrm{mix}}(u)\log(1/\varepsilon)$\\
+\texttt{ZRESCALE}（RESCALE$\downarrow$） & fold-aware restriction & $(0,0)$；$k_{\downarrow}=1$ & $\emptyset$ & 支持尺度 $T_{\downarrow}(m)\asymp (4/9)m$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\input{sections/body/pom/parts/thm__pom-boolean-circuit-projection-budget}
+
+\paragraph{共振/碰撞读出指令：\texttt{MOM} 协处理器}
+除“加减乘除商余”的值层指令外，本文的高阶碰撞矩 \(S_q(m)\)（定理 \ref{thm:pom-moment-resonance}）提供了一类\textbf{独立的可审计读出运算}：其接口由“已核验最小递推 + Hankel 证书抽取”完全确定，可作为共振机制的可执行后端。
+\begin{itemize}
+  \item \texttt{MOM.SET(q)}：选择阶 \(q\)，加载其已核验最小递推 \((d_q,m_0,(c_i)_{i=1}^{d_q})\) 与最短初值窗口 \((S_q(2),\dots,S_q(1+d_q))\)（例如注 \ref{rem:pom-moment-init-9-12} 与表 \ref{tab:fold_collision_moment_recursions_9_17}）。
+  \item \texttt{MOM.STEP}：执行一次递推更新
+  \(
+  S_q(m)\leftarrow \sum_{i=1}^{d_q} c_i S_q(m-i)
+  \)，并左移长度 \(d_q\) 的历史窗口。
+  \item \texttt{MOM.ODDNEU.CHECK}：检查并断言奇滞后中性
+  \(
+  \sum_{i\ \mathrm{odd}} c_i=0
+  \)
+  （命题 \ref{prop:pom-moment-odd-lag-neutrality}）；在已核验范围内，这是对系数表与“最小递推”声明的无需额外计算开销且可直接复算的一致性审计。
+  \item \texttt{RESO.EXTRACT(q)}（离线/批处理微码）：对足够长的 \(S_q\) 样本构造 Hankel 块并恢复最小实现；若 \(d_q<2\lfloor q/2\rfloor+1\)，则输出模态约束证书（定理 \ref{thm:pom-moment-resonance}）或 Hankel-null 证书（注 \ref{rem:pom-nullmodes-algorithm}）。
+\end{itemize}
+
+\paragraph{微码原语（英文标签，用于可审计性）}
+\begin{itemize}
+  \item \texttt{LIFT\_SCALE}：进入 $\mathcal{S}_\varphi$；
+  \item \texttt{LIFT\_PHASE}：进入 $\mathcal{T}$；
+  \item \texttt{LIFT\_PRIME}：进入 $\mathcal{P}$；
+  \item \texttt{LIFT\_PRIME\_TRACE}：把 $P_Z$ 的重写残差轨迹外置到 $\mathcal{P}$（无损规范投影门；定义 \ref{def:pom-fold-prime-lift} 与命题 \ref{prop:pom-fold-prime-lift-injective}）；
+  \item \texttt{UNLIFT\_PRIME\_TRACE}：从 $(x,r)\in X_m\times\mathcal{P}$ 回放逆重写以恢复输入微态（命题 \ref{prop:pom-fold-prime-lift-injective}）；
+  \item \texttt{EVOLVE(op)}：执行一步本体演化 $U$；
+  \item \texttt{PROJ\_NORM}（亦记 \texttt{FOLDZ}）：执行 $P_Z$；
+  \item \texttt{PROJ\_RESCALE\_DOWN}：执行跨分辨率降阶门 $\mathrm{RESCALE}\downarrow$；
+  \item \texttt{PROJ\_PRIM}：执行 $P_{\mathrm{prim}}$（trace $\Rightarrow$ primitive）；
+  \item \texttt{PROJ\_ORDER}（亦记 \texttt{ORDER}）：执行 $P_{\le}$；
+  \item \texttt{PROJ\_TEMP($u$)}：执行温度化序投影 $\mathrm{PROJ}_u$（定义 \ref{def:pom-proj-temp}；$u\to 0$ 为零温硬化极限）；
+  \item \texttt{PROJ\_CHI}：执行 $P_\chi$（同余/角色分层投影）；
+  \item \texttt{TWIST($\chi$)}：对角色/同余类做扭曲读出；
+  \item \texttt{CLEAN}：排空有限余量并回写稳定地址。
+\end{itemize}
+
+\begin{remark}[跨分辨率 \texttt{RESCALE}$\downarrow$ 的典型外表重写常数]\label{rem:pom-rescale-space-constant}
+当实现需要显式降分辨率（例如把 \(m{+}1\) 位寄存器投影到 \(m\) 位寄存器）时，朴素“丢弃末位”截断一般不满足跨尺度一致性（见小节 \ref{subsec:fold-gauge-anomaly}），必须以折叠感知 restriction \(\widetilde r_{m+1\to m}\) 作为 Gauge 条件。
+此时从朴素截断纠偏到 \(\widetilde r_{m+1\to m}\) 的最小外表改动支持由规范差 \(G_m\) 精确刻画（定义 \ref{def:fold-gauge-anomaly}）。
+在均匀微态基线下，其典型密度存在并锁定为 \(4/9\)（定理 \ref{thm:fold-gauge-anomaly-density}），因此任何频繁执行 \texttt{RESCALE}$\downarrow$ 的微码都不可避免地出现一个新的不可约空间项
+\[
+T_{\downarrow}(m)\ \asymp\ \frac{4}{9}m,
+\]
+它刻画的是\emph{要写回多少寄存器位}，并在统一成本模型中以 $k_{\downarrow}(I)\,T_{\downarrow}(m)$ 作为独立空间项计入（定义 \ref{def:pom-cost}）；该项与在线延迟常数（例如 \(\delta_{\min}(\Fold_\infty)=3\)，命题 \ref{prop:pom-delay-min}）正交。
+\end{remark}
+
+\subsubsection{FRACTRAN 兼容层：素数寄存器的 first-fit 零温序门}\label{subsec:pom-fractran}
+Conway 的 FRACTRAN 语言把“素数=寄存器”做到字面意义上的等价：机器配置是一整数 \(N\)，其素因子分解指数向量 \((v_p(N))_{p\in\mathbb{P}}\) 正是素数寄存器纤维 \(\mathcal{P}\) 的坐标（定义 \ref{def:pom-prime-fiber}；注 \ref{rem:two-coordinate-monoids}）。其执行规则是：给定一串有序分数，永远取\emph{第一个}能使 \(N\cdot f\) 仍为整数的分数去乘 \cite{Conway1987FRACTRAN}。
+
+\begin{definition}[FRACTRAN 程序与一步语义]\label{def:pom-fractran}
+一个 FRACTRAN 程序是一个约分后的正分数序列
+\(
+f_1,\dots,f_k
+ \)
+（\(f_i=a_i/b_i\)，\(\gcd(a_i,b_i)=1\)）。
+给定状态整数 \(N\in\NN_{\ge 1}\)，若存在最小 \(i\) 使得 \(Nf_i\in\NN_{\ge 1}\)，则更新 \(N\leftarrow Nf_i\)；若不存在则停机。
+\end{definition}
+
+\begin{proposition}[FRACTRAN = \texorpdfstring{$\mathcal{P}$}{P} 上的受序门控平移]\label{prop:pom-fractran-prime-translation}
+令 \(r=v(N)\in\mathcal{P}\) 表示 \(N\) 的素数指数向量（即 \(r(p)=v_p(N)\)）。
+对每条指令 \(f_i=a_i/b_i\) 定义
+\[
+\beta_i:=v(b_i)\in\mathcal{P},\qquad
+\Delta_i:=v(a_i)-v(b_i)\in \ZZ^{(\mathbb{P})}.
+\]
+则 \(Nf_i\in\NN_{\ge 1}\) 当且仅当 \(r\ge \beta_i\)（逐素数坐标的偏序），且该步更新等价于
+\[
+r\ \longleftarrow\ r+\Delta_i.
+\]
+令
+\[
+i^\ast(r):=\min\{\,i:\ r\ge \beta_i\,\},
+\]
+若集合为空则停机；否则 FRACTRAN 一步等价于确定性转移
+\[
+T(r)=r+\Delta_{i^\ast(r)}.
+\]
+\end{proposition}
+\begin{proof}
+由 \(\gcd(a_i,b_i)=1\)，有 \(Nf_i\in\NN\iff b_i\mid N\)。在指数向量口径下，这等价于对所有 \(p\) 有 \(v_p(N)\ge v_p(b_i)\)，即 \(r\ge \beta_i\)。在可执行时，
+\(
+v_p(Nf_i)=v_p(N)+v_p(a_i)-v_p(b_i)
+\)
+逐坐标成立，从而 \(r\leftarrow r+\Delta_i\)。first-fit 的“取最小 \(i\)”即对应 \(i^\ast(r)\) 的定义。证毕。
+\end{proof}
+
+\begin{remark}[first-fit 是 \texorpdfstring{$u\to 0$}{u->0} 的零温硬化极限]\label{rem:pom-fractran-zero-temp}
+对固定 \(r\)，令可行集合 \(I(r):=\{i:\ r\ge \beta_i\}\)。定义一个“软 first-fit”分布
+\[
+\Pr_u(i\mid r)\ \propto\ u^{i}\,\ind\!\left[i\in I(r)\right],\qquad u\in(0,1].
+\]
+则当 \(u\to 0\) 时，质量集中到 \(\min I(r)\)，并恢复定义 \ref{def:pom-fractran} 的硬 first-fit 规则（确定性选择 \(i^\ast(r)\)）。
+这给出一个最小例子：确定性优先级选择可视为温度化序投影 \(\mathrm{PROJ}_u\) 的零温硬化（定义 \ref{def:pom-proj-temp}，注 \ref{rem:pom-order-as-zero-temp}）。
+\end{remark}
+
+\begin{proposition}[序投影的热形变：软 first-fit 的解析语义族与随机支配]\label{prop:pom-fractran-soft-firstfit-analytic-dominance}
+对固定 \(r\) 且 \(I(r)\neq\varnothing\)，令
+\[
+Z_r(u):=\sum_{j\in I(r)}u^{j}\qquad(u\in(0,1])
+\]
+并将注 \ref{rem:pom-fractran-zero-temp} 的分布正规化为
+\[
+\Pr_u(i\mid r):=\frac{u^{i}}{Z_r(u)}\,\ind[i\in I(r)].
+\]
+则：
+\begin{enumerate}
+  \item \textbf{（解析性）}映射 \(u\mapsto (\Pr_u(i\mid r))_{i=1}^{k}\) 在 \(u\in(0,1]\) 上为实解析的概率单纯形曲线；
+  \item \textbf{（零温极限）}\(\Pr_u(\cdot\mid r)\) 当 \(u\downarrow 0\) 时收敛到 \(\delta_{i^\ast(r)}\)（恢复硬 first-fit）；
+  \item \textbf{（随机支配随 \(u\downarrow 0\) 单调强化）}若 \(0<u_1<u_2\le 1\)，则对任意阈值 \(t\in\{1,\dots,k\}\) 有
+  \[
+  \sum_{i\le t}\Pr_{u_1}(i\mid r)\ \ge\ \sum_{i\le t}\Pr_{u_2}(i\mid r),
+  \]
+  即质量随 \(u\downarrow 0\) 单调向小索引集中（按索引序的一阶随机支配）。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+由于 \(I(r)\subseteq\{1,\dots,k\}\) 为有限集，\(Z_r(u)\) 为非零多项式且在 \(u\in(0,1]\) 上严格为正，故每个 \(\Pr_u(i\mid r)\) 为多项式比值，从而对 \(u\in(0,1]\) 实解析，得到第 (1) 条。
+令 \(i_\ast:=\min I(r)=i^\ast(r)\)。将 \(Z_r(u)\) 写成 \(u^{i_\ast}\bigl(1+\sum_{j\in I(r)\setminus\{i_\ast\}}u^{j-i_\ast}\bigr)\) 即得当 \(u\downarrow 0\) 时 \(\Pr_u(i_\ast\mid r)\to 1\) 且其余坐标趋于 \(0\)，得到第 (2) 条。
+\par
+对第 (3) 条，注意到对任意 \(u\) 与 \(i\in I(r)\) 有 \(\Pr_u(i\mid r)\propto u^{i}\)，故当 \(0<u_1<u_2\) 时
+\[
+\frac{\Pr_{u_1}(i\mid r)}{\Pr_{u_2}(i\mid r)}
+=
+\frac{Z_r(u_2)}{Z_r(u_1)}\left(\frac{u_1}{u_2}\right)^{i}
+\]
+随 \(i\) 单调递减；因此该族满足单调似然比（MLR）序，从而按标准推论得到索引序的一阶随机支配：
+\(
+\Pr_{u_1}(i\ge t\mid r)\le \Pr_{u_2}(i\ge t\mid r)
+\),
+等价于所示的累积分布不等式。证毕。
+\end{proof}
+
+\input{parts/parts/cor__pom-fractran-soft-firstfit-uniform-error}
+\input{parts/parts/thm__pom-soft-order-fixed-temp-nondefinability}
+
+\begin{remark}[控制流外置：状态机即序投影的选择]\label{rem:pom-fractran-controlflow}
+在 FRACTRAN 中，“状态机”不必额外理解为图论对象：可行性谓词 \(r\ge \beta_i\) 给出一族分段线性可达区域，而 first-fit 规则正是对该分解上的\emph{选择投影}（把 \(r\) 映射到索引 \(i^\ast(r)\) 并据此选取更新）。
+FRACTRAN 还可通过引入若干专用素数轴把程序计数器与有限控制态外置到 \(\mathcal{P}\) 的坐标账本中（以这些素数的指数承载当前指令段/分支状态），从而把控制流也编译为素数寄存器的可寻址坐标。
+在 POM 语言中，这等价于把投影词的控制结构搬运到 \(\mathcal{P}\) 纤维，而不可并行开销仍由序门的选择深度支配。
+\end{remark}
+
+\input{parts/con__pom-fractran-primecore-finite-partial-functions}
+
+\begin{remark}[成本下界：扫描深度 \texorpdfstring{$\times$}{x} 支撑规模]\label{rem:pom-fractran-cost}
+在 prime-core 内部，\(r\mapsto r+\Delta_i\) 是 \(\mathcal{P}\) 上的线性更新，因此演化深度 \(D_U\) 可视为常数量级；不可并行项完全来自序门。
+把一条 \texttt{FSTEP} 实现为一次“优先级选择”型的 \texttt{PROJ\_ORDER(first-fit)} 调用，则其投影词可取 \(W=(0,1)\)，但其一次序投影聚合深度 \(T_{\le}\) 至少包含对指令表的优先级扫描（最坏为 \(k\)）。
+同时，可行性测试仅触及分母 \(b_i\) 的素数支撑 \(|\mathrm{supp}(b_i)|\) 个坐标（逐素数比较），从而“每步要读多少寄存器轴”与“要扫多深”在结构上正交。
+若要求把输出显式写回外表 \(X_\infty\)，则需额外一次 \texttt{PROJ\_NORM}，对应 \(k_Z\) 增加 \(1\)（定义 \ref{def:pom-cost}）。
+\end{remark}
+
+\begin{proposition}[图灵完备性的内禀串行性：first-fit 优先级选择深度的不可消去下界]\label{prop:pom-fractran-firstfit-serial-depth}
+固定一条长度为 \(k\) 的 FRACTRAN 程序 \(f_1,\dots,f_k\)（定义 \ref{def:pom-fractran}）。
+在仅允许通过序门 \(\mathrm{PROJ\_ORDER}(\text{first-fit})\) 实现优先级选择的 PW/ISA 语义模型中，任何与硬 first-fit 语义一致的一步实现，其最坏序投影聚合深度满足
+\[
+T_{\le}\ =\ \Omega(k).
+\]
+并且该下界不因把控制流外置到 \(\mathcal{P}\) 纤维或施加规范化重写而改变：不可并行开销仍被锁定在优先级选择深度上。
+\end{proposition}
+\begin{proof}
+取状态 \(r\) 使得可行集合 \(I(r)=\{k\}\)（例如使 \(r\ge \beta_k\) 且对所有 \(i<k\) 有 \(r\not\ge \beta_i\)；在有限指令表下总可通过逐素数坐标选取实现）。
+则硬 first-fit 必须输出 \(i^\ast(r)=k\)。
+在仅允许通过优先级选择序门确定 \(i^\ast(r)\) 的模型中，要排除所有 \(i<k\) 的可行性并确证 \(k\) 为最小可行索引，最坏情形下必须经历对 \(k\) 条指令的优先级扫描；因此 \(T_{\le}\) 至少线性受 \(k\) 控制。
+控制流外置与规范化重写只改变实现的纤维承载与常数层组织（注 \ref{rem:pom-fractran-controlflow}），而不改变“输出必须等于 \(\min I(r)\)”这一选择语义本身；故该下界不可消去。证毕。
+\end{proof}
+
+\begin{corollary}[迭代执行的总序投影聚合深度线性下界]\label{cor:pom-fractran-firstfit-total-serial-depth}
+沿命题 \ref{prop:pom-fractran-firstfit-serial-depth} 的语义模型，固定指令表长度 \(k\)。
+若某实现需要完成 \(t\) 次 hard first-fit 优先级选择（例如执行 \(t\) 步 \texttt{FSTEP} 所包含的 \(t\) 次 \(\mathrm{PROJ\_ORDER}(\text{first-fit})\) 调用），则其最坏情形下的总序投影聚合深度满足
+\[
+T_{\le}^{\mathrm{tot}}\ =\ \Omega(tk).
+\]
+\end{corollary}
+\begin{proof}
+每一次优先级选择都必须在当前状态下确定输出 \(\min I(r)\)，并在最坏情形下需要 \(\Omega(k)\) 的序投影聚合深度（命题 \ref{prop:pom-fractran-firstfit-serial-depth}）。
+在迭代执行中，第 \(s\) 步选择的输出参与确定第 \(s+1\) 步的输入状态，因此这 \(t\) 次选择在因果上串行不可并行化；总聚合深度在最坏情形下至少为各步下界的线性和，从而得到 \(\Omega(tk)\)。证毕。
+\end{proof}
+
+\paragraph{Prime-core 微码原语（FRACTRAN 兼容层）}
+在本文 ISA 抽象层中，可把 FRACTRAN 的核心一步封装为三个 prime-core 原语（它们不引入新数学结构，只是把 \(\mathcal{P}\)+\(P_{\le}\) 的组合写成可审计接口）：
+\begin{itemize}
+  \item \texttt{PTEST(b)}：输入 \(b\in\NN_{\ge 1}\)，返回证书 \(\ind\!\left[r\ge v(b)\right]\)（逐素数坐标比较）。
+  \item \texttt{PUPD($\Delta$)}：执行指数更新 \(r\leftarrow r+\Delta\)（其中 \(\Delta\in\ZZ^{(\mathbb{P})}\) 且在 \texttt{PTEST} 可行时保持 \(r\in\mathcal{P}\)）。
+  \item \texttt{FIRSTFIT($\{(b_i,\Delta_i)\}_{i=1}^k$)}：返回 \(i^\ast(r)=\min\{i:\ r\ge v(b_i)\}\) 并执行 \(r\leftarrow r+\Delta_{i^\ast(r)}\)；若不存在则停机。
+\end{itemize}
+其中 \texttt{FIRSTFIT} 的确定性正来自序投影（优先级选择），而非来自 \(\mathcal{P}\) 上的线性更新；这正是“增长分界在序投影”的一个可执行示例。
+
+\paragraph{机制审计接口}
+规范投影 $P_Z$ 的实现核可用 $\zeta$、$\log\mathfrak{M}$、Dirichlet--Mertens 常数张量与 $\rho/\lambda$ 作为审计指纹（见第 \ref{sec:zeta-finite-part} 节）。原子投影 $P_{\mathrm{prim}}$ 与扭曲读出 \texttt{TWIST} 把 prime-like 轨道谱与 Chebotarev 型偏差转化为可计算指纹。序投影 $P_{\le,b}$ 与角色投影 $P_\chi$ 亦可按相同流程编译为有限同步核并抽取同类指纹，从而实现跨核对比。
+
+\paragraph{指令签名与审计等价}
+在该抽象层中，一条指令/微码 $I$ 的可审计分类对象不是单独的投影词 $W(I)$，而是其指令签名
+$$
+\Sigma(I)=\bigl(W(I),\ k_{\downarrow}(I),\ \mathfrak{F}(K_Z(I)),\ \mathfrak{F}(K_{\le}(I)),\ \mathcal{F}(I)\bigr)
+$$
+（定义 \ref{def:pom-instruction-signature}）。其中 $K_Z(I),K_{\le}(I)$ 是投影门的具体核选择，$\mathcal{F}(I)$ 是纤维选择，$k_{\downarrow}(I)$ 记录跨分辨率降阶门的调用次数（定义 \ref{def:pom-rescale-count}）。命题 \ref{prop:pom-signature-audit} 给出签名一致的直接后果：若 $\Sigma(I)=\Sigma(J)$，则两者的 $\zeta$/primitive/有限部常数/扭曲谱隙等指纹一致，且成本模型的投影门部分同型；差异只能体现在由纤维选择与演化编排承担的 $D_U$ 项上。
+
+\begin{remark}[投影词范畴与“算法等价 = 自然同构”的口径]\label{rem:pom-word-category}
+把微码原语集合
+\(
+\{\texttt{LIFT\_*},\texttt{EVOLVE},\texttt{PROJ\_*},\texttt{TWIST},\texttt{CLEAN}\}
+\)
+视为生成元，则一切“算法/实现”都可表示为这些生成元的有限复合词。
+形式上，可将其组织为一个自由（严格）单张量范畴 \(\mathbf{W}\)：对象为“当前纤维配置/读出层级”，态射为投影词，张量积对应并行装配。
+
+另一方面，给定具体核选择与势/群扩张选择，可定义一个“谱语义”函子
+\[
+\mathcal{S}:\mathbf{W}\to \mathbf{Kern},
+\]
+把一个词送到一个可审计的核对象（加权邻接算子、\(\zeta\)/primitive、有限部常数与扭曲谱隙等指纹在 \(\mathbf{Kern}\) 中自然携带）。
+于是两条投影词 \(w_1,w_2\) 的“算法等价”可用自然同构表述：若存在 \(\mathcal{S}(w_1)\simeq \mathcal{S}(w_2)\) 的同构（在本文的可审计口径下表现为指纹族一致，或更强的共轭/同谱同型），则它们是同一本体读出的两种 presentation。
+这为“可推演、可重写、可计算”的演算学提供了一个抽象边界：重写系统在词法层闭合，而验证在指纹层完成。
+\end{remark}
+
+\begin{remark}[语义函子闭环：从投影词到矩阵族与签名]\label{rem:pom-sem-functor-loop}
+在可执行层，可将谱语义函子具体化为一条矩阵族语义
+\[
+\mathsf{Sem}_\theta:\mathbf{PW}\to \mathbf{Mat}_{\ge 0},
+\]
+其中 \(\mathrm{PROJ}_u\) 对应权重/温度注入 \(M\mapsto M(u)\)，\(E_m\) 对应折叠纤维上的条件期望（Markov 核平均），\(\mathrm{LIFT}_G\) 对应群扩张的角色分解与扭曲通道族 \(M\mapsto (M_\chi)_\chi\)。
+于是任一投影词的可审计输出都通过同一闭环抽取：
+\[
+\text{有限核/矩阵族}\ \Rightarrow\ \zeta(z)=\det(I-zM)^{-1}\ \Rightarrow\ (\text{twist})\ \Rightarrow\ \log\mathfrak{M}\ \Rightarrow\ \text{签名},
+\]
+从而“词法重写—语义核对—证书输出”在同一接口上闭合。
+\end{remark}
+
+\subsubsection{投影词重写：终止性与正规形}\label{subsec:pom-rewriting-calculus}
+本小节把“接口串联”提升为可推演的演算学：在词法层给出一个可终止重写系统，使“在线规范投影的可消去性”与“序投影的空间化”以规则形式落地；其正确性由本文已证的结构定理保证（尤其是一次投影正规形与 CRT 空间化定律）。
+
+\begin{definition}[值层投影词语言与规范化重写]\label{def:pom-rewriting-val}
+考虑值层微码词的子语言 \(\mathbf{W}_{\mathrm{val}}\)，其生成元包含本体演化步 \texttt{EVOLVE(op)}（其中 \texttt{op} 属于值层半环闭包 \(\oplus,\otimes\) 可表达的局部组合）与规范投影 \texttt{PROJ\_NORM}（即 \(P_Z\)），并允许与 \texttt{CLEAN} 做有限复合。
+定义重写关系 \(\Rightarrow\) 为下述两条规则生成的最小兼容闭包（对任意上下文闭合）：
+\[
+\text{(RZ)}\quad
+\texttt{PROJ\_NORM;\ PROJ\_NORM}\ \Rightarrow\ \texttt{PROJ\_NORM},
+\]
+\[
+\text{(RNF)}\quad
+\texttt{PROJ\_NORM;\ w;\ PROJ\_NORM}\ \Rightarrow\ \texttt{w;\ PROJ\_NORM}
+\quad (\text{其中 }w\in\mathbf{W}_{\mathrm{val}}\text{ 不含 }\texttt{PROJ\_NORM}).
+\]
+这里 (RNF) 的语义对应定理 \ref{thm:pom-one-fold-normal-form} 的“一次投影正规形”：值层半环闭包的中间规范化可推到末端一次完成。
+\end{definition}
+
+\begin{proposition}[终止性与正规形存在（值层）]\label{prop:pom-rewriting-terminating}
+在定义 \ref{def:pom-rewriting-val} 的 \(\mathbf{W}_{\mathrm{val}}\) 上，重写系统 \((\mathbf{W}_{\mathrm{val}},\Rightarrow)\) 终止；并且每个词均可归约到一个正规形
+\[
+w\ \Rightarrow^\ast\ \widetilde w\cdot \texttt{PROJ\_NORM},
+\]
+其中 \(\widetilde w\) 不含 \texttt{PROJ\_NORM}，且末端 \texttt{PROJ\_NORM} 至多出现一次。
+\end{proposition}
+\begin{proof}
+取下降度量为二元序
+\(
+\big(\#(\texttt{PROJ\_NORM}),\ \text{末端以外的 }\texttt{PROJ\_NORM}\text{ 出现次数}\big)
+\)
+按字典序比较。
+规则 (RZ) 严格减少第一分量；规则 (RNF) 不增第一分量但严格减少第二分量。
+故不存在无限下降链，系统终止。终止后若仍有 \texttt{PROJ\_NORM} 不在末端，则必可用 (RNF) 再次规约，矛盾；因此正规形必为所述形式。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/thm__pom-val-semantics-polynomial-monotone-decidable}
+
+\begin{remark}[可复现：重写引擎示例输出]\label{rem:pom-rewriting-engine-demo}
+为避免“演算学”停留在口头层面，脚本 \texttt{scripts/exp\_pom\_rewriting\_engine\_demo.py} 实现了定义 \ref{def:pom-rewriting-val} 的值层重写规则 (RZ,RNF)，并生成一个可审计的示例表，展示典型微码词在重写下的正规形（中间的 \texttt{PROJ\_NORM} 被完全消去并推到末端一次）。
+\input{sections/generated/tab_pom_rewriting_engine_demo}
+\end{remark}
+
+\begin{remark}[序投影的空间化作为编译重写模式]\label{rem:pom-rewriting-order-spatialize}
+定理 \ref{thm:pom-order-spatialization} 给出一个与“词法重写”同型的编译模式：把序投影 \texttt{PROJ\_ORDER}（即 \(P_{\le}\)）替换为“模轴束上的点wise 计算 + CRT 重建”的并行路径。
+在 typed 口径下，它并非在同一对象上闭合的等式，而是一个改变纤维配置的自然变换：
+\[
+\texttt{PROJ\_ORDER}
+\ \Longrightarrow\
+\texttt{LIFT\_PRIME; (pointwise);\ CRT\_READOUT; PROJ\_NORM},
+\]
+其正确性由 CRT 唯一重建保证；其代价语义把时间瓶颈转移为可并行的模轴空间预算。
+\end{remark}
+
+\paragraph{统一微码模板}
+\begin{itemize}
+  \item \texttt{ZADD}：\texttt{LIFT\_SCALE; EVOLVE(add); PROJ\_NORM; CLEAN}.
+  \item \texttt{ZMUL}（phase-route）：\texttt{LIFT\_PHASE; EVOLVE(phase-linearize); EVOLVE(pointwise-mul); PROJ\_NORM; CLEAN}.
+  \item \texttt{ZMUL}（prime-route）：\texttt{LIFT\_PRIME; EVOLVE(pointwise-mul); PROJ\_NORM; CLEAN}.
+  \item \texttt{ZSUB}：\texttt{PROJ\_ORDER(cmp); EVOLVE(sub); PROJ\_NORM; CLEAN}.
+  \item \texttt{ZSUBR}：\texttt{LIFT\_SCALE; EVOLVE(signed-digit-sub); PROJ\_NORM(strong); CLEAN}.
+  \item \texttt{ZDIVMOD}（reciprocal-route）：\texttt{EVOLVE(recip-iterate); PROJ\_ORDER(q); EVOLVE(r=a-bq); PROJ\_ORDER(fix); PROJ\_NORM(q); PROJ\_NORM(r); CLEAN}.
+  \item \texttt{FSTEP}（FRACTRAN-step）：\texttt{LIFT\_PRIME; PROJ\_ORDER(first-fit); EVOLVE(fractran-update); CLEAN}.（若需写回外表，再追加 \texttt{PROJ\_NORM}；见小节 \ref{subsec:pom-fractran}。）
+  \item \texttt{ZPRIM}：\texttt{EVOLVE(trace); PROJ\_PRIM; CLEAN}.
+\end{itemize}
+
+\begin{remark}[序读出采用 $P_\chi$ 的口径]
+当序读出由角色投影 $P_\chi$ 实现时，可将上述微码中的 \texttt{PROJ\_ORDER} 替换为 \texttt{PROJ\_CHI}；其不可并行时间尺度由 $\tau_{\mathrm{mix}}$ 给出（注 \ref{rem:pom-chi-mixing}）。
+\end{remark}
+
+\begin{remark}[\texorpdfstring{$p$}{p}-local 与在线延迟的对应]\label{rem:pom-plocal-delay}
+第 \ref{sec:A-kernel-compare-main} 节把并行归一化核的滑动窗口范围（$p$-local）与 MSDF 在线延迟建立对应，并给出单流在线机的最小状态规格（命题 \ref{prop:min-state-spec-flow}）。因此 $\delta_Z$ 并非外加常数，而是由所选归一化核的局部性与在线编译结构决定。
+\end{remark}
+
+以上 ISA/微码不引入新的算术原语，而是将“同一演化 + 三类投影 + 线性化深度”的差异组织为可审计的投影词。该抽象层与第 \ref{sec:folding} 节的折叠接口与第 \ref{sec:A-kernel-compare-main} 节的核指纹体系兼容。

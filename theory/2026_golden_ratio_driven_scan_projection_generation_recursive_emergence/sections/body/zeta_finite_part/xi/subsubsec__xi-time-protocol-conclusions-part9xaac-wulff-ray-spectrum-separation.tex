@@ -1,0 +1,484 @@
+\paragraph{同一 Fibonacci 同余骨架上的频谱实现分离}
+前述链条已经把 Figalli--Zhang 的各向异性 Serrin 可实现类压缩为 Fibonacci 同余骨架上的纯尺度 Wulff 射线，并把该射线识别为同窗口内唯一的 Schur 极小地板。然而，共享同一有限分辨率半环并不意味着共享同一 Fourier 实现：bin-fold 的非平凡频谱由定理 \ref{thm:fold-spectrum-factorization} 所给出的 Fibonacci 频率乘积分解支配，而纯尺度 Wulff 射线对应的只是模 \(F_{m+2}\) 的截断区间计数。下列结果把这一区别压缩为零集结构、最大纤维归一化偏置与谱核类型三条彼此独立的可审计分离律。
+
+\begin{theorem}[纯尺度 Wulff 射线的非平凡 Fourier 零集公式]\label{thm:xi-time-part9xaab-wulff-ray-fourier-zero-formula}
+沿用定理 \ref{thm:xi-time-part9x-serrin-ray-fibonacci-semirings} 与推论 \ref{cor:xi-time-part9x-serrin-ray-exact-capacity} 的记号，记
+\[
+M_m:=F_{m+2},
+\qquad
+2^m=q_mM_m+a_m,
+\qquad
+0\le a_m<M_m.
+\]
+对纯尺度 Wulff 射线定义纤维计数函数
+\[
+d_m^{W,\mathrm{ray}}(r)
+:=
+\#\bigl\{0\le \rho<2^m:\ [\rho]_{M_m}=r\bigr\}
+\qquad
+\bigl(r\in \ZZ/(M_m\ZZ)\bigr).
+\]
+则有显式剖面
+\[
+d_m^{W,\mathrm{ray}}(r)=q_m+\mathbf 1_{I_m}(r),
+\qquad
+I_m:=\{0,1,\dots,a_m-1\}\subset \ZZ/(M_m\ZZ).
+\]
+定义其离散 Fourier 变换
+\[
+\widehat d_m^{W,\mathrm{ray}}(k)
+:=
+\sum_{r\in \ZZ/(M_m\ZZ)}
+d_m^{W,\mathrm{ray}}(r)\,
+e^{-2\pi i kr/M_m},
+\]
+以及非平凡零集
+\[
+\mathcal Z_m^{W,\mathrm{ray}}
+:=
+\bigl\{k\in \ZZ/(M_m\ZZ)\setminus\{0\}:\ \widehat d_m^{W,\mathrm{ray}}(k)=0\bigr\}.
+\]
+则对每个 \(k\neq 0\) 都有
+\[
+\widehat d_m^{W,\mathrm{ray}}(k)
+=
+\sum_{r=0}^{a_m-1}e^{-2\pi i kr/M_m}
+=
+\frac{1-e^{-2\pi i ka_m/M_m}}{1-e^{-2\pi i k/M_m}}.
+\]
+若再记
+\[
+g_m:=\gcd(M_m,a_m),
+\]
+则
+\[
+\mathcal Z_m^{W,\mathrm{ray}}
+=
+\left\{
+j\frac{M_m}{g_m}\ \ (\mathrm{mod}\ M_m):\ 1\le j\le g_m-1
+\right\},
+\qquad
+\bigl|\mathcal Z_m^{W,\mathrm{ray}}\bigr|=g_m-1.
+\]
+特别地，\(\{0\}\cup \mathcal Z_m^{W,\mathrm{ray}}\) 恰为 \(\ZZ/(M_m\ZZ)\) 的一个循环子群，故纯尺度 Wulff 射线的非平凡零集完全由 \(\gcd(M_m,a_m)\) 控制，与各向异性体 \(K\) 的具体形状无关。
+\end{theorem}
+\begin{proof}
+由 Euclid 除法
+\[
+2^m=q_mM_m+a_m
+\]
+可知区间 \(\{0,1,\dots,2^m-1\}\) 中每个模 \(M_m\) 的余类恰出现 \(q_m\) 次，而前 \(a_m\) 个余类各多出一次，故
+\[
+d_m^{W,\mathrm{ray}}(r)=q_m+\mathbf 1_{I_m}(r).
+\]
+对 \(k\neq 0\)，常值部分的 Fourier 系数消失，于是
+\[
+\widehat d_m^{W,\mathrm{ray}}(k)
+=
+\sum_{r=0}^{a_m-1}e^{-2\pi i kr/M_m},
+\]
+并由几何级数公式得到所示闭式。
+
+该和式为零当且仅当
+\[
+e^{-2\pi i ka_m/M_m}=1
+\qquad\text{且}\qquad
+e^{-2\pi i k/M_m}\neq 1,
+\]
+也即
+\[
+M_m\mid ka_m,
+\qquad
+M_m\nmid k.
+\]
+写
+\[
+M_m=g_mM_m',
+\qquad
+a_m=g_ma_m',
+\qquad
+\gcd(M_m',a_m')=1,
+\]
+则 \(M_m\mid ka_m\) 等价于 \(M_m'\mid k\)。因此所有非零解恰为模 \(M_m\) 下的非零倍数
+\[
+\frac{M_m}{g_m},
+\ 2\frac{M_m}{g_m},
+\ \dots,
+\ (g_m-1)\frac{M_m}{g_m},
+\]
+共有 \(g_m-1\) 个。于是 \(\{0\}\cup \mathcal Z_m^{W,\mathrm{ray}}\) 正是由 \(M_m/g_m\) 生成的循环子群。证毕。
+\end{proof}
+
+\begin{corollary}[纯尺度 Wulff 零集的二进赋值相图]\label{cor:xi-time-part9xaab-wulff-ray-zero-2adic-phase}
+在定理 \ref{thm:xi-time-part9xaab-wulff-ray-fourier-zero-formula} 的记号下，
+\[
+g_m=\gcd(F_{m+2},2^m)=2^{\nu_2(F_{m+2})}.
+\]
+因此
+\[
+\bigl|\mathcal Z_m^{W,\mathrm{ray}}\bigr|
+=
+\begin{cases}
+0,
+& m+2\equiv 1,2,4,5 \pmod 6,
+\\[1mm]
+1,
+& m+2\equiv 3 \pmod 6,
+\\[1mm]
+2^{\nu_2(m+2)+2}-1,
+& m+2\equiv 0 \pmod 6.
+\end{cases}
+\]
+特别地，沿六倍窗子序列 \(m+2\equiv 0\pmod 6\) 有线性上界
+\[
+\bigl|\mathcal Z_m^{W,\mathrm{ray}}\bigr|
+\le
+4(m+2)-1.
+\]
+\end{corollary}
+\begin{proof}
+由 \(a_m\equiv 2^m\pmod{M_m}\) 与定理 \ref{thm:xi-time-part9xaab-wulff-ray-fourier-zero-formula}，
+\[
+g_m=\gcd(M_m,a_m)=\gcd(F_{m+2},2^m).
+\]
+因为 \(2^m\) 是纯 \(2\)-幂，故
+\[
+g_m=2^{\nu_2(F_{m+2})}.
+\]
+再用 Fibonacci 数的标准 \(2\)-adic 赋值公式
+\[
+\nu_2(F_n)=
+\begin{cases}
+0,
+& n\equiv 1,2,4,5 \pmod 6,
+\\
+1,
+& n\equiv 3 \pmod 6,
+\\
+\nu_2(n)+2,
+& n\equiv 0 \pmod 6,
+\end{cases}
+\]
+便得到三分情形。最后由
+\[
+\bigl|\mathcal Z_m^{W,\mathrm{ray}}\bigr|=g_m-1
+\]
+与 \(2^{\nu_2(m+2)}\le m+2\) 推得六倍窗上的线性上界。证毕。
+\end{proof}
+
+\begin{theorem}[六倍窗上半阶零点块与纯尺度零集的严格分离]\label{thm:xi-time-part9xaab-wulff-ray-zero-block-separation}
+记
+\[
+\mathcal Z_m^{\mathrm{bin}}:=\mathcal Z_m
+\]
+为 bin-fold 的非平凡谱零点集合，\(\mathcal Z_m^{W,\mathrm{ray}}\) 为定理 \ref{thm:xi-time-part9xaab-wulff-ray-fourier-zero-formula} 的纯尺度 Wulff 零点集合。若
+\[
+m+2\equiv 0\pmod 6,
+\]
+则有严格分离估计
+\[
+\frac{|\mathcal Z_m^{\mathrm{bin}}|}{|\mathcal Z_m^{W,\mathrm{ray}}|}
+\ge
+\frac{F_{(m+2)/2}}{4(m+2)-1}.
+\]
+因此，bin-fold 在六倍窗上的半阶大陪集零点块不可能由任何单参数 Wulff 尺度自由度单独产生。
+
+特别地，在最小三轴窗 \(m=58\) 上，
+\[
+|\mathcal Z_{58}^{\mathrm{bin}}|=839415,
+\qquad
+|\mathcal Z_{58}^{W,\mathrm{ray}}|=15,
+\qquad
+\frac{|\mathcal Z_{58}^{\mathrm{bin}}|}{|\mathcal Z_{58}^{W,\mathrm{ray}}|}=55961.
+\]
+\end{theorem}
+\begin{proof}
+若 \(m+2\equiv 0\pmod 6\)，则由推论 \ref{cor:fold-zero-half-index-multiple6}，
+\[
+|\mathcal Z_m^{\mathrm{bin}}|
+=
+|\mathcal Z_m|
+\ge
+F_{(m+2)/2}.
+\]
+另一方面，推论 \ref{cor:xi-time-part9xaab-wulff-ray-zero-2adic-phase} 给出
+\[
+|\mathcal Z_m^{W,\mathrm{ray}}|
+\le
+4(m+2)-1.
+\]
+两式相除即得一般比值下界。
+
+当 \(m=58\) 时，推论 \ref{cor:xi-fold-zero-m58-three-coset-exhaustion} 给出
+\[
+|\mathcal Z_{58}^{\mathrm{bin}}|=839415,
+\]
+而 \(m+2=60\) 且 \(\nu_2(60)=2\)，故由推论 \ref{cor:xi-time-part9xaab-wulff-ray-zero-2adic-phase}
+\[
+|\mathcal Z_{58}^{W,\mathrm{ray}}|
+=
+2^{2+2}-1
+=15.
+\]
+因此
+\[
+\frac{|\mathcal Z_{58}^{\mathrm{bin}}|}{|\mathcal Z_{58}^{W,\mathrm{ray}}|}
+=
+\frac{839415}{15}
+=55961.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[一阶指数普适而二阶归一化偏置分离]\label{thm:xi-time-part9xaab-wulff-ray-first-second-order-separation}
+记
+\[
+M_m^{W,\mathrm{ray}}
+:=
+\max_{r}d_m^{W,\mathrm{ray}}(r)=q_m+1,
+\qquad
+\overline d_m:=\frac{2^m}{F_{m+2}}.
+\]
+则纯尺度 Wulff 射线满足
+\[
+\lim_{m\to\infty}\frac{1}{m}\log M_m^{W,\mathrm{ray}}
+=
+\log\frac{2}{\varphi},
+\qquad
+\lim_{m\to\infty}\frac{M_m^{W,\mathrm{ray}}}{\overline d_m}=1.
+\]
+另一方面，bin-fold 的最大纤维 \(d_{\max}^{\mathrm{bin}}(m)\) 满足
+\[
+\lim_{m\to\infty}\frac{1}{m}\log d_{\max}^{\mathrm{bin}}(m)
+=
+\log\frac{2}{\varphi},
+\]
+但同时
+\[
+\liminf_{m\to\infty}\frac{d_{\max}^{\mathrm{bin}}(m)}{\overline d_m}
+\ge
+1+C_\varphi
+\approx
+1.2244178274047294
+>1.
+\]
+因此，\(\log(2/\varphi)\) 只是一阶基数失配常数；真正区分“纯尺度几何”与“bin-fold 异常纤维”的，是二阶归一化 \(L^\infty\)-偏置系数。
+\end{theorem}
+\begin{proof}
+由
+\[
+2^m=q_mF_{m+2}+a_m,
+\qquad
+0\le a_m<F_{m+2},
+\]
+以及
+\[
+F_{m+2}\sim \frac{\varphi^{m+2}}{\sqrt5},
+\]
+可得
+\[
+q_m
+\sim
+\frac{2^m}{F_{m+2}}
+\sim
+\frac{\sqrt5}{\varphi^2}\left(\frac{2}{\varphi}\right)^m.
+\]
+故
+\[
+M_m^{W,\mathrm{ray}}=q_m+1
+\]
+满足
+\[
+\frac{1}{m}\log M_m^{W,\mathrm{ray}}\to \log\frac{2}{\varphi}.
+\]
+另一方面，
+\[
+\frac{M_m^{W,\mathrm{ray}}}{\overline d_m}
+=
+\frac{q_m+1}{q_m+a_m/F_{m+2}}
+=
+1+\frac{1-a_m/F_{m+2}}{q_m+a_m/F_{m+2}}
+\longrightarrow 1,
+\]
+因为 \(q_m\to\infty\)。
+
+对 bin-fold，指数极限由定理 \ref{thm:fold-bin-max-fiber-exponent} 给出，而归一化偏置下界正是推论 \ref{cor:fold-max-fiber-constant-bias} 的内容。证毕。
+\end{proof}
+
+\begin{theorem}[纯尺度 Wulff 射线中心化缺陷的离散 Fej\'er 核表示]\label{thm:xi-time-part9xaab-wulff-ray-fejer-kernel}
+沿用定理 \ref{thm:xi-time-part9xaab-wulff-ray-fourier-zero-formula} 的记号，并定义中心化缺陷
+\[
+\delta_m^{W,\mathrm{ray}}(r)
+:=
+d_m^{W,\mathrm{ray}}(r)-\frac{2^m}{F_{m+2}}
+=
+\mathbf 1_{I_m}(r)-\frac{a_m}{M_m}.
+\]
+则
+\[
+\widehat{\delta_m^{W,\mathrm{ray}}}(0)=0,
+\]
+且对每个 \(k\neq 0\) 都有
+\[
+\widehat{\delta_m^{W,\mathrm{ray}}}(k)
+=
+\frac{1-e^{-2\pi i ka_m/M_m}}{1-e^{-2\pi i k/M_m}}.
+\]
+从而
+\[
+\bigl|\widehat{\delta_m^{W,\mathrm{ray}}}(k)\bigr|^2
+=
+\frac{\sin^2(\pi ka_m/M_m)}{\sin^2(\pi k/M_m)}
+\qquad(k\neq 0).
+\]
+亦即，纯尺度 Wulff 射线的全部非平凡谱能恰是一个离散 Fej\'er 核。并且 Parseval 质量满足
+\[
+\frac{1}{M_m}
+\sum_{k\neq 0}
+\bigl|\widehat{\delta_m^{W,\mathrm{ray}}}(k)\bigr|^2
+=
+a_m\left(1-\frac{a_m}{M_m}\right).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9xaab-wulff-ray-fourier-zero-formula}，
+\[
+d_m^{W,\mathrm{ray}}(r)=q_m+\mathbf 1_{I_m}(r),
+\qquad
+\frac{2^m}{M_m}=q_m+\frac{a_m}{M_m},
+\]
+故
+\[
+\delta_m^{W,\mathrm{ray}}(r)=\mathbf 1_{I_m}(r)-\frac{a_m}{M_m}.
+\]
+于是 \(\widehat{\delta_m^{W,\mathrm{ray}}}(0)=0\) 显然成立。对 \(k\neq 0\)，常值项 Fourier 系数消失，因此
+\[
+\widehat{\delta_m^{W,\mathrm{ray}}}(k)
+=
+\sum_{r=0}^{a_m-1}e^{-2\pi i kr/M_m},
+\]
+并由几何级数公式得到第一条闭式。再用
+\[
+|1-e^{-i\theta}|=2\bigl|\sin(\theta/2)\bigr|
+\]
+即可得到 Fej\'er 核表达式。
+
+最后由 Parseval 恒等式，
+\[
+\frac{1}{M_m}\sum_{k}\bigl|\widehat{\delta_m^{W,\mathrm{ray}}}(k)\bigr|^2
+=
+\sum_{r}\bigl|\delta_m^{W,\mathrm{ray}}(r)\bigr|^2.
+\]
+右端直接化简为
+\[
+a_m\left(1-\frac{a_m}{M_m}\right)^2
++
+(M_m-a_m)\left(\frac{a_m}{M_m}\right)^2
+=
+a_m\left(1-\frac{a_m}{M_m}\right).
+\]
+又因 \(\widehat{\delta_m^{W,\mathrm{ray}}}(0)=0\)，故得到所示非平凡频率 Parseval 质量。证毕。
+\end{proof}
+
+\begin{theorem}[Fibonacci--Riesz 与 Fej\'er 类在最小三轴窗上的不可同构性]\label{thm:xi-time-part9xaab-binfold-fejer-riesz-nonisomorphism}
+记
+\[
+\delta_m^{\mathrm{bin}}(r):=d_m(r)-\frac{2^m}{F_{m+2}},
+\qquad
+\delta_m^{W,\mathrm{ray}}(r):=d_m^{W,\mathrm{ray}}(r)-\frac{2^m}{F_{m+2}}.
+\]
+则在非零频率上，
+\[
+\widehat{\delta_m^{\mathrm{bin}}}(k)=\widehat d_m(k)
+\qquad (k\neq 0),
+\]
+故由定理 \ref{thm:fold-spectrum-factorization} 与注 \ref{rem:fold-zero-sparse-necessity}，bin-fold 的归一化非平凡谱能是 Fibonacci 频率驱动的有限 Riesz 乘积；另一方面，由定理 \ref{thm:xi-time-part9xaab-wulff-ray-fejer-kernel}，纯尺度 Wulff 射线的归一化非平凡谱能是单区间诱导的离散 Fej\'er 核。
+
+更强地，在最小三轴窗 \(m=58\) 上，不存在任何双射
+\[
+\sigma:\ZZ/(F_{60}\ZZ)\setminus\{0\}\longrightarrow \ZZ/(F_{60}\ZZ)\setminus\{0\}
+\]
+使得
+\[
+\bigl|\widehat{\delta_{58}^{\mathrm{bin}}}(k)\bigr|
+=
+\bigl|\widehat{\delta_{58}^{W,\mathrm{ray}}}(\sigma(k))\bigr|
+\qquad(\forall\,k\neq 0).
+\]
+因此，Fibonacci--Riesz 类与 Fej\'er 类在最小三轴窗上已严格分离，不能通过任何频率重标号互相同构。
+\end{theorem}
+\begin{proof}
+若存在这样的双射 \(\sigma\)，则两侧非零频率零集的基数必须相同。由推论 \ref{cor:xi-fold-zero-m58-three-coset-exhaustion}，
+\[
+\bigl|\mathcal Z_{58}^{\mathrm{bin}}\bigr|=839415.
+\]
+而由推论 \ref{cor:xi-time-part9xaab-wulff-ray-zero-2adic-phase}，
+\[
+\bigl|\mathcal Z_{58}^{W,\mathrm{ray}}\bigr|=15.
+\]
+两者矛盾，故所述双射不存在。于是两类频谱模型在最小三轴窗上已不可同构。证毕。
+\end{proof}
+
+\begin{conjecture}[Fej\'er 刚性]\label{conj:xi-time-part9xaab-fejer-rigidity}
+对每个 \(m\ge 1\)，令
+\[
+G_m:=\ZZ/(F_{m+2}\ZZ),
+\qquad
+\overline d_m:=\frac{2^m}{F_{m+2}}.
+\]
+设 \(d_m^\sharp:G_m\to \NN\) 是一列满足
+\[
+\sum_{r\in G_m}d_m^\sharp(r)=2^m
+\]
+的纤维函数，并记
+\[
+M_m^\sharp:=\max_{r\in G_m}d_m^\sharp(r),
+\qquad
+\delta_m^\sharp:=d_m^\sharp-\overline d_m.
+\]
+我猜想下列三条合起来足以刻画纯尺度 Wulff 射线：
+\begin{enumerate}
+  \item
+  \[
+  \lim_{m\to\infty}\frac{1}{m}\log M_m^\sharp
+  =
+  \log\frac{2}{\varphi};
+  \]
+  \item
+  \[
+  \lim_{m\to\infty}\frac{M_m^\sharp}{\overline d_m}=1;
+  \]
+  \item 对每个 \(m\)，集合
+  \[
+  \{0\}\cup
+  \bigl\{k\in G_m:\ \widehat{\delta_m^\sharp}(k)=0\bigr\}
+  \]
+  是 \(G_m\) 的一个循环子群。
+\end{enumerate}
+若此猜想成立，则对每个 \(m\) 都存在群自同构 \(\sigma_m\in \mathrm{Aut}(G_m)\)，使
+\[
+d_m^\sharp\circ \sigma_m^{-1}
+=
+q_m+\mathbf 1_{I_m},
+\qquad
+I_m=\{0,1,\dots,a_m-1\}.
+\]
+等价地，
+\[
+\delta_m^\sharp\circ \sigma_m^{-1}
+=
+\mathbf 1_{I_m}-\frac{a_m}{F_{m+2}}.
+\]
+换言之，在同一 Fibonacci 同余骨架上，满足上述三条条件的有限分辨率对象必然就是纯尺度 Wulff 射线。
+\end{conjecture}
+\begin{proof}[证据]
+定理 \ref{thm:xi-time-part9xaab-wulff-ray-fourier-zero-formula}、
+定理 \ref{thm:xi-time-part9xaab-wulff-ray-first-second-order-separation}
+与定理 \ref{thm:xi-time-part9xaab-wulff-ray-fejer-kernel}
+表明，纯尺度 Wulff 射线确实满足这三条条件。另一方面，bin-fold 虽与之共享一阶指数常数 \(\log(2/\varphi)\)，但定理 \ref{thm:xi-time-part9xaab-wulff-ray-first-second-order-separation} 表明其归一化最大纤维偏置始终高于 \(1\)，而定理 \ref{thm:xi-time-part9xaab-binfold-fejer-riesz-nonisomorphism} 又表明其零集结构与 Fej\'er 类严格不符。故 bin-fold 至少在第二、第三条上系统性失效。证毕。
+\end{proof}
+
+\noindent
+综上，Figalli--Zhang 的单参数各向异性 Serrin 可实现类与本文的 bin-fold 模型虽然共享同一 Fibonacci 同余半环骨架，并在一阶恢复指数上同现 \(\log(2/\varphi)\)，但二者的频谱实现已在三条互不依赖的尺度上严格分离：纯尺度 Wulff 射线的非平凡零集只是一个由 \(\gcd(F_{m+2},2^m)\) 控制的单循环子群，其中心化谱能是离散 Fej\'er 核，且最大纤维相对均值比趋于 \(1\)；bin-fold 则保留半阶大陪集零点块、Fibonacci 频率驱动的有限 Riesz 乘积与常数级 \(L^\infty\) 偏置。由此，Wulff 射线在本文内部的角色被精确定位为同骨架下的纯尺度比较对象，而非 fold 异常的频谱来源。
+
+\endinput

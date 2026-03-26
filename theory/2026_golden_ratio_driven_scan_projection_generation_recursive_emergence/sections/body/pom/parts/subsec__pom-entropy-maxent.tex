@@ -1,0 +1,636 @@
+\subsection{结论簇 I：熵饱和与最大熵提升}\label{subsec:pom-entropy-maxent}
+\begin{definition}[窗口值与外表值]\label{def:pom-window-value}
+对 $\omega=\omega_1\cdots\omega_m\in\Omega_m$，定义窗口值
+\[
+N(\omega):=\sum_{k=1}^m \omega_k F_{k+1}.
+\]
+对 $x=x_1\cdots x_m\in X_m$，定义外表值
+\[
+V_m(x):=\sum_{k=1}^m x_k F_{k+1}.
+\]
+\end{definition}
+
+\begin{lemma}[单隐藏位分解]\label{lem:pom-one-bit}
+对任意 $\omega\in\Omega_m$，存在唯一 $b(\omega)\in\{0,1\}$ 使
+\[
+N(\omega)=V_m(\Fold_m(\omega)) + b(\omega)\,F_{m+2}.
+\]
+\end{lemma}
+\begin{proof}
+由 $\sum_{k=1}^m F_{k+1}=F_{m+3}-2$ 得 $0\le N(\omega)<F_{m+3}$。因此 $N(\omega)$ 的 Zeckendorf 表示中不可能出现权重 $F_{m+3}$，其非零位仅可能到 $F_{m+2}$。由 $\Fold_m$ 的定义，$\Fold_m(\omega)$ 给出前 $m$ 位，余下唯一可能的高位即 $F_{m+2}$，于是存在唯一 $b(\omega)\in\{0,1\}$ 使等式成立。证毕。
+\end{proof}
+
+\begin{proposition}[纤维自由度的二层分解]\label{prop:pom-fiber-decompose}
+对任意 $x\in X_m$，记 $I(x)$ 为 $x$ 中可执行逆代换 $100\mapsto 011$ 的局部位点集合（以长度 $3$ 窗口计），并要求所选位点两两不相邻以避免重叠。则任意 $\omega\in\Fold_m^{-1}(x)$ 可视为"一个余量位 $b\in\{0,1\}$"与"一组不相邻逆代换位点"的组合；因此
+\[
+d_m(x)\le 2\cdot \#\{\text{路径图 }P_{|I(x)|}\text{ 的独立集}\}
+\le 2F_{\lfloor m/2\rfloor+2}.
+\]
+\end{proposition}
+\begin{proof}
+由引理 \ref{lem:pom-one-bit}，给定 $\omega$ 的超出前 $m$ 位的信息至多是一位 $b$。其余自由度来自逆代换 $100\mapsto 011$ 的选择：当两次逆代换发生重叠时会产生非二元符号，因此合法选择只能来自一条线性链上的不相邻位点集合。路径图独立集计数即为 Fibonacci 数，从而得到上述上界。证毕。
+\end{proof}
+
+\begin{theorem}[$B_m$ 的闭式计数]\label{thm:pom-hidden-bit-count}
+对任意 $m\ge 1$，令
+\[
+B_m:=\{\omega\in\Omega_m: b(\omega)=1\}.
+\]
+则
+$$
+\boxed{\ |B_m|=\left\lfloor \frac{2^m}{3}\right\rfloor\ }
+$$
+等价地
+$$
+|B_m|=
+\begin{cases}
+\dfrac{2^m-1}{3}, & m\ \text{为偶数},\\[6pt]
+\dfrac{2^m-2}{3}, & m\ \text{为奇数}.
+\end{cases}
+$$
+\end{theorem}
+\begin{proof}
+由引理 \ref{lem:zeckendorf-range-bijection} 知 $V_m(X_m)=\{0,1,\dots,F_{m+2}-1\}$。故由引理 \ref{lem:pom-one-bit} 的分解
+$$
+N(\omega)=V_m(\Fold_m(\omega))+b(\omega)F_{m+2}
+$$
+可得
+$$
+b(\omega)=1\quad\Longleftrightarrow\quad N(\omega)\ge F_{m+2}.
+$$
+下面对最高位 $\omega_m$ 分类计数。
+
+\paragraph{若 $\omega_m=0$}
+则
+$$
+N(\omega)\le \sum_{k=1}^{m-1}F_{k+1}=F_{m+2}-1,
+$$
+故不可能满足 $N(\omega)\ge F_{m+2}$，从而该分支对 $B_m$ 无贡献。
+
+\paragraph{若 $\omega_m=1$}
+写
+$$
+N(\omega)=F_{m+1}+\omega_{m-1}F_m+\sum_{k=1}^{m-2}\omega_kF_{k+1}.
+$$
+阈值为 $F_{m+2}=F_{m+1}+F_m$，故 $N(\omega)\ge F_{m+2}$ 等价于
+$$
+\omega_{m-1}F_m+\sum_{k=1}^{m-2}\omega_kF_{k+1}\ \ge\ F_m.
+$$
+再对 $\omega_{m-1}$ 分类：
+\begin{itemize}
+  \item 若 $\omega_{m-1}=1$，条件自动成立；其余 $m-2$ 位任意，贡献 $2^{m-2}$ 个。
+  \item 若 $\omega_{m-1}=0$，条件化为
+  $$
+  \sum_{k=1}^{m-2}\omega_kF_{k+1}\ge F_m.
+  $$
+  这与“长度 $m-2$ 的同型阈值问题”一致：右端正是 $F_{(m-2)+2}=F_m$，因此该分支贡献 $|B_{m-2}|$ 个。
+\end{itemize}
+综上得到递推
+$$
+|B_m|=2^{m-2}+|B_{m-2}|\qquad(m\ge 3),
+$$
+并由直接枚举得初值 $|B_1|=0$、$|B_2|=1$。
+
+解递推：若 $m=2k$，则
+$$
+|B_{2k}|=1+\sum_{j=1}^{k-1}2^{2j}=\frac{2^{2k}-1}{3}.
+$$
+若 $m=2k+1$，则
+$$
+|B_{2k+1}|=\sum_{j=0}^{k-1}2^{2j+1}=\frac{2^{2k+1}-2}{3}.
+$$
+两式统一为 $|B_m|=\lfloor 2^m/3\rfloor$。证毕。
+\end{proof}
+
+\begin{corollary}[极限密度与“非均匀的一比特”]\label{cor:pom-hidden-bit-entropy}
+在 $\Omega_m$ 上取均匀分布，则
+$$
+\mathbb{P}[b(\omega)=1]=\frac{|B_m|}{2^m}
+=\frac{1}{3}-\frac{\varepsilon_m}{3\cdot 2^m},
+$$
+其中 $\varepsilon_m=1$ 当 $m$ 为偶数、$\varepsilon_m=2$ 当 $m$ 为奇数。因而
+$$
+\lim_{m\to\infty}\mathbb{P}[b(\omega)=1]=\frac{1}{3},\qquad
+\lim_{m\to\infty}\mathbb{P}[b(\omega)=0]=\frac{2}{3}.
+$$
+\end{corollary}
+
+\begin{remark}[去除取整符号的闭式与二进制截断]\label{rem:pom-hidden-bit-dyadic-trunc}
+由 \(2^m\bmod 3\in\{1,2\}\) 且随 \(m\) 的奇偶交替，有
+\[
+|B_m|
+=\left\lfloor\frac{2^m}{3}\right\rfloor
+=\frac{2^m-r_m}{3},
+\qquad
+r_m=
+\begin{cases}
+1,& m\ \text{为偶数},\\
+2,& m\ \text{为奇数},
+\end{cases}
+\]
+从而可统一写成完全无取整的闭式
+\[
+\boxed{\ |B_m|=\frac{2^{m+1}+(-1)^m-3}{6}\ }.
+\]
+因此
+\[
+\boxed{\ \mathbb{P}[b(\omega)=1]-\frac13=\frac{(-1)^m-3}{6\cdot 2^m}\ },
+\]
+误差项由 \(m\) 的奇偶唯一决定，呈两点振荡且幅度为 \(2^{-m}\) 级。
+此外由于
+\[
+\frac13=0.\overline{01}_2=\sum_{j\ge 1}2^{-2j},
+\]
+有
+\[
+\frac{|B_m|}{2^m}=\frac{\lfloor 2^m/3\rfloor}{2^m}
+\]
+恰为 \(1/3\) 的二进制小数在 \(m\) 位处截断的 dyadic 近似；等价地 \(|B_m|\) 的二进制展开为长度 \(m\) 的交替串
+\[
+|B_m|=(0101\cdots)_2
+\]
+（例如 \(m=4,5,6\) 时分别为 \(5=(0101)_2\)、\(10=(01010)_2\)、\(21=(010101)_2\)）。
+同一常数 \(1/3\) 亦作为 delay-\(3\) 同步核 \(\zeta_B(z)\) 的主极点出现（\S\ref{subsec:zeta-online-kernel}），从而把隐藏位的全局密度与 prime-like 主尺度在同一代数标尺上对齐。
+\end{remark}
+
+\begin{corollary}[全局分支质量守恒与子集偏置约束]\label{cor:pom-branch-mass-law}
+对每个 \(x\in X_m\) 与 \(b\in\{0,1\}\)，定义纤维内的隐藏位分裂计数
+\[
+d_{m,b}(x):=\#\{\omega\in\Omega_m:\ \Fold_m(\omega)=x,\ b(\omega)=b\},
+\]
+并记纤维总多重度 \(d_m(x)=d_{m,0}(x)+d_{m,1}(x)\) 以及纤维内的分支-\(1\) 质量比例
+\[
+p_1(x):=\frac{d_{m,1}(x)}{d_m(x)}\in[0,1].
+\]
+令 \(\omega\sim\mathrm{Unif}(\Omega_m)\)、\(X:=\Fold_m(\omega)\)，并写输出分布为 \(\pi_m(x):=\mathbb{P}(X=x)=d_m(x)/2^m\)。
+则有精确平均恒等式
+\[
+\boxed{\;
+\mathbb{E}_{X\sim\pi_m}\bigl[p_1(X)\bigr]
+=\mathbb{P}[b(\omega)=1]
+=\frac{|B_m|}{2^m}
+=\frac{\lfloor 2^m/3\rfloor}{2^m}. \;}
+\]
+因此
+\[
+\left|\mathbb{E}_{\pi_m}[p_1]-\frac13\right|\le 2^{-m}.
+\]
+并且对任意子集 \(S\subseteq X_m\) 满足 \(\pi_m(S)>0\)，有\emph{守恒型}约束（严格恒等式）
+\[
+\boxed{\;
+\mathbb{E}_{\pi_m}[p_1\mid X\in S]-\mathbb{P}[b=1]
+=-\frac{\pi_m(S^c)}{\pi_m(S)}
+\left(\mathbb{E}_{\pi_m}[p_1\mid X\in S^c]-\mathbb{P}[b=1]\right). \;}
+\]
+即任何“特殊集合”内部的系统性偏置只能以跨集合的重分配形式出现，不能在全局上净产生/净消去隐藏位质量。
+\end{corollary}
+\begin{proof}
+对任意 \(x\in X_m\)，在事件 \(\{X=x\}\) 上 \(\omega\) 在纤维 \(\Fold_m^{-1}(x)\) 内条件均匀，故
+\(
+\mathbb{P}[b=1\mid X=x]=d_{m,1}(x)/d_m(x)=p_1(x)
+\)。
+由全期望公式得
+\[
+\mathbb{E}_{X\sim\pi_m}[p_1(X)]=\mathbb{P}[b=1]=|B_m|/2^m,
+\]
+再用定理 \ref{thm:pom-hidden-bit-count}（以及 \(|\lfloor 2^m/3\rfloor-2^m/3|\le 1\)）得到误差界。
+\par
+对任意 \(S\subseteq X_m\)，再用全期望公式
+\(
+\mathbb{P}[b=1]=\pi_m(S)\mathbb{E}[p_1\mid X\in S]+\pi_m(S^c)\mathbb{E}[p_1\mid X\in S^c]
+\)，
+移项并除以 \(\pi_m(S)\) 即得守恒恒等式。证毕。
+\end{proof}
+
+\begin{proposition}[相关层数定理：\texorpdfstring{$k$}{k}-moment 的混合矩簇分裂]\label{prop:pom-hiddenbit-mixed-moment-cluster}\label{prop:pom-mixed-moment-clusters}
+沿用推论 \ref{cor:pom-branch-mass-law} 的二支分裂计数 \(d_{m,b}(x)\)。
+对整数 \(k\ge 1\)，定义
+\[
+S_k(m):=\sum_{x\in X_m} d_m(x)^k,
+\qquad
+M^{(k)}_{a}(m):=\sum_{x\in X_m} d_{m,0}(x)^a\,d_{m,1}(x)^{k-a}\qquad(0\le a\le k).
+\]
+则有严格恒等式（混合矩分裂）
+\[
+\boxed{\;
+S_k(m)=\sum_{a=0}^{k}\binom{k}{a}\,M^{(k)}_{a}(m)\; }.
+\]
+进一步，定义对称化混合矩
+\[
+\widetilde M^{(k)}_{a}(m):=
+\begin{cases}
+M^{(k)}_{a}(m)+M^{(k)}_{k-a}(m), & 0\le a<k-a,\\
+M^{(k)}_{a}(m), & a=k-a,
+\end{cases}
+\]
+则 \(S_k(m)\) 只依赖于 \(a=0,1,\dots,\lfloor k/2\rfloor\) 这一半的对称化层：
+\[
+\boxed{\;
+S_k(m)=\sum_{a=0}^{\lfloor k/2\rfloor}\binom{k}{a}\,\widetilde M^{(k)}_{a}(m)\; }.
+\]
+因此在“只把隐藏位视作无标号二支”的信息条件下，\(k\)-moment 的客观相关自由度恰为 \(\lfloor k/2\rfloor+1\) 层。
+\end{proposition}
+
+\begin{remark}[含义：以混合矩簇为类型的分层编译]\label{rem:pom-hiddenbit-mixed-moment-typing}
+命题 \ref{prop:pom-hiddenbit-mixed-moment-cluster} 给出一个结构源：\(\mathrm{MOM}_k\) 的编译不必把“\(k\) 份同步直积”作为唯一入口。
+在二支分裂客观存在（引理 \ref{lem:pom-one-bit}）且全局质量非稀疏（定理 \ref{thm:pom-hidden-bit-count}）的口径下，
+可先把 \(a=0,\dots,\lfloor k/2\rfloor\) 的混合矩层立为对象类型，再对每一层分别编译（或分别做递推/最小 realization），最后按二项式系数组合回 \(S_k(m)\)。
+这把“相关层数 = \(\lfloor k/2\rfloor+1\)”从经验设定提升为由单隐藏位分解强制出的可审计结构自由度。
+\end{remark}
+
+\begin{theorem}[一步可判别与右解析性]\label{thm:pom-right-resolving}
+对任意 $m\ge 2$ 与任意 $v\in V_m=\{0,1\}^{m-1}$，有
+\[
+\Fold_m(v0)\neq \Fold_m(v1).
+\]
+因此标记图 $G_m$（定义 \ref{def:G_m}）是右解析（right-resolving）的：同一顶点出发的两条出边具有不同标记。
+\end{theorem}
+\begin{proof}
+记 $\omega_0=v0$、$\omega_1=v1$。则 $N(\omega_1)-N(\omega_0)=F_{m+1}$. 若 $\Fold_m(\omega_0)=\Fold_m(\omega_1)$，由引理 \ref{lem:pom-one-bit} 得
+\[
+N(\omega_1)-N(\omega_0)\in\{0,F_{m+2}\},
+\]
+与 $F_{m+1}\neq F_{m+2}$ 矛盾。故两者标记不同，右解析性随之成立。证毕。
+\end{proof}
+
+\begin{theorem}[一步可判别与左解析性]\label{thm:pom-left-resolving}
+对任意 $m\ge 2$ 与任意 $v\in V_m=\{0,1\}^{m-1}$，有
+\[
+\Fold_m(0v)\neq \Fold_m(1v).
+\]
+因此对任意固定的长度 $m-1$ \emph{后缀}，在其左侧补 $0/1$ 的读出值可一步判别；换言之，$\Fold_m$ 对“首位未知”的二选一也是严格可判别的。
+\end{theorem}
+\begin{proof}
+记 $\omega_0=0v$、$\omega_1=1v$。则 $N(\omega_1)-N(\omega_0)=F_2=1$。
+若 $\Fold_m(\omega_0)=\Fold_m(\omega_1)$，由引理 \ref{lem:pom-one-bit} 得
+\[
+N(\omega_1)-N(\omega_0)\in\{0,F_{m+2}\},
+\]
+而当 $m\ge 2$ 时 $F_{m+2}\ge 3$，与 $N(\omega_1)-N(\omega_0)=1$ 矛盾。故两者读出不同。证毕。
+\end{proof}
+
+\begin{theorem}[熵饱和：折叠不改变信息率]\label{thm:pom-entropy-saturation}
+对任意 $m\ge 2$，像空间 $Y_m=\Phi_m(\{0,1\}^{\ZZ})$ 满足
+\[
+h_{\mathrm{top}}(Y_m)=\log 2.
+\]
+\end{theorem}
+\begin{proof}
+由于 $\Phi_m$ 是滑动块因子，必有 $h_{\mathrm{top}}(Y_m)\le \log 2$。另一方面，$G_m$ 每个顶点有两条出边，总长度为 $n$ 的路径数为 $2^{m-1}\cdot 2^{n}$。由定理 \ref{thm:pom-right-resolving}，在固定起点下标记序列决定唯一路径，因此长度 $n$ 的标记词数至少为 $2^{n}$。于是
+\[
+\log 2\le h_{\mathrm{top}}(Y_m)\le \log 2,
+\]
+结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[二轴复杂度分离律：熵率不降，但降分辨率的最小重写支持为线性尺度]\label{cor:pom-two-axis-separation}
+在序列级，折叠因子像 \(Y_m\) 的信息率不损失：对任意 \(m\ge 2\)，\(h_{\mathrm{top}}(Y_m)=\log 2\)（定理 \ref{thm:pom-entropy-saturation}），并且对任意输出轨道 \(y\in Y_m\) 有有限对一缺陷上界 \( |\Phi_m^{-1}(y)|\le 2^{m-1}\)（注 \ref{rem:pom-finite-defect}）。
+\par
+但在跨分辨率降阶时，把朴素微态截断 \(r_{m+1\to m}\) 修正为折叠一致的 coarse-graining \(\widetilde r_{m+1\to m}\)（小节 \ref{subsec:fold-gauge-anomaly}）所需改动支持规模由规范差 \(G_m(\omega)\) 给出（定义 \ref{def:fold-gauge-anomaly}），并满足：
+\begin{enumerate}
+  \item \textbf{最坏情形：}对任意 \(m\ge 1\)，存在输入 \(\omega^\star(m)\in\Omega_{m+1}\) 使 \(G_m(\omega^\star)=m\)（定理 \ref{thm:fold-gauge-anomaly-max}），即纠偏可触及 \(\Theta(m)\) 位；
+  \item \textbf{均匀基线：}在审计窗口 \(m\le 20\) 的精确枚举中（表 \ref{tab:fold_gauge_anomaly_stats}），\(\bar G_m/m\) 已上升到约 \(0.4176\)；并且该线性尺度可被封口为闭式常数密度定律：
+  \[
+  \lim_{m\to\infty}\frac{\bar G_m}{m}=\frac{4}{9}
+  \]
+  （定理 \ref{thm:fold-gauge-anomaly-density}）。因此在均匀微态基线下，降一阶分辨率的“典型重写支持规模”满足 \(\bar G_m\sim (4/9)m\)。
+\end{enumerate}
+因此在本文体系内，“每步信息率（熵率）”与“降一阶分辨率所需的最小重写支持规模”构成两条正交轴：折叠的多对一并不意味着熵率压缩；它把代价迁移为跨尺度一致性所需的全局支持重写量。
+\end{corollary}
+
+\begin{remark}[有限缺陷：从纤维多重度到有限部常数]\label{rem:pom-finite-defect}
+熵饱和表明折叠在信息率意义下不压缩；其“丢失”体现为\textbf{有限缺陷}而非指数尺度。具体而言，给定标记序列 $y\in Y_m$，其前像路径数由起始顶点选择给出，故
+\[
+|\Phi_m^{-1}(y)|\le |V_m|=2^{m-1}.
+\]
+更强地，该“有限缺陷”可被提升为一个显式的缺陷寄存器：令
+\[
+\mathcal{D}_m:=V_m=\{0,1\}^{m-1}.
+\]
+定义映射
+\[
+\Psi_m:\{0,1\}^{\ZZ}\to Y_m\times \mathcal{D}_m,\qquad
+\Psi_m(s):=\bigl(\Phi_m(s),\,s_0s_1\cdots s_{m-2}\bigr).
+\]
+则 $\Psi_m$ 为单射：给定 $y=\Phi_m(s)$ 与缺陷寄存器 $\delta:=s_0\cdots s_{m-2}$，可用定理 \ref{thm:pom-right-resolving} 逐步恢复所有 $t\ge 0$ 的后继比特（由窗口末位的二选一可判别），并用定理 \ref{thm:pom-left-resolving} 逐步恢复所有 $t<0$ 的前驱比特（由窗口首位的二选一可判别），从而恢复整条输入序列 $s$。
+因此每条 $y\in Y_m$ 的前像数至多为 $|\mathcal{D}_m|=2^{m-1}$，并且“折叠丢失”可被理解为一个有限的初态/横截面寄存器，而非熵率损失。
+
+这种有限缺陷可由纤维多重度 $d_m(x)$ 与条件期望 $E_m$ 的块平均结构刻画（命题 \ref{prop:fold-conditional-expectation}），并与 Abel/Hadamard 有限部常数形成互补的“常数级指纹”（定义 \ref{def:abel-finite-part} 及相关附录接口）。因此折叠的“丢失”属于有限分辨率残差，而非熵率损失。
+\end{remark}
+
+\begin{remark}[纤维平均与有限部常数的同一接口]\label{rem:pom-em-logm}
+窗口尺度上，$E_m$ 通过 $d_m$ 对纤维做平均，压缩的是一次投影的不可观测自由度；轨道尺度上，Abel/Hadamard 有限部常数
+\[
+\log\mathfrak{M}(\theta)
+=
+\log C(\theta)
+\;+\;
+\sum_{k\ge 2}\frac{\mu(k)}{k}\log\zeta_\theta\!\bigl(z_\star(\theta)^k\bigr)
+\]
+（定义 \ref{def:abel-finite-part} 与命题 \ref{prop:abel-finite-part-mobius-zeta}）压缩的是 primitive 轨道乘积在无限尺度下的有限部漂移。因而 $E_m$ 与 $\log\mathfrak{M}$ 是同一“信息丢失接口”的微观/宏观两种尺度：前者是窗口纤维平均，后者是沿循环重复观测后的重整化常数；其导出的 $\mathsf{M}(\theta)=\gamma+\log\mathfrak{M}(\theta)$ 与 $P(\theta)$ 共同形成主尺度与有限部的双指纹（见 \ref{subsec:chi-ldp}）。
+\end{remark}
+
+\begin{definition}[推前与纤维均匀提升]\label{def:pom-maxent-lift}
+把 $\mathcal{A}_m\simeq\mathbb{C}^{\Omega_m}$、$\mathcal{B}_m\simeq\mathbb{C}^{X_m}$ 识别为有限集上的函数代数（见定理 \ref{prop:fold-pushforward-lift}）。对任意分布 $\pi\in\Delta(X_m)$，定义纤维均匀提升
+\[
+\widetilde\pi(a):=\frac{\pi(\Fold_m(a))}{d_m(\Fold_m(a))},\qquad a\in\Omega_m.
+\]
+则 $(\Fold_m)_*\widetilde\pi=\pi$。
+\end{definition}
+
+\begin{theorem}[最大熵提升的唯一性]\label{thm:pom-maxent-lift}
+固定任意 $\pi\in\Delta(X_m)$，在所有满足 $(\Fold_m)_*\mu=\pi$ 的分布 $\mu\in\Delta(\Omega_m)$ 中，Shannon 熵
+\[
+H(\mu):=-\sum_{a\in\Omega_m}\mu(a)\log\mu(a)
+\]
+的最大值唯一且由 $\widetilde\pi$ 取得。并且
+\[
+H(\widetilde\pi)=H(\pi)+\mathbb{E}_{\pi}[\log d_m(X)].
+\]
+\end{theorem}
+\begin{proof}
+固定 $x\in X_m$ 时，纤维 $\Fold_m^{-1}(x)$ 上的总质量为 $\pi(x)$。在该纤维内，熵在“均匀分配”处唯一取最大值（严格凹性）。对各纤维求和得到全局最大值与唯一性。直接代入 $\widetilde\pi$ 得
+\[
+H(\widetilde\pi)
+=-\sum_{x\in X_m}d_m(x)\frac{\pi(x)}{d_m(x)}\log\!\left(\frac{\pi(x)}{d_m(x)}\right)
+=H(\pi)+\sum_{x\in X_m}\pi(x)\log d_m(x).
+\]
+证毕。
+\end{proof}
+
+\begin{definition}[热力学缺陷与空间投影标量]\label{def:pom-kappa}
+对任意分布 $\pi\in\Delta(X_m)$，定义
+\[
+\kappa_m(\pi):=\mathbb{E}_{\pi}[\log d_m(X)].
+\]
+由定理 \ref{thm:pom-maxent-lift}，$\kappa_m(\pi)=H(\widetilde\pi)-H(\pi)$，因此 $\kappa_m$ 给出“折叠纤维被压掉的自由度”的可观测标量刻画。
+\end{definition}
+
+\begin{definition}[自然基准分布：均匀微态的折叠推前]\label{def:pom-wm-baseline}
+令 $u_{\Omega_m}$ 表示 $\Omega_m=\{0,1\}^m$ 上的均匀分布（$u_{\Omega_m}(a)\equiv 2^{-m}$）。
+定义 $X_m$ 上的自然基准分布
+\[
+w_m:=(\Fold_m)_*u_{\Omega_m},\qquad
+w_m(x)=\frac{d_m(x)}{2^m}\quad(x\in X_m).
+\]
+它刻画了“均匀微态”在折叠后的输出分布（亦即把纤维多重度归一化为概率权重）。\footnote{为避免与第 \ref{sec:experiments} 节 Parry(PF) 基线的 $\pi_m$ 记号混淆，本文统一用 $w_m$ 表示该分布。旧稿中曾在碰撞矩/R\'enyi 指纹处使用 $\pi_m(x)=d_m(x)/2^m$ 的同义记号，但下文不再采用之。}
+\end{definition}
+
+\begin{proposition}[\texorpdfstring{$\kappa_m(\pi)$}{kappa} 的 KL 精确分解]\label{prop:pom-kappa-kl-decomposition}
+对任意 $\pi\in\Delta(X_m)$，令 $w_m$ 为定义 \ref{def:pom-wm-baseline} 的自然基准分布。则有严格恒等式
+\[
+\boxed{\;
+\kappa_m(\pi)=m\log 2\;-\;H(\pi)\;-\;D_{\mathrm{KL}}(\pi\|w_m)\; }.
+\]
+因此 $\kappa_m(\pi)\le m\log 2-H(\pi)$，且当且仅当 $\pi=w_m$ 时取等号。
+\end{proposition}
+\begin{proof}
+由 KL 定义与 $w_m(x)=d_m(x)/2^m$，
+\[
+\begin{aligned}
+D_{\mathrm{KL}}(\pi\|w_m)
+&=\sum_{x\in X_m}\pi(x)\log\frac{\pi(x)}{d_m(x)/2^m}\\
+&=\sum_x\pi(x)\log\pi(x)-\sum_x\pi(x)\log d_m(x)+m\log 2\\
+&=-H(\pi)-\kappa_m(\pi)+m\log 2.
+\end{aligned}
+\]
+移项即得恒等式；不等式与取等号条件由 $D_{\mathrm{KL}}\ge 0$ 与 $D_{\mathrm{KL}}(\pi\|w_m)=0\Leftrightarrow \pi=w_m$ 得到。证毕。
+\end{proof}
+
+\begin{proposition}[折叠的“近正则性”：\texorpdfstring{$D_{\mathrm{KL}}(w_m\|U_m)$}{KL(w||U)} 的温和线性上界]\label{prop:pom-wm-kl-to-uniform}
+令 $U_m$ 为 $X_m$ 上的均匀分布（$U_m(x)\equiv 1/|X_m|=1/F_{m+2}$），并令平均纤维多重度为
+\(
+\overline d_m:=2^m/|X_m|=2^m/F_{m+2}
+\)。
+则
+\[
+\boxed{\;
+D_{\mathrm{KL}}(w_m\|U_m)\ \le\ \log\frac{D_m}{\overline d_m}
+\;=\;\log\!\left(\frac{D_m\,F_{m+2}}{2^m}\right)\; }.
+\]
+并且由注 \ref{rem:pom-defect-gap}，
+\[
+D_{\mathrm{KL}}(w_m\|U_m)\ \le\ m\log\!\left(\frac{\varphi^{3/2}}{2}\right)+O(1),
+\qquad \log(\varphi^{3/2}/2)\approx 0.0286.
+\]
+\end{proposition}
+\begin{proof}
+注意
+\(
+\frac{w_m(x)}{U_m(x)}=\frac{d_m(x)/2^m}{1/|X_m|}=\frac{d_m(x)}{\overline d_m}
+\)，
+故 $\sup_x \frac{w_m(x)}{U_m(x)}=D_m/\overline d_m$。由一般不等式
+\(
+D_{\mathrm{KL}}(P\|Q)\le \log \sup_x \frac{P(x)}{Q(x)}
+\)
+立得第一式；第二式由注 \ref{rem:pom-defect-gap} 的 $D_m/\overline d_m=\Theta((\varphi^{3/2}/2)^m)$ 取对数得到。证毕。
+\end{proof}
+
+\begin{theorem}[谱--信息夹逼：熵缺口由 \texorpdfstring{$(D_m,\mathsf{Col}_m,\mathcal Z_m)$}{(D,Col,Z)} 控制]\label{thm:pom-spectral-information-sandwich}
+令 \(w_m=(\Fold_m)_*u_{\Omega_m}\) 为均匀微态的折叠推前（定义 \ref{def:pom-wm-baseline}），令 \(U_m\) 为 \(X_m\) 上的均匀分布（命题 \ref{prop:pom-wm-kl-to-uniform}）。
+定义到均匀的熵缺口（自然对数，单位 nats）
+\[
+\mathrm{gap}_m^{(\mathrm{nat})}
+:=\log|X_m|-H(w_m)
+=D_{\mathrm{KL}}(w_m\|U_m),
+\qquad |X_m|=F_{m+2}.
+\]
+再定义折叠碰撞概率
+\[
+\mathsf{Col}_m:=\sum_{x\in X_m}w_m(x)^2
+=\mathbb{P}\bigl(\Fold_m(\omega)=\Fold_m(\eta)\bigr),
+\qquad \omega,\eta\stackrel{\mathrm{iid}}{\sim}\mathrm{Unif}(\Omega_m).
+\]
+则有如下\emph{可审计}的双向夹逼：
+\[
+\boxed{\;
+2\left(\frac{D_m}{2^m}-\frac{1}{F_{m+2}}\right)^2
+\ \le\
+\mathrm{gap}_m^{(\mathrm{nat})}
+\ \le\
+\log\!\bigl(F_{m+2}\,\mathsf{Col}_m\bigr)
+\ \le\
+\log\!\bigl(F_{m+2}-|\mathcal Z_m|\bigr).\;}
+\]
+其中 \(D_m=\max_{x\in X_m}d_m(x)\) 为最大纤维多重度（见小节 \ref{subsec:pom-max-fiber}），\(\mathcal Z_m\) 为附录 \ref{app:fold-multiplicity} 中定义 \ref{def:fold-spectrum-zero-set} 的谱零点集合。
+把上式除以 \(\log 2\) 即得到比特单位的缺口 \(\mathrm{gap}_m^{(2)}=\mathrm{gap}_m^{(\mathrm{nat})}/\log 2\)。
+\end{theorem}
+\begin{proof}
+\textbf{(1) 下界（Pinsker + 最大点差）.}
+令 \(F:=F_{m+2}\)。
+由 Pinsker 不等式（自然对数口径）
+\(
+D_{\mathrm{KL}}(w_m\|U_m)\ge 2\,D_{\mathrm{TV}}(w_m,U_m)^2
+\)，
+其中
+\(
+D_{\mathrm{TV}}(P,Q):=\frac12\sum_x|P(x)-Q(x)|
+\)。
+又因为
+\[
+D_{\mathrm{TV}}(w_m,U_m)
+=\sum_{x:\,w_m(x)>1/F}\bigl(w_m(x)-1/F\bigr)
+\ge \max_x\bigl(w_m(x)-1/F\bigr),
+\]
+而 \(\max_x w_m(x)=D_m/2^m\)，故得到
+\(
+D_{\mathrm{KL}}(w_m\|U_m)\ge 2(D_m/2^m-1/F)^2
+\)。
+\par
+\textbf{(2) 上界（Rényi-2/碰撞上界）.}
+二阶 Rényi 熵（collision entropy）满足
+\(
+H(w_m)\ge H_2(w_m):=-\log\sum_x w_m(x)^2=-\log \mathsf{Col}_m
+\)，
+因此
+\[
+\mathrm{gap}_m^{(\mathrm{nat})}
+=\log F-H(w_m)
+\le \log F-H_2(w_m)
+=\log\bigl(F\,\mathsf{Col}_m\bigr).
+\]
+最后由附录 \ref{app:fold-multiplicity} 的定理 \ref{thm:fold-collision-zero-reduction}，
+\(
+\mathsf{Col}_m\le 1-|\mathcal Z_m|/F
+\)，
+从而 \(F\mathsf{Col}_m\le F-|\mathcal Z_m|\)，得到最右端上界。证毕。
+\end{proof}
+
+\begin{definition}[碰撞膨胀系数（可审计的二阶指纹）]\label{def:pom-collision-inflation}
+沿用定理 \ref{thm:pom-spectral-information-sandwich} 的记号，定义
+\[
+C_{\mathrm{col}}(m)
+:=F_{m+2}\,\mathsf{Col}_m
+:=F_{m+2}\sum_{x\in X_m} w_m(x)^2.
+\]
+其对数即二阶 Rényi 散度：
+\(
+D_2(w_m\|U_m)=\log C_{\mathrm{col}}(m)
+\)
+（自然对数口径），并且
+\[
+\chi^2(w_m\|U_m)
+:=\sum_{x\in X_m}\frac{(w_m(x)-U_m(x))^2}{U_m(x)}
+=C_{\mathrm{col}}(m)-1.
+\]
+由 \(w_m(x)=d_m(x)/2^m\) 可得完全可枚举的纤维表达式
+\[
+C_{\mathrm{col}}(m)
+=\frac{F_{m+2}}{2^{2m}}\sum_{x\in X_m} d_m(x)^2
+=\frac{F_{m+2}}{2^{2m}}\sum_{d\ge 1}\#\{x\in X_m:\ d_m(x)=d\}\,d^2.
+\]
+\end{definition}
+
+\begin{remark}[从“最大纤维尾部”到“整体二阶偏离”的机制判别]\label{rem:pom-gap-bulk-vs-tail}
+定理 \ref{thm:pom-spectral-information-sandwich} 的左端下界仅依赖最大纤维 \(D_m\) 的单点偏离项
+\(
+D_m/2^m-1/F_{m+2}
+\)；
+而对 Fold 而言 \(D_m/2^m\) 指数级趋零（见小节 \ref{subsec:pom-max-fiber}），故该下界在窗口上很快变得极小。
+与之相对，表 \ref{tab:fold_multiplicity_histogram} 的比特缺口 \(\mathrm{gap}_m^{(2)}=\log_2|X_m|-H(w_m)\) 在已审计窗口内已达常数量级并呈缓慢漂移；
+这提示“隐藏/可见比特预算”的主导证据不来自极端尾部，而来自整体二阶偏离（定义 \ref{def:pom-collision-inflation} 的 \(C_{\mathrm{col}}(m)\)）所反映的 bulk 频谱能量分布。
+\par
+另一方面，把缺口写成
+\[
+\mathrm{gap}_m^{(2)}
+=\log_2 F_{m+2}-m+\mathbb{E}_{w_m}[\log_2 d_m(X)],
+\]
+并用 Binet 渐近 \(\log_2 F_{m+2}=(m+2)\log_2\varphi-\log_2\sqrt5+o(1)\)，得到可审计的“常数分解”
+\[
+\mathrm{gap}_m^{(2)}
+=\underbrace{2\log_2\varphi-\log_2\sqrt5}_{\text{语法常数}}
+\;+\;
+\underbrace{\Bigl(\mathbb{E}_{w_m}[\log_2 d_m(X)]-m\log_2(2/\varphi)\Bigr)}_{\text{纤维漂移项}}
+\;+\;o(1),
+\]
+其中纤维漂移项可由表 \ref{tab:fold_fiber_log_moments_mu_sigma}（或表 \ref{tab:fold_multiplicity_histogram}）直接读出与追踪。
+\end{remark}
+
+\begin{corollary}[最大纤维达到者的指数稀薄率（两种自然测度）]\label{cor:pom-maxfiber-rare-uniform}
+令 \(\mathcal{M}_m:=\{x\in X_m:\ d_m(x)=D_m\}\)。在类型均匀测度 \(U_m=\mathrm{Unif}(X_m)\) 与微态均匀推前测度 \(w_m(x)=d_m(x)/2^m\) 下，有
+\[
+U_m(\mathcal{M}_m)=\Theta(\varphi^{-m}),
+\qquad
+w_m(\mathcal{M}_m)=\Theta\!\left(\left(\frac{\sqrt{\varphi}}{2}\right)^m\right),\qquad \frac{\overline d_m}{D_m}
+=\Theta\!\left(\left(\frac{2}{\varphi^{3/2}}\right)^m\right).
+\]
+其中前两项分别对应“类型均匀”与“微态均匀推前”两种自然采样口径下的极值命中率；更精确的闭式公式见推论 \ref{cor:pom-maxfiber-rarity-two-measures}。
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:pom-maxfiber-rarity-two-measures} 得到
+\(
+U_m(\mathcal{M}_m)=\Theta(\varphi^{-m})
+\)
+与
+\(
+w_m(\mathcal{M}_m)=\Theta((\sqrt{\varphi}/2)^m)
+\)。
+此外，在 $U_m$ 下
+\(
+\mathbb{E}_{U_m}[d_m(X)]=\frac{1}{|X_m|}\sum_{x\in X_m}d_m(x)=\frac{2^m}{|X_m|}=\overline d_m
+\)，
+由 Markov 不等式得
+\(
+\mathbb{P}_{U_m}(d_m(X)\ge D_m)\le \overline d_m/D_m
+\)，
+而 \(\overline d_m/D_m=\Theta((2/\varphi^{3/2})^m)\) 由注 \ref{rem:pom-defect-gap} 给出。证毕。
+\end{proof}
+
+\begin{remark}[窗口缺陷与有限部常数的同型]\label{rem:pom-kappa-logm}
+窗口尺度上，$\kappa_m(\pi)$ 是一次折叠投影的对数纤维体积缺陷；轨道尺度上，$\log\mathfrak{M}(\theta)$ 是 primitive 轨道乘积在无限尺度下的 Möbius--Abel 正则化有限部（定义 \ref{def:abel-finite-part}）。二者分别给出微观/宏观的“纤维缺陷”接口，为跨尺度缺陷泛函的对齐提供了统一口径。
+\end{remark}
+
+\begin{remark}[与条件期望的对偶性]
+纤维均匀提升 $\widetilde\pi$ 与条件期望 $E_m$ 构成对偶接口：$E_m$ 在观测量层面是“纤维平均”，而 $\widetilde\pi$ 在概率层面是“纤维均匀化”。二者分别给出折叠的算子化与信息论刻画。
+\end{remark}
+
+\begin{proposition}[全局 KL 缺陷恒等式：偏离最大熵提升的精确距离]\label{prop:pom-kl-defect-identity}
+固定任意 \(\pi\in\Delta(X_m)\)，并令 \(\widetilde\pi\in\Delta(\Omega_m)\) 为其纤维均匀提升（定义 \ref{def:pom-maxent-lift}）。
+则对任意满足 \((\Fold_m)_*\mu=\pi\) 的 \(\mu\in\Delta(\Omega_m)\)，有严格恒等式
+\[
+\boxed{\;
+D_{\mathrm{KL}}(\mu\|\widetilde\pi)=H(\widetilde\pi)-H(\mu)\;}
+\]
+特别地，由定义 \ref{def:pom-kappa} 与定理 \ref{thm:pom-maxent-lift}，恒有
+\[
+H(\widetilde\pi)=H(\pi)+\kappa_m(\pi),
+\qquad
+D_{\mathrm{KL}}(\mu\|\widetilde\pi)=H(\pi)+\kappa_m(\pi)-H(\mu),
+\]
+从而 \(\kappa_m(\pi)\) 可被视为“在宏观分布 \(\pi\) 固定时，微观层面可被压掉的最大熵缺陷”。
+\end{proposition}
+
+\begin{proof}
+由 KL 定义
+\[
+D_{\mathrm{KL}}(\mu\|\widetilde\pi):=\sum_{a\in\Omega_m}\mu(a)\log\frac{\mu(a)}{\widetilde\pi(a)}
+=-H(\mu)-\sum_{a\in\Omega_m}\mu(a)\log\widetilde\pi(a).
+\]
+而由 \(\widetilde\pi(a)=\pi(x)/d_m(x)\)（其中 \(x=\Fold_m(a)\)），并用 \((\Fold_m)_*\mu=\pi\) 得
+\[
+\begin{aligned}
+\sum_{a\in\Omega_m}\mu(a)\log\widetilde\pi(a)
+&=\sum_{a\in\Omega_m}\mu(a)\bigl(\log\pi(\Fold_m(a))-\log d_m(\Fold_m(a))\bigr)\\
+&=\sum_{x\in X_m}\pi(x)\log\pi(x)-\sum_{x\in X_m}\pi(x)\log d_m(x).
+\end{aligned}
+\]
+对 \(\widetilde\pi\) 直接展开熵可得
+\[
+H(\widetilde\pi)
+=-\sum_{a\in\Omega_m}\widetilde\pi(a)\log\widetilde\pi(a)
+=-\sum_{x\in X_m}\pi(x)\log\pi(x)+\sum_{x\in X_m}\pi(x)\log d_m(x).
+\]
+故 \(-\sum_a\mu(a)\log\widetilde\pi(a)=H(\widetilde\pi)\)，代回即得
+\(
+D_{\mathrm{KL}}(\mu\|\widetilde\pi)=H(\widetilde\pi)-H(\mu)
+\)。
+证毕。
+\end{proof}
+
+\begin{remark}[延迟归一化推迟律]\label{rem:pom-lazy-fold}
+若中间演化 $U_t$ 在观测层不区分折叠纤维，即对任意 $g\in\mathcal{A}_m$ 有 $g\circ U_t\in\mathcal{B}_m$ 等价于 $g=\bar g\circ\Fold_m$（命题 \ref{prop:pom-fiber-invariance}），则
+\[
+E_m\circ U_t\circ E_m=E_m\circ U_t.
+\]
+因此在此类“纤维不区分”的演化段内，多次 $P_Z$ 可合并为末端一次，实现规范投影的推迟执行。
+\end{remark}

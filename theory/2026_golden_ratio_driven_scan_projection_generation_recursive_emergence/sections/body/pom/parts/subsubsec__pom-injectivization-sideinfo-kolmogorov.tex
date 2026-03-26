@@ -1,0 +1,463 @@
+\paragraph{纤维谱驱动的单射化侧信息、预言机容量与条件描述谱}\label{subsubsec:pom-injectivization-sideinfo-kolmogorov}
+本节把纤维多重度谱 \(\{d_f(x)\}_{x\in X}\) 的三种接口统一到同一计数对象：单射化所需的侧信息预算、\(T\)-元预言机反演容量、以及条件 Kolmogorov 描述谱的聚合计数。
+\par
+
+\begin{proposition}[单射化所需侧信息字母表预算的精确值与可实现性]\label{prop:pom-injectivization-sideinfo-exact-alphabet}
+设 \(f:\Omega\to X\) 为有限映射，并记 \(d_f(x):=\card{f^{-1}(x)}\)。
+称一条记录轴 \(r:\Omega\to R\) 使扩展读出 \((f,r):\Omega\to X\times R\) 为单射为\emph{单射化}。
+令
+\[
+D_f:=\max_{x\in X}d_f(x).
+\]
+则在所有使 \((f,r)\) 单射的记录轴中，\(\card{R}\) 的最小可能值恰为 \(D_f\)。
+\end{proposition}
+
+\begin{proof}
+必要性：固定 \(x\in X\)。
+若 \((f,r)\) 单射，则 \(r\) 在纤维 \(f^{-1}(x)\) 上必须取互异值，故 \(\card{r(f^{-1}(x))}\ge d_f(x)\)，从而 \(\card{R}\ge \max_x d_f(x)=D_f\)。
+\par
+充分性：对每个 \(x\in X\) 选取一条注入编号 \(\iota_x:f^{-1}(x)\hookrightarrow\{0,1,\dots,D_f-1\}\)，并定义 \(r(\omega):=\iota_{f(\omega)}(\omega)\)。
+则同一纤维内不同 \(\omega\) 获得不同标签，故 \((f,r)\) 单射，且 \(R\subseteq\{0,\dots,D_f-1\}\)。
+与必要性合并即得最小值为 \(D_f\)。证毕。
+\end{proof}
+
+\begin{corollary}[二值旁带的可逆提升位数]\label{cor:pom-injectivization-binary-auxbits-exact}
+设 \(f:\Omega\to X\) 为有限映射，并沿用命题 \ref{prop:pom-injectivization-sideinfo-exact-alphabet} 的记号 \(D_f=\max_x|f^{-1}(x)|\)。
+定义 \(f\) 的\emph{二值可逆提升位数}为
+\[
+k_{\mathrm{rev}}(f):=\min\Bigl\{k\in\NN:\ \exists\ \iota:\Omega\hookrightarrow X\times\{0,1\}^k\ \text{单射},\ \operatorname{pr}_1\circ\iota=f\Bigr\}.
+\]
+则有严格等式
+\[
+\boxed{\;
+k_{\mathrm{rev}}(f)=\left\lceil \log_2 D_f\right\rceil\; }.
+\]
+\end{corollary}
+\begin{proof}
+若存在 \(k\) 位二值旁带的单射提升，则对任意 \(x\in X\)，纤维 \(f^{-1}(x)\) 在第二坐标上至多可区分 \(2^k\) 个候选，故 \(|f^{-1}(x)|\le 2^k\) 且 \(D_f\le 2^k\)，从而 \(k\ge \lceil\log_2 D_f\rceil\)。
+\par
+反之，由命题 \ref{prop:pom-injectivization-sideinfo-exact-alphabet} 存在单射提升 \(\Omega\hookrightarrow X\times[D_f]\)。
+取 \(k=\lceil\log_2 D_f\rceil\)，并取一条注入 \([D_f]\hookrightarrow\{0,1\}^k\)，复合即得所需二值旁带提升，故 \(k_{\mathrm{rev}}(f)\le \lceil\log_2 D_f\rceil\)。
+合并得等式。证毕。
+\end{proof}
+
+\begin{corollary}[固定字母表的可逆提升长度]\label{cor:pom-injectivization-mary-auxlength-exact}
+设 \(f:\Omega\to X\) 为有限映射，并令 \(D_f:=\max_{x\in X}\card{f^{-1}(x)}\)。
+固定整数 \(M\ge 2\) 并令 \([M]:=\{0,1,\dots,M-1\}\)。
+定义 \(f\) 的 \(M\)-元可逆提升长度为
+\[
+\ell_{\mathrm{rev}}^{(M)}(f):=\min\Bigl\{L\in\NN:\ \exists\ \iota:\Omega\hookrightarrow X\times [M]^L\ \text{单射},\ \operatorname{pr}_1\circ\iota=f\Bigr\}.
+\]
+则有严格等式
+\[
+\boxed{\;\ell_{\mathrm{rev}}^{(M)}(f)=\left\lceil \log_M D_f\right\rceil.\;}
+\]
+\end{corollary}
+\begin{proof}
+若存在 \(L\) 使 \(\Omega\hookrightarrow X\times[M]^L\) 且第一坐标为 \(f\)，则对任意 \(x\in X\)，纤维 \(f^{-1}(x)\) 在第二坐标上至多可区分 \(M^L\) 个候选，故 \(D_f\le M^L\) 并得到 \(L\ge \lceil\log_M D_f\rceil\)。
+\par
+反之，由命题 \ref{prop:pom-injectivization-sideinfo-exact-alphabet} 存在单射提升 \(\Omega\hookrightarrow X\times[D_f]\)。
+取 \(L=\lceil\log_M D_f\rceil\)，并取一条注入 \([D_f]\hookrightarrow [M]^L\)（例如用 \(M\)-进展开并补齐到长度 \(L\)），复合即得所需 \(M\)-元旁带提升，从而 \(\ell_{\mathrm{rev}}^{(M)}(f)\le \lceil\log_M D_f\rceil\)。
+合并得等式。证毕。
+\end{proof}
+
+\begin{corollary}[碰撞概率强化的可逆提升下界与均匀性判别]\label{cor:pom-injectivization-collision-strengthened-lowerbound}
+设 \(f:\Omega\to X\) 为有限映射，并记 \(|\Omega|<\infty\)。
+令 \(A,A'\overset{\mathrm{i.i.d.}}{\sim}\mathrm{Unif}(\Omega)\)，并定义碰撞概率
+\[
+\mathsf{Col}(f):=\mathbb{P}\bigl[f(A)=f(A')\bigr]=\sum_{x\in X}\Bigl(\frac{d_f(x)}{|\Omega|}\Bigr)^2,
+\qquad d_f(x):=\card{f^{-1}(x)}.
+\]
+固定整数 \(M\ge 2\)，并令 \(\ell_{\mathrm{rev}}^{(M)}(f)\) 为推论 \ref{cor:pom-injectivization-mary-auxlength-exact} 的 \(M\)-元可逆提升长度。
+则成立严格下界
+\[
+\boxed{\;
+\ell_{\mathrm{rev}}^{(M)}(f)\ \ge\ \left\lceil \log_M\bigl(|\Omega|\,\mathsf{Col}(f)\bigr)\right\rceil.\;}
+\]
+并且该下界逐点支配计数下界
+\[
+\ell_{\mathrm{rev}}^{(M)}(f)\ \ge\ \left\lceil \log_M\Bigl(\frac{|\Omega|}{|X|}\Bigr)\right\rceil,
+\]
+两者取等当且仅当推前分布 \(x\mapsto d_f(x)/|\Omega|\) 在 \(X\) 上均匀。
+\end{corollary}
+
+\begin{proof}
+令 \(D_f=\max_x d_f(x)\)。
+由不等式
+\[
+\sum_{x\in X}d_f(x)^2\le D_f\sum_{x\in X}d_f(x)=D_f\,|\Omega|
+\]
+得
+\(
+D_f\ge |\Omega|^{-1}\sum_x d_f(x)^2=|\Omega|\,\mathsf{Col}(f)
+\)。
+由推论 \ref{cor:pom-injectivization-mary-auxlength-exact}，
+\(
+\ell_{\mathrm{rev}}^{(M)}(f)=\lceil\log_M D_f\rceil
+\)，代入即得第一式。
+\par
+另一方面由 Cauchy--Schwarz，
+\(
+\mathsf{Col}(f)\ge |X|^{-1}
+\)，且等号当且仅当 \(d_f(x)/|\Omega|\) 在 \(X\) 上均匀。
+代入第一式即得计数下界与等号条件。证毕。
+\end{proof}
+
+\begin{corollary}[Fold 的单射化最小侧信息与 unknot 观测的范数平方]\label{cor:pom-fold-injectivization-minsideinfo-equals-unknot-norm-square}
+对分辨率 \(m\ge 1\) 取折叠映射 \(f=\Fold_m:\Omega_m=\{0,1\}^m\to X_m\)，并记纤维多重度 \(d_m(x)=|f^{-1}(x)|\) 与最大纤维
+\[
+D_m:=\max_{x\in X_m}d_m(x).
+\]
+则任意记录轴 \(r:\Omega_m\to R\) 若使扩展读出 \((\Fold_m,r)\) 为单射，必有 \(|R|\ge D_m\)，并且该下界可达。
+\par
+另一方面，令 \(B_m=\CC^{X_m}\)，并取平方根指数场
+\[
+\delta_m:=\sum_{x\in X_m}\sqrt{d_m(x)}\,\widetilde P_x\in B_m
+\]
+（定义 \ref{def:op-algebra-fold-sqrt-index-field}）。
+则在有限维交换 \(C^\ast\)-代数 \(B_m\) 的范数下有严格恒等式
+\[
+\boxed{\;
+\min\{|R|:\ (\Fold_m,r)\ \text{单射}\}
+=D_m
+=\|\delta_m\|_{C^\ast(B_m)}^{\,2}\; }.
+\]
+其中 \(\delta_m\) 亦可视为由基本构造诱导的 \(B_m\)-值 Temperley--Lieb 评估中 unknot 的取值（命题 \ref{prop:op-algebra-fold-bm-valued-tl-jones}）。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-injectivization-sideinfo-exact-alphabet} 取 \(f=\Fold_m\) 立得
+\(
+\min|R|=\max_x d_m(x)=D_m
+\)。
+而由命题 \ref{prop:op-algebra-fold-sqrt-index-field-basic}(2)，\(\|\delta_m\|_{C^\ast(B_m)}^{2}=\max_x d_m(x)=D_m\)。
+合并即得。证毕。
+\end{proof}
+
+\begin{proposition}[单射化的平均侧信息熵预算无松弛]\label{prop:pom-injectivization-sideinfo-exact-entropy}
+沿用命题 \ref{prop:pom-injectivization-sideinfo-exact-alphabet} 的设定，并取任意宏观分布 \(\pi\in\Delta(X)\)。
+令 \(A\sim \pi^{e}\) 为纤维均匀提升，即 \(X:=f(A)\sim\pi\) 且对每个 \(x\in X\)，条件分布 \(A\mid(X=x)\) 在 \(f^{-1}(x)\) 上均匀。
+若 \(r:\Omega\to R\) 使 \((f,r)\) 单射，则有严格恒等式
+\[
+H(r(A)\mid X)=H(A\mid X)=\EE_{\pi}\!\bigl[\log d_f(X)\bigr].
+\]
+因此在二进制单位下，任何单射化方案的平均侧信息预算必须且仅须为 \(\EE_{\pi}[\log d_f(X)]/\log 2\) 比特。
+\end{proposition}
+
+\begin{proof}
+由 \((f,r)\) 的单射性，存在确定性逆映射 \(\Psi\) 使 \(A=\Psi(X,r(A))\)，因此
+\[
+H(A\mid X)\le H(r(A)\mid X).
+\]
+另一方面 \(r(A)\) 为 \(A\) 的确定性函数，故由信息不增性 \(H(r(A)\mid X)\le H(A\mid X)\)，两式合并得 \(H(r(A)\mid X)=H(A\mid X)\)。
+\par
+在纤维均匀提升下，对每个 \(x\) 有 \(H(A\mid X=x)=\log d_f(x)\)，故
+\(
+H(A\mid X)=\EE_{\pi}[\log d_f(X)]
+\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[prime-register 可读单射化的最小信息速率由条件熵强制]\label{thm:pom-prime-register-conditional-entropy-rate-lowerbound}
+设 \(\Omega\) 为有限字母表上的不可约有限型移位，\(\sigma:\Omega\to\Omega\) 为移位算子。
+设 \(f:\Omega\to X\) 为有限对一因子码（滑块块码），并取 \(\sigma\)-遍历不变测度 \(\mu\)。
+记条件熵缺口
+\[
+h_\mu(\Omega\mid X):=h_\mu(\sigma)-h_{f_*\mu}(\sigma).
+\]
+固定素数 \(p\)。
+设存在连续映射 \(r:\Omega\to\ZZ_p\) 使得扩展读出
+\[
+\omega\longmapsto\bigl(f(\omega),r(\omega)\bigr)\in X\times\ZZ_p
+\]
+为单射。
+并设 \(r\) 在有限深度上可读：存在整数函数 \(N(n)\uparrow\infty\) 与一族 \(n\)-块码 \(\rho_n\) 使
+\[
+r(\omega)\bmod p^{N(n)}=\rho_n\!\bigl(\omega_{[0,n-1]}\bigr)\qquad(\forall\,\omega\in\Omega).
+\]
+则必有信息守恒下界
+\[
+\boxed{\;
+\liminf_{n\to\infty}\frac{N(n)}{n}\ \ge\ \frac{h_\mu(\Omega\mid X)}{\log p}\; }.
+\]
+\end{theorem}
+\begin{proof}
+对每个 \(n\) 记语言 \(\mathcal L_n(\Omega)\)、\(\mathcal L_n(X)\)，并对 \(u\in\mathcal L_n(X)\) 定义逆像集合
+\[
+\mathcal P_n(u):=\{w\in\mathcal L_n(\Omega):\ f(w)=u\}.
+\]
+由条件 Shannon--McMillan--Breiman 定理，在 \(f_*\mu\)-几乎处处的 \(u\) 上有
+\[
+\log\#\mathcal P_n(u)\ \ge\ n\bigl(h_\mu(\Omega\mid X)-o(1)\bigr)
+\]
+（在对数尺度上成立）。
+\par
+另一方面，若对某个 \(u\) 存在 \(w\neq w'\in\mathcal P_n(u)\) 使 \(\rho_n(w)\equiv\rho_n(w')\pmod{p^{N(n)}}\)，则可取 \(\omega,\omega'\in\Omega\) 的前 \(n\) 块分别为 \(w,w'\) 且满足 \(f(\omega)=f(\omega')\)，并由可读性得 \(r(\omega)\equiv r(\omega')\pmod{p^{N(n)}}\)；
+在 \(p\)-进表示下两者的前 \(N(n)\) 位相同，从而 \((f,r)(\omega)=(f,r)(\omega')\) 与单射性矛盾。
+因此对每个 \(u\) 都有注入
+\[
+\mathcal P_n(u)\hookrightarrow \ZZ/p^{N(n)}\ZZ,
+\qquad
+w\longmapsto \rho_n(w),
+\]
+从而 \(p^{N(n)}\ge \#\mathcal P_n(u)\)。
+取对数并除以 \(n\)，再令 \(n\to\infty\) 即得所示下界。证毕。
+\end{proof}
+
+\begin{definition}[\texorpdfstring{$T$}{T}-元预言机反演机制与容量]\label{def:pom-tary-oracle-inversion-capacity}
+设 \(f:\Omega\to X\) 为有限映射，并取整数 \(T\ge 1\)。
+称一对映射 \((\mathrm{enc},\mathrm{dec})\) 为\emph{\(T\)-元预言机反演机制}，若存在集合 \(G\subseteq\Omega\) 使得
+\[
+\mathrm{dec}\bigl(f(\omega),\mathrm{enc}(\omega)\bigr)=\omega\quad(\forall\,\omega\in G),
+\qquad
+f(\mathrm{dec}(x,t))=x\quad(\forall\,x\in X,\ t\in[T]).
+\]
+定义其容量为
+\[
+C_f(T):=\max\{\card{G}:\ \exists\ (\mathrm{enc},\mathrm{dec})\ \text{满足上述条件}\}.
+\]
+\end{definition}
+
+\begin{theorem}[\texorpdfstring{$T$}{T}-元预言机容量闭式与纤维谱的可逆重构]\label{thm:pom-tary-oracle-capacity-and-inversion}
+在定义 \ref{def:pom-tary-oracle-inversion-capacity} 的设定下，记 \(d_f(x):=\card{f^{-1}(x)}\)。
+则：
+\begin{enumerate}
+  \item \textbf{（容量闭式）}
+  \[
+  C_f(T)=\sum_{x\in X}\min\bigl(d_f(x),T\bigr).
+  \]
+  \item \textbf{（纤维谱重构）}
+  令 \(N_f(t):=\card{\{x\in X:\ d_f(x)\ge t\}}\)（\(t\in\NN_{\ge 1}\)），并约定 \(C_f(0)=0\)。
+  则对 \(t\ge 1\) 有
+  \[
+  N_f(t)=C_f(t)-C_f(t-1),
+  \qquad
+  \card{\{x\in X:\ d_f(x)=t\}}=N_f(t)-N_f(t+1).
+  \]
+  因而整数点函数 \(T\mapsto C_f(T)\) 完全决定多重集 \(\{d_f(x)\}_{x\in X}\)。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+先证容量闭式。对任意固定 \(x\in X\)，由于 \(\mathrm{dec}(x,t)\in f^{-1}(x)\) 且 \(t\) 仅有 \(T\) 个取值，
+集合 \(G\cap f^{-1}(x)\) 中至多有 \(\min(d_f(x),T)\) 个元素能被赋予互异码字并满足解码正确；故
+\[
+\card{G}\le \sum_{x\in X}\min(d_f(x),T).
+\]
+反向构造：对每个 \(x\) 选取子集 \(S_x\subseteq f^{-1}(x)\) 使 \(\card{S_x}=\min(d_f(x),T)\)，并把 \(S_x\) 双射编码到 \([T]\) 的一部分；令 \(\mathrm{dec}(x,t)\) 为对应元素（未用到的 \(t\) 任取纤维内元素补齐），即可令 \(G=\bigsqcup_x S_x\) 达到上界，从而闭式成立。
+\par
+再证重构公式。直接计算离散差分
+\[
+C_f(t)-C_f(t-1)
+=\sum_{x\in X}\bigl(\min(d_f(x),t)-\min(d_f(x),t-1)\bigr)
+=\sum_{x\in X}\mathbf 1_{\{d_f(x)\ge t\}}
+=N_f(t),
+\]
+并由 \(\card{\{d_f=t\}}=N_f(t)-N_f(t+1)\) 得第二条。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$B$}{B}-比特预言机反演容量闭式（有限集合口径）]\label{cor:pom-bbit-oracle-capacity-closed-form}
+设 \(\Omega,X\) 为有限集合，\(f:\Omega\to X\) 为映射，并记 \(d(x):=\card{f^{-1}(x)}\)。
+固定整数 \(B\ge 0\)。
+称一对映射
+\[
+\mathrm{enc}:\Omega\to\{0,1\}^{B},
+\qquad
+\mathrm{dec}:X\times\{0,1\}^{B}\to\Omega
+\]
+为 \(B\)-比特预言机反演机制，若满足：
+\begin{enumerate}
+\normalfont
+  \item \textbf{不越纤维：}\(f(\mathrm{dec}(x,b))=x\) 对所有 \((x,b)\) 成立；
+  \item \textbf{在子集上可逆：}存在 \(G\subseteq\Omega\) 使对所有 \(\omega\in G\) 有 \(\mathrm{dec}(f(\omega),\mathrm{enc}(\omega))=\omega\)。
+\end{enumerate}
+令容量
+\(
+C_f(B):=\max_{\mathrm{enc},\mathrm{dec}}\card{G}
+\)。
+则有严格恒等式
+\[
+\boxed{\;
+C_f(B)=\sum_{x\in X}\min\bigl(d(x),2^{B}\bigr).\;}
+\]
+\end{corollary}
+\begin{proof}
+令 \(T:=2^B\)，并取双射 \(\{0,1\}^B\cong [T]\)。
+则本推论的机制定义与定义 \ref{def:pom-tary-oracle-inversion-capacity} 的 \(T\)-元预言机机制同型，容量公式由定理 \ref{thm:pom-tary-oracle-capacity-and-inversion} 立得。证毕。
+\end{proof}
+
+\begin{corollary}[见证关系上的最优成功率与必要侧信息]\label{cor:pom-witness-extraction-optimal-success}
+设 \(R\subseteq X\times W\) 为有限关系，并对 \(x\in X\) 记 \(W(x):=\{w\in W:(x,w)\in R\}\)，\(d(x):=\card{W(x)}\)。
+考虑给定 \(x\) 后在 \(W(x)\) 上均匀抽取见证 \(w\) 的模型。
+若允许附加 \(B\) 比特侧信息，则任意机制在条件于 \(x\) 的成功率满足
+\[
+\mathrm{Succ}(x;B)\le \min\Bigl(1,\frac{2^{B}}{d(x)}\Bigr),
+\]
+且存在机制使上界取等号。
+因此对任意 \(d(x)\ge 1\) 与 \(\varepsilon\in(0,1)\)，若要求 \(\mathrm{Succ}(x;B)\ge 1-\varepsilon\)，则必有
+\[
+B\ \ge\ \log_2 d(x)+\log_2(1-\varepsilon).
+\]
+\end{corollary}
+\begin{proof}
+把集合 \(\Omega:=R\) 并取映射 \(f:R\to X\)、\(f(x,w)=x\)，则纤维大小即 \(d(x)\)。
+由推论 \ref{cor:pom-bbit-oracle-capacity-closed-form} 的逐纤维最优性，\(B\) 比特机制在纤维 \(f^{-1}(x)=\{x\}\times W(x)\) 上至多可使 \(\min(d(x),2^B)\) 个点可逆。
+当 \(w\) 在 \(W(x)\) 上均匀时，最优成功率为 \(\min(d(x),2^B)/d(x)=\min(1,2^B/d(x))\)。
+最后对不等式 \(\min(1,2^B/d(x))\ge 1-\varepsilon\) 变形即得所示必要性。证毕。
+\end{proof}
+
+\begin{proposition}[纤维均匀采样的随机性复杂度与反秩构造]\label{prop:pom-uniform-fiber-sampling-randomness-optimality}
+设 \(\Omega,X\) 为有限集合，\(f:\Omega\to X\) 为映射，并固定 \(x\in X\) 使 \(d(x):=\card{f^{-1}(x)}\ge 1\)。
+考虑仅以 \(x\) 为输入、输出 \(\omega\in f^{-1}(x)\) 的随机算法 \(\mathsf{Samp}\)。
+\begin{enumerate}
+\normalfont
+  \item 若 \(\mathsf{Samp}(x)\) 在纤维 \(f^{-1}(x)\) 上严格均匀，则其内部随机源的 Shannon 熵满足
+  \[
+  H(\mathrm{Rand})\ge \log_2 d(x).
+  \]
+  \item 若存在可计算反秩算子 \(\mathsf{Unrank}_x:[0,d(x)-1]\to f^{-1}(x)\) 使 \(\mathsf{Unrank}_x\) 为双射，则存在严格均匀采样算法，其期望随机比特数不超过 \(\log_2 d(x)+O(1)\)。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) 设随机源为随机变量 \(R\)，输出为 \(\omega=g(x,R)\)。
+则 \(H(\omega\mid x)\le H(R\mid x)\le H(R)\)。
+若 \(\omega\mid x\) 在 \(f^{-1}(x)\) 上均匀，则 \(H(\omega\mid x)=\log_2 d(x)\)，从而 \(H(R)\ge \log_2 d(x)\)。
+\par
+(2) 令 \(k=\lceil\log_2 d(x)\rceil\)，从 \(\{0,1\}^k\) 取均匀整数 \(U\in[0,2^k-1]\)。
+若 \(U<d(x)\) 则输出 \(\mathsf{Unrank}_x(U)\)，否则重抽。
+接受概率至少 \(1/2\)，故期望抽样次数至多 \(2\)，期望随机比特数至多 \(2k=\log_2 d(x)+O(1)\)。
+严格均匀性为标准拒绝采样结论。证毕。
+\end{proof}
+
+\begin{theorem}[预言机容量与条件 Kolmogorov 描述谱的聚合等价]\label{thm:pom-oracle-capacity-kolmogorov-spectrum}
+设 \(f:\Omega\to X\) 为在某个固定编码下可计算的有限映射，并固定一台通用前缀自由机 \(U\)。
+对 \(x\in X\) 与 \(B\in\ZZ_{\ge 0}\) 定义
+\[
+\mathcal K_x(B):=\{\omega\in f^{-1}(x):\ K_U(\omega\mid x)\le B\}.
+\]
+则存在常数 \(c\in\NN\)（仅依赖于 \(U\) 与 \(f\) 的描述）使得对所有 \(x\in X,B\ge 0\) 同时成立
+\[
+\card{\mathcal K_x(B)}\le 2^B,
+\qquad
+\card{\mathcal K_x(B+c)}\ge \min\bigl(d_f(x),2^B\bigr).
+\]
+从而在聚合意义上，
+\[
+\sum_{x\in X}\min(d_f(x),2^B)
+\ \le\
+\sum_{x\in X}\card{\mathcal K_x(B+c)}
+\ \le\
+2^c\sum_{x\in X}\min(d_f(x),2^B).
+\]
+\end{theorem}
+
+\begin{proof}
+上界：若 \(K_U(\omega\mid x)\le B\)，则存在长度 \(\le B\) 的前缀自由程序 \(p\) 使 \(U(x,p)=\omega\)。
+对固定 \(x\)，不同 \(\omega\) 的最短程序互异，而长度 \(\le B\) 的前缀自由程序个数至多为 \(2^B\)，故 \(\card{\mathcal K_x(B)}\le 2^B\)。
+\par
+下界：由于 \(f\) 可计算且 \(\Omega\) 有限，可构造一条可计算枚举 \(e(x,i)\)（例如遍历 \(\Omega\) 并筛选 \(f(\omega)=x\)）使
+\[
+\{e(x,0),e(x,1),\dots,e(x,d_f(x)-1)\}=f^{-1}(x),
+\]
+且 \(i\mapsto e(x,i)\) 为单射。
+令解释器程序 \(\pi\)（长度为常数 \(c\)）在输入 \((x,i)\) 时输出 \(e(x,i)\)。
+于是对任意 \(i<\min(d_f(x),2^B)\)，取长度 \(B\) 的二进制串编码 \(i\) 得 \(K_U(e(x,i)\mid x)\le B+c\)，从而
+\(\card{\mathcal K_x(B+c)}\ge \min(d_f(x),2^B)\)。
+聚合不等式由逐点不等式求和并注意 \(\card{\mathcal K_x(B+c)}\le 2^c\cdot 2^B\) 的粗界给出。证毕。
+\end{proof}
+
+\begin{corollary}[有限语义层的正规形最小化与图灵层预算最小化的分界]\label{cor:pom-normalform-vs-turing-budget-undecidable}
+在投影词片段的固定分辨率语义层中，重写系统的终止与合流保证等价类存在可计算的唯一正规形，因而审计门数等有限代价的最小化为可判定问题（参见定理 \ref{thm:pom-rewrite-termination-confluence} 与推论 \ref{cor:pom-rewrite-normalform-minimal-audit}）。
+另一方面，把同一单射化预算推广到一般全定义可计算映射 \(\pi:D\to Y\) 的外置预算 \(b(\pi)\)，则即便在有限纤维上界类中亦不可判定（定理 \ref{thm:conclusion-minimal-external-budget-undecidable}）。
+\end{corollary}
+
+\begin{theorem}[语义图灵完备类上不存在可计算的实现无关规范代表]\label{thm:pom-no-global-computable-canonical-representative}
+设 \(\mathcal A\) 为任意语义上图灵完备的投影/外置算法模型，并以外延相等给出语义等价关系 \(\equiv\)。
+假设存在一个包含关系保持的可计算嵌入，将片段 \(\mathbf{PW}_{Z,E}\) 的对象视为 \(\mathcal A\) 的一个子类，并使得在该子类上 \(\equiv\) 与投影词等价一致。
+\par
+则不存在总可计算映射 \(\mathrm{NF}_{\mathcal A}:\mathcal A\to \mathbf{PW}^\ast\) 同时满足：
+\begin{enumerate}
+  \item \textbf{语义正确：}对任意 \(A\in\mathcal A\)，有 \(\mathrm{NF}_{\mathcal A}(A)\equiv A\)；
+  \item \textbf{规范性：}对任意 \(A,B\in\mathcal A\)，有 \(A\equiv B\iff \mathrm{NF}_{\mathcal A}(A)=\mathrm{NF}_{\mathcal A}(B)\)；
+  \item \textbf{与有限语义层相容：}当 \(A\) 落在上述 \(\mathbf{PW}_{Z,E}\) 子类时，\(\mathrm{NF}_{\mathcal A}(A)\) 与该片段的不可约正规形一致（例如由定理 \ref{thm:pom-rewrite-termination-confluence} 诱导的正规形）。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+若上述 \(\mathrm{NF}_{\mathcal A}\) 存在，则语义等价可由有限字符串相等判定：给定 \(A,B\)，计算 \(\mathrm{NF}_{\mathcal A}(A)\)、\(\mathrm{NF}_{\mathcal A}(B)\) 并比较即可决定 \(A\equiv B\)。
+这与语义图灵完备类上的语义等价不可判定性矛盾（定理 \ref{thm:conclusion-semantic-equivalence-undecidable}）。
+证毕。
+\end{proof}
+
+\begin{theorem}[不存在可计算的充分切片选择器：保守有限指纹不可能全局完备]\label{thm:pom-no-computable-sufficient-slice-selector}
+设对任意固定的有限审计切片 \(\Theta\)，存在可计算语义映射 \(\mathsf{Sem}_\Theta\)（输出取值于可有效比较的有限数据域），并且在该切片覆盖的片段上保守：若两对象同属该片段且 \(\mathsf{Sem}_\Theta\) 取值相等，则两者语义等价。
+\par
+若语义模型 \(\mathcal A\) 图灵完备且语义等价不可判定，则不存在总可计算过程
+\[
+\mathrm{Sel}:\mathcal A\times\mathcal A\to \{\text{有限审计切片}\}
+\]
+使对任意 \(A,B\in\mathcal A\) 同时满足：\(A,B\) 均落在 \(\mathrm{Sel}(A,B)\) 所覆盖的片段内，且
+\[
+A\equiv B\quad\Longleftrightarrow\quad
+\mathsf{Sem}_{\mathrm{Sel}(A,B)}(A)=\mathsf{Sem}_{\mathrm{Sel}(A,B)}(B).
+\]
+\end{theorem}
+\begin{proof}
+若 \(\mathrm{Sel}\) 存在，则给定任意 \(A,B\) 可先计算 \(\Theta=\mathrm{Sel}(A,B)\)，再计算并比较 \(\mathsf{Sem}_\Theta(A)\) 与 \(\mathsf{Sem}_\Theta(B)\)，从而判定 \(A\equiv B\)。
+这与语义等价不可判定性矛盾（定理 \ref{thm:conclusion-semantic-equivalence-undecidable}）。证毕。
+\end{proof}
+
+\begin{corollary}[可逆提升所需旁带位数的停机不可判定性与不可近似性]\label{cor:pom-ancilla-halting-inapproximability}
+对全定义可计算映射 \(\pi:D\to Y\) 的最小外置预算 \(b(\pi)\)（定理 \ref{thm:conclusion-minimal-external-budget-undecidable}），定义旁带位数
+\[
+a(\pi):=\left\lceil \log_2 b(\pi)\right\rceil.
+\]
+则在该定理构造的族 \(\{\pi_{M,x}\}\) 上有 \(a(\pi_{M,x})\in\{0,1\}\)，且判定命题 \(a(\pi)=0\) 不可判定。
+并且集合 \(\{\pi:\ a(\pi)=0\}\) 不是递归可枚举集。
+并且不存在任何算法能在所有输入上把 \(a(\pi)\) 以严格小于 \(1\) 的加性误差近似；更强地，不存在任何保证乘性因子 \(<2\) 的近似算法。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-minimal-external-budget-undecidable}，对该族有 \(b(\pi_{M,x})\in\{1,2\}\) 且 \(b(\pi_{M,x})=1\) 当且仅当不停机；故 \(a(\pi_{M,x})=\lceil\log_2 b(\pi_{M,x})\rceil\in\{0,1\}\)，并且判定 \(a(\pi)=0\) 等价于判定不停机，从而不可判定。
+\par
+非递归可枚举性由等价 \(a(\pi)=0\iff b(\pi)=1\) 与推论 \ref{cor:conclusion-external-budget-noncomputable-nonre} 立得：若 \(\{\pi:a(\pi)=0\}\) 为递归可枚举，则 \(\{\pi:b(\pi)=1\}\) 亦为递归可枚举，矛盾。
+\par
+若存在加性误差 \(<1\) 的近似算法 \(\widehat a(\pi)\)，则在该族上 \(\widehat a(\pi)\) 必能区分 \(a(\pi)=0\) 与 \(a(\pi)=1\)，从而可判定停机矛盾。
+乘性因子 \(<2\) 的情形同理：因 \(a(\pi)\in\{0,1\}\)，任何严格小于 \(2\) 的乘性保证亦将强制区分两种情形，仍导出停机可判定矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[有限审计预算单射化在有效子移位因子码类上不可判定]\label{thm:pom-finite-audit-budget-factorcode-undecidable}
+存在一个从任意图灵机 \(M\) 可有效构造的三元组 \((\Omega_M,X_M,f_M)\)，其中 \(\Omega_M\) 为由可枚举禁词集合给出的有效子移位、\(X_M\) 为有限字母表移位、且 \(f_M:\Omega_M\to X_M\) 为块码，使得下列两命题等价：
+\begin{enumerate}
+  \item \(M\) 在空输入上停机；
+  \item 存在有限集合 \(K\) 与连续映射 \(r:\Omega_M\to K\) 使扩展读出 \(\omega\mapsto(f_M(\omega),r(\omega))\) 为单射。
+\end{enumerate}
+因此，给定有效子移位与因子码，判定是否存在有限审计预算使其单射化在递归论意义下不可判定。
+\end{theorem}
+\begin{proof}
+构造一类更新（renewal）子移位。
+取字母表 \(\mathcal A:=\{0,1,\#\}^2\)，将配置视为两轨符号序列；第一轨为可见输出，第二轨为隐藏标签。
+对每个整数 \(n\ge 1\) 与 \(i\in\{1,\dots,n\}\)，定义长度 \(n+1\) 的块
+\[
+B_{n,i}:\quad
+\text{第一轨为 }0^n1\#,\qquad
+\text{第二轨为 }e_i\#,
+\]
+其中 \(e_i\in\{0,1\}^n\) 为恰在位置 \(i\) 取 \(1\) 的指示串。
+令 \(\Omega_\infty\) 为由双向拼接这些块生成的子移位：每个 \(\#\) 为分隔符，且相邻分隔段必须等于某个 \(B_{n,i}\)。
+令 \(f:\Omega_\infty\to X_\infty\) 为投影到第一轨（遗忘第二轨）的块码。
+对输出段 \(0^n1\) 的每次出现，第二轨有 \(n\) 种可选 \(e_i\)，故 \(f\) 的纤维多重度在 \(n\) 上无界。
+\par
+现并行模拟图灵机 \(M\)。
+若 \(M\) 在时间 \(T\) 停机，则从该时刻起枚举并加入禁词，禁止任何长度 \(n>T\) 的分隔段出现（即禁止所有 \(B_{n,i}\) 及其跨边界拼接）。
+若 \(M\) 永不停机，则不会加入任何此类禁词。
+由此得到有效子移位 \(\Omega_M\subseteq\Omega_\infty\)；并令 \(X_M:=f(\Omega_M)\)、\(f_M:=f|_{\Omega_M}\)。
+\par
+若 \(M\) 停机于时间 \(T\)，则在 \(\Omega_M\) 中每个分隔段长度满足 \(n\le T\)，从而 \(f_M\) 的纤维多重度一致有界于 \(T\)。
+取 \(K:=\{1,\dots,T\}\)，并令 \(r\) 在每个分隔段内读出第二轨的 \(1\) 的位置（并在跨段处拼接为局部函数），则 \((f_M,r)\) 为单射。
+\par
+若 \(M\) 不停机，则允许的 \(n\) 无界，从而存在任意大的纤维。
+若存在有限 \(K\) 与连续 \(r:\Omega_M\to K\) 使 \((f_M,r)\) 单射，则对任意固定的可见段 \(0^n1\) 的同像纤维中 \(n\) 个不同隐藏标签都必须取互异 \(r\)-值，迫使 \(|K|\ge n\)。
+令 \(n\to\infty\) 得矛盾。
+综上两命题等价，故判定问题不可判定。证毕。
+\end{proof}
+
+\endinput

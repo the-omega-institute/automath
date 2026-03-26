@@ -1,0 +1,143 @@
+\begin{theorem}[谱自由能门系在 \texorpdfstring{$\{0,1\}^n$}{\{0,1\}^n} 上的单调布尔克隆完备性]\label{thm:conclusion-free-energy-gates-equal-monotone-boolean-clone}
+固定 \(n\ge 1\)。令 \(\mathfrak G_n\) 为由下列三类原语在 \(n\) 个二值谱输入上生成的门系：
+\begin{enumerate}
+  \item 张量积，对应自由能加法；
+  \item 块对角直和，对应自由能取 \(\max\)；
+  \item 常数门。
+\end{enumerate}
+以定理 \ref{thm:conclusion-free-energy-monotone-boolean-embedding} 的二值谱比特
+\[
+Z(M,x)\in\{0,1\}
+\]
+为输入变量，则 \(\mathfrak G_n\) 在 \(\{0,1\}^n\) 上可实现的全部 \(\{0,1\}\)-值函数，恰好等于单调布尔克隆：
+\[
+\operatorname{Clone}(\mathfrak G_n)=\mathsf{MonBool}_n.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-free-energy-monotone-boolean-embedding}，任意单调布尔函数
+\(
+f:\{0,1\}^n\to\{0,1\}
+\)
+都可由张量积、块对角直和与常数门精确编译，故
+\[
+\mathsf{MonBool}_n\subseteq \operatorname{Clone}(\mathfrak G_n).
+\]
+
+反向，由命题 \ref{prop:conclusion-free-energy-gates-monotonicity-obstruction}，任何由这三类原语有限次复合得到的输出自由能函数都对每个输入坐标单调不减，因此其在 \(\{0,1\}^n\) 上诱导的 \(\{0,1\}\)-值函数必为单调布尔函数。故
+\[
+\operatorname{Clone}(\mathfrak G_n)\subseteq \mathsf{MonBool}_n.
+\]
+两向合并即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[非单调逻辑的绝对不可编译性]\label{cor:conclusion-free-energy-nonmonotone-absolute-uncompilability}
+对任意 \(n\ge 1\)，否定门、奇偶门、模 \(2\) 线性门，以及任意非单调布尔函数，都不属于谱自由能门系 \(\mathfrak G_n\) 的可实现对象。更强地，若某个布尔函数在某个子立方体上的限制已非单调，则该函数亦不可由 \(\mathfrak G_n\) 表示。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-free-energy-gates-equal-monotone-boolean-clone}，\(\mathfrak G_n\) 的可实现类恰为 \(\mathsf{MonBool}_n\)。故凡非单调布尔函数均被排除。若某函数在某个子立方体上的限制已非单调，而该函数本身可由 \(\mathfrak G_n\) 实现，则其在该子立方体上的限制仍应来自单调函数的限制，从而仍单调，矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[任意非常值单调停机公式的高精度近似不可判定]\label{thm:conclusion-free-energy-monotone-halting-formula-nonapproximable}
+设 \(f:\{0,1\}^n\to\{0,1\}\) 为任意非常值单调布尔函数，并取任意常数 \(a<b\)。则存在一族由谱自由能门系生成的非负矩阵模板 \(\widetilde T^{(q)}_{f,\mathbf M,\mathbf x}\)，使得相应极限
+\[
+F_{f,\mathbf M,\mathbf x}
+:=
+\lim_{q\to\infty}\frac1q\log\rho\!\bigl(\widetilde T^{(q)}_{f,\mathbf M,\mathbf x}\bigr)
+\in\{a,b\}
+\]
+并满足
+\[
+F_{f,\mathbf M,\mathbf x}=a
+\iff
+f\bigl(Z(M_1,x_1),\dots,Z(M_n,x_n)\bigr)=0,
+\]
+\[
+F_{f,\mathbf M,\mathbf x}=b
+\iff
+f\bigl(Z(M_1,x_1),\dots,Z(M_n,x_n)\bigr)=1.
+\]
+因此，对任意
+\[
+0<\delta<\frac{b-a}{2},
+\]
+不存在算法：对所有输入组 \(\mathbf M,\mathbf x\)，输出一个长度小于 \(\delta\) 的有理区间 \(I\)，并总保证
+\[
+F_{f,\mathbf M,\mathbf x}\in I.
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:conclusion-temperature-kernel-free-energy-two-point-any-constants}，单变量停机谱比特可被精确编译为取值于 \(\{a,b\}\) 的二点自由能；再由定理 \ref{thm:conclusion-free-energy-monotone-boolean-embedding}，任意单调布尔函数 \(f\) 都可在这些二值谱输入上精确实现。于是所述二点谱族存在。
+
+现因 \(f\) 非常值且单调，沿 \(\{0,1\}^n\) 中从 \(0^n\) 到 \(1^n\) 的任一坐标递增链，必存在某一步使 \(f\) 从 \(0\) 跳到 \(1\)。故存在某个坐标 \(j\) 与某个背景向量 \(\eta\in\{0,1\}^{n-1}\)，使
+\[
+f(\eta_1,\dots,\eta_{j-1},0,\eta_j,\dots,\eta_{n-1})=0,
+\]
+\[
+f(\eta_1,\dots,\eta_{j-1},1,\eta_j,\dots,\eta_{n-1})=1.
+\]
+把除第 \(j\) 个之外的各输入固定为“立即停机”或“永不停机”的标准机—输入对，以实现背景比特 \(\eta\)。则统一近似算法一旦存在，便能根据输出区间判定第 \(j\) 个输入对应的谱值究竟是 \(a\) 还是 \(b\)，从而判定该机器是否停机。由于 \(\delta<(b-a)/2\)，两个谱值不可能同时落入同一长度小于 \(\delta\) 的区间，故这给出停机判定，矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[停机嵌入对次指数温度扰动的刚性]\label{thm:conclusion-temperature-kernel-subexponential-perturbation-rigidity}
+在定理 \ref{thm:conclusion-temperature-kernel-free-energy-halting-embedding} 的设定下，令
+\[
+p_q(M,x)=2^{-\alpha q}\bigl(1-H_{M,x}(q)\bigr).
+\]
+取任意正实序列 \((u_q)_{q\ge 1}\) 满足
+\[
+\lim_{q\to\infty}\frac{1}{q}\log u_q=0,
+\]
+并定义扰动后的温度调度
+\[
+\widetilde p_q(M,x):=u_q\,p_q(M,x).
+\]
+则相应谱自由能极限仍满足完全相同的二值化：
+\[
+\widetilde F_{M,x}
+:=
+\lim_{q\to\infty}\frac1q\log\rho\!\bigl(T^{(q)}_{\widetilde p_q(M,x)}\bigr)
+=
+\begin{cases}
+\log\varphi, & M(x)\ \text{停机},\\[2pt]
+(1-\alpha)\log 2, & M(x)\ \text{不停机}.
+\end{cases}
+\]
+因此停机嵌入对一切次指数温度扰动保持刚性。
+\end{theorem}
+\begin{proof}
+若 \(M(x)\) 于某时刻 \(T\) 停机，则对一切 \(q\ge T\) 有
+\[
+p_q(M,x)=0,
+\qquad
+\widetilde p_q(M,x)=0.
+\]
+故从某一层起
+\(
+T^{(q)}_{\widetilde p_q(M,x)}=K^{\otimes q}
+\)，于是
+\[
+\widetilde F_{M,x}=\log\varphi.
+\]
+
+若 \(M(x)\) 不停机，则对所有 \(q\) 有
+\[
+\widetilde p_q(M,x)=u_q\,2^{-\alpha q}.
+\]
+由假设，
+\[
+\frac1q\log \widetilde p_q(M,x)
+=
+-\alpha\log 2+\frac1q\log u_q
+\longrightarrow
+-\alpha\log 2.
+\]
+并且由于 \(u_q\) 仅次指数增长，从某个 \(q_0\) 起有 \(\widetilde p_q(M,x)\in(0,1]\)，故定理 \ref{thm:pom-perron-landauer-limit-law} 仍可应用于该尾部。于是
+\[
+\widetilde F_{M,x}
+=
+\max\{\log\varphi,(1-\alpha)\log 2\}
+=(1-\alpha)\log 2,
+\]
+其中最后一步与定理 \ref{thm:conclusion-temperature-kernel-free-energy-halting-embedding} 同。证毕。
+\end{proof}

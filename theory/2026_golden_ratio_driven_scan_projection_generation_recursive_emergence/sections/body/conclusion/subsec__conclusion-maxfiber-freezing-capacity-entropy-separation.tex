@@ -1,0 +1,536 @@
+\subsection{最大纤维冻结、容量反演与有限窗分离}\label{subsec:conclusion-maxfiber-freezing-capacity-entropy-separation}
+沿用定理 \ref{thm:fold-oracle-capacity-closed-form}、定理 \ref{thm:pom-oracle-capacity-stieltjes-inversion-mellin} 与定理 \ref{thm:fold-pressure-freezing-threshold} 的记号。
+本小节把最大纤维主导的冻结机制、连续容量曲线的离散反演、以及 window-\(6\) 的有限尺度异常签名分离统一压缩为一组直接后果。
+
+\begin{theorem}[亚极大预算区间中的预言机容量平台律]\label{thm:conclusion-subcritical-maxfiber-capacity-platform}
+记
+\[
+M_m:=\max_{x\in X_m}d_m(x),
+\qquad
+K_m:=\#\{x\in X_m:\ d_m(x)=M_m\},
+\]
+\[
+M_m^{(2)}:=\max\{d_m(x):\ d_m(x)<M_m\},
+\qquad
+\alpha_\ast:=\lim_{m\to\infty}\frac{1}{m}\log M_m,
+\]
+\[
+g_\ast:=\lim_{m\to\infty}\frac{1}{m}\log K_m,
+\qquad
+\alpha_\ast^{(2)}:=\limsup_{m\to\infty}\frac{1}{m}\log M_m^{(2)}.
+\]
+设整数预算序列 \((B_m)_{m\ge 1}\) 满足极限
+\[
+\beta:=\lim_{m\to\infty}\frac{1}{m}\log 2^{B_m}
+\]
+存在，并且
+\[
+\alpha_\ast^{(2)}<\beta<\alpha_\ast.
+\]
+则对充分大的 \(m\) 有精确恒等式
+\[
+C_m(B_m)=2^m-K_m\bigl(M_m-2^{B_m}\bigr),
+\]
+其中
+\[
+C_m(B):=\sum_{x\in X_m}\min\bigl(d_m(x),2^B\bigr).
+\]
+若再记
+\[
+\mathrm{Succ}_m(B):=\frac{C_m(B)}{2^m},
+\]
+则有
+\[
+\lim_{m\to\infty}\frac{1}{m}\log\bigl(1-\mathrm{Succ}_m(B_m)\bigr)
+=
+\alpha_\ast+g_\ast-\log 2
+\le 0.
+\]
+\end{theorem}
+\begin{proof}
+由 \(\alpha_\ast^{(2)}<\beta<\alpha_\ast\)，对充分大的 \(m\) 有
+\[
+M_m^{(2)}<2^{B_m}<M_m.
+\]
+因此所有严格小于 \(M_m\) 的纤维都被预算 \(2^{B_m}\) 完全覆盖，而仅有最大纤维被截断。
+利用定理 \ref{thm:fold-oracle-capacity-closed-form} 的闭式表达，
+\[
+C_m(B_m)
+=
+\sum_{d_m(x)<M_m}d_m(x)+K_m\,2^{B_m}.
+\]
+再用总质量恒等式
+\[
+\sum_{x\in X_m}d_m(x)=2^m
+\]
+便得到
+\[
+C_m(B_m)=2^m-K_m(M_m-2^{B_m}).
+\]
+
+于是
+\[
+1-\mathrm{Succ}_m(B_m)=\frac{K_m(M_m-2^{B_m})}{2^m}.
+\]
+又因为
+\[
+\frac{2^{B_m}}{M_m}
+=
+\exp\!\bigl(-m(\alpha_\ast-\beta)+o(m)\bigr)\to 0,
+\]
+从而
+\[
+M_m-2^{B_m}=M_m(1+o(1)).
+\]
+代入
+\[
+K_m=\exp(g_\ast m+o(m)),
+\qquad
+M_m=\exp(\alpha_\ast m+o(m))
+\]
+即得
+\[
+1-\mathrm{Succ}_m(B_m)
+=
+\exp\!\bigl((\alpha_\ast+g_\ast-\log 2)m+o(m)\bigr),
+\]
+从而得到所述极限。
+最后，由 \(K_mM_m\le \sum_x d_m(x)=2^m\) 立得 \(\alpha_\ast+g_\ast\le \log 2\)。证毕。
+\end{proof}
+
+\begin{corollary}[次大纤维阈值以上的渐近满恢复]\label{cor:conclusion-near-complete-recovery-above-second-maximum}
+在定理 \ref{thm:conclusion-subcritical-maxfiber-capacity-platform} 的设定下，若进一步满足
+\[
+\alpha_\ast+g_\ast<\log 2
+\]
+且预算序列 \((B_m)_{m\ge 1}\) 满足
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}>
+\frac{\alpha_\ast^{(2)}}{\log 2},
+\]
+则有
+\[
+\mathrm{Succ}_m(B_m)\xrightarrow[m\to\infty]{}1.
+\]
+\end{corollary}
+\begin{proof}
+由假设可取 \(\varepsilon>0\)，使得对充分大的 \(m\) 都有
+\[
+\frac{1}{m}\log 2^{B_m}\ge \alpha_\ast^{(2)}+\varepsilon,
+\]
+从而
+\[
+2^{B_m}>M_m^{(2)}.
+\]
+若对某个充分大的 \(m\) 有 \(2^{B_m}\ge M_m\)，则立刻得到 \(C_m(B_m)=2^m\)。
+否则 \(M_m^{(2)}<2^{B_m}<M_m\)，于是由定理 \ref{thm:conclusion-subcritical-maxfiber-capacity-platform} 的证明可知
+\[
+1-\mathrm{Succ}_m(B_m)
+=
+\frac{K_m(M_m-2^{B_m})}{2^m}
+\le
+\frac{K_mM_m}{2^m}.
+\]
+再用
+\[
+K_mM_m=\exp\!\bigl((\alpha_\ast+g_\ast)m+o(m)\bigr)
+\]
+与 \(\alpha_\ast+g_\ast<\log 2\)，得到右端指数衰减到 \(0\)。
+故总有 \(\mathrm{Succ}_m(B_m)\to 1\)。证毕。
+\end{proof}
+
+\begin{theorem}[连续容量曲线在整数节点上的精确反演]\label{thm:conclusion-continuous-capacity-integral-node-inversion}
+固定分辨率 \(m\)，并记连续容量曲线
+\[
+\mathcal C_m^{\mathrm{cont}}(T):=\sum_{x\in X_m}\min\bigl(d_m(x),T\bigr)
+\qquad(T\ge 0).
+\]
+对每个整数 \(t\ge 1\)，定义整数尾计数与精确直方图
+\[
+N_m^{\ge}(t):=\#\{x\in X_m:\ d_m(x)\ge t\},
+\qquad
+n_m(t):=\#\{x\in X_m:\ d_m(x)=t\}.
+\]
+则有严格反演公式
+\[
+N_m^{\ge}(t)=\mathcal C_m^{\mathrm{cont}}(t)-\mathcal C_m^{\mathrm{cont}}(t-1),
+\]
+\[
+n_m(t)=2\mathcal C_m^{\mathrm{cont}}(t)-\mathcal C_m^{\mathrm{cont}}(t-1)-\mathcal C_m^{\mathrm{cont}}(t+1).
+\]
+因此，正整数点上的取值列
+\[
+\bigl(\mathcal C_m^{\mathrm{cont}}(t)\bigr)_{t\ge 0}
+\]
+完全决定纤维多重度直方图 \(\bigl(n_m(t)\bigr)_{t\ge 1}\)，并因而完全决定全部幂和
+\[
+S_a(m):=\sum_{t\ge 1}t^a n_m(t)
+\qquad(a\ge 1).
+\]
+\end{theorem}
+\begin{proof}
+对整数 \(t\ge 1\)，有
+\[
+\mathcal C_m^{\mathrm{cont}}(t)-\mathcal C_m^{\mathrm{cont}}(t-1)
+=
+\sum_{x\in X_m}\Bigl(\min(d_m(x),t)-\min(d_m(x),t-1)\Bigr).
+\]
+对任意整数 \(d\ge 1\)，括号内恰等于 \(\mathbf 1_{\{d\ge t\}}\)，故
+\[
+\mathcal C_m^{\mathrm{cont}}(t)-\mathcal C_m^{\mathrm{cont}}(t-1)
+=
+\#\{x\in X_m:\ d_m(x)\ge t\}
+=
+N_m^{\ge}(t).
+\]
+这便给出第一式。
+
+再由
+\[
+n_m(t)=N_m^{\ge}(t)-N_m^{\ge}(t+1)
+\]
+代入上式可得
+\[
+n_m(t)
+=
+\bigl(\mathcal C_m^{\mathrm{cont}}(t)-\mathcal C_m^{\mathrm{cont}}(t-1)\bigr)
+-\bigl(\mathcal C_m^{\mathrm{cont}}(t+1)-\mathcal C_m^{\mathrm{cont}}(t)\bigr),
+\]
+即第二式。
+最后，
+\[
+S_a(m)=\sum_{t\ge 1}t^a n_m(t)
+\]
+只是直方图的矩，因此由 \(\bigl(n_m(t)\bigr)_{t\ge 1}\) 唯一确定。证毕。
+\end{proof}
+
+\begin{theorem}[冻结相 escort 测度的 Shannon--Rényi 熵谱塌缩]\label{thm:conclusion-frozen-escort-shannon-renyi-collapse}
+设严格顶端间隙
+\[
+\alpha_\ast^{(2)}<\alpha_\ast
+\]
+成立，并定义冻结阈值
+\[
+a_{\mathrm c}:=\frac{\log\varphi-g_\ast}{\alpha_\ast-\alpha_\ast^{(2)}}.
+\]
+若 \(a>a_{\mathrm c}\)，则压力满足
+\[
+P_a=a\alpha_\ast+g_\ast,
+\]
+并且 escort 测度
+\[
+\pi_{m,a}(x):=\frac{d_m(x)^a}{S_a(m)},
+\qquad
+S_a(m):=\sum_{x\in X_m}d_m(x)^a
+\]
+在最大纤维集合
+\[
+A_m^{\max}:=\{x\in X_m:\ d_m(x)=M_m\}
+\]
+上指数集中：
+\[
+\pi_{m,a}(A_m^{\max})
+\ge
+1-\exp\!\bigl(-m\Delta(a)+o(m)\bigr),
+\]
+其中
+\[
+\Delta(a):=a(\alpha_\ast-\alpha_\ast^{(2)})-(\log\varphi-g_\ast)>0.
+\]
+进一步，对每个固定 \(\beta\in(1,\infty]\)，Rényi 熵率满足
+\[
+\lim_{m\to\infty}\frac{1}{m}H_\beta(\pi_{m,a})=g_\ast,
+\]
+而 Shannon 熵率满足
+\[
+\lim_{m\to\infty}\frac{1}{m}H(\pi_{m,a})=g_\ast.
+\]
+\end{theorem}
+\begin{proof}
+对有限 \(\beta>1\)，由
+\[
+\sum_{x\in X_m}\pi_{m,a}(x)^\beta
+=
+\frac{S_{a\beta}(m)}{S_a(m)^\beta}
+\]
+以及 \(a\beta>a>a_{\mathrm c}\)，可将定理 \ref{thm:fold-pressure-freezing-threshold} 同时应用于指数 \(a\) 与 \(a\beta\)，得到
+\[
+\frac{1}{m}\log S_a(m)\to a\alpha_\ast+g_\ast,
+\qquad
+\frac{1}{m}\log S_{a\beta}(m)\to a\beta\alpha_\ast+g_\ast.
+\]
+于是
+\[
+\frac{1}{m}H_\beta(\pi_{m,a})
+=
+\frac{1}{1-\beta}\left(
+\frac{1}{m}\log S_{a\beta}(m)-\beta\frac{1}{m}\log S_a(m)
+\right)
+\to g_\ast.
+\]
+
+对 \(\beta=\infty\)，推论 \ref{cor:fold-escort-minentropy-rate} 已给出
+\[
+\lim_{m\to\infty}\frac{1}{m}H_\infty(\pi_{m,a})=g_\ast.
+\]
+
+再证 Shannon 熵。
+由定理 \ref{thm:fold-escort-groundstate-concentration}，记
+\[
+p_m:=\pi_{m,a}(A_m^{\max}),
+\qquad
+1-p_m\le \exp\!\bigl(-m\Delta(a)+o(m)\bigr).
+\]
+又因 \(\pi_{m,a}\) 在 \(A_m^{\max}\) 上条件均匀，若 \(K_m:=|A_m^{\max}|\)，则可写
+\[
+\pi_{m,a}=p_m\,U_m^{\max}+(1-p_m)\eta_m,
+\]
+其中 \(U_m^{\max}:=\mathrm{Unif}(A_m^{\max})\)，\(\eta_m\) 为补集上的某个概率分布。
+于是
+\[
+H(\pi_{m,a})
+=
+h_{\mathrm{bin}}(p_m)+p_m\log K_m+(1-p_m)H(\eta_m).
+\]
+因为
+\[
+0\le H(\eta_m)\le \log|X_m|=m\log\varphi+O(1),
+\]
+而 \(1-p_m\) 指数衰减，所以
+\[
+h_{\mathrm{bin}}(p_m)=o(m),
+\qquad
+(1-p_m)H(\eta_m)=o(m),
+\qquad
+p_m\log K_m=\log K_m+o(m).
+\]
+故
+\[
+H(\pi_{m,a})=\log K_m+o(m),
+\]
+再用 \(\frac{1}{m}\log K_m\to g_\ast\) 即得
+\[
+\lim_{m\to\infty}\frac{1}{m}H(\pi_{m,a})=g_\ast.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[冻结相中整数阶 escort--Rényi 熵率的全阶塌缩]\label{thm:conclusion-frozen-escort-integer-renyi-collapse}
+沿用定理 \ref{thm:conclusion-frozen-escort-shannon-renyi-collapse} 的记号，并设
+\[
+a>a_{\mathrm c}.
+\]
+对任意整数 \(b\ge 2\)，定义 escort--Rényi 熵率
+\[
+h_b(a):=
+\lim_{m\to\infty}
+\frac{1}{m(1-b)}
+\log\!\left(\sum_{x\in X_m}\pi_{m,a}(x)^b\right),
+\]
+其中
+\[
+\pi_{m,a}(x)=\frac{d_m(x)^a}{S_a(m)}.
+\]
+则极限存在，且满足完全塌缩公式
+\[
+h_b(a)=g_\ast.
+\]
+进一步，若 min-entropy 率
+\[
+h_\infty(a):=
+\lim_{m\to\infty}\frac{1}{m}\Bigl(-\log\max_{x\in X_m}\pi_{m,a}(x)\Bigr)
+\]
+存在，则同样有
+\[
+h_\infty(a)=g_\ast.
+\]
+\end{theorem}
+\begin{proof}
+对任意整数 \(b\ge 2\)，由 escort 分布定义直接计算得到
+\[
+\sum_{x\in X_m}\pi_{m,a}(x)^b
+=
+\frac{\sum_x d_m(x)^{ab}}{S_a(m)^b}
+=
+\frac{S_{ab}(m)}{S_a(m)^b}.
+\]
+因此
+\[
+\frac{1}{m(1-b)}
+\log\!\left(\sum_x\pi_{m,a}(x)^b\right)
+=
+\frac{1}{1-b}
+\left(
+\frac{1}{m}\log S_{ab}(m)-b\frac{1}{m}\log S_a(m)
+\right).
+\]
+由于 \(a>a_{\mathrm c}\) 且 \(b\ge 2\)，必有 \(ab>a_{\mathrm c}\)。
+于是可将定理 \ref{thm:fold-pressure-freezing-threshold} 同时应用于指数 \(a\) 与 \(ab\)，得到
+\[
+P_a=a\alpha_\ast+g_\ast,
+\qquad
+P_{ab}=ab\alpha_\ast+g_\ast.
+\]
+将其代入上式即得
+\[
+h_b(a)
+=
+\frac{(ab\alpha_\ast+g_\ast)-b(a\alpha_\ast+g_\ast)}{1-b}
+=
+g_\ast.
+\]
+这便证明了全部整数阶 \(b\ge 2\) 的塌缩公式。
+
+至于 min-entropy 率，推论 \ref{cor:fold-escort-minentropy-rate} 已给出：在同一冻结区间 \(a>a_{\mathrm c}\) 内，只要该极限存在，便有
+\[
+h_\infty(a)=g_\ast.
+\]
+证毕。
+\end{proof}
+
+\input{thm__conclusion-frozen-escort-tv-rigidity}
+
+\begin{theorem}[bin-fold escort 族的全 \texorpdfstring{\(f\)}{f}-散度两点塌缩]\label{thm:conclusion-binfold-escort-full-fdiv-collapse}
+在 bin-fold 口径下，记 escort 分布为 \(\pi_{m,q}\)（\(q\ge 0\)），并令
+\[
+\theta(q):=\frac{1}{1+\varphi^{q+1}}.
+\]
+设 \(\Phi:(0,\infty)\to\RR\) 为任意连续凸函数，且 \(\Phi(1)=0\)。
+定义离散 \(f\)-散度
+\[
+D_\Phi(\mu\Vert \nu):=\sum_x \nu(x)\,\Phi\!\left(\frac{\mu(x)}{\nu(x)}\right).
+\]
+则对任意 \(p,q\ge 0\)，极限
+\[
+\lim_{m\to\infty}D_\Phi(\pi_{m,q}\Vert \pi_{m,p})
+\]
+存在，且满足闭式
+\[
+\lim_{m\to\infty}D_\Phi(\pi_{m,q}\Vert \pi_{m,p})
+=
+\theta(p)\,\Phi\!\left(\frac{\theta(q)}{\theta(p)}\right)
++
+\bigl(1-\theta(p)\bigr)\,
+\Phi\!\left(\frac{1-\theta(q)}{1-\theta(p)}\right).
+\]
+换言之，bin-fold escort 温度族的全部 \(f\)-散度在极限中都塌缩为同一 Bernoulli 两点模型的 \(f\)-散度。
+\end{theorem}
+\begin{proof}
+记末位两扇区
+\[
+A_m:=\{w\in X_m:\ w_m=1\},
+\qquad
+B_m:=\{w\in X_m:\ w_m=0\}.
+\]
+由结论 \ref{con:xi-time-part9o-escort-fdiv-collapse} 的证明机制可知：对任意固定 \(p,q\ge 0\)，在扇区 \(A_m\) 与 \(B_m\) 内部，\(\pi_{m,q}\) 与 \(\pi_{m,p}\) 都渐近均匀，且比值在每个扇区内一致趋于常数。
+更精确地，
+\[
+\sup_{w\in A_m}\left|
+\frac{\pi_{m,q}(w)}{\pi_{m,p}(w)}
+-\frac{\theta(q)}{\theta(p)}
+\right|
+\to 0,
+\]
+\[
+\sup_{w\in B_m}\left|
+\frac{\pi_{m,q}(w)}{\pi_{m,p}(w)}
+-\frac{1-\theta(q)}{1-\theta(p)}
+\right|
+\to 0.
+\]
+同时
+\[
+\pi_{m,p}(A_m)\to \theta(p),
+\qquad
+\pi_{m,p}(B_m)\to 1-\theta(p).
+\]
+
+因此
+\[
+D_\Phi(\pi_{m,q}\Vert \pi_{m,p})
+=
+\sum_{w\in A_m}\pi_{m,p}(w)\,
+\Phi\!\left(\frac{\pi_{m,q}(w)}{\pi_{m,p}(w)}\right)
++
+\sum_{w\in B_m}\pi_{m,p}(w)\,
+\Phi\!\left(\frac{\pi_{m,q}(w)}{\pi_{m,p}(w)}\right).
+\]
+由于两扇区上的比值都一致收敛到常数，而 \(\Phi\) 连续，故可逐扇区应用一致收敛与有界收敛，得到
+\[
+\sum_{w\in A_m}\pi_{m,p}(w)\,
+\Phi\!\left(\frac{\pi_{m,q}(w)}{\pi_{m,p}(w)}\right)
+\to
+\theta(p)\,\Phi\!\left(\frac{\theta(q)}{\theta(p)}\right),
+\]
+\[
+\sum_{w\in B_m}\pi_{m,p}(w)\,
+\Phi\!\left(\frac{\pi_{m,q}(w)}{\pi_{m,p}(w)}\right)
+\to
+\bigl(1-\theta(p)\bigr)\,
+\Phi\!\left(\frac{1-\theta(q)}{1-\theta(p)}\right).
+\]
+两式相加即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[window-\(6\) 中可逆预算与完备异常签名维数的 \(19\) 比特分离]\label{prop:conclusion-window6-19bit-separation}
+在 \(m=6\) 的 binary-interval fold 上，纤维直方图为
+\[
+2:8,\qquad 3:4,\qquad 4:9.
+\]
+因此离散预言机容量满足
+\[
+C_6(B)=8\min(2,2^B)+4\min(3,2^B)+9\min(4,2^B),
+\]
+从而
+\[
+C_6(0)=21,\qquad C_6(1)=42,\qquad C_6(B)=64\quad(B\ge 2).
+\]
+记
+\[
+B^{\mathrm{full}}_6:=\min\{B\in\ZZ_{\ge 0}:\ C_6(B)=64\}.
+\]
+则
+\[
+B^{\mathrm{full}}_6=2.
+\]
+另一方面，由
+\[
+\Aut(\Fold_6^{\mathrm{bin}})^{\mathrm{ab}}\cong (\ZZ/2\ZZ)^{21}
+\]
+可知最小完备二元异常签名空间维数为 \(21\)。
+因此存在严格的有限尺度分离
+\[
+\dim_{\FF_2}\Aut(\Fold_6^{\mathrm{bin}})^{\mathrm{ab}}-B^{\mathrm{full}}_6
+=
+21-2
+=
+19.
+\]
+\end{proposition}
+\begin{proof}
+将直方图代入定理 \ref{thm:fold-oracle-capacity-closed-form} 的闭式表达即可得到
+\[
+C_6(0)=8+4+9=21,
+\]
+\[
+C_6(1)=8\cdot 2+4\cdot 2+9\cdot 2=42,
+\]
+\[
+C_6(2)=8\cdot 2+4\cdot 3+9\cdot 4=64.
+\]
+由于最大纤维大小等于 \(4\)，故当 \(B=1\) 时仍有纤维不能被完全分离，而当 \(B=2\) 时已满足 \(2^B=4\ge \max_x d_6(x)\)，于是
+\[
+B^{\mathrm{full}}_6=2.
+\]
+
+再由定理 \ref{thm:xi-foldbin-gauge-representation-distribution-law-m6-spectrum} 或命题 \ref{prop:xi-window6-two-bit-recovery-vs-21bit-signature}，
+\[
+\Aut(\Fold_6^{\mathrm{bin}})^{\mathrm{ab}}\cong (\ZZ/2\ZZ)^{21}.
+\]
+因此最小完备二元异常签名维数为 \(21\)，两者相减即得 \(19\) 比特分离。证毕。
+\end{proof}
+
+\input{subsubsec__conclusion-window6-majorization-capacity-prony-compression}
+\input{thm__conclusion-freezing-infinity-budget-hankel-threshold}
+
+\endinput

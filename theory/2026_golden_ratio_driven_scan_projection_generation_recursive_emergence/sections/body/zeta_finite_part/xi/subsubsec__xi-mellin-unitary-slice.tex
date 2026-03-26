@@ -1,0 +1,121 @@
+% Mellin unitary slice: unique isometric readout line and self-dual conjugation
+
+\subsubsection{幺正切片：Mellin 读出的唯一等距线与反演对偶的共轭退化}\label{subsubsec:xi-mellin-unitary-slice}
+
+本小节给出一个与本文既定 unitary slice 语义严格同型的“乘法谱分解”事实：当把读出理解为乘法群 \(\RR_{+}^{\times}\) 的频域表示时，\(\Re(s)=\tfrac12\) 是唯一允许等距（范数守恒）读出的切片；并且反演对偶 \(x\mapsto 1/x\) 在该切片上退化为谱侧逐点复共轭。
+该结论为 \(\mathbf{PW}\) 类型安全（\S\ref{subsec:xi-pw-type-safety-null}）中的“可见域锁定/离切片即 \(\mathsf{NULL}\)”提供一条纯调和分析的等价解释：离开幺正切片必引入不可消去的权重扭曲，若协议拒绝外置该扭曲方向，则读出在类型层不再成立并被编译为 \(\mathsf{NULL}\)（定理 \ref{thm:xi-offset-null-type-safety}）。
+
+\paragraph{乘法 Haar 测度与 Mellin 读出}
+令 \(\RR_{+}^{\times}=(0,\infty)\) 配备乘法 Haar 测度
+\[
+\dd^{\times}x:=\frac{\dd x}{x},
+\]
+并记
+\[
+L^{2}_{\times}:=L^{2}(\RR_{+}^{\times},\dd^{\times}x).
+\]
+对足够良好的 \(f:\RR_{+}^{\times}\to\CC\)（例如 \(f\in L^{1}\cap L^{2}_{\times}\)），定义带临界移位的 Mellin 读出
+\begin{equation}\label{eq:mellin-shifted-readout}
+(\mathcal{M}f)(s):=\int_{0}^{\infty} f(x)\,x^{\,s-\frac12}\,\dd^{\times}x
+\qquad(s\in\CC),
+\end{equation}
+并定义沿切片 \(\Re(s)=\sigma\) 的读出
+\[
+(\mathcal{M}_{\sigma}f)(t):=(\mathcal{M}f)(\sigma+\mathrm{i}t),\qquad t\in\RR.
+\]
+上述“\(-\tfrac12\)”移位使得幺正切片与本文 completion 口径的临界线一致：当 \(\sigma=\tfrac12\) 时，核为单位模角色 \(x^{\mathrm{i}t}\)。
+
+\begin{theorem}[Mellin--Plancherel 幺正切片与唯一性]\label{thm:mellin-unitary-slice-unique}
+映射 \(f\mapsto \mathcal{M}_{1/2}f\) 在稠密子空间上延拓为幺正同构
+\[
+\mathcal{M}_{1/2}:L^{2}_{\times}\ \xrightarrow{\ \sim\ }\ L^{2}\!\left(\RR,\frac{\dd t}{2\pi}\right).
+\]
+并且对任意 \(\sigma\in\RR\)，有严格的权重扭曲恒等式
+\begin{equation}\label{eq:mellin-sigma-weight-twist}
+\|\mathcal{M}_{\sigma}f\|_{L^{2}(\dd t/2\pi)}
+=
+\|\,x^{\sigma-\frac12}f\,\|_{L^{2}_{\times}}.
+\end{equation}
+因此，当 \(\sigma\neq\tfrac12\) 时，\(\mathcal{M}_{\sigma}\) 不可能在 \(L^{2}_{\times}\) 上成为等距算子；换言之，\(\Re(s)=\tfrac12\) 为 Mellin 读出的唯一等距切片。
+\end{theorem}
+
+\begin{proof}
+令对数坐标 \(y:=\log x\)，则 \(\dd^{\times}x=\dd y\)，并令 \(g(y):=f(e^{y})\)。
+由 \eqref{eq:mellin-shifted-readout}，
+\[
+(\mathcal{M}_{1/2}f)(t)
+=\int_{0}^{\infty} f(x)\,x^{\mathrm{i}t}\,\dd^{\times}x
+=\int_{\RR} g(y)\,e^{\mathrm{i}ty}\,\dd y.
+\]
+取本文在附录 \ref{subsec:unit-circle-scale-linearization} 中使用的傅里叶归一化
+\(
+(\mathcal{F}g)(\xi)=\int_{\RR}g(y)e^{-\mathrm{i}\xi y}\dd y
+\)，
+则上式为 \((\mathcal{F}g)(-\!t)\)。
+由 Plancherel 定理，\(\mathcal{F}:L^{2}(\RR,\dd y)\to L^{2}(\RR,\dd\xi/2\pi)\) 为幺正同构，从而 \(\mathcal{M}_{1/2}\) 亦为幺正同构。
+\par
+对一般 \(\sigma\in\RR\)，有
+\[
+(\mathcal{M}_{\sigma}f)(t)
+=\int_{0}^{\infty} f(x)\,x^{\sigma-\frac12}\,x^{\mathrm{i}t}\,\dd^{\times}x
+=(\mathcal{M}_{1/2}(x^{\sigma-\frac12}f))(t).
+\]
+由 \(\mathcal{M}_{1/2}\) 的幺正性立得 \eqref{eq:mellin-sigma-weight-twist}。
+若 \(\sigma\neq\tfrac12\)，则权重因子 \(x^{\sigma-\frac12}\) 非单位模，故存在 \(f\in L^{2}_{\times}\) 使 \(\|x^{\sigma-\frac12}f\|_{L^{2}_{\times}}\neq\|f\|_{L^{2}_{\times}}\)，从而 \(\mathcal{M}_{\sigma}\) 不可能等距。证毕。
+\end{proof}
+
+\paragraph{反演对偶与谱侧共轭}
+在 \(L^{2}_{\times}\) 上定义反演对偶算子
+\[
+(Jf)(x):=\overline{f(1/x)}.
+\]
+由于 \(\dd^{\times}x\) 在 \(x\mapsto 1/x\) 下不变，\(J\) 为反线性等距对合（\(J^{2}=I\)）。
+
+\begin{remark}[反演对偶的 Jacobian 归一化]\label{rem:mellin-inversion-jacobian}
+若改用 Lebesgue 口径的 Hilbert 空间 \(L^{2}((0,\infty),\dd x)\)，则反演 \(x\mapsto 1/x\) 的反线性等距对合可写为
+\[
+(J_{\dd x}h)(x):=x^{-1}\overline{h(1/x)}.
+\]
+二者仅差一个等距搬运：映射 \(h\mapsto f:=x^{1/2}h\) 给出同构 \(L^{2}((0,\infty),\dd x)\cong L^{2}_{\times}\)，并满足
+\(
+J(x^{1/2}h)=x^{1/2}(J_{\dd x}h)
+\)。
+因此，是否出现 \(x^{-1}\) 因子仅由内积/测度归一化选择决定，而“反演对偶在幺正切片上退化为谱侧复共轭”的结论不受该选择影响（命题 \ref{prop:mellin-conjugation-identity}）。
+\end{remark}
+
+\begin{proposition}[Mellin 共轭恒等式与临界切片退化]\label{prop:mellin-conjugation-identity}
+对足够良好的 \(f\) 与任意 \(s\in\CC\)，成立恒等式
+\[
+\boxed{\;(\mathcal{M}(Jf))(s)=\overline{(\mathcal{M}f)(1-\overline{s})}\;}
+\]
+从而在幺正切片 \(s=\tfrac12+\mathrm{i}t\) 上有谱侧逐点共轭退化
+\[
+\boxed{\;(\mathcal{M}_{1/2}(Jf))(t)=\overline{(\mathcal{M}_{1/2}f)(t)}\qquad(t\in\RR).\;}
+\]
+\end{proposition}
+
+\begin{proof}
+由定义与代换 \(x\mapsto 1/x\)（此时 \(\dd^{\times}x\) 不变）得
+\[
+(\mathcal{M}(Jf))(s)
+=\int_{0}^{\infty}\overline{f(1/x)}\,x^{\,s-\frac12}\,\dd^{\times}x
+=\int_{0}^{\infty}\overline{f(x)}\,x^{\,\frac12-s}\,\dd^{\times}x.
+\]
+而
+\[
+\overline{(\mathcal{M}f)(1-\overline{s})}
+=\overline{\int_{0}^{\infty} f(x)\,x^{\,1-\overline{s}-\frac12}\,\dd^{\times}x}
+=\int_{0}^{\infty}\overline{f(x)}\,x^{\,\frac12-s}\,\dd^{\times}x,
+\]
+两式相同，得第一式。
+当 \(s=\tfrac12+\mathrm{i}t\) 时，\(1-\overline{s}=s\)，即得第二式。证毕。
+\end{proof}
+
+\begin{remark}[与 unitary slice 语义的对齐]\label{rem:mellin-unitary-slice-semantic-alignment}
+定理 \ref{thm:mellin-unitary-slice-unique} 表明：若要求读出在 \(L^{2}\) 意义下等距（不引入额外权重寄存器），则切片参数被结构性地钉死在 \(\Re(s)=\tfrac12\)。
+在本文 completion 接口中，unitary slice 由 \(|u_{L}(s)|=1\iff \Re(s)=\tfrac12\) 刻画（注 \ref{rem:xi-critical-line-unit-circle}），并在 \(\mathbf{PW}\) 闭包下被提升为“可见域”的类型约束（定义 \ref{def:xi-visible-read-null}）。
+因此，上述幺正切片唯一性可被视为“\(\tfrac12\) 为正交轴”的一条严格译文：离开该切片的自由度首先表现为权重扭曲 \(x^{\sigma-\frac12}\)，若协议拒绝外置该扭曲方向，则读出在类型层不成立并以 \(\mathsf{NULL}\) 保持可寻址性（定理 \ref{thm:xi-offset-null-type-safety}）。
+\end{remark}
+
+\endinput
+

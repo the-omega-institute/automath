@@ -1,0 +1,558 @@
+% Auto-split to keep each TeX source < 800 lines.
+
+\paragraph{纤维谱的两态一致渐近与分位阈值（bin-fold）}
+本段在命题 \ref{prop:fold-bin-fiber-tail} 的尾部表示之上，给出二进制区间折叠
+\(\mathrm{Fold}^{\mathrm{bin}}_m:\{0,\dots,2^m-1\}\to X_m\)
+的纤维多重度谱在 \(m\to\infty\) 下的一个闭式极限图景：在指数主阶上，纤维规模退化为仅由末位 \(w_m\) 决定的两态常数；由此导出与 prime-register 分位阈值同型的显式指数常数 \(\log(2/\varphi)\)。
+
+\begin{theorem}[纤维大小的两态一致渐近（bin-fold）]\label{thm:fold-bin-two-state-asymptotic}
+存在绝对常数 \(C>0\)，使得对所有充分大的 \(m\) 以及任意 \(w=(w_1,\dots,w_m)\in X_m\)，二进制区间折叠的纤维多重度满足
+\begin{equation}\label{eq:fold-bin-two-state-asymptotic}
+\boxed{\;
+\Bigl|\,d^{\mathrm{bin}}_m(w)\ -\ \varphi^{-w_m}\Bigl(\frac{2}{\varphi}\Bigr)^m\,\Bigr|\ \le\ C\;}
+\end{equation}
+其中 \(\varphi=\frac{1+\sqrt5}{2}\)。
+等价地，
+\[
+\Bigl(\frac{\varphi}{2}\Bigr)^m d^{\mathrm{bin}}_m(w)
+=\varphi^{-w_m}+O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr),
+\qquad (m\to\infty),
+\]
+且误差在 \(w\in X_m\) 上一致。
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{prop:fold-bin-fiber-tail}，
+\(
+d^{\mathrm{bin}}_m(w)
+\)
+等价于计数所有满足相邻约束与边界约束的尾部位串 \((c_{m+1},\dots,c_K)\)，并同时满足阈值约束
+\[
+V_m(w)+\sum_{k=m+1}^{K}c_k F_{k+1}\le 2^m-1,
+\]
+其中 \(K=K(m)\)（定义 \ref{def:K-of-m}）。
+记 \(L:=K-m\ge 0\)，并令
+\(
+d_i:=c_{m+i}\ (1\le i\le L)
+\)。
+定义两组尾部线性函数
+\[
+x(d):=\sum_{i=1}^{L} d_i F_{i+1},
+\qquad
+y(d):=\sum_{i=1}^{L} d_i F_i.
+\]
+\par
+\noindent\textbf{(1) 尾部和的 Fibonacci 分解。}
+由恒等式
+\(
+F_{m+i+1}=F_{m+1}F_{i+1}+F_m F_i
+\)
+（对 \(i\) 归纳即可），得到
+\begin{equation}\label{eq:fold-bin-tail-sum-split}
+\sum_{i=1}^{L} d_i F_{m+i+1}=F_{m+1}x(d)+F_m y(d).
+\end{equation}
+\par
+\noindent\textbf{(2) \(x(d)\) 与 \(y(d)\) 的有界偏差。}
+由 Binet 公式推出的精确恒等式
+\(
+F_{i+1}-\varphi F_i=(-1/\varphi)^i
+\)
+得
+\[
+x(d)-\varphi y(d)=\sum_{i=1}^{L} d_i\Bigl(-\frac{1}{\varphi}\Bigr)^i=:S(d).
+\]
+由于可容许性 \(d_id_{i+1}=0\) 禁止相邻指标同时取 \(1\)，故
+\[
+-1\ \le\ S(d)\ \le\ \sum_{k\ge 1}\varphi^{-2k}=\frac{1}{\varphi},
+\]
+从而
+\begin{equation}\label{eq:fold-bin-y-as-x-over-phi}
+y(d)=\frac{x(d)}{\varphi}+O(1),
+\end{equation}
+且 \(O(1)\) 绝对有界并与 \(m,w\) 无关。
+\par
+\noindent\textbf{(3) 阈值约束化归为对 \(x(d)\) 的截断计数。}
+将 \eqref{eq:fold-bin-y-as-x-over-phi} 代入 \eqref{eq:fold-bin-tail-sum-split}，并使用
+\(
+F_{m+1}=\varphi F_m+(-1/\varphi)^m
+\)
+得到
+\[
+\sum_{i=1}^{L} d_i F_{m+i+1}
+=F_m\Bigl(\Bigl(\varphi+\frac{1}{\varphi}\Bigr)x(d)+O(1)\Bigr)+O(1)
+=\sqrt5\,F_m\,x(d)+O(F_m)+O(1).
+\]
+记 \(B_w:=2^m-1-V_m(w)\)。
+由 \(0\le V_m(w)\le F_{m+2}-1\) 与 \(F_{m+2}=\Theta(\varphi^m)\) 得
+\begin{equation}\label{eq:fold-bin-Bw-as-2m}
+B_w=2^m+O(\varphi^m).
+\end{equation}
+因此存在绝对常数使
+\begin{equation}\label{eq:fold-bin-d-count-x-threshold}
+d^{\mathrm{bin}}_m(w)
+=\#\Bigl\{d:\ d\ \text{可容许},\ w_m d_1=0,\ x(d)\le \frac{B_w}{\sqrt5\,F_m}+O(1)\Bigr\}.
+\end{equation}
+\par
+\noindent\textbf{(4) 主尺度与末位两态因子。}
+由 Binet 渐近 \(F_m=\varphi^m/\sqrt5+O(\varphi^{-m})\) 与 \eqref{eq:fold-bin-Bw-as-2m} 得
+\begin{equation}\label{eq:fold-bin-x-threshold-main}
+\frac{B_w}{\sqrt5\,F_m}=\Bigl(\frac{2}{\varphi}\Bigr)^m+O(1).
+\end{equation}
+另一方面，长度 \(L\) 的可容许尾部字数为 \(F_{L+2}\)；
+而首位约束 \(d_1=0\) 的可容许字数为 \(F_{L+1}\)，故其比值趋于 \(1/\varphi\)。
+将该两态比值与 \eqref{eq:fold-bin-d-count-x-threshold}--\eqref{eq:fold-bin-x-threshold-main} 合并，得到
+\[
+d^{\mathrm{bin}}_m(w)
+=\Bigl(\frac{2}{\varphi}\Bigr)^m\times
+\begin{cases}
+1+O\bigl((\varphi/2)^m\bigr),& w_m=0,\\[2pt]
+\varphi^{-1}+O\bigl((\varphi/2)^m\bigr),& w_m=1,
+\end{cases}
+\]
+从而得到 \eqref{eq:fold-bin-two-state-asymptotic}。证毕。
+\end{proof}
+
+\begin{corollary}[两点极限律（bin-fold）]\label{cor:fold-bin-two-point-limit-law}
+令 \(U_m\sim\mathrm{Unif}\{0,\dots,2^m-1\}\)，并令 \(W_m:=\mathrm{Fold}^{\mathrm{bin}}_m(U_m)\in X_m\)。
+定义推前分布
+\[
+\mu_m(w):=\mathbb{P}(W_m=w)=\frac{d^{\mathrm{bin}}_m(w)}{2^m},\qquad w\in X_m,
+\]
+以及尺度化随机变量
+\(
+Z_m:=\bigl(\frac{\varphi}{2}\bigr)^m d^{\mathrm{bin}}_m(W_m)
+\)。
+则 \(Z_m\) 在分布上收敛到两点分布 \(Z\)：
+\[
+Z=
+\begin{cases}
+1,& \text{以概率 }\displaystyle \frac{\varphi}{\sqrt5},\\[6pt]
+\varphi^{-1},& \text{以概率 }\displaystyle \frac{1}{\varphi\sqrt5}.
+\end{cases}
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:fold-bin-two-state-asymptotic}，有 \(Z_m=\varphi^{-W_m(m)}+o(1)\)（在概率意义下），故只需计算末位 \(W_m(m)=w_m\) 的极限权重。
+注意 \(\card{\{w\in X_m:w_m=0\}}=F_{m+1}\)、\(\card{\{w\in X_m:w_m=1\}}=F_m\)。
+并由定理主项 \(d^{\mathrm{bin}}_m(w)\sim \varphi^{-w_m}(2/\varphi)^m\) 得
+\[
+\mathbb{P}(w_m=0)
+=\sum_{w_m=0}\mu_m(w)
+\sim
+F_{m+1}\cdot \frac{(2/\varphi)^m}{2^m}
+=\frac{F_{m+1}}{\varphi^m}\to \frac{\varphi}{\sqrt5},
+\]
+同理 \(\mathbb{P}(w_m=1)\to \frac{1}{\varphi\sqrt5}\)。证毕。
+\end{proof}
+
+\begin{corollary}[分位阈值的显式指数常数（bin-fold）]\label{cor:fold-bin-quantile-threshold-constant}
+在与定义 \ref{def:pom-gamma-quantile} 同型的分位口径下，对 bin-fold 定义纤维指数
+\[
+\gamma^{\mathrm{bin}}_m(w):=\frac{1}{m}\log d^{\mathrm{bin}}_m(w),\qquad w\in X_m,
+\]
+并令 \(\gamma^{\mathrm{bin}}_m(\varepsilon)\) 为其在输出分布 \(\mu_m(w)=d^{\mathrm{bin}}_m(w)/2^m\) 下的尾部分位，
+\[
+\gamma^{\mathrm{bin}}_{m}(\varepsilon):=\inf\Bigl\{\gamma:\ \mathbb{P}_{\mu_m}\bigl(\gamma^{\mathrm{bin}}_m(W_m)>\gamma\bigr)\le \varepsilon\Bigr\},
+\qquad
+B^{\mathrm{bin}}_m(\varepsilon):=\exp\!\bigl(m\,\gamma^{\mathrm{bin}}_m(\varepsilon)\bigr).
+\]
+则当 \(m\to\infty\)，有分段常数极限
+\[
+\Bigl(\frac{\varphi}{2}\Bigr)^m B^{\mathrm{bin}}_m(\varepsilon)\ \longrightarrow\
+\begin{cases}
+1,& 0<\varepsilon<\displaystyle\frac{\varphi}{\sqrt5},\\[6pt]
+\varphi^{-1},& \displaystyle\frac{\varphi}{\sqrt5}<\varepsilon<1.
+\end{cases}
+\]
+特别地，对任意固定 \(\varepsilon\in(0,\varphi/\sqrt5)\)，有
+\[
+B^{\mathrm{bin}}_m(\varepsilon)
+=\Bigl(\frac{2}{\varphi}\Bigr)^m\,(1+o(1)),
+\qquad
+\frac{1}{m}\log B^{\mathrm{bin}}_m(\varepsilon)\to \log\frac{2}{\varphi}.
+\]
+\end{corollary}
+
+\begin{proof}
+由推论 \ref{cor:fold-bin-two-point-limit-law}，在概率意义下有
+\(
+(\varphi/2)^m d^{\mathrm{bin}}_m(W_m)\Rightarrow Z\in\{1,\varphi^{-1}\}
+\)；
+分位极限因此退化为两点分布的分位函数，得到所示分段极限。
+最后一式由两端同取 \(\log\) 并除以 \(m\) 得到。证毕。
+\end{proof}
+
+\paragraph{输出分布的常数级非均匀性：KL 极限、幂和常数与 R\'enyi 速率塌缩}
+两态一致渐近不仅给出分位阈值的显式指数常数，还允许把输出分布 \(\mu_m\) 相对于稳定层均匀分布的偏离压缩为\emph{常数级}账本：
+在指数尺度上 \(H_q(\mu_m)/m\) 对一切 \(q>0\) 均塌缩到 \(\log\varphi\)，而所有非均匀性只残留在 \(O(1)\) 的漂移项中。
+
+\begin{proposition}[bin-fold 输出非均匀性的极限常数律：\texorpdfstring{$D_{\mathrm{KL}}(\mu_m\Vert u_m)\to C_{\mathrm{KL}}$}{DKL(mu||u)->CKL}]\label{prop:fold-bin-kl-constant}
+沿用推论 \ref{cor:fold-bin-two-point-limit-law} 的记号。
+令 \(u_m\) 为 \(X_m\) 上的均匀分布：\(u_m(w)=1/|X_m|\)。
+定义相对熵（KL 散度）
+\[
+D_{\mathrm{KL}}(\mu_m\Vert u_m)
+:=\sum_{w\in X_m}\mu_m(w)\log\frac{\mu_m(w)}{u_m(w)}.
+\]
+则存在极限常数
+\[
+C_{\mathrm{KL}}
+=2\log\varphi-\frac12\log 5-\frac{\log\varphi}{\varphi\sqrt5},
+\]
+使得
+\[
+D_{\mathrm{KL}}(\mu_m\Vert u_m)\ \longrightarrow\ C_{\mathrm{KL}}
+\qquad(m\to\infty).
+\]
+等价地，纤维信息损失的期望满足
+\[
+\mathbb{E}_{\mu_m}\bigl[\log d^{\mathrm{bin}}_m(W_m)\bigr]
+=m\log\!\Bigl(\frac{2}{\varphi}\Bigr)-\frac{\log\varphi}{\varphi\sqrt5}+o(1),
+\]
+并且输出 Shannon 熵呈现常数级熵缺口
+\[
+H(\mu_m)=\log|X_m|-C_{\mathrm{KL}}+o(1),
+\qquad
+H(\mu_m):=-\sum_{w\in X_m}\mu_m(w)\log \mu_m(w).
+\]
+\end{proposition}
+
+\begin{proof}
+由 \(\mu_m(w)=d^{\mathrm{bin}}_m(w)/2^m\) 与 \(u_m(w)=1/|X_m|\) 得恒等式
+\begin{equation}\label{eq:fold-bin-kl-identity}
+D_{\mathrm{KL}}(\mu_m\Vert u_m)
+=\mathbb{E}_{\mu_m}\bigl[\log d^{\mathrm{bin}}_m(W_m)\bigr]-m\log 2+\log|X_m|.
+\end{equation}
+由定理 \ref{thm:fold-bin-two-state-asymptotic} 的一致主项，
+\[
+\log d^{\mathrm{bin}}_m(w)
+=m\log\!\Bigl(\frac{2}{\varphi}\Bigr)-w_m\log\varphi+O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr),
+\qquad (w\in X_m),
+\]
+故
+\[
+\mathbb{E}_{\mu_m}\bigl[\log d^{\mathrm{bin}}_m(W_m)\bigr]
+=m\log\!\Bigl(\frac{2}{\varphi}\Bigr)-\log\varphi\cdot \mathbb{P}(W_m(m)=1)+o(1).
+\]
+由推论 \ref{cor:fold-bin-two-point-limit-law} 得 \(\mathbb{P}(W_m(m)=1)\to \frac{1}{\varphi\sqrt5}\)，从而得到所示期望渐近。
+另一方面，由 Binet 渐近 \(F_{m+2}=\varphi^{m+2}/\sqrt5+o(\varphi^m)\) 得
+\[
+\log|X_m|=\log F_{m+2}=(m+2)\log\varphi-\frac12\log 5+o(1).
+\]
+将两式代回 \eqref{eq:fold-bin-kl-identity} 即得 \(D_{\mathrm{KL}}(\mu_m\Vert u_m)\to C_{\mathrm{KL}}\)。
+最后，恒等式 \(D_{\mathrm{KL}}(\mu_m\Vert u_m)=\log|X_m|-H(\mu_m)\) 给出熵缺口表达。证毕。
+\end{proof}
+
+\begin{proposition}[bin-fold 的全阶碰撞矩主项闭式与指数增长率]\label{prop:fold-bin-power-sum-asymptotic}
+对任意固定 \(q\ge 0\)，定义 \(q\) 阶碰撞矩（幂和）
+\[
+S_q^{\mathrm{bin}}(m):=\sum_{w\in X_m}\bigl(d^{\mathrm{bin}}_m(w)\bigr)^q.
+\]
+则当 \(m\to\infty\) 时有一致渐近
+\[
+S_q^{\mathrm{bin}}(m)=\Bigl(\frac{2}{\varphi}\Bigr)^{qm}\Bigl(F_{m+1}+\varphi^{-q}F_m\Bigr)\Bigl(1+O\bigl(q(\varphi/2)^m\bigr)\Bigr),
+\]
+其中误差在 \(q\) 固定时对 \(m\) 一致。
+因此指数增长率极限存在并为
+\[
+\tau_{\mathrm{bin}}(q):=\lim_{m\to\infty}\frac{1}{m}\log S_q^{\mathrm{bin}}(m)
+=q\log\!\Bigl(\frac{2}{\varphi}\Bigr)+\log\varphi,
+\]
+并且对应的主指数根（Perron 根）为
+\[
+r_q:=\exp\bigl(\tau_{\mathrm{bin}}(q)\bigr)=\frac{2^q}{\varphi^{q-1}}=2^q\varphi^{1-q}.
+\]
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:fold-bin-two-state-asymptotic}，对所有 \(w\in X_m\) 有一致展开
+\[
+d^{\mathrm{bin}}_m(w)=\varphi^{-w_m}\Bigl(\frac{2}{\varphi}\Bigr)^m\Bigl(1+O\bigl((\varphi/2)^m\bigr)\Bigr),
+\]
+其中误差项在 \(w\) 上一致。从而对任意固定 \(q\ge 0\) 可得
+\[
+\bigl(d^{\mathrm{bin}}_m(w)\bigr)^q
+=\Bigl(\frac{2}{\varphi}\Bigr)^{qm}\varphi^{-q w_m}\Bigl(1+O\bigl(q(\varphi/2)^m\bigr)\Bigr),
+\]
+其中误差项在 \(w\in X_m\) 上一致。
+将 \(X_m\) 按末位 \(w_m\in\{0,1\}\) 分拆，并用
+\(
+\card\{w\in X_m:w_m=0\}=F_{m+1}
+\)、\(
+\card\{w\in X_m:w_m=1\}=F_{m}
+\)，得
+\[
+S_q^{\mathrm{bin}}(m)
+=\Bigl(\frac{2}{\varphi}\Bigr)^{qm}\Bigl(F_{m+1}+\varphi^{-q}F_m\Bigr)\Bigl(1+O\bigl(q(\varphi/2)^m\bigr)\Bigr).
+\]
+两端取对数并除以 \(m\)，再令 \(m\to\infty\)，由 \(F_{m+1}+\varphi^{-q}F_m=\Theta(\varphi^m)\) 得
+\(\tau_{\mathrm{bin}}(q)=q\log(2/\varphi)+\log\varphi\)，从而 \(r_q=\exp(\tau_{\mathrm{bin}}(q))=2^q\varphi^{1-q}\)。证毕。
+\end{proof}
+
+\begin{theorem}[R\'enyi 速率塌缩与“伪多重分形”消失：\texorpdfstring{$H_q(\mu_m)/m\to\log\varphi$}{Hq(mu)/m->log phi}]\label{thm:fold-bin-renyi-rate-collapse}
+沿用推论 \ref{cor:fold-bin-two-point-limit-law} 的 \(\mu_m\) 记号。
+对 \(q>0\)、\(q\neq 1\) 定义 R\'enyi 熵
+\[
+H_q(\mu_m):=\frac{1}{1-q}\log\sum_{w\in X_m}\mu_m(w)^q,
+\]
+并以极限定义 Shannon 熵 \(H_1(\mu_m):=H(\mu_m)\)。
+则对所有 \(q>0\) 都成立统一极限
+\[
+\lim_{m\to\infty}\frac{1}{m}H_q(\mu_m)=\log\varphi,
+\qquad
+\lim_{m\to\infty}\frac{1}{m}H_1(\mu_m)=\log\varphi.
+\]
+进一步，令
+\(
+\gamma_m:=\frac{1}{m}\log d^{\mathrm{bin}}_m(W_m)
+\)（\(W_m\sim\mu_m\)），
+则 \(\gamma_m\to\log(2/\varphi)\)，且偏离仅为 \(O(m^{-1})\)。
+\end{theorem}
+
+\begin{proof}
+当 \(q\neq 1\) 时，由 \(\mu_m(w)=d^{\mathrm{bin}}_m(w)/2^m\) 得
+\[
+\sum_{w\in X_m}\mu_m(w)^q
+=2^{-qm}\,S_q^{\mathrm{bin}}(m).
+\]
+将命题 \ref{prop:fold-bin-power-sum-asymptotic} 的渐近代入得
+\[
+\log\sum_{w}\mu_m(w)^q
+=-qm\log 2 + m\log r_q + O(1)
+=(1-q)m\log\varphi+O(1),
+\]
+其中用到 \(r_q=2^q/\varphi^{q-1}\)。
+两端同除以 \(m(1-q)\) 并令 \(m\to\infty\) 即得 \(\frac{1}{m}H_q(\mu_m)\to\log\varphi\)。
+\par
+当 \(q=1\) 时，由命题 \ref{prop:fold-bin-kl-constant} 得
+\(
+H(\mu_m)=\log|X_m|-D_{\mathrm{KL}}(\mu_m\Vert u_m)
+=m\log\varphi+O(1)
+\)，
+从而 \(\frac{1}{m}H_1(\mu_m)\to\log\varphi\)。
+\par
+最后，由定理 \ref{thm:fold-bin-two-state-asymptotic} 的一致展开
+\(
+\log d^{\mathrm{bin}}_m(W_m)=m\log(2/\varphi)-W_m(m)\log\varphi+o(1)
+\)
+且 \(W_m(m)\in\{0,1\}\)，两端除以 \(m\) 得
+\(
+\gamma_m=\log(2/\varphi)+O(m^{-1})
+\)，故结论成立。证毕。
+\end{proof}
+
+\input{subsubsec__fold-bin-solvable-model}
+
+\begin{corollary}[重建预算的相变：阈值 \texorpdfstring{$\varepsilon_c=\varphi/\sqrt5$}{epsc=phi/sqrt5} 处出现 \texorpdfstring{$\log\varphi$}{log phi} 级节省]\label{cor:fold-bin-budget-phase-transition}
+沿用推论 \ref{cor:fold-bin-quantile-threshold-constant} 中的尾部分位阈值 \(B^{\mathrm{bin}}_m(\varepsilon)\)。
+若某类重建/解码协议的失败概率可由纤维阈值控制为
+\[
+\mathbb{P}\Bigl(d^{\mathrm{bin}}_m(W_m)>\frac{P_m}{2}\Bigr)\ \le\ \varepsilon,
+\]
+则充分条件是选择模积预算 \(P_m>2B^{\mathrm{bin}}_m(\varepsilon)\)。
+在该口径下，令 \(\varepsilon_c:=\varphi/\sqrt5\)。
+则最小对数预算呈现分段相变：
+\[
+\log P_m\ \ge\ m\log\!\Bigl(\frac{2}{\varphi}\Bigr)+\log 2+o(1)\qquad(0<\varepsilon<\varepsilon_c),
+\]
+而当 \(\varepsilon>\varepsilon_c\) 时可降低为
+\[
+\log P_m\ \ge\ m\log\!\Bigl(\frac{2}{\varphi}\Bigr)+\log 2-\log\varphi+o(1).
+\]
+\end{corollary}
+
+\begin{proof}
+由 \(B^{\mathrm{bin}}_m(\varepsilon)\) 的定义，恒有
+\(
+\mathbb{P}\bigl(d^{\mathrm{bin}}_m(W_m)>B^{\mathrm{bin}}_m(\varepsilon)\bigr)\le \varepsilon
+\)；
+因此若 \(P_m>2B^{\mathrm{bin}}_m(\varepsilon)\) 则
+\(
+\mathbb{P}\bigl(d^{\mathrm{bin}}_m(W_m)>P_m/2\bigr)\le\varepsilon
+\)，满足所需的失败概率控制。
+\par
+另一方面，由推论 \ref{cor:fold-bin-quantile-threshold-constant}，
+\[
+\Bigl(\frac{\varphi}{2}\Bigr)^m B^{\mathrm{bin}}_m(\varepsilon)\to
+\begin{cases}
+1,& 0<\varepsilon<\varepsilon_c,\\
+\varphi^{-1},& \varepsilon_c<\varepsilon<1,
+\end{cases}
+\]
+从而
+\[
+\log B^{\mathrm{bin}}_m(\varepsilon)
+=m\log\!\Bigl(\frac{2}{\varphi}\Bigr)+
+\begin{cases}
+o(1),& 0<\varepsilon<\varepsilon_c,\\
+-\log\varphi+o(1),& \varepsilon>\varepsilon_c.
+\end{cases}
+\]
+取 \(P_m=2B^{\mathrm{bin}}_m(\varepsilon)(1+o(1))\) 即得两条下界。证毕。
+\end{proof}
+
+\begin{corollary}[最大纤维、组合上界与饱和判别]\label{cor:fold-bin-saturation}
+对任意 \(m\ge 1\)，最大纤维由 \(w=0^m\) 取得，并满足组合上界
+\begin{equation}\label{eq:fold-bin-upper}
+d^{\mathrm{bin}}_{\max}(m):=d^{\mathrm{bin}}_m(0^m)\le |X_{K(m)-m}|=F_{K(m)-m+2}.
+\end{equation}
+记 \(K=K(m)\)、\(L=K-m\)，并定义在相邻约束下的\emph{最大尾和}
+\[
+S_{\max}(m):=\max\Bigl\{\sum_{k=m+1}^{K} c_k F_{k+1}:\ (c_{m+1},\dots,c_K)\in\{0,1\}^{L},\ c_k c_{k+1}=0\Bigr\}.
+\]
+则对 \(w=0^m\)，上界 \eqref{eq:fold-bin-upper} 饱和当且仅当阈值约束对所有合法尾部都是冗余的，即
+\begin{equation}\label{eq:fold-bin-sat-iff}
+d^{\mathrm{bin}}_{\max}(m)=F_{K(m)-m+2}\quad\Longleftrightarrow\quad 2^m-1\ge S_{\max}(m).
+\end{equation}
+并且 \(S_{\max}(m)\) 具有完全显式的闭式（由“1010\(\cdots\)”极大尾部取得）：
+\begin{equation}\label{eq:fold-bin-Smax-closed}
+S_{\max}(m)=
+\begin{cases}
+F_{K(m)+2}-F_{m+1}, & L=K(m)-m\ \text{为奇数},\\
+F_{K(m)+2}-F_{m+2}, & L=K(m)-m\ \text{为偶数}.
+\end{cases}
+\end{equation}
+等价地，饱和判别可改写为
+\[
+F_{K(m)+2}-2^m\le
+\begin{cases}
+F_{m+1}-1,& L\ \text{奇},\\
+F_{m+2}-1,& L\ \text{偶}.
+\end{cases}
+\]
+\end{corollary}
+
+\begin{corollary}[饱和判别的余数窗口形式：顶端区间条件]\label{cor:fold-bin-saturation-residue-window}
+沿用推论 \ref{cor:fold-bin-saturation} 的记号，令 \(K=K(m)\) 并置
+\[
+r_m:=(2^m-1)-F_{K+1}\ \in\ \{0,1,\dots,F_K-1\}.
+\]
+则推论 \ref{cor:fold-bin-saturation} 的饱和条件
+\(
+2^m-1\ge S_{\max}(m)
+\)
+等价于如下“顶端窗口”条件：
+\[
+r_m\in\bigl[F_K-F_{m+1},\,F_K-1\bigr]\quad (L\ \text{奇}),
+\qquad
+r_m\in\bigl[F_K-F_{m+2},\,F_K-1\bigr]\quad (L\ \text{偶}).
+\]
+因此饱和并非由 \(2^m\) 的规模决定，而由其相对 Fibonacci 阶梯 \(F_{K+1}\) 的余数落点所决定。
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:fold-bin-Smax-closed} 与 \(F_{K+2}=F_{K+1}+F_K\)，
+不等式 \(2^m-1\ge S_{\max}(m)\) 等价于
+\[
+(2^m-1)-F_{K+1}\ \ge\
+\begin{cases}
+F_K-F_{m+1},& L\ \text{奇},\\
+F_K-F_{m+2},& L\ \text{偶},
+\end{cases}
+\]
+即所示余数窗口条件。证毕。
+\end{proof}
+
+\begin{corollary}[饱和窗口的相对尺度与指数衰减]\label{cor:fold-bin-saturation-window-density}
+在推论 \ref{cor:fold-bin-saturation-residue-window} 的余数表示下，饱和条件仅要求 \(r_m\) 落入长度
+\[
+\ell_m=
+\begin{cases}
+F_{m+1},& L\ \text{奇},\\
+F_{m+2},& L\ \text{偶}
+\end{cases}
+\]
+的顶端窗口中；相对于全余数区间长度 \(F_K\)，其占比为 \(\ell_m/F_K\)。
+由于 \(K(m)=m\log_{\varphi}2+O(1)\)，该占比满足
+\[
+\frac{\ell_m}{F_{K(m)}}=\Theta\!\bigl(\varphi^{m-K(m)}\bigr)=\Theta\!\bigl(\varphi^{-(K(m)-m)}\bigr),
+\]
+从而随 \(m\) 指数级衰减；该“顶端窗口”图景与注 \ref{rem:fold-bin-finite} 的对数线性形式刚性在机制层面一致。
+\end{corollary}
+
+\begin{theorem}[最大纤维指数与 \texorpdfstring{$\log(2/\varphi)$}{log(2/phi)}（bin-fold）]\label{thm:fold-bin-max-fiber-exponent}
+令 \(d^{\mathrm{bin}}_{\max}(m):=\max_{w\in X_m} d^{\mathrm{bin}}_m(w)\)。
+则极限存在并满足
+\[
+\lim_{m\to\infty}\frac{1}{m}\log d^{\mathrm{bin}}_{\max}(m)=\log\frac{2}{\varphi}.
+\]
+特别地，该指数常数与正文命题 \ref{prop:beta-quantization-step} 中的不可约步长 \(\Delta_{\min}=\log(2/\varphi)\) 同一。
+\end{theorem}
+\begin{proof}
+由满射 \(\mathrm{Fold}^{\mathrm{bin}}_m:\{0,\dots,2^m-1\}\twoheadrightarrow X_m\) 的计数恒等式
+\(
+\sum_{w\in X_m} d^{\mathrm{bin}}_m(w)=2^m
+\)
+得
+\(
+d^{\mathrm{bin}}_{\max}(m)\ge 2^m/|X_m|
+=2^m/F_{m+2}
+\)。
+由 Binet 渐近 \(F_{m+2}=\Theta(\varphi^{m})\) 得
+\[
+\liminf_{m\to\infty}\frac{1}{m}\log d^{\mathrm{bin}}_{\max}(m)\ \ge\ \log\frac{2}{\varphi}.
+\]
+\par
+另一方面，由推论 \ref{cor:fold-bin-saturation} 的上界
+\(
+d^{\mathrm{bin}}_{\max}(m)\le F_{K(m)-m+2}
+\)。
+由定义 \eqref{eq:K-of-m} 有
+\(
+F_{K(m)+1}\le 2^m-1 < F_{K(m)+2}
+\)，
+结合 \(\log F_n=n\log\varphi+O(1)\) 得
+\[
+\bigl(K(m)+1\bigr)\log\varphi+O(1)\ \le\ m\log 2\ \le\ \bigl(K(m)+2\bigr)\log\varphi+O(1),
+\]
+从而 \(K(m)=m\log_{\varphi}2+O(1)\)，故
+\[
+\log F_{K(m)-m+2}=\bigl(K(m)-m\bigr)\log\varphi+O(1)
+=m(\log 2-\log\varphi)+O(1).
+\]
+两边同除以 \(m\) 并取上极限，得
+\(
+\limsup_{m\to\infty}\frac{1}{m}\log d^{\mathrm{bin}}_{\max}(m)\le \log(2/\varphi)
+\)。
+合并上下界即得极限同一性。证毕。
+\end{proof}
+
+\begin{remark}[不可约步长常数的硬约束]\label{rem:fold-bin-delta-min-hard-constraint}
+定理 \ref{thm:fold-bin-max-fiber-exponent} 给出：在 bin-fold 的纤维结构不变的前提下，最大可见冗余增长率的指数常数被强制为 \(\log(2/\varphi)\)。
+因此，若某一方案在同一折叠纪律下声称实现严格小于 \(\log(2/\varphi)\) 的不可约步长（正文命题 \ref{prop:beta-quantization-step} 的意义），则与最大纤维指数定理所提供的增长率证书发生结构性冲突。
+\end{remark}
+
+\begin{remark}[指数级 Diophantine 近似与“仅有限次饱和”]\label{rem:fold-bin-finite}
+由 \eqref{eq:fold-bin-Smax-closed} 可见，饱和条件强迫 \(2^m\) 与某个 Fibonacci 数 \(F_{K(m)+2}\) \emph{异常接近}。
+用 Binet 公式 \(F_n=\varphi^n/\sqrt5+O(\varphi^{-n})\) 将其改写，可导出一个指数级小的线性对数形式约束：
+\[
+\Bigl|(K(m)+2)\log\varphi - m\log 2 - \log\sqrt5\Bigr|
+\ \lesssim\ \Bigl(\frac{\varphi}{2}\Bigr)^m.
+\]
+由于 \(\varphi\) 为代数数而 \(2\) 为有理数，上式左侧是非零的对数线性形式；而 Baker 型下界（例如 Matveev 的显式形式）给出其\emph{至多多项式级}的小下界（见 \cite{Matveev2000LinearFormsLogs,BakerWustholz2007LogarithmicForms}），从而与右侧的指数级小量矛盾，推出：
+\[
+\text{上界饱和只能发生有限次。}
+\]
+本结论在本文的可复现管线中可直接数值审计（见表 \ref{tab:fold_binary_saturation_points}）。
+\end{remark}
+
+\begin{proposition}[计算 \(\boldsymbol{d^{\mathrm{bin}}_m(w)}\) 的 \(O(m)\) Fibonacci-digit DP]\label{prop:fold-bin-digit-dp}
+给定 \(m\ge 1\) 与 \(w\in X_m\)。令 \(K=K(m)\) 并记 \(V=V_m(w)\)，再令 \(\mathrm{slack}:=2^m-1-V\)。
+将 \(\mathrm{slack}\) 写为 Zeckendorf 位串 \(Z(\mathrm{slack})=(b_1,\dots,b_K)\)（合法，无相邻 \(11\)）。
+则 \(d^{\mathrm{bin}}_m(w)\) 可由如下 digit DP 在 \(O(K-m)=O(m)\) 时间内精确计算：
+\[
+\mathrm{DP}(k,\mathrm{prev},\mathrm{tight})
+\quad(k=K,K-1,\dots,m+1),
+\]
+其中 \(\mathrm{prev}\in\{0,1\}\) 记录上一个（更高位）是否取 \(1\)，\(\mathrm{tight}\in\{0,1\}\) 表示当前前缀是否仍与 \((b_k,\dots,b_K)\) 相同；
+转移时允许选择 \(c_k\in\{0,1\}\)，满足
+\[
+c_k c_{k+1}=0,\qquad
+\mathrm{tight}=1\Rightarrow c_k\le b_k,\qquad
+w_m=1\Rightarrow c_{m+1}=0,
+\]
+并按是否保持等号更新 \(\mathrm{tight}\)。该 DP 的输出即为满足 \(\sum_{k=m+1}^K c_k F_{k+1}\le \mathrm{slack}\) 的尾部数目，从而等于 \(d^{\mathrm{bin}}_m(w)\)。
+\end{proposition}
+
+\input{sections/generated/tab_fold_binary_saturation_points}
+

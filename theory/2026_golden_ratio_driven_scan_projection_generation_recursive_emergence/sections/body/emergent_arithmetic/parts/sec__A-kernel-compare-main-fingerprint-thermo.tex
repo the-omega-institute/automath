@@ -1,0 +1,351 @@
+\subsubsection{核指纹表与计算接口}
+前两小节已经说明，不同核之间最本质的可比对象不是完整规则表，而是其零式骨架与 \(q\)-场附着方式。为了把这一点落实为正文中可直接引用、可直接计算的对象，我们把每个核 \(K\) 的谱指纹压缩到一组有限而封闭的数据上。
+
+对单流核 \(K\)，记其加权转移矩阵为
+\[
+M_K(u)=\sum_{r\ge 0} M_{K,r}u^r,
+\qquad
+M_{K,0}=A_{K,0},
+\]
+其中 \(u\) 记录每一步的原子活动度 \(\kappa\)，而 \(A_{K,0}\) 是 carry-free 骨架矩阵。定义长度 \(n\) 的加权闭轨迹计数
+\[
+a_{K,n}(u):=\Tr\!\bigl(M_K(u)^n\bigr).
+\]
+再由 Witt--M\"obius 反演定义 primitive 分层谱
+\[
+B_{K,n}(u):=
+\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{K,n/d}(u^d).
+\]
+于是 \(B_{K,n}(u)\) 的 \(u^r\)-系数，正是长度 \(n\) 的 primitive 闭环中总活动度恰为 \(r\) 的轨道数。
+
+在截断阶 \(N\) 上，把核 \(K\) 的指纹记为
+\[
+\mathfrak F^{(N)}_K
+:=
+\Bigl(
+\det(I-zA_{K,0}),
+\ \lambda_K(u),
+\ \{B_{K,n}(0),B_{K,n}(1),B_{K,n}(u)\}_{1\le n\le N}
+\Bigr),
+\]
+其中
+\[
+\lambda_K(u):=\rho(M_K(u))
+\]
+是 Perron 压力曲线。这个定义同时压缩了三层信息：\(u=0\) 的纯骨架语法，\(u=1\) 的无偏 combinatorial 计数，以及中间 \(u\in(0,1)\) 乃至更一般 \(u>0\) 的连续偏置谱。因而，一旦两个核在某一截断阶 \(N\) 上具有相同的 \(\mathfrak F^{(N)}\)，它们在该分辨率下对所有基于 primitive 轨道、端点谱、压力曲线与短程热力学量的审计都不可区分；而一旦某一分量开始分叉，核差异便可精确定位到某个长度层、某个活动度层或某个端点层。
+
+因此，这里的“核指纹表”不是附录式实验表格，而是一个最小但完备的计算接口。表 \ref{tab:parallel-addition-kernels-fingerprint-main} 汇总了三核在“单流 \(\Rightarrow\) 全局块级”装配下的指纹，包括状态数、延迟、\(\kappa\) 均值、carry-free 的 \(\det(I-zA_0)\) 与 primitive 谱、以及端点 \(\lambda(0),\lambda(1)\)。
+\input{sections/generated/tab_parallel_addition_kernels_fingerprint_main}
+
+\subsubsection{端点谱表（\texorpdfstring{$u=0,1$}{u=0,1}）的 primitive 基准}\label{subsec:kernel-endpoint-primitive}
+在所有核指纹中，最先应固定的是两个端点。第一端点是 \(u=0\)。此时只有 \(\kappa=0\) 的边存活，所以
+\[
+B_{K,n}(0)=p_n(A_{K,0}),
+\]
+即它等于 carry-free 骨架 SFT 的 primitive 周期轨道数。于是，端点 \(u=0\) 只看语法骨架，不看活动层。第二端点是 \(u=1\)。此时所有允许边都以同权出现，因此 \(B_{K,n}(1)\) 只记录相应单流在线机在无偏计数下的 primitive 轨道数，而不再区分不同 carry 强度。
+
+对三核 \(K_9/K_{13}/K_{21}\)，这两个端点给出最干净的 primitive 基准。对 \(K_9\)，carry-free 骨架是 \(7\)-全移位，而 \(u=1\) 时的单流总字母表大小为 \(21\)，故
+\[
+B_{9,n}(0)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,7^{n/d},
+\qquad
+B_{9,n}(1)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,21^{n/d}.
+\]
+对 \(K_{13}\)，carry-free 骨架是 \(3\)-全移位，而 \(u=1\) 时总字母表大小为 \(13\)，故
+\[
+B_{13,n}(0)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,3^{n/d},
+\qquad
+B_{13,n}(1)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,13^{n/d}.
+\]
+对 \(K_{21}\)，\(u=0\) 端点不再是全移位，而是黄金均值 shift，因此
+\[
+B_{21,n}(0)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,L_{n/d},
+\]
+其中 \(L_n\) 为 Lucas 数列；另一方面，在 \(u=1\) 时单流总字母表大小为 \(5\)，故
+\[
+B_{21,n}(1)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,5^{n/d}.
+\]
+于是，\(u=0\) 端点区分的是纯骨架语法，\(u=1\) 端点区分的是总字母表与总复杂度；两者一起构成所有中间权重层的边界条件。特别地，\(K_{21}\) 在 \(u=0\) 的特殊性不在于“更复杂”，而在于其零式骨架已经不是自由全移位，而是最小的非平凡禁子词系统。
+
+表 \ref{tab:parallel-addition-kernels-endpoint-primitive} 给出三核在两端点的单流与全局块级 \(p_n\)（\(n\le 20\)），作为后续比较中间 \(u\in(0,1)\) 分层谱的基准底座。
+\input{sections/generated/tab_parallel_addition_kernels_endpoint_primitive}
+
+\begin{corollary}[\texorpdfstring{$u=1$}{u=1} 的无权退化：仅看输入规模的 full shift 基线]\label{cor:par-add-u1-degeneracy}
+在确定性完备读入的单流同步图上，\(u=1\) 时带权邻接矩阵 \(M_K(1)\) 退化为“仅计数边”的邻接矩阵。若每个状态对每个输入符号恰有一条出边，则每行和恒为 \(|B_K|\)，从而
+\[
+\Tr(M_K(1)^n)=|B_K|^n,\qquad
+\zeta_K(z,1)=\exp\!\left(\sum_{n\ge 1}\frac{|B_K|^n}{n}z^n\right)=\frac{1}{1-|B_K|z}.
+\]
+因此 primitive 轨道数（按轨道计）为 full shift 的闭式 M\"obius 反演：
+\[
+p_n(1)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,|B_K|^{n/d}.
+\]
+对本文三核的单流输入字母表大小为
+\(
+|B_9|=21,\ |B_{13}|=13,\ |B_{21}|=5
+\)
+（见表 \ref{tab:parallel-addition-kernels-endpoint-primitive}），这解释了为什么核对比必须引入 \(u\)：否则 \(\zeta\) 层面会退化为“只看输入规模”。
+\end{corollary}
+
+\begin{corollary}[多流全局端点的闭式提升（避免直积大图）]\label{cor:par-add-global-lift-endpoints}
+设单流带权邻接矩阵为 \(M_{\mathrm{flow}}(u)\)，同余流条数为 \(m\)（强核 \(m=4\)，弱核 \(m=2\)）。全局块级核满足张量积结构
+\[
+M_{\mathrm{glob}}(u)=M_{\mathrm{flow}}(u)^{\otimes m},
+\qquad
+\Tr(M_{\mathrm{glob}}(u)^n)=\left(\Tr(M_{\mathrm{flow}}(u)^n)\right)^m.
+\]
+因此全局 primitive 分层谱满足
+\[
+B^{\mathrm{glob}}_{n}(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\left(\Tr\!\left(M_{\mathrm{flow}}(u^d)^{n/d}\right)\right)^m,
+\]
+从而端点 \(u\in\{0,1\}\) 的全局谱可由单流闭式直接提升得到（表 \ref{tab:parallel-addition-kernels-endpoint-primitive}）。
+\end{corollary}
+
+做素数影子对比时，计算接口可取为：先计算周期迹 \(a_{K,n}(u)=\Tr(M_K(u)^n)\)，再用 Witt/M\"obius 反演提取 primitive 加权谱
+\[
+B_{K,n}(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{K,n/d}(u^d),
+\]
+而全局块级直积下有 \(a_n^{\mathrm{glob}}(u)=a_n^{\mathrm{flow}}(u)^m\)，因此只需单流即可装配全局的 primitive 谱。
+
+\subsubsection{两变量 \texorpdfstring{$\zeta_K(z,u)$}{zeta(z,u)} 与 primitive 分层谱 \texorpdfstring{$B_n(u)$}{B\_n(u)}}
+端点层给出的是边界基准；真正承载整个核动力学的，是两变量 \(\zeta\)。对单流同步图 \(\Gamma_K\)，以每条边的原子活动度 \(\kappa(e)\in\ZZ_{\ge 0}\) 作为势，定义带权邻接矩阵族
+\[
+M_K(u)_{ij}:=\sum_{e:i\to j}u^{\kappa(e)}\in\ZZ[u].
+\]
+于是两变量 \(\zeta\)-函数写为
+\[
+\zeta_K(z,u)
+:=\exp\!\left(\sum_{n\ge 1}\frac{a_{K,n}(u)}{n}z^n\right)
+=\prod_{\gamma\in\mathrm{Prim}(K)}
+\bigl(1-u^{\kappa(\gamma)}z^{|\gamma|}\bigr)^{-1},
+\]
+其中 \(|\gamma|\) 为 primitive 轨道长度，\(\kappa(\gamma)\) 为轨道总活动度。这里 \(z\) 记录长度，\(u\) 记录 carry 强度；所谓“素数影子”，正是 primitive 轨道在长度与活动度双重分层下形成的 Euler 原子。
+
+若进一步定义 primitive 生成函数
+\[
+\mathcal P_K(z,u):=\sum_{n\ge 1}B_{K,n}(u)z^n,
+\]
+则有标准的 Witt 展开
+\[
+\log \zeta_K(z,u)
+=\sum_{m\ge 1}\frac{1}{m}\,\mathcal P_K(z^m,u^m).
+\]
+这说明 \(\zeta_K\) 与 \(B_{K,n}(u)\) 不是两套数据，而是同一 primitive 分层谱的两种编码：前者适合解析与谱半径分析，后者适合离散长度分层与表格审计。
+
+对 \(K_9\)，单流核在加权后退化为一维闭式：
+\[
+a_{9,n}(u)=(7+14u)^n,
+\qquad
+B_{9,n}(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,\bigl(7+14u^d\bigr)^{n/d}.
+\]
+于是
+\[
+B_{9,1}(u)=7+14u,
+\qquad
+B_{9,2}(u)=21+98u+91u^2.
+\]
+相对地，\(K_{13}\) 与 \(K_{21}\) 不再退化为一维闭式，但其单流 \(B_{K,n}(u)\) 已在附录 \ref{app:sync-kernel-A-compare} 的表 \ref{tab:parallel-addition-kernels-weighted-primitive} 中显式列出。特别地，第一层就已经形成最短可分指纹：
+\[
+B_{9,1}(u)=7+14u,\qquad
+B_{13,1}(u)=3+2u+2u^2+6u^3,\qquad
+B_{21,1}(u)=1+4u.
+\]
+这三式不仅在 \(u=0,1\) 处不同，而且在中间 \(u\)-层的次数结构也已经分叉：\(K_9\) 的第一层只有二项，\(K_{13}\) 已经出现三次活动层，\(K_{21}\) 则给出最瘦的 \(1+4u\) 结构。因而，单看 \(n=1\) 的 primitive 多项式，就足以把三核在活动层上分开；更高 \(n\) 的显式表则提供更细的长度分层指纹。
+
+\subsubsection{压力曲线 \texorpdfstring{$\lambda_K(u)$}{lambda(u)}、端点与 carry 密度}\label{subsec:kernel-pressure-curve}
+若说 \(\zeta_K(z,u)\) 编码了全部 primitive 轨道，那么
+\[
+\lambda_K(u):=\rho(M_K(u))
+\]
+便提取出其中的 Perron 主尺度。沿对数温标 \(\theta=\log u\) 重新参数化，压力函数可写为
+\[
+P_K(\theta):=\log \lambda_K(e^\theta),
+\]
+而平均 carry 密度则由
+\[
+\alpha_K(u):=u\frac{\mathrm{d}}{\mathrm{d}u}\log\lambda_K(u)=P'_K(\log u)
+\]
+给出；相应的方差密度由 \(P''_K(\log u)\) 控制。于是，\(\lambda_K(u)\) 是连接离散 primitive 表与连续统计量的中枢对象。
+
+\begin{proposition}[端点、单调性与多流提升]\label{prop:kernel-pressure-endpoints}
+设 \(\kappa(e)\in\ZZ_{\ge 0}\)，并令 \(A_0:=M_K(0)\) 为 carry-free 骨架邻接矩阵。
+则：
+\begin{enumerate}
+  \item \textbf{端点 \(u=0\)}：\(\lambda_K(0)=\rho(A_0)\)；
+  \item \textbf{端点 \(u=1\)}：若在线机对每个输入符号都存在一条出边（确定性完备读入），则 \(\lambda_K(1)=|B|\)；
+  \item \textbf{单调性/连续性}：\(u\mapsto \lambda_K(u)\) 在 \([0,1]\) 上非减且连续；
+  \item \textbf{多流提升}：若全局块级由 \(m\) 条同构同余流张量装配，则
+  \(
+  \lambda^{\mathrm{glob}}_K(u)=\lambda^{\mathrm{flow}}_K(u)^m
+  \)
+  且
+  \(
+  P^{\mathrm{glob}}_K(u)=m\,P^{\mathrm{flow}}_K(u)
+  \)。
+\end{enumerate}
+\end{proposition}
+
+由 carry-free 骨架分类与 \(u=1\) 的总字母表大小，可直接得到单流端点值
+\[
+\lambda_9(0)=7,\qquad \lambda_{13}(0)=3,\qquad \lambda_{21}(0)=\varphi,
+\]
+以及
+\[
+\lambda_9(1)=21,\qquad \lambda_{13}(1)=13,\qquad \lambda_{21}(1)=5.
+\]
+因此，\(\lambda_K(0)\) 是纯 carry-free 语法的 Perron 根，而 \(\lambda_K(1)\) 是无偏计数下的总复杂度尺度。对 \(K_9\)，压力曲线甚至是完全闭式的：
+\[
+\lambda_9(u)=7+14u,
+\qquad
+P_9(\theta)=\log(7+14e^\theta),
+\qquad
+\alpha_9(u)=\frac{2u}{1+2u}.
+\]
+在无偏点 \(u=1\) 上，\(\alpha_9(1)=2/3\)。进一步的方差密度与大偏差率函数将在推论 \ref{cor:k9-integrable-pressure-ldp} 中以闭式给出。
+
+\begin{remark}[carry 密度与压力导数（热力学形式）]
+把 \(\kappa\) 视为边势并令 \(\theta=\log u\)，则 \(P_K(\theta)=\log\rho(M_K(e^\theta))\) 是有限图移位的压力函数。
+在不可约情形，\(P_K\) 在 \((-\infty,0]\) 上可微，并满足
+\[
+u\frac{\mathrm{d}}{\mathrm{d}u}\log\lambda_K(u)
+=\frac{\mathrm{d}}{\mathrm{d}\theta}P_K(\theta)
+=\mathbb{E}_{\mu_u}[\kappa],
+\]
+其中 \(\mu_u\) 为势 \(\theta\kappa\) 的平衡态。这给出一个与“均匀输入驱动”不同但可比较的 carry 密度读出：前者来自外加输入分布，后者来自压力最优化，因此在指纹层更稳定。
+\end{remark}
+
+\subsubsection{核的热力学形式：零温基态、CLT/LDP 与加权 prime-orbit 定理}\label{subsec:kernel-thermo}
+到这里，核比较已经不应再被理解为单纯的 combinatorics，而应被理解为一个有限状态热力学系统。对固定 \(u>0\)，由 Perron--Frobenius 理论可在单流边移位上得到唯一平衡态 \(\mu_{K,u}\)。若 \(S_n=\sum_{t=1}^{n}\kappa(e_t)\) 表示前 \(n\) 步总活动度，则压力函数控制其一维统计量；\(u\) 的变化不仅改变 primitive 计数的权重，也改变平衡态中典型 carry 密度、涨落规模与大偏差成本。换言之，\(u\) 不是纯粹形式参数，而是一个真正的温度门。
+
+\paragraph{势能与温度参数化}
+对每条边 \(e\) 取势能 \(\kappa(e)\in\ZZ_{\ge 0}\)（原子 carry 强度），并令
+\[
+u=e^{-\beta}\in(0,1],\qquad \beta\ge 0.
+\]
+则带权矩阵 \(M_K(u)\) 等价于局部常势 \(\phi_\beta:=-\beta\kappa\) 的有限维转移算子；\(P_K(\theta)=\log\rho(M_K(e^\theta))\) 即相应压力（自由能密度）。
+
+\begin{proposition}[平衡态的显式 PF 公式（有限图/局部常势）]\label{prop:kernel-equilibrium-pf}
+设 \(u\in(0,1]\) 且 \(M_K(u)\) 不可约。令 \(\lambda=\lambda_K(u)\)，取 Perron--Frobenius 的左右特征向量 \(r,\ell>0\) 满足
+\(
+M_K(u)\,r=\lambda r,\ \ell^{\mathsf T}M_K(u)=\lambda \ell^{\mathsf T}
+\)
+并归一化 \(\ell^{\mathsf T}r=1\)。则存在一个在边移位上的一阶 Markov 平衡态 \(\mu_u\)，其转移概率可写成
+\[
+\mathbb{P}_{\mu_u}(i\to j)=\frac{M_K(u)_{ij}\,r_j}{\lambda r_i}.
+\]
+并且在该平衡态下，
+\(
+\partial_\theta \log\lambda_K(e^\theta)=\mathbb{E}_{\mu_{e^\theta}}[\kappa]
+\)
+成立。
+\end{proposition}
+
+\paragraph{零温极限（ground state）}
+当 \(\beta\to\infty\)（即 \(u\to 0\)）时，势能 \(-\beta\kappa\) 强制系统选择最小平均 carry 的轨道集合。对有限字母表上的局部常势，一维 Gibbs 态在零温下收敛到一个由有限并 SFT 支撑的极限测度；在本文情形中，这个极限正好压回 carry-free 骨架。
+
+\begin{theorem}[零温选择落在 carry-free 子移位]\label{thm:kernel-zero-temp}
+对单流核的边移位空间，取局部常势 \(\phi_\beta:=-\beta\kappa\) 并令 \(\mu_\beta\) 为其 Gibbs 平衡态。则当 \(\beta\to+\infty\) 时，\(\mu_\beta\) 在弱-\(\ast\) 拓扑下收敛到一个极限测度 \(\mu_0\)；并且 \(\mu_0\) 支撑在 carry-free 子图（\(\kappa=0\) 的边）生成的有限并 SFT 上。若 carry-free 子图只有一个本质强连通分量，则 \(\mu_0\) 为该分量的 Parry（最大熵）测度。
+\end{theorem}
+
+\begin{corollary}[最小字母表核的零温基态为 Zeckendorf 语法]\label{cor:kernel-21-ground-state}
+对 \(21\)-local 最小字母表核，carry-free 骨架与黄金均值 shift 共轭（定理 \ref{thm:carry-free-zeta-trichotomy}），因此零温极限 \(\mu_0\) 等于黄金均值 shift 的 Parry 最大熵测度。特别地，“输出 \(1\)”的极限密度为
+\[
+\mu_0(1)=\frac{1}{\varphi+2}\approx 0.276393,
+\]
+与注 \ref{prop:parry-measure-golden} 的显式公式一致。
+\end{corollary}
+
+\begin{remark}[零温谱的“可微指纹”：从 \texorpdfstring{$u=0$}{u=0} 骨架读出一阶响应]\label{rem:kernel-zero-temp-differential-fingerprint}
+除“零温极限支撑在哪里”外，更细的机制差异可在 \(u=0\) 骨架上以导数形式直接读出。具体地，把单流带权矩阵写为
+\[
+M_K(u)=A_0+uA_1+u^2A_2+\cdots,
+\]
+并假设 carry-free 骨架 \(A_0\) 的 Perron 根 \(\lambda_0\) 为简单特征值，则谱半径 \(\lambda_K(u)=\rho(M_K(u))\) 在 \(u=0\) 的邻域解析，且一阶系数 \(c_1\) 具有显式 PF 微扰公式（见附录 \ref{app:sync-kernel-A-compare} 的命题 \ref{prop:lambda-linear-response}）：
+\[
+\lambda_K(u)=\lambda_0+c_1u+O(u^2),
+\qquad
+c_1=\frac{\ell^{\mathsf T}A_1 r}{\ell^{\mathsf T}r}.
+\]
+因此平均 carry 密度满足
+\[
+\mathbb{E}_u[\kappa]
+=u\frac{\mathrm{d}}{\mathrm{d}u}\log\lambda_K(u)
+=\frac{c_1}{\lambda_0}u+O(u^2),
+\]
+这使得“无需跑到中间温度，也能在 \(u=0\) 的骨架上区分机制”的审计接口在本文口径下完全闭合。
+\end{remark}
+
+\paragraph{carry 统计：CLT 与大偏差（固定温度）}
+在 \(u\in(0,1)\) 固定时，\(\mu_u\) 是有限状态 Markov 平衡态；对边可观测量 \(\kappa\) 的部分和
+\(
+S_n:=\sum_{t=1}^{n}\kappa(e_t)
+\)
+可直接应用有限状态 Markov 链的极限定理，其均值与方差由压力导数给出。
+
+\begin{proposition}[carry 的 CLT/LDP 指纹]\label{prop:kernel-clt-ldp}
+设 \(u\in(0,1)\) 且 \(M_K(u)\) 原始。令 \(\theta=\log u\)，并记
+\(
+P(\theta):=\log\rho(M_K(e^\theta))
+\)。
+则：
+\begin{enumerate}
+  \item \textbf{（LLN/均值）} \(\lim_{n\to\infty}\frac{1}{n}S_n=P'(\theta)\)，几乎处处且在 \(L^1\) 成立；
+  \item \textbf{（CLT）} 若 \(\kappa\) 非共边界，则
+  \(
+  \frac{S_n-nP'(\theta)}{\sqrt{n}}
+  \)
+  在 \(\mu_u\) 下收敛到均值 \(0\)、方差 \(P''(\theta)\) 的正态分布；
+  \item \textbf{（LDP）} 经验均值 \(S_n/n\) 满足大偏差原理，其速率函数为 Legendre 变换
+  \[
+  I(\alpha)=\sup_{t\in\RR}\bigl(t\alpha-(P(\theta+t)-P(\theta))\bigr).
+  \]
+\end{enumerate}
+\end{proposition}
+
+\begin{corollary}[\texorpdfstring{$K_9$}{K9} 的闭式压力曲线：CLT 方差密度与 LDP 率函数全显式]\label{cor:k9-integrable-pressure-ldp}
+对强核 \(K_9\) 的单流编译（附录 \ref{app:sync-kernel-A-compare}），有严格线性
+\[
+\lambda_9(u)=7+14u.
+\]
+因此压力（取 \(\theta=\log u\)）为
+\[
+P_9(\theta)=\log\lambda_9(e^\theta)=\log\!\bigl(7+14e^\theta\bigr).
+\]
+其导数给出 carry 密度与方差密度：
+\[
+P_9'(\theta)=\frac{2e^\theta}{1+2e^\theta},
+\qquad
+P_9''(\theta)=\frac{2e^\theta}{(1+2e^\theta)^2}.
+\]
+从而
+\[
+\mathbb{E}_{u}[\kappa]=u\frac{\mathrm{d}}{\mathrm{d}u}\log\lambda_9(u)=\frac{2u}{1+2u}.
+\]
+并且对任意基准 \(\theta_0=\log u_0\)，记
+\[
+\alpha_0:=P_9'(\theta_0)=\frac{2e^{\theta_0}}{1+2e^{\theta_0}}\in(0,1).
+\]
+则经验均值 \(\bar\kappa_n=S_n/n\) 在 \(\theta_0\) 平衡态下的率函数可写为闭式
+\[
+I_{\theta_0}(\alpha)
+=\alpha\log\frac{\alpha}{\alpha_0}+(1-\alpha)\log\frac{1-\alpha}{1-\alpha_0},
+\qquad \alpha\in[0,1],
+\]
+其中端点按连续延拓理解。换言之，\(K_9\) 的整条压力曲线、均值曲线、方差曲线与大偏差率函数都可在同一个一维闭式中同时审计。
+\end{corollary}
+
+\paragraph{加权 prime-orbit 定理（“素数影子”的热力学主项）}
+对
+\[
+B_n(u)=\sum_{|\gamma|=n,\ \gamma\ \mathrm{primitive}}u^{\kappa(\gamma)},
+\]
+由迹公式 \(a_n(u)=\Tr(M_K(u)^n)\) 与 M\"obius 反演可把主项与误差直接追踪到谱隙。
+
+\begin{theorem}[加权 primitive 轨道计数与指数误差]\label{thm:kernel-weighted-prime-orbit}
+设 \(u\in(0,1]\) 且 \(M_K(u)\) 原始，令 \(\lambda_1(u)=\lambda_K(u)\)，并令 \(\lambda_2(u)\) 为其余特征值的最大模。则
+\[
+B_n(u)=\frac{\lambda_1(u)^n}{n}+O\!\left(\frac{|\lambda_2(u)|^n}{n}\right)\qquad(n\to\infty).
+\]
+因此 \(\lambda_K(u)\) 与谱隙比 \( |\lambda_2(u)|/\lambda_1(u)\) 构成核的素数热力学指纹。
+\end{theorem}
+
+这条主项说明，primitive 分层谱的主增长率由 Perron 根控制，而误差指数由谱隙控制；热力学主项、primitive 轨道增长与误差衰减因此不再是分离对象，而是同一谱结构的三个面向。更完整的脚本复现、状态机构图与数值输出见附录 \ref{app:sync-kernel-A-compare} 以及附录中的表 \ref{tab:parallel-addition-kernels-weighted-primitive}、表 \ref{tab:parallel-addition-kernels-zeta-series}。下面转向有限群标签方向，把这一热力学主链按同余类进一步细化。

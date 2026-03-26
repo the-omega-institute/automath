@@ -1,0 +1,63 @@
+\begin{theorem}[逐纤维自由对合的计数与外部信息下界：完美匹配熵]\label{thm:fiberwise-free-involution-matching-entropy}
+设 \(p:E\twoheadrightarrow B\) 为有限到一映射，令 \(E_b:=p^{-1}(b)\) 且 \(d_b:=|E_b|\)。
+称 \(\tau:E\to E\) 为\emph{逐纤维自由对合}，若满足：
+\[
+\tau^2=\mathrm{id},\qquad p\circ\tau=p,\qquad \text{并且}\qquad \tau|_{E_b}\ \text{无不动点}\ \ (\forall b\in B).
+\]
+记全部逐纤维自由对合之集合为 \(\mathrm{Inv}_{\mathrm{free}}(p)\)。
+则：
+\begin{enumerate}
+  \item \textbf{（奇数阻断）}若存在 \(b\in B\) 使 \(d_b\) 为奇数，则 \(\mathrm{Inv}_{\mathrm{free}}(p)=\varnothing\)。
+  \item \textbf{（精确计数）}若对所有 \(b\in B\) 都有 \(d_b\) 为偶数，写 \(d_b=2r_b\)，则
+  \[
+  \#\mathrm{Inv}_{\mathrm{free}}(p)
+  =\prod_{b\in B}\frac{(2r_b)!}{2^{r_b}\,r_b!}
+  =\prod_{b\in B}(2r_b-1)!!.
+  \]
+  \item \textbf{（外部信息下界）}任何确定性协议若要在不改变 \(p\) 的前提下指定一条逐纤维自由对合，
+  其外部可变信息量（以比特计）满足下界
+  \[
+  \mathsf I_{\min}\ \ge\ \log_2\#\mathrm{Inv}_{\mathrm{free}}(p)
+  =\sum_{b\in B}\log_2\!\bigl((2r_b-1)!!\bigr).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对每个 \(b\)，限制 \(\tau_b:=\tau|_{E_b}\) 是 \(E_b\) 上的一个无不动点对合。
+该结构等价于将 \(E_b\) 划分为若干个无序二元组（完美匹配）。
+\par
+若 \(|E_b|\) 为奇数，则有限集上不存在完美匹配，故 (1) 成立。
+\par
+若 \(|E_b|=2r_b\)，则完美匹配的数目为经典计数
+\[
+\frac{(2r_b)!}{2^{r_b}\,r_b!}=(2r_b-1)!!,
+\]
+因为先对 \(2r_b\) 个元素排列，再按相邻配对并除去每对内部交换与各对之间置换的冗余。
+各纤维相互独立，故总数为上述乘积，得到 (2)。
+\par
+对 (3)，若某一外部寄存器/证书在所有输入情形下仅能取 \(\mathcal R\) 个不同状态，则其最多可区分 \(|\mathcal R|\) 种选择。
+要实现对 \(\#\mathrm{Inv}_{\mathrm{free}}(p)\) 个不同对合的确定性选择，必须有 \(|\mathcal R|\ge \#\mathrm{Inv}_{\mathrm{free}}(p)\)；
+换算为比特即得 \(\mathsf I_{\min}\ge \log_2\#\mathrm{Inv}_{\mathrm{free}}(p)\)。证毕。
+\end{proof}
+
+\begin{corollary}[规范群中心中的二值跳跃与 $2$-挠元]\label{cor:autp-center-z2-by-twofibers}
+设 \(p:E\twoheadrightarrow B\) 如定理 \ref{thm:fiberwise-free-involution-matching-entropy}，并令其规范群（逐纤维全对称）
+\[
+\Aut(p):=\{g\in\Sym(E):\ p\circ g=p\}\ \cong\ \prod_{b\in B} S_{d_b}.
+\]
+令 \(N_2:=\#\{b\in B:\ d_b=2\}\)。
+则中心满足
+\[
+Z(\Aut(p))\ \cong\ (\ZZ_2)^{N_2},
+\]
+并由每个 \(2\)-点纤维上的换位元生成。
+特别地，若 \(\tau\) 为逐纤维自由对合且满足 \(g\tau=\tau g\) 对所有 \(g\in\Aut(p)\) 成立，则 \(\tau\) 必仅在 \(2\)-点纤维上非平凡；因此此类 \(\tau\) 存在当且仅当 \(N_2>0\)，并与“选择若干条 \(2\)-点纤维并在其上交换”的数据一一对应。
+\end{corollary}
+\begin{proof}
+由分解 \(\Aut(p)\cong \prod_b S_{d_b}\) 得 \(Z(\Aut(p))\cong\prod_b Z(S_{d_b})\)。
+而 \(Z(S_1)=\{e\}\)、\(Z(S_2)=S_2\cong\ZZ_2\)、且对 \(d\ge 3\) 有 \(Z(S_d)=\{e\}\)，故中心仅来自 \(d_b=2\) 的纤维并给出所述同构。
+若 \(\tau\) 与 \(\Aut(p)\) 中所有逐纤维置换可交换，则其在每条纤维上的限制 \(\tau_b\) 必属 \(Z(S_{d_b})\)；
+结合“无不动点”条件，除 \(d_b=2\) 外只能为恒等，而 \(d_b=2\) 时唯一非平凡中心元即换位且无不动点。
+由此得到存在性与分类断言。证毕。
+\end{proof}
+

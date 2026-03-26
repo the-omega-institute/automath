@@ -1,0 +1,264 @@
+\paragraph{仿射复合、条带延拓与整数采样：差核 \texorpdfstring{$\frac{2}{4+(a-b)^2}$}{2/(4+(a-b)^2)} 的离散化接口}
+本段在命题 \ref{prop:cdim-kernel-rkhs-feature-map} 的显式特征表示之上，给出三类可直接编译为离线证书的接口：仿射复合的尺度二分律与精确范数、最大条带 \(|\Im z|<1\) 的全纯延拓与尖锐点评价常数、以及整数平移核族的精确 Riesz 界与整数采样的稳定可逆性。
+
+\begin{proposition}[仿射复合算子的尺度二分律与精确范数]\label{prop:cdim-kernel-affine-composition-norm}
+令 \(\mathcal H_K\) 为命题 \ref{prop:cdim-kernel-rkhs-feature-map} 中由核
+\(
+K(a,b)=\frac{2}{4+(a-b)^2}
+\)
+生成的再生核 Hilbert 空间。
+对 \(\lambda\in\RR\setminus\{0\}\)、\(\beta\in\RR\) 定义仿射复合算子
+\[
+(C_{\lambda,\beta}f)(a):=f(\lambda a+\beta).
+\]
+则成立：
+\begin{enumerate}
+  \item 若 \(0<|\lambda|\le 1\)，则 \(C_{\lambda,\beta}:\mathcal H_K\to\mathcal H_K\) 有界，且
+  \[
+  \boxed{\ \|C_{\lambda,\beta}\|=|\lambda|^{-1/2}\ }.
+  \]
+  \item 若 \(|\lambda|>1\)，则 \(C_{\lambda,\beta}\) 在 \(\mathcal H_K\) 上不有界。
+  \item \(\beta\) 不影响范数：\(\|C_{\lambda,\beta}\|=\|C_{\lambda,0}\|\)。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+由 \(K(a+\beta,b+\beta)=K(a,b)\) 可知平移算子 \(T_\beta f(\cdot)=f(\cdot+\beta)\) 在 \(\mathcal H_K\) 上为酉；由 \(K(-a,-b)=K(a,b)\) 可知反射算子 \(Rf(\cdot)=f(-\cdot)\) 亦为酉。
+因此 \(\|C_{\lambda,\beta}\|=\|C_{|\lambda|,0}\|\)，只需处理 \(\lambda>0\) 且 \(\beta=0\)。
+\par
+由命题 \ref{prop:cdim-kernel-rkhs-feature-map}，对任意 \(w\in L^2(\RR,\dd\xi)\) 定义
+\[
+f_w(a):=\langle w,\Phi(a)\rangle_{\mathfrak F},
+\qquad
+\Phi(a)(\xi)=2^{-1/2}e^{-|\xi|}e^{\mathrm{i}a\xi}.
+\]
+若 \(f_w\equiv 0\)，则对所有 \(a\in\RR\) 有
+\(
+\int_{\RR}w(\xi)e^{-|\xi|}e^{-\mathrm{i}a\xi}\,\dd\xi=0
+\)。
+由于 \(w(\xi)e^{-|\xi|}\in L^1(\RR)\)，其 Fourier 变换处处为零推出 \(w(\xi)e^{-|\xi|}=0\) 几乎处处，从而 \(w=0\)。
+因此表示 \(f\leftrightarrow w\) 唯一，且 \(\|f_w\|_{\mathcal H_K}=\|w\|_{2}\)。
+\par
+对 \(\lambda>0\) 计算
+\[
+(C_{\lambda,0}f_w)(a)=f_w(\lambda a)
+=2^{-1/2}\int_{\RR}w(\xi)e^{-|\xi|}e^{-\mathrm{i}\lambda a\xi}\,\dd\xi.
+\]
+作变量代换 \(\eta=\lambda\xi\) 得
+\[
+(C_{\lambda,0}f_w)(a)
+=2^{-1/2}\int_{\RR}\Bigl(\lambda^{-1}e^{-(\lambda^{-1}-1)|\eta|}w(\eta/\lambda)\Bigr)\,e^{-|\eta|}e^{-\mathrm{i}a\eta}\,\dd\eta,
+\]
+因此 \(C_{\lambda,0}f_w=f_{T_\lambda w}\)，其中线性算子 \(T_\lambda\) 在 \(L^2(\RR)\) 上定义为
+\[
+(T_\lambda w)(\eta):=\lambda^{-1}e^{-(\lambda^{-1}-1)|\eta|}\,w(\eta/\lambda).
+\]
+于是
+\[
+\|C_{\lambda,0}f_w\|_{\mathcal H_K}^2
+=\|T_\lambda w\|_2^2
+=\lambda^{-1}\int_{\RR}|w(\xi)|^2e^{2(\lambda-1)|\xi|}\,\dd\xi.
+\]
+当 \(0<\lambda\le 1\) 时，\(e^{2(\lambda-1)|\xi|}\le 1\)，从而
+\(
+\|C_{\lambda,0}\|\le \lambda^{-1/2}
+\)。
+取 \(w_\varepsilon:=\mathbf 1_{[-\varepsilon,\varepsilon]}/\sqrt{2\varepsilon}\) 则
+\[
+\frac{\|C_{\lambda,0}f_{w_\varepsilon}\|_{\mathcal H_K}^2}{\|f_{w_\varepsilon}\|_{\mathcal H_K}^2}
+=\lambda^{-1}\cdot\frac{1}{2\varepsilon}\int_{-\varepsilon}^{\varepsilon}e^{2(\lambda-1)|\xi|}\,\dd\xi
+\xrightarrow[\varepsilon\downarrow 0]{}\lambda^{-1},
+\]
+故 \(\|C_{\lambda,0}\|\ge \lambda^{-1/2}\)，从而 \(\|C_{\lambda,0}\|=\lambda^{-1/2}\)。
+\par
+当 \(\lambda>1\) 时，取 \(w_R:=\mathbf 1_{[R,R+1]}\)（\(R\to\infty\)）得
+\[
+\frac{\|C_{\lambda,0}f_{w_R}\|_{\mathcal H_K}^2}{\|f_{w_R}\|_{\mathcal H_K}^2}
+=\lambda^{-1}\frac{\int_{R}^{R+1}e^{2(\lambda-1)\xi}\,\dd\xi}{\int_{R}^{R+1}1\,\dd\xi}
+\xrightarrow[R\to\infty]{}\infty,
+\]
+故 \(C_{\lambda,0}\) 不有界。证毕。
+\end{proof}
+
+\begin{proposition}[条带解析延拓与尖锐点评价常数]\label{prop:cdim-kernel-strip-extension-eval}
+令条带域
+\[
+\mathbb S:=\{z\in\CC:\ |\Im z|<1\},
+\]
+并定义核
+\[
+K_{\mathbb S}(z,w):=\frac{2}{4+(z-\overline w)^2}\qquad(z,w\in\mathbb S).
+\]
+则：
+\begin{enumerate}
+  \item \(K_{\mathbb S}\) 为 \(\mathbb S\) 上正定核，诱导一个全纯--反全纯的再生核 Hilbert 空间 \(\mathcal A(\mathbb S)\)。
+  \item 限制映射 \(R:\mathcal A(\mathbb S)\to\mathcal H_K\)、\(Rf=f|_{\RR}\) 为等距同构；从而每个 \(f\in\mathcal H_K\) 唯一延拓为 \(\mathbb S\) 上的全纯函数（仍记为 \(f\)）。
+  \item 对任意 \(y\in(-1,1)\) 与任意 \(x\in\RR\) 有尖锐点评价
+  \[
+  \boxed{\;
+  |f(x+\mathrm{i}y)|\le \frac{1}{\sqrt{2(1-y^2)}}\,\|f\|_{\mathcal H_K}\;}
+  \]
+  且常数最优。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+沿用命题 \ref{prop:cdim-kernel-rkhs-feature-map} 的特征空间 \(\mathfrak F=L^2(\RR,\dd\xi)\)，并对 \(z=x+\mathrm{i}y\in\mathbb S\) 定义
+\[
+\Phi(z)(\xi):=2^{-1/2}e^{-|\xi|}e^{\mathrm{i}z\xi}.
+\]
+当且仅当 \(|y|<1\) 时，\(\Phi(z)\in \mathfrak F\)；并且对任意 \(z,w\in\mathbb S\) 有
+\[
+\langle \Phi(z),\Phi(w)\rangle_{\mathfrak F}
+=\frac12\int_{\RR}e^{-2|\xi|}e^{\mathrm{i}\xi(z-\overline w)}\,\dd\xi
+=\frac{2}{4+(z-\overline w)^2}
+=K_{\mathbb S}(z,w).
+\]
+由 Moore--Aronszajn 构造可得 \(K_{\mathbb S}\) 正定并诱导 \(\mathcal A(\mathbb S)\)，且 \(z\mapsto\Phi(z)\) 的全纯性给出 \(\mathcal A(\mathbb S)\) 的全纯--反全纯结构。
+当 \(z,w\in\RR\) 时 \(K_{\mathbb S}(z,w)=K(z,w)\)，故限制映射为等距同构。
+\par
+点评价由 RKHS 基本不等式 \(|f(z)|\le \|f\|\sqrt{K_{\mathbb S}(z,z)}\) 给出；而
+\[
+K_{\mathbb S}(x+\mathrm{i}y,x+\mathrm{i}y)
+=\frac{2}{4+(2\mathrm{i}y)^2}
+=\frac{1}{2(1-y^2)}.
+\]
+取 \(f=K_{\mathbb S}(\cdot,x+\mathrm{i}y)\) 即达等号，故常数最优。证毕。
+\end{proof}
+
+\begin{proposition}[整数平移核族的精确 Riesz 界]\label{prop:cdim-kernel-integer-translate-riesz-bounds}
+沿用命题 \ref{prop:cdim-kernel-rkhs-feature-map} 的核 \(K(a,b)=\frac{2}{4+(a-b)^2}\)，并令
+\[
+k_n:=K(n,0)=\frac{2}{4+n^2}\qquad(n\in\ZZ),
+\qquad
+V:=\overline{\mathrm{span}}\{K(\cdot-n):\ n\in\ZZ\}\subset\mathcal H_K.
+\]
+则 \(\{K(\cdot-n)\}_{n\in\ZZ}\) 为 \(V\) 的 Riesz 基，且对任意有限支撑序列 \(c\in\ell^2(\ZZ)\) 有精确不等式
+\[
+\boxed{\;
+\frac{\pi}{\sinh(2\pi)}\sum_{n\in\ZZ}|c_n|^2
+\ \le\
+\Bigl\|\sum_{n\in\ZZ}c_n\,K(\cdot-n)\Bigr\|_{\mathcal H_K}^2
+\ \le\
+\pi\coth(2\pi)\sum_{n\in\ZZ}|c_n|^2\; }.
+\]
+\end{proposition}
+\begin{proof}
+由再生性质与平移不变性，
+\[
+\Bigl\|\sum_{n}c_nK(\cdot-n)\Bigr\|_{\mathcal H_K}^2
+=\sum_{n,m}c_n\overline{c_m}\,\langle K(\cdot-n),K(\cdot-m)\rangle_{\mathcal H_K}
+=\sum_{n,m}c_n\overline{c_m}\,k_{n-m}.
+\]
+令离散 Fourier 级数 \(\widehat c(\theta):=\sum_{n\in\ZZ}c_ne^{-\mathrm{i}n\theta}\)（\(\theta\in[-\pi,\pi]\)）。
+Toeplitz 卷积在 \(\ell^2(\ZZ)\) 上由离散 Fourier 变换对角化，存在符号
+\[
+S(\theta):=\sum_{n\in\ZZ}k_ne^{-\mathrm{i}n\theta}
+\]
+使得
+\[
+\sum_{n,m}c_n\overline{c_m}\,k_{n-m}
+=\frac{1}{2\pi}\int_{-\pi}^{\pi}|\widehat c(\theta)|^2S(\theta)\,\dd\theta.
+\]
+对 \(a>0\) 记
+\(
+G_a(\theta):=\sum_{n\in\ZZ}\frac{e^{-\mathrm{i}n\theta}}{n^2+a^2}
+\)。
+则 \(G_a\) 为 \(2\pi\)-周期的分布解并在 \((0,2\pi)\) 内光滑，且满足
+\(
+G_a''-a^2G_a=-2\pi\sum_{m\in\ZZ}\delta(\theta-2\pi m)
+\)。
+由偶对称与周期条件可得对 \(\theta\in[-\pi,\pi]\)
+\[
+G_a(\theta)=\frac{\pi}{a}\,\frac{\cosh\!\bigl(a(\pi-|\theta|)\bigr)}{\sinh(a\pi)}.
+\]
+取 \(a=2\) 并注意 \(k_n=2/(n^2+4)\)，得到闭式
+\[
+S(\theta)=\sum_{n\in\ZZ}\frac{2}{n^2+4}e^{-\mathrm{i}n\theta}
+=\pi\,\frac{\cosh\!\bigl(2(\pi-|\theta|)\bigr)}{\sinh(2\pi)}.
+\]
+因此
+\(
+\min_{\theta}S(\theta)=S(\pm\pi)=\pi/\sinh(2\pi)
+\)、
+\(
+\max_{\theta}S(\theta)=S(0)=\pi\coth(2\pi)
+\)。
+再由 Parseval 恒等式
+\(
+\frac{1}{2\pi}\int_{-\pi}^{\pi}|\widehat c(\theta)|^2\,\dd\theta=\sum_{n\in\ZZ}|c_n|^2
+\)
+得所示 Riesz 界，并推出 \(\{K(\cdot-n)\}\) 为 \(V\) 的 Riesz 基。证毕。
+\end{proof}
+
+\begin{proposition}[整数采样的稳定可逆性与对偶核的卷积表示]\label{prop:cdim-kernel-integer-sampling-dual-kernel}
+沿用命题 \ref{prop:cdim-kernel-integer-translate-riesz-bounds} 的子空间 \(V\) 与核族 \(\{K(\cdot-n)\}\)。
+定义采样算子 \(\mathcal S:V\to\ell^2(\ZZ)\) 为 \((\mathcal S f)_n:=f(n)\)。
+则 \(\mathcal S\) 为拓扑同构，且存在唯一对偶核族 \(\{\widetilde K_n\}_{n\in\ZZ}\subset V\) 使
+\[
+f=\sum_{n\in\ZZ}f(n)\,\widetilde K_n
+\qquad\text{（在 \(\mathcal H_K\) 范数下收敛）},
+\]
+并且 \(\widetilde K_n\) 具有平移卷积表示
+\[
+\widetilde K_n=\sum_{m\in\ZZ}q_{n-m}\,K(\cdot-m),
+\]
+其中 \(q\in\ell^1(\ZZ)\) 为
+\(
+Q(\theta):=1/S(\theta)
+\)
+的 Fourier 系数（\(S\) 见命题 \ref{prop:cdim-kernel-integer-translate-riesz-bounds}）。
+此外条件数由精确 Riesz 界给出：
+\[
+\boxed{\;
+\|\mathcal S\|^2=\pi\coth(2\pi),
+\qquad
+\|\mathcal S^{-1}\|^2=\frac{\sinh(2\pi)}{\pi}\; }.
+\]
+\end{proposition}
+\begin{proof}
+由再生性质 \(f(n)=\langle f,K(\cdot-n)\rangle_{\mathcal H_K}\)，\(\mathcal S\) 即 \(\{K(\cdot-n)\}\) 的分析算子。
+命题 \ref{prop:cdim-kernel-integer-translate-riesz-bounds} 表明 \(\{K(\cdot-n)\}\) 为 \(V\) 的 Riesz 基，故分析算子 \(\mathcal S\) 为同构且
+\(
+\|\mathcal S\|^2=B
+\)、
+\(
+\|\mathcal S^{-1}\|^2=A^{-1}
+\)
+（其中 \(A=\pi/\sinh(2\pi)\)、\(B=\pi\coth(2\pi)\)）。
+\par
+对偶基的存在唯一性由 Riesz 基一般理论给出。
+另一方面，Gram 作用在 \(\ell^2(\ZZ)\) 上为卷积算子，其 Fourier 乘子为 \(S(\theta)\)，逆算子乘子为 \(Q(\theta)=1/S(\theta)\)。
+因此对偶核族在系数层的逆卷积核即为 \(q\) 的 Fourier 系数，从而得到 \(\widetilde K_n=\sum_m q_{n-m}K(\cdot-m)\)。
+由 \(S\) 的闭式可知 \(Q\) 在 \([-\pi,\pi]\) 上为分段 \(C^1\) 且有界变差，故 Fourier 系数满足 \(q_n=O(n^{-2})\)，从而 \(q\in\ell^1(\ZZ)\)，级数在 \(\mathcal H_K\) 范数下收敛。证毕。
+\end{proof}
+
+\begin{proposition}[Gram 卷积算子的精确谱区间与尖锐性实现]\label{prop:cdim-kernel-gram-convolution-spectrum}
+令 \(G:\ell^2(\ZZ)\to\ell^2(\ZZ)\) 为卷积算子
+\[
+(Gc)_n:=\sum_{m\in\ZZ}k_{n-m}c_m,
+\qquad
+k_n=\frac{2}{4+n^2}.
+\]
+则
+\[
+\boxed{\;
+\mathrm{Spec}(G)=\Bigl[\frac{\pi}{\sinh(2\pi)},\ \pi\coth(2\pi)\Bigr]\; }.
+\]
+并且存在单位向量序列 \(\{c^{(N)}\}\subset\ell^2(\ZZ)\) 使
+\(
+\langle c^{(N)},Gc^{(N)}\rangle\to \pi\coth(2\pi)
+\)，亦存在单位向量序列使极限等于 \(\pi/\sinh(2\pi)\)。
+\end{proposition}
+\begin{proof}
+离散 Fourier 变换将 \(G\) 对角化为乘子算子：\(\widehat{Gc}(\theta)=S(\theta)\widehat c(\theta)\)，其中 \(S\) 为命题 \ref{prop:cdim-kernel-integer-translate-riesz-bounds} 的符号。
+由于 \(S\) 连续且取值于闭区间 \([\min S,\max S]\)，谱等于本质值域，遂得到所示谱区间。
+\par
+取 \(|\widehat c^{(N)}|^2\) 为集中于 \(\theta_0\in\{0,\pi\}\) 的 \(L^1\)-归一逼近单位（例如 Fej\'er 型核的平移），则
+\(
+\int |\widehat c^{(N)}|^2S\to S(\theta_0)
+\)
+从而 \(\langle c^{(N)},Gc^{(N)}\rangle\to S(\theta_0)\)。
+取 \(\theta_0=0\) 与 \(\theta_0=\pi\) 分别得到上、下端点的尖锐实现。证毕。
+\end{proof}
+
+\endinput
+

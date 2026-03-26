@@ -1,0 +1,490 @@
+\paragraph{fold-\texorpdfstring{$\pi$}{pi} exact Jacobi 宿主的主子压缩、最小 exact compressor 与 Ritz--Wythoff 极点逼近}
+与上一节 finite-support truncation 塔不同，这里不再截断谱支撑，而是直接对 exact compact Jacobi 宿主 \(J_\varphi\) 取 principal compression。
+这样得到的 finite-dimensional scalar host 不再只是从下方单调逼近 odd Bernoulli tail，而是在一个精确长度阈值之前完全无损。
+更进一步，这条 principal compression 层级具有最优维数、首个失配项的唯一回路公式，以及沿 Wythoff 双梯的外侧单调 pole convergence。
+
+沿用定理~\ref{thm:xi-time-part9zbe-foldpi-canonical-compact-jacobi}、
+\ref{thm:xi-time-part9zbe-foldpi-compact-determinant-sampling}、
+\ref{thm:xi-time-part9zbf-foldpi-wythoff-spectral-order}
+与定理~\ref{thm:xi-time-part9zbg-foldpi-finite-depth-exactness-obstruction} 的记号。
+把 \(J_\varphi\) 写成其标准 Jacobi 形式
+\[
+J_\varphi e_j=\alpha_{j+1}e_{j+1}+\beta_j e_j+\alpha_j e_{j-1},
+\qquad
+\alpha_j>0,\ \alpha_0:=0,\ \beta_j\in\RR,
+\]
+其中 \((e_j)_{j\ge 0}\) 为 \(\ell^2(\NN_0)\) 的标准正交基。
+由定理~\ref{thm:xi-time-part9zbe-foldpi-canonical-compact-jacobi} 的构造，循环向量满足
+\[
+v_0=U(1)=\sqrt{u_0}\,e_0,
+\qquad
+u_k=\langle v_0,J_\varphi^k v_0\rangle
+\qquad (k\ge 0).
+\]
+因此 H.111 的 odd Bernoulli tail 仍可写为
+\[
+\mathcal E_\varphi(s)
+=
+\sum_{k\ge 0}(-1)^k(2k)!\,u_k\,s^{2k+1}.
+\]
+
+\begin{theorem}[principal compression 的 \texorpdfstring{$(2n-1)$}{(2n-1)} 阶精确矩保持]\label{thm:xi-time-part9zbi-principal-compression-exact-moments}
+对每个 \(n\ge 1\)，定义
+\[
+E_n:=\operatorname{span}\{e_0,\dots,e_{n-1}\},
+\qquad
+P_n:\ell^2(\NN_0)\to E_n
+\]
+为正交投影，并令
+\[
+J_\varphi^{[n]}:=P_nJ_\varphi P_n|_{E_n}.
+\]
+则对每个 \(n\ge 1\) 与每个整数 \(0\le k\le 2n-1\)，都有严格恒等式
+\[
+\langle v_0,(J_\varphi^{[n]})^k v_0\rangle
+=
+\langle v_0,J_\varphi^k v_0\rangle
+=
+u_k.
+\]
+换言之，\(n\times n\) 的 principal compression 已能精确保留 exact host 的前 \(2n\) 个 odd Bernoulli layers。
+\end{theorem}
+\begin{proof}
+因为 \(v_0=\sqrt{u_0}\,e_0\)，只需证明
+\[
+\langle e_0,(J_\varphi^{[n]})^k e_0\rangle
+=
+\langle e_0,J_\varphi^k e_0\rangle
+\qquad (0\le k\le 2n-1).
+\]
+
+由 Jacobi 结构，每作用一次 \(J_\varphi\) 最多只会把基指标改变 \(1\)，亦可保持不变。
+因此
+\[
+\langle e_0,J_\varphi^k e_0\rangle
+\]
+可解释为所有长度为 \(k\) 的带权闭路之和，其中每条路径都从层 \(0\) 出发并回到层 \(0\)。
+
+若某条闭路曾到达层 \(n\)，则至少需要 \(n\) 次上行与 \(n\) 次下行，因此总长度至少为 \(2n\)。
+于是当 \(k\le 2n-1\) 时，一切有贡献的闭路都完全落在
+\[
+\{0,1,\dots,n-1\}
+\]
+内。
+而在这一区间上，\(J_\varphi^{[n]}\) 与 \(J_\varphi\) 的边权和留点权完全一致，因此这些闭路的权重与总和都不变。
+故
+\[
+\langle e_0,(J_\varphi^{[n]})^k e_0\rangle
+=
+\langle e_0,J_\varphi^k e_0\rangle
+\]
+对 \(0\le k\le 2n-1\) 成立。
+两边再同乘 \(u_0\) 即得
+\[
+\langle v_0,(J_\varphi^{[n]})^k v_0\rangle=u_k.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[H.111 奇层的 principal compression 精确重建]\label{cor:xi-time-part9zbi-principal-compression-odd-tail-reconstruction}
+定义 principal compression 的有理 Borel 影子
+\[
+\widehat{\mathcal E}_\varphi^{[n]}(\xi)
+:=
+\langle v_0,(I+\xi^2J_\varphi^{[n]})^{-1}v_0\rangle,
+\]
+以及相应的 factorial lift
+\[
+\mathcal E_\varphi^{[n]}(s)
+:=
+\sum_{k\ge 0}
+(-1)^k(2k)!\,
+\langle v_0,(J_\varphi^{[n]})^k v_0\rangle\,
+s^{2k+1}.
+\]
+则当 \(\xi\to 0\) 与 \(s\to 0\) 时分别有
+\[
+\widehat{\mathcal E}_\varphi^{[n]}(\xi)-\widehat{\mathcal E}_\varphi(\xi)
+=
+O(\xi^{4n}),
+\]
+\[
+\mathcal E_\varphi^{[n]}(s)-\mathcal E_\varphi(s)
+=
+O(s^{4n+1}).
+\]
+因此，\(\mathcal E_\varphi^{[n]}\) 与 exact odd tail 在
+\[
+s,\ s^3,\ \dots,\ s^{4n-1}
+\]
+诸项上完全一致；亦即前 \(2n\) 个 H.111 奇层系数被 \(n\)-维主子压缩无损重建。
+\end{corollary}
+\begin{proof}
+由 Neumann 展开，
+\[
+\widehat{\mathcal E}_\varphi(\xi)
+=
+\sum_{k\ge 0}(-1)^k u_k\,\xi^{2k},
+\]
+而
+\[
+\widehat{\mathcal E}_\varphi^{[n]}(\xi)
+=
+\sum_{k\ge 0}
+(-1)^k
+\langle v_0,(J_\varphi^{[n]})^k v_0\rangle
+\xi^{2k}.
+\]
+由定理~\ref{thm:xi-time-part9zbi-principal-compression-exact-moments}，两者在 \(k=0,\dots,2n-1\) 上系数完全一致，故差从 \(\xi^{4n}\) 起始。
+
+同理，
+\[
+\mathcal E_\varphi(s)
+=
+\sum_{k\ge 0}(-1)^k(2k)!\,u_k\,s^{2k+1},
+\]
+\[
+\mathcal E_\varphi^{[n]}(s)
+=
+\sum_{k\ge 0}
+(-1)^k(2k)!\,
+\langle v_0,(J_\varphi^{[n]})^k v_0\rangle
+s^{2k+1}.
+\]
+由同一矩保持结论，二者在 \(k=0,\dots,2n-1\) 上仍逐项相同，因此差从
+\[
+s^{2(2n)+1}=s^{4n+1}
+\]
+开始。
+证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$n$}{n}-维 exact compressor 的最优性]\label{thm:xi-time-part9zbi-minimal-exact-compressor}
+设 \(K\) 为任意自伴算子，\(v\) 为其向量。
+若对某个 \(n\ge 1\) 有
+\[
+\langle v,K^k v\rangle=u_k
+\qquad (0\le k\le 2n-1),
+\]
+则必有
+\[
+\dim \operatorname{span}\{v,Kv,\dots,K^{n-1}v\}\ge n.
+\]
+特别地，不存在任何维数小于 \(n\) 的标量谱宿主，能够精确承载 H.111 的前 \(2n\) 个 odd Bernoulli layers；因此 principal compression \(J_\varphi^{[n]}\) 在维数意义下是最小 exact compressor。
+\end{theorem}
+\begin{proof}
+由定理~\ref{thm:xi-time-part9zbc-foldpi-hankel-strict-positivity}，矩 Hankel 矩阵
+\[
+H_{n-1}:=(u_{i+j})_{0\le i,j\le n-1}
+\]
+严格正定。
+事实上，任取 \(c=(c_0,\dots,c_{n-1})\neq 0\)，令
+\[
+P_c(y):=\sum_{j=0}^{n-1}c_j y^j.
+\]
+由于 \(\mu_\varphi\) 的支撑为无穷互异点集，非零多项式 \(P_c\) 不可能在其支撑上恒零，因此
+\[
+c^\ast H_{n-1}c
+=
+\int |P_c(y)|^2\,\dd\mu_\varphi(y)>0.
+\]
+
+另一方面，若
+\[
+\dim \operatorname{span}\{v,Kv,\dots,K^{n-1}v\}<n,
+\]
+则这些向量线性相关。
+其 Gram 矩阵为
+\[
+\bigl(\langle K^i v,K^j v\rangle\bigr)_{0\le i,j\le n-1}
+=
+\bigl(\langle v,K^{i+j}v\rangle\bigr)_{0\le i,j\le n-1}
+=
+H_{n-1},
+\]
+其中用到了 \(K\) 的自伴性及假设中的矩匹配。
+但线性相关将迫使该 Gram 矩阵奇异，这与 \(H_{n-1}\) 的严格正定矛盾。
+故必有
+\[
+\dim \operatorname{span}\{v,Kv,\dots,K^{n-1}v\}\ge n.
+\]
+
+对 \(J_\varphi^{[n]}\) 而言，\(E_n\) 本身即由
+\[
+e_0,\ J_\varphi^{[n]}e_0,\ \dots,\ (J_\varphi^{[n]})^{n-1}e_0
+\]
+生成，因此其维数正好为 \(n\)。
+故它是最小 exact compressor。证毕。
+\end{proof}
+
+\begin{proposition}[principal rational Borel shadow 的极点几何与 natural strip 保持]\label{prop:xi-time-part9zbi-principal-rational-shadow-natural-strip}
+设 \(J_\varphi^{[n]}\) 的正特征值按降序排列为
+\[
+\lambda_1^{[n]}>\cdots>\lambda_n^{[n]}>0,
+\]
+相应归一化特征向量为 \(v_1^{[n]},\dots,v_n^{[n]}\)，并记
+\[
+w_j^{[n]}:=|\langle v_0,v_j^{[n]}\rangle|^2.
+\]
+则 \(w_j^{[n]}>0\)，并且
+\[
+\widehat{\mathcal E}_\varphi^{[n]}(\xi)
+=
+\sum_{j=1}^{n}\frac{w_j^{[n]}}{1+\lambda_j^{[n]}\xi^2}.
+\]
+因此 \(\widehat{\mathcal E}_\varphi^{[n]}\) 的全部奇点恰为
+\[
+\xi=\pm \frac{i}{\sqrt{\lambda_j^{[n]}}}
+\qquad (1\le j\le n),
+\]
+并满足
+\[
+|\Im \xi|\ge \frac{2\pi}{\varphi}.
+\]
+于是，每一个 finite principal rational shadow 都不会在 natural Borel strip
+\[
+|\Im \xi|<\frac{2\pi}{\varphi}
+\]
+内引入伪奇点。
+\end{proposition}
+\begin{proof}
+有限维谱定理给出
+\[
+(I+\xi^2J_\varphi^{[n]})^{-1}
+=
+\sum_{j=1}^{n}\frac{1}{1+\lambda_j^{[n]}\xi^2}
+\,
+|v_j^{[n]}\rangle\langle v_j^{[n]}|.
+\]
+两侧取 \(v_0\) 的矩，即得
+\[
+\widehat{\mathcal E}_\varphi^{[n]}(\xi)
+=
+\sum_{j=1}^{n}\frac{|\langle v_0,v_j^{[n]}\rangle|^2}{1+\lambda_j^{[n]}\xi^2}.
+\]
+
+下面证明 \(w_j^{[n]}>0\)。
+由 \(v_0=\sqrt{u_0}\,e_0\)，只需证明每个特征向量的第一坐标非零。
+若某个归一化特征向量 \(v=(x_0,\dots,x_{n-1})\) 满足 \(x_0=0\)，则由特征方程首行
+\[
+\alpha_1 x_1+\beta_0 x_0=\lambda x_0
+\]
+得到 \(x_1=0\)。
+再逐行递推，由 \(\alpha_j>0\) 可依次推出 \(x_2=\cdots=x_{n-1}=0\)，与 \(v\neq 0\) 矛盾。
+故每个特征向量第一坐标皆非零，因而 \(w_j^{[n]}>0\)。
+
+又因为 \(J_\varphi^{[n]}\) 是正压缩，
+\[
+0<\lambda_j^{[n]}\le \|J_\varphi^{[n]}\|\le \|J_\varphi\|=\rho_\ast=\frac{\varphi^2}{4\pi^2}.
+\]
+于是
+\[
+\frac{1}{\sqrt{\lambda_j^{[n]}}}
+\ge
+\frac{1}{\sqrt{\rho_\ast}}
+=
+\frac{2\pi}{\varphi}.
+\]
+故全部极点均位于边界之外。
+证毕。
+\end{proof}
+
+\begin{theorem}[唯一越界回路给出的首个失配项精确公式]\label{thm:xi-time-part9zbi-first-mismatch-unique-excursion}
+对每个 \(n\ge 1\)，成立精确恒等式
+\[
+u_{2n}-\langle v_0,(J_\varphi^{[n]})^{2n}v_0\rangle
+=
+u_0(\alpha_1\alpha_2\cdots \alpha_n)^2.
+\]
+等价地，
+\[
+\mathcal E_\varphi(s)-\mathcal E_\varphi^{[n]}(s)
+=
+(4n)!\,u_0(\alpha_1\alpha_2\cdots \alpha_n)^2\,s^{4n+1}
++O(s^{4n+3}).
+\]
+因此，principal compression 对 exact odd tail 的第一次失配，不仅阶数精确可知，而且其系数也被一个单一、唯一、显式的越界回路权重完全控制。
+\end{theorem}
+\begin{proof}
+由定理~\ref{thm:xi-time-part9zbi-principal-compression-exact-moments}，所有 \(k\le 2n-1\) 的矩完全一致。
+现在考察 \(k=2n\)。
+
+在
+\[
+\langle e_0,J_\varphi^{2n}e_0\rangle
+\]
+的闭路展开中，若一条长度 \(2n\) 的闭路曾到达层 \(n\)，则它至少需要 \(n\) 次上行和 \(n\) 次下行。
+由于总长度恰等于 \(2n\)，这迫使该闭路不能包含任何停留，也不能在到达层 \(n\) 之前发生额外回撤。
+故这样的闭路唯一，即
+\[
+0\to 1\to 2\to \cdots\to n\to n-1\to \cdots\to 1\to 0.
+\]
+其权重恰为
+\[
+\alpha_1\alpha_2\cdots\alpha_n\cdot \alpha_n\cdots\alpha_2\alpha_1
+=
+(\alpha_1\alpha_2\cdots\alpha_n)^2.
+\]
+
+其余所有长度 \(2n\) 的闭路若不触及层 \(n\)，则完全落在
+\[
+\{0,1,\dots,n-1\}
+\]
+内，因此在压缩后仍完整保留。
+于是
+\[
+\langle e_0,J_\varphi^{2n}e_0\rangle
+-
+\langle e_0,(J_\varphi^{[n]})^{2n}e_0\rangle
+=
+(\alpha_1\cdots\alpha_n)^2.
+\]
+两边同乘 \(u_0\) 即得
+\[
+u_{2n}-\langle v_0,(J_\varphi^{[n]})^{2n}v_0\rangle
+=
+u_0(\alpha_1\cdots\alpha_n)^2.
+\]
+
+最后，把这一差值代入
+\[
+\mathcal E_\varphi(s)
+=
+\sum_{k\ge 0}(-1)^k(2k)!\,u_k\,s^{2k+1},
+\]
+并注意在 \(k=2n\) 时符号为正，便得到
+\[
+\mathcal E_\varphi(s)-\mathcal E_\varphi^{[n]}(s)
+=
+(4n)!\,u_0(\alpha_1\cdots\alpha_n)^2\,s^{4n+1}
++O(s^{4n+3}).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[Ritz--Wythoff 收敛定理]\label{thm:xi-time-part9zbi-ritz-wythoff-convergence}
+设
+\[
+\lambda_1>\lambda_2>\cdots>0
+\]
+为 exact host \(J_\varphi\) 的非零特征值降序排列；
+对每个 \(n\ge 1\)，设
+\[
+\lambda_1^{[n]}>\cdots>\lambda_n^{[n]}>0
+\]
+为 principal compression \(J_\varphi^{[n]}\) 的正特征值降序排列。
+则对每个固定 \(j\ge 1\)，当 \(n\ge j\) 时有
+\[
+\lambda_j^{[n]}\uparrow \lambda_j
+\qquad (n\to\infty).
+\]
+从而，若定义 principal rational shadow 的正虚轴极点
+\[
+p_j^{[n]}:=\frac{1}{\sqrt{\lambda_j^{[n]}}},
+\qquad
+p_j:=\frac{1}{\sqrt{\lambda_j}},
+\]
+则
+\[
+p_j^{[n]}\downarrow p_j.
+\]
+再结合定理~\ref{thm:xi-time-part9zbf-foldpi-wythoff-spectral-order}，可得
+\[
+p_{\lfloor m\varphi\rfloor}=\frac{2\pi m}{\varphi},
+\qquad
+p_{\lfloor m\varphi^2\rfloor}=2\pi m
+\qquad (m\ge 1).
+\]
+故主子压缩所产生的 finite rational Borel shadows 并非任意趋近于 exact pole lattice，而是沿 Wythoff 序从外侧单调逼近该双梯 pole geometry。
+\end{theorem}
+\begin{proof}
+由 Courant--Fischer 极小极大原理，
+\[
+\lambda_j^{[n]}
+=
+\max_{\substack{L\subset E_n\\ \dim L=j}}
+\ \min_{\substack{x\in L\\ \|x\|=1}}
+\langle J_\varphi x,x\rangle
+\qquad (n\ge j),
+\]
+而
+\[
+\lambda_j
+=
+\max_{\substack{L\subset \ell^2(\NN_0)\\ \dim L=j}}
+\ \min_{\substack{x\in L\\ \|x\|=1}}
+\langle J_\varphi x,x\rangle.
+\]
+由于 \(E_n\subset E_{n+1}\subset \ell^2(\NN_0)\)，立得
+\[
+\lambda_j^{[n]}\le \lambda_j^{[n+1]}\le \lambda_j.
+\]
+
+下面证明极限等于 \(\lambda_j\)。
+任取 \(\varepsilon>0\)。
+由 \(J_\varphi\) 的极小极大表征，可取某个 \(j\)-维子空间 \(L_\varepsilon\subset \ell^2(\NN_0)\)，使
+\[
+\min_{\substack{x\in L_\varepsilon\\ \|x\|=1}}
+\langle J_\varphi x,x\rangle
+>
+\lambda_j-\varepsilon.
+\]
+而 \(\bigcup_n E_n\) 在 \(\ell^2(\NN_0)\) 中稠密，因此对充分大的 \(n\)，可在 \(E_n\) 中找到某个 \(j\)-维子空间 \(L_{\varepsilon,n}\) 近似 \(L_\varepsilon\)，使其最小 Rayleigh 商仍满足
+\[
+\min_{\substack{x\in L_{\varepsilon,n}\\ \|x\|=1}}
+\langle J_\varphi x,x\rangle
+>
+\lambda_j-2\varepsilon.
+\]
+于是
+\[
+\lambda_j^{[n]}\ge \lambda_j-2\varepsilon
+\]
+对充分大 \(n\) 成立。
+结合上面的单调夹逼
+\[
+\lambda_j^{[n]}\le \lambda_j,
+\]
+便得到
+\[
+\lambda_j^{[n]}\uparrow \lambda_j.
+\]
+
+对极点 \(p_j^{[n]}\) 的结论只需应用函数 \(x\mapsto x^{-1/2}\) 在 \((0,\infty)\) 上的严格单调递减性。
+最后，由定理~\ref{thm:xi-time-part9zbf-foldpi-wythoff-spectral-order}，
+\[
+\lambda_{\lfloor m\varphi\rfloor}=\frac{\varphi^2}{4\pi^2m^2},
+\qquad
+\lambda_{\lfloor m\varphi^2\rfloor}=\frac{1}{4\pi^2m^2},
+\]
+逐项取倒数平方根即得
+\[
+p_{\lfloor m\varphi\rfloor}=\frac{2\pi m}{\varphi},
+\qquad
+p_{\lfloor m\varphi^2\rfloor}=2\pi m.
+\]
+证毕。
+\end{proof}
+
+\begin{conjecture}[Ritz 误差的唯一越界回路主导律]\label{conj:xi-time-part9zbi-ritz-error-unique-excursion}
+对每个固定 \(j\ge 1\)，存在常数 \(c_j>0\)，使得
+\[
+\lambda_j-\lambda_j^{[n]}
+\sim
+c_j\,u_0(\alpha_1\alpha_2\cdots\alpha_n)^2
+\qquad (n\to\infty),
+\]
+等价地，
+\[
+p_j^{[n]}-p_j
+\sim
+\frac{c_j\,u_0}{2\lambda_j^{3/2}}
+(\alpha_1\alpha_2\cdots\alpha_n)^2.
+\]
+这里的唯一自然小参数，正是定理~\ref{thm:xi-time-part9zbi-first-mismatch-unique-excursion} 中首个失配项所暴露的最短越界回路权重。
+\end{conjecture}
+
+\noindent
+因此，H.111 odd Bernoulli tail 除了拥有一条由 finite-support truncation 构成的单调耗尽塔之外，还内生出另一条性质更强的压缩层级：principal compression 不仅在长度 \(2n-1\) 之前完全无损，而且在维数上是最小的 exact compressor；其第一次失配由唯一越界回路显式控制，而其 pole geometry 又沿 Wythoff 双梯从外侧单调逼近 exact 宿主。由此，项目中的 compact Jacobi 谱宿主不再只是一个抽象的 infinite-rank realization，而是同时携带一条最优维数、局部 exact、误差可定量、并与 Wythoff pole ordering 严格兼容的 Ritz--Jacobi 压缩层级。
+
+\endinput

@@ -1,0 +1,71 @@
+\subsection{unitary-slice 的二整数证书与可重复空值判定}\label{subsec:unitary-two-integer-certificate}
+本小节给出一个纯代数的 unitary 证书协议：其输出为二整数对 \((p,q)\)，并以此构造精确落在单位圆上的证书点；同时给出一个以“舍入前像区间”为基础的可重复接受/拒绝规则，当证书与输入浮点位串不相容时读出按空值语义退化为 \(\mathsf{NULL}\)。
+
+\paragraph{二整数表示与整数闭包}
+\begin{definition}[二整数 unitary 证书]\label{def:unitary-two-integer-certificate}
+对任意 \((p,q)\in\ZZ^{2}\)（不全为零），定义
+\begin{equation}\label{eq:unitary-two-integer-map}
+\boxed{\;
+r(p,q):=\frac{q+\mathrm{i}p}{q-\mathrm{i}p}\in\TT\; }.
+\end{equation}
+并约定规范化形式为
+\(
+\gcd(p,q)=1,\ q\ge 0
+\)，且端点 \(r=-1\) 取唯一代表 \((p,q)=(1,0)\)。
+\end{definition}
+
+\begin{proposition}[单位圆乘法在二整数表示下闭合]\label{prop:unitary-two-integer-closure}
+对任意 \((p,q),(p',q')\in\ZZ^{2}\)（不全为零），记
+\[
+(p'',q''):=\bigl(pq'+qp',\ qq'-pp'\bigr)\in\ZZ^{2}.
+\]
+则有严格恒等式
+\[
+r(p,q)\,r(p',q')=r(p'',q''),
+\qquad
+r(p,q)^{-1}=r(-p,q).
+\]
+\end{proposition}
+\begin{proof}
+直接展开
+\(
+\frac{q+\mathrm{i}p}{q-\mathrm{i}p}\cdot\frac{q'+\mathrm{i}p'}{q'-\mathrm{i}p'}
+\)
+并配成共轭分式即可得到乘法闭式；求逆由共轭对称性立得。证毕。
+\end{proof}
+
+\paragraph{从浮点输入到证书输出的确定性协议}
+\begin{algorithm}[unitary 证书的确定性生成与 \texorpdfstring{$\mathsf{NULL}$}{NULL} 判定]\label{alg:unitary-two-integer-deterministic}
+输入：浮点复数 \(\widehat u\in\CC\)（位串给定）、最大分母 \(Q_{\max}\in\NN\)、容许误差预算 \(\delta>0\)。
+
+\smallskip
+\noindent 输出：证书 \((p,q)\)（从而 \(u_{\mathrm{cert}}:=r(p,q)\in\TT\)）或空值 \(\mathsf{NULL}\)。
+\begin{enumerate}
+  \item 由位串构造舍入前像区间 \(\mathcal{I}(\widehat u)\subset\CC\)：它由实部与虚部的 ulp 区间直积给出，完全由舍入模式与位串决定。
+  \item 以半角公式在 \(\Re(\widehat u)\neq-1\) 时定义
+  \[
+  \widehat x:=\frac{\Im(\widehat u)}{1+\Re(\widehat u)}.
+  \]
+  若 \(1+\Re(\widehat u)=0\)（端点邻域），则改用对称公式
+  \(
+  \widehat x:=\frac{1-\Re(\widehat u)}{\Im(\widehat u)}
+  \)
+  并以固定分支规则记录符号。
+  \item 对 \(\widehat x\) 作确定性连分数截断（固定截断规则与最大分母 \(Q_{\max}\)），得到最简分数 \(p/q\)。
+  \item 置 \(u_{\mathrm{cert}}:=r(p,q)\) 并判定
+  \[
+  \mathrm{ACCEPT}(p,q)\Longleftrightarrow
+  \mathrm{dist}\bigl(u_{\mathrm{cert}},\mathcal{I}(\widehat u)\bigr)\le\delta,
+  \]
+  其中 \(\mathrm{dist}\) 取任一固定的可复算范数（例如在 \((\Re,\Im)\) 平面上的 \(\ell_{\infty}\) 距离，并以有理上界实现）。
+  若 \(\mathrm{ACCEPT}(p,q)\) 成立则输出 \((p,q)\)，否则输出 \(\mathsf{NULL}\)。
+\end{enumerate}
+\end{algorithm}
+
+\begin{proposition}[可重复性：同一位串给出唯一证书或空值]\label{prop:unitary-two-integer-reproducible}
+在固定舍入模式、固定 \(Q_{\max}\)、固定连分数截断规则与固定 \(\mathrm{dist}\) 的前提下，算法 \ref{alg:unitary-two-integer-deterministic} 对同一输入位串 \(\widehat u\) 产生唯一输出（证书或 \(\mathsf{NULL}\)）。
+并且第三方仅依赖位串与输出即可复核 \(\mathrm{ACCEPT}(p,q)\) 的真值，从而满足可回放性与跨平台一致性要求。
+\end{proposition}
+\begin{proof}
+舍入前像区间 \(\mathcal{I}(\widehat u)\) 由位串唯一确定；连分数截断在固定规则下确定 \(p/q\)；接受判据仅依赖 \((p,q)\)、\(\mathcal{I}(\widehat u)\)、\(\delta\) 与固定范数上界计算，故输出唯一且可复核。证毕。
+\end{proof}

@@ -1,0 +1,471 @@
+\paragraph{双参粗粒化的结构性升维：尺度异质性作为随机参数、Laplace 对消与 \texorpdfstring{$f$}{f}-散度锐常数}
+在 \S\ref{subsec:cdim-poisson-cauchy} 的单参 Poisson--Cauchy 粗粒化中，核的尺度参数 \(t\) 被视为外部时间，而剖面随机性主要来自位置平移 \(\Gamma\)。
+然而在后续共动 Poisson 场的缺陷剖面（\S\ref{subsubsec:xi-comoving-defect-delta-bound}，式 \eqref{eq:xi-offcritical-comoving-poisson-field}）中，每个原子同时携带位置与内禀尺度异质性：同一尺度 \(t\) 下的核宽度为 \(t+\delta_j\)，并不能以一阶扰动忽略。
+本段将 \((\Gamma,\Delta)\) 视为 \(\RR\times[0,\infty)\) 上的随机向量，把 \(\Delta\) 与 \(\Gamma\) 等同纳入二参 Taylor 正规形；其直接后果是：由于 Poisson 核的调和性，二阶项发生 Laplace 对消，主项仅保留 \(\Var(\Gamma)-\Var(\Delta)\) 与 \(\mathrm{Cov}(\Gamma,\Delta)\) 两个协方差不变量。
+在此基础上，任意光滑 Csiszár \(\,f\)-散度的四次常数与（在二阶对消下）六次常数都可写为这些不变量的显式二次型，从而形成可离线复核的剖面证书接口。
+
+\phantomsection\label{subsec:cdim-poisson-cauchy-bivariate-uplift}
+\begin{proposition}[双参 Poisson--Cauchy 粗粒化的二阶正规形：Laplace 对消仅留下方差差与协方差]\label{prop:cdim-poisson-bivariate-second-order-normal-form}
+令 \((\Gamma,\Delta)\) 为取值于 \(\RR\times[0,\infty)\) 的随机向量，满足
+\[
+\EE|\Gamma|^3+\EE|\Delta|^3<\infty,
+\qquad
+\bar\gamma:=\EE\Gamma,\ \bar\delta:=\EE\Delta.
+\]
+对 \(t>0\) 定义 Poisson--Cauchy 核
+\[
+P_t(x):=\frac{1}{\pi}\frac{t}{x^2+t^2}\qquad(x\in\RR),
+\]
+并定义双参粗粒化密度
+\[
+h_t(x):=\EE\!\left[P_{t+\Delta}(x-\Gamma)\right],
+\qquad
+g_t(x):=P_{t+\bar\delta}(x-\bar\gamma).
+\]
+记二阶中心矩
+\[
+\sigma_\gamma^2:=\Var(\Gamma),\qquad
+\sigma_\delta^2:=\Var(\Delta),\qquad
+\sigma_{\gamma\delta}:=\mathrm{Cov}(\Gamma,\Delta).
+\]
+则存在显式核
+\[
+r_t(x):=\frac12\,\partial_x^{\,2} g_t(x)
+=\frac{1}{\pi}\frac{(t+\bar\delta)\bigl(3(x-\bar\gamma)^2-(t+\bar\delta)^2\bigr)}{\bigl((x-\bar\gamma)^2+(t+\bar\delta)^2\bigr)^3},
+\]
+\[
+q_t(x):=-\partial_x\partial_t g_t(x)
+=\frac{1}{\pi}\frac{2(x-\bar\gamma)\bigl((x-\bar\gamma)^2-3(t+\bar\delta)^2\bigr)}{\bigl((x-\bar\gamma)^2+(t+\bar\delta)^2\bigr)^3},
+\]
+使得当 \(t\to\infty\) 时有二阶正规形
+\begin{equation}\label{eq:cdim-poisson-bivariate-second-order-normal-form}
+\boxed{\;
+h_t
+=
+g_t
++(\sigma_\gamma^2-\sigma_\delta^2)\,r_t
++\sigma_{\gamma\delta}\,q_t
++\varepsilon_t\;}
+\end{equation}
+其中余项满足
+\[
+\|\varepsilon_t\|_{L^1(\RR)}=O(t^{-3}),
+\qquad
+\|\varepsilon_t\|_{L^\infty(\RR)}=O(t^{-4}).
+\]
+\end{proposition}
+\begin{proof}
+对二参函数 \((\gamma,\delta)\mapsto P_{t+\delta}(x-\gamma)\) 在 \((\bar\gamma,\bar\delta)\) 处作三阶 Taylor 展开并取期望；一次项因中心化 \(\EE(\Gamma-\bar\gamma)=\EE(\Delta-\bar\delta)=0\) 消失。
+二次项给出
+\[
+\frac12\EE(\Gamma-\bar\gamma)^2\,\partial_\gamma^2
++\EE(\Gamma-\bar\gamma)(\Delta-\bar\delta)\,\partial_\gamma\partial_\delta
++\frac12\EE(\Delta-\bar\delta)^2\,\partial_\delta^2.
+\]
+注意 \(\partial_\gamma=-\partial_x\)、\(\partial_\delta=\partial_t\)，从而二次修正为
+\[
+\frac12\sigma_\gamma^2\,\partial_x^2 g_t
+-\sigma_{\gamma\delta}\,\partial_x\partial_t g_t
++\frac12\sigma_\delta^2\,\partial_t^2 g_t.
+\]
+又 \(P_t\) 为上半平面 Poisson 核，满足调和方程 \((\partial_x^2+\partial_t^2)P_t\equiv 0\)，故 \(\partial_t^2 g_t=-\partial_x^2 g_t\)。
+因此二次项坍缩为
+\[
+(\sigma_\gamma^2-\sigma_\delta^2)\,\frac12\partial_x^2 g_t
++\sigma_{\gamma\delta}\,(-\partial_x\partial_t g_t)
+=(\sigma_\gamma^2-\sigma_\delta^2)\,r_t+\sigma_{\gamma\delta}\,q_t,
+\]
+得到 \eqref{eq:cdim-poisson-bivariate-second-order-normal-form}。
+\par
+余项由三阶导数的积分余项控制。
+利用缩放恒等式 \(P_t(x)=t^{-1}P_1(x/t)\) 可得任意三阶混合导数均形如
+\(
+\partial_x^k\partial_t^\ell P_t(x)=t^{-(k+\ell+1)}\Phi_{k,\ell}(x/t)
+\)，
+其中 \(\Phi_{k,\ell}\) 为可积有界的有理函数。
+因此其 \(L^1\)-范数为 \(O(t^{-(k+\ell)})\)，而 \(L^\infty\)-范数为 \(O(t^{-(k+\ell+1)})\)。
+乘以三阶中心矩并取期望即得所示 \(\|\varepsilon_t\|_{1}=O(t^{-3})\)、\(\|\varepsilon_t\|_{\infty}=O(t^{-4})\)。证毕。
+\end{proof}
+
+\begin{proposition}[任意光滑 \texorpdfstring{$f$}{f}-散度的四次锐渐近：常数为协方差不变量的显式二次型]\label{prop:cdim-poisson-bivariate-fdiv-fourth-order-constant}
+在命题 \ref{prop:cdim-poisson-bivariate-second-order-normal-form} 的设定下，令 \(f:(0,\infty)\to\RR\) 为凸函数，满足 \(f(1)=0\) 且在 \(1\) 的邻域二阶可微并具有有限 \(f''(1)\)。
+定义 Csiszár \(\,f\)-散度
+\[
+D_f(h_t\mid g_t):=\int_{\RR} g_t(x)\,f\!\left(\frac{h_t(x)}{g_t(x)}\right)\dd x.
+\]
+则极限存在并给出完全显式常数：
+\begin{equation}\label{eq:cdim-poisson-bivariate-fdiv-fourth-order-limit}
+\boxed{\;
+\lim_{t\to\infty}t^4\,D_f(h_t\mid g_t)
+=
+f''(1)\left(\frac{(\sigma_\gamma^2-\sigma_\delta^2)^2}{8}+\frac{\sigma_{\gamma\delta}^2}{2}\right).\;}
+\end{equation}
+特别地，对相对熵 \(D_{\mathrm{KL}}(h_t\mid g_t)\)（取 \(f(u)=u\log u\)）有
+\[
+\lim_{t\to\infty}t^4\,D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{(\sigma_\gamma^2-\sigma_\delta^2)^2}{8}+\frac{\sigma_{\gamma\delta}^2}{2}.
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:cdim-poisson-bivariate-second-order-normal-form} 得 \(\|h_t-g_t\|_{1}=O(t^{-2})\) 且 \(\|h_t-g_t\|_{\infty}=O(t^{-3})\)，从而
+\[
+\frac{h_t}{g_t}=1+\delta_t,\qquad \delta_t=O(t^{-2})\ \text{于 }L^\infty,\qquad
+\int_{\RR}g_t\,\delta_t\,\dd x=\int_{\RR}(h_t-g_t)\dd x=0.
+\]
+在 \(\delta=0\) 处对 \(f(1+\delta)\) 作二阶展开并积分，利用一次项消失，得到
+\[
+D_f(h_t\mid g_t)=\frac{f''(1)}{2}\int_{\RR} g_t\,\delta_t^2\,\dd x+o(t^{-4}).
+\]
+再由命题 \ref{prop:cdim-poisson-bivariate-second-order-normal-form} 的主项并除以 \(g_t\)，引入缩放变量 \(y=\frac{x-\bar\gamma}{t+\bar\delta}\) 以及标准 Cauchy 密度 \(G(y)=\frac{1}{\pi}\frac{1}{1+y^2}\)，得到
+\[
+\delta_t(x)=\frac{1}{(t+\bar\delta)^2}\Bigl[(\sigma_\gamma^2-\sigma_\delta^2)\,u_1(y)+\sigma_{\gamma\delta}\,u_2(y)\Bigr]+o(t^{-2}),
+\]
+其中
+\[
+u_1(y)=\frac{3y^2-1}{(1+y^2)^2}\quad(\text{偶}),
+\qquad
+u_2(y)=\frac{2y(y^2-3)}{(1+y^2)^2}\quad(\text{奇}).
+\]
+于是
+\[
+\int_{\RR} g_t\,\delta_t^2\,\dd x
+=\frac{1}{t^4}\int_{\RR}G(y)\Bigl[(\sigma_\gamma^2-\sigma_\delta^2)\,u_1(y)+\sigma_{\gamma\delta}\,u_2(y)\Bigr]^2\dd y
++o(t^{-4}).
+\]
+由于 \(u_1u_2\) 为奇函数，交叉项严格为零。
+并且由命题 \ref{prop:cdim-poisson-kernel-derivative-l1-energy} 的能量常数 \eqref{eq:cdim-poisson-pt-second-energy} 可等价推出
+\(
+\int_{\RR}G(y)\,u_1(y)^2\dd y=\frac14
+\)，
+而直接三角代换（或同类 Beta 积分）给出
+\(
+\int_{\RR}G(y)\,u_2(y)^2\dd y=1
+\)。
+代回即得
+\[
+\int_{\RR} g_t\,\delta_t^2\,\dd x
+=\frac{1}{t^4}\left(\frac{(\sigma_\gamma^2-\sigma_\delta^2)^2}{4}+\sigma_{\gamma\delta}^2\right)+o(t^{-4}).
+\]
+将其代入 \(D_f=\frac{f''(1)}{2}\int g_t\delta_t^2\) 即得 \eqref{eq:cdim-poisson-bivariate-fdiv-fourth-order-limit}。证毕。
+\end{proof}
+
+\begin{corollary}[复二阶矩不变量的四次锐常数：\texorpdfstring{$|m_2|^2$}{|m2|^2} 表述]\label{cor:cdim-poisson-bivariate-fdiv-fourth-order-complex-m2}
+在命题 \ref{prop:cdim-poisson-bivariate-fdiv-fourth-order-constant} 的设定下，令
+\[
+Z:=(\Gamma-\bar\gamma)+\mathrm{i}(\Delta-\bar\delta)\in\CC,
+\qquad
+m_2:=\EE[Z^2]\in\CC.
+\]
+则
+\[
+\boxed{\;
+m_2=(\sigma_\gamma^2-\sigma_\delta^2)+2\mathrm{i}\sigma_{\gamma\delta},\;}
+\]
+并且对任意满足命题 \ref{prop:cdim-poisson-bivariate-fdiv-fourth-order-constant} 条件的 \(f\) 有
+\[
+\boxed{\;
+\lim_{t\to\infty}(t+\bar\delta)^4\,D_f(h_t\mid g_t)
+=\frac{f''(1)}{8}\,\abs{m_2}^2\;}
+\]
+特别地，对相对熵 \(D_{\mathrm{KL}}\) 有
+\[
+\boxed{\;
+\lim_{t\to\infty}(t+\bar\delta)^4\,D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{1}{8}\,\abs{m_2}^2\;}
+\]
+\end{corollary}
+\begin{proof}
+由恒等式
+\[
+\EE[Z^2]
+=\EE\bigl[(\Gamma-\bar\gamma)^2-(\Delta-\bar\delta)^2\bigr]
+  +2\mathrm{i}\,\EE\bigl[(\Gamma-\bar\gamma)(\Delta-\bar\delta)\bigr]
+\]
+得到 \(m_2=(\sigma_\gamma^2-\sigma_\delta^2)+2\mathrm{i}\sigma_{\gamma\delta}\)，从而
+\(
+\abs{m_2}^2=(\sigma_\gamma^2-\sigma_\delta^2)^2+4\sigma_{\gamma\delta}^2
+\)。
+另一方面，由命题 \ref{prop:cdim-poisson-bivariate-fdiv-fourth-order-constant} 的极限与 \((t+\bar\delta)^4/t^4\to 1\) 得
+\[
+\lim_{t\to\infty}(t+\bar\delta)^4\,D_f(h_t\mid g_t)
+=f''(1)\left(\frac{(\sigma_\gamma^2-\sigma_\delta^2)^2}{8}+\frac{\sigma_{\gamma\delta}^2}{2}\right)
+=\frac{f''(1)}{8}\abs{m_2}^2.
+\]
+相对熵情形取 \(f(u)=u\log u\) 即得。证毕。
+\end{proof}
+
+\begin{proposition}[二阶对消判据与非退化可实现性]\label{prop:cdim-poisson-bivariate-second-order-cancellation-realizable}
+在命题 \ref{prop:cdim-poisson-bivariate-fdiv-fourth-order-constant} 的设定下，以下断言等价：
+\begin{enumerate}
+  \item \(D_{\mathrm{KL}}(h_t\mid g_t)=o\bigl((t+\bar\delta)^{-4}\bigr)\)（\(t\to\infty\)）；
+  \item \(m_2=\EE[Z^2]=0\)；
+  \item \(\sigma_\gamma^2=\sigma_\delta^2\) 且 \(\sigma_{\gamma\delta}=0\)。
+\end{enumerate}
+并且存在非退化分布（\(\Var(\Gamma)>0\)）满足 \(\Delta>0\) a.s.\ 且 \(m_2=0\)。
+\end{proposition}
+\begin{proof}
+\((1)\Longleftrightarrow(2)\) 由推论 \ref{cor:cdim-poisson-bivariate-fdiv-fourth-order-complex-m2}（取 \(f(u)=u\log u\)）立即得到；
+\((2)\Longleftrightarrow(3)\) 由同一推论中 \(m_2=(\sigma_\gamma^2-\sigma_\delta^2)+2\mathrm{i}\sigma_{\gamma\delta}\) 立得。
+\par
+为给出非退化实现，取任意 \(\rho>0\) 与 \(\bar\delta>\frac{\sqrt3}{2}\rho\)，并令复随机变量 \(Z\) 等概率取三值
+\[
+Z\in\left\{\rho,\ \rho e^{2\pi\mathrm{i}/3},\ \rho e^{4\pi\mathrm{i}/3}\right\}.
+\]
+则 \(\EE[Z]=0\)、\(\EE[Z^2]=0\) 且 \(\EE[Z^3]=\rho^3\neq 0\)。
+令
+\[
+\Gamma:=\bar\gamma+\Re(Z),\qquad
+\Delta:=\bar\delta+\Im(Z),
+\]
+则 \(\EE\Gamma=\bar\gamma\)、\(\EE\Delta=\bar\delta\)，并且由 \(\Im(Z)\in\{0,\pm \tfrac{\sqrt3}{2}\rho\}\) 与 \(\bar\delta>\frac{\sqrt3}{2}\rho\) 得 \(\Delta>0\) a.s.；
+同时 \(Z=(\Gamma-\bar\gamma)+\mathrm{i}(\Delta-\bar\delta)\) 仍满足 \(m_2=\EE[Z^2]=0\)。
+由于 \(Z\) 非常值，\(\Gamma\) 与 \(\Delta\) 非退化，从而给出所需例子。证毕。
+\end{proof}
+
+\begin{proposition}[四次主项对消时的六次锐渐近：第三中心张量的显式指纹系数]\label{prop:cdim-poisson-bivariate-fdiv-sixth-order-constant}
+在命题 \ref{prop:cdim-poisson-bivariate-second-order-normal-form} 的设定下，进一步假设四阶中心绝对矩有限：
+\[
+\EE|\Gamma-\bar\gamma|^4+\EE|\Delta-\bar\delta|^4<\infty,
+\]
+并施加二阶对消条件
+\[
+\sigma_\gamma^2=\sigma_\delta^2,\qquad \sigma_{\gamma\delta}=0,
+\]
+使得命题 \ref{prop:cdim-poisson-bivariate-fdiv-fourth-order-constant} 的 \(t^{-4}\) 主项完全消失。
+记第三中心矩
+\[
+\kappa_{300}:=\EE(\Gamma-\bar\gamma)^3,\quad
+\kappa_{210}:=\EE(\Gamma-\bar\gamma)^2(\Delta-\bar\delta),
+\]
+\[
+\kappa_{120}:=\EE(\Gamma-\bar\gamma)(\Delta-\bar\delta)^2,\quad
+\kappa_{030}:=\EE(\Delta-\bar\delta)^3.
+\]
+则对任意满足命题 \ref{prop:cdim-poisson-bivariate-fdiv-fourth-order-constant} 条件的 \(f\)，存在六次锐渐近且常数完全显式：
+\begin{equation}\label{eq:cdim-poisson-bivariate-fdiv-sixth-order-limit}
+\boxed{\;
+\lim_{t\to\infty}t^6\,D_f(h_t\mid g_t)
+=
+f''(1)\,\frac{3}{32}\Bigl[(3\kappa_{120}-\kappa_{300})^2+(3\kappa_{210}-\kappa_{030})^2\Bigr].\;}
+\end{equation}
+特别地，
+\[
+\lim_{t\to\infty}t^6\,D_{\mathrm{KL}}(h_t\mid g_t)
+=
+\frac{3}{32}\Bigl[(3\kappa_{120}-\kappa_{300})^2+(3\kappa_{210}-\kappa_{030})^2\Bigr].
+\]
+\end{proposition}
+\begin{proof}
+在二阶对消条件下需将二参 Taylor 推进到三阶。
+对 \((\gamma,\delta)\mapsto P_{t+\delta}(x-\gamma)\) 在 \((\bar\gamma,\bar\delta)\) 处作三阶展开并取期望：一次项为零，二次项按假设为零，故主项来自三阶中心矩与三阶混合导数。
+将 \(\partial_\gamma=-\partial_x\)、\(\partial_\delta=\partial_t\) 代入并整理，可把四个三阶导数组合压缩为仅两个独立形状函数：
+存在
+\[
+a:=\frac{3\kappa_{120}-\kappa_{300}}{6},\qquad
+b:=\frac{3\kappa_{210}-\kappa_{030}}{6},
+\]
+以及
+\[
+v_1(y)=\frac{-24y(y^2-1)}{(1+y^2)^3}\quad(\text{奇}),\qquad
+v_2(y)=\frac{6(y^4-6y^2+1)}{(1+y^2)^3}\quad(\text{偶}),
+\]
+使得在 \(L^2(g_t\dd x)\) 意义下
+\[
+\frac{h_t-g_t}{g_t}
+=\frac{1}{t^3}\Bigl[a\,v_1(y)+b\,v_2(y)\Bigr]+o(t^{-3}),
+\qquad y=\frac{x-\bar\gamma}{t+\bar\delta}.
+\]
+同命题 \ref{prop:cdim-poisson-bivariate-fdiv-fourth-order-constant}，对 \(f(1+\delta)\) 作二阶展开并用 \(\int g_t\delta_t=0\) 消去一次项，得到
+\[
+D_f(h_t\mid g_t)=\frac{f''(1)}{2}\int_{\RR} g_t\,\delta_t^2\,\dd x+o(t^{-6}).
+\]
+代入上式并以 \(g_t\dd x=G(y)\dd y\) 得
+\[
+t^6 D_f(h_t\mid g_t)\to
+\frac{f''(1)}{2}\int_{\RR}G(y)\bigl[a\,v_1(y)+b\,v_2(y)\bigr]^2\dd y.
+\]
+由于 \(v_1v_2\) 为奇函数，交叉项为零。
+并且以 \(y=\tan\theta\) 将积分化为 Beta 积分逐项求和可得
+\(
+\int_{\RR}G(y)\,v_1(y)^2\dd y=\int_{\RR}G(y)\,v_2(y)^2\dd y=\frac{27}{4}
+\)。
+因此极限为
+\[
+\frac{f''(1)}{2}\cdot\frac{27}{4}\,(a^2+b^2)
+=f''(1)\,\frac{3}{32}\Bigl[(3\kappa_{120}-\kappa_{300})^2+(3\kappa_{210}-\kappa_{030})^2\Bigr],
+\]
+即得 \eqref{eq:cdim-poisson-bivariate-fdiv-sixth-order-limit}。证毕。
+\end{proof}
+
+\begin{corollary}[二阶对消下的六次锐常数：\texorpdfstring{$|m_3|^2$}{|m3|^2} 表述]\label{cor:cdim-poisson-bivariate-fdiv-sixth-order-complex-m3}
+在命题 \ref{prop:cdim-poisson-bivariate-fdiv-sixth-order-constant} 的二阶对消条件下，沿用
+\(
+Z=(\Gamma-\bar\gamma)+\mathrm{i}(\Delta-\bar\delta)
+\)
+并记 \(m_3:=\EE[Z^3]\)。
+则
+\[
+\boxed{\;
+m_3=(\kappa_{300}-3\kappa_{120})+\mathrm{i}(3\kappa_{210}-\kappa_{030}),\;}
+\]
+并且对任意满足命题 \ref{prop:cdim-poisson-bivariate-fdiv-fourth-order-constant} 条件的 \(f\) 有
+\[
+\boxed{\;
+\lim_{t\to\infty}(t+\bar\delta)^6\,D_f(h_t\mid g_t)=\frac{3f''(1)}{32}\,\abs{m_3}^2\;}
+\]
+特别地，
+\[
+\boxed{\;
+\lim_{t\to\infty}(t+\bar\delta)^6\,D_{\mathrm{KL}}(h_t\mid g_t)=\frac{3}{32}\,\abs{m_3}^2\;}
+\]
+\end{corollary}
+\begin{proof}
+令 \(U:=\Gamma-\bar\gamma\)、\(V:=\Delta-\bar\delta\)。
+则 \(Z^3=(U+\mathrm{i}V)^3=(U^3-3UV^2)+\mathrm{i}(3U^2V-V^3)\)，取期望即得所示 \(m_3\) 表达。
+因此
+\(
+\abs{m_3}^2=(3\kappa_{120}-\kappa_{300})^2+(3\kappa_{210}-\kappa_{030})^2
+\)。
+再由命题 \ref{prop:cdim-poisson-bivariate-fdiv-sixth-order-constant} 的极限与 \((t+\bar\delta)^6/t^6\to 1\) 得结论。证毕。
+\end{proof}
+
+\begin{proposition}[熵耗散的五次/七次锐渐近与刚性判别：由二阶/三阶不变量完全决定]\label{prop:cdim-poisson-bivariate-entropy-dissipation-asymptotics-rigidity}
+沿用命题 \ref{prop:cdim-poisson-bivariate-second-order-normal-form} 的设定。
+由 Poisson 半群律 \(P_s*P_{t+\delta}=P_{t+s+\delta}\) 与线性性可直接验证：对一切 \(s>0\) 有 \(h_{t+s}=P_s*h_t\)、\(g_{t+s}=P_s*g_t\)。
+因此可应用分数 Fisher 耗散恒等式（命题 \ref{prop:xi-poisson-kl-dissipation-fractional-fisher}）：
+\[
+\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\mid g_t)=-\mathcal I_1(h_t\mid g_t),
+\qquad \mathcal I_1\ge 0.
+\]
+则：
+\begin{enumerate}
+  \item 在一般情形下，
+  \[
+  \lim_{t\to\infty}t^5\,\mathcal I_1(h_t\mid g_t)
+  =
+  \frac{(\sigma_\gamma^2-\sigma_\delta^2)^2}{2}+2\sigma_{\gamma\delta}^2.
+  \]
+  \item 在二阶对消条件 \(\sigma_\gamma^2=\sigma_\delta^2\)、\(\sigma_{\gamma\delta}=0\) 下，且满足命题 \ref{prop:cdim-poisson-bivariate-fdiv-sixth-order-constant} 的矩条件时，
+  \[
+  \lim_{t\to\infty}t^7\,\mathcal I_1(h_t\mid g_t)
+  =
+  \frac{9}{16}\Bigl[(3\kappa_{120}-\kappa_{300})^2+(3\kappa_{210}-\kappa_{030})^2\Bigr].
+  \]
+\end{enumerate}
+并由此得到两级刚性：
+若 \(D_{\mathrm{KL}}(h_t\mid g_t)=o(t^{-4})\)，则必有 \(\sigma_\gamma^2=\sigma_\delta^2\) 且 \(\sigma_{\gamma\delta}=0\)；
+在上述二阶对消下，若 \(D_{\mathrm{KL}}(h_t\mid g_t)=o(t^{-6})\)，则必有 \(\kappa_{300}=3\kappa_{120}\) 且 \(\kappa_{030}=3\kappa_{210}\)。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:cdim-poisson-bivariate-fdiv-fourth-order-constant}（或命题 \ref{prop:cdim-poisson-bivariate-fdiv-sixth-order-constant}）得到
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)=\frac{A}{t^4}+o(t^{-4})
+\quad\text{或}\quad
+D_{\mathrm{KL}}(h_t\mid g_t)=\frac{B}{t^6}+o(t^{-6}),
+\]
+其中
+\[
+A=\frac{(\sigma_\gamma^2-\sigma_\delta^2)^2}{8}+\frac{\sigma_{\gamma\delta}^2}{2},
+\qquad
+B=\frac{3}{32}\Bigl[(3\kappa_{120}-\kappa_{300})^2+(3\kappa_{210}-\kappa_{030})^2\Bigr].
+\]
+对 \(t\) 求导并用耗散恒等式 \(\mathcal I_1=-\frac{\dd}{\dd t}D_{\mathrm{KL}}\) 立得
+\[
+\mathcal I_1(h_t\mid g_t)=\frac{4A}{t^5}+o(t^{-5})
+\quad\text{或}\quad
+\mathcal I_1(h_t\mid g_t)=\frac{6B}{t^7}+o(t^{-7}),
+\]
+从而两极限分别为 \(4A\)、\(6B\)。
+刚性判别由常数严格非负且仅在相应不变量为零时取零得到。证毕。
+\end{proof}
+
+\begin{corollary}[耗散率 \texorpdfstring{$\mathcal I_1$}{I1} 的复矩形式与两级刚性]\label{cor:cdim-poisson-bivariate-dissipation-complex-moments}
+沿命题 \ref{prop:cdim-poisson-bivariate-entropy-dissipation-asymptotics-rigidity} 的设定，令
+\(
+Z=(\Gamma-\bar\gamma)+\mathrm{i}(\Delta-\bar\delta)
+\)，
+并记 \(m_n:=\EE[Z^n]\)（\(n\ge 2\)）。
+则
+\[
+\boxed{\;
+\lim_{t\to\infty}(t+\bar\delta)^5\,\mathcal I_1(h_t\mid g_t)=\frac12\,\abs{m_2}^2\;}
+\]
+并且在二阶对消条件 \(m_2=0\) 下，
+\[
+\boxed{\;
+\lim_{t\to\infty}(t+\bar\delta)^7\,\mathcal I_1(h_t\mid g_t)=\frac{9}{16}\,\abs{m_3}^2\;}
+\]
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:cdim-poisson-bivariate-fdiv-fourth-order-complex-m2} 与推论 \ref{cor:cdim-poisson-bivariate-fdiv-sixth-order-complex-m3}，
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{\abs{m_2}^2}{8(t+\bar\delta)^4}+o\bigl((t+\bar\delta)^{-4}\bigr)
+\quad\text{或}\quad
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{3\abs{m_3}^2}{32(t+\bar\delta)^6}+o\bigl((t+\bar\delta)^{-6}\bigr).
+\]
+对 \(t\) 求导并用耗散恒等式 \(\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\mid g_t)=-\mathcal I_1(h_t\mid g_t)\) 得
+\[
+\mathcal I_1(h_t\mid g_t)
+=\frac{\abs{m_2}^2}{2(t+\bar\delta)^5}+o\bigl((t+\bar\delta)^{-5}\bigr)
+\quad\text{或}\quad
+\mathcal I_1(h_t\mid g_t)
+=\frac{9\abs{m_3}^2}{16(t+\bar\delta)^7}+o\bigl((t+\bar\delta)^{-7}\bigr),
+\]
+从而得到两极限常数。证毕。
+\end{proof}
+
+\begin{conjecture}[KL 全渐近展开的复矩谱对角化]\label{conj:cdim-poisson-bivariate-kl-complex-moment-expansion}
+在命题 \ref{prop:cdim-poisson-bivariate-second-order-normal-form} 的设定下，令
+\(
+Z=(\Gamma-\bar\gamma)+\mathrm{i}(\Delta-\bar\delta)
+\)
+并对 \(n\ge 2\) 记 \(m_n:=\EE[Z^n]\)。
+若对一切 \(n\ge 2\) 有 \(\EE\abs{Z}^{2n}<\infty\)，则猜想存在全渐近展开
+\[
+\boxed{\;
+D_{\mathrm{KL}}(h_t\mid g_t)
+\sim
+\sum_{n\ge 2}\frac{n(n-1)}{2^{2n}}\cdot \frac{\abs{m_n}^2}{(t+\bar\delta)^{2n}}
+\qquad(t\to\infty).\;}
+\]
+该形式与推论 \ref{cor:cdim-poisson-bivariate-fdiv-fourth-order-complex-m2} 的四次常数（\(n=2\)）一致；
+并在二阶对消 \(m_2=0\) 时与推论 \ref{cor:cdim-poisson-bivariate-fdiv-sixth-order-complex-m3} 的六次常数（\(n=3\)）一致。
+\end{conjecture}
+
+\begin{proposition}[缺陷剖面 \texorpdfstring{$G_t$}{G_t} 的直接套用：四次系数的可审计封闭式]\label{prop:cdim-poisson-defect-profile-bivariate-kl-constant}
+令缺陷剖面 \(G_t\) 如式 \eqref{eq:xi-offcritical-comoving-poisson-field}：
+\[
+G_t(x)=\frac{1}{\pi}\sum_j m_j\delta_j\frac{t+\delta_j}{(x-\gamma_j)^2+(t+\delta_j)^2}.
+\]
+令
+\[
+M_0:=\sum_j m_j\delta_j\in(0,\infty),
+\qquad
+\widehat h_t:=\frac{1}{M_0}G_t,
+\qquad
+w_j:=\frac{m_j\delta_j}{M_0},
+\]
+并以权重 \(w_j\) 定义随机对 \((\Gamma,\Delta)\) 取值 \((\gamma_j,\delta_j)\)。
+记
+\[
+\bar\gamma:=\EE_w\Gamma,\quad \bar\delta:=\EE_w\Delta,
+\qquad
+\widehat g_t(x):=P_{t+\bar\delta}(x-\bar\gamma).
+\]
+若 \(\EE_w|\Gamma|^3+\EE_w|\Delta|^3<\infty\)（在文档场景中 \(\Delta=\delta_j\in(0,1/2)\) 时该条件自动满足），则
+\begin{equation}\label{eq:cdim-poisson-defect-profile-bivariate-kl-constant}
+\boxed{\;
+\lim_{t\to\infty}t^4\,D_{\mathrm{KL}}(\widehat h_t\mid \widehat g_t)
+=
+\frac{\bigl(\Var_w(\Gamma)-\Var_w(\Delta)\bigr)^2}{8}
++\frac{\mathrm{Cov}_w(\Gamma,\Delta)^2}{2}.\;}
+\end{equation}
+\end{proposition}
+\begin{proof}
+将 \(\widehat h_t\) 写为 \(\EE_w[P_{t+\Delta}(x-\Gamma)]\)，将 \(\widehat g_t\) 写为 \(P_{t+\bar\delta}(x-\bar\gamma)\)，即满足命题 \ref{prop:cdim-poisson-bivariate-second-order-normal-form} 的设定；再对 \(f(u)=u\log u\) 套用命题 \ref{prop:cdim-poisson-bivariate-fdiv-fourth-order-constant} 即得 \eqref{eq:cdim-poisson-defect-profile-bivariate-kl-constant}。证毕。
+\end{proof}
+
+\endinput
+

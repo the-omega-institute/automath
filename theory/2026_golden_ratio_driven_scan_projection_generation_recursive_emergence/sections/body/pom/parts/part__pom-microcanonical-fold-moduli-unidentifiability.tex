@@ -1,0 +1,550 @@
+\paragraph{宏观完备而微观不可识别：固定纤维谱的折叠实现模空间与查询下界}
+定理 \ref{thm:pom-oracle-tomography-completeness-f-Iu-Iw} 表明：在指数尺度上，容量曲线 \(\Gamma_{\mathrm{orc}}\) 足以反演计数谱 \(f\) 及两类速率函数。
+然而 \(\Gamma_{\mathrm{orc}}\)（乃至完整的纤维谱 \(d_m\)）并不决定\emph{折叠实现本身}：同一纤维谱对应一个阶乘级的实现模空间，并诱导出截面选择的指数自由度与识别所需的查询下界。
+本段将这些“宏观完备/微观不可识别”的事实写成可直接引用的闭式计数与信息论不等式。
+
+\begin{definition}[固定纤维谱的微正则折叠实现类]\label{def:pom-microcanonical-fold-class}
+固定分辨率 \(m\)，并记
+\[
+\Omega_m=\{0,1\}^m,
+\qquad
+X_m\ \text{为稳定类型集合},
+\qquad
+N:=\card{\Omega_m}=2^m,
+\qquad
+n:=\card{X_m}.
+\]
+给定纤维多重度函数 \(d:X_m\to\NN_{\ge 1}\) 满足 \(\sum_{x\in X_m}d(x)=N\)。
+定义具有指定纤维谱 \(d\) 的折叠实现类为
+\[
+\mathfrak{Fold}_m(d)
+:=\Bigl\{F:\Omega_m\to X_m:\ \card{F^{-1}(x)}=d(x)\ \ \forall x\in X_m\Bigr\}.
+\]
+并定义归一化纤维谱分布 \(w\in\Delta(X_m)\) 为 \(w(x):=d(x)/N\)。
+\end{definition}
+
+\begin{theorem}[同像计数闭式]\label{thm:pom-microcanonical-fold-class-count}
+在定义 \ref{def:pom-microcanonical-fold-class} 的设定下，有严格等式
+\[
+\boxed{\;
+\card{\mathfrak{Fold}_m(d)}=\frac{N!}{\prod_{x\in X_m} d(x)!}\; } .
+\]
+\end{theorem}
+\begin{proof}
+构造 \(F\in\mathfrak{Fold}_m(d)\) 等价于将 \(\Omega_m\) 的 \(N\) 个元素划分为 \(n\) 个带标签的块 \(F^{-1}(x)\)（\(x\in X_m\)），且各块大小分别为 \(\{d(x)\}_{x\in X_m}\)。
+带标签的多项式分割计数即为多项式系数
+\(
+\binom{N}{(d(x))_{x\in X_m}}=N!/\prod_x d(x)!
+\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[微正则折叠熵：同谱模空间的指数率]\label{thm:pom-microcanonical-fold-entropy}
+令 \(w(x)=d(x)/N\)，并记 Shannon 熵（自然对数）
+\[
+H(w):=-\sum_{x\in X_m} w(x)\log w(x).
+\]
+则有精确渐近式
+\[
+\boxed{\;
+\log\card{\mathfrak{Fold}_m(d)}=N\,H(w)+O(n\log N)\;}
+\]
+并且在 \(n\log N=o(N)\) 的条件下，
+\[
+\boxed{\;
+\frac{1}{N}\log\card{\mathfrak{Fold}_m(d)}=H(w)+o(1)\;}
+\qquad(m\to\infty).
+\]
+上述条件在本文主线 \(n=\card{X_m}\asymp \varphi^m\)、\(N=2^m\) 下成立。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-microcanonical-fold-class-count}，
+\(
+\log\card{\mathfrak{Fold}_m(d)}=\log N!-\sum_x\log d(x)!
+\)。
+对任意整数 \(k\ge 1\) 取 Stirling 展开
+\(
+\log k!=k\log k-k+\tfrac12\log(2\pi k)+O(1)
+\)，得到
+\[
+\log\card{\mathfrak{Fold}_m(d)}
+=N\log N-\sum_x d(x)\log d(x)+O\!\left(\log N+\sum_x\log d(x)\right).
+\]
+由 \(\sum_x d(x)=N\) 且 \(1\le d(x)\le N\) 得 \(\sum_x\log d(x)\le n\log N\)，从而误差项为 \(O(n\log N)\)。
+主项化简为
+\[
+N\log N-\sum_x d(x)\log d(x)
+=-\sum_x Nw(x)\log w(x)
+=N H(w).
+\]
+于是得到第一式；若 \(n\log N=o(N)\) 则将误差除以 \(N\) 得第二式。证毕。
+\end{proof}
+
+\begin{corollary}[本体描述长度下界：仅知纤维谱时指定折叠的最小信息量]\label{cor:pom-microcanonical-fold-description-length-lower-bound}
+在仅给定纤维谱 \(d\) 的前提下，任何能唯一指定某个 \(F\in\mathfrak{Fold}_m(d)\) 的编码所需比特数 \(L_m(d)\) 必满足
+\[
+\boxed{\;
+L_m(d)\ \ge\ \log_2\card{\mathfrak{Fold}_m(d)}
+=\frac{1}{\log 2}\log\card{\mathfrak{Fold}_m(d)}\; } .
+\]
+特别地，在定理 \ref{thm:pom-microcanonical-fold-entropy} 的条件下，
+\[
+L_m(d)\ \ge\ \frac{N}{\log 2}H(w)+o(N).
+\]
+\end{corollary}
+\begin{proof}
+若可用的码字总数小于 \(\card{\mathfrak{Fold}_m(d)}\)，则不可能对 \(\mathfrak{Fold}_m(d)\) 中所有对象给出单射编码；由鸽巢原理得到矛盾。证毕。
+\end{proof}
+
+\begin{corollary}[单点稀有性与低复杂度类的双指数稀薄性]\label{cor:pom-microcanonical-fold-singleton-and-low-complexity-rarity}
+在定义 \ref{def:pom-microcanonical-fold-class} 的设定下，令 \(F\sim\mathrm{Unif}(\mathfrak{Fold}_m(d))\)。
+则：
+\begin{enumerate}
+  \item 对任意固定 \(F_0\in\mathfrak{Fold}_m(d)\)，有
+  \[
+  \mathbb P(F=F_0)=\frac{1}{\card{\mathfrak{Fold}_m(d)}},
+  \qquad
+  \log\mathbb P(F=F_0)=-N H(w)+O(n\log N).
+  \]
+  特别地，只要 \(H(w)\) 在 \(m\to\infty\) 下不趋于 \(0\) 且 \(n\log N=o(N)\)，则该单点概率为 \(\exp(-\Theta(N))=\exp(-\Theta(2^m))\) 的双指数小量。
+  \item 对任意函数类 \(\mathcal C_m\subseteq\mathfrak{Fold}_m(d)\)，若满足 \(\log\card{\mathcal C_m}\le L(m)\)，则
+  \[
+  \mathbb P(F\in\mathcal C_m)\le \exp\!\bigl(L(m)-N H(w)+O(n\log N)\bigr).
+  \]
+  因而当 \(L(m)=\mathrm{poly}(m)\) 且 \(n\log N=o(N)\) 时，有 \(\mathbb P(F\in\mathcal C_m)\le \exp(-\Theta(2^m))\)。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由均匀先验，(1) 的第一式为定义，取对数并代入定理 \ref{thm:pom-microcanonical-fold-entropy} 得第二式；其后的双指数结论由 \(N=2^m\) 与 \(n\log N=o(N)\) 直接推出。
+\par
+(2) 由 \(\mathbb P(F\in\mathcal C_m)=\card{\mathcal C_m}/\card{\mathfrak{Fold}_m(d)}\) 与定理 \ref{thm:pom-microcanonical-fold-entropy} 代入立得。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-microcanonical-fold-streaming-program-rarity}
+
+\begin{theorem}[截面选择的指数自由度：右逆空间的精确计数]\label{thm:pom-microcanonical-section-count}
+对任意 \(F\in\mathfrak{Fold}_m(d)\)，定义其右逆（截面）集合
+\[
+\mathfrak{S}(F):=\Bigl\{s:X_m\to \Omega_m:\ F\circ s=\mathrm{id}_{X_m}\Bigr\}.
+\]
+则有闭式
+\[
+\boxed{\;
+\card{\mathfrak{S}(F)}=\prod_{x\in X_m} d(x)\; } ,
+\qquad
+\boxed{\;
+\log\card{\mathfrak{S}(F)}=\sum_{x\in X_m}\log d(x)\; } .
+\]
+若记 \(\nu:=\mathrm{Unif}(X_m)\)，并定义
+\(
+\kappa_\nu(d):=\mathbb{E}_{\nu}[\log d(X)]=\frac{1}{n}\sum_x\log d(x)
+\)，则
+\[
+\boxed{\;
+\log\card{\mathfrak{S}(F)}=n\,\kappa_\nu(d).\;}
+\]
+\end{theorem}
+\begin{proof}
+构造 \(s\in\mathfrak{S}(F)\) 等价于对每个 \(x\in X_m\) 从纤维 \(F^{-1}(x)\) 中选择一个代表元；各纤维选择彼此独立，计数为乘积 \(\prod_x d(x)\)。
+取对数并改写为 \(\nu\) 下的均值即得。证毕。
+\end{proof}
+
+\begin{theorem}[谱不可导出截面：仅凭纤维谱无法产生普适有效的规范右逆]\label{thm:pom-spectrum-cannot-induce-universal-section}
+设存在一“谱\(\to\)截面”规则 \(\mathcal{A}\)，其输入仅为纤维谱 \(d\)，输出为映射 \(s_d:X_m\to\Omega_m\)。
+称 \(\mathcal{A}\) 为\emph{普适有效}，若对所有 \(F\in\mathfrak{Fold}_m(d)\) 都有 \(F\circ s_d=\mathrm{id}_{X_m}\)。
+若满足 \(n=\card{X_m}\ge 2\) 且存在某个 \(x_0\in X_m\) 使 \(d(x_0)\ge 2\)，则不存在普适有效的 \(\mathcal{A}\)。
+\end{theorem}
+\begin{proof}
+反设存在普适有效的 \(s_d\)。
+任取 \(F\in\mathfrak{Fold}_m(d)\) 并取 \(x_0\in X_m\) 使 \(d(x_0)\ge 2\)。
+令 \(\omega_0:=s_d(x_0)\in\Omega_m\)，则由普适有效性知 \(F(\omega_0)=x_0\)。
+\par
+由于 \(n\ge 2\) 且 \(d(x)\ge 1\) 对所有 \(x\) 成立，存在某个 \(x_1\neq x_0\) 以及 \(\omega_1\in\Omega_m\) 使 \(F(\omega_1)=x_1\neq x_0\)。
+取置换 \(\sigma\) 交换 \(\omega_0\) 与 \(\omega_1\)，并令 \(F':=F\circ\sigma^{-1}\)。
+则 \(\card{(F')^{-1}(x)}=\card{F^{-1}(x)}=d(x)\) 对一切 \(x\) 成立，即 \(F'\in\mathfrak{Fold}_m(d)\)。
+但
+\[
+F'(s_d(x_0))=F'(\omega_0)=F(\sigma^{-1}(\omega_0))=F(\omega_1)\neq x_0,
+\]
+从而 \(F'\circ s_d\neq \mathrm{id}_{X_m}\)，与普适有效性矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[学习/审计的查询下界：识别同谱折叠所需查询次数]\label{thm:pom-microcanonical-fold-query-lower-bound}
+在黑箱查询模型中，未知 \(F\in\mathfrak{Fold}_m(d)\) 作为 oracle 给出；算法可自适应选择
+\(\omega^{(1)},\dots,\omega^{(k)}\in\Omega_m\)，并观察响应 \(F(\omega^{(i)})\in X_m\)。
+若算法在确定性意义下对所有 \(F\in\mathfrak{Fold}_m(d)\) 都能唯一确定 \(F\)，则其查询次数必满足
+\[
+\boxed{\;
+k\ \ge\ \left\lceil \frac{\log\card{\mathfrak{Fold}_m(d)}}{\log\card{X_m}}\right\rceil\; } .
+\]
+结合定理 \ref{thm:pom-microcanonical-fold-entropy}，在 \(n\log N=o(N)\) 下有
+\[
+k\ \ge\ \frac{N\,H(w)}{\log n}+o\!\left(\frac{N}{\log n}\right).
+\]
+在本文主线 \(n\asymp\varphi^m\) 下，\(\log n=\Theta(m)\)，从而 \(k=\Omega(2^m/m)\)。
+\end{theorem}
+\begin{proof}
+任意 \(k\) 次查询产生的响应轨迹至多有 \(n^k=\card{X_m}^k\) 种可能。
+若 \(n^k<\card{\mathfrak{Fold}_m(d)}\)，则存在 \(F\neq F'\) 产生同一轨迹（鸽巢原理），算法无法区分，因而不可能精确识别。
+故必须有 \(n^k\ge \card{\mathfrak{Fold}_m(d)}\)，取对数即得第一式。
+其余结论由定理 \ref{thm:pom-microcanonical-fold-entropy} 代入并用 \(\log n=\Theta(m)\) 得到。证毕。
+\end{proof}
+
+\begin{remark}[计数下界与查询刚性]
+定理 \ref{thm:pom-microcanonical-fold-query-lower-bound} 仅使用“响应字母表大小为 \(n\)”这一粗信息，
+并未利用同谱约束 \(\card{F^{-1}(x)}=d(x)\) 所诱导的无放回结构。
+在微正则语义下，精确识别还满足更强的刚性：只要仍存在至少两个未查询点，即可在保持计数约束的前提下交换其标签而不改变全部已观测响应。
+\end{remark}
+
+\begin{theorem}[最坏情形查询刚性：非平凡纤维谱下精确识别需 \(N-1\) 次查询]\label{thm:pom-microcanonical-fold-worstcase-query-rigidity}
+设 \(n=\card{X_m}\ge 2\)。
+考虑确定性自适应查询算法：每次选择尚未查询的 \(\omega\in\Omega_m\) 并观察 \(F(\omega)\)，在 \(k\) 次查询后输出估计 \(\widehat F\)。
+若算法满足对一切 \(F\in\mathfrak{Fold}_m(d)\) 都有 \(\widehat F=F\)，则必有
+\[
+\boxed{\;k\ge N-1\;}
+\qquad(N=\card{\Omega_m}=2^m).
+\]
+\end{theorem}
+\begin{proof}
+取任意确定性算法 \(\mathcal{A}\)，反设其在最坏情形下仅查询 \(k\le N-2\) 次。
+由 \(n\ge 2\) 且 \(d(x)\ge 1\)（对所有 \(x\)）可取不同标签 \(x_\star\neq y_\star\in X_m\) 使 \(d(x_\star),d(y_\star)\ge 1\)。
+\par
+以对抗方式生成回答：在前 \(k\) 次查询中，从每个标签 \(x\) 具有 \(d(x)\) 个“可用计数”的多重集中依次取出回答，并预先保留 \(x_\star\) 与 \(y_\star\) 各一单位不被使用。
+由于除去这两单位后仍有 \(N-2\) 个计数可用，而 \(k\le N-2\)，该策略可行且不会违反任意标签的计数上限。
+由此得到查询点集合 \(Q\subset\Omega_m\)（\(\card{Q}=k\)）及其在 \(Q\) 上的响应轨迹。
+\par
+令 \(U:=\Omega_m\setminus Q\)，则 \(\card{U}=N-k\ge 2\)。
+在 \(U\) 中任选 \(\omega_1\neq\omega_2\)。
+在保持 \(Q\) 上响应轨迹不变的前提下，构造两映射 \(F_0,F_1\in\mathfrak{Fold}_m(d)\)：
+令
+\[
+F_0(\omega_1)=x_\star,\quad F_0(\omega_2)=y_\star,\qquad
+F_1(\omega_1)=y_\star,\quad F_1(\omega_2)=x_\star,
+\]
+并将 \(U\setminus\{\omega_1,\omega_2\}\) 处的取值按剩余计数（总和为 \(\card{U}-2\)）任意补全。
+该补全可行是因为上述回答策略保证了 \(x_\star,y_\star\) 的各一单位仍未使用，且其余标签的未使用计数总和恰为 \(\card{U}-2\)。
+\par
+由于 \(\mathcal{A}\) 未查询 \(\omega_1,\omega_2\)，故在 \(Q\) 上 \(F_0\) 与 \(F_1\) 给出完全相同的观测轨迹，从而 \(\mathcal{A}\) 的输出必相同；
+但 \(F_0\neq F_1\)，与“对所有 \(F\)”精确识别矛盾。
+\end{proof}
+
+\paragraph{微正则先验下的后验模空间：计数闭式、轨迹概率与 Bayes 识别率}
+以下把“同谱折叠实现模空间”赋予均匀先验，并将任意有限查询轨迹的后验规模与 Bayes 最优精确识别率写成完全显式的组合闭式。
+
+\begin{theorem}[后验模空间的精确计数与轨迹概率]\label{thm:pom-microcanonical-fold-posterior-count-and-prob}
+令 \(F\sim\mathrm{Unif}(\mathfrak{Fold}_m(d))\)。
+对任意互异查询点集 \(Q=\{\omega_1,\dots,\omega_k\}\subset\Omega_m\) 与任意响应序列 \(\mathbf{a}=(a_1,\dots,a_k)\in X_m^k\)，记其计数向量
+\[
+c_{\mathbf{a}}(x):=\card{\{i\in\{1,\dots,k\}:\ a_i=x\}},\qquad x\in X_m,\qquad \sum_{x}c_{\mathbf{a}}(x)=k.
+\]
+则满足 \(F(\omega_i)=a_i\ (1\le i\le k)\) 的实现数为
+\[
+\boxed{\;
+\card{\Bigl\{F\in\mathfrak{Fold}_m(d):\ F(\omega_i)=a_i,\ 1\le i\le k\Bigr\}}
+=\frac{(N-k)!}{\prod_{x\in X_m}\bigl(d(x)-c_{\mathbf{a}}(x)\bigr)!}\;},
+\]
+其中若存在 \(x\) 使 \(c_{\mathbf{a}}(x)>d(x)\) 则右端按 \(0\) 解释。
+相应地，该轨迹在均匀先验下出现的概率为
+\[
+\boxed{\;
+\mathbb{P}(\mathbf{a})
+=\frac{(N-k)!}{N!}\prod_{x\in X_m}\frac{d(x)!}{\bigl(d(x)-c_{\mathbf{a}}(x)\bigr)!}
+=\frac{1}{(N)_k}\prod_{x\in X_m}\bigl(d(x)\bigr)_{c_{\mathbf{a}}(x)}\;},
+\]
+其中 \((u)_r:=u(u-1)\cdots(u-r+1)\) 为下降阶乘，且 \((u)_0:=1\)，并约定 \((N)_k:=N(N-1)\cdots(N-k+1)\)。
+因此 \(\mathbb{P}(\mathbf{a})\) 与兼容实现数仅依赖于计数向量 \(c_{\mathbf{a}}\) 与查询次数 \(k\)，与 \(Q\) 的具体位置无关。
+\end{theorem}
+\begin{proof}
+固定 \(Q\) 上的响应后，剩余 \(N-k\) 个微态必须按剩余计数
+\(
+d(x)-c_{\mathbf{a}}(x)
+\)
+分配到各标签（\(x\in X_m\)），该分配数为带标签的多项式系数
+\(
+(N-k)!/\prod_x(d(x)-c_{\mathbf{a}}(x))!
+\)；
+若某 \(x\) 使 \(c_{\mathbf{a}}(x)>d(x)\)，则不存在可行分配，计数为 \(0\)。
+\par
+轨迹概率由定理 \ref{thm:pom-microcanonical-fold-class-count} 的
+\(
+\card{\mathfrak{Fold}_m(d)}=N!/\prod_x d(x)!
+\)
+作比值得到，并用恒等式
+\(
+d(x)!/(d(x)-r)!= (d(x))_{r}
+\)
+与
+\(
+N!/(N-k)!=(N)_k
+\)
+化简即得。
+最后一条“仅依赖计数”的结论由公式中不出现 \(Q\) 的具体结构直接推出。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-microcanonical-fold-adaptive-no-gain-sufficient-statistic}
+
+\input{sections/body/pom/parts/part__pom-microcanonical-fold-section-coverage-cutoff}
+
+\begin{theorem}[剩余 \(t\) 点的 Bayes 最优精确识别率：超几何剩余计数闭式]\label{thm:pom-microcanonical-fold-bayes-success-Nminus-t}
+令 \(F\sim\mathrm{Unif}(\mathfrak{Fold}_m(d))\)。
+考虑任意查询协议，在不重复的前提下查询 \(k=N-t\) 个点并观测全部响应；记未查询集 \(U\) 的大小为 \(\card{U}=t\)。
+令剩余计数向量 \(R=(R_x)_{x\in X_m}\) 定义为
+\[
+R_x:=\card{\{\omega\in U:\ F(\omega)=x\}},\qquad \sum_{x\in X_m}R_x=t.
+\]
+则在给定全部观测的条件下，\(U\) 上所有满足剩余计数 \(R\) 的标签赋值在后验下等可能，其数目为 \(t!/\prod_x R_x!\)。
+因此任何算法在该轨迹下精确输出整张映射 \(F\) 的最优成功概率为 \(\prod_x R_x!/t!\)，从而
+\[
+\boxed{\;
+\mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)
+=\EE\Bigl[\frac{\prod_{x\in X_m}R_x!}{t!}\Bigr]\;},
+\]
+其中 \(R\) 服从由总体计数 \(d\) 与样本量 \(t\) 参数化的多元超几何分布。
+并且存在等价闭式
+\[
+\boxed{\;
+\mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)
+=\frac{1}{(N)_t}\sum_{\substack{r_x\in\ZZ_{\ge 0}\\ \sum_x r_x=t}}\ \prod_{x\in X_m}\bigl(d(x)\bigr)_{r_x}\; } .
+\]
+\end{theorem}
+\begin{proof}
+在固定 \(Q=\Omega_m\setminus U\) 上的全部响应之后，\(U\) 上唯一尚未被决定的是“把多重集 \(\{x^{\times R_x}\}\) 赋给 \(t\) 个已命名位置”的排列；
+可行赋值数为 \(t!/\prod_x R_x!\)。
+由于先验在 \(\mathfrak{Fold}_m(d)\) 上均匀，且对 \(U\) 内的任意置换都保持不变，故在给定观测与 \(R\) 的条件下，上述 \(t!/\prod_x R_x!\) 个赋值在后验下等可能；
+于是最优（MAP）成功概率为其倒数 \(\prod_x R_x!/t!\)，从而得第一式。
+\par
+对闭式：对任意 \((r_x)_x\) 满足 \(\sum_x r_x=t\)，由超几何分布
+\[
+\mathbb{P}(R=r)=\frac{\prod_{x\in X_m}\binom{d(x)}{r_x}}{\binom{N}{t}}
+\]
+得
+\[
+\EE\Bigl[\frac{\prod_x R_x!}{t!}\Bigr]
+=\sum_{r:\ \sum r_x=t}\frac{\prod_x r_x!}{t!}\cdot \frac{\prod_x\binom{d(x)}{r_x}}{\binom{N}{t}}
+=\frac{1}{t!\binom{N}{t}}\sum_{r:\ \sum r_x=t}\ \prod_x\Bigl(r_x!\binom{d(x)}{r_x}\Bigr).
+\]
+用恒等式 \(r!\binom{d}{r}=(d)_r\) 与 \(t!\binom{N}{t}=(N)_t\) 化简即得。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-microcanonical-fold-posterior-entropy-linear-law}
+
+\input{sections/body/pom/parts/part__pom-microcanonical-fold-information-linear-law-ldp-sidebits}
+
+\begin{theorem}[固定 \(t\) 的热力学极限：完全齐次对称多项式]\label{thm:pom-microcanonical-fold-bayes-success-thermo-limit}
+令 \(w(x):=d(x)/N\)。
+若 \(t\) 固定而 \(N\to\infty\)，则
+\[
+\mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)\ \longrightarrow\ \mathsf{h}_t(w)
+:=\sum_{\substack{r_x\in\ZZ_{\ge 0}\\ \sum_x r_x=t}}\ \prod_{x\in X_m} w(x)^{r_x}.
+\]
+并且 \(\mathsf{h}_t(w)\) 的生成函数为
+\[
+\boxed{\;
+\sum_{t\ge 0}\mathsf{h}_t(w)\,z^t=\prod_{x\in X_m}\frac{1}{1-w(x)z}\; } .
+\]
+\end{theorem}
+\begin{proof}
+对固定 \(t\)，有
+\(
+(d(x))_{r_x}=d(x)^{r_x}+O(d(x)^{r_x-1})
+\)
+且 \((N)_t=N^t+O(N^{t-1})\)。
+将定理 \ref{thm:pom-microcanonical-fold-bayes-success-Nminus-t} 的闭式除以 \(N^t\) 并用 \(d(x)=Nw(x)\) 展开，
+得极限为 \(\mathsf{h}_t(w)\)。
+\par
+生成函数由完全齐次对称多项式的标准定义给出：
+对每个 \(x\) 有 \((1-w(x)z)^{-1}=\sum_{r\ge 0}w(x)^r z^r\)，对所有 \(x\) 相乘并取 \(z^t\) 系数即得。证毕。
+\end{proof}
+
+\begin{theorem}[均匀极小原理：任意 \(t\) 下 \texorpdfstring{$\mathsf{h}_t$}{h\_t} 在均匀分布处取最小]\label{thm:pom-microcanonical-fold-ht-uniform-min}
+设 \(n=\card{X_m}\ge 1\)，令 \(U\in\Delta(X_m)\) 为均匀分布 \(U(x)=1/n\)。
+则对任意 \(w\in\Delta(X_m)\) 与任意整数 \(t\ge 0\)，成立
+\[
+\boxed{\;
+\mathsf{h}_t(w)\ \ge\ \mathsf{h}_t(U)=\frac{\binom{n+t-1}{t}}{n^t}\; } ,
+\]
+且等号当且仅当 \(w\equiv U\)。
+\end{theorem}
+\begin{proof}
+取任意 \(z\in(0,1)\)，令 \(\phi_z(x):=-\log(1-zx)\)。
+则 \(\phi_z\) 在 \(x\in[0,1]\) 上严格凸，且由 Jensen 不等式
+\[
+\sum_{x\in X_m}\phi_z(w(x))
+\ \ge\
+n\,\phi_z\!\left(\frac{1}{n}\sum_x w(x)\right)
+= -n\log\!\left(1-\frac{z}{n}\right).
+\]
+指数化得
+\(
+\prod_x(1-w(x)z)^{-1}\ge (1-z/n)^{-n}
+\)。
+两边展开为系数非负的幂级数，逐项比较 \(z^t\) 系数即得 \(\mathsf{h}_t(w)\ge \mathsf{h}_t(U)\)；
+而
+\(
+(1-z/n)^{-n}=\sum_{t\ge 0}\binom{n+t-1}{t}(z/n)^t
+\)
+给出闭式值。
+严格凸性推出等号充要条件为 \(w\equiv U\)。证毕。
+\end{proof}
+
+\begin{theorem}[碰撞矩完备性：\texorpdfstring{$\mathsf{h}_t(w)$}{h\_t(w)} 由有限幂和显式生成]\label{thm:pom-microcanonical-fold-ht-from-power-sums}
+对分布 \(w\in\Delta(X_m)\) 定义幂和
+\(
+p_k(w):=\sum_{x\in X_m}w(x)^k
+\)
+（其中 \(p_1(w)=1\)）。
+令
+\[
+\mathcal{H}_w(z):=\sum_{t\ge 0}\mathsf{h}_t(w)\,z^t=\prod_{x\in X_m}(1-w(x)z)^{-1}.
+\]
+则作为形式幂级数有严格恒等式
+\[
+\boxed{\;
+\log \mathcal{H}_w(z)=\sum_{k\ge 1}\frac{p_k(w)}{k}\,z^k\; } .
+\]
+从而对任意固定 \(t\)，\(\mathsf{h}_t(w)\) 仅依赖于 \(\{p_2(w),\dots,p_t(w)\}\)，并可由截断指数级数的 \(z^t\) 系数唯一确定。
+\end{theorem}
+\begin{proof}
+由恒等式 \(-\log(1-u)=\sum_{k\ge 1}u^k/k\)（作为形式幂级数）与 \(u=w(x)z\)，有
+\[
+\log \mathcal{H}_w(z)
+=-\sum_{x}\log(1-w(x)z)
+=\sum_{x}\sum_{k\ge 1}\frac{w(x)^k}{k}z^k
+=\sum_{k\ge 1}\frac{p_k(w)}{k}z^k.
+\]
+由于 \(p_1(w)=1\) 固定，故 \(z^t\) 系数仅依赖于 \(p_2,\dots,p_t\)。证毕。
+\end{proof}
+
+\begin{corollary}[低阶显式公式]\label{cor:pom-microcanonical-fold-ht-low-order}
+记 \(p_k:=p_k(w)\)，则
+\[
+\mathsf{h}_2=\frac{1+p_2}{2},\qquad
+\mathsf{h}_3=\frac{1+3p_2+2p_3}{6},
+\]
+\[
+\mathsf{h}_4=\frac{1+6p_2+3p_2^2+8p_3+6p_4}{24},
+\]
+\[
+\mathsf{h}_5=\frac{1+10p_2+15p_2^2+20p_3+20p_2p_3+30p_4+24p_5}{120}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-microcanonical-fold-ht-from-power-sums} 将
+\(
+\mathcal{H}_w(z)=\exp(\sum_{k\ge 1}p_k z^k/k)
+\)
+截断到相应阶并直接展开，取系数即可。证毕。
+\end{proof}
+
+\begin{theorem}[折叠矩谱到微观可逆性的编译：\texorpdfstring{$(N-t)$}{N-t} 查询 Bayes 识别率为有限多项式]\label{thm:pom-microcanonical-fold-bayes-success-polynomial-in-moments}
+在折叠语义下取 \(d=d_m\)、\(N=2^m\)、\(w=w_m\)，并记碰撞矩
+\(
+S_k(m):=\sum_{x\in X_m}d_m(x)^k
+\)。
+则对每个固定整数 \(t\ge 0\)，当 \(m\to\infty\) 时
+\[
+\boxed{\;
+\mathrm{Succ}^{\mathrm{Bayes}}_{2^m-t}(d_m)=\mathsf{h}_t(w_m)+o(1)\;}
+\]
+并且由 \(\,p_k(w_m)=\sum_x w_m(x)^k=2^{-mk}S_k(m)\) 可知 \(\mathsf{h}_t(w_m)\) 可由
+\(\{S_2(m),\dots,S_t(m)\}\) 通过推论 \ref{cor:pom-microcanonical-fold-ht-low-order} 的多项式公式显式计算。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-microcanonical-fold-bayes-success-thermo-limit} 得
+\(
+\mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)=\mathsf{h}_t(w)+o(1)
+\)
+（固定 \(t\)，令 \(N=2^m\to\infty\)）。
+在 Fold 口径下 \(w=w_m\) 且 \(p_k(w_m)=2^{-mk}S_k(m)\)（见 \S\ref{subsubsec:pom-real-q-pressure-thermo-frontier}），再由定理 \ref{thm:pom-microcanonical-fold-ht-from-power-sums} 与推论 \ref{cor:pom-microcanonical-fold-ht-low-order} 得到“有限多项式可计算性”。证毕。
+\end{proof}
+
+\begin{corollary}[二、三阶例式]\label{cor:pom-microcanonical-fold-bayes-success-examples-t2-t3}
+在定理 \ref{thm:pom-microcanonical-fold-bayes-success-polynomial-in-moments} 的设定下，有
+\[
+\mathrm{Succ}^{\mathrm{Bayes}}_{2^m-2}(d_m)
+=\frac{1+p_2(w_m)}{2}+o(1)
+=\frac{1+2^{-2m}S_2(m)}{2}+o(1),
+\]
+\[
+\mathrm{Succ}^{\mathrm{Bayes}}_{2^m-3}(d_m)
+=\frac{1+3p_2(w_m)+2p_3(w_m)}{6}+o(1)
+=\frac{1+3\cdot 2^{-2m}S_2(m)+2\cdot 2^{-3m}S_3(m)}{6}+o(1).
+\]
+\end{corollary}
+
+\begin{theorem}[残余置换熵：\texorpdfstring{$(N-t)$}{N-t} 查询的不可消去不确定性由 \texorpdfstring{$\mathsf{h}_t(w)$}{h\_t(w)} 定量]\label{thm:pom-microcanonical-fold-residual-min-entropy}
+在均匀微正则先验下，查询 \(N-t\) 点后尚未被观测的自由度仅为未查询集 \(U\) 上的标签排列；
+其后验最大概率即 Bayes 最优精确识别率。
+令
+\[
+\mathcal{R}_t(w):=-\log \mathsf{h}_t(w).
+\]
+则在 \(t\) 固定且 \(N\to\infty\) 时，\(N-t\) 查询后“残余可消去不确定性”的最优 min-entropy 极限等于 \(\mathcal{R}_t(w)\)。
+并且 \(\mathcal{R}_t(w)=0\) 当且仅当 \(w\) 退化为单点分布；
+而 \(\mathcal{R}_t(w)\) 在均匀分布处取最大值
+\[
+\boxed{\;
+\mathcal{R}_t(U)= -\log\!\left(\frac{\binom{n+t-1}{t}}{n^t}\right)\; } .
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-microcanonical-fold-bayes-success-thermo-limit}，
+\(
+\mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)\to \mathsf{h}_t(w)
+\)，取负对数得到 \(\mathcal{R}_t(w)\)。
+若 \(w\) 为单点分布，则 \(\mathsf{h}_t(w)=1\) 从而 \(\mathcal{R}_t(w)=0\)；
+反之若 \(\mathsf{h}_t(w)=1\) 则 \(p_2(w)=1\)（由推论 \ref{cor:pom-microcanonical-fold-ht-low-order} 的 \(\mathsf{h}_2\)）从而 \(w\) 必为单点分布。
+均匀分布处的最大性由定理 \ref{thm:pom-microcanonical-fold-ht-uniform-min}（均匀最小 \(\mathsf{h}_t\)）立即推出。证毕。
+\end{proof}
+
+\begin{theorem}[主纤维极点定理：\texorpdfstring{$t\to\infty$}{t->infty} 时 \texorpdfstring{$\mathsf{h}_t(w)$}{h\_t(w)} 的指数率与约化常数]\label{thm:pom-microcanonical-fold-dominant-pole-asymptotics}
+令
+\[
+w_\star:=\max_{x\in X_m} w(x),
+\qquad
+r:=\card{\{x\in X_m:\ w(x)=w_\star\}}\ge 1,
+\qquad
+C(w):=\prod_{x:\ w(x)<w_\star}\left(1-\frac{w(x)}{w_\star}\right)^{-1}.
+\]
+则生成函数 \(\mathcal{H}_w(z)=\prod_x(1-w(x)z)^{-1}\) 在 \(z=1/w_\star\) 处具有 \(r\) 阶极点，并且当 \(t\to\infty\) 时
+\[
+\boxed{\;
+\mathsf{h}_t(w)=\frac{C(w)}{(r-1)!}\,t^{\,r-1}\,w_\star^{\,t}\,(1+o(1))\; } .
+\]
+因此
+\[
+\boxed{\;
+\lim_{t\to\infty}\frac{1}{t}\log \mathsf{h}_t(w)=\log w_\star\; } ,
+\]
+而多项式前因子完全由约化乘积常数 \(C(w)\) 与极点阶 \(r\) 决定。
+\end{theorem}
+\begin{proof}
+将达到最大质量的 \(r\) 个因子抽出，写
+\[
+\mathcal{H}_w(z)=(1-w_\star z)^{-r}\cdot G_w(z),
+\qquad
+G_w(z):=\prod_{x:\ w(x)<w_\star}(1-w(x)z)^{-1}.
+\]
+则 \(G_w\) 在 \(z=1/w_\star\) 处解析且 \(G_w(1/w_\star)=C(w)\)。
+并且
+\[
+(1-w_\star z)^{-r}=\sum_{t\ge 0}\binom{t+r-1}{r-1}w_\star^{\,t}z^t.
+\]
+由系数提取与解析主导项估计（最近奇点主导）得
+\[
+\mathsf{h}_t(w)=\binom{t+r-1}{r-1}w_\star^{\,t}C(w)+o\!\left(t^{r-1}w_\star^{\,t}\right),
+\]
+再用 \(\binom{t+r-1}{r-1}\sim t^{r-1}/(r-1)!\) 即得所示渐近。
+对极限 \(\frac{1}{t}\log \mathsf{h}_t(w)\) 取对数并除以 \(t\) 即得 \(\log w_\star\)。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-microcanonical-fold-near-complete-uniform-asymptotics-phase}
+
+综上，固定纤维谱的微正则先验把“宏观纤维分布 \(w\)”与“微观可逆性”之间的关系压缩为一条完全可计算的对称函数链：
+在 \(N-t\) 查询的热力学极限下，Bayes 最优精确识别率由 \(\mathsf{h}_t(w)\) 给出；
+其低阶仅依赖有限碰撞矩 \(p_2(w),\dots,p_t(w)\)（在 Fold 口径下等价于 \(S_2(m),\dots,S_t(m)\)），
+而其大阶渐近由主纤维质量 \(w_\star\) 与约化常数 \(C(w)\) 统摄。
+在近完全查询的统一尺度 \(t=o(N^{2/3})\) 内，该描述仍保持有效，并由此诱导出由 \(w_\star\) 控制的常数/幂律/指数三段标度。
+
+\endinput
+

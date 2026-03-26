@@ -1,0 +1,475 @@
+\subsection{策略盲后验几何、Hellinger 跳跃生成元与双端点有限矩分叉}\label{subsec:conclusion-posterior-hellinger-endpoint-bifurcation}
+在微正则无放回查询链、查询加侧信息的 Gaussian 临界窗、对角约束率失真函数 \(R_w(\delta)\) 的两端点展开，以及小失真 Hellinger 生成元都已经建立之后，还可把这些原本分散在第 \(9\) 章不同局部的机制压缩成一条更高层的终端链。其核心并不只是“查询越多，信息越大”或“失真越小，代价越高”这类定性口号，而是四个彼此耦合的刚性事实：微正则查询的信息产出满足条件熵超鞅与边际递减；带外置比特的最优恢复阈值在整个确定性自适应类中严格策略盲；小失真端点的一阶极限并不产生任意可逆链，而只产生由 \(A_{1/2}(w)\) 与 \(\sqrt w\) 完全锁定的完全图生成元；零速率端点则在切空间上发生秩一塌缩，并与小失真端点一起形成一条无法由任何固定有限整数碰撞矩同时闭合的双端点分叉。
+
+\begin{theorem}[微正则查询的信息递减收益律]\label{thm:conclusion-microcanonical-query-diminishing-returns}
+在定理 \ref{thm:pom-microcanonical-information-doob} 的设定下，定义信息增量
+\[
+\Delta_i:=\mathsf I_i-\mathsf I_{i-1}=-\log p_{i-1}(T_i),
+\qquad
+p_i(x):=\frac{d(x)-C_i(x)}{N-i}.
+\]
+则有：
+\begin{enumerate}
+  \item 对每个 \(1\le i\le k\)，
+  \[
+  \EE[\Delta_i\mid \mathcal F_{i-1}]=H(p_{i-1});
+  \]
+  \item 过程 \((H(p_i))_{i\ge 0}\) 为超鞅；
+  \item 因而期望信息增量满足单调递减律
+  \[
+  \EE\Delta_1\ge \EE\Delta_2\ge \cdots \ge \EE\Delta_k;
+  \]
+  \item 等价地，期望后验模空间对数
+  \[
+  i\longmapsto \EE\bigl[\log \mathcal M_i(T_{1:i})\bigr]
+  \]
+  为离散凸函数，即对 \(1\le i<k\) 有
+  \[
+  \EE[\log \mathcal M_{i+1}]-2\EE[\log \mathcal M_i]+\EE[\log \mathcal M_{i-1}]\ge 0.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一式正是定理 \ref{thm:pom-microcanonical-information-doob} 的条件增量恒等式。由同一定理，\((p_i)_{i\ge 0}\) 为取值于概率单纯形 \(\Delta(X_m)\) 的鞅。Shannon 熵 \(H\) 在概率单纯形上凹，故 Jensen 不等式给出
+\[
+\EE[H(p_i)\mid \mathcal F_{i-1}]
+\le
+H\!\left(\EE[p_i\mid \mathcal F_{i-1}]\right)
+=
+H(p_{i-1}),
+\]
+从而 \((H(p_i))\) 为超鞅。取期望即得
+\[
+\EE\Delta_{i+1}=\EE H(p_i)\le \EE H(p_{i-1})=\EE\Delta_i.
+\]
+另一方面，由定理 \ref{thm:pom-microcanonical-information-identity}，
+\[
+\log \mathcal M_i(T_{1:i})=\log\card{\mathfrak{Fold}_m(d)}-\mathsf I_i.
+\]
+故
+\[
+\EE[\log \mathcal M_{i+1}]-2\EE[\log \mathcal M_i]+\EE[\log \mathcal M_{i-1}]
+=
+\EE\Delta_i-\EE\Delta_{i+1}\ge 0.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[缺失类型数的精确一、二阶矩公式]\label{thm:conclusion-missing-type-first-second-moments}
+在定理 \ref{thm:pom-microcanonical-adaptive-no-gain-without-replacement} 的设定下，对 \(t\in\{0,\dots,N\}\) 定义缺失指示量
+\[
+I_x(t):=\mathbf 1_{\{x\notin\{T_1,\dots,T_t\}\}},
+\qquad
+M(t):=\sum_{x\in X_m}I_x(t).
+\]
+再记
+\[
+\alpha_x(t):=\frac{\binom{N-d(x)}{t}}{\binom Nt},
+\qquad
+\alpha_{xy}(t):=\frac{\binom{N-d(x)-d(y)}{t}}{\binom Nt}\quad(x\ne y),
+\]
+并约定若上标为负则相应二项式系数取 \(0\)。则有精确公式
+\[
+\EE[M(t)]=\sum_{x\in X_m}\alpha_x(t),
+\]
+\[
+\Var(M(t))
+=
+\sum_{x\in X_m}\alpha_x(t)\bigl(1-\alpha_x(t)\bigr)
++2\sum_{x<y}\Bigl(\alpha_{xy}(t)-\alpha_x(t)\alpha_y(t)\Bigr).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-microcanonical-adaptive-no-gain-without-replacement}，轨迹 \((T_i)\) 与从多重集 \(\{x^{\times d(x)}\}_{x\in X_m}\) 的无放回抽样同分布。于是
+\[
+\PP(I_x(t)=1)=\frac{\binom{N-d(x)}{t}}{\binom Nt}=\alpha_x(t),
+\]
+因为前 \(t\) 次抽样都避开类型 \(x\) 当且仅当从其补集的 \(N-d(x)\) 个元素中取出 \(t\) 个。故
+\[
+\EE[M(t)]=\sum_x \EE[I_x(t)]=\sum_x \alpha_x(t).
+\]
+同理，对 \(x\ne y\) 有
+\[
+\PP(I_x(t)=I_y(t)=1)
+=
+\frac{\binom{N-d(x)-d(y)}{t}}{\binom Nt}
+=
+\alpha_{xy}(t),
+\]
+因为两类纤维互不相交。于是
+\[
+\Cov(I_x(t),I_y(t))=\alpha_{xy}(t)-\alpha_x(t)\alpha_y(t),
+\qquad
+\Var(I_x(t))=\alpha_x(t)(1-\alpha_x(t)).
+\]
+对
+\(
+M(t)=\sum_x I_x(t)
+\)
+展开方差即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[覆盖尾概率的二侧压缩公式]\label{cor:conclusion-cover-time-tail-two-sided-compression}
+沿用定理 \ref{thm:conclusion-missing-type-first-second-moments} 的记号。设 \(\tau\) 为覆盖时刻，则对任意 \(t\in\{0,\dots,N\}\) 有
+\[
+\PP(\tau>t)=\PP(M(t)>0),
+\]
+并且满足二侧显式界
+\[
+\frac{\bigl(\EE M(t)\bigr)^2}{\bigl(\EE M(t)\bigr)^2+\Var(M(t))}
+\le
+\PP(\tau>t)
+\le
+\EE M(t).
+\]
+因而把定理 \ref{thm:conclusion-missing-type-first-second-moments} 代入后，覆盖尾概率获得一个完全由纤维谱 \(\{d(x)\}_{x\in X_m}\) 决定的闭式上、下包络。
+\end{corollary}
+\begin{proof}
+由定义，\(\tau>t\) 当且仅当至少还有一种类型未被看到，即 \(M(t)>0\)。故第一式成立。上界来自
+\[
+\mathbf 1_{\{M(t)>0\}}\le M(t),
+\]
+取期望即得
+\[
+\PP(\tau>t)\le \EE M(t).
+\]
+下界由 Paley--Zygmund 不等式在阈值 \(0\) 处给出：
+\[
+\PP(M(t)>0)\ge \frac{(\EE M(t))^2}{\EE[M(t)^2]}
+=
+\frac{(\EE M(t))^2}{(\EE M(t))^2+\Var(M(t))}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[带外置信息的最优恢复率对策略完全失明]\label{thm:conclusion-microcanonical-query-sidebits-strategy-blind}
+设 \(A\) 为任意确定性自适应互异查询策略，执行 \(k\) 次查询，并允许额外获得 \(B\) 比特外置信息。记其全局最优精确恢复成功率为
+\[
+\mathrm{Succ}^{A,\mathrm{opt}}_{k,B}.
+\]
+则对任意此类 \(A\) 都有严格恒等式
+\[
+\mathrm{Succ}^{A,\mathrm{opt}}_{k,B}
+=
+\EE\!\left[\min\!\left(1,\frac{2^B}{\mathcal M_k(T_{1:k})}\right)\right],
+\]
+且右端与策略 \(A\) 无关。特别地，若
+\[
+k=\lfloor \beta N\rfloor,
+\qquad
+B_N=\frac{(1-\beta)NH(w)+t\sqrt{\beta(1-\beta)N\,V(w)}}{\log 2},
+\]
+则对每一个确定性自适应策略 \(A\) 都有同一 Gaussian 临界窗极限
+\[
+\mathrm{Succ}^{A,\mathrm{opt}}_{k,B_N}\longrightarrow \Phi(t).
+\]
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:pom-microcanonical-query-plus-bits-phase} 已给出在给定轨迹 \(T_{1:k}\) 条件下的最优恢复成功率闭式：
+\[
+\min\!\left(1,\frac{2^B}{\mathcal M_k(T_{1:k})}\right),
+\]
+这是因为后验在兼容集合上均匀，而 \(B\) 比特至多区分 \(2^B\) 个候选。对轨迹取期望即得第一式。
+
+接着，由定理 \ref{thm:pom-microcanonical-adaptive-no-gain-without-replacement}，任意确定性自适应互异策略所产生的类型轨迹分布都与从多重集 \(\{x^{\times d(x)}\}_{x\in X_m}\) 的无放回抽样同分布，故上式右端与 \(A\) 无关。临界窗极限正是定理 \ref{thm:pom-microcanonical-query-plus-bits-phase} 的第二部分；由于右端对一切 \(A\) 相同，该极限也对一切 \(A\) 相同。证毕。
+\end{proof}
+
+\begin{theorem}[后验模空间的 majorization 单调律]\label{thm:conclusion-posterior-moduli-majorization-monotonicity}
+固定 \(k\) 并记可行计数向量集合
+\[
+\mathcal C_k:=
+\left\{
+c\in \NN^{X_m}:\ 0\le c(x)\le d(x),\ \sum_{x\in X_m}c(x)=k
+\right\}.
+\]
+对 \(c\in \mathcal C_k\)，令
+\[
+r_c:=d-c,
+\qquad
+M_k(c):=\frac{(N-k)!}{\prod_{x\in X_m} r_c(x)!}.
+\]
+若 \(c,c'\in\mathcal C_k\) 满足残差向量的 majorization 关系
+\[
+r_c\succ r_{c'},
+\]
+则
+\[
+M_k(c)\le M_k(c').
+\]
+等价地，在固定查询数 \(k\) 下，后验兼容集合大小对残余纤维谱是 Schur--凹的：残余计数越均衡，后验模空间越大；残余计数越极端，后验模空间越小。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-microcanonical-fold-posterior-count-and-prob} 的后验计数公式，
+\[
+\log M_k(c)=\log (N-k)!-\sum_{x\in X_m}\log(r_c(x)!).
+\]
+定义 \(\phi(n):=\log(n!)\)。则
+\[
+\phi(n+1)-2\phi(n)+\phi(n-1)=\log\frac{n+1}{n}\ge 0,
+\]
+故 \(\phi\) 在 \(\NN\) 上离散凸。于是，在固定总和 \(\sum_x r_c(x)=N-k\) 下，函数
+\[
+r\longmapsto \sum_{x\in X_m}\phi(r(x))
+\]
+为 Schur--凸。由 \(r_c\succ r_{c'}\) 得
+\[
+\sum_x \log(r_c(x)!)\ge \sum_x \log(r_{c'}(x)!).
+\]
+代回 \(\log M_k(c)\) 的表达式便得到
+\[
+M_k(c)\le M_k(c').
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[小失真极限的 Hellinger 跳跃生成元]\label{thm:conclusion-hellinger-small-distortion-generator}
+设 \(w\in \Delta(X)\) 全支撑，并记
+\[
+A:=A_{1/2}(w)=\sum_{x\in X}\sqrt{w(x)}.
+\]
+令 \(K_\delta(\cdot\mid\cdot)\) 为命题 \ref{prop:pom-diagonal-rate-keep-resample-channel} 中由最优耦合 \(P_\delta^\star\) 诱导的保持--重采样核。则当 \(\delta\downarrow 0\) 时，逐项极限
+\[
+Q_w:=\lim_{\delta\downarrow0}\frac{K_\delta-I}{\delta}
+\]
+存在，且显式为
+\[
+(Q_w)_{xy}=
+\frac{\sqrt{w(y)/w(x)}}{A^2-1},
+\qquad x\ne y,
+\]
+\[
+(Q_w)_{xx}
+=
+-\frac{A-\sqrt{w(x)}}{\sqrt{w(x)}(A^2-1)}.
+\]
+等价地，
+\[
+K_\delta=I+\delta Q_w+o(\delta).
+\]
+\end{theorem}
+\begin{proof}
+这正是推论 \ref{cor:pom-diagonal-rate-critical-continuous-time-generator} 的逐项表述，只是把其连续时间极限矩阵重新解释为 \(\delta\downarrow 0\) 的一阶生成元。证毕。
+\end{proof}
+
+\begin{corollary}[Hellinger 生成元的 \(w\)-可逆性与显式 Dirichlet 形式]\label{cor:conclusion-hellinger-generator-reversibility-dirichlet}
+在定理 \ref{thm:conclusion-hellinger-small-distortion-generator} 的记号下，\(Q_w\) 关于原始分布 \(w\) 可逆，即对任意 \(x\ne y\),
+\[
+w(x)(Q_w)_{xy}=w(y)(Q_w)_{yx}
+=
+\frac{\sqrt{w(x)w(y)}}{A^2-1}.
+\]
+因此 \(w\) 是 \(Q_w\) 的平稳分布，并且对应的 Dirichlet 形式为
+\[
+\mathcal E_w(f)
+:=
+-\sum_{x\in X}w(x)f(x)(Q_wf)(x)
+=
+\frac{1}{2(A^2-1)}
+\sum_{x\ne y}\sqrt{w(x)w(y)}\,\bigl(f(x)-f(y)\bigr)^2.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-hellinger-small-distortion-generator}，
+\[
+w(x)(Q_w)_{xy}
+=
+w(x)\frac{\sqrt{w(y)/w(x)}}{A^2-1}
+=
+\frac{\sqrt{w(x)w(y)}}{A^2-1},
+\]
+其右端对 \((x,y)\) 对称，故详细平衡成立，平稳性随之成立。
+对任意以 \(w\) 为平稳分布的可逆生成元，Dirichlet 形式的标准表达为
+\[
+\mathcal E_w(f)=\frac12\sum_{x\ne y}w(x)(Q_w)_{xy}(f(x)-f(y))^2.
+\]
+代入上述电导闭式即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[均匀字母表上的完全图极限半群]\label{cor:conclusion-uniform-complete-graph-generator}
+取 \(w=U_n\) 为 \(n\)-点均匀分布。则结论 \ref{thm:conclusion-hellinger-small-distortion-generator} 中的生成元退化为
+\[
+(Q_n)_{xy}=\frac1{n-1}\quad(x\ne y),
+\qquad
+(Q_n)_{xx}=-1,
+\]
+亦即
+\[
+Q_n=-\frac{n}{n-1}I+\frac1{n-1}J,
+\]
+其中 \(J\) 为全 \(1\) 矩阵。故其半群显式为
+\[
+e^{tQ_n}
+=
+e^{-\frac{n}{n-1}t}\left(I-\frac1nJ\right)+\frac1nJ,
+\]
+并且谱隙精确为
+\[
+\lambda_{\mathrm{gap}}(Q_n)=\frac{n}{n-1}.
+\]
+\end{corollary}
+\begin{proof}
+对均匀分布 \(w(x)=1/n\) 有 \(A=\sqrt n\)。把这一数值代入定理 \ref{thm:conclusion-hellinger-small-distortion-generator} 即得
+\[
+(Q_n)_{xy}=\frac{1/n^{1/2}}{(n-1)/n}=\frac1{n-1}\qquad(x\ne y),
+\]
+\[
+(Q_n)_{xx}
+=-\frac{\sqrt n-1/\sqrt n}{((n-1)/n)\cdot 1/\sqrt n}
+=-1.
+\]
+从而
+\[
+Q_n=-\frac{n}{n-1}I+\frac1{n-1}J.
+\]
+由于 \(J\) 在 \(\mathbf 1\) 上的特征值为 \(n\)，在 \(\mathbf 1^\perp\) 上的特征值为 \(0\)，故 \(Q_n\) 的谱为
+\[
+0,\qquad -\frac{n}{n-1}\ \text{（重数 }n-1\text{）},
+\]
+指数化便得半群公式与谱隙。证毕。
+\end{proof}
+
+\begin{theorem}[零速率端点的一阶切向塌缩]\label{thm:conclusion-zero-rate-endpoint-rankone-tangent-collapse}
+设 \(w\in\Delta(X)\) 全支撑，并记
+\[
+\delta_0:=1-p_2(w),
+\qquad
+\varepsilon:=\delta_0-\delta\downarrow 0^+,
+\qquad
+C(w):=p_2(w)+p_2(w)^2-2p_3(w).
+\]
+则在切空间 \(\RR^X/\RR\mathbf 1\) 中，
+\[
+\nabla R_w(\delta)
+\equiv
+-\frac{2\varepsilon}{C(w)}\,w
+\pmod{\RR\mathbf 1}
++O(\varepsilon^2).
+\]
+更精确地，对任意切向扰动 \(\dot w\)（满足 \(\sum_x \dot w(x)=0\)），都有
+\[
+DR_w(\delta)[\dot w]
+=
+-\frac{2\varepsilon}{C(w)}
+\sum_{x\in X}\dot w(x)w(x)
++O\!\bigl(\varepsilon^2\|\dot w\|_1\bigr).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-frechet-derivative-scaling-potential}，
+\[
+\nabla R_w(\delta)\equiv 2\psi_\delta \pmod{\RR\mathbf 1}.
+\]
+而定理 \ref{thm:pom-diagonal-rate-scaling-potential-endpoints} 给出当 \(\varepsilon=\delta_0-\delta\downarrow 0\) 时
+\[
+\psi_\delta(x)=\frac{\varepsilon}{C(w)}\Bigl(\frac{p_2(w)}{2}-w(x)\Bigr)+c_\varepsilon+O(\varepsilon^2).
+\]
+其中 \(\frac{\varepsilon p_2(w)}{2C(w)}+c_\varepsilon\) 为纯常数项，故在模去 \(\RR\mathbf 1\) 后，
+\[
+\psi_\delta\equiv -\frac{\varepsilon}{C(w)}\,w+O(\varepsilon^2)\pmod{\RR\mathbf 1}.
+\]
+乘以 \(2\) 即得第一式。与任意满足 \(\sum_x\dot w(x)=0\) 的切向扰动配对即可得到第二式。证毕。
+\end{proof}
+
+\begin{corollary}[零速率端点的 first-order blind hyperplane]\label{cor:conclusion-zero-rate-endpoint-first-order-blind-hyperplane}
+定义
+\[
+\mathcal T_w:=
+\left\{
+\dot w\in \RR^X:\ \sum_{x\in X}\dot w(x)=0,\ \sum_{x\in X}\dot w(x)w(x)=0
+\right\}.
+\]
+则对任意 \(\dot w\in\mathcal T_w\)，当 \(\delta\uparrow\delta_0\) 时有
+\[
+DR_w(\delta)[\dot w]
+=
+O\!\bigl((\delta_0-\delta)^2\|\dot w\|_1\bigr).
+\]
+若 \(w\) 非均匀且 \(|X|\ge 3\)，则 \(\mathcal T_w\) 在 \(\RR^X\) 中为余维 \(2\) 子空间；若 \(w\) 均匀，则第二个约束由第一个自动蕴含，此时整个切空间都在一阶上不可见。
+\end{corollary}
+\begin{proof}
+对 \(\dot w\in\mathcal T_w\)，有
+\[
+\sum_x \dot w(x)=0,
+\qquad
+\sum_x \dot w(x)w(x)=0.
+\]
+将其代入定理 \ref{thm:conclusion-zero-rate-endpoint-rankone-tangent-collapse} 的方向导数公式，主项完全消失，只剩下
+\[
+O\!\bigl((\delta_0-\delta)^2\|\dot w\|_1\bigr).
+\]
+关于余维的陈述是线性代数的直接结论：若 \(w\) 非均匀，则 \(\mathbf 1\) 与 \(w\) 线性无关；若 \(w\) 均匀，则 \(w\in \RR\mathbf 1\)，第二约束冗余。证毕。
+\end{proof}
+
+\begin{theorem}[零速率端点的有限碰撞矩 jet rigidity]\label{thm:conclusion-zero-rate-endpoint-finite-collision-jet-rigidity}
+给定整数 \(J\ge 2\)。设 \(w,\widetilde w\in\Delta(X)\) 为两个全支撑分布，并满足
+\[
+p_r(w)=p_r(\widetilde w)\qquad (2\le r\le J+1).
+\]
+则它们具有相同的零速率阈值
+\[
+\delta_0(w)=\delta_0(\widetilde w),
+\]
+并且在 \(\delta\uparrow\delta_0\) 时，Taylor jet 直到 \(J\) 阶完全一致。更精确地，存在仅依赖于共同碰撞矩 \(p_2,\dots,p_{J+1}\) 的系数 \(a_2,\dots,a_J\)，使
+\[
+R_w(\delta)
+=
+\sum_{j=2}^J a_j(\delta_0-\delta)^j
++O\!\bigl((\delta_0-\delta)^{J+1}\bigr),
+\]
+\[
+R_{\widetilde w}(\delta)
+=
+\sum_{j=2}^J a_j(\delta_0-\delta)^j
++O\!\bigl((\delta_0-\delta)^{J+1}\bigr).
+\]
+\end{theorem}
+\begin{proof}
+由 \(p_2(w)=p_2(\widetilde w)\) 得
+\[
+\delta_0(w)=1-p_2(w)=1-p_2(\widetilde w)=\delta_0(\widetilde w).
+\]
+另一方面，命题 \ref{prop:pom-diagonal-rate-finite-moment-closure} 已证明：零速率端点附近的第 \(j\) 阶系数 \(a_j\) 是有限幂和
+\[
+\{p_2(w),p_3(w),\dots,p_{j+1}(w)\}
+\]
+的有理函数。于是当 \(2\le j\le J\) 时，
+\[
+a_j(w)=a_j(\widetilde w).
+\]
+把这些共同系数代回端点展开即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[两端点的不可兼容有限决定性]\label{cor:conclusion-two-endpoint-incompatible-finite-determinacy}
+给定任意整数 \(J\ge 2\)。则存在两列全支撑分布 \(w_m,\widetilde w_m\)（可取定义在同一字母表上），使得：
+\begin{enumerate}
+  \item 它们满足
+  \[
+  p_r(w_m)=p_r(\widetilde w_m)\qquad (2\le r\le J+1);
+  \]
+  \item 因而由定理 \ref{thm:conclusion-zero-rate-endpoint-finite-collision-jet-rigidity}，零速率端点 \(\delta\uparrow\delta_0\) 的 Taylor jet 到 \(J\) 阶完全一致；
+  \item 但小失真端点的首个非平凡常数严格不同，即
+  \[
+  A_{1/2}(w_m)^2-1\ne A_{1/2}(\widetilde w_m)^2-1.
+  \]
+\end{enumerate}
+从而，任意固定有限族整数碰撞矩都不可能同时决定 \(R_w(\delta)\) 在两端点的局部 germ。
+\end{corollary}
+\begin{proof}
+定理 \ref{thm:pom-finite-integer-moments-cannot-replace-half} 已给出：对任意固定整数 \(Q\ge 2\)，存在两列全支撑分布，在整数阶碰撞矩 \(p_r\) 于 \(2\le r\le Q\) 上完全一致，但半阶端点常数 \(A_{1/2}^2-1\) 严格不同。取 \(Q=J+1\) 即得上面第 \(1\) 与第 \(3\) 条。第 \(2\) 条则由定理 \ref{thm:conclusion-zero-rate-endpoint-finite-collision-jet-rigidity} 直接推出。证毕。
+\end{proof}
+
+\begin{theorem}[微正则后验几何与双端点失真几何之间的双重极限断裂]\label{thm:conclusion-posterior-distortion-double-limit-fracture}
+项目中的后验几何存在两类彼此独立的信息塌缩机制：
+\begin{enumerate}
+  \item 在查询侧，依据定理 \ref{thm:conclusion-microcanonical-query-diminishing-returns} 与定理 \ref{thm:conclusion-microcanonical-query-sidebits-strategy-blind}，信息增量满足条件熵超鞅与边际递减，而带外置比特的最优恢复阈值在整个确定性自适应类中严格策略盲；
+  \item 在失真侧，依据定理 \ref{thm:conclusion-hellinger-small-distortion-generator}、定理 \ref{thm:conclusion-zero-rate-endpoint-rankone-tangent-collapse}、定理 \ref{thm:conclusion-zero-rate-endpoint-finite-collision-jet-rigidity} 与推论 \ref{cor:conclusion-two-endpoint-incompatible-finite-determinacy}，小失真端点的一阶开口由 \(A_{1/2}(w)\) 锁定并产生 Hellinger 型完全图生成元，零速率端点则在切空间上发生秩一塌缩，且其任意有限阶 jet 只由有限整数碰撞矩决定。
+\end{enumerate}
+因此，查询极限 \((k/N\to\beta)\) 与失真极限 \((\delta\downarrow0\ \text{或}\ \delta\uparrow\delta_0)\) 虽然都经由 \(R_w\) 与后验模空间耦合，但它们在可见不变量、局部生成元与有限矩决定性上并不闭合为同一条有限层级机制：前者由超几何守恒与熵鞅主导，后者则在两端分别由 Hellinger 权与秩一切向塌缩主导。
+\end{theorem}
+\begin{proof}
+第一部分即定理 \ref{thm:conclusion-microcanonical-query-diminishing-returns} 与定理 \ref{thm:conclusion-microcanonical-query-sidebits-strategy-blind} 的直接组合。第二部分由定理 \ref{thm:conclusion-hellinger-small-distortion-generator}、推论 \ref{cor:conclusion-hellinger-generator-reversibility-dirichlet}、定理 \ref{thm:conclusion-zero-rate-endpoint-rankone-tangent-collapse}、定理 \ref{thm:conclusion-zero-rate-endpoint-finite-collision-jet-rigidity} 与推论 \ref{cor:conclusion-two-endpoint-incompatible-finite-determinacy} 联合得到：零速率端点的局部 jet 可被有限整数碰撞矩控制到任意固定阶，而小失真端点的首个非平凡常数却由 \(A_{1/2}\) 决定，不能被任何固定有限整数矩族替代。故两条极限链在机制与可审计口径上严格分离。证毕。
+\end{proof}
+
+这条链把无放回后验几何、查询加侧信息的 Gaussian 阈值、Hellinger 小失真生成元以及零速率端点的有限矩闭包第一次压缩到同一段终端语言中。其要点不是简单地重述“查询有信息”或“失真有代价”，而是表明：查询侧的平均信息产出满足条件熵超鞅与策略盲阈值，而失真侧在 \(\delta\downarrow0\) 与 \(\delta\uparrow\delta_0\) 两端分别暴露出两类完全不同的局部生成机制；二者只在全局变分问题里耦合，却不在任何固定有限矩层级上闭合。就本文整体结构而言，这意味着后验几何并不存在单一的有限统计坐标来统一承载“查询极限”与“失真极限”：一端由 Hellinger 权打开，一端则由碰撞矩 jet 封闭，中间裂口本身就是该框架的一条新刚性。
+
+\endinput

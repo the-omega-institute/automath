@@ -1,0 +1,573 @@
+\subsubsection{Carath\'eodory--Toeplitz 语义下的端点热核探针：Toeplitz 主子矩阵实现、单调极限与可审计推论链}\label{subsubsec:xi-endpoint-heat-kernel-probe-toeplitz}
+本段将端点热核探针置于 Carath\'eodory--Toeplitz 语义之内：探针既可表述为 \(\TT\) 上正测度的端点权重矩（从而适配端点递归与局部喷流分析），亦可在有限阶 Toeplitz 主子矩阵上由单一二次型给出（从而适配矩证书/可见证书的离线复核与复杂度评估）。
+
+\paragraph{Toeplitz 实现与严格恒等式}
+沿用定理 \ref{thm:xi-endpoint-heat-kernel-probe-third-order-expansion} 中端点热核探针的记号 \(a_N=\int_{\TT}\bigl|\frac{1-\xi}{2}\bigr|^{2N}\,\dd\mu(\xi)\)。
+令 \(\mu\) 为 \(\TT\) 上有限正 Borel 测度，并令其 Fourier 系数
+\[
+c_h:=\int_{\TT}\xi^{-h}\,\dd\mu(\xi),\qquad h\in\ZZ,
+\]
+从而 \(c_{-h}=\overline{c_h}\) 且 Toeplitz 主子矩阵
+\[
+\mathbf{T}_N:=(c_{j-k})_{0\le j,k\le N}\in\Mat_{N+1}(\CC)_{\mathrm{Herm}}
+\]
+半正定（Carath\'eodory--Toeplitz 完备性，参见附录相应刻画与 \S\ref{subsubsec:xi-pontryagin-toeplitz-blaschke-tomography-tate} 的记号约定）。
+定义端点热核探针向量，并引入其 Toeplitz 二次型表示
+\begin{equation}\label{eq:xi-endpoint-heat-probe-bN-aN}
+\boxed{\;
+b^{(N)}_k:=(-1)^k\binom{N}{k}\ (0\le k\le N),\qquad
+a_N=4^{-N}\,(b^{(N)})^\ast\,\mathbf{T}_N\,b^{(N)}\;}
+\end{equation}
+并记端点压缩函数
+\begin{equation}\label{eq:xi-endpoint-rxi-def}
+\boxed{\;
+r(\xi):=\frac{|1-\xi|^2}{4}\in[0,1]\qquad(\xi\in\TT).\;}
+\end{equation}
+
+\begin{proposition}[端点热核探针的 Toeplitz--Herglotz 同一]\label{prop:xi-endpoint-heat-probe-toeplitz-herglotz-identity}
+在上述记号下，对所有 \(N\ge 0\) 成立严格恒等式
+\begin{equation}\label{eq:xi-endpoint-heat-probe-identity}
+\boxed{\;
+a_N
+=\frac{1}{4^N}\int_{\TT}|1-\xi|^{2N}\,\dd\mu(\xi)
+=\int_{\TT}r(\xi)^N\,\dd\mu(\xi)\ \ge\ 0.\;}
+\end{equation}
+\end{proposition}
+\begin{proof}
+由定义与 Fubini 交换求和积分，
+\[
+(b^{(N)})^\ast\mathbf{T}_N b^{(N)}
+=\sum_{j,k=0}^{N}\overline{b_j^{(N)}}\,b_k^{(N)}\,c_{j-k}
+=\int_{\TT}\sum_{j,k=0}^{N}\overline{b_j^{(N)}}\,b_k^{(N)}\,\xi^{-(j-k)}\,\dd\mu(\xi).
+\]
+注意到
+\(
+\sum_{k=0}^{N}b_k^{(N)}\xi^{k}=(1-\xi)^N
+\)
+以及
+\(
+\sum_{j=0}^{N}\overline{b_j^{(N)}}\xi^{-j}=(1-\xi^{-1})^N
+=\overline{(1-\xi)^N}
+\)
+（在 \(\TT\) 上 \( \xi^{-1}=\overline{\xi}\)）。
+故 integrand 化简为 \(|1-\xi|^{2N}\)，得到第一等号；第二等号由 \eqref{eq:xi-endpoint-rxi-def} 直接改写。
+最后由 \(\mu\) 正性得 \(a_N\ge 0\)。证毕。
+\end{proof}
+
+\begin{theorem}[谱裕度对端点热核的显式下界]\label{thm:xi-endpoint-heat-probe-spectral-margin-lower-bound}
+沿用 \eqref{eq:xi-endpoint-heat-probe-bN-aN} 的记号。
+对任意 \(N\ge 1\) 记 \(\lambda_{\min}(\mathbf{T}_N)\) 为 Hermitian Toeplitz 主子矩阵 \(\mathbf{T}_N\) 的最小特征值，则有
+\begin{equation}\label{eq:xi-endpoint-heat-probe-spectral-margin-lb}
+\boxed{\;
+a_N\ \ge\ \lambda_{\min}(\mathbf{T}_N)\cdot \frac{\binom{2N}{N}}{4^N}\; }.
+\end{equation}
+特别地，若 \(\lambda_{\min}(\mathbf{T}_N)\ge \eta>0\)，则
+\[
+a_N\ \ge\ \eta\cdot \frac{\binom{2N}{N}}{4^N}
+\ \sim\ \frac{\eta}{\sqrt{\pi N}}\qquad(N\to\infty).
+\]
+\end{theorem}
+\begin{proof}
+由 Rayleigh 商与 \(\mathbf{T}_N\succeq \lambda_{\min}(\mathbf{T}_N)I\) 得
+\[
+(b^{(N)})^\ast\mathbf{T}_N b^{(N)}\ \ge\ \lambda_{\min}(\mathbf{T}_N)\,\norm{b^{(N)}}_2^2.
+\]
+将其除以 \(4^N\) 并使用 \eqref{eq:xi-endpoint-heat-probe-bN-aN} 得
+\(
+a_N\ge \lambda_{\min}(\mathbf{T}_N)\,\norm{b^{(N)}}_2^2/4^N
+\)。
+最后由 Vandermonde 恒等式
+\(
+\norm{b^{(N)}}_2^2=\sum_{k=0}^N\binom{N}{k}^2=\binom{2N}{N}
+\)
+得到 \eqref{eq:xi-endpoint-heat-probe-spectral-margin-lb}。证毕。
+\end{proof}
+
+\begin{corollary}[无端点原子时谱裕度必然坍缩]\label{cor:xi-endpoint-heat-probe-spectral-margin-collapse-no-atom}
+沿用以上记号，并记 \(m_{-1}:=\mu(\{-1\})\)。
+若 \(m_{-1}=0\)，则 Toeplitz 谱裕度无法保持统一正下界：对任意 \(\eta>0\)，存在无穷多个 \(N\) 使
+\[
+\lambda_{\min}(\mathbf{T}_N)\ <\ \eta.
+\]
+更具体地，对任意 \(N\ge 1\) 有
+\[
+\lambda_{\min}(\mathbf{T}_N)\ \le\ a_N\cdot \frac{4^N}{\binom{2N}{N}}
+\ \sim\ a_N\sqrt{\pi N}\qquad(N\to\infty),
+\]
+从而在 \(m_{-1}=0\) 时右端随 \(N\to\infty\) 趋于 \(0\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-endpoint-heat-probe-spectral-margin-lower-bound} 立即得到
+\(
+\lambda_{\min}(\mathbf{T}_N)\le a_N\,4^N/\binom{2N}{N}
+\)。
+若 \(m_{-1}=0\)，则由推论 \ref{cor:xi-endpoint-heat-probe-monotone-limit-gap} 的极限 \(a_N\downarrow m_{-1}\) 得 \(a_N\to 0\)，故右端趋零，从而谱裕度坍缩。证毕。
+\end{proof}
+
+\begin{theorem}[分辨率—精度张力：确定性离线核验的硬约束]\label{thm:xi-endpoint-heat-probe-resolution-accuracy-hard-constraint}
+设输入层仅给出 Toeplitz 系数的近似 \(\{\widehat c_h\}_{|h|\le N}\)，满足逐项误差
+\(
+|\widehat c_h-c_h|\le \delta
+\)（\(|h|\le N\)）。
+令 \(\widehat{\mathbf{T}}_N:=(\widehat c_{j-k})_{0\le j,k\le N}\)。
+则存在绝对常数 \(C>0\) 使
+\begin{equation}\label{eq:xi-endpoint-heat-probe-opnorm-entrywise}
+\boxed{\;
+\norm{\widehat{\mathbf{T}}_N-\mathbf{T}_N}_{\mathrm{op}}\ \le\ C(N+1)\delta\;}
+\end{equation}
+（例如可取 \(C=1\)）。
+\par
+若某一确定性方案试图在同一阶 \(N\) 上同时满足：
+\begin{enumerate}
+  \item \textbf{谱裕度闭合：}存在 \(\eta>0\) 使 \(\lambda_{\min}(\widehat{\mathbf{T}}_N)\ge \eta\) 且 \(\norm{\widehat{\mathbf{T}}_N-\mathbf{T}_N}_{\mathrm{op}}\le \eta/2\)，从而推出 \(\mathbf{T}_N\succeq 0\)；
+  \item \textbf{端点上界证书：}通过端点热核探针给出 \(m_{-1}\le \varepsilon\) 的上界（例如以 \(a_N\le \varepsilon\) 作为证据，并利用 \(a_N\downarrow m_{-1}\)）；
+\end{enumerate}
+则必有
+\begin{equation}\label{eq:xi-endpoint-heat-probe-delta-hard}
+\boxed{\;
+\delta\ \le\ c\,\frac{\varepsilon}{\sqrt N}\;}
+\end{equation}
+其中 \(c>0\) 为与 \(C\) 仅相差常数因子的绝对常数。
+进一步，若在某个态 \(\omega\) 下存在端点谱维数 \(d_{-1}(\omega)>0\) 使
+\(
+\omega(a_N-m_{-1})\lesssim N^{-d_{-1}(\omega)/2}
+\)
+且 \(m_{-1}=0\)，并取 \(N\asymp \varepsilon^{-2/d_{-1}(\omega)}\) 以实现 \(\omega(a_N)\lesssim \varepsilon\)，则必有
+\[
+\delta\ \lesssim\ \varepsilon^{\,1+1/d_{-1}(\omega)}.
+\]
+\end{theorem}
+\begin{proof}
+由 \(\norm{A}_{\mathrm{op}}\le \sqrt{\norm{A}_1\norm{A}_\infty}\)，并注意到 \(\widehat{\mathbf{T}}_N-\mathbf{T}_N\) 的每一行（列）绝对和至多为 \((N+1)\delta\)，得到 \eqref{eq:xi-endpoint-heat-probe-opnorm-entrywise}（可取 \(C=1\)）。
+\par
+谱裕度闭合条件给出 \(\norm{\widehat{\mathbf{T}}_N-\mathbf{T}_N}_{\mathrm{op}}\le \eta/2\)。
+另一方面由 Weyl 不等式，
+\[
+\lambda_{\min}(\mathbf{T}_N)\ \ge\ \lambda_{\min}(\widehat{\mathbf{T}}_N)-\norm{\widehat{\mathbf{T}}_N-\mathbf{T}_N}_{\mathrm{op}}
+\ \ge\ \eta/2,
+\]
+即 \(\eta\le 2\lambda_{\min}(\mathbf{T}_N)\)。
+若又以 \(a_N\le \varepsilon\) 作为端点上界证书，则由定理 \ref{thm:xi-endpoint-heat-probe-spectral-margin-lower-bound} 得
+\[
+\lambda_{\min}(\mathbf{T}_N)\ \le\ a_N\cdot \frac{4^N}{\binom{2N}{N}}
+\ \le\ \varepsilon\cdot \frac{4^N}{\binom{2N}{N}}
+\ \sim\ \varepsilon\sqrt{\pi N}.
+\]
+从而 \(\eta\lesssim \varepsilon\sqrt N\)，再与
+\(
+C(N+1)\delta\le \eta/2
+\)
+合并即得 \eqref{eq:xi-endpoint-heat-probe-delta-hard}。
+最后一条由 \(N\asymp \varepsilon^{-2/d_{-1}(\omega)}\) 代入 \(\delta\lesssim \varepsilon/\sqrt N\) 得到。证毕。
+\end{proof}
+
+\paragraph{单调极限、谱隙指数界与端点质量}
+记端点原子质量 \(m_{-1}:=\mu(\{-1\})\)。
+
+\begin{corollary}[端点质量的单调读出与谱隙指数界]\label{cor:xi-endpoint-heat-probe-monotone-limit-gap}
+对 \(a_N\) 有单调性与极限
+\begin{equation}\label{eq:xi-endpoint-heat-probe-monotone-limit}
+\boxed{\;
+0\le a_{N+1}\le a_N,\qquad
+a_N\downarrow m_{-1}\quad(N\to\infty).\;}
+\end{equation}
+并且若存在常数 \(r_\star\in[0,1)\) 使得
+\[
+\sup_{\xi\in\operatorname{supp}(\mu)\setminus\{-1\}}r(\xi)\le r_\star,
+\]
+则对所有 \(N\ge 0\) 有指数型误差界
+\begin{equation}\label{eq:xi-endpoint-heat-probe-gap-exp-bound}
+\boxed{\;
+0\le a_N-m_{-1}\le r_\star^{\,N}\,\mu(\TT\setminus\{-1\}).\;}
+\end{equation}
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:xi-endpoint-heat-probe-identity}，\(a_N=\int r^N\,\dd\mu\) 且 \(0\le r\le 1\)。
+故 \(r^{N+1}\le r^N\) 给出单调性。
+又因 \(r(\xi)=1\) 当且仅当 \(\xi=-1\)，由单调收敛定理得
+\(
+\lim_{N\to\infty}a_N=\mu(\{r=1\})=\mu(\{-1\})=m_{-1}
+\)。
+指数界由
+\(
+a_N-m_{-1}=\int_{\TT\setminus\{-1\}}r(\xi)^N\,\dd\mu(\xi)\le r_\star^N\mu(\TT\setminus\{-1\})
+\)
+得到。证毕。
+\end{proof}
+
+\paragraph{Adams 扭曲端点核：旋相扫描的 Fourier 对角化、单一网格 Toeplitz--PSD 核验与圆分方靶点的原子质量读出}
+\input{sections/body/zeta_finite_part/xi/parts/thm__xi-endpoint-heat-probe-cyclotomic-target}\iffalse
+对任意整数 \(d\ge 1\)，定义 \(d\)-扭曲矩
+\[
+c^{(d)}_h:=c_{dh}\qquad(h\in\ZZ),
+\]
+并令
+\(
+\mathbf{T}^{(d)}_N:=(c^{(d)}_{j-k})_{0\le j,k\le N}
+\)。
+以同一二项式向量 \(b^{(N)}\) 定义扭曲端点热核探针
+\[
+a_N^{(d)}:=4^{-N}\,(b^{(N)})^\ast\,\mathbf{T}^{(d)}_N\,b^{(N)}.
+\]
+则对所有 \(N\ge 0\) 成立严格恒等式
+\[
+\boxed{\;
+a_N^{(d)}=\int_{\TT}\left(\frac{|1-\xi^d|^2}{4}\right)^{N}\,\dd\mu(\xi)\ \ge\ 0\;}
+\]
+并且 \((a_N^{(d)})_{N\ge 0}\) 单调下降且满足
+\[
+\boxed{\;
+a_N^{(d)}\ \downarrow\ \mu\bigl(\{\xi\in\TT:\ \xi^d=-1\}\bigr)\qquad(N\to\infty).\;}
+\]
+\end{theorem}
+\begin{proof}
+由
+\(
+(1-\xi^d)^N=\sum_{k=0}^{N}(-1)^k\binom{N}{k}\xi^{dk}
+\)
+展开并按命题 \ref{prop:xi-endpoint-heat-probe-toeplitz-herglotz-identity} 的同一计算，得到
+\[
+4^{-N}(b^{(N)})^\ast\mathbf{T}^{(d)}_N b^{(N)}
+=\frac{1}{4^N}\int_{\TT}|1-\xi^d|^{2N}\,\dd\mu(\xi)
+=\int_{\TT}\left(\frac{|1-\xi^d|^2}{4}\right)^{N}\,\dd\mu(\xi).
+\]
+对任意 \(\xi\in\TT\) 有 \(|1-\xi^d|\le 2\)，且 \(|1-\xi^d|=2\) 当且仅当 \(\xi^d=-1\)。
+因此核函数 \(\left(|1-\xi^d|^2/4\right)^{N}\) 随 \(N\) 单调下降到指示函数 \(\ind_{\{\xi^d=-1\}}\)。
+由单调收敛定理得到极限等于 \(\mu(\{\xi^d=-1\})\)。证毕。
+\end{proof}
+
+\begin{corollary}[半角纤维的可核验质量]\label{cor:xi-endpoint-heat-probe-adams-twist-halfangle}
+在定理 \ref{thm:xi-endpoint-heat-probe-adams-twist-roots} 中取 \(d=2\)，则
+\[
+a_N^{(2)}\ \downarrow\ \mu(\{i\})+\mu(\{-i\})\qquad(N\to\infty).
+\]
+\end{corollary}
+\begin{proof}
+由 \(\xi^2=-1\iff \xi\in\{\pm i\}\) 直接代入得到。证毕。
+\end{proof}
+\fi
+\paragraph{谱隙半径的极限刻画与内部校验约束}
+定义端点外支撑的谱隙半径
+\begin{equation}\label{eq:xi-endpoint-heat-probe-rstar-def}
+\boxed{\;
+r_\ast:=\sup_{\xi\in\operatorname{supp}(\mu)\setminus\{-1\}}r(\xi)\in[0,1].\;}
+\end{equation}
+
+\begin{theorem}[指数根与比值极限决定谱隙半径]\label{thm:xi-endpoint-heat-probe-rstar-root-ratio}
+若 \(m_{-1}<\mu(\TT)\)（即 \(\mu(\TT\setminus\{-1\})>0\)），则
+\begin{equation}\label{eq:xi-endpoint-heat-probe-root-limit}
+\boxed{\;\lim_{N\to\infty}(a_N-m_{-1})^{1/N}=r_\ast.\;}
+\end{equation}
+进一步地，令
+\(
+\rho_N:=\frac{a_{N+1}-m_{-1}}{a_N-m_{-1}}
+\)
+（\(N\) 充分大时分母为正），则 \(\rho_N\) 单调递增且
+\begin{equation}\label{eq:xi-endpoint-heat-probe-ratio-limit}
+\boxed{\;\rho_N\uparrow r_\ast.\;}
+\end{equation}
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:xi-endpoint-heat-probe-identity}，
+\(
+a_N-m_{-1}=\int_{\TT\setminus\{-1\}} r(\xi)^N\,\dd\mu(\xi)
+\)。
+上界由 \(r(\xi)\le r_\ast\) 给出
+\(
+(a_N-m_{-1})^{1/N}\le r_\ast\,\mu(\TT\setminus\{-1\})^{1/N}\to r_\ast
+\)。
+对下界，任取 \(\varepsilon>0\)。由 \(r_\ast\) 为支撑上的上确界，存在 \(\xi_0\in\operatorname{supp}(\mu)\setminus\{-1\}\) 使 \(r(\xi_0)>r_\ast-\varepsilon\)。
+由支撑定义取邻域 \(U\ni\xi_0\) 使 \(\mu(U)>0\) 且 \(r(\xi)\ge r_\ast-\varepsilon\) 于 \(U\) 成立。
+于是
+\(
+a_N-m_{-1}\ge \int_U r(\xi)^N\,\dd\mu(\xi)\ge (r_\ast-\varepsilon)^N\mu(U)
+\)，从而 \(\liminf (a_N-m_{-1})^{1/N}\ge r_\ast-\varepsilon\)。
+令 \(\varepsilon\downarrow 0\) 得 \eqref{eq:xi-endpoint-heat-probe-root-limit}。
+\par
+对比值 \(\rho_N\)，先由 \eqref{eq:xi-endpoint-heat-probe-logconvex}（见后述定理）得 \(\rho_N\) 单调递增。
+另一方面，由
+\[
+\rho_N=\frac{\int_{\TT\setminus\{-1\}} r(\xi)^{N+1}\,\dd\mu(\xi)}{\int_{\TT\setminus\{-1\}} r(\xi)^{N}\,\dd\mu(\xi)}
+\]
+可知 \(\rho_N\le r_\ast\)（加权平均界）。
+为证极限下界，任取 \(\varepsilon>0\)。令 \(A_{\varepsilon}:=\{\xi\in\TT\setminus\{-1\}: r(\xi)\ge r_\ast-\varepsilon\}\)。
+由 \(r_\ast\) 为支撑上确界可取 \(\varepsilon/2\) 使 \(\mu(A_{\varepsilon/2})>0\)。
+则
+\[
+1-\frac{\int_{A_{\varepsilon}} r^N\,\dd\mu}{\int r^N\,\dd\mu}
+=\frac{\int_{\TT\setminus(\{-1\}\cup A_{\varepsilon})} r^N\,\dd\mu}{\int r^N\,\dd\mu}
+\le
+\frac{(r_\ast-\varepsilon)^N\,\mu(\TT)}{(r_\ast-\varepsilon/2)^N\,\mu(A_{\varepsilon/2})}\xrightarrow[N\to\infty]{}0.
+\]
+于是
+\[
+\rho_N\ge (r_\ast-\varepsilon)\cdot \frac{\int_{A_{\varepsilon}} r^N\,\dd\mu}{\int r^N\,\dd\mu}=(r_\ast-\varepsilon)\,(1+o(1)).
+\]
+令 \(\varepsilon\downarrow 0\) 并结合 \(\rho_N\le r_\ast\) 与单调性，得 \(\rho_N\uparrow r_\ast\)。证毕。
+\end{proof}
+
+\input{parts/thm__xi-endpoint-heat-probe-rstar-regular-variation-tail}\input{parts/thm__xi-endpoint-heat-probe-hausdorff-ratio-finite-toeplitz}
+
+\paragraph{端点幂律喷流与 dyadic 差分比值的指数读出}
+以下讨论 \(r(\xi)\uparrow 1\) 的端点局部几何如何在 \(a_N\) 的多尺度差分中显影。
+
+\begin{theorem}[端点幂律密度诱导的探针主项]\label{thm:xi-endpoint-heat-probe-powerlaw-leading}
+设 \(\mu\) 在 \(-1=e^{\mathrm{i}\pi}\) 的邻域内分解为
+\[
+\mu=m_{-1}\delta_{-1}+f(\theta)\,\dd\theta+\mu_\perp,
+\]
+其中 \(\mu_\perp\) 在 \(\theta=\pi\) 的某邻域上为零。
+假设存在 \(\alpha>-1\) 与常数 \(K_\pm\ge 0\) 使得当 \(\theta\to\pi^\pm\) 时
+\[
+f(\theta)\sim
+\begin{cases}
+K_+(\theta-\pi)^\alpha,& \theta\downarrow\pi,\\
+K_-(\pi-\theta)^\alpha,& \theta\uparrow\pi.
+\end{cases}
+\]
+记 \(p:=\frac{\alpha+1}{2}>0\)。
+则当 \(N\to\infty\) 时有渐近
+\begin{equation}\label{eq:xi-endpoint-heat-probe-powerlaw-asymptotic}
+\boxed{\;
+a_N-m_{-1}
+=c\,N^{-p}+o(N^{-p}),\qquad
+c:=2^\alpha\,\Gamma(p)\,(K_++K_-)\;}
+\end{equation}
+且 \(c>0\) 当且仅当 \(K_++K_->0\)。
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:xi-endpoint-heat-probe-identity}，
+\(
+a_N-m_{-1}=\int_{\TT\setminus\{-1\}}r(\xi)^N\,\dd\mu(\xi)
+\)。
+在 \(\mu_\perp\) 的支撑上 \(r(\xi)\le q<1\)，其贡献为 \(O(q^N)\)。
+对绝对连续部分，令 \(\theta=\pi+\varphi\)，并用
+\(
+r(e^{\mathrm{i}(\pi+\varphi)})=\cos^2(\varphi/2)
+\)。
+在 \(|\varphi|\) 小时
+\(
+\log\cos^2(\varphi/2)=-\varphi^2/4+O(\varphi^4)
+\)，因此主贡献来自 \(|\varphi|\asymp N^{-1/2}\)。
+对 \(\varphi>0\) 的一侧，代入尺度变换 \(\varphi=2y/\sqrt N\) 并用幂律假设
+\(
+f(\pi+\varphi)\sim K_+\varphi^\alpha
+\) 得
+\[
+\int_{0}^{\varepsilon}\cos^{2N}\!\left(\frac{\varphi}{2}\right)f(\pi+\varphi)\,\dd\varphi
+=2^{\alpha+1}K_+\,N^{-p}\int_{0}^{\infty}e^{-y^2}y^\alpha\,\dd y+o(N^{-p}).
+\]
+同理负侧给出 \(K_-\) 的同型项。最后利用
+\(
+\int_0^\infty e^{-y^2}y^\alpha\,\dd y=\frac12\Gamma\!\bigl(\frac{\alpha+1}{2}\bigr)=\frac12\Gamma(p)
+\)
+即可得到系数 \(c=2^\alpha\Gamma(p)(K_++K_-)\)。证毕。
+\end{proof}
+
+\begin{corollary}[dyadic 三级差分比值读出幂律指数]\label{cor:xi-endpoint-heat-probe-dyadic-exponent-readout}
+在定理 \ref{thm:xi-endpoint-heat-probe-powerlaw-leading} 的假设下，令
+\[
+R_N:=\frac{a_N-a_{2N}}{a_{2N}-a_{4N}}.
+\]
+则
+\begin{equation}\label{eq:xi-endpoint-heat-probe-dyadic-ratio-limit}
+\boxed{\;\lim_{N\to\infty}R_N=2^{p}=2^{(\alpha+1)/2},\;}
+\end{equation}
+从而
+\begin{equation}\label{eq:xi-endpoint-heat-probe-alpha-from-dyadic}
+\boxed{\;\alpha=2\log_2\!\Bigl(\lim_{N\to\infty}R_N\Bigr)-1.\;}
+\end{equation}
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:xi-endpoint-heat-probe-powerlaw-asymptotic}，
+\(
+a_N-a_{2N}=(a_N-m_{-1})-(a_{2N}-m_{-1})
+=c(1-2^{-p})N^{-p}+o(N^{-p})
+\)，
+同理
+\(
+a_{2N}-a_{4N}=c(1-2^{-p})2^{-p}N^{-p}+o(N^{-p})
+\)。
+相除即得 \eqref{eq:xi-endpoint-heat-probe-dyadic-ratio-limit}，再反解得 \eqref{eq:xi-endpoint-heat-probe-alpha-from-dyadic}。证毕。
+\end{proof}
+
+\begin{corollary}[端点幂律系数的闭式核验提取]\label{cor:xi-endpoint-heat-probe-powerlaw-coefficient-extraction}
+在定理 \ref{thm:xi-endpoint-heat-probe-powerlaw-leading} 的假设下，令
+\[
+D_N:=N^{p}(a_N-a_{2N}).
+\]
+则
+\[
+\lim_{N\to\infty}D_N=c(1-2^{-p}),
+\]
+从而
+\begin{equation}\label{eq:xi-endpoint-heat-probe-Ksum-extraction}
+\boxed{\;
+K_++K_-=\frac{1}{2^\alpha\Gamma(p)}\cdot
+\frac{\lim_{N\to\infty}D_N}{1-2^{-p}}\;}
+\end{equation}
+（其中 \(p=\tfrac{\alpha+1}{2}\)）。
+\end{corollary}
+\begin{proof}
+由上一个推论的渐近式乘以 \(N^p\) 取极限即可，最后代入 \(c=2^\alpha\Gamma(p)(K_++K_-)\) 得 \eqref{eq:xi-endpoint-heat-probe-Ksum-extraction}。证毕。
+\end{proof}
+
+\paragraph{端点原子质量的外推抽取}
+\begin{proposition}[Richardson 外推提升端点原子收敛阶]\label{prop:xi-endpoint-heat-probe-richardson-extrapolation}
+设存在 \(p>0\) 与常数 \(c\neq 0\) 使
+\(
+a_N=m_{-1}+cN^{-p}+o(N^{-p})
+\)。
+定义
+\[
+\widehat m_N^{(p)}:=\frac{2^{p}a_{2N}-a_N}{2^{p}-1}.
+\]
+则 \(\widehat m_N^{(p)}=m_{-1}+o(N^{-p})\)。
+若进一步有
+\(
+a_N=m_{-1}+cN^{-p}+c_1N^{-p-1}+o(N^{-p-1})
+\)，则 \(\widehat m_N^{(p)}=m_{-1}+O(N^{-p-1})\)。
+\end{proposition}
+\begin{proof}
+由假设
+\(
+a_{2N}=m_{-1}+c2^{-p}N^{-p}+o(N^{-p})
+\)。
+代入定义得
+\(
+2^pa_{2N}-a_N=(2^p-1)m_{-1}+o(N^{-p})
+\)，除以 \(2^p-1\) 即得第一条。
+含 \(N^{-p-1}\) 次项时同理直接抵消主项并得到阶提升。证毕。
+\end{proof}
+
+\begin{corollary}[自适应外推：无需预先给定 \(p\)]\label{cor:xi-endpoint-heat-probe-adaptive-extrapolation}
+在定理 \ref{thm:xi-endpoint-heat-probe-powerlaw-leading} 的假设下，令
+\[
+\widehat p_N:=\log_2\!\Bigl(\frac{a_N-a_{2N}}{a_{2N}-a_{4N}}\Bigr),
+\qquad
+\widetilde m_N:=\frac{2^{\widehat p_N}a_{2N}-a_N}{2^{\widehat p_N}-1}.
+\]
+则 \(\widehat p_N\to p\) 且 \(\widetilde m_N\to m_{-1}\)。
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:xi-endpoint-heat-probe-dyadic-exponent-readout} 得 \(\widehat p_N\to p\)。
+又由命题 \ref{prop:xi-endpoint-heat-probe-richardson-extrapolation} 的公式对 \(p\) 的连续依赖性以及 \(a_N\to m_{-1}\) 得 \(\widetilde m_N\to m_{-1}\)。证毕。
+\end{proof}
+
+\paragraph{闭式卷积、生成函数与差分主项}
+\begin{proposition}[中心二项式卷积闭式：线性时间计算]\label{prop:xi-endpoint-heat-probe-binomial-convolution}
+对 Toeplitz 系数 \(\{c_h\}\)（\(|h|\le N\)）有闭式表示
+\begin{equation}\label{eq:xi-endpoint-heat-probe-binomial-convolution}
+\boxed{\;
+a_N=\frac{1}{4^N}\sum_{h=-N}^{N}(-1)^h\binom{2N}{N+h}\,c_h.\;}
+\end{equation}
+因此 \(a_N\) 仅依赖 \(\{c_h\}_{|h|\le N}\)，并可由一次卷积在 \(O(N)\) 时间内计算。
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:xi-endpoint-heat-probe-bN-aN} 展开
+\[
+(b^{(N)})^\ast\mathbf{T}_N b^{(N)}
+=\sum_{h=-N}^{N}c_h\sum_{k} \overline{b^{(N)}_{k+h}}\,b^{(N)}_{k},
+\]
+内和取使指标合法的 \(k\)。
+由 \(b^{(N)}_{k}=(-1)^k\binom{N}{k}\) 得
+\(
+\overline{b^{(N)}_{k+h}}\,b^{(N)}_{k}=(-1)^h\binom{N}{k+h}\binom{N}{k}
+\)。
+对 \(k\) 求和并用 Vandermonde 卷积恒等式
+\(
+\sum_k\binom{N}{k+h}\binom{N}{k}=\binom{2N}{N+h}
+\)
+即得 \eqref{eq:xi-endpoint-heat-probe-binomial-convolution}。证毕。
+\end{proof}
+
+\begin{proposition}[端点母函数的 Stieltjes 表示与 Abel 残差读出]\label{prop:xi-endpoint-heat-probe-stieltjes-abel-residue}
+令 \(\nu:=r_\#(\mu)\) 为 \eqref{eq:xi-endpoint-rxi-def} 的推前测度，则 \(\nu\) 支撑于 \([0,1]\) 且 \(\nu(\{1\})=m_{-1}\)。
+并且对 \(N\ge 0\) 有
+\[
+a_N=\int_{[0,1]}x^N\,\dd\nu(x).
+\]
+定义生成函数
+\(
+\mathcal{A}(z):=\sum_{N\ge 0}a_N z^N
+\)，则当 \(|z|<1\) 时有严格表示
+\begin{equation}\label{eq:xi-endpoint-heat-probe-stieltjes-genfun}
+\boxed{\;
+\mathcal{A}(z)=\int_{[0,1]}\frac{1}{1-zx}\,\dd\nu(x).\;}
+\end{equation}
+并且端点原子质量满足 Abel 残差公式
+\begin{equation}\label{eq:xi-endpoint-heat-probe-abel-residue}
+\boxed{\;m_{-1}=\lim_{z\uparrow 1}(1-z)\mathcal{A}(z).\;}
+\end{equation}
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:xi-endpoint-heat-probe-identity} 立得 \(a_N=\int x^N\,\dd\nu(x)\)。
+对 \(|z|<1\) 有 \(\sum_{N\ge 0}(zx)^N=\frac{1}{1-zx}\) 且被 \(1/(1-|z|)\) 一致控制，可交换求和与积分得到 \eqref{eq:xi-endpoint-heat-probe-stieltjes-genfun}。
+若 \(\nu\) 在 \(x=1\) 处有原子 \(m_{-1}\)，则 \(\mathcal{A}(z)=\frac{m_{-1}}{1-z}+(\text{在 }z=1\text{ 解析的项})\)，故 \((1-z)\mathcal{A}(z)\to m_{-1}\)。证毕。
+\end{proof}
+
+\begin{theorem}[端点探针的有限 Hankel 秩与有限共轭对刚性]\label{thm:xi-endpoint-probe-finite-hankel-rank-finite-conjugate-pairs}
+在标量口径 \(\mathcal{A}=\CC\) 下，令 \(\mu\) 为 \(\TT\) 上有限正测度并定义端点探针
+\[
+a_N:=\frac{1}{4^N}\int_{\TT}|1-\xi|^{2N}\,\dd\mu(\xi),
+\qquad
+m_{-1}:=\mu(\{-1\}).
+\]
+令 \(\nu=r_\#(\mu)\)（\(r(\xi)=|1-\xi|^2/4\)），并记 \(s_N:=a_N-m_{-1}=\int_{[0,1)}x^N\,\dd\nu(x)\)。
+则以下条件等价：
+\begin{enumerate}
+  \item 序列 \((s_N)_{N\ge 0}\) 的 Hankel 秩有限：存在 \(R<\infty\) 使得对一切 \(M\ge 0\)，Hankel 矩阵 \((s_{i+j})_{0\le i,j\le M}\) 的秩不超过 \(R\)；
+  \item 测度 \(\nu\big|_{[0,1)}\) 为至多 \(R\) 个点的原子测度。
+\end{enumerate}
+在此情形下，存在互异 \(x_1,\dots,x_R\in(0,1)\) 与权重 \(w_j>0\) 使
+\[
+s_N=\sum_{j=1}^{R}w_j x_j^N,
+\]
+并且令
+\(
+Q(t):=\prod_{j=1}^{R}(t-x_j)=\sum_{k=0}^{R}q_k t^k
+\)，则 \((s_N)\) 满足严格线性递推
+\[
+\sum_{k=0}^{R}q_k\,s_{N+k}=0\qquad(\forall N\ge 0).
+\]
+进一步，\(\mu\) 在 \(\TT\setminus\{-1\}\) 上的支撑包含于有限多个共轭点对 \(\{e^{\mathrm{i}\theta_j},e^{-\mathrm{i}\theta_j}\}\)（\(1\le j\le R\)），其中 \(x_j=\frac12(1-\cos\theta_j)\)。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:xi-endpoint-heat-probe-stieltjes-abel-residue}，\(s_N\) 为 \([0,1)\) 上正测度 \(\nu\big|_{[0,1)}\) 的 Hausdorff 矩序列。
+Hausdorff 矩问题的结构理论给出：\((s_N)\) 的 Hankel 秩有限当且仅当该测度为有限原子；当
+\(
+\nu\big|_{[0,1)}=\sum_{j=1}^{R}w_j\delta_{x_j}
+\)
+时，必有 \(s_N=\sum_j w_jx_j^N\)。
+此时递推由最小多项式 \(Q\) 直接给出：对任意 \(N\ge 0\)，
+\[
+\sum_{k=0}^{R}q_k s_{N+k}
+=\sum_{j=1}^{R}w_j x_j^N\sum_{k=0}^{R}q_k x_j^k
+=\sum_{j=1}^{R}w_j x_j^N Q(x_j)=0.
+\]
+最后，对任意 \(x\in(0,1)\)，方程 \(r(\xi)=x\) 在 \(\TT\) 上等价于 \(\Re\xi=1-2x\)，其解为一对共轭点 \(e^{\pm\mathrm{i}\theta}\)（\(\cos\theta=1-2x\)）；因此 \(\nu\big|_{[0,1)}\) 的每个原子对应 \(\TT\setminus\{-1\}\) 上的一个有限共轭对支撑。证毕。
+\end{proof}
+
+\begin{proposition}[幂律情形的纯差分主项]\label{prop:xi-endpoint-heat-probe-powerlaw-differences}
+在定理 \ref{thm:xi-endpoint-heat-probe-powerlaw-leading} 的幂律假设下（\(p=\tfrac{\alpha+1}{2}\)），有
+\[
+a_N-a_{N+1}\sim p\,c\,N^{-p-1},
+\qquad
+a_{N-1}-2a_N+a_{N+1}\sim p(p+1)\,c\,N^{-p-2},
+\]
+其中 \(c\) 由 \eqref{eq:xi-endpoint-heat-probe-powerlaw-asymptotic} 给出。
+\end{proposition}
+\begin{proof}
+由 \(a_N-m_{-1}=cN^{-p}+o(N^{-p})\)，令 \(u_N:=cN^{-p}\)。
+则
+\[
+a_N-a_{N+1}=(u_N-u_{N+1})+o(N^{-p})-o(N^{-p})
+=u_N\Bigl(1-(1+1/N)^{-p}\Bigr)+o(N^{-p-1}),
+\]
+而 \((1+1/N)^{-p}=1-\frac{p}{N}+O(N^{-2})\) 给出 \(u_N-u_{N+1}=pc\,N^{-p-1}+O(N^{-p-2})\)。
+二阶中心差分同理由 \(n\mapsto n^{-p}\) 的二阶泰勒展开得到主项 \(p(p+1)c\,N^{-p-2}\)。
+吸收误差即得。证毕。
+\end{proof}
+
+\endinput
+

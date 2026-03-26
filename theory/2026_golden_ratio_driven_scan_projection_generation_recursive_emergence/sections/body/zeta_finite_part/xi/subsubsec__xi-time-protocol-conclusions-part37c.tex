@@ -1,0 +1,173 @@
+\paragraph{互素模族的外置寄存器去相关、最小熵下界与碰撞稀释}
+定理 \ref{thm:xi-godel-fiber-index-mod-uniformity-independence} 给出单一模数下的均匀化与输出独立性定量界。
+当外置残差由一族互素模共同给出时，中国剩余同构与总变差的 data-processing 性质允许将单模结果提升为向量残差的同时去相关。
+在同一误差界下，可进一步得到条件最小熵下界与二阶碰撞指纹的稀释律。
+
+\begin{theorem}[有限互素模族的外置残差去相关]\label{thm:xi-godel-coprime-mod-family-decoupling}
+沿用定理 \ref{thm:xi-godel-fiber-index-mod-uniformity-independence} 的设定。
+取两两互素整数 \(q_1,\dots,q_k\ge 2\)，并令
+\[
+q:=\prod_{j=1}^k q_j,
+\qquad
+\mathbf R_{\mathbf q}:=\bigl(R_{q_1},\dots,R_{q_k}\bigr)\in \prod_{j=1}^k\mathbb Z/q_j\mathbb Z.
+\]
+记 \(U_{\mathbf q}:=\bigotimes_{j=1}^k U_{q_j}\) 为直积均匀分布。
+则有总变差界
+\[
+\bigl\|\mathcal L(\mathbf R_{\mathbf q})-U_{\mathbf q}\bigr\|_{\mathrm{TV}}
+\le
+\min\!\left\{1,\frac{q\,|X|}{4|\Omega|}\right\},
+\]
+以及联合去相关界
+\[
+\bigl\|\mathcal L(X_\ast,\mathbf R_{\mathbf q})-\mathcal L(X_\ast)\otimes U_{\mathbf q}\bigr\|_{\mathrm{TV}}
+\le
+\min\!\left\{1,\frac{q\,|X|}{4|\Omega|}\right\}.
+\]
+\end{theorem}
+\begin{proof}
+由中国剩余定理存在群同构
+\(
+\psi:\mathbb Z/q\mathbb Z\stackrel{\sim}{\to}\prod_{j=1}^k\mathbb Z/q_j\mathbb Z
+\)
+使得 \(\mathbf R_{\mathbf q}=\psi(R_q)\)，且 \(U_q\) 在 \(\psi\) 下推前为 \(U_{\mathbf q}\)。
+由于总变差距离在可测映射推前下收缩，
+\[
+\|\mathcal L(\mathbf R_{\mathbf q})-U_{\mathbf q}\|_{\mathrm{TV}}
+\le
+\|\mathcal L(R_q)-U_q\|_{\mathrm{TV}},
+\qquad
+\|\mathcal L(X_\ast,\mathbf R_{\mathbf q})-\mathcal L(X_\ast)\otimes U_{\mathbf q}\|_{\mathrm{TV}}
+\le
+\|\mathcal L(X_\ast,R_q)-\mathcal L(X_\ast)\otimes U_q\|_{\mathrm{TV}}.
+\]
+将定理 \ref{thm:xi-godel-fiber-index-mod-uniformity-independence} 代入模数 \(q\) 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[条件最小熵的几乎处处下界]\label{cor:xi-godel-conditional-minentropy-lower-bound}
+在定理 \ref{thm:xi-godel-coprime-mod-family-decoupling} 的设定下，对每个 \(x\in X\) 定义条件偏差
+\[
+\eta_x:=\left\|\mathcal L(\mathbf R_{\mathbf q}\mid X_\ast=x)-U_{\mathbf q}\right\|_{\mathrm{TV}}.
+\]
+则成立精确分解
+\[
+\left\|\mathcal L(X_\ast,\mathbf R_{\mathbf q})-\mathcal L(X_\ast)\otimes U_{\mathbf q}\right\|_{\mathrm{TV}}
+=\sum_{x\in X}\PP(X_\ast=x)\,\eta_x,
+\]
+从而 \(\EE[\eta_{X_\ast}]\le \varepsilon\)，其中 \(\varepsilon:=\min\{1,q|X|/(4|\Omega|)\}\)。
+因此对任意 \(\delta\in(0,1]\)，令
+\(
+G_\delta:=\{x\in X:\ \eta_x\le \delta\}
+\)，则
+\[
+\PP(X_\ast\notin G_\delta)\le \varepsilon/\delta.
+\]
+并且对每个 \(x\in G_\delta\) 有条件最小熵下界
+\[
+H_\infty(\mathbf R_{\mathbf q}\mid X_\ast=x)\ \ge\ \log q-\log(1+\delta q),
+\]
+其中 \(H_\infty(Y):=-\log\max_y\PP(Y=y)\)。
+\end{corollary}
+\begin{proof}
+前两式由总变差对分层混合的精确分解与定理 \ref{thm:xi-godel-coprime-mod-family-decoupling} 直接得到。
+由 Markov 不等式，
+\(
+\PP(\eta_{X_\ast}>\delta)\le \EE[\eta_{X_\ast}]/\delta\le \varepsilon/\delta
+\)。
+若 \(x\in G_\delta\)，则对任意 \(\mathbf r\) 由 \(\|\mathcal L(\mathbf R_{\mathbf q}\mid X_\ast=x)-U_{\mathbf q}\|_{\mathrm{TV}}\le \delta\) 得
+\(
+\PP(\mathbf R_{\mathbf q}=\mathbf r\mid X_\ast=x)\le q^{-1}+\delta
+\)，
+从而
+\(
+H_\infty(\mathbf R_{\mathbf q}\mid X_\ast=x)\ge -\log(q^{-1}+\delta)=\log q-\log(1+\delta q)
+\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[素数指数寄存器的均匀性与稳定类型独立性]\label{cor:xi-godel-prime-exponent-register-uniform-independence}
+在折叠设定 \(X_\ast=\Fold_m(\omega)\)（\(\omega\sim\mathrm{Unif}(\Omega_m)\)）下，沿用推论 \ref{cor:xi-fold-profinite-haar-exponential-rate} 的纤维索引 \(I_m\)。
+取互异素数 \(p_1,\dots,p_k\)，并令
+\[
+E_{m,j}:=I_m\bmod p_j\in\{0,1,\dots,p_j-1\},
+\qquad
+\mathbf E_m:=(E_{m,1},\dots,E_{m,k}),
+\qquad
+q:=\prod_{j=1}^k p_j.
+\]
+则有
+\[
+\bigl\|\mathcal L(\mathbf E_m)-\textstyle\bigotimes_{j=1}^k U_{p_j}\bigr\|_{\mathrm{TV}}
+\le
+\min\!\left\{1,\frac{q\,|X_m|}{4\cdot 2^m}\right\},
+\]
+以及
+\[
+\bigl\|\mathcal L(\Fold_m(\omega),\mathbf E_m)-\mathcal L(\Fold_m(\omega))\otimes \textstyle\bigotimes_{j=1}^k U_{p_j}\bigr\|_{\mathrm{TV}}
+\le
+\min\!\left\{1,\frac{q\,|X_m|}{4\cdot 2^m}\right\}.
+\]
+进一步令
+\[
+N_m:=\prod_{j=1}^k p_j^{E_{m,j}},
+\qquad
+\mathcal N:=\Bigl\{\prod_{j=1}^k p_j^{e_j}:\ 0\le e_j<p_j\Bigr\},
+\]
+则 \(N_m\) 的分布与 \(\mathcal N\) 上均匀分布的总变差距离满足同一上界，并且 \((\Fold_m(\omega),N_m)\) 与乘积分布的总变差距离满足同一上界。
+\end{corollary}
+\begin{proof}
+对 \(\mathbf E_m\) 的两条界由定理 \ref{thm:xi-godel-coprime-mod-family-decoupling} 取 \(q_j=p_j\) 并代入 \(|\Omega_m|=2^m\)、\(|X|=|X_m|\) 得到。
+映射 \((e_1,\dots,e_k)\mapsto \prod_j p_j^{e_j}\) 在 \(\prod_j\{0,\dots,p_j-1\}\) 与 \(\mathcal N\) 之间为双射，故推前保持总变差距离，从而 \(N_m\) 的结论成立；联合分布同理。证毕。
+\end{proof}
+
+\begin{proposition}[外置模寄存器的碰撞稀释律]\label{prop:xi-godel-mod-register-collision-dilution}
+沿用推论 \ref{cor:xi-fold-profinite-haar-exponential-rate} 的折叠设定，令 \(q\ge 2\) 并记
+\(
+P_{m,q}:=\mathcal L(\Fold_m(\omega),R_{m,q})
+\)、
+\(
+w_m:=\mathcal L(\Fold_m(\omega))
+\)。
+对任意分布 \(\nu\) 定义碰撞概率
+\(
+\mathrm{Col}(\nu):=\sum_z \nu(z)^2
+\)。
+则有不等式
+\[
+\bigl|\mathrm{Col}(P_{m,q})-\tfrac{1}{q}\mathrm{Col}(w_m)\bigr|
+\le
+2\varepsilon_{m,q},
+\qquad
+\varepsilon_{m,q}:=\min\!\left\{1,\frac{q\,|X_m|}{4\cdot 2^m}\right\}.
+\]
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:xi-fold-joint-mod-tv-rate-general} 得
+\(
+\|P_{m,q}-w_m\otimes U_q\|_{\mathrm{TV}}\le \varepsilon_{m,q}
+\)。
+对任意两分布 \(\nu,\nu'\) 有
+\[
+\bigl|\mathrm{Col}(\nu)-\mathrm{Col}(\nu')\bigr|
+=\Bigl|\sum_z(\nu(z)-\nu'(z))(\nu(z)+\nu'(z))\Bigr|
+\le \sum_z|\nu(z)-\nu'(z)|\cdot(\nu(z)+\nu'(z))
+\le 2\|\nu-\nu'\|_{\mathrm{TV}}.
+\]
+故
+\(
+|\mathrm{Col}(P_{m,q})-\mathrm{Col}(w_m\otimes U_q)|\le 2\varepsilon_{m,q}
+\)。
+另一方面
+\(
+\mathrm{Col}(w_m\otimes U_q)=\sum_{x,r}w_m(x)^2q^{-2}=\frac{1}{q}\mathrm{Col}(w_m)
+\)。
+合并即得结论。证毕。
+\end{proof}
+
+\begin{remark}[秩索引外置的 Kolmogorov 不可压缩性]\label{rem:xi-godel-rank-index-kolmogorov-incompressible}
+对折叠映射 \(\Fold_m\) 的任意可计算纤维索引 \(I_m\)，
+将定理 \ref{thm:pom-reversible-external-residual-kolmogorov-lower-bound} 应用于残差 \(R(\omega)=I_m(\omega)\) 得到：
+在给定 \(X=\Fold_m(\omega)\) 与 \(m\) 的条件下，\(I_m\) 的前缀 Kolmogorov 复杂度以概率 \(1-2^{-\Omega(1)}\) 达到 \(\log_2 d_m(X)\) 的最优阶，并且存在相应的确定性上界（推论 \ref{cor:pom-reversible-external-residual-kolmogorov-typical-equality}）。
+\end{remark}
+
+\endinput

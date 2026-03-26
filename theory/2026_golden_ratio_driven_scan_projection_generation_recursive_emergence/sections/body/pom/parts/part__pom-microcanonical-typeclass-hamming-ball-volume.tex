@@ -1,0 +1,312 @@
+% (User input window)
+
+\paragraph{定型类内 Hamming 球的指数体积与部分反演阈值：对角约束最大熵耦合}
+微正则后验在“仅固定类型计数/边缘组成”的条件下呈现典型的定型类结构：在给定边缘分布 \(w\) 时，
+未查询标签向量在长度 \(t\) 的定型类上均匀。
+因此，允许 \(\delta\)-失真时的最优“部分反演”成功率可还原为一个纯组合覆盖问题：
+定型类由多少个定型内 Hamming 球即可在指数尺度上覆盖。
+本段给出该覆盖率的精确指数阈值，并将其表示为一个对角约束下的最大熵耦合问题；
+进一步证明极大耦合的唯一性、指数族结构、标量化求解、以及互信息/对偶导数刻画。
+
+\begin{definition}[定型类与定型内 Hamming 球]\label{def:pom-typeclass-and-hamming-ball}
+令 \(X\) 为有限字母表且 \(|X|=n\ge 2\)，取全支撑分布 \(w\in\Delta(X)\)。
+令 \(t\to\infty\) 且满足 \(t\,w(x)\in\NN\)（对所有 \(x\in X\)）。
+定义定型类
+\[
+\mathcal T_t(w):=\Bigl\{x^t\in X^t:\ \frac{1}{t}\bigl|\{i:\ x_i=a\}\bigr|=w(a)\ \ \forall a\in X\Bigr\}.
+\]
+对任意参考序列 \(x^t\in\mathcal T_t(w)\) 与任意失真参数 \(\delta\in[0,1]\)，定义定型内球
+\[
+\mathcal B_t(w,\delta;x^t):=\Bigl\{y^t\in\mathcal T_t(w):\ t^{-1}d_{\rm H}(x^t,y^t)\le \delta\Bigr\}.
+\]
+\end{definition}
+
+\begin{definition}[指数体积与覆盖阈值]\label{def:pom-typeclass-volume-and-threshold}
+若极限存在且与参考序列 \(x^t\in\mathcal T_t(w)\) 无关，则定义指数体积
+\[
+\mathcal V_w(\delta):=\lim_{t\to\infty}\frac{1}{t}\log|\mathcal B_t(w,\delta;x^t)|.
+\]
+并定义相应的覆盖阈值
+\[
+R_w(\delta):=H(w)-\mathcal V_w(\delta)\ \ge\ 0.
+\]
+\end{definition}
+
+\begin{theorem}[指数体积的存在性与变分表示]\label{thm:pom-typeclass-hamming-ball-volume-variational}
+在定义 \ref{def:pom-typeclass-and-hamming-ball} 的设定下，极限 \(\mathcal V_w(\delta)\) 存在，并满足严格变分式
+\[
+\boxed{\;
+\mathcal V_w(\delta)
+=
+\sup\Bigl\{H_P(Y|X):\ P\in\Delta(X\times X),\ P_X=P_Y=w,\ \mathbb P_P(X=Y)\ge 1-\delta\Bigr\}\; }.
+\]
+并且该指数体积与参考序列 \(x^t\in\mathcal T_t(w)\) 的选择无关。
+\end{theorem}
+\begin{proof}
+对任意 \(x^t\in\mathcal T_t(w)\) 与任意 \(y^t\in\mathcal T_t(w)\)，记其联合经验分布（contingency table）为 \(P_{x^t y^t}\in\Delta(X\times X)\)。
+定型约束 \(y^t\in\mathcal T_t(w)\) 等价于 \(P_Y=w\)，而 \(x^t\in\mathcal T_t(w)\) 等价于 \(P_X=w\)。
+Hamming 约束 \(t^{-1}d_{\rm H}(x^t,y^t)\le \delta\) 等价于 \(P(X=Y)\ge 1-\delta\)。
+\par
+对固定 \(x^t\)，当 \(y^t\) 的联合型为某个可行 \(P\) 时，
+符合该联合型的 \(y^t\) 个数的指数率为 \(H_P(Y|X)\)（标准定型计数：\(|\{y^t:\ P_{x^t y^t}=P\}|=\exp(tH_P(Y|X)+o(t))\)）。
+因此 \(|\mathcal B_t(w,\delta;x^t)|\) 在指数尺度上由可行集合上的最大 \(H_P(Y|X)\) 决定，从而得到所示上确界。
+\par
+由于可行集合在有限维单纯形内紧且 \(H_P(Y|X)\) 连续，最大值存在。
+上界（\(\limsup\)）与下界（\(\liminf\)）由对有限个联合型的并集上界与选择近最优联合型的下界配对给出，从而极限存在。
+最后，定型类在坐标置换下传递作用，\(|\mathcal B_t(w,\delta;x^t)|\) 仅依赖于 \(x^t\) 的类型而非具体序列，故与参考序列无关。证毕。
+\end{proof}
+
+\begin{theorem}[唯一极大耦合与指数族结构]\label{thm:pom-typeclass-hamming-ball-unique-maximizer-exponential-family}
+对每个 \(\delta\in(0,1)\)，定理 \ref{thm:pom-typeclass-hamming-ball-volume-variational} 的上确界由唯一耦合 \(P^\star_\delta\) 达到。
+存在唯一标量 \(\lambda(\delta)\in\RR\) 与唯一正向量 \(u(\delta)\in\RR_{>0}^{X}\) 使
+\[
+\boxed{\;
+P^\star_\delta(x,y)
+=
+\frac{u_xu_y\,\exp\!\bigl(\lambda(\delta)\,\mathbf 1_{\{x=y\}}\bigr)}
+{\sum_{a,b\in X}u_au_b\,\exp\!\bigl(\lambda(\delta)\,\mathbf 1_{\{a=b\}}\bigr)}\qquad(\forall x,y\in X)\; }.
+\]
+并且其边缘满足 \(P^\star_{\delta,X}=P^\star_{\delta,Y}=w\)。
+记 \(p_0:=\sum_{x\in X}w(x)^2\)。
+若 \(1-\delta>p_0\)，则对角质量约束饱和并满足 \(\mathbb P_{P^\star_\delta}(X=Y)=1-\delta\)，且 \(\lambda(\delta)>0\)。
+若 \(1-\delta\le p_0\)，则最优耦合为独立耦合 \(P^\star_\delta=w\otimes w\)，并且 \(\lambda(\delta)=0\)、\(\mathcal V_w(\delta)=H(w)\)、\(R_w(\delta)=0\)。
+\end{theorem}
+\begin{proof}
+可行集合由线性约束与不等式约束给出，为紧凸集。
+函数 \(H_P(Y|X)=H(P)-H(w)\) 在 \(P\) 上严格凹（因 \(H(P)\) 严格凹且 \(H(w)\) 为常数），
+故极大元唯一。
+\par
+对偶化（KKT）给出指数族形式：
+\(
+P(x,y)\propto \exp(\alpha_x+\beta_y+\lambda\mathbf 1_{\{x=y\}})
+\)。
+由于约束要求 \(P_X=P_Y=w\) 且问题在交换 \(X,Y\) 下对称，唯一性强制 \(\alpha=\beta\)（相差常数可并入归一化因子）。
+令 \(u_x=e^{\alpha_x}>0\) 得到所示结构。
+\par
+令 \(P^{\mathrm{ind}}:=w\otimes w\)，则 \(H_{P^{\mathrm{ind}}}(Y|X)=H(w)\) 且 \(\mathbb P_{P^{\mathrm{ind}}}(X=Y)=p_0\)。
+由于对任意耦合 \(P\) 恒有 \(H_P(Y|X)\le H(Y)=H(w)\)，当 \(1-\delta\le p_0\) 时 \(P^{\mathrm{ind}}\) 可行并达到全局上界；
+因而由唯一性知 \(P^\star_\delta=P^{\mathrm{ind}}\)，并且指数族参数满足 \(\lambda(\delta)=0\)。
+\par
+当 \(1-\delta>p_0\) 时，独立耦合不可行。
+若最优点处约束为严格不等式，则由互补松弛必有 \(\lambda(\delta)=0\)，从而仍为独立耦合，矛盾。
+故约束必饱和，且 \(\lambda(\delta)>0\) 并满足 \(\mathbb P_{P^\star_\delta}(X=Y)=1-\delta\)。证毕。
+\end{proof}
+
+\begin{theorem}[部分反演的指数阈值：覆盖率由 \texorpdfstring{$R_w(\delta)$}{Rw(delta)} 决定]\label{thm:pom-microcanonical-partial-inversion-threshold}
+设 \(Y^t\) 在 \(\mathcal T_t(w)\) 上均匀分布。
+允许额外 \(B\) 比特外置信息：编码器取任意映射 \(\mathrm{enc}:\mathcal T_t(w)\to\{1,\dots,2^B\}\)，
+解码器以 \(\mathrm{enc}(Y^t)\) 为输入输出 \(\widehat Y^t\in\mathcal T_t(w)\)。
+对固定 \(\delta\in(0,1)\) 定义失真事件
+\[
+\mathcal E_\delta:=\{t^{-1}d_{\rm H}(Y^t,\widehat Y^t)\le \delta\},
+\]
+并令最优成功率
+\[
+\mathrm{Succ}^{\mathrm{opt}}_t(B,\delta):=\sup_{\mathrm{enc},\mathrm{dec}}\ \mathbb P(\mathcal E_\delta).
+\]
+令 \(\mathcal V_w(\delta)\) 与 \(R_w(\delta)\) 如定义 \ref{def:pom-typeclass-volume-and-threshold}。
+当 \(t\to\infty\) 且 \(B=\lfloor rt/\log 2\rfloor\)（码率 \(r\ge 0\) 固定）时，成立相变：
+\[
+\boxed{\;
+\lim_{t\to\infty}\mathrm{Succ}^{\mathrm{opt}}_t(B,\delta)=
+\begin{cases}
+0, & r<R_w(\delta),\\
+1, & r>R_w(\delta).
+\end{cases}\;}
+\]
+并且当 \(r<R_w(\delta)\) 时有指数上界
+\[
+\boxed{\;
+\limsup_{t\to\infty}\frac{1}{t}\log \mathrm{Succ}^{\mathrm{opt}}_t(B,\delta)\ \le\ r-R_w(\delta)\;<0\; }.
+\]
+\end{theorem}
+\begin{proof}
+由定型计数，\(|\mathcal T_t(w)|=\exp(tH(w)+o(t))\)。
+由定理 \ref{thm:pom-typeclass-hamming-ball-volume-variational}，对任意参考点 \(x^t\in\mathcal T_t(w)\) 有
+\(|\mathcal B_t(w,\delta;x^t)|=\exp(t\mathcal V_w(\delta)+o(t))\)，且误差项与参考点无关。
+\par
+\textbf{上界：}
+任意编码至多产生 \(M=2^B=\exp(rt+o(t))\) 个解码输出点，
+其 \(\delta\)-成功集合被包含于至多 \(M\) 个定型内球的并集，覆盖数不超过
+\(
+M\exp(t\mathcal V_w(\delta)+o(t))
+\)。
+除以 \(|\mathcal T_t(w)|\) 得
+\[
+\mathrm{Succ}^{\mathrm{opt}}_t(B,\delta)
+\le
+\exp\!\bigl(t(r-\!R_w(\delta))+o(t)\bigr),
+\]
+推出当 \(r<R_w(\delta)\) 时成功率指数衰减，并得到所示 \(\limsup\) 上界。
+\par
+\textbf{下界：}
+取一个最大化的球覆盖（贪婪选取球心即可），其所需球数的指数率等于
+\(|\mathcal T_t(w)|/|\mathcal B_t(w,\delta;\cdot)|=\exp(tR_w(\delta)+o(t))\)。
+当 \(r>R_w(\delta)\) 时，允许的码字数 \(M=\exp(rt+o(t))\) 在指数尺度上严格大于所需覆盖数，
+故可构造使覆盖比例趋于 \(1\) 的码本，从而 \(\mathrm{Succ}^{\mathrm{opt}}_t(B,\delta)\to 1\)。
+证毕。
+\end{proof}
+
+\paragraph{最优耦合的标量化：对角乘子的单参求解}
+沿用定理 \ref{thm:pom-typeclass-hamming-ball-unique-maximizer-exponential-family} 的指数族参数。
+写 \(\kappa:=e^{\lambda}-1\in(-1,\infty)\)，并记 \(A:=\sum_{x\in X}u_x\)。
+
+\begin{theorem}[边缘约束的二次根与自洽方程]\label{thm:pom-typeclass-diagonal-coupling-scalarization}
+对任意给定 \(\kappa>-1\) 与任意 \(A>0\)，边缘约束 \(P_X=P_Y=w\) 等价于对每个 \(x\in X\) 满足二次方程
+\[
+\boxed{\;
+\kappa u_x^2+A u_x-w(x)=0\; } .
+\]
+从而（取正根）有显式表达
+\[
+u_x(A,\kappa)=
+\begin{cases}
+\dfrac{-A+\sqrt{A^2+4\kappa w(x)}}{2\kappa}, & \kappa\ne0,\\[10pt]
+\dfrac{w(x)}{A}, & \kappa=0.
+\end{cases}
+\]
+并且对每个固定 \(\kappa>-1\)，存在唯一 \(A=A(\kappa)>0\) 使得自洽条件 \(A=\sum_x u_x(A,\kappa)\) 成立；
+该唯一解给出唯一向量 \(u(\kappa)\)。
+\end{theorem}
+\begin{proof}
+由指数族形式可写（其中 \(A=\sum_x u_x\)）
+\[
+P(x,y)=\frac{u_xu_y\bigl(1+\kappa\mathbf 1_{\{x=y\}}\bigr)}{Z},
+\qquad
+Z:=\sum_{a,b\in X}u_au_b\bigl(1+\kappa\mathbf 1_{\{a=b\}}\bigr)=A^2+\kappa\sum_{a\in X}u_a^2.
+\]
+对固定 \(x\) 求和得边缘
+\[
+w(x)=\sum_y P(x,y)=\frac{u_x(A+\kappa u_x)}{Z}.
+\]
+注意 \(u\mapsto cu\ (c>0)\) 不改变 \(P\)（分子与分母同乘 \(c^2\)），故可选取等价标度使得 \(Z=1\)。
+在该规范化下，边缘约束等价于 \(w(x)=u_x(A+\kappa u_x)\)，即所示二次方程。
+正根显式解立得。
+\par
+对固定 \(\kappa>-1\)，函数 \(A\mapsto \sum_x u_x(A,\kappa)\) 连续严格递减，并在 \(A\downarrow 0\) 时趋于 \(+\infty\)，在 \(A\to\infty\) 时趋于 \(0\)，
+故方程 \(A=\sum_x u_x(A,\kappa)\) 存在唯一解。
+唯一性给出 \(u(\kappa)\) 的唯一性。
+最后，由 \(w(x)=u_x(A+\kappa u_x)\) 对 \(x\) 求和得 \(A^2+\kappa\sum_x u_x^2=\sum_x w(x)=1\)，从而 \(Z=1\) 与上述规范化一致。证毕。
+\end{proof}
+
+\begin{theorem}[对角质量的严格单调性与唯一匹配]\label{thm:pom-typeclass-diagonal-mass-monotone}
+令 \(P^\star_{\delta(\kappa)}\) 为由参数 \(\kappa\in(-1,\infty)\) 给出的最优耦合，并记其对角质量
+\[
+\Delta(\kappa):=\sum_{x\in X}P^\star_{\delta(\kappa)}(x,x)=\mathbb P(X=Y).
+\]
+则 \(\Delta(\kappa)\) 在 \(\kappa\in(-1,\infty)\) 上严格递增，且满足端点值
+\[
+\Delta(0)=\sum_x w(x)^2,\qquad
+\lim_{\kappa\downarrow-1}\Delta(\kappa)=0,\qquad
+\lim_{\kappa\to\infty}\Delta(\kappa)=1.
+\]
+因此当 \(1-\delta>\sum_x w(x)^2\) 时，存在唯一 \(\kappa(\delta)>0\) 使 \(\Delta(\kappa(\delta))=1-\delta\)；
+而当 \(1-\delta\le \sum_x w(x)^2\) 时，最优耦合为独立耦合并对应 \(\kappa(\delta)=0\)。
+\end{theorem}
+\begin{proof}
+由指数族形式与边缘约束，可将 \(\Delta(\kappa)\) 表示为 \(u(\kappa)\) 的有理函数；
+当 \(\kappa\) 增大时，对角权重 \((1+\kappa)u_x^2\) 相对非对角权重 \(u_xu_y\ (x\neq y)\) 严格上升，
+而边缘被固定为 \(w\)，故对角质量必须严格增大。
+端点值由 \(\kappa\to 0\) 的连续性与 \(\kappa\downarrow-1,\ \kappa\to\infty\) 的极限（对角项分别被消去/强制）直接得到。
+严格单调与端点满射保证：对任意目标对角质量 \(p\in(0,1)\) 存在唯一 \(\kappa\in(-1,\infty)\) 使 \(\Delta(\kappa)=p\)。
+结合定理 \ref{thm:pom-typeclass-hamming-ball-unique-maximizer-exponential-family} 中“活跃约束 \(\Leftrightarrow 1-\delta>\sum_x w(x)^2\)”的讨论，即得所示匹配关系。证毕。
+\end{proof}
+
+\begin{theorem}[保持--重采样结构：最优耦合对应一参 Gibbs 通道]\label{thm:pom-typeclass-keep-resample-channel}
+令 \(P^\star_\delta\) 为最优耦合，并用参数 \((u,\kappa)\) 表示。
+记
+\[
+A=\sum_x u_x,\qquad \pi(x):=\frac{u_x}{A},
+\qquad
+p_x:=\mathbb P_{P^\star_\delta}(Y=x\mid X=x)=\frac{(1+\kappa)u_x}{A+\kappa u_x}\in(0,1).
+\]
+则条件分布 \(Y\mid X=x\) 具有分解
+\[
+\boxed{\;
+\mathbb P(Y=x\mid X=x)=p_x,\qquad
+\mathbb P(Y=y\mid X=x,\ y\neq x)=(1-p_x)\frac{\pi(y)}{1-\pi(x)}\; }.
+\]
+\end{theorem}
+\begin{proof}
+由指数族形式，固定 \(x\) 时有
+\(
+P^\star_\delta(x,x)\propto (1+\kappa)u_x^2
+\)
+而对 \(y\neq x\) 有
+\(
+P^\star_\delta(x,y)\propto u_xu_y
+\)。
+对 \(y\) 归一化并写成 \(\pi\) 的形式即可得到分解。证毕。
+\end{proof}
+
+\begin{theorem}[覆盖阈值的互信息刻画：对角约束下的最小互信息]\label{thm:pom-typeclass-rate-distortion-mutual-information}
+令
+\[
+\mathcal C_\delta(w):=\Bigl\{P\in\Delta(X\times X):\ P_X=P_Y=w,\ \mathbb P_P(X=Y)\ge 1-\delta\Bigr\}.
+\]
+则有严格等式
+\[
+\boxed{\;
+R_w(\delta)=\inf_{P\in\mathcal C_\delta(w)} I_P(X;Y)\; } ,
+\]
+并且该下确界由唯一耦合 \(P^\star_\delta\) 取到。
+\end{theorem}
+\begin{proof}
+对任意 \(P\in\mathcal C_\delta(w)\)，有恒等式
+\(
+I_P(X;Y)=H(w)-H_P(Y|X)
+\)。
+因此在 \(\mathcal C_\delta(w)\) 上最小化互信息等价于最大化条件熵。
+由定理 \ref{thm:pom-typeclass-hamming-ball-volume-variational}，
+最大条件熵的值为 \(\mathcal V_w(\delta)\)，且由定理 \ref{thm:pom-typeclass-hamming-ball-unique-maximizer-exponential-family} 的唯一极大耦合达到。
+故
+\(
+R_w(\delta)=H(w)-\mathcal V_w(\delta)=I_{P^\star_\delta}(X;Y)
+\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[对偶导数恒等式：\texorpdfstring{$R_w'(\delta)$}{Rw'(delta)} 等于最优对角乘子的相反数]\label{thm:pom-typeclass-dual-derivative}
+记 \(p_0=\sum_{x\in X}w(x)^2\)。
+当 \(1-\delta>p_0\)（对角质量约束活跃）时，函数 \(\delta\mapsto R_w(\delta)\) 在该区间上可微，且满足
+\[
+\boxed{\;
+-\frac{d}{d\delta}R_w(\delta)=\lambda(\delta)\; } ,
+\]
+其中 \(\lambda(\delta)\) 为定理 \ref{thm:pom-typeclass-hamming-ball-unique-maximizer-exponential-family} 中最优耦合的 KKT 乘子（对角质量约束的影子价格）。
+当 \(1-\delta\le p_0\) 时，最优耦合为独立耦合，\(R_w(\delta)=0\) 且 \(\lambda(\delta)=0\)。
+\end{theorem}
+\begin{proof}
+将对角质量约束写为
+\(
+g_\delta(P):=(1-\delta)-\mathbb P_P(X=Y)\le 0
+\)。
+对最大化问题
+\(
+\sup\{H_P(Y|X):\ P_X=P_Y=w,\ g_\delta(P)\le 0\}
+\)，
+取拉格朗日函数
+\[
+\mathscr L(P,\lambda)
+:=H_P(Y|X)-\lambda\,g_\delta(P)
+=H_P(Y|X)+\lambda\bigl(\mathbb P_P(X=Y)-1+\delta\bigr),
+\qquad \lambda\ge 0.
+\]
+由定理 \ref{thm:pom-typeclass-hamming-ball-unique-maximizer-exponential-family}：
+当 \(1-\delta>p_0\) 时约束活跃并饱和（\(\lambda(\delta)>0\)）；
+当 \(1-\delta\le p_0\) 时最优解为独立耦合且 \(\lambda(\delta)=0\)。
+两种情形下由严格凹性得到强对偶与乘子唯一性。
+因此最优值可写为
+\[
+\mathcal V_w(\delta)=\max_{P_X=P_Y=w}\ \mathscr L(P,\lambda(\delta)),
+\]
+且 \(\lambda(\delta)\) 与指数族形式中的对角系数一致。
+由包络定理，
+\[
+\frac{d}{d\delta}\mathcal V_w(\delta)=\frac{\partial}{\partial\delta}\mathscr L(P^\star_\delta,\lambda(\delta))=\lambda(\delta).
+\]
+而 \(R_w(\delta)=H(w)-\mathcal V_w(\delta)\)，故 \(R_w'(\delta)=-\lambda(\delta)\)，即所示恒等式。证毕。
+\end{proof}
+
+\endinput
+

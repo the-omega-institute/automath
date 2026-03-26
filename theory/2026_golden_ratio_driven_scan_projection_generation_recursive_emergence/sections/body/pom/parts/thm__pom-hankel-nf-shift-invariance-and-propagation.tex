@@ -1,0 +1,233 @@
+\begin{theorem}[Hankel-正规形转移算子的偏移不变性与幂传播]\label{thm:pom-hankel-nf-shift-invariance-and-power-propagation}
+设 \(k\) 为域，\(\mathbf a=(a_n)_{n\ge 0}\in k^{\NN}\) 为一列，且其 Hankel 秩为 \(d\)。
+对任意偏移 \(k\ge 0\) 定义阶 \(d\) 的 Hankel 见证块
+\[
+H_k:=\bigl(a_{k+i+j}\bigr)_{0\le i,j\le d-1}\in M_d(k).
+\]
+假设存在某个 \(k_0\ge 0\) 使得 \(\det(H_{k_0})\neq 0\)，并定义
+\[
+\mathcal A:=H_{k_0}^{-1}H_{k_0+1}\in M_d(k).
+\]
+则对任意 \(k\ge 0\) 满足 \(\det(H_k)\neq 0\)，均有
+\[
+H_k^{-1}H_{k+1}=\mathcal A,
+\]
+从而由 \(H_k^{-1}H_{k+1}\) 计算得到的 Hankel-正规形转移矩阵在所有可逆偏移上均一致。
+此外，对一切 \(r\ge 0\) 成立幂传播恒等式
+\[
+H_{k_0+r}=H_{k_0}\,\mathcal A^{\,r}.
+\]
+\end{theorem}
+\begin{proof}
+由 Hankel 秩与最小线性实现维数一致（定理 \ref{thm:hankel-rank-minimal}），可取维数为 \(d\) 的最小实现 \((\alpha,A,\beta)\) 使
+\(
+a_n=\alpha^{\mathsf T}A^n\beta
+\)。
+令可观测矩阵与可达矩阵
+\[
+\mathcal O:=
+\begin{pmatrix}
+\alpha^{\mathsf T}\\
+\alpha^{\mathsf T}A\\
+\vdots\\
+\alpha^{\mathsf T}A^{d-1}
+\end{pmatrix}\in M_d(k),
+\qquad
+\mathcal C:=
+\begin{pmatrix}
+\beta & A\beta & \cdots & A^{d-1}\beta
+\end{pmatrix}\in M_d(k).
+\]
+最小性蕴含可观测与可达，从而 \(\mathcal O,\mathcal C\in\GL_d(k)\)。
+对任意 \(k\ge 0\) 与 \(0\le i,j\le d-1\) 有
+\[
+\bigl(\mathcal O A^k \mathcal C\bigr)_{ij}
+=\bigl(\alpha^{\mathsf T}A^i\bigr)\,A^k\,\bigl(A^j\beta\bigr)
+=\alpha^{\mathsf T}A^{k+i+j}\beta
+=a_{k+i+j},
+\]
+故
+\[
+H_k=\mathcal O\,A^k\,\mathcal C\qquad(k\ge 0).
+\]
+于是对任意满足 \(\det(H_k)\neq 0\) 的偏移 \(k\)（此时 \(H_k\) 可逆）有
+\[
+H_k^{-1}H_{k+1}
+=(\mathcal O A^k \mathcal C)^{-1}(\mathcal O A^{k+1}\mathcal C)
+=\mathcal C^{-1}A\mathcal C,
+\]
+右端与 \(k\) 无关。
+又由于
+\(
+\mathcal A=H_{k_0}^{-1}H_{k_0+1}=\mathcal C^{-1}A\mathcal C
+\)，
+遂得 \(H_k^{-1}H_{k+1}=\mathcal A\)。
+最后，
+\[
+H_{k_0+r}=\mathcal O A^{k_0+r}\mathcal C
+=\mathcal O A^{k_0}\mathcal C\,(\mathcal C^{-1}A\mathcal C)^r
+=H_{k_0}\,\mathcal A^{\,r}.
+\]
+证毕。
+\end{proof}
+
+\begin{remark}[谱半径读出与偏移选择的无关性]\label{rem:pom-hankel-nf-spectral-radius-offset-independence}
+在上述证明中，\(\mathcal A=\mathcal C^{-1}A\mathcal C\) 与最小实现矩阵 \(A\) 相似，因而 \(\mathcal A\) 的谱（特别是谱半径）与偏移 \(k\) 的选择无关，并与实现的相似变换无关。
+因此，以 Hankel-正规形转移矩阵的谱半径读出指数增长率（自由能尺度）的口径具有偏移不变性：偏移仅作为可逆见证存在性的整数证书进入，而不改变读出的谱指纹。
+\end{remark}
+
+\begin{corollary}[Hankel 行列式的几何律]\label{cor:pom-hankel-determinant-geometric-law}
+在定理 \ref{thm:pom-hankel-nf-shift-invariance-and-power-propagation} 的设定下，对一切 \(r\ge 0\) 成立
+\[
+\det(H_{k_0+r})=\det(H_{k_0})\cdot \det(\mathcal A)^{\,r}.
+\]
+特别地，令 \(D_r:=\det(H_{k_0+r})\)，则对 \(r\ge 1\) 有二阶乘法递推
+\[
+D_{r+1}D_{r-1}=D_r^2.
+\]
+\end{corollary}
+\begin{proof}
+由 \(H_{k_0+r}=H_{k_0}\mathcal A^{\,r}\) 取行列式得
+\(
+\det(H_{k_0+r})=\det(H_{k_0})\det(\mathcal A)^r
+\)。
+将 \(D_r=\det(H_{k_0})\det(\mathcal A)^r\) 代入即得 \(D_{r+1}D_{r-1}=D_r^2\)。证毕。
+\end{proof}
+
+\begin{theorem}[外代数传播：任意阶子式的线性动力学]\label{thm:pom-hankel-exterior-power-propagation}
+在定理 \ref{thm:pom-hankel-nf-shift-invariance-and-power-propagation} 的设定下，固定 \(s\in\{1,\dots,d\}\)，考虑 \(s\)-次外幂诱导算子 \(\bigwedge^s\)。
+则对一切 \(r\ge 0\) 有
+\[
+\bigwedge\nolimits^s(H_{k_0+r})
+=\bigwedge\nolimits^s(H_{k_0})\cdot \bigl(\bigwedge\nolimits^s(\mathcal A)\bigr)^{\,r}.
+\]
+因此所有 \(s\times s\) 子式（作为 Grassmann--Pl\"ucker 坐标）随偏移的演化由单一矩阵 \(\bigwedge^s(\mathcal A)\) 的幂完全控制。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-hankel-nf-shift-invariance-and-power-propagation} 得 \(H_{k_0+r}=H_{k_0}\mathcal A^{\,r}\)。
+外幂函子满足 \(\bigwedge^s(XY)=(\bigwedge^sX)(\bigwedge^sY)\) 与 \(\bigwedge^s(\mathcal A^{\,r})=(\bigwedge^s\mathcal A)^{\,r}\)，从而
+\[
+\bigwedge\nolimits^s(H_{k_0+r})
+=\bigwedge\nolimits^s(H_{k_0}\mathcal A^{\,r})
+=\bigl(\bigwedge\nolimits^s H_{k_0}\bigr)\cdot \bigwedge\nolimits^s(\mathcal A^{\,r})
+=\bigl(\bigwedge\nolimits^s H_{k_0}\bigr)\cdot \bigl(\bigwedge\nolimits^s\mathcal A\bigr)^{\,r}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[外代数综合征的有限记忆递推]\label{cor:pom-hankel-exterior-power-finite-memory}
+在定理 \ref{thm:pom-hankel-exterior-power-propagation} 的设定下，固定 \(s\in\{1,\dots,d\}\) 并记
+\[
+B_s:=\bigwedge\nolimits^s(\mathcal A)\in M_{N_s}(k),
+\qquad
+N_s:=\binom{d}{s}.
+\]
+令 \(B_s\) 的特征多项式为
+\[
+\chi_s(t):=\det(tI-B_s)=t^{N_s}+c_{N_s-1}t^{N_s-1}+\cdots+c_0\in k[t].
+\]
+定义外代数传播矩阵序列
+\[
+W_r^{(s)}:=\bigwedge\nolimits^s(H_{k_0+r})\in M_{N_s}(k),\qquad r\ge 0.
+\]
+则对一切 \(r\ge 0\) 成立严格递推
+\[
+W_{r+N_s}^{(s)}\ =\ -\sum_{j=0}^{N_s-1} c_j\,W_{r+j}^{(s)}.
+\]
+特别地，在固定基底下 \(W_r^{(s)}\) 的每个矩阵元（等价于 \(H_{k_0+r}\) 的任一固定 \(s\times s\) 子式）都满足同一长度 \(N_s\) 的线性递推。
+\end{corollary}
+\begin{proof}
+由 Cayley--Hamilton 定理，\(\chi_s(B_s)=0\)，即
+\[
+B_s^{N_s}=-\sum_{j=0}^{N_s-1}c_j\,B_s^{j}.
+\]
+两侧右乘 \(B_s^{r}\)，并左乘 \(\bigwedge^s(H_{k_0})\)，得
+\[
+\bigl(\bigwedge\nolimits^s H_{k_0}\bigr)B_s^{r+N_s}
+=-\sum_{j=0}^{N_s-1}c_j\,\bigl(\bigwedge\nolimits^s H_{k_0}\bigr)B_s^{r+j}.
+\]
+由定理 \ref{thm:pom-hankel-exterior-power-propagation} 的传播式
+\(
+W_r^{(s)}=(\bigwedge^s H_{k_0})B_s^r
+\)
+代回即得所示递推。
+最后一句由 \(W_r^{(s)}\) 的矩阵元与 \(H_{k_0+r}\) 的 \(s\times s\) 子式在外幂基底下的一一对应（Grassmann--Pl\"ucker 坐标表示）直接推出。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$p$}{p}-进刚性指数的严格仿射律]\label{cor:pom-hankel-stiffness-affine-law}
+设 \(p\) 为素数，且对所有相关的 \(r\) 有 \(\det(H_{k_0+r})\neq 0\) 且 \(\det(\mathcal A)\neq 0\)，从而赋值 \(v_p\) 可作用于这些行列式。
+定义刚性指数
+\[
+\mathsf{Stiff}_p(k):=v_p\!\bigl(\det(H_k)\bigr).
+\]
+则对一切 \(r\ge 0\) 有
+\[
+\mathsf{Stiff}_p(k_0+r)=\mathsf{Stiff}_p(k_0)+r\cdot v_p\!\bigl(\det(\mathcal A)\bigr),
+\]
+因此 \(k\mapsto \mathsf{Stiff}_p(k)\) 在偏移方向上为严格仿射函数；其斜率 \(v_p(\det(\mathcal A))\) 与偏移无关。
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:pom-hankel-determinant-geometric-law} 的 \(\det(H_{k_0+r})=\det(H_{k_0})\det(\mathcal A)^r\)，对两侧取 \(v_p\) 即得。证毕。
+\end{proof}
+
+\begin{proposition}[坏素集合的二元上界：由两相邻 Hankel 行列式控制]\label{prop:pom-hankel-bad-primes-two-determinants}
+设 \((a_n)_{n\ge 0}\subset\ZZ\)，并沿用定理 \ref{thm:pom-hankel-nf-shift-invariance-and-power-propagation} 的 \(d,k_0\)。
+若 \(\det(H_{k_0})\neq 0\)，则对任意 \(r\ge 1\) 有
+\[
+\det(H_{k_0+r})=\frac{\det(H_{k_0+1})^{\,r}}{\det(H_{k_0})^{\,r-1}}
+\qquad\text{于}\ \QQ^\times.
+\]
+并且所有整数行列式的素因子集合满足包含关系
+\[
+\bigcup_{r\ge 0}\{\,p\in\mathbb P:\ p\mid \det(H_{k_0+r})\,\}
+\ \subseteq\
+\{\,p\in\mathbb P:\ p\mid \det(H_{k_0})\det(H_{k_0+1})\,\}.
+\]
+\end{proposition}
+\begin{proof}
+由 \(\mathcal A=H_{k_0}^{-1}H_{k_0+1}\) 得
+\(
+\det(\mathcal A)=\det(H_{k_0+1})/\det(H_{k_0})
+\)。
+代入推论 \ref{cor:pom-hankel-determinant-geometric-law} 的
+\(
+\det(H_{k_0+r})=\det(H_{k_0})\det(\mathcal A)^r
+\)
+即得所示公式。
+因此 \(\det(H_{k_0+r})\) 的分子与分母所含素数均来自 \(\det(H_{k_0})\) 与 \(\det(H_{k_0+1})\) 的素因子集合，结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[有限模层面的纯周期性与有限群轨道闭包]\label{cor:pom-hankel-modM-pure-periodicity}
+设 \((a_n)_{n\ge 0}\subset\ZZ\) 且满足定理 \ref{thm:pom-hankel-nf-shift-invariance-and-power-propagation} 的 Hankel 秩与可逆偏移条件。
+固定整数 \(M\ge 2\) 并假设 \(\gcd(\det(H_{k_0}),M)=1\)，从而 \(\bar H_{k_0}\in\GL_d(\ZZ/M\ZZ)\) 可逆（横线表示模 \(M\) 约化）。
+令
+\[
+\bar{\mathcal A}:=\bar H_{k_0}^{-1}\bar H_{k_0+1}\ \in\ \GL_d(\ZZ/M\ZZ).
+\]
+则对一切 \(r\ge 0\) 有
+\[
+\bar H_{k_0+r}=\bar H_{k_0}\,\bar{\mathcal A}^{\,r}.
+\]
+因此序列 \(r\mapsto \bar H_{k_0+r}\) 为纯周期序列，其周期整除 \(\bar{\mathcal A}\) 在有限群 \(\GL_d(\ZZ/M\ZZ)\) 中的阶；换言之，模 \(M\) 层面的后续 Hankel 轨道由两相邻块 \((\bar H_{k_0},\bar H_{k_0+1})\) 唯一确定并在有限群中闭合。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-hankel-nf-shift-invariance-and-power-propagation}，对一切 \(r\ge 0\) 有 \(H_{k_0+r}=H_{k_0}\mathcal A^{\,r}\)。
+两侧模 \(M\) 约化得到 \(\bar H_{k_0+r}=\bar H_{k_0}\,\overline{\mathcal A^{\,r}}\)。
+又因 \(\bar{\mathcal A}=\bar H_{k_0}^{-1}\bar H_{k_0+1}\)，并且在有限环 \(\ZZ/M\ZZ\) 上矩阵乘法与幂运算与约化相容，故 \(\overline{\mathcal A^{\,r}}=\bar{\mathcal A}^{\,r}\)，从而得到所示公式。
+由于 \(\GL_d(\ZZ/M\ZZ)\) 为有限群，\(\bar{\mathcal A}\) 具有有限阶 \(T\)，满足 \(\bar{\mathcal A}^{\,r+T}=\bar{\mathcal A}^{\,r}\) 对所有 \(r\) 成立；代回即得 \(\bar H_{k_0+r+T}=\bar H_{k_0+r}\)，从而序列为纯周期并且周期整除 \(T\)。
+最后一句由 \(\bar{\mathcal A}=\bar H_{k_0}^{-1}\bar H_{k_0+1}\) 与 \(\bar H_{k_0+r}=\bar H_{k_0}\bar{\mathcal A}^{\,r}\) 的确定性立得。证毕。
+\end{proof}
+
+\begin{conjecture}[Fold 碰撞矩 Hankel-正规形的二进分母约束]\label{conj:pom-fold-collision-hankel-nf-dyadic-denominator}
+将上述结构应用于 \(m\mapsto S_q(m)\)（\S\ref{subsubsec:pom-collision-kernel-family}）的 Hankel-正规形 \(\mathrm{HANKELNF}_q\)（定义 \ref{def:pom-hankel-normal-form}）。
+令
+\(
+\mathcal A_q:=(H_0^{(\ell_q)})^{-1}H_1^{(\ell_q)}
+\)
+为其 Hankel shift realization。
+则猜想对每个固定 \(q\ge 2\)，矩阵 \(\mathcal A_q\) 的全部条目属于 \(\ZZ[1/2]\)（分母仅含 \(2\) 的幂）。
+并且对任意奇素数 \(p\neq 2\)，偏移斜率 \(v_p(\det(\mathcal A_q))\) 由 fold 的 prime shadow 指纹决定且在 \(q\) 轴上最终稳定。
+\end{conjecture}
+
+\endinput
+

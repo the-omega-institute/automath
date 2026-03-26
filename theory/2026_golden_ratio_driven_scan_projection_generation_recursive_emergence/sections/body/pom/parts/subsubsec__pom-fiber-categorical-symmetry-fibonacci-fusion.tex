@@ -1,0 +1,218 @@
+\subsubsection{范畴对称接口下的 Fibonacci 纤维：融合空间、复制态与 Witten 指数}\label{subsubsec:pom-fiber-categorical-symmetry-fibonacci-fusion}
+非可逆/范畴对称可通过拓扑缺陷与 SymTFT 的通用语言统一表述，其核心特征是“对称”以局域量子操作而非 \(\ast\)-自同构的方式作用于可观测代数，并由缺陷的融合结构给出可计算的电荷与分区函数数据 \cite{BhardwajSchaferNameki2025GeneralizedChargesII}。
+在本章的折叠原型中，纤维多重度与独立集系统的严格坐标化提供了一个可直接对接该语言的离散接口：Fibonacci 计数不仅控制纤维大小，也自然出现为秩二融合律的最小原型。
+
+\begin{proposition}[路径独立集与 Fibonacci 融合路径基的显式同构]\label{prop:pom-fiber-fibonacci-anyon-fusion-path-bijection}
+令 \(\mathcal C_{\mathrm{Fib}}\) 为秩二半单张量范畴，其简单对象为 \(\{\ind,\tau_{\mathrm{Fib}}\}\)，并满足融合律
+\[
+\tau_{\mathrm{Fib}}\otimes \tau_{\mathrm{Fib}}\ \cong\ \ind\ \oplus\ \tau_{\mathrm{Fib}},
+\qquad
+d_{\mathrm{FP}}(\tau_{\mathrm{Fib}})=\varphi .
+\]
+对每个 \(\ell\ge 0\)，定义融合空间
+\[
+\mathcal H_\ell\ :=\ \Hom_{\mathcal C_{\mathrm{Fib}}}\!\bigl(\ind,\tau_{\mathrm{Fib}}^{\otimes(\ell+3)}\bigr),
+\]
+并令 \(\mathcal B_\ell\) 为左结合融合树所诱导的标准融合路径基（以中间通道标记给出）。
+则存在与路径结构兼容的规范双射
+\[
+\mathsf{Ind}(P_\ell)\ \longleftrightarrow\ \mathcal B_\ell,
+\]
+从而
+\[
+\dim \mathcal H_\ell\ =\ |\mathsf{Ind}(P_\ell)|\ =\ F_{\ell+2}.
+\]
+\end{proposition}
+
+\begin{proof}
+将 \(\mathcal B_\ell\) 的基向量写作中间通道序列 \((a_1,\dots,a_{\ell+3})\)，其中 \(a_1=\tau_{\mathrm{Fib}}\)、\(a_{\ell+3}=\ind\)，且由融合律可知：
+若 \(a_k=\ind\)，则必有 \(a_{k+1}=\tau_{\mathrm{Fib}}\)；若 \(a_k=\tau_{\mathrm{Fib}}\)，则 \(a_{k+1}\in\{\ind,\tau_{\mathrm{Fib}}\}\)。
+因此集合
+\[
+S(a):=\{\,j\in\{1,\dots,\ell\}:\ a_{j+1}=\ind\,\}
+\]
+不含相邻整数，从而给出路径 \(P_\ell\) 的独立集。
+反之，任取独立集 \(S\subseteq\{1,\dots,\ell\}\)，令 \(a_{j+1}=\ind\iff j\in S\) 且其余 \(a_{j+1}=\tau_{\mathrm{Fib}}\)，再固定端点 \(a_1=\tau_{\mathrm{Fib}}\)、\(a_{\ell+3}=\ind\)，即可得到唯一合法融合路径。
+由此得到 \(\mathsf{Ind}(P_\ell)\leftrightarrow \mathcal B_\ell\) 的双射。
+最后，由 \(\dim \mathcal H_\ell=|\mathcal B_\ell|\) 与路径独立集计数递推（等价于 Fibonacci 递推）得到 \(\dim \mathcal H_\ell=F_{\ell+2}\)。证毕。
+\end{proof}
+
+\begin{corollary}[一般纤维的融合空间实现与维数恒等式]\label{cor:pom-fiber-fib-fusion-realization-general-x}
+取任意 \(x\in X_m\)，设其候选位点诱导图分解为 \(\Gamma_x\cong\bigsqcup_{i=1}^r P_{\ell_i}\)。
+定义
+\[
+\mathcal H_x\ :=\ \bigotimes_{i=1}^r \mathcal H_{\ell_i},
+\qquad
+\mathcal B_x\ :=\ \bigotimes_{i=1}^r \mathcal B_{\ell_i}.
+\]
+则存在规范双射
+\[
+\Fold_m^{-1}(x)\ \longleftrightarrow\ \mathcal B_x,
+\]
+并且
+\[
+d_m(x)=\bigl|\Fold_m^{-1}(x)\bigr|\ =\ \dim \mathcal H_x.
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:pom-fiber-indset-factorization}，存在规范同构 \(\Fold_m^{-1}(x)\cong \mathsf{Ind}(\Gamma_x)\)，且当 \(\Gamma_x\) 为路径不交并时
+\(
+\mathsf{Ind}(\Gamma_x)\cong \prod_{i=1}^r \mathsf{Ind}(P_{\ell_i})
+\)。
+再由命题 \ref{prop:pom-fiber-fibonacci-anyon-fusion-path-bijection} 的分量双射与张量基直积结构，可得
+\(
+\Fold_m^{-1}(x)\leftrightarrow \mathcal B_x
+\)。
+取基数与维数即得 \(d_m(x)=\dim \mathcal H_x\)。证毕。
+\end{proof}
+
+\begin{corollary}[碰撞矩的复制态融合空间读法]\label{cor:pom-collision-moments-replica-fusion-space}
+对整数 \(q\ge 1\)，定义碰撞矩 \(S_q(m):=\sum_{x\in X_m}d_m(x)^q\)（见正文定义）。
+则有严格恒等式
+\[
+S_q(m)\ =\ \dim\Bigl(\ \bigoplus_{x\in X_m}\ \mathcal H_x^{\otimes q}\ \Bigr).
+\]
+\end{corollary}
+
+\begin{proof}
+由推论 \ref{cor:pom-fiber-fib-fusion-realization-general-x}，有 \(\dim(\mathcal H_x^{\otimes q})=(\dim\mathcal H_x)^q=d_m(x)^q\)。
+对 \(x\) 求和即得。证毕。
+\end{proof}
+
+\begin{theorem}[折叠群胚诱导的 \(2\) 维半单 TQFT：闭曲面配分函数由纤维多重度控制]\label{thm:pom-fold-groupoid-2d-tqft-partition}
+令 \(\mathcal B_m:=\mathrm{span}\{\widetilde P_x:\ x\in X_m\}\cong \CC^{X_m}\) 为折叠不变量交换代数（命题 \ref{prop:fold-invariant-subalgebra}），并在正交幂等基 \(\{\widetilde P_x\}_{x\in X_m}\) 上定义 Frobenius 余单位
+\[
+\varepsilon_m(\widetilde P_x):=d_m(x)^2.
+\]
+令 \(\mathcal A_m:=(\mathcal B_m,\mu,\eta,\varepsilon_m)\)（其中 \(\mu\) 为乘法、\(\eta\) 为单位）成为交换半单 Frobenius 代数。
+则存在唯一 \(2\) 维有向 TQFT \(Z_m\) 满足 \(Z_m(S^1)=\mathcal A_m\)，并且对任意闭有向 genus-\(g\) 曲面 \(\Sigma_g\) 有显式闭式
+\[
+Z_m(\Sigma_g)=\sum_{x\in X_m} d_m(x)^{2-2g}.
+\]
+特别地，
+\[
+Z_m(S^2)=\sum_{x\in X_m}d_m(x)^2=S_2(m),
+\qquad
+Z_m(T^2)=\sum_{x\in X_m}1=|X_m|.
+\]
+\end{theorem}
+
+\begin{proof}
+由于 \(\mathcal B_m\) 在幂等基下分解为 \(\bigoplus_{x\in X_m}\CC\,\widetilde P_x\) 且 \(\widetilde P_x\widetilde P_y=\delta_{xy}\widetilde P_x\)，该 Frobenius 代数是半单的。
+由 \(2\) 维有向 TQFT 与交换 Frobenius 代数的等价分类，存在唯一 \(Z_m\) 使 \(Z_m(S^1)=\mathcal A_m\)。
+在半单口径下句柄元为
+\[
+\eta_m:=\sum_{x\in X_m}\varepsilon_m(\widetilde P_x)^{-1}\widetilde P_x=\sum_{x\in X_m}d_m(x)^{-2}\widetilde P_x,
+\]
+故 \(\eta_m^g=\sum_x d_m(x)^{-2g}\widetilde P_x\)，再取余单位得
+\[
+Z_m(\Sigma_g)=\varepsilon_m(\eta_m^g)=\sum_x d_m(x)^{-2g}\varepsilon_m(\widetilde P_x)=\sum_x d_m(x)^{2-2g}.
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[硬核费米子模型的 Witten 指数与 \texorpdfstring{$Z_x(-1)$}{Zx(-1)}]\label{prop:pom-fiber-witten-index-zx-minus-one}
+令 \(Z_x(t)=\sum_{S\in\mathsf{Ind}(\Gamma_x)}t^{|S|}\) 为纤维多项式（定理 \ref{thm:pom-fiber-indset-factorization}）。
+把 \(\Gamma_x\) 上的独立集系统视为 \(N=2\) 超对称硬核费米子模型的配置空间，并以独立集复形的链复形作为超荷上同调模型。
+则其 Witten 指数 \(\mathcal I_W(\Gamma_x)\) 与 \(Z_x(-1)\) 满足
+\[
+\mathcal I_W(\Gamma_x)\ =\ -\,Z_x(-1),
+\]
+其中符号取决于约化 Euler 特征的约定（本式采用定义 \ref{def:pom-independence-complex} 的空面为 \((-1)\)-维面之约定）。
+进一步，若 \(\Gamma_x\cong\bigsqcup_{i=1}^r P_{\ell_i}\)，则有完备判别
+\[
+Z_x(-1)=0\ \Longleftrightarrow\ \exists i:\ \ell_i\equiv 1\pmod 3.
+\]
+\end{proposition}
+
+\begin{proof}
+按定义，\(Z_x(-1)=\sum_{S}(-1)^{|S|}\) 为独立集复形 \(\mathrm{Ind}^{\Delta}(\Gamma_x)\) 的面数交错和；
+与约化 Euler 特征的关系给出
+\(
+\widetilde\chi(|\mathrm{Ind}^{\Delta}(\Gamma_x)|)=-Z_x(-1)
+\)。
+而在上述 \(N=2\) 硬核费米子模型中，Witten 指数等于该链复形的 Euler 特征，因此 \(\mathcal I_W(\Gamma_x)=-Z_x(-1)\)（参见 \cite{FendleySchoutensDeBoer2003LatticeModelsN2Supersymmetry} 的系统论证与模型化框架）。
+
+对零判别：由定理 \ref{thm:pom-fiber-independence-complex-classification}，
+\(|\mathrm{Ind}^{\Delta}(\Gamma_x)|\) 可缩当且仅当存在 \(\ell_i\equiv 1\pmod 3\)。
+可缩当且仅当约化 Euler 特征为 \(0\)，由 \(\widetilde\chi=-Z_x(-1)\) 即得等价判别。证毕。
+\end{proof}
+
+\input{parts/part__pom-fiber-leyang-cyclotomic-factorization}
+
+\begin{proposition}[由路径独立集诱导的秩二融合半环]\label{prop:pom-fiber-grothendieck-fibonacci-fusion-semiring}
+令 \(V_\ell:=\CC[\mathsf{Ind}(P_\ell)]\) 为以路径独立集为基的复向量空间。
+则由末端顶点“取/不取”的分解，存在自然同构
+\[
+V_{\ell+1}\ \cong\ V_\ell\ \oplus\ V_{\ell-1}\qquad(\ell\ge 1).
+\]
+令 \(\mathcal V\) 为由 \(\{V_\ell\}_{\ell\ge 0}\) 张成的加性范畴，并令移位自函子 \(\mathsf T\) 由 \(\mathsf T(V_\ell)=V_{\ell+1}\) 给出。
+则在 Grothendieck 半环 \(K_0^+(\mathcal V)\) 中成立
+\[
+[\mathsf T]^2\ =\ [\mathsf T]\ +\ [\mathrm{Id}],
+\]
+从而 \([\mathsf T]\) 生成的秩二半环同构于 Fibonacci 融合半环 \(\ZZ_{\ge 0}[\tau]/(\tau^2-\tau-1)\)。
+\end{proposition}
+
+\begin{proof}
+独立集族满足严格分解
+\[
+\mathsf{Ind}(P_{\ell+1})\ =\ \mathsf{Ind}(P_\ell)\ \sqcup\ \bigl(\mathsf{Ind}(P_{\ell-1})+(\ell+1)\bigr),
+\]
+其中第二项表示取末端顶点 \(\ell+1\) 的独立集，故其余顶点只能来自前 \(\ell-1\) 个顶点。
+对上述不交并取自由向量空间即得 \(V_{\ell+1}\cong V_\ell\oplus V_{\ell-1}\)。
+在 \(K_0^+(\mathcal V)\) 中该同构对所有 \([V_\ell]\) 给出 \([V_{\ell+2}]=[V_{\ell+1}]+[V_\ell]\)，等价于 \([\mathsf T]^2=[\mathsf T]+[\mathrm{Id}]\)。证毕。
+\end{proof}
+
+\begin{proposition}[秩二刚性：真空融合空间维数的 Fibonacci 约束强制融合律]\label{prop:pom-rank2-rigidity-fibonacci-fusion-law}
+设 \(\mathcal C\) 为秩二半单张量范畴，其简单对象为 \(\{\ind,X\}\)，并满足 \(\Hom(\ind,X)=0\)。
+若对所有 \(n\ge 1\) 有
+\[
+\dim\Hom(\ind, X^{\otimes n})\ =\ F_{n-1},
+\]
+则其 Grothendieck 融合环必满足
+\[
+[X]^2\ =\ [\ind]\ +\ [X],
+\]
+并且 \(d_{\mathrm{FP}}(X)=\varphi\)。
+\end{proposition}
+
+\begin{proof}
+秩二融合环上存在非负整数 \(a,b\) 使 \( [X]^2=a[\ind]+b[X]\)。
+令 \(u_n:=\dim\Hom(\ind,X^{\otimes n})\)，则
+\(
+X^{\otimes(n+2)}\cong X^{\otimes n}\otimes X^{\otimes 2}\cong a\,X^{\otimes n}\oplus b\,X^{\otimes(n+1)}
+\)，
+从而 \(u_{n+2}=a\,u_n+b\,u_{n+1}\)。
+由假设 \(u_n=F_{n-1}\) 满足 Fibonacci 递推 \(F_{n+1}=F_n+F_{n-1}\)，比较递推系数得 \((a,b)=(1,1)\)，即 \([X]^2=[\ind]+[X]\)。
+Frobenius--Perron 维数为融合矩阵的 Perron 根，故 \(d_{\mathrm{FP}}(X)\) 满足 \(d^2=d+1\)，取正根得 \(d=\varphi\)。证毕。
+\end{proof}
+
+\begin{conjecture}[折叠群胚 Jones 塔的 SymTFT 完整化与 doubled Fibonacci 中心缺陷的极限嵌入]\label{conj:pom-fold-jones-tower-symtft-doubled-fib}
+令 \(\mathcal A_{m,1}:=\langle \mathcal A_m,e_m\rangle\cong \bigoplus_{x\in X_m}M_{d_m(x)}(\CC)\) 为折叠条件期望的 Jones 基本构造（定理 \ref{thm:op-algebra-fold-basic-construction-pair-groupoid}），并令 \(\mathsf{Bimod}(\mathcal A_{m,1})\) 为由有限半单双模所生成的双模 \(2\)-范畴。
+存在一族 \(3\) 维 SymTFT \(\{\mathfrak S_m\}_{m\ge 1}\)，使其边界理论的对称 \(1\)-范畴在 Morita 意义下与 \(\mathsf{Bimod}(\mathcal A_{m,1})\) 的某个对称子范畴一致；并且在 \(m\to\infty\) 的分辨率极限口径下，\(\mathcal Z(\mathfrak S_m)\) 中出现稳定的编织满子范畴，同构于 doubled Fibonacci 模范畴 \(\mathrm{Fib}\boxtimes \mathrm{Fib}^{\mathrm{rev}}\)。
+\end{conjecture}
+
+\begin{remark}
+该猜想与“对称范畴的中心编码 SymTFT 的拓扑缺陷数据”的一般原则相容；在此意义下，折叠碰撞矩与基本构造给出的非交换矩阵直和提供了一个与中心缺陷语言可计算对接的算子代数入口（参见 \cite{BhardwajSchaferNameki2025GeneralizedChargesII}）。
+\end{remark}
+
+\begin{conjecture}[Fold--Lee--Yang--Jones 对应：由谱单值化诱导的 Markov 迹边界取值]\label{conj:pom-fold-leyang-jones-boundary-value}
+存在一 Temperley--Lieb 型张量范畴 \(\mathcal T_{\Fold}\) 及其 Markov 迹 \(\tr_{\Fold}\)，并存在依赖于 \(y\) 的 braid 表示
+\(
+\rho_{\Fold}(\,\cdot\,;y)
+\)
+（由 Lee--Yang 谱四次 \(\Pi(\lambda,y)\) 的 \(S_4\) 单值数据诱导；定理 \ref{thm:xi-terminal-zm-leyang-monodromy-s4}），使得对任意由折叠语法生成的 braid word \(w\) 及其闭包链结 \(\widehat w\) 的 Jones 多项式 \(V_{\widehat w}(q)\) 有
+\[
+V_{\widehat w}(q)\Big|_{q=q_{\mathrm{LY}}(y)}
+=\tr_{\Fold}\!\bigl(\rho_{\Fold}(w;y)\bigr),
+\]
+其中 \(q_{\mathrm{LY}}(y)\) 为由谱椭圆曲线的模参数（等价地由其模形式实现；定理 \ref{thm:xi-terminal-zm-leyang-elliptic-37-modularity-monodromy-langlands}）给出的局部系统参数。
+\end{conjecture}
+
+\begin{remark}
+该形式把 Lee--Yang 覆盖的最大单值对称（\(S_4\)）与四阶碰撞核在 \(y=1\) 投影下显现的满对称算术复杂度（命题 \ref{prop:xi-terminal-zm4-moment-kernel-s5}）并置到同一条拓扑不变量的边界取值机制中；
+其可检验内容包括：在固定 \(y\) 的专化后，链结取值与由单值化确定的代数数据之间的可计算一致性，以及相应模素统计在 Chebotarev 口径下的独立性约束（推论 \ref{cor:xi-zm4-moment-kernel-leyang-s4-s3-s5-chebotarev-triple-product}）。
+\end{remark}
+

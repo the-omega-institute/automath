@@ -1,0 +1,133 @@
+% (User input window)
+
+\subsubsection{长度同余类的 Chebotarev 与 Dirichlet--Artin 分解：root-of-unity 滤波、扭曲 \texorpdfstring{$\zeta$}{zeta} 与平方根门槛}\label{subsubsec:zeta-online-kernel-length-modq-chebotarev}
+本段把长度同余类视作最基本的 ``\(\ZZ/q\ZZ\)-时间 cocycle''：它不引入额外观测量，却提供了 primitive 轨道的同余分解、扭曲 \(\zeta\) 扇区与常数层（Mertens）漂移的一条最直接的可审计接口。
+此外，未归一化 prime-shadow 的谱误差由非 Perron 模长 \(\Lambda\) 控制，kernel-RH（\(\Lambda\le\sqrt{\rho}\)）给出平方根门槛。
+
+\paragraph{primitive 轨道与长度同余类的两种口径}
+设 \(M\in\ZZ_{\ge0}^{d\times d}\) 为 primitive 非负整数矩阵，\(\rho:=\rho(M)>1\) 为 Perron 根，其余特征值记为 \(\mu_2,\dots,\mu_d\)，并令
+\[
+\Lambda:=\max_{k\ge2}|\mu_k|.
+\]
+定义 primitive 轨道数（Witt/Möbius 反演；见注 \ref{prop:finite-dimensional-explicit-formula}）
+\[
+p_n(M):=\frac{1}{n}\sum_{m\mid n}\mu(m)\,\Tr\!\bigl(M^{n/m}\bigr)\qquad(n\ge1).
+\]
+对整数 \(q\ge2\) 与剩余类 \(a\in\{0,1,\dots,q-1\}\)，定义未归一化累积计数
+\[
+\Pi_a(N;q):=\sum_{\substack{1\le n\le N\\ n\equiv a\ (\mathrm{mod}\ q)}} p_n(M),
+\qquad
+\Pi(N):=\sum_{1\le n\le N}p_n(M),
+\]
+以及 Mertens 归一化的同余类和
+\[
+\mathcal{M}_{q,a}(N):=\sum_{\substack{1\le n\le N\\ n\equiv a\ (\mathrm{mod}\ q)}}\frac{p_n(M)}{\rho^{n}}.
+\]
+
+\begin{theorem}[长度同余类的 Chebotarev--Mertens 定理与常数分解]\label{thm:zeta-length-modq-chebotarev-mertens}
+令 \(\omega_q:=e^{2\pi i/q}\)。则当 \(N\to\infty\) 时有
+\[
+\boxed{\;
+\mathcal{M}_{q,a}(N)=\frac{1}{q}\log N+\mathsf{M}^{(\mathrm{len})}_{q,a}(M)+o(1)\; }.
+\]
+其中常数项可由 root-of-unity 扭曲的 primitive 生成函数显式给出：记
+\(
+P_M(z):=\sum_{n\ge1}p_n(M)\,z^n
+\)，则
+\[
+\boxed{\;
+\mathsf{M}^{(\mathrm{len})}_{q,a}(M)
+=\frac{\mathsf{M}(M)}{q}
++\frac{1}{q}\sum_{j=1}^{q-1}\omega_q^{-aj}\,P_M\!\left(\frac{\omega_q^{\,j}}{\rho}\right)\; }.
+\]
+这里 \(\mathsf{M}(M)\) 是总 Mertens 常数，即
+\[
+\sum_{n\le N}\frac{p_n(M)}{\rho^n}=\log N+\mathsf{M}(M)+o(1).
+\]
+\end{theorem}
+\begin{proof}
+将指标函数展开为离散 Fourier 滤波器
+\[
+\mathbf 1_{\{n\equiv a\ (\mathrm{mod}\ q)\}}
+=\frac{1}{q}\sum_{j=0}^{q-1}\omega_q^{\,j(n-a)}.
+\]
+代入 \(\mathcal{M}_{q,a}(N)\) 并交换求和得
+\[
+\mathcal{M}_{q,a}(N)
+=\frac{1}{q}\sum_{n\le N}\frac{p_n(M)}{\rho^n}
++\frac{1}{q}\sum_{j=1}^{q-1}\omega_q^{-aj}\sum_{n\le N}\frac{p_n(M)\,\omega_q^{\,jn}}{\rho^n}.
+\]
+第一项给出 \(\frac{1}{q}\log N+\frac{\mathsf{M}(M)}{q}+o(1)\)。
+对每个 \(j\ge1\)，由
+\(
+p_n(M)/\rho^n
+=1/n+O(\vartheta^n/n)
+\)
+（其中 \(\vartheta:=\max\{\Lambda/\rho,\ \rho^{-1/2}\}<1\)）
+与 Dirichlet 判别可知 \(\sum_{n\ge1}p_n(M)\omega_q^{jn}/\rho^n\) 收敛；其和即为 \(P_M(\omega_q^{\,j}/\rho)\)。
+因此内层部分和收敛到 \(P_M(\omega_q^{\,j}/\rho)\)，从而得到所示常数分解式。证毕。
+\end{proof}
+
+\begin{remark}[未归一化 prime-shadow 的端点偏差与平方根门槛]\label{rem:zeta-length-modq-raw-endpoint-bias}
+未归一化的 \(\Pi_a(N;q)\) 在指数尺度上由末项主导，因此一般不具备严格的同余等分布主项。
+设 \(N_a:=\max\{n\le N:\ n\equiv a\ (\mathrm{mod}\ q)\}\)，则由
+\(
+p_n(M)=\rho^n/n+O(\Lambda^n/n)
+\)
+以及沿算术级数的几何求和可得
+\[
+\Pi_a(N;q)
+=\frac{\rho^{N_a}}{N_a}\cdot\frac{\rho^q}{\rho^q-1}
++O\!\left(\frac{\rho^{N_a}}{N_a^2}\right)
++O\!\left(\frac{\Lambda^{N}}{N}\right).
+\]
+因此 kernel-RH（\(\Lambda\le \sqrt{\rho}\)）把 prime-shadow 的谱误差统一压缩到平方根尺度 \(O(\rho^{N/2}/N)\)，且当存在达界谱点 \(|\mu_k|=\sqrt{\rho}\) 时一般出现不可改进的平方根级振荡（参见命题 \ref{prop:finite-rh-sqrt-resonance-general} 的显式公式模板）。
+\end{remark}
+
+\paragraph{Dirichlet--Artin 分解：扭曲 \texorpdfstring{$\zeta$}{zeta} 扇区与 prime-生成函数}
+对 \(j\in\{0,1,\dots,q-1\}\) 定义扭曲 \(\zeta\)（Artin 因子）
+\[
+Z_j(z):=\det\bigl(I-\omega_q^{\,j}z\,M\bigr)^{-1},
+\qquad
+\mathcal{P}_j(z):=\sum_{n\ge1}\omega_q^{\,jn}p_n(M)\,z^n.
+\]
+
+\begin{theorem}[扭曲 prime-生成函数的 Möbius--log 形式]\label{thm:zeta-length-modq-dirichlet-artin-mobiuslog}
+在 \(|z|<1/\rho\) 内有解析恒等式
+\[
+\boxed{\;
+\mathcal{P}_j(z)=\sum_{m\ge1}\frac{\mu(m)}{m}\,\log Z_j(z^m)\; }.
+\]
+从而 \(\mathcal{P}_j\) 的奇性由 \(\{\omega_q^{-j}\mu_k^{-1}\}_{k=1}^d\) 的 \(m\)-次根所生成；在 Dirichlet 变量 \(s\)（取 \(z=\rho^{-s}\)）下，其奇点实部为
+\(
+\Re(s)=\log|\mu_k|/\log\rho
+\)。
+\end{theorem}
+\begin{proof}
+由行列式--迹展开
+\[
+\log Z_j(z)=\sum_{n\ge1}\frac{\Tr((\omega_q^{\,j}M)^n)}{n}\,z^n
+=\sum_{n\ge1}\frac{\omega_q^{\,jn}\Tr(M^n)}{n}\,z^n
+\]
+与 Witt/Möbius 反演的标准对偶关系，交换求和并按 \(m\mid n\) 重排即可得到所示公式。证毕。
+\end{proof}
+
+\begin{corollary}[长度同余类的 Artin 分解]\label{cor:zeta-length-modq-artin-decomposition}
+令
+\[
+\mathcal{P}_a(z):=\sum_{n\ge1}\mathbf 1_{\{n\equiv a\ (\mathrm{mod}\ q)\}}\,p_n(M)\,z^n.
+\]
+则
+\[
+\boxed{\;
+\mathcal{P}_a(z)
+=\frac{1}{q}\sum_{j=0}^{q-1}\omega_q^{-aj}\,\mathcal{P}_j(z)
+=\frac{1}{q}\sum_{j=0}^{q-1}\omega_q^{-aj}\sum_{m\ge1}\frac{\mu(m)}{m}\log Z_j(z^m)\; }.
+\]
+特别地，kernel-RH（\(|\mu_k|\le \sqrt{\rho}\) 对一切 \(k\ge2\)）等价于 \(\mathcal{P}_a(\rho^{-s})\) 在开带 \(1/2<\Re(s)<1\) 内解析。
+\end{corollary}
+\begin{proof}
+由 root-of-unity 滤波器恒等式直接得到第一式；第二式代入定理 \ref{thm:zeta-length-modq-dirichlet-artin-mobiuslog} 即得。
+最后一条由上文奇点实部字典立得。证毕。
+\end{proof}
+

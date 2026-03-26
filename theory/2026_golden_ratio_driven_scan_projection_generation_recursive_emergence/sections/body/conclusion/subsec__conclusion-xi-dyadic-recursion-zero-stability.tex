@@ -1,0 +1,235 @@
+\subsection{\texorpdfstring{$\xi/\Xi$}{xi/Xi} 的二进尺度递归与零点稳定性}\label{subsec:conclusion-xi-dyadic-recursion-zero-stability}
+本小节给出一条直接作用于 \(\xi\)-函数本体的离散尺度推进：
+在二进尺度 \(2^K\) 上递归截断 Jacobi--Mellin 表示，并把余项压缩为显式超指数尾界；
+随后在简单零点附近以 Rouch\'e 判据给出截断零点的稳定性与位移控制。
+
+\begin{theorem}[二进尺度递归与超指数余项界]\label{thm:conclusion-xi-dyadic-recursion-superexp}
+定义
+\[
+\xi(s):=\frac{s(s-1)}{2}\pi^{-s/2}\Gamma\!\left(\frac{s}{2}\right)\zeta(s),
+\qquad
+\Xi(z):=\xi\!\left(\frac12+\mathrm{i}z\right),
+\]
+\[
+\psi(x):=\sum_{n\ge 1}e^{-\pi n^2x}\qquad(x\ge 1),
+\]
+并令 \(s=\frac12+\mathrm{i}z\)。
+经典表示写为
+\begin{equation}\label{eq:conclusion-xi-integral}
+\xi(s)=\frac12+\frac{s(s-1)}{2}\int_{1}^{\infty}
+\Bigl(x^{-s/2-1/2}+x^{s/2-1}\Bigr)\psi(x)\,\mathrm{d}x.
+\end{equation}
+对 \(K\in\NN\) 定义二进尺度部分和
+\begin{equation}\label{eq:conclusion-xi-dyadic-partial}
+\Xi_K(z):=
+\frac12+\frac{s(s-1)}{2}\sum_{k=0}^{K-1}
+\int_{2^k}^{2^{k+1}}
+\Bigl(x^{-s/2-1/2}+x^{s/2-1}\Bigr)\psi(x)\,\mathrm{d}x.
+\end{equation}
+则：
+\begin{enumerate}
+  \item \textbf{递归步进：}
+  \begin{equation}\label{eq:conclusion-xi-dyadic-recursion}
+  \Xi_{K+1}(z)=\Xi_K(z)+\frac{s(s-1)}{2}
+  \int_{2^K}^{2^{K+1}}
+  \Bigl(x^{-s/2-1/2}+x^{s/2-1}\Bigr)\psi(x)\,\mathrm{d}x.
+  \end{equation}
+
+  \item \textbf{实轴超指数尾界：}
+  设
+  \[
+  C_{\psi}:=\frac{1}{\pi\,(1-e^{-3\pi})}.
+  \]
+  则对任意 \(t\in\RR\) 与任意 \(K\in\NN\)，
+  \begin{equation}\label{eq:conclusion-xi-tail-real}
+  \bigl|\Xi(t)-\Xi_K(t)\bigr|
+  \le
+  C_{\psi}\,(t^2+1)\,(2^K)^{-3/4}e^{-\pi 2^K}.
+  \end{equation}
+
+  \item \textbf{局部复邻域尾界：}
+  对任意 \(\eta\in[0,1]\)，若 \(|\Im z|\le \eta\)，则
+  \begin{equation}\label{eq:conclusion-xi-tail-strip}
+  \bigl|\Xi(z)-\Xi_K(z)\bigr|
+  \le
+  C_{\psi}\,\bigl(|z|^2+1\bigr)\,(2^K)^{-3/4+\eta/2}e^{-\pi 2^K}.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+式 \eqref{eq:conclusion-xi-dyadic-recursion} 由 \eqref{eq:conclusion-xi-dyadic-partial} 的定义直接得到。
+
+再看余项。由 \eqref{eq:conclusion-xi-integral} 与 \eqref{eq:conclusion-xi-dyadic-partial}，
+\[
+\Xi(z)-\Xi_K(z)
+=
+\frac{s(s-1)}{2}\int_{2^K}^{\infty}
+\Bigl(x^{-s/2-1/2}+x^{s/2-1}\Bigr)\psi(x)\,\mathrm{d}x.
+\]
+对 \(x\ge 1\)，有
+\[
+\psi(x)=\sum_{n\ge 1}e^{-\pi n^2x}
+\le e^{-\pi x}\sum_{n\ge 1}e^{-3\pi(n-1)}
+=\frac{e^{-\pi x}}{1-e^{-3\pi}}.
+\]
+当 \(z=t\in\RR\) 时，\(\Re(s)=1/2\)，故
+\[
+\bigl|x^{-s/2-1/2}\bigr|=\bigl|x^{s/2-1}\bigr|=x^{-3/4},
+\]
+从而
+\[
+\left|\int_{2^K}^{\infty}(\cdots)\psi(x)\,\mathrm{d}x\right|
+\le
+\frac{2}{1-e^{-3\pi}}\int_{2^K}^{\infty}x^{-3/4}e^{-\pi x}\,\mathrm{d}x
+\le
+\frac{2}{\pi(1-e^{-3\pi})}(2^K)^{-3/4}e^{-\pi 2^K}.
+\]
+再用 \(\frac{|s(s-1)|}{2}=\frac{|t^2+1/4|}{2}\le t^2+1\)，即得
+\eqref{eq:conclusion-xi-tail-real}。
+
+对复点 \(z=u+\mathrm{i}v\)（\(|v|\le \eta\)），\(\Re(s)=1/2-v\)，于是
+\[
+\bigl|x^{-s/2-1/2}\bigr|\le x^{-3/4+\eta/2},
+\qquad
+\bigl|x^{s/2-1}\bigr|\le x^{-3/4+\eta/2}.
+\]
+同理可得
+\[
+\left|\int_{2^K}^{\infty}(\cdots)\psi(x)\,\mathrm{d}x\right|
+\le
+\frac{2}{\pi(1-e^{-3\pi})}(2^K)^{-3/4+\eta/2}e^{-\pi 2^K}.
+\]
+又
+\(
+s(s-1)=-(z^2+1/4)
+\),
+故 \(\frac{|s(s-1)|}{2}\le |z|^2+1\)；
+代回得到 \eqref{eq:conclusion-xi-tail-strip}。证毕。
+\end{proof}
+
+\begin{corollary}[误差阈值下的双对数尺度深度律]\label{cor:conclusion-xi-dyadic-depth-law}
+在定理 \ref{thm:conclusion-xi-dyadic-recursion-superexp} 的实轴口径下，
+给定 \(t\in\RR\) 与 \(\varepsilon\in(0,1)\)。
+若
+\begin{equation}\label{eq:conclusion-xi-depth-threshold}
+2^K\ \ge\ \frac1\pi\log\!\left(\frac{C_{\psi}(t^2+1)}{\varepsilon}\right),
+\end{equation}
+则
+\[
+|\Xi(t)-\Xi_K(t)|\le \varepsilon.
+\]
+因此可取
+\[
+K\ \ge\
+\left\lceil
+\log_2\!\left(
+\frac1\pi\log\!\left(\frac{C_{\psi}(t^2+1)}{\varepsilon}\right)
+\right)
+\right\rceil
+\]
+保证该误差阈值。
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:conclusion-xi-tail-real}，
+\[
+|\Xi(t)-\Xi_K(t)|
+\le
+C_{\psi}(t^2+1)(2^K)^{-3/4}e^{-\pi 2^K}
+\le
+C_{\psi}(t^2+1)e^{-\pi 2^K}.
+\]
+若 \eqref{eq:conclusion-xi-depth-threshold} 成立，则右端不超过 \(\varepsilon\)。证毕。
+\end{proof}
+
+\begin{theorem}[简单零点的 Rouch\'e 稳定性与位移控制]\label{thm:conclusion-xi-rouche-stability}
+将 \(\Xi\) 与 \(\Xi_K\) 视为复变量 \(z\) 的整函数（定义同上）。
+设 \(z_0=t_0\in\RR\) 是 \(\Xi\) 的简单零点，即
+\[
+\Xi(z_0)=0,\qquad \Xi'(z_0)\neq 0.
+\]
+则存在 \(r_0\in(0,1]\)，使得对任意 \(r\in(0,r_0]\)，闭圆盘
+\(
+\overline{D}(z_0,r)
+\)
+内不含 \(\Xi\) 的其它零点。
+定义
+\[
+m(r):=\min_{|z-z_0|=r}|\Xi(z)|>0.
+\]
+若某个 \(K\) 满足
+\begin{equation}\label{eq:conclusion-xi-rouche-condition}
+\sup_{|z-z_0|=r}|\Xi(z)-\Xi_K(z)|<m(r),
+\end{equation}
+则：
+\begin{enumerate}
+  \item \(\Xi_K\) 在 \(D(z_0,r)\) 内恰有一个零点（按重数计），记为 \(z_K\)；
+  \item 位移满足
+  \begin{equation}\label{eq:conclusion-xi-rouche-shift}
+  |z_K-z_0|
+  \le
+  \frac{r}{m(r)}\,
+  \sup_{|z-z_0|\le r}|\Xi(z)-\Xi_K(z)|.
+  \end{equation}
+  进一步由 \eqref{eq:conclusion-xi-tail-strip}（取 \(\eta=r\)）可得
+  \begin{equation}\label{eq:conclusion-xi-rouche-shift-explicit}
+  |z_K-z_0|
+  \le
+  \frac{r\,C_{\psi}\bigl((|t_0|+r)^2+1\bigr)}{m(r)}
+  (2^K)^{-3/4+r/2}e^{-\pi 2^K}.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:conclusion-xi-rouche-condition}，在 \(|z-z_0|=r\) 上有
+\(
+|\Xi-\Xi_K|<|\Xi|
+\)。
+Rouch\'e 定理给出 \(\Xi\) 与 \(\Xi_K\) 在 \(D(z_0,r)\) 内零点数相同；
+而 \(\Xi\) 在该圆盘内恰有一个简单零点 \(z_0\)，故 \(z_K\) 存在且唯一。
+
+设
+\[
+H(z):=\frac{\Xi(z)}{z-z_0}.
+\]
+则 \(H\) 在 \(\overline{D}(z_0,r)\) 上解析且无零。
+在边界上
+\[
+|H(z)|=\frac{|\Xi(z)|}{|z-z_0|}\ge \frac{m(r)}{r}.
+\]
+由最小模原理，
+\(
+\min_{|z-z_0|\le r}|H(z)|\ge m(r)/r
+\)。
+又 \(\Xi_K(z_K)=0\)，故
+\[
+|z_K-z_0|
+=
+\frac{|\Xi(z_K)|}{|H(z_K)|}
+=
+\frac{|\Xi(z_K)-\Xi_K(z_K)|}{|H(z_K)|}
+\le
+\frac{r}{m(r)}\sup_{|z-z_0|\le r}|\Xi(z)-\Xi_K(z)|.
+\]
+即得 \eqref{eq:conclusion-xi-rouche-shift}。
+最后在 \(|z-z_0|\le r\) 上有 \(|z|\le |t_0|+r\)，代入
+\eqref{eq:conclusion-xi-tail-strip} 得 \eqref{eq:conclusion-xi-rouche-shift-explicit}。证毕。
+\end{proof}
+
+\begin{corollary}[尺度递归求零的超指数收敛]\label{cor:conclusion-xi-root-superexp-convergence}
+在定理 \ref{thm:conclusion-xi-rouche-stability} 的设定下，固定 \(r\in(0,r_0]\)。
+对所有充分大的 \(K\)，记 \(z_K\) 为 \(D(z_0,r)\) 内 \(\Xi_K\) 的唯一零点。
+则
+\[
+|z_K-z_0|
+\le
+\mathcal C(t_0,r)\,(2^K)^{-3/4+r/2}e^{-\pi 2^K},
+\]
+其中
+\[
+\mathcal C(t_0,r):=\frac{r\,C_{\psi}\bigl((|t_0|+r)^2+1\bigr)}{m(r)}.
+\]
+特别地，\(z_K\to z_0\) 的主导收敛因子为 \(e^{-\pi 2^K}\)，即关于尺度层 \(K\) 的超指数收敛。
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:conclusion-xi-rouche-shift-explicit} 直接得到；当 \(K\to\infty\) 时右端趋于 \(0\)。证毕。
+\end{proof}

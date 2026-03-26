@@ -1,0 +1,354 @@
+\begin{theorem}[残余歧义观测的完全谱分解定理]\label{thm:conclusion-statnull-ambiguity-observable-spectral-decomposition}
+固定分辨率 \(m\)。对任意长度 \(n\) 的合法宏观前缀 \(w\in X_m^n\)，记确定化滤波状态的候选数为
+\[
+K_n(w):=|S_n(w)|.
+\]
+对任意单调函数
+\[
+\Phi:\{1,\dots,|V_m|\}\to\RR
+\]
+定义熵标度归一化的歧义观测量
+\[
+\mathcal A_{\Phi,m}(n):=
+2^{-n}\sum_{w\in X_m^n}\bigl(\Phi(K_n(w))-\Phi(1)\bigr),
+\]
+并记离散增量
+\[
+\Delta\Phi(k):=\Phi(k)-\Phi(k-1)\qquad (k\ge 2).
+\]
+则有精确恒等式
+\[
+\mathcal A_{\Phi,m}(n)
+=
+\sum_{k=2}^{|V_m|}\Delta\Phi(k)\,\frac{N_{m,\ge k}(n)}{2^n},
+\]
+其中
+\[
+N_{m,\ge k}(n):=\#\{\,w\in X_m^n:\ |S_n(w)|\ge k\,\}.
+\]
+若对一切满足 \(\Delta\Phi(k)>0\) 的 \(k\)，诱导子图 \(H_{m,\ge k}\) 都满足定理 \ref{thm:Ym-ambiguity-spectrum-law} 的“唯一最大谱半径强连通分量且原始”假设，则
+\[
+\mathcal A_{\Phi,m}(n)
+=
+L_{\Phi,m}e^{-\varepsilon_{\Phi,m}n}(1+o(1)),
+\]
+其中
+\[
+\varepsilon_{\Phi,m}:=
+\min\{\,\varepsilon_{m,\ge k}:\ \Delta\Phi(k)>0\,\},
+\]
+\[
+L_{\Phi,m}:=
+\sum_{\substack{2\le k\le |V_m|\\ \Delta\Phi(k)>0\\ \varepsilon_{m,\ge k}=\varepsilon_{\Phi,m}}}
+\Delta\Phi(k)\,c_{m,\ge k}>0.
+\]
+亦即，任意单调清晰度观测在大时间端都完全由阈值歧义谱 \(\{\varepsilon_{m,\ge k}\}_{k\ge 2}\) 支配，其首指数无需重新计算，只需在被激活的阈值层中取最小者。
+\end{theorem}
+\begin{proof}
+对任意整数 \(s\ge 1\)，离散望远镜恒等式给出
+\[
+\Phi(s)-\Phi(1)
+=
+\sum_{k=2}^{s}\Delta\Phi(k)
+=
+\sum_{k=2}^{|V_m|}\Delta\Phi(k)\,\mathbf 1_{\{s\ge k\}}.
+\]
+代入 \(s=K_n(w)\) 并对全部 \(w\in X_m^n\) 求和，可得
+\[
+\mathcal A_{\Phi,m}(n)
+=
+\sum_{k=2}^{|V_m|}\Delta\Phi(k)\,\frac{N_{m,\ge k}(n)}{2^n}.
+\]
+若对所有 \(\Delta\Phi(k)>0\) 的层级都可应用定理 \ref{thm:Ym-ambiguity-spectrum-law}，则
+\[
+\frac{N_{m,\ge k}(n)}{2^n}
+=
+c_{m,\ge k}e^{-\varepsilon_{m,\ge k}n}
++o\!\bigl(e^{-\varepsilon_{m,\ge k}n}\bigr).
+\]
+由于求和仅有有限项，取其中指数最小者即得首项
+\[
+L_{\Phi,m}e^{-\varepsilon_{\Phi,m}n},
+\]
+其余项都以更快指数衰减。证毕。
+\end{proof}
+
+\begin{corollary}[精确歧义层的暴露相定理]\label{cor:conclusion-exact-k-ambiguity-exposed-phase}
+对每个 \(k\ge 2\)，定义“恰有 \(k\) 个候选”的前缀计数
+\[
+N_{m,=k}(n):=\#\{\,w\in X_m^n:\ |S_n(w)|=k\,\}.
+\]
+则恒有
+\[
+N_{m,=k}(n)=N_{m,\ge k}(n)-N_{m,\ge k+1}(n).
+\]
+若某一级阈值谱出现严格间隙
+\[
+\varepsilon_{m,\ge k}<\varepsilon_{m,\ge k+1},
+\]
+则
+\[
+\frac{N_{m,=k}(n)}{2^n}
+=
+c_{m,\ge k}e^{-\varepsilon_{m,\ge k}n}(1+o(1)).
+\]
+因此，每一个严格的谱台阶都会把“恰好 \(k\) 重歧义”暴露成一个独立指数相，而不再只是尾事件 \(\{|S_n|\ge k\}\) 的粗粒度影子。
+\end{corollary}
+\begin{proof}
+恒等式
+\[
+N_{m,=k}(n)=N_{m,\ge k}(n)-N_{m,\ge k+1}(n)
+\]
+显然成立。再由定理 \ref{thm:Ym-ambiguity-spectrum-law}，
+\[
+\frac{N_{m,\ge k}(n)}{2^n}
+=
+c_{m,\ge k}e^{-\varepsilon_{m,\ge k}n}(1+o(1)),
+\]
+\[
+\frac{N_{m,\ge k+1}(n)}{2^n}
+=
+c_{m,\ge k+1}e^{-\varepsilon_{m,\ge k+1}n}(1+o(1)).
+\]
+若 \(\varepsilon_{m,\ge k}<\varepsilon_{m,\ge k+1}\)，则第二项相对第一项指数级可忽略，故结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[阈值歧义集的 Hausdorff 余维阶梯定理]\label{thm:conclusion-threshold-ambiguity-hausdorff-codim-ladder}
+对每个 \(k\ge 2\)，定义阈值歧义集
+\[
+\mathcal Y_{m,\ge k}:=
+\{\,y\in Y_m:\ |S_n(y)|\ge k\ \text{对一切 }n\ge 1\,\}.
+\]
+在前缀超度量
+\[
+d(y,y'):=2^{-\min\{\,n\ge 0:\ y_n\neq y_n'\,\}}
+\]
+下，若 \(H_{m,\ge k}\neq\varnothing\) 且满足定理 \ref{thm:Ym-ambiguity-spectrum-law} 的 Perron--Frobenius 假设，则
+\[
+\dim_{\mathrm H}(\mathcal Y_{m,\ge k})
+=
+\frac{\log\rho_{m,\ge k}}{\log 2}
+=
+1-\frac{\varepsilon_{m,\ge k}}{\log 2},
+\]
+从而
+\[
+\mathrm{codim}(\mathcal Y_{m,\ge k})
+=
+\frac{\varepsilon_{m,\ge k}}{\log 2}.
+\]
+因此，歧义并不只对应一个总余维，而是天然分裂成一条由 \(k\) 标号的余维阶梯。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:det-candidate-set-monotone}，候选集合基数随读入单调不增；因此只要长度 \(n\) 后满足 \(|S_n|\ge k\)，则此前所有时刻也都满足 \(|S_t|\ge k\)。于是 \(\mathcal Y_{m,\ge k}\) 的长度-\(n\) 允许前缀数恰为 \(N_{m,\ge k}(n)\)。
+
+而定理 \ref{thm:Ym-ambiguity-spectrum-law} 给出
+\[
+N_{m,\ge k}(n)=c_{m,\ge k}\rho_{m,\ge k}^{\,n}+O(\rho_{m,\ge k,2}^{\,n}).
+\]
+在前缀超度量下，长度 \(n\) 柱集正是半径 \(2^{-n}\) 的球；因此完全沿推论 \ref{cor:Ym-amb-hausdorff-codim} 的 covering argument，可得
+\[
+\dim_{\mathrm H}(\mathcal Y_{m,\ge k})=\frac{\log\rho_{m,\ge k}}{\log 2}.
+\]
+再代入
+\[
+\varepsilon_{m,\ge k}=\log 2-\log\rho_{m,\ge k}
+\]
+即可得到余维公式。证毕。
+\end{proof}
+
+\begin{theorem}[扫描预算--余维对偶定理]\label{thm:conclusion-scan-budget-codim-duality}
+对每个 \(k\ge 2\) 与容忍阈值 \(\eta\in(0,1)\)，定义最小扫描深度
+\[
+n_{m,\eta}^{(k)}
+:=
+\min\left\{\,n\ge 1:\ \frac{N_{m,\ge k}(n)}{2^n}\le \eta\,\right\}.
+\]
+则当 \(\eta\downarrow 0\) 时，
+\[
+n_{m,\eta}^{(k)}
+=
+\frac{1}{\varepsilon_{m,\ge k}}\log\frac1\eta
++\frac{1}{\varepsilon_{m,\ge k}}\log c_{m,\ge k}
++O(1).
+\]
+等价地，
+\[
+n_{m,\eta}^{(k)}
+=
+\frac{1}{(\log 2)\,\mathrm{codim}(\mathcal Y_{m,\ge k})}
+\log\frac1\eta
++O(1).
+\]
+因此，扫描时间的主导系数并非某个外加算法常数，而恰是对应阈值歧义集的 Hausdorff 余维；扫描预算与余维在此精确互反。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:Ym-ambiguity-spectrum-law}，
+\[
+\frac{N_{m,\ge k}(n)}{2^n}
+=
+c_{m,\ge k}e^{-\varepsilon_{m,\ge k}n}(1+o(1)).
+\]
+令 \(n=n_{m,\eta}^{(k)}\)，则
+\[
+\eta\asymp c_{m,\ge k}e^{-\varepsilon_{m,\ge k}n},
+\]
+取对数便得
+\[
+n
+=
+\frac{1}{\varepsilon_{m,\ge k}}\log\frac1\eta
++\frac{1}{\varepsilon_{m,\ge k}}\log c_{m,\ge k}
++O(1).
+\]
+再由定理 \ref{thm:conclusion-threshold-ambiguity-hausdorff-codim-ladder}
+\[
+\varepsilon_{m,\ge k}=(\log 2)\,\mathrm{codim}(\mathcal Y_{m,\ge k}),
+\]
+即得第二式。证毕。
+\end{proof}
+
+\begin{theorem}[清晰度的不可单标量化定理]\label{thm:conclusion-clarity-nonscalarization}
+若阈值歧义谱并未塌缩，即存在
+\[
+2\le k<\ell\le |V_m|
+\quad\text{使}\quad
+\varepsilon_{m,\ge k}<\varepsilon_{m,\ge \ell},
+\]
+则不存在任何非零标量序列 \(C_m(n)\)，能使所有单调歧义观测都满足
+\[
+\mathcal A_{\Phi,m}(n)\asymp C_m(n)\qquad (n\to\infty).
+\]
+更强地，对指标函数
+\[
+\Phi_k(s):=\mathbf 1_{\{s\ge k\}},
+\qquad
+\Phi_\ell(s):=\mathbf 1_{\{s\ge \ell\}},
+\]
+有
+\[
+\frac{\mathcal A_{\Phi_k,m}(n)}{\mathcal A_{\Phi_\ell,m}(n)}
+=
+\exp\!\bigl((\varepsilon_{m,\ge \ell}-\varepsilon_{m,\ge k})n+o(n)\bigr)
+\longrightarrow +\infty.
+\]
+因此，一旦残余歧义等级谱真正非平凡，就不存在任何“单一清晰度指标”可以同时代表全部歧义观测；不同层级的残余歧义在指数尺度上彼此不可压缩。
+\end{theorem}
+\begin{proof}
+对上述指标函数，定义直接给出
+\[
+\mathcal A_{\Phi_k,m}(n)=\frac{N_{m,\ge k}(n)}{2^n},
+\qquad
+\mathcal A_{\Phi_\ell,m}(n)=\frac{N_{m,\ge \ell}(n)}{2^n}.
+\]
+再由定理 \ref{thm:Ym-ambiguity-spectrum-law}，
+\[
+\mathcal A_{\Phi_k,m}(n)
+=
+c_{m,\ge k}e^{-\varepsilon_{m,\ge k}n}(1+o(1)),
+\]
+\[
+\mathcal A_{\Phi_\ell,m}(n)
+=
+c_{m,\ge \ell}e^{-\varepsilon_{m,\ge \ell}n}(1+o(1)).
+\]
+相除即得
+\[
+\frac{\mathcal A_{\Phi_k,m}(n)}{\mathcal A_{\Phi_\ell,m}(n)}
+=
+\frac{c_{m,\ge k}}{c_{m,\ge \ell}}
+e^{(\varepsilon_{m,\ge \ell}-\varepsilon_{m,\ge k})n}(1+o(1))
+\to +\infty.
+\]
+若存在统一的 \(C_m(n)\) 使两者都与之同阶，则上述比值必须有界，矛盾。证毕。
+\end{proof}
+
+\begin{corollary}[“消除统计型 \texorpdfstring{\(\mathsf{NULL}\)}{NULL}”与“压低深层多义度”的非同阶分离]\label{cor:conclusion-statnull-vs-deep-ambiguity-scale-separation}
+统计型 \(\mathsf{NULL}\) 与“未同步”等价，即
+\[
+|S_n(w)|>1
+\quad\Longleftrightarrow\quad
+w\ \text{在长度 }n\text{ 时仍触发统计型 }\mathsf{NULL}.
+\]
+若
+\[
+\varepsilon_{m,\ge 2}<\varepsilon_{m,\ge 3},
+\]
+并定义
+\[
+n_{m,\eta}^{(2)}
+:=
+\min\left\{\,n\ge 1:\ \frac{N_{m,\ge 2}(n)}{2^n}\le \eta\,\right\},
+\]
+则当 \(\eta\downarrow 0\) 时，
+\[
+\frac{N_{m,\ge 3}(n_{m,\eta}^{(2)})}{2^{n_{m,\eta}^{(2)}}}
+=
+\Theta\!\left(\eta^{\varepsilon_{m,\ge 3}/\varepsilon_{m,\ge 2}}\right).
+\]
+因此，把统计型 \(\mathsf{NULL}\) 压到尺度 \(\eta\) 所需的扫描预算，并不会自动把“三重及以上残余歧义”压到同阶；后者只以幂指数
+\[
+\varepsilon_{m,\ge 3}/\varepsilon_{m,\ge 2}>1
+\]
+随 \(\eta\) 衰减。
+\end{corollary}
+\begin{proof}
+由统计型 \(\mathsf{NULL}\) 与未同步的等价及定义，
+\[
+\frac{N_{m,\ge 2}(n)}{2^n}
+\]
+正是长度 \(n\) 时仍未同步的最大熵密度。由定理 \ref{thm:conclusion-scan-budget-codim-duality}，
+\[
+n_{m,\eta}^{(2)}
+=
+\frac{1}{\varepsilon_{m,\ge 2}}\log\frac1\eta+O(1).
+\]
+再将其代入
+\[
+\frac{N_{m,\ge 3}(n)}{2^n}
+=
+c_{m,\ge 3}e^{-\varepsilon_{m,\ge 3}n}(1+o(1)),
+\]
+即得
+\[
+\frac{N_{m,\ge 3}(n_{m,\eta}^{(2)})}{2^{n_{m,\eta}^{(2)}}}
+=
+\Theta\!\left(\eta^{\varepsilon_{m,\ge 3}/\varepsilon_{m,\ge 2}}\right).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[瞬态壳的“周期不可见--清晰度可见”二重分裂定理]\label{thm:conclusion-transient-shell-period-invisible-clarity-visible-splitting}
+在一般 sofic 口径下，文稿已证明：歧义壳的瞬态块在确定化邻接矩阵中形成上三角幂零块，因而
+\[
+\det(I-zA_m^{\mathrm{det}})=\det(I-zA_m^{\mathrm{ess}}),
+\]
+且周期/Fredholm 数据只感知 singleton skeleton，而不感知 ambiguity shell。与此同时，只要某一级阈值子图 \(H_{m,\ge k}\) 非空并满足定理 \ref{thm:Ym-ambiguity-spectrum-law} 的 Perron--Frobenius 假设，则定理 \ref{thm:conclusion-threshold-ambiguity-hausdorff-codim-ladder} 与定理 \ref{thm:conclusion-scan-budget-codim-duality} 给出
+\[
+\mathrm{codim}(\mathcal Y_{m,\ge k})
+=
+\frac{\varepsilon_{m,\ge k}}{\log 2}>0,
+\qquad
+n_{m,\eta}^{(k)}
+=
+\frac{1}{\varepsilon_{m,\ge k}}\log\frac1\eta+O(1).
+\]
+因此，瞬态壳在本体系中出现严格二重分裂：
+\begin{enumerate}
+\normalfont
+  \item 它对周期谱、\(\zeta\)-因子与 determinant 证书不可见；
+  \item 它对清晰度预算、残余歧义等级与 Hausdorff 余维完全可见。
+\end{enumerate}
+换言之，瞬态并非“无谱可见”就等于“可忽略”；它只是从周期通道退场，转而在清晰度通道中留下完整的指数--余维指纹。
+\end{theorem}
+\begin{proof}
+前一半正是定理 \ref{thm:conclusion-ambiguity-shell-zeta-sync-splitting} 的结论：歧义壳作为幂零瞬态块，不进入
+\[
+\det(I-zA_m^{\mathrm{det}}),\qquad \zeta_{H_m^{\mathrm{det}}}(z),\qquad \{p_n\},\qquad h_{\mathrm{top}}
+\]
+等周期--熵型不变量。后一半则由定理 \ref{thm:conclusion-threshold-ambiguity-hausdorff-codim-ladder} 与定理 \ref{thm:conclusion-scan-budget-codim-duality} 直接给出：一旦某一级阈值壳非空，其对应残余歧义集便具有严格正的分形余维，并强制出
+\[
+n_{m,\eta}^{(k)}\sim \varepsilon_{m,\ge k}^{-1}\log(1/\eta)
+\]
+的对数级扫描预算。二者合并即得所述“周期不可见--清晰度可见”二重分裂。证毕。
+\end{proof}

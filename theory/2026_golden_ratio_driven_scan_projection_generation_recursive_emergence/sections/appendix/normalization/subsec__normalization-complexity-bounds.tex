@@ -1,0 +1,55 @@
+\subsection{折叠与归一化的复杂度界（按分辨率 m 与按比特两种口径）}
+\label{subsec:normalization-complexity-bounds}
+
+本附录将正文中"可计算、可终止"的表述升级为显式复杂度界。为避免模型争议，我们同时给出两种等价口径：
+\begin{itemize}
+  \item \textbf{按分辨率口径：}把 $m$ 视为输入长度，允许在常数时间内执行对 $\{0,1,\dots,F_{m+3}\}$ 范围整数的基本算术（这是把大整数成本吸收进常数的 RAM 口径；适合强调"随分辨率线性步数"）。
+  \item \textbf{按比特口径：}把整数按其二进制长度计成本。由于 $F_{m+3}\asymp \varphi^{m}$，有 $\log_2 F_{m+3}=\Theta(m)$，因此"分辨率口径"的线性步数对应于"比特口径"的多项式成本。
+\end{itemize}
+
+\begin{lemma}[权重与数值大小]\label{lem:bitlength-fib}
+对任意 $m\ge 1$，Fibonacci 权重满足
+\[
+\sum_{k=1}^m F_{k+1}=F_{m+3}-1,
+\]
+因此对任意 $\omega\in\Omega_m$ 都有 $0\le N(\omega)\le F_{m+3}-1$。并且二进制长度满足
+\[
+\log_2(F_{m+3})=\Theta(m).
+\]
+\end{lemma}
+
+\begin{proposition}[\texorpdfstring{$\Fold_m$}{Fold\_m} 的复杂度]\label{prop:fold-complexity}
+给定分辨率 $m$ 的微态 $\omega\in\Omega_m$，折叠 $\Fold_m(\omega)$（定义 \ref{def:fold-word}）可在以下复杂度内计算：
+\begin{itemize}
+  \item \textbf{分辨率口径：}时间 $O(m)$，空间 $O(m)$（可选；若在线生成 Fibonacci 权重并流式输出规范形，可做到额外空间 $O(m)$ 存储输出、其余 $O(1)$）。
+  \item \textbf{比特口径：}时间 $O(m^2)$ 比特运算，空间 $O(m)$ 个 $O(m)$ 比特整数。
+\end{itemize}
+\end{proposition}
+
+\begin{proof}
+先计算 $N(\omega)=\sum_{k=1}^m \omega_k F_{k+1}$：这是 $m$ 项加权求和，分辨率口径为 $O(m)$ 步。由引理 \ref{lem:bitlength-fib}，中间量二进制长度为 $\Theta(m)$，故比特口径下每次加法为 $O(m)$，总为 $O(m^2)$。
+
+随后对 $N(\omega)$ 取 Zeckendorf 贪心规范形：每次选取不超过余量的最大 Fibonacci 权重并跳过相邻位。最高位索引不超过 $m+2$（引理 \ref{lem:bitlength-fib}），因此迭代次数 $O(m)$；分辨率口径为 $O(m)$ 步。比特口径下每次"比较/减法"成本为 $O(m)$，故总为 $O(m^2)$。最后截断取前 $m$ 位为 $O(m)$。
+\end{proof}
+
+\begin{proposition}[稳定加法与稳定乘法的复杂度]\label{prop:stable-arith-complexity}
+设 $c,d\in X_\infty$ 仅有限个 $1$，并令
+\[
+m:=\max\{k:\ c_k=1\text{ 或 } d_k=1\}
+\]
+为输入的有效分辨率。则稳定加法 $c\oplus d$ 与稳定乘法 $c\otimes d$（定义 \ref{def:stable-add} 与 \ref{def:stable-mul}）可按附录 E 的"值层运算 + Zeckendorf 规范形"实现，并满足：
+\begin{itemize}
+  \item \textbf{分辨率口径：}加法时间 $O(m)$；乘法时间 $O(m)+T_\times$，其中 $T_\times$ 为值层整数乘法成本（在单位成本 RAM 下可视为常数或视实现而定）。
+  \item \textbf{比特口径：}令 $b=\Theta(m)$ 为 $\mathrm{Val}(c),\mathrm{Val}(d)$ 的比特长度，并令 $M(b)$ 为 $b$ 比特整数乘法成本（例如学校乘法 $M(b)=O(b^2)$）。则
+  \[
+  \text{加法时间 }O(m^2),\qquad
+  \text{乘法时间 }O(M(m)+m^2).
+  \]
+\end{itemize}
+\end{proposition}
+
+\begin{proof}
+加法：先做值层加法 $N=\mathrm{Val}(c)+\mathrm{Val}(d)$，再做 Zeckendorf 规范化并输出。规范化成本由命题 \ref{prop:fold-complexity} 的分析给出（将输入从 $\omega\in\Omega_m$ 换为有限支撑配置并不改变最高权重索引阶）。比特口径下值层加法为 $O(b)=O(m)$，主项来自规范化的 $O(m^2)$。
+
+乘法：值层乘法成本为 $M(b)=M(\Theta(m))$，再加 Zeckendorf 规范化 $O(m^2)$，得到所述界。
+\end{proof}

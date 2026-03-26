@@ -1,0 +1,328 @@
+\begin{theorem}[相位--账本预算区域的精确半空间]\label{thm:conclusion-phase-ledger-budget-exact-halfspace}
+定义
+\[
+\alpha:=\frac{\log 2}{\log\varphi},
+\qquad
+g:=\alpha-1=\frac{\log(2/\varphi)}{\log\varphi}.
+\]
+给定整数 \(k\ge 1\) 与实数 \(c\ge 0\)。则存在有限寄存器族 \(R_\bullet=\{R_m\}_{m\ge 1}\) 满足
+\[
+\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)\le c
+\]
+且对充分大 \(m\) 存在单射
+\[
+E_m:\{0,1\}^m\hookrightarrow X_m^{\,k}\times R_m,
+\]
+当且仅当
+\[
+k+c\ge \alpha.
+\]
+\end{theorem}
+\begin{proof}
+必要性正是定理 \ref{thm:conclusion-rate-cdim-budget-inequality}：若上述单射存在，则
+\[
+k+\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)\ge \alpha.
+\]
+故在 \(\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)\le c\) 的前提下，必有 \(k+c\ge \alpha\)。
+
+现证充分性。若 \(k\ge 2\)，则由定理 \ref{thm:conclusion-rate-cdim-achievability} 第一部分，存在充分大 \(m\) 上的单射
+\[
+\{0,1\}^m\hookrightarrow X_m\times X_m.
+\]
+于是取平凡寄存器族 \(R_m=\{\ast\}\) 即得
+\[
+\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)=0\le c,
+\]
+并把其余 \(k-2\) 个相位坐标固定在任意基点上，即可得到
+\[
+\{0,1\}^m\hookrightarrow X_m^{\,k}\times R_m.
+\]
+
+若 \(k=1\)，则条件 \(k+c\ge \alpha\) 等价于 \(c\ge g\)。此时由定理 \ref{thm:conclusion-rate-cdim-achievability} 第二部分，存在寄存器族 \(R_\bullet^{\min}\) 使
+\[
+\{0,1\}^m\hookrightarrow X_m\times R_m^{\min}
+\]
+最终成立，且
+\[
+\overline{\mathrm{cdim}}_{\varphi}(R_\bullet^{\min})=g\le c.
+\]
+故直接取 \(R_\bullet=R_\bullet^{\min}\) 即可。
+
+综上，充分性成立。证毕。
+\end{proof}
+
+\begin{corollary}[整数相位预算的二值量子化]\label{cor:conclusion-phase-budget-binary-quantization}
+定义最小可实现相位数
+\[
+k_{\min}(c):=
+\min\Bigl\{
+k\in\ZZ_{\ge 1}:\ \exists\,R_\bullet,\ 
+\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)\le c,\
+\{0,1\}^m\hookrightarrow X_m^{\,k}\times R_m\ \text{最终成立}
+\Bigr\}.
+\]
+则有精确公式
+\[
+k_{\min}(c)=
+\begin{cases}
+1,& c\ge g,\\[1mm]
+2,& 0\le c<g.
+\end{cases}
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-phase-ledger-budget-exact-halfspace}，\(k\) 可行当且仅当 \(k+c\ge \alpha\)。又因
+\[
+1<\alpha<2,
+\]
+若 \(c\ge g=\alpha-1\)，则
+\[
+1+c\ge \alpha,
+\]
+故 \(k_{\min}(c)=1\)。若 \(0\le c<g\)，则
+\[
+1+c<\alpha<2\le 2+c,
+\]
+故 \(k=1\) 不可行而 \(k=2\) 可行。证毕。
+\end{proof}
+
+\begin{theorem}[次指数账本族的相位普适性]\label{thm:conclusion-subexponential-ledger-phase-universality}
+若寄存器族 \(R_\bullet=\{R_m\}_{m\ge 1}\) 满足
+\[
+\log |R_m|=o(m),
+\]
+则
+\[
+\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)=0,
+\]
+并且对任意整数 \(k\ge 1\)，以下两命题等价：
+\[
+\{0,1\}^m\hookrightarrow X_m^{\,k}\times R_m\ \text{最终成立},
+\]
+\[
+k\ge 2.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:conclusion-rate-cdim-arithmetic}，
+\[
+\log|R_m|=o(m)\Longrightarrow \overline{\mathrm{cdim}}_{\varphi}(R_\bullet)=0.
+\]
+再应用定理 \ref{thm:conclusion-phase-ledger-budget-exact-halfspace}，可实现性等价于
+\[
+k+0\ge \alpha.
+\]
+由于 \(1<\alpha<2\)，这与 \(k\ge 2\) 等价。证毕。
+\end{proof}
+
+\begin{theorem}[二进稀疏度控制的对数偏差界]\label{thm:conclusion-binary-sparsity-logarithmic-deviation}
+设 \(\delta:\NN_{\ge 1}\to \RR\) 满足定理 \ref{thm:conclusion-log-rigidity-under-tropical} 的三条假设，并记
+\[
+c:=\frac{\delta(2)}{\log 2},
+\qquad
+s_2(n):=\sum_{j\ge 0}\varepsilon_j
+\]
+为 \(n=\sum_{j\ge 0}\varepsilon_j2^j\) 的二进制 \(1\)-数字和。则存在常数 \(C_0,C_1>0\) 仅依赖于 \(\delta\)，使得对一切 \(n\ge 2\)，成立
+\[
+c\log n-C_0
+\le
+\delta(n)
+\le
+c\log n+C_1\log\!\bigl(1+s_2(n)\bigr).
+\]
+\end{theorem}
+\begin{proof}
+取 \(k=\lfloor \log_2 n\rfloor\)，写
+\[
+n=2^k+t,
+\qquad
+0\le t<2^k.
+\]
+由定理 \ref{thm:conclusion-log-rigidity-under-tropical} 证明中的下界估计，
+\[
+\delta(n)\ge \delta(2^k)-C=k\delta(2)-C.
+\]
+又 \(k=\log_2 n+O(1)\)，故存在常数 \(C_0>0\) 使
+\[
+\delta(n)\ge c\log n-C_0.
+\]
+
+再将 \(n\) 作二进制分解
+\[
+n=\sum_{j\ge 0}\varepsilon_j2^j,
+\qquad
+\varepsilon_j\in\{0,1\},
+\]
+其中非零项个数恰为 \(s_2(n)\)。以平衡二叉树方式合并这些 dyadic 项；每一层应用一次热带可加性上界
+\[
+\delta(a+b)\le \max\{\delta(a),\delta(b)\}+C.
+\]
+二叉树深度至多为 \(\lceil \log_2 s_2(n)\rceil\)，故
+\[
+\delta(n)
+\le
+\max_{j:\varepsilon_j=1}\delta(2^j)+C\lceil \log_2 s_2(n)\rceil.
+\]
+又
+\[
+\max_{j:\varepsilon_j=1}\delta(2^j)
+=
+\delta(2)\max\{j:\varepsilon_j=1\}
+\le
+c\log n+O(1),
+\]
+于是存在常数 \(C_1>0\) 使
+\[
+\delta(n)\le c\log n+C_1\log(1+s_2(n)).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[有界二进复杂度层上的 exact logarithmic rigidity]\label{cor:conclusion-bounded-popcount-exact-log-rigidity}
+对任意固定整数 \(L\ge 1\)，在稀疏层
+\[
+\mathcal B_L:=\{n\ge 1:\ s_2(n)\le L\}
+\]
+上有一致渐近
+\[
+\delta(n)=c\log n+O_L(1).
+\]
+特别地，对每个固定 \(r\ge 1\)，在全部形如
+\[
+n=2^{a_1}+\cdots+2^{a_r}
+\qquad
+(a_1>\cdots>a_r\ge 0)
+\]
+的整数上，\(\delta(n)\) 与 \(c\log n\) 只相差一个依赖于 \(r\) 而与 \(n\) 无关的常数。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-binary-sparsity-logarithmic-deviation}，
+\[
+c\log n-C_0
+\le
+\delta(n)
+\le
+c\log n+C_1\log(1+s_2(n)).
+\]
+若 \(n\in\mathcal B_L\)，则
+\[
+\delta(n)\le c\log n+C_1\log(1+L).
+\]
+与统一下界合并，即得
+\[
+\delta(n)=c\log n+O_L(1).
+\]
+第二部分即取 \(L=r\) 的特例。证毕。
+\end{proof}
+
+\begin{theorem}[全局次线性误差强制 exact logarithm]\label{thm:conclusion-sublinear-error-forces-exact-logarithm}
+在定理 \ref{thm:conclusion-log-rigidity-under-tropical} 的假设下，下列命题等价：
+\begin{enumerate}
+  \item \(\delta(n)=c\log n+o(\log n)\)；
+  \item 对一切素数 \(p\) 都有
+  \[
+  \delta(p)=c\log p;
+  \]
+  \item 对一切 \(n\ge 1\) 都有
+  \[
+  \delta(n)=c\log n.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\((3)\Rightarrow(1)\) 与 \((3)\Rightarrow(2)\) 显然。
+
+若 \((2)\) 成立，则对任意
+\[
+n=\prod_p p^{v_p(n)}
+\]
+由乘法同态可得
+\[
+\delta(n)=\sum_p v_p(n)\delta(p)=\sum_p v_p(n)c\log p=c\log n.
+\]
+故 \((2)\Rightarrow(3)\)。
+
+若 \((1)\) 成立，则对任意固定素数 \(p\) 与任意 \(a\ge 1\)，由乘法同态
+\[
+a\,\delta(p)=\delta(p^a)=c\log(p^a)+o(\log p^a)=ac\log p+o(a).
+\]
+两边除以 \(a\)，令 \(a\to\infty\)，即得
+\[
+\delta(p)=c\log p.
+\]
+故 \((1)\Rightarrow(2)\)。三者等价。证毕。
+\end{proof}
+
+\begin{corollary}[算术型账本族不能闭合单相位缺口]\label{cor:conclusion-multiplicative-tropical-ledgers-cannot-close-single-phase-gap}
+设寄存器族 \(R_\bullet=\{R_m\}_{m\ge 1}\) 满足
+\[
+\log |R_m|=\delta(m),
+\]
+其中 \(\delta\) 满足定理 \ref{thm:conclusion-log-rigidity-under-tropical} 的三条假设。则
+\[
+\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)=0.
+\]
+因而
+\[
+\{0,1\}^m\hookrightarrow X_m\times R_m
+\]
+不可能最终成立，而
+\[
+\{0,1\}^m\hookrightarrow X_m^{\,2}\times R_m
+\]
+必然最终成立。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-log-rigidity-under-tropical}，
+\[
+\delta(m)=c\log m+O(\log\log m)=o(m).
+\]
+再由命题 \ref{prop:conclusion-rate-cdim-arithmetic}，
+\[
+\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)
+=
+\limsup_{m\to\infty}\frac{\delta(m)}{m\log\varphi}
+=0.
+\]
+于是结论由定理 \ref{thm:conclusion-subexponential-ledger-phase-universality} 立即得到。证毕。
+\end{proof}
+
+\begin{theorem}[乘法--热带账本的 exactness triad]\label{thm:conclusion-multiplicative-tropical-exactness-triad}
+在定理 \ref{thm:conclusion-log-rigidity-under-tropical} 的假设下，下列三组命题彼此等价：
+\begin{enumerate}
+  \item \[
+  \delta(n)=c\log n
+  \qquad (\forall n\ge 1);
+  \]
+  \item \[
+  \delta(n)=c\log n+O(1);
+  \]
+  \item \[
+  \delta(p)=c\log p
+  \qquad (\forall p\ \text{prime}).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\((1)\Rightarrow(2)\) 显然。
+
+若 \((2)\) 成立，则对任意素数 \(p\) 与任意 \(a\ge 1\)，有
+\[
+a\,\delta(p)=\delta(p^a)=ac\log p+O(1).
+\]
+两边除以 \(a\) 并令 \(a\to\infty\)，得
+\[
+\delta(p)=c\log p.
+\]
+故 \((2)\Rightarrow(3)\)。
+
+若 \((3)\) 成立，则由乘法同态对素因子分解求和，得到
+\[
+\delta(n)=c\log n
+\qquad (\forall n\ge 1).
+\]
+故 \((3)\Rightarrow(1)\)。三者等价。证毕。
+\end{proof}
+
+\noindent
+这表明，\(\overline{\mathrm{cdim}}_{\varphi}\) 的可实现区域并不是松散的必要边界，而在整数相位口径下已经闭合为精确半空间；与此同时，乘法同态与热带可加型账本并不会在该半空间内部形成新的正速率层，而是整体塌缩到零速率边界上。于是，相位缺口的刚性并非来自某个特定构造，而是来自一整类算术型账本律在预算几何中的共同退化。

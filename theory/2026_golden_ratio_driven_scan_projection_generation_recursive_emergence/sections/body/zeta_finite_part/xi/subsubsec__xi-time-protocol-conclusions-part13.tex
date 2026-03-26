@@ -1,0 +1,541 @@
+% (User input window)
+
+\paragraph{跨接口终端结论：像空间塌缩、真实输入核分离与端点/有限域审计不变量}
+本段把像空间 \(Y_m\) 的共轭塌缩、真实输入核与无约束同步核的谱分离、strictification（完全正可见实现）、端点审计以及有限域影子等链条中的可复核常数与普适性质，
+压缩为可独立引用的结论条目；证明仅指向相应已完成的定理/命题/推论（或其可审计输出），不再重复推导细节。
+
+\begin{conclusion}[真实输入核的 Parry 记忆位严格解耦：\texorpdfstring{$(p_x,p_y)$}{(px,py)} 在最大熵下给出闭式边缘并严格独立]\label{con:xi-terminal-real-input-parry-memory-decoupling}
+在本质 \(20\) 状态真实输入核 \(M_{\mathrm{ess}}\) 的 Parry 最大熵测度下，输入记忆
+\(m=(p_x,p_y)\in\{00,01,10,11\}\) 的边缘分布满足闭式
+\[
+\mathbb{P}(00)=\frac{3+\sqrt5}{10},\qquad
+\mathbb{P}(01)=\mathbb{P}(10)=\frac15,\qquad
+\mathbb{P}(11)=\frac{3-\sqrt5}{10}.
+\]
+并且两比特严格独立且同边缘：
+\[
+\mathbb{P}(p_x=1)=\mathbb{P}(p_y=1)=\frac{5-\sqrt5}{10},
+\qquad
+\mathbb{P}(p_x,p_y)=\mathbb{P}(p_x)\mathbb{P}(p_y).
+\]
+该解耦为精确代数事实（而非近似），可由同步态条件分布表的支撑结构反推强制得到（例如特定同步态仅在单一记忆态下出现）。
+\end{conclusion}
+\begin{proof}[证明]
+见命题 \ref{prop:real-input-40-memory-marginal} 与推论 \ref{cor:real-input-40-memory-independence}（其推导中使用了表 \ref{tab:real_input_40_parry_internal_distribution} 的支撑结构）。证毕。
+\end{proof}
+
+\begin{conclusion}[同步态—记忆信道的硬判定分层与可观测性常数：互信息与 MAP 准确率出现 \texorpdfstring{$\sqrt5$}{sqrt5} 闭式]\label{con:xi-terminal-sync-memory-hard-decision-map-accuracy}
+把同步态 \(S\in Q\) 视为对记忆 \(M=(p_x,p_y)\) 的观测信道。
+在 \(M_{\mathrm{ess}}\) 的 Parry 最大熵测度下，存在一组硬判定同步态使后验退化为确定值：
+\[
+s\in\{01\text{-}1,010,11\text{-}1\}\Rightarrow \mathbb{P}(M=00\mid s)=1,
+\qquad
+s\in\{0\text{-}12,1\text{-}12\}\Rightarrow \mathbb{P}(M=11\mid s)=1,
+\]
+且这类硬判定同步态的总概率为
+\[
+\mathbb{P}(01\text{-}1)+\mathbb{P}(010)+\mathbb{P}(11\text{-}1)+\mathbb{P}(0\text{-}12)+\mathbb{P}(1\text{-}12)=\frac{3}{10}.
+\]
+此外，互信息为可复核常数
+\(
+I(S;M)\approx 0.812300
+\) bits。
+以 MAP 规则在线判别记忆（取使 \(\mathbb{P}(\cdot\mid s)\) 最大者），最优可达准确率满足闭式
+\[
+\mathrm{Acc}^*(M\leftarrow S)=\sum_s \mathbb{P}(s)\max_m \mathbb{P}(m\mid s)=\frac{3\sqrt5}{10}.
+\]
+对若干自然二值函数亦有闭式最优准确率：
+\[
+\mathrm{Acc}^*(p_x\leftarrow S)=\mathrm{Acc}^*(p_y\leftarrow S)=\frac45,
+\qquad
+\mathrm{Acc}^*(C\leftarrow S)=\frac{17+\sqrt5}{20},
+\quad
+C:=\ind_{\{M=11\}}.
+\]
+\end{conclusion}
+\begin{proof}[证明]
+硬判定分层与其总概率见注 \ref{rem:real-input-40-bayes-decode}；互信息常数见注 \ref{rem:real-input-40-mutual-info}；
+MAP 准确率及其派生二值函数的闭式见命题 \ref{prop:real-input-40-map-accuracies}。证毕。
+\end{proof}
+
+\begin{conclusion}[strictification 的普适表征：\texorpdfstring{$G^{\mathrm{BC}}_m$}{GBCm} 是“完全正可见实现存在性”的最大可见群商]\label{con:xi-terminal-strictification-maximal-cp-visible-quotient}
+固定分辨率 \(m\) 并令 \(\mathcal{A}_m:=\CC[G^{\mathrm{BC}}_m]\)。
+若可见扭曲通道族 \(\{F_{\overline\chi}\}_{\overline\chi\in\widehat{G^{\mathrm{BC}}_m}}\) 可组装为 \(\mathcal{A}_m\)-值解析函数 \(F_m:\mathbb{D}\to\mathcal{A}_m\)，且
+\begin{enumerate}
+  \item 异常在可见通道上严格为零；
+  \item 块 Toeplitz--PSD 层级 \(\mathbf{T}^{\mathcal{A}_m}_N(F_m)\succeq 0\) 对一切 \(N\) 成立，
+\end{enumerate}
+则存在 \(\mathcal{A}_m\)-值正测度 \(\boldsymbol\mu_m\) 使 \(F_m\) 具有算子值 Herglotz 表示；
+从而所有通道 \(F_{\overline\chi}\) 同时为同一 \(\boldsymbol\mu_m\) 的 Fourier--Pontryagin 投影（完全正可见实现存在）。
+反之，若某群商 \(G\twoheadrightarrow Q\) 上存在上述完全正可见实现并使闭环接口严格交换，则该群商必唯一因子化通过 \(G^{\mathrm{BC}}_m\)；
+因此 strictification 具有最大可见商的普适性质。
+\end{conclusion}
+\begin{proof}[证明]
+见定理 \ref{thm:xi-gbc-maximal-cp-visible-realization}（并结合命题 \ref{prop:pom-bc-quotient-strictify}、\ref{prop:pom-bc-quotient-universal}）。证毕。
+\end{proof}
+
+\input{para__xi-gbc-character-measurability-duality}
+\input{para__xi-gbc-stabilized-terminal-anomaly-count}
+
+\begin{conclusion}[端点阈值承载的中心性与通道强度谱：\texorpdfstring{$\boldsymbol\mu_m(\{-1\})$}{mu(-1)} 诱导不可约通道的非负标量分解]\label{con:xi-terminal-endpoint-atom-channel-strength-spectrum}
+在结论 \ref{con:xi-terminal-strictification-maximal-cp-visible-quotient} 的完全正实现下，端点 \(-1\) 的原子
+\(
+\mathbf{M}_{-1}:=\boldsymbol\mu_m(\{-1\})\in(\mathcal{A}_m)_+
+\)
+存在且为正元。
+若 \(G^{\mathrm{BC}}_m\) 为阿贝尔群，则 \(\mathcal{A}_m\) 交换从而 \(\mathbf{M}_{-1}\) 属于中心；
+更一般地，若 \(\boldsymbol\mu_m\) 取值于中心子代数，则对任意不可约分量 \(\pi\) 有
+\[
+(\mathbf{M}_{-1})_\pi=\lambda_\pi\,I_{d_\pi},
+\qquad
+\lambda_\pi\ge 0.
+\]
+族 \(\{\lambda_\pi\}\) 给出端点阈值承载的有限维“通道强度分解”，把极端共振边界层强度压缩为不可约表示索引下的一组非负谱数据。
+\end{conclusion}
+\begin{proof}[证明]
+见定理 \ref{thm:xi-endpoint-atom-central-channel-strength}。证毕。
+\end{proof}
+
+\begin{conclusion}[端点热核探针的严格恒等式：有限 Toeplitz 二次型单调抽取端点原子质量]\label{con:xi-terminal-endpoint-heat-kernel-probe-identity}
+令 \(\mathscr{C}(w)=c_0+2\sum_{n\ge 1}c_n w^n\) 在 \(w=0\) 邻域解析，并约定 \(c_{-n}:=\overline{c_n}\)。
+对每个 \(N\ge 0\) 定义 Toeplitz 主子矩阵 \(\mathbf{T}_N:=(c_{j-k})_{0\le j,k\le N}\)，并令二项式向量 \(b^{(N)}\in\RR^{N+1}\) 满足
+\[
+b^{(N)}_k:=(-1)^k\binom{N}{k}\qquad(0\le k\le N),
+\qquad
+a_N:=\frac{(b^{(N)})^{\mathsf T}\mathbf{T}_N b^{(N)}}{4^N}.
+\]
+若 \(\mathscr{C}\) 属于 Carath\'eodory 类，则存在唯一有限正测度 \(\mu\) 使 \(c_n=\int_{\TT}\xi^{-n}\,\dd\mu(\xi)\)，并且成立严格恒等式
+\[
+a_N=\int_{\TT}\left|\frac{1-\xi}{2}\right|^{2N}\,\dd\mu(\xi)\ge 0,
+\qquad
+a_N\downarrow \mu(\{-1\})\quad(N\to\infty).
+\]
+因此端点阈值承载 \(\mu(\{-1\})\) 可由有限 Toeplitz 数据以单调方式无歧义提取。
+\end{conclusion}
+\begin{proof}[证明]
+见定理 \ref{thm:xi-endpoint-heat-kernel-probe}。证毕。
+\end{proof}
+
+\begin{conclusion}[端点原子提取的指数型误差界：支撑受控时达到指数逼近]\label{con:xi-terminal-endpoint-atom-exponential-error}
+在结论 \ref{con:xi-terminal-endpoint-heat-kernel-probe-identity} 的设定下，取任意闭集 \(K\subset\TT\setminus\{-1\}\)，并令
+\[
+q(K):=\sup_{\xi\in K}\left|\frac{1-\xi}{2}\right|\in(0,1).
+\]
+则对所有 \(N\ge 0\) 有
+\[
+0\le a_N-\mu(\{-1\})\le q(K)^{2N}\mu(K)+\mu\!\bigl(\TT\setminus(\{-1\}\cup K)\bigr).
+\]
+特别地，若 \(\mu(\TT\setminus(\{-1\}\cup K))=0\)，则
+\(
+0\le a_N-\mu(\{-1\})\le q(K)^{2N}\mu(K)
+\)，从而在端点邻域之外存在谱隙（或支撑受控）时，端点原子质量由 \(\{a_N\}\) 以指数速度逼近提取；其中 \(N\) 充当严格的端点分辨率深度。
+\end{conclusion}
+\begin{proof}[证明]
+见推论 \ref{cor:xi-endpoint-heat-kernel-exp-error}。证毕。
+\end{proof}
+
+\begin{conclusion}[阈值强度与端点谱维数：余项衰减指数精确等价于端点局部幂律指数]\label{con:xi-terminal-endpoint-threshold-spectral-dimension}
+将表示测度分解为
+\[
+\mu=\mathfrak m_{-1}\delta_{-1}+\mu_{\neq -1},
+\qquad
+\mathfrak m_{-1}:=\mu(\{-1\})\ge 0.
+\]
+则对每个 \(N\ge 0\) 有严格分离恒等式
+\[
+a_N=\mathfrak m_{-1}+\int_{\TT\setminus\{-1\}}\left|\frac{1-\xi}{2}\right|^{2N}\,\dd\mu_{\neq-1}(\xi),
+\qquad
+a_N-\mathfrak m_{-1}\downarrow 0,
+\]
+从而 \(\mathfrak m_{-1}\) 为端点阈值承载的唯一零阶强度参数。进一步，若 \(\mu_{\neq -1}\) 在端点角窗满足局部幂律：存在 \(\alpha>-1\) 与常数 \(K_\pm\ge 0\) 使当 \(\varepsilon\downarrow 0\) 时
+\[
+\mu_{\neq -1}\bigl(\{\pi<\arg\xi<\pi+\varepsilon\}\bigr)=K_+\,\varepsilon^{\alpha+1}+o(\varepsilon^{\alpha+1}),
+\qquad
+\mu_{\neq -1}\bigl(\{\pi-\varepsilon<\arg\xi<\pi\}\bigr)=K_-\,\varepsilon^{\alpha+1}+o(\varepsilon^{\alpha+1}),
+\]
+则余项具有幂律渐近
+\[
+a_N-\mathfrak m_{-1}\sim (\alpha+1)\,2^{\alpha}\,
+\Gamma\!\left(\frac{\alpha+1}{2}\right)\,
+(K_++K_-)\,N^{-(\alpha+1)/2}\qquad (N\to\infty).
+\]
+尤其当 \(\mu\) 在 \(\xi=-1\) 邻域绝对连续且角密度 \(f(\theta)\) 于 \(\theta=\pi\) 连续且 \(f(\pi)>0\) 时，\(\alpha=0\) 且
+\[
+a_N-\mathfrak m_{-1}\sim 2f(\pi)\sqrt{\frac{\pi}{N}}.
+\]
+故端点局部谱维数指数（定义 \ref{def:xi-endpoint-spectral-dimension}）可由 \(a_N-\mathfrak m_{-1}\) 的幂律衰减率直接识别。
+\end{conclusion}
+\begin{proof}[证明]
+见推论 \ref{cor:xi-endpoint-atom-separation} 与定理 \ref{thm:xi-endpoint-spectral-dimension-laplace}。证毕。
+\end{proof}
+
+\begin{conclusion}[Adams--Toeplitz--PSD 派生层级：Carath\'eodory 正性在幂覆盖下闭合]\label{con:xi-terminal-adams-toeplitz-psd-hierarchy}
+若 \(\mathscr{C}(w)=c_0+2\sum_{n\ge 1}c_n w^n\) 属于 Carath\'eodory 类并由正测度 \(\mu\) 表示，则对每个 \(m\ge 1\) 定义推前测度 \(\mu_m:=(\xi\mapsto\xi^m)_\ast\mu\)。其矩满足
+\[
+c^{(m)}_n:=\int_{\TT}\xi^{-n}\,\dd\mu_m(\xi)=c_{mn}.
+\]
+因此对任意 \(N,m\ge 1\)，稀疏 Toeplitz 主子矩阵族
+\[
+\mathbf{T}^{(m)}_N:=\bigl(c_{m(j-k)}\bigr)_{0\le j,k\le N}\succeq 0
+\]
+自动成立。该派生层级在不改变正性证书口径的前提下，将端点压缩与外置尺度参数 \(m\) 直接耦合，形成一族可随 \(m\) 调节分辨率的多尺度 PSD 约束。
+\end{conclusion}
+\begin{proof}[证明]
+见命题 \ref{prop:xi-adams-pushforward-toeplitz-principal-minor-monotonicity} 与式 \eqref{eq:xi-adams-toeplitz-psd}。证毕。
+\end{proof}
+
+\begin{conclusion}[尺度交换律：幂覆盖将端点边界层缺陷搬运到任意紧子圆盘并产生高度无关的 Jensen 正缺陷]\label{con:xi-terminal-scale-exchange-power-covering-jensen}
+在自对偶完成化与固定切片制度下，离切片点状缺陷的圆盘像 \(w_\rho\) 由 Cayley--Busemann 结构性压缩到端点边界层（定理 \ref{thm:xi-offcritical-quadratic-radial-compression}）。
+沿幂覆盖 \(\pi_m(\omega)=\omega^m\) 的 Adams--Norm 折叠门可将该端点边界层中的点状缺陷搬运到任意预设的紧子圆盘：对任意 \(r_\star\in(0,1)\) 存在显式尺度 \(m_\star\) 使 \(|w_\rho|^{m_\star}\le r_\star\)。
+并且在固定半径 \(R\in(r_\star,1)\) 处产生高度无关的 Jensen 正缺陷下界：
+\[
+D_{\mathrm{Nm}_{m_\star}[F_\zeta]}(R)\ \ge\ \log\!\frac{R}{r_\star}\ >\ 0.
+\]
+该结论给出一条制度内可审计的交换机制：二次压缩把离切片信息压入端点边界层，而幂覆盖/折叠门以尺度参数 \(m_\star\) 将其解压到固定半径并以 Jensen 缺陷显影。
+\end{conclusion}
+\begin{proof}[证明]
+见推论 \ref{cor:xi-adams-norm-fixed-radius-jensen-certificate}（并结合 \eqref{eq:xi-adams-norm-mstar-def}--\eqref{eq:xi-adams-norm-mstar-radius}）。证毕。
+\end{proof}
+
+\begin{conclusion}[端点重整化的二元正交分解：普适 \texorpdfstring{$\zeta$}{zeta}-极 \texorpdfstring{$\oplus$}{oplus} 离散 \texorpdfstring{$\chi_4$}{chi4} 本征残余]\label{con:xi-terminal-endpoint-renormalization-zeta-chi4-orthogonal}
+在完成化坐标 \(S=r+r^{-1}\) 下，最小反变纤维坐标为 \(\delta:=r-r^{-1}\)，并满足反演反变部分的最小闭包
+\(
+\mathcal{A}^{-}=\delta\,\ZZ[S]
+\)
+（备注 \ref{rem:endpoint-inv-antiinv-min-closure}）。
+奇 Chebyshev--Adams 伴随族满足恒等式
+\[
+D_d(S,\delta)=\delta\,U_{d-1}(S/2),
+\]
+从而在端点分支 \(r=\pm\mathrm{i}\) 上 \(S=0\) 并有
+\[
+\frac{D_d(0,\delta)}{\delta}=U_{d-1}(0)=\sin(d\pi/2)=:\varepsilon(d)\in\{-1,0,1\}.
+\]
+该端点通道指标 \(\varepsilon(d)\) 给出模 \(4\) 的完整奇类分裂，并与非平凡 Dirichlet 角色 \(\chi_4\) 严格一致：\(\varepsilon(d)=\chi_4(d)\)（定理 \ref{thm:endpoint-four-channel-chi4}）。
+进一步，反变端点观测在 \(\sigma\downarrow 0\) 处解析并满足
+\[
+\lim_{\sigma\downarrow 0}\mathcal O(\mathcal W_{\sigma}^{\delta}G)
+=L(1,\chi_4)\,\mathcal O(G)=\frac{\pi}{4}\,\mathcal O(G),
+\]
+而与之正交地，偶通道的全部发散仅沿 rank-one 方向出现并由 \(\zeta(1+\sigma)\) 的极点完全控制（定理 \ref{thm:endpoint-even-finite-part-renormalization}）。
+因此端点重整化后的非紧性可被压缩为“普适 \(\zeta\)-极 \(\oplus\) 离散 \(\chi_4\) 本征残余”的二元正交分解。
+\end{conclusion}
+\begin{proof}[证明]
+Chebyshev--Adams 恒等式与 \(\varepsilon=\chi_4\) 见命题 \ref{prop:endpoint-odd-chebyshev-identity} 与定理 \ref{thm:endpoint-four-channel-chi4}；
+反变通道极限见推论 \ref{cor:endpoint-odd-analytic-at-zero}；
+偶通道的极点控制与残余分解见注 \ref{rem:endpoint-renormalization-universal-pole-discrete-hair}（并参见注 \ref{rem:endpoint-obstruction-dichotomy}）。
+证毕。
+\end{proof}
+
+\begin{conclusion}[有限阿贝尔可见商的块 Toeplitz 对角化：单一块 PSD 证书等价于全通道 PSD]\label{con:xi-terminal-abelian-block-toeplitz-diagonalization}
+令 \(\mathcal{A}\) 为有限维 \(C^\ast\)-代数，并取解析函数 \(F:\mathbb{D}\to\mathcal{A}\)。
+则以下命题等价：\(\Re F(w)\succeq 0\)（算子值 Carath\'eodory）、对每个不可约表示 \(\pi\) 有 \(\Re F_\pi(w)\succeq 0\)、以及对每个 \(N\ge 0\) 的块 Toeplitz 截断 \(\mathbf{T}^{\mathcal{A}}_N(F)\succeq 0\)。
+特别地，当 \(\mathcal{A}=\CC[H]\) 且 \(H\) 为有限阿贝尔群时，在 Fourier--Pontryagin 对偶分解下 \(\mathbf{T}^{\mathcal{A}}_N(F)\) 与直和矩阵 \(\bigoplus_{\chi\in\widehat H}\mathbf{T}_N(F_\chi)\) 酉等价；因此
+\[
+\mathbf{T}^{\mathcal{A}}_N(F)\succeq 0\ \Longleftrightarrow\ \forall\chi\in\widehat H,\ \mathbf{T}_N(F_\chi)\succeq 0.
+\]
+从而“逐通道 PSD 核验”可被统一为一个单一块 Toeplitz--PSD 可行域（单一半正定证书）；与结论 \ref{con:xi-terminal-adams-toeplitz-psd-hierarchy} 的 Adams--Toeplitz 派生层级结合，可在单一块证书口径下实现全尺度、全通道的正性核验。
+\end{conclusion}
+\begin{proof}[证明]
+见定理 \ref{thm:xi-fourier-pontryagin-block-toeplitz} 与推论 \ref{cor:xi-abelian-block-toeplitz-directsum}。证毕。
+\end{proof}
+
+\begin{conclusion}[异常类与散射绕数的同一阻碍：交换失败残差与拓扑绕数在可见口径下严格对齐]\label{con:xi-terminal-anom-winding-obstruction-equivalence}
+固定分辨率 \(m\) 并考虑可见扭曲通道诱导的 unitary-slice 散射行列式回路
+\(\{\det\mathcal S_{\overline\chi}\}_{\overline\chi\in\widehat{G^{\mathrm{BC}}_m}}\)。
+若异常在可见通道上严格为零，则每个可见通道的散射回路可取高能归一化
+\(\det\mathcal S_{\overline\chi}(\infty)=1\)，并满足
+\[
+\mathrm{Wind}\bigl(\det\mathcal S_{\overline\chi}\bigr)=0
+\qquad(\forall\,\overline\chi\in\widehat{G^{\mathrm{BC}}_m}),
+\]
+从而在有限型点状共振口径下所有可见通道的真共振指数归零。
+反向地，若对某群商 \(G\twoheadrightarrow H\) 的全部可见通道均可实现上述归一化与零绕数，则该群商必唯一因子化通过 \(G^{\mathrm{BC}}_m\)，并在 \(H\) 上使异常严格为零。
+因此“代数残差”（异常类）与“拓扑绕数”在可见口径下构成同一阻碍类。
+\end{conclusion}
+\begin{proof}[证明]
+见定理 \ref{thm:xi-anom-winding-obstruction}（真共振指数与绕数/Blaschke 度的对齐由定理 \ref{thm:selfdual-wind-deg-dbl-kappa-identity} 给出）。证毕。
+\end{proof}
+
+\begin{conclusion}[有界切片的有限前沿原理：证书搜索与编译优化在每一分辨率层级均可退化为有限枚举]\label{con:xi-terminal-finite-frontier-principle}
+在任意固定有界复杂度切片 \(\mathbf{PW}^{\ast}_{\le}\) 内，取保守语义函子 \(\mathsf{Sem}\) 与任一代价函子 \(\mathcal{C}\)。
+则对任意投影词 \(w\in \mathbf{PW}^{\ast}_{\le}\)，其语义等价类 \([w]\) 在代价域中的像 \(\mathcal{C}([w])\subseteq \mathbb{T}^{(2)}\) 具有有限帕累托前沿，并可由有限枚举构造。
+因此任何以“接口正规形参数—异常签名—谱指纹”为核对输出的证书目标，在每一固定分辨率层级上必然退化为有限枚举与有限核对；困难被严格集中到“切片上界随分辨率增长律”而非实现细节。
+\end{conclusion}
+\begin{proof}[证明]
+见定理 \ref{thm:xi-finite-frontier-certificate}。证毕。
+\end{proof}
+
+\begin{conclusion}[像空间在 \texorpdfstring{$m\ge 3$}{m>=3} 时失去分辨率可辨识性：\texorpdfstring{$Y_m$}{Ym} 的共轭塌缩]\label{con:xi-terminal-image-space-resolution-nonidentifiability}
+沿定义 \ref{def:Y_m} 记
+\[
+Y_m:=\Phi_m\bigl(\{0,1\}^{\ZZ}\bigr).
+\]
+则对任意 \(m,n\ge 3\)，移位系统 \((Y_m,\sigma)\) 与 \((Y_n,\sigma)\) 拓扑共轭；更强地，它们都与二元全移位 \((\{0,1\}^{\ZZ},\sigma)\) 共轭。因而对每个 \(m\ge 3\) 与 \(k\ge 1\) 有
+\[
+h_{\mathrm{top}}(Y_m)=\log 2,\qquad
+\zeta_{Y_m}(z)=\frac{1}{1-2z},\qquad
+\#\mathrm{Fix}(\sigma^k|_{Y_m})=2^k.
+\]
+特别地，任何仅依赖 \(Y_m\) 的拓扑共轭不变量都不可能恢复分辨率 \(m\)；非平凡的 prime shadow 或 arithmetic shadow 必须来自核、势/权重、扭曲通道或附加约束，而不能由像空间 \(Y_m\) 单独承载。
+\end{conclusion}
+\begin{proof}[证明]
+定理 \ref{thm:Phi_m-conjugacy-threshold} 已给出当 \(m\ge 3\) 时 \(\Phi_m\) 与二元全移位之间的拓扑共轭，推论 \ref{cor:Ym-conjugacy-all-mge3} 给出任意 \(Y_m,Y_n\) 之间的共轭。由推论 \ref{cor:Phi_m-zeta-closed}（等价地，推论 \ref{cor:Ym-periodic-rigidity}）可得固定点计数与内禀 Artin--Mazur \(\zeta\)-函数的闭式。拓扑共轭不变量在共轭下保持不变，而推论 \ref{cor:Phi_m-zeta-closed} 已明确非平凡 prime shadow 不来自折叠因子本身，故结论成立。证毕。
+\end{proof}
+
+\begin{conclusion}[Zeckendorf 合法性不是微扰：加法投影碰撞谱主指数发生严格指数级分离]\label{con:xi-terminal-addition-collision-spectrum-constant-factor-drop}
+把“加法作为一次投影”的 \(q\)-阶碰撞 Perron 根分别记为
+\[
+r_q^{\oplus,\mathrm{sync10}},\qquad
+r_q^{\oplus,\mathrm{real}},
+\]
+其中前者对应 \(10\) 状态归一化核与全移位输入，后者对应真实输入 \(40\) 状态核与 Zeckendorf 合法性约束。则对所有 \(q\ge 2\) 有严格不等式
+\[
+r_q^{\oplus,\mathrm{real}}<r_q^{\oplus,\mathrm{sync10}}.
+\]
+在 \(q=2\) 时，
+\[
+r_2^{\oplus,\mathrm{sync10}}\approx 8.7430515270,\qquad
+r_2^{\oplus,\mathrm{real}}\approx 3.9985433445,\qquad
+\frac{r_2^{\oplus,\mathrm{sync10}}}{r_2^{\oplus,\mathrm{real}}}\approx 2.186559.
+\]
+若 \(S_q^{\oplus,\mathrm{sync10}}(m)\) 与 \(S_q^{\oplus,\mathrm{real}}(m)\) 分别表示两种口径下的 \(q\)-阶碰撞矩，则
+\[
+S_q^{\oplus,\mathrm{sync10}}(m)=\Theta\!\bigl((r_q^{\oplus,\mathrm{sync10}})^m\bigr),\qquad
+S_q^{\oplus,\mathrm{real}}(m)=\Theta\!\bigl((r_q^{\oplus,\mathrm{real}})^m\bigr),
+\]
+并存在常数 \(c_q,C_q>0\) 使得对充分大的 \(m\) 有
+\[
+c_q\left(\frac{r_q^{\oplus,\mathrm{sync10}}}{r_q^{\oplus,\mathrm{real}}}\right)^m
+\le
+\frac{S_q^{\oplus,\mathrm{sync10}}(m)}{S_q^{\oplus,\mathrm{real}}(m)}
+\le
+C_q\left(\frac{r_q^{\oplus,\mathrm{sync10}}}{r_q^{\oplus,\mathrm{real}}}\right)^m.
+\]
+因此，把真实输入替换为全移位输入所造成的误差不是多项式级或次指数级，而是由 Perron 根比值控制的严格指数级形变。
+\end{conclusion}
+\begin{proof}[证明]
+对所有 \(q\ge 2\) 的严格不等式由定理 \ref{thm:addition-collision-perron-drop-real-vs-sync} 给出。附录 \ref{app:add-collision-spectrum} 已将两类 \(q\)-阶碰撞矩编译为有限非负核，并给出 Perron 主尺度表示 \(S_q^{\oplus}(m)=\Theta((r_q^{\oplus})^m)\)；故上述比值估计由标准 Perron--Frobenius 渐近立即得到。\(q=2\) 的显式数值由命题 \ref{prop:addition-collision-spectrum-sync10-vs-real40} 及表 \ref{tab:add-collision-spectrum-10-vs-40} 给出。证毕。
+\end{proof}
+
+\begin{conclusion}[像空间塌缩之后的核层刚性：真实输入 essential 核与二元全移位在流等价与 \texorpdfstring{$K$}{K}-理论上严格分离]\label{con:xi-terminal-kernel-flow-k-separation-from-fullshift}
+令 \(A=M_{\mathrm{ess}}\) 为真实输入 \(20\times 20\) essential 邻接矩阵。则
+\[
+\mathrm{BF}(A)\cong \ZZ^2\oplus \ZZ/2\ZZ,\qquad
+K_0(\mathcal O_A)\cong \ZZ^2\oplus \ZZ/2\ZZ,\qquad
+K_1(\mathcal O_A)\cong \ZZ^2.
+\]
+另一方面，对任意 \(m\ge 3\)，像空间 \(Y_m\) 仅为二元全移位的一个共轭模型。因而：
+\begin{enumerate}
+  \item \(A\) 不可能与二元全移位的任一 irreducible SFT 表示流等价；
+  \item \(\mathcal O_A\) 不可能与 \(\mathcal O_2\) 稳定同构；
+  \item 本文中出现的非平凡 prime-orbit、\(\zeta\) 或算子代数结构，不是 \(Y_m\) 的内禀像空间影子，而是核层级的独立刚性。
+\end{enumerate}
+\end{conclusion}
+\begin{proof}[证明]
+命题 \ref{prop:real-input-40-bf-ktheory} 已给出 \(A\) 的 Bowen--Franks 群与 Cuntz--Krieger \(K\)-群。对二元全移位的标准邻接矩阵 \([2]\)，有
+\[
+\mathrm{BF}([2])=\ZZ/(1-2)\ZZ=0,\qquad
+K_0(\mathcal O_2)=0,\qquad
+K_1(\mathcal O_2)=0.
+\]
+由于 Bowen--Franks 群在 irreducible SFT 的流等价下保持不变，而 Cuntz--Krieger \(K\)-群在稳定同构下保持不变，故前两条成立。再结合结论 \ref{con:xi-terminal-image-space-resolution-nonidentifiability} 中 \(Y_m\) 的全移位塌缩，第三条随之成立。证毕。
+\end{proof}
+
+\begin{conclusion}[高阶碰撞矩的模 \texorpdfstring{$2$}{2} 阴影在 \texorpdfstring{$q=9,\dots,17$}{q=9,...,17} 上完全有限自动机化]\label{con:xi-terminal-high-order-collision-mod2-automaticity}
+对共振窗 \(q=9,\dots,17\)，模 \(2\) 影子分解满足
+\[
+E^{a_q}(E+1)^{b_q}S_q\equiv 0\pmod 2,
+\]
+其中表 \ref{tab:fold_collision_charpoly_mod2_shadow_q9_17} 给出
+\[
+b_q=
+\begin{cases}
+4, & q=9,10,\\
+6, & q=11,12,14,16,\\
+8, & q=13,15,\\
+10, & q=17.
+\end{cases}
+\]
+因此各序列 \(S_q(m)\bmod 2\) 的最终周期满足
+\[
+\mathrm{Per}_q\mid 4\quad(q=9,10),\qquad
+\mathrm{Per}_q\mid 8\quad(q=11,\dots,16),\qquad
+\mathrm{Per}_q\mid 16\quad(q=17).
+\]
+进一步，定义向量值序列
+\[
+\mathbf S(m):=\bigl(S_9(m),S_{10}(m),\dots,S_{17}(m)\bigr)\pmod 2.
+\]
+则存在 \(M_0\) 使得对所有 \(m\ge M_0\) 有
+\[
+\mathbf S(m+16)=\mathbf S(m).
+\]
+等价地，\(\mathbf S(m)\) 在最终阶段仅依赖于 \(m\) 的低 \(4\) 位二进制展开；因此整个高阶区间的模 \(2\) 阴影可由一个周期长度至多为 \(16\) 的有限自动机完全生成。
+\end{conclusion}
+\begin{proof}[证明]
+定理 \ref{thm:pom-resonance-mod2-finite-bit-automaticity} 给出：对每个 \(q\)，最终周期整除 \(2^{\lceil\log_2 b_q\rceil}\)。把表 \ref{tab:fold_collision_charpoly_mod2_shadow_q9_17} 中的 \(b_q\) 逐项代入，即得上述各区间的周期上界。向量序列 \(\mathbf S(m)\) 的最终周期于是整除
+\[
+\mathrm{lcm}(4,8,16)=16.
+\]
+故存在 \(M_0\) 使 \(\mathbf S(m+16)=\mathbf S(m)\) 对一切 \(m\ge M_0\) 成立；而“最终周期整除 \(16\)”与“最终仅依赖于 \(m\) 的低 \(4\) 位二进制展开”等价。证毕。
+\end{proof}
+
+\begin{conclusion}[零温端点的大偏差速率函数具有由 \texorpdfstring{$B_\infty$}{B∞} 控制的对数尖点]\label{con:xi-terminal-real-input-output-rate-log-cusp}
+沿用命题 \ref{prop:real-input-40-pressure-freezing} 的输出位势记号，并令
+\[
+P(\theta)=\frac{\theta}{2}+\log c+A e^{-\theta/2}+B e^{-\theta}+O(e^{-3\theta/2})
+\qquad (\theta\to+\infty),
+\]
+其中
+\[
+A:=\frac{d}{c}>0,
+\qquad
+c=\sqrt{\rho(B_\infty)}.
+\]
+定义未归一化 Legendre--Fenchel 对偶
+\[
+\widetilde I(s):=\sup_{\theta\in\RR}\bigl(s\theta-P(\theta)\bigr),
+\qquad 0\le s\le \frac12.
+\]
+当 \(s\uparrow \frac12\) 时，令
+\[
+\delta:=\frac12-s\downarrow 0.
+\]
+则有精确边界展开
+\[
+\widetilde I(s)
+=
+-\log c
++2\delta\log\delta
++2\Bigl(\log\frac{2}{A}-1\Bigr)\delta
++O(\delta^2).
+\]
+特别地，
+\[
+\widetilde I\!\left(\frac12\right)
+=-\log c
+=-\frac12\log\rho(B_\infty).
+\]
+若改用附录 \ref{app:real-input-40-zeta-u} 中的归一化速率函数
+\[
+I_e(s):=\sup_{\theta\in\RR}\bigl(s\theta-(P(\theta)-P(0))\bigr)
+=\widetilde I(s)+P(0),
+\]
+则同样有
+\[
+I_e(s)
+=
+P(0)-\log c
++2\delta\log\delta
++2\Bigl(\log\frac{2}{A}-1\Bigr)\delta
++O(\delta^2),
+\]
+从而
+\[
+I_e\!\left(\frac12\right)=P(0)-\log c=\log(\varphi^2/c).
+\]
+因此饱和端点 \(s=\frac12\) 不是解析边界点，而是首系数为 \(2\) 的对数尖点；其未归一化高度完全由零温地基矩阵 \(B_\infty\) 的 Perron 根控制。
+\end{conclusion}
+\begin{proof}[证明]
+由命题 \ref{prop:real-input-40-pressure-freezing}，当 \(\theta\to+\infty\) 时
+\[
+P'(\theta)=\frac12-\frac{A}{2}e^{-\theta/2}+O(e^{-\theta}),
+\qquad
+P''(\theta)=\frac{A}{4}e^{-\theta/2}+O(e^{-\theta})>0
+\]
+对充分大的 \(\theta\) 成立。因此当 \(s<\frac12\) 且充分接近 \(\frac12\) 时，极值点 \(\theta=\theta(s)\) 唯一，并由方程
+\[
+P'(\theta)=s
+\]
+确定。令 \(\delta=\frac12-s\)，则
+\[
+\delta=\frac{A}{2}e^{-\theta/2}+O(e^{-\theta}),
+\]
+从而反解得
+\[
+e^{-\theta/2}=\frac{2\delta}{A}+O(\delta^2),
+\qquad
+\theta=-2\log\delta+2\log\frac{A}{2}+O(\delta).
+\]
+将其代回
+\[
+\widetilde I(s)=s\theta-P(\theta)
+=-\delta\theta-\log c-Ae^{-\theta/2}+O(e^{-\theta}),
+\]
+得到
+\[
+\widetilde I(s)
+=
+-\log c
++2\delta\log\delta
++2\Bigl(\log\frac{2}{A}-1\Bigr)\delta
++O(\delta^2).
+\]
+令 \(\delta\downarrow 0\) 即得
+\(
+\widetilde I(\frac12)=-\log c
+\)。
+同一附录中命题 \ref{prop:real-input-40-pressure-freezing} 之后的零温缩放证书已识别 \(c=\sqrt{\rho(B_\infty)}\)，故
+\(
+\widetilde I(\frac12)=-\frac12\log\rho(B_\infty)
+\)。
+归一化速率函数 \(I_e\) 与 \(\widetilde I\) 仅相差常数 \(P(0)\)，故展开的一次非解析项与线性系数保持不变；端点值
+\(
+I_e(\frac12)=P(0)-\log c
+\)
+则与推论 \ref{cor:real-input-40-rate-endpoints} 一致。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part13b-output-microcanonical-logcusp}
+
+\input{subsubsec__xi-time-protocol-conclusions-part13a-positive-entropy-ground-face}
+
+\begin{conclusion}[折叠输出的内生 Gibbs 规格与 Parry 基线几乎同熵：最大熵缺口降至微比特级且 KL 率等同于熵缺口]\label{con:xi-terminal-fold-output-gibbs-parry-microbit-gap}
+对 Fold 输出分布 \(\pi_m(x)=d_m(x)/2^m\) 的块频率拟合得到两状态 Markov 规格 \(P_{\mathrm{fit}}\)，其一步转移与黄金均值 Parry 基线仅在 \(10^{-3}\) 量级偏离（例如 \(P_{\mathrm{fit}}(1\mid 0)=0.3829949\) 对比 \(P_{\mathrm{Parry}}(1\mid 0)=0.3819660\)）。
+更关键的是熵率层面的微缺口：
+\[
+h_{\mathrm{fit}}\approx 0.481210204266,\quad
+\log\varphi\approx 0.481211825060,\quad
+\Delta h:=\log\varphi-h_{\mathrm{fit}}\approx 1.620794\times 10^{-6}\ \text{nats/symbol}.
+\]
+并且 KL 散度率满足严格一致性恒等式
+\[
+D_{\mathrm{KL}}^{\mathrm{rate}}(P_{\mathrm{fit}}\|P_{\mathrm{Parry}})=\log\varphi-h_{\mathrm{fit}}=\Delta h,
+\]
+从而折叠诱导的“偏离”主要体现为常数级指纹（有限部/端点层），而非熵率层面的结构崩塌。
+\end{conclusion}
+\begin{proof}[证明]
+见注 \ref{rem:pom-gibbs-markov-fit} 与注 \ref{rem:pom-gibbs-parry-entropy-gap}（其中数值证书由 \texttt{scripts/exp\_fold\_output\_gibbs\_markov\_fit.py} 生成并以 \texttt{\string\input} 方式纳入正文）。证毕。
+\end{proof}
+
+\begin{conclusion}[端点质量给出黄金常数的过定约束审计：两条独立比值估计在 Parry 模型下必同收敛于 \texorpdfstring{$\varphi$}{phi}]\label{con:xi-terminal-parry-endpoint-mass-overdetermined-phi-audit}
+以任意经验直方图 \(\hat\pi_{m,N}\) 定义端点质量
+\[
+\widehat M_{ij}(m):=\sum_{\substack{u\in X_m\\ u_1=i,\ u_m=j}}\hat\pi_{m,N}(u).
+\]
+若数据在分辨率 \(m\) 下接近黄金均值 Parry 基线，则可构造两条相互独立的黄金常数估计量：
+\[
+\widehat\varphi_{(00/01)}(m):=\frac{\widehat M_{00}(m)}{\widehat M_{01}(m)}\cdot \frac{F_{m-1}}{F_m},
+\qquad
+\widehat\varphi_{(01/11)}(m):=\frac{\widehat M_{01}(m)}{\widehat M_{11}(m)}\cdot \frac{F_{m-2}}{F_{m-1}}.
+\]
+在 Parry 真模型下，两者在极限意义下收敛到同一常数 \(\varphi\)，从而形成一个低维、过定约束的自洽审计机制：任何偏离 Parry 的端点结构将使两条比值估计产生可检测的不一致。
+\end{conclusion}
+\begin{proof}[证明]
+见推论 \ref{cor:parry-endpoint-phi-estimators}。证毕。
+\end{proof}
+
+\begin{conclusion}[模群判据下的贝叶斯逆与零知识因子化：完全正信道的“可见闭包不变性”给出充要刻画]\label{con:xi-terminal-bayesian-inverse-zk-factorization-invariance}
+在算子代数设定中，贝叶斯逆 \(F^\sharp\) 的存在性由 Tomita--Takesaki 模群判据控制。
+一旦 \(F^\sharp\) 存在，则对任意正规完全正转录信道 \(\Phi:\mathcal{M}\to\mathcal{T}\)，以下命题等价：
+\begin{enumerate}
+  \item 存在正规完全正映射 \(S:\mathcal{N}\to\mathcal{T}\) 使 \(\Phi=S\circ F^\sharp\)（相对于 \(\mathcal{N}\) 的完美零知识因子化）；
+  \item \(\Phi\) 在可见闭包幂等子 \(K:=F\circ F^\sharp\) 下不变：\(\Phi=\Phi\circ K\)。
+\end{enumerate}
+并且在等价条件下分解 \(\Phi=S\circ F^\sharp\) 中的 \(S\) 唯一且满足 \(S=\Phi|_{\mathcal{N}}\)。
+因此“零知识/可因子化”从构造性问题降格为单一不变性检验。
+\end{conclusion}
+\begin{proof}[证明]
+见定理 \ref{thm:op-algebra-bayes-inverse-zk}。证毕。
+\end{proof}

@@ -1,0 +1,226 @@
+\subsubsection{中值图的素数账本嵌入：\texorpdfstring{$\Theta$}{Theta}-类、算术距离与三元中值闭式}\label{subsubsec:cdim-median-graph-godel-prime-ledger}
+本小节把中值图（等价于 CAT(0) 立方复形的 \(1\)-骨架）中的超平面分隔结构编译为平方自由素数寄存器。
+其结果是：顶点可寻址性、图距离与三元中值均可在 \(\gcd/\operatorname{lcm}\) 的算术闭式中表达；并且局部“素数比值 + 方形一致性”已足以恢复全局 \(\Theta\)-类结构（至素数重标号与基点归一化）。
+
+\begin{definition}[Gödel 素数码]\label{def:cdim-median-godel-prime-code}
+设 \(G=(V,E)\) 为连通中值图，并取基点 \(o\in V\)。
+记 \(\Theta(G)\) 为 \(G\) 的 Djoković--Winkler \(\Theta\)-类集合。
+取任意单射
+\(
+\iota:\Theta(G)\hookrightarrow \mathbb{P}
+\)
+（\(\mathbb{P}\) 为素数集合）。
+对 \(v\in V\) 定义
+\[
+S_o(v):=\{H\in\Theta(G):\ H\ \textup{分隔}\ o\ \textup{与}\ v\}.
+\]
+定义顶点的 Gödel 素数码（平方自由整数）为
+\[
+\Gamma(v):=\prod_{H\in S_o(v)}\iota(H)\ \in\ \NN_{\square},
+\]
+其中
+\(
+\NN_{\square}:=\{n\in\NN:\ \nu_p(n)\in\{0,1\}\ \forall p\}
+\)
+为正平方自由整数集合。
+\end{definition}
+
+\begin{theorem}[算术可寻址性与三元中值的闭式]\label{thm:cdim-median-godel-distance-median-closed-form}
+在定义 \ref{def:cdim-median-godel-prime-code} 的设定下：
+\begin{enumerate}
+  \item 映射 \(\Gamma:V\to\NN_{\square}\) 为单射。
+  \item 对任意 \(u,v\in V\)，图距离满足算术表达式
+  \[
+  d_G(u,v)
+  =\omega\!\left(\frac{\operatorname{lcm}(\Gamma(u),\Gamma(v))}{\gcd(\Gamma(u),\Gamma(v))}\right)
+  =\omega\!\left(\frac{\Gamma(u)\Gamma(v)}{\gcd(\Gamma(u),\Gamma(v))^2}\right),
+  \]
+  其中 \(\omega(n)\) 表示 \(n\) 的不同素因子个数。
+  \item 对任意 \(u,v,w\in V\)，令 \(m=\mathrm{med}(u,v,w)\) 为唯一中值点，则有封闭式
+  \[
+  \Gamma(m)=
+  \frac{\gcd(\Gamma(u),\Gamma(v))\ \gcd(\Gamma(v),\Gamma(w))\ \gcd(\Gamma(w),\Gamma(u))}
+  {\gcd(\Gamma(u),\Gamma(v),\Gamma(w))^2}.
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+中值图等价于部分立方图（partial cube），因此存在等距嵌入
+\(
+\varphi:V\hookrightarrow\{0,1\}^{\Theta(G)}
+\)
+使每个 \(\Theta\)-类对应一个二值坐标；并且对每个 \(v\)，集合 \(S_o(v)\) 与 \(\varphi(v)\) 的 \(1\)-坐标集合一致。
+\par
+\textbf{(1)} 由素数唯一分解，平方自由整数 \(\Gamma(v)\) 的素因子集合唯一确定 \(S_o(v)\)，从而唯一确定 \(\varphi(v)\) 与 \(v\)，故 \(\Gamma\) 单射。
+\par
+\textbf{(2)} 在 \(\{0,1\}^{\Theta(G)}\) 中距离为 Hamming 距离：
+\(
+d_G(u,v)=|S_o(u)\triangle S_o(v)|
+\)。
+而对平方自由 \(a,b\)，\(\operatorname{lcm}(a,b)/\gcd(a,b)\) 的素因子集合恰为两者素因子集合的对称差，故其素因子数等于 \(|S_o(u)\triangle S_o(v)|\)，即所示公式。
+\par
+\textbf{(3)} 中值点在超立方中为逐坐标多数（majority）。
+对平方自由码而言，这等价于：素数 \(p\) 出现在 \(\Gamma(m)\) 中当且仅当 \(p\) 至少出现在三者 \(\Gamma(u),\Gamma(v),\Gamma(w)\) 中的两个。
+而
+\(
+\gcd(a,b)\gcd(b,c)\gcd(c,a)
+\)
+对“两两共同素数”给出一次计数，对“三者共同素数”给出三次计数；再除以 \(\gcd(a,b,c)^2\) 将三次计数校正为一次计数，得到所示闭式。证毕。
+\end{proof}
+
+\begin{corollary}[二分性与 Möbius 奇偶层]\label{cor:cdim-median-mobius-bipartite-coloring}
+在定义 \ref{def:cdim-median-godel-prime-code} 的设定下，定义
+\[
+\chi(v):=(-1)^{\omega(\Gamma(v))}=\mu(\Gamma(v)),
+\]
+其中 \(\mu\) 为 Möbius 函数（在平方自由整数上满足 \(\mu(n)=(-1)^{\omega(n)}\)）。
+则 \(\chi\) 给出 \(G\) 的二染色：任意边 \(uv\in E\) 满足 \(\chi(u)=-\chi(v)\)。
+\end{corollary}
+
+\begin{proof}
+在部分立方嵌入中，每条边恰翻转一个坐标，等价于 \(S_o(\cdot)\) 的对称差大小为 \(1\)。
+因此沿任一边，\(\Gamma\) 恰乘（或除）一个素数，从而 \(\omega(\Gamma)\) 奇偶翻转一次，即 \(\chi\) 变号。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$\Theta$}{Theta}-刚性：局部素数比值与方形一致性推出全局 Gödel 结构]\label{thm:cdim-median-theta-rigidity-prime-ratio}
+设 \(G=(V,E)\) 为连通中值图。
+称 \(F:V\to\NN_{\square}\) 为\textbf{素数比值嵌入}，若对任意边 \(uv\in E\) 存在素数 \(p\) 使
+\[
+F(v)=F(u)\cdot p\quad\textup{或}\quad F(u)=F(v)\cdot p.
+\]
+进一步要求\textbf{方形一致性}：对任意诱导 \(4\)-环 \(u\!-\!v\!-\!w\!-\!z\!-\!u\)，若
+\[
+\frac{F(v)}{F(u)}=p,\qquad \frac{F(w)}{F(v)}=q
+\]
+（必要时取倒数使其为素数），则必有
+\[
+\frac{F(z)}{F(u)}=q,\qquad \frac{F(w)}{F(z)}=p.
+\]
+则存在基点 \(o\in V\)、常数 \(c\in\NN_{\square}\) 与单射 \(\iota:\Theta(G)\hookrightarrow\mathbb P\)，使得
+\[
+F(v)=c\cdot\Gamma_{o,\iota}(v)\qquad(\forall v\in V),
+\]
+其中 \(\Gamma_{o,\iota}\) 为定义 \ref{def:cdim-median-godel-prime-code} 的 Gödel 素数码。
+并且在固定 \(o\) 且规定 \(F(o)=c\) 的归一化下，\(\iota\) 在 \(\Theta(G)\) 上唯一。
+\end{theorem}
+
+\begin{proof}[证明要点]
+在部分立方图中，\(\Theta\)-关系由诱导 \(4\)-环的相对边生成的传递闭包刻画。
+方形一致性迫使每条边的素数标签在同一 \(\Theta\)-类内保持常数，因此可定义 \(\iota(H)\) 为取 \(H\) 中任一边的素数标签，并且该定义良好。
+取基点 \(o\) 并令 \(c:=F(o)\)。
+对任意 \(v\)，沿任意从 \(o\) 到 \(v\) 的最短路把经过的 \(\Theta\)-类标签相乘得到 \(\Gamma_{o,\iota}(v)\)；
+由 \(4\)-环生成关系与方形一致性，路径替换不改变乘积，故该定义与路径无关。
+最后由连通性与边局部规则推出 \(F(v)=c\Gamma_{o,\iota}(v)\)。
+唯一性：若 \(F(o)\) 固定，则每个 \(\Theta\)-类上边比值的素数标签被 \(F\) 唯一确定，从而 \(\iota\) 唯一。证毕。
+\end{proof}
+
+\begin{theorem}[CAT(0) 立方几何上的广义 Stokes 刚性：方形闭合、\texorpdfstring{$\Theta$}{Theta}-类常值与全局势函数]\label{thm:cdim-median-stokes-rigidity-potential}
+设 \(G=(V,E)\) 为有限中值图（等价于某有限 CAT(0) 立方复形的 \(1\)-骨架），其边按 Djoković--Winkler 关系分解为 \(\Theta\)-类集合 \(\Theta(G)\)。
+令 \(\alpha\in C^1(G;\RR)\) 为反对称边余链（对任意有向边 \(u\to v\) 赋值 \(\alpha(u\to v)\)，并要求 \(\alpha(v\to u)=-\alpha(u\to v)\)）。
+对任意诱导方形 \(Q\subseteq G\)（视为定向 \(2\)-胞腔），定义离散外微分
+\[
+(d\alpha)(Q):=\sum_{e\in\partial Q}\alpha(e),
+\]
+其中 \(\partial Q\) 取一致定向的边界环。
+固定基点 \(o\in V\)。
+对每个 \(\Theta\)-类 \(H\in\Theta(G)\)，令 \(H\) 在顶点集上诱导二分割（两侧半空间），并约定含 \(o\) 的一侧为 \(H^-\)、其补为 \(H^+\)；
+称一条穿越 \(H\) 的有向边 \(u\to v\) 为\textbf{远离 \(o\) 的定向}，若 \(u\in H^-\)、\(v\in H^+\)。
+则下列命题等价：
+\begin{enumerate}
+  \item 对任意诱导方形 \(Q\subseteq G\)，有 \((d\alpha)(Q)=0\)；
+  \item 对任意 \(H\in\Theta(G)\)，存在常数 \(a_H\in\RR\)，使得 \(\alpha\) 在 \(H\) 的全部远离 \(o\) 的定向穿越边上取同一值 \(a_H\)（从而在相反定向上取 \(-a_H\)）；
+  \item 存在 \(f\in C^0(G;\RR)\) 使得 \(\alpha=df\)，即对任意有向边 \(u\to v\) 有 \(\alpha(u\to v)=f(v)-f(u)\)。
+\end{enumerate}
+并且在 (2) 的记号下可取显式势函数
+\[
+f(v)=\sum_{H\in S_o(v)} a_H,
+\qquad
+S_o(v):=\{H\in\Theta(G):\ H\ \textup{分隔}\ o\ \textup{与}\ v\}.
+\]
+\end{theorem}
+
+\begin{proof}
+\textbf{(3)\(\Rightarrow\)(1)} 设 \(Q\) 为任意诱导方形，其边界为闭合回路 \(v_0\to v_1\to v_2\to v_3\to v_0\)。
+由 \(\alpha=df\) 得
+\[
+\sum_{e\in\partial Q}\alpha(e)
+=\sum_{i=0}^{3}\bigl(f(v_{i+1})-f(v_i)\bigr)=0
+\]
+（约定 \(v_4=v_0\)），故 \((d\alpha)(Q)=0\)。
+\par
+\textbf{(1)\(\Rightarrow\)(2)} 在中值图中，每个诱导方形的对边属于同一 \(\Theta\)-类。
+对任意方形 \(Q\)，条件 \((d\alpha)(Q)=0\) 强制该方形的同一 \(\Theta\)-类对边（取相容定向）取值相等。
+而 \(\Theta\)-关系由“方形对边”等价的传递闭包生成，因此对任意固定的 \(H\in\Theta(G)\)，\(\alpha\) 在该类中同向穿越边上必为常值。
+以基点 \(o\) 的半空间取向规范同向性，即得到所述 \(a_H\)。
+\par
+\textbf{(2)\(\Rightarrow\)(3)} 由中值图的超平面分隔坐标化，
+对任意边 \(u\sim v\) 存在唯一 \(H\in\Theta(G)\) 使该边穿越 \(H\)，并且
+\[
+S_o(v)=S_o(u)\,\triangle\,\{H\},
+\]
+其中 \(\triangle\) 为对称差。
+更精确地，若 \(u\to v\) 为穿越 \(H\) 的远离 \(o\) 的定向，则 \(S_o(v)=S_o(u)\cup\{H\}\)；
+反之 \(S_o(u)=S_o(v)\cup\{H\}\)。
+令 \(f(v):=\sum_{H\in S_o(v)}a_H\)，则对任意有向边 \(u\to v\) 穿越 \(H\) 有
+\[
+f(v)-f(u)=
+\begin{cases}
+a_H,& u\to v\ \textup{远离 }o,\\
+-a_H,& v\to u\ \textup{远离 }o,
+\end{cases}
+\]
+与 (2) 中对 \(\alpha\) 的规定一致，从而 \(\alpha=df\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[可寻址性约束下的最小素数谱与立方维数]\label{cor:cdim-median-min-prime-spectrum-cube-dimension}
+设 \(G\) 为连通中值图，并记其立方维数为
+\[
+\dim_{\square}(G):=|\Theta(G)|.
+\]
+若 \(F:V\to\NN_{\square}\) 为定理 \ref{thm:cdim-median-theta-rigidity-prime-ratio} 的素数比值嵌入且为单射（可寻址），则其使用的素数个数至少为 \(\dim_{\square}(G)\)；
+并且存在恰使用 \(\dim_{\square}(G)\) 个两两不同素数的此类嵌入（取任意单射 \(\iota:\Theta(G)\hookrightarrow\mathbb P\) 并令 \(F=\Gamma_{o,\iota}\)）。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:cdim-median-theta-rigidity-prime-ratio}，在归一化后 \(F\) 等价于对每个 \(\Theta\)-类选取一个素数标签。
+若两条不同 \(\Theta\)-类复用同一素数标签，则平方自由性使该素数在算术码中只能记录一次，从而把两条独立坐标方向在可见层面压缩为同一比特，破坏可寻址性（单射性）。
+因此可寻址嵌入必须对不同 \(\Theta\)-类使用不同素数，故需要至少 \(|\Theta(G)|=\dim_{\square}(G)\) 个素数。
+反向构造由定义 \ref{def:cdim-median-godel-prime-code} 直接给出。证毕。
+\end{proof}
+
+\begin{theorem}[平方自由素数寄存器上的加权中值度量与椭圆实现]\label{thm:cdim-squarefree-median-metric-ellipse-realization}
+在 \(\NN_{\square}\) 上定义度量
+\[
+\delta(n,m):=\log\!\left(\frac{\operatorname{lcm}(n,m)}{\gcd(n,m)}\right)
+=\sum_{p\in\mathbb P}\bigl|\nu_p(n)-\nu_p(m)\bigr|\log p,
+\]
+其中 \(\nu_p(n)\in\{0,1\}\) 为平方自由指数。
+则 \((\NN_{\square},\delta)\) 为中值度量空间：任意三元组 \(n_1,n_2,n_3\) 的中值点唯一存在，且为
+\[
+n_\ast=
+\frac{\gcd(n_1,n_2)\ \gcd(n_2,n_3)\ \gcd(n_3,n_1)}
+{\gcd(n_1,n_2,n_3)^2}.
+\]
+进一步，定义椭圆族
+\[
+\mathcal E:=\{E_n:\ n\in\NN_{\square}\},
+\qquad
+E_n:=\left\{(x,y)\in\RR^2:\ \frac{x^2}{n^2}+y^2n^2\le 1\right\}.
+\]
+令 \(\delta_{\mathcal E}(E_n,E_m):=\delta(n,m)\)，则映射 \(n\mapsto E_n\) 为等距同构，从而 \((\mathcal E,\delta_{\mathcal E})\) 亦为中值度量空间，且
+\(
+\mathrm{med}(E_{n_1},E_{n_2},E_{n_3})=E_{n_\ast}
+\)。
+\end{theorem}
+
+\begin{proof}
+\(\delta\) 是在 \(\{0,1\}^{\mathbb P}\) 上以权重 \(\log p\) 加权的 Hamming 距离。
+对每个素数坐标，三元中值由多数决定；加权和的极小化逐坐标分离，因此全局中值由逐素数多数拼合得到。
+该拼合对平方自由整数恰等价于所示 \(\gcd\) 闭式。
+椭圆实现部分由 \(\delta_{\mathcal E}\) 的定义直接给出等距同构；中值结论随之转移。证毕。
+\end{proof}
+
+\endinput
+

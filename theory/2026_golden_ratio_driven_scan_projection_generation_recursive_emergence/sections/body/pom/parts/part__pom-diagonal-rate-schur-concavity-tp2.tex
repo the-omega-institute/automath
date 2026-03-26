@@ -1,0 +1,135 @@
+% (User input window)
+
+\paragraph{Schur--凹性与最难源原理：对角约束最小互信息的主序单调性}
+在固定失真 \(\delta\) 下，速率 \(R_w(\delta)\) 对字母标签的置换不变，因而可视为单纯形上的对称泛函。
+下述定理给出其在 Hardy--Littlewood--Pólya 主序下的全局单调结构，并导出均匀分布的极大性；随后记录最优耦合在组合全正性意义下的刚性。
+
+\begin{theorem}[Schur--凹性：对角约束最小互信息在主序下单调]\label{thm:pom-diagonal-rate-schur-concavity-tp2}
+令 \(X\) 为有限集（\(|X|=n\ge 2\)），取全支撑分布 \(v,w\in\Delta(X)\)，并固定 \(\delta\in[0,1)\)。
+若 \(v\prec w\)（按坐标非增序重排后的 Hardy--Littlewood--Pólya 主序），则
+\[
+R_v(\delta)\ \ge\ R_w(\delta).
+\]
+并且若进一步满足 \(\delta<1-p_2(w)\) 且 \(v\) 不是 \(w\) 的置换，则严格不等式成立：
+\[
+R_v(\delta)\ >\ R_w(\delta).
+\]
+\end{theorem}
+\begin{proof}
+记 \(p_2(\cdot)=\sum_{x\in X}(\cdot)^2\)。
+若 \(\delta\ge 1-p_2(w)\)，则独立耦合 \(w\otimes w\) 可行且 \(I(X;Y)=0\)，从而 \(R_w(\delta)=0\)；又互信息非负，故 \(R_v(\delta)\ge 0=R_w(\delta)\)。
+下设 \(\delta<1-p_2(w)\)。
+由于 \(p_2\) 为 Schur--凸（\(t\mapsto t^2\) 凸），由 \(v\prec w\) 得 \(p_2(v)\le p_2(w)\)，故亦有 \(\delta<1-p_2(v)\)，两端均处在非平凡区间。
+\par
+在该区间内，由对偶极大表示定理 \ref{thm:pom-diagonal-rate-scaling-duality}，
+存在唯一 \(\kappa_\delta>0\) 及（模整体伸缩唯一的）\(u_\delta\succ0\) 使唯一最优耦合写成指数族形状
+\[
+P^\star_\delta(x,y)=\frac{u_\delta(x)u_\delta(y)\bigl(1+\kappa_\delta\,\mathbf 1_{\{x=y\}}\bigr)}{Z_\delta},
+\qquad Z_\delta>0,
+\]
+并满足边缘自洽关系
+\[
+w(x)=\sum_{y\in X}P^\star_\delta(x,y)=\frac{u_\delta(x)\bigl(A_\delta+\kappa_\delta u_\delta(x)\bigr)}{Z_\delta},
+\qquad
+A_\delta:=\sum_{z\in X}u_\delta(z).
+\]
+等价地，对每个 \(x\) 有二次方程
+\(
+\kappa_\delta u_\delta(x)^2+A_\delta u_\delta(x)=Z_\delta w(x)
+\)，
+其正根给出
+\[
+\frac{u_\delta(x)}{w(x)}
+=
+\frac{2Z_\delta}{A_\delta+\sqrt{A_\delta^2+4\kappa_\delta Z_\delta w(x)}},
+\]
+右端作为 \(w(x)\) 的函数严格递减。
+\par
+另一方面，由同一定理的包络原理（在 \(\Delta(X)\) 的切空间 \(\sum_x \dot w(x)=0\) 上取导），
+对任意切向扰动 \(\dot w\) 有
+\[
+\mathrm d R_w(\delta)[\dot w]=2\sum_{x\in X}\dot w(x)\,\log\frac{u_\delta(x)}{w(x)},
+\]
+从而
+\(
+\frac{\partial R_w(\delta)}{\partial w(x)}=2\log\frac{u_\delta(x)}{w(x)}+\mathrm{const}
+\)。
+因此若 \(w(x)>w(y)\)，则 \(\log\frac{u_\delta(x)}{w(x)}<\log\frac{u_\delta(y)}{w(y)}\)，即
+\[
+(w(x)-w(y))\Bigl(\frac{\partial R_w(\delta)}{\partial w(x)}-\frac{\partial R_w(\delta)}{\partial w(y)}\Bigr)\le 0,
+\]
+且当 \(w(x)\ne w(y)\) 时为严格不等。
+由 Hardy--Littlewood--Pólya 的梯度判别准则，\(w\mapsto R_w(\delta)\) 为 Schur--凹。
+严格性由上式的严格版本与主序的 T-变换分解推出：若 \(v\prec w\) 且非置换，则存在有限步 Robin Hood 操作使每步严格增大函数值，故 \(R_v(\delta)>R_w(\delta)\)。
+证毕。
+\end{proof}
+
+\begin{remark}[零速率区间的等号情形]\label{rem:pom-diagonal-rate-zero-rate-majorization}
+当 \(\delta\ge 1-p_2(w)\) 时有 \(R_w(\delta)=0\)。
+若 \(v\prec w\)，则 \(p_2(v)\le p_2(w)\)，从而 \(1-p_2(v)\ge 1-p_2(w)\)。
+因此当 \(\delta\ge 1-p_2(v)\) 时两者同为零；而若 \(1-p_2(w)\le\delta<1-p_2(v)\)，则 \(R_w(\delta)=0<R_v(\delta)\)。
+\end{remark}
+
+\begin{corollary}[均匀极大与闭式上界]\label{cor:pom-diagonal-rate-uniform-global-max}
+令 \(|X|=n\ge 2\)，并记 \(U_n\) 为 \(X\) 上的均匀分布。
+则对任意全支撑 \(w\in\Delta(X)\) 与任意 \(\delta\in[0,1)\) 有
+\[
+R_w(\delta)\ \le\ R_{U_n}(\delta).
+\]
+若 \(0\le\delta<1-\tfrac1n\)，则等号当且仅当 \(w\) 为均匀分布的置换（等价于 \(w\equiv U_n\)）。
+并且 \(R_{U_n}(\delta)\) 的闭式由定理 \ref{thm:pom-diagonal-rate-uniform-closed-form}（或熵型重写推论 \ref{cor:pom-diagonal-rate-uniform-entropy-rewrite}）给出。
+\end{corollary}
+\begin{proof}
+均匀分布满足 \(U_n\prec w\)。
+由定理 \ref{thm:pom-diagonal-rate-schur-concavity-tp2} 得 \(R_{U_n}(\delta)\ge R_w(\delta)\)。
+当 \(\delta<1-\tfrac1n\) 时 \(R_{U_n}(\delta)>0\) 且处于非平凡区间；
+若 \(w\) 非均匀则 \(U_n\prec w\) 为严格主序，故由同一定理的严格性得到 \(R_{U_n}(\delta)>R_w(\delta)\)，从而等号仅在 \(w\equiv U_n\)（至置换）时成立。
+闭式由所引定理/推论直接给出。证毕。
+\end{proof}
+
+\begin{theorem}[最优耦合的 \texorpdfstring{$\mathrm{TP}_2$}{TP2} 结构：二阶全正性与严格性刻画]\label{thm:pom-diagonal-rate-optimal-tp2}
+取全支撑分布 \(w\in\Delta(X)\) 并令 \(\delta\in(0,1-p_2(w))\)，从而最优对角参数满足 \(\kappa_\delta>0\)。
+令 \(P^\star_\delta\) 为实现 \(R_w(\delta)\) 的唯一最优耦合。
+则对任意 \(x_1\ne x_2\) 与任意 \(y_1\ne y_2\) 有
+\[
+\det\!\begin{pmatrix}
+P^\star_\delta(x_1,y_1) & P^\star_\delta(x_1,y_2)\\
+P^\star_\delta(x_2,y_1) & P^\star_\delta(x_2,y_2)
+\end{pmatrix}\ \ge\ 0.
+\]
+并且该行列式严格大于零当且仅当 \(\{x_1,x_2\}\cap\{y_1,y_2\}\ne\varnothing\)（等价地：该 \(2\times2\) 子矩阵包含至少一个对角元）。
+因此 \(P^\star_\delta\)（以及对应条件核 \(K^\star_\delta(y\mid x)=P^\star_\delta(x,y)/w(x)\)）为 \(\mathrm{TP}_2\) 矩阵。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-maxent-markov-diagonal-plus-rankone-spectrum} 的“对角 \(+\) 秩一”分解，
+存在 \(\kappa_\delta>0\)、\(u_\delta\succ0\) 与 \(Z_\delta>0\) 使得
+\[
+P^\star_\delta(x,y)=\frac{u_\delta(x)u_\delta(y)}{Z_\delta}\quad(x\ne y),
+\qquad
+P^\star_\delta(x,x)=\frac{(1+\kappa_\delta)u_\delta(x)^2}{Z_\delta}.
+\]
+取任意 \(x_1\ne x_2\) 与 \(y_1\ne y_2\)，并记
+\[
+\Delta:=
+P^\star_\delta(x_1,y_1)P^\star_\delta(x_2,y_2)-P^\star_\delta(x_1,y_2)P^\star_\delta(x_2,y_1).
+\]
+若 \(\{x_1,x_2\}\cap\{y_1,y_2\}=\varnothing\)，则四个位置均为非对角项，
+相应 \(2\times2\) 子矩阵为秩一外积 \(\propto (u_\delta(x_i))_{i=1,2}(u_\delta(y_j))_{j=1,2}^{\mathsf T}\)，故 \(\Delta=0\)。
+\par
+若 \(\{x_1,x_2\}\cap\{y_1,y_2\}\ne\varnothing\)，不妨设 \(x_1=y_1\)（其余情形同理），则
+\[
+\Delta
+=\frac{(1+\kappa_\delta)u_\delta(x_1)^2}{Z_\delta}\cdot\frac{u_\delta(x_2)u_\delta(y_2)}{Z_\delta}
+-\frac{u_\delta(x_1)u_\delta(y_2)}{Z_\delta}\cdot\frac{u_\delta(x_2)u_\delta(x_1)}{Z_\delta}
+=\frac{\kappa_\delta\,u_\delta(x_1)^2u_\delta(x_2)u_\delta(y_2)}{Z_\delta^2}\;>\;0.
+\]
+若同时出现两个对角元（即 \(\{x_1,x_2\}=\{y_1,y_2\}\)），同理得到
+\(
+\Delta=\kappa_\delta(\kappa_\delta+2)u_\delta(x_1)^2u_\delta(x_2)^2/Z_\delta^2>0
+\)。
+综上，任意二阶行列式均非负，且严格性恰由是否触及对角增强项决定，结论成立。
+对条件核 \(K^\star_\delta\)，任意 \(2\times2\) 子式仅差正因子 \(1/(w(x_1)w(x_2))\)，故符号保持。证毕。
+\end{proof}
+
+\endinput
+

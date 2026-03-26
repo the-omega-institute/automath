@@ -1,0 +1,590 @@
+\section{圆维与单位圆面积相位坐标门：Haar 回拉、精度势账本与群论信息守恒}\label{sec:circle-dimension-phase-gate}
+
+\providecommand{\cdim}{\operatorname{cdim}}
+\providecommand{\pcdim}{\operatorname{pcdim}}
+
+本节在附录 \ref{app:unit-circle-phase-gate} 固定的单位圆面积相位坐标门之上，给出一组面向正文的接口化陈述：以 Haar 回拉与 Jacobian 的唯一性把“近零加权”提升为结构强制的定量定律；以结构搬运在有界相位盒内复刻与 \((\RR,+,\cdot)\) 严格同构的算术，从而把发散统一迁移至边界端点；以精度势把可逆紧化下的可见信息变化编译为可审计账本；并据此引入“圆维”作为独立相位圆因子的群论计数量。
+为与端点局部幂律所定义的端点谱维数 \(d_{-1}\)（定义 \ref{def:xi-endpoint-spectral-dimension}）区分，本节的圆维仅计数可见相位通道的圆因子数目，而不涉及端点邻域测度的细分衰减指数。
+
+\subsection{目标与接口定位}\label{subsec:cdim-goal-interface}
+本节的组织目标如下。
+\begin{enumerate}
+  \item \textbf{无参紧化与端点承载：}把无界变量 \(x\in\RR\) 压缩为相位盒 \(\mathbb{U}=(-\tfrac12,\tfrac12)\) 上的有界坐标，并以射影紧化把 \(x\to\pm\infty\) 合并为单位圆端点 \(-1\)（\S\ref{subsec:cdim-phase-gate-compactification}）。
+  \item \textbf{Haar 回拉强制内禀权重：}单位圆归一化 Haar 测度在该坐标门下的回拉必为 Cauchy 权重 \(\dd\mu(x)=\dd x/(\pi(1+x^2))\)，从而“近零加权”由 Jacobian 唯一诱导（\S\ref{subsec:cdim-haar-pullback}）。
+  \item \textbf{可逆压缩与不可逆性的外置：}相位门本身可逆；任何不可逆性仅来自后续投影/截断/离散化，并应按“扩展保存”外置为可审计残差寄存器（\S\ref{subsec:cdim-transport-and-reversibility}，并见附录 \ref{subsec:unit-circle-phase-information}）。
+  \item \textbf{圆维与账本闭合：}以对偶紧群的圆因子维数定义圆维，并给出其同构不变、直和可加与有限扩张不变等算律；精度势账本把相位算术的局部条件数变化压缩为势差恒等式，使“信息守恒”在可审计标量层面闭合（\S\ref{subsec:cdim-circle-dimension}--\S\ref{subsec:cdim-precision-ledger}）。
+  \item \textbf{粗粒化的一致性接口：}Poisson--Cauchy 核族在同一形态内闭合；Poisson 半群的严格交换律与相对熵耗散提供一条标准的不可逆接口，其信息损失须由外置残差项补偿以维持账本闭合（\S\ref{subsec:cdim-poisson-cauchy}）。
+\end{enumerate}
+本节仅陈述可在正文直接调用的接口与定量关系；坐标门、尺度线性化与相位算术的证明与工具库统一指向附录 \ref{app:unit-circle-phase-gate}。
+
+\subsection{单位圆面积相位坐标门：无参紧化与端点层}\label{subsec:cdim-phase-gate-compactification}
+沿用附录 \ref{app:unit-circle-phase-gate} 的记号。对 \(x\in\RR\) 定义面积相位坐标与角变量
+\[
+\upsilon(x):=\frac{1}{\pi}\arctan(x)\in\Bigl(-\tfrac12,\tfrac12\Bigr),
+\qquad
+\vartheta(x):=2\pi\upsilon(x)=2\arctan(x)\in(-\pi,\pi),
+\]
+并定义单位圆嵌入（Cayley 形式）
+\[
+\iota(x):=e^{\mathrm{i}\vartheta(x)}=\frac{1+\mathrm{i}x}{1-\mathrm{i}x}\in\TT.
+\]
+该映射满足 \(\iota(0)=1\)，且当 \(x\to\pm\infty\) 时 \(\vartheta(x)\to\pm\pi\)、\(\iota(x)\to-1\)。
+因此 \(\iota\) 可在射影紧化 \(\widehat{\RR}:=\RR\cup\{\infty\}\) 上以 \(\iota(\infty):=-1\) 延拓为同胚（参见 \eqref{eq:unit-circle-cayley-embed}--\eqref{eq:unit-circle-phase-inverse}）。
+\par
+该端点层的制度含义是：主尺度不再以数值大小呈现，而以“边界余量”呈现；数值发散被严格搬运为相位趋近边界端点的极限过程。
+
+\subsection{Haar 回拉与近零加权：信息密度的唯一确定}\label{subsec:cdim-haar-pullback}
+由 \(\vartheta(x)=2\arctan(x)\) 得 \(\dd\vartheta/\dd x=2/(1+x^2)\)，从而
+\[
+\dd\upsilon=\frac{\dd\vartheta}{2\pi}=\frac{1}{\pi}\frac{\dd x}{1+x^2}.
+\]
+定义自然权重测度（Cauchy 权重）
+\[
+\dd\mu(x):=\frac{1}{\pi(1+x^2)}\,\dd x,
+\]
+则 \(\upsilon\) 把 \((\RR,\mu)\) 推前到 \((\mathbb{U},\mathrm{Leb})\)，而 \(\mathrm{Leb}\) 在角变量下正对应单位圆 \(\TT\) 的归一化 Haar 测度（见附录 \ref{subsec:unit-circle-phase-integrals}）。
+推论 \ref{cor:unit-circle-cayley-haar-forces-cauchy} 给出更强的唯一性结论：在保持 Haar 归一化且把 \(\infty\) 压到单点的纪律下，回拉权重由 Jacobian 变换公式唯一确定。
+\par
+据此定义相位门 Jacobian（信息密度）
+\[
+J(x):=\left|\frac{\dd\upsilon}{\dd x}\right|=\frac{1}{\pi(1+x^2)}.
+\]
+其在 \(x=0\) 处取最大值 \(J(0)=1/\pi\)，并随 \(|x|\) 严格衰减，且尾部满足 \(J(x)\sim (\pi x^2)^{-1}\)（注 \ref{rem:unit-circle-phase-haar-pullback-weight}）。
+因此，在以等相位预算（等面积/等角度）作为“等信息刻度”的制度下，原变量轴上的局部可分辨密度由 \(J(x)\) 唯一给出；“近零加权、远端抑制”并非外加偏好，而是 Haar 归一化与无参紧化共同强制的结构性结论。
+
+\subsection{结构搬运与可逆性纪律：边界元素内化与有界算术}\label{subsec:cdim-transport-and-reversibility}
+\paragraph{Möbius 群律与边界反演内化}
+在射影紧化 \(\overline{\RR}:=\RR\cup\{\infty\}\) 上定义二元运算
+\[
+x\oplus y:=\frac{x+y}{1-xy},
+\]
+并按连续延拓约定 \(1-xy=0\Rightarrow x\oplus y=\infty\)、且 \(x\oplus\infty=-1/x\)（约定 \(1/0=\infty,1/\infty=0\)）。
+命题 \ref{prop:unit-circle-phase-mobius-law} 断言 \((\overline{\RR},\oplus)\) 为交换群且 \(\iota:(\overline{\RR},\oplus)\to(\TT,\cdot)\) 为群同态，从而“反演”被内化为与边界元素 \(\infty\) 的一次群运算：
+\(
+x\oplus\infty=-1/x
+\)。
+该内化把“溢出/发散”从运算层剥离为端点极限层的几何行为，使后续协议可在有界表示层面进行审计。
+
+\paragraph{相位盒算术与域同构}
+沿双射 \(\upsilon:\RR\to\mathbb{U}\) 作结构搬运，可在相位盒上定义相位加法与相位乘法 \((\boxplus,\boxtimes)\)（定义 \ref{def:unit-circle-phase-transport-arith}），并由定理 \ref{thm:unit-circle-phase-field-iso} 得到与 \((\RR,+,\cdot)\) 的严格同构。
+因此，相位表示始终落在有界盒 \(\mathbb{U}\) 内，而数值发散被等价搬运为相位趋近边界 \(\pm\tfrac12\)（注 \ref{rem:unit-circle-phase-bounded}）。
+
+\paragraph{可逆压缩与不可逆性的外置}
+相位门 \(\upsilon,\iota\) 在 \(\RR\) 上为双射（端点仅以极限方式出现），故“提升—读出”本身不引入信息损失。
+当后续组合离散化、截断或折叠等不可逆读出时，应将不可逆性视作\emph{部分观测}（定义 \ref{def:unit-circle-phase-partial-observation}），并按扩展保存原则外置记录轴使扩展读出恢复为单射（命题 \ref{prop:unit-circle-phase-extension-preserving}）；由此，任何“信息损失”均被制度化为可审计残差寄存器，而非被隐式吞没。
+
+\subsection{圆维：相位圆因子的群论计数}\label{subsec:cdim-circle-dimension}
+本小节引入“圆维”用于刻画可见相位通道的独立圆因子数目。其定义仅依赖交换结构与 Haar 归一化，不诉诸几何嵌入。
+
+\begin{definition}[圆维]\label{def:circle-dimension}
+令 \(G\) 为有限生成离散交换群，并令其 Pontryagin 对偶紧群为 \(\widehat{G}:=\operatorname{Hom}(G,\TT)\)（取点态乘法拓扑）。
+记 \((\widehat G)^0\) 为 \(\widehat G\) 的连通单位元分量。
+定义 \(G\) 的\textbf{圆维}为
+\[
+\boxed{\;\cdim(G):=\dim\bigl((\widehat G)^0\bigr)\in\NN\cup\{0\}\;}
+\]
+其中 \(\dim\) 为紧李群（等价：环面）的流形维数。
+\end{definition}
+
+\begin{definition}[半圆维]\label{def:half-circle-dimension}
+令 \(M\) 为有限生成可消去交换幺半群，记其 Grothendieck 群完成为 \(G(M)\)。
+当 \(M\) 嵌入 \(G(M)\) 且满足 \(G(M)=M-M\) 时，定义 \(M\) 的\textbf{半圆维}为
+\[
+\boxed{\;\cdim_{+}(M):=\frac12\,\cdim\!\bigl(G(M)\bigr)\in\tfrac12\NN\cup\{0\}\;}
+\]
+用以刻画由正锥约束所选取的“单侧相位”容量。
+\end{definition}
+
+\begin{proposition}[圆维的基本算律]\label{prop:circle-dimension-laws}
+对有限生成离散交换群 \(G,H\) 有：
+\begin{enumerate}
+  \item \textbf{同构不变：}若 \(G\simeq H\)，则 \(\cdim(G)=\cdim(H)\)。
+  \item \textbf{直和可加：}\(\cdim(G\oplus H)=\cdim(G)+\cdim(H)\)。
+  \item \textbf{有限扩张不变：}若存在短正合列 \(0\to F\to G\to H\to 0\) 且 \(F\) 有限，则 \(\cdim(G)=\cdim(H)\)。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Pontryagin 对偶把直和送到直积：\(\widehat{G\oplus H}\simeq \widehat G\times\widehat H\)，从而连通分量满足 \((\widehat{G\oplus H})^0\simeq (\widehat G)^0\times(\widehat H)^0\)，维数遂相加。
+有限扩张情形下，\(\widehat F\) 为有限（故全不连通）紧群，且 \(\widehat G\) 作为 \(\widehat H\) 的有限覆盖，二者的连通分量同胚，维数相等。
+同构不变性由定义直接给出。证毕。
+\end{proof}
+
+\begin{example}[基本例子]\label{ex:circle-dimension-examples}
+有 \(\cdim(\ZZ)=1\)、\(\cdim(\ZZ^k)=k\)，且对任意有限交换群 \(F\) 有 \(\cdim(F)=0\)。
+对正锥 \(\NN\) 的群完成为 \(G(\NN)=\ZZ\)，故 \(\cdim_{+}(\NN)=\tfrac12\)。
+\end{example}
+
+\begin{remark}[细分与纤维标签不增圆维]\label{rem:circle-dimension-refinement}
+由命题 \ref{prop:circle-dimension-laws}(3)，任何有限纤维扩张只引入 \(O(1)\) 级的标签复杂度而不改变圆维。
+在协议实现中，常见的“分辨率细分/离散标签插入”可在扩展保存口径下被组织为有限（或由有限生成 torsion 群生成的）纤维寄存器；其对偶为全不连通紧因子，不能生成新的独立圆因子。
+因此，此类细分应在账本中表现为残差寄存器复杂度的增加，而非圆维增量。
+\end{remark}
+
+\input{subsubsec__circle-dimension-phase-gate-polyhedral-gate-word-complexity}
+
+\input{subsubsec__circle-dimension-phase-gate-higher-cdim-ledger}
+\input{subsubsec__circle-dimension-phase-gate-cdim-fg-abelian-calculus}
+\input{subsubsec__circle-dimension-phase-gate-cdim-hom-completion-anomaly-ledger}
+\input{subsubsec__circle-dimension-phase-gate-cdim-kernel-defect-incompressibility}
+\input{subsubsec__circle-dimension-phase-gate-median-graph-godel-prime-ledger}
+
+\input{para__circle-dimension-phase-gate-signed-circle-dimension}
+
+
+\input{subsec__circle-dimension-phase-gate-operational-half-circle-dimension}
+\input{subsec__circle-dimension-phase-gate-residual-circle-dimension}
+\input{subsec__circle-dimension-phase-gate-solenoid-terminal-phase-system}
+\input{subsec__circle-dimension-phase-gate-profinite-fiber-localization-rational-winding}
+\input{subsec__circle-dimension-phase-gate-localized-division-prime-fiber-precision-minimality}
+\input{subsec__circle-dimension-phase-gate-phase-register-biaxial-ledger}
+\input{subsec__circle-dimension-phase-gate-dyadic-audit-solenoid-rigidity}
+\input{subsec__circle-dimension-phase-gate-2adic-divisibility-towers-prime-register-rigidity}
+
+\subsection{精度势与信息账本：Jacobian 的负对数编译为可审计代价}\label{subsec:cdim-precision-ledger}
+由 \(J(x)=\abs{\dd\upsilon/\dd x}\) 定义精度势（定义 \ref{def:unit-circle-phase-precision-potential}）
+\[
+\mathcal{P}(x):=-\log J(x)=\log\pi+\log(1+x^2).
+\]
+命题 \ref{prop:unit-circle-phase-diff-entropy-ledger} 给出微分熵的严格账本恒等式：对 \(U=\upsilon(X)\) 有
+\[
+h_{\mathrm{diff}}(X)=h_{\mathrm{diff}}(U)+\EE[\mathcal{P}(X)].
+\]
+该恒等式把“可逆压缩不消灭信息”的口径严格化为：若以相位盒的均匀刻度作为可见层，则原变量的尾部尺度以精度负载 \(\EE[\mathcal P(X)]\) 形式进入守恒账本；其离散对应物为折叠纤维的对数体积缺陷（注 \ref{rem:unit-circle-phase-precision-ledger-vs-pom}）。
+\par
+进一步地，命题 \ref{prop:unit-circle-phase-log-condition-numbers} 表明相位算术 \((\boxplus,\boxtimes)\) 的输入端条件数满足严格的势差恒等式：局部敏感性变化完全由 \(\mathcal P\) 的差分（及乘法的显式对数因子）封闭表达，从而把“运算导致的可分辨度变化”压缩为可审计的标量账本。
+
+\subsection{尺度伸缩的端点线性化：半平面坐标与加性深度}\label{subsec:cdim-scale-linearization}
+尺度伸缩 \(x\mapsto mx\) 在圆盘坐标上的非线性作用可被完全线性化。
+附录 \ref{subsec:unit-circle-scale-linearization} 引入右半平面坐标 \(\mathfrak{w}(z)=(1+z)/(1-z)\)（式 \eqref{eq:scale-linearization-halfplane-coordinate}），并给出伸缩诱导的 Möbius 自同构 \(\psi_m\)（式 \eqref{eq:scale-psi-m}）满足严格共轭恒等式
+\[
+\mathfrak{w}\!\bigl(\psi_m(z)\bigr)=\frac{1}{m}\,\mathfrak{w}(z)
+\qquad(\text{命题 \ref{prop:scale-linearization-identity-multipliers}}).
+\]
+因此端点精度势 \(y:=-\log|\mathfrak{w}|\) 满足严格尺度加法律 \(y(\psi_m(z))=y(z)+\log m\)（式 \eqref{eq:endpoint-busemann-addition-law}），把尺度链的累积复杂度收束为一维加法账本。
+该线性化亦为后续 Mellin/傅里叶对角化与 Dirichlet 乘子口径提供规范接口（\eqref{eq:scale-mellin-diagonalization} 与定理 \ref{thm:phase-depth-spectrum-L}）。
+
+\subsection{Poisson--Cauchy 粗粒化与相位门的一致性：从核族闭合到可分辨度单调性}\label{subsec:cdim-poisson-cauchy}
+Poisson 核
+\(
+P_t(x)=\frac{1}{\pi}\frac{t}{x^2+t^2}
+\)
+与 Haar 回拉权重 \(J(x)=\frac{1}{\pi(1+x^2)}\) 同属 Cauchy 核族；因此“回拉权重”与“粗粒化核”在同一函数形态内闭合。
+在视界共动口径下，定理 \ref{thm:xi-offcritical-poisson-semigroup-homomorphism} 给出 Poisson 半群的严格交换律 \(G_{t+s}=P_s*G_t\) 及 Fourier 乘子表示 \(\widehat G_t(\xi)=e^{-t|\xi|}\widehat G_0(\xi)\)，从而把尺度扫描锁定为由生成元 \(-|D|\) 驱动的标准 Markov 半群。
+\par
+另一方面，端点 \(-1\) 的 Poisson 权重与时间纤维坐标在 Cayley 圆盘化下严格同一：命题 \ref{prop:app-busemann-poisson-minus1} 给出
+\(
+B^{-1}(w)=\Im(\mathcal{C}^{-1}(w))=\frac{1-|w|^{2}}{|1+w|^{2}}
+\)，且 \(b_{-1}(w)=\log B^{-1}(w)\)（差一个常数）可取作以 \(-1\) 为基点的 Busemann 函数。
+因此，上半平面虚部 \(y\) 可被视作端点 Poisson 核读出，而“离临界线偏移”在端点薄层中以二阶径向通道进入（推论 \ref{cor:app-offcritical-horocycle-busemann}）。
+\par
+不可逆粗粒化的可分辨度单调性由相对熵耗散给出：命题 \ref{prop:xi-poisson-relative-entropy-contraction} 与 \ref{prop:xi-poisson-relative-entropy-fisher-krein} 证明相对 Cauchy 背景的相对熵沿 Poisson 流严格下降，并以非局域 Dirichlet 形式给出精确耗散率。
+更精细地，命题 \ref{con:xi-poisson-coarsegraining-nohair} 与 \ref{con:xi-poisson-coarsegraining-second-order-normal-form} 给出 Poisson 粗粒化在大尺度 \(t\to\infty\) 下的“无毛发”塌缩与二阶正规形：可见贡献在二阶之前严格塌缩为有限矩不变量，并存在一致二阶展开
+\[
+\boxed{\;
+h_t(x)
+=
+\frac{1}{\pi}\frac{t}{(x-\bar\gamma)^2+t^2}
+\;+\;
+\frac{\mathrm{Var}}{\pi}\,
+\frac{t\bigl(3(x-\bar\gamma)^2-t^2\bigr)}{\bigl((x-\bar\gamma)^2+t^2\bigr)^3}
+\;+\;O(t^{-4})\; }.
+\]
+其中 \(h_t(x)=\int_{\RR}P_t(x-\gamma)\,\dd\tilde\nu(\gamma)\) 为归一化权重测度 \(\tilde\nu\) 的 Poisson 平均，\(\bar\gamma=\int_{\RR}\gamma\,\dd\tilde\nu(\gamma)\) 为重心，\(\mathrm{Var}=\int_{\RR}(\gamma-\bar\gamma)^2\,\dd\tilde\nu(\gamma)\) 为二阶中心矩（命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form}）。
+由此可进一步推出全变差与相对熵的二阶尺度律（命题 \ref{prop:xi-poisson-tv-kl-second-order}），并与半稳定从属表示及分数 Fisher 恒等式口径一致（命题 \ref{prop:xi-poisson-subordination-half-stable} 与 \ref{prop:xi-poisson-kl-dissipation-fractional-fisher}）。
+\par
+因此，在把相位门作为规范可见接口的制度中，任何以 Poisson 半群为粗粒化引擎的协议都会结构性地压缩可分辨度；若需维持“总信息不灭”的账本闭合，则被压掉的自由度必须外置为可审计残差寄存器（矩链、缺陷测度或精度势累计），而不能被隐式消解。
+
+\subsection{高维推广与主 \texorpdfstring{$U(1)$}{U(1)} 束接口：局部相位、全局相位与唯一角度}\label{subsec:cdim-highdim-u1-bundle}
+相位门的两条核心机制——(i) 均匀测度的 Jacobian 回拉强制内禀权重；(ii) 端点紧化把非紧致病态统一迁移至边界——在更高维中具有标准几何对应物。
+附录 \ref{subsec:unit-disk-phase-tower} 以“相位塔”的形式给出可直接拼接的接口：射影化与 Hopf 纤维化把全局相位纤维严格实现为主 \(U(1)\) 束，而立体投影体积元拉回给出 \((1+\|x\|^2)^{-n}\) 型密度衰减。
+
+\paragraph{共形投影的体积律：\texorpdfstring{$(1+\|x\|^2)^{-n}$}{(1+||x||^2)^(-n)} 衰减的结构来源}
+令 \(\sigma:S^{n}\setminus\{N\}\to\RR^{n}\) 为从北极 \(N\) 出发的立体投影。
+命题 \ref{prop:stereographic-volume-form} 给出球面度量在 \(\RR^{n}\) 上的共形坐标形式：共形因子
+\(
+\Omega(x)=\frac{2}{1+\|x\|^{2}}
+\)
+满足
+\[
+(\sigma^{-1})^{\ast}g_{S^{n}}=\Omega(x)^2 g_{\mathrm{Euc}},
+\qquad
+(\sigma^{-1})^{\ast}\dd V_{S^{n}}=\Omega(x)^n\,\dd V_{\RR^{n}}
+=\left(\frac{2}{1+\|x\|^{2}}\right)^{n}\dd V_{\RR^{n}}.
+\]
+因此，均匀体积元在投影坐标下必然诱导 \((1+\|x\|^2)^{-n}\) 型尾部衰减；“近零加权、远端抑制”在高维并非外加偏好，而是共形 Jacobian 的直接结果。
+
+\paragraph{二维特例与“\texorpdfstring{$4$}{4}”型平方常数}
+二维球面 \(S^{2}\) 的立体投影坐标 \(z\in\CC\) 下，
+\[
+\dd s^{2}=\frac{4}{(1+|z|^{2})^{2}}\,|\,\dd z\,|^{2},
+\qquad
+\dd A_{S^{2}}=\frac{4}{(1+|z|^{2})^{2}}\,\dd A_{\RR^{2}}
+\]
+给出标准的“\(4\)”型共形平方常数（见附录 \ref{subsec:unit-disk-phase-tower} 及命题 \ref{con:xi-four-as-universal_conformal_square}）。
+该常数属于规一化选择在共形因子中的固定平方项，不承载新的动力学自由度；在可观测不变量中只能通过对数差与比值进入，并在端点 Poisson/Busemann 比值中严格消去（命题 \ref{con:xi-busemann-ratio-cancels-four}）。
+\par
+就“精度势”而言，若把 \((\sigma^{-1})^{\ast}\dd V_{S^{n}}/\dd V_{\RR^{n}}\) 视作高维紧化门的密度，则其负对数
+\[
+s_n(x):=-\log\frac{(\sigma^{-1})^{\ast}\dd V_{S^{n}}}{\dd V_{\RR^{n}}}
+=n\log(1+\|x\|^{2})-n\log 2
+\]
+给出一个与一维 \(\mathcal{P}(x)=\log\pi+\log(1+x^2)\) 同型的“共形精度势”：其增长完全由 \(\log(1+\|x\|^2)\) 控制，并按维数线性放大。
+
+\paragraph{相位塔原语：射影化与 Hopf 主 \texorpdfstring{$U(1)$}{U(1)} 束}
+命题 \ref{prop:phase-tower-principal-u1} 给出标准主丛
+\[
+S^{1}\hookrightarrow S^{2n+1}\twoheadrightarrow \mathbb{CP}^{n},
+\]
+其中 \(U(1)\) 通过 \(e^{\mathrm{i}\phi}\cdot z=e^{\mathrm{i}\phi}z\) 自由作用在 \(S^{2n+1}\subset\CC^{n+1}\) 上，纤维为 \(U(1)\)-轨道。
+该结构把“提升一次，多出一个全局相位纤维”的表述提升为严格的主 \(U(1)\) 束事实；一维相位门 \((\upsilon,\iota)\) 可视为把非紧坐标压入一个紧相位纤维的最小实例（附录 \ref{subsec:unit-disk-phase-tower}）。
+
+\paragraph{局部相位与全局相位：\texorpdfstring{$\det:U(n)\to U(1)$}{det} 的总体读出与唯一角度}
+将多轴信息编码为 \(z\in\CC^{n+1}\) 时，各坐标极分解给出局部相位 \(\{\theta_k\}\)；
+与此同时存在共同的全局相位作用 \(z\mapsto e^{\mathrm{i}\phi}z\)，其商空间为复射影空间 \(\mathbb{CP}^{n}\cong(\CC^{n+1}\setminus\{0\})/U(1)\)。
+因此，全局相位严格对应主 \(U(1)\) 束的纤维坐标，而相对结构落在基空间上。
+在矩阵口径下，\(\det:U(n)\to U(1)\) 给出唯一的总体相位读出，且 \(\ker(\det)=SU(n)\)（附录 \ref{subsec:unit-disk-phase-tower}）。
+\par
+就本节的圆维语义而言，上述主丛结构表明：多轴编码的全局相位仅贡献一个圆因子；其余自由度进入基空间（或 \(SU(n)\)）结构与相应的纤维代价项，而不生成新的独立相位圆通道。
+
+\input{para__circle-dimension-phase-gate-global-phase-exhaustion}
+
+\subsection{实现与审计协议：有限化积分、相位 Fourier、有理基函数与残差寄存器}\label{subsec:cdim-implementation-audit}
+本小节把相位门接口编译为一组可直接执行的审计模板：无界积分的有限化、相位模态证书与量化误差放大律；并规定在不可逆环节必须外置的残差寄存器格式，使账本保持闭合。
+
+\paragraph{有限化积分模板：从 \texorpdfstring{$\RR$}{R} 到相位盒与单位圆平均}
+由 \(\upsilon(x)=\pi^{-1}\arctan(x)\) 及 \(\dd\mu(x)=\frac{1}{\pi(1+x^2)}\dd x\)（\eqref{eq:unit-circle-phase-derivative}--\eqref{eq:unit-circle-phase-cauchy-measure}），对任意可积 \(f\) 有严格等价
+\[
+\boxed{\;
+\int_{\RR} f(x)\,\dd\mu(x)=\int_{-1/2}^{1/2} f\bigl(\tan(\pi u)\bigr)\,\dd u\;}
+\qquad(\text{式 \eqref{eq:unit-circle-phase-weighted-integral}}).
+\]
+将 \(u=\vartheta/(2\pi)\)（\eqref{eq:unit-circle-phase-vartheta}）代入得到单位圆角平均形式
+\[
+\int_{\RR} f(x)\,\dd\mu(x)
+=\frac{1}{2\pi}\int_{-\pi}^{\pi} f\!\left(\tan\!\frac{\vartheta}{2}\right)\dd\vartheta.
+\]
+在 Haar 兼容性的纪律下，上述权重完全由 Jacobian 回拉唯一确定（推论 \ref{cor:unit-circle-cayley-haar-forces-cauchy}），不允许再外加任何“经验加权”。
+
+\paragraph{相位 Fourier 与有理基函数：把实轴对象转写为单位圆模态数据}
+对 \(f\in L^2(\RR,\dd\mu)\)，相位 Fourier 系数由
+\[
+\widehat f(k)
+:=\int_{-1/2}^{1/2} f\bigl(\tan(\pi u)\bigr)e^{-2\pi\mathrm{i}ku}\,\dd u
+=\int_{\RR} f(x)\,\overline{\iota(x)^k}\,\dd\mu(x),
+\qquad
+\iota(x)=\frac{1+\mathrm{i}x}{1-\mathrm{i}x}
+\]
+定义（\eqref{eq:unit-circle-phase-fourier-coeff}），并在 \(L^2\) 意义下给出圆级数重构（\eqref{eq:unit-circle-phase-fourier-reconstruct}）。
+由于 \(\iota(x)^k\) 为 \(x\) 的有理函数，有限模态截断可被表达为显式有理核投影（命题 \ref{prop:unit-circle-phase-hardy-kernel-rational}），从而把“分析问题 \(\to\) 有理结构”制度化为可审计基底：模态证书由有限数据 \(\{\widehat f(k)\}_{|k|\le K}\) 与截断阶 \(K\) 完全确定。
+
+\paragraph{量化与误差放大律：动态范围被强制压入末位精度}
+由读出门 \(x=\upsilon^{-1}(u)=\tan(\pi u)\) 得
+\[
+\boxed{\;\frac{\dd x}{\dd u}=\pi(1+x^2)\;}
+\qquad(\text{式 \eqref{eq:app-precision-amplification}}).
+\]
+因此当 \(|x|\) 大时，微小相位误差 \(\Delta u\) 被放大为 \(\Delta x\approx \pi x^2\Delta u\) 的巨大读出误差；换言之，紧化协议把远端尺度信息强制搬运到相位末位精度中。
+粗略地，若 \(u\) 的量化精度为 \(\Delta u\)，则可分辨最大量级满足
+\[
+|x|_{\max}\approx \cot(\pi\Delta u)\approx \frac{1}{\pi\Delta u}\qquad(\Delta u\to 0)
+\]
+（附录 \ref{subsec:unit-disk-phase-tower}）。
+
+\paragraph{残差寄存器的最小格式：端点窗口、精度势累计与不可寻址通道}
+当协议引入截断、量化或折叠等不可逆环节时，需按扩展保存原则外置记录轴（\S\ref{subsec:cdim-transport-and-reversibility}，并见附录 \ref{subsec:unit-circle-phase-information}）。
+在相位门语境中，可将残差寄存器的最小格式制度化为三类项：
+\begin{enumerate}
+  \item \textbf{端点窗口质量：}对 \(\varepsilon\in(0,\tfrac12)\) 定义端点窗口
+  \[
+  W_{\varepsilon}:=\left\{u\in\mathbb{U}:\ |u|\ge \tfrac12-\varepsilon\right\},
+  \]
+  记录由截断/量化吞没的端点窗口质量及其符号分解（对应 \(x\to\pm\infty\) 的两侧端点）。
+  \item \textbf{精度势累计：}记录 \(\sum \mathcal{P}(x_i)\) 或 \(\EE[\mathcal{P}(X)]\) 的经验估计，使其与微分熵账本恒等式 \eqref{eq:unit-circle-phase-diff-entropy-ledger} 对齐，并反映“信息迁移到末位精度”的累计负载。
+  \item \textbf{不可寻址通道标记：}在纯相位制度（unitary slice）中，一类离切片偏移被结构性推入二阶径向通道（推论 \ref{cor:app-offcritical-horocycle-busemann} 与推论 \ref{cor:xi-null-second-order-radial-channel}）。
+  对此需输出其被拒绝的通道类型标签及相应的审计锚点，以避免把“被投影压入不可见通道”误记为“消失”。
+\end{enumerate}
+
+\paragraph{端到端审计流程：从原变量到相位证书的闭包}
+在上述模板下，一个闭合的审计流程可被组织为如下四步：
+\begin{enumerate}
+  \item \textbf{相位化：}由 \(u=\upsilon(x)\) 或 \(w=\iota(x)\) 生成相位表征，并同时输出 Haar 回拉权重 \(\dd\mu\) 以保证归一化一致性。
+  \item \textbf{模态化：}计算有限模态 \(\{\widehat f(k)\}_{|k|\le K}\) 并输出截断阶 \(K\)，从而得到仅依赖有理基函数的模态证书。
+  \item \textbf{尺度扫描（可选）：}若引入 Poisson 半群粗粒化，则须同时输出尺度参数与端点 Poisson/Busemann 权重读出 \(B^{-1}\)（命题 \ref{prop:app-busemann-poisson-minus1}），以保证“边界承载”的可核验一致性。
+  \item \textbf{残差封口：}输出端点窗口质量、精度势累计与不可寻址通道标记，使一切不可逆环节的损失以显式账本项外置，从而保持信息账本的闭合。
+\end{enumerate}
+
+\subsection{端点线性化与深度账本：尺度半群的 Koenigs 对角化}\label{subsec:cdim-koenigs-linearization}
+附录 \ref{subsec:unit-circle-scale-linearization} 给出尺度伸缩诱导的圆盘自同构半群 \(\{\psi_m\}_{m>0}\subset\mathrm{Aut}(\mathbb{D})\) 及其严格线性化坐标。
+在端点 \(u=-1\) 的吸引情形（\(m>1\)）下，该线性化可视为 Koenigs 对角化的一个全局闭式实现：半平面坐标 \(\mathfrak{w}(u)=\frac{1+u}{1-u}\) 将端点压到 \(\mathfrak{w}=0\)，并满足严格共轭恒等式
+\[
+\mathfrak{w}\!\bigl(\psi_m(u)\bigr)=\frac{1}{m}\,\mathfrak{w}(u)
+\qquad(\text{式 \eqref{eq:scale-linearization-identity}}).
+\]
+因此端点深度（精度势）\(y(u)=-\log|\mathfrak{w}(u)|\) 服从严格加法时间律
+\[
+y\!\bigl(\psi_m(u)\bigr)=y(u)+\log m
+\qquad(\text{式 \eqref{eq:endpoint-busemann-addition-law}}),
+\]
+把非紧尺度链的累积复杂度收束为一维加法账本 \(\sum\log m\)；其“时间参数”与右半平面模型上的双曲等距缩放一致（\eqref{eq:poincare-right-halfplane-metric}）。
+
+\subsection{相位--Witt 转移算子的 Mellin 对角化：\texorpdfstring{$\zeta$}{zeta} 乘子谱与尺度算律}\label{subsec:cdim-mellin-diagonalization}
+在 Koenigs 坐标 \(\mathfrak{w}\) 上，离散尺度叠加可被编译为转移算子
+\[
+(\mathcal{T}G)(\mathfrak{w})
+:=\sum_{m\ge 1}\frac{1}{m}\,G\!\left(\frac{\mathfrak{w}}{m}\right)
+\qquad(\text{式 \eqref{eq:scale-transfer-operator}}).
+\]
+其对幂函数 \(G_\alpha(\mathfrak{w})=\mathfrak{w}^{\alpha}\) 的本征关系给出逐点谱指纹
+\(
+\mathcal{T}(\mathfrak{w}^{\alpha})=\zeta(1+\alpha)\mathfrak{w}^{\alpha}
+\)
+（\eqref{eq:scale-transfer-eigen-monomial}）。
+进一步地，Mellin 变换 \(\mathcal{M}\) 在 \(\Re(s)>1\) 的可交换条件下满足严格对角化恒等式
+\[
+\mathcal{M}(\mathcal{T}G)(s)=\zeta(s)\,\mathcal{M}G(s)
+\qquad(\text{式 \eqref{eq:scale-mellin-diagonalization}}).
+\]
+因此，尺度半群在端点线性化后并不生成新的连续自由度：其结构作用集中为深度账本的平移叠加，并在频域体现为 \(\zeta\) 乘子谱的可审计作用。
+
+\subsection{端点载荷的正交分解：有限离散残差与连续精度负载}\label{subsec:cdim-endpoint-orthogonal-load}
+端点薄层的载荷包含两类互不混淆的成分：一类为由半角分支所强制的有限离散残差，另一类为由尺度伸缩所强制的连续精度负载。
+附录 \ref{subsec:unit-disk-witt-chebyshev} 将该分解写成可直接调用的命题链。
+\par
+首先，幂半群 \(w\mapsto w^m\) 在完成化迹坐标 \(S=2\cos(\theta/2)\) 上等价于 Chebyshev--Adams 多项式 \(S\mapsto C_m(S)\)（\S\ref{subsec:unit-disk-witt-chebyshev}）。
+在端点 \(w=-1\)（等价 \(\theta=\pi\)、从而 \(S=0\)）处，有
+\[
+C_m(0)=2\cos(m\pi/2)\in\{0,\pm 2\},
+\]
+并且该取值仅依赖 \(m\bmod 4\)（命题 \ref{prop:half-angle-z4-residue}）。
+因此端点处的幂半群作用携带一个 \(\ZZ/4\) 型离散残差，可视为“半角分支记忆”的有限承载。
+\par
+另一方面，在 Cayley 相位轴 \(u_{\mathrm C}(t)=\frac{1+\mathrm{i}t}{1-\mathrm{i}t}\) 上，Koenigs 线性化变量满足 \(\mathfrak{w}(u_{\mathrm C}(t))=\mathrm{i}/t\)，并在伸缩 \(t\mapsto mt\) 下严格缩放为 \(\mathfrak{w}\mapsto \mathfrak{w}/m\)，从而端点深度满足 \(y\mapsto y+\log m\)（命题 \ref{prop:endpoint-orthogonal-decomposition-z4-Rplus}）。
+由此得到端点载荷的正交分解：有限离散残差由 \(m\bmod 4\) 完全承载，而非紧性沿精度势轴以 \(\log m\) 平移账本累积。
+
+\subsection{相位折叠的最小可逆化：绕数证书与外置纤维的不可省略性}\label{subsec:cdim-minimal-injectivization}
+在 Dirichlet 参数化 \(z=\lambda^{-s}\)（\(s=\sigma+\mathrm{i}t\)、\(\lambda>1\)）下，角变量仅记录 \(t\log\lambda\) 的 \(2\pi\)-同余类（\eqref{eq:dirichlet-z-polar-decomposition}），从而虚向必然发生周期折叠。
+若坚持以主值辐角 \(\mathrm{Arg}\) 作为可见角信息，则单射化必须外置一个整数轴作为绕数证书：
+\[
+\mathrm{Arg}(z)=-t\log\lambda+2\pi\,\kappa_{\lambda}(s),
+\qquad
+\kappa_{\lambda}(s)\in\ZZ
+\qquad(\text{式 \eqref{eq:dirichlet-winding-certificate}}).
+\]
+命题 \ref{prop:dirichlet-trifiber-injection-audit} 给出三纤维扩展映射 \(\mathcal{E}_\lambda:(\sigma,t)\mapsto(|z|,u_{\mathrm C}(t),\kappa_\lambda)\) 的单射性，并给出一致性约束
+\[
+t\log\lambda+\mathrm{Arg}(z)=2\pi\,\kappa_\lambda(s)\in 2\pi\ZZ
+\qquad(\text{式 \eqref{eq:dirichlet-arg-consistency}}).
+\]
+因此，在“只记录主值角变量”的制度中，离散证书并非实现细节而是结构最小输入：若拒绝外置该整数纤维，则虚向折叠不可被可逆化，残差只能以不可寻址通道的形式进入账本闭包。
+
+\subsection{Poisson--Cauchy 粗粒化的二阶尺度证书：可见两参数族与信息损失阶}\label{subsec:cdim-poisson-second-order-certificate}
+Poisson 半群粗粒化的“无毛发塌缩—二阶正规形—信息耗散”链条为端点审计提供一类可复核的二阶尺度证书。
+其核心陈述已在 \S\ref{subsec:cdim-poisson-cauchy} 给出：大尺度下可见贡献在二阶之前塌缩为有限矩不变量（命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form}），相对熵沿粗粒化流严格收缩（命题 \ref{prop:xi-poisson-relative-entropy-contraction}），并且信息损失的量纲在 \(L^{1}\) 与 \(D_{\mathrm{KL}}\) 口径下分别为 \(t^{-2}\) 与 \(t^{-4}\)（命题 \ref{prop:xi-poisson-tv-kl-second-order}）。
+在审计协议中，上述三条结论允许将“被粗粒化压掉的自由度”以可审计的二阶证书项外置封口，而不将其误识为可逆信息的消失。
+
+\input{subsubsec__circle-dimension-phase-gate-poisson-window-jensen-defect}
+\input{subsec__circle-dimension-phase-gate-poisson-cauchy-constants}
+
+\subsection{相位 Fourier 的有限模态 Hardy 投影：显式有理核与截断证书}\label{subsec:cdim-hardy-finite-mode-projection}
+附录 \ref{subsec:unit-circle-phase-fourier} 将相位门与圆上的谐波分析接口固定为一组可直接调用的模板：自然权重下的相位 Fourier 展开、有限模态的 Hardy 正交投影、以及由显式有理核给出的截断算子。
+本小节将该接口层并入正文证书体系，使“有限模态—有理核—截断误差”在可逆紧化与残差寄存器纪律下可被制度化审计。
+
+\paragraph{相位 Fourier 系数与圆级数模板}
+把相位盒 \(\mathbb{U}\) 视作 \(\RR/\ZZ\) 的基本区间，并取角色基 \(e^{2\pi\mathrm{i}ku}\)（\(k\in\ZZ\)）。
+对 \(f\in L^2(\RR,\dd\mu)\)，相位 Fourier 系数 \(\widehat f(k)\) 由式 \eqref{eq:unit-circle-phase-fourier-coeff} 定义，并在 \(L^2\) 意义下给出圆级数重构 \eqref{eq:unit-circle-phase-fourier-reconstruct}。
+其中基函数 \(w(x)^k\)（\(w(x)=\iota(x)=\frac{1+\mathrm{i}x}{1-\mathrm{i}x}\)）为 \(x\) 的有理函数族，从而“实轴对象 \(\to\) 圆上模态数据”的转写可被编译为纯代数可操作的证书基底。
+等价地，可将系数写为
+\[
+\widehat f(k)=\int_{\RR} f(x)\,\overline{w(x)^{k}}\,\dd\mu(x)\qquad(k\in\ZZ),
+\]
+并在相位坐标 \(u=\upsilon(x)\in\mathbb{U}\) 下视为标准 Fourier 展开。
+
+\paragraph{有限模态 Hardy 投影与显式有理核}
+对整数 \(N\ge 1\)，令 \(\Pi_N\) 表示 \(L^2(\RR,\dd\mu)\) 上投影到 \(\mathrm{Span}\{w(\cdot)^k:0\le k\le N-1\}\) 的正交投影（“前 \(N\) 个非负模态”）。
+命题 \ref{prop:unit-circle-phase-hardy-kernel-rational} 给出其核表示：存在显式有理核 \(K_N(x,y)\) 使
+\[
+(\Pi_N f)(x)=\int_{\RR} K_N(x,y)\,f(y)\,\dd\mu(y),
+\qquad f\in L^2(\RR,\dd\mu),
+\]
+并且 \(K_N\) 在对角 \(x=y\) 处仅有可去奇点且满足 \(K_N(x,x)=N\)。
+其中核的闭式为
+\[
+K_N(x,y)=\sum_{k=0}^{N-1}w(x)^k\,\overline{w(y)}^{\,k}
+=\frac{1-\bigl(w(x)\overline{w(y)}\bigr)^N}{1-w(x)\overline{w(y)}},
+\]
+并且对 \(x\neq y\) 有分母化简
+\[
+\frac{1}{1-w(x)\overline{w(y)}}
+=\frac{(1-\mathrm{i}x)(1+\mathrm{i}y)}{2\mathrm{i}(y-x)}
+=\frac12+\frac{1+xy}{2\mathrm{i}(y-x)}
+\]
+（式 \eqref{eq:unit-circle-phase-hardy-kernel}--\eqref{eq:unit-circle-phase-hardy-kernel-denominator}）。
+因此有限模态截断被完全落实为“显式有理核算子”，使区间算术/高精度积分可直接输出可核验误差证书。
+
+\paragraph{截断证书的制度含义}
+在相位门的可逆紧化下，有限模态截断并非经验性滤波，而是 Hardy 基下的严格正交投影；因此误差来源可被分解为三类互不混淆的审计项：
+\begin{enumerate}
+  \item \textbf{模态截断阶：}截断参数 \(N\) 诱导的尾部模态遗漏；
+  \item \textbf{核算子求值误差：}对 \(\Pi_N\) 的积分实现策略（解析、数值高精、或区间算术）所产生的可控误差；
+  \item \textbf{后续不可逆接口：}任何投影、量化、截断或离散化的不可逆性，均须按残差寄存器纪律外置封口（\S\ref{subsec:cdim-implementation-audit} 与 \S\ref{subsec:cdim-minimal-injectivization}）。
+\end{enumerate}
+由此，“有限模态—有理核—残差封口”构成一个可直接编译为证书对象的最小接口层。
+
+\input{subsec__circle-dimension-phase-gate-hardy-certificate-syntax}
+
+\subsection{有理主弧 Gram 核：分母层分解与 Ramanujan 相关性的谱化定位}\label{subsec:cdim-rational-major-arc-gram}
+附录 \ref{subsubsec:unit-circle-rational-gram-bootstrap} 把“有理频率的大筛 Gram 形式”封装为一族正核算子，并给出其二次型的 Fourier--Ramanujan 展开，从而将谱范数的主要贡献定位为低频段的分母层相关性。
+
+\paragraph{分母层直和与尺度核算子}
+记有理频率集合
+\[
+\mathcal{Q}_M:=\left\{\frac{a}{q}:\ 1\le q\le M,\ (a,q)=1\right\}\subset\mathbb{Q}/\mathbb{Z},
+\qquad
+\ell^2(\mathcal{Q}_M)\cong\bigoplus_{q\le M}\ell^2\bigl((\ZZ/q\ZZ)^\times\bigr),
+\]
+并取实偶、非负、快速衰减的 \(\widehat\psi\) 定义周期化核 \(\psi_L\) 以及算子 \(K_{M,L}\)（命题 \ref{prop:conclusion66-gram-ramanujan-decomposition}）。
+该构造将“主弧 Gram 矩阵”提升为可变尺度的正核算子族，从而可在谱范数层面对主弧贡献作统一审计。
+
+\paragraph{幅度平方恒等式与 Ramanujan 和的结构出场}
+命题 \ref{prop:conclusion66-gram-ramanujan-decomposition} 给出严格恒等式
+\[
+\langle g,K_{M,L}g\rangle
+=\sum_{n\in\ZZ}\widehat\psi(n/L)\,
+\left|\sum_{q\le M}\ \sum_{(a,q)=1} g(a/q)\,e^{2\pi\mathrm{i}an/q}\right|^2,
+\qquad g\in\ell^2(\mathcal{Q}_M).
+\]
+在分母层分解下，该恒等式把 \(\|K_{M,L}\|_{\mathrm{op}}\) 的主要贡献精确定位到低频 \(n\) 段的指数和相关性；当 \(g\) 在每个分母层上近常量时，内层和退化为 Ramanujan 和 \(c_q(n)=\sum_{(a,q)=1}e^{2\pi\mathrm{i}an/q}\)，从而形成“分母层—低频段—谱范数”的可审计闭环。
+
+\subsection{尺度自举与有限验证：从单尺度谱降到统一谱隙的可判定化}\label{subsec:cdim-scale-bootstrap-finite-verification}
+在与上节相同的主弧 Gram 核框架内，附录 \ref{subsubsec:unit-circle-rational-gram-bootstrap} 给出两条互补的审计原则。
+\begin{enumerate}
+  \item \textbf{尺度自举：}在标度 \(L\asymp M^2\) 下，一次尺度上的谱降会触发全尺度的幂次衰减（定理 \ref{thm:conclusion67-scale-bootstrap}）。
+  \item \textbf{有限验证：}对固定 primitive sofic--权系统，统一扭曲谱隙可等价归约为有限检查集上的核验（定理 \ref{thm:conclusion68-finite-verification}）。
+\end{enumerate}
+二者合并后，“有限检查 \(\Rightarrow\) 全尺度结论”的证书逻辑被制度化为：有限多对 \((\theta,M)\) 的谱核验足以推出全域统一谱隙；而若统一谱隙失败，则必在有限可枚举的检查集中出现可复核的反例频率或尺度。
+
+\subsection{Farey 采样极限与连续化：从有理 Gram 矩阵到卷积型积分算子}\label{subsec:cdim-farey-operator-limit}
+当把 \(\mathcal{Q}_M\) 视为 \([0,1]\) 上的准均匀采样时，主弧 Gram 核可在适当归一化下连续化为 \([0,1]\) 上的卷积型积分算子谱问题。
+该极限由无量纲比值 \(\tau=L/M^2\) 参数化，从而为无限分辨率极限提供一条可核验的算子基准。
+\par
+定理 \ref{thm:gm-farey-sampling-operator-limit} 给出算子极限：在经验测度嵌入意义下，归一化离散算子 \(\widetilde K_{M,L}\) 收敛到
+\[
+(\mathcal{K}_\tau h)(x):=\int_0^1 \psi\!\bigl(\tau(x-y)\bigr)\,h(y)\,dy,
+\]
+并推出 \(\|\widetilde K_{M,L}\|_{\mathrm{op}}\to\|\mathcal{K}_\tau\|_{\mathrm{op}}\) 及主本征结构的收敛（\(\psi\ge 0\) 情形）。
+此外，命题 \ref{prop:gm-farey-tau-spectral-phases} 给出 \(\tau\to 0\) 与 \(\tau\to\infty\) 两端的精确谱相态渐近，形成与有限维谱证书并行的连续化审计通道。
+
+\subsection{幂覆盖与 Adams--Norm 折叠门：尺度交换律、缺陷搬运与 Jensen 显影}\label{subsec:cdim-adams-norm-folding-jensen}
+附录 \ref{subsec:unit-disk-jensen-defect} 将“开圆盘内无零点”进一步压缩为 Jensen 缺陷族 \(D_{\zeta}(\varrho)\)（定义 \ref{def:app-jensen-defect}），并给出“单零点 \(\Rightarrow\) 正缺陷”的刚性下界（命题 \ref{prop:app-jensen-single-zero-lower-bound}）。
+然而离切片点状缺陷在 Cayley--Busemann 压缩下会被推入端点边界层，使得任何固定半径采样族存在制度性的盲区（推论 \ref{cor:app-jensen-finite-sampling-blindspot}）。
+
+为在固定切片制度中把端点边界层的径向不可见性搬运为可审计的尺度参数，引入幂覆盖 \(\pi_m(\omega)=\omega^m\) 及其 Adams--Norm 折叠门 \(\mathrm{Nm}_m\)（定义 \ref{def:xi-adams-norm-fold}）。
+该折叠门将覆盖纤维上的分支自由度乘积对称化，从而把盘内零点严格搬运为半径幂次缩放后的零点（定理 \ref{thm:xi-adams-norm-zero-transport}）：若 \(F_\zeta(w_\rho)=0\)，则 \(\mathrm{Nm}_m[F_\zeta](w_\rho^m)=0\)。
+因此，对任意目标子盘半径 \(r_\star\in(0,1)\) 可取显式尺度阈值 \(m_\star\) 使 \(|w_\rho|^{m_\star}\le r_\star\)（见 \eqref{eq:xi-adams-norm-mstar-def}--\eqref{eq:xi-adams-norm-mstar-radius}），并在任意固定 \(R\in(r_\star,1)\) 处得到高度无关的 Jensen 正缺陷下界
+\[
+D_{\mathrm{Nm}_{m_\star}[F_\zeta]}(R)\ \ge\ \log\!\frac{R}{r_\star}\ >\ 0
+\]
+（推论 \ref{cor:xi-adams-norm-fixed-radius-jensen-certificate}）。
+该结论提供了一个制度内可审计的交换机制：二次径向压缩把离切片信息压入端点边界层，而幂覆盖/折叠门以尺度参数将端点缺陷解压到固定半径并以 Jensen 缺陷显影。
+
+\subsection{端点重整化的二元正交分解：普适 \texorpdfstring{$\zeta$}{zeta}-极与离散 \texorpdfstring{$\chi_4$}{chi4} 本征残余}\label{subsec:cdim-endpoint-renorm-zeta-chi4}
+在完成化迹坐标 \(S=r+r^{-1}\) 下，反演不变部分严格下降为 \(\ZZ[S]\)，使端点 \(u=-1\) 的可见信息在偶通道退化为三态集合（推论 \ref{cor:endpoint-tristate-compression}）。
+为恢复端点分支的 \(\ZZ/4\) 记忆，需要引入最小的反演反变纤维坐标 \(\delta=r-r^{-1}\)，并用奇 Chebyshev--Adams 伴随族 \(D_d(S,\delta)=r^{d}-r^{-d}\) 生成端点反变通道（备注 \ref{rem:endpoint-inv-antiinv-min-closure}）。
+
+命题 \ref{prop:endpoint-odd-chebyshev-identity} 给出恒等式 \(D_d(S,\delta)=\delta\,U_{d-1}(S/2)\)，从而在端点分支 \(r=\pm \mathrm{i}\)（\(S=0\)）上得到离散指标 \(\varepsilon(d)=U_{d-1}(0)=\sin(d\pi/2)\)，并与模 \(4\) 的非平凡 Dirichlet 角色 \(\chi_4\) 严格一致（定理 \ref{thm:endpoint-four-channel-chi4}）。
+因此端点的有限分支记忆可由纯离散通道承载，并与端点深度账本的连续对数负载保持正交解耦。
+更精确地，在端点符号口径下，偶通道的全部发散仅由 \(\zeta(1+\sigma)\) 的普适极控制，而反变通道在 \(\sigma\downarrow 0\) 处解析并塌缩为常数 \(L(1,\chi_4)=\pi/4\)；
+二者合并为“普适 \(\zeta\)-极 \(\oplus\) 离散 \(\chi_4\) 本征残余”的二元正交分解（备注 \ref{rem:endpoint-renormalization-universal-pole-discrete-hair}）。
+
+\subsection{双底叠加的去周期化：不可公度尺度摧毁严格虚周期}\label{subsec:cdim-two-base-deperiodization}
+单尺度 Dirichlet 化在结构上强制严格虚周期，并把零点/极点集合压缩为有限条等差竖线簇（命题 \ref{prop:xi-single-scale-completed-zero-count-leading-constant}）。
+该梳齿刚性可由最小的多尺度叠加机制破坏：若取 \(L_1,L_2>1\) 且 \(\log L_1/\log L_2\notin\QQ\)，并假设 \(g,h\) 不具任何非平凡单位根乘法不变性，则
+\[
+f(s):=g(L_1^{-s})+h(L_2^{-s})
+\]
+不存在任何非零纯虚周期 \(T\in i\RR\setminus\{0\}\)（定理 \ref{thm:xi-two-base-deperiodization-no-imag-period}）。
+因此，两不可公度尺度已足以在制度层面摧毁“有限竖向晶格”的严格周期对称，从而为后续连续尺度混合与绝对连续谱型的出现奠定最小离散去周期化基础。
+
+\subsection{尺度 Mellin 叠加完成化：连续底混合保持函数方程与临界线实值性}\label{subsec:cdim-scale-mellin-superposition}
+在自对偶条件下，单底完成化族 \(\{\Xi_{\Delta,L}\}_{L>1}\) 对每个 \(L\) 都满足严格函数方程与 Hardy 型临界线实值性。
+据此，可将 \(L\) 视为连续尺度参数并作 Mellin 型叠加：对实值权函数 \(w\) 定义尺度叠加完成化
+\[
+\mathcal X_{\Delta,w}(s)
+:=\int_{1}^{\infty} w(\log L)\,\Xi_{\Delta,L}(s)\,\frac{dL}{L}
+=\int_{0}^{\infty} w(x)\,\Delta\!\bigl(e^{-sx},e^{(2s-1)x}\bigr)\,dx
+\]
+（定义 \ref{def:xi-scale-mellin-superposition}）。
+该混合保持严格对称性与临界线实值性：
+\[
+\mathcal X_{\Delta,w}(s)=\mathcal X_{\Delta,w}(1-s),
+\qquad
+\mathcal X_{\Delta,w}\!\left(\tfrac12+it\right)\in\RR
+\]
+（命题 \ref{prop:xi-scale-mellin-fe-real}）。
+因此连续底混合在不破坏“自对偶—临界线实值”制度的前提下，引入可控的尺度积分自由度以打破单尺度梳齿刚性（备注 \ref{rem:xi-scale-mellin-break-lattice}）。
+
+\subsection{单尺度梳齿的二点统计极限：有限平移 Dirac 梳齿与相位偏移集合}\label{subsec:cdim-single-scale-comb-two-point}
+设 \(L>1\) 固定，零点多重集 \(\mathcal Z\) 由有限多条等差竖线塔组成，其基本虚步长为 \(\Delta_t(L)=2\pi/\log L\)（命题 \ref{prop:xi-single-scale-completed-zero-count-leading-constant}）。
+在该结构下，归一化二点统计
+\[
+\mathcal R_T(\psi)
+:=\frac{1}{N_{\Xi}(T)}
+\sum_{\substack{s,s'\in\mathcal Z\\ |\Im(s)|,|\Im(s')|\le T}}
+\psi\!\left(\frac{\Im(s)-\Im(s')}{\Delta_t(L)}\right),
+\qquad \psi\in C_c(\RR),
+\]
+在 \(T\to\infty\) 下收敛到有限个平移 Dirac 梳齿的线性组合：存在有限集 \(A\subset[0,1)\) 与非负权重 \(w_a\) 使
+\[
+\lim_{T\to\infty}\mathcal R_T(\psi)=\sum_{a\in A} w_a \sum_{n\in\ZZ}\psi(n+a)
+\]
+（命题 \ref{prop:xi-single-scale-two-point-correlation-comb}）。
+该极限把“有限条竖线塔”的相位偏移差集合制度化为有限可审计对象：它既刻画了单尺度梳齿谱型的纯点相关退化，也为去周期化与连续化机制提供了对照基准。
+
+\subsection{有理主弧 Gram 核的谱化闭包：幅度平方恒等式、尺度自举与有限验证}\label{subsec:cdim-gram-spectral-closure}
+本章对有理主弧 Gram 核的可审计闭包由三条互补接口组成：幅度平方恒等式（命题 \ref{prop:conclusion66-gram-ramanujan-decomposition}）、尺度自举（定理 \ref{thm:conclusion67-scale-bootstrap}）与有限验证（定理 \ref{thm:conclusion68-finite-verification}）。
+其中幅度平方恒等式将谱范数主贡献精确定位到低频段的 Ramanujan 相关性；而尺度自举与有限验证把统一谱隙的全尺度结论严格降解为有限可核验任务并实现尺度传播。
+三者在正文层面分别由 \S\ref{subsec:cdim-rational-major-arc-gram} 与 \S\ref{subsec:cdim-scale-bootstrap-finite-verification} 给出，并在 \S\ref{subsec:cdim-certificate-interface-closure} 中以最小接口表封装。
+
+\input{subsec__circle-dimension-phase-gate-fibonacci-poisson-kl-rh-discretization}
+
+\input{subsec__circle-dimension-phase-gate-audit-chain}
+
+\input{subsec__circle-dimension-phase-gate-s4-hurwitz-nielsen-double-discriminant}
+\input{subsec__circle-dimension-phase-gate-s4-v4-fixedfield-resolvent-prym}
+\input{subsec__circle-dimension-phase-gate-s4-a4-v4-etale-prym-splitting}
+
+\input{subsec__circle-dimension-phase-gate-closed-loop-theorem}
+
+\subsection{证书接口的最小闭包：从相位门到统一谱隙审计}\label{subsec:cdim-certificate-interface-closure}
+为便于后续章节直接调用，本章在相位门之上形成的证书接口可压缩为如下闭包集合：
+\begin{enumerate}
+  \item \textbf{相位 Fourier 与有理基底：}式 \eqref{eq:unit-circle-phase-fourier-coeff}--\eqref{eq:unit-circle-phase-fourier-reconstruct}；
+  \item \textbf{有限模态 Hardy 投影：}核 \eqref{eq:unit-circle-phase-hardy-kernel}、分母化简 \eqref{eq:unit-circle-phase-hardy-kernel-denominator} 与投影表示（命题 \ref{prop:unit-circle-phase-hardy-kernel-rational}）；
+  \item \textbf{证书语义与离线验证器约定：}有限数据证书、固定网格与区间算术输入格式（定义 \ref{def:cdim-finite-data-certificate-offline-verifier}，\S\ref{subsec:cdim-certificate-semantics-offline-verifier-conventions}）；
+  \item \textbf{有理主弧 Gram 的分母层分解：}命题 \ref{prop:conclusion66-gram-ramanujan-decomposition}；
+  \item \textbf{尺度自举：}定理 \ref{thm:conclusion67-scale-bootstrap}；
+  \item \textbf{有限验证：}定理 \ref{thm:conclusion68-finite-verification}；
+  \item \textbf{Farey 采样连续化：}定理 \ref{thm:gm-farey-sampling-operator-limit} 与尺度相态命题 \ref{prop:gm-farey-tau-spectral-phases}；
+  \item \textbf{Jensen 缺陷与固定半径显影：}Jensen 求和式 \eqref{eq:app-jensen-sum} 与 Adams--Norm 折叠门的固定半径缺陷证书（推论 \ref{cor:xi-adams-norm-fixed-radius-jensen-certificate}）；
+  \item \textbf{端点二元正交残余：}普适 \(\zeta\)-极与离散 \(\chi_4\) 本征通道的正交分解（备注 \ref{rem:endpoint-renormalization-universal-pole-discrete-hair}，定理 \ref{thm:endpoint-four-channel-chi4}）；
+  \item \textbf{去周期化与连续尺度混合：}双底去周期化定理 \ref{thm:xi-two-base-deperiodization-no-imag-period} 与尺度 Mellin 叠加完成化（定义 \ref{def:xi-scale-mellin-superposition}，命题 \ref{prop:xi-scale-mellin-fe-real}）；
+  \item \textbf{单尺度梳齿相关基准：}二点统计极限为有限平移 Dirac 梳齿（命题 \ref{prop:xi-single-scale-two-point-correlation-comb}）。
+  \item \textbf{Euler 乘积的算子分解：}端点尺度链算子 \(\mathcal{K}\) 的素数生成元分解 \eqref{eq:cdim-euler-operator-factorization}；
+  \item \textbf{Mellin 幺正切片唯一性：}等距读出仅允许 \(\Re(s)=\tfrac12\)（定理 \ref{thm:mellin-unitary-slice-unique} 与式 \eqref{eq:mellin-sigma-weight-twist}）；
+  \item \textbf{反演对偶与视界缺陷链：}反演对偶 \(J\) 的谱侧共轭退化（命题 \ref{prop:cdim-mellin-inversion-duality}），Jensen 缺陷的单标量 RH 判据（定理 \ref{thm:cdim-horizon-purity-criterion}），以及排斥半径 \(r_\ast(\varrho)=\varrho e^{-D_{\zeta}(\varrho)}\) 的禁入证书与对数半径导数律（定理 \ref{thm:cdim-defect-repulsion-radius}，命题 \ref{prop:cdim-jensen-defect-log-derivative}）。
+  \item \textbf{闭环定理与双证书语言：}等距切片纪律、缺陷趋零/排斥半径序列证书与 Toeplitz--PSD 层级（含共终端稀疏化）的完全等价（定理 \ref{thm:cdim-closed-loop-unitary-horizon-repulsion-toeplitz}，定理 \ref{thm:app-horizon-toeplitz-lmi}，定理 \ref{thm:xi-toeplitz-psd-cofinal-sparsification}）；
+  \item \textbf{时间纤维与端点压缩：}缺陷的上半平面圆平均表示与 \texorpdfstring{$|w|=\varrho$}{|w|=varrho} 的 Cayley 逆像圆（命题 \ref{prop:app-jensen-defect-upperhalf-circle-average}、命题 \ref{prop:app-cayley-preimage-modulus-circle}），以及端点角窗局部化/双端触及（推论 \ref{cor:app-jensen-endpoint-localization}，定理 \ref{thm:dephys-timefiber-two-ended}）；
+  \item \textbf{扩展保存的规范记录轴：}\(\mathrm{Ext}(\pi)\) 范畴与初对象 \(r_0\)（定义 \ref{def:xi-extension-preserving-category}，定理 \ref{thm:xi-extension-preserving-initial-object}）及唯一连续横截方向（推论 \ref{cor:xi-unique-continuous-transverse-register}）；并由最小记录轴定理（定理 \ref{thm:cdim-minimal-record-axis}）与规格表（表 \ref{tab:cdim-certificate-register-spec}）给出可直接调用的寄存器接口；
+  \item \textbf{对数 Sobolev--Gross 证书：}混合强度 \(\alpha\) 控制临界线束缚带（命题 \ref{prop:op-algebra-logsobolev-zero-band}）；
+  \item \textbf{相位前缀与二次分辨率屏障：}dyadic 前缀过滤与端点二次压缩下界（定理 \ref{thm:xi-phase-prefix-collision-lower-bound}、推论 \ref{cor:xi-compactified-spacing-quadratic}、定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}）；
+  \item \textbf{Riemann--Siegel--Gabcke 层级零点区间证书：}层级截断诱导的零点区间认证、紧化坐标二次增益与余项阶的比特增益律（定理 \ref{thm:cdim-rs-gabcke-local-zero-stability}，推论 \ref{cor:cdim-rs-gabcke-compactified-quadratic-gain}，定理 \ref{thm:cdim-rs-gabcke-bit-gain}）；
+  \item \textbf{对称近似函数方程的后验实部约束：}截断比率不等式与收缩吸引子判据（定理 \ref{thm:cdim-afe-posterior-sigma-constraint}，定理 \ref{thm:cdim-afe-contraction-attractor}；\S\ref{subsec:cdim-afe-posterior-sigma-contraction}）；
+  \item \textbf{Poisson--Cauchy 常数与剖面证书：}高阶 Fisher--能量闭式常数（命题 \ref{prop:cdim-cauchy-kernel-higher-order-fisher-energy}）与矩匹配相对熵主项（命题 \ref{prop:cdim-poisson-kl-moment-matching-leading-term}）；全变差与相对熵的高阶校正项、耗散次主常数与二散度矩层析反演（命题 \ref{prop:cdim-poisson-tv-fourth-order-correction}、命题 \ref{prop:cdim-poisson-kl-sixth-order-correction}、命题 \ref{prop:cdim-poisson-fdiv-sixth-order-correction}、推论 \ref{cor:cdim-poisson-kl-dissipation-seventh-order-correction}、命题 \ref{prop:cdim-poisson-kl-sixth-order-coefficient-negative}、命题 \ref{prop:cdim-poisson-two-divergence-moment-tomography}、推论 \ref{cor:cdim-poisson-normalized-kl-eventual-monotone}）；中心单点剖面的 Stieltjes 可识别性与中心对称化刻画（命题 \ref{prop:cdim-poisson-central-slice-stieltjes-identifiability}、推论 \ref{cor:cdim-poisson-central-slice-kernel}）及方差的单调下界序列（命题 \ref{prop:cdim-poisson-variance-monotone-lower-bound}）；并由高阶导数 Gram 闭式与指数生成核（命题 \ref{prop:cdim-cauchy-kernel-derivative-gram-closed-form}、命题 \ref{prop:cdim-cauchy-derivative-gram-exponential-kernel}）将全矩差的相对熵二次主项核化为差核能量并给出谱表示（命题 \ref{prop:cdim-poisson-kl-all-moment-quadratic-form}、命题 \ref{prop:cdim-poisson-kl-quadratic-form-spectral}）；中心双通道读出唯一重构全分布，且任意 \texorpdfstring{$t$}{t}-开区间的双通道数据已足以确定整测度（命题 \ref{prop:cdim-poisson-central-two-channel-reconstruction}、推论 \ref{cor:cdim-poisson-central-two-channel-local-uniqueness}）；差核 \(\frac{2}{4+(a-b)^2}\) 具有显式 RKHS 特征映射与 Mercer 展开，并由 Laguerre--Parseval 正交分解给出离散截断证书与最优 \(N\)-项逼近律（命题 \ref{prop:cdim-kernel-rkhs-feature-map}、命题 \ref{prop:cdim-kernel-mercer-rational-basis}、命题 \ref{prop:cdim-kernel-energy-laguerre-parseval}、命题 \ref{prop:cdim-kernel-energy-best-nterm}；并见奇指标 Gram 主子式的 \(2\)-进赋值命题 \ref{prop:cdim-kernel-odd-gram-v2-determinant}）；此外给出仿射复合的尺度二分律、最大条带延拓与整数采样的精确 Riesz 界等离散化接口（命题 \ref{prop:cdim-kernel-affine-composition-norm}--\ref{prop:cdim-kernel-gram-convolution-spectrum}）。
+  \item \textbf{体积常数闭包：}\(\log(2/\pi)\) 与 \(SU(2)\) Weyl 推前归一化常数同一性（推论 \ref{cor:zigzag-entropy-su2-weyl-constant}，备注 \ref{rem:phase-gate-volume-constants-closure}）。
+  \item \textbf{Hurwitz/Nielsen 离散证书：}\(S_4\) 护照 \((4)(2)^5\) 的 Hurwitz--共轭单轨道性、绝对 Nielsen 类覆盖度 \(160\)，以及双判别同步特例下相邻整点有理分歧与 Lee--Yang 三次核的平移闭包（\S\ref{subsec:cdim-s4-hurwitz-nielsen-double-discriminant}）。
+  \item \textbf{三轴地址与编译协议：}多轴前缀地址（定义 \ref{def:multi_axis_address}）、\(\mathsf{NULL}\) 的站点判据 \(F(a)\neq\varnothing\)（命题 \ref{prop:cdim-nonnull-section-criterion}）与离线编译—核验流程（算法 \ref{alg:cdim-three-axis-address-compile}）。
+\end{enumerate}
+上述接口层的共同作用是：在相位门的可逆压缩之上，把无限对象的关键可分辨结构制度性压缩为有限可审计数据（模态、核、谱范数与有限检查集），并与残差寄存器纪律共同形成后续审计链条的最小可复用闭包。
+
+\endinput
+

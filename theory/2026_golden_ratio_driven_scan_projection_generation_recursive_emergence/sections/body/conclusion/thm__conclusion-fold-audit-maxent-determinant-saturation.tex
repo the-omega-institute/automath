@@ -1,0 +1,430 @@
+\begin{theorem}[纤维均匀提升是唯一的最大熵截面]\label{thm:conclusion-fold-audit-maxent-section-uniqueness}
+固定分辨率 \(m\ge 1\)。对任意宏观分布 \(\nu\in\Delta(X_m)\)，定义其 lift 多面体
+\[
+\mathcal L_m(\nu):=
+\{\mu\in\Delta(\Omega_m):P_m\mu=\nu\}.
+\]
+则 \(Q_m\nu\) 是 \(\mathcal L_m(\nu)\) 上 Shannon 熵的唯一极大元。更精确地，若记
+\[
+\Gamma_m(\nu):=\mathbb E_\nu[\log d_m(X)],
+\]
+则有
+\[
+H(Q_m\nu)=H(\nu)+\Gamma_m(\nu),
+\]
+并且对任意 \(\mu\in\mathcal L_m(\nu)\)，
+\[
+H(Q_m\nu)-H(\mu)
+=
+\sum_{x\in X_m}\nu(x)\Bigl(\log d_m(x)-H(\mu(\,\cdot\,|x))\Bigr)\ge 0.
+\]
+等号成立当且仅当 \(\mu(\,\cdot\,|x)\) 在每条纤维 \(\Fold_m^{-1}(x)\) 上均为均匀分布。
+\end{theorem}
+\begin{proof}
+把任意 \(\mu\in\mathcal L_m(\nu)\) 按纤维分解为
+\[
+\mu(a)=\nu(x)\,\mu_x(a)\qquad (a\in \Fold_m^{-1}(x)),
+\]
+其中 \(\mu_x\in\Delta(\Fold_m^{-1}(x))\)。由熵的链式分解，
+\[
+H(\mu)=H(\nu)+\sum_{x\in X_m}\nu(x)H(\mu_x).
+\]
+另一方面，\(Q_m\nu\) 在每条纤维 \(\Fold_m^{-1}(x)\) 上恰为均匀分布，故
+\[
+H(Q_m\nu)
+=
+H(\nu)+\sum_{x\in X_m}\nu(x)\log d_m(x)
+=
+H(\nu)+\Gamma_m(\nu).
+\]
+两式相减即得
+\[
+H(Q_m\nu)-H(\mu)
+=
+\sum_{x\in X_m}\nu(x)\Bigl(\log d_m(x)-H(\mu_x)\Bigr).
+\]
+由于有限集上熵在均匀分布处唯一取极大，故对每个 \(x\) 都有
+\[
+H(\mu_x)\le \log d_m(x),
+\]
+且等号当且仅当 \(\mu_x\) 为该纤维上的均匀分布。于是结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[Fold 审计的精确 KL--Pythagoras 分解]\label{thm:conclusion-fold-audit-kl-pythagoras}
+对任意 \(\mu\in\Delta(\Omega_m)\) 与任意 \(\nu\in\Delta(X_m)\)，有严格恒等式
+\[
+D(\mu\|Q_m\nu)
+=
+D(P_m\mu\|\nu)+D(\mu\|Q_mP_m\mu).
+\]
+特别地，
+\[
+D(\mu\|Q_mP_m\mu)=H(Q_mP_m\mu)-H(\mu),
+\]
+并且
+\[
+D(\mu\|Q_mP_m\mu)
+=
+\sum_{x\in X_m}(P_m\mu)(x)\Bigl(\log d_m(x)-H(\mu(\,\cdot\,|x))\Bigr).
+\]
+\end{theorem}
+\begin{proof}
+记 \(\mu^\flat:=P_m\mu\in\Delta(X_m)\)，并把 \(\mu\) 的纤维条件分布记为 \(\mu_x:=\mu(\,\cdot\,|x)\)。对任意 \(a\in\Fold_m^{-1}(x)\)，由 \(Q_m\) 的定义有
+\[
+(Q_m\nu)(a)=\frac{\nu(x)}{d_m(x)},
+\qquad
+(Q_m\mu^\flat)(a)=\frac{\mu^\flat(x)}{d_m(x)}.
+\]
+于是
+\[
+\begin{aligned}
+D(\mu\|Q_m\nu)
+&=
+\sum_{x\in X_m}\sum_{a\in\Fold_m^{-1}(x)}
+\mu(a)\log\frac{\mu(a)}{\nu(x)/d_m(x)}\\
+&=
+\sum_{x\in X_m}\mu^\flat(x)\log\frac{\mu^\flat(x)}{\nu(x)}
++\sum_{x\in X_m}\mu^\flat(x)
+\sum_{a\in\Fold_m^{-1}(x)}\mu_x(a)\log\frac{\mu_x(a)}{1/d_m(x)}.
+\end{aligned}
+\]
+第一项正是 \(D(\mu^\flat\|\nu)\)，第二项正是 \(D(\mu\|Q_m\mu^\flat)\)，故
+\[
+D(\mu\|Q_m\nu)=D(P_m\mu\|\nu)+D(\mu\|Q_mP_m\mu).
+\]
+取 \(\nu=P_m\mu\) 即得第一条特别公式。
+
+再由上一条定理对 \(\nu=P_m\mu\) 的最大熵截面结论，
+\[
+H(Q_mP_m\mu)-H(\mu)
+=
+\sum_{x\in X_m}(P_m\mu)(x)\Bigl(\log d_m(x)-H(\mu_x)\Bigr),
+\]
+而右端与上式第二项完全相同，故
+\[
+D(\mu\|Q_mP_m\mu)=H(Q_mP_m\mu)-H(\mu),
+\]
+并得最后一个显式展开式。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$K_m=Q_mP_m$}{Km=QmPm} 是全部审计幂等中的普适 KL 极小元]\label{thm:conclusion-fold-audit-universal-kl-minimal-idempotent}
+记
+\[
+\mathfrak R_m:=
+\{\,Q_m\kappa P_m:\ \kappa:\Delta(X_m)\to\Delta(X_m)\ \text{为仿射幂等}\,\}.
+\]
+则对任意 \(w_m=Q_m\kappa P_m\in\mathfrak R_m\) 与任意 \(\mu\in\Delta(\Omega_m)\)，有
+\[
+D(\mu\|w_m\mu)
+=
+D(P_m\mu\|\kappa P_m\mu)+D(\mu\|K_m\mu)
+\ge
+D(\mu\|K_m\mu).
+\]
+因而 \(K_m\) 具有如下普适极小性质：它是 \(\mathfrak R_m\) 中唯一一个对所有微观分布 \(\mu\) 都达到最小 KL 损失的幂等元。
+\end{theorem}
+\begin{proof}
+对任意 \(\mu\in\Delta(\Omega_m)\)，令 \(\mu^\flat:=P_m\mu\)。对
+\[
+w_m\mu=Q_m\kappa\mu^\flat
+\]
+应用定理 \ref{thm:conclusion-fold-audit-kl-pythagoras}，取 \(\nu=\kappa\mu^\flat\)，便得
+\[
+D(\mu\|w_m\mu)
+=
+D(\mu^\flat\|\kappa\mu^\flat)+D(\mu\|Q_m\mu^\flat).
+\]
+由于 \(Q_m\mu^\flat=Q_mP_m\mu=K_m\mu\)，故
+\[
+D(\mu\|w_m\mu)
+=
+D(P_m\mu\|\kappa P_m\mu)+D(\mu\|K_m\mu)
+\ge
+D(\mu\|K_m\mu).
+\]
+这证明了普适下界。
+
+若某个 \(w_m=Q_m\kappa P_m\) 对所有 \(\mu\) 都与 \(K_m\) 取得相同损失，则上式中第一项必须对所有 \(\mu\) 恒为零，即
+\[
+D(P_m\mu\|\kappa P_m\mu)=0\qquad (\forall \mu\in\Delta(\Omega_m)).
+\]
+而 \(P_m:\Delta(\Omega_m)\twoheadrightarrow \Delta(X_m)\) 为满射，遂等价于
+\[
+D(\nu\|\kappa\nu)=0\qquad (\forall \nu\in\Delta(X_m)).
+\]
+因此 \(\kappa\nu=\nu\) 对所有 \(\nu\) 成立，即 \(\kappa=\mathrm{id}_{\Delta(X_m)}\)。于是
+\[
+w_m=Q_mP_m=K_m.
+\]
+唯一性得证。证毕。
+\end{proof}
+
+\begin{theorem}[均匀审计律的行列式熵缺口与算术--几何均值恒等式]\label{thm:conclusion-fold-audit-uniform-law-agm-gap}
+记
+\[
+u_m^X:=\mathrm{Unif}(X_m),\qquad
+u_m^\Omega:=\mathrm{Unif}(\Omega_m),\qquad
+\widetilde u_m:=Q_m u_m^X.
+\]
+则有
+\[
+H(\widetilde u_m)
+=
+\log|X_m|
++
+\frac{1}{|X_m|}\sum_{x\in X_m}\log d_m(x),
+\]
+从而借助行列式势
+\[
+Z_m(t):=\det(I+t\mathcal F_m)=\prod_{x\in X_m}(1+t\,d_m(x)),
+\]
+得到
+\[
+H(\widetilde u_m)
+=
+\log|X_m|
++
+\frac{1}{|X_m|}
+\lim_{t\to\infty}\Bigl(\log Z_m(t)-|X_m|\log t\Bigr).
+\]
+进一步，
+\[
+D(\widetilde u_m\|u_m^\Omega)
+=
+\log\frac{\frac1{|X_m|}\sum_{x\in X_m}d_m(x)}
+{\left(\prod_{x\in X_m}d_m(x)\right)^{1/|X_m|}}.
+\]
+亦即，\(\widetilde u_m\) 到全微观均匀律的相对熵，精确等于纤维多重度谱的算术--几何均值缺口。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-fold-audit-maxent-section-uniqueness} 对 \(\nu=u_m^X\) 的应用，
+\[
+H(\widetilde u_m)
+=
+H(u_m^X)+\mathbb E_{u_m^X}[\log d_m(X)]
+=
+\log|X_m|+\frac1{|X_m|}\sum_{x\in X_m}\log d_m(x).
+\]
+又由附录中行列式势的高温端读出公式，
+\[
+\lim_{t\to\infty}\Bigl(\log Z_m(t)-|X_m|\log t\Bigr)
+=
+\sum_{x\in X_m}\log d_m(x),
+\]
+故第二式立即成立。
+
+再因 \(u_m^\Omega(a)=2^{-m}\)，有
+\[
+D(\widetilde u_m\|u_m^\Omega)=m\log 2-H(\widetilde u_m).
+\]
+把上一式代入，并用
+\[
+\sum_{x\in X_m}d_m(x)=|\Omega_m|=2^m
+\]
+化简，得到
+\[
+\begin{aligned}
+D(\widetilde u_m\|u_m^\Omega)
+&=
+\log\frac{2^m/|X_m|}
+{\exp\bigl(\frac1{|X_m|}\sum_x\log d_m(x)\bigr)}\\
+&=
+\log\frac{\frac1{|X_m|}\sum_x d_m(x)}
+{\left(\prod_x d_m(x)\right)^{1/|X_m|}}.
+\end{aligned}
+\]
+这正是所述算术--几何均值缺口。证毕。
+\end{proof}
+
+\begin{theorem}[临界可见证书率是同一行列式势的端点缺口]\label{thm:conclusion-fold-audit-visible-witness-determinant-endpoint-gap}
+记 multiplicity determinant
+\[
+Z_m(t):=\det(I+t\mathcal F_m),
+\qquad
+\mathcal F_m:=(E_mE_m^\ast)^{-1}.
+\]
+则临界可见证书率
+\[
+r_\varphi=\log_2\frac{2}{\varphi}
+\]
+可严格重写为
+\[
+r_\varphi=
+\lim_{m\to\infty}
+\frac1m
+\log_2
+\frac{Z_m'(0)}
+{\displaystyle \lim_{t\to\infty}\frac{\dd}{\dd(\log t)}\log Z_m(t)}.
+\]
+等价地，
+\[
+r_\varphi=
+\lim_{m\to\infty}
+\frac1m\log_2\frac{\operatorname{Tr}(\mathcal F_m)}{\operatorname{rank}(K_m)}.
+\]
+\end{theorem}
+\begin{proof}
+由行列式势的两端读出，
+\[
+Z_m'(0)=\operatorname{Tr}(\mathcal F_m)=\sum_{x\in X_m}d_m(x)=2^m,
+\]
+且
+\[
+\lim_{t\to\infty}\frac{\dd}{\dd(\log t)}\log Z_m(t)=|X_m|=F_{m+2}.
+\]
+故
+\[
+\frac{Z_m'(0)}
+{\displaystyle \lim_{t\to\infty}\frac{\dd}{\dd(\log t)}\log Z_m(t)}
+=
+\frac{2^m}{F_{m+2}}.
+\]
+对其取 \(\frac1m\log_2\) 并用 Binet 公式
+\[
+F_{m+2}=\frac{\varphi^{m+2}-(-\varphi^{-1})^{m+2}}{\sqrt5}
+=
+\varphi^m\cdot\frac{\varphi^2+o(1)}{\sqrt5},
+\]
+即得
+\[
+\lim_{m\to\infty}\frac1m\log_2\frac{2^m}{F_{m+2}}
+=
+1-\log_2\varphi
+=
+\log_2\frac2\varphi
+=
+r_\varphi.
+\]
+
+另一方面，由 \(\operatorname{Tr}(\mathcal F_m)=2^m\) 以及纤维反射子 \(K_m\) 的像空间维数等于 \(|X_m|\)，即
+\[
+\operatorname{rank}(K_m)=|X_m|=F_{m+2},
+\]
+可得第二式。证毕。
+\end{proof}
+
+\begin{theorem}[投影词演算在一次折叠后已饱和]\label{thm:conclusion-fold-audit-onefold-saturation}
+在附录 A.5 的投影词演算中，定义观察侧与分布侧经由审计层因子化的一切幂等分别为
+\[
+\mathfrak I_m^{\mathrm{obs}}
+:=
+\{\,\iota_m\beta E_m:\ \beta^2=\beta\in \operatorname{End}(\mathcal B_m)\,\}
+\cup
+\{\mathrm{id}_{\mathcal A_m}\},
+\]
+\[
+\mathfrak I_m^{\mathrm{mea}}
+:=
+\{\,Q_m\alpha P_m:\ \alpha^2=\alpha\in \operatorname{End}(\mathbb R^{X_m})\,\}
+\cup
+\{\mathrm{id}_{\mathbb R^{\Omega_m}}\}.
+\]
+则对每个非恒等幂等
+\[
+w_m\in \mathfrak I_m^{\mathrm{obs}}\cup \mathfrak I_m^{\mathrm{mea}},
+\]
+均有
+\[
+\operatorname{rank}(w_m)\le |X_m|=F_{m+2},
+\]
+且等号成立当且仅当
+\[
+w_m=\Pi_m=\iota_mE_m
+\qquad\text{或}\qquad
+w_m=K_m=Q_mP_m.
+\]
+因此，对任意满足 \(\operatorname{rank}(w_m)\ge 1\) 的此类幂等族 \((w_m)\)，必有
+\[
+\liminf_{m\to\infty}
+\frac1m\log_2\frac{2^m}{\operatorname{rank}(w_m)}
+\ge r_\varphi.
+\]
+\end{theorem}
+\begin{proof}
+由投影词正规形定理，观察侧任意非恒等幂等都可写成
+\[
+w_m=\iota_m\beta E_m
+\qquad (\beta^2=\beta\in\operatorname{End}(\mathcal B_m)).
+\]
+由于 \(E_m:\mathcal A_m\twoheadrightarrow \mathcal B_m\) 为满射且 \(\iota_m:\mathcal B_m\hookrightarrow \mathcal A_m\) 为单射，故
+\[
+\operatorname{rank}(w_m)=\operatorname{rank}(\beta)\le \dim\mathcal B_m=|X_m|.
+\]
+若达到等号，则 \(\beta\) 为 \(\mathcal B_m\) 上满秩幂等，故必为恒等，从而
+\[
+w_m=\iota_mE_m=\Pi_m.
+\]
+
+分布侧同理，任意非恒等幂等都可写成
+\[
+w_m=Q_m\alpha P_m
+\qquad (\alpha^2=\alpha\in\operatorname{End}(\mathbb R^{X_m})).
+\]
+由 \(P_m:\mathbb R^{\Omega_m}\twoheadrightarrow \mathbb R^{X_m}\) 为满射且 \(Q_m:\mathbb R^{X_m}\hookrightarrow \mathbb R^{\Omega_m}\) 为单射，得
+\[
+\operatorname{rank}(w_m)=\operatorname{rank}(\alpha)\le |X_m|.
+\]
+若达到等号，则 \(\alpha\) 为 \(\mathbb R^{X_m}\) 上满秩幂等，故 \(\alpha=\mathrm{id}\)，于是
+\[
+w_m=Q_mP_m=K_m.
+\]
+
+因此对所有非恒等幂等都有
+\[
+\operatorname{rank}(w_m)\le F_{m+2}.
+\]
+于是
+\[
+\frac1m\log_2\frac{2^m}{\operatorname{rank}(w_m)}
+\ge
+\frac1m\log_2\frac{2^m}{F_{m+2}}.
+\]
+令 \(m\to\infty\) 并用上一定理，便得
+\[
+\liminf_{m\to\infty}
+\frac1m\log_2\frac{2^m}{\operatorname{rank}(w_m)}
+\ge
+r_\varphi.
+\]
+证毕。
+\end{proof}
+
+\begin{conjecture}[行列式熵律]\label{conj:conclusion-fold-audit-determinant-entropy-law}
+存在常数
+\[
+\delta_\ast\in\bigl(0,(\log 2)\,r_\varphi\bigr)
+\]
+使得
+\[
+D(\widetilde u_m\|u_m^\Omega)
+=
+\delta_\ast\,m+o(m).
+\]
+等价地，存在
+\[
+\gamma_\ast:=(\log 2)\,r_\varphi-\delta_\ast
+\]
+使
+\[
+\frac1{|X_m|}\sum_{x\in X_m}\log d_m(x)
+=
+\gamma_\ast\,m+o(m),
+\]
+亦即
+\[
+\lim_{m\to\infty}
+\frac{1}{m|X_m|}
+\lim_{t\to\infty}
+\Bigl(\log Z_m(t)-|X_m|\log t\Bigr)
+=
+\gamma_\ast.
+\]
+若该猜想成立，则 multiplicity determinant \(Z_m(t)\) 在高温端读出的平均对数纤维体积具有稳定线性斜率；于是端点缺口 \((\log 2)\,r_\varphi\) 将被严格分裂为
+\[
+(\log 2)\,r_\varphi
+=
+\underbrace{\gamma_\ast}_{\text{可由纤维几何保留的平均隐熵}}
++
+\underbrace{\delta_\ast}_{\text{任何均匀审计不可消去的线性信息损失}}.
+\]
+\end{conjecture}

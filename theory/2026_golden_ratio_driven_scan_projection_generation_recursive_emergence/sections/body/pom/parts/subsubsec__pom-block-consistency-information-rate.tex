@@ -1,0 +1,133 @@
+\subsubsection{块一致性信息率、分区细化单调性与 Schur--凹性不可实现判别}\label{subsubsec:pom-block-consistency-information-rate}
+本段在有限字母表上引入一种“块一致性”约束下的最小互信息代价，并给出三个与制度设计直接相关的结构性事实：约束问题可完全降维到块层，细化一致性只会增加互信息代价，而非平凡分区下该代价函数不可能具有 Schur--凹性（因其必然破坏全对称性）。
+
+\paragraph{块一致性信息率}
+设 \(X\) 为有限集合，\(\Delta(X)\) 为其概率单纯形。
+取一个非平凡划分 \(\mathcal P=\{B_1,\dots,B_m\}\)（\(m\ge 2\)），令块投影为
+\[
+\pi_{\mathcal P}:X\to[m],\qquad \pi_{\mathcal P}(x)=i\ \Longleftrightarrow\ x\in B_i.
+\]
+对任意 \(w\in\Delta(X)\) 与 \(\delta\in[0,1)\)，定义块一致性约束下的信息率
+\begin{equation}\label{eq:pom-block-consistency-information-rate}
+\boxed{\;
+R^{\mathcal P}_w(\delta)
+:=
+\inf\Bigl\{I(X;Y):\ P_X=P_Y=w,\ \mathbb{P}\bigl(\pi_{\mathcal P}(X)=\pi_{\mathcal P}(Y)\bigr)\ge 1-\delta\Bigr\}\; }.
+\end{equation}
+其中下确界取遍所有在同一概率空间上的耦合 \((X,Y)\)，互信息 \(I(X;Y)\) 以自然对数定义。
+记块分布 \(W:= (\pi_{\mathcal P})_* w\in\Delta([m])\)。
+
+\begin{theorem}[块化等价：块一致性信息率的完全降维]\label{thm:pom-block-consistency-rate-block-reduction}
+对任意 \((w,\delta)\) 都有
+\[
+R^{\mathcal P}_w(\delta)=R_W(\delta),
+\]
+其中 \(R_W(\delta)\) 为字母表 \([m]\) 上的“对角一致性”问题：
+\[
+R_W(\delta)
+:=
+\inf\Bigl\{I(U;V):\ P_U=P_V=W,\ \mathbb{P}(U=V)\ge 1-\delta\Bigr\}.
+\]
+并且存在最优耦合 \((X,Y)\) 具有如下结构：令 \((U,V):=(\pi_{\mathcal P}(X),\pi_{\mathcal P}(Y))\)，则在条件于 \((U=i,V=j)\) 时，
+\(X\) 与 \(Y\) 条件独立，且分别按 \(w\) 在 \(B_i,B_j\) 上的归一化限制分布抽样。
+\end{theorem}
+\begin{proof}
+对任意可行耦合 \((X,Y)\)，由数据处理不等式得
+\[
+I(X;Y)\ge I(\pi_{\mathcal P}(X);\pi_{\mathcal P}(Y))=I(U;V),
+\]
+且 \(\mathbb{P}(U=V)\ge 1-\delta\)，并且 \(P_U=P_V=W\)。
+故 \(R^{\mathcal P}_w(\delta)\ge R_W(\delta)\)。
+\par
+反向地，取任一块层可行耦合 \((U,V)\)（边缘为 \(W\)，且 \(\mathbb{P}(U=V)\ge 1-\delta\)）。
+在条件于 \((U=i,V=j)\) 时，令 \(X\) 与 \(Y\) 条件独立，且分别取分布
+\[
+P(X=x\mid U=i):=\frac{w(x)}{W_i}\ind_{x\in B_i},
+\qquad
+P(Y=y\mid V=j):=\frac{w(y)}{W_j}\ind_{y\in B_j}
+\]
+（约定 \(W_i=0\) 时对应条件事件零测而无需定义）。
+则 \(P_X=P_Y=w\)，且 \(\pi_{\mathcal P}(X)=U\)、\(\pi_{\mathcal P}(Y)=V\)，从而耦合满足块一致性约束。
+又由于 \(X\to U\) 与 \(Y\to V\) 为确定映射，且在给定 \((U,V)\) 后 \(X,Y\) 条件独立，
+\[
+I(X;Y)=I(U;V),
+\]
+故 \(R^{\mathcal P}_w(\delta)\le R_W(\delta)\)。
+合并即得结论，并给出所述最优结构。证毕。
+\end{proof}
+
+\begin{corollary}[阈值零化]\label{cor:pom-block-consistency-rate-threshold-zero}
+若 \(\delta\ge 1-\frac{1}{m}\)，则对所有 \(w\in\Delta(X)\) 恒有
+\[
+R^{\mathcal P}_w(\delta)=0.
+\]
+\end{corollary}
+\begin{proof}
+令 \(U,V\) 独立同分布为 \(W\)。
+由 Cauchy--Schwarz 不等式得
+\(
+\mathbb{P}(U=V)=\sum_{i=1}^{m}W_i^2\ge \frac{1}{m}
+\)。
+当 \(\delta\ge 1-\frac{1}{m}\) 时，独立耦合已满足 \(\mathbb{P}(U=V)\ge 1-\delta\)，且 \(I(U;V)=0\)，故 \(R_W(\delta)=0\)。
+再由定理 \ref{thm:pom-block-consistency-rate-block-reduction} 得 \(R^{\mathcal P}_w(\delta)=0\)。证毕。
+\end{proof}
+
+\begin{proposition}[分区细化的单调性]\label{prop:pom-block-consistency-rate-refinement-monotone}
+设 \(\mathcal P\preceq\mathcal Q\)（即 \(\mathcal P\) 为 \(\mathcal Q\) 的细化：任意 \(\mathcal P\)-块包含于某个 \(\mathcal Q\)-块）。
+则对任意 \(w\in\Delta(X)\)、\(\delta\in[0,1)\) 有
+\[
+R^{\mathcal P}_w(\delta)\ \ge\ R^{\mathcal Q}_w(\delta).
+\]
+\end{proposition}
+\begin{proof}
+任取耦合 \((X,Y)\) 满足 \(\mathbb{P}(\pi_{\mathcal P}(X)=\pi_{\mathcal P}(Y))\ge 1-\delta\)。
+由细化关系知“同 \(\mathcal P\)-块”蕴含“同 \(\mathcal Q\)-块”，故亦有
+\(\mathbb{P}(\pi_{\mathcal Q}(X)=\pi_{\mathcal Q}(Y))\ge 1-\delta\)。
+因此 \(\mathcal P\) 的可行耦合集合包含于 \(\mathcal Q\) 的可行耦合集合，取互信息下确界即得不等式。证毕。
+\end{proof}
+
+\begin{theorem}[Schur--凹性不可实现：非平凡分区下的对称性破缺]\label{thm:pom-block-consistency-rate-schur-concavity-impossible}
+设 \(\mathcal P\) 非平凡且 \(\delta<1-\frac1m\)。
+若函数 \(W\mapsto R_W(\delta)\) 在 \(\Delta^\circ([m])\) 上非常值，则
+\[
+w\longmapsto R^{\mathcal P}_w(\delta)
+\]
+不可能在 \(\Delta^\circ(X)\) 上为 Schur--凹函数（更不可能严格 Schur--凹）。
+\end{theorem}
+\begin{proof}
+任意 Schur--凹函数在 \(\Delta^\circ(X)\) 上必为全对称函数：对任意置换 \(\sigma\)（作用于 \(X\) 的坐标重标号），向量 \(w\) 与 \(\sigma w\) 互相主序支配（置换矩阵为双随机矩阵），故 Schur--凹性强制 \(f(w)=f(\sigma w)\)。
+\par
+另一方面，由定理 \ref{thm:pom-block-consistency-rate-block-reduction}，
+\(
+R^{\mathcal P}_w(\delta)=R_{(\pi_{\mathcal P})_*w}(\delta)
+\)。
+当置换 \(\sigma\) 允许跨块交换质量时，一般有
+\((\pi_{\mathcal P})_*(\sigma w)\neq (\pi_{\mathcal P})_*w\)。
+若 \(W\mapsto R_W(\delta)\) 非常值，则存在 \(W,W'\in\Delta^\circ([m])\) 使 \(R_W(\delta)\neq R_{W'}(\delta)\)；
+取 \(w\in\Delta^\circ(X)\) 使 \((\pi_{\mathcal P})_*w=W\)，并取跨块置换 \(\sigma\) 使 \((\pi_{\mathcal P})_*(\sigma w)=W'\)，则
+\[
+R^{\mathcal P}_w(\delta)=R_W(\delta)\neq R_{W'}(\delta)=R^{\mathcal P}_{\sigma w}(\delta),
+\]
+从而该函数不可能全对称，故不可能 Schur--凹。证毕。
+\end{proof}
+
+\begin{remark}[KL 账本望远镜：嵌套 I-投影的 Pythagoras 级联]\label{rem:pom-kl-ledger-telescope-i-projection}
+令 \(\mathcal C_1\supseteq \cdots \supseteq \mathcal C_M\) 为概率单纯形上的闭凸集合链，取任意 \(\mu\)。
+对每个 \(m\) 令 \(\mu^{(m)}\) 为 \(\mu\) 到 \(\mathcal C_m\) 的 I-投影（KL 下的最小化元）
+\[
+\mu^{(m)}:=\arg\min_{\nu\in\mathcal C_m}D_{\mathrm{KL}}(\mu\|\nu).
+\]
+若每一步 I-投影存在且唯一，则对 \(m=2,\dots,M\) 有 Pythagoras 恒等式
+\[
+D_{\mathrm{KL}}(\mu\|\mu^{(m-1)})
+=D_{\mathrm{KL}}(\mu\|\mu^{(m)})+D_{\mathrm{KL}}(\mu^{(m)}\|\mu^{(m-1)}),
+\]
+从而望远镜式成立：
+\[
+D_{\mathrm{KL}}(\mu\|\mu^{(1)})
+=\sum_{m=2}^{M}D_{\mathrm{KL}}(\mu^{(m)}\|\mu^{(m-1)})\;+\;D_{\mathrm{KL}}(\mu\|\mu^{(M)}).
+\]
+当分辨率链的“升维/降维”步骤由一致的 I-投影（或等价的条件期望/充分统计）实现时，上式给出信息耗散的可加守恒账本；若以非 I-投影的朴素截断替代，则 Pythagoras 级联一般失效，从而产生坐标依赖的伪不变量。
+\end{remark}
+
+\endinput

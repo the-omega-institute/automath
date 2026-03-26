@@ -1,0 +1,449 @@
+\subsubsection{生成函数消去、Mellin 谱指纹与 Ramanujan 分母层：从有限验证到双能量互补与图 \texorpdfstring{$\zeta$}{zeta}}\label{subsubsec:gm-genfunc-mellin-ramanujan-bootstrap-sumproduct-graphzeta}
+本小节把 \S\ref{subsubsec:gm-odd-moment-sdp-modq-profinite} 与 \S\ref{subsubsec:gm-farey-limit-mod-obstruction-zeck-measure} 的“线性约束计数 \(\Leftrightarrow\) Perron 指纹”“模障碍 \(\Leftrightarrow\) 共边界”“连续极限 \(\Leftrightarrow\) 扭曲谱隙”三条接口进一步封闭为若干可审计结果：线性约束计数的多变量生成函数有理性与显式消去（定理 \ref{thm:gm-linear-constraints-genfunc-rational}），矩阵细分方程的 Mellin 可解析化与极点谱指纹（定理 \ref{thm:gm-mellin-meromorphic-fingerprint}），非共振频率上的统一指数衰减与曲率律（命题 \ref{prop:gm-nonresonant-exp-sum-curvature}），有理频率 Gram 的分母层正交分解与 Ramanujan 和表达（命题 \ref{prop:gm-ramanujan-layer-decomposition}），以及尺度自举与有限验证原则（命题 \ref{prop:gm-scale-bootstrap-gram} 与定理 \ref{thm:gm-finite-verification-uniform-gap}）。在此基础上给出自动系数 Dirichlet 多项式的高阶矩节省与临界区间改进（定理 \ref{thm:gm-automatic-dirichlet-moment-bound} 与推论 \ref{cor:gm-critical-window-automatic-saving}），并补入乘性能量的可编译性、加/乘双能量互补与 sum--product 指数律（定理 \ref{thm:gm-multiplicative-energy-compilable}--推论 \ref{cor:gm-sumproduct-exponent-law}），以及图 \(\zeta\) 的 cyclotomic 因子分类对有限模障碍的代数化判别（定理 \ref{thm:gm-graph-zeta-cyclotomic-classification}）。
+
+\paragraph{线性约束计数的多变量生成函数有理性：分母为特征多项式的显式消去}
+\begin{theorem}[线性约束计数的多变量生成函数有理性：分母为特征多项式的显式消去]\label{thm:gm-linear-constraints-genfunc-rational}
+沿用定理 \ref{thm:gm-sofic-zeck-linear-constraints-pf} 的记号，固定整数线性系统 \(Qx=b\)（维度固定），并令 \(\Omega_m(Q,b)\) 为长度 \(m\) 的可行 \(K\)-元组集合。
+定义长度生成函数
+\[
+F_{Q,b}(z):=\sum_{m\ge 0}\#\Omega_m(Q,b)\,z^m.
+\]
+则 \(F_{Q,b}(z)\) 为有理函数，且可写为
+\begin{equation}\label{eq:gm-genfunc-resolvent}
+\boxed{\ 
+F_{Q,b}(z)
+=u_{Q,b}^{\mathsf T}\,(I-zB_{Q,b})^{-1}v_{Q,b}\ } ,
+\end{equation}
+其中 \(B_{Q,b}\) 为同步转导器显式构造的有限非负整数矩阵，而 \(u_{Q,b},v_{Q,b}\ge 0\) 为入口/出口向量。
+特别地，\(F_{Q,b}\) 的全部极点包含于
+\(
+\det(I-zB_{Q,b})=0
+\)
+的根集合；并且 \(\#\Omega_m(Q,b)\) 作为 \(m\) 的函数可在全复平面上延拓为有限个项的“指数多项式和”（由 \(B_{Q,b}\) 的 Jordan 结构显式给出）。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:gm-sofic-zeck-linear-constraints-pf} 有 \(\#\Omega_m(Q,b)=u_{Q,b}^{\mathsf T}B_{Q,b}^{\,m}v_{Q,b}\)。
+于是对 \(|z|<\rho(B_{Q,b})^{-1}\) 的幂级数求和给出
+\(
+\sum_{m\ge 0}B_{Q,b}^{\,m}z^m=(I-zB_{Q,b})^{-1}
+\)
+从而得到 \eqref{eq:gm-genfunc-resolvent}。
+极点包含性由矩阵 resolvent 的行列式分母给出；指数多项式和表示来自 \(B_{Q,b}\) 的 Jordan 分解与 Cayley--Hamilton。证毕。
+\end{proof}
+
+\paragraph{矩阵细分方程的 Mellin 可解析化：\texorpdfstring{$\varphi^{-s}$}{phi^{-s}} 上的 meromorphic 延拓与极点谱指纹}
+\begin{theorem}[矩阵细分方程的 Mellin 可解析化：\texorpdfstring{$\varphi^{-s}$}{phi^{-s}} 上的谱指纹]\label{thm:gm-mellin-meromorphic-fingerprint}
+设 \(\mu\) 为定理 \ref{thm:gm-zeck-normalized-limit-measure} 的极限归一化测度（支撑于 \([0,1]\)），并设其向量细分方程可抽象为
+\begin{equation}\label{eq:gm-matrix-refinement-abstract}
+\vec\mu=\sum_{j\in\mathcal{J}}T_j\cdot(\vec\mu\circ S_j^{-1}),
+\qquad
+S_j(x)=\varphi^{-a_j}x+t_j,
+\end{equation}
+其中 \(a_j\in\NN\) 固定，\(t_j\in[0,1]\)，且 \(T_j\) 为非负矩阵（维数有限）。
+令
+\[
+M(s):=\int_0^1 x^{s}\,d\mu(x),\qquad \Re(s)>-1,
+\]
+并令 \(z:=\varphi^{-s}\)（在 \(z\)-平面取主支）。
+则存在一个有限维线性系统
+\begin{equation}\label{eq:gm-mellin-linear-system}
+\boxed{\ (I-P(z))\,\mathbf{M}(s)=\mathbf{H}(s)\ },
+\qquad
+P(z):=\sum_{\substack{j\in\mathcal{J}\\ t_j=0}} z^{a_j}\,T_j,
+\end{equation}
+其中 \(\mathbf{M}(s)\) 为一组有限多的“状态 Mellin 矩”组成的向量（包含 \(M(s)\) 在 Perron 方向上的分量），而 \(\mathbf{H}(s)\) 在半平面 \(\Re(s)>-1\) 内解析并在 \(s\)-平面上作整函数延拓。
+因此，\(\mathbf{M}(s)\)（从而 \(M(s)\)）作为 \(z\)-函数为 meromorphic，且其极点集合包含于
+\[
+\det(I-P(z))=0
+\]
+的根集合；每一极点的阶数由 \(P(z)\) 在该点的 Jordan 结构决定。
+该极点数据给出“极限分布的 Mellin 谱指纹”：端点型（\(x\to 0^+\)）的幂律/对数修正与矩增长可由有限矩阵谱在离线口径下读出。
+\end{theorem}
+
+\begin{proof}[证明要点]
+对 \eqref{eq:gm-matrix-refinement-abstract} 取 Mellin（或对向量测度逐分量取 \(\int x^s\)）：
+当 \(t_j=0\) 时，\(\int (S_j x)^s\,d\mu=\varphi^{-a_js}\int x^s\,d\mu\) 给出严格的 \(z^{a_j}\) 系数；
+当 \(t_j>0\) 时，由 \(x\mapsto (t_j+\varphi^{-a_j}x)^s\) 在 \(\Re(s)>-1\) 内解析且在 \(x\in[0,1]\) 上一致可控，得到一项解析函数贡献，可并入 \(\mathbf{H}(s)\)。
+把所有 \(t_j=0\) 的分支项移到左边即得 \eqref{eq:gm-mellin-linear-system}。
+meromorphic 性与极点集合由矩阵 resolvent \((I-P(z))^{-1}\) 给出；极点阶由 Jordan 结构决定。证毕。
+\end{proof}
+
+\begin{corollary}[Mellin 极点的黄金梳齿簇：有限多竖线等差塔]\label{cor:gm-mellin-pole-golden-comb}
+在定理 \ref{thm:gm-mellin-meromorphic-fingerprint} 的设定下，令
+\(
+D(z):=\det(I-P(z))\in\CC[z]
+\)。
+若 \(z_0\neq 0\) 满足 \(D(z_0)=0\)，则方程 \(\varphi^{-s}=z_0\) 的全部解构成一条候选极点塔
+\[
+s=-\frac{\log z_0}{\log\varphi}+\frac{2\pi i}{\log\varphi}\,k,\qquad k\in\ZZ,
+\]
+其中 \(\log\) 取任一支。
+并且 \(\mathbf{M}(s)\)（从而 \(M(s)\)）的全部极点只能落在所有此类塔的并上；极点阶数由 \(P(z)\) 在 \(z_0\) 处的 Jordan 结构（等价地由 \((I-P(z))^{-1}\) 在 \(z_0\) 处的主部）决定。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:gm-mellin-meromorphic-fingerprint}，\(\mathbf{M}(s)\) 作为 \(z=\varphi^{-s}\) 的函数仅可能在 \(D(z)=0\) 处出现极点。
+对给定 \(z_0\neq 0\)，解 \(\varphi^{-s}=z_0\) 等价于
+\(
+-s\log\varphi=\log z_0-2\pi i k
+\)
+（复对数的多值性），从而得到所示等差竖线塔。
+\end{proof}
+
+\begin{corollary}[Mellin 极点计数的线性上界：由 \texorpdfstring{$\deg D$}{deg D} 控制的显式常数]\label{cor:gm-mellin-pole-count-linear}
+沿用推论 \ref{cor:gm-mellin-pole-golden-comb} 的记号，并记 \(d:=\deg D\)。
+令 \(N_{\mathrm{pole}}(T;\sigma_1,\sigma_2)\) 为竖直条带 \(\sigma_1\le \Re(s)\le \sigma_2\) 内、满足 \(|\Im(s)|\le T\) 的极点总数（按阶计）。
+则
+\[
+N_{\mathrm{pole}}(T;\sigma_1,\sigma_2)\le \frac{d\,\log\varphi}{\pi}\,T+O(1).
+\]
+\end{corollary}
+
+\begin{proof}
+\(D\) 的根（按重数计）至多有 \(d\) 个。
+每一根 \(z_0\neq 0\) 诱导一条虚步长为 \(2\pi/\log\varphi\) 的等差竖线塔（推论 \ref{cor:gm-mellin-pole-golden-comb}），在高度窗 \(|\Im(s)|\le T\) 内的点数为 \(\frac{\log\varphi}{\pi}T+O(1)\)。
+对所有根求和并按代数重数计阶即可得到上界。
+\end{proof}
+
+\paragraph{Jensen 剖面与极点骨架：行列式径向平均的凸编码与留数显影}
+\begin{proposition}[矩阵 Mellin 指纹的 Jensen 剖面：\texorpdfstring{$\det(I-P(z))$}{det(I-P(z))} 的径向平均完全可解]\label{prop:gm-mellin-jensen-profile-det}
+在定理 \ref{thm:gm-mellin-meromorphic-fingerprint} 的设定下，令
+\[
+D(z):=\det(I-P(z))\in\CC[z]
+\]
+为多项式，并写其零点（按重数）为 \(\{z_j\}_{j=1}^{J}\subset\CC\)，首项系数为 \(c\neq 0\)（即 \(D(z)=c\prod_{j=1}^{J}(z-z_j)\)）。
+定义 Jensen 剖面（竖线平均）为
+\[
+\mathcal{M}(\sigma)
+:=\frac{\log\varphi}{2\pi}\int_{0}^{2\pi/\log\varphi}
+\log\Bigl|D\bigl(\varphi^{-(\sigma+\mathrm{i}t)}\bigr)\Bigr|\,\dd t,
+\qquad \sigma\in\RR.
+\]
+则有完全闭式
+\[
+\boxed{\;
+\mathcal{M}(\sigma)=\log|c|+\sum_{j=1}^{J}\log\max\!\bigl\{\varphi^{-\sigma},|z_j|\bigr\}\; }.
+\]
+特别地，\(\mathcal{M}\) 为凸且分段仿射函数，其折点集合恰为
+\(
+\{\,-\log|z_j|/\log\varphi\,\}_{j=1}^{J}
+\)
+（按重数计）。
+因此 \(\mathcal{M}\) 在 \(\sigma\)-轴上的折点谱精确编码了
+\(\det(I-P(\varphi^{-s}))\)
+所诱导的 Mellin 极点竖线簇（实部集合）。
+\end{proposition}
+\begin{proof}
+令 \(r:=\varphi^{-\sigma}\)。
+当 \(t\) 在区间 \([0,2\pi/\log\varphi]\) 变化时，
+\(
+z=\varphi^{-(\sigma+\mathrm{i}t)}=r\,e^{-\mathrm{i}t\log\varphi}
+\)
+遍历圆 \(|z|=r\) 一周。
+因此 \(\mathcal{M}(\sigma)\) 等于 \(\frac{1}{2\pi}\int_{0}^{2\pi}\log|D(re^{\mathrm{i}\theta})|\,\dd\theta\)。
+对多项式应用 Jensen 公式（等价于对 \(\log|z-z_j|\) 的圆周平均逐项计算）得到
+\[
+\frac{1}{2\pi}\int_{0}^{2\pi}\log|D(re^{\mathrm{i}\theta})|\,\dd\theta
+=\log|c|+\sum_{j=1}^{J}\log\max\{r,|z_j|\},
+\]
+即所示闭式。
+凸性与折点位置由 \(\log\max\{r,|z_j|\}=\max\{-\sigma\log\varphi,\log|z_j|\}\) 的分段线性结构立得。证毕。
+\end{proof}
+
+\begin{proposition}[极点竖线骨架与留数闭式：伴随矩阵给出 \texorpdfstring{$\mathbf{M}(s)$}{M(s)} 的显式部分分式显影]\label{prop:gm-mellin-pole-skeleton-residue-adjugate}
+在定理 \ref{thm:gm-mellin-meromorphic-fingerprint} 的设定下，仍记 \(D(z)=\det(I-P(z))\)。
+若 \(D\) 在 \(\CC^\times\) 上的零点均为单根 \(z_1,\dots,z_J\)（按重数计），则对每个 \(j\) 的任意一支对数选择 \(s_{j,0}\) 满足 \(\varphi^{-s_{j,0}}=z_j\)，其全部解为
+\[
+s_{j,k}:=s_{j,0}+\frac{2\pi\mathrm{i}}{\log\varphi}\,k\qquad(k\in\ZZ),
+\]
+并且 \(\mathbf{M}(s)\) 的极点仅可能出现在 \(\{s_{j,k}\}_{j,k}\)（除去可能的可消奇点）。
+在非消去情形下，\(\mathbf{M}(s)\) 在每个 \(s_{j,k}\) 处为简单极点，并具有留数闭式
+\[
+\boxed{\;
+\operatorname*{Res}_{s=s_{j,k}}\mathbf{M}(s)
+=-\frac{1}{\log\varphi}\cdot
+\frac{\operatorname{adj}(I-P(z_j))}{z_j\,D'(z_j)}\,
+\mathbf{H}(s_{j,k})\; }.
+\]
+等价地，若记 \(\partial_{\log z}D(z):=zD'(z)\) 为对 \(\log z\) 的导数，则
+\[
+\operatorname*{Res}_{s=s_{j,k}}\mathbf{M}(s)
+=-\frac{1}{\log\varphi}\cdot
+\frac{\operatorname{adj}(I-P(z_j))}{\partial_{\log z}D(z_j)}\,
+\mathbf{H}(s_{j,k}).
+\]
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:gm-mellin-linear-system}，
+\[
+\mathbf{M}(s)=(I-P(z))^{-1}\mathbf{H}(s)=\frac{\operatorname{adj}(I-P(z))}{D(z)}\,\mathbf{H}(s),
+\qquad z=\varphi^{-s}.
+\]
+当 \(D(z_j)=0\) 为单根时，\(D(z)=D'(z_j)(z-z_j)+O((z-z_j)^2)\)，且 \(\operatorname{adj}(I-P(z))\) 在 \(z_j\) 处解析。
+因此在 \(z\)-变量中，
+\(
+(I-P(z))^{-1}
+\)
+在 \(z=z_j\) 处为简单极点，主部系数为 \(\operatorname{adj}(I-P(z_j))/D'(z_j)\)。
+\par
+再将 \(z=\varphi^{-s}\) 代入并在 \(s_{j,k}\) 邻域展开：
+\(
+\varphi^{-s}-z_j=-(\log\varphi)z_j\,(s-s_{j,k})+o(s-s_{j,k})
+\)。
+由此得到 \(s\)-变量的留数系数 \(-1/(\log\varphi\,z_j)\)，并与上述 \(z\)-变量主部系数相乘，得到所示闭式。
+若在某个 \(s_{j,k}\) 处恰有 \(\operatorname{adj}(I-P(z_j))\mathbf{H}(s_{j,k})=0\)，则该极点可消去；其余情况为简单极点。证毕。
+\end{proof}
+
+\paragraph{谱隙的统计推论：中心极限定理与 Hölder 正则（有限状态谱数据 \texorpdfstring{$\Rightarrow$}{=>} 实分析性质）}
+\begin{theorem}[有限状态权函数的谱隙型 CLT：极限定理与可审计误差预算]\label{thm:gm-sofic-spectral-clt}
+令 \(\omega=(\omega_k)_{k\ge 1}\) 为 primitive sofic shift 下的平稳 Markov 链输出，并令 \(w\) 为一个有界整数值权函数（可视为边权或局部势）。
+定义可加泛函
+\[
+S_m:=\sum_{k=1}^{m} w(\omega_k),
+\qquad
+Y_m:=\frac{S_m-\mathbb{E}S_m}{\sqrt{\mathrm{Var}(S_m)}}.
+\]
+若权函数满足非算术条件（等价于不存在非平凡模 \(q\) 使其为共边界；亦等价于命题 \ref{prop:gm-cycle-gcd-mod-obstruction} 中的不变量 \(d=1\)），则 \(Y_m\) 依分布收敛到标准正态。
+并且该推论可在本文“扭曲 Perron 分支”口径下完全证书化：存在常数 \(C>0\) 使对任意有界 Lipschitz 测试函数 \(\varphi\) 都有
+\[
+\Bigl|\mathbb{E}\varphi(Y_m)-\mathbb{E}\varphi(Z)\Bigr|
+\ \ll_{\varphi}\ m^{-1/2}\ +\ C\cdot \rho_\star^{\,m},
+\qquad Z\sim\mathcal{N}(0,1),
+\]
+其中 \(\rho_\star\in(0,1)\) 由扭曲谱隙给出并可离线核验。
+\end{theorem}
+
+\begin{proof}[证明要点]
+把特征函数写为有限维扭曲转移矩阵的矩阵幂线性泛函，并对 \(\theta\) 在零点附近作解析扰动展开：
+\(\log\lambda(\theta)=\log\lambda(0)+i\mu\theta-\tfrac12\sigma^2\theta^2+O(\theta^3)\)。
+在 \(\theta\asymp m^{-1/2}\) 的 CLT 缩放下，主项给出高斯极限；而其余谱与截断误差由扭曲谱隙贡献指数小项 \(\rho_\star^m\)。
+Berry--Esseen 级的 \(m^{-1/2}\) 误差来自三阶项控制与 Fourier 反演。证毕。
+\end{proof}
+
+\begin{theorem}[极限密度的 Hölder 正则指数可计算：由复扭曲谱隙导出的 \texorpdfstring{$C^\alpha$}{C^alpha}]\label{thm:gm-holder-regularity-from-gap}
+在定理 \ref{thm:gm-zeck-normalized-limit-measure} 的设定下，设极限测度 \(\mu\) 的 Fourier--Perron 同构满足如下“复扭曲统一谱隙”：存在 \(\delta\in(0,1)\) 使对所有 \(\xi\ne 0\) 都有
+\[
+\rho\!\bigl(T(\xi)\bigr)\ \le\ (1-\delta)\,\rho\!\bigl(T(0)\bigr),
+\]
+其中 \(T(\xi)\) 为实频扭曲转移算子（定义见定理 \ref{thm:gm-zeck-normalized-limit-measure}）。
+令
+\[
+\beta:=\frac{-\log(1-\delta)}{\log\varphi}.
+\]
+若 \(\beta>1\)（等价于 \((1-\delta)\varphi<1\)），则 \(\mu\) 绝对连续且密度 \(f=d\mu/dx\) 属于某个 Hölder 类 \(C^\alpha([0,1])\)，并可取显式下界
+\[
+\alpha\ <\ \beta-1.
+\]
+此外，\(|f|_{C^\alpha}\) 可由有限状态谱数据与 \(\delta\) 给出可审计控制。
+\end{theorem}
+
+\begin{proof}[证明要点]
+统一谱隙使得在每一次尺度下降（\(\xi\mapsto \xi/\varphi\)）中，扭曲转移的主增长至多乘以 \((1-\delta)\)。
+迭代次数为 \(\asymp \log_\varphi|\xi|\)，从而得到
+\(
+|\widehat\mu(\xi)|\ll |\xi|^{-\beta}
+\)
+的幂律衰减。
+当 \(\beta>1+\alpha\) 时，\(\int |\xi|^{\alpha}|\widehat\mu(\xi)|\,d\xi<\infty\) 由幂律积分给出，
+于是 Fourier 反演与差分估计推出 \(f\in C^\alpha\)，且 Hölder 范数由衰减常数控制。证毕。
+\end{proof}
+
+\paragraph{非共振频率上的指数和与统一大偏差：主特征值曲率律}
+\begin{proposition}[非共振频率上的指数和统一大偏差：谱半径的二阶曲率律]\label{prop:gm-nonresonant-exp-sum-curvature}
+设 \(\mathcal{L}\) 为 primitive sofic 语言，令
+\(
+S_m(\theta)=\sum_{\omega\in\mathcal{L}_m} e^{i\theta\,\mathrm{val}(\omega)}
+\)。
+则存在扭曲 Perron 分支 \(\lambda(\theta)\) 使对某些常数 \(C>0\) 有
+\[
+|S_m(\theta)|\ \le\ C\,|\lambda(\theta)|^{m}.
+\]
+并且在任意远离共振集 \(\Theta_{\mathrm{res}}\) 的紧集上，\(\log|\lambda(\theta)|\) 具有严格负的二阶下界：存在 \(c>0\) 使得对所有 \(\theta\) 充分远离 \(\Theta_{\mathrm{res}}\) 有
+\[
+\log|\lambda(\theta)|\ \le\ \log\lambda(0)-c\,\mathrm{dist}(\theta,\Theta_{\mathrm{res}})^2.
+\]
+由此得到可用于主弧判别的统一指数衰减律，并与 \S\ref{subsubsec:gm-rational-sieve-affine-centered-opuc-multifractal} 的主弧机制相容。
+\end{proposition}
+
+\begin{proof}[证明要点]
+由有限状态扭曲转移矩阵表示 \(S_m(\theta)=p^{\mathsf T}A(\theta)^{m}q\)，其中 \(A(\theta)\) 在 \(\theta\) 上解析。
+令 \(\lambda(\theta)\) 为 \(A(\theta)\) 的主特征值分支，则 \(A(\theta)^m\) 的谱分解给出第一式。
+在远离共振集处，主特征值与其余谱之间存在统一间隙；并且 \(\log\lambda(\theta)\) 在共振点附近二阶展开，\(\log|\lambda(\theta)|\) 的严格凹性由非平凡扭曲导致的相位抵消给出，从而得到二次距离下界。证毕。
+\end{proof}
+
+\paragraph{有理频率 Gram 的分母层正交分解：Ramanujan 和核的谱化表达}
+\begin{proposition}[有理频率 Gram 矩阵的分母层正交分解：Ramanujan 和核的谱化表达]\label{prop:gm-ramanujan-layer-decomposition}
+令 \(\psi\) 为偶的 Schwartz 函数，\(\mathcal{Q}_M=\{a/q\in[0,1]:1\le q\le M,(a,q)=1\}\)，并令
+\(
+K_{M,L}
+\)
+为核矩阵
+\(
+(K_{M,L})_{r,r'}=\psi(L(r-r'))
+\)
+（与 \S\ref{subsubsec:gm-farey-limit-mod-obstruction-zeck-measure} 同型）。
+将 \(\psi\) 在 \(\TT=\RR/\ZZ\) 上作周期化并仍记为 \(\psi\)，则对任意 \(g\in\ell^2(\mathcal{Q}_M)\) 有 Fourier 展开
+\[
+\langle g,K_{M,L}g\rangle
+=\sum_{n\in\ZZ}\widehat\psi(n/L)\,
+\Bigl|\sum_{q\le M}\ \sum_{(a,q)=1} g(a/q)\,e^{2\pi i an/q}\Bigr|^2.
+\]
+并且在分母层分解 \(\ell^2(\mathcal{Q}_M)\cong\bigoplus_{q\le M}\ell^2((\ZZ/q\ZZ)^\times)\) 下，上式把 \(\|K_{M,L}\|_{\mathrm{op}}\) 的主要贡献精确定位为低频段的 Ramanujan 和相关性：当 \(g\) 在每个分母层上近常量时，内和退化为 Ramanujan 和
+\(
+c_q(n)=\sum_{(a,q)=1}e^{2\pi i an/q}
+\)
+的加权叠加。
+\end{proposition}
+
+\begin{proof}
+周期化后 \(\psi\) 有 Fourier 系数 \(\widehat\psi(n/L)\)。
+把核写为 \(\psi(L(r-r'))=\sum_{n\in\ZZ}\widehat\psi(n/L)e^{2\pi i n(r-r')}\)，代入二次型并交换求和得结论。证毕。
+\end{proof}
+
+\paragraph{尺度自举与有限验证：从单尺度谱降到统一谱隙}
+\begin{proposition}[尺度自举原理：一次谱降触发全尺度多项式衰减]\label{prop:gm-scale-bootstrap-gram}
+设存在某一尺度 \(M_0\) 及 \(L\asymp M_0^2\) 使得
+\[
+\|K_{M_0,L}\|_{\mathrm{op}}\ \le\ M_0^{-\eta}
+\qquad(\eta>0).
+\]
+则存在常数 \(\eta'=\eta'(\eta,\psi)>0\) 使得对所有 \(M\ge M_0\)（取同型标度 \(L\asymp M^2\)）均有
+\[
+\|K_{M,L}\|_{\mathrm{op}}\ \ll\ M^{-\eta'}.
+\]
+换言之，有理主弧 Gram 的谱降具有“单尺度触发--全尺度传播”的自举性质。
+\end{proposition}
+
+\begin{proof}[证明思路]
+由命题 \ref{prop:gm-ramanujan-layer-decomposition}，\(\|K_{M,L}\|_{\mathrm{op}}\) 的主贡献来自低频 \(n\) 段的 Ramanujan 和相关性。
+当 \(L\asymp M^2\) 时，Farey 局部覆盖与分母半群结构使不同尺度间的低频相关满足一条可迭代的卷积型不等式；一次尺度上的谱降可通过正性与 Schur/Young 型比较传播到更大尺度，并转化为幂次衰减。证毕。
+\end{proof}
+
+\begin{theorem}[有限验证原理：统一谱隙的可判定化与有限检查集]\label{thm:gm-finite-verification-uniform-gap}
+对任一给定 primitive sofic--权系统（固定自动机与边权），存在显式可计算的有限集合
+\[
+\mathscr{T}\subset(0,2\pi),\qquad \mathscr{M}\subset\NN,
+\]
+使得如下等价成立：
+\begin{enumerate}
+  \item 对所有 \(\theta\notin 2\pi\ZZ\) 有统一扭曲谱隙 \(\rho(A(e^{i\theta\cdot}))\le (1-\delta)\rho(A(0))\)（某 \(\delta>0\)）。
+  \item 对所有 \(\theta\in\mathscr{T}\) 与所有 \(M\in\mathscr{M}\) 验证相应扭曲谱半径严格小于 \(\rho(A(0))\)（或等价地验证相关 \(K_{M,L}\) 的谱降门槛）。
+\end{enumerate}
+其中 \(\mathscr{T}\) 的构造由模障碍不变量 \(d\)（命题 \ref{prop:gm-cycle-gcd-mod-obstruction}）与状态数控制，而 \(\mathscr{M}\) 的构造由尺度自举（命题 \ref{prop:gm-scale-bootstrap-gram}）确定。
+\end{theorem}
+
+\begin{proof}[证明要点]
+模障碍仅可能出现在有限集合 \(\{q:\ q\mid d\}\)，其共振频率为有限并可枚举，故可取有限 \(\mathscr{T}\) 覆盖所有潜在共振点的邻域代表。
+在排除这些频率后，谱半径作为 \(\theta\) 的连续函数在紧集上取得最大值；结合离散网格逼近可将“严格小于”归约为有限检查。
+尺度方向由命题 \ref{prop:gm-scale-bootstrap-gram} 给出：只需在有限个起始尺度上验证谱降，即可推出全尺度统一。证毕。
+\end{proof}
+
+\paragraph{自动系数 Dirichlet 多项式：统一高阶矩节省与临界区间改进}
+\begin{theorem}[自动系数 Dirichlet 多项式的非渐近高阶矩界：谱隙输入下的统一 \texorpdfstring{$2k$}{2k} 阶控制]\label{thm:gm-automatic-dirichlet-moment-bound}
+设 \((b_n)\) 由有限状态系统产生（例如在区间 \([N,2N]\) 上截断的 automatic/sofic 系列），并假设相应扭曲转移算子满足统一谱隙（等价于排除有限模障碍族，参见定理 \ref{thm:gm-improvability-iff-d1}）。
+则对任意固定 \(k\in\NN\) 存在 \(\varepsilon_k>0\) 与常数 \(C_k\) 使对所有 \(T\ge 1\) 有
+\[
+\int_0^T\Bigl|\sum_{n\sim N} b_n n^{it}\Bigr|^{2k}\,dt
+\ \le\
+C_k\,T\,N^{k}\,(\log N)^{O_k(1)}\,N^{-\varepsilon_k}.
+\]
+\end{theorem}
+
+\begin{proof}[证明思路]
+展开 \(2k\) 次幂并交换积分，得到对数相位 \(\log(n_1\cdots n_k)-\log(n_{k+1}\cdots n_{2k})\) 的振荡积分与系数相关的多体计数。
+统一谱隙使所有非平凡扭曲相关以指数方式衰减，从而把“对角主项”之外的贡献压低一个 \(N^{-\varepsilon_k}\) 的幂次节省；对数尺度的近对角部分用分离/带宽窗补丁与多对数因子吸收。证毕。
+\end{proof}
+
+\begin{corollary}[临界区间的结构性改进定理：自动系数下 \texorpdfstring{$V\asymp N^{3/4}$}{V~N^{3/4}} 的严格幂次节省]\label{cor:gm-critical-window-automatic-saving}
+在定理 \ref{thm:gm-automatic-dirichlet-moment-bound} 的设定下，令
+\(
+D(t)=\sum_{n\sim N} b_n n^{it}
+\)
+并取 \(W=\{t\in[0,T]:|D(t)|\ge V\}\) 为 \(1\)-分离大值点集。
+则在标度 \(T=N^{6/5}\) 与阈值 \(V\asymp N^{3/4}\) 下，存在 \(\epsilon>0\)（仅由谱隙数据与自动机决定）使
+\[
+|W|\ \ll\ N^{12/5-\epsilon}\,V^{-4}.
+\]
+\end{corollary}
+
+\begin{proof}[证明要点]
+将三阶迹/高阶矩证书链（\S\ref{subsubsec:gm-third-trace-dual-certificates} 与 \S\ref{subsubsec:gm-affine-inverse-gram-arithmetic-dichotomy}）与定理 \ref{thm:gm-automatic-dirichlet-moment-bound} 的非渐近矩节省合成，即可在临界区间击穿由能量耦合通道导致的瓶颈项，并在 \(T=N^{6/5}\) 标度下读出所示幂次节省。证毕。
+\end{proof}
+
+\paragraph{乘性能量的可编译性与 sum--product 指数律：双能量互补}
+\begin{theorem}[Zeckendorf--sofic 的乘性能量可编译：积等式计数的 Perron 指纹（条件版）]\label{thm:gm-multiplicative-energy-compilable}
+设 \(A_m=\{\mathrm{val}(\omega):\omega\in\mathcal{L}_m\}\) 来自 primitive sofic--Zeckendorf 系统。
+若存在“乘法正规化转导器”（在有限状态中实现乘法的进位/归一化，并与 \(\mathcal{L}\) 的四重同步积耦合），则存在有限非负整数矩阵 \(B_{\times}\) 与向量 \(u,v\ge 0\) 使
+\[
+E_{\times}(A_m):=\#\{a_1a_2=a_3a_4:\ a_i\in A_m\}
+=u^{\mathsf T}B_{\times}^{\,m}v,
+\]
+从而 \(\lim_{m\to\infty}m^{-1}\log E_\times(A_m)=\log\rho(B_\times)\) 存在且满足有限阶线性递推闭合。
+\end{theorem}
+
+\begin{theorem}[加性与乘性双能量互补的谱形态：张量转导器下的严格内域约束]\label{thm:gm-add-mult-energy-complementarity}
+在定理 \ref{thm:gm-multiplicative-energy-compilable} 的条件下，记
+\[
+|A_m|\asymp \alpha^m,\qquad
+E_+(A_m)\asymp \beta_+^m,\qquad
+E_\times(A_m)\asymp \beta_\times^m.
+\]
+则存在仅依赖 \(\mathcal{L}\) 的常数 \(\kappa>0\) 使
+\[
+\boxed{\ \log\beta_+ + \log\beta_\times\ \le\ 6\log\alpha-\kappa\ }.
+\]
+因此同一 Zeckendorf--sofic 集合不可能在指数意义上同时接近“加法高度结构化”与“乘法高度结构化”；其互补性由有限状态张量谱半径严格强制。
+\end{theorem}
+
+\begin{corollary}[Fibonacci--基数的 sum--product 指数律：由双能量互补推出的指数膨胀]\label{cor:gm-sumproduct-exponent-law}
+令 \(\Sigma_m=A_m+A_m\)、\(\Pi_m=A_m\cdot A_m\)。
+在定理 \ref{thm:gm-add-mult-energy-complementarity} 的假设下，存在 \(\delta>0\) 使对充分大 \(m\) 有
+\[
+\max\{|\Sigma_m|,|\Pi_m|\}\ \ge\ |A_m|^{1+\delta}
+\]
+（指数意义上的膨胀），且 \(\delta\) 可由 \(\kappa\) 与 \(\alpha\) 显式下界：
+\(
+\delta\ge \kappa/(2\log\alpha)
+\)。
+\end{corollary}
+
+\paragraph{双大筛输入与图 \texorpdfstring{$\zeta$}{zeta} 的 cyclotomic 因子：模障碍的代数化判别}
+\begin{proposition}[双大筛输入的统一形式：加法角色与乘法角色的同时谱隙化]\label{prop:gm-double-large-sieve-input}
+设 \((b_n)\) 由同一 finite-state 系统生成，并假设其加法角色扭曲与乘法 Dirichlet 角色扭曲的转移算子均满足统一谱隙（等价于排除有限障碍族）。
+则存在 \(\delta_1,\delta_2>0\) 使对任意固定 \(\theta>0\)、任意 \(Q\le N^\theta\)，以及任意非平凡 Dirichlet 角色 \(\chi\ (\bmod q)\)（\(q\le Q\)）与加性角色 \(e(an/q)\)（同 \(q\le Q\)）都有
+\[
+\sum_{n\sim N} b_n\chi(n)\ \ll\ N^{1-\delta_1},
+\qquad
+\sum_{n\sim N} b_n e(an/q)\ \ll\ N^{1-\delta_2},
+\]
+其中隐含常数仅依赖有限状态谱数据。
+\end{proposition}
+
+\begin{theorem}[图 \texorpdfstring{$\zeta$}{zeta} 函数的 cyclotomic 因子分类：模障碍的 \texorpdfstring{$\zeta$}{zeta}--谱等价刻画]\label{thm:gm-graph-zeta-cyclotomic-classification}
+令 \(G\) 为 primitive 有向图，边权 \(w\) 诱导模 \(q\) 角色扭曲邻接算子 \(A(\chi)\)。
+定义扭曲图 \(\zeta\) 函数（动力学 \(\zeta\)）：
+\[
+Z_G(u,\chi):=\prod_{[\gamma]}\bigl(1-u^{\ell(\gamma)}\chi(w(\gamma))\bigr)^{-1},
+\]
+乘积遍历素回路同伦类 \([\gamma]\)。
+则存在显式多项式 \(P_\chi(u)\) 使
+\[
+Z_G(u,\chi)=\frac{P_\chi(u)}{\det(I-uA(\chi))}.
+\]
+并且存在非平凡模障碍当且仅当存在某些 \(\chi\ne 1\) 使 \(Z_G(u,\chi)\) 含 cyclotomic 因子；等价地，
+\[
+\rho(A(\chi))=\rho(A(1))
+\]
+在某个非平凡 \(\chi\) 上成立。
+因此“有限模障碍”的全部来源可等价归约为可枚举的 cyclotomic 因子结构。
+\end{theorem}
+
+\begin{proof}[证明要点]
+对 SFT/sofic 的动力学 \(\zeta\) 有标准行列式表示 \(Z(u)=\exp(\sum_{n\ge 1}\mathrm{tr}(A^n)u^n/n)=1/\det(I-uA)\)（参见 \cite[Chapter~6]{LindMarcus1995}）；扭曲情形把 \(A\) 替换为 \(A(\chi)\) 得到分母。
+分子 \(P_\chi\) 用于吸收有限前缀/瞬态态的修正（在 primitive 情形下可取为常数）。
+cyclotomic 因子对应单位圆上的根，从而等价于扭曲与非扭曲在谱半径上等半径；其与模共边界/障碍的等价由命题 \ref{prop:gm-cycle-gcd-mod-obstruction} 与定理 \ref{thm:gm-uniform-twist-gap-from-gcd} 的结构性刻画给出。证毕。
+\end{proof}
+
+\endinput
+

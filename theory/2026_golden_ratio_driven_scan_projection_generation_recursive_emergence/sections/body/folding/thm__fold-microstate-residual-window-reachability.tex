@@ -1,0 +1,67 @@
+\begin{theorem}[纤维残差窗口的全区间可达性与熵谱完备]\label{thm:fold-microstate-residual-window-reachability}
+设 \(\Omega\) 为有限集合，\(\Fold:\Omega\twoheadrightarrow X\) 为满射。
+对每个 \(x\in X\) 记纤维 \(F_x:=\Fold^{-1}(x)\) 与多重度 \(d(x):=|F_x|\)。
+给定任意宏观分布 \(\pi\in\Delta(X)\)，定义其\textbf{纤维均匀提升} \(\mu^{\mathrm{e}}_\pi\in\Delta(\Omega)\) 为
+\[
+\mu^{\mathrm{e}}_\pi(\omega):=\frac{\pi(x)}{d(x)},\qquad \omega\in F_x.
+\]
+并令
+\[
+\mathcal{C}_\pi:=\{\mu\in\Delta(\Omega):\ \Fold_{\#}\mu=\pi\}.
+\]
+定义相对于纤维均匀提升的\textbf{微态残差}
+\[
+\mathsf{R}(\mu):=D_{\mathrm{KL}}\!\left(\mu\ \middle\|\ \mu^{\mathrm{e}}_\pi\right),
+\]
+以及\textbf{可逆窗口长度}
+\[
+W_{\mathrm{inv}}(\pi):=\sum_{x\in X}\pi(x)\log d(x).
+\]
+则成立全区间可达性：
+\[
+\boxed{\ \{\mathsf{R}(\mu):\ \mu\in\mathcal{C}_\pi\}=[0,W_{\mathrm{inv}}(\pi)]\ }.
+\]
+等价地，\(\mathcal{C}_\pi\) 中可实现的 Shannon 熵恰覆盖闭区间
+\[
+\boxed{\ \{H(\mu):\ \mu\in\mathcal{C}_\pi\}=\bigl[H(\pi),\ H(\pi)+W_{\mathrm{inv}}(\pi)\bigr]\ }.
+\]
+其中右端点由 \(\mu=\mu^{\mathrm{e}}_\pi\) 取到（纤维均匀提升为最大熵 lift），左端点由每条纤维取原子条件分布取到。
+\end{theorem}
+\begin{proof}
+取任意 \(\mu\in\mathcal{C}_\pi\)，令 \(\mu_x\in\Delta(F_x)\) 表示 \(\mu\) 在纤维上的条件分布，则对 \(\omega\in F_x\) 有
+\[
+\mu(\omega)=\pi(x)\mu_x(\omega),
+\qquad
+\mu^{\mathrm{e}}_\pi(\omega)=\pi(x)u_x(\omega),
+\]
+其中 \(u_x\) 为 \(F_x\) 上的均匀分布。
+由 KL 的链式分解（对有限分布为直接恒等式）得
+\[
+D_{\mathrm{KL}}\!\left(\mu\ \middle\|\ \mu^{\mathrm{e}}_\pi\right)
+=\sum_{x\in X}\pi(x)\,D_{\mathrm{KL}}(\mu_x\|u_x).
+\]
+并且对每个 \(x\)，有 \(D_{\mathrm{KL}}(\mu_x\|u_x)=\log d(x)-H(\mu_x)\)，因而
+\[
+0\le D_{\mathrm{KL}}(\mu_x\|u_x)\le \log d(x),
+\]
+且当 \(\mu_x\) 在 \(\Delta(F_x)\) 上变化时，\(H(\mu_x)\) 连续覆盖区间 \([0,\log d(x)]\)，从而 \(D_{\mathrm{KL}}(\mu_x\|u_x)\) 连续覆盖 \([0,\log d(x)]\)。
+因此
+\[
+\{\mathsf{R}(\mu):\mu\in\mathcal{C}_\pi\}
+=\sum_{x\in X}\pi(x)\,[0,\log d(x)]
+=[0,\sum_{x\in X}\pi(x)\log d(x)]
+=[0,W_{\mathrm{inv}}(\pi)],
+\]
+其中“和”按 Minkowski 和理解；最后一步由区间加法闭包性直接给出。
+\par
+另一方面，直接计算得
+\[
+\mathsf{R}(\mu)=D_{\mathrm{KL}}\!\left(\mu\ \middle\|\ \mu^{\mathrm{e}}_\pi\right)
+=H(\mu^{\mathrm{e}}_\pi)-H(\mu),
+\qquad
+H(\mu^{\mathrm{e}}_\pi)=H(\pi)+W_{\mathrm{inv}}(\pi),
+\]
+从而熵谱结论与残差谱结论互相等价。证毕。
+\end{proof}
+
+\endinput

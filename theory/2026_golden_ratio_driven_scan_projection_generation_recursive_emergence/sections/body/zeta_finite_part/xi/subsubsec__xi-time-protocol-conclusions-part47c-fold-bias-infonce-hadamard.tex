@@ -1,0 +1,458 @@
+\paragraph{条件偏置谱分解、\texorpdfstring{$2$}{2}-进分离与 Bayes--InfoNCE 反演闭合}
+
+\begin{theorem}[条件偏置的切线相位因子化与碰撞关联的正半定谱分解]\label{thm:xi-fold-bias-tangent-factorization-gram-psd}
+令 \(m\ge 1\)，并记 \(M:=F_{m+2}\) 与
+\[
+N(\omega):=\sum_{j=1}^{m}\omega_jF_{j+1}\qquad(\omega\in\{0,1\}^m).
+\]
+对每个 \(r\in\ZZ/(M\ZZ)\)，定义
+\[
+d_m(r):=\#\{\omega\in\{0,1\}^m:\ N(\omega)\equiv r\pmod M\},
+\qquad
+\mu_m(r):=\frac{d_m(r)}{2^m}.
+\]
+对每个坐标 \(k\in\{1,\dots,m\}\)，定义
+\[
+b_{m,k}(r):=\#\{\omega:\ \omega_k=1,\ N(\omega)\equiv r\pmod M\},
+\qquad
+\nu_{m,k}(r):=\frac{2b_{m,k}(r)-d_m(r)}{2^m}.
+\]
+取离散 Fourier 变换约定
+\[
+\widehat f(t):=\sum_{r\in\ZZ/(M\ZZ)}f(r)\,e^{-2\pi \mathrm{i}tr/M},
+\qquad
+t\in\ZZ/(M\ZZ).
+\]
+则有：
+\begin{enumerate}
+  \item 对任意 \(t\in\ZZ/(M\ZZ)\) 成立
+  \[
+  \widehat{\nu}_{m,k}(t)
+  =
+  -\frac{\mathrm{i}}{2^{m+1}}\,
+  \widehat d_m(t)\,
+  \tan\!\Bigl(\pi t\,\frac{F_{k+1}}{M}\Bigr),
+  \]
+  其中
+  \[
+  \widehat d_m(t)=\prod_{j=1}^{m}\Bigl(1+e^{-2\pi \mathrm{i}tF_{j+1}/M}\Bigr),
+  \]
+  并在 \(\cos\!\bigl(\pi tF_{k+1}/M\bigr)=0\) 时按连续延拓解释右侧（与原始乘子表达一致）。
+  \item 定义 \(m\times m\) Gram 矩阵
+  \[
+  G_{k\ell}^{(m)}:=\sum_{r\in\ZZ/(M\ZZ)}\nu_{m,k}(r)\nu_{m,\ell}(r),
+  \qquad 1\le k,\ell\le m.
+  \]
+  令
+  \[
+  v_k(t):=
+  \begin{cases}
+  \tan\!\bigl(\pi t\,\frac{F_{k+1}}{M}\bigr),& \cos\!\bigl(\pi t\,\frac{F_{k+1}}{M}\bigr)\neq 0,\\
+  0,& \cos\!\bigl(\pi t\,\frac{F_{k+1}}{M}\bigr)=0,
+  \end{cases}
+  \qquad
+  v(t):=(v_1(t),\dots,v_m(t))^\top,
+  \]
+  则有谱分解
+  \[
+  G^{(m)}
+  =
+  \frac{1}{4^{m+1}M}
+  \sum_{t\in\ZZ/(M\ZZ)}
+  |\widehat d_m(t)|^2\,v(t)v(t)^\top.
+  \]
+  因而 \(G^{(m)}\succeq 0\)，且 \(\mathrm{rank}(G^{(m)})\le M\)。
+  \item 取 \(\omega,\omega'\) 为 \(\{0,1\}^m\) 上独立均匀样本，并在碰撞事件
+  \[
+  \mathsf C:=\{N(\omega)\equiv N(\omega')\pmod M\}
+  \]
+  上条件化。令 \(\sigma_k:=(-1)^{\omega_k}\)、\(\sigma'_\ell:=(-1)^{\omega'_\ell}\)，并记
+  \[
+  c_m:=\PP(\mathsf C)
+  =\sum_r\mu_m(r)^2
+  =\frac{1}{M\,4^m}\sum_t|\widehat d_m(t)|^2.
+  \]
+  则对任意 \(k,\ell\) 有
+  \[
+  \EE[\sigma_k\sigma'_\ell\mid \mathsf C]
+  =\frac{G_{k\ell}^{(m)}}{c_m}
+  =\frac14\cdot
+  \frac{\sum_t|\widehat d_m(t)|^2\,v_k(t)v_\ell(t)}
+       {\sum_t|\widehat d_m(t)|^2}.
+  \]
+  因而碰撞条件下跨拷贝关联矩阵必为正半定，并由切线向量外积的加权平均给出。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-fiber-bias-fourier-multiplier-energy}，
+\[
+\widehat{\nu}_{m,k}(t)
+=\frac{1}{2^{m+1}}
+\Bigl(e^{-2\pi \mathrm{i}tF_{k+1}/M}-1\Bigr)
+\prod_{j\ne k}\Bigl(1+e^{-2\pi \mathrm{i}tF_{j+1}/M}\Bigr).
+\]
+再由定理 \ref{thm:fold-spectrum-factorization} 的
+\(
+\widehat d_m(t)=\prod_{j=1}^{m}(1+e^{-2\pi \mathrm{i}tF_{j+1}/M})
+\)
+得
+\[
+\widehat{\nu}_{m,k}(t)
+=\frac{1}{2^{m+1}}\widehat d_m(t)\,
+\frac{e^{-2\pi \mathrm{i}tF_{k+1}/M}-1}{1+e^{-2\pi \mathrm{i}tF_{k+1}/M}}.
+\]
+记 \(\theta:=2\pi tF_{k+1}/M\)。恒等式
+\[
+\frac{e^{-\mathrm{i}\theta}-1}{1+e^{-\mathrm{i}\theta}}
+=-\mathrm{i}\tan(\theta/2)
+\]
+给出第 1 条。
+\par
+对第 2 条，Parseval 恒等式给出
+\[
+G_{k\ell}^{(m)}
+=\sum_r \nu_{m,k}(r)\nu_{m,\ell}(r)
+=\frac1M\sum_t \widehat{\nu}_{m,k}(t)\,\overline{\widehat{\nu}_{m,\ell}(t)}.
+\]
+代入第 1 条并注意 \(\tan(\cdot)\in\RR\)，得到
+\[
+G_{k\ell}^{(m)}
+=\frac{1}{4^{m+1}M}\sum_t |\widehat d_m(t)|^2\,v_k(t)v_\ell(t),
+\]
+即所示矩阵分解。每一项均为非负权重乘秩一外积，故 \(G^{(m)}\succeq 0\)；并且秩至多为项数 \(M\)。
+\par
+对第 3 条，条件于 \(R:=N(\omega)\equiv r\ (\mathrm{mod}\ M)\) 时，
+\[
+\EE[\sigma_k\mid R=r]
+=1-2\PP(\omega_k=1\mid R=r)
+=-\bigl(2p_k(r)-1\bigr).
+\]
+于是
+\[
+\EE[\sigma_k\sigma'_\ell\mid \mathsf C]
+=\frac{1}{c_m}\sum_r \mu_m(r)^2\bigl(2p_k(r)-1\bigr)\bigl(2p_\ell(r)-1\bigr)
+=\frac{1}{c_m}\sum_r \nu_{m,k}(r)\nu_{m,\ell}(r)
+=\frac{G_{k\ell}^{(m)}}{c_m}.
+\]
+再由 \(\mu_m=d_m/2^m\) 与 Parseval，
+\[
+c_m=\sum_r\mu_m(r)^2=\frac1M\sum_t|\widehat\mu_m(t)|^2
+=\frac{1}{M\,4^m}\sum_t|\widehat d_m(t)|^2,
+\]
+代入即得最后一式。证毕。
+\end{proof}
+
+\begin{theorem}[单比特--余类泄漏互信息的平方偏置与对数势夹逼]\label{thm:xi-fold-singlebit-residue-mi-bounds}
+沿用定理 \ref{thm:xi-fold-bias-tangent-factorization-gram-psd} 的记号。
+令
+\[
+R:=N(\omega)\ (\mathrm{mod}\ M),\qquad \omega\sim\mathrm{Unif}(\{0,1\}^m).
+\]
+对固定 \(k\in\{1,\dots,m\}\)，定义
+\[
+p_k(r):=\PP(\omega_k=1\mid R=r),\qquad
+\beta_k(r):=2p_k(r)-1,
+\qquad
+\nu_{m,k}(r)=\mu_m(r)\beta_k(r).
+\]
+记二元熵函数 \(h(p):=-p\log p-(1-p)\log(1-p)\)。
+则（以自然对数计）有
+\[
+I(\omega_k;R)
+=\log 2-\EE\!\left[h\!\left(\frac{1+\beta_k(R)}{2}\right)\right],
+\]
+且满足双边夹逼
+\[
+\frac12\,\EE[\beta_k(R)^2]
+\ \le\
+I(\omega_k;R)
+\ \le\
+-\frac12\,\EE\!\left[\log\!\bigl(1-\beta_k(R)^2\bigr)\right].
+\]
+此外，若记
+\[
+\mu_{m,k}^{(1)}(r):=\PP(R=r\mid \omega_k=1),
+\]
+则
+\[
+\EE[\beta_k(R)^2]
+=\sum_{r:\mu_m(r)>0}\mu_m(r)\beta_k(r)^2
+=\sum_{r:\mu_m(r)>0}\frac{\nu_{m,k}(r)^2}{\mu_m(r)}
+=\chi^2\!\bigl(\mu_{m,k}^{(1)}\mid \mu_m\bigr).
+\]
+\end{theorem}
+\begin{proof}
+由于 \(\omega_k\sim\mathrm{Bernoulli}(1/2)\)，\(H(\omega_k)=\log 2\)。
+而
+\[
+H(\omega_k\mid R)
+=\EE\!\left[h\!\left(\frac{1+\beta_k(R)}{2}\right)\right],
+\]
+故第一式由 \(I(\omega_k;R)=H(\omega_k)-H(\omega_k\mid R)\) 立即得到。
+\par
+对 \(|\beta|<1\)，恒等式
+\[
+\log 2-h\!\left(\frac{1+\beta}{2}\right)
+=\frac12\int_{0}^{\beta}\log\frac{1+t}{1-t}\,\dd t
+\]
+成立。且在 \(t\in[0,1)\) 上有
+\[
+2t\le \log\frac{1+t}{1-t}\le \frac{2t}{1-t^2}.
+\]
+积分得到
+\[
+\frac{\beta^2}{2}
+\le
+\log 2-h\!\left(\frac{1+\beta}{2}\right)
+\le
+-\frac12\log(1-\beta^2).
+\]
+对 \(\beta=\beta_k(R)\) 取期望即得互信息夹逼（\(\beta=\pm1\) 的点由极限延拓）。
+\par
+最后，由 \(\nu_{m,k}(r)=\mu_m(r)\beta_k(r)\) 得
+\[
+\mu_m(r)\beta_k(r)^2=\frac{\nu_{m,k}(r)^2}{\mu_m(r)}\qquad(\mu_m(r)>0).
+\]
+又由计数定义，
+\[
+\mu_{m,k}^{(1)}(r)=\frac{b_{m,k}(r)}{2^{m-1}},\qquad
+\mu_m(r)=\frac{d_m(r)}{2^m},
+\]
+故
+\[
+\mu_{m,k}^{(1)}(r)-\mu_m(r)
+=\frac{2b_{m,k}(r)-d_m(r)}{2^m}
+=\nu_{m,k}(r).
+\]
+于是
+\[
+\chi^2(\mu_{m,k}^{(1)}\mid\mu_m)
+=\sum_{r:\mu_m(r)>0}\frac{(\mu_{m,k}^{(1)}(r)-\mu_m(r))^2}{\mu_m(r)}
+=\sum_{r:\mu_m(r)>0}\frac{\nu_{m,k}(r)^2}{\mu_m(r)}
+=\EE[\beta_k(R)^2].
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[由 \texorpdfstring{$2$}{2}-进分离率推出奇纤维集合的指数上界]\label{thm:xi-fold-odd-fiber-exponential-upper-bound-from-v2}
+设 \(X_m\) 为 Fold 稳定块空间且 \(|X_m|=F_{m+2}\)，并记纤维多重度为 \(d_m(x)\)。
+若存在常数 \(\alpha>0,c'>0\) 使得当 \(m\) 充分大时
+\[
+\PP_{x\sim\mathrm{Unif}(X_m)}\!\bigl[v_2(d_m(x))\le \alpha m\bigr]\le e^{-c'm},
+\]
+则奇纤维集合
+\[
+\mathcal O_m:=\{x\in X_m:\ d_m(x)\ \text{为奇数}\}
+\]
+满足
+\[
+|\mathcal O_m|
+\le |X_m|\,e^{-c'm}
+=O\!\bigl((\varphi e^{-c'})^m\bigr).
+\]
+特别地，存在 \(\rho<\varphi\) 使 \(|\mathcal O_m|=O(\rho^m)\)。
+\end{theorem}
+\begin{proof}
+若 \(d_m(x)\) 为奇数，则 \(v_2(d_m(x))=0\)，从而
+\[
+\{x:\ d_m(x)\ \text{为奇}\}\subseteq \{x:\ v_2(d_m(x))\le \alpha m\}.
+\]
+因此
+\[
+\frac{|\mathcal O_m|}{|X_m|}
+=\PP_{x\sim\mathrm{Unif}(X_m)}(x\in\mathcal O_m)
+\le
+\PP_{x\sim\mathrm{Unif}(X_m)}\!\bigl[v_2(d_m(x))\le \alpha m\bigr]
+\le e^{-c'm},
+\]
+其中最后一步由推论 \ref{cor:pom-fiber-multiplicity-linear-2adic-divisibility}。
+乘以 \(|X_m|\) 得
+\[
+|\mathcal O_m|\le |X_m|e^{-c'm}.
+\]
+再用 \(|X_m|=F_{m+2}=\Theta(\varphi^m)\) 即得
+\(
+|\mathcal O_m|=O((\varphi e^{-c'})^m)
+\)，并且 \(\varphi e^{-c'}<\varphi\)，故结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[Bayes--InfoNCE 的 Newton--二项展开与碰撞幂和闭式反演]\label{thm:xi-fold-bayes-infonce-newton-binomial-inversion}
+令
+\[
+w_m(x):=\frac{d_m(x)}{2^m},\qquad x\in X_m,
+\]
+并取 \(X\sim w_m\)。
+对每个 \(K\ge 2\)，令
+\[
+J\mid X\sim\mathrm{Binomial}(K-1,w_m(X)),
+\qquad
+L_{K,m}^{\star}:=\EE[\log(1+J)].
+\]
+定义
+\[
+f(j):=\log(1+j),\qquad (\Delta g)(j):=g(j+1)-g(j),\qquad
+a_r:=\Delta^r f(0)\quad(r\ge 0),
+\]
+以及碰撞幂和
+\[
+p_r:=\EE[w_m(X)^r]=\sum_{x\in X_m}w_m(x)^{r+1}\qquad(r\ge 0).
+\]
+记 \(n:=K-1\)。则：
+\begin{enumerate}
+  \item \textnormal{(Newton--二项精确展开)}
+  \[
+  L_{K,m}^{\star}
+  =\sum_{r=0}^{n}\binom{n}{r}\,a_r\,p_r.
+  \]
+  \item \textnormal{(闭式反演)} 对每个 \(r\ge 1\)，有
+  \[
+  p_r
+  =\frac{1}{a_r}
+  \sum_{q=0}^{r}(-1)^{r-q}\binom{r}{q}\,L_{q+1,m}^{\star},
+  \]
+  其中约定 \(L_{1,m}^{\star}:=0\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+固定 \(X\) 并记 \(w:=w_m(X)\)。
+对整数 \(j\ge 0\)，Newton 展开给出
+\[
+f(j)=\sum_{r=0}^{j}\binom{j}{r}\Delta^r f(0)=\sum_{r=0}^{j}\binom{j}{r}a_r.
+\]
+故
+\[
+\EE[f(J)\mid X]
+=\sum_{r=0}^{n}a_r\,\EE\!\left[\binom{J}{r}\,\middle|\,X\right].
+\]
+对 \(J\mid X\sim\mathrm{Binomial}(n,w)\)，有
+\[
+\EE\!\left[\binom{J}{r}\,\middle|\,X\right]=\binom{n}{r}w^r.
+\]
+于是
+\[
+\EE[f(J)\mid X]=\sum_{r=0}^{n}\binom{n}{r}a_r\,w^r.
+\]
+再对 \(X\sim w_m\) 取期望，利用 \(\EE[w^r]=p_r\)，得到
+\[
+L_{K,m}^{\star}=\sum_{r=0}^{n}\binom{n}{r}a_rp_r.
+\]
+第一式得证。
+\par
+为得反演，令
+\[
+A_n:=L_{n+1,m}^{\star},\qquad g_r:=a_rp_r.
+\]
+则上式等价于
+\[
+A_n=\sum_{r=0}^{n}\binom{n}{r}g_r\qquad(n\ge 0).
+\]
+由经典二项反演，
+\[
+g_r=\sum_{q=0}^{r}(-1)^{r-q}\binom{r}{q}A_q.
+\]
+因此
+\[
+p_r=\frac{g_r}{a_r}
+=\frac{1}{a_r}\sum_{q=0}^{r}(-1)^{r-q}\binom{r}{q}L_{q+1,m}^{\star},
+\qquad r\ge 1.
+\]
+由推论 \ref{cor:fold-infonce-triangular-inversion-collision-spectrum}，\(a_r=\Delta^r f(0)\neq 0\)（\(r\ge 1\)），故除法合法。证毕。
+\end{proof}
+
+\begin{theorem}[Fold 直积下 Bayes--InfoNCE 指数母函数的 Hadamard 乘法律]\label{thm:xi-fold-product-infonce-egf-hadamard-law}
+设两族折叠
+\[
+\Fold_m^{(i)}:\Omega_m^{(i)}\twoheadrightarrow X_m^{(i)}\qquad(i=1,2)
+\]
+具有纤维多重度 \(d_m^{(i)}\) 与权重 \(w_m^{(i)}\)，并令直积折叠
+\[
+\Fold_m^{(\otimes)}:=\Fold_m^{(1)}\otimes \Fold_m^{(2)}.
+\]
+对 \(i\in\{1,2,\otimes\}\)，定义
+\[
+p_r^{(i)}:=\EE\!\left[(w_m^{(i)}(X_i))^r\right],\qquad
+L_{K,m}^{(i),\star}:=\EE[\log(1+J_i)],\quad
+J_i\mid X_i\sim\mathrm{Binomial}(K-1,w_m^{(i)}(X_i)).
+\]
+再定义指数母函数
+\[
+\mathcal A^{(i)}(z):=\sum_{n=0}^{\infty}L_{n+1,m}^{(i),\star}\frac{z^n}{n!},
+\qquad
+\mathcal H^{(i)}(z):=e^{-z}\mathcal A^{(i)}(z),
+\]
+\[
+\mathcal U^{(i)}(z):=\sum_{r=0}^{\infty}p_r^{(i)}\frac{z^r}{r!},
+\qquad
+\mathcal K(z):=\sum_{r=0}^{\infty}a_r\frac{z^r}{r!},
+\]
+其中 \(a_r=\Delta^r\log(1+\cdot)(0)\)。
+记指数型 Hadamard 乘积
+\[
+\left(\sum_{r\ge 0}u_r\frac{z^r}{r!}\right)\odot
+\left(\sum_{r\ge 0}v_r\frac{z^r}{r!}\right)
+:=\sum_{r\ge 0}(u_rv_r)\frac{z^r}{r!}.
+\]
+则成立
+\[
+\mathcal U^{(\otimes)}=\mathcal U^{(1)}\odot\mathcal U^{(2)},
+\]
+\[
+\mathcal H^{(\otimes)}
+=\mathcal K\odot\mathcal U^{(\otimes)}
+=\mathcal K\odot\bigl(\mathcal U^{(1)}\odot\mathcal U^{(2)}\bigr).
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-product-fold-additivity}，
+\[
+d_m^{(\otimes)}(x_1,x_2)=d_m^{(1)}(x_1)d_m^{(2)}(x_2),
+\]
+且归一化后有 \(\pi_m^{(\otimes)}=\pi_m^{(1)}\otimes\pi_m^{(2)}\)。
+故
+\[
+w_m^{(\otimes)}(x_1,x_2)=w_m^{(1)}(x_1)w_m^{(2)}(x_2),
+\]
+并且 \(X_1,X_2\) 在 \(w_m^{(\otimes)}\) 下独立，于是
+\[
+p_r^{(\otimes)}
+=\EE\!\left[(w_m^{(\otimes)}(X_1,X_2))^r\right]
+=\EE[(w_m^{(1)}(X_1))^r]\cdot \EE[(w_m^{(2)}(X_2))^r]
+=p_r^{(1)}p_r^{(2)}.
+\]
+逐系数等价于
+\(
+\mathcal U^{(\otimes)}=\mathcal U^{(1)}\odot\mathcal U^{(2)}
+\)。
+\par
+另一方面，由定理 \ref{thm:xi-fold-bayes-infonce-newton-binomial-inversion}，
+\[
+L_{n+1,m}^{(i),\star}
+=\sum_{r=0}^{n}\binom{n}{r}a_r p_r^{(i)}.
+\]
+代入 \(\mathcal A^{(i)}\) 并交换求和（形式幂级数意义下恒合法）：
+\[
+\mathcal A^{(i)}(z)
+=\sum_{n\ge 0}\sum_{r\le n}\binom{n}{r}a_r p_r^{(i)}\frac{z^n}{n!}
+=\sum_{r\ge 0}a_r p_r^{(i)}\frac{z^r}{r!}\sum_{m\ge 0}\frac{z^m}{m!}
+=e^z\sum_{r\ge 0}a_r p_r^{(i)}\frac{z^r}{r!}.
+\]
+因此
+\[
+\mathcal H^{(i)}(z)
+=e^{-z}\mathcal A^{(i)}(z)
+=\sum_{r\ge 0}a_r p_r^{(i)}\frac{z^r}{r!}
+=\mathcal K\odot\mathcal U^{(i)}.
+\]
+取 \(i=\otimes\) 并代入 \(p_r^{(\otimes)}=p_r^{(1)}p_r^{(2)}\) 即得
+\[
+\mathcal H^{(\otimes)}
+=\mathcal K\odot\mathcal U^{(\otimes)}
+=\mathcal K\odot\bigl(\mathcal U^{(1)}\odot\mathcal U^{(2)}\bigr).
+\]
+证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part47d-abelian-negativity-rho-hankel-cm}
+\input{subsubsec__xi-time-protocol-conclusions-part48-fiber-algebra-collision-zero-temp-primitive}
+
+\endinput

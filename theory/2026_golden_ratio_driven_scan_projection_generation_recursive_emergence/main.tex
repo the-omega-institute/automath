@@ -1,0 +1,195 @@
+\ifdefined\pdfoutput\pdfoutput=1\fi % pdfTeX only; safe under XeTeX/LuaTeX
+\documentclass[11pt,letterpaper,fontset=fandol]{ctexart}
+
+% Silence spurious “Missing character … (U+0013)” log noise.
+\tracinglostchars=0\relax
+
+\usepackage{geometry}
+\geometry{letterpaper, margin=1in}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Ind}{Ind}
+\DeclareMathOperator{\Disc}{Disc}
+\DeclareMathOperator{\Arg}{Arg}
+\usepackage{amscd}
+\makeatletter
+\@ifundefined{FASTBUILD}{%
+  \usepackage{graphicx}%
+}{%
+  % Fast build: skip loading external graphics, speed up compilation.
+  \usepackage[draft]{graphicx}%
+}%
+\makeatother
+
+% Keep compilation robust even if some (pipeline-generated) graphics are missing.
+% Replace missing graphics with a small framed placeholder instead of a hard error.
+\makeatletter
+\let\origincludegraphics\includegraphics
+\renewcommand{\includegraphics}[2][]{%
+  \IfFileExists{#2}{%
+    \origincludegraphics[#1]{#2}%
+  }{%
+    \fbox{\ttfamily missing graphic: \detokenize{#2}}%
+  }%
+}%
+\makeatother
+\usepackage[hypertexnames=false]{hyperref}
+\usepackage{cite}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{adjustbox}
+\usepackage{etoolbox}
+\usepackage{fvextra}
+\usepackage{verbatim}
+\usepackage{url}
+\usepackage{mathrsfs}
+\usepackage{dsfont}
+\usepackage{subfiles}
+
+% Ask xeCJK to synthesize missing CJK font shapes when needed.
+\makeatletter
+\@ifundefined{xeCJKsetup}{}{%
+  \xeCJKsetup{AutoFakeBold=true,AutoFakeSlant=true}%
+}%
+\makeatother
+
+% FandolSong has no bold-italic face; substitute with bold-upright to avoid warnings.
+\DeclareFontShape{TU}{FandolSong-Regular(0)}{b}{it}{<->ssub*FandolSong-Regular(0)/b/n}{}
+
+% Allow line breaks in \url/\path at underscores.
+\makeatletter
+\g@addto@macro\UrlBreaks{\do\_}
+\makeatother
+
+% Scale tabular blocks to fit line width (avoid overfull boxes for wide tables).
+% NOTE: Use *Before/After* hooks to wrap the whole environment; using AtBegin/AtEnd
+% would inject code *inside* tabular and can break alignments (including \maketitle).
+\BeforeBeginEnvironment{tabular}{\begin{adjustbox}{max width=\linewidth}}%
+\AfterEndEnvironment{tabular}{\end{adjustbox}}%
+
+% Theorem environments (Chinese)
+\theoremstyle{plain}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{conclusion}{结论}[section]
+\newtheorem{conjecture}[theorem]{猜想}
+\newtheorem{auditthm}{定理}
+\newtheorem{auditcor}[auditthm]{推论}
+\newtheorem{auditprop}[auditthm]{命题}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{example}[theorem]{例}
+\newtheorem{algorithm}[theorem]{算法}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{注}
+
+% Reference counter for generated (non-float, non-theorem) \input fragments.
+% Used to avoid undefined \ref{} targets without interfering with theorem/table/equation numbering.
+\newcounter{genfrag}[section]
+\renewcommand{\thegenfrag}{\thesection.\arabic{genfrag}}
+\newcommand{\genfraglabel}[1]{\refstepcounter{genfrag}\label{#1}}
+
+% Common commands
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\DD}{\mathbb{D}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\TT}{\mathbb{T}}
+\newcommand{\EE}{\mathbb{E}}
+\providecommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Sol}{\Sigma_{\mathrm{sol}}}
+\newcommand{\abs}[1]{\left\lvert #1\right\rvert}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\card}[1]{\left\lvert #1\right\rvert}
+\newcommand{\Tr}{\mathrm{Tr}}
+\providecommand{\End}{\operatorname{End}}
+\providecommand{\Hom}{\operatorname{Hom}}
+\providecommand{\Ext}{\operatorname{Ext}}
+\providecommand{\Aut}{\operatorname{Aut}}
+\providecommand{\Inn}{\operatorname{Inn}}
+\providecommand{\Out}{\operatorname{Out}}
+\providecommand{\Gal}{\operatorname{Gal}}
+\providecommand{\Tor}{\operatorname{Tor}}
+\providecommand{\Lie}{\operatorname{Lie}}
+\providecommand{\supp}{\operatorname{supp}}
+\providecommand{\diag}{\operatorname{diag}}
+\providecommand{\Frob}{\operatorname{Frob}}
+\providecommand{\GL}{\operatorname{GL}}
+\providecommand{\rank}{\operatorname{rank}}
+\providecommand{\Spec}{\operatorname{Spec}}
+\providecommand{\Pic}{\operatorname{Pic}}
+\providecommand{\Div}{\operatorname{Div}}
+\providecommand{\ord}{\operatorname{ord}}
+\providecommand{\Res}{\operatorname{Res}}
+\providecommand{\Jac}{\operatorname{Jac}}
+\providecommand{\Prym}{\operatorname{Prym}}
+\providecommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Span}{\mathrm{Span}}
+\newcommand{\Mat}{\mathrm{Mat}}
+\providecommand{\cdim}{\operatorname{cdim}}
+\providecommand{\pcdim}{\operatorname{pcdim}}
+\providecommand{\dashmapsto}{\mapsto}
+\providecommand{\longtwoheadrightarrow}{\relbar\joinrel\twoheadrightarrow}
+\providecommand{\Log}{\log}
+\newcommand{\Chi}{\mathcal{X}}
+
+% Paper-specific
+\newcommand{\Fold}{\mathrm{Fold}}
+\providecommand{\poly}{\operatorname{poly}}
+\providecommand{\Id}{\mathrm{Id}}
+\providecommand{\ket}[1]{\lvert #1\rangle}
+\providecommand{\bra}[1]{\langle #1\rvert}
+
+% Code listings (fvextra / fancyvrb)
+\fvset{breaklines=true,breakanywhere=true,fontsize=\small}
+\RecustomVerbatimEnvironment{verbatim}{Verbatim}{breaklines=true,breakanywhere=true,fontsize=\small}
+
+% Silence underfull box warnings (layout remains visible in PDF).
+\hbadness=10000\relax
+\vbadness=10000\relax
+\hfuzz=\maxdimen\relax
+
+\title{黄金比例驱动的扫描—投影生成：\\\large 由群作用与统计稳定性递归涌现的算术与概念层级}
+\author{马昊伯\\CHRONOAI PTE. LTD.\\\#14-02, Marina Bay Financial Centre Tower 1\\8 Marina Blvd, Singapore 018981}
+
+\begin{document}
+\sloppy
+\hfuzz=\maxdimen\relax
+\maketitle
+\subfile{sections/frontmatter/main}
+
+\begingroup
+\tracinglostchars=0\relax
+\makeatletter
+\let\input@path\@empty
+\makeatother
+\tableofcontents
+\endgroup
+\newpage
+
+\subfile{sections/body/main}
+
+\FloatBarrier
+\subfile{sections/appendix/main}
+
+\FloatBarrier
+\bibliographystyle{amsplain}
+\bibliography{references,references_lee_yang,references_fibonacci,references_godel_zeckendorf,references_algebra,references_lmfdb,references_paircorr,references_indefinite_schur,references_internal_2025,references_internal_2026,references_quantum_zk,references_zk,references_horizon_physics,references_horizon_operator,references_flow_equivalence_operator_algebra,references_langlands,references_riemann,references_ml_ai}
+
+\end{document}

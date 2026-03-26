@@ -1,0 +1,194 @@
+\subsection{Fibonacci 时间索引下的 Poisson--KL 刚性与 Jensen 缺陷离散化}\label{subsec:cdim-fibonacci-poisson-kl-rh-discretization}
+本小节在既有 Poisson 半群、Cauchy 基准与 Jensen 缺陷框架内，给出一条以 Fibonacci 时间/半径链为索引的可执行证书化陈述。
+所用基础接口包括：Poisson 半群同态（定理 \ref{thm:xi-offcritical-poisson-semigroup-homomorphism}）、相对熵收缩与耗散（命题 \ref{prop:xi-poisson-relative-entropy-contraction} 与命题 \ref{prop:xi-poisson-relative-entropy-fisher-krein}）、以及 RH 的缺陷判据与可数化形式（定理 \ref{thm:cdim-horizon-purity-criterion}、定理 \ref{thm:app-rh-iff-jensen-defect-vanishing-sequence}、定理 \ref{thm:app-jensen-countable-criterion}）。
+
+\begin{conclusion}[Fibonacci 时间下的 Poisson 粗粒化严格因子分解]\label{con:cdim-fibonacci-poisson-semigroup-factorization}
+记 Fibonacci 数列 \((F_m)_{m\ge 0}\) 满足
+\(
+F_0=0,\ F_1=1,\ F_{m+2}=F_{m+1}+F_m
+\)。
+令 \(\mathsf T_t f:=P_t*f\) 为 Poisson 卷积算子，其中
+\[
+P_t(x)=\frac1\pi\frac{t}{x^2+t^2}.
+\]
+则对任意 \(m\ge 0\) 有
+\[
+\mathsf T_{F_{m+2}}
+=
+\mathsf T_{F_{m+1}}\circ \mathsf T_{F_m}
+=
+\mathsf T_{F_m}\circ \mathsf T_{F_{m+1}}.
+\]
+\end{conclusion}
+\begin{proof}
+由定理 \ref{thm:xi-offcritical-poisson-semigroup-homomorphism} 的半群律
+\(
+\mathsf T_{t+s}=\mathsf T_t\circ\mathsf T_s
+\)
+及 Fibonacci 递推
+\(
+F_{m+2}=F_{m+1}+F_m
+\)
+直接得
+\[
+\mathsf T_{F_{m+2}}
+=
+\mathsf T_{F_{m+1}+F_m}
+=
+\mathsf T_{F_{m+1}}\circ\mathsf T_{F_m}.
+\]
+Poisson 卷积交换性给出右端对易式，结论成立。
+\end{proof}
+
+\begin{conclusion}[Fibonacci 半径链与 Poisson 时间共轭]\label{con:cdim-fibonacci-radius-time-conjugacy}
+定义
+\[
+\varrho_m:=\frac{F_m}{F_m+2}\qquad(m\ge 1),
+\qquad
+t(\varrho):=\frac{2\varrho}{1-\varrho}.
+\]
+则成立：
+\begin{enumerate}
+  \item \(t(\varrho_m)=F_m\)；
+  \item \(1-\varrho_m^2=\dfrac{4(F_m+1)}{(F_m+2)^2}\)；
+  \item 设 \(\varphi=\frac{1+\sqrt5}{2}\)，则
+  \[
+  1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}\qquad(m\to\infty).
+  \]
+\end{enumerate}
+\end{conclusion}
+\begin{proof}
+由定义直接计算
+\[
+t(\varrho_m)
+=
+\frac{2\cdot \frac{F_m}{F_m+2}}{1-\frac{F_m}{F_m+2}}
+=
+F_m.
+\]
+再由恒等式 \(1-\varrho^2=(1-\varrho)(1+\varrho)\)，并代入 \(\varrho=\frac{t}{t+2}\)，得
+\[
+1-\varrho^2
+=
+\frac{2}{t+2}\cdot\frac{2(t+1)}{t+2}
+=
+\frac{4(t+1)}{(t+2)^2}.
+\]
+令 \(t=F_m\) 即得第二式。
+第三式由 Binet 渐近 \(F_m\sim \varphi^m/\sqrt5\) 代入第二式并化简得到。
+\end{proof}
+
+\begin{conclusion}[Jensen 圆周平均的逆向 KL 分解]\label{con:cdim-jensen-average-reverse-kl-splitting}
+设 \((\Omega,\mu)\) 为概率空间，\(f>0\) 可测且 \(0<\int f\,\mathrm d\mu<\infty\)。
+定义倾斜测度
+\[
+\mathrm d\nu=\frac{f}{\int f\,\mathrm d\mu}\,\mathrm d\mu.
+\]
+则
+\[
+D_{\mathrm{KL}}(\mu\mid \nu)=\log\!\int f\,\mathrm d\mu-\int \log f\,\mathrm d\mu.
+\]
+进一步，对圆盘解析函数 \(F\) 及 \(\varrho\in(0,1)\)，取
+\[
+f_\varrho(\theta):=\bigl|F(\varrho e^{\mathrm i\theta})\bigr|^{-2},
+\quad
+Z_\varrho:=\int_0^{2\pi}f_\varrho(\theta)\frac{\mathrm d\theta}{2\pi},
+\quad
+\mathrm d\nu_\varrho=\frac{f_\varrho}{Z_\varrho}\,\frac{\mathrm d\theta}{2\pi},
+\]
+则有恒等式
+\[
+\int_0^{2\pi}\log\bigl|F(\varrho e^{\mathrm i\theta})\bigr|\frac{\mathrm d\theta}{2\pi}
+=
+\frac12\,D_{\mathrm{KL}}(\mu\mid \nu_\varrho)-\frac12\log Z_\varrho.
+\]
+\end{conclusion}
+\begin{proof}
+由定义
+\[
+\frac{\mathrm d\mu}{\mathrm d\nu}
+=
+\frac{\int f\,\mathrm d\mu}{f},
+\]
+故
+\[
+D_{\mathrm{KL}}(\mu\mid\nu)
+=
+\int \log\frac{\mathrm d\mu}{\mathrm d\nu}\,\mathrm d\mu
+=
+\log\!\int f\,\mathrm d\mu-\int\log f\,\mathrm d\mu.
+\]
+取 \(f=f_\varrho\) 且 \(\log f_\varrho=-2\log|F(\varrho e^{\mathrm i\theta})|\) 即得第二式。
+\end{proof}
+
+\begin{conclusion}[Poisson 相对熵的平台刚性]\label{con:cdim-poisson-kl-plateau-rigidity}
+沿用命题 \ref{prop:xi-poisson-relative-entropy-contraction} 与命题 \ref{prop:xi-poisson-relative-entropy-fisher-krein} 的记号，定义
+\[
+\mathcal E(t):=D_{\mathrm{KL}}(h_t\mid c_t),\qquad t\ge 0.
+\]
+若存在 \(t_0\ge 0\) 与 \(s>0\) 使
+\[
+\mathcal E(t_0+s)=\mathcal E(t_0),
+\]
+则必有 \(h=c_0\)（几乎处处），从而 \(\mathcal E(t)\equiv 0\)。
+\end{conclusion}
+\begin{proof}
+由命题 \ref{prop:xi-poisson-relative-entropy-fisher-krein}，
+\[
+\frac{\mathrm d}{\mathrm dt}\mathcal E(t)=-\mathcal I(t),\qquad \mathcal I(t)\ge 0.
+\]
+端点相等与单调性蕴含 \(\mathcal E\) 在 \([t_0,t_0+s]\) 常值，故 \(\mathcal I(t)=0\) 几乎处处，特别有 \(h_{t_0}=c_{t_0}\)。
+再由同命题中的“零耗散当且仅当平衡态”判据（等价地可用 Poisson 乘子 \(e^{-t_0|\xi|}\neq 0\) 的 Fourier 反演）得到 \(h=c_0\)。
+\end{proof}
+
+\begin{conclusion}[对称 KL 的严格耗散与双侧平台唯一性]\label{con:cdim-poisson-jeffreys-dissipation-rigidity}
+定义对称 KL
+\[
+\mathcal J(t):=D_{\mathrm{KL}}(h_t\mid c_t)+D_{\mathrm{KL}}(c_t\mid h_t).
+\]
+则 \(\mathcal J\) 单调不增；并且若存在 \(t_0\ge 0,s>0\) 使 \(\mathcal J(t_0+s)=\mathcal J(t_0)\)，则 \(h=c_0\)。
+\end{conclusion}
+\begin{proof}
+两项 KL 均在 Poisson 同时推进下满足数据处理收缩，故和函数 \(\mathcal J\) 单调不增。
+若端点相等，则单调性迫使两项在该区间各自常值，故对应耗散泛函均为零，进而由结论 \ref{con:cdim-poisson-kl-plateau-rigidity} 得 \(h=c_0\)。
+\end{proof}
+
+\begin{conclusion}[Fibonacci 时间平台判别的有限证据形式]\label{con:cdim-fibonacci-kl-platform-finite-certificate}
+令 \(t_m:=F_m\)，并记 \(\mathcal E(t)=D_{\mathrm{KL}}(h_t\mid c_t)\)。
+则下列命题等价：
+\begin{enumerate}
+  \item \(h=c_0\)（几乎处处）；
+  \item 存在 \(m\ge 1\) 使 \(\mathcal E(F_{m+1})=\mathcal E(F_m)\)；
+  \item 存在 \(m\ge 1\) 使 \(\mathcal E(F_{m+2})=\mathcal E(F_{m+1})\)。
+\end{enumerate}
+\end{conclusion}
+\begin{proof}
+\((1)\Rightarrow(2),(3)\) 显然。
+对 \((2)\Rightarrow(1)\)：由 \(\mathcal E\) 单调不增可知若两端点相等，则 \(\mathcal E\) 在区间 \([F_m,F_{m+1}]\) 常值，故由结论 \ref{con:cdim-poisson-kl-plateau-rigidity} 得 \(h=c_0\)。
+\((3)\Rightarrow(1)\) 同理。
+\end{proof}
+
+\begin{conclusion}[RH 一致缺陷判据在 Fibonacci 半径链上的离散承载]\label{con:cdim-rh-defect-fibonacci-discretization}
+设 \(\varrho_m=\frac{F_m}{F_m+2}\uparrow 1\)。
+记
+\[
+\mathcal D(\varrho):=\sup_{x_0\in\RR}D_{\zeta,x_0}(\varrho).
+\]
+则“存在 \(\rho_n\uparrow 1\) 使 \(\mathcal D(\rho_n)\to 0\)”与下述离散条件等价：
+\[
+\exists\,\varepsilon_m\downarrow 0\ \text{使}\ \mathcal D(\varrho_m)\le \varepsilon_m\ \ (\forall m).
+\]
+特别地，该条件与定理 \ref{thm:cdim-horizon-purity-criterion}、定理 \ref{thm:app-rh-iff-jensen-defect-vanishing-sequence} 给出的 RH 缺陷判据相容，并可固定到显式 Fibonacci 索引。
+\end{conclusion}
+\begin{proof}
+若离散条件成立，则取 \(\rho_n:=\varrho_n\) 即得 \(\mathcal D(\rho_n)\to 0\)。
+
+反向，若存在 \(\rho_n\uparrow 1\) 使 \(\mathcal D(\rho_n)\to 0\)，则对每个 \(m\) 取 \(n(m)\) 使 \(\varrho_m\le \rho_{n(m)}\)。
+由 Jensen 缺陷在半径参数上的单调性（见命题 \ref{prop:cdim-jensen-defect-log-derivative} 及其附录对应命题），得
+\[
+\mathcal D(\varrho_m)\le \mathcal D(\rho_{n(m)}).
+\]
+令 \(\varepsilon_m:=\sup_{k\ge n(m)}\mathcal D(\rho_k)\)，则 \(\varepsilon_m\downarrow 0\) 且 \(\mathcal D(\varrho_m)\le\varepsilon_m\)。
+故两条件等价。
+\end{proof}
+

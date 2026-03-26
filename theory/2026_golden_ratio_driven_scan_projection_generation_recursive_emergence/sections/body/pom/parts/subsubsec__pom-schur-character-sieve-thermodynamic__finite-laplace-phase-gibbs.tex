@@ -1,0 +1,303 @@
+% (User input window)
+
+\paragraph{有限 Laplace 原理与相图：主层、主系数与对称群 Gibbs 极限}
+沿用前述设定与记号。
+为简化表述，对任意分拆 \(\nu\vdash q\) 定义其\textbf{分拆压力}与\textbf{分拆主系数}
+\[
+\mathcal{P}(\nu):=\sum_{r=1}^{q} c_r(\nu)\,P(r),
+\qquad
+K(\nu):=\prod_{r=1}^{q}\kappa_r^{\,c_r(\nu)}.
+\]
+并记谱隙参数
+\[
+\varepsilon_*:=\min_{1\le r\le q}\log\!\left(\frac{\rho_r}{\theta_r}\right)>0
+\]
+（其中 \(\rho_r=e^{P(r)}\)，且 \(0<\theta_r<\rho_r\) 由 \eqref{eq:pom-sr-main-term-kappa} 给出）。
+
+\begin{lemma}[分拆单项式的指数主项]\label{lem:pom-partition-monomial-exponential-main-term}
+对任意固定分拆 \(\nu\vdash q\) 有
+\[
+\mathsf{M}_\nu(m)=K(\nu)\,e^{m\mathcal{P}(\nu)}+O\!\left(e^{m(\mathcal{P}(\nu)-\varepsilon_*)}\right)\qquad(m\to\infty).
+\]
+\end{lemma}
+\begin{proof}
+由 \eqref{eq:pom-sr-main-term-kappa}，
+\(
+S_r(m)=\kappa_r\rho_r^{\,m}+O(\theta_r^{\,m})
+=\kappa_r e^{mP(r)}\bigl(1+O(e^{-m\varepsilon_*})\bigr)
+\)
+对所有 \(1\le r\le q\) 同时成立。
+将其代入 \(\mathsf{M}_\nu(m)=\prod_{r=1}^{q}S_r(m)^{c_r(\nu)}\) 并取有限乘积，误差可并入常数且相对误差仍为 \(O(e^{-m\varepsilon_*})\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[Schur 通道迹的有限 Laplace 原理：主指数与主系数的可判定公式]\label{thm:pom-schur-trace-finite-laplace-principle}
+固定 \(q\ge 2\)，并沿用命题 \ref{prop:pom-schur-tomography-by-partitions} 的分拆求和式
+\[
+T_{q,\lambda}(m)=f^\lambda\sum_{\nu\vdash q}\frac{\chi^\lambda(\nu)}{z_\nu}\,\mathsf{M}_\nu(m).
+\]
+对任意 \(\lambda\vdash q\) 与任意指数层 \(v\in\RR\) 定义层系数
+\[
+A_\lambda(v):=
+f^\lambda\!\!\sum_{\substack{\nu\vdash q\\ \mathcal{P}(\nu)=v}}\frac{\chi^\lambda(\nu)}{z_\nu}\,K(\nu),
+\qquad
+\mathcal{V}_\lambda:=\left\{\mathcal{P}(\nu):\nu\in\mathrm{Supp}(\lambda)\right\}.
+\]
+若存在 \(v\in\mathcal{V}_\lambda\) 使 \(A_\lambda(v)\neq 0\)，令
+\[
+\mathcal{P}_\lambda^{\mathrm{eff}}
+:=
+\max\{v\in\mathcal{V}_\lambda:\ A_\lambda(v)\neq 0\}.
+\]
+则存在 \(\varepsilon_\lambda>0\) 使得
+\[
+T_{q,\lambda}(m)
+=
+A_\lambda(\mathcal{P}_\lambda^{\mathrm{eff}})\,e^{m\mathcal{P}_\lambda^{\mathrm{eff}}}
++O\!\left(e^{m(\mathcal{P}_\lambda^{\mathrm{eff}}-\varepsilon_\lambda)}\right),
+\qquad
+\limsup_{m\to\infty}\frac{1}{m}\log|T_{q,\lambda}(m)|=\mathcal{P}_\lambda^{\mathrm{eff}}.
+\]
+若对所有 \(v\in\mathcal{V}_\lambda\) 均有 \(A_\lambda(v)=0\)，则
+\[
+\limsup_{m\to\infty}\frac{1}{m}\log|T_{q,\lambda}(m)|
+\le
+\max_{v\in\mathcal{V}_\lambda}v-\varepsilon_*,
+\]
+即指数主阶至少下降 \(\varepsilon_*\)。
+特别地，若 \(\mathcal{P}_\lambda\) 与 \(\mathcal{M}_\lambda\) 如上文定义且 \(A_\lambda(\mathcal{P}_\lambda)\neq 0\)，则 \(\mathcal{P}_\lambda^{\mathrm{eff}}=\mathcal{P}_\lambda\)，并与定理 \ref{thm:pom-schur-channel-radius-character-sieve} 的非退化情形一致。
+\end{theorem}
+\begin{proof}
+由引理 \ref{lem:pom-partition-monomial-exponential-main-term} 可将 \(T_{q,\lambda}(m)\) 写成有限个指数项之和，并按 \(\mathcal{P}(\nu)\) 分层重排：
+\[
+T_{q,\lambda}(m)=\sum_{v\in\mathcal{V}_\lambda} A_\lambda(v)\,e^{mv}+O\!\left(e^{m(\max\mathcal{V}_\lambda-\varepsilon_*)}\right).
+\]
+若存在非零层系数，则取 \(v=\mathcal{P}_\lambda^{\mathrm{eff}}\) 为最大非零层即可得到主项与指数率；
+误差项由更低层 \(v<\mathcal{P}_\lambda^{\mathrm{eff}}\) 的指数间隙以及引理中的统一亏损共同控制。
+若全部层系数为零，则主项层面完全消去，仅剩来自各 \(\mathsf{M}_\nu(m)\) 的误差贡献，从而得到所示上界。
+证毕。
+\end{proof}
+
+\paragraph{共振层的全通道消去：特征标正交与刚性}
+记全局最大压力与其极大集合为
+\[
+\mathcal{P}_{\max}:=\max_{\nu\vdash q}\mathcal{P}(\nu),
+\qquad
+\mathcal{R}_{\max}:=\{\nu\vdash q:\ \mathcal{P}(\nu)=\mathcal{P}_{\max}\}.
+\]
+并引入共振层权函数（视为 \(S_q\) 的类函数）
+\[
+w(\nu):=K(\nu)\,\mathbf 1_{\{\nu\in\mathcal{R}_{\max}\}}.
+\]
+
+\begin{proposition}[共振层 Fourier 系数与全通道消去的充要条件]\label{prop:pom-schur-resonant-layer-total-cancellation}
+对每个 \(\lambda\vdash q\) 定义共振层 Fourier 系数
+\[
+b_\lambda:=\sum_{\nu\vdash q}\frac{\chi^\lambda(\nu)}{z_\nu}\,w(\nu)
+=\sum_{\nu\in\mathcal{R}_{\max}}\frac{\chi^\lambda(\nu)}{z_\nu}\,K(\nu).
+\]
+则有反演公式：对任意 \(\mu\vdash q\)，
+\[
+\boxed{\;
+w(\mu)=\sum_{\lambda\vdash q}\chi^\lambda(\mu)\,b_\lambda\; }.
+\]
+从而以下两命题等价：
+\begin{enumerate}
+  \item 对所有非平凡 \(\lambda\neq(q)\) 都有 \(b_\lambda=0\)；
+  \item \(w(\nu)\) 在全部共轭类上为常数（即 \(w\) 与所有非平凡不可约特征标正交）。
+\end{enumerate}
+特别地，若 \(\mathcal{R}_{\max}\subsetneq\{\nu\vdash q\}\)，则必存在某个非平凡 \(\lambda\neq(q)\) 使 \(b_\lambda\neq 0\)，即共振指数层不能被所有非平凡 Schur 通道同时消去。
+\end{proposition}
+\begin{proof}
+由对称群特征标的列正交关系
+\(
+\sum_{\lambda\vdash q}\chi^\lambda(\mu)\chi^\lambda(\nu)=z_\mu\,\mathbf 1_{\{\mu=\nu\}}
+\)，
+有
+\[
+\sum_{\lambda\vdash q}\chi^\lambda(\mu)\,b_\lambda
+=\sum_{\nu\vdash q}\frac{w(\nu)}{z_\nu}\sum_{\lambda\vdash q}\chi^\lambda(\mu)\chi^\lambda(\nu)
+=\sum_{\nu\vdash q}\frac{w(\nu)}{z_\nu}\,z_\mu\,\mathbf 1_{\{\mu=\nu\}}
+=w(\mu),
+\]
+从而反演公式成立。
+若对一切 \(\lambda\neq(q)\) 均有 \(b_\lambda=0\)，则 \(w(\mu)=\chi^{(q)}(\mu)\,b_{(q)}\equiv b_{(q)}\) 为常数；
+反之，若 \(w\) 为常数类函数，则其与所有非平凡特征标正交，故 \(b_\lambda=0\)（\(\lambda\neq(q)\)）。
+最后，若 \(\mathcal{R}_{\max}\) 不是全体分拆，则 \(w\) 不是常数类函数，因而至少一个非平凡 Fourier 系数必非零。证毕。
+\end{proof}
+
+\begin{theorem}[压力向量的有限扇形相图：通道主层的分段线性结构]\label{thm:pom-schur-pressure-fan-diagram}
+固定 \(q\ge2\)，并把压力向量记为 \(p=(P(1),\dots,P(q))\in\RR^q\)。
+对每个分拆 \(\nu\vdash q\)，\(\mathcal{P}(\nu)=\langle c(\nu),p\rangle\) 是 \(p\) 的线性函数（其中 \(c(\nu)=(c_1(\nu),\dots,c_q(\nu))\)）。
+令超平面族
+\[
+\mathcal{H}_q
+:=
+\left\{\langle c(\nu)-c(\mu),p\rangle=0:\ \nu,\mu\vdash q,\ \nu\neq\mu\right\}.
+\]
+则对任意 \(p\notin\bigcup\mathcal{H}_q\)，所有 \(\{\mathcal{P}(\nu)\}_{\nu\vdash q}\) 两两不同。
+从而对每个 \(\lambda\vdash q\)，极大集合 \(\mathcal{M}_\lambda\) 为单点 \(\{\nu_\lambda(p)\}\)，并且存在 \(\varepsilon_\lambda(p)>0\) 使
+\[
+T_{q,\lambda}(m)
+=
+f^\lambda\,\frac{\chi^\lambda(\nu_\lambda(p))}{z_{\nu_\lambda(p)}}\,K(\nu_\lambda(p))\,
+e^{m\mathcal{P}(\nu_\lambda(p))}
++O\!\left(e^{m(\mathcal{P}(\nu_\lambda(p))-\varepsilon_\lambda(p))}\right),
+\]
+其中可取
+\[
+\varepsilon_\lambda(p)=\min\!\left\{
+\varepsilon_*,
+\min_{\nu\in\mathrm{Supp}(\lambda),\,\nu\neq\nu_\lambda(p)}\bigl(\mathcal{P}(\nu_\lambda(p))-\mathcal{P}(\nu)\bigr)
+\right\}>0.
+\]
+\end{theorem}
+\begin{proof}
+当 \(p\notin\bigcup\mathcal{H}_q\) 时，\(\mathcal{P}(\nu)\) 在有限集合上严格全序，故每个 \(\lambda\) 的极大值在 \(\mathrm{Supp}(\lambda)\) 上唯一取得于 \(\nu_\lambda(p)\)。
+又 \(\nu_\lambda(p)\in\mathrm{Supp}(\lambda)\) 给出 \(\chi^\lambda(\nu_\lambda(p))\neq 0\)，且 \(K(\nu_\lambda(p))>0\)，因此主层系数为单项且非零。
+将此代入定理 \ref{thm:pom-schur-trace-finite-laplace-principle} 并同时计入引理 \ref{lem:pom-partition-monomial-exponential-main-term} 的统一亏损，即得所示误差指数。证毕。
+\end{proof}
+
+\begin{proposition}[主循环长度选择：最大指数层的背包结构]\label{prop:pom-partition-pressure-knapsack}
+对 \(1\le r\le q\) 定义每元压力 \(a_r:=P(r)/r\)，并记 \(a_*:=\max_{1\le r\le q}a_r\)、\(R_*:=\{r:\ a_r=a_*\}\)。
+则对任意分拆 \(\nu\vdash q\) 恒有
+\[
+\mathcal{P}(\nu)\le q\,a_*.
+\]
+若 \(\nu\) 达到最大值 \(\mathcal{P}_{\max}\)，则其任一出现的部件长度 \(r\) 必满足 \(r\in R_*\)。
+若 \(R_*=\{r_*\}\) 为单点且 \(r_*\mid q\)，则最大化分拆唯一，且为 \(\nu=(r_*)^{q/r_*}\)。
+\end{proposition}
+\begin{proof}
+由约束 \(\sum_{r=1}^{q} r\,c_r(\nu)=q\)，有
+\[
+\mathcal{P}(\nu)=\sum_{r=1}^{q} r\,c_r(\nu)\,a_r\le a_*\sum_{r=1}^{q} r\,c_r(\nu)=q a_*.
+\]
+若某个 \(r\notin R_*\) 仍出现，则对应项严格小于 \(a_* r c_r(\nu)\)，从而整体严格小于 \(q a_*\)，不可能达到最大值。
+最后在 \(R_*=\{r_*\}\) 且 \(r_*\mid q\) 时，约束强制所有部件长度均为 \(r_*\)，并由 \(\sum r_*c_{r_*}=q\) 得唯一性。证毕。
+\end{proof}
+
+\begin{corollary}[恒等扇区主导的全通道同阶塌缩]\label{cor:pom-identity-sector-collapse-all-schur-channels}
+若满足严格优势
+\[
+\frac{P(1)}{1}>\max_{2\le r\le q}\frac{P(r)}{r},
+\]
+则 \(\mathcal{P}_{\max}=qP(1)\) 且唯一最大化分拆为 \(\nu_0=(1^q)\)。
+从而对所有 \(\lambda\vdash q\) 存在 \(\varepsilon>0\) 使
+\[
+T_{q,\lambda}(m)
+=
+\frac{(f^\lambda)^2}{q!}\,\kappa_1^{\,q}\,e^{m qP(1)}
++O\!\left(e^{m(qP(1)-\varepsilon)}\right).
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-partition-pressure-knapsack}，严格优势意味着 \(R_*=\{1\}\)，故最大化分拆唯一为 \((1^q)\)。
+又 \(\chi^\lambda(1^q)=f^\lambda>0\)、\(z_{1^q}=q!\)、\(K(1^q)=\kappa_1^q\)，主系数严格非零。
+将 \(\nu_0\) 代入定理 \ref{thm:pom-schur-trace-finite-laplace-principle} 即得所示主项与指数误差。证毕。
+\end{proof}
+
+\paragraph{对称群 Gibbs 极限：共轭类冻结与序参量}
+定义 \(S_q\) 上的 Gibbs 分布（固定 \(m\)）：
+\[
+\mathbb P_{m,q}(\sigma):=\frac{\mathcal{C}_\sigma(m)}{\sum_{\pi\in S_q}\mathcal{C}_\pi(m)}
+=\frac{\mathsf{M}_{\nu(\sigma)}(m)}{\sum_{\pi\in S_q}\mathsf{M}_{\nu(\pi)}(m)}.
+\]
+其在分拆空间上的投影为
+\[
+\mathbb P^{\mathrm{part}}_{m,q}(\nu)
+:=
+\sum_{\sigma:\,\nu(\sigma)=\nu}\mathbb P_{m,q}(\sigma)
+=
+\frac{\frac{q!}{z_\nu}\mathsf{M}_\nu(m)}{\sum_{\mu\vdash q}\frac{q!}{z_\mu}\mathsf{M}_\mu(m)}.
+\]
+并记总变差距离 \(D_{\mathrm{TV}}(\mu,\nu):=\frac12\sum_x|\mu(x)-\nu(x)|\)（有限状态空间）。
+
+\begin{theorem}[唯一主循环型下的冻结与通道序参量极限]\label{thm:pom-symmetric-group-gibbs-freezing}
+若 \(\mathcal{R}_{\max}=\{\nu_*\}\) 为单点，并记
+\[
+\delta:=\mathcal{P}_{\max}-\max_{\nu\neq\nu_*}\mathcal{P}(\nu)>0,
+\qquad
+\delta_*:=\min(\delta,\varepsilon_*)>0,
+\]
+则存在常数 \(C_q>0\) 使
+\[
+D_{\mathrm{TV}}\!\left(\mathbb P_{m,q},\ \mathrm{Unif}(\mathrm{Cl}(\nu_*))\right)\le C_q\,e^{-m\delta_*},
+\qquad
+D_{\mathrm{TV}}\!\left(\mathbb P_{m,q}^{\mathrm{part}},\ \delta_{\nu_*}\right)\le C_q\,e^{-m\delta_*}.
+\]
+对任意 \(\lambda\vdash q\) 定义序参量
+\[
+\mathfrak m_\lambda(m):=\EE_{m,q}\bigl[\chi^\lambda(\sigma)\bigr],
+\]
+则有
+\[
+\mathfrak m_\lambda(m)=\chi^\lambda(\nu_*)+O(e^{-m\delta_*}),
+\qquad
+\frac{T_{q,\lambda}(m)}{T_{q,(q)}(m)}=f^\lambda\,\mathfrak m_\lambda(m)
+=f^\lambda\,\chi^\lambda(\nu_*)+O(e^{-m\delta_*}).
+\]
+\end{theorem}
+\begin{proof}
+由引理 \ref{lem:pom-partition-monomial-exponential-main-term}，
+\(
+\mathsf{M}_\nu(m)=K(\nu)e^{m\mathcal{P}(\nu)}\bigl(1+O(e^{-m\varepsilon_*})\bigr)
+\)。
+代入 \(\mathbb P_{m,q}^{\mathrm{part}}(\nu)\) 的有限比值式，并以唯一最大层间隙 \(\delta\) 控制其余项，得
+\(
+\mathbb P_{m,q}^{\mathrm{part}}(\nu_*)=1+O(e^{-m\delta_*})
+\)
+及 \(\mathbb P_{m,q}^{\mathrm{part}}(\nu)=O(e^{-m\delta_*})\)（\(\nu\neq\nu_*\)）。
+故分拆空间的 TV 距离指数收敛到 \(\delta_{\nu_*}\)。
+\par
+由于 \(\mathcal{C}_\sigma(m)\) 在共轭类内常值，条件于 \(\nu_*\) 时 \(\mathbb P_{m,q}\) 在 \(\mathrm{Cl}(\nu_*)\) 上为均匀分布，
+从而
+\(
+D_{\mathrm{TV}}(\mathbb P_{m,q},\mathrm{Unif}(\mathrm{Cl}(\nu_*)))\le 1-\mathbb P_{m,q}^{\mathrm{part}}(\nu_*)
+\),
+得到 \(S_q\) 上的 TV 界。
+\par
+字符为类函数，故 \(\mathfrak m_\lambda(m)=\sum_{\nu}\mathbb P_{m,q}^{\mathrm{part}}(\nu)\chi^\lambda(\nu)\)，由分拆分布收敛得到所示极限与误差。
+最后，由
+\(
+T_{q,\lambda}(m)=\frac{f^\lambda}{q!}\sum_{\sigma\in S_q}\chi^\lambda(\sigma)\mathcal{C}_\sigma(m)
+\)
+与
+\(
+T_{q,(q)}(m)=\frac{1}{q!}\sum_{\sigma\in S_q}\mathcal{C}_\sigma(m)
+\)
+可得 \(T_{q,\lambda}(m)=f^\lambda T_{q,(q)}(m)\mathfrak m_\lambda(m)\)。证毕。
+\end{proof}
+
+\begin{theorem}[多极大值相的混合极限：共轭类混合与序参量跳跃]\label{thm:pom-symmetric-group-gibbs-mixture}
+若 \(|\mathcal{R}_{\max}|\ge 2\)，定义极大层权
+\[
+W(\nu):=\frac{K(\nu)}{z_\nu}\qquad(\nu\in\mathcal{R}_{\max}),
+\qquad
+\pi_\infty(\nu):=\frac{W(\nu)}{\sum_{\mu\in\mathcal{R}_{\max}}W(\mu)}.
+\]
+则有极限
+\[
+\lim_{m\to\infty}\mathbb P^{\mathrm{part}}_{m,q}(\nu)=
+\begin{cases}
+\pi_\infty(\nu),& \nu\in\mathcal{R}_{\max},\\
+0,& \nu\notin\mathcal{R}_{\max},
+\end{cases}
+\]
+并且
+\[
+\mathbb P_{m,q}\xrightarrow[m\to\infty]{}\sum_{\nu\in\mathcal{R}_{\max}}\pi_\infty(\nu)\,\mathrm{Unif}(\mathrm{Cl}(\nu)),
+\qquad
+\lim_{m\to\infty}\mathfrak m_\lambda(m)=\sum_{\nu\in\mathcal{R}_{\max}}\pi_\infty(\nu)\,\chi^\lambda(\nu).
+\]
+当压力向量 \(p\) 穿越 \(\mathcal{H}_q\) 的壁面并导致 \(\mathcal{R}_{\max}\) 改变时，上述极限权重与序参量呈现分段常值的跃迁。
+\end{theorem}
+\begin{proof}
+仍由引理 \ref{lem:pom-partition-monomial-exponential-main-term}，对 \(\mathbb P_{m,q}^{\mathrm{part}}(\nu)\) 代入
+\(
+\mathsf{M}_\nu(m)=K(\nu)e^{m\mathcal{P}(\nu)}(1+o(1))
+\)
+并以 \(\mathcal{P}_{\max}\) 为公共因子提取：
+非极大层以指数速度消失，极大层保留并按 \(W(\nu)\) 归一化，得到分拆空间极限。
+由于类内权重常值，\(S_q\) 上的极限为各极大共轭类均匀分布的凸组合；字符期望随之收敛，得到序参量极限式。证毕。
+\end{proof}
+

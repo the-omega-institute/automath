@@ -1,0 +1,297 @@
+\paragraph{屏幕亏秩的 R\'enyi 平坦化、零误差审计时间与拟阵信息律}
+在部分屏幕的精确熵--审计恒等式、最优核坐标补全、内部坐标束板层分解与协议型 \(\mathsf{NULL}\) 的相对同调实现都已确立之后，还可把同一亏秩机制再推进一步：相对顶维 Betti 数不仅给出 Shannon 条件熵，而且在全阶 R\'enyi 塔上保持完全平坦；它同时等于零误差审计时间的二元基准值、决定条件碰撞矩的几何级数律，并把可见信息提升为一个由边界矩阵行空间诱导的可表示拟阵秩函数。于是，screen deficit 不再只是“缺多少补全位”的问题，而是统一组织了熵、时间、碰撞与可见秩的同一不变量。
+
+\begin{theorem}[相对 Betti--R\'enyi 平坦律]\label{thm:conclusion-relative-betti-renyi-flatness}
+沿用定理 \ref{thm:conclusion-screen-entropy-audit-identity} 的记号，并记
+\[
+N_{m,n}:=\dim_{\FF_2}C_n(\mathcal Q_m;\FF_2)=2^{mn},
+\qquad
+\beta_S:=\beta_n(\mathcal Q_m,A_{\neg S};\FF_2).
+\]
+则在均匀 bulk 先验下，部分屏幕信道 \(X\mapsto Y=f_S(X)\) 满足
+\[
+H(X\mid Y)=\beta_S,
+\qquad
+H(Y)=N_{m,n}-\beta_S,
+\qquad
+I(X;Y)=N_{m,n}-\beta_S.
+\]
+更强地，对任意阶 \(q\in [0,\infty]\) 的标准条件 R\'enyi 熵，只要它仅由各非空纤维上的条件分布决定，均有
+\[
+H_q(X\mid Y)=\beta_S.
+\]
+因此，部分屏幕所隐藏的信息量在全阶 R\'enyi 塔上完全平坦，并且该共同值恰由相对顶维 Betti 数给出。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-screen-entropy-audit-identity} 的证明，对任意
+\[
+y\in \operatorname{im}(f_S)
+\]
+都有
+\[
+\#f_S^{-1}(y)=2^{\beta_S},
+\]
+且该数与 \(y\) 无关。由于 \(X\) 在 \(C_n(\mathcal Q_m;\FF_2)\) 上均匀，故条件分布 \(X\mid(Y=y)\) 在纤维 \(f_S^{-1}(y)\) 上均匀，从而
+\[
+H(X\mid Y=y)=\log_2\#f_S^{-1}(y)=\beta_S.
+\]
+对 \(Y\) 取平均即得
+\[
+H(X\mid Y)=\beta_S.
+\]
+
+又因为
+\[
+H(X)=N_{m,n},
+\]
+所以
+\[
+H(Y)=H(X)-H(X\mid Y)=N_{m,n}-\beta_S,
+\]
+并且
+\[
+I(X;Y)=H(X)-H(X\mid Y)=N_{m,n}-\beta_S.
+\]
+
+对任意固定 \(y\)，条件分布 \(X\mid(Y=y)\) 都是支撑在 \(2^{\beta_S}\) 个点上的均匀分布。故无论取 Shannon 熵、碰撞熵、最小熵还是任意阶 \(q\in(0,\infty)\setminus\{1\}\) 的标准 R\'enyi 熵，其值都等于
+\[
+\log_2 2^{\beta_S}=\beta_S.
+\]
+由于该值与 \(y\) 无关，故相应的条件 R\'enyi 熵也都等于 \(\beta_S\)。证毕。
+\end{proof}
+
+\begin{theorem}[条件碰撞矩的几何级数律与 Hankel 秩一刚性]\label{thm:conclusion-screen-collision-moment-hankel-rank-one}
+沿用定理 \ref{thm:conclusion-relative-betti-renyi-flatness} 的设定。对每个 \(q\ge 1\)，定义条件碰撞矩
+\[
+M_q(S):=
+\sum_{y}\PP(Y=y)\sum_x \PP(X=x\mid Y=y)^q.
+\]
+则有精确闭式
+\[
+M_q(S)=2^{-(q-1)\beta_S}.
+\]
+因此，序列 \(q\mapsto M_q(S)\) 是公比 \(2^{-\beta_S}\) 的纯几何级数；相应 Hankel 矩阵
+\[
+\mathcal H_S:=\bigl(M_{i+j}(S)\bigr)_{i,j\ge 1}
+\]
+满足
+\[
+\rank \mathcal H_S=1.
+\]
+从而，若某一隐藏机制的条件碰撞 Hankel 矩阵秩严格大于 \(1\)，则它不可能仅仅来自屏幕截断造成的纯相对同调盲区。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-relative-betti-renyi-flatness}，给定任意
+\[
+y\in \operatorname{im}(f_S),
+\]
+条件分布 \(X\mid(Y=y)\) 在 \(2^{\beta_S}\) 个点上均匀。故
+\[
+\sum_x \PP(X=x\mid Y=y)^q
+=
+2^{\beta_S}\cdot 2^{-q\beta_S}
+=
+2^{-(q-1)\beta_S},
+\]
+且该值与 \(y\) 无关。对 \(y\) 再取平均，即得
+\[
+M_q(S)=2^{-(q-1)\beta_S}.
+\]
+
+于是对任意 \(i,j\ge 1\)，
+\[
+M_{i+j}(S)
+=
+2^{-((i+j)-1)\beta_S}
+=
+\bigl(2^{-(i-1)\beta_S}\bigr)\bigl(2^{-j\beta_S}\bigr).
+\]
+故 \(\mathcal H_S\) 为两个无限列向量的外积，因而
+\[
+\rank \mathcal H_S=1.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[零误差审计时间的精确公式]\label{thm:conclusion-screen-zeroerror-audit-time}
+沿用上述设定。设审计字母表大小为 \(A\ge 2\)。考虑如下零误差补全任务：先观察部分屏幕输出 \(Y=f_S(X)\)，再允许一个拥有 \(X\) 的编码器逐步发送 \(A\)-元审计符号，接收端须在最坏情形下精确恢复 \(X\)。则最小最坏情形延迟恰为
+\[
+T_\ast(S;A)=\left\lceil \frac{\beta_S}{\log_2 A}\right\rceil.
+\]
+特别地，在二元审计通道上，
+\[
+T_\ast(S;2)=\beta_S.
+\]
+因此，屏幕盲区所诱导的最小补全时间，不是额外的动态对象，而正是同一相对顶维亏秩按字母表底数重标后的时间化读出。
+\end{theorem}
+
+\begin{proof}
+固定任意 \(y\in \operatorname{im}(f_S)\)。由定理 \ref{thm:conclusion-relative-betti-renyi-flatness}，
+\[
+\#f_S^{-1}(y)=2^{\beta_S}.
+\]
+若在 \(t\) 步之内发送 \(A\)-元审计符号，则至多产生 \(A^t\) 条不同转录。零误差恢复要求同一纤维中的不同点必须被不同转录区分，故必要条件为
+\[
+A^t\ge 2^{\beta_S},
+\]
+即
+\[
+t\ge \left\lceil \frac{\beta_S}{\log_2 A}\right\rceil.
+\]
+
+反之，由定理 \ref{thm:conclusion-screen-optimal-audit-kolmogorov-isometry} 的构造，固定 \(\ker f_S\) 的一组 \(\FF_2\)-基，并取直和分解
+\[
+C_n(\mathcal Q_m;\FF_2)=L_S\oplus \ker f_S.
+\]
+则任意 \(x\in f_S^{-1}(y)\) 都可唯一表示为
+\[
+x=s_S(y)+\sum_{j=1}^{\beta_S}\varepsilon_j k_j,
+\qquad
+\varepsilon_j\in \FF_2.
+\]
+因此，只需发送 \(\beta_S\) 个二进核坐标，便可在最坏情形下零误差恢复 \(x\)。把这 \(\beta_S\) 个比特按 \(A\)-元字母表分组，即得
+\[
+T_\ast(S;A)\le \left\lceil \frac{\beta_S}{\log_2 A}\right\rceil.
+\]
+与下界合并便得等式。证毕。
+\end{proof}
+
+\begin{theorem}[屏幕信息的拟阵秩结构与隐藏信息的超模律]\label{thm:conclusion-screen-information-matroid-supermodularity}
+对任意屏幕
+\[
+S\subseteq \overrightarrow{\mathcal F_m^{n-1}},
+\]
+定义
+\[
+r_2(S):=\rank_{\FF_2}(f_S).
+\]
+则函数
+\[
+S\longmapsto I(X;Y_S)
+\]
+恰等于由顶维边界矩阵之行限制诱导的 \(\FF_2\)-可表示拟阵秩函数，即
+\[
+I(X;Y_S)=r_2(S).
+\]
+特别地，对任意屏幕 \(S,T\) 有
+\[
+I(X;Y_{S\cup T})+I(X;Y_{S\cap T})
+\le
+I(X;Y_S)+I(X;Y_T),
+\]
+且 \(I(X;Y_S)\) 随 \(S\) 单调不减。
+
+对偶地，若定义隐藏信息
+\[
+J(S):=H(X\mid Y_S),
+\]
+则
+\[
+J(S)=N_{m,n}-r_2(S),
+\]
+从而 \(J\) 满足超模律
+\[
+J(S\cup T)+J(S\cap T)\ge J(S)+J(T),
+\]
+并随 \(S\) 单调不增。
+\end{theorem}
+
+\begin{proof}
+固定 \(m,n\) 后，顶维边界算子在 \(\FF_2\) 上可由一个固定矩阵表示，而 \(f_S\) 恰是取其由 \(S\) 索引的那些行所得到的线性映射。故
+\[
+r_2(S)
+=
+\dim_{\FF_2}\operatorname{span}\{\text{boundary rows indexed by }S\},
+\]
+从而 \(r_2(\cdot)\) 正是一个 \(\FF_2\)-可表示拟阵的秩函数，因此自动满足单调性与次模性。
+
+另一方面，\(X\) 在 \(C_n(\mathcal Q_m;\FF_2)\) 上均匀，而 \(f_S\) 为线性映射，因此 \(Y_S=f_S(X)\) 在像空间 \(\operatorname{im}(f_S)\) 上均匀。于是
+\[
+H(Y_S)=\log_2 |\operatorname{im}(f_S)|=r_2(S).
+\]
+又因 \(Y_S\) 是 \(X\) 的确定函数，
+\[
+I(X;Y_S)=H(Y_S)=r_2(S).
+\]
+
+再由定理 \ref{thm:conclusion-relative-betti-renyi-flatness}，
+\[
+J(S)=H(X\mid Y_S)=N_{m,n}-I(X;Y_S)=N_{m,n}-r_2(S).
+\]
+于是 \(J\) 继承了 \(r_2\) 的单调性对偶与超模性。证毕。
+\end{proof}
+
+\begin{corollary}[内部坐标束屏幕上的精确面积律]\label{cor:conclusion-coordinate-bundle-exact-area-law}
+对任意
+\[
+J\subseteq [n],
+\qquad
+s:=|J|,
+\]
+记 \(S_J^{\mathrm{int}}\) 为内部坐标束屏幕。则
+\[
+\beta_{S_J^{\mathrm{int}}}=2^{m(n-s)}.
+\]
+因此同时成立精确等式
+\[
+H(X\mid Y_{S_J^{\mathrm{int}}})=2^{m(n-s)}\ \text{bits},
+\]
+\[
+T_\ast(S_J^{\mathrm{int}};2)=2^{m(n-s)},
+\]
+\[
+\min_{(R,r_S)}\cdim(R)=2^{m(n-s)}.
+\]
+特别地，当 \(s=1\) 时，
+\[
+H(X\mid Y_{S_{\{j\}}^{\mathrm{int}}})
+=
+T_\ast(S_{\{j\}}^{\mathrm{int}};2)
+=
+\min_{(R,r_S)}\cdim(R)
+=
+2^{m(n-1)},
+\]
+即得到一条严格等式型面积律。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-coordinate-bundle-kernel-slab-decomposition}，
+\[
+\rank_{\ZZ}\ker f_{S_J^{\mathrm{int}}}=2^{m(n-s)}.
+\]
+由于该核为自由阿贝尔群，其 \(\FF_2\)-约化维数也恰等于该秩，故
+\[
+\beta_{S_J^{\mathrm{int}}}=2^{m(n-s)}.
+\]
+再将此值分别代入定理 \ref{thm:conclusion-relative-betti-renyi-flatness} 与定理 \ref{thm:conclusion-screen-zeroerror-audit-time}，便得到前两条公式。
+
+最后，由定理 \ref{thm:spg-internal-coordinate-bundle-screen-cost-closed-form}，
+\[
+\min_{(R,r_S)}\cdim(R)=2^{m(n-s)}.
+\]
+故三种量完全重合。证毕。
+\end{proof}
+
+\begin{conjecture}[R\'enyi 平坦刚性]\label{conj:conclusion-screen-renyi-flatness-rigidity}
+在有限状态 projection-word 语境中，设
+\[
+P_m:\Omega_m\to X_m
+\]
+为任意有限分辨率确定性投影，并在均匀先验下考虑条件纤维分布。若同时满足：
+\begin{enumerate}
+  \item 条件 R\'enyi 熵对全部阶 \(q\) 完全平坦；
+  \item 条件碰撞矩的 Hankel 矩阵秩等于 \(1\)；
+\end{enumerate}
+则在每个连通可见分支上，\(P_m\) 的非空纤维应当形成某个有限阿贝尔群的仿射 torsor。等价地，其隐藏扇区应当是纯同调型的，而非共振型的。
+
+dyadic 屏幕模型所对应的 torsor 正是
+\[
+H_n(\mathcal Q_m,A_{\neg S};\FF_2).
+\]
+因此，一旦条件碰撞 Hankel 矩阵秩严格大于 \(1\)，隐藏结构便不能再被纯 torsor 机制解释，而必须进入真正的类内模态或共振异质性世界。
+\end{conjecture}
+
+\endinput

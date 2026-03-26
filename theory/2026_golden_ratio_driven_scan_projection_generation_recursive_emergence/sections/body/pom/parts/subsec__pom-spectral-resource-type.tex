@@ -1,0 +1,351 @@
+\subsubsection{谱资源类型：\texorpdfstring{$\Sigma_{\mathrm{space}}$}{Sigma space} 与 \texorpdfstring{$\mathbf{Conv}$}{Conv} 的凸闭包单子}\label{subsec:pom-spectral-resource-type}
+
+上文已把加权碰撞 moment-kernel 的 Perron 根 \(r_q(u)\) 组织为二维压力曲面
+\(
+P(q,u)=\log r_q(u)-q\log|A_{\mathrm{out}}|
+\)
+（\S\ref{subsec:pom-pressure-surface-qu}），并将在 \S\ref{subsec:pom-quantile-budget-law} 用其控制尾部分位与 prime-register 配额。
+为了把“谱是一条资源”升级为可推演的类型系统（从而定向重写/编译中的策略选择），我们把 \(q\mapsto P(q,u)\) 收紧为一个离散凸预算对象，并把其凸闭包视为正规形。
+
+\paragraph{预算域与离散凸闭包}
+令
+\[
+\mathbf{Bud}:=\{\,b:\ZZ_{\ge 2}\to\overline{\RR}\,\},
+\qquad
+b\le c\ \Longleftrightarrow\ (\forall q\ge 2)\ b(q)\le c(q),
+\qquad
+(b+c)(q):=b(q)+c(q),
+\]
+视其为一个对称幺半预序范畴。
+令 \(\mathbf{Conv}\subseteq \mathbf{Bud}\) 为满足离散凸条件
+\[
+b(q+1)-b(q)\ \ge\ b(q)-b(q-1)\qquad(q\ge 3)
+\]
+的满子范畴，并记包含函子 \(J:\mathbf{Conv}\hookrightarrow \mathbf{Bud}\)。
+定义\textbf{离散下凸闭包} \(\mathbb{T}:\mathbf{Bud}\to\mathbf{Conv}\) 为：对任意 \(b\in\mathbf{Bud}\)，\(\mathbb{T}(b)\) 是所有满足 \(c\le b\) 的离散凸函数 \(c\) 中的最大者（等价于其 epigraph 的下凸包；可复现实现见注 \ref{rem:pom-pressure-multifractal-q60}）。
+则 \(\mathbb{T}\dashv J\)，从而诱导一个幂等\emph{闭包单子} \(J\circ\mathbb{T}:\mathbf{Bud}\to\mathbf{Bud}\)：
+\[
+\mathbb{T}(b)\le b,\qquad
+\mathbb{T}(\mathbb{T}(b))=\mathbb{T}(b),\qquad
+b\le b'\ \Longrightarrow\ \mathbb{T}(b)\le \mathbb{T}(b').
+\]
+在凸对偶口径下，该闭包也可由同一 Legendre--Fenchel 共轭的双对偶给出（注 \ref{rem:pom-legendre-chernoff-same-dual}）。
+
+\paragraph{投影词的谱资源与类型正规形}
+沿用注 \ref{rem:pom-word-category} 的谱语义函子 \(\mathcal{S}:\mathbf{W}\to \mathbf{Kern}\)。
+对任意投影词 \(w\)、温度参数 \(u\in(0,1]\) 与角色通道 \(\chi\)，令 \(r^{(w)}_{q,\chi}(u)\) 为核 \(\mathcal{S}(w)\) 在 \(\chi\)-扭曲与温度化下的加权碰撞 moment-kernel 的 Perron 根（构造与 \S\ref{subsec:pom-pressure-surface-qu} 同型，只是底层核替换为 \(\mathcal{S}(w)\) 的 \(\chi\)-通道）。
+定义其\textbf{空间谱资源曲线}为
+\[
+\Sigma_{\mathrm{space}}(w)(q;\chi,u)
+:=\log r^{(w)}_{q,\chi}(u)-q\log|A_{\mathrm{out}}|.
+\]
+并定义\textbf{谱资源类型正规形}为
+\[
+\boxed{\;
+\mathrm{Ty}_{\mathrm{space}}(w;\chi,u)
+:=\mathbb{T}\bigl(q\mapsto \Sigma_{\mathrm{space}}(w)(q;\chi,u)\bigr)\in\mathbf{Conv}.}
+\]
+在基例 \(w\) 为本文的碰撞 moment 读出门且 \(\chi=\chi_0\) 时，\(\Sigma_{\mathrm{space}}(w)\) 退化为二维压力 \(P(q,u)\)。
+
+因此固定通道参数 \((\chi,u)\) 后，上述构造可视为一条从投影词 $2$-范畴到凸预算域的组合赋值：
+\[
+\mathbf{PW}\xrightarrow{\ \Sigma_{\mathrm{space}}(-;\chi,u)\ }\mathbf{Bud}\xrightarrow{\ \mathbb{T}\ }\mathbf{Conv},
+\]
+其中 \(\mathbb{T}\dashv J\) 给出的幂等闭包单子提供一个规范的“类型正规化器”（type normalizer）。
+
+\begin{remark}[常数级异常 vs.\ 指数级异常：\texorpdfstring{$\mathsf{Anom}_G$}{AnomG} 与 \texorpdfstring{$r^{(w)}_{q,\chi}$}{rqchi} 的互补核验]\label{rem:pom-constant-vs-exponential-anom}
+异常签名 \(\mathsf{Anom}_G(K;\theta)\)（定义 \ref{def:pom-anom-signature}）记录的是扭曲通道在 \(\zeta\) 的 Abel/Hadamard 有限部上的\emph{常数级漂移}；
+而 \(\Sigma_{\mathrm{space}}(w)(q;\chi,u)=\log r^{(w)}_{q,\chi}(u)-q\log|A_{\mathrm{out}}|\) 记录的是 \(q\)-碰撞谱的\emph{指数级主尺度}。
+因此可定义一个与角色通道相关的指数级“谱异常”（在同一温度 \(u\) 下比较非平凡扭曲与平凡通道）：
+\[
+\Delta^{\mathrm{exp}}_{\chi}(w;q,u)
+:=\log r^{(w)}_{q,\chi}(u)-\log r^{(w)}_{q,\chi_0}(u).
+\]
+当 \(\Delta^{\mathrm{exp}}_{\chi}\equiv 0\)（在可审计的 \(q\)-窗口/网格上）时，表示该扭曲通道对碰撞谱的指数级增长不产生影响；而 \(\mathsf{Anom}_G\) 是否为零则进一步刻画常数级残差是否可被重写消去。
+这为“交换失败”的诊断提供一条二维交叉核验：同一角色族既可在常数层通过 \(\mathsf{Anom}\) 核对，也可在指数层通过 \(\Delta^{\mathrm{exp}}_{\chi}\) 核对。
+\end{remark}
+
+\begin{remark}[用类型定向重写：把“优化”提升为正规形选择]\label{rem:pom-type-directed-normalization}
+当同一读出任务存在多条可审计编译路径（例如序门硬化的两条路径：温度硬化 vs.\ moment-分位-CRT 空间化，注 \ref{rem:pom-hardening-u-vs-q}），往往会得到一族在可见输出口径下等价（或 \(\varepsilon\)-sound 等价，定义 \ref{def:pom-eps-sound-rewrite}）的候选投影词 \(\{w_i\}\)。
+此时可把 \(\mathrm{Ty}_{\mathrm{space}}(w_i;\chi,u)\) 作为静态预算类型：在点wise 序 \( \le \) 下选择最小者作为词法正规形代表，并把差额以证书形式记入（例如 \((\mathrm{RCRT}_\varepsilon)\) 的失败概率账本与 \(\gamma\)-证书）。
+由于 \(\mathbb{T}\) 把预算正规化为离散凸对象，最优化（例如对偶最优矩阶 \(q^\star\) 的搜索）在整数上具备离散准凸结构，见 \S\ref{subsec:pom-quantile-budget-law} 的单峰性质讨论，从而把“选 \(q\)”与“选编译策略”统一为一个可审计的类型最小化问题。
+\end{remark}
+
+\begin{definition}[kink 与 kink 集合（离散凸预算）]\label{def:pom-kink-set}
+设 \(b\in\mathbf{Conv}\)，并在一个有限窗口 \(q\in\{2,3,\dots,Q_{\max}\}\) 上考虑其离散斜率
+\[
+\Delta b(q):=b(q)-b(q-1)\qquad(q=3,\dots,Q_{\max}).
+\]
+离散凸性等价于 \(\Delta b(q)\) 随 \(q\) 单调不减。
+定义 \(b\) 在该窗口上的 \textbf{kink 集合}为
+\[
+\mathrm{Kink}(b)
+:=\{2,Q_{\max}\}\ \cup\
+\Bigl\{\,q\in\{3,\dots,Q_{\max}-1\}:\ \Delta b(q+1)>\Delta b(q)\Bigr\}.
+\]
+\end{definition}
+
+\begin{proposition}[Kink principle for \texorpdfstring{$q$}{q}-selection（类型闭包的离散优化缩并）]\label{prop:pom-kink-principle-q-selection}
+固定通道参数 \((\chi,u)\) 与投影词 \(w\)，令
+\(
+b:=\mathrm{Ty}_{\mathrm{space}}(w;\chi,u)\in\mathbf{Conv}
+\)
+为其谱资源类型正规形（定义见 \S\ref{subsec:pom-spectral-resource-type}）。
+则在任意有限窗口 \(q\in\{2,\dots,Q_{\max}\}\) 上：
+\begin{enumerate}
+  \item \textbf{（只需检查 kink）} 对任意仿射目标 \(L(q)=aq+c\)，离散凸优化
+  \[
+  \arg\min_{q\in\{2,\dots,Q_{\max}\}}\bigl(b(q)+L(q)\bigr)
+  \]
+  的最优解集合是一个（可能退化的）连续整数区间；因此存在一个最优点落在 \(\mathrm{Kink}(b)\) 上。
+  \item \textbf{（对偶搜索的等价表述）} 等价地，对任意 \(\gamma\in\RR\)，函数
+  \(
+  q\mapsto (q-1)\gamma-b(q)
+  \)
+  的最大化问题（离散 Legendre--Fenchel 对偶）可通过比较离散斜率 \(\Delta b(q)\) 与 \(\gamma\) 在 \(\mathrm{Kink}(b)\) 上定位：最优 \(q^\star\) 可取为某个 kink，使得 \(\gamma\) 落在其左右斜率区间内。
+\end{enumerate}
+因此任何“基于类型闭包 \(\mathbb{T}\)”的 \(q\)-优化都不必全扫描：只需在类型正规形的 kink 集合上做有限检查即可（kink 数远小于扫描窗口长度，并可在计算 \(\mathbb{T}\) 时顺带输出）。
+\end{proposition}
+
+\begin{proof}
+(1) 因为 \(b\in\mathbf{Conv}\)，故 \(\Delta b(q)\) 单调不减，且 \(b(q)+aq\) 仍为离散凸函数。
+离散凸函数的子水平集是区间，从而最优解集合亦为区间；区间端点处对应离散斜率发生跳变（或落在窗口边界），即属于定义 \ref{def:pom-kink-set} 的 kink 集合。
+(2) 是 (1) 的对偶表述：最大化 \((q-1)\gamma-b(q)\) 等价于最小化 \(b(q)-(q-1)\gamma\)；最优 \(q^\star\) 的判据由离散斜率的单调性给出。
+\end{proof}
+
+\subsubsection{分位配额律：从纤维多重度尾部到 prime-register 预算}\label{subsec:pom-quantile-budget-law}
+
+本段将“空间换时间”的 prime-register 设计从“最坏纤维”口径改写为“尾部分位”口径，使资源预算可由 moment-kernel 压力曲线直接给出。
+
+\begin{definition}[纤维指数的尾部分位]\label{def:pom-gamma-quantile}
+沿用定义 \ref{def:pom-fiber-spectrum} 的 \(\gamma_m(x)=\frac{1}{m}\log d_m(x)\)，并以输出分布 \(w_m(x)=d_m(x)/2^m\) 抽样随机变量 \(\gamma_m(X)\)。
+对 \(\varepsilon\in(0,1)\)，定义尾部分位
+$$
+\gamma_{m}(\varepsilon):=\inf\Bigl\{\gamma\ge 0:\ \mathbb{P}_{w_m}\big[\gamma_m(X)>\gamma\big]\le \varepsilon\Bigr\}.
+$$
+\end{definition}
+
+\begin{proposition}[Chernoff 上界：由 \texorpdfstring{$S_q$}{Sq} 压住尾部]\label{prop:pom-quantile-chernoff}
+对任意整数 \(q\ge 2\) 与任意 \(\gamma\ge 0\)，有
+$$
+\mathbb{P}_{w_m}\big[\gamma_m(X)\ge \gamma\big]
+\ \le\
+\exp\!\bigl(-(q-1)m\gamma\bigr)\cdot \frac{S_q(m)}{2^m}.
+$$
+特别地，若 \(\tau(q)=\limsup_{m\to\infty}\frac{1}{m}\log S_q(m)\)（定义 \ref{def:pom-moment-pressure}），则在指数尺度上有
+$$
+\limsup_{m\to\infty}\frac{1}{m}\log \mathbb{P}_{w_m}\big[\gamma_m(X)\ge \gamma\big]
+\ \le\
+\tau(q)-\log 2-(q-1)\gamma.
+$$
+\end{proposition}
+
+\begin{proof}
+由命题 \ref{prop:pom-fiber-index-cgf}，
+\(
+\mathbb{E}_{w_m}\big[\exp((q-1)m\gamma_m(X))\big]=S_q(m)/2^m
+\)。
+对事件 \(\{\gamma_m(X)\ge\gamma\}\) 应用 Markov 不等式得第一式；取对数并除以 \(m\)，再取 \(\limsup\) 得第二式。证毕。
+\end{proof}
+
+\begin{corollary}[对偶最优化：把 \texorpdfstring{$q$}{q} 变成可求解的预算控制器]\label{cor:pom-quantile-dual-optimizer}
+令 \(\tau(q)=\limsup_{m\to\infty}\frac{1}{m}\log S_q(m)\)（定义 \ref{def:pom-moment-pressure}），并定义
+\[
+\Phi(q):=\tau(q)-\log 2,
+\qquad
+I(\gamma):=\sup_{q\in\ZZ_{\ge 2}}\bigl((q-1)\gamma-\Phi(q)\bigr).
+\]
+则对任意 \(\gamma\ge 0\) 有指数尺度上界
+\[
+\limsup_{m\to\infty}\frac{1}{m}\log \mathbb{P}_{w_m}\big[\gamma_m(X)\ge \gamma\big]
+\ \le\ -\,I(\gamma).
+\]
+特别地，当 \(S_q(m)=\Theta(r_q^m)\)（从而 \(\tau(q)=\log r_q\)）时，
+\(
+\Phi(q)=\log r_q-\log 2
+\)
+把尾部控制完全组织为可计算的 moment 主尺度族 \(\{r_q\}_{q\ge 2}\) 的凸对偶。
+\end{corollary}
+
+\begin{corollary}[整数谱的最强可计算尾界（有限阶截断）]\label{cor:pom-integer-moment-strongest-tail-bound}\label{cor:pom-best-computable-tail-bound-integer-moments}
+在实际计算中往往只能得到有限个整数矩阶的信息：给定 \(K\ge 2\)，只掌握 \(\{\Phi(q)\}_{2\le q\le K}\)（等价地：只掌握 \(\{\tau(q)\}_{2\le q\le K}\) 或 \(\{r_q\}_{2\le q\le K}\)）。
+定义截断对偶
+\[
+I_{\le K}(\gamma):=\sup_{2\le q\le K}\bigl((q-1)\gamma-\Phi(q)\bigr).
+\]
+则仍有指数尺度上界
+\[
+\limsup_{m\to\infty}\frac{1}{m}\log \mathbb{P}_{w_m}\big[\gamma_m(X)\ge \gamma\big]
+\ \le\ -\,I_{\le K}(\gamma).
+\]
+\end{corollary}
+
+\begin{remark}[信息论最优性（在“仅知道这些整数矩”条件下）]\label{rem:pom-integer-moment-tail-optimality}
+推论 \ref{cor:pom-integer-moment-strongest-tail-bound} 给出的 \(I_{\le K}\) 不只是“一个可计算上界”，而是在“只掌握 \(\{\Phi(q)\}_{2\le q\le K}\)”这一信息集下的\textbf{最强统一指数尾界}：
+若试图把尾指数界在某个 \(\gamma\) 处严格加强（即给出 \(J(\gamma)>I_{\le K}(\gamma)\) 并宣称对所有与该矩信息一致的候选分布都成立），则在一般情形下无法同时保持对全部 \(q\le K\) 的矩约束一致。
+这可理解为“矩信息 \(\leftrightarrow\) 尾界”的凸对偶/对偶线性规划现象：整数矩谱给出一族线性（仿射）证书，取上包络即得到在该信息集内无法被统一改进的最强指数证书。
+\end{remark}
+
+\begin{corollary}[prime-register 的分位预算（把最坏值替换为尾部）]\label{cor:pom-prime-register-quantile-budget}
+取 \(\varepsilon\in(0,1)\)，并令 \(B_m(\varepsilon):=\exp(m\,\gamma_m(\varepsilon))\)。
+若选择一组两两互素模数使得其乘积 \(P_m\) 满足
+$$
+P_m\ >\ 2\,B_m(\varepsilon),
+$$
+则在定义 \ref{def:pom-order-elimination-rewrite} 的区间读出/重建口径下，使用 prime-register（CRT）对纤维标签做外置承载时，发生“标签超界导致不可唯一重建”的概率至多为 \(\varepsilon\)（在 \(w_m\) 抽样的输出稳定类型口径下）。
+\end{corollary}
+
+\begin{proof}
+对输出样本 \(X\sim w_m\)，其纤维规模为 \(d_m(X)=\exp(m\gamma_m(X))\)。
+当 \(\gamma_m(X)\le\gamma_m(\varepsilon)\) 时，有 \(d_m(X)\le B_m(\varepsilon)\)。
+此时取区间界 \(B=B_m(\varepsilon)\)，由定义 \ref{def:pom-order-elimination-rewrite} 的侧条件 \(P>2B\) 得唯一 CRT 重建成立。
+而 \(\gamma_m(X)>\gamma_m(\varepsilon)\) 的概率按定义 \ref{def:pom-gamma-quantile} 不超过 \(\varepsilon\)。证毕。
+\end{proof}
+
+\medskip\noindent\textbf{分位配额阈值的准充要性（区间读出版本）}
+在定义 \ref{def:pom-order-elimination-rewrite} 的“区间读出/重建”协议下，prime-register 的乘积预算 \(P_m\) 不仅给出推论 \ref{cor:pom-prime-register-quantile-budget} 的充分阈值，而且在该协议意义下是\emph{锐的}：
+若某一外置 prime-register 方案希望把“标签超界导致不可唯一重建”的失败概率压到 \(\le \varepsilon\)，则其总模积必须满足
+\[
+\boxed{\ P_m\ >\ 2\,B_m(\varepsilon)\ }.
+\]
+等价地，若 \(P_m\le 2B_m(\varepsilon)\)，则对任意满足侧条件 \(P_m>2B\) 的区间界 \(B\)（必有 \(B<P_m/2\)），由尾部分位的极小性（定义 \ref{def:pom-gamma-quantile}）可知
+\(\mathbb{P}_{w_m}\!\big[d_m(X)>B\big]>\varepsilon\)，从而在同一协议口径下无法将失败概率压到 \(\le\varepsilon\)
+（仅差严格不等号/整数取整细节）。
+
+\medskip\noindent\textbf{信息守恒—分位定律（\(\varepsilon\)-容错可逆性所需外置信息量的定标）}
+在“微态均匀抽样、输出 \(X\sim w_m\)、给定 \(X=x\) 时纤维内等概率”的口径下，被投影抹去的信息量由
+\[
+L_m(X):=\log d_m(X)
+\]
+（单位 nats）精确刻画；其 \((1-\varepsilon)\)-尾部分位即为
+\(\log B_m(\varepsilon)=m\,\gamma_m(\varepsilon)\)。
+分位配额阈值的准充要性表明：在该协议下实现失败概率 \(\le\varepsilon\) 的外置承载，必须至少提供
+\[
+\log P_m\ \ge\ \log 2+\log B_m(\varepsilon)
+\qquad(\text{等价于 }P_m>2B_m(\varepsilon)),
+\]
+因此 \(B_m(\varepsilon)=\exp(m\gamma_m(\varepsilon))\) 在指数尺度上给出了“恢复被投影丢失的信息”所需外置信息量的\emph{精确定标}，且该尺度不可再降。
+
+\medskip\noindent\textbf{压力—对偶设计方程（由 \(\tau(q)\) 反算最小 prime-register 增长率）}
+令 \(\beta_m(\varepsilon):=\frac{1}{m}\log\frac{1}{\varepsilon}\)。
+由命题 \ref{prop:pom-quantile-chernoff} 与尾部分位的定义（定义 \ref{def:pom-gamma-quantile}），在指数尺度上可将分位强度上界写成对 \(q\) 的闭式下包络：
+\[
+\boxed{\;
+\gamma_m(\varepsilon)\ \le\
+\inf_{q\in\ZZ_{\ge 2}}
+\frac{\tau(q)-\log 2+\beta_m(\varepsilon)}{q-1}
+\qquad(\text{指数尺度}).\;}
+\]
+因此在定义 \ref{def:pom-order-elimination-rewrite} 的区间读出/重建口径下，一个可审计的足够预算可写为
+\[
+\boxed{\;
+\log P_m\ \gtrsim\ \log 2\ +\ m\cdot
+\inf_{q\in\ZZ_{\ge 2}}
+\frac{\tau(q)-\log 2+\beta_m(\varepsilon)}{q-1}\; }.
+\]
+在已核验口径 \(S_q(m)=\Theta(r_q^m)\) 下，上式中的 \(\tau(q)\) 可替换为 \(\log r_q\)，并由注 \ref{rem:pom-quantile-budget-computable} 给出完全可计算的证书化设计方程。
+
+\begin{corollary}[\texorpdfstring{$q$}{q}-参数化配额上界：失败概率—寄存器指数预算族]\label{cor:pom-prime-register-q-quota-family}
+对任意整数 \(q\ge 2\) 与任意阈值 \(B>0\)，有严格尾界
+\[
+\boxed{\;
+\mathbb{P}_{w_m}\!\bigl(d_m(X)\ge B\bigr)
+\ \le\
+\frac{S_q(m)}{2^m}\cdot B^{-(q-1)}\; }.
+\]
+特别地，若写 \(B=e^{m\gamma}\)，则
+\[
+\mathbb{P}_{w_m}\!\bigl(d_m(X)\ge e^{m\gamma}\bigr)
+\ \le\
+\exp\!\bigl(-(q-1)m\gamma\bigr)\cdot \frac{S_q(m)}{2^m},
+\]
+并且在 \(S_q(m)=\Theta(r_q^m)\) 的口径下可读出指数尺度“相图”
+\[
+\mathbb{P}_{w_m}\!\bigl(d_m(X)\ge e^{m\gamma}\bigr)
+\ \lesssim\
+\exp\!\Bigl(m\bigl(\log r_q-\log 2-(q-1)\gamma\bigr)\Bigr).
+\]
+因此若希望 \(\mathbb{P}_{w_m}(d_m(X)\ge B)\le \varepsilon\)，一个完全显式的足够条件是取
+\[
+\boxed{\;
+B\ \ge\ B_{m,q}^{\mathrm{fin}}(\varepsilon)
+::=\varepsilon^{-1/(q-1)}\left(\frac{S_q(m)}{2^m}\right)^{\!1/(q-1)}\; }.
+\]
+在已核验的指数口径 \(S_q(m)=\Theta(r_q^m)\) 下，这等价于指数尺度闭式预算族
+\[
+\boxed{\;
+B\ \gtrsim\ B_m^{(q)}(\varepsilon)
+::=\varepsilon^{-1/(q-1)}\left(\frac{r_q}{2}\right)^{\!m/(q-1)}\; }.
+\]
+将其代入 CRT 侧条件（定义 \ref{def:pom-order-elimination-rewrite} 的 \(P>2B\)），得到一个可审计的 prime-register 配额族：
+\[
+\boxed{\;
+P_m\ >\ 2\,B_{m,q}^{\mathrm{fin}}(\varepsilon)
+\ \Longrightarrow\
+\mathbb{P}(\text{CRT 标签超界导致不可唯一重建})\ \le\ \varepsilon\; }.
+\]
+记
+\[
+\beta_{m,q}^{\mathrm{fin}}
+:=\frac{1}{q-1}\left(\frac{1}{m}\log S_q(m)-\log 2\right),
+\qquad
+\beta_q:=\frac{\log r_q-\log 2}{q-1},
+\]
+则
+\(
+\log B_{m,q}^{\mathrm{fin}}(\varepsilon)
+=m\,\beta_{m,q}^{\mathrm{fin}}+\frac{1}{q-1}\log(1/\varepsilon)
+\)
+且在 \(r_q\) 口径下
+\(
+\log B_m^{(q)}(\varepsilon)=m\,\beta_q+\frac{1}{q-1}\log(1/\varepsilon)
+\)。
+\end{corollary}
+\begin{proof}
+令 \(\gamma=(1/m)\log B\)。则事件 \(\{d_m(X)\ge B\}\) 等价于 \(\{\gamma_m(X)\ge \gamma\}\)。
+将 \(\gamma=(1/m)\log B\) 代入命题 \ref{prop:pom-quantile-chernoff} 得（下式中 \(\pi_m\) 视为 \(w_m\) 的旧记号）：
+\[
+\mathbb{P}_{w_m}\!\bigl(d_m(X)\ge B\bigr)
+=\mathbb{P}_{\pi_m}\!\bigl(\gamma_m(X)\ge \tfrac{1}{m}\log B\bigr)
+\le
+\exp\!\bigl(-(q-1)\log B\bigr)\cdot \frac{S_q(m)}{2^m}
+=\frac{S_q(m)}{2^m}\,B^{-(q-1)}.
+\]
+令右端 \(\le \varepsilon\) 并解出 \(B\) 得 \(B_{m,q}^{\mathrm{fin}}(\varepsilon)\)。
+最后一段“\(P_m>2B_{m,q}^{\mathrm{fin}}(\varepsilon)\Rightarrow\) 失败概率 \(\le\varepsilon\)”由推论 \ref{cor:pom-prime-register-quantile-budget} 对任意 \(B\) 的单调性立得：当 \(P_m>2B\) 时仅在事件 \(\{d_m(X)>B\}\) 上可能发生超界失败。
+证毕。
+\end{proof}
+
+\input{parts/part__pom-certificate-pareto-kink-multifractal-skeleton}
+
+\begin{remark}[ISA 级常数：\texorpdfstring{$\beta_q$}{betaq} 与端点闭环]\label{rem:pom-betaq-isa}
+推论 \ref{cor:pom-prime-register-q-quota-family} 把 prime-register 的“配额”压缩为一条可直接代入成本模型的指数律：
+\[
+\log P_m\ \gtrsim\ \log 2\ +\ m\,\beta_q\ +\ \frac{1}{q-1}\log(1/\varepsilon),
+\qquad
+\beta_q=\frac{\log r_q-\log 2}{q-1}.
+\]
+因此每个整数 \(q\ge 2\) 都诱导一个可审计的“寄存器指数预算斜率” \(\beta_q\)（表 \ref{tab:fold_collision_renyi_spectrum} 给出 \(q\le 17\) 的精确 \(r_q\)）。
+例如最低阶证书 \(q=2\) 给出
+\[
+B_m^{(2)}(\varepsilon)=\varepsilon^{-1}\left(\frac{r_2}{2}\right)^m,
+\qquad
+\beta_2=\log(r_2/2),
+\qquad
+r_2=2.481194304092,
+\]
+从而得到一条“极硬”的闭式空间预算。
+\par
+更重要的是：端点常数把“矩/时间轴”的 Rényi 指纹与“空间/最坏纤维”锁到同一事实。
+由命题 \ref{prop:pom-rq-qinfty-endpoint}（等价于最大纤维闭式定理 \ref{thm:pom-max-fiber} 与端点推论 \ref{cor:pom-max-fiber-rate-endpoint}）有
+\[
+\lim_{q\to\infty}\frac{1}{q}\log r_q=\log\sqrt{\varphi},
+\qquad\text{从而}\qquad
+\lim_{q\to\infty}\beta_q=\log\sqrt{\varphi}.
+\]
+而 \(D_m=\max_x d_m(x)\) 的闭式/枚举表（表 \ref{tab:fold_max_fiber_achievers_phase}）显示
+\(
+m^{-1}\log D_m
+\)
+在数值上快速贴近同一常数 \(\log\sqrt{\varphi}\)，使“高阶 Rényi 端点”与“最坏纤维指数”在本文体系内形成闭环对齐。
+\end{remark}

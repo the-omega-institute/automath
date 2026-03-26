@@ -1,0 +1,81 @@
+% Weighted Stokes--Sobolev energy identity and high-frequency tail bound.
+
+\begin{theorem}[加权 Dirichlet 能量的 Walsh 谱恒等式与高频尾界]\label{thm:fold-hypercube-weighted-stokes-sobolev-energy-spectrum}
+设 \(n\ge 1\)、\(\Omega_n:=\{0,1\}^n\)，并取权重向量 \(w=(w_1,\dots,w_n)\) 满足 \(w_i>0\)。
+对任意函数 \(f:\Omega_n\to\CC\)，定义加权 Dirichlet 能量
+\[
+\mathcal E_w(f)
+:=\frac12\sum_{\omega\in\Omega_n}\sum_{i=1}^n w_i\,\bigl|f(\omega^{(i)})-f(\omega)\bigr|^2.
+\]
+对任意 \(I\subseteq[n]\) 定义 Walsh 字符 \(\chi_I(\omega):=(-1)^{\sum_{i\in I}\omega_i}\) 并采用归一化 Fourier--Walsh 系数
+\[
+\widehat f(I):=2^{-n}\sum_{\omega\in\Omega_n} f(\omega)\chi_I(\omega).
+\]
+则成立精确谱分解
+\[
+\boxed{\;
+\mathcal E_w(f)
+=2^{n+1}\sum_{\varnothing\neq I\subseteq[n]}\Bigl(\sum_{i\in I}w_i\Bigr)\,|\widehat f(I)|^2.\;}
+\]
+特别地，若 \(f=\mathbf 1_S\) 为子集 \(S\subseteq\Omega_n\) 的指示函数，并记 \(c_i(S)\) 为第 \(i\) 坐标方向的无向割边数，则
+\[
+\mathcal E_w(\mathbf 1_S)=\sum_{i=1}^n w_i\,c_i(S).
+\]
+并且对任意阈值 \(\tau>0\) 有高频尾界
+\[
+\boxed{\;
+\sum_{\substack{I\subseteq[n]\\ \sum_{i\in I}w_i\ge \tau}}|\widehat f(I)|^2
+\ \le\ \frac{\mathcal E_w(f)}{2^{n+1}\tau}\; }.
+\]
+\end{theorem}
+\begin{proof}
+对加权 Laplace 算子取
+\[
+(\Delta_w g)(\omega):=\sum_{i=1}^n w_i\bigl(g(\omega)-g(\omega^{(i)})\bigr)
+\]
+（与定理 \ref{thm:fold-hypercube-weighted-walsh-stokes} 的记号一致）。
+则由离散分部积分恒等式
+\[
+\langle f,\Delta_w f\rangle
+=\frac12\sum_{\omega\in\Omega_n}\sum_{i=1}^n w_i\,|f(\omega)-f(\omega^{(i)})|^2
+=\mathcal E_w(f),
+\qquad
+\langle f,g\rangle:=\sum_{\omega\in\Omega_n} f(\omega)\overline{g(\omega)}.
+\]
+另一方面，对任意 \(\varnothing\neq I\subseteq[n]\)，由
+\(
+\chi_I(\omega^{(i)})=\chi_I(\omega)
+\)
+当 \(i\notin I\)，以及
+\(
+\chi_I(\omega^{(i)})=-\chi_I(\omega)
+\)
+当 \(i\in I\)，得
+\[
+\Delta_w\chi_I=2\Bigl(\sum_{i\in I}w_i\Bigr)\chi_I,
+\qquad
+\langle \chi_I,\chi_I\rangle=2^n.
+\]
+将 \(f=\sum_{I\subseteq[n]}\widehat f(I)\chi_I\) 代入并用 Walsh 基正交性得到
+\[
+\mathcal E_w(f)=\langle f,\Delta_w f\rangle
+=\sum_{\varnothing\neq I\subseteq[n]}|\widehat f(I)|^2\,\langle \chi_I,\Delta_w\chi_I\rangle
+=2^{n+1}\sum_{\varnothing\neq I}\Bigl(\sum_{i\in I}w_i\Bigr)|\widehat f(I)|^2,
+\]
+即第一条恒等式。
+\par
+当 \(f=\mathbf 1_S\) 时，\(|\mathbf 1_S(\omega^{(i)})-\mathbf 1_S(\omega)|^2\) 等于 \(1\) 当且仅当 \(\omega\) 与 \(\omega^{(i)}\) 跨越割边；
+对固定 \(i\) 的求和在每条无向割边上恰计两次，故
+\(
+\frac12\sum_{\omega}|\mathbf 1_S(\omega^{(i)})-\mathbf 1_S(\omega)|^2=c_i(S)
+\)，从而 \(\mathcal E_w(\mathbf 1_S)=\sum_i w_i c_i(S)\)。
+\par
+最后，对满足 \(\sum_{i\in I}w_i\ge\tau\) 的 \(I\) 有
+\(
+|\widehat f(I)|^2\le \tau^{-1}\bigl(\sum_{i\in I}w_i\bigr)|\widehat f(I)|^2
+\)；
+对这类 \(I\) 求和并用谱恒等式即可得到尾界。证毕。
+\end{proof}
+
+\endinput
+

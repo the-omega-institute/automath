@@ -1,0 +1,466 @@
+\subsubsection{视界零知识与转录算子：相对独立延拓、闭环 \texorpdfstring{$\zeta$}{zeta}-化与临界切片对称}\label{subsubsec:xi-horizon-zero-knowledge-operator-model}
+上一段把“单切片协议”的可审计判定闭合到读出反射子 \(R_{\mathrm{read}}\)（定理 \ref{thm:xi-read-reflector-factorization}）。
+本段进一步指出：当交互转录在视界因子上闭合时，这种闭合不仅是谓词层的因子分解，而且可被精确提升为信息论意义下的\emph{完美零知识}（zero knowledge）结构；
+其直接后果是：协议在视界层诱导出一个可审计的转移算子族与 Fredholm 行列式接口，并在“可逆/对偶 \(+\) 详细平衡”假设下自动携带功能方程型对称，从而把“临界线对称—谱—零点”组织到同一条闭环展开链路中。
+\par
+
+\paragraph{设定：体—界因子、转录核与模拟器}
+令 \((\Omega,\mathcal{F},\mu)\) 为体（bulk）微观态概率空间，令 \((Y,\mathcal{Y})\) 为视界可见空间，并令 \(\pi:\Omega\to Y\) 为可测因子映射（视界投影）；记 \(y=\pi(\omega)\)、\(\nu:=\pi_{\#}\mu\)。
+令 \((\mathcal{T},\mathcal{G})\) 为交互转录空间：给定微态 \(\omega\)，协议输出转录 \(\tau\in\mathcal{T}\) 的条件分布记为核 \(P_{\omega}(\dd\tau)\)。
+由此得到联合测度
+\[
+\mathbf{P}(\dd\omega,\dd\tau):=\mu(\dd\omega)\,P_{\omega}(\dd\tau)
+\qquad(\text{在 }\Omega\times\mathcal{T}\text{ 上}).
+\]
+取 \(\mu\) 关于 \(\pi\) 的一个析取（disintegration）\(\{\mu_y\}_{y\in Y}\)，使 \(\mu(\dd\omega)=\nu(\dd y)\,\mu_y(\dd\omega)\)。
+\par
+在本文语境中，一个重要特例是取 \(\pi=\mathrm{read}\) 或 \(\pi=(\mathrm{read},a)\)（地址化后的可见读出，见定义 \ref{def:xi-visible-read-null} 与定义 \ref{def:multi_axis_address}），此时“视界因子”即为协议可见的稳定类型空间。
+
+\begin{definition}[视界因子上的完美零知识]\label{def:xi-horizon-perfect-zero-knowledge}
+称协议相对于因子 \(\pi\) \textbf{完美零知识}，若存在仅依赖 \(y\) 的模拟核 \(S_y(\dd\tau)\) 使得对 \(\mu\)-几乎处处的 \(\omega\) 有
+\[
+P_{\omega}(\cdot)=S_{\pi(\omega)}(\cdot).
+\]
+换言之，在给定可见数据 \(y\) 后，转录的条件分布不再依赖体微态 \(\omega\) 的任何额外信息。
+\end{definition}
+
+\begin{theorem}[完美零知识的等价刻画：条件独立与相对独立拼接]\label{thm:xi-horizon-perfect-zk-equivalences}
+在上述设定下，下列命题等价：
+\begin{enumerate}
+  \item 视界完美零知识（定义 \ref{def:xi-horizon-perfect-zero-knowledge}）。
+  \item \(\tau\) 与 \(\omega\) 在给定 \(y=\pi(\omega)\) 条件下条件独立：对任意有界可测函数 \(f:\Omega\to\CC\)、\(g:\mathcal{T}\to\CC\)，有
+  \[
+  \mathbb{E}_{\mathbf{P}}\bigl[f(\omega)\,g(\tau)\mid y\bigr]
+  =
+  \mathbb{E}_{\mu}\bigl[f(\omega)\mid y\bigr]\cdot
+  \mathbb{E}_{\mathbf{P}}\bigl[g(\tau)\mid y\bigr]
+  \quad(\nu\text{-a.e. }y).
+  \]
+  \item 联合测度沿因子 \(Y\) 为\textbf{相对独立拼接}：存在核 \(S_y(\dd\tau)\) 使得
+  \[
+  \mathbf{P}(\dd\omega,\dd\tau)
+  =
+  \nu(\dd y)\,\mu_y(\dd\omega)\,S_y(\dd\tau).
+  \]
+  \item 条件互信息消失：在 \(\mathbf{P}\) 下有 \(I(\omega;\tau\mid y)=0\)。
+\end{enumerate}
+因此，“视界作为信息屏障”的严格译文是：\(\mathbf{P}\) 是沿 \(Y\) 的相对独立延拓；协议在视界层的全部可判定统计都可由 \(\{S_y\}\) 生成而不需要访问体微态纤维内的额外自由度。
+\end{theorem}
+
+\begin{proof}
+\textbf{(1)\(\Rightarrow\)(3).}
+若 \(P_{\omega}=S_{\pi(\omega)}\)，则
+\[
+\mathbf{P}(\dd\omega,\dd\tau)
+=
+\mu(\dd\omega)\,S_{\pi(\omega)}(\dd\tau)
+=
+\nu(\dd y)\,\mu_y(\dd\omega)\,S_y(\dd\tau).
+\]
+\textbf{(3)\(\Rightarrow\)(2).}
+由 \(\mathbf{P}(\dd\omega,\dd\tau\mid y)=\mu_y(\dd\omega)\,S_y(\dd\tau)\) 直接得到条件独立的乘法分解。
+\textbf{(2)\(\Leftrightarrow\)(4).}
+这是条件互信息的标准刻画：\(I(\omega;\tau\mid y)=0\) 当且仅当 \(\omega\perp \tau\mid y\)。
+\textbf{(3)\(\Rightarrow\)(1).}
+由 \(\mathbf{P}(\dd\omega,\dd\tau)=\mu(\dd\omega)\,P_{\omega}(\dd\tau)\) 与 (3) 比较可知，对 \(\mu\)-几乎处处的 \(\omega\) 有 \(P_{\omega}(\cdot)=S_{\pi(\omega)}(\cdot)\)。
+证毕。
+\end{proof}
+
+\input{para__xi-horizon-zk-fiberpath-stokes-discriminant}
+
+\paragraph{阈值零知识与视界秘密共享：由局部可模拟到全局可耦合}
+在多辐射分块/多验证者语境中，视界可见空间常呈乘积分解 \(Y=\prod_{i=1}^{m}Y_i\)，其中每个 \(Y_i\) 对应一个子系统的可见读出。
+此时“零知识”可按子集视角细化为阈值形式：任意规模 \(\le t\) 的真子集视角均可被局部模拟；而“秘密共享/纠错”图像则对应于：尽管任意真子集在可见语义中不携带内部见证，但全体联合读出可以恢复内部（从而使全局读出在信息论意义下具备重构能力）。
+
+\begin{definition}[阈值 \(t\) 的多方零知识（视界口径）]\label{def:xi-threshold-zk}
+设 \(Y=\prod_{i=1}^{m}Y_i\) 且 \(\pi=(\pi_1,\dots,\pi_m):\Omega\to Y\)。
+设转录空间亦分解为 \(\mathcal{T}=\prod_{i=1}^{m}\mathcal{T}_i\)，并对任意 \(S\subseteq[m]:=\{1,\dots,m\}\) 记
+\[
+Y_S:=\prod_{i\in S}Y_i,\qquad
+\mathcal{T}_S:=\prod_{i\in S}\mathcal{T}_i,
+\qquad
+y_S:=\pi_S(\omega):=(\pi_i(\omega))_{i\in S},
+\qquad
+\tau_S:=\operatorname{pr}_S(\tau).
+\]
+称协议满足\textbf{阈值 \(t\) 的多方零知识}，若对任意满足 \(|S|\le t\) 的子集 \(S\subseteq[m]\)，存在仅依赖 \(y_S\) 的模拟核
+\(
+S_S(\dd\tau_S\mid y_S)
+\)
+使得对 \(\mu\)-几乎处处的 \(\omega\) 有
+\[
+\mathsf{Law}\bigl(\tau_S\mid \pi_S(\omega)=y_S\bigr)=S_S(\cdot\mid y_S).
+\]
+\end{definition}
+
+\begin{definition}[局部模拟核族的射影一致性]\label{def:xi-threshold-zk-projective-consistency}
+在定义 \ref{def:xi-threshold-zk} 的记号下，称局部模拟核族
+\(
+\{\,S_S(\dd\tau_S\mid y_S):|S|\le t\,\}
+\)
+满足\textbf{射影一致性}，若对任意 \(S\subseteq T\subseteq[m]\) 且 \(|T|\le t\)，有
+\begin{equation}\label{eq:xi-threshold-zk-projective}
+\boxed{\;
+(\operatorname{pr}_{T\to S})_{\#}S_T(\cdot\mid y_T)=S_S(\cdot\mid y_S),
+\qquad y_S=\operatorname{pr}_{T\to S}(y_T),\;}
+\end{equation}
+其中 \(\operatorname{pr}_{T\to S}\) 为自然投影（对 \(Y\) 与 \(\mathcal{T}\) 均适用）。
+\end{definition}
+
+\begin{definition}[全局可耦合的阈值模拟器]\label{def:xi-threshold-zk-global-coupler}
+称阈值模拟核族 \(\{S_S\}_{|S|\le t}\) 存在\textbf{全局耦合模拟器}，若存在核
+\(
+S(\dd\tau\mid y)
+\)
+使得对所有 \(|S|\le t\) 都有
+\begin{equation}\label{eq:xi-threshold-zk-global-marginals}
+\boxed{\;
+(\operatorname{pr}_{S})_{\#}S(\cdot\mid y)=S_S(\cdot\mid y_S),
+\qquad y_S=\operatorname{pr}_S(y).\;}
+\end{equation}
+\end{definition}
+
+\begin{proposition}[一致性判别与耦合存在性（边缘扩展问题）]\label{prop:xi-threshold-zk-consistency-coupling}
+在标准 Borel（或可分完备度量）假设下，若存在全局耦合模拟器（定义 \ref{def:xi-threshold-zk-global-coupler}），则局部模拟核族必满足射影一致性 \eqref{eq:xi-threshold-zk-projective}。
+反之，当局部模拟核族在 \(\nu\)-几乎处处的 \(y\) 上可被\emph{同时}实现为某个联合核 \(S(\dd\tau\mid y)\) 的边缘族时（即边缘扩展问题可行），便存在全局耦合模拟器。
+\par
+特别地，当 \(t=m\)（或更一般地，当局部核族给定于一个包含全体坐标并在包含关系下闭合的投影系统）时，射影一致性与全局核存在性等价。
+\end{proposition}
+
+\begin{remark}[视界秘密共享的极端阈值与“全体可重构”]\label{rem:xi-threshold-zk-secret-sharing}
+在“辐射分块”模型中，性质“任意真子集不可重构内部而全体可重构”可被视为 \(t=m-1\) 的极端阈值秘密共享图像：所有 \(|S|\le m-1\) 的视角在可见语义下均可局部模拟，而当取全体 \(S=[m]\) 时，联合读出可能获得内部信息并触发完备性重构。
+该几何化版本可参见 \cite{BalasubramanianEtAl2021SecretSharing} 的纠错/秘密共享讨论；在本文口径下，它对应于“局部零知识（可模拟）”与“全局耦合/重构（可恢复）”之间的结构张力。
+\end{remark}
+
+\paragraph{视界转录转移算子与“协议 \texorpdfstring{$\zeta$}{zeta} 函数”接口}
+在完美零知识下，任何“单轮转录—可见更新”统计都可在视界空间上闭合。
+为把其闭环结构与 \(\zeta\)/谱接口对齐，引入一个可加长度/作用量函子 \(\ell:\mathcal{T}\to\RR_{\ge 0}\)，满足复合可加性
+\(
+\ell(\tau_1\circ\tau_2)=\ell(\tau_1)+\ell(\tau_2)
+\)
+（例如以步数或代价势为长度）。
+
+\begin{definition}[视界转录转移算子族与协议行列式]\label{def:xi-horizon-transcript-transfer-operator}
+设给定一个在视界上闭合的单轮核 \(Q_y(\dd y',\dd\tau)\)（给定当前可见态 \(y\)，输出下一可见态 \(y'\) 与转录 \(\tau\) 的联合分布）。
+对 \(s\in\CC\) 定义加权的视界核
+\[
+k_s(y,\dd y')
+:=
+\int_{\mathcal{T}} e^{-s\ell(\tau)}\,Q_y(\dd y',\dd\tau),
+\]
+并定义其在 \(L^2(Y,\nu)\) 上的核算子
+\[
+(\mathcal{K}_s f)(y):=\int_Y f(y')\,k_s(y,\dd y').
+\]
+若 \(\mathcal{K}_s\) 在某开域内为迹类且关于 \(s\) 解析，则可定义 Fredholm 行列式
+\[
+D_{\mathrm{prot}}(s):=\det(I-\mathcal{K}_s),
+\qquad
+\zeta_{\mathrm{prot}}(s):=D_{\mathrm{prot}}(s)^{-1}.
+\]
+\end{definition}
+
+\begin{proposition}[闭环展开恒等式与闭路权重和]\label{prop:xi-horizon-protocol-zeta-loop-expansion}
+在定义 \ref{def:xi-horizon-transcript-transfer-operator} 的迹类解析假设下，恒有
+\[
+\log D_{\mathrm{prot}}(s)=-\sum_{n\ge 1}\frac{1}{n}\Tr(\mathcal{K}_s^{n}).
+\]
+在有限/可数分割的视界近似（\(Y\) 为有限集合或可数 Markov 分割）下，\(\Tr(\mathcal{K}_s^{n})\) 等于所有长度为 \(n\) 的“转录闭环”之权重和；因此 \(\zeta_{\mathrm{prot}}\) 在语义上对应于一类由可验证转录闭环所驱动的 Ruelle/Ihara 型 \(\zeta\)-化对象。
+\end{proposition}
+
+\begin{proof}
+第一式是迹类 Fredholm 行列式定义 \ref{def:fredholm-determinant} 在 \(z=1\) 的直接应用。
+\par
+当 \(Y\) 为有限集合时，\(\mathcal{K}_s\) 为矩阵；\(\Tr(\mathcal{K}_s^{n})\) 是对所有闭路
+\(
+y_0\to y_1\to\cdots\to y_{n-1}\to y_0
+\)
+的权重积求和，而每一步的权重由 \(k_s(y_i,y_{i+1})\) 给出；把 \(k_s\) 写回其对 \(\tau\) 的积分表达即可将该权重解释为“转录闭环”的加权和。
+可数 Markov 分割情形同理，只需以核算子复合的积分表示与 Fubini 交换将轨道积分写成闭环求和。证毕。
+\end{proof}
+
+\paragraph{微观可逆性与零知识对偶 \texorpdfstring{$\Rightarrow$}{=>} 功能方程型对称}
+假设协议携带一个“时间反演/对偶”结构，使得在视界层面出现类似完成化自对偶的共轭对称：存在可逆有界算子 \(J_Y:L^2(Y,\nu)\to L^2(Y,\nu)\)，使得对所有 \(s\) 有
+\begin{equation}\label{eq:xi-hzom-detailed-balance}
+\boxed{\ \mathcal{K}_s^{*}=J_Y\,\mathcal{K}_{1-\overline{s}}\,J_Y^{-1}\ }.
+\end{equation}
+该关系可视为“视界详细平衡 \(+\) 参数对偶”的统一表达：它把 \(s\mapsto 1-\overline{s}\) 的功能方程型对称落实为核算子族的伴随共轭。
+
+\begin{proposition}[详细平衡共轭 \texorpdfstring{$\Rightarrow$}{=>} 行列式反射对称]\label{prop:xi-hzom-functional-equation}
+在 \eqref{eq:xi-hzom-detailed-balance} 的假设下，协议行列式满足
+\[
+\boxed{\ \overline{D_{\mathrm{prot}}(1-\overline{s})}=D_{\mathrm{prot}}(s)\ }.
+\]
+因此其零点集合关于直线 \(\Re(s)=\tfrac12\) 镜像对称。
+\end{proposition}
+
+\begin{proof}
+由迹类行列式的基本性质，对任意迹类算子 \(A\) 有 \(\overline{\det(I-A)}=\det(I-A^{*})\)。
+因此
+\[
+\overline{D_{\mathrm{prot}}(1-\overline{s})}
+=\det\!\bigl(I-\mathcal{K}_{1-\overline{s}}^{*}\bigr).
+\]
+而由 \eqref{eq:xi-hzom-detailed-balance}（把 \(s\) 替换为 \(1-\overline{s}\)）得
+\(
+\mathcal{K}_{1-\overline{s}}^{*}=J_Y\,\mathcal{K}_{s}\,J_Y^{-1}
+\)。
+行列式对共轭不变，故
+\[
+\det\!\bigl(I-\mathcal{K}_{1-\overline{s}}^{*}\bigr)
+=
+\det\!\bigl(I-J_Y\mathcal{K}_sJ_Y^{-1}\bigr)
+=
+\det(I-\mathcal{K}_s)
+=D_{\mathrm{prot}}(s).
+\]
+证毕。
+\end{proof}
+
+\begin{remark}[收缩判别准则的协议译文：把零点集中化约为谱收缩性]\label{rem:xi-hzom-contraction-template}
+若在某个右半平面 \(\Re(s)\ge \sigma_0\) 上能建立谱收缩性 \(\rho(\mathcal{K}_s)<1\)，则 \(1\notin\mathrm{Spec}(\mathcal{K}_s)\)，从而 \(D_{\mathrm{prot}}(s)\neq 0\)；
+由命题 \ref{prop:xi-hzom-functional-equation} 的反射对称，立即推出左半平面 \(\Re(s)\le 1-\sigma_0\) 上同样零自由。
+因此，对任意 \(\epsilon>0\) 若能证明
+\(
+\Re(s)\ge \tfrac12+\epsilon\Rightarrow \rho(\mathcal{K}_s)<1
+\)，
+则协议行列式的全部零点都被压缩到临界切片 \(\Re(s)=\tfrac12\)。
+该模板与本节后文的“合同对称—边界零点原理”（定理 \ref{thm:xi-contractive-boundary-zero}）在形式上同构：二者均把零点几何化约为一个纯算子论的收缩/可逆性证书问题。
+\end{remark}
+
+\begin{remark}[零点—健全性二象性：闭环计数误差与谱奇点]\label{rem:xi-hzom-zero-soundness-duality}
+在定义 \ref{def:xi-horizon-transcript-transfer-operator} 的闭环展开下，\(\Tr(\mathcal{K}_s^n)\) 可被理解为“长度为 \(n\) 的可接受转录闭环”的加权计数。
+在满足解析延拓与增长条件时，\(\zeta_{\mathrm{prot}}\) 的零点/极点位置将通过显式公式型的轮廓移动控制闭环计数的误差项：零点偏离临界切片会引入指数级偏差模态，而临界切片集中则把可见偏差压到临界型涨落。
+在该语义下，临界线陈述可被重述为：所有可伪造优势只能以临界型方式积累，而不存在非临界的指数放大通道。
+\end{remark}
+
+\begin{corollary}[幺正切片与谱穿越：零点作为 \(1\) 的谱碰撞]\label{cor:xi-hzom-unitary-slice}
+若在临界切片 \(s=\tfrac12+it\) 上，视界算子可被重参数化为一族幺正算子 \(U(t)\) 且满足
+\(
+D_{\mathrm{prot}}(\tfrac12+it)=\det(I-U(t))
+\)
+（或相差一处处非零的解析因子），
+则零点事件等价于 \(1\in\mathrm{Spec}(U(t))\)。
+在本文的完成化行列式桥核情形，这正是 unitary slice 的谱穿越判据（命题 \ref{prop:xi-unitary-slice-spectral-crossing}）的抽象译文：临界线零点被实现为视界幺正演化在同一点 \(1\) 的谱碰撞。
+与将零点理解为谱线/共振的路线相容，可参见 \cite{Connes1999TraceFormulaNCG} 对“吸收谱线/共振”的谱解释。
+\end{corollary}
+
+\begin{theorem}[unitary-slice 的零点计数与谱流]\label{thm:xi-unitary-slice-zero-count-spectral-flow}
+设 \(U(\theta)\) 为一条 \(C^{1}\) 的有限维幺正路径（\(\theta\in[\theta_1,\theta_2]\)），并令
+\[
+F(\theta):=\det(I-U(\theta)).
+\]
+则：
+\begin{enumerate}
+  \item 若 \(F(\theta_0)=0\)，则其代数重数等于 \(\dim\ker(I-U(\theta_0))\)。
+  \item 若进一步假设横截性成立：对任意 \(v\in\ker(I-U(\theta_0))\setminus\{0\}\)，存在局部本征相位分支 \(U(\theta)v(\theta)=e^{i\phi_v(\theta)}v(\theta)\) 且满足 \(\phi_v'(\theta_0)\neq 0\)，则 \(F\) 在 \(\theta_0\) 处为简单零点；并且区间内零点的有向计数等于谱流
+  \[
+  \mathrm{sf}_{[\theta_1,\theta_2]}(U;1)
+  :=
+  \sum_{\theta_0\in(\theta_1,\theta_2)}\ \sum_{v\in\ker(I-U(\theta_0))}\mathrm{sign}\bigl(\phi_v'(\theta_0)\bigr),
+  \]
+  其中内层求和对 \(\ker(I-U(\theta_0))\) 的任意基理解为按重数计的穿越贡献。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+有限维情形下可取连续特征值分支 \(e^{i\phi_j(\theta)}\)（按代数重数计），从而
+\[
+F(\theta)=\prod_{j=1}^{d}\bigl(1-e^{i\phi_j(\theta)}\bigr).
+\]
+因此 \(F(\theta_0)=0\) 当且仅当存在若干 \(j\) 使 \(\phi_j(\theta_0)\equiv 0\ (\mathrm{mod}\ 2\pi)\)，其个数恰为 \(\dim\ker(I-U(\theta_0))\)；并且零点的代数重数等于该个数，得到 (1)。
+\par
+若 \(\phi_j'(\theta_0)\neq 0\)，则
+\(
+1-e^{i\phi_j(\theta)}=-i\phi_j'(\theta_0)(\theta-\theta_0)+o(\theta-\theta_0)
+\)
+给出一次因子，从而穿越点为简单零点，其方向由 \(\mathrm{sign}(\phi_j'(\theta_0))\) 决定；将所有穿越贡献相加即得所示谱流表达。证毕。
+\end{proof}
+
+\begin{definition}[视界零知识算子模型（HZOM）]\label{def:xi-hzom}
+称数据 \((Y,\nu;\mathcal{K}_s,J_Y)\) 构成一个\textbf{视界零知识算子模型}，若满足：
+\begin{enumerate}
+  \item \textbf{（零知识闭包）}存在视界因子 \(\pi:\Omega\to Y\) 使协议相对于 \(\pi\) 完美零知识（定义 \ref{def:xi-horizon-perfect-zero-knowledge}），并由此在 \(Y\) 上诱导出闭合核算子族 \(\mathcal{K}_s\)（定义 \ref{def:xi-horizon-transcript-transfer-operator}）。
+  \item \textbf{（迹类解析）}\(\mathcal{K}_s\) 在某开域内为迹类并随 \(s\) 解析，从而 \(D_{\mathrm{prot}}(s)=\det(I-\mathcal{K}_s)\) 定义良好。
+  \item \textbf{（详细平衡对偶）}\(\mathcal{K}_s\) 满足 \eqref{eq:xi-hzom-detailed-balance}，从而 \(D_{\mathrm{prot}}\) 具有功能方程型反射对称（命题 \ref{prop:xi-hzom-functional-equation}）。
+  \item \textbf{（算术一致性）}存在处处非零的整函数 \(E(s)\) 使得
+  \[
+  \Xi_{\zeta}(s)=E(s)\,D_{\mathrm{prot}}(s)
+  \]
+  （或等价地二者同属一个唯一确定的解析等价类），从而 \(\Xi_{\zeta}\) 与 \(D_{\mathrm{prot}}\) 具有相同的零点集合。
+\end{enumerate}
+\end{definition}
+
+\begin{remark}[与密码学零知识的抽象对齐]\label{rem:xi-hzom-crypto-alignment}
+定义 \ref{def:xi-horizon-perfect-zero-knowledge} 的“模拟器仅依赖可见因子 \(y\)”与密码学零知识论证中的经典要求同型：模拟器只能访问公开语句而不访问见证（纤维内信息），从而转录在信息论意义下不泄漏见证。
+在该对应下，证书长度/核验复杂度的极限效率与下界结果（例如配对型预处理 SNARK/SNARG 的尺寸界）可被视为对“视界可见接口的可编译性预算”的外部参照 \cite{Groth2016SizePairingNIZK}；
+它与本文以 \(\kappa\)/分辨率/正交轴预算刻画“可核验升级的不可替代代价”在结构上相容。
+\end{remark}
+
+\begin{theorem}[HZOM 可检验收缩性模板：谱半径收缩 \texorpdfstring{$\Rightarrow$}{=>} 零点强迫临界化]\label{thm:xi-hzom-rh-reduction}
+在定义 \ref{def:xi-hzom} 的设定下，若对任意 \(\epsilon>0\) 都能证明
+\[
+\Re(s)\ge \tfrac12+\epsilon\quad\Longrightarrow\quad \rho(\mathcal{K}_s)<1,
+\]
+则 \(\Xi_{\zeta}\) 的全部零点都满足 \(\Re(s)=\tfrac12\)。
+\end{theorem}
+
+\begin{proof}
+由谱收缩性得 \(D_{\mathrm{prot}}(s)\neq 0\) 于 \(\Re(s)\ge \tfrac12+\epsilon\)；
+由命题 \ref{prop:xi-hzom-functional-equation} 的反射对称得 \(D_{\mathrm{prot}}(s)\neq 0\) 于 \(\Re(s)\le \tfrac12-\epsilon\)。
+由于 \(\epsilon>0\) 任意，\(D_{\mathrm{prot}}\) 的零点只能位于 \(\Re(s)=\tfrac12\)。
+再由算术一致性（定义 \ref{def:xi-hzom} 的第 (4) 条）可知 \(\Xi_{\zeta}\) 与 \(D_{\mathrm{prot}}\) 零点集合相同，故结论成立。证毕。
+\end{proof}
+
+\paragraph{离临界线零点与指数级区分器：零知识破坏的解析证据}
+在“视界算子—行列式”口径中，离临界线零点不仅是谱论异常，而且会以极点/留数的形式在可审计统计上产生指数型放大模态。
+该机制在本文的多极矩二分律（定理 \ref{thm:xi-horizon-multipole-temperedness-dichotomy}）与离散 Abel--Weil 展开（定理 \ref{thm:discrete-abel-weil-expansion}）中已有严格对应：一旦出现 \(\Re(\rho)>\tfrac12\) 的零点，其在相应生成函数的单位圆盘内诱导极点，从而强迫系数尾项呈指数增长。
+
+\begin{proposition}[离临界线零点的指数级可分辨性定理：零知识在指数尺度上的必然破坏]\label{prop:xi-hzom-offcritical-zero-distinguisher}
+设 \(D(s)=\det(I-\mathcal{K}_s)\) 在某域内解析且满足命题 \ref{prop:xi-horizon-protocol-zeta-loop-expansion} 的迹类展开。
+假设存在一个与转录长度统计对齐的拉普拉斯/ Mellin 读出接口，使得某个真实统计量 \(A(T)\)（例如闭环计数的截断线性泛函）可由 \(\frac{D'(s)}{D(s)}\) 的 Mellin--Perron 反演给出，并且允许将积分轮廓向左移动并拾取 \(D\) 的零点留数项（该假设与 \(\zeta/\Xi\) 的显式公式型推导同型，参见 \cite{Connes1999TraceFormulaNCG} 以及本文 \S\ref{subsec:discrete-abel-weil-polar-rigidity} 的离散 Abel--Weil 版本）。
+\par
+若 \(D\) 在 \(\rho=\beta+\mathrm{i}\gamma\) 处有零点，且 \(\beta>\tfrac12\)（重数 \(m(\rho)\ge 1\)），则存在一族有界检验函数 \(\{\Phi_T\}_{T\to\infty}\)（可取为围绕 \(\rho\) 的截断反演核）与常数 \(c>0\)，使得对任意仅依赖视界数据的模拟分布 \(Q_T\)（即满足阈值零知识意义下的可见闭包），均有下界
+\[
+\left|\mathbb{E}_{P_T}[\Phi_T]-\mathbb{E}_{Q_T}[\Phi_T]\right|
+\ \ge\
+c\,T^{m(\rho)-1}\,e^{(\beta-\frac12)T}.
+\]
+因此，在该类模型中，若要求对所有增长尺度 \(T\) 的检验族都满足指数尺度的零知识不可区分，则零点必须被迫集中到临界切片邻域；在带反射对称时（命题 \ref{prop:xi-hzom-functional-equation}），该条件进一步与“全部零点位于 \(\Re(s)=\tfrac12\)”一致。
+\end{proposition}
+
+\paragraph{二次检验零知识与 Weil 正性：完全正性作为区分器闭包}
+在实践协议与谱模型中，一个自然的区分器子类是二次型统计：它们只读取“线性读出量”的二阶能量。
+在本文视界正性语言下，这类二次检验对应于一个 Hermitian 形式（或算子值形式）的完全正性，从而把“零知识不可区分”转译为“正性证书可行”。
+
+\begin{definition}[二次检验区分器与相关形式]\label{def:xi-hzom-quadratic-distinguishers}
+令 \(M_{\tau}\) 为由转录 \(\tau\) 诱导的随机测度（例如闭环计数测度/回归到长度变量的随机分布），并取一类试验函数空间 \(\mathcal{F}\)（例如紧支撑或 Schwartz 类，按具体反演接口选择）。
+对 \(f\in\mathcal{F}\) 定义二次检验统计
+\[
+\mathcal{D}_{f}(\tau):=\left|\int f\,\dd M_{\tau}\right|^{2}.
+\]
+并定义 Hermitian 相关形式
+\[
+Q(f,g):=\mathbb{E}\!\left[\left(\int f\,\dd M_{\tau}\right)\overline{\left(\int g\,\dd M_{\tau}\right)}\right],
+\qquad f,g\in\mathcal{F},
+\]
+其中期望取在给定视界条件（或给定 \(y\)）下的转录分布之上。
+\end{definition}
+
+\begin{proposition}[二次检验零知识的完全正性刻画：区分器闭包 \texorpdfstring{$\Leftrightarrow$}{<->} Gram 表示]\label{prop:xi-hzom-weil-positivity-cp}
+在定义 \ref{def:xi-hzom-quadratic-distinguishers} 的设定下，下列陈述等价：
+\begin{enumerate}
+  \item 对任意有限组 \(\{f_j\}_{j=1}^{N}\subset\mathcal{F}\)，矩阵 \(\bigl[Q(f_i,f_j)\bigr]_{i,j=1}^{N}\) 半正定；
+  \item 对任意选择系数 \(\{z_j\}_{j=1}^{N}\subset\CC\)，有
+  \[
+  \sum_{i,j=1}^{N}\overline{z_i}z_j\,Q(f_i,f_j)\ \ge\ 0;
+  \]
+  \item 存在一个 Hilbert 空间值线性映射 \(f\mapsto \mathsf{X}(f)\)（在二阶意义下）使得 \(Q(f,g)=\langle \mathsf{X}(f),\mathsf{X}(g)\rangle\)。
+\end{enumerate}
+因此，“二次检验层面的零知识不可区分”可被压缩为 \(Q\) 的完全正性证书。
+当 \(D\) 与完成化对象处于 Connes 的迹公式/Weil 正性框架同一解析等价类时，该完全正性进一步推送为零点分布的临界约束（参见 \cite{Connes1999TraceFormulaNCG} 的谱几何路线），并与本文的 Toeplitz--PSD/完全正接口（定理 \ref{thm:app-horizon-toeplitz-lmi}、\S\ref{subsubsec:xi-operator-valued-carath-toeplitz-complete-positivity}）同型对接。
+\end{proposition}
+
+\begin{proof}
+对任意 \(\{z_j\}\)，有
+\[
+\sum_{i,j}\overline{z_i}z_j\,Q(f_i,f_j)
+=
+\mathbb{E}\!\left[\left|\int \Bigl(\sum_j z_j f_j\Bigr)\dd M_{\tau}\right|^{2}\right]\ge 0,
+\]
+从而 (1)\(\Leftrightarrow\)(2)。
+而 (2) 等价于存在 Gram 表示 \(Q(f,g)=\langle \mathsf{X}(f),\mathsf{X}(g)\rangle\)（取 \(\mathsf{X}(f)\) 为 \(L^2\)-随机变量 \(\int f\,\dd M_{\tau}\) 的等价类）即得 (3)。证毕。
+\end{proof}
+
+\paragraph{de Bruijn--Newman 热流作为“模拟噪声阈值”}
+在经典 \(\Xi\) 语境中，de Bruijn--Newman 热流把零点实性/临界稳定性组织为一条随噪声强度变化的相变常数；
+在本文的协议口径下，可把该常数解释为“零知识稳定性的最小噪声阈值”：当噪声强到足以消除可放大的区分模态时，零点结构进入临界稳定相。
+
+\begin{definition}[de Bruijn--Newman 常数的零知识阈值解释：噪声强度的临界稳定相即 ZK 稳定域]\label{def:xi-hzom-zk-newman-constant}
+对协议长度变量（或其对数尺度）施加高斯模糊强度 \(t\ge 0\)，并记由此诱导的变形行列式为 \(D_t(s)\)。
+若存在 \(t_0\in\RR\) 使得当 \(t\ge t_0\) 时 \(D_t\) 的全部零点处于临界稳定相（例如全落在 \(\Re(s)=\tfrac12\) 或等价切片上），则定义
+\[
+\Lambda_{\mathrm{ZK}}:=\inf\{t\in\RR:\ D_t\ \text{处于临界稳定相}\}\in[-\infty,\infty].
+\]
+当 \(D_t\) 与经典 \(\Xi\) 的 de Bruijn--Newman 变形 \(H_t\) 同属一个解析等价类时，\(\Lambda_{\mathrm{ZK}}\) 与 de Bruijn--Newman 常数 \(\Lambda\) 一致；并且 \(\Lambda\ge 0\)（\cite{RodgersTao2018NewmanNonnegative}；亦见 \cite{Polymath2019NewmanUpper} 的有效逼近与上界）可被解释为：零噪声极限处系统处于（或恰处于边界的）零知识稳定阈值之上。
+\end{definition}
+
+\begin{remark}[有限核的 Newman 阈值与噪声相变点]\label{rem:xi-hzom-kernel-newman-threshold}
+在有限核/有限矩阵口径中，类似“噪声阈值”已以核版 Newman 阈值的形式出现：同步核加权例子中，相变点由 \(\beta_{\star}\) 精确给出（命题 \ref{prop:sync-kernel-weighted-newman-threshold}，并见定义 \ref{def:kernel-newman-threshold}）。
+该相变可被解释为：当势参数（或等价噪声强度）跨越阈值时，Ramanujan/RH 条款由严格成立转为失效，从而出现可见的非临界放大通道。
+\end{remark}
+
+\paragraph{图视界离散化：Ihara--ZK 对偶与 Ramanujan 健全性指数}
+当 \(Y\) 为有限集合并由有限图（或有限 Markov 链）离散化时，转移算子 \(\mathcal{K}_s\) 的谱结构与 Ihara \(\zeta\) 的极点几何严格耦合（\S\ref{subsec:operator-zeta-interface}；亦见 \S\ref{subsubsec:xi-horizon-ramanujan-feasible-reduction} 的 Ramanujan--toy-RH 字典）。
+在该离散模型中，可把“健全性放大率”与“谱隙/次大特征值模”直接对齐。
+
+\begin{proposition}[Ihara--ZK 对偶：谱隙给出最优健全性指数，Ramanujan 达到平方根级最优]\label{prop:xi-ihara-zk-soundness-exponent}
+设 \(G\) 为有限 \(d\)-正则图，\(A\) 为其邻接矩阵，\(P:=A/d\) 为简单随机游走转移矩阵。
+考虑一类以随机游走混合与局部一致性抽查为核心的迭代验证协议：令 \(n\) 为抽查轮数，并假设伪造通过率被次大特征值模控制为
+\(
+\mathrm{Pr}[\text{forge pass}]\lesssim \|P^{n}-\Pi\|
+\)
+（\(\Pi\) 为平稳投影）。
+则存在常数 \(c>0\) 使
+\[
+\mathrm{Pr}[\text{forge pass}]\ \le\ c\,|\lambda_2(P)|^{n}
+\qquad\Longrightarrow\qquad
+\text{健全性指数}\ \gtrsim\ \log\!\Bigl(\frac{1}{|\lambda_2(P)|}\Bigr)=\log\!\Bigl(\frac{d}{|\lambda_2(A)|}\Bigr).
+\]
+因此当 \(G\) 为 Ramanujan 图（\(|\lambda_2(A)|\le 2\sqrt{d-1}\)，等价于 Ihara--RH 圆周带约束）时，该指数达到平方根级最优界；
+其偏离则对应可伪造优势的可观放大通道。
+此外，图上费米子模型的配分函数与图 \(\zeta\) 的互反关系、以及系数对费米闭环的计数解释，可参见 \cite{MatsuuraOhta2025FermionsZetaGraph}。
+\end{proposition}
+
+\paragraph{双通道互补与临界线模方分解：实性与零知识互补性的同源性}
+临界线实性（Hardy 实值化）在本文中可由完成化与 unitary slice 直接推出（命题 \ref{prop:xi-unitary-slice-spectral-crossing} 与注 \ref{rem:xi-unitary-slice-operator-audit}）。
+若进一步引入两条互补通道的零知识结构，则该实性可被更强地提升为模方分解：临界线上的行列式值必为非负实数。
+
+\begin{proposition}[双通道互补零知识的临界线模方分解：临界线实性被强化为非负性]\label{prop:xi-hzom-two-channel-modsquare}
+设见证分解为 \(\omega=(\omega_{+},\omega_{-})\)，并存在两条不可通讯的证明通道生成 \(\tau_{+},\tau_{-}\)，使得：
+\begin{enumerate}
+  \item 各通道相对于其可见因子 \(y_{\pm}\) 完美零知识；
+  \item 条件独立：\((\omega_{+},\tau_{+})\perp(\omega_{-},\tau_{-})\mid y\)；
+  \item 视界对偶对称给出因子行列式的共轭配对
+  \(
+  D_{-}(s)=\overline{D_{+}(1-\overline{s})}.
+  \)
+\end{enumerate}
+则全行列式分解为 \(D(s)=D_{+}(s)D_{-}(s)\)，并在临界切片上满足
+\[
+\boxed{\;
+D\!\left(\tfrac12+\mathrm{i}t\right)=\left|D_{+}\!\left(\tfrac12+\mathrm{i}t\right)\right|^{2}\in\RR_{\ge 0}\; }.
+\]
+因此，“临界线实性”可被视为“互补零知识通道的共轭配对”所强制；同时，零点是否离开临界切片被化约为单侧因子 \(D_{+}\) 在右半平面的零点控制问题。
+\end{proposition}
+
+\begin{proof}
+由条件独立与行列式乘法性得 \(D=D_{+}D_{-}\)。
+取 \(s=\tfrac12+\mathrm{i}t\) 则 \(1-\overline{s}=s\)，故
+\(
+D_{-}(s)=\overline{D_{+}(s)}
+\)。
+于是 \(D(s)=D_{+}(s)\overline{D_{+}(s)}=|D_{+}(s)|^{2}\ge 0\)。证毕。
+\end{proof}
+
+\paragraph{可积“环上杂质散射”模板：自伴扩展参数与模拟器自由度}
+在可积散射模型中，环上杂质散射的 Bethe 方程可产生一族幺正转移矩阵，其量子化能级可与临界零点虚部对齐，从而提供“临界线 \(=\) 幺正切片谱”的显式样例。
+更重要的是：自伴扩展/边界条件引入的相位参数在不改变可验证语言（完备性约束）的前提下改变转录分布，因而可被解释为模拟器在视界层的自由度参数。
+
+\begin{remark}[散射 realization 与模拟器参数化]\label{rem:xi-hzom-impurity-scattering-simulator-freedom}
+LeClair--Mussardo 构造了一个可积的“环上杂质散射”模型，使得 Bethe Ansatz 能级与 \(\zeta\) 的临界零点虚部对应，并将 GRH 解释为 Bethe 方程的完备性 \cite{LeClairMussardo2024RiemannZerosImpurities}。
+在本文口径中，可把相应幺正转移矩阵族视为 unitary slice 上的验证核 \(U(t)\)（与推论 \ref{cor:xi-hzom-unitary-slice} 对齐），而边界条件/自伴扩展参数所引入的相位自由度则对应于：在保持“可核验谓词/完成化约束”不变的前提下，改变转录分布的模拟器参数族。
+该观察与本文在散射/Blaschke/视界读出中的“边界酉化 \(\Rightarrow\) 内因子承载缺陷”（\S\ref{subsubsec:selfdual-blaschke-defect-fixed-slice}）相容，并为“非临界零点 \(=\) 共振泄漏模态”的谱学图像提供可操作的 realization 模板。
+\end{remark}
+
+\begin{remark}[Takesaki 判据、Pimsner--Popa 指数与非交换行列式 \texorpdfstring{$\zeta$}{zeta}]\label{rem:xi-hzom-opalgebra-takesaki-index-fkdet}
+若将本小节的“视界因子闭包/模拟器仅依赖可见信息”提升到 von Neumann 代数口径，则视界零知识可被刻画为
+一个 \(\varphi\)-保持条件期望的存在性，而其存在性与可见子代数对模自同构群的不变性严格等价（Takesaki 判据，参见 \cite{AccardiCecchini1982ConditionalExpectationsTakesaki,Takesaki1972ConditionalExpectationsVNA}）。
+在有限指数子因子包含下，Pimsner--Popa 不等式进一步把“纤维内不可区分见证数”的极值上界量化为 Jones 指数，
+并由此给出零知识健全性误差的不可改进尺度（\cite{PimsnerPopa1986EntropyIndexSubfactors}）。
+此外，Fuglede--Kadison 行列式提供了“视界 \(\zeta\) 函数”的非交换定义，使“零点 \(\Leftrightarrow\) 可见谱共振”获得统一表述（\cite{FugledeKadison1951DeterminantsTraceFiniteFactors}）。
+详见附录 \ref{subsec:op-algebra-modular-zk-index-fkdet}。
+\end{remark}
+
+\endinput
+

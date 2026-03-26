@@ -1,0 +1,643 @@
+% Spectral / recurrence / index certificates for the fold gauge anomaly.
+% This file is intentionally hand-written (not auto-generated) to keep the
+% main text coherent while reusing generated algebraic fragments.
+
+\paragraph{谱—递推—指数闭合：规范差机制的可核验三角}\label{par:fold-gauge-anomaly-spectral-recurrence-triangle}
+上一段输入的生成片段已给出规范差逐位过程的压力函数（命题 \ref{prop:fold-gauge-anomaly-pressure}）、Jordan 相关闭式（定理 \ref{thm:fold-gauge-anomaly-autocov-closed}）、
+谱指纹与 Hankel 证书（定理 \ref{thm:fold-gauge-anomaly-hankel-rank3}），以及大偏差端点与代数速率曲线（命题 \ref{prop:fold-gauge-anomaly-ldp} 与命题 \ref{prop:fold-gauge-anomaly-rate-curve-param}）。
+本段把这些结果进一步压缩为三类\emph{有限数据即可核验}的接口：频域功率谱的有理指纹、有限长度矩生成函数的四阶封闭递推，以及折叠条件期望的有限指数（最大纤维多重度）。
+
+\input{para__fold-gauge-anomaly-local-rewrite-ldp-barrier}
+
+\begin{theorem}[Jordan 频谱指纹：逐位规范差指示过程的功率谱为有理函数]\label{thm:fold-gauge-anomaly-psd-rational}
+在命题 \ref{prop:fold-gauge-anomaly-pressure} 的均匀基线与平稳口径下，
+令 \(g_t=\mathbf 1\{X_t\neq Y_t\}\in\{0,1\}\)，并记
+\(
+C_k:=\mathrm{Cov}(g_t,g_{t+k})
+\)（\(k\in\ZZ\)）。
+定义其离散功率谱（Fourier--Stieltjes 变换）
+\[
+\mathcal S_g(\omega):=\sum_{k\in\ZZ} C_k e^{-ik\omega}\qquad(\omega\in\RR).
+\]
+则 \(\mathcal S_g\) 为严格有理函数；写 \(s:=e^{i\omega}\) 时有完全闭式
+\begin{equation}\label{eq:fold-gauge-anomaly-psd-rational}
+\boxed{\;
+\mathcal S_g(\omega)=\frac{2}{9}\cdot
+\frac{4s^{6}+3s^{5}-46s^{4}-99s^{3}-46s^{2}+3s+4}{8s^{6}+20s^{5}-26s^{4}-85s^{3}-26s^{2}+20s+8}\; }.
+\end{equation}
+\end{theorem}
+
+\begin{proof}[证明要点（由相关生成函数直接求和）]
+由推论 \ref{cor:fold-gauge-anomaly-cov-genfun}，滞后协方差在 \(k\ge 1\) 的生成函数
+\(
+C(z)=\sum_{k\ge 1}C_k z^k
+\)
+为有理函数。
+又因 \(C_{-k}=C_k\) 且 \(C_0=\mathrm{Var}(g_t)=20/81\)（定理 \ref{thm:fold-gauge-anomaly-autocov-closed}），
+故
+\(
+\mathcal S_g(\omega)=C_0+C(e^{i\omega})+C(e^{-i\omega})
+\)。
+将 \(z=s\) 与 \(z=s^{-1}\) 代入并作代数化简，即得 \eqref{eq:fold-gauge-anomaly-psd-rational}。证毕。
+\end{proof}
+
+\begin{corollary}[分母的完全因子分解与协方差闭式]\label{cor:fold-gauge-anomaly-psd-denominator-factorization-cov}
+在定理 \ref{thm:fold-gauge-anomaly-psd-rational} 的记号下，功率谱 \eqref{eq:fold-gauge-anomaly-psd-rational} 的分母多项式满足完全分解
+\[
+8s^6+20s^5-26s^4-85s^3-26s^2+20s+8
+=(s-2)(s+2)^2(2s-1)(2s+1)^2.
+\]
+因此 \(\mathcal S_g\) 在单位圆内的极点仅为 \(s=\tfrac12\) 的一重极点与 \(s=-\tfrac12\) 的二重极点。
+由留数抽取可得协方差闭式：对一切 \(k\ge 1\)，
+\[
+C_k=\mathrm{Cov}(g_t,g_{t+k})
+=\frac18\Big(\frac12\Big)^k+\Big(\frac{7}{648}+\frac{k}{108}\Big)\Big(-\frac12\Big)^k,
+\qquad
+C_0=\frac{20}{81}.
+\]
+\end{corollary}
+\begin{proof}
+对分母多项式直接代数展开验证分解式。
+由 \(|s|=1\) 的 Fourier 系数抽取公式，
+\(
+C_k=\frac{1}{2\pi i}\oint_{|s|=1}\mathcal S_g(\omega)\,s^{k-1}\,\dd s
+\)，
+而分解式表明单位圆内仅有 \(s=\tfrac12\) 与 \(s=-\tfrac12\) 两类极点，其中后者为二重极点。
+应用留数定理并对二重极点使用导数留数公式即可得到所示闭式；
+其结果与定理 \ref{thm:fold-gauge-anomaly-autocov-closed} 的协方差闭式一致。证毕。
+\end{proof}
+
+\begin{proposition}[协方差序列的三阶整系数递推与 Hankel 秩证书]\label{prop:fold-gauge-anomaly-covariance-recurrence-integers-hankel-rank3}
+令 \(C_k=\mathrm{Cov}(g_t,g_{t+k})\)（\(k\ge 0\)）。
+则对一切 \(k\ge 1\) 成立三阶整系数递推
+\[
+8C_{k+3}+4C_{k+2}-2C_{k+1}-C_k=0.
+\]
+从而无限 Hankel 矩阵 \(H=(C_{i+j+1})_{i,j\ge 0}\) 的秩恰为 \(3\)；
+等价地，任意 \(4\times 4\) Hankel 子式行列式恒为零，而存在某个 \(3\times 3\) Hankel 子式非零。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:fold-gauge-anomaly-hankel-rank3}，令 \(d_k:=\mathrm{Cov}(g_t,g_{t+k})\)（\(k\ge 1\)），则
+\(
+d_{k+3}=-\frac12d_{k+2}+\frac14d_{k+1}+\frac18d_k
+\)。
+对该递推两边同乘 \(8\) 即得所述整系数形式（并将 \(d_k\) 记回 \(C_k\)）。
+Hankel 秩结论与定理 \ref{thm:fold-gauge-anomaly-hankel-rank3} 等价。证毕。
+\end{proof}
+
+\begin{proposition}[总规范差的四阶递推：概率生成函数由固定特征多项式封闭]\label{prop:fold-gauge-anomaly-mgf-order4-recurrence}
+令 \(G_m:=\sum_{t=1}^{m} g_t\)，并对 \(u>0\) 定义概率生成函数
+\[
+M_m(u):=\mathbb E\!\left[u^{G_m}\right]
+=\mathbb E\exp\!\bigl((\log u)\,G_m\bigr).
+\]
+引入清分母的计数型生成函数 \(\widetilde M_m(u):=2^{m}M_m(u)\)。
+则对所有 \(m\ge 0\)，序列 \(\bigl(\widetilde M_m(u)\bigr)_{m\ge 0}\) 满足四阶线性递推
+\begin{equation}\label{eq:fold-gauge-anomaly-Mm-order4}
+\boxed{\;
+\widetilde M_{m+4}(u)=\widetilde M_{m+3}(u)+(2u+1)\widetilde M_{m+2}(u)+(u^{3}-2u)\widetilde M_{m+1}(u)-2u\,\widetilde M_m(u)\; }.
+\end{equation}
+等价地，\(\bigl(M_m(u)\bigr)\) 同样满足四阶递推，但系数整体按 \(2^{-j}\) 比例缩放（对应于 \(A_\theta=\tfrac12(2A_\theta)\) 的尺度差）。
+在 \(u=1\) 处，该递推的特征因子为
+\(
+(\mu-2)(\mu-1)(\mu+1)^2
+\)，
+其中 \((\mu+1)^2\) 的 Jordan 二重根对应于定理 \ref{thm:fold-gauge-anomaly-A0-jordan} 的交错相位残差，
+从而解释有限长统计量中出现的 \(m2^{-m}\) 级振荡修正项（定理 \ref{thm:fold-gauge-anomaly-var-finite-closed}）。
+\end{proposition}
+
+\begin{proof}[证明要点（Cayley--Hamilton）]
+令 \(\theta=\log u\)，并取命题 \ref{prop:fold-gauge-anomaly-pressure} 的矩阵 \(A_\theta\)。
+记 \(B_u:=2A_\theta\)，则其特征多项式正是
+\(
+F(\mu,u)=\det(\mu I-B_u)
+\)，
+其显式四次多项式写法已在命题 \ref{prop:fold-gauge-anomaly-pressure} 中给出。
+由 Cayley--Hamilton 定理得 \(F(B_u,u)=0\)。
+而对固定 \(u\)，计数型生成函数 \(\widetilde M_m(u)\) 可写为有限状态换能器的路径权重和，等价地为某个线性泛函作用在 \(B_u^m\) 上；
+将 \(F(B_u,u)=0\) 左右乘以相应向量并取该线性泛函，得到 \eqref{eq:fold-gauge-anomaly-Mm-order4}。证毕。
+\end{proof}
+
+\begin{theorem}[生成函数的显式有理性与整系数递推]\label{thm:fold-gauge-anomaly-gf-rational-integral-recurrence}
+在命题 \ref{prop:fold-gauge-anomaly-parry-kernel-mismatch-label} 的 Parry 转移核 \(P\) 与边标记 \(g\) 下，
+令
+\[
+D_m(u):=\EE\!\left[u^{G_m}\right]=\sum_{k=0}^{m}p_{m,k}u^k,\qquad
+p_{m,k}:=\PP(G_m=k),
+\]
+并定义步长母函数
+\[
+\mathcal F(z,u):=\sum_{m\ge 0} D_m(u)\,z^m.
+\]
+则 \(\mathcal F\) 为显式有理函数，且满足
+\[
+\mathcal F(z,u)=\frac{N(z,u)}{9\,\Delta(z,u)},
+\]
+其中
+\[
+\Delta(z,u)=8-4z-(4u+2)z^2+(2u-u^3)z^3+u z^4,
+\]
+\[
+\begin{aligned}
+N(z,u)=\;&72+4z-12z^2-2z^3+32u z-24u z^2-10u z^3\\
+&\quad+18u^2 z^2+4u^2 z^3-u^3 z^3.
+\end{aligned}
+\]
+等价地，对一切 \(m\ge 4\) 有四阶递推
+\[
+8D_m(u)=4D_{m-1}(u)+(4u+2)D_{m-2}(u)+(u^3-2u)D_{m-3}(u)-uD_{m-4}(u).
+\]
+更强地，令
+\[
+H_m(u):=9\cdot 2^m D_m(u)=9\,\widetilde M_m(u),
+\]
+则对所有 \(m\ge 0\) 有 \(H_m(u)\in\ZZ[u]\)，并且对一切 \(m\ge 4\) 有整系数递推
+\[
+H_m(u)=H_{m-1}(u)+(2u+1)H_{m-2}(u)+(u^3-2u)H_{m-3}(u)-2u\,H_{m-4}(u).
+\]
+因此对每个 \(m,k\) 皆有 \(9\cdot 2^m\,p_{m,k}\in\ZZ\)。
+\end{theorem}
+
+\begin{proof}
+由 Markov 结构与倾斜核 \(Q(u)_{ij}:=P_{ij}u^{g(i,j)}\)，有
+\(
+D_m(u)=\pi^\top Q(u)^m\mathbf 1
+\)，其中 \(\pi\) 为 \(P\) 的平稳分布。
+因此
+\(
+\mathcal F(z,u)=\pi^\top (I-zQ(u))^{-1}\mathbf 1
+\)
+为有理函数。
+对本 \(4\) 态模型直接展开 \(\det(I-zQ(u))\) 得到 \(\Delta(z,u)\)，并由伴随矩阵条目计算得到 \(N(z,u)\)。
+将恒等式 \(9\Delta(z,u)\mathcal F(z,u)=N(z,u)\) 逐项比较 \(z^m\) 系数得到 \(D_m\) 的四阶递推；该递推与命题 \ref{prop:fold-gauge-anomaly-mgf-order4-recurrence} 对 \(\widetilde M_m\) 的递推在缩放下等价。
+将递推乘以 \(9\cdot 2^m\) 并整理得到 \(H_m\) 的整系数递推。
+由 \(H_0,\dots,H_3\) 的有限枚举可知其属于 \(\ZZ[u]\)，递推闭合推出 \(H_m\in\ZZ[u]\) 对所有 \(m\) 成立，从而 \(9\cdot 2^m p_{m,k}\in\ZZ\)。证毕。
+\end{proof}
+
+\begin{theorem}[端点事件的精确闭式：Fibonacci 端点与 \texorpdfstring{$\bmod 3$}{mod 3} 律]\label{thm:fold-gauge-anomaly-endpoint-fibonacci-mod3}
+沿用定理 \ref{thm:fold-gauge-anomaly-gf-rational-integral-recurrence} 的记号。
+令 Fibonacci 数列满足 \(F_0=0,F_1=1,F_{n+2}=F_{n+1}+F_n\)。
+则端点事件概率满足
+\[
+\PP(G_m=0)=
+\begin{cases}
+1,& m=0,\\[2pt]
+\frac59,& m=1,\\[6pt]
+\displaystyle \frac{F_{m+5}}{9\cdot 2^m},& m\ge 2,
+\end{cases}
+\]
+并且对任意 \(m\ge 1\)，满长端点满足
+\[
+\PP(G_m=m)=
+\begin{cases}
+2^{-m},& m\equiv 2\pmod 3,\\[4pt]
+\frac89\,2^{-m},& m\equiv 0,1\pmod 3.
+\end{cases}
+\]
+\end{theorem}
+
+\begin{proof}
+由定义 \(\PP(G_m=0)=D_m(0)\)。
+将定理 \ref{thm:fold-gauge-anomaly-gf-rational-integral-recurrence} 的四阶递推代入 \(u=0\) 并化简可得：对 \(m\ge 4\)，序列
+\(
+U_m:=9\cdot 2^m D_m(0)
+\)
+满足二阶递推 \(U_m=U_{m-1}+U_{m-2}\)。
+直接计算 \(U_2=13\)、\(U_3=21\) 得 \(U_m=F_{m+5}\)（\(m\ge 2\)），从而得到 \(\PP(G_m=0)=F_{m+5}/(9\cdot 2^m)\)。
+\(m=0\) 时 \(G_0=0\) 给出 \(\PP(G_0=0)=1\)；\(m=1\) 时由 \(\EE[g_t]=4/9\) 得 \(\PP(G_1=0)=1-\EE[g_1]=5/9\)。
+\par
+对 \(\PP(G_m=m)\)，由命题 \ref{prop:fold-gauge-anomaly-parry-kernel-mismatch-label} 知 \(g=1\) 的允许边仅为
+\((a,b)\)、\((b,c)\)、\((c,a)\)，故事件 \(\{G_m=m\}\) 强制隐藏链沿 \(a\to b\to c\to a\) 的 \(3\)-循环确定性行走。
+该循环上一步概率依次为 \(P_{ab}=\frac14\)、\(P_{bc}=1\)、\(P_{ca}=\frac12\)，每三步乘积为 \(2^{-3}\)。
+按起点 \(S_0\in\{a,b,c\}\) 与余数 \(m\bmod 3\) 分情形计算满循环乘积，并以平稳分布
+\(\pi=(\pi_a,\pi_b,\pi_c,\pi_d)=(\frac49,\frac29,\frac29,\frac19)\) 加权求和，即得所示 \(\bmod 3\) 分段公式。证毕。
+\end{proof}
+
+\begin{theorem}[单位圆扭结的 Perron--Frobenius 刚性与严格谱隙]\label{thm:fold-gauge-anomaly-unit-circle-rigidity}
+令
+\[
+B(u):=2A_{\log u}=
+\begin{pmatrix}
+1&u&0&1\\
+0&0&u&0\\
+u&2&0&0\\
+1&0&0&0
+\end{pmatrix},
+\]
+其中 \(A_\theta\) 由命题 \ref{prop:fold-gauge-anomaly-pressure} 给出，\(\log u\) 取任意分支使 \(e^{\log u}=u\)。
+则对任意 \(|u|=1\) 有
+\[
+\rho(B(u))\le \rho(B(1))=2,
+\]
+且当 \(u\neq 1\) 时严格成立 \(\rho(B(u))<2\)。
+等价地，对任意 \(t\in\RR\setminus 2\pi\ZZ\)，有
+\[
+\rho(A_{it})<1.
+\]
+\end{theorem}
+
+\begin{proof}
+当 \(|u|=1\) 时逐项取绝对值得 \(|B(u)|=B(1)\)（按元素绝对值）。
+矩阵 \(B(1)\) 非负且原始：其存在自环 \(1\to 1\)，并且从任一状态都可达状态 \(1\) 且可由状态 \(1\) 到达，故强连通且非周期。
+由 Frobenius--Wielandt 比较定理，
+\[
+\rho(B(u))\le \rho(B(1))=2.
+\]
+若等号成立，则存在 \(\varphi\in\RR\) 与对角酉矩阵 \(D=\mathrm{diag}(d_1,d_2,d_3,d_4)\) 使
+\[
+B(u)=e^{i\varphi}D\,B(1)\,D^{-1}.
+\]
+比较 \((1,1)\) 元得 \(e^{i\varphi}=1\)，从而 \(B(u)=D B(1)D^{-1}\)。
+对每个 \(B(1)_{ij}\neq 0\) 有
+\[
+\frac{d_j}{d_i}=\frac{B(u)_{ij}}{B(1)_{ij}}.
+\]
+由 \((1,2)\)、\((2,3)\)、\((3,1)\) 元分别得
+\[
+\frac{d_2}{d_1}=u,\qquad \frac{d_3}{d_2}=u,\qquad \frac{d_1}{d_3}=u,
+\]
+相乘得到 \(u^3=1\)。
+另一方面，\((3,2)\) 元给出 \(d_2/d_3=1\)，与 \(d_3/d_2=u\) 合并即 \(u=1\)。
+故 \(u\neq 1\) 时不可能取等，必有 \(\rho(B(u))<2\)。
+最后令 \(u=e^{it}\)，则 \(B(u)=2A_{it}\)，于是
+\[
+\rho(A_{it})=\frac{\rho(B(e^{it}))}{2}<1\qquad (t\notin 2\pi\ZZ).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[规范差同余分布的指数均匀化]\label{cor:fold-gauge-anomaly-congruence-mixing}
+记
+\[
+M_m(u):=\mathbb E\!\left[u^{G_m}\right],\qquad \widetilde M_m(u):=2^m M_m(u).
+\]
+则 \(\widetilde M_m\) 满足四阶递推
+\[
+\widetilde M_{m+4}
+=\widetilde M_{m+3}
++(2u+1)\widetilde M_{m+2}
++(u^3-2u)\widetilde M_{m+1}
+-2u\,\widetilde M_m,
+\]
+其特征多项式即
+\[
+F(\mu,u)=\mu^4-\mu^3-\mu^2(2u+1)+\mu(-u^3+2u)+2u.
+\]
+固定整数 \(q\ge 2\)，令 \(\omega_q=e^{2\pi i/q}\)，并记
+\[
+R_{m,q}:=G_m\bmod q\in \ZZ/q\ZZ.
+\]
+定义
+\[
+\delta_q:=\max_{1\le j\le q-1}\frac{\rho(B(\omega_q^{\,j}))}{2}\in(0,1).
+\]
+则存在常数 \(C_q>0\)，使对任意 \(m\ge 1\) 与 \(r\in\ZZ/q\ZZ\) 都有
+\[
+\left|\mathbb P(R_{m,q}=r)-\frac1q\right|
+\le C_q\,m^3\,\delta_q^{\,m}.
+\]
+特别地，\(R_{m,q}\) 以指数速度趋于 \(\ZZ/q\ZZ\) 上的均匀分布。
+当 \(q=2\) 时，
+\[
+\delta_2=\frac{\rho(B(-1))}{2},
+\]
+其中 \(\rho(B(-1))\) 为多项式
+\[
+\mu^4-\mu^3+\mu^2-\mu-2
+\]
+的最大实根。
+\end{corollary}
+
+\begin{proof}
+离散 Fourier 反演给出
+\[
+\mathbb P(R_{m,q}=r)
+=\frac1q\sum_{j=0}^{q-1}\omega_q^{-jr}\,\mathbb E\!\left[(\omega_q^{\,j})^{G_m}\right]
+=\frac1q+\frac1q\sum_{j=1}^{q-1}\omega_q^{-jr}M_m(\omega_q^{\,j}),
+\]
+从而
+\[
+\left|\mathbb P(R_{m,q}=r)-\frac1q\right|
+\le \frac1q\sum_{j=1}^{q-1}\left|M_m(\omega_q^{\,j})\right|.
+\]
+对固定 \(u\in\CC\)，由命题 \ref{prop:fold-gauge-anomaly-mgf-order4-recurrence} 的四阶递推与 Jordan 分解，
+\[
+\widetilde M_m(u)=\sum_{\ell} p_\ell(m)\lambda_\ell(u)^m,
+\]
+其中 \(\lambda_\ell(u)\) 是 \(B(u)\) 的特征值，且 \(\deg p_\ell\le 3\)。
+故存在 \(C(u)>0\) 使
+\[
+|\widetilde M_m(u)|\le C(u)\,m^3\,\rho(B(u))^m,
+\qquad
+|M_m(u)|\le C(u)\,m^3\!\left(\frac{\rho(B(u))}{2}\right)^m.
+\]
+当 \(u=\omega_q^{\,j}\) 且 \(1\le j\le q-1\) 时，\(u\neq 1\) 且 \(|u|=1\)，由定理 \ref{thm:fold-gauge-anomaly-unit-circle-rigidity} 得 \(\rho(B(u))<2\)。
+取
+\[
+\delta_q=\max_{1\le j\le q-1}\frac{\rho(B(\omega_q^{\,j}))}{2}<1
+\]
+并吸收有限个 \(j\) 的常数，即得所述不等式。
+\(q=2\) 情形由 \(u=-1\) 代入 \(F(\mu,u)\) 直接得到。
+证毕。
+\end{proof}
+
+\begin{theorem}[大模数同余谱隙的扩散标度]\label{thm:fold-gauge-anomaly-large-q-delta}
+设 \(g_\ast=\frac49\)、\(\sigma_G^2=\frac{118}{243}\)（定理 \ref{thm:fold-gauge-anomaly-clt}）。
+则存在 \(q_0\ge 2\)，使对所有 \(q\ge q_0\) 有
+\[
+\delta_q
+=\exp\!\left(-\frac{2\pi^2\sigma_G^2}{q^2}+O(q^{-4})\right)
+=\exp\!\left(-\frac{236\pi^2}{243\,q^2}+O(q^{-4})\right),
+\]
+等价地，
+\[
+\delta_q
+=1-\frac{2\pi^2\sigma_G^2}{q^2}+O(q^{-4}).
+\]
+\end{theorem}
+
+\begin{proof}
+写
+\[
+F(\mu,u)=\mu^4-\mu^3-\mu^2(2u+1)+\mu(-u^3+2u)+2u.
+\]
+由命题 \ref{prop:fold-gauge-anomaly-pressure}，\(F(2,1)=0\) 且
+\[
+\partial_\mu F(2,1)=9\neq 0.
+\]
+由隐函数定理，存在 \(u=1\) 邻域上的解析主导根分支 \(\mu(u)\)（\(\mu(1)=2\)）。
+令
+\[
+\Lambda(\theta):=\frac{\mu(e^\theta)}{2}.
+\]
+在 \(\theta=0\) 邻域内，\(\log \Lambda(\theta)=P_G(\theta)\)（实轴上一致），故
+\[
+P_G(it)=ig_\ast t-\frac{\sigma_G^2}{2}t^2+O(t^3),
+\qquad
+\Re P_G(it)=-\frac{\sigma_G^2}{2}t^2+O(t^4),
+\]
+其中第二式用到实系数解析函数在虚轴上的偶性。
+因此当 \(|t|\) 足够小时，
+\[
+\rho(A_{it})
+=\exp\!\bigl(\Re P_G(it)\bigr)
+=\exp\!\left(-\frac{\sigma_G^2}{2}t^2+O(t^4)\right).
+\]
+取 \(t=2\pi/q\) 得
+\[
+\rho\!\left(A_{2\pi i/q}\right)
+=\exp\!\left(-\frac{2\pi^2\sigma_G^2}{q^2}+O(q^{-4})\right).
+\]
+又由定理 \ref{thm:fold-gauge-anomaly-unit-circle-rigidity}，所有非零频率均严格小于 \(1\)；
+当 \(q\) 足够大时，\(\delta_q=\max_{1\le j\le q-1}\rho(A_{2\pi i j/q})\) 的最大项由最小非零频率 \(j=1\)（等价地 \(j=q-1\)）取得，从而得到所述展开。
+证毕。
+\end{proof}
+
+\begin{theorem}[随窗口增长的同余阈值相变]\label{thm:fold-gauge-anomaly-congruence-phase-transition}
+令 \(q=q(m)\ge 2\) 随 \(m\to\infty\) 变化，并记
+\[
+R_{m,q(m)}:=G_m\bmod q(m).
+\]
+则有：
+\begin{enumerate}
+  \item 若 \(\frac{m}{q(m)^2}\to\infty\)，则
+  \[
+  \sup_{r\in\ZZ/q(m)\ZZ}
+  \left|\mathbb P(R_{m,q(m)}=r)-\frac{1}{q(m)}\right|
+  \longrightarrow 0,
+  \]
+  且该差异可压到 \(\exp(-c\,m/q(m)^2)\) 量级（某个 \(c>0\)）。
+  \item 若 \(\frac{q(m)}{\sqrt m}\to\infty\)，则
+  \[
+  \left\|\mathcal L(R_{m,q(m)})-\mathrm{Unif}(\ZZ/q(m)\ZZ)\right\|_{\mathrm{TV}}
+  \longrightarrow 1.
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+对任意 \(q\ge 2\)，Fourier 反演给出
+\[
+\sup_r\left|\mathbb P(R_{m,q}=r)-\frac1q\right|
+\le \frac1q\sum_{j=1}^{q-1}\left|\mathbb E\!\left[e^{2\pi i j G_m/q}\right]\right|.
+\]
+由推论 \ref{cor:fold-gauge-anomaly-congruence-mixing} 的 Jordan 上界与定理 \ref{thm:fold-gauge-anomaly-large-q-delta} 的小频率展开，可得
+\[
+\left|\mathbb E\!\left[e^{2\pi i j G_m/q}\right]\right|
+\le C\,m^3\exp\!\left(-c_0\,\frac{j^2m}{q^2}\right)
+\]
+（常数与 \(q\) 足够大时的局部频率区间统一可取；高频段由定理 \ref{thm:fold-gauge-anomaly-unit-circle-rigidity} 的严格谱隙给出更强指数衰减）。
+故
+\[
+\sup_r\left|\mathbb P(R_{m,q}=r)-\frac1q\right|
+\le C' q\,m^3\,\exp\!\left(-c_0\frac{m}{q^2}\right).
+\]
+当 \(m/q(m)^2\to\infty\) 时，前因子 \(q\,m^3\) 可被指数项吸收，得到 (1)。
+
+对 (2)，由定理 \ref{thm:fold-gauge-anomaly-clt} 的方差线性增长，
+对任意 \(C>0\) 存在 \(m_0(C)\) 使 \(m\ge m_0(C)\) 时
+\[
+\mathbb P\!\left(|G_m-g_\ast m|\le C\sqrt m\right)\ge 1-\varepsilon_C,
+\qquad
+\varepsilon_C:=\frac{2\sigma_G^2}{C^2}.
+\]
+记
+\[
+S_m:=\left\{r\in\ZZ/q\ZZ:\exists n\in\ZZ,\ |n-g_\ast m|\le C\sqrt m,\ n\equiv r\!\!\!\pmod q\right\},
+\]
+则 \(|S_m|\le 2C\sqrt m+1\)，且 \(\mathbb P(R_{m,q}\in S_m)\ge 1-\varepsilon_C\)。
+于是
+\[
+\left\|\mathcal L(R_{m,q})-\mathrm{Unif}(\ZZ/q\ZZ)\right\|_{\mathrm{TV}}
+\ge \mathbb P(R_{m,q}\in S_m)-\frac{|S_m|}{q}
+\ge (1-\varepsilon_C)-\frac{2C\sqrt m+1}{q}.
+\]
+若 \(q/\sqrt m\to\infty\)，则对任意固定 \(C\)，上式下极限不小于 \(1-\varepsilon_C\)；
+再令 \(C\to\infty\)（故 \(\varepsilon_C\to 0\)）得到总变差极限为 \(1\)。
+证毕。
+\end{proof}
+
+\begin{proposition}[非渐近 Chernoff 轮廓：尾概率指数由代数压力函数唯一决定]\label{prop:fold-gauge-anomaly-chernoff-nonasymptotic}
+令压力函数 \(P_G(\theta)=\log\rho(A_\theta)\) 如命题 \ref{prop:fold-gauge-anomaly-pressure}，并令
+\[
+I(a)=\sup_{\theta\in\RR}\bigl(a\theta-P_G(\theta)\bigr)\qquad(a\in[0,1])
+\]
+为其 Legendre--Fenchel 变换（命题 \ref{prop:fold-gauge-anomaly-ldp}）。
+则对任意 \(a\in(0,1)\) 存在常数 \(C(a)>0\) 与整数 \(r(a)\ge 0\)，使得对所有 \(m\ge 1\) 有统一上界
+\begin{equation}\label{eq:fold-gauge-anomaly-chernoff-two-sided}
+\boxed{\;
+\mathbb P\!\left(\frac{G_m}{m}\ge a\right)\le C(a)\,m^{r(a)}e^{-m I(a)},\qquad
+\mathbb P\!\left(\frac{G_m}{m}\le a\right)\le C(a)\,m^{r(a)}e^{-m I(a)}.\;}
+\end{equation}
+其中鞍点参数 \(u(a)=e^{\theta(a)}\) 可由消元证书 \(R(a,u)=0\) 的可行分支唯一确定（命题 \ref{prop:fold-gauge-anomaly-rate-curve-param}），故指数轮廓 \(I(a)\) 为可审计的“代数—对数型”对象；
+而多项式前因子 \(m^{r(a)}\) 的出现仅由有限维转移算子的 Jordan 缺陷决定（在本 \(4\) 态接口下可取 \(r(a)\le 3\)）。
+\end{proposition}
+
+\begin{proof}[证明要点（矩阵 Chernoff + 有限维谱分解）]
+对任意 \(\theta\in\RR\)，Chernoff 不等式给出
+\(
+\mathbb P(G_m\ge am)\le e^{-am\theta}\,\mathbb E e^{\theta G_m}
+\)；
+而 \(\mathbb E e^{\theta G_m}\) 是有限维加权邻接矩阵 \(A_\theta\) 的某个矩阵元（或其线性组合），故可由有限维谱/Jordan 分解界为
+\(
+\mathbb E e^{\theta G_m}\le C(\theta)\,m^{r(\theta)}\rho(A_\theta)^m
+\)。
+优化 \(\theta\) 得指数项 \(I(a)\)，并将剩余常数与多项式因子吸收为 \(C(a),r(a)\)。证毕。
+\end{proof}
+
+\begin{theorem}[Gallavotti--Cohen 缺陷的严格符号律与远场饱和]\label{thm:fold-gauge-anomaly-gc-defect-sign}
+定义 GC 缺陷函数
+\[
+\Delta(\theta):=P_G(\theta)-\theta-P_G(-\theta).
+\]
+则：
+\begin{enumerate}
+  \item \(\Delta\) 为奇函数，\(\Delta(0)=0\)；
+  \item 其线性化偏置满足
+  \begin{equation}\label{eq:fold-gauge-anomaly-gc-defect-slope}
+  \boxed{\;
+  \Delta'(0)=2P_G'(0)-1=2\cdot\frac49-1=-\frac19\;};
+  \end{equation}
+  \item 其远场极限满足
+  \begin{equation}\label{eq:fold-gauge-anomaly-gc-defect-saturation}
+  \boxed{\;
+  \lim_{\theta\to+\infty}\Delta(\theta)=-\log\varphi\;};
+  \end{equation}
+  \item 严格符号律成立：
+  \begin{equation}\label{eq:fold-gauge-anomaly-gc-defect-sign}
+  \boxed{\;
+  \Delta(\theta)<0\ (\theta>0),\qquad \Delta(\theta)>0\ (\theta<0)\;}.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[证明要点（可审计）]
+（1）由定义直接计算得 \(\Delta(-\theta)=-\Delta(\theta)\)。
+（2）由 \(\Delta'(\theta)=P_G'(\theta)-1+P_G'(-\theta)\) 取 \(\theta=0\)，并用命题 \ref{prop:fold-gauge-anomaly-pressure} 的闭式 \(P_G'(0)=4/9\)。
+（3）由命题 \ref{prop:fold-gauge-anomaly-ldp} 的端点闭式：当 \(\theta\to+\infty\) 时 \(P_G(\theta)=\theta-\log 2+o(1)\)，而 \(P_G(-\theta)\to \log(\varphi/2)\)，故 \(\Delta(\theta)\to -\log\varphi\)。
+（4）对该最小 \(4\) 态接口，\(\Delta\) 在 \(\theta>0\) 上严格递减（等价于 \(\Delta'(\theta)<0\)），可由命题 \ref{prop:fold-gauge-anomaly-rate-curve-param} 的代数参数化把 \(\Delta'(\theta)\) 化为代数分支上的显式表达并作符号审计；于是由 \(\Delta(0)=0\) 得 \(\theta>0\) 时 \(\Delta(\theta)<0\)。\(\theta<0\) 的符号由奇性得到。证毕。
+\end{proof}
+
+\begin{corollary}[两常数闭合：\texorpdfstring{$\frac49$}{4/9} 与 \texorpdfstring{$\log\varphi$}{log phi} 锁定同一缺陷曲线的局部与远场]\label{cor:fold-gauge-anomaly-two-constants-closure}
+在定理 \ref{thm:fold-gauge-anomaly-gc-defect-sign} 的记号下，\(\Delta'(0)=-\frac19\) 与
+\(\lim_{\theta\to+\infty}\Delta(\theta)=-\log\varphi\) 构成一对局部—远场规范条件：
+它们分别由 \(P_G'(0)=4/9\) 的均值常数与端点指数 \(I(0)=\log(2/\varphi)\)（命题 \ref{prop:fold-gauge-anomaly-ldp}）诱导。
+并且在原点处存在严格的三阶校正（偶次项完全相消）：
+\begin{equation}\label{eq:fold-gauge-anomaly-delta-taylor3}
+\boxed{\;
+\Delta(\theta)= -\frac{\theta}{9}\;-\;\frac{1174}{6561}\,\theta^{3}\;+\;O(\theta^{5})\qquad(\theta\to 0).}
+\end{equation}
+因此 \(\Delta\) 的“非自对偶”指纹不止于三阶累积量非零，而是以单参数缺陷曲线的局部斜率与远场饱和值同时封口。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:fold-gauge-anomaly-pressure}，\(P_G\) 在 \(\theta=0\) 处的前三阶导数均有闭式，
+并且 \(P_G\) 为光滑函数。
+将 \(P_G(\theta)\) 与 \(P_G(-\theta)\) 作 Taylor 展开，代入 \(\Delta(\theta)=P_G(\theta)-\theta-P_G(-\theta)\)；
+注意偶次项相消、奇次项加倍，即得 \eqref{eq:fold-gauge-anomaly-delta-taylor3}。证毕。
+\end{proof}
+
+\begin{proposition}[折叠条件期望的有限指数：最大纤维多重度给出最坏信息损失的对数尺度]\label{prop:fold-condexp-index-maxfiber}
+固定分辨率 \(m\)。
+沿用小节 \ref{subsec:pom-max-fiber} 的记号，记纤维多重度
+\(
+d_m(x)=|\Fold_m^{-1}(x)|
+\)
+与最大多重度
+\(
+D_m=\max_{x\in X_m} d_m(x)
+\)。
+取有限维交换代数 \(A_m=\CC^{\Omega_m}\) 及其子代数 \(B_m\subset A_m\)（由 \(X_m\) 上函数拉回得到的纤维常值函数），
+并令 \(E_m:A_m\to B_m\) 为按纤维均匀平均的条件期望。
+则其 Pimsner--Popa 指数满足严格等式
+\begin{equation}\label{eq:fold-condexp-index-maxfiber}
+\boxed{\;
+\mathrm{Ind}(E_m)=D_m\; }.
+\end{equation}
+并且由定理 \ref{thm:dephys-index-max-relative-entropy-loss}（有限指数的相对熵损失极值公式）得到有限维离散原型：
+\begin{equation}\label{eq:fold-condexp-index-entropy-loss}
+\boxed{\;
+\sup_{\rho,\sigma}\Bigl[D(\rho\|\sigma)-D(\rho\circ E_m\ \|\ \sigma\circ E_m)\Bigr]
+=\log \mathrm{Ind}(E_m)=\log D_m.\;}
+\end{equation}
+\end{proposition}
+
+\begin{proof}[证明要点]
+对任意非负函数 \(f\in A_m\) 与任意 \(a\in\Omega_m\)，若 \(x=\Fold_m(a)\) 且 \(d=d_m(x)\)，则
+\(
+(E_m f)(a)=\frac1d\sum_{b\in\Fold_m^{-1}(x)} f(b)\ge \frac1d f(a)
+\)。
+因此 \(E_m(f)\ge D_m^{-1}f\)，即 \(\mathrm{Ind}(E_m)\le D_m\)。
+反过来，取某个达到最大多重度的 \(x_\star\) 及其纤维中的一点 \(a_\star\)，令 \(f=\mathbf 1_{\{a_\star\}}\)。
+则在该纤维上 \(E_m f \equiv 1/D_m\)，从而若 \(E_m(f)\ge \Lambda^{-1}f\) 成立必有 \(\Lambda\ge D_m\)，故 \(\mathrm{Ind}(E_m)\ge D_m\)。
+合并得 \(\mathrm{Ind}(E_m)=D_m\)。
+式 \eqref{eq:fold-condexp-index-entropy-loss} 由定理 \ref{thm:dephys-index-max-relative-entropy-loss} 直接推出。证毕。
+\end{proof}
+
+\begin{remark}[视界极值态的图论普适性：最大信息损失归约为独立集计数优化]\label{rem:fold-horizon-extremal-independent-set}
+命题 \ref{prop:fold-condexp-index-maxfiber} 表明：在该离散视界原型中，“最坏外部化损失”的对数尺度由最大纤维多重度 \(D_m\) 唯一锁定，并且其证书见证可取自某条达到 \(D_m\) 的极大纤维（证明中取 \(f=\mathbf 1_{\{a_\star\}}\) 即给出指数的饱和下界见证）。
+\par
+另一方面，由纤维的独立集坐标化定理 \ref{thm:pom-fiber-indset-factorization}，对任意 \(x\in X_m\) 存在候选位点诱导图 \(\Gamma_x\) 使得
+\[
+\Fold_m^{-1}(x)\cong \mathsf{Ind}(\Gamma_x),
+\qquad
+d_m(x)=|\mathsf{Ind}(\Gamma_x)|=Z_x(1),
+\]
+并且当 \(\Gamma_x\cong\bigsqcup_i P_{\ell_i}\) 时有严格乘法分解
+\(
+d_m(x)=\prod_i F_{\ell_i+2}
+\)。
+因此
+\[
+D_m=\max_{x\in X_m} d_m(x)=\max_{x\in X_m}|\mathsf{Ind}(\Gamma_x)|
+\]
+把“最大信息损失（最大纤维）”严格等价为一个纯组合优化问题：在族 \(\{\Gamma_x\}_{x\in X_m}\) 中最大化独立集总数（等价地最大化路径分量长度谱所诱导的 Fibonacci 乘积因子）。
+该归约的输入仅为 \(\Gamma_x\) 的分量结构，因而与其余微观实现细节解耦，形成一条可对外引用的图论普适性结论。
+\end{remark}
+
+\begin{corollary}[纤维熵势的饱和判据：平均对数多重度与平均多重度之间的严格缺口]\label{cor:fold-fiber-entropy-saturation}
+对任意 \(\pi\in\Delta(X_m)\)，定义纤维熵势
+\[
+S_{\mathrm{fib}}(\pi):=\mathbb E_{\pi}[\log d_m(X)].
+\]
+则恒有 Jensen 上界
+\begin{equation}\label{eq:fold-fiber-entropy-jensen-gap}
+\boxed{\;
+S_{\mathrm{fib}}(\pi)\le \log\mathbb E_{\pi}[d_m(X)]\;}
+\end{equation}
+且等号成立当且仅当 \(d_m(X)\) 在 \(\pi\)-几乎处处为常数（即所有可见类型承载相同的纤维多重度）。
+特别地，对均匀可见基线 \(\pi=\mathrm{Unif}(X_m)\) 有 \(\mathbb E_{\pi}[d_m(X)]=|\Omega_m|/|X_m|=I_m\)（定义 \ref{def:pom-fold-index}），从而
+\[
+\boxed{\;
+\mathbb E_{\pi}[\log d_m(X)]\le \log\frac{|\Omega_m|}{|X_m|}=S_Z(m)\; }.
+\]
+\end{corollary}
+
+\begin{proof}
+由对数的凹性（Jensen 不等式）得 \eqref{eq:fold-fiber-entropy-jensen-gap}。
+等号条件为 \(d_m(X)\) 在 \(\pi\)-支撑上为常数。
+最后一段由
+\(
+\mathbb E_{\mathrm{Unif}(X_m)}[d_m(X)]=\frac{1}{|X_m|}\sum_{x\in X_m} d_m(x)=\frac{|\Omega_m|}{|X_m|}
+\)
+得出。证毕。
+\end{proof}
+
+\begin{proposition}[可审计的“谱—层析—证书”三角：功率谱与四阶递推共同锁定最小识别复杂度]\label{prop:fold-gauge-anomaly-spectrum-tomography-certificate-triangle}
+设观测者仅能访问两类有限数据：
+\begin{enumerate}
+  \item[(i)] 功率谱在有限频点网格上的采样 \(\{\mathcal S_g(\omega_\ell)\}_{\ell=1}^{L}\)；
+  \item[(ii)] 对某个固定 \(u\neq 1\)，有限长度生成函数值 \(\{M_m(u)\}_{m=0}^{N}\)（其中 \(N\ge 3\)）。
+\end{enumerate}
+则：
+\begin{enumerate}
+  \item 由命题 \ref{prop:fold-gauge-anomaly-mgf-order4-recurrence}，数据 \(\{M_m(u)\}_{m=0}^{N}\) 在代数上必须落在四阶递推生成的四维线性空间中；
+  任意声称“同机制”的实现都必须满足该递推的有限数据一致性约束。
+  \item 由定理 \ref{thm:fold-gauge-anomaly-psd-rational}，\(\mathcal S_g\) 具有固定的有理极点结构；
+  任意机制替换若改变 \( (-1/2)\) 交错模态或其 Jordan 残差（定理 \ref{thm:fold-gauge-anomaly-A0-jordan}），则必在有限个频点上产生可检测偏差。
+  \item 两类数据联合后，最小识别复杂度被“阶数 \(4\)”强制：
+  任意试图用阶数 \(<4\) 的线性状态模型同时拟合 (i)--(ii) 两类数据，将在严格代数意义下失败（无法同时满足四阶递推与谱有理式的极点/Jordan 约束）。
+\end{enumerate}
+因此，规范差机制的最低阶可核验承载维数被严格锁定为 \(4\)，并可由“递推一致性 + 频域极点结构”双通道证书同时审计。
+\end{proposition}
+

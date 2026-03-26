@@ -1,0 +1,238 @@
+\subsubsection{加法作为投影的碰撞谱：10 状态归一化核与真实输入 40 状态核的常数因子差异}
+\label{app:real-input-40-addition-collision-spectrum}
+
+稳定加法满足折叠公式
+\(
+c\oplus d=\Fold_\infty(c+d)
+\)
+（推论 \ref{cor:add-as-fold}），其机制语义可表述为“先把输入升维到两条比特流，再投影回稳定类型”：
+输入为 \((x_k,y_k)\in\{0,1\}^2\)，中间本体场为逐位和 \(d_k=x_k+y_k\in\{0,1,2\}\)，再由同步核输出归一化位 \(e_k\in\{0,1\}\)。
+
+\paragraph{两种核口径：归一化核 vs.\ 真实算术核}
+附录 \ref{app:sync-kernel-basic} 的 $10$ 状态同步核是 \(\Fold_\infty\) 的在线归一化器：其输入字母为 \(d\in\{0,1,2\}\)，输出字母为 \(e\in\{0,1\}\)。
+而命题 \ref{prop:real-input-40-essential-20} 的 \(40\) 状态真实输入核将“输入必须来自两条合法 Zeckendorf 轨道（禁止相邻 \(11\)）”这一约束并入状态，
+从而给出在真实算术驱动下的最小可审计机制对象。
+
+\paragraph{加法投影的 \texorpdfstring{$q$}{q}-重碰撞矩与碰撞谱常数}
+沿用定义 \ref{def:pom-moment-q} 的口径，把加法视为一个确定性转导器（每步读入 \((x_k,y_k)\) 并输出 \(e_k\)）。
+对整数 \(q\ge 2\)，定义长度 \(m\) 的 \(q\)-阶碰撞矩为
+\[
+S_q^{\oplus}(m):=\sum_{y} d_m(y)^q,
+\]
+其中 \(y\in\{0,1\}^m\) 为长度 \(m\) 的输出块，\(d_m(y)\) 为产生该输出块的输入块（长度 \(m\) 的 \((x,y)\)-对）的前像计数。
+由命题 \ref{prop:pom-moment-kernel-exists} 的 moment-kernel 编译路线（对底层转导器做 \(q\) 份同步直积并施加“逐步同输出”约束），存在有限非负整数核 \(A_q^{\oplus}\) 使得
+\(
+S_q^{\oplus}(m)=\Theta((r_q^{\oplus})^m)
+\)，其中
+\(
+r_q^{\oplus}:=\rho(A_q^{\oplus})
+\)
+为 Perron 主尺度；该常数可视为“加法作为一次投影”在空间侧制造同像不可区分性的谱指纹。
+
+\begin{theorem}[\texorpdfstring{$q$}{q}-阶碰撞 Perron 根的 Hölder 下界与边界—体积分岔]\label{thm:addition-collision-hoelder-lb-boundary-bulk}
+设 \(f_m:A_m\to B_m\) 为任意映射，并令 \(d_m(b):=|f_m^{-1}(b)|\)。
+对 \(q\ge 1\) 定义
+\[
+S_q(m):=\sum_{b\in B_m} d_m(b)^q.
+\]
+则对任意 \(q\ge 1\) 有确定性下界
+\begin{equation}\label{eq:addition-collision-hoelder-lb}
+S_q(m)\ \ge\ \frac{|A_m|^q}{|B_m|^{q-1}}.
+\end{equation}
+若进一步存在输入增长率 \(h_{\mathrm{in}}:=\lim_{m\to\infty}\frac1m\log|A_m|\) 且令
+\(
+r_q:=\limsup_{m\to\infty} S_q(m)^{1/m}
+\)，则
+\begin{equation}\label{eq:addition-collision-hoelder-rq}
+r_q\ \ge\ \exp\!\bigl(qh_{\mathrm{in}}-(q-1)h_{\mathrm{out}}\bigr),
+\qquad
+h_{\mathrm{out}}:=\lim_{m\to\infty}\frac1m\log|B_m|.
+\end{equation}
+因此，当保持输入端 \(A_m\) 不变而把输出端从“自由边界” \(B_m=\{0,1\}^m\) 改为“合法内核” \(B_m=X_m\) 时，右端的 \(h_{\mathrm{out}}\) 从 \(\log 2\) 跃迁为 \(\log\varphi\)，从而 Hölder 下界的指数底发生严格跃迁。
+\end{theorem}
+
+\begin{proof}
+由 Hölder 不等式（或 \(\ell^q\) 范数单调性）
+\[
+\Bigl(\sum_{b\in B_m} d_m(b)\Bigr)^q\le |B_m|^{q-1}\sum_{b\in B_m} d_m(b)^q
+\]
+得 \eqref{eq:addition-collision-hoelder-lb}；而 \(\sum_{b\in B_m}d_m(b)=|A_m|\)。
+对 \eqref{eq:addition-collision-hoelder-lb} 取对数并除以 \(m\) 后取 \(\limsup\) 即得 \eqref{eq:addition-collision-hoelder-rq}。
+最后一段仅将 \(h_{\mathrm{out}}\) 解释为输出集合的指数增长率：对自由边界 \(B_m=\{0,1\}^m\) 有 \(h_{\mathrm{out}}=\log 2\)，对合法内核 \(B_m=X_m\) 有 \(h_{\mathrm{out}}=\log\varphi\)（由 \(|X_m|=F_{m+2}\)）。证毕。
+\end{proof}
+
+\begin{corollary}[真实输入加法投影的熵式下界]\label{cor:addition-collision-real-hoelder-lb}
+在真实输入口径下取 \(A_m=X_m\times X_m\) 且 \(B_m=\{0,1\}^m\)。
+则对每个 \(q\ge 1\)，由定理 \ref{thm:addition-collision-hoelder-lb-boundary-bulk} 有
+\[
+r_q^{\oplus,\mathrm{real}}\ \ge\ \exp\!\bigl(2q\log\varphi-(q-1)\log 2\bigr)=\frac{\varphi^{2q}}{2^{q-1}}.
+\]
+特别地当 \(q=2\) 时得到
+\(
+r^{\oplus,\mathrm{real}}_2\ge \varphi^4/2
+\)，与表 \ref{tab:sync-kernel-addition-collision-spectrum} 的审计值相容。
+\end{corollary}
+
+\begin{conjecture}[合法输出内核上的均衡律：Hölder 下界可达]\label{conj:addition-collision-legal-output-equilibrium}
+对真实输入口径，改取输出端为合法内核 \(B_m=X_m\)，并把对应的 \(q\)-阶碰撞 Perron 根记为 \(r_{q}^{\oplus,\mathrm{real}\to X}\)。
+则对每个整数 \(q\ge 2\) 预期成立
+\[
+r_{q}^{\oplus,\mathrm{real}\to X}=\varphi^{q+1},
+\]
+亦即 Hölder 下界在该内核口径下达到指数意义上的均衡极值。
+\end{conjecture}
+
+\begin{proposition}[加法投影的碰撞谱：10 状态 vs.\ 真实输入 40 状态]\label{prop:addition-collision-spectrum-sync10-vs-real40}
+令 \(r_q^{\oplus,\mathrm{sync10}}\) 表示在 $10$ 状态归一化核上、以全移位输入 \(\{0,1\}^2\) 驱动得到的加法投影碰撞谱常数；
+令 \(r_q^{\oplus,\mathrm{real}}\) 表示在真实输入 \(40\) 状态核（Zeckendorf 守卫约束）下得到的对应常数。
+则数值上（脚本生成）：
+\[
+r_2^{\oplus,\mathrm{sync10}}\approx 8.7430515270,\qquad
+r_3^{\oplus,\mathrm{sync10}}\approx 19.8508935221,\qquad
+r_2^{\oplus,\mathrm{real}}\approx 3.9985433445,
+\]
+从而二阶碰撞主尺度出现显著下降
+\[
+\frac{r_2^{\oplus,\mathrm{sync10}}}{r_2^{\oplus,\mathrm{real}}}\approx 2.186559.
+\]
+\end{proposition}
+
+\begin{remark}[解释：40 状态核的独立价值来自“输入约束的核几何化”（可审计）]
+\label{rem:addition-collision-spectrum-interpretation}
+命题 \ref{prop:addition-collision-spectrum-sync10-vs-real40} 表明：
+若仅用 $10$ 状态归一化核而忽略真实算术输入的合法性约束，则“加法作为投影”的二阶同像碰撞强度（由 \(r_2^{\oplus}\) 表征）会在指数尺度上被系统性夸大。
+真实输入核把该约束提升为有限状态几何，并在最硬的空间指标 \(r_2^{\oplus}\) 上给出可量化的常数因子差异，
+因此 \(40\) 状态核不仅更“真实”，而且在空间损失谱层面确有独立信息贡献。
+\end{remark}
+
+\begin{theorem}[输入约束导致碰撞 Perron 根严格下降]\label{thm:addition-collision-perron-drop-real-vs-sync}
+对每个整数 \(q\ge 2\)，令 \(A^{\oplus,\mathrm{sync10}}_q\) 与 \(A^{\oplus,\mathrm{real}}_q\) 分别表示在
+\begin{itemize}
+  \item \(10\) 状态归一化核（忽略真实输入合法性筛选），以及
+  \item 真实输入 \(40\) 状态核（把 \(x,y\in X\) 的 \(11\) 禁词约束并入状态）
+\end{itemize}
+两种口径下，由 moment-kernel 编译得到的 \(q\)-阶碰撞核（命题 \ref{prop:pom-moment-kernel-exists} 的同型构造，适用于“加法作为投影”的转导语义）。
+记 Perron 根
+\[
+r_q^{\oplus,\mathrm{sync10}}:=\rho\!\left(A^{\oplus,\mathrm{sync10}}_q\right),
+\qquad
+r_q^{\oplus,\mathrm{real}}:=\rho\!\left(A^{\oplus,\mathrm{real}}_q\right).
+\]
+则对所有 \(q\ge 2\) 有严格不等式
+\[
+\boxed{\; r_q^{\oplus,\mathrm{real}}<r_q^{\oplus,\mathrm{sync10}}.\;}
+\]
+\end{theorem}
+
+\begin{proof}
+真实输入核在每一步仅允许那些由两条黄金均值输入 \((x,y)\in X\times X\) 产生的输入对延拓；相对于“全移位输入”的归一化核口径，这在底层路径集合上给出真子集约束。
+在 moment-kernel 编译中，\(A_q\) 的条目编码的是“\(q\) 路并行演化在输出层逐步碰撞”的可行迁移计数/权重；
+因此当底层可行迁移被删减时，编译所得的每一步可行 \(q\)-迁移也只能减少不增，从而在逐项偏序下满足
+\[
+0\le A^{\oplus,\mathrm{real}}_q \le A^{\oplus,\mathrm{sync10}}_q,
+\qquad
+A^{\oplus,\mathrm{real}}_q\neq A^{\oplus,\mathrm{sync10}}_q.
+\]
+对同步核口径，取其本质强连通分量后得到的 moment-kernel 为原始（Perron--Frobenius 主特征向量严格正），
+从而非负矩阵谱半径对逐项偏序严格单调：若 \(0\le A<B\) 且 \(B\) 原始，则 \(\rho(A)<\rho(B)\)。
+应用该引理即得
+\(\rho(A^{\oplus,\mathrm{real}}_q)<\rho(A^{\oplus,\mathrm{sync10}}_q)\)，证毕。
+\end{proof}
+
+\paragraph{可复算协议}
+表 \ref{tab:sync-kernel-addition-collision-spectrum} 报告上述常数与派生量；其生成脚本为
+\texttt{scripts/exp\_sync\_kernel\_addition\_collision\_spectrum.py}（已纳入 \texttt{scripts/run\_all.py} 管线）。
+\input{sections/generated/tab_sync_kernel_addition_collision_spectrum}
+
+\paragraph{二阶碰撞主尺度的代数刻画与满对称伽罗瓦性}
+当 \(q=2\) 时，moment-kernel \(A^{\oplus}_2\) 的 Perron 根不仅给出二阶碰撞矩的指数增长率，
+且在代数层面呈现“最大一般性”：其最小多项式在 \(\QQ[t]\) 上不可约，并具有满对称 Galois 群；
+相应的二阶投影熵率因此给出一个可审计的超越常数。
+下述多项式与模素证书由脚本 \texttt{scripts/exp\_addition\_collision\_q2\_minpoly\_galois\_certificate.py} 生成。
+
+\input{sections/generated/tab_addition_collision_q2_minpoly_galois_certificate}
+
+\input{sections/generated/eq_addition_collision_sync10_r2_minpoly}
+\input{sections/generated/eq_addition_collision_real_input40_r2_minpoly}
+
+\begin{theorem}[真实输入 \(40\) 状态核的二阶碰撞 Perron 根：最小多项式与递推阶数]\label{thm:addition-collision-real-input40-q2-minpoly}
+令 \(A^{\oplus,\mathrm{real}}_2\) 为真实输入 \(40\) 状态核（命题 \ref{prop:real-input-40-essential-20}）所诱导的二阶碰撞 moment-kernel，
+并记
+\[
+r^{\oplus,\mathrm{real}}_2:=\rho\!\left(A^{\oplus,\mathrm{real}}_2\right).
+\]
+则 \(r^{\oplus,\mathrm{real}}_2\) 为次数 \(26\) 的代数整数，其最小多项式为式 \ref{eq:addition-collision-real-input40-r2-minpoly} 所定义的
+\(P^{\oplus,\mathrm{real}}_2(t)\in\ZZ[t]\)，并且 \(r^{\oplus,\mathrm{real}}_2\) 为 \(P^{\oplus,\mathrm{real}}_2\) 的最大实根。
+此外，在由全 \(1\) 向量生成的循环子模上存在首一湮灭多项式
+\[
+t^{6}(t-1)(t+1)\,P^{\oplus,\mathrm{real}}_2(t),
+\]
+从而任何由该循环子模给出的矩序列（例如 \(u^{\top}(A^{\oplus,\mathrm{real}}_2)^{m}v\)，其中 \(u,v\) 为正向量）满足阶数至多为 \(34\) 的线性递推，
+且 \(P^{\oplus,\mathrm{real}}_2\) 为支配指数增长项的不可约因子。
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{prop:pom-moment-kernel-exists} 的 moment-kernel 编译路线，
+\(A^{\oplus,\mathrm{real}}_2\) 为有限维非负整矩阵；其 Perron 根为代数整数，且由 Perron--Frobenius 理论为单一正实特征值。
+对由全 \(1\) 向量生成的循环子模实施 Krylov 消元可得一个次数至多为 \(34\) 的首一湮灭多项式；
+脚本证书给出其可取为 \(t^{6}(t-1)(t+1)P^{\oplus,\mathrm{real}}_2(t)\)，并同时给出 \(P^{\oplus,\mathrm{real}}_2\) 的不可约性（表 \ref{tab:addition-collision-q2-minpoly-galois-certificate}）。
+由于 Perron 根在该循环子模上的投影非零，故其最小多项式必整除该湮灭多项式的不可约因子并与支配指数增长的因子一致，
+从而即为 \(P^{\oplus,\mathrm{real}}_2\)，并且 \(r^{\oplus,\mathrm{real}}_2\) 为其最大实根。证毕。
+\end{proof}
+
+\begin{theorem}[\(10\) 状态归一化核的二阶碰撞 Perron 根：最小多项式]\label{thm:addition-collision-sync10-q2-minpoly}
+令 \(A^{\oplus,\mathrm{sync10}}_2\) 表示在 \(10\) 状态归一化核上、以全移位输入 \(\{0,1\}^2\) 驱动所诱导的二阶碰撞 moment-kernel，
+并记 \(r^{\oplus,\mathrm{sync10}}_2:=\rho(A^{\oplus,\mathrm{sync10}}_2)\)。
+则 \(r^{\oplus,\mathrm{sync10}}_2\) 为次数 \(14\) 的代数整数，其最小多项式为式 \ref{eq:addition-collision-sync10-r2-minpoly} 所定义的
+\(P^{\oplus,\mathrm{sync10}}_2(t)\in\ZZ[t]\)；
+并且在由全 \(1\) 向量生成的循环子模上可取首一湮灭多项式为 \(t^{2}P^{\oplus,\mathrm{sync10}}_2(t)\)。
+\end{theorem}
+
+\begin{proof}
+证明与定理 \ref{thm:addition-collision-real-input40-q2-minpoly} 同理，差别仅在于底层转导器取 \(10\) 状态归一化核且输入不受 Zeckendorf 守卫约束；
+相应不可约性与湮灭证书见表 \ref{tab:addition-collision-q2-minpoly-galois-certificate}。证毕。
+\end{proof}
+
+\begin{theorem}[二阶碰撞 Perron 根的满对称伽罗瓦群]\label{thm:addition-collision-q2-full-symmetric-galois}
+多项式 \(P^{\oplus,\mathrm{real}}_2\) 与 \(P^{\oplus,\mathrm{sync10}}_2\) 的分裂域在 \(\QQ\) 上的 Galois 群分别同构于
+\[
+\Gal\!\left(P^{\oplus,\mathrm{real}}_2/\QQ\right)\cong S_{26},
+\qquad
+\Gal\!\left(P^{\oplus,\mathrm{sync10}}_2/\QQ\right)\cong S_{14}.
+\]
+\end{theorem}
+
+\begin{proof}
+由表 \ref{tab:addition-collision-q2-minpoly-galois-certificate} 的不可约性证书可知两多项式在 \(\QQ\) 上不可约，故其 Galois 群在对应根集上均为传递子群。
+对 \(P^{\oplus,\mathrm{real}}_2\)，模素数 \(71\) 的分解次数型为 \([23,2,1]\)，从而 Galois 群含有一条 \(23\)-循环；
+由于 \(23>26/2\)，该群原始，进而由 Jordan 定理得到 \(A_{26}\subseteq G\)。
+另一方面，\(\Disc(P^{\oplus,\mathrm{real}}_2)\equiv 2\pmod{5}\) 且 \(2\) 非 \(\FF_{5}\) 的平方剩余，
+故判别式非平方，从而 \(G\nsubseteq A_{26}\)，于是 \(G=S_{26}\)。
+对 \(P^{\oplus,\mathrm{sync10}}_2\) 完全同理：模 \(19\) 的次数型为 \([13,1]\) 给出 \(13\)-循环并推出原始性与 \(A_{14}\subseteq G\)，
+而 \(\Disc(P^{\oplus,\mathrm{sync10}}_2)\equiv 7\pmod{23}\) 且 \(7\) 为非平方剩余，故 \(G=S_{14}\)。证毕。
+\end{proof}
+
+\begin{corollary}[不可根式化与二阶投影熵率的超越性]\label{cor:addition-collision-q2-nonradical-transcendental}
+数 \(r^{\oplus,\mathrm{real}}_2\) 与 \(r^{\oplus,\mathrm{sync10}}_2\) 皆不可由根式表示。
+并且以
+\[
+h^{\oplus,\mathrm{real}}_2:=\log\!\Bigl(\frac{16}{r^{\oplus,\mathrm{real}}_2}\Bigr),
+\qquad
+h^{\oplus,\mathrm{sync10}}_2:=\log\!\Bigl(\frac{16}{r^{\oplus,\mathrm{sync10}}_2}\Bigr)
+\]
+定义的二阶投影熵率均为超越数。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:addition-collision-q2-full-symmetric-galois}，两最小多项式的 Galois 群分别为 \(S_{26}\) 与 \(S_{14}\)，均为不可解群，故对应 Perron 根不可根式化。
+另一方面，\(\frac{16}{r^{\oplus,\mathrm{real}}_2}\) 与 \(\frac{16}{r^{\oplus,\mathrm{sync10}}_2}\) 为非 \(1\) 的代数数；
+若其对数为代数且非零，则其指数应为超越，与代数性矛盾（Lindemann--Weierstrass 逆否命题），从而上述两对数皆为超越数。证毕。
+\end{proof}
+
+\begin{conjecture}[高阶碰撞 Perron 根的满对称泛型性与 Perron 分离率的指数稳定]\label{conj:addition-collision-higher-q-full-symmetric}
+对由加法投影诱导的 moment-kernel 族 \(\{A^{\oplus,\mathrm{real}}_q\}_{q\ge 2}\) 与 \(\{A^{\oplus,\mathrm{sync10}}_q\}_{q\ge 2}\)，记其 Perron 根分别为
+\(r^{\oplus,\mathrm{real}}_q=\rho(A^{\oplus,\mathrm{real}}_q)\) 与 \(r^{\oplus,\mathrm{sync10}}_q=\rho(A^{\oplus,\mathrm{sync10}}_q)\)。
+则预期对每个 \(q\ge 2\)，这两类 Perron 根的最小多项式在 \(\QQ\) 上不可约，
+其 Galois 群分别同构于相应次数的满对称群；
+并且这些 Perron 数在其共轭集合中具有严格模长分离，且分离比率随 \(q\) 呈稳定的指数衰减。
+\end{conjecture}

@@ -1,0 +1,456 @@
+\subsection{Fibonacci 深度过滤下的新谐波、谱导体与 cyclotomic 包分解}\label{subsec:conclusion-fibadic-new-harmonics-conductor-cyclotomic}
+沿用小节 \ref{subsec:conclusion-fibadic-profinite-collapse-character-conductor-rigidity} 中
+\[
+\widehat X_F\cong \widehat{\ZZ},
+\qquad
+X_{d-2}\cong \ZZ/(F_d\ZZ),
+\]
+以及“有限值连续观测具有唯一整数导体”的结论链。此前主稿已经把 Fibonacci-adic 地址完成的对象层压缩到经典 profinite 整数，并由此完全分类其有限商、连续角色、有限值观测与全局连续自同态。进一步沿同一有限层商链逐层细分，还可得到一条此前未显式抽出的新谐波理论：有限层可见谐波总数 \(F_d\) 经过 Möbius 反演拆分为精确可见深度计数 \(a_d\)，后者在 \(L^2\)-Fourier 侧给出正交新空间分解，并在 Koopman 平移下进一步压缩为按首次 Fibonacci 深度出现分组的 cyclotomic 包。
+
+\begin{theorem}[Fibonacci 可见深度的 Möbius 反演计数公式]\label{thm:conclusion-fibadic-visible-depth-mobius-count}
+设 \(\widehat X_F^\vee\) 为 \(\widehat X_F\) 的连续特征群。对每个 \(\chi\in \widehat X_F^\vee\)，定义其精确可见深度
+\[
+\delta(\chi):=
+\min\Bigl\{
+d\ge 1:\ \chi\ \text{经由}\ \pi_d:\widehat X_F\twoheadrightarrow \ZZ/(F_d\ZZ)\ \text{因子化}
+\Bigr\},
+\]
+并约定 \(F_1=1\)，故平凡特征满足 \(\delta(\mathbf 1)=1\)。记
+\[
+a_d:=\#\{\chi\in \widehat X_F^\vee:\ \delta(\chi)=d\}
+\qquad (d\ge 1).
+\]
+则对每个 \(d\ge 1\) 有精确恒等式
+\[
+F_d=\sum_{e\mid d} a_e,
+\qquad
+a_d=\sum_{e\mid d}\mu\!\left(\frac{d}{e}\right)F_e.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-fibadic-profinite-collapse-to-zhat} 与定理 \ref{thm:conclusion-fibadic-open-ideal-finite-quotient-classification}，深度 \(d\) 的有限层商正是
+\[
+\pi_d:\widehat X_F\twoheadrightarrow \ZZ/(F_d\ZZ).
+\]
+因此，在深度 \(d\) 可见的连续特征恰为 \(\ZZ/(F_d\ZZ)\) 的全部特征，其总数为
+\[
+\#(\ZZ/(F_d\ZZ))^\vee=F_d.
+\]
+
+另一方面，由定理 \ref{thm:conclusion-fibadic-address-pontryagin-dual-qmodz}，每个连续特征可唯一写成 \(\chi_{a/N}\)，其普通导体为 \(N\)。再由定理 \ref{thm:conclusion-fibadic-minimal-resolution-for-prime-register-package}，该特征在深度 \(d\) 可见当且仅当
+\[
+N\mid F_d
+\iff
+d_N\mid d,
+\]
+其中
+\[
+d_N:=\operatorname{lcm}_{p^e\parallel N} z(p^e).
+\]
+故 \(\delta(\chi)=d_N\)，并且
+\[
+\{\chi:\chi\ \text{在深度 }d\text{ 可见}\}
+=
+\bigsqcup_{e\mid d}\{\chi:\delta(\chi)=e\}.
+\]
+计数即得
+\[
+F_d=\sum_{e\mid d}a_e.
+\]
+对整除偏序应用 Möbius 反演，便得
+\[
+a_d=\sum_{e\mid d}\mu\!\left(\frac{d}{e}\right)F_e.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[精确深度角色的指数占优定律]\label{cor:conclusion-fibadic-exact-depth-characters-dominate}
+沿用定理 \ref{thm:conclusion-fibadic-visible-depth-mobius-count} 的记号。则
+\[
+a_d=F_d+O\!\bigl(\tau(d)\varphi^{d/2}\bigr)
+\qquad(d\to\infty),
+\]
+其中 \(\tau(d)\) 为约数函数，\(\varphi\) 为黄金比。特别地，
+\[
+\frac{a_d}{F_d}\longrightarrow 1.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-fibadic-visible-depth-mobius-count}，
+\[
+a_d
+=
+F_d+\sum_{\substack{e\mid d\\ e<d}}\mu\!\left(\frac{d}{e}\right)F_e.
+\]
+任意 proper divisor \(e<d\) 都满足 \(e\le d/2\)，故
+\[
+|a_d-F_d|
+\le
+\sum_{\substack{e\mid d\\ e<d}}F_e
+\le
+\tau(d)\,F_{\lfloor d/2\rfloor}.
+\]
+由 Binet 公式，
+\[
+F_{\lfloor d/2\rfloor}=O(\varphi^{d/2}),
+\qquad
+F_d\asymp \varphi^d.
+\]
+于是
+\[
+a_d=F_d+O\!\bigl(\tau(d)\varphi^{d/2}\bigr).
+\]
+又因 \(\tau(d)=e^{o(d)}\)，故误差相对 \(F_d\) 指数可忽略，从而
+\[
+\frac{a_d}{F_d}\to 1.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[Fibonacci 深度的新空间正交分解与 Möbius 投影公式]\label{thm:conclusion-fibadic-newspace-orthogonal-decomposition}
+设 \(m_H\) 为 \(\widehat X_F\) 上的 Haar 概率测度。对每个 \(d\ge 1\)，定义有限层可见子空间
+\[
+\mathcal H_d:=L^2(\widehat X_F,m_H)^{\pi_d\text{-meas}},
+\]
+并定义深度 \(d\) 的新空间
+\[
+\mathcal N_d
+:=
+\overline{\operatorname{span}}
+\{\chi\in \widehat X_F^\vee:\ \delta(\chi)=d\}.
+\]
+则：
+\begin{enumerate}
+  \item \(\dim \mathcal H_d=F_d\)，\(\dim \mathcal N_d=a_d\)；
+  \item 对每个 \(d\ge 1\)，成立正交直和分解
+  \[
+  \mathcal H_d=\bigoplus_{e\mid d}\mathcal N_e;
+  \]
+  \item 整体 \(L^2\)-空间有可数正交分解
+  \[
+  L^2(\widehat X_F,m_H)
+  =
+  \widehat{\bigoplus}_{d\ge 1}\mathcal N_d;
+  \]
+  \item 若 \(E_d\) 记 \(\mathcal H_d\) 上的正交投影，则新空间投影 \(P_d\) 满足
+  \[
+  E_d=\sum_{e\mid d}P_e,
+  \qquad
+  P_d=\sum_{e\mid d}\mu\!\left(\frac{d}{e}\right)E_e.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-fibadic-profinite-collapse-to-zhat}，\(\widehat X_F\) 是紧阿贝尔群，其连续特征群 \(\widehat X_F^\vee\cong \QQ/\ZZ\) 在 \(L^2(\widehat X_F,m_H)\) 中构成标准正交基。固定 \(d\)。经由 \(\pi_d\) 因子化的特征恰为 \(\ZZ/(F_d\ZZ)\) 的全部特征，总数为 \(F_d\)，故 \(\dim \mathcal H_d=F_d\)。而精确深度为 \(d\) 的特征张成 \(\mathcal N_d\)，其维数即 \(a_d\)。
+
+又由精确深度的定义，特征 \(\chi\) 属于 \(\mathcal H_d\) 当且仅当 \(\delta(\chi)\mid d\)。按精确深度分组，便得
+\[
+\mathcal H_d=\bigoplus_{e\mid d}\mathcal N_e.
+\]
+再对全部特征按其精确深度分组，即得
+\[
+L^2(\widehat X_F,m_H)
+=
+\widehat{\bigoplus}_{d\ge 1}\mathcal N_d.
+\]
+
+若 \(E_d\) 为 \(\mathcal H_d\) 上的正交投影，则它在特征 \(\chi\) 上的作用为
+\[
+E_d\chi=
+\begin{cases}
+\chi,& \delta(\chi)\mid d,\\
+0,& \delta(\chi)\nmid d.
+\end{cases}
+\]
+同理，\(P_d\chi=\chi\) 当且仅当 \(\delta(\chi)=d\)。故
+\[
+E_d=\sum_{e\mid d}P_e.
+\]
+再对整除格作 Möbius 反演，即得
+\[
+P_d=\sum_{e\mid d}\mu\!\left(\frac{d}{e}\right)E_e.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[有限层连续观测的谱导体定理]\label{thm:conclusion-fibadic-finite-layer-observable-spectral-conductor}
+设 \(f:\widehat X_F\to \CC\) 为连续函数，并假设其经由某一有限层因子化。定义其可见深度
+\[
+D(f):=\min\{d\ge 1:\ f\in \mathcal H_d\}.
+\]
+记其 Fourier 支撑为
+\[
+\operatorname{Spec}(f):=\{\chi\in \widehat X_F^\vee:\ \widehat f(\chi)\neq 0\},
+\]
+并记各特征的普通导体为 \(\operatorname{cond}(\chi)\)。则：
+\begin{enumerate}
+  \item \(D(f)\) 存在，且满足
+  \[
+  D(f)=\operatorname{lcm}\{\delta(\chi):\ \chi\in \operatorname{Spec}(f)\};
+  \]
+  \item 若定义算术谱导体
+  \[
+  N(f):=\operatorname{lcm}\{\operatorname{cond}(\chi):\ \chi\in \operatorname{Spec}(f)\},
+  \]
+  则
+  \[
+  D(f)=d_{N(f)}
+  =
+  \operatorname{lcm}_{p^e\parallel N(f)} z(p^e).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由假设，存在某个 \(d\) 使 \(f\in\mathcal H_d\)，故 \(D(f)\) 存在。又因 \(\mathcal H_d\) 有限维，\(\operatorname{Spec}(f)\) 为有限集。
+
+由定理 \ref{thm:conclusion-fibadic-newspace-orthogonal-decomposition}，
+\[
+\mathcal H_d=\bigoplus_{e\mid d}\mathcal N_e,
+\]
+故
+\[
+f\in \mathcal H_d
+\iff
+\delta(\chi)\mid d \quad \forall\,\chi\in \operatorname{Spec}(f).
+\]
+因此，最小这样的 \(d\) 必为
+\[
+D(f)=\operatorname{lcm}\{\delta(\chi):\ \chi\in \operatorname{Spec}(f)\}.
+\]
+
+再由定理 \ref{thm:conclusion-fibadic-visible-depth-mobius-count} 与定理 \ref{thm:conclusion-fibadic-minimal-resolution-for-prime-register-package}，对每个特征 \(\chi\) 都有
+\[
+\delta(\chi)=d_{\operatorname{cond}(\chi)}.
+\]
+设
+\[
+N(f)=\operatorname{lcm}\{\operatorname{cond}(\chi):\ \chi\in \operatorname{Spec}(f)\}.
+\]
+若 \(p^e\parallel N(f)\)，则 \(e\) 为所有 \(\operatorname{cond}(\chi)\) 中 \(p\)-进指数的最大值。因此
+\[
+d_{N(f)}
+=
+\operatorname{lcm}_{p^e\parallel N(f)} z(p^e)
+=
+\operatorname{lcm}\{d_{\operatorname{cond}(\chi)}:\ \chi\in \operatorname{Spec}(f)\}.
+\]
+与上式合并，即得
+\[
+D(f)=d_{N(f)}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[Fibonacci 深度包的 cyclotomic 分块定理]\label{thm:conclusion-fibadic-cyclotomic-packet-decomposition}
+令
+\[
+U:L^2(\widehat X_F,m_H)\to L^2(\widehat X_F,m_H),
+\qquad
+(Uf)(x):=f(x+1),
+\]
+为加一平移的 Koopman 算子。对每个 \(d\ge 1\)，定义深度 \(d\) 的 cyclotomic 包多项式
+\[
+\Pi_d(X):=\prod_{\substack{N\ge 1\\ d_N=d}}\Phi_N(X),
+\]
+其中 \(\Phi_N\) 为第 \(N\) 个 cyclotomic 多项式。则：
+\begin{enumerate}
+  \item 每个新空间 \(\mathcal N_d\) 在 \(U\) 下不变；
+  \item \(U|_{\mathcal N_d}\) 的特征多项式恰为 \(\Pi_d(X)\)；
+  \item 因而
+  \[
+  \deg \Pi_d=a_d;
+  \]
+  \item 对每个有限层 \(\mathcal H_d\)，有规范因式分解
+  \[
+  X^{F_d}-1=\prod_{e\mid d}\Pi_e(X),
+  \]
+  且该乘积分解与定理 \ref{thm:conclusion-fibadic-newspace-orthogonal-decomposition} 的正交新空间分解完全一致。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对任意特征 \(\chi\in \widehat X_F^\vee\)，有
+\[
+U\chi(x)=\chi(x+1)=\chi(1)\chi(x),
+\]
+故每个特征都是 \(U\) 的特征向量。若 \(\chi\) 的导体为 \(N\)，则 \(\chi=\chi_{a/N}\) 且 \(\gcd(a,N)=1\)，从而
+\[
+\chi(1)=e^{2\pi i a/N}
+\]
+是一个本原 \(N\) 次单位根。于是，对所有满足 \(d_N=d\) 的特征，其特征值恰遍历全部本原 \(N\) 次单位根，各出现一次。故 \(\mathcal N_d\) 在 \(U\) 下不变，且
+\[
+\chi_{U|_{\mathcal N_d}}(X)
+=
+\prod_{\substack{N\ge 1\\ d_N=d}}\Phi_N(X)
+=
+\Pi_d(X).
+\]
+其次数即
+\[
+\deg \Pi_d
+=
+\sum_{d_N=d}\varphi(N)
+=
+a_d.
+\]
+
+另一方面，\(\mathcal H_d\) 是有限循环群 \(\ZZ/(F_d\ZZ)\) 的正则表示空间，其上加一平移的特征值为全部 \(F_d\) 次单位根，因此特征多项式为
+\[
+X^{F_d}-1.
+\]
+再由定理 \ref{thm:conclusion-fibadic-newspace-orthogonal-decomposition}，
+\[
+\mathcal H_d=\bigoplus_{e\mid d}\mathcal N_e,
+\]
+而直和上的特征多项式等于各分块特征多项式之积，遂得
+\[
+X^{F_d}-1=\prod_{e\mid d}\Pi_e(X).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[Fibonacci 新谐波的主导性]\label{cor:conclusion-fibadic-new-harmonics-dominate}
+沿用定理 \ref{thm:conclusion-fibadic-cyclotomic-packet-decomposition} 的记号。则
+\[
+\deg \Pi_d
+=
+F_d+O\!\bigl(\tau(d)\varphi^{d/2}\bigr),
+\qquad
+\frac{\deg \Pi_d}{F_d}\to 1.
+\]
+等价地，在有限层谱
+\[
+X^{F_d}-1
+\]
+的全部特征模态中，渐近上几乎全部特征根都属于第一次在深度 \(d\) 出现的 cyclotomic 新包 \(\Pi_d\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-fibadic-cyclotomic-packet-decomposition}，\(\deg \Pi_d=a_d\)。再调用推论 \ref{cor:conclusion-fibadic-exact-depth-characters-dominate} 即得
+\[
+\deg \Pi_d
+=
+a_d
+=
+F_d+O\!\bigl(\tau(d)\varphi^{d/2}\bigr),
+\]
+从而
+\[
+\frac{\deg \Pi_d}{F_d}\to 1.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[Fibonacci 深度包的 Möbius 乘积公式]\label{thm:conclusion-fibadic-cyclotomic-packet-mobius-product}
+对 \(d\ge 2\)，设 \(\Pi_d(X)\) 为深度 \(d\) 的 cyclotomic 包多项式。则在 \(\ZZ[X]\) 中成立精确恒等式
+\[
+\Pi_d(X)=\prod_{e\mid d}\bigl(X^{F_e}-1\bigr)^{\mu(d/e)}.
+\]
+此外，
+\[
+\Pi_1(X)=X-1.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-fibadic-cyclotomic-packet-decomposition}，对每个 \(d\ge 1\) 都有
+\[
+X^{F_d}-1=\prod_{e\mid d}\Pi_e(X).
+\]
+将其视作整除格上的乘法卷积关系。由于 \(\ZZ[X]\) 的分式域乘法群为交换群，可在除数格上对该乘积关系施行 Möbius 反演，得到
+\[
+\Pi_d(X)=\prod_{e\mid d}\bigl(X^{F_e}-1\bigr)^{\mu(d/e)}.
+\]
+当 \(d=1\) 时，唯一深度为 \(1\) 的特征只对应平凡包，故
+\[
+\Pi_1(X)=X-1.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[深度包在 \texorpdfstring{$X=1$}{X=1} 处的 \texorpdfstring{$p$}{p}-进内容公式]\label{thm:conclusion-fibadic-cyclotomic-packet-padic-content}
+对每个 \(d\ge 2\)，有
+\[
+\Pi_d(1)=\prod_{e\mid d}F_e^{\mu(d/e)}\in \NN.
+\]
+更精确地，记
+\[
+m_p(d):=\sum_{e\mid d}\mu(d/e)\,v_p(F_e),
+\]
+则
+\[
+\Pi_d(1)=\prod_p p^{\,m_p(d)},
+\]
+并且
+\[
+m_p(d)=\#\{k\ge 1:\ z(p^k)=d\},
+\]
+其中 \(z(p^k)\) 为素幂 \(p^k\) 的 Fibonacci 出现阶。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-fibadic-cyclotomic-packet-mobius-product}，
+\[
+\Pi_d(X)=\prod_{e\mid d}(X^{F_e}-1)^{\mu(d/e)}.
+\]
+当 \(d\ge 2\) 时，
+\[
+\sum_{e\mid d}\mu(d/e)=0.
+\]
+因此令 \(X\to 1\)，并用局部展开
+\[
+X^{F_e}-1=F_e(X-1)+O\bigl((X-1)^2\bigr),
+\]
+得到全部 \((X-1)\)-因子严格抵消，从而
+\[
+\Pi_d(1)=\prod_{e\mid d}F_e^{\mu(d/e)}.
+\]
+对两边取 \(p\)-进赋值即得
+\[
+v_p(\Pi_d(1))
+=
+\sum_{e\mid d}\mu(d/e)\,v_p(F_e)
+=
+m_p(d).
+\]
+
+再证计数公式。对任意 \(e\)，有
+\[
+v_p(F_e)=\#\{k\ge 1:\ p^k\mid F_e\}.
+\]
+而 \(p^k\mid F_e\) 当且仅当 \(z(p^k)\mid e\)，故
+\[
+v_p(F_e)
+=
+\sum_{f\mid e}\#\{k\ge 1:\ z(p^k)=f\}.
+\]
+在整除格上再次施行 Möbius 反演，即得
+\[
+m_p(d)=\#\{k\ge 1:\ z(p^k)=d\}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[深度包在 \texorpdfstring{$X=1$}{X=1} 处检测真正的新素幂频率]\label{cor:conclusion-fibadic-cyclotomic-packet-detects-new-prime-power}
+对每个 \(d\ge 2\)，成立等价关系
+\[
+\Pi_d(1)>1
+\iff
+\exists\,p^k\ \text{使}\ z(p^k)=d.
+\]
+因此，深度 \(d\) 是否携带真正新的素幂频率，可由单一整数 \(\Pi_d(1)\) 直接判定。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-fibadic-cyclotomic-packet-padic-content}，
+\[
+\Pi_d(1)=\prod_p p^{\,m_p(d)},
+\qquad
+m_p(d)=\#\{k\ge 1:\ z(p^k)=d\}.
+\]
+故 \(\Pi_d(1)>1\) 当且仅当存在某个素数 \(p\) 使 \(m_p(d)>0\)，等价于存在某个素幂 \(p^k\) 满足 \(z(p^k)=d\)。证毕。
+\end{proof}
+
+\paragraph{Fibonacci 新谐波的统一读法}
+定理 \ref{thm:conclusion-fibadic-visible-depth-mobius-count} 至定理 \ref{thm:conclusion-fibadic-cyclotomic-packet-padic-content} 说明：在 \(\widehat X_F\cong \widehat{\ZZ}\) 的全局塌缩之后，Fibonacci 深度过滤并未消失，而是在调和分析层保留了一条完全可分类的新生谱链。有限层可见谐波总数 \(F_d\) 经 Möbius 反演拆分为精确深度计数 \(a_d\)，后者在 Fourier 侧给出正交新空间 \(\mathcal N_d\)，并在 Koopman 平移下进一步压缩为按首次可见深度分组的 cyclotomic 包 \(\Pi_d\)。更进一步，在 \(X=1\) 处的取值
+\[
+\Pi_d(1)=\prod_{e\mid d}F_e^{\mu(d/e)}
+\]
+又把这些新包直接联到各素幂的 Fibonacci 出现阶：其 \(p\)-进赋值恰计数满足 \(z(p^k)=d\) 的素幂层数。因此，Fibonacci 地址塔的谐波结构并非由旧层残余主导；相反，在深度 \(d\) 的有限谱中，渐近上几乎全部模态都属于当层第一次出现的新生谐波，而这些新生包是否携带真正新的素幂频率，也已可由单一整数 \(\Pi_d(1)\) 直接读出。
+
+\endinput

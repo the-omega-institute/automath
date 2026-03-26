@@ -1,0 +1,99 @@
+\begin{corollary}[单素数模审计的失败概率上界：由坏素数个数控制]\label{cor:xi-hankel-badprime-selection-probability}
+在命题 \ref{prop:xi-hankel-good-bad-prime-dichotomy} 的设定下，固定 \(\Delta_\ell=\det(H_\ell)\in\ZZ\setminus\{0\}\)，并令坏素数集合
+\[
+\mathcal B(\Delta_\ell):=\{p\ \text{prime}:\ p\mid \Delta_\ell\}.
+\]
+给定整数 \(M\ge 1\)，令 \(\mathcal P_M\) 为前 \(M\) 个素数组成的集合，并从 \(\mathcal P_M\) 中均匀抽取素数 \(p\)。
+则有概率界
+\[
+\Pr\bigl[p\in\mathcal B(\Delta_\ell)\bigr]
+\ \le\ \frac{\omega(\Delta_\ell)}{M}
+\ \le\ \frac{\lfloor \log_2|\Delta_\ell|\rfloor}{M},
+\]
+其中 \(\omega(\Delta_\ell)\) 为 \(\Delta_\ell\) 的不同素因子个数。
+\end{corollary}
+\begin{proof}
+第一不等式为计数恒等式：集合 \(\mathcal P_M\) 中能整除 \(\Delta_\ell\) 的素数至多有 \(\omega(\Delta_\ell)\) 个。
+第二不等式由
+\[
+2^{\omega(\Delta_\ell)}\ \le\ \prod_{p\mid \Delta_\ell}p\ \le\ |\Delta_\ell|
+\]
+推出。证毕。
+\end{proof}
+
+\begin{corollary}[有界素数集均匀抽取的失败概率与期望尝试次数]\label{cor:xi-hankel-badprime-selection-trials}
+沿用推论 \ref{cor:xi-hankel-badprime-selection-probability} 的记号并固定 \(X\ge 2\)。
+令 \(\mathcal P(X):=\{p\le X:\ p\ \text{prime}\}\)，其基数为 \(\card{\mathcal P(X)}=\pi(X)\)。
+若从 \(\mathcal P(X)\) 中按均匀分布抽取素数 \(p\)，则
+\[
+\Pr[p\mid \Delta_\ell]
+\ \le\
+\frac{\omega(\Delta_\ell)}{\pi(X)}
+\ \le\
+\frac{\log|\Delta_\ell|}{(\log 2)\,\pi(X)}.
+\]
+若进一步对独立同分布的重复抽取采用“直到 \(p\nmid\Delta_\ell\) 为止”的停止规则，则当 \(\omega(\Delta_\ell)<\pi(X)\) 时停止时间的期望满足
+\[
+\EE[\mathrm{trials}]
+\ \le\
+\frac{1}{1-\omega(\Delta_\ell)/\pi(X)}.
+\]
+\end{corollary}
+\begin{proof}
+失败概率由计数恒等式
+\(
+\Pr[p\mid \Delta_\ell]=\card{(\mathcal P(X)\cap\mathcal B(\Delta_\ell))}/\pi(X)
+\le \omega(\Delta_\ell)/\pi(X)
+\)
+给出；并用 \(\omega(\Delta_\ell)\le \log|\Delta_\ell|/\log 2\) 得第二个不等式。
+对停止规则，失败概率 \(q:=\Pr[p\mid\Delta_\ell]\le \omega(\Delta_\ell)/\pi(X)<1\)，停止时间服从参数 \(1-q\) 的几何分布，故 \(\EE[\mathrm{trials}]=1/(1-q)\le 1/(1-\omega(\Delta_\ell)/\pi(X))\)。证毕。
+\end{proof}
+
+\begin{corollary}[避开坏素数的对数尺度小素数存在性]\label{cor:xi-hankel-short-prime-avoids-badset}
+沿用推论 \ref{cor:xi-hankel-badprime-selection-probability} 的记号，固定整数 \(\Delta_\ell\in\ZZ\setminus\{0\}\) 并假设 \(|\Delta_\ell|\ge 3\)。
+则存在素数 \(p\) 满足
+\[
+\boxed{\;
+p\ \ll\ \log(2|\Delta_\ell|)\,\log\log(2|\Delta_\ell|)
+\qquad\text{且}\qquad
+p\nmid \Delta_\ell.\;}
+\]
+因此可在位长 \(O(\log\log|\Delta_\ell|)\) 的模轴上实现一次“良素数”审计。
+\end{corollary}
+\begin{proof}
+令 \(m:=\lceil\log_2(2|\Delta_\ell|)\rceil\) 并记 \(p_1<p_2<\cdots\) 为素数序列。
+若 \(p_1,\dots,p_m\) 全部整除 \(\Delta_\ell\)，则 \(p_1\cdots p_m\mid \Delta_\ell\)，从而
+\[
+|\Delta_\ell|\ \ge\ p_1\cdots p_m\ \ge\ 2^m\ >\ 2|\Delta_\ell|,
+\]
+矛盾。
+故在 \(\{p_1,\dots,p_m\}\) 中存在某个素数 \(p\) 使 \(p\nmid \Delta_\ell\)，并且 \(p\le p_m\)。
+最后，经典素数序列上界给出 \(p_m\ll m\log m\)，代入 \(m\asymp \log|\Delta_\ell|\) 即得 \(p\ll \log(2|\Delta_\ell|)\log\log(2|\Delta_\ell|)\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[区间素数抽样的失败概率上界]\label{cor:xi-hankel-badprime-interval-selection-probability}
+沿用命题 \ref{prop:xi-hankel-good-bad-prime-dichotomy} 的设定并固定 \(\Delta_\ell\in\ZZ\setminus\{0\}\)。
+给定 \(Y\ge 2\)，从区间 \([Y,2Y]\) 内的素数集合中按均匀分布抽取一枚素数 \(p\)。
+则失败概率满足
+\[
+\Pr[p\mid \Delta_\ell]
+\ \le\
+\frac{\omega(\Delta_\ell)}{\pi(2Y)-\pi(Y)}
+\ \le\
+\frac{\lfloor \log_2|\Delta_\ell|\rfloor}{\pi(2Y)-\pi(Y)}.
+\]
+并且当 \(Y\) 充分大时，利用 \(\pi(2Y)-\pi(Y)\gg Y/\log Y\) 可得
+\[
+\Pr[p\mid \Delta_\ell]
+\ =\
+O\!\left(\frac{\log|\Delta_\ell|\cdot \log Y}{Y}\right).
+\]
+\end{corollary}
+\begin{proof}
+区间内坏素数个数至多为 \(\omega(\Delta_\ell)\)，而候选素数总数为 \(\pi(2Y)-\pi(Y)\)，故概率至多其比值。
+再用 \(\omega(\Delta_\ell)\le \lfloor\log_2|\Delta_\ell|\rfloor\) 得第二个不等式。
+最后一式由素数定理的弱形式下界 \(\pi(2Y)-\pi(Y)\gg Y/\log Y\) 代入得到。证毕。
+\end{proof}
+
+\endinput

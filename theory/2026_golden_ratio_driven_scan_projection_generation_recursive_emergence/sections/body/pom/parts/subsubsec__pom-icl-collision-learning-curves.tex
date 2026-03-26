@@ -1,0 +1,582 @@
+% ICL-style learning curves from collision moments and fiber LDP.
+
+\subsubsection{碰撞矩的学习曲线接口：占用泛函展开、随机纤维任务的 Bayes 误差与提示长度相变}\label{subsubsec:pom-icl-collision-learning-curves}
+本段把“表示瓶颈诱导的不可分辨等价类”压缩为折叠纤维谱的可核验统计量，并给出一组与实现细节无关的闭式学习曲线：其输入仅为输出分布 \(w_m\) 与碰撞矩序列 \(\{S_q(m)\}_{q\ge 1}\)，并在指数提示长度尺度上由纤维对数多重度的大偏差率函数封口。
+
+\paragraph{记号}
+固定分辨率 \(m\ge 1\)，令 \(\Omega_m=\{0,1\}^m\)，并令 \(\Fold_m:\Omega_m\twoheadrightarrow X_m\) 为折叠映射。
+纤维多重度 \(d_m(x)=|\Fold_m^{-1}(x)|\) 与输出分布
+\[
+w_m(x):=\frac{d_m(x)}{2^m}\qquad(x\in X_m)
+\]
+见定义 \ref{def:pom-ind-lyapunov-fingerprint}。
+对 \(q\ge 1\) 定义标准碰撞矩
+\[
+S_q(m):=\sum_{x\in X_m}d_m(x)^q,
+\]
+及其归一化幂矩（Rényi/碰撞幂和）
+\[
+M_q(m):=\sum_{x\in X_m}w_m(x)^q=\frac{S_q(m)}{2^{qm}}.
+\]
+
+\paragraph{对比分离损失的可审计闭式}
+\begin{theorem}[一般分区下的 InfoNCE 最优闭式]\label{thm:pom-infonce-partition-optimal-closed-form}
+设 \(\Omega\) 为有限样本空间并赋予均匀分布。
+给定满射分区 \(g:\Omega\twoheadrightarrow\mathcal Y\)，记纤维 \(C_y:=g^{-1}(y)\) 且 \(|C_y|=:c_y\)。
+令
+\[
+U\sim\mathrm{Unif}(\Omega),\qquad Y:=g(U),
+\qquad
+V\mid (Y=y)\sim \mathrm{Unif}(C_y).
+\]
+并令负样本 \(W_1,\dots,W_{K-1}\stackrel{\mathrm{i.i.d.}}{\sim}\mathrm{Unif}(\Omega)\) 与 \((U,V)\) 独立。
+对任意打分函数 \(s:\Omega\times\Omega\to\RR\cup\{-\infty\}\)，定义 InfoNCE 损失
+\[
+L_K(s):=\EE\Biggl[-\log\frac{e^{s(U,V)}}{e^{s(U,V)}+\sum_{i=1}^{K-1}e^{s(U,W_i)}}\Biggr].
+\]
+令同类负样本计数
+\[
+J:=\#\{\,1\le i\le K-1:\ g(W_i)=g(U)\,\}.
+\]
+则成立精确最优值公式
+\[
+\inf_{s}L_K(s)=\EE\bigl[\log(1+J)\bigr],
+\qquad
+J\mid(Y=y)\sim \mathrm{Binomial}\!\left(K-1,\frac{c_y}{|\Omega|}\right).
+\]
+并且最优打分可取为硬同类判别器
+\[
+s^\star(u,v):=
+\begin{cases}
+0,& g(u)=g(v),\\
+-\infty,& g(u)\neq g(v).
+\end{cases}
+\]
+\end{theorem}
+\begin{proof}
+固定 \(U=u\) 与集合 \(\{V,W_1,\dots,W_{K-1}\}\) 的一次实现，记 \(y=g(u)\)，并令同类候选指标集合
+\[
+I_y:=\{0\}\cup\{\,i:\ g(W_i)=y\,\},
+\]
+其中 \(0\) 对应候选 \(V\)。
+在给定 \(u\) 与 \(I_y\) 的条件下，集合 \(\{V\}\cup\{W_i:i\in I_y\setminus\{0\}\}\) 为 \(C_y\) 上的 i.i.d.\ 均匀样本，因此“正样本索引”为 \(0\) 的条件概率在 \(I_y\) 上均匀，等于 \(|I_y|^{-1}=(1+J)^{-1}\)。
+于是任一（含 softmax）预测器在对数损失下的条件 Bayes 风险为 \(\log|I_y|=\log(1+J)\)，从而
+\(
+L_K(s)\ge \EE[\log(1+J)]
+\)。
+\par
+对 \(s^\star\)，softmax 概率在同类候选上均匀、异类候选上为零，故逐点达到该条件 Bayes 风险并取到下界。
+最后，\(J\mid(Y=y)\) 为 \(K-1\) 次独立抽样命中 \(C_y\) 的计数，故服从所示二项分布。
+证毕。
+\end{proof}
+
+\input{parts/thm__pom-bayes-infonce-second-collision-dominance}
+\begin{theorem}[Bayes--InfoNCE 最优值的三阶大负样本展开]\label{thm:pom-infonce-bayes-optimal-third-order-largeK}
+沿用定理 \ref{thm:pom-infonce-partition-optimal-closed-form} 的设定，并记输出分布
+\[
+w(y):=\PP(Y=y)=\frac{|C_y|}{|\Omega|}\qquad(y\in\mathcal Y),
+\]
+从而 \(w(y)>0\)、\(\sum_{y\in\mathcal Y}w(y)=1\)。
+记 Bayes--InfoNCE 的最优值为
+\[
+L_K^\star(g):=\inf_s L_K(s)=\EE[\log(1+J)].
+\]
+令 Shannon 熵（自然对数）
+\[
+H(w):=-\sum_{y\in\mathcal Y}w(y)\log w(y),
+\]
+并定义逆权幂和
+\[
+\mathsf S_{-1}(w):=\sum_{y\in\mathcal Y}\frac{1}{w(y)},
+\qquad
+\mathsf S_{-2}(w):=\sum_{y\in\mathcal Y}\frac{1}{w(y)^2}.
+\]
+则当 \(K\to\infty\) 时有渐近展开
+\[
+L_K^\star(g)
+=\log K-H(w)
++\frac{|\mathcal Y|-1}{2(K-1)}
++\frac{\mathsf S_{-1}(w)-6|\mathcal Y|+5}{12(K-1)^2}
++\mathcal R_3(K),
+\]
+其中余项满足显式控制
+\[
+\bigl|\mathcal R_3(K)\bigr|
+\le \frac{C}{(K-1)^3}\,\mathsf S_{-2}(w),
+\]
+常数 \(C>0\) 为绝对常数，与 \((\Omega,\mathcal Y,g)\) 无关。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-infonce-partition-optimal-closed-form}，对任意 \(y\in\mathcal Y\) 有
+\[
+J\mid(Y=y)\sim \mathrm{Binomial}(K-1,w(y)),
+\qquad
+L_K^\star(g)=\EE\bigl[\Phi_K(w(Y))\bigr],
+\]
+其中对 \(p\in(0,1]\) 定义
+\[
+\Phi_K(p):=\EE\bigl[\log(1+\mathrm{Binomial}(K-1,p))\bigr].
+\]
+对函数 \(x\mapsto \log(1+x)\) 在 \(x=(K-1)p\) 处作带余项的 Taylor 展开，并代入二项分布中心矩至四阶的闭式表达，可得存在绝对常数 \(C>0\) 使对一切 \(p\in(0,1]\) 成立
+\[
+\Phi_K(p)
+=\log K+\log p
++\frac{1-p}{2p(K-1)}
++\frac{1-6p+5p^2}{12p^2(K-1)^2}
++O\!\left(\frac{1}{(K-1)^3p^3}\right),
+\]
+且误差项在绝对值下可取为 \(C\bigl((K-1)^{-3}p^{-3}\bigr)\)。
+\par
+将上式在 \(p=w(Y)\) 下取期望并逐项化简：由于
+\[
+\EE[\log w(Y)]=\sum_y w(y)\log w(y)=-H(w),
+\qquad
+\EE[w(Y)^{-1}]=\sum_y w(y)\frac{1}{w(y)}=|\mathcal Y|,
+\]
+从而
+\[
+\EE\!\left[\frac{1-w(Y)}{w(Y)}\right]=\EE[w(Y)^{-1}]-1=|\mathcal Y|-1,
+\]
+并且
+\[
+\EE\!\left[\frac{1-6w(Y)+5w(Y)^2}{w(Y)^2}\right]
+=\EE[w(Y)^{-2}]-6\EE[w(Y)^{-1}]+5
+=\mathsf S_{-1}(w)-6|\mathcal Y|+5.
+\]
+余项在绝对值下由
+\(
+\EE[w(Y)^{-3}]=\sum_y w(y)\,w(y)^{-3}=\mathsf S_{-2}(w)
+\)
+吸收，得到 \(|\mathcal R_3(K)|\le C(K-1)^{-3}\mathsf S_{-2}(w)\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[Fold 设定下的二阶系数与逆多重度谱]\label{cor:pom-infonce-fold-third-order-largeK}
+在分辨率 \(m\) 上取 \(\Omega_m=\{0,1\}^m\) 与折叠 \(\Fold_m:\Omega_m\twoheadrightarrow X_m\)，并记
+\(
+w_m(x)=d_m(x)/2^m
+\)。
+设 \(L_{K,\star}^{(m)}:=L_K^\star(\Fold_m)\)。
+令
+\[
+H_1(m):=-\sum_{x\in X_m}w_m(x)\log w_m(x)
+\]
+为 \(w_m\) 的 Shannon 熵（自然对数）。
+定义对角算子
+\[
+\mathcal E_m:\ell^2(X_m)\to\ell^2(X_m),\qquad
+\mathcal E_m\mathbf 1_x:=d_m(x)^{-1/2}\mathbf 1_x,
+\]
+则 \(\|\mathcal E_m\|_{\mathsf{HS}}^2=\sum_{x\in X_m}d_m(x)^{-1}\)。
+在此记号下，当 \(K\to\infty\) 时有
+\[
+L_{K,\star}^{(m)}
+=\log K-H_1(m)
++\frac{|X_m|-1}{2(K-1)}
++\frac{2^m\|\mathcal E_m\|_{\mathsf{HS}}^2-6|X_m|+5}{12(K-1)^2}
++\widetilde{\mathcal R}_3(K),
+\]
+并且余项满足
+\[
+\bigl|\widetilde{\mathcal R}_3(K)\bigr|
+\le
+\frac{C}{(K-1)^3}\sum_{x\in X_m}\frac{1}{w_m(x)^2}
+=\frac{C\,2^{2m}}{(K-1)^3}\sum_{x\in X_m}\frac{1}{d_m(x)^2},
+\]
+其中 \(C>0\) 为定理 \ref{thm:pom-infonce-bayes-optimal-third-order-largeK} 的绝对常数。
+\end{corollary}
+\begin{proof}
+将定理 \ref{thm:pom-infonce-bayes-optimal-third-order-largeK} 应用于 \(g=\Fold_m\) 即得。
+其中
+\[
+\mathsf S_{-1}(w_m)=\sum_{x\in X_m}\frac{1}{w_m(x)}
+=\sum_x \frac{2^m}{d_m(x)}
+=2^m\sum_x d_m(x)^{-1}
+=2^m\|\mathcal E_m\|_{\mathsf{HS}}^2,
+\]
+并且
+\(
+\mathsf S_{-2}(w_m)=\sum_x w_m(x)^{-2}=2^{2m}\sum_x d_m(x)^{-2}
+\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[外置余项比特对 InfoNCE 的精确作用律]\label{cor:pom-infonce-fold-ledger-remainder-bits}
+在分辨率 \(m\) 上取 \(\Omega_m=\{0,1\}^m\) 与折叠 \(\Fold_m:\Omega_m\twoheadrightarrow X_m\)，并令 \(d_m(x)=|\Fold_m^{-1}(x)|\)。
+沿用定理 \ref{thm:xi-fold-algorithmic-holographic-ledger} 的账本编码 \(E_m(\omega)=(x,i)\)（其中 \(x=\Fold_m(\omega)\)、\(0\le i<d_m(x)\)）。
+对 \(B\in\NN\) 定义余项
+\[
+R_B(\omega):= i(\omega)\bmod 2^B,
+\qquad
+g_B(\omega):=\bigl(\Fold_m(\omega),R_B(\omega)\bigr).
+\]
+令正样本按 \(g_B\)-纤维重采样（负样本仍均匀独立），并记对应的 InfoNCE 损失为 \(L_{K,B}(s)\)。
+则
+\[
+\inf_s L_{K,B}(s)=\EE\bigl[\log(1+J_B)\bigr],
+\]
+其中在条件 \((X,R)=(x,r)\) 下有
+\[
+J_B\mid(X=x,R=r)\sim \mathrm{Binomial}\!\left(K-1,\frac{d_{m,B}(x,r)}{2^m}\right),
+\qquad
+d_{m,B}(x,r):=\bigl|\{\omega:\ \Fold_m(\omega)=x,\ R_B(\omega)=r\}\bigr|.
+\]
+并且对每个固定 \(x\in X_m\)，集合 \(\{0,\dots,d_m(x)-1\}\) 在模 \(2^B\) 的余类占用数满足二点取值律：
+\[
+d_{m,B}(x,r)\in\Bigl\{\Big\lfloor\frac{d_m(x)}{2^B}\Big\rfloor,\ \Big\lceil\frac{d_m(x)}{2^B}\Big\rceil\Bigr\},
+\]
+且恰有 \(d_m(x)\bmod 2^B\) 个余类取上取整，其余取下取整。
+因此得到无近似夹逼
+\[
+\EE\!\Big[\log\bigl(1+\mathrm{Bin}(K-1,\lfloor d_m(X)/2^B\rfloor/2^m)\bigr)\Big]
+\le
+\inf_s L_{K,B}(s)
+\le
+\EE\!\Big[\log\bigl(1+\mathrm{Bin}(K-1,\lceil d_m(X)/2^B\rceil/2^m)\bigr)\Big],
+\]
+其中 \(X=\Fold_m(U)\)、\(U\sim\mathrm{Unif}(\Omega_m)\)。
+此外该最优值关于 \(B\) 单调不增：
+\[
+\inf_s L_{K,B+1}(s)\ \le\ \inf_s L_{K,B}(s).
+\]
+\end{corollary}
+\begin{proof}
+对第一组等式，直接将定理 \ref{thm:pom-infonce-partition-optimal-closed-form} 应用于 \(g=g_B\) 即得。
+\par
+对二点取值律：对任意整数 \(d\ge 0\)，映射 \(i\mapsto i\bmod 2^B\) 把区间 \(\{0,\dots,d-1\}\) 分配到 \(2^B\) 个余类，每个余类的占用数只能相差至多 \(1\)；
+并且上取整出现次数恰等于余数 \(d\bmod 2^B\)。
+应用于每个纤维大小 \(d=d_m(x)\) 得到所示结构。
+\par
+夹逼由二项分布 \(\mathrm{Bin}(K-1,p)\) 对参数 \(p\) 的单调性与 \(\log(1+\cdot)\) 的单调性给出。
+\par
+对单调性：分区 \(g_{B+1}\) 细化 \(g_B\)，故逐个负样本满足
+\(
+\mathbf 1[g_{B+1}(W_i)=g_{B+1}(U)]\le \mathbf 1[g_B(W_i)=g_B(U)]
+\)，从而 \(J_{B+1}\le J_B\)。
+取期望即得。
+证毕。
+\end{proof}
+
+\input{parts/thm__pom-infonce-remainder-bits-renormalization-tomography}
+
+\begin{theorem}[\texorpdfstring{$B$}{B}-比特外置下的 Rényi 碰撞占用极值]\label{thm:pom-remainder-bits-renyi-collision-extremal}
+固定整数 \(d\ge 0\) 与桶数 \(M:=2^B\)。
+对任意占用向量 \((n_1,\dots,n_M)\in\NN^M\) 满足 \(\sum_{j=1}^M n_j=d\)，及任意实数 \(q\ge 1\)，令
+\[
+\Phi_q(n_1,\dots,n_M):=\sum_{j=1}^{M} n_j^q.
+\]
+记 \(a=\lfloor d/M\rfloor\)、\(r=d\bmod M\)。
+则：
+\begin{enumerate}
+  \item \textbf{（平衡极小）}\(\Phi_q\) 的最小值为
+  \[
+  \min\Phi_q=r(a+1)^q+(M-r)a^q,
+  \]
+  且当且仅当 \((n_j)\) 由 \(r\) 个 \(a+1\) 与 \(M-r\) 个 \(a\) 组成时取到。
+  \item \textbf{（极端极大）}若 \(d\ge M\)，则
+  \[
+  \max\Phi_q=(d-M+1)^q+(M-1)\cdot 1^q;
+  \]
+  若 \(d<M\)，则 \(\max\Phi_q=d\)（即 \(d\) 个 \(1\) 其余为 \(0\)）。
+\end{enumerate}
+将其应用于任意 \(B\)-比特外置映射 \(R:\Omega_m\to\{0,1\}^B\)：对每个 \(x\in X_m\) 记
+\[
+n_{x,r}:=\bigl|\{\omega:\ \Fold_m(\omega)=x,\ R(\omega)=r\}\bigr|,
+\qquad \sum_r n_{x,r}=d_m(x).
+\]
+则对每个 \(q\ge 1\) 有逐纤维下界
+\[
+\sum_r n_{x,r}^q\ \ge\ r_x(a_x+1)^q+(2^B-r_x)a_x^q,
+\qquad
+a_x=\Big\lfloor\frac{d_m(x)}{2^B}\Big\rfloor,\ \ r_x=d_m(x)\bmod 2^B,
+\]
+并且该下界可由某个 \(R\) 在每个 \(x\) 上同时取到（在纤维内实施平衡分配）。
+\end{theorem}
+\begin{proof}
+当 \(q=1\) 时 \(\Phi_1\equiv d\) 常值，结论平凡。
+下设 \(q>1\)。
+\par
+对极小值：若存在 \(n_i\ge n_j+2\)，则由函数 \(t\mapsto t^q\) 的严格凸性有
+\[
+(n_i^q+n_j^q)-\bigl((n_i-1)^q+(n_j+1)^q\bigr)>0,
+\]
+故把 \(1\) 个单位从大桶移向小桶会严格降低 \(\Phi_q\)。
+迭代直至所有桶差至多 \(1\) 即得平衡形态；该形态由整数除法唯一决定，故给出闭式并刻画所有达到者。
+\par
+对极大值：同样由凸性，固定总和时 \(\Phi_q\) 在主序意义下由最集中分配达到最大，即尽可能把质量压到一个桶、其余尽可能小。
+当 \(d\ge M\) 时取 \((d-M+1,1,\dots,1)\)；当 \(d<M\) 时取 \((1,\dots,1,0,\dots,0)\)。
+\par
+应用到纤维：对每个固定 \(x\)，将 \((n_{x,r})_{r\in\{0,1\}^B}\) 视为占用向量并代入上述极小闭式即得逐纤维下界。
+最后，“同时取到”由在每个纤维内独立构造平衡分配并拼接为全局映射 \(R\) 得到。
+证毕。
+\end{proof}
+
+\begin{theorem}[解析占用泛函的碰撞矩展开律]\label{thm:pom-occupancy-functional-collision-expansion}
+令 \(\psi:\CC\to\CC\) 为整函数，并取任意整数 \(n\ge 0\)。
+则成立严格恒等式
+\[
+\sum_{x\in X_m} w_m(x)\,\psi\!\bigl(n w_m(x)\bigr)
+=\sum_{q=0}^{\infty}\frac{\psi^{(q)}(0)}{q!}\,n^q\,M_{q+1}(m)
+=\sum_{q=0}^{\infty}\frac{\psi^{(q)}(0)}{q!}\,n^q\,\frac{S_{q+1}(m)}{2^{(q+1)m}}.
+\]
+\end{theorem}
+
+\begin{proof}
+由 Taylor 展开 \(\psi(t)=\sum_{q\ge 0}\psi^{(q)}(0)t^q/q!\)，对每个 \(x\) 代入 \(t=nw_m(x)\) 得
+\[
+w_m(x)\psi(nw_m(x))=\sum_{q\ge 0}\frac{\psi^{(q)}(0)}{q!}\,n^q\,w_m(x)^{q+1}.
+\]
+因 \(\sum_x w_m(x)^{q+1}\le \sum_x w_m(x)=1\)，且 \(\psi\) 为整函数从而 \(\sum_q|\psi^{(q)}(0)|n^q/q!<\infty\)，故可交换求和次序并得结论。
+证毕。
+\end{proof}
+
+\begin{theorem}[随机纤维任务的提示学习：Bayes 误差由有限阶碰撞矩决定]\label{thm:pom-random-fiber-task-bayes-error}
+令任务标签为随机函数 \(\tau:X_m\to\{\pm1\}\)，在 \(\{\pm1\}^{X_m}\) 上均匀取值。
+给定提示长度 \(k\in\NN\)，观测 \(k\) 个 i.i.d.\ 样本
+\[
+(X_1,Y_1),\dots,(X_k,Y_k),
+\qquad
+X_i\sim w_m,\quad Y_i=\tau(X_i),
+\]
+并对独立测试点 \(X_{k+1}\sim w_m\) 预测 \(Y_{k+1}=\tau(X_{k+1})\)。
+则在所有可测预测器中，Bayes 最小分类误差满足严格闭式
+\[
+\mathrm{Err}_m(k)
+=\frac12\sum_{x\in X_m}w_m(x)\bigl(1-w_m(x)\bigr)^k
+=\frac12\sum_{j=0}^{k}(-1)^j\binom{k}{j}\,M_{j+1}(m)
+=\frac12\sum_{j=0}^{k}(-1)^j\binom{k}{j}\,\frac{S_{j+1}(m)}{2^{(j+1)m}}.
+\]
+\end{theorem}
+
+\begin{proof}
+条件于提示样本 \(X_1,\dots,X_k\) 与查询 \(X_{k+1}=x\)：
+若 \(x\in\{X_1,\dots,X_k\}\)，则 \(\tau(x)\) 已被提示揭示，Bayes 误差为 \(0\)；
+若 \(x\notin\{X_1,\dots,X_k\}\)，则在提示条件下 \(\tau(x)\) 仍为独立均匀的 \(\pm1\)，故 Bayes 误差为 \(1/2\)。
+因此
+\[
+\mathrm{Err}_m(k)=\frac12\,\PP\bigl(X_{k+1}\notin\{X_1,\dots,X_k\}\bigr)
+=\frac12\sum_x w_m(x)\,\PP(\forall i\le k,\ X_i\neq x)
+=\frac12\sum_x w_m(x)\bigl(1-w_m(x)\bigr)^k.
+\]
+最后对 \((1-w)^k=\sum_{j=0}^k(-1)^j\binom{k}{j}w^j\) 作二项式展开并求和即得。
+证毕。
+\end{proof}
+
+\begin{theorem}[随机纤维任务的 Bayes 误差曲线也是最小完备层析坐标]\label{thm:pom-random-fiber-task-bayes-error-minimal-tomography}
+固定分辨率 \(m\)，令 \(N:=|X_m|\)，并把有序纤维谱视为严格有序单纯形
+\[
+\Delta_N^\downarrow
+:=
+\Bigl\{
+(w_1,\dots,w_N)\in\RR^N:\ 
+w_1>\cdots>w_N>0,\ \sum_{i=1}^N w_i=1
+\Bigr\}
+\]
+中的一点。则在任意非空开集 \(U\subset \Delta_N^\downarrow\) 上，误差坐标族
+\[
+\bigl(\mathrm{Err}_m(1),\dots,\mathrm{Err}_m(N-1)\bigr)
+\]
+同样构成恢复纤维谱的最小完备层析系统。亦即：
+\begin{enumerate}
+  \item 由 \(\mathrm{Err}_m(1),\dots,\mathrm{Err}_m(N-1)\) 可唯一恢复有序纤维谱 \((w_1,\dots,w_N)\)；
+  \item 任意少于 \(N-1\) 个 Bayes 误差标量都不可能在 \(U\) 上给出连续单射恢复。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-random-fiber-task-bayes-error}，
+\[
+2\,\mathrm{Err}_m(k)=\sum_{j=0}^{k}(-1)^j\binom{k}{j}M_{j+1}(m)
+\qquad(k\ge 0),
+\]
+其中 \(M_r(m):=\sum_i w_i^r\) 且 \(M_1(m)=1\) 已知。于是对 \(k=1,\dots,N-1\)，
+\[
+\mathrm{Err}_m(k)
+\]
+给出关于未知量
+\[
+M_2(m),\dots,M_N(m)
+\]
+的上三角线性系统；其中 \(M_{k+1}(m)\) 的系数恰为
+\[
+\frac12(-1)^k\binom{k}{k}=\frac12(-1)^k\neq 0.
+\]
+故可由回代唯一恢复 \(M_2(m),\dots,M_N(m)\)，再由 Newton 恒等式恢复多项式
+\[
+P_m(t)=\prod_{i=1}^{N}(t-w_i),
+\]
+从而恢复全部纤维谱，得到第 \(1\) 条。
+
+对最小性，只需重复定理 \ref{thm:pom-infonce-fiber-spectrum-tomography-minimality} 的 Brouwer 不变域定理论证：\(\Delta_N^\downarrow\) 的任意开子域都是 \((N-1)\)-维流形，而少于 \(N-1\) 个连续标量读数不可能在其上给出连续单射到欧氏空间的参数化。故第 \(2\) 条成立。证毕。
+\end{proof}
+
+\input{parts/thm__pom-second-order-collision-common-bottleneck}
+
+\begin{corollary}[固定提示长度下的有理生成函数与常系数递推]\label{cor:pom-icl-error-rational-recursion}
+固定 \(k\in\NN\)。
+若对每个 \(q\in\{1,\dots,k+1\}\)，序列 \(m\mapsto S_q(m)\) 自某个 \(m_0\) 起满足常系数线性递推（等价于有限 Hankel 秩），则误差序列 \(m\mapsto \mathrm{Err}_m(k)\) 亦自某个阈值起满足常系数线性递推；其普通生成函数
+\[
+\mathcal E_k(z):=\sum_{m\ge 0}\mathrm{Err}_m(k)\,z^m
+\]
+为有理函数，并可写为
+\[
+\mathcal E_k(z)=\frac12\sum_{j=0}^{k}(-1)^j\binom{k}{j}\,\mathcal M_{j+1}(z),
+\qquad
+\mathcal M_q(z):=\sum_{m\ge 0}M_q(m)\,z^m=\sum_{m\ge 0}\frac{S_q(m)}{2^{qm}}\,z^m.
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:pom-random-fiber-task-bayes-error}，
+\(
+\mathrm{Err}_m(k)=\frac12\sum_{j=0}^k(-1)^j\binom{k}{j}M_{j+1}(m)
+\)。
+若 \(S_q(m)\) 满足递推，则 \(M_q(m)=2^{-qm}S_q(m)\) 仍满足常系数递推（系数按 \(2^{-q\ell}\) 缩放）；有限个递推序列的线性组合仍满足某个常系数递推，生成函数因此为有理函数。
+证毕。
+\end{proof}
+
+\begin{proposition}[插值噪声方差的 Poisson--\texorpdfstring{$\mathrm{Ei}$}{Ei}--碰撞矩闭式]\label{prop:pom-interpolation-variance-poisson-ei-collision}
+取如下最小插值模型：
+\begin{itemize}
+  \item 训练样本数 \(N\sim\mathrm{Pois}(n)\)；
+  \item 条件于 \(N\)，样本 \(\omega_i\) i.i.d.\ 均匀于 \(\Omega_m\)，并置 \(X_i=\Fold_m(\omega_i)\in X_m\)；
+  \item 标签为纯噪声 \(Y_i=\varepsilon_i\)，其中 \(\EE[\varepsilon_i]=0\)、\(\EE[\varepsilon_i^2]=\sigma^2\)；
+  \item 学习器输出纤维常数预测：对每个 \(x\in X_m\) 令 \(N_x:=\#\{i\le N:X_i=x\}\)，并置
+  \[
+  \widehat f(x):=\mathbf 1_{\{N_x>0\}}\cdot\frac{1}{N_x}\sum_{i:X_i=x}\varepsilon_i.
+  \]
+\end{itemize}
+则对测试点 \(X\sim w_m\) 的期望平方误差满足严格恒等式
+\[
+\mathcal V_m(n):=\EE[\widehat f(X)^2]
+=\sigma^2\sum_{x\in X_m}w_m(x)\,g\!\bigl(nw_m(x)\bigr),
+\]
+其中函数 \(g\) 具有等价闭式：
+\[
+g(\lambda)=\sum_{r=1}^{\infty}\frac{1}{r}\,e^{-\lambda}\frac{\lambda^r}{r!},
+\qquad
+g(\lambda)=e^{-\lambda}\bigl(\mathrm{Ei}(\lambda)-\gamma-\log\lambda\bigr)\quad(\lambda>0),
+\]
+并且 \(g\) 在 \(0\) 点解析，幂级数为
+\[
+g(\lambda)=\sum_{q=1}^{\infty}b_q\lambda^q,
+\qquad
+b_q=\sum_{r=1}^{q}\frac{(-1)^{q-r}}{r\cdot r!\cdot (q-r)!}.
+\]
+从而有碰撞矩展开
+\[
+\mathcal V_m(n)=\sigma^2\sum_{q=1}^{\infty}b_q\,n^q\,M_{q+1}(m)
+=\sigma^2\sum_{q=1}^{\infty}b_q\,n^q\,\frac{S_{q+1}(m)}{2^{(q+1)m}}.
+\]
+其中前几项为 \(b_1=1\)、\(b_2=-\tfrac34\)、\(b_3=\tfrac{11}{36}\)、\(b_4=-\tfrac{25}{288}\)。
+\end{proposition}
+
+\begin{proof}
+在 Poisson 化抽样下，计数向量 \((N_x)_{x\in X_m}\) 独立且 \(N_x\sim\mathrm{Pois}(nw_m(x))\)。
+条件于 \(N_x\)，有
+\[
+\EE[\widehat f(x)^2\mid N_x]
+=\mathbf 1_{\{N_x>0\}}\cdot \EE\!\left[\left(\frac{1}{N_x}\sum_{i=1}^{N_x}\varepsilon_i\right)^2\Bigm|N_x\right]
+=\mathbf 1_{\{N_x>0\}}\cdot \frac{\sigma^2}{N_x}.
+\]
+故
+\[
+\mathcal V_m(n)=\sum_x w_m(x)\,\EE\!\left[\frac{\sigma^2}{N_x}\mathbf 1_{\{N_x>0\}}\right]
+=\sigma^2\sum_x w_m(x)\,g(nw_m(x)),
+\]
+其中 \(g(\lambda)=\EE[\,N^{-1}\mathbf 1_{\{N>0\}}\,]\) 且 \(N\sim\mathrm{Pois}(\lambda)\)。
+代入 Poisson 质量函数得级数形式。
+又由
+\(
+\mathrm{Ei}(\lambda)=\gamma+\log\lambda+\sum_{r\ge 1}\lambda^r/(r\cdot r!)
+\)
+（\(\lambda>0\)）可得指数积分闭式。
+将 \(e^{-\lambda}=\sum_{j\ge 0}(-1)^j\lambda^j/j!\) 与 \(\sum_{r\ge 1}\lambda^r/(r\cdot r!)\) 相乘并收集 \(\lambda^q\) 系数即得 \(b_q\)。
+最后由 \(\sum_x w_m(x)\,(nw_m(x))^q=n^qM_{q+1}(m)\) 得展开式。
+证毕。
+\end{proof}
+
+\begin{corollary}[亚临界占用下的二阶闭式：方差由二重碰撞主导]\label{cor:pom-subcritical-occupancy-variance-second-order}
+在命题 \ref{prop:pom-interpolation-variance-poisson-ei-collision} 的设定下，若存在一列 \(n_m\) 满足
+\[
+\max_{x\in X_m} n_m\,w_m(x)\xrightarrow[m\to\infty]{}0,
+\]
+则
+\[
+\mathcal V_m(n_m)
+=\sigma^2\,n_m\,M_2(m)+O\!\left(\sigma^2\,n_m^2\,M_3(m)\right)
+=\sigma^2\,n_m\,\frac{S_2(m)}{4^m}+O\!\left(\sigma^2\,n_m^2\,\frac{S_3(m)}{8^m}\right).
+\]
+若进一步存在指数闭式 \(S_q(m)=\Theta(r_q^m)\)（例如由碰撞核 realization 给出），则
+\[
+\lim_{m\to\infty}\frac1m\log \mathcal V_m(n_m)
+=\lim_{m\to\infty}\frac1m\log n_m+\log r_2-2\log 2.
+\]
+\end{corollary}
+
+\begin{proof}
+由 \(g(\lambda)=\lambda+O(\lambda^2)\)（\(\lambda\to0\)）与一致性条件 \(\sup_x(n_m w_m(x))\to0\)，
+\[
+\mathcal V_m(n_m)=\sigma^2\sum_x w_m(x)\Bigl(n_mw_m(x)+O\bigl((n_mw_m(x))^2\bigr)\Bigr)
+=\sigma^2n_mM_2(m)+O(\sigma^2n_m^2M_3(m)).
+\]
+指数率结论由 \(M_2(m)=S_2(m)/4^m=\Theta((r_2/4)^m)\) 得到。
+证毕。
+\end{proof}
+
+\begin{theorem}[指数提示长度下的提示相变：误差指数由 \texorpdfstring{$I_w$}{Iw} 给出]\label{thm:pom-icl-exponential-prompt-phase-transition}
+令随机变量
+\[
+E_m:=\frac1m\log d_m(X),\qquad X\sim w_m.
+\]
+假设 \(E_m\) 在速度 \(m\) 下满足完全大偏差原理，率函数为良函数 \(I_w\)（记号与存在性条件见定理 \ref{thm:pom-ldp-uniform-and-wm-exact-spectrum}）。
+对 \(\kappa\ge 0\) 令提示长度 \(k_m:=\lceil e^{\kappa m}\rceil\)，并记
+\[
+U_m(\kappa):=2\,\mathrm{Err}_m(k_m)=\sum_{x\in X_m}w_m(x)\bigl(1-w_m(x)\bigr)^{k_m}.
+\]
+设 \(I_w\) 在有效域内部严格凸且其零点唯一，记该零点为 \(\alpha_\star\)（即 \(I_w(\alpha_\star)=0\)）。
+则有指数律
+\[
+\lim_{m\to\infty}-\frac1m\log U_m(\kappa)
+=
+\begin{cases}
+0, & \kappa\le \log 2-\alpha_\star,\\[4pt]
+\displaystyle \inf_{\alpha\le \log 2-\kappa} I_w(\alpha), & \kappa>\log 2-\alpha_\star.
+\end{cases}
+\]
+\end{theorem}
+
+\begin{proof}
+写 \(w_m(x)=\exp(m(E_m-\log2))\)。
+对任意 \(\varepsilon>0\) 定义事件
+\[
+A_m^-(\varepsilon):=\{E_m\le \log2-\kappa-\varepsilon\},\qquad
+A_m^+(\varepsilon):=\{E_m\ge \log2-\kappa+\varepsilon\}.
+\]
+在 \(A_m^-(\varepsilon)\) 上有 \(k_mw_m(X)\le e^{-\varepsilon m+o(m)}\to0\)，故
+\(
+(1-w_m(X))^{k_m}=1+o(1)
+\)
+且 \(o(1)\) 可一致控制。
+在 \(A_m^+(\varepsilon)\) 上有 \(k_mw_m(X)\ge e^{\varepsilon m+o(m)}\to\infty\)，并由 \((1-u)^k\le e^{-ku}\) 得该部分贡献超指数衰减。
+因此 \(U_m(\kappa)\) 的指数率与 \(\PP(A_m^-(\varepsilon))\) 一致；令 \(\varepsilon\downarrow0\) 并应用 \(E_m\) 的大偏差原理得到
+\[
+\lim_{m\to\infty}-\frac1m\log U_m(\kappa)=\inf_{\alpha\le \log2-\kappa}I_w(\alpha),
+\]
+并注意当阈值 \(\log2-\kappa\) 覆盖零点 \(\alpha_\star\) 时右端为 \(0\)，得分段形式。
+证毕。
+\end{proof}
+
+\begin{conjecture}[Fibonacci 码率约束下的提示效率极值性]\label{conj:pom-icl-efficiency-extremal-under-fibonacci-rate}
+设 \(\mathcal F\) 为所有满足 \(|\Omega_m|=2^m\)、\(|X_m|=F_{m+2}\) 且 \(f_m:\Omega_m\twoheadrightarrow X_m\) 为满射的映射族。
+对 \(f\in\mathcal F\) 记其诱导分布 \(w_m^{(f)}(x):=|f_m^{-1}(x)|/2^m\)，并在指数提示长度 \(k_m=\lceil e^{\kappa m}\rceil\)（\(\kappa>\log\varphi\)）下定义未见概率指数率
+\[
+\mathcal E_f(\kappa):=\liminf_{m\to\infty}-\frac1m\log\Bigl(\sum_{x}w_m^{(f)}(x)\bigl(1-w_m^{(f)}(x)\bigr)^{k_m}\Bigr).
+\]
+猜想对所有 \(\kappa>\log\varphi\) 有
+\[
+\mathcal E_{\mathrm{Fold}}(\kappa)=\sup_{f\in\mathcal F}\mathcal E_f(\kappa),
+\]
+并且在指数尺度上极值唯一（仅差 \(o(m)\) 级量化扰动）。
+\end{conjecture}
+
+\endinput

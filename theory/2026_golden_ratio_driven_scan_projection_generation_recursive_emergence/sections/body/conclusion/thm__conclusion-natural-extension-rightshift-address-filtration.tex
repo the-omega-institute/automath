@@ -1,0 +1,117 @@
+\begin{theorem}[有限纤维自然扩张的右移插入实现]\label{thm:conclusion-finite-fiber-natural-extension-right-shift-insertion}
+设 \(T:X\twoheadrightarrow X\) 为有限纤维满射。为每个 \(y\in X\) 选定单射
+\[
+\iota_y:T^{-1}(y)\hookrightarrow \NN,
+\qquad
+\beta(x):=\iota_{T(x)}(x).
+\]
+定义自然扩张
+\[
+X^{\leftarrow}
+:=
+\{(x_0,x_{-1},x_{-2},\dots): T(x_{-n})=x_{-n+1}\ \forall n\ge 1\},
+\]
+以及编码像
+\[
+\widehat X
+:=
+\Bigl\{(x_0,(a_1,a_2,\dots))\in X\times \NN^{\NN}:\ \exists (x_{-n})_{n\ge 1}
+\text{ s.t. }T(x_{-n})=x_{-n+1},\ \beta(x_{-n})=a_n\Bigr\}.
+\]
+则映射
+\[
+C:X^{\leftarrow}\to \widehat X,
+\qquad
+C((x_0,x_{-1},x_{-2},\dots))=(x_0,(\beta(x_{-1}),\beta(x_{-2}),\dots))
+\]
+是同胚。并且若自然扩张移位记为
+\[
+\sigma_{\leftarrow}(x_0,x_{-1},x_{-2},\dots)=(T(x_0),x_0,x_{-1},\dots),
+\]
+则在 \(\widehat X\) 上有严格共轭
+\[
+C\circ \sigma_{\leftarrow}\circ C^{-1}
+=
+\widehat T,
+\qquad
+\widehat T\bigl(x,(a_1,a_2,\dots)\bigr)=\bigl(T(x),(\beta(x),a_1,a_2,\dots)\bigr).
+\]
+故任何有限纤维历史系统都可精确编译为“现态加无穷分支寄存器”的右移插入机。
+\end{theorem}
+\begin{proof}
+由定义，\(C\) 显然良定且连续。若
+\[
+C((x_0,x_{-1},x_{-2},\dots))=C((y_0,y_{-1},y_{-2},\dots)),
+\]
+则 \(x_0=y_0\)，且对每个 \(n\ge 1\) 有
+\[
+\beta(x_{-n})=\beta(y_{-n}).
+\]
+由于 \(\beta\) 在每条纤维 \(T^{-1}(x_{-n+1})\) 上是单射，而 \(T(x_{-n})=x_{-n+1}=y_{-n+1}=T(y_{-n})\)，递归即得 \(x_{-n}=y_{-n}\) 对全部 \(n\) 成立，故 \(C\) 单射。另一方面，\(\widehat X\) 本就定义为 \(C\) 的像，故 \(C\) 对 \(\widehat X\) 满射。
+
+在积拓扑下，\(C^{-1}\) 也连续：给定 \((x_0,(a_n))\in \widehat X\)，先由 \(x_0\) 确定第零坐标；若已知 \(x_{-n+1}\)，则 \(x_{-n}\) 是纤维 \(T^{-1}(x_{-n+1})\) 中满足
+\[
+\beta(x_{-n})=a_n
+\]
+的唯一元素。因此 \(C\) 为同胚。
+
+最后，对任意 \((x_0,x_{-1},x_{-2},\dots)\in X^{\leftarrow}\)，有
+\[
+C\bigl(\sigma_{\leftarrow}(x_0,x_{-1},x_{-2},\dots)\bigr)
+=
+C(T(x_0),x_0,x_{-1},\dots)
+=
+\bigl(T(x_0),(\beta(x_0),\beta(x_{-1}),\dots)\bigr),
+\]
+而这正等于
+\[
+\widehat T\bigl(C(x_0,x_{-1},x_{-2},\dots)\bigr).
+\]
+故 \(C\circ \sigma_{\leftarrow}\circ C^{-1}=\widehat T\)。证毕。
+\end{proof}
+
+\begin{corollary}[时间是同一地址点的分辨率滤过，而非绝对时刻序列]\label{cor:conclusion-time-as-address-resolution-filtration}
+在 \(B=2^L\) 的 \(2\)-进模型中，设事件流
+\[
+e=(e_1,e_2,\dots),
+\qquad
+\operatorname{code}(e_t)\in\{0,1,\dots,M\},
+\]
+并定义
+\[
+\mathbb T:=T_2(E_{\min}),
+\qquad
+X(e):=\sum_{t\ge 1}\operatorname{code}(e_t)B^{t-1}v\in \mathbb T.
+\]
+则该级数在 \(2\)-进拓扑下收敛，且其前缀和
+\[
+X_n(e):=\sum_{t=1}^{n}\operatorname{code}(e_t)B^{t-1}v
+\]
+满足
+\[
+X_n(e)\equiv X(e)\pmod{B^n\mathbb T}.
+\]
+若 \(B>M\)，则映射 \(e\mapsto X(e)\) 为单射。因而时间推进可被严格解释为：同一 \(2^L\)-进地址点的前缀分辨率不断提高，而不是绝对时刻序列的外加流逝。并且 \(\mathrm{ZG}\) 的自然密度满足
+\[
+\delta_{\mathrm{ZG}}\in(0,1),
+\]
+说明这种地址化并非稀薄算术边缘，而具有正密度支撑。
+\end{corollary}
+\begin{proof}
+由于 \(B=2^L\) 在 \(2\)-进绝对值下满足 \(|B|_2<1\)，故级数
+\[
+\sum_{t\ge 1}\operatorname{code}(e_t)B^{t-1}v
+\]
+在 \(\mathbb T\) 中绝对收敛。其尾项
+\[
+X(e)-X_n(e)=\sum_{t\ge n+1}\operatorname{code}(e_t)B^{t-1}v
+\]
+显然落在 \(B^n\mathbb T\) 中，因此
+\[
+X_n(e)\equiv X(e)\pmod{B^n\mathbb T}.
+\]
+
+若 \(B>M\)，则所有 digit 都严格落在 \(B\)-进展开的标准代表系 \(\{0,\dots,B-1\}\) 内。若 \(X(e)=X(e')\) 而 \(e\neq e'\)，取首个满足 \(\operatorname{code}(e_t)\neq \operatorname{code}(e_t')\) 的 \(t\)，则二者差值在 \(B^{t-1}\mathbb T/B^t\mathbb T\) 中给出非零类，矛盾。故 \(e\mapsto X(e)\) 单射。
+
+最后，\(\delta_{\mathrm{ZG}}\in(0,1)\) 已由定理 \ref{thm:conclusion-zg-dirichlet-simple-pole-density} 给出，故相应地址像具有正密度支撑。证毕。
+\end{proof}

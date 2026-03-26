@@ -1,0 +1,559 @@
+\subsection{Chebyshev 重整化、Lee--Yang 运输与极值读取的统一闭包}\label{subsec:conclusion-chebyshev-lee-yang-extreme-closure}
+本小节在统一对象层上给出六条可直接复用的封口结论，覆盖椭圆族函子性、结果式复合消元、相干读取极值速率、torus 维度反演、\(S_4\) 提升谱指纹与 Zeckendorf 约束编码的行列式实现。
+
+\begin{conclusion}[Gödel--Joukowsky 椭圆族的 Chebyshev 重整化与测度函子性]\label{con:conclusion-joukowsky-chebyshev-functorial}
+设 \(r>0\)，定义
+\[
+J_r:\TT\to\CC,\qquad J_r(e^{\mathrm{i}\theta})=r e^{\mathrm{i}\theta}+r^{-1}e^{-\mathrm{i}\theta},
+\]
+并记
+\[
+E_r:=J_r(\TT),\qquad \mu_r:=(J_r)_*m_{\TT},
+\]
+其中 \(m_{\TT}\) 为 \(\TT\) 上 Haar 概率测度。对任意整数 \(n\ge 1\)，定义
+\[
+C_n(w):=2T_n\!\left(\frac{w}{2}\right)\in\ZZ[w],
+\]
+其中 \(T_n\) 为第一类 Chebyshev 多项式。则：
+\begin{enumerate}
+  \item 对任意 \(z\in\CC^\times\)，有
+  \[
+  C_n\!\bigl(J_r(z)\bigr)=J_{r^n}\!\bigl(z^n\bigr).
+  \]
+  \item \(C_n(E_r)=E_{r^n}\)。
+  \item \((C_n)_*\mu_r=\mu_{r^n}\)。
+\end{enumerate}
+\end{conclusion}
+\begin{proof}
+置 \(u:=rz\)，则 \(J_r(z)=u+u^{-1}\)。由 Chebyshev 恒等式
+\[
+2T_n\!\left(\frac{u+u^{-1}}{2}\right)=u^n+u^{-n},
+\]
+得到
+\[
+C_n\!\bigl(J_r(z)\bigr)=u^n+u^{-n}=r^n z^n+r^{-n}z^{-n}=J_{r^n}\!\bigl(z^n\bigr).
+\]
+故 \(C_n(E_r)=E_{r^n}\)。
+再由推前函子性，
+\[
+(C_n)_*\mu_r
+=(C_n)_*(J_r)_*m_{\TT}
+=(J_{r^n})_*(z\mapsto z^n)_*m_{\TT}.
+\]
+而映射 \(z\mapsto z^n\) 保持 Haar 测度不变，因此
+\[
+(C_n)_*\mu_r=(J_{r^n})_*m_{\TT}=\mu_{r^n}.
+\]
+证毕。
+\end{proof}
+
+\begin{conclusion}[Lee--Yang 运输多项式的 Chebyshev--范数复合消元律]\label{con:conclusion-lee-yang-chebyshev-resultant}
+设 \(\mathbb{K}\) 为特征 \(0\) 的域，\(P(z)\in\mathbb{K}[z]\) 且 \(P(0)\neq 0\)。对 \(r>0\) 定义
+\[
+Q_r(w):=\operatorname{Res}_z\!\bigl(P(z),\,r z^2-wz+r^{-1}\bigr)\in\mathbb{K}(r)[w].
+\]
+对 \(n\ge 1\) 定义
+\[
+P^{(n)}(y):=\operatorname{Res}_z\!\bigl(P(z),\,z^n-y\bigr)\in\mathbb{K}[y],
+\]
+并令 \(C_n(w)=2T_n(w/2)\)。则存在与 \(t\) 无关的常数
+\[
+\kappa=\kappa(P,r,n)\in\mathbb{K}(r)^\times
+\]
+使得
+\[
+\operatorname{Res}_w\!\bigl(Q_r(w),\,C_n(w)-t\bigr)
+=\kappa\cdot \operatorname{Res}_y\!\bigl(P^{(n)}(y),\,r^n y^2-ty+r^{-n}\bigr).
+\]
+等价地，上式两端作为 \(t\) 的多项式具有相同零点多重集
+\[
+\left\{\,J_{r^n}(\alpha^n):\ P(\alpha)=0\,\right\}.
+\]
+\end{conclusion}
+\begin{proof}
+在代数闭包中写
+\[
+P(z)=a\prod_{j=1}^{d}(z-\alpha_j),
+\]
+并允许重根。由结果式乘积公式，
+\[
+Q_r(w)=a^2\prod_{j=1}^{d}\bigl(r\alpha_j^2-w\alpha_j+r^{-1}\bigr).
+\]
+又因 \(P(0)\neq 0\)，故 \(\alpha_j\neq 0\)，从而
+\[
+r\alpha_j^2-w\alpha_j+r^{-1}=-\alpha_j\bigl(w-J_r(\alpha_j)\bigr).
+\]
+故 \(Q_r\) 的根（按重数）为 \(w=J_r(\alpha_j)\)。
+
+令
+\[
+R(t):=\operatorname{Res}_w\!\bigl(Q_r(w),\,C_n(w)-t\bigr).
+\]
+再次用乘积公式得
+\[
+R(t)=\lambda\prod_{j=1}^{d}\bigl(C_n(J_r(\alpha_j))-t\bigr),
+\]
+其中 \(\lambda\neq 0\) 与 \(t\) 无关。由结论 \ref{con:conclusion-joukowsky-chebyshev-functorial}，
+\[
+C_n(J_r(\alpha_j))=J_{r^n}(\alpha_j^n),
+\]
+故
+\[
+R(t)=\lambda\prod_{j=1}^{d}\bigl(J_{r^n}(\alpha_j^n)-t\bigr).
+\]
+
+另一方面，定义
+\[
+S(t):=\operatorname{Res}_z\!\bigl(P(z),\,r^n z^{2n}-tz^n+r^{-n}\bigr).
+\]
+乘积公式给出
+\[
+S(t)=a^{2n}\prod_{j=1}^{d}\bigl(r^n\alpha_j^{2n}-t\alpha_j^n+r^{-n}\bigr)
+=a^{2n}\prod_{j=1}^{d}\alpha_j^n\bigl(J_{r^n}(\alpha_j^n)-t\bigr).
+\]
+故 \(S(t)\) 与 \(R(t)\) 仅差一个 \(t\)-无关的非零常数因子。
+
+最后，对中间变量 \(y=z^n\) 施行复合消元：
+\[
+\operatorname{Res}_z\!\bigl(P(z),\,r^n z^{2n}-tz^n+r^{-n}\bigr)
+=\operatorname{Res}_y\!\Bigl(\operatorname{Res}_z(P(z),z^n-y),\,r^n y^2-ty+r^{-n}\Bigr),
+\]
+即
+\[
+S(t)=\operatorname{Res}_y\!\bigl(P^{(n)}(y),\,r^n y^2-ty+r^{-n}\bigr).
+\]
+因此存在 \(\kappa\in\mathbb{K}(r)^\times\) 使
+\[
+R(t)=\kappa\cdot \operatorname{Res}_y\!\bigl(P^{(n)}(y),\,r^n y^2-ty+r^{-n}\bigr).
+\]
+证毕。
+\end{proof}
+
+\begin{conclusion}[相干读取极值的 \texorpdfstring{$n^{-2}$}{n^-2} 恢复速率]\label{con:conclusion-coherent-reading-extreme-n2}
+设 \(r>1\)，令 \(W\sim\mu_r\)，并记
+\[
+R_2:=r^2+r^{-2},\qquad c:=R_2+2.
+\]
+取独立同分布样本 \(W_1,W_2,\dots\sim\mu_r\)，定义
+\[
+M_n:=\max_{1\le j\le n}|W_j|^2,\qquad \widehat R_{2,n}:=M_n-2.
+\]
+则有：
+\begin{enumerate}
+  \item
+  \[
+  n\sqrt{c-M_n}\ \xRightarrow[n\to\infty]{}\ Z,\qquad
+  Z\sim\mathrm{Exp}\!\left(\text{rate}=\frac{1}{\pi}\right).
+  \]
+  等价地
+  \[
+  n^2(c-M_n)\ \xRightarrow[n\to\infty]{}\ Z^2.
+  \]
+  \item
+  \[
+  n^2(R_2-\widehat R_{2,n})\ \xRightarrow[n\to\infty]{}\ Z^2,
+  \qquad
+  R_2-\widehat R_{2,n}=O_{\PP}(n^{-2}).
+  \]
+  \item 定义
+  \[
+  \widehat r_n:=\sqrt{\frac{\widehat R_{2,n}+\sqrt{\widehat R_{2,n}^2-4}}{2}},
+  \]
+  则
+  \[
+  n^2(r-\widehat r_n)\ \xRightarrow[n\to\infty]{}\ 
+  \frac{r}{2\sqrt{R_2^2-4}}\,Z^2
+  =
+  \frac{r^3}{2(r^4-1)}\,Z^2.
+  \]
+\end{enumerate}
+\end{conclusion}
+\begin{proof}
+由 \(W=J_r(e^{\mathrm{i}\theta})\)（\(\theta\sim\mathrm{Unif}[0,2\pi)\)）可得
+\[
+|W|^2=R_2+2\cos(2\theta).
+\]
+令 \(X:=\cos(2\theta)\in[-1,1]\)，其分布函数为
+\[
+\PP(X\le x)=\frac12+\frac1\pi\arcsin(x).
+\]
+当 \(\varepsilon\downarrow 0\) 时，
+\[
+\PP(X>1-\varepsilon)
+=1-\left(\frac12+\frac1\pi\arcsin(1-\varepsilon)\right)
+\sim \frac{\sqrt{2\varepsilon}}{\pi}.
+\]
+
+记 \(X_{(n)}:=\max_{j\le n}X_j\)。对任意 \(x\ge 0\)，
+\[
+\PP\!\left(n\sqrt{1-X_{(n)}}>x\right)
+=\left(1-\PP\!\left(X>1-\frac{x^2}{n^2}\right)\right)^n
+\longrightarrow e^{-(\sqrt2/\pi)x}.
+\]
+故
+\[
+n\sqrt{1-X_{(n)}}\Rightarrow Y,\qquad
+Y\sim\mathrm{Exp}\!\left(\text{rate}=\frac{\sqrt2}{\pi}\right).
+\]
+又
+\[
+c-M_n=2(1-X_{(n)}),
+\]
+因此
+\[
+n\sqrt{c-M_n}=\sqrt2\,n\sqrt{1-X_{(n)}}\Rightarrow Z,
+\]
+其中 \(Z\sim\mathrm{Exp}(\text{rate}=1/\pi)\)。
+连续映射定理给出
+\[
+n^2(c-M_n)\Rightarrow Z^2.
+\]
+
+由 \(\widehat R_{2,n}=M_n-2\)，有
+\[
+R_2-\widehat R_{2,n}=c-M_n,
+\]
+从而第二条成立。
+
+令
+\[
+g(u):=\sqrt{\frac{u+\sqrt{u^2-4}}{2}},\qquad u>2.
+\]
+则 \(\widehat r_n=g(\widehat R_{2,n})\)、\(r=g(R_2)\)，且 \(g\) 在 \(R_2>2\) 处可微。
+由一阶展开，
+\[
+r-\widehat r_n
+=g'(R_2)(R_2-\widehat R_{2,n})+o_{\PP}(R_2-\widehat R_{2,n}).
+\]
+乘以 \(n^2\) 并结合第二条得
+\[
+n^2(r-\widehat r_n)\Rightarrow g'(R_2)Z^2.
+\]
+计算
+\[
+g'(R_2)=\frac{r}{2\sqrt{R_2^2-4}}
+=\frac{r^3}{2(r^4-1)},
+\]
+结论成立。证毕。
+\end{proof}
+
+\begin{conclusion}[圆维极值指数的可观测性与 torus 维度反演]\label{con:conclusion-torus-dimension-extreme-index}
+设 \(k\ge 1\)，\(F\in C^2(\TT^k;\RR)\) 具有有限个全局极大点，且每个极大点均非退化（Hessian 负定）。
+令 \(\Theta_1,\Theta_2,\dots\) 为 \(\TT^k\) 上 Haar 独立样本，并记
+\[
+Y_j:=F(\Theta_j),\qquad
+M:=\max_{\theta\in\TT^k}F(\theta),\qquad
+Y_{(n)}:=\max_{j\le n}Y_j.
+\]
+则存在 \(A=A(F)>0\) 使得对任意 \(x\ge 0\)，
+\[
+\PP\!\left(n^{2/k}(M-Y_{(n)})>x\right)
+\xrightarrow[n\to\infty]{}
+\exp\!\bigl(-A\,x^{k/2}\bigr).
+\]
+因而 \(n^{2/k}(M-Y_{(n)})\) 收敛到 Weibull 型极限分布，其形状参数为 \(k/2\)。
+特别地，
+\[
+M-Y_{(n)}=n^{-2/k+o_{\PP}(1)},
+\]
+故 \(k\) 可由极值标度指数唯一反演。
+\end{conclusion}
+\begin{proof}
+设 \(\theta_\star\) 为任一非退化全局极大点，并记
+\[
+H_\star:=-D^2F(\theta_\star)\succ 0.
+\]
+局部坐标下有
+\[
+F(\theta_\star+h)=M-\frac12 h^\top H_\star h+o(|h|^2).
+\]
+故当 \(\varepsilon\downarrow 0\) 时，局部超水平集
+\(
+\{h: F(\theta_\star+h)>M-\varepsilon\}
+\)
+体积为
+\[
+\frac{\mathrm{Vol}(B_k)\,(2\varepsilon)^{k/2}}{\sqrt{\det H_\star}}
++o(\varepsilon^{k/2}).
+\]
+将所有非退化极大点贡献相加并除以 Haar 归一化体积 \((2\pi)^k\)，得
+\[
+\PP(Y>M-\varepsilon)=A\,\varepsilon^{k/2}+o(\varepsilon^{k/2}),
+\]
+其中 \(A>0\)。
+
+于是
+\[
+\PP\!\left(Y_{(n)}<M-\frac{x}{n^{2/k}}\right)
+=\left(1-\PP\!\left(Y>M-\frac{x}{n^{2/k}}\right)\right)^n
+\to e^{-A x^{k/2}}.
+\]
+即
+\[
+\PP\!\left(n^{2/k}(M-Y_{(n)})>x\right)\to e^{-A x^{k/2}}.
+\]
+再由极限分布的尾指数即可读出
+\(
+M-Y_{(n)}=n^{-2/k+o_{\PP}(1)}
+\)。
+证毕。
+\end{proof}
+
+\begin{conclusion}[Lee--Yang 单值化群的 \texorpdfstring{$6$}{6} 维超立方体提升与 \texorpdfstring{$11$}{11} 态谱指纹]\label{con:conclusion-s4-hypercube-11state-spectrum}
+设 Lee--Yang 四重覆盖 \(\pi_y:E\to\PP^1_y\) 的单值化群满足
+\[
+\mathrm{Mon}(\pi_y)\cong S_4.
+\]
+将 \(S_4\) 视为 \(\{1,2,3,4\}\) 上置换群，其在边集
+\[
+\mathcal E:=\{\{i,j\}:1\le i<j\le 4\}
+\]
+上诱导忠实作用 \(S_4\hookrightarrow S_6\)，进而得到
+\[
+\rho:S_4\hookrightarrow \mathrm{Aut}(Q_6),\qquad Q_6:=\{0,1\}^{\mathcal E}.
+\]
+把 \(Q_6\) 顶点解释为 \(4\) 顶点标号简单图，则：
+\begin{enumerate}
+  \item \(\rho(S_4)\)-轨道与 \(4\) 顶点无标号图同构类一一对应，轨道数为 \(11\)。
+  \item 在 \(Q_6\) 上取“每步等概率翻转一条边”的标准随机游走，轨道空间上诱导得到 \(11\) 态马尔可夫链 \(P\)。
+  \item 其特征多项式完全分解为
+  \[
+  \chi_P(\lambda)
+  =
+  \frac{1}{729}\lambda^3(\lambda-1)(\lambda+1)(3\lambda-2)(3\lambda+2)(3\lambda-1)^2(3\lambda+1)^2.
+  \]
+  因而
+  \[
+  \mathrm{Spec}(P)
+  =
+  \left\{
+  1,\ \pm\frac23,\ \pm\frac13,\ 0,\ -1
+  \right\},
+  \]
+  其中 \(0\) 的重数为 \(3\)，\(\pm\frac13\) 的重数各为 \(2\)，其余重数为 \(1\)。
+\end{enumerate}
+\end{conclusion}
+\begin{proof}
+首先，\(Q_6\) 每个顶点对应 \(K_4\) 的一个边子集，即一个标号图。
+\(S_4\) 作用正是顶点重标号，因此两点同轨道当且仅当对应图同构。
+而 \(4\) 顶点无标号简单图同构类个数为 \(11\)，得第一条。
+
+其次，单步翻转一条边与顶点重标号可交换，故随机游走可在轨道空间良定义。
+从任意轨道代表出发，一步转移到各轨道的概率等于可达边数除以 \(6\)，且与代表选择无关，得到 \(11\) 态链 \(P\)。
+
+最后，对该 \(11\times 11\) 有理矩阵直接求特征多项式，得到上述因式分解。
+由因式立即读出谱值与重数。
+证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$Q_6$}{Q6} 的 Joukowsky 圆律：归一化邻接谱诱导的单位圆零点性]\label{prop:conclusion-q6-joukowsky-unit-circle-zero-law}
+令 \(Q_6\) 为 \(6\) 维超立方体图，其邻接矩阵记为 \(A\in\Mat_{64}(\ZZ)\)。
+令
+\[
+H:=\frac13 A,
+\qquad
+\Psi_H(z):=z^{64}\det\!\bigl((z+z^{-1})I_{64}-H\bigr)\in\ZZ[z,z^{-1}].
+\]
+则 \(\Psi_H\) 的全部零点均满足 \(|z|=1\)。
+\end{proposition}
+\begin{proof}
+由于 \(A\) 为实对称矩阵，\(H\) 亦实对称，故其全部特征值 \(\mu_1,\dots,\mu_{64}\) 为实数。
+并且 \(Q_6\) 为 \(6\)-正则图，谱界 \(\mathrm{Spec}(A)\subseteq[-6,6]\) 成立，从而 \(\mu_j\in[-2,2]\)。
+将行列式按谱分解写为
+\[
+\Psi_H(z)=z^{64}\prod_{j=1}^{64}\bigl(z+z^{-1}-\mu_j\bigr).
+\]
+任一零点 \(z\neq 0\) 必满足对某个 \(j\) 有 \(z+z^{-1}=\mu_j\)，等价于
+\[
+z^2-\mu_j z+1=0.
+\]
+其判别式为 \(\mu_j^2-4\le 0\)，两根互为共轭且乘积为 \(1\)，故两根模长皆为 \(1\)。
+因此 \(\Psi_H\) 的零点全部落在单位圆上。证毕。
+\end{proof}
+
+\begin{theorem}[有理余弦相位的二次体封闭性]\label{thm:conclusion-hypercube-phase-quadratic-closure}
+对任意 \(d\in\NN\) 与 \(0\le k\le d\)，定义相位
+\[
+\theta_{d,k}:=\arccos\!\left(1-\frac{2k}{d}\right)\in[0,\pi].
+\]
+则
+\[
+\cos\theta_{d,k}=1-\frac{2k}{d}\in\QQ,
+\qquad
+\sin\theta_{d,k}=\frac{2}{d}\sqrt{k(d-k)}.
+\]
+因此对任意 \(r\in\QQ_{>0}\)，令
+\[
+w_{d,k}(r):=r e^{i\theta_{d,k}}+r^{-1}e^{-i\theta_{d,k}}
+\]
+则其坐标满足
+\[
+\Re\,w_{d,k}(r)\in\QQ,
+\qquad
+\Im\,w_{d,k}(r)\in \QQ\cdot\sqrt{k(d-k)}\subset \QQ\bigl(\sqrt{k(d-k)}\bigr).
+\]
+\end{theorem}
+\begin{proof}
+第一式由定义直接得到。
+又
+\[
+\sin\theta_{d,k}=\sqrt{1-\cos^2\theta_{d,k}}
+=\sqrt{1-\left(1-\frac{2k}{d}\right)^2}
+=\frac{2}{d}\sqrt{k(d-k)}.
+\]
+写
+\[
+w_{d,k}(r)=(r+r^{-1})\cos\theta_{d,k}+i(r-r^{-1})\sin\theta_{d,k},
+\]
+注意 \(r\pm r^{-1}\in\QQ\)，代入即得坐标封闭性。证毕。
+\end{proof}
+
+\begin{corollary}[6D 相位仅产生两类不可约二次根]\label{cor:conclusion-hypercube-phase-d6-only-sqrt2-sqrt5}
+在定理 \ref{thm:conclusion-hypercube-phase-quadratic-closure} 中取 \(d=6\)。
+则对 \(k\in\{0,1,2,3,4,5,6\}\) 有
+\[
+k(6-k)\in\{0,5,8,9\},
+\]
+从而对任意 \(r\in\QQ_{>0}\)，点 \(w_{6,k}(r)\) 的虚部仅可能落在
+\[
+\Im\,w_{6,k}(r)\in \QQ\ \cup\ \QQ\cdot\sqrt2\ \cup\ \QQ\cdot\sqrt5.
+\]
+进一步，对每个非退化相位（\(k\in\{1,2,4,5\}\)，等价于 \(\sin\theta_{6,k}\cos\theta_{6,k}\neq 0\)），集合
+\[
+\{\,w_{6,k}(r):\ r\in\QQ_{>0}\,\}
+\]
+在双曲叶
+\(
+\mathcal H_{\theta_{6,k}}=\{r e^{i\theta_{6,k}}+r^{-1}e^{-i\theta_{6,k}}:\ r>0\}
+\)
+中稠密。
+\end{corollary}
+\begin{proof}
+二次根类型由 \(k(6-k)\) 的取值集合直接给出，并注意 \(\sqrt8=2\sqrt2\)、\(\sqrt9=3\in\QQ\)。
+稠密性由 \(\QQ_{>0}\) 在 \(\RR_{>0}\) 中稠密且映射 \(r\mapsto r e^{i\theta}+r^{-1}e^{-i\theta}\) 连续推出。证毕。
+\end{proof}
+
+\begin{proposition}[两素数尺度在双曲叶上的稠密轨道]\label{prop:conclusion-two-prime-dense-orbit-hyperbola-leaf}
+取互异素数 \(p\neq q\)，并令
+\[
+H:=\{p^{m}q^{n}:\ m,n\in\ZZ\}\subset \RR_{>0}.
+\]
+固定相位 \(\theta\in(0,\pi)\) 且 \(\sin\theta\cos\theta\neq 0\)，定义双曲叶
+\[
+\mathcal H_{\theta}:=\{\,w(r):=r e^{i\theta}+r^{-1}e^{-i\theta}:\ r>0\,\}\subset\CC,
+\]
+并令 \(O_{\theta}:=\{w(r):\ r\in H\}\subset \mathcal H_{\theta}\)。
+则 \(O_{\theta}\) 在 \(\mathcal H_{\theta}\) 中稠密（相对拓扑）。
+\end{proposition}
+\begin{proof}
+由于 \(p\neq q\) 且素因子分解唯一，若 \(\log p/\log q\in\QQ\) 则存在非零整数 \(m,n\) 使 \(p^{m}=q^{n}\)，矛盾。
+故 \(\alpha:=\log p/\log q\notin\QQ\)。
+
+令
+\(
+\Lambda:=\{m\log p+n\log q:\ m,n\in\ZZ\}=\log q\cdot(\ZZ+\alpha\ZZ)
+\)。
+由 \(\alpha\) 的无理性，集合 \(\{\{n\alpha\}:n\in\ZZ\}\) 在 \([0,1]\) 稠密，从而对任意 \(x\in\RR\) 与任意 \(\varepsilon>0\)，可取 \(n\in\ZZ\) 使得 \(n\alpha\) 的小数部分与 \(x/\log q\) 的小数部分相差小于 \(\varepsilon/\log q\)；
+再取整数 \(m\) 使 \(m+n\alpha\) 与 \(x/\log q\) 相差小于 \(\varepsilon/\log q\)。
+于是 \(|(m\log p+n\log q)-x|<\varepsilon\)，说明 \(\Lambda\) 在 \(\RR\) 中稠密。
+因此 \(H=\exp(\Lambda)\) 在 \(\RR_{>0}\) 中稠密。
+
+映射 \(r\mapsto w(r)\) 在 \(\RR_{>0}\) 上连续，且 \(\mathcal H_{\theta}=w(\RR_{>0})\)。
+故 \(w(H)=O_{\theta}\) 在 \(w(\RR_{>0})=\mathcal H_{\theta}\) 中稠密。证毕。
+\end{proof}
+
+\begin{conjecture}[椭圆倍增提升的相干零点原则]\label{conj:conclusion-elliptic-lift-coherent-zero-circle-principle}
+令 \(E\) 为数域上的椭圆曲线，并取 \(P\in E\) 非零点。
+考虑由二进制驱动的仿射倍增系统
+\[
+Q_{n+1}=[2]Q_n+[b_n]P,\qquad b_n\in\{0,1\}.
+\]
+对无穷多个良约化素点 \(\mathfrak p\)，在有限群 \(E(\kappa(\mathfrak p))\) 上由向后分支（解 \([2]Q_n=Q_{n+1}-[b_n]P\) 的二挠陪集）诱导转移算子族 \(T_{\mathfrak p,n}\)。
+将其特征参数以 Joukowsky 变量 \(z+z^{-1}\) 重新参数化得到一族判别式 \(\Psi_{\mathfrak p,n}(z)\)。
+则当驱动序列 \((b_n)\) 在可计算口径下保持一致相干（以致上述二挠分支可在一族 \(\mathfrak p\) 上被统一控制）时，\(\Psi_{\mathfrak p,n}\) 的零点在 \(n\to\infty\) 下趋于集中于单位圆；
+而当 \((b_n)\) 的有效 Hausdorff 维数（算法意义下）为正时，单位圆外出现不可消除的离散质量。
+\end{conjecture}
+
+\begin{conclusion}[Gödel--Zeckendorf 约束编码的行列式实现与全纯性]\label{con:conclusion-zeckendorf-dirichlet-jacobi}
+记 \(p_n\) 为第 \(n\) 个素数，定义约束集合
+\[
+\Omega:=
+\left\{
+\varepsilon=(\varepsilon_n)_{n\ge 1}\in\{0,1\}^{\NN}:\ 
+\varepsilon_n\varepsilon_{n+1}=0,\ 
+\varepsilon\ \text{有限支撑}
+\right\}.
+\]
+定义 Dirichlet 生成函数
+\[
+F(s):=\sum_{\varepsilon\in\Omega}\ \prod_{n\ge 1}p_n^{-s\varepsilon_n}.
+\]
+则成立：
+\begin{enumerate}
+  \item 当 \(\Re(s)>1\) 时，级数绝对收敛且 \(F(s)\) 在该半平面上全纯。
+  \item 对截断
+  \[
+  F_N(s):=
+  \sum_{\substack{\varepsilon_1,\dots,\varepsilon_N\in\{0,1\}\\ \varepsilon_n\varepsilon_{n+1}=0}}
+  \prod_{n=1}^{N}p_n^{-s\varepsilon_n},
+  \]
+  当 \(s>1\) 为实数时有 \(F_N(s)\uparrow F(s)\)；在 \(\Re(s)>1\) 上有 \(F_N(s)\to F(s)\)，并满足递推
+  \[
+  F_0(s)=1,\qquad
+  F_1(s)=1+2^{-s},\qquad
+  F_N(s)=F_{N-1}(s)+p_N^{-s}F_{N-2}(s)\ (N\ge 2).
+  \]
+  \item 对 \(N\ge 1\)，定义三对角矩阵
+  \[
+  J_N(s)=
+  \begin{pmatrix}
+  1+2^{-s} & \mathrm{i}\,p_2^{-s/2} & 0 & \cdots & 0\\
+  \mathrm{i}\,p_2^{-s/2} & 1 & \mathrm{i}\,p_3^{-s/2} & \ddots & \vdots\\
+  0 & \mathrm{i}\,p_3^{-s/2} & 1 & \ddots & 0\\
+  \vdots & \ddots & \ddots & \ddots & \mathrm{i}\,p_N^{-s/2}\\
+  0 & \cdots & 0 & \mathrm{i}\,p_N^{-s/2} & 1
+  \end{pmatrix},
+  \]
+  则
+  \[
+  F_N(s)=\det J_N(s),
+  \qquad
+  F(s)=\lim_{N\to\infty}\det J_N(s)\quad(\Re(s)>1).
+  \]
+\end{enumerate}
+\end{conclusion}
+\begin{proof}
+设 \(\sigma:=\Re(s)>1\)。对任意 \(N\)，有
+\[
+\bigl|F_N(s)\bigr|
+\le
+\sum_{\substack{\varepsilon_1,\dots,\varepsilon_N\in\{0,1\}\\ \varepsilon_n\varepsilon_{n+1}=0}}
+\prod_{n=1}^{N}p_n^{-\sigma\varepsilon_n}
+\le
+\prod_{n=1}^{N}(1+p_n^{-\sigma}).
+\]
+又 \(\sum_n p_n^{-\sigma}<\infty\)，故无穷乘积 \(\prod_n(1+p_n^{-\sigma})\) 收敛，从而级数绝对收敛。
+当 \(s>1\) 为实数时，所有项非负，故 \(F_N(s)\) 单调递增并收敛到 \(F(s)\)。
+在任意紧集 \(\Re(s)\ge 1+\eta\) 上同理有统一上界，故由 Weierstrass 判别得到一致收敛，进而 \(F\) 在 \(\Re(s)>1\) 上全纯。
+
+递推由末位分解得到：长度 \(N\) 的 admissible 串按 \(\varepsilon_N=0/1\) 分组。
+若 \(\varepsilon_N=0\) 贡献 \(F_{N-1}\)；若 \(\varepsilon_N=1\) 则 \(\varepsilon_{N-1}=0\)，贡献 \(p_N^{-s}F_{N-2}\)。
+故得第二条递推。
+
+再设 \(D_N:=\det J_N(s)\)。三对角行列式递推给出
+\[
+D_0=1,\quad D_1=1+2^{-s},\quad
+D_N=D_{N-1}-(\mathrm{i}p_N^{-s/2})^2D_{N-2}
+=D_{N-1}+p_N^{-s}D_{N-2}.
+\]
+其初值与递推与 \(F_N\) 完全一致，故 \(D_N=F_N\) 对一切 \(N\) 成立。
+令 \(N\to\infty\) 即得
+\[
+F(s)=\lim_{N\to\infty}\det J_N(s).
+\]
+证毕。
+\end{proof}
+
+\begin{remark}[同一对象层上的三重统一]\label{rem:conclusion-chebyshev-lee-yang-extreme-unified}
+上述六条结论在同一约束对象层上实现一致闭包：对象由可审计约束一次固定，迭代/采样/消元次数提供统一的“读取刻度”，而稳定可观测量（极值尾指数、谱指纹与结果式零点簇）构成跨章节可复用的同构证书。该闭包同时连接 Gödel 尺度、Lee--Yang 椭圆运输与 \(6\) 维超立方体谱结构，使“构造--验证--反演”在同一函子链上可复核闭合。
+\end{remark}

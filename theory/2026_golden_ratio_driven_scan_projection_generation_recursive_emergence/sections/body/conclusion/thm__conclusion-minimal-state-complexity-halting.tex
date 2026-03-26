@@ -1,0 +1,75 @@
+\begin{theorem}[最小状态复杂度可编码停机时间]\label{thm:conclusion-minimal-state-complexity-halting}
+存在一可计算映射 \((M,x)\mapsto \pi_{M,x}\)，将任意图灵机 \(M\) 与输入 \(x\) 送到一个全定义的序贯转导 \(\pi_{M,x}\)（在某个正则语言上定义），使得：
+\begin{enumerate}
+  \item 对每个固定 \((M,x)\)，\(\pi_{M,x}\) 的每个输出纤维大小至多为 \(2\)；
+  \item 记 \(T(M,x)\in\NN\cup\{\infty\}\) 为停机时间（不停机记为 \(\infty\)），并令 \(s(\pi_{M,x})\) 为实现 \(\pi_{M,x}\) 的最小确定性有限状态转导器的状态数。
+  则当 \(T(M,x)<\infty\) 时有
+  \[
+  s(\pi_{M,x})=T(M,x)+1,
+  \]
+  而当 \(T(M,x)=\infty\) 时 \(s(\pi_{M,x})=O(1)\)。
+\end{enumerate}
+从而映射 \((M,x)\mapsto s(\pi_{M,x})\) 不可计算；并且性质“存在统一常数 \(S\) 使对所有 \((M,x)\) 有 \(s(\pi_{M,x})\le S\)”在该族上不可判定。
+\end{theorem}
+\begin{proof}
+取字母表 \(\Sigma:=\{0,1,\#\}\)，并令正则语言
+\(
+L:=\{\,1^n\# b:\ n\ge 0,\ b\in\{0,1\}\,\}
+\)。
+对每个 \((M,x)\)，定义 \(\pi_{M,x}:L\to L\) 为
+\[
+\pi_{M,x}(1^n\# b)
+:=
+0^n\#\begin{cases}
+b,& M(x)\ \text{在 }n\text{ 步内未停机},\\
+0,& M(x)\ \text{在 }n\text{ 步内已停机}.
+\end{cases}
+\]
+谓词“在 \(n\) 步内停机”可由有限步模拟判定，故 \(\pi_{M,x}\) 可计算且全定义。
+并且对每个输出 \(0^n\# c\)，其原像至多为 \(1^n\#0\) 与 \(1^n\#1\) 两点，故纤维大小 \(\le 2\)。
+\par
+若 \(T:=T(M,x)<\infty\)，则当且仅当 \(n\ge T\) 时输出末位被强制为 \(0\)。
+对任意 \(0\le i<T\)，考虑前缀 \(1^i\) 与 \(1^{i+1}\)。
+它们在共同后缀 \(1^{T-i-1}\#1\) 的续接下，分别对应输入长度 \(T-1\) 与 \(T\)，从而输出末位分别为 \(1\) 与 \(0\)。
+因此从 Myhill--Nerode 最小化原理（或等价的“未来输出函数不同 \(\Rightarrow\) 状态必须区分”）可知，
+在读入前缀 \(1^i\) 后必须处于彼此不同的状态，\(i=0,1,\dots,T\) 共需至少 \(T+1\) 个状态，故 \(s(\pi_{M,x})\ge T+1\)。
+另一方面，用状态计数器 \(\{0,1,\dots,T\}\)（到达 \(T\) 后吸收）即可实现上述阈值行为，故 \(s(\pi_{M,x})\le T+1\)，从而 \(s(\pi_{M,x})=T+1\)。
+\par
+若 \(T(M,x)=\infty\)，则 \(\pi_{M,x}\) 退化为逐符号转导 \(1\mapsto 0\)、\(\#\mapsto \#\)、\(b\mapsto b\)，显然可由常数状态实现，故 \(s(\pi_{M,x})=O(1)\)。
+\par
+最后，若 \((M,x)\mapsto s(\pi_{M,x})\) 可计算，则可由 \(s(\pi_{M,x})\) 判定 \(T(M,x)\) 是否有限并恢复其值，与停机问题不可判定性矛盾。证毕。
+\end{proof}
+
+\begin{corollary}[最小寄存器数的不可计算性：弱硬件判据已足以编码停机性]\label{cor:conclusion-min-register-halting}
+固定一种标准同步序贯电路模型：以 NAND 作为唯一组合逻辑门，并以 \(k\) 个二值寄存器（触发器）作为状态记忆。
+对任意序贯转导 \(\pi\) 定义
+\[
+k_{\min}(\pi):=\min\Bigl\{k:\ \exists\ \text{上述模型的电路实现 }\pi\Bigr\}.
+\]
+则映射 \((M,x)\mapsto k_{\min}(\pi_{M,x})\) 不可计算。
+并且存在一个全定义可计算的前置变换 \((M,x)\mapsto(M^{(+1)},x)\)（先执行一步空操作再模拟 \(M\)），使得
+\[
+k_{\min}(\pi_{M^{(+1)},x})=
+\begin{cases}
+0,&T(M,x)=\infty,\\
+\ge 1,&T(M,x)<\infty,
+\end{cases}
+\]
+从而“是否需要至少一个记忆触发器”这一极弱判据已足以编码停机性。
+\end{corollary}
+
+\begin{proof}
+任何含 \(k\) 个二值寄存器的确定性同步序贯电路，其可达内部状态数至多为 \(2^k\)。
+因此对任意 \(\pi\) 有下界
+\(
+k_{\min}(\pi)\ge \lceil\log_2 s(\pi)\rceil
+\)。
+由定理 \ref{thm:conclusion-minimal-state-complexity-halting}，当 \(T(M,x)=T<\infty\) 时 \(s(\pi_{M,x})=T+1\)，从而 \(k_{\min}(\pi_{M,x})\ge \lceil\log_2(T+1)\rceil\)；
+而当 \(T(M,x)=\infty\) 时 \(\pi_{M,x}\) 退化为常数状态可实现的逐符号转导，故 \(k_{\min}(\pi_{M,x})=0\)。
+对加一填充 \(M^{(+1)}\)，若 \(T(M,x)<\infty\) 则 \(T(M^{(+1)},x)\ge 1\)，从而 \(s(\pi_{M^{(+1)},x})\ge 2\) 并强制 \(k_{\min}\ge 1\)；
+若 \(T(M,x)=\infty\) 则仍保持 \(k_{\min}=0\)。
+因此若 \((M,x)\mapsto k_{\min}(\pi_{M,x})\) 可计算，即可判定停机性，矛盾。证毕。
+\end{proof}
+
+\endinput
+

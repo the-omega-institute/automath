@@ -1,0 +1,158 @@
+\paragraph{dyadic multiplicity 的复杂度屏障与周期化 Fourier 的绝对连续性排斥}
+在局部化数系的连通 Lie 商刚性与 Zeckendorf--Gödel Dirichlet 级数的 \(s=1\) 密度--留数定理已经确立之后，还可沿 dyadic multiplicity 与 Fibonacci 共振两条链进一步抽取出下列若干条后果。
+
+\begin{theorem}[固定元数 dyadic multiplicity 的 Presburger 谓词类属于 \texorpdfstring{$\mathbf P$}{P}]\label{thm:xi-fixed-arity-dyadic-multiplicity-presburger-in-p}
+固定整数 \(r\ge 1\)，并固定一个 Presburger 公式
+\[
+\Phi=\Phi\bigl(m;V_1,\epsilon_1,d_1;\dots;V_r,\epsilon_r,d_r\bigr).
+\]
+定义语言
+\[
+L_\Phi
+:=
+\left\{
+\bigl(m,w^{(1)},\dots,w^{(r)}\bigr):
+w^{(i)}\in X_m,\ 
+\Phi\!\bigl(m;V_m(w^{(1)}),w_m^{(1)},d_m^{\mathrm{bin}}(w^{(1)});\dots;V_m(w^{(r)}),w_m^{(r)},d_m^{\mathrm{bin}}(w^{(r)})\bigr)
+\right\}.
+\]
+则
+\[
+L_\Phi\in \mathbf P.
+\]
+特别地，若存在 many-one 归约
+\[
+\mathrm{SAT}\le_m^p L_\Phi,
+\]
+则必有
+\[
+\mathbf P=\mathbf{NP}.
+\]
+\end{theorem}
+\begin{proof}
+设输入为
+\[
+\bigl(m,w^{(1)},\dots,w^{(r)}\bigr).
+\]
+由于 \(r\) 固定，输入总长度与 \(m\) 同阶。先逐个 \(i=1,\dots,r\) 扫描字 \(w^{(i)}\)，在线性时间内检验其是否属于 \(X_m\)，并同时计算
+\[
+V_m\bigl(w^{(i)}\bigr),
+\qquad
+\epsilon_i:=w_m^{(i)}.
+\]
+再由命题 \ref{prop:fold-bin-digit-dp}（亦即结论 \ref{con:xi-terminal-foldbin-digit-dp-linear-time} 的算法核），可在 \(O(m)\) 时间内精确计算
+\[
+d_i:=d_m^{\mathrm{bin}}\bigl(w^{(i)}\bigr).
+\]
+因此全部参数
+\[
+m,\ V_i,\ \epsilon_i,\ d_i
+\qquad(1\le i\le r)
+\]
+都可在总时间 \(O(m)\) 内求得，并且其二进制长度均为 \(O(m)\)。
+
+由于 \(\Phi\) 是固定的 Presburger 公式，可对其预先执行一次量词消去，得到一个仅依赖于 \(\Phi\) 的等价量词自由公式；该公式是有限个线性等式、不等式与同余条件的布尔组合。于是，对上述 \(O(m)\)-比特整数代入求值可在多项式时间内完成。故 \(L_\Phi\) 可由多项式时间算法判定，即
+\[
+L_\Phi\in\mathbf P.
+\]
+
+最后，若 \(\mathrm{SAT}\le_m^p L_\Phi\)，则由 \(L_\Phi\in \mathbf P\) 立得 \(\mathrm{SAT}\in \mathbf P\)，从而
+\[
+\mathbf P=\mathbf{NP}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[黄金参数二点 Bernoulli 卷积的周期化 Fourier 系数不属于任何有限 \texorpdfstring{$\ell^r$}{lr}，因而不具有任何 \texorpdfstring{$L^p$}{Lp} 密度]\label{thm:xi-bernoulli-two-periodization-no-lp-density}
+令
+\[
+q:=\varphi^{-1},
+\]
+并令 \(\mu_q^{(2)}\) 如定理 \ref{thm:fold-pisot-bernoulli-convolution-representation}。记
+\[
+\nu:=\bigl(\RR\to \mathbb T_2=\RR/(2\ZZ)\bigr)_\#\mu_q^{(2)}
+\]
+为其 \(2\)-周期化测度。则对任意
+\[
+1\le r<\infty,
+\]
+\[
+\widehat\nu\notin \ell^r(\ZZ).
+\]
+特别地，对任意
+\[
+1<p\le\infty,
+\]
+\(\nu\) 都不可能具有 \(L^p(\mathbb T_2)\) 密度。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-pisot-bernoulli-fibonacci-direction-nonrajchman}，对任意非零整数初值对
+\[
+(u_0,u_1)\in\ZZ^2\setminus\{(0,0)\},
+\]
+若 \((u_n)_{n\ge 0}\) 满足 Fibonacci 递推
+\[
+u_{n+2}=u_{n+1}+u_n,
+\]
+则存在常数 \(c(u_0,u_1)>0\) 使
+\[
+\bigl|\widehat\nu(u_n)\bigr|
+=
+\bigl|\widehat{\mu_q^{(2)}}(\pi u_n)\bigr|
+\longrightarrow c(u_0,u_1),
+\qquad
+|u_n|\to\infty.
+\]
+固定任意一组此类非零初值对，并记 \(c:=c(u_0,u_1)\)。则存在 \(N_0\) 使得对一切 \(n\ge N_0\)，都有
+\[
+\bigl|\widehat\nu(u_n)\bigr|\ge \frac{c}{2}.
+\]
+因此对任意 \(1\le r<\infty\)，
+\[
+\sum_{u\in\ZZ}\bigl|\widehat\nu(u)\bigr|^r
+\ge
+\sum_{n\ge N_0}\bigl|\widehat\nu(u_n)\bigr|^r
+\ge
+\sum_{n\ge N_0}\left(\frac{c}{2}\right)^r
+=+\infty.
+\]
+故 \(\widehat\nu\notin \ell^r(\ZZ)\) 对所有有限 \(r\) 都成立。
+
+再反设 \(\nu\) 具有某个 \(L^p(\mathbb T_2)\) 密度。若 \(1<p\le 2\)，则 Hausdorff--Young 不等式给出
+\[
+\widehat\nu\in \ell^{p'}(\ZZ),
+\qquad
+\frac1p+\frac1{p'}=1,
+\]
+与上式矛盾。若 \(2<p\le\infty\)，则由于 \(\mathbb T_2\) 的 Haar 测度有限，有
+\[
+L^p(\mathbb T_2)\subseteq L^2(\mathbb T_2),
+\]
+从而 Plancherel 定理给出 \(\widehat\nu\in \ell^2(\ZZ)\)，同样矛盾。故 \(\nu\) 不可能具有任何 \(L^p(\mathbb T_2)\) 密度。证毕。
+\end{proof}
+
+\begin{theorem}[黄金参数二点 Bernoulli 卷积的周期化测度在全部 \texorpdfstring{$L^r$}{Lr} 标度上均无密度]\label{thm:xi-bernoulli-two-periodization-no-any-lr-density}
+沿用定理 \ref{thm:xi-bernoulli-two-periodization-no-lp-density} 的记号。则对任意
+\[
+1\le r\le \infty,
+\]
+\(\nu\) 都不可能具有 \(L^r(\mathbb T_2)\) 密度。
+\end{theorem}
+\begin{proof}
+当 \(1<r\le \infty\) 时，这正是定理 \ref{thm:xi-bernoulli-two-periodization-no-lp-density} 的结论。
+
+只剩 \(r=1\)。若 \(\nu\) 具有 \(L^1(\mathbb T_2)\) 密度，则由 Riemann--Lebesgue 引理必有
+\[
+\widehat\nu(u)\longrightarrow 0
+\qquad (|u|\to\infty).
+\]
+然而定理 \ref{thm:xi-pisot-bernoulli-fibonacci-direction-nonrajchman} 已给出沿任意非平凡 Fibonacci 递推逃逸序列 \((u_n)\) 都有
+\[
+|u_n|\to\infty,
+\qquad
+\bigl|\widehat\nu(u_n)\bigr|\longrightarrow c(u_0,u_1)>0.
+\]
+这与 Riemann--Lebesgue 引理矛盾。故 \(L^1\) 密度亦不存在。综上，\(\nu\) 在全部 \(L^r\) 标度上都无密度。证毕。
+\end{proof}
+
+\endinput

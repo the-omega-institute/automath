@@ -1,0 +1,496 @@
+\section{射影压力算子：把整数 \texorpdfstring{$q$}{q} 的 moment-kernel 提升为实参数}\label{app:pom-projective-pressure-operator}
+
+本附录补上注 \ref{rem:pom-fiber-index-ldp} 中标出的“\(q\to t\)”缺口：给出一个对任意实参数 \(q\ge 1\) 定义的\textbf{射影转移算子}（projective transfer operator），其在整数点 \(q\in\ZZ_{\ge 2}\) 上严格退化为本文的对称幂 moment-kernel \(\widetilde A_q\)（注 \ref{rem:pom-moment-symmetric-power-substitution-operator}），从而把离散压力 \(\log r_q\) 升级为一条连续压力曲线的可执行候选。
+
+\subsection{从在线核到射影动力学：\texorpdfstring{$(\Phi_b,g_b)$}{(Phi,g)} 的定义}
+沿用定义 \ref{def:pom-collision-count-bisim} 的确定性在线核/转导器 \(\mathcal{T}\)：状态集 \(Q\)，输入字母表 \(A_{\mathrm{in}}\)，输出字母表 \(A_{\mathrm{out}}\)，以及确定性转移--输出映射
+\[
+\tau:Q\times A_{\mathrm{in}}\to Q\times A_{\mathrm{out}},\qquad (s,a)\mapsto (s',b).
+\]
+
+\begin{definition}[输出分桶转移矩阵与射影更新]\label{def:pom-projective-transfer-operator}
+对每个输出符号 \(b\in A_{\mathrm{out}}\)，定义非负整数矩阵 \(B_b\in\Mat_{Q\times Q}(\NN)\) 为
+\[
+(B_b)_{s',s}:=\#\{a\in A_{\mathrm{in}}:\ \tau(s,a)=(s',b)\}.
+\]
+令
+\[
+\Delta:=\Bigl\{w\in\RR_{\ge 0}^{Q}:\ \langle \mathbf{1},w\rangle=1\Bigr\}
+\]
+为状态权重的标准单纯形（\(\mathbf{1}\) 为全 \(1\) 向量）。
+对 \(w\in\Delta\) 与 \(b\in A_{\mathrm{out}}\)，定义
+\[
+g_b(w):=\langle \mathbf{1},B_b w\rangle\in\RR_{\ge 0},
+\qquad
+\Phi_b(w):=
+\begin{cases}
+\dfrac{B_b w}{\langle \mathbf{1},B_b w\rangle},& g_b(w)>0,\\[8pt]
+\text{任取 }\Delta\text{ 中一点（该项将被置零）},& g_b(w)=0.
+\end{cases}
+\]
+对任意实参数 \(q\ge 1\)，定义作用在函数 \(f:\Delta\to\RR\) 上的算子
+\[
+(\mathcal{L}_q f)(w):=\sum_{b\in A_{\mathrm{out}}} g_b(w)^{\,q}\, f(\Phi_b(w)),
+\]
+其中约定当 \(g_b(w)=0\) 时，对应求和项取 \(0\)（对 \(q\ge 1\) 与连续 \(f\) 该约定与任意 \(\Phi_b(w)\) 的选取无关）。
+\end{definition}
+
+\begin{remark}[解释：\texorpdfstring{$g_b$}{g} 是“局部纤维增长”，\texorpdfstring{$\Phi_b$}{Phi} 是“归一化后继”]
+把 \(w\) 理解为“当前隐藏态在 \(Q\) 上的权重分布”。则 \(B_b w\) 是在输出为 \(b\) 的条件下，对所有允许的输入字母做合并后得到的\emph{未归一化}后继权重；其总质量 \(g_b(w)\) 即该步“产生输出 \(b\)”的总计数（或总权重）。\(\Phi_b(w)\) 则把该未归一化权重重新投影回单纯形，得到一个射影动力学。
+\end{remark}
+
+\subsection{整数点的严格退化：\texorpdfstring{$\mathcal{L}_q|_{\mathcal{H}_q}=\widetilde A_q$}{Lq|Hq=Aq}}
+\begin{definition}[齐次多项式子空间]\label{def:pom-homogeneous-polynomials-simplex}
+对整数 \(q\ge 0\)，记 \(\mathcal{H}_q\) 为 \(\Delta\) 上齐次次数为 \(q\) 的多项式函数空间：
+\[
+\mathcal{H}_q:=\{\,p|_{\Delta}:\ p(w)=\sum_{|\nu|=q}c_\nu\,w^\nu,\ c_\nu\in\RR\,\},
+\qquad
+w^\nu:=\prod_{s\in Q} w_s^{\nu(s)}.
+\]
+\end{definition}
+
+\begin{proposition}[齐次子空间不变与分母消去]\label{prop:pom-projective-operator-invariant-homogeneous}
+对任意整数 \(q\ge 1\)，子空间 \(\mathcal{H}_q\) 在 \(\mathcal{L}_q\) 下不变；并且对任意 \(p\in\mathcal{H}_q\) 与 \(w\in\Delta\) 有恒等式
+\[
+(\mathcal{L}_q p)(w)=\sum_{b\in A_{\mathrm{out}}} p(B_b w).
+\]
+\end{proposition}
+\begin{proof}
+取 \(p\in\mathcal{H}_q\)，并固定 \(b\in A_{\mathrm{out}}\)。
+当 \(g_b(w)>0\) 时，\(\Phi_b(w)=B_b w/g_b(w)\)，而 \(p\) 齐次次数为 \(q\)，故
+\[
+p(\Phi_b(w))=p\!\left(\frac{B_b w}{g_b(w)}\right)=\frac{p(B_b w)}{g_b(w)^{\,q}}.
+\]
+代回定义 \ref{def:pom-projective-transfer-operator} 得
+\[
+g_b(w)^{\,q}\,p(\Phi_b(w))=p(B_b w).
+\]
+当 \(g_b(w)=0\) 时，\(B_b w\) 的总质量为零，且 \(B_b\ge 0,w\ge 0\) 蕴含 \(B_b w=0\)，从而 \(p(B_b w)=0\)（因 \(q\ge 1\)）。按定义该项在 \(\mathcal{L}_q\) 中也取 \(0\)。故对所有 \(w\in\Delta\) 恒有
+\[
+(\mathcal{L}_q p)(w)=\sum_{b} g_b(w)^{\,q}\,p(\Phi_b(w))=\sum_b p(B_b w).
+\]
+右端是齐次次数 \(q\) 多项式的有限和，因此仍落在 \(\mathcal{H}_q\)。证毕。
+\end{proof}
+
+\begin{theorem}[整数退化 = 对称幂 moment-kernel]\label{thm:pom-projective-operator-degenerates-to-moment-kernel}
+沿用命题 \ref{prop:pom-moment-symmetric-power} 与注 \ref{rem:pom-moment-symmetric-power-substitution-operator} 的记号。对每个整数 \(q\ge 2\)，算子 \(\mathcal{L}_q\) 在 \(\mathcal{H}_q\) 上的矩阵表示（单项式基 \(w^\nu\)）恰为对称幂商 moment-kernel \(\widetilde A_q\)：
+\[
+\bigl[\mathcal{L}_q|_{\mathcal{H}_q}\bigr]_{(w^\nu)}=\widetilde A_q.
+\]
+因此其谱半径满足
+\[
+\rho\!\bigl(\mathcal{L}_q|_{\mathcal{H}_q}\bigr)=\rho(\widetilde A_q)=r_q.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-projective-operator-invariant-homogeneous}，
+\(
+(\mathcal{L}_q p)(w)=\sum_{b} p(B_b w)
+\)
+对任意 \(p\in\mathcal{H}_q\) 成立。另一方面，在注 \ref{rem:pom-moment-symmetric-power-substitution-operator} 中，
+\(\mathcal{T}=\sum_b \mathcal{T}_b\)
+对多项式环的作用等价于把变量向量 \(\mathbf{x}=(x_s)_{s\in Q}\) 作线性替换 \(\mathbf{x}\mapsto B_b^{\mathsf T}\mathbf{x}\)（因为 \(x_s\mapsto T_s^{(b)}(\mathbf{x})\) 正是第 \(s\) 行的线性组合）。在“把 \(w\) 视为坐标向量”的识别下，\(p(B_b w)\) 与该替换作用同型。
+故 \(\mathcal{L}_q|_{\mathcal{H}_q}\) 与 \(\mathcal{T}|_{R_q}\) 共轭；而注 \ref{rem:pom-moment-symmetric-power-substitution-operator} 已给出 \(\mathcal{T}\) 在齐次次数 \(q\) 子空间上的矩阵表示为 \(\widetilde A_q\)。
+谱半径结论随之成立。证毕。
+\end{proof}
+
+\subsection{连续压力曲线与大偏差接口}
+\begin{remark}[从离散 \texorpdfstring{$r_q$}{rq} 到连续 \texorpdfstring{$\Lambda(t)$}{Lambda(t)} 的可执行路线]\label{rem:pom-projective-pressure-route}
+定理 \ref{thm:pom-projective-operator-degenerates-to-moment-kernel} 给出严格对齐：整数 \(q\ge 2\) 时，\(\mathcal{L}_q\) 在有限维不变子空间上的限制即 moment-kernel。
+因此可把注 \ref{rem:pom-fiber-index-ldp} 所需的连续累积母函数 \(\Lambda(t)\) 具体化为：令 \(q=t+1\ge 1\)，并在某个适当的函数空间（例如 Hölder 连续函数或有界变差函数空间）上求 \(\mathcal{L}_{t+1}\) 的 Perron 主特征值 \(\lambda(t+1)\)（存在性/唯一性可由常见的锥收缩/准紧性条件保证），再定义
+\[
+\Lambda(t):=\log\lambda(t+1)-\log|A_{\mathrm{out}}|.
+\]
+在整数点 \(t=q-1\) 处，上式严格退化为
+\(
+\Lambda(q-1)=\log r_q-\log|A_{\mathrm{out}}|
+\)
+（对 Fold 主核即 \(\log r_q-\log 2\)），与命题 \ref{prop:pom-fiber-index-cgf} 的整点恒等式精确一致。
+一旦 \(\Lambda\) 满足可微/本质严格凸条件，G\"artner--Ellis 接口即可直接给出纤维指数的大偏差率函数 \(I(\gamma)=\sup_{t\ge 0}(t\gamma-\Lambda(t))\)。
+\end{remark}
+
+在上述构造下，整数 moment-kernel 节点与连续射影压力曲线之间还可抽出若干纯几何结论；它们把零参数归一化、整数点凸性、离散 Legendre 下包络以及线性退化判据压缩为一条完全可审计的推理链。
+
+\begin{theorem}[射影压力曲线在零参数处的精确归一化常数]\label{thm:pom-projective-pressure-zero-normalization}
+沿用定义 \ref{def:pom-projective-transfer-operator} 的记号，并假设注 \ref{rem:pom-projective-pressure-route} 所述 Perron 主特征值 \(\lambda(q)\) 在 \(q\ge 1\) 上已被定义。则有
+\[
+\mathcal{L}_1 1 = |A_{\mathrm{in}}|\,1,
+\qquad
+\lambda(1)=|A_{\mathrm{in}}|,
+\qquad
+\Lambda(0)=\log\frac{|A_{\mathrm{in}}|}{|A_{\mathrm{out}}|}.
+\]
+特别地，若输入与输出字母表满足
+\[
+|A_{\mathrm{in}}|=|A_{\mathrm{out}}|,
+\]
+则有严格归一化
+\[
+\boxed{\;\Lambda(0)=0.\;}
+\]
+为与后续离散节点记号统一，下文约定
+\[
+r_1:=\lambda(1)=|A_{\mathrm{in}}|.
+\]
+\end{theorem}
+\begin{proof}
+对任意 \(w\in\Delta\)，由定义有
+\[
+(\mathcal{L}_1 1)(w)=\sum_{b\in A_{\mathrm{out}}}g_b(w)
+=\sum_b \langle \mathbf{1},B_b w\rangle
+=\left\langle \mathbf{1},\left(\sum_b B_b\right)w\right\rangle.
+\]
+对固定状态 \(s\in Q\) 与固定输入 \(a\in A_{\mathrm{in}}\)，确定性映射
+\[
+\tau(s,a)=(s',b)
+\]
+恰给出唯一一对 \((s',b)\)。因此矩阵 \(\sum_b B_b\) 的每一列元素和都等于 \(|A_{\mathrm{in}}|\)，从而
+\[
+\sum_b g_b(w)=|A_{\mathrm{in}}|\,\langle \mathbf{1},w\rangle=|A_{\mathrm{in}}|.
+\]
+这证明了
+\[
+\mathcal{L}_1 1=|A_{\mathrm{in}}|\,1.
+\]
+另一方面，对任意 \(f\in C(\Delta)\) 与任意 \(w\in\Delta\)，有
+\[
+|(\mathcal{L}_1 f)(w)|
+\le
+\sum_b g_b(w)\,\|f\|_\infty
+=
+|A_{\mathrm{in}}|\,\|f\|_\infty.
+\]
+故
+\[
+\|\mathcal{L}_1\|_{C(\Delta)\to C(\Delta)}\le |A_{\mathrm{in}}|.
+\]
+由 Gelfand 谱半径公式，\(\rho(\mathcal{L}_1)\le |A_{\mathrm{in}}|\)；而常数函数 \(1\) 已给出特征值 \(|A_{\mathrm{in}}|\)，故
+\[
+\lambda(1)=\rho(\mathcal{L}_1)=|A_{\mathrm{in}}|.
+\]
+最后把该式代回
+\[
+\Lambda(t)=\log\lambda(t+1)-\log|A_{\mathrm{out}}|
+\]
+并取 \(t=0\)，得到
+\[
+\Lambda(0)=\log|A_{\mathrm{in}}|-\log|A_{\mathrm{out}}|
+=
+\log\frac{|A_{\mathrm{in}}|}{|A_{\mathrm{out}}|}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[连续射影压力的 Hölder 对数凸性]\label{thm:pom-projective-pressure-holder-logconvex}
+沿用定理 \ref{thm:pom-projective-pressure-zero-normalization} 的记号。进一步假设对每个 \(q\ge 1\)，\(\mathcal{L}_q\) 作为 \(C(\Delta)\) 上的正有界算子具有严格正连续 Perron 特征函数 \(h_q>0\)，并满足
+\[
+\mathcal{L}_q h_q=\lambda(q)h_q.
+\]
+则：
+\begin{enumerate}
+  \item 函数 \(q\mapsto \lambda(q)\) 在 \([1,\infty)\) 上对数凸，即对任意 \(q_0,q_1\ge 1\) 与 \(\theta\in[0,1]\)，若记
+  \[
+  q_\theta:=(1-\theta)q_0+\theta q_1,
+  \]
+  则有
+  \[
+  \boxed{\;
+  \lambda(q_\theta)
+  \le
+  \lambda(q_0)^{1-\theta}\lambda(q_1)^\theta.\;}
+  \]
+  \item 因而
+  \[
+  t\longmapsto \Lambda(t)=\log\lambda(t+1)-\log|A_{\mathrm{out}}|
+  \]
+  在 \([0,\infty)\) 上凸。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+固定 \(q_0,q_1\ge 1\) 与 \(\theta\in[0,1]\)，并令
+\[
+\phi:=h_{q_0}^{\,1-\theta}h_{q_1}^{\,\theta}>0.
+\]
+对任意 \(w\in\Delta\)，由 Hölder 不等式与 \(\mathcal{L}_q\) 的定义，
+\[
+\begin{aligned}
+(\mathcal{L}_{q_\theta}\phi)(w)
+&=
+\sum_{b\in A_{\mathrm{out}}}
+g_b(w)^{q_\theta}
+h_{q_0}(\Phi_b(w))^{1-\theta}
+h_{q_1}(\Phi_b(w))^\theta\\
+&=
+\sum_b
+\Bigl(g_b(w)^{q_0}h_{q_0}(\Phi_b(w))\Bigr)^{1-\theta}
+\Bigl(g_b(w)^{q_1}h_{q_1}(\Phi_b(w))\Bigr)^\theta\\
+&\le
+\Bigl(\sum_b g_b(w)^{q_0}h_{q_0}(\Phi_b(w))\Bigr)^{1-\theta}
+\Bigl(\sum_b g_b(w)^{q_1}h_{q_1}(\Phi_b(w))\Bigr)^\theta\\
+&=
+(\mathcal{L}_{q_0}h_{q_0})(w)^{1-\theta}
+(\mathcal{L}_{q_1}h_{q_1})(w)^\theta\\
+&=
+\lambda(q_0)^{1-\theta}\lambda(q_1)^\theta\,\phi(w).
+\end{aligned}
+\]
+记
+\[
+C_\theta:=\lambda(q_0)^{1-\theta}\lambda(q_1)^\theta.
+\]
+则 \(\mathcal{L}_{q_\theta}\phi\le C_\theta\phi\)。由正性归纳可得
+\[
+\mathcal{L}_{q_\theta}^n\phi\le C_\theta^n\phi
+\qquad(n\ge 1).
+\]
+由于 \(\Delta\) 紧且 \(\phi\) 连续严格正，存在常数 \(0<m_\phi\le M_\phi<\infty\) 使
+\[
+m_\phi\le \phi(w)\le M_\phi
+\qquad(\forall w\in\Delta).
+\]
+于是对任意 \(f\in C(\Delta)\) 有
+\[
+|f|\le \frac{\|f\|_\infty}{m_\phi}\,\phi,
+\]
+从而
+\[
+\begin{aligned}
+\|\mathcal{L}_{q_\theta}^n f\|_\infty
+&\le
+\frac{\|f\|_\infty}{m_\phi}\,
+\|\mathcal{L}_{q_\theta}^n\phi\|_\infty\\
+&\le
+\frac{\|f\|_\infty}{m_\phi}\,C_\theta^n\|\phi\|_\infty\\
+&\le
+\frac{M_\phi}{m_\phi}\,C_\theta^n\|f\|_\infty.
+\end{aligned}
+\]
+故
+\[
+\|\mathcal{L}_{q_\theta}^n\|_{C(\Delta)\to C(\Delta)}
+\le
+\frac{M_\phi}{m_\phi}\,C_\theta^n.
+\]
+由 Gelfand 公式得到
+\[
+\lambda(q_\theta)=\rho(\mathcal{L}_{q_\theta})\le C_\theta,
+\]
+即
+\[
+\lambda(q_\theta)\le \lambda(q_0)^{1-\theta}\lambda(q_1)^\theta.
+\]
+这证明了对数凸性。对 \(\Lambda(t)=\log\lambda(t+1)-\log|A_{\mathrm{out}}|\) 取对数、平移并减去常数，不改变凸性，故第二条成立。证毕。
+\end{proof}
+
+\begin{corollary}[离散 moment-kernel 谱半径序列的凸性与导数夹逼]\label{cor:pom-projective-pressure-discrete-convexity-slopes}
+沿用定理 \ref{thm:pom-projective-pressure-holder-logconvex} 的假设，并对整数 \(q\ge 2\) 保持记号
+\[
+r_q:=\rho(\widetilde A_q).
+\]
+再配合定理 \ref{thm:pom-projective-pressure-zero-normalization} 中的约定 \(r_1=|A_{\mathrm{in}}|\)，则有：
+\begin{enumerate}
+  \item 序列 \(q\mapsto \log r_q\) 为凸序列，即对每个整数 \(q\ge 2\),
+  \[
+  \boxed{\;
+  2\log r_q\le \log r_{q-1}+\log r_{q+1}.\;}
+  \]
+  等价地，
+  \[
+  \boxed{\;r_q^2\le r_{q-1}r_{q+1}.\;}
+  \]
+  \item 差商序列单调不减：对每个整数 \(q\ge 2\),
+  \[
+  \boxed{\;
+  \log\frac{r_q}{r_{q-1}}
+  \le
+  \log\frac{r_{q+1}}{r_q}.\;}
+  \]
+  \item 若 \(\Lambda\) 在 \([0,\infty)\) 上可微，则对任意整数 \(q\ge 2\) 与任意 \(t\in[q-2,q-1]\)，都有
+  \[
+  \boxed{\;
+  \log\frac{r_q}{r_{q-1}}
+  \le
+  \Lambda'(t)
+  \le
+  \log\frac{r_{q+1}}{r_q}.\;}
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-projective-pressure-holder-logconvex}，\(\Lambda\) 在 \([0,\infty)\) 上凸。另一方面，由定理 \ref{thm:pom-projective-pressure-zero-normalization} 与定理 \ref{thm:pom-projective-operator-degenerates-to-moment-kernel}，
+\[
+\Lambda(q-1)=\log r_q-\log|A_{\mathrm{out}}|
+\qquad(q\in\ZZ_{\ge 1}).
+\]
+因此整数序列
+\[
+q\longmapsto \log r_q
+\]
+与整数节点
+\[
+q\longmapsto \Lambda(q-1)
+\]
+只差一个常数 \(\log|A_{\mathrm{out}}|\)，故凸性完全等价。于是第一条成立，而第二条正是第一条的差分等价写法。
+
+若进一步 \(\Lambda\) 可微，则对任意 \(t\in[q-2,q-1]\)，凸可微函数的导数必夹在左右割线斜率之间：
+\[
+\frac{\Lambda(q-1)-\Lambda(q-2)}{1}
+\le
+\Lambda'(t)
+\le
+\frac{\Lambda(q)-\Lambda(q-1)}{1}.
+\]
+再代入
+\[
+\Lambda(k-1)=\log r_k-\log|A_{\mathrm{out}}|
+\]
+即可得到第三条。证毕。
+\end{proof}
+
+\begin{theorem}[连续压力的离散 Legendre 下包络与可计算速率下界]\label{thm:pom-projective-pressure-discrete-legendre-envelope}
+沿用定理 \ref{thm:pom-projective-pressure-holder-logconvex} 的假设，并进一步假设注 \ref{rem:pom-projective-pressure-route} 所述 G\"artner--Ellis 正则性成立，从而速率函数
+\[
+I(\gamma):=\sup_{t\ge 0}\bigl(t\gamma-\Lambda(t)\bigr)
+\]
+定义良好。定义离散下包络
+\[
+I_{\mathrm{disc}}(\gamma)
+:=
+\sup_{q\ge 1}
+\Bigl((q-1)\gamma-\log r_q+\log|A_{\mathrm{out}}|\Bigr).
+\]
+再定义离散斜率
+\[
+s_q:=\log\frac{r_{q+1}}{r_q}
+\qquad(q\ge 1),
+\]
+并约定 \(s_0:=-\infty\)。则有：
+\begin{enumerate}
+  \item 对任意 \(\gamma\in\RR\)，
+  \[
+  \boxed{\;I(\gamma)\ge I_{\mathrm{disc}}(\gamma).\;}
+  \]
+  \item 序列 \((s_q)_{q\ge 1}\) 单调不减；并且若某个 \(q\ge 1\) 满足
+  \[
+  \gamma\in[s_{q-1},s_q],
+  \]
+  则
+  \[
+  \boxed{\;
+  I_{\mathrm{disc}}(\gamma)
+  =
+  (q-1)\gamma-\log r_q+\log|A_{\mathrm{out}}|.\;}
+  \]
+  因而 \(I_{\mathrm{disc}}\) 是由离散节点
+  \[
+  \bigl(q-1,\log r_q-\log|A_{\mathrm{out}}|\bigr)
+  \qquad(q\ge 1)
+  \]
+  生成的分段线性凸函数。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对任意固定整数 \(q\ge 1\)，由于 \(t=q-1\) 允许代入 Legendre--Fenchel 变换定义，故
+\[
+I(\gamma)
+=
+\sup_{t\ge 0}\bigl(t\gamma-\Lambda(t)\bigr)
+\ge
+(q-1)\gamma-\Lambda(q-1).
+\]
+再由整数点一致性
+\[
+\Lambda(q-1)=\log r_q-\log|A_{\mathrm{out}}|
+\]
+得到
+\[
+I(\gamma)\ge (q-1)\gamma-\log r_q+\log|A_{\mathrm{out}}|.
+\]
+对所有 \(q\ge 1\) 取上确界，便得第一条。
+
+第二条中的单调性正是推论 \ref{cor:pom-projective-pressure-discrete-convexity-slopes} 第二条的重写。记
+\[
+\ell_q(\gamma):=(q-1)\gamma-\log r_q+\log|A_{\mathrm{out}}|.
+\]
+则对 \(q\ge 1\) 有
+\[
+\ell_{q+1}(\gamma)-\ell_q(\gamma)=\gamma-s_q.
+\]
+若 \(\gamma\in[s_{q-1},s_q]\)，则
+\[
+\ell_{q+1}(\gamma)-\ell_q(\gamma)=\gamma-s_q\le 0.
+\]
+\(\text{若 }q\ge 2\)，则还有
+\[
+\ell_q(\gamma)-\ell_{q-1}(\gamma)=\gamma-s_{q-1}\ge 0.
+\]
+又因 \((s_j)\) 单调不减，故当 \(q\ge 2\) 且 \(j\le q-1\) 时，
+\[
+\ell_{j+1}(\gamma)-\ell_j(\gamma)=\gamma-s_j\ge 0,
+\]
+而当 \(j\ge q\) 时，
+\[
+\ell_{j+1}(\gamma)-\ell_j(\gamma)=\gamma-s_j\le 0.
+\]
+因此：
+\begin{itemize}
+\item 若 \(q\ge 2\)，则仿射函数族 \((\ell_j)\) 在 \(j=q\) 之前单调不减、在 \(j=q\) 之后单调不增，故 \(\ell_q\) 恰为上包络的主导项；
+\item 若 \(q=1\)，则由 \(\gamma\le s_1\) 及 \((s_j)\) 单调不减可知对所有 \(j\ge 1\) 都有
+\[
+\ell_{j+1}(\gamma)-\ell_j(\gamma)=\gamma-s_j\le 0,
+\]
+故 \(\ell_1\) 为主导项。
+\end{itemize}
+于是统一得到
+\[
+I_{\mathrm{disc}}(\gamma)=\ell_q(\gamma).
+\]
+最后，\(I_{\mathrm{disc}}\) 是一族仿射函数的上确界，因此必为凸的分段线性函数。证毕。
+\end{proof}
+
+\begin{theorem}[离散二阶差分塌缩强制连续压力区间仿射]\label{thm:pom-projective-pressure-discrete-flatness-forces-affine}
+沿用定理 \ref{thm:pom-projective-pressure-holder-logconvex} 的设定。若对某个整数 \(q\ge 2\) 恰有
+\[
+\boxed{\;r_q^2=r_{q-1}r_{q+1},\;}
+\]
+则连续压力函数 \(\Lambda\) 在闭区间 \([q-2,q]\) 上必为仿射函数。特别地，\(\Lambda\) 不可能在整个 \([0,\infty)\) 上保持本质严格凸。
+
+更一般地，若对某一整数区间中的每个
+\[
+q=q_0+1,\dots,q_1-1
+\]
+都满足
+\[
+r_q^2=r_{q-1}r_{q+1},
+\]
+则 \(\Lambda\) 在整个区间 \([q_0-1,q_1-1]\) 上仿射。
+\end{theorem}
+\begin{proof}
+由整数点一致性，
+\[
+\Lambda(q-2)=\log r_{q-1}-\log|A_{\mathrm{out}}|,
+\]
+\[
+\Lambda(q-1)=\log r_q-\log|A_{\mathrm{out}}|,
+\qquad
+\Lambda(q)=\log r_{q+1}-\log|A_{\mathrm{out}}|.
+\]
+条件 \(r_q^2=r_{q-1}r_{q+1}\) 等价于
+\[
+2\Lambda(q-1)=\Lambda(q-2)+\Lambda(q).
+\]
+也就是说，凸函数 \(\Lambda\) 在区间 \([q-2,q]\) 的中点 \(q-1\) 处恰达到端点弦值。对凸函数而言，这一等式只能在该区间上整体仿射时发生；否则中点值必严格低于弦值。故 \(\Lambda\) 在 \([q-2,q]\) 上仿射。
+
+更一般地，若对 \(q=q_0+1,\dots,q_1-1\) 的每个相邻三点都满足同样的中点等式，则 \(\Lambda\) 分别在各个区间
+\[
+[q_0-1,q_0+1],\ [q_0,q_0+2],\ \dots,\ [q_1-3,q_1-1]
+\]
+上仿射。由于这些区间两两重叠且端点斜率一致，故它们拼接成整个区间 \([q_0-1,q_1-1]\) 上的同一仿射函数。证毕。
+\end{proof}
+
+\begin{remark}[数值逼近建议：从有限维“整数截断”外推到实参数]\label{rem:pom-projective-pressure-numerics}
+工程上，可把 \(\mathcal{L}_{t+1}\) 视为对 \(\Delta\) 上函数的正算子并用 Galerkin/配点离散：
+用低阶多项式基、简单网格或稀疏网格在 \(\Delta\) 上构造有限维近似算子 \(\mathcal{L}_{t+1}^{(N)}\)，再取其 Perron 根近似 \(\lambda_N(t+1)\)。
+整数点上，\(\mathcal{L}_{q}\) 已在 \(\mathcal{H}_q\) 上给出\emph{严格有限维}表示 \(\widetilde A_q\)，因此可用 \(\rho(\widetilde A_q)=r_q\) 作为离散化/外推的强一致性回归锚点（尤其是检查 \(t\mapsto \log\lambda_N(t+1)\) 的凸性与在 \(t=q-1\) 处的插值误差）。
+\end{remark}
+

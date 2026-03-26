@@ -1,0 +1,231 @@
+\paragraph{再生展开与刷新统计：更新过程、母函数有理性与 Laguerre--世俗 SCGF}
+秩一刷新表示
+\(
+K^\star_\delta=\mathrm{diag}(1-r_\delta)+r_\delta\,\pi_\delta^{\mathsf T}
+\)
+不仅将谱与 resolvent 压缩为一维世俗方程（定理 \ref{thm:pom-maxent-markov-laguerre-secular-spectrum} 与命题 \ref{prop:pom-diagonal-rate-resolvent-entry-closed-form}），
+亦把路径层面的随机性完全外置为一个更新过程：刷新候选为 i.i.d.，而停留长度为状态依赖几何分布。
+这一再生表示在离散时间上给出刷新计数、再生奖励与熵率的闭式极限律，并在指数尺度上导出刷新计数的 SCGF，其 Perron 根由 Laguerre 变形的世俗多项式确定。
+
+\begin{theorem}[秩一刷新核的再生展开表示]\label{thm:pom-diagonal-rate-refresh-regeneration-iid-expansion}
+沿用命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 的记号：
+\(\delta\in(0,\delta_0)\)、\(\kappa:=\kappa_\delta>0\)、\(\{t_x\}_{x\in X}\subset(\kappa,\infty)\)，并令
+\[
+\pi_\delta(x):=\frac{1}{t_x-\kappa}\in\Delta(X),
+\qquad
+r_\delta(x):=\frac{t_x-\kappa}{t_x}\in(0,1).
+\]
+令 \(\{(Y_k,H_k)\}_{k\ge 1}\) 为 i.i.d.\ 随机对，满足对所有 \(y\in X\)、\(h\in\{1,2,\dots\}\) 有
+\[
+\PP(Y_k=y,\ H_k=h)=\pi_\delta(y)\,r_\delta(y)\,(1-r_\delta(y))^{h-1}.
+\]
+定义更新时刻 \(\sigma_0:=0\)、\(\sigma_k:=\sum_{j=1}^{k}H_j\)。
+并定义离散时间过程 \((X_m)_{m\ge 0}\) 为
+\[
+X_m:=Y_k\qquad(\sigma_{k-1}\le m<\sigma_k).
+\]
+则：
+\begin{enumerate}
+  \item \((X_m)_{m\ge 0}\) 为以核 \(K^\star_\delta\) 为转移的马尔可夫链；
+  \item \(\{\sigma_k\}_{k\ge 0}\) 为再生时刻：对每个 \(k\ge 0\)，在事件 \(\{m=\sigma_k\}\) 上，
+  后继刷新候选 \(Y_{k+1}\) 与过去 \(\sigma\)-代数 \(\sigma(X_0,\dots,X_m)\) 独立且服从 \(\pi_\delta\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由构造，若 \(\sigma_{k-1}\le m<\sigma_k-1\)，则 \(X_{m+1}=X_m=Y_k\)；
+而在 \(m=\sigma_k-1\) 时，进入下一块并令 \(X_{m+1}=Y_{k+1}\)，其中 \(Y_{k+1}\sim\pi_\delta\) 且独立于过去。
+因此对任意 \(x,y\in X\)，在条件 \(X_m=x\) 下，
+\[
+\PP(X_{m+1}=y\mid X_m=x)
+=\PP(H_k\ge 2\mid Y_k=x)\mathbf 1_{\{y=x\}}
+\;+\;\PP(H_k=1\mid Y_k=x)\pi_\delta(y)
+=(1-r_\delta(x))\mathbf 1_{\{y=x\}}+r_\delta(x)\pi_\delta(y),
+\]
+这正是 \(K^\star_\delta\) 的秩一刷新表示（命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone}），从而得到 (1)。
+(2) 由 \(\{(Y_k,H_k)\}\) 的独立同分布性与块展开定义直接推出。证毕。
+\end{proof}
+
+\begin{proposition}[刷新间隔的有理母函数与 Hausdorff 完全单调尾]\label{prop:pom-diagonal-rate-refresh-interval-pgf-logderivative}
+在定理 \ref{thm:pom-diagonal-rate-refresh-regeneration-iid-expansion} 的设定下，令 \(H:=H_1\) 为单块长度。
+记全多项式
+\[
+\mathcal P_\delta(z):=\prod_{x\in X}(t_x-z).
+\]
+则对 \(|s|\) 充分小有严格恒等式
+\begin{equation}\label{eq:pom-diagonal-rate-refresh-interval-pgf}
+\boxed{\;
+\Phi_H(s):=\EE[s^{H}]
+=\sum_{x\in X}\pi_\delta(x)\frac{r_\delta(x)s}{1-(1-r_\delta(x))s}
+=s\sum_{x\in X}\frac{1}{t_x-\kappa s}
+\;=\;-\,s\,\frac{\mathcal P_\delta'(\kappa s)}{\mathcal P_\delta(\kappa s)}\; } .
+\end{equation}
+并且对任意整数 \(m\ge 0\)，尾概率满足
+\begin{equation}\label{eq:pom-diagonal-rate-refresh-interval-tail}
+\boxed{\;
+\PP(H>m)=\sum_{x\in X}\pi_\delta(x)\,(1-r_\delta(x))^{m}
+=\sum_{x\in X}\frac{1}{t_x-\kappa}\left(\frac{\kappa}{t_x}\right)^{m}\; } .
+\end{equation}
+因此 \(\{\PP(H>m)\}_{m\ge 0}\) 为 \([0,1)\) 上有限原子测度的 Hausdorff 矩序列，并满足完全单调性：
+对任意 \(k,m\ge 0\)，有 \(({-1})^{k}(\Delta^{k}\PP(H>\cdot))_{m}\ge 0\)。
+\end{proposition}
+\begin{proof}
+由条件分布 \(H\mid(Y=x)\sim\mathrm{Geom}(r_\delta(x))\)（支撑于 \(\{1,2,\dots\}\)）可得
+\(
+\EE[s^H]=\sum_x\pi_\delta(x)\frac{r_\delta(x)s}{1-(1-r_\delta(x))s}
+\)。
+代入 \(\pi_\delta(x)=1/(t_x-\kappa)\) 与 \(r_\delta(x)=(t_x-\kappa)/t_x\) 得
+\(
+\pi_\delta(x)\frac{r_\delta(x)s}{1-(1-r_\delta(x))s}
+=s/(t_x-\kappa s)
+\)，从而得到第二个等号。
+最后用对数导数恒等式
+\(
+\sum_x(t_x-z)^{-1}=-\mathcal P_\delta'(z)/\mathcal P_\delta(z)
+\)
+得到 \eqref{eq:pom-diagonal-rate-refresh-interval-pgf} 的闭式。
+\par
+尾概率表示由 \(\PP(H>m\mid Y=x)=(1-r_\delta(x))^m\) 得到，并用 \(1-r_\delta(x)=\kappa/t_x\) 化简为 \eqref{eq:pom-diagonal-rate-refresh-interval-tail}。
+完全单调性对 \(\lambda^m\) 逐项差分并用 \(\lambda\in(0,1)\) 即得。证毕。
+\end{proof}
+
+\begin{theorem}[刷新计数的更新极限定理]\label{thm:pom-diagonal-rate-refresh-count-renewal-lln-clt}
+在定理 \ref{thm:pom-diagonal-rate-refresh-regeneration-iid-expansion} 的设定下，令刷新计数
+\[
+N_m:=\max\{k:\ \sigma_k\le m\}\qquad(m\ge 0).
+\]
+则极限
+\[
+\EE[H]=\sum_{x\in X}\frac{\pi_\delta(x)}{r_\delta(x)}=\sum_{x\in X}\frac{t_x}{(t_x-\kappa)^2}
+\]
+有限，且几乎必然成立
+\[
+\frac{N_m}{m}\longrightarrow \frac{1}{\EE[H]}.
+\]
+若再记
+\[
+\EE[H^2]=\sum_{x\in X}\pi_\delta(x)\frac{2-r_\delta(x)}{r_\delta(x)^2}
+=\sum_{x\in X}\frac{t_x(t_x+\kappa)}{(t_x-\kappa)^3},
+\qquad
+\Var(H)=\EE[H^2]-\EE[H]^2,
+\]
+则中心极限定律成立：
+\[
+\frac{N_m-\frac{m}{\EE[H]}}{\sqrt m}\ \Longrightarrow\ \mathcal N\!\left(0,\ \frac{\Var(H)}{\EE[H]^3}\right).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-refresh-regeneration-iid-expansion}，\((H_k)_{k\ge 1}\) 为 i.i.d.\ 且具有指数尾，故 \(\EE[H],\EE[H^2]<\infty\)。
+更新过程的强大数定律与中心极限定理给出 \(N_m/m\to 1/\EE[H]\) 及所示归一化极限分布（标准更新计数定理）。证毕。
+\end{proof}
+
+\begin{theorem}[再生奖励的中心极限定理与显式方差]\label{thm:pom-diagonal-rate-refresh-reward-clt-variance}
+在定理 \ref{thm:pom-diagonal-rate-refresh-regeneration-iid-expansion} 的设定下，取任意可观测 \(f:X\to\RR\)，并令
+\[
+S_m(f):=\sum_{j=0}^{m-1}f(X_j).
+\]
+在平稳初始 \(X_0\sim w\) 下，令 \(\mu_f:=\sum_{x\in X}w(x)f(x)\)。
+则存在方差常数 \(\sigma_f^2\ge 0\) 使
+\[
+\frac{S_m(f)-m\mu_f}{\sqrt m}\ \Longrightarrow\ \mathcal N(0,\sigma_f^2),
+\qquad
+\sigma_f^2=\frac{\Var\!\bigl(f(Y)H-\mu_f H\bigr)}{\EE[H]},
+\]
+其中 \((Y,H)\) 具有定理 \ref{thm:pom-diagonal-rate-refresh-regeneration-iid-expansion} 中的单块联合分布。
+\end{theorem}
+\begin{proof}
+由块展开，令 \(R_k:=f(Y_k)H_k\) 为第 \(k\) 块奖励，则 \(R_k\) 为 i.i.d.\ 且 \(\EE[R_1^2]<\infty\)。
+由再生奖励过程的标准中心极限定理，有
+\(
+\frac{S_m(f)-m\mu_f}{\sqrt m}\Rightarrow\mathcal N(0,\Var(R_1-\mu_f H_1)/\EE[H_1])
+\)；
+将 \((R_1,H_1)\) 写回为 \((f(Y)H,H)\) 即得所示方差形式。证毕。
+\end{proof}
+
+\begin{theorem}[刷新计数的 Laguerre--世俗 SCGF]\label{thm:pom-diagonal-rate-refresh-count-scgf-laguerre}
+在命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 的秩一刷新表示下，对任意 \(\theta\in\RR\) 定义正核
+\[
+K_{\delta,\theta}(y\mid x):=(1-r_\delta(x))\mathbf 1_{\{y=x\}}+e^{\theta}r_\delta(x)\pi_\delta(y).
+\]
+则 \(K_{\delta,\theta}\) 的 Perron 根 \(\rho(\theta)>0\) 为方程
+\begin{equation}\label{eq:pom-diagonal-rate-refresh-count-perron-equation}
+\boxed{\;
+\sum_{x\in X}\frac{1}{\rho(\theta)\,t_x-\kappa}=e^{-\theta}\;}
+\end{equation}
+的唯一正解。
+等价地，令 \(z(\theta):=\kappa/\rho(\theta)\)，则 \(z(\theta)\in(0,\min_x t_x)\) 为 Laguerre 变形多项式
+\begin{equation}\label{eq:pom-diagonal-rate-refresh-count-laguerre-deform}
+\boxed{\;
+\mathcal Q_{\delta,\theta}(z):=z\,\mathcal P_\delta'(z)+\kappa e^{-\theta}\,\mathcal P_\delta(z)\;}
+\end{equation}
+在该区间内的唯一零点，并满足 \(\rho(\theta)=\kappa/z(\theta)\)。
+\par
+在平稳初始下，刷新计数满足 SCGF 极限
+\[
+\psi(\theta):=\lim_{m\to\infty}\frac{1}{m}\log\EE_w\bigl[e^{\theta N_m}\bigr]=\log\rho(\theta),
+\]
+并且 \(\psi\) 在 \(\RR\) 上实解析且严格凸。
+此外，
+\[
+\psi'(0)=\frac{1}{\EE[H]},
+\qquad
+\psi''(0)=\frac{\Var(H)}{\EE[H]^3},
+\]
+其中 \(\EE[H],\Var(H)\) 由定理 \ref{thm:pom-diagonal-rate-refresh-count-renewal-lln-clt} 的闭式给出。
+\end{theorem}
+\begin{proof}
+由秩一表示，\(K_{\delta,\theta}=\mathrm{diag}(1-r_\delta)+e^{\theta}r_\delta\pi_\delta^{\mathsf T}\)。
+对 \(\rho I-K_{\delta,\theta}\) 应用秩一行列式引理并用
+\(
+\pi_\delta(x)r_\delta(x)=1/t_x
+\)
+得到其世俗方程等价于 \eqref{eq:pom-diagonal-rate-refresh-count-perron-equation}，从而 Perron 根的唯一性由左端对 \(\rho\) 的严格单调性与正性给出。
+令 \(z=\kappa/\rho\) 并化简可得 \(\mathcal Q_{\delta,\theta}(z)=0\)，即 \eqref{eq:pom-diagonal-rate-refresh-count-laguerre-deform}。
+\par
+对 SCGF，记
+\(
+F_m(\theta):=\EE_w[e^{\theta N_m}]
+\)
+并将刷新事件视为沿路径的乘法权重，则由 Feynman--Kac 迭代有
+\(
+F_m(\theta)=w^{\mathsf T}K_{\delta,\theta}^{\,m}\mathbf 1
+\)。
+由于 \(K_{\delta,\theta}\) 为逐项正矩阵，其幂增长由 Perron 根控制，故
+\(
+\lim_{m\to\infty}\frac{1}{m}\log F_m(\theta)=\log\rho(\theta)
+\)。
+解析性与严格凸性由 Perron 根对参数的解析扰动与 \(\log\rho(\theta)\) 的严格对数凸性给出。
+最后，\(\psi'(0)\) 与 \(\psi''(0)\) 分别等于 \(\lim_m \EE[N_m]/m\) 与 \(\lim_m\Var(N_m)/m\)，而这两者由更新计数定理给出为 \(1/\EE[H]\) 与 \(\Var(H)/\EE[H]^3\)（定理 \ref{thm:pom-diagonal-rate-refresh-count-renewal-lln-clt}）。证毕。
+\end{proof}
+
+\begin{proposition}[熵率的再生编码闭式]\label{prop:pom-diagonal-rate-refresh-entropy-rate-renewal-coding}
+沿用定理 \ref{thm:pom-diagonal-rate-refresh-regeneration-iid-expansion} 的记号，令
+\(
+\mathsf h:=h(K^\star_\delta)
+\)
+为定理 \ref{thm:pom-maxent-markov-unique-optimal-kernel} 所定义之熵率。
+则有再生编码恒等式
+\[
+\boxed{\;
+\mathsf h=\frac{H(Y,H)}{\EE[H]}\;}
+\]
+并且可写成完全闭式
+\[
+\mathsf h
+=\frac{H(\pi_\delta)+\EE_{\pi_\delta}\!\left[-\log r_\delta(Y)-\frac{1-r_\delta(Y)}{r_\delta(Y)}\log(1-r_\delta(Y))\right]}{\sum_{x\in X}\pi_\delta(x)/r_\delta(x)}.
+\]
+\end{proposition}
+\begin{proof}
+由再生展开，路径由独立块 \((Y_k,H_k)\) 编码，且每块在时间尺度上占据 \(H_k\) 个符号。
+对平稳过程应用 Shannon--McMillan--Breiman 定理（有限状态平稳遍历链），单位时间的信息率等于单位块信息量与单位块长度之比：
+\(
+\mathsf h=H(Y,H)/\EE[H]
+\)。
+又 \(H(Y,H)=H(\pi_\delta)+\EE_{\pi_\delta}[H(H\mid Y)]\)，并且对 \(\mathrm{Geom}(r)\)（支撑 \(\{1,2,\dots\}\)）有熵闭式
+\(
+H(\mathrm{Geom}(r))=-\log r-\frac{1-r}{r}\log(1-r)
+\)，
+代回即得所示表达。证毕。
+\end{proof}
+
+\endinput
+

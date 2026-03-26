@@ -1,0 +1,70 @@
+\subsection{共动前缀位与端点预算的二比一交换律及统一审计的强逆前沿}\label{subsec:conclusion-comoving-prefix-endpoint-budget-strong-frontier}
+沿用正文关于共动前缀量化、端点可检测余量与相位前缀碰撞门槛的记号。前文已经分别给出：在最坏误差模型下，共动前缀位 \(B\) 对端点预算 \(p\) 的精确削减律，以及高度带上的前缀地址碰撞下界。将这两条链合并之后，可把统一可审计性的预算几何压缩成一条 sharp 前沿：共动前缀每增加 \(1\) 位，在主项上恰可替代 \(2\) 位端点预算；而一旦落到该前沿以下，则无论失败表现为端点盲区还是地址碰撞，都不再存在覆盖全部高度窗的统一完备审计器。
+
+\begin{theorem}[二比一预算交换与统一审计的强逆前沿]\label{thm:conclusion-comoving-prefix-endpoint-twoforone-strong-frontier}
+固定 \(T\ge 1\)、\(\delta_0\in(0,\tfrac12]\)，并考虑全部满足
+\[
+|\gamma|\le T,
+\qquad
+\delta(\rho)\ge \delta_0
+\]
+的候选零点。设 \(B\in\NN\) 为共动前缀位数，并令最坏量化误差
+\[
+\eta_B:=T\,2^{-B}.
+\]
+则在正文的最坏情形模型中，统一覆盖该候选族所需且充分的最小端点预算满足精确闭式
+\[
+\boxed{\;
+p_{\min}(T,\delta_0;B)
+=
+\log_2\!\Biggl(
+\frac{\eta_B^2+(1+\delta_0)^2}{4\delta_0}
+\Biggr).\;}
+\]
+特别地，在主导区间 \(T^2 2^{-2B}\gg 1\) 上，
+\[
+\boxed{\;
+2B+p_{\min}(T,\delta_0;B)
+=
+2\log_2 T+\log_2\!\Bigl(\frac1{\delta_0}\Bigr)+O(1).\;}
+\]
+因此每增加 \(1\) 位共动前缀，端点预算主项恰削减 \(2\) 位，直至进入饱和相。
+
+进一步，若预算对 \((B,p)\) 落在上述前沿以下，则不存在统一覆盖全部 \(|\gamma|\le T\)、\(\delta(\rho)\ge \delta_0\) 的完备审计器；其失败必来自以下两类机制之一：
+\begin{enumerate}
+  \item 端点预算低于 \(p_{\min}(T,\delta_0;B)\)，从而最坏候选仍落入端点盲区；
+  \item 前缀位数低于相位前缀碰撞门槛，从而高度带内发生地址碰撞，无法实现单射寻址。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一条精确闭式正是定理 \ref{thm:xi-comoving-prefix-endpoint-barrier-law} 的内容。其渐近式则由
+\[
+\eta_B^2=T^2 2^{-2B}
+\]
+代入同一定理的展开式立即得到：
+\[
+p_{\min}(T,\delta_0;B)
+=
+2\log_2T-2B+\log_2\!\Bigl(\frac1{\delta_0}\Bigr)+O(1),
+\]
+移项即得
+\[
+2B+p_{\min}(T,\delta_0;B)
+=
+2\log_2T+\log_2\!\Bigl(\frac1{\delta_0}\Bigr)+O(1).
+\]
+故每增加 \(1\) 位共动前缀，端点预算主项恰下降 \(2\) 位。
+
+若某预算对 \((B,p)\) 满足 \(p<p_{\min}(T,\delta_0;B)\)，则定理 \ref{thm:xi-comoving-prefix-endpoint-barrier-law} 已直接给出必要性：存在满足最坏量化误差约束的候选使
+\[
+h_{\tilde x_0}(\rho)<2^{-p},
+\]
+从而该候选无法被统一覆盖。另一方面，若 \(B\) 自身低于定理 \ref{thm:xi-phase-prefix-collision-lower-bound} 的地址门槛，则高度带上的相位前缀必发生碰撞，任何依赖 \(B\) 位前缀的统一审计都无法实现单射寻址。于是落在前沿以下时，必有上述两类失败机制之一发生；这正是统一完备审计的强逆断言。证毕。
+\end{proof}
+
+\input{thm__conclusion-comoving-endpoint-address-loglog-transition}
+
+\paragraph{统一读法}
+这一前沿现在可被读成一条更完整的预算链：固定图表中的二次端点压缩给出 \(2\log_2T\) 级别的必需负担，而一旦外置共动前缀，该负担便整体转移到地址轴，端点预算本身降为高度无关的常数门槛；但这种节省绝非自由消失，因为删去前缀后固定图表下界会立刻恢复。再往径向紧化推进，离开临界线的读出还会额外强制一个不可去的 \(2\log_2\log L\) 双对数尾项。故这里真正闭合的不是单一预算不等式，而是“端点轴—地址轴—径向紧化轴”三者之间的 sharp 分裂。
+
+\endinput

@@ -1,0 +1,210 @@
+\subsubsection{Poisson 窗口恒等式与平移 Jensen 缺陷的积分律}\label{subsubsec:cdim-poisson-window-jensen-defect}
+本段抽取两条可直接编译为离线证书的闭式接口：其一把 Cayley 模长缺口表示为 Poisson 核在尺度参数上的窗口积分，从而把对数缺陷势编译为一个可审计的 Poisson 窗口质量；其二给出平移族 Jensen 缺陷在基点方向的显式积分律，并在积分层面严格消除高度参数 \(\gamma\)。
+二者与本小节其余部分的 Poisson--Cauchy 粗粒化散度常数链条相容：前者提供核层原语，后者提供缺陷端的可审计标量化读出，而后续命题给出相对熵与一般 \(f\)-散度在大尺度下的精确次主常数与刚性不等式。
+\par
+下述记号沿用附录 \ref{app:unit-circle-phase-gate} 的 Cayley 紧化与 Poisson 核族。
+
+\begin{proposition}[Cayley 模长的 Poisson 窗口恒等式]\label{prop:cdim-cayley-poisson-window-identity}
+令 \(\mathcal{C}\) 为 \eqref{eq:app-cayley-disk} 的 Cayley 紧化，并对 \(\lambda>0\) 定义保持端点基准的标尺族
+\[
+\mathcal{C}_{\lambda}(t):=\mathcal{C}(t/\lambda)=\frac{\lambda+\mathrm{i}t}{\lambda-\mathrm{i}t}
+\qquad(t\in\mathbb{H}).
+\]
+令 Poisson 核
+\[
+P_{s}(x):=\frac{1}{\pi}\frac{s}{x^{2}+s^{2}}
+\qquad(s>0,\ x\in\RR).
+\]
+则对任意 \(\gamma\in\RR\)、\(\lambda>0\) 与 \(0<\delta<\lambda\) 有严格恒等式
+\begin{equation}\label{eq:cdim-cayley-modulus-poisson-window}
+\boxed{\;
+\log\frac{1}{\bigl|\mathcal{C}_{\lambda}(\gamma+\mathrm{i}\delta)\bigr|}
+=\int_{\lambda-\delta}^{\lambda+\delta}\frac{s}{\gamma^{2}+s^{2}}\,\dd s
+=\pi\int_{\lambda-\delta}^{\lambda+\delta}P_{s}(\gamma)\,\dd s\; }.
+\end{equation}
+并且其关于 \(\delta\) 的导数具有边界求和形式
+\begin{equation}\label{eq:cdim-cayley-modulus-poisson-window-delta-derivative}
+\boxed{\;
+\partial_{\delta}\log\frac{1}{\bigl|\mathcal{C}_{\lambda}(\gamma+\mathrm{i}\delta)\bigr|}
+=\frac{\lambda+\delta}{\gamma^{2}+(\lambda+\delta)^{2}}+\frac{\lambda-\delta}{\gamma^{2}+(\lambda-\delta)^{2}}
+=\pi\bigl(P_{\lambda+\delta}(\gamma)+P_{\lambda-\delta}(\gamma)\bigr)\; }.
+\end{equation}
+\end{proposition}
+\begin{proof}
+由定义，
+\[
+\mathcal{C}_{\lambda}(\gamma+\mathrm{i}\delta)=\frac{\lambda-\delta+\mathrm{i}\gamma}{\lambda+\delta-\mathrm{i}\gamma},
+\qquad
+\bigl|\mathcal{C}_{\lambda}(\gamma+\mathrm{i}\delta)\bigr|^{2}
+=\frac{\gamma^{2}+(\lambda-\delta)^{2}}{\gamma^{2}+(\lambda+\delta)^{2}}.
+\]
+因此
+\[
+\log\frac{1}{\bigl|\mathcal{C}_{\lambda}(\gamma+\mathrm{i}\delta)\bigr|}
+=\frac12\log\frac{\gamma^{2}+(\lambda+\delta)^{2}}{\gamma^{2}+(\lambda-\delta)^{2}}
+=\frac12\int_{\lambda-\delta}^{\lambda+\delta}\frac{\dd}{\dd s}\log(\gamma^{2}+s^{2})\,\dd s
+=\int_{\lambda-\delta}^{\lambda+\delta}\frac{s}{\gamma^{2}+s^{2}}\,\dd s,
+\]
+并由 \(\frac{s}{\gamma^{2}+s^{2}}=\pi P_{s}(\gamma)\) 得到 \eqref{eq:cdim-cayley-modulus-poisson-window}。
+对 \(\delta\) 求导并使用端点求导法则得到
+\[
+\partial_{\delta}\int_{\lambda-\delta}^{\lambda+\delta}\frac{s}{\gamma^{2}+s^{2}}\,\dd s
+=\frac{\lambda+\delta}{\gamma^{2}+(\lambda+\delta)^{2}}+\frac{\lambda-\delta}{\gamma^{2}+(\lambda-\delta)^{2}},
+\]
+从而得到 \eqref{eq:cdim-cayley-modulus-poisson-window-delta-derivative}。证毕。
+\end{proof}
+
+\begin{corollary}[Cayley 窗函数的全质量守恒律]\label{cor:cdim-cayley-window-mass-conservation}
+在命题 \ref{prop:cdim-cayley-poisson-window-identity} 的设定下，令
+\[
+\Phi_{\lambda,\delta}(\gamma):=\log\frac{1}{\bigl|\mathcal{C}_{\lambda}(\gamma+\mathrm{i}\delta)\bigr|}
+\qquad(\gamma\in\RR).
+\]
+则有严格恒等式
+\[
+\int_{\RR}\Phi_{\lambda,\delta}(\gamma)\,\dd\gamma\ =\ 2\pi\delta.
+\]
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:cdim-cayley-modulus-poisson-window}，
+\[
+\Phi_{\lambda,\delta}(\gamma)=\int_{\lambda-\delta}^{\lambda+\delta}\frac{s}{\gamma^{2}+s^{2}}\,\dd s.
+\]
+对 \(\gamma\) 积分并用 Tonelli 定理交换积分次序得
+\[
+\int_{\RR}\Phi_{\lambda,\delta}(\gamma)\,\dd\gamma
+=\int_{\lambda-\delta}^{\lambda+\delta}\left(\int_{\RR}\frac{s}{\gamma^{2}+s^{2}}\,\dd\gamma\right)\dd s
+=\int_{\lambda-\delta}^{\lambda+\delta}\pi\,\dd s
+=2\pi\delta.
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[平移族 Jensen 缺陷的 \texorpdfstring{$\gamma$}{gamma}-消除与显式积分律]\label{prop:cdim-shifted-jensen-defect-integral-law}
+固定 \(0<\varrho<1\)，并令 \([u]_+:=\max\{u,0\}\)。
+对任意 \((\gamma,\delta)\in\RR\times(0,1)\) 与任意基点 \(x_0\in\RR\)，定义移位 Cayley 像与阈值化缺陷核
+\[
+w_{\gamma,\delta;x_0}:=\mathcal{C}\bigl((\gamma-x_0)+\mathrm{i}\delta\bigr)\in\mathbb{D},
+\qquad
+d_{\varrho}(\gamma,\delta;x_0):=\Bigl[\log\frac{\varrho}{|w_{\gamma,\delta;x_0}|}\Bigr]_+.
+\]
+对有限原子配置 \(\mu=\sum_{j=1}^{N}m_j\,\delta_{(\gamma_j,\delta_j)}\)（\(m_j\in\NN\)），令
+\[
+D_{\mu}(\varrho;x_0):=\sum_{j=1}^{N}m_j\,d_{\varrho}(\gamma_j,\delta_j;x_0).
+\]
+则有严格恒等式
+\begin{equation}\label{eq:cdim-shifted-jensen-defect-integral-law}
+\boxed{\;
+\int_{\RR}D_{\mu}(\varrho;x_0)\,\dd x_0=\sum_{j=1}^{N}m_j\,\Lambda_{\varrho}(\delta_j)\;}
+\end{equation}
+其中
+\[
+X(\varrho,\delta):=\sqrt{\max\Bigl\{0,\ \frac{\varrho^{2}(1+\delta)^{2}-(1-\delta)^{2}}{1-\varrho^{2}}\Bigr\}},
+\]
+\[
+\Lambda_{\varrho}(\delta)
+:=2(1+\delta)\arctan\!\Bigl(\frac{X(\varrho,\delta)}{1+\delta}\Bigr)
+-2(1-\delta)\arctan\!\Bigl(\frac{X(\varrho,\delta)}{1-\delta}\Bigr).
+\]
+特别地，\(\Lambda_{\varrho}(\delta)\) 与 \(\gamma\) 无关；并且对每个 \(\delta\in(0,1)\) 有端点饱和极限
+\begin{equation}\label{eq:cdim-shifted-jensen-defect-integral-saturation}
+\boxed{\;\lim_{\varrho\uparrow 1}\Lambda_{\varrho}(\delta)=2\pi\delta\; }.
+\end{equation}
+从而
+\[
+\lim_{\varrho\uparrow 1}\int_{\RR}D_{\mu}(\varrho;x_0)\,\dd x_0
+=2\pi\sum_{j=1}^{N}m_j\,\delta_j.
+\]
+\end{proposition}
+\begin{proof}
+由定义，\(d_{\varrho}(\gamma,\delta;x_0)\) 仅依赖差变量 \(x:=\gamma-x_0\)，从而
+\[
+\int_{\RR}d_{\varrho}(\gamma,\delta;x_0)\,\dd x_0
+=\int_{\RR}\Bigl[\log\frac{\varrho}{|\mathcal{C}(x+\mathrm{i}\delta)|}\Bigr]_+\,\dd x,
+\]
+故足以证明单原子情形并线性叠加。
+\par
+由 \eqref{eq:app-cayley-disk} 的代数化简（亦见 \eqref{eq:xi-cayley-modulus-delta}），有
+\[
+|\mathcal{C}(x+\mathrm{i}\delta)|^2=\frac{x^2+(1-\delta)^2}{x^2+(1+\delta)^2}.
+\]
+因此 \(|\mathcal{C}(x+\mathrm{i}\delta)|<\varrho\) 等价于 \(|x|<X(\varrho,\delta)\)。
+并且在该区间上
+\[
+\log\frac{\varrho}{|\mathcal{C}(x+\mathrm{i}\delta)|}
+=\frac12\log\frac{\varrho^{2}\bigl(x^{2}+(1+\delta)^{2}\bigr)}{x^{2}+(1-\delta)^{2}}.
+\]
+令 \(X:=X(\varrho,\delta)\)、\(A:=1+\delta\)、\(B:=1-\delta\)。
+在 \([-X,X]\) 上积分并使用原函数恒等式
+\[
+\int \log(x^2+a^2)\,\dd x=x\log(x^2+a^2)-2x+2a\arctan(x/a),
+\]
+得到
+\[
+\int_{\RR}\Bigl[\log\frac{\varrho}{|\mathcal{C}(x+\mathrm{i}\delta)|}\Bigr]_+\,\dd x
+=2X\log\varrho+X\log\frac{X^2+A^2}{X^2+B^2}
++2A\arctan(X/A)-2B\arctan(X/B).
+\]
+由边界条件 \(|\mathcal{C}(X+\mathrm{i}\delta)|=\varrho\) 可得 \(\frac{X^{2}+B^{2}}{X^{2}+A^{2}}=\varrho^{2}\)，从而
+\(
+\log\frac{X^2+A^2}{X^2+B^2}=-2\log\varrho
+\)，故前两项严格抵消，得到 \eqref{eq:cdim-shifted-jensen-defect-integral-law} 中 \(\Lambda_{\varrho}\) 的闭式。
+\par
+最后令 \(\varrho\uparrow 1\)。
+此时 \(X(\varrho,\delta)\to\infty\)，两项反正切分别趋于 \(\pi/2\)，从而
+\(
+\Lambda_{\varrho}(\delta)\to \pi(1+\delta)-\pi(1-\delta)=2\pi\delta
+\)，得到 \eqref{eq:cdim-shifted-jensen-defect-integral-saturation}。证毕。
+\end{proof}
+
+\paragraph{Poisson--Cauchy 粗粒化的 KL 次主常数与奇阶消失}
+令 \(\nu\) 为 \(\RR\) 上概率测度，均值 \(\bar\gamma\)，中心矩
+\[
+\mu_k:=\int_{\RR}(\gamma-\bar\gamma)^k\,\dd\nu(\gamma)\qquad(k\ge 2),
+\qquad
+\sigma^2:=\mu_2.
+\]
+令 Poisson 核 \(P_t(x)=\frac{1}{\pi}\frac{t}{x^2+t^2}\) 并定义粗粒化
+\[
+h_t:=P_t*\nu,
+\qquad
+g_t(x):=P_t(x-\bar\gamma)
+\qquad(t>0).
+\]
+在矩条件（例如 \(\mu_6<\infty\)）下，命题 \ref{prop:cdim-poisson-kl-sixth-order-correction} 给出 KL 缺陷的二阶常数与奇阶消失：
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{\sigma^4}{8t^4}
++\frac{1}{t^6}\Bigl(\frac{3}{32}\mu_3^2-\frac18\sigma^2\mu_4+\frac{1}{64}\sigma^6\Bigr)+o(t^{-6}),
+\]
+并且 \(t^{-5}\) 级项严格为零（偶阶结构）。
+
+\paragraph{\texorpdfstring{$f$}{f}-散度次主项与耗散率展开}
+在同一设定下，命题 \ref{prop:cdim-poisson-fdiv-sixth-order-correction} 表明对满足 \(f(1)=f'(1)=0\) 且 \(f''(1)>0\) 的三阶可微 \(f\)，其 \(f\)-散度满足
+\[
+D_f(h_t\mid g_t)
+=\frac{f''(1)\sigma^4}{8t^4}
++\frac{1}{t^6}\Bigl[
+f''(1)\Bigl(\frac{3}{32}\mu_3^2-\frac18\sigma^2\mu_4\Bigr)-\frac{f'''(1)\sigma^6}{64}
+\Bigr]+o(t^{-6}).
+\]
+若记耗散率 \(I_1(t):=-\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\mid g_t)\)（等价于推论 \ref{cor:cdim-poisson-kl-dissipation-seventh-order-correction} 的 \(\mathcal I_1(h_t\mid g_t)\)），则
+\[
+I_1(t)=\frac{\sigma^4}{2t^5}
++\frac{1}{t^7}\Bigl(\frac{9}{16}\mu_3^2-\frac34\sigma^2\mu_4+\frac{3}{32}\sigma^6\Bigr)+o(t^{-7}).
+\]
+
+\paragraph{六次系数的严格负性与极值分布}
+命题 \ref{prop:cdim-poisson-kl-sixth-order-coefficient-negative} 给出六次系数的普适负性与上界：若 \(\sigma^2>0\) 且 \(\mu_4<\infty\)，则
+\[
+\frac{3}{32}\mu_3^2-\frac18\sigma^2\mu_4+\frac{1}{64}\sigma^6
+\le -\frac{1}{64}\bigl(2\mu_3^2+7\sigma^6\bigr)<0,
+\]
+并且在仅固定 \((\bar\gamma,\sigma^2)\) 的类中，六次系数的上确界仅由对称二点分布
+\(
+\nu=\frac12\delta_{\bar\gamma+\sigma}+\frac12\delta_{\bar\gamma-\sigma}
+\)
+达到。
+
+\endinput
+

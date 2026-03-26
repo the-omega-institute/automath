@@ -1,0 +1,387 @@
+\paragraph{阿贝尔可见通道负性、压力余项审计与 Hankel 原始缺口的补充刚性}
+
+\begin{theorem}[有限阿贝尔可见通道上的负性支持不可压缩界]\label{thm:xi-abelian-visible-channel-negative-support-incompressible}
+设 \(H\) 为有限阿贝尔群，\(\mathcal A:=\CC[H]\)，且 \(F:\mathbb D\to\mathcal A\) 解析。
+对每个 \(N\ge 0\)，记 \(\mathbf T_N^{\mathcal A}(F)\) 为 \(\mathcal A\)-值 Toeplitz 截断矩阵。
+对每个角色 \(\chi\in\widehat H\)，记标量通道 \(F_\chi:=\chi\circ F\) 与 \(\mathbf T_N(F_\chi)\)。
+定义
+\[
+K_N:=\nu_-\!\bigl(\mathbf T_N^{\mathcal A}(F)\bigr),\qquad
+S_N:=\{\chi\in\widehat H:\ \nu_-\!\bigl(\mathbf T_N(F_\chi)\bigr)\ge 1\}.
+\]
+则有
+\[
+\left\lceil \frac{K_N}{N+1}\right\rceil\le |S_N|\le K_N.
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:xi-abelian-block-toeplitz-directsum} 的直和分解（等价地由定理 \ref{thm:xi-abelian-channel-kappaCar-additivity} 的逐通道可加性），
+\[
+\nu_-\!\bigl(\mathbf T_N^{\mathcal A}(F)\bigr)
+=\sum_{\chi\in\widehat H}\nu_-\!\bigl(\mathbf T_N(F_\chi)\bigr).
+\]
+记
+\[
+k_\chi:=\nu_-\!\bigl(\mathbf T_N(F_\chi)\bigr)\in\{0,1,\dots,N+1\},
+\]
+则 \(K_N=\sum_{\chi}k_\chi\)，且 \(S_N=\{\chi:\ k_\chi\ge 1\}\)。
+于是
+\[
+K_N=\sum_{\chi\in S_N}k_\chi\le\sum_{\chi\in S_N}(N+1)=(N+1)|S_N|,
+\]
+故 \(|S_N|\ge K_N/(N+1)\)，从而 \(|S_N|\ge\lceil K_N/(N+1)\rceil\)。
+另一方面
+\[
+K_N=\sum_{\chi\in S_N}k_\chi\ge \sum_{\chi\in S_N}1=|S_N|.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[随机抽样通道的负性检测概率下界]\label{cor:xi-abelian-random-channel-negative-detection-lower-bound}
+在定理 \ref{thm:xi-abelian-visible-channel-negative-support-incompressible} 的设定下，记
+\[
+M:=|\widehat H|,\qquad
+L_N:=\left\lceil\frac{K_N}{N+1}\right\rceil.
+\]
+从 \(\widehat H\) 中不放回均匀抽取 \(r\) 个角色并检测对应 \(\mathbf T_N(F_\chi)\) 是否出现负特征值（\(0\le r\le M\)）。
+则“至少检测到一个负性通道”的概率满足
+\[
+\PP(\mathrm{detect})\ \ge\
+1-\frac{\binom{M-L_N}{r}}{\binom{M}{r}},
+\]
+其中约定 \(\binom{a}{r}=0\)（当 \(a<r\)）。
+\end{corollary}
+\begin{proof}
+若负性通道集合为 \(S_N\)，则
+\[
+\PP(\mathrm{miss})
+=\frac{\binom{M-|S_N|}{r}}{\binom{M}{r}}.
+\]
+由定理 \ref{thm:xi-abelian-visible-channel-negative-support-incompressible}，
+\(
+|S_N|\ge L_N
+\)。
+函数 \(s\mapsto \binom{M-s}{r}\) 随 \(s\) 单调不增，故
+\[
+\PP(\mathrm{miss})
+\le \frac{\binom{M-L_N}{r}}{\binom{M}{r}},
+\]
+即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[Gödel 整数化对负性账本的超线性实现代价]\label{thm:xi-godel-encoding-implementation-cost-for-negative-ledger}
+在定理 \ref{thm:xi-abelian-visible-channel-negative-support-incompressible} 的设定下，设以 Gödel 型素数指数编码承诺负性通道列表
+\[
+\tau=(a_1,\dots,a_T),\qquad a_t\ge 1,\qquad T:=|S_N|,
+\]
+\[
+G(\tau):=\prod_{t=1}^{T}p_t^{a_t},
+\]
+其中 \(p_t\) 为第 \(t\) 个素数。
+则存在绝对常数 \(c>0\)，使
+\[
+\log_2 G(\tau)\ \ge\ T\log_2 T-cT.
+\]
+进一步，令 \(L_N=\left\lceil K_N/(N+1)\right\rceil\)。当 \(K_N\ge 1\) 时，
+\[
+\log_2 G(\tau)\ \ge\ L_N\log_2 L_N-cL_N.
+\]
+\end{theorem}
+\begin{proof}
+第一式即定理 \ref{thm:xi-godel-integerization-log-overhead} 的量纲结论（把其 \(T\log_2T-c_0T-c_1\) 形式并入常数）。
+\par
+由定理 \ref{thm:xi-abelian-visible-channel-negative-support-incompressible}，\(T\ge L_N\)。
+取前 \(L_N\) 项子向量 \(\tau_{[L_N]}=(a_1,\dots,a_{L_N})\)，则
+\[
+G(\tau)\ge G(\tau_{[L_N]}).
+\]
+对长度 \(L_N\) 的 \(\tau_{[L_N]}\) 应用定理 \ref{thm:xi-godel-integerization-log-overhead}，得常数 \(c_0,c_1\) 使
+\[
+\log_2 G(\tau_{[L_N]})
+\ge L_N\log_2L_N-c_0L_N-c_1.
+\]
+当 \(L_N\ge 1\) 时，\(-c_1\ge-|c_1|L_N\)，故
+\[
+\log_2 G(\tau_{[L_N]})
+\ge L_N\log_2L_N-(c_0+|c_1|)L_N.
+\]
+令 \(c:=c_0+|c_1|\) 即得第二式。证毕。
+\end{proof}
+
+\begin{proposition}[Toeplitz 负谱的鲁棒数值核验]\label{prop:xi-toeplitz-negative-spectrum-robust-verification}
+设 \(T\in\CC^{(N+1)\times(N+1)}\) 为 Hermitian，\(\widehat T\) 为其近似矩阵。
+若存在 \(\eta>0\) 使
+\[
+\lambda_{\min}(\widehat T)\le -\eta,\qquad
+\|\,\widehat T-T\,\|_2\le \eta/2,
+\]
+则
+\[
+\lambda_{\min}(T)\le -\eta/2<0,
+\qquad
+\nu_-(T)\ge 1.
+\]
+\end{proposition}
+\begin{proof}
+由 Weyl 特征值扰动不等式，
+\[
+|\lambda_{\min}(T)-\lambda_{\min}(\widehat T)|
+\le \|T-\widehat T\|_2.
+\]
+因此
+\[
+\lambda_{\min}(T)
+\le \lambda_{\min}(\widehat T)+\|T-\widehat T\|_2
+\le -\eta+\eta/2=-\eta/2<0.
+\]
+故 \(T\) 至少有一个负特征值，即 \(\nu_-(T)\ge 1\)。证毕。
+\end{proof}
+
+\begin{theorem}[压力展开对 \texorpdfstring{$\rho_m$}{rho_m} 的可审计收敛阈值与余项界]\label{thm:xi-rhom-pressure-series-convergence-threshold-remainder}
+令
+\[
+f(t):=\log|\lambda(e^{\mathrm{i}t})|,
+\qquad
+t_m:=\frac{2\pi}{m},
+\qquad
+\rho_m:=3\exp\!\bigl(f(t_m)\bigr).
+\]
+设 \(f\) 在 \(t=0\) 的幂级数真实收敛半径为 \(R_t\approx 1.070953\)（见注 \ref{rem:sync-hatdelta-analytic-radius-complex}）。
+则当 \(m\ge 6\) 时（即 \(|t_m|<R_t\)），\(f(t_m)\) 的局部级数绝对收敛。
+\par
+任取 \(r\) 满足 \(|t_m|<r<R_t\)，并记
+\[
+M_r:=\max_{|z|=r}|f(z)|.
+\]
+若
+\[
+f(t)=\sum_{k\ge 0}c_{2k}t^{2k},
+\qquad
+R_{2K}(t_m):=\sum_{k>K}c_{2k}t_m^{2k},
+\]
+则有
+\[
+|R_{2K}(t_m)|
+\le
+M_r\frac{(|t_m|/r)^{2K+2}}{1-(|t_m|/r)^2}.
+\]
+进而对
+\[
+\rho_m^{(2K)}:=3\exp\!\left(\sum_{k=0}^{K}c_{2k}t_m^{2k}\right)
+\]
+有相对误差界
+\[
+\frac{|\rho_m^{(2K)}-\rho_m|}{\rho_m}
+\le e^{|R_{2K}(t_m)|}-1.
+\]
+\end{theorem}
+\begin{proof}
+由注 \ref{rem:sync-hatdelta-analytic-radius-complex}，\(R_t\approx 1.070953\)。
+当 \(m\ge 6\) 时 \(|t_m|=2\pi/m\le 2\pi/6<R_t\)，故级数在 \(t_m\) 处收敛；并且 \(m=5\) 落在收敛盘外。
+\par
+对 \(|t|<R_t\)，取 \(r\in(|t_m|,R_t)\)。
+由 Cauchy 估计（同推论 \ref{cor:pressure-taylor-remainder-cauchy} 的机制），
+\[
+|c_{2k}|\le M_r r^{-2k}.
+\]
+因此
+\[
+|R_{2K}(t_m)|
+\le \sum_{k>K}|c_{2k}|\,|t_m|^{2k}
+\le M_r\sum_{k>K}\left(\frac{|t_m|}{r}\right)^{2k}
+=M_r\frac{(|t_m|/r)^{2K+2}}{1-(|t_m|/r)^2}.
+\]
+再写
+\[
+\rho_m=3e^{S+R},\qquad
+\rho_m^{(2K)}=3e^S,
+\]
+其中 \(S=\sum_{k=0}^{K}c_{2k}t_m^{2k}\)、\(R=R_{2K}(t_m)\)。
+则
+\[
+\frac{|\rho_m^{(2K)}-\rho_m|}{\rho_m}
+=|1-e^{-R}|
+\le e^{|R|}-1
+=e^{|R_{2K}(t_m)|}-1.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[原始缺口 \texorpdfstring{$\Delta_{\mathrm{prim}}$}{Delta_prim} 的消失准则]\label{thm:xi-hankel-primitive-gap-vanishing-criterion}
+设 \(H\) 为窗口维数 \(n\) 的 Hankel 型矩阵，\(P(\lambda)\) 为对应序列的最小递推首一多项式，\(\deg P=d\)。
+按定义 \ref{def:pom-resonance-hankel-null-multiples}，记倍乘冗余子空间
+\[
+M(P)\subseteq \ker(H^{\mathsf T}),
+\]
+并定义
+\[
+\Delta_{\mathrm{prim}}
+:=\dim\!\bigl(\ker(H^{\mathsf T})/M(P)\bigr).
+\]
+若 \(\mathrm{rank}(H)=d\)，则
+\[
+\ker(H^{\mathsf T})=M(P)
+\qquad\Longleftrightarrow\qquad
+\Delta_{\mathrm{prim}}=0.
+\]
+\end{theorem}
+\begin{proof}
+由定义 \ref{def:pom-resonance-hankel-null-multiples}，\(M(P)\subseteq\ker(H^{\mathsf T})\)。
+又因 \(P\) 首一且 \(\deg P=d\)，映射
+\[
+Q\longmapsto \operatorname{coeff}_{<n}(QP),\qquad \deg Q<n-d,
+\]
+在该窗口约束下为单射，故
+\[
+\dim M(P)=n-d.
+\]
+另一方面，\(\mathrm{rank}(H)=d\) 给出
+\[
+\dim\ker(H^{\mathsf T})=n-d.
+\]
+由包含关系与维数相等，得 \(\ker(H^{\mathsf T})=M(P)\)。
+因此商空间维数为 \(0\)，即 \(\Delta_{\mathrm{prim}}=0\)。
+反向蕴含由定义显然。证毕。
+\end{proof}
+
+\begin{corollary}[Hankel-null 额外向量的一步结构判据]\label{cor:xi-hankel-null-extra-vectors-one-step-criterion}
+在定理 \ref{thm:xi-hankel-primitive-gap-vanishing-criterion} 的设定下，若已审计得到最小递推多项式 \(P\) 且满足
+\[
+\mathrm{rank}(H)=\deg P,
+\]
+则 Hankel-null 中所有零向量均为 \(P\) 的倍乘冗余，因而不携带新的独立结构信息；等价地
+\[
+\Delta_{\mathrm{prim}}=0.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-hankel-primitive-gap-vanishing-criterion} 直接得到。
+与共振窗实例上的结论 \ref{cor:pom-hankel-null-no-primitive-residual} 一致。证毕。
+\end{proof}
+
+\begin{theorem}[深层 Toeplitz 负谱的 \texorpdfstring{$\det$}{det}--\texorpdfstring{$\mathrm{tr}$}{tr} 下界与几何参数化]\label{thm:xi-deep-toeplitz-negative-gap-det-tr-geometry}
+在命题 \ref{prop:xi-toeplitz-negative-spectrum-pick-poisson-gram} 的有限 Blaschke 设定下，取
+\[
+\mathsf P=\left(\frac{1}{1-a_j\overline a_k}\right)_{j,k=1}^{\kappa}\succ0,
+\qquad a_1,\dots,a_\kappa\in\mathbb D,
+\]
+并设 \(\kappa\ge 2\)。
+则其最小特征值满足显式下界
+\[
+\lambda_{\min}(\mathsf P)
+\ge
+\frac{(\kappa-1)^{\kappa-1}}{\mathrm{tr}(\mathsf P)^{\kappa-1}}\det(\mathsf P).
+\]
+其中
+\[
+\mathrm{tr}(\mathsf P)=\sum_{j=1}^{\kappa}P_{a_j}(-1)
+\]
+（见命题 \ref{prop:xi-toeplitz-negative-spectrum-pick-poisson-gram}），且
+\[
+\det(\mathsf P)
+=
+\prod_{j=1}^{\kappa}\frac{1-|a_j|^2}{|1+a_j|^2}
+\cdot
+\prod_{1\le j<k\le \kappa}\rho(a_j,a_k)^2,
+\qquad
+\rho(a,b):=\left|\frac{a-b}{1-a\overline b}\right|
+\]
+（见命题 \ref{prop:xi-pick-poisson-det-factorization}）。
+故深层截断的负谱间隙可由上述几何量显式审计。
+\end{theorem}
+\begin{proof}
+设 \(\lambda_1\ge\cdots\ge\lambda_\kappa>0\) 为 \(\mathsf P\) 特征值，则
+\[
+\det(\mathsf P)=\prod_{i=1}^{\kappa}\lambda_i,\qquad
+\mathrm{tr}(\mathsf P)=\sum_{i=1}^{\kappa}\lambda_i.
+\]
+对前 \(\kappa-1\) 个特征值用 AM--GM：
+\[
+\prod_{i=1}^{\kappa-1}\lambda_i
+\le
+\left(\frac{\sum_{i=1}^{\kappa-1}\lambda_i}{\kappa-1}\right)^{\kappa-1}
+\le
+\left(\frac{\mathrm{tr}(\mathsf P)}{\kappa-1}\right)^{\kappa-1}.
+\]
+于是
+\[
+\det(\mathsf P)
+=\lambda_{\min}(\mathsf P)\prod_{i=1}^{\kappa-1}\lambda_i
+\le
+\lambda_{\min}(\mathsf P)\left(\frac{\mathrm{tr}(\mathsf P)}{\kappa-1}\right)^{\kappa-1},
+\]
+整理得
+\[
+\lambda_{\min}(\mathsf P)\ge
+\frac{(\kappa-1)^{\kappa-1}}{\mathrm{tr}(\mathsf P)^{\kappa-1}}\det(\mathsf P).
+\]
+再代入 \(\mathrm{tr}\) 与 \(\det\) 的显式表达即得几何化形式。证毕。
+\end{proof}
+
+\begin{proposition}[CM 相位锁定的单标量可逆压缩]\label{prop:xi-cm-phase-lock-single-scalar-recoverability}
+定义
+\[
+f(z):=2z^2+z+2,\qquad
+z_\ast:=\frac{-1-\mathrm{i}\sqrt{15}}{4}\in\mathbb S^1,
+\]
+则 \(f(z_\ast)=0\)，且 \(\{z_\ast,\overline{z_\ast}\}\) 为 \(f\) 在单位圆上的根对。
+对任意 \(\zeta\in\mathbb S^1\) 定义锁定残差
+\[
+\rho(\zeta):=|f(\zeta)|,
+\]
+并记到根轨道的最近距离
+\[
+d(\zeta):=\min\{|\zeta-z_\ast|,\ |\zeta-\overline{z_\ast}|\}.
+\]
+若 \(\rho(\zeta)\le 15/8\)，则有显式界
+\[
+d(\zeta)\ \le\
+\frac{\sqrt{15}-\sqrt{15-8\rho(\zeta)}}{4}.
+\]
+因此在小残差区间，单一标量 \(\rho(\zeta)\) 即可定量控制 \(\zeta\) 到 CM 根轨道的距离。
+\end{proposition}
+\begin{proof}
+由分解
+\[
+f(z)=2(z-z_\ast)(z-\overline{z_\ast}),
+\]
+设
+\[
+d_1:=|\zeta-z_\ast|,\quad d_2:=|\zeta-\overline{z_\ast}|,\quad d:=\min\{d_1,d_2\}.
+\]
+则
+\[
+\rho(\zeta)=2d_1d_2.
+\]
+不妨设 \(d=d_1\)，则 \(d_2\ge d\)，故
+\[
+\rho(\zeta)\ge 2d^2\quad\Rightarrow\quad d\le \sqrt{\rho(\zeta)/2}.
+\]
+在 \(\rho(\zeta)\le 15/8\) 下，得到 \(d\le \sqrt{15}/4\)。
+又
+\[
+|z_\ast-\overline{z_\ast}|=\frac{\sqrt{15}}{2},
+\]
+由三角不等式
+\[
+d_2\ge |z_\ast-\overline{z_\ast}|-d=\frac{\sqrt{15}}{2}-d.
+\]
+于是
+\[
+\rho(\zeta)=2dd_2
+\ge 2d\left(\frac{\sqrt{15}}{2}-d\right)
+=\sqrt{15}\,d-2d^2.
+\]
+等价于
+\[
+2d^2-\sqrt{15}\,d+\rho(\zeta)\ge 0.
+\]
+因 \(d\le\sqrt{15}/4\) 落在抛物线左支，得
+\[
+d\le
+\frac{\sqrt{15}-\sqrt{15-8\rho(\zeta)}}{4}.
+\]
+证毕。
+\end{proof}
+
+\endinput

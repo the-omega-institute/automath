@@ -1,0 +1,510 @@
+% (User input window)
+
+\paragraph{尾熵变分、容量平台与有限素数局部化的对偶序结构}
+前两条把纤维尾计数在指数尺度上的几何压缩为压力谱与连续容量谱的统一变分公式，
+后两条则把有限素数局部化系统的离散偏序与其 Pontryagin 对偶端的满射偏序写成同一条
+\(\operatorname{Hom}\)--商映射链。
+
+\begin{theorem}[尾熵函数同时生成压力谱与连续容量谱]\label{thm:xi-tail-entropy-pressure-capacity-variational}
+沿用命题 \ref{prop:op-algebra-capacity-kinks-equal-spectrum-levels} 与定理
+\ref{thm:pom-oracle-capacity-stieltjes-inversion-mellin} 的记号。
+于是对每个 \(m\) 都有
+\[
+\mathcal C_m^{\mathrm{cont}}(T)=\int_0^T N_m(t)\,\dd t,
+\qquad
+S_q(m)=q\int_0^\infty t^{q-1}N_m(t)\,\dd t
+\qquad(q>0),
+\]
+并且 \(\mathcal C_m^{\mathrm{cont}}\) 与 \(N_m\) 彼此决定。
+记
+\[
+M_m:=\max_{x\in X_m}d_m(x),
+\qquad
+\alpha_\ast:=\lim_{m\to\infty}\frac{1}{m}\log M_m.
+\]
+进一步假设：对每个 \(\gamma\in[0,\alpha_\ast]\)，极限
+\[
+s(\gamma):=\lim_{m\to\infty}\frac{1}{m}\log N_m(e^{\gamma m})
+\]
+存在，且
+\(
+\frac1m\log N_m(e^{\gamma m})
+\)
+在 \([0,\alpha_\ast]\) 的每个紧子区间上一致收敛到 \(s(\gamma)\)。
+定义
+\[
+P(q):=\lim_{m\to\infty}\frac{1}{m}\log S_q(m)
+\qquad(q>0),
+\]
+\[
+\Gamma(\beta):=\lim_{m\to\infty}\frac{1}{m}\log \mathcal C_m^{\mathrm{cont}}(e^{\beta m})
+\qquad(\beta\ge 0),
+\]
+则上述极限存在，且满足精确变分公式
+\[
+\boxed{\;
+P(q)=\sup_{0\le \gamma\le \alpha_\ast}\bigl(q\gamma+s(\gamma)\bigr)\qquad(q>0)\; }
+\]
+以及
+\[
+\boxed{\;
+\Gamma(\beta)=\sup_{0\le \gamma\le \min\{\beta,\alpha_\ast\}}
+\bigl(\gamma+s(\gamma)\bigr)\qquad(\beta\ge 0)\; }.
+\]
+特别地，压力谱与容量谱并非两套独立对象，而是同一尾熵函数 \(s(\gamma)\) 的
+Laplace--Abel 投影。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-oracle-capacity-stieltjes-inversion-mellin}，
+\[
+S_q(m)=q\int_0^\infty t^{q-1}N_m(t)\,\dd t.
+\]
+由于 \(N_m(t)=0\) 当 \(t>M_m\) 时成立，作代换 \(t=e^{\gamma m}\) 得
+\[
+\begin{aligned}
+S_q(m)
+&=
+qm\int_0^{\frac1m\log M_m}
+\exp\!\left(
+m\left(
+q\gamma+\frac{1}{m}\log N_m(e^{\gamma m})
+\right)
+\right)\,\dd\gamma.
+\end{aligned}
+\]
+又因为
+\(
+\frac1m\log M_m\to\alpha_\ast
+\)
+且
+\(
+\frac1m\log N_m(e^{\gamma m})\to s(\gamma)
+\)
+在任意紧子区间上一致收敛，
+故可对紧区间上的指数积分应用标准 Laplace 原理，得到
+\[
+\lim_{m\to\infty}\frac{1}{m}\log S_q(m)
+=
+\sup_{0\le \gamma\le \alpha_\ast}\bigl(q\gamma+s(\gamma)\bigr).
+\]
+这就给出 \(P(q)\) 的公式。
+\par
+同理，由命题 \ref{prop:op-algebra-capacity-kinks-equal-spectrum-levels}，
+\[
+\mathcal C_m^{\mathrm{cont}}(e^{\beta m})
+=
+\int_0^{e^{\beta m}}N_m(t)\,\dd t.
+\]
+再次代换 \(t=e^{\gamma m}\)，并注意当 \(\gamma>\frac1m\log M_m\) 时
+\(N_m(e^{\gamma m})=0\)，可得
+\[
+\mathcal C_m^{\mathrm{cont}}(e^{\beta m})
+=
+m\int_0^{\min\{\beta,\frac1m\log M_m\}}
+\exp\!\left(
+m\left(
+\gamma+\frac{1}{m}\log N_m(e^{\gamma m})
+\right)
+\right)\,\dd\gamma.
+\]
+再次应用 Laplace 原理，即得
+\[
+\lim_{m\to\infty}\frac{1}{m}\log \mathcal C_m^{\mathrm{cont}}(e^{\beta m})
+=
+\sup_{0\le \gamma\le \min\{\beta,\alpha_\ast\}}
+\bigl(\gamma+s(\gamma)\bigr).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[高预算连续容量的线性--平台律]\label{thm:xi-high-budget-continuous-capacity-linear-plateau}
+对每个 \(m\)，令
+\[
+M_m:=\max_{x\in X_m}d_m(x),
+\qquad
+\mathcal M_m:=\{x\in X_m:\ d_m(x)=M_m\},
+\qquad
+K_m:=|\mathcal M_m|,
+\]
+并定义
+\[
+M_m^{(2)}:=\max\{d_m(x):\ d_m(x)<M_m\},
+\]
+若次大纤维不存在则取 \(M_m^{(2)}:=1\)。
+进一步设极限
+\[
+\alpha_\ast:=\lim_{m\to\infty}\frac{1}{m}\log M_m,
+\qquad
+g_\ast:=\lim_{m\to\infty}\frac{1}{m}\log K_m
+\]
+存在，并记
+\[
+\alpha_\ast^{(2)}:=\limsup_{m\to\infty}\frac{1}{m}\log M_m^{(2)}.
+\]
+并假设
+\[
+\alpha_\ast^{(2)}<\alpha_\ast.
+\]
+定义连续容量指数
+\[
+\Gamma(\beta):=\lim_{m\to\infty}\frac{1}{m}\log \mathcal C_m^{\mathrm{cont}}(e^{\beta m})
+\qquad(\beta\ge 0),
+\]
+以及
+\[
+P(1):=\lim_{m\to\infty}\frac{1}{m}\log S_1(m).
+\]
+再设
+\[
+\beta_c:=\log\varphi+\alpha_\ast^{(2)}-g_\ast,
+\qquad
+a_c:=\frac{\log\varphi-g_\ast}{\alpha_\ast-\alpha_\ast^{(2)}}.
+\]
+则成立：
+\begin{enumerate}
+  \item 若 \(\beta_c<\beta<\alpha_\ast\)，则
+  \[
+  \boxed{\;
+  \Gamma(\beta)=\beta+g_\ast\; }.
+  \]
+  \item 若 \(\beta>\alpha_\ast\)，则
+  \[
+  \boxed{\;
+  \Gamma(\beta)=P(1)=\log 2\; }.
+  \]
+  \item 若进一步 \(a_c<1\)（等价地 \(\beta_c<\alpha_\ast\)），则
+  \[
+  P(1)=\alpha_\ast+g_\ast,
+  \]
+  从而平台值可重写为 \(\alpha_\ast+g_\ast\)，并且
+  \[
+  \boxed{\;
+  \Gamma(\beta)=
+  \begin{cases}
+  \beta+g_\ast,& \beta_c<\beta<\alpha_\ast,\\[2mm]
+  \alpha_\ast+g_\ast,& \beta\ge \alpha_\ast.
+  \end{cases}\;}
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定义
+\[
+\mathcal C_m^{\mathrm{cont}}(T)
+=
+\sum_{x\in X_m}\min\bigl(d_m(x),T\bigr).
+\]
+先取 \(\beta<\alpha_\ast\) 并令 \(T=e^{\beta m}\)。
+由 \(M_m=e^{\alpha_\ast m+o(m)}\) 可知，对充分大的 \(m\)，最大纤维满足 \(M_m>T\)，因此
+\[
+\mathcal C_m^{\mathrm{cont}}(T)\ge K_mT.
+\]
+另一方面，
+\[
+\mathcal C_m^{\mathrm{cont}}(T)
+\le
+K_mT+\sum_{x\notin\mathcal M_m}d_m(x)
+\le
+K_mT+|X_m|\,M_m^{(2)}.
+\]
+由 \(|X_m|=F_{m+2}\) 可知
+\(
+\frac1m\log|X_m|\to\log\varphi
+\)，
+故第一项的指数为 \(g_\ast+\beta\)，第二项的指数至多为
+\(\log\varphi+\alpha_\ast^{(2)}\)。
+当 \(\beta>\beta_c=\log\varphi+\alpha_\ast^{(2)}-g_\ast\) 时，前者严格支配后者，于是
+\[
+\Gamma(\beta)=g_\ast+\beta.
+\]
+这证明了第 \(1\) 条。
+\par
+若 \(\beta>\alpha_\ast\)，则 \(e^{\beta m}>M_m\) 终将对所有纤维成立，从而
+\[
+\mathcal C_m^{\mathrm{cont}}(e^{\beta m})
+=
+\sum_{x\in X_m}d_m(x)
+=
+S_1(m).
+\]
+而 \(\sum_x d_m(x)=2^m\) 是折叠纤维基数的恒等式，故
+\[
+P(1)=\lim_{m\to\infty}\frac1m\log S_1(m)=\log 2,
+\]
+并得到第 \(2\) 条。
+\par
+最后设 \(a_c<1\)，即
+\[
+g_\ast+\alpha_\ast>\log\varphi+\alpha_\ast^{(2)}.
+\]
+注意
+\[
+S_1(m)
+=
+\sum_{x\in\mathcal M_m}M_m+\sum_{x\notin\mathcal M_m}d_m(x)
+=
+K_mM_m+\sum_{x\notin\mathcal M_m}d_m(x),
+\]
+于是
+\[
+K_mM_m\le S_1(m)\le K_mM_m+|X_m|\,M_m^{(2)}.
+\]
+第一项的指数为 \(g_\ast+\alpha_\ast\)，第二项的指数至多为
+\(\log\varphi+\alpha_\ast^{(2)}\)，故在 \(a_c<1\) 下有
+\[
+P(1)=\lim_{m\to\infty}\frac1m\log S_1(m)=g_\ast+\alpha_\ast.
+\]
+结合第 \(2\) 条，这一平台值同时等于 \(\log 2\)。
+再把该恒等式代回前两步的结论，便得到所示分段律。
+\par
+对边界点 \(\beta=\alpha_\ast\)，只需注意
+\[
+K_m\min\{M_m,e^{\alpha_\ast m}\}
+\le
+\mathcal C_m^{\mathrm{cont}}(e^{\alpha_\ast m})
+\le
+K_m e^{\alpha_\ast m}+|X_m|\,M_m^{(2)},
+\]
+其中
+\(
+\min\{M_m,e^{\alpha_\ast m}\}=e^{\alpha_\ast m+o(m)}
+\)。
+在 \(a_c<1\) 的支配关系下，两边皆具有指数 \(g_\ast+\alpha_\ast\)，故平台公式延伸到
+\(\beta=\alpha_\ast\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[有限素数局部化数系之间的 \texorpdfstring{$\operatorname{Hom}$}{Hom} 分类]\label{thm:xi-localized-integers-hom-classification}
+对有限素数集 \(S,T\subset\mathbb P\)，记
+\[
+G_S:=\ZZ[S^{-1}],
+\qquad
+G_T:=\ZZ[T^{-1}],
+\]
+并视它们为加法群。
+由定理 \ref{thm:cdim-star-z1s-dual-extension}，
+\[
+0\to \ZZ\to G_S\to \bigoplus_{p\in S}\ZZ(p^\infty)\to 0
+\]
+以及
+\[
+0\to \prod_{p\in S}\ZZ_p\to \widehat{G_S}\to \TT\to 0
+\]
+皆为短正合列。
+则有自然同构
+\[
+\boxed{\;
+\operatorname{Hom}_{\mathbf{Ab}}(G_S,G_T)\cong
+\begin{cases}
+G_T,& S\subseteq T,\\[1mm]
+0,& S\not\subseteq T,
+\end{cases}\;}
+\]
+并且当 \(S\subseteq T\) 时，每个同态都唯一写成
+\[
+\varphi_u:G_S\to G_T,
+\qquad
+\varphi_u(x):=ux,
+\qquad
+u\in G_T.
+\]
+\(\operatorname{Hom}(G_S,G_T)\cong G_T\) 可由 \(\varphi_u\mapsto u=\varphi_u(1)\) 给出。
+此外有：
+\begin{enumerate}
+  \item \(\varphi_u\neq 0\) 当且仅当 \(u\neq 0\)；若 \(u\neq 0\)，则 \(\varphi_u\) 必为单射；
+  \item \(\varphi_u\) 为满射当且仅当 \(S=T\) 且 \(u\in G_T^\times\) 是局部化环 \(\ZZ[T^{-1}]\) 的单位。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+先设 \(S\subseteq T\)。
+任取 \(u\in G_T\)，定义
+\[
+\varphi_u:G_S\to G_T,
+\qquad
+\varphi_u(x):=ux.
+\]
+由于 \(x\in G_S\) 的分母素数只来自 \(S\subseteq T\)，而 \(u\in G_T\) 的分母素数也只来自
+\(T\)，故乘积 \(ux\) 仍属于 \(G_T\)，从而 \(\varphi_u\) 为良定义的加法同态。
+\par
+另一方面，任取 \(\varphi\in\operatorname{Hom}(G_S,G_T)\)，记 \(u:=\varphi(1)\)。
+对任意
+\[
+x=\frac{a}{\prod_{p\in S}p^{k_p}}\in G_S
+\]
+都有
+\[
+\left(\prod_{p\in S}p^{k_p}\right)\varphi(x)=\varphi(a)=au.
+\]
+另一方面，
+\[
+\left(\prod_{p\in S}p^{k_p}\right)(ux)=au.
+\]
+故
+\[
+\left(\prod_{p\in S}p^{k_p}\right)\bigl(\varphi(x)-ux\bigr)=0.
+\]
+由于 \(G_T\subset\QQ\) 无挠，遂有
+\[
+\varphi(x)=ux.
+\]
+故每个同态都唯一等于某个 \(\varphi_u\)，因而
+\(
+\operatorname{Hom}(G_S,G_T)\cong G_T
+\)。
+\par
+再设 \(S\not\subseteq T\)，取 \(p\in S\setminus T\)。
+任意 \(\varphi:G_S\to G_T\) 记 \(r:=\varphi(1)\)。
+由于在 \(G_S\) 中对每个 \(n\ge 1\) 都有 \(1=p^n\cdot p^{-n}\)，于是
+\[
+r=\varphi(1)=p^n\varphi(p^{-n}),
+\]
+故 \(r\in p^nG_T\) 对一切 \(n\ge 1\) 都成立。
+现证明
+\[
+\bigcap_{n\ge 1}p^nG_T=\{0\}
+\qquad (p\notin T).
+\]
+若 \(x\in G_T\setminus\{0\}\)，可写成既约分式
+\[
+x=\frac{a}{\prod_{q\in T}q^{m_q}}
+\]
+其中 \(a\in\ZZ\setminus\{0\}\)，且分母与 \(p\) 互素。
+若 \(x\in p^nG_T\)，则存在 \(y_n\in G_T\) 使 \(x=p^n y_n\)；
+把两边写成既约分式便知 \(p^n\mid a\)。
+这不可能对所有 \(n\) 同时成立，故只能有 \(x=0\)。
+因此 \(r=0\)。
+\par
+最后，对任意 \(x=a/b\in G_S\) 仍有
+\[
+b\,\varphi(x)=\varphi(a)=a\,r=0.
+\]
+由于 \(G_T\) 无挠，得 \(\varphi(x)=0\)。
+故 \(\varphi=0\)，从而
+\(
+\operatorname{Hom}(G_S,G_T)=0
+\)。
+\par
+现设 \(S\subseteq T\) 且 \(u\in G_T\)。
+显然 \(\varphi_u=0\) 当且仅当 \(u=0\)。
+若 \(u\neq 0\) 且 \(\varphi_u(x)=0\)，则 \(ux=0\)。
+由于 \(G_S\subset\QQ\) 且 \(\QQ\) 无挠，乘以非零有理数不可能消去非零元素，故 \(x=0\)。
+因此 \(\varphi_u\) 必为单射。
+\par
+最后判别满射性。
+若 \(S=T\)，则 \(\varphi_u\) 满射当且仅当 \(uG_S=G_S\)，这等价于主理想 \((u)\) 等于整环
+\(\ZZ[S^{-1}]\) 本身，亦即 \(u\in G_S^\times\)。
+反之若 \(S\subsetneq T\)，取 \(q\in T\setminus S\)。
+对任意 \(x\in G_S\)，由于 \(x\) 的分母中不含 \(q\)，故 \(ux\) 在 \(q\)-方向上的分母指数至多由
+\(u\) 的 \(q\)-分母指数给出一个固定上界。
+然而 \(G_T\) 中包含全部 \(q^{-N}\)（\(N\ge 1\)），其 \(q\)-分母指数无上界，故
+\(uG_S\neq G_T\)。
+于是 \(\varphi_u\) 不可能满射。
+综上即得全部结论。
+\end{proof}
+
+\begin{corollary}[有限素数局部化系统的序结构由 \texorpdfstring{$\operatorname{Hom}$}{Hom} 与对偶商映射完全刻画]\label{cor:xi-localized-integers-order-dual-quotient}
+沿用定理 \ref{thm:xi-localized-integers-hom-classification} 的记号。
+对有限素数集 \(S,T\subset\mathbb P\)，下列命题等价：
+\begin{enumerate}
+  \item \(S\subseteq T\)；
+  \item 存在非零群同态 \(G_S\to G_T\)；
+  \item 存在单射群同态 \(G_S\hookrightarrow G_T\)；
+  \item 存在连续满同态 \(\widehat{G_T}\twoheadrightarrow \widehat{G_S}\)；
+  \item 存在连续满同态
+  \[
+  \prod_{p\in T}\ZZ_p\twoheadrightarrow \prod_{p\in S}\ZZ_p.
+  \]
+\end{enumerate}
+特别地，
+\[
+G_S\cong G_T
+\quad\Longleftrightarrow\quad
+\widehat{G_S}\cong \widehat{G_T}
+\quad\Longleftrightarrow\quad
+S=T.
+\]
+\end{corollary}
+\begin{proof}
+\((1)\Rightarrow(3)\) 由自然包含 \(G_S\subseteq G_T\) 立即成立；
+\((3)\Rightarrow(2)\) 显然；
+\((2)\Rightarrow(1)\) 则由定理
+\ref{thm:xi-localized-integers-hom-classification} 中
+\(\operatorname{Hom}(G_S,G_T)\) 的分类直接给出。
+\par
+\((1)\Rightarrow(4)\)：由包含 \(G_S\hookrightarrow G_T\) 对偶化，
+得到连续满同态
+\(
+\widehat{G_T}\twoheadrightarrow\widehat{G_S}
+\)。
+\((4)\Rightarrow(3)\)：Pontryagin 对偶把紧交换群的连续满射送到离散交换群的单射，
+故对偶化后得到 \(G_S\hookrightarrow G_T\)。
+\par
+\((1)\Rightarrow(5)\) 由坐标投影
+\[
+\prod_{p\in T}\ZZ_p\longrightarrow \prod_{p\in S}\ZZ_p
+\]
+直接给出。
+\par
+\((5)\Rightarrow(1)\)：由定理 \ref{thm:cdim-star-prime-coordinate-orthogonality}，
+任意连续同态
+\(
+\prod_{p\in T}\ZZ_p\to\prod_{p\in S}\ZZ_p
+\)
+都按素数坐标分解，且互异素数坐标之间不存在非零连续态射。
+若某个 \(p\in S\setminus T\) 存在，则目标中的 \(p\)-坐标 \(\ZZ_p\) 不可能由源端产生非零像，
+从而不可能得到满射，矛盾。
+故必有 \(S\subseteq T\)。
+\par
+于是五条命题全部等价。
+若 \(G_S\cong G_T\)，则同时有 \(S\subseteq T\) 与 \(T\subseteq S\)，故 \(S=T\)；
+反向显然。
+对偶系统的同构判别完全同理。
+证毕。
+\end{proof}
+
+\begin{theorem}[有限素数局部化数系的张量乘法律]\label{thm:xi-localized-integers-tensor-union-law}
+沿用定理 \ref{thm:xi-localized-integers-hom-classification} 的记号。则有自然同构
+\[
+\boxed{\;
+G_S\otimes_{\ZZ}G_T\cong G_{S\cup T},
+\qquad
+\operatorname{Tor}_1^{\ZZ}(G_S,G_T)=0.\;}
+\]
+更一般地，对任意有限素数集族 \(S_1,\dots,S_r\subset\mathbb P\)，有
+\[
+\boxed{\;
+G_{S_1}\otimes_{\ZZ}\cdots\otimes_{\ZZ}G_{S_r}
+\cong
+G_{S_1\cup\cdots\cup S_r}.\;}
+\]
+因此，有限素数集 \(S\mapsto G_S\) 在对象层不仅携带由包含关系控制的偏序态射结构，而且其并集运算恰对应于局部化数系的张量乘法。
+\end{theorem}
+\begin{proof}
+记
+\[
+M_S:=\left\{\prod_{p\in S}p^{k_p}:k_p\in\NN\right\},
+\qquad
+M_T:=\left\{\prod_{p\in T}p^{\ell_p}:\ell_p\in\NN\right\}.
+\]
+则 \(G_S=M_S^{-1}\ZZ\)、\(G_T=M_T^{-1}\ZZ\)。
+局部化的标准张量公式给出
+\[
+M_S^{-1}\ZZ\otimes_{\ZZ}M_T^{-1}\ZZ
+\cong
+(M_SM_T)^{-1}\ZZ.
+\]
+而 \(M_SM_T\) 正是由 \(S\cup T\) 中素数生成的乘法集合，故
+\[
+G_S\otimes_{\ZZ}G_T\cong \ZZ[(S\cup T)^{-1}]=G_{S\cup T}.
+\]
+对 \(r\) 个因子的情形只需迭代应用同一公式即可。
+\par
+另一方面，局部化函子 \(M_S^{-1}(-)\) 对 \(\ZZ\)-模是精确的，故 \(G_S\) 为平坦
+\(\ZZ\)-模。于是对任意 \(\ZZ\)-模 \(N\) 都有
+\[
+\operatorname{Tor}_1^{\ZZ}(G_S,N)=0.
+\]
+取 \(N=G_T\) 即得所示消失结论。证毕。
+\end{proof}
+
+\endinput

@@ -1,0 +1,171 @@
+\paragraph{有限寄存器的支撑护栏与逐级谱定位：Gershgorin、Sturm 交错与 Schur 残差的 Stieltjes 证书化}
+沿用命题 \ref{con:xi-shadow-spectrum-determinant-ratio} 与命题 \ref{con:xi-terminating-jfraction-uniqueness} 的记号，
+令 \(J\in\RR^{\kappa\times\kappa}\) 为深度谱的规范 Jacobi 证书（对称三对角且次对角元严格正），并记
+\[
+\beta_i:=J_{ii},
+\qquad
+\alpha_i:=J_{i,i+1}>0,
+\qquad (1\le i\le \kappa-1),
+\]
+并约定边界项 \(\alpha_0=\alpha_\kappa:=0\)。
+其谱 \(\mathrm{Spec}(J)=\{a_j\}_{j=1}^{\kappa}\subset(1,\infty)\)（按重数计）对应深度 \(a_j=1+\delta_j\)。
+
+\begin{proposition}[Jacobi 证书的 Gershgorin 支撑界：仅由有限寄存器系数给出 \texorpdfstring{$(\delta_{\min},\delta_{\max})$}{(delta_min,delta_max)} 的可核验区间]\label{prop:xi-jacobi-gershgorin-support-guardrail}
+设 \(a_{\min}:=\min_j a_j\)、\(a_{\max}:=\max_j a_j\)。
+则必有显式支撑界
+\[
+\boxed{\;
+\min_{1\le i\le \kappa}\bigl(\beta_i-\alpha_{i-1}-\alpha_i\bigr)
+\ \le\ a_{\min}\ \le\ a_{\max}\ \le\
+\max_{1\le i\le \kappa}\bigl(\beta_i+\alpha_{i-1}+\alpha_i\bigr)\; }.
+\]
+从而得到
+\[
+\boxed{\;
+\delta_{\min},\delta_{\max}\ \in\
+\Bigl[\min_{i}(\beta_i-\alpha_{i-1}-\alpha_i)-1,\ \max_{i}(\beta_i+\alpha_{i-1}+\alpha_i)-1\Bigr]\; }.
+\]
+该界不依赖任何极点定位或全谱反演过程，而仅依赖有限寄存器的局部系数，因而可作为制度内“深度支撑”的即时可审计护栏。
+\end{proposition}
+\begin{proof}
+由 Gershgorin 圆盘定理，任意特征值 \(\lambda\in\mathrm{Spec}(J)\) 必落在某一行的 Gershgorin 区间
+\(
+[\beta_i-(|\alpha_{i-1}|+|\alpha_i|),\ \beta_i+(|\alpha_{i-1}|+|\alpha_i|)]
+\) 中。
+由于 \(\alpha_i>0\) 且 \(\alpha_0=\alpha_\kappa=0\)，取并集即得所示不等式链。证毕。
+\end{proof}
+
+\begin{proposition}[谱定位的单调收缩：前 \texorpdfstring{$N$}{N} 级寄存器给出对每个深度原子 \texorpdfstring{$a_j$}{a_j} 的嵌套夹逼区间]\label{prop:xi-jacobi-sturm-nested-localization}
+对 \(1\le N\le \kappa\) 令 \(J_N\) 为 \(J\) 的前 \(N\times N\) 首主子矩阵，并记其升序谱为
+\[
+\lambda^{(N)}_1<\cdots<\lambda^{(N)}_N.
+\]
+则由于三对角 Jacobi 结构的 Sturm 交错性，对每个 \(1\le N\le \kappa-1\) 均有严格交错
+\[
+\boxed{\;
+\lambda^{(N+1)}_1<\lambda^{(N)}_1<\lambda^{(N+1)}_2<\cdots<
+\lambda^{(N)}_N<\lambda^{(N+1)}_{N+1}\; }.
+\]
+因此，存在一族区间索引 \(i_N(j)\in\{0,1,\dots,N\}\)（约定 \(\lambda^{(N)}_0:=-\infty\)、\(\lambda^{(N)}_{N+1}:=+\infty\)）使得对每个 \(j\in\{1,\dots,\kappa\}\) 与所有充分大的 \(N\) 有
+\[
+\lambda^{(N)}_{i_N(j)}\ \le\ a_j\ \le\ \lambda^{(N)}_{i_N(j)+1},
+\]
+并且该夹逼区间随 \(N\uparrow \kappa\) 逐级收缩，在 \(N=\kappa\) 时精确闭合为点区间 \([a_j,a_j]\)。
+因而“有限证书长度”不仅给出缺陷存在性的判定，还给出每个深度原子在逐级意义下的可核验定位区间，其收缩由三对角谱理论强制而不依赖数值启发式。
+\end{proposition}
+\begin{proof}[证明要点]
+严格交错由 Jacobi 矩阵特征多项式的三项递推与 Sturm 序列性质给出。
+交错性意味着：每一特征值 \(\lambda^{(N+1)}_j\) 都落在唯一的区间 \((\lambda^{(N)}_{j-1},\lambda^{(N)}_{j})\) 中；
+迭代该定位并追踪同一谱支，即得到对全谱 \(a_j=\lambda^{(\kappa)}_j\) 的逐级嵌套夹逼。
+当 \(N=\kappa\) 时 \(J_N=J\)，夹逼区间退化为点。证毕。
+\end{proof}
+
+\begin{proposition}[Schur 补余量的正性：有限寄存器截断误差的 Stieltjes 型与全尺度符号证书]\label{prop:xi-jacobi-truncation-remainder-stieltjes}
+记
+\[
+S(t):=\Phi\,\langle e_1,(tI+J)^{-1}e_1\rangle,
+\qquad
+S_N(t):=\Phi\,\langle e_1,(tI+J_N)^{-1}e_1\rangle,
+\qquad (1\le N<\kappa,\ t>0),
+\]
+其中 \(\Phi>0\) 为通量常数（与命题 \ref{con:xi-terminating-jfraction-uniqueness} 一致）。
+则存在唯一的有限正测度 \(\nu_N\ge 0\)（支撑于 \([a_{\min},a_{\max}]\)）使得对一切 \(t>0\) 有
+\[
+\boxed{\;
+(-1)^{N-1}\bigl(S(t)-S_N(t)\bigr)
+\ =\ \int_{[a_{\min},a_{\max}]}\frac{1}{t+a}\,\dd\nu_N(a)\; }.
+\]
+因此截断误差在全尺度上为 Stieltjes 型并完全单调，其符号由 \(N\) 的奇偶性强制；
+并且其总质量满足
+\[
+\boxed{\;
+\nu_N([a_{\min},a_{\max}])
+=\lim_{t\to\infty}t\,(-1)^{N-1}\bigl(S(t)-S_N(t)\bigr)\;}
+\]
+从而给出“不可回收残差强度”的可审计标量证书。
+\end{proposition}
+\begin{proof}[证明要点]
+由命题 \ref{con:xi-terminating-jfraction-uniqueness}，\(S\) 具有终止 Stieltjes 连分式表示；其第 \(N\) 级截断 \(S_N\) 正是相应收敛子。
+由 Stieltjes 连分式理论（亦即 Markov--Stieltjes 极值与偶/奇收敛子的交错夹逼，参见命题 \ref{prop:xi-markov-stieltjes-extremal-principle}），偶/奇收敛子分别从上/下夹逼 \(S\)，并且带符号误差 \((-1)^{N-1}(S-S_N)\) 仍为 Stieltjes 类函数。
+因此它具有上述正测度表示；总质量公式由 \(t\to\infty\) 的 Stieltjes 渐近 \(\int (t+a)^{-1}\dd\nu\sim \nu([1,\infty))/t\) 得出。证毕。
+\end{proof}
+
+\begin{proposition}[深度轨道的 \texorpdfstring{$W_1$}{W1} 稳定性：Stieltjes 读出对深度测度的最强尺度 Lipschitz 常数]\label{prop:xi-stieltjes-w1-lipschitz}
+令 \(\mu,\tilde\mu\) 为支撑于 \([1,\infty)\) 的有限正测度，且总质量相同
+\(\mu([1,\infty))=\tilde\mu([1,\infty))\)。
+定义对应 Stieltjes 轨道
+\[
+S_\mu(t)=\int\frac{1}{t+a}\,\dd\mu(a),
+\qquad
+S_{\tilde\mu}(t)=\int\frac{1}{t+a}\,\dd\tilde\mu(a).
+\]
+则对任意 \(t>0\) 有最优尺度 Lipschitz 估计
+\[
+\boxed{\;
+|S_\mu(t)-S_{\tilde\mu}(t)|
+\ \le\ \frac{1}{(t+1)^2}\,W_1(\mu,\tilde\mu)\; }.
+\]
+其中 \(W_1\) 为以代价 \(|a-\tilde a|\) 定义的一阶 Wasserstein 距离（附录 \S\ref{app:kronecker-w1-transport} 的同型定义）。
+该常数 \((t+1)^{-2}\) 由核 \(a\mapsto (t+a)^{-1}\) 在 \([1,\infty)\) 上的最强 Lipschitz 常数给出，因而在尺度意义上不可改进。
+\end{proposition}
+\begin{proof}
+函数 \(f_t(a):=(t+a)^{-1}\) 在 \([1,\infty)\) 上可微且满足
+\(
+|f_t'(a)|=(t+a)^{-2}\le (t+1)^{-2}
+\)，
+故 \(\mathrm{Lip}(f_t)\le (t+1)^{-2}\)。
+由 Kantorovich--Rubinstein 对偶表述，
+\(
+|\int f_t\,\dd(\mu-\tilde\mu)|\le \mathrm{Lip}(f_t)\,W_1(\mu,\tilde\mu)
+\)，
+即得结论。证毕。
+\end{proof}
+
+\begin{remark}[逆向稳定性的制度边界：在分离紧域上由有限尺度窗反控 \texorpdfstring{$W_1$}{W1}]\label{rem:xi-stieltjes-w1-local-inverse}
+上述 Lipschitz 估计给出从 \(W_1(\mu,\tilde\mu)\) 到单尺度读出差异 \(|S_\mu(t)-S_{\tilde\mu}(t)|\) 的最强衰减律。
+反向方向若不施加先验紧性与分离约束，则无法期待以有限标量轨道在制度意义下统一控制传输距离（其退化机制与“深度碰撞/逃逸 \(\Rightarrow\) 反演病态”同型）。
+\par
+在有限缺陷（\(\kappa\) 原子）且满足如下紧性假设的参数域上：支撑上界 \(a_{\max}\le A\)、最小分离度 \(\min_{j\ne k}|a_j-a_k|\ge s\)、权重上下界 \(0<w_{\min}\le w_j\le w_{\max}\)，映射
+\(
+\mu\mapsto (S_\mu(t))_{t\in[0,T]}
+\)
+为有限维解析嵌入并在该紧域上局部双 Lipschitz；因此存在常数 \(C=C(\kappa,A,s,w_{\min},w_{\max},T)>0\) 使得
+\[
+W_1(\mu,\tilde\mu)\ \le\ C\int_{0}^{T}(t+1)^2\,\bigl|S_\mu(t)-S_{\tilde\mu}(t)\bigr|\,\dd t.
+\]
+该不等式把“轨道误差 \(\Rightarrow\) 传输误差”的可审计性明确限定在制度可控的紧域之内：一旦进入碰撞/逃逸边界，任何反向控制常数必不可避免地发散。
+\end{remark}
+
+\begin{proposition}[Cauchy--Stieltjes 全正性：有限采样核的变差递减与证书符号刚性]\label{prop:xi-cauchy-stieltjes-total-positivity-variation-diminishing}
+设 \(1<a_1<\cdots<a_\kappa\)，并取严格递增采样 \(0\le t_0<\cdots<t_N\)。
+定义 Cauchy--Stieltjes 核矩阵
+\[
+\mathcal{C}_{ij}:=\frac{1}{t_i+a_j}\qquad(0\le i\le N,\ 1\le j\le\kappa).
+\]
+则 \(\mathcal{C}\) 为全正矩阵：任意同阶子式行列式均严格为正。
+进一步，令 \(\mathrm{var}(\cdot)\) 表示去零后的符号变差数（序列中符号改变次数），则对任意 \(x\in\RR^\kappa\) 有变差递减性质
+\[
+\boxed{\;
+\mathrm{var}\!\bigl(\mathcal{C}x\bigr)\ \le\ \mathrm{var}(x)\; }.
+\]
+因此任意由深度谱 Stieltjes 轨道
+\(
+S(t)=\sum_{j=1}^\kappa \frac{w_j}{t+a_j}
+\)
+生成的有限采样向量 \(\bigl(S(t_i)\bigr)_{i=0}^{N}\)（亦即 \(\mathcal{C}w\)）满足一条制度内符号刚性：在对其作任意线性残差/检验时，可见符号振荡次数被输入系数的符号结构与维数 \(\kappa\) 严格上界，从而排除“高频伪振荡”的证书伪影。
+\end{proposition}
+\begin{proof}[证明要点]
+任取同阶指标子集 \(I=\{i_1<\cdots<i_m\}\subseteq\{0,\dots,N\}\)、\(J=\{j_1<\cdots<j_m\}\subseteq\{1,\dots,\kappa\}\)。
+相应 \(m\times m\) 子式为经典 Cauchy 行列式：
+\[
+\det\!\Bigl(\frac{1}{t_{i_p}+a_{j_q}}\Bigr)_{1\le p,q\le m}
+=
+\frac{\prod_{1\le p<q\le m}(t_{i_q}-t_{i_p})\cdot\prod_{1\le p<q\le m}(a_{j_q}-a_{j_p})}
+{\prod_{p,q}(t_{i_p}+a_{j_q})}.
+\]
+由于 \(t_{i_q}-t_{i_p}>0\)、\(a_{j_q}-a_{j_p}>0\) 且 \(t_{i_p}+a_{j_q}>0\)，故子式严格为正，从而 \(\mathcal{C}\) 全正。
+变差递减性质是全正矩阵的基本定理（Gantmacher--Kre\u{\i}n 变差递减定理）的直接推论。证毕。
+\end{proof}
+
+\endinput
+

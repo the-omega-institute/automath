@@ -1,0 +1,584 @@
+\subsubsection{window-\texorpdfstring{\(6\)}{6} 的离散结构与不变量汇总}\label{subsubsec:window6-discrete-results}
+为突出 window-\(6\) 的“最小锚点”角色，并便于将其向一般分辨率 \(m\) 的推广以可审计方式引用，可把若干已在正文与附录建立的结果收束为一组相互补充的陈述，并尽量避免解释性叙事。
+它们共同呈现结构、不变量与判别式三类离散结构在本框架内的闭合形态：一方面由 \(\Fold_m/\Fold^{\mathrm{bin}}_m\) 的纤维直方图与 Fourier 谱决定统计/信息缺口；另一方面由边界层塔与 Zeckendorf 唯一性把统一维数压缩为可审计的分辨率签名；并进一步通过碰撞核的代数证书与零点集的约数尺度计数把谱侧常数与算术调制纳入可复核接口。
+
+\begin{enumerate}
+  \item \textbf{折叠规范体积的 Stirling 线性缺陷：\texorpdfstring{$g_m$}{gm} 与 \texorpdfstring{$\kappa_m$}{kappa} 的差趋于 \(1\)。}
+  令
+  \(\mathcal{G}^{\mathrm{bin}}_m:=\mathrm{Aut}(\Fold^{\mathrm{bin}}_m)\)
+  为由二进制区间折叠 \(\Fold^{\mathrm{bin}}_m\) 诱导的 fold-gauge 规范群，并定义规范体积密度
+  \[
+  g_m:=\frac{1}{2^m}\log\card{\mathcal{G}^{\mathrm{bin}}_m},
+  \qquad
+  \kappa_m
+  :=\frac{1}{2^m}\sum_{w\in X_m}d^{\mathrm{bin}}_m(w)\log d^{\mathrm{bin}}_m(w)
+  =\mathbb{E}_{\pi_m}\!\bigl[\log d^{\mathrm{bin}}_m(X)\bigr],
+  \quad
+  \pi_m(w):=\frac{d^{\mathrm{bin}}_m(w)}{2^m}.
+  \]
+  则对所有 \(m\ge 1\) 有夹逼
+  \(
+  \kappa_m-1\le g_m\le \kappa_m
+  \)
+  （命题 \ref{prop:fold-bin-gauge-volume}），并且 Stirling 首项在指数精度上给出线性差展开
+  \[
+  g_m=\kappa_m-1+O\!\left(\frac{|X_m|\,m}{2^m}\right)
+  =\kappa_m-1+O\!\left(m\left(\frac{\varphi}{2}\right)^m\right),
+  \qquad
+  \kappa_m-g_m=1+o(1)
+  \]
+  （定理 \ref{thm:fold-bin-gauge-volume-stirling}）。
+  该结论把“规范体积（阶乘乘积）”与“折叠缺陷（\(d\log d\) 平均）”严格联结为同一热力学量的两种正规化，其误差为指数小量。
+
+  \input{parts/thm__window6-binfold-lastbit-lecam-kl}
+  \par
+  在 window-\(6\) 锚点上，纤维尺寸直方图为 \(2:8,3:4,4:9\)（推论 \ref{cor:fold-bin-m6-fiber-hist}），因此
+  \(
+  \mathcal{G}^{\mathrm{bin}}_6\cong S_{2}^{8}\times S_{3}^{4}\times S_{4}^{9}
+  \)
+  且其 Abel 化电荷格满足
+  \(
+  (\mathcal{G}^{\mathrm{bin}}_6)^{\mathrm{ab}}\cong (\ZZ_2)^{21}
+  \)
+  （推论 \ref{cor:fold-bin-gauge-m6}）。
+  通过纤维符号映射 \(\mathrm{sgn}_6\)（定义 \ref{def:fold-bin-gauge-sign} 与推论 \ref{cor:fold-bin-gauge-sign}），该电荷格可被解释为 \(X_6\) 上的 \(21\) 个独立“纤维奇偶荷”（视界比特）；并且 boundary sheet-flip 在其中给出一个规范的 \((\ZZ_2)^3\) 坐标子格（推论 \ref{cor:fold-bin-boundary-center-z2}）。
+
+  \begin{theorem}[二进制区间折叠规范群的 Abel 化与全局偶置约束]\label{thm:window6-foldbin-gauge-abelianization-even-parity}
+  对一般分辨率 \(m\ge 1\)，记
+  \(\mathcal{G}^{\mathrm{bin}}_m=\Aut(\Fold^{\mathrm{bin}}_m)\)
+  且记纤维多重度 \(d^{\mathrm{bin}}_m(w):=\card{(\Fold^{\mathrm{bin}}_m)^{-1}(w)}\)（\(w\in X_m\)）。
+  令
+  \[
+  r_m:=\#\{w\in X_m:\ d^{\mathrm{bin}}_m(w)\ge 2\},
+  \]
+  即具有非平凡对称群的纤维数。
+  则有自然同构
+  \[
+  \boxed{\;(\mathcal{G}^{\mathrm{bin}}_m)^{\mathrm{ab}}\ \cong\ (\ZZ_2)^{r_m}.\;}
+  \]
+  此外令
+  \[
+  (\mathcal{G}^{\mathrm{bin}}_m)^{+}
+  :=\mathcal{G}^{\mathrm{bin}}_m\cap \mathfrak{A}_{2^m}
+  =\{\sigma\in\mathcal{G}^{\mathrm{bin}}_m:\ \operatorname{sgn}(\sigma)=+1\},
+  \]
+  其中 \(\mathfrak{A}_{2^m}\) 为 \(\Omega_m\) 上偶置换群。
+  则 \((\mathcal{G}^{\mathrm{bin}}_m)^{+}\) 为指数 \(2\) 的正规子群；并且当 \(r_m\ge 1\) 时
+  \[
+  \boxed{\;\bigl((\mathcal{G}^{\mathrm{bin}}_m)^{+}\bigr)^{\mathrm{ab}}\ \cong\ (\ZZ_2)^{r_m-1}.\;}
+  \]
+  等价地：在“全局偶置”约束下，逐纤维的 \(\ZZ_2\) 符号电荷出现唯一一条线性关系，其总积必须为 \(+1\)。
+  \end{theorem}
+
+  \begin{proof}
+  由 \(\Fold^{\mathrm{bin}}_m\) 的纤维分解，整体规范群分解为纤维对称群的直积
+  \(
+  \mathcal{G}^{\mathrm{bin}}_m\cong \prod_{w\in X_m}\mathfrak{S}_{d^{\mathrm{bin}}_m(w)}
+  \)。
+  而当 \(d\ge 2\) 时 \(\mathfrak{S}_d^{\mathrm{ab}}\cong \ZZ_2\)（由符号同态给出），当 \(d=1\) 时 Abel 化平凡；故直积 Abel 化即为 \((\ZZ_2)^{r_m}\)。
+  \par
+  对全局偶置：任意 \(\sigma\in\mathcal{G}^{\mathrm{bin}}_m\) 在 \(\Omega_m\) 上是按纤维不交并的置换直积，其全局符号等于各纤维符号之积，
+  因而 \((\mathcal{G}^{\mathrm{bin}}_m)^{+}\) 恰为“纤维符号总积为 \(+1\)”的核，指数为 \(2\) 且正规。
+  将 Abel 化识别为 \((\ZZ_2)^{r_m}\) 后，该核对应于求和映射 \((\ZZ_2)^{r_m}\to\ZZ_2\) 的核，维数降 \(1\)，即得到 \((\ZZ_2)^{r_m-1}\)。
+  证毕。
+  \end{proof}
+
+  \input{parts/cor__window6-foldbin-global-even-parity-orientation-torsor}
+  \input{parts/thm__window6-foldbin-gauge-low-degree-homology}
+  \input{parts/prop__window6-foldbin-gauge-center-and-charge-separation}
+  \input{parts/thm__window6-bdry-sheet-parity-nonfunctorial-extension}
+  \input{parts/thm__window6-center-2rank-excludes-simple-groups}
+  \input{parts/prop__window6-no-translation-quotient-fiber}
+
+  \item \textbf{最大纤维的组合上界何时饱和：显式判别式与有限共振窗。}
+  记
+  \(d^{\mathrm{bin}}_{\max}(m):=\max_{w\in X_m}d^{\mathrm{bin}}_m(w)\)。
+  则最大值由 \(w=0^m\) 取得，且满足组合上界
+  \(d^{\mathrm{bin}}_{\max}(m)\le F_{K(m)-m+2}\)；
+  并且上界饱和当且仅当阈值约束对所有合法尾部冗余，即
+  \[
+  d^{\mathrm{bin}}_{\max}(m)=F_{K(m)-m+2}
+  \quad\Longleftrightarrow\quad
+  2^m-1\ge S_{\max}(m),
+  \]
+  其中 \(S_{\max}(m)\) 具有完全显式闭式（推论 \ref{cor:fold-bin-saturation}）。
+  该饱和条件进一步强迫 \(2^m\) 与某一 Fibonacci 数发生指数级逼近，从而导出“仅有限次饱和”的 Diophantine 刚性（注 \ref{rem:fold-bin-finite}）。
+  在 \(m\le 400\) 的全扫描审计中，饱和点集合为表 \ref{tab:fold_binary_saturation_points} 所列有限集，从而形成一列离散“共振分辨率窗”。
+  在这些饱和点上，最大纤维并非仅满足计数等式，而是与更低分辨率的稳定类型空间形成规范双射：
+  \input{subsubsec__window6-discrete-results-saturation-selfsimilarity}
+
+  \item \textbf{最大纤维的 Fourier–能量驱动机制与常数级偏置下界。}
+  在模 \(F_{m+2}\) 的地址上令 \(d_m(r)\) 为折叠多重度函数、\(\widehat d_m(k)\) 为其离散 Fourier 系数，
+  并记均值 \(\overline d_m=2^m/F_{m+2}\)、最大值 \(M_m:=\max_r d_m(r)\)、谱峰 \(S_m:=\max_{k\neq 0}|\widehat d_m(k)|\)。
+  则最大纤维由非平凡频谱能量定量强迫：
+  \[
+  M_m\ge \overline d_m+\frac{1}{F_{m+2}}\Biggl(\sum_{k\ne 0}\abs{\widehat d_m(k)}^2\Biggr)^{1/2}
+  \quad\text{（定理 \ref{thm:fold-max-fiber-spectrum}）},
+  \qquad
+  M_m\ge \overline d_m+\frac{S_m}{F_{m+2}}
+  \quad\text{（定理 \ref{thm:fold-max-fiber-fourier}）}.
+  \]
+  特别地，由一个固定 Fibonacci 模的可审计下界推出常数级乘性偏置：
+  \[
+  \liminf_{m\to\infty}\frac{M_m}{\overline d_m}\ \ge\ 1+C_\varphi\ \approx\ 1.2244178274
+  \qquad\text{（推论 \ref{cor:fold-max-fiber-constant-bias}）}.
+  \]
+  因此最大纤维的“超额”并非偶发，而由非平凡频谱幅度在极限上至少保留约 \(22.44\%\) 的乘性偏置。
+
+  \item \textbf{顶端纤维谱的 Fibonacci 刚性：最大/次大/第三大闭式、比例隔离带与隐藏比特分裂谱。}
+  对 \(m\ge 2\) 与 \(x\in X_m\) 令
+  \(
+  d_m(x):=\card{\Fold_m^{-1}(x)}
+  \)，并定义顶端谱水平
+  \[
+  \begin{aligned}
+  D_m &:=\max_{x\in X_m} d_m(x),\\
+  D_m^{(2)} &:=\max\{d_m(x):x\in X_m,\ d_m(x)<D_m\},\\
+  D_m^{(3)} &:=\max\{d_m(x):x\in X_m,\ d_m(x)<D_m^{(2)}\}.
+  \end{aligned}
+  \]
+  记最大达到者集合 \(\mathcal{M}_m:=\{x\in X_m:\ d_m(x)=D_m\}\)。
+  取 Fibonacci 延拓 \(F_0=0,F_1=1\)。则：
+  \begin{itemize}
+    \item \textbf{最大纤维闭式、可达构造与二步递推：}对一切 \(m\ge 2\)，
+    \[
+    D_{2k}=F_{k+2},\qquad D_{2k+1}=2F_{k+1}.
+    \]
+    并且存在显式达到族 \(x^{(m)}\in X_m\)（写 \(m=4q+r,\ r\in\{0,1,2,3\}\)）：
+    \[
+    x^{(m)}=
+    \begin{cases}
+    (0001)^{\,q-1}0000,& r=0,\ q\ge 1,\\[2pt]
+    (0001)^{\,q-1}00100,& r=1,\ q\ge 1,\\[2pt]
+    (0001)^{\,q}00,& r=2,\ q\ge 0,\\[2pt]
+    (0001)^{\,q-1}0000100,& r=3,\ q\ge 1,
+    \end{cases}
+    \qquad
+    d_m\!\bigl(x^{(m)}\bigr)=D_m.
+    \]
+    此外，\(D_m\) 满足二步递推与基值
+    \[
+    D_m=D_{m-2}+D_{m-4}\quad(m\ge 6),\qquad (D_2,D_3,D_4,D_5)=(2,2,3,4)
+    \]
+    （定理 \ref{thm:pom-max-fiber}；推论 \ref{cor:pom-D-rec}）。
+
+    \item \textbf{次大纤维闭式与全局 gap 证书（比例隔离带）：}当 \(k\ge 5\) 时，
+    \[
+    D_{2k}^{(2)}=F_{k+2}-F_{k-4},\qquad
+    D_{2k+1}^{(2)}=2F_{k+1}-F_{k-4}
+    \]
+    （定理 \ref{thm:pom-second-max-fiber-closed-form}）。
+    因而对任意非最大达到者 \(x\in X_m\setminus\mathcal{M}_m\) 满足
+    \[
+    d_m(x)\le D_m^{(2)}\le \varepsilon\,D_m
+    \]
+    的统一比例隔离带，其中可取显式“一刀切”证书
+    \[
+    \boxed{\;\frac{D_m^{(2)}}{D_m}\le \frac{25}{26}\qquad(m\ge 2)\;}
+    \]
+    且在 \(m=13\) 取等；渐近最坏极限常数为
+    \[
+    \lim_{k\to\infty}\frac{D_{2k+1}^{(2)}}{D_{2k+1}}
+    =1-\frac{1}{11+5\sqrt5}\approx 0.9549150281,
+    \qquad
+    \lim_{k\to\infty}\frac{D_{2k}^{(2)}}{D_{2k}}
+    =1-\frac{1}{9+4\sqrt5}\approx 0.9442719090
+    \]
+    （推论 \ref{cor:pom-second-max-gap-constant}）。
+
+    \item \textbf{第三大纤维闭式与 Fibonacci 梯级缺口：}当 \(k\ge 6\) 时，
+    \[
+    D_{2k}^{(3)}=F_{k+2}-F_{k-3}
+    \]
+    （定理 \ref{thm:pom-third-max-fiber-even-closed-form}）。
+    奇数支在稳定相（\(m=2k+1\ge 19\)）满足精确闭式
+    \[
+    D_{2k+1}^{(3)}=2F_{k+1}-F_{k-4}-F_{k-8}
+    \]
+    （注 \ref{rem:pom-third-max-fiber-odd-closed-form}）。
+    因此顶端谱出现刚性的 Fibonacci 梯级缺口：
+    \[
+    D_{2k}-D_{2k}^{(2)}=F_{k-4},\quad D_{2k}-D_{2k}^{(3)}=F_{k-3}\ (k\ge 6),
+    \qquad
+    D_{2k+1}-D_{2k+1}^{(2)}=F_{k-4}\ (k\ge 5),
+    \]
+    \[
+    D_{2k+1}-D_{2k+1}^{(3)}=F_{k-4}+F_{k-8}\ (k\ge 9)
+    \]
+    （注 \ref{rem:pom-top-fiber-spectrum-ladder}）。
+
+    \item \textbf{最大纤维达到者的隐藏比特分裂谱：}对任意最大达到者 \(x\in X_m\)（\(d_m(x)=D_m\)），存在唯一一比特分裂
+    \[
+    d_m(x)=d_{m,0}(x)+d_{m,1}(x),
+    \]
+    其中 \(d_{m,b}(x)\) 计数隐藏位 \(b\in\{0,1\}\) 的两支预像（注 \ref{rem:pom-max-fiber-achievers-bsplit}；表 \ref{tab:fold_max_fiber_achievers_bsplit}）。
+    在稳定阈值区间上，分裂向量仅出现 Fibonacci 型式：
+    \[
+    \begin{aligned}
+    m=2k:\quad &(d_{m,0},d_{m,1})\in\{(F_{k+1},F_k),(F_k,F_{k+1})\},\\
+    m=2k+1:\quad &(d_{m,0},d_{m,1})\in
+    \Bigl\{(2F_k,2F_{k-1}), (2F_{k-1},2F_k),\\
+    &\qquad (F_{k+1},F_{k+1})\Bigr\},
+    \end{aligned}
+    \]
+    且平衡型 \((F_{k+1},F_{k+1})\) 作为交换对合的不动点以有限重数出现，从而给出最大相位集合的可审计二分指纹。
+    该分裂谱可视为最大层“二支溢出结构”的最小充分统计量，并与顶端梯级缺口的刚性缺陷律相容。
+
+    \item \textbf{最大纤维达到者的完全结构刻画与有限个数定理：}
+    在候选位点诱导图表示下（定理 \ref{thm:pom-fiber-indset-factorization}），存在仅由 \(x\) 决定的诱导图
+    \[
+    \Gamma_x\ \cong\ \bigsqcup_{i=1}^r P_{\ell_i},
+    \qquad
+    d_m(x)=\prod_{i=1}^r F_{\ell_i+2}.
+    \]
+    因而最大纤维达到者的结构可被完全归约为分量长度多重集 \(\{\ell_i\}\) 的判别。
+    在稳定阈值区间上（定理 \ref{thm:pom-max-achievers-phase-stabilization}），该判别进一步刚性化：
+    \begin{itemize}
+      \item \textbf{偶数 \(m=2k\)：}\(\ x\in\mathcal{M}_m\iff \Gamma_x\cong P_k\)（单分量满长路径）。
+      \item \textbf{奇数 \(m=2k+1\)：}\(\ x\in\mathcal{M}_m\iff \Gamma_x\cong P_{k-1}\sqcup P_1\)（一条满长路径加一条长度 \(1\) 的离散分量）。
+    \end{itemize}
+    并且达到者集合在逆序 involution \(\mathrm{rev}\) 下封闭；其基数满足统一上界 \(|\mathcal{M}_m|\le 4\)，且在稳定相位中
+    \[
+    |\mathcal{M}_{2k}|=2\quad(k\ge 5),
+    \qquad
+    |\mathcal{M}_{2k+1}|=4\quad(k\ge 6)
+    \]
+    （定理 \ref{thm:pom-max-achievers-phase-stabilization}；并可在表 \ref{tab:fold_max_fiber_achievers_phase} 的可审计窗口内逐项核验）。
+
+    \item \textbf{极大纤维对平均纤维的指数放大律与精确常数：}
+    令平均纤维大小
+    \[
+    \overline d_m:=\frac{1}{|X_m|}\sum_{x\in X_m}d_m(x)=\frac{2^m}{|X_m|}=\frac{2^m}{F_{m+2}}.
+    \]
+    则极大放大比满足极限指数律
+    \[
+    \lim_{m\to\infty}\frac{1}{m}\log\frac{D_m}{\overline d_m}
+    =\log\!\left(\frac{\varphi^{3/2}}{2}\right),
+    \qquad \varphi=\frac{1+\sqrt5}{2}.
+    \]
+    更精细地，存在分奇偶的精确乘性常数使得
+    \[
+    \frac{D_m}{\overline d_m}
+    =
+    \begin{cases}
+    \displaystyle \frac{\varphi^{4}}{5}\Bigl(\frac{\varphi^{3/2}}{2}\Bigr)^{m}\,(1+o(1)),& m\ \text{为偶},\\[1.2ex]
+    \displaystyle \frac{2\varphi^{5/2}}{5}\Bigl(\frac{\varphi^{3/2}}{2}\Bigr)^{m}\,(1+o(1)),& m\ \text{为奇},
+    \end{cases}
+    \]
+    从而“最大纤维优势”具有严格的指数放大率 \(\varphi^{3/2}/2>1\) 且常数项可显式化（亦见注 \ref{rem:pom-defect-gap}）。
+
+    \item \textbf{纤维基数的奇偶判据：\texorpdfstring{$\bmod 2$}{mod 2} 完全由分量长度 \texorpdfstring{$\bmod 3$}{mod 3} 决定。}
+    仍令 \(\Gamma_x\cong\bigsqcup_i P_{\ell_i}\)。由于 \(d_m(x)=\prod_i F_{\ell_i+2}\)，而 Fibonacci 数列模 \(2\) 的 Pisano 周期为 \(3\)，故有严格判据
+    \[
+    d_m(x)\equiv 1\pmod 2
+    \quad\Longleftrightarrow\quad
+    \forall i,\ \ell_i\not\equiv 1\pmod 3,
+    \]
+    等价地
+    \[
+    d_m(x)\equiv 0\pmod 2
+    \quad\Longleftrightarrow\quad
+    \exists i,\ \ell_i\equiv 1\pmod 3.
+    \]
+    因此纤维基数的奇偶性是一个纯局部、可审计且与 uplift/边界证书无关的算术不变量：它仅由可逆位点图的分量长度的 \(\bmod 3\) 类决定。
+
+    \item \textbf{极大纤维序列的有理生成函数、特征多项式与四周期次主振荡项：}
+    为将二步递推闭合为一条统一的线性递推，取约定 \(D_0:=1,D_1:=2\)（从而 \((D_2,D_3,D_4,D_5)=(2,2,3,4)\) 与推论 \ref{cor:pom-D-rec} 相容），则
+    \[
+    D_m=D_{m-2}+D_{m-4}\qquad(m\ge 4),
+    \]
+    其特征多项式为
+    \[
+    r^{4}-r^{2}-1=0,
+    \]
+    从而四个特征根为 \(\pm\sqrt{\varphi}\) 与 \(\pm i/\sqrt{\varphi}\)。
+    相应的常规生成函数为严格有理式
+    \[
+    \sum_{m\ge 0} D_m\,z^m=\frac{1+2z+z^{2}}{1-z^{2}-z^{4}}.
+    \]
+    因此收敛半径为 \(1/\sqrt{\varphi}\)，主导增长率为 \(\sqrt{\varphi}\)；并且由于存在次主特征根 \(\pm i/\sqrt{\varphi}\)，次主校正项呈 \(4\) 周期相位（由 \(i^m\) 控制），其幅度精确为 \(O(\varphi^{-m/2})\)。等价地，存在常数 \(A_\pm\) 使得
+    \[
+    D_m=A_+(\sqrt{\varphi})^{m}+A_-(-\sqrt{\varphi})^{m}+O(\varphi^{-m/2}),
+    \]
+    从而给出“主增长—四周期细振荡”的严格二尺度分解。
+
+    \item \textbf{Fibonacci 乘积严格次乘性与“分量合并增益”原理：}
+    Fibonacci 数满足严格融合恒等式与不等式（引理 \ref{lem:pom-fib-fusion-submultiplicativity}）：对任意 \((a,b)\neq(1,1)\)，
+    \(
+    F_aF_b< F_{a+b-1}<F_{a+b}
+    \)。
+    因而在分量乘法分解 \(d_m(x)=\prod_i F_{\ell_i+2}\) 的口径下，任取两分量长度 \(\ell,\ell'\ge 1\)，若其在候选链上可通过补齐一个桥接位点并接为更长分量，则纤维基数出现严格“合并增益”
+    \[
+    F_{\ell+2}F_{\ell'+2}<F_{\ell+\ell'+3},\qquad
+    F_{\ell+\ell'+3}-F_{\ell+2}F_{\ell'+2}=F_{\ell+1}F_{\ell'+1}\ge F_{\min\{\ell,\ell'\}+1}
+    \]
+    （推论 \ref{cor:pom-fib-component-fusion-gain}）。
+    该增益下界提供一条纯组合、可审计的稳定性证书：纤维基数偏离饱和的幅度可由“分裂次数”与最短分量长度共同控制。
+
+    \item \textbf{不同纤维基数取值的亚指数复杂度：\texorpdfstring{\(\exp(\Theta(\sqrt m))\)}{exp(Theta(sqrt m))} 级别的值域反差。}
+    令 \(\mathcal{V}_m:=\{d_m(x):x\in X_m\}\) 为分辨率 \(m\) 下纤维基数的取值集合。
+    在分量分解口径下，\(|\mathcal{V}_m|\) 由整数分区数在指数尺度上夹逼，从而满足严格亚指数标度
+    \[
+    |\mathcal{V}_m|=\exp(\Theta(\sqrt m)),
+    \]
+    且可取显式分区数上下界（见注 \ref{rem:pom-fiber-value-set-complexity}）。
+    因此出现如下结构反差：\(|X_m|=F_{m+2}=\exp(\Theta(m))\) 为指数规模，而 \(\mathcal{V}_m\) 仅为亚指数规模。
+
+    \item \textbf{最大链数的极值结构与“与最大纤维相反的极端”：全孤立分量最优。}
+    在分布式格模型 \(\mathcal L_x\cong J(\bigsqcup_i Z_{\ell_i})\) 下，最大链数（等价于线性扩张数）具有闭式
+    \[
+    |\mathrm{MC}(\mathcal L_x)|
+    =\binom{N}{\ell_1,\dots,\ell_r}\prod_{i=1}^r E_{\ell_i}
+    =N!\prod_{i=1}^r\frac{E_{\ell_i}}{\ell_i!},
+    \qquad N=\sum_{i=1}^r \ell_i
+    \]
+    （定理 \ref{thm:pom-fence-maxchains-euler}）。
+    因而在固定总长度 \(N\) 的约束下，
+    \[
+    |\mathrm{MC}(\mathcal L_x)|\le N!,
+    \]
+    且当且仅当 \(\ell_1=\cdots=\ell_r=1\)（全部分量孤立）时取等号（推论 \ref{cor:pom-fence-maxchains-all-isolated-optimal}）。
+    该极值结构与最大纤维达到者的“单长分量”结构（上文关于 \(\Gamma_x\) 的刚性刻画）形成互补极端：纤维同时承载“体积极大”与“调度自由度极大”的分离。
+
+    \item \textbf{双不变量可达域的凸包定理：\texorpdfstring{\((\log d,\log\mathrm{MC})\)}{(log d, log MC)} 的 Pareto 前沿由有限原子长度生成。}
+    在上述两类乘法分解下，对归一化对偶不变量
+    \[
+    A=\frac{1}{N}\log d_m(x),\qquad
+    B=\frac{1}{N}\bigl(\log|\mathrm{MC}(\mathcal L_x)|-\log(N!)\bigr)
+    \]
+    （\(N=\sum_i\ell_i\)），其在 \(N\to\infty\) 的尺度极限中形成一个紧凸可达域，并且该可达域等于原子点集
+    \(
+    \{(\ell^{-1}\log F_{\ell+2},\,\ell^{-1}\log(E_\ell/\ell!)):\ell\in\NN\}
+    \)
+    的闭凸包（定理 \ref{thm:pom-fiber-ab-convex-hull}）。
+    因而 Pareto 前沿可由支撑超平面完全刻画，并由有限原子长度的混合生成。
+
+    \item \textbf{系数 \(4\) 的谱刚性：离散 Green 核的半奇整数角量子化。}
+    在锯齿序多项式的核算子口径中，Green 核
+    \(K_k(i,j)=\min(i,j)\) 的谱闭式
+    \(
+    \lambda_p(k)=\bigl(2(1-\cos\theta_p)\bigr)^{-1}=(4\sin^2(\theta_p/2))^{-1}
+    \)
+    具有半奇整数角量子化
+    \(
+    \theta_p=\frac{(2p-1)\pi}{2k+1}
+    \)
+    （引理 \ref{lem:pom-Kk-eigenvalues}；注 \ref{rem:pom-Kk-factor4-spectral-rigidity}）。
+    因而谱表示中的系数 \(4\) 与尺度 \(4k+2\) 并非任意归一化，而由混合边界量子化与半角恒等式结构性强制给出。
+
+    \item \textbf{“四分角”最近奇点律：调度熵的 \texorpdfstring{\(2/\pi\)}{2/pi} 常数与系数 \(4\) 的解析来源。}
+    Euler 交错数 \(E_n\) 的指数常数
+    \(
+    \lim_{n\to\infty}\frac1n\log(E_n/n!)=\log(2/\pi)
+    \)
+    由 \(\sec z+\tan z\) 在 \(z=\pm\pi/2\) 的最近奇点主导（定理 \ref{thm:pom-fence-volume-log2pi}）。
+    由于基本周期为 \(2\pi\)，\(\pi/2=(2\pi)/4\) 给出严格“四分角”尺度，
+    从而把 \(\log(2/\pi)=-\log(\pi/2)\) 与谱侧的系数 \(4\) 统一到同一角尺度比值之下（注 \ref{rem:pom-quarter-turn-pi2-scale}）。
+
+    \item \textbf{两类熵常数的同源闭合：\texorpdfstring{\(\pi/2\)}{pi/2} 作为折叠热力学的普适尺度。}
+    多链细化谱密度满足闭式
+    \[
+    h_{\mathrm{ref}}(k)=-\log\!\Bigl(2\sin\frac{\pi}{4k+2}\Bigr)
+    =\log(2k+1)-\log\pi+\frac{\pi^2}{24(2k+1)^2}+\frac{\pi^4}{2880(2k+1)^4}+O(k^{-6})
+    \]
+    （推论 \ref{cor:pom-fence-multichain-entropy-pi}；注 \ref{rem:pom-quarter-turn-pi2-scale}）。
+    与调度/体积侧的极限密度 \(\log(2/\pi)=-\log(\pi/2)\) 并置可见：\(-\log\pi\) 与 \(\log(2/\pi)\) 共享唯一的角尺度 \(\pi/2\)，并分别以半角量子化与最近奇点支配的形式实现。
+
+    \item \textbf{谱几何同源范式：端点正规性 \texorpdfstring{\(\Longleftrightarrow\)}{<->} 半奇整数模态 \texorpdfstring{\(\Longleftrightarrow\)}{<->} 四分角常数。}
+    综上，混合边界端点的正规性条件在离散谱侧强制半奇整数模态并引入半角系数 \(4\)，而在解析组合侧则以 \(\pi/2\) 的四分角最近奇点锁定 \(\log(2/\pi)\)；
+    二者共同构成一个实现无关的“半角/四分角”同源机制，从而为本文视界端点相关段落中反复出现的 \(1/4\) 型比例常数（例如黑洞视界语义下的 \(1/4\) 形式）提供统一的数学原型（见注 \ref{rem:pom-quarter-turn-pi2-scale} 的归因段）。
+
+    \item \textbf{Gram 分解的行列式刚性与 \texorpdfstring{\((4\sin^2)\)}{(4 sin^2)} 乘积恒等式。}
+    Green 核 \(K_k(i,j)=\min(i,j)\) 具有整数 Gram 分解 \(K_k=B_kB_k^{\mathsf T}\)（\(B_k\) 为单位下三角全 \(1\) 矩阵），从而 \(\det(K_k)=1\)（引理 \ref{lem:pom-Kk-gram-det}）。
+    结合特征值闭式 \(\lambda_p=(4\sin^2\phi_p)^{-1}\)（\(\phi_p=(2p-1)\pi/(4k+2)\)），得到严格乘积恒等式
+    \(
+    \prod_{p=1}^{k}4\sin^2(\phi_p)=1
+    \)，并由 \(\mathrm{tr}(K_k)=k(k+1)/2\) 得到对应的严格求和恒等式（推论 \ref{cor:pom-Kk-sine-product-sum}）。
+
+    \item \textbf{Chebyshev 识别：\texorpdfstring{\(\lambda/4\)}{lambda/4} 为唯一整系数正规化尺度。}
+    记 \(L_k:=K_k^{-1}\) 为混合边界离散 Laplacian，则其特征多项式可写成
+    \[
+    \det(\lambda I-L_k)=(-1)^k\,P_k\!\Bigl(1-\frac{\lambda}{4}\Bigr),
+    \qquad
+    P_k(y):=\frac{T_{2k+1}(\sqrt y)}{\sqrt y}\in\ZZ[y],
+    \]
+    从而谱点满足 \(\mu_p=4\sin^2(\phi_p)\)（定理 \ref{thm:pom-Lk-chebyshev-charpoly}）。
+    该表示将系数 \(4\) 提升为“Chebyshev 模态量子化 + 整系数谱代数”的共同约束：\(\lambda\mapsto 1-\lambda/4\) 是把谱点映射到 \(\cos^2(\phi_p)\) 从而与 \(T_{2k+1}\) 对齐的自然线性正规化。
+
+    \item \textbf{移位行列式的封闭式与严格线性自由能（面积律形态）。}
+    对 \(t>-4\)，有严格恒等式
+    \[
+    \det(L_k+tI)=\det(I+tK_k)=P_k\!\Bigl(1+\frac{t}{4}\Bigr)=\frac{T_{2k+1}(\sqrt{1+t/4})}{\sqrt{1+t/4}},
+    \]
+    并由此得到自由能密度极限
+    \[
+    \lim_{k\to\infty}\frac{1}{2k+1}\log\det(L_k+tI)=\mathrm{arcosh}\!\Bigl(\sqrt{1+\frac{t}{4}}\Bigr),
+    \]
+    以及显式重整化常数项
+    \(
+    \lim_{k\to\infty}F_k(t)=-\log\!\bigl(2\sqrt{1+t/4}\bigr)
+    \)
+    （推论 \ref{cor:pom-Lk-shifted-det-free-energy}）。
+
+    \item \textbf{谱隙常数的完全显式化：\texorpdfstring{\(\pi^2/(2k+1)^2\)}{pi^2/(2k+1)^2} 的刚性出现。}
+    \(L_k\) 的最小/次小特征值满足
+    \[
+    \mu_1=4\sin^2\!\Bigl(\frac{\pi}{4k+2}\Bigr),\qquad
+    \mu_2=4\sin^2\!\Bigl(\frac{3\pi}{4k+2}\Bigr),
+    \]
+    从而
+    \(
+    \mu_1=\pi^2/(2k+1)^2+O(k^{-4})
+    \)
+    且 \(\lambda_{\max}(K_k)=\mu_1^{-1}=(2k+1)^2/\pi^2+O(1)\)
+    （推论 \ref{cor:pom-Lk-gap-pi2}）。
+
+    \item \textbf{高阶矩的 Bernoulli--多项式律：全体 \texorpdfstring{\(\csc^{2r}\)}{csc^{2r}} 奇角幂和为 \texorpdfstring{\((2k+1)\)}{(2k+1)} 的偶次多项式。}
+    对 \(r\ge 1\) 定义
+    \(
+    S_r(k)=\sum_{p=1}^{k}\csc^{2r}(\phi_p)
+    \)
+    与 \(n:=2k+1\)，则
+    \[
+    S_r(k)=-\frac12+\sum_{j=1}^{r} a_{r,j}\,n^{2j},
+    \qquad
+    a_{r,r}=\frac{2^{2r-1}(2^{2r}-1)\,|B_{2r}|}{(2r)!},
+    \]
+    并且 \(\mathrm{tr}(K_k^{\,r})=\frac{1}{4^{\,r}}S_r(k)\)，从而系数 \(4\) 以 \(4^{-r}\) 的形式在全部迹矩上系统出现（命题 \ref{prop:pom-csc-moments-bernoulli}；并见注 \ref{rem:pom-csc-moments-examples} 的前三阶闭式）。
+
+    \item \textbf{谱测度的极限律：经验谱分布收敛到 \texorpdfstring{\([0,4]\)}{[0,4]} 上的反正弦律。}
+    混合边界离散 Laplacian \(L_k=K_k^{-1}\) 的经验谱测度
+    \(
+    \nu_k=\frac1k\sum_{p=1}^k\delta_{\mu_p}
+    \)
+    弱收敛到 \([0,4]\) 上的反正弦分布 \(\dd\nu(\mu)=\frac{1}{\pi\sqrt{\mu(4-\mu)}}\dd\mu\)，并给出迹泛函极限
+    \(
+    \frac1k\tr f(L_k)\to \frac1\pi\int_0^4 f(\mu)/\sqrt{\mu(4-\mu)}\,\dd\mu
+    \)
+    （定理 \ref{thm:pom-Lk-arcsine-law}）。
+    该极限律将系数 \(4\) 提升为谱支撑端点的刚性尺度。
+
+    \item \textbf{离散 Weyl 定律的精确余项界：半奇整数网格误差压缩为常数阶。}
+    对计数函数 \(N_k(\mu)=\#\{p\le k:\mu_p\le\mu\}\) 与
+    \(
+    \theta(\mu)=\arccos(1-\mu/2)
+    \)，有
+    \[
+    N_k(\mu)=\left\lfloor \frac{2k+1}{2\pi}\theta(\mu)+\frac12\right\rfloor,\qquad
+    \Bigl|N_k(\mu)-\frac{2k+1}{2\pi}\theta(\mu)\Bigr|\le 1
+    \]
+    （推论 \ref{cor:pom-Lk-discrete-weyl}），从而经验谱分布函数在全区间上以 \(O(1/k)\) 逼近连续反正弦律。
+
+    \item \textbf{谱 \texorpdfstring{\(\zeta\)}{zeta} 主项的 Dirichlet 因子：奇模态投影的解析指纹。}
+    对 \(\Re(s)>\tfrac12\) 的谱 \(\zeta\) 函数 \(\zeta_k(s)=\sum_p\mu_p^{-s}\)，有主导渐近
+    \[
+    \zeta_k(s)=\Bigl(\frac{2k+1}{\pi}\Bigr)^{2s}\Bigl(1-2^{-2s}\Bigr)\zeta(2s)+O(k),
+    \]
+    其中因子 \(\bigl(1-2^{-2s}\bigr)\) 由半奇整数模态（奇频子谱）强制产生（命题 \ref{prop:pom-Lk-spectral-zeta-dirichlet}）。
+
+    \item \textbf{热核密度的闭式极限：Bessel--反正弦对偶与扩散尺度规范化。}
+    热迹 \(H_k(t)=\tr(e^{-tL_k})\) 满足
+    \[
+    \frac1k H_k(t)\ \longrightarrow\ \frac{1}{\pi}\int_0^\pi e^{-2t(1-\cos\theta)}\,\dd\theta
+    =e^{-2t}I_0(2t),
+    \qquad
+    \frac{1}{2k+1}H_k(t)\ \longrightarrow\ \frac12 e^{-2t}I_0(2t)
+    \]
+    （推论 \ref{cor:pom-Lk-heat-kernel-bessel}），从而反正弦谱律在 Laplace 变换下给出严格的 Bessel 闭式。
+
+    \item \textbf{离散—连续谱同构的唯一尺度：ND 行列式极限 \texorpdfstring{\(\cosh(\sqrt{s})\)}{cosh(sqrt(s))}.}
+    连续 ND 算子 \(\mathcal L=-\dd^2/\dd x^2\)（\(u'(0)=0,u(1)=0\)）满足 \(\det(\mathcal L+s)=\cosh(\sqrt{s})\)。
+    离散算子在缩放
+    \(
+    \widetilde L_k=\frac{(2k+1)^2}{4}L_k
+    \)
+    下实现严格谱匹配，并具有行列式极限
+    \[
+    \det\!\Bigl(L_k+\frac{4s}{(2k+1)^2}I\Bigr)\ \longrightarrow\ \cosh(\sqrt{s})\qquad(s\ge 0),
+    \]
+    从而 \(t/4\) 的尺度因子由连续 ND 谱的半奇整数模态匹配结构性强制固定（推论 \ref{cor:pom-Lk-continuum-ND-det-cosh}）。
+
+    \input{subsubsec__window6-discrete-results-green-kernel-area-law}
+
+    \input{subsubsec__window6-discrete-results-green-kernel-golden-coupling}
+  \end{itemize}
+
+  \item \textbf{Zeckendorf--Fibonacci 分辨率签名 \texorpdfstring{$\Sigma(\mathfrak g)$}{Sigma(g)} 的唯一性与 NAP 选择器的最小解。}
+  对候选统一李代数 \(\mathfrak g\)，令 \(D=\dim\mathfrak g\)，并以 Zeckendorf 唯一分解写
+  \(D=\sum_{k\in S}F_k\)（\(S\) 无相邻指标）。
+  定义分辨率签名
+  \[
+  \Sigma(\mathfrak g):=\{\,m=k+2:\ k\in S\,\}.
+  \]
+  由于边界层计数满足 \(\card{X_m^{\mathrm{bdry}}}=F_{m-2}\)，从而
+  \(D=\sum_{m\in\Sigma(\mathfrak g)}\card{X_m^{\mathrm{bdry}}}\)，并由 Zeckendorf 唯一性知 \(\Sigma(\mathfrak g)\) 亦唯一（见 \S\ref{subsec:bdry-tower-zeck-gut} 与表 \ref{tab:zeckendorf_gut_signatures}）。
+  在此基础上，施加非阿贝尔保留约束（NAP）\(\{6,8\}\subset \Sigma(\mathfrak g)\) 并在简单李代数族中最小化 \(D\)，得到最小解为
+  \(
+  \mathfrak g=\mathfrak{so}(10),\ D=45,\ \Sigma(\mathfrak g)=\{6,8,11\}
+  \)
+  （表 \ref{tab:nap_selector_so10} 与式 \ref{eq_nap_selector_so10}）。
+  该构造把“统一维数”提升为可审计的离散层签名函子，并给出完全离散、可复核的统一代数选择器。
+
+  \begin{corollary}[NAP 与局域 uplift 的联合锁定]\label{cor:nap-local-uplift-forces-so10}
+  若在 NAP 约束 \(\{6,8\}\subset\Sigma(\mathfrak g)\) 之外，进一步要求统一顶层由 window-\(6\) 的局域几何 uplift 实现，
+  即除平凡位移外仅允许 \(\delta=\pm 34\)（推论 \ref{cor:terminal-window6-local-uplift-admissibility}），
+  则顶层 Zeckendorf 项被锁定为 \(F_9=34\)，从而签名必须包含 \(m=11\)。
+  因此 \(\{6,8,11\}\subset \Sigma(\mathfrak g)\)，并在简单李代数扫描域内由表 \ref{tab:nap_selector_so10} 的极小性结论强制得到
+  \(\mathfrak g=\mathfrak{so}(10)\) 为唯一最小候选。
+  \end{corollary}
+  \begin{proof}
+  推论 \ref{cor:terminal-window6-local-uplift-admissibility} 给出：在局域几何可实现性口径下，window-\(6\) 的非零 uplift 位移只能为 \(34\)，对应的顶层 Zeckendorf 项只能取 \(F_9\)，等价于签名包含 \(m=9+2=11\)。
+  与 NAP 约束 \(\{6,8\}\subset \Sigma(\mathfrak g)\) 合并即得 \(\{6,8,11\}\subset \Sigma(\mathfrak g)\)。
+  在简单李代数扫描域内，表 \ref{tab:nap_selector_so10} 与式 \ref{eq_nap_selector_so10} 给出满足该必含层约束的最小维数解为 \(\mathfrak{so}(10)\)，并且其签名恰为 \(\{6,8,11\}\)。
+  证毕。
+  \end{proof}
+
+  \item \textbf{高退化尾部的多重分形骨架：上包络（Legendre）与下包络（Paley--Zygmund）的同构接口。}
+  令 \(\gamma_m(x)=(1/m)\log d_m(x)\)，并按定义 \ref{def:pom-fiber-spectrum} 定义谱函数 \(f(\gamma)\)。
+  则 moment 压力 \(\tau(q)\)（或在已核验口径下的 \(\tau(q)=\log r_q\)）给出严格上包络
+  \[
+  f(\gamma)\ \le\ \inf_{q\ge 2}\bigl(\tau(q)-q\gamma\bigr)
+  \qquad\text{（命题 \ref{prop:pom-spectrum-legendre-upper}）},
+  \]
+  并在标准热力学形式条件下可提升为等号，从而把谱形压缩为 \(\{r_q\}\) 的可计算信息。
+  同时 Paley--Zygmund 下包络由 \((r_q,r_{2q})\) 直接给出（命题 \ref{prop:pom-spectrum-pz-lower}），并以亏损
+  \(
+  \delta(q):=\log\varphi-\underline f(q)
+  \)
+  量化“厚尾保证指数”的衰减（推论 \ref{cor:pom-spectrum-intermittency-deficit}）。
+  在 \(q=2,\dots,10\) 的审计点上，\(\delta(q)\) 随 \(q\) 增大显著上升，典型数值见表 \ref{tab:fold_collision_multifractal_envelope_pz_q10} 与图 \ref{fig:fold-collision-multifractal-envelope-pz}（注 \ref{rem:pom-spectrum-pz-numerics}）。
+  此外，由有限分辨率下的低阶矩 \((\mu_m,\sigma_m^2)\) 可得到“典型窗平台”计数下界
+  \[
+  \card{A_m(\varepsilon)}
+  \ \ge\
+  \left(1-\frac{\sigma_m^2}{m\varepsilon^2}\right)
+  \exp\!\bigl(m(\log 2-\mu_m-\varepsilon)\bigr),
+  \qquad
+  A_m(\varepsilon):=\{x\in X_m:\ \abs{\gamma_m(x)-\mu_m}\le \varepsilon\}
+  \]
+  （命题 \ref{prop:pom-spectrum-finite-m-plateau}），为厚尾与典型集的并置提供完全可审计的有限 \(m\) 接口。
+
+  \item \textbf{碰撞核主极点留数常数的代数证书：仅由 \texorpdfstring{$(\chi_A,r)$}{(chiA,r)} 决定。}
+  对有限状态碰撞核的邻接矩阵 \(A\)，令 \(\chi_A(\lambda)=\det(\lambda I-A)\)（首项归一），并设 Perron 根 \(r=\rho(A)\) 为单根。
+  定义
+  \(
+  \zeta_A(z)=\det(I-zA)^{-1}
+  \)
+  与主极点留数常数
+  \[
+  C(A):=\lim_{z\to 1/r}(1-rz)\,\zeta_A(z).
+  \]
+  则有闭式恒等式
+  \[
+  C(A)=\frac{r^{d-1}}{\chi_A'(r)}
+  =\prod_{\lambda\in\sigma(A)\setminus\{r\}}\left(1-\frac{\lambda}{r}\right)^{-1},
+  \qquad d:=\deg\chi_A,
+  \]
+  因而一旦 \(\chi_A\) 与 \(r\) 被独立审计，\(C(A)\) 即可在不求全谱的前提下精确重建；并可进一步给出整系数最小多项式级证书（见定义 \ref{def:pom-collision-zeta-a4} 及表 \ref{tab:collision_kernel_A2_finite_part}--\ref{tab:collision_kernel_A4_finite_part} 的审计输出）。
+
+  \item \textbf{零点集 \texorpdfstring{$\card{\mathcal{Z}_m}$}{|Z_m|} 的“约数尺度”精确计数：从扫频到扫 \texorpdfstring{$m+2$}{m+2} 的约数。}
+  当 \(F_{m+2}\) 为偶数时，零点集 \(\mathcal{Z}_m\) 可表示为若干等差余类的并，从而其精确计算可降维为：
+  枚举 \(d\mid(m+2)\) 的少量约数并做有限次整除筛选，构造相应同余类并用有限交集兼容判据计数，最后以 inclusion--exclusion 完成并集精确计数。
+  该流程把“扫所有频率 \(k\)”降为“扫 \(m+2\) 的约数结构”，可直接嵌入审计流水线（见注 \ref{rem:fold-zero-coset-algorithm}；实现脚本 \texttt{\detokenize{scripts/exp_fold_zero_coset_union_count.py}}）。
+\end{enumerate}
+

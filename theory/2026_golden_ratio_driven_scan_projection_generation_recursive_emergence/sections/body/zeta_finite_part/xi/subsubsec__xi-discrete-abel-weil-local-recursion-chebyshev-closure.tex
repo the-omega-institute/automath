@@ -1,0 +1,287 @@
+\paragraph{局部二阶递推识别与跨尺度 Chebyshev 闭合}
+在定理 \ref{thm:xi-abel-powerbase-covariance-pole-power-map}、命题 \ref{prop:abel-decimation-semigroup-identity} 与
+定理 \ref{thm:abel-power-base-gap-amplification} 的记号下，
+可把“底数幂重整化”进一步压缩为局部可识别递推与误差封口机制。
+
+\begin{proposition}[抽取算子的根单位滤波表示与半群闭合]\label{prop:xi-abel-Rk-root-filter-semigroup}
+设 \(f(r)=\sum_{n\ge 0}a_n r^n\) 在原点邻域解析，定义
+\[
+(\mathcal R_k f)(r):=\sum_{m\ge 0}a_{km}r^m,\qquad k\ge 2.
+\]
+则在 \(r\) 的充分小邻域内有
+\[
+\mathcal R_k f(r)
+=\frac1k\sum_{j=0}^{k-1}f\!\left(\zeta_k^j r^{1/k}\right),
+\qquad
+\zeta_k:=e^{2\pi i/k},
+\]
+并且满足严格半群律
+\[
+\mathcal R_k\circ\mathcal R_\ell=\mathcal R_{k\ell}\qquad(k,\ell\ge 2).
+\]
+沿用
+\(
+\mathcal A_{b,\delta}(r)=\sum_{n\ge 0}E_b(n)b^{-\delta n}r^n
+\)
+时，有
+\[
+\mathcal A_{b^k,\delta}=\mathcal R_k(\mathcal A_{b,\delta}).
+\]
+\end{proposition}
+\begin{proof}
+前两式是标准根单位筛选恒等式与系数抽取复合恒等式；
+最后一式即定理 \ref{thm:xi-abel-powerbase-covariance-pole-power-map} 与命题
+\ref{prop:abel-decimation-semigroup-identity} 的同义写法。证毕。
+\end{proof}
+
+\begin{theorem}[极点除子在尺度幂重整化下的幂映射与 Lyapunov 指数]\label{thm:xi-abel-pole-divisor-powermap-lyapunov}
+固定 \(b>1,\delta\ge 0\)。
+在离散 Abel--Weil 展开口径下写
+\[
+\mathcal A_{b,\delta}(r)
+=-\sum_{\rho}\frac{m(\rho)}{\rho}\frac{1}{1-r\,\lambda_\rho}
++H_{b,\delta}(r),
+\qquad
+\lambda_\rho:=b^{\rho-(\frac12+\delta)},
+\]
+其中 \(H_{b,\delta}\) 在 \(|r|<b^{1/2+\delta}\) 解析。
+则对任意 \(k\ge 2\) 有
+\[
+\mathcal A_{b^k,\delta}(r)
+=\mathcal R_k(\mathcal A_{b,\delta})(r)
+=-\sum_{\rho}\frac{m(\rho)}{\rho}\frac{1}{1-r\,\lambda_\rho^k}
++\mathcal R_k(H_{b,\delta})(r),
+\]
+故极点满足
+\[
+r_{\rho,\delta}(b):=\lambda_\rho^{-1}
+\Longrightarrow
+r_{\rho,\delta}(b^k)=r_{\rho,\delta}(b)^k.
+\]
+定义
+\[
+\Lambda_\rho:=\log|r_{\rho,\delta}(b)|=\Bigl(\frac12+\delta-\Re\rho\Bigr)\log b,
+\]
+则在 \(b\mapsto b^k\) 下有 \(\Lambda_\rho\mapsto k\Lambda_\rho\)。
+因此：
+\[
+\Re\rho>\frac12+\delta\Longleftrightarrow |r_{\rho,\delta}(b)|<1\Longleftrightarrow |r_{\rho,\delta}(b^k)|\to 0,
+\]
+\[
+\Re\rho=\frac12+\delta\Longleftrightarrow |r_{\rho,\delta}(b)|=1\Longleftrightarrow |r_{\rho,\delta}(b^k)|\equiv 1,
+\]
+\[
+\Re\rho<\frac12+\delta\Longleftrightarrow |r_{\rho,\delta}(b)|>1\Longleftrightarrow |r_{\rho,\delta}(b^k)|\to \infty.
+\]
+\end{theorem}
+\begin{proof}
+对几何核 \((1-r\lambda)^{-1}=\sum_{n\ge 0}\lambda^n r^n\) 有
+\[
+\mathcal R_k\!\left(\frac{1}{1-r\lambda}\right)
+=\sum_{m\ge 0}\lambda^{km}r^m
+=\frac{1}{1-r\lambda^k}.
+\]
+逐项应用到极点展开得第一组公式。解析余项在抽取后仍解析，且收敛半径不减。
+Lyapunov 分类由
+\(
+|r_{\rho,\delta}(b^k)|=|r_{\rho,\delta}(b)|^k
+\)
+直接推出。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$H^2$}{H2} 收缩与截断误差无放大律]\label{prop:xi-abel-H2-contraction-truncation-noamplify}
+若 \(f(r)=\sum_{n\ge 0}a_n r^n\in H^2(\mathbb D)\)，则对任意 \(k\ge 2\) 有
+\[
+\|\mathcal R_k f\|_{H^2}^2=\sum_{m\ge 0}|a_{km}|^2\le \sum_{n\ge 0}|a_n|^2=\|f\|_{H^2}^2,
+\]
+并且严格耗散量为
+\[
+\|f\|_{H^2}^2-\|\mathcal R_k f\|_{H^2}^2
+=\sum_{\substack{n\ge 0\\k\nmid n}}|a_n|^2.
+\]
+令截断 \(f_N(r):=\sum_{n=0}^{N}a_n r^n\)，则
+\[
+\|\mathcal R_k f-\mathcal R_k f_N\|_{H^2}\le \|f-f_N\|_{H^2}.
+\]
+\end{proposition}
+\begin{proof}
+由 \(H^2\) 的系数范数刻画与 \(\mathcal R_k\) 的系数抽取定义，逐项求和即得。
+截断不等式由线性性与收缩性直接推出。证毕。
+\end{proof}
+
+\begin{theorem}[双共轭主极点的局部二阶递推与指数余项]\label{thm:xi-abel-local-ar2-dominant-conjugate-poles}
+设
+\[
+F(r)=\sum_{n\ge 0}a_n r^n
+\]
+在 \(|r|<R_2\) 亚纯，且在该圆盘内仅有一对共轭简单极点
+\(
+r_\ast,\overline{r_\ast}
+\)
+满足 \(0<|r_\ast|<R_2\)。
+若可写
+\[
+F(r)=\frac{u}{1-r/r_\ast}+\frac{\overline u}{1-r/\overline{r_\ast}}+G(r),
+\qquad
+G\ \text{在 }|r|<R_2\ \text{解析},
+\]
+并记
+\[
+\lambda:=r_\ast^{-1},\qquad
+A:=\lambda+\overline\lambda,\qquad
+B:=\lambda\overline\lambda=|\lambda|^2,
+\]
+则存在常数 \(C_0>0\) 使得对所有 \(n\ge 0\)，
+\[
+a_{n+2}-A a_{n+1}+B a_n=\varepsilon_n,\qquad
+|\varepsilon_n|\le C_0R_2^{-n}.
+\]
+等价地，存在常数 \(C_1>0\) 使
+\[
+|\varepsilon_n|\le C_1\left(\frac{|r_\ast|}{R_2}\right)^n|\lambda|^n.
+\]
+\end{theorem}
+\begin{proof}
+系数分解为
+\[
+a_n=u\lambda^n+\overline u\,\overline\lambda^{\,n}+g_n,\qquad
+g_n=\frac{1}{2\pi i}\int_{|r|=R_2}\frac{G(r)}{r^{n+1}}\,\dd r.
+\]
+由 Cauchy 估计 \(|g_n|\le M_2R_2^{-n}\)（\(M_2:=\sup_{|r|=R_2}|G(r)|\)）。
+主项 \(u\lambda^n+\overline u\,\overline\lambda^n\) 满足特征多项式
+\(
+x^2-Ax+B=0
+\)
+对应的二阶齐次递推；故残差仅来自 \(g_n\)：
+\[
+\varepsilon_n=g_{n+2}-Ag_{n+1}+Bg_n.
+\]
+于是
+\(
+|\varepsilon_n|\le M_2(R_2^{-n-2}+|A|R_2^{-n-1}+|B|R_2^{-n})
+\),
+得到第一界；第二界由 \(R_2^{-n}=|\lambda|^n(|r_\ast|/R_2)^n\) 改写。证毕。
+\end{proof}
+
+\begin{theorem}[四点局部回归对二阶参数的指数恢复]\label{thm:xi-abel-local-fourpoint-regression-exponential-recovery}
+在定理 \ref{thm:xi-abel-local-ar2-dominant-conjugate-poles} 的条件下，定义
+\[
+D_n:=a_{n+1}^2-a_na_{n+2}.
+\]
+对每个 \(n\)（当 \(D_n\neq0\)）定义 \((A_n,B_n)\) 为线性系统
+\[
+\begin{pmatrix}
+a_{n+1} & a_n\\
+a_{n+2} & a_{n+1}
+\end{pmatrix}
+\begin{pmatrix}
+A_n\\
+-B_n
+\end{pmatrix}
+=
+\begin{pmatrix}
+a_{n+2}\\
+a_{n+3}
+\end{pmatrix}
+\]
+的解。
+若存在 \(\kappa>0\)、\(n_0\) 使对 \(n\ge n_0\) 有
+\[
+|D_n|\ge \kappa |\lambda|^{2n},
+\]
+则存在常数 \(C_\kappa>0\) 使
+\[
+|A_n-A|+|B_n-B|
+\le
+C_\kappa\left(\frac{|r_\ast|}{R_2}\right)^n.
+\]
+设 \(\widehat\lambda_{n,\pm}\) 为方程 \(x^2-A_nx+B_n=0\) 的根。
+若 \(\lambda\neq\overline\lambda\)，则存在常数 \(C_\kappa'>0\) 使
+\[
+\min_{\sigma\in\{+,-\}}|\widehat\lambda_{n,\sigma}-\lambda|
+\le
+C_\kappa'\left(\frac{|r_\ast|}{R_2}\right)^n.
+\]
+\end{theorem}
+\begin{proof}
+近似递推写作
+\[
+a_{n+2}=Aa_{n+1}-Ba_n+\varepsilon_n,\qquad
+a_{n+3}=Aa_{n+2}-Ba_{n+1}+\varepsilon_{n+1}.
+\]
+记
+\(
+M_n=\begin{psmallmatrix}a_{n+1}&a_n\\a_{n+2}&a_{n+1}\end{psmallmatrix}
+\),
+\(
+v_n=(A_n,-B_n)^\top
+\),
+\(
+v=(A,-B)^\top
+\),
+\(
+e_n=(\varepsilon_n,\varepsilon_{n+1})^\top
+\)。
+则 \(M_n(v_n-v)=e_n\)，从而
+\[
+v_n-v=M_n^{-1}e_n.
+\]
+由 \(\det M_n=D_n\) 与假设 \( |D_n|\ge \kappa |\lambda|^{2n}\)，结合
+\(
+|a_{n+j}|\ll |\lambda|^{n+j}
+\)
+与
+\(
+|\varepsilon_n|+|\varepsilon_{n+1}|\ll R_2^{-n}
+\),
+得到
+\[
+|A_n-A|+|B_n-B|
+\ll_\kappa
+\left(\frac{|r_\ast|}{R_2}\right)^n.
+\]
+根误差界由二次方程根对系数的局部 Lipschitz 连续性与根分离性给出。证毕。
+\end{proof}
+
+\begin{corollary}[跨尺度闭合递推与误差指数加速]\label{cor:xi-abel-crossscale-chebyshev-closure-acceleration}
+在定理 \ref{thm:xi-abel-local-ar2-dominant-conjugate-poles} 的设定下，定义
+\[
+S_k:=\lambda^k+\overline\lambda^{\,k},\qquad
+P_k:=|\lambda|^{2k}\qquad(k\ge 0).
+\]
+则
+\[
+S_0=2,\ S_1=A,\qquad S_{k+1}=AS_k-BS_{k-1}\ (k\ge 1),
+\]
+\[
+P_0=1,\qquad P_{k+1}=BP_k\ (k\ge 0).
+\]
+令下采样系数 \(a_n^{[k]}:=a_{kn}\)（即 \(\mathcal R_kF\) 的 Taylor 系数）。
+则 \(\mathcal R_kF\) 的主极点对为 \((r_\ast^k,\overline{r_\ast}^k)\)，解析半径至少为 \(R_2^k\)。
+对 \(a_n^{[k]}\) 按定理 \ref{thm:xi-abel-local-fourpoint-regression-exponential-recovery} 定义局部回归参数
+\((A_n^{[k]},B_n^{[k]})\)，则存在常数 \(C_k>0\) 使
+\[
+|A_n^{[k]}-S_k|+|B_n^{[k]}-P_k|
+\le
+C_k\left(\frac{|r_\ast|}{R_2}\right)^{kn}.
+\]
+因此尺度幂重整化把误差指数从 \(n\) 加速到 \(kn\)。
+\end{corollary}
+\begin{proof}
+\(S_k,P_k\) 递推由
+\[
+\lambda^{k+1}+\overline\lambda^{\,k+1}
+=(\lambda+\overline\lambda)(\lambda^k+\overline\lambda^{\,k})-\lambda\overline\lambda(\lambda^{k-1}+\overline\lambda^{\,k-1})
+\]
+与 \(P_{k+1}=|\lambda|^2P_k\) 直接得到。
+对 \(\mathcal R_kF\)，极点映射与解析半径幂次放大由定理
+\ref{thm:xi-abel-powerbase-covariance-pole-power-map} 与 Cauchy 系数估计给出。
+将定理 \ref{thm:xi-abel-local-fourpoint-regression-exponential-recovery} 应用于 \(\mathcal R_kF\) 即得误差界；比值项变为
+\(
+(|r_\ast|^k/R_2^k)^n=(|r_\ast|/R_2)^{kn}
+\)。
+证毕。
+\end{proof}
+
+\endinput
+

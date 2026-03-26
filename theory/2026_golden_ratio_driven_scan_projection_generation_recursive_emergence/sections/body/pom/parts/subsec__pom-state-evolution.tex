@@ -1,0 +1,712 @@
+\subsection{本体态空间与局部演化}\label{subsec:pom-state-evolution}
+\input{parts/para__pom-state-space-fiber-decomposition}
+
+\begin{definition}[分辨率态空间]\label{def:pom-state-space}
+对分辨率 $m$，定义本体态空间
+\[
+\mathcal{H}_m:=\mathcal{X}_m\times \mathcal{M}_m,
+\]
+其中 $\mathcal{X}_m$ 为外表坐标（如 $X_m$ 或 $X_\infty$ 的截断），$\mathcal{M}_m$ 为隐纤维（可包含 $\mathcal{S}_\varphi,\mathcal{T},\mathcal{P}$ 的局部激活块、同步核状态与余量等）。
+\end{definition}
+
+\begin{definition}[局部性与有限传播]\label{def:pom-locality}
+给定本体一步演化算子
+\[
+U:\mathcal{H}_m\to\mathcal{H}_m
+\]
+并称 \(U\) 满足\textbf{局部性与有限传播}，若每一步仅依赖有限窗口并只更新有限半径的局部块。该定义与第 \ref{sec:A-kernel-compare-main} 节的局部核/在线归一化口径一致。
+\end{definition}
+
+\subsection{三类投影：规范投影、原子投影与序投影}\label{subsec:pom-projections}
+\begin{definition}[规范投影 $P_Z$]\label{def:pom-proj-norm}
+在窗口层，$P_Z$ 定义为 $\Fold_m:\Omega_m\to X_m$ 的规范化投影（定义 \ref{def:fold-word}），其实现为值保持的局部重写系统并满足终止与合流（定理 \ref{thm:fold-suite}）。在算子代数层，$P_Z$ 由折叠诱导的条件期望
+\[
+E_m:\mathcal{A}_m\to\mathcal{B}_m
+\]
+实现（命题 \ref{prop:fold-conditional-expectation}），因此 $P_Z$ 为幂等投影并与归约顺序无关。
+\end{definition}
+
+\begin{definition}[原子投影 $P_{\mathrm{prim}}$]\label{def:pom-proj-prim}
+给定核/演化算子 $T$，令时间迹序列 $a_n:=\Tr(T^n)$。定义 primitive 轨道谱
+\[
+p_n:=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}.
+\]
+记 $P_{\mathrm{prim}}(a):=(p_n)_{n\ge 1}$，则由 Euler 乘积与 Möbius/Witt 反演，有
+\[
+Z=E\circ P_{\mathrm{prim}}\circ T,
+\qquad
+Z=E\circ M\circ T.
+\]
+因此 $P_{\mathrm{prim}}$ 是把“时间迹”投影为 prime-like 原子层的规范读出门。
+\end{definition}
+
+\begin{definition}[序投影 $P_{\le}$]\label{def:pom-proj-order}
+序投影 $P_{\le}$ 指把本体态映射到有序约束的读出证书（如符号、比较判定或区间约束），其目标在于把“$0\le r<b$”一类的全局序关系编码为可观测输出。与 $P_Z$ 不同，$P_{\le}$ 不一定是环同态，也不保证局部可并行化；其读出往往需要跨窗口聚合，因此是不可并行增长的主要来源。
+\end{definition}
+
+\input{parts/para__pom-projection-interpretation}
+
+\begin{definition}[温度化序投影 $\mathrm{PROJ}_u$（软序门）]\label{def:pom-proj-temp}
+令 $\Gamma$ 为某个用于序/约束读出的有限图核（例如比较、区间约束或 residue 分层核），并设每条边 $e$ 具有一个非负可加代价势
+\[
+E(e)\in\ZZ_{\ge 0},
+\qquad
+E(\gamma)=\sum_{e\in\gamma}E(e).
+\]
+对 $u\in(0,1]$，定义带权邻接矩阵
+\[
+M_E(u)_{ij}:=\sum_{e:i\to j}u^{E(e)}.
+\]
+令 $\mu_u$ 为该带权 SFT 的平衡态/Parry 测度（等价地由 $M_E(u)$ 的 Perron--Frobenius 特征向量给出的一步马尔可夫测度）。对任一证书读出函数 $R$（例如比较符号、商余区间标签、或同余类标签），定义\textbf{温度化序投影}为其在 $\mu_u$ 下的推前分布：
+\[
+\mathrm{PROJ}_u(R):=R_\ast\mu_u.
+\]
+当 $u$ 接近 $1$ 时，$\mathrm{PROJ}_u$ 体现“软约束/平均读出”；当 $u$ 减小（$\beta=-\log u$ 增大）时，读出逐步向低代价（更满足约束/更接近最优）的路径集合集中。
+\end{definition}
+
+\begin{remark}[序投影作为零温极限]\label{rem:pom-order-as-zero-temp}
+在局部常势（边势）设定下，零温极限 $u\to 0$（等价 $\beta\to+\infty$）把平衡态 $\mu_u$ 推向\emph{基态集合}：支持在使平均代价 $\bar E=\lim_{n\to\infty}E(\gamma_n)/|\gamma_n|$ 最小的周期/子移位分量上（参见 \cite{ChazottesGambaudoUgalde2011ZeroTempLocConst} 的一般结论）。因此在机制层面，序投影 $P_{\le}$ 可被理解为“软序门 $\mathrm{PROJ}_u$ 在零温下的硬化极限”：从加权平均转为选择/可行性筛选（典型为 $\arg\min$ 结构），这也是 $P_{\le}$ 不可约地引入不可并行读出深度的根源。
+
+在有限图上，零温基态可由最小平均回路权精确表征：令 $\phi_\theta=\langle\theta,\Phi\rangle$ 或一般取 $\phi=E$，则最小平均代价等于图上的 min-mean-cycle 值，并可用 Karp 算法多项式时间求出（\cite{Karp1978MinCycleMean}）。这把序投影的关键制约因素转化为一个可审计的组合证书接口。
+\end{remark}
+
+\subsubsection{由势诱导的凸几何：可达均值凸体与对偶压力}\label{subsec:pom-potential-convex-geometry}
+\paragraph{势向量作为内禀坐标}
+对有限图核（SFT）\(\Gamma\)，给每条边赋一个多维可加观测量（势向量）
+$$
+\varphi:E(\Gamma)\to \ZZ^d.
+$$
+对任一 \(\sigma\)-不变测度 \(\mu\)，其平均观测向量定义为
+$$
+m(\mu):=\int \varphi\,d\mu\ \in\ \RR^d.
+$$
+定义\textbf{可达均值集合}（rotation/mean set）
+$$
+\mathcal{R}_\varphi:=\{m(\mu):\ \mu\ \text{为}\ \Gamma\ \text{上的}\ \sigma\text{-不变测度}\}\subset\RR^d.
+$$
+由于不变测度集合在弱-\(\ast\) 拓扑下紧且凸、而 \(\mu\mapsto m(\mu)\) 为连续线性映射，故 \(\mathcal{R}_\varphi\) 也是紧凸集。
+
+\paragraph{压力面与率函数：凸对偶把“几何”读出来}
+对参数 \(\theta\in\RR^d\)，令边权取为 \(\exp\langle\theta,\varphi(e)\rangle\)，得到加权矩阵族 \(M_\theta\) 与压力
+$$
+P(\theta):=\log\rho(M_\theta).
+$$
+在原始情形，\(\nabla P(\theta)\) 给出平衡态下的典型均值密度，而 Hessian \(\nabla^2P(\theta)\) 给出协方差密度（正文 \ref{subsec:logM-analyticity} 已将这种“可微分指纹”作为实现接口固定）。
+更重要的是：对固定基准 \(\theta_0\)，经验均值的 LDP 率函数可写为
+$$
+I_{\theta_0}(x)=\sup_{t\in\RR^d}\Bigl(\langle t,x\rangle-\bigl(P(\theta_0+t)-P(\theta_0)\bigr)\Bigr),
+$$
+其有效域恰落在 \(\mathcal{R}_\varphi\) 上（域外取 \(+\infty\)）。
+因此，“几何”无需先验嵌入欧氏空间：它由势向量的并置与核约束内生生成，并通过 \((P\leftrightarrow I)\) 的 Legendre--Fenchel 对偶被量化读出。
+
+\paragraph{6D 超立方体与 3D 切面（最小形式）}
+若选取 \(6\) 个二元通道（每步取值 \(0/1\)）作为势分量 \(\varphi=(\varphi_1,\dots,\varphi_6)\)，则任一长度 \(n\) 的轨道给出计数向量
+$$
+N_n:=\sum_{t=0}^{n-1}\varphi(e_t)\in\{0,1,\dots,n\}^6,
+$$
+归一化后落在 \([0,1]^6\)。真实可达集合是其中由核允许路径裁剪出的凸子体（即 \(\mathcal{R}_\varphi\) 在该选择下的具体化）。
+所谓“6D 立方体的 3D 切面”，就是固定其中 \(3\) 个坐标（或固定 \(3\) 个线性组合，例如 \(\chi=\varphi_e-\varphi_2\) 这类）所得到的截面；而在 \(\theta\) 空间中对该切片做梯度/Hessian 读出，即对应对该凸体在该切片上的一阶与二阶局部测量。
+
+\input{parts/para__pom-convex-unification-narrative}
+
+\begin{remark}[范畴边界与不可并行增长]\label{rem:pom-factor-boundary}
+任意滑动块因子码均具有常数在线延迟，因此所有随规模增长的读出深度必然来自非因子码投影（典型即 $P_{\le}$）或把混合留在演化深度 $D_U$ 中。这一“范畴边界”把增长项从算法技巧提升为结构性约束。
+\end{remark}
+
+\begin{definition}[角色/同余投影 $P_\chi$]\label{def:pom-proj-chi}
+角色投影 $P_\chi$ 指把 primitive 轨道按可加观测量（如 $\chi(\gamma),N_-(\gamma),N_e(\gamma)$）做同余/角色分层，并读出 residue 类标签。其可由扭曲矩阵族 $M(q)$ 与 Dirichlet--Mertens 常数张量实现（见 \ref{subsec:arity-dirichlet-mertens-tensor}），因此是 $P_{\le}$ 在“序/同余/角色读出”方向上的具体化门，亦可视为对 $P_{\mathrm{prim}}$ 的角色化增强。
+\end{definition}
+
+\begin{remark}[序约束的主导轴：碰撞轴]\label{rem:pom-collision-axis}
+在真实输入 40 状态核中，\(((3,3,5))\) 的最坏扭曲谱半径由纯碰撞 cocycle 达到（注记 \ref{prop:arity-335-collision-dominant}），说明序投影的主导限制因素并非“值轴”而是碰撞/相消轴。因而若以空间换时间，优先引入可分离的碰撞轴束比单纯扩展值通道更有效。
+\end{remark}
+
+\begin{remark}[“加轴不一定加速”：更细分的同余读出可能更慢]\label{rem:pom-more-axis-slower}
+在三维同余分层中，已给出两组可审计的最坏扭曲比值：
+\[
+\rho_{3,3,3}/\lambda\approx 0.9366863402,
+\qquad
+\rho_{5,5,5}/\lambda\approx 0.9628140340
+\]
+（附录 \ref{app:real-input-40-arity-3d} 的数值输出；见脚本 \texttt{scripts/exp\_sync\_kernel\_real\_input\_40\_arity\_3d.py}）。
+注意到 \(\rho_{5,5,5}/\lambda\) 更接近 \(1\)，因此其扭曲谱隙 \(-\log(\rho/\lambda)\) 更小、对应的混合尺度更大。
+
+这给出一个结构性结果：当最坏扭曲由\emph{纯碰撞 cocycle} 主导时，增加同余轴的模数（更细的 residue/角色读出）会引入更多非平凡角色，但\textbf{最慢模并不会因此被“值轴细分”所消除}；相反，它可能进一步逼近共振从而使混合变慢。
+因此“空间换时间”在该相区的有效手段不是单纯增加角色维数，而是改变核几何以解耦/削弱碰撞轴（例如引入可分离的碰撞轴束或改变投影门编排）。
+\end{remark}
+
+\subsection{投影词语法与成本模型}\label{subsec:pom-words}
+\begin{definition}[投影词与半群]\label{def:pom-projection-word}
+令投影字母表 $\{Z,\le\}$ 分别代表一次 $P_Z$ 与一次 $P_{\le}$ 读出。对任意指令/微码 $I$，定义投影词
+\[
+W(I)=(k_Z(I),k_{\le}(I)),
+\]
+其中 $k_Z,k_{\le}$ 为规范/序投影的调用次数。令
+\[
+\mathcal{W}=\langle Z,\le\rangle^*/\sim,\qquad Z^2\sim Z
+\]
+为投影词半群（幂等律来自 $P_Z\circ P_Z=P_Z$）；其他等价关系可按具体实现的因果锥/局部可交换性附加。
+\end{definition}
+
+\begin{remark}[原子投影的扩展投影词]\label{rem:pom-word-prim}
+若把原子投影纳入读出，则可扩展字母表为 $\{Z,\mathrm{prim},\le\}$，并记
+\[
+W^{\mathrm{full}}(I)=(k_Z(I),k_{\mathrm{prim}}(I),k_{\le}(I)).
+\]
+对算术指令默认 $k_{\mathrm{prim}}=0$，原子投影主要服务于 prime-like 谱的读出与机制审计。
+\end{remark}
+
+\begin{remark}[角色投影的投影词记号]\label{rem:pom-word-chi}
+当序读出由 $P_\chi$ 实现时，可改记投影字母表为 $\{Z,\chi\}$，并写
+\(
+W_\chi(I)=(k_Z(I),k_\chi(I))
+\)。
+此时 $k_\chi$ 仅统计角色/同余投影的调用次数，作为 $k_{\le}$ 的具体化版本。
+\end{remark}
+
+\begin{definition}[跨分辨率降阶计数]\label{def:pom-rescale-count}
+除投影词中的读出门 $P_Z,P_{\le}$ 外，若指令/微码 $I$ 显式调用分辨率降阶投影门
+\(
+\mathrm{RESCALE}\downarrow:\Omega_{m+1}\to X_m
+\)
+（见注 \ref{rem:pom-rescale-gauge-anomaly}），则记其调用次数为 $k_{\downarrow}(I)$；若不涉及跨分辨率读出，则取 $k_{\downarrow}(I)=0$。
+\end{definition}
+
+\begin{definition}[纤维选择与核选择]\label{def:pom-fiber-kernel-choice}
+对任意指令/微码 $I$，记其在实现过程中被激活的先验纤维族为
+$$
+\mathcal{F}(I)\subseteq \{\mathcal{S}_\varphi,\mathcal{T},\mathcal{P},\widehat{\ZZ}\},
+$$
+分别对应尺度纤维、相位纤维、素数寄存器纤维与 profinite 同余轴（定义 \ref{def:pom-scale-fiber}、\ref{def:pom-phase-fiber}、\ref{def:pom-prime-fiber}、\ref{def:pom-profinite}）。
+并且记其规范读出所采用的归一化核为 $K_Z(I)$（即实现 $P_Z$ 的具体核），序/角色读出所采用的核为 $K_{\le}(I)$ 或 $K_{\chi}(I)$（实现 $P_{\le}$ 或 $P_\chi$ 的具体核）。
+\end{definition}
+
+\begin{remark}[相位纤维与寄存器轴的紧群封装：通用 solenoid 扩张]\label{rem:pom-solenoid-extension}
+定义 \ref{def:pom-fiber-kernel-choice} 把相位纤维 \(\mathcal{T}\) 与同余轴 \(\widehat{\ZZ}\) 并列为可被 \(\mathrm{LIFT}\) 激活的先验纤维族。
+在紧致交换群层面，这两条轴可被一个规范的紧阿贝尔群扩张统一封装：定义一维通用 solenoid
+\begin{equation}\label{eq:pom-universal-solenoid-quotient}
+\boxed{\;
+\Sol\ :=\ (\RR\times \widehat{\ZZ})/\ZZ,\qquad
+n\cdot(t,a):=(t+n,\ a-n)\; }.
+\end{equation}
+则存在自然短正合列
+\begin{equation}\label{eq:pom-universal-solenoid-ses}
+\boxed{\;
+0\ \longrightarrow\ \widehat{\ZZ}\ \xrightarrow{\ \iota_{\widehat{\ZZ}}\ }\ \Sol\ \xrightarrow{\ \pi_{\TT}\ }\ \TT\ \longrightarrow\ 0\;}
+\end{equation}
+其中
+\(
+\iota_{\widehat{\ZZ}}(a)=[(0,a)]
+\)
+为嵌入，而
+\(
+\pi_{\TT}([(t,a)])=e^{2\pi \mathrm{i}t}
+\)
+为满射（其核同构于 \(\widehat{\ZZ}\)）。
+\par
+该扩张的结构含义是：相位圆 \(\TT\) 可作为 \(\Sol\) 的商群读出（对应相位纤维 \(\mathcal{T}\) 的投影像），而同余轴 \(\widehat{\ZZ}\) 作为核被“内置”为不可见自由度；因此任何在相位投影下出现的遗忘/不可逆性，都可以在 \(\Sol\) 层被严格提升为一个可逆的群动作，并将差异外置为核方向的残差坐标。
+这把“信息外置守恒/可逆性”的叙事约束提升为一个可审计的群扩张结构接口。
+\end{remark}
+
+\begin{definition}[指令签名：投影词 $\times$ 核指纹 $\times$ 纤维选择]\label{def:pom-instruction-signature}
+令 $\mathfrak{F}(K)$ 为核的谱指纹（定义 \ref{def:kernel-spectral-fingerprint}）。对任意指令/微码 $I$，定义其（审计）指令签名为
+$$
+\Sigma(I):=\Bigl(W(I),\ k_{\downarrow}(I),\ \mathfrak{F}\bigl(K_Z(I)\bigr),\ \mathfrak{F}\bigl(K_{\le}(I)\bigr),\ \mathcal{F}(I)\Bigr),
+$$
+其中 $W(I)$ 为投影词（定义 \ref{def:pom-projection-word}），$k_{\downarrow}(I)$ 为跨分辨率降阶调用次数（定义 \ref{def:pom-rescale-count}），$\mathcal{F}(I)$ 为纤维选择（定义 \ref{def:pom-fiber-kernel-choice}）。当序读出由 $P_\chi$ 实现时，可将 $\mathfrak{F}(K_{\le}(I))$ 替换为 $\mathfrak{F}(K_{\chi}(I))$。
+\end{definition}
+
+\begin{remark}[为什么 $W$ 不够：核几何进入指纹]\label{rem:pom-signature-why}
+投影词 $W(I)$ 只记录“调用了几次投影门”，并不记录“投影门的几何是什么”。而核指纹 $\mathfrak{F}(K)$（例如 $\zeta_K$、primitive 分层谱 $\{B_{K,n}(u)\}$、有限部常数与扭曲谱隙）决定了同一投影门在机制层的差异（附录 \ref{app:sync-kernel-A-compare}）。因此更强的统一分类对象应为 $\Sigma(I)$ 而非仅为 $W(I)$。
+\end{remark}
+
+\begin{proposition}[签名一致 $\Rightarrow$ 指纹一致与成本模型同型]\label{prop:pom-signature-audit}
+设两条指令/微码 $I,J$ 满足 $\Sigma(I)=\Sigma(J)$。则：
+\begin{enumerate}
+  \item \textbf{投影审计不变量一致：}两者在同一核指纹口径下给出相同的 $\zeta$、primitive 原子谱（含其加权分层）、压力曲线端点与扭曲谱隙等可审计指纹（由 $\mathfrak{F}(K_Z),\mathfrak{F}(K_{\le})$ 完全决定）。
+  \item \textbf{成本模型同型：}在定义 \ref{def:pom-cost} 的口径下，两者具有相同的投影词系数 $(k_Z,k_{\le})$ 以及相同的跨分辨率降阶次数 $k_{\downarrow}$，并且其常数项（如 $\delta_Z$）与混合尺度（如 $\tau_{\mathrm{mix}}$）由核指纹相同而一致，因此成本模型的结构分解一致：
+  $$
+  \begin{aligned}
+  T_I(n;m)&=k_Z\,\delta_Z+k_{\le}\,T_{\le}(n)+k_{\downarrow}\,T_{\downarrow}(m)+D_U(n),\\
+  T_J(n;m)&=k_Z\,\delta_Z+k_{\le}\,T_{\le}(n)+k_{\downarrow}\,T_{\downarrow}(m)+D_U'(n),
+  \end{aligned}
+  $$
+  其中差异仅可能出现在“线性化深度/演化深度”项 $D_U$ 上，而该项正由纤维选择 $\mathcal{F}$ 与具体演化编排决定（定义 \ref{def:pom-space-time}）。
+\end{enumerate}
+\end{proposition}
+
+\begin{definition}[成本模型]\label{def:pom-cost}
+令 $\delta_Z$ 为一次规范投影的基准读出深度（例如在线归一化的固定延迟，见定理 \ref{thm:online-delay-fold}），令 $T_{\le}(n)$ 为一次序投影的聚合深度，令 $T_{\downarrow}(m)$ 为一次跨分辨率降阶门 $\mathrm{RESCALE}\downarrow$ 的典型写回支持规模（注 \ref{rem:pom-rescale-gauge-anomaly}），令 $D_U(n)$ 为在本体演化中完成线性化所需的深度。则定义
+\[
+T_I(n;m)=k_Z(I)\,\delta_Z+k_{\le}(I)\,T_{\le}(n)+k_{\downarrow}(I)\,T_{\downarrow}(m)+D_U(n).
+\]
+该模型把投影读出与演化深度分离，用于比较不同实现把“混合”置于时间还是空间的策略差异。
+\end{definition}
+
+\begin{remark}[分辨率降阶不是“扔尾巴”：\texorpdfstring{$\mathrm{RESCALE}\downarrow$}{RESCALE down} 与规范差下界]\label{rem:pom-rescale-gauge-anomaly}
+除投影词中的 \(P_Z,P_{\le}\) 外，分辨率变换本身也可视为一个不可省略的投影门：在微态空间 \(\Omega_{m+1}\) 上，朴素截断
+\(
+r_{m+1\to m}:\Omega_{m+1}\to\Omega_m
+\)
+一般不与折叠相容，而折叠感知 restriction
+\(
+\widetilde r_{m+1\to m}(\omega)=\pi_{m+1\to m}(\Fold_{m+1}(\omega))\in X_m
+\)
+才是跨尺度一致的降分辨率读出（小节 \ref{subsec:fold-omega-restriction}）。
+因此在 ISA/微码抽象中，可把
+$$
+\mathrm{RESCALE}\downarrow:\ \Omega_{m+1}\to X_m,\qquad \omega\mapsto \widetilde r_{m+1\to m}(\omega)
+$$
+当作一个原语投影门来计入成本。
+\par
+更关键的是：该门的\emph{空间}投影支持规模在最坏情形下是线性的。定义规范差 \(G_m(\omega)\) 为
+\(
+|r_{m+1\to m}(\omega)\oplus \widetilde r_{m+1\to m}(\omega)|_0
+\)
+（定义 \ref{def:fold-gauge-anomaly}），则定理 \ref{thm:fold-gauge-anomaly-max} 给出最坏下界 \(G_m^{\max}=m\)。
+并且在均匀微态基线下，其\emph{典型}支持规模同样为线性且具有闭式常数密度：
+\(
+\lim_{m\to\infty}\bar G_m/m=4/9
+\)
+（定理 \ref{thm:fold-gauge-anomaly-density}），因此平均需要触及约 \((4/9)m\) 个外表位。
+若把这一"支持重写量"作为独立的非并行开销项记为 \(T_{\downarrow}(m)\)，则典型情形下
+\[
+T_{\downarrow}(m)\ \asymp\ \frac{4}{9}m.
+\]
+这说明"在线延迟为常数"（因果锥长度）并不排除"降一阶分辨率需要触及整条外表寄存器"的最坏情形：两者刻画的是正交的复杂度分量（延迟 vs.\ 总体支持规模）。
+\end{remark}
+
+\begin{remark}[原子投影读出成本]\label{rem:pom-cost-prim}
+若需要读取 primitive 原子层谱，可在成本模型中添加
+\[
+k_{\mathrm{prim}}(I)\,T_{\mathrm{prim}}(n),
+\]
+其中 $T_{\mathrm{prim}}(n)$ 表示轨道层谱的读出或 Möbius 反演深度；对算术指令取 $k_{\mathrm{prim}}=0$。
+\end{remark}
+
+\begin{remark}[角色投影门下的时间上界]\label{rem:pom-cost-chi}
+当序读出由 $P_\chi$ 实现时，可用 $\tau_{\mathrm{mix}}$ 作为 $T_{\le}$ 的有效尺度（见注 \ref{rem:pom-chi-mixing}），从而得到
+\[
+T_I(n;m)\ \approx\ k_Z(I)\,\delta_Z\ +\ k_\chi(I)\,\tau_{\mathrm{mix}}\ +\ k_{\downarrow}(I)\,T_{\downarrow}(m)\ +\ D_U(n).
+\]
+这给出“投影词 $\Rightarrow$ 非并行开销”的直接量化接口。
+\end{remark}
+
+\begin{remark}[不可并行开销的三正交指纹（延迟/支持/混合）]\label{rem:pom-nonparallel-three-meters}
+定义 \ref{def:pom-cost} 给出总成本。
+若采取“先验纤维内线性化（尺度/相位/素数寄存器等）为本体结构、可并行展开”的口径，则 $D_U(n)$ 可视为可并行项而不计入\emph{不可并行}开销。
+于是与规模相关且不可通过并行化消去的部分可由下述三项互不替代的指纹刻画：
+\begin{itemize}
+  \item \textbf{延迟指纹 \(\delta\)：}规范投影门 \(P_Z\) 的最小在线延迟（因果锥长度）。对 Zeckendorf 归一化有
+  \(\delta_{\min}(\Fold_\infty)=3\)（命题 \ref{prop:pom-delay-min}），且增大空间不能将其压到 \(2\)（注 \ref{rem:pom-space-time-orth}）。
+  \item \textbf{支持指纹 \(G_m\)：}跨分辨率降阶/写回纠偏所需触及的外表位数。其最坏情形 \(G_m^{\max}=m\)（定理 \ref{thm:fold-gauge-anomaly-max}），均匀基线下的典型密度极限为
+  \(\lim_{m\to\infty}\bar G_m/m=4/9\)（定理 \ref{thm:fold-gauge-anomaly-density}），从而 \(T_{\downarrow}(m)\asymp (4/9)m\)（注 \ref{rem:pom-rescale-gauge-anomaly}）。
+  \item \textbf{混合指纹 \(\tau_{\mathrm{mix}}\)：}序/同余/角色读出门（\(P_{\le}\) 或其角色化版本 \(P_\chi\)）的收敛尺度。达到误差阈值 \(\varepsilon\) 的必要深度满足
+  \[
+  n\ \gtrsim\ \tau_{\mathrm{mix}}(u)\,\log(1/\varepsilon),
+  \qquad
+  \tau_{\mathrm{mix}}(u)=\frac{1}{\log(\lambda_1(u)/\Lambda(u))}
+  \]
+  （推论 \ref{cor:pom-order-mixing}；注 \ref{rem:pom-order-mixing-scale} 与注 \ref{rem:pom-chi-mixing}）。
+\end{itemize}
+在该口径下，“四则与商余”的不可并行差异只表现为投影词中的序门是否出现：若 \(k_{\le}=0\)，则不可并行延迟主项仅为常数 \(\delta_Z\)；
+若语义包含规范解选择（符号、最小非负余数、商余约束 \(0\le r<b\) 等），则必有 \(k_{\le}\ge 1\) 并引入由 \(\tau_{\mathrm{mix}}\) 刻度的增长项。
+若指令显式调用 \(\mathrm{RESCALE}\downarrow\)，则支持指纹 \(G_m\) 给出独立且线性尺度的写回预算。
+\par
+此外，规范投影门 \(P_Z\) 的\emph{空间}非单射性仍可由碰撞 moment-kernel 的 Perron 根 \(\{r_q\}_{q\ge 2}\)（或压力曲线）作谱级量化（定理 \ref{thm:pom-collision-kernel-ak}）：该谱指纹决定尾部分位与 prime-register 预算证书，但它刻画的是“同像碰撞强度”，不应与上述三类不可并行读出指纹混同。
+一个直接的、可复算的例子是：把输入合法性约束提升为 40 状态真实输入核后，“加法作为一次投影”的空间侧碰撞常数发生显著变化（附录 \S\ref{app:add-collision-spectrum}）。
+\end{remark}
+
+\subsection{带参数的投影词 \texorpdfstring{$2$}{2}-范畴与可审计重写}\label{subsec:pom-2cat-rewrite}
+\paragraph{目标}
+投影词半群 $\mathcal W$（定义 \ref{def:pom-projection-word}）提供了“词法计数”，指令签名 $\Sigma$（定义 \ref{def:pom-instruction-signature}）提供了“可审计不变量”。
+要得到可推演的演算学，还需把“可重写、可判等、可估价”收束为一个统一系统：重写在词法/编译层闭合，判等与估价在谱指纹层完成。
+
+\begin{definition}[带参数的投影词 \texorpdfstring{$2$}{2}-范畴]\label{def:pom-projword-2cat}
+定义一个（弱）$2$-范畴 $\mathbf{PW}$（projection-word）如下：
+\begin{itemize}
+  \item \textbf{对象（带类型的接口）：}一个对象可取为三元接口
+  \[
+  \mathcal{I}(m;K;\kappa),
+  \]
+  其中 $m$ 为分辨率（窗口长度/截断尺度），$K$ 为机制核（同步核、真实输入核、碰撞核等），$\kappa$ 为边势/可观测（事件势、角色势、同余标签或 cocycle）。该对象等价于“读出层与纤维配置”的带参化版本：它把“在哪个尺度上、用哪个核、读哪个可观测”固定为类型，从而把后续投影词的复合约束为可检查的类型匹配。
+  \item \textbf{$1$-态射：}由生成元与其参数标注组成的投影词（允许有限复合）：
+  \[
+  \{\ P_Z,\ P_{\le},\ P_\chi,\ P_{\mathrm{prim}},\ E_m,\ \mathrm{PROJ}_u,\ \mathrm{LIFT}_G,\ \mathrm{MOM}_q,\ \mathrm{TWIST}(\chi),\ U\ \}
+  \]
+  其中 $E_m$ 为条件期望接口（定义 \ref{def:pom-proj-norm}），$\mathrm{PROJ}_u$ 为软序门（定义 \ref{def:pom-proj-temp}），$\mathrm{LIFT}_G$ 为群扩张/标记提升门（见第 \ref{sec:zeta-finite-part} 节的群扩张接口），$\mathrm{MOM}_q$（$q\ge2$）为 $q$-重碰撞/矩提升门：把一个折叠/读出核编译为其 $q$-重 fiber-product moment-kernel，从而读出高阶碰撞矩 \(S_q(m)=\sum_x d_m(x)^q\) 的线性递推与 Perron 主尺度（见定理 \ref{thm:pom-collision-kernel-ak}）。与 \(\mathrm{TWIST}(\chi)\) 一起，\(\mathrm{MOM}_q\) 构成将“词法重写”提升为“可计算谱指纹/资源预算”的最小谱门接口。其余为本文的投影门族（定义 \ref{def:pom-proj-norm}--\ref{def:pom-proj-chi}）。
+  \item \textbf{$2$-态射：}由“可审计结构事实”给出的重写证书（等式/同构），包括但不限于：
+  \begin{enumerate}
+    \item 幂等与塔式关系：$P_Z\circ P_Z=P_Z$，以及 $E_{m_1}\circ E_{m_2}=E_{m_1}$（条件期望塔性质）；
+    \item 时间—空间交换图：$Z=E\circ M\circ T$（命题 \ref{prop:time-space-commuting-diagram}），把 $\det(I-zT)^{-1}$ 与 primitive/Euler 乘积的两条实现路径严格对齐；
+    \item 群扩张分解：对 abelian 标记扩张，$\mathrm{LIFT}_G$ 的行列式/谱对象可在角色上分解并由 $\mathrm{TWIST}(\chi)$ 的族读出（第 \ref{sec:zeta-finite-part} 节的 DFT/扭曲接口）；
+    \item 高阶矩核编译：对任意 \(q\ge2\)，$\mathrm{MOM}_q$ 产生的 moment-kernel 在有限状态上闭合，从而 \(S_q(m)\) 可写为有限矩阵幂的读出并满足有限阶整系数递推；其主指数由 Perron 根 \(r_q\) 给出（定理 \ref{thm:pom-collision-kernel-ak}）。
+    \item 硬序门作为零温极限：$P_{\le}$ 可视为 $\mathrm{PROJ}_u$ 在 $u\to 0$ 的硬化极限（注 \ref{rem:pom-order-as-zero-temp}），其“极限退化”提供一类可检验的渐近重写规则。
+  \end{enumerate}
+\end{itemize}
+将这些 $2$-态射视为“可证明等价/可交换的编译变换”，即可在 $\mathbf{PW}$ 中进行带证书的重写。
+\end{definition}
+
+\begin{remark}[三门 + 两谱门：最小可推演片段]\label{rem:pom-pw-star-fragment}
+在本文后续的“正规形—异常—空间谱—零温证书”闭环中，反复出现的最小生成片段可记为
+\[
+\mathbf{PW}^{\ast}:=\langle E_m,\ \mathrm{PROJ}_u,\ \mathrm{LIFT}_G,\ \mathrm{TWIST}(\chi),\ \mathrm{MOM}_q\rangle\subseteq \mathbf{PW}.
+\]
+其中 \(E_m,\mathrm{PROJ}_u,\mathrm{LIFT}_G\) 给出分辨率读出、温度化序门与群扩张三条接口轴；
+而 \(\mathrm{TWIST}(\chi)\) 与 \(\mathrm{MOM}_q\) 则把交换失败/尾部放大等“残差”对象化为可计算谱指纹（\(\log\mathfrak{M}_\chi\)、\(\rho_\chi/\lambda\)、\(r_q(u)\)、\(P(q,u)\)）。
+因此在 \(\mathbf{PW}^{\ast}\) 上，一个“算法等价”既可在词法层以正规形与 \(2\)-态射证书呈现，也可在谱层以异常签名与资源曲线交叉核验（见 \S\ref{subsec:pom-three-generator-residual-closure}、\S\ref{subsec:pom-spectral-resource-type}、\S\ref{subsec:pom-proj-tropicalization}）。
+\end{remark}
+
+\begin{definition}[\texorpdfstring{$\varepsilon$}{eps}-sound 的近似重写证书（误差预算）]\label{def:pom-eps-sound-rewrite}
+固定对象 \(\mathcal{I}(m;K;\kappa)\)，并约定其携带一份参考抽样分布 \(\mathbb{P}_{\mathcal I}\)
+（典型例子：折叠输出基线 \(X\sim\pi_m\)；温度门口径下由 Gibbs/Parry 平衡态诱导的推前分布）。
+对任意同型的投影词 \(w,w'\)（同源同靶），把它们在该接口与抽样分布下诱导的可见读出记为随机变量
+\(
+Y_w,Y_{w'}.
+\)
+若存在坏事件 \(E\) 满足 \(\mathbb{P}_{\mathcal I}[E]\le \varepsilon\)，并且在 \(E^c\) 上有 \(Y_w=Y_{w'}\) 几乎处处成立，
+则称存在一个 \textbf{\(\varepsilon\)-sound} 的近似重写证书，记为
+$$
+w\ \Longrightarrow_{\varepsilon}\ w'.
+$$
+当 \(\varepsilon=0\) 时，该定义退化为 exact 重写证书。
+\end{definition}
+
+\begin{proposition}[误差预算的可加复合律]\label{prop:pom-eps-sound-compose}
+若 \(w\Longrightarrow_{\varepsilon}w'\) 且 \(w'\Longrightarrow_{\delta}w''\)，则 \(w\Longrightarrow_{\varepsilon+\delta}w''\)。
+因此沿任意有限重写轨迹 \(w=w_0\Rightarrow w_1\Rightarrow\cdots\Rightarrow w_r=w'\)，若第 \(i\) 步的预算为 \(\varepsilon_i\)，则整体失败概率满足
+\[
+\varepsilon_{\mathrm{tot}}\ \le\ \sum_{i=1}^{r}\varepsilon_i.
+\]
+\end{proposition}
+\begin{proof}
+取对应坏事件 \(E_1,E_2\)。
+在 \(E_1^c\cap E_2^c\) 上有 \(Y_w=Y_{w'}=Y_{w''}\)，故坏事件可取 \(E_1\cup E_2\)，其概率不超过 \(\varepsilon+\delta\)。证毕。
+\end{proof}
+
+\begin{definition}[最小预算距离（Lawvere 距离）]\label{def:pom-eps-distance}
+固定对象 \(\mathcal{I}(m;K;\kappa)\) 与其参考抽样分布 \(\mathbb{P}_{\mathcal I}\)（定义 \ref{def:pom-eps-sound-rewrite}）。
+对任意同型的投影词 \(w_1,w_2\)（同源同靶），定义其\textbf{最小预算距离}为
+\[
+\boxed{\;
+d_{\mathcal I}(w_1,w_2)
+:=
+\inf\{\varepsilon\ge 0:\ w_1\Longrightarrow_{\varepsilon} w_2\}\;}
+\]
+并约定当集合为空时 \(d_{\mathcal I}(w_1,w_2)=+\infty\)。
+\end{definition}
+
+\begin{proposition}[预算范畴化：最小预算给出内禀距离]\label{prop:pom-eps-distance-lawvere}
+在定义 \ref{def:pom-eps-distance} 的记号下，对任意同源同靶的投影词 \(w_1,w_2,w_3\) 有
+\[
+\boxed{\;
+d_{\mathcal I}(w,w)=0,\qquad
+d_{\mathcal I}(w_1,w_3)\ \le\ d_{\mathcal I}(w_1,w_2)+d_{\mathcal I}(w_2,w_3)\; }.
+\]
+因此每个同态类 \(\mathbf{PW}(A,B)\) 在 \(d_{\mathcal I}\) 下带有一个（一般非对称的）Lawvere 距离结构：预算的可加复合律被内化为距离的三角不等式。
+\end{proposition}
+\begin{proof}
+取 \(E=\varnothing\) 得 \(w\Longrightarrow_0 w\)，故 \(d_{\mathcal I}(w,w)=0\)。
+\par
+对三角不等式，任取 \(\eta_1>d_{\mathcal I}(w_1,w_2)\)、\(\eta_2>d_{\mathcal I}(w_2,w_3)\)。
+按下确界的定义，存在证书 \(w_1\Longrightarrow_{\eta_1} w_2\) 与 \(w_2\Longrightarrow_{\eta_2} w_3\)；
+由命题 \ref{prop:pom-eps-sound-compose} 得 \(w_1\Longrightarrow_{\eta_1+\eta_2} w_3\)，从而
+\(
+d_{\mathcal I}(w_1,w_3)\le \eta_1+\eta_2
+\)。
+令 \(\eta_1,\eta_2\downarrow\) 即得结论。证毕。
+\end{proof}
+
+\begin{remark}[Lawvere 富化口径：\texorpdfstring{$\mathbf{PW}_\varepsilon$}{PW\_eps}]\label{rem:pom-pw-eps-lawvere}
+将 \(\varepsilon\)-sound 证书 \(w\Longrightarrow_\varepsilon w'\) 视为带预算的 \(2\)-态射，并以最小预算距离 \(d_{\mathcal I}\)（定义 \ref{def:pom-eps-distance}）作为同态类上的内禀结构，则对固定接口 \(\mathcal I\)：
+\begin{itemize}
+  \item \textbf{预算合成律}（命题 \ref{prop:pom-eps-sound-compose}）等价于 \(d_{\mathcal I}\) 的三角不等式（命题 \ref{prop:pom-eps-distance-lawvere}）；
+  \item \textbf{非对称性}允许把“可实现的近似编译”组织为有向距离（Lawvere 距离），无需强加对称性假设。
+\end{itemize}
+在该意义下，投影词演算可被视为一个以 \((\overline{\RR}_{\ge 0},\ge,+,0)\) 为基底的 Lawvere 富化 \(2\)-范畴（记作 \(\mathbf{PW}_\varepsilon\)）：证书与预算不再作为外部叙述附加于输出，而被内化为范畴结构数据。
+\end{remark}
+
+\begin{remark}[编译输出作为 \texorpdfstring{$(w',\varepsilon)$}{(w',eps)}]\label{rem:pom-compile-output-word-eps}
+在工程口径下，一个“带证书”的编译过程往往输出一条正规化后的词 \(w'\) 以及其相对于原词 \(w\) 的总误差预算 \(\varepsilon\)：
+这正对应于在 \(\mathbf{PW}\) 中构造一条 \(2\)-态射证书 \(w\Longrightarrow_{\varepsilon} w'\)。
+本文后续的分位预算与 prime-register 设计正是为“从 side condition 生成 \(\varepsilon\)-sound 证书”服务（见 \S\ref{subsec:pom-quantile-budget-law}）。
+\end{remark}
+
+\paragraph{局部可终止/可合流的重写片段（读出冗余的正规形）}
+\begin{definition}[读出塔重写系统]\label{def:pom-rewrite-E-tower}
+在 $\mathbf{PW}$ 的生成元中，取仅由条件期望门与规范投影门生成的局部子片段
+\[
+\mathbf{PW}_{Z,E}:=\langle P_Z,\ \{E_m\}_{m\ge 1}\rangle.
+\]
+定义其上的重写规则族为：
+\begin{enumerate}
+  \item \textbf{(R$_Z$) 幂等缩并：} $P_Z\circ P_Z\Rightarrow P_Z$；
+  \item \textbf{(R$_E$) 条件期望塔缩并：} 若 $m_2\ge m_1$，则 $E_{m_1}\circ E_{m_2}\Rightarrow E_{m_1}$。
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[读出塔重写的终止性与合流性（局部正规形）]\label{thm:pom-rewrite-termination-confluence}
+在重写系统 \ref{def:pom-rewrite-E-tower} 下，任意 $\mathbf{PW}_{Z,E}$-投影词都：
+\begin{enumerate}
+  \item \textbf{终止：}不存在无限重写链；
+  \item \textbf{（局部）合流：}任意两条重写序列最终可汇合到同一不可约词；
+  \item \textbf{正规形唯一：}对任意仅含 $\{E_m\}$ 的复合词，其正规形唯一且等于单个 $E_{m_\star}$，其中 $m_\star$ 为该词中出现的最小分辨率指标；对含 $P_Z$ 的词，其正规形至多含一个 $P_Z$ 因子。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\textbf{终止性：}对任意词，定义度量
+\[
+\mu(W):=\bigl(\#P_Z(W)+\#E(W),\ \min\{m:\ E_m\ \text{出现在}\ W\}\bigr)\in\NN\times(\NN\cup\{+\infty\})
+\]
+并按字典序比较。规则 (R$_Z$) 与 (R$_E$) 都严格减少 $\#P_Z+\#E$，因此不存在无限重写链。
+
+\textbf{合流性与正规形：}在 $\{E_m\}$ 片段中，任意二元相邻子词都可由 (R$_E$) 缩并为较小指标的 $E$；因此任意重写都只可能把词逐步缩并到“仅剩一个最小指标”的形式。由于塔性质本身给出等式 $E_{m_1}\circ E_{m_2}=E_{m_1}$（条件期望塔性质），不同缩并顺序对应同一复合算子，故不可约正规形唯一。含 $P_Z$ 的情形同理：幂等缩并把多余的 $P_Z$ 归并为一个。证毕。
+\end{proof}
+
+\begin{proposition}[半环闭包内的判等性：正规形 \texorpdfstring{$\Rightarrow$}{=>} 可判定词问题]\label{prop:pom-projword-decidable}
+在片段 $\mathbf{PW}_{Z,E}$ 上，$1$-态射（投影词）的等价关系（由 $2$-态射给出的可重写等式闭包）是可判定的：给定任意两词 $W_1,W_2\in\mathbf{PW}_{Z,E}$，计算其在重写系统 \ref{def:pom-rewrite-E-tower} 下的不可约正规形 $N(W_1),N(W_2)$，则
+\[
+W_1\ \simeq\ W_2\quad\Longleftrightarrow\quad N(W_1)=N(W_2),
+\]
+从而词问题可在多项式时间内解决（正规化仅需逐步缩并相邻子词）。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:pom-rewrite-termination-confluence}，重写系统终止且（局部）合流，因此每个词存在且仅存在一个不可约正规形；并且两词等价当且仅当它们可重写到同一正规形。证毕。
+\end{proof}
+
+\begin{remark}[可计算实现：读出塔正规化器]\label{rem:pom-projword-normalizer-script}
+脚本 \texttt{scripts/exp\_pom\_projword\_ze\_normalizer.py} 给出 $\mathbf{PW}_{Z,E}$ 片段的一个最小可复现正规化器：输入一个由符号 \texttt{PZ} 与 \texttt{E[m]} 组成的复合词（按从左到右的复合顺序），输出按 (R$_Z$),(R$_E$) 缩并后的正规形。
+这提供“算法等价 \(\Rightarrow\) 投影词等价”的最小可执行原型：在该片段中，等价性完全由正规形决定。
+\end{remark}
+
+\begin{remark}[split-epi 扩展片段的可计算正规化器：\texorpdfstring{$\mathbf{PW}_{Z,E,P,Q}$}{PW_{Z,E,P,Q}}]\label{rem:pom-projword-zepq-normalizer-script}
+在分辨率 \(m\) 上，折叠推前 \(P_m:=(\Fold_m)_*\) 与纤维均匀提升 \(Q_m\) 满足 split-epi 恒等式
+\(
+P_m\circ Q_m=\mathrm{id}
+\)
+（见 \S\ref{subsec:pom-information-ledger} 及定理 \ref{thm:pom-fiber-reflector}）。
+令 \(K_m:=Q_m\circ P_m\) 为纤维反射子，则 \(K_m^2=K_m\)，并且 \(P_m\circ K_m=P_m\)、\(K_m\circ Q_m=Q_m\)。
+\par
+脚本 \texttt{scripts/exp\_pom\_projword\_zepq\_normalizer.py} 给出包含这些局部规则的一个可执行正规化器：输入由 \texttt{PZ}, \texttt{E[m]}, \texttt{P[m]}, \texttt{Q[m]}, \texttt{K[m]} 组成的复合词，按局部重写规则将其缩并到不可约正规形。
+该实现提供一个更贴近投影词范畴的形式结构的可复现原型：在读出塔规则之外，把 split-epi（推前/提升对偶）也纳入可推迟执行与冗余消除的可计算重写框架。
+\end{remark}
+
+\begin{remark}[边界：序投影 \texorpdfstring{$P_{\le}$}{P<=} 不属于局部可消去片段]\label{rem:pom-rewrite-boundary-order}
+定理 \ref{thm:pom-rewrite-termination-confluence} 只处理“局部 coarse-graining 冗余”的可终止片段。
+一旦投影词中出现 $P_{\le}$（或其实现 $\mathrm{PROJ}_u$ 的零温硬化极限），其读出往往依赖跨窗口聚合（定义 \ref{def:pom-proj-order}），不再具有由分辨率指标单调下降所控制的缩并度量；因此 $P_{\le}$ 是投影词演算学中的结构性边界：它标记了不可并行增长项的进入点，而非可被局部重写消去的冗余。
+\end{remark}
+
+\begin{definition}[签名函子与投影门估价]\label{def:pom-sigma-functor}
+把指令签名 $\Sigma$（定义 \ref{def:pom-instruction-signature}）从“指令集合”提升为 $\mathbf{PW}$ 上的一个（弱）$2$-函子
+\[
+\Sigma:\mathbf{PW}\to \mathbf{Inv},
+\]
+其在 $1$-态射上取值为
+\(
+\Sigma(I)=(W(I),\mathfrak F(K_Z(I)),\mathfrak F(K_{\le}(I)),\mathcal F(I))
+\)
+（或以 $K_\chi$ 取代 $K_{\le}$），并把 $2$-态射（重写证书）送到恒等同构（即“重写不改变签名”）。
+\end{definition}
+
+\begin{proposition}[重写不变性与可估价闭环]\label{prop:pom-rewrite-audit-loop}
+若在 $\mathbf{PW}$ 中存在带证书的重写 $I\Rightarrow J$（即存在 $2$-态射），则：
+\begin{enumerate}
+  \item \textbf{签名不变：}$\Sigma(I)=\Sigma(J)$。
+  \item \textbf{投影门成本可由指纹估价：}对角色/同余门，令
+  \[
+  g(u):=\log\!\bigl(\lambda_1(u)/\Lambda(u)\bigr),
+  \qquad
+  \tau_{\mathrm{mix}}(u):=\frac{1}{g(u)},
+  \]
+  其中 $\lambda_1(u)$ 为主谱半径、$\Lambda(u)$ 为最坏非平凡扭曲谱半径（推论 \ref{cor:pom-order-mixing}）。
+  则达到相对误差 $\varepsilon$ 的读出深度满足
+  \[
+  n\ \gtrsim\ \frac{\log(1/\varepsilon)}{g(u)}=\tau_{\mathrm{mix}}(u)\,\log(1/\varepsilon),
+  \]
+  且该尺度由核指纹中的扭曲谱隙完全决定（见注 \ref{rem:pom-chi-mixing}）。
+\end{enumerate}
+\end{proposition}
+
+\begin{corollary}[GRH-型平方根界 \texorpdfstring{$\Rightarrow$}{=>} 混合尺度的通用上界]\label{cor:pom-grh-mix-upper}
+若在某一角色/扭曲族上满足核版 RH/GRH 的平方根界（定义 \ref{def:kernel-rh} 的同型条件），即
+\(
+\Lambda(u)\le \lambda_1(u)^{1/2}
+\)，
+则
+\[
+g(u)=\log\!\bigl(\lambda_1(u)/\Lambda(u)\bigr)\ \ge\ \tfrac12\log\lambda_1(u),
+\qquad
+\tau_{\mathrm{mix}}(u)\ \le\ \frac{2}{\log\lambda_1(u)}.
+\]
+因此在平方根界成立时，序/角色读出的本体时间尺度被主尺度 $\lambda_1(u)$ 的对数统一控制。
+\end{corollary}
+
+\subsection{高阶碰撞核与空间损失谱}\label{subsec:pom-higher-collision-spectrum}
+本小节把规范投影 $P_Z$ 在有限分辨率下的“纤维残差”从一个平均压缩率提升为一族可审计的谱指纹。记折叠纤维多重度
+$$
+d_m(x):=\bigl|\Fold_m^{-1}(x)\bigr|,\qquad x\in X_m,
+$$
+并定义 $k$ 阶碰撞矩（$k$-tuple 同像计数）
+$$
+S_k(m):=\sum_{x\in X_m} d_m(x)^k
+=\Bigl|\{(\omega^{(1)},\dots,\omega^{(k)})\in\Omega_m^k:\ \Fold_m(\omega^{(1)})=\cdots=\Fold_m(\omega^{(k)})\}\Bigr|.
+$$
+当 $k=2$ 时，$S_2(m)$ 即二体碰撞计数，控制了 Fold 输出分布的 Rényi-2 指纹；更一般的 $k$ 给出一整条矩谱。
+
+\subsubsection{一般 \texorpdfstring{$k$}{k} 的 moment-kernel \texorpdfstring{$A_k$}{Ak}：存在性与 PF 主谱}\label{subsec:pom-ak-existence}
+\begin{theorem}[一般 $k$ 的碰撞核与 Perron 主谱]\label{thm:pom-collision-kernel-ak}
+对每个固定整数 $k\ge 2$，存在一个有限状态的非负整数矩阵 $A_k$（可视为某个 SFT 的邻接矩阵）以及非负整数向量 $u_k,v_k$，使得对所有充分大的 $m$ 有
+\[
+S_k(m)=u_k^{\mathsf T}\,A_k^{\,m}\,v_k.
+\]
+从而极限
+\[
+\lim_{m\to\infty}\frac{1}{m}\log S_k(m)=\log r_k
+\]
+存在，其中 $r_k:=\rho(A_k)>0$ 为 Perron--Frobenius 主特征值（谱半径）。
+\end{theorem}
+\begin{proof}[证明思路（可构造，审计链闭合）]
+关键输入事实是：$\Fold_\infty$ 可由固定延迟的确定性有限状态在线转导器实现（定理 \ref{thm:online-delay-fold}），因此有限分辨率的 $\Fold_m$ 亦可视为“有限状态同步图 + 末端函数”的组合读出。
+
+令该转导器的状态集为 $Q$，一步转移由“读入一位 $\Rightarrow$ 输出一位 + 状态更新”的确定性规则给出。构造其 $k$ 重同步积自动机：状态为 $Q^k$，一步同时读入 $(d^{(1)},\dots,d^{(k)})\in\{0,1\}^k$，并得到 $k$ 个输出位 $(e^{(1)},\dots,e^{(k)})\in\{0,1\}^k$ 及下一状态。再施加\textbf{相等约束} $e^{(1)}=\cdots=e^{(k)}$（并把末端函数的有限输出也一并纳入该相等约束：可通过把“末端窗口”并入状态来实现）。这样得到一个有限有向图，其边的重数等于满足相等约束的输入 $k$-tuple 数。
+
+于是长度为 $m$ 的可接受路径条数正是“$k$ 个输入词被转导到同一个输出词”的计数，也即 $S_k(m)$。取该图的邻接矩阵为 $A_k$，并用起止向量编码初态集合与末端函数的有限修正，即得到 $S_k(m)=u_k^{\mathsf T}A_k^{m}v_k$（对小 $m$ 的边界项可吸收进“充分大”的阈值）。
+
+最后，对 $A_k$ 的本质强连通分量应用 Perron--Frobenius 定理：主谱半径 $r_k$ 控制路径数的指数增长率，从而得到所述极限。
+\end{proof}
+
+\begin{remark}[推广到一般投影词的 moment 编译器]\label{rem:pom-moment-compiler-general-word}
+上面的构造只用到了“可由有限状态转导器实现”的事实，因此可直接推广：只要某个投影词 \(W\) 的语义能被编译为有限状态同步图（或等价的加权自动机/有限歧义转导器），对任意 \(k\ge 2\) 都能构造一个依赖于 \(W\) 的 moment-kernel
+\(
+A_k^{(W)}
+\)
+与读出向量，使得
+\(
+S_k^{(W)}(m)=u_k^{(W)\mathsf T}(A_k^{(W)})^{m}v_k^{(W)}
+\)
+并定义主谱 \(r_k^{(W)}=\rho(A_k^{(W)})\)。
+具体做法是：取 \(k\) 重同步积并对输出施加“相等约束”，再按对称化/直方图压缩（若约束与权重对坐标置换不变）即可得到多项式规模的对称商核；这给出“任意投影词 \(\Rightarrow\) moment 谱”的统一可计算编译口径。
+\end{remark}
+
+\begin{remark}[与 $k=2,3,4$ 的一致性检查（已生成指纹）]\label{rem:pom-ak-consistency}
+当 $k=2,3,4$ 时，本文已有最小有限状态“碰撞核”实现（分别记为 $A_2,A_3,A_4$），从而 $r_k$ 可由有限矩阵的谱半径精确给出，并已汇总为 Rényi 指纹表
+\[
+\texttt{sections/generated/tab\_fold\_collision\_renyi\_spectrum.tex}.
+\]
+此外，$k=4,\dots,8$ 的 $S_k(m)$ 已给出经枚举核验的整系数递推（可审计证据表
+\(
+\texttt{sections/generated/tab\_fold\_collision\_moment\_recursions.tex}
+\)
+；入口脚本见 \texttt{scripts/exp\_fold\_collision\_moment\_recursions.py}）。
+\end{remark}
+
+\begin{proposition}[对称化编译：\texorpdfstring{$A_k$}{Ak} 的多项式规模上界（可计算）]\label{prop:pom-ak-symmetric-compression}
+令 $\Fold_\infty$ 的固定延迟在线实现的同步状态集为 $Q$（本论文的 delay-$3$ 同步核取 $|Q|=10$），并按定理 \ref{thm:pom-collision-kernel-ak} 的 fiber-product 构造得到 $k$ 重 moment-kernel \(A_k\)。
+则存在一个由对称化（商去 $S_k$ 作用）得到的非负整数核 \(\widetilde A_k\) 及相应读出向量 \(\widetilde u_k,\widetilde v_k\)，使得对充分大的 $m$ 有
+\[
+S_k(m)=\widetilde u_k^{\mathsf T}\,\widetilde A_k^{\,m}\,\widetilde v_k,
+\qquad
+\rho(\widetilde A_k)=\rho(A_k)=r_k.
+\]
+并且其状态数满足显式上界
+\[
+\dim(\widetilde A_k)\ \le\ \binom{k+|Q|-1}{|Q|-1}.
+\]
+特别地，对本文的 10 状态同步核（$|Q|=10$）有
+\[
+\boxed{\ \dim(\widetilde A_k)\le \binom{k+9}{9}=O(k^9)\ }.
+\]
+\end{proposition}
+\begin{proof}[证明思路]
+在 $Q^k$ 上对称群 $S_k$ 作用为置换坐标。fiber-product 的“逐位输出一致”约束与每步计数权重仅依赖于各坐标所处的同步状态与可用边集合，因此对坐标置换不变。故可将 $Q^k$ 的状态按 $S_k$-轨道分组，等价地用“直方图/多重集合”状态
+\[
+\nu\in\NN^{Q},\qquad \sum_{q\in Q}\nu(q)=k
+\]
+代表：$\nu(q)$ 记录 $k$ 份拷贝中处于状态 $q$ 的个数。此类 $\nu$ 的总数即为“把 $k$ 分到 $|Q|$ 个盒子”的组合数 \(\binom{k+|Q|-1}{|Q|-1}\)。
+
+对任意两类直方图状态 $\nu,\nu'$，定义 \(\widetilde A_k(\nu,\nu')\) 为所有满足“输出一致”约束、并使得从任一代表元（具有直方图 $\nu$）出发一步更新后直方图变为 $\nu'$ 的输入 $k$-tuple 的总数；该数由于置换不变性与计数可加性而良定义，并给出一个非负整数邻接矩阵 \(\widetilde A_k\)。起止向量的对称化同理得到 \(\widetilde u_k,\widetilde v_k\)。这样得到的路径计数与原 $A_k$ 在轨道计数意义下相同，从而给出同一序列 $S_k(m)$ 的线性表示。
+
+最后，$A_k$ 与 $\widetilde A_k$ 的关系可视为把表示空间按 $S_k$-不变子空间投影（或把加权自动机做确定性最小化之前的对称化预压缩），其 Perron 主尺度由本质强连通分量上的增长率决定；对称化不会改变“可接受路径条数”的指数增长率，因此谱半径保持为同一 \(r_k\)。证毕。
+\end{proof}
+
+\begin{proposition}[对称商 moment-kernel 的转移权重：多项式时间可计算]\label{prop:pom-ak-symmetric-transition-poly}
+沿定理 \ref{thm:pom-collision-kernel-ak} 的构造，设在线同步核为确定性转导器：状态集 $Q$，输入字母表 $\{0,1\}$，并存在确定性函数
+$$
+\delta:Q\times\{0,1\}\to Q,\qquad \varepsilon:Q\times\{0,1\}\to\{0,1\},
+$$
+其中 $\delta(q,d)$ 为下一状态、$\varepsilon(q,d)$ 为输出位。令 $k\ge 2$，并用直方图状态
+$$
+\nu\in\NN^{Q},\qquad \sum_{q\in Q}\nu(q)=k
+$$
+表示 $k$ 份拷贝在各同步状态上的出现次数。
+
+则对任意输出位 $e\in\{0,1\}$ 与任意两直方图 $\nu,\nu'$，从 $\nu$ 以“逐位输出一致且等于 $e$”约束一步转移到 $\nu'$ 的权重可写为
+$$
+w_e(\nu,\nu')
+=
+\sum_{\{a_q\}}
+\ \prod_{q\in Q}\binom{\nu(q)}{a_q},
+$$
+其中求和对所有整数族 $\{a_q\}_{q\in Q}$ 进行，满足：
+\begin{itemize}
+  \item \textbf{(输出一致约束)} 对每个 $q\in Q$，必须有
+  $$
+  \varepsilon(q,0)\neq e\ \Rightarrow\ a_q=0,\qquad
+  \varepsilon(q,1)\neq e\ \Rightarrow\ a_q=\nu(q),
+  $$
+  即 $a_q$ 仅在允许的输入位上取值（$a_q$ 解释为“处于状态 $q$ 的轨道中，选择输入 $0$ 的条数”）；
+  \item \textbf{(下一直方图约束)} $\nu'$ 由 $\{a_q\}$ 唯一确定，且要求满足
+  $$
+  \nu'(q')
+  =
+  \sum_{q\in Q}\Bigl(
+  a_q\,\mathbf{1}_{\delta(q,0)=q'}+(\nu(q)-a_q)\,\mathbf{1}_{\delta(q,1)=q'}
+  \Bigr),
+  \qquad \forall q'\in Q.
+  $$
+\end{itemize}
+因此对称商核的一步邻接权重为
+$$
+\widetilde A_k(\nu,\nu')=w_0(\nu,\nu')+w_1(\nu,\nu').
+$$
+并且当 $|Q|$ 固定（本文为 $|Q|=10$）时，给定任意 $\nu$，全体 $w_e(\nu,\nu')$（对所有 $\nu'$）可通过对 $q\in Q$ 逐状态做一次多项式卷积/动态规划在 $\mathrm{poly}(k)$ 时间内计算，从而 \(\widetilde A_k\) 的构造为可执行的多项式级过程。
+\end{proposition}
+\begin{proof}[证明要点（计数=二项式系数卷积）]
+固定 $\nu$ 与输出位 $e$。对每个同步状态 $q$，处于 $q$ 的 $\nu(q)$ 条轨道在满足 $\varepsilon(q,d)=e$ 的输入位 $d\in\{0,1\}$ 中作选择；当两种输入均允许时，选择 $a_q$ 条取 $0$、其余取 $1$ 的方式数为 $\binom{\nu(q)}{a_q}$；当仅一种输入允许时，$a_q$ 被强制为 $0$ 或 $\nu(q)$。
+
+在给定所有 $\{a_q\}$ 后，每条轨道的下一状态由 $\delta(q,0)$ 或 $\delta(q,1)$ 确定，从而得到唯一的下一直方图 $\nu'$，其坐标满足题中线性约束式。对所有可行 $\{a_q\}$ 求和即得到 $w_e(\nu,\nu')$。
+
+算法层面，这就是一组“按状态独立选择 $\Rightarrow$ 按目标状态聚合”的计数卷积：把每个 $q$ 的选择视为在变量族 $\{z_{q'}\}_{q'\in Q}$ 上的多项式
+$$
+P_{q,e}(z):=\mathbf{1}_{\varepsilon(q,0)=e}\,z_{\delta(q,0)}+\mathbf{1}_{\varepsilon(q,1)=e}\,z_{\delta(q,1)},
+$$
+则对固定 $\nu$ 有生成函数
+$$
+\prod_{q\in Q} P_{q,e}(z)^{\nu(q)}
+=\sum_{\nu'} w_e(\nu,\nu')\,z^{\nu'},
+$$
+其中 $z^{\nu'}:=\prod_{q'\in Q} z_{q'}^{\nu'(q')}$。在 $|Q|$ 固定时，系数抽取可用逐状态卷积 DP 实现，复杂度为 $k$ 的某个固定次数多项式。证毕。
+\end{proof}
+
+\begin{corollary}[系数抽取形式：转移多项式生成函数]\label{cor:pom-ak-coefficient-extraction}
+沿用命题 \ref{prop:pom-ak-symmetric-transition-poly} 的记号。
+对每个同步状态 \(q\in Q\) 与输出位 \(e\in\{0,1\}\)，定义转移多项式
+\[
+P_{q,e}(z):=\sum_{d\in\{0,1\}:\ \varepsilon(q,d)=e} z_{\delta(q,d)}.
+\]
+对直方图态 \(\nu\in\NN^Q\)（\(\sum_q\nu(q)=k\)），定义
+\[
+F_{\nu,e}(z):=\prod_{q\in Q}P_{q,e}(z)^{\nu(q)}.
+\]
+则有严格系数抽取恒等式
+\[
+F_{\nu,e}(z)=\sum_{\nu'} w_e(\nu,\nu')\,z^{\nu'},
+\qquad
+w_e(\nu,\nu')=[z^{\nu'}]\,F_{\nu,e}(z),
+\]
+其中 \([z^{\nu'}]\) 表示取单项式 \(z^{\nu'}=\prod_{q'\in Q} z_{q'}^{\nu'(q')}\) 的系数。
+因此对称商 moment-kernel 的一步权重满足
+\[
+\widetilde A_k(\nu,\nu')=\sum_{e\in\{0,1\}}[z^{\nu'}]\,F_{\nu,e}(z).
+\]
+\end{corollary}

@@ -1,0 +1,108 @@
+\subsubsection{直积自然数半环的同态刚性与幂等分割通道}\label{subsubsec:cdim-semiring-rigidity}
+在定义 \ref{def:cdim-audited-realization-budget} 的审计实现口径中，单侧正锥常以 \(\NN^v\) 的坐标半轴作为“互斥寄存器通道”的抽象。
+当协议不仅要求保加法，还要求兼容乘法组合规则时，自然出现交换幺半环同态的语义限制。
+下面给出一条刚性结论：在 \(\NN^r\) 的坐标逐点乘加结构下，同态不允许任何混合编码，其可做之事仅为坐标抽取（允许重复）。
+该刚性为“实现层可编码”与“结构层不可坍缩”提供一个完全代数化的分界线。
+
+\begin{theorem}[直积自然数半环的同态刚性]\label{thm:cdim-nr-nd-semiring-hom-rigidity}
+将 \(\NN^r,\NN^d\) 视为交换幺半环：加法与乘法均按坐标逐点定义，且 \(0=(0,\dots,0)\)、\(1=(1,\dots,1)\)。
+则任意交换幺半环同态
+\[
+f:\NN^r\longrightarrow \NN^d
+\]
+都存在唯一函数 \(\sigma:\{1,\dots,d\}\to\{1,\dots,r\}\) 使得对一切 \(x=(x_1,\dots,x_r)\in\NN^r\) 有
+\[
+f(x)=\bigl(x_{\sigma(1)},x_{\sigma(2)},\dots,x_{\sigma(d)}\bigr).
+\]
+\end{theorem}
+\begin{proof}
+记 \(\pi_j:\NN^d\to\NN\) 为第 \(j\) 个坐标投影，并令 \(f_j:=\pi_j\circ f:\NN^r\to\NN\)。
+则每个 \(f_j\) 仍是交换幺半环同态。
+令
+\[
+e_i:=(0,\dots,0,1,0,\dots,0)\in\NN^r
+\]
+为第 \(i\) 个坐标单位向量，则 \(e_i^2=e_i\)，且当 \(i\neq k\) 时 \(e_ie_k=0\)，并且 \(\sum_{i=1}^r e_i=1\)。
+\par
+在 \(\NN\) 中满足 \(n^2=n\) 的仅有 \(n\in\{0,1\}\)，故 \(f_j(e_i)\in\{0,1\}\)。
+由同态性，
+\[
+0=f_j(0)=f_j(e_ie_k)=f_j(e_i)\,f_j(e_k),
+\]
+于是对固定 \(j\)，至多存在一个 \(i\) 使 \(f_j(e_i)=1\)。
+另一方面，
+\[
+1=f_j(1)=f_j\!\Bigl(\sum_{i=1}^r e_i\Bigr)=\sum_{i=1}^r f_j(e_i),
+\]
+故必恰有一个指标 \(i=\sigma(j)\) 使 \(f_j(e_{\sigma(j)})=1\)，其余为 \(0\)。
+对任意 \(x=\sum_{i=1}^r x_ie_i\)（按加法分解）有
+\[
+f_j(x)=\sum_{i=1}^r x_i f_j(e_i)=x_{\sigma(j)}.
+\]
+汇总各 \(j\) 得所述形式。
+唯一性由每个 \(j\) 的指标 \(\sigma(j)\) 唯一确定。证毕。
+\end{proof}
+
+\begin{corollary}[单射与自同构的结构限制]\label{cor:cdim-nr-nd-semiring-hom-inj-auto}
+在定理 \ref{thm:cdim-nr-nd-semiring-hom-rigidity} 的设定下：
+\begin{enumerate}
+  \item 若 \(f:\NN^r\to\NN^d\) 为单射交换幺半环同态，则 \(\sigma\) 必为满射，特别地 \(d\ge r\)；
+  \item 若 \(f\) 为同构，则 \(d=r\) 且 \(\sigma\) 为置换，从而
+  \(
+  \Aut_{\mathrm{Semiring}}(\NN^r)\cong S_r
+  \)。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) 若存在 \(i_0\notin\sigma(\{1,\dots,d\})\)，则改变输入的第 \(i_0\) 坐标不改变输出，故 \(f\) 非单射。
+反之若 \(\sigma\) 满射，则任意 \(x\neq y\) 至少在某一输入坐标 \(i\) 上不同；取 \(j\) 使 \(\sigma(j)=i\)，则输出第 \(j\) 坐标不同，故 \(f\) 单射。
+(2) 同构必单射且满射；由定理 \ref{thm:cdim-nr-nd-semiring-hom-rigidity} 的显式形式立即得到 \(d=r\) 且 \(\sigma\) 双射，从而为置换。证毕。
+\end{proof}
+
+\begin{proposition}[幂等分割刻画 \(\Hom(\NN^r,S)\)]\label{prop:cdim-nr-hom-idempotent-splitting}
+令 \(S\) 为任意交换幺半环。
+则交换幺半环同态集合 \(\Hom_{\mathrm{Semiring}}(\NN^r,S)\) 与集合
+\[
+\Bigl\{(\varepsilon_1,\dots,\varepsilon_r)\in S^r:\ 
+\varepsilon_i^2=\varepsilon_i,\ 
+\varepsilon_i\varepsilon_k=0\ (i\neq k),\
+\sum_{i=1}^r \varepsilon_i=1
+\Bigr\}
+\]
+之间存在自然双射，其对应由
+\[
+f\ \longmapsto\ (f(e_1),\dots,f(e_r))
+\]
+给出；逆向由
+\[
+(\varepsilon_1,\dots,\varepsilon_r)\ \longmapsto\
+f_{\varepsilon}(x_1,\dots,x_r):=\sum_{i=1}^r x_i\varepsilon_i
+\]
+给出。
+\end{proposition}
+\begin{proof}
+若 \(f\) 为同态，则 \(f(e_i)^2=f(e_i^2)=f(e_i)\)，且 \(f(e_ie_k)=f(0)=0\) 给出正交性；
+又 \(f(\sum e_i)=f(1)=1\) 给出和为 \(1\)。
+\par
+反之，给定正交幂等分割 \((\varepsilon_i)\) 并定义 \(f_{\varepsilon}\) 如上，则加法同态性显然且 \(f_\varepsilon(1)=\sum \varepsilon_i=1\)。
+乘法同态性由正交性保证：
+\[
+f_\varepsilon(x)\,f_\varepsilon(y)
+=\sum_{i,k} x_iy_k\,\varepsilon_i\varepsilon_k
+=\sum_i x_iy_i\,\varepsilon_i
+=f_\varepsilon(x\cdot y),
+\]
+其中 \(x\cdot y\) 表示逐点乘积。
+两映射互为逆由构造直接核验。证毕。
+\end{proof}
+
+\begin{conjecture}[乘法通道强制的最小半圆维预算]\label{conj:cdim-semiring-idempotent-budget}
+令 \(S\) 为交换幺半环，并设 \(S\) 含有 \(r\) 个两两正交且和为 \(1\) 的非零幂等元 \((\varepsilon_1,\dots,\varepsilon_r)\)。
+则在定义 \ref{def:cdim-audited-realization-budget} 的“可审计实现”纪律的乘法兼容版本中，任何实现都必须提供至少 \(r\) 个互相独立的可审计账本道，且其带符号圆维预算满足
+\[
+B(\iota)\ \ge\ \frac{r}{2},
+\]
+并且等号当且仅当该实现与把 \(r\) 个幂等通道实现为 \(r\) 个互斥单侧寄存器的标准正交模型等价。
+\end{conjecture}
+
+\endinput

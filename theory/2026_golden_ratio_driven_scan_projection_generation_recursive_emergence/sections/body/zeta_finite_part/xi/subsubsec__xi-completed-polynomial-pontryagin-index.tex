@@ -1,0 +1,344 @@
+\subsubsection{完成化多项式的 Pontryagin 指数：径向缺陷、Toeplitz 惯性与检出门槛的闭式对齐}\label{subsubsec:xi-completed-polynomial-pontryagin-index}
+在 \S\ref{subsec:xi-from-self-dual} 中，完成化压缩把切片零点问题等价转写为自倒数多项式 \(\Phi_L\) 的单位圆根分布，并由其视界 Carath\'eodory 函数 \(\mathscr{C}_{\Phi_L}\) 给出 Toeplitz--PSD 证书链（定理 \ref{thm:xi-slice-horizon-carath-toeplitz}）。
+本段在 \(\Xi\)-RH 失败的情形下，把“根偏离单位圆”的几何信息进一步指数化为一个完全可审计的整数指标：盘内根计数同时等于负平方指数、Toeplitz 负惯性稳定值与最小 Pontryagin 负能自由度数；
+并将最小离线距离 \(\delta_{\min}\) 与有限阶 Toeplitz 检出的不可行性门槛对齐为显式下界。
+\par
+为避免单位圆边界根导致的有限审计细节，下文采用一般位置假设：\(\Phi_L\) 在 \(\TT\) 上无零点；边界根的处理可通过极限/局部分解并置完成，参见注 \ref{rem:xi-schur-cohn-sdp-interface} 与 \S\ref{subsubsec:xi-negative-square-index-pontryagin-realization} 的边界无极点口径。
+
+\begin{definition}[盘内根指数与最近边界深度]\label{def:xi-phiL-disk-index-depth}
+沿用 \S\ref{subsec:xi-from-self-dual} 的记号：给定 \(L>1\)，令
+\(
+P_L(S)=\widehat\Delta(L^{-1/2},S)\in\RR[S]
+\)
+且 \(d=\deg P_L\)，并令
+\[
+\Phi_L(y):=y^{d}P_L(y+y^{-1})\in\RR[y],\qquad D:=\deg\Phi_L=2d.
+\]
+假设 \(\Phi_L\) 在单位圆 \(\TT\) 上无零点。
+定义其\textbf{盘内根指数}
+\[
+\boxed{\;
+\kappa(\Phi_L):=\sum_{\substack{a\in\mathbb{D}:\\ \Phi_L(a)=0}}\operatorname{ord}_{a}(\Phi_L)\ \in\ \NN\cup\{0\}\;}
+\]
+并定义\textbf{最近边界半径}与\textbf{最薄边界层深度}
+\[
+\boxed{\;
+r_{\max}(\Phi_L):=
+\begin{cases}
+\max\{|a|:\ a\in\mathbb{D},\ \Phi_L(a)=0\}, & \kappa(\Phi_L)>0,\\[2pt]
+0, & \kappa(\Phi_L)=0,
+\end{cases}
+\qquad
+h_{\min}(\Phi_L):=1-r_{\max}(\Phi_L).\;}
+\]
+\end{definition}
+
+\begin{theorem}[完成化多项式的负平方指数：盘内根计数的严格等价（41）]\label{thm:xi-phiL-negative-squares-equals-disk-roots}
+在定义 \ref{def:xi-phiL-disk-index-depth} 的设定下，定理 \ref{thm:xi-slice-horizon-carath-toeplitz} 所定义的视界 Carath\'eodory 函数
+\[
+\mathscr{C}_{\Phi_L}(\omega):=1-\frac{2}{D}\,\omega\,\frac{\Phi_L'(\omega)}{\Phi_L(\omega)}
+\qquad(\omega\in\mathbb{D})
+\]
+在 \(\mathbb{D}\) 内恰有 \(\kappa(\Phi_L)\) 个极点（按阶计），从而属于广义 Carath\'eodory 类 \(\mathcal{C}_{\kappa(\Phi_L)}\setminus\mathcal{C}_{\kappa(\Phi_L)-1}\)，并满足负平方指数恒等式
+\[
+\boxed{\ \mathrm{sq}_-\!\bigl(\mathscr{C}_{\Phi_L}\bigr)=\kappa(\Phi_L).\ }
+\]
+\end{theorem}
+
+\begin{proof}
+由 \(\Phi_L(0)=\mathrm{lc}(P_L)\neq 0\)，\(\mathscr{C}_{\Phi_L}\) 在 \(\omega=0\) 解析。
+并且 \(\mathscr{C}_{\Phi_L}\) 的全部极点只能来自 \(\Phi_L'/\Phi_L\)，即恰为 \(\Phi_L\) 的零点；当 \(\Phi_L\) 在 \(a\in\mathbb{D}\) 处零点重数为 \(m\) 时，\(\Phi_L'/\Phi_L\) 在 \(a\) 处具有 \(m\) 阶极点，故 \(\mathscr{C}_{\Phi_L}\) 在 \(\mathbb{D}\) 内的极点总阶数即为 \(\kappa(\Phi_L)\)。
+由一般位置假设，\(\partial\mathbb{D}\) 上无极点。
+因此可将定理 \ref{thm:xi-poles-negative-squares-equivalence}（极点计数 \(\Longleftrightarrow\) 负平方指数）应用于 \(C=\mathscr{C}_{\Phi_L}\)，得到 \(\mathrm{sq}_-(\mathscr{C}_{\Phi_L})=\kappa(\Phi_L)\) 并给出 \(\mathscr{C}_{\Phi_L}\in\mathcal{C}_{\kappa(\Phi_L)}\setminus\mathcal{C}_{\kappa(\Phi_L)-1}\)。证毕。
+\end{proof}
+
+\begin{corollary}[Toeplitz 负惯性稳定读出：稳定负维数等于盘内根指数（42）]\label{cor:xi-phiL-toeplitz-inertia-stabilizes}
+沿用定理 \ref{thm:xi-slice-horizon-carath-toeplitz} 的记号，将 \(\mathscr{C}_{\Phi_L}\) 在 \(\omega=0\) 处展开为
+\(
+\mathscr{C}_{\Phi_L}(\omega)=c_0+2\sum_{n\ge 1}c_n\omega^n
+\)
+并令 Toeplitz 截断
+\(
+\mathbf{T}_N:=(c_{j-k})_{0\le j,k\le N}
+\)。
+则存在 \(N_0\) 使得对所有 \(N\ge N_0\) 成立
+\[
+\boxed{\;
+\nu_-\!\bigl(\mathbf{T}_N\bigr)=\kappa(\Phi_L).\;}
+\]
+因此，一旦 \(\kappa(\Phi_L)>0\)，Toeplitz--PSD 层级必在某一有限级给出否证器；而 \(\kappa(\Phi_L)=0\) 等价于 \(\mathbf{T}_N\succeq 0\) 对所有 \(N\) 成立，亦即等价于 \(\Xi_{\Delta,L}\) 的临界线性（定理 \ref{thm:xi-slice-horizon-carath-toeplitz}）。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:xi-phiL-negative-squares-equals-disk-roots}，\(\mathscr{C}_{\Phi_L}\in\mathcal{C}_{\kappa(\Phi_L)}\) 且在 \(\mathbb{D}\) 内仅有有限多个极点且边界无极点。
+因此可将定理 \ref{thm:xi-toeplitz-inertia-stabilizes-to-kappa}（Toeplitz 负惯性稳定读出）应用于 \(C=\mathscr{C}_{\Phi_L}\)，得到 \(\nu_-(\mathbf{T}_N)=\mathrm{sq}_-(\mathscr{C}_{\Phi_L})=\kappa(\Phi_L)\) 在足够高阶上稳定。证毕。
+\end{proof}
+
+\begin{theorem}[CMV 点态稳定化迫使 Toeplitz 负惯性检出深度逃向无穷]\label{thm:xi-phiL-cmv-stabilization-forces-detection-depth-divergence}
+设 \(\{U_L^{\mathrm{CMV}}\}_L\) 满足定理 \ref{thm:xi-cmv-stabilization-infinite} 的点态稳定化假设，并记
+\[
+\mathbf T_N(L):=(c^{(L)}_{j-k})_{0\le j,k\le N}
+\]
+为 \(\mathscr C_{\Phi_L}\) 的 Toeplitz 截断，\(\alpha_0(L),\dots,\alpha_{D_L-1}(L)\) 为相应 Verblunsky 参数。
+则对每个固定 \(N\ge 1\)，存在 \(L_N\) 使得当 \(L\ge L_N\) 时
+\[
+\mathbf T_N(L)\succ 0.
+\]
+进一步，对任意满足 \(\kappa(\Phi_L)>0\) 的无穷子列，定义最小检出深度
+\[
+N_{\mathrm{det}}(L):=
+\min\{N\ge 1:\ \nu_-(\mathbf T_N(L))>0\}.
+\]
+则
+\[
+\boxed{\;
+N_{\mathrm{det}}(L)\to\infty
+\qquad
+\text{沿任意 }\kappa(\Phi_L)>0\text{ 的无穷子列}. \;}
+\]
+换言之，若有限窗 Verblunsky 前缀在每个固定深度最终稳定于单位圆盘内部，则任何持续存在的盘内根缺陷都不能在固定有限级 Toeplitz/CMV 证书中长期显现，而只能被推向任意深的证书层。
+\end{theorem}
+\begin{proof}
+固定 \(N\ge 1\)。
+由定理 \ref{thm:xi-cmv-stabilization-infinite}，存在 \(L_N\) 使得当 \(L\ge L_N\) 时，
+\[
+D_L>N,
+\qquad
+\alpha_0(L)=\alpha_0,\dots,\alpha_{N-1}(L)=\alpha_{N-1},
+\]
+且
+\(
+|\alpha_j|<1
+\)
+对 \(0\le j\le N-1\) 成立。
+
+另一方面，由 \(\mathscr C_{\Phi_L}(0)=1\) 可知 \(c_0^{(L)}=1\)。
+因此对每个 \(1\le m\le N\)，定理 \ref{thm:xi-toeplitz-det-verblunsky} 的乘积分解给出
+\[
+\det \mathbf T_m(L)
+=
+\prod_{j=0}^{m-1}\bigl(1-|\alpha_j|^2\bigr)^{m-j}>0.
+\]
+于是所有前导主子式均为正，故由 Sylvester 判据
+\[
+\mathbf T_N(L)\succ 0
+\qquad(L\ge L_N).
+\]
+这证明了第一条。
+
+现在考虑任意满足 \(\kappa(\Phi_L)>0\) 的无穷子列。
+由推论 \ref{cor:xi-phiL-toeplitz-inertia-stabilizes}，对每个这样的 \(L\)，序列 \((\mathbf T_n(L))_{n\ge 1}\) 在充分大深度上具有正的负惯性指数，故 \(N_{\mathrm{det}}(L)\) 定义良好且有限。
+
+若结论不成立，则存在某个整数 \(M\ge 1\) 与一条无穷子列 \(L_j\to\infty\) 使
+\[
+N_{\mathrm{det}}(L_j)\le M
+\qquad(j\ge 1).
+\]
+由于 \(\mathbf T_{N_{\mathrm{det}}(L_j)}(L_j)\) 是 \(\mathbf T_M(L_j)\) 的主子矩阵，而半正定性对主子矩阵遗传，故
+\[
+\nu_-(\mathbf T_M(L_j))>0
+\qquad(j\ge 1).
+\]
+但由第一条，对该固定深度 \(M\) 存在 \(L_M\) 使得
+\[
+\mathbf T_M(L)\succ 0
+\qquad(L\ge L_M),
+\]
+这与上式矛盾。
+故不可能存在有界的无穷检出深度子列，从而
+\[
+N_{\mathrm{det}}(L)\to\infty
+\]
+沿任意 \(\kappa(\Phi_L)>0\) 的无穷子列成立。证毕。
+\end{proof}
+
+\begin{proposition}[最近盘根 \(\Longleftrightarrow\) 最小离线距离：与 \(\mathrm{arcosh}\) 闭式的兼容（43）]\label{prop:xi-phiL-depth-delta-min-alignment}
+在命题 \ref{prop:xi-rh-interval-criterion} 与推论 \ref{cor:xi-rh-unit-circle-reciprocal} 的完成化表示下，
+\[
+\Xi_{\Delta,L}(s)=0
+\quad\Longleftrightarrow\quad
+\Phi_L\!\bigl(L^{\,s-\frac12}\bigr)=0.
+\]
+假设 \(\kappa(\Phi_L)>0\)，并令 \(r_{\max}(\Phi_L)\) 如定义 \ref{def:xi-phiL-disk-index-depth}。
+则 \(\Xi_{\Delta,L}\) 的离线零点到临界线 \(\Re(s)=\tfrac12\) 的最小水平距离满足
+\[
+\boxed{\;
+\delta_{\min}(\Xi_{\Delta,L})
+\;=\;
+\frac{1}{\log L}\,\log\frac{1}{r_{\max}(\Phi_L)}\;}
+\]
+并且
+\[
+\boxed{\;
+r_{\max}(\Phi_L)=L^{-\delta_{\min}(\Xi_{\Delta,L})},
+\qquad
+h_{\min}(\Phi_L)=1-L^{-\delta_{\min}(\Xi_{\Delta,L})}.\;}
+\]
+\par
+若进一步处于“越界实根”口径：存在实根 \(S_\star\in\RR\) 满足 \(|S_\star|>2\) 且 \(P_L(S_\star)=0\)，并以定义 \ref{def:xi-radial-defect-index-delta-min} 记
+\(
+\delta_{\min}(P_L)
+\)；
+则对由该最浅越界根诱导的最近盘根 \(a_\star\in\mathbb{D}\cap\RR\) 有闭式
+\[
+\boxed{\;
+a_\star=\frac{S_\star-\operatorname{sgn}(S_\star)\sqrt{S_\star^{2}-4}}{2}
+\;=\;
+\operatorname{sgn}(S_\star)\exp\!\Bigl(-\operatorname{arcosh}(|S_\star|/2)\Bigr)\;}
+\]
+且
+\(
+\delta_{\min}(\Xi_{\Delta,L})=\delta_{\min}(P_L)
+\)
+（并与推论 \ref{cor:xi-single-scale-radial-deviation-arcosh} 的 \(\mathrm{arcosh}\) 闭式一致）。
+\end{proposition}
+
+\begin{proof}
+由 \(y:=L^{s-\frac12}\)（命题 \ref{prop:xi-rh-interval-criterion} 的证明），任取 \(\Phi_L\) 的一根 \(y_0\in\CC^\times\)，则由复对数多值性得到零点塔
+\[
+s=\frac12+\frac{\log y_0+2\pi i k}{\log L},\qquad k\in\ZZ.
+\]
+其水平偏移量为 \(|\Re(s)-\tfrac12|=\frac{1}{\log L}|\log|y_0||\)。
+由于 \(\Phi_L\) 为自倒数多项式（推论 \ref{cor:xi-rh-unit-circle-reciprocal}），其零点关于 \(y\mapsto 1/\overline y\) 成对对应，故“最小水平偏移”由模长最接近 \(1\) 的零点决定；而这正由盘内零点中模长最大的 \(r_{\max}(\Phi_L)\) 给出，从而得到
+\(\delta_{\min}(\Xi_{\Delta,L})=\frac{1}{\log L}\log\frac{1}{r_{\max}(\Phi_L)}\)。
+其余两式是代数重写。
+\par
+在越界实根口径下，令 \(S_\star\) 为 \(P_L\) 的实根且 \(|S_\star|>2\)，则二次方程 \(y+y^{-1}=S_\star\) 的两根为
+\(
+y_\star^{\pm}=\frac{S_\star\pm\sqrt{S_\star^2-4}}{2}
+\)；
+其中恰有一根满足 \(|y|<1\)，它即为上式的 \(a_\star\)，从而 \(|a_\star|=\exp\!\bigl(-\operatorname{arcosh}(|S_\star|/2)\bigr)\)。
+将该值代回 \(\delta_{\min}(\Xi_{\Delta,L})=\frac{1}{\log L}\log(1/|a_\star|)\) 即得到 \(\delta_{\min}(\Xi_{\Delta,L})=\delta_{\min}(P_L)\) 并与推论 \ref{cor:xi-single-scale-radial-deviation-arcosh} 对齐。证毕。
+\end{proof}
+
+\begin{corollary}[有限阶 Toeplitz 检出的不可行性门槛：\(\delta_{\min}\log L\) 薄层下的 \((\delta_{\min}\log L)^{-1}\) 发散律（44）]\label{cor:xi-phiL-toeplitz-length-lb-delta-min}
+在定理 \ref{thm:xi-phiL-negative-squares-equals-disk-roots} 的一般位置假设下，若 \(\kappa(\Phi_L)>0\) 且最近盘根模长为 \(r_{\max}(\Phi_L)\)，则任何希望以有限阶 Toeplitz--PSD 核验在制度意义上\emph{排除}该盘内极点的策略，其证书长度 \(N\) 必满足
+\[
+\boxed{\;
+N\ \gtrsim\ \frac{1}{h_{\min}(\Phi_L)}
+\;=\;\frac{1}{1-r_{\max}(\Phi_L)}
+\;=\;\frac{1}{1-L^{-\delta_{\min}(\Xi_{\Delta,L})}}\;}
+\]
+其中 \(\delta_{\min}(\Xi_{\Delta,L})\) 由命题 \ref{prop:xi-phiL-depth-delta-min-alignment} 给出。
+特别地，在薄层 regime \(\delta_{\min}(\Xi_{\Delta,L})\,\log L\ll 1\) 下，有
+\[
+\boxed{\;
+N\ \gtrsim\ \frac{1}{\delta_{\min}(\Xi_{\Delta,L})\,\log L}\;}
+\]
+从而“极弱离线偏移”（\(\delta_{\min}\downarrow 0\)）在 Toeplitz 口径下强制出现不可避免的证书长度爆炸。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:xi-phiL-negative-squares-equals-disk-roots}，\(\mathscr{C}_{\Phi_L}\) 在 \(\mathbb{D}\) 内存在盘内极点 \(a\) 且 \(|a|=r_{\max}(\Phi_L)\)。
+由于 \(\mathscr{C}_{\Phi_L}\) 为有理函数，其“余项系数可审计有界”假设在此口径下可取为平凡成立（无尾项）。
+因此可将定理 \ref{thm:xi-toeplitz-length-vs-boundary-depth} 应用于 \(C=\mathscr{C}_{\Phi_L}\)，并取 \(h=1-|a|=h_{\min}(\Phi_L)\)，得到必要下界 \(N\gtrsim h^{-1}\)。
+由命题 \ref{prop:xi-phiL-depth-delta-min-alignment}，\(r_{\max}(\Phi_L)=L^{-\delta_{\min}(\Xi_{\Delta,L})}\)，代入即得第一条框内式。
+\par
+当 \(\delta_{\min}\log L\ll 1\) 时，\(1-L^{-\delta_{\min}}=1-e^{-\delta_{\min}\log L}\asymp \delta_{\min}\log L\)，故得到第二条框内式。证毕。
+\end{proof}
+
+\begin{corollary}[端点不对称：\texorpdfstring{$S_\star<-2$}{S<-2} 触发 Toeplitz 检出门槛的必然对数修正（45）]\label{cor:xi-phiL-endpoint-asymmetry-log-correction}
+在推论 \ref{cor:xi-phiL-toeplitz-length-lb-delta-min} 的一般位置设定下，进一步假设最近盘根 \(a_\star\in\mathbb{D}\cap\RR\) 由某个越界实根 \(S_\star\in\RR\setminus[-2,2]\) 诱导（命题 \ref{prop:xi-phiL-depth-delta-min-alignment}）。
+记最薄边界层深度 \(h:=1-|a_\star|\in(0,1)\)。
+则端点 \(-1\) 的 Busemann 压缩（定理 \ref{thm:xi-toeplitz-length-vs-boundary-depth}）在单尺度实越界根口径下呈现严格的符号不对称：
+\begin{enumerate}
+  \item 若 \(S_\star>2\)（等价 \(a_\star\in(0,1)\)），则存在常数 \(c>0\) 使必要下界可取为纯幂型
+  \[
+  \boxed{\;
+  N\ \ge\ c\,h^{-1}\; }.
+  \]
+  \item 若 \(S_\star<-2\)（等价 \(a_\star\in(-1,0)\)），则存在常数 \(c'>0\) 使必要下界出现对数修正
+  \[
+  \boxed{\;
+  N\ \ge\ c'\,h^{-1}\log\frac{1}{h}\; }.
+  \]
+\end{enumerate}
+等价地，在薄层 regime \(h\asymp \delta_{\min}(\Xi_{\Delta,L})\,\log L\) 下，
+\[
+N\ \gtrsim\ \frac{1}{\delta_{\min}(\Xi_{\Delta,L})\,\log L}\qquad(S_\star>2),
+\]
+\[
+N\ \gtrsim\ \frac{1}{\delta_{\min}(\Xi_{\Delta,L})\,\log L}\,
+\log\!\Bigl(\frac{1}{\delta_{\min}(\Xi_{\Delta,L})\,\log L}\Bigr)\qquad(S_\star<-2).
+\]
+\end{corollary}
+
+\begin{proof}
+由于 \(\mathscr{C}_{\Phi_L}\) 为有理函数，定理 \ref{thm:xi-toeplitz-length-vs-boundary-depth} 的“余项系数可审计有界”口径在此可取为平凡成立。
+令 \(a=a_\star\in(-1,1)\)。
+对实 \(a\) 有 \(Q=(1-a^2)^{-1}\) 且
+\(
+\delta=B^{-1}(a)=(1-a^2)/(1+a)^2
+\)，
+从而 \(\delta Q=(1+a)^{-2}\)。
+将其代入定理 \ref{thm:xi-toeplitz-length-vs-boundary-depth} 的精细门槛
+\(
+N\ge C^{-1}Q\log(1+\delta Q)
+\)
+即得
+\[
+N\ \gtrsim\ \frac{1}{1-a^2}\,
+\log\!\Bigl(1+\frac{1}{(1+a)^2}\Bigr).
+\]
+若 \(a\in(0,1)\)（等价 \(S_\star>2\)），则 \(1+a\in(1,2)\)，故对数因子为绝对常数，而 \((1-a^2)^{-1}\asymp (1-a)^{-1}=h^{-1}\)，得到第一式。
+若 \(a\in(-1,0)\) 且 \(h=1-|a|=1+a\)，则 \(1-a\in(1,2)\) 且 \((1-a^2)^{-1}\asymp (1+a)^{-1}=h^{-1}\)，同时 \(\log(1+(1+a)^{-2})\asymp \log(h^{-2})\asymp \log(1/h)\)，得到第二式。
+最后两条等价式由命题 \ref{prop:xi-phiL-depth-delta-min-alignment} 给出的 \(h=1-L^{-\delta_{\min}(\Xi_{\Delta,L})}\asymp \delta_{\min}(\Xi_{\Delta,L})\log L\)（薄层）代入即得。证毕。
+\end{proof}
+
+\begin{corollary}[Pontryagin--Hilbert--P{\'o}lya 指数阻碍：\(\kappa(\Phi_L)\) 为最小负能自由度数（46）]\label{cor:xi-phiL-pontryagin-realization-index}
+在上述设定下，令 Cayley--Schur 变换
+\[
+S_{\Phi_L}(\omega):=\frac{\mathscr{C}_{\Phi_L}(\omega)-1}{\mathscr{C}_{\Phi_L}(\omega)+1}.
+\]
+则 \(S_{\Phi_L}\in\mathcal{S}_{\kappa(\Phi_L)}\setminus\mathcal{S}_{\kappa(\Phi_L)-1}\)，并存在指标为 \(\kappa(\Phi_L)\) 的 Pontryagin 空间 \(\Pi_{\kappa(\Phi_L)}\) 与其上的极小 \(J\)-酉保守 realization，使 \(S_{\Phi_L}\) 为其特征函数（传递函数）。
+特别地，
+\[
+\boxed{\;
+\kappa(\Phi_L)=0\ \Longleftrightarrow\ \text{存在 Hilbert（幺正）实现}\;}
+\]
+而一旦 \(\kappa(\Phi_L)>0\)，任何保守实现都不可避免地需要 \(\kappa(\Phi_L)\) 个负能自由度，从而把“单位圆根破缺”精确指数化为 Hilbert--P{\'o}lya 单位性破缺的最小维数证据。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:xi-phiL-negative-squares-equals-disk-roots}，\(\mathrm{sq}_-(\mathscr{C}_{\Phi_L})=\kappa(\Phi_L)\)。
+由定义 \ref{def:xi-generalized-carath-class} 与 Cayley--Schur 变换，\(\mathrm{sq}_-(S_{\Phi_L})=\mathrm{sq}_-(\mathscr{C}_{\Phi_L})\)，故 \(S_{\Phi_L}\in\mathcal{S}_{\kappa(\Phi_L)}\setminus\mathcal{S}_{\kappa(\Phi_L)-1}\)。
+再由定理 \ref{thm:xi-minimal-pontryagin-conservative-realization}（最小 Pontryagin 保守实现）立即得到 realization 的存在性与极小指数等于 \(\kappa(\Phi_L)\)。
+\(\kappa(\Phi_L)=0\) 的情形即退化为 Hilbert 空间上的幺正实现；反之若存在 Hilbert 幺正实现则负平方指数为零，从而 \(\kappa(\Phi_L)=0\)。证毕。
+\end{proof}
+
+\begin{proposition}[径向缺陷权重的单标量封装：Blaschke 原点模与 \(\mathrm{arcosh}\) 求和律（47）]\label{prop:xi-phiL-defect-weight-blaschke-origin}
+在一般位置假设下，令 \(B_{\Phi_L}\) 表示由 \(\Phi_L\) 的盘内零点（按重数）构造的有限 Blaschke 乘积：
+\[
+B_{\Phi_L}(\omega):=\prod_{\substack{a\in\mathbb{D}:\\ \Phi_L(a)=0}}
+\left(\frac{\omega-a}{1-\overline a\,\omega}\right)^{\operatorname{ord}_a(\Phi_L)}.
+\]
+则其原点模满足
+\[
+\boxed{\;
+|B_{\Phi_L}(0)|
+=\prod_{\substack{a\in\mathbb{D}:\\ \Phi_L(a)=0}}|a|^{\operatorname{ord}_a(\Phi_L)},\qquad
+-\log|B_{\Phi_L}(0)|
+=\sum_{\substack{a\in\mathbb{D}:\\ \Phi_L(a)=0}}\operatorname{ord}_a(\Phi_L)\,\log\frac{1}{|a|}\;}
+\]
+从而 \(-\log|B_{\Phi_L}(0)|\) 给出一个把全部盘内点状缺陷压缩为单标量的“总径向权重”。
+\par
+若进一步处于“越界实根”口径（定义 \ref{def:xi-radial-defect-index-delta-min}），并记全部越界实根为 \(\{S_\star\}\subset\RR\)（按重数计），则上述总径向权重具有 \(\mathrm{arcosh}\) 闭式
+\[
+\boxed{\;
+-\log|B_{\Phi_L}(0)|
+=\sum_{\substack{S_\star\in\RR:\\ |S_\star|>2,\ P_L(S_\star)=0}}
+\mathrm{mult}(S_\star)\,\operatorname{arcosh}\!\bigl(|S_\star|/2\bigr)\; }.
+\]
+\end{proposition}
+
+\begin{proof}
+第一组恒等式为有限 Blaschke 乘积的直接代数性质：由定义 \(B_{\Phi_L}(0)=\prod (-a)^{\operatorname{ord}_a(\Phi_L)}\)，取模并取对数即得。
+\par
+在越界实根口径下，对每个满足 \(|S_\star|>2\) 的实根（重数 \(m\)），二次方程 \(y+y^{-1}=S_\star\) 的盘内解为 \(a_\star\)（命题 \ref{prop:xi-phiL-depth-delta-min-alignment}），并满足
+\(
+|a_\star|=\exp(-\operatorname{arcosh}(|S_\star|/2))
+\)。
+因此该根对 \(-\log|B_{\Phi_L}(0)|\) 的贡献为 \(m\,\operatorname{arcosh}(|S_\star|/2)\)；对全部越界实根求和即得所示闭式。证毕。
+\end{proof}
+
+\endinput

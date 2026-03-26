@@ -1,0 +1,541 @@
+\subsection{多尺度一致性：restriction 逆系统与相容性口径}\label{subsec:folding-multiscale}
+
+当比较不同窗口长度 $m$ 的输出时，“一致”应被精确定义为跨尺度相容性：高分辨率输出经由自然的截断（restriction）投影到低分辨率后，应复现低分辨率输出所包含的内容。下面给出对象层的标准构造（完整证明见附录 G）。
+
+\subsubsection{折叠与因子化的核心定理（汇总陈述）}\label{subsec:fold-theorem-suite}
+为统一折叠接口的可审计性要求，本小节将折叠引起的关键结构归纳为一个汇总定理：它给出折叠的精确定义、归约顺序无关（终止/合流）、幂等/满射、多尺度 restriction 逆系统相容、序列级 sofic 因子与最小右分辨覆盖，以及差异度证书到折叠直方图 TV 偏差的定量链条。
+
+\begin{theorem}[有限窗口折叠：合流、逆系统相容、sofic 因子与定量证书]\label{thm:fold-suite}
+设 $\Omega_m=\{0,1\}^m$，$X_m=\{w\in\{0,1\}^m:\text{不含子词 }11\}$，并令 $\Fold_m:\Omega_m\to X_m$ 如定义 \ref{def:fold-word}。则：
+\begin{enumerate}
+\normalfont
+  \item \textbf{（归约顺序无关的规范化）}折叠可由值保持的局部重写系统实现，且该系统强终止并合流；因此 $\Fold_m$ 的实现与归约顺序无关。
+  \item \textbf{（幂等与满射）}\(\Fold_m(\omega)\in X_m\)；并且 \(\Fold_m|_{X_m}=\mathrm{id}\)、\(\Fold_m:\Omega_m\twoheadrightarrow X_m\)。
+  \item \textbf{（restriction 逆系统与逆极限）}对任意 $m_2\ge m_1$，截断 $\pi_{m_2\to m_1}:X_{m_2}\to X_{m_1}$ 构成 restriction 逆系统，且存在自然同构 \(X_\infty\cong\varprojlim X_m\)（定理 \ref{thm:inverse-limit-golden}）。
+\item \textbf{（跨分辨率相容的交换图）}直接微态截断一般不与折叠交换；但定义 \ref{subsec:fold-omega-restriction} 的折叠感知 restriction \(\widetilde r_{m+1\to m}(\omega)=\pi_{m+1\to m}(\Fold_{m+1}(\omega))\) 使得交换图成立（命题 \ref{prop:fold-omega-commute}）。
+  \item \textbf{（序列级因子与显式 sofic 图像）}由 \(\Fold_m\) 沿滑动窗口诱导的 \(\Phi_m\) 是滑动块码，记忆为 $0$、预期性为 $m-1$（命题 \ref{prop:Phi_m-radius}）；其像空间 \(Y_m\subset X_m^{\ZZ}\) 是 sofic 子移位，并可由显式标记图 \(G_m\) 给出（定理 \ref{thm:Phi_m-sofic-graph}）。
+  \item \textbf{（最小右分辨覆盖）}对 \(Y_m\)，右分辨表示可由子集确定化得到（命题 \ref{prop:Phi_m-right-resolving}）；进一步按 follower 集最小化得到右 Fischer cover，其最小性可参见 \cite{LindMarcus1995,Kitchens1998SymbolicDynamics}。
+  \item \textbf{（定量证书：差异度 \(\Rightarrow\) 折叠直方图 TV 偏差）}在旋转扫描（Sturmian）模型下，对任意 $N\ge 1$，
+  \[
+  D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})\ \le\ (m+1)\,D_N^*(\alpha;x_0),
+  \]
+  且到 Parry 基线的误差分解满足推论 \ref{cor:tv-decomposition-parry}。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(1) 由命题 \ref{prop:fold-rewrite-newman}（强终止 + 合流）与推论 \ref{cor:foldm-order-indep}。
+
+(2) 由命题 \ref{prop:fold-basic}。
+
+(3) restriction 一致性由引理 \ref{lem:pi-functorial-golden}；逆极限同构由定理 \ref{thm:inverse-limit-golden}（完整证明见附录 G 的定理 \ref{app:multiscale-inverse-limit}）。
+
+(4) 由小节 \ref{subsec:fold-omega-restriction} 的定义与命题 \ref{prop:fold-omega-commute}。
+
+(5) 半径由命题 \ref{prop:Phi_m-radius}；sofic 图像与显式标记图由定理 \ref{thm:Phi_m-sofic-graph}。
+
+(6) 由命题 \ref{prop:Phi_m-right-resolving} 与右 Fischer cover 的最小性（参见 \cite{LindMarcus1995,Kitchens1998SymbolicDynamics}）。
+
+(7) 由第 \ref{sec:experiments} 节的定理 \ref{thm:tv-certificate-hist}（其证明给出显式系数 $m+1$），并由推论 \ref{cor:tv-decomposition-parry} 得到到 Parry 基线的误差分解。
+\end{proof}
+
+\begin{definition}[尺度投影（restriction）]\label{def:pi-m2-m1-golden}
+对任意 $m_2\ge m_1$，定义截断投影
+\[
+\pi_{m_2\to m_1}:X_{m_2}\to X_{m_1},\qquad
+\pi_{m_2\to m_1}(x_1,\dots,x_{m_2})=(x_1,\dots,x_{m_1}).
+\]
+\end{definition}
+
+\begin{lemma}[一致性]\label{lem:pi-functorial-golden}
+对任意 $m_3\ge m_2\ge m_1$ 有
+\[
+\pi_{m_3\to m_1}=\pi_{m_2\to m_1}\circ \pi_{m_3\to m_2}.
+\]
+并且对任意无穷合法序列 $c=(c_1,c_2,\dots)$ 有
+\[
+\pi_{m_2\to m_1}\bigl(\pi_{m_2}(c)\bigr)=\pi_{m_1}(c).
+\]
+\end{lemma}
+
+\begin{theorem}[逆极限同构（分辨率无关对象）]\label{thm:inverse-limit-golden}
+令
+\[
+X_\infty:=\{(c_1,c_2,\dots)\in\{0,1\}^{\mathbb{N}}:\ c_kc_{k+1}=0\ \forall k\ge 1\}.
+\]
+则存在自然同构
+\[
+X_\infty\ \cong\ \varprojlim X_m,
+\]
+并且 $X_m$ 可视为 $X_\infty$ 的有限截断因子：不同 $m$ 的差异仅在“可见前缀长度”上，而非在统一对象本身上。
+\end{theorem}
+
+\subsubsection{关于微态截断与折叠的相容性：正确的交换图}\label{subsec:fold-omega-restriction}
+上述逆系统结构发生在稳定语法集合 $\{X_m\}$ 上，其 restriction 映射是定义 \ref{def:pi-m2-m1-golden} 的截断 $\pi_{m_2\to m_1}:X_{m_2}\to X_{m_1}$。一个需要澄清的问题是：能否在微态空间 $\Omega_m=\{0,1\}^m$ 上直接用“去掉末位”的截断与折叠 $\Fold_m$ 形成交换图？
+
+\paragraph{直接截断一般不与折叠交换}
+令
+\[
+r_{m+1\to m}:\Omega_{m+1}\to\Omega_m,\qquad
+r_{m+1\to m}(\omega_1\cdots\omega_m\omega_{m+1}):=\omega_1\cdots\omega_m
+\]
+为微态上的直接截断。一般地，
+\[
+\Fold_m\circ r_{m+1\to m}\ \neq\ \pi_{m+1\to m}\circ \Fold_{m+1}.
+\]
+例如取 $m=1$、$\omega=11$，则 $r_{2\to 1}(11)=1$，从而 $(\Fold_1\circ r_{2\to 1})(11)=\Fold_1(1)=1$；另一方面 $N(11)=F_2+F_3=3$ 的 Zeckendorf 规范形为 $3=F_4$，故 $\Fold_2(11)=00$，从而 $(\pi_{2\to 1}\circ \Fold_2)(11)=0$。
+
+\paragraph{折叠感知的 restriction（在 $\Omega$ 上实现交换）}
+为在微态层面得到严格交换的形式化，我们定义一个与折叠相容的 restriction：
+\[
+\widetilde r_{m+1\to m}:\Omega_{m+1}\to \Omega_m,\qquad
+\widetilde r_{m+1\to m}(\omega):=\pi_{m+1\to m}\bigl(\Fold_{m+1}(\omega)\bigr).
+\]
+注意 $\widetilde r_{m+1\to m}(\omega)\in X_m\subset\Omega_m$，因此该定义确实给出一条 $\Omega_{m+1}\to\Omega_m$ 的映射（它不是“原始截断”，而是“先折叠后截断”的可审计粗化）。
+
+\begin{proposition}[跨分辨率相容的交换图]\label{prop:fold-omega-commute}
+对任意 $m\ge 1$，下图交换：
+\[
+\begin{CD}
+\Omega_{m+1} @>{\Fold_{m+1}}>> X_{m+1}\\
+@V{\widetilde r_{m+1\to m}}VV @VV{\pi_{m+1\to m}}V\\
+\Omega_m @>{\Fold_m}>> X_m.
+\end{CD}
+\]
+即对任意 $\omega\in\Omega_{m+1}$ 有
+\[
+\Fold_m\bigl(\widetilde r_{m+1\to m}(\omega)\bigr)
+\ =\
+\pi_{m+1\to m}\bigl(\Fold_{m+1}(\omega)\bigr).
+\]
+\end{proposition}
+
+\begin{proof}
+由定义，$\widetilde r_{m+1\to m}(\omega)=\pi_{m+1\to m}(\Fold_{m+1}(\omega))\in X_m$。而命题 \ref{prop:fold-basic} 的幂等性给出：对任意 $x\in X_m$，$\Fold_m(x)=x$。因此
+\[
+\Fold_m\bigl(\widetilde r_{m+1\to m}(\omega)\bigr)
+=\Fold_m\!\left(\pi_{m+1\to m}(\Fold_{m+1}(\omega))\right)
+=\pi_{m+1\to m}(\Fold_{m+1}(\omega)).
+\]
+证毕。
+\end{proof}
+
+\paragraph{交换缺陷与离散斯托克斯恒等式}
+折叠与截断的不交换性可以在每一步降分辨率上以一个可审计的向量缺陷编码，并在任意尺度区间上给出严格的望远镜分解。
+
+\begin{definition}[局部交换缺陷与曲率指示]\label{def:fold-local-curvature-defect}
+对 \(m\ge 1\) 与 \(\eta\in\Omega_{m+1}\)，定义局部交换缺陷向量
+\[
+\kappa_{m+1\to m}(\eta)
+:=\Fold_m\!\bigl(r_{m+1\to m}(\eta)\bigr)\ \oplus\ \pi_{m+1\to m}\!\bigl(\Fold_{m+1}(\eta)\bigr)
+\in \{0,1\}^{m}.
+\]
+并定义其零/非零指示
+\[
+K_{m+1\to m}(\eta):=\ind_{\{\kappa_{m+1\to m}(\eta)\neq 0\}}.
+\]
+\end{definition}
+
+\begin{definition}[全局交换缺陷]\label{def:fold-global-stokes-defect}
+令 \(n>m\)。对任意 \(\omega\in\Omega_n\) 定义全局交换缺陷
+\[
+D_{n\to m}(\omega)
+:=\Fold_m\!\bigl(r_{n\to m}(\omega)\bigr)\ \oplus\ \pi_{n\to m}\!\bigl(\Fold_n(\omega)\bigr)
+\in \{0,1\}^{m}.
+\]
+\end{definition}
+
+\begin{theorem}[折叠--截断塔上的离散广义斯托克斯恒等式]\label{thm:fold-discrete-stokes-defect}
+对任意 \(n>m\) 与任意 \(\omega\in\Omega_n\)，成立严格恒等式
+\[
+\boxed{\;
+D_{n\to m}(\omega)
+=\bigoplus_{j=m}^{n-1}
+\pi_{j\to m}\!\left(
+\kappa_{j+1\to j}\!\bigl(r_{n\to j+1}(\omega)\bigr)
+\right)\; }.
+\]
+\end{theorem}
+
+\begin{proof}
+对 \(j\in\{m,\dots,n\}\) 定义
+\[
+A_j(\omega):=\Fold_j\!\bigl(r_{n\to j}(\omega)\bigr),\qquad
+B_j(\omega):=\pi_{n\to j}\!\bigl(\Fold_n(\omega)\bigr),\qquad
+\Delta_j(\omega):=A_j(\omega)\oplus B_j(\omega).
+\]
+由定义 \(\Delta_m(\omega)=D_{n\to m}(\omega)\)，且 \(\Delta_n(\omega)=0\)。
+由 \(\pi\) 的函子性得 \(B_{j-1}(\omega)=\pi_{j\to j-1}(B_j(\omega))\)；由 \(r\) 的复合一致性得 \(r_{n\to j-1}=r_{j\to j-1}\circ r_{n\to j}\)，从而
+\(
+A_{j-1}(\omega)=\Fold_{j-1}\!\bigl(r_{j\to j-1}(r_{n\to j}(\omega))\bigr)
+\)。
+于是对 \(j=m+1,\dots,n\),
+\[
+\begin{aligned}
+\Delta_{j-1}(\omega)
+&=A_{j-1}(\omega)\oplus B_{j-1}(\omega)\\
+&=\Bigl(A_{j-1}(\omega)\oplus \pi_{j\to j-1}(A_j(\omega))\Bigr)\ \oplus\ \pi_{j\to j-1}\Bigl(A_j(\omega)\oplus B_j(\omega)\Bigr),
+\end{aligned}
+\]
+其中括号内第一项按定义 \ref{def:fold-local-curvature-defect} 恰为
+\(
+\kappa_{j\to j-1}\!\bigl(r_{n\to j}(\omega)\bigr)
+\)。
+因此得到递推式
+\[
+\Delta_{j-1}(\omega)
+=\kappa_{j\to j-1}\!\bigl(r_{n\to j}(\omega)\bigr)\ \oplus\ \pi_{j\to j-1}\!\bigl(\Delta_j(\omega)\bigr).
+\]
+从 \(j=n,n-1,\dots,m+1\) 递推，并使用 \(\pi\) 对逐位异或的同态性，即得
+\[
+\Delta_m(\omega)=\bigoplus_{j=m}^{n-1}\pi_{j\to m}\!\left(\kappa_{j+1\to j}\!\bigl(r_{n\to j+1}(\omega)\bigr)\right),
+\]
+而 \(\Delta_m(\omega)=D_{n\to m}(\omega)\)。证毕。
+\end{proof}
+\input{thm__fold-stokes-defect-haar-mixing}
+
+\begin{corollary}[多尺度曲率积分的误差上界]\label{cor:fold-discrete-stokes-auditable-bound}
+令 \(n>m\)。
+对任意有界函数 \(f:X_m\to\RR\) 与任意 \(\Omega_n\) 上的概率分布 \(\mu\)，取 \(\omega\sim\mu\)。则
+\[
+\boxed{\;
+\Bigl|\EE_\mu f\!\bigl(\Fold_m(r_{n\to m}(\omega))\bigr)-\EE_\mu f\!\bigl(\pi_{n\to m}(\Fold_n(\omega))\bigr)\Bigr|
+\ \le\ 2\|f\|_\infty\ \PP_\mu\!\bigl[D_{n\to m}(\omega)\neq 0\bigr]\; }.
+\]
+并且由定理 \ref{thm:fold-discrete-stokes-defect} 推出事件包含
+\[
+\boxed{\;
+\{D_{n\to m}\neq 0\}\subseteq \bigcup_{j=m}^{n-1}\Bigl\{K_{j+1\to j}\!\bigl(r_{n\to j+1}(\omega)\bigr)=1\Bigr\}\; }.
+\]
+因此
+\[
+\boxed{\;
+\PP_\mu\!\bigl[D_{n\to m}(\omega)\neq 0\bigr]\ \le\ \sum_{j=m}^{n-1}\PP_\mu\!\left[K_{j+1\to j}\!\bigl(r_{n\to j+1}(\omega)\bigr)=1\right]\; }.
+\]
+\end{corollary}
+
+\begin{proof}
+记
+\(
+x=\Fold_m(r_{n\to m}(\omega))
+\)、
+\(
+y=\pi_{n\to m}(\Fold_n(\omega))
+\)。
+则 \(\{x\neq y\}=\{x\oplus y\neq 0\}=\{D_{n\to m}(\omega)\neq 0\}\)，并且恒有
+\(
+|f(x)-f(y)|\le 2\|f\|_\infty\,\ind_{\{x\neq y\}}
+\)。
+取期望即得第一式。
+第二式由定理 \ref{thm:fold-discrete-stokes-defect} 的异或表示给出：若对所有 \(j\) 均有 \(\kappa_{j+1\to j}(r_{n\to j+1}(\omega))=0\)，则异或和为 \(0\)，从而 \(D_{n\to m}=0\)；取逆否命题即得事件包含。最后一式为并合界。证毕。
+\end{proof}
+\input{subsubsec__fold-defect-budgets}
+
+\begin{proposition}[分辨率条带上的势函数表示]\label{prop:fold-discrete-poincare-band}
+固定 \(n>m\) 与 \(\omega\in\Omega_n\)，并对 \(j\in\{m,\dots,n\}\) 定义势函数 \(A_j(\omega):=D_{n\to j}(\omega)\in\{0,1\}^j\)。
+则对所有 \(j=m+1,\dots,n\) 成立严格等式
+\[
+\boxed{\;
+A_{j-1}(\omega)\ \oplus\ \pi_{j\to j-1}\!\bigl(A_j(\omega)\bigr)
+=\kappa_{j\to j-1}\!\bigl(r_{n\to j}(\omega)\bigr)\; }.
+\]
+\end{proposition}
+
+\begin{proof}
+在定理 \ref{thm:fold-discrete-stokes-defect} 的证明中取 \(\Delta_j(\omega)=D_{n\to j}(\omega)=A_j(\omega)\) 即得递推恒等式
+\(
+\Delta_{j-1}=\kappa_{j\to j-1}(r_{n\to j}(\omega))\oplus \pi_{j\to j-1}(\Delta_j)
+\)。
+两端再与 \(\pi_{j\to j-1}(\Delta_j)\) 逐位异或即可得到所述形式。证毕。
+\end{proof}
+
+\begin{conjecture}[曲率均值序列的 Hilbert--Langlands 模性轮廓]\label{conj:fold-curvature-hilbert-modularity}
+令 \(\mu_m=\mathrm{Unif}(\Omega_{m+1})\)。
+定义曲率均值序列
+\[
+\kappa_m:=\EE_{\mu_m}\!\bigl[K_{m+1\to m}\bigr]\qquad(m\ge 1),
+\]
+并定义其 \(q\)-生成函数与 Dirichlet 生成函数
+\[
+F_K(q):=\sum_{m\ge 1}\kappa_m q^m,\qquad
+Z_K(s):=\sum_{m\ge 1}\kappa_m\,m^{-s}.
+\]
+在黄金分支折叠所内生的 \(\QQ(\sqrt5)\) 算术背景下，猜想存在定义于 \(\QQ(\sqrt5)\) 的 Hilbert 模形式 \(\mathcal F\)，使得 \(F_K\) 的 \(q\)-展开与 \(\mathcal F\) 的一个显式 Hecke--Euler 正则化相一致（至多相差有限个 Euler 因子与一个有理函数项）；并且 \(Z_K(s)\) 具有预期的解析延拓与函数方程，其对偶对称性与定理 \ref{thm:fold-discrete-stokes-defect} 的“曲率积分--边界缺陷”结构相协调。
+若 \((\kappa_m)\) 满足来自某 Hilbert 模形式的 Hecke 型递推或有限阶线性递推，则可通过有限截断的枚举计算与矩阵递推核验该一致性或给出反例。
+\end{conjecture}
+
+\subsubsection{规范差（gauge anomaly）：直接截断与折叠感知 restriction 的最坏全域偏离}\label{subsec:fold-gauge-anomaly}
+\paragraph{两个降分辨率输出之间的最小修正量}
+在微态层面，我们区分了直接截断 \(r_{m+1\to m}\) 与折叠感知 restriction \(\widetilde r_{m+1\to m}\)（小节 \ref{subsec:fold-omega-restriction}）。
+下面将二者的不一致以纯组合量度量化为一个可计算标量。
+
+\begin{definition}[规范差 \texorpdfstring{$G_m(\omega)$}{Gm(omega)}]\label{def:fold-gauge-anomaly}
+对 \(m\ge 1\) 与任意 \(\omega\in\Omega_{m+1}\)，定义长度 \(m\) 的规范差
+$$
+G_m(\omega)
+:=\bigl|\,r_{m+1\to m}(\omega)\ \oplus\ \widetilde r_{m+1\to m}(\omega)\,\bigr|_0,
+$$
+其中 \(\oplus\) 为逐位异或（在 \(\{0,1\}^m\) 上按模 \(2\) 相加），而 \(|\cdot|_0\) 为汉明重量（非零位计数）。
+\end{definition}
+
+\begin{remark}[语义：分辨率降阶的“时间投影”下界]
+\(\widetilde r_{m+1\to m}\) 在定义上是“先折叠再截断”的粗化；而 \(r_{m+1\to m}\) 是“直接丢弃末位”的直接降维。
+量 \(G_m(\omega)\) 精确回答：若从直接截断 \(r_{m+1\to m}(\omega)\) 出发，希望恢复到与折叠一致的低分辨率输出 \(\widetilde r_{m+1\to m}(\omega)\)，至少需要改动多少个输出比特（在汉明意义下）。
+因此它是“升维—投影”语言中一个可审计的时间投影证书：它度量降分辨率所触及的输出支持规模，而非局部因果锥的延迟长度。
+\end{remark}
+
+\begin{theorem}[最坏规范差为满长：存在全域翻转输入]\label{thm:fold-gauge-anomaly-max}
+对任意 \(m\ge 1\)，存在 \(\omega^\star(m)\in\Omega_{m+1}\) 使得
+$$
+G_m\bigl(\omega^\star(m)\bigr)=m.
+$$
+换言之，直接截断与折叠感知 restriction 在最坏输入下会在前 \(m\) 位上\emph{逐位全异}。
+\end{theorem}
+
+\begin{proof}
+由定义可得 \(0\le G_m(\omega)\le m\)。
+下面构造使其取到上界的 \(\omega^\star(m)\)。
+\par
+令 \(\omega^\star=\omega^\star(m)\in\Omega_{m+1}\) 的前 \(m\) 位按周期模式 \(110\) 给出：
+$$
+\omega^\star_k=
+\begin{cases}
+1,& k\equiv 1,2\pmod 3,\ 1\le k\le m,\\
+0,& k\equiv 0\pmod 3,\ 1\le k\le m,
+\end{cases}
+$$
+并令末位
+$$
+\omega^\star_{m+1}:=\mathbf{1}_{\{m\equiv 1\ (\mathrm{mod}\ 3)\}}.
+$$
+于是 \(r_{m+1\to m}(\omega^\star)\) 为长度 \(m\) 的 \(110110\cdots\) 前缀。
+\par
+将 \(\omega^\star\) 嵌入配置空间 \(a:=\iota_{m+1}(\omega^\star)\in\mathcal D\)（定义 \ref{def:fold-word}）。
+对每个满足 \(3j+1\le m\) 的 \(j\ge 0\)，都有 \(a_{3j+1}=a_{3j+2}=1\)，因此相邻合并规则 (\ref{rule:fold:adj}) 可在这些两两不相交的位置同时应用（见定义 \ref{def:fold-word}）：
+$$
+a\ \to\ a':=a-\sum_{3j+1\le m}\bigl(e_{3j+1}+e_{3j+2}\bigr)+\sum_{3j+1\le m}e_{3j+3}.
+$$
+按 Fibonacci 恒等式 \(F_{k+1}+F_{k+2}=F_{k+3}\)，每一步都保持 \(\mathrm{Val}\) 不变，故 \(\mathrm{Val}(a')=\mathrm{Val}(a)=N(\omega^\star)\)。
+\par
+由构造可见：在 \(1\le k\le m\) 上，\(a'_k\) 正是周期模式 \(001001\cdots\) 的长度 \(m\) 前缀；并且该前缀不含相邻 \(11\)，故 \(a'\) 是不可约形（落在 \(X_\infty\)）。
+由命题 \ref{prop:fold-rewrite-newman} 的合流与 Zeckendorf 唯一性，\(a'\) 必等于正规形 \(\mathrm{NF}(a)\)。
+于是
+$$
+\Fold_{m+1}(\omega^\star)=\pi_{m+1}(\mathrm{NF}(a))=\pi_{m+1}(a'),
+\qquad
+\widetilde r_{m+1\to m}(\omega^\star)=\pi_{m+1\to m}(\Fold_{m+1}(\omega^\star))=\pi_m(a').
+$$
+因此 \(\widetilde r_{m+1\to m}(\omega^\star)\) 为长度 \(m\) 的 \(001001\cdots\) 前缀。
+两者逐位异或得到全 \(1\) 串，故 \(G_m(\omega^\star)=m\)。证毕。
+\end{proof}
+
+\begin{corollary}[任意“只修末端常数位”的降分辨率补丁都不完备]\label{cor:fold-tail-patch-incomplete}
+固定常数 \(R\ge 0\)。设某一替代映射 \(T_{m,R}:\Omega_{m+1}\to\Omega_m\) 满足：对任意 \(\omega\in\Omega_{m+1}\)，字符串 \(T_{m,R}(\omega)\) 与直接截断 \(r_{m+1\to m}(\omega)\) 的不同位只可能落在末端 \(R\) 个坐标上（即
+\(\bigl|r_{m+1\to m}(\omega)\oplus T_{m,R}(\omega)\bigr|_0\le R\)）。
+若进一步要求 \(T_{m,R}\) 在微态层面实现折叠塔交换，即对一切 \(\omega\) 有
+\[
+\Fold_m\!\bigl(T_{m,R}(\omega)\bigr)=\pi_{m+1\to m}\!\bigl(\Fold_{m+1}(\omega)\bigr),
+\]
+并且 \(T_{m,R}(\omega)\in X_m\)（等价地 \(\Fold_m(T_{m,R}(\omega))=T_{m,R}(\omega)\)），
+则对所有 \(m>R\) 必存在 \(\omega\in\Omega_{m+1}\) 使得 \(T_{m,R}(\omega)\ne \widetilde r_{m+1\to m}(\omega)\)；
+特别地，不存在与 \(m\) 无关的常数 \(R\) 使得这类“末端局域补丁”对所有分辨率同时成立。
+\end{corollary}
+
+\begin{proof}
+在 \(T_{m,R}(\omega)\in X_m\) 且交换图成立的假设下，对任意 \(\omega\) 有
+\[
+T_{m,R}(\omega)
+=\Fold_m\!\bigl(T_{m,R}(\omega)\bigr)
+=\pi_{m+1\to m}\!\bigl(\Fold_{m+1}(\omega)\bigr)
+=\widetilde r_{m+1\to m}(\omega),
+\]
+故 \(T_{m,R}\) 被强制等于折叠感知 restriction \(\widetilde r_{m+1\to m}\)。
+于是对每个 \(\omega\) 有
+\(
+\bigl|r_{m+1\to m}(\omega)\oplus \widetilde r_{m+1\to m}(\omega)\bigr|_0\le R
+\)，
+即 \(G_m(\omega)\le R\)（定义 \ref{def:fold-gauge-anomaly}）。
+取定理 \ref{thm:fold-gauge-anomaly-max} 的 \(\omega^\star(m)\) 使 \(G_m(\omega^\star)=m\)，当 \(m>R\) 时矛盾。
+因此必存在 \(\omega\) 使 \(T_{m,R}(\omega)\neq \widetilde r_{m+1\to m}(\omega)\)。
+\par
+同时，上述推导给出一个定量下界：若对给定 \(m\) 的某个 \(T_{m,R}\) 仍要求 \(T_{m,R}\equiv \widetilde r_{m+1\to m}\)，则必有
+\(
+R\ge \sup_{\omega}G_m(\omega)=m
+\)，并且在任意概率基线下也有
+\(
+R\ge \EE[G_m]=\bar G_m
+\)
+（例如均匀基线下由定理 \ref{thm:fold-gauge-anomaly-mean-finite-closed} 得 \(\bar G_m=\frac49m+O(1)\)）。
+证毕。
+\end{proof}
+
+\begin{remark}[有限尾补丁不完备与不可局部消除的 \texorpdfstring{$\mathsf{NULL}$}{NULL} 范式]\label{rem:fold-tail-patch-null-nonlocal}
+推论 \ref{cor:fold-tail-patch-incomplete} 表明：在跨分辨率降阶中，折叠一致的 restriction \(\widetilde r_{m+1\to m}\) 不能由“直接截断 \(r_{m+1\to m}\) + 仅修末端常数位”的协议恢复。
+更精确地，规范差 \(G_m(\omega)\)（定义 \ref{def:fold-gauge-anomaly}）给出从 \(r_{m+1\to m}(\omega)\) 到 \(\widetilde r_{m+1\to m}(\omega)\) 的最小汉明修正规模；当只允许触及末端 \(R\) 位时，\(m>R\) 即保证存在输入使该修正\emph{必然}越界，从而与折叠相容性检查器（命题 \ref{prop:fold-omega-commute}）冲突。
+\par
+在“地址先于概念值”的语义约定（见第 \ref{sec:spg} 节）下，这给出一个严格的不可局部修补范式：
+若拒绝引入足够的正交记录轴（例如把降阶所需的非局部信息外置为残差账本），且同时将“折叠一致/值保持”作为审计语义的硬约束，则任何只允许有限尾补丁的实现都必在某些输入族上失去可寻址性；
+按本文约定，这类“无地址/读出不定义”即被等价处理为 \(\mathsf{NULL}\)。
+\end{remark}
+
+\begin{remark}[统计现象：均匀输入下的平均规范差（可复现枚举）]\label{rem:fold-gauge-anomaly-typical}
+除最坏情形外，均匀输入基线下的平均规范差同样呈线性尺度。
+令
+$$
+\bar G_m:=\mathbb{E}_{\omega\sim\mathrm{Unif}(\Omega_{m+1})}\,G_m(\omega).
+$$
+脚本 \texttt{scripts/exp\_fold\_gauge\_anomaly.py} 对 \(m\le 20\) 做精确枚举并输出 \(\bar G_m\) 与 \(\bar G_m/m\)（表 \ref{tab:fold_gauge_anomaly_stats}）；数值结果与命题 \ref{prop:fold-gauge-anomaly-mean-density-monotone} 的结论一致，即 \(\bar G_m/m\) 全局单调不减并在 \(m\ge 2\) 后严格递增，且在 \(m=20\) 时达到约 \(0.4176\)。
+该结论表明：大规模“降分辨率重写”并非仅由极端构造触发，在无结构输入下也会以正的密度铺满全串。
+\par
+进一步，均匀输入基线下的平均规范差密度极限不仅存在，而且可写出闭式常数：
+\[
+g_\ast:=\lim_{m\to\infty}\frac{\bar G_m}{m}=\frac49,
+\]
+见定理 \ref{thm:fold-gauge-anomaly-density}（由有限同步核的平稳分布直接求得）。
+作为对“大 \(m\)”收敛速度的补充审计，脚本 \texttt{scripts/exp\_fold\_gauge\_anomaly\_mc.py} 对 \(m\in\{40,100,200\}\) 做 Monte Carlo 估计并给出标准误差，估计与 \(4/9\) 一致（表 \ref{tab:fold_gauge_anomaly_mc}）。
+\end{remark}
+
+\input{sections/generated/tab_fold_gauge_anomaly_stats}
+
+\input{sections/generated/eq_fold_gauge_anomaly_density_49}
+
+\iffalse
+\begin{corollary}[“规范差很大”但“信息很小”：互信息常数与常数 Bayes 预测]\label{cor:fold-gauge-anomaly-mi}
+在定理 \ref{thm:fold-gauge-anomaly-density} 的典型内点联合律下，
+\[
+\mathbb P(X=1)=\frac12,\qquad \mathbb P(Y=1)=\frac{5}{18}.
+\]
+互信息为
+\begin{align}
+I(X;Y)&:=\sum_{x,y\in\{0,1\}}\mathbb P(x,y)\log\frac{\mathbb P(x,y)}{\mathbb P(x)\mathbb P(y)}\nonumber\\
+&=\frac{7}{18}\log\frac{14}{13}+\frac{1}{9}\log\frac{4}{5}+\frac{1}{3}\log\frac{12}{13}+\frac{1}{6}\log\frac{6}{5}\nonumber\\
+&\approx 7.7321\times 10^{-3}\ \text{nats}\approx 1.1155\times 10^{-2}\ \text{bits}.
+\end{align}
+此外，
+\[
+\mathbb P(Y=1\mid X=0)=\frac{2}{9},\qquad \mathbb P(Y=1\mid X=1)=\frac{1}{3},
+\]
+因此 Bayes 最优预测器退化为常数预测 \(\widehat Y\equiv 0\)，其最小错误率为
+\[
+\mathbb P(\widehat Y\neq Y)=\mathbb P(Y=1)=\frac{5}{18}.
+\]
+\end{corollary}
+
+\begin{remark}[量化的“近 Parry”：一步 KL 率约 \(10^{-5}\) nats/step]\label{rem:fold-gauge-anomaly-parry-kl}
+由注 \ref{rem:fold-gauge-anomaly-near-parry} 的一阶马尔可夫近似转移 \(P\)，其平稳分布为 \(\pi_0=\frac{13}{18},\pi_1=\frac{5}{18}\)。
+黄金均值 shift 的 Parry 链（同一禁词结构下的最大熵基线）满足
+\[
+Q(1\mid 0)=\varphi^{-2},\qquad Q(0\mid 0)=\varphi^{-1},\qquad Q(0\mid 1)=1.
+\]
+以每步相对熵率度量两链偏差，
+\[
+\mathcal D(P\|Q):=\sum_{i\in\{0,1\}}\pi_i\sum_j P_{ij}\log\frac{P_{ij}}{Q_{ij}}
+=\frac{13}{18}\!\left(\frac{8}{13}\log\frac{8/13}{\varphi^{-1}}+\frac{5}{13}\log\frac{5/13}{\varphi^{-2}}\right)
+\approx 1.0728\times 10^{-5}\ \text{nats/step}.
+\]
+因此在二元组（order-1）统计层面，均匀基线折叠输出与 Parry 最大熵链一致；若存在系统性偏差，其主要承载应出现在更长程依赖（order \(\ge 2\)）上。
+\end{remark}
+\fi
+
+\input{sections/generated/tab_fold_gauge_anomaly_mc}
+\input{sections/generated/eq_fold_gauge_anomaly_clt_variance}
+\input{sections/generated/eq_fold_gauge_anomaly_pressure}
+\begin{proposition}[压力函数的全阶有理累积量与五阶显式展开]\label{prop:fold-gauge-anomaly-pressure-cumulants-up-to-5}
+在命题 \ref{prop:fold-gauge-anomaly-pressure} 的均匀基线设定下，压力函数
+\[
+P_G(\theta)=\log\rho(A_\theta)=\log\!\left(\frac{\mu(e^\theta)}{2}\right)
+\]
+在 \(\theta=0\) 的某邻域内解析，并且其 Taylor 系数全为有理数；等价地，密度累积量
+\[
+\kappa_r:=P_G^{(r)}(0)\qquad (r\ge 1)
+\]
+均属于 \(\QQ\)。
+更进一步，\(P_G\) 在五阶截断下具有完全显式展开
+\[
+P_G(\theta)
+=\frac49\,\theta+\frac{59}{243}\,\theta^2-\frac{587}{6561}\,\theta^3-\frac{4445}{236196}\,\theta^4+\frac{1729457}{19131876}\,\theta^5+O(\theta^6),
+\]
+从而
+\[
+\kappa_1=\frac49,\qquad
+\kappa_2=\frac{118}{243},\qquad
+\kappa_3=-\frac{1174}{2187},\qquad
+\kappa_4=-\frac{8890}{19683},\qquad
+\kappa_5=\frac{17294570}{1594323}.
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:fold-gauge-anomaly-pressure}，\(\mu(u)\) 在 \(u=1\) 的邻域满足整系数四次方程 \(F(\mu,u)=0\)，且 \(\mu(1)=2\) 为其最大实根。
+并且在 \((\mu,u)=(2,1)\) 处有 \(\partial_\mu F(2,1)\neq 0\)；
+故由隐函数定理存在唯一解析分支 \(u\mapsto \mu(u)\)。
+于是 \(P_G(\theta)=\log(\mu(e^\theta)/2)\) 在 \(\theta=0\) 邻域解析。
+\par
+由于 \(F\) 的系数在 \(\ZZ\) 中，且初值 \(\mu(1)=2\in\QQ\)，对恒等式
+\(
+F(\mu(e^\theta),e^\theta)\equiv 0
+\)
+逐阶比较幂级数系数可递归解出 \(\mu(e^\theta)\) 的各阶 Taylor 系数；
+这些系数由有限次四则运算作用于整数与已知低阶系数得到，因而均为有理数。
+对 \(\log(\cdot)\) 的复合不引入新的超越分母因子，故 \(P_G\) 的 Taylor 系数同样全为有理数。
+将该递推计算至五阶即得所示显式展开与 \(\kappa_1,\dots,\kappa_5\)。
+可复现核验脚本：\texttt{scripts/exp\_fold\_gauge\_anomaly\_pressure\_cumulants5.py}。证毕。
+\end{proof}
+\input{sections/generated/eq_fold_gauge_anomaly_branch_points}
+\input{thm__fold-gauge-anomaly-singularity-lattice-nonholonomic}
+\input{sections/generated/eq_fold_gauge_anomaly_jordan_correlations}
+\input{prop__fold-gauge-anomaly-covariance-distribution-hankel}
+\input{sections/generated/eq_fold_gauge_anomaly_spectral_fingerprint}
+\input{sections/generated/tab_fold_gauge_anomaly_rate_curve_resultant_degree}
+\input{sections/generated/eq_fold_gauge_anomaly_rate_curve_resultant_structure}
+\input{thm__fold-gauge-anomaly-rate-curve-discriminant-q19}
+\input{sections/generated/eq_fold_gauge_anomaly_ldp_rate}
+
+\input{subsubsec__fold-gauge-anomaly-bernoulli-p-baseline}
+\input{subsubsec__fold-gauge-anomaly-bernoulli-p-kink-geometry}
+\input{subsubsec__fold-gauge-anomaly-mismatch-language-word-complexity}
+\input{subsubsec__fold-gauge-anomaly-bernoulli-p-thresholds}
+\input{subsubsec__fold-gauge-anomaly-bernoulli-p-closed-form-parry-chain}
+\input{subsubsec__fold-gauge-anomaly-bernoulli-p-recursive-jordan-discriminant}
+
+\input{subsubsec__fold-gauge-anomaly-spectral-curve-arithmetic}
+\input{subsubsec__fold-gauge-anomaly-spectral-recurrence-certificates}
+\input{subsubsec__fold-gauge-anomaly-uniform-baseline-finite-length-moment-closures}
+
+\begin{theorem}[多步降阶的规范差密度不变性]\label{thm:fold-gauge-anomaly-kstep-invariance}
+固定整数 \(k\ge 1\)。
+对任意 \(\omega\in\Omega_{m+k}=\{0,1\}^{m+k}\)，定义多步直接截断与折叠感知 restriction
+\[
+r_{m+k\to m}(\omega):=\omega_{1}\cdots\omega_{m},
+\qquad
+\widetilde r_{m+k\to m}(\omega):=\pi_{m+k\to m}\bigl(\Fold_{m+k}(\omega)\bigr)\in X_m,
+\]
+并定义 \(k\)-步规范差
+\[
+G_m^{(k)}(\omega):=\bigl|\,r_{m+k\to m}(\omega)\ \oplus\ \widetilde r_{m+k\to m}(\omega)\,\bigr|_0,
+\]
+其中 \(\oplus\) 为逐位异或、\(|\cdot|_0\) 为汉明重量。
+在均匀基线 \(\omega\sim\mathrm{Unif}(\Omega_{m+k})\) 下，有
+\[
+\boxed{\ \lim_{m\to\infty}\frac{1}{m}\,\mathbb E\!\left[G_m^{(k)}\right]=\frac49\ },
+\qquad
+\boxed{\ \frac{G_m^{(k)}-\frac49 m}{\sqrt m}\Rightarrow \mathcal N\!\left(0,\frac{118}{243}\right)\ }.
+\]
+并且对任意 \(\theta\in\RR\)，其每步对数矩母函数极限与 \(k=1\) 情形相同：存在与 \(k\) 无关的压力函数 \(P_G(\theta)\) 使得
+\[
+\lim_{m\to\infty}\frac{1}{m}\log\mathbb E\exp\!\bigl(\theta\,G_m^{(k)}\bigr)=P_G(\theta)=\log\rho(A_\theta)
+\]
+其中 \(A_\theta\) 为命题 \ref{prop:fold-gauge-anomaly-pressure} 的同一 \(4\times 4\) 加权邻接矩阵。
+因此由命题 \ref{prop:fold-gauge-anomaly-ldp}，\(G_m^{(k)}/m\) 的大偏差率函数端点闭式 \(I(0)=\log(2/\varphi), I(1)=\log 2\) 亦不随 \(k\) 改变。
+\end{theorem}
+
+\begin{proof}[证明要点（结构性）]
+折叠 \(\Fold_\infty\) 具有有限状态的在线实现：在 IID Bernoulli\((1/2)\) 输入下，输出与逐位失配指示可被表示为一个原始有限状态 Markov 链上的可加观测量（定理 \ref{thm:fold-gauge-anomaly-clt} 与命题 \ref{prop:fold-gauge-anomaly-pressure} 的证明要点）。
+对固定 \(k\)，有限词 \(\omega\in\Omega_{m+k}\) 仅改变该双向同步实现的右边界条件；由于链的原始性，右边界条件对内点统计的影响沿距离指数衰减，故其对总和 \(G_m^{(k)}\) 的期望、方差与指数矩仅造成 \(O(1)\) 的边界修正。
+将该边界修正除以 \(m\)（或以 \(\sqrt m\) 归一化）即消失，从而密度极限、CLT 常数以及压力函数 \(P_G\)（因此 LDP 率函数）均与 \(k=1\) 情形一致。证毕。
+\end{proof}
+
+\begin{remark}[数值审计：固定超前位数下的常数密度与方差率]\label{rem:fold-gauge-anomaly-kstep-mc}
+为补充上述“边界影响指数衰减”的结构论证，表 \ref{tab:fold_gauge_anomaly_kstep_mc} 对若干固定 \(k\) 与较大 \(m\) 给出 Monte Carlo 审计，显示 \(\mathbb E[G_m^{(k)}]/m\) 与 \(\mathrm{Var}(G_m^{(k)})/m\) 均稳定对齐于 \(\frac49\) 与 \(\frac{118}{243}\)。
+\end{remark}
+
+\input{sections/generated/tab_fold_gauge_anomaly_kstep_mc}

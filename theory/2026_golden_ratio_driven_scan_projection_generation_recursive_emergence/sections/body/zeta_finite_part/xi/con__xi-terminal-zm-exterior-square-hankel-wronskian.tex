@@ -1,0 +1,293 @@
+\paragraph{外二次谱与局部可识别性：二阶 Hankel--Wronskian、判别式平方与六窗消参证书}
+沿用结论 \ref{con:xi-terminal-zm-order4-rational} 的双变量配分函数 \(Z_m(y)\) 及其最小湮灭多项式
+\(\Pi(\lambda,y)=\lambda^4-\lambda^3-(2y+1)\lambda^2+\lambda+y(y+1)\)。
+并沿用结论 \ref{con:xi-terminal-zm-discriminant-leyang} 的 Lee--Yang 三次因子
+\[
+P_{\mathrm{LY}}(y):=256y^3+411y^2+165y+32.
+\]
+\par
+本段将二阶 Hankel 行列式视为外二次表示的 Pl\"ucker 坐标，并据此给出其闭递推、外二次判别式的完全平方分解、黄金比共振点处的降阶回文递推，以及仅用六窗局部数据恢复参数与消去参数的代数证书。
+\par
+
+\begin{conclusion}[外二次谱控制的二阶 Hankel--Wronskian 六阶闭递推]\label{con:xi-terminal-zm-exterior-square-hankel-wronskian-order6}
+定义二阶 Hankel--Wronskian
+\[
+\Delta^{(2)}_m(y):=Z_m(y)Z_{m+3}(y)-Z_{m+1}(y)Z_{m+2}(y)\qquad(m\ge 0),
+\]
+并在固定 \(y\) 下简记 \(\Delta^{(2)}_m:=\Delta^{(2)}_m(y)\)。
+则序列 \(\bigl(\Delta^{(2)}_m\bigr)_{m\ge 0}\) 满足一条六阶齐次线性递推：
+\[
+\boxed{\;
+\begin{aligned}
+&\Delta^{(2)}_{m+6}+(2y+1)\Delta^{(2)}_{m+5}-(y^2+y+1)\Delta^{(2)}_{m+4}-(4y^3+7y^2+3y+1)\Delta^{(2)}_{m+3}\\
+&\qquad-(y^4+2y^3+2y^2+y)\Delta^{(2)}_{m+2}+(2y^5+5y^4+4y^3+y^2)\Delta^{(2)}_{m+1}+y^3(y+1)^3\Delta^{(2)}_{m}=0.
+\end{aligned}\;}
+\]
+等价地，其特征多项式可取为
+\[
+\chi^{(2)}(\mu;y)
+=\mu^6+(2y+1)\mu^5-(y^2+y+1)\mu^4-(4y^3+7y^2+3y+1)\mu^3-(y^4+2y^3+2y^2+y)\mu^2
+\]
+\[
+\qquad\qquad\qquad\qquad\qquad\quad
++(2y^5+5y^4+4y^3+y^2)\mu+y^3(y+1)^3.
+\]
+若 \(\lambda_1,\dots,\lambda_4\) 为 \(\Pi(\lambda,y)=0\) 的根（在代数闭包中），则 \(\chi^{(2)}(\mu;y)\) 的根集合可表述为
+\[
+\{\lambda_i\lambda_j:\ 1\le i<j\le 4\}.
+\]
+\end{conclusion}
+\begin{proof}[证明要点]
+在代数闭包中，若 \(\Pi(\lambda,y)\) 的四根互异，则存在系数 \(c_1,\dots,c_4\) 使
+\(
+Z_m(y)=\sum_{i=1}^4 c_i\lambda_i^m
+\)。
+将该表达代入
+\(
+\Delta^{(2)}_m
+=\det\!\bigl(\begin{smallmatrix}Z_m&Z_{m+1}\\ Z_{m+2}&Z_{m+3}\end{smallmatrix}\bigr)
+\)
+并展开行列式，可得
+\(
+\Delta^{(2)}_m=\sum_{1\le i<j\le 4}c_{ij}(\lambda_i\lambda_j)^m
+\)
+（反对称性消去 \(i=j\) 项）。
+因此 \(\Delta^{(2)}_m\) 的指数模态由六个乘积 \(\lambda_i\lambda_j\) 控制，递推的特征多项式为
+\(
+\prod_{i<j}(\mu-\lambda_i\lambda_j)
+\)，即为 \(\chi^{(2)}(\mu;y)\)。
+将该乘积在 \(\QQ(y)\) 中展开得到所示显式系数。
+由于两边系数均为 \(\ZZ[y]\) 中多项式，上述恒等式由稠密参数集推出对全体 \(y\) 成立。
+显式展开与核验可由脚本 \texttt{scripts/exp\_fold\_zm\_bivariate\_partition\_audit.py} 复核。证毕。
+\end{proof}
+
+\begin{conclusion}[外二次判别式的完全平方分解与二阶共振临界集]\label{con:xi-terminal-zm-exterior-square-discriminant-square}
+将 \(\chi^{(2)}(\mu;y)\) 视为关于 \(\mu\) 的六次多项式，则其判别式在 \(\QQ(y)\) 中具有完全平方分解：
+\[
+\boxed{\;
+\mathrm{Disc}_{\mu}\bigl(\chi^{(2)}(\mu;y)\bigr)
+=y^8(y-1)^2(y+1)^6(y^2+y-1)^2P_{\mathrm{LY}}(y)^2
+=\Bigl(y^4(y-1)(y+1)^3(y^2+y-1)P_{\mathrm{LY}}(y)\Bigr)^2.
+\;}
+\]
+从而其判别式支撑（等价地，单生成阶 \(A[\mu]\) 的有限判别式支撑，\(A:=\QQ[y]\)）包含于
+\[
+\boxed{\;y\in\{0,1,-1\}\ \cup\ \{y^2+y-1=0\}\ \cup\ \{P_{\mathrm{LY}}(y)=0\}.}
+\]
+并且由于判别式为平方，\(\mathrm{Gal}\bigl(\chi^{(2)}/\QQ(y)\bigr)\subseteq A_6\)。
+\par
+其中 \(y=-1\) 与 \(y^2+y-1=0\) 的出现属于单生成模型 \(A[\mu]\subset B\)（\(B\) 为 \(A\) 在 \(L=\QQ(y)(\mu)\) 中的整闭包）的指数理想缺陷；其并不对应扩张 \(L/\QQ(y)\) 的真实有限分歧。
+真实有限分歧支撑精确等于 \(y=0\)、\(y=1\) 与 \(P_{\mathrm{LY}}(y)=0\)（见定理 \ref{thm:xi-terminal-zm-exterior-square-finite-ramification-index-ideal}）。
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-terminal-zm-exterior-square-hankel-wronskian-order6} 的显式表达，对 \(\chi^{(2)}(\mu;y)\) 作 \(\mu\)-判别式并在 \(\QQ[y]\) 中因式分解即可得到所示完全平方分解。
+判别式在基域中为平方当且仅当伽罗瓦群包含于交错群，应用于次数 \(6\) 即得结论。
+上述恒等式可由脚本 \texttt{scripts/exp\_fold\_zm\_bivariate\_partition\_audit.py} 复核。证毕。
+\end{proof}
+
+\begin{theorem}[外二次六次原始元的有限分歧精确定位与指数理想闭式公式]\label{thm:xi-terminal-zm-exterior-square-finite-ramification-index-ideal}
+设 \(K=\QQ(y)\)，\(A=\QQ[y]\)，并令 \(\chi^{(2)}(\mu;y)\in A[\mu]\) 如结论 \ref{con:xi-terminal-zm-exterior-square-hankel-wronskian-order6}。
+取 \(\mu\) 为其任一根并置 \(L:=K(\mu)\)。
+记 \(B\) 为 \(A\) 在 \(L\) 中的整闭包。
+则成立如下三点：
+\begin{enumerate}
+  \item \(\chi^{(2)}\) 的伽罗瓦闭包与谱四次 \(\Pi(\lambda,y)\) 的分裂域一致；
+  且 \(\mathrm{Gal}(L/K)\cong S_4\) 并通过四元集合之 \(2\)-子集置换表示嵌入 \(A_6\)
+  （见结论 \ref{con:xi-terminal-zm-exterior-square-galois-s4}）。
+  \item \(B/A\) 的真实有限分歧支撑精确等于
+  \[
+  \{y=0\}\ \cup\ \{y=1\}\ \cup\ \{P_{\mathrm{LY}}(y)=0\},
+  \]
+  并且其有限判别式理想为主理想
+  \[
+  \mathfrak D_{B/A,\mathrm{fin}}=\bigl(y(y-1)P_{\mathrm{LY}}(y)\bigr)^2.
+  \]
+  \item 单生成阶 \(A[\mu]\subset B\) 的指数理想满足闭式恒等式
+  \[
+  [B:A]_{\mathrm{fin}}=\bigl(y^3(y+1)^3(y^2+y-1)\bigr),
+  \]
+  从而在有限素处有判别式指数公式
+  \[
+  \Disc_A(A[\mu])_{\mathrm{fin}}
+  =\mathfrak D_{B/A,\mathrm{fin}}\cdot [B:A]_{\mathrm{fin}}^{2}.
+  \]
+  特别地，\(\mathrm{Disc}_{\mu}\bigl(\chi^{(2)}(\mu;y)\bigr)\) 中出现的 \(y+1\) 与 \(y^2+y-1\) 因子在有限处完全由指数缺陷贡献，而非真实分歧。
+\end{enumerate}
+上述结论的分歧--指数分解结构可参照内部审计记录 \cite{Internal2026ExteriorSquareFiniteRamificationIndexIdealAudit}。
+\end{theorem}
+\begin{proof}[证明要点]
+第 \(1\) 点已由结论 \ref{con:xi-terminal-zm-exterior-square-galois-s4} 给出。
+\par
+对第 \(2\) 点，谱四次覆盖的 \(S_4\)-伽罗瓦闭包在 \(y\)-直线上的有限分歧值由 \(y=0,1\) 与 \(P_{\mathrm{LY}}(y)=0\) 给出（见结论 \ref{con:xi-terminal-zm-leyang-ramification-critical-values}），且相应惰性生成元可取为换位。
+外二次扩张 \(L/K\) 对应 \(S_4\) 在 \(2\)-子集上的次数 \(6\) 置换表示；在该表示下换位诱导为循环型 \(2^2\cdot 1^2\)，故每个有限分歧值对不同的总贡献为 \(2\)，从而
+\(
+\mathfrak D_{B/A,\mathrm{fin}}=\bigl(y(y-1)P_{\mathrm{LY}}(y)\bigr)^2
+\)。
+\par
+对第 \(3\) 点，\(\chi^{(2)}(\mu;y)\) 关于 \(\mu\) 首一且可分，故
+\(
+\Disc_A(A[\mu])=\mathrm{Disc}_{\mu}\bigl(\chi^{(2)}(\mu;y)\bigr)\in A
+\)，并由 Dedekind 域上的经典指数公式
+\(
+\Disc_A(A[\mu])=\Disc_A(B)\,[B:A]^2
+\)
+比较有限素处指数即得
+\(
+[B:A]_{\mathrm{fin}}=(y^3(y+1)^3(y^2+y-1))
+\)。
+由此亦可见 \(y=-1\) 与 \(y^2+y-1=0\) 处仅为单生成阶的非极大性，而非 \(L/K\) 的真实有限分歧。证毕。
+\end{proof}
+
+\begin{theorem}[外二次谱曲线的正规化亏格]\label{thm:xi-terminal-zm-exterior-square-curve-genus2}
+令 \(C^{\wedge 2}\) 为仿射曲线 \(\chi^{(2)}(\mu;y)=0\) 的正规化之光滑射影模型，并视为到 \(\PP^1_y\) 的次数 \(6\) 覆叠。
+则
+\[
+g(C^{\wedge 2})=2.
+\]
+\end{theorem}
+\begin{proof}[证明要点]
+由定理 \ref{thm:xi-terminal-zm-exterior-square-finite-ramification-index-ideal}，有限分歧值为五点 \(y=0,1\) 与 \(P_{\mathrm{LY}}(y)=0\) 的三根，且各点惰性诱导为循环型 \(2^2\cdot 1^2\)，故每点分歧贡献为 \(2\)。
+另一方面，无穷远处由谱四次的四循环惰性诱导（见结论 \ref{con:xi-terminal-zm-s4-splitting-curve-genus16}），其在 \(2\)-子集表示下循环型为 \(4\cdot 2\)，故无穷远分歧贡献为 \(4\)。
+对次数 \(6\) 的覆盖应用 Riemann--Hurwitz 公式得
+\[
+2g(C^{\wedge 2})-2=-12+\bigl(4+5\cdot 2\bigr)=2,
+\]
+从而 \(g(C^{\wedge 2})=2\)。证毕。
+\end{proof}
+
+\begin{corollary}[外二次属二曲线 Jacobian 的椭圆分裂]\label{cor:xi-terminal-zm-exterior-square-jacobian-splitting}
+在泛型参数下，\(C^{\wedge 2}\) 的 Jacobian 在 \(\QQ(y)\) 上同源分解为两条椭圆曲线之积。
+更精确地，若 \(\widetilde{X}\to\PP^1_y\) 为谱四次的 \(S_4\)-伽罗瓦闭包，且取配对稳定子 \(V_4^{\mathrm{pair}}=\langle(12),(34)\rangle\le S_4\)，则 \(C^{\wedge 2}\) 与 \(\widetilde{X}/V_4^{\mathrm{pair}}\) 双有理等价，且
+\[
+J(C^{\wedge 2})\ \sim\ E_{\mathrm{res}}\times E,
+\]
+其中 \(E=\widetilde{X}/S_3\) 与 \(E_{\mathrm{res}}=\widetilde{X}/D_8\) 为两条椭圆曲线（见结论 \ref{con:xi-terminal-zm-s4-jacobian-group-algebra-prym-e3-b3}）。
+\end{corollary}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-terminal-zm-exterior-square-galois-s4}，扩张 \(L/K\) 的单值化由 \(S_4\) 在 \(2\)-子集上的置换表示给出；
+因此其对应的次数 \(6\) 中间域可识别为分裂域曲线 \(\widetilde{X}\) 对 \(2\)-子集稳定子的商，即 \(\widetilde{X}/V_4^{\mathrm{pair}}\)（参见结论 \ref{con:xi-terminal-zm-s4-v4pair-explicit-model} 中对该商的显式模型）。
+于是 \(C^{\wedge 2}\) 与 \(\widetilde{X}/V_4^{\mathrm{pair}}\) 具有同一函数域，从而双有理等价。
+最后，结论 \ref{con:xi-terminal-zm-s4-jacobian-group-algebra-prym-e3-b3} 给出 \(J(\widetilde{X}/V_4^{\mathrm{pair}})\sim E_{\mathrm{res}}\times E\)，遂得到所述分解。证毕。
+\end{proof}
+
+\begin{conclusion}[黄金比参数处的 \texorpdfstring{$(-1)$}{-1}-倒易对称与外二次谱塌缩]\label{con:xi-terminal-zm-minus-one-reciprocity-exterior-square}
+对所有 \(y\) 恒成立恒等式
+\[
+\Pi(\lambda,y)-\lambda^{4}\Pi(-1/\lambda,y)=-(\lambda^{4}-1)(y^{2}+y-1).
+\]
+因此当 \(y^{2}+y-1=0\) 时，谱四次满足 \((-1)\)-倒易性
+\[
+\Pi(\lambda,y)=\lambda^{4}\Pi(-1/\lambda,y),
+\]
+并诱导根集合上的对合 \(\lambda\mapsto -1/\lambda\)。
+从而外二次多项式满足
+\[
+(\mu+1)^{2}\ \bigm|\ \chi^{(2)}(\mu;y).
+\]
+\end{conclusion}
+\begin{proof}[证明要点]
+差值恒等式由对 \(\Pi(\lambda,y)\) 直接代入并化简得到。
+当 \(y^{2}+y-1=0\) 时，\(\lambda\mapsto -1/\lambda\) 保持方程 \(\Pi(\lambda,y)=0\) 不变，故根集在该对合下成对出现；从而存在至少两组 \(i<j\) 使 \(\lambda_i\lambda_j=-1\)，于是 \(\chi^{(2)}\) 在 \(\mu=-1\) 处至少二重零点，即 \((\mu+1)^2\mid \chi^{(2)}(\mu;y)\)。证毕。
+\end{proof}
+
+\begin{conclusion}[\texorpdfstring{$\mu=-1$}{mu=-1} 的黄金比共振判别与二重根结构]\label{con:xi-terminal-zm-exterior-square-mu-minus-one-resonance}
+对所有 \(y\) 有显式恒等式
+\[
+\boxed{\;\chi^{(2)}(-1;y)=y(y-1)(y^2+y-1)^2.\;}
+\]
+因此 \(\mu=-1\) 为 \(\chi^{(2)}(\mu;y)\) 的根当且仅当
+\(
+y\in\{0,1\}
+\)
+或
+\(
+y^2+y-1=0
+\)。
+并且在 \(y^2+y-1=0\) 且 \(y\notin\{0,1\}\) 时，\(\mu=-1\) 为 \(\chi^{(2)}(\mu;y)\) 的二重根。
+\end{conclusion}
+\begin{proof}[证明要点]
+直接代入 \(\mu=-1\) 并在 \(\ZZ[y]\) 中因式分解得到恒等式。
+再对 \(\partial_\mu\chi^{(2)}(\mu;y)\) 代入 \(\mu=-1\) 可见其亦被 \(y^2+y-1\) 整除，从而在 \(y^2+y-1=0\) 时至少二重；
+结合结论 \ref{con:xi-terminal-zm-exterior-square-discriminant-square} 的判别式分解可知该处重根阶数恰为 \(2\)。证毕。
+\end{proof}
+
+\begin{conclusion}[黄金比参数处 \texorpdfstring{$\Delta^{(2)}_m$}{Delta(2)} 的最小递推降阶与回文五阶关系]\label{con:xi-terminal-zm-exterior-square-hankel-wronskian-order5-golden}
+若 \(y\) 满足 \(y^2+y-1=0\)，则 \(\chi^{(2)}(\mu;y)\) 含因子 \((\mu+1)^2\)，并且 \(\bigl(\Delta^{(2)}_m(y)\bigr)_{m\ge 0}\) 的最小湮灭多项式为 \(\chi^{(2)}(\mu;y)\) 的平方自由部分；因而递推阶数由 \(6\) 降至 \(5\)。
+在该约束下可取如下回文五阶递推：
+\[
+\boxed{\;
+\Delta^{(2)}_{m+5}+2y\,\Delta^{(2)}_{m+4}-2(y+1)\Delta^{(2)}_{m+3}-2(y+1)\Delta^{(2)}_{m+2}+2y\,\Delta^{(2)}_{m+1}+\Delta^{(2)}_{m}=0.
+\;}
+\]
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-terminal-zm-exterior-square-mu-minus-one-resonance} 得在 \(y^2+y-1=0\) 时 \(\mu=-1\) 为二重根，故 \((\mu+1)^2\mid \chi^{(2)}(\mu;y)\)。
+另一方面，结论 \ref{con:xi-terminal-zm-discriminant-leyang} 给出 \(\mathrm{Disc}_{\lambda}(\Pi)=-y(y-1)P_{\mathrm{LY}}(y)\)，而 \(y^2+y-1\) 与 \(y(y-1)P_{\mathrm{LY}}(y)\) 在 \(\QQ[y]\) 中互素，故在 \(y^2+y-1=0\) 下 \(\Pi(\lambda,y)\) 具有四个互异根；
+因此其伴随矩阵在代数闭包中可对角化，而外二次表示在同一特征向量楔积基下亦对角化，故最小多项式为特征多项式的平方自由部分。
+将 \(y^2+y-1=0\) 代入 \(\chi^{(2)}(\mu;y)\) 并约去一个 \((\mu+1)\) 因子，化简得到所示回文五阶递推。证毕。
+\end{proof}
+
+\begin{conclusion}[任意六窗局部数据的有理可识别性]\label{con:xi-terminal-zm-six-window-rational-identifiability}
+令 \(m\ge 0\)，并设
+\[
+U_m:=Z_{m+4}-Z_{m+3}+Z_{m+1},\qquad
+V_m:=Z_{m+5}-Z_{m+4}+Z_{m+2}.
+\]
+若 \(\Delta^{(2)}_m\neq 0\)，则参数 \(y\) 可由任意六个连续观测值 \(\{Z_m,\dots,Z_{m+5}\}\) 以有理式唯一恢复：
+\[
+\boxed{\;
+y=\frac12\left(\frac{Z_mV_m-Z_{m+1}U_m}{\Delta^{(2)}_m}-1\right).
+\;}
+\]
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-terminal-zm-order4-rational} 的四阶递推在指标 \(m+4\)、\(m+5\) 处可写为二元线性方程组：
+\[
+U_m=(2y+1)Z_{m+2}-y(y+1)Z_m,\qquad
+V_m=(2y+1)Z_{m+3}-y(y+1)Z_{m+1}.
+\]
+对未知量 \(A:=2y+1\)、\(B:=y(y+1)\) 用 Cramer 法则求解，系数行列式恰为
+\(\Delta^{(2)}_m=Z_mZ_{m+3}-Z_{m+1}Z_{m+2}\)。
+由此得到
+\(
+A=(Z_mV_m-Z_{m+1}U_m)/\Delta^{(2)}_m
+\)，进而 \(y=(A-1)/2\)。证毕。
+\end{proof}
+
+\begin{conclusion}[消去参数的六窗四次 Pl\"ucker 型恒等式]\label{con:xi-terminal-zm-six-window-parameter-free-quartic}
+在结论 \ref{con:xi-terminal-zm-six-window-rational-identifiability} 的记号下，不显式引入参数 \(y\)，六窗数据 \(\{Z_m,\dots,Z_{m+5}\}\) 必满足如下参数自由四次恒等式：
+\[
+\boxed{\;
+\bigl(Z_mV_m-Z_{m+1}U_m\bigr)^2-\bigl(\Delta^{(2)}_m\bigr)^2-4\,\Delta^{(2)}_m\bigl(Z_{m+2}V_m-Z_{m+3}U_m\bigr)=0.
+\;}
+\]
+\end{conclusion}
+\begin{proof}[证明要点]
+由上一结论同理可得
+\[
+A=\frac{Z_mV_m-Z_{m+1}U_m}{\Delta^{(2)}_m},
+\qquad
+B=\frac{Z_{m+2}V_m-Z_{m+3}U_m}{\Delta^{(2)}_m}.
+\]
+而 \((A,B)\) 来自同一参数 \(y\)，故恒满足代数约束 \(4B=A^2-1\)（由 \(A=2y+1\)、\(B=y(y+1)\) 直接计算）。
+将 \(A,B\) 的有理表达代入并清分母，即得所示四次恒等式。证毕。
+\end{proof}
+
+\begin{conclusion}[外二次六次多项式的伽罗瓦群刻画与信息完备性]\label{con:xi-terminal-zm-exterior-square-galois-s4}
+令 \(\chi^{(2)}(\mu;y)\) 如结论 \ref{con:xi-terminal-zm-exterior-square-hankel-wronskian-order6}。
+则当 \(y\) 不落入结论 \ref{con:xi-terminal-zm-exterior-square-discriminant-square} 的分歧集合时，成立：
+\begin{enumerate}
+  \item \(\chi^{(2)}(\mu;y)\) 的分裂域与 \(\Pi(\lambda,y)\) 的分裂域相同；
+  \item \(\mathrm{Gal}\bigl(\chi^{(2)}/\QQ(y)\bigr)\cong S_4\)，并以 \(S_4\) 作用于四元集合之 \(2\)-子集的标准方式忠实嵌入 \(A_6\subset S_6\)。
+\end{enumerate}
+特别地，结论 \ref{con:xi-terminal-zm-exterior-square-discriminant-square} 中判别式为平方与该嵌入的全偶置换性一致。
+\end{conclusion}
+\begin{proof}[证明要点]
+设 \(\lambda_1,\dots,\lambda_4\) 为 \(\Pi(\lambda,y)\) 的根，则由外二次构造，\(\chi^{(2)}\) 的根为 \(\lambda_i\lambda_j\)（\(i<j\)），故其分裂域包含于 \(\Pi\) 的分裂域。
+反之，若某自同构固定全部 \(\lambda_i\lambda_j\)，则其在 \(2\)-子集集合 \(\binom{\{1,2,3,4\}}{2}\) 上的诱导作用为恒等；
+该作用为忠实，故该自同构必为恒等，从而两分裂域相同。
+另一方面，由定理 \ref{thm:xi-terminal-zm-leyang-elliptic-structure} 知 \(\mathrm{Gal}(\Pi/\QQ(y))\cong S_4\)，于是 \(\mathrm{Gal}(\chi^{(2)}/\QQ(y))\cong S_4\)。
+再由结论 \ref{con:xi-terminal-zm-exterior-square-discriminant-square} 的判别式平方分解可知该像包含于 \(A_6\)。
+该嵌入的全偶性亦可由生成元循环型直接检验，例如换位 \((12)\) 在 \(2\)-子集上诱导为 \((1^2\,2^2)\)，而 \(4\)-循环 \((1234)\) 诱导为 \((4\cdot 2)\)，二者均为偶置换。证毕。
+\end{proof}
+

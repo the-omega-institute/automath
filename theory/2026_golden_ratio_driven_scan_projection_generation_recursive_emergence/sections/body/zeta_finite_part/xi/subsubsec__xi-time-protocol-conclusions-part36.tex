@@ -1,0 +1,586 @@
+\paragraph{Fold 纤维复杂度、Fibonacci--Lee--Yang 边界与算术共振接口}
+在既有 Fold--certificate 语义与 Lee--Yang 单位圆框架下，可把纤维多重度、算法复杂度、零点输运和算术分裂行为统一写入同一审计账本：纤维层给出微态复杂度增益，Fibonacci 乘积给出自然边界与等分布极限，Joukowsky 输运把单位圆零点闭包到椭圆层，而同余读出侧的相干模数与 Frobenius 类数据给出可有限验证的算术接口。
+
+\begin{theorem}[Fold 的算法全息账本]\label{thm:xi-fold-algorithmic-holographic-ledger}
+设 \(m\ge 1\)，\(\Omega_m:=\{0,1\}^m\)，稳定类型空间为 \(X_m\)，并令
+\(
+\Fold_m:\Omega_m\to X_m
+\)
+为规范折叠映射。
+对 \(x\in X_m\) 定义纤维多重度
+\[
+d_m(x):=\bigl|\Fold_m^{-1}(x)\bigr|,
+\qquad
+w_m(x):=\frac{d_m(x)}{2^m}.
+\]
+记 \(K(\cdot\mid m)\) 为给定 \(m\) 的前缀型 Kolmogorov 复杂度。
+若 \(\omega\sim\mathrm{Unif}(\Omega_m)\)，并置 \(x:=\Fold_m(\omega)\)，则存在与 \(m,c\) 无关的绝对常数 \(C>0\)，使任意 \(c\in\mathbb N,\ c\ge 1\) 满足
+\[
+\mathbb P\!\left(
+K(\omega\mid m)\ge K(x\mid m)+\lfloor\log_2 d_m(x)\rfloor-C(\log m+c)
+\right)\ge 1-2^{-c},
+\]
+并且对所有 \(\omega\in\Omega_m\) 恒有
+\[
+K(\omega\mid m)\le K(x\mid m)+\lceil\log_2 d_m(x)\rceil+C\log m.
+\]
+\end{theorem}
+\begin{proof}
+对每个纤维 \(\Fold_m^{-1}(x)\) 取字典序枚举，定义可计算编码
+\[
+E_m:\Omega_m\to\bigsqcup_{x\in X_m}\{x\}\times\{0,1,\dots,d_m(x)-1\},
+\qquad
+E_m(\omega)=(x,i),
+\]
+其中 \(x=\Fold_m(\omega)\)，\(i\) 为 \(\omega\) 在该纤维中的秩。
+由 \(\Fold_m\) 可计算且纤维有限可枚举，\(E_m\) 及其逆均可计算。
+因此
+\[
+K(\omega\mid m)\le K(x,i\mid m)+O(1)
+\le K(x\mid m)+K(i\mid x,m)+O(\log m).
+\]
+又 \(0\le i<d_m(x)\)，可取自描述编码使
+\[
+K(i\mid x,m)\le \lceil\log_2 d_m(x)\rceil+O(\log m),
+\]
+得到上界。
+
+对下界，固定 \(x\) 后，\(\omega\) 在纤维 \(\Fold_m^{-1}(x)\) 上均匀。
+长度小于 \(\lfloor\log_2 d_m(x)\rfloor-c\) 的前缀描述至多产生
+\(
+2^{\lfloor\log_2 d_m(x)\rfloor-c}\le 2^{-c}d_m(x)
+\)
+个对象，故条件概率至少 \(1-2^{-c}\) 的 \(\omega\) 满足
+\[
+K(\omega\mid x,m)\ge \lfloor\log_2 d_m(x)\rfloor-c.
+\]
+再由链式下界与 \(x\) 可由 \(\omega\) 可计算恢复，
+\[
+K(\omega\mid m)\ge K(x\mid m)+K(\omega\mid x,m)-O(\log m),
+\]
+合并即得概率下界。证毕。
+\end{proof}
+
+\begin{corollary}[稳定类型可极简而微态仍可近随机]\label{cor:xi-fold-simple-type-complex-microstate}
+在定理 \ref{thm:xi-fold-algorithmic-holographic-ledger} 的记号下，
+对任意 \(m\) 与任意 \(x\in X_m\)，存在
+\(
+\omega\in\Fold_m^{-1}(x)
+\)
+使
+\[
+K(\omega\mid m)\ge
+K(x\mid m)+\lfloor\log_2 d_m(x)\rfloor-O(\log m).
+\]
+因此可取一列 \(m\to\infty\) 的对象 \((\omega_m)\)，其稳定类型
+\(
+x_m:=\Fold_m(\omega_m)
+\)
+满足 \(K(x_m\mid m)=O(\log m)\)，而
+\(
+K(\omega_m\mid m)=\Omega(\log d_m(x_m))
+\)。
+当 \(d_m(x_m)\) 指数增长时，微态复杂度可线性增长而稳定类型仍保持低描述复杂度。
+\end{corollary}
+\begin{proof}
+固定 \(x\)。
+若纤维内所有 \(\omega\) 都满足
+\(
+K(\omega\mid m)<K(x\mid m)+\lfloor\log_2 d_m(x)\rfloor-C\log m
+\)，
+则可由不足 \(d_m(x)\) 个程序覆盖整纤维，矛盾。
+故至少存在一个 \(\omega\) 达到所示下界。
+令 \(x_m\) 取为低描述复杂度的规范形并使用该下界，即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[Fibonacci--Lee--Yang 乘积的单位圆自然边界]\label{thm:xi-fibonacci-leyang-natural-boundary}
+令 \(F_1=F_2=1\) 为 Fibonacci 数列，并定义
+\[
+\mathcal Z(z):=\prod_{j=1}^{\infty}\bigl(1+z^{F_{j+1}}\bigr),
+\qquad |z|<1.
+\]
+则无穷乘积在 \(|z|<1\) 绝对收敛并定义解析函数。
+此外，单位圆 \(\{|z|=1\}\) 是 \(\mathcal Z\) 的自然边界：\(\mathcal Z\) 不能在单位圆任一点作解析延拓。
+并且其单位圆零点集合稠密。
+\end{theorem}
+\begin{proof}
+当 \(|z|<1\) 时，\(\sum_{j\ge 1}|z|^{F_{j+1}}<\infty\)，故
+\(
+\sum_j\log(1+z^{F_{j+1}})
+\)
+绝对收敛，乘积解析。
+
+每个因子 \(1+z^{F_{j+1}}\) 的零点为
+\[
+z=\exp\!\left(\frac{(2k+1)\pi i}{F_{j+1}}\right),\qquad
+k=0,\dots,F_{j+1}-1,
+\]
+全部位于单位圆。
+由于 \(F_{j+1}\to\infty\)，这些点在单位圆上稠密。
+
+反设 \(\mathcal Z\) 可在某个 \(\zeta\in\{|z|=1\}\) 的邻域 \(U\) 解析延拓为 \(\widetilde{\mathcal Z}\)。
+由零点稠密性，\(U\) 内存在以 \(\zeta\) 为聚点的无穷零点列，故 \(\widetilde{\mathcal Z}\) 在包含 \(\zeta\) 的连通分支上恒为零。
+特别地，\(\widetilde{\mathcal Z}\equiv 0\) 于 \(U\cap\{|z|<1\}\)。
+由解析延拓唯一性，\(\mathcal Z\equiv 0\) 于单位圆内，和 \(\mathcal Z(0)=1\) 矛盾。
+故单位圆为自然边界。证毕。
+\end{proof}
+
+\begin{theorem}[Fibonacci--Lee--Yang 零点的 Haar 等分布]\label{thm:xi-fibonacci-leyang-haar-equidistribution}
+令
+\[
+P_m(z):=\prod_{j=1}^{m}\bigl(1+z^{F_{j+1}}\bigr),
+\]
+并令 \(\mu_m\) 为其零点（按重数）的归一化计数测度。
+则
+\[
+\mu_m\Rightarrow \mu_{\mathrm{Haar}}
+\qquad (m\to\infty),
+\]
+其中 \(\mu_{\mathrm{Haar}}\) 为单位圆上的 Haar 概率测度。
+\end{theorem}
+\begin{proof}
+记
+\(
+D_m:=\deg P_m=\sum_{j=1}^{m}F_{j+1}=F_{m+3}-2
+\)。
+对 \(n\ge 1\)，设 \(\nu_n\) 为方程 \(z^n=-1\) 的根在单位圆上的均匀计数测度，则
+\[
+\mu_m=\frac{1}{D_m}\sum_{j=1}^{m}F_{j+1}\,\nu_{F_{j+1}}.
+\]
+对整数 \(k\)，其 Fourier 系数
+\[
+\widehat{\nu_n}(k)
+:=\int z^k\,d\nu_n(z)
+=\frac1n\sum_{\ell=0}^{n-1}
+\exp\!\left(\frac{(2\ell+1)\pi i k}{n}\right)
+=
+\begin{cases}
+(-1)^{k/n}, & n\mid k,\\
+0, & n\nmid k.
+\end{cases}
+\]
+故
+\[
+\widehat{\mu_m}(k)
+=\frac{1}{D_m}\sum_{j=1}^{m}F_{j+1}\,\widehat{\nu_{F_{j+1}}}(k).
+\]
+当 \(k\neq 0\) 时，仅有限多个 \(j\) 满足 \(F_{j+1}\mid k\)，其加权和有界，而 \(D_m\to\infty\)，故
+\(
+\widehat{\mu_m}(k)\to 0
+\)。
+并且 \(\widehat{\mu_m}(0)=1\)。
+这与 Haar 测度 Fourier 系数一致，故 \(\mu_m\Rightarrow\mu_{\mathrm{Haar}}\)。证毕。
+\end{proof}
+
+\begin{corollary}[Joukowsky--G\"odel 椭圆输运下的零点等分布]\label{cor:xi-joukowsky-godel-ellipse-transport-equidistribution}
+对任意 \(r>0\)，定义
+\[
+J_r(e^{i\theta})=re^{i\theta}+r^{-1}e^{-i\theta},
+\]
+其像记为椭圆 \(E_r\)，并记
+\(
+\mu_r:=(J_r)_{\#}\mu_{\mathrm{Haar}}
+\)。
+令
+\[
+Q_{m,r}(w):=
+\operatorname{Res}_z\!\bigl(P_m(z),\,rz^2-wz+r^{-1}\bigr),
+\]
+并令 \(\nu_{m,r}\) 为 \(Q_{m,r}\) 的零点归一化计数测度（按重数）。
+则
+\[
+\nu_{m,r}=(J_r)_{\#}\mu_m,
+\qquad
+\nu_{m,r}\Rightarrow \mu_r\quad(m\to\infty).
+\]
+特别地，\(Q_{m,r}\) 的全部零点落在 \(E_r\) 上。
+\end{corollary}
+\begin{proof}
+结式定义保证：\(w\) 是 \(Q_{m,r}\) 的根，当且仅当存在 \(z\) 使
+\(
+P_m(z)=0
+\)
+且
+\(
+rz^2-wz+r^{-1}=0
+\)。
+对 \(|z|=1\) 的零点，后式等价于 \(w=J_r(z)\)，因而零点多重集正是单位圆零点在 \(J_r\) 下的推前，故 \(\nu_{m,r}=(J_r)_{\#}\mu_m\)。
+再由定理 \ref{thm:xi-fibonacci-leyang-haar-equidistribution} 与连续映射定理即得弱收敛。证毕。
+\end{proof}
+
+\input{subsubsec__xi-fold-congruence-diffusion-hankel-attention}
+
+\begin{theorem}[投影词相干模数与有限可证性]\label{thm:xi-coherence-modulus-finite-decidability}
+设 \(w\) 为有限投影词，\(\mathrm{Mod}(w)\) 为其调用的模集合，且
+\[
+m^\ast(w):=\mathrm{lcm}\bigl(\mathrm{Mod}(w)\bigr).
+\]
+记 \(\Phi_w\) 为 \(w\) 在逆极限同余对象上的解释，并定义相干模数
+\[
+\kappa(w):=
+\min\Bigl\{
+n\mid m^\ast(w):
+\Phi_w\ \text{可通过}\ \mathbb Z/n\mathbb Z\ \text{因子化}
+\Bigr\}.
+\]
+在本文既定的投影词语义（串接对应态射复合、模依赖按并集合并）下，成立：
+\begin{enumerate}
+  \item \(\kappa(w)\) 良定义且 \(\kappa(w)\mid m^\ast(w)\)；
+  \item 对任意词 \(u,v\) 与 \(k\ge 1\)，
+  \[
+  \kappa(uv)=\mathrm{lcm}\bigl(\kappa(u),\kappa(v)\bigr),
+  \qquad
+  \kappa(u^k)=\kappa(u);
+  \]
+  \item 令 \(n:=\mathrm{lcm}(\kappa(u),\kappa(v))\)，则
+  \[
+  \Phi_u=\Phi_v\ \text{在逆极限对象上成立}
+  \Longleftrightarrow
+  \Phi_u=\Phi_v\ \text{在}\ \mathbb Z/n\mathbb Z\ \text{上逐点成立}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由有限词稳定性，\(\Phi_w\) 至少可通过 \(m^\ast(w)\) 因子化，故定义集合非空；
+该集合属于 \(m^\ast(w)\) 的因子集，有限且按整除有最小元，故 (1) 成立。
+
+若 \(\Phi_u,\Phi_v\) 分别可通过 \(n_u,n_v\) 因子化，则复合 \(\Phi_{uv}\) 可通过 \(\mathrm{lcm}(n_u,n_v)\) 因子化，得
+\(
+\kappa(uv)\mid\mathrm{lcm}(\kappa(u),\kappa(v))
+\)。
+反向由语义中的模并集闭包：\(uv\) 的可行模必须同时覆盖 \(u,v\) 的最小相干模，故
+\(
+\mathrm{lcm}(\kappa(u),\kappa(v))\mid\kappa(uv)
+\)。
+从而得等式；幂等式同理。
+
+对 (3)，由 (2) 可知 \(\Phi_u,\Phi_v\) 均可通过 \(\mathbb Z/n\mathbb Z\) 因子化。
+设 \(\pi_n\) 为逆极限到 \(\mathbb Z/n\mathbb Z\) 的投影，则
+\(
+\Phi_u=\bar\Phi_u\circ\pi_n,\ \Phi_v=\bar\Phi_v\circ\pi_n
+\)。
+于是逆极限上逐点相等当且仅当 \(\bar\Phi_u=\bar\Phi_v\)，即在 \(\mathbb Z/n\mathbb Z\) 上逐点相等。证毕。
+\end{proof}
+
+\begin{theorem}[非交换审计的线性外置证书尺度]\label{thm:xi-sl2-linear-external-certificate}
+令
+\[
+R=
+\begin{pmatrix}
+1&1\\
+0&1
+\end{pmatrix},
+\qquad
+L=
+\begin{pmatrix}
+1&0\\
+1&1
+\end{pmatrix}
+\in \mathrm{SL}_2(\mathbb Z_{\ge 0}),
+\]
+并对有限正整序列 \(a=(a_1,\dots,a_T)\) 定义
+\[
+M(a):=R^{a_1}L\,R^{a_2}L\cdots R^{a_T}L.
+\]
+若存在 \(A_{\max}\) 使 \(1\le a_t\le A_{\max}\)（\(1\le t\le T\)），
+则存在仅依赖于 \(A_{\max}\) 的常数 \(0<c_1<c_2\) 使
+\[
+2^{c_1T}\le \|M(a)\|_\infty\le 2^{c_2T},
+\]
+其中 \(\|\cdot\|_\infty\) 为矩阵条目最大值。
+从而二进制位长
+\[
+\ell_2\!\bigl(\|M(a)\|_\infty\bigr):=
+\lfloor\log_2\|M(a)\|_\infty\rfloor+1
+\]
+满足 \(\ell_2(\|M(a)\|_\infty)=\Theta(T)\)。
+\end{theorem}
+\begin{proof}
+记 \(B_t:=R^{a_t}L\)。
+由
+\[
+R^a=
+\begin{pmatrix}
+1&a\\
+0&1
+\end{pmatrix},
+\qquad
+R^aL=
+\begin{pmatrix}
+1+a&a\\
+1&1
+\end{pmatrix},
+\]
+得 \(\|B_t\|_\infty\le A_{\max}+1=:M_0\)。
+对任意非负 \(2\times2\) 矩阵 \(U,V\) 有
+\(
+\|UV\|_\infty\le 2\|U\|_\infty\|V\|_\infty
+\)，
+迭代即得
+\[
+\|M(a)\|_\infty\le (2M_0)^T.
+\]
+
+又因 \(a_t\ge 1\)，逐项比较得
+\[
+B_t\succeq RL=
+\begin{pmatrix}
+2&1\\
+1&1
+\end{pmatrix},
+\qquad
+M(a)\succeq (RL)^T.
+\]
+而
+\[
+(RL)^T=
+\begin{pmatrix}
+F_{2T+1}&F_{2T}\\
+F_{2T}&F_{2T-1}
+\end{pmatrix},
+\]
+故
+\[
+\|M(a)\|_\infty\ge F_{2T+1}
+\ge \frac{\varphi^{2T-1}}{\sqrt5}
+\ge 2^{c_1T}
+\]
+（对某个仅依赖常数的 \(c_1>0\)）。
+与上界合并即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[区间谱的 Lee--Yang 提升与 6D 超立方体椭圆闭包]\label{thm:xi-interval-spectrum-leyang-lift-6d-hypercube}
+设 \(P(\lambda)\in\mathbb R[\lambda]\) 的全部零点属于闭区间 \([-2,2]\)，定义
+\[
+\mathcal L[P](z):=z^{\deg P}\,P\!\bigl(z+z^{-1}\bigr).
+\]
+则 \(\mathcal L[P]\) 的全部零点都位于单位圆 \(\{|z|=1\}\)。
+进一步，对任意 \(r>0\)，经 Joukowsky 输运
+\(
+w=J_r(z)=rz+r^{-1}z^{-1}
+\)
+所得结式多项式零点全部落在椭圆 \(E_r\) 上。
+
+特别地，6D 超立方体邻接多项式 \(\chi_{H_6}\) 具有实谱 \(\{6-2k:0\le k\le 6\}\subset[-6,6]\)；
+令 \(P_6(t):=\chi_{H_6}(3t)\)，则 \(P_6\) 的零点位于 \([-2,2]\)，故
+\(
+\mathcal L[P_6]
+\)
+自动满足 Lee--Yang 单位圆零点性质，并在 \(J_r\) 输运下形成椭圆零点族。
+\end{theorem}
+\begin{proof}
+对任意零点 \(\lambda_0\in[-2,2]\)，存在 \(\theta\in\mathbb R\) 使
+\(
+\lambda_0=2\cos\theta=e^{i\theta}+e^{-i\theta}
+\)。
+于是 \(P(\lambda_0)=0\) 当且仅当
+\(
+P(z+z^{-1})=0
+\)
+在 \(z=e^{\pm i\theta}\) 处成立，且 \(|z|=1\)。
+乘子 \(z^{\deg P}\) 仅清除负幂，不改变有限点零点集合，故 \(\mathcal L[P]\) 零点均在单位圆。
+再由结式定义，单位圆零点经 \(w=J_r(z)\) 推前后即得椭圆零点闭包。证毕。
+\end{proof}
+
+\begin{theorem}[Lee--Yang--Fold 特征和的 Pisano 周期分解与衰减指数闭式]\label{thm:xi-leyang-fold-pisano-factorization-decay}
+令 Fibonacci 数列满足 \(F_1=F_2=1\) 与递推 \(F_{n+2}=F_{n+1}+F_n\)。
+取奇素数 \(p\)，并记 \(\zeta_p:=\exp(2\pi i/p)\)。
+对 \(m\ge 1\) 定义特征和
+\begin{equation}\label{eq:xi-leyang-fold-Sm-def}
+S_m(p):=
+2^{-m}\sum_{\omega\in\{0,1\}^m}\zeta_p^{\sum_{j=1}^{m}\omega_jF_{j+1}}
+=
+\prod_{j=1}^{m}\frac{1+\zeta_p^{F_{j+1}}}{2}.
+\end{equation}
+令 \(T:=\pi(p)\) 为 Fibonacci 数列在模 \(p\) 下的 Pisano 周期（见 \eqref{eq:xi-leyang-fold-Sm-def} 的指数序列），则对任意分解 \(m=qT+r\)（\(q\in\NN\)，\(0\le r<T\)）有严格因子化
+\begin{equation}\label{eq:xi-leyang-fold-pisano-block-factorization}
+S_m(p)=\bigl(S_T(p)\bigr)^q\,S_r(p).
+\end{equation}
+并且极限
+\begin{equation}\label{eq:xi-leyang-fold-gamma-def}
+\gamma(p):=-\lim_{m\to\infty}\frac{1}{m}\log|S_m(p)|
+\end{equation}
+存在，且满足闭式
+\begin{equation}\label{eq:xi-leyang-fold-gamma-closed}
+\gamma(p)= -\frac{1}{T}\log\abs{S_T(p)}
+ = -\frac{1}{T}\sum_{j=1}^{T}\log\abs{\cos\!\Bigl(\frac{\pi F_{j+1}}{p}\Bigr)} \;>\;0.
+\end{equation}
+\end{theorem}
+\begin{proof}
+对 \eqref{eq:xi-leyang-fold-Sm-def} 的和式逐坐标分离得
+\[
+S_m(p)=2^{-m}\prod_{j=1}^{m}\Bigl(\sum_{\omega_j\in\{0,1\}}\zeta_p^{\omega_jF_{j+1}}\Bigr)
+=\prod_{j=1}^{m}\frac{1+\zeta_p^{F_{j+1}}}{2}.
+\]
+由于 \(F_{n+T}\equiv F_n\ (\bmod\ p)\)（\(T=\pi(p)\)），因子 \(\frac{1+\zeta_p^{F_{j+1}}}{2}\) 在 \(j\) 上以周期 \(T\) 重复，从而得到分解 \eqref{eq:xi-leyang-fold-pisano-block-factorization}。
+对 \eqref{eq:xi-leyang-fold-pisano-block-factorization} 取绝对值对数并除以 \(m=qT+r\)，注意到 \(r\) 有界而 \(q/m\to 1/T\)，得到极限 \eqref{eq:xi-leyang-fold-gamma-def} 存在且等于 \(-\frac1T\log|S_T(p)|\)。
+\par
+最后，对任意整数 \(k\) 有恒等式
+\[
+\left|\frac{1+\zeta_p^{k}}{2}\right|
+=\left|\cos\!\Bigl(\frac{\pi k}{p}\Bigr)\right|,
+\]
+代入 \(k=F_{j+1}\) 即得 \eqref{eq:xi-leyang-fold-gamma-closed} 的第二个表达式。
+当 \(p\) 为奇素数时，\(\cos(\pi k/p)\neq 0\) 对一切 \(k\in\ZZ\) 成立；并且在积 \(\prod_{j=1}^{T}\frac{1+\zeta_p^{F_{j+1}}}{2}\) 中 \(j=1\) 给出因子 \(\abs{\cos(\pi/p)}<1\)，从而 \(|S_T(p)|\in(0,1)\) 且 \(\gamma(p)>0\)。
+\end{proof}
+
+\begin{proposition}[Pisano 块的 cyclotomic 范数恒等式与共轭平均衰减指数]\label{prop:xi-leyang-fold-cyclotomic-norm-conjugate-mean}
+在定理 \ref{thm:xi-leyang-fold-pisano-factorization-decay} 的设定下，取 \(g\in(\ZZ/p\ZZ)^\times\)，并定义扭曲特征和
+\begin{equation}\label{eq:xi-leyang-fold-Sm-twist}
+S_m(p;g):=
+2^{-m}\sum_{\omega\in\{0,1\}^m}\zeta_p^{g\sum_{j=1}^{m}\omega_jF_{j+1}}
+=\prod_{j=1}^{m}\frac{1+\zeta_p^{gF_{j+1}}}{2}.
+\end{equation}
+令 \(T:=\pi(p)\)，并定义 Pisano 块
+\[
+A_{p,g}:=S_T(p;g)\in \QQ(\zeta_p).
+\]
+设
+\[
+\rho(p):=\min\{n\ge 1:\ p\mid F_n\}
+\]
+为 Fibonacci 数列的出现阶，则 \(\rho(p)\mid T\) 且 \(p\mid F_n\iff \rho(p)\mid n\)（例如见 \cite{Wall1960FibonacciModm}）。
+在此记号下，\(A_{p,1}\) 的范数满足闭式
+\begin{equation}\label{eq:xi-leyang-fold-norm-Ap1}
+\mathrm N_{\QQ(\zeta_p)/\QQ}\!\bigl(A_{p,1}\bigr)
+=\prod_{g=1}^{p-1}A_{p,g}
+=2^{-(p-1)\left(T-\frac{T}{\rho(p)}\right)}\in\QQ_{>0},
+\end{equation}
+从而
+\begin{equation}\label{eq:xi-leyang-fold-absprod-Apg}
+\prod_{g=1}^{p-1}\abs{A_{p,g}}
+=2^{-(p-1)\left(T-\frac{T}{\rho(p)}\right)}.
+\end{equation}
+定义共轭衰减指数
+\[
+\gamma_g(p):=-\frac{1}{T}\log\abs{A_{p,g}},
+\]
+则其共轭平均值满足
+\begin{equation}\label{eq:xi-leyang-fold-mean-gamma}
+\frac{1}{p-1}\sum_{g=1}^{p-1}\gamma_g(p)=\left(1-\frac{1}{\rho(p)}\right)\log 2.
+\end{equation}
+\end{proposition}
+\begin{proof}
+\(\Gal(\QQ(\zeta_p)/\QQ)\cong(\ZZ/p\ZZ)^\times\) 由 \(\sigma_g(\zeta_p)=\zeta_p^g\) 给出；由 \eqref{eq:xi-leyang-fold-Sm-twist} 得 \(\sigma_g(A_{p,1})=A_{p,g}\)，因此
+\[
+\mathrm N(A_{p,1})
+=\prod_{g=1}^{p-1}A_{p,g}
+=\prod_{g=1}^{p-1}\prod_{j=1}^{T}\frac{1+\zeta_p^{gF_{j+1}}}{2}
+=\prod_{j=1}^{T}\prod_{g=1}^{p-1}\frac{1+\zeta_p^{gF_{j+1}}}{2}.
+\]
+对固定 \(j\) 分两类：
+若 \(p\mid F_{j+1}\)，则 \(\zeta_p^{gF_{j+1}}=1\) 且内积等于 \(1\)。
+若 \(p\nmid F_{j+1}\)，则映射 \(g\mapsto gF_{j+1}\) 在 \((\ZZ/p\ZZ)^\times\) 上为置换，从而
+\[
+\prod_{g=1}^{p-1}(1+\zeta_p^{gF_{j+1}})=\prod_{k=1}^{p-1}(1+\zeta_p^k).
+\]
+由 \(\prod_{k=1}^{p-1}(x-\zeta_p^k)=\frac{x^p-1}{x-1}\) 取 \(x=-1\)（\(p\) 奇使 \(p-1\) 为偶）得
+\(\prod_{k=1}^{p-1}(1+\zeta_p^k)=1\)，因此该类 \(j\) 的内积为 \(2^{-(p-1)}\)。
+\par
+由出现阶性质 \(p\mid F_n\iff \rho(p)\mid n\) 且 \(\rho(p)\mid T\) 可知，在 \(j\in\{1,\dots,T\}\) 中满足 \(p\mid F_{j+1}\) 的指标恰有 \(T/\rho(p)\) 个。
+故满足 \(p\nmid F_{j+1}\) 的指标数为 \(T-T/\rho(p)\)，从而得到 \eqref{eq:xi-leyang-fold-norm-Ap1}。
+对绝对值并利用范数与共轭乘积一致性得到 \eqref{eq:xi-leyang-fold-absprod-Apg}，再取对数即得 \eqref{eq:xi-leyang-fold-mean-gamma}。
+\end{proof}
+
+\begin{corollary}[Fibonacci--cyclotomic \(2\)-单位性：Pisano 块乘积仅在 \((2)\) 处有算术支撑]\label{cor:xi-leyang-fold-pisano-block-2unit}
+取奇素数 \(p\)，令 \(T=\pi(p)\) 并以 \(\rho(p)\) 表示出现阶。
+在 \(\ZZ[\zeta_p]\) 中定义
+\[
+U_p:=\prod_{j=1}^{T}\bigl(1+\zeta_p^{F_{j+1}}\bigr)\in\ZZ[\zeta_p].
+\]
+则其绝对范数满足闭式
+\begin{equation}\label{eq:xi-leyang-fold-norm-Up}
+\mathrm N_{\QQ(\zeta_p)/\QQ}(U_p)=2^{(p-1)\,T/\rho(p)}.
+\end{equation}
+特别地，主理想 \((U_p)\subset\ZZ[\zeta_p]\) 的素理想分解中不出现任何位于奇素数 \(\ell\neq 2\) 之上的素理想；
+换言之，\(U_p\) 是一个 \(2\)-单位（其理想支撑仅位于 \((2)\) 上）。
+\end{corollary}
+\begin{proof}
+由定义 \(U_p=2^T A_{p,1}\) 且 \(\mathrm N(2^T)=2^{T(p-1)}\)，再结合命题 \ref{prop:xi-leyang-fold-cyclotomic-norm-conjugate-mean} 的 \eqref{eq:xi-leyang-fold-norm-Ap1} 得到
+\[
+\mathrm N(U_p)=2^{T(p-1)}\cdot 2^{-(p-1)\left(T-\frac{T}{\rho(p)}\right)}
+=2^{(p-1)\,T/\rho(p)}.
+\]
+若某素理想 \(\mathfrak p\subset\ZZ[\zeta_p]\) 位于奇素数 \(\ell\neq 2\) 之上且 \(\mathfrak p\mid (U_p)\)，则理想范数 \(\mathrm N(\mathfrak p)=\ell^f\) 为奇数，从而 \(\ell\mid \mathrm N(U_p)\)，与 \eqref{eq:xi-leyang-fold-norm-Up} 右端为纯 \(2\) 次幂矛盾。
+故 \((U_p)\) 的支撑仅能位于 \((2)\) 上。
+\end{proof}
+
+\begin{corollary}[由原始素因子定理导出的无穷共轭平均衰减平台]\label{cor:xi-leyang-fold-infinite-mean-gamma-platform}
+对每个整数 \(n>12\)，存在素数 \(p\) 使 \(\rho(p)=n\)（例如由 Lucas 序列的原始素因子定理推出，见 \cite{BiluHanrotVoutier2001PrimitiveDivisorsLucas}）。
+从而对每个 \(n>12\) 都存在素数 \(p\) 满足
+\[
+\frac{1}{p-1}\sum_{g=1}^{p-1}\gamma_g(p)=\left(1-\frac{1}{n}\right)\log 2,
+\]
+并且这些值随 \(n\to\infty\) 单调趋于 \(\log 2\)。
+\end{corollary}
+\begin{proof}
+取 \(n>12\)。原始素因子定理给出：\(F_n\) 存在一个原始素因子 \(p\)，即 \(p\mid F_n\) 且对一切 \(1\le k<n\) 有 \(p\nmid F_k\)。
+由出现阶定义即得 \(\rho(p)=n\)。
+代入命题 \ref{prop:xi-leyang-fold-cyclotomic-norm-conjugate-mean} 的平均公式 \eqref{eq:xi-leyang-fold-mean-gamma} 得到所示恒等式；并且右端随 \(n\) 增大严格递增且以 \(\log 2\) 为极限。
+\end{proof}
+
+\begin{proposition}[Pisano 块的实值性与相位锁定：整周期上无净相位]\label{prop:xi-leyang-fold-pisano-block-real}
+取奇素数 \(p\)，令 \(T=\pi(p)\) 且 \(g\in(\ZZ/p\ZZ)^\times\)。
+则 Pisano 块 \(A_{p,g}=S_T(p;g)\) 为实数。
+更强地，令
+\[
+W_T:=\sum_{j=1}^{T}F_{j+1},
+\]
+则 \(W_T\equiv 0\ (\bmod\ p)\)，并且对补映射 \(\omega\mapsto \omega^c\)（\(\omega_j^c:=1-\omega_j\)）有严格共轭配对，从而 \(A_{p,g}\in\RR\)。
+\end{proposition}
+\begin{proof}
+由恒等式 \(\sum_{k=0}^{n}F_k=F_{n+2}-1\) 得
+\(
+W_T=\sum_{k=2}^{T+1}F_k=F_{T+3}-2
+\)。
+由 Pisano 周期定义 \((F_T,F_{T+1})\equiv(0,1)\ (\bmod\ p)\)，从而 \(F_{T+2}\equiv 1\) 且 \(F_{T+3}\equiv 2\)，于是 \(W_T\equiv 0\ (\bmod\ p)\)。
+\par
+将 \eqref{eq:xi-leyang-fold-Sm-twist} 在 \(m=T\) 写为
+\[
+A_{p,g}
+=2^{-T}\sum_{\omega\in\{0,1\}^T}\zeta_p^{g\sum_{j=1}^{T}\omega_jF_{j+1}}.
+\]
+对任意 \(\omega\)，记 \(\omega^c\) 为补，则
+\[
+\sum_{j=1}^{T}\omega^c_jF_{j+1}=W_T-\sum_{j=1}^{T}\omega_jF_{j+1}\equiv -\sum_{j=1}^{T}\omega_jF_{j+1}\pmod p,
+\]
+从而
+\[
+\zeta_p^{g\sum \omega^c_jF_{j+1}}
+=\zeta_p^{-g\sum \omega_jF_{j+1}}
+=\overline{\zeta_p^{g\sum \omega_jF_{j+1}}}.
+\]
+故和式在复共轭下不变，得到 \(A_{p,g}\in\RR\)。
+\end{proof}
+
+\begin{conjecture}[6D--Lee--Yang--Fold 的 Chebotarev 共振律]\label{conj:xi-6d-leyang-fold-chebotarev-resonance}
+沿用文内记号：令 \(L_2\) 为 6D 超立方体相关多项式 \(P_2\) 的分裂域，\(L_{\mathrm{LY}}\) 为 Lee--Yang 三次多项式的分裂域，记复合域
+\[
+K:=L_2L_{\mathrm{LY}}.
+\]
+对 \(K/\mathbb Q\) 的不分歧素数 \(p\)，记 Frobenius 共轭类为
+\(
+\operatorname{Frob}_p\subset\operatorname{Gal}(K/\mathbb Q)
+\)。
+定义
+\[
+S_m(p):=
+2^{-m}\sum_{\omega\in\{0,1\}^m}
+\exp\!\left(
+\frac{2\pi i}{p}\sum_{j=1}^{m}\omega_jF_{j+1}
+\right)
+=
+\prod_{j=1}^{m}\frac{1+\exp(2\pi iF_{j+1}/p)}{2},
+\]
+并令
+\[
+\gamma(p):=
+-\lim_{m\to\infty}\frac{1}{m}\log|S_m(p)|
+\]
+（当 \(p\) 为奇素数时极限由定理 \ref{thm:xi-leyang-fold-pisano-factorization-decay} 保证存在并具有闭式）。
+
+猜想：\(\gamma(p)\) 对每个不分歧 \(p\) 存在，且仅依赖于 \(\operatorname{Frob}_p\) 的共轭类。
+此外，\(\operatorname{Frob}_p\) 为恒等类（即 \(p\) 在 \(K\) 中完全分裂）时，\(\gamma(p)\) 严格低于 Chebotarev 意义下的典型值，从而在模 \(p\) 的 Fold 纤维多重度 Fourier 指纹中产生可检测的算术偏振窗口。
+\end{conjecture}
+
+\endinput

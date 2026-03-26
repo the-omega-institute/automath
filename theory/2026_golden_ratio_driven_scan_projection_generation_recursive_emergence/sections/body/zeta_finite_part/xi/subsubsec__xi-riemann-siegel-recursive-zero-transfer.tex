@@ -1,0 +1,208 @@
+% Riemann--Siegel recursion / Hardy Z(t) zero-transfer certificates.
+\subsubsection{Riemann--Siegel 余项的层级递归与零点漂移证书：Hardy 实值化的局部传输}\label{subsubsec:xi-riemann-siegel-recursive-zero-transfer}
+上一小节以 Poisson 混叠把离散采样误差转写为别名尾和，并由 Rouch\'e 定理将“函数误差预算”转换为“零点漂移预算”（定理 \ref{thm:xi-dyadic-zero-tracking}）。
+本小节记录另一条与之同型的局部证书链：在 Hardy 实值化与 Riemann--Siegel 余项的高阶渐近展开下，截断阶数 \(m\) 形成一条自然的递归层级；通过一个 Rouch\'e--Taylor 传输引理，可把余项预算直接译码为零点漂移界与区间内零点计数的闭合条件。
+
+\paragraph{Hardy 实值化与递归截断}
+记 Riemann--Siegel \(\vartheta\)-函数为 \(\vartheta(t)\)，并定义 Hardy 实值化函数
+\begin{equation}\label{eq:xi-hardy-Z-def}
+Z(t):=e^{\mathrm{i}\vartheta(t)}\zeta\!\left(\tfrac12+\mathrm{i}t\right)\qquad (t\in\RR).
+\end{equation}
+则 \(Z(t)\in\RR\) 且其实零点与 \(\zeta(\tfrac12+\mathrm{i}t)\) 的临界线零点一致。
+为避免与前文的双变量配分函数 \(Z_m(y)\) 混淆，本段的 \(Z(t)\) 专指 \eqref{eq:xi-hardy-Z-def} 所定义的 Hardy 实值化函数。
+令
+\begin{equation}\label{eq:xi-riemann-siegel-aNz}
+a(t):=\sqrt{\frac{t}{2\pi}},\qquad N:=\lfloor a(t)\rfloor,\qquad z:=1-2\bigl(a(t)-N\bigr),
+\end{equation}
+并以 \(R(t)\) 记 Riemann--Siegel 公式中的余项。
+在标准高阶渐近展开口径中，可将余项写为
+\begin{equation}\label{eq:xi-riemann-siegel-remainder-expansion}
+R(t)=(-1)^{N+1}a(t)^{-1/2}\sum_{r\ge 0} C_r\!\bigl(z(t)\bigr)\,a(t)^{-r},
+\end{equation}
+其中 \(C_r\) 为一族由局部参数 \(z\) 决定的显式系数函数。
+令 \(Z^{(m)}(t)\) 表示把 \eqref{eq:xi-riemann-siegel-remainder-expansion} 截断到 \(r=0,\dots,m-1\) 所得到的递归截断近似（其余 Riemann--Siegel 主项取同一约定）。
+在固定截断索引与分支的局部邻域内，\(t\mapsto Z^{(m)}(t)\) 作为复变量具有全纯延拓；在下述论证中，仅使用该局部全纯性与一致误差预算，而不依赖余项系数的具体构造。
+
+\paragraph{Rouch\'e--Taylor 零点传输引理}
+\begin{theorem}[Rouch\'e--Taylor 递归零点传输：从可控余项到可控零点漂移]\label{thm:xi-rouche-taylor-zero-transfer}
+设 \(f,g\) 在闭圆盘 \(\overline{D(t_0,r)}:=\{t\in\CC:\ \abs{t-t_0}\le r\}\) 上全纯，且 \(g(t_0)=0\)、\(g'(t_0)\neq 0\)。
+记
+\[
+\varepsilon:=\sup_{\abs{t-t_0}\le r}\abs{f(t)-g(t)},
+\qquad
+M:=\sup_{\abs{t-t_0}\le r}\abs{g''(t)}.
+\]
+若满足
+\begin{equation}\label{eq:xi-rouche-taylor-conditions}
+0<r,\quad
+\abs{g'(t_0)}>\tfrac{M}{2}r\quad\text{且}\quad
+\varepsilon<\Bigl(\abs{g'(t_0)}-\tfrac{M}{2}r\Bigr)r,
+\end{equation}
+则：
+\begin{enumerate}
+  \item \(f\) 在 \(D(t_0,r)\) 内恰有一个零点（计重数），且该零点为单零点；
+  \item 记该零点为 \(\gamma\)，则满足显式位移界
+  \begin{equation}\label{eq:xi-rouche-taylor-drift-bound}
+  \boxed{\;
+  \abs{\gamma-t_0}\ \le\ \frac{\varepsilon}{\abs{g'(t_0)}-\tfrac{M}{2}r}\; }.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+令线性化函数 \(\ell(t):=g'(t_0)(t-t_0)\)。
+由积分形式的 Taylor 余项，对任意 \(\abs{t-t_0}\le r\) 有
+\[
+g(t)-\ell(t)=\int_{0}^{1}(1-u)\,g''\!\bigl(t_0+u(t-t_0)\bigr)\,(t-t_0)^{2}\,\dd u,
+\]
+从而 \(\abs{g(t)-\ell(t)}\le \frac{M}{2}\abs{t-t_0}^{2}\)。
+特别地在边界 \(\abs{t-t_0}=r\) 上，
+\[
+\abs{g(t)-\ell(t)}\le \frac{M}{2}r^{2}<\abs{g'(t_0)}r=\abs{\ell(t)}
+\]
+由 \eqref{eq:xi-rouche-taylor-conditions} 的 \(\abs{g'(t_0)}>\tfrac{M}{2}r\) 成立。
+故由 Rouch\'e 定理，\(g\) 与 \(\ell\) 在 \(D(t_0,r)\) 内的零点数相同，因而 \(g\) 在盘内恰有一个零点（单零点）。
+\par
+另一方面，对任意 \(\abs{t-t_0}\le r\) 有下界
+\[
+\abs{g(t)}
+\ge
+\abs{\ell(t)}-\abs{g(t)-\ell(t)}
+\ge
+\Bigl(\abs{g'(t_0)}-\tfrac{M}{2}r\Bigr)\abs{t-t_0}.
+\]
+故在边界 \(\abs{t-t_0}=r\) 上，
+\(
+\abs{g(t)}\ge\bigl(\abs{g'(t_0)}-\tfrac{M}{2}r\bigr)r>\varepsilon\ge \abs{f(t)-g(t)}
+\)
+由 \eqref{eq:xi-rouche-taylor-conditions} 的末条不等式成立。
+再次应用 Rouch\'e 定理，\(f\) 与 \(g\) 在 \(D(t_0,r)\) 内零点数相同，故 \(f\) 在盘内亦恰有一个零点（计重数），且必须为单零点。
+\par
+设 \(\gamma\) 为该零点，则 \(f(\gamma)=0\) 蕴含 \(g(\gamma)=-(f-g)(\gamma)\)，从而 \(\abs{g(\gamma)}\le \varepsilon\)。
+将前述下界取 \(t=\gamma\) 得
+\[
+\varepsilon\ \ge\ \abs{g(\gamma)}\ \ge\ \Bigl(\abs{g'(t_0)}-\tfrac{M}{2}r\Bigr)\abs{\gamma-t_0},
+\]
+即得 \eqref{eq:xi-rouche-taylor-drift-bound}。
+\end{proof}
+
+\paragraph{Riemann--Siegel 阶梯递归的量化吸引率}
+\begin{corollary}[每加一阶，零点定位误差在主尺度上乘以 \texorpdfstring{$t^{-1/2}$}{t^{-1/2}}]\label{cor:xi-riemann-siegel-attraction-rate}
+沿用 \eqref{eq:xi-hardy-Z-def}--\eqref{eq:xi-riemann-siegel-remainder-expansion} 的记号。
+设 \(t_0\in\RR\) 且 \(Z^{(m)}(t_0)=0\)、\((Z^{(m)})'(t_0)\neq 0\)。
+取 \(r>0\) 使得 \(Z\) 与 \(Z^{(m)}\) 在 \(\overline{D(t_0,r)}\) 上全纯，并记
+\[
+\varepsilon_m:=\sup_{\abs{t-t_0}\le r}\abs{Z(t)-Z^{(m)}(t)},
+\qquad
+M_m:=\sup_{\abs{t-t_0}\le r}\abs{(Z^{(m)})''(t)}.
+\]
+若 \(\varepsilon_m\) 满足余项预算
+\begin{equation}\label{eq:xi-riemann-siegel-uniform-remainder-budget}
+\varepsilon_m\ \le\ A_m\,a(t_0)^{-m-1/2},
+\end{equation}
+并且（以 \(f=Z\)、\(g=Z^{(m)}\)）满足定理 \ref{thm:xi-rouche-taylor-zero-transfer} 的条件 \eqref{eq:xi-rouche-taylor-conditions}，则 \(Z\) 在 \(D(t_0,r)\) 内恰有一个单零点 \(\gamma\in\RR\)，并且
+\begin{equation}\label{eq:xi-riemann-siegel-zero-drift-budget}
+\boxed{\;
+\abs{\gamma-t_0}
+\ \le\
+\frac{A_m\,a(t_0)^{-m-1/2}}{\abs{(Z^{(m)})'(t_0)}-\tfrac{M_m}{2}r}\; }.
+\end{equation}
+\par
+特别地，若进一步具备横截性下界 \(\abs{(Z^{(m)})'(t_0)}\ge B\,t_0^{1/4}\log t_0\)，并取 \(r=r(t_0,m)\) 使得 \(M_m r=o(\abs{(Z^{(m)})'(t_0)})\)，则由 \(a(t_0)^{-m-1/2}\asymp t_0^{-(2m+1)/4}\) 得到量级化吸引率
+\begin{equation}\label{eq:xi-riemann-siegel-attraction-scale}
+\abs{\gamma-t_0}\ \ll\ \frac{t_0^{-(m+1)/2}}{\log t_0},
+\end{equation}
+从而递归阶数 \(m\mapsto m+1\) 在相同横截性尺度下使零点定位误差的主量级严格乘上 \(t_0^{-1/2}\)。
+\end{corollary}
+\begin{proof}[证明要点]
+直接以 \(f=Z\)、\(g=Z^{(m)}\) 代入定理 \ref{thm:xi-rouche-taylor-zero-transfer}。
+由于 \(Z\) 在实轴取实值，故其零点关于实轴共轭对称；圆盘 \(D(t_0,r)\) 关于实轴对称且仅含一个零点，因而该零点必为实数。
+利用 \(a(t_0)^{-m-1/2}=(t_0/(2\pi))^{-(2m+1)/4}\) 与横截性尺度 \(\abs{(Z^{(m)})'(t_0)}\asymp t_0^{1/4}\log t_0\) 化简，得 \eqref{eq:xi-riemann-siegel-attraction-scale}。
+\end{proof}
+
+\paragraph{相邻递归层之间零点的同伦对应}
+\begin{proposition}[相邻截断层的零点收缩：零点序列在 \texorpdfstring{$m$}{m} 上形成可控 Cauchy]\label{prop:xi-riemann-siegel-adjacent-level-zero-homotopy}
+沿用上述记号，并取 \(r>0\) 使得 \(Z^{(m)}\) 与 \(Z^{(m+1)}\) 在 \(\overline{D(t_0,r)}\) 上全纯。
+设 \(t_0\) 为 \(Z^{(m)}\) 的单零点，并令
+\[
+\delta_m:=\sup_{\abs{t-t_0}\le r}\abs{Z^{(m+1)}(t)-Z^{(m)}(t)}.
+\]
+记 \(M_m:=\sup_{\abs{t-t_0}\le r}\abs{(Z^{(m)})''(t)}\)。
+若
+\[
+\abs{(Z^{(m)})'(t_0)}>\tfrac{M_m}{2}r,
+\qquad
+\delta_m<\Bigl(\abs{(Z^{(m)})'(t_0)}-\tfrac{M_m}{2}r\Bigr)r,
+\]
+则存在唯一零点 \(t_1\in D(t_0,r)\) 满足 \(Z^{(m+1)}(t_1)=0\)，并且
+\begin{equation}\label{eq:xi-riemann-siegel-adjacent-drift}
+\boxed{\;
+\abs{t_1-t_0}\ \le\ \frac{\delta_m}{\abs{(Z^{(m)})'(t_0)}-\tfrac{M_m}{2}r}\; }.
+\end{equation}
+当 \(\delta_m\) 由新增的首个被省略项主导时，\(\delta_m=\Theta(a(t_0)^{-m-1/2})\)，从而在横截性尺度 \(\abs{(Z^{(m)})'(t_0)}\asymp t_0^{1/4}\log t_0\) 下得到
+\(
+\abs{t_1-t_0}\ll t_0^{-(m+1)/2}/\log t_0
+\)。
+\end{proposition}
+\begin{proof}
+以 \(f=Z^{(m+1)}\)、\(g=Z^{(m)}\) 直接套用定理 \ref{thm:xi-rouche-taylor-zero-transfer} 即得 \eqref{eq:xi-riemann-siegel-adjacent-drift}；
+最后一条由 \eqref{eq:xi-riemann-siegel-remainder-expansion} 的幂阶提升（每加一阶引入一个额外的 \(a^{-1}\sim t^{-1/2}\) 因子）给出。
+\end{proof}
+
+\paragraph{局部误差预算下的零点计数闭合}
+\begin{theorem}[区间内零点计数的局部封闭性：屏障带与局部圆盘证书]\label{thm:xi-local-zero-count-closure-budget}
+设 \(I=[T_1,T_2]\subset\RR\)，并设 \(f,g\) 在某个包含 \(I\) 的复邻域内全纯，且对一切 \(t\in I\) 都有 \(f(t),g(t)\in\RR\)。
+设 \(g\) 在 \(I\) 内恰有 \(k\) 个单零点
+\(
+T_1<\tau_1<\cdots<\tau_k<T_2
+\)。
+取常数 \(\eta>0\) 与半径 \(r_1,\dots,r_k>0\) 满足：
+\begin{enumerate}
+  \item \(\,[\tau_j-r_j,\tau_j+r_j]\subset (T_1,T_2)\) 且这些区间两两不交；
+  \item \(\inf_{t\in I\setminus \bigcup_{j=1}^{k}(\tau_j-r_j,\tau_j+r_j)}\abs{g(t)}\ge 2\eta\)；
+  \item \(\sup_{t\in I}\abs{f(t)-g(t)}\le \eta\) 且对每个 \(j\) 有 \(\sup_{\abs{t-\tau_j}\le r_j}\abs{f(t)-g(t)}\le \eta\)；
+  \item 对每个 \(j\)，以 \(t_0=\tau_j\) 在圆盘 \(\overline{D(\tau_j,r_j)}\) 上满足定理 \ref{thm:xi-rouche-taylor-zero-transfer} 的条件 \eqref{eq:xi-rouche-taylor-conditions}（取 \(f\) 与 \(g\) 为给定函数）。
+\end{enumerate}
+则 \(f\) 在 \(I\) 内恰有 \(k\) 个实零点 \(\gamma_1<\cdots<\gamma_k\)，并且对每个 \(j\) 都有唯一对应
+\[
+\gamma_j\in (\tau_j-r_j,\tau_j+r_j),
+\qquad
+f(\gamma_j)=0,
+\]
+且不存在任何额外零点落在 \(I\) 的其余部分。
+此外，每个 \(\gamma_j\) 均满足定理 \ref{thm:xi-rouche-taylor-zero-transfer} 的位移界 \eqref{eq:xi-rouche-taylor-drift-bound}（以 \(t_0=\tau_j\) 代入）。
+\end{theorem}
+\begin{proof}
+由条件 (ii)--(iii)，若 \(t\in I\setminus \bigcup_j(\tau_j-r_j,\tau_j+r_j)\)，则
+\(
+\abs{f(t)}\ge \abs{g(t)}-\abs{f(t)-g(t)}\ge 2\eta-\eta=\eta>0
+\)，故 \(f\) 在该集合上无零点。
+\par
+另一方面，对每个 \(j\)，由条件 (iv) 与定理 \ref{thm:xi-rouche-taylor-zero-transfer}（取 \(t_0=\tau_j\)、半径 \(r_j\)）可知：\(f\) 在 \(D(\tau_j,r_j)\) 内恰有一个单零点；由于 \(f\) 在实轴取实值且圆盘关于实轴对称，该零点必为实数，记为 \(\gamma_j\in(\tau_j-r_j,\tau_j+r_j)\)。
+区间不交性保证 \(\gamma_j\) 两两不同。
+合并上述两部分即得：\(f\) 在 \(I\) 内恰有 \(k\) 个实零点，且无额外零点。
+位移界由定理 \ref{thm:xi-rouche-taylor-zero-transfer} 逐点给出。
+\end{proof}
+
+\begin{remark}[计数闭合的制度含义]\label{rem:xi-local-zero-count-closure-meaning}
+定理 \ref{thm:xi-local-zero-count-closure-budget} 给出一种纯局部的“计数 + 定位”闭合接口：当候选零点邻域的全纯证书（圆盘上的 Rouch\'e--Taylor 预算）与邻域外的屏障带下界同时成立时，区间内零点的存在性、唯一性与位移界可在同一误差预算链内闭合，而无需诉诸全局型零点计数流程。
+\end{remark}
+
+\paragraph{递归校正零点的定向律（猜想）}
+\begin{conjecture}[首省略项锁定零点漂移方向]\label{conj:xi-riemann-siegel-omitted-term-direction-law}
+设 \(\gamma_n\) 为 Hardy 函数 \(Z(t)\) 的第 \(n\) 个正零点（按大小排列），并令 \(\tau_n^{(m)}\) 为 \(Z^{(m)}\) 的第 \(n\) 个正零点（在一致编号可实现的范围内）。
+将 Riemann--Siegel 余项的第 \(m\) 阶修正项记为
+\[
+\Delta_m(t):=(-1)^{N+1}a(t)^{-m-1/2}C_m\!\bigl(z(t)\bigr),
+\]
+其中 \(a,N,z\) 由 \eqref{eq:xi-riemann-siegel-aNz} 给出。
+则对每个固定 \(n\) 存在 \(m_0(n)\) 使得对所有 \(m\ge m_0(n)\) 成立严格定向律
+\[
+\operatorname{sgn}\bigl(\tau_n^{(m)}-\gamma_n\bigr)
+=
+-\,\operatorname{sgn}\bigl(\Delta_m(\tau_n^{(m)})\bigr),
+\]
+并且序列 \(\{\tau_n^{(m)}\}_{m\ge m_0(n)}\) 对 \(\gamma_n\) 呈现单调收敛或二步交错收敛（由 \(\Delta_m\) 的符号稳定性决定）。
+若该猜想成立，则零点递归不仅具有 \(t^{-1/2}\) 量级的几何收缩率（推论 \ref{cor:xi-riemann-siegel-attraction-rate}），且其漂移方向由单一可计算修正项在局部上锁定。
+\end{conjecture}
+
+\endinput

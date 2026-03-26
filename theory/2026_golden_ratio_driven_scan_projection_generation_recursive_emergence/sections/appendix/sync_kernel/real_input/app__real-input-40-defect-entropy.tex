@@ -1,0 +1,278 @@
+\subsubsection{同步缺陷熵与复位统计：避免 \texorpdfstring{$0^m$}{0m} 的异常输入集与代数常数 \texorpdfstring{$\alpha_m$}{alpha m}}\label{app:real-input-40-defect-entropy}
+命题 \ref{prop:real-input-40-reset-word} 表明 $0^5$ 是同步核的最短同步复位词：一旦输入和位 $d_k$ 连续出现 $5$ 个 $0$，内部状态被强制复位到 $000$。
+因此“状态不唯一/状态无法从远处锁定”的全部异常现象都只能发生在输入轨道\emph{从未出现} $0^5$ 的集合上。
+本小节把这一异常集合的\textbf{拓扑熵}与\textbf{统计尺度}完全显式化。
+
+\paragraph{缺陷输入子移位：永远看不到 \texorpdfstring{$0^m$}{0m} 的真实输入}
+记真实输入系统为
+\[
+Y:=X\times X\subset\{0,1\}^{\ZZ}\times\{0,1\}^{\ZZ},
+\]
+其中 $X$ 为黄金均值（Zeckendorf）移位（禁止子词 $11$），并按命题 \ref{prop:real-input-40-skeleton-factor} 将 $Y$ 视为四字母 $1$-step SFT：
+字母表
+\(
+\mathcal{A}:=\{00,01,10,11\}
+\)
+（对应逐位对 $(x_k,y_k)$），邻接矩阵即为命题 \ref{prop:real-input-40-skeleton-factor} 的
+\(
+A=A_0\otimes A_0
+\)
+（按顺序 $(00,01,10,11)$）。
+令特殊字母
+\[
+\mathbf{0}:=00\in\mathcal{A}.
+\]
+注意：对真实算术输入而言，和位 $d_k=x_k+y_k$ 满足
+\(
+d_k=0\iff (x_k,y_k)=\mathbf{0}
+\)；
+因此 $d$-字母表上的同步复位词 $0^m$ 与 $\mathcal{A}$-字母表上的子词 $\mathbf{0}^m$ 一一对应（仅差一个平移）。
+
+\begin{definition}[避免同步复位词的缺陷子移位]\label{def:real-input-defect-subshift}
+对整数 $m\ge 2$，定义
+\[
+Y^{\neg \mathbf{0}^m}
+:=\bigl\{\,u\in Y:\ \text{对所有 }k\in\ZZ,\ u_k u_{k+1}\cdots u_{k+m-1}\neq \mathbf{0}^m\,\bigr\}.
+\]
+称其为\textbf{同步缺陷输入集}：它由真实输入中\emph{永远看不到}同步复位词 $0^m$ 的轨道组成。
+\end{definition}
+
+\paragraph{Run-length lift：把“禁止 \texorpdfstring{$\mathbf{0}^m$}{0m}”升格为 \texorpdfstring{$1$}{1}-step SFT}
+禁止一个长词可用 run-length 记忆升格为 $1$-step SFT。这里由于仅需监测字母 $\mathbf{0}=00$ 的连续长度，状态数可压到 $m+2$ 个。
+
+\begin{proposition}[避免 \texorpdfstring{$\mathbf{0}^m$}{0m} 的 \texorpdfstring{$(m+2)$}{m+2} 状态 lift]\label{prop:real-input-defect-runlift}
+对 $m\ge 2$，令状态集
+\[
+\mathcal{V}_m:=\{01,10,11,00^{(1)},00^{(2)},\dots,00^{(m-1)}\},
+\]
+其中 $00^{(r)}$ 表示“当前字母为 $00$ 且末尾连续 $00$ 的长度为 $r$”。
+定义有向图（等价地邻接矩阵）$R_m$ 如下：
+\begin{itemize}
+  \item 从 $01$ 可转移到 $10$ 或 $00^{(1)}$；
+  \item 从 $10$ 可转移到 $01$ 或 $00^{(1)}$；
+  \item 从 $11$ 只能转移到 $00^{(1)}$；
+  \item 从 $00^{(r)}$（$1\le r\le m-2$）可转移到 $01,10,11$，并可转移到 $00^{(r+1)}$；
+  \item 从 $00^{(m-1)}$ 只能转移到 $01,10,11$（从而禁止再转移到 $00$，即禁止 $\mathbf{0}^m$）。
+\end{itemize}
+则 $Y^{\neg \mathbf{0}^m}$ 与由邻接矩阵 $R_m$ 定义的 $1$-step SFT 共轭，因而
+\[
+h_{\mathrm{top}}\!\left(Y^{\neg \mathbf{0}^m}\right)=\log\rho(R_m).
+\]
+\end{proposition}
+
+\paragraph{缺陷熵常数 \texorpdfstring{$\alpha_m$}{alpha m}：显式特征多项式族}
+\begin{theorem}[同步缺陷熵的显式代数结构]\label{thm:real-input-defect-entropy}
+令 $m\ge 2$，并令 $R_m$ 为命题 \ref{prop:real-input-defect-runlift} 的 run-length lift 邻接矩阵。
+则其特征多项式在 $\ZZ[t]$ 中分解为
+\[
+\chi_{R_m}(t)=(t+1)\,f_m(t),
+\]
+其中
+\[
+\boxed{\;
+f_m(t)=t^{m+1}-t^{m}-3t^{m-1}-2\sum_{k=1}^{m-2}t^k+1\; }.
+\]
+记 $\alpha_m:=\rho(R_m)$ 为 Perron 根（最大实特征值），则
+\[
+\boxed{\;
+h_{\mathrm{top}}\!\left(Y^{\neg \mathbf{0}^m}\right)=\log\alpha_m\; }.
+\]
+并且当 $m\to\infty$ 时有单调收敛
+\[
+\alpha_m\uparrow \rho(A)=\varphi^2,
+\qquad
+h_{\mathrm{top}}\!\left(Y^{\neg \mathbf{0}^m}\right)\uparrow h_{\mathrm{top}}(Y)=\log\varphi^2.
+\]
+\end{theorem}
+
+\begin{proof}
+我们在命题 \ref{prop:real-input-defect-runlift} 的状态顺序
+\(
+(01,10,11,00^{(1)},\dots,00^{(m-1)})
+\)
+下写出右特征向量方程 $R_m v=t v$。
+令
+\[
+v_{01}=a,\quad v_{10}=b,\quad v_{11}=c,\quad v_{00^{(r)}}=x_r\ (1\le r\le m-1).
+\]
+由转移规则得到方程组
+\[
+ta=b+x_1,\qquad
+tb=a+x_1,\qquad
+tc=x_1,
+\]
+以及
+\[
+tx_r=a+b+c+x_{r+1}\quad(1\le r\le m-2),
+\qquad
+tx_{m-1}=a+b+c.
+\]
+将前两式相减得
+\(
+(t+1)(a-b)=0
+\)，因此 $t=-1$ 为特征值（取特征向量 $a=1,b=-1,c=0,x_r=0$），从而 $(t+1)$ 为特征多项式因子。
+以下假设 $t\neq -1$，则必有 $a=b$。
+
+在 $a=b$ 下由 $ta=a+x_1$ 得 $x_1=(t-1)a$，并由 $tc=x_1$ 得 $c=(t-1)a/t$。
+记
+\[
+s:=a+b+c=2a+c=\frac{3t-1}{t}\,a.
+\]
+由链式方程可递推得到
+\[
+x_{m-1}=\frac{s}{t},\qquad
+x_r=\frac{s+x_{r+1}}{t}\ (1\le r\le m-2),
+\]
+从而
+\[
+x_1=s\sum_{k=1}^{m-1}t^{-k}.
+\]
+将其与 $x_1=(t-1)a$ 比较，消去 $a$（非零，否则 $v=0$），并在 $t\neq 1$ 下化简得到等价方程
+\[
+0=
+\frac{t^m(t-1)^2-(3t-1)(t^{m-1}-1)}{t-1}
+\;=\;
+t^{m+1}-t^{m}-(3t-1)\sum_{k=0}^{m-2}t^k.
+\]
+最后将右端展开为
+\[
+t^{m+1}-t^{m}-3t^{m-1}-2\sum_{k=1}^{m-2}t^k+1
+=f_m(t),
+\]
+故对 $t\notin\{-1,1\}$，特征值方程等价于 $f_m(t)=0$。
+剩下只需排除 $t=1$：若 $t=1$，则由 $ta=b+x_1$ 与 $tb=a+x_1$ 得 $a=b$，并由 $ta=a+x_1$ 得 $x_1=0$，从而 $tc=x_1$ 给出 $c=0$。
+此时链式方程变为 $x_{m-1}=a+b+c=2a$ 与 $x_r=a+b+c+x_{r+1}=2a+x_{r+1}$，递推得 $x_1=2(m-1)a$，与 $x_1=0$ 矛盾，故只能 $a=0$，从而 $v=0$。
+因此 $t=1$ 不是特征值。
+于是 $R_m$ 的全部特征值由 $t=-1$ 与 $f_m(t)=0$ 给出，且次数之和为 $1+(m+1)=m+2=\dim R_m$，从而
+\(
+\chi_{R_m}(t)=(t+1)f_m(t)
+\)。
+
+由命题 \ref{prop:real-input-defect-runlift} 与 Perron--Frobenius 定理，$\alpha_m=\rho(R_m)$ 为最大实特征值，故
+\(
+h_{\mathrm{top}}(Y^{\neg \mathbf{0}^m})=\log\alpha_m
+\)。
+单调性与极限由包含关系
+\(
+Y^{\neg \mathbf{0}^m}\subset Y^{\neg \mathbf{0}^{m+1}}\subset Y
+\)
+与拓扑熵对包含的单调性推出；极限上界为 $h_{\mathrm{top}}(Y)=\log\rho(A)=\log\varphi^2$（命题 \ref{prop:real-input-40-skeleton-factor}）。
+证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$m=5$}{m=5} 的同步缺陷熵常数 \texorpdfstring{$\alpha_5$}{alpha\_5}]\label{cor:real-input-defect-entropy-m5}
+当 $m=5$ 时，
+\[
+f_5(t)=t^6-t^5-3t^4-2t^3-2t^2-2t+1,
+\]
+其 Perron 根为
+\[
+\alpha_5=2.599377117436323935\ldots,
+\qquad
+h_{\mathrm{top}}\!\left(Y^{\neg \mathbf{0}^5}\right)=\log\alpha_5.
+\]
+因此相对缺陷熵差为
+\[
+\log\frac{\varphi^2}{\alpha_5}=0.0071518040100975209\ldots,
+\qquad
+\frac{\alpha_5}{\varphi^2}=0.9928737092819488085\ldots.
+\]
+\end{corollary}
+
+\paragraph{Parry 最大熵测度下同步复位词的密度与平均间距（闭式）}
+\begin{proposition}[复位词 \texorpdfstring{$0^m$}{0^m} 的起点强度与平均间距]\label{prop:real-input-reset-gap}
+在 $Y=X\times X$ 的 Parry 最大熵测度下，记 $\lambda:=\rho(A)=\varphi^2$。
+令 $\nu_m$ 为在位置 $0$ 处\emph{开始}出现复位词 $0^m$（即 $(x_k,y_k)=00$ 连续 $m$ 次）的概率，则对任意 $m\ge 2$ 有
+\[
+\boxed{\;
+\nu_m=\frac{1}{5\lambda^{m-2}}\; }.
+\]
+从而在任意长窗口内，相邻两次复位词起点的平均间距趋于
+\[
+\boxed{\;
+\mathbb{E}[\mathrm{gap}(0^m)]=\frac{1}{\nu_m}=5\lambda^{m-2}\; }.
+\]
+特别地，对 $m=5$：
+\[
+\nu_5=\frac{1}{5\varphi^6},
+\qquad
+\mathbb{E}[\mathrm{gap}(0^5)]=5\varphi^6\approx 89.72135954999579.
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:real-input-40-input-memory-marginal}（或命题 \ref{prop:real-input-40-memory-marginal}）知
+\(
+\mathbb{P}(00)=\varphi^2/5=\lambda/5
+\)。
+另一方面，$Y$ 的骨架矩阵为 $A=A_0\otimes A_0$（命题 \ref{prop:real-input-40-A0-tensor-hidden}），其 Parry 转移满足标准公式
+\(
+p_{ij}=A_{ij}r_j/(\lambda r_i)
+\)
+（$r$ 为 $A$ 的右 Perron 向量）。
+对状态 $00$，有 $A_{00,00}=1$，故
+\[
+\mathbb{P}(00\to 00)=\frac{A_{00,00}r_{00}}{\lambda r_{00}}=\frac{1}{\lambda}.
+\]
+因此
+\[
+\nu_m
+=\mathbb{P}(00)\cdot \mathbb{P}(00\to 00)^{m-1}
+=\frac{\lambda}{5}\left(\frac{1}{\lambda}\right)^{m-1}
+=\frac{1}{5\lambda^{m-2}}.
+\]
+最后，$\nu_m$ 是“复位词起点集合”在 $\ZZ$ 上的密度（强度）。由遍历定理，该点集在长窗口 $[-N,N]$ 内的点数与 $2N$ 之比趋于 $\nu_m$，从而平均间距趋于 $1/\nu_m$。证毕。
+\end{proof}
+
+\paragraph{把缺陷熵接回 40 状态核：非复位 primitive 轨道的指数稀薄上界}
+\begin{theorem}[不出现复位词的 primitive 轨道指数稀薄]\label{thm:real-input-40-nonreset-primes-thin}
+固定 $m\ge 2$。
+令 $p_n(M)$ 为真实输入 $40$ 状态核（邻接矩阵 $M$）的长度 $n$ primitive 轨道数（见 \ref{subsec:real-input-40-prime-splitting} 前的定义），
+并令 $p_n^{\neg \mathbf{0}^m}$ 为缺陷输入子移位 $Y^{\neg \mathbf{0}^m}$ 的长度 $n$ primitive 轨道数（等价于 $R_m$ 的 primitive 轨道数）。
+定义
+\[
+p_n^{\mathrm{noreset}}(M;m)
+:=\#\{\tau\ \text{primitive 轨道 in }M:\ \pi(\tau)\in Y^{\neg \mathbf{0}^m}\},
+\]
+其中 $\pi$ 为忘掉内部同步态、仅保留输入对 $(x,y)$ 的自然投影。
+则存在常数 $C_m>0$ 使得对所有 $n\ge 1$，
+\[
+p_n^{\mathrm{noreset}}(M;m)\le C_m\,\frac{\alpha_m^n}{n},
+\]
+其中 $\alpha_m$ 为定理 \ref{thm:real-input-defect-entropy} 的 Perron 根。
+特别地当 $m=5$ 时有指数稀薄比率
+\[
+\boxed{\;
+\frac{p_n^{\mathrm{noreset}}(M;5)}{p_n(M)}
+\ll
+\left(\frac{\alpha_5}{\varphi^2}\right)^n
+=\bigl(0.99287370928\ldots\bigr)^n\; }.
+\]
+\end{theorem}
+\begin{proof}
+任取 $n$。
+对任意长度为 $n$ 的输入周期轨道，其在同步核上的 lift 由初始内部状态 $s\in Q$ 决定，而 $|Q|=10$。
+因此对任意集合 $E$ 的输入周期点，有粗界
+\[
+|{\rm Fix}_M(\sigma^n)\cap \pi^{-1}(E)|
+\le 10\cdot |{\rm Fix}_Y(\sigma^n)\cap E|.
+\]
+取 $E=Y^{\neg \mathbf{0}^m}$ 得
+\(
+a_n^{\mathrm{noreset}}(M;m)\le 10\,a_n(R_m)
+\)，其中 $a_n(R_m)=\Tr(R_m^n)$ 为缺陷输入的周期点计数。
+由 Perron--Frobenius 定理，存在 $\beta_m<\alpha_m$ 使得
+\(
+a_n(R_m)=\alpha_m^n+O(\beta_m^n)
+\)，从而
+\[
+a_n^{\mathrm{noreset}}(M;m)\le 10\alpha_m^n+O(\beta_m^n).
+\]
+另一方面，由一般恒等式 $a_n=\sum_{d\mid n} d\,p_d\ge n\,p_n$ 得
+\(
+p_n^{\mathrm{noreset}}(M;m)\le a_n^{\mathrm{noreset}}(M;m)/n
+\)，于是存在常数 $C_m$ 使得
+\(
+p_n^{\mathrm{noreset}}(M;m)\le C_m\,\alpha_m^n/n
+\)。
+最后，由 $p_n(M)=\varphi^{2n}/n+O(\varphi^n/n)$（见推论 \ref{cor:real-input-40-primitive-lucas-simplified} 之后的估计）即可得到所示指数稀薄比率。证毕。
+\end{proof}

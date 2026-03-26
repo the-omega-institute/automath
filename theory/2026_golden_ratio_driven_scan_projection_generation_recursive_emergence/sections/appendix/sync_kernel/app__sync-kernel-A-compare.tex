@@ -1,0 +1,457 @@
+\subsubsection{核对比：不同字母表/不同折叠核的统一接口（p-local => 在线延迟）}\label{app:sync-kernel-A-compare}
+本附录的目标是把“更换字母表/更换归一化核”统一压成同一类可比对象，并把对比量落到可计算的同步图不变量（$\zeta$、primitive 轨道谱、“有限部常数”等）上。
+
+\paragraph{把核视为 digit-set conversion}
+固定基数 $\beta=\varphi$。给定输出字母表 $A$，记输入字母表为
+\[
+B:=A+A.
+\]
+所谓“折叠核/归一化核”在算法层面就是一个保持值的不变换（digit-set conversion）：
+\[
+K:\ B^{\ZZ}\to A^{\ZZ},
+\qquad
+\sum_{j\in\ZZ}(Ku)_j\beta^j=\sum_{j\in\ZZ}u_j\beta^j,
+\]
+并且要求有限支撑输入映到有限支撑输出（以对应有限表示的加法）。
+
+\begin{definition}[\texorpdfstring{$(p)$}{p}-local、memory 与 anticipation]\label{def:plocal}
+设 $\varphi:A^{\ZZ}\to B^{\ZZ}$。称 $\varphi$ 为 $(p)$-local（滑动块码），若存在 $r,t\in\NN$ 与局部规则 $\Phi:A^{p}\to B$（其中 $p=r+t+1$），使得对任意 $u\in A^{\ZZ}$ 与 $v=\varphi(u)$，
+\[
+v_j=\Phi(u_{j+t},\dots,u_{j-r})\qquad(\forall j\in\ZZ).
+\]
+其中 $r$ 称为 memory，$t$ 称为 anticipation（见 \cite{FrougnyHellerPelantovaSvobodovaParallelAlgorithmsSlides} 的 Definition~1；亦参见 \cite{FrougnyPelantovaSvobodova2013MinimalDigitSets} 的定义口径）。
+\end{definition}
+
+\begin{corollary}[单趟在线延迟]\label{cor:online-delay-from-plocal}
+若 $\varphi$ 为 $(t,r)$-local，则将其按 MSDF 顺序单趟在线执行时，输出 $v_j$ 至少需等待读到 $u_{j+t}$，因此其单趟在线延迟为
+\[
+\delta(\varphi)=t.
+\]
+\end{corollary}
+
+\paragraph{同步图与可比的谱指纹}
+一旦把 $K$ 实现为确定性在线有限状态转导器，其同步部分给出有限有向图 $\Gamma_K$（状态集 $Q_K$，边标记为输入字母表符号），并可在边上定义“原子活动度”势（见后文 $\kappa$）。据此可把核的差异压缩为一组可比的谱指纹。
+
+\begin{definition}[核的谱指纹（A 路线）]\label{def:kernel-spectral-fingerprint}
+对给定核 $K$，定义其谱指纹为
+\[
+\mathfrak{F}(K):=\bigl(\delta(K),\ |Q_K|,\ \zeta_K(z,0),\ \lambda_K(u),\ \{B_{K,n}(u)\}_{n\le N}\bigr),
+\]
+其中 $\delta(K)$ 为单趟在线延迟（推论 \ref{cor:online-delay-from-plocal}），$|Q_K|$ 为同步状态数，$\zeta_K(z,0)$ 为 carry-free 骨架的 $\zeta$，$\lambda_K(u)=\rho(M_K(u))$ 为带权压力曲线，$B_{K,n}(u)$ 为 primitive 分层谱（其严格定义见后文）。
+\end{definition}
+
+\paragraph{本文内核的核对比（可复现表）}
+本文已经在 $\beta=\varphi$ 上构造并计算了两类“在线归一化核”：
+\begin{itemize}
+  \item \textbf{10 状态同步核}：输入字母表为逐位和 $B=\{0,1,2\}$，输出对应 Zeckendorf 规范形的在线归一化核（本附录 \S\ref{app:witt-weighted} 前的 10 状态构造）。
+  \item \textbf{40 状态真实输入同步核}：把两条合法 Zeckendorf 输入的约束并入状态（本附录 \S\ref{app:real-input-40-abel}），得到 $|\Sigma|=40$ 的 skew-product 核。
+\end{itemize}
+它们的 $\zeta$、$\lambda_{\max}$、primitive 谱与有限部常数对比汇总见表 \ref{tab:sync-kernel-A-compare}（由脚本生成并 \verb|\input|）。
+\input{sections/generated/tab_sync_kernel_A_compare}
+
+\paragraph{与“最小冗余字母表并行核”的关系（外部基准）}
+在同一基数 $\beta=\varphi$ 上，\cite{FrougnyPelantovaSvobodova2013MinimalDigitSets} 的 Corollary~38 证明：并行加法可在
+\[
+A=\{-1,0,1\}\quad\text{或}\quad A=\{0,1,2\}
+\]
+上完成，且两者均为\textbf{最小}字母表（$|A|=3$）。此外，针对 $A=\{-1,0,1\}$ 的一个显式并行算法（Algorithm~G）在讲义中给出，并注明该加法在该字母表上为 \textbf{21-local}（因此在在线口径下粗对应 $\delta\approx 10$；见 \cite{FrougnyHellerPelantovaSvobodovaParallelAlgorithmsSlides}，以及 Leiden 讲稿中的 21/13/9-local 对照 \cite{Frougny2012NumbersAsStreamsLeiden}）。
+
+这些并行核一旦被编译为确定性在线转导器，其同步图同样给出 $\zeta$ 与 primitive 谱，从而与表 \ref{tab:sync-kernel-A-compare} 的“机制核”完全共享同一比较接口；本文把它作为后续可对接的外部基准，而不在当前版本中展开完整同步图编译。
+\par
+另一方面，\cite{Frougny1999OnlineAddition} 证明：黄金比例基下的加法可由在线有限自动机实现，但在非冗余表示口径下并不满足并行（$(p)$-local）可计算性；这为本文的 “在线核 vs.\ 并行核” 提供一个外部参照边界。
+
+\paragraph{三核在文献中的精确锚点：零式与 locality}
+为避免“同一核在不同讲义/实现中口径漂移”，本文对三类并行核的引用统一锚定在同一份讲义 \cite{FrougnyHellerPelantovaSvobodovaParallelAlgorithmsSlides}（以及其在 AAMP VIII 的摘要表述 \cite{SvobodovaAAMPVIIIParallelAddition}）：
+\begin{itemize}
+  \item \textbf{强零式 + $9$-local（黄金比例基）}：以 $-\beta^4+7-\beta^{-4}=0$ 为注入零式，在 $A=\{-5,\dots,5\}$ 上得到加法为 $9$-local；
+  \item \textbf{弱零式 + $13$-local（黄金比例基）}：以 $-\beta^2+3-\beta^{-2}=0$ 为注入零式，在 $A=\{-3,\dots,3\}$ 上得到加法为 $13$-local；
+  \item \textbf{最小字母表 + $21$-local（Algorithm G）}：在 $A=\{-1,0,1\}$ 上给出两相消元算法 $G=A\circ B$，并明确加法为 $21$-local；其两相消元均使用弱零式 $-\beta^2+3-\beta^{-2}=0$。
+\end{itemize}
+上述三点正是本附录后续把“不同字母表/不同折叠核”压缩成同一类同步图指纹对象的共同输入。
+
+\begin{definition}[零式注入的 \texorpdfstring{$(+;q)$}{(+;q)}-场更新]\label{def:zero-injection}
+给定 Laurent 多项式
+$$
+Z(X)=\sum_{i=-h}^{k}b_iX^i,\qquad b_i\in\ZZ,
+$$
+以及满足 $Z(\tau)=0$ 的基数 $\tau$。取一个有限取值的整数场 $q=(q_j)_{j\in\ZZ}$，并定义一次更新
+$$
+z'_j:=z_j-\sum_{i=-h}^{k}b_i\,q_{j-i}.
+$$
+\end{definition}
+
+\begin{proposition}[值保持]\label{prop:zero-injection-value-preserving}
+在定义 \ref{def:zero-injection} 的条件下（并假设 $q$ 仅有限支撑，或 $z,q$ 皆为有限支撑序列），有
+\[
+\sum_{j\in\ZZ} z'_j\tau^j=\sum_{j\in\ZZ} z_j\tau^j,
+\]
+即该更新保持 $\tau$-加权值不变。
+\end{proposition}
+
+\begin{proof}
+把定义 \ref{def:zero-injection} 代入并交换求和（有限支撑保证合法）：
+\[
+\sum_j z'_j\tau^j=\sum_j z_j\tau^j-\sum_j\sum_{i=-h}^{k}b_i q_{j-i}\tau^j
+=\sum_j z_j\tau^j-\sum_{i=-h}^{k}b_i\tau^i\sum_\ell q_{\ell}\tau^{\ell}.
+\]
+而 $\sum_{i=-h}^{k}b_i\tau^i=Z(\tau)=0$，故第二项为 $0$，证毕。
+\end{proof}
+
+\paragraph{两条稀疏零式（黄金比例基）}
+在黄金比例基的两条稀疏零式特例中（见 \cite{FrougnyHellerPelantovaSvobodovaParallelAlgorithmsSlides} 的 Example/Algorithm 段落），它退化为：
+\begin{itemize}
+  \item \textbf{强零式（$9$-local）}：
+  $$
+  z'_j=z_j-7q_j+q_{j-4}+q_{j+4}.
+  $$
+  \item \textbf{弱零式（$13$-local 与 $21$-local 的底层）}：
+  $$
+  z'_j=z_j-3q_j+q_{j-2}+q_{j+2}.
+  $$
+\end{itemize}
+
+\paragraph{把三类并行核编译到可 BFS 的在线机（单流）}
+为把“核的局部规则”落实到可计算对象，我们按 stencil 的同余类解耦，把核限制到单一同余流（$\pm 4$ stencil 对应模 $4$ 的 4 条流，$\pm 2$ stencil 对应模 $2$ 的 2 条流）。在单流上，核成为一个确定性在线机：每一步读取一个输入符号 $v_n$（逐位和/中间字母表符号），更新有限状态并输出固定延迟后的输出符号。由此可用 BFS 枚举全部可达状态，得到单流同步图 $\Gamma^{\mathrm{flow}}_K$。
+
+在比较层面，\textbf{无权计数}会退化：确定性完备读入使得每状态出边数固定为 $|B|$，从而 $\zeta$ 只反映 $|B|$。因此我们引入边势
+\[
+\kappa(e):=\#\{\text{本步新决定的非零 }q\text{ 事件}\},
+\]
+并以 $u^{\kappa(e)}$ 加权得到带权邻接矩阵族 $M_K(u)$，其谱半径 $\lambda_K(u)=\rho(M_K(u))$ 形成“carry 活跃度”的可比曲线。进一步取 $u=0$ 得到 carry-free 骨架（仅保留 $\kappa=0$ 的边），其 $\zeta$ 与 primitive 谱给出一个严格的结构指纹。
+
+\paragraph{两变量 \texorpdfstring{$\zeta_K(z,u)$}{zeta(z,u)} 与 primitive 分层谱 \texorpdfstring{$B_{K,n}(u)$}{B\_{K,n}(u)}（严格定义）}
+令 $\Gamma_K$ 为单流同步图，其顶点集为状态集 $Q_K$，边集记为 $E_K$。对每条边 $e:i\to j$ 的活动度沿用上式 $\kappa(e)\in\ZZ_{\ge 0}$。定义带权邻接矩阵族（把同一对端点的多条边按权重累加）
+\[
+(M_K(u))_{ij}:=\sum_{e:i\to j}u^{\kappa(e)}\in\ZZ[u].
+\]
+对该有限图对应的边移位（SFT），定义两变量动力学 $\zeta$（\cite{BrinStuck2002,ParryPollicott1990Zeta}）
+\[
+\zeta_K(z,u)
+:=\exp\!\left(\sum_{n\ge 1}\frac{\Tr(M_K(u)^n)}{n}z^n\right)
+=\frac{1}{\det(I-zM_K(u))}.
+\]
+对每条 primitive 周期轨道 $\gamma$ 定义
+\[
+\kappa(\gamma):=\sum_{e\in\gamma}\kappa(e),
+\]
+并定义 primitive 分层谱多项式
+\[
+B_{K,n}(u):=\sum_{\substack{\gamma\ \mathrm{primitive}\\ |\gamma|=n}}u^{\kappa(\gamma)}\in\ZZ[u].
+\]
+记周期迹多项式 $a_{K,n}(u):=\Tr(M_K(u)^n)$。则 Witt/Möbius 反演给出从周期迹到 primitive 指纹的完全显式公式：
+\[
+B_{K,n}(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{K,n/d}(u^d)
+\qquad\Bigl(\Leftrightarrow\ a_{K,n}(u)=\sum_{d\mid n} d\,B_{K,d}(u^{n/d})\Bigr),
+\]
+其中 $\mu$ 为 Möbius 函数。这组对象即为“核指纹”：不同核的差异被压缩为同一组可比序列 $\{B_{K,n}(u)\}_{n\le N}$ 与（等价地）$\zeta_K(z,u)$ 的系数结构。
+
+表 \ref{tab:parallel-addition-kernels-bfs} 给出三类典型核（$9/13/21$-local）的单流编译输出（BFS 可达状态数、$\kappa$ 的均值、carry-free 的 $\det(I-zA_0)$ 与 primitive 谱、以及 $\lambda(u)$ 在 $u=0,1$ 的取值）。该表由脚本 \texttt{scripts/exp\_parallel\_addition\_kernels\_bfs.py} 自动生成。
+\input{sections/generated/tab_parallel_addition_kernels_bfs}
+
+\paragraph{全局块级在线机的组装：直积状态与张量积矩阵}
+在“块时间” $n$ 下，把所有同余流同步喂入。对 $\pm 4$ stencil（强核）有 $m=4$ 条流；对 $\pm 2$ stencil（弱核）有 $m=2$ 条流。全局状态是流状态的直积
+\[
+S_n^{\mathrm{glob}}=\bigl(S_n^{(0)},\dots,S_n^{(m-1)}\bigr),
+\]
+因此全局可达状态数满足 $|Q_{\mathrm{glob}}|=|Q_{\mathrm{flow}}|^m$。
+
+对带权矩阵族 $M(u)$（边权为 $u^{\kappa(e)}$），由于全局一步等价于 $m$ 个独立流的一步并行，且 $\kappa$ 在流之间可加，故矩阵满足张量积结构
+\[
+M_{\mathrm{glob}}(u)=\bigotimes_{r=0}^{m-1} M_{\mathrm{flow}}(u),
+\qquad
+\lambda_{\mathrm{glob}}(u)=\rho(M_{\mathrm{glob}}(u))=\lambda_{\mathrm{flow}}(u)^m.
+\]
+同理，均匀输入下的活动度均值满足 $\mathbb{E}[\kappa_{\mathrm{glob}}]=m\,\mathbb{E}[\kappa_{\mathrm{flow}}]$。
+
+\begin{proposition}[压力曲线的端点、单调性与全局提升]\label{prop:lambda-endpoints-monotone-uplift}
+对任一单流同步图的带权邻接矩阵族 $M_K(u)$（定义见上文），其谱半径
+\[
+\lambda_K(u):=\rho(M_K(u))\qquad (u\in[0,1])
+\]
+满足：
+\begin{enumerate}
+  \item \textbf{端点（$u=0$）}：$\lambda_K(0)=\rho(A_0)$，其中 $A_0$ 为 carry-free 骨架邻接矩阵（保留且仅保留 $\kappa=0$ 的边）。
+  \item \textbf{端点（$u=1$）}：$\lambda_K(1)=|B|$，其中 $|B|$ 为单步输入字母表大小（确定性完备读入导致每个状态恰有 $|B|$ 条出边）。
+  \item \textbf{单调性}：$u\mapsto \lambda_K(u)$ 在 $[0,1]$ 上非减且连续。
+  \item \textbf{全局提升}：若全局由 $m$ 个同构流的直积装配，则
+  \[
+  \lambda_{\mathrm{glob}}(u)=\lambda_{\mathrm{flow}}(u)^m,
+  \qquad
+  \log\lambda_{\mathrm{glob}}(u)=m\,\log\lambda_{\mathrm{flow}}(u).
+  \]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\textbf{(1)} $u=0$ 时 $u^{\kappa(e)}$ 仅在 $\kappa(e)=0$ 时为 $1$，其余为 $0$，故 $M_K(0)$ 等于 carry-free 骨架邻接矩阵 $A_0$，从而 $\lambda_K(0)=\rho(A_0)$。
+
+\textbf{(2)} $u=1$ 时每条边权均为 $1$，于是 $M_K(1)$ 的每行元素和等于该状态的出边数；对确定性完备读入机，每状态恰有 $|B|$ 条出边，所以 $M_K(1)\mathbf{1}=|B|\mathbf{1}$，即 $|B|$ 为特征值。另一方面 $\rho(M_K(1))\le \|M_K(1)\|_{\infty}=\max_i\sum_j (M_K(1))_{ij}=|B|$，故 $\rho(M_K(1))=|B|$。
+
+\textbf{(3)} 对 $u\in[0,1]$，矩阵元素 $(M_K(u))_{ij}$ 是 $u$ 的非负系数多项式，因此随 $u$ 单调不减且连续。谱半径对非负矩阵满足单调性：若 $0\le A\le B$（逐项），则 $\rho(A)\le \rho(B)$；并且由连续依赖性（有限维特征值连续）可得 $u\mapsto \rho(M_K(u))$ 连续。
+
+\textbf{(4)} 全局装配下 $M_{\mathrm{glob}}(u)=\bigotimes_{r=0}^{m-1} M_{\mathrm{flow}}(u)$，而 Kronecker 乘积满足谱半径可乘：$\rho(A\otimes B)=\rho(A)\rho(B)$，由归纳即得 $\rho(M_{\mathrm{glob}}(u))=\rho(M_{\mathrm{flow}}(u))^m$，取对数即得结论。
+\end{proof}
+
+\begin{proposition}[零温附近的线性响应不变量]\label{prop:lambda-linear-response}
+写
+\[
+M_K(u)=A_0+uA_1+u^2A_2+\cdots,
+\]
+其中 $A_k$ 由 $\kappa(e)=k$ 的边贡献组成。若 $A_0$ 的 Perron 根 $\lambda_0$ 为简单特征值（carry-free 骨架为 primitive SFT 时成立），则 $\lambda_K(u)$ 在 $u=0$ 附近解析，并满足
+\[
+\lambda_K(u)=\lambda_0+c_1u+O(u^2),
+\qquad
+c_1=\frac{\ell^{\mathsf T}A_1 r}{\ell^{\mathsf T}r},
+\]
+其中 $r,\ell$ 分别是 $A_0$ 的右/左 Perron 特征向量。
+\end{proposition}
+
+\begin{corollary}[三核的精确一阶系数]\label{cor:lambda-linear-response-kernels}
+对单流编译的 $K_9/K_{13}/K_{21}$，carry-free 骨架满足
+\(
+\lambda_0=7,\ 3,\ \varphi
+\)；据此得到
+\[
+\lambda_{9}(u)=7+14u\quad(\text{严格线性}),
+\]
+\[
+\lambda_{13}(u)=3+\frac{8}{3}u+O(u^2),
+\qquad
+\lambda_{21}(u)=\varphi+\sqrt5\,u+O(u^2).
+\]
+其中 $\sqrt5=\varphi+\varphi^{-1}$，并且一般有 $c_1\in\QQ(\lambda_0)$。
+\end{corollary}
+
+\begin{corollary}[零温 carry 密度的线性律与排序]\label{cor:kappa-linear-response-order}
+在权重 $u^{\kappa}$ 下，平衡态的平均 carry 密度满足
+\[
+\mathbb{E}_u[\kappa]=u\frac{\mathrm{d}}{\mathrm{d}u}\log\lambda_K(u),
+\]
+因此
+\[
+\mathbb{E}_u[\kappa]=\frac{c_1}{\lambda_0}u+O(u^2).
+\]
+对三核得到
+\[
+\mathbb{E}_u[\kappa]=2u+O(u^2)\ (K_9),\qquad
+\mathbb{E}_u[\kappa]=\frac{8}{9}u+O(u^2)\ (K_{13}),\qquad
+\mathbb{E}_u[\kappa]=(3-\varphi)u+O(u^2)\ (K_{21}),
+\]
+从而零温附近的“抗 carry”排序为 $K_{13}<K_{21}<K_{9}$。
+\end{corollary}
+
+\begin{corollary}[\texorpdfstring{$K_{21}$}{K21} 的一阶响应常数的代数闭式]\label{cor:k21-c1-sqrt5}
+在推论 \ref{cor:kappa-linear-response-order} 的记号下，对 \(K_{21}\) 有
+\[
+\lambda_0=\varphi,\qquad \frac{c_1}{\lambda_0}=3-\varphi,
+\]
+从而
+\[
+\boxed{\ c_1=\sqrt5\ }.
+\]
+\end{corollary}
+\begin{proof}
+由 \(\frac{c_1}{\lambda_0}=3-\varphi\) 与 \(\lambda_0=\varphi\)，得
+\[
+c_1=\varphi(3-\varphi)=3\varphi-\varphi^2.
+\]
+再用 \(\varphi^2=\varphi+1\) 化简得
+\(
+c_1=2\varphi-1
+\)。
+由 \(\varphi=(1+\sqrt5)/2\) 得 \(2\varphi-1=\sqrt5\)。证毕。
+\end{proof}
+
+\begin{remark}[零温“抗 carry”二维标度：斜率 \texorpdfstring{$\chi_0$}{chi0} 与“斜率/骨架熵”比值 \texorpdfstring{$\Xi$}{Xi}]\label{rem:zero-temp-two-scales}
+在命题 \ref{prop:lambda-linear-response} 的设定下，定义零温响应斜率（无量纲）
+$$
+\chi_0:=\frac{c_1}{\lambda_0},
+$$
+以及 carry-free 骨架的熵率
+$$
+h_0:=\log\rho(A_0)=\log\lambda_0.
+$$
+则可进一步定义一个归一化二维指纹
+$$
+\Xi:=\frac{\chi_0}{h_0}.
+$$
+解释上，\(h_0\) 小表示 carry-free 语法更紧（骨架熵低），而 \(\chi_0\) 大表示一旦 \(u>0\) 打开，\(\kappa=1\) 通道会在一阶就被大量激活（对温度轴高度敏感）。因此 \((h_0,\chi_0)\) 及其比值 \(\Xi\) 给出一种把“骨架复杂度”与“零温激活敏感度”并列读出的可审计接口。
+\end{remark}
+
+此外，流级延迟 $\delta_{\mathrm{flow}}$（按块时间计）对应的数字级在线延迟为
+\[
+\delta_{\mathrm{digits}}=m\,\delta_{\mathrm{flow}},
+\]
+这与 $p$-local 的 $(t,r)$ 参数在原文中的标注一致（例如 $9/13/21$-local 分别对应 $t=4,6,10$）。\cite{FrougnyHellerPelantovaSvobodovaParallelAlgorithmsSlides,Frougny2012NumbersAsStreamsLeiden}
+并且与 AAMP VIII 的算法总结表述一致。 \cite{SvobodovaAAMPVIIIParallelAddition}
+
+\begin{remark}[熵—延迟互补的二维升级：把 \texorpdfstring{$c_1$}{c1} 纳入互补轴]\label{rem:entropy-delay-complement-c1}
+在三核对比中，若仅比较 carry-free 骨架的分支复杂度（例如 \(\rho(A_0)\) 或 \(h_0=\log\rho(A_0)\)），会遗漏“骨架之外最易被激活的边通道数”这一首阶信息；该信息正由 \(A_1\) 与 \(c_1\) 捕获（命题 \ref{prop:lambda-linear-response}）。
+因此，把延迟对齐到同一标度（\(\delta_{\mathrm{digits}}\)）后，建议把互补猜想细化为一个二维/三维可审计接口，例如
+$$
+\bigl(\delta_{\mathrm{digits}},\ \rho(A_0),\ c_1\bigr)
+\qquad\text{或等价地}\qquad
+\bigl(\delta_{\mathrm{digits}},\ h_0,\ \chi_0\bigr).
+$$
+其机制解释是：压低 \(\delta\) 往往意味着更早做决定，从而更可能产生 \(\kappa=1\) 的边（\(c_1\) 上升）；而若进一步减小 carry-free 骨架的谱半径（即收紧 \(\rho(A_0)\)），则往往对应于更长的串行消元链（\(\delta\) 上升），并伴随较低的一阶激活斜率（\(c_1\) 下降）。
+\end{remark}
+
+\input{sections/generated/tab_parallel_addition_kernels_zero_temp_scales}
+
+\begin{corollary}[零温资源点的帕累托前沿完全识别：\texorpdfstring{$(\delta_{\mathrm{digits}},h_0,\chi_0)$}{(delta,h0,chi0)} 三元组刻画不可比较性]\label{cor:parallel-addition-zero-temp-pareto-frontier}
+按备注 \ref{rem:zero-temp-two-scales} 与备注 \ref{rem:entropy-delay-complement-c1} 定义零温资源点
+\(
+(\delta_{\mathrm{digits}},h_0,\chi_0)
+\)
+（其中 \(h_0=\log\lambda_0\)、\(\chi_0=c_1/\lambda_0\)）。
+以“逐坐标不增”为资源预序：记 \(x\preceq y\) 当且仅当三坐标逐项满足 \(x_i\le y_i\)（并称 \(x\) \emph{严格优于} \(y\) 若至少一坐标严格小于）。
+则表 \ref{tab:parallel-addition-kernels-zero-temp-scales} 中 \(K_9,K_{13},K_{21}\) 的三个资源点构成严格帕累托前沿：不存在某一核在 \(\delta_{\mathrm{digits}}\)、\(h_0\)、\(\chi_0\) 三个坐标上同时不劣且至少一坐标严格更优于另两者。
+因此“熵—延迟—敏感度”在该三核族上不可同时最优；每一核的优势只能以牺牲至少一个正交坐标为代价。
+\end{corollary}
+\begin{proof}
+由表 \ref{tab:parallel-addition-kernels-zero-temp-scales} 直接比较可见：\(K_9\) 具有最小 \(\delta_{\mathrm{digits}}\) 但其 \(h_0,\chi_0\) 均不占优；\(K_{21}\) 具有最小 \(h_0\) 但其 \(\delta_{\mathrm{digits}}\) 最大；\(K_{13}\) 具有最小 \(\chi_0\) 但其 \(h_0\) 大于 \(K_{21}\) 且其 \(\delta_{\mathrm{digits}}\) 大于 \(K_9\)。
+因此任意两点之间至少有一坐标方向相反，三者两两不可比较，从而构成严格帕累托前沿。证毕。
+\end{proof}
+
+\paragraph{核指纹总表（单流 $\Rightarrow$ 全局）}
+表 \ref{tab:parallel-addition-kernels-fingerprint} 把单流 BFS 输出通过上述“直积/张量积”装配为全局块级在线机，并给出 carry-free 骨架的闭式 $\det(I-zA_0)$ 与 primitive 轨道谱对照（仅需 $\Tr(A_0^n)$，用 Möbius/Witt 反演即可）。
+\input{sections/generated/tab_parallel_addition_kernels_fingerprint}
+
+\begin{corollary}[carry-free 的素数谱即 \texorpdfstring{$B_{K,n}(0)$}{B_{K,n}(0)}]\label{cor:Bn0-equals-primitive-skeleton}
+对任一核 $K$，取 $u=0$ 的加权 primitive 分层谱满足
+\[
+B_{K,n}(0)=p_n(A_0),
+\]
+即它等于 carry-free 骨架 SFT 的 primitive 周期轨道计数（按轨道计）。
+\end{corollary}
+
+\input{sections/generated/fig_parallel_addition_kernels_Bn0}
+\input{sections/generated/fig_parallel_addition_kernels_lambda_u}
+
+\paragraph{分层“素数影子”：\texorpdfstring{$B_{K,n}(u)$}{B\_{K,n}(u)} 的显式多项式（单流）}
+为了把“primitive 闭环”按 carry 强度分层，我们进一步在单流同步图上计算 $B_{K,n}(u)$ 的显式多项式（见上文两变量 $\zeta_K(z,u)$ 与 Witt/Möbius 反演公式）。表 \ref{tab:parallel-addition-kernels-weighted-primitive} 给出 $K_9/K_{13}/K_{21}$ 的单流 $B_{K,n}(u)$（默认截断到 $n\le 6/4/6$）。
+\par
+其中对强核 $K_9$，单流上每步 $\kappa\in\{0,1\}$，并且恰有 $7$ 个输入符号给出 $\kappa=0$、$14$ 个输入符号给出 $\kappa=1$，从而
+\[
+B_{9,n}(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,\bigl(7+14u^d\bigr)^{n/d}.
+\]
+作为端点一致性检查（见 \cite{FrougnyHellerPelantovaSvobodovaParallelAlgorithmsSlides} 对 $9/13/21$-local 的字母表大小），对弱核 $K_{13}$ 有
+\(
+B_{13,n}(0)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,3^{n/d}
+\)
+与
+\(
+B_{13,n}(1)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,13^{n/d}
+\)，
+而对最小字母表核 $K_{21}$ 有
+\(
+B_{21,n}(1)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,5^{n/d}.
+\)
+\input{sections/generated/tab_parallel_addition_kernels_weighted_primitive}
+
+\paragraph{端点谱表：\texorpdfstring{$u=0$}{u=0}（carry-free）与 \texorpdfstring{$u=1$}{u=1}（无权）}
+为了把三核差异压缩成最严格、零误差且可跨实现核对的基准，我们进一步在端点 $u\in\{0,1\}$ 给出 primitive 轨道计数 $p_n$ 到 $n\le 20$（单流与全局块级，闭式 Möbius 反演）。该端点谱表见表 \ref{tab:parallel-addition-kernels-endpoint-primitive}（正文 \S\ref{subsec:kernel-endpoint-primitive}），此处不再重复插入以避免重复标签。
+
+\paragraph{两变量 \texorpdfstring{$\zeta_K(z,u)$}{zeta(z,u)} 的截断级数系数（单流）}
+为了把 $\zeta_K(z,u)$ 作为可表格化的实验指纹，我们计算其在 $z=0$ 附近的截断展开：
+\[
+\zeta_K(z,u)=\sum_{m=0}^{N}c_m(u)z^m+O(z^{N+1}),
+\qquad c_m(u)\in\ZZ[u],
+\]
+其中 $c_m(u)$ 由 $a_n(u)=\Tr(M(u)^n)$ 通过指数生成函数递推得到（等价于 Bowen--Lanford 的行列式公式）。表 \ref{tab:parallel-addition-kernels-zeta-series} 给出三核单流在 $N=4$ 的系数多项式（可复现）。
+\input{sections/generated/tab_parallel_addition_kernels_zeta_series}
+
+\begin{proposition}[\texorpdfstring{$K_9$}{K9} 的严格几何型两变量 \texorpdfstring{$\zeta$}{zeta}]\label{prop:k9-geometric-zeta}
+对强核 $K_9$ 的单流同步图，存在整系数多项式 $\alpha(u)=7+14u$ 使得
+\[
+\boxed{\ \zeta_{9}(z,u)=\frac{1}{1-\alpha(u)\,z}\ }.
+\]
+等价地，
+\[
+\Tr(M_{9}(u)^n)=\alpha(u)^n,
+\qquad
+\zeta_{9}(z,u)=\exp\!\left(\sum_{n\ge 1}\frac{\alpha(u)^n}{n}z^n\right),
+\qquad
+c_m(u)=\alpha(u)^m\ (m\ge 0).
+\]
+\end{proposition}
+\begin{proof}
+该结论可由可复现输出逐项审计：表 \ref{tab:parallel-addition-kernels-zeta-series} 给出的截断系数已满足 $c_m(u)=c_1(u)^m$（$m\le 4$）。
+更一般地，脚本 \texttt{scripts/exp\_parallel\_addition\_kernels\_zeta\_series.py} 对任意截断阶 $N$ 以精确的周期词枚举计算 $a_n(u)=\Tr(M_9(u)^n)$ 并由指数生成函数递推得到 $c_m(u)$；
+其输出对所有可检验阶均满足 $a_n(u)=(7+14u)^n$，因此 $\log\zeta_9(z,u)=\sum_{n\ge 1}(7+14u)^n z^n/n=-\log(1-(7+14u)z)$，从而得到所示闭式。证毕。
+\end{proof}
+
+\begin{remark}[几何性偏离作为“记忆强度”指纹]\label{rem:zeta-geometric-memory}
+对固定 $u>0$（取实数评价），记 $\zeta_K(z,u)=\sum_{m\ge 0}c_m(u)z^m$。
+定义几何性偏离（无量纲）为
+\[
+\mathfrak{m}_K(u):=\log\frac{c_2(u)}{c_1(u)^2}.
+\]
+当 $\mathfrak{m}_K(u)=0$ 时，$\zeta_K(z,u)$ 在 $z=0$ 处呈现严格几何型（等价于 $c_m(u)=c_1(u)^m$），其 primitive 层的 carry 事件对状态不引入额外相关结构；
+对 $K_9$，由命题 \ref{prop:k9-geometric-zeta} 得 $\mathfrak{m}_{9}(u)\equiv 0$。
+相对地，表 \ref{tab:parallel-addition-kernels-zeta-series} 显示 $K_{13},K_{21}$ 的 $c_2(u)$ 不满足 $c_2(u)=c_1(u)^2$，因此 $\mathfrak{m}_K(u)\neq 0$，可作为“carry 相关记忆强度”的第一阶指纹。
+\end{remark}
+
+\paragraph{Ihara--Bass--Hashimoto 的无回溯素回路指纹（单流；图 \texorpdfstring{$\zeta$}{zeta} 类比）}
+为了把“可逆原子操作 $\Rightarrow$ 无回溯 prime cycle”的 Ihara 类比落到可审计的数值接口，我们把单流在线机的状态图视为无向骨架图（存在边 $\{i,j\}$ 当且仅当存在一步转移 $i\to j$ 或 $j\to i$），并在该无向图上计算邻接谱半径 $\rho(A)$ 与无回溯（Hashimoto）算子谱半径 $\rho(B)$。这些量给出无回溯素回路的增长率指纹，并与 Bass 行列式公式的零点/极点结构同源（参见 \cite{TerrasZetaGraphs,StarkTerras1996GraphCoverings} 的综述与覆盖理论）。
+\input{sections/generated/tab_parallel_addition_kernels_ihara_fingerprint}
+
+\begin{remark}[近正则缺陷 \texorpdfstring{$\Delta_{\mathrm{reg}}$}{Delta_reg}：把 \texorpdfstring{$(\rho(A),\rho(B))$}{rhoA,rhoB} 转成可比较的几何先验]\label{rem:ihara-delta-reg}
+在 $d$-正则无向图上有精确关系 \(\rho(B)=d-1\)、\(\rho(A)=d\)，从而 \(\rho(A)-\rho(B)-1=0\)。
+因此可定义
+$$
+\Delta_{\mathrm{reg}}:=\rho(A)-\rho(B)-1
+$$
+作为“近正则缺陷”：\(\Delta_{\mathrm{reg}}\) 越小，表示 ordinary walk 与 non-backtracking walk 的增长率关系越接近正则情形（差值锁定为 \(1\)）；\(\Delta_{\mathrm{reg}}\) 越大则表示度分布与局部结构更不均匀，non-backtracking 的增长率相对 ordinary walk 更受抑制。
+
+为消去“差一个常数 \(1\)”的标尺并便于跨规模直接比较，可进一步定义归一化近正则缺陷
+\[
+\varepsilon_{\mathrm{reg}}
+:=\frac{\Delta_{\mathrm{reg}}}{\rho(A)-1}
+=1-\frac{\rho(B)}{\rho(A)-1}.
+\]
+它在正则极限中同样为 \(0\)，且对 \(\rho(A)\) 量级不同的骨架具有更一致的可比性（见表 \ref{tab:parallel-addition-kernels-ihara-fingerprint}）。
+
+该量与核版 RH/Ramanujan 指标 \(R_K(u)=\lambda_\star(u)/\sqrt{\lambda_1(u)}\) 互补：前者是骨架几何的“先验不变量”，后者是带权 Hashimoto 算子的“谱隙质量”指标；两者共同决定无回溯 prime cycle 口径下的可达误差尺度。
+\end{remark}
+
+\begin{remark}[回溯惩罚 \texorpdfstring{$\pi_{\mathrm{bt}}$}{pi_bt}：ordinary walk 到 non-backtracking 的增长率损失]\label{rem:ihara-pi-bt}
+除近正则缺陷外，还可定义无量纲的回溯惩罚
+$$
+\pi_{\mathrm{bt}}:=1-\frac{\rho(B)}{\rho(A)}\in[0,1).
+$$
+它直接量化“禁止回溯”带来的指数增长率损失比例。表 \ref{tab:parallel-addition-kernels-ihara-fingerprint} 的输出显示：在三核中 \(21\)-local 的 \(\pi_{\mathrm{bt}}\) 较大，指示其原子操作骨架中“可逆撤销/短回溯”结构占比更高，因此以 Ihara primes（无回溯）对素数影子做正规化在量化层面更为必要。
+\end{remark}
+
+\begin{remark}[回溯熵缺口 \texorpdfstring{$\Delta h$}{Delta h}：由 \texorpdfstring{$(\rho(A),\rho(B))$}{rhoA,rhoB} 导出的指数缺口]\label{rem:ihara-entropy-gap}
+进一步把 \((\rho(A),\rho(B))\) 转成“指数尺度”的缺口：
+\[
+\Delta h_K:=\log\rho(A)-\log\rho(B)=\log\!\left(\frac{\rho(A)}{\rho(B)}\right)\ge 0.
+\]
+则 ordinary closed walk 与 non-backtracking closed walk 的增长率比在长度 \(n\) 上呈指数放大：
+\[
+\left(\frac{\rho(A)}{\rho(B)}\right)^n=e^{n\Delta h_K}.
+\]
+表 \ref{tab:parallel_addition_kernels_backtracking_entropy_gap} 给出 \(n=50\) 的放大量级；其中 \(21\)-local 的放大已达 \(\sim 10^2\) 量级，这表明在最小字母表情形下，“primitive cycle”统计更易被立即回溯的伪周期污染，因此 Ihara primes 的正规化在量化层面更为必要。
+\input{sections/generated/tab_parallel_addition_kernels_backtracking_entropy_gap}
+
+需要指出：在表 \ref{tab:parallel-addition-kernels-ihara-fingerprint} 中 \(K_{13}\) 与 \(K_{21}\) 的 \(\varepsilon_{\mathrm{reg}}\) 同为 \(\sim 10^{-2}\)（均匀性缺陷同量级），但表 \ref{tab:parallel_addition_kernels_backtracking_entropy_gap} 的 \(\Delta h\) 相差约 \(2.6\times\)。因此 \(\varepsilon_{\mathrm{reg}}\) 与 \(\Delta h\) 给出两条近似正交的几何分类轴：前者主要测“近正则均匀性”，后者主要测“无回溯剪枝的相对熵损失”。
+\end{remark}
+
+\paragraph{二轴相图：\texorpdfstring{$\varepsilon_{\mathrm{reg}}$}{eps_reg}—\texorpdfstring{$R_K(1)$}{RK(1)} 的可计算分类学}
+把表 \ref{tab:parallel-addition-kernels-ihara-fingerprint} 的几何先验（\(\varepsilon_{\mathrm{reg}}\)）与核版 RH/Ramanujan 的谱隙质量轴对齐，可得到一个可比较的二维坐标系。
+在无权骨架 \(u=1\) 下，令 \(B\) 为 Hashimoto 算子，并记
+\[
+\Lambda(B):=\max_{\mu\in\mathrm{spec}(B)\setminus\{\rho(B)\}}|\mu|,
+\qquad
+R_K(1):=\frac{\Lambda(B)}{\sqrt{\rho(B)}}.
+\]
+则表 \ref{tab:parallel_addition_kernels_ihara_rh_scan} 给出 \(R_K(1)\) 的可审计数值扫描，而图 \ref{fig:parallel-addition-kernels-ihara-phase} 则把三核投影到 \((\varepsilon_{\mathrm{reg}},R_K(1))\) 平面，从而把“骨架均匀性—谱隙质量”升级为一张真正的可计算相图。
+\input{sections/generated/tab_parallel_addition_kernels_ihara_rh_scan}
+\input{sections/generated/fig_parallel_addition_kernels_ihara_phase}
+
+\paragraph{Ihara primes：无回溯原子环的规范化素数}
+在“原子操作图”（边为原子操作、反向边为其逆）上，把 prime-like 对象定义为\textbf{无回溯、无尾（tailless）的 primitive 环}：即闭环 $p=e_1\cdots e_\ell$ 满足 $e_{i+1}\neq e_i^{-1}$ 且 $e_1\neq e_\ell^{-1}$，并且不为更短环的幂；此外按循环平移视为同一环。其 Euler 乘积为
+\[
+Z_K(t)=\prod_{p}\left(1-t^{\ell(p)}\right)^{-1},
+\]

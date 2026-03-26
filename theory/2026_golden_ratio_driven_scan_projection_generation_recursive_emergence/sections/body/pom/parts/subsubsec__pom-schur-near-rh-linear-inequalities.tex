@@ -1,0 +1,200 @@
+% (User input window)
+
+\paragraph{near-RH 的线性不等式完备化：由有限组压力约束判定平方根门槛}
+定理 \ref{thm:pom-schur-channel-radius-character-sieve} 表明：在“非退化主项支配”制度下，
+每个 Schur 通道的谱半径 \(\rho(B_{q,\lambda})\) 由一族分拆循环计数向量对低阶压力 \(\{P(r)\}_{r\le q}\) 的\emph{线性泛函最大值}给出。
+本段记录一个直接推论：若该非退化制度对全部非平凡通道成立，则全局 near-RH（全部非平凡通道满足平方根界）等价于一组\emph{有限可枚举}的线性不等式，
+并且“线性裕度”可直接传播为谱隙与 prime-shadow 偏差的指数证书。
+
+\paragraph{记号回顾：分拆线性型与可见循环类型集合}
+沿用 \S\ref{subsubsec:pom-wreath-artin-factorization} 与
+\S\ref{subsubsec:pom-schur-character-sieve-thermodynamic} 的记号。
+固定整数 \(q\ge2\)，并设存在 Schur 分块
+\(
+A_q\simeq\bigoplus_{\lambda\vdash q}(B_{q,\lambda}\otimes I_{f^\lambda})
+\)。
+对分拆 \(\nu\vdash q\) 记其循环计数为 \(c_r(\nu)\)。
+令低阶压力 \(P(r)=\log\rho_r\ (1\le r\le q)\) 如 \eqref{eq:pom-sr-main-term-kappa} 前所定义，
+并定义分拆线性型
+\[
+L(\nu):=\sum_{r\ge1} c_r(\nu)\,P(r).
+\]
+此外，定义“非平凡特征标可见”的循环类型集合
+\[
+\mathcal{N}_q
+:=
+\Bigl\{\nu\vdash q:\ \exists\,\lambda\vdash q,\ \lambda\neq(q)\ \text{使}\ \chi^\lambda(\nu)\neq0\Bigr\}.
+\]
+
+\begin{theorem}[near-RH 的完备线性化]\label{thm:pom-schur-near-rh-linear-inequality-complete}
+在定理 \ref{thm:pom-schur-channel-radius-character-sieve} 的设定下，
+进一步假设其“非退化主项支配”条件对\emph{全部}非平凡通道 \(\lambda\neq(q)\) 成立，
+即对每个 \(\lambda\neq(q)\) 有
+\[
+\log\rho(B_{q,\lambda})=\max_{\nu:\ \chi^\lambda(\nu)\neq0} L(\nu).
+\]
+则以下两命题等价：
+\begin{enumerate}
+  \item \textbf{（全通道平方根界 / near-RH）}
+  \[
+  \max_{\lambda\neq(q)}\rho(B_{q,\lambda})\ \le\ \rho(B_{q,(q)})^{1/2}
+  \qquad\Bigl(\rho(B_{q,(q)})=e^{P(q)}\Bigr);
+  \]
+  \item \textbf{（有限线性不等式族）}对所有 \(\nu\in\mathcal{N}_q\) 成立
+  \[
+  \boxed{\;2L(\nu)\ \le\ P(q)\; }.
+  \]
+\end{enumerate}
+因此，在上述非退化制度下，near-RH 严格等价于压力向量 \((P(1),\dots,P(q))\) 上一族可显式枚举的有限线性约束。
+\end{theorem}
+\begin{proof}
+\textbf{(1)\(\Rightarrow\)(2).}
+取任意 \(\nu\in\mathcal{N}_q\)。
+由定义存在 \(\lambda\neq(q)\) 使 \(\chi^\lambda(\nu)\neq0\)。
+由非退化假设与 \(\max\) 的定义，
+\(
+L(\nu)\le \log\rho(B_{q,\lambda})
+\)。
+再由 near-RH 得 \(\log\rho(B_{q,\lambda})\le \frac12\log\rho(B_{q,(q)})=\frac12P(q)\)，
+从而 \(2L(\nu)\le P(q)\)。
+\par
+\textbf{(2)\(\Rightarrow\)(1).}
+对任意 \(\lambda\neq(q)\)，其特征标支持
+\(
+\mathrm{Supp}(\lambda)=\{\nu:\chi^\lambda(\nu)\neq0\}
+\)
+满足 \(\mathrm{Supp}(\lambda)\subseteq\mathcal{N}_q\)。
+故由 (2) 得 \(L(\nu)\le P(q)/2\) 对所有 \(\nu\in\mathrm{Supp}(\lambda)\) 成立，
+于是
+\[
+\log\rho(B_{q,\lambda})
+=\max_{\nu\in\mathrm{Supp}(\lambda)} L(\nu)\ \le\ \frac12P(q),
+\]
+即 \(\rho(B_{q,\lambda})\le e^{P(q)/2}=\rho(B_{q,(q)})^{1/2}\)。
+对所有 \(\lambda\neq(q)\) 取最大即得 near-RH。证毕。
+\end{proof}
+
+\begin{corollary}[平方根界的裕度传播：线性裕度 \texorpdfstring{$\delta$}{delta} 给出全通道谱隙与 prime-偏差指数率]\label{cor:pom-schur-near-rh-margin-propagation}
+在定理 \ref{thm:pom-schur-near-rh-linear-inequality-complete} 的设定下，给定 \(\delta>0\)。
+若对所有 \(\nu\in\mathcal{N}_q\) 成立严格裕度
+\[
+2L(\nu)\ \le\ P(q)-\delta,
+\]
+则对所有非平凡通道 \(\lambda\neq(q)\) 有定量谱隙
+\[
+\boxed{\;
+\rho(B_{q,\lambda})\ \le\ \exp\!\Bigl(\frac{P(q)-\delta}{2}\Bigr)\; }.
+\]
+从而由定理 \ref{thm:pom-schur-chebotarev-prime-deviation}（通道 prime-shadow 的显式公式模板）得到：
+对每个 \(\lambda\neq(q)\) 存在常数 \(C_{q,\lambda}>0\) 使对所有 \(N\ge2\) 有
+\[
+\boxed{\;
+\Pi_\lambda(N)=O\!\left(\frac{\exp\!\bigl(\tfrac{P(q)-\delta}{2}N\bigr)}{N}\right)\;}
+\]
+（误差的指数率由 \(\rho(B_{q,\lambda})\) 控制）。
+\end{corollary}
+\begin{proof}
+由假设，对任意 \(\lambda\neq(q)\) 有
+\(
+\max_{\nu\in\mathrm{Supp}(\lambda)}L(\nu)\le (P(q)-\delta)/2
+\)；
+再由非退化假设 \(\log\rho(B_{q,\lambda})=\max_{\nu\in\mathrm{Supp}(\lambda)}L(\nu)\) 得谱半径上界。
+prime-shadow 误差项估计为定理 \ref{thm:pom-schur-chebotarev-prime-deviation} 的直接代入。证毕。
+\end{proof}
+
+\begin{corollary}[Schur--压力外壳：通道谱半径是显式凸多面体的支撑函数]\label{cor:pom-schur-pressure-polytope-shell}
+固定 \(q\ge2\) 并记压力向量 \(p:=(P(1),\dots,P(q))\in\RR^q\)。
+令循环计数向量
+\(
+c(\nu):=(c_1(\nu),\dots,c_q(\nu))\in\NN_0^q
+\)
+并定义凸多面体
+\[
+\mathcal{P}_q:=\mathrm{conv}\{c(\nu):\ \nu\vdash q\}\subset\RR^q,
+\qquad
+\mathcal{P}_q(\lambda):=\mathrm{conv}\{c(\nu):\ \nu\in\mathrm{Supp}(\lambda)\}\subseteq\mathcal{P}_q.
+\]
+则在定理 \ref{thm:pom-schur-channel-radius-character-sieve} 的非退化制度下，对每个 \(\lambda\vdash q\) 成立支撑函数表述
+\[
+\boxed{\;
+\log\rho(B_{q,\lambda})
+=
+\max_{\nu\in\mathrm{Supp}(\lambda)}L(\nu)
+=
+\max_{x\in\mathcal{P}_q(\lambda)}\langle x,p\rangle\; }.
+\]
+因此通道谱半径集合
+\(\{\log\rho(B_{q,\lambda})\}_{\lambda\vdash q}\)
+是同一压力向量 \(p\) 在一族显式可枚举凸多面体 \(\{\mathcal{P}_q(\lambda)\}\) 上的支撑函数取值；
+特别地，near-RH 约束属于有限维线性规划范畴：
+\[
+\max_{\lambda\neq(q)}\ \max_{x\in\mathcal{P}_q(\lambda)}\bigl(2\langle x,p\rangle-P(q)\bigr)\ \le\ 0.
+\]
+\end{corollary}
+\begin{proof}
+由定义 \(L(\nu)=\langle c(\nu),p\rangle\)。
+而 \(\max_{\nu\in\mathrm{Supp}(\lambda)}\langle c(\nu),p\rangle\) 作为对离散集合的最大值，等价于对其凸包 \(\mathcal{P}_q(\lambda)\) 的支撑函数取值；
+再由定理 \ref{thm:pom-schur-channel-radius-character-sieve} 得 \(\log\rho(B_{q,\lambda})=\max_{\nu\in\mathrm{Supp}(\lambda)}L(\nu)\)。
+最后一条 near-RH 约束为把 \(\log\rho(B_{q,\lambda})\le P(q)/2\) 写成支撑函数不等式并取最大。证毕。
+\end{proof}
+
+\paragraph{乘法升级与平方根门槛的结构性不相容：张量谱的必然放大}
+near-RH 以“非 Perron 模长 \(\le \sqrt{\rho}\)”为门槛。
+下述结论指出：一旦高阶核可被视为某种张量化升级并且\emph{不抹去}低阶的次主模态，则平方根门槛在足够大阶上必破产。
+该结论不依赖具体的分拆/特征标制度，仅使用张量谱的基本乘法结构。
+
+\begin{theorem}[张量化乘法升级下的次主谱放大：平方根门槛在大阶必失效]\label{thm:pom-multiplicative-upgrade-fatal-amplification}
+设 \(A\in M_d(\NN)\) 为本原非负矩阵，\(\rho:=\rho(A)>1\) 为 Perron 根。
+令 \(\eta:=\max\{|\mu|:\ \mu\in\sigma(A),\ \mu\neq\rho\}\) 为非 Perron 最大模特征值，并取满足 \(Av=\mu v\)、\(|\mu|=\eta\) 的特征向量 \(v\neq 0\)。
+对任意整数 \(b\ge 2\)，令 \(\mathcal H_b\) 为某个有限维实向量空间，并设存在满射线性映射
+\[
+\Pi_b:\ (\RR^d)^{\otimes b}\twoheadrightarrow \mathcal H_b
+\]
+与线性算子 \(A_b:\mathcal H_b\to\mathcal H_b\) 使得互换关系成立：
+\begin{equation}\label{eq:pom-multiplicative-upgrade-intertwining}
+\boxed{\;A_b\,\Pi_b=\Pi_b\,(A^{\otimes b}).\;}
+\end{equation}
+若进一步满足\textbf{次主模态不被湮灭}：
+\begin{equation}\label{eq:pom-multiplicative-upgrade-first-order-faithful}
+\boxed{\;\Pi_b\bigl(u^{\otimes(b-1)}\otimes v\bigr)\neq 0\;}
+\end{equation}
+其中 \(u\) 为 \(A\) 的 Perron 特征向量（\(Au=\rho u\)），则 \(A_b\) 的谱包含特征值 \(\rho^{b-1}\mu\)，从而
+\[
+\max_{\lambda\in\sigma(A_b),\ \lambda\neq\rho(A_b)}|\lambda|
+\ \ge\ \rho^{b-1}\eta.
+\]
+在此情形下若还满足 Perron 标度 \(\rho(A_b)=\rho(A^{\otimes b})=\rho^b\)，则存在 \(b_0\) 使对所有 \(b\ge b_0\) 均有
+\[
+\max_{\lambda\in\sigma(A_b),\ \lambda\neq\rho(A_b)}|\lambda|\ >\ \sqrt{\rho(A_b)}.
+\]
+\end{theorem}
+\begin{proof}
+由张量谱的乘法性，向量
+\(
+x:=u^{\otimes(b-1)}\otimes v
+\)
+满足
+\[
+(A^{\otimes b})x=(\rho^{b-1}\mu)\,x.
+\]
+对其作用 \(\Pi_b\) 并用互换关系 \eqref{eq:pom-multiplicative-upgrade-intertwining} 得
+\[
+A_b\bigl(\Pi_b x\bigr)=\Pi_b\bigl((A^{\otimes b})x\bigr)=(\rho^{b-1}\mu)\,\Pi_b x.
+\]
+由 \eqref{eq:pom-multiplicative-upgrade-first-order-faithful}，\(\Pi_b x\neq 0\)，故 \(\rho^{b-1}\mu\in\sigma(A_b)\)，从而次主谱模长至少为 \(\rho^{b-1}\eta\)。
+\par
+若另有 \(\rho(A_b)=\rho^b\)，则
+\[
+\frac{\rho^{b-1}\eta}{\sqrt{\rho(A_b)}}=\eta\,\rho^{b/2-1}\xrightarrow[b\to\infty]{}\infty
+\qquad(\rho>1,\ \eta>0),
+\]
+故对充分大 \(b\) 有 \(\rho^{b-1}\eta>\sqrt{\rho(A_b)}\)，从而平方根门槛必失效。证毕。
+\end{proof}
+
+\begin{corollary}[正规升级的直接谱点推出]\label{cor:pom-multiplicative-upgrade-normal-direct-spectrum}
+在定理 \ref{thm:pom-multiplicative-upgrade-fatal-amplification} 的设定下，若进一步假设 \(A_b\) 为正规算子（在某个内积下满足 \(A_bA_b^\ast=A_b^\ast A_b\)），
+则 \(\rho^{b-1}\mu\) 不仅作为谱半径下界出现，而且是 \(A_b\) 的真实特征值；
+因此一旦 \(\rho(A_b)=\rho^b\) 且 \(\Pi_b(u^{\otimes(b-1)}\otimes v)\neq 0\)，则平方根门槛失效无需任何伪谱/稳定性估计。
+\end{corollary}
+
+\input{sections/body/pom/parts/subsubsec__pom-schur-near-rh-linear-inequalities-part2}

@@ -1,0 +1,256 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Fold factor-chain spectral-gap audit (hypercube walk -> Fold_m factor chain).
+
+We build the factor chain on X_m induced by the simple random walk on Ω_m={0,1}^m:
+  - pick ω uniformly from the current fiber Fold_m^{-1}(x),
+  - flip one uniformly random bit to get ω',
+  - output y=Fold_m(ω').
+
+Equivalently, for the compressed Markov kernel on distributions:
+  \bar P_m = P_m ∘ P^{□}_m ∘ Q_m,
+where P_m is pushforward by Fold_m and Q_m is fiber-uniform lift.
+
+This script computes \bar P_m exactly for small m, diagonalizes the symmetric
+similarity transform (reversible chain), and audits the lower bound:
+  gap(\bar P_m) >= gap(P^{□}_m) = 2/m.
+
+Outputs:
+  - artifacts/export/fold_factor_chain_hypercube_gap_m6_m12.json
+  - sections/generated/tab_fold_factor_chain_gap_m6_m12.tex
+
+All output is English-only by repository convention.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Tuple
+
+import numpy as np
+
+from common_fold_map_cache import fold_map_packed
+from common_paths import export_dir, generated_dir
+from common_phi_fold import fib_upto
+
+
+@dataclass(frozen=True)
+class Row:
+    m: int
+    omega_size: int
+    X_size: int
+    d_min: int
+    d_max: int
+    gap: float
+    gap_lower: float
+    gap_ratio: float
+    diag_max_abs: float
+    sym_err_max_abs: float
+
+    def to_dict(self) -> Dict[str, object]:
+        return {
+            "m": int(self.m),
+            "omega_size": int(self.omega_size),
+            "X_size": int(self.X_size),
+            "d_min": int(self.d_min),
+            "d_max": int(self.d_max),
+            "gap": float(self.gap),
+            "gap_lower": float(self.gap_lower),
+            "gap_ratio": float(self.gap_ratio),
+            "diag_max_abs": float(self.diag_max_abs),
+            "sym_err_max_abs": float(self.sym_err_max_abs),
+        }
+
+
+def _unique_X_states(fold_map: np.ndarray) -> List[int]:
+    xs = sorted({int(x) for x in fold_map.tolist()})
+    return xs
+
+
+def build_factor_chain(m: int) -> Tuple[np.ndarray, np.ndarray, List[int]]:
+    """Return (Pbar, pi, xs) where Pbar is |X|x|X|, pi is stationary on X."""
+    m = int(m)
+    if m <= 0:
+        raise ValueError("Require m>=1")
+    size = 1 << m
+    fold_map = fold_map_packed(m)
+    xs = _unique_X_states(fold_map)
+    idx = {x: i for i, x in enumerate(xs)}
+    n = len(xs)
+
+    # Fiber sizes d_m(x).
+    d = np.zeros(n, dtype=np.int64)
+    for w in range(size):
+        d[idx[int(fold_map[w])]] += 1
+    if int(d.sum()) != size:
+        raise AssertionError("Fiber-size accounting mismatch")
+
+    # Directed edge counts between fibers under one-bit flips on Ω_m.
+    counts = np.zeros((n, n), dtype=np.int64)
+    for w in range(size):
+        xi = idx[int(fold_map[w])]
+        for b in range(m):
+            # Packed words are MSB-first; flip bit-position b (0..m-1) by XOR.
+            w2 = w ^ (1 << (m - 1 - b))
+            yi = idx[int(fold_map[w2])]
+            counts[xi, yi] += 1
+
+    # Normalize to a Markov kernel on X_m.
+    denom = (d.astype(np.float64) * float(m)).reshape(-1, 1)
+    Pbar = counts.astype(np.float64) / denom
+
+    # Stationary distribution is pushforward of uniform on Ω_m.
+    pi = d.astype(np.float64) / float(size)
+
+    # Sanity checks: row-stochastic and non-negative.
+    if not np.all(Pbar >= -1e-15):
+        raise AssertionError("Negative transition probability detected (numerical?)")
+    row_sums = Pbar.sum(axis=1)
+    if not np.allclose(row_sums, 1.0, atol=1e-12, rtol=0.0):
+        raise AssertionError(f"Row sums not 1: max|sum-1|={float(np.max(np.abs(row_sums-1.0))):.3e}")
+
+    return Pbar, pi, xs
+
+
+def spectral_gap_reversible(P: np.ndarray, pi: np.ndarray) -> Tuple[float, float, float]:
+    """Return (gap, diag_max_abs, sym_err_max_abs) using symmetric similarity transform."""
+    P = np.asarray(P, dtype=np.float64)
+    pi = np.asarray(pi, dtype=np.float64)
+    if P.shape[0] != P.shape[1]:
+        raise ValueError("P must be square")
+    if P.shape[0] != pi.shape[0]:
+        raise ValueError("pi size mismatch")
+    if np.min(pi) <= 0:
+        raise ValueError("pi must be strictly positive for similarity transform")
+
+    diag_max_abs = float(np.max(np.abs(np.diag(P))))
+    s = np.sqrt(pi)
+    # S = D^{1/2} P D^{-1/2}
+    S = (s.reshape(-1, 1) * P) / s.reshape(1, -1)
+    sym_err = float(np.max(np.abs(S - S.T)))
+
+    # Eigenvalues of S are real; largest is 1.
+    evals = np.linalg.eigvalsh(S)
+    evals.sort()
+    lam1 = float(evals[-1])
+    lam2 = float(evals[-2]) if evals.shape[0] >= 2 else float("-inf")
+
+    # Normalize possible numerical drift of lam1.
+    gap = float(1.0 - lam2)
+    return gap, diag_max_abs, sym_err
+
+
+def write_table(rows: List[Row], out_path: Path) -> None:
+    lines: List[str] = []
+    lines.append("% Auto-generated by scripts/exp_fold_factor_chain_hypercube_gap_m6_m12.py")
+    lines.append("\\begin{table}[H]")
+    lines.append("\\centering")
+    lines.append("\\scriptsize")
+    lines.append("\\setlength{\\tabcolsep}{6pt}")
+    lines.append("\\renewcommand{\\arraystretch}{1.10}")
+    lines.append(
+        (
+            "\\caption{Finite-window audit for the Fold factor chain $\\overline P_m^{\\square}$ "
+            "(Definition~\\ref{def:pom-fold-factor-chain}): exact construction from the hypercube walk, "
+            "and numerical verification of the spectral-gap lower bound "
+            "$\\mathrm{gap}(\\overline P_m^{\\square})\\ge 2/m$ (Theorem~\\ref{thm:pom-fold-factor-chain-gap-lsi}).}"
+        )
+    )
+    lines.append("\\label{tab:fold_factor_chain_gap_m6_m12}")
+    lines.append("\\begin{tabular}{r r r r r r r r}")
+    lines.append("\\toprule")
+    lines.append(
+        "$m$ & $|\\Omega_m|$ & $|X_m|$ & $\\min d_m$ & $\\max d_m$ & $\\mathrm{gap}(\\overline P_m^{\\square})$ & $2/m$ & ratio\\\\"
+    )
+    lines.append("\\midrule")
+    for r in rows:
+        lines.append(
+            f"{r.m} & {r.omega_size} & {r.X_size} & {r.d_min} & {r.d_max} & {r.gap:.10g} & {r.gap_lower:.10g} & {r.gap_ratio:.6g}\\\\"
+        )
+    lines.append("\\bottomrule")
+    lines.append("\\end{tabular}")
+    lines.append("\\end{table}")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def parse_args() -> argparse.Namespace:
+    ap = argparse.ArgumentParser(description="Audit spectral gap of the Fold factor chain for small m.")
+    ap.add_argument("--m-list", type=str, default="6,12", help="Comma-separated m values (e.g. 6,12).")
+    ap.add_argument(
+        "--json-out",
+        type=str,
+        default=str(export_dir() / "fold_factor_chain_hypercube_gap_m6_m12.json"),
+    )
+    return ap.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    m_list = [int(s.strip()) for s in str(args.m_list).split(",") if s.strip()]
+    if not m_list:
+        raise SystemExit("Empty --m-list")
+
+    rows: List[Row] = []
+    for m in m_list:
+        Pbar, pi, xs = build_factor_chain(m)
+        gap, diag_max_abs, sym_err = spectral_gap_reversible(Pbar, pi)
+
+        # X_m size is F_{m+2}.
+        fib = fib_upto(m + 2)
+        X_size_expected = int(fib[m + 1])
+        if X_size_expected != len(xs):
+            raise AssertionError(f"|X_m| mismatch for m={m}: expected {X_size_expected} got {len(xs)}")
+
+        # Fiber sizes.
+        # Recover from pi: d = pi * 2^m.
+        omega_size = 1 << m
+        d = (pi * float(omega_size)).round().astype(np.int64)
+        if int(d.sum()) != omega_size:
+            raise AssertionError("Recovered fiber sizes do not sum to 2^m")
+        d_min = int(d.min())
+        d_max = int(d.max())
+
+        gap_lower = 2.0 / float(m)
+        rows.append(
+            Row(
+                m=m,
+                omega_size=omega_size,
+                X_size=len(xs),
+                d_min=d_min,
+                d_max=d_max,
+                gap=float(gap),
+                gap_lower=float(gap_lower),
+                gap_ratio=float(gap / gap_lower) if gap_lower > 0 else float("nan"),
+                diag_max_abs=float(diag_max_abs),
+                sym_err_max_abs=float(sym_err),
+            )
+        )
+
+        # Audit sanity: diagonal should be zero (Proposition 03a-c).
+        if diag_max_abs > 1e-12:
+            raise AssertionError(f"Nonzero diagonal detected for m={m}: max|P(x,x)|={diag_max_abs:.3e}")
+        # Reversibility check in symmetric transform.
+        if sym_err > 1e-10:
+            raise AssertionError(f"Reversibility/symmetry error too large for m={m}: {sym_err:.3e}")
+        # Gap lower bound (with numerical slack).
+        if gap + 1e-10 < gap_lower:
+            raise AssertionError(f"Gap lower bound violated for m={m}: gap={gap:.12g} < 2/m={gap_lower:.12g}")
+
+    payload: Dict[str, object] = {"rows": [r.to_dict() for r in rows]}
+    json_out = Path(args.json_out)
+    if not json_out.is_absolute():
+        json_out = Path.cwd() / json_out
+    json_out.parent.mkdir(parents=True, exist_ok=True)
+    json_out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    write_table(rows, out_path=(generated_dir() / "tab_fold_factor_chain_gap_m6_m12.tex"))
+
+
+if __name__ == "__main__":
+    main()
+

@@ -1,0 +1,392 @@
+\subsubsection{矩阶正性与跨阶凸性：Hankel 正半定、生成函数有理性与谱约束}\label{subsubsec:pom-moment-hankel-positivity-crossq}
+本段刻画固定分辨率 \(m\) 下的\textbf{矩阶（\(q\) 轴）结构}：把幂和矩 \(\{S_q(m)\}_{q\ge 0}\) 解释为离散测度的矩序列，
+由 Hankel 正性推出跨阶离散凸性，并与正文的压力/谱半径指纹（命题 \ref{prop:pom-pressure-convexity}）对齐。
+此外，我们记录“有限态矩阵幂读出 \(\Rightarrow\) 有理生成函数 \(\Rightarrow\) Jordan 全阶展开”的标准谱分解口径，
+以便将递推/核实现的后果直接组织为可复核的渐近式链条。
+
+\begin{proposition}[幂和矩的 Hankel 正半定与主子式非负]\label{prop:pom-power-sum-hankel-psd}
+固定分辨率 \(m\ge 1\)，令折叠 \(\Fold_m:\Omega_m\twoheadrightarrow X_m\) 的纤维多重度为
+\(
+d_m(x):=\card{\Fold_m^{-1}(x)}\ge 1
+\)。
+对整数 \(q\ge 0\) 定义幂和矩
+\[
+S_q(m):=\sum_{x\in X_m} d_m(x)^q,
+\qquad
+S_0(m)=|X_m|,
+\qquad
+S_1(m)=\sum_x d_m(x)=|\Omega_m|=2^m.
+\]
+则对任意整数 \(r\ge 0\)，Hankel 矩阵
+\[
+H^{(m)}_r:=\bigl[S_{i+j}(m)\bigr]_{0\le i,j\le r}
+\]
+为正半定矩阵；因此其全部主子式（principal minors）非负。
+\end{proposition}
+\begin{proof}
+对任意 \(c=(c_0,\dots,c_r)^{\mathsf T}\in\RR^{r+1}\)，有
+\[
+c^{\mathsf T}H^{(m)}_r c
+=\sum_{i,j=0}^{r} c_ic_jS_{i+j}(m)
+=\sum_{x\in X_m}\Bigl(\sum_{i=0}^{r}c_i\,d_m(x)^i\Bigr)^2
+\ge 0,
+\]
+从而 \(H^{(m)}_r\succeq 0\)。
+正半定矩阵的任意主子矩阵仍正半定，故其行列式均非负。证毕。
+\end{proof}
+
+\begin{corollary}[跨 \(q\) 的离散对数凸性链与比值单调性]\label{cor:pom-crossq-logconvex-chain}
+在命题 \ref{prop:pom-power-sum-hankel-psd} 的设定下，对任意整数 \(q\ge 1\) 有
+\[
+\boxed{\;
+S_q(m)^2\ \le\ S_{q-1}(m)\,S_{q+1}(m)\; }.
+\]
+更一般地，对任意整数 \(q\ge r\ge 1\) 有
+\[
+\boxed{\;
+S_q(m)^2\ \le\ S_{q-r}(m)\,S_{q+r}(m)\; }.
+\]
+从而比值
+\(
+R_q(m):=S_{q+1}(m)/S_q(m)
+\)
+在 \(q\ge 0\) 上单调不减（即 \(R_{q}(m)\ge R_{q-1}(m)\) 对一切 \(q\ge 1\) 成立）。
+\end{corollary}
+\begin{proof}
+第一式可由 \(2\times 2\) 主子式 \(\det\bigl[\begin{smallmatrix}S_{q-1}(m)&S_q(m)\\ S_q(m)&S_{q+1}(m)\end{smallmatrix}\bigr]\ge 0\) 直接得到。
+对一般 \(r\ge 1\)，对向量 \((d_m(x)^{(q-r)/2})_x\) 与 \((d_m(x)^{(q+r)/2})_x\) 用 Cauchy--Schwarz 得
+\[
+S_q(m)=\sum_x d_m(x)^{(q-r)/2}d_m(x)^{(q+r)/2}
+\le \sqrt{S_{q-r}(m)}\,\sqrt{S_{q+r}(m)},
+\]
+平方即得第二式。
+最后由 \(S_q(m)^2\le S_{q-1}(m)S_{q+1}(m)\) 得
+\(
+S_{q+1}(m)/S_q(m)\ge S_q(m)/S_{q-1}(m)
+\)，
+即 \(R_q(m)\ge R_{q-1}(m)\)。证毕。
+\end{proof}
+
+\paragraph{Prony--Hankel 重构：固定 \(m\) 的纤维谱由有限个 \(q\)-矩完全确定}
+固定分辨率 \(m\) 并考虑纤维多重度的取值集合
+\[
+\mathcal{D}_m:=\{d_m(x):\ x\in X_m\}=\{a_1<\cdots<a_{r_m}\}\subset\NN,
+\qquad
+n_i:=\#\{x\in X_m:\ d_m(x)=a_i\}.
+\]
+则对一切整数 \(q\ge 0\) 有有限指数和表示
+\[
+S_q(m)=\sum_{i=1}^{r_m} n_i\,a_i^{\,q}.
+\]
+
+\begin{theorem}[最小阶与 Hankel 秩]\label{thm:pom-fiber-spectrum-prony-hankel-rank}
+在上述设定下，\(r_m\) 等于无限 Hankel 矩阵 \(\bigl[S_{i+j}(m)\bigr]_{i,j\ge 0}\) 的秩。
+等价地，\(r_m\) 是序列 \(q\mapsto S_q(m)\) 满足的最小阶线性递推的阶数（以 \(q\) 为时间变量）：
+存在唯一的最小整数 \(r=r_m\) 与常数 \(c_0,\dots,c_{r-1}\) 使对所有 \(q\ge 0\) 有
+\[
+\boxed{\;
+S_{q+r}(m)+c_{r-1}S_{q+r-1}(m)+\cdots+c_0 S_q(m)=0\; }.
+\]
+\end{theorem}
+\begin{proof}
+由表示 \(S_q(m)=\sum_{i=1}^{r_m}n_i a_i^q\)（\(a_i\) 两两不同且非零），序列 \((S_q(m))_{q\ge 0}\) 为 \(r_m\) 个指数项的有限和，
+从而满足阶数至多 \(r_m\) 的线性递推：取
+\(
+Q_m(t):=\prod_{i=1}^{r_m}(t-a_i)=t^{r_m}+c_{r_m-1}t^{r_m-1}+\cdots+c_0
+\)，
+则对每个 \(i\) 有 \(a_i^{q+r_m}+c_{r_m-1}a_i^{q+r_m-1}+\cdots+c_0 a_i^q=0\)，
+乘以 \(n_i\) 并对 \(i\) 求和即得递推。
+\par
+反之，若存在阶数 \(r\) 的递推，则 Hankel 矩阵的列向量满足长度 \(r\) 的线性相关关系，故其秩至多 \(r\)；
+从而最小递推阶数等于 Hankel 秩。
+而对有限指数和，Hankel 秩恰等于指数项个数 \(r_m\)（经典 Prony/Hankel 理论）。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$2r_m$}{2rm} 个矩的完全重构]\label{thm:pom-fiber-spectrum-prony-hankel-2r-reconstruction}
+仅由有限数据 \(\{S_q(m)\}_{q=0}^{2r_m-1}\) 可唯一确定全部原子 \(\{a_i\}_{i=1}^{r_m}\) 与其重数 \(\{n_i\}_{i=1}^{r_m}\)。
+更具体地，存在唯一的首一多项式
+\[
+Q_m(t)=t^{r_m}+c_{r_m-1}t^{r_m-1}+\cdots+c_0=\prod_{i=1}^{r_m}(t-a_i)
+\]
+使得对所有 \(q\ge 0\) 递推恒等式
+\(
+S_{q+r_m}(m)+c_{r_m-1}S_{q+r_m-1}(m)+\cdots+c_0S_q(m)=0
+\)
+成立。
+系数 \((c_j)\) 由线性方程组
+\[
+\sum_{j=0}^{r_m} c_j\,S_{q+j}(m)=0,\qquad q=0,\dots,r_m-1,\qquad c_{r_m}=1
+\]
+唯一解出；随后 \(\{a_i\}\) 为 \(Q_m\) 的根（按重数计），而 \(\{n_i\}\) 由 Vandermonde 系统
+\[
+\sum_{i=1}^{r_m} n_i\,a_i^{\,q}=S_q(m),\qquad q=0,\dots,r_m-1
+\]
+唯一恢复。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-spectrum-prony-hankel-rank} 的最小递推刻画，
+\((c_0,\dots,c_{r_m-1})\) 满足所示线性方程组。
+当 \(r_m\) 取为最小阶时，相应 Hankel 主子式 \(\det H^{(m)}_{r_m-1}>0\)，故该线性系统可逆并给出唯一解。
+由递推构造 \(Q_m\) 后，\(Q_m\) 的根即为指数和的底数集合 \(\{a_i\}\)；
+在根互异时 Vandermonde 矩阵可逆，从而重数 \(\{n_i\}\) 唯一确定。
+（若出现重根，则对应指数项需乘以多项式因子并进入 Jordan 型广义 Prony；在本文的纤维计数口径下 \(a_i\) 为不同整数取值，故无重根。）证毕。
+\end{proof}
+
+\begin{corollary}[有界整数退化谱的 Vandermonde 反演：碰撞矩唯一确定直方图]\label{cor:pom-degeneracy-histogram-vandermonde-inversion}
+固定 \(m\) 并假设存在整数 \(D\ge 1\) 使得 \(d_m(x)\in\{1,2,\dots,D\}\) 对所有 \(x\in X_m\) 成立。
+对 \(1\le d\le D\) 记直方图计数
+\[
+N_d:=\#\{x\in X_m:\ d_m(x)=d\}.
+\]
+则向量 \((N_1,\dots,N_D)\) 由有限矩 \(\{S_q(m)\}_{q=0}^{D-1}\) 唯一确定，并满足线性系统
+\[
+S_q(m)=\sum_{d=1}^D N_d\,d^{\,q}\qquad(q=0,1,\dots,D-1).
+\]
+\end{corollary}
+\begin{proof}
+系数矩阵为节点 \(1,2,\dots,D\) 上的 Vandermonde 矩阵，行列式非零，故线性系统存在唯一解。证毕。
+\end{proof}
+
+\begin{theorem}[信息完备阈值的最小性：一般情形下 \texorpdfstring{$2r$}{2r} 个矩不可降低]\label{thm:pom-fiber-spectrum-prony-hankel-threshold-sharp}
+对任意整数 \(r\ge 2\)，存在两组不同的有限原子谱
+\[
+\{(a_i,n_i)\}_{i=1}^{r}\ \neq\ \{(a'_i,n'_i)\}_{i=1}^{r}
+\]
+（其中 \(a_i,a'_i\in\NN_{\ge 1}\) 两两不同且 \(n_i,n'_i\in\NN_{\ge 1}\)），使得其幂和矩满足
+\[
+\sum_{i=1}^{r}n_i a_i^{\,k}
+\;=\;
+\sum_{i=1}^{r}n'_i (a'_i)^{\,k}
+\qquad(0\le k\le 2r-2),
+\]
+但在 \(k=2r-1\) 处不相等。
+因此在不附加额外结构假设时，任何仅依赖于 \(\{S_k\}_{k=0}^{2r-2}\) 的方法都无法唯一确定 \(r\)-原子谱；
+换言之，定理 \ref{thm:pom-fiber-spectrum-prony-hankel-2r-reconstruction} 的 \(2r\) 矩阈值在一般意义下是尖锐的。
+\end{theorem}
+\begin{proof}
+取 \(n:=2r-1\)，并考虑二项式系数权重 \(w_j:=\binom{n}{j}\)（\(0\le j\le n\)）。
+定义两组原子谱（各含 \(r\) 个不同原子）：
+\[
+a_i:=2i-1,\quad n_i:=\binom{n}{2i-2}\qquad(1\le i\le r),
+\]
+\[
+a'_i:=2i,\quad n'_i:=\binom{n}{2i-1}\qquad(1\le i\le r).
+\]
+对每个整数 \(k\ge 0\)，考虑交错和
+\[
+\Delta_k:=\sum_{j=0}^{n}(-1)^j\binom{n}{j}(j+1)^k.
+\]
+这是多项式 \(p(x)=x^k\) 的 \(n\)-阶有限差分在点 \(x=1\) 的取值（差分算子作用于多项式会使次数降低），因此当 \(k\le n-1\) 时有 \(\Delta_k=0\)。
+从 \(\Delta_k=0\) 立即推出
+\[
+\sum_{j\ \mathrm{even}}\binom{n}{j}(j+1)^k
+\;=\;
+\sum_{j\ \mathrm{odd}}\binom{n}{j}(j+1)^k
+\qquad(0\le k\le n-1),
+\]
+这正是两组谱在 \(k\le 2r-2\) 的矩相等性。
+\par
+当 \(k=n\) 时，\(\Delta_n\) 等于 \(n\)-阶差分对首项 \(x^n\) 的作用常数，满足 \(\Delta_n=(-1)^n n!\neq 0\)，
+从而两组谱在 \(k=2r-1\) 的矩必不相等。
+因此得到所述反例族，结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[两谱情形的有限判别]\label{cor:pom-fiber-spectrum-two-atom-complete-invariant}
+若固定 \(m\) 时纤维多重度仅取两值（\(r_m=2\)），
+则四个矩数据 \(\{S_q(m)\}_{q=0}^{3}\) 已足以完全恢复该分辨率上的纤维谱 \(\{(a_1,n_1),(a_2,n_2)\}\)。
+因此在两谱可解模型（例如附录的 bin-fold 可解口径，见注 \ref{rem:fold-bin-solvable-model}）中，
+“二谱数据”在每个固定 \(m\) 上构成一个完全不变量。
+\end{corollary}
+
+\begin{corollary}[压力的离散凸性与 Perron 根不等式]\label{cor:pom-crossq-pressure-convexity}
+令 \(\tau(q):=\limsup_{m\to\infty}\frac{1}{m}\log S_q(m)\) 为定义 \ref{def:pom-moment-pressure} 的 moment 压力。
+则对一切整数 \(q\ge 1\) 成立离散凸性不等式
+\[
+\boxed{\;
+2\tau(q)\ \le\ \tau(q-1)+\tau(q+1)\; }.
+\]
+若进一步在已核验口径下 \(\tau(q)=\log r_q\)（其中 \(r_q=\rho(A_q)\) 为 \(q\)-阶碰撞核的 Perron 根；见定理 \ref{thm:pom-collision-kernel-ak} 与定义 \ref{def:pom-moment-pressure}），则有跨阶谱半径约束
+\[
+\boxed{\;
+r_q^{\,2}\ \le\ r_{q-1}\,r_{q+1}\; }.
+\]
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:pom-crossq-logconvex-chain} 的 \(S_q(m)^2\le S_{q-1}(m)S_{q+1}(m)\)，取 \(\log\)、除以 \(m\) 并取 \(\limsup\) 即得第一式。
+第二式由 \(\tau(q)=\log r_q\) 代入第一式并指数化得到。证毕。
+\end{proof}
+
+\begin{proposition}[矩序列的有理型生成函数与 Jordan 全阶谱展开]\label{prop:pom-moment-genfunc-jordan}
+固定整数 \(q\ge 2\)。
+若存在有限维非负矩阵 \(A_q\) 与向量 \(u_q,v_q\ge 0\)，以及整数偏移 \(m_0\ge 0\)，使得对所有 \(n\ge 0\) 有
+\[
+S_q(n+m_0)=u_q^{\mathsf T}A_q^{\,n}v_q,
+\]
+则幂级数
+\[
+G_q(z):=\sum_{n\ge 0} S_q(n+m_0)\,z^n
+\]
+在形式意义下为有理函数，并满足 resolvent 恒等式
+\[
+\boxed{\;
+G_q(z)=u_q^{\mathsf T}(I-zA_q)^{-1}v_q\; }.
+\]
+其分母可取为 \(\det(I-zA_q)\) 的因子。
+\par
+进一步，设 \(A_q\) 的谱为 \(\mathrm{Spec}(A_q)=\{\lambda_1,\dots,\lambda_s\}\)（按 Jordan 结构计入），
+则存在多项式 \(P_j(n)\)（次数严格小于对应 Jordan 块大小）使得对所有 \(n\ge 0\) 有全阶精确展开
+\[
+\boxed{\;
+S_q(n+m_0)=\sum_{j=1}^{s} P_j(n)\,\lambda_j^{\,n}\; }.
+\]
+若 \(A_q\) 原始（primitive），记 Perron 根 \(r_q=\rho(A_q)>0\)，则存在常数 \(c_q>0\) 与 \(0<\theta_q<r_q\) 使得
+\[
+S_q(n+m_0)=c_q\,r_q^{\,n}+O(\theta_q^{\,n})\qquad(n\to\infty).
+\]
+若 \(A_q\) 不原始且不可约周期为 \(p\)，则存在 \(p\)-周期系数列 \(\{c_{q,r}\}_{r=0}^{p-1}\) 使得
+\[
+S_q(n+m_0)=r_q^{\,n}\bigl(c_{q,n\bmod p}+o(1)\bigr)\qquad(n\to\infty).
+\]
+\end{proposition}
+\begin{proof}
+由 Neumann 级数 \((I-zA_q)^{-1}=\sum_{n\ge 0} z^nA_q^n\)（形式幂级数意义）得
+\(
+u_q^{\mathsf T}(I-zA_q)^{-1}v_q=\sum_{n\ge 0}u_q^{\mathsf T}A_q^n v_q\,z^n
+\)，从而得到 \(G_q\) 的有理表示，分母可由 \(\det(I-zA_q)\) 控制。
+Jordan 展开为有限维线性代数的标准结论：把 \(A_q\) 置于 Jordan 标准形并展开 \(u_q^{\mathsf T}A_q^{n}v_q\) 即得多项式乘指数之和；
+原始/周期情形由 Perron--Frobenius 理论对外周谱结构的刻画推出。证毕。
+\end{proof}
+
+\paragraph{双变量 \texorpdfstring{$\zeta$}{zeta} 的有限态压缩与交换谱曲面}
+对每个固定的矩阶 \(q\)，命题 \ref{prop:pom-moment-genfunc-jordan} 给出 \(m\)-方向的有理型生成函数；
+对每个固定的分辨率 \(m\)，定理 \ref{thm:pom-fiber-spectrum-prony-hankel-rank}--\ref{thm:pom-fiber-spectrum-prony-hankel-2r-reconstruction} 给出 \(q\)-方向的有限指数和结构。
+当进一步存在一个\emph{统一的有限态双变量编译}把整个表 \(\{S_q(m)\}_{q,m}\) 压缩为一个固定有限维核族时，可将两轴同时封装为单个 Fredholm 行列式对象。
+
+\begin{definition}[双变量 moment-\texorpdfstring{$\zeta$}{zeta}（碰撞矩全表的封装）]\label{def:pom-bivariate-moment-zeta}
+定义形式幂级数（双变量生成函数）
+\[
+\mathfrak{Z}(z,u)
+:=\exp\!\Bigl(\sum_{m\ge 1}\sum_{q\ge 1}\frac{S_q(m)}{m}\,u^{q}z^{m}\Bigr)
+\in \QQ[[z,u]].
+\]
+由系数抽取恒等式可得
+\[
+[z^m][u^q]\ \log\mathfrak{Z}(z,u)=\frac{S_q(m)}{m}\qquad(m,q\ge 1).
+\]
+\end{definition}
+
+\begin{theorem}[双变量 Fredholm 行列式表示与有理性]\label{thm:pom-bivariate-moment-zeta-fredholm}
+假设存在一个固定维数 \(D\) 的矩阵族 \(\mathcal{A}(u)\in\Mat_{D\times D}(\QQ(u))\)，其在 \(u=0\) 解析且满足 \(\mathcal{A}(0)=0\)，并且对每个 \(m\ge 1\) 有迹恒等式
+\[
+\Tr\!\bigl(\mathcal{A}(u)^m\bigr)=\sum_{q\ge 1} S_q(m)\,u^{q}\ \in\ \QQ[[u]].
+\]
+则定义 \ref{def:pom-bivariate-moment-zeta} 的 \(\mathfrak{Z}(z,u)\) 满足严格恒等式
+\[
+\boxed{\;
+\mathfrak{Z}(z,u)=\det\bigl(I-z\,\mathcal{A}(u)\bigr)^{-1}\; }.
+\]
+因此 \(\mathfrak{Z}\) 在形式意义下为 \((z,u)\) 的有理函数；并且 \(\{S_q(m)\}\) 可由 \(\log\mathfrak{Z}\) 的系数抽取严格恢复。
+\end{theorem}
+\begin{proof}
+由 Fredholm 行列式的定义（见定义 \ref{def:fredholm-determinant} 的同型有限维口径）对任意矩阵 \(T\) 有恒等式
+\[
+\det(I-zT)=\exp\!\left(-\sum_{m\ge 1}\frac{\Tr(T^m)}{m}z^m\right).
+\]
+取 \(T=\mathcal{A}(u)\) 并代入假设的迹展开，即得
+\[
+\det(I-z\mathcal{A}(u))^{-1}
+=\exp\!\Bigl(\sum_{m\ge 1}\frac{\Tr(\mathcal{A}(u)^m)}{m}z^m\Bigr)
+=\exp\!\Bigl(\sum_{m\ge 1}\sum_{q\ge 1}\frac{S_q(m)}{m}u^q z^m\Bigr)
+=\mathfrak{Z}(z,u).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[二维递推代数的交换谱曲面]\label{thm:pom-commutative-spectral-surface}
+在定理 \ref{thm:pom-bivariate-moment-zeta-fredholm} 的假设下，令
+\[
+D(z,u):=\det(I-z\,\mathcal{A}(u))\in\QQ(z,u),
+\]
+并取清分母后的首一化多项式代表 \(\widetilde D(z,u)\in\ZZ[z,u]\)（去掉整体公因子）。
+定义代数集合
+\[
+\mathcal{V}:=\{(z,u)\in\CC^{2}:\ \widetilde D(z,u)=0\}.
+\]
+则 \(\mathcal{V}\) 可视为该双变量编译的\textbf{交换谱曲面}：它把 \(m\)-方向的极点/谱（由 \(z\) 控制）与 \(q\)-方向的代数奇性/递推（由 \(u\) 控制）压缩到同一个代数证书 \(\widetilde D=0\) 上；
+相应地，沿 \(m\) 与沿 \(q\) 的移位算子在该证书所生成的坐标代数中交换，从而把看似“二维不可交换递推”的自由度坍缩为一个交换的有限生成代数对象。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-bivariate-moment-zeta-fredholm}，\(\mathfrak{Z}=1/D\) 为双变量有理函数，其零极结构（以及由此诱导的二维线性约束/消元关系）由清分母后的多项式 \(\widetilde D\) 完全刻画。
+将沿 \(m\) 与沿 \(q\) 的移位视为在 \(\QQ[[z,u]]\) 上的乘法与系数抽取所诱导的代数作用，则二者来自可交换变量 \(z,u\) 的乘法作用，因而在由 \(\widetilde D\) 所定义的商代数中保持交换；该商代数的极大谱自然包含于 \(\mathcal{V}\)。
+证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/subsubsec__pom-bivariate-system-identification}
+
+\input{sections/body/pom/parts/thm__pom-elliptic-two-time-observability-dichotomy}
+
+\begin{proposition}[Chernoff 型阈值上界：计数测度与推前测度的统一形式]\label{prop:pom-chernoff-threshold-bounds}
+固定分辨率 \(m\) 并令阈值集合
+\[
+A_m(\alpha):=\{x\in X_m:\ \log d_m(x)\ge \alpha m\}\qquad(\alpha\ge 0).
+\]
+则对任意整数 \(q\ge 1\) 与任意 \(\alpha\ge 0\) 有确定性上界
+\[
+\boxed{\;
+|A_m(\alpha)|\ \le\ e^{-q\alpha m}\,S_q(m)\; }.
+\]
+此外令 \(w_m(x):=d_m(x)/2^m\) 为均匀微态的折叠推前，并取 \(X_m\sim w_m\)。
+则对任意整数 \(q\ge 1\) 与任意 \(\alpha\ge 0\) 有
+\[
+\boxed{\;
+\mathbb{P}\bigl(\log d_m(X_m)\ge \alpha m\bigr)
+\ \le\ e^{-q\alpha m}\,\frac{S_{q+1}(m)}{2^m}\; }.
+\]
+两式在指数尺度上分别回收命题 \ref{prop:pom-spectrum-legendre-upper}（计数测度的谱上界）与 \S\ref{subsec:pom-spectral-resource-type} 的 Chernoff/Markov 尾界（输出测度的尾部预算）。
+\end{proposition}
+\begin{proof}
+对第一式，若 \(x\in A_m(\alpha)\) 则 \(d_m(x)^q\ge e^{q\alpha m}\)，故
+\(
+|A_m(\alpha)|e^{q\alpha m}\le \sum_{x\in A_m(\alpha)}d_m(x)^q\le S_q(m)
+\)。
+对第二式，在 \(A_m(\alpha)\) 上有 \(d_m(x)^{q+1}\ge e^{q\alpha m}d_m(x)\)，从而
+\(
+\sum_{x\in A_m(\alpha)}d_m(x)\le e^{-q\alpha m}\sum_{x\in A_m(\alpha)}d_m(x)^{q+1}\le e^{-q\alpha m}S_{q+1}(m)
+\)，
+再除以 \(2^m\) 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[推前测度右尾的 \(r_q\)-Chernoff 大偏差证书]\label{cor:pom-wm-tail-ldp-rq-certificate}
+沿用命题 \ref{prop:pom-chernoff-threshold-bounds} 的记号，并对每个整数 \(q\ge 1\) 假设指数增长率
+\[
+\log r_{q+1}:=\lim_{m\to\infty}\frac{1}{m}\log S_{q+1}(m)
+\]
+存在。
+则对任意阈值 \(\alpha\ge 0\) 与任意整数 \(q\ge 1\)，成立指数型上界
+\[
+\limsup_{m\to\infty}\frac{1}{m}\log \mathbb{P}\!\left(\frac{1}{m}\log d_m(X_m)\ge \alpha\right)
+\le
+\log r_{q+1}-\log 2-q\,\alpha.
+\]
+因此右尾速率满足
+\[
+\limsup_{m\to\infty}\frac{1}{m}\log \mathbb{P}\!\left(\frac{1}{m}\log d_m(X_m)\ge \alpha\right)
+\le
+-\sup_{q\ge 1}\Bigl(q\,\alpha+\log 2-\log r_{q+1}\Bigr),
+\]
+从而 \(\{r_q\}_{q\ge 2}\) 在严格意义上给出一族可优化的 Chernoff 型大偏差指数证书。
+\end{corollary}
+\begin{proof}
+对命题 \ref{prop:pom-chernoff-threshold-bounds} 的第二式取对数、除以 \(m\)，并令 \(m\to\infty\) 即得第一条不等式；
+第二条仅为对 \(q\) 取上确界。证毕。
+\end{proof}
+
+\begin{remark}[Fibonacci 基准线、严格性与端点极值谱]\label{rem:pom-fib-baseline-and-endpoint}
+关于矩压力的 Fibonacci 规模普适下界与其严格性判别，可直接参见命题 \ref{prop:pom-rq-universal-bounds}；
+其等号条件在固定 \(m\) 上等价于纤维完全等尺寸（即 \(d_m(\cdot)\) 处处常数），从而对应于推前分布 \(w_m\) 的严格均匀性。
+\par
+关于极端纤维指数（最大纤维增长率）与高阶压力斜率端点的谱刻画，
+正文已由命题 \ref{prop:pom-rq-qinfty-endpoint} 与命题 \ref{prop:pom-maxfiber-exponent-equals-renyi-endpoint} 给出：
+其核心机制正是基本夹逼 \(M_m^q\le S_q(m)\le |X_m|M_m^q\) 在 \(q\to\infty\) 的斜率极限中压缩掉 \(|X_m|\) 的常数级贡献。
+\end{remark}
+

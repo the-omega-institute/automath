@@ -1,0 +1,402 @@
+\subsubsection{纤维重采样对比学习的 Bayes--InfoNCE 极值与熵退化}\label{subsubsec:fold-infonce-fiber-resampling}
+本段把纤维多重度分布 \(w_m\) 直接嵌入到对比学习的 Bayes 最优 InfoNCE 目标中：当负样本按纤维推前分布重采样时，最优损失的主项由 \(-H(w_m)\) 控制，并伴随 \(O((K-1)^{-1})\) 的二阶校正。
+
+\begin{definition}[纤维推前分布]\label{def:fold-pushforward-weight-wm}
+对折叠满射 \(\Fold_m:\Omega_m=\{0,1\}^m\twoheadrightarrow X_m\) 定义纤维多重度
+\[
+d_m(x):=\bigl|\Fold_m^{-1}(x)\bigr|,\qquad x\in X_m,
+\]
+并定义均匀微态在 \(X_m\) 上的推前分布
+\[
+w_m(x):=\frac{d_m(x)}{2^m}\qquad(x\in X_m).
+\]
+\end{definition}
+
+\begin{theorem}[纤维重采样下 Bayes 最优 InfoNCE 的显式表达与双边估计]\label{thm:fold-infonce-entropy-degeneration-second-order}
+取 \(K\ge 2\)。
+考虑如下“纤维重采样”对比学习采样机制：先采样
+\(
+X\sim w_m
+\)，再令负样本计数
+\[
+J\mid X\sim \mathrm{Binomial}\bigl(K-1,\ w_m(X)\bigr),
+\]
+并令 \(L_{m}^{K,\star}\) 表示该机制下 Bayes 最优 InfoNCE 损失的最小值。
+则有严格恒等式
+\[
+L_{m}^{K,\star}
+=\EE_{X\sim w_m}\ \EE\bigl[\log(1+J)\mid X\bigr].
+\]
+并且对任意 \(K\ge 2\)，成立双边估计
+\[
+\log(K-1)+\EE\log w_m(X)-\frac{3|X_m|}{2(K-1)}
+\ \le\
+L_{m}^{K,\star}
+\ \le\
+\log(K-1)+\EE\log w_m(X)+\frac{|X_m|}{K-1},
+\]
+其中 \(|X_m|<\infty\)。
+特别地，当 \(K\to\infty\)（固定 \(m\)）时，
+\[
+L_{m}^{K,\star}
+=\log(K-1)-H(w_m)+o(1),
+\qquad
+H(w_m):=-\EE_{X\sim w_m}\log w_m(X).
+\]
+进一步，记
+\[
+\kappa_m(w_m):=\EE_{X\sim w_m}\bigl[\log d_m(X)\bigr],
+\]
+则亦可写成
+\[
+L_{m}^{K,\star}
+=\log(K-1)+\kappa_m(w_m)-m\log 2+o(1).
+\]
+\end{theorem}
+
+\begin{proof}
+恒等式由定义（Bayes 最优仅依赖于 \(X\) 下的“正确候选+负样本落在同一纤维”的计数 \(J\)）直接给出。
+下界与上界分别来自对 \(f(t)=\log(1+t)\) 的凹性 Jensen 上界与二阶切线下界。
+\par
+\textbf{上界：}
+由凹性，
+\[
+\EE[\log(1+J)\mid X]\le \log\bigl(1+\EE[J\mid X]\bigr)=\log\bigl(1+(K-1)w_m(X)\bigr).
+\]
+并且对任意 \(p\in(0,1]\) 有
+\[
+\log(1+(K-1)p)
+=\log(K-1)+\log p+\log\Bigl(1+\frac{1}{(K-1)p}\Bigr)
+\le \log(K-1)+\log p+\frac{1}{(K-1)p}.
+\]
+取 \(p=w_m(X)\) 并取期望。注意到
+\[
+\EE\!\left[\frac{1}{w_m(X)}\right]=\sum_{x\in X_m}w_m(x)\frac1{w_m(x)}=|X_m|,
+\]
+得到上界。
+\par
+\textbf{下界：}
+对 \(Y\ge 0\) 且 \(\EE Y=\mu\)，由 \(f''(t)=-\frac{1}{(1+t)^2}\) 单调递增可逐点验证二阶切线下界
+\[
+f(Y)\ge f(\mu)+f'(\mu)(Y-\mu)+\frac12 f''(\mu)(Y-\mu)^2.
+\]
+取期望并用 \(\EE(Y-\mu)=0\)，得
+\[
+\EE f(Y)\ge f(\mu)-\frac{\mathrm{Var}(Y)}{2(1+\mu)^2}.
+\]
+应用于 \(Y=J\)、\(\mu=(K-1)p\)、\(\mathrm{Var}(J)=(K-1)p(1-p)\le (K-1)p\)，得到
+\[
+\EE[\log(1+J)\mid p]\ge \log(1+\mu)-\frac{\mu}{2(1+\mu)^2}.
+\]
+再用初等估计
+\[
+\log(1+\mu)-\frac{\mu}{2(1+\mu)^2}
+\ge \log\mu-\frac{3}{2\mu}\qquad(\mu>0),
+\]
+得到
+\[
+\EE[\log(1+J)\mid p]\ge \log(K-1)+\log p-\frac{3}{2(K-1)p}.
+\]
+取 \(p=w_m(X)\) 并取期望，再用 \(\EE[1/p]=|X_m|\) 得下界。
+\par
+\textbf{极限：}
+固定 \(m\) 令 \(K\to\infty\)。由条件大数定律 \(J/(K-1)\to p\)（\(p=w_m(X)\)）且 \(\log(1+J)\le \log K\)，并注意 \(w_m(X)\ge 2^{-m}\) 给出一致可积性，
+可交换极限与期望，得
+\[
+L_m^{K,\star}-\log(K-1)\to \EE\log w_m(X)=-H(w_m).
+\]
+再用 \(\log w_m(X)=\log d_m(X)-m\log 2\) 得最后一式。证毕。
+\end{proof}
+
+\begin{corollary}[二阶渐近的显式系数仅依赖宏态基数]\label{cor:fold-infonce-bayes-second-order-universal-coefficient}
+固定 \(m\) 并记 \(n:=K-1\)。
+在定理 \ref{thm:fold-infonce-entropy-degeneration-second-order} 的设定下，当 \(K\to\infty\) 时存在二阶展开
+\[
+\boxed{\;
+L_m^{K,\star}
+=\log(K-1)-H(w_m)+\frac{|X_m|+1}{2(K-1)}+O_m\!\bigl((K-1)^{-2}\bigr)\; }.
+\]
+特别地，\((K-1)^{-1}\) 的校正系数完全不依赖纤维谱细节，仅由宏态空间大小 \(|X_m|\) 决定。
+在本文的 Fibonacci 稳定类型口径下进一步有 \(|X_m|=F_{m+2}\)。
+\end{corollary}
+\begin{proof}
+对固定 \(p\in(0,1]\)，令 \(J_p\sim\mathrm{Binomial}(n,p)\) 并取 \(g(x)=\log(1+x)\)。
+在 \(m_p:=np\) 处作二阶 Taylor 展开并取期望，得到
+\[
+\EE[g(J_p)]
+=g(m_p)+\frac{g''(m_p)}{2}\Var(J_p)+O\!\left(\frac{1}{n^2}\right),
+\]
+其中 \(g''(x)=-(1+x)^{-2}\) 且 \(\Var(J_p)=np(1-p)\)。
+因此
+\[
+\EE[\log(1+J_p)]
+=\log(1+np)-\frac{np(1-p)}{2(1+np)^2}+O\!\left(\frac{1}{n^2}\right)
+=\log n+\log p+\frac{1+p}{2np}+O\!\left(\frac{1}{n^2}\right),
+\]
+其中最后一步对固定 \(m\) 的 \(p\ge 2^{-m}\) 给出一致展开。
+取 \(p=w_m(X)\) 且 \(X\sim w_m\)，并用
+\[
+\EE[\log w_m(X)]=\sum_x w_m(x)\log w_m(x)=-H(w_m),
+\qquad
+\EE\!\left[\frac{1+w_m(X)}{w_m(X)}\right]
+=\sum_x (1+w_m(x))=|X_m|+1,
+\]
+即得所示二阶展开。证毕。
+\end{proof}
+
+\begin{corollary}[二阶碰撞概率刻画 \texorpdfstring{$K=2$}{K=2} 最优损失与三阶递推闭包]\label{cor:fold-infonce-k2-collision-recurrence-closure}
+沿用定义 \ref{def:fold-pushforward-weight-wm} 的推前分布 \(w_m\)，并令
+\[
+\mathsf{Col}_m:=\sum_{x\in X_m}w_m(x)^2=\frac{S_2(m)}{4^m}
+\]
+为碰撞概率（定义 \ref{def:pom-s2}）。
+则 \(K=2\) 的 Bayes 最优 InfoNCE 损失满足严格恒等式
+\[
+\boxed{\;
+L_m^{2,\star}=(\log 2)\,\mathsf{Col}_m=(\log 2)\,\frac{S_2(m)}{4^m}.\;}
+\]
+并且由命题 \ref{prop:pom-s2-recurrence} 的三阶递推可知，当 \(m\ge 5\) 时序列 \(\{L_m^{2,\star}\}\) 满足缩放递推
+\[
+\boxed{\;
+L_m^{2,\star}=\frac12 L_{m-1}^{2,\star}+\frac14 L_{m-2}^{2,\star}-\frac18 L_{m-3}^{2,\star}.\;}
+\]
+\end{corollary}
+
+\begin{proof}
+当 \(K=2\) 时，条件分布 \(J\mid X\sim\mathrm{Binomial}(1,w_m(X))\) 等价于 Bernoulli\((w_m(X))\)，故
+\[
+\EE[\log(1+J)\mid X]=\log 2\cdot \EE[J\mid X]=(\log 2)\,w_m(X).
+\]
+再对 \(X\sim w_m\) 取期望，得到
+\(
+L_m^{2,\star}=(\log 2)\EE_{X\sim w_m}[w_m(X)]=(\log 2)\sum_x w_m(x)^2
+\)，即第一式。
+第二式由命题 \ref{prop:pom-s2-recurrence} 的递推两边同除以 \(4^m\) 并乘以 \(\log 2\) 得到。证毕。
+\end{proof}
+
+\begin{theorem}[Rényi 碰撞幂和给出的 Bayes--InfoNCE 多矩上界]\label{thm:fold-infonce-renyi-collision-upper-envelope}
+在定理 \ref{thm:fold-infonce-entropy-degeneration-second-order} 的设定下，
+对任意整数 \(q\ge 2\) 定义归一化碰撞幂和
+\[
+M_q(m):=\sum_{x\in X_m}w_m(x)^q.
+\]
+则对任意 \(K\ge 2\) 成立显式上界
+\[
+L_{m}^{K,\star}\ \le\
+\frac{q-2}{q-1}\log 2\ +\ \frac{1}{q-1}\log\!\Bigl(1+(K-1)^{q-1}M_q(m)\Bigr).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-infonce-entropy-degeneration-second-order} 证明中的凹性 Jensen 上界，
+\[
+\EE[\log(1+J)\mid X]\le \log\bigl(1+(K-1)w_m(X)\bigr).
+\]
+对任意 \(u\ge 0\) 与整数 \(q\ge 2\)，由凸性与二点插值得
+\[
+\left(\frac{1+u}{2}\right)^{q-1}\le \frac{1+u^{q-1}}{2},
+\qquad\Longrightarrow\qquad
+(1+u)^{q-1}\le 2^{q-2}(1+u^{q-1}),
+\]
+从而
+\[
+\log(1+u)\le \frac{q-2}{q-1}\log 2+\frac{1}{q-1}\log(1+u^{q-1}).
+\]
+取 \(u=(K-1)w_m(X)\) 并取期望。注意到 \(z\mapsto \log(1+Az)\)（\(A>0\)）在 \(z\ge 0\) 上凹，
+故
+\[
+\EE\log\bigl(1+(K-1)^{q-1}w_m(X)^{q-1}\bigr)
+\le
+\log\!\Bigl(1+(K-1)^{q-1}\EE[w_m(X)^{q-1}]\Bigr).
+\]
+而 \(\EE[w_m(X)^{q-1}]=\sum_x w_m(x)^q=M_q(m)\)。
+合并即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[指数负样本尺度下的分段线性上包络]\label{cor:fold-infonce-exponential-negative-phase-envelope}
+沿用定理 \ref{thm:fold-infonce-renyi-collision-upper-envelope} 的记号。
+设对某个整数 \(q\ge 2\) 极限
+\[
+P_q:=\lim_{m\to\infty}\frac{1}{m}\log S_q(m),
+\qquad
+S_q(m):=\sum_{x\in X_m}d_m(x)^q
+\]
+存在，并记
+\[
+r_q:=e^{P_q}=\lim_{m\to\infty}S_q(m)^{1/m},
+\qquad
+h_q:=q\log 2-\log r_q.
+\]
+对任意指数负样本序列 \(K_m=\lceil e^{\gamma m}\rceil\)（\(\gamma\ge 0\)）有
+\[
+\limsup_{m\to\infty}\frac{1}{m}L_{m}^{K_m,\star}
+\le
+\left(\gamma-\frac{h_q}{q-1}\right)_{+},
+\qquad
+(t)_{+}:=\max\{t,0\}.
+\]
+因此
+\[
+\limsup_{m\to\infty}\frac{1}{m}L_{m}^{K_m,\star}
+\le
+\inf_{q\ge 2}\left(\gamma-\frac{h_q}{q-1}\right)_{+},
+\]
+并由 \(\gamma=\frac{h_q}{q-1}\) 给出一族临界直线的分段线性上包络。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:fold-infonce-renyi-collision-upper-envelope}，并用
+\(
+M_q(m)=S_q(m)/2^{qm}
+\)，得
+\[
+\frac{1}{m}L_{m}^{K_m,\star}
+\le
+\frac{q-2}{q-1}\cdot\frac{\log 2}{m}
+\;+\;
+\frac{1}{q-1}\cdot\frac{1}{m}\log\!\Bigl(1+(K_m-1)^{q-1}\frac{S_q(m)}{2^{qm}}\Bigr).
+\]
+令 \(m\to\infty\)，首项消失。
+并且 \(\frac{1}{m}\log(K_m-1)\to\gamma\)、\(\frac{1}{m}\log S_q(m)\to\log r_q\)，故括号内指数主阶为
+\[
+(q-1)\gamma+\log r_q-q\log 2=(q-1)\left(\gamma-\frac{h_q}{q-1}\right).
+\]
+由 \(\log(1+e^{m a+o(m)})/m\to a_{+}\) 得到所示上界；对所有 \(q\ge 2\) 取下确界即得第二式。证毕。
+\end{proof}
+
+\begin{corollary}[碰撞谱给出的 Shannon 熵率下界]\label{cor:fold-shannon-entropy-rate-lower-bound-from-rq}
+令 \(H(w_m):=-\sum_{x\in X_m}w_m(x)\log w_m(x)\)。
+若对某个整数 \(q\ge 2\) 存在 \(r_q=\lim_{m\to\infty}S_q(m)^{1/m}\)，并令 \(h_q=q\log 2-\log r_q\)，则
+\[
+\liminf_{m\to\infty}\frac{1}{m}H(w_m)\ \ge\ \frac{h_q}{q-1}.
+\]
+\end{corollary}
+\begin{proof}
+对任意 \(q>1\)，Shannon 熵支配 Rényi 熵 \(H_q(w_m)\)：
+\(
+H(w_m)\ge H_q(w_m)
+\)。
+而
+\[
+H_q(w_m):=\frac{1}{1-q}\log\sum_x w_m(x)^q
+=\frac{1}{1-q}\log M_q(m)
+=\frac{q\log 2}{q-1}-\frac{1}{(q-1)m}\log S_q(m).
+\]
+取 \(\liminf_{m\to\infty}\) 并代入 \(\lim_{m\to\infty}\frac{1}{m}\log S_q(m)=\log r_q\)，得到
+\(
+\liminf \frac{1}{m}H(w_m)\ge (q\log 2-\log r_q)/(q-1)=h_q/(q-1)
+\)。
+证毕。
+\end{proof}
+
+\begin{proposition}[对数多重度的压力导数恒等式]\label{prop:fold-logmultiplicity-pressure-derivative}
+令
+\[
+\kappa_m(w_m):=\EE_{X\sim w_m}\bigl[\log d_m(X)\bigr],
+\qquad
+S_a(m):=\sum_{x\in X_m}d_m(x)^a\quad(a\in\RR).
+\]
+则在每个固定 \(m\) 上成立恒等式
+\[
+\kappa_m(w_m)=\left.\frac{\dd}{\dd a}\log S_a(m)\right|_{a=1}.
+\]
+若进一步假设极限压力
+\[
+P(a):=\lim_{m\to\infty}\frac{1}{m}\log S_a(m)
+\]
+在 \(a=1\) 处可导，则
+\[
+\lim_{m\to\infty}\frac{1}{m}\kappa_m(w_m)=P'(1),
+\qquad
+\lim_{m\to\infty}\frac{1}{m}H(w_m)=\log 2-P'(1).
+\]
+\end{proposition}
+\begin{proof}
+由
+\(
+\frac{\dd}{\dd a}\log S_a(m)=\frac{\sum_x d_m(x)^a\log d_m(x)}{\sum_x d_m(x)^a}
+\)，
+代入 \(a=1\) 并用 \(\sum_x d_m(x)=2^m\)、\(w_m(x)=d_m(x)/2^m\) 得
+\[
+\left.\frac{\dd}{\dd a}\log S_a(m)\right|_{a=1}
+=\frac{1}{2^m}\sum_x d_m(x)\log d_m(x)
+=\sum_x w_m(x)\log d_m(x)
+=\kappa_m(w_m).
+\]
+若 \(P\) 在 \(1\) 处可导，则按定义
+\(
+P'(1)=\lim_{m\to\infty}\frac{1}{m}\kappa_m(w_m)
+\)。
+另一方面
+\(
+H(w_m)=m\log 2-\kappa_m(w_m)
+\)，两边同除以 \(m\) 并取极限即得第二式。证毕。
+\end{proof}
+
+\begin{corollary}[归一化压力端点导数识别平均对数多重度]\label{cor:fold-logmultiplicity-normalized-pressure-derivative}
+沿用命题 \ref{prop:fold-logmultiplicity-pressure-derivative} 的记号，并记
+\[
+\pi_m(x):=\frac{d_m(x)}{2^m}=w_m(x),\qquad x\in X_m,
+\qquad
+\mu_m:=\frac{1}{m}\,\EE_{X\sim \pi_m}\bigl[\log d_m(X)\bigr].
+\]
+则对每个固定 \(m\) 都有精确恒等式
+\[
+\mu_m=\log 2+\left.\frac{\dd}{\dd a}\right|_{a=1}\left(\frac{1}{m}\log\sum_{x\in X_m}\pi_m(x)^a\right).
+\]
+若进一步极限压力 \(P(a)=\lim_{m\to\infty}\frac{1}{m}\log S_a(m)\) 在 \(a=1\) 处可导，并定义归一化压力
+\[
+\widetilde P(a):=P(a)-a\log 2,
+\]
+则有端点识别式
+\[
+\lim_{m\to\infty}\mu_m=\log 2+\widetilde P'(1).
+\]
+\end{corollary}
+\begin{proof}
+由 \(\pi_m(x)=d_m(x)/2^m\) 得
+\[
+\sum_x \pi_m(x)^a=\sum_x \frac{d_m(x)^a}{2^{am}}=\frac{S_a(m)}{2^{am}}.
+\]
+因此
+\[
+\frac{1}{m}\log\sum_x\pi_m(x)^a=\frac{1}{m}\log S_a(m)-a\log 2,
+\]
+两侧对 \(a\) 求导并在 \(a=1\) 处取值，结合命题 \ref{prop:fold-logmultiplicity-pressure-derivative} 的
+\(
+\kappa_m(w_m)=\left.\frac{\dd}{\dd a}\log S_a(m)\right|_{a=1}
+\)
+与 \(\mu_m=\kappa_m(w_m)/m\)，即得第一式。
+若 \(P\) 在 \(1\) 处可导，则由定义 \(\widetilde P'(1)=P'(1)-\log2\)，并结合命题 \ref{prop:fold-logmultiplicity-pressure-derivative} 的 \(\lim_{m\to\infty}\mu_m=P'(1)\)，得到第二式。证毕。
+\end{proof}
+
+\begin{corollary}[指数负样本双极限的稳定展开与临界阈值]\label{cor:fold-infonce-exponential-K-stable-expansion}
+取 \(K_m=\lceil e^{\gamma m}\rceil\)。
+若 \(\gamma>\log\varphi\)，则存在常数 \(C_\gamma>0\) 使对所有充分大 \(m\) 有
+\[
+\Bigl|L_{m}^{K_m,\star}-\bigl(\log(K_m-1)-H(w_m)\bigr)\Bigr|
+\le C_\gamma\,e^{-(\gamma-\log\varphi)m}.
+\]
+若进一步假设熵率 \(h:=\lim_{m\to\infty}\frac{1}{m}H(w_m)\) 存在，则
+\[
+\lim_{m\to\infty}\frac{1}{m}L_{m}^{K_m,\star}=\gamma-h.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:fold-infonce-entropy-degeneration-second-order} 的双边估计，
+\[
+\Bigl|L_{m}^{K,\star}-\bigl(\log(K-1)-H(w_m)\bigr)\Bigr|
+\le
+\frac{3|X_m|}{2(K-1)}\ \vee\ \frac{|X_m|}{K-1}
+\le
+\frac{3|X_m|}{2(K-1)}.
+\]
+又由 \(|X_m|=F_{m+2}=\Theta(\varphi^m)\) 与 \(K_m\asymp e^{\gamma m}\) 得
+\(
+|X_m|/(K_m-1)\le C_\gamma e^{-(\gamma-\log\varphi)m}
+\)（\(\gamma>\log\varphi\)）。
+从而得到稳定展开。若熵率存在，则两边除以 \(m\) 并令 \(m\to\infty\) 即得极限。证毕。
+\end{proof}
+
+\input{sections/appendix/fold_multiplicity/parts/thm__fold-infonce-laplace-renyi-moment-expansion}
+
+\endinput
+

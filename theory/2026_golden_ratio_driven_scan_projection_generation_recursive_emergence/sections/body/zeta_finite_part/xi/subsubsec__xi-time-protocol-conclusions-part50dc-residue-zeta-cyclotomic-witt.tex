@@ -1,0 +1,509 @@
+为便于把前述凸压力链与长度同余类的 \(\zeta\)-接口对齐，下面把射影压力、periodic residue 生成函数以及 residue zeta 的 cyclotomic--Witt 分解整理为一组可直接调用的标准形式。
+
+\begin{theorem}[射影压力算子谱半径的单纯形凸性证书]\label{thm:xi-time-part50dc-projective-pressure-perron-logconvex}
+沿用定义 \ref{def:pom-projective-transfer-operator} 的记号。在单纯形
+\[
+\Delta:=\{w\in\mathbb R_{\ge 0}^{Q}:\ \langle \mathbf 1,w\rangle=1\}
+\]
+上，对每个输出符号 \(b\in A_{\mathrm{out}}\) 记
+\[
+g_b(w):=\langle \mathbf 1,B_bw\rangle,
+\qquad
+\Phi_b(w):=\frac{B_bw}{\langle \mathbf 1,B_bw\rangle}
+\quad \bigl(g_b(w)>0\bigr),
+\]
+并对任意实参数 \(q\ge 1\) 定义射影转移算子
+\[
+(\mathcal L_qf)(w):=
+\sum_{b\in A_{\mathrm{out}}}g_b(w)^q\,f(\Phi_b(w)),
+\]
+其中 \(g_b(w)=0\) 的项按 \(0\) 计。再记
+\[
+\lambda(q):=\rho_{\mathrm{proj}}(q):=\rho(\mathcal L_q).
+\]
+则函数
+\[
+q\longmapsto \log \lambda(q)
+\]
+在 \([1,\infty)\) 上凸。更精确地，对每个 \(n\ge 1\)，函数
+\[
+q\longmapsto \log \|\mathcal L_q^n\|_{\infty\to\infty}
+=
+\log \|\mathcal L_q^n\mathbf 1\|_\infty
+\]
+在 \([1,\infty)\) 上凸；从而对归一化连续压力
+\[
+\Lambda(t):=\log \lambda(t+1)-\log |A_{\mathrm{out}}|
+\qquad (t\ge 0),
+\]
+也有
+\[
+t\longmapsto \Lambda(t)
+\]
+在 \([0,\infty)\) 上凸。等价地，对任意 \(q_0,q_1\ge 1\) 与 \(t\in[0,1]\)，都有
+\[
+\rho_{\mathrm{proj}}\bigl((1-t)q_0+tq_1\bigr)
+\le
+\rho_{\mathrm{proj}}(q_0)^{1-t}\rho_{\mathrm{proj}}(q_1)^t.
+\]
+\end{theorem}
+\begin{proof}
+先证算子范数可由正锥元 \(\mathbf 1\) 实现。对任意 \(f\in C(\Delta)\) 与任意 \(w\in\Delta\)，有
+\[
+|(\mathcal L_qf)(w)|
+\le
+\sum_{b\in A_{\mathrm{out}}}g_b(w)^q\,\|f\|_\infty
+=
+(\mathcal L_q\mathbf 1)(w)\,\|f\|_\infty.
+\]
+取上确界可得
+\[
+\|\mathcal L_qf\|_\infty\le \|\mathcal L_q\mathbf 1\|_\infty\,\|f\|_\infty,
+\]
+故
+\[
+\|\mathcal L_q\|_{\infty\to\infty}\le \|\mathcal L_q\mathbf 1\|_\infty.
+\]
+反向不等式由取 \(f=\mathbf 1\) 立即得到，因此
+\[
+\|\mathcal L_q\|_{\infty\to\infty}=\|\mathcal L_q\mathbf 1\|_\infty.
+\]
+对 \(\mathcal L_q^n\) 重复同一论证，便有
+\[
+\|\mathcal L_q^n\|_{\infty\to\infty}=\|\mathcal L_q^n\mathbf 1\|_\infty
+\qquad (n\ge 1).
+\]
+
+现固定 \(n\ge 1\)。对任意输出路径
+\[
+\beta=(b_1,\dots,b_n)\in A_{\mathrm{out}}^n
+\]
+与任意 \(w\in\Delta\)，递归定义
+\[
+w_0:=w,
+\qquad
+w_i:=\Phi_{b_i}(w_{i-1})
+\quad (1\le i\le n),
+\]
+并记路径权
+\[
+G_\beta(w):=\prod_{i=1}^{n}g_{b_i}(w_{i-1})\ge 0.
+\]
+反复展开 \(\mathcal L_q\) 得
+\[
+(\mathcal L_q^n\mathbf 1)(w)=\sum_{\beta\in A_{\mathrm{out}}^n}G_\beta(w)^q.
+\]
+若对某个 \(w\) 有全部 \(G_\beta(w)=0\)，则上式恒为 \(0\)，该点对上确界无贡献；否则在指标集
+\[
+I(w):=\{\beta\in A_{\mathrm{out}}^n:\ G_\beta(w)>0\}
+\]
+上有
+\[
+\log (\mathcal L_q^n\mathbf 1)(w)
+=
+\log\!\left(\sum_{\beta\in I(w)}e^{q\log G_\beta(w)}\right),
+\]
+这是有限个仿射函数 \(q\mapsto q\log G_\beta(w)\) 的 \(\log\)-sum-exp，因而关于 \(q\) 凸。对 \(w\) 取上确界仍保持凸性，于是
+\[
+q\longmapsto
+\log\|\mathcal L_q^n\mathbf 1\|_\infty
+=
+\log\|\mathcal L_q^n\|_{\infty\to\infty}
+\]
+在 \([1,\infty)\) 上凸。
+
+最后，由 Gelfand 公式，
+\[
+\log \lambda(q)
+=
+\log \rho(\mathcal L_q)
+=
+\lim_{n\to\infty}\frac{1}{n}\log\|\mathcal L_q^n\|_{\infty\to\infty}.
+\]
+右端是一列凸函数的点态极限，因此仍为凸函数。这就证明了
+\[
+q\longmapsto \log \lambda(q)
+\]
+在 \([1,\infty)\) 上凸。对
+\[
+\Lambda(t)=\log \lambda(t+1)-\log |A_{\mathrm{out}}|
+\]
+仅作平移与常数平移，故 \(t\mapsto \Lambda(t)\) 在 \([0,\infty)\) 上同样凸。最后将对数凸性指数化，即得所示谱半径不等式。证毕。
+\end{proof}
+
+\begin{corollary}[整数阶 moment-kernel 谱半径嵌入一条规范的凸包络曲线]\label{cor:xi-time-part50dc-moment-kernel-convex-envelope}
+对每个整数 \(q\ge 2\)，记
+\[
+r_q:=\rho(\widetilde A_q).
+\]
+则有
+\[
+\log r_q\le \log \rho_{\mathrm{proj}}(q).
+\]
+因此，离散压力样本
+\[
+q\longmapsto \log r_q
+\]
+内嵌于连续凸曲线
+\[
+q\longmapsto \log \rho_{\mathrm{proj}}(q)
+\]
+之下。更精确地，若 \(q_0<q_1<\cdots<q_s\) 为整数、\(\vartheta_i\ge 0\)、\(\sum_i\vartheta_i=1\)，并记
+\[
+\bar q:=\sum_{i=0}^s\vartheta_i q_i\in\mathbb Z_{\ge 2},
+\]
+则有链式估计
+\[
+\log r_{\bar q}
+\le
+\log \rho_{\mathrm{proj}}(\bar q)
+\le
+\sum_{i=0}^s \vartheta_i\log \rho_{\mathrm{proj}}(q_i).
+\]
+\end{corollary}
+\begin{proof}
+定理 \ref{thm:xi-projective-pressure-canonical-convex-majorant} 的第二、三条正是上述结论在
+\[
+\Lambda(q)=\log\rho_{\mathrm{proj}}(q)
+\]
+记号下的改写。证毕。
+\end{proof}
+
+\begin{theorem}[长度同余类 periodic residue 生成函数的有理性与 core 八次控制]\label{thm:xi-time-part50dc-periodic-residue-rational-core-octic}
+固定整数 \(m\ge 2\)，记 \(\omega_m:=e^{2\pi i/m}\)，并把定理 \ref{thm:xi-dirichlet-residue-fourier-parseval-exact} 的 periodic residue counts 改写为
+\[
+A_n^{(r;m)}:=A_{m,r}(n)
+\qquad (r\in\mathbb Z/m\mathbb Z,\ n\ge 1).
+\]
+定义普通生成函数
+\[
+G_{r,m}(z):=\sum_{n\ge 1}A_n^{(r;m)}z^n.
+\]
+则有 Fourier--resolvent 表示
+\[
+G_{r,m}(z)
+=
+\frac1m\sum_{j=0}^{m-1}\omega_m^{-jr}\,
+\Tr\!\left(\frac{zM(\omega_m^j)}{I-zM(\omega_m^j)}\right).
+\]
+进一步，沿用附录 \ref{app:real-input-40-zeta-u} 的因式分解
+\[
+\Delta(z,u)=\det(I-zM(u))=(1-uz^2)F(z,u),
+\]
+并定义 core 生成函数
+\[
+G_{r,m}^{\mathrm{core}}(z)
+:=
+-\frac1m\sum_{j=0}^{m-1}\omega_m^{-jr}\,
+z\partial_z\log F(z,\omega_m^j).
+\]
+则有精确分解
+\[
+G_{r,m}(z)
+=
+2\sum_{\substack{k\ge 1\\ k\equiv r\ (\mathrm{mod}\ m)}}z^{2k}
++G_{r,m}^{\mathrm{core}}(z).
+\]
+因此：
+\begin{enumerate}
+  \item \(G_{r,m}(z)\) 是有理函数，其分母整除
+  \[
+  (1-z^{2m})\prod_{j=0}^{m-1}F(z,\omega_m^j);
+  \]
+  \item \(G_{r,m}^{\mathrm{core}}(z)\) 的分母整除
+  \[
+  \prod_{j=0}^{m-1}F(z,\omega_m^j);
+  \]
+  \item 系数序列 \(\bigl(A_n^{(r;m)}\bigr)_{n\ge 1}\) 满足长度至多 \(10m\) 的线性递推，而扣除显式原子项之后的序列满足长度至多 \(8m\) 的线性递推。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-dirichlet-residue-fourier-parseval-exact}，
+\[
+A_n^{(r;m)}
+=
+\frac1m\sum_{j=0}^{m-1}\omega_m^{-jr}a_n(\omega_m^j).
+\]
+对 \(n\ge 1\) 乘以 \(z^n\) 并求和，得到
+\[
+G_{r,m}(z)
+=
+\frac1m\sum_{j=0}^{m-1}\omega_m^{-jr}
+\sum_{n\ge 1}a_n(\omega_m^j)z^n.
+\]
+另一方面，由矩阵几何级数，
+\[
+\sum_{n\ge 1}a_n(u)z^n
+=
+\sum_{n\ge 1}\Tr\!\bigl((zM(u))^n\bigr)
+=
+\Tr\!\left(\frac{zM(u)}{I-zM(u)}\right),
+\]
+从而得到第一条显示公式。
+
+再利用
+\[
+\Tr\!\left(\frac{zM(u)}{I-zM(u)}\right)
+=
+-z\partial_z\log\det(I-zM(u))
+=
+-z\partial_z\log\Delta(z,u),
+\]
+并代入
+\[
+\Delta(z,u)=(1-uz^2)F(z,u),
+\]
+便有
+\[
+\Tr\!\left(\frac{zM(u)}{I-zM(u)}\right)
+=
+\frac{2uz^2}{1-uz^2}
+-z\partial_z\log F(z,u).
+\]
+将 \(u=\omega_m^j\) 代回 Fourier 平均，可得
+\[
+\frac1m\sum_{j=0}^{m-1}\omega_m^{-jr}\frac{2\omega_m^j z^2}{1-\omega_m^j z^2}
+=
+\frac1m\sum_{j=0}^{m-1}\omega_m^{-jr}
+\sum_{k\ge 1}2\omega_m^{jk}z^{2k}
+=
+2\sum_{k\ge 1}z^{2k}\cdot
+\frac1m\sum_{j=0}^{m-1}\omega_m^{j(k-r)}.
+\]
+单位根正交性给出
+\[
+\frac1m\sum_{j=0}^{m-1}\omega_m^{j(k-r)}
+=
+\mathbf 1_{\{k\equiv r\ (\mathrm{mod}\ m)\}},
+\]
+故
+\[
+G_{r,m}(z)
+=
+2\sum_{\substack{k\ge 1\\ k\equiv r\ (\mathrm{mod}\ m)}}z^{2k}
++G_{r,m}^{\mathrm{core}}(z).
+\]
+
+原子项显然是分母整除 \(1-z^{2m}\) 的有理函数，而 \(G_{r,m}^{\mathrm{core}}(z)\) 是有限个
+\[
+\frac{\text{多项式}}{F(z,\omega_m^j)}
+\]
+之和，因此其分母整除 \(\prod_{j=0}^{m-1}F(z,\omega_m^j)\)。由注
+\ref{rem:real-input-40-zero-activation}，对 \(j=0\) 时 \(F(z,1)\) 的 \(z\)-次数为 \(7\)，而对 \(j\neq 0\) 时次数至多为 \(8\)；因此
+\[
+\deg_z\prod_{j=0}^{m-1}F(z,\omega_m^j)\le 8m,
+\]
+而加上原子分母 \(1-z^{2m}\) 后，完整分母次数至多为 \(10m\)。由有理生成函数与常系数线性递推的标准对应，便得到最后一条。证毕。
+\end{proof}
+
+\begin{corollary}[single atom 在 periodic residue 生成函数层形成显式 cyclotomic 壳]\label{cor:xi-time-part50dc-atomic-periodic-residue-cyclotomic-shell}
+沿用定理 \ref{thm:xi-time-part50dc-periodic-residue-rational-core-octic} 的记号，并定义原子 generating function
+\[
+G_{r,m}^{\mathrm{cycle}}(z):=G_{r,m}(z)-G_{r,m}^{\mathrm{core}}(z).
+\]
+令 \(\ell_r\in\{2,4,\dots,2m\}\) 为满足
+\[
+\ell_r\equiv 2r\pmod{2m}
+\]
+的唯一正代表。则有显式闭式
+\[
+\boxed{\;
+G_{r,m}^{\mathrm{cycle}}(z)=\frac{2z^{\ell_r}}{1-z^{2m}}.\;}
+\]
+特别地：
+\begin{enumerate}
+  \item \(G_{r,m}^{\mathrm{cycle}}(z)\) 的全部极点都是 simple cyclotomic poles，且恰位于
+  \[
+  \mu_{2m}:=\{\zeta\in\CC:\ \zeta^{2m}=1\};
+  \]
+  \item 原子 generating function \(G_{r,m}^{\mathrm{cycle}}(z)\) 的系数序列 \(\bigl([z^n]G_{r,m}^{\mathrm{cycle}}(z)\bigr)_{n\ge 1}\) 的最小周期恰为 \(2m\)。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-time-part50dc-periodic-residue-rational-core-octic}，
+\[
+G_{r,m}^{\mathrm{cycle}}(z)
+=
+2\sum_{\substack{k\ge 1\\ k\equiv r\ (\mathrm{mod}\ m)}}z^{2k}.
+\]
+当 \(r\neq 0\) 时，满足 \(k\equiv r\pmod m\) 的正整数可唯一写成 \(k=r+qm\)（\(q\ge 0\)），于是
+\[
+G_{r,m}^{\mathrm{cycle}}(z)
+=
+2\sum_{q\ge 0}z^{2r+2qm}
+=
+\frac{2z^{2r}}{1-z^{2m}}.
+\]
+当 \(r=0\) 时，最小正解为 \(k=m\)，故
+\[
+G_{0,m}^{\mathrm{cycle}}(z)
+=
+2\sum_{q\ge 0}z^{2m+2qm}
+=
+\frac{2z^{2m}}{1-z^{2m}}.
+\]
+两种情形统一写成
+\[
+G_{r,m}^{\mathrm{cycle}}(z)=\frac{2z^{\ell_r}}{1-z^{2m}}.
+\]
+因此其全部极点恰为 \(1-z^{2m}\) 的零点，并且均为单极点。另一方面，系数序列恰是在模 \(2m\) 的唯一同余类 \(n\equiv \ell_r\pmod{2m}\) 上取值 \(2\)、其余位置取值 \(0\)，故其最小周期就是 \(2m\)。证毕。
+\end{proof}
+
+\begin{corollary}[full periodic residue 生成函数的奇点来源分裂为 core 谱与 cyclotomic 壳]\label{cor:xi-time-part50dc-full-periodic-residue-core-cyclotomic-splitting}
+沿用上述记号。对每个固定的剩余类 \(r\in\ZZ/m\ZZ\)，full periodic residue generating function 满足精确分解
+\[
+\boxed{\;
+G_{r,m}(z)
+=
+G_{r,m}^{\mathrm{core}}(z)+\frac{2z^{\ell_r}}{1-z^{2m}}.\;}
+\]
+因此，single atom 所能引入的新奇点只可能落在 \(\mu_{2m}\) 上，并且都为 simple cyclotomic poles；全部模长不等于 \(1\) 的奇点全部来自 \(G_{r,m}^{\mathrm{core}}(z)\)。特别地，一切仅由奇点模长决定的指数型量，例如 periodic residue counts 的 \(\limsup^{1/n}\) 与相应的平方根门槛失效，均完全由 core 谱控制。
+\end{corollary}
+\begin{proof}
+第一式只是定理 \ref{thm:xi-time-part50dc-periodic-residue-rational-core-octic} 与推论 \ref{cor:xi-time-part50dc-atomic-periodic-residue-cyclotomic-shell} 的直接合并。又
+\[
+\frac{2z^{\ell_r}}{1-z^{2m}}
+\]
+的全部极点都位于单位圆上的 \(\mu_{2m}\)，故 atom 部分不可能贡献任何模长不等于 \(1\) 的奇点。于是全部此类奇点都必须来自 \(G_{r,m}^{\mathrm{core}}(z)\)；若在个别单位根处发生可去抵消，也只会删除 \(\mu_{2m}\) 中的点，而不会在其外产生新的奇点。证毕。
+\end{proof}
+
+\begin{theorem}[长度同余类 residue zeta 的 cyclotomic--Witt 分解与原子梳齿骨架]\label{thm:xi-time-part50dc-residue-zeta-cyclotomic-witt}
+固定整数 \(m\ge 2\) 与剩余类 \(r\in\mathbb Z/m\mathbb Z\)。定义 residue zeta 函数（作为 \(z=0\) 附近常数项为 \(1\) 的形式幂级数）
+\[
+\mathcal Z_{r,m}(z)
+:=
+\exp\!\Bigl(\sum_{n\ge 1}\frac{A_n^{(r;m)}}{n}z^n\Bigr).
+\]
+则有精确分解
+\[
+\mathcal Z_{r,m}(z)
+=
+\prod_{j=0}^{m-1}
+\Delta(z,\omega_m^j)^{-\omega_m^{-jr}/m},
+\]
+其中幂指数按 \(z=0\) 附近常数项为 \(1\) 的分支解释。进一步，
+\[
+\mathcal Z_{r,m}(z)=\mathcal A_{r,m}(z)\,\mathcal R_{r,m}(z),
+\]
+其中
+\[
+\mathcal A_{r,m}(z)
+:=
+\prod_{j=0}^{m-1}(1-\omega_m^j z^2)^{-\omega_m^{-jr}/m},
+\qquad
+\mathcal R_{r,m}(z)
+:=
+\prod_{j=0}^{m-1}F(z,\omega_m^j)^{-\omega_m^{-jr}/m}.
+\]
+并且原子因子满足显式梳齿展开
+\[
+\log \mathcal A_{r,m}(z)
+=
+\sum_{\substack{n\ge 1\\ n\equiv r\ (\mathrm{mod}\ m)}}
+\frac{z^{2n}}{n}.
+\]
+特别地，
+\[
+\mathcal A_{0,m}(z)=(1-z^{2m})^{-1/m}.
+\]
+此外，对全部剩余类求积有
+\[
+\prod_{r\in\mathbb Z/m\mathbb Z}\mathcal Z_{r,m}(z)
+=
+\Delta(z,1)^{-1}
+=
+\zeta(z,1).
+\]
+换言之，\(\mathcal A_{r,m}\) 完全记录二步原子在长度同余类上的梳齿骨架，而 \(\mathcal R_{r,m}\) 只承载由 core 因子 \(F(z,\omega_m^j)\) 所决定的剩余谱数据。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-dirichlet-residue-fourier-parseval-exact} 的 Fourier 反演，
+\[
+\sum_{n\ge 1}\frac{A_n^{(r;m)}}{n}z^n
+=
+\frac1m\sum_{j=0}^{m-1}\omega_m^{-jr}
+\sum_{n\ge 1}\frac{a_n(\omega_m^j)}{n}z^n.
+\]
+而由
+\[
+\zeta(z,u)=\Delta(z,u)^{-1}
+=
+\exp\!\Bigl(\sum_{n\ge 1}\frac{a_n(u)}{n}z^n\Bigr),
+\]
+可得
+\[
+\sum_{n\ge 1}\frac{a_n(u)}{n}z^n=-\log \Delta(z,u).
+\]
+于是
+\[
+\sum_{n\ge 1}\frac{A_n^{(r;m)}}{n}z^n
+=
+-\frac1m\sum_{j=0}^{m-1}\omega_m^{-jr}\log\Delta(z,\omega_m^j).
+\]
+指数化便得到第一条 cyclotomic 分解。
+
+再把
+\[
+\Delta(z,u)=(1-uz^2)F(z,u)
+\]
+代入，即得
+\[
+\mathcal Z_{r,m}(z)=\mathcal A_{r,m}(z)\,\mathcal R_{r,m}(z).
+\]
+对原子因子取对数，有
+\[
+\log\mathcal A_{r,m}(z)
+=
+-\frac1m\sum_{j=0}^{m-1}\omega_m^{-jr}\log(1-\omega_m^j z^2).
+\]
+展开
+\[
+-\log(1-\omega_m^j z^2)
+=
+\sum_{n\ge 1}\frac{\omega_m^{jn}}{n}z^{2n},
+\]
+得到
+\[
+\log\mathcal A_{r,m}(z)
+=
+\sum_{n\ge 1}\frac{z^{2n}}{n}\cdot
+\frac1m\sum_{j=0}^{m-1}\omega_m^{j(n-r)}.
+\]
+内层平均等于 \(1\) 当且仅当 \(n\equiv r\pmod m\)，否则为 \(0\)，故
+\[
+\log \mathcal A_{r,m}(z)
+=
+\sum_{\substack{n\ge 1\\ n\equiv r\ (\mathrm{mod}\ m)}}
+\frac{z^{2n}}{n}.
+\]
+当 \(r=0\) 时，上式化为
+\[
+\log\mathcal A_{0,m}(z)
+=
+\sum_{k\ge 1}\frac{z^{2mk}}{mk}
+=
+-\frac1m\log(1-z^{2m}),
+\]
+从而
+\[
+\mathcal A_{0,m}(z)=(1-z^{2m})^{-1/m}.
+\]
+
+最后，对全部 \(r\in\mathbb Z/m\mathbb Z\) 求积并利用单位根正交性
+\[
+\sum_{r\in\mathbb Z/m\mathbb Z}\omega_m^{-jr}
+=
+m\,\delta_{j0},
+\]
+便得到
+\[
+\prod_{r\in\mathbb Z/m\mathbb Z}\mathcal Z_{r,m}(z)
+=
+\Delta(z,1)^{-1}
+=
+\zeta(z,1).
+\]
+证毕。
+\end{proof}
+
+\endinput

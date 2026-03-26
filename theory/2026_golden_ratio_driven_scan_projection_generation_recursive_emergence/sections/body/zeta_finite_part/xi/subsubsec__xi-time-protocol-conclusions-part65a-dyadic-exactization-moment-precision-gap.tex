@@ -1,0 +1,304 @@
+\paragraph{dyadic 屏幕 exactization、边界码退化、矩层析二歧与读出精度分离}
+在 dyadic 体--界全息链的精确屏幕、边界像 LDPC 阴影、有限矩盒完备性与对角边界译码阈值都已固定之后，还可继续抽取出下列四条派生结果。它们分别把部分屏幕的 exactization 代价压缩为加权拟阵极小化，把 dyadic 边界像码的相对距离退化写成闭式，把固定阶边界矩与分辨率自适应矩盒之间的分界提升为严格二歧，并把单标量 Joukowsky--Gödel 读出与多通道边界译码之间的精度差距量化为指数分离。
+
+\begin{theorem}[部分屏幕 exactization 的加权拟阵极小化与拓扑缺口恒等式]\label{thm:xi-time-part65a-weighted-exactization-matroid-top-gap}
+沿用定理 \ref{thm:xi-time-part9fa-exact-screen-minimal-size-matroid-basis} 与定理 \ref{thm:spg-screen-rank-matroid-supermodularity} 的记号，并令
+\[
+M_{m,n}:=\bigl(\overrightarrow{\mathcal F_m^{n-1}},r\bigr)
+\]
+为由可见秩函数 \(r(\cdot)\) 定义的边界行拟阵，记其总秩为
+\[
+\rho_{m,n}:=2^{mn}.
+\]
+给定任意非负权
+\[
+c:\overrightarrow{\mathcal F_m^{n-1}}\to \RR_{\ge 0},
+\]
+并对任意部分屏幕 \(S\subseteq \overrightarrow{\mathcal F_m^{n-1}}\) 定义 exactization 的最小追加代价
+\[
+\mathcal C_c(S):=
+\min\Bigl\{
+\sum_{\vec f\in T\setminus S}c(\vec f):
+\ T\supseteq S,\ \ker f_T=0
+\Bigr\}.
+\]
+则有
+\[
+\mathcal C_c(S)
+=
+\min\Bigl\{
+\sum_{\vec f\in B}c(\vec f):
+\ B\subseteq \overrightarrow{\mathcal F_m^{n-1}}\setminus S,\
+B\text{ 是 }M_{m,n}/S\text{ 的一组基}
+\Bigr\}.
+\]
+特别地，当 \(c\equiv 1\) 时，
+\[
+\mathcal C_1(S)
+=
+\rho_{m,n}-r(S)
+=
+2^{mn}-r(S)
+=
+\delta(S)
+=
+\rank_{\ZZ}\widetilde H_{n-1}(A_{\neg S};\ZZ).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9fa-exact-screen-minimal-size-matroid-basis}，精确屏幕恰由边界行拟阵的基控制，且其总秩为
+\(
+\rho_{m,n}=2^{mn}
+\)。
+对任意 \(B\subseteq \overrightarrow{\mathcal F_m^{n-1}}\setminus S\)，收缩拟阵 \(M_{m,n}/S\) 的秩函数满足
+\[
+r_{M_{m,n}/S}(B)=r(S\cup B)-r(S).
+\]
+因此，\(B\) 为 \(M_{m,n}/S\) 的基当且仅当
+\[
+r(S\cup B)=\rho_{m,n},
+\qquad
+|B|=\rho_{m,n}-r(S),
+\]
+也即当且仅当 \(S\cup B\) 是一个达到满秩而不含冗余追加面的 exactization。
+
+现取任意 \(T\supseteq S\) 满足 \(\ker f_T=0\)。由定理
+\ref{thm:xi-time-part9fa-exact-screen-minimal-size-matroid-basis} 的首部分，\(\ker f_T=0\) 等价于 \(r(T)=\rho_{m,n}\)，故 \(T\setminus S\) 在收缩拟阵 \(M_{m,n}/S\) 中张成满秩子集。于是可取某组基
+\[
+B\subseteq T\setminus S.
+\]
+由于权函数 \(c\) 非负，便有
+\[
+\sum_{\vec f\in B}c(\vec f)\le \sum_{\vec f\in T\setminus S}c(\vec f).
+\]
+这说明任意 exactization 的追加代价都不小于某组收缩拟阵基的权和；反过来，任一基 \(B\) 都给出 \(T=S\cup B\) 的 exactization。故第一条公式成立。
+
+当 \(c\equiv 1\) 时，收缩拟阵的每一组基都具有基数
+\(
+\rho_{m,n}-r(S)
+\)，于是
+\[
+\mathcal C_1(S)=\rho_{m,n}-r(S)=2^{mn}-r(S).
+\]
+再由定理 \ref{thm:spg-screen-rank-matroid-supermodularity}，
+\[
+\delta(S)=\rho_{m,n}-r(S),
+\]
+而定理 \ref{thm:xi-time-part9fa-screen-kernel-top-homology} 给出
+\[
+\delta(S)=\rank_{\ZZ}\widetilde H_{n-1}(A_{\neg S};\ZZ).
+\]
+合并即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[dyadic 边界像码的正码率--零相对距离退化与固定唯一纠错半径]\label{cor:xi-time-part65a-dyadic-boundary-code-not-asymptotically-good}
+固定 \(n\ge 1\)，并沿用定理 \ref{thm:xi-time-part9fa-dyadic-boundary-image-ldpc} 的记号。则 dyadic 边界像码族
+\[
+\bigl(\mathcal C_{m,n}\bigr)_{m\ge 1}
+\]
+的相对距离满足
+\[
+\Delta_{m,n}
+:=
+\frac{d_{\min}(\mathcal C_{m,n})}{N_{m,n}}
+=
+\frac{2}{(2^m+1)\,2^{m(n-1)}}
+\xrightarrow[m\to\infty]{}
+0.
+\]
+另一方面，其码率满足
+\[
+\operatorname{Rate}_{m,n}
+:=
+\frac{\dim_{\FF_2}\mathcal C_{m,n}}{N_{m,n}}
+=
+\frac{2^m}{n(2^m+1)}
+\xrightarrow[m\to\infty]{}
+\frac1n.
+\]
+因此，对任意固定 \(n\)，码族 \((\mathcal C_{m,n})_{m\ge 1}\) 不是渐近优码族。并且任何最优最大似然唯一译码的可保证纠错半径都满足
+\[
+t_{m,n}^{\operatorname{ML}}
+\le
+\left\lfloor \frac{d_{\min}(\mathcal C_{m,n})-1}{2}\right\rfloor
+=
+n-1.
+\]
+特别地，在最坏情形的对抗错误模型下，可保证唯一纠错的边界面数与分辨率 \(m\) 无关。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9fa-dyadic-boundary-image-ldpc}，
+\[
+N_{m,n}=n(2^m+1)2^{m(n-1)},
+\qquad
+\dim_{\FF_2}\mathcal C_{m,n}=2^{mn},
+\qquad
+d_{\min}(\mathcal C_{m,n})=2n.
+\]
+直接代入即可得到
+\[
+\Delta_{m,n}
+=
+\frac{2n}{n(2^m+1)2^{m(n-1)}}
+=
+\frac{2}{(2^m+1)2^{m(n-1)}}
+\to 0
+\]
+以及
+\[
+\operatorname{Rate}_{m,n}
+=
+\frac{2^{mn}}{n(2^m+1)2^{m(n-1)}}
+=
+\frac{2^m}{n(2^m+1)}
+\to \frac1n.
+\]
+故该码族具有正码率极限而相对距离趋于零，从而不是渐近优码族。
+
+对于任意二元线性码，统一唯一纠错半径至多为
+\[
+\left\lfloor \frac{d_{\min}-1}{2}\right\rfloor.
+\]
+将 \(d_{\min}(\mathcal C_{m,n})=2n\) 代入便得
+\[
+t_{m,n}^{\operatorname{ML}}\le n-1.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[固定阶边界矩不可分与分辨率自适应矩盒完备的严格二歧]\label{thm:xi-time-part65a-fixed-order-boundary-moment-vs-adaptive-box-dichotomy}
+固定 \(n\ge 2\)。对每个分辨率 \(m\ge 1\)，设
+\[
+\mathcal A_m\subseteq \NN^n
+\]
+为一族多重指标。若存在常数 \(R<\infty\) 使得
+\[
+\mathcal A_m\subseteq \{\alpha\in\NN^n:\ |\alpha|\le R\}
+\qquad(\forall m\ge 1),
+\]
+则边界通量矩字典
+\[
+U\longmapsto \bigl(M_\alpha(U)\bigr)_{\alpha\in\mathcal A_m}
+\]
+不可能在全部 \(m\)-级 dyadic polycube 上同时单射。
+
+相反，若取分辨率自适应矩盒
+\[
+\mathcal B_m:=\{0,\dots,2^m-1\}^n,
+\]
+则体积分矩字典
+\[
+U\longmapsto \bigl(\mu_\alpha(U)\bigr)_{\alpha\in\mathcal B_m}
+\]
+在全部 \(m\)-级 dyadic polycube 上为单射；并且边界 Gödel 整数在固定分辨率类内唯一决定 \(U\)。
+\end{theorem}
+\begin{proof}
+若存在统一总次数上界 \(R\)，则对 \(m=R+1\) 应用定理
+\ref{thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments}，可得两个互异的 \(m\)-级 dyadic polycube
+\[
+U\neq V
+\]
+满足
+\[
+M_\alpha(U)=M_\alpha(V)
+\qquad
+(\forall \alpha\in\NN^n,\ |\alpha|\le R).
+\]
+由于 \(\mathcal A_m\subseteq \{|\alpha|\le R\}\)，遂有
+\[
+\bigl(M_\alpha(U)\bigr)_{\alpha\in\mathcal A_m}
+=
+\bigl(M_\alpha(V)\bigr)_{\alpha\in\mathcal A_m},
+\]
+故该字典在 \(m=R+1\) 时已非单射，从而不可能在全部分辨率上同时单射。
+
+另一方面，定理 \ref{thm:xi-time-part9fa-dyadic-finite-moment-completeness} 已证明：对每个固定 \(m\)，矩盒
+\[
+\mathcal B_m=\{0,\dots,2^m-1\}^n
+\]
+给出的体积分矩字典是单射。再由推论
+\ref{cor:spg-boundary-godel-finite-moment-completeness}，边界 Gödel 整数在固定分辨率类内唯一决定 dyadic polycube。本定理遂得证。证毕。
+\end{proof}
+
+\begin{theorem}[Joukowsky--Gödel 单标量读出与多通道边界译码的指数精度分离]\label{thm:xi-time-part65a-scalar-vs-multichannel-exponential-precision-gap}
+取互异素数 \(p_1,\dots,p_k\)，并沿用定理 \ref{thm:spg-single-parameter-log-readout-vs-diagonal-multichannel-bifurcation} 的单标量读出
+\[
+u(b):=\sum_{i=1}^k b_i\log p_i,
+\qquad
+b\in\{0,1\}^k.
+\]
+若要求仅由 \(u(b)\) 的单标量观测，在统一绝对误差阈值 \(\eta_k\) 下对全部 \(2^k\) 个状态保证无碰撞唯一译码，则必有
+\[
+\eta_k
+\le
+\frac{1}{2(2^k-1)}
+\sum_{i=1}^k\log p_i.
+\]
+
+另一方面，多通道对角边界译码允许的统一相对误差阈值为
+\[
+\varepsilon_\ast
+:=
+\frac{p_{\min}-1}{p_{\min}+1},
+\qquad
+p_{\min}:=\min_{1\le i\le k}p_i,
+\]
+并且该阈值由定理 \ref{thm:spg-single-parameter-log-readout-vs-diagonal-multichannel-bifurcation} 给出充分性、由命题 \ref{prop:spg-relative-error-threshold-sharpness} 给出最坏情形下的尖锐必要性。
+
+因此，任意试图用单一标量 \(u(b)\) 取代多通道边界译码的方案，都必然支付指数级绝对精度代价。若进一步取 \(p_i\) 为前 \(k\) 个素数，则
+\[
+\eta_k=O\!\left(\frac{k\log k}{2^k}\right),
+\qquad
+\varepsilon_\ast=\frac13.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:spg-single-parameter-log-readout-vs-diagonal-multichannel-bifurcation}，存在 \(b\neq b'\) 使
+\[
+|u(b)-u(b')|
+\le
+\frac{1}{2^k-1}\sum_{i=1}^k\log p_i.
+\]
+若要求在绝对误差不超过 \(\eta_k\) 的条件下对全部状态无碰撞唯一译码，则以各点 \(u(b)\) 为中心、半径 \(\eta_k\) 的闭区间必须两两不交。于是必要地有
+\[
+2\eta_k
+\le
+\min_{b\neq b'}|u(b)-u(b')|
+\le
+\frac{1}{2^k-1}\sum_{i=1}^k\log p_i,
+\]
+从而得到
+\[
+\eta_k
+\le
+\frac{1}{2(2^k-1)}
+\sum_{i=1}^k\log p_i.
+\]
+
+多通道情形的充分性由定理
+\ref{thm:spg-single-parameter-log-readout-vs-diagonal-multichannel-bifurcation} 直接给出，而阈值
+\(
+\varepsilon_\ast=\frac{p_{\min}-1}{p_{\min}+1}
+\)
+在最坏情形下的必要性由命题
+\ref{prop:spg-relative-error-threshold-sharpness} 给出，故该相对误差门槛是 sharp 的。
+
+若 \(p_i\) 取前 \(k\) 个素数，则 \(p_{\min}=2\)，故
+\[
+\varepsilon_\ast=\frac{2-1}{2+1}=\frac13.
+\]
+同时由素数定理的标准推论，
+\[
+\sum_{i=1}^k\log p_i=\vartheta(p_k)\sim p_k\sim k\log k,
+\]
+代回上式即得
+\[
+\eta_k=O\!\left(\frac{k\log k}{2^k}\right).
+\]
+证毕。
+\end{proof}
+
+\noindent
+这四条派生结果表明，dyadic 边界协议中的可恢复性门槛可分解为三类严格量化的结构参数：部分屏幕的秩亏由收缩拟阵基选择与顶维同调秩共同控制，边界像码的渐近限制由相对距离退化而非码率塌缩主导，矩层析的完备性必须随分辨率同步扩张，而边界读出的鲁棒性则依赖于多通道坐标而不能被无损压缩为单一实参数。
+
+\endinput

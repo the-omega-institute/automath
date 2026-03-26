@@ -1,0 +1,267 @@
+\subsection{三类证书对象的统一输入格式：地址端、缺陷端与线性代数端}\label{subsec:cdim-three-end-certificate-format}
+在 unitary slice 的可见域约束下（\S\ref{subsec:cdim-visible-null-trichotomy}），一切可审计断言均被制度化为“有限数据证书 + 确定性离线验证器”的对象层事件（定义 \ref{def:cdim-finite-data-certificate-offline-verifier}）。
+本小节将本章出现的主要证书对象归并为三端输入格式：地址端刻画可定义性与 \(\mathsf{NULL}\) 的失败见证；缺陷端刻画盘内禁入的半径阈值证书链；线性代数端刻画 Toeplitz--PSD 与端点承载强度的独立读出。
+
+\subsubsection{地址端：类型化地址 \texorpdfstring{$(L,\theta,b)$}{(L,theta,b)} 与 \texorpdfstring{$\mathrm{Read}_{US}$}{Read\_US} 的确定性语义}\label{subsubsec:cdim-three-end-addr}
+在 unitary slice 审计口径下，取可见域 \(X_{\mathrm{vis}}=\mathrm{Phase}\) 并固定确定性验证器 \(\mathrm{Ver}\) 及其证书后端（\S\ref{subsec:cdim-certificate-semantics-offline-verifier-conventions}）。
+以 dyadic 深度 \(b\in\NN\) 类型化精度索引（端点落在 \(2^{-b}\ZZ\)），并固定实现约定（算法标识、外向舍入与输入规范化），从而保证跨平台可重复性（备注 \ref{rem:cdim-implementation-neutrality-offline}）。
+在此结构下，地址端的统一输入对象可取为
+\[
+\mathrm{Addr}_{US}:=\{(L,\theta,b):\ L>1,\ \theta\in\RR,\ b\in\NN\},
+\]
+并由三值偏函数 \(\mathrm{Read}_{US}\) 给出确定性读出语义（定义 \ref{def:cdim-read-us-partial}）：
+\[
+\mathrm{Read}_{US}:\mathrm{Addr}_{US}\rightharpoonup
+\{\mathsf{NonZero},\mathsf{RootInterval},\mathsf{NULL}\}.
+\]
+其中 \(\mathsf{NULL}\) 的对象语义为“局部截面不存在/证书纤维为空”（\S\ref{subsec:cdim-local-section-gluing-null}），并在站点/（预）层口径下可完备三分解为语义空值、协议空值与碰撞空值（\S\ref{subsec:cdim-null-three-way}）。
+
+\subsubsection{缺陷端：半径参数与禁入律证书}\label{subsubsec:cdim-three-end-defect}
+缺陷端证书对象由有限集合
+\[
+\mathcal{C}_{\mathrm{def}}:=\{(\varrho_j,\varepsilon_j)\}_{j=1}^{M}\subset(0,1)\times\QQ_{\ge 0}
+\]
+给出，其语义为“可核验地保证 \(D_{\zeta}(\varrho_j)\le \varepsilon_j\)”（\S\ref{subsec:cdim-jensen-defect-certificate-compilation}）。
+由排斥半径定义
+\[
+r_{\ast}(\varrho):=\varrho\exp\!\bigl(-D_{\zeta}(\varrho)\bigr)\qquad(0<\varrho<1),
+\]
+与禁入律（定理 \ref{thm:cdim-defect-repulsion-radius}）：\(F_{\zeta}\) 在子盘 \(|w|<r_{\ast}(\varrho)\) 内无零点。
+更定量地，若 \(D_{\zeta}(\varrho)\le \varepsilon\)，则
+\[
+r_{\ast}(\varrho)\ge \varrho e^{-\varepsilon}.
+\]
+因此缺陷端的每条上界不等式均可被确定性编译为显式禁入半径下界，并以趋一序列 \(r_{\ast}(\varrho_n)\uparrow 1\) 给出 RH 的充分证书链路入口（定理 \ref{thm:cdim-closed-loop-unitary-horizon-repulsion-toeplitz}）。
+
+\subsubsection{线性代数端：Toeplitz--PSD 与端点热核量}\label{subsubsec:cdim-three-end-linear}
+线性代数端证书对象由两部分构成：
+\begin{enumerate}
+  \item \textbf{Toeplitz 数据与 PSD 核验：}有限阶矩数据 \((c_0,\dots,c_N)\)（有理/区间编码）及其 Toeplitz 主子矩阵 \(\mathbf{T}_N\succeq 0\) 的离线核验（\S\ref{subsec:cdim-toeplitz-psd-certificate-compilation}；并见谱裕度封口规则，定理 \ref{thm:xi-spectral-margin-finite-psd-certificate}）。
+  \item \textbf{端点热核量与误差界：}端点热核量 \(a_N=\frac{(b^{(N)})^{\mathsf T}\mathbf{T}_N b^{(N)}}{4^N}\) 的计算值及其区间误差界（\S\ref{subsec:cdim-endpoint-heat-kernel-probe}）。
+\end{enumerate}
+在 Carath\'eodory 设定下，端点热核恒等式与单调极限 \(a_N\downarrow\mu(\{-1\})\) 使 \(a_N\) 成为对端点原子质量（端点承载强度）的直接读出；并且在支撑受控/谱隙存在时可给出指数型误差界，从而 \(N\) 可被解释为端点原子提取的分辨率深度（推论 \ref{cor:xi-endpoint-heat-kernel-exp-error}）。
+
+\paragraph{有限寄存器的支撑护栏与逐级谱定位}\label{subsec:cdim-jacobi-certificate-guards}
+当线性代数端进一步以有限寄存器（例如对称三对角 Jacobi 寄存器）承载一类可核验谱信息时，支撑护栏与逐级谱定位可被完全压缩为有限可复算的不等式/交错关系：
+\begin{enumerate}
+  \item \textbf{Gershgorin 支撑界：}若 \(J\in\RR^{\kappa\times\kappa}\) 为对称三对角 Jacobi 寄存器，记 \(\beta_i:=J_{ii}\)、\(\alpha_i:=J_{i,i+1}>0\) 且约定 \(\alpha_0=\alpha_\kappa:=0\)，则命题 \ref{prop:xi-jacobi-gershgorin-support-guardrail} 给出显式支撑护栏
+  \[
+  \min_{1\le i\le \kappa}\bigl(\beta_i-\alpha_{i-1}-\alpha_i\bigr)
+  \ \le\ a_{\min}\ \le\ a_{\max}\ \le\
+  \max_{1\le i\le \kappa}\bigl(\beta_i+\alpha_{i-1}+\alpha_i\bigr).
+  \]
+  \item \textbf{Sturm 交错与嵌套夹逼：}对首主子矩阵 \(J_N\) 的升序谱 \(\lambda^{(N)}_1<\cdots<\lambda^{(N)}_N\)，命题 \ref{prop:xi-jacobi-sturm-nested-localization} 给出严格 Sturm 交错并推出全谱原子在 \(\{J_N\}\) 的嵌套区间中单调夹逼收缩。
+  \item \textbf{Stieltjes 残差证书：}对截断 Stieltjes 变换 \(S_N\) 与真值 \(S\)，命题 \ref{prop:xi-jacobi-truncation-remainder-stieltjes} 给出 Schur 残差的 Stieltjes 表示与确定符号性，从而把截断误差制度化为可核验测度项。
+\end{enumerate}
+上述界与残差证书可作为线性代数端的辅助一致性输入，并在失败见证中以有限数据形式外置（\S\ref{subsec:cdim-failure-witness-output-format}）。
+
+\subsection{统一离线验证器的组合与拒绝规则：三端证书的最小闭包}\label{subsec:cdim-unified-offline-verifier-closure}
+三端证书的制度意义在于：缺陷端与线性代数端分别提供“盘内禁入”与“端点承载强度”的正交读出，而地址端提供“可定义性/失败类型”的对象层见证；三者在类型层不可相互替代（定理 \ref{thm:cdim-budget-failure-separation}）。
+据此，可将统一离线核验流程组织为一个组合验证器，并显式规定其拒绝规则。
+
+\subsubsection{组合规则：从局部证书到全局推论的可判定闭包}\label{subsubsec:cdim-unified-offline-verifier-composition}
+令
+\(
+\mathcal{C}=\mathcal{C}_{\mathrm{addr}}\cup\mathcal{C}_{\mathrm{def}}\cup\mathcal{C}_{\mathrm{lin}}
+\)
+为三端证书集合。
+定义统一验证器 \(\mathrm{Ver}^{\mathrm{uni}}\) 的确定性核验顺序如下：
+\begin{enumerate}
+  \item \textbf{地址一致性：}对每个 \((L,\theta,b)\in\mathcal{C}_{\mathrm{addr}}\)，调用 \(\mathrm{Read}_{US}(L,\theta,b)\) 并核验返回对象（定义 \ref{def:cdim-read-us-partial}）。若输出为 \(\mathsf{NULL}\)，则按其三分解类型记录失败见证标签（\S\ref{subsec:cdim-null-three-way}）。
+  \item \textbf{缺陷编译：}对每个 \((\varrho,\varepsilon)\in\mathcal{C}_{\mathrm{def}}\)，核验 \(D_{\zeta}(\varrho)\le \varepsilon\) 并编译为禁入半径下界
+  \(
+  r_{\ast}(\varrho)\ge \varrho e^{-\varepsilon}
+  \)
+  （定理 \ref{thm:cdim-defect-repulsion-radius}）。
+  \item \textbf{Toeplitz--PSD 与端点热核：}对每个 \(N\) 级 Toeplitz 数据核验 \(\mathbf{T}_N\succeq 0\)（或输出负惯性/负特征值作为否证见证），并计算/核验端点热核量 \(a_N\) 及其误差界（\S\ref{subsec:cdim-endpoint-heat-kernel-probe}）。在 PSD 成立时允许将 \(a_N\) 解释为 \(\mu(\{-1\})\) 的单调上逼近并附带误差上界（推论 \ref{cor:xi-endpoint-heat-kernel-exp-error}）。
+\end{enumerate}
+上述三步在类型层形成闭包：缺陷端给出“盘内禁入”推论；线性代数端给出“端点承载强度”推论；地址端给出“局部截面存在性/\(\mathsf{NULL}\) 失败见证”。三者在正交阈值分解下不可互相替代（定理 \ref{thm:cdim-budget-failure-separation}）。
+
+\subsubsection{拒绝规则：有限审计不可判定性与一致维数上界的前提}\label{subsec:cdim-quantifier-elimination-spectral-surrogate}
+若线性代数端未外置一致维数上界（等价地缺乏一致 Hankel 秩上界），则“仅访问有限截断/有限采样”的任何核验流程都可能遭遇谱替身：存在两组候选在所有有限可见数据上一致而全局真值相反，从而全局命题对有限审计不可判定（定理 \ref{thm:xi-spectral-surrogate-finite-audit-undecidable}）。
+相应地，统一验证器必须拒绝将有限证书解释为全局结论，除非：
+\begin{enumerate}
+  \item 外置模式轴/维数上界，使全层级约束可被量词消去为有限截断核验（定理 \ref{thm:xi-oracle-collapse-toeplitz-psd-finite-truncation}），或
+  \item 明确进入无限族检查的制度（以保持全局可判定性）。
+\end{enumerate}
+该拒绝在失败见证层应输出为“模式轴不足/需要外置额外模式寄存器”的可核验标签（\S\ref{subsec:cdim-failure-witness-output-format}）。
+
+\subsection{盲区预算定理：固定半径采样、端点原子与 dyadic 深度的最小联合预算}\label{subsec:cdim-blindspot-budget-theorem}
+在纯相位可见域下，边界层盲区与碰撞型 \(\mathsf{NULL}\) 同阶出现：二者均源自端点压缩的二次量纲，并分别作用于“阈值显影”与“寻址分离”（\S\ref{subsec:cdim-boundary-blindspot-loop}，命题 \ref{prop:cdim-phase-prefix-occupancy-barrier}）。
+端点热核探针则提供第三条正交预算：它不改变半径阈值与地址超度量，而对端点承载强度作单调读出（\S\ref{subsec:cdim-endpoint-heat-kernel-probe}）。
+
+\subsubsection{三类边界层资源的统一记号}\label{subsubsec:cdim-blindspot-budget-notation}
+在 unitary slice 的可见域约束下，考虑三类彼此正交、且在离线验证器语义中不可互相替代的资源：
+\begin{enumerate}
+  \item \textbf{半径采样预算：}给定有限半径采样集合 \(\{\varrho_j\}_{j=1}^{M}\subset(0,1)\)，记 \(\varrho_{\max}:=\max_j\varrho_j\)，并定义边界层厚度预算 \(\Delta_{\varrho}:=1-\varrho_{\max}\in(0,1)\)。
+  \item \textbf{dyadic 深度预算：}给定地址深度 \(b\in\NN\)，其柱事件半径为 \(2^{-b}\)，并由地址超度量 \(d_{\mathrm{addr}}\) 将“共享前缀深度”制度化为“在半径 \(2^{-b}\) 的超度量球内不可分离”（\S\ref{subsec:cdim-phase-prefix-quadratic-barrier}）。
+  \item \textbf{端点热核预算：}给定 Toeplitz 截断阶 \(N\)，端点热核量 \(a_N\) 对端点原子质量 \(\mu(\{-1\})\) 给出单调上逼近；在支撑受控/谱隙存在时进一步给出指数型误差界，从而 \(N\) 可解释为端点原子提取的分辨率深度（推论 \ref{cor:xi-endpoint-heat-kernel-exp-error}）。
+\end{enumerate}
+上述三者分别控制：盘内阈值显影（\(\Delta_{\varrho}\)）、相位寻址碰撞（\(b\)）与端点承载强度（\(N\)）。
+
+\subsubsection{固定采样半径的不可见域：半径盲区预算}\label{subsubsec:cdim-blindspot-budget-radius}
+设存在离临界线零点 \(\rho=\beta+\mathrm{i}\gamma\)（\(\beta<\tfrac12\)），记偏移 \(\delta:=\tfrac12-\beta>0\)。
+令其圆盘像为 \(w_\rho\in\mathbb{D}\)，并记阈值半径 \(r_\rho:=|w_\rho|\in(0,1)\)。
+则在仅使用半径采样至 \(\varrho_{\max}\) 的缺陷证书后端中，以下为结构性不可见条件：
+\[
+\varrho_{\max}\le r_\rho
+\quad\Longrightarrow\quad
+\{D_{\zeta}(\varrho_j)\}_{j=1}^{M}\ \text{不携带排除该零点的正缺陷见证}.
+\]
+在高高度量纲下（\(|\gamma|\to\infty\)、\(\delta\) 有界），阈值半径满足边界层近似
+\[
+1-r_\rho^2\ \asymp\ \frac{\delta}{\gamma^2},
+\]
+并等价得到 \(1-r_\rho\asymp \delta/\gamma^2\)，亦即存在常数 \(c_1,c_2>0\) 使当 \(|\gamma|\) 足够大时
+\[
+c_1\frac{\delta}{\gamma^2}\ \le\ 1-r_\rho\ \le\ c_2\frac{\delta}{\gamma^2}.
+\]
+从而对给定的边界层厚度预算 \(\Delta_{\varrho}=1-\varrho_{\max}\) 有
+\[
+\frac{\delta}{\gamma^2}\ \lesssim\ \Delta_{\varrho}
+\quad\Longrightarrow\quad
+\rho\ \text{处于该半径预算的边界层盲区}.
+\]
+制度含义为：固定半径采样对高高度偏移具有不可绕过的 \(T^{-2}\) 红移；若不提升 \(\varrho_{\max}\)（即不缩小 \(\Delta_\varrho\)），则仅通过增加采样点数不能破盲（参见 \S\ref{subsec:cdim-boundary-blindspot-loop}）。
+
+\subsubsection{端点压缩下的碰撞强制：dyadic 深度预算}\label{subsubsec:cdim-blindspot-budget-dyadic}
+令 \(\upsilon(t)=\pi^{-1}\arctan(t)\in(-\tfrac12,\tfrac12)\) 并记 \(\widetilde u(t)=\upsilon(t)+\tfrac12\in(0,1)\)。
+对深度 \(b\in\NN\) 定义 dyadic 地址
+\(
+A_b(t):=\lfloor 2^b\widetilde u(t)\rfloor
+\)。
+命题 \ref{prop:cdim-phase-prefix-occupancy-barrier} 给出占用下界：存在常数 \(c>0\) 使对所有足够大高度窗 \((T,2T]\) 与任意 \(b\ge 1\)，必存在地址值 \(a\) 使
+\[
+\#\{\gamma\in(T,2T]:A_b(\gamma)=a\}\ \ge\ c\,\frac{T^2\log T}{2^b}.
+\]
+特别地，若要求高度窗内实现地址级别的可分离（单射读出），则必须满足
+\[
+2^b\ \gtrsim\ T^2\log T,
+\qquad\text{等价地}\qquad
+b\ \ge\ 2\log_2T+\log_2\log T-O(1).
+\]
+该二次门槛与半径盲区预算同阶：二者均由端点压缩的 \(T^{-2}\) 量纲强制产生，分别作用于阈值显影与寻址分离；从而提升 \(b\) 不能替代提升 \(\varrho_{\max}\)，反之亦然（定理 \ref{thm:cdim-budget-failure-separation}）。
+
+\begin{theorem}[端点压缩下的“地址--外置账本”联合预算下界]\label{thm:cdim-address-ledger-joint-budget-lower-bound}
+在高度窗 \((T,2T]\) 中令 \(\gamma\) 运行于零点集合（按 \S\ref{subsec:cdim-blindspot-budget-theorem} 的可见域口径）。
+固定 dyadic 深度 \(b\in\NN\) 并采用端点压缩地址
+\[
+A_b(\gamma):=\bigl\lfloor 2^b\widetilde u(\gamma)\bigr\rfloor,
+\qquad
+\widetilde u(t)=\upsilon(t)+\frac12.
+\]
+再附加一个外置账本标签 \(R(\gamma)\in\{1,\dots,P\}\)（不对其构造作任何限制）。
+若组合编码
+\[
+\gamma \longmapsto \bigl(A_b(\gamma),R(\gamma)\bigr)\in \{0,\dots,2^b-1\}\times \{1,\dots,P\}
+\]
+在窗 \((T,2T]\) 的零点集上为单射，则存在常数 \(c>0\) 使当 \(T\) 足够大时必有
+\[
+2^b\,P\ \ge\ c\,T^2\log T.
+\]
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{prop:cdim-phase-prefix-occupancy-barrier}，存在常数 \(c>0\) 使对充分大 \(T\) 必存在某一地址 \(a\in\{0,\dots,2^b-1\}\) 满足
+\[
+\#\{\gamma\in(T,2T]:A_b(\gamma)=a\}\ \ge\ c\,\frac{T^2\log T}{2^b}.
+\]
+若 \(\gamma\mapsto(A_b(\gamma),R(\gamma))\) 在 \((T,2T]\) 上为单射，则在该固定 \(a\) 的纤维中，\(R(\gamma)\) 必须两两不同，从而
+\[
+P\ \ge\ c\,\frac{T^2\log T}{2^b},
+\]
+即 \(2^bP\ge cT^2\log T\)。证毕。
+\end{proof}
+
+\begin{corollary}[半径盲区预算与联合离散预算的正交必要条件]\label{cor:cdim-radius-blindspot-and-joint-discrete-budget-orthogonal}
+设存在离临界线偏移 \(\delta>0\) 的零点 \(\rho=\tfrac12+\delta+\mathrm{i}\gamma\)，并在高度尺度 \(|\gamma|\sim T\) 上以固定半径采样集合 \(\{\varrho_j\}_{j=1}^{M}\subset(0,1)\) 构造缺陷证书后端（\S\ref{subsubsec:cdim-blindspot-budget-radius}）。
+令 \(\varrho_{\max}:=\max_j\varrho_j\) 且 \(\Delta_{\varrho}:=1-\varrho_{\max}\)。
+若某检测机制同时满足：
+\begin{itemize}
+  \item 可见性：缺陷证书在 \(\delta\neq 0\) 与 \(\delta=0\) 两情形可区分；
+  \item 地址可分离：在窗 \((T,2T]\) 的零点集上存在外置账本标签 \(R(\gamma)\in\{1,\dots,P\}\) 使 \(\gamma\mapsto(A_b(\gamma),R(\gamma))\) 为单射，
+\end{itemize}
+则当 \(T\) 足够大时必满足两条互不替代的必要条件
+\[
+\Delta_{\varrho}\ \lesssim\ \frac{\delta}{T^2}
+\qquad\text{与}\qquad
+2^b\,P\ \gtrsim\ T^2\log T.
+\]
+\end{corollary}
+
+\begin{proof}
+第一条由 \S\ref{subsubsec:cdim-blindspot-budget-radius} 的边界层近似 \(1-r_\rho\asymp \delta/\gamma^2\) 给出：可见性要求 \(\varrho_{\max}>r_\rho\)，即 \(\Delta_{\varrho}\lesssim \delta/\gamma^2\)，而在 \(|\gamma|\sim T\) 上得到 \(\Delta_{\varrho}\lesssim \delta/T^2\)。
+第二条即定理 \ref{thm:cdim-address-ledger-joint-budget-lower-bound}。证毕。
+\end{proof}
+
+\begin{corollary}[素数支撑数的最小增长律：端点压缩可分离的外置代价]\label{cor:cdim-ledger-prime-support-min-growth}
+在推论 \ref{cor:cdim-radius-blindspot-and-joint-discrete-budget-orthogonal} 的地址可分离设定中，进一步假设外置账本容量 \(P\) 为平方自由且由 \(k\) 个互异素数支撑：
+\[
+P=\prod_{j=1}^{k} p_j,\qquad p_i\neq p_j.
+\]
+则对充分大 \(T\)，若联合编码在 \((T,2T]\) 上为单射，则必有
+\[
+k\ \ge\ (1-o(1))\,
+\frac{2\log T+\log\log T-b\log 2}{\log\log T}.
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:cdim-address-ledger-joint-budget-lower-bound} 得 \(\log P\ge 2\log T+\log\log T-b\log 2+O(1)\)。
+在固定 \(k\) 的情形下，平方自由乘积 \(\prod_{j=1}^{k}p_j\) 的最小值由前 \(k\) 个素数的乘积 \(p_k^\#\) 给出；由素数定理的标准推论有
+\[
+\log p_k^\#=(1+o(1))\,k\log k.
+\]
+因此
+\(
+k\log k\ge (1-o(1))(2\log T+\log\log T-b\log 2)
+\)。
+并且右端主阶为 \(\log T\)，从而 \(\log k\le (1+o(1))\log\log T\)，代回反解即得所示下界。证毕。
+\end{proof}
+
+\subsubsection{端点原子质量的单调提取与误差界：端点热核预算}\label{subsubsec:cdim-blindspot-budget-endpoint-atom}
+在 Toeplitz--PSD（Carath\'eodory）语义内，端点热核量满足单调极限 \(a_N\downarrow\mu(\{-1\})\)（定理 \ref{thm:xi-endpoint-heat-kernel-probe}）。
+因此：
+\begin{enumerate}
+  \item 若对某 \(N\) 给出可核验上界 \(a_N\le \eta\)，则必有 \(\mu(\{-1\})\le \eta\)。该推论不依赖任何半径采样预算，仅依赖有限阶 Toeplitz 数据与二次型核验。
+  \item 若进一步假设端点之外存在谱隙（或支撑受控），从而存在 \(q\in(0,1)\) 使端点之外贡献满足 \(\le q^{2N}\) 型衰减，则可将 \(N\) 解释为端点原子提取的分辨率深度，并给出指数型误差界（推论 \ref{cor:xi-endpoint-heat-kernel-exp-error}）。
+\end{enumerate}
+与 \(\Delta_{\varrho}\) 与 \(b\) 的预算不同，端点热核预算的作用对象是端点承载强度；其在证书闭包中对应独立的记录轴分量，不能由提升 \(\varrho_{\max}\) 或增加 \(b\) 替代。
+
+\subsection{失败见证输出规范：把拒绝与 \texorpdfstring{$\mathsf{NULL}$}{NULL} 形式化为可审计数据}\label{subsec:cdim-failure-witness-output-format}
+三端证书闭包中的失败不被解释为数值不稳定，而被制度化为可离线复核的否证见证：要么为 \(\mathsf{NULL}\) 的对象层三分解，要么为模式轴不足所导致的拒绝（\S\ref{subsec:cdim-null-three-way}，\S\ref{subsec:cdim-quantifier-elimination-spectral-surrogate}）。
+本小节给出一条统一的最小输出格式，使第三方验证器无需访问任何生成轨迹即可复核“拒绝的必要性”。
+
+\subsubsection{失败见证的最小数据结构}\label{subsubsec:cdim-failure-witness-min-structure}
+统一离线验证器的拒绝输出被规范为四元组
+\[
+W=(\mathsf{tag},\ \mathsf{loc},\ \mathsf{lb},\ \mathsf{aux}),
+\]
+其中：
+\begin{enumerate}
+  \item \(\mathsf{tag}\in\{\mathsf{Sem},\mathsf{Prot},\mathsf{Coll},\mathsf{Dim}\}\) 为类型标签，分别对应语义空值、协议空值、碰撞空值与维数/模式轴不足（谱替身风险）；
+  \item \(\mathsf{loc}\) 为位置标识（例如 \((L,\theta,b)\)、\((\varrho,\cdot)\) 或 \(N\)）；
+  \item \(\mathsf{lb}\) 为被强制的下界（例如 \(b\ge b_{\min}(T)\)、\(\Delta_{\varrho}\le \Delta_{\varrho,\min}(\gamma,\delta)\)、或“需要外置一致维数上界 \(D\)”）；
+  \item \(\mathsf{aux}\) 为辅助核验数据（例如占用计数下界、Gershgorin 支撑界、负惯性指标、或区间算术外向舍入证书）。
+\end{enumerate}
+该格式的设计要求为：\(\mathsf{lb}\) 与 \(\mathsf{aux}\) 必须完全由有限有理/整数数据给出，使第三方验证器能在实现无关意义下复核否证见证。
+
+\subsubsection{盲区预算的失败见证模板}\label{subsubsec:cdim-failure-witness-templates}
+对 \S\ref{subsec:cdim-blindspot-budget-theorem} 的三类预算，可给出如下规范化失败见证模板：
+\begin{enumerate}
+  \item \textbf{半径盲区见证：}若缺陷端仅给出 \(\varrho_{\max}\) 且无法越过阈值半径，则输出 \(\mathsf{tag}=\mathsf{Coll}\)，并给出 \(\Delta_{\varrho}\asymp \delta/\gamma^2\) 的可核验形式（例如由 \(|w_\rho|\) 的显式表达生成的区间下界），以证明现有 \(\varrho_{\max}\) 必不足以显影。
+  \item \textbf{寻址碰撞见证：}若在高度窗 \((T,2T]\) 的地址端出现碰撞型 \(\mathsf{NULL}\)，则输出 \(\mathsf{tag}=\mathsf{Coll}\) 与下界 \(2^b\gtrsim T^2\log T\)，并附上可核验的占用下界计数作为 \(\mathsf{aux}\)（命题 \ref{prop:cdim-phase-prefix-occupancy-barrier}）。
+  \item \textbf{端点原子预算见证：}若线性代数端需要控制 \(\mu(\{-1\})\) 却仅提供过小 \(N\) 的 Toeplitz 数据，则输出 \(\mathsf{tag}=\mathsf{Dim}\) 并给出显式误差界（例如 \(q^{2N}\) 型上界未进入目标阈值），从而把拒绝归因于端点原子分辨率不足而非数值不稳定（推论 \ref{cor:xi-endpoint-heat-kernel-exp-error}）。
+\end{enumerate}
+
+\subsection{盲区预算定理的协定推论：三端证书的最小联合充分条件}\label{subsec:cdim-blindspot-budget-corollaries}
+在“缺陷端 + 地址端 + 线性代数端”三端证书并行的统一验证器中，若目标是在高度尺度 \(T\) 上对离线偏移给出可审计排除，则至少需要满足以下联合充分条件族（其形式表达的是资源的不可替代性，而非最佳常数）：
+\begin{enumerate}
+  \item \textbf{阈值显影条件：}半径采样必须进入端点薄层，使 \(\Delta_{\varrho}=1-\varrho_{\max}\) 至少达到 \(\asymp \delta/T^2\) 的量纲；否则离切片零点仍可落在有限采样盲区中而不触发正缺陷见证（\S\ref{subsubsec:cdim-blindspot-budget-radius}）。
+  \item \textbf{寻址分离条件：}地址深度必须满足 \(2^b\gtrsim T^2\log T\)；否则高度窗中的柱事件高重数占用结构强制发生，地址读出必出现碰撞型 \(\mathsf{NULL}\)（命题 \ref{prop:cdim-phase-prefix-occupancy-barrier}）。
+  \item \textbf{端点承载条件：}若协议同时要求对端点承载强度作独立审计，则 Toeplitz 截断阶 \(N\) 必须足以把 \(a_N\) 的误差界压至目标阈值内；在端点外谱隙存在时该条件可指数满足，否则必须外置更大模式轴或引入更强假设（\S\ref{subsubsec:cdim-blindspot-budget-endpoint-atom}，\S\ref{subsec:cdim-quantifier-elimination-spectral-surrogate}）。
+\end{enumerate}
+该联合条件的制度含义为：在 unitary slice 的最小闭包中，“排除离线偏移”不属于单一证书族的职责，而是三端资源的并行闭包；任何拒绝外置其中之一的协议都会在类型层产生可核验的失败见证，并按 \S\ref{subsec:cdim-failure-witness-output-format} 的格式输出。
+
+\endinput
+

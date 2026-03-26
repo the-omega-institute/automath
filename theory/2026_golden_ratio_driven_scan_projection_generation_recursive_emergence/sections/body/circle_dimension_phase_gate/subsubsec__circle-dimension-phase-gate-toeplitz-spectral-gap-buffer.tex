@@ -1,0 +1,223 @@
+\subsubsection{Toeplitz 谱隙诱导的 Carath\'eodory 缓冲：从有限谱裕度到递归稳定常数}\label{subsubsec:cdim-toeplitz-spectral-gap-buffer}
+Toeplitz--PSD 层级仅给出 \(\Re\mathscr{C}\ge 0\) 的非负性判别（附录 \ref{subsubsec:app-horizon-weyl-carath-toeplitz}）。
+若在某一有限截断阶 \(N\) 上进一步获得\emph{可核验的谱裕度} \(\lambda_{\min}(\mathbf{T}_N)\ge \eta>0\)，则可将“正性”定量提升为圆盘内部的显式缓冲下界：\(\Re\mathscr{C}\) 在任意固定子圆盘 \(|w|\le r<1\) 上被迫远离零。
+该缓冲既提供分母远离零的制度封口，也给出 Cayley--Schur 坐标下的统一收缩常数，从而把“递归更新的稳定性”编译为可离线核验的不等式。
+\par
+以下先在一般 Carath\'eodory--Toeplitz 设定下给出定量定理，再给出常数的极值构造与 Cayley 变换后的收缩界；最后将其作为视界 Weyl--Carath\'eodory 接口的直接推论读入 RH 语义。
+\vspace{4pt}
+
+\paragraph{Carath\'eodory 表示与 Toeplitz 截断}
+令 \(\mu\) 为单位圆 \(\TT\) 上的有限正 Borel 测度，记其 Fourier--Stieltjes 矩为
+\[
+c_n:=\int_{\TT}\xi^{-n}\,\dd\mu(\xi)\qquad(n\in\ZZ).
+\]
+定义相应的 Carath\'eodory 函数
+\begin{equation}\label{eq:cdim-carath-measure-representation}
+\mathscr{C}(w):=\int_{\TT}\frac{\xi+w}{\xi-w}\,\dd\mu(\xi)\qquad(|w|<1),
+\end{equation}
+则 \(\mathscr{C}\) 在 \(\mathbb{D}\) 内解析且满足 \(\Re \mathscr{C}(w)\ge 0\)，并具有归一化展开
+\begin{equation}\label{eq:cdim-carath-series}
+\mathscr{C}(w)=c_0+2\sum_{n\ge 1}c_n w^n,\qquad c_0=\mu(\TT)>0.
+\end{equation}
+对每个 \(N\ge 0\) 定义 Toeplitz 主子矩阵
+\[
+\mathbf{T}_N:=(c_{j-k})_{0\le j,k\le N}.
+\]
+
+\begin{theorem}[Toeplitz 谱隙诱导的 Carath\'eodory 缓冲下界]\label{thm:cdim-toeplitz-spectral-gap-carath-buffer}
+在上述设定下，取 \(N\ge 0\) 并假设 \(\mathbf{T}_N\succ 0\) 且
+\[
+\lambda_{\min}(\mathbf{T}_N)\ge \eta>0.
+\]
+则对任意 \(w\in\mathbb{D}\)（令 \(r:=|w|\)）有显式下界
+\begin{equation}\label{eq:cdim-carath-buffer-lower}
+\boxed{\;
+\Re \mathscr{C}(w)\ \ge\ \eta\cdot\frac{1-r^{N+1}}{1+r^{N+1}}\; }.
+\end{equation}
+同理，若存在 \(M>0\) 使 \(\lambda_{\max}(\mathbf{T}_N)\le M\)，则亦有上界
+\begin{equation}\label{eq:cdim-carath-buffer-upper}
+\boxed{\;
+\Re \mathscr{C}(w)\ \le\ M\cdot\frac{1+r^{N+1}}{1-r^{N+1}}\; }.
+\end{equation}
+\end{theorem}
+\begin{proof}
+由 Toeplitz--Gram 表示，对任意 \(v=(v_0,\dots,v_N)^{\mathsf T}\in\CC^{N+1}\) 有
+\[
+v^\ast\mathbf{T}_N v=\int_{\TT}\left|\sum_{k=0}^N v_k\,\xi^{-k}\right|^2\,\dd\mu(\xi).
+\]
+取几何向量 \(v=v(w):=(1,w,\dots,w^N)^{\mathsf T}\) 并记 \(r=|w|\)。则
+\[
+v(w)^\ast\mathbf{T}_N v(w)
+=\int_{\TT}\left|\sum_{k=0}^N (w\xi^{-1})^k\right|^2\,\dd\mu(\xi)
+=\int_{\TT}\frac{|\xi^{N+1}-w^{N+1}|^2}{|\xi-w|^2}\,\dd\mu(\xi),
+\]
+其中最后一步用 \(|\xi|=1\) 化简得到。
+另一方面，
+\[
+\Re \mathscr{C}(w)=\int_{\TT}\frac{1-r^2}{|\xi-w|^2}\,\dd\mu(\xi).
+\]
+注意到 \(|\xi^{N+1}|=1\)，故对任意 \(\xi\in\TT\) 有
+\[
+1-r^{N+1}\ \le\ |\xi^{N+1}-w^{N+1}|\ \le\ 1+r^{N+1}.
+\]
+由上界估计得到
+\[
+v(w)^\ast\mathbf{T}_N v(w)
+\le (1+r^{N+1})^2\int_{\TT}\frac{1}{|\xi-w|^2}\,\dd\mu(\xi)
+=\frac{(1+r^{N+1})^2}{1-r^2}\,\Re \mathscr{C}(w),
+\]
+即
+\begin{equation}\label{eq:cdim-carath-buffer-step1}
+\Re \mathscr{C}(w)\ge (1-r^2)\frac{v(w)^\ast\mathbf{T}_N v(w)}{(1+r^{N+1})^2}.
+\end{equation}
+而谱裕度给出
+\[
+v(w)^\ast\mathbf{T}_N v(w)\ge \eta\,\|v(w)\|_2^2
+=\eta\sum_{k=0}^N r^{2k}
+=\eta\frac{1-r^{2N+2}}{1-r^2}.
+\]
+代回 \eqref{eq:cdim-carath-buffer-step1} 得
+\[
+\Re \mathscr{C}(w)
+\ge
+\eta\frac{1-r^{2N+2}}{(1+r^{N+1})^2}
+=\eta\frac{1-r^{N+1}}{1+r^{N+1}},
+\]
+即 \eqref{eq:cdim-carath-buffer-lower}。
+\par
+上界同理：由 \(|\xi^{N+1}-w^{N+1}|\ge 1-r^{N+1}\) 得
+\[
+v(w)^\ast\mathbf{T}_N v(w)\ge (1-r^{N+1})^2\int_{\TT}\frac{1}{|\xi-w|^2}\,\dd\mu(\xi)
+=\frac{(1-r^{N+1})^2}{1-r^2}\,\Re\mathscr{C}(w),
+\]
+从而
+\[
+\Re\mathscr{C}(w)\le (1-r^2)\frac{v(w)^\ast\mathbf{T}_N v(w)}{(1-r^{N+1})^2}
+\le (1-r^2)\frac{\lambda_{\max}(\mathbf{T}_N)\|v(w)\|_2^2}{(1-r^{N+1})^2}.
+\]
+再用 \(\|v(w)\|_2^2=(1-r^{2N+2})/(1-r^2)\) 化简即得 \eqref{eq:cdim-carath-buffer-upper}。证毕。
+\end{proof}
+
+\begin{proposition}[常数最优性与显式极值构造]\label{prop:cdim-carath-buffer-sharpness}
+定理 \ref{thm:cdim-toeplitz-spectral-gap-carath-buffer} 中的系数 \(\frac{1-r^{N+1}}{1+r^{N+1}}\) 在一般情形下不可改进。
+更具体地：对任意 \(N\ge 0\)、\(\eta>0\) 与 \(\phi\in\RR\)，取离散测度
+\[
+\mu_{N,\eta,\phi}:=\frac{\eta}{N+1}\sum_{k=0}^{N}\delta_{\exp\!\left(\mathrm{i}\frac{\phi+2\pi k}{N+1}\right)},
+\]
+其 Carath\'eodory 函数满足闭式
+\begin{equation}\label{eq:cdim-carath-extremal-closed-form}
+\boxed{\;
+\mathscr{C}_{N,\eta,\phi}(w)=\eta\cdot\frac{1+e^{-\mathrm{i}\phi}w^{N+1}}{1-e^{-\mathrm{i}\phi}w^{N+1}}\; }.
+\end{equation}
+并且 \(\mathbf{T}_N=\eta I_{N+1}\) 从而 \(\lambda_{\min}(\mathbf{T}_N)=\eta\)。
+此外对任意 \(0<r<1\)，在点
+\(
+w=r\exp\!\left(\mathrm{i}\frac{\phi+\pi}{N+1}\right)
+\)
+处取等号：
+\[
+\Re\mathscr{C}_{N,\eta,\phi}(w)=\eta\frac{1-r^{N+1}}{1+r^{N+1}}.
+\]
+\end{proposition}
+\begin{proof}
+由定义直接计算 Fourier 矩：
+\[
+c_n=\int_{\TT}\xi^{-n}\,\dd\mu_{N,\eta,\phi}(\xi)
+=\frac{\eta}{N+1}\sum_{k=0}^{N}\exp\!\left(-\mathrm{i}n\frac{\phi+2\pi k}{N+1}\right).
+\]
+当 \(1\le |n|\le N\) 时，上式为一段完整的单位根和，故 \(c_n=0\)，而 \(c_0=\eta\)。
+因此 \(\mathbf{T}_N=(c_{j-k})_{0\le j,k\le N}=\eta I_{N+1}\)，从而 \(\lambda_{\min}(\mathbf{T}_N)=\eta\)。
+\par
+由 \eqref{eq:cdim-carath-series}，\(\mathscr{C}\) 的系数仅在 \(n\equiv 0\pmod{N+1}\) 时非零；对 \(m\ge 1\) 有
+\(
+c_{m(N+1)}=\eta e^{-\mathrm{i}m\phi}
+\)。
+故
+\[
+\mathscr{C}_{N,\eta,\phi}(w)
+=\eta+2\sum_{m\ge 1}\eta e^{-\mathrm{i}m\phi}w^{m(N+1)}
+=\eta\left(1+2\frac{e^{-\mathrm{i}\phi}w^{N+1}}{1-e^{-\mathrm{i}\phi}w^{N+1}}\right)
+=\eta\frac{1+e^{-\mathrm{i}\phi}w^{N+1}}{1-e^{-\mathrm{i}\phi}w^{N+1}},
+\]
+即 \eqref{eq:cdim-carath-extremal-closed-form}。
+取 \(w=r\exp(\mathrm{i}(\phi+\pi)/(N+1))\)，则 \(e^{-\mathrm{i}\phi}w^{N+1}=-r^{N+1}\)，从而 \(\mathscr{C}_{N,\eta,\phi}(w)\in\RR_{>0}\) 且其实部等于所示下界；因此该系数在一般情形下不可改进。证毕。
+\end{proof}
+
+\begin{theorem}[谱隙 \texorpdfstring{$\Rightarrow$}{=>} 缓冲 \texorpdfstring{$\Rightarrow$}{=>} Cayley--Schur 子盘收缩]\label{thm:cdim-toeplitz-gap-schur-contraction}
+在定理 \ref{thm:cdim-toeplitz-spectral-gap-carath-buffer} 的设定下，记 \(c_0=\mathscr{C}(0)>0\)，并作归一化
+\[
+\widetilde{\mathscr{C}}(w):=\frac{1}{c_0}\mathscr{C}(w),
+\qquad
+\widetilde{\mathscr{C}}(0)=1,\quad \Re\widetilde{\mathscr{C}}(w)\ge 0.
+\]
+定义 Cayley--Schur 变换
+\[
+S(w):=\frac{\widetilde{\mathscr{C}}(w)-1}{\widetilde{\mathscr{C}}(w)+1}\qquad(|w|<1),
+\]
+并记其 \(r\)-缩放 \(S_r(w):=S(rw)\)（故 \(S_r\) 在 \(\mathbb{D}\) 内解析且 \(S_r(0)=0\)）。
+对任意 \(0<r<1\) 定义
+\begin{equation}\label{eq:cdim-deltaN-def}
+\delta_N(r):=\frac{\eta}{c_0}\cdot\frac{1-r^{N+1}}{1+r^{N+1}}.
+\end{equation}
+则：
+\begin{enumerate}
+  \item \textbf{（缓冲）}在闭子圆盘 \(|w|\le r\) 上有
+  \[
+  \inf_{|w|\le r}\Re\widetilde{\mathscr{C}}(w)\ \ge\ \delta_N(r).
+  \]
+  \item \textbf{（收缩）} \(S_r\) 在 \(H^\infty(\mathbb{D})\) 范数下满足显式上界
+  \begin{equation}\label{eq:cdim-schur-contraction-q}
+  \boxed{\;
+  \|S_r\|_{H^\infty(\mathbb{D})}\ \le\ \sqrt{1-\delta_N(r)(1-r)^2}\ <\ 1\; }.
+  \end{equation}
+\end{enumerate}
+从而 \(S_r\) 的像包含于严格欧氏子盘 \(\{|z|\le q_N(r)\}\)（\(q_N(r):=\sqrt{1-\delta_N(r)(1-r)^2}\)），并在该坐标下把“谱裕度”编译为一条可核验的递归稳定常数：分母 \(1+ \widetilde{\mathscr{C}}(w)\) 在 \(|w|\le r\) 上一致远离零，且 Cayley 读出在该子圆盘上保持严格裕度。
+\end{theorem}
+\begin{proof}
+第一条由定理 \ref{thm:cdim-toeplitz-spectral-gap-carath-buffer} 在 \(|w|=r\) 的下界立得；由于 \(\Re\mathscr{C}\) 为调和函数，闭圆盘 \(|w|\le r\) 上的最小值在边界取得，从而对全部 \(|w|\le r\) 成立；再除以 \(c_0\) 得 \eqref{eq:cdim-deltaN-def} 的形式。
+\par
+第二条使用 Carath\'eodory 增长估计：当 \(\widetilde{\mathscr{C}}(0)=1\) 且 \(\Re\widetilde{\mathscr{C}}\ge 0\) 时，
+\[
+\sup_{|w|\le r}|\widetilde{\mathscr{C}}(w)|\ \le\ \frac{1+r}{1-r}=:M(r).
+\]
+令 \(\varphi(z):=\frac{z-1}{z+1}\)。则对任意 \(z\neq -1\) 有恒等式
+\[
+|\varphi(z)|^2
+=\frac{|z|^2-2\Re z+1}{|z|^2+2\Re z+1}
+=1-\frac{4\Re z}{|z|^2+2\Re z+1}
+\le 1-\frac{4\Re z}{(|z|+1)^2}.
+\]
+取 \(z=\widetilde{\mathscr{C}}(w)\) 并在 \(|w|\le r\) 上用
+\(\Re \widetilde{\mathscr{C}}(w)\ge \delta_N(r)\)、\(|\widetilde{\mathscr{C}}(w)|\le M(r)\)，得到
+\[
+|S(w)|^2\le 1-\frac{4\delta_N(r)}{(M(r)+1)^2}.
+\]
+而 \(M(r)+1=\frac{1+r}{1-r}+1=\frac{2}{1-r}\)，故
+\[
+|S(w)|^2\le 1-\delta_N(r)(1-r)^2\qquad(|w|\le r).
+\]
+于是
+\[
+\|S_r\|_{H^\infty(\mathbb{D})}
+=\sup_{|w|<1}|S(rw)|
+=\sup_{|u|\le r}|S(u)|
+\le \sqrt{1-\delta_N(r)(1-r)^2}<1,
+\]
+即 \eqref{eq:cdim-schur-contraction-q}。证毕。
+\end{proof}
+
+\begin{corollary}[视界 Weyl--Carath\'eodory 接口下的谱隙证书与递归稳定范式]\label{cor:cdim-toeplitz-gap-stability-rh}
+沿用附录 \ref{subsubsec:app-horizon-weyl-carath-toeplitz} 的视界记号：
+令
+\(
+E_\zeta(z)=\Xi_\zeta(\tfrac12+\mathrm{i}z)
+\)
+且 \(m_\zeta(z)=-E_\zeta'(z)/E_\zeta(z)\)；并令 \(\mathscr{C}_\zeta(w)=-\mathrm{i}\,m_\zeta(\mathcal{C}^{-1}(w))\) 为视界 Carath\'eodory 函数（式 \eqref{eq:app-horizon-m-c-relation}）。
+在 RH 成立时，\(\mathscr{C}_\zeta\) 属于 Carath\'eodory 类，从而其 Toeplitz 主子矩阵 \(\mathbf{T}_N\) 半正定（定理 \ref{thm:app-horizon-toeplitz-lmi}）。
+\par
+进一步地，若在某一阶 \(N\) 上获得可离线核验的谱裕度下界 \(\lambda_{\min}(\mathbf{T}_N)\ge \eta>0\)，则对任意固定 \(0<r<1\)：
+定理 \ref{thm:cdim-toeplitz-spectral-gap-carath-buffer} 与定理 \ref{thm:cdim-toeplitz-gap-schur-contraction} 给出显式缓冲常数 \(\delta_N(r)\) 与收缩常数 \(q_N(r)<1\)，从而在 \(|w|\le r\) 的固定可见域内，Cayley--Schur 坐标下的读出与后续 Möbius/有理更新可在同一裕度下被制度化封口：分母项一致远离零，递归更新不会在层级推进中发生可见域内的误差爆炸。
+\end{corollary}
+
+\endinput
+

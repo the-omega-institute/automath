@@ -1,0 +1,415 @@
+\subsection{Laurent 干涉映射的奇异环、玫瑰/Lissajous 反推与有限环分解}
+
+本节把若干平面闭合图样统一解释为单位圆参数在 Laurent 干涉映射下的像，并将奇异环、分歧值环、Haar--Jensen 对数势以及 cyclotomic 消元接口组织为可直接计算的闭式陈述。
+
+\begin{theorem}[二项 Laurent 映射的奇异环与对数平面晶格]\label{thm:derived-two-term-laurent-singular-ring}
+令 \(A,B\in\CC\setminus\{0\}\)，并取整数 \(M>N\)。定义二项 Laurent 映射
+\[
+f(w):=Aw^M+Bw^N,
+\qquad
+w\in\CC^\times.
+\]
+记其奇异环为临界集的模长像
+\[
+\Sigma(f):=\{|w|:\ f'(w)=0\}.
+\]
+则成立：
+\begin{enumerate}
+  \item \(\Sigma(f)\) 为单点集合 \(\{\rho\}\)，其中
+  \[
+  \rho=
+  \left|
+  \frac{-BN}{AM}
+  \right|^{\frac{1}{M-N}}.
+  \]
+  \item 全体临界点满足
+  \[
+  \operatorname{Crit}(f)
+  =
+  \left\{
+  w\in\CC^\times:\ w^{M-N}=-\frac{BN}{AM}
+  \right\},
+  \]
+  因而可写成
+  \[
+  w_k=
+  \rho\,
+  \exp\!\left(
+  \frac{i(\arg(-BN/AM)+2\pi k)}{M-N}
+  \right),
+  \qquad
+  k=0,\dots,M-N-1.
+  \]
+  \item 若取任意对数分支 \(\theta=\log w\)，则临界点在 \(\theta\)-平面形成竖直晶格
+  \[
+  \theta=
+  \log\rho
+  +
+  i\frac{\arg(-BN/AM)+2\pi k}{M-N}
+  +
+  2\pi i\,\ell,
+  \qquad
+  k=0,\dots,M-N-1,\ \ell\in\ZZ.
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+直接计算得
+\[
+f'(w)=AM\,w^{M-1}+BN\,w^{N-1}
+=
+w^{N-1}\bigl(AM\,w^{M-N}+BN\bigr).
+\]
+在 \(\CC^\times\) 上 \(w^{N-1}\neq 0\)，故
+\[
+f'(w)=0
+\iff
+w^{M-N}=-\frac{BN}{AM}.
+\]
+取模即得
+\[
+|w|^{M-N}=
+\left|
+\frac{BN}{AM}
+\right|,
+\]
+从而 \(|w|=\rho\)，这就证明了奇异环为单点集合。角度表达式由复数 \(M-N\) 次开方给出，而对数坐标公式只是再加上 \(\log\) 的 \(2\pi i\)-周期项。证毕。
+\end{proof}
+
+\begin{corollary}[玫瑰曲线的单位圆反推与参数奇异环半径]\label{cor:derived-rose-laurent-singular-ring}
+令 \(n,d\in\NN\) 且 \(n\ge 1\)。考虑玫瑰曲线
+\[
+z(\theta)=\cos\!\left(\frac{n}{d}\theta\right)e^{i\theta}.
+\]
+设 \(t=\theta/d\) 且 \(w=e^{it}\in\mathbb S^1\)。则
+\[
+z(\theta)=F_{n,d}(w),
+\qquad
+F_{n,d}(w):=\frac12\bigl(w^{d+n}+w^{d-n}\bigr).
+\]
+因此 \(F_{n,d}\) 的参数奇异环半径为
+\[
+\rho_{n,d}
+=
+\left(\frac{|d-n|}{d+n}\right)^{\frac{1}{2n}},
+\]
+且其临界点在 \(\theta=\log w\) 平面仍呈竖直晶格。
+\end{corollary}
+
+\begin{proof}
+由
+\[
+\cos(nt)=\frac12(w^n+w^{-n}),
+\qquad
+e^{idt}=w^d,
+\]
+得到
+\[
+z(\theta)=\cos(nt)e^{idt}
+=
+\frac12(w^n+w^{-n})w^d
+=
+\frac12(w^{d+n}+w^{d-n})
+=
+F_{n,d}(w).
+\]
+现将定理 \ref{thm:derived-two-term-laurent-singular-ring} 应用于
+\[
+A=B=\frac12,
+\qquad
+M=d+n,
+\qquad
+N=d-n.
+\]
+由于 \(M-N=2n\)，故奇异环半径为
+\[
+\rho_{n,d}
+=
+\left|
+\frac{-(d-n)}{d+n}
+\right|^{\frac1{2n}}
+=
+\left(\frac{|d-n|}{d+n}\right)^{\frac1{2n}}.
+\]
+其对数平面晶格结构亦由同一定理直接给出。
+\end{proof}
+
+\begin{theorem}[玫瑰映射的像平面分歧值环]\label{thm:derived-rose-image-branch-ring}
+在推论 \ref{cor:derived-rose-laurent-singular-ring} 的记号下，记
+\[
+\mathcal B_{n,d}:=
+F_{n,d}\bigl(\operatorname{Crit}(F_{n,d})\bigr)\subset\CC
+\]
+为分歧值集。则存在常数
+\[
+R_{n,d}
+:=
+\frac{n}{n+d}
+\left(
+\frac{|d-n|}{d+n}
+\right)^{\frac{d-n}{2n}}
+\]
+使得对每个 \(z\in \mathcal B_{n,d}\) 都有
+\[
+|z|=R_{n,d}.
+\]
+因此，玫瑰族同时携带两条互补的环结构：参数平面中的临界环 \(|w|=\rho_{n,d}\)，以及像平面中的分歧值环 \(|z|=R_{n,d}\)。
+\end{theorem}
+
+\begin{proof}
+先将 \(F_{n,d}\) 写成
+\[
+F_{n,d}(w)=\frac12\,w^{d-n}(w^{2n}+1).
+\]
+而
+\[
+F_{n,d}'(w)
+=
+\frac12\Bigl((d+n)w^{d+n-1}+(d-n)w^{d-n-1}\Bigr),
+\]
+故临界方程为
+\[
+(d+n)w^{2n}+(d-n)=0,
+\qquad\text{即}\qquad
+w^{2n}=-\frac{d-n}{d+n}.
+\]
+将其代回 \(F_{n,d}\) 得
+\[
+\begin{aligned}
+F_{n,d}(w)
+&=
+\frac12\,w^{d-n}\left(1-\frac{d-n}{d+n}\right) \\
+&=
+\frac12\,w^{d-n}\cdot \frac{2n}{d+n}
+=
+\frac{n}{d+n}w^{d-n}.
+\end{aligned}
+\]
+于是对任意临界点 \(w\) 都有
+\[
+|F_{n,d}(w)|
+=
+\frac{n}{d+n}|w|^{d-n}
+=
+\frac{n}{d+n}\rho_{n,d}^{\,d-n}
+=
+\frac{n}{d+n}
+\left(
+\frac{|d-n|}{d+n}
+\right)^{\frac{d-n}{2n}}.
+\]
+这与临界点的角度无关，故 \(\mathcal B_{n,d}\) 落在模长恒定的圆周上。证毕。
+\end{proof}
+
+\begin{theorem}[Haar--Jensen 刚性与幂半群可加性]\label{thm:derived-laurent-haar-jensen-potential}
+对二项 Laurent 映射
+\[
+f(w)=Aw^M+Bw^N
+\qquad (M>N,\ A,B\neq 0),
+\]
+定义单位圆上的对数平均雅可比势
+\[
+\Pi(f):=\frac{1}{2\pi}\int_{0}^{2\pi}\log|f'(e^{i\theta})|\,d\theta.
+\]
+则有闭式
+\[
+\Pi(f)=\log\bigl(\max\{|A|M,\ |B|N\}\bigr).
+\]
+若再取幂半群 \(P_m(w):=w^m\)（\(m\in\NN\)），则满足严格可加性
+\[
+\Pi(f\circ P_m)=\Pi(f)+\log m.
+\]
+\end{theorem}
+
+\begin{proof}
+由
+\[
+f'(w)=AMw^{M-1}+BNw^{N-1}=w^{N-1}(AMw^{M-N}+BN)
+\]
+知在 \(|w|=1\) 上有
+\[
+\Pi(f)
+=
+\log|AM|
++
+\frac{1}{2\pi}\int_0^{2\pi}
+\log\left|e^{i(M-N)\theta}+\frac{BN}{AM}\right|\,d\theta.
+\]
+记 \(c:=BN/(AM)\) 与 \(k:=M-N\ge 1\)。作变量替换 \(\phi=k\theta\)，并利用 Haar 测度在 \(\mathbb S^1\) 上的旋转不变性，得到
+\[
+\frac{1}{2\pi}\int_0^{2\pi}\log|e^{i\phi}+c|\,d\phi
+=
+\log\bigl(\max\{1,|c|\}\bigr),
+\]
+这是 Jensen 公式对一次多项式 \(z+c\) 的标准特例。因而
+\[
+\Pi(f)
+=
+\log|AM|+\log\bigl(\max\{1,|c|\}\bigr)
+=
+\log\bigl(\max\{|A|M,\ |B|N\}\bigr).
+\]
+
+再看复合情形。由链式法则
+\[
+(f\circ P_m)'(w)=f'(w^m)\cdot mw^{m-1}.
+\]
+在 \(|w|=1\) 上 \(|w^{m-1}|=1\)，故
+\[
+\Pi(f\circ P_m)
+=
+\frac{1}{2\pi}\int_0^{2\pi}\log|f'(e^{im\theta})|\,d\theta+\log m.
+\]
+而 \(\theta\mapsto m\theta\) 保持单位圆 Haar 测度，因此第一项恰等于 \(\Pi(f)\)。从而
+\[
+\Pi(f\circ P_m)=\Pi(f)+\log m.
+\]
+证毕。
+\end{proof}
+
+\begin{proposition}[Lissajous 族的 cyclotomic--resultant 整系数消元]\label{prop:derived-lissajous-cyclotomic-resultant}
+设 \(a,b\in\NN\)，并取 \(\delta\in\pi\QQ\)。考虑 Lissajous 参数曲线
+\[
+x(t)=\cos(at+\delta),
+\qquad
+y(t)=\cos(bt).
+\]
+令 \(w=e^{it}\in\mathbb S^1\) 与 \(\zeta=e^{i\delta}\)，则
+\[
+x=\frac12(\zeta w^a+\zeta^{-1}w^{-a}),
+\qquad
+y=\frac12(w^b+w^{-b}).
+\]
+设 \(K:=\QQ(\zeta)\)。则存在多项式
+\[
+F_{a,b,\delta}(X,Y)\in\ZZ[X,Y]
+\]
+使得对所有 \(t\in\RR\) 都有
+\[
+F_{a,b,\delta}(x(t),y(t))=0.
+\]
+并且可取
+\[
+F_{a,b,\delta}(X,Y)
+=
+\operatorname{Norm}_{K/\QQ}
+\Bigl(
+\operatorname{Res}_{w}\bigl(P_1(w),P_2(w)\bigr)
+\Bigr)
+\]
+在清分母后的整系数形式，其中
+\[
+P_1(w):=\zeta w^{2a}-2Xw^a+\zeta^{-1},
+\qquad
+P_2(w):=w^{2b}-2Yw^b+1.
+\]
+\end{proposition}
+
+\begin{proof}
+由
+\[
+\cos(at+\delta)
+=
+\frac12(\zeta e^{iat}+\zeta^{-1}e^{-iat}),
+\qquad
+\cos(bt)
+=
+\frac12(e^{ibt}+e^{-ibt}),
+\]
+并代入 \(w=e^{it}\)，便得到
+\[
+P_1(w)=0,
+\qquad
+P_2(w)=0
+\]
+在 \(X=x(t)\)、\(Y=y(t)\) 处同时成立。故按 resultant 的定义，
+\[
+R(X,Y):=\operatorname{Res}_{w}(P_1,P_2)\in K[X,Y]
+\]
+满足
+\[
+R(x(t),y(t))=0
+\qquad
+(t\in\RR).
+\]
+再对 \(K/\QQ\) 取域范数，得到
+\[
+\operatorname{Norm}_{K/\QQ}(R)(x(t),y(t))=0,
+\]
+并且其系数属于 \(\QQ[X,Y]\)。最后清分母即可得到某个
+\(
+F_{a,b,\delta}(X,Y)\in\ZZ[X,Y]
+\)
+满足所需恒等式。证毕。
+\end{proof}
+
+\begin{theorem}[可公度多频 Laurent 干涉的有限奇异环分解]\label{thm:derived-commensurable-multifrequency-singular-rings}
+令 \(\{m_1,\dots,m_J\}\subset\NN\)，并记
+\[
+g:=\gcd(m_1,\dots,m_J).
+\]
+考虑 Laurent 干涉函数
+\[
+H(w):=\sum_{j=1}^{J}c_j\,(w^{m_j}+w^{-m_j}),
+\qquad
+c_j\in\CC,
+\]
+以及其相位升降变体
+\[
+F(w):=w^qH(w),
+\qquad
+q\in\ZZ.
+\]
+则存在整数 \(L\ge 0\)、\(r\in\{0,\dots,g-1\}\) 与一元多项式 \(Q(u)\in\CC[u]\)，使得
+\[
+w^LF'(w)=w^rQ(w^g).
+\]
+特别地，在 \(\CC^\times\) 上有
+\[
+F'(w)=0
+\iff
+Q(w^g)=0.
+\]
+因而其奇异环集合
+\[
+\Sigma(F):=\{|w|:\ F'(w)=0\}
+\]
+是有限集，并满足
+\[
+\Sigma(F)=\{|u_k|^{1/g}:\ Q(u_k)=0\}.
+\]
+换言之，可公度多频干涉的临界集必为有限条同心圆周之并。
+\end{theorem}
+
+\begin{proof}
+先写出
+\[
+F(w)=\sum_{j=1}^{J}c_j\,(w^{q+m_j}+w^{q-m_j}).
+\]
+因此 \(F'(w)\) 是有限项 Laurent 多项式，其指数集合为
+\[
+\{q+m_j-1,\ q-m_j-1:\ 1\le j\le J\}.
+\]
+所有这些指数彼此之差都落在 \(g\ZZ\) 中，因为
+\[
+(q\pm m_i-1)-(q\pm m_j-1)\in\{\pm(m_i-m_j),\ \pm(m_i+m_j)\},
+\]
+而每个 \(m_j\) 都被 \(g\) 整除。故存在某个整数同余类 \(r\bmod g\)，使全部指数都与 \(r\) 同余。
+
+取足够大的 \(L\)，使得 \(w^LF'(w)\) 成为普通多项式。由于其全部幂次仍同余于 \(r\bmod g\)，故可写成
+\[
+w^LF'(w)=w^rQ(w^g)
+\]
+其中 \(Q\in\CC[u]\)。
+
+现在 \(w\in\CC^\times\) 时 \(w^L\neq 0\) 且 \(w^r\neq 0\)，故
+\[
+F'(w)=0
+\iff
+w^LF'(w)=0
+\iff
+Q(w^g)=0.
+\]
+若 \(u_k\) 枚举 \(Q\) 的全部根，则所有临界点都满足 \(w^g=u_k\) 对某个 \(k\) 成立，因此其模长恒为 \(|u_k|^{1/g}\)。由于 \(Q\) 只有有限多个根，\(\Sigma(F)\) 必为有限集，亦即有限条同心圆周的并。证毕。
+\end{proof}

@@ -1,0 +1,94 @@
+% (User input window)
+
+\paragraph{多井低温展开与顶端结构辨识：\texorpdfstring{$q\to\infty$}{q->∞} 的 softmax 几何}
+定理 \ref{thm:pom-zero-temperature-two-term-expansion-maxfiber-entropy} 给出零温两项展开
+\(
+P_q=q\alpha_\ast+h_\ast+o(1)
+\)（\(q\to\infty\)）并将端点截距识别为最大纤维达到者的熵率。
+在有限图/有限态编译核的制度下，压力 \(q\mapsto P(q)=\log\rho(A(q))\) 还可呈现“多井竞争”的低温解析结构：
+顶端之外可能存在有限多个可见相，其贡献以指数小量叠加并诱导一族可计算的交叉尺度。
+本段记录一个可独立引用的 softmax 口径，以及由有限差分窗口恢复顶端参数族的可判定性结论。
+
+\paragraph{设定：幂权矩阵族与闭路对数平均权}
+令 \(G\) 为有限有向图（允许多重边），对每条边 \(e\) 赋予权 \(a(e)>0\)。
+对每个实参数 \(q\ge0\) 定义加权邻接矩阵族 \(A(q)\)：
+对顶点 \(i\to j\) 的所有边 \(e:i\to j\) 作求和，
+\[
+A(q)_{ij}:=\sum_{e:i\to j} a(e)^q.
+\]
+假设对每个 \(q\) 矩阵 \(A(q)\) 原始（primitive），并记压力
+\[
+P(q):=\log\rho(A(q)).
+\]
+对任意闭路 \(\gamma=e_1\cdots e_\ell\) 定义其对数平均权
+\[
+\alpha(\gamma):=\frac{1}{\ell}\sum_{t=1}^{\ell}\log a(e_t).
+\]
+令 \(\{\alpha_i\}_{i=1}^K\) 为所有闭路对数平均权的\emph{去重后有限集合}（这是一个额外结构性假设），按降序排列
+\(
+\alpha_1>\alpha_2>\cdots>\alpha_K
+\)。
+并令 \(h_i\) 为达到 \(\alpha_i\) 的临界子图（由所有满足 \(\alpha(\gamma)=\alpha_i\) 的闭路所张成的最大强连通子图）的 Perron 熵：
+若该临界层由若干强连通分量组成，则 \(h_i\) 取其最大值（即最大 \(\log\rho\)）。
+
+\begin{theorem}[多相 softmax 低温展开]\label{thm:pom-multiwell-softmax-low-temperature-expansion}
+在上述设定下，令
+\(
+c:=\min_{i\ge2}(\alpha_1-\alpha_i)>0
+\)。
+则存在常数 \(C>0\) 使当 \(q\to\infty\) 时有
+\[
+\boxed{\;
+P(q)=\log\!\Bigl(\sum_{i=1}^{K}\exp(q\alpha_i+h_i)\Bigr)+O\!\bigl(e^{-cq}\bigr)\; }.
+\]
+等价地，
+\[
+\boxed{\;
+P(q)=q\alpha_1+h_1+\log\!\Bigl(1+\sum_{i\ge2}\exp\bigl(-(\alpha_1-\alpha_i)q+(h_i-h_1)\bigr)\Bigr)+O\!\bigl(e^{-cq}\bigr)\; }.
+\]
+从而导出交叉尺度（顶端相 \(i\) 对主相的可见竞争温度）
+\[
+q_{i\leftrightarrow 1}\ \asymp\ \frac{h_1-h_i}{\alpha_1-\alpha_i},
+\]
+它统一刻画了斜率差 \((\alpha_1-\alpha_i)\) 与截距差 \((h_1-h_i)\) 在 \(q\)-轴上的平衡尺度。
+\end{theorem}
+\begin{proof}[证明要点]
+将 \(A(q)\) 的条目写为有限和 \(\sum_e \exp(q\log a(e))\) 并对 \(q\to\infty\) 作“最大项”重整化：
+在 max-plus 极限中，谱半径的对数主项由闭路对数平均权的最大值 \(\alpha_1\) 决定，
+而截距由达到该最大平均权的临界子图上的 Perron 熵给出（即 \(h_1\)）。
+当闭路平均权集合 \(\{\alpha_i\}\) 有限且存在正间隙 \(c>0\) 时，非顶端相的贡献按 \(\exp(-(\alpha_1-\alpha_i)q)\) 指数压制；
+将这些贡献在谱半径的 Collatz--Wielandt 变分式中聚合，并对临界子图做分块比较，即得到所示 softmax 形式与指数余项。
+证毕。
+\end{proof}
+
+\begin{theorem}[顶端参数的有限可恢复性：由 \texorpdfstring{$q$}{q}-轴有限差分辨识 \texorpdfstring{$(\alpha_i,h_i)$}{(alpha_i,hi)}]\label{thm:pom-multiwell-top-parameter-identifiability}
+沿用定理 \ref{thm:pom-multiwell-softmax-low-temperature-expansion} 的设定。
+定义离散差分
+\[
+\Delta P(q):=P(q+1)-P(q),
+\qquad
+\Delta^2 P(q):=P(q+1)-2P(q)+P(q-1).
+\]
+则存在整数 \(Q_0\) 与常数 \(K_0\)（仅依赖图规模与相数上界）使得当 \(q\ge Q_0\) 时，
+有限窗口 \(\{\Delta P(q+j)\}_{j=0}^{K_0}\) 的数据即可在指数精度内恢复：
+\begin{enumerate}
+  \item 主相参数 \((\alpha_1,h_1)\)；
+  \item 所有与主相存在可见竞争的次级相集合 \(\{(\alpha_i,h_i)\}_{i\ge2}\)；
+  \item 各相的交叉尺度 \(q_{i\leftrightarrow1}\)。
+\end{enumerate}
+因此“低温多相结构”不仅是极限对象，而且在原则上可由有限差分窗口直接辨识并形成可判定数据。
+\end{theorem}
+\begin{proof}[证明要点]
+由定理 \ref{thm:pom-multiwell-softmax-low-temperature-expansion}，
+\(
+P(q)-q\alpha_1-h_1
+\)
+在 \(q\to\infty\) 下为有限个指数项
+\(\sum_{i\ge2}\exp(-(\alpha_1-\alpha_i)q+(h_i-h_1))\)
+的对数扰动（并带指数小余项）。
+对该扰动作离散差分可得到同类的有限指数和结构；
+于是可对差分序列应用与定理 \ref{thm:pom-fiber-spectrum-prony-hankel-2r-reconstruction} 同型的 Prony--Hankel 识别机制：
+有限窗口足以恢复指数率 \((\alpha_1-\alpha_i)\) 与系数 \(\exp(h_i-h_1)\)，从而恢复 \((\alpha_i,h_i)\) 与交叉尺度。
+证毕。
+\end{proof}
+

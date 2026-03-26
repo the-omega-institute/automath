@@ -1,0 +1,245 @@
+\begin{remark}[从递推系数还原 \texorpdfstring{$P_{16},P_{17}$}{P16,P17}]\label{rem:pom-moment-charpoly-16-17}
+沿用定理 \ref{thm:pom-moment-resonance} 的递推格式与特征多项式约定
+\(
+P_q(\lambda)=\lambda^d-\sum_{i=1}^d c_i\lambda^{d-i}
+\)。
+由表 \ref{tab:fold_collision_moment_recursions_9_17} 的 \(q=16,17\) 递推系数直接代入可得
+$$
+\begin{aligned}
+P_{16}(\lambda)={}&\lambda^{13}-2\lambda^{12}-1611\lambda^{11}-62312\lambda^{10}-2559407\lambda^9\\
+&+24862788\lambda^8+585266591\lambda^7-62312\lambda^6+44606766\lambda^5\\
+&-24862794\lambda^4-255692\lambda^3+124624\lambda^2-8\lambda+8,
+\\
+P_{17}(\lambda)={}&\lambda^{13}-2\lambda^{12}-2599\lambda^{11}-125872\lambda^{10}-6569850\lambda^9\\
+&+96034590\lambda^8+2764163954\lambda^7+643026032\lambda^6+15022392733\lambda^5\\
+&-769974566\lambda^4-15329386299\lambda^3-642908352\lambda^2-1347896340\lambda+673948170.
+\end{aligned}
+$$
+这些显式特征多项式可直接用于根扫描/谱包结构分析；例如表 \ref{tab:fold_collision_kernel_rh_scan_q2_17} 的计算即以 \(P_q\) 为输入（脚本 \texttt{scripts/exp\_fold\_collision\_kernel\_rh\_scan\_q2\_17.py}）。
+\end{remark}
+
+\input{sections/generated/tab_fold_collision_moment_charpoly_galois_certificate_q16_17}
+\input{sections/generated/eq_pom_resonance_disc_factorization_q16_q17}
+
+\begin{theorem}[共振窗 \texorpdfstring{$q=16,17$}{q=16,17} 的满对称伽罗瓦群与换位惯性]\label{thm:pom-resonance-galois-s13-q16-17}
+对上述 \(P_{16},P_{17}\in\ZZ[\lambda]\) 有
+\[
+\Gal(P_{16}/\QQ)\cong S_{13},\qquad \Gal(P_{17}/\QQ)\cong S_{13}.
+\]
+并且存在素数 \(p_{16}=59\) 与 \(p_{17}=62927\)，使得在相应模约化下分别出现唯一二重根型分解，且 \(p_i\)-进赋值满足 \(v_{p_i}(\Disc(P_i))=1\)（\(i\in\{16,17\}\)）。
+从而在各自分裂域中可取素点 \(\mathfrak P\mid p_i\)，使惯性群 \(I(\mathfrak P/p_i)\) 在根集上的置换作用为一换位。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-resonance-window-minpoly-irreducible-q9-17}（或表 \ref{tab:fold_collision_moment_charpoly_irreducible_certificate_q9_17} 的证书），
+\(P_{16}\bmod 239\) 与 \(P_{17}\bmod 31\) 在 \(\FF_p[\lambda]\) 上不可约，故 \(P_{16},P_{17}\) 在 \(\QQ[\lambda]\) 上不可约，伽罗瓦群在 \(13\) 个根上传递作用。
+
+另一方面，直接模分解给出
+\[
+P_{16}(\lambda)\equiv (\lambda+2)^2\cdot f_3(\lambda)\cdot f_4(\lambda)\cdot \widetilde f_4(\lambda)\pmod{59},
+\]
+其中 \(f_3,f_4,\widetilde f_4\) 分别为不可约三次、四次、四次因子；并且 \(v_{59}(\Disc(P_{16}))=1\)。
+同理，
+\[
+P_{17}(\lambda)\equiv \lambda^2(\lambda+24107)(\lambda-25605)(\lambda-10001)\cdot g_8(\lambda)\pmod{62927},
+\]
+其中 \(g_8\) 为不可约八次因子，且 \(v_{62927}(\Disc(P_{17}))=1\)。
+这里 \(v_p\) 表示 \(\QQ\) 上的 \(p\)-进赋值。
+上述 ``唯一二重根'' 与 ``判别式赋值为 \(1\)'' 共同刻画了在相应素数处的简单分歧：在分裂域中可取 \(\mathfrak P\mid p\) 使局部惯性作用仅交换那对在模 \(p\) 下塌缩为二重根的共轭根，其余根不动，因而给出一条 \(2\)-循环。
+
+最后记 \(G_i:=\Gal(P_i/\QQ)\le S_{13}\)（\(i\in\{16,17\}\)）。
+由于 \(\deg P_i=13\) 为素数，传递性推出本原性。
+设 \(\tau\in G_i\) 为上一步得到的换位，写作 \(\tau=(a\,b)\)。
+考虑图 \(\Gamma\)：顶点为 \(13\) 个根，边集为 \(\{\{g(a),g(b)\}: g\in G_i\}\)。
+\(\Gamma\) 的连通分支在 \(G_i\) 下不变，若 \(\Gamma\) 不连通则得到非平凡分块，违背本原性，故 \(\Gamma\) 连通。
+连通图的边换位生成 \(S_{13}\)，而这些边换位均由 \(\tau\) 的共轭给出并属于 \(G_i\)，从而 \(S_{13}\subseteq G_i\subseteq S_{13}\)，即 \(G_i=S_{13}\)。
+\end{proof}
+
+\begin{proposition}[判别式的分歧支撑与 \texorpdfstring{$2$}{2}-进分歧强度（\texorpdfstring{$q=16,17$}{q=16,17}）]\label{prop:pom-resonance-disc-support-q16-q17}
+对共振窗 \(q\in\{16,17\}\) 的 \(P_q(\lambda)\in\ZZ[\lambda]\)，其判别式为负且满足分解式 \eqref{eq:pom_resonance_disc_factorization_q16_q17}；
+其中 \(\Delta_{16},\Delta_{17}\in\ZZ\) 与所有不超过 \(20000\) 的素数互素（即在该素数范围内无额外分歧支撑）。
+特别地，分裂域的分歧素数集合至少包含
+\[
+\{2,3,7,59\}\subseteq \mathrm{Ram}(P_{16}),
+\qquad
+\{2,3,5,7,11,13,17\}\subseteq \mathrm{Ram}(P_{17}),
+\]
+并且在 \(2\) 处分别满足 \(v_2(\Disc(P_{16}))=58\)、\(v_2(\Disc(P_{17}))=100\)，呈现强烈的 \(2\)-进野分歧。
+\end{proposition}
+\begin{proof}
+判别式可由 \(\Disc(P)=\pm\Res(P,P')\) 的 Sylvester 行列式表达式唯一确定。
+对 \(q=16,17\) 直接计算 \(\Disc(P_q)\) 并对素数 \(\le 20000\) 作赋值审计后，得到式 \eqref{eq:pom_resonance_disc_factorization_q16_q17} 的指数分解与互素性断言（由脚本 \texttt{scripts/exp\_pom\_resonance\_q16\_q17\_galois\_newman\_discriminant\_support.py} 输出）。证毕。
+\end{proof}
+
+\begin{corollary}[Frobenius 循环型证书推出 \texorpdfstring{$S_{13}$}{S13}（\texorpdfstring{$q=16,17$}{q=16,17}）]\label{cor:pom-resonance-s13-frobenius-cycle-certificate-q16-q17}
+对 \(q\in\{16,17\}\)，可取三个不分歧素数 \(p_{\mathrm{irr}},p_{7},p_{(12,1)}\) 使得
+\[
+P_q\bmod p_{\mathrm{irr}}\ \text{不可约},\qquad
+P_q\bmod p_{7}\ \text{含一个次数为 \(7\) 的不可约因子},\qquad
+P_q\bmod p_{(12,1)}\ \text{的次数分解型为 }(12,1),
+\]
+从而 \(\Gal(P_q/\QQ)\cong S_{13}\)。
+具体地，可取
+\[
+(p_{\mathrm{irr}},p_{7},p_{(12,1)})=(239,19,127)\ \ (q=16),
+\qquad
+(31,23,59)\ \ (q=17),
+\]
+其模分解型见表 \ref{tab:fold_collision_moment_charpoly_galois_certificate_q16_17}。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-resonance-disc-support-q16-q17}，上述素数均不分歧。
+由 \(P_q\bmod p_{\mathrm{irr}}\) 不可约，伽罗瓦群 \(G_q\le S_{13}\) 含一条 \(13\)-循环，故在 \(13\) 点上传递，且因次数为素数从而为本原。
+由 \(P_q\bmod p_7\) 含次数 \(7\) 因子，Dedekind 判据给出某个 Frobenius 元在循环分解中含一条 \(7\)-循环。
+由于 \(G_q\) 本原且含素数长度循环 \(7\le 13-3\)，Jordan 定理推出 \(A_{13}\subseteq G_q\)。
+另一方面，\((12,1)\) 的分解型对应 Frobenius 循环型含一条 \(12\)-循环，属奇置换，故 \(G_q\not\subseteq A_{13}\)。
+综上 \(G_q=S_{13}\)。证毕。
+\end{proof}
+
+\begin{proposition}[两素数证书锁定 \texorpdfstring{$S_{13}$}{S13}（\texorpdfstring{$q=16,17$}{q=16,17}）]\label{prop:pom-resonance-s13-two-prime-certificate-q16-q17}
+对 \(q\in\{16,17\}\)，存在两个不分歧素数 \(p_{\mathrm{irr}},p_{(11,2)}\) 使得
+\[
+P_q\bmod p_{\mathrm{irr}}\ \text{不可约},\qquad
+P_q\bmod p_{(11,2)}\ \text{的次数分解型为 }(11,2),
+\]
+从而 \(\Gal(P_q/\QQ)\cong S_{13}\)。
+具体地，可取
+\[
+(p_{\mathrm{irr}},p_{(11,2)})=
+(239,47)\ \ (q=16),
+\qquad
+(31,41)\ \ (q=17),
+\]
+其模分解型见表 \ref{tab:fold_collision_moment_charpoly_galois_certificate_q16_17}。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:pom-resonance-disc-support-q16-q17}，上述素数均不落在相应的分歧支撑内，因而可取为不分歧素数。
+由表 \ref{tab:fold_collision_moment_charpoly_galois_certificate_q16_17}，模 \(p_{\mathrm{irr}}\) 不可约推出 \(P_q\) 在 \(\QQ\) 上不可约，从而伽罗瓦群在 \(13\) 个根上传递。
+由于次数 \(13\) 为素数，传递性推出本原性。
+另一方面，\((11,2)\) 的分解型对应 Frobenius 元的循环型含一条 \(2\)-循环，即包含换位。
+本原子群一旦包含换位，必为全对称群 \(S_{13}\)。证毕。
+\end{proof}
+
+\begin{theorem}[Newman 比值的次数与范数律在 \texorpdfstring{$q=16,17$}{q=16,17} 的特化]\label{thm:pom-resonance-newman-uq-degree-norm-q16-q17}
+沿用猜想 \ref{conj:pom-resonance-full-symmetric-galois-norm-law} 的记号，
+在共振窗 \(q\in\{16,17\}\) 内令 \(r_q\) 为 \(P_q\) 的 Perron 根，并令 \(\lambda_q^-<0\) 为最外负实根，\(\Lambda_q:=|\lambda_q^-|\)。
+定义 Newman 比值
+\[
+\upsilon_q:=\frac{\Lambda_q^2}{r_q}=\frac{(\lambda_q^-)^2}{r_q}.
+\]
+则有
+\[
+[\QQ(\upsilon_{16}):\QQ]=[\QQ(\upsilon_{17}):\QQ]=13\cdot 12=156,
+\]
+并且范数满足
+\[
+\mathrm{N}_{\QQ(\upsilon_{16})/\QQ}(\upsilon_{16})=\abs{(-1)^{13}P_{16}(0)}^{12}=8^{12},
+\qquad
+\mathrm{N}_{\QQ(\upsilon_{17})/\QQ}(\upsilon_{17})=\abs{(-1)^{13}P_{17}(0)}^{12}=673948170^{12}.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-resonance-galois-s13-q16-17}，\(\Gal(P_q/\QQ)\cong S_{13}\)（\(q=16,17\)）。
+在分裂域内把根记为 \(\alpha_1,\dots,\alpha_{13}\)，并取标号使 \(\alpha_1=r_q\)、\(\alpha_2=\lambda_q^-\)。
+于是
+\(
+\upsilon_q=\alpha_2^2/\alpha_1
+\)。
+在 \(S_{13}\) 的根置换作用下，其共轭集合恰为有序对轨道
+\[
+\mathcal{O}:=\left\{\frac{\alpha_i^2}{\alpha_j}:\ i\ne j\right\},
+\]
+从而 \([\QQ(\upsilon_q):\QQ]=|\mathcal{O}|=13\cdot 12\)。
+对范数，轨道乘积给出
+\[
+\prod_{i\ne j}\frac{\alpha_i^2}{\alpha_j}
+=\frac{\prod_i \alpha_i^{2\cdot 12}}{\prod_j \alpha_j^{12}}
+=\Bigl(\prod_{k=1}^{13}\alpha_k\Bigr)^{12}
+=\abs{(-1)^{13}P_q(0)}^{12},
+\]
+其中 \(\prod_k\alpha_k=(-1)^{13}P_q(0)\) 来自首一多项式的常数项恒等式。
+最后由注 \ref{rem:pom-moment-charpoly-16-17} 读取 \(P_{16}(0)=8\)、\(P_{17}(0)=673948170\)，得到显式数值。证毕。
+\end{proof}
+
+\begin{proposition}[两分裂域的线性无交与直积伽罗瓦群]\label{prop:pom-resonance-q16-q17-linearly-disjoint}
+设 \(L_{16},L_{17}\) 分别为 \(P_{16},P_{17}\) 的分裂域，则
+\[
+L_{16}\cap L_{17}=\QQ,\qquad \Gal(L_{16}L_{17}/\QQ)\cong S_{13}\times S_{13}.
+\]
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:pom-resonance-galois-s13-q16-17}，\(\Gal(L_i/\QQ)\cong S_{13}\)（\(i\in\{16,17\}\)）。
+当 \(n\ge 5\) 时 \(S_n\) 的唯一非平凡真正规范子群为 \(A_n\)，故 \(L_i/\QQ\) 的唯一非平凡真伽罗瓦子扩张为二次扩张
+\(
+L_i^{A_{13}}=\QQ(\sqrt{\Disc(P_i)}).
+\)
+又由于 \(59\mid \Disc(P_{16})\) 且 \(59\nmid \Disc(P_{17})\)，并且 \(62927\mid \Disc(P_{17})\) 且 \(62927\nmid \Disc(P_{16})\)，两二次子域的分歧素数集合不同，因而不可能相同。
+于是 \(L_{16}\cap L_{17}\) 既不含该二次子域，也无其他非平凡正规子扩张，只能等于 \(\QQ\)。
+线性无交推出合成分裂域的伽罗瓦群为直积同构。证毕。
+\end{proof}
+
+\begin{theorem}[同时不可约的切博塔廖夫密度与显式素数]\label{thm:pom-resonance-q16-q17-simultaneous-irreducible-chebotarev}
+设 \(\mathcal{P}\) 为除去有限分歧素数后满足
+\[
+P_{16}\ \text{在}\ \FF_p[\lambda]\ \text{不可约且}\ P_{17}\ \text{在}\ \FF_p[\lambda]\ \text{不可约}
+\]
+的素数 \(p\) 的集合，则 \(\mathcal{P}\) 具有自然密度
+\[
+\delta(\mathcal{P})=\frac{1}{13^2}=\frac{1}{169}.
+\]
+并且可取 \(p=4003\) 作为满足上述条件的实例。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-resonance-q16-q17-linearly-disjoint}，\(\Gal(L_{16}L_{17}/\QQ)\cong S_{13}\times S_{13}\)。
+对不分歧素数 \(p\)，其 Frobenius 共轭类在直积群中按切博塔廖夫密度定理等分布。
+次数 \(13\) 多项式在 \(\FF_p\) 上不可约当且仅当对应置换为 \(13\)-循环；而 \(13\)-循环在 \(S_{13}\) 中所占比例为 \(12!/13!=1/13\)。
+直积情形下两事件独立，故同时不可约的密度为 \(1/169\)。
+对 \(p=4003\) 的断言可由直接模分解核验。证毕。
+\end{proof}
+
+\begin{corollary}[联合分解型的正密度实现]\label{cor:pom-resonance-q16-q17-joint-splitting-type-density}
+存在无穷多不分歧素数 \(p\) 使得
+\[
+\deg\text{-分解型}\bigl(P_{16}\bmod p\bigr)=(7,2,2,2),\qquad
+\deg\text{-分解型}\bigl(P_{17}\bmod p\bigr)=(7,6).
+\]
+满足上述联合分解型的素数集合具有自然密度
+\[
+\frac{1}{336}\cdot\frac{1}{42}=\frac{1}{14112},
+\]
+并且可取 \(p=1373\) 作为实例。
+\end{corollary}
+\begin{proof}
+在 \(S_{13}\) 中，循环类型 \((7)(2)(2)(2)\) 的共轭类比例为
+\(
+1/(7\cdot 2^3\cdot 3!)=1/336
+\)，其中 \(3!\) 来自三条 \(2\)-循环的同型重数；
+循环类型 \((7)(6)\) 的比例为 \(1/(7\cdot 6)=1/42\)。
+由命题 \ref{prop:pom-resonance-q16-q17-linearly-disjoint} 的直积伽罗瓦群与切博塔廖夫密度定理，上述两类共轭类在直积中按比例乘法出现，故联合密度为 \(1/14112\)。
+对 \(p=1373\) 的断言可由直接模分解核验。证毕。
+\end{proof}
+
+\begin{proposition}[一次判别式赋值与素理想分解]\label{prop:pom-resonance-q16-q17-dedekind-factorization}
+取 \(P_{16}\) 的一根 \(\alpha_{16}\) 并记 \(K_{16}=\QQ(\alpha_{16})\)。
+则 \(59\nmid [\mathcal{O}_{K_{16}}:\ZZ[\alpha_{16}]]\)，并且
+\[
+59\,\mathcal{O}_{K_{16}}=\mathfrak p_1^{2}\,\mathfrak p_2\,\mathfrak p_3\,\mathfrak p_4,\qquad
+\bigl(f(\mathfrak p_1),f(\mathfrak p_2),f(\mathfrak p_3),f(\mathfrak p_4)\bigr)=(1,3,4,4).
+\]
+同理取 \(P_{17}\) 的一根 \(\alpha_{17}\) 并记 \(K_{17}=\QQ(\alpha_{17})\)。
+则 \(62927\nmid [\mathcal{O}_{K_{17}}:\ZZ[\alpha_{17}]]\)，并且
+\[
+62927\,\mathcal{O}_{K_{17}}=\mathfrak q_1^{2}\,\mathfrak q_2\,\mathfrak q_3\,\mathfrak q_4\,\mathfrak q_5,\qquad
+\bigl(f(\mathfrak q_1),f(\mathfrak q_2),f(\mathfrak q_3),f(\mathfrak q_4),f(\mathfrak q_5)\bigr)=(1,1,1,1,8).
+\]
+\end{proposition}
+\begin{proof}
+判别式恒等式
+\[
+\Disc\bigl(\ZZ[\alpha]\bigr)=\Disc(K)\cdot[\mathcal{O}_K:\ZZ[\alpha]]^2
+\]
+表明：若 \(v_p(\Disc(\ZZ[\alpha]))=1\)，则 \(p\nmid[\mathcal{O}_K:\ZZ[\alpha]]\)（右端平方因子在 \(p\)-进赋值上为偶数）。
+由定理 \ref{thm:pom-resonance-galois-s13-q16-17}，在 \(p=59\) 与 \(p=62927\) 两处有 \(v_p(\Disc(P_q))=1\)，并且模 \(p\) 分解包含且仅包含一个二重一次因子，其余因子互素。
+于是可应用 Dedekind 素分解定理：模 \(p\) 不可约因子次数给出素理想的剩余次数，指数给出分歧指数。
+将 \((\lambda+2)^2\cdot(\deg 3)\cdot(\deg 4)\cdot(\deg 4)\) 与 \(\lambda^2\cdot(\deg 1)^3\cdot(\deg 8)\) 逐一对应，即得所示分解式与剩余次数向量。证毕。
+\end{proof}
+

@@ -1,0 +1,149 @@
+\begin{corollary}[软 first-fit 的输入无关正确率下界]\label{cor:pom-fractran-soft-firstfit-uniform-error}
+沿用注 \ref{rem:pom-fractran-zero-temp} 与命题 \ref{prop:pom-fractran-soft-firstfit-analytic-dominance} 的记号：对固定状态 \(r\)，令
+\(
+I(r):=\{i:\ r\ge \beta_i\}
+\)，并记硬 first-fit 选择
+\(
+i^\ast(r):=\min I(r)
+\)（若 \(I(r)=\varnothing\) 则停机）。
+当 \(I(r)\neq\varnothing\) 时，软 first-fit 分布
+\(
+\Pr_u(i\mid r)\propto u^i\,\ind[i\in I(r)]
+\)
+满足对任意 \(u\in(0,1)\) 的统一下界
+\[
+\Pr_u\bigl(i^\ast(r)\mid r\bigr)\ \ge\ 1-u,
+\qquad
+\Pr_u\bigl(i\neq i^\ast(r)\mid r\bigr)\ \le\ u.
+\]
+\end{corollary}
+\begin{proof}
+令 \(i^\ast=i^\ast(r)\)。由于 \(i^\ast\) 为 \(I(r)\) 的最小元素，有
+\[
+\sum_{i\in I(r)}u^i
+\le
+u^{i^\ast}\sum_{j=0}^{\infty}u^j
+=
+\frac{u^{i^\ast}}{1-u}.
+\]
+因此
+\[
+\Pr_u(i^\ast\mid r)
+=
+\frac{u^{i^\ast}}{\sum_{i\in I(r)}u^i}
+\ge
+1-u.
+\]
+余者为补事件概率。证毕。
+\end{proof}
+
+\begin{corollary}[温度—时间权衡：固定温度下的累积失败界]\label{cor:pom-fractran-soft-firstfit-temp-time-tradeoff}
+考虑用软 first-fit（温度参数固定为 \(u\in(0,1)\)）替代硬 first-fit 的随机执行过程，并将“选中非硬 first-fit 指令”视为一次失败事件。
+则对任意步数 \(T\ge 1\)，全程无失败的成功概率满足
+\[
+\Pr(\text{前 }T\text{ 步全程选对})\ \ge\ (1-u)^T,
+\]
+并因此有统一上界
+\[
+\Pr(\text{前 }T\text{ 步至少一次选错})\ \le\ 1-(1-u)^T\ \le\ Tu.
+\]
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:pom-fractran-soft-firstfit-uniform-error}，对任意时刻与任意历史条件，下一步条件成功率均不小于 \(1-u\)。
+对条件概率做逐步展开即可得
+\(
+\Pr(\text{前 }T\text{ 步全程选对})\ge (1-u)^T
+\)。
+其余两式分别为补事件概率与不等式 \(1-(1-u)^T\le Tu\)（例如由 Bernoulli 不等式或并界）给出。证毕。
+\end{proof}
+
+\begin{theorem}[固定正温下 soft first-fit 的可达一致率指数塌缩]\label{thm:pom-fractran-soft-firstfit-fixed-temp-exponential-collapse}
+固定 \(u\in(0,1)\)。
+存在一条 FRACTRAN 程序 \(P\) 与初值 \(N_0\)，使得硬 first-fit 轨道在前 \(T\) 步不停机且满足：若以温度 \(u\) 的 soft first-fit（注 \ref{rem:pom-fractran-zero-temp}）替代硬选择所得到的随机轨道记为 \((\widehat N_t)_{t\ge 0}\)，而硬轨道记为 \((N_t)_{t\ge 0}\)，则对任意 \(T\ge 1\) 有
+\[
+\Pr\!\bigl(\forall\,0\le t\le T,\ \widehat N_t=N_t\bigr)\ \le\ \left(\frac{1}{1+u}\right)^T.
+\]
+特别地，若取使硬轨道永不停机的实例，则 \(\Pr(\forall\,t\ge 0,\ \widehat N_t=N_t)=0\)。
+\end{theorem}
+\begin{proof}
+取任意一条 FRACTRAN 程序 \(P_0=(f_1,\dots,f_k)\) 与初值 \(N_0\)，使其硬轨道在前 \(T\) 步不停机。
+构造新程序
+\[
+P:=(f_1,f_1,f_2,f_2,\dots,f_k,f_k),
+\]
+并沿用同一初值 \(N_0\)。
+记第 \(t\) 步硬 first-fit 在 \(P_0\) 上选中的最小可行索引为 \(i_t\in\{1,\dots,k\}\)。
+则在 \(P\) 上，第 \(t\) 步的最小可行索引为 \(2i_t-1\)，且其重复项 \(2i_t\) 亦可行。
+
+由软 first-fit 分布 \(\Pr_u(j\mid r)\propto u^{j}\ind[j\in I(r)]\)（见注 \ref{rem:pom-fractran-zero-temp}），在第 \(t\) 步、条件于此前均未偏离硬轨道时，有
+\[
+\Pr\!\bigl(\widehat i_t=2i_t-1\ \big|\ \widehat N_0=N_0,\dots,\widehat N_t=N_t\bigr)
+\le
+\frac{u^{2i_t-1}}{u^{2i_t-1}+u^{2i_t}}
+=\frac{1}{1+u},
+\]
+其中 \(\widehat i_t\) 为第 \(t\) 步软选择的索引；不等号仅使用了“可行集合至少包含 \(\{2i_t-1,2i_t\}\)”从而分母不小于两项和。
+因此对任意 \(T\ge 1\)，由条件概率链式展开得
+\[
+\Pr\!\bigl(\forall\,0\le t\le T,\ \widehat N_t=N_t\bigr)
+=\prod_{t=0}^{T-1}\Pr\!\bigl(\widehat N_{t+1}=N_{t+1}\mid \widehat N_0=N_0,\dots,\widehat N_t=N_t\bigr)
+\le\left(\frac{1}{1+u}\right)^T.
+\]
+若硬轨道永不停机，则令 \(T\to\infty\) 得到全程一致事件概率为 \(0\)。证毕。
+\end{proof}
+
+\begin{theorem}[温度预算的全程可靠性上界与输入无关设计准则]\label{thm:pom-fractran-soft-firstfit-annealed-budget}
+考虑一条温度调度序列 \((u_t)_{t\ge 1}\subset(0,1)\)，并令第 \(t\) 步使用温度参数 \(u_t\) 的软 first-fit 分布 \(\Pr_{u_t}(\cdot\mid r_t)\)。
+令事件 \(E_t\) 表示第 \(t\) 步偏离硬 first-fit（即选择 \(i\neq i^\ast(r_t)\)）。
+则对任意 \(T\ge 1\) 有
+\[
+\Pr\Bigl(\bigcup_{t=1}^{T}E_t\Bigr)\ \le\ \sum_{t=1}^{T}u_t,
+\qquad
+\Pr\Bigl(\bigcup_{t\ge 1}E_t\Bigr)\ \le\ \sum_{t\ge 1}u_t.
+\]
+因此若希望对任意未知停机时刻 \(T\) 仍保证全程正确概率不少于 \(1-\varepsilon\)，一个充分条件是
+\[
+\sum_{t\ge 1}u_t\ \le\ \varepsilon.
+\]
+\end{theorem}
+\begin{proof}
+对任意 \(t\) 与任意可达状态 \(r_t\)，由推论 \ref{cor:pom-fractran-soft-firstfit-uniform-error}（将 \(u\) 替换为 \(u_t\)）得
+\(\Pr(E_t\mid r_t)\le u_t\)。
+取全期望得 \(\Pr(E_t)\le u_t\)。
+由并界（Boole 不等式）
+\[
+\Pr\Bigl(\bigcup_{t=1}^{T}E_t\Bigr)\le \sum_{t=1}^{T}\Pr(E_t)\le \sum_{t=1}^{T}u_t.
+\]
+令 \(T\to\infty\) 得第二式。证毕。
+\end{proof}
+
+\begin{corollary}[多项式退火阈值与显式 \texorpdfstring{$\varepsilon$}{epsilon}-预算调度]\label{cor:pom-fractran-soft-firstfit-cooling-threshold}
+在定理 \ref{thm:pom-fractran-soft-firstfit-annealed-budget} 的设定下，取多项式退火 \(u_t=ct^{-p}\)（\(c>0\)）。
+则当 \(p>1\) 时 \(\sum_{t\ge 1}u_t=c\zeta(p)<\infty\)，从而
+\[
+\Pr\Bigl(\bigcup_{t\ge 1}E_t\Bigr)\le c\zeta(p),
+\]
+并可取 \(c\le \varepsilon/\zeta(p)\) 使总失败概率不超过 \(\varepsilon\)。
+当 \(p\le 1\) 时 \(\sum_{t\ge 1}u_t=+\infty\)，上述输入无关并界不再给出与 \(T\) 无关的非平凡全程成功下界。
+此外，指数预算 \(u_t=\varepsilon\,2^{-t}\) 满足 \(\sum_{t\ge 1}u_t=\varepsilon\)，因而 \(\Pr(\cup_{t\ge 1}E_t)\le \varepsilon\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-fractran-soft-firstfit-annealed-budget} 将问题化为级数收敛性；其余为初等分析。证毕。
+\end{proof}
+
+\begin{conjecture}[冷却可和性阈值：从概率正确到可验证正确]\label{conj:pom-soft-order-cooling-summability-phase-transition}
+考虑一条温度调度 \((u_t)_{t\ge 1}\subset(0,1)\)，并以每步软序门 \(\mathrm{PROJ}_{u_t}\)（定义 \ref{def:pom-proj-temp}）替代硬序门 \(P_{\le}\) 的优先级选择，从而得到随机化的控制流模拟。
+猜想存在由可和性刻画的结构相变：
+\begin{enumerate}
+  \item 若 \(\sum_{t\ge 1}u_t=+\infty\)，则存在一个可取为通用的程序与初值，使随机化轨道以概率 \(1\) 在有限步后偏离对应的硬轨道；
+  \item 若 \(\sum_{t\ge 1}u_t<\infty\)，则对任意固定程序与初值，随机化轨道与硬轨道“全程一致”的事件具有严格正概率，并可由一个可审计的乘积型下界给出。
+\end{enumerate}
+定理 \ref{thm:pom-fractran-soft-firstfit-annealed-budget} 给出可和情形的输入无关失败预算控制；定理 \ref{thm:pom-fractran-soft-firstfit-fixed-temp-exponential-collapse} 则在固定正温情形提供了可达的指数塌缩证据链。
+\end{conjecture}
+
+\begin{conjecture}[硬序门的确定性必要性：固定温度无法承载无界可靠控制流]\label{conj:pom-soft-order-fixed-temp-not-deterministic}
+令 \(P_{\le}\) 表示零温（硬）序门，并以 \(\mathrm{PROJ}_u\) 表示温度参数 \(u\in(0,1)\) 的软序门（其中 soft first-fit 给出一个可计算实例）。
+猜想：若 \(u\) 被固定为常数 \(u_0\in(0,1)\)，则任何仅由 \(\mathrm{PROJ}_{u_0}\) 与确定性投影算子（折叠、提升、清理等）构成的控制流层，都无法在所有输入上实现硬 first-fit 的确定性语义；更强地，在允许无界迭代的语义中，它无法以输入无关的方式将总失败概率压到 \(0\)。
+推论 \ref{cor:pom-fractran-soft-firstfit-temp-time-tradeoff} 给出固定温度下的温度—时间标度律，而定理 \ref{thm:pom-fractran-soft-firstfit-annealed-budget} 则表明：若允许随时间退火并满足 \(\sum_{t\ge 1}u_t<\infty\)，则可得到输入无关的全程失败预算控制；与之对照，固定正温下的累积失败无法以输入无关方式消去，因而获得无界可靠控制须允许零温硬化极限 \(u\downarrow 0\) 或退火调度。
+\end{conjecture}
+

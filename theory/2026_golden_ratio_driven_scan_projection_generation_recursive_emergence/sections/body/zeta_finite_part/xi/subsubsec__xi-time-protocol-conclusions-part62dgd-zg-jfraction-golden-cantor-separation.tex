@@ -1,0 +1,317 @@
+\paragraph{ZG 的素数 J-分式、黄金 Cantor 地址与 Archimedean/\texorpdfstring{$2^L$}{2^L}-进规模分离}
+在 \(ZG\) 的矩阵 Euler 递推、自然密度的前缀单调极限以及 H.161 的 \(2^L\)-进地址像同胚都已固定之后，还可把算术密度与非阿基米德地址几何进一步压缩为下列三条结果：前缀密度具有显式的 prime \(J\)-分式与无穷乘积表示；相应地址像恰是黄金均值子移位的 Cantor 型实现，并具有 \(\log\varphi/\log B\) 的精确维数；从而 \(ZG\) 在 Archimedean 计数侧的正密度与其在 \(2^L\)-进地址侧的严格亚一维几何之间形成一条明确的尺度分离。
+
+\begin{theorem}[ZG 自然密度的素数 \texorpdfstring{$J$}{J}-分式、无穷乘积与定量正性]\label{thm:xi-time-part62dgd-zg-density-prime-jfraction-positive}
+记
+\[
+\mathbf 1:=(1,1)^{\mathsf T},
+\qquad
+e_1:=(1,0)^{\mathsf T},
+\]
+并定义
+\[
+\binom{A_n}{B_n}
+:=
+\left(
+\prod_{i=1}^{n}
+\begin{pmatrix}
+\dfrac{p_i}{p_i+1} & \dfrac{p_i}{p_i+1}\\[1ex]
+\dfrac{1}{p_i+1} & 0
+\end{pmatrix}
+\right)e_1,
+\qquad
+t_n:=A_n+B_n,
+\qquad
+r_n:=\frac{B_n}{A_n},
+\]
+且约定 \(r_0:=0\)。则 \(\delta_{\mathrm{ZG}}=\mathrm{dens}(ZG)\) 满足：
+\begin{enumerate}
+  \item 对每个 \(n\ge 1\)，有递推
+  \[
+  r_n=\frac{1}{p_n(1+r_{n-1})},
+  \]
+  从而得到 \(J\)-分式展开
+  \[
+  r_n=
+  \cfrac{1}{p_n\!\left(1+\cfrac{1}{p_{n-1}\!\left(1+\cfrac{1}{\ddots\left(1+\frac1{p_1}\right)}\right)}\right)}.
+  \]
+  \item 对每个 \(n\ge 1\)，有
+  \[
+  t_n
+  =
+  t_{n-1}\left(1-\frac{r_{n-1}}{(p_n+1)(1+r_{n-1})}\right).
+  \]
+  因而
+  \[
+  \delta_{\mathrm{ZG}}
+  =
+  \frac1{\zeta(2)}\lim_{n\to\infty}t_n
+  =
+  \frac1{\zeta(2)}
+  \prod_{n\ge 2}
+  \left(1-\frac{r_{n-1}}{(p_n+1)(1+r_{n-1})}\right).
+  \]
+  \item 若记
+  \[
+  \delta_n:=\frac{t_n}{\zeta(2)},
+  \]
+  则 \(\delta_n\downarrow \delta_{\mathrm{ZG}}\in(0,1)\)，并且对每个 \(n\ge 1\) 有显式尾估计
+  \[
+  0<\delta_n-\delta_{\mathrm{ZG}}
+  \le
+  \delta_n\sum_{j\ge n+1}\frac{1}{p_{j-1}(p_j+1)}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:xi-zg-prefix-recursion-monotone-tail-certificate} 中的归一化前缀量 \((a_n,b_n)\) 满足
+\[
+(a_0,b_0)=(1,0),
+\]
+\[
+a_n=(a_{n-1}+b_{n-1})\frac{p_n}{p_n+1},
+\qquad
+b_n=\frac{a_{n-1}}{p_n+1}.
+\]
+而这里按矩阵定义的 \((A_n,B_n)\) 由乘法递推也满足同一组初值与同一递推式。故
+\[
+A_n=a_n,
+\qquad
+B_n=b_n,
+\qquad
+t_n=A_n+B_n=u_n.
+\]
+于是
+\[
+r_n=\frac{B_n}{A_n}
+=
+\frac{1}{p_n}\frac{A_{n-1}}{A_{n-1}+B_{n-1}}
+=
+\frac{1}{p_n(1+r_{n-1})},
+\]
+第一条得证；递归展开即给出所述 \(J\)-分式。
+
+再由
+\[
+t_n=A_n+B_n
+=
+\frac{p_n}{p_n+1}(A_{n-1}+B_{n-1})
++\frac{1}{p_n+1}A_{n-1},
+\]
+以及
+\[
+A_{n-1}=\frac{t_{n-1}}{1+r_{n-1}},
+\]
+可得
+\[
+t_n
+=
+t_{n-1}\frac{p_n+\frac{1}{1+r_{n-1}}}{p_n+1}
+=
+t_{n-1}\left(1-\frac{r_{n-1}}{(p_n+1)(1+r_{n-1})}\right).
+\]
+这就得到第二条的递推式。又由 \(t_1=1\) 与命题
+\ref{prop:xi-zg-prefix-recursion-monotone-tail-certificate}
+中的
+\[
+\delta_{\mathrm{ZG}}=\frac{1}{\zeta(2)}\lim_{n\to\infty}t_n
+\]
+可知对 \(n\ge 2\) 迭代上式便得到所示无穷乘积表示。
+
+现证第三条。由 \(r_0=0\) 与第一条递推归纳得到
+\[
+0<r_n\le \frac1{p_n}\qquad (n\ge 1).
+\]
+记
+\[
+c_j:=\frac{r_{j-1}}{(p_j+1)(1+r_{j-1})}\qquad (j\ge 2).
+\]
+则
+\[
+0<c_j\le \frac{1}{p_{j-1}(p_j+1)}.
+\]
+由第二条可得
+\[
+t_\infty
+=
+t_n\prod_{j\ge n+1}(1-c_j),
+\]
+从而
+\[
+0<t_n-t_\infty
+=
+t_n\left(1-\prod_{j\ge n+1}(1-c_j)\right).
+\]
+对正数列 \((c_j)\) 应用不等式
+\[
+1-\prod_{j\ge n+1}(1-c_j)\le \sum_{j\ge n+1}c_j
+\]
+便得
+\[
+0<t_n-t_\infty
+\le
+t_n\sum_{j\ge n+1}\frac{1}{p_{j-1}(p_j+1)}.
+\]
+两边同时乘以 \(\zeta(2)^{-1}\)，即得
+\[
+0<\delta_n-\delta_{\mathrm{ZG}}
+\le
+\delta_n\sum_{j\ge n+1}\frac{1}{p_{j-1}(p_j+1)}.
+\]
+又命题 \ref{prop:xi-zg-prefix-recursion-monotone-tail-certificate} 已证明 \(t_n\) 单调下降并收敛到 \(\zeta(2)\delta_{\mathrm{ZG}}\)，故 \(\delta_n\downarrow \delta_{\mathrm{ZG}}\in(0,1)\)。证毕。
+\end{proof}
+
+\begin{theorem}[ZG 的 \texorpdfstring{$2^L$}{2^L}-进地址像是黄金 Cantor 集，且维数为 \texorpdfstring{$\log\varphi/\log B$}{log phi / log B}]\label{thm:xi-time-part62dgd-zg-address-golden-cantor-dimension}
+设
+\[
+\Sigma_\varphi
+:=
+\{\,z=(z_k)_{k\ge 1}\in \{0,1\}^{\NN}: z_kz_{k+1}=0\ \forall k\,\},
+\]
+固定 \(T:=T_2(E_{\min})\) 中一个非零向量 \(v\)，并令 \(B:=2^L\ge 2\)。定义地址映射
+\[
+X_B:\Sigma_\varphi\longrightarrow T,
+\qquad
+X_B(z):=\sum_{k\ge 1}z_kB^{k-1}v,
+\]
+以及像集
+\[
+\mathcal X_B:=X_B(\Sigma_\varphi).
+\]
+则成立：
+\begin{enumerate}
+  \item \(X_B\) 是 \(\Sigma_\varphi\) 到 \(\mathcal X_B\) 的拓扑同胚。若定义
+  \[
+  \mathcal T:=X_B\circ \sigma\circ X_B^{-1},
+  \]
+  其中 \(\sigma\) 为黄金均值子移位上的左移，则 \((\mathcal X_B,\mathcal T)\) 与 \((\Sigma_\varphi,\sigma)\) 拓扑共轭。
+  \item 在由最长公共前缀等价地由模 \(B^mT\) 同余诱导的 \(B\)-进超度量下，
+  \[
+  \dim_{\mathrm H}(\mathcal X_B)
+  =
+  \underline{\dim}_{\mathrm M}(\mathcal X_B)
+  =
+  \overline{\dim}_{\mathrm M}(\mathcal X_B)
+  =
+  \frac{\log\varphi}{\log B}.
+  \]
+  \item 若记 \(N_m(\mathcal X_B)\) 为 \(\mathcal X_B\) 在尺度 \(B^{-m}\) 上的最少球覆盖数，则
+  \[
+  N_m(\mathcal X_B)=F_{m+2},
+  \]
+  并且对
+  \[
+  s:=\frac{\log\varphi}{\log B}
+  \]
+  有
+  \[
+  \lim_{m\to\infty}N_m(\mathcal X_B)\,B^{-ms}
+  =
+  \frac{\varphi^2}{\sqrt5}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+取 \(E=\{0,1\}\) 且 \(\mathrm{code}(0)=0\)、\(\mathrm{code}(1)=1\)。由于 \(B=2^L>1\)，定理
+\ref{thm:xi-time-part62d-hologram-image-cantor-homeomorphism}
+适用于该二元字母表，并给出地址映射
+\[
+X:E^{\NN}\to \Lambda_{E,v}
+\]
+是到其像的拓扑同胚。由于 \(\Sigma_\varphi\subset E^{\NN}\) 是闭的移位不变子集，故其限制
+\[
+X_B:=X|_{\Sigma_\varphi}
+:
+\Sigma_\varphi\to \mathcal X_B
+\]
+仍是拓扑同胚。由此定义
+\[
+\mathcal T:=X_B\circ \sigma\circ X_B^{-1}
+\]
+便立即得到第一条。
+
+对第二、三条，记 \([\mathbf a]_\varphi\subset \Sigma_\varphi\) 为长度 \(m\) 的合法前缀 \(\mathbf a=(a_1,\dots,a_m)\) 所对应的圆柱集。由定理
+\ref{thm:xi-time-part62d-hologram-image-cantor-homeomorphism}
+的前缀同余性质，所有 \(z\in[\mathbf a]_\varphi\) 的像都满足
+\[
+X_B(z)\equiv \sum_{k=1}^{m}a_kB^{k-1}v\pmod{B^mT}.
+\]
+不同合法前缀对应不同的模 \(B^mT\) 余类，因此在 \(\mathcal X_B\) 上的长度 \(m\) 圆柱集恰给出一族两两不交的半径 \(B^{-m}\) 的闭开球。于是尺度 \(B^{-m}\) 的最少覆盖数恰等于长度 \(m\) 的合法前缀个数。该个数即为标准 Fibonacci 计数
+\[
+N_m(\mathcal X_B)=F_{m+2}.
+\]
+
+由此立得
+\[
+\underline{\dim}_{\mathrm M}(\mathcal X_B)
+=
+\overline{\dim}_{\mathrm M}(\mathcal X_B)
+=
+\lim_{m\to\infty}\frac{\log F_{m+2}}{m\log B}
+=
+\frac{\log\varphi}{\log B}.
+\]
+对 Hausdorff 维数，若 \(s>\log\varphi/\log B\)，则长度 \(m\) 圆柱集构成一个直径 \(B^{-m}\) 的覆盖，并满足
+\[
+F_{m+2}B^{-ms}\longrightarrow 0,
+\]
+故 \(\mathcal H^s(\mathcal X_B)=0\)。反之，若 \(s<\log\varphi/\log B\)，则任何直径不超过 \(B^{-m}\) 的覆盖都至少需要 \(F_{m+2}\) 个集合，因而其 \(s\)-维代价至少为
+\[
+F_{m+2}B^{-ms}\longrightarrow \infty.
+\]
+于是 \(\mathcal H^s(\mathcal X_B)=\infty\)。因此
+\[
+\dim_{\mathrm H}(\mathcal X_B)=\frac{\log\varphi}{\log B},
+\]
+第二条得证。
+
+最后，由 Binet 公式
+\[
+F_{m+2}=\frac{\varphi^{m+2}-(-\varphi^{-1})^{m+2}}{\sqrt5}
+\]
+可得
+\[
+F_{m+2}\varphi^{-m}\longrightarrow \frac{\varphi^2}{\sqrt5}.
+\]
+而
+\[
+B^{-ms}=\varphi^{-m},
+\]
+故
+\[
+N_m(\mathcal X_B)\,B^{-ms}
+=
+F_{m+2}\varphi^{-m}
+\longrightarrow
+\frac{\varphi^2}{\sqrt5}.
+\]
+第三条成立。证毕。
+\end{proof}
+
+\begin{corollary}[ZG 的 Archimedean 正密度与 \texorpdfstring{$2^L$}{2^L}-进亚一维地址几何严格分离]\label{cor:xi-time-part62dgd-zg-archimedean-nonarchimedean-scale-separation}
+沿用定理 \ref{thm:xi-time-part62dgd-zg-density-prime-jfraction-positive} 与定理 \ref{thm:xi-time-part62dgd-zg-address-golden-cantor-dimension} 的记号。则 \(ZG\) 同时满足
+\[
+0<\delta_{\mathrm{ZG}}<1,
+\]
+并且其 \(2^L\)-进地址像 \(\mathcal X_B\) 满足
+\[
+\dim_{\mathrm H}(\mathcal X_B)
+=
+\frac{\log\varphi}{\log B}
+<1.
+\]
+因此，\(ZG\) 在整数轴上的自然计数中是正密度对象，而在 \(2^L\)-进地址侧却形成一个严格亚一维的 Cantor 集。
+\end{corollary}
+\begin{proof}
+第一式由定理 \ref{thm:xi-zg-abel-residue-log-density} 与定理
+\ref{thm:xi-time-part62dgd-zg-density-prime-jfraction-positive}
+给出。第二式是定理
+\ref{thm:xi-time-part62dgd-zg-address-golden-cantor-dimension}
+的直接结论。又因 \(B=2^L\ge 2>\varphi\)，故
+\[
+\frac{\log\varphi}{\log B}<1.
+\]
+证毕。
+\end{proof}
+
+\endinput

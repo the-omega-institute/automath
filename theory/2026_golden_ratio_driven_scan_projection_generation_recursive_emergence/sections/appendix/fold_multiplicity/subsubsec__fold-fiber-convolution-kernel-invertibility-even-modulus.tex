@@ -1,0 +1,203 @@
+% Invertibility and identifiability for coordinate-constrained convolution kernels (even modulus).
+%
+\subsubsection{偶模长下约束卷积核的可逆判别、核分解与谱盲点}\label{subsubsec:fold-fiber-convolution-kernel-invertibility-even-modulus}
+沿用小节 \ref{subsubsec:fold-fiber-conditional-statistics} 的记号：固定 \(m\ge 1\)，令
+\[
+M:=F_{m+2},\qquad G:=\ZZ/(M\ZZ),
+\]
+并对非空 \(I\subseteq\{1,\dots,m\}\) 定义核
+\[
+K_I:=\sum_{S\subseteq I}\delta_{\sum_{i\in S}F_{i+1}}\in \CC[G]
+\]
+与卷积算子
+\[
+T_I:\CC[G]\to \CC[G],\qquad T_I(f):=K_I*f.
+\]
+命题 \ref{prop:fold-fiber-subset-convolution} 给出严格恒等式 \(d_m=K_I*a_{m,I}\)。
+本段刻画 \(T_I\) 的可逆性与其失败机制，并据此给出偶模长下“可由 \(d_m\) 唯一读出”的坐标信息极限。
+
+\begin{theorem}[卷积核的完全可逆判别]\label{thm:fold-fiber-convolution-kernel-invertibility}
+对任意非空 \(I\subseteq\{1,\dots,m\}\)，以下命题等价：
+\begin{enumerate}
+\normalfont
+  \item \(T_I\) 在 \(\CC[G]\) 上可逆；
+  \item 对一切 \(k\in G\) 有 \(\widehat{K_I}(k)\neq 0\)；
+  \item 对每个 \(i\in I\)，线性同余
+  \[
+  kF_{i+1}\equiv M/2\pmod M
+  \]
+  在 \(k\in G\) 中无解；
+  \item 对每个 \(i\in I\)，成立 \(v_2(\gcd(F_{i+1},M))=v_2(M)\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对加性角色 \(\chi_k(r):=e^{2\pi i kr/M}\)（\(k\in G\)），离散 Fourier 变换把卷积对角化：
+\[
+\widehat{T_I(f)}(k)=\widehat{K_I}(k)\,\widehat f(k),
+\qquad
+\widehat{K_I}(k)=\prod_{i\in I}\bigl(1+\chi_k(F_{i+1})\bigr),
+\]
+其中乘积形式由 \(K_I\) 的子集和定义直接展开得到。
+因此 \(T_I\) 可逆当且仅当对所有 \(k\) 有 \(\widehat{K_I}(k)\neq 0\)，得到 (1)\(\Leftrightarrow\)(2)。
+又 \(\widehat{K_I}(k)=0\) 当且仅当存在 \(i\in I\) 使 \(\chi_k(F_{i+1})=-1\)，得到 (2)\(\Leftrightarrow\)(3)。
+
+对固定 \(i\)，\(\chi_k(F_{i+1})=-1\) 等价于 \(e^{2\pi i kF_{i+1}/M}=e^{\pi i}\)，亦即同余
+\(
+kF_{i+1}\equiv M/2\pmod M
+\) 有解。
+该线性同余可解当且仅当 \(\gcd(F_{i+1},M)\mid M/2\)。
+由于 \(\gcd(F_{i+1},M)\mid M\)，该可解性等价于
+\(
+v_2(\gcd(F_{i+1},M))\le v_2(M)-1
+\)；
+因此“无解”当且仅当 \(v_2(\gcd(F_{i+1},M))=v_2(M)\)，得到 (3)\(\Leftrightarrow\)(4)。
+证毕。
+\end{proof}
+
+\begin{proposition}[偶模长下的整除刻画]\label{prop:fold-fiber-convolution-invertibility-divisibility}
+令 \(n:=m+2\)。
+当 \(3\nmid n\)（等价于 \(M\) 为奇数）时，对任意非空 \(I\) 均有 \(T_I\) 可逆（与推论 \ref{cor:fold-fiber-conditional-reconstruction-odd-modulus} 一致）。
+当 \(3\mid n\)（等价于 \(M\) 为偶数）时，设 \(\nu:=v_2(n)\) 且记 \(D:=3\cdot 2^{\nu}\)。
+则对任意非空 \(I\) 有：
+\[
+T_I\ \text{可逆}\qquad\Longleftrightarrow\qquad
+I\subseteq \{\,i\in\{1,\dots,m\}:\ D\mid (i+1)\,\}.
+\]
+\end{proposition}
+\begin{proof}
+由恒等式 \(\gcd(F_a,F_b)=F_{\gcd(a,b)}\) 得
+\[
+\gcd(F_{i+1},M)=\gcd(F_{i+1},F_n)=F_{\gcd(i+1,n)}.
+\]
+因此定理 \ref{thm:fold-fiber-convolution-kernel-invertibility} 的条件 (4) 等价于
+\[
+v_2(F_{\gcd(i+1,n)})=v_2(F_n)\qquad\text{对所有 }i\in I.
+\]
+若 \(3\nmid n\)，则 \(F_n\) 为奇数，从而 \(v_2(F_n)=0\) 且上式对任意 \(i\) 自动成立，得第一句。
+若 \(3\mid n\)，则 \(F_n\) 为偶数。
+Fibonacci 数的 \(2\)-进赋值满足标准分情形：
+\[
+v_2(F_n)=
+\begin{cases}
+1, & n\equiv 3\pmod 6,\\
+v_2(n)+2, & n\equiv 0\pmod 6,
+\end{cases}
+\]
+并且当且仅当 \(3\mid d\) 时 \(F_d\) 为偶数。
+因此，要使 \(v_2(F_{\gcd(i+1,n)})\) 达到与 \(v_2(F_n)\) 相同的最大值，\(\gcd(i+1,n)\) 必须同时包含全部 \(2\)-幂因子 \(2^\nu\) 且包含因子 \(3\)，即 \(D\mid \gcd(i+1,n)\)。
+这与 \(D\mid(i+1)\) 等价，从而得到所示刻画。
+证毕。
+\end{proof}
+
+\begin{corollary}[可逆坐标集合的稀疏律与精确计数]\label{cor:fold-fiber-invertible-coordinate-sparsity}
+设 \(3\mid (m+2)\)，令 \(\nu:=v_2(m+2)\)、\(D:=3\cdot 2^\nu\)，并写 \(m+2=D\cdot t\)（其中 \(t\) 为奇数）。
+定义
+\[
+\mathcal G_m:=\{\,k\in\{1,\dots,m\}:\ T_{\{k\}}\ \text{可逆}\,\}.
+\]
+则
+\[
+\mathcal G_m=\{\,k\in\{1,\dots,m\}:\ D\mid (k+1)\,\},
+\qquad
+|\mathcal G_m|=t-1=\frac{m+2}{3\cdot 2^{v_2(m+2)}}-1.
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:fold-fiber-convolution-invertibility-divisibility} 取 \(I=\{k\}\) 得 \(\mathcal G_m=\{k:D\mid(k+1)\}\)。
+又在集合 \(\{2,3,\dots,m+1\}=\{2,3,\dots,Dt-1\}\) 中可被 \(D\) 整除者恰为 \(D,2D,\dots,(t-1)D\)，故基数为 \(t-1\)。
+证毕。
+\end{proof}
+
+\begin{proposition}[零点频谱与核的 Fourier 分解]\label{prop:fold-fiber-convolution-kernel-zero-spectrum}
+对任意非空 \(I\subseteq\{1,\dots,m\}\) 定义
+\[
+Z_I:=\{\,k\in G:\ \widehat{K_I}(k)=0\,\}.
+\]
+则：
+\begin{enumerate}
+\normalfont
+  \item \(Z_I=\bigcup_{i\in I}Z_{\{i\}}\)；
+  \item 对每个 \(i\)，若 \(Z_{\{i\}}\neq\varnothing\)，则 \(Z_{\{i\}}\) 为某个陪集
+  \[
+  Z_{\{i\}}=k_i+\frac{M}{\gcd(F_{i+1},M)}\,\ZZ/M\ZZ,
+  \]
+  其中 \(k_i\) 为同余 \(kF_{i+1}\equiv M/2\pmod M\) 的任一解；并且 \(|Z_{\{i\}}|=\gcd(F_{i+1},M)\)。
+  \item 作为 \(\CC[G]\) 上线性算子，有正交直和分解
+  \[
+  \ker(T_I)=\bigoplus_{k\in Z_I}\CC\cdot e_k,
+  \qquad
+  \dim_{\CC}\ker(T_I)=|Z_I|,
+  \]
+  其中 \(e_k\) 为角色 \(\chi_k\) 的最小中心幂等元（Fourier 基的一维特征方向）。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+由 \(\widehat{K_I}(k)=\prod_{i\in I}(1+\chi_k(F_{i+1}))\) 立得 (1)。
+对单点 \(I=\{i\}\)，零点条件 \(1+\chi_k(F_{i+1})=0\) 等价于线性同余 \(kF_{i+1}\equiv M/2\pmod M\)；
+其解集要么为空，要么为某一解加上齐次解子群 \((M/\gcd(F_{i+1},M))\ZZ/M\ZZ\)，并且大小为 \(\gcd(F_{i+1},M)\)，得 (2)。
+最后，离散 Fourier 变换把卷积算子对角化，\(T_I\) 在角色 \(\chi_k\) 的一维分量上的特征值为 \(\widehat{K_I}(k)\)，故核恰为 \(Z_I\) 上所有零特征值分量之直和，得到 (3)。
+证毕。
+\end{proof}
+
+\begin{theorem}[偶模长下的可恢复信息极大性]\label{thm:fold-fiber-identifiable-sigma-algebra-maximal}
+设 \(3\mid (m+2)\) 且 \(\mathcal G_m\) 如推论 \ref{cor:fold-fiber-invertible-coordinate-sparsity}。
+令
+\[
+\mathscr A_m:=\sigma\bigl(\{\omega_k:\ k\in\mathcal G_m\}\bigr)
+\]
+为由 \(\mathcal G_m\) 生成的坐标 \(\sigma\)-代数。
+则：
+\begin{enumerate}
+\normalfont
+  \item 若 \(I\subseteq \mathcal G_m\) 为非空有限集，则 \(a_{m,I}\) 由 \(d_m\) 唯一确定；从而对任意模式 \(v\in\{0,1\}^I\)，计数函数 \(A_{m,I}(\cdot;v)\) 亦由 \(d_m\) 唯一确定（通过命题 \ref{prop:fold-fiber-subset-convolution} 的平移表示）。
+  \item 若 \(k\notin \mathcal G_m\)，则卷积方程
+  \[
+  d_m=K_{\{k\}}*a
+  \qquad (a\in \CC[G])
+  \]
+  的解在 \(\CC[G]\) 中不唯一；等价地，仅由 \(d_m\) 不能唯一确定单坐标约束的“全零子纤维计数” \(a_{m,\{k\}}\)（因而不能唯一确定 \(A_{m,\{k\}}(\cdot;0)\) 与 \(A_{m,\{k\}}(\cdot;1)\)）。
+  因此，在“由 \(d_m\) 唯一可恢复的坐标信息”这一意义下，\(\mathscr A_m\) 为极大对象：任意加入一个不可逆坐标即产生不可识别自由度。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+若 \(I\subseteq\mathcal G_m\)，则对每个 \(i\in I\)，\(T_{\{i\}}\) 可逆；由命题 \ref{prop:fold-fiber-convolution-invertibility-divisibility} 得 \(T_I\) 可逆。
+由 \(d_m=K_I*a_{m,I}\)（命题 \ref{prop:fold-fiber-subset-convolution}）即知 \(a_{m,I}=T_I^{-1}(d_m)\) 唯一，得到 (1)。
+
+若 \(k\notin\mathcal G_m\)，则 \(T_{\{k\}}\) 不可逆，故 \(\ker(T_{\{k\}})\neq\{0\}\)。
+取任意非零 \(h\in\ker(T_{\{k\}})\)，则对任意 \(\lambda\in\CC\) 有
+\[
+K_{\{k\}}*(a_{m,\{k\}}+\lambda h)=K_{\{k\}}*a_{m,\{k\}}=d_m,
+\]
+从而解不唯一，得 (2)。
+最后一句由“加入不可逆坐标 \(\Rightarrow\) 产生非唯一解空间”的机制直接推出。
+证毕。
+\end{proof}
+
+\begin{proposition}[偶模长的谱盲点]\label{prop:fold-multiplicity-spectrum-blindspot-half}
+若 \(M=F_{m+2}\) 为偶数（等价于 \(m\equiv 1\pmod 3\)），则在频率 \(M/2\in G\) 处有严格消失
+\[
+\widehat d_m(M/2)=\sum_{r\in G}(-1)^r\,d_m(r)=0.
+\]
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:fold-spectrum-factorization}，
+\[
+\widehat d_m(M/2)=\prod_{j=1}^{m}\Bigl(1+e^{-\pi i F_{j+1}}\Bigr)
+=\prod_{j=1}^{m}\Bigl(1+(-1)^{F_{j+1}}\Bigr).
+\]
+由于 \(F_2=1\) 为奇数，乘积中包含因子 \(1+(-1)=0\)，故整体为零。
+证毕。
+\end{proof}
+
+\begin{conjecture}[偶模长下的最小补充观测与完全重建]\label{conj:fold-fiber-minimal-extra-observation-reconstruction}
+设 \(M=F_{m+2}\) 为偶数。
+记 \(\mathcal G_m\) 为可逆坐标集合，并对每个 \(k\notin\mathcal G_m\) 令 \(Z_{\{k\}}\subseteq G\) 为命题 \ref{prop:fold-fiber-convolution-kernel-zero-spectrum} 的零点频谱陪集。
+猜想：若在仅观测 \(d_m\) 的基础上，额外给定每个不可逆坐标 \(k\notin\mathcal G_m\) 的约束基函数 \(a_{m,\{k\}}\) 在盲点频谱上的 Fourier 投影
+\[
+\bigl\{\widehat{a_{m,\{k\}}}(k'):\ k\notin\mathcal G_m,\ k'\in Z_{\{k\}}\bigr\},
+\]
+则对任意有限 \(I\subseteq\{1,\dots,m\}\) 与任意 \(v\in\{0,1\}^I\)，计数函数 \(A_{m,I}(\cdot;v)\) 由该扩充数据唯一确定。
+\end{conjecture}
+
+\input{prop__fold-unseen-modes-span-Zm}
+

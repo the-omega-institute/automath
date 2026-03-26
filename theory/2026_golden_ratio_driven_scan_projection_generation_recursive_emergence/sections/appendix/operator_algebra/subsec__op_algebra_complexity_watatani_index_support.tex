@@ -1,0 +1,753 @@
+% Complexity-theoretic interpretation of fold multiplicities via Watatani index and basic construction.
+%
+\subsection{复杂度的折叠—指数表述：NP 的支撑判别与 \texorpdfstring{$\#P$}{\#P} 的系数场}\label{subsec:op-algebra-complexity-watatani-index-support}
+本节在附录 \ref{app:op-algebra-fold-subalgebra}--\ref{subsec:op-algebra-fold-quantum-channel} 的有限维交换口径上，
+将“折叠纤维多重度场”与经典复杂度类作一一对应的可审计翻译：
+NP 的可满足性判别等价于某个中心正元（Watatani 指标元）的支撑判别，而 \(\#P\) 计数函数等价于该中心正元在极小中心投影上的系数字段。
+同一纤维多重度的二次矩进一步等价于测量--制备折叠信道的最小环境维数（Choi/Kraus 秩）。
+
+\paragraph{一般折叠与有限维交换包含。}
+令 \(\Omega,Y\) 为有限集合，取映射 \(\Fold:\Omega\to Y\)（允许非满射），并令
+\[
+A:=\CC^{\Omega},\qquad B:=\CC^{Y}.
+\]
+以 \(\{P_\omega\}_{\omega\in\Omega}\) 表示 \(A\) 的极小投影基（点投影），并对 \(y\in Y\) 定义纤维投影
+\[
+\widetilde P_y:=\sum_{\omega:\ \Fold(\omega)=y}P_\omega\in A.
+\]
+定义纤维多重度 \(d(y):=|\Fold^{-1}(y)|\)（允许取 \(0\)）以及纤维平均条件期望 \(E:A\to B\)（与命题 \ref{prop:fold-conditional-expectation} 同型）：
+\[
+E(P_\omega):=\frac{1}{d(\Fold(\omega))}\,\widetilde P_{\Fold(\omega)}.
+\]
+在此设定下，Watatani 指标元与纤维多重度场的闭式完全由定理 \ref{thm:op-algebra-fold-watatani-index-equals-multiplicity-field} 的证明逐字推出。
+
+\begin{proposition}[复合粗化下的 \texorpdfstring{$q$}{q}-碰撞矩双向界]\label{prop:op-algebra-coarsegraining-sq-two-sided}
+设 \(f:\Omega\to Y\)、\(g:Y\to Z\) 为有限集合映射，并记纤维多重度
+\[
+d_f(y):=\bigl|f^{-1}(y)\bigr|,
+\qquad
+d_{g\circ f}(z):=\bigl|(g\circ f)^{-1}(z)\bigr|.
+\]
+对任意实数 \(q\ge 1\)，定义 \(q\)-碰撞矩
+\[
+S_q(f):=\sum_{y\in Y} d_f(y)^q,
+\qquad
+S_q(g\circ f):=\sum_{z\in Z} d_{g\circ f}(z)^q,
+\]
+并记
+\[
+D(g):=\max_{z\in Z}\bigl|g^{-1}(z)\bigr|.
+\]
+则成立双向界
+\[
+S_q(g\circ f)\ \ge\ S_q(f),
+\qquad
+S_q(g\circ f)\ \le\ D(g)^{\,q-1}\,S_q(f).
+\]
+\end{proposition}
+\begin{proof}
+对任意 \(z\in Z\) 有分解
+\[
+d_{g\circ f}(z)=\sum_{y:\ g(y)=z} d_f(y).
+\]
+当 \(q\ge 1\) 时函数 \(t\mapsto t^q\) 在 \([0,\infty)\) 上凸，且 \(d_f(y)\ge 0\)，故对每个 \(z\) 有
+\[
+\Bigl(\sum_{y:\ g(y)=z} d_f(y)\Bigr)^q \ge \sum_{y:\ g(y)=z} d_f(y)^q.
+\]
+对 \(z\) 求和并交换求和次序即得 \(S_q(g\circ f)\ge S_q(f)\)。
+\par
+令 \(m_z:=|g^{-1}(z)|\le D(g)\)。
+对任意非负数列 \((a_i)_{i=1}^{m_z}\) 与 \(q\ge 1\) 有不等式
+\[
+\Bigl(\sum_{i=1}^{m_z} a_i\Bigr)^q \le m_z^{\,q-1}\sum_{i=1}^{m_z}a_i^q,
+\]
+例如由幂均值/广义 Hölder 不等式导出。
+取 \(a_i\) 为 \(y\in g^{-1}(z)\) 的 \(d_f(y)\) 得
+\[
+d_{g\circ f}(z)^q
+\le m_z^{\,q-1}\sum_{y:\ g(y)=z} d_f(y)^q
+\le D(g)^{\,q-1}\sum_{y:\ g(y)=z} d_f(y)^q.
+\]
+对 \(z\) 求和得到
+\[
+S_q(g\circ f)\le D(g)^{\,q-1}\sum_{z\in Z}\sum_{y:\ g(y)=z} d_f(y)^q
+=D(g)^{\,q-1}S_q(f).
+\]
+证毕。
+\end{proof}
+
+\paragraph{电路投影作为折叠：最大纤维与二次碰撞矩。}
+令 \(C:\{0,1\}^n\to\{0,1\}^n\) 为多输出布尔电路，并将其视为折叠 \(\Fold=C\)（取 \(\Omega=Y=\{0,1\}^n\)）。
+记
+\[
+D(C):=\max_{y\in\{0,1\}^n}\card{C^{-1}(y)},
+\qquad
+S_2(C):=\sum_{y\in\{0,1\}^n}\card{C^{-1}(y)}^2
+=\card{\{(a,b)\in(\{0,1\}^n)^2:\ C(a)=C(b)\}}.
+\]
+更一般地，对任意整数 \(k\ge 2\) 记
+\[
+S_k(C):=\sum_{y\in\{0,1\}^n}\card{C^{-1}(y)}^k
+=\card{\{(a_1,\dots,a_k)\in(\{0,1\}^n)^k:\ C(a_1)=\cdots=C(a_k)\}}.
+\]
+在有限维交换包含 \(B\subset A\) 的口径下，\(D(C)\) 等于指标元 \(\mathrm{Ind}_{\mathrm W}(E_C)\) 的最大系数（等价地，其 \(C^\ast\)-范数），而 \(S_2(C)\) 等于定理 \ref{thm:fold-channel-choi-rank-equals-s2-general} 中二次碰撞矩。
+
+\begin{proposition}[电路粗粒化条件期望的有限指数与最坏信息损失]\label{prop:circuit-condexp-index-maxfiber}
+将电路 \(C:\{0,1\}^n\to\{0,1\}^n\) 视为折叠 \(\Fold=C\)（取 \(\Omega=Y=\{0,1\}^n\)），并令 \(E_C:A\to B\) 为沿 \(C\)-纤维的算术平均条件期望（见上段一般折叠口径）。
+则其 Pimsner--Popa 指数满足严格等式
+\[
+\boxed{\;\mathrm{Ind}(E_C)=D(C)\;}
+\]
+其中 \(D(C)=\max_y |C^{-1}(y)|\)。
+并且由有限指数相对熵损失极值公式（定理 \ref{thm:dephys-index-max-relative-entropy-loss}）得到
+\[
+\boxed{\;
+\sup_{\rho,\sigma}\Bigl[D(\rho\|\sigma)-D(\rho\circ E_C\ \|\ \sigma\circ E_C)\Bigr]
+=\log\mathrm{Ind}(E_C)=\log D(C).\;}
+\]
+\end{proposition}
+\begin{proof}
+与命题 \ref{prop:fold-condexp-index-maxfiber} 的证明完全同型：对任意非负函数 \(f\in A=\CC^{\{0,1\}^n}\) 与任意输入点 \(a\in\{0,1\}^n\)，若 \(y=C(a)\) 且 \(d=|C^{-1}(y)|\le D(C)\)，则
+\[
+(E_C f)(a)=\frac{1}{d}\sum_{b:\ C(b)=y}f(b)\ \ge\ \frac{1}{d}f(a)\ \ge\ \frac{1}{D(C)}f(a),
+\]
+从而 \(\mathrm{Ind}(E_C)\le D(C)\)。
+反向取达到最大纤维的 \(y_\star\) 与其中一点 \(a_\star\)，令 \(f=\mathbf 1_{\{a_\star\}}\) 即得饱和性，故 \(\mathrm{Ind}(E_C)=D(C)\)。
+最后一式由定理 \ref{thm:dephys-index-max-relative-entropy-loss} 直接推出。证毕。
+\end{proof}
+
+\begin{corollary}[指数阈值判定与对数信息损失的 NP 困难性]\label{cor:circuit-index-entropy-loss-np-hard}
+给定电路 \(C:\{0,1\}^n\to\{0,1\}^n\)，判定 \(\mathrm{Ind}(E_C)\ge 2\) 为 \(\mathrm{NP}\)-完备；
+并且若存在确定性多项式时间算法可在加性误差 \(<\tfrac12\log 2\) 意义下近似
+\[
+\log\mathrm{Ind}(E_C)=\sup_{\rho,\sigma}\bigl[D(\rho\|\sigma)-D(\rho\circ E_C\ \|\ \sigma\circ E_C)\bigr],
+\]
+则 \(\mathrm{P}=\mathrm{NP}\)。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:circuit-condexp-index-maxfiber} 有 \(\mathrm{Ind}(E_C)=D(C)\)，而判定 \(D(C)\ge 2\) 在定理 \ref{thm:circuit-noninjective-np-complete} 中已证为 \(\mathrm{NP}\)-完备，故第一条成立。
+第二条：若可在误差 \(<\tfrac12\log 2\) 下近似 \(\log\mathrm{Ind}(E_C)\)，则可区分
+\(
+\log\mathrm{Ind}(E_C)=0
+\)
+与
+\(
+\log\mathrm{Ind}(E_C)\ge \log 2
+\)，从而判定 \(\mathrm{Ind}(E_C)\ge 2\)，推出 \(\mathrm{P}=\mathrm{NP}\)。证毕。
+\end{proof}
+
+\begin{theorem}[电路非单射性判定的 NP 完备性]\label{thm:circuit-noninjective-np-complete}
+定义判定问题 \(\text{\normalfont\textsc{Circuit-Index}}_{\ge 2}\)：
+输入为布尔电路 \(C:\{0,1\}^n\to\{0,1\}^n\)，问题为是否 \(D(C)\ge 2\)（等价地，是否存在 \(a\neq b\) 使 \(C(a)=C(b)\)）。
+则 \(\text{\normalfont\textsc{Circuit-Index}}_{\ge 2}\) 为 \(\mathrm{NP}\)-完备。
+\end{theorem}
+
+\begin{proof}
+\(\mathrm{NP}\) 属于性：证书取 \((a,b)\)，可在多项式时间验证 \(a\neq b\) 且 \(C(a)=C(b)\)。
+\par
+\(\mathrm{NP}\) 困难性：从 \(\mathrm{SAT}\) 归约。
+给定含 \(n\) 个变量的 CNF 公式 \(\varphi(u)\)，引入新变量 \(z\) 并令 \(\varphi'(u,z):=\varphi(u)\wedge (z\vee\neg z)\)。
+构造电路 \(C_{\varphi'}:\{0,1\}^{n+1}\to\{0,1\}^{n+1}\)：
+\[
+C_{\varphi'}(a):=
+\begin{cases}
+0^{n+1}, & \varphi'(a)=1,\\
+a, & \varphi'(a)=0.
+\end{cases}
+\]
+若 \(\varphi\) 不可满足，则 \(\varphi'\) 无满足赋值，\(C_{\varphi'}\) 为恒等映射，故 \(D(C_{\varphi'})=1\)；
+若 \(\varphi\) 可满足，则任取一组满足赋值 \(u\) 并取 \(z=0,1\) 得到两点 \(a\neq b\) 使 \(\varphi'(a)=\varphi'(b)=1\)，从而 \(C_{\varphi'}(a)=C_{\varphi'}(b)=0^{n+1}\)，故 \(D(C_{\varphi'})\ge 2\)。
+因此 \(\varphi\in\mathrm{SAT}\iff D(C_{\varphi'})\ge 2\)，归约多项式时间可构造，结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[变量阶碰撞矩的幂次放大：因子 \texorpdfstring{$2$}{2} 近似即可判定电路非单射]\label{thm:circuit-collision-moment-two-approx-nplus2}
+对电路 \(C:\{0,1\}^n\to\{0,1\}^n\) 定义 \(q\)-阶碰撞矩
+\(
+S_q(C)=\sum_y |C^{-1}(y)|^q
+\)（见上段定义）。
+取 \(q=n+2\)。
+若存在确定性多项式时间算法输出 \(\widehat S\) 满足
+\[
+\frac12\,S_{n+2}(C)\ \le\ \widehat S\ \le\ 2\,S_{n+2}(C),
+\]
+则可在多项式时间内判定 \(D(C)\ge 2\)，从而 \(\mathrm{P}=\mathrm{NP}\)。
+\end{theorem}
+\begin{proof}
+若 \(C\) 为单射，则必为双射，故对所有 \(y\) 有 \(|C^{-1}(y)|=1\)，从而
+\[
+S_{n+2}(C)=\sum_{y}1^{n+2}=2^n.
+\]
+若 \(C\) 非单射，则存在 \(y_0\) 使 \(|C^{-1}(y_0)|\ge 2\)。
+由于 \(\sum_y |C^{-1}(y)|=2^n\) 且输出点亦有 \(2^n\) 个，必存在 \(y_1\) 使 \(|C^{-1}(y_1)|=0\)。
+对 \(q>1\) 函数 \(t\mapsto t^q\) 在 \([0,\infty)\) 上严格凸，且在“至少出现一个 \(2\) 与一个 \(0\)”的约束下，碰撞矩的最小值由分布
+\(
+(2,0,1,\dots,1)
+\)
+达到，从而对 \(q=n+2\) 有
+\[
+S_{n+2}(C)\ \ge\ 2^{n+2}+(2^n-2)\cdot 1^{n+2}
+=5\cdot 2^n-2.
+\]
+当 \(n\ge 2\) 时，\(\frac12(5\cdot 2^n-2)>2^{n+1}\)。
+因此：
+\begin{itemize}
+\item 若 \(C\) 单射，则 \(\widehat S\le 2S_{n+2}(C)=2^{n+1}\)；
+\item 若 \(C\) 非单射，则 \(\widehat S\ge \frac12 S_{n+2}(C)>2^{n+1}\)。
+\end{itemize}
+以阈值 \(2^{n+1}\) 即可由 \(\widehat S\) 判定非单射性。
+由定理 \ref{thm:circuit-noninjective-np-complete}，该判定为 \(\mathrm{NP}\)-完备，故若上述近似算法存在则推出 \(\mathrm{P}=\mathrm{NP}\)。证毕。
+\end{proof}
+
+\begin{theorem}[电路最大纤维阈值判定的 NP 完备性]\label{thm:circuit-index-ge-k-np-complete}
+固定整数 \(k\ge 2\)。
+定义判定问题 \(\text{\normalfont\textsc{Circuit-Index}}_{\ge k}\)：
+输入为布尔电路 \(C:\{0,1\}^n\to\{0,1\}^n\)，问题为是否 \(D(C)\ge k\)。
+则 \(\text{\normalfont\textsc{Circuit-Index}}_{\ge k}\) 为 \(\mathrm{NP}\)-完备。
+\end{theorem}
+\begin{proof}
+\(\mathrm{NP}\) 属于性：证书取 \(k\) 个两两不同的输入 \(a_1,\dots,a_k\)，可在多项式时间验证 \(a_i\neq a_j\) 且 \(C(a_1)=\cdots=C(a_k)\)。
+\par
+\(\mathrm{NP}\) 困难性：从 \(\mathrm{SAT}\) 归约。
+给定含 \(n\) 个变量的 CNF 公式 \(\varphi(u)\)，取 \(t:=\lceil\log_2 k\rceil\)，引入新变量 \(z\in\{0,1\}^t\)，并令
+\[
+\varphi^{(t)}(u,z):=\varphi(u)\wedge \bigwedge_{i=1}^{t}(z_i\vee\neg z_i).
+\]
+构造电路 \(C_{\varphi^{(t)}}:\{0,1\}^{n+t}\to\{0,1\}^{n+t}\)：
+\[
+C_{\varphi^{(t)}}(a):=
+\begin{cases}
+0^{n+t}, & \varphi^{(t)}(a)=1,\\
+a, & \varphi^{(t)}(a)=0.
+\end{cases}
+\]
+若 \(\varphi\) 不可满足，则 \(\varphi^{(t)}\) 无满足赋值，\(C_{\varphi^{(t)}}\) 为恒等映射，故 \(D(C_{\varphi^{(t)}})=1\)。
+若 \(\varphi\) 可满足，则存在 \(u\) 使 \(\varphi(u)=1\)，从而对所有 \(z\in\{0,1\}^t\) 都有 \(C_{\varphi^{(t)}}(u,z)=0^{n+t}\)，故
+\(
+|C_{\varphi^{(t)}}^{-1}(0^{n+t})|\ge 2^t\ge k
+\)，即 \(D(C_{\varphi^{(t)}})\ge k\)。
+因此 \(\varphi\in\mathrm{SAT}\iff D(C_{\varphi^{(t)}})\ge k\)，归约多项式时间可构造，结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[最大纤维的次指数因子近似障碍]\label{thm:circuit-maxfiber-polyfactor-inapprox}
+令 \(f:\NN\to\NN\) 满足 \(\log f(n)=o(n)\)。
+若存在多项式时间算法 \(\mathcal A\)，对任意 \(n\) 位输入输出电路 \(C:\{0,1\}^n\to\{0,1\}^n\) 输出整数 \(\widehat D(C)\) 并满足
+\[
+D(C)\ \le\ \widehat D(C)\ \le\ f(n)\,D(C),
+\]
+则 \(P=NP\)。
+特别地，对任意多项式 \(p(n)\)，不存在多项式时间的 \(p(n)\)-因子近似算法，除非 \(P=NP\)。
+\end{theorem}
+\begin{proof}
+从 \(\mathrm{SAT}\) 归约。
+给定含 \(n\) 个变量的 CNF 公式 \(\varphi(u)\)，取 \(t:=n\)，并令
+\[
+\varphi_t(u,z_1,\dots,z_t,z):=\varphi(u)\wedge(z\vee\neg z)\wedge\bigwedge_{i=1}^{t}(z_i\vee\neg z_i).
+\]
+沿定理 \ref{thm:circuit-index-ge-k-np-complete} 的模板构造电路
+\(
+C_{\varphi_t}:\{0,1\}^{2n+1}\to\{0,1\}^{2n+1}
+\)
+使得 \(\varphi_t(a)=1\) 时输出 \(0^{2n+1}\)，否则输出 \(a\)。
+若 \(\varphi\) 不可满足，则 \(\varphi_t\) 无满足赋值，\(C_{\varphi_t}\) 为恒等映射，故 \(D(C_{\varphi_t})=1\)。
+若 \(\varphi\) 可满足，则存在 \(u\) 使 \(\varphi(u)=1\)，从而对任意 \((z_1,\dots,z_t,z)\in\{0,1\}^{t+1}\) 都有 \(C_{\varphi_t}(u,z_1,\dots,z_t,z)=0^{2n+1}\)，故
+\[
+D(C_{\varphi_t})\ge \bigl|C_{\varphi_t}^{-1}(0^{2n+1})\bigr|\ge 2^{t+1}=2^{n+1}.
+\]
+\par
+由 \(\log f(m)=o(m)\)（取 \(m=2n+1\)）可知存在 \(n_0\) 使对所有 \(n\ge n_0\) 有 \(f(2n+1)<2^{n+1}\)。
+于是当 \(n\ge n_0\) 时，
+\[
+\varphi\ \text{不可满足}\ \Rightarrow\ \widehat D(C_{\varphi_t})\le f(2n+1)<2^{n+1},
+\qquad
+\varphi\ \text{可满足}\ \Rightarrow\ \widehat D(C_{\varphi_t})\ge D(C_{\varphi_t})\ge 2^{n+1}.
+\]
+比较 \(\widehat D(C_{\varphi_t})\) 与阈值 \(2^{n+1}\) 即可在多项式时间内判定 \(\varphi\in\mathrm{SAT}\)，从而 \(P=NP\)。
+对有限个 \(n<n_0\) 可在 \(\varphi\) 上添加哑元作填充，使归约落入 \(n\ge n_0\) 的区间而不改变可满足性。证毕。
+\end{proof}
+
+\begin{theorem}[任意固定阶 \texorpdfstring{$q\ge 2$}{q>=2} 的电路碰撞矩为 \texorpdfstring{\(\#\mathrm{P}\)}{\#P} 完备]\label{thm:circuit-s2-sharpP-complete}
+对任意固定整数 \(q\ge 2\)，给定电路 \(C:\{0,1\}^n\to\{0,1\}^n\)，计算
+\[
+S_q(C):=\sum_{y\in\{0,1\}^n}\card{C^{-1}(y)}^{q}
+\]
+是 \(\#\mathrm{P}\)-完备的函数问题。
+\end{theorem}
+
+\begin{proof}
+\(\#\mathrm{P}\) 属于性：令
+\[
+R_C(a_1,\dots,a_q)\equiv\bigl(C(a_1)=C(a_2)=\cdots=C(a_q)\bigr).
+\]
+谓词 \(R_C\) 可在多项式时间验证，并且
+\[
+S_q(C)=\#\bigl\{(a_1,\dots,a_q)\in(\{0,1\}^n)^q:\ R_C(a_1,\dots,a_q)\bigr\},
+\]
+故 \(S_q(C)\in\#\mathrm{P}\)。
+\par
+\(\#\mathrm{P}\) 困难性：从 \(\#\mathrm{SAT}\) 归约。
+沿定理 \ref{thm:circuit-noninjective-np-complete} 的构造取 \(C_{\varphi'}\)，并记 \(N:=2^{n+1}\)、
+\(
+s:=\#\{a\in\{0,1\}^{n+1}:\ \varphi'(a)=1\}
+\)。
+则 \(0^{n+1}\) 的纤维大小为 \(s\)，其余每个不可满足赋值 \(a\) 作为输出点的纤维大小为 \(1\)，从而
+\[
+S_q(C_{\varphi'})=s^q+(N-s).
+\]
+由构造 \(s=2\,\#\mathrm{SAT}(\varphi)\) 为偶数，且当 \(t\ge 0\) 为偶数时有严格递增性
+\[
+(t+2)^q+(N-t-2)\;-\;\bigl(t^q+(N-t)\bigr)=(t+2)^q-t^q-2\ \ge\ 2^q-2\ >\ 0.
+\]
+因此映射 \(t\mapsto t^q+(N-t)\) 在偶数集合 \(\{0,2,\dots,N\}\) 上为单射。
+给定 \(S_q(C_{\varphi'})\) 可在该有序集合上以二分搜索在多项式时间恢复唯一的偶数根 \(s\)，进而恢复 \(\#\mathrm{SAT}(\varphi)=s/2\)。
+故计算 \(S_q(C)\) 为 \(\#\mathrm{P}\)-困难。证毕。
+\end{proof}
+
+\begin{corollary}[Watatani 指标元的坐标迹矩等于电路碰撞矩]\label{cor:circuit-watatani-moments-sharpP-complete}
+对任意固定整数 \(q\ge 2\)，令 \(C:\{0,1\}^n\to\{0,1\}^n\) 为电路，并令 \(E_C\) 为其折叠条件期望。
+在交换识别 \(B\cong \CC^{\{0,1\}^n}\) 上取坐标和迹
+\[
+\Tr_{\mathrm{out}}(f):=\sum_{y\in\{0,1\}^n} f(y).
+\]
+则有严格恒等式
+\[
+\Tr_{\mathrm{out}}\!\left(\mathrm{Ind}_{\mathrm W}(E_C)^q\right)=S_q(C),
+\]
+从而函数问题 \(C\mapsto \Tr_{\mathrm{out}}(\mathrm{Ind}_{\mathrm W}(E_C)^q)\) 为 \(\#\mathrm{P}\)-完备。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:op-algebra-fold-watatani-index-equals-multiplicity-field} 的闭式，在电路折叠口径下
+\(
+\mathrm{Ind}_{\mathrm W}(E_C)=\sum_{y} |C^{-1}(y)|\,\widetilde P_y
+\)，
+并由幂等关系 \(\widetilde P_y\widetilde P_{y'}=\delta_{yy'}\widetilde P_y\) 得
+\(
+\mathrm{Ind}_{\mathrm W}(E_C)^q=\sum_y |C^{-1}(y)|^q\,\widetilde P_y
+\)。
+由于 \(\Tr_{\mathrm{out}}(\widetilde P_y)=1\)，立得
+\(
+\Tr_{\mathrm{out}}(\mathrm{Ind}_{\mathrm W}(E_C)^q)=\sum_y |C^{-1}(y)|^q=S_q(C)
+\)。
+由定理 \ref{thm:circuit-s2-sharpP-complete} 得 \(\#\mathrm{P}\)-完备性。证毕。
+\end{proof}
+
+\begin{theorem}[电路高阶碰撞矩计算的 \texorpdfstring{\(\#\mathrm{P}\)}{\#P} 完备性]\label{thm:circuit-sk-fixedk-sharpP-complete}
+固定整数 \(k\ge 2\)。
+给定电路 \(C:\{0,1\}^n\to\{0,1\}^n\)，计算 \(S_k(C)\) 为 \(\#\mathrm{P}\)-完备的函数问题。
+\end{theorem}
+\begin{proof}
+\(\#\mathrm{P}\) 属于性：\(S_k(C)\) 计数满足谓词
+\[
+C(a_1)=\cdots=C(a_k)
+\]
+的 \(k\)-元证书 \((a_1,\dots,a_k)\in(\{0,1\}^n)^k\)，该谓词可在多项式时间验证。
+\par
+\(\#\mathrm{P}\) 困难性：从 \(\#\mathrm{SAT}\) 归约。
+给定含 \(n\) 个变量的 CNF 公式 \(\varphi(u)\)，引入一比特 \(z\) 并令 \(\varphi'(u,z):=\varphi(u)\wedge(z\vee\neg z)\)，并沿定理 \ref{thm:circuit-noninjective-np-complete} 的模板构造电路
+\[
+C_{\varphi'}(a):=
+\begin{cases}
+0^{n+1}, & \varphi'(a)=1,\\
+a, & \varphi'(a)=0.
+\end{cases}
+\]
+记 \(N:=2^{n+1}\) 与
+\(
+s:=\#\{a\in\{0,1\}^{n+1}:\ \varphi'(a)=1\}
+\)。
+则输出 \(0^{n+1}\) 的纤维大小为 \(s\)，其余每个不可满足赋值 \(a\) 作为输出点的纤维大小为 \(1\)，从而
+\[
+S_k(C_{\varphi'})=s^k+(N-s)=N+\bigl(s^k-s\bigr).
+\]
+由构造可知 \(s\) 必为偶数（每个满足 \(u\) 对应 \(z=0,1\) 两个满足赋值）。
+令 \(F_k(s):=s^k-s\)。
+对偶数 \(s\ge 0\) 有差分
+\[
+F_k(s+2)-F_k(s)=(s+2)^k-s^k-2.
+\]
+当 \(s=0\) 时，右端为 \(2^k-2>0\)；当 \(s\ge 2\) 时，由均值定理存在 \(\xi\in(s,s+2)\) 使
+\(
+(s+2)^k-s^k=2k\xi^{k-1}\ge 2k s^{k-1}\ge 4
+\)
+（因 \(k\ge 2\) 且 \(s\ge 2\)），故差分严格为正。
+因此 \(F_k\) 在偶数集合 \(\{0,2,\dots,N\}\) 上严格递增且 \(F_k(0)=0\)。
+\par
+给定数值 \(S_k(C_{\varphi'})\)，计算
+\(
+T:=S_k(C_{\varphi'})-N=F_k(s)
+\)。
+由于 \(k\) 固定，可在多项式时间内对偶数区间 \([0,N]\) 作二分搜索，唯一恢复 \(s\)，进而恢复 \(\#\mathrm{SAT}(\varphi)=s/2\)。
+故计算 \(S_k(C)\) 为 \(\#\mathrm{P}\)-困难。证毕。
+\end{proof}
+
+\begin{corollary}[电路 \texorpdfstring{$k$}{k}-碰撞投影的秩刻画与 \texorpdfstring{\(\#\mathrm{P}\)}{\#P} 完备性]\label{cor:circuit-k-collision-projector-rank-sharpP-complete}
+固定整数 \(k\ge 2\)。
+给定电路 \(C:\{0,1\}^n\to\{0,1\}^n\)，令 \(H_n:=\CC^{\{0,1\}^n}\) 并以 \(\{\lvert a\rangle\}_{a\in\{0,1\}^n}\) 为标准正交基。
+对每个 \(y\in\{0,1\}^n\) 定义正交投影
+\[
+\Pi_y:=\sum_{a:\ C(a)=y}\lvert a\rangle\langle a\rvert\ \in\ \mathcal{B}(H_n),
+\]
+并定义 \(k\)-碰撞投影算子
+\[
+\Pi_C^{(k)}:=\sum_{y\in\{0,1\}^n}\Pi_y^{\otimes k}\ \in\ \mathcal{B}(H_n^{\otimes k}).
+\]
+则 \(\Pi_C^{(k)}\) 为正交投影，且
+\[
+\rank\bigl(\Pi_C^{(k)}\bigr)=S_k(C).
+\]
+因此计算 \(\rank(\Pi_C^{(k)})\) 为 \(\#\mathrm{P}\)-完备的函数问题。
+\end{corollary}
+\begin{proof}
+由于 \(\{\Pi_y\}_{y}\) 两两正交且 \(\sum_y\Pi_y=I\)，故 \(\{\Pi_y^{\otimes k}\}_{y}\) 两两正交且均为投影，从而 \(\Pi_C^{(k)}\) 为投影。
+并且 \(\rank(\Pi_y)=|C^{-1}(y)|\)，故
+\[
+\rank(\Pi_C^{(k)})
+=\sum_{y\in\{0,1\}^n}\rank(\Pi_y^{\otimes k})
+=\sum_{y\in\{0,1\}^n}\bigl(\rank(\Pi_y)\bigr)^k
+=\sum_{y\in\{0,1\}^n}|C^{-1}(y)|^k
+=S_k(C).
+\]
+最后一断言由定理 \ref{thm:circuit-sk-fixedk-sharpP-complete} 与 \(\rank(\Pi_C^{(k)})=S_k(C)\) 立即推出。证毕。
+\end{proof}
+
+\begin{proposition}[通用可编译碰撞核将强迫 \texorpdfstring{$P=NP$}{P=NP}]\label{prop:universal-compilable-collision-kernel-implies-p-np}
+设存在一个多项式时间算法 \(\mathcal K\)，对任意电路 \(C:\{0,1\}^n\to\{0,1\}^n\) 输出三元组 \((A_C,u_C,v_C)\)，其中 \(A_C\) 为维数 \(d(n)=\mathrm{poly}(n)\) 的非负整数矩阵，\(u_C,v_C\) 为整向量；
+并且存在多项式 \(T(n)\) 使得
+\[
+S_2(C)=u_C^{\mathsf T}A_C^{\,T(n)}v_C.
+\]
+则 \(P=NP\)。
+\end{proposition}
+
+\begin{proof}
+在 \(d(n)=\mathrm{poly}(n)\) 与 \(T(n)=\mathrm{poly}(n)\) 下，数值 \(u^{\mathsf T}A^{T}v\) 可用重复平方法在多项式时间内计算（等价地，属于 \(\mathrm{NC}^1\subseteq P\) 的矩阵幂与向量乘积组合）。
+因此 \(S_2(C)\) 可在多项式时间内计算。
+由定理 \ref{thm:circuit-s2-sharpP-complete} 的 \(\#\mathrm{P}\)-完备性，得到 \(\#\mathrm{P}\subseteq P\)，从而 \(\mathrm{NP}\subseteq P\)，即 \(P=NP\)。证毕。
+\end{proof}
+
+\begin{conjecture}[NP 完全性强迫碰撞核维数超多项式增长]\label{conj:collision-kernel-dimension-obstruction-np}
+存在常数 \(\alpha>0\) 使得：对任意电路族 \(\{C_n:\{0,1\}^n\to\{0,1\}^n\}_{n\ge 1}\)，
+若判定谓词 \(D(C_n)\ge 2\) 在 Karp 归约意义下承载某个 \(\mathrm{NP}\)-完全语言，
+则对 \(S_2(C_n)\) 的任何表示
+\[
+S_2(C_n)=u_n^{\mathsf T}A_n^{\,T(n)}v_n
+\]
+（其中 \(A_n\) 为非负整数矩阵、\(u_n,v_n\) 为整向量、\(T(n)\) 为多项式）
+必有 \(\dim(A_n)\ge 2^{\alpha n}\)（或至少为超多项式下界）。
+\end{conjecture}
+
+\begin{definition}[NP 验证器折叠]\label{def:np-verifier-fold}
+设 \(L\subseteq\{0,1\}^\ast\) 为一 NP 语言。
+取标准验证器表示：存在多项式 \(p\) 与确定性多项式时间谓词
+\[
+V:\{0,1\}^n\times \{0,1\}^{p(n)}\to\{0,1\}
+\]
+满足对每个 \(x\in\{0,1\}^n\),
+\[
+x\in L\quad\Longleftrightarrow\quad \exists\,w\in\{0,1\}^{p(n)}\ \text{使}\ V(x,w)=1.
+\]
+定义验证器折叠
+\[
+\Fold_{V,n}:\Omega_{V,n}\to Y_n,
+\qquad
+\Omega_{V,n}:=\{0,1\}^n\times\{0,1\}^{p(n)},
+\qquad
+Y_n:=\{0,1\}^n\sqcup\{\bot\},
+\]
+并令
+\[
+\Fold_{V,n}(x,w):=
+\begin{cases}
+x, & V(x,w)=1,\\
+\bot, & V(x,w)=0.
+\end{cases}
+\]
+\end{definition}
+
+\begin{theorem}[NP 语言的 Watatani 指标支撑刻画]\label{thm:np-watatani-index-support-characterization}
+沿用定义 \ref{def:np-verifier-fold}。
+令 \(A_n:=\CC^{\Omega_{V,n}}\)、\(B_n:=\CC^{Y_n}\)，并令 \(E_{V,n}:A_n\to B_n\) 为纤维平均条件期望。
+则 Watatani 指标元满足显式闭式
+\[
+\mathrm{Ind}_{\mathrm W}(E_{V,n})
+=\sum_{y\in Y_n} d_{V,n}(y)\,\widetilde P_y,
+\qquad
+d_{V,n}(y):=\bigl|\Fold_{V,n}^{-1}(y)\bigr|.
+\]
+并且对任意 \(x\in\{0,1\}^n\) 有
+\[
+d_{V,n}(x)=\#\{w\in\{0,1\}^{p(n)}:\ V(x,w)=1\},
+\]
+从而
+\[
+x\in L
+\quad\Longleftrightarrow\quad
+d_{V,n}(x)>0
+\quad\Longleftrightarrow\quad
+\widetilde P_x\ \text{在}\ \mathrm{Ind}_{\mathrm W}(E_{V,n})\ \text{的支撑中。}
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:op-algebra-fold-watatani-index-equals-multiplicity-field} 的证明（其仅依赖“有限集分块 + 纤维平均”），将 \((\Omega_m,X_m,\Fold_m)\) 换为 \((\Omega_{V,n},Y_n,\Fold_{V,n})\) 立得指标闭式。
+对 \(x\in\{0,1\}^n\)，其纤维正是 \(\{(x,w):V(x,w)=1\}\)，故 \(d_{V,n}(x)\) 等于见证计数。
+最后等价链由 NP 定义 \(x\in L\iff \exists w\ V(x,w)=1\iff d_{V,n}(x)>0\) 给出。
+证毕。
+\end{proof}
+
+\begin{definition}[指数支撑判别与系数读出]\label{def:index-support-and-coeff-problems}
+在上述有限维交换包含设定下，令输入由一族可有效构造的三元组 \((A_x\supseteq B_x,\ E_x)\) 与指定极小中心投影 \(p_x\in B_x\) 给出。
+定义两个问题：
+\begin{enumerate}
+\normalfont
+  \item \(\mathrm{INDEX\text{-}SUPPORT}\)：判定 \(p_x\) 是否落在 \(\mathrm{Ind}_{\mathrm W}(E_x)\) 的支撑中（等价于其系数是否非零）。
+  \item \(\mathrm{INDEX\text{-}COEFF}\)：输出 \(\mathrm{Ind}_{\mathrm W}(E_x)\) 在 \(p_x\) 上的系数。
+\end{enumerate}
+\end{definition}
+
+\begin{corollary}[SAT 的支撑判别与 \texorpdfstring{$\#\mathrm{SAT}$}{\#SAT} 系数读出]\label{cor:index-support-sat-np-hard-index-coeff-sharpP}
+存在多项式时间可构造的映射 \(\varphi\mapsto(A_\varphi\supseteq B_\varphi,\ E_\varphi,\ \widetilde P_\varphi)\)，使得：
+\begin{enumerate}
+\normalfont
+  \item \(\varphi\) 可满足当且仅当 \(\widetilde P_\varphi\) 落在 \(\mathrm{Ind}_{\mathrm W}(E_\varphi)\) 的支撑中；
+  \item \(\mathrm{Ind}_{\mathrm W}(E_\varphi)\) 在 \(\widetilde P_\varphi\) 上的系数恰等于 \(\#\mathrm{SAT}(\varphi)\)。
+\end{enumerate}
+因此 \(\mathrm{INDEX\text{-}SUPPORT}\) 至少 NP-困难，而 \(\mathrm{INDEX\text{-}COEFF}\) 至少 \(\#P\)-困难（在保持计数的多项式时间归约口径下）。
+\end{corollary}
+\begin{proof}
+取 \(L=\mathrm{SAT}\) 并令 \(V(\varphi,w)\) 为“赋值 \(w\) 是否满足公式 \(\varphi\)”的多项式时间谓词。
+将定理 \ref{thm:np-watatani-index-support-characterization} 应用于该验证器折叠，即得到
+\(
+d(\varphi)=\#\{w:V(\varphi,w)=1\}=\#\mathrm{SAT}(\varphi)
+\)
+以及“\(d(\varphi)>0\iff\varphi\) 可满足”的支撑判别。
+证毕。
+\end{proof}
+
+\begin{theorem}[Jones 基本构造的见证块分解]\label{thm:np-jones-basic-construction-witness-blocks}
+在定理 \ref{thm:np-watatani-index-support-characterization} 的设定下，令 \(\tau_n\) 为 \(A_n\) 上的标准迹态，并令
+\[
+A_{n,1}:=\langle A_n,e_{V,n}\rangle
+\]
+为由 \(E_{V,n}\) 实现的 Jones 投影 \(e_{V,n}\) 所生成的基本构造代数。
+则存在规范 \(\ast\)-同构
+\[
+A_{n,1}\ \cong\ \bigoplus_{y\in Y_n} M_{d_{V,n}(y)}(\CC),
+\]
+其中对每个 \(x\in\{0,1\}^n\)，块维数 \(d_{V,n}(x)\) 等于 \(x\) 的见证计数。
+\end{theorem}
+\begin{proof}
+这是定理 \ref{thm:op-algebra-fold-basic-construction-pair-groupoid} 在一般折叠 \(\Fold_{V,n}\) 上的同型表述：GNS 空间按纤维 \(\Fold_{V,n}^{-1}(y)\) 作正交直和分解，Jones 投影在每条纤维上为一维平均投影，因此生成代数逐纤维为全矩阵代数，块大小为纤维基数。
+证毕。
+\end{proof}
+
+\begin{theorem}[测量--制备折叠信道的最小 Kraus 秩等于二次碰撞矩]\label{thm:fold-channel-choi-rank-equals-s2-general}
+令 \(\Fold:\Omega\to Y\) 为任意有限集合映射（允许非满射），并令 \(\mathcal{H}:=\CC^{\Omega}\)。
+对 \(y\in Y\) 定义纤维投影 \(\Pi_y:=\sum_{\Fold(\omega)=y}\ket{\omega}\bra{\omega}\)，并记 \(d(y)=|\Fold^{-1}(y)|\)（允许取 \(0\)）。
+定义测量--制备信道
+\[
+\mathcal E(\rho):=\sum_{y\in Y:\ d(y)>0}\frac{\Tr(\Pi_y\rho)}{d(y)}\,\Pi_y.
+\]
+则其 Choi 秩（等价于最小 Kraus 秩、最小 Stinespring 环境维数）满足
+\[
+\rank J(\mathcal E)=\sum_{y\in Y:\ d(y)>0}d(y)^2.
+\]
+\end{theorem}
+\begin{proof}
+与定理 \ref{thm:op-algebra-fold-quantum-channel-minimal-environment-equals-s2} 的证明完全一致：按纤维块计算 Choi 矩阵的秩并求和即可。
+证毕。
+\end{proof}
+
+\begin{corollary}[折叠信道 Kraus 秩的 NP/\texorpdfstring{$\#P$}{\#P} 困难性模板]\label{cor:fold-channel-kraus-rank-hardness-template}
+存在从 SAT 实例到折叠信道的多项式时间变换 \(\varphi\mapsto\mathcal E_\varphi\)，使得：
+\begin{enumerate}
+\normalfont
+  \item 判定 \(\rank J(\mathcal E_\varphi)=4^{n+1}\)（其中 \(n\) 为变量数）为 NP-困难；
+  \item 计算 \(\rank J(\mathcal E_\varphi)\) 为 \(\#P\)-困难，并且 \(\#\mathrm{SAT}(\varphi)\) 可由该秩在多项式时间内显式反演恢复。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+给定含 \(n\) 个变量的公式 \(\varphi\)，令
+\[
+\Omega_\varphi:=\{0,1\}^n\times\{0,1\},
+\qquad
+Y_\varphi:=\{\varphi\}\sqcup\{\bot\},
+\]
+并定义折叠
+\[
+\Fold_\varphi(w,b):=
+\begin{cases}
+\varphi, & b=0\ \text{且}\ w\models\varphi,\\
+\bot, & \text{否则}.
+\end{cases}
+\]
+记 \(s:=\#\mathrm{SAT}(\varphi)\)，则 \(d(\varphi)=s\) 且 \(d(\bot)=2^{n+1}-s\)。
+由定理 \ref{thm:fold-channel-choi-rank-equals-s2-general}，
+\[
+\rank J(\mathcal E_\varphi)=s^2+(2^{n+1}-s)^2=:S_2(\varphi).
+\]
+由于 \(0\le s\le 2^n<2^{n+1}\)，有 \(S_2(\varphi)=4^{n+1}\) 当且仅当 \(s=0\)，即 \(\varphi\) 不可满足，故得到 NP-困难性。
+\par
+并且
+\(
+S_2(\varphi)=2s^2-2^{n+2}s+4^{n+1}
+\)
+视为关于 \(s\) 的一元二次式，在区间 \(0\le s\le 2^n\) 上具有唯一反演根；因此精确计算 \(\rank J(\mathcal E_\varphi)\) 可在多项式时间恢复 \(s=\#\mathrm{SAT}(\varphi)\)，从而为 \(\#P\)-困难。
+证毕。
+\end{proof}
+
+\begin{theorem}[SAT 可归约为归一化 Choi 态最大本征值的 \texorpdfstring{$(<2)$}{<2} 因子上界近似]\label{thm:fold-choi-maxeig-approx-sat-hard}
+沿用推论 \ref{cor:fold-channel-kraus-rank-hardness-template} 的折叠 \(\Fold_\varphi:\Omega_\varphi\to Y_\varphi\) 与对应信道 \(\mathcal E_\varphi\)，并记
+\[
+N:=|\Omega_\varphi|=2^{n+1},
+\qquad
+\rho_\varphi:=\frac{1}{N}J(\mathcal E_\varphi).
+\]
+则：
+\begin{enumerate}
+  \item 若 \(\varphi\notin\mathrm{SAT}\)，则 \(\rho_\varphi=I/N^2\)，从而 \(\lambda_{\max}(\rho_\varphi)=1/N^2\)；
+  \item 若 \(\varphi\in\mathrm{SAT}\)，记 \(s:=\#\mathrm{SAT}(\varphi)\)（于是 \(1\le s\le 2^n\)），则
+  \[
+  \lambda_{\max}(\rho_\varphi)=\frac{1}{N\cdot \min\{s,\,N-s\}}\ \ge\ \frac{2}{N^2}.
+  \]
+\end{enumerate}
+因此判定 \(\varphi\in\mathrm{SAT}\) 等价于判定
+\[
+\lambda_{\max}(\rho_\varphi)\ge \frac{2}{N^2}.
+\]
+并且对任意常数 \(\varepsilon>0\)，若存在多项式时间算法对所有 \(\varphi\) 输出实数 \(\widehat\lambda(\varphi)\) 满足
+\[
+\lambda_{\max}(\rho_\varphi)\ \le\ \widehat\lambda(\varphi)\ \le\ (2-\varepsilon)\,\lambda_{\max}(\rho_\varphi),
+\]
+则 \(P=NP\)。
+\end{theorem}
+\begin{proof}
+记 \(s:=\#\mathrm{SAT}(\varphi)\)，并沿推论 \ref{cor:fold-channel-kraus-rank-hardness-template} 的构造有 \(d(\varphi)=s\)、\(d(\bot)=N-s\)。
+当 \(s=0\) 时，\(\Fold_\varphi\) 为常值映射且 \(\Pi_\bot=I\)，从而信道退化为完全去偏极化
+\[
+\mathcal E_\varphi(\rho)=\frac{\Tr(\rho)}{N}\,I.
+\]
+其 Choi 矩阵满足 \(J(\mathcal E_\varphi)=I\otimes I/N\)，故 \(\rho_\varphi=I/N^2\)，从而 \(\lambda_{\max}(\rho_\varphi)=1/N^2\)。
+
+当 \(1\le s\le N-1\) 时，两个纤维均非空，归一化 Choi 态的非零特征值为
+\[
+\frac{1}{N\,s}\ \text{与}\ \frac{1}{N\,(N-s)},
+\]
+其最大者为 \(1/(N\min\{s,N-s\})\)。又由 \(s\le 2^n=N/2\) 得 \(\min\{s,N-s\}\le N/2\)，从而 \(\lambda_{\max}(\rho_\varphi)\ge 2/N^2\)。于是阈值判定等价成立。
+
+若存在所述近似算法，则当 \(s=0\) 时有
+\(
+\widehat\lambda(\varphi)\le (2-\varepsilon)/N^2<2/N^2
+\)；
+当 \(s\ge 1\) 时有
+\(
+\widehat\lambda(\varphi)\ge \lambda_{\max}(\rho_\varphi)\ge 2/N^2
+\)。
+因此比较 \(\widehat\lambda(\varphi)\) 与阈值 \(2/N^2\) 即可在多项式时间内判定 \(\varphi\in\mathrm{SAT}\)，从而 \(P=NP\)。证毕。
+\end{proof}
+
+\begin{corollary}[最大相对熵与二阶纯度的二值谱指纹]\label{cor:fold-choi-binary-fingerprints}
+沿用定理 \ref{thm:fold-choi-maxeig-approx-sat-hard} 的记号，令 \(\sigma:=I/N^2\)。
+则：
+\begin{enumerate}
+  \item 最大相对熵满足
+  \[
+  D_{\max}(\rho_\varphi\|\sigma)=\log\bigl(N^2\lambda_{\max}(\rho_\varphi)\bigr)
+  =
+  \begin{cases}
+  0, & \varphi\notin\mathrm{SAT},\\
+  \ge \log 2, & \varphi\in\mathrm{SAT}.
+  \end{cases}
+  \]
+  因此在加性误差严格小于 \(\frac12\log 2\) 的口径下近似 \(D_{\max}(\rho_\varphi\|\sigma)\) 为 NP-困难；
+  \item 二阶纯度满足
+  \[
+  \Tr(\rho_\varphi^2)=\frac{|\mathrm{Im}(\Fold_\varphi)|}{N^2}
+  =
+  \begin{cases}
+  1/N^2, & \varphi\notin\mathrm{SAT},\\
+  2/N^2, & \varphi\in\mathrm{SAT},
+  \end{cases}
+  \]
+  因此对任意 \(\varepsilon>0\)，若存在多项式时间算法输出 \(\widehat p(\varphi)\) 满足
+  \[
+  \Tr(\rho_\varphi^2)\ \le\ \widehat p(\varphi)\ \le\ (2-\varepsilon)\Tr(\rho_\varphi^2),
+  \]
+  则 \(P=NP\)。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+\textbf{(1)} 由定义 \(D_{\max}(\rho\|\sigma)=\log\inf\{t:\rho\le t\sigma\}\) 以及 \(\sigma=I/N^2\)，得到
+\(
+D_{\max}(\rho_\varphi\|\sigma)=\log(N^2\lambda_{\max}(\rho_\varphi))
+\)。
+再由定理 \ref{thm:fold-choi-maxeig-approx-sat-hard} 的两种情形即得二值分离。
+
+\textbf{(2)} 由 Choi 谱分解，\(\rho_\varphi\) 的非零特征值为 \(1/(N d(y))\)，重数为 \(d(y)^2\)（对每个非空纤维 \(y\)）。
+因此
+\[
+\Tr(\rho_\varphi^2)=\sum_{y:\ d(y)>0} d(y)^2\Bigl(\frac{1}{N d(y)}\Bigr)^2=\frac{\#\{y:\ d(y)>0\}}{N^2}=\frac{|\mathrm{Im}(\Fold_\varphi)|}{N^2}.
+\]
+当 \(\varphi\notin\mathrm{SAT}\) 时 \(d(\varphi)=0\) 且 \(\mathrm{Im}(\Fold_\varphi)=\{\bot\}\)；
+当 \(\varphi\in\mathrm{SAT}\) 时 \(d(\varphi)=s>0\) 且 \(\mathrm{Im}(\Fold_\varphi)=\{\varphi,\bot\}\)，从而得到二值结论。
+最后一条近似障碍的推出与定理 \ref{thm:fold-choi-maxeig-approx-sat-hard} 同型：以阈值 \(2/N^2\) 即可判定可满足性。证毕。
+\end{proof}
+
+\begin{conjecture}[折叠谱判定的低阶可计算性与 \texorpdfstring{$P$}{P} vs \texorpdfstring{$NP$}{NP} 的结构性对撞]\label{conj:fold-spectral-low-order-pnp}
+设 \(\mathcal F\) 为一族可在多项式时间内给出折叠描述的测量--制备信道，包含由公式 \(\varphi\mapsto \mathcal E_\varphi\) 与电路 \(C\mapsto \mathcal E_C\) 生成的子族。
+则预期存在常数 \(\delta\in(0,1)\) 使得：对任意 \(\varepsilon>0\)，若存在多项式时间算法能够对所有 \(\mathcal E\in\mathcal F\) 的归一化 Choi 态 \(\rho_{\mathcal E}\) 在乘法误差 \((2-\varepsilon)\) 下上界近似
+\(
+\|\rho_{\mathcal E}\|_\infty
+\)
+（等价地，在加性误差小于 \(\delta\) 下近似 \(D_{\max}(\rho_{\mathcal E}\|I/N^2)\)），则 \(P=NP\)。
+反之，若 \(P\neq NP\)，则对该类折叠信道的上述低阶谱量的任何此类近似在最坏情形上必需超多项式时间。
+\end{conjecture}
+
+\begin{definition}[对数可寻址见证]\label{def:log-addressable-witness}
+设 \(L\in \mathrm{NP}\) 由验证器 \(V(x,w)\) 给出。
+称 \(V\) 具有\textbf{对数可寻址见证}性质，若存在常数 \(c\) 与两族多项式时间算法 \((\mathrm{enc},\mathrm{dec})\) 使对所有 \(x\in\{0,1\}^n\)：
+\begin{enumerate}
+\normalfont
+  \item 对任意满足 \(V(x,w)=1\) 的 \(w\)，\(\mathrm{enc}(x,w)\in\{0,1\}^{\le c\log n}\) 定义且映射 \(w\mapsto \mathrm{enc}(x,w)\) 在可接受见证集上单射；
+  \item 对任意满足 \(V(x,w)=1\) 的 \(w\)，有 \(\mathrm{dec}(x,\mathrm{enc}(x,w))=w\)。
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[对数可寻址见证在 NP-完全层面强迫 \texorpdfstring{$P=NP$}{P=NP}]\label{thm:log-addressable-witness-implies-P-equals-NP}
+若某个 NP-完全语言 \(L\) 存在满足定义 \ref{def:log-addressable-witness} 的验证器，则 \(L\in P\)，从而 \(P=NP\)。
+\end{theorem}
+\begin{proof}
+给定输入 \(x\in\{0,1\}^n\)，枚举所有长度不超过 \(c\log n\) 的编码串 \(r\)（数目至多 \(n^c\)）。
+对每个 \(r\) 计算 \(w_r:=\mathrm{dec}(x,r)\) 并检验 \(V(x,w_r)\)。
+若存在 \(r\) 使 \(V(x,w_r)=1\) 则接受，否则拒绝。
+由单射可寻址性，若 \(x\in L\) 则必存在某个见证 \(w\) 的编码 \(r=\mathrm{enc}(x,w)\) 被枚举到并通过验证；若 \(x\notin L\) 则无 \(r\) 可通过。
+总运行时间为多项式，故 \(L\in P\)。证毕。
+\end{proof}
+
+\begin{definition}[\texorpdfstring{$\mathsf{FOLD\#}$}{FOLD\#}：多项式时间可计算折叠族的纤维计数类]\label{def:FOLDsharp}
+称 \(\{\Fold_n\}_{n\ge 1}\) 为\textbf{多项式时间可计算折叠族}，若存在多项式 \(m(n)\)、一族有限集合 \(\Omega_n\subseteq\{0,1\}^{m(n)}\) 与一族可多项式编码的有限集合 \(Y_n\)，并且给定 \((\omega,n)\) 可在 \(\mathrm{poly}(n)\) 时间内计算 \(\Fold_n(\omega)\in Y_n\)。
+定义函数类
+\[
+\mathsf{FOLD\#}
+:=\left\{f:\{0,1\}^\ast\to\NN\ \middle|\ \exists\ \text{多项式时间可计算折叠族}\ \Fold_n:\Omega_n\to Y_n,\ \forall x\in\{0,1\}^n,\ f(x)=|\Fold_n^{-1}(x)|\right\}.
+\]
+\end{definition}
+
+\begin{theorem}[\texorpdfstring{$\mathsf{FOLD\#}=\#P$}{FOLD\# = \#P}]\label{thm:FOLDsharp-equals-sharpP}
+\(\mathsf{FOLD\#}=\#P\)。
+更精确地：对任意多项式时间可计算折叠族 \(\Fold_n\)，函数 \(x\mapsto |\Fold_n^{-1}(x)|\) 属于 \(\#P\)；反之，任意 \(\#P\) 函数都可实现为某个验证器折叠 \(\Fold_{V,n}\) 的纤维多重度函数。
+\end{theorem}
+\begin{proof}
+\textbf{包含 \(\mathsf{FOLD\#}\subseteq \#P\).}
+给定折叠族 \(\Fold_n\)，关系
+\(
+R(x,\omega)\iff (\Fold_n(\omega)=x)
+\)
+可在多项式时间判定，且 \(\omega\) 的长度为 \(m(n)=\mathrm{poly}(n)\)。
+因此 \(f(x)=\#\{\omega:\ R(x,\omega)\}\) 为 \(\#P\) 函数。
+\par
+\textbf{包含 \(\#P\subseteq \mathsf{FOLD\#}\).}
+任取 \(\#P\) 函数 \(g(x)=\#\{w:\ V(x,w)=1\}\)（其中 \(V\) 为多项式时间谓词）。
+构造验证器折叠 \(\Fold_{V,n}\) 如定义 \ref{def:np-verifier-fold}，则对每个 \(x\) 有 \(d_{V,n}(x)=g(x)\)。
+于是 \(g\in\mathsf{FOLD\#}\)。
+证毕。
+\end{proof}
+

@@ -1,0 +1,496 @@
+\paragraph{尺度--移位 Cayley 紧化下的深度函数、Jensen 多半径融合与分位收缩递推}
+本段将共动缺陷账本推广到尺度--移位图表，并给出三类可审计结构：深度函数的最优放大闭式、Jensen 缺陷在对数半径坐标上的凸融合、以及计数主项--误差分解下的收缩型分位递推模板。
+
+\begin{theorem}[尺度--移位 Cayley 紧化的深度闭式与最优尺度]\label{thm:xi-scaled-shifted-cayley-depth-optimal-scale}
+定义标准 Cayley 变换
+\[
+\mathcal C(z):=\frac{z-\mathrm{i}}{z+\mathrm{i}},
+\]
+并对任意 \(a>0\)、\(x_0\in\RR\) 定义尺度--移位紧化
+\[
+\mathcal C_{a,x_0}(z):=\mathcal C\!\left(\frac{z-x_0}{a}\right)
+=\frac{z-x_0-\mathrm{i}a}{z-x_0+\mathrm{i}a}.
+\]
+设 \(\rho=\beta+\mathrm{i}\gamma\) 为 \(\Xi_\zeta\) 的离临界线零点，且
+\[
+0<\beta<\frac12,\qquad
+\delta:=\frac12-\beta>0,\qquad
+t_\rho:=\gamma+\mathrm{i}\delta\in\mathbb H.
+\]
+令
+\[
+w_{\rho,a,x_0}:=\mathcal C_{a,x_0}(t_\rho)\in\mathbb D,\qquad
+h_{a,x_0}(\rho):=1-|w_{\rho,a,x_0}|^2.
+\]
+则有
+\begin{align}
+|w_{\rho,a,x_0}|^2
+&=\frac{(\gamma-x_0)^2+(\delta-a)^2}{(\gamma-x_0)^2+(\delta+a)^2},\label{eq:xi-scaled-shifted-cayley-depth-modulus}\\
+h_{a,x_0}(\rho)
+&=\frac{4a\delta}{(\gamma-x_0)^2+(\delta+a)^2}.\label{eq:xi-scaled-shifted-cayley-depth}
+\end{align}
+并且对固定 \((\rho,x_0)\)，函数 \(a\mapsto h_{a,x_0}(\rho)\) 在 \(a>0\) 上有唯一极大点
+\begin{equation}\label{eq:xi-scaled-shifted-cayley-optimal-a}
+a^\ast(\rho;x_0)=\sqrt{(\gamma-x_0)^2+\delta^2},
+\end{equation}
+对应最大深度
+\begin{equation}\label{eq:xi-scaled-shifted-cayley-optimal-depth}
+h^\ast(\rho;x_0)
+=\frac{2\delta}{\delta+\sqrt{(\gamma-x_0)^2+\delta^2}}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+由定义
+\[
+w_{\rho,a,x_0}
+=\frac{(\gamma-x_0)+\mathrm{i}(\delta-a)}{(\gamma-x_0)+\mathrm{i}(\delta+a)},
+\]
+直接得到 \eqref{eq:xi-scaled-shifted-cayley-depth-modulus}，进而得到
+\eqref{eq:xi-scaled-shifted-cayley-depth}。
+记
+\[
+h(a):=\frac{4a\delta}{(\gamma-x_0)^2+(\delta+a)^2}.
+\]
+求导得
+\[
+h'(a)=\frac{4\delta\bigl((\gamma-x_0)^2+\delta^2-a^2\bigr)}
+{\bigl((\gamma-x_0)^2+(\delta+a)^2\bigr)^2},
+\]
+故唯一临界点即 \eqref{eq:xi-scaled-shifted-cayley-optimal-a}，且为极大点。代回即得
+\eqref{eq:xi-scaled-shifted-cayley-optimal-depth}。证毕。
+\end{proof}
+
+\begin{theorem}[Jensen 排斥半径导出的尺度--移位偏移上界]\label{thm:xi-scaled-shifted-jensen-implies-delta-bound}
+定义
+\[
+s_{a,x_0}(w):=\frac12+\mathrm{i}\bigl(x_0+a\,\mathcal C^{-1}(w)\bigr),
+\qquad
+F_{\zeta,a,x_0}(w):=\Xi_\zeta\!\bigl(s_{a,x_0}(w)\bigr),
+\]
+并设其 Jensen 缺陷为
+\[
+D_{\zeta,a,x_0}(\varrho)
+:=\frac1{2\pi}\int_0^{2\pi}\log\!\bigl|F_{\zeta,a,x_0}(\varrho e^{\mathrm{i}\theta})\bigr|\,\dd\theta
+-\log\!\bigl|F_{\zeta,a,x_0}(0)\bigr|,
+\quad 0<\varrho<1.
+\]
+令排斥半径
+\[
+r_{\zeta,a,x_0}^\ast(\varrho):=\varrho e^{-D_{\zeta,a,x_0}(\varrho)}.
+\]
+则 \(F_{\zeta,a,x_0}\) 在 \(|w|<r_{\zeta,a,x_0}^\ast(\varrho)\) 内无零点。特别地，若
+\[
+D_{\zeta,a,x_0}(\varrho)\le \varepsilon,\qquad
+r:=\varrho e^{-\varepsilon},
+\]
+则任意离线零点 \(\rho=\beta+\mathrm{i}\gamma\)（\(\delta=\tfrac12-\beta>0\)）的像点 \(w_{\rho,a,x_0}\) 必满足 \(|w_{\rho,a,x_0}|\ge r\)。
+记
+\[
+t:=|\gamma-x_0|,
+\]
+则当
+\[
+t\le \frac{2ar}{1-r^2}
+\]
+时，有显式上界
+\begin{equation}\label{eq:xi-scaled-shifted-delta-bound-general}
+\delta\le
+\frac{a(1+r^2)-\sqrt{\,4a^2r^2-t^2(1-r^2)^2\,}}{1-r^2}.
+\end{equation}
+在共动情形 \(x_0=\gamma\)（即 \(t=0\)）下，\eqref{eq:xi-scaled-shifted-delta-bound-general} 退化为
+\begin{equation}\label{eq:xi-scaled-shifted-delta-bound-comoving}
+\delta\le a\,\frac{1-r}{1+r}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-scaled-shifted-cayley-depth-optimal-scale} 的
+\eqref{eq:xi-scaled-shifted-cayley-depth-modulus}，
+\[
+|w_{\rho,a,x_0}|^2
+=\frac{t^2+(\delta-a)^2}{t^2+(\delta+a)^2}.
+\]
+条件 \(|w_{\rho,a,x_0}|\ge r\) 等价于
+\[
+t^2+(\delta-a)^2\ge r^2\bigl(t^2+(\delta+a)^2\bigr),
+\]
+即
+\[
+\delta^2-2a\frac{1+r^2}{1-r^2}\,\delta+(t^2+a^2)\ge 0.
+\]
+判别式为
+\[
+\Delta_\delta
+=\frac{4a^2r^2-t^2(1-r^2)^2}{(1-r^2)^2},
+\]
+故当 \(t\le 2ar/(1-r^2)\) 时可开方。与 \(\delta>0\) 及 \(\beta\in(0,\tfrac12)\) 相容的有效分支给出
+\eqref{eq:xi-scaled-shifted-delta-bound-general}。令 \(t=0\) 即得
+\eqref{eq:xi-scaled-shifted-delta-bound-comoving}。证毕。
+\end{proof}
+
+\begin{theorem}[给定偏移阈值下的高度覆盖窗与尺度最优选择]\label{thm:xi-jensen-window-optimal-scale}
+在定理 \ref{thm:xi-scaled-shifted-jensen-implies-delta-bound} 的设定下，固定 \(0<r<1\) 与偏移阈值 \(\delta_0>0\)，并记
+\[
+A(r):=\frac{1+r^2}{1-r^2}.
+\]
+对任意 \(a>0\) 定义高度覆盖半宽 \(U(a)\ge 0\) 为
+\begin{equation}\label{eq:xi-jensen-window-Ua}
+U(a)^2:=\max\bigl\{0,\ 2aA(r)\delta_0-a^2-\delta_0^2\bigr\}.
+\end{equation}
+则在证书条件 \(|w_{\rho,a,x_0}|\ge r\) 下，对任意离线零点 \(\rho=\beta+\mathrm{i}\gamma\)（\(\delta=\tfrac12-\beta>0\)）均有蕴含
+\begin{equation}\label{eq:xi-jensen-window-implication}
+|\gamma-x_0|\le U(a)\quad\Longrightarrow\quad \delta\le \delta_0.
+\end{equation}
+并且当右端为正时，\(U(a)\) 关于尺度参数 \(a\) 的最大化具有解析解
+\begin{equation}\label{eq:xi-jensen-window-optimal-scale}
+a_{\mathrm{opt}}=\delta_0A(r),
+\qquad
+U_{\max}:=\max_{a>0}U(a)=\delta_0\sqrt{A(r)^2-1}
+=\delta_0\frac{2r}{1-r^2}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+令 \(t:=|\gamma-x_0|\)。由定理 \ref{thm:xi-scaled-shifted-jensen-implies-delta-bound} 的推导可知
+\(|w_{\rho,a,x_0}|\ge r\) 等价地推出二次不等式
+\[
+\delta^2-2aA(r)\delta+(t^2+a^2)\ge 0,
+\]
+并在 \(\delta>0\)、\(\beta\in(0,\tfrac12)\) 的有效分支上强制
+\begin{equation}\label{eq:xi-jensen-window-delta-upper-branch}
+\delta\le aA(r)-\sqrt{a^2\bigl(A(r)^2-1\bigr)-t^2}.
+\end{equation}
+若 \(t^2\le 2aA(r)\delta_0-a^2-\delta_0^2\)，则
+\[
+a^2\bigl(A(r)^2-1\bigr)-t^2\ge (aA(r)-\delta_0)^2,
+\]
+从而由 \eqref{eq:xi-jensen-window-delta-upper-branch} 得 \(\delta\le \delta_0\)，即
+\eqref{eq:xi-jensen-window-implication}。
+
+将 \eqref{eq:xi-jensen-window-Ua} 的非零分支视作关于 \(a\) 的凹二次式，
+\[
+U(a)^2=-(a-\delta_0A(r))^2+\delta_0^2\bigl(A(r)^2-1\bigr),
+\]
+故极大点为 \(a_{\mathrm{opt}}=\delta_0A(r)\)，最大值给出 \eqref{eq:xi-jensen-window-optimal-scale}。证毕。
+\end{proof}
+
+\begin{corollary}[有限高度区间的最小采样复杂度与等距网格]\label{cor:xi-height-interval-minimal-sampling}
+在定理 \ref{thm:xi-jensen-window-optimal-scale} 的设定下，固定偏移阈值 \(\delta_0>0\) 与高度截断 \(T>0\)，并取 \(\varrho\in(0,1)\)、\(\varepsilon\ge 0\) 及 \(r=\varrho e^{-\varepsilon}\)，在每个中心 \(x_0\) 处使用最优尺度 \(a_{\mathrm{opt}}=\delta_0A(r)\)。
+若存在中心集 \(\{x_k\}_{k=1}^N\subset[-T,T]\)，使对每个 \(k\) 均有 Jensen 证书
+\[
+D_{\zeta,a_{\mathrm{opt}},x_k}(\varrho)\le \varepsilon,
+\]
+且覆盖条件
+\[
+[-T,T]\subset \bigcup_{k=1}^N [x_k-U_{\max},\,x_k+U_{\max}],
+\]
+则在 \([-T,T]\) 内不存在满足 \(\delta>\delta_0\) 的离线零点。
+
+此外，覆盖数的最小可能值满足
+\begin{equation}\label{eq:xi-height-interval-Nmin}
+N_{\min}=\Bigl\lceil \frac{T}{U_{\max}}\Bigr\rceil
+=\Bigl\lceil \frac{T(1-r^2)}{2\delta_0 r}\Bigr\rceil,
+\end{equation}
+并可由等距网格 \(x_k=-T+U_{\max}+2(k-1)U_{\max}\) 达到。
+\end{corollary}
+\begin{proof}
+对任意 \(\gamma\in[-T,T]\)，覆盖条件保证存在 \(k\) 使 \(|\gamma-x_k|\le U_{\max}\)。
+在中心 \(x_k\) 的证书条件下，定理 \ref{thm:xi-jensen-window-optimal-scale} 给出
+\(\delta\le \delta_0\)。
+因此 \([-T,T]\) 内无 \(\delta>\delta_0\) 的离线零点。
+
+反之，每个中心最多覆盖长度 \(2U_{\max}\) 的区间，故任何覆盖 \([-T,T]\) 的方案必满足
+\(N\cdot 2U_{\max}\ge 2T\)，即 \(N\ge \lceil T/U_{\max}\rceil\)，从而得到
+\eqref{eq:xi-height-interval-Nmin}。等距构造达到该下界。证毕。
+\end{proof}
+
+\begin{corollary}[固定缺陷预算下的极限半径与复杂度闭式]\label{cor:xi-eps-fixed-radius-limit}
+在定理 \ref{thm:xi-scaled-shifted-jensen-implies-delta-bound} 的证书形式
+\(
+D_{\zeta,a,x_0}(\varrho)\le \varepsilon
+\)
+下，排斥半径为 \(r=\varrho e^{-\varepsilon}\)。
+若在固定 \(\varepsilon>0\) 下令 \(\varrho\uparrow 1\)，则 \(r\uparrow e^{-\varepsilon}\)，并且
+\begin{equation}\label{eq:xi-eps-fixed-Umax-limit}
+U_{\max}\uparrow
+\delta_0\frac{2e^{-\varepsilon}}{1-e^{-2\varepsilon}}
+=\delta_0\frac{1}{\sinh\varepsilon}.
+\end{equation}
+相应地，\eqref{eq:xi-height-interval-Nmin} 给出的全局覆盖下界满足渐近
+\begin{equation}\label{eq:xi-eps-fixed-Nmin-asymptotic}
+N_{\min}\sim \frac{T\sinh\varepsilon}{\delta_0}\qquad (\varrho\uparrow 1).
+\end{equation}
+\end{corollary}
+\begin{proof}
+函数 \(r\mapsto \frac{2r}{1-r^2}\) 在 \((0,1)\) 上严格递增，故在固定 \(\varepsilon\) 下
+\(\varrho\uparrow 1\) 给出 \(r=\varrho e^{-\varepsilon}\uparrow e^{-\varepsilon}\)，代入
+\eqref{eq:xi-jensen-window-optimal-scale} 即得 \eqref{eq:xi-eps-fixed-Umax-limit}。
+再代入 \eqref{eq:xi-height-interval-Nmin} 即得 \eqref{eq:xi-eps-fixed-Nmin-asymptotic}。证毕。
+\end{proof}
+
+\begin{proposition}[Jensen 缺陷在对数半径变量上的凸性与多半径融合]\label{prop:xi-jensen-logradius-convex-fusion}
+设 \(F\) 在 \(\mathbb D\) 内解析且 \(F(0)\neq 0\)。定义
+\[
+D_F(\varrho):=\frac1{2\pi}\int_0^{2\pi}\log|F(\varrho e^{\mathrm{i}\theta})|\,\dd\theta-\log|F(0)|
+=\sum_{|a_k|<\varrho}\log\frac{\varrho}{|a_k|}.
+\]
+则对几乎处处 \(\varrho\in(0,1)\) 有
+\begin{equation}\label{eq:xi-jensen-logradius-derivative-counting}
+\frac{\dd}{\dd(\log\varrho)}D_F(\varrho)=N_F(\varrho),
+\end{equation}
+其中 \(N_F(\varrho)\) 为 \(|w|<\varrho\) 内零点计数。令
+\[
+u:=\log\varrho,\qquad
+\mathcal D_F(u):=D_F(e^u),\quad u\in(-\infty,0),
+\]
+则 \(\mathcal D_F\) 为凸函数（分段线性且右导数单调不减）。
+
+进一步，给定网格
+\[
+0<\varrho_1<\cdots<\varrho_M<1,\qquad
+D_F(\varrho_j)\le \varepsilon_j,
+\]
+对任意 \(\varrho\in[\varrho_i,\varrho_{i+1}]\)，令
+\[
+\lambda:=\frac{\log\varrho-\log\varrho_i}{\log\varrho_{i+1}-\log\varrho_i}\in[0,1],
+\]
+则有可计算上界
+\begin{equation}\label{eq:xi-jensen-logradius-fusion-bound}
+D_F(\varrho)\le (1-\lambda)\varepsilon_i+\lambda\varepsilon_{i+1}.
+\end{equation}
+从而排斥半径
+\[
+r_F^\ast(\varrho):=\varrho e^{-D_F(\varrho)}
+\]
+满足
+\begin{equation}\label{eq:xi-jensen-logradius-fusion-repulsion}
+r_F^\ast(\varrho)\ge
+\varrho\exp\!\bigl(-(1-\lambda)\varepsilon_i-\lambda\varepsilon_{i+1}\bigr).
+\end{equation}
+\end{proposition}
+\begin{proof}
+Jensen 求和式逐项求导可得
+\[
+\frac{\dd}{\dd(\log\varrho)}\log\frac{\varrho}{|a_k|}
+=\mathbf 1_{\{|a_k|<\varrho\}},
+\]
+求和即得 \eqref{eq:xi-jensen-logradius-derivative-counting}。由于右导数 \(N_F(e^u)\) 单调不减，\(\mathcal D_F\) 凸。
+对凸函数应用线性插值上界即得 \eqref{eq:xi-jensen-logradius-fusion-bound}；再由定义
+\(
+r_F^\ast(\varrho)=\varrho e^{-D_F(\varrho)}
+\)
+直接得到 \eqref{eq:xi-jensen-logradius-fusion-repulsion}。证毕。
+\end{proof}
+
+\begin{theorem}[单零点缺陷贡献的中心平移平均闭式与极限律]\label{thm:xi-singlezero-defect-translation-average}
+固定 \(a>0\) 与 \(0<r<1\)。对单个离线零点参数 \((\gamma,\delta)\)（\(\delta>0\)）定义其在中心 \(x_0\) 处的单零点缺陷贡献
+\begin{equation}\label{eq:xi-singlezero-defect-pointwise}
+\mathfrak d_{r,a}(x_0;\gamma,\delta)
+:=\log_+\frac{r}{|w_{\rho,a,x_0}|},
+\qquad
+\log_+(u):=\max\{\log u,0\}.
+\end{equation}
+记
+\begin{equation}\label{eq:xi-singlezero-defect-B}
+B:=r^2(\delta+a)^2-(\delta-a)^2.
+\end{equation}
+若 \(B\le 0\)，则 \(\mathfrak d_{r,a}(\cdot;\gamma,\delta)\equiv 0\)。若 \(B>0\)，定义
+\begin{equation}\label{eq:xi-singlezero-defect-L}
+L:=\sqrt{\frac{B}{1-r^2}}>0,
+\end{equation}
+则中心平移平均具有闭式表达
+\begin{equation}\label{eq:xi-singlezero-defect-translation-average}
+\int_{-\infty}^{\infty}\mathfrak d_{r,a}(x_0;\gamma,\delta)\,\dd x_0
+=
+2(\delta+a)\arctan\!\frac{L}{\delta+a}
+-2(\delta-a)\arctan\!\frac{L}{\delta-a}.
+\end{equation}
+并约定当 \(\delta=a\) 时，上式第二项取其连续延拓值 \(0\)。
+并且当 \(r\uparrow 1\) 时有极限律
+\begin{equation}\label{eq:xi-singlezero-defect-translation-average-limit}
+\lim_{r\uparrow 1}\int_{-\infty}^{\infty}\mathfrak d_{r,a}(x_0;\gamma,\delta)\,\dd x_0
+=2\pi\,\min\{\delta,a\}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+由平移不变性令 \(t:=\gamma-x_0\)，则 \(\dd x_0=-\dd t\)，且
+\[
+|w_{\rho,a,x_0}|^2
+=\frac{t^2+(\delta-a)^2}{t^2+(\delta+a)^2}.
+\]
+当且仅当 \(|w_{\rho,a,x_0}|<r\) 时有 \(\mathfrak d_{r,a}(x_0;\gamma,\delta)>0\)，即
+\[
+\frac{t^2+(\delta-a)^2}{t^2+(\delta+a)^2}<r^2
+\quad\Longleftrightarrow\quad
+(1-r^2)t^2<r^2(\delta+a)^2-(\delta-a)^2.
+\]
+因此当 \(B\le 0\) 时无解，\(\mathfrak d_{r,a}\equiv 0\)；当 \(B>0\) 时等价于 \(|t|<L\)，其中 \(L\) 由
+\eqref{eq:xi-singlezero-defect-L} 给出。于是
+\begin{align*}
+\int_{-\infty}^{\infty}\mathfrak d_{r,a}(x_0;\gamma,\delta)\,\dd x_0
+&=\int_{-L}^{L}\left(\log r-\frac12\log\bigl(t^2+(\delta-a)^2\bigr)+\frac12\log\bigl(t^2+(\delta+a)^2\bigr)\right)\dd t.
+\end{align*}
+利用初等积分恒等式（\(c\neq 0\)）
+\[
+\int_0^L\log(t^2+c^2)\,\dd t
+=L\log(L^2+c^2)-2L+2c\arctan(L/c),
+\]
+并注意到端点条件 \(|w_{\rho,a,x_0}|=r\) 在 \(|t|=L\) 处等价于
+\[
+r^2=\frac{L^2+(\delta-a)^2}{L^2+(\delta+a)^2}
+\quad\Longrightarrow\quad
+\log(L^2+(\delta+a)^2)-\log(L^2+(\delta-a)^2)=-2\log r,
+\]
+从而上述积分中所有线性 \(\log r\) 项完全抵消，仅余反正切项，化简得到
+\eqref{eq:xi-singlezero-defect-translation-average}。
+
+当 \(r\uparrow 1\) 且 \(B>0\) 时，由 \eqref{eq:xi-singlezero-defect-L} 得 \(L\to+\infty\)。
+若 \(\delta<a\)，则 \(\arctan(L/(\delta+a))\to\pi/2\) 且 \(\arctan(L/(\delta-a))\to-\pi/2\)，极限为 \(2\pi\delta\)；
+若 \(\delta>a\)，则两反正切同趋 \(\pi/2\)，极限为 \(2\pi a\)。
+两者统一为 \eqref{eq:xi-singlezero-defect-translation-average-limit}。证毕。
+\end{proof}
+
+\begin{theorem}[单零点缺陷模型下的对数网格极值最优性]\label{thm:xi-singlezero-jensen-loggrid-minimax}
+考虑单零点模型
+\[
+D_{r_0}(\varrho):=\bigl(\log(\varrho/r_0)\bigr)_+,\qquad r_0\in[\varrho_{\min},1),\ \varrho_{\min}\in(0,1).
+\]
+给定采样半径
+\[
+\varrho_{\min}=\varrho_0<\varrho_1<\cdots<\varrho_M<\varrho_{M+1}=1,
+\]
+观测噪声满足
+\[
+\bigl|\widehat D(\varrho_j)-D_{r_0}(\varrho_j)\bigr|\le \varepsilon,\qquad j=1,\dots,M.
+\]
+在“括区 + 指数反解”信息结构下（即先用采样网格定位括区，再由激活节点反解 \(r_0\)），其最坏乘法不确定度受
+\[
+\mathfrak R_{\max}\asymp e^{2\varepsilon}\,
+\max_{0\le j\le M}\frac{\varrho_{j+1}}{\varrho_j}
+\]
+控制；并且最小化
+\(
+\max_j(\varrho_{j+1}/\varrho_j)
+\)
+的最优设计是对数等距网格
+\begin{equation}\label{eq:xi-jensen-loggrid-optimal}
+\varrho_j=\varrho_{\min}^{\,1-\frac{j}{M+1}},\qquad j=1,\dots,M,
+\end{equation}
+达到
+\begin{equation}\label{eq:xi-jensen-loggrid-optimal-ratio}
+\max_{0\le j\le M}\frac{\varrho_{j+1}}{\varrho_j}
+=\varrho_{\min}^{-\frac{1}{M+1}}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+在固定括区 \([\varrho_j,\varrho_{j+1})\) 内，模型关系
+\(
+D_{r_0}(\varrho_{j+1})=\log(\varrho_{j+1}/r_0)
+\)
+给出指数反解；加性误差 \(\pm\varepsilon\) 直接转化为 \(r_0\) 的乘法因子 \(e^{\pm\varepsilon}\)，从而区间内不确定度贡献为 \(e^{2\varepsilon}\)。
+跨括区的不确定度由网格比值上界
+\(
+\max_j(\varrho_{j+1}/\varrho_j)
+\)
+控制，得到整体量级表达。
+
+最后利用
+\[
+\prod_{j=0}^{M}\frac{\varrho_{j+1}}{\varrho_j}
+=\frac{1}{\varrho_{\min}},
+\]
+可知
+\[
+\max_{0\le j\le M}\frac{\varrho_{j+1}}{\varrho_j}
+\ge \left(\frac{1}{\varrho_{\min}}\right)^{\frac{1}{M+1}},
+\]
+等号当且仅当所有比值相等，即 \eqref{eq:xi-jensen-loggrid-optimal}。证毕。
+\end{proof}
+
+\begin{theorem}[主项尺度收缩下的分位递推与扰动稳定性]\label{thm:xi-mainscale-contraction-quantile-recursion}
+设 \(I=[T_1,T_2]\subset\RR\)，\(M:I\to\RR\) 为严格递增 \(C^1\) 函数，\(E:I\to\RR\) 连续，定义
+\[
+F(t):=M(t)+E(t).
+\]
+给定整数 \(n\) 并假设 \(T_n(I)\subset I\)，其中
+\[
+T_n(t):=M^{-1}\!\bigl(n-E(t)\bigr).
+\]
+若存在 \(L\in[0,1)\) 使
+\[
+|E(t)-E(u)|\le L\,|M(t)-M(u)|,\qquad \forall\,t,u\in I,
+\]
+则：
+\begin{enumerate}
+\item \(T_n\) 在度量
+\(
+d_M(t,u):=|M(t)-M(u)|
+\)
+下为收缩映射，收缩常数为 \(L\)；
+\item \(T_n\) 在 \(I\) 上存在唯一不动点 \(t_n^\ast\)，且任意初值迭代 \(t_{k+1}=T_n(t_k)\) 以 \(L^k\) 速率收敛到 \(t_n^\ast\)；
+\item 若 \(\widetilde E:I\to\RR\) 满足
+\[
+\sup_{t\in I}|E(t)-\widetilde E(t)|\le \eta,\qquad
+|\widetilde E(t)-\widetilde E(u)|\le \widetilde L\,|M(t)-M(u)|,\ \widetilde L<1,
+\]
+并令
+\(
+\widetilde T_n(t):=M^{-1}(n-\widetilde E(t))
+\)
+具有不动点 \(\widetilde t_n^\ast\)，则
+\begin{align}
+|M(\widetilde t_n^\ast)-M(t_n^\ast)|
+&\le \frac{\eta}{1-\widetilde L},\label{eq:xi-quantile-recursion-M-error}\\
+|\widetilde t_n^\ast-t_n^\ast|
+&\le \frac{\eta}{(1-\widetilde L)\,\inf_{t\in I}M'(t)}.\label{eq:xi-quantile-recursion-t-error}
+\end{align}
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对任意 \(t,u\in I\)，
+\[
+d_M(T_n(t),T_n(u))
+=|M(T_n(t))-M(T_n(u))|
+=|E(t)-E(u)|
+\le L\,d_M(t,u),
+\]
+故为收缩映射，(1)--(2) 由 Banach 不动点定理成立。
+
+对扰动项，利用不动点方程
+\(
+M(t_n^\ast)=n-E(t_n^\ast)
+\) 与
+\(
+M(\widetilde t_n^\ast)=n-\widetilde E(\widetilde t_n^\ast)
+\)：
+\[
+|M(\widetilde t_n^\ast)-M(t_n^\ast)|
+=|E(t_n^\ast)-\widetilde E(\widetilde t_n^\ast)|
+\]
+\[
+\le |E(t_n^\ast)-\widetilde E(t_n^\ast)|
++|\widetilde E(t_n^\ast)-\widetilde E(\widetilde t_n^\ast)|
+\le \eta+\widetilde L\,|M(t_n^\ast)-M(\widetilde t_n^\ast)|.
+\]
+移项得 \eqref{eq:xi-quantile-recursion-M-error}，再由均值定理即得
+\eqref{eq:xi-quantile-recursion-t-error}。证毕。
+\end{proof}
+
+\begin{conjecture}[主项尺度一致收缩与高处零点动力学]\label{conj:xi-rvm-mainscale-global-contraction}
+令
+\[
+M(t):=\frac{t}{2\pi}\log\frac{t}{2\pi}-\frac{t}{2\pi}+\frac78
+\]
+为 Riemann--von Mangoldt 计数主项，并取与零点计数方程对齐的一条连续误差代表 \(E(t)\)。
+猜想存在常数 \(L_\infty<1\) 与 \(T_0\) 使对全部 \(t,u\ge T_0\) 有
+\[
+|E(t)-E(u)|\le L_\infty\,|M(t)-M(u)|.
+\]
+若该猜想成立，则对充分大的指标 \(n\)，定理
+\ref{thm:xi-mainscale-contraction-quantile-recursion}
+给出的分位递推算子在相应区间上一致收缩，且可由
+\(
+\eta/(1-L_\infty)
+\)
+给出统一扰动预算，从而形成“主项尺度下的高处零点收缩动力学”证书模板。
+\end{conjecture}
+
+\endinput

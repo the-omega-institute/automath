@@ -1,0 +1,508 @@
+\subsubsection{有限状态的稀疏刚性与单位圆解析障碍}\label{subsubsec:zeta-syntax-finite-state-sparsity-rigidity}
+本段给出若干与“有限状态/常数内存”范畴直接兼容、且可在本文的 \(\zeta\)–行列式与 primitive Euler 乘积接口上即时调用的刚性结论。
+核心点在于：在二元字母表上，有限自动机与有限禁止模式的计数密度只能出现指数尺度的稀疏或周期性的正密度；而若以素数型（Euler）乘积试图在单位圆上形成无穷支撑，则会强制出现稠密极点并形成自然边界，从而与有限矩阵的有理 \(\zeta\) 机制不相容。
+
+\begin{theorem}[确定性有限自动机的密度谱：指数稀疏或周期性正密度]\label{thm:zeta-syntax-dfa-density-dichotomy}
+令 \(\Sigma=\{0,1\}\)，并令 \(\mathcal A=(Q,\Sigma,\delta,q_0,F)\) 为任意完备确定性有限自动机（DFA）。
+对每个 \(m\ge 0\) 定义长度 \(m\) 的接受词计数
+\[
+a_m:=\#\{w\in\Sigma^m:\ \mathcal A\ \text{接受 }w\}.
+\]
+则存在整数 \(p\ge 1\)、常数 \(c_0,\dots,c_{p-1}\ge 0\)（不全为零）与 \(\theta\in(0,1)\)，使得当 \(m\to\infty\) 时有
+\[
+\frac{a_m}{2^m}=c_{m\bmod p}+O(\theta^m).
+\]
+特别地，以下二者恰有其一成立：
+\begin{enumerate}
+  \item 存在 \(\eta\in(0,1)\) 使得 \(a_m=O\bigl((2\eta)^m\bigr)\)，从而 \(\frac{a_m}{2^m}=O(\eta^m)\) 指数趋零；
+  \item 存在同余类 \(r\ (\bmod\ p)\) 使 \(\inf_{k\ge 0}\frac{a_{r+kp}}{2^{r+kp}}>0\)，从而密度在某一无穷子列上有正下界。
+\end{enumerate}
+因此，不存在 DFA 使得 \(\frac{a_m}{2^m}\) 具有严格介于上述两类之间的多项式稀疏渐近（例如 \(\frac{a_m}{2^m}\asymp m^{-\alpha}\)）。
+\end{theorem}
+\begin{proof}
+对每个字母 \(b\in\{0,1\}\) 定义转移矩阵 \(T_b\in\{0,1\}^{|Q|\times|Q|}\)，令 \((T_b)_{ij}=1\) 当且仅当 \(\delta(i,b)=j\)。
+令
+\[
+B:=T_0+T_1\in \ZZ_{\ge 0}^{|Q|\times|Q|}.
+\]
+由于 \(\mathcal A\) 完备且确定，矩阵 \(B\) 的每一行和恒为 \(2\)。
+令 \(u\) 为初态指示向量、\(v\) 为终态集合 \(F\) 的指示向量，则
+\[
+a_m=u^{\mathsf T}B^m v.
+\]
+因此 \((a_m)\) 满足由 \(\chi_B\) 给出的常系数线性递推，并可写作有限和
+\(
+a_m=\sum_j P_j(m)\lambda_j^m
+\)，其中 \(\lambda_j\) 枚举 \(B\) 的特征值、\(P_j\) 为次数受控多项式。
+\par
+由 \(B\mathbf 1=2\mathbf 1\) 得 \(2\) 是 \(B\) 的特征值，且对任一可达闭类对应的子矩阵同样成立；然而 \(u^{\mathsf T}B^m v\) 的主项系数可能在所有周期类上同时消失，从而有效增长率严格小于 \(2^m\)。
+令 \(\widetilde B:=\tfrac12 B\)，则 \(\widetilde B\) 为行随机矩阵。
+把状态空间分解为瞬态部分与闭类之并；在闭类上，\(\widetilde B\) 为有限状态马尔可夫链的转移矩阵。
+对每个闭类的周期 \(p\)，经典分解定理给出：存在同余类上的极限投影，使得 \(\widetilde B^m\) 在每个同余类 \(m\equiv r\ (\bmod\ p)\) 上以指数速度收敛到相应投影（\(\widetilde B\) 的谱隙保证误差为 \(O(\theta^m)\)）。
+将各闭类的贡献与瞬态项的指数衰减合并，即得
+\(
+u^{\mathsf T}\widetilde B^m v=c_{m\bmod p}+O(\theta^m)
+\)
+并从而得到所述展开；二分结论由 \(c_r\) 是否在某个同余类上严格为零决定。证毕。
+\end{proof}
+
+\begin{corollary}[有限自动机无法精确识别二进制素数集合]\label{cor:zeta-syntax-dfa-prime-symmetric-diff}
+令 \(\mathcal P_m\subseteq\{0,1\}^m\) 表示长度为 \(m\) 的二进制表示对应的素数集合（约定首位为 \(1\) 以排除前导零），并记
+\(
+p_m:=|\mathcal P_m|.
+\)
+对任意固定 DFA \(\mathcal A\)，令 \(L_m:=L(\mathcal A)\cap\{0,1\}^m\)。
+则存在常数 \(c>0\) 与 \(m_0\) 使对所有 \(m\ge m_0\),
+\[
+|L_m\triangle \mathcal P_m|\ \ge\ c\,\frac{2^m}{m}.
+\]
+并且若 \(L_m\) 的密度落入定理 \ref{thm:zeta-syntax-dfa-density-dichotomy}(2) 的情形，则存在无穷多 \(m\) 与常数 \(c'>0\) 使
+\[
+|L_m\triangle \mathcal P_m|\ \ge\ c'\,2^m.
+\]
+\end{corollary}
+\begin{proof}
+由素数定理的标准等价形式可取常数 \(C_1,C_2>0\) 使对充分大 \(m\) 有
+\[
+C_1\,\frac{2^m}{m}\ \le\ p_m\ \le\ C_2\,\frac{2^m}{m}.
+\]
+由定理 \ref{thm:zeta-syntax-dfa-density-dichotomy}，\(|L_m|\) 要么指数稀疏，要么沿某同余类有正密度下界。
+\par
+若 \(|L_m|=O((2\eta)^m)\)（\(\eta<1\)），则对充分大 \(m\) 有 \(|L_m|\ll 2^m/m\)，从而即使 \(L_m\subseteq\mathcal P_m\)，亦至少漏掉 \(p_m-|L_m|\gg 2^m/m\) 个素数，得到第一条下界。
+若沿无穷子列有 \(|L_m|\ge \alpha 2^m\)，则对该子列充分大 \(m\) 有
+\(
+|L_m|-p_m\ge \alpha 2^m-C_2 2^m/m\ge (\alpha/2)2^m
+\)，这些额外项必为合数误报，故给出第二条下界；第一条下界对一般情形取 \(c\) 足够小即可同时覆盖两种分支。证毕。
+\end{proof}
+
+\begin{corollary}[二进制素数的有限状态检索崩塌：召回率与精确率不可同时保持]\label{cor:zeta-syntax-dfa-prime-recall-precision-collapse}
+在推论 \ref{cor:zeta-syntax-dfa-prime-symmetric-diff} 的记号下，令 \(L_m:=L(\mathcal A)\cap\{0,1\}^m\) 为 DFA \(\mathcal A\) 的长度 \(m\) 接受切片，并令 \(\mathcal P_m\) 为长度 \(m\) 的二进制素数集合。
+定义
+\[
+\mathrm{Rec}_m:=\frac{|L_m\cap \mathcal P_m|}{|\mathcal P_m|},
+\qquad
+\mathrm{Prec}_m:=\frac{|L_m\cap \mathcal P_m|}{|L_m|}
+\quad(|L_m|>0).
+\]
+则必有其一成立：
+\begin{enumerate}
+  \item \(\mathrm{Rec}_m\to 0\) 指数收敛；
+  \item 存在整数 \(p\ge 1\) 与同余类 \(r\ (\mathrm{mod}\ p)\)，使得沿子列 \(m\equiv r\ (\mathrm{mod}\ p)\) 有 \(\mathrm{Prec}_m\to 0\)。
+\end{enumerate}
+特别地，对任意固定 \(\varepsilon>0\)，不存在单一 DFA 能在无穷多个长度 \(m\) 上同时满足 \(\mathrm{Rec}_m\ge \varepsilon\) 与 \(\mathrm{Prec}_m\ge \varepsilon\)。
+\end{corollary}
+
+\begin{proof}
+记 \(a_m:=|L_m|\)、\(p_m:=|\mathcal P_m|\)。
+由定理 \ref{thm:zeta-syntax-dfa-density-dichotomy}，要么 \(a_m=O((2\eta)^m)\)（某 \(\eta\in(0,1)\)），要么沿某一无穷同余子列 \(m\equiv r\ (\mathrm{mod}\ p)\) 有 \(a_m\ge \alpha 2^m\)（某 \(\alpha>0\)）。
+\par
+在第一种情形，\(\mathrm{Rec}_m\le a_m/p_m\)。
+由推论 \ref{cor:zeta-syntax-dfa-prime-symmetric-diff} 证明中的素数定理窗估计 \(p_m\asymp 2^m/m\)，得
+\[
+\mathrm{Rec}_m\ \ll\ \eta^m\,m,
+\]
+从而指数趋零。
+\par
+在第二种情形，对该同余子列上 \(m\) 且 \(a_m>0\)，有
+\[
+\mathrm{Prec}_m
+\le \frac{p_m}{a_m}
+\ll \frac{2^m/m}{\alpha 2^m}
+=O\!\left(\frac{1}{m}\right)\to 0.
+\]
+两种情形覆盖全部 DFA。最后结论由反证法立得：若两者在无穷多个 \(m\) 上同时 \(\ge\varepsilon\)，则既排除 \(\mathrm{Rec}_m\) 指数趋零，也排除 \(\mathrm{Prec}_m\) 在某同余子列趋零。证毕。
+\end{proof}
+
+\begin{theorem}[Zeckendorf 语法内的素数语言非 sofic]\label{thm:zeta-syntax-zeckendorf-primes-not-sofic}
+令 \(X_\infty\subseteq\{0,1\}^{\mathbb N}\) 为黄金均值（Zeckendorf）移位：禁止相邻子词 \(11\)，并记其长度 \(m\) 的合法块集合为
+\(
+X_m=\{w\in\{0,1\}^m:\text{不含子词 }11\}
+\)。
+对 \(x=x_1\cdots x_m\in X_m\) 定义其 Zeckendorf 值
+\[
+V_m(x):=\sum_{k=1}^m x_k F_{k+1}.
+\]
+令
+\[
+\mathcal P_m:=\{x\in X_m:\ V_m(x)\ \text{为素数}\},
+\qquad
+p_m:=|\mathcal P_m|,
+\qquad
+\mathcal P:=\bigcup_{m\ge 1}\mathcal P_m\subset X_\infty.
+\]
+则 \(\mathcal P\) 不是 sofic 移位；等价地，不存在有限标记图（亦即常数内存机制）能在 Zeckendorf 数字流上精确识别素性。
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{prop:fold-inverse-limit-xm-xinfty}（Zeckendorf 截断在 \([0,F_{m+2})\) 上与 \(X_m\) 构成双射）可知
+\[
+\{V_m(x):\ x\in X_m\}=\{0,1,\dots,F_{m+2}-1\},
+\]
+从而除去 \(0,1\) 的边界项后有
+\(
+p_m=\pi(F_{m+2})+O(1)
+\)，其中 \(\pi(\cdot)\) 为素数计数函数。
+由素数定理与 \(F_{m+2}\asymp \varphi^m\) 得
+\[
+p_m\ \asymp\ \frac{F_{m+2}}{\log F_{m+2}}
+\ \asymp\ \frac{\varphi^m}{m}.
+\]
+\par
+反设 \(\mathcal P\) 为 sofic 移位。
+则其长度计数序列 \((p_m)_{m\ge 1}\) 为某个有限矩阵幂的线性泛函，因而满足常系数线性递推；
+等价地，
+\(
+p_m=\sum_{i=1}^r Q_i(m)\lambda_i^m
+\)，其中 \(\lambda_i\) 为代数数、\(Q_i\) 为次数属于 \(\ZZ_{\ge 0}\) 的多项式（次数由极点重数决定）。
+取主导模长 \(\Lambda:=\max_i|\lambda_i|>0\)。
+则 \(p_m\) 的主项必为 \(m^k\Lambda^m\) 形式（\(k\in\ZZ_{\ge 0}\)），不可能出现 \(m^{-1}\Lambda^m\) 的主导因子。
+这与上式 \(p_m\asymp \varphi^m/m\) 矛盾。
+故 \(\mathcal P\) 非 sofic。证毕。
+\end{proof}
+
+\begin{corollary}[Zeckendorf 素数集合非正则]\label{cor:zeta-syntax-zeckendorf-primes-not-regular}
+沿用定理 \ref{thm:zeta-syntax-zeckendorf-primes-not-sofic} 的记号。
+令
+\[
+\mathcal P^{\ast}:=\{\,x\in\{0,1\}^{\ast}:\ x\in X_{|x|}\ \text{且}\ V_{|x|}(x)\ \text{为素数}\,\}.
+\]
+则 \(\mathcal P^{\ast}\) 不是正则语言；特别地，不存在任何确定性有限自动机能在 Zeckendorf 数码流上精确识别素性。
+\end{corollary}
+\begin{proof}
+若 \(\mathcal P^{\ast}\) 为正则语言，则长度切片计数 \(p_m:=|\mathcal P_m|\) 可写为 \(p_m=u^{\mathsf T}B^m v\)（某个有限非负整数矩阵 \(B\) 与向量 \(u,v\)），从而满足常系数线性递推并具有形如
+\(
+p_m=\sum_i Q_i(m)\lambda_i^m
+\)
+的指数多项式渐近。
+这与定理 \ref{thm:zeta-syntax-zeckendorf-primes-not-sofic} 证明中得到的
+\(
+p_m\asymp \varphi^m/m
+\)
+矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[Zeckendorf 语法内正则集合的估值幂律计数]\label{thm:zeta-syntax-zeckendorf-regular-valuation-powerlaw}
+令 \(\mathcal Z\subseteq\{0,1\}^\ast\) 为 Zeckendorf 规范有限词语言：禁止相邻子词 \(11\)，并要求末位为 \(1\)。
+对 \(w=x_1\cdots x_m\in\mathcal Z\) 定义估值
+\[
+\mathrm{val}(w):=\sum_{k=1}^{m}x_k F_{k+1}.
+\]
+若 \(L\subseteq\mathcal Z\) 为正则语言，则存在常数 \(\alpha\in[0,1]\) 使得计数函数
+\[
+N_L(T):=\#\{w\in L:\ \mathrm{val}(w)\le T\}
+\]
+满足渐近
+\[
+N_L(T)=T^{\alpha+o(1)}\qquad(T\to\infty).
+\]
+\end{theorem}
+\begin{proof}
+令 \(a_m:=\#\{w\in L:\ |w|=m\}\)。
+取识别 \(L\) 的 DFA \(\mathcal A\) 并用其转移矩阵表示可得 \(a_m=u^{\mathsf T}B^m v\)，其中 \(B\in\ZZ_{\ge 0}^{d\times d}\) 为某个非负整数矩阵、\(u,v\) 为指示向量。
+由 Perron--Frobenius 与强连通分解，存在 \(\lambda\ge 0\) 与整数 \(d_0\ge 0\) 使
+\[
+a_m=\Theta(m^{d_0}\lambda^m)\qquad(m\to\infty),
+\]
+其中若 \(L\) 有限则可取 \(\lambda=0\)（此时 \(a_m=0\) 对充分大 \(m\) 成立）。
+\par
+另一方面，由 \(\mathcal Z\subseteq X_m\)（禁止 \(11\)）且末位为 \(1\) 可知 \(a_m\le |X_m^{(1)}|=F_{m+1}=\Theta(\varphi^m)\)，因此当 \(L\) 无穷时必有 \(\lambda\le \varphi\)。
+\par
+取 \(n\) 使 \(F_{n+1}\le T<F_{n+2}\)。
+对任意 \(w\in\mathcal Z\) 且 \(|w|=m\)，由 Zeckendorf 估值的基本界
+\[
+F_{m+1}\le \mathrm{val}(w)\le F_{m+2}-1,
+\]
+得：若 \(\mathrm{val}(w)\le T\) 则必有 \(|w|\le n\)；而若 \(|w|\le n-1\) 则 \(\mathrm{val}(w)\le F_{n+1}-1\le T\)。
+因此
+\[
+\sum_{m\le n-1}a_m\ \le\ N_L(T)\ \le\ \sum_{m\le n}a_m.
+\]
+由 \(a_m=\Theta(m^{d_0}\lambda^m)\) 知上述两端均为 \(\Theta(n^{d_0}\lambda^n)\)。
+又 \(F_{n+1}=\Theta(\varphi^n)\) 给出 \(n=\log_\varphi T+O(1)\)，从而
+\[
+N_L(T)=\Theta\!\bigl((\log T)^{d_0}\lambda^{\log_\varphi T+O(1)}\bigr)
+=T^{\log_\varphi\lambda}\,(\log T)^{d_0+O(1)}
+=T^{\alpha+o(1)},
+\]
+其中 \(\alpha:=\log_\varphi\lambda\in[0,1]\)（有限语言情形可取 \(\alpha=0\)）。
+证毕。
+\end{proof}
+
+\begin{corollary}[Zeckendorf 素数语言非正则]\label{cor:zeta-syntax-zeckendorf-prime-language-not-regular}
+令
+\[
+\mathcal P_{\mathcal Z}:=\{\mathrm{Zeck}(p)\in\mathcal Z:\ p\ \text{为素数}\},
+\]
+其中 \(\mathrm{Zeck}(n)\) 表示 \(n\) 的规范 Zeckendorf 表示（禁止相邻 \(11\) 且末位为 \(1\)）。
+则 \(\mathcal P_{\mathcal Z}\) 不是正则语言。
+\end{corollary}
+\begin{proof}
+若 \(\mathcal P_{\mathcal Z}\) 为正则语言，则由定理 \ref{thm:zeta-syntax-zeckendorf-regular-valuation-powerlaw}，存在 \(\alpha\in[0,1]\) 使
+\[
+N_{\mathcal P_{\mathcal Z}}(T)=T^{\alpha+o(1)}.
+\]
+另一方面，Zeckendorf 表示在正整数上为双射，故 \(N_{\mathcal P_{\mathcal Z}}(T)=\pi(T)\)。
+由素数定理 \(\pi(T)\sim T/\log T\) 可知：对任意 \(\alpha<1\) 有 \(\pi(T)/T^\alpha\to\infty\)，而 \(\pi(T)/T\to 0\)。
+因此不存在常数 \(\alpha\in[0,1]\) 使 \(\pi(T)=T^{\alpha+o(1)}\)，矛盾。
+故 \(\mathcal P_{\mathcal Z}\) 非正则。证毕。
+\end{proof}
+
+\begin{corollary}[有限状态预处理加正则判别无法精确识别 Zeckendorf 素性]\label{cor:zeta-syntax-zeckendorf-primes-mealy-regular-impossible}
+令 \(T:\mathcal Z\to\{0,1\}^\ast\) 为任意确定性 Mealy 转导器（有限状态、逐位读入、逐位输出），并令 \(L\subseteq\{0,1\}^\ast\) 为正则语言。
+则原像
+\[
+T^{-1}(L):=\{w\in\mathcal Z:\ T(w)\in L\}
+\]
+为正则语言。
+特别地，不存在一对 \((T,L)\) 使对所有 \(w\in\mathcal Z\) 成立
+\[
+w\in\mathcal P_{\mathcal Z}\quad\Longleftrightarrow\quad T(w)\in L.
+\]
+\end{corollary}
+\begin{proof}
+取识别 \(L\) 的 DFA \(D_L=(Q_L,\{0,1\},\delta_L,q_L^{(0)},F_L)\)，并设 \(T\) 的状态集为 \(Q_T\)，其转移与输出规则分别为
+\[
+q_T\xrightarrow{a}q_T',\qquad \mathrm{out}(q_T,a)\in\{0,1\}.
+\]
+构造直积自动机 \(D\) ，其状态空间为 \(Q_T\times Q_L\)，初态为 \((q_T^{(0)},q_L^{(0)})\)。
+读入字母 \(a\in\{0,1\}\) 时，由 \(T\) 给出输出 \(b=\mathrm{out}(q_T,a)\) 与新状态 \(q_T'\)，并令 \(D_L\) 同时按 \(b\) 更新到 \(q_L':=\delta_L(q_L,b)\)；
+于是 \((q_T,q_L)\mapsto(q_T',q_L')\) 定义了 \(D\) 的转移。
+令终态集合为 \(Q_T\times F_L\)，则 \(D\) 在输入端精确识别集合 \(T^{-1}(L)\)。
+因此 \(T^{-1}(L)\) 为正则语言。
+最后一条若成立则 \(\mathcal P_{\mathcal Z}=T^{-1}(L)\) 为正则，与推论 \ref{cor:zeta-syntax-zeckendorf-prime-language-not-regular} 矛盾。证毕。
+\end{proof}
+
+\begin{proposition}[正则前缀码的 Kraft 和为有理数]\label{prop:zeta-syntax-regular-prefixfree-kraft-rational}
+令 \(L\subseteq\{0,1\}^\ast\) 为前缀无歧义（prefix-free）语言，并设 \(L\) 为正则语言。
+定义 Kraft 和
+\[
+K(L):=\sum_{w\in L}2^{-|w|}.
+\]
+则 \(K(L)\in\QQ\)，并且给定识别 \(L\) 的 DFA，可通过解一个系数属于 \(\tfrac12\ZZ\) 的线性方程组构造性得到 \(K(L)\)。
+\end{proposition}
+\begin{proof}
+取识别 \(L\) 的完备 DFA \(\mathcal A=(Q,\{0,1\},\delta,q_0,F)\)。
+令 \(\omega=(\omega_1,\omega_2,\dots)\) 为独立同分布随机比特流，满足 \(\PP(\omega_i=0)=\PP(\omega_i=1)=\tfrac12\)。
+记事件
+\[
+E:=\{\exists n\ge 1:\ \omega_1\cdots\omega_n\in L\}.
+\]
+由于 \(L\) prefix-free，圆柱集合 \([[\!w\!]]:=\{\omega:\ \omega_1\cdots\omega_{|w|}=w\}\)（\(w\in L\)）两两不交，且 \(\PP([[\!w\!]])=2^{-|w|}\)。
+因此 \(\PP(E)=\sum_{w\in L}\PP([[\!w\!]])=K(L)\)。
+\par
+另一方面，令 \(p(q)\) 表示从状态 \(q\in Q\) 出发，在该随机输入驱动下“某时刻进入接受集合 \(F\)”的概率。
+则 \(p(q)\) 满足有限线性方程组
+\[
+p(q)=1\quad(q\in F),
+\qquad
+p(q)=\frac{p(\delta(q,0))+p(\delta(q,1))}{2}\quad(q\notin F).
+\]
+其系数属于 \(\tfrac12\ZZ\)，故解（取最小非负解）为有理数；并且可由消元法显式求得。
+由定义 \(K(L)=\PP(E)=p(q_0)\in\QQ\)。
+\end{proof}
+
+\begin{theorem}[停机概率给出常数内存不可达的严格证据]\label{thm:zeta-syntax-omega-regular-impossible}
+取任意通用前缀自由图灵机 \(U\)，令其停机程序集合为 \(\mathrm{HALT}_U\subseteq\{0,1\}^\ast\)，并定义 Chaitin 停机概率
+\[
+\Omega_U:=\sum_{p\in \mathrm{HALT}_U}2^{-|p|}.
+\]
+则 \(\mathrm{HALT}_U\) 不是正则语言；因此不存在有限自动机（常数内存过程）能在该前缀编码下精确识别 \(U\) 的停机性。
+\end{theorem}
+\begin{proof}
+集合 \(\mathrm{HALT}_U\) 为 prefix-free。
+若 \(\mathrm{HALT}_U\) 为正则语言，则由命题 \ref{prop:zeta-syntax-regular-prefixfree-kraft-rational} 得 \(\Omega_U=K(\mathrm{HALT}_U)\in\QQ\)，并且可由 DFA 的线性方程组构造性计算。
+然而 \(\Omega_U\) 为不可计算实数（算法信息论中的经典事实），矛盾。
+故 \(\mathrm{HALT}_U\) 不正则，且任何有限自动机不可能精确识别 \(\mathrm{HALT}_U\)。
+\end{proof}
+
+\begin{theorem}[left-c.e.\ 实数作为 dyadic 密度与有限状态的有理刚性]\label{thm:zeta-syntax-leftce-dyadic-density}
+对集合 \(S\subseteq\NN\) 定义 dyadic 密度
+\[
+d_2(S):=\lim_{m\to\infty}\frac{|S\cap[0,2^m)|}{2^m},
+\]
+若极限存在。
+称 \(\alpha\in[0,1]\) 为 left-c.e.\ 实数，若存在可计算且单调递增的有理序列 \((q_s)_{s\ge 0}\subseteq \QQ\cap[0,1]\) 使 \(q_s\uparrow\alpha\)。
+则：
+\begin{enumerate}
+  \item 对任意 left-c.e.\ 的 \(\alpha\in[0,1]\)，存在可判定集合 \(S_\alpha\subseteq\NN\)，使 \(d_2(S_\alpha)\) 存在且 \(d_2(S_\alpha)=\alpha\)；
+  \item 若集合 \(S\subseteq\NN\) 在“长度 \(m\) 的补零二进制表示”口径下可由某个固定 DFA 识别，且 \(d_2(S)\) 存在，则 \(d_2(S)\in\QQ\)；
+  \item 取 \(\alpha=\Omega_U\)，则得到一个可判定但不具常数内存识别机制的集合 \(S_{\Omega_U}\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\textit{(1)} 给定 \(q_s\uparrow\alpha\)。
+取严格递增整数序列 \((m_s)\)（\(m_0=0\)）使 \(2^{m_s}\ge 2^s\)（\(s\ge 1\)），并记 \(N_s:=2^{m_s}\)。
+递归定义 \(S_\alpha\cap[0,N_s)\)。
+设已定义到阶段 \(s\)，并记 \(A_s:=|S_\alpha\cap[0,N_s)|\)。
+在新区间 \([N_s,N_{s+1})\) 内，令
+\[
+B_{s+1}:=\big\lfloor q_{s+1}N_{s+1}\big\rfloor-A_s,
+\]
+并把该新区间的前 \(B_{s+1}\) 个整数并入 \(S_\alpha\)。
+由于 \(N_{s+1}\) 可取足够大，可保证 \(0\le B_{s+1}\le N_{s+1}-N_s\)。
+从而
+\(
+|S_\alpha\cap[0,N_{s+1})|=\lfloor q_{s+1}N_{s+1}\rfloor
+\)，并且
+\[
+\left|\frac{|S_\alpha\cap[0,N_s)|}{N_s}-q_s\right|\le \frac1{N_s}.
+\]
+由 \(q_s\to\alpha\) 且 \(N_s\to\infty\)，得到 \(\frac{|S_\alpha\cap[0,2^{m_s})|}{2^{m_s}}\to\alpha\)。
+结合 \((m_s)\to\infty\) 可推出 dyadic 密度极限存在且等于 \(\alpha\)。
+此外，给定 \(n\)，可计算唯一 \(s\) 使 \(N_s\le n<N_{s+1}\)，并比较 \(n-N_s<B_{s+1}\) 判定 \(n\in S_\alpha\)，故 \(S_\alpha\) 可判定。
+\par
+\textit{(2)} 令 \(S\) 由完备 DFA \(\mathcal A\) 在长度 \(m\) 的补零二进制表示上识别。
+记 \(a_m:=|S\cap[0,2^m)|\)，则存在行随机矩阵 \(\widetilde B\)（条目属于 \(\{0,\tfrac12,1\}\)）及向量 \(u,v\) 使
+\[
+\frac{a_m}{2^m}=u^{\mathsf T}\widetilde B^m v.
+\]
+若极限 \(d_2(S)\) 存在，则由定理 \ref{thm:zeta-syntax-dfa-density-dichotomy} 的周期展开可知该极限等于某个闭类上的平稳分布对接受集合的质量。
+平稳分布解线性方程组 \(\pi=\pi \widetilde B\)，系数皆为有理数，故可取 \(\pi\in\QQ^{Q}\)，从而 \(d_2(S)\in\QQ\)。
+\par
+\textit{(3)} 由定理 \ref{thm:zeta-syntax-omega-regular-impossible}，\(\Omega_U\) 不可计算，特别不为有理数。
+由 (1) 存在可判定集合 \(S_{\Omega_U}\) 使 \(d_2(S_{\Omega_U})=\Omega_U\)。
+若 \(S_{\Omega_U}\) 可由某固定 DFA 识别，则由 (2) 得 \(d_2(S_{\Omega_U})\in\QQ\)，矛盾。
+\end{proof}
+
+\begin{conjecture}[素数识别的状态复杂度必须指数增长]\label{conj:zeta-syntax-prime-dfa-exponential}
+令 \(\mathsf{DFA}(m)\) 表示“对所有 \(m\) 位二进制整数（首位为 \(1\)）均正确判定素性”的 DFA 所需的最少状态数。
+则存在常数 \(c>0\) 使
+\[
+\mathsf{DFA}(m)\ \ge\ \exp(c m)\qquad(m\to\infty).
+\]
+\end{conjecture}
+
+\begin{theorem}[Euler 型乘积的单位圆自然边界：素数支撑导致稠密极点]\label{thm:zeta-syntax-euler-product-natural-boundary}
+令 \((b_n)_{n\ge 1}\subset\ZZ_{\ge 0}\) 为一列非负整数，并假设存在无穷多素数 \(p\) 使得 \(b_p>0\)。
+进一步假设乘积
+\[
+Z_b(z):=\prod_{n\ge 1}(1-z^n)^{-b_n}.
+\]
+在开单位圆盘内定义了一个全纯函数（例如对任意 \(0<r<1\) 有 \(\sum_{n\ge 1}b_n r^n<\infty\)，从而 \(\log Z_b(z)=\sum_{n\ge 1}\frac{b_n}{n}\frac{z^n}{1-z^n}\) 逐项收敛）。
+则：
+\begin{enumerate}
+  \item 对每个满足 \(b_p>0\) 的素数 \(p\)，\(Z_b\) 在全部 \(p\) 次单位根 \(z=e^{2\pi i k/p}\ (k=0,\dots,p-1)\) 处具有极点；
+  \item 这些极点在单位圆 \(|z|=1\) 上稠密，因此单位圆是 \(Z_b\) 的自然边界；
+  \item 因而 \(Z_b\) 不可能是有理函数，特别地不可能形如 \(\det(I-zM)^{-1}\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+若 \(b_p>0\)，则因子 \((1-z^p)^{-b_p}\) 在 \(z^p=1\) 的每个解处为极点。
+乘积中其余因子在该点至多贡献有限值（或进一步加强发散），故 \(Z_b\) 在每个 \(p\) 次单位根处必为极点。
+\par
+稠密性：任取单位圆上一点 \(e^{i\theta}\) 与任意 \(\varepsilon>0\)。
+取足够大的素数 \(p>\pi/\varepsilon\)，并令 \(k\) 为最接近 \(p\theta/(2\pi)\) 的整数，则
+\(
+|\theta-2\pi k/p|\le \pi/p<\varepsilon
+\)。
+由于满足 \(b_p>0\) 的素数无穷多，极点在单位圆稠密。
+稠密极点蕴含单位圆为自然边界；而有理函数在紧致集上不可能具有无穷稠密极点，故 \(Z_b\) 非有理。证毕。
+\end{proof}
+
+\begin{remark}[与有限状态 \texorpdfstring{$\zeta$}{zeta} 接口的冲突]\label{rem:zeta-syntax-natural-boundary-obstruction}
+在本文的有限图（SFT/sofic）口径下，动力学 \(\zeta\) 具有有限矩阵的行列式表示 \(\zeta_M(z)=\det(I-zM)^{-1}\)，从而为有理函数（\S\ref{subsec:zeta-syntax-zeta}）。
+因此，若某一 primitive 侧的 Euler 型乘积机制在素数长度上具有无穷支撑并以非负指数进入乘积，则按定理 \ref{thm:zeta-syntax-euler-product-natural-boundary} 必强制单位圆自然边界，从而无法来自任何有限状态 \(\zeta\) 机制。
+\end{remark}
+
+\begin{theorem}[有限核 \texorpdfstring{$\zeta$}{zeta} 的虚周期刚性]\label{thm:zeta-syntax-finite-zeta-imaginary-periodicity}
+令 \(M\) 为有限非负矩阵，并记有限核 \(\zeta\)-函数
+\[
+\zeta_M(z):=\det(I-zM)^{-1}.
+\]
+定义变量代换后的函数 \(F_M(s):=\zeta_M(e^{-s})\)。
+则 \(F_M\) 满足整虚周期
+\[
+F_M(s+2\pi i)=F_M(s).
+\]
+另一方面，经典 Riemann \(\zeta\) 函数在半平面 \(\Re(s)>1\) 上不具该周期性：存在 \(s\) 使 \(\zeta(s+2\pi i)\ne \zeta(s)\)。
+因此不存在任何有限矩阵 \(M\) 使得 \(\zeta(s)=F_M(s)\) 在 \(\Re(s)>1\) 上成立。
+\end{theorem}
+\begin{proof}
+第一式由恒等式 \(e^{-(s+2\pi i)}=e^{-s}\) 直接推出。
+\par
+对第二式，取实数 \(\sigma>1\)。
+由 Dirichlet 级数在 \(\Re(s)>1\) 的绝对收敛性，有
+\[
+\zeta(\sigma+2\pi i)-\zeta(\sigma)
+=
+\sum_{n\ge 2}n^{-\sigma}\bigl(e^{-2\pi i\log n}-1\bigr).
+\]
+记常数 \(c_0:=|e^{-2\pi i\log 2}-1|>0\)。
+则
+\[
+\bigl|2^{-\sigma}(e^{-2\pi i\log 2}-1)\bigr|=c_0\,2^{-\sigma}.
+\]
+另一方面，对尾项有估计
+\[
+\left|\sum_{n\ge 3}n^{-\sigma}\bigl(e^{-2\pi i\log n}-1\bigr)\right|
+\le
+2\sum_{n\ge 3}n^{-\sigma}
+\le
+2\frac{3^{-\sigma}}{1-3^{-1}}
+=3\cdot 3^{-\sigma}.
+\]
+由于 \((2/3)^\sigma\to 0\)，可取充分大 \(\sigma\) 使 \(3\cdot 3^{-\sigma}<\tfrac12 c_0\,2^{-\sigma}\)。
+对该 \(\sigma\) 有 \(\zeta(\sigma+2\pi i)\ne \zeta(\sigma)\)。
+从而 \(\zeta\) 在 \(\Re(s)>1\) 上不具 \(2\pi i\) 周期性，遂不可能与任意 \(F_M\) 相等。证毕。
+\end{proof}
+
+\begin{conjecture}[Euler 乘积的有限状态不可达性：有理 \texorpdfstring{$\zeta$}{zeta} 族无法逼近经典乘积拓扑]\label{conj:zeta-syntax-euler-topology-unreachable}
+设 \(\{\zeta_{M_k}\}_k\) 为一族有限状态机制的动力学 \(\zeta\)-函数，其中
+\(
+\zeta_{M_k}(z)=\det(I-zM_k)^{-1}
+\)
+为有理函数；并设该族的延迟上界有界且状态数至多多项式增长。
+将“Euler 乘积结构”视为对 primitive 系数序列在 \(n^{-1}\) 权下的收敛拓扑（等价地，对 \(\log\zeta\) 的系数在 \(n^{-1}\) 权下的收敛）。
+则预期该拓扑下不存在收敛子列能逼近经典 Riemann \(\zeta\) 的 Euler 乘积：Euler 乘积的算术复杂性在该意义下强制状态复杂度超多项式增长。
+\end{conjecture}
+
+\begin{proposition}[常数内存机制的指数遗忘与每比特互信息塌缩]\label{prop:zeta-syntax-constant-memory-exponential-forgetting}
+令 \(\mathcal T\) 为任意有限状态在线转导器（Mealy 机），状态集 \(Q\) 有限。
+对任意全支撑 i.i.d. 输入分布 \(\mu\)，令 \(S_m\in Q\) 为读入 \(m\) 个输入符号后的内部状态。
+若由 \(\mu\) 诱导的状态马尔可夫链不可约且非周期，则存在唯一平稳分布 \(\pi\)，并存在常数 \(C<\infty\)、\(\gamma\in(0,1)\) 使对任意初态分布 \(\nu\) 与任意 \(m\ge 0\),
+\[
+\|\nu P^m-\pi\|_{\mathrm{TV}}\ \le\ C\,\gamma^m.
+\]
+从而对任意有界可观测 \(f:Q\to\RR\),
+\[
+\bigl|\EE_\nu[f(S_m)]-\EE_\pi[f(S)]\bigr|
+\ \le\ 2\|f\|_\infty\,C\,\gamma^m.
+\]
+此外，对输入前缀 \(X_1^m\) 有互信息上界
+\[
+I(X_1^m;S_m)\ \le\ \log |Q|,
+\qquad\text{从而}\qquad
+\frac{1}{m}I(X_1^m;S_m)\ \xrightarrow[m\to\infty]{}\ 0.
+\]
+\end{proposition}
+\begin{proof}
+有限不可约非周期马尔可夫链为 primitive，故谱隙与标准耦合/Doeblin 论证给出总变差的指数收敛上界。
+对任意有界 \(f\)，由 \(|\EE_\nu f-\EE_{\nu'}f|\le 2\|f\|_\infty\|\nu-\nu'\|_{\mathrm{TV}}\) 得到第二式。
+互信息上界为信息论恒等式：\(I(X_1^m;S_m)\le H(S_m)\le \log|Q|\)。证毕。
+\end{proof}
+
+\begin{proposition}[有限禁止模式的显式指数稀疏上界]\label{prop:zeta-syntax-finite-forbidden-exp-sparse}
+设 \(F\) 为一组非空的有限禁止子词，最大长度为 \(\ell\)。
+令
+\[
+X_m(F):=\{w\in\{0,1\}^m:\ w\ \text{不含任何 }F\text{ 中子词}\}.
+\]
+则对所有 \(m\) 成立
+\[
+|X_m(F)|\ \le\ 2^m\Bigl(1-2^{-\ell}\Bigr)^{\lfloor m/\ell\rfloor},
+\qquad
+\frac{|X_m(F)|}{2^m}\ \le\ \exp\bigl(-\Theta(m)\bigr).
+\]
+\end{proposition}
+\begin{proof}
+取不相交块起点集合 \(\{1,1+\ell,1+2\ell,\dots\}\)。
+固定取 \(F\) 中某个长度为 \(\ell\) 的禁止词（若 \(F\) 中长度不齐，则取最大长度并将较短者纳入更强的排除条件，所得上界不弱）。
+对每个块起点处的长度 \(\ell\) 子词，\(2^\ell\) 种可能中至少有 \(1\) 种被排除，故每个块最多保留比例 \(1-2^{-\ell}\)。
+将 \(\lfloor m/\ell\rfloor\) 个不相交块的约束相乘即得所示上界。证毕。
+\end{proof}
+
+\par
+以上结论共同说明：在二元有限状态范畴中，长度层计数密度、Kraft 和与 dyadic 密度都被有限维线性机制强制落入极窄的刚性类（指数稀疏/周期性正密度、以及在极限存在时的有理性）。
+素数集合在长度层面的规模为 \(p_m\asymp 2^m/m\)，既不属于有限禁止模式的指数稀疏，也不可能与任何固定 DFA 的密度谱兼容；而停机概率 \(\Omega_U\) 与由其实现的 dyadic 密度进一步给出一种不可由常数内存抵达的严格证据。
+这类刚性同时在解析侧体现为有限矩阵 \(\zeta\) 的有理性，与素数支撑的 Euler 型乘积在单位圆上的稠密奇点/自然边界机制形成结构性分离。
+

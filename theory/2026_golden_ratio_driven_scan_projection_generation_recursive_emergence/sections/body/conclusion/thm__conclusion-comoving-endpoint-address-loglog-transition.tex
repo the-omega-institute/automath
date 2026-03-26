@@ -1,0 +1,176 @@
+\begin{theorem}[端点二次压缩与共动前缀的精确相变]\label{thm:conclusion-comoving-endpoint-address-budget-phase-transition}
+设高度窗满足
+\[
+|\gamma|\le T,
+\qquad
+\delta\ge \delta_0>0.
+\]
+记 \(p_{\mathrm{fix}}(T,\delta_0)\) 为在固定 Cayley 图表下，为使端点余量
+\[
+h(\rho)=1-|w_\rho|^2
+\]
+达到单值可核验所需的最小位预算；记 \(p_{\mathrm{com}}(\delta_0)\) 为允许外置共动前缀 \(x_0=\gamma\) 后所需的最小位预算。则有必要下界
+\[
+p_{\mathrm{fix}}(T,\delta_0)\ge
+\log_2\!\frac{T^2+(1+\delta_0)^2}{4\delta_0}
+=
+2\log_2T+\log_2\frac1{\delta_0}+O(1),
+\]
+而共动局部化后
+\[
+p_{\mathrm{com}}(\delta_0)\ge
+\log_2\!\frac{(1+\delta_0)^2}{4\delta_0}.
+\]
+因此
+\[
+p_{\mathrm{fix}}(T,\delta_0)-p_{\mathrm{com}}(\delta_0)
+=
+2\log_2T+O(1)
+\qquad (T\to\infty).
+\]
+换言之，固定图表与共动图表之间的预算差并非常数改进，而是一条对数级相变。
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound} 给出固定图表下的必要下界
+\[
+1-|w_\rho|^2\ge \frac{4\delta_0}{T^2+(1+\delta_0)^2},
+\]
+故任何最小可分辨尺度为 \(2^{-p}\) 的核验机制都必须满足
+\[
+2^{-p}<\frac{4\delta_0}{T^2+(1+\delta_0)^2},
+\]
+从而
+\[
+p_{\mathrm{fix}}(T,\delta_0)\ge
+\log_2\!\frac{T^2+(1+\delta_0)^2}{4\delta_0}.
+\]
+其渐近式正是同一定理中的展开。
+
+另一方面，推论 \ref{cor:xi-comoving-prefix-bit-budget-gain} 表明：当允许外置共动前缀并取 \(x_0=\gamma\) 时，
+\[
+h_\gamma(\rho)=1-|w_{\rho,\gamma}|^2=\frac{4\delta}{(1+\delta)^2}\ge \frac{4\delta_0}{(1+\delta_0)^2}.
+\]
+于是任何同类核验都必须满足
+\[
+2^{-p}<\frac{4\delta_0}{(1+\delta_0)^2},
+\]
+故
+\[
+p_{\mathrm{com}}(\delta_0)\ge
+\log_2\!\frac{(1+\delta_0)^2}{4\delta_0}.
+\]
+两式相减即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[固定图表与共动图表的二比一对数差]\label{cor:conclusion-comoving-endpoint-address-budget-log-phase-transition}
+当 \(T\to\infty\) 时，固定图表下的端点预算比共动图表多出恰为 \(2\log_2T+O(1)\) 的主阶负担。故“共动有帮助”在该制度内并非经验改善，而是从二次压缩到线性显影的 sharp 位复杂度跃迁。
+\end{corollary}
+\begin{proof}
+这是定理 \ref{thm:conclusion-comoving-endpoint-address-budget-phase-transition} 的直接重述。证毕。
+\end{proof}
+
+\begin{theorem}[地址预算与端点预算的正交转移]\label{thm:conclusion-comoving-address-endpoint-budget-transfer}
+在结论 \ref{thm:conclusion-comoving-endpoint-address-budget-phase-transition} 的设定下，位预算的下降并非自由消失，而是严格转移：
+
+若某类协议在所有高度窗 \(|\gamma|\le T\) 上实现了 \(T\)-一致的常数级端点预算，则该协议必显式外置一个可寻址前缀；若此前缀被删除，则同一协议在固定可见接口下必重新满足
+\[
+p\ge 2\log_2T+\log_2\frac1{\delta_0}+O(1).
+\]
+因此，共动局部化并非对固定图表审计的优化，而是把端点预算重写为地址前缀预算的一次正交轴交换。
+\end{theorem}
+\begin{proof}
+注 \ref{rem:xi-comoving-horizon-localization-address-null} 已明确指出：共动局部化所回收的端点预算，并不在对象层消失，而是制度性地转移为可寻址前缀 \(x_0\) 的外置成本；若地址前缀未给定，相应评价在对象层不定义并读出为 \(\mathsf{NULL}\)。
+另一方面，定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound} 表明：在固定可见接口下，一旦拒绝外置此前缀，高高度区间中的离切片偏移就必通过端点二次径向通道进入，并重新触发
+\[
+p\ge 2\log_2T+\log_2\frac1{\delta_0}+O(1)
+\]
+的必要位门槛。故预算下降只能理解为地址轴与端点轴之间的严格转移。证毕。
+\end{proof}
+
+\begin{corollary}[地址轴与端点轴的不可替代性]\label{cor:conclusion-comoving-address-endpoint-axis-exchange}
+被共动前缀节省下来的预算，并不是固定图表审计中的同类信息冗余，而是被改写为地址前缀这一正交制度资源；因此两类预算彼此不可替代。
+\end{corollary}
+\begin{proof}
+定理 \ref{thm:conclusion-comoving-address-endpoint-budget-transfer} 已说明：删除前缀后，固定图表端点预算下界会立刻恢复到 \(2\log_2T\) 量级。故两类预算不在同一轴上，不能以纯数值富余互换。证毕。
+\end{proof}
+
+\begin{theorem}[径向紧化读出的 \texorpdfstring{$2\log_2\log L$}{2log2logL} 次级代价]\label{thm:conclusion-radial-compactification-loglog-secondary-cost}
+设
+\[
+x=\log|u_L(s)|=(2\Re(s)-1)\log L,
+\qquad
+\Re(s)\neq \frac12,
+\]
+并要求仅通过
+\[
+u=\upsilon(x)=\pi^{-1}\arctan(x)
+\]
+的 \(n\)-比特 dyadic 近似来给出绝对误差不超过 \(\varepsilon\in(0,1]\) 的单值可核验读出。则当 \(L\to\infty\) 时必有
+\[
+n\ge
+\log_2\frac1\varepsilon
++
+\log_2\!\bigl(1+(2\Re(s)-1)^2(\log L)^2\bigr)
++
+\log_2\pi
++
+O(1),
+\]
+从而
+\[
+n\ge
+\log_2\frac1\varepsilon
++
+2\log_2\log L
++
+\log_2\!\bigl(\pi(2\Re(s)-1)^2\bigr)
++
+o(1).
+\]
+因此，离开临界线之后，径向紧化读出的不可消除次级代价恰为 \(2\log_2\log L\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-radial-information-projection-lower-bound}，
+\[
+n\ge
+\log_2\!\Bigl(\frac{1}{\varepsilon}\Bigr)
++
+\log_2(1+x^2)
++
+\log_2\pi
++
+O(1).
+\]
+将
+\[
+x=(2\Re(s)-1)\log L
+\]
+代入即得第一式。若 \(\Re(s)\neq \tfrac12\) 固定，则
+\[
+x^2\sim (2\Re(s)-1)^2(\log L)^2,
+\]
+故
+\[
+\log_2(1+x^2)
+=
+2\log_2\log L+\log_2(2\Re(s)-1)^2+o(1).
+\]
+与 \(\log_2\pi\) 合并即得第二式。证毕。
+\end{proof}
+
+\begin{corollary}[径向紧化的双对数尾项]\label{cor:conclusion-radial-compactification-doublelog-tail}
+远离临界线时，径向紧化读出的位复杂度不能在 \(L\) 上一致有界；其结构被严格分解为
+\[
+\log_2\frac1\varepsilon
+\quad+\quad
+2\log_2\log L
+\quad+\quad
+O(1),
+\]
+即“主误差成本 + 几何离切片成本”的双层预算。
+\end{corollary}
+\begin{proof}
+这是定理 \ref{thm:conclusion-radial-compactification-loglog-secondary-cost} 的直接推论。证毕。
+\end{proof}
+
+\endinput

@@ -1,0 +1,568 @@
+\section{递归地址化：派生概念由旧层读出序列生成}\label{sec:recursive-addressing}
+
+\input{para__recursive-addressing-positioning}
+
+本节在标准可测动力系统 \((X,\mathcal{B},\mu,T)\) 与有限时间窗读出口径下处理一个结构性问题：在给定一族可测概念之后，如何由其有限时间窗读出递归生成更细的概念族，以及该过程是否会在可测结构层面引入外加对象。核心结论是：递归地址化不扩张既有可见 \(\sigma\)-代数；递归生成的柱事件族仍落在旧层可见 \(\sigma\)-代数 \(\mathcal{G}^{(L)}\) 内（命题 \ref{prop:recursive-addressing-refinement}），从而新层仅在 \(\mathcal{G}^{(L)}\) 内重新选取并组织可见事件（推论 \ref{cor:recursive-addressing-visible-sigma-nonexpansion}，因而 \(\mathcal{G}^{(L+1)}\subseteq \mathcal{G}^{(L)}\)）。在符号柱集口径下，前缀细化对应前缀超度量球的缩小，见第 \ref{sec:spg} 节段落 \ref{par:spg-prefix-ultrametric}。与第 \ref{sec:logic-expansion-chain} 节的抽象扩张链相对应，本节把地址、局部截面、\(\mathsf{NULL}\) 与观察者索引 forcing 解释为该上位语义在扫描—投影读出模型中的具体实现。
+
+\subsection{地址的复合生成}
+
+设在层级 $L$ 已得到一族概念 $\mathcal{C}^{(L)}=\{C^{(L)}_1,\dots,C^{(L)}_{r_L}\}$，其中每个 $C^{(L)}_i\in\mathcal{B}$ 可测。定义派生的二元向量过程
+\[
+\mathbf{b}^{(L)}_t(x):=\bigl(\ind_{C^{(L)}_1}(T^t x),\dots,\ind_{C^{(L)}_{r_L}}(T^t x)\bigr)\in\{0,1\}^{r_L}.
+\]
+对任意长度 $\ell$ 与任意地址
+\[
+a=\bigl(a_0,\dots,a_{\ell-1}\bigr)\in\bigl(\{0,1\}^{r_L}\bigr)^\ell,
+\]
+定义其对应的派生柱事件
+\[
+C^{(L+1)}_{a,t}:=\{x\in X:\mathbf{b}^{(L)}_t(x)=a_0,\dots,\mathbf{b}^{(L)}_{t+\ell-1}(x)=a_{\ell-1}\}\in\mathcal{B}.
+\]
+令 $\mathcal{C}^{(L+1)}$ 为选定的一族此类柱事件（例如取一组有限地址集合 $A^{(L+1)}$ 对应的 $C^{(L+1)}_{a,0}$）。由此得到闭合递归：\textbf{派生概念是旧层读出序列的柱事件}，从而地址仅来自可观测数据而非外加原语。
+
+\begin{proposition}[$\sigma$-代数细化：递归地址化不引入外加结构]\label{prop:recursive-addressing-refinement}
+令 $\mathcal{G}^{(L)}$ 为由旧层概念在有限时间窗内的平移生成的 $\sigma$-代数：
+\[
+\mathcal{G}^{(L)}:=\sigma\bigl(T^{-t}C_i^{(L)}:\ 1\le i\le r_L,\ t\in\ZZ\bigr).
+\]
+则对任意地址 $a$ 与任意 $t$，派生柱事件 $C^{(L+1)}_{a,t}$ 属于 $\mathcal{G}^{(L)}$。因此递归地址化仅执行“对既有可观测事件作柱集闭包/细化”，而不引入外加可测集。
+\end{proposition}
+
+\begin{proof}
+对任意固定的 \(i\) 与 \(t\)，函数 \(x\mapsto \ind_{C_i^{(L)}}(T^t x)=\ind_{T^{-t}C_i^{(L)}}(x)\) 是 \(\mathcal{G}^{(L)}\)-可测的。
+因此对任意给定地址 \(a=(a_0,\dots,a_{\ell-1})\)，事件
+\[
+\{x:\mathbf b^{(L)}_t(x)=a_0,\dots,\mathbf b^{(L)}_{t+\ell-1}(x)=a_{\ell-1}\}
+\]
+可写为有限个集合 \(T^{-s}C_i^{(L)}\) 及其补集的有限交（在 \(s=t,\dots,t+\ell-1\) 上并对 \(i=1,\dots,r_L\) 展开），故属于由这些集合生成的 \(\sigma\)-代数，即属于 \(\mathcal{G}^{(L)}\)。证毕。
+\end{proof}
+
+\begin{corollary}[可见 \texorpdfstring{$\sigma$}{sigma}-代数不扩张：递归柱事件仅在内层重组织]\label{cor:recursive-addressing-visible-sigma-nonexpansion}
+沿用命题 \ref{prop:recursive-addressing-refinement} 的记号。
+设新层概念族 \(\mathcal{C}^{(L+1)}\) 由若干派生柱事件 \(C^{(L+1)}_{a,t}\) 选取而成，并令
+\[
+\mathcal{G}^{(L+1)}:=\sigma\bigl(T^{-t}C:\ C\in \mathcal{C}^{(L+1)},\ t\in\ZZ\bigr).
+\]
+则有
+\[
+\boxed{\ \mathcal{G}^{(L+1)}\subseteq \mathcal{G}^{(L)}\ }.
+\]
+因此，递归生成的柱事件族不扩张既有可见 \(\sigma\)-代数，而仅在 \(\mathcal{G}^{(L)}\) 内重新选取并组织可见事件。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:recursive-addressing-refinement}，对任意地址 \(a\) 与任意 \(t\in\ZZ\)，派生柱事件 \(C^{(L+1)}_{a,t}\) 都属于 \(\mathcal{G}^{(L)}\)。
+设 \(C\in\mathcal{C}^{(L+1)}\)，按构造存在 \(a,t_0\) 使 \(C=C^{(L+1)}_{a,t_0}\)。
+于是对任意 \(s\in\ZZ\)，有 \(T^{-s}C=T^{-s}C^{(L+1)}_{a,t_0}=C^{(L+1)}_{a,t_0+s}\in\mathcal{G}^{(L)}\)。
+因此 \(\mathcal{G}^{(L+1)}\) 的生成元均属于 \(\mathcal{G}^{(L)}\)，从而 \(\mathcal{G}^{(L+1)}\subseteq \mathcal{G}^{(L)}\)。证毕。
+\end{proof}
+
+\subsection{空值到投影的递归语义}
+
+与推论 \ref{cor:recursive-addressing-visible-sigma-nonexpansion} 的“可见 \texorpdfstring{$\sigma$}{sigma}-代数不扩张”结论相一致，递归地址化在语义上可表述为“地址先于取值”的\emph{可读出前缀}机制。对任意候选地址 \(a\in A^{(L+1)}\)，在地址对象未给定之前不对其派生概念赋值：读出为偏函数，在该输入处不定义，其失败不得被误读为数值 \(0\)，并按本文约定以内禀空值 \(\mathsf{NULL}\) 表示“不可寻址/不定义”。一旦地址 \(a\) 被选定，则概念值由二元投影 \(x\mapsto \ind_{C_a^{(L+1)}}(x)\) 给出。于是层级递归满足：
+\begin{itemize}
+  \item “无地址 $\Rightarrow$ 空值（不定义）”；
+  \item “有地址 $\Rightarrow$ 二元投影（$0/1$）”；
+  \item “地址 $\Rightarrow$ 由旧层读出生成”。
+\end{itemize}
+在类型语义上，这意味着：若地址对象未给定（或不属于协议允许的 \(\mathcal{A}_{\mathrm{adm}}\)），则不存在可在对象层引用的评价函数 \(\ind_{C_a}\)（等价地，\(1_{C_a}\) 不能在协议的可见域中被构造成一个总定义读出）；
+此时读出偏函数在该输入处不定义，其语义后果以内禀空值 \(\mathsf{NULL}\) 表示（并将在 \S\ref{subsec:prefix-site-null} 中被等价内生化为 \(\mathscr{F}(a)=\varnothing\) 的局部截面障碍）。
+本节所述空值属于\emph{语义空值}（地址缺失，读出不定义）；与之正交的\emph{协议空值}（类型系统锁定 unitary slice）与\emph{碰撞空值}（侧信息预算不足导致不可唯一重建）见 \S\ref{subsec:xi-pw-type-safety-null} 及命题 \ref{prop:xi-null-three-way}。在更统一的口径下，可把“完备地址”打包为多轴前缀（定义 \ref{def:multi_axis_address}），其中碰撞空值对应残差轴不足，其最小侧信息预算由定理 \ref{thm:address-defect-law} 给出。
+该语义可与布尔代数闭包兼容，也可在算子代数层面以投影算子及其乘积实现（见附录 \ref{app:op-algebra}）。
+
+\subsection{前缀站点与局部截面：\texorpdfstring{$\mathsf{NULL}$}{NULL} 的内禀刻画}\label{subsec:prefix-site-null}
+本小节给出一个与“地址先于取值”严格兼容的形式化：把地址空间视为由前缀偏序生成的站点（cylinder site），并把“协议可接受且单值可核验的读出/证书”组织为其上的（预）层对象。其用途不在于引入新的测度论结构，而在于把空值（\(\mathsf{NULL}\)）提升为一个清晰的存在性障碍：\emph{在给定地址处不存在协议允许的局部截面}，从而避免把 “不定义” 误读为数值 \(0\) 的歧义。
+
+\begin{definition}[前缀站点与柱覆盖]\label{def:prefix-site}
+为简明起见仅以二元字母表 \(\Sigma=\{0,1\}\) 书写（对一般有限字母表 \(\Sigma\) 完全同型）。令 \(\mathcal{A}:=\Sigma^{<\infty}\) 为全体有限地址，并以前缀关系 \(a\preceq b\) 赋偏序。
+令 \(\mathcal{A}_{\mathrm{adm}}\subseteq\mathcal{A}\) 为协议所允许的地址集合（在本节的递归构造中，其原型可取为各层选定的有限地址族 \(A^{(L)}\) 及其在 refinement 下的闭包）。
+对任意 \(a\in\mathcal{A}_{\mathrm{adm}}\)，令柱事件 \(C_a\subseteq X\) 如第 \ref{sec:spg} 节定义（亦即 \(C_a=\omega_\infty^{-1}([a])\)，其中 \([a]\subseteq\Omega_\infty\) 为符号柱集）。
+\par
+称有限族 \(\{b_i\succeq a\}_{i=1}^n\subseteq\mathcal{A}_{\mathrm{adm}}\) 为 \(a\) 的一个\textbf{柱覆盖}，若 \(C_a=\bigcup_{i=1}^{n} C_{b_i}\)。
+该覆盖关系与段落 \ref{par:spg-prefix-ultrametric} 的前缀拓扑一致：\(\Omega_\infty=\varprojlim \Omega_k\) 的 clopen 基由柱集 \([a]\) 给出，因而“前缀细化”与“覆盖分解”为同一对象的两种等价描述。
+\end{definition}
+
+\begin{definition}[协议可接受读出的（预）层]\label{def:prefix-sheaf-readout}
+固定一套“可见域 + 检查器”的读出协议，其抽象口径见定义 \ref{def:xi-visible-read-null}（在此仅使用其“读出可为部分映射、并以 \(\mathsf{NULL}\) 表示不定义”的结构）。
+对每个 \(a\in\mathcal{A}_{\mathrm{adm}}\) 定义集合
+\[
+\mathscr{F}(a):=\{\text{在柱事件 }C_a\text{ 上协议允许、且在类型意义下为单值可核验的读出/证书对象}\},
+\]
+并对 refinement \(b\succeq a\) 定义限制映射
+\(\rho_{a\leftarrow b}:\mathscr{F}(a)\to\mathscr{F}(b)\)
+为把读出/证书限制到子柱 \(C_b\)（等价地：在事件层面对更深前缀条件化）。
+\end{definition}
+
+\begin{proposition}[局部截面存在性与 \texorpdfstring{$\mathsf{NULL}$}{NULL}]\label{prop:null-as-local-section-obstruction}
+在定义 \ref{def:prefix-site}--\ref{def:prefix-sheaf-readout} 的口径下，“地址先于取值”的语义可等价表述为：
+\[
+\text{地址 }a\text{ 的读出在类型层非 }\mathsf{NULL}
+\quad\Longleftrightarrow\quad
+\mathscr{F}(a)\neq\varnothing.
+\]
+并且在递归地址化的闭包口径下（命题 \ref{prop:recursive-addressing-refinement}），\(\mathscr{F}\) 对任意有限柱覆盖满足粘接唯一性：若 \(\{b_i\succeq a\}\) 覆盖 \(a\)，且一族局部对象 \(s_i\in\mathscr{F}(b_i)\) 在重叠处相容（即在任意交 \(C_{b_i}\cap C_{b_j}\) 上的限制一致），则存在唯一 \(s\in\mathscr{F}(a)\) 使得 \(s|_{C_{b_i}}=s_i\)。
+\end{proposition}
+
+\begin{proof}
+第一条等价仅是将 “不定义（\(\mathsf{NULL}\)）” 从数值层改写为对象层的存在性断言：读出/证书之所以可核验，要求其在给定地址处确有协议允许的局部对象可供引用；当且仅当该局部对象存在时，读出在类型层被视为非 \(\mathsf{NULL}\)。
+\par
+对粘接唯一性：柱覆盖是有限并集分解，且柱事件在 refinement 下封闭（由定义）；递归地址化又保证所有派生对象仍落在既有可观测柱事件所生成的 \(\sigma\)-代数内（命题 \ref{prop:recursive-addressing-refinement}）。
+因此若局部对象在重叠处一致，则它们在集合层的拼接由并集给出且唯一；协议可接受性在限制映射下保持，故粘接得到的对象仍属于 \(\mathscr{F}(a)\) 并满足唯一性。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$\mathsf{NULL}$}{NULL} 的三分解（局部截面障碍版）]\label{cor:null-trichotomy-local-section}
+在上述站点/（预）层表述下，\(\mathsf{NULL}\) 的三类来源（定义 \ref{def:xi-visible-read-null} 与命题 \ref{prop:xi-null-three-way}）可被统一为三类互不混淆的局部截面障碍：
+\begin{enumerate}
+  \item \textbf{语义空值：} \(a\notin\mathcal{A}_{\mathrm{adm}}\)，即协议未提供该地址对象；此时在站点上无对象可供取截面，空值由“缺乏指称”直接给出。
+  \item \textbf{协议空值：} \(a\in\mathcal{A}_{\mathrm{adm}}\) 但可见域/类型系统拒绝在 \(C_a\) 上建立读出（典型地：可见域被锁定为某一切片而拒绝额外坐标轴），从而 \(\mathscr{F}(a)=\varnothing\)。
+  \item \textbf{碰撞空值：} \(a\in\mathcal{A}_{\mathrm{adm}}\) 且通过检查器，但在“单值可核验读出”的类型约定下，若底层读出存在多对一压缩而未外置使扩展读出单射化的残差轴，则在该类型中仍等价表现为 \(\mathscr{F}(a)=\varnothing\)；其最小侧信息预算由命题 \ref{prop:xi-null-three-way} 与定理 \ref{thm:address-defect-law} 给出。
+\end{enumerate}
+因此，“\(\mathsf{NULL}\)”并非字符串的数值性质，而是站点对象与（预）层纤维在协议意义下的结构性空缺：合法性由 \(\mathscr{F}(a)\) 的非空性判定。
+\end{corollary}
+
+\paragraph{粘合障碍的上同调口径：\texorpdfstring{$H^2$}{H2} 见证}
+命题 \ref{prop:null-as-local-section-obstruction} 将 \(\mathsf{NULL}\) 内禀化为“局部截面不存在”的对象论断言。
+在本文后续的多轴前缀语义（定义 \ref{def:multi_axis_address}）与协议闭包中，局部证书对象往往还携带一组\emph{可调但必须可审计}的相容性标签（例如纤维自同构/gauge 选择的等价类；可取其阿贝尔化作为系数，见定义 \ref{def:fold-gauge-group}）。
+此时，“在重叠处相容”不仅是集合意义的相等，还可能包含一个可复核的二阶一致性约束；其失败可用 Čech 上同调的二阶障碍类作证书化刻画。
+
+\begin{definition}[粘合障碍类（Čech \texorpdfstring{$H^2$}{H2} 口径）]\label{def:prefix-site-h2-gluing-obstruction}
+设 \(A\) 为一个系数阿贝尔群。
+考虑上述前缀站点 \(\mathcal{A}_{\mathrm{adm}}\) 及其柱覆盖。
+假设在某一协议口径下，局部证书对象的相容性可被组织为一个带 \(A\)-纤维的“相容层”（例如 \(A\)-torsor/带 gauge 的局部对象），使得对任意覆盖 \(\{b_i\succeq a\}\) 与任意局部对象族 \((s_i\in\mathscr{F}(b_i))\)，其在二重重叠上的差异可由一族 \(A\)-值转移数据 \(g_{ij}\) 记录，并在三重重叠上诱导一个 Čech \(2\)-余圈
+\[
+\alpha_{ijk}:=g_{ij}+g_{jk}+g_{ki}\in A,
+\qquad
+\alpha\in Z^2(\{b_i\},A).
+\]
+称其同调类 \([\alpha]\in H^2(\{b_i\},A)\)（并在加细覆盖下取极限）为地址 \(a\) 处的\textbf{粘合障碍类}：\([\alpha]=0\) 表示可通过允许的局部 gauge 调整把 \((s_i)\) 改写为在重叠处严格相容的家族，从而满足可粘接性；\([\alpha]\neq 0\) 则表示存在结构性扭结阻止其全球化。
+\end{definition}
+
+\begin{proposition}[\texorpdfstring{$H^2$}{H2} 粘合障碍 \(\Rightarrow\) \texorpdfstring{$\mathsf{NULL}$}{NULL}]\label{prop:null-as-h2-obstruction}
+在定义 \ref{def:prefix-site-h2-gluing-obstruction} 的设定下，
+若某一可核对地址 \(a\in\mathcal{A}_{\mathrm{adm}}\) 的粘合障碍类 \([\alpha]\neq 0\)，
+则该地址处不存在协议允许的全局局部截面（证书对象），从而
+\(
+\mathscr{F}(a)=\varnothing
+\)
+并且读出在类型层必为 \(\mathsf{NULL}\)（命题 \ref{prop:null-as-local-section-obstruction}）。
+\end{proposition}
+
+\begin{proof}
+反设 \(\mathscr{F}(a)\neq\varnothing\)，取任一全局对象 \(s\in\mathscr{F}(a)\) 并限制到覆盖 \(\{b_i\}\) 上得 \(s_i:=s|_{C_{b_i}}\in\mathscr{F}(b_i)\)。
+则在任意重叠处这些限制严格相容；按定义 \ref{def:prefix-site-h2-gluing-obstruction}，其诱导的转移数据可取为平凡（从而 \(\alpha\) 为零余圈、\([\alpha]=0\)），与 \([\alpha]\neq 0\) 矛盾。
+故 \(\mathscr{F}(a)=\varnothing\)，进而读出为 \(\mathsf{NULL}\)。
+证毕。
+\end{proof}
+
+\paragraph{从 \(H^2\) 障碍到带状 gerbe：对象层级的提升}
+命题 \ref{prop:null-as-h2-obstruction} 把 \([\alpha]\neq 0\) 解释为“全局证书对象不存在”的见证。
+为了在结构上保留“局部存在、全局失效”的信息，单纯的集合值（预）层口径并不足够：当粘合在三重重叠上出现二阶结合缺陷时，合适的语义对象是以 \(A\) 为 band 的 \(2\)-层级对象。
+
+\begin{theorem}[Čech-\texorpdfstring{$H^2$}{H2} 障碍的 gerbe 语义]\label{thm:prefix-site-cech-null-gerbe}
+沿用定义 \ref{def:prefix-site-h2-gluing-obstruction} 的设定。
+固定 \(a\in\mathcal{A}_{\mathrm{adm}}\) 与其一组柱覆盖 \(\{b_i\succeq a\}\)，并记二重与三重交为
+\(
+C_{b_{ij}}:=C_{b_i}\cap C_{b_j}
+\)
+与
+\(
+C_{b_{ijk}}:=C_{b_i}\cap C_{b_j}\cap C_{b_k}
+\)。
+设 \(\alpha\in Z^2(\{b_i\},A)\) 为该覆盖上由局部识别数据诱导的 Čech \(2\)-余圈，并记其同调类为 \([\alpha]\)（在加细覆盖下取极限）。
+则存在一个由 \((\{b_i\},\alpha)\) 函子性构造的纤维化群胚 \(\mathcal{G}_\alpha\to \mathcal{A}_{\mathrm{adm}}\)，满足：
+\begin{enumerate}
+  \item \(\mathcal{G}_\alpha\) 为以 \(A\) 为 band 的带状 gerbe：在足够细覆盖下局部非空且局部连通，并且任意对象的自同构群自然同构于 \(A\)。
+  \item \(\mathcal{G}_\alpha\) 的中性化（存在全局对象）与“地址 \(a\) 处存在协议允许的全局证书对象”严格等价。
+  \item \(\mathcal{G}_\alpha\) 的等价类仅由 \([\alpha]\) 决定：更精确地，\(\mathcal{G}_\alpha\) 的带状类与 \([\alpha]\) 在 \(H^2(\{b_i\},A)\) 中一致。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+以覆盖索引集为对象，令 \(\mathcal{G}_\alpha(b_i)\) 的对象为“定义在 \(C_{b_i}\) 上的局部证书对象”，态射为协议允许的局部 gauge 变换。
+在二重交 \(C_{b_{ij}}\) 上以转移数据 \(g_{ij}\) 识别局部对象，并要求在三重交 \(C_{b_{ijk}}\) 上的两种复合 \(g_{ij}g_{jk}\) 与 \(g_{ik}\) 的差异由 \(\alpha_{ijk}\) 给出（以 \(A\) 的作用实现结合缺陷）。
+局部对象的存在性给出局部非空性；在假设“局部证书对象带 \(A\)-纤维的相容结构”下，任意两局部对象在足够细覆盖下局部同构，从而得局部连通性；而自同构的局部群由 \(A\) 决定并在加细下稳定，故得到 \(A\)-带状 gerbe。
+\par
+若存在全局证书对象，则其限制与恒等粘合数据给出中性对象；反之，中性对象给出覆盖上的 descent datum，并且中性化意味着可在允许的 gauge 调整下将结合缺陷严格消去，从而得到全局对象。
+最后，更换局部对象与识别只会把 \(\alpha\) 改变为 Čech 余边界，因此 \(\mathcal{G}_\alpha\) 的等价类仅依赖于 \([\alpha]\)。
+证毕。
+\end{proof}
+
+\paragraph{障碍的最小可见化：通用系数商}
+当 \([\alpha]\neq 0\) 时，中性化失败把读出推向 \(\mathsf{NULL}\)（命题 \ref{prop:null-as-h2-obstruction}）。
+另一方面，若允许把系数群作最小化商化，则可在不改变覆盖与局部数据的前提下把二阶缺陷严格消去，从而将 gerbe 归约到中性情形。
+
+\begin{proposition}[使障碍点态消失的最小系数商]\label{prop:prefix-site-min-visible-quotient}
+在定理 \ref{thm:prefix-site-cech-null-gerbe} 的设定下，令
+\[
+H_\alpha:=\bigl\langle \alpha_{ijk}\ \bigm|\ C_{b_{ijk}}\neq\varnothing \bigr\rangle\le A,
+\qquad
+A_{\mathrm{vis}}:=A/H_\alpha,
+\]
+并记自然投影为 \(\pi:A\twoheadrightarrow A_{\mathrm{vis}}\)。
+则：
+\begin{enumerate}
+  \item \(\alpha\) 推送到 \(A_{\mathrm{vis}}\) 后点态为零：其像 \(\bar\alpha\in Z^2(\{b_i\},A_{\mathrm{vis}})\) 满足 \(\bar\alpha_{ijk}=0\) 对一切 \(C_{b_{ijk}}\neq\varnothing\)。
+  因而对应的 gerbe \(\mathcal{G}_{\bar\alpha}\) 必为中性 gerbe。
+  \item 若 \(\varphi:A\to B\) 为任意阿贝尔群同态，使得 \(\varphi(\alpha_{ijk})=0\) 对所有三重交成立（等价地，\(\alpha\) 在系数 \(B\) 下点态消失），则 \(\varphi\) 唯一因子分解为
+  \[
+  A\twoheadrightarrow A_{\mathrm{vis}}\xrightarrow{\ \exists!\ } B.
+  \]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) 由 \(H_\alpha\) 的生成方式，\(\pi(\alpha_{ijk})=0\) 对所有 \(C_{b_{ijk}}\neq\varnothing\) 成立，故 \(\bar\alpha=0\)。
+在定理 \ref{thm:prefix-site-cech-null-gerbe} 的构造中，\(\bar\alpha=0\) 对应平凡结合子，从而 gerbe 中性。
+\par
+(2) 若 \(\varphi(\alpha_{ijk})=0\) 对一切三重交成立，则 \(H_\alpha\subseteq\ker\varphi\)，因此 \(\varphi\) 通过商 \(A/H_\alpha\) 因子分解且唯一。
+证毕。
+\end{proof}
+
+\paragraph{保留分辨率的代价：外置寄存器的严格下界}
+命题 \ref{prop:prefix-site-min-visible-quotient} 表明：在只允许改变系数群而不引入外置记录轴的制度下，\([\alpha]\) 的可见化最小化为 \(A_{\mathrm{vis}}\)。
+若目标是恢复原始 \(A\) 的分辨率，则必须显式外置承载 \(H_\alpha\) 的信息量。
+
+\begin{theorem}[恢复 \(A\)-分辨率所需的最小寄存器容量]\label{thm:prefix-site-register-lower-bound}
+设 \(A\) 为有限阿贝尔群，并沿用命题 \ref{prop:prefix-site-min-visible-quotient} 的记号。
+若仅允许额外引入一个有限寄存器集合 \(R\)，并要求存在集合嵌入
+\[
+A\hookrightarrow A_{\mathrm{vis}}\times R,
+\]
+则必有
+\[
+\card{R}\ \ge\ \card{H_\alpha}
+\qquad\Longleftrightarrow\qquad
+\log_2\card{R}\ \ge\ \log_2\card{H_\alpha}.
+\]
+并且该下界可达：存在 \(R\) 使得等号成立。
+\end{theorem}
+
+\begin{proof}
+对任意 \(\bar a\in A_{\mathrm{vis}}\)，投影 \(\pi:A\to A_{\mathrm{vis}}\) 的纤维 \(\pi^{-1}(\bar a)\) 为一个 \(H_\alpha\)-陪集，故其基数恒为 \(\card{H_\alpha}\)。
+若存在嵌入 \(A\hookrightarrow A_{\mathrm{vis}}\times R\)，则其在每个纤维上的限制给出
+\(
+\pi^{-1}(\bar a)\hookrightarrow \{\bar a\}\times R\cong R
+\)，
+从而 \(\card{R}\ge \card{H_\alpha}\)。
+\par
+可达性：取 \(R:=H_\alpha\)。
+任选一个集合截面 \(s:A_{\mathrm{vis}}\to A\)（不必为群同态），则每个 \(a\in A\) 可唯一写为 \(a=s(\pi(a))+h(a)\) 且 \(h(a)\in H_\alpha\)。
+令 \(\iota(a):=(\pi(a),h(a))\in A_{\mathrm{vis}}\times H_\alpha\)，则 \(\iota\) 为嵌入且 \(\card{R}=\card{H_\alpha}\)。
+证毕。
+\end{proof}
+
+\paragraph{代数化的读出：扭曲群胚与投影表象}
+二阶结合缺陷亦可被转写为覆盖神经上的扭曲乘法，从而把“局部证书 + 识别数据”的读出链条解释为投影表象而非严格表象。
+
+\begin{proposition}[Čech 群胚的 \(A\)-扭曲与投影表象]\label{prop:prefix-site-projective-rep-twist}
+令 \(\mathfrak N(\{b_i\})\) 为覆盖的神经，并令 \(\Pi\) 为其 \(1\)-骨架生成的 Čech 群胚（对象为指标 \(i\)，态射由二重交 \(C_{b_{ij}}\neq\varnothing\) 生成）。
+则 \(\alpha\) 诱导：
+\begin{enumerate}
+  \item 一个以 \(A\) 为中心的 \(\Pi\) 的 \(2\)-上扩张（等价地，\(\Pi\) 上的 \(A\)-加权结合子），从而定义扭曲群胚代数 \(\CC_\alpha[\Pi]\)（其乘法由 \(\alpha\) 扭曲）。
+  \item 覆盖上的任一 descent 数据（局部对象与二重交识别）自然给出 \(\Pi\) 的一个投影表象，其乘子（multiplier）由 \([\alpha]\) 决定；并且该投影表象可严格化为真实表象当且仅当 \([\alpha]=0\)。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+在 \(\Pi\) 上选择生成态射 \(i\to j\) 表示二重交上的识别。
+三重交上两种复合 \(i\to j\to k\) 与 \(i\to k\) 的差异由 \(A\)-值元素 \(\alpha_{ijk}\) 记录，这正是 \(2\)-范畴意义下结合子的全部数据。
+将该结合子视为乘法扭曲即得到 \(\CC_\alpha[\Pi]\)。
+\par
+对投影表象：任一把局部对象与识别送入线性化实现的选择，在复合路径上得到的算子只在标量乘子（或一般的 \(A\) 作用）意义下相等，乘子由 \(\alpha_{ijk}\) 给定并在余边界改变下保持同调类不变。
+当且仅当 \([\alpha]=0\) 时，存在余边界修正消除该乘子，从而 strictification 为真实表象。
+证毕。
+\end{proof}
+
+\paragraph{对偶下降与谱可定义性：角色通道的可见子群}
+在角色分解口径下，只有能湮灭 \(H_\alpha\) 的角色才可在可审计意义下给出无歧义的全局模式。
+
+\begin{corollary}[可见角色与湮灭子群]\label{cor:prefix-site-visible-characters-annihilator}
+设 \(A\) 为有限阿贝尔群，并记 Pontryagin 对偶 \(\widehat A:=\Hom(A,\TT)\)。
+令 \(H_\alpha\le A\) 与 \(A_{\mathrm{vis}}=A/H_\alpha\) 如命题 \ref{prop:prefix-site-min-visible-quotient}。
+则有自然同构
+\[
+\widehat{A_{\mathrm{vis}}}\ \cong\ H_\alpha^\perp
+:=\{\chi\in\widehat A:\ \chi(h)=1\ \forall h\in H_\alpha\}.
+\]
+并且 \(\chi\in H_\alpha^\perp\) 当且仅当 \(\chi(\alpha_{ijk})=1\) 对所有 \(C_{b_{ijk}}\neq\varnothing\) 成立。
+\end{corollary}
+
+\begin{proof}
+商同态 \(A\twoheadrightarrow A/H_\alpha\) 的对偶同态为嵌入 \(\widehat{A/H_\alpha}\hookrightarrow \widehat A\)，其像恰为湮灭子群 \(H_\alpha^\perp\)。
+又因 \(H_\alpha\) 由 \(\{\alpha_{ijk}\}\) 生成，\(\chi\in H_\alpha^\perp\) 等价于 \(\chi(\alpha_{ijk})=1\) 对所有生成元成立。
+证毕。
+\end{proof}
+
+\begin{theorem}[谱化输出的可定义性判别：只能在 \texorpdfstring{$A_{\mathrm{vis}}$}{Avis} 上无歧义成立]\label{thm:prefix-site-spectral-definability-avis}
+考虑任一“谱化”步骤，其输入为命题 \ref{prop:prefix-site-projective-rep-twist} 的 descent 数据（等价地，扭曲群胚代数 \(\CC_\alpha[\Pi]\)），输出为可审计的谱对象（例如：转移算子族、迹/行列式、\(\zeta\)-函数型不变量或基于角色分解的误差控制）。
+假设该步骤满足最弱的自然性：对允许的局部 gauge 调整（即改变 \(\alpha\) 为同调余边界）最终输出不变。
+则：
+\begin{enumerate}
+  \item 若 \(\chi\in\widehat A\) 不属于 \(H_\alpha^\perp\)，则任何以 \(\chi\) 作为模式的“扭曲谱对象”都不具备 gauge 不变性，从而无法下降为全局可审计对象。
+  \item 若 \(\chi\in H_\alpha^\perp\cong\widehat{A_{\mathrm{vis}}}\)，则上述歧义消失；因此一切基于角色分解的谱命题在形式上只能理解为关于 \(A_{\mathrm{vis}}\) 的命题，而非关于原始 \(A\) 的命题。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{prop:prefix-site-projective-rep-twist}，沿不同复合路径得到的线性化实现相差乘子 \(\chi(\alpha_{ijk})\)。
+若存在某个三重交使 \(\chi(\alpha_{ijk})\neq 1\)，则该乘子在 gauge 调整下不能被消去，从而违背“最终输出 gauge 不变”的可审计性要求，故全局对象不可定义。
+反之，当 \(\chi\in H_\alpha^\perp\) 时，对所有三重交均有 \(\chi(\alpha_{ijk})=1\)，投影乘子消失，谱化输出可下降为无歧义的全局对象；再由推论 \ref{cor:prefix-site-visible-characters-annihilator} 得到其必经由 \(\widehat{A_{\mathrm{vis}}}\)。
+证毕。
+\end{proof}
+
+\subsection{观察者索引、信息状态与 forcing 语义}\label{subsec:observer-indexed-forcing}
+前述“地址先于取值”“\(\mathsf{NULL}\) 的局部截面判据”与“多轴前缀提升可读性”本质上都属于对象层可断言性的组织问题。
+为把这三条链压缩到同一语义框架中，本小节把对象层事实统一放回\emph{观察者索引的信息状态}上：全局层只保留推理规则，而对象层命题是否成立，则由局部信息状态上的 forcing 关系给出。
+
+\begin{definition}[观察者索引的信息状态框架]\label{def:observer-indexed-information-frame}
+称八元组
+\[
+\mathfrak F=(P,\le,\iota,\tau,\mathrm{Cov},\mathrm{Upd},D,V)
+\]
+为一个观察者索引的信息状态框架，若满足下列条件：
+\begin{enumerate}
+  \item \(P\) 为信息状态集合；每个 \(p\in P\) 表示一个局部可访问的信息条件，而非无索引的全局世界。
+  \item \(\le\) 为 \(P\) 上的预序；若 \(q\le p\)，则称 \(q\) 是 \(p\) 的细化，表示 \(q\) 在 \(p\) 的基础上拥有更多记录、更细的区分能力或更强的分类结构。
+  \item \(\iota:P\to I\) 为观察者索引映射，\(\tau:P\to T\) 为时间索引映射，并满足
+  \[
+  q\le p \Longrightarrow \iota(q)=\iota(p),\qquad \tau(q)\ge \tau(p).
+  \]
+  \item 对每个 \(p\in P\)，\(\mathrm{Cov}(p)\) 给出 \(p\) 的覆盖族；每个覆盖
+  \[
+  \{p_k\to p\}_{k\in K}
+  \]
+  满足 \(p_k\le p\)，并且覆盖在细化下稳定：若 \(q\le p\) 且 \(\{p_k\to p\}_{k\in K}\in\mathrm{Cov}(p)\)，则存在 \(\{q_\ell\to q\}_{\ell\in L}\in\mathrm{Cov}(q)\) 及映射 \(\lambda:L\to K\)，使得 \(q_\ell\le p_{\lambda(\ell)}\) 对一切 \(\ell\in L\) 成立。
+  \item 对每个更新动作 \(\alpha\)，\(\mathrm{Upd}_\alpha(p)\subseteq P\) 为在 \(p\) 上执行 \(\alpha\) 后可到达的合法后继状态，并满足与细化的双向相容性：若 \(q\le p\)，则
+  \[
+  r\in \mathrm{Upd}_\alpha(q)\Rightarrow \exists s\in \mathrm{Upd}_\alpha(p)\ \text{使}\ r\le s,
+  \]
+  \[
+  s\in \mathrm{Upd}_\alpha(p)\Rightarrow \exists r\in \mathrm{Upd}_\alpha(q)\ \text{使}\ r\le s.
+  \]
+  \item \(D\) 为对象域；对每个原子命题 \(A\)，赋值 \(V(A)\subseteq P\) 为下闭集，即
+  \[
+  p\in V(A),\ q\le p \Longrightarrow q\in V(A).
+  \]
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[forcing 关系]\label{def:observer-indexed-forcing}
+在框架 \(\mathfrak F\) 上，定义对象层可断言关系
+\[
+p\Vdash \varphi
+\]
+如下：
+\begin{enumerate}
+  \item 对原子命题 \(A\)，规定
+  \[
+  p\Vdash A \Longleftrightarrow p\in V(A).
+  \]
+  \item 对合取，规定
+  \[
+  p\Vdash \varphi\land\psi
+  \Longleftrightarrow
+  p\Vdash \varphi\ \text{且}\ p\Vdash \psi.
+  \]
+  \item 对蕴含，规定
+  \[
+  p\Vdash \varphi\to\psi
+  \Longleftrightarrow
+  \forall q\le p,\ \bigl(q\Vdash \varphi \Rightarrow q\Vdash \psi\bigr).
+  \]
+  \item 对否定，规定
+  \[
+  p\Vdash \neg\varphi
+  \Longleftrightarrow
+  \forall q\le p,\ q\nVdash \varphi.
+  \]
+  \item 对析取，规定 \(p\Vdash \varphi\lor\psi\) 当且仅当存在某个覆盖 \(\{p_k\to p\}_{k\in K}\in\mathrm{Cov}(p)\)，使得对每个 \(k\in K\)，均有
+  \[
+  p_k\Vdash \varphi\quad \text{或}\quad p_k\Vdash \psi.
+  \]
+  \item 对全称量词，规定
+  \[
+  p\Vdash \forall x\,\varphi(x)
+  \Longleftrightarrow
+  \forall q\le p,\ \forall d\in D,\ q\Vdash \varphi(d).
+  \]
+  \item 对存在量词，规定 \(p\Vdash \exists x\,\varphi(x)\) 当且仅当存在某个覆盖 \(\{p_k\to p\}_{k\in K}\in\mathrm{Cov}(p)\)，并可为每个 \(k\in K\) 选取 \(d_k\in D\)，使得
+  \[
+  p_k\Vdash \varphi(d_k).
+  \]
+  \item 对更新模态，规定
+  \[
+  p\Vdash [\alpha]\varphi
+  \Longleftrightarrow
+  \forall q\in \mathrm{Upd}_\alpha(p),\ q\Vdash \varphi,
+  \]
+  \[
+  p\Vdash \langle\alpha\rangle\varphi
+  \Longleftrightarrow
+  \exists q\in \mathrm{Upd}_\alpha(p),\ q\Vdash \varphi.
+  \]
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[已决定]\label{def:observer-indexed-decided}
+称命题 \(\varphi\) 在状态 \(p\) 上\emph{已决定}，若
+\[
+p\Downarrow \varphi
+\quad:\Longleftrightarrow\quad
+p\Vdash \varphi\ \text{或}\ p\Vdash \neg\varphi.
+\]
+若既无 \(p\Vdash \varphi\)，又无 \(p\Vdash \neg\varphi\)，则称 \(\varphi\) 在 \(p\) 上未决定。
+\end{definition}
+
+\begin{proposition}[forcing 的单调性]\label{prop:observer-indexed-forcing-monotonicity}
+若 \(q\le p\) 且 \(p\Vdash \varphi\)，则 \(q\Vdash \varphi\)。
+\end{proposition}
+
+\begin{proof}
+对公式复杂度作归纳。
+原子情形由 \(V(A)\) 的下闭性直接得到；合取情形平凡。
+蕴含、否定与全称量词情形都只需注意：定义中对一切 \(r\le p\) 的量化在 \(q\le p\) 下仍有效。
+析取与存在量词情形由覆盖在细化下的稳定性推出：\(p\) 上的任一合法覆盖都可沿 \(q\le p\) 限制为 \(q\) 的合法覆盖。
+对更新模态，\([\alpha]\) 的情形由后继状态与细化的前向相容性推出；\(\langle\alpha\rangle\) 的情形则由后继状态与细化的后向相容性推出。
+故结论成立。
+\end{proof}
+
+\begin{corollary}[细化不推翻已建立的对象事实]\label{cor:observer-indexed-no-retraction}
+若某命题在较粗状态 \(p\) 上已可断言，则在任何后续细化状态 \(q\le p\) 上仍可断言。
+因此，信息细化的作用不是撤销对象层事实，而是缩小未决定域。
+\end{corollary}
+
+\begin{proof}
+这是命题 \ref{prop:observer-indexed-forcing-monotonicity} 的直接推论。
+\end{proof}
+
+\begin{proposition}[全局层只统一推理规则]\label{prop:observer-indexed-global-layer-logic-only}
+设 \(\Gamma\vdash \varphi\) 是与定义 \ref{def:observer-indexed-forcing} 相容的演算层推理。
+则对任意状态 \(p\in P\)，若
+\[
+p\Vdash \gamma
+\qquad (\forall \gamma\in \Gamma),
+\]
+则
+\[
+p\Vdash \varphi.
+\]
+因此，全局层统一的是推理规则，而对象层事实始终由具体信息状态上的 forcing 给出。
+\end{proposition}
+
+\begin{proof}
+这是 forcing 语义对相应演算层的标准可靠性陈述；证明对推导长度作归纳即可。
+证毕。
+\end{proof}
+
+\begin{definition}[地址对象与局部截面]\label{def:observer-indexed-address-local-sections}
+沿用定义 \ref{def:prefix-site}--\ref{def:prefix-sheaf-readout} 的前缀站点与协议可接受读出层。
+对每个信息状态 \(p\)，记
+\[
+A(p)\subseteq \mathcal{A}_{\mathrm{adm}}
+\]
+为在 \(p\) 上已对象化且协议允许的地址集合。
+对每个 \(a\in A(p)\)，记
+\[
+\Gamma_p(a)\subseteq \mathscr{F}(a)
+\]
+为在状态 \(p\) 上、地址 \(a\) 处全部协议允许、类型意义下单值且可核验的局部截面之集合。
+若 \(a\notin A(p)\)，则称该地址在 \(p\) 上尚未对象化；若 \(a\in A(p)\) 但 \(\Gamma_p(a)=\varnothing\)，则称该地址在 \(p\) 上尚无合法局部读出。
+\end{definition}
+
+\begin{proposition}[地址先于取值]\label{prop:observer-indexed-address-before-value}
+对任意状态 \(p\) 与地址符号 \(a\)，若 \(a\notin A(p)\)，则一切形如“\(a\) 的值为 \(v\)”的对象层命题在 \(p\) 上都不能成立；
+若 \(a\in A(p)\) 但 \(\Gamma_p(a)=\varnothing\)，则“\(a\) 在当前类型中可被单值读出”的命题在 \(p\) 上不能成立。
+\end{proposition}
+
+\begin{proof}
+对象层取值命题要成立，前提是存在合法指称对象与相应的局部截面。
+若地址对象尚未形成，则命题缺乏对象语义支撑；若地址已对象化但局部截面为空，则读出命题缺乏证书支撑。
+因此两种情形下相关命题都不能在 \(p\) 上被强制。
+\end{proof}
+
+\begin{corollary}[非 \texorpdfstring{$\mathsf{NULL}$}{NULL} 的 forcing 判据]\label{cor:observer-indexed-nonnull-criterion}
+在状态 \(p\) 上，地址 \(a\) 的读出为非 \(\mathsf{NULL}\) 当且仅当
+\[
+a\in A(p)
+\qquad\text{且}\qquad
+\Gamma_p(a)\neq \varnothing.
+\]
+因此，非 \(\mathsf{NULL}\) 不是一个值域元素，而是局部截面的存在性条件。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:observer-indexed-address-before-value} 立即得到。
+\end{proof}
+
+\begin{definition}[\texorpdfstring{$\mathsf{NULL}$}{NULL} 的状态化三分解]\label{def:observer-indexed-null-trichotomy}
+在状态 \(p\) 上，地址 \(a\) 的 \(\mathsf{NULL}\) 分为三类：
+\begin{enumerate}
+  \item \textbf{语义空值：} \(a\notin A(p)\)。此时对象层尚未形成合法指称。
+  \item \textbf{协议空值：} \(a\in A(p)\) 但由于当前可见域、类型约束或协议纪律的限制，\(\Gamma_p(a)=\varnothing\)。此时有地址而无合法读出。
+  \item \textbf{碰撞空值：} 地址与协议均合法，但底层读出仍存在不可消解的多对一压缩；在未补足足够残差轴、未提升到单射层级之前，\(\Gamma_p(a)=\varnothing\)。
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[\texorpdfstring{$\mathsf{NULL}$}{NULL} 的结构性]\label{prop:observer-indexed-null-structural}
+\(\mathsf{NULL}\) 不是值域中的一个普通元素，而是对象层 forcing 失败的结构性形式。
+\end{proposition}
+
+\begin{proof}
+由推论 \ref{cor:observer-indexed-nonnull-criterion}，非 \(\mathsf{NULL}\) 的充要条件是局部截面的非空存在。
+故 \(\mathsf{NULL}\) 的本质不是某个特殊值被读出，而是相关读出命题未能在当前状态上被强制成立。
+\end{proof}
+
+\begin{definition}[多轴前缀与公共细化]\label{def:observer-indexed-common-refinement}
+设 \(u\) 与 \(v\) 是两个协议兼容的前缀轴，并记 \(p_u,p_v\in P\) 为分别只包含单轴 \(u,v\) 信息的状态。
+若存在状态 \(p_{u\otimes v}\in P\) 使
+\[
+p_{u\otimes v}\le p_u,
+\qquad
+p_{u\otimes v}\le p_v,
+\]
+则称 \(p_{u\otimes v}\) 为它们的联合前缀状态或公共细化。
+\end{definition}
+
+\begin{proposition}[多轴前缀提升可断言性]\label{prop:observer-indexed-common-refinement-decidability}
+在定义 \ref{def:observer-indexed-common-refinement} 的前提下，联合前缀不会降低任何已建立的对象层事实。
+并且，凡依赖于额外残差轴才能消解的碰撞命题，都可能在公共细化状态上首次变为已决定。
+\end{proposition}
+
+\begin{proof}
+第一部分是命题 \ref{prop:observer-indexed-forcing-monotonicity} 的直接结果。
+第二部分则来自公共细化对不可区分候选读出的进一步切分：原先在单轴状态上混合在一起的候选项，经附加轴区分后，可能首次形成单值且可核验的局部截面，从而把未决定命题推进到已决定状态。
+\end{proof}
+
+\begin{definition}[延迟分类]\label{def:observer-indexed-delayed-classification}
+设 \(s\le \tau(p)\)，且 \(A_s\) 为一个关于较早时刻 \(s\) 的命题。
+若在状态 \(p\) 上
+\[
+p\nVdash A_s,
+\qquad
+p\nVdash \neg A_s,
+\]
+但存在某个更新动作 \(\alpha\) 与某个后继状态 \(q\in \mathrm{Upd}_\alpha(p)\)，使得
+\[
+q\Downarrow A_s,
+\]
+则称 \(A_s\) 在 \(p\to q\) 的更新过程中发生了延迟分类。
+\end{definition}
+
+\begin{proposition}[延迟分类不改写过去]\label{prop:observer-indexed-delayed-classification-not-retrocausal}
+在定义 \ref{def:observer-indexed-delayed-classification} 的情形下，更新所改变的是关于时刻 \(s\) 之命题的当前可断言性，而不是时刻 \(s\) 的对象层内容本身。
+\end{proposition}
+
+\begin{proof}
+命题 \(A_s\) 的时间索引 \(s\) 在更新前后保持不变；变化的只是信息状态由 \(p\) 细化为某个可达后继 \(q\)。
+因此，延迟分类表达的是“关于过去对象的命题在更强信息状态上首次被定解”，而非“过去被回写为另一个对象层事实”。
+\end{proof}
+
+\begin{corollary}[观察更新的对象层意义]\label{cor:observer-indexed-update-decides-not-create}
+观察、再分类、增加残差轴、拼接证书对象等操作，在对象层上的统一作用，是把某些命题从未决定推进到已决定，而不是凭空创造事实。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:observer-indexed-common-refinement-decidability} 与命题 \ref{prop:observer-indexed-delayed-classification-not-retrocausal} 联立即得。
+\end{proof}
+
+\input{subsubsec__recursive-addressing-observer-indexed-forcing-continuation}

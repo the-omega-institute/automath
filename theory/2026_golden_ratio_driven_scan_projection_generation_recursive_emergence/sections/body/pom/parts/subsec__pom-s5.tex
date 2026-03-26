@@ -1,0 +1,620 @@
+\subsubsection{五阶碰撞矩与 \texorpdfstring{$\mathrm{R\acute{e}nyi}$}{Renyi}--5 投影熵率}\label{subsec:pom-s5}
+\begin{definition}[五阶折叠碰撞矩]\label{def:pom-s5}
+定义五阶碰撞和
+$$
+S_5(m):=\sum_{x\in X_m} d_m(x)^5.
+$$
+等价地，从 \(\Omega_m\) 上均匀独立抽取五条窗口 \(\omega_1,\dots,\omega_5\)，则
+$$
+\mathbb{P}\bigl[\Fold_m(\omega_1)=\cdots=\Fold_m(\omega_5)\bigr]=\frac{S_5(m)}{32^m}.
+$$
+\end{definition}
+
+\begin{proposition}[五阶递推、主根与 \texorpdfstring{$h_5$}{h5}]\label{prop:pom-s5-recurrence}
+对一切 \(m\ge 13\) 有精确递推
+$$
+S_5(m)=2S_5(m-1)+11S_5(m-2)+8S_5(m-3)+20S_5(m-4)-10S_5(m-5).
+$$
+令 \(r_5\) 为特征多项式
+$$
+x^5-2x^4-11x^3-8x^2-20x+10=0
+$$
+的最大实根（\(r_5\approx 4.800521005045\)）。则
+$$
+S_5(m)=\Theta(r_5^m),
+\qquad
+h_5:=\lim_{m\to\infty}\frac{1}{m}\Bigl(-\log\sum_{x\in X_m}w_m(x)^5\Bigr)
+:=\log\!\left(\frac{32}{r_5}\right).
+$$
+\end{proposition}
+\begin{proof}
+递推由脚本 \texttt{scripts/exp\_fold\_collision\_moment\_recursions.py} 对枚举值逐项核验（并确定最早起始点）。其特征多项式的 Perron 根为 \(r_5\)，从而 \(S_5(m)=\Theta(r_5^m)\)。再用
+$$
+\sum_{x\in X_m}w_m(x)^5=\sum_x\frac{d_m(x)^5}{32^m}=\frac{S_5(m)}{32^m},
+$$
+即得 \(h_5=\log(32/r_5)\)。证毕。
+\end{proof}
+
+\begin{remark}[\texorpdfstring{$\mathrm{R\acute{e}nyi}$}{Renyi} 指纹谱：从 \texorpdfstring{$q=2,3$}{q=2,3} 到更高阶]\label{rem:pom-renyi-spectrum}
+对任意整数 \(q\ge 2\) 定义
+$$
+S_q(m):=\sum_{x\in X_m} d_m(x)^q,\qquad
+H_q(m):=-\log\sum_{x\in X_m}w_m(x)^q=-\log\!\left(\frac{S_q(m)}{2^{qm}}\right).
+$$
+对 \(q=2,3,4\)，命题 \ref{prop:pom-s2-recurrence}、\ref{prop:pom-s3-recurrence} 与 \ref{prop:pom-s4-recurrence} 给出严格有限态碰撞核与闭式熵率 \(h_q=\log(2^q/r_q)\)。
+对 \(q=5,6,7,8\)，可审计地核验存在小阶整系数递推（表 \ref{tab:fold_collision_moment_recursions}；脚本 \texttt{scripts/exp\_fold\_collision\_moment\_recursions.py}），从而 \(r_q\) 与 \(h_q\) 可由递推特征多项式的 Perron 根精确抽取；其数值列于表 \ref{tab:fold_collision_renyi_spectrum}（脚本 \texttt{scripts/exp\_fold\_collision\_renyi\_spectrum.py}）。
+对 \(q\ge 9\)，同样可由经核验的整系数递推直接给出精确 \(r_q\)（从而精确 \(h_q\)），并已列于表 \ref{tab:fold_collision_renyi_spectrum}。
+\par
+若需标准 Rényi 熵率的归一化口径，可取 \(h_q^{\mathrm{R}}:=h_q/(q-1)\)（与 \S\ref{subsec:pom-higher-collision-spectrum} 中的定义一致）。
+\end{remark}
+
+\input{parts/subsubsec__pom-collision-kernel-family}
+
+\begin{proposition}[\texorpdfstring{$h_q$}{hq} 的几何化：投影输出测度的 Rényi 维数谱]\label{prop:pom-renyi-dimension-spectrum}
+令 \(w_m(x)=d_m(x)/2^m\) 为均匀微态的折叠推前。把分辨率 \(m\) 与几何尺度对应为
+\[
+\varepsilon_m:=\varphi^{-m}.
+\]
+定义输出测度在尺度 \(\varepsilon_m\) 下的 \(q\)-阶 Rényi 维数近似为
+\[
+D_q(m):=\frac{1}{q-1}\cdot \frac{\log\sum_{x\in X_m}w_m(x)^q}{\log \varepsilon_m}
+\qquad(q\ge 2).
+\]
+若 \(h_q=\lim_{m\to\infty}\frac{1}{m}H_q(m)\) 存在（例如当 \(S_q(m)=\Theta(r_q^m)\) 时成立），则极限
+\[
+D_q:=\lim_{m\to\infty}D_q(m)
+\]
+存在且满足闭式
+\[
+\boxed{\;
+D_q=\frac{h_q}{(q-1)\log\varphi}\; }.
+\]
+\end{proposition}
+\begin{proof}
+由定义 \(H_q(m)=-\log\sum_x w_m(x)^q\) 与 \(\log\varepsilon_m=-m\log\varphi\) 得
+\[
+D_q(m)=\frac{1}{q-1}\cdot \frac{-H_q(m)}{-m\log\varphi}
+:=\frac{1}{(q-1)\log\varphi}\cdot \frac{1}{m}H_q(m).
+\]
+令 \(m\to\infty\) 即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[整数阶 Rényi 维数的代数非理性排除律]\label{thm:pom-renyi-dimension-no-algebraic-irrationality}
+沿用命题 \ref{prop:pom-renyi-dimension-spectrum} 的 \(D_q\) 记号，并取整数 \(q\ge 2\)。
+假设存在代数数 \(r_q>0\)，并定义
+\[
+h_q:=q\log 2-\log r_q,
+\qquad
+D_q=\frac{h_q}{(q-1)\log\varphi}.
+\]
+（例如当 \(r_q=\rho(A_q)\) 为某个整数矩阵 \(A_q\) 的 Perron 根，或当 \(r_q\) 为一条整系数递推特征多项式的 Perron 根时，该假设成立。）
+则对每个整数 \(q\ge 2\)，几何 Rényi 维数 \(D_q\) 不可能是代数但非有理的数。
+更确切地，
+\[
+D_q\in\QQ
+\quad\text{或}\quad
+D_q\ \text{为超越数}.
+\]
+\end{theorem}
+\begin{proof}
+由定义有
+\[
+\varphi^{D_q}
+=\exp(D_q\log\varphi)
+=\exp\!\left(\frac{q\log 2-\log r_q}{q-1}\right)
+=\left(\frac{2^q}{r_q}\right)^{\!\frac1{q-1}}.
+\]
+由假设 \(r_q\) 为代数数，故右端为代数数。
+\par
+若 \(D_q\) 为代数但非有理，则由 Gelfond--Schneider 定理（底数 \(\varphi\) 为代数且 \(\varphi\notin\{0,1\}\)），\(\varphi^{D_q}\) 必为超越数，与上式矛盾。\cite{Baker1975TranscendentalNumberTheory,Internal2026RenyiAlgebraicIrrationalityForbidden}
+因此 \(D_q\) 只能取有理数或超越数两类。证毕。
+\end{proof}
+
+\begin{conjecture}[Fold--Perron 根的 Kummer 排斥与几何 Rényi 维数的普遍超越性]\label{conj:pom-renyi-dimension-universal-transcendence}
+对每个整数 \(q\ge 2\)，设 \(r_q\) 与 \(D_q\) 如命题 \ref{prop:pom-renyi-dimension-spectrum} 与定理 \ref{thm:pom-renyi-dimension-no-algebraic-irrationality}。
+猜想对所有 \(q\ge 2\) 有 \(D_q\notin\QQ\)。
+等价地，不存在 \(\theta\in\QQ\) 使得
+\[
+r_q=2^q\,\varphi^{-(q-1)\theta}.
+\]
+在该猜想下，由定理 \ref{thm:pom-renyi-dimension-no-algebraic-irrationality} 立即推出 \(D_q\) 对所有整数 \(q\ge 2\) 均为超越数。
+\end{conjecture}
+
+\begin{remark}[可审计输出：\(D_q\) 由表中 \(h_q\) 直接读出]\label{rem:pom-renyi-dimension-values}
+命题 \ref{prop:pom-renyi-dimension-spectrum} 表明：一旦 \(h_q\) 可由碰撞核/递推谱半径抽取，则几何维数谱 \(D_q\) 无需额外假设即可直接由闭式给出。
+由表 \ref{tab:fold_collision_renyi_spectrum} 可见 \(D_q\) 在已核验范围内接近 \(1\) 且随 \(q\) 缓慢下降；这可理解为：高阶矩更偏向大纤维（极少数 \(x\) 的 \(d_m(x)\) 主导），从而“内空间厚度”在 Rényi 意义下逐步变薄。
+例如由表中精确 \(h_q\)（或等价的 \(r_q\)）直接代入
+\(
+D_q=h_q/((q-1)\log\varphi)
+\)
+得到
+\[
+D_3\approx 0.9897,\qquad D_4\approx 0.9875,\qquad D_5\approx 0.9855,
+\]
+从而“近均匀但随阶数缓慢变薄”的弱多重分形趋势在数值上清晰可见。
+\par
+更定量地，顶层纤维谱缺口（推论 \ref{cor:pom-second-max-gap-constant}）直接给出“次大层”相对“最大层”的显式衰减率。
+令
+\(
+\varepsilon_m:=1-\frac{D_m^{(2)}}{D_m}
+\)。
+则在大 \(m\) 的奇偶分支上分别有极限
+\[
+\varepsilon_{2k}\to \varphi^{-6},
+\qquad
+\varepsilon_{2k+1}\to \tfrac12\varphi^{-5}.
+\]
+因此对固定足够大的 \(m\)，随 \(q\) 增大有
+\[
+\left(\frac{D_m^{(2)}}{D_m}\right)^q
+:=(1-\varepsilon_m)^q
+:=\exp\!\bigl(q\log(1-\varepsilon_m)\bigr)
+\approx \exp(-q\varepsilon_m),
+\]
+从而“第二层”在 \(e^{-1}\) 精度下的交叉阶约为
+\[
+q_{\ast,\mathrm{even}}\approx \varphi^{6}\approx 18,
+\qquad
+q_{\ast,\mathrm{odd}}\approx 2\varphi^{5}\approx 22.
+\]
+这把“高阶矩由极少数大纤维主导”的经验指纹转写为一个可检验的量化预测：当继续把可审计递推扩展到 \(q>17\) 时，\(q\in[18,22]\) 附近应出现更强的顶端支配（从而更明显的低维有效行为/压缩现象）。
+\end{remark}
+
+\input{sections/generated/tab_fold_collision_renyi_spectrum}
+
+\begin{remark}[扩展指纹（可复核）：\texorpdfstring{$q\le 20$}{q<=20} 的 \texorpdfstring{$r_q$}{rq} 与 \texorpdfstring{$h_q$}{hq}]\label{rem:pom-renyi-spectrum-q20}
+为把 Rényi 指纹谱扩展到更高阶，我们用模 \(F_{m+2}\) 的 residue DP 直接计算
+\(
+S_q(m)=\sum_{r\in\ZZ/F_{m+2}\ZZ}c_m(r)^q
+\)
+并由比值收敛（Aitken \(\Delta^2\)）估计 \(r_q\)。
+表 \ref{tab:fold_collision_renyi_spectrum_mod_dp_q20} 给出 \(q\le 20\) 的可复核扩展输出；其中 \(q\le 16\) 与由递推/有限核抽取的精确 \(r_q\) 在数值上吻合到表格精度，\(q\ge 17\) 则给出 DP 窗口 \(m\le 30\) 下的稳定估计值（脚本 \texttt{scripts/exp\_fold\_collision\_renyi\_spectrum\_mod\_dp\_q20.py} 一键生成）。
+\end{remark}
+
+\begin{remark}[为何 \(m\le 30\) 的 DP 窗口足够：由特征多项式抽取的谱隙给出几何衰减（可复核）]\label{rem:pom-dp-window-spectral-gap}
+在已存在最小递推的情形下（例如 \(q\le 23\) 的已核验窗口内，见表 \ref{tab:fold_collision_kernel_rh_scan_q2_17} 与表 \ref{tab:fold_collision_kernel_rh_scan_q18_23}），记 \(r_q\) 为 Perron 根，\(\Lambda_q=\max_{\mu\ne r_q}|\mu|\) 为次谱模。
+则在一般位置（主根简单且主模态系数非零）下，比值估计 \(S_q(m+1)/S_q(m)\to r_q\) 的主误差项满足几何衰减率
+\[
+\left|\frac{S_q(m+1)}{S_q(m)}-r_q\right|=O\!\left(\left(\frac{\Lambda_q}{r_q}\right)^{m}\right),
+\]
+而 Aitken \(\Delta^2\) 会把主几何项进一步压低到更高阶。
+\par
+在共振区 \(q=9,\dots,17\) 内，达到 \(\Lambda_q\) 的次主导根在数值上稳定为负实根，从而比值误差具有二周期交替结构；此时 Aitken \(\Delta^2\) 的作用可被严格解释为\textbf{消去该交替主误差项}，并把主控衰减尺度从 \(\Lambda_q/r_q\) 转写为由第三模指纹 \(\delta_{\mathrm{ait}}(q)\) 控制（推论 \ref{cor:pom-aitken-cancels-two-cycle}；表 \ref{tab:fold_collision_resonance_aitken_certificate_q9_17}）。
+\par
+对本文关心的 DP 扩展区间 \(q\le 20\)，由表中可直接读出 \(\Lambda_q/r_q\) 仍显著小于 \(1\)：例如
+\[
+\frac{\Lambda_{15}}{r_{15}}\approx 0.6918,\qquad
+\frac{\Lambda_{20}}{r_{20}}\approx 0.7590,
+\]
+从而在窗口端点 \(m\approx 30\) 处几何项分别约为 \((0.69)^{30}\approx 1.5\times 10^{-5}\) 与 \((0.759)^{30}\approx 2.6\times 10^{-4}\)。
+这给出一个完全由已审计特征多项式导出的解释：为什么在 \(m\in[24,30]\) 的 residue DP 窗口上，简单的“比值收敛 + Aitken \(\Delta^2\)”就足以产出稳定的 \(r_q\) 指纹估计（并与表 \ref{tab:fold_collision_renyi_spectrum_mod_dp_q20} 的观测精度一致）。
+\end{remark}
+\input{sections/generated/tab_fold_collision_renyi_spectrum_mod_dp_q20}
+
+\begin{remark}[端点收敛速度（可复核）：\texorpdfstring{$q\le 60$}{q<=60} 时 \texorpdfstring{$h_q/q\to\log(2/\sqrt{\varphi})$}{hq/q->log(2/sqrt(phi))}]\label{rem:pom-renyi-endpoint-q60}
+命题 \ref{prop:pom-rq-qinfty-endpoint} 给出端点常数
+\(
+\lim_{q\to\infty}h_q/q=\log(2/\sqrt{\varphi})
+\)
+以及 \(O(1/q)\) 级误差界。
+表 \ref{tab:fold_collision_renyi_endpoint_convergence_q60} 用模 \(F_{m+2}\) 的 residue DP 在窗口 \(m\in[24,30]\) 上计算 \(S_q(m)=\sum_r c_m(r)^q\)，并对 \(\log S_q(m)\) 作线性回归估计 \(\log r_q\)，从而得到 \(h_q/q\) 的数值证书：
+当 \(q=60\) 时，\(\log(2/\sqrt{\varphi})-(h_q/q)\) 已降至 \(10^{-4}\) 量级，与端点误差界的 \(O(1/q)\) 形状一致。
+\end{remark}
+\input{sections/generated/tab_fold_collision_renyi_endpoint_convergence_q60}
+
+\begin{remark}[自由能超额 \texorpdfstring{$g_q$}{gq} 的快速衰减（可复核数值律）]\label{rem:pom-free-energy-excess-gq}
+为定量刻画 \(r_q\) 到端点尺度 \(\varphi^{q/2}\) 的收敛速度，引入“自由能超额”（free-energy excess）
+\[
+g_q:=\log r_q-\frac{q}{2}\log\varphi
+:= q\Bigl(\log\!\left(\frac{2}{\sqrt{\varphi}}\right)-\frac{h_q}{q}\Bigr).
+\]
+注意表 \ref{tab:fold_collision_renyi_endpoint_convergence_q60} 的 \texttt{gap} 列正是 \(g_q/q\)。
+因此在已核验窗口 \(m\in[24,30]\) 上可直接得到
+\[
+g_{20}\approx 0.1724,\quad g_{30}\approx 0.0939,\quad g_{40}\approx 0.0444,\quad g_{60}\approx 0.00834.
+\]
+特别地，
+\[
+\frac{r_{60}}{\varphi^{30}}=\exp(g_{60})\approx 1.0084,
+\]
+即到 \(q=60\) 时相对端点尺度的乘性误差已在 \(1\%\) 内。
+这远强于命题 \ref{prop:pom-rq-qinfty-endpoint} 给出的普适包络 \(g_q\le \log\varphi\)（例如只会给出 \(g_{60}\le\log\varphi\approx 0.48\)）。
+\par
+在目前四个审计点上，\(g_q\) 的衰减呈现出明显快于 \(1/q\) 的趋势。
+一个保守的指数包络（仅用这四点即可验证覆盖）为
+\[
+g_q\ \le\ 0.1724\,e^{-0.06(q-20)}\qquad(q\ge 20).
+\]
+该现象在本文中不作为定理使用，而应被视为一个带审计 provenance 的可追踪数值律：随着更大 \(q\) 的端点表扩展，可以直接复核/证伪其衰减型态。
+\end{remark}
+
+\input{parts/part__pom-double-limit-rigidity-and-Dq-convergence-by-gq}
+
+\begin{remark}[端点残差的 \texorpdfstring{$q^{-4}$}{q^-4} 超收敛迹象：以 \texttt{gap} 为幂次指纹（可复核）]\label{rem:pom-endpoint-gap-qminus4}
+令端点常数
+\[
+L_\infty:=\log\!\left(\frac{2}{\sqrt{\varphi}}\right),
+\qquad
+\mathrm{gap}_q:=L_\infty-\frac{h_q}{q}=\frac{g_q}{q},
+\]
+其中 \(\mathrm{gap}_q\) 正是表 \ref{tab:fold_collision_renyi_endpoint_convergence_q60} 的 \texttt{gap} 列。
+从该表可直接读出
+\(
+\mathrm{gap}_{20}=8.62\times 10^{-3}
+\)
+与
+\(
+\mathrm{gap}_{60}=1.39\times 10^{-4}
+\)。
+因此尺度诊断量
+\(
+q^4\mathrm{gap}_q
+\)
+在两端点上分别为
+\[
+20^4\mathrm{gap}_{20}\approx 1.38\times 10^3,
+\qquad
+60^4\mathrm{gap}_{60}\approx 1.80\times 10^3,
+\]
+落在同一数量级。
+这给出一个强烈的数值指示：在当前折叠系统的已审计区间内，端点残差更接近 \(q^{-4}\) 级而非“普通的” \(q^{-1}\) 慢收敛；等价地 \(g_q=q\,\mathrm{gap}_q\) 更接近 \(q^{-3}\) 标度。
+该观察不作为定理使用，但它提供了一个可随更高 \(q\) 端点表扩展而直接复核/证伪的衰减幂次指纹。
+\end{remark}
+
+\begin{remark}[共振坍缩与端点幂次的同步：低阶修正项的结构性消去（可证伪预测）]\label{rem:pom-endpoint-gap-resonance-link}
+在 \(q\ge 9\) 的已核验窗口内，moment-kernel 的最小实现维数出现结构性坍缩/共振（定理 \ref{thm:pom-moment-resonance}；表 \ref{tab:fold_collision_resonance_gap_delta_q_9_17} 与表 \ref{tab:fold_collision_resonance_nullmodes_q9_17}），这意味着可见模态空间中存在额外的线性约束（其显式整数证书由 Hankel-null 输出给出）。
+把这一事实与上面的端点幂次指纹放在一起，一个自然的机制解释是：这些额外约束会消去若干原本贡献端点误差的低阶修正通道，从而把 \(\mathrm{gap}_q\) 的首个非零修正阶推高，表现为更快的 \(q^{-4}\) 级衰减。
+\par
+相应地得到一个新的、可直接检验的预测：
+\begin{center}
+\fbox{\parbox{0.95\linewidth}{
+若在某个折叠门/参数变体中共振缺口消失（无额外约束），则 $\mathrm{gap}_q$ 的衰减幂次应退化回 $q^{-1}$ 或 $q^{-2}$ 级。
+}}
+\end{center}
+因此“端点残差的衰减幂次”本身可作为折叠门是否触发该类共振约束的结构指纹之一。
+\end{remark}
+
+\begin{remark}[端点平台指纹 \texorpdfstring{$C_q$}{Cq} 与两点外推器：不增大 \texorpdfstring{$m$}{m} 窗口的常数层自校验]\label{rem:pom-endpoint-extrapolator}
+定义端点平台指纹
+\[
+C_q:=q^4\,\mathrm{gap}_q
+:=q^4\left(L_\infty-\frac{h_q}{q}\right).
+\]
+若 \(\mathrm{gap}_q\approx C/q^4\) 成立，则 \(C_q\) 在中高阶 \(q\) 上应进入平台（仅剩小幅振荡）。
+在该模型下，用两点 \((p,q)\) 可消去未知常数 \(C\)，得到端点外推器
+\[
+\boxed{\;
+\widehat L_\infty(p,q)
+::=\frac{q^4\,(h_q/q)-p^4\,(h_p/p)}{q^4-p^4}\; }.
+\]
+该外推器仅依赖 \(h_q/q\) 的表格读数，并可在同一审计窗口上做端点常数层的交叉一致性检查：
+例如由表 \ref{tab:fold_collision_renyi_endpoint_convergence_q60} 的 \((p,q)=(20,60)\) 得
+\(
+\widehat L_\infty(20,60)\approx 0.4525081
+\)，
+与同表的 \(L_\infty=0.4525412680\) 已相差 \(3.3\times 10^{-5}\) 量级。
+同时也可用表 \ref{tab:fold_collision_renyi_spectrum_mod_dp_q20} 的 \(q\le 20\) 输出构造若干 \(\widehat L_\infty(p,q)\)，作为端点常数层的内部自洽诊断量。
+\end{remark}
+
+\begin{proposition}[普适夹逼：高阶碰撞主指数与投影熵率仅由 \texorpdfstring{$|X_m|$}{|Xm|} 与最大纤维锁定]\label{prop:pom-rq-universal-bounds}
+对整数 \(q\ge 2\)，令
+$$
+S_q(m):=\sum_{x\in X_m} d_m(x)^q,\qquad d_m(x):=\bigl|\Fold_m^{-1}(x)\bigr|.
+$$
+并令 \(r_q\) 表示 \(S_q(m)\) 的指数增长率（例如定理 \ref{thm:pom-collision-kernel-ak} 给出的 Perron 根；等价地 \(r_q=\lim_{m\to\infty}S_q(m)^{1/m}\)），定义未归一化 \(q\)-阶投影熵率
+$$
+h_q:=\log\!\left(\frac{2^q}{r_q}\right)=q\log 2-\log r_q.
+$$
+则有两侧界
+$$
+\frac{2^q}{\varphi^{q-1}}\ \le\ r_q\ \le\ 2\,\varphi^{(q-1)/2},
+$$
+等价地
+$$
+(q-1)\log\!\left(\frac{2}{\sqrt{\varphi}}\right)\ \le\ h_q\ \le\ (q-1)\log\varphi.
+$$
+\end{proposition}
+\begin{proof}
+对任意固定 \(m\) 与 \(q\ge 2\)，由幂均值/Holder 不等式，
+$$
+S_q(m)=\sum_{x\in X_m}d_m(x)^q\ \ge\ \frac{\bigl(\sum_x d_m(x)\bigr)^q}{|X_m|^{\,q-1}}
+:=\frac{2^{qm}}{F_{m+2}^{\,q-1}},
+$$
+其中 \(\sum_x d_m(x)=|\Omega_m|=2^m\) 且 \(|X_m|=F_{m+2}\)。
+另一方面令 \(D_m:=\max_{x\in X_m} d_m(x)\)，则
+$$
+S_q(m)=\sum_x d_m(x)^q\ \le\ D_m^{\,q-1}\sum_x d_m(x)=2^m D_m^{\,q-1}.
+$$
+两式取对数并除以 \(m\)，再令 \(m\to\infty\)，结合 Fibonacci 渐近 \(F_{m+2}\sim \varphi^{m}/\sqrt5\) 与最大纤维渐近 \(D_m=\Theta(\varphi^{m/2})\)（定理 \ref{thm:pom-max-fiber}），得到
+$$
+\log r_q=\lim_{m\to\infty}\frac{1}{m}\log S_q(m)\in\Bigl[q\log 2-(q-1)\log\varphi,\ \log 2+\frac{q-1}{2}\log\varphi\Bigr],
+$$
+从而 \(r_q\) 的界成立。代入 \(h_q=q\log 2-\log r_q\) 即得 \(h_q\) 的等价界。证毕。
+\end{proof}
+
+\begin{proposition}[极端阶端点：\texorpdfstring{$r_q^{1/q}\to\sqrt{\varphi}$}{rq^(1/q)->sqrt(phi)} 与归一化熵端点常数]\label{prop:pom-rq-qinfty-endpoint}
+令 \(r_q\) 表示 \(S_q(m)\) 的指数增长率（例如由 moment-kernel 的 Perron 根给出），并记 \(\varphi\) 为黄金比例。
+则当 \(q\to\infty\) 时有极限
+\[
+\boxed{\;
+\lim_{q\to\infty} r_q^{1/q}=\sqrt{\varphi}\; }.
+\]
+等价地，
+\[
+\lim_{q\to\infty}\frac{1}{q}\,h_q
+:=\log\!\left(\frac{2}{\sqrt{\varphi}}\right),
+\qquad
+\lim_{q\to\infty}\frac{1}{q-1}\,h_q
+:=\log\!\left(\frac{2}{\sqrt{\varphi}}\right),
+\]
+从而 Rényi 维数谱端点满足
+\[
+\lim_{q\to\infty}D_q
+:=\frac{\log\!\left(2/\sqrt{\varphi}\right)}{\log\varphi}
+\approx 0.94042009
+\]
+（其中 \(D_q\) 见命题 \ref{prop:pom-renyi-dimension-spectrum}）。
+\par
+并且对任意整数 \(q\ge 2\) 有显式误差界
+\[
+\boxed{\;
+0\ \le\ \log\!\left(\frac{2}{\sqrt{\varphi}}\right)-\frac{h_q}{q}\ \le\ \frac{\log\varphi}{q}\; }.
+\]
+\end{proposition}
+\begin{proof}
+对任意 \(m,q\ge 2\)，由
+\(
+D_m:=\max_x d_m(x)
+\)
+得两侧夹逼
+\[
+D_m^q\ \le\ S_q(m)\ \le\ |X_m|\,D_m^q.
+\]
+两端取 \(1/(mq)\) 次方，得到
+\[
+D_m^{1/m}\ \le\ S_q(m)^{1/(mq)}\ \le\ D_m^{1/m}\,|X_m|^{1/(mq)}.
+\]
+令 \(m\to\infty\)，左端由定理 \ref{thm:pom-max-fiber} 给出
+\(
+\lim_{m\to\infty}D_m^{1/m}=\varphi^{1/2}
+\)；
+右端的因子满足
+\(
+\lim_{m\to\infty}|X_m|^{1/(mq)}=\varphi^{1/q}
+\)
+（因为 \(|X_m|=F_{m+2}\sim \varphi^m/\sqrt5\)）。
+因此对每个固定 \(q\ge 2\) 有
+\[
+\sqrt{\varphi}\ \le\ r_q^{1/q}\ \le\ \sqrt{\varphi}\,\varphi^{1/q}.
+\]
+令 \(q\to\infty\) 即得 \(\lim_{q\to\infty}r_q^{1/q}=\sqrt{\varphi}\)。
+最后由 \(h_q=q\log 2-\log r_q\) 与命题 \ref{prop:pom-renyi-dimension-spectrum} 的闭式，直接得到各端点极限。
+\par
+由 \(\sqrt{\varphi}\le r_q^{1/q}\le \sqrt{\varphi}\,\varphi^{1/q}\) 得
+\[
+\frac{1}{2}\log\varphi\ \le\ \frac{1}{q}\log r_q\ \le\ \frac{1}{2}\log\varphi+\frac{1}{q}\log\varphi.
+\]
+代入 \(\frac{h_q}{q}=\log 2-\frac{1}{q}\log r_q\)，即得
+\[
+0\ \le\ \log\!\left(\frac{2}{\sqrt{\varphi}}\right)-\frac{h_q}{q}\ \le\ \frac{\log\varphi}{q}.
+\]
+证毕。
+\end{proof}
+
+\begin{remark}[由碰撞谱自洽重建 \texorpdfstring{$\varphi$}{phi}（无需 Fibonacci 输入）]\label{rem:pom-recover-phi-from-collision-spectrum}
+表 \ref{tab:fold_collision_renyi_spectrum}（以及其更高阶扩展表）给出经 DP/递推审计的 \(r_q\)（从而 \(h_q=\log(2^q/r_q)\)）。
+令
+\[
+s_q:=\frac{h_q}{q}=\log 2-\frac{1}{q}\log r_q,
+\qquad
+g_q:=e^{s_q}=\frac{2}{r_q^{1/q}}.
+\]
+由端点极限 \(\lim_{q\to\infty}s_q=\log(2/\sqrt{\varphi})\) 可得一个完全内部的“反解常数”恒等式：
+\[
+\boxed{\;
+\varphi
+:=4e^{-2\lim_{q\to\infty}s_q}
+:=\left(\lim_{q\to\infty}r_q^{1/q}\right)^2\; }.
+\]
+工程上，为避免 \(q\)-方向收敛偏慢，可对序列 \(s_q\) 做 Aitken \(\Delta^2\) 加速（与我们在 \(m\)-比值上使用的加速完全平行）：
+\[
+s_q^{(\infty)}
+\approx
+s_{q+2}-\frac{(s_{q+2}-s_{q+1})^2}{s_{q+2}-2s_{q+1}+s_q},
+\qquad
+\widehat\varphi_q:=4e^{-2s_q^{(\infty)}}.
+\]
+表 \ref{tab:fold_collision_phi_reconstruction_from_renyi} 给出仅用已审计 \(\{r_q\}\) 反演得到的 \(\widehat\varphi_q\) 的收敛示例（脚本 \texttt{scripts/exp\_fold\_collision\_phi\_reconstruction\_from\_renyi.py} 一键生成）。
+\end{remark}
+
+\input{sections/generated/tab_fold_collision_phi_reconstruction_from_renyi}
+
+\begin{proposition}[压力的凸性与指纹的凹性]\label{prop:pom-pressure-convexity}
+对任意 \(m\ge 2\)，函数 \(q\mapsto \log S_q(m)\) 在 \(q\ge 0\) 上为凸函数。
+因此在 \(S_q(m)=\Theta(r_q^m)\)（例如由命题 \ref{prop:pom-moment-kernel-exists} 的 Perron 主尺度保证）时，压力
+\[
+P(q):=\log r_q
+\]
+在整数点上满足离散凸性：对任意整数 \(q_0<q_1<q_2\) 有
+\[
+\boxed{\;
+P(q_1)\ \le\ \frac{q_2-q_1}{q_2-q_0}\,P(q_0)\ +\ \frac{q_1-q_0}{q_2-q_0}\,P(q_2)\; }.
+\]
+等价地，未归一化 Rényi 指纹 \(h_q=q\log 2-P(q)\) 在整数点上为凹的：
+\[
+\boxed{\;
+h_{q_1}\ \ge\ \frac{q_2-q_1}{q_2-q_0}\,h_{q_0}\ +\ \frac{q_1-q_0}{q_2-q_0}\,h_{q_2}\; }.
+\]
+\end{proposition}
+\begin{proof}
+固定 \(m\)。取任意 \(q_0,q_2\ge 0\) 与 \(\theta\in(0,1)\)，令 \(q_1=\theta q_0+(1-\theta)q_2\)。
+由 Hölder 不等式（或 log-sum-exp 的凸性）得
+\[
+S_{q_1}(m)=\sum_{x\in X_m}d_m(x)^{q_1}
+\le
+\left(\sum_{x\in X_m}d_m(x)^{q_0}\right)^{\theta}
+\left(\sum_{x\in X_m}d_m(x)^{q_2}\right)^{1-\theta}
+:=S_{q_0}(m)^{\theta}S_{q_2}(m)^{1-\theta}.
+\]
+取对数即得 \(q\mapsto \log S_q(m)\) 的凸性。
+\par
+令 \(q_0<q_1<q_2\) 为整数并取
+\(
+\theta=\frac{q_2-q_1}{q_2-q_0}
+\)
+使得 \(q_1=\theta q_0+(1-\theta)q_2\)。
+对上式取 \(\frac{1}{m}\log\) 并令 \(m\to\infty\)，得到
+\[
+\log r_{q_1}\le \theta\log r_{q_0}+(1-\theta)\log r_{q_2},
+\]
+即 \(P\) 的离散凸性。最后 \(h_q=q\log 2-P(q)\) 为线性函数减去凸函数，从而在整数点上为凹。证毕。
+\end{proof}
+
+\begin{proposition}[跨 \texorpdfstring{$q$}{q} 不等式：\texorpdfstring{$g(q)$}{g(q)} 的单调性]\label{prop:pom-crossq-g-monotone}
+对任意整数 \(m\ge 2\) 与 \(2\le p<q\)，令 \(d_m=(d_m(x))_{x\in X_m}\) 并记 \(S_k(m)=\sum_x d_m(x)^k=\|d_m\|_k^k\)。
+则有限维范数不等式给出
+\[
+\|d_m\|_p\ \le\ |X_m|^{\frac{1}{p}-\frac{1}{q}}\ \|d_m\|_q,
+\]
+从而
+\[
+S_q(m)\ \ge\ S_p(m)^{q/p}\,|X_m|^{1-q/p}.
+\]
+若存在 \(r_k\) 使 \(S_k(m)=\Theta(r_k^m)\)，并且 \(|X_m|\sim \varphi^m\)，则有跨阶约束
+\[
+\boxed{\;
+\log r_q \ \ge\ \frac{q}{p}\log r_p + \left(1-\frac{q}{p}\right)\log\varphi\; }.
+\]
+等价地，定义
+\[
+g(q):=\frac{\log r_q-\log\varphi}{q},
+\]
+则 \(g(q)\) 在 \(q\ge 2\) 上单调不减。
+表 \ref{tab:fold_collision_crossq_g_profile_q2_23} 给出 \(q=2,\dots,23\) 的可复算读数，可作为后续扩展/重实现的回归一致性检查（脚本 \texttt{scripts/exp\_fold\_collision\_crossq\_g\_profile\_q2\_23.py} 一键生成）。
+\end{proposition}
+\begin{proof}
+对长度 \(n=|X_m|\) 的非负向量 \(d_m\)，当 \(2\le p<q\) 时有 \(\|d_m\|_p\le n^{1/p-1/q}\|d_m\|_q\)。
+两边取 \(q\) 次幂得到
+\(
+\|d_m\|_q^q \ge \|d_m\|_p^q\,n^{1-q/p}
+\)，
+即
+\(
+S_q(m)\ge S_p(m)^{q/p}|X_m|^{1-q/p}
+\)。
+对两边取 \(\frac{1}{m}\log\) 并令 \(m\to\infty\)，利用
+\(
+\lim_{m\to\infty}\frac{1}{m}\log S_k(m)=\log r_k
+\)
+与
+\(
+\lim_{m\to\infty}\frac{1}{m}\log|X_m|=\log\varphi
+\)
+即得第一式；再代回定义得到 \(g(q)\) 的单调性。证毕。
+\end{proof}
+
+\input{sections/generated/tab_fold_collision_crossq_g_profile_q2_23}
+
+\begin{remark}[更高阶碰撞矩的精确递推与阶数规律（可审计）]\label{rem:pom-moment-rec}
+二阶与三阶碰撞矩分别由三态核 \(A_2,A_3\) 实现（命题 \ref{prop:pom-s2-recurrence} 与命题 \ref{prop:pom-s3-recurrence}）。更高阶 \(q\) 下，序列 \(\{S_q(m)\}\) 仍呈现出\textbf{小阶整数线性递推}的现象：对 \(q=4,5,6,7,8\) 可验证存在阶数分别为 \(5,5,7,7,9\) 的精确递推（从某个 \(m\) 起对所有 \(m\) 成立），其系数见表 \ref{tab:fold_collision_moment_recursions}。这些递推等价于“存在有限维的 \(q\)-阶碰撞核/矩阵 realization”，从而 \(S_q(m)=\Theta(r_q^m)\) 的指数尺度由对应特征多项式的 Perron 根 \(r_q\) 控制。
+对 \(q=2,\dots,8\)，递推阶数与 \(r_q,h_q\) 的汇总见表 \ref{tab:fold_collision_moment_spectrum_k2_8}。
+\input{sections/generated/tab_fold_collision_moment_spectrum_k2_8}
+
+在已核验范围 \(q\le 8\) 内，上述最小递推阶数与 Hankel 最小实现维数均呈现出“每两阶增加 \(2\)”的规律（见定理 \ref{thm:pom-moment-hankel} 与推论 \ref{cor:pom-moment-minreal}）。
+把它整理为一个可直接核验的\textbf{闭包律}：记 \(d_q\) 为 \(S_q(m)\) 的最小整系数递推阶数（等价地最小线性 realization 维数），则在 \(q=2,\dots,8\) 上有
+\[
+\boxed{\;
+d_q = 2\left\lfloor \frac{q}{2}\right\rfloor+1\;}
+\]
+（等价地：奇 \(q\) 时 \(d_q=q\)，偶 \(q\) 时 \(d_q=q+1\)）。
+工程上这给出一个可审计的复杂度承诺：在非共振典型窗口中，扩展到更高阶只需要 \(O(q)\) 级状态增长（每两阶仅增加 2 个自由度），而非指数级爆炸。
+然而当 \(q\) 继续增大时，该规律出现\textbf{结构性坍缩/共振}：对 \(q=9,\dots,17\)，在模 \(F_{m+2}\) 的审计窗口 \(m\le 26\)（并在额外窗口 \(m\le 32\) 上作点检）上可验证存在更低阶的整系数递推（表 \ref{tab:fold_collision_moment_recursions_9_17}），其最小阶数
+\[
+(d_9,d_{10},d_{11},d_{12},d_{13},d_{14},d_{15},d_{16},d_{17})=(7,9,9,13,11,13,11,13,13),
+\]
+明显低于“每两阶增加 2”的线性外推。该现象表明“闭合维数指纹”出现稳定的秩缺口，其机制与 Fibonacci 同余结构的代数退化相关。共振的机制化判别见定理 \ref{thm:pom-moment-resonance}。
+\end{remark}
+
+\begin{corollary}[闭合维数外推在 \texorpdfstring{$q\ge 9$}{q>=9} 处失效（反例族）]\label{cor:pom-moment-dim-collapse}
+令 \(d_q\) 表示 \(S_q(m)\) 的最小整系数递推阶数（等价地最小线性 realization 维数；亦即 Hankel 最小实现维数，见定理 \ref{thm:hankel-rank-minimal}）。
+则在已核验范围 \(q=9,\dots,23\) 内，有严格不等式
+\[
+\boxed{\;
+d_q\ <\ 2\lfloor q/2\rfloor+1\; }.
+\]
+更具体地，
+\[
+(d_9,\dots,d_{23})=(7,9,9,13,11,13,11,13,13,17,15,17,15,17,17),
+\]
+见表 \ref{tab:fold_collision_moment_recursions_9_17} 与表 \ref{tab:fold_collision_moment_recursions_18_23}。
+因此任何将 \(2\lfloor q/2\rfloor+1\) 视作对所有 \(q\) 的“最小闭合维数规律”的强形式陈述均不成立；该维数律仅描述了非共振典型情形下的上界饱和模式（注 \ref{rem:pom-closure-dim-mode-trunc}）。
+\end{corollary}
+\begin{definition}[闭合缺陷 \texorpdfstring{$\Delta_q$}{Deltaq}：共振/选择定则的不变量化]\label{def:pom-closure-defect-deltaq}
+令 \(h=\lfloor q/2\rfloor\)。
+定义\textbf{闭合缺陷}（closure defect）
+\[
+\boxed{\;
+\Delta_q\ :=\ (2h+1)-d_q\;}
+\]
+其中 \(2h+1\) 为“差分模态截断”下的名义模态数（注 \ref{rem:pom-closure-dim-mode-trunc}），而 \(d_q\) 为最小递推阶数/最小 realization 维数（推论 \ref{cor:pom-moment-dim-collapse}）。
+\end{definition}
+\begin{remark}[解释：\texorpdfstring{$\Delta_q>0$}{Deltaq>0} 即“选择定则”，并给出可量化降维增益]\label{rem:pom-closure-defect-selection-rule}
+当 \(\Delta_q>0\) 时，定理 \ref{thm:pom-moment-resonance} 表明存在非平凡的模态约束使得名义 \(2h+1\) 维模态 realization 不是最小实现；因此 \(\Delta_q\) 可被视为“可激发模态空间的余维”，即共振/坍缩触发的\emph{选择定则强度}。
+\par
+工程上，这直接量化了对 \(q\)-阶谱后端的可压缩增益：若某实现以 \(2h+1\) 个差分模态作为状态闭包并进行递推，则在共振相区可进一步压到 \(d_q\) 维最小实现（由递推/伴随矩阵或 Hankel 最小化恢复），其名义压缩比约为
+\[
+\mathrm{gain}(q)\ \approx\ \frac{2h+1}{d_q}.
+\]
+例如 \(q=15\) 时，\(2h+1=15\) 而已核验 \(d_{15}=11\)，对应一个稳定的结构性降维缺口。
+\end{remark}
+\begin{proof}[推论 \ref{cor:pom-moment-dim-collapse} 的证明]
+由表 \ref{tab:fold_collision_moment_recursions_9_17} 与表 \ref{tab:fold_collision_moment_recursions_18_23} 的已核验最小递推阶数直接比较即可。证毕。
+\end{proof}
+
+\begin{remark}[闭合维数 \texorpdfstring{$2\lfloor q/2\rfloor+1$}{2 floor(q/2)+1} 的结构来源：同余角色模态的有限截断]\label{rem:pom-closure-dim-mode-trunc}
+命题 \ref{prop:pom-s2-plancherel} 给出一个把“几何—同余—谱”焊接在一起的可审计模板：二阶碰撞矩
+\(
+S_2(m)=\sum_r c_m(r)^2
+\)
+既是同余切片上 residue 分布的 \(\ell^2\) 质量，也是其离散傅里叶系数的 Plancherel 能量平均；并且每个频率 \(j\) 上的傅里叶系数 \(\widehat c_m(j)\) 由局部因子 \(\prod_k(1+\chi_j(F_{k+1}))\) 完全决定。
+
+在更高阶 \(q\) 的 moment-kernel 编译（命题 \ref{prop:pom-moment-kernel-exists}）中，本质上是在同步直积上施加“逐位输出一致”的约束；该约束把 \(q\) 份拷贝的相位信息压缩为一个\textbf{有限取值的差分模态索引}：它记录“相位在共轭配对下的净偏置”（可理解为 \(\widehat c\) 与 \(\overline{\widehat c}\) 的幂次差 \(a-b\) 的有效范围）。由配对/共轭不变性，净偏置的可取范围被强制截断为
+\[
+-(\lfloor q/2\rfloor)\ \le\ a-b\ \le\ \lfloor q/2\rfloor,
+\]
+因此在\emph{非共振的典型情形}下，只需跟踪 \(2\lfloor q/2\rfloor+1\) 个模态即可闭合地递推到下一步分辨率；这给出了“每两阶增加 2 个自由度”的结构原因。该模态截断与 Hankel 秩下界（定理 \ref{thm:pom-moment-hankel}）在已核验范围 \(q\le 8\) 内精确吻合，从而把经验指纹升级为可解释的有限闭包机制。
+而表 \ref{tab:fold_collision_moment_recursions_9_17} 的 \(q\ge 9\) 现象表明：当 Fibonacci 同余结构诱发代数退化时，可见模态空间会出现额外约束，使得读出所能激发的子空间维数严格小于名义上界（推论 \ref{cor:pom-moment-dim-collapse}）。因此更关键的统一对象不再是“继续提高 \(q\)”，而是刻画何时、以及为何出现不可激发的模态（见猜想 \ref{conj:pom-moment-visible} 与定理 \ref{thm:pom-moment-resonance} 的模态约束口径）。
+\end{remark}
+
+\input{sections/generated/tab_fold_collision_moment_recursions}
+
+\input{sections/generated/tab_fold_collision_moment_recursions_9_17}
+
+\input{sections/generated/tab_fold_collision_moment_recursions_18_23}
+
+\input{parts/subsubsec__pom-collision-moment-2adic-odometer}
+
+\paragraph{更高阶矩谱常数（\texorpdfstring{$q=9,\dots,23$}{q=9..23}）：Perron 根与熵率}
+表 \ref{tab:fold_collision_moment_recursions_9_17} 与表 \ref{tab:fold_collision_moment_recursions_18_23} 给出 \(q=9,\dots,23\) 的已核验最小递推。
+由递推特征多项式的 Perron 根可抽取指数尺度 \(r_q\) 及相应的（非归一化）Rényi 指纹率
+\(
+h_q=\log(2^q/r_q)
+\)
+（定义 \ref{def:pom-moment-pressure}）。
+下表汇总 \(q=9,\dots,23\) 的 \(r_q\)、\(r_q^{1/q}\) 与 \(h_q\)：
+\input{sections/generated/tab_fold_collision_moment_spectrum_k9_17}
+\input{sections/generated/tab_fold_collision_moment_spectrum_k18_23}
+
+\begin{remark}[更高阶 DP 端点指纹（\(q=24,25\)）]\label{rem:pom-renyi-endpoint-q24-25}
+在更高的 Rényi 阶上，可通过 residue DP 直接计算 \(S_q(m)\)，并用比值收敛与 Aitken \(\Delta^2\) 加速在固定窗口上估计 \(r_q\)。
+例如在 \(m\in\{34,35,36,37\}\) 的窗口上得到稳定估计：
+\[
+\widehat r_{24}\approx 369.478420314,\quad \widehat h_{24}^{\mathrm R}\approx 0.4662365216;\qquad
+\widehat r_{25}\approx 466.281715009,\quad \widehat h_{25}^{\mathrm R}\approx 0.4659953968.
+\]
+这些数值继续支持高阶 \(h_q^{\mathrm R}\) 的窄带收敛现象；相应的 DP 端点估计可由脚本
+\texttt{scripts/exp\_fold\_collision\_renyi\_spectrum\_mod\_dp\_q20.py --q-max 25 --m-max 37}
+一键生成。
+但在当前窗口 \(m\le 37\) 下，尚未拟合到可全窗核验的低阶整系数递推（因此暂未进入全谱根扫描/ \(\beta_q,\delta_q\) 的“精确”口径）。
+\end{remark}
+

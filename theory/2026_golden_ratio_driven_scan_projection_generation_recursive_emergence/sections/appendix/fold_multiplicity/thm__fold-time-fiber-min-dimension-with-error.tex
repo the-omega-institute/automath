@@ -1,0 +1,80 @@
+\begin{theorem}[允许误差的时间寄存器下界：纤维阈值障碍]\label{thm:fold-time-register-error-fiber-threshold}
+沿用定义 \ref{def:fold-pushforward-weight-wm} 的 \(\Fold_m,\Omega_m,X_m,d_m,w_m\)。
+令 \(T\) 为有限“时间寄存器”（任意有限集合）。
+允许任意编码
+\[
+\alpha:\Omega_m\to T
+\]
+与任意解码
+\[
+g:X_m\times T\to \Omega_m.
+\]
+定义成功集合与失败率
+\[
+\mathrm{Succ}:=\{\omega\in\Omega_m:\ g(\Fold_m(\omega),\alpha(\omega))=\omega\},
+\qquad
+\varepsilon:=1-\frac{|\mathrm{Succ}|}{2^m}.
+\]
+则对任意 \((\alpha,g)\) 恒有不可避免下界
+\[
+\boxed{\;
+\varepsilon\ \ge\ \EE_{X\sim w_m}\Bigl(1-\frac{|T|}{d_m(X)}\Bigr)_+ \;},
+\qquad (u)_+:=\max\{u,0\}.
+\]
+特别地，对任意 \(\varepsilon_0\in(0,1)\)，若 \(\varepsilon\le \varepsilon_0\)，则
+\[
+\boxed{\;
+\PP_{X\sim w_m}\bigl(d_m(X)>2|T|\bigr)\le 2\varepsilon_0.\;}
+\]
+\end{theorem}
+
+\begin{proof}
+固定 \(x\in X_m\)。纤维 \(\Fold_m^{-1}(x)\) 的大小为 \(d_m(x)\)。
+由于 \(\alpha(\omega)\in T\)，在同一 \(x\) 下，最多只有 \(|T|\) 个不同微态可获得互异的时间标签；否则必存在不同 \(\omega\neq \omega'\) 使 \((x,\alpha(\omega))=(x,\alpha(\omega'))\)，从而 \(g(x,\alpha(\omega))\) 至多可输出一个值，至少一者解码失败。
+因此条件失败率满足
+\[
+\PP(\omega\notin\mathrm{Succ}\mid \Fold_m(\omega)=x)\ \ge\ \Bigl(1-\frac{|T|}{d_m(x)}\Bigr)_+.
+\]
+对 \(X\sim w_m\) 取期望即得第一式。
+\par
+若 \(d_m(X)>2|T|\)，则 \((1-|T|/d_m(X))_+>1/2\)，故
+\[
+\varepsilon
+\ge \EE\Bigl(1-\frac{|T|}{d_m(X)}\Bigr)_+
+\ge \frac12\,\PP\bigl(d_m(X)>2|T|\bigr),
+\]
+整理得第二式。证毕。
+\end{proof}
+
+\begin{corollary}[碰撞矩尾界诱导的规模律]\label{cor:fold-time-register-moment-tail-scaling}
+在定理 \ref{thm:fold-time-register-error-fiber-threshold} 的设定下，取任意 \(q\ge 2\) 并定义 \(q\)-碰撞矩
+\[
+S_q(m):=\sum_{x\in X_m}d_m(x)^q.
+\]
+则对任意 \(B>0\) 有尾界
+\[
+\PP_{X\sim w_m}\bigl(d_m(X)\ge B\bigr)
+\le \frac{S_q(m)}{2^m}\cdot B^{-(q-1)}.
+\]
+从而只要 \(B>2|T|\) 且
+\[
+\frac{S_q(m)}{2^m}\cdot B^{-(q-1)}\ >\ 2\varepsilon_0,
+\]
+就必有失败率 \(\varepsilon>\varepsilon_0\)。
+\end{corollary}
+
+\begin{proof}
+由 \(w_m(x)=d_m(x)/2^m\)，有
+\[
+\EE_{X\sim w_m}\bigl[d_m(X)^{q-1}\bigr]
+=\sum_{x\in X_m}\frac{d_m(x)}{2^m}\,d_m(x)^{q-1}
+=\frac{S_q(m)}{2^m}.
+\]
+对随机变量 \(d_m(X)\) 应用 Markov 不等式得到尾界。
+再与定理 \ref{thm:fold-time-register-error-fiber-threshold} 的
+\(\PP(d_m(X)>2|T|)\le 2\varepsilon_0\)
+合并，即得结论。证毕。
+\end{proof}
+
+\endinput
+

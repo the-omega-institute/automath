@@ -1,0 +1,110 @@
+\subsection{有限分辨率同余刚性与筛分障碍}\label{subsec:stat-stability-finite-resolution-congruence-obstructions}
+
+本小节把判别层再推进一步，说明为什么某些偏差不能被简单归入采样噪声，而必须被理解为结构性障碍。经验分布迟迟不靠近理论基线，并不总意味着模型失败；更常见的情形是当前窗口仍受某种同余刚性、筛分障碍或分辨率锁定约束。因而，有限分辨率不仅是误差来源，也是结构本身的边界条件。
+
+在判别上需要明确区分两类现象。第一类是纯样本波动：随着样本预算 \(N\) 增大，其偏差按可预期速率衰减。第二类是结构性残留：即使 \(N\) 已经很大，只要分辨率 \(m\) 仍低于某个门槛，偏差就会持续存在，因为底层仍被模约束、语法禁阻或覆盖残差锁住。本小节的同余刚性与筛分障碍，正是用于识别这种不能过早乐观的结构性残差：稳定概念值得信赖，不只因为偏差小，更因为已经排除了偏差被有限分辨率障碍暂时伪装的可能。
+
+\begin{proposition}[稳定谓词的余类化与周期系数]\label{prop:stable-predicate-residue-classification}
+固定 \(m\ge 1\)，令 \(M:=F_{m+2}\)。
+对任意谓词 \(P\subseteq X_m\)，定义其余类像
+\[
+R_P\ :=\ \{\,v_m(x)\bmod M:\ x\in P\,\}\ \subseteq\ \ZZ/M\ZZ,
+\]
+并定义周期系数
+\[
+a_P(n)\ :=\ \ind_{\{n\bmod M\in R_P\}}\qquad(n\ge 1).
+\]
+则对任意 \(\omega\in\Omega_m\) 有
+\[
+\ind_{\{\Fold_m(\omega)\in P\}}\ =\ a_P\!\bigl(N(\omega)\bigr),
+\]
+从而 \(a_P\) 为周期 \(M\) 的算术函数。
+\end{proposition}
+
+\begin{proof}
+由推论 \ref{cor:fold-mod-rigidity-periodic-predicates} 的因子化 \(\Fold_m=s_m\circ r_m\)，取 \(R_P:=s_m^{-1}(P)\) 即得
+\(
+\Fold_m(\omega)\in P\iff r_m(\omega)\in R_P
+\)，
+而 \(r_m(\omega)=N(\omega)\bmod M\)。
+将其写成指示函数即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[周期 Dirichlet 级数的 Hurwitz \texorpdfstring{$\zeta$}{zeta} 分解]\label{thm:periodic-dirichlet-series-hurwitz-decomposition}
+在命题 \ref{prop:stable-predicate-residue-classification} 的记号下，对 \(\Re(s)>1\) 定义 Dirichlet 级数
+\[
+D_P(s)\ :=\ \sum_{n\ge 1}\frac{a_P(n)}{n^s}.
+\]
+则成立显式分解
+\[
+D_P(s)\ =\ M^{-s}\sum_{r=1}^{M} a_P(r)\,\zeta\!\left(s,\frac{r}{M}\right),
+\]
+其中 \(\zeta(s,\alpha)\) 为 Hurwitz \(\zeta\) 函数（\(\alpha\in(0,1]\)）。
+因此 \(D_P\) 的解析延拓与奇点结构由有限个 Hurwitz \(\zeta\) 的线性组合完全决定（参见 \cite{Apostol1976,Titchmarsh1986RiemannZeta}）。
+\end{theorem}
+
+\begin{proof}
+由周期性分解 \(n=Mk+r\)（其中 \(k\ge 0\)，\(1\le r\le M\)），得到
+\[
+\sum_{n\ge 1}\frac{a_P(n)}{n^s}
+=\sum_{r=1}^{M}a_P(r)\sum_{k\ge 0}\frac{1}{(Mk+r)^s}
+=M^{-s}\sum_{r=1}^{M}a_P(r)\sum_{k\ge 0}\frac{1}{\left(k+\frac{r}{M}\right)^s}.
+\]
+内层和即为 \(\zeta(s,r/M)\)。证毕。
+\end{proof}
+
+\begin{remark}[Euler 积阻断的结构性原因]\label{rem:euler-product-obstruction-periodic-indicator}
+若 \(D_P(s)\) 在 \(\Re(s)>1\) 上具有收敛的 Euler 积表示，则其系数 \(a_P(n)\) 必为（至少）乘法函数。
+对一般余类指示函数 \(a_P(n)=\ind_{\{n\bmod M\in R_P\}}\)，该乘法性通常不成立，因此不会出现“跨所有素数的”Euler 积结构；只有在极少数退化情形（例如 \(a_P\equiv 0\)、\(a_P\equiv 1\)，或 \(a_P(n)=\ind_{\{\gcd(n,M)=1\}}\) 这类由主特征诱导的情形）才可能出现有限因子修正的 Euler 积。
+\end{remark}
+
+\begin{theorem}[固定分辨率余类筛的素数精确率退化]\label{thm:fixed-resolution-prime-sieve-precision-to-zero}
+固定 \(m\ge 1\)，令 \(M:=F_{m+2}\)，并取任意 \(P\subseteq X_m\)。
+令 \(R_P\subseteq\ZZ/M\ZZ\) 与 \(a_P\) 如命题 \ref{prop:stable-predicate-residue-classification}。
+定义接受集合
+\[
+S_P\ :=\ \{n\in\NN:\ a_P(n)=1\}.
+\]
+若 \(R_P\) 含至少一个与 \(M\) 互素的余类，则对经验精确率
+\[
+\mathrm{Prec}_P(X)\ :=\ \frac{\#\{p\le X:\ p\ \text{为素数且}\ p\in S_P\}}{\#\{n\le X:\ n\in S_P\}}
+\]
+成立渐近上界
+\[
+\mathrm{Prec}_P(X)\ \le\ \frac{M}{\varphi(M)}\cdot \frac{1+o(1)}{\log X}\qquad(X\to\infty),
+\]
+从而 \(\mathrm{Prec}_P(X)\to 0\)。
+\end{theorem}
+
+\begin{proof}
+记 \(U_M:=\{a\in\ZZ/M\ZZ:\gcd(a,M)=1\}\)。
+由算术级数中的素数定理（参见 \cite{Titchmarsh1986RiemannZeta}），对每个 \(a\in R_P\cap U_M\) 有
+\[
+\#\{p\le X:\ p\equiv a\ (\mathrm{mod}\ M)\}
+=\frac{1+o(1)}{\varphi(M)}\frac{X}{\log X}.
+\]
+求和得
+\[
+\#\{p\le X:\ p\in S_P\}
+=\frac{\card{R_P\cap U_M}}{\varphi(M)}\frac{1+o(1)}{\log X}\,X.
+\]
+另一方面，余类计数给出
+\[
+\#\{n\le X:\ n\in S_P\}=\frac{\card{R_P}}{M}X+O(1).
+\]
+相除得到
+\[
+\mathrm{Prec}_P(X)
+=\frac{\card{R_P\cap U_M}}{\card{R_P}}\cdot\frac{M}{\varphi(M)}\cdot\frac{1+o(1)}{\log X}
+\ \le\ \frac{M}{\varphi(M)}\cdot\frac{1+o(1)}{\log X},
+\]
+从而趋于 \(0\)。证毕。
+\end{proof}
+
+\begin{conjecture}[素数集合的有限分辨率 lift--obstruction]\label{conj:prime-lift-obstruction-finite-resolution}
+对每个 \(m\ge 1\)，令 \(\mathcal B_m\subseteq\mathcal P(\NN)\) 为由模 \(F_{m+2}\) 的余类集合生成的布尔代数（等价地，由所有 \(S_P\) 生成，其中 \(P\subseteq X_m\) 任意）。
+记 \(\mathcal B_\infty:=\bigcup_{m\ge 1}\mathcal B_m\)。
+猜想不存在一族集合 \(A_m\in\mathcal B_m\) 使得其在自然投影意义下相容，并且其指示函数在任意固定 \(s>1\) 的 Dirichlet 拓扑中逼近素数指示函数 \(\ind_{\PP}\)。
+\end{conjecture}
+
+以上结果表明，本节给出的稳定性判别并不止于“偏差是否变小”，还要求明确区分哪些偏差会随着样本增长自然消退，哪些偏差来自固定分辨率下无法绕开的结构性筛分障碍。至此，判别层已经把前文的生成链压回为一组可承认条件；下一节将把这些条件进一步编译为可运行、可核对、可复现的实验协议。

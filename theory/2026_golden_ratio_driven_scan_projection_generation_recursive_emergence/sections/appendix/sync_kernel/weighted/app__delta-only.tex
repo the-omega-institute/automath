@@ -1,0 +1,504 @@
+\subsubsection{仅用 \texorpdfstring{$\Delta$}{Delta} 的闭式计算}\label{app:delta-only}
+令 $z_\star(u)=\lambda(u)^{-1}$ 为 $\Delta(z,u)$ 的最小正根，定义
+\[
+C(u):=\lim_{z\to z_\star}(1-z/z_\star)\zeta(z,u)=\frac{1}{-z_\star\,\partial_z\Delta(z_\star,u)}.
+\]
+由 Witt 反演与 $\zeta=1/\Delta$ 可得
+\[
+\log\mathfrak{M}(\theta)
+=\log C(u)+\sum_{m\ge 2}\frac{\mu(m)}{m}\log\zeta(z_\star^m,u^m)
+=\log C(u)-\sum_{m\ge 2}\frac{\mu(m)}{m}\log\Delta(z_\star^m,u^m),
+\]
+其中级数以指数速度收敛。
+
+\begin{corollary}[完成化的纯实计算：单位圆上 \texorpdfstring{$\Delta(z_\star^m,u^m)$}{Delta(z*^m,u^m)} 的实代数化]\label{cor:sync-kernel-weighted-logM-completed-real}
+取 \(u=e^{i\theta}\) 并令 \(r=e^{i\theta/2}\)、\(s=r+r^{-1}=2\cos(\theta/2)\in[-2,2]\)。记 \(w_\star(s)\) 为 \(\widehat\Delta(w,s)=0\) 的最小模根，则 \(z_\star(u)=w_\star(s)/r\)。
+对任意 \(m\ge 1\)，令
+\[
+S_m(s):=r^m+r^{-m}=2\cos(m\theta/2)=:C_m(s)\in\ZZ[s]
+\]
+（\(C_m\) 为 Chebyshev--Adams 运算；见推论 \ref{cor:primitive-completion-hatp}）。
+则有恒等式
+\[
+\boxed{\ \Delta(z_\star(u)^m,u^m)=\widehat\Delta\!\bigl(w_\star(s)^m,\ S_m(s)\bigr)\ }.
+\]
+因此在单位圆扭曲上，\(\log\mathfrak{M}(\theta)\) 的 \(\Delta\)-only 级数每一项都可在实域上计算：输入仅为实参数 \(s\in[-2,2]\) 与实数 \(w_\star(s)\) 及其幂。
+\end{corollary}
+
+\subsubsection{前 10 个 primitive 加权谱多项式}\label{app:weighted-primitive-table}
+前 10 项 $p_n(u)=\sum_{\tau\ \mathrm{primitive},\,|\tau|=n}u^{S_\tau\varphi}$ 由
+\(
+p_n(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(u^d)
+\)
+从矩阵 \(B(u)\) 的迹多项式 \(a_n(u)=\Tr(B(u)^n)\) 严格计算得到；一键生成输出如下（脚本 \texttt{scripts/exp\_sync\_kernel\_weighted\_primitive\_completed.py}）：
+
+\input{sections/generated/eq_sync_kernel_weighted_primitive_pn_first10}
+当 $n\ge 2$ 时无 $u^0$ 与 $u^n$ 项，且系数满足 $p_{n,k}=p_{n,n-k}$。
+
+\begin{corollary}[primitive 多项式的完成化：\texorpdfstring{$\widehat p_n(s)\in\ZZ[s]$}{hat p in Z[s]} 与 Chebyshev--Adams 运算]\label{cor:primitive-completion-hatp}
+取
+\[
+u=r^2,\qquad s:=r+r^{-1},
+\]
+并对 \(n\ge 1\) 定义 primitive 多项式的完成化
+\[
+\widehat p_n(s):=r^{-n}p_n(r^2).
+\]
+则对所有 \(n\ge 1\) 有 \(\widehat p_n(s)\in\ZZ[s]\)。并且：
+\begin{enumerate}
+  \item 若 \(n\) 为偶数，则 \(\widehat p_n(s)\) 为 \(s\) 的偶多项式；
+  \item 若 \(n\) 为奇数，则 \(\widehat p_n(s)\) 为 \(s\) 的奇多项式。
+\end{enumerate}
+进一步，对任意整数 \(d\ge 1\) 定义
+\[
+C_d(s):=r^d+r^{-d}\in\ZZ[s],
+\qquad
+C_d(s)=2T_d(s/2)
+\]
+（\(T_d\) 为第一类 Chebyshev 多项式）。则完成化坐标下的幂替换满足严格的“倍角律”：
+\[
+r^{-dn}\,p_n(r^{2d})=\widehat p_n\!\bigl(C_d(s)\bigr),
+\]
+即 Witt/Möbius 反演中的 \(u\mapsto u^d\) 在完成化后等价于 \(s\mapsto C_d(s)\) 的 Chebyshev--Adams 运算。
+\end{corollary}
+
+\begin{corollary}[奇长度的严格奇偶平衡：\texorpdfstring{$p_n(-1)=0$}{p_n(-1)=0}]\label{cor:primitive-odd-parity-balance}
+若 \(n\ge 3\) 为奇数，则由推论 \ref{cor:primitive-odd-div} 的整除律 \(u(u+1)\mid p_n(u)\) 得
+\[
+\boxed{\ p_n(-1)=\sum_{k\ge 0}(-1)^k p_{n,k}=0\ }.
+\]
+因此奇长度 primitive 轨道在“能量奇偶”两侧的计数严格相等（以符号加权意义表述）。
+\end{corollary}
+\begin{proof}
+由系数镜像对称 \(p_{n,k}=p_{n,n-k}\) 可得（见上文）
+\(
+p_n(u)=u^n p_n(1/u)
+\)。
+令 \(u=r^2\) 得
+\(
+p_n(r^2)=r^{2n}p_n(r^{-2})
+\)，
+从而 \(r^{-n}p_n(r^2)\) 在 \(r\mapsto r^{-1}\) 下不变。由不变量子环恒等式
+\(
+\ZZ[r,r^{-1}]^{\,r\mapsto r^{-1}}=\ZZ[r+r^{-1}]=\ZZ[s]
+\)
+即得 \(\widehat p_n(s)\in\ZZ[s]\)。
+\par
+奇偶性来自指数奇偶：\(p_n(r^2)\) 只含 \(r^{2k}\)，乘上 \(r^{-n}\) 后幂指数与 \(n\) 同奇偶；而 \(\ZZ[s]\) 中 \(s\mapsto -s\) 的奇偶分解与 \(r\mapsto -r\) 的幂奇偶一致，故得到 \(\widehat p_n\) 的奇偶性结论。
+\par
+最后令 \(s=r+r^{-1}\)，则
+\(
+C_d(s)=r^d+r^{-d}
+\)
+满足递推 \(C_{d+1}=sC_d-C_{d-1}\)，因而 \(C_d\in\ZZ[s]\)，并与 Chebyshev 多项式关系 \(C_d(s)=2T_d(s/2)\) 等价。代入 \(u=r^2\) 及 \(u^d=r^{2d}\) 得
+\[
+r^{-dn}p_n(r^{2d})=\widehat p_n(r^d+r^{-d})=\widehat p_n(C_d(s)),
+\]
+即所述倍角律。证毕。
+\end{proof}
+
+\begin{corollary}[完成化的 Chebyshev--Witt 变换：\texorpdfstring{$\widehat a\leftrightarrow \widehat p$}{hat a <-> hat p}]\label{cor:chebyshev-witt-completed}
+在同一完成化坐标 \(u=r^2,s=r+r^{-1}\) 下，定义 completed ghost（迹）多项式
+\[
+\widehat a_n(s):=r^{-n}a_n(r^2)=r^{-n}\Tr(B(r^2)^n)\in\ZZ[s].
+\]
+则对任意 \(n\ge 1\) 有严格恒等式
+\[
+\boxed{\ 
+\widehat p_n(s)=\frac1n\sum_{d\mid n}\mu(d)\,\widehat a_{n/d}\!\bigl(C_d(s)\bigr),
+\qquad
+\widehat a_n(s)=\sum_{d\mid n}d\,\widehat p_d\!\bigl(C_{n/d}(s)\bigr)
+\ }.
+\]
+\end{corollary}
+\begin{proof}
+对 \(u=r^2\) 的 Witt/Möbius 反演
+\(
+p_n(u)=\frac1n\sum_{d\mid n}\mu(d)a_{n/d}(u^d)
+\)
+两侧同乘 \(r^{-n}\)，并用完成化倍角律
+\(
+r^{-dn}f(r^{2d})=\widehat f(C_d(s))
+\)
+（对 \(f=a_{n/d}\) 与 \(f=p_d\) 分别应用）即可得到第一式；第二式同理由
+\(
+a_n(u)=\sum_{d\mid n} d\,p_d(u^{n/d})
+\)
+完成化得到。
+\end{proof}
+
+\begin{theorem}[完成化 primitive 的素幂差商解码恒等式]\label{thm:completed-primitive-prime-power-difference-quotient}
+沿用推论 \ref{cor:chebyshev-witt-completed} 的完成化记号。
+对任意素数 \(p\) 与整数 \(k\ge 1\)，有严格恒等式
+\begin{equation}\label{eq:completed-primitive-prime-power-diffquot}
+\boxed{\;
+\widehat p_{p^k}(s)
+=\frac{\widehat a_{p^k}(s)-\widehat a_{p^{k-1}}\!\bigl(C_p(s)\bigr)}{p^k}
+\ \in\ \ZZ[s].\;}
+\end{equation}
+\end{theorem}
+\begin{proof}
+将推论 \ref{cor:chebyshev-witt-completed} 的 Möbius 反演式
+\(
+\widehat p_n(s)=\frac1n\sum_{d\mid n}\mu(d)\,\widehat a_{n/d}(C_d(s))
+\)
+应用于 \(n=p^k\)。
+由于 \(\mu(d)=0\) 除非 \(d\in\{1,p\}\)，且 \(\mu(1)=1\)、\(\mu(p)=-1\)，得到
+\[
+\widehat p_{p^k}(s)
+=\frac{1}{p^k}\Bigl(\widehat a_{p^k}(s)-\widehat a_{p^{k-1}}\!\bigl(C_p(s)\bigr)\Bigr),
+\]
+即 \eqref{eq:completed-primitive-prime-power-diffquot}。
+整系数性由左端 \(\widehat p_{p^k}\in\ZZ[s]\)（推论 \ref{cor:primitive-completion-hatp} 与推论 \ref{cor:chebyshev-witt-completed}）直接给出。证毕。
+\end{proof}
+
+\begin{corollary}[素数长度同余：\texorpdfstring{$\widehat a_p(s)\equiv C_p(s)\ (\mathrm{mod}\ p)$}{hat a_p congruent Cp mod p}]\label{cor:completed-prime-congruence}
+沿用推论 \ref{cor:chebyshev-witt-completed} 的完成化记号。若 \(p\) 为素数，则有整系数同余
+\[
+\boxed{\ \widehat a_p(s)\equiv C_p(s)\pmod p\ }.
+\]
+\end{corollary}
+\begin{proof}
+对素数 \(p\)，由 \(\widehat p_p(s)=\frac1p\bigl(\widehat a_p(s)-\widehat a_1(C_p(s))\bigr)\)（推论 \ref{cor:chebyshev-witt-completed} 的第一式，因子仅为 \(d=1,p\)）可知
+\[
+\widehat a_p(s)-\widehat a_1(C_p(s))\in p\,\ZZ[s].
+\]
+而在本核上 \(a_1(u)=\Tr(B(u))=p_1(u)=1+u\)，故
+\(
+\widehat a_1(s)=r^{-1}(1+r^2)=r+r^{-1}=s
+\)，从而 \(\widehat a_1(C_p(s))=C_p(s)\)。
+代回即得同余。证毕。
+\end{proof}
+
+\begin{corollary}[Teichm\"uller 型同余：\texorpdfstring{$\widehat a_p(s)\equiv s^p\ (\mathrm{mod}\ p)$}{hat a_p congruent s^p mod p}]\label{cor:completed-teichmueller-congruence}
+沿用推论 \ref{cor:completed-prime-congruence} 的记号。若 \(p\) 为素数，则在 \(\ZZ[s]\) 中有同余
+\[
+\boxed{\ \widehat a_p(s)\equiv s^p\pmod p\ }.
+\]
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:completed-prime-congruence} 得 \(\widehat a_p(s)\equiv C_p(s)\pmod p\)。
+另一方面，在 \(\FF_p[r,r^{-1}]\) 中有
+\[
+s^p=(r+r^{-1})^p\equiv r^p+r^{-p}=C_p(s)\pmod p,
+\]
+其中同余来自 \(\binom{p}{k}\equiv 0\pmod p\)（\(1\le k\le p-1\)）。
+因此 \(C_p(s)\equiv s^p\pmod p\)；合并即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[Chebyshev--Frobenius 塌缩：完成化 Dwork 同余塔在 \texorpdfstring{$\bmod p$}{mod p} 上的 Frobenius 刚性]\label{cor:completed-dwork-frobenius-tower}
+令 \(p\) 为素数、\(k\ge 1\)。在 completed ghost 的记号下，有完成化 Dwork 同余
+\[
+\boxed{\ \widehat a_{p^k}(s)\equiv \widehat a_{p^{k-1}}\!\bigl(C_p(s)\bigr)\pmod{p^k}\qquad\text{于 }\ZZ[s]\ }
+\]
+（定理 \ref{thm:discussion-completed-dwork-chebyshev}）。
+进一步，在 \(\bmod p\) 层面可将其塌缩为纯 Frobenius 迭代：
+\[
+\boxed{\ \widehat a_{p^k}(s)\equiv \widehat a_{p^{k-1}}(s^p)\pmod p\qquad\text{于 }\ZZ[s]\ },
+\qquad
+\boxed{\ \widehat a_{p^k}(s)\equiv s^{p^k}\pmod p\qquad\text{于 }\ZZ[s]\ }.
+\]
+\end{corollary}
+\begin{proof}
+第一式即定理 \ref{thm:discussion-completed-dwork-chebyshev} 的重述。
+对第二式，将第一式降模到 \(\FF_p[s]\)，并用推论 \ref{cor:completed-teichmueller-congruence} 的证明中恒等式
+\(
+C_p(s)\equiv s^p\ (\mathrm{mod}\ p)
+\)
+替换自变量即可得
+\(
+\widehat a_{p^k}(s)\equiv \widehat a_{p^{k-1}}(s^p)\ (\mathrm{mod}\ p)
+\)。
+对第三式，对 \(k\) 作归纳：\(k=1\) 即推论 \ref{cor:completed-teichmueller-congruence}；
+若 \(\widehat a_{p^{k-1}}(s)\equiv s^{p^{k-1}}\ (\mathrm{mod}\ p)\)，则代入 \(s^p\) 得
+\(
+\widehat a_{p^{k-1}}(s^p)\equiv s^{p^k}\ (\mathrm{mod}\ p)
+\)，再与第二式合并即得结论。证毕。
+\end{proof}
+
+\input{sections/generated/tab_sync_kernel_weighted_primitive_completed}
+
+\begin{corollary}[半转端点的严格符号律：\texorpdfstring{$p_n(-1)$}{p_n(-1)} 由 \texorpdfstring{$\widehat p_n(0)$}{hat p_n(0)} 交替编码]\label{cor:primitive-halfturn-sign-law}
+在完成化坐标 \(u=r^2,s=r+r^{-1}\) 下，半转端点 \(s=0\) 对应于 \(r=\mathrm{i}\)（从而 \(u=-1\)）。
+因此对任意整数 \(m\ge 1\)，偶长 primitive 满足严格恒等式
+\[
+\boxed{\ p_{2m}(-1)=(-1)^m\,\widehat p_{2m}(0)\ }.
+\]
+特别地，由表 \ref{tab:sync_kernel_weighted_primitive_completed} 可读出
+\[
+\bigl(\widehat p_2(0),\widehat p_4(0),\widehat p_6(0),\widehat p_8(0),\widehat p_{10}(0)\bigr)=(6,4,19,37,166),
+\]
+从而
+\[
+\bigl(p_2(-1),p_4(-1),p_6(-1),p_8(-1),p_{10}(-1)\bigr)=(-6,4,-19,37,-166).
+\]
+\end{corollary}
+\begin{proof}
+由定义 \(\widehat p_n(s)=r^{-n}p_n(r^2)\)。
+在 \(s=0\) 处取 \(r=\mathrm{i}\)，则 \(r^2=-1\)，且对 \(n=2m\) 有
+\[
+\widehat p_{2m}(0)=\mathrm{i}^{-2m}\,p_{2m}(-1)=(-1)^m p_{2m}(-1),
+\]
+移项即得所述恒等式。
+表 \ref{tab:sync_kernel_weighted_primitive_completed} 的数值代入给出末两式。证毕。
+\end{proof}
+
+\begin{remark}[二次分辨率与半转端点的对角锁定：\texorpdfstring{$\Delta_2^{\mathrm{disc}}=\widehat p_8(0)=37$}{Delta2disc=hatp8(0)=37}]\label{rem:delta2disc-hatp8-diagonal-lock}
+由注 \ref{rem:pom-discriminant-quadratic-field-tower}，二阶最小递推特征多项式 \(P_2\) 的判别式平方自由部分为 \(\Delta_2^{\mathrm{disc}}=37\)。
+另一方面，表 \ref{tab:sync_kernel_weighted_primitive_completed} 给出 \(\widehat p_8(0)=37\)，并由推论 \ref{cor:primitive-halfturn-sign-law} 得 \(p_8(-1)=\widehat p_8(0)\)。
+因此在整数层面出现严格同一
+\[
+\boxed{\ \Delta_2^{\mathrm{disc}}=\widehat p_8(0)=p_8(-1)=37\ }.
+\]
+\end{remark}
+
+\begin{proposition}[半转端点零化素因子必进入 completed primitive 判别式]\label{prop:halfturn-prime-divides-discriminant}
+设 \(m\ge 1\)，并令 \(n=2m\) 为偶数。
+由于 \(\widehat p_n(s)\) 为偶多项式（推论 \ref{cor:primitive-completion-hatp}），存在 \(f_n\in\ZZ[t]\) 使
+\(\widehat p_n(s)=f_n(s^2)\)。
+若奇素数 \(p\mid \widehat p_n(0)=f_n(0)\)，则
+\(\widehat p_n(s)\bmod p\) 在 \((\ZZ/p\ZZ)[s]\) 中至少含因子 \(s^2\)，从而在模 \(p\) 意义下非平方自由。
+等价地，
+\[
+\boxed{\ p\mid \mathrm{Disc}_s\!\bigl(\widehat p_n\bigr)\ }.
+\]
+\end{proposition}
+\begin{proof}
+由 \(p\mid f_n(0)\) 得 \(f_n(t)\equiv t\,g(t)\ (\mathrm{mod}\ p)\)，故
+\(\widehat p_n(s)=f_n(s^2)\equiv s^2 g(s^2)\ (\mathrm{mod}\ p)\)。
+因此 \(s=0\) 为重根，判别式在模 \(p\) 下为零，从而 \(p\mid \mathrm{Disc}_s(\widehat p_n)\)。证毕。
+\end{proof}
+
+\begin{lemma}[平方代换的判别式裂解：内部判别式以平方进入]\label{lem:disc-square-substitution-split}
+设 \(f(t)=a\prod_{j=1}^{d}(t-\alpha_j)\in\CC[t]\) 为次数 \(d\ge 1\) 的多项式，且 \(c:=f(0)\neq 0\)。
+定义 \(g(s):=f(s^2)\in\CC[s]\)（次数 \(2d\) 的偶多项式）。
+则判别式满足严格恒等式
+\[
+\boxed{\ \mathrm{Disc}_s(g)=(-1)^d\,4^d\,a\,c\cdot \mathrm{Disc}_t(f)^2\ }.
+\]
+\end{lemma}
+\begin{proof}
+写 \(f(t)=a\prod_{j=1}^{d}(t-\alpha_j)\)，则
+\(
+g(s)=a\prod_{j=1}^{d}(s^2-\alpha_j)
+=a\prod_{j=1}^{d}(s-\sqrt{\alpha_j})(s+\sqrt{\alpha_j})
+\)。
+对每个 \(j\) 的同根对有差 \(2\sqrt{\alpha_j}\)，贡献
+\(\prod_{j}(2\sqrt{\alpha_j})^2=4^d\prod_j \alpha_j\)；
+而对不同 \(i\neq j\)，四对差的乘积满足
+\[
+\prod_{\varepsilon,\varepsilon'\in\{\pm 1\}}\bigl(\varepsilon\sqrt{\alpha_i}-\varepsilon'\sqrt{\alpha_j}\bigr)^2
+=\bigl(\alpha_i-\alpha_j\bigr)^4,
+\]
+故跨对贡献为 \(\prod_{i<j}(\alpha_i-\alpha_j)^4=\mathrm{Disc}_t(f)^2/a^{4d-4}\)。
+由判别式的根表示（\(g\) 为次数 \(2d\) 的多项式）得
+\[
+\mathrm{Disc}_s(g)=a^{4d-2}\cdot 4^d\prod_{j=1}^{d}\alpha_j\cdot\prod_{i<j}(\alpha_i-\alpha_j)^4.
+\]
+代入上一式，并用
+\(
+c=f(0)=a(-1)^d\prod_{j=1}^{d}\alpha_j
+\)
+消去 \(\prod_j\alpha_j\)，即得所述恒等式。证毕。
+\end{proof}
+
+\begin{corollary}[completed primitive 的二次指纹由首项与常数项决定]\label{cor:completed-primitive-quadratic-fingerprint-by-const}
+设 \(n\) 为偶数，并写 \(\widehat p_n(s)=f_n(s^2)\)（\(f_n\in\ZZ[t]\)）。
+令 \(d=\deg f_n\)、\(a\) 为 \(f_n\) 首项系数、\(c=\widehat p_n(0)=f_n(0)\)。
+则由引理 \ref{lem:disc-square-substitution-split} 可得
+\[
+\mathrm{sqf}\!\Bigl(\mathrm{Disc}_s\bigl(\widehat p_n\bigr)\Bigr)
+=\mathrm{sqf}\bigl((-1)^d\,a\,c\bigr),
+\]
+从而 completed primitive 的判别式平方自由核与 \(f_n\) 的内部系数无关，仅由首项系数与常数项决定。
+在表 \ref{tab:sync_kernel_weighted_primitive_completed} 的 \(n\in\{6,8,10\}\) 上（首项系数皆为 \(a=3\)），二次指纹分别为
+\[
+\QQ(\sqrt{57}),\qquad \QQ(\sqrt{-111}),\qquad \QQ(\sqrt{498}),
+\]
+其中各自新增的奇分歧素数依次为 \(19,37,83\)。
+\end{corollary}
+
+\begin{remark}[\texorpdfstring{$\widehat p_8$}{hat p8} 的分裂域内生出现双二次轴与 Klein 四闭合]\label{rem:hatp8-klein-four-quadratic-axes}
+由表 \ref{tab:sync_kernel_weighted_primitive_completed}，
+\(\widehat p_8(s)=3s^6+14s^4+93s^2+37=f_8(t)|_{t=s^2}\)，其中
+\(
+f_8(t)=3t^3+14t^2+93t+37
+\)。
+由于 \(f_8\) 为三次且其判别式非平方，其分裂域包含二次子域 \(\QQ(\sqrt{\mathrm{Disc}(f_8)})=\QQ(\sqrt{-6094463})\)，而
+\(-6094463=-389\cdot 15667\)。
+另一方面，推论 \ref{cor:completed-primitive-quadratic-fingerprint-by-const} 给出 \(\mathrm{sqf}(\mathrm{Disc}_s(\widehat p_8))=-111=-3\cdot 37\)，从而 \(\widehat p_8\) 的分裂域亦包含独立二次子域 \(\QQ(\sqrt{-111})\)。
+两条二次轴的奇分歧素数集合分别为 \(\{389,15667\}\) 与 \(\{3,37\}\)，互不相交；
+因此在 \(\widehat p_8\) 的分裂域中内生出现秩 \(2\) 的二次子域格（Klein 四闭合），并诱导四组互异的局部奇偶通道。
+\end{remark}
+
+\begin{corollary}[\texorpdfstring{$K_2^{\mathrm{disc}}$}{K2disc} 与 \texorpdfstring{$\QQ(\sqrt{-111})$}{Q(sqrt(-111))} 的共享奇分歧仅为 \texorpdfstring{$37$}{37}]\label{cor:disc2-prim8-shared-ramified-37}
+二次域 \(K_2^{\mathrm{disc}}=\QQ(\sqrt{37})\) 的唯一奇分歧素数为 \(37\)（注 \ref{rem:pom-discriminant-quadratic-field-tower}）。
+而由推论 \ref{cor:completed-primitive-quadratic-fingerprint-by-const}，\(\widehat p_8\) 的二次指纹 \(\QQ(\sqrt{-111})\) 的奇分歧素数集合为 \(\{3,37\}\)。
+因此二者的奇分歧交集精确为 \(\{37\}\)，从而 \(37\) 是“递推判别式二次轴”与“completed primitive 判别式二次轴”之间唯一共享的奇分歧门槛。
+\end{corollary}
+
+\begin{remark}[局部重根的唯一可能处：completed primitive 的判别式素支撑门槛]\label{rem:hatp-local-double-root-prime-support}
+对固定的偶数 \(n\)，若奇素数 \(p\nmid \mathrm{Disc}_s(\widehat p_n)\)，则 \(\widehat p_n(s)\bmod p\) 在 \((\ZZ/p\ZZ)[s]\) 上必为平方自由，
+从而在该素数处严格排除“模 \(p\) 重根/局部谱退化”的可能。
+因此 \(\mathrm{Disc}_s(\widehat p_n)\) 的素支撑提供一个完全离散的局部分歧门槛集合：只有落在该有限集合内的素数才允许 completed primitive 在模 \(p\) 层面出现同根塌缩。
+表 \ref{tab:sync_kernel_weighted_primitive_completed_discriminant_fingerprint} 给出 \(n\in\{6,8,10\}\) 的奇素支撑；
+其中 \(389,15667,186303348019\) 作为“唯一允许发生局部退化的高素数门槛”与常数项素数（如 \(37\)）在操作意义上同阶。
+\end{remark}
+
+\input{sections/generated/tab_sync_kernel_weighted_primitive_completed_discriminant_fingerprint}
+
+\subsubsection{Dirichlet 完成化截面的单例外对与 Salem 多项式}\label{app:sync-kernel-weighted-dirichlet-xi-single-exception}
+沿用式 \eqref{eq:sync-kernel-weighted-delta-explicit} 的 \(\Delta(z,u)=\det(I-zB(u))\) 以及命题 \ref{prop:kernel-xi-functional-equation} 的完成化截面
+\[
+\Xi(s):=\Delta(3^{-s},3^{2s-1}),
+\qquad
+\Xi(s)=\Xi(1-s).
+\]
+记
+\[
+r:=3^{\,s-\frac12}\qquad(\text{故 }u=3^{2s-1}=r^2,\ z=3^{-s}=3^{-1/2}r^{-1}).
+\]
+
+\begin{theorem}[完成化零点的单例外对结构]\label{thm:sync-kernel-weighted-xi-single-exception-pair}
+在上述记号下，存在多项式 \(N(r)\in\ZZ[\sqrt3][r]\) 使得
+\begin{equation}\label{eq:sync-kernel-weighted-xi-Nr-quotient}
+\boxed{\;
+\Xi(s)=\frac{N(r)}{27r^3},
+\qquad
+N(r)=\sqrt3\,r^6-2r^5-3\sqrt3\,r^4-8r^3-3\sqrt3\,r^2-2r+\sqrt3\; }.
+\end{equation}
+并且 \(N\) 为互逆多项式：\(r^6N(1/r)=N(r)\)。
+设 \(\sigma:\sqrt3\mapsto-\sqrt3\) 为 \(\QQ(\sqrt3)\) 的非平凡自同构，则 \(N\) 的零点满足如下分层：
+\begin{enumerate}
+  \item 存在唯一实数 \(\alpha>1\) 使得 \(\{\alpha,\alpha^{-1}\}\) 为 \(N\) 的全部非幺模实零点；
+  \item 除 \(\alpha,\alpha^{-1}\) 外，\(N\) 的其余四个零点皆满足 \(|r|=1\)，并成两对共轭。
+\end{enumerate}
+等价地，\(\Xi(s)=0\) 在临界线 \(\Re(s)=\tfrac12\) 之外仅出现一对例外零点（互为 \(s\mapsto 1-s\) 的对称像）。
+\end{theorem}
+
+\begin{proof}
+将 \(u=r^2,\ z=3^{-1/2}r^{-1}\) 代入 \(\Delta(z,u)\) 的显式表达式 \eqref{eq:sync-kernel-weighted-delta-explicit} 并清分母，即得 \eqref{eq:sync-kernel-weighted-xi-Nr-quotient}；互逆性由直接代数化简验证。
+\par
+为刻画零点模长结构，令 \(t:=r+r^{-1}\)。
+由互逆性可将 \(N\) 写成
+\begin{equation}\label{eq:sync-kernel-weighted-Nr-pt}
+\boxed{\;
+N(r)=r^3P(t),
+\qquad
+P(t)=\sqrt3\,t^3-2t^2-6\sqrt3\,t-4\in\RR[t]\; }.
+\end{equation}
+计算得
+\[
+P(-2)=4\sqrt3-12<0,\qquad
+P(-1)=5\sqrt3-6>0,\qquad
+P(0)=-4<0,
+\]
+\[
+P(3)=9\sqrt3-22<0,\qquad
+P(4)=40\sqrt3-36>0,
+\]
+从而 \(P\) 存在三实根 \(t_1<t_2<t_3\) 且满足
+\[
+t_1\in(-2,-1),\qquad t_2\in(-1,0),\qquad t_3\in(3,4)\subset(2,\infty).
+\]
+对任一根 \(t=t_j\)，方程 \(t=r+r^{-1}\) 等价于二次方程 \(r^2-tr+1=0\)。
+当 \(|t|<2\) 时判别式 \(t^2-4<0\)，两根为共轭且满足 \(|r|=1\)；
+当 \(t>2\) 时判别式 \(t^2-4>0\)，两根为互逆正实根 \(\alpha,\alpha^{-1}\)（其中 \(\alpha=\frac{t+\sqrt{t^2-4}}{2}>1\)）。
+由 \(t_1,t_2\in(-2,2)\) 与 \(t_3>2\) 即得所述分层。证毕。
+\end{proof}
+
+\begin{corollary}[三二次分解与临界/例外分层]\label{cor:sync-kernel-weighted-xi-three-quadratics}
+设 \(t_1<t_2<t_3\) 为 \(P(t)=0\) 的三实根，则在 \(\RR[r]\) 上成立分解
+\[
+N(r)=\sqrt3\prod_{j=1}^{3}\bigl(r^2-t_jr+1\bigr).
+\]
+其中 \(r^2-t_3r+1\) 的两根为 \(\alpha,\alpha^{-1}\)（\(\alpha>1\)），而 \(r^2-t_1r+1\) 与 \(r^2-t_2r+1\) 的根皆在单位圆上。
+\end{corollary}
+
+\begin{proof}
+由 \eqref{eq:sync-kernel-weighted-Nr-pt} 有 \(N(r)=r^3P(r+r^{-1})\)。
+将 \(P\) 分解为 \(\sqrt3\prod_{j=1}^{3}(t-t_j)\) 并使用恒等式
+\(
+r+r^{-1}-t_j=(r^2-t_jr+1)/r
+\)
+即可得到所示分解；根的模长归类继承自定理 \ref{thm:sync-kernel-weighted-xi-single-exception-pair} 的证明。证毕。
+\end{proof}
+
+\begin{theorem}[例外零点的显式坐标与偏离指数]\label{thm:sync-kernel-weighted-xi-exception-coordinate}
+沿用推论 \ref{cor:sync-kernel-weighted-xi-three-quadratics} 的记号，令
+\[
+\alpha=\frac{t_3+\sqrt{t_3^2-4}}{2}>1,
+\qquad
+\beta:=\frac{\log\alpha}{\log 3}.
+\]
+则 \(\Xi(s)=0\) 的全部零点分为两类：
+\begin{enumerate}
+  \item 例外实零点恰为 \(s_\pm=\frac12\pm\beta\)；
+  \item 其余四个零点全落在临界线 \(\Re(s)=\tfrac12\)，并可写为
+  \[
+  s=\frac12\pm i\frac{\theta_1}{\log 3},
+  \qquad
+  s=\frac12\pm i\frac{\theta_2}{\log 3},
+  \qquad
+  \theta_j:=\arccos(t_j/2)\in(0,\pi)\ (j=1,2).
+  \]
+\end{enumerate}
+数值上，
+\[
+t_1\approx-1.6423800228,\quad t_2\approx-0.4350479177,\quad t_3\approx3.2321284788,
+\]
+\[
+\alpha\approx 2.8855773846,\qquad \beta\approx 0.9646032765.
+\]
+\end{theorem}
+
+\begin{proof}
+由定义 \(r=3^{s-1/2}\) 与 \eqref{eq:sync-kernel-weighted-xi-Nr-quotient}，\(\Xi(s)=0\iff N(r)=0\)。
+当 \(r=\alpha,\alpha^{-1}\) 时 \(\log r\in\RR\)，故 \(s=\frac12+\log r/\log 3\) 为实数并给出 \(s_\pm\)。
+当 \(|r|=1\) 时写 \(r=e^{i\theta}\)，则 \(s=\frac12+i\theta/\log 3\) 落在临界线；
+由 \(r+r^{-1}=2\cos\theta=t_j\) 得 \(\theta_j=\arccos(t_j/2)\)。
+数值近似由三次方程 \(P(t)=0\) 的实根及二次方程 \(r^2-t_3r+1=0\) 的解析表达式给出。证毕。
+\end{proof}
+
+\begin{proposition}[范数降阶与整系数 Salem 型六次]\label{prop:sync-kernel-weighted-xi-norm-salem}
+设 \(\sigma:\sqrt3\mapsto-\sqrt3\) 为 \(\QQ(\sqrt3)\) 的非平凡自同构，并令
+\[
+F(r):=-\,\mathrm{Nm}_{\QQ(\sqrt3)/\QQ}\!\bigl(N\bigr)(r):=-\,N(r)\,\sigma(N)(r)\in\ZZ[r].
+\]
+则有显式恒等式
+\[
+F(r)=3r^{12}-22r^{10}-23r^{8}-12r^{6}-23r^{4}-22r^{2}+3.
+\]
+置 \(y=r^2\)，得到整系数六次多项式
+\[
+f(y):=3y^{6}-22y^{5}-23y^{4}-12y^{3}-23y^{2}-22y+3\in\ZZ[y].
+\]
+则 \(y_0:=\alpha^2\) 为 \(f\) 的唯一实根（\(>1\)），并且 \(f\) 另有唯一实根 \(y_0^{-1}\in(0,1)\)，其余四根均满足 \(|y|=1\)。
+并且 \(f\) 在 \(\QQ\) 上不可约（例如其模 \(7\) 约化不可约）。
+\end{proposition}
+
+\begin{proof}
+范数闭式由直接展开 \(N(r)\sigma(N)(r)\) 并取负号得到；得到 \(f(y)\) 仅使用代换 \(y=r^2\)。
+由定理 \ref{thm:sync-kernel-weighted-xi-single-exception-pair}，\(N(r)\) 的零点模长结构为 \(\{\alpha,\alpha^{-1}\}\cup\{|r|=1\text{ 的四点}\}\)；
+共轭嵌入 \(\sigma\) 不改变 \(|r|\)，故 \(F(r)\) 的零点集合为两者并集，从而仍仅含一对正实互逆根 \(\alpha,\alpha^{-1}\) 而其余均在单位圆上。
+代换 \(y=r^2\) 得到 \(f\) 的根模长结构为 \(\{\alpha^2,\alpha^{-2}\}\cup\{|y|=1\text{ 的四点}\}\)，从而实根性陈述成立。
+不可约性可由有限域不可约性判别：将 \(f\) 模 \(7\) 约化得到 \(\FF_7[y]\) 上不可约六次多项式，故 \(f\) 在 \(\QQ[y]\) 上不可约（Gauss 引理）。证毕。
+\end{proof}
+
+\begin{theorem}[例外偏离指数的 Mahler 测度表述]\label{thm:sync-kernel-weighted-xi-beta-mahler}
+令 \(\tilde f(y):=f(y)/3\) 为首一化多项式（从而 \(\tilde f\) 的首项与常数项皆为 \(1\)），并令 \(M(\tilde f)\) 为 Mahler 测度。
+则
+\[
+M(\tilde f)=\alpha^2,
+\qquad
+\log M(\tilde f)=2\log\alpha=2\beta\log 3,
+\qquad
+\beta=\frac{1}{2\log 3}\,\log M(\tilde f).
+\]
+\end{theorem}
+
+\begin{proof}
+按定义 \(M(\tilde f)=\prod_i\max\{1,|y_i|\}\)，其中 \(\{y_i\}\) 为 \(\tilde f\) 的根（按重数计）。
+由命题 \ref{prop:sync-kernel-weighted-xi-norm-salem}，除 \(y_0=\alpha^2>1\) 外其余根均满足 \(|y_i|\le 1\)；并且仅有一根为 \(y_0^{-1}<1\) 而其余四根在单位圆上。
+因此 \(M(\tilde f)=\alpha^2\)，取对数并用 \(\beta=\log\alpha/\log 3\) 即得。证毕。
+\end{proof}

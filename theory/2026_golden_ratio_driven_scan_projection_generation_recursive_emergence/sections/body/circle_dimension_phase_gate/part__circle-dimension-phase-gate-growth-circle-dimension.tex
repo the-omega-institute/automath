@@ -1,0 +1,453 @@
+\paragraph{增长圆维：以多项式阶替代“无穷维”直觉的可审计指标}
+定义 \ref{def:cdim-algebraic-circle-rank} 的代数圆秩 \(\cdim_{\QQ}\) 与定理 \ref{thm:cdim-algebraic-degree-min-circle-rank} 的最小圆秩 \(\cdim_{\min}\)
+在超越元出现时必然取到 \(\infty\)。
+为在不引入“无穷维空间”类比的前提下刻画“分辨率提升时自由度增长的阶”，此处引入一个与有限分辨率滤过兼容的增长指标，并给出其在自然等价类内的不变性、对多项式环与有限生成整环的闭式律，以及与代数/超越分岔与素因子账本的关系。
+
+\begin{definition}[有限分辨率滤过与增长圆维]\label{def:gcdim-filtration}
+设 \(A\) 为可数阿贝尔群。
+称一族子群 \(\mathcal F=\{A_{\le N}\}_{N\ge 1}\) 为 \(A\) 的\textbf{有限分辨率滤过}，若：
+\begin{enumerate}
+  \item 每个 \(A_{\le N}\) 为有限生成子群；
+  \item \(A_{\le N}\subseteq A_{\le N+1}\)；
+  \item \(\bigcup_{N\ge 1}A_{\le N}=A\)。
+\end{enumerate}
+记
+\[
+\operatorname{rk}_{\ZZ}(B):=\dim_{\QQ}(B\otimes_{\ZZ}\QQ)\in\NN\cup\{0,\infty\}
+\qquad(B\ \text{为阿贝尔群})
+\]
+为 \(B\) 的自由秩（挠部忽略）。
+定义 \(A\) 在滤过 \(\mathcal F\) 下的\textbf{增长圆维}为
+\[
+\operatorname{gcdim}_{\mathcal F}(A)
+:=
+\limsup_{N\to\infty}\frac{\log\bigl(\operatorname{rk}_{\ZZ}(A_{\le N})+1\bigr)}{\log N}\in[0,\infty].
+\]
+\end{definition}
+
+\begin{definition}[滤过的多项式同阶等价]\label{def:gcdim-poly-equivalence}
+设 \(\mathcal F=\{A_{\le N}\}\)、\(\mathcal F'=\{A'_{\le N}\}\) 为同一阿贝尔群 \(A\) 的两有限分辨率滤过。
+若存在常数 \(c,C>0\) 与整数 \(a,b\ge 1\) 使对充分大 \(N\) 有
+\[
+A_{\le N}\subseteq A'_{\le \lfloor C N^{a}\rfloor},
+\qquad
+A'_{\le N}\subseteq A_{\le \lfloor c N^{b}\rfloor},
+\]
+则称 \(\mathcal F\sim_{\mathrm{poly}}\mathcal F'\)。
+\end{definition}
+
+\begin{theorem}[增长圆维的滤过不变性]\label{thm:gcdim-filtration-invariance}
+若 \(\mathcal F\sim_{\mathrm{poly}}\mathcal F'\)，则
+\[
+\operatorname{gcdim}_{\mathcal F}(A)=\operatorname{gcdim}_{\mathcal F'}(A).
+\]
+\end{theorem}
+\begin{proof}
+由定义 \ref{def:gcdim-poly-equivalence}，对充分大 \(N\) 有
+\[
+\operatorname{rk}_{\ZZ}(A_{\le N})
+\le
+\operatorname{rk}_{\ZZ}\!\bigl(A'_{\le \lfloor C N^{a}\rfloor}\bigr),
+\qquad
+\operatorname{rk}_{\ZZ}(A'_{\le N})
+\le
+\operatorname{rk}_{\ZZ}\!\bigl(A_{\le \lfloor c N^{b}\rfloor}\bigr).
+\]
+对两边取 \(\log(\cdot+1)\) 并除以 \(\log N\)，注意
+\(\log(CN^{a})=a\log N+O(1)\)、\(\log(cN^{b})=b\log N+O(1)\)，并对 \(N\to\infty\) 取 \(\limsup\)，得到
+\[
+\operatorname{gcdim}_{\mathcal F}(A)
+\le
+\operatorname{gcdim}_{\mathcal F'}(A)
+\le
+\operatorname{gcdim}_{\mathcal F}(A),
+\]
+从而相等。证毕。
+\end{proof}
+
+\begin{theorem}[多项式环的增长圆维]\label{thm:gcdim-polynomial-ring}
+令 \(R_n:=\ZZ[x_1,\dots,x_n]\)，并以总次数滤过
+\[
+(R_n)_{\le N}:=\bigl\langle x_1^{a_1}\cdots x_n^{a_n}:\ a_1+\cdots+a_n\le N\bigr\rangle_{\ZZ}
+\]
+诱导增长圆维。
+则
+\[
+\operatorname{gcdim}(R_n)=n.
+\]
+\end{theorem}
+\begin{proof}
+\((R_n)_{\le N}\) 作为 \(\ZZ\)-模由满足 \(a_1+\cdots+a_n\le N\) 的单项式自由生成，因此
+\[
+\operatorname{rk}_{\ZZ}\bigl((R_n)_{\le N}\bigr)
+=\card{\{(a_1,\dots,a_n)\in\NN^{n}:\ a_1+\cdots+a_n\le N\}}
+=\binom{n+N}{n}.
+\]
+由组合恒等式 \(\binom{n+N}{n}=N^{n}/n!+O(N^{n-1})\)，有
+\[
+\frac{\log\bigl(\operatorname{rk}_{\ZZ}((R_n)_{\le N})+1\bigr)}{\log N}
+=\frac{\log\binom{n+N}{n}+O(1)}{\log N}\longrightarrow n,
+\]
+从而 \(\operatorname{gcdim}(R_n)=n\)。证毕。
+\end{proof}
+
+\begin{theorem}[有限生成整环的 Noether--Hilbert 增长律]\label{thm:gcdim-noether-hilbert-dim-minus-one}
+设 \(A\) 为有限生成的 \(\ZZ\)-代数，且为整环并作为阿贝尔群无挠。
+则存在整数 \(n\ge 0\) 与一个多项式子环 \(B\simeq \ZZ[t_1,\dots,t_n]\subseteq A\)，使得 \(A\) 为 \(B\) 上有限模。
+并且对由 \(B\) 的总次数滤过诱导的自然滤过 \(\{A_{\le N}\}\)，有
+\[
+\operatorname{gcdim}(A)=n,
+\qquad
+\dim(A)=n+1,
+\qquad
+\operatorname{gcdim}(A)=\dim(A)-1.
+\]
+\end{theorem}
+\begin{proof}
+将 \(A\) 张量到 \(\QQ\) 得 \(A_{\QQ}:=A\otimes_{\ZZ}\QQ\)，它是有限生成 \(\QQ\)-代数且为整环。
+由 Noether 正规化定理，存在代数无关元 \(t_1,\dots,t_n\in A_{\QQ}\)，使 \(A_{\QQ}\) 整于 \(\QQ[t_1,\dots,t_n]\)。
+清分母可在 \(A\) 中取得同名元并得到嵌入 \(B\simeq \ZZ[t_1,\dots,t_n]\hookrightarrow A\)，且 \(A\) 对 \(B\) 为有限模。
+\par
+令 \(B_{\le N}\) 为总次数 \(\le N\) 的 \(\ZZ\)-子模。
+取 \(A\) 作为 \(B\)-模的一组生成元 \(a_1,\dots,a_r\)，并定义
+\[
+A_{\le N}:=B_{\le N}a_1+\cdots+B_{\le N}a_r.
+\]
+则 \(\{A_{\le N}\}\) 构成 \(A\) 的有限分辨率滤过。
+由生成表达式立得上界
+\[
+\operatorname{rk}_{\ZZ}(A_{\le N})\le r\cdot \operatorname{rk}_{\ZZ}(B_{\le N}).
+\]
+另一方面，记 \(K:=\QQ(t_1,\dots,t_n)\)、\(L:=\mathrm{Frac}(A_{\QQ})\)。
+由于 \(A_{\QQ}\) 对 \(\QQ[t_1,\dots,t_n]\) 整且有限生成，\(L/K\) 为有限扩张。
+取 \(K\)-线性无关元 \(b_1,\dots,b_d\in A_{\QQ}\) 并清分母使 \(b_i\in A\)。
+则对每个 \(N\)，张量到 \(\QQ\) 后有直和嵌入
+\[
+\bigl(B_{\le N}\otimes\QQ\bigr)b_1\ \oplus\ \cdots\ \oplus\ \bigl(B_{\le N}\otimes\QQ\bigr)b_d
+\ \subseteq\ A_{\le N}\otimes\QQ,
+\]
+从而
+\(
+\operatorname{rk}_{\ZZ}(A_{\le N})\ge d\cdot \operatorname{rk}_{\ZZ}(B_{\le N})
+\)。
+由定理 \ref{thm:gcdim-polynomial-ring}（对 \(B\cong \ZZ[t_1,\dots,t_n]\)）知
+\(
+\operatorname{rk}_{\ZZ}(B_{\le N})=\binom{n+N}{n}
+\)
+并给出 \(\operatorname{gcdim}(B)=n\)。
+夹逼即得 \(\operatorname{gcdim}(A)=n\)。
+\par
+最后，由 \(A\) 对 \(B\) 整且有限模，Krull 维数满足 \(\dim(A)=\dim(B)\)，而 \(\dim(\ZZ[t_1,\dots,t_n])=n+1\)，故 \(\dim(A)=n+1\) 并得 \(\operatorname{gcdim}(A)=\dim(A)-1\)。证毕。
+\end{proof}
+
+\begin{definition}[素点 Dirichlet 级数与算术圆维]\label{def:acdim-prime-point-dirichlet}
+设 \(R\) 为有限生成交换含幺 \(\ZZ\)-代数。
+定义其\textbf{素点 Dirichlet 级数}为
+\[
+\mathcal Z_R(s):=\sum_{p\ \mathrm{prime}}\ \#\operatorname{Hom}_{\mathrm{ring}}(R,\mathbb F_p)\,p^{-s},
+\]
+并定义其\textbf{算术圆维}为
+\[
+\operatorname{acdim}(R):=\sigma_c(\mathcal Z_R)-1,
+\]
+其中 \(\sigma_c(\cdot)\) 表示收敛临界指数（abscissa of convergence）。
+\end{definition}
+
+\begin{proposition}[多项式环的算术圆维]\label{prop:acdim-polynomial-ring}
+对任意整数 \(d\ge 0\)，令 \(R=\ZZ[x_1,\dots,x_d]\)。
+则对任意素数 \(p\) 有
+\[
+\#\operatorname{Hom}_{\mathrm{ring}}(R,\mathbb F_p)=p^{d},
+\qquad
+\mathcal Z_R(s)=\sum_{p}p^{d-s},
+\qquad
+\operatorname{acdim}(R)=d.
+\]
+\end{proposition}
+\begin{proof}
+环同态 \(\varphi:\ZZ[x_1,\dots,x_d]\to\mathbb F_p\) 必限制为 \(\ZZ\to\mathbb F_p\) 的自然映射，
+且由 \((\varphi(x_1),\dots,\varphi(x_d))\in(\mathbb F_p)^d\) 唯一决定；反之任意赋值给出同态，故同态数为 \(p^d\)。
+对收敛性：若 \(\Re(s)>d+1\)，则 \(\sum_p p^{d-\Re(s)}\le \sum_{n\ge 2} n^{-(\Re(s)-d)}<\infty\)；
+而当 \(\Re(s)=d+1\) 时 \(\sum_p p^{-1}=\infty\)，故 \(\sigma_c=d+1\) 且 \(\operatorname{acdim}(R)=d\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[代数整数与超越元的算术圆维分离]\label{cor:acdim-algebraic-vs-transcend}
+取 \(\alpha\in\CC\)。
+\begin{enumerate}
+  \item 若 \(\alpha\) 超越，则 \(\ZZ[\alpha]\cong\ZZ[x]\)，从而 \(\operatorname{acdim}(\ZZ[\alpha])=1\)。
+  \item 若 \(\alpha\) 为代数整数，则 \(\operatorname{acdim}(\ZZ[\alpha])=0\)。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+\textbf{(1)} 由命题 \ref{prop:acdim-polynomial-ring} 取 \(d=1\) 即得。
+\par
+\textbf{(2)} 设 \(\alpha\) 的首一最小多项式为 \(f\in\ZZ[x]\)，则 \(\ZZ[\alpha]\cong\ZZ[x]/(f)\)。
+对任意素数 \(p\)，环同态 \(\ZZ[x]/(f)\to\mathbb F_p\) 等价于选取 \(a\in\mathbb F_p\) 使 \(f(a)\equiv 0\pmod p\)，故
+\[
+\#\operatorname{Hom}_{\mathrm{ring}}(\ZZ[\alpha],\mathbb F_p)\le \deg f=:m.
+\]
+于是对任意 \(\Re(s)>1\) 有
+\(
+\mathcal Z_{\ZZ[\alpha]}(s)\le m\sum_p p^{-\Re(s)}<\infty
+\)；
+而在 \(\Re(s)=1\) 处由 \(\sum_p 1/p=\infty\) 得发散，从而 \(\sigma_c(\mathcal Z_{\ZZ[\alpha]})=1\)，即 \(\operatorname{acdim}(\ZZ[\alpha])=0\)。
+证毕。
+\end{proof}
+
+\begin{conjecture}[算术圆维与相对 Krull 维度一致]\label{conj:acdim-krull-dimension}
+设 \(R\) 为有限生成、既约的交换含幺 \(\ZZ\)-代数，令
+\(
+d:=\dim(\Spec R)-1
+\)
+为其相对维度。
+则预期
+\[
+\operatorname{acdim}(R)=d.
+\]
+\end{conjecture}
+
+\begin{theorem}[单元素生成子环的代数/超越二分：增长圆维的有限化分岔]\label{thm:gcdim-zalpha-dichotomy}
+取 \(\alpha\in\CC\)，令 \(A:=\ZZ[\alpha]\subset\CC\)，并给定滤过
+\[
+A_{\le N}:=\langle 1,\alpha,\alpha^2,\dots,\alpha^N\rangle_{\ZZ}.
+\]
+则：
+\begin{enumerate}
+  \item 若 \(\alpha\) 为代数数且 \(\deg_{\QQ}(\alpha)=d\)，则 \(\operatorname{rk}_{\ZZ}(A_{\le N})\le d\) 对一切 \(N\) 成立，从而 \(\operatorname{gcdim}(A)=0\)；
+        并且 \(A\otimes\QQ\cong \QQ(\alpha)\) 为 \(d\) 维向量空间，故 \(\cdim_{\QQ}(A)=d\)。
+  \item 若 \(\alpha\) 为超越数，则 \(\operatorname{rk}_{\ZZ}(A_{\le N})=N+1\)，从而 \(\operatorname{gcdim}(A)=1\)，而按定理 \ref{thm:cdim-algebraic-degree-min-circle-rank} 有 \(\cdim_{\min}(\alpha)=\infty\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\textbf{(1)} 若 \(\alpha\) 代数，取其整系数最小多项式 \(g(x)\in\ZZ[x]\)（次数 \(d\)），则对一切 \(n\ge d\) 有 \(\alpha^n\in \langle 1,\alpha,\dots,\alpha^{d-1}\rangle_{\ZZ}\)。
+故 \(\operatorname{rk}_{\ZZ}(A_{\le N})\le d\)，从定义 \ref{def:gcdim-filtration} 得 \(\operatorname{gcdim}(A)=0\)。
+而 \(A\otimes\QQ\simeq \QQ(\alpha)\) 维数为 \(d\)，故 \(\cdim_{\QQ}(A)=d\)。
+\par
+\textbf{(2)} 若 \(\alpha\) 超越，则集合 \(\{1,\alpha,\dots,\alpha^N\}\) 在 \(\ZZ\) 上线性无关；否则 \(\sum_{k=0}^{N}c_k\alpha^k=0\)（\(c_k\in\ZZ\) 非全零）给出 \(\alpha\) 满足非零整系数多项式矛盾。
+故 \(\operatorname{rk}_{\ZZ}(A_{\le N})=N+1\)，从而 \(\operatorname{gcdim}(A)=1\)。
+最后一条由定理 \ref{thm:cdim-algebraic-degree-min-circle-rank} 直接给出。证毕。
+\end{proof}
+
+\begin{definition}[两轴签名：增长轴与最小代数度]\label{def:gcdim-two-axis-signature}
+设 \(F/\QQ\) 为有限生成域扩张。
+定义其\textbf{增长轴}为超越次数
+\[
+n(F):=\operatorname{trdeg}_{\QQ}F\in\NN\cup\{0\}.
+\]
+令 \(n:=n(F)\)。
+在全部超越基 \((t_1,\dots,t_n)\) 上定义\textbf{最小代数度}
+\[
+d_{\min}(F):=\min_{(t_1,\dots,t_n)}[F:\QQ(t_1,\dots,t_n)]\in\NN.
+\]
+并定义 \(F\) 的\textbf{两轴签名}为
+\[
+\Sigma_{\mathrm{2ax}}(F):=\bigl(n(F),d_{\min}(F)\bigr).
+\]
+\end{definition}
+
+\begin{proposition}[两轴签名的有限性与实现]\label{prop:gcdim-two-axis-finiteness}
+对任意有限生成域 \(F/\QQ\)，\(d_{\min}(F)\) 有限，并且存在某个超越基 \((t_1,\dots,t_n)\) 使得
+\[
+[F:\QQ(t_1,\dots,t_n)]=d_{\min}(F).
+\]
+\end{proposition}
+\begin{proof}
+取 \(F=\QQ(u_1,\dots,u_m)\)。
+从 \(\{u_i\}\) 中取极大代数无关子集得到超越基 \((t_1,\dots,t_n)\)，其中 \(n=\operatorname{trdeg}_{\QQ}F\)。
+则剩余生成元对 \(\QQ(t_1,\dots,t_n)\) 代数，从而 \(F/\QQ(t_1,\dots,t_n)\) 为有限扩张。
+对所有超越基取最小值即得 \(d_{\min}(F)<\infty\)，并由极小原理可取到实现基。证毕。
+\end{proof}
+
+\begin{theorem}[塔律与代数度合成下界]\label{thm:gcdim-two-axis-tower-laws}
+设 \(E/F/\QQ\) 为有限生成域塔。
+则：
+\begin{enumerate}
+  \item \(n(E)=n(F)+\operatorname{trdeg}_{F}E\)；
+  \item 若 \(E/F\) 为有限代数扩张，则 \(n(E)=n(F)\)，并且
+  \[
+  d_{\min}(E)\ \ge\ [E:F]\cdot d_{\min}(F).
+  \]
+  若存在同一超越基同时实现 \(d_{\min}(F)\) 与 \(d_{\min}(E)\)（例如当 \(E\) 由在实现基上代数加入的有限元生成），则上式取等号。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(1) 为超越次数的标准塔律。
+\par
+(2) 代数扩张不改变超越次数，故 \(n(E)=n(F)\)。
+取任意超越基 \((t_1,\dots,t_n)\) 使 \([F:\QQ(t_1,\dots,t_n)]=d_{\min}(F)\)。
+则塔度公式给出
+\[
+[E:\QQ(t_1,\dots,t_n)]=[E:F]\cdot[F:\QQ(t_1,\dots,t_n)]
+=[E:F]\cdot d_{\min}(F).
+\]
+对 \(E\) 的所有超越基取最小值得到所示不等式；在存在共同实现基时可达成等号。证毕。
+\end{proof}
+
+\begin{theorem}[线性不交与代数独立条件下的乘法律]\label{thm:gcdim-two-axis-product-laws}
+设 \(F,G/\QQ\) 为有限生成域，并满足：
+\begin{enumerate}
+  \item \(F\) 与 \(G\) 在 \(\QQ\) 上线性不交；
+  \item 合成域 \(FG\) 满足超越次数可加：\(n(FG)=n(F)+n(G)\)。
+\end{enumerate}
+则
+\[
+n(FG)=n(F)+n(G),
+\qquad
+d_{\min}(FG)=d_{\min}(F)\,d_{\min}(G).
+\]
+\end{theorem}
+\begin{proof}
+取实现 \(d_{\min}(F)\)、\(d_{\min}(G)\) 的超越基 \(\mathbf t=(t_1,\dots,t_{n(F)})\)、\(\mathbf s=(s_1,\dots,s_{n(G)})\)，使
+\[
+[F:\QQ(\mathbf t)]=d_{\min}(F),
+\qquad
+[G:\QQ(\mathbf s)]=d_{\min}(G).
+\]
+由 \(n(FG)=n(F)+n(G)\) 可取 \(\mathbf t\cup \mathbf s\) 为 \(FG\) 的一组超越基，故 \(\QQ(\mathbf t,\mathbf s)\) 为 \(FG\) 的纯超越子域。
+线性不交给出代数度相乘：
+\[
+[FG:\QQ(\mathbf t,\mathbf s)]
+=[F:\QQ(\mathbf t)]\,[G:\QQ(\mathbf s)]
+=d_{\min}(F)\,d_{\min}(G).
+\]
+由定义 \ref{def:gcdim-two-axis-signature} 的最小性，左端亦为 \(d_{\min}(FG)\)。证毕。
+\end{proof}
+
+\begin{theorem}[素因子账本的不可有限化：UFD 的自由除子轴]\label{thm:prime-ledger-non-finitizable-ufd}
+设 \(D\) 为唯一分解整环（UFD），记其非同伴素元集合（按同伴类计）为 \(P\)。
+令 \(M:=D\setminus\{0\}\) 为乘法交换幺半群，令 \(M_{\mathrm{red}}:=M/D^\times\) 为除去单位后的约化幺半群。
+则存在同态嵌入
+\[
+v:M_{\mathrm{red}}\hookrightarrow \bigoplus_{p\in P}\NN,\qquad x\longmapsto (v_p(x))_{p\in P},
+\]
+并且其群完成嵌入到自由阿贝尔群
+\[
+G(M_{\mathrm{red}})\hookrightarrow \bigoplus_{p\in P}\ZZ.
+\]
+特别地，若 \(P\) 为无限集，则 \(\cdim\bigl(\bigoplus_{p\in P}\ZZ\bigr)=\infty\)，从而任何试图以有限个交换圆因子或有限秩交换账本同态地承载全部素分解信息的制度都必然失败：素因子账本轴不可被有限化。
+\end{theorem}
+\begin{proof}
+UFD 的唯一分解给出 \(x=\prod_{p\in P}p^{v_p(x)}\)（除有限多项外指数为 \(0\)），从而得到幺半群同态 \(v\)，其在约化后为单射。
+对可消交换幺半群取 Grothendieck 群完成得到同态 \(G(M_{\mathrm{red}})\to \bigoplus_{p\in P}\ZZ\)，并保持单射性。
+若 \(P\) 无限，则右端为无限秩自由阿贝尔群，其圆维为 \(\infty\)（由定理 \ref{thm:cdim-axiomatic-rigidity} 与直和可加性）。证毕。
+\end{proof}
+
+\begin{definition}[同态半圆维]\label{def:cdim-hom-half-circle-dimension}
+对可消交换幺半群 \(M\)，定义其\textbf{同态半圆维}为
+\[
+\cdim^{\mathrm{hom}}_{+}(M):=
+\frac12\inf\Bigl\{k\in\NN_{\ge 0}:\ \exists\ \text{幺半群单射 }M\hookrightarrow (\NN^k,+)\Bigr\},
+\]
+若上式中的集合为空，则约定 \(\cdim^{\mathrm{hom}}_{+}(M)=+\infty\)。
+\end{definition}
+
+\begin{theorem}[乘法对象的有限维同态账本障碍]\label{thm:cdim-multiplicative-object-no-finite-hom-ledger}
+记
+\[
+M_\times:=(\NN_{\ge 1},\times).
+\]
+设 \(d\ge 1\)，并给定单射 \(e:M_\times\to\ZZ^d\)。
+则对任意有限生成阿贝尔群 \(L\)，不存在映射 \(s:M_\times\to L\) 使得
+\[
+\Phi:M_\times\longrightarrow (\ZZ^d\oplus L,+),
+\qquad
+\Phi(n):=(e(n),s(n))
+\]
+成为单射幺半群同态。
+特别地，不存在幺半群单射
+\[
+M_\times\hookrightarrow (\NN^k,+)\qquad(k<\infty),
+\]
+从而
+\[
+\cdim^{\mathrm{hom}}_{+}(M_\times)=+\infty.
+\]
+\end{theorem}
+\begin{proof}
+反设存在这样的 \(\Phi\)。
+由于 \(M_\times\) 为可消交换幺半群，而 \((\ZZ^d\oplus L,+)\) 为交换群，Grothendieck 完成的泛性质给出唯一群同态
+\[
+\widetilde\Phi:G(M_\times)\longrightarrow \ZZ^d\oplus L
+\]
+满足 \(\widetilde\Phi\circ\iota=\Phi\)，其中 \(\iota:M_\times\hookrightarrow G(M_\times)\) 为典范嵌入。
+
+又由唯一分解定理，
+\[
+G(M_\times)\cong \QQ_{>0}^{\times}\cong \bigoplus_{p\ \mathrm{prime}}\ZZ,
+\]
+故 \(G(M_\times)\) 为无限秩自由阿贝尔群。
+
+我们断言 \(\widetilde\Phi\) 仍为单射。
+事实上，若 \(\widetilde\Phi(xy^{-1})=0\)（其中 \(x,y\in M_\times\)），则
+\[
+\Phi(x)-\Phi(y)=0,
+\]
+从而 \(\Phi(x)=\Phi(y)\)。
+由 \(\Phi\) 的单射性得 \(x=y\)，故 \(xy^{-1}\) 在群完成中只能是单位元。
+因此 \(\widetilde\Phi\) 为群单射。
+
+然而 \(\ZZ^d\oplus L\) 是有限生成阿贝尔群，其自由秩有限；
+无限秩自由阿贝尔群不可能单射到有限秩阿贝尔群中，矛盾。
+故此类 \(\Phi\) 不存在。
+若存在单射 \(M_\times\hookrightarrow(\NN^k,+)\)，则与自然包含 \((\NN^k,+)\hookrightarrow(\ZZ^k,+)\) 复合，便得到单射幺半群同态 \(M_\times\hookrightarrow(\ZZ^k,+)\)，这与上面的无限秩障碍矛盾。
+故 \(\cdim^{\mathrm{hom}}_{+}(M_\times)=+\infty\)。
+\end{proof}
+
+\begin{corollary}[有限素数截断的精确同态半圆维]\label{cor:cdim-finite-prime-truncation-hom-half-circle}
+记 \(p_1<p_2<\cdots\) 为递增素数序列。
+对 \(B\ge 1\)，定义有限素数截断幺半群
+\[
+M_B:=\langle p_1,\dots,p_B\rangle_{\times}\subseteq M_\times.
+\]
+则指数向量映射给出幺半群同构
+\[
+M_B\cong \NN^B,
+\]
+并且
+\[
+\cdim^{\mathrm{hom}}_{+}(M_B)=\frac{B}{2}.
+\]
+等价地，若存在幺半群单射
+\[
+M_B\hookrightarrow (\NN^k,+),
+\]
+则必有 \(k\ge B\)，且 \(k=B\) 可达。
+\end{corollary}
+\begin{proof}
+指数向量映射
+\[
+p_1^{a_1}\cdots p_B^{a_B}\longmapsto (a_1,\dots,a_B)
+\]
+给出 \(M_B\cong \NN^B\)。
+
+若 \(\Psi:M_B\hookrightarrow(\NN^k,+)\) 为单射幺半群同态，则群完成给出单射
+\[
+G(M_B)\hookrightarrow \ZZ^k.
+\]
+而
+\[
+G(M_B)\cong \ZZ^B,
+\]
+故自由秩比较强制 \(B\le k\)。
+
+反向上，\(M_B\cong \NN^B\) 的恒等嵌入已给出 \(k=B\) 的可达性。
+因此使单射存在的最小 \(k\) 恰为 \(B\)，从而按定义
+\[
+\cdim^{\mathrm{hom}}_{+}(M_B)=\frac{B}{2}.
+\]
+\end{proof}
+
+\begin{remark}[单标量实现与精确乘法的分离]\label{rem:cdim-hom-half-circle-vs-operational}
+定理 \ref{thm:cdim-multiplicative-object-no-finite-hom-ledger} 与推论 \ref{cor:cdim-finite-prime-truncation-hom-half-circle}
+表明：要求保持乘法组合律时，素数账本轴数由出现的独立素数数目精确控制，并在 \(M_\times\) 上变为无穷。
+这与定理 \ref{thm:cdim-operational-half-circle-dimension-N} 的单轴相位压缩律并不矛盾；
+后者刻画的是单标量自然数寄存器的操作型可见容量，而此处处理的是保持乘法结构的同态账本。
+\end{remark}
+
+\begin{conjecture}[高度一素理想有限性与乘法账本的有限化]\label{conj:height-one-prime-ledger-finiteness}
+设 \(A\) 为 Noether 整环，记高度一素理想集合为 \(\mathfrak P_1(A)\)，并令 \(M:=A\setminus\{0\}\)。
+在“除去单位并以高度一素理想分解作为外置账本”的同态保持口径下，乘法账本可被有限秩交换轴承载当且仅当 \(\mathfrak P_1(A)\) 有限。
+\end{conjecture}
+
+\endinput

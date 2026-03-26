@@ -1,0 +1,389 @@
+\subparagraph{独立 Bernoulli 输入下的 Gödel 密度估计量：确定性近似、Cramér 偏差与迭代对数律}
+上一段已在 primorial 归一化口径下给出 Gödel 外置寄存器的强自平均、中心极限定理与大偏差主链。若把驱动序列进一步退化为彼此独立的 Bernoulli 位本身，则 prime-register 加权密度估计量还会呈现一条更强的保持性：它不仅在强大数律、中心极限与大偏差层面与普通经验均值同型，而且在确定性逼近、最优阈值检验与迭代对数律层面也保持同一主阶结构。
+
+在以下各条结果中，令 \(\mathfrak p_j\) 为第 \(j\) 个素数，并对二元样本 \(x=(x_1,\dots,x_n)\in\{0,1\}^n\) 定义
+\[
+G_n(x):=\prod_{j=1}^{n}\mathfrak p_j^{x_j},
+\qquad
+\Theta_n:=\sum_{j=1}^{n}\log \mathfrak p_j,
+\qquad
+\widehat d_n(x):=\frac{\log G_n(x)}{\Theta_n}.
+\]
+若 \((X_j)_{j\ge 1}\) 为随机样本，则记
+\[
+S_n:=\log G_n=\sum_{j=1}^{n}X_j\log \mathfrak p_j,
+\qquad
+\widehat p_n:=\frac{S_n}{\Theta_n}.
+\]
+
+\begin{theorem}[Gödel 密度估计量与经验均值的确定性逼近]\label{thm:fold-godel-density-estimator-deterministic-mean-approx}
+对任意 \(x=(x_1,\dots,x_n)\in\{0,1\}^n\)，定义经验均值
+\[
+\overline x_n:=\frac1n\sum_{j=1}^{n}x_j.
+\]
+则存在绝对常数 \(C>0\)，使对充分大的 \(n\) 成立一致估计
+\[
+\sup_{x\in\{0,1\}^n}\bigl|\widehat d_n(x)-\overline x_n\bigr|
+\le
+C\,\frac{\log\log n}{\log n}.
+\]
+特别地，Gödel 密度估计量与普通经验均值在确定性意义下只相差 \(o(1)\)。
+\end{theorem}
+\begin{proof}
+记
+\[
+w_{n,j}:=\frac{\log \mathfrak p_j}{\Theta_n},
+\qquad 1\le j\le n.
+\]
+则 \(\sum_{j=1}^{n}w_{n,j}=1\)，并且
+\[
+\widehat d_n(x)-\overline x_n
+=
+\sum_{j=1}^{n}\left(w_{n,j}-\frac1n\right)x_j.
+\]
+因此
+\[
+\sup_{x\in\{0,1\}^n}\bigl|\widehat d_n(x)-\overline x_n\bigr|
+\le
+\sum_{j=1}^{n}\left|w_{n,j}-\frac1n\right|
+=
+\frac{1}{\Theta_n}\sum_{j=1}^{n}\left|\log \mathfrak p_j-\frac{\Theta_n}{n}\right|.
+\]
+
+由素数渐近
+\[
+\mathfrak p_j=j\bigl(\log j+O(\log\log j)\bigr),
+\]
+可得对所有 \(1\le j\le n\) 一致成立
+\[
+\log \mathfrak p_j=\log j+O(\log\log n).
+\]
+另一方面，
+\[
+\Theta_n=\sum_{j=1}^{n}\log \mathfrak p_j
+=
+n\log n+O(n\log\log n),
+\]
+故
+\[
+\frac{\Theta_n}{n}=\log n+O(\log\log n).
+\]
+于是
+\[
+\sum_{j=1}^{n}\left|\log \mathfrak p_j-\frac{\Theta_n}{n}\right|
+\le
+\sum_{j=1}^{n}\bigl|\log j-\log n\bigr|+O(n\log\log n).
+\]
+由于 \(j\le n\) 时 \(|\log j-\log n|=\log(n/j)\)，故
+\[
+\sum_{j=1}^{n}\bigl|\log j-\log n\bigr|
+=
+\sum_{j=1}^{n}\log\frac{n}{j}
+=
+n\log n-\log(n!)
+=
+O(n)
+\]
+（由 Stirling 公式）。再结合 \(\Theta_n\asymp n\log n\)，得到
+\[
+\sup_{x\in\{0,1\}^n}\bigl|\widehat d_n(x)-\overline x_n\bigr|
+=
+O\!\left(\frac{\log\log n}{\log n}\right).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[Gödel 密度估计量的渐近正态性与一阶效率]\label{thm:fold-godel-density-estimator-clt-efficient}
+设 \(X_1,X_2,\dots\) 独立同分布，且
+\[
+X_j\sim \mathrm{Bernoulli}(p),
+\qquad 0<p<1.
+\]
+则
+\[
+\sqrt n\,(\widehat p_n-p)\ \Rightarrow\ \mathcal N\!\bigl(0,\ p(1-p)\bigr).
+\]
+因此，尽管 \(\widehat p_n\) 使用的是素数对数加权而非等权平均，它与普通样本均值具有完全相同的一阶渐近方差。
+\end{theorem}
+\begin{proof}
+令
+\[
+Y_j:=(X_j-p)\log \mathfrak p_j,
+\qquad
+T_n:=\sum_{j=1}^{n}Y_j=S_n-p\Theta_n.
+\]
+则 \((Y_j)_{j\ge 1}\) 相互独立、均值为 \(0\)，并且
+\[
+\Var(Y_j)=p(1-p)(\log \mathfrak p_j)^2.
+\]
+记
+\[
+s_n^2:=\sum_{j=1}^{n}\Var(Y_j)=p(1-p)\sum_{j=1}^{n}(\log \mathfrak p_j)^2.
+\]
+
+由
+\[
+\log \mathfrak p_j=\log j+O(\log\log n)
+\qquad (1\le j\le n)
+\]
+一致成立，可得
+\[
+\Theta_n=\sum_{j=1}^{n}\log \mathfrak p_j
+=
+n\log n+O(n\log\log n),
+\]
+以及
+\[
+\sum_{j=1}^{n}(\log \mathfrak p_j)^2
+=
+n(\log n)^2+O\bigl(n\log n\log\log n\bigr).
+\]
+故
+\[
+s_n^2\sim p(1-p)\,n(\log n)^2.
+\]
+
+又因为
+\[
+\max_{1\le j\le n}|Y_j|
+\le
+\log \mathfrak p_n
+=
+O(\log n)
+=
+o(s_n),
+\]
+Lindeberg 条件自动成立，从而由 Lindeberg--Feller 中心极限定理，
+\[
+\frac{T_n}{s_n}\Rightarrow \mathcal N(0,1).
+\]
+
+另一方面，
+\[
+\sqrt n\,(\widehat p_n-p)
+=
+\frac{\sqrt n\,T_n}{\Theta_n}
+=
+\frac{\sqrt n\,s_n}{\Theta_n}\cdot \frac{T_n}{s_n},
+\]
+而
+\[
+\frac{\sqrt n\,s_n}{\Theta_n}
+\to
+\sqrt{p(1-p)}.
+\]
+由 Slutsky 定理即得
+\[
+\sqrt n\,(\widehat p_n-p)\Rightarrow \mathcal N\!\bigl(0,p(1-p)\bigr).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[Gödel 密度估计量的 Cramér 型大偏差原理]\label{thm:fold-godel-density-estimator-cramer-ldp}
+在定理 \ref{thm:fold-godel-density-estimator-clt-efficient} 的设定下，\((\widehat p_n)_{n\ge 1}\) 以速度 \(n\) 满足大偏差原理，其好速率函数为
+\[
+I_p(x)=
+\begin{cases}
+x\log\frac{x}{p}+(1-x)\log\frac{1-x}{1-p},& x\in[0,1],\\[2mm]
++\infty,& x\notin[0,1].
+\end{cases}
+\]
+\end{theorem}
+\begin{proof}
+定义对数矩母函数
+\[
+\Lambda_n(t):=\frac1n\log \EE\exp\bigl(nt\widehat p_n\bigr).
+\]
+由独立性，
+\[
+\Lambda_n(t)
+=
+\frac1n\sum_{j=1}^{n}
+\log\Bigl(1-p+p\,e^{t a_{n,j}}\Bigr),
+\qquad
+a_{n,j}:=\frac{n\log \mathfrak p_j}{\Theta_n}.
+\]
+
+由定理 \ref{thm:fold-godel-density-estimator-deterministic-mean-approx} 的证明可知
+\[
+\frac1n\sum_{j=1}^{n}|a_{n,j}-1|
+=
+\sum_{j=1}^{n}\left|\frac{\log \mathfrak p_j}{\Theta_n}-\frac1n\right|
+=
+O\!\left(\frac{\log\log n}{\log n}\right)\to 0.
+\]
+另一方面，
+\[
+a_{n,j}\le \frac{n\log \mathfrak p_n}{\Theta_n}=O(1),
+\]
+故对每个固定 \(t\in\RR\)，函数
+\[
+g_t(a):=\log\bigl(1-p+p\,e^{ta}\bigr)
+\]
+在包含全部 \(a_{n,j}\) 的某个紧区间上 Lipschitz。于是
+\[
+\left|\Lambda_n(t)-g_t(1)\right|
+\le
+\frac{L_t}{n}\sum_{j=1}^{n}|a_{n,j}-1|
+\to 0,
+\]
+从而
+\[
+\Lambda_n(t)\to \Lambda(t):=\log(1-p+pe^t).
+\]
+
+又因为 \(\widehat p_n\in[0,1]\) 几乎处处成立，故指数紧性自动满足。函数 \(\Lambda\) 在 \(\RR\) 上有限且 \(C^\infty\)，因而可由 Gärtner--Ellis 定理推出 \((\widehat p_n)\) 在速度 \(n\) 下满足大偏差原理，其速率函数为 Legendre--Fenchel 变换
+\[
+I_p(x)=\sup_{t\in\RR}\{tx-\Lambda(t)\}.
+\]
+对 Bernoulli 对数矩母函数 \(\Lambda(t)=\log(1-p+pe^t)\) 直接计算其 Legendre 变换，即得上述显式二元相对熵公式。证毕。
+\end{proof}
+
+\begin{corollary}[基于 Gödel 密度估计量的最优阈值检验与平衡 Chernoff 指数]\label{cor:fold-godel-density-estimator-optimal-threshold-test}
+固定 \(0<p_0<p_1<1\)。对阈值 \(\eta\in(p_0,p_1)\) 定义检验
+\[
+\phi_{n,\eta}:=\mathbf 1_{\{\widehat p_n\ge \eta\}}.
+\]
+则类型 I、II 误差满足
+\[
+\lim_{n\to\infty}\frac1n\log \PP_{p_0}(\phi_{n,\eta}=1)
+=
+-I_{p_0}(\eta),
+\]
+\[
+\lim_{n\to\infty}\frac1n\log \PP_{p_1}(\phi_{n,\eta}=0)
+=
+-I_{p_1}(\eta).
+\]
+并且存在唯一阈值
+\[
+\eta^\star=
+\frac{\log\!\bigl(\frac{1-p_0}{1-p_1}\bigr)}
+{\log\!\bigl(\frac{p_1(1-p_0)}{p_0(1-p_1)}\bigr)}
+\in(p_0,p_1)
+\]
+使得
+\[
+I_{p_0}(\eta^\star)=I_{p_1}(\eta^\star).
+\]
+因此，\(\eta^\star\) 在阈值检验类中给出唯一的平衡点，而共同值
+\[
+I_{p_0}(\eta^\star)=I_{p_1}(\eta^\star)
+\]
+可视为该阈值类的平衡 Chernoff 指数。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:fold-godel-density-estimator-cramer-ldp}，并注意到 \(I_{p_0}\) 在 \([p_0,1]\) 上严格递增，而 \(I_{p_1}\) 在 \([0,p_1]\) 上严格递减，可得
+\[
+\lim_{n\to\infty}\frac1n\log \PP_{p_0}(\widehat p_n\ge \eta)
+=
+-I_{p_0}(\eta),
+\]
+\[
+\lim_{n\to\infty}\frac1n\log \PP_{p_1}(\widehat p_n\le \eta)
+=
+-I_{p_1}(\eta),
+\]
+即所示两条误差指数。
+
+平衡条件为
+\[
+I_{p_0}(\eta)=I_{p_1}(\eta),
+\]
+等价于
+\[
+\eta\log\frac{p_1}{p_0}
+=(1-\eta)\log\frac{1-p_0}{1-p_1}.
+\]
+直接解得
+\[
+\eta^\star=
+\frac{\log\!\bigl(\frac{1-p_0}{1-p_1}\bigr)}
+{\log\!\bigl(\frac{1-p_0}{1-p_1}\bigr)+\log\!\bigl(\frac{p_1}{p_0}\bigr)}
+=
+\frac{\log\!\bigl(\frac{1-p_0}{1-p_1}\bigr)}
+{\log\!\bigl(\frac{p_1(1-p_0)}{p_0(1-p_1)}\bigr)}.
+\]
+又
+\[
+\frac{\mathrm d}{\mathrm d\eta}\bigl(I_{p_0}(\eta)-I_{p_1}(\eta)\bigr)
+=
+\log\!\bigl(\tfrac{p_1(1-p_0)}{p_0(1-p_1)}\bigr)>0,
+\]
+故该平衡阈值唯一。证毕。
+\end{proof}
+
+\begin{theorem}[Gödel 密度估计量的 Hartman--Wintner 型迭代对数律]\label{thm:fold-godel-density-estimator-lil}
+在定理 \ref{thm:fold-godel-density-estimator-clt-efficient} 的设定下，几乎处处成立
+\[
+\limsup_{n\to\infty}
+\sqrt{\frac{n}{2p(1-p)\log\log n}}\,
+(\widehat p_n-p)=1,
+\]
+\[
+\liminf_{n\to\infty}
+\sqrt{\frac{n}{2p(1-p)\log\log n}}\,
+(\widehat p_n-p)=-1.
+\]
+\end{theorem}
+\begin{proof}
+仍记
+\[
+Y_j:=(X_j-p)\log \mathfrak p_j,
+\qquad
+T_n:=\sum_{j=1}^{n}Y_j=S_n-p\Theta_n,
+\]
+以及
+\[
+s_n^2:=\sum_{j=1}^{n}\Var(Y_j)
+=
+p(1-p)\sum_{j=1}^{n}(\log \mathfrak p_j)^2.
+\]
+由定理 \ref{thm:fold-godel-density-estimator-clt-efficient} 的证明，
+\[
+s_n^2\sim p(1-p)\,n(\log n)^2.
+\]
+并且
+\[
+\max_{1\le j\le n}|Y_j|
+\le
+\log \mathfrak p_n
+\sim
+\log n.
+\]
+因此
+\[
+\frac{\max_{1\le j\le n}|Y_j|}
+{s_n/\sqrt{\log\log s_n^2}}
+\ll
+\sqrt{\frac{\log\log n}{n}}
+\to 0.
+\]
+由独立非同分布中心变量的 Hartman--Wintner--Kolmogorov 迭代对数律，可得
+\[
+\limsup_{n\to\infty}
+\frac{T_n}{\sqrt{2s_n^2\log\log s_n^2}}=1,
+\qquad
+\liminf_{n\to\infty}
+\frac{T_n}{\sqrt{2s_n^2\log\log s_n^2}}=-1
+\quad a.s.
+\]
+
+另一方面，
+\[
+\widehat p_n-p=\frac{T_n}{\Theta_n},
+\qquad
+\Theta_n\sim n\log n,
+\qquad
+s_n^2\sim p(1-p)\,n(\log n)^2,
+\]
+并且 \(\log\log s_n^2\sim \log\log n\)。故
+\[
+\frac{\sqrt{2s_n^2\log\log s_n^2}}{\Theta_n}
+\sim
+\sqrt{\frac{2p(1-p)\log\log n}{n}}.
+\]
+将上述等价关系代回，即得所示两条迭代对数律。证毕。
+\end{proof}
+
+\endinput

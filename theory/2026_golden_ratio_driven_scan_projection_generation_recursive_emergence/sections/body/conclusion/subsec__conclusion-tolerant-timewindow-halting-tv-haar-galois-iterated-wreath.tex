@@ -1,0 +1,342 @@
+\subsection{容错时间视窗下界、停机全变差谱嵌入与递推输运的 wreath 塔判据}\label{subsec:conclusion-tolerant-timewindow-halting-tv-haar-galois-iterated-wreath}
+本小节在既有时间视窗圆维下界、Gödel--Lee--Yang \(2\)-进仿射 IFS 与 Joukowsky--Godel 输运分歧框架之上，给出容错读出、停机统计可分性、Haar 刚性与递推 wreath 塔嵌入的统一终态命题。
+
+\begin{theorem}[容错情形下时间视窗圆维--残差账本下界]\label{thm:conclusion-tolerant-timewindow-ledger-lower-bound}
+设 \(b,T\in\ZZ_{>0}\)、\(k\in\{0,1,\dots,T-1\}\)。
+沿定理 \ref{thm:conclusion-time-window-cdim-ledger-lower-bound} 的记号，取
+\[
+W_b(G_T):=(\ZZ/2^b\ZZ)^T,\qquad |W_b(G_T)|=2^{bT},
+\]
+并设编码器
+\[
+\mathrm{enc}:W_b(G_T)\to \mathrm{Phase}(k)_b\times R
+\]
+不要求单射。
+若存在解码器
+\[
+\mathrm{dec}:\mathrm{Phase}(k)_b\times R\to W_b(G_T)
+\]
+使得在均匀先验 \(M\sim\mathrm{Unif}(W_b(G_T))\) 下
+\[
+\PP[\mathrm{dec}(\mathrm{enc}(M))\neq M]\le \varepsilon,\qquad 0\le \varepsilon<1,
+\]
+则有
+\[
+\log_2|R|
+\ \ge\
+(1-\varepsilon)bT-bk-h_2(\varepsilon),
+\]
+其中
+\[
+h_2(\varepsilon):=-\varepsilon\log_2\varepsilon-(1-\varepsilon)\log_2(1-\varepsilon)
+\]
+为二元熵（约定 \(0\log 0=0\)）。
+\end{theorem}
+\begin{proof}
+令 \(Y:=\mathrm{enc}(M)\)、\(\widehat M:=\mathrm{dec}(Y)\)。
+由 Fano 不等式，
+\[
+H(M\mid Y)\le h_2(\varepsilon)+\varepsilon\log_2\bigl(|W_b(G_T)|-1\bigr)
+\le h_2(\varepsilon)+\varepsilon bT.
+\]
+故
+\[
+I(M;Y)=H(M)-H(M\mid Y)
+\ge bT-h_2(\varepsilon)-\varepsilon bT
+=(1-\varepsilon)bT-h_2(\varepsilon).
+\]
+另一方面，
+\[
+I(M;Y)\le H(Y)\le \log_2|\mathrm{Phase}(k)_b|+\log_2|R|
+=bk+\log_2|R|.
+\]
+合并即得
+\[
+\log_2|R|\ge (1-\varepsilon)bT-bk-h_2(\varepsilon).
+\]
+当 \(\varepsilon=0\) 时，该式退化为定理 \ref{thm:conclusion-time-window-cdim-ledger-lower-bound} 的精确计数下界。证毕。
+\end{proof}
+
+\begin{corollary}[多项式残差账本下的近似时间圆维下界]\label{cor:conclusion-polynomial-ledger-approx-time-cdim-bound}
+沿定理 \ref{thm:conclusion-tolerant-timewindow-ledger-lower-bound} 的设定。
+若进一步存在常数 \(C,\alpha>0\) 使
+\[
+|R|\le C\,T^\alpha,
+\]
+则必有
+\[
+k\ \ge\
+(1-\varepsilon)T-\frac{\alpha}{b}\log_2 T-\frac{\log_2 C+h_2(\varepsilon)}{b}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-tolerant-timewindow-ledger-lower-bound}，
+\[
+bk+\log_2|R|
+\ge
+(1-\varepsilon)bT-h_2(\varepsilon).
+\]
+代入 \(\log_2|R|\le \log_2 C+\alpha\log_2 T\) 后移项即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[停机时间在 Gödel--Lee--Yang \(2\)-进仿射吸引子上的全变差谱线嵌入]\label{thm:conclusion-halting-tv-spectral-embedding-on-2adic-attractor}
+设 \(T:=T_2(E_{\min})\cong\ZZ_2^2\)，取 \(L\ge 1\)、\(B:=2^L\)，并取两位数字
+\[
+D=\{d_0,d_1\}\subset T
+\]
+满足强分离条件（例如 \(d_0\not\equiv d_1\pmod{BT}\)）。
+记 \(\pi:\Sigma_D\to K_D\) 为定理 \ref{thm:conclusion-godel-leyang-2adic-ifs-exact-dimension} 给出的编码同胚。
+
+令几何分布 \(\mu\) 取于 \(\NN\)：
+\[
+\mu(\{n\})=2^{-(n+1)}\qquad(n\ge 0),
+\]
+并对任意 \(f:\NN\to\{0,1\}\) 定义
+\[
+\Phi_f(n):=\pi\!\bigl(d_{f(0)},d_{f(1)},\dots,d_{f(n)},d_1,d_1,d_1,\dots\bigr),
+\qquad
+\nu_f:=(\Phi_f)_\#\mu.
+\]
+取
+\[
+f_{M,x}(n):=\ind[n<T(M,x)],
+\qquad
+g(n)\equiv 1.
+\]
+则对任意 \((M,x)\) 有
+\[
+\|\nu_{f_{M,x}}-\nu_g\|_{\mathrm{TV}}
+=
+\begin{cases}
+0,&T(M,x)=\infty,\\[2pt]
+2^{-T(M,x)},&T(M,x)<\infty.
+\end{cases}
+\]
+\end{theorem}
+\begin{proof}
+若 \(T(M,x)=\infty\)，则 \(f_{M,x}\equiv g\)，从而 \(\Phi_{f_{M,x}}=\Phi_g\)、\(\nu_{f_{M,x}}=\nu_g\)，全变差为 \(0\)。
+
+设 \(T:=T(M,x)<\infty\)。
+当 \(n<T\) 时，\(f_{M,x}(0),\dots,f_{M,x}(n)\) 全为 \(1\)，故
+\[
+\Phi_{f_{M,x}}(n)=\Phi_g(n).
+\]
+当 \(n\ge T\) 时，两序列在第 \(T\) 位分别取 \(d_0\) 与 \(d_1\)，由 \(\pi\) 的单射性得
+\[
+\Phi_{f_{M,x}}(n)\neq \Phi_g(n).
+\]
+于是两分布的公共质量恰为
+\[
+\sum_{n=0}^{T-1}\mu(\{n\})=1-2^{-T},
+\]
+故
+\[
+\|\nu_{f_{M,x}}-\nu_g\|_{\mathrm{TV}}=2^{-T}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[停机时间决定统计可分性样本复杂度的精确指数律]\label{cor:conclusion-halting-sample-complexity-exact-law}
+沿定理 \ref{thm:conclusion-halting-tv-spectral-embedding-on-2adic-attractor}，记
+\[
+\delta:=\|\nu_{f_{M,x}}-\nu_g\|_{\mathrm{TV}}=2^{-T(M,x)}.
+\]
+对 \(N\ge 1\)，考虑等先验二元检验
+\[
+H_0:\ Z_{1:N}\overset{\mathrm{iid}}{\sim}\nu_g,
+\qquad
+H_1:\ Z_{1:N}\overset{\mathrm{iid}}{\sim}\nu_{f_{M,x}}.
+\]
+则最小贝叶斯错误率为
+\[
+\inf_{\varphi}\PP[\varphi(Z_{1:N})\ \text{判错}]
+=\frac{(1-\delta)^N}{2}
+=\frac{(1-2^{-T(M,x)})^N}{2}.
+\]
+因此若要求错误率不超过 \(\eta\in(0,\frac12)\)，则必须满足
+\[
+N\ \ge\ \frac{\log(2\eta)}{\log(1-2^{-T(M,x)})}
+\sim 2^{T(M,x)}\log\frac1{2\eta}
+\quad(T(M,x)\to\infty).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-halting-tv-spectral-embedding-on-2adic-attractor} 的构造，
+\(\nu_g\) 为单点分布，\(\nu_{f_{M,x}}\) 在该点的质量为 \(1-\delta\)，其余质量 \(\delta\) 落在与该点不交的尾支撑上。
+故
+\[
+\|\nu_{f_{M,x}}^{\otimes N}-\nu_g^{\otimes N}\|_{\mathrm{TV}}
+=1-(1-\delta)^N.
+\]
+二元等先验下的最小贝叶斯错误率公式
+\[
+P_e^\star=\frac{1-\|\nu_{f_{M,x}}^{\otimes N}-\nu_g^{\otimes N}\|_{\mathrm{TV}}}{2}
+\]
+即给出
+\[
+P_e^\star=\frac{(1-\delta)^N}{2}.
+\]
+阈值不等式由 \(P_e^\star\le\eta\) 直接移项得到，最后一式由
+\(\log(1-u)\sim -u\)（\(u\downarrow 0\)）得出。证毕。
+\end{proof}
+
+\begin{theorem}[\(2\)-进仿射自相似测度的 Haar 刚性与整数维分岔]\label{thm:conclusion-2adic-selfsimilar-haar-rigidity-integer-dimension}
+设 \(T\) 为紧致 \(\ZZ_2\)-模，\(B:=2^L\)（\(L\ge 1\)），\(D\subset T\) 为有限数字集并满足强分离条件。
+令 \(K_D,\mu_D\) 分别为相应吸引子与等权自相似测度。
+
+则以下两条等价：
+\begin{enumerate}
+  \item 存在闭的 \(B\)-不变子群 \(H\le T\) 与 \(a\in T\)，使
+  \[
+  K_D=a+H,\qquad \mu_D=m_{a+H}
+  \]
+  （\(m_{a+H}\) 为平移后的 Haar 概率测度）；
+  \item 存在闭 \(B\)-不变子群 \(H\le T\) 与 \(a\in T\)，使
+  \[
+  \widetilde D:=D-(1-B)a\subset H
+  \]
+  给出 \(H/BH\) 的一组完全陪集代表（等价地 \(|D|=[H:BH]\)，且 \(\widetilde D\) 在 \(H/BH\) 中逐陪集唯一覆盖）。
+\end{enumerate}
+并且在上述条件成立时，
+\[
+\dim_H(K_D)=\operatorname{rank}_{\ZZ_2}(H)\in\ZZ.
+\]
+\end{theorem}
+\begin{proof}
+\((2)\Rightarrow(1)\)：
+在平移变量 \(x'=x-a\) 下，IFS 变为
+\[
+x'\mapsto \widetilde d+Bx',\qquad \widetilde d\in\widetilde D.
+\]
+由“\(\widetilde D\) 为 \(H/BH\) 完全代表”可逐层得到唯一 \(B\)-进展开
+\[
+H=\left\{\sum_{n\ge 0}B^n\widetilde d_n:\ \widetilde d_n\in\widetilde D\right\},
+\]
+故吸引子为 \(a+H\)。
+同时每个深度 \(n\) 圆柱对应 \(H/B^nH\) 的一个陪集，且
+\[
+[H:B^nH]=|D|^n;
+\]
+等权 Bernoulli 推前与 Haar 测度在该生成 \(\pi\)-系统上赋值一致，故 \(\mu_D=m_{a+H}\)。
+
+\((1)\Rightarrow(2)\)：
+由 Hutchinson 分解
+\[
+a+H=\bigsqcup_{d\in D}(d+B(a+H))
+\]
+及强分离，平移后得到
+\[
+H=\bigsqcup_{d\in D}\bigl((d-(1-B)a)+BH\bigr).
+\]
+故 \(\widetilde D=D-(1-B)a\) 恰为 \(H/BH\) 的完全陪集代表，且 \(|D|=[H:BH]\)。
+
+最后，若 \(\operatorname{rank}_{\ZZ_2}(H)=r\)，则
+\[
+[H:BH]=[H:2^L H]=2^{rL}.
+\]
+由 \(|D|=[H:BH]\) 与定理 \ref{thm:conclusion-godel-leyang-2adic-ifs-exact-dimension} 的维数公式
+\(
+\dim_H(K_D)=\log_2|D|/L
+\)
+得 \(\dim_H(K_D)=r\in\ZZ\)。证毕。
+\end{proof}
+
+\begin{proposition}[Galois 稳定数字集诱导吸引子与自相似测度的不变性]\label{prop:conclusion-galois-stable-digit-set-attractor-measure-invariance}
+令 \(E/\QQ\) 为椭圆曲线，\(T:=T_2(E)\)，\(B:=2^L\in\End(T)\)。
+取有限数字集 \(D\subset T\)，定义 IFS
+\[
+\tau_d(x):=d+Bx,\qquad d\in D,
+\]
+并记其吸引子与自相似测度为 \((K_D,\mu_D)\)。
+若 \(D\) 在绝对 Galois 群 \(G_\QQ\) 的自然作用下稳定，即
+\[
+\sigma(D)=D\qquad(\forall \sigma\in G_\QQ),
+\]
+则：
+\begin{enumerate}
+  \item \(\sigma(K_D)=K_D\)（\(K_D\) 为 Galois 不变集）；
+  \item \(\sigma_*\mu_D=\mu_D\)（\(\mu_D\) 为 Galois 不变测度）。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+因 \(B=[2^L]\) 与 \(G_\QQ\) 作用交换，对任意 \(\sigma\in G_\QQ\)、\(d\in D\)、\(x\in T\) 有
+\[
+\sigma(\tau_d(x))=\sigma(d+Bx)=\sigma(d)+B\sigma(x)=\tau_{\sigma(d)}(\sigma(x)).
+\]
+由 \(\sigma(D)=D\)，\(\sigma\) 将 IFS 系统映到自身，故把其唯一吸引子映到自身，即 \(\sigma(K_D)=K_D\)。
+
+对测度，\(\mu_D\) 满足 Hutchinson 方程
+\[
+\mu_D=\frac1{|D|}\sum_{d\in D}(\tau_d)_*\mu_D.
+\]
+两端施加 \(\sigma_*\) 并用上式交换关系得到
+\[
+\sigma_*\mu_D=\frac1{|D|}\sum_{d\in D}(\tau_d)_*(\sigma_*\mu_D),
+\]
+即 \(\sigma_*\mu_D\) 满足同一不动点方程。
+由收缩 IFS 的不动点测度唯一性，\(\sigma_*\mu_D=\mu_D\)。证毕。
+\end{proof}
+
+\begin{theorem}[递推 Joukowsky--Godel 输运的迭代 wreath 塔嵌入]\label{thm:conclusion-recursive-jg-transport-iterated-wreath-embedding}
+设 \(K\) 为特征 \(\neq 2\) 的域，\(P_0(z)\in K[z]\) 为可分多项式，\(\deg P_0=n\) 且 \(P_0(0)\neq 0\)。
+给定参数 \(r_1,\dots,r_m\in K^\times\)，递推定义
+\[
+P_j(w):=\operatorname{Res}_{z}\!\bigl(P_{j-1}(z),\,r_j z^2-wz+r_j^{-1}\bigr)\in K[w],
+\qquad j=1,\dots,m.
+\]
+记 \(L_j\) 为 \(P_j\) 在 \(K\) 上的分裂域。
+
+则对每个 \(j=1,\dots,m\)，存在自然嵌入
+\[
+\Gal(L_{j-1}/K)\hookrightarrow (\ZZ/2\ZZ)^n\rtimes \Gal(L_j/K),
+\]
+并因此得到迭代嵌入
+\[
+\Gal(L_0/K)\hookrightarrow
+(\ZZ/2\ZZ)^n\rtimes\Bigl((\ZZ/2\ZZ)^n\rtimes\bigl(\cdots\rtimes((\ZZ/2\ZZ)^n\rtimes\Gal(L_m/K))\cdots\bigr)\Bigr).
+\]
+\end{theorem}
+\begin{proof}
+对固定 \(j\)，将定理 \ref{thm:conclusion-joukowsky-transport-wreath-embedding} 应用于输入多项式 \(P_{j-1}\) 与参数 \(r_j\)。
+该定理给出：\(L_{j-1}\) 可嵌入到由 \(L_j\) 与至多 \(n\) 个二次判别式扩张生成的域中，
+相应 Galois 作用由
+\[
+(\ZZ/2\ZZ)^{m_j}\rtimes \Gal(L_j/K)
+\]
+控制（\(m_j\le n\)）。
+将 \((\ZZ/2\ZZ)^{m_j}\) 视作 \((\ZZ/2\ZZ)^n\) 的坐标子群即得所示嵌入。
+对 \(j=1,\dots,m\) 递推合成即得迭代塔。证毕。
+\end{proof}
+
+\begin{conjecture}[递推输运的完全 wreath 现象]\label{conj:conclusion-recursive-jg-transport-full-wreath}
+在定理 \ref{thm:conclusion-recursive-jg-transport-iterated-wreath-embedding} 的设定下，若每一步二次提升判别式在相应平方类群中满足最大独立性，则对 Zariski 一般参数 \((P_0,r_1,\dots,r_m)\)，上述迭代嵌入达到等号，即每一层均实现满的二元提升自由度。
+换言之，递推输运在一般位置上呈现“最大非阿贝尔分支”。
+\end{conjecture}
+
+\begin{proposition}[完全 wreath 猜想的平方类判别等价式]\label{prop:conclusion-recursive-jg-transport-squareclass-criterion}
+沿定理 \ref{thm:conclusion-recursive-jg-transport-iterated-wreath-embedding}。
+对每个 \(j\)，设 \(\mathcal W_j\) 为 \(P_j\) 的根集（在代数闭包中），并记
+\[
+\Delta_{j,w}:=w^2-4\in L_j^\times,\qquad w\in\mathcal W_j.
+\]
+则下列命题等价：
+\begin{enumerate}
+  \item 第 \(j\) 层相对提升达到满二元秩（即 \(\Gal(L_{j-1}/L_j)\cong(\ZZ/2\ZZ)^n\)）；
+  \item 平方类集合
+  \[
+  \{[\Delta_{j,w}]:\,w\in\mathcal W_j\}\subset L_j^\times/(L_j^\times)^2
+  \]
+  在 \(\FF_2\)-线性意义下独立并满秩 \(n\)。
+\end{enumerate}
+因而猜想 \ref{conj:conclusion-recursive-jg-transport-full-wreath} 等价于上述线性无关性在 \(j=1,\dots,m\) 上同时成立。
+\end{proposition}
+\begin{proof}
+对固定 \(j\)，定理 \ref{thm:conclusion-joukowsky-transport-wreath-embedding} 与推论 \ref{cor:conclusion-joukowsky-discrete-ledger-lower-bound} 给出：第 \(j\) 层二次提升由判别式平方类 \([\Delta_{j,w}]\) 决定，其相对 Galois 二元秩等于这些平方类在
+\(
+L_j^\times/(L_j^\times)^2
+\)
+中张成空间的维数。
+满秩 \(n\) 当且仅当线性独立并达到 \(n\) 维。
+逐层并置即得全局等价。证毕。
+\end{proof}
+

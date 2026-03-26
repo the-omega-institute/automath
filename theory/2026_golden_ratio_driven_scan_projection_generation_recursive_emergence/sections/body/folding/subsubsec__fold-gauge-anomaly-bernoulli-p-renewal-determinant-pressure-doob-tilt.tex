@@ -1,0 +1,273 @@
+\paragraph{再生母函数的行列式接口与周期倾斜：更新方程、周期方程与 Doob 归一化}
+沿用定理 \ref{thm:fold-bernoulli-p-regeneration-bivariate-pgf} 与定理 \ref{thm:fold-bernoulli-p-finite-time-mismatch-rational-recurrence} 的记号。
+\providecommand{\Den}{\operatorname{Den}}
+对 \(u>0\) 与 \(m\ge 0\) 记
+\[
+M_m(u):=\EE\!\left[u^{G_m}\mid S_0=d\right],
+\qquad
+F_p(u,z):=\sum_{m\ge 0}M_m(u)\,z^m.
+\]
+
+\begin{theorem}[行列式—再生母函数的严格分解与分母几何化]\label{thm:fold-bernoulli-p-renewal-determinant-factorization}
+取 \(p\in(0,1)\)，令 \(q:=1-p\)。
+对 \(u>0\) 定义倾斜核
+\(
+Q_p(u)_{ij}:=P(p)_{ij}\,u^{g(i,j)}
+\)。
+并令 \(\Phi_p(u,z)\) 为定理 \ref{thm:fold-bernoulli-p-regeneration-bivariate-pgf} 给出的再生周期二元母函数：
+\[
+\Phi_p(u,z)=\EE\!\left[u^{X_0}z^{L_0}\mid S_0=d\right]
+=\frac{p q\,z^2\bigl(1-pu z^2\bigr)}{\Den_\Phi(u,z)},
+\qquad
+\Den_\Phi(u,z):=\bigl(1-qz\bigr)\bigl(1-pu z^2\bigr)-p^2 q\,u^3 z^3.
+\]
+则成立以下两条严格恒等式。
+\begin{enumerate}
+  \item \textbf{严格再生分解（无卷积残差项）}：
+  存在解析函数 \(\Psi_p(u,z)\)（\(|z|\) 充分小时）使得
+  \begin{equation}\label{eq:fold-bernoulli-p-renewal-F-Psi-Phi}
+  \boxed{\;
+  F_p(u,z)=\frac{\Psi_p(u,z)}{1-\Phi_p(u,z)}\; }.
+  \end{equation}
+  并且 \(\Psi_p\) 可取为有理函数
+  \begin{equation}\label{eq:fold-bernoulli-p-renewal-Psi-explicit}
+  \boxed{\;
+  \Psi_p(u,z)=1+\frac{z\bigl(1+p^2uz-puz^2+p^2u^2z^2\bigr)}{\Den_\Phi(u,z)}\;}
+  \end{equation}
+  （与定理 \ref{thm:fold-bernoulli-p-finite-time-mismatch-rational-recurrence} 中的显式分子 \(N_p(u,z)\) 等价）。
+
+  \item \textbf{分母几何化恒等式：}对所有 \((u,z)\) 在收敛域内有
+  \begin{equation}\label{eq:fold-bernoulli-p-renewal-den-geometrization}
+  \boxed{\;
+  1-\Phi_p(u,z)=\frac{\det(I-zQ_p(u))}{\Den_\Phi(u,z)}\;}
+  \end{equation}
+  从而 \(\det(I-zQ_p(u))\) 恰为 \(1-\Phi_p(u,z)\) 的分子。
+  特别地，
+  \begin{equation}\label{eq:fold-bernoulli-p-renewal-det-equals-Dp}
+  \det(I-zQ_p(u))=D_p(u,z),
+  \end{equation}
+  其中 \(D_p(u,z)\) 为定理 \ref{thm:fold-bernoulli-p-finite-time-mismatch-rational-recurrence} 的分母多项式 \eqref{eq:fold-bernoulli-p-finite-time-mgf-den}。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+令 \(\tau_1:=\inf\{t>0:S_t=d\}\)。
+由强马尔可夫性质，对每个 \(m\ge 0\) 成立严格更新方程
+\[
+M_m(u)=\EE\!\left[u^{G_m};\,m<\tau_1\mid S_0=d\right]
+\;+\;\sum_{\ell=1}^{m}\EE\!\left[u^{X_0};\,L_0=\ell\mid S_0=d\right]\,M_{m-\ell}(u).
+\]
+对 \(m\) 作生成函数变换得到
+\(
+F_p(u,z)=\Psi_p(u,z)+\Phi_p(u,z)F_p(u,z)
+\)，其中
+\(
+\Psi_p(u,z):=\sum_{m\ge 0}\EE[u^{G_m};m<\tau_1\mid S_0=d]z^m
+\)。
+整理即得 \eqref{eq:fold-bernoulli-p-renewal-F-Psi-Phi}。
+对 \(\Psi_p\) 的显式表达，可将
+\(
+F_p(u,z)=N_p(u,z)/D_p(u,z)
+\)（定理 \ref{thm:fold-bernoulli-p-finite-time-mismatch-rational-recurrence}）
+与
+\(
+1-\Phi_p(u,z)=\det(I-zQ_p(u))/\Den_\Phi(u,z)
+\)
+联立，从而取 \(\Psi_p=N_p/\Den_\Phi\) 并化简得到 \eqref{eq:fold-bernoulli-p-renewal-Psi-explicit}。
+
+对 \eqref{eq:fold-bernoulli-p-renewal-den-geometrization}，由 \(\Phi_p(u,z)=\frac{p q\,z^2(1-pu z^2)}{\Den_\Phi(u,z)}\) 直接得
+\[
+1-\Phi_p(u,z)=\frac{\Den_\Phi(u,z)-p q\,z^2(1-pu z^2)}{\Den_\Phi(u,z)}.
+\]
+而分子多项式逐项展开恰与 \(\det(I-zQ_p(u))\) 一致；另一方面，由 \(\sum_{m\ge0}M_m(u)z^m=e_d^{\mathsf T}(I-zQ_p(u))^{-1}\mathbf 1\) 可知
+\(\det(I-zQ_p(u))\) 与 \(F_p\) 的分母一致，从而得到 \eqref{eq:fold-bernoulli-p-renewal-det-equals-Dp}。证毕。
+\end{proof}
+
+\begin{theorem}[压力的周期方程刻画与导数的周期倾斜公式]\label{thm:fold-bernoulli-p-pressure-cycle-equation}
+对任意 \(\theta\in\RR\) 令 \(u=e^\theta\)，并记压力函数
+\(
+P_{G,p}(\theta)=\log\rho(Q_p(u))
+\)
+（定理 \ref{thm:fold-gauge-anomaly-bernoulli-p-laws}）。
+令 \(z(\theta):=e^{-P_{G,p}(\theta)}=\rho(Q_p(u))^{-1}\)。
+则：
+\begin{enumerate}
+  \item \(z(\theta)\) 是方程
+  \begin{equation}\label{eq:fold-bernoulli-p-cycle-equation}
+  \Phi_p\!\left(e^\theta,z\right)=1
+  \end{equation}
+  的最小正解；等价地，
+  \[
+  z(\theta)=\min\{z>0:1-\Phi_p(e^\theta,z)=0\}
+  =\min\{z>0:\det(I-zQ_p(e^\theta))=0\}.
+  \]
+  \item 在 \(\Phi_p(u,z(\theta))\equiv 1\) 的定义域内，隐函数微分给出导数公式
+  \begin{equation}\label{eq:fold-bernoulli-p-pressure-derivative-Phi}
+  \boxed{\;
+  P_{G,p}'(\theta)=
+  \frac{u\,\partial_u\Phi_p(u,z)}{z\,\partial_z\Phi_p(u,z)}
+  \Bigg|_{(u,z)=(e^\theta,z(\theta))}\; }.
+  \end{equation}
+  \item 定义单周期倾斜测度 \(\PP_\theta\)（作用于 \((L_0,X_0)\)）为
+  \[
+  \frac{\dd \PP_\theta}{\dd \PP}\ \propto\ \exp\!\bigl(\theta X_0-P_{G,p}(\theta)\,L_0\bigr)
+  \quad\text{并在 }\Phi_p(e^\theta,e^{-P_{G,p}(\theta)})=1\text{ 下归一化}.
+  \]
+  则有严格识别式
+  \begin{equation}\label{eq:fold-bernoulli-p-pressure-derivative-cycle-tilt}
+  \boxed{\;
+  P_{G,p}'(\theta)=\frac{\EE_\theta[X_0]}{\EE_\theta[L_0]}\; }.
+  \end{equation}
+  并且二阶导数满足
+  \begin{equation}\label{eq:fold-bernoulli-p-pressure-second-derivative-cycle-tilt}
+  \boxed{\;
+  P_{G,p}''(\theta)=
+  \frac{\Var_\theta\!\left(X_0-P_{G,p}'(\theta)L_0\right)}{\EE_\theta[L_0]}>0\; }.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-bernoulli-p-renewal-determinant-factorization} 的 \eqref{eq:fold-bernoulli-p-renewal-den-geometrization}，
+\(
+1-\Phi_p(u,z)=0
+\)
+与
+\(
+\det(I-zQ_p(u))=0
+\)
+在正实根上等价。
+并且由 Pringsheim 定理，\(F_p(u,\cdot)\) 的主奇点为最小正根，因而 \(z(\theta)\) 由 \eqref{eq:fold-bernoulli-p-cycle-equation} 唯一刻画。
+
+对恒等式 \(\Phi_p(u,z(\theta))\equiv 1\) 作微分，注意 \(u'=u\)、\(z'=-zP_{G,p}'(\theta)\)，得到
+\(
+0=\partial_u\Phi_p\cdot u+\partial_z\Phi_p\cdot z'
+\)，整理即得 \eqref{eq:fold-bernoulli-p-pressure-derivative-Phi}。
+
+最后，由 \(\Phi_p(u,z)=\EE[u^{X_0}z^{L_0}\mid S_0=d]\)，可识别
+\(
+u\partial_u\Phi_p=\EE[X_0u^{X_0}z^{L_0}]
+\) 与
+\(
+z\partial_z\Phi_p=\EE[L_0u^{X_0}z^{L_0}]
+\)；
+在 \(\Phi_p(u,z)=1\) 的归一化下它们分别是 \(\PP_\theta\) 下的 \(\EE_\theta[X_0]\)、\(\EE_\theta[L_0]\)，从而得到 \eqref{eq:fold-bernoulli-p-pressure-derivative-cycle-tilt}。
+再微分并整理为中心化形式即可得 \eqref{eq:fold-bernoulli-p-pressure-second-derivative-cycle-tilt}；严格正性由周期统计的非退化性给出。证毕。
+\end{proof}
+
+\input{subsubsec__fold-gauge-anomaly-bernoulli-p-pressure-ldp-compressed-cubic}
+\input{subsubsec__fold-gauge-anomaly-bernoulli-p-pressure-curve-moments-local-ldp}
+
+\begin{theorem}[指数倾斜的 Doob 变换在本模型中的闭式形式]\label{thm:fold-bernoulli-p-doob-transform-closed}
+取 \(u>0\)，记 \(\rho(u;p):=\rho(Q_p(u))\)。
+令 \(r(u)\)、\(\ell(u)\) 分别为 \(Q_p(u)\) 的 Perron 右、左特征向量：
+\(
+Q_p(u)r(u)=\rho(u;p)r(u)
+\)、
+\(
+\ell(u)^{\mathsf T}Q_p(u)=\rho(u;p)\ell(u)^{\mathsf T}
+\)。
+在规范化 \(r_c(u)=1\)、\(\ell_a(u)=1\) 下有完全闭式。
+\begin{enumerate}
+  \item \textbf{右特征向量：}
+  \[
+  r_b(u)=\frac{u}{\rho},\qquad
+  r_d(u)=\frac{\rho^2-pu}{(1-p)u\,\rho^2},\qquad
+  r_a(u)=\rho\,r_d(u)=\frac{\rho^2-pu}{(1-p)u\,\rho}.
+  \]
+  \item \textbf{左特征向量：}
+  \[
+  \ell_d(u)=\frac{p(1-p)}{\rho},\qquad
+  \ell_c(u)=\frac{u^2p^2}{\rho^2-pu},\qquad
+  \ell_b(u)=\frac{\rho\,u p^2}{\rho^2-pu}.
+  \]
+  \item \textbf{Doob \texorpdfstring{$(h)$}{(h)}-变换核：}定义
+  \[
+  \widetilde P^{(u)}_{ij}:=\frac{1}{\rho(u;p)}\frac{r_j(u)}{r_i(u)}\,Q_p(u)_{ij}.
+  \]
+  则 \(\widetilde P^{(u)}\) 为同一支持图上的不可约马尔可夫核，其全部非零转移概率为
+  \[
+  \widetilde P^{(u)}_{d,a}=1,\quad \widetilde P^{(u)}_{b,c}=1,
+  \]
+  \[
+  \widetilde P^{(u)}_{c,b}=\frac{pu}{\rho^2},\quad
+  \widetilde P^{(u)}_{c,a}=1-\frac{pu}{\rho^2},
+  \]
+  \[
+  \widetilde P^{(u)}_{a,a}=\frac{1-p}{\rho},\quad
+  \widetilde P^{(u)}_{a,d}=\frac{p(1-p)}{\rho^2},\quad
+  \widetilde P^{(u)}_{a,b}=\frac{p^2(1-p)\,u^3}{\rho(\rho^2-pu)}.
+  \]
+  \item \textbf{平稳分布：}平稳分布满足 \(\widetilde\pi^{(u)}_b=\widetilde\pi^{(u)}_c\)，且
+  \[
+  \widetilde\pi^{(u)}_i\ \propto\ \ell_i(u)\,r_i(u),
+  \]
+  即可由未归一化权重给出
+  \[
+  \widetilde\pi^{(u)}_a\ \propto\ \frac{\rho^2-pu}{(1-p)u\,\rho},\qquad
+  \widetilde\pi^{(u)}_b=\widetilde\pi^{(u)}_c\ \propto\ \frac{u^2p^2}{\rho^2-pu},\qquad
+  \widetilde\pi^{(u)}_d\ \propto\ \frac{p(\rho^2-pu)}{u\,\rho^3}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+将 \(Q_p(u)r=\rho r\) 与 \(Q_p(u)^{\mathsf T}\ell=\rho\ell\) 逐行写出。
+由确定性边 \(d\to a\)、\(b\to c\) 得
+\(
+r_a=\rho r_d
+\) 与
+\(
+r_b=(u/\rho)r_c
+\)，并由 \(c\)-行解出 \(r_d\)，再由 \(r_c=1\) 得 (1)。
+左向量同理由稀疏结构解出并取 \(\ell_a=1\) 得 (2)。
+将 (1) 代入 Doob 变换定义并逐项化简得到 (3)。
+最后用一般事实 \(\widetilde\pi_i\propto \ell_i r_i\) 得 (4)。证毕。
+\end{proof}
+
+\begin{proposition}[周期倾斜下几何分解的闭包性与 Doob 变换一致性]\label{prop:fold-bernoulli-p-cycle-tilt-geometric-closure}
+沿用定理 \ref{thm:fold-bernoulli-p-regeneration-bivariate-pgf} 的几何分解变量
+\(
+(M,(K_j)_{j\ge 0},(N_i)_{i\ge 1})
+\)。
+对任意 \((u,z)\) 处于 \(\Phi_p(u,z)\) 的收敛域内，定义周期倾斜测度
+\[
+\frac{\dd \PP^{(u,z)}}{\dd \PP}\ \propto\ u^{X_0}z^{L_0}.
+\]
+则该倾斜族在几何分解类中闭包，具体为：在 \(\PP^{(u,z)}\) 下，
+\begin{enumerate}
+  \item 条件于 \(M=m\)，族 \((K_0,\dots,K_m)\) 仍为独立同分布几何变量，且
+  \[
+  K_j\sim \mathrm{Geom}\!\bigl(1-(1-p)z\bigr)\qquad(0\le j\le m).
+  \]
+  \item 条件于 \(M=m\)，族 \((N_1,\dots,N_m)\) 仍为独立同分布几何变量，且
+  \[
+  N_i\sim \mathrm{Geom}\!\bigl(1-pu z^2\bigr)\qquad(1\le i\le m).
+  \]
+  \item 随机变量 \(M\) 的边缘分布在倾斜下仍为几何分布：
+  \[
+  M\sim \mathrm{Geom}\!\bigl(1-q_M(u,z)\bigr),
+  \qquad
+  q_M(u,z)=\frac{p^2(1-p)\,u^3z^3}{(1-(1-p)z)(1-pu z^2)}.
+  \]
+  \item 若取 \(z=\rho(u;p)^{-1}\)，则上述倾斜更新与定理 \ref{thm:fold-bernoulli-p-doob-transform-closed} 的 Doob 变换核完全一致：在 \(a\)、\(c\) 两处的更新概率分别等于
+  \[
+  1-(1-p)z=1-\frac{1-p}{\rho},
+  \qquad
+  1-pu z^2=1-\frac{pu}{\rho^2},
+  \]
+  并且 \(q_M(u,z)\) 对应于倾斜链中“失配模块个数”的几何公比。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:fold-bernoulli-p-regeneration-bivariate-pgf} 的条件独立结构与分解式
+\eqref{eq:fold-bernoulli-p-regeneration-decomposition}，
+倾斜权重 \(u^{X_0}z^{L_0}\) 在 \((M,K_j,N_i)\) 上按
+\(
+z^{\sum K_j}\cdot (u^3z^3)^M\cdot (u z^2)^{\sum N_i}
+\)
+逐因子分离。
+对几何分布施加幂权重仍为几何分布，从而得到 (1)(2)。
+对 \(M\) 的边缘分布，把条件矩母函数代入并对 \(m\) 求和可见其概率质量为幂几何型，公比即为 \(q_M(u,z)\)，得到 (3)。
+最后令 \(z=\rho^{-1}\) 并对照定理 \ref{thm:fold-bernoulli-p-doob-transform-closed}(3) 的闭式转移概率，即得 (4)。证毕。
+\end{proof}
+
+\endinput
+

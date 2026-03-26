@@ -1,0 +1,316 @@
+\paragraph{Bayes--InfoNCE 损失梯的 Hausdorff 编译、Prony 层析与容量闭合}
+在固定分辨率 \(m\) 下，Bayes 最优 InfoNCE 总损失不只是纤维谱的某种间接探针；它本身已经携带了一条按阶数组织的精确下三角编码。把这条编码显式拆开之后，损失梯、Hausdorff 矩锥、有限原子 Prony 恢复以及预言机容量曲线之间便形成了一条完全闭合的有限层析链。
+
+\begin{theorem}[Bayes 最优 InfoNCE 梯的精确下三角分解]\label{thm:xi-time-part47ca-infonce-newton-pascal-eta-expansion}
+固定分辨率 \(m\)，记
+\[
+w_x:=\frac{d_m(x)}{2^m}\qquad(x\in X_m),
+\qquad
+p_q(m):=\sum_{x\in X_m} w_x^q\qquad(q\ge 1),
+\]
+并令 \(L_{K,m}^{\star}\) 表示 Bayes 最优 InfoNCE 总损失。则对每个整数 \(K\ge 2\)，成立精确恒等式
+\[
+L_{K,m}^{\star}
+=
+\sum_{q=2}^{K}(-1)^q\eta_q\binom{K-1}{q-1}\,p_q(m),
+\]
+其中
+\[
+\eta_q
+:=
+\int_0^\infty \frac{e^{-t}(1-e^{-t})^{q-1}}{t}\,\dd t
+>0.
+\]
+等价地，对每个 \(q\ge 2\)，有
+\[
+(-1)^q\eta_q
+=
+\sum_{j=1}^{q}(-1)^{q-j}\binom{q-1}{j-1}\log j.
+\]
+因此，Bayes 最优 InfoNCE 损失梯正是纤维概率幂谱 \(\{p_q(m)\}_{q\ge 2}\) 的一条 Newton--Pascal 下三角编码。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:pom-infonce-partition-optimal-closed-form}，Bayes 最优值可写为
+\[
+L_{K,m}^{\star}
+=
+\sum_{x\in X_m}\Phi_K(w_x),
+\qquad
+\Phi_K(p):=
+p\,\EE[\log(1+J)],
+\quad
+J\sim\mathrm{Binomial}(K-1,p).
+\]
+把二项分布显式展开，得到
+\[
+\Phi_K(p)
+=
+\sum_{j=1}^{K}\binom{K-1}{j-1}p^j(1-p)^{K-j}\log j.
+\]
+抽取 \(p^q\) 的系数可得
+\[
+[p^q]\Phi_K(p)
+=
+\sum_{j=1}^{q}\binom{K-1}{j-1}\binom{K-j}{q-j}(-1)^{q-j}\log j.
+\]
+再利用组合恒等式
+\[
+\binom{K-1}{j-1}\binom{K-j}{q-j}
+=
+\binom{K-1}{q-1}\binom{q-1}{j-1},
+\]
+即得
+\[
+\Phi_K(p)
+=
+\sum_{q=2}^{K}\binom{K-1}{q-1}
+\Bigl(
+\sum_{j=1}^{q}(-1)^{q-j}\binom{q-1}{j-1}\log j
+\Bigr)p^q.
+\]
+另一方面，由积分表示
+\[
+\log j=\int_0^\infty \frac{e^{-t}-e^{-jt}}{t}\,\dd t
+\]
+并把求和移入积分，可得
+\[
+\sum_{j=1}^{q}(-1)^{q-j}\binom{q-1}{j-1}\log j
+=
+(-1)^q\int_0^\infty \frac{e^{-t}(1-e^{-t})^{q-1}}{t}\,\dd t
+=
+(-1)^q\eta_q.
+\]
+于是
+\[
+\Phi_K(p)=\sum_{q=2}^{K}(-1)^q\eta_q\binom{K-1}{q-1}p^q.
+\]
+最后对 \(x\in X_m\) 求和，即得所示恒等式。又因被积函数在 \((0,\infty)\) 上处处非负且非零，故 \(\eta_q>0\)。证毕。
+\end{proof}
+
+\begin{theorem}[Bayes 最优损失梯的 signed Hausdorff 反演]\label{thm:xi-time-part47ca-infonce-signed-hausdorff-inversion}
+对每个 \(q\ge 2\)，有精确反演公式
+\[
+p_q(m)
+=
+\eta_q^{-1}
+\sum_{K=2}^{q}(-1)^K\binom{q-1}{K-1}L_{K,m}^{\star}.
+\]
+进一步定义有限正测度
+\[
+\mu_m:=\sum_{x\in X_m} w_x\,\delta_{w_x},
+\qquad
+\operatorname{supp}\mu_m\subset[0,1].
+\]
+则对每个 \(n\ge 0\)，有
+\[
+\int_0^1 t^n\,\dd\mu_m(t)=p_{n+1}(m).
+\]
+因此 \(\{p_{n+1}(m)\}_{n\ge 0}\) 构成一个真正的 Hausdorff 矩序列。特别地，对任意 \(r\ge 0\)，矩阵
+\[
+H_r(m):=\bigl(p_{i+j+1}(m)\bigr)_{0\le i,j\le r},
+\qquad
+\widetilde H_r(m):=\bigl(p_{i+j+1}(m)-p_{i+j+2}(m)\bigr)_{0\le i,j\le r}
+\]
+皆正半定。
+\end{theorem}
+
+\begin{proof}
+令
+\[
+b_q(m):=(-1)^q\eta_q\,p_q(m)\qquad(q\ge 2).
+\]
+则定理 \ref{thm:xi-time-part47ca-infonce-newton-pascal-eta-expansion} 可重写为
+\[
+L_{K,m}^{\star}
+=
+\sum_{q=2}^{K}\binom{K-1}{q-1}b_q(m).
+\]
+这是标准下三角 Pascal 系统。对其施行二项反演，得到
+\[
+b_q(m)
+=
+\sum_{K=2}^{q}(-1)^{q-K}\binom{q-1}{K-1}L_{K,m}^{\star}.
+\]
+由于 \(b_q(m)=(-1)^q\eta_q p_q(m)\)，遂得
+\[
+p_q(m)
+=
+\eta_q^{-1}
+\sum_{K=2}^{q}(-1)^K\binom{q-1}{K-1}L_{K,m}^{\star}.
+\]
+再由 \(\mu_m\) 的定义，
+\[
+\int_0^1 t^n\,\dd\mu_m(t)
+=
+\sum_{x\in X_m}w_x^{n+1}
+=
+p_{n+1}(m).
+\]
+故 \(\{p_{n+1}(m)\}_{n\ge 0}\) 为 \([0,1]\) 上的 Hausdorff 矩序列。Hankel 正性与局部化矩阵正性遂由 Hausdorff 矩问题的标准判据立即给出。证毕。
+\end{proof}
+
+\begin{theorem}[纤维概率谱的有限 Prony 恢复界]\label{thm:xi-time-part47ca-infonce-prony-fiber-spectrum-bound}
+记
+\[
+s_m:=\#\operatorname{supp}\mu_m=\#\{w_x:x\in X_m\}.
+\]
+则前 \(2s_m\) 个 Bayes 最优损失
+\[
+L_{2,m}^{\star},L_{3,m}^{\star},\dots,L_{2s_m,m}^{\star}
+\]
+已足以唯一恢复完整的纤维概率谱多重集 \(\{w_x:x\in X_m\}\)。特别地，粗界
+\[
+L_{2,m}^{\star},\dots,L_{2|X_m|,m}^{\star}
+\]
+总是充分的。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:xi-time-part47ca-infonce-signed-hausdorff-inversion}，前 \(2s_m\) 个损失唯一确定矩
+\[
+p_1(m)=1,\ p_2(m),\dots,p_{2s_m}(m).
+\]
+把 \(\mu_m\) 写成
+\[
+\mu_m=\sum_{j=1}^{s_m}\alpha_j\,\delta_{u_j},
+\qquad
+0<u_1<\cdots<u_{s_m}\le 1,
+\qquad
+\alpha_j>0.
+\]
+则对每个 \(n\ge 0\)，有
+\[
+p_{n+1}(m)=\sum_{j=1}^{s_m}\alpha_j u_j^n.
+\]
+令
+\[
+Q_m(t):=\prod_{j=1}^{s_m}(t-u_j)
+=
+t^{s_m}+a_{s_m-1}t^{s_m-1}+\cdots+a_0.
+\]
+则对 \(n=0,\dots,s_m-1\)，满足递推
+\[
+\sum_{\ell=0}^{s_m}a_\ell\,p_{n+\ell+1}(m)=0,
+\qquad
+a_{s_m}=1.
+\]
+这给出一个由前 \(2s_m\) 个矩构成的 Hankel 线性系统。由于 \(\mu_m\) 恰有 \(s_m\) 个互异原子，其 Hankel 秩正好为 \(s_m\)，故该系统唯一恢复 \(Q_m\)，从而唯一恢复全部支撑点 \(u_j\)。
+
+随后，系数 \(\alpha_j\) 由 Vandermonde 系统
+\[
+p_{n+1}(m)=\sum_{j=1}^{s_m}\alpha_j u_j^n,
+\qquad
+n=0,\dots,s_m-1
+\]
+唯一求出。最后，若某个权值 \(u_j\) 在多重集 \(\{w_x\}\) 中的重数为 \(n_j\)，则
+\[
+\alpha_j=\sum_{x:\,w_x=u_j}w_x=n_j u_j,
+\]
+因而
+\[
+n_j=\frac{\alpha_j}{u_j}\in\NN.
+\]
+这就唯一恢复了完整多重集 \(\{w_x:x\in X_m\}\)。又因 \(s_m\le |X_m|\)，粗界随即成立。证毕。
+\end{proof}
+
+\begin{corollary}[Bayes 最优损失梯对预言机容量曲线的有限完备编译]\label{cor:xi-time-part47ca-infonce-finite-loss-capacity-complete}
+固定分辨率 \(m\)。则有限损失段
+\[
+\{L_{K,m}^{\star}\}_{K=2}^{2s_m}
+\]
+唯一决定整条 \(B\)-比特预言机成功率曲线
+\[
+B\longmapsto \operatorname{Succ}_m(B),
+\qquad
+\operatorname{Succ}_m(B)
+:=
+\frac{1}{2^m}\sum_{x\in X_m}\min\bigl(d_m(x),2^B\bigr)
+\qquad(B\in\ZZ_{\ge 0}).
+\]
+因此，在固定分辨率下，Bayes 最优 InfoNCE 损失梯是整条可逆侧信息容量曲线的有限完备统计量。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:xi-time-part47ca-infonce-prony-fiber-spectrum-bound}，有限损失段 \(\{L_{K,m}^{\star}\}_{K=2}^{2s_m}\) 唯一恢复多重集 \(\{w_x:x\in X_m\}\)。于是
+\[
+d_m(x)=2^m w_x
+\]
+也被完全恢复。把这些纤维多重度代入容量闭式
+\[
+\operatorname{Succ}_m(B)
+=
+\frac{1}{2^m}\sum_{x\in X_m}\min\bigl(d_m(x),2^B\bigr)
+\]
+即可逐点恢复全部 \(B\)-比特成功率。证毕。
+\end{proof}
+
+\begin{theorem}[固定有限侧信息对有限 Rényi 塔的共同仿射平移]\label{thm:xi-time-part47ca-remainder-bits-renyi-affine-shift}
+沿用定理 \ref{thm:pom-remainder-bits-all-renyi-compression-law} 的记号。对 \(q\ge 2\) 定义
+\[
+M_q(m):=\frac{S_q(m)}{2^{qm}},
+\qquad
+M_{q,B}(m):=\frac{S_{q,B}(m)}{2^{qm}},
+\]
+以及二进 Rényi 熵
+\[
+H_{q,m}:=\frac{1}{1-q}\log_2 M_q(m),
+\qquad
+H_{q,m}^{(B)}:=\frac{1}{1-q}\log_2 M_{q,B}(m).
+\]
+若
+\[
+d_{\min}(m):=\min_{x\in X_m}d_m(x)\xrightarrow[m\to\infty]{}\infty,
+\]
+则对任意有限指标集 \(Q\subset\{2,3,\dots\}\)，有一致估计
+\[
+\sup_{q\in Q}\bigl|H_{q,m}^{(B)}-H_{q,m}-B\bigr|
+=
+O_Q\!\bigl(d_{\min}(m)^{-1}\bigr).
+\]
+特别地，若系数族 \(\{c_q\}_{q\in Q}\) 满足
+\[
+\sum_{q\in Q}c_q=0,
+\]
+则相应仿射组合在固定 \(B\)-比特侧信息下保持不变：
+\[
+\sum_{q\in Q}c_q H_{q,m}^{(B)}
+=
+\sum_{q\in Q}c_q H_{q,m}
+ + O_Q\!\bigl(d_{\min}(m)^{-1}\bigr).
+\]
+因此，固定有限比特侧信息对整个有限 Rényi 塔只施加共同平移，而不改变其内部仿射几何。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:pom-remainder-bits-all-renyi-compression-law}，对每个固定 \(q\ge 2\)，有
+\[
+S_{q,B}(m)=2^{-B(q-1)}S_q(m)+O_q\!\bigl(S_{q-1}(m)\bigr).
+\]
+另一方面，
+\[
+S_q(m)=\sum_{x\in X_m}d_m(x)^q
+\ge
+d_{\min}(m)\sum_{x\in X_m}d_m(x)^{q-1}
+=
+d_{\min}(m)\,S_{q-1}(m),
+\]
+故
+\[
+\frac{S_{q-1}(m)}{S_q(m)}\le d_{\min}(m)^{-1}.
+\]
+于是
+\[
+M_{q,B}(m)
+=
+2^{-B(q-1)}M_q(m)\Bigl(1+O_q\!\bigl(d_{\min}(m)^{-1}\bigr)\Bigr).
+\]
+对两边取 \(\log_2\) 并乘以 \((1-q)^{-1}\)，得到
+\[
+H_{q,m}^{(B)}=H_{q,m}+B+O_q\!\bigl(d_{\min}(m)^{-1}\bigr).
+\]
+由于 \(Q\) 有限，误差常数可在 \(q\in Q\) 上统一，从而得到第一式。
+再对满足 \(\sum_{q\in Q}c_q=0\) 的仿射组合求和，共同平移项 \(B\sum_{q\in Q}c_q\) 抵消，即得第二式。证毕。
+\end{proof}
+
+\endinput

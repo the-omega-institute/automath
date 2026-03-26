@@ -1,0 +1,66 @@
+\subsection{设计空间与协议筛选：折叠为何被剩下}\label{subsec:protocol-screening-fold-survivor}
+
+本小节把第 \ref{sec:spg}--\ref{sec:group-unification} 节中已出现的“二元读出—规范形—跨分辨率相容—对称性审计”口径，统一整理为一条协议筛选链，并将其与一般 Ostrowski 设计空间（小节 \ref{subsec:ostrowski-generalized-fold}）对齐。其目的在于澄清：本文采用的 Zeckendorf 折叠并非从众多可能规则中任取一例，而是在本文固定的可审计接口条件下，由设计空间内生地退化得到的最简幸存结构。\par
+为避免重复证明，本小节的陈述以引用为主；必要的推导仅限于由定义直接推出的参数退化关系。
+
+\subsubsection{设计空间：一般 Ostrowski 计数与“取值 \texorpdfstring{$\to$}{->} 规范形 \texorpdfstring{$\to$}{->} 截断”折叠族}
+在小节 \ref{subsec:ostrowski-generalized-fold} 中，本文已将二元 Zeckendorf 折叠推广到一般无理数 \(\alpha=[0;a_1,a_2,\dots]\) 所诱导的 Ostrowski 计数系统：对每个分辨率 \(m\)，其原始数字空间与合法稳定类型空间分别为
+\[
+\Omega_m^{(\alpha)}=\prod_{n=1}^{m}\{0,1,\dots,a_n\},\qquad
+X_m^{(\alpha)}\subseteq \Omega_m^{(\alpha)}
+\]
+（定义 \ref{def:ostrowski-entropy-gap}），并由 Ostrowski 表示定理给出唯一规范形 \(Z_\alpha(N)\) 与合法集合 \(X_m^{(\alpha)}\)（定义 \ref{def:Xm-alpha}）。相应的折叠族
+\[
+\Fold_m^{(\alpha)}(\omega):=\pi_m^{(\alpha)}\!\bigl(Z_\alpha(N_\alpha(\omega))\bigr)
+\qquad(\text{定义 \ref{def:fold-alpha}})
+\]
+体现了本文固定的构造范式：“先取值、再取规范形、最后截断”。该范式的直接后果是跨分辨率函子性（命题 \ref{prop:fold-alpha-basic}-(4) 及定理 \ref{thm:normalize-then-truncate-functorial}）：在一般 Ostrowski 场景中，“先规范形再截断”与截断投影严格可交换，交换图是定义性成立而非附加假设。\par
+本文的主线折叠 \(\Fold_m:\Omega_m\to X_m\) 则是上述族在黄金端点 \(\alpha=\varphi^{-1}\) 的二元退化（命题 \ref{prop:Xm-alpha-cardinality}，并见定义 \ref{def:fold-word}）。
+
+\subsubsection{协议条款：六类可审计接口条件}
+将本文全稿反复使用的“协议”要求，抽象为一组仅约束\emph{允许的折叠接口}的条款。以下条款不依赖具体实现细节，只要求输出对象在有限窗口与可核验语义下可闭合：
+\begin{enumerate}
+  \item[\textbf{(P1)}] \textbf{二元读出：} 宏观读出字母表固定为 \(\{0,1\}\)（第 \ref{sec:spg} 节）；允许的折叠与中间门不得引入更大字母表。
+  \item[\textbf{(P2)}] \textbf{唯一可寻址：} 宏观地址必须具备唯一指称：对每个分辨率 \(m\)，稳定类型层应允许用有限对象给出可核验的单值地址化（与“地址先于概念值/空值 \(\mathsf{NULL}\)”口径相容，见第 \ref{sec:recursive-addressing} 节与第 \ref{sec:pom} 节的类型化讨论）。
+  \item[\textbf{(P3)}] \textbf{有限窗口完备：} 分辨率 \(m\) 的宏观对象应由前 \(m\) 位完备决定，且其可寻址值域在该尺度上无孔洞（需存在双射证书把 \(X_m\) 对齐到连续区间）。
+  \item[\textbf{(P4)}] \textbf{跨分辨率相容：} 折叠与截断/降阶应在可审计意义下相容：同一对象的多尺度读出必须形成可交换的比较图，从而避免“同一对象在不同分辨率下不一致”。
+  \item[\textbf{(P5)}] \textbf{最坏情形全定义：} 折叠与降阶规则必须对所有输入定义，并在最坏输入上保持协议条款的可核验性；不允许以“避开坏输入”维持一致性。
+  \item[\textbf{(P6)}] \textbf{对称性审计：} 协议允许的对称必须可枚举并可核验；未经授权的对称会诱发地址冲突或证书不可判别，因而须被筛除到可审计的残余稳定子。
+\end{enumerate}
+
+\subsubsection{筛选链：二元读出迫使 Ostrowski 退化到黄金端点}
+在 Ostrowski 设计空间内，(P1) 直接把连分数参数锁定到黄金端点。其理由仅依赖定义：由 \(\Omega_m^{(\alpha)}=\prod_{n=1}^{m}\{0,1,\dots,a_n\}\)（定义 \ref{def:fold-alpha}）可知，若对所有 \(m\) 都要求 \(\Omega_m^{(\alpha)}=\{0,1\}^m\)，则必有 \(a_n=1\) 对所有 \(n\) 成立，从而
+\[
+\alpha=[0;1,1,1,\dots]=\varphi^{-1}.
+\]
+在该退化下，合法集合 \(X_m^{(\alpha)}\) 亦退化为禁止相邻 \(11\) 的黄金均值语法 \(X_m\)（命题 \ref{prop:Xm-alpha-cardinality}；并见小节 \ref{subsec:folding-fibonacci-stable-syntax}）。因此，黄金端点并非“偏好选择”，而是二元字母表与 Ostrowski 合法性在本文范式中的共同交点。
+
+\begin{remark}[二元读出不等于二进制权重]\label{rem:protocol-binary-not-base2}
+(P1) 限制的是读出字母表，而非值权重。本文二元折叠以 Fibonacci 权重取值并取 Zeckendorf 规范形（定义 \ref{def:fold-word}），其稳定语法由禁词 \((11)\) 决定（小节 \ref{subsec:folding-fibonacci-stable-syntax}）。若改用“二进制权重 + 满移位”并令折叠退化为恒等，则纤维多重度恒为 \(1\)，从而无法产生本文所需的非平凡纤维统计、规范差审计与信息账本接口（参见小节 \ref{subsec:pom-information-ledger} 及小节 \ref{subsec:folding-stable-compression-resolution} 的分解口径）。
+\end{remark}
+
+\subsubsection{有限窗口完备：前缀双射与连续值域证书}
+在黄金端点的二元语法下，(P3) 的“无孔洞完备性”可由前缀双射证书给出。引理 \ref{lem:zeckendorf-range-bijection} 证明：存在双射
+\[
+V_m:X_m\overset{\sim}{\longrightarrow}\{0,1,\dots,F_{m+2}-1\},
+\]
+从而 \(X_m\) 的地址值域为连续区间并由前 \(m\) 位完备决定（亦见第 \ref{sec:emergent-arithmetic} 节把该双射提升为分辨率模结构的值—地址同构）。该双射在本文语义中提供了可审计的“尺度 \(m\) 完备性”证书：它排除了任何必须依赖远端尾部才能决定前缀取值的规则。
+
+\subsubsection{跨分辨率相容与最坏情形：从交换图到全局重写}
+在一般 Ostrowski 折叠中，(P4) 的跨分辨率相容性是定义性成立（定理 \ref{thm:normalize-then-truncate-functorial}）。在二元 Zeckendorf 折叠中，朴素截断 \(r_{m+1\to m}\) 对应“先截断再规范化”的顺序，因此一般不交换；而折叠感知 restriction
+\[
+\widetilde r_{m+1\to m}:=\pi_{m+1\to m}\circ \Fold_{m+1}
+\]
+正是把降阶顺序纠正为“先规范形再截断”的定义性实现，并且在自然性约束下是唯一修正（定理 \ref{thm:normalize-then-truncate-functorial}；并见命题 \ref{prop:fold-omega-commute}）。\par
+将 (P4) 与 (P5) 合并后，出现一条更强的结构后果：若仍试图用“仅修正末端常数位”的局部尾补丁来恢复交换，则在最坏输入上必失败。其可审计证据是规范差 \(G_m\) 的最坏端满长翻转（定理 \ref{thm:fold-gauge-anomaly-max}）及“尾补丁不完备”推论（推论 \ref{cor:fold-tail-patch-incomplete}）。因此，在本文固定的折叠范式下，“跨尺度一致性 \(\Rightarrow\) 全局重写/跨位传播”不是实现偏好，而是协议条款在最坏情形下的结构性强制。
+
+\subsubsection{对称性审计：window-\texorpdfstring{$6$}{6} 锚点下的残余稳定子}
+(P6) 在本文中以“可枚举的有限证书”形式落实：window-\(6\) 的折叠标签 \(F_6:\Omega_6\to X_6\) 可视为 \(6\) 维超立方体顶点上的标签函数，在几何自同构群 \(\mathrm{Aut}(Q_6)\) 作用下引入几何稳定子
+\[
+\mathrm{Stab}_{\mathrm{geo}}(F_6):=\{\sigma\in\mathrm{Aut}(Q_6):F_6\circ\sigma=F_6\}.
+\]
+定理 \ref{thm:foldbin6-geo-stabilizer-z2}（亦见推论 \ref{cor:terminal-foldbin6-geo-stabilizer-z2}）给出：该稳定子为阶 \(2\) 群，仅含恒等与唯一非平凡对合元；并且其在二进制编号上的可审计指纹为掩码位移 \(\pm 34\)（推论 \ref{cor:foldbin6-geo-mask-34}）。该结果将“允许的对称”压缩到可核验的 \(\ZZ_2\) 残余，从而与 (P2) 的唯一可寻址性兼容。
+
+\paragraph{综合陈述（接口意义下的“幸存”）}
+综上，在本文采用的设计空间（一般 Ostrowski 折叠族，定义 \ref{def:fold-alpha}）与协议条款 (P1)--(P6) 的共同约束下，二元 Zeckendorf 折叠可被视为一个由接口闭包强制选出的最简模型：二元读出把参数退化到黄金端点并锁定禁词 \((11)\) 的稳定语法（命题 \ref{prop:Xm-alpha-cardinality} 与小节 \ref{subsec:folding-fibonacci-stable-syntax}），前缀双射给出有限窗完备的连续值域证书（引理 \ref{lem:zeckendorf-range-bijection}），跨分辨率相容性迫使采用“先规范化再截断”的降阶并在最坏情形上强制全局重写（定理 \ref{thm:normalize-then-truncate-functorial}、定理 \ref{thm:fold-gauge-anomaly-max}），而对称性筛选在 window-\(6\) 锚点处将几何稳定子削减为可审计的唯一 \(\ZZ_2\) 残余（定理 \ref{thm:foldbin6-geo-stabilizer-z2}）。\par
+在该意义下，“折叠为何被剩下”应被理解为接口闭合的刚性结果：若试图在保持上述协议接口的同时任意改造折叠机制，则必在至少一处破坏二元读出、唯一可寻址、有限窗完备、跨尺度相容、最坏情形全定义或对称性审计的可核验条件。

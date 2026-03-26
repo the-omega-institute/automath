@@ -1,0 +1,336 @@
+\begin{theorem}[连续--离散 Legendre 前沿的 Bregman 格点量化]\label{thm:conclusion-continuous-discrete-legendre-bregman-quantization}
+设 \(\Theta\subset[0,\infty)\) 为闭区间，\(\Lambda\in C^1(\Theta^\circ)\) 且严格凸。对任意
+\[
+\gamma\in \Lambda'(\Theta^\circ),
+\]
+记 \(t_\ast(\gamma)\in\Theta^\circ\) 为唯一切触点，即
+\[
+\Lambda'(t_\ast(\gamma))=\gamma.
+\]
+定义连续 Legendre 前沿与其整数格近似为
+\[
+I_\Theta(\gamma):=\sup_{t\in\Theta}\bigl(t\gamma-\Lambda(t)\bigr),
+\qquad
+I_{\Theta,\ZZ}(\gamma):=\sup_{n\in\Theta\cap\ZZ}\bigl(n\gamma-\Lambda(n)\bigr).
+\]
+则有精确恒等式
+\[
+I_\Theta(\gamma)-I_{\Theta,\ZZ}(\gamma)
+=
+\min_{n\in\Theta\cap\ZZ}
+D_\Lambda\bigl(n,t_\ast(\gamma)\bigr),
+\]
+其中
+\[
+D_\Lambda(x,y):=\Lambda(x)-\Lambda(y)-\Lambda'(y)(x-y)
+\]
+为 \(\Lambda\) 的 Bregman 散度。更强地，任一整数最优点
+\[
+n_\ast(\gamma)\in\argmax_{n\in\Theta\cap\ZZ}\bigl(n\gamma-\Lambda(n)\bigr)
+\]
+都满足
+\[
+n_\ast(\gamma)\in
+\{\lfloor t_\ast(\gamma)\rfloor,\ \lceil t_\ast(\gamma)\rceil\}\cap\Theta.
+\]
+若进一步 \(\Lambda\in C^2(\Theta^\circ)\)，且
+\[
+\operatorname{dist}\bigl(t_\ast(\gamma),\partial\Theta\bigr)\ge \frac12,
+\]
+则
+\[
+0\le I_\Theta(\gamma)-I_{\Theta,\ZZ}(\gamma)
+\le
+\frac18\sup_{|t-t_\ast(\gamma)|\le 1/2}\Lambda''(t).
+\]
+\end{theorem}
+\begin{proof}
+由严格凸性，函数
+\[
+G_\gamma(t):=t\gamma-\Lambda(t)
+\]
+严格凹，且其唯一极大点为 \(t=t_\ast(\gamma)\)。因此
+\[
+I_\Theta(\gamma)=t_\ast(\gamma)\gamma-\Lambda(t_\ast(\gamma)).
+\]
+对任意整数 \(n\in\Theta\cap\ZZ\)，有
+\[
+\begin{aligned}
+I_\Theta(\gamma)-\bigl(n\gamma-\Lambda(n)\bigr)
+&=
+\Lambda(n)-\Lambda(t_\ast)-\gamma(n-t_\ast)\\
+&=
+\Lambda(n)-\Lambda(t_\ast)-\Lambda'(t_\ast)(n-t_\ast)\\
+&=
+D_\Lambda(n,t_\ast),
+\end{aligned}
+\]
+从而对整数 \(n\) 取下确界便得到
+\[
+I_\Theta(\gamma)-I_{\Theta,\ZZ}(\gamma)
+=
+\min_{n\in\Theta\cap\ZZ}D_\Lambda(n,t_\ast(\gamma)).
+\]
+
+再证最近格点局域化。由于 \(G_\gamma\) 在 \(t_\ast\) 左侧严格递增、右侧严格递减，故所有严格小于 \(\lfloor t_\ast\rfloor\) 的整数值都不可能优于 \(\lfloor t_\ast\rfloor\)，所有严格大于 \(\lceil t_\ast\rceil\) 的整数值都不可能优于 \(\lceil t_\ast\rceil\)。于是任一整数最优点只能落在这两个最近格点之一。
+
+若 \(\Lambda\in C^2\) 且 \(\operatorname{dist}(t_\ast,\partial\Theta)\ge 1/2\)，取最近整数 \(n^\sharp\) 使
+\[
+|n^\sharp-t_\ast|\le \frac12.
+\]
+由二阶 Taylor 公式，存在 \(\xi\) 介于 \(n^\sharp\) 与 \(t_\ast\) 之间，使
+\[
+D_\Lambda(n^\sharp,t_\ast)=\frac12\Lambda''(\xi)(n^\sharp-t_\ast)^2.
+\]
+故
+\[
+I_\Theta(\gamma)-I_{\Theta,\ZZ}(\gamma)
+\le
+D_\Lambda(n^\sharp,t_\ast)
+\le
+\frac12\sup_{|t-t_\ast|\le 1/2}\Lambda''(t)\cdot \frac14,
+\]
+即得所示上界。证毕。
+\end{proof}
+
+\begin{theorem}[离散相带宽度的曲率采样]\label{thm:conclusion-discrete-phase-band-width-curvature-sampling}
+设 \(\Lambda\) 在包含整数窗 \(\{1,\dots,Q_{\max}-1\}\) 的开区间上属于 \(C^2\)，并对每个内点 \(q\in\{3,\dots,Q_{\max}-1\}\) 定义离散相带
+\[
+\Gamma_q:=
+\bigl[
+\Lambda(q-1)-\Lambda(q-2),\
+\Lambda(q)-\Lambda(q-1)
+\bigr].
+\]
+则：
+\begin{enumerate}
+  \item \(q\) 成为离散 Legendre 前沿的最优阶，当且仅当
+  \[
+  \gamma\in \Gamma_q;
+  \]
+  \item 相带宽度满足精确恒等式
+  \[
+  |\Gamma_q|
+  =
+  \Lambda(q)-2\Lambda(q-1)+\Lambda(q-2);
+  \]
+  \item 存在某个 \(\xi_q\in(q-2,q)\) 使
+  \[
+  |\Gamma_q|=\Lambda''(\xi_q).
+  \]
+\end{enumerate}
+因此，每一条 \(q\)-相带的宽度恰是连续压力曲线在长度 \(2\) 的窗口内留下的一枚曲率样本。
+\end{theorem}
+\begin{proof}
+第一条是定理 \ref{thm:conclusion-discrete-convex-budget-kink-fan} 应用于离散预算
+\[
+b(q):=\Lambda(q-1)
+\]
+后的直接结论。第二条由端点相减立得：
+\[
+|\Gamma_q|
+=
+\bigl[\Lambda(q)-\Lambda(q-1)\bigr]
+-
+\bigl[\Lambda(q-1)-\Lambda(q-2)\bigr]
+=
+\Lambda(q)-2\Lambda(q-1)+\Lambda(q-2).
+\]
+第三条则由二阶有限差分的拉格朗日型中值公式给出：对 \(f=\Lambda\) 与步长 \(1\)，存在 \(\xi_q\in(q-2,q)\) 使
+\[
+\Lambda(q)-2\Lambda(q-1)+\Lambda(q-2)=\Lambda''(\xi_q).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[离散扇宽序列的帐篷核层析]\label{thm:conclusion-discrete-fan-width-tent-kernel-tomography}
+设 \(\Lambda:\Theta\to\RR\) 仅要求凸，并记其分布意义下的二阶导数为正 Radon 测度
+\[
+\mu_\Lambda:=\Lambda''.
+\]
+对每个整数 \(q\) 定义相带宽度
+\[
+w_q:=\Lambda(q)-2\Lambda(q-1)+\Lambda(q-2).
+\]
+则有精确表示
+\[
+w_q
+=
+\int_{q-2}^{q}
+\Bigl(1-\bigl|t-(q-1)\bigr|\Bigr)\,d\mu_\Lambda(t).
+\]
+若进一步 \(\Lambda\in C^2\)，则
+\[
+w_q
+=
+\int_{q-2}^{q}
+\Bigl(1-\bigl|t-(q-1)\bigr|\Bigr)\Lambda''(t)\,dt.
+\]
+因此，离散相带宽度序列 \((w_q)\) 恰是连续曲率测度 \(\mu_\Lambda\) 经帐篷核
+\[
+K(u):=(1-|u|)_+
+\]
+卷积后在整数格上的采样。
+\end{theorem}
+\begin{proof}
+先设 \(\Lambda\in C^2\)。对任意 \(x\in\Theta^\circ\)，标准积分恒等式给出
+\[
+\Lambda(x+1)-2\Lambda(x)+\Lambda(x-1)
+=
+\int_{-1}^{1}(1-|u|)\Lambda''(x+u)\,du.
+\]
+令 \(x=q-1\)，并作变量替换 \(t=x+u\)，得到
+\[
+w_q
+=
+\int_{q-2}^{q}
+\Bigl(1-\bigl|t-(q-1)\bigr|\Bigr)\Lambda''(t)\,dt.
+\]
+
+若 \(\Lambda\) 仅凸，则其一阶导数为有界变差函数，分布导数 \(\mu_\Lambda=d\Lambda'\) 为正测度。取标准 mollifier \(\rho_\varepsilon\)，令
+\[
+\Lambda_\varepsilon:=\rho_\varepsilon\ast\Lambda.
+\]
+则 \(\Lambda_\varepsilon\in C^\infty\)、\(\Lambda_\varepsilon\to\Lambda\) 局部一致，且 \(\Lambda_\varepsilon''\,dt\rightharpoonup \mu_\Lambda\) 弱收敛。对 \(\Lambda_\varepsilon\) 应用上述光滑公式并令 \(\varepsilon\to 0\)，便得到测度版本。证毕。
+\end{proof}
+
+\begin{theorem}[输出分桶几何的扇保持性]\label{thm:conclusion-output-bucket-geometry-preserves-discrete-fan}
+设 \(T,T'\) 为两套确定性在线核，具有同一状态集与同一输出字母表。若对每个输出符号 \(b\in A_{\mathrm{out}}\) 都有
+\[
+B_b(T)=B_b(T'),
+\]
+则：
+\begin{enumerate}
+  \item 对所有实参数 \(t\ge 0\)，两者的射影转移算子完全一致，
+  \[
+  \mathcal L_{t+1}^{(T)}=\mathcal L_{t+1}^{(T')};
+  \]
+  \item 因而其连续压力曲线完全一致，
+  \[
+  \Lambda_T(t)=\Lambda_{T'}(t)
+  \qquad(\forall t\ge 0);
+  \]
+  \item 特别地，整数矩谱塔、离散 Legendre 前沿、相带 \(\Gamma_q\) 与扇宽 \(w_q\) 全部一致。
+\end{enumerate}
+因此，离散 \(q\)-相图与其连续压力几何首先是输出分桶几何的不变量，而不是输入实现细节的不变量。
+\end{theorem}
+\begin{proof}
+由定义 \ref{def:pom-projective-transfer-operator}，
+\[
+g_b(w)=\langle\mathbf 1,B_bw\rangle,
+\qquad
+\Phi_b(w)=\frac{B_bw}{\langle\mathbf 1,B_bw\rangle}
+\]
+完全由 \(B_b\) 决定。因此若 \(T,T'\) 的全部 \(B_b\) 相同，则对任意实参数 \(q=t+1\ge 1\) 都有
+\[
+\mathcal L_q^{(T)}f
+=
+\sum_{b\in A_{\mathrm{out}}}g_b(w)^q f(\Phi_b(w))
+=
+\mathcal L_q^{(T')}f
+\]
+作为作用在同一函数空间上的算子恒等相同。于是 Perron 主特征值相同，故
+\[
+\lambda_T(q)=\lambda_{T'}(q)
+\qquad (\forall q\ge 1).
+\]
+按注 \ref{rem:pom-projective-pressure-route} 的定义
+\[
+\Lambda(t)=\log\lambda(t+1)-\log|A_{\mathrm{out}}|,
+\]
+便得到
+\[
+\Lambda_T(t)=\Lambda_{T'}(t)
+\qquad (\forall t\ge 0).
+\]
+整数矩谱塔 \((r_q)\) 与 \(\Lambda(q-1)\) 的一致性由定理 \ref{thm:pom-projective-operator-degenerates-to-moment-kernel} 给出，而 \(I_{\mathrm{disc}},\Gamma_q,w_q\) 仅由整数锚点 \(\Lambda(q-1)\) 与其有限差分确定，故全部一致。证毕。
+\end{proof}
+
+\begin{theorem}[仿射闭式的扇宽排斥]\label{thm:conclusion-affine-closed-form-excluded-by-fan-width}
+设在某个区间 \(\Theta\subset[1,\infty)\) 上存在闭式
+\[
+\lambda(t)=2^t\varphi^{\,1-t}.
+\]
+令对应连续压力定义为
+\[
+\Lambda(s):=\log\lambda(s+1)-\log 2
+\qquad (s\in\Theta-1).
+\]
+则
+\[
+\Lambda(s)=s\log\frac{2}{\varphi},
+\]
+从而对所有满足 \(q-2,q-1,q\in\Theta-1\) 的整数 \(q\ge 3\)，都有
+\[
+\Gamma_q=
+\left\{\log\frac{2}{\varphi}\right\},
+\qquad
+w_q=0.
+\]
+因此，只要在某个整数窗上观测到
+\[
+w_q>0,
+\]
+则上述仿射闭式不可能在该窗上成立。
+\end{theorem}
+\begin{proof}
+由假设，
+\[
+\lambda(s+1)=2^{s+1}\varphi^{-s}.
+\]
+代入连续压力定义，得到
+\[
+\Lambda(s)
+=
+\log\lambda(s+1)-\log 2
+=
+\log(2^{s+1}\varphi^{-s})-\log 2
+=
+s\log\frac{2}{\varphi}.
+\]
+故 \(\Lambda\) 仿射，其一阶差分恒为常数
+\[
+\Lambda(q)-\Lambda(q-1)=\log\frac{2}{\varphi}.
+\]
+于是
+\[
+\Gamma_q=
+\Bigl[
+\log\frac{2}{\varphi},
+\log\frac{2}{\varphi}
+\Bigr]
+=
+\left\{\log\frac{2}{\varphi}\right\},
+\]
+并且
+\[
+w_q=\Lambda(q)-2\Lambda(q-1)+\Lambda(q-2)=0.
+\]
+证毕。
+\end{proof}
+
+\input{thm__conclusion-tent-kernel-local-invertibility}
+
+\begin{conjecture}[帐篷核层析的唯一重建]\label{conj:conclusion-tent-kernel-tomography-unique-reconstruction}
+设连续压力 \(\Lambda\) 满足附录 \ref{app:pom-projective-pressure-operator} 所要求的谱隙--解析制度，并且其曲率测度 \(\mu_\Lambda\) 落在一个足够窄的 Paley--Wiener 型带宽类中。则定理 \ref{thm:conclusion-discrete-fan-width-tent-kernel-tomography} 的帐篷层析应是唯一可逆的：离散相带宽度序列
+\[
+(w_q)_{q\ge 3}
+\]
+唯一决定 \(\mu_\Lambda\)，从而唯一决定 \(\Lambda\)（差一个仿射项）；而该仿射项又由整点锚定
+\[
+\Lambda(q-1)=\log r_q-\log|A_{\mathrm{out}}|
+\]
+固定。等价地，整条连续 Legendre 前沿 \(I\) 应可由离散扇 \((\Gamma_q)_{q\ge 3}\) 唯一恢复。
+
+支持性理由在于：定理 \ref{thm:conclusion-discrete-fan-width-tent-kernel-tomography} 已给出
+\[
+w_q=(K\ast\mu_\Lambda)(q-1),
+\qquad
+K(u)=(1-|u|)_+,
+\]
+而其 Fourier 变换满足
+\[
+\widehat K(\xi)=\left(\frac{\sin(\xi/2)}{\xi/2}\right)^2.
+\]
+在低频带内，\(\widehat K\) 无零点。若谱隙解析性把 \(\mu_\Lambda\) 压入这一无零频带，则帐篷核卷积应可唯一反演；结合整数锚点即可消去仿射不确定性。
+\end{conjecture}

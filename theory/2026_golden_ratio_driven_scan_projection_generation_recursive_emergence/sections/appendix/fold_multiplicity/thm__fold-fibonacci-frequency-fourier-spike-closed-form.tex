@@ -1,0 +1,94 @@
+\begin{theorem}[Fibonacci 共振频率处的 Fourier 尖峰闭式]\label{thm:fold-fibonacci-frequency-fourier-spike-closed-form}
+沿用附录 \ref{app:fold-multiplicity} 的记号，并令 \(M:=F_{m+2}\)。
+则在频率 \(k=F_{m+1}\in \ZZ/(M\ZZ)\) 处，离散 Fourier 系数满足完全显式闭式
+\[
+\widehat d_m(F_{m+1})
+=
+2^m\exp\!\Bigl(\frac{\mathrm{i}\pi}{M}\bigl(F_{m-1}+(-1)^{m+1}\bigr)\Bigr)
+\prod_{r=1}^{m}\cos\!\Bigl(\frac{\pi F_r}{M}\Bigr).
+\]
+从而归一化幅度为
+\[
+a_m(F_{m+1})
+=\frac{\bigl|\widehat d_m(F_{m+1})\bigr|}{2^m}
+=\prod_{r=1}^{m}\cos\!\Bigl(\frac{\pi F_r}{M}\Bigr).
+\]
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:fold-spectrum-factorization} 的乘积分解，取 \(k=F_{m+1}\) 得
+\[
+\widehat d_m(F_{m+1})
+=\prod_{j=1}^{m}\Bigl(1+e^{-2\pi \mathrm{i}\,F_{m+1}F_{j+1}/M}\Bigr).
+\]
+由于 \(F_{m+1}=F_{m+2}-F_m\)，在模 \(M\) 意义下有 \(F_{m+1}\equiv -F_m\)。
+再由引理 \ref{lem:fold-resonance-docagne}（并注意 \(F_mF_{j+1}\equiv (-1)^{j+1}F_{m+1-j}\pmod M\)），推出
+\[
+F_{m+1}F_{j+1}\equiv (-1)^{j}F_{m+1-j}\pmod M.
+\]
+因此
+\[
+\widehat d_m(F_{m+1})
+=\prod_{j=1}^{m}\Bigl(1+e^{-2\pi \mathrm{i}\,(-1)^{j}F_{m+1-j}/M}\Bigr).
+\]
+对任意实数 \(x\) 与符号 \(\varepsilon\in\{\pm1\}\) 有恒等式
+\(
+1+e^{-2\pi \mathrm{i}\varepsilon x}=2e^{-\pi \mathrm{i}\varepsilon x}\cos(\pi x)
+\)；
+代入 \(x=F_{m+1-j}/M\) 得
+\[
+\widehat d_m(F_{m+1})
+=2^m\exp\!\Bigl(-\frac{\pi\mathrm{i}}{M}\sum_{j=1}^{m}(-1)^{j}F_{m+1-j}\Bigr)
+\prod_{j=1}^{m}\cos\!\Bigl(\frac{\pi F_{m+1-j}}{M}\Bigr).
+\]
+令 \(r:=m+1-j\) 仅作换元，乘积项化为 \(\prod_{r=1}^{m}\cos(\pi F_{r}/M)\)，且
+\[
+\sum_{j=1}^{m}(-1)^{j}F_{m+1-j}
+=(-1)^{m+1}\sum_{r=1}^{m}(-1)^{r}F_{r}.
+\]
+交错和 \(S_m:=\sum_{r=1}^{m}(-1)^{r}F_r\) 满足闭式 \(S_m=(-1)^mF_{m-1}-1\)（可由递推 \(S_m=S_{m-1}+(-1)^mF_m\) 与 \(F_m=F_{m-1}+F_{m-2}\) 归纳得到）。
+代回得
+\[
+-\sum_{j=1}^{m}(-1)^{j}F_{m+1-j}
+=F_{m-1}+(-1)^{m+1},
+\]
+从而得到所述相位因子与闭式。
+最后，因 \(0\le F_r/M\le \tfrac12\)（且当 \(m\ge 2\) 时严格小于 \(\tfrac12\)），上述余弦因子非负，
+故模长恒等式即为第二式。证毕。
+\end{proof}
+
+\begin{corollary}[由 Fourier 尖峰导出的总变差常数下界]\label{cor:fold-tv-lower-bound-from-fourier-spike}
+沿用附录 \ref{app:fold-multiplicity} 的残差分布 \(p_m(r):=d_m(r)/2^m\)（\(r\in\ZZ/(M\ZZ)\)，\(M=F_{m+2}\)），并令 \(u(r)\equiv 1/M\) 为均匀分布。
+则对任意非零频率 \(k\in\ZZ/(M\ZZ)\) 都有下界
+\[
+\|p_m-u\|_{\mathrm{TV}}
+\ge
+\frac{|\widehat d_m(k)|}{2^{m+1}}.
+\]
+特别地，取 \(k=F_{m+1}\) 并结合定理 \ref{thm:fold-critical-resonance-constant}，得到
+\[
+\liminf_{m\to\infty}\|p_m-u\|_{\mathrm{TV}}\ \ge\ \frac{C_\varphi}{2}\;>\;0.
+\]
+\end{corollary}
+
+\begin{proof}
+由对偶表述
+\(
+\|p_m-u\|_{\mathrm{TV}}
+=\frac12\sup_{\|f\|_\infty\le 1}\bigl|\sum_r(p_m(r)-u(r))f(r)\bigr|
+\)。
+取测试函数 \(f(r):=e^{-2\pi \mathrm{i}kr/M}\)（满足 \(\|f\|_\infty=1\)）并用 \(\sum_r u(r)e^{-2\pi \mathrm{i}kr/M}=0\)（\(k\ne 0\)）得
+\[
+\|p_m-u\|_{\mathrm{TV}}
+\ge \frac12\Bigl|\sum_r p_m(r)e^{-2\pi \mathrm{i}kr/M}\Bigr|
+=\frac12\Bigl|\frac{1}{2^m}\widehat d_m(k)\Bigr|
+=\frac{|\widehat d_m(k)|}{2^{m+1}}.
+\]
+最后对 \(k=F_{m+1}\) 令 \(m\to\infty\)，由定理 \ref{thm:fold-critical-resonance-constant} 中
+\(
+a_m(F_{m+1})=|\widehat d_m(F_{m+1})|/2^m\to C_\varphi
+\)
+即得所示 \(\liminf\) 下界。证毕。
+\end{proof}
+
+\endinput

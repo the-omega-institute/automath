@@ -1,0 +1,75 @@
+\paragraph{局域并行归一化的传播下界}
+在线延迟--\(3\) 转导器给出一种串行（单趟）机制；
+另一方面，若要求以固定半径的同步局部更新在有限步内完成归一化，则不可避免地受到“光锥传播”的线性下界。
+该下界刻画了规范化中跨尺度进位传播的不可压缩性，并与折叠核的读出资源解释相容。
+
+\begin{theorem}[Zeckendorf 归一化的局域并行时间下界]\label{thm:zeckendorf-parallel-propagation-lower-bound}
+取字母表 \(\mathcal A=\{0,1,2\}\)，并以 Fibonacci 权重 \(w_k:=F_{k+1}\) 定义值映射
+\[
+\mathrm{Val}(x):=\sum_{k\in\ZZ} x_k\,w_k
+\qquad(x\in \mathcal A^{\ZZ}\ \text{有限支撑}).
+\]
+令 \(Z(\mathrm{Val}(x))\in\{0,1\}^{\ZZ}\) 表示与 \(\mathrm{Val}(x)\) 同值的唯一 Zeckendorf 合法表示（无相邻 \(11\)）。
+\par
+设 \(\Phi:\mathcal A^{\ZZ}\to\{0,1\}^{\ZZ}\) 为半径 \(r\) 的一维元胞自动机，即存在局部规则 \(f:\mathcal A^{2r+1}\to\{0,1\}\) 使
+\[
+(\Phi(x))_j=f(x_{j-r},\dots,x_{j+r})\qquad(\forall j\in\ZZ),
+\]
+并记 \(\Phi^t\) 为迭代 \(t\) 次。
+若存在整数 \(t\ge 1\) 使得对一切有限支撑输入 \(x\) 都成立
+\[
+\Phi^t(x)=Z(\mathrm{Val}(x)),
+\]
+则对任意整数 \(m\ge 2\)（偶数）必有
+\[
+\boxed{\;
+t\ \ge\ \left\lceil\frac{m-1}{r}\right\rceil\; }.
+\]
+因此在该同步局部模型下，不存在独立于输入尺度的常数步数实现；最坏情形并行时间必为 \(\Omega(m)\)。
+\end{theorem}
+\begin{proof}
+\textbf{(1) 光锥依赖。}
+由半径为 \(r\) 的局部更新，归纳得到：对任意 \(t\ge 0\)，输出坐标 \((\Phi^t(x))_j\) 仅依赖输入在区间 \([j-rt,j+rt]\) 上的限制。
+
+\par\noindent
+\textbf{(2) 远程敏感对。}
+固定偶数 \(m\ge 2\)。
+定义 \(x^{(m)}\in\{0,1\}^{\ZZ}\subset\mathcal A^{\ZZ}\) 为
+\[
+x^{(m)}_k:=
+\begin{cases}
+1,& k\in\{1,3,5,\dots,m-1\},\\
+0,& \text{其余},
+\end{cases}
+\qquad
+y^{(m)}:=x^{(m)}+e_1\in\mathcal A^{\ZZ},
+\]
+其中 \(e_1\) 为在坐标 \(1\) 处取值 \(1\) 的单位串。
+显然 \(x^{(m)}\) 已是 Zeckendorf 合法表示，故 \(Z(\mathrm{Val}(x^{(m)}))=x^{(m)}\)，特别地其第 \(m\) 位为 \(0\)。
+\par
+另一方面，
+\[
+\mathrm{Val}(x^{(m)})
+=\sum_{j=1}^{m/2} w_{2j-1}
+=\sum_{j=1}^{m/2} F_{2j}
+=F_{m+1}-1,
+\]
+其中最后一步为 Fibonacci 的标准求和恒等式。
+由于 \(w_m=F_{m+1}\) 且 \(\mathrm{Val}(y^{(m)})=\mathrm{Val}(x^{(m)})+w_1=(F_{m+1}-1)+1=F_{m+1}=w_m\)，
+故 \(Z(\mathrm{Val}(y^{(m)}))\) 必为仅在第 \(m\) 位取 \(1\) 的合法表示。
+因此
+\[
+Z(\mathrm{Val}(x^{(m)}))_m=0,\qquad
+Z(\mathrm{Val}(y^{(m)}))_m=1.
+\]
+
+\par\noindent
+\textbf{(3) 下界推出。}
+若 \(rt<m-1\)，则由 (1) 得 \((\Phi^t(\cdot))_m\) 不可能依赖坐标 \(1\) 的输入，从而
+\(
+\Phi^t(x^{(m)})_m=\Phi^t(y^{(m)})_m
+\)，
+这与 (2) 中规范化输出在第 \(m\) 位必须不同相矛盾。
+故 \(rt\ge m-1\)，即 \(t\ge \lceil (m-1)/r\rceil\)。证毕。
+\end{proof}
+

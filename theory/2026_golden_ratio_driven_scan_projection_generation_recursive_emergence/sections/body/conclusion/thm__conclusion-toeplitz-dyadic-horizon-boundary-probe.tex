@@ -1,0 +1,223 @@
+\begin{theorem}[有界实现类的 dyadic 视界完备性]\label{thm:conclusion-toeplitz-dyadic-horizon-completeness}
+设 \(\mathcal C_D\) 为一族 Carath\'eodory 候选函数，且其最小实现维数统一满足
+\[
+\operatorname{mdeg}(C)\le D
+\qquad (C\in \mathcal C_D).
+\]
+对
+\[
+C(w)=c_0+2\sum_{n\ge 1}c_n w^n
+\]
+记
+\[
+T_N:=(c_{j-k})_{0\le j,k\le N},
+\qquad
+K_D:=\left\lceil \log_2(2D)\right\rceil.
+\]
+则成立严格等价
+\[
+\Bigl(T_{2^k}\succeq 0 \ \text{for all } 0\le k\le K_D\Bigr)
+\iff
+\Bigl(T_N\succeq 0 \ \text{for all } N\ge 0\Bigr).
+\]
+更强地，若记
+\[
+N_\bullet:=2^{K_D},
+\]
+则上式进一步等价于单一 dyadic 视界条件
+\[
+T_{N_\bullet}\succeq 0.
+\]
+\end{theorem}
+
+\begin{proof}
+由推论 \ref{cor:xi-oracle-collapse-single-dyadic-truncation}，在统一实现维数上界 \(\operatorname{mdeg}(C)\le D\) 的制度下，取
+\[
+N_\bullet=2^{\lceil \log_2(2D)\rceil},
+\]
+便有严格等价
+\[
+T_{N_\bullet}\succeq 0
+\iff
+T_N\succeq 0 \qquad (\forall N\ge 0).
+\]
+于是若
+\[
+T_{2^k}\succeq 0 \qquad (0\le k\le K_D),
+\]
+则其中尤其包含 \(T_{N_\bullet}\succeq 0\)，故推出全层级 Toeplitz--PSD。反向方向平凡，因为全层级半正定必然蕴含所有 dyadic 主子矩阵半正定。证毕。
+\end{proof}
+
+\begin{corollary}[可行性与可辨识性的视界分裂]\label{cor:conclusion-toeplitz-feasibility-identification-horizon-splitting}
+在定理 \ref{thm:conclusion-toeplitz-dyadic-horizon-completeness} 的设定下，若再处于一般位置，则存在严格的信息尺度分裂：
+\begin{enumerate}
+  \item \textbf{可行性核验}仅需
+  \[
+  K_D+1
+  =
+  \left\lceil \log_2(2D)\right\rceil+1
+  =
+  O(\log D)
+  \]
+  个 dyadic 视界层；
+  \item \textbf{谱表示唯一辨识}却仍需长度恰为
+  \[
+  2D
+  \]
+  的连续样本前缀，而任意长度 \(\le 2D-1\) 的前缀都不能保证唯一恢复。
+\end{enumerate}
+因此，Toeplitz--PSD 的有界实现核验与一般位置下的谱表示唯一恢复，并不共享同一视界尺度。
+\end{corollary}
+
+\begin{proof}
+第一条即定理 \ref{thm:conclusion-toeplitz-dyadic-horizon-completeness}。第二条由定理 \ref{thm:conclusion-visible-joint-horizon-sharp-2d} 及其证明中的重构极小性直接给出：长度 \(2D\) 的连续样本前缀足以唯一恢复谱表示，而任意长度不超过 \(2D-1\) 的前缀都存在非唯一性见证。证毕。
+\end{proof}
+
+\begin{theorem}[纤维内 NP 完备语义强制最小实现度指数爆炸]\label{thm:conclusion-toeplitz-np-compilation-forces-exponential-realization-degree}
+假定猜想 \ref{conj:xi-toeplitz-psd-horizon-block-foldsat} 成立，并保留其中的最小否证视界指数下界
+\[
+N^\ast(x)\ge \exp(\Omega(n)),
+\]
+其中 \(n\) 为实例规模。若 \(D(n)\) 表示该编译对象在规模 \(n\) 上的最小实现维数统一上界，则必有
+\[
+D(n)\ge \frac12 \exp(\Omega(n)).
+\]
+\end{theorem}
+
+\begin{proof}
+若在规模 \(n\) 上所有编译对象都满足最小实现维数 \(\le D(n)\)，则由推论 \ref{cor:xi-oracle-collapse-single-dyadic-truncation} 可知，其全局 Toeplitz--PSD 真值已由单一截断阶
+\[
+N_\bullet(n):=2^{\lceil \log_2(2D(n))\rceil}
+\]
+完全决定，特别地
+\[
+N_\bullet(n)\le 4D(n).
+\]
+于是对任一否证实例 \(x\notin \mathrm{Block\text{-}FoldSAT}\)，其最小否证视界满足
+\[
+N^\ast(x)\le N_\bullet(n)\le 4D(n).
+\]
+与猜想 \ref{conj:xi-toeplitz-psd-horizon-block-foldsat} 的指数下界合并，即得
+\[
+4D(n)\ge \exp(\Omega(n)),
+\]
+亦即
+\[
+D(n)\ge \frac12 \exp(\Omega(n))
+\]
+（吸收常数因子到 \(\Omega(n)\) 中即可）。证毕。
+\end{proof}
+
+\begin{theorem}[端点原子与 Toeplitz 可行性的联合有限核验]\label{thm:conclusion-toeplitz-endpoint-atom-dyadic-joint-verification}
+设 \(\mathcal C_D\) 如定理 \ref{thm:conclusion-toeplitz-dyadic-horizon-completeness}，并对某一对象假设其 Herglotz 测度 \(\mu\) 满足
+\[
+\operatorname{supp}\mu\subseteq \{-1\}\cup K,
+\qquad
+K\subset \TT\setminus \{-1\}
+\]
+其中 \(K\) 为闭集。定义
+\[
+q(K):=\sup_{\xi\in K}\left|\frac{1-\xi}{2}\right|\in(0,1),
+\]
+以及端点热核探针
+\[
+a_N:=4^{-N}(b^{(N)})^\ast T_N b^{(N)},
+\qquad
+b_k^{(N)}:=(-1)^k\binom{N}{k}.
+\]
+对任意精度 \(\varepsilon\in(0,1)\)，定义
+\[
+N_\varepsilon:=
+\left\lceil \frac{\log(1/\varepsilon)}{2|\log q(K)|}\right\rceil,
+\qquad
+K(D,\varepsilon):=
+\left\lceil
+\log_2 \max\{2D,N_\varepsilon\}
+\right\rceil .
+\]
+则只要核验 dyadic 层
+\[
+T_{2^k}\succeq0
+\qquad (0\le k\le K(D,\varepsilon)),
+\]
+并同时计算单一探针值
+\[
+a_{2^{K(D,\varepsilon)}} ,
+\]
+便可同时保证：
+\begin{enumerate}
+  \item \(T_N\succeq0\) 对全部 \(N\ge0\) 成立；
+  \item 端点原子质量满足
+  \[
+  0\le a_{2^{K(D,\varepsilon)}}-\mu(\{-1\})\le \varepsilon.
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+记
+\[
+N_\bullet:=2^{K(D,\varepsilon)}.
+\]
+由定义，\(N_\bullet\ge 2D\)。若
+\[
+T_{2^k}\succeq 0
+\qquad (0\le k\le K(D,\varepsilon)),
+\]
+则尤其有 \(T_{N_\bullet}\succeq 0\)。由定理 \ref{thm:conclusion-toeplitz-dyadic-horizon-completeness}，立即推出
+\[
+T_N\succeq 0
+\qquad (\forall N\ge 0).
+\]
+
+另一方面，由推论 \ref{cor:xi-endpoint-heat-probe-monotone-limit-gap}，
+\[
+0\le a_N-\mu(\{-1\})\le q(K)^{2N}
+\qquad (N\ge 0).
+\]
+当 \(N\ge N_\varepsilon\) 时，右端不超过 \(\varepsilon\)。而由构造 \(N_\bullet\ge N_\varepsilon\)，故
+\[
+0\le a_{N_\bullet}-\mu(\{-1\})\le \varepsilon.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[核验层数、最大视界与精确重构长度的三重分裂]\label{cor:conclusion-toeplitz-three-way-complexity-splitting}
+在定理 \ref{thm:conclusion-toeplitz-endpoint-atom-dyadic-joint-verification} 的有界实现--端点谱隙切片上，存在三种彼此不可混同的复杂度尺度：
+\begin{enumerate}
+  \item \textbf{核验层数}
+  \[
+  K(D,\varepsilon)+1
+  =
+  O\bigl(\log D+\log\log(1/\varepsilon)\bigr);
+  \]
+  \item \textbf{最大被审视的 Toeplitz 视界}
+  \[
+  2^{K(D,\varepsilon)}
+  =
+  O\bigl(\max\{D,\log(1/\varepsilon)\}\bigr);
+  \]
+  \item \textbf{精确谱重构所需的连续前缀长度}
+  \[
+  2D,
+  \]
+  且长度 \(2D-1\) 一般不足以唯一恢复。
+\end{enumerate}
+因此，“需要检查多少层”、“需要看到多大阶”与“是否已足以精确重构谱表示”是三条彼此正交的复杂度轴。
+\end{corollary}
+
+\begin{proof}
+第一、二条由定理 \ref{thm:conclusion-toeplitz-endpoint-atom-dyadic-joint-verification} 中
+\[
+K(D,\varepsilon)=
+\left\lceil
+\log_2 \max\{2D,N_\varepsilon\}
+\right\rceil
+\]
+及
+\[
+N_\varepsilon=
+\left\lceil \frac{\log(1/\varepsilon)}{2|\log q(K)|}\right\rceil
+\]
+直接得到，其中 \(q(K)\in(0,1)\) 在固定谱隙切片上为常数。第三条由推论 \ref{cor:conclusion-toeplitz-feasibility-identification-horizon-splitting} 给出。证毕。
+\end{proof}

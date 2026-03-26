@@ -1,0 +1,298 @@
+% Entropy gap suppression and Hankel collapse bounds.
+
+\begin{theorem}[熵缺口对非零谱指纹的指数抑制]\label{thm:xi-entropy-gap-exponential-suppression-nonzero-fingerprint}
+沿用 \eqref{eq:xi-comoving-scan-fourier} 的有限缺陷口径，并取采样步长 \(\Delta=1\)，令
+\(
+u_n:=\widehat H(n)
+\)
+为离散谱指纹序列。
+记整数缺陷指数 \(\kappa_{\mathrm{ind}}:=\sum_{j=1}^{\kappa}m_j\) 与缺陷熵 \(S_{\mathrm{def}}\)（\eqref{eq:xi-defect-entropy-closed-form}），并定义熵缺口
+\[
+\kappa_{\mathrm{ind}}-S_{\mathrm{def}}
+=\sum_{j=1}^{\kappa}\frac{m_j}{1+\delta_j}
+\qquad\text{（见 \eqref{eq:xi-defect-entropy-index-decomposition}）}.
+\]
+则对每个整数 \(n\ge 1\) 成立显式上界
+\[
+|u_n|
+\ \le\
+4\pi\,e^{-n}\,(\kappa_{\mathrm{ind}}-S_{\mathrm{def}}).
+\]
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:xi-comoving-scan-fourier}（取 \(\Delta=1\)）可写
+\[
+u_n
+=4\pi\sum_{j=1}^{\kappa}m_j\,\frac{\delta_j}{1+\delta_j}\,e^{-(1+\delta_j)n}\,e^{-\mathrm{i}\gamma_j n}.
+\]
+取模并分离指数因子得
+\[
+|u_n|
+\le
+4\pi\,e^{-n}\sum_{j=1}^{\kappa}m_j\,\frac{\delta_j}{1+\delta_j}\,(e^{-\delta_j})^{n}.
+\]
+对任意 \(\delta>0\) 有 \(e^\delta\ge 1+\delta\)，从而 \(e^{-\delta}\le (1+\delta)^{-1}\)；
+于是对 \(n\ge 1\),
+\(
+(e^{-\delta_j})^{n}\le (1+\delta_j)^{-n}\le (1+\delta_j)^{-1}
+\)。
+代回并用 \(\frac{\delta_j}{1+\delta_j}\le 1\) 得
+\[
+|u_n|
+\le
+4\pi\,e^{-n}\sum_{j=1}^{\kappa}m_j\,\frac{1}{1+\delta_j}
+=
+4\pi\,e^{-n}\,(\kappa_{\mathrm{ind}}-S_{\mathrm{def}}),
+\]
+其中最后一步使用 \eqref{eq:xi-defect-entropy-index-decomposition}。证毕。
+\end{proof}
+
+\begin{proposition}[非零谐波的熵乘积锐化界]\label{prop:xi-nonzero-harmonic-entropy-gap-product-sharp}
+在定理 \ref{thm:xi-entropy-gap-exponential-suppression-nonzero-fingerprint} 的设定下，令
+\[
+w_j:=\frac{\delta_j}{1+\delta_j}\in(0,1),
+\qquad
+S_{\mathrm{def}}=\sum_{j=1}^{\kappa}m_j w_j,
+\qquad
+\kappa_{\mathrm{ind}}-S_{\mathrm{def}}=\sum_{j=1}^{\kappa}m_j(1-w_j).
+\]
+则对每个整数 \(n\ge 1\) 成立统一上界
+\[
+|u_n|
+\ \le\
+4\pi\,e^{-n}\,\frac{S_{\mathrm{def}}(\kappa_{\mathrm{ind}}-S_{\mathrm{def}})}{\kappa_{\mathrm{ind}}}.
+\]
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:xi-comoving-scan-fourier}（取 \(\Delta=1\)）并引入 \(w_j=\delta_j/(1+\delta_j)\) 得
+\[
+u_n
+=4\pi\,e^{-n}\sum_{j=1}^{\kappa}m_j\,w_j\,e^{-\delta_j n}\,e^{-\mathrm{i}\gamma_j n}.
+\]
+由 \(e^\delta\ge 1+\delta\) 推出 \(e^{-\delta}\le (1+\delta)^{-1}=1-w\)，从而对 \(n\ge 1\) 有
+\(
+e^{-\delta_j n}\le (1-w_j)^n\le (1-w_j)
+\)。
+因此
+\[
+|u_n|
+\le
+4\pi\,e^{-n}\sum_{j=1}^{\kappa}m_j\,w_j(1-w_j)
+=
+4\pi\,e^{-n}\Bigl(S_{\mathrm{def}}-\sum_{j=1}^{\kappa}m_j w_j^2\Bigr).
+\]
+将 \((w_j)\) 按重数展开为长度 \(\kappa_{\mathrm{ind}}\) 的序列并应用 Cauchy--Schwarz 不等式，
+\[
+\sum_{j=1}^{\kappa}m_j w_j^2
+\ \ge\
+\frac{\bigl(\sum_{j=1}^{\kappa}m_j w_j\bigr)^2}{\sum_{j=1}^{\kappa}m_j}
+=\frac{S_{\mathrm{def}}^2}{\kappa_{\mathrm{ind}}}.
+\]
+代回即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[两点采样反演的熵缺口下界]\label{cor:xi-entropy-gap-lower-bound-from-two-samples}
+在命题 \ref{prop:xi-nonzero-harmonic-entropy-gap-product-sharp} 的设定下，若 \(u_0=4\pi S_{\mathrm{def}}\)，则对每个整数 \(n\ge 1\) 有
+\[
+\kappa_{\mathrm{ind}}-S_{\mathrm{def}}
+\ \ge\
+\kappa_{\mathrm{ind}}\,e^{n}\,\frac{|u_n|}{|u_0|}.
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:xi-nonzero-harmonic-entropy-gap-product-sharp} 得
+\[
+|u_n|
+\le
+4\pi\,e^{-n}\,\frac{S_{\mathrm{def}}(\kappa_{\mathrm{ind}}-S_{\mathrm{def}})}{\kappa_{\mathrm{ind}}}.
+\]
+结合 \(u_0=4\pi S_{\mathrm{def}}\) 并整理即得。证毕。
+\end{proof}
+
+\begin{proposition}[第一谐波的方差惩罚律]\label{prop:xi-first-harmonic-variance-penalty}
+在命题 \ref{prop:xi-nonzero-harmonic-entropy-gap-product-sharp} 的设定下，将 \((w_j)\) 按重数展开为长度 \(\kappa_{\mathrm{ind}}\) 的序列 \((w_\ell)_{\ell=1}^{\kappa_{\mathrm{ind}}}\subset(0,1)\) 并记均值
+\[
+\bar w:=\frac{1}{\kappa_{\mathrm{ind}}}\sum_{\ell=1}^{\kappa_{\mathrm{ind}}}w_\ell=\frac{S_{\mathrm{def}}}{\kappa_{\mathrm{ind}}},
+\qquad
+\Var(w):=\frac{1}{\kappa_{\mathrm{ind}}}\sum_{\ell=1}^{\kappa_{\mathrm{ind}}}(w_\ell-\bar w)^2.
+\]
+则第一谐波满足显式上界
+\[
+\frac{e}{4\pi}\,|u_1|
+\ \le\
+\frac{S_{\mathrm{def}}(\kappa_{\mathrm{ind}}-S_{\mathrm{def}})}{\kappa_{\mathrm{ind}}}
+\ -\
+\kappa_{\mathrm{ind}}\,\Var(w).
+\]
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:xi-comoving-scan-fourier}（取 \(\Delta=1\) 且 \(n=1\)）并沿用 \(e^{-\delta}\le (1+\delta)^{-1}=1-w\) 得
+\[
+|u_1|
+\le
+4\pi\,e^{-1}\sum_{\ell=1}^{\kappa_{\mathrm{ind}}}w_\ell(1-w_\ell)
+=
+4\pi\,e^{-1}\Bigl(\sum_{\ell=1}^{\kappa_{\mathrm{ind}}}w_\ell-\sum_{\ell=1}^{\kappa_{\mathrm{ind}}}w_\ell^2\Bigr).
+\]
+注意
+\[
+\sum_{\ell=1}^{\kappa_{\mathrm{ind}}}w_\ell^2
+=
+\kappa_{\mathrm{ind}}\Var(w)+\kappa_{\mathrm{ind}}\bar w^2
+=
+\kappa_{\mathrm{ind}}\Var(w)+\frac{S_{\mathrm{def}}^2}{\kappa_{\mathrm{ind}}},
+\]
+代回并整理即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[熵缺口驱动的 Hankel 主子式塌缩上界]\label{prop:xi-entropy-gap-hankel-determinant-collapse-upper-bound}
+令 \(\mathsf H_{\kappa-1}:=(u_{p+q})_{0\le p,q\le \kappa-1}\) 为 Toeplitz--扫描 Hankel 框架中的 Hankel 指纹块，并定义
+\[
+B:=\sup_{n\ge 1}|u_n|.
+\]
+则行列式满足组合学型上界
+\[
+|\det(\mathsf H_{\kappa-1})|
+\ \le\
+(\kappa-1)!\,|u_0|\,B^{\kappa-1}+\bigl(\kappa!-(\kappa-1)!\bigr)\,B^{\kappa}
+\ \le\
+\kappa!\bigl(|u_0|\,B^{\kappa-1}+B^{\kappa}\bigr).
+\]
+特别地，在定理 \ref{thm:xi-entropy-gap-exponential-suppression-nonzero-fingerprint} 的设定下，若 \(S_{\mathrm{def}}\) 固定而 \(\kappa_{\mathrm{ind}}-S_{\mathrm{def}}\to 0\)，则存在仅依赖 \(\kappa\) 的常数使
+\[
+|\det(\mathsf H_{\kappa-1})|\ \ll_{\kappa}\ (\kappa_{\mathrm{ind}}-S_{\mathrm{def}})^{\kappa-1}.
+\]
+\end{proposition}
+\begin{proof}
+以排列展开式写
+\[
+\det(\mathsf H_{\kappa-1})
+=\sum_{\pi\in S_{\kappa}}\mathrm{sgn}(\pi)\prod_{p=0}^{\kappa-1}u_{p+\pi(p)}.
+\]
+注意 \(p+\pi(p)=0\) 仅可能在 \(p=0\) 且 \(\pi(0)=0\) 时发生，因此每一单项式至多含一个因子 \(u_0\)。
+若 \(\pi(0)=0\)，其余因子指标皆满足 \(p+\pi(p)\ge 1\)，故
+\[
+\Bigl|\prod_{p=0}^{\kappa-1}u_{p+\pi(p)}\Bigr|
+\le
+|u_0|\,B^{\kappa-1}.
+\]
+此类排列恰有 \((\kappa-1)!\) 个。
+若 \(\pi(0)\neq 0\)，则全部指标 \(\ge 1\)，从而
+\[
+\Bigl|\prod_{p=0}^{\kappa-1}u_{p+\pi(p)}\Bigr|
+\le
+B^{\kappa},
+\]
+此类排列数为 \(\kappa!-(\kappa-1)!\)。
+求和得第一条不等式，第二条由粗略放大系数得到。
+\par
+最后一条由定理 \ref{thm:xi-entropy-gap-exponential-suppression-nonzero-fingerprint} 给出 \(B\ll (\kappa_{\mathrm{ind}}-S_{\mathrm{def}})\)，并结合 \(u_0=4\pi S_{\mathrm{def}}\)（命题 \ref{prop:xi-defect-entropy-closed-form-invariant}）代入即得。证毕。
+\end{proof}
+
+\begin{theorem}[Hankel 主块的一尖峰奇异谱分离]\label{thm:xi-hankel-spike-singular-spectrum-separation}
+令 \(\mathsf H_{\kappa-1}:=(u_{p+q})_{0\le p,q\le \kappa-1}\)，并记 \(B:=\sup_{n\ge 1}|u_n|\)。
+将 \(\mathsf H_{\kappa-1}\) 的奇异值按降序记为 \(\sigma_1\ge\cdots\ge\sigma_\kappa\)。
+则
+\[
+\sigma_1(\mathsf H_{\kappa-1})\ \ge\ |u_0|-\kappa B,
+\qquad
+\sigma_j(\mathsf H_{\kappa-1})\ \le\ \kappa B\quad(2\le j\le \kappa).
+\]
+当 \(\kappa B<|u_0|\) 时，第一奇异值与其余奇异值存在显式分离。
+\end{theorem}
+\begin{proof}
+记标准基向量 \(e_0:=(1,0,\dots,0)^{\mathsf T}\in\RR^{\kappa}\)，并分解
+\[
+\mathsf H_{\kappa-1}=u_0\,e_0e_0^{\mathsf T}+E,
+\qquad
+E_{pq}:=\begin{cases}
+0,&p=q=0,\\
+u_{p+q},&p+q\ge 1.
+\end{cases}
+\]
+由定义 \(|E_{pq}|\le B\)，故
+\[
+\|E\|_{\mathrm{op}}
+\le
+\|E\|_{\mathrm{F}}
+\le
+\sqrt{\kappa^2-1}\,B
+\le
+\kappa B.
+\]
+秩一矩阵 \(u_0e_0e_0^{\mathsf T}\) 的奇异值为 \((|u_0|,0,\dots,0)\)。
+由 Weyl 奇异值扰动不等式得
+\[
+\sigma_1(\mathsf H_{\kappa-1})\ge |u_0|-\|E\|_{\mathrm{op}}\ge |u_0|-\kappa B,
+\qquad
+\sigma_j(\mathsf H_{\kappa-1})\le \|E\|_{\mathrm{op}}\le \kappa B\ (j\ge 2).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[负块谱的单尖峰与浅负谱上界]\label{cor:xi-negative-block-spectrum-spike-and-shallow-bound}
+令 \(G_{\kappa-1}:=\mathsf H_{\kappa-1}^{\ast}\mathsf H_{\kappa-1}\succeq 0\)。
+则 \(G_{\kappa-1}\) 的特征值满足
+\[
+\lambda_{\max}(G_{\kappa-1})\ \ge\ (|u_0|-\kappa B)^2,
+\qquad
+\lambda_j(G_{\kappa-1})\ \le\ (\kappa B)^2\quad(2\le j\le \kappa).
+\]
+因此负块 \(-G_{\kappa-1}\) 的最深负特征值不大于 \(-(|u_0|-\kappa B)^2\)，其余负特征值皆不小于 \(-(\kappa B)^2\)。
+\end{corollary}
+\begin{proof}
+由定义 \(\lambda_j(G_{\kappa-1})=\sigma_j(\mathsf H_{\kappa-1})^2\)，并应用定理 \ref{thm:xi-hankel-spike-singular-spectrum-separation} 即得。证毕。
+\end{proof}
+
+\begin{proposition}[浅负谱方向的秩一可消去半径]\label{prop:xi-rankone-flip-radius-shallow-negative}
+在推论 \ref{cor:xi-toeplitz-scan-hankel-congruence-decomposition} 的合同正规形中，负方向由 \(-G_{\kappa-1}\) 给出。
+记 \(\lambda_{\min}(G_{\kappa-1})\) 为 \(G_{\kappa-1}\) 的最小特征值，并取其单位特征向量 \(v\)。
+则存在 Hermitian 秩一扰动
+\(
+\Delta:=\lambda_{\min}(G_{\kappa-1})\,vv^{\ast}
+\)
+使得相应负特征值精确平移至 \(0\)，从而负惯性至少下降 \(1\)，并且
+\[
+\|\Delta\|_{\mathrm{op}}=\lambda_{\min}(G_{\kappa-1})
+=\sigma_\kappa(\mathsf H_{\kappa-1})^2
+\le
+(\kappa B)^2.
+\]
+若进一步使用 \(B\le 4\pi e^{-1}\,S_{\mathrm{def}}(\kappa_{\mathrm{ind}}-S_{\mathrm{def}})/\kappa_{\mathrm{ind}}\)（由命题 \ref{prop:xi-nonzero-harmonic-entropy-gap-product-sharp} 在 \(n=1\) 的特例推出），则得到由 \((S_{\mathrm{def}},\kappa_{\mathrm{ind}},\kappa)\) 参数化的显式上界。
+\end{proposition}
+\begin{proof}
+对 Hermitian 矩阵的谱分解，沿最浅负方向的单位特征向量 \(v\) 施加秩一扰动 \(\Delta=\lambda_{\min}(G_{\kappa-1})vv^{\ast}\)，可将 \(-\lambda_{\min}(G_{\kappa-1})\) 精确推至 \(0\)，其余特征值保持不变，故负惯性至少下降 \(1\)。
+范数恒等式 \(\|\Delta\|_{\mathrm{op}}=\lambda_{\min}(G_{\kappa-1})\) 由秩一算子谱半径立得。
+最后由 \(\lambda_{\min}(G_{\kappa-1})=\sigma_\kappa(\mathsf H_{\kappa-1})^2\) 与定理 \ref{thm:xi-hankel-spike-singular-spectrum-separation} 的 \(\sigma_\kappa\le \kappa B\) 得到 \(\|\Delta\|_{\mathrm{op}}\le (\kappa B)^2\)。
+若代入命题 \ref{prop:xi-nonzero-harmonic-entropy-gap-product-sharp}（\(n=1\)）即得显式化版本。证毕。
+\end{proof}
+
+\begin{proposition}[熵缺口控制节点模长的加权几何平均]\label{prop:xi-entropy-gap-controls-geometric-mean-radius}
+在 \eqref{eq:xi-comoving-scan-fourier} 的有限缺陷口径下取 \(\Delta=1\)，并令
+\[
+\rho_j:=e^{-(1+\delta_j)}\in(0,e^{-1})\qquad(1\le j\le \kappa).
+\]
+则按重数加权的几何平均满足显式上界
+\[
+\Bigl(\prod_{j=1}^{\kappa}\rho_j^{m_j}\Bigr)^{1/\kappa_{\mathrm{ind}}}
+\ \le\
+e^{-1}\cdot\frac{\kappa_{\mathrm{ind}}-S_{\mathrm{def}}}{\kappa_{\mathrm{ind}}}.
+\]
+\end{proposition}
+\begin{proof}
+由 \(e^{\delta}\ge 1+\delta\) 得 \(e^{-\delta}\le (1+\delta)^{-1}\)，从而
+\(
+\rho_j=e^{-1}e^{-\delta_j}\le e^{-1}(1+\delta_j)^{-1}
+\)。
+对按重数展开后的 \(\kappa_{\mathrm{ind}}\) 个因子应用 AM--GM 不等式，
+\[
+\Bigl(\prod_{j=1}^{\kappa}(1+\delta_j)^{-m_j}\Bigr)^{1/\kappa_{\mathrm{ind}}}
+\le
+\frac{1}{\kappa_{\mathrm{ind}}}\sum_{j=1}^{\kappa}\frac{m_j}{1+\delta_j}
+=\frac{\kappa_{\mathrm{ind}}-S_{\mathrm{def}}}{\kappa_{\mathrm{ind}}},
+\]
+其中最后一步使用 \eqref{eq:xi-defect-entropy-index-decomposition}。
+合并即得结论。证毕。
+\end{proof}
+
+\endinput

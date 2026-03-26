@@ -1,0 +1,400 @@
+\subsubsection{共动前缀量化下的端点分辨率—位复杂度定律}\label{subsubsec:xi-comoving-prefix-endpoint-budget-laws}
+在端点分辨率—位复杂度审计框架中，记离临界线偏移
+\[
+\delta(\rho):=\frac12-\beta,\qquad
+\rho=\beta+\mathrm{i}\gamma,\qquad
+0<\delta(\rho)\le \frac12.
+\]
+沿用 Cayley 图表的盘内像记号 \(w_{\rho,x_0}\)，并定义端点可检测余量
+\begin{equation}\label{eq:xi-comoving-prefix-endpoint-margin}
+h_{x_0}(\rho)
+:=
+1-|w_{\rho,x_0}|^2
+=
+\frac{4\delta(\rho)}{(\gamma-x_0)^2+(1+\delta(\rho))^2}.
+\end{equation}
+给定端点分辨率预算 \(p\in\NN\)，采用阈值语义
+\begin{equation}\label{eq:xi-comoving-prefix-detection-threshold}
+h_{x_0}(\rho)\ge 2^{-p},
+\end{equation}
+其中左式成立表示该零点在预算 \(p\) 下可被稳定区分，反之不可被统一区分。
+
+\begin{proposition}[半径预算盲区与二次红移尺度：高高度离切片偏移的不可见条件]\label{prop:xi-radius-budget-blind-zone-quadratic-redshift}
+沿用 \eqref{eq:xi-comoving-prefix-endpoint-margin} 的记号，令
+\[
+r_{\rho,x_0}:=|w_{\rho,x_0}|\in(0,1).
+\]
+则有恒等式
+\[
+1-r_{\rho,x_0}
+=\frac{1-r_{\rho,x_0}^2}{1+r_{\rho,x_0}}
+=\frac{h_{x_0}(\rho)}{1+r_{\rho,x_0}},
+\]
+从而对任意 \(\rho\) 都成立夹逼
+\begin{equation}\label{eq:xi-radius-gap-vs-margin}
+\boxed{\;
+\frac12\,h_{x_0}(\rho)\ \le\ 1-r_{\rho,x_0}\ \le\ h_{x_0}(\rho).\;}
+\end{equation}
+特别地，在无共动修正（取 \(x_0=0\)）时，结合 \eqref{eq:xi-comoving-prefix-endpoint-margin} 得到显式二次尺度
+\begin{equation}\label{eq:xi-radius-gap-quadratic-redshift-explicit}
+\boxed{\;
+\frac{2\delta(\rho)}{\gamma^2+(1+\delta(\rho))^2}
+\ \le\ 1-r_{\rho,0}\ \le\
+\frac{4\delta(\rho)}{\gamma^2+(1+\delta(\rho))^2}\;}
+\end{equation}
+并且当 \(|\gamma|\to\infty\)、\(\delta(\rho)\) 有界时，\(1-r_{\rho,0}\asymp \delta(\rho)/\gamma^2\)。
+\par
+令 \(\varrho_{\max}\in(0,1)\) 为半径采样的最大预算，并记 \(\Delta:=1-\varrho_{\max}\)。
+若
+\[
+\varrho_{\max}\le r_{\rho,x_0}\qquad(\text{等价于 }\Delta\ge 1-r_{\rho,x_0}),
+\]
+则任何仅访问半径区间 \((0,\varrho_{\max}]\) 的审计（例如仅依赖 Jensen 缺陷剖面 \(\varrho\mapsto D_\zeta(\varrho)\) 在该区间的取值，见 \S\ref{subsubsec:xi-addressability-resolution-law}）都无法给出排除该零点的正缺陷见证：在该可见数据上，包含该零点与不包含该零点的候选在审计意义下不可区分。
+\end{proposition}
+\begin{proof}
+第一式由 \(1-r^2=(1-r)(1+r)\) 恒等变形得到；\eqref{eq:xi-radius-gap-vs-margin} 由 \(1<1+r_{\rho,x_0}<2\) 立得。
+取 \(x_0=0\) 并代入 \eqref{eq:xi-comoving-prefix-endpoint-margin} 得 \eqref{eq:xi-radius-gap-quadratic-redshift-explicit}。
+\par
+对最后一段，若 \(\varrho_{\max}\le r_{\rho,x_0}\)，则半径 \(\varrho\le\varrho_{\max}\) 的圆周/圆盘采样不包含点 \(w_{\rho,x_0}\)。
+因此任何以“是否穿过 \(w_{\rho,x_0}\)”为必要触发条件的缺陷读出（例如 Jensen 求和式中“仅对 \(|a_k|<\varrho\)”求和的结构）在该预算下不会改变取值，从而无法产生可离线复核的排除见证。
+\end{proof}
+
+\begin{corollary}[固定预算的不完备性：常数端点厚度与常数 dyadic 深度无法全高度排除离线偏移]\label{cor:xi-fixed-budget-incomplete-offcritical-exclusion}
+固定常数半径预算 \(\Delta\in(0,1)\) 与常数 dyadic 深度 \(m\ge 1\)（相位地址 \(A_m\)，见 \S\ref{subsubsec:xi-phase-prefix-resolution-law}）。
+则存在 \(T_0\) 使得对所有 \(T\ge T_0\)，在高度尺度 \(|\gamma|\asymp T\) 上必发生如下两类失败之一：
+\begin{enumerate}
+  \item \textbf{半径端盲区：}对任意满足
+  \(
+  \delta(\rho)\ \lesssim\ \Delta\,T^2
+  \)
+  的离切片偏移，均有 \(\varrho_{\max}=1-\Delta\le r_{\rho,0}\)，从而该偏移落入半径预算盲区（命题 \ref{prop:xi-radius-budget-blind-zone-quadratic-redshift}）；
+  \item \textbf{地址端碰撞强制：}若 \(2^m\not\gtrsim T^2\log T\)，则高度带 \((T,2T]\) 内相位地址必发生碰撞，无法实现单射寻址（定理 \ref{thm:xi-phase-prefix-collision-lower-bound}）。
+\end{enumerate}
+因此，在保持 \((\Delta,m)\) 为常数的制度中，不存在对所有高度一致有效的“离线排除离切片偏移”机制；其可审计能力必然局限于有限高度窗。
+\end{corollary}
+\begin{proof}
+第一点由 \eqref{eq:xi-radius-gap-quadratic-redshift-explicit} 与 \(\Delta\ge 1-r_{\rho,0}\iff \varrho_{\max}\le r_{\rho,0}\) 直接推出。
+第二点为定理 \ref{thm:xi-phase-prefix-collision-lower-bound} 的直接应用。
+当 \(m\) 固定而 \(T\to\infty\) 时，\(2^m\not\gtrsim T^2\log T\) 必最终成立，从而地址端碰撞在结构上不可避免；与此同时，半径端盲区刻画给出一族在给定 \(\Delta\) 下不可见的偏移尺度。证毕。
+\end{proof}
+
+\begin{theorem}[量化共动前缀下的端点屏障削减律]\label{thm:xi-comoving-prefix-endpoint-barrier-law}
+固定 \(\delta_0\in(0,\tfrac12]\)、\(T\ge 1\)，并考虑候选族
+\[
+\mathcal{A}(T,\delta_0)
+:=
+\left\{
+\rho=\beta+\mathrm{i}\gamma:
+|\gamma|\le T,\ 
+\delta(\rho)\in[\delta_0,\tfrac12]
+\right\}.
+\]
+设制度允许注入 \(B\in\NN\) 比特共动前缀，并以 \([-T,T]\) 的均匀量化中心给出地址 \(\tilde x_0\)，满足
+\[
+|\gamma-\tilde x_0|
+\le
+\eta_B,
+\qquad
+\eta_B:=T\,2^{-B}.
+\]
+则对全体 \(\mathcal{A}(T,\delta_0)\) 的统一覆盖，端点预算的最小实数阈值为
+\begin{equation}\label{eq:xi-comoving-prefix-pmin}
+p_{\min}(T,\delta_0;B)
+:=
+\log_2\!\Biggl(
+\frac{\eta_B^2+(1+\delta_0)^2}{4\delta_0}
+\Biggr),
+\end{equation}
+即
+\[
+p\ge p_{\min}(T,\delta_0;B)
+\]
+为充分条件；且在该均匀量化最坏误差模型下也是必要条件。
+对应的最小整数预算为 \(\lceil p_{\min}(T,\delta_0;B)\rceil\)。
+此外在 \(T^2 2^{-2B}\gg 1\) 的主导区间，
+\begin{equation}\label{eq:xi-comoving-prefix-pmin-asymptotic}
+p_{\min}(T,\delta_0;B)
+=
+2\log_2 T-2B+\log_2\!\Bigl(\frac1{\delta_0}\Bigr)+O(1).
+\end{equation}
+因此每增加 \(1\) 比特共动前缀，端点预算主项削减 \(2\) 比特，直至进入饱和相。
+\end{theorem}
+
+\begin{proof}
+在约束
+\(
+|\gamma-\tilde x_0|\le\eta_B
+\)
+与
+\(
+\delta\in[\delta_0,\tfrac12]
+\)
+下，由 \eqref{eq:xi-comoving-prefix-endpoint-margin} 有
+\[
+h_{\tilde x_0}(\rho)
+\ge
+\frac{4\delta}{\eta_B^2+(1+\delta)^2}.
+\]
+记
+\[
+f(\delta):=\frac{4\delta}{\eta_B^2+(1+\delta)^2},
+\qquad
+\delta\in(0,\tfrac12].
+\]
+直接求导得
+\[
+f'(\delta)
+=
+\frac{4(\eta_B^2+1-\delta^2)}{(\eta_B^2+(1+\delta)^2)^2}
+>0,
+\]
+故 \(f\) 在 \((0,\tfrac12]\) 严格递增，最小值取于 \(\delta=\delta_0\)。从而
+\[
+h_{\tilde x_0}(\rho)
+\ge
+\frac{4\delta_0}{\eta_B^2+(1+\delta_0)^2}.
+\]
+要求 \eqref{eq:xi-comoving-prefix-detection-threshold} 对全体候选成立，等价于
+\[
+2^{-p}
+\le
+\frac{4\delta_0}{\eta_B^2+(1+\delta_0)^2},
+\]
+即
+\[
+p\ge
+\log_2\!\Biggl(
+\frac{\eta_B^2+(1+\delta_0)^2}{4\delta_0}
+\Biggr)=p_{\min},
+\]
+充分性成立。
+
+必要性在“均匀量化 + 最坏误差 \(\eta_B\)”模型下来自边界点构造：存在 \(\gamma\) 落在量化单元边界使
+\(
+|\gamma-\tilde x_0|=\eta_B
+\)；
+再取 \(\delta=\delta_0\)，则
+\[
+h_{\tilde x_0}(\rho)
+=
+\frac{4\delta_0}{\eta_B^2+(1+\delta_0)^2}.
+\]
+若 \(p<p_{\min}\)，则 \(2^{-p}>h_{\tilde x_0}(\rho)\)，该候选在预算 \(p\) 下不可被统一覆盖，必要性得证。
+
+最后由 \(\eta_B^2=T^2 2^{-2B}\) 代入 \eqref{eq:xi-comoving-prefix-pmin}：
+\[
+p_{\min}
+=
+\log_2\!\Bigl(T^2 2^{-2B}\Bigr)
+-\log_2(4\delta_0)
++\log_2\!\Bigl(1+\frac{(1+\delta_0)^2}{T^2 2^{-2B}}\Bigr),
+\]
+在 \(T^2 2^{-2B}\gg 1\) 时最后一项并入 \(O(1)\)，即得 \eqref{eq:xi-comoving-prefix-pmin-asymptotic}。证毕。
+\end{proof}
+
+\begin{corollary}[端点—前缀 Pareto 前沿与总代价折半]\label{cor:xi-comoving-prefix-pareto-half-cost}
+在定理 \ref{thm:xi-comoving-prefix-endpoint-barrier-law} 设定下，定义同权总代价
+\[
+C(B):=B+p_{\min}(T,\delta_0;B).
+\]
+则成立：
+\begin{enumerate}
+  \item 当 \(B\le \log_2 T-O(1)\) 时，
+  \[
+  C(B)
+  =
+  2\log_2 T-B+\log_2\!\Bigl(\frac1{\delta_0}\Bigr)+O(1),
+  \]
+  因而 \(C(B)\) 随 \(B\) 单调下降；
+  \item 当 \(B\ge \log_2 T+O(1)\) 时，
+  \[
+  p_{\min}(T,\delta_0;B)
+  =
+  \log_2\!\Bigl(\frac{(1+\delta_0)^2}{4\delta_0}\Bigr)+o(1),
+  \]
+  端点预算进入高度无关的饱和相。
+\end{enumerate}
+因此最优总代价在过渡区 \(B^\star=\log_2 T+O(1)\) 取得，并满足
+\[
+C_{\min}
+=
+\log_2 T+\log_2\!\Bigl(\frac1{\delta_0}\Bigr)+O(1).
+\]
+相对于固定图表、无共动前缀时的 \(2\log_2 T+\log_2(1/\delta_0)\) 主屏障，总代价主项严格折半。
+\end{corollary}
+
+\begin{proof}
+将 \eqref{eq:xi-comoving-prefix-pmin} 代入 \(C(B)\)：
+\[
+C(B)
+=
+B+\log_2\!\Biggl(
+\frac{T^2 2^{-2B}+(1+\delta_0)^2}{4\delta_0}
+\Biggr).
+\]
+当 \(T^2 2^{-2B}\) 主导时，得
+\[
+C(B)
+=
+2\log_2 T-B+\log_2(1/\delta_0)+O(1),
+\]
+故随 \(B\) 线性下降。  
+当 \((1+\delta_0)^2\) 主导时，\(p_{\min}\) 收敛到常数，总代价主导项来自 \(B\)。二者交替区由
+\(
+T^2 2^{-2B}\asymp 1
+\)
+给出，即 \(B^\star=\log_2 T+O(1)\)。
+将其代回即得 \(C_{\min}\) 主项。证毕。
+\end{proof}
+
+\begin{proposition}[多零点高度簇的 Chebyshev 共动中心律]\label{prop:xi-comoving-prefix-chebyshev-center-law}
+设有限高度簇 \(\Gamma=\{\gamma_j\}_{j=1}^m\subset\RR\)，并记
+\[
+a:=\min\Gamma,\qquad
+b:=\max\Gamma,\qquad
+r:=\frac{b-a}{2}.
+\]
+在只已知 \(\delta_j\in[\delta_0,\tfrac12]\) 的统一审计语义下，定义最坏情形可检测余量
+\[
+\underline H_{\Gamma,\delta_0}(x_0)
+:=
+\inf_{\delta_1,\dots,\delta_m\in[\delta_0,\tfrac12]}
+\ \min_{1\le j\le m}
+\frac{4\delta_j}{(\gamma_j-x_0)^2+(1+\delta_j)^2}.
+\]
+则
+\[
+\max_{x_0\in\RR}\underline H_{\Gamma,\delta_0}(x_0)
+=
+\frac{4\delta_0}{r^2+(1+\delta_0)^2},
+\]
+且最优共动中心唯一为
+\[
+x_0^\star=\frac{a+b}{2}.
+\]
+因此统一端点预算仅由簇半径 \(r\) 决定，而不由 \(\max_j|\gamma_j|\) 决定。
+\end{proposition}
+
+\begin{proof}
+对固定 \(x_0\) 与固定 \(j\)，函数
+\[
+\delta\mapsto \frac{4\delta}{(\gamma_j-x_0)^2+(1+\delta)^2}
+\]
+在 \((0,\tfrac12]\) 上严格递增（同定理 \ref{thm:xi-comoving-prefix-endpoint-barrier-law} 的导数判别），故最坏情形取于 \(\delta_j=\delta_0\)。于是
+\[
+\underline H_{\Gamma,\delta_0}(x_0)
+=
+\min_{1\le j\le m}
+\frac{4\delta_0}{(\gamma_j-x_0)^2+(1+\delta_0)^2}
+=
+\frac{4\delta_0}{\bigl(\max_j|\gamma_j-x_0|\bigr)^2+(1+\delta_0)^2}.
+\]
+故最大化 \(\underline H_{\Gamma,\delta_0}\) 等价于最小化
+\(
+\max_j|\gamma_j-x_0|
+\)。
+实线上该最小化问题的唯一解是区间 \([a,b]\) 的 Chebyshev 中心 \(x_0^\star=(a+b)/2\)，最小值为 \(r\)。代回即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[递归二分共动定位的二次误差衰减]\label{thm:xi-comoving-prefix-recursive-bisection}
+设单个候选零点 \(\rho=\beta+\mathrm{i}\gamma\) 满足 \(\delta(\rho)\in[\delta_0,\tfrac12]\)、\(|\gamma|\le T\)。
+对每一层 \(m\ge 0\)，将区间 \([-T,T]\) 二分为 \(2^m\) 个等长子区间，并取 \(\tilde x_0^{(m)}\) 为包含 \(\gamma\) 的子区间中心，则
+\[
+|\gamma-\tilde x_0^{(m)}|
+\le
+\eta_m,
+\qquad
+\eta_m:=T\,2^{-m}.
+\]
+对应余量满足
+\begin{equation}\label{eq:xi-comoving-prefix-recursive-margin}
+h_{\tilde x_0^{(m)}}(\rho)
+\ge
+\frac{4\delta_0}{T^2 2^{-2m}+(1+\delta_0)^2}.
+\end{equation}
+定义端点阈值预算
+\[
+p_m:=\Bigl\lceil-\log_2 h_{\tilde x_0^{(m)}}(\rho)\Bigr\rceil.
+\]
+则在 \(T^2 2^{-2m}\gg 1\) 的主导区间内，满足
+\[
+p_{m+1}=p_m-2+o(1),
+\]
+即递归深度每增加 \(1\) 层，主导端点预算减少 \(2\) 比特，直至饱和。
+\end{theorem}
+
+\begin{proof}
+由 \eqref{eq:xi-comoving-prefix-endpoint-margin} 与
+\(
+|\gamma-\tilde x_0^{(m)}|\le \eta_m
+\),
+\(
+\delta(\rho)\ge\delta_0
+\)
+直接得到 \eqref{eq:xi-comoving-prefix-recursive-margin}。
+进一步写成
+\[
+-\log_2 h_{\tilde x_0^{(m)}}(\rho)
+\le
+\log_2\!\Bigl(T^2 2^{-2m}+(1+\delta_0)^2\Bigr)
+-\log_2(4\delta_0).
+\]
+在 \(T^2 2^{-2m}\) 主导时，上式主项是 \(2\log_2 T-2m\)。将 \(m\) 替换为 \(m+1\) 可见主项减少 \(2\)，故
+\(
+p_{m+1}=p_m-2+o(1)
+\)
+（取整仅引入有界误差）。证毕。
+\end{proof}
+
+\begin{proposition}[共动前缀速率的相变阈值]\label{prop:xi-comoving-prefix-rate-phase-transition}
+令
+\[
+B(T):=\lfloor r\log_2 T\rfloor,\qquad r\ge 0.
+\]
+在 \(\delta\in[\delta_0,\tfrac12]\)、\(T\to\infty\) 下，覆盖 \(|\gamma|\le T\) 的最小端点预算满足：
+\begin{enumerate}
+  \item 若 \(0\le r<1\)，则
+  \[
+  p_{\min}\bigl(T,\delta_0;B(T)\bigr)
+  =
+  (2-2r)\log_2 T+\log_2\!\Bigl(\frac1{\delta_0}\Bigr)+O(1);
+  \]
+  \item 若 \(r=1\)，则
+  \[
+  p_{\min}\bigl(T,\delta_0;B(T)\bigr)=O(1);
+  \]
+  \item 若 \(r>1\)，则
+  \[
+  p_{\min}\bigl(T,\delta_0;B(T)\bigr)
+  =
+  \log_2\!\Bigl(\frac{(1+\delta_0)^2}{4\delta_0}\Bigr)+o(1).
+  \]
+\end{enumerate}
+因此 \(r=1\) 是严格相变阈值：只有当共动前缀带宽达到 \(\log_2 T\) 同阶，端点主屏障 \(2\log_2 T\) 才由发散相转入有界相。
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:xi-comoving-prefix-endpoint-barrier-law}，
+\[
+p_{\min}(T,\delta_0;B)
+=
+\log_2\!\Biggl(
+\frac{T^2 2^{-2B}+(1+\delta_0)^2}{4\delta_0}
+\Biggr).
+\]
+代入 \(B=B(T)=\lfloor r\log_2T\rfloor\)，记
+\(
+\theta_T:=r\log_2T-\lfloor r\log_2T\rfloor\in[0,1)
+\)，则
+\[
+T^2 2^{-2B(T)}
+=
+T^{2-2r}\,2^{2\theta_T},
+\qquad
+1\le 2^{2\theta_T}<4.
+\]
+若 \(0\le r<1\)，该项发散并主导分母，得到第一式；
+若 \(r=1\)，该项有界且不趋于无穷，故 \(p_{\min}=O(1)\)；
+若 \(r>1\)，该项趋零，极限由 \((1+\delta_0)^2\) 主导，得第三式。证毕。
+\end{proof}
+

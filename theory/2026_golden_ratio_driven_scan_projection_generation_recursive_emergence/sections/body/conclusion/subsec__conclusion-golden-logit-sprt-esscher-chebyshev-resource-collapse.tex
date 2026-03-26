@@ -1,0 +1,324 @@
+\subsection{黄金 logit 晶格、序贯终端符号与 Chebyshev 停时谱的资源塌缩}\label{subsec:conclusion-golden-logit-sprt-esscher-chebyshev-resource-collapse}
+沿用小节 \ref{subsubsec:pom-golden-sequential-martingale-sprt-ldp}、小节 \ref{subsubsec:pom-golden-channel-contraction-sdpi}、小节 \ref{subsubsec:pom-phi-logit-lattice-dynamics} 与小节 \ref{subsubsec:pom-chebyshev-stopping-time-spectral} 的记号。主稿已经给出了黄金互补二元观测下的 \(\varphi\)-logit 后验晶格、对称阈值 SPRT 的错误率与期望样本量闭式、Esscher 去偏桥，以及停时 \(\tau_T\) 的 Chebyshev 概率母函数与有限谱分解。将这些接口并置之后，还可进一步把整个停止实验压缩为一条更尖锐的终端链：完整停止路径的统计信息在推断意义上坍缩为终端符号这一单比特；Esscher 外倾只重标 \((\tau_T,S_T)\)-壳层而不重排壳层内部桥形；时间谱的全部角结构保留为公平 Dirichlet 模态，而偏置只施加统一径向收缩；最后，even 顶端谱缺口与最优互信息收缩常数在同一黄金幂次上完全同一化。
+
+\begin{theorem}[停止实验的终端符号极小充分性]\label{thm:conclusion-golden-sprt-terminal-sign-minimal-sufficiency}
+在二相位模型中令
+\[
+Y_i:=2B_i-1\in\{\pm 1\},
+\qquad
+K_n:=\sum_{i=1}^{n}Y_i,
+\qquad
+\tau_T:=\inf\{n\ge 0:\ |K_n|=T\},
+\]
+并记
+\[
+S_T:=\operatorname{sign}(K_{\tau_T})\in\{\pm 1\},
+\qquad
+\mathsf W_T:=(Y_1,\dots,Y_{\tau_T})
+\]
+为完整停止路径。则关于两点实验 \((\mathbb P_{\theta_+},\mathbb P_{\theta_-})\)，统计量 \(S_T\) 是 \(\mathsf W_T\) 的极小充分统计量。等价地，整个停止实验的似然比完全坍缩为
+\[
+\boxed{\;
+\frac{d\mathbb P_{\theta_+}}{d\mathbb P_{\theta_-}}(\mathsf W_T)
+\;=\;
+\varphi^{T S_T}.
+\;}
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-golden-likelihood-ratio-martingales}，单步似然比满足
+\[
+\frac{\mathbb P_{\theta_+}(Y_i=y_i)}{\mathbb P_{\theta_-}(Y_i=y_i)}=\varphi^{y_i}.
+\]
+故对任一停止路径 \(\omega=(y_1,\dots,y_n)\)，有
+\[
+\frac{d\mathbb P_{\theta_+}}{d\mathbb P_{\theta_-}}(\omega)
+=
+\prod_{i=1}^{n}\varphi^{y_i}
+=
+\varphi^{\sum_{i=1}^{n}y_i}.
+\]
+在停止时刻 \(\tau_T\) 上必有
+\[
+\sum_{i=1}^{n}y_i=K_{\tau_T}(\omega)=\pm T=T\,S_T(\omega),
+\]
+于是
+\[
+\frac{d\mathbb P_{\theta_+}}{d\mathbb P_{\theta_-}}(\omega)=\varphi^{T S_T(\omega)}.
+\]
+因此似然比 \(\sigma\)-代数恰由 \(S_T\) 生成。对两点支配实验，似然比生成的 \(\sigma\)-代数即极小充分 \(\sigma\)-代数，故 \(S_T\) 极小充分。证毕。
+\end{proof}
+
+\begin{theorem}[Esscher 外倾的壳层刚性]\label{thm:conclusion-golden-sprt-esscher-shell-rigidity}
+令 \(\mathbb Q\) 为命题 \ref{prop:pom-golden-esscher-symmetrization} 中由 Esscher 去偏得到的公平测度，使得在 \(\mathbb Q\) 下 \(Y_i\) 为对称 \(\{\pm 1\}\)-步长。则在停止 \(\sigma\)-代数 \(\mathcal F_{\tau_T}\) 上，
+\[
+\boxed{\;
+\frac{d\mathbb P_{\theta_+}}{d\mathbb Q}
+\Big|_{\mathcal F_{\tau_T}}
+\;=\;
+\left(\frac{2}{\varphi^{3/2}}\right)^{\tau_T}\varphi^{K_{\tau_T}/2}.
+\;}
+\]
+从而对任意满足 \(n\ge T\)、\(n\equiv T\pmod 2\) 的整数 \(n\) 与任意 \(s\in\{\pm1\}\)，在壳层
+\[
+\{\tau_T=n,\ S_T=s\}
+\]
+上，Radon--Nikodym 因子恒为常数
+\[
+\left(\frac{2}{\varphi^{3/2}}\right)^n\varphi^{sT/2}.
+\]
+特别地，
+\[
+\boxed{\;
+\mathbb P_{\theta_+}\bigl(\,\cdot\mid \tau_T=n,\ S_T=s\bigr)
+=
+\mathbb Q\bigl(\,\cdot\mid \tau_T=n,\ S_T=s\bigr).
+\;}
+\]
+因此偏置并不改变同一 \((n,s)\)-壳层内部的桥形分布，只对各壳层整体施加指数再权。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-golden-esscher-symmetrization}，
+\[
+\frac{d\mathbb Q}{d\mathbb P_{\theta_+}}\Big|_{\mathcal F_n}
+=
+\left(\frac{\varphi^{3/2}}{2}\right)^n\varphi^{-K_n/2}.
+\]
+由于 \(\tau_T<\infty\) 几乎处处成立，上式在停止时刻直接给出
+\[
+\frac{d\mathbb P_{\theta_+}}{d\mathbb Q}\Big|_{\mathcal F_{\tau_T}}
+=
+\left(\frac{2}{\varphi^{3/2}}\right)^{\tau_T}\varphi^{K_{\tau_T}/2}.
+\]
+在事件 \(\{\tau_T=n,S_T=s\}\) 上，\(\tau_T=n\) 与 \(K_{\tau_T}=sT\) 都为常数，因此该密度退化为
+\[
+\left(\frac{2}{\varphi^{3/2}}\right)^n\varphi^{sT/2}.
+\]
+故在该壳层上，\(\mathbb P_{\theta_+}\) 与 \(\mathbb Q\) 仅差一个归一化常数，从而条件分布完全一致。证毕。
+\end{proof}
+
+\begin{corollary}[停止时间谱是公平 Dirichlet 谱的统一径向收缩]\label{cor:conclusion-golden-sprt-stopping-spectrum-radial-contraction}
+对公平简单随机游走在区间 \(\{-T,\dots,T\}\) 上的 Dirichlet 模态，记
+\[
+\mu_j:=\cos\frac{(2j-1)\pi}{2T},
+\qquad
+j=1,\dots,T.
+\]
+则在偏置模型 \(\theta_+\) 下，停时 \(\tau_T\) 的全部特征模态恰为
+\[
+\boxed{\;
+\lambda_j
+=
+2\varphi^{-3/2}\mu_j
+=
+2\varphi^{-3/2}\cos\frac{(2j-1)\pi}{2T},
+\qquad
+j=1,\dots,T.
+\;}
+\]
+因此偏置并不改变谱角
+\(
+\frac{(2j-1)\pi}{2T}
+\)
+的几何布置；它只施加统一的径向收缩因子
+\[
+\boxed{\;r_\ast:=2\varphi^{-3/2}.\;}
+\]
+\end{corollary}
+\begin{proof}
+命题 \ref{prop:pom-tau-pmf-finite-spectral-decomposition} 已给出停时分布的有限谱分解，其特征值为
+\[
+\lambda_j=2\varphi^{-3/2}\cos\theta_j,
+\qquad
+\theta_j=\frac{(2j-1)\pi}{2T}.
+\]
+而 \(\mu_j=\cos\theta_j\) 正是公平简单随机游走在对应 Dirichlet 边界问题中的标准模态。故偏置下的全部特征值恰由公平 Dirichlet 谱乘以统一因子 \(2\varphi^{-3/2}\) 得到。证毕。
+\end{proof}
+
+\begin{theorem}[风险--时间前沿的精确消元律]\label{thm:conclusion-golden-sprt-risk-time-elimination}
+记对称阈值规则的停止后验误差与期望样本量分别为
+\[
+\varepsilon_T:=\frac{1}{1+\varphi^T},
+\qquad
+\mathbb E_{\theta_+}[\tau_T]
+=
+\varphi^3T\cdot\frac{\varphi^T-1}{\varphi^T+1}.
+\]
+则二者满足无渐近误差的消元关系
+\[
+\boxed{\;
+\mathbb E_{\theta_+}[\tau_T]
+=
+\varphi^3(1-2\varepsilon_T)\,
+\log_\varphi\!\frac{1-\varepsilon_T}{\varepsilon_T}.
+\;}
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:pom-sprt-stopping-posterior-constant}，
+\[
+\varepsilon_T=\frac{1}{1+\varphi^T},
+\]
+故可反解为
+\[
+\varphi^T=\frac{1-\varepsilon_T}{\varepsilon_T},
+\qquad
+T=\log_\varphi\!\frac{1-\varepsilon_T}{\varepsilon_T}.
+\]
+同时
+\[
+\frac{\varphi^T-1}{\varphi^T+1}
+=
+\frac{\frac{1-\varepsilon_T}{\varepsilon_T}-1}{\frac{1-\varepsilon_T}{\varepsilon_T}+1}
+=
+1-2\varepsilon_T.
+\]
+把这两个表达代入定理 \ref{thm:pom-sprt-symmetric-threshold-mean-time} 的期望样本量闭式即得。证毕。
+\end{proof}
+
+\begin{theorem}[序贯判别相对于固定窗 Bayes 最优的指数优势]\label{thm:conclusion-golden-sprt-sequential-exponent-dominates-fixed-window}
+记固定样本量 \(n\) 下的 Bayes 最优错误率为 \(P_e(n)\)。则其每样本误差指数满足
+\[
+-\frac{1}{n}\log_2 P_e(n)\longrightarrow
+C_\varphi:=\frac32\log_2\varphi-1.
+\]
+另一方面，对阈值序贯规则有
+\[
+-\frac{1}{\mathbb E_{\theta_+}[\tau_T]}\log_2 \varepsilon_T
+\longrightarrow
+\alpha_{\mathrm{seq}}
+:=
+\frac{\log_2\varphi}{\varphi^3}.
+\]
+并且严格不等式
+\[
+\boxed{\;\alpha_{\mathrm{seq}}>C_\varphi.\;}
+\]
+成立。因而在“每单位期望样本量”的误差指数意义下，该对称阈值序贯规则严格优于同源固定窗 Bayes 最优判别。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-bayes-error-explicit-sharp-asymptotic}，
+\[
+P_e(n)=\varphi^2\sqrt{\frac{2}{\pi n}}\,(2\varphi^{-3/2})^n(1+o(1)),
+\]
+故
+\[
+-\frac{1}{n}\log_2 P_e(n)\to -\log_2(2\varphi^{-3/2})=\frac32\log_2\varphi-1=C_\varphi.
+\]
+另一方面，由推论 \ref{cor:pom-sprt-stopping-posterior-constant} 与定理 \ref{thm:pom-sprt-symmetric-threshold-mean-time}，
+\[
+\varepsilon_T=\varphi^{-T}(1+o(1)),
+\qquad
+\mathbb E_{\theta_+}[\tau_T]=\varphi^3T(1+o(1)).
+\]
+故
+\[
+-\frac{1}{\mathbb E_{\theta_+}[\tau_T]}\log_2 \varepsilon_T
+=
+\frac{T\log_2\varphi+o(T)}{\varphi^3T+o(T)}
+\longrightarrow
+\frac{\log_2\varphi}{\varphi^3}
+=
+\alpha_{\mathrm{seq}}.
+\]
+最后直接计算得
+\[
+\alpha_{\mathrm{seq}}\approx 0.1638882844,
+\qquad
+C_\varphi\approx 0.0413628704,
+\]
+从而 \(\alpha_{\mathrm{seq}}>C_\varphi\)。证毕。
+\end{proof}
+
+\begin{corollary}[停止时钟的纯资源性]\label{cor:conclusion-golden-sprt-clock-is-pure-resource}
+在停止实验中，随机时钟 \(\tau_T\) 不再承担证据坐标，而只记录达到既定后验精度所消耗的资源。更精确地：
+\begin{enumerate}
+  \item 一旦终端符号 \(S_T\) 已知，\(\tau_T\) 对隐藏相位 \(\Theta\) 不再携带额外统计信息；
+  \item 停止后的后验误差几乎处处等于确定常数
+  \[
+  \varepsilon_T=\frac{1}{1+\varphi^T};
+  \]
+  \item 因而整个停止实验在推断论意义上退化为“一比特证据 \(S_T\) 加一条纯资源时钟 \(\tau_T\)”。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-golden-sprt-terminal-sign-minimal-sufficiency}，\(S_T\) 已是完整停止路径的极小充分统计量，故任何停止后可测统计量，包括 \(\tau_T\)，在给定 \(S_T\) 后都不再增加关于 \(\Theta\) 的信息。
+另一方面，推论 \ref{cor:pom-sprt-stopping-posterior-constant} 已给出
+\[
+\varepsilon_T=\frac{1}{1+\varphi^T},
+\]
+说明停止后的后验精度完全由阈值 \(T\) 决定，而与实现路径的内部形状及具体停止时刻的波动无关。
+再结合命题 \ref{prop:pom-tau-terminal-sign-independence} 中 \(\tau_T\) 与 \(S_T\) 在真相位下的独立性，可见 \(\tau_T\) 的角色确已从“证据坐标”剥离为“资源账本”。证毕。
+\end{proof}
+
+\begin{theorem}[几何顶端谱缺口与信息收缩常数的同一律]\label{thm:conclusion-golden-top-gap-equals-sdpi}
+令
+\[
+G_m:=1-\frac{D_m^{(2)}}{D_m}
+\]
+为顶端相对纤维缺口，并令 \(\eta_I(W)\) 表示黄金互补二元信道 \(W\) 的最优互信息收缩常数。则有严格恒等式
+\[
+\boxed{\;
+\lim_{k\to\infty}G_{2k}
+=
+\eta_I(W)
+=
+\varphi^{-6}.
+\;}
+\]
+同时奇数尺度满足
+\[
+\boxed{\;
+\lim_{k\to\infty}G_{2k+1}
+=
+\frac12\varphi^{-5}
+=
+\frac{\varphi}{2}\,\eta_I(W).
+\;}
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:pom-top-gap-limit-constants}，
+\[
+\lim_{k\to\infty}G_{2k}=\varphi^{-6},
+\qquad
+\lim_{k\to\infty}G_{2k+1}=\frac12\varphi^{-5}.
+\]
+另一方面，由定理 \ref{thm:pom-golden-binary-channel-contraction}，黄金互补二元信道的最优互信息收缩常数满足
+\[
+\eta_I(W)=\varphi^{-6}.
+\]
+比较两式即得 even 尺度上的完全同一化；对 odd 尺度再用
+\[
+\frac12\varphi^{-5}=\frac{\varphi}{2}\varphi^{-6}
+\]
+即可得到第二式。证毕。
+\end{proof}
+
+\begin{corollary}[停止实验的三常数闭包]\label{cor:conclusion-golden-sprt-three-constant-closure}
+上述链条表明，该序贯判别机制的全部终端可审计量本质上由以下三个常数生成：
+\[
+\varphi^T,
+\qquad
+2\varphi^{-3/2},
+\qquad
+\varphi^{-6}.
+\]
+其中 \(\varphi^T\) 控制终端后验赔率与错误率，\(2\varphi^{-3/2}\) 控制停时谱的统一径向收缩，而 \(\varphi^{-6}\) 同时控制 even 顶端几何缺口与最优互信息收缩。
+因此，停止后的时空逻辑不再保留一条高维证据流形，而完全塌缩为后验尺度、时间谱尺度与信息缺口尺度三者的闭合代数。
+\end{corollary}
+\begin{proof}
+第一项由定理 \ref{thm:conclusion-golden-sprt-terminal-sign-minimal-sufficiency} 与定理 \ref{thm:conclusion-golden-sprt-risk-time-elimination} 中
+\(
+\varepsilon_T=(1+\varphi^T)^{-1}
+\)
+的精确关系给出。
+第二项由推论 \ref{cor:conclusion-golden-sprt-stopping-spectrum-radial-contraction} 给出。
+第三项由定理 \ref{thm:conclusion-golden-top-gap-equals-sdpi} 给出。
+三者分别支配后验、时间分布与信息收缩三个层面，且不再需要额外独立参数。证毕。
+\end{proof}
+
+\noindent
+因此，在黄金偏置的对称阈值序贯实验中，完整停止路径并不是一个真正高维的统计对象。停止之后，推断意义上的全部证据已经压缩到终端符号 \(S_T\) 这一单比特；壳层内部路径形状由公平桥几何统一控制，而随机时钟 \(\tau_T\) 只记录达到既定后验精度所需的资源消耗。再与 Chebyshev 停时谱的统一径向收缩以及 \(\varphi^{-6}\) 的几何/信息双重同一化合并，便得到一条由终端赔率、谱半径与 SDPI 缺口共同闭合的三尺度终端结构。
+
+\endinput

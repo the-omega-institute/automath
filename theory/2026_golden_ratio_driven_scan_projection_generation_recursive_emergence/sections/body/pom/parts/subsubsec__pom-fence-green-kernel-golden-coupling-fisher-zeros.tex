@@ -1,0 +1,536 @@
+\paragraph{黄金耦合与 Fisher 零点：\texorpdfstring{\(t=1\)}{t=1} 的 Fibonacci 算术化、零点反正弦律与 Riccati 递推}
+本段把质量参数 \(t\) 的“黄金刻度”与离散行列式/Green 核的可审计闭式联结起来：
+一方面在 \(t=1\) 处得到完全算术化的 Fibonacci 行列式与两点关联；
+另一方面把 \(\det(L_k+tI)\) 的零点（Fisher 零点）与 \([-4,0]\) 上的反正弦律严格对齐，并给出零点的均匀化与边界 Riccati 递推的精确收敛率。
+
+\begin{corollary}[“黄金耦合”唯一性：\texorpdfstring{\(t=1\)}{t=1} 的等价刻画]\label{cor:pom-Lk-golden-coupling-unique}
+设 \(\varphi=\frac{1+\sqrt5}{2}\)，并对 \(t>0\) 定义
+\[
+\eta(t):=\mathrm{arsinh}\sqrt{\frac{t}{4}}\qquad(\Re\eta\ge 0).
+\]
+则下述命题等价，并给出同一唯一正解 \(t_\star=1\)：
+\[
+\eta(t_\star)=\log\varphi,
+\qquad
+q(t_\star):=e^{-2\eta(t_\star)}=\varphi^{-2},
+\qquad
+\lim_{k\to\infty}\frac{1}{k}\log\det(L_k+t_\star I)=2\log\varphi.
+\]
+因此 \(t=1\) 是使谱自由能密度严格匹配黄金移位熵刻度 \(2\log\varphi\) 的唯一正参数点。
+\end{corollary}
+\begin{proof}
+由定义，\(\eta(t)\) 在 \(t>0\) 上严格递增，因此方程 \(\eta(t)=\log\varphi\) 至多有一解。
+又
+\(
+\eta(t)=\mathrm{arsinh}(\sqrt{t}/2)
+\)
+等价于 \(\sqrt{t}/2=\sinh(\eta)\)。
+取 \(\eta=\log\varphi\)，利用
+\(
+\sinh(\log\varphi)=\frac{\varphi-\varphi^{-1}}{2}=\frac12
+\)
+得到 \(t=1\)。
+第二个等价式由 \(q(t)=e^{-2\eta(t)}\) 的定义立得。
+第三个等价式由推论 \ref{cor:pom-Lk-surface-free-energy} 的 \(f(t)=\lim_{k\to\infty}\frac1k\log\det(L_k+tI)=2\eta(t)\) 给出。证毕。
+\end{proof}
+
+\begin{corollary}[黄金耦合处的 Fibonacci 行列式与 Green 核全显式：分母 \texorpdfstring{\(F_{2k+1}\)}{F_{2k+1}} 的统一化]\label{cor:pom-Lk-t1-fibonacci-det-green}
+仍以 \(F_0=0,F_1=1\) 为 Fibonacci 数列。令 \(A_k:=L_k+I\in\ZZ^{k\times k}\)。
+则
+\[
+\det(A_k)=F_{2k+1}.
+\]
+并且其逆矩阵矩阵元对 \(1\le i\le j\le k\) 满足精确闭式
+\[
+(A_k^{-1})_{ij}
+=\frac{F_{2i}\,F_{2(k-j)+1}}{F_{2k+1}},
+\qquad
+(A_k^{-1})_{ji}=(A_k^{-1})_{ij}.
+\]
+等价地，伴随矩阵在对象层发生分离变量因子化：
+\[
+\operatorname{adj}(A_k)_{ij}=F_{2\min(i,j)}\,F_{2(k-\max(i,j))+1}.
+\]
+特别地，
+\[
+(A_k^{-1})_{11}=\frac{F_{2k-1}}{F_{2k+1}},
+\qquad
+(A_k^{-1})_{1k}=\frac{1}{F_{2k+1}}.
+\]
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:pom-Lk-shifted-det-free-energy}，对 \(t=1\) 有
+\[
+\det(A_k)=\det(L_k+I)=\frac{\cosh((2k+1)\eta(1))}{\cosh(\eta(1))}.
+\]
+而 \(\eta(1)=\mathrm{arsinh}(1/2)=\log\varphi\)，并注意 \(\cosh(\log\varphi)=\frac{\varphi+\varphi^{-1}}{2}=\frac{\sqrt5}{2}\)。
+因此
+\[
+\det(A_k)=\frac{\cosh((2k+1)\log\varphi)}{\cosh(\log\varphi)}
+=\frac{(\varphi^{2k+1}+\varphi^{-(2k+1)})/2}{\sqrt5/2}
+=\frac{\varphi^{2k+1}+\varphi^{-(2k+1)}}{\sqrt5}
+=F_{2k+1}.
+\]
+矩阵元闭式由命题 \ref{prop:pom-Lk-green-kernel-entries} 取 \(t=1\) 得到：
+\[
+(A_k^{-1})_{ij}
+=\frac{\sinh(2i\log\varphi)\,\cosh((2(k-j)+1)\log\varphi)}{\sinh(2\log\varphi)\,\cosh((2k+1)\log\varphi)}.
+\]
+利用恒等式
+\(
+\sinh(2n\log\varphi)=\frac{\sqrt5}{2}F_{2n}
+\)
+与
+\(
+\cosh((2m+1)\log\varphi)=\frac{\sqrt5}{2}F_{2m+1}
+\)
+（由 Binet 公式直接化简）即得所示 Fibonacci 比。
+伴随矩阵公式由 \(\operatorname{adj}(A_k)=\det(A_k)\,A_k^{-1}\) 立得。证毕。
+\end{proof}
+
+\begin{remark}[“面积项 + 常数项 + 指数小修正”在 Fibonacci 上的精确实现]\label{rem:pom-Lk-fibonacci-area-law-exact}
+在黄金耦合 \(t=1\) 下，由 Binet 公式对奇指标的精确写法
+\[
+F_{2k+1}=\frac{\varphi^{2k+1}}{\sqrt5}\Bigl(1+\varphi^{-4k-2}\Bigr)
+\]
+得到不经渐近的精确分解
+\[
+\log F_{2k+1}=(2k+1)\log\varphi-\frac12\log 5+\log\bigl(1+\varphi^{-4k-2}\bigr),
+\qquad
+0<\log\bigl(1+\varphi^{-4k-2}\bigr)<\varphi^{-4k-2}.
+\]
+因此，“面积律主项 + 普适常数项 + 指数小有限尺寸修正”在本模型中可视为 Fibonacci 的严格代数恒等式，而非经验级近似。
+\end{remark}
+
+\begin{corollary}[边界熵导数与 Parry 质量的精确耦合：\texorpdfstring{\(t=1\)}{t=1} 处的同源闭合]\label{cor:pom-Lk-t1-parry-surface-derivative}
+令黄金均值 shift 的 Parry 最大熵测度在符号 \(1\) 上的质量为
+\(
+\pi(1)=\frac{1}{\varphi^2+1}
+\)
+（注 \ref{prop:parry-measure-golden}）。
+在谱侧，令 \(q(t)=e^{-2\eta(t)}\) 并取表面自由能 \(g(t)=-\log(1+q(t))\)（推论 \ref{cor:pom-Lk-surface-free-energy}）。
+则在黄金耦合点 \(t=1\) 有严格恒等式
+\[
+\frac{q(1)}{1+q(1)}=\frac{\varphi^{-2}}{1+\varphi^{-2}}=\frac{1}{\varphi^2+1}=\pi(1),
+\]
+并且
+\[
+g'(1)=\pi(1)\cdot\frac{1}{\sqrt{1\cdot(4+1)}}=\frac{\pi(1)}{\sqrt5}.
+\]
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:pom-Lk-golden-coupling-unique} 知 \(q(1)=\varphi^{-2}\)，代入即得第一式。
+第二式由推论 \ref{cor:pom-Lk-surface-free-energy} 的
+\(
+g'(t)=\frac{q(t)}{1+q(t)}\cdot \frac{1}{\sqrt{t(4+t)}}
+\)
+在 \(t=1\) 处取值立得。证毕。
+\end{proof}
+
+\begin{theorem}[Fisher 零点的极限分布：\texorpdfstring{\(\det(L_k+tI)\)}{det(L_k+tI)} 的零点测度收敛到 \texorpdfstring{\([-4,0]\)}{[-4,0]} 上的反正弦律]\label{thm:pom-Lk-fisher-zeros-arcsine}
+把 \(P_k(t):=\det(L_k+tI)\) 视为关于 \(t\) 的次数 \(k\) 多项式，其零点为
+\[
+t_p=-4\sin^2\!\Bigl(\frac{(2p-1)\pi}{4k+2}\Bigr)\in(-4,0),
+\qquad p=1,\dots,k.
+\]
+令零点经验测度
+\(
+\omega_k:=\frac1k\sum_{p=1}^k\delta_{t_p}
+\)。
+则 \(\omega_k\) 在弱拓扑下收敛到 \([-4,0]\) 上的反正弦分布 \(\omega\)，其密度为
+\[
+\dd\omega(t)=\frac{1}{\pi\sqrt{(-t)(4+t)}}\,\dd t,\qquad t\in(-4,0).
+\]
+并且对任意 \(t\in\CC\setminus[-4,0]\)，归一化对数势存在且为闭式
+\[
+\lim_{k\to\infty}\frac{1}{k}\log\bigl|\det(L_k+tI)\bigr|
+=2\,\Re\,\mathrm{arsinh}\sqrt{\frac{t}{4}}.
+\]
+\end{theorem}
+\begin{proof}
+由于 \(P_k(t)=\prod_{p=1}^k(\mu_p+t)\) 且 \(\mu_p\) 为 \(L_k\) 的特征值（定理 \ref{thm:pom-Lk-arcsine-law}），零点满足 \(t_p=-\mu_p\)。
+故 \(\omega_k\) 是经验谱测度 \(\nu_k\) 在映射 \(t=-\mu\) 下的推前；由定理 \ref{thm:pom-Lk-arcsine-law} 立得极限密度为所示反正弦律。
+
+对对数势部分，由推论 \ref{cor:pom-Lk-shifted-det-free-energy} 的 Chebyshev 形式
+\(
+\det(L_k+tI)=T_{2k+1}(\sqrt{1+t/4})/\sqrt{1+t/4}
+\)
+并用 \(T_n(z)=\frac12(w^n+w^{-n})\)（其中 \(w=z+\sqrt{z^2-1}\)，在 \(\CC\setminus[-1,1]\) 上解析）可得
+\[
+\frac{1}{k}\log|\det(L_k+tI)|
+=\frac{2k+1}{k}\Re\log w(t)+o(1),
+\]
+其中 \(w(t)=\sqrt{1+t/4}+\sqrt{t/4}=\exp(\mathrm{arsinh}\sqrt{t/4})\)（选取与 \(t>0\) 相容的解析延拓）。
+令 \(k\to\infty\) 即得极限 \(2\Re\,\mathrm{arsinh}\sqrt{t/4}\)。证毕。
+\end{proof}
+
+\begin{remark}[零点的共形均匀化：Joukowsky 映射下的“奇根统一”]\label{rem:pom-Lk-fisher-zeros-uniformization}
+引入均匀化参数 \(w\in\CC^\times\) 使
+\[
+w+w^{-1}=t+2
+\qquad\Longleftrightarrow\qquad
+t=w+w^{-1}-2.
+\]
+则 \(P_k(t)=0\) 等价于
+\[
+w^{2k+1}=-1.
+\]
+因此零点集合是“\(-1\) 的奇阶单位根”在 Joukowsky 映射 \(t=w+w^{-1}-2\) 下的像；
+当 \(|w|=1\) 时，像域恰为线段 \([-4,0]\)，并把单位圆上的均匀离散点推前为定理 \ref{thm:pom-Lk-fisher-zeros-arcsine} 的反正弦律极限。
+该均匀化同时给出端点尺度的几何来源：\([-4,0]\) 是单位圆在 \(w+w^{-1}-2\) 下的精确像域端点。
+\end{remark}
+
+\begin{proposition}[临界端点的平方根型分支：\texorpdfstring{$t=0$}{t=0} 与 \texorpdfstring{$t=-4$}{t=-4} 的 Puiseux 指数刚性]\label{prop:pom-Lk-branch-puiseux}
+把
+\[
+f(t):=\lim_{k\to\infty}\frac{1}{k}\log\det(L_k+tI)
+=2\,\mathrm{arsinh}\sqrt{\frac{t}{4}}
+\]
+视为 \(t\in\CC\setminus[-4,0]\) 上的解析函数（固定与 \(t>0\) 相容的 \(\sqrt{t(4+t)}\) 分支）。
+则 \(t=0\) 与 \(t=-4\) 是仅有的平方根型分支点（对应判别式 \(\Delta(t)=t(4+t)\) 的两零点）。
+并且在外域极限 \(t\to 0\) 下有 Puiseux 展开
+\[
+\boxed{\;
+f(t)=\sqrt{t}-\frac{t^{3/2}}{24}+O(t^{5/2})\;}
+\]
+（分支由 \(\sqrt{t}\) 的选取确定）。
+另一方面，令表面自由能 \(g(t):=-\log(1+e^{-2\eta(t)})\)（其中 \(\eta(t)=\mathrm{arsinh}\sqrt{t/4}\)，见推论 \ref{cor:pom-Lk-surface-free-energy}），则同一极限下
+\[
+\boxed{\;
+g(t)=-\log 2+\frac{\sqrt{t}}{2}+O(t)\;}
+\]
+从而 bulk 与表面项的非解析性均由同一 Puiseux 指数 \(1/2\) 控制；并且第二分支点 \(t=-4\) 的位置恰为 \(\Delta(t)\) 的另一零点，等价于分支点间距的规范化常数 \(4\)。
+\end{proposition}
+
+\begin{proof}
+令 \(z=\sqrt{t}/2\)，则 \(\eta(t)=\mathrm{arsinh}(z)\)。
+由级数 \(\mathrm{arsinh}(z)=z-\frac{z^3}{6}+O(z^5)\)（\(z\to 0\)）得
+\[
+f(t)=2\eta(t)=2z-\frac{2z^3}{6}+O(z^5)
+=\sqrt{t}-\frac{t^{3/2}}{24}+O(t^{5/2}).
+\]
+并且 \(q(t)=e^{-2\eta(t)}=e^{-f(t)}=1-\sqrt{t}+O(t)\)，故
+\[
+g(t)=-\log(1+q(t))
+=-\log\!\bigl(2-\sqrt{t}+O(t)\bigr)
+=-\log2+\frac{\sqrt{t}}{2}+O(t).
+\]
+分支点位置来自 \(\sqrt{t(4+t)}\) 在 \(t=0,-4\) 的平方根退化。证毕。
+\end{proof}
+
+\begin{proposition}[边界反射系数的 Schur--Riccati 递推与黄金耦合下的 Fibonacci 收敛率]\label{prop:pom-Lk-boundary-riccati-recursion}
+定义有限尺度边界反射系数
+\[
+q_k(t):=(L_k+tI)^{-1}_{11}\qquad(t>0).
+\]
+则 \((q_k(t))_{k\ge 1}\) 满足 Schur--Riccati 递推
+\[
+q_{k+1}(t)=\frac{1}{t+2-q_k(t)},\qquad q_1(t)=\frac{1}{1+t},
+\]
+并收敛到固定点 \(q(t)\in(0,1)\)（推论 \ref{cor:pom-Lk-boundary-fixed-point-riccati}）：
+\[
+q(t)=\frac{1}{t+2-q(t)}\qquad\Longleftrightarrow\qquad q(t)^2-(2+t)q(t)+1=0.
+\]
+更强地，存在精确误差形式
+\[
+0<q_k(t)-q(t)=\frac{(1-q(t)^2)\,q(t)^{2k}}{1+q(t)^{2k+1}}
+< (1-q(t)^2)\,q(t)^{2k},
+\]
+从而 \(|q_k(t)-q(t)|=\Theta(q(t)^{2k})\)。
+在黄金耦合 \(t=1\) 下，该递推完全算术化：
+\[
+q_k(1)=\frac{F_{2k-1}}{F_{2k+1}}\ \xrightarrow[k\to\infty]{}\ \varphi^{-2},
+\qquad
+0<q_k(1)-\varphi^{-2}=\Theta(\varphi^{-4k}).
+\]
+\end{proposition}
+\begin{proof}
+递推由对称三对角矩阵 \(L_k+tI\) 的逐步 Schur 补（等价于一维 continued fraction）得到；也可由命题 \ref{prop:pom-Lk-green-kernel-entries} 的闭式 \(q_k(t)=\cosh((2k-1)\eta(t))/\cosh((2k+1)\eta(t))\) 直接验证。
+
+对误差，令 \(q=q(t)=e^{-2\eta(t)}\)（推论 \ref{cor:pom-Lk-boundary-fixed-point-riccati}），则
+\[
+q_k(t)=\frac{\cosh((2k-1)\eta)}{\cosh((2k+1)\eta)}
+=q\,\frac{1+q^{2k-1}}{1+q^{2k+1}},
+\]
+从而
+\[
+q_k(t)-q=q\,\frac{q^{2k-1}-q^{2k+1}}{1+q^{2k+1}}
+=\frac{(1-q^2)\,q^{2k}}{1+q^{2k+1}},
+\]
+并立得所示双边界与 \(\Theta(q^{2k})\)。
+最后，黄金耦合的 Fibonacci 表达由推论 \ref{cor:pom-Lk-t1-fibonacci-det-green} 的 \((A_k^{-1})_{11}=F_{2k-1}/F_{2k+1}\) 给出，且 \(\varphi^{-2}=q(1)\)。
+由 Binet 公式可得误差阶 \(\Theta(\varphi^{-4k})\)。证毕。
+\end{proof}
+
+\begin{corollary}[黄金耦合 \texorpdfstring{$t=1$}{t=1} 的边界反射误差闭式]\label{cor:pom-Lk-t1-error-closed-form}
+在黄金耦合 \(t=1\) 下，令 \(q(1)=\varphi^{-2}\)。
+则对一切 \(k\ge 1\) 有完全显式闭式
+\begin{equation}\label{eq:pom-Lk-t1-error-closed-form}
+\boxed{\;
+q_k(1)-\varphi^{-2}
+=(1-\varphi^{-4})\frac{\varphi^{-4k}}{1+\varphi^{-(4k+2)}}
+=\frac{\varphi^4-1}{\varphi^{4k+4}+\varphi^{2}}\; }.
+\end{equation}
+从而
+\[
+0<q_k(1)-\varphi^{-2}<(1-\varphi^{-4})\varphi^{-4k},
+\qquad
+|q_k(1)-\varphi^{-2}|\asymp \varphi^{-4k}.
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-Lk-boundary-riccati-recursion} 的精确误差式
+\(
+q_k(t)-q(t)=\frac{(1-q(t)^2)q(t)^{2k}}{1+q(t)^{2k+1}}
+\)
+并取 \(t=1\) 与 \(q(1)=\varphi^{-2}\)，得
+\[
+q_k(1)-\varphi^{-2}
+=(1-\varphi^{-4})\frac{\varphi^{-4k}}{1+\varphi^{-(4k+2)}}.
+\]
+将分子分母同乘 \(\varphi^{4k+4}\) 即得第二个闭式表达。
+上界由 \(1+\varphi^{-(4k+2)}>1\) 直接推出；
+渐近 \(\asymp\varphi^{-4k}\) 由 \(\varphi^{-(4k+2)}\to 0\) 得到。证毕。
+\end{proof}
+
+\begin{corollary}[黄金层级截断误差的绝对可求和性]\label{cor:pom-Lk-t1-error-summable}
+令 \(\Delta_k:=q_k(1)-\varphi^{-2}\)。
+则
+\[
+0<\Delta_k<(1-\varphi^{-4})\varphi^{-4k},
+\qquad
+\sum_{k\ge 1}\Delta_k<\infty.
+\]
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:pom-Lk-t1-error-closed-form} 的上界与几何级数
+\(
+\sum_{k\ge 1}\varphi^{-4k}<\infty
+\)
+立即得到可求和性。证毕。
+\end{proof}
+
+\begin{corollary}[Riccati 近似的精确误差分解：由 \texorpdfstring{$D_k$}{Dk} 控制的单调收敛与级数余项]\label{cor:pom-Lk-riccati-error-by-determinants}
+对 \(k\ge 0\) 定义 \(D_k(t):=\det(L_k+tI)\) 并约定 \(D_0(t)=1\)。
+则对一切 \(k\ge 1\) 有精确恒等式
+\[
+\boxed{\;
+q_k(t)=\frac{D_{k-1}(t)}{D_k(t)}\; }.
+\]
+并且由命题 \ref{prop:pom-Lk-det-cassini-pell} 得差分公式
+\[
+\boxed{\;
+q_k(t)-q_{k+1}(t)=\frac{t}{D_k(t)\,D_{k+1}(t)}\; }.
+\]
+因此当 \(t>0\) 时，\((q_k(t))_{k\ge 1}\) 严格单调递减并收敛到固定点 \(q(t)\in(0,1)\)，且误差具有完全显式的级数余项表示
+\[
+\boxed{\;
+q_k(t)-q(t)=t\sum_{n\ge k}\frac{1}{D_n(t)\,D_{n+1}(t)}\; }.
+\]
+\end{corollary}
+
+\begin{proof}
+令 \(A_k:=L_k+tI\)。
+由 Cramer 公式，
+\(
+(A_k^{-1})_{11}=\det(A_k^{(1,1)})/\det(A_k)
+\)，其中 \(A_k^{(1,1)}\) 为删去第 \(1\) 行第 \(1\) 列所得主子式。
+由于 \(A_k^{(1,1)}\) 与 \(L_{k-1}+tI\) 在显式三对角结构上同构，故 \(\det(A_k^{(1,1)})=D_{k-1}(t)\)，从而 \(q_k=D_{k-1}/D_k\)。
+差分公式由
+\[
+q_k-q_{k+1}
+=\frac{D_{k-1}}{D_k}-\frac{D_k}{D_{k+1}}
+=\frac{D_{k-1}D_{k+1}-D_k^2}{D_kD_{k+1}}
+=\frac{t}{D_kD_{k+1}}
+\]
+（命题 \ref{prop:pom-Lk-det-cassini-pell}）立得。
+对 \(t>0\) 有 \(D_k(t)>0\)，故 \(q_k-q_{k+1}>0\) 并给出单调性；余项表示由对差分公式从 \(n=k\) 到 \(\infty\) 求和并用 \(q_n\to q\) 得到。证毕。
+\end{proof}
+
+\begin{remark}[有限窗审计：黄金耦合 Fibonacci 化、Fisher 零点与 Riccati 收敛]\label{rem:pom-fence-green-kernel-golden-coupling-audit}
+脚本在有限窗上核验：推论 \ref{cor:pom-Lk-golden-coupling-unique} 的 \(t_\star=1\) 唯一性刻画、
+推论 \ref{cor:pom-Lk-t1-fibonacci-det-green} 的 Fibonacci 行列式与矩阵元闭式、
+定理 \ref{thm:pom-Lk-fisher-zeros-arcsine} 的零点位置与反正弦律（通过映射 \(t=-\mu\) 与 Joukowsky 均匀化的数值一致性），
+以及命题 \ref{prop:pom-Lk-boundary-riccati-recursion} 的 Riccati 递推与收敛率。
+审计表如下：
+\input{sections/generated/tab_fence_green_kernel_golden_coupling_audit}
+\end{remark}
+
+\paragraph{\texorpdfstring{$k$}{k}-重谱碰撞的根单位过滤核：递推、临界缩放与零点指纹}
+为刻画高重并根临界点附近的统一核结构，固定整数 \(k\ge 2\)，定义
+\[
+Z_n^{(k)}(t):=\sum_{r\ge 0}\binom{n+k-1}{k-1+kr}\,t^r,\qquad n\in\ZZ_{\ge 0}.
+\]
+其中求和在 \(k-1+kr\le n+k-1\) 时终止。
+
+\begin{theorem}[根单位过滤配分函数的代数结构]\label{thm:pom-kcollision-root-filter-recurrence}
+对上述 \(Z_n^{(k)}(t)\) 有：
+\begin{enumerate}
+\item 系数均为非负整数，且 \(\deg_t Z_n^{(k)}=\lfloor n/k\rfloor\)；
+\item 序列 \((Z_n^{(k)}(t))_{n\ge 0}\) 满足阶 \(k\) 常系数递推
+\[
+Z_{n+k}^{(k)}
+=\binom{k}{1}Z_{n+k-1}^{(k)}-\binom{k}{2}Z_{n+k-2}^{(k)}+\cdots+(-1)^{k-1}\binom{k}{k-1}Z_{n+1}^{(k)}
++\bigl(t-(-1)^k\bigr)Z_n^{(k)},
+\]
+且在 \(0\le n\le k-1\) 时
+\(
+Z_n^{(k)}(t)=\binom{n+k-1}{k-1}
+\)；
+\item 对应特征多项式为
+\[
+\chi_k(\lambda;t)=(\lambda-1)^k-t.
+\]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一点由定义直接成立。
+将 \((\lambda-1)^k-t\) 展开为
+\[
+\lambda^k-\binom{k}{1}\lambda^{k-1}+\binom{k}{2}\lambda^{k-2}-\cdots+(-1)^k-t
+\]
+并代入常系数递推与特征多项式的对应关系，得到第二、三点。
+初值由 \(\lfloor n/k\rfloor=0\) 时仅 \(r=0\) 项贡献给出。证毕。
+\end{proof}
+
+\begin{theorem}[重碰撞临界窗口的 Mittag--Leffler 极限]\label{thm:pom-kcollision-mittag-leffler-scaling}
+令
+\[
+E_{\alpha,\beta}(z):=\sum_{m=0}^{\infty}\frac{z^m}{\Gamma(\alpha m+\beta)},\qquad \alpha>0.
+\]
+固定 \(k\ge 2\)。当 \(n\to\infty\) 时，在任意紧集 \(K\subset\CC\) 上一致有
+\[
+n^{-(k-1)}Z_n^{(k)}\!\left(-\frac{u}{n^k}\right)\longrightarrow E_{k,k}(-u),\qquad u\in K.
+\]
+\end{theorem}
+\begin{proof}
+写作
+\[
+Z_n^{(k)}\!\left(-\frac{u}{n^k}\right)
+=\sum_{r\ge 0}\binom{n+k-1}{k-1+kr}\left(-\frac{u}{n^k}\right)^r.
+\]
+固定 \(r\) 时，
+\[
+\binom{n+k-1}{k-1+kr}
+=\frac{n^{k-1+kr}}{(k-1+kr)!}\bigl(1+o(1)\bigr),
+\]
+故
+\[
+n^{-(k-1)}\binom{n+k-1}{k-1+kr}\left(-\frac{u}{n^k}\right)^r
+\to \frac{(-u)^r}{\Gamma(kr+k)}.
+\]
+再由
+\[
+\left|n^{-(k-1)}\binom{n+k-1}{k-1+kr}\left(\frac{u}{n^k}\right)^r\right|
+\le \frac{C_K^r\,e^{kr}}{(k-1+kr)!},\qquad u\in K,
+\]
+及右端可求和，应用 Weierstrass \(M\)-判别法可交换极限与求和，得结论。证毕。
+\end{proof}
+
+\begin{corollary}[Lee--Yang 零点的临界缩放极限]\label{cor:pom-kcollision-lee-yang-scaling}
+记 \(E_{k,k}(-u)\) 的零点（按重数）为 \(\{\xi_{k,j}\}_{j\ge 1}\subset\CC\setminus\{0\}\)。
+对任意固定 \(J\in\NN\)，当 \(n\) 充分大时，\(Z_n^{(k)}(t)\) 在窗口 \(|t|=O(n^{-k})\) 内对应的前 \(J\) 个零点满足
+\[
+t_{n,j}\sim -\frac{\xi_{k,j}}{n^k},\qquad 1\le j\le J.
+\]
+并且
+\[
+\{-n^k t:\ Z_n^{(k)}(t)=0\}\xrightarrow[n\to\infty]{\mathrm{loc.\ Hausdorff}}\{\xi_{k,j}\}_{j\ge 1}.
+\]
+\end{corollary}
+\begin{proof}
+令
+\[
+F_n(u):=n^{-(k-1)}Z_n^{(k)}\!\left(-\frac{u}{n^k}\right),\qquad F(u):=E_{k,k}(-u).
+\]
+由定理 \ref{thm:pom-kcollision-mittag-leffler-scaling}，\(F_n\to F\) 在紧集上一致，且均全纯。
+由 Hurwitz 定理，紧域内零点（计重数）收敛到 \(F\) 的零点。
+变量替换 \(t=-u/n^k\) 即得。证毕。
+\end{proof}
+
+\begin{proposition}[Hankel 行列式的秩截断与主指纹]\label{prop:pom-kcollision-hankel-fingerprint}
+定义
+\[
+H_m^{(k)}(t):=\det\bigl[Z_{i+j}^{(k)}(t)\bigr]_{0\le i,j\le m-1}.
+\]
+则
+\begin{enumerate}
+\item 若 \(m>k\)，则 \(H_m^{(k)}(t)\equiv 0\)；
+\item 主 Hankel 行列式满足
+\[
+H_k^{(k)}(t)=(-1)^{\frac{(k-1)(3k-4)}{2}}\bigl(1-(-1)^k t\bigr)^{k-1}.
+\]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+取 \(\tau^k=t\)、\(\omega_j=e^{2\pi i j/k}\)。
+由根单位过滤恒等式，
+\[
+Z_n^{(k)}(t)=\sum_{j=0}^{k-1}w_j(t)\lambda_j(t)^n,\qquad
+\lambda_j(t):=1+\omega_j\tau,\quad
+w_j(t):=\frac{1}{k}\frac{\lambda_j(t)^{k-1}}{\omega_j^{k-1}\tau^{k-1}}.
+\]
+故 Hankel 矩阵分解为 \(V_m^\top W V_m\)，其中
+\[
+(V_m)_{j,i}=\lambda_j(t)^i,\qquad
+W=\mathrm{diag}(w_0,\dots,w_{k-1}).
+\]
+从而 \(\mathrm{rank}\le k\)，得 \(m>k\) 时行列式为零。
+当 \(m=k\) 时，
+\[
+H_k^{(k)}=(\det V_k)^2\prod_{j=0}^{k-1}w_j.
+\]
+再用 Vandermonde 公式、\(x^k-1\) 判别式
+\[
+\prod_{0\le i<j\le k-1}(\omega_j-\omega_i)^2
+=(-1)^{\frac{(k-1)(k-2)}{2}}k^k,
+\]
+以及
+\[
+\prod_{j=0}^{k-1}(1+\omega_j\tau)=1-(-1)^k t,\qquad
+\prod_{j=0}^{k-1}\omega_j=(-1)^{k-1},
+\]
+整理即得所示闭式。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$E_{k,k}$}{Ekk} 的根单位指数分解与实轴零点量子化]\label{thm:pom-kcollision-ekk-root-phase-quantization}
+对任意分支 \(z^{1/k}\) 有恒等式
+\[
+E_{k,k}(z)=\frac1k\,z^{\frac{1-k}{k}}\sum_{j=0}^{k-1}\omega_j^{1-k}\exp\!\bigl(\omega_j z^{1/k}\bigr),\qquad
+\omega_j=e^{2\pi i j/k}.
+\]
+令 \(u>0\)，取主值分支 \((-u)^{1/k}=u^{1/k}e^{i\pi/k}\)。
+当 \(u\to+\infty\) 时，
+\[
+E_{k,k}(-u)
+=-\frac{2}{k}u^{\frac{1-k}{k}}
+\exp\!\Bigl(u^{1/k}\cos\frac{\pi}{k}\Bigr)
+\cos\!\Bigl(u^{1/k}\sin\frac{\pi}{k}+\frac{\pi}{k}\Bigr)
++O\!\left(u^{\frac{1-k}{k}}\exp\!\Bigl(u^{1/k}\cos\frac{3\pi}{k}\Bigr)\right),
+\]
+其中 \(k=2\) 时误差项消失。
+进一步，记 \(E_{k,k}(-u)\) 的正实大零点为 \(\xi_{k,n}\)（按递增计），则
+\[
+\xi_{k,n}
+=\left(\frac{\bigl(n+\frac12-\frac1k\bigr)\pi}{\sin(\pi/k)}\right)^{k}\bigl(1+o(1)\bigr),\qquad n\to\infty.
+\]
+\end{theorem}
+\begin{proof}
+第一式由
+\(
+e^{\omega_j z^{1/k}}=\sum_{m\ge 0}\omega_j^m z^{m/k}/m!
+\)
+与根单位正交关系筛选 \(m\equiv k-1\pmod k\) 得到。
+第二式中，代入 \(z=-u\) 后，\(j=0\) 与 \(j=k-1\) 两项给出最大实部并构成共轭主导对，其余项实部不超过 \(\cos(3\pi/k)\) 对应指数级次，故得主项加误差。
+令主项余弦相位等于 \((n+\frac12)\pi\) 即得零点量子化近似；指数分离保证相对误差为 \(o(1)\)。证毕。
+\end{proof}
+
+\begin{conjecture}[有限维转移模型中的重碰撞临界核普适性]\label{conj:pom-kcollision-universality-ekk}
+设 \((Z_n(t))\) 来自有限维转移矩阵（等价常系数递推）并在 \(t=t_\ast\) 发生原始 \(k\)-重主导谱碰撞：主导特征值代数重数为 \(k\)，其余谱与主导谱存在正模长间隙，且无额外对称性引起进一步约化。
+则存在常数 \(C,c\ne 0\) 使在临界窗口 \(t=t_\ast-u/n^k\) 下
+\[
+n^{-(k-1)}Z_n\!\left(t_\ast-\frac{u}{n^k}\right)\Longrightarrow C\,E_{k,k}(-c\,u),
+\]
+并且 Lee--Yang 零点在该窗口内按推论 \ref{cor:pom-kcollision-lee-yang-scaling} 收敛到相应 \(E_{k,k}\) 零点集。
+\end{conjecture}
+

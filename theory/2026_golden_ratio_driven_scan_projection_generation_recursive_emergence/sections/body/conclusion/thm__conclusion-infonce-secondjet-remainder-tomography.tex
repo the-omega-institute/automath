@@ -1,0 +1,280 @@
+\paragraph{大负样本 jet、余项外置与有限分辨率对比层析}
+在推论 \ref{cor:conclusion-infonce-large-k-visible-entropy-complement} 已把
+\(\mathcal L_{K,m}^\star\) 的大负样本熵截距精确识别为推前熵之后，其二阶 jet、余项外置重整化与有限分辨率层析还可继续压缩为如下几条结论。
+
+\begin{theorem}[大负样本二阶系数的逆多重度定理]\label{thm:conclusion-infonce-second-jet-reciprocal-multiplicity}
+固定分辨率 \(m\)，记
+\[
+\mu_m(x):=\frac{d_m(x)}{2^m},
+\qquad
+H_1(m):=H(\mu_m)=-\sum_{x\in X_m}\mu_m(x)\log \mu_m(x),
+\]
+并定义对角算子
+\[
+E_m:\ell^2(X_m)\to \ell^2(X_m),
+\qquad
+E_m1_x=d_m(x)^{-1/2}1_x.
+\]
+则大负样本展开的二阶系数满足严格极限
+\[
+\lim_{K\to\infty}
+12(K-1)^2
+\left(
+\mathcal L_{K,m}^\star-\log K+H_1(m)-\frac{|X_m|-1}{2(K-1)}
+\right)
+=
+2^m|E_m|_{HS}^2-6|X_m|+5,
+\]
+亦即
+\[
+\lim_{K\to\infty}
+12(K-1)^2
+\left(
+\mathcal L_{K,m}^\star-\log K+H_1(m)-\frac{|X_m|-1}{2(K-1)}
+\right)
+=
+2^m\sum_{x\in X_m}\frac1{d_m(x)}-6|X_m|+5.
+\]
+因此，Bayes 最优 InfoNCE 的大负样本 jet 前两阶分别精确读出推前熵与逆纤维谱和。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:pom-infonce-bayes-optimal-third-order-largeK} 在 \(g=\Fold_m\) 下，
+\[
+\mathcal L_{K,m}^\star
+=
+\log K-H_1(m)
++\frac{|X_m|-1}{2(K-1)}
++\frac{\mathsf S_{-1}(\mu_m)-6|X_m|+5}{12(K-1)^2}
++O_m\!\bigl((K-1)^{-3}\bigr),
+\]
+其中
+\[
+\mathsf S_{-1}(\mu_m)=\sum_{x\in X_m}\frac1{\mu_m(x)}
+=
+2^m\sum_{x\in X_m}\frac1{d_m(x)}.
+\]
+移项后乘以 \(12(K-1)^2\)，并令 \(K\to\infty\)，便得到
+\[
+\lim_{K\to\infty}
+12(K-1)^2
+\left(
+\mathcal L_{K,m}^\star-\log K+H_1(m)-\frac{|X_m|-1}{2(K-1)}
+\right)
+=
+\mathsf S_{-1}(\mu_m)-6|X_m|+5.
+\]
+又
+\[
+|E_m|_{HS}^2=\sum_{x\in X_m}d_m(x)^{-1},
+\]
+故上式亦可写成
+\[
+2^m|E_m|_{HS}^2-6|X_m|+5.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[余项外置的二阶 Euclid 缺陷精确公式]\label{thm:conclusion-remainder-bits-euclid-defect-exact}
+固定整数 \(B\ge 0\)，记 \(M:=2^B\)，并把每条纤维按余项
+\(r\in\{0,1\}^B\) 细分为占用数 \(d_{m,B}(x,r)\)。
+定义
+\[
+S_2(m):=\sum_{x\in X_m}d_m(x)^2,
+\qquad
+S_{2,B}(m):=\sum_{x\in X_m}\sum_{r\in\{0,1\}^B}d_{m,B}(x,r)^2.
+\]
+对每个 \(x\) 作 Euclid 分解
+\[
+d_m(x)=Mq_x+s_x,
+\qquad
+0\le s_x<M.
+\]
+则有严格恒等式
+\[
+S_{2,B}(m)=M^{-1}S_2(m)+\mathcal E_B(m),
+\]
+其中
+\[
+\mathcal E_B(m):=
+\sum_{x\in X_m}\left(s_x-M^{-1}s_x^2\right).
+\]
+并且
+\[
+0\le \mathcal E_B(m)\le \frac{M}{4}|X_m|=2^{B-2}|X_m|.
+\]
+因此，\(B\)-比特外置对二阶碰撞的影响并不只是纯粹的 \(2^{-B}\) 缩放，而总会留下一个由 Euclid 余数全体精确控制的非负缺陷项。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:pom-infonce-remainder-bits-second-order-renormalization}，
+\[
+\sum_{r\in\{0,1\}^B}d_{m,B}(x,r)^2
+=
+2^{-B}d_m(x)^2-2^{-B}s_x^2+s_x.
+\]
+对 \(x\in X_m\) 求和得到
+\[
+S_{2,B}(m)
+=
+2^{-B}S_2(m)+\sum_{x\in X_m}\left(s_x-2^{-B}s_x^2\right)
+=
+M^{-1}S_2(m)+\mathcal E_B(m).
+\]
+再考虑函数
+\[
+f_M(s):=s-M^{-1}s^2
+\qquad (0\le s\le M).
+\]
+它在区间 \([0,M]\) 上非负，并于 \(s=M/2\) 取最大值 \(M/4\)。
+由于每个 \(s_x\in\{0,\dots,M-1\}\)，故
+\[
+0\le s_x-M^{-1}s_x^2\le \frac{M}{4}.
+\]
+对 \(x\) 求和即得
+\[
+0\le \mathcal E_B(m)\le \frac{M}{4}|X_m|.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[完美 dyadic 重整化的整除判别]\label{cor:conclusion-perfect-dyadic-renormalization-divisibility}
+沿用定理 \ref{thm:conclusion-remainder-bits-euclid-defect-exact} 的记号。则下列命题等价：
+\begin{enumerate}
+  \item \(S_{2,B}(m)=2^{-B}S_2(m)\)；
+  \item \(\mathcal E_B(m)=0\)；
+  \item 对每个 \(x\in X_m\) 都有 \(2^B\mid d_m(x)\)。
+\end{enumerate}
+因此，二阶碰撞在 \(B\)-比特外置下发生严格无误差缩放，当且仅当每条纤维大小都被 \(2^B\) 整除。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-remainder-bits-euclid-defect-exact}，
+\[
+S_{2,B}(m)-2^{-B}S_2(m)=\mathcal E_B(m)=\sum_{x\in X_m}\left(s_x-2^{-B}s_x^2\right).
+\]
+其中每一项都非负。又对 \(0\le s<M=2^B\)，有
+\[
+s-M^{-1}s^2=0 \iff s=0.
+\]
+故
+\[
+\mathcal E_B(m)=0
+\iff
+s_x=0\ \text{对一切 }x
+\iff
+2^B\mid d_m(x)\ \text{对一切 }x.
+\]
+于是三条等价。证毕。
+\end{proof}
+
+\begin{theorem}[固定余项比特对整数 Rényi 骨架的指数沉默]\label{thm:conclusion-fixed-remainder-bits-renyi-exponential-silence}
+对任意固定整数 \(q\ge 1\) 与 \(B\ge 0\)，定义
+\[
+S_{q,B}(m):=\sum_{x\in X_m}\sum_{r\in\{0,1\}^B}d_{m,B}(x,r)^q,
+\qquad
+M_{q,B}(m):=\frac{S_{q,B}(m)}{2^{qm}}.
+\]
+则有精确双边界
+\[
+2^{-B(q-1)}S_q(m)\le S_{q,B}(m)\le S_q(m),
+\qquad
+2^{-B(q-1)}M_q(m)\le M_{q,B}(m)\le M_q(m).
+\]
+若再有 \(d_{\min}(m)\to\infty\) 且 \(q\ge 2\)，则
+\[
+S_{q,B}(m)=2^{-B(q-1)}S_q(m)+O_q\!\bigl(S_{q-1}(m)\bigr),
+\qquad
+\frac{M_{q,B}(m)}{M_q(m)}\to 2^{-B(q-1)}.
+\]
+特别地，只要
+\[
+S_q(m)=\Theta(r_q^m),
+\]
+便对每个固定 \(B\) 都有
+\[
+\lim_{m\to\infty}M_{q,B}(m)^{1/m}
+=
+\lim_{m\to\infty}M_q(m)^{1/m}
+=
+\frac{r_q}{2^q}.
+\]
+换言之，任何固定数目的外置余项比特都只能改变整数 Rényi 骨架的前因子，而不能改变其指数主率。
+\end{theorem}
+
+\begin{proof}
+这正是定理 \ref{thm:pom-remainder-bits-all-renyi-compression-law} 的内容。证毕。
+\end{proof}
+
+\begin{corollary}[任意固定对比协议的一致谱恢复]\label{cor:conclusion-fixed-infonce-protocol-uniform-r2-recovery}
+对任意固定整数 \(K\ge 2\)、\(B\ge 0\)，记 \(\mathcal L_{K,B,m}^\star\) 为含
+\(B\)-比特余项外置时的 Bayes 最优 InfoNCE 损失。则极限存在，且
+\[
+\lim_{m\to\infty}\bigl(\mathcal L_{K,B,m}^\star\bigr)^{1/m}=\frac{r_2}{4},
+\]
+并满足统一反演公式
+\[
+r_2
+=
+4\lim_{m\to\infty}
+\left(
+\frac{2^B\,\mathcal L_{K,B,m}^\star}{(K-1)\log 2}
+\right)^{1/m}.
+\]
+因此，所有固定的负样本数 \(K\) 与所有固定的外置余项比特数 \(B\)，在指数尺度上都收缩为同一个二阶碰撞谱不变量 \(r_2\)。
+\end{corollary}
+
+\begin{proof}
+这正是推论 \ref{cor:pom-infonce-exponential-invariant-r2-identifiability} 的直接结论。证毕。
+\end{proof}
+
+\begin{theorem}[对比层析的维数精确性与 Newton--Prony 完备]\label{thm:conclusion-infonce-tomography-dimension-exact}
+固定分辨率 \(m\)，令
+\[
+N:=|X_m|,
+\qquad
+w_m(x):=\frac{d_m(x)}{2^m}.
+\]
+考虑最优损失塔
+\[
+\mathcal L_m:=
+\bigl(
+\mathcal L_{2,m}^\star,\mathcal L_{3,m}^\star,\dots,\mathcal L_{N,m}^\star
+\bigr)\in\RR^{N-1}.
+\]
+则：
+\begin{enumerate}
+  \item \(\mathcal L_m\) 代数唯一确定权重多重集 \(\{w_m(x)\}_{x\in X_m}\)；
+  \item 因而代数唯一确定纤维多重集 \(\{d_m(x)\}_{x\in X_m}\)、全部碰撞矩 \(\{S_q(m)\}_{q\ge 1}\) 与纤维直方图；
+  \item 任意少于 \(N-1\) 个 Bayes 最优 InfoNCE 标量的连续读出，都不可能在权重开单纯形上给出连续单射恢复。
+\end{enumerate}
+故 \(\mathcal L_m\) 在有限分辨率上构成一组既充分又连续意义下最小的纤维谱坐标。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:pom-infonce-fiber-spectrum-tomography}，
+\[
+\mathcal L_{2,m}^\star,\dots,\mathcal L_{N,m}^\star
+\]
+可以先上三角回代恢复幂和矩
+\[
+M_2(m),\dots,M_N(m),
+\]
+再由 Newton 恒等式恢复首一多项式
+\[
+Q_m(z)=\prod_{x\in X_m}(z-w_m(x)),
+\]
+从而唯一恢复全部权重多重集 \(\{w_m(x)\}_{x\in X_m}\)。这证明了第 \(1\) 条。
+
+第 \(2\) 条随后立即得到：一旦恢复 \(\{w_m(x)\}\)，便恢复
+\[
+d_m(x)=2^m w_m(x),
+\]
+故所有碰撞矩
+\[
+S_q(m)=\sum_{x\in X_m}d_m(x)^q
+\]
+及由 Newton--Prony/Hankel 反演确定的纤维直方图也被唯一决定。
+
+第 \(3\) 条正是定理 \ref{thm:pom-infonce-fiber-spectrum-tomography-minimality} 的内容：少于 \(N-1\) 个连续标量读数，不可能在权重开单纯形上形成连续单射恢复。证毕。
+\end{proof}

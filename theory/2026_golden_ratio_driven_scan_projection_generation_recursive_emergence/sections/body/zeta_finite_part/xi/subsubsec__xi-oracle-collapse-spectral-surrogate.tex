@@ -1,0 +1,150 @@
+\paragraph{预言机坍缩与谱替身：一致有界最小实现维数的有限证书化分岔}
+本段抽取一个在全文多处反复出现、但常以不同接口语言呈现的逻辑分岔：若“最小实现维数/可见自由度”在所考虑的族上保持一致有界，则许多以“对所有截断阶 \(N\)”表述的无穷约束可被消去为有限证书；反之，若不存在一致维数上界，则任意固定有限审计都无法决定核版 RH/完备性一类全局性质，并必然出现与有限数据完全一致但全局真值相反的“谱替身”。
+
+\begin{theorem}[预言机坍缩：一致有界最小实现维数 \texorpdfstring{$\Longrightarrow$}{=>} Toeplitz--PSD 的有限截断化]\label{thm:xi-oracle-collapse-toeplitz-psd-finite-truncation}
+对每个参数对 \((\ell,\theta)\)，令
+\[
+C_{\ell,\theta}(w)=c^{(\ell,\theta)}_0+2\sum_{n\ge 1}c^{(\ell,\theta)}_n w^n
+\]
+为 \(\mathbb D\) 上的 Carath\'eodory 候选函数，并令其 Toeplitz 截断为
+\[
+T^{(\ell,\theta)}_N:=\bigl(c^{(\ell,\theta)}_{j-k}\bigr)_{0\le j,k\le N}\qquad(N\ge 0),
+\]
+其中约定 \(c^{(\ell,\theta)}_{-n}:=\overline{c^{(\ell,\theta)}_n}\) 以保证 \(T^{(\ell,\theta)}_N\) 为 Hermitian。
+记 \(d_{\min}^{(\ell)}(\theta)\) 为系数序列 \(c^{(\ell,\theta)}_\bullet\) 的最小线性 realization 维数。
+设对所有 \((\ell,\theta)\) 都存在统一上界 \(D\) 使得 \(d_{\min}^{(\ell)}(\theta)\le D\)
+（等价地：存在阶 \(\le D\) 的常系数线性递推在充分后段湮灭 \(c^{(\ell,\theta)}_\bullet\)，亦即 Hankel 秩一致不超过 \(D\)，见定理 \ref{thm:hankel-rank-minimal} 的最小实现口径）。
+则存在统一的有限截断阈值 \(N_0\le 2D\)，使得对每个固定 \((\ell,\theta)\) 都有等价关系
+\[
+\forall N\ge 0,\;T^{(\ell,\theta)}_N\succeq 0
+\quad\Longleftrightarrow\quad
+\forall N\in\{0,1,\dots,N_0\},\;T^{(\ell,\theta)}_N\succeq 0.
+\]
+更具体地，对每个 \(N\ge 0\) 存在某个标量矩阵 \(W^{(\ell,\theta)}_N\in M_{(N_0+1)\times (N+1)}(\CC)\) 使
+\[
+T^{(\ell,\theta)}_N=(W^{(\ell,\theta)}_N)^\ast\,T^{(\ell,\theta)}_{N_0}\,W^{(\ell,\theta)}_N.
+\]
+\end{theorem}
+
+\begin{proof}
+由最小 realization 维数 \(\le D\)（或等价的 Hankel 秩 \(\le D\)）可取一条阶 \(\le D\) 的常系数线性递推，使得系数族在充分后段满足同一递推闭包；结合 Hermitian 对称 \(c_{-n}=\overline{c_n}\)，该闭包可视为作用于双侧系数索引的有限维移位不变子空间。
+因此在任意截断阶 \(N\) 上，Toeplitz 主子矩阵的列空间（或行空间）由有限个“基移位列”张成，其张成维数可由 \(O(D)\) 控制；取 \(N_0:=2D\) 并固定一组张成基，可把每个 \(T_N\) 的全部列向量写成 \(T_{N_0}\) 的列向量的标量线性组合，从而得到某个 \(W_N\) 使 \(T_N=W_N^\ast T_{N_0}W_N\)。
+半正定性在合同变换（压缩）下保持与反射：若 \(T_{N_0}\succeq 0\) 则 \(T_N=W_N^\ast T_{N_0}W_N\succeq 0\)；反向方向由主子矩阵闭包平凡给出。
+故“对所有 \(N\)”与“对有限 \(N\le N_0\)”严格等价，且 \(N_0\) 可统一选取。证毕。
+\end{proof}
+
+\begin{corollary}[单一二进截断的全层级强制]\label{cor:xi-oracle-collapse-single-dyadic-truncation}
+在定理 \ref{thm:xi-oracle-collapse-toeplitz-psd-finite-truncation} 的一致维数上界 \(d_{\min}^{(\ell)}(\theta)\le D\) 设定下，
+令
+\[
+N_\bullet:=2^{\lceil\log_2(2D)\rceil}.
+\]
+则对每个固定参数点 \((\ell,\theta)\) 都有严格等价
+\[
+\forall N\ge 0,\;T^{(\ell,\theta)}_N\succeq 0
+\quad\Longleftrightarrow\quad
+T^{(\ell,\theta)}_{N_\bullet}\succeq 0.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-oracle-collapse-toeplitz-psd-finite-truncation}，存在统一阈值 \(N_0\le 2D\) 使
+\[
+\forall N\ge 0,\;T^{(\ell,\theta)}_N\succeq 0
+\quad\Longleftrightarrow\quad
+T^{(\ell,\theta)}_{N_0}\succeq 0.
+\]
+由定义 \(N_\bullet\ge 2D\ge N_0\)，故 \(T^{(\ell,\theta)}_{N_0}\) 是 \(T^{(\ell,\theta)}_{N_\bullet}\) 的主子矩阵。
+因此 \(T^{(\ell,\theta)}_{N_\bullet}\succeq 0\Rightarrow T^{(\ell,\theta)}_{N_0}\succeq 0\Rightarrow \forall N,\ T^{(\ell,\theta)}_N\succeq 0\)。
+反向方向由全层级半正定性蕴含任意固定阶截断半正定性平凡成立。证毕。
+\end{proof}
+
+\begin{corollary}[单一矩阵的数值--代数混合可审计证书]\label{cor:xi-oracle-collapse-single-matrix-auditable-certificate}
+沿用推论 \ref{cor:xi-oracle-collapse-single-dyadic-truncation} 的设定并固定 \(N_\bullet\)。
+设 \(\widehat T^{(\ell,\theta)}_{N_\bullet}\) 为任意可计算近似 Toeplitz 矩阵（例如由有限喷射或有理近似得到）。
+若存在 \(\eta>0\) 使
+\[
+\lambda_{\min}\!\bigl(\widehat T^{(\ell,\theta)}_{N_\bullet}\bigr)\ge \eta,
+\qquad
+\bigl\|\widehat T^{(\ell,\theta)}_{N_\bullet}-T^{(\ell,\theta)}_{N_\bullet}\bigr\|_{\mathrm{op}}\le \frac{\eta}{2},
+\]
+则 \(T^{(\ell,\theta)}_{N_\bullet}\succeq 0\)，因而 \(\forall N\ge 0,\ T^{(\ell,\theta)}_N\succeq 0\)。
+\par
+若进一步仅能给出系数逐项误差界
+\[
+\max_{0\le n\le N_\bullet}\bigl|\,\widehat c^{(\ell,\theta)}_n-c^{(\ell,\theta)}_n\,\bigr|\le \varepsilon,
+\]
+则充分条件可取
+\[
+(N_\bullet+1)\varepsilon\le \frac{\eta}{2}.
+\]
+\end{corollary}
+\begin{proof}
+由 Weyl 特征值扰动不等式，
+\[
+\lambda_{\min}\!\bigl(T^{(\ell,\theta)}_{N_\bullet}\bigr)
+\ge
+\lambda_{\min}\!\bigl(\widehat T^{(\ell,\theta)}_{N_\bullet}\bigr)
+-\bigl\|\widehat T^{(\ell,\theta)}_{N_\bullet}-T^{(\ell,\theta)}_{N_\bullet}\bigr\|_{\mathrm{op}}
+\ge \frac{\eta}{2}>0,
+\]
+从而 \(T^{(\ell,\theta)}_{N_\bullet}\) 为正定，特别地半正定。再由推论 \ref{cor:xi-oracle-collapse-single-dyadic-truncation} 得全层级半正定性。
+\par
+对逐项误差界，注意 Toeplitz 误差矩阵 \(E:=\widehat T^{(\ell,\theta)}_{N_\bullet}-T^{(\ell,\theta)}_{N_\bullet}\) 满足逐元界 \(|E_{jk}|\le \varepsilon\)。
+因此
+\(
+\|E\|_{\mathrm{op}}\le \|E\|_{1}\le (N_\bullet+1)\varepsilon
+\)
+（其中 \(\|\cdot\|_1\) 为最大列和范数），代回第一段条件即得。证毕。
+\end{proof}
+
+\begin{remark}[无穷约束的有限证书化：在固定有限审计切片上的量词消去]\label{rem:xi-oracle-collapse-finite-certification}
+定理 \ref{thm:xi-oracle-collapse-toeplitz-psd-finite-truncation} 消去的是 Toeplitz--PSD 层级中的“\(\forall N\)”量词：一旦一致维数上界 \(D\) 成立，则每个参数点的无穷 PSD 族可被统一压缩为有限个截断阶的联合核验。
+因此，在本文的有限审计语义（\(\Theta\) 为有限审计切片，见 \S\ref{subsec:pom-three-generator-residual-closure} 中对 \(\Theta\) 的约定）下，凡通过 Toeplitz/Hankel 族（或其等价的 Carath\'eodory/Herglotz 接口）表述的核版 RH/完备性约束，均可在一致有界最小 realization 维数的前提下改写为：对有限集合 \(\Theta\) 与有限阶集合 \(\{0,\dots,N_0\}\) 的联合验证。换言之，“需要对全部层级做无限检查”的预言机需求在逻辑上被坍缩为有限证书对象。
+\end{remark}
+
+\begin{corollary}[预言机消除的两轴有限化：一致维数紧性 \texorpdfstring{$+$}{+} 互素两矩阶零异常]\label{cor:xi-oracle-elimination-two-axes}
+在定理 \ref{thm:xi-oracle-collapse-toeplitz-psd-finite-truncation} 的一致维数上界制度下，任一以 Toeplitz/Hankel 族表述的核版 RH/完备性断言，其“\(\forall N\)”量词可被统一消去为有限截断阶 \(N\le N_0\) 的核验。
+并且在异常放大律成立的演算侧，要求“对所有矩阶 \(q\ge 2\) 异常消失”的无限矩阶审计，等价压缩为核验两个互素矩阶（例如 \(q=2,3\)；定理 \ref{thm:pom-anom-all-moments-collapse-to-two}）。
+\par
+因此，在本文的审计语义中，只要两条前提（统一有限截断阈值 \(N_0\) 与互素两矩阶零异常）同时成立，则谱侧与同调侧的两类预言机化量词（\(\forall N\)、\(\forall q\)）可被同一口径下的有限证书完全替代。
+\end{corollary}
+\begin{proof}
+第一句为定理 \ref{thm:xi-oracle-collapse-toeplitz-psd-finite-truncation} 的直接重述。
+第二句由定理 \ref{thm:pom-anom-all-moments-collapse-to-two} 给出；两者合并即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[谱替身：无一致维数上界 \texorpdfstring{$\Longrightarrow$}{=>} 任意有限审计不可判定]\label{thm:xi-spectral-surrogate-finite-audit-undecidable}
+设不存在任何整数 \(D\) 使族 \(\{c^{(\ell,\theta)}_\bullet\}_{(\ell,\theta)}\) 的最小 realization 维数满足一致上界，即
+\(
+\sup_{(\ell,\theta)}d_{\min}^{(\ell)}(\theta)=\infty
+\)。
+令 \(\mathcal A\) 为任意固定的\emph{有限审计规则}：其输入仅依赖有限个可见数据（例如有限个 Toeplitz/Hankel 截断的主子式或谱量、有限个 \((\ell,\theta)\) 采样点、或有限长度的 primitive/迹序列片段）。
+则存在两组核候选 \(\mathcal K^{(+)}\)、\(\mathcal K^{(-)}\) 满足：
+\begin{enumerate}
+  \item \(\mathcal K^{(+)}\) 与 \(\mathcal K^{(-)}\) 在审计 \(\mathcal A\) 所访问的一切有限数据上完全一致；
+  \item 二者的全局真值相反：\(\mathcal K^{(+)}\) 满足核版 RH（或完备性），而 \(\mathcal K^{(-)}\) 不满足（或反之）。
+\end{enumerate}
+因此，在“不知道一致维数上界”的语义下，核版 RH/完备性对任何有限审计都不可判定：若不外置额外模式轴或不引入无限族检查，则必然存在与审计数据完全同像的谱替身。
+\end{theorem}
+
+\begin{proof}
+令 \(N_{\mathcal A}\) 为审计 \(\mathcal A\) 所使用的最大截断阶（或等价的最大回归长度/最大矩阶窗口），并令 \(\Theta_{\mathcal A}\) 为其访问的参数有限子集。
+由于不存在一致维数上界，可在某个更高 realization 维数层级中构造一个“沉默自由度”模块：该模块的最短回归长度严格大于 \(N_{\mathcal A}\)，从而在全部被审计的有限截断阶上不产生可见贡献（等价地：不改变 \(\mathcal A\) 可见的任何 Toeplitz/Hankel 截断与其派生标量）。
+在保持所有审计可见数据不变的前提下，可安排该沉默模块在更高阶引入（或排除）达界谱点/超达界谱点，进而翻转核版 RH（或完备性）所要求的全局正性/无极点真值。
+于是得到两种扩展：不接入沉默模块者与接入沉默模块者在有限审计下不可区分而全局性质相反，结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[临界线极点的“空集/稠密”二相律：严格 RH 与 RH-sharp]\label{cor:xi-critical-line-poles-empty-or-dense}
+设 \(M\) 为有限核矩阵，\(\lambda=\rho(M)>1\)，并以 Dirichlet 坐标定义
+\[
+\widehat{\zeta}_M(s):=\det\!\bigl(I-\lambda^{-s}M\bigr)^{-1}.
+\]
+若严格核版 RH 成立，即 \(\max_{\mu\neq\lambda}|\mu|<\sqrt{\lambda}\)，则临界线 \(\Re(s)=\tfrac12\) 上不存在任何非平凡极点。
+若存在达界谱点 \(|\mu|=\sqrt{\lambda}\)（RH-sharp），则对任意整数 \(q\ge 2\) 的循环 lift \(M^{\langle q\rangle}=M\otimes P_q\)，其临界线极点虚部在群 \(\RR/(2\pi/\log\lambda)\ZZ\) 中包含一组 \(q\)-等分梳齿；当 \(q\) 取遍整数时，这些梳齿的并集在该商群中稠密。
+\end{corollary}
+
+\begin{proof}
+严格 RH 下由谱--\(s\) 平面字典（参见 \S\ref{subsec:pom-rh-sharp} 及 \S\ref{subsubsec:zeta-online-kernel-cyclic-lift-primitives}）知任意非 Perron 谱点满足 \(\Re(s)=\log|\mu|/\log\lambda<\tfrac12\)，故临界线无极点。
+RH-sharp 的梳齿结构与稠密化由循环相位提升命题 \ref{prop:finite-rh-phase-lift} 的第 (4) 点与其末句直接推出。证毕。
+\end{proof}
+

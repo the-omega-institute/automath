@@ -1,0 +1,295 @@
+\begin{lemma}[多步曲率由单步曲率事件支配]\label{lem:pom-multistep-curvature-dominated}
+对任意整数 $n>m\ge 1$，令
+\[
+\tau_{n\to m}:=\tau_{m+1\to m}\circ\cdots\circ\tau_{n\to n-1},
+\qquad
+\pi_{n\to m}:=\pi_{m+1\to m}\circ\cdots\circ\pi_{n\to n-1},
+\]
+并定义多步不交换指示量
+\[
+\mathcal K_{n\to m}(\omega):=\mathbf 1\!\Big[\Fold_m(\tau_{n\to m}(\omega))\neq \pi_{n\to m}(\Fold_n(\omega))\Big]\qquad(\omega\in\Omega_n).
+\]
+则对所有 $\omega\in\Omega_n$ 成立
+\[
+\mathcal K_{n\to m}(\omega)\ \le\ \sum_{k=m}^{n-1}\mathcal K_{k+1\to k}\!\bigl(\tau_{n\to k+1}(\omega)\bigr).
+\]
+\end{lemma}
+\begin{proof}
+若右端为 $0$，则对每个 $k\in\{m,\dots,n-1\}$ 与 $\omega_{k+1}:=\tau_{n\to k+1}(\omega)\in\Omega_{k+1}$，由定义 $\mathcal K_{k+1\to k}(\omega_{k+1})=0$ 得
+\[
+\Fold_k(\tau_{k+1\to k}(\omega_{k+1}))=\pi_{k+1\to k}(\Fold_{k+1}(\omega_{k+1})).
+\]
+注意 $\tau_{k+1\to k}(\omega_{k+1})=\tau_{n\to k}(\omega)$。从 $k=m$ 起迭代并在每一步对等式两侧左复合相应的投影，利用逆系统的复合律 $\pi_{n\to m}=\pi_{k+1\to m}\circ\pi_{n\to k+1}$，可得
+\[
+\Fold_m(\tau_{n\to m}(\omega))=\pi_{n\to m}(\Fold_n(\omega)),
+\]
+即 $\mathcal K_{n\to m}(\omega)=0$。取逆否命题即得所示上界。证毕。
+\end{proof}
+
+\begin{theorem}[曲率事件可和性推出几乎处处的最终交换]\label{thm:pom-curvature-summable-eventual-commutation}
+令 $\Omega_\infty:=\{0,1\}^{\NN}$，并以 $\tau_{\infty\to m}:\Omega_\infty\to\Omega_m$ 表示取前 $m$ 位前缀。
+给定 $\Omega_\infty$ 上任意概率测度 $\PP$，定义事件
+\[
+A_m:=\Bigl\{\omega\in\Omega_\infty:\ \mathcal K_{m+1\to m}(\tau_{\infty\to m+1}(\omega))=1\Bigr\}.
+\]
+若满足可和性条件 $\sum_{m\ge 1}\PP(A_m)<\infty$，则存在 $\Omega_\infty^\star\subset\Omega_\infty$ 使 $\PP(\Omega_\infty^\star)=1$，且对每个 $\omega\in\Omega_\infty^\star$ 存在 $m_0(\omega)$ 使对所有 $m\ge m_0(\omega)$ 都有
+\[
+\Fold_m(\tau_{\infty\to m}(\omega))
+=\pi_{m+1\to m}\!\Bigl(\Fold_{m+1}(\tau_{\infty\to m+1}(\omega))\Bigr).
+\]
+从而对每个 $\omega\in\Omega_\infty^\star$，存在唯一的逆极限点 $x_\infty(\omega)\in X_\infty\simeq\varprojlim X_m$ 满足
+\[
+\pi_m(x_\infty(\omega))=\Fold_m(\tau_{\infty\to m}(\omega))\qquad(m\ge m_0(\omega)).
+\]
+\end{theorem}
+\begin{proof}
+由第一 Borel--Cantelli 引理，$\sum_m\PP(A_m)<\infty$ 蕴含 $\PP(A_m\ \mathrm{i.o.})=0$。因此对几乎处处的 $\omega$，存在 $m_0(\omega)$ 使得对所有 $m\ge m_0(\omega)$ 都有 $\omega\notin A_m$，即 $\mathcal K_{m+1\to m}(\tau_{\infty\to m+1}(\omega))=0$，展开定义得到所示最终交换恒等式。
+
+令 $x_m(\omega):=\Fold_m(\tau_{\infty\to m}(\omega))$。对 $m\ge m_0(\omega)$，上式等价于 $\pi_{m+1\to m}(x_{m+1}(\omega))=x_m(\omega)$，从而 $(x_m(\omega))_{m\ge m_0(\omega)}$ 给出逆系统的一条相容尾部。对 $m<m_0(\omega)$ 再令 $x_m(\omega):=\pi_{m_0(\omega)\to m}(x_{m_0(\omega)}(\omega))$，得到全体 $m\ge 1$ 的相容族，于是由逆极限的泛性质对应唯一的 $x_\infty(\omega)\in X_\infty$。证毕。
+\end{proof}
+
+\begin{proposition}[曲率概率给出的总变差最优上界]\label{prop:pom-curvature-tv-optimal}
+固定 $m\ge 1$，令 $\mu\in\Delta(\Omega_{m+1})$ 为任意分布，并在同一微态 $\omega\sim\mu$ 下定义
+\[
+X:=\Fold_m(\tau_{m+1\to m}(\omega))\in X_m,
+\qquad
+Y:=\pi_{m+1\to m}(\Fold_{m+1}(\omega))\in X_m,
+\]
+以及 $\varepsilon:=\PP_\mu[X\neq Y]=\PP_\mu[\mathcal K_{m+1\to m}(\omega)=1]$。
+则
+\[
+D_{\mathrm{TV}}\bigl(\mathcal L(X),\mathcal L(Y)\bigr)\ \le\ \varepsilon,
+\]
+且该常数在一般情形下不可再改进。
+\end{proposition}
+\begin{proof}
+对任意集合 $B\subseteq X_m$，有
+\[
+\bigl|\PP[X\in B]-\PP[Y\in B]\bigr|
+=\bigl|\EE(\mathbf 1_B(X)-\mathbf 1_B(Y))\bigr|
+\le \EE\,|\mathbf 1_B(X)-\mathbf 1_B(Y)|
+\le \PP[X\neq Y]=\varepsilon.
+\]
+取上确界得到总变差上界。最优性可由支持几乎不交且 $\PP[X\neq Y]=\varepsilon$ 的构造实现，从而达到 $D_{\mathrm{TV}}=\varepsilon$。证毕。
+\end{proof}
+
+\begin{proposition}[曲率门槛对信息注入的可审计上界]\label{prop:pom-curvature-conditional-entropy-bound}
+在命题 \ref{prop:pom-curvature-tv-optimal} 的设定下，令 $E:=\mathbf 1[X\neq Y]$，并记二元熵函数
+\[
+h(\varepsilon):=-\varepsilon\log\varepsilon-(1-\varepsilon)\log(1-\varepsilon),
+\]
+其中对数底任取但须一致。
+则条件熵满足
+\[
+H(Y\mid X)\ \le\ h(\varepsilon)+\varepsilon\log\bigl(|X_m|-1\bigr).
+\]
+若进一步令末位比特 $B:=\omega_{m+1}\in\{0,1\}$，则
+\[
+I(B;Y\mid X)\ \le\ h(\varepsilon)+\varepsilon\log\bigl(|X_m|-1\bigr).
+\]
+\end{proposition}
+\begin{proof}
+在事件 $\{E=0\}$ 上有 $Y=X$，故 $H(Y\mid X,E=0)=0$。在事件 $\{E=1\}$ 上，给定 $X$ 时随机变量 $Y$ 的取值落在 $X_m\setminus\{X\}$，从而 $H(Y\mid X,E=1)\le \log(|X_m|-1)$。于是
+\[
+H(Y\mid X)\le H(E\mid X)+\PP(E=1)\,H(Y\mid X,E=1)
+\le h(\varepsilon)+\varepsilon\log(|X_m|-1).
+\]
+又 $I(B;Y\mid X)=H(Y\mid X)-H(Y\mid X,B)\le H(Y\mid X)$，得到第二式。证毕。
+\end{proof}
+
+\begin{theorem}[截断--折叠曲率与单隐藏位的同一性]\label{thm:pom-truncation-curvature-equals-hidden-bit}
+固定 \(m\ge 1\)，令 \(\eta\in\Omega_{m+1}\)。
+定义曲率向量与指示量
+\[
+\kappa_{m+1\to m}(\eta)
+:=\Fold_m(\tau_{m+1\to m}(\eta))\oplus \pi_{m+1\to m}(\Fold_{m+1}(\eta))\in\{0,1\}^m,
+\qquad
+\mathcal K_{m+1\to m}(\eta):=\mathbf 1[\kappa_{m+1\to m}(\eta)\neq 0],
+\]
+并在尺度 \(m{+}1\) 上以引理 \ref{lem:pom-one-bit} 的口径定义隐藏位 \(b(\eta)\in\{0,1\}\) 使得
+\[
+N(\eta)=V_{m+1}(\Fold_{m+1}(\eta))+b(\eta)\,F_{m+3}.
+\]
+则恒有
+\[
+\boxed{\;\mathcal K_{m+1\to m}(\eta)=b(\eta).\;}
+\]
+更精确地，令 \(r:=N(\eta)\bmod F_{m+2}\in\ZZ/(F_{m+2}\ZZ)\)，并沿用定理 \ref{thm:fold-congruence-universal-property} 的规范截面记号 \(w(r)\in X_m\)。
+则
+\[
+\pi_{m+1\to m}(\Fold_{m+1}(\eta))=
+\begin{cases}
+w(r),& b(\eta)=0,\\
+w(r-F_{m+1}),& b(\eta)=1,
+\end{cases}
+\qquad\text{从而}\qquad
+\kappa_{m+1\to m}(\eta)=
+\begin{cases}
+0,& b(\eta)=0,\\
+w(r)\oplus w(r-F_{m+1}),& b(\eta)=1.
+\end{cases}
+\]
+\end{theorem}
+\begin{proof}
+由引理 \ref{lem:pom-fold-congruence}（或定理 \ref{thm:fold-congruence-universal-property} 的等价表述），稳定输出 \(\Fold_m(\cdot)\) 仅依赖于 \(N(\cdot)\bmod F_{m+2}\)，并可写成 \(\Fold_m(\omega)=w(N(\omega)\bmod F_{m+2})\)。
+朴素截断仅丢弃末位权重 \(\eta_{m+1}F_{m+2}\)，因此
+\(
+N(\tau_{m+1\to m}\eta)\equiv N(\eta)\pmod{F_{m+2}}
+\)，从而
+\[
+\Fold_m(\tau_{m+1\to m}(\eta))=w(r).
+\]
+另一方面，对 \(\Fold_{m+1}\) 的隐藏位分解给出
+\(
+N(\eta)\equiv V_{m+1}(\Fold_{m+1}(\eta))\pmod{F_{m+3}}
+\)，而把 \(\Fold_{m+1}(\eta)\) 投影到 \(X_m\) 并取 \(V_m\) 等价于在模 \(F_{m+2}\) 意义下忽略 \(F_{m+2}\) 位；因此
+\[
+V_m\!\left(\pi_{m+1\to m}(\Fold_{m+1}(\eta))\right)\equiv N(\eta)-b(\eta)F_{m+3}\pmod{F_{m+2}}.
+\]
+由 Fibonacci 递推 \(F_{m+3}=F_{m+2}+F_{m+1}\) 得 \(F_{m+3}\equiv F_{m+1}\ (\mathrm{mod}\ F_{m+2})\)，从而
+\[
+V_m\!\left(\pi_{m+1\to m}(\Fold_{m+1}(\eta))\right)\equiv r-b(\eta)F_{m+1}\pmod{F_{m+2}}.
+\]
+当 \(b(\eta)=0\) 时，上式与 \(V_m(w(r))=r\) 合并推出 \(\pi_{m+1\to m}(\Fold_{m+1}(\eta))=w(r)\)，故 \(\kappa_{m+1\to m}(\eta)=0\)，从而 \(\mathcal K_{m+1\to m}(\eta)=0\)。
+当 \(b(\eta)=1\) 时，注意 \(F_{m+1}\not\equiv 0\ (\mathrm{mod}\ F_{m+2})\)，故余数类从 \(r\) 变为 \(r-F_{m+1}\)，推出
+\(\pi_{m+1\to m}(\Fold_{m+1}(\eta))=w(r-F_{m+1})\neq w(r)\)，从而 \(\kappa_{m+1\to m}(\eta)=w(r)\oplus w(r-F_{m+1})\neq 0\)，即 \(\mathcal K_{m+1\to m}(\eta)=1\)。
+两种情形合并得到 \(\mathcal K_{m+1\to m}(\eta)=b(\eta)\) 与所述精确表达式。证毕。
+\end{proof}
+
+\begin{proposition}[独立曲率尾部下的朴素坐标几乎处处失效]\label{prop:pom-curvature-independent-divergent}
+在定理 \ref{thm:pom-curvature-summable-eventual-commutation} 的设定下仍记 $A_m=\{\mathcal K_{m+1\to m}(\tau_{\infty\to m+1}(\omega))=1\}$。
+若进一步假设 $(A_m)_{m\ge 1}$ 相互独立且 $\sum_{m\ge 1}\PP(A_m)=\infty$，则 $\PP(A_m\ \mathrm{i.o.})=1$。
+因此对 $\PP$-几乎处处的 $\omega$，序列 $x_m(\omega):=\Fold_m(\tau_{\infty\to m}(\omega))$ 违反相容条件 $\pi_{m+1\to m}(x_{m+1}(\omega))=x_m(\omega)$ 无穷多次，从而以朴素截断 $\tau_{\infty\to m}$ 作为跨分辨率坐标口径几乎处处不能产生逆极限坐标。
+\end{proposition}
+\begin{proof}
+由第二 Borel--Cantelli 引理，在独立性与 $\sum_m\PP(A_m)=\infty$ 下有 $\PP(A_m\ \mathrm{i.o.})=1$。而 $A_m$ 的发生等价于 $\pi_{m+1\to m}(x_{m+1}(\omega))\neq x_m(\omega)$，故相容性失败无穷多次。证毕。
+\end{proof}
+
+\begin{corollary}[均匀微态基线下曲率概率的闭式与 \texorpdfstring{$1/3$}{1/3} 极限]\label{cor:pom-curvature-uniform-limit-closed}
+令 \(\PP\) 为 \(\Omega_\infty\) 上的 i.i.d.\ Bernoulli\((\tfrac12)\) 乘积测度，并令
+\[
+\varepsilon_m:=\PP\!\left[\mathcal K_{m+1\to m}(\tau_{\infty\to m+1}(\omega))=1\right].
+\]
+则对所有 \(m\ge 1\) 有严格恒等式
+\[
+\boxed{\;
+\varepsilon_m
+=\PP[b(\eta)=1]_{\eta\sim\mathrm{Unif}(\Omega_{m+1})}
+=\frac13-\frac{\varepsilon_{m+1}^\star}{3\cdot 2^{m+1}}\;},
+\]
+其中 \(\varepsilon_{m+1}^\star=1\)（\(m{+}1\) 偶）或 \(\varepsilon_{m+1}^\star=2\)（\(m{+}1\) 奇）。
+因此
+\[
+\lim_{m\to\infty}\varepsilon_m=\frac13,\qquad
+\varepsilon_m-\frac13=\Theta(2^{-m}).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-truncation-curvature-equals-hidden-bit} 有 \(\mathcal K_{m+1\to m}(\eta)=b(\eta)\)（\(\eta\in\Omega_{m+1}\)），故 \(\varepsilon_m=\PP[b(\eta)=1]\)（均匀微态）。
+再由结论 \ref{con:pom-hidden-bit-mass-conservation-truncation} 的闭式计数（应用于分辨率 \(m{+}1\)）得到所示概率表达式与极限。证毕。
+\end{proof}
+
+\begin{proposition}[分辨率塔上的相容锥判别：曲率规约的必要性]\label{prop:pom-identity-cone-requires-curvature-reduction}
+对任意 \(n>m\ge 1\) 与 \(\omega\in\Omega_n\)，定义缺陷向量
+\[
+D_{n\to m}(\omega):=\Fold_m(\tau_{n\to m}(\omega))\oplus \pi_{n\to m}(\Fold_n(\omega))\in\{0,1\}^m,
+\qquad
+\mathcal K_{n\to m}(\omega)=\mathbf 1[D_{n\to m}(\omega)\neq 0].
+\]
+令 \(\omega\in\Omega_\infty\)，并设 \(x_m(\omega):=\Fold_m(\tau_{\infty\to m}(\omega))\)。
+则族 \((x_m(\omega))_{m\ge 1}\) 在逆系统中相容（即存在 \(x_\infty(\omega)\in\varprojlim X_m\) 使 \(\pi_m(x_\infty(\omega))=x_m(\omega)\) 对所有 \(m\) 成立）当且仅当对所有 \(m\ge 1\) 都有
+\[
+\mathcal K_{m+1\to m}(\tau_{\infty\to m+1}(\omega))=0.
+\]
+特别地，在均匀微态基线下由推论 \ref{cor:pom-curvature-uniform-limit-closed} 得 \(\PP[\mathcal K_{m+1\to m}=1]\to\tfrac13\)，因此朴素截断口径下的相容性失配并非可忽略的稀薄效应，而是由模结构不嵌套所强迫的稳定残差；相应的严格相容锥需以 fold-aware restriction 的交换口径（定义 \ref{def:pom-fold-aware-restriction}）给出。
+\end{proposition}
+\begin{proof}
+相容性条件等价于对所有 \(m\) 有 \(\pi_{m+1\to m}(x_{m+1}(\omega))=x_m(\omega)\)。
+按 \(x_m(\omega)\) 的定义展开即得
+\(
+\pi_{m+1\to m}(\Fold_{m+1}(\tau_{\infty\to m+1}\omega))=\Fold_m(\tau_{\infty\to m}\omega)
+\)，这恰等价于 \(\mathcal K_{m+1\to m}(\tau_{\infty\to m+1}\omega)=0\)。
+最后一段由推论 \ref{cor:pom-curvature-uniform-limit-closed} 给出的非零极限概率与定义 \ref{def:pom-fold-aware-restriction} 的严格交换图表合并得到。证毕。
+\end{proof}
+
+\begin{lemma}[朴素截断口径下缺陷的余圈组合律]\label{lem:pom-truncation-defect-cocycle}
+在命题 \ref{prop:pom-identity-cone-requires-curvature-reduction} 的记号下，把 \(X_j\subseteq\{0,1\}^j\) 视为二元向量空间 \(V_j:=(\ZZ/2)^j\) 的子集，并将 \(\pi_{j\to i}\) 延拓为前缀投影 \(V_j\to V_i\)。
+则对任意 \(n\ge k\ge m\ge 1\) 与任意 \(\omega\in\Omega_n\) 有严格恒等式
+\[
+\boxed{\;
+D_{n\to m}(\omega)
+\ =\
+D_{k\to m}\!\bigl(\tau_{n\to k}(\omega)\bigr)\ \oplus\ \pi_{k\to m}\!\bigl(D_{n\to k}(\omega)\bigr)\; }.
+\]
+并且 \(D_{m\to m}\equiv 0\)。
+\end{lemma}
+\begin{proof}
+取 \(\omega\in\Omega_n\)。
+由定义
+\[
+D_{n\to m}(\omega)=\Fold_m(\tau_{n\to m}(\omega))\oplus \pi_{n\to m}(\Fold_n(\omega)).
+\]
+在 \(\ZZ/2\) 上插入并消去同一项 \(\pi_{k\to m}(\Fold_k(\tau_{n\to k}(\omega)))\)，并用 \(\tau_{n\to m}=\tau_{k\to m}\circ\tau_{n\to k}\)、\(\pi_{n\to m}=\pi_{k\to m}\circ\pi_{n\to k}\) 得
+\[
+\begin{aligned}
+D_{n\to m}(\omega)
+&=
+\Bigl(\Fold_m(\tau_{k\to m}(\tau_{n\to k}\omega))\oplus \pi_{k\to m}(\Fold_k(\tau_{n\to k}\omega))\Bigr)\\
+&\qquad\oplus
+\pi_{k\to m}\Bigl(\Fold_k(\tau_{n\to k}\omega)\oplus \pi_{n\to k}(\Fold_n(\omega))\Bigr).
+\end{aligned}
+\]
+第一括号按定义等于 \(D_{k\to m}(\tau_{n\to k}(\omega))\)，第二括号等于 \(\pi_{k\to m}(D_{n\to k}(\omega))\)，合并即得。
+最后 \(D_{m\to m}(\omega)=\Fold_m(\omega)\oplus \Fold_m(\omega)=0\)。证毕。
+\end{proof}
+
+\begin{proposition}[缺陷余圈的 gauge 扭曲与余边界型变换]\label{prop:pom-truncation-defect-gauge-coboundary}
+沿用上述记号。
+给定任意 \(0\)-上链族 \(a=(a_m)_{m\ge 1}\)，其中 \(a_m:\Omega_m\to\{0,1\}^m\)。
+定义 gauge 扭曲后的折叠族
+\[
+\Fold_m^{(a)}(\omega):=\Fold_m(\omega)\oplus a_m(\omega).
+\]
+令 \(D_{n\to m}^{(a)}\) 为由 \(\Fold^{(a)}\) 诱导的缺陷向量：
+\[
+D^{(a)}_{n\to m}(\omega):=\Fold_m^{(a)}(\tau_{n\to m}(\omega))\oplus \pi_{n\to m}(\Fold_n^{(a)}(\omega)).
+\]
+则对一切 \(n\ge m\) 与 \(\omega\in\Omega_n\) 有
+\[
+\boxed{\;
+D_{n\to m}^{(a)}(\omega)
+\ =\
+D_{n\to m}(\omega)\ \oplus\ a_m(\tau_{n\to m}(\omega))\ \oplus\ \pi_{n\to m}\!\bigl(a_n(\omega)\bigr)\; }.
+\]
+\end{proposition}
+\begin{proof}
+直接代入定义并用 \(\pi_{n\to m}(u\oplus v)=\pi_{n\to m}(u)\oplus\pi_{n\to m}(v)\)（在 \(V_n\) 上）得到：
+\[
+\begin{aligned}
+D^{(a)}_{n\to m}(\omega)
+&=\bigl(\Fold_m(\tau_{n\to m}\omega)\oplus a_m(\tau_{n\to m}\omega)\bigr)\ \oplus\ 
+\pi_{n\to m}\bigl(\Fold_n(\omega)\oplus a_n(\omega)\bigr)\\
+&=D_{n\to m}(\omega)\ \oplus\ a_m(\tau_{n\to m}\omega)\ \oplus\ \pi_{n\to m}(a_n(\omega)).
+\end{aligned}
+\]
+证毕。
+\end{proof}
+
+\begin{conjecture}[Zeckendorf 规约口径下的缺陷类非平凡性]\label{conj:pom-zeckendorf-defect-class-nontrivial}
+设 \((\Fold_m)_{m\ge 1}\) 来自某个满足终止性、合流性且以 Zeckendorf 正规形为唯一正常形的二元局部重写实现（命题 \ref{prop:xi-local-binary-normalization-fibonacci-rigidity}）。
+则朴素截断口径下的缺陷族 \((D_{n\to m})\)（引理 \ref{lem:pom-truncation-defect-cocycle}）在上述 gauge 扭曲意义下不平凡：不存在 \(0\)-上链族 \(a=(a_m)\) 使得对所有 \(n\ge m\) 恒有 \(D^{(a)}_{n\to m}\equiv 0\)。
+等价地，缺陷余圈的 gauge 等价类张成一个非零的 \(\ZZ_2\)-一维子空间，并且仅依赖于 Zeckendorf 正规形体系而与具体重写策略无关。
+\end{conjecture}
+
+\begin{remark}[曲率尾部门槛与逆极限粒子化判据]\label{rem:pom-curvature-particleization}
+跨分辨率比较若以朴素前缀 $\tau$ 为坐标口径，则曲率事件控制了“先截断再折叠”与“先折叠再限制”的不一致频率，从而把伪不变量风险转化为可审计的尾部门槛。
+在给定微态基线 $\PP$ 下，可将可讨论的稳定本体限定为满足曲率尾部可和（或最终为零）的逆极限子集：其不同分辨率坐标 $\pi_m(x_\infty)$ 才能被视为同一对象在稳定逆系统口径下的一致投影。
+\end{remark}
+
+\begin{proposition}[\texorpdfstring{$\mathbb Z_2$}{Z2}-障碍类口径下的“曲率--进位缺陷”同构原型]\label{prop:pom-curvature-carry-defect-z2-obstruction-principle}
+定义 \ref{def:fold-local-curvature-defect} 的局部交换缺陷向量 \(\kappa_{m+1\to m}(\eta)\in\{0,1\}^m\) 与其指示 \(K_{m+1\to m}(\eta)\in\{0,1\}\)（亦见定理 \ref{thm:pom-truncation-curvature-equals-hidden-bit} 的 \(\mathcal K_{m+1\to m}\) 记号）给出一个以 \(\mathbb Z_2\) 为系数的障碍型不变量：其在尺度塔上的累积满足离散广义 Stokes 恒等式（定理 \ref{thm:fold-discrete-stokes-defect}），因此以“异或求和”方式实现可加性。
+\par
+另一方面，附录定理 \ref{thm:multinomial-vp-carry-signature} 将多项式系数的 \(p\)-进赋值识别为 \(p\)-进逐位加法的总进位次数；特别在 \(p=2\) 时，该总进位次数在 \(\mathbb Z_2\) 上同样具有可加性，并在折叠诱导的规范体积链上表现为尺度缺陷（定理 \ref{thm:fold-multiscale-carry-defect}）。
+\par
+因此在 \(\mathbb Z_2\)-上同调的抽象口径下，“折叠--截断的不交换曲率”与“二进进位缺陷”可视为同一类对象的两种实例：二者均由逐位进位/溢出机制生成，并作为取值于 \(\mathbb Z_2\) 的障碍类刻画跨尺度可交换性的失配。
+\end{proposition}

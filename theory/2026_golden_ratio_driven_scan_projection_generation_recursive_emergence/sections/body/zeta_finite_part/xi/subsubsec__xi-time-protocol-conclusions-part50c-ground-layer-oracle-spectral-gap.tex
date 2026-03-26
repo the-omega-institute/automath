@@ -1,0 +1,334 @@
+\paragraph{零温 witness 复杂度、Ramanujan 谱缝与平衡均值间隙}
+在输出位势的端点大偏差、地基熵、局部 Legendre 几何与碰撞位势的 RH/Ramanujan 临界窗已经建立之后，还可进一步把零温极端层的可恢复性、可采样性与谱窗口失效压缩为下列若干条结果。统一记
+\[
+\mathcal G_n:=
+\{\gamma:\ |\gamma|=n,\ \text{其输出 }1\text{ 的总数为 }k_{\max}(n)\}
+\]
+为极端饱和层。
+
+\begin{theorem}[极端饱和层的完备外置阈值恰为 \texorpdfstring{$\log_2 c$}{log2 c} 比特/步]\label{thm:xi-real-input-ground-layer-oracle-threshold}
+沿用推论 \ref{cor:real-input-40-ground-entropy} 的记号，并令 \(\Gamma_n\) 在 \(\mathcal G_n\) 上均匀分布。对任意只允许 \(B_n\) 比特外置寄存器的编码--解码机制，记恢复输出为 \(\widehat\Gamma_n\)。则有
+\[
+\boxed{\;
+\mathbb P(\widehat\Gamma_n=\Gamma_n)
+\le
+\frac{2^{B_n}}{A_{n,k_{\max}(n)}}.
+\;}
+\]
+从而：
+\begin{enumerate}
+  \item 若存在 \(\varepsilon>0\) 使
+  \[
+  B_n\le (\log_2 c-\varepsilon)n
+  \]
+  对充分大的 \(n\) 成立，则
+  \[
+  \mathbb P(\widehat\Gamma_n=\Gamma_n)
+  \le
+  \exp\!\bigl(-\varepsilon(\log 2)\,n+o(n)\bigr).
+  \]
+  \item 若希望存在固定 \(\eta\in(0,1]\) 使
+  \[
+  \mathbb P(\widehat\Gamma_n=\Gamma_n)\ge \eta
+  \]
+  对充分大的 \(n\) 成立，则必有
+  \[
+  B_n\ge n\log_2 c+\log_2\eta+o(n).
+  \]
+\end{enumerate}
+换言之，极端饱和层的最小完备外置率恰为 \(\log_2 c\) 比特/步。
+\end{theorem}
+\begin{proof}
+由定义，
+\[
+|\mathcal G_n|=A_{n,k_{\max}(n)}.
+\]
+设外置寄存器的取值集合为 \(\mathcal R_n\)，则
+\(
+|\mathcal R_n|\le 2^{B_n}
+\)。
+对任意确定性编码--解码机制，每个寄存器值 \(r\in\mathcal R_n\) 至多只能对应一个被正确恢复的候选路径；因此在 \(\mathcal G_n\) 中至多只有 \(2^{B_n}\) 条路径可能被正确译回。由于 \(\Gamma_n\) 在 \(\mathcal G_n\) 上均匀分布，得到
+\[
+\mathbb P(\widehat\Gamma_n=\Gamma_n)\le \frac{2^{B_n}}{|\mathcal G_n|}
+=\frac{2^{B_n}}{A_{n,k_{\max}(n)}}.
+\]
+随机机制只是确定性机制的凸组合，故同一上界仍然成立。
+
+再由推论 \ref{cor:real-input-40-ground-entropy}，
+\[
+A_{n,k_{\max}(n)}=\exp\bigl((\log c)n+o(n)\bigr).
+\]
+将其代回上式，便得到
+\[
+\mathbb P(\widehat\Gamma_n=\Gamma_n)
+\le
+\exp\bigl(B_n\log 2-(\log c)n+o(n)\bigr).
+\]
+若 \(B_n\le (\log_2 c-\varepsilon)n\)，则
+\[
+B_n\log 2-(\log c)n\le -\varepsilon(\log 2)\,n,
+\]
+从而得到第一条。
+反之，若成功概率对充分大的 \(n\) 满足
+\(
+\mathbb P(\widehat\Gamma_n=\Gamma_n)\ge \eta
+\)，则必有
+\[
+\eta
+\le
+\frac{2^{B_n}}{A_{n,k_{\max}(n)}},
+\]
+即
+\[
+B_n\ge \log_2 A_{n,k_{\max}(n)}+\log_2\eta
+=n\log_2 c+\log_2\eta+o(n).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[极端饱和层在无偏路径总体中的稀有指数等于 \texorpdfstring{$\log(\varphi^2/c)$}{log(phi^2/c)}]\label{thm:xi-real-input-ground-layer-unbiased-rarity}
+沿用命题 \ref{prop:real-input-40-pressure-freezing} 与推论 \ref{cor:real-input-40-ground-entropy} 的记号，记
+\[
+Z_n(1):=\mathbf{1}^{\mathsf T}M(1)^n\mathbf{1},
+\qquad
+p_n:=\frac{A_{n,k_{\max}(n)}}{Z_n(1)}.
+\]
+则有精确指数律
+\[
+\boxed{\;
+\lim_{n\to\infty}\frac{1}{n}\log p_n
+=
+\log c-\log\lambda(1)
+=
+-\delta_\ast,
+\;}
+\]
+其中
+\[
+\lambda(1)=\frac{3+\sqrt5}{2}=\varphi^2,
+\qquad
+\delta_\ast:=\log\frac{\varphi^2}{c}\approx 0.32249108560171.
+\]
+特别地，
+\[
+p_n=\exp(-\delta_\ast n+o(n)).
+\]
+若在全部长度 \(n\) 的可行路径上做独立无偏抽样，直到首次命中 \(\mathcal G_n\) 的等待时间记为 \(T_n\)，则
+\[
+\mathbb E[T_n]=\frac{1}{p_n}=\exp(\delta_\ast n+o(n)).
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:real-input-40-pressure-freezing}，
+\[
+\lim_{n\to\infty}\frac{1}{n}\log Z_n(1)=P(0)=\log\lambda(1)=\log(\varphi^2).
+\]
+另一方面，推论 \ref{cor:real-input-40-ground-entropy} 给出
+\[
+\lim_{n\to\infty}\frac{1}{n}\log A_{n,k_{\max}(n)}=\log c.
+\]
+两式相减即得
+\[
+\lim_{n\to\infty}\frac{1}{n}\log p_n
+=
+\log c-\log(\varphi^2)
+=
+-\delta_\ast.
+\]
+这与推论 \ref{cor:real-input-40-rate-endpoints} 的端点代价
+\(
+I(1/2)=\log(\varphi^2/c)
+\)
+完全一致。
+若独立重复无偏抽样，则 \(T_n\) 服从参数为 \(p_n\) 的几何分布，因而
+\(
+\mathbb E[T_n]=1/p_n
+\)，从而得到所示指数律。证毕。
+\end{proof}
+
+\begin{theorem}[RH-sharp 临界参数严格位于零温四次锚点之前]\label{thm:xi-real-input-rh-window-zero-temp-perron-gap}
+沿用命题 \ref{prop:real-input-40-collision-rhk-window} 与定理 \ref{thm:xi-zero-temperature-fourstate-artin-mazur-zeta-primitive-asymptotic} 的记号。设 \(u_R>1\) 为唯一满足
+\[
+u_R^5+4u_R^4+3u_R^3-96u_R^2-42u_R-14=0
+\]
+的正实根，并记
+\[
+\mathcal Q(u):=u^5+4u^4+3u^3-96u^2-42u-14,
+\]
+\[
+\mathcal R(y):=y^4-6y^3+9y^2-y-1,
+\qquad
+y_\infty:=\rho(B_\infty)=c^2.
+\]
+则有严格有理夹逼
+\[
+\boxed{\;
+\frac{359}{100}<u_R<\frac{3593}{1000}<y_\infty<\frac{18}{5}.\;}
+\]
+特别地，
+\[
+\boxed{\;
+u_R<y_\infty=\rho(B_\infty)=c^2.
+\;}
+\]
+因此在严格非空区间
+\[
+u\in\bigl(u_R,\rho(B_\infty)\bigr)
+\]
+上，核版 RH/Ramanujan 条件已经失效，但零温 quartic 地基尺度尚未达到其自身 Perron 阈值。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:real-input-40-collision-rhk-window}，\(\mathcal Q\) 在 \((0,\infty)\) 上恰有一个正根 \(u_R\)。直接代入得到
+\[
+\mathcal Q\!\left(\frac{359}{100}\right)
+=
+-\frac{25100699801}{10^{10}}<0,
+\qquad
+\mathcal Q\!\left(\frac{3593}{1000}\right)
+=
+\frac{362872814205193}{10^{15}}>0.
+\]
+由介值定理与唯一正根性，立得
+\[
+\frac{359}{100}<u_R<\frac{3593}{1000}.
+\]
+
+另一方面，定理 \ref{thm:xi-zero-temperature-fourstate-artin-mazur-zeta-primitive-asymptotic} 给出 \(y_\infty\) 是四次方程
+\[
+\mathcal R(y)=y^4-6y^3+9y^2-y-1=0
+\]
+的最大正根。
+\[
+\mathcal R\!\left(\frac{3593}{1000}\right)
+=
+-\frac{53334838799}{10^{12}}<0,
+\qquad
+\mathcal R\!\left(\frac{18}{5}\right)
+=
+\frac{41}{625}>0.
+\]
+因此同样由介值定理可得
+\[
+\frac{3593}{1000}<y_\infty<\frac{18}{5}.
+\]
+\[
+u_R<y_\infty=\rho(B_\infty)=c^2.
+\]
+\[
+u_R<\frac{3593}{1000}<y_\infty=\rho(B_\infty)=c^2.
+\]
+于是所述严格非空区间
+\[
+u\in\bigl(u_R,\rho(B_\infty)\bigr)
+\]
+立刻成立。证毕。
+\end{proof}
+
+\begin{theorem}[RH-sharp 阈与零温冻结阈的代数分裂]\label{thm:xi-real-input-rh-threshold-zero-temp-algebraic-splitting}
+沿用定理 \ref{thm:xi-real-input-rh-window-zero-temp-perron-gap} 的记号。则
+\[
+\gcd_{\ZZ[X]}\bigl(\mathcal Q(X),\mathcal R(X)\bigr)=1.
+\]
+等价地，
+\[
+\operatorname{Res}\bigl(\mathcal Q,\mathcal R\bigr)\neq 0.
+\]
+因此 \(u_R\) 与 \(y_\infty=\rho(B_\infty)\) 不可能由同一个代数根同时满足这两条定义方程；特别地，
+\[
+u_R\neq y_\infty.
+\]
+结合定理 \ref{thm:xi-real-input-rh-window-zero-temp-perron-gap}，可知 RH-sharp 谱阈与零温冻结阈不仅在实轴上严格分离，而且在代数上亦不可合并。
+\end{theorem}
+\begin{proof}
+对整系数多项式 \(\mathcal Q\) 与 \(\mathcal R\) 施行 Euclid 算法可得
+\[
+\gcd_{\ZZ[X]}\bigl(\mathcal Q(X),\mathcal R(X)\bigr)=1,
+\]
+等价地，
+\[
+\operatorname{Res}\bigl(\mathcal Q,\mathcal R\bigr)=-720892\neq 0.
+\]
+故 \(\mathcal Q\) 与 \(\mathcal R\) 没有公共代数根。
+
+另一方面，定理 \ref{thm:xi-real-input-rh-window-zero-temp-perron-gap} 已给出
+\[
+\mathcal Q(u_R)=0,
+\qquad
+\mathcal R(y_\infty)=0,
+\qquad
+u_R<y_\infty.
+\]
+若 \(u_R=y_\infty\)，则该代数数将同时是 \(\mathcal Q\) 与 \(\mathcal R\) 的公共根，矛盾。故
+\[
+u_R\neq y_\infty.
+\]
+于是两条阈值边界在定义方程层面已经代数分裂，而定理 \ref{thm:xi-real-input-rh-window-zero-temp-perron-gap} 又进一步给出其实轴顺序为
+\(
+u_R<y_\infty
+\)。
+证毕。
+\end{proof}
+
+\endinput
+\input{subsubsec__xi-time-protocol-conclusions-part50ca-output-endpoint-logcusp-rigidity}
+
+\begin{theorem}[最大密度层与平衡均值之间存在显式代数间隙而仍保留正熵]\label{thm:xi-real-input-ground-layer-mean-gap-positive-entropy}
+沿用推论 \ref{cor:real-input-40-alpha-max}、推论 \ref{cor:real-input-40-ground-entropy} 与表 \ref{tab:real_input_40_output_potential_cumulants_closed} 的记号，记
+\[
+\alpha_{\max}:=\frac12,
+\qquad
+\alpha_0:=P'(0)=\frac{23}{20}-\frac{7\sqrt5}{20},
+\]
+\[
+\Delta_\mu:=\alpha_{\max}-\alpha_0
+=
+\frac{7\sqrt5-13}{20}
+\approx 0.132623792124926.
+\]
+则对每个 \(n\) 及每条 \(\gamma\in\mathcal G_n\)，都有
+\[
+\frac{k_{\max}(n)}{n}
+=
+\frac12+O\!\left(\frac{1}{n}\right)
+=
+\alpha_0+\Delta_\mu+O\!\left(\frac{1}{n}\right).
+\]
+并且极端饱和层的总数满足
+\[
+|\mathcal G_n|
+=
+\exp\bigl((\log c)n+o(n)\bigr).
+\]
+因此在距离平衡均值 \(\Delta_\mu n+O(1)\) 的线性偏差层上，仍承载指数多的可行路径。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:real-input-40-ground-entropy}，
+\[
+k_{\max}(n)=\lfloor n/2\rfloor,
+\qquad
+|\mathcal G_n|=A_{n,k_{\max}(n)}
+=
+\exp\bigl((\log c)n+o(n)\bigr).
+\]
+因此
+\[
+\frac{k_{\max}(n)}{n}=\frac12+O\!\left(\frac{1}{n}\right).
+\]
+另一方面，表 \ref{tab:real_input_40_output_potential_cumulants_closed} 给出
+\[
+P'(0)=\frac{23}{20}-\frac{7\sqrt5}{20},
+\]
+故
+\[
+\frac12-P'(0)=\frac{7\sqrt5-13}{20}=\Delta_\mu>0.
+\]
+将两式合并，即得
+\[
+\frac{k_{\max}(n)}{n}
+=
+P'(0)+\Delta_\mu+O\!\left(\frac{1}{n}\right),
+\]
+并且同一偏差层的路径总数仍具有指数增长率 \(\log c\)。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part50cc-binfold-saturation-endpoint-shell-geometry}

@@ -1,0 +1,379 @@
+\paragraph{\texorpdfstring{$(\min)$}{min}-核闭包与预言机层析：\texorpdfstring{$\Gamma_{\mathrm{orc}}$}{Gamma\_orc} 的可逆反演与局部代价几何}
+定理 \ref{thm:pom-oracle-capacity-thermal-cut} 给出容量曲线的 \((\min)\)-核表示
+\(
+\Gamma_{\mathrm{orc}}=\sup_{\alpha}(f(\alpha)+\min(\alpha,\cdot))
+\)。
+本段将该表示抽象为一个带伴随算子的 Galois 对偶，从而把“由 \(\Gamma_{\mathrm{orc}}\) 反演 \(f\) 与两类速率函数”写成一条完全可审计的闭包/反闭包机制；
+并进一步给出临界窗的首阶有限尺寸修正，以及热相内局部代价
+\(
+R(a):=\tau(1)-\Gamma_{\mathrm{orc}}(a)=\log 2-\Gamma_{\mathrm{orc}}(a)
+\)
+的 KL--Bregman 同一式与面积表示。
+
+\subparagraph{\texorpdfstring{$(\min)$}{min}-核的 Galois 对偶与闭包算子}
+在闭区间 \([0,\log 2]\) 上，对任意上半连续函数 \(f:[0,\log 2]\to\RR\cup\{-\infty\}\) 定义
+\begin{equation}\label{eq:pom-min-kernel-closure-operator-T}
+(\mathfrak{T}_{\min} f)(a)
+:=\sup_{\alpha\in[0,\log 2]}\bigl(f(\alpha)+\min(\alpha,a)\bigr),
+\qquad a\in[0,\log 2],
+\end{equation}
+并对任意函数 \(g:[0,\log 2]\to\RR\cup\{\pm\infty\}\) 定义伴随算子
+\begin{equation}\label{eq:pom-min-kernel-erosion-operator-E}
+(\mathfrak{E}_{\min} g)(\alpha)
+:=\inf_{a\in[0,\log 2]}\bigl(g(a)-\min(\alpha,a)\bigr),
+\qquad \alpha\in[0,\log 2].
+\end{equation}
+
+\begin{theorem}[Galois 对偶与闭包/内核]\label{thm:pom-min-kernel-galois-adjunction-closure}
+对任意 \(f,g\) 有严格等价
+\[
+\boxed{\;
+\mathfrak{T}_{\min}f\le g\quad\Longleftrightarrow\quad f\le \mathfrak{E}_{\min}g\;}
+\]
+（不等号按点态理解）。
+因此 \(\mathfrak{E}_{\min}\circ\mathfrak{T}_{\min}\) 为扩张算子（extensive），而 \(\mathfrak{T}_{\min}\circ\mathfrak{E}_{\min}\) 为收缩算子（contractive），并且成立幂等恒等式
+\[
+\boxed{\;
+\mathfrak{T}_{\min}\circ\mathfrak{E}_{\min}\circ\mathfrak{T}_{\min}=\mathfrak{T}_{\min},\qquad
+\mathfrak{E}_{\min}\circ\mathfrak{T}_{\min}\circ\mathfrak{E}_{\min}=\mathfrak{E}_{\min}\;}
+\]
+从而 \(\mathfrak{T}_{\min}\circ\mathfrak{E}_{\min}\) 与 \(\mathfrak{E}_{\min}\circ\mathfrak{T}_{\min}\) 均为投影算子（idempotent）。
+\end{theorem}
+\begin{proof}
+由定义 \eqref{eq:pom-min-kernel-closure-operator-T}，\(\mathfrak{T}_{\min}f\le g\) 等价于
+\(
+f(\alpha)+\min(\alpha,a)\le g(a)
+\)
+对所有 \((\alpha,a)\in[0,\log 2]^2\) 成立。
+对固定 \(\alpha\) 两边对 \(a\) 取下确界，得到
+\(
+f(\alpha)\le \inf_a(g(a)-\min(\alpha,a))=(\mathfrak{E}_{\min}g)(\alpha)
+\)；
+反向若 \(f\le \mathfrak{E}_{\min}g\)，则对任意 \(a\) 有
+\[
+(\mathfrak{T}_{\min}f)(a)
+=\sup_{\alpha}\bigl(f(\alpha)+\min(\alpha,a)\bigr)
+\le \sup_{\alpha}\bigl((\mathfrak{E}_{\min}g)(\alpha)+\min(\alpha,a)\bigr)
+\le g(a),
+\]
+其中最后一步由 \((\mathfrak{E}_{\min}g)(\alpha)\le g(a)-\min(\alpha,a)\)（对 \(\inf\) 的定义）逐点推出。
+幂等恒等式由该对偶直接推出：例如取 \(g=\mathfrak{T}_{\min}f\)，则 \(f\le \mathfrak{E}_{\min}\mathfrak{T}_{\min}f\)，再施加 \(\mathfrak{T}_{\min}\) 得
+\(
+\mathfrak{T}_{\min}f\le \mathfrak{T}_{\min}\mathfrak{E}_{\min}\mathfrak{T}_{\min}f
+\)；
+而 \(\mathfrak{T}_{\min}\mathfrak{E}_{\min}\) 为收缩算子又给出反向不等式，故等号成立。另一式同理。证毕。
+\end{proof}
+
+\begin{definition}[\texorpdfstring{$(\min)$}{min}-核可实现类]\label{def:pom-min-kernel-class-G}
+记 \(\mathcal{G}_{\min}\) 为满足下列三条性质的函数类 \(g:[0,\log 2]\to\RR\cup\{-\infty\}\)：
+\begin{enumerate}
+  \item \(g\) 上半连续；
+  \item \(g\) 凹；
+  \item \(g\) 为 \(1\)-Lipschitz：\(|g(a)-g(b)|\le |a-b|\)；
+  \item \(g\) 单调不减：若 \(a\le b\)，则 \(g(a)\le g(b)\)。
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[\texorpdfstring{$(\min)$}{min}-核共轭的可逆性：最大前像与精确回收]\label{thm:pom-min-kernel-projection-and-inversion}
+对任意 \(g:[0,\log 2]\to\RR\cup\{\pm\infty\}\)，令
+\begin{equation}\label{eq:pom-min-kernel-inversion-f-from-g}
+\boxed{\;
+f_{\max}(\alpha):=(\mathfrak{E}_{\min}g)(\alpha)
+=\inf_{a\in[0,\log 2]}\bigl(g(a)-\min(\alpha,a)\bigr),\qquad \alpha\in[0,\log 2].\;}
+\end{equation}
+则：
+\begin{enumerate}
+  \item \textbf{（最大前像）}对任意 \(f\) 都有
+  \[
+  \mathfrak{T}_{\min}f\le g\quad\Longleftrightarrow\quad f\le f_{\max}.
+  \]
+  因而在所有满足 \(\mathfrak{T}_{\min}f\le g\) 的前像中，\(f_{\max}\) 为唯一最大元。
+  \item \textbf{（可实现时的精确回收）}若 \(g\) 可写为 \(g=\mathfrak{T}_{\min}f\)（对某个 \(f\)），则
+  \[
+  \boxed{\;
+  g=\mathfrak{T}_{\min}f_{\max}=\mathfrak{T}_{\min}(\mathfrak{E}_{\min}g)\;}
+  \]
+  并且对任何满足 \(g=\mathfrak{T}_{\min}\tilde f\) 的 \(\tilde f\) 必有 \(\tilde f\le f_{\max}\)。
+  \item \textbf{（\(\mathcal{G}_{\min}\) 上的简化反演）}若 \(g\in\mathcal{G}_{\min}\)，则上式中的下确界在 \(a=\alpha\) 处达到，从而
+  \[
+  \boxed{\;
+  f_{\max}(\alpha)=g(\alpha)-\alpha\qquad(\alpha\in[0,\log 2])\;}
+  \]
+  并且仍有 \(g=\mathfrak{T}_{\min}f_{\max}\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一条与第二条是定理 \ref{thm:pom-min-kernel-galois-adjunction-closure} 的直接推论：
+\(\mathfrak{T}_{\min}f\le g\Longleftrightarrow f\le \mathfrak{E}_{\min}g=f_{\max}\)，并且若 \(g=\mathfrak{T}_{\min}f\) 则
+\(
+\mathfrak{T}_{\min}f_{\max}
+=\mathfrak{T}_{\min}\mathfrak{E}_{\min}\mathfrak{T}_{\min}f
+=\mathfrak{T}_{\min}f=g
+\)
+（用到 \(\mathfrak{T}_{\min}\circ\mathfrak{E}_{\min}\circ\mathfrak{T}_{\min}=\mathfrak{T}_{\min}\)）。
+\par
+第三条：设 \(g\in\mathcal{G}_{\min}\) 且固定 \(\alpha\)。
+当 \(a\ge \alpha\) 时，\(\min(\alpha,a)=\alpha\)，故 \(g(a)-\min(\alpha,a)=g(a)-\alpha\)；
+由单调不减性知其在 \(a=\alpha\) 处取下确界，值为 \(g(\alpha)-\alpha\)。
+当 \(a\le \alpha\) 时，\(\min(\alpha,a)=a\)，故 \(g(a)-\min(\alpha,a)=g(a)-a\)；
+而凹与 \(1\)-Lipschitz（并结合单调不减）给出任意次梯度 \(s(a)\in[0,1]\)，从而
+\(
+\frac{d}{da}(g(a)-a)\le 0
+\)
+在分布意义下成立，故 \(a\mapsto g(a)-a\) 单调不增，于是其在 \([0,\alpha]\) 的下确界同样在 \(a=\alpha\) 达到。
+两段合并得到 \(f_{\max}(\alpha)=g(\alpha)-\alpha\)。
+于是对任意 \(a\in[0,\log 2]\)，
+\[
+(\mathfrak{T}_{\min}f_{\max})(a)
+=\sup_{\alpha}\bigl(g(\alpha)-\alpha+\min(\alpha,a)\bigr).
+\]
+当 \(\alpha\le a\) 时，上式括号内等于 \(g(\alpha)\le g(a)\)（单调不减）；
+当 \(\alpha\ge a\) 时，上式括号内等于 \(g(\alpha)-\alpha+a\le g(a)\)（由 \(1\)-Lipschitz 得 \(g(\alpha)-g(a)\le \alpha-a\)）。
+取 \(\alpha=a\) 可取到等号，故 \((\mathfrak{T}_{\min}f_{\max})(a)=g(a)\) 对所有 \(a\) 成立。证毕。
+\end{proof}
+
+\subparagraph{由 \texorpdfstring{$\Gamma_{\mathrm{orc}}$}{Gamma\_orc} 完全反演谱与速率函数，并判别热相点}
+在定理 \ref{thm:pom-ldp-uniform-and-wm-exact-spectrum} 的谱等号制度下，计数谱 \(f\) 上半连续且凹，且满足
+\(
+\sup_\alpha f(\alpha)=\log\varphi
+\)；
+而定理 \ref{thm:pom-oracle-capacity-thermal-cut} 给出
+\(
+\Gamma_{\mathrm{orc}}=\mathfrak{T}_{\min}f
+\)。
+因此 \(\Gamma_{\mathrm{orc}}\) 在指数尺度上决定 \(f\) 及相应的两类大偏差速率函数。
+
+\begin{theorem}[\texorpdfstring{$\Gamma_{\mathrm{orc}}$}{Gamma\_orc} 的精确反演与双速率重建]\label{thm:pom-oracle-tomography-completeness-f-Iu-Iw}
+假设 \(\Gamma_{\mathrm{orc}}\in\mathcal{G}_{\min}\)。
+则由 \eqref{eq:pom-min-kernel-inversion-f-from-g} 得到谱的精确反演
+\[
+\boxed{\;
+f(\alpha)=\inf_{a\in[0,\log 2]}\bigl(\Gamma_{\mathrm{orc}}(a)-\min(\alpha,a)\bigr),\qquad \alpha\in[0,\log 2].\;}
+\]
+并且类型均匀测度 \(U_m=\mathrm{Unif}(X_m)\) 与推前测度 \(w_m\)（定义 \ref{def:pom-wm-baseline}）对应的速率函数满足
+\[
+\boxed{\;
+I_U(\alpha)=\log\varphi-f(\alpha),\qquad
+I_w(\alpha)=\log 2-\alpha-f(\alpha)\;}
+\]
+（在其有效域上按谱等号理解）。
+从而 \(\Gamma_{\mathrm{orc}}\) 单独决定 \(f\)、\(I_U\) 与 \(I_w\) 的全曲线。
+\end{theorem}
+\begin{proof}
+第一式为定理 \ref{thm:pom-min-kernel-projection-and-inversion} 的 \((\min)\)-核反演。
+第二式中 \(I_U=\log\varphi-f\) 为定理 \ref{thm:pom-ldp-uniform-and-wm-exact-spectrum} 的计数谱等号；
+而 \(w_m(x)=d_m(x)/2^m\) 是 \(U_m\) 关于观测 \(Y_m=\frac1m\log d_m\) 的指数倾斜，
+在指数尺度上给出
+\(
+w_m(Y_m\approx\alpha)\asymp \exp(m(f(\alpha)+\alpha-\log 2))
+\)，
+故 \(I_w(\alpha)=\log 2-\alpha-f(\alpha)\)。证毕。
+\end{proof}
+
+\begin{theorem}[热相内点判别：可微性与斜率区间]\label{thm:pom-oracle-thermal-point-criteria}
+对任意 \(a\in(0,\log 2)\)，下列两条陈述等价：
+\begin{enumerate}
+  \item \(a\) 属于热相区间 \((a_0,a_1)\)（等价于定理 \ref{thm:pom-oracle-capacity-thermal-cut} 中的唯一共轭点 \(q_*(a)\) 落在 \((0,1)\)）；
+  \item \(\Gamma_{\mathrm{orc}}\) 在 \(a\) 处可微，且 \(0<\Gamma_{\mathrm{orc}}'(a)<1\)。
+\end{enumerate}
+在该等价条件下，上确界表示
+\(
+\Gamma_{\mathrm{orc}}(a)=\sup_{\alpha}(f(\alpha)+\min(\alpha,a))
+\)
+在折点层 \(\alpha=a\) 处唯一取到，并因此满足严格同一式
+\[
+\boxed{\;f(a)=\Gamma_{\mathrm{orc}}(a)-a.\;}
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-oracle-capacity-thermal-cut} 与推论 \ref{cor:pom-oracle-capacity-slope-readout}，
+热相内点处存在唯一 \(q_*(a)\in(0,1)\) 且 \(\Gamma_{\mathrm{orc}}'(a)=1-q_*(a)\in(0,1)\)，得 \((1)\Rightarrow(2)\)。
+反之，若 \(\Gamma_{\mathrm{orc}}'(a)\in(0,1)\)，则其支撑线斜率既不同于线性段的端点斜率 \(1\)（低预算线性段）亦不同于平台段斜率 \(0\)，从而 \(a\) 不可能落在冻结相，必须属于热相区间，得 \((2)\Rightarrow(1)\)。
+在热相内点，定理 \ref{thm:pom-oracle-capacity-thermal-cut} 已给出折点唯一最优性，故 \(f(a)=\Gamma_{\mathrm{orc}}(a)-a\) 作为直接推论成立。证毕。
+\end{proof}
+
+\subparagraph{临界窗与中偏差：成功率的有限尺寸修正}
+以下两条结论将定理 \ref{thm:pom-oracle-critical-window-gaussian} 的高斯极限提升到首阶修正与中偏差指数层级。
+
+\begin{theorem}[Edgeworth 首阶修正：三阶压力导数控制临界窗偏差]\label{thm:pom-oracle-critical-window-edgeworth}
+沿用定理 \ref{thm:pom-oracle-critical-window-gaussian} 的记号，进一步假设 \(\tau\) 在 \(q=1\) 的左邻域实解析，且三阶导数
+\[
+\kappa_3:=\tau^{(3)}(1^-)
+\]
+存在。
+对固定 \(t\in\RR\) 取
+\(
+B_m=\bigl\lfloor \beta_{\mathrm{crit}}m+\frac{t}{\log 2}\sqrt m\bigr\rfloor
+\)，并令 \(z:=t/\sigma\)。
+在谱隙与解析正规性保证的局部极限定理制度下，有首阶展开
+\[
+\boxed{\;
+\mathrm{Succ}^{\mathrm{orc}}_m(B_m)
+=\Phi(z)+\frac{\kappa_3}{6\sigma^3}\,\frac{1}{\sqrt m}\,(1-z^2)\,\phi(z)+o(m^{-1/2})\; } ,
+\]
+其中 \(\Phi\) 与 \(\phi\) 分别为标准正态分布函数与密度。
+\end{theorem}
+\begin{proof}[证明要点]
+由定理 \ref{thm:pom-oracle-critical-window-gaussian} 的分解，临界窗内成功率的主贡献由事件 \(Y_m\le a_1+t/\sqrt m\) 决定，而软阈值补集项为 \(\exp(-\Theta(\sqrt m))\) 并可并入误差。
+对归一化变量 \(\bigl(\sqrt m\,(Y_m-a_1)\bigr)/\sigma\) 应用由 \(\tau\) 的三阶解析喷射与谱隙扰动导出的 Edgeworth 展开，即得所示首阶修正。证毕。
+\end{proof}
+
+\begin{proposition}[中偏差主指数：预算偏离 \texorpdfstring{$m^\gamma$}{m^gamma} 级时的普适二次律]\label{prop:pom-oracle-critical-window-mdp}
+设 \(\tau\) 在 \(q=1\) 的左邻域二次可微且 \(\sigma^2=\tau''(1^-)>0\)。
+取 \(1/2<\gamma<1\) 与 \(s>0\)，并令
+\[
+B_m=\left\lfloor \beta_{\mathrm{crit}}m-\frac{s}{\log 2}\,m^\gamma\right\rfloor.
+\]
+在标准谱隙正规性（使 \(I_w\) 在其极小点二次可微）下，有
+\[
+\boxed{\;
+\log \mathrm{Succ}^{\mathrm{orc}}_m(B_m)
+=-\frac{s^2}{2\sigma^2}\,m^{2\gamma-1}+o\!\bigl(m^{2\gamma-1}\bigr)\; } ,
+\qquad m\to\infty.
+\]
+\end{proposition}
+\begin{proof}[证明要点]
+将预算换算为 \(a_m=a_1-s\,m^{\gamma-1}+o(m^{\gamma-1})\)。
+由 \(I_w\) 在极小点 \(a_1\) 的二次展开 \(I_w(a_1-\delta)=\delta^2/(2\sigma^2)+o(\delta^2)\) 及中偏差原理，得到
+\(
+\log w_m(Y_m\le a_m)=-(s^2/(2\sigma^2))m^{2\gamma-1}+o(m^{2\gamma-1})
+\)。
+而在该尺度下软阈值补项不改变主指数，故成功率与该尾概率同指数阶。证毕。
+\end{proof}
+
+\subparagraph{局部代价的 KL--Bregman 同一式与面积表示}
+记
+\[
+R(a):=\tau(1)-\Gamma_{\mathrm{orc}}(a)=\log 2-\Gamma_{\mathrm{orc}}(a)\ \ (\ge 0),
+\]
+其为热相内的局部“成功率缺口指数”（亦即 \(R(a)=-\Sigma_{\mathrm{orc}}(a)\)，见定理 \ref{thm:pom-oracle-restricted-fenchel-duality-negative-temp}）。
+
+\begin{definition}[Bregman 散度（压力几何）]\label{def:pom-bregman-divergence-pressure}
+设 \(\tau\) 在区间上可微且凸。
+对 \(p,q\) 定义 Bregman 散度
+\[
+\mathcal{B}_{\tau}(p,q):=\tau(p)-\tau(q)-\tau'(q)(p-q)\ \ (\ge 0).
+\]
+\end{definition}
+
+\begin{theorem}[KL--Bregman 同一式：局部代价等于 escort 到基准的相对熵率]\label{thm:pom-oracle-local-cost-kl-bregman}
+设 \(a\in(a_0,a_1)\) 为热相内点，并令 \(q_*(a)\in(0,1)\) 为唯一共轭参数（满足 \(\tau'(q_*(a))=a\)）。
+则有严格恒等式
+\[
+\boxed{\;
+R(a)=\tau(1)-\tau(q_*(a))-(1-q_*(a))a
+=\mathcal{B}_{\tau}\bigl(1,q_*(a)\bigr)\; } .
+\]
+进一步地，对 escort 分布 \(\pi_{m,q}(x)=d_m(x)^q/S_q(m)\) 与基准 \(w_m=\pi_{m,1}\)，在可交换极限/求导的谱隙制度下有
+\[
+\boxed{\;
+R(a)=\lim_{m\to\infty}\frac{1}{m}D_{\mathrm{KL}}\!\bigl(\pi_{m,q_*(a)}\ \|\ w_m\bigr)\; } .
+\]
+\end{theorem}
+\begin{proof}
+热相内点处，由 \eqref{eq:pom-oracle-gamma-restricted-variational-q01} 的受限变分表示与唯一最优性，
+\(
+\Gamma_{\mathrm{orc}}(a)=\tau(q_*)+(1-q_*)a
+\)；
+代入 \(R=\tau(1)-\Gamma_{\mathrm{orc}}\) 得第一式，第二式为定义 \ref{def:pom-bregman-divergence-pressure}。
+\par
+对 KL，直接计算
+\[
+\log\frac{\pi_{m,q}(x)}{w_m(x)}
+=(q-1)\log d_m(x)-\bigl(\log S_q(m)-\log S_1(m)\bigr).
+\]
+对 \(\pi_{m,q}\) 取期望得
+\(
+D_{\mathrm{KL}}(\pi_{m,q}\|w_m)=(q-1)\mathbb{E}_{\pi_{m,q}}[\log d_m]-\bigl(\log S_q-\log S_1\bigr)
+\)。
+除以 \(m\) 并令 \(m\to\infty\)（用推论 \ref{cor:pom-pressure-derivatives-from-escort} 的极限导数公式）得到
+\(
+\frac{1}{m}D_{\mathrm{KL}}\to (q-1)\tau'(q)-(\tau(q)-\tau(1))
+=\mathcal{B}_{\tau}(1,q)
+\)；
+取 \(q=q_*(a)\) 即得。证毕。
+\end{proof}
+
+\begin{corollary}[速率--预算参数化：Bregman 等距曲线唯一决定最小预算]\label{cor:pom-oracle-rate-budget-bregman-isodistance}
+在热相内假设 \(a\mapsto R(a)\) 连续且严格单调。
+给定目标代价指数 \(r\in(0,R(a_0^+))\)，令
+\[
+a(r):=\inf\{a\in[0,\log 2]:\ R(a)\le r\}.
+\]
+则存在唯一 \(q(r)\in(0,1)\) 使
+\[
+\mathcal{B}_{\tau}\bigl(1,q(r)\bigr)=r,
+\qquad
+a(r)=\tau'(q(r)).
+\]
+因此最优权衡曲线由 \(q\mapsto(\tau'(q),\mathcal{B}_{\tau}(1,q))\) 在 \(q\in(0,1)\) 上唯一参数化。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-oracle-local-cost-kl-bregman}，热相内 \(R(a)=\mathcal{B}_{\tau}(1,q_*(a))\) 且 \(a=\tau'(q_*(a))\)。
+严格凸性给出 \(q\mapsto \mathcal{B}_{\tau}(1,q)\) 在 \((0,1)\) 上严格单调，故对任意 \(r\) 存在唯一 \(q(r)\) 解，并由共轭关系得到 \(a(r)=\tau'(q(r))\)。证毕。
+\end{proof}
+
+\begin{theorem}[信息投影原理：均值约束下到 \texorpdfstring{$w_m$}{wm} 的最小相对熵必由 escort 达到]\label{thm:pom-oracle-i-projection-escort}
+对固定 \(m\)，记 \(y_m(x)=\frac{1}{m}\log d_m(x)\) 并令
+\[
+\mathcal{M}_m(a):=\Bigl\{\pi\in\Delta(X_m):\ \mathbb{E}_{\pi}[y_m(X)]=a\Bigr\}.
+\]
+对可行区间内部的 \(a\)，极小化
+\[
+R_m(a):=\inf_{\pi\in\mathcal{M}_m(a)}D_{\mathrm{KL}}(\pi\|w_m)
+\]
+存在唯一解，且该解为某个 escort 分布 \(\pi_{m,q}\)。
+并且对偶表述成立：
+\[
+\boxed{\;
+R_m(a)=\sup_{\theta\in\RR}\left(\theta a-\frac{1}{m}\log \mathbb{E}_{w_m}\bigl[e^{\theta m y_m(X)}\bigr]\right)\; }.
+\]
+在热相正规性下，对任意 \(a\in(a_0,a_1)\) 有一致极限
+\[
+\lim_{m\to\infty}\frac{1}{m}R_m(a)=R(a),
+\qquad
+q\to q_*(a).
+\]
+\end{theorem}
+\begin{proof}
+对有限 \(m\)，这是带线性矩约束的 KL 极小化：由拉格朗日乘子法与严格凸性，唯一极小化器满足
+\(
+\pi(x)\propto w_m(x)e^{\theta m y_m(x)}
+\)。
+由于 \(w_m(x)\propto d_m(x)\) 且 \(e^{\theta m y_m(x)}=d_m(x)^{\theta}\)，故 \(\pi(x)\propto d_m(x)^{1+\theta}\)，即为 escort 族。
+对偶式为标准 Fenchel 对偶（或由 KL 的 Gibbs 变分式得到）。
+极限一致性由压力极限、共轭唯一性与定理 \ref{thm:pom-oracle-local-cost-kl-bregman} 合成。证毕。
+\end{proof}
+
+\begin{theorem}[局部面积表示：斜率缺口面积与二阶能量积分]\label{thm:pom-oracle-local-cost-area-representation}
+在热相内取 \(a=\tau'(q)\)（\(q\in(0,1)\)）。
+则 \(R(a)=\mathcal{B}_{\tau}(1,q)\) 具有严格积分表示
+\[
+\boxed{\;
+R(a)=\int_{q}^{1}\bigl(\tau'(t)-\tau'(q)\bigr)\,\dd t
+=\int_{q}^{1}\bigl(\tau'(t)-a\bigr)\,\dd t
+=\int_{q}^{1}(1-t)\tau''(t)\,\dd t\; }.
+\]
+并且由 \(R(a)=\log 2-\Gamma_{\mathrm{orc}}(a)\) 得到
+\[
+\boxed{\;
+R(a)=\int_{a}^{\log 2}\Gamma_{\mathrm{orc}}'(s)\,\dd s
+=\int_{a}^{\log 2}\bigl(1-q_*(s)\bigr)\,\dd s\qquad (a\in(a_0,a_1))\;}
+\]
+其中第二个等号使用推论 \ref{cor:pom-oracle-capacity-slope-readout} 的 \(\Gamma_{\mathrm{orc}}'(s)=1-q_*(s)\)。
+\end{theorem}
+\begin{proof}
+由定义 \(\mathcal{B}_{\tau}(1,q)=\tau(1)-\tau(q)-\tau'(q)(1-q)\)，直接积分得
+\[
+\int_q^1(\tau'(t)-\tau'(q))\,\dd t=\tau(1)-\tau(q)-(1-q)\tau'(q)=\mathcal{B}_{\tau}(1,q),
+\]
+并由分部积分得到 \(\int_q^1(1-t)\tau''(t)\,\dd t\)。
+第二组恒等式由 \(\Gamma_{\mathrm{orc}}(\log 2)=\log 2\) 与基本定理
+\(
+\log 2-\Gamma_{\mathrm{orc}}(a)=\int_a^{\log 2}\Gamma_{\mathrm{orc}}'(s)\dd s
+\)
+得到；再代入推论 \ref{cor:pom-oracle-capacity-slope-readout} 即得。证毕。
+\end{proof}
+
+\endinput
+

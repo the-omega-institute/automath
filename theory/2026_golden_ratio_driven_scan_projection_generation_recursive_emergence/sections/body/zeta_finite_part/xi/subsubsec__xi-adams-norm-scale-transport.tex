@@ -1,0 +1,193 @@
+\subsubsection{端点压缩的尺度交换律：Adams--Norm 折叠门与固定半径证书}\label{subsubsec:xi-adams-norm-scale-transport}
+定理 \ref{thm:xi-offcritical-quadratic-radial-compression} 已给出离切片零点
+\(\rho=\beta+\mathrm{i}\gamma\)（\(0<\beta<\tfrac12\)）在圆盘坐标中的结构性压缩：
+令 \(\delta:=\tfrac12-\beta>0\) 且 \(w_\rho=\mathcal{C}(\gamma+\mathrm{i}\delta)\in\mathbb{D}\)，则
+\[
+1-|w_\rho|^2=\frac{4\delta}{\gamma^2+(1+\delta)^2},
+\qquad
+|w_\rho|^2=1-\frac{4\delta}{\gamma^2+(1+\delta)^2}.
+\]
+因此当 \(|\gamma|\to\infty\) 且 \(\delta\) 固定时，圆盘半径缺口 \(1-|w_\rho|^2\) 以 \(\Theta(\gamma^{-2})\) 被压入端点邻域的边界层，并诱导推论 \ref{cor:xi-offcritical-visibility-threshold-bit-budget} 中的分辨率/位预算门槛。
+\par
+在 unitary slice 锁定的制度中（定义 \ref{def:xi-visible-read-null}，取 \(X_{\mathrm{vis}}=\mathsf{Phase}\)），径向信息不允许被作为连续寄存器外置；因此内禀问题是：
+在不引入径向连续模式轴、并保持既有自对偶完成化与固定切片制度的前提下，是否存在一种纯代数/函子化的尺度门，把端点边界层中的点状缺陷搬运到预设的紧子圆盘中，使“高高度不可见性”可被转写为“尺度参数的可见性”？
+\par
+本段给出一个严格实现：沿幂覆盖 \(w\mapsto w^m\) 的 Adams--Norm 折叠门把分支自由度乘积对称化，从而把端点邻域的点状缺陷搬运为固定半径处的可核验 Jensen 缺陷下界；其代价是引入一个外置尺度参数 \(m\)（可显式估计，并在不变量坐标中具有整系数闭合）。
+
+\paragraph{幂覆盖与 Adams--Norm 折叠门}
+对任意整数 \(m\ge 1\)，令
+\[
+\pi_m:\mathbb{D}\to\mathbb{D},\qquad \pi_m(\omega)=\omega^m
+\]
+为 \(m\)-次覆盖（deck 群为 \(\mu_m=\{\zeta_m^k:0\le k\le m-1\}\)，\(\zeta_m=e^{2\pi\mathrm{i}/m}\)）。
+
+\begin{definition}[Adams--Norm 折叠门]\label{def:xi-adams-norm-fold}
+设 \(F\) 在 \(\mathbb{D}\) 内解析。定义其沿 \(\pi_m\) 的\textbf{折叠范数}（Norm）为
+\begin{equation}\label{eq:xi-adams-norm-def}
+\boxed{\;
+\mathrm{Nm}_m[F](w)
+~:=~
+\prod_{\omega^m=w}F(\omega),
+\qquad w\in\mathbb{D}.
+\;}
+\end{equation}
+等价地，在任意局部选取 \(m\)-次根的解析分支 \(w^{1/m}\)，可写为
+\begin{equation}\label{eq:xi-adams-norm-branch}
+\mathrm{Nm}_m[F](w)
+~=~
+\prod_{k=0}^{m-1}F\!\bigl(\zeta_m^k\,w^{1/m}\bigr).
+\end{equation}
+\end{definition}
+
+\begin{proposition}[单值解析性]\label{prop:xi-adams-norm-holomorphic}
+若 \(F\) 在 \(\mathbb{D}\) 内解析，则 \(\mathrm{Nm}_m[F]\) 在 \(\mathbb{D}\) 内解析且单值。
+\end{proposition}
+
+\begin{proof}
+在任意单连通开集 \(U\subset\mathbb{D}\setminus\{0\}\) 上可选取解析分支 \(w^{1/m}\)，并由 \eqref{eq:xi-adams-norm-branch} 给出 \(\mathrm{Nm}_m[F]\) 在 \(U\) 上的解析表达。
+更换分支相当于将 \(w^{1/m}\) 乘以某个 \(\zeta_m^\ell\)，从而仅对因子集合作置换，乘积不变；因此该定义与分支选择无关并可解析延拓到 \(\mathbb{D}\setminus\{0\}\)。
+在 \(w=0\) 处，\(\mathrm{Nm}_m[F](0)=F(0)^m\) 且由 \(F\) 的泰勒展开可见其无本质奇性，故延拓为解析函数。
+因此 \(\mathrm{Nm}_m[F]\) 在 \(\mathbb{D}\) 内解析并单值。证毕。
+\end{proof}
+
+\paragraph{点状缺陷的尺度搬运}
+\begin{theorem}[点状缺陷的尺度搬运]\label{thm:xi-adams-norm-zero-transport}
+设 \(F\) 在 \(\mathbb{D}\) 内解析，取 \(m\ge 1\)。
+若 \(F(a)=0\)（\(a\in\mathbb{D}\)），则 \(\mathrm{Nm}_m[F](a^m)=0\)。
+更一般地，若 \(\mathrm{ord}_a(F)=r\)，则
+\[
+\mathrm{ord}_{a^m}\bigl(\mathrm{Nm}_m[F]\bigr)\ \ge\ r.
+\]
+\end{theorem}
+
+\begin{proof}
+若 \(F(a)=0\)，则在 \(w=a^m\) 处的 \(\pi_m\)-纤维包含点 \(a\)，故 \eqref{eq:xi-adams-norm-def} 的乘积包含因子 \(F(a)=0\)，从而 \(\mathrm{Nm}_m[F](a^m)=0\)。
+\par
+若 \(\mathrm{ord}_a(F)=r\)，取局部参数 \(t\) 使 \(F(\omega)=(\omega-a)^r g(\omega)\) 且 \(g(a)\neq 0\)。
+对 \(a\neq 0\) 的情形，在 \(w\) 的邻域选取满足 \(\omega(w)^m=w\)、\(\omega(a^m)=a\) 的解析分支，则
+\((\omega(w)-a)\) 在 \(w-a^m\) 上一阶非退化，从而因子 \(F(\omega(w))\) 至少贡献 \(r\) 阶零点；其余因子为解析函数的乘积，故总体阶数不小于 \(r\)。
+对 \(a=0\) 的情形，写 \(F(\omega)=\omega^{r}g(\omega)\) 且 \(g(0)\neq 0\)。
+由 \eqref{eq:xi-adams-norm-branch}，
+\[
+\mathrm{Nm}_m[F](w)
+=\prod_{k=0}^{m-1}\bigl(\zeta_m^k w^{1/m}\bigr)^{r}\,g\!\bigl(\zeta_m^k w^{1/m}\bigr)
+=\Bigl(\prod_{k=0}^{m-1}\zeta_m^{kr}\Bigr)\,w^{r}\cdot \prod_{k=0}^{m-1}g\!\bigl(\zeta_m^k w^{1/m}\bigr).
+\]
+其中最后一项在 \(w=0\) 处解析且取值为 \(g(0)^m\neq 0\)，故 \(\mathrm{ord}_{0}(\mathrm{Nm}_m[F])=r\)。
+证毕。
+\end{proof}
+
+\paragraph{端点压缩的可逆化：显式尺度阈值与固定半径 Jensen 证书}
+沿用 \eqref{eq:xi-ramanujan-horizon-Fzeta} 的圆盘化完成化对象 \(F_\zeta\)（\(F_\zeta(w)=\Xi_\zeta(\frac12+\mathrm{i}\mathcal{C}^{-1}(w))\)），并固定一个目标半径 \(r_\star\in(0,1)\)。
+对任意离切片零点 \(\rho=\beta+\mathrm{i}\gamma\)（\(0<\beta<\tfrac12\)），其圆盘像 \(w_\rho\) 满足 \(|w_\rho|<1\) 且 \(F_\zeta(w_\rho)=0\)（定理 \ref{thm:app-rh-iff-disk-zero-free} 与定理 \ref{thm:xi-offcritical-quadratic-radial-compression} 的对应口径）。
+\par
+定义显式尺度阈值
+\begin{equation}\label{eq:xi-adams-norm-mstar-def}
+m_\star(\gamma,\delta;r_\star)
+:=\left\lceil \frac{\log(r_\star^{2})}{\log(|w_\rho|^{2})}\right\rceil,
+\qquad
+\delta=\tfrac12-\beta,
+\end{equation}
+则由 \(|w_\rho|^2\in(0,1)\) 得 \(\log(|w_\rho|^2)<0\)，从而
+\begin{equation}\label{eq:xi-adams-norm-mstar-radius}
+|w_\rho|^{m_\star}\ \le\ r_\star.
+\end{equation}
+并且当 \(|\gamma|\to\infty\) 且 \(\delta\) 有界时，利用
+\(|w_\rho|^{2}=1-\frac{4\delta}{\gamma^{2}+(1+\delta)^{2}}\) 的一阶对数展开得到渐近
+\begin{equation}\label{eq:xi-adams-norm-mstar-asymptotic}
+\boxed{\;
+m_\star(\gamma,\delta;r_\star)
+\sim
+\frac{\gamma^{2}+(1+\delta)^{2}}{4\delta}\,\log\!\frac{1}{r_\star^{2}}
+\qquad(|\gamma|\to\infty).\;}
+\end{equation}
+
+\begin{corollary}[固定半径缺陷证书（尺度交换律）]\label{cor:xi-adams-norm-fixed-radius-jensen-certificate}
+取任意 \(R\in(r_\star,1)\)。
+若存在离切片零点 \(\rho=\beta+\mathrm{i}\gamma\)（\(0<\beta<\tfrac12\)）对应圆盘零点 \(w_\rho\)，并取 \(m_\star=m_\star(\gamma,\delta;r_\star)\) 如 \eqref{eq:xi-adams-norm-mstar-def}，
+则 \(\mathrm{Nm}_{m_\star}[F_\zeta]\) 在半径 \(R\) 处的 Jensen 缺陷（定义 \ref{def:app-jensen-defect}）满足确定性下界
+\[
+D_{\mathrm{Nm}_{m_\star}[F_\zeta]}(R)\ \ge\ \log\!\frac{R}{|w_\rho|^{m_\star}}\ \ge\ \log\!\frac{R}{r_\star}\ >\ 0,
+\]
+从而在固定半径 \(R\) 处产生与高度参数 \(\gamma\) 无关的正缺陷下界；其代价由尺度参数 \(m_\star\) 承载，并满足 \eqref{eq:xi-adams-norm-mstar-asymptotic} 的二次增长律。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:xi-adams-norm-zero-transport}，\(F_\zeta(w_\rho)=0\) 推出 \(\mathrm{Nm}_{m_\star}[F_\zeta](w_\rho^{m_\star})=0\)，且由 \eqref{eq:xi-adams-norm-mstar-radius} 有 \(|w_\rho^{m_\star}|\le r_\star<R\)。
+由 Jensen 求和式（命题 \ref{prop:app-jensen-formula-defect}），任意满足 \(|a|<R\) 的零点至少贡献 \(\log(R/|a|)\)，故
+\[
+D_{\mathrm{Nm}_{m_\star}[F_\zeta]}(R)\ \ge\ \log\!\frac{R}{|w_\rho|^{m_\star}}
+\ \ge\ \log\!\frac{R}{r_\star}.
+\]
+证毕。
+\end{proof}
+
+\paragraph{与 Chebyshev--Adams 的整系数对齐：尺度门的代数闭合}
+文内已指出：在半角完成化坐标下，幂半群 \(u\mapsto u^m\) 在不变量迹坐标中等价于整系数多项式作用 \(S\mapsto C_m(S)\)（注 \ref{rem:xi-half-angle-endpoint-paradigm}）。
+因此 \(\pi_m\) 不是纯解析技巧，而是与不变量坐标中的 Chebyshev--Adams 动力学同型：尺度参数 \(m\) 在 \(\ZZ\)-结构中可被整系数地寻址。
+在该意义下，折叠门 \(\mathrm{Nm}_m\) 可视为沿 \(\pi_m\) 的乘法 pushforward：它把 \(m\)-重覆盖的分支自由度折叠为单值对象，使端点边界层中的点状缺陷可被搬运到预设紧子圆盘并在固定半径处以 Jensen 缺陷证书显化（推论 \ref{cor:xi-adams-norm-fixed-radius-jensen-certificate}）。
+
+\paragraph{无根式审计接口与端点四通道闭包（反变纤维的最小引入）}
+在 Cayley 有理参数化下，半角变量的幂作用可提升为纯有理/整系数运算：以
+\(
+r=\iota(x)=(1+\mathrm{i}x)/(1-\mathrm{i}x)
+\)
+参数化半角变量，则完成化迹坐标 \(S=r+r^{-1}\) 给出全有理闭式 \(S(x)=2(1-x^{2})/(1+x^{2})\)，并存在整系数递推实现 \(x\mapsto\tau_d(x)\) 使 \(C_d(S(x))=S(\tau_d(x))\)（命题 \ref{prop:chebyshev-adams-fully-rational}）。
+因此，与 \(S\mapsto C_d(S)\) 对齐的 unitary-slice 证书构造可在整数层实现“无三角函数、无代数根式”的可复算审计接口。
+\par
+另一方面，端点分支记忆若需由三态喷射提升到完整的 \(\ZZ/4\) 通道，则必须引入一个最小的反演反变纤维坐标；为避免与本节离切片偏移 \(\delta=\tfrac12-\beta\) 混淆，此处将其记为
+\(
+\delta_{\mathrm{anti}}:=r-r^{-1}
+\)。
+附录给出严格的极小闭包与伴随恒等式：
+\(
+\mathcal A^{-}=\delta_{\mathrm{anti}}\ZZ[S]
+\)
+且
+\(
+D_d(S,\delta_{\mathrm{anti}})=\delta_{\mathrm{anti}}\,U_{d-1}(S/2)
+\)
+（备注 \ref{rem:endpoint-inv-antiinv-min-closure}，命题 \ref{prop:endpoint-odd-chebyshev-identity}），从而在端点分支 \(r=\pm\mathrm{i}\) 上产生离散指标 \(U_{d-1}(0)=\sin(d\pi/2)\) 并实现最小的 \(\chi_4\)-型四通道读出（定理 \ref{thm:endpoint-four-channel-chi4}）。
+
+\paragraph{多尺度 Toeplitz--PSD 派生层级：从 Toeplitz--PSD 到 Adams--Toeplitz--PSD}
+由附录定理 \ref{thm:app-horizon-toeplitz-lmi}，若 \(\mathscr{C}(w)=c_0+2\sum_{n\ge 1}c_n w^n\) 属于 Carath\'eodory 类，则存在正测度 \(\mu\) 使
+\(
+c_n=\int_{\TT}\xi^n\,d\mu(\xi)
+\)。
+对每个 \(m\ge 1\) 定义推前测度 \(\mu_m:=(\xi\mapsto \xi^m)_*\mu\)，则其矩满足
+\[
+c^{(m)}_n:=\int_{\TT}\xi^n\,d\mu_m(\xi)=\int_{\TT}(\xi^m)^n\,d\mu(\xi)=c_{mn}.
+\]
+因此对任意 \(N,m\ge 1\)，稀疏 Toeplitz 主子矩阵族
+\begin{equation}\label{eq:xi-adams-toeplitz-psd}
+\boxed{\;
+\mathbf{T}^{(m)}_N
+:=\bigl(c_{m(j-k)}\bigr)_{0\le j,k\le N}\ \succeq\ 0\qquad(\forall\,N,m)\;}
+\end{equation}
+自动成立。
+该派生层级把端点压缩与外置尺度参数 \(m\) 直接耦合：在保持正性证书口径不变的前提下，形成一族可随 \(m\) 选择分辨率的多尺度 PSD 约束。
+
+\begin{theorem}[对称性—可核验性张力的尺度化定理（尺度交换律）]\label{thm:xi-symmetry-audit-tension-scaled}
+在自对偶完成化与固定切片制度下，离切片点状缺陷 \(\rho=\beta+\mathrm{i}\gamma\) 的圆盘像 \(w_\rho\) 被 Cayley--Busemann 结构性地压缩到端点边界层，并满足定理 \ref{thm:xi-offcritical-quadratic-radial-compression} 的二次径向压缩律。
+沿幂覆盖 \(\pi_m(\omega)=\omega^m\) 的 Adams--Norm 折叠门 \(\mathrm{Nm}_m\) 可把该端点边界层中的点状缺陷搬运到任意预设的紧子圆盘：对任意 \(r_\star\in(0,1)\) 存在显式尺度 \(m_\star\) 使 \(|w_\rho|^{m_\star}\le r_\star\) 且 \(\mathrm{Nm}_{m_\star}[F_\zeta]\) 在固定半径 \(R\in(r_\star,1)\) 处产生高度无关的 Jensen 正缺陷下界（推论 \ref{cor:xi-adams-norm-fixed-radius-jensen-certificate}）。
+该尺度门在不变量坐标中与整系数 Chebyshev--Adams 运算同型，并诱导与 Toeplitz--PSD 接口相容的多尺度派生 PSD 层级 \eqref{eq:xi-adams-toeplitz-psd}。
+\end{theorem}
+
+\paragraph{端点通道的线性增益：\texorpdfstring{$\Phi_{-1}$}{Phi-1} 的尺度放大 \texorpdfstring{$\perp$}{⊥} Jensen 的半径重参数化}
+需要强调的是：在幂拉回 \(F^{(m)}(w)=F(w^m)\) 下，Jensen 缺陷仅作确定性重参数化
+\(
+D_{F^{(m)}}(\varrho)=D_F(\varrho^m)
+\)
+（命题 \ref{prop:app-jensen-defect-power-covariance}），因此该操作本身并不产生新的径向平均证书增益。
+相反，在“偏移仅由 Blaschke 数据承载”的口径下，端点吸收系数 \(\Phi_{-1}(B)\)（命题 \ref{prop:xi-endpoint-absorption-coefficient}）在奇数 Adams 门
+\(
+B^{(m)}(w)=B(w^m)
+\)
+下满足线性重标定
+\(
+\Phi_{-1}(B^{(m)})=m\Phi_{-1}(B)
+\)
+（定理 \ref{thm:xi-endpoint-absorption-adams-rescaling}）。
+因此，同一尺度参数 \(m\) 在径向平均通道上仅重参数化观测半径，而在端点通道上提供可核验的线性放大；该对照与本小节的“尺度交换律”口径相容，并为后续多尺度审计链提供一条独立于固定半径 Jensen 证书的端点增益机制。
+
+\endinput

@@ -1,0 +1,131 @@
+% (User input window)
+
+\paragraph{算术地址、Smith 不变量与连通性层级的可计算治理}
+在结论 \ref{con:xi-tree-potential-cycle-basis-residual-decomposition}--\ref{con:xi-connectivity-hierarchy-finite-critical-budgets} 的离散残差口径下，零残差等价类与其随预算的合并链不仅可由图论描述，还可被进一步压缩为有限阿贝尔群的商结构与 Smith 不变量的冻结判定。
+下列结论把“连通性增长”完全归约为一条可复核的算术商链，并给出一遍扫描即可输出的治理算法框架。
+
+\begin{conclusion}[零残差可达关系的整格余类刻画与算术地址的存在唯一性]\label{con:xi-arithmetic-address-existence-uniqueness}
+设 \(G=(V,E)\) 为有限图。
+对每条有向边 \(e:u\to v\) 赋予残差标记 \(r(e)\in\ZZ^d\)，并规定反向边满足 \(r(e^{-1})=-r(e)\)；
+同时赋予预算阈值 \(c(e)\in\NN\)。
+对预算 \(B\) 定义子图 \(G_{\le B}\)（取满足 \(c(e)\le B\) 的边）。
+若 \(u,v\) 位于 \(G_{\le B}\) 的同一连通分量内，令
+\[
+R_B(u,v)\subseteq\ZZ^d
+\]
+表示所有从 \(u\) 至 \(v\) 的路径残差和集合。
+则存在一秩不超过 \(d\) 的子格 \(H_B\subseteq\ZZ^d\)（由该分量内所有闭路残差生成，且与生成树选择无关），使得对该分量内任意 \(u,v\) 都有
+\[
+R_B(u,v)=\alpha_B(v)-\alpha_B(u)+H_B,
+\]
+其中 \(\alpha_B:V\to\ZZ^d\) 可取为任一生成树势函数（结论 \ref{con:xi-tree-potential-cycle-basis-residual-decomposition} 的 \(\Phi_B\)）。
+由此定义算术地址
+\[
+a_B:V\to Q_B:=\ZZ^d/H_B,
+\qquad
+a_B(v):=\alpha_B(v)\bmod H_B,
+\]
+则该 \(a_B\) 在加常数平移意义下唯一，并且
+\[
+0\in R_B(u,v)\quad\Longleftrightarrow\quad a_B(u)=a_B(v).
+\]
+因此，预算 \(B\) 下的零残差等价类严格等同于算术地址的纤维分解。
+\end{conclusion}
+
+\begin{conclusion}[预算过滤下算术地址的函子性：连通性层级为有限交换商链]\label{con:xi-arithmetic-address-functorial-quotient-chain}
+在结论 \ref{con:xi-arithmetic-address-existence-uniqueness} 的记号下，随预算增长有子格单调性 \(H_B\subseteq H_{B'}\)（\(B\le B'\)），从而诱导满同态
+\[
+\pi_{B}^{B'}:Q_B\to Q_{B'}
+\]
+满足 \(a_{B'}=\pi_{B}^{B'}\circ a_B\)。
+特别地，零残差等价关系族 \((\sim_B)\) 在每个连通分量上由一条有限阿贝尔群商链完全控制：任意 \(B\le B'\) 下的类合并，恰对应于将 \(Q_B\) 进一步商去由新增闭路残差所生成的子群。
+因此，连通性增长的全部可观察效应可归约为 \(\{Q_B\}\) 的单调商结构，而与冗余路径细节无关。
+\end{conclusion}
+
+\begin{conclusion}[单个闭路残差的合并因子定律：类合并幅度等于其在旧商群中的阶]\label{con:xi-single-cycle-merge-factor-order}
+固定预算 \(B\)，考虑在某连通分量内新增一条边 \(e\)（其阈值为 \(B^+\)），使得在 \(G_{\le B^+}\) 中首次形成一个新独立闭路残差向量 \(h\in\ZZ^d\)，满足
+\[
+h\notin H_B,
+\qquad
+H_{B^+}=H_B+\ZZ h.
+\]
+记旧商群 \(Q_B=\ZZ^d/H_B\) 中元素 \([h]\) 的阶为 \(m\)（即最小正整数 \(m\) 使 \(mh\in H_B\)）。
+则新商群满足
+\[
+Q_{B^+}\cong Q_B/\langle [h]\rangle,
+\]
+从而在该分量上零残差等价类数的最大可能合并因子精确等于 \(m\)：
+任意两点 \(u,v\) 若在预算 \(B\) 下地址差落入 \(\langle[h]\rangle\)，则在 \(B^+\) 下必被合并；且除由 \(\langle[h]\rangle\) 强制的合并外，不会出现额外合并。
+\end{conclusion}
+
+\begin{conclusion}[素分解独立性：连通性层级按各素数的 \(p\)-主部分可分离]\label{con:xi-prime-decomposition-independence}
+仍在结论 \ref{con:xi-arithmetic-address-existence-uniqueness}--\ref{con:xi-single-cycle-merge-factor-order} 的设定中，设在某预算范围内 \(H_B\) 达到满秩 \(d\)，从而 \(Q_B\) 为有限阿贝尔群。
+对任一素数 \(p\)，记 \(Q_B^{(p)}\) 为其 \(p\)-主子群。
+则算术地址诱导分解 \(a_B=(a_B^{(p)})_p\)，并且
+\[
+u\sim_B v\quad\Longleftrightarrow\quad
+\forall p,\ a_B^{(p)}(u)=a_B^{(p)}(v).
+\]
+同时，预算提升所导致的类合并在各 \(p\)-主部分上相互独立：若新增闭路残差 \([h]\in Q_B\) 的合并因子为 \(m=\mathrm{ord}([h])\)，则其素分解
+\(
+m=\prod_p p^{\nu_p(m)}
+\)
+精确对应于各 \(Q_B^{(p)}\) 上的合并深度 \(\nu_p(m)\)。
+因此，连通性增长可在数论意义上逐素数解耦，并由一组彼此独立的 \(p\)-进塔控制。
+\end{conclusion}
+
+\begin{conclusion}[最优指纹位长的算术闭式：由商群阶而非节点规模决定]\label{con:xi-optimal-fingerprint-bitlength-arithmetic-closed-form}
+在满秩情形下，设该分量的算术地址像生成全体 \(Q_B\)（例如存在 \(d\) 个顶点使其地址差生成 \(\ZZ^d/H_B\)）。
+则任何在预算 \(B\) 下对零残差等价类做无碰撞确定编码的指纹长度 \(k_B\) 必满足
+\[
+k_B\ge \left\lceil\log_2|Q_B|\right\rceil,
+\]
+且存在达到该下界的构造。
+更进一步，若允许两两碰撞概率上界为 \(\delta_B\)，则最小可达位长满足
+\[
+k_B=\left\lceil\log_2|Q_B|+\log_2\frac1{\delta_B}\right\rceil.
+\]
+因此，在该模型中最优指纹复杂度由闭式量
+\(
+|Q_B|=[\ZZ^d:H_B]
+\)
+决定，而与图中冗余连边、路径数量及 \(|V|\) 的增长无关（与结论 \ref{con:xi-multiscale-fingerprint-optimal-bitlength} 的信息论下界相容，并在此处给出算术可达闭式）。
+\end{conclusion}
+
+\begin{conclusion}[稳定化判据：连通性停止增长当且仅当闭路格的 Smith 不变量冻结]\label{con:xi-smith-invariants-freeze-stabilization}
+在同一分量上令 \(I_B:=[\ZZ^d:H_B]\)（满秩时为有限指数）。
+则随预算增长 \(I_B\) 单调不增，且存在预算 \(B_\ast\) 使对所有 \(B\ge B_\ast\) 等价关系不再合并，当且仅当存在 \(B_\ast\) 使对所有 \(B\ge B_\ast\) 有 \(I_B=I_{B_\ast}\)；
+等价地，子格 \(H_B\) 的 Smith 不变量序列 \((s_1(B)\mid\cdots\mid s_d(B))\) 在 \(B\ge B_\ast\) 后恒定。
+因此，连通性是否已饱和可由有限阿贝尔群不变量的冻结判定，而无需追踪图的全部冗余演化。
+\end{conclusion}
+
+\begin{conclusion}[单遍治理算法：同时输出临界合并链与算术地址基的可验证生成元]\label{con:xi-one-pass-governance-algorithm}
+对所有边按阈值 \(c(e)\) 非降排序并逐一扫描，并在每一连通分量内维护：
+并查集结构（跟踪 \(G_{\le B}\) 的连通分量），以及闭路残差生成元矩阵的增量 Smith 形式（跟踪子格 \(H_B\subseteq\ZZ^d\) 的不变量与指数 \(I_B\)）。
+则存在一单遍算法在时间
+\(
+O(|E|\cdot \mathrm{poly}(d)\cdot \log R)
+\)
+内（其中 \(R\) 为残差坐标幅度上界）同时输出：
+\begin{enumerate}
+  \item 所有临界预算点及其对应合并因子（由结论 \ref{con:xi-single-cycle-merge-factor-order} 的阶 \(m\) 计算）；
+  \item 每个预算层上的最小可验证闭路生成元集合（给出 \(H_B\) 的 Smith 基）；
+  \item 每个顶点的算术地址 \(a_B(v)\)（以不变量分量坐标表示），从而可在 \(O(d)\) 时间内判定任意一对顶点是否零残差等价。
+\end{enumerate}
+该结论给出一条可计算且可复核的治理定理：连通性层级与审计结构可被同一遍扫描同时抽取并输出证书化生成元。
+\end{conclusion}
+
+\begin{conclusion}[合并深度下界：闭路残差的 \(p\)-进精度限制了连通性收敛速度]\label{con:xi-merge-depth-lower-bound-padic}
+在满秩情形下固定素数 \(p\)。
+设预算提升过程中每一次引入的新独立闭路残差 \([h]\in Q_B\) 的 \(p\)-阶至多为 \(p^{t}\)，即对所有临界步成立
+\(
+\nu_p(\mathrm{ord}([h]))\le t
+\)。
+记在某初始预算 \(B_0\) 下 \(p\)-主部分的指数为 \(|Q_{B_0}^{(p)}|=p^{E}\)。
+则要使 \(p\)-主部分完全塌缩为平凡（从而在该分量上消除全部 \(p\)-进差异所导致的类分裂），临界合并步数至少为
+\[
+\left\lceil \frac{E}{t}\right\rceil.
+\]
+因此，在可审计闭路证书的 \(p\)-进阶受限时，连通性增长具有不可突破的收敛速度下界；该下界以纯粹算术量 \(E\) 与单步可提供的 \(p\)-进信息量 \(t\) 精确刻画。
+\end{conclusion}
+

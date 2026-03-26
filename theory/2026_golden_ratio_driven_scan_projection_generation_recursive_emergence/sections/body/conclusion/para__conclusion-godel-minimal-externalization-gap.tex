@@ -1,0 +1,91 @@
+\begin{theorem}[可回放 Gödel 外置与信息论最小外置的对数级鸿沟]\label{thm:conclusion-godel-vs-minimal-gap}
+固定分辨率 \(m\ge 1\)。令 \(A\sim\mathrm{Unif}(\Omega_m)\)，并记稳定读出 \(X:=\Fold_m(A)\in X_m\)。
+定义纤维预算
+\[
+\kappa_m:=\EE\!\bigl[\log d_m(X)\bigr],
+\qquad d_m(x):=\#\Fold_m^{-1}(x).
+\]
+则：
+\begin{enumerate}
+  \item 若 \(R\) 为任意记录轴且由 \(A\) 决定（即 \(R=f(A)\)），并且映射 \(A\mapsto(X,R)\) 为单射，则
+  \[
+  H(R\mid X)\ \ge\ \kappa_m.
+  \]
+  因而“仅要求信息可逆（存在右逆）”的最小外置长度在均匀基线下至少为 \(\kappa_m\)。
+  \item \(\kappa_m\) 具有线性下界
+  \[
+  \kappa_m\ \ge\ \log\frac{2^m}{|X_m|}
+  =m\log 2-\log F_{m+2},
+  \]
+  从而 \(\kappa_m=\Theta(m)\)。
+  \item 对任何固定确定性策略 \(\mathsf S\)，可回放 prime-register 历史 Gödel 值满足
+  \[
+  \liminf_{m\to\infty}\frac{\EE\!\bigl[\log N(r_{\mathsf S}(\omega))\bigr]}{m\log m}>0,
+  \]
+  其中 \(\omega\sim\mathrm{Unif}(\Omega_{m+1})\)（见定理 \ref{thm:conclusion-godel-history-expected-liminf}）。因此“要求可回放（轨迹可逆）”与“只要求信息可逆”之间存在不可消除的 \(\Theta(\log m)\) 级开销差。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对第一条，由 \(R=f(A)\) 得 \(H(A\mid X,R)=0\) 与链式法则
+\[
+H(A\mid X)=H(R\mid X)+H(A\mid X,R)\le H(R\mid X),
+\]
+而在均匀基线下 \(A\mid(X=x)\) 在纤维 \(\Fold_m^{-1}(x)\) 上均匀，故
+\(
+H(A\mid X)=\EE[\log d_m(X)]=\kappa_m
+\)。
+\par
+对第二条，由 \(H(A)=m\log 2\) 且 \(H(A)=H(X)+H(A\mid X)\) 得
+\[
+\kappa_m=H(A\mid X)=m\log 2-H(X)\ge m\log 2-\log|X_m|.
+\]
+再用 \(|X_m|=F_{m+2}=\Theta(\varphi^m)\) 得 \(\kappa_m=\Theta(m)\)。
+\par
+第三条由定理 \ref{thm:conclusion-godel-history-expected-liminf} 直接得到；将其与 \(\kappa_m=\Theta(m)\) 进行归一化比较即可得到 \(\Theta(\log m)\) 分离。证毕。
+\end{proof}
+
+\begin{theorem}[CRT-并行 prime-register 的“局部性—轴数”下界]\label{thm:conclusion-crt-parallel-prime-register-locality-axis-lb}
+设规模参数 \(B\to\infty\)。
+对一组素幂模轴配置 \(B=\prod_p p^{m_p}\) 定义资源计数
+\[
+S_{\mathrm{mod}}:=\card{\{p:\ m_p>0\}},
+\qquad
+R_{\mathrm{mod}}:=\sum_p m_p.
+\]
+在局部 prime-register 约束下，设存在素数上限 \(P\) 使仅允许使用 \(p\le P\) 的素轴，并且每条轴的 \(p\)-进深度满足统一上界 \(m_p\le M\)，其中 \(M\) 不随 \(B\) 增长。
+若要求覆盖规模 \(B\)（即 \(\prod_{p\le P}p^{m_p}\ge B\)），则必有
+\[
+\boxed{\;
+S_{\mathrm{mod}}
+\ \ge\
+\left(1+o(1)\right)\frac{\log B}{M\log\log B}\;}
+\qquad(B\to\infty),
+\]
+其中 \(o(1)\) 仅依赖于素数分布的渐近。
+\end{theorem}
+
+\begin{proof}
+在约束 \(m_p\le M\) 下有
+\[
+\log B
+\ \le\
+\sum_{p\le P}m_p\log p
+\ \le\
+M\sum_{p\le P}\log p
+=M\,\vartheta(P),
+\]
+其中 \(\vartheta\) 为 Chebyshev 函数。
+由素数定理 \(\vartheta(P)\sim P\)，得
+\(
+P\ge (1+o(1))\frac{1}{M}\log B
+\)。
+因此
+\[
+S_{\mathrm{mod}}\ \ge\ \pi(P)
+\ \sim\ \frac{P}{\log P}
+\ \ge\
+\left(1+o(1)\right)\frac{\log B}{M\log\log B},
+\]
+其中 \(\pi\) 为素数计数函数且 \(\log P\sim\log\log B\)。证毕。
+\end{proof}
+

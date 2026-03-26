@@ -1,0 +1,278 @@
+\paragraph{window-\(6\) 的 \(2\)-进读出模型：椭圆 solenoid、块式 Gödel 编码、相干深度与谱维数}
+本段将 \(m=6\) 的离散窗口（\(64\) 微观块）与 Lee--Yang 椭圆锚点的 \(2\)-进地址空间 \(T_2(E_{\min})\cong\ZZ_2^2\) 对齐，并把“时间=读取”严格实现为 \(8\)-进最低位剥离与除法共轭。
+在该口径下，相干深度转写为 \(2\)-进赋值的不变量；对受限语法（SFT）得到由 Perron 谱半径锁定的 Hausdorff 维数；缺口级数则把“无限差异”刻写为单位圆自然边界。
+
+\begin{theorem}[\(2\)-进椭圆 solenoid 的短正合列与连通分量分离]\label{thm:conclusion-elliptic-2adic-solenoid-exact-sequence}
+令 \(E/\CC\) 为复椭圆曲线，并以 \([2]:E(\CC)\to E(\CC)\) 表示乘二同态。
+定义 \(2\)-进椭圆 solenoid
+\[
+\Sigma_2(E):=\varprojlim\bigl(E(\CC)\xleftarrow{[2]}E(\CC)\xleftarrow{[2]}\cdots\bigr)
+=\Bigl\{(x_n)_{n\ge 0}\in E(\CC)^{\NN}:\ [2]x_{n+1}=x_n\ (\forall n)\Bigr\}.
+\]
+则存在自然短正合列
+\[
+0\longrightarrow T_2(E)\longrightarrow \Sigma_2(E)\xrightarrow{\ \pi_0\ }E(\CC)\longrightarrow 0,
+\]
+其中 \(T_2(E):=\varprojlim E[2^n]\) 为 \(2\)-进 Tate 模块，\(\pi_0((x_n)):=x_0\)。
+特别地，\(\Sigma_2(E)\) 的单位元连通分量经 \(\pi_0\) 同胚于 \(E(\CC)\)，而全部全不连通信息集中于核 \(T_2(E)\)。
+\end{theorem}
+
+\begin{proof}
+映射 \(\pi_0\) 连续且为群同态。
+由于 \([2]\) 在紧连通交换 Lie 群 \(E(\CC)\) 上满射，任取 \(x_0\in E(\CC)\) 可递归选取 \(x_{n+1}\) 使 \([2]x_{n+1}=x_n\)，故 \(\pi_0\) 满射。
+若 \((x_n)\in\ker(\pi_0)\)，则 \(x_0=O\) 且 \([2]x_1=O\)，从而 \(x_1\in E[2]\)；递推得 \(x_n\in E[2^n]\) 且 \([2]x_{n+1}=x_n\)，故 \(\ker(\pi_0)\cong \varprojlim E[2^n]=T_2(E)\)，正合性成立。
+\par
+由于 \(T_2(E)\) 为紧全不连通群（同胚于 \(\ZZ_2^2\)），其连通分量为单点。
+于是 \(\Sigma_2(E)\) 的单位元连通分量在 \(\pi_0\) 下同胚映到 \(E(\CC)\)（其为连通紧群），并且核仅贡献全不连通部分。证毕。
+\end{proof}
+
+\begin{proposition}[6 位块式 Gödel 编码与 \texorpdfstring{$\ZZ_{64}$}{Z64} 全息点]\label{prop:conclusion-window6-godel-base64-inverse-limit}
+令
+\[
+\Omega_6:=\{0,1\}^6,\qquad
+\mathrm{int}_6(w):=\sum_{i=1}^{6}w_i\,2^{i-1}\in\{0,\dots,63\}.
+\]
+对任意 \(n\ge 1\) 定义块式编码
+\[
+G_n:\Omega_6^n\to \ZZ/64^n\ZZ,\qquad
+G_n(w^{(0)},\dots,w^{(n-1)})\equiv \sum_{t=0}^{n-1}\mathrm{int}_6(w^{(t)})\,64^t\pmod{64^n}.
+\]
+则 \((G_n)_{n\ge 1}\) 与截断严格相容：若 \(m<n\)，则
+\[
+G_n(w^{(0)},\dots,w^{(n-1)})\bmod 64^m=G_m(w^{(0)},\dots,w^{(m-1)}).
+\]
+从而存在唯一逆极限双射
+\[
+G_\infty:\Omega_6^{\NN}\xrightarrow{\sim}\ZZ_{64}:=\varprojlim \ZZ/64^n\ZZ.
+\]
+\end{proposition}
+
+\begin{proof}
+\(\mathrm{int}_6:\Omega_6\to\{0,\dots,63\}\) 为双射，故 \(G_n\) 为标准 \(64\)-进展开，因而双射。
+截断相容性由模运算与展开唯一性直接推出；逆极限双射由泛性质给出。证毕。
+\end{proof}
+
+\begin{theorem}[\(Q_6\)–\(E\lbrack 8\rbrack\)–\(T_2(E)\) 的同一时间读取模型：移位与 \(8\)-进除法共轭]\label{thm:conclusion-window6-8adic-readout-shift-conjugacy}
+令 \(E/\CC\) 为椭圆曲线，并固定 \(T_2(E)\) 的一组 \(\ZZ_2\)-基，从而 \(T_2(E)\cong \ZZ_2^2\)。
+设
+\[
+\Omega_6=\{0,1\}^6,
+\qquad
+a(w):=\sum_{i=1}^{3}w_i\,2^{i-1}\in \ZZ/8\ZZ,
+\qquad
+b(w):=\sum_{i=4}^{6}w_i\,2^{i-4}\in \ZZ/8\ZZ.
+\]
+令 \(\sigma:\Omega_6^{\NN}\to\Omega_6^{\NN}\) 为左移 \(\sigma(w^{(0)},w^{(1)},\dots)=(w^{(1)},w^{(2)},\dots)\)。
+定义映射
+\[
+\Phi:\Omega_6^{\NN}\longrightarrow \ZZ_2^2,\qquad
+\Phi\bigl((w^{(t)})_{t\ge 0}\bigr)
+=\Bigl(\sum_{t\ge 0}a(w^{(t)})\,8^t,\ \sum_{t\ge 0}b(w^{(t)})\,8^t\Bigr),
+\]
+其中和式按 \(8\)-进极限在 \(\ZZ_2\) 中收敛。
+则 \(\Phi\) 为同胚。
+并且存在连续映射
+\[
+S:\ZZ_2^2\to \ZZ_2^2,\qquad
+S(x):=\frac{x-(x\bmod 8)}{8}
+\]
+（按坐标定义，其中 \(x\bmod 8\in(\ZZ/8\ZZ)^2\) 为最低位），使得共轭关系成立：
+\[
+\Phi\circ\sigma=S\circ\Phi.
+\]
+\end{theorem}
+
+\begin{proof}
+在每个坐标上，映射 \(\{0,\dots,7\}^{\NN}\to\ZZ_2\)、\((d_t)\mapsto\sum_{t\ge 0}d_t\,8^t\) 为标准 \(8\)-进同胚；
+\(\Omega_6\ni w\mapsto(a(w),b(w))\in(\ZZ/8\ZZ)^2\) 为双射，故其直积诱导 \(\Phi\) 为同胚。
+共轭恒等式由坐标分解
+\(
+x=(x\bmod 8)+8\,S(x)
+\)
+逐坐标成立直接推出。证毕。
+\end{proof}
+
+\begin{corollary}[相干深度的 \(2\)-进赋值刻画]\label{cor:conclusion-window6-coherence-depth-v2}
+对 \(\omega,\omega'\in\Omega_6^{\NN}\) 定义相干深度
+\[
+\kappa(\omega,\omega'):=\max\{k\ge 0:\ \omega^{(0)}=\omega'^{(0)},\dots,\omega^{(k-1)}=\omega'^{(k-1)}\}\in\NN\cup\{\infty\}.
+\]
+令 \(X=\Phi(\omega),\ Y=\Phi(\omega')\in\ZZ_2^2\)。
+定义向量的 \(2\)-进赋值
+\[
+v_2(X-Y):=\min\bigl(v_2(X_1-Y_1),\ v_2(X_2-Y_2)\bigr)\in\NN\cup\{\infty\}.
+\]
+则
+\[
+\kappa(\omega,\omega')=\left\lfloor\frac{v_2(X-Y)}{3}\right\rfloor,
+\qquad
+X\equiv Y\pmod{8^k\ZZ_2^2}\ \Longleftrightarrow\ \kappa(\omega,\omega')\ge k.
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-window6-8adic-readout-shift-conjugacy}，两条序列的前 \(k\) 个块相同当且仅当两坐标的前 \(k\) 个 \(8\)-进数字相同，当且仅当 \(X-Y\in 8^k\ZZ_2^2\)。
+又 \(8^k=2^{3k}\)，故 \(X-Y\in 8^k\ZZ_2^2\iff v_2(X-Y)\ge 3k\)。
+取最大 \(k\) 即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[二进制 Gödel 倍点提升与逐位可逆读出]\label{prop:conclusion-binary-godel-elliptic-lift-reversible-readout}
+令 \(K\) 为特征不等于 \(2\) 的域，\(E/K\) 为椭圆曲线（群 law 以加法记），\(O\in E(K)\) 为单位元。
+取点 \(P\in E(K)\) 且 \(P\neq O\)。
+对任意二进制字 \(w=b_0b_1\cdots b_{n-1}\in\{0,1\}^n\)，定义二进制 Gödel 整数
+\[
+I(w):=\sum_{j=0}^{n-1}b_j\,2^{n-1-j},
+\]
+并定义倍点提升
+\[
+\Phi_n(w):=[I(w)]P\in E(K).
+\]
+则：
+\begin{enumerate}
+  \item 对任意 \(w\in\{0,1\}^n\) 与位 \(b\in\{0,1\}\)，满足递推
+  \[
+  \Phi_{n+1}(wb)=[2]\Phi_n(w)+[b]P.
+  \]
+  \item 若点列 \((Q_n)_{n\ge 0}\subset E(K)\) 满足
+  \[
+  Q_{n+1}=[2]Q_n+[b_n]P,\qquad b_n\in\{0,1\},
+  \]
+  则每个 \(b_n\) 由差分唯一恢复：
+  \[
+  b_n=
+  \begin{cases}
+  0,& Q_{n+1}-[2]Q_n=O,\\
+  1,& Q_{n+1}-[2]Q_n=P.
+  \end{cases}
+  \]
+  \item 若 \(P\) 的阶为 \(N\) 且 \(N\ge 2^n\)，则 \(\Phi_n:\{0,1\}^n\to\langle P\rangle\) 为单射，从而 \(\Phi_n(w)\) 无歧义确定 \(w\)。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+第一条由恒等式 \(I(wb)=2I(w)+b\) 立即推出。
+第二条将递推改写为 \(Q_{n+1}-[2]Q_n=[b_n]P\)；由于 \(b_n\in\{0,1\}\) 且 \(P\neq O\)，右端仅可能为 \(O\) 或 \(P\)，故恢复唯一。
+第三条中，若 \(\Phi_n(w)=\Phi_n(w')\)，则 \([I(w)-I(w')]P=O\)，即 \(N\mid(I(w)-I(w'))\)。
+而 \(|I(w)-I(w')|<2^n\le N\)，故差为 \(0\)，从而 \(w=w'\)。证毕。
+\end{proof}
+
+\begin{proposition}[三重积的二挠残差与 \(6\) 维超立方体分歧]\label{prop:conclusion-elliptic-e3-2torsion-q6-branching}
+设 \(K\) 代数闭且 \(\mathrm{char}(K)\neq 2\)，令 \(E/K\) 为椭圆曲线并假设二挠完全分裂 \(E[2]\cong(\ZZ/2\ZZ)^2\)。
+则
+\[
+E^3[2]\ \cong\ (E[2])^3\ \cong\ (\ZZ/2\ZZ)^6,
+\]
+从而 \(E^3[2]\) 的 Cayley 图（取任一 \(\FF_2\)-基为生成元）同构于 \(6\) 维超立方体 \(Q_6\) 的 \(1\)-骨架。
+进一步地，对任意驱动序列 \((R_n)_{n\ge 0}\subset E^3(K)\) 考虑递推
+\[
+Q_{n+1}=[2]Q_n+R_n.
+\]
+给定末端点 \(Q_{n+1}\) 与驱动项 \(R_n\) 后，满足该递推的 \(Q_n\) 解集为一个 \(E^3[2]\) 的陪集，因而在每一步向后求逆时存在恰 \(2^6\) 个二挠分支，可由 \(Q_6\) 的顶点标记。
+\end{proposition}
+\begin{proof}
+\([2]:E\to E\) 的核为 \(E[2]\) 且 \(|E[2]|=4\)，故对三重积有 \(\ker([2]:E^3\to E^3)=E^3[2]\) 且 \(|E^3[2]|=4^3=64=2^6\)，并与 \((\ZZ/2\ZZ)^6\) 同构。
+其 Cayley 图为 \(6\) 维超立方体为标准事实。
+对递推方程，固定 \(Q_{n+1}\) 与 \(R_n\) 后需解 \([2]Q_n=Q_{n+1}-R_n\)；若 \(Q_n^{(0)}\) 为任一解，则全部解为
+\(
+Q_n^{(0)}+E^3[2]
+\)，从而分歧自由度由 \(E^3[2]\) 给出。证毕。
+\end{proof}
+
+\begin{theorem}[受限 window-\(6\) 语法的谱维数公式：\texorpdfstring{$\rho(A)$}{rho(A)} 决定 Hausdorff 维数]\label{thm:conclusion-window6-sft-2adic-dimension-spectral-radius}
+令 \(\Gamma\) 为以 \(\Omega_6\) 为顶点集的有限有向图，邻接矩阵为 \(A\in\mathrm{Mat}_{64}(\{0,1\})\)。
+令 \(X_\Gamma\subseteq\Omega_6^{\NN}\) 为所有允许路径（一步转移受 \(\Gamma\) 约束）构成的一侧移位系统，并令
+\(
+\Lambda_\Gamma:=\Phi(X_\Gamma)\subseteq \ZZ_2^2
+\)。
+在 \(\Lambda_\Gamma\) 上定义超度量
+\[
+d(X,Y):=8^{-\kappa(\Phi^{-1}(X),\Phi^{-1}(Y))}.
+\]
+则 Hausdorff 维数存在且满足闭式公式
+\[
+\dim_H(\Lambda_\Gamma)=\frac{\log\rho(A)}{\log 8}\in[0,2],
+\]
+其中 \(\rho(A)\) 为谱半径。
+\end{theorem}
+
+\begin{proof}
+令 \(N_k\) 为长度 \(k\) 的允许词数量，则
+\(
+N_k=\mathbf 1^{\mathsf T}A^{k-1}\mathbf 1
+\)
+且由 Perron--Frobenius 理论有 \(\lim_{k\to\infty}\frac1k\log N_k=\log\rho(A)\)。
+每个长度 \(k\) 的圆柱集在度量 \(d\) 下直径为 \(8^{-k}\)，而 \(\Lambda_\Gamma\) 可由 \(N_k\) 个此类圆柱像覆盖。
+于是对任意 \(s>0\)，有
+\[
+\mathcal H^s_{8^{-k}}(\Lambda_\Gamma)\ \ll\ N_k\,8^{-ks}.
+\]
+当 \(s>\log\rho(A)/\log 8\) 时右端指数衰减，故 \(\mathcal H^s(\Lambda_\Gamma)=0\) 并得上界。
+\par
+反向，对不可约分量取 Perron 左右特征向量构造 Parry 测度，并以其在柱集上的指数标度给出 Frostman 下界，
+从而当 \(s<\log\rho(A)/\log 8\) 时 \(\mathcal H^s(\Lambda_\Gamma)=\infty\)。
+令 \(s\uparrow\) 临界值即得等式。证毕。
+\end{proof}
+
+\begin{theorem}[缺口级数的 Lee--Yang 型自然边界判别]\label{thm:conclusion-window6-gap-series-natural-boundary}
+对任意 \(\omega,\omega'\in\Omega_6^{\NN}\)，令
+\[
+\delta_k:=
+\begin{cases}
+1,&\omega^{(k)}\neq\omega'^{(k)},\\
+0,&\omega^{(k)}=\omega'^{(k)},
+\end{cases}
+\qquad
+F_{\omega,\omega'}(z):=\sum_{k\ge 0}\delta_k\,z^{8^k}.
+\]
+则：
+\begin{enumerate}
+  \item \(F_{\omega,\omega'}\) 在单位圆盘 \(|z|<1\) 内绝对收敛且解析；
+  \item 若仅有限多个 \(k\) 使 \(\delta_k=1\)，则 \(F_{\omega,\omega'}\) 为多项式；
+  \item 若无穷多个 \(k\) 使 \(\delta_k=1\)，则单位圆 \(|z|=1\) 为 \(F_{\omega,\omega'}\) 的自然边界：不存在任何穿越 \(|z|=1\) 的解析延拓。
+  进一步，对
+  \[
+  P_n(z):=\prod_{\substack{0\le k\le n\\ \delta_k=1}}\bigl(1-z^{8^k}\bigr)
+  \]
+  的零点集合，随 \(n\to\infty\) 在 \(|z|=1\) 上稠密。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+由 \(|z|<1\) 时 \(\sum_{k\ge 0}|z|^{8^k}<\infty\) 得 (1)。
+(2) 由有限和即得。
+若 \(\delta_k\) 无穷非零，则指数序列 \(n_k=8^k\) 满足 \(n_{k+1}/n_k=8>1\) 的 Hadamard 缺口条件，且系数不最终为零；由 Hadamard 缺口定理推出 \(|z|=1\) 为自然边界，得 (3) 的前半。
+对稠密零点性：每个因子 \(1-z^{8^k}\) 的零点为 \(8^k\) 次单位根，随 \(k\to\infty\) 其并集在单位圆上稠密；当 \(\delta_k=1\) 无穷多次发生时，零点族无穷注入，故 \(P_n\) 的零点在极限中稠密。证毕。
+\end{proof}
+
+\begin{theorem}[五叶分歧塔的 \(2\)-进逆极限：五个 Tate 模扭子的离散并]\label{thm:conclusion-elliptic-five-leaf-branch-tower-torsor}
+令 \(E/\CC\) 为椭圆曲线，并取五个点 \(P_0,\dots,P_4\in E(\CC)\)。
+对每个 \(i\) 选取一条 \(2\)-进开方塔 \((P_{i,n})_{n\ge 0}\) 满足 \([2]P_{i,n+1}=P_{i,n}\) 且 \(P_{i,0}=P_i\)。
+令
+\[
+B_n:=\bigsqcup_{i=0}^{4}\bigl(P_{i,n}+E[2^n]\bigr),
+\qquad
+b_{n+1\to n}:=[2]\big|_{B_{n+1}}:B_{n+1}\to B_n.
+\]
+则逆极限
+\[
+B_\infty:=\varprojlim(B_n,b_{n+1\to n})
+\]
+分解为五个互不相交的开闭分支；每个分支均为 \(T_2(E)\) 的主齐次空间（torsor）。
+进一步地，在任一分支上选定一个基点后，该分支与 \(T_2(E)\) 在拓扑意义下同胚同构。
+\end{theorem}
+
+\begin{proof}
+固定 \(i\)。
+平移同构 \(\tau_{i,n}:E[2^n]\to P_{i,n}+E[2^n]\)、\(Q\mapsto P_{i,n}+Q\) 与倍点满足交换关系
+\(
+[2]\circ\tau_{i,n+1}=\tau_{i,n}\circ[2]
+\)。
+因此限制到第 \(i\) 个分支的逆系统与 \((E[2^n],[2])_n\) 同构，其逆极限即为 \(T_2(E)\)，并且整体仅差一个平移基点，故为 \(T_2(E)\) 的 torsor。
+五个 \(i\) 的离散并在每一层保持不交且为开闭子集；逆极限保开闭性，从而 \(B_\infty\) 分解为五个开闭分支。证毕。
+\end{proof}
+
+\begin{remark}[与 Lee--Yang 椭圆锚点的五分歧点对齐]\label{rem:conclusion-elliptic-five-leaf-leyang-alignment}
+在本稿固定的 Lee--Yang 极小模型 \(E_{\min}\) 上，重量覆盖 \(\pi_y:E_{\min}\to\PP^1_y\) 的有限分歧点总数为 \(5\)，并可取为两条有理分歧点与三条非有理分歧点（见结论 \ref{con:xi-terminal-zm-leyang-ramification-critical-values} 及其后续关于分歧除子主化的证书链）。
+将 \((P_0,\dots,P_4)\) 选为这五条分歧点并施行定理 \ref{thm:conclusion-elliptic-five-leaf-branch-tower-torsor}，得到一个由 \(2\)-进 Tate 模块驱动的“五叶逆极限骨架”，其每一叶对应一条固定分歧点的 \(2^n\)-除法塔。
+\end{remark}
+
+\endinput

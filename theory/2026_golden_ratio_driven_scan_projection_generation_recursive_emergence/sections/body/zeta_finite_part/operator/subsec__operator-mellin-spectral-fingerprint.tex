@@ -1,0 +1,112 @@
+\subsection{谱隙驱动的解析指纹：Mellin 矩函数、极限定理与非共振大偏差}\label{subsec:operator-mellin-spectral-fingerprint}
+
+本小节把“有限状态可编译”的结论推进到解析侧：由有限状态系统诱导的极限分布与特征函数/矩函数，都可在一组有限维扭曲算子上闭合；因此其延拓极点、谱隙、正则性与大偏差可被压缩为有限谱数据，并可被审计为有限个行列式/谱半径证书。
+
+\subsubsection{Mellin 指纹：矩阵细分方程在 \texorpdfstring{$z=\varphi^{-s}$}{z=phi(-s)} 上的有理延拓}
+
+\begin{theorem}[矩阵细分方程的 Mellin 可解析化：\texorpdfstring{$\varphi^{-s}$}{phi^{-s}} 上的有理延拓与极点谱指纹]\label{thm:conclusion62-mellin-rational}
+设 \(\boldsymbol{\mu}=(\mu_1,\dots,\mu_d)\) 为 \([0,1]\) 上的有限向量测度，满足一组图导向（matrix-directed）的细分/自相似方程：
+\begin{equation}\label{eq:operator-mellin-matrix-refinement}
+\boldsymbol{\mu}
+=\sum_{j=1}^{J}T_j\,\bigl(\boldsymbol{\mu}\circ S_j^{-1}\bigr),
+\qquad
+S_j(x)=\varphi^{-a_j}x+t_j,
+\end{equation}
+其中 \(a_j\in\NN\) 固定，\(t_j\in[0,1]\cap\ZZ[\varphi^{-1}]\)，且 \(T_j\in\Mat_{d\times d}(\RR_{\ge 0})\)。
+令 \(\nu\in\RR_{\ge 0}^d\) 为固定左向量并定义标量测度 \(\mu:=\langle \nu,\boldsymbol{\mu}\rangle\)。
+对 \(\Re(s)>-1\) 定义 Mellin--矩函数
+\[
+M(s):=\int_{0}^{1}x^{s}\,d\mu(x).
+\]
+则取 \(z=\varphi^{-s}\) 后，\(M(s)\) 在半平面 \(\Re(s)>-1\) 内可表示为 \(z\) 的有理函数 \(R(z)\in\CC(z)\)，并据此作 meromorphic 延拓。
+其极点集合包含于某个有限维“矩细分算子”的特征方程零点集：
+存在矩阵多项式族 \(\mathcal{A}(z)\in\Mat_{D\times D}(\CC[z])\)（\(D\) 仅依赖 \(d\)、\(\{a_j\}\)、\(\{t_j\}\) 与细分图的有限状态结构）与向量多项式 \(\mathbf{b}(z)\) 使得
+\begin{equation}\label{eq:operator-mellin-linear-system}
+\mathbf{M}(s)=(I-\mathcal{A}(z))^{-1}\mathbf{b}(z),
+\qquad
+M(s)=\mathbf{c}^{\mathsf T}\mathbf{M}(s),
+\end{equation}
+从而 \(M(s)\) 的全部极点包含于 \(\det(I-\mathcal{A}(z))=0\) 的根集合；并且每一极点的阶数由 \(\mathcal{A}(z)\) 在对应特征值处的 Jordan 结构决定。
+\end{theorem}
+
+\begin{proof}
+要点是把 \eqref{eq:operator-mellin-matrix-refinement} 视为一个有限状态图上的“尺度替换 + 线性输出”机制：在 sofic--Zeckendorf 口径下，细分分支 \(S_j\) 与状态更新均为有限个 \(\varphi\)-adic 仿射变换，且平移参数 \(t_j\) 落在有限生成的 \(\ZZ[\varphi^{-1}]\) 网格上。
+因此可选取一个有限 Markov 分割并引入一组\emph{分割分量上的限制矩函数}作为未知量，得到一个在 \(z=\varphi^{-s}\) 上系数为多项式的有限线性系统；解该系统即得 \eqref{eq:operator-mellin-linear-system}。
+由有限维线性系统的 Cramer 法则，\(\mathbf{M}(s)\) 与 \(M(s)\) 为 \(z\) 的有理函数，并可 meromorphic 延拓；极点位置与阶数由行列式零点与 Jordan 结构给出。证毕。
+\end{proof}
+
+\subsubsection{谱隙统计：CLT 的谱口径与复扭曲谱隙推出的正则性}
+
+\begin{theorem}[谱隙推论：可加观测量的 CLT 与非零频率指数衰减]\label{thm:conclusion63-clt-spectral}
+令 \((X,\sigma,\mu)\) 为原始 sofic shift 在 Parry 平衡态 \(\mu\) 下的双边系统，取有界可加观测量 \(f\)（柱函数）并记部分和
+\(
+S_m:=\sum_{k=0}^{m-1}f\circ\sigma^{k}
+\)。
+假设 \(f\) 非共边界（非算术）并且相应的扭曲转移算子 \(\mathcal{L}_{\theta}\)（或等价的有限维扭曲矩阵族）在 \(\theta=0\) 附近满足解析谱微扰与谱隙。
+则标准化变量
+\[
+Y_m:=\frac{S_m-m\int f\,d\mu}{\sqrt{m}}
+\]
+满足中心极限定理：在 \(\mu\) 下收敛到均值 \(0\)、方差 \(\sigma_f^2>0\) 的正态分布（\(\sigma_f^2\) 可由压力 Hessian/Green--Kubo 公式读出）。
+\par
+此外，对任意紧集 \(K\Subset \RR\setminus\{0\}\)，存在常数 \(C_K>0\) 与 \(\rho_K\in(0,1)\) 使得特征函数在非零频率上具有一致指数衰减：
+\[
+\boxed{\;
+\sup_{\theta\in K}\left|\mathbb{E}_{\mu}\,e^{\mathrm{i}\theta S_m}\right|
+\le C_K\,\rho_K^{m}\qquad(m\ge 1).\;}
+\]
+该“高频指数衰减 + 零频二阶展开”组合给出 CLT/Edgeworth/中偏差局部展开的制度化谱输入（并与附录中对分支半径的证书化接口对齐）。
+\end{theorem}
+
+\begin{proof}
+CLT 由有限状态 Markov 链/转移算子的标准谱方法给出（同命题 \ref{prop:kernel-clt-ldp} 的口径）。
+指数衰减来自扭曲算子在 \(\theta\in K\) 上的统一谱隙：其主谱半径严格小于 \(\theta=0\) 处的 Perron 根，从而 \(m\) 步振幅由该谱半径幂次控制。证毕。
+\end{proof}
+
+\begin{corollary}[复扭曲统一谱隙 \texorpdfstring{$\Rightarrow$}{=>} 极限密度的 Hölder 正则]\label{cor:conclusion64-holder-regularity}
+在定理 \ref{thm:conclusion63-clt-spectral} 的设定下，进一步假设存在复扭曲的统一谱隙：对所有 \(\theta\neq 0\) 有
+\[
+\rho(\mathcal{L}_{\theta})\le (1-\delta)\,\rho(\mathcal{L}_0)
+\]
+（某个 \(\delta>0\)，并且扭曲族在复邻域内解析可控）。
+则由系统诱导的极限测度在相应实轴投影上绝对连续，且其密度 \(f=d\mu/dx\) 属于某个 Hölder 类 \(C^{\alpha}([0,1])\)。
+并且 \(\alpha>0\) 可由“谱隙常数 \(\delta\) + 复解析带宽/压缩常数”给出显式下界：存在可计算函数 \(\alpha=\alpha(\delta,\mathcal{L})\) 使得 \(|f|_{C^{\alpha}}\) 可被制度数据显式控制。
+\end{corollary}
+
+\begin{proof}
+统一复扭曲谱隙等价于转移算子在 Hölder（或适当的各向异性 Banach）空间上的一致准紧性与谱分离，从而不变分布的密度落在该空间并继承 Hölder 正则性；指数 \(\alpha\) 由谱半径收缩与解析带宽的标准插值/Doeblin--Fortet 不等式给出。证毕。
+\end{proof}
+
+\subsubsection{非共振大偏差：指数和的 Perron 分支与二阶曲率律}
+
+\begin{proposition}[非共振频率上的指数和统一大偏差：谱半径的二阶曲率律]\label{prop:conclusion65-expsums-uniform-ldp}
+设 \(\mathcal{L}_m\subset X_m\) 为长度 \(m\) 的合法词集，并令
+\[
+S_m(\theta):=\sum_{\omega\in\mathcal{L}_m}\exp\!\bigl(\mathrm{i}\theta\,\mathrm{Val}(\omega)\bigr).
+\]
+令 \(\lambda(\theta)\) 表示相应扭曲转移算子的 Perron 主特征值分支（\(\lambda(0)>0\)）。
+则存在常数 \(C>0\) 使得对所有 \(\theta\) 在某邻域内成立
+\[
+\boxed{\;
+|S_m(\theta)|\le C\,|\lambda(\theta)|^{m}\qquad(m\ge 1).\;}
+\]
+并且对任何远离共振集
+\(
+\Theta_{\mathrm{res}}:=\{\theta:\ \rho(\mathcal{L}_{\theta})=\rho(\mathcal{L}_0)\}
+\)
+的紧集 \(K\Subset \RR\setminus\Theta_{\mathrm{res}}\)，存在 \(c=c(K)>0\) 使得
+\[
+\boxed{\;
+\log|\lambda(\theta)|
+\le \log\lambda(0)-c\,\mathrm{dist}(\theta,\Theta_{\mathrm{res}})^{2}
+\qquad(\theta\in K).\;}
+\]
+该二阶曲率律给出远离共振时的统一指数衰减，可作为主弧/共振判别的可审计输入。
+\end{proposition}
+
+\begin{proof}
+第一条由扭曲转移算子的谱分解给出：指数和等价于对常值函数的 \(m\) 次作用，其主项由 Perron 分支 \(\lambda(\theta)^{m}\) 控制。
+第二条来自 \(\theta\mapsto \log\lambda(\theta)\) 的解析严格凹性：共振集之外主谱半径严格下降，而在紧集上可用二阶微扰与紧性取到统一曲率下界。证毕。
+\end{proof}
+
+\endinput

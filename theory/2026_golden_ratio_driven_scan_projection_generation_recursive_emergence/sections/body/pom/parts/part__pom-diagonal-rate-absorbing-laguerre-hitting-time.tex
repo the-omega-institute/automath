@@ -1,0 +1,301 @@
+% (User input window)
+
+\paragraph{停留--刷新核的删点吸收：命中时母函数、实根交错与几何混合}
+命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 给出的最优核
+\(
+K^\star_\delta
+\)
+不仅在谱侧由 Laguerre--世俗多项式 \(\mathcal Q_\delta\) 控制（定理 \ref{thm:pom-maxent-markov-laguerre-secular-spectrum}），
+其删点吸收过程的命中分布亦可由同型的“删点 Laguerre 多项式”完全封闭。
+该封闭进一步导出：命中时在离散时间上为有限支撑的正权几何混合，其尾分布为 Hausdorff 矩序列并满足递减风险率；
+相应基本矩阵在秩一扰动意义下具有闭式。
+
+\paragraph{记号：停留--刷新分解与删点 Laguerre 多项式}
+固定 \(\delta\in(0,\delta_0)\) 并沿用命题 \ref{prop:pom-diagonal-rate-diagonal-closure-rankone} 的参数 \(\kappa_\delta>0\) 与 \(\{t_x\}_{x\in X}\subset(\kappa_\delta,\infty)\)。
+为简洁起见以下写 \(\kappa:=\kappa_\delta\)。
+定义
+\[
+\pi_\delta(x):=\frac{1}{t_x-\kappa}\in(0,1),
+\qquad
+r_\delta(x):=\frac{t_x-\kappa}{t_x}\in(0,1),
+\]
+则由 \(\sum_x (t_x-\kappa)^{-1}=1\) 可知 \(\pi_\delta\in\Delta(X)\)，并且最优核可写成等价的“停留--刷新”形式：对任意 \(x,z\in X\) 有
+\begin{equation}\label{eq:pom-diagonal-rate-hitting-stay-refresh}
+\boxed{\;
+K^\star_\delta(z\mid x)
+=\bigl(1-r_\delta(x)\bigr)\,\mathbf 1_{\{z=x\}}
+\;+\;
+r_\delta(x)\,\pi_\delta(z)\; } .
+\end{equation}
+
+\begin{definition}[删点 Laguerre 多项式与命中时]\label{def:pom-diagonal-rate-absorbing-laguerre-hit}
+令 \((X_m)_{m\ge 0}\) 为以 \(K^\star_\delta\) 为转移核的马尔可夫链，并以 \(\PP_x\)、\(\EE_x\) 表示条件于 \(X_0=x\) 的概率与期望。
+对给定目标点 \(y\in X\)，定义命中时
+\[
+\tau_y:=\inf\{m\ge 1:\ X_m=y\}.
+\]
+在多项式侧，定义删点多项式与其 Laguerre 伴随
+\[
+\mathcal P_{-y}(z):=\prod_{u\in X\setminus\{y\}}(t_u-z),
+\qquad
+\mathcal Q_{-y}(z):=z\,\mathcal P_{-y}'(z)+\kappa\,\mathcal P_{-y}(z),
+\]
+并对 \(x\ne y\) 记
+\(
+\mathcal P_{-x,-y}(z):=\prod_{u\in X\setminus\{x,y\}}(t_u-z)
+\)。
+\end{definition}
+
+\input{sections/body/pom/parts/part__pom-diagonal-rate-absorbing-wronskian-interlacing}
+
+\begin{theorem}[命中时的概率母函数闭式：删点 Laguerre 有理式]\label{thm:pom-diagonal-rate-absorbing-hit-pgf}
+在定义 \ref{def:pom-diagonal-rate-absorbing-laguerre-hit} 的设定下，对任意 \(x\ne y\) 与 \(|s|\) 充分小有严格恒等式
+\begin{equation}\label{eq:pom-diagonal-rate-hit-pgf-closed-form}
+\boxed{\;
+\EE_x\!\big[s^{\tau_y}\big]
+=
+s\,\kappa\,\frac{t_x-\kappa}{t_y-\kappa}\cdot
+\frac{\mathcal P_{-x,-y}(\kappa s)}{\mathcal Q_{-y}(\kappa s)}\; } .
+\end{equation}
+\end{theorem}
+\begin{proof}[证明要点]
+对 \(x\ne y\) 记 \(f_x(s):=\EE_x[s^{\tau_y}]\)。
+由一步分解得线性方程
+\[
+f_x(s)=sK^\star_\delta(y\mid x)+s\sum_{z\ne y}K^\star_\delta(z\mid x)\,f_z(s).
+\]
+令 \(\widetilde K^{(y)}\) 表示 \(K^\star_\delta\) 在 \(X\setminus\{y\}\) 上的删点次转移矩阵，
+并令 \(q^{(y)}(x):=K^\star_\delta(y\mid x)\)（\(x\ne y\)）。
+则向量形式为
+\[
+(I-s\widetilde K^{(y)})f=sq^{(y)}.
+\]
+将 \eqref{eq:pom-diagonal-rate-hitting-stay-refresh} 的停留--刷新分解代入，
+\(\widetilde K^{(y)}\) 为“对角可逆 \(+\) 秩一”的显式扰动，
+对 \((I-s\widetilde K^{(y)})^{-1}\) 应用 Sherman--Morrison 公式即可得 \(f_x(s)\) 的闭式表达；
+将其改写为 \(\sum_{u\ne y}(t_u-\kappa s)^{-1}\) 的有理式，并用
+\(
+\sum_{u\ne y}(t_u-z)^{-1}=-\mathcal P_{-y}'(z)/\mathcal P_{-y}(z)
+\)
+及消去 \(\mathcal P_{-y}=(t_x-\cdot)\mathcal P_{-x,-y}\) 即得到 \eqref{eq:pom-diagonal-rate-hit-pgf-closed-form}。证毕。
+\end{proof}
+
+\begin{theorem}[删点 Laguerre 多项式的根位置与交错]\label{thm:pom-diagonal-rate-absorbing-laguerre-interlacing}
+假设 \(\{t_u:u\in X\setminus\{y\}\}\) 两两不同，并将其按升序排列为
+\(
+t_{(1)}<\cdots<t_{(n-1)}
+\)。
+则 \(\mathcal Q_{-y}\) 的全部零点均为单实根，记为
+\(
+z_{y,1}<\cdots<z_{y,n-1}
+\)，并满足严格交错
+\begin{equation}\label{eq:pom-diagonal-rate-absorbing-interlacing}
+\boxed{\;
+\kappa<z_{y,1}<t_{(1)}<z_{y,2}<t_{(2)}<\cdots<z_{y,n-1}<t_{(n-1)}\;}
+\end{equation}
+从而 \(\lambda_{y,i}:=\kappa/z_{y,i}\in(0,1)\)。
+\end{theorem}
+\begin{proof}
+\(\mathcal Q_{-y}(z)=0\) 等价于世俗方程
+\[
+\sum_{u\ne y}\frac{1}{t_u-z}=\frac{\kappa}{z},
+\]
+其证明与定理 \ref{thm:pom-maxent-markov-laguerre-secular-spectrum} 的交错性完全同型：
+左端在每个区间 \((\kappa,t_{(1)})\) 与 \((t_{(k)},t_{(k+1)})\) 上连续严格递增并在端点发散，
+右端在 \((0,\infty)\) 上严格递减且为正；
+由端点符号与介值定理得到每个区间唯一解并给出严格交错。
+单根性由单调性推出。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-diagonal-rate-absorbing-wronskian-full-spectrum-interlacing}
+
+\begin{theorem}[正权几何混合：命中分布为有限支撑的凸组合]\label{thm:pom-diagonal-rate-absorbing-geometric-mixture}
+在定理 \ref{thm:pom-diagonal-rate-absorbing-laguerre-interlacing} 的两两不同假设下，
+沿用其 \(\lambda_{y,i}\in(0,1)\)。
+则对任意 \(x\ne y\)，存在唯一权重 \(\{\omega_i^{(x,y)}\}_{i=1}^{n-1}\subset(0,1)\)（\(\sum_i\omega_i^{(x,y)}=1\)）使得对所有 \(k\ge 1\) 有
+\begin{equation}\label{eq:pom-diagonal-rate-absorbing-geometric-mixture}
+\boxed{\;
+\PP_x(\tau_y=k)
+=\sum_{i=1}^{n-1}\omega_i^{(x,y)}\,(1-\lambda_{y,i})\,\lambda_{y,i}^{k-1}\;}
+\end{equation}
+并且权重具有显式残数闭式
+\begin{equation}\label{eq:pom-diagonal-rate-absorbing-mixture-weights}
+\boxed{\;
+\omega_i^{(x,y)}
+=
+-\,\kappa\,\frac{t_x-\kappa}{t_y-\kappa}\cdot
+\frac{\mathcal P_{-x,-y}(z_{y,i})}{(z_{y,i}-\kappa)\,\mathcal Q_{-y}'(z_{y,i})}\; } .
+\end{equation}
+\end{theorem}
+\begin{proof}[证明要点]
+由定理 \ref{thm:pom-diagonal-rate-absorbing-hit-pgf}，
+\(
+\EE_x[s^{\tau_y}]
+\)
+为 \(s\) 的有理函数，其分母零点由 \(\mathcal Q_{-y}(\kappa s)=0\) 给出，故极点为 \(\{z_{y,i}/\kappa\}_{i=1}^{n-1}\subset(1,\infty)\) 且均为单极点。
+对 \(\EE_x[s^{\tau_y}]\) 作部分分式分解并回到 \(\lambda_{y,i}=\kappa/z_{y,i}\) 即得 \eqref{eq:pom-diagonal-rate-absorbing-geometric-mixture}，
+而 \eqref{eq:pom-diagonal-rate-absorbing-mixture-weights} 由残数计算得到。
+权重正性由 \(\mathcal P_{-x,-y}\) 的零点（即 \(\{t_u:u\ne x,y\}\)）与 \(\mathcal Q_{-y}\) 的零点严格交错推出残数符号交替，
+再结合 \(z_{y,i}>\kappa\) 与系数 \(\kappa(t_x-\kappa)/(t_y-\kappa)>0\) 得 \(\omega_i^{(x,y)}>0\)。
+归一化 \(\sum_i\omega_i^{(x,y)}=1\) 由 \(s\uparrow 1\) 时 \(\EE_x[s^{\tau_y}]\uparrow 1\) 与每个几何母函数在 \(s=1\) 取值 \(1\) 给出。证毕。
+\end{proof}
+
+\begin{corollary}[Hausdorff 矩与完全单调尾]\label{cor:pom-diagonal-rate-absorbing-hausdorff-moment-tail}
+在定理 \ref{thm:pom-diagonal-rate-absorbing-geometric-mixture} 的设定下，定义尾概率
+\(
+S_k^{(x,y)}:=\PP_x(\tau_y>k)
+\)（\(k\ge 0\)）。
+则对所有 \(k\ge 0\) 有
+\[
+\boxed{\;
+S_k^{(x,y)}=\sum_{i=1}^{n-1}\omega_i^{(x,y)}\,\lambda_{y,i}^{k}\;}
+\]
+因此 \(\{S_k^{(x,y)}\}_{k\ge 0}\) 为 \([0,1)\) 上离散测度 \(\sum_i\omega_i^{(x,y)}\delta_{\lambda_{y,i}}\) 的 Hausdorff 矩序列，并满足完全单调性：对任意 \(m,k\ge 0\)，
+\[
+(-1)^m(\Delta^m S^{(x,y)})_k\ge 0,
+\]
+其中 \(\Delta\) 为前向差分算子。
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:pom-diagonal-rate-absorbing-geometric-mixture} 对 \(k\) 求和得到尾概率表示；
+对差分算子逐项作用并用
+\(
+\Delta^m(\lambda^k)=\lambda^k(\lambda-1)^m
+\)
+与 \(\lambda\in(0,1)\)、\(\omega_i>0\) 即得完全单调性。证毕。
+\end{proof}
+
+\begin{corollary}[递减风险率]\label{cor:pom-diagonal-rate-absorbing-dfr}
+令风险率
+\(
+h_k^{(x,y)}:=\PP_x(\tau_y=k\mid \tau_y\ge k)
+\)（\(k\ge 1\)）。
+则 \(h_{k+1}^{(x,y)}\le h_k^{(x,y)}\) 对所有 \(k\ge 1\) 成立。
+\end{corollary}
+\begin{proof}
+由尾概率 \(S_k^{(x,y)}\) 有 \(h_k^{(x,y)}=1-\frac{S_k^{(x,y)}}{S_{k-1}^{(x,y)}}\)。
+而 Hausdorff 矩序列的比值 \(\frac{S_k}{S_{k-1}}\) 为递增序列（等价地，\(\{S_k\}\) 对数凸），
+结合即得风险率递减。证毕。
+\end{proof}
+
+\begin{theorem}[删点基本矩阵的秩一闭式]\label{thm:pom-diagonal-rate-absorbing-fundamental-matrix-rankone}
+固定 \(y\in X\) 并在 \(X\setminus\{y\}\) 上定义删点次转移矩阵
+\[
+\widetilde K^{(y)}(z\mid x):=K^\star_\delta(z\mid x)\qquad(x,z\ne y),
+\]
+以及基本矩阵（fundamental matrix）
+\(
+N^{(y)}:=(I-\widetilde K^{(y)})^{-1}
+\)。
+则对任意 \(x,z\in X\setminus\{y\}\) 有严格恒等式
+\begin{equation}\label{eq:pom-diagonal-rate-absorbing-fundamental-matrix}
+\boxed{\;
+N^{(y)}_{xz}
+=\frac{1}{r_\delta(x)}\,\mathbf 1_{\{x=z\}}
+\;+\;
+\frac{\pi_\delta(z)}{\pi_\delta(y)\,r_\delta(z)}\;}
+\end{equation}
+从而对固定 \(z\ne y\)，\(\EE_x[\#\{m<\tau_y:\ X_m=z\}]\) 对起点 \(x\) 的依赖仅通过首项 \(\frac{1}{r_\delta(x)}\mathbf 1_{\{x=z\}}\) 出现。
+\end{theorem}
+\begin{proof}[证明要点]
+将 \eqref{eq:pom-diagonal-rate-hitting-stay-refresh} 在删点集合 \(X\setminus\{y\}\) 上写成矩阵形式
+\[
+\widetilde K^{(y)}=\mathrm{diag}(1-r)+r\,\pi_{-y}^{\mathsf T},
+\]
+其中 \(\pi_{-y}\) 为删去 \(y\) 的列向量，\(r\) 为删去 \(y\) 的刷新率列向量（由此 \(r\,\pi_{-y}^{\mathsf T}\) 为秩一矩阵）。
+于是
+\[
+I-\widetilde K^{(y)}=\mathrm{diag}(r)-r\,\pi_{-y}^{\mathsf T}
+\]
+为可逆对角矩阵的秩一扰动；
+对其应用 Sherman--Morrison 公式并用
+\(
+\mathbf{1}^{\mathsf T}\pi_{-y}=1-\pi_\delta(y)
+\)
+即可得到 \eqref{eq:pom-diagonal-rate-absorbing-fundamental-matrix}。证毕。
+\end{proof}
+
+\begin{corollary}[命中时均值的闭式]\label{cor:pom-diagonal-rate-absorbing-mean-hit-time}
+在定理 \ref{thm:pom-diagonal-rate-absorbing-fundamental-matrix-rankone} 的设定下，
+对任意 \(x\ne y\) 有
+\[
+\boxed{\;
+\EE_x[\tau_y]
+=\sum_{z\ne y}N^{(y)}_{xz}
+=\frac{1}{r_\delta(x)}+\frac{1}{\pi_\delta(y)}\sum_{z\ne y}\frac{\pi_\delta(z)}{r_\delta(z)}\;}
+\]
+\end{corollary}
+\begin{proof}
+由删点吸收链的一般事实，
+\(
+\EE_x[\tau_y]=\sum_{z\ne y}N^{(y)}_{xz}
+\)；
+代入 \eqref{eq:pom-diagonal-rate-absorbing-fundamental-matrix} 得结论。证毕。
+\end{proof}
+
+\paragraph{删集推广：多靶集合的母函数与基本矩阵}
+令 \(B\subset X\) 为非空真子集，并定义 \(\tau_B:=\inf\{m\ge 1:\ X_m\in B\}\)。
+记
+\[
+\pi_\delta(B):=\sum_{b\in B}\pi_\delta(b)\in(0,1),
+\qquad
+\mathcal P_{-B}(z):=\prod_{u\in X\setminus B}(t_u-z),
+\qquad
+\mathcal Q_{-B}(z):=z\,\mathcal P_{-B}'(z)+\kappa\,\mathcal P_{-B}(z).
+\]
+
+\begin{theorem}[多靶命中时的全闭式：删集 Laguerre 控制]\label{thm:pom-diagonal-rate-absorbing-set-hit-and-occupancy}
+在上述记号下，对任意 \(x\notin B\) 与 \(|s|\) 充分小有概率母函数闭式
+\begin{equation}\label{eq:pom-diagonal-rate-hit-set-pgf}
+\boxed{\;
+\EE_x[s^{\tau_B}]
+=
+s\,\kappa\,\pi_\delta(B)\,(t_x-\kappa)\cdot
+\frac{\mathcal P_{-(B\cup\{x\})}(\kappa s)}{\mathcal Q_{-B}(\kappa s)}\; } ,
+\end{equation}
+其中 \(\mathcal P_{-(B\cup\{x\})}(z):=\prod_{u\in X\setminus(B\cup\{x\})}(t_u-z)\)。
+\par
+并且在 \(X\setminus B\) 上的删集基本矩阵
+\(
+N^{(B)}:=(I-\widetilde K^{(B)})^{-1}
+\)
+满足秩一闭式：对任意 \(x,z\notin B\)，
+\begin{equation}\label{eq:pom-diagonal-rate-fundamental-matrix-set}
+\boxed{\;
+N^{(B)}_{xz}
+=\frac{1}{r_\delta(x)}\,\mathbf 1_{\{x=z\}}
+\;+\;
+\frac{\pi_\delta(z)}{\pi_\delta(B)\,r_\delta(z)}\;}
+\end{equation}
+其中 \(\widetilde K^{(B)}(z\mid x):=K^\star_\delta(z\mid x)\)（\(x,z\notin B\)）。
+\end{theorem}
+\begin{proof}[证明要点]
+删集情形与删点情形在代数结构上同型：
+在 \(X\setminus B\) 上，\(\widetilde K^{(B)}=\mathrm{diag}(1-r)+r\,\pi_{-B}^{\mathsf T}\)，其中 \(\pi_{-B}\) 为删去 \(B\) 的列向量、\(r\) 为对应刷新率列向量。
+对 \((I-s\widetilde K^{(B)})^{-1}\) 与 \((I-\widetilde K^{(B)})^{-1}\) 分别应用 Sherman--Morrison 公式，
+并用 \(\mathbf 1^{\mathsf T}\pi_{-B}=1-\pi_\delta(B)\) 及
+\(
+\sum_{u\notin B}(t_u-z)^{-1}=-\mathcal P_{-B}'(z)/\mathcal P_{-B}(z)
+\)
+即可得到 \eqref{eq:pom-diagonal-rate-hit-set-pgf}--\eqref{eq:pom-diagonal-rate-fundamental-matrix-set}。证毕。
+\end{proof}
+
+\begin{conjecture}[删集 Laguerre 系列的 Laguerre--Pólya 闭包]\label{conj:pom-diagonal-rate-absorbing-laguerre-polya-closure}
+设存在一族有限模型 \((X_m,\kappa_m,\{t_x^{(m)}\}_{x\in X_m})\) 与一族靶集合 \(B_m\subset X_m\)（皆为非空真子集），
+并令
+\[
+\mathcal P_{-B_m}^{(m)}(z):=\prod_{x\in X_m\setminus B_m}(t_x^{(m)}-z),
+\qquad
+\mathcal Q_{-B_m}^{(m)}(z):=z\bigl(\mathcal P_{-B_m}^{(m)}\bigr)'(z)+\kappa_m\,\mathcal P_{-B_m}^{(m)}(z).
+\]
+若在某一尺度归一化下 \(\mathcal Q_{-B_m}^{(m)}\) 局部一致收敛到整函数 \(\mathcal Q_\infty\)，并且经验测度
+\(
+\nu_m:=|X_m\setminus B_m|^{-1}\sum_{x\notin B_m}\delta_{t_x^{(m)}}
+\)
+在 \((\underline t,\infty)\) 上弱收敛到某极限 \(\nu\)，且满足一类可核验的 Stieltjes 紧性条件（例如 \(\sup_m\int (t-\underline t)^{-2}\,d\nu_m(t)<\infty\) 与 \(\inf_m\kappa_m>0\)），
+则极限整函数 \(\mathcal Q_\infty\) 属于 Laguerre--Pólya 类，并且其零点全为正实数且与 \(\mathrm{supp}(\nu)\) 的间隙保持交错。
+等价地，在极限意义下，多靶命中时的尾分布仍为 \([0,1)\) 上测度的 Hausdorff 矩，从而有限维的“正权几何混合”语义在无限维极限中保持闭包。
+\end{conjecture}
+
+\endinput
+

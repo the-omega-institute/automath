@@ -1,0 +1,632 @@
+\subsubsection{滑动块因子 \texorpdfstring{$Y_m$}{Ym} 的谱/\texorpdfstring{$\zeta$}{zeta}：cover 与内禀对象的精确分离}\label{subsec:Ym-zeta-spectrum}
+上一段已解释“为何本文主要使用 cover 的 \(\zeta\)”。为满足“折叠诱导滑动块因子的谱/\(\zeta\) 计算应明确到可执行层”的可核验性要求，本小节把两类对象的计算链条明确列出，并给出 \(Y_m\) 的内禀 \(\zeta_{Y_m}\) 的\textbf{可计算}表述，同时强调其与覆盖 SFT 行列式 \(\det(I-zA_m)\) 的定义差异。
+
+\paragraph{cover-SFT 的谱与 \texorpdfstring{$\zeta$}{zeta}}
+取 \(Y_m\) 的右 Fischer cover（或任一 follower-separated 右解析 cover）\(H_m\)，按定义 \ref{def:Phi_m-adjacency} 得到边移位 \(X_{A_m}\) 的邻接矩阵 \(A_m\)。则：
+\begin{itemize}
+  \item \textbf{谱/熵：} \(h_{\mathrm{top}}(Y_m)=\log\rho(A_m)\)（命题 \ref{prop:Phi_m-entropy}）；
+  \item \textbf{最大熵测度：} Parry 测度由 \(A_m\) 的 Perron--Frobenius 左/右本征向量显式给出（命题 \ref{prop:Phi_m-parry}），并可推前得到 \(Y_m\) 的最大熵测度（命题 \ref{prop:Phi_m-parry-pushforward}）；
+  \item \textbf{\(\zeta\)：} 覆盖 SFT 的 Artin--Mazur \(\zeta\) 满足
+  \[
+  \zeta_{X_{A_m}}(z)=\frac{1}{\det(I-zA_m)},
+  \qquad
+  \#\mathrm{Fix}(\sigma^n|_{X_{A_m}})=\mathrm{Tr}(A_m^n),
+  \]
+  并因此
+  \(
+  \#\mathrm{Fix}(\sigma^n|_{X_{A_m}})=\rho(A_m)^n+O(\rho_2^n)
+  \)
+  （\(\rho_2<\rho(A_m)\) 为次大谱半径，取不可约非周期分量时成立）。
+\end{itemize}
+这套链条之所以“可审计”，在于一切输入仅是有限图/矩阵：所有数值不变量（熵、主特征值、留数常数、primitive 轨道谱等）都可由线性代数直接复现。
+
+\paragraph{sofic 因子 \texorpdfstring{$Y_m$}{Ym} 的内禀 \texorpdfstring{$\zeta_{Y_m}$}{zetaYm}：可计算但不等于 cover 行列式}
+内禀 \(\zeta_{Y_m}\) 由周期点计数定义：
+\[
+\zeta_{Y_m}(z):=\exp\left(\sum_{n\ge 1}\frac{\#\mathrm{Fix}(\sigma^n|_{Y_m})}{n}z^n\right).
+\]
+由于 \(Y_m\) 是 sofic shift（有限标记图像；见 \cite{Weiss1973SFTandSofic,CovenPaul1975SoficSystems,LindMarcus1995,Kitchens1998SymbolicDynamics}），其周期点集是正则对象，因此 \(\zeta_{Y_m}\) 为有理函数（参见 \cite{Manning1971RationalZeta}）。关键是：\(\#\mathrm{Fix}(\sigma^n|_{Y_m})\) 计数的是\textbf{标记序列}的周期点，而 \(\mathrm{Tr}(A_m^n)\) 计数的是 cover 上\textbf{边序列}的周期点；当标记因子不是一一对应时，这两者不同。
+
+\paragraph{一个可执行的计数口径（转移半群自动机）}
+给定任一右解析表示（例如 $H_m^{\mathrm{det}}$ 或 Fischer cover），可把每个字母 $a\in X_m$ 诱导为状态集上的部分转移 $\tau_a$，并由可达的部分映射半群构造一个有限自动机；其邻接矩阵记为 $B_m$。则
+\[
+\#\mathrm{Fix}(\sigma^n|_{Y_m})=\mathrm{Tr}(B_m^n),\qquad
+\zeta_{Y_m}(z)=\frac{1}{\det(I-zB_m)}.
+\]
+该口径见 \cite{Nasu1995TextileSystems}，以及 \cite{LindMarcus1995,Kitchens1998SymbolicDynamics} 关于 sofic/cover 的章节。
+
+\begin{proposition}[内禀 \texorpdfstring{$\zeta_{Y_m}$}{zetaYm} 的主极点与熵：与 cover 同一指数尺度]\label{prop:Ym-zeta-leading-pole}
+设 \(Y_m\) 不可约（或取其最大熵本质分量）。则 \(Y_m\) 的周期点增长率满足
+\[
+\limsup_{n\to\infty}\frac{1}{n}\log\#\mathrm{Fix}(\sigma^n|_{Y_m})
+\ =\ h_{\mathrm{top}}(Y_m),
+\]
+从而内禀 \(\zeta_{Y_m}(z)\) 的收敛半径为
+\[
+R_{Y_m}=e^{-h_{\mathrm{top}}(Y_m)}.
+\]
+另一方面，cover 接口给出 \(h_{\mathrm{top}}(Y_m)=\log\rho(A_m)\)（命题 \ref{prop:Phi_m-entropy}），因此
+\[
+R_{Y_m}=\rho(A_m)^{-1}.
+\]
+换言之：尽管 \(\zeta_{Y_m}\) 与 \(\zeta_{X_{A_m}}=1/\det(I-zA_m)\) 一般不相等，但二者在主极点模长（即指数尺度）上由同一熵决定。
+\end{proposition}
+
+\begin{proof}
+sofic shift 的周期点计数指数增长率与拓扑熵一致，参见 \cite{Weiss1973SFTandSofic,CovenPaul1975SoficSystems,LindMarcus1995,Kitchens1998SymbolicDynamics}。
+另一方面由上段口径 \(\#\mathrm{Fix}(\sigma^n|_{Y_m})=\mathrm{Tr}(B_m^n)\)，故收敛半径为 \(\rho(B_m)^{-1}=e^{-h_{\mathrm{top}}(Y_m)}\)。再由命题 \ref{prop:Phi_m-entropy} 的 \(h_{\mathrm{top}}(Y_m)=\log\rho(A_m)\) 得 \(R_{Y_m}=\rho(A_m)^{-1}\)。
+\end{proof}
+
+\begin{proposition}[周期点计数的显式夹逼：cover \texorpdfstring{$\Rightarrow$}{=>} sofic]\label{prop:periodic-count-sandwich}
+取 \(Y_m\) 的一个右解析标记图表示 \(H_m=(\mathcal{S}_m,\mathcal{E}_m,\lambda_m)\)（例如定义 \ref{def:Phi_m-right-resolving} 的 \(H_m^{\mathrm{det}}\)，或进一步最小化得到的 Fischer cover）。令 \(X_{A_m}\) 为其边移位（定义 \ref{def:Phi_m-adjacency}），并令 \(\pi_m:X_{A_m}\to Y_m\) 为逐边取标记的因子映射（定义同命题 \ref{prop:Phi_m-parry-pushforward}）。则对任意 \(n\ge 1\) 有
+\[
+\#\mathrm{Fix}(\sigma^n|_{Y_m})
+\ \le\
+\#\mathrm{Fix}(\sigma^n|_{X_{A_m}})
+\ =\
+\mathrm{Tr}(A_m^n),
+\]
+并且还存在完全显式的下界
+\[
+\#\mathrm{Fix}(\sigma^n|_{Y_m})
+\ \ge\
+\frac{1}{|\mathcal{S}_m|}\,\#\mathrm{Fix}(\sigma^n|_{X_{A_m}})
+\ =\
+\frac{1}{|\mathcal{S}_m|}\,\mathrm{Tr}(A_m^n).
+\]
+因此 \(\#\mathrm{Fix}(\sigma^n|_{Y_m})\) 与 \(\mathrm{Tr}(A_m^n)\) 在指数尺度上一致（差异至多为常数因子），并与命题 \ref{prop:Ym-zeta-leading-pole} 的“同一主极点模长”结论一致。
+\end{proposition}
+
+\begin{proof}
+上界源于因子映射 \(\pi_m\) 将 \(X_{A_m}\) 的 \(n\)-周期点映为 \(Y_m\) 的 \(n\)-周期点，故 \(\#\mathrm{Fix}(\sigma^n|_{Y_m})\le \#\mathrm{Fix}(\sigma^n|_{X_{A_m}})\)。
+下界由右解析性给出前像多重度的统一控制：对任意 $y\in Y_m$，其 lift 由“起始状态 $S\in\mathcal{S}_m$ + 标记序列”唯一确定，故 $|\pi_m^{-1}(y)|\le |\mathcal{S}_m|$。对 $n$-周期点求和即得
+\(\#\mathrm{Fix}(X_{A_m})\le |\mathcal{S}_m|\#\mathrm{Fix}(Y_m)\)。
+最后 \(\#\mathrm{Fix}(X_{A_m})=\mathrm{Tr}(A_m^n)\) 由 SFT 周期点计数恒等式给出（\cite{LindMarcus1995}）。
+\end{proof}
+
+\begin{corollary}[长度-\texorpdfstring{$n$}{n} 周期压缩因子与常数级缺陷]\label{cor:Ym-periodic-compression-ratio}
+沿用命题 \ref{prop:periodic-count-sandwich} 的记号。对任意满足 \(\#\mathrm{Fix}(\sigma^n|_{Y_m})>0\) 的 \(n\ge 1\)，定义长度-\(n\) 周期压缩因子
+\[
+R_m(n):=\frac{\#\mathrm{Fix}(\sigma^n|_{X_{A_m}})}{\#\mathrm{Fix}(\sigma^n|_{Y_m})}
+=\frac{\mathrm{Tr}(A_m^n)}{\#\mathrm{Fix}(\sigma^n|_{Y_m})}.
+\]
+则对所有这样的 \(n\) 都有统一界
+\[
+\boxed{\ 1\ \le\ R_m(n)\ \le\ |\mathcal{S}_m|\ }.
+\]
+特别地，定义常数级“sofic 缺陷常数”
+\[
+\delta_m:=\limsup_{n\to\infty}\log R_m(n),
+\]
+则
+\[
+0\ \le\ \delta_m\ \le\ \log|\mathcal{S}_m|.
+\]
+该量度在指数尺度上不改变熵/主极点模长，但以可计算的常数级方式量化“cover 周期点被因子码压缩”的强度。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:periodic-count-sandwich} 得
+\(
+\#\mathrm{Fix}(\sigma^n|_{Y_m})\le \mathrm{Tr}(A_m^n)
+\)
+与
+\(
+\#\mathrm{Fix}(\sigma^n|_{Y_m})\ge |\mathcal{S}_m|^{-1}\mathrm{Tr}(A_m^n)
+\)。
+对两式同除以 \(\#\mathrm{Fix}(\sigma^n|_{Y_m})\) 即得 \(1\le R_m(n)\le |\mathcal{S}_m|\)。
+再取对数并取 \(\limsup_{n\to\infty}\) 得 \(0\le \delta_m\le \log|\mathcal{S}_m|\)。证毕。
+\end{proof}
+
+\begin{remark}[机制：窗口层多对一不等于时间层熵损失]\label{rem:Ym-no-entropy-loss-mechanism}
+命题 \ref{prop:periodic-count-sandwich} 给出一个精确的“常数因子压缩”律：尽管窗口层折叠 \(\Fold_m:\Omega_m\to X_m\) 典型为多对一，从而序列级因子 \(\Phi_m\) 也可能把多个 cover 周期轨道折叠到同一标记周期点，但在时间尺度的周期点增长上，这种压缩最多只体现为 \(|\mathcal{S}_m|\) 的常数因子，而不会改变指数斜率（熵/主极点模长）。
+
+更具体地，由
+\[
+\frac{1}{|\mathcal{S}_m|}\Tr(A_m^n)\le \#\mathrm{Fix}(\sigma^n|_{Y_m})\le \Tr(A_m^n)
+\]
+立刻推出
+\[
+\limsup_{n\to\infty}\frac{1}{n}\log\#\mathrm{Fix}(\sigma^n|_{Y_m})
+=\limsup_{n\to\infty}\frac{1}{n}\log\Tr(A_m^n)
+=\log\rho(A_m),
+\]
+即 \(h_{\mathrm{top}}(Y_m)=\log\rho(A_m)\)（命题 \ref{prop:Ym-zeta-leading-pole}）。
+因此“丢失的信息”不是被指数压扁为熵损失，而是迁移进右解析状态集 \(\mathcal{S}_m\) 所携带的记忆结构：窗口层的多重度对应的是有限记忆的重编码，而非指数增长率的衰减。
+
+在本文的具体模型（Zeckendorf 折叠）中，上述机制还能进一步“封口”：定理 \ref{thm:Ym-ambiguity-shell-dag} 表明 $m\ge 3$ 时非单点歧义层是纯瞬态 DAG，完全不承载周期点；其造成的时间代价不是熵损失，而是一个可计入的有限同步延迟 \(D_{\mathrm{sync}}(m)=m-1\)（推论 \ref{cor:Ym-sync-delay}）。
+\end{remark}
+
+\begin{corollary}[单点本质态 \texorpdfstring{$\Rightarrow$}{=>} 有限延迟右解码]\label{cor:Ym-singleton-essential-finite-delay}
+沿用定义 \ref{def:G_m} 与定义 \ref{def:Phi_m-right-resolving} 的记号。设通过“子集确定化 + 右语言最小化”得到的一个右解析最小表示（例如右 Fischer cover 或其等价的最小确定性表示）满足如下\textbf{单点本质态}条件：
+\begin{equation}\label{eq:Ym-singleton-essential-singletons}
+\text{其最大熵本质强连通分量的状态可辨识为全部单点子集 }\ \{\{v\}:v\in V_m\}.
+\end{equation}
+则在该本质分量上成立：
+\begin{enumerate}
+  \item \textbf{（无标记碰撞）}对任意 \(v\in V_m\)，两条出边 \((v,0)\)、\((v,1)\) 的标记不同：
+  \[
+  \Fold_m(v0)\neq \Fold_m(v1).
+  \]
+  \item \textbf{（逐步解码）}存在一个有限状态右逆转导器（解码器），其状态可取为 \(V_m\)。当处于状态 \(v_t\in V_m\) 且读入输出符号 \(a_t\in X_m\) 时，唯一确定 \(b_t\in\{0,1\}\) 使
+  \[
+  \Fold_m(v_t b_t)=a_t,
+  \]
+  并更新 \(v_{t+1}=v_t\) 去首加尾 \((b_t)\)。因此一旦输出轨道进入上述单点本质分量，输入比特序列从该时刻起可\textbf{零额外预期性}在线恢复。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+\textbf{(1)} 在右解析确定化表示中，对任意单点状态 \(\{v\}\) 与输出符号 \(a\)，后继由
+\(
+\delta_m(\{v\},a)
+\)
+给出。若存在 \(\Fold_m(v0)=\Fold_m(v1)=a\)，则从 \(\{v\}\) 读入 \(a\) 时两条不同的 \(b\)-边都会被纳入，从而
+\(
+\delta_m(\{v\},a)
+\)
+将包含至少两个顶点，迫使确定化状态离开单点类；这与“单点态在本质强连通分量上封闭”（条件 \eqref{eq:Ym-singleton-essential-singletons}）矛盾。故 \(\Fold_m(v0)\neq \Fold_m(v1)\)。
+
+\textbf{(2)} 由 (1) 可知对每个 \(v_t\) 与允许的输出 \(a_t\)，在 \(b_t\in\{0,1\}\) 中恰有一个满足 \(\Fold_m(v_t b_t)=a_t\)。更新规则 \(v_{t+1}=v_t\) 去首加尾由定义 \ref{def:G_m} 的边结构给出，因此该过程在单点本质分量内闭合并确定一个有限状态转导器；其逐步输出 \(b_t\) 给出一条右逆（在该分量上逐时刻反演标记）。证毕。
+\end{proof}
+
+\begin{corollary}[歧义壳的熵严格低于 \texorpdfstring{$\log 2$}{log 2}]\label{cor:Ym-ambiguity-shell-low-entropy}
+在推论 \ref{cor:Ym-singleton-essential-finite-delay} 的条件下，设右解析最小表示的状态图按强连通分量分解，其中最大熵本质分量为单点态分量（其熵为 \(\log 2\)，参见表 \ref{tab:phi_m_sofic_entropy} 的数值证书）。
+令 \(Y_m^{\mathrm{amb}}\subset Y_m\) 为那些在该右解析最小表示中\textbf{完全不进入}单点本质分量的标记序列所构成的 sofic 子系统（等价地：其 lift 的当前候选集合在一侧读入过程中始终为非单点）。
+在本文的 Zeckendorf 折叠模型中，当 \(m\ge 3\) 时由定理 \ref{thm:Ym-ambiguity-shell-dag} 进一步得到 \(Y_m^{\mathrm{amb}}=\varnothing\)，并参见备注 \ref{rem:Ym-amb-empty}。下述推论刻画一般 sofic 场景下歧义壳的严格低熵结构，并在本模型中作为一致性检查保留。
+则有严格不等式
+\[
+h_{\mathrm{top}}(Y_m^{\mathrm{amb}})<\log 2.
+\]
+因此“窗口层的多对一”在时间层不会产生指数级丢熵；它只对应一个\textbf{严格低熵}的歧义壳层，而最大熵部分在有限状态记忆中可右解码。
+\end{corollary}
+\begin{proof}
+由假设，单点态本质分量承载 \(Y_m\) 的最大熵，其邻接计数矩阵的谱半径为 \(2\)，故 \(h_{\mathrm{top}}=\log 2\)。
+而 \(Y_m^{\mathrm{amb}}\) 由\emph{剔除该本质分量后的其余强连通分量}所呈现：这些分量的谱半径都严格小于最大值 \(2\)（否则将出现另一个同熵本质分量，与“最大熵分量由单点态承载”的设定矛盾）。
+因此 \(Y_m^{\mathrm{amb}}\) 的拓扑熵严格小于 \(\log 2\)。证毕。
+\end{proof}
+
+\begin{corollary}[歧义壳指数稀薄：块计数比例具有显式指数缺口]\label{cor:Ym-ambiguity-shell-exponentially-thin}
+令 \(N_{\mathrm{amb}}(n)\) 表示歧义壳子系统 \(Y_m^{\mathrm{amb}}\) 允许的长度 \(n\) 块数（即其语言在长度 \(n\) 的不同子词数）。则
+\[
+N_{\mathrm{amb}}(n)=\exp\!\bigl(h_{\mathrm{top}}(Y_m^{\mathrm{amb}})\,n+o(n)\bigr),
+\]
+而由 \(h_{\mathrm{top}}(Y_m)=\log 2\) 可得 \(Y_m\) 的长度 \(n\) 块数至少为 \(2^n\)。因此存在 \(\varepsilon_m>0\) 使得
+\[
+\frac{N_{\mathrm{amb}}(n)}{2^n}
+=
+\exp\!\bigl(-\varepsilon_m\,n+o(n)\bigr),
+\qquad
+\varepsilon_m:=\log 2-h_{\mathrm{top}}(Y_m^{\mathrm{amb}})>0.
+\]
+换言之，在块计数意义下，右解码失败所对应的歧义壳并非“同阶复杂”的部分，而是带有显式指数缺口的稀薄层。
+\end{corollary}
+
+\begin{proof}
+对任意子移位 \(Z\)，其拓扑熵可按块计数定义为
+\(
+h_{\mathrm{top}}(Z)=\lim_{n\to\infty}\frac{1}{n}\log N_Z(n)
+\)
+（其中 \(N_Z(n)\) 为长度 \(n\) 允许块数），从而 \(N_Z(n)=\exp(h_{\mathrm{top}}(Z)\,n+o(n))\)。对 \(Z=Y_m^{\mathrm{amb}}\) 得第一式。
+\par
+另一方面，\(h_{\mathrm{top}}(Y_m)=\log 2\) 等价于 \(Y_m\) 的块增长率至少为 \(2^n\)（例如取熵定义的下极限即可），故比值满足所示指数衰减，其中 \(\varepsilon_m>0\) 由推论 \ref{cor:Ym-ambiguity-shell-low-entropy} 给出。证毕。
+\end{proof}
+
+\begin{definition}[同步时间与同步尾]\label{def:Ym-sync-time}
+对任意 \(y\in Y_m\)，从初始候选集 \(S_0:=V_m\) 出发递推
+\[
+S_{t+1}:=\delta_m(S_t,y_t)\qquad (t\ge 0).
+\]
+定义\textbf{同步时间}（第一次进入单点态的时刻）
+\[
+T_m(y):=\inf\{\,t\ge 0:\ |S_t|=1\,\}\in\NN\cup\{\infty\}.
+\]
+若 \(T_m(y)=\infty\)，则称 \(y\) 永不同步（对应歧义壳轨道）。
+\end{definition}
+
+\begin{remark}[统计型 \texorpdfstring{$\mathsf{NULL}$}{NULL} 的时间层刻画：未同步即无地址]\label{rem:Ym-stat-null-unsync}
+在确定化表示 \(H_m^{\mathrm{det}}\) 中，状态 \(S_t\subseteq V_m\) 是“给定过去输出前缀时仍可能的内部后缀集合”。
+因此：
+\(|S_t|=1\) 表示此时刻的内部后缀（从而局部 lift）被输出前缀\emph{唯一}确定；
+\(|S_t|>1\) 则表示存在不可消去的右解码歧义。
+在“地址先于概念值”的语义约定（见第 \ref{sec:spg} 节）下，这种歧义可被等价理解为时间层的统计型 \(\mathsf{NULL}\)：输出前缀不足以生成唯一地址，因此相应读出在该时刻不定义。
+同步时间 \(T_m\) 即“统计型 \(\mathsf{NULL}\) 首次消失”的时刻；而定义 \ref{def:eta_m_hat_singleton_rate} 的 \(\widehat\eta_m\) 与命题 \ref{prop:eta_m_hat_ergodic_limit} 的 \(\eta_m^{\mathrm{obs}}\) 则给出其在线可观测频率。
+\end{remark}
+
+\begin{theorem}[同步尾界：最大熵测度下的指数型同步时间预算]\label{thm:Ym-sync-tail}
+设 \(Y_m\) 的最大熵测度为 \(\nu_m\)（命题 \ref{prop:Phi_m-parry-pushforward}）。若歧义壳子系统 \(Y_m^{\mathrm{amb}}\neq\varnothing\)，令
+\[
+\varepsilon_m:=\log 2-h_{\mathrm{top}}(Y_m^{\mathrm{amb}})>0
+\]
+为推论 \ref{cor:Ym-ambiguity-shell-exponentially-thin} 给出的熵缺口。则存在常数 \(C_m>0\) 与 \(n_0\in\NN\)，使得对所有 \(n\ge n_0\) 有
+\[
+\boxed{\ \nu_m(T_m>n)\ \le\ C_m\,e^{-\varepsilon_m n}\ }.
+\]
+从而：
+\begin{enumerate}
+  \item \textbf{期望同步时间有限：}\(\mathbb{E}_{\nu_m}[T_m]<\infty\)，并且规模为 \(O(1/\varepsilon_m)\)。
+  \item \textbf{同步时间预算：}对任意 \(0<\delta<1\)，若
+  \[
+  n\ \ge\ \frac{1}{\varepsilon_m}\log\frac{C_m}{\delta},
+  \]
+  则 \(\nu_m(T_m>n)\le \delta\)。
+\end{enumerate}
+当 \(Y_m^{\mathrm{amb}}=\varnothing\) 时，\(T_m(y)\le L_m\) 对所有 \(y\in Y_m\) 成立，其中 \(L_m<\infty\) 由备注 \ref{rem:Ym-amb-empty} 给出，因此同步尾在有限处截断。
+\end{theorem}
+
+\begin{proof}
+记 \(H_m^{\mathrm{det}}\) 为确定化右解析表示（定义 \ref{def:Phi_m-right-resolving}），并以 \(S_t\) 表示其状态轨道。
+由命题 \ref{prop:det-candidate-set-monotone} 的单点态前向封闭性，一旦 \(|S_t|=1\) 则对所有 \(s\ge t\) 都有 \(|S_s|=1\)。因此事件 \(\{T_m>n\}\) 等价于“读入前 \(n\) 步后仍处于非单点态”，并可写成长度-\(n\) 柱集的并：
+\[
+\{T_m>n\}=\bigcup_{w\in\mathcal{W}_{m}^{\mathrm{unsync}}(n)}[w],
+\]
+其中 \(\mathcal{W}_{m}^{\mathrm{unsync}}(n)\subset X_m^n\) 为那些使得从初始状态 \(S_0=V_m\) 出发读入 \(w\) 后得到 \(|S_n|>1\) 的输出块集合。
+\par
+\textbf{(i) 柱集概率的统一上界。}
+由命题 \ref{prop:Phi_m-parry-pushforward}，\(\nu_m\) 是覆盖 SFT 上 Parry 测度的推前。Parry 测度对任意长度-\(n\) lift 柱集具有 \(\asymp e^{-h_{\mathrm{top}}(Y_m)n}=2^{-n}\) 的 Gibbs 型界；推前至 \(Y_m\) 后仍得到统一上界：存在常数 \(C_m^{\mathrm{cyl}}>0\) 与 \(n_1\in\NN\)，使得对所有允许的长度-\(n\) 输出柱集 \([w]\)（\(n\ge n_1\)）有
+\[
+\nu_m([w])\le C_m^{\mathrm{cyl}}\,2^{-n}.
+\]
+\par
+\textbf{(ii) 未同步前缀数目的指数界。}
+集合 \(\mathcal{W}_{m}^{\mathrm{unsync}}(n)\) 正是 $H_m^{\mathrm{det}}$ 的非单点态子图 $H_m^{\mathrm{amb}}$ 中、从初始状态出发长度为 \(n\) 的标记路径的标记集合。
+由于 $H_m^{\mathrm{amb}}$ 为有限图，其长度-\(n\) 标记数满足
+\[
+|\mathcal{W}_{m}^{\mathrm{unsync}}(n)|
+\ \le\
+C_m^{\mathrm{lang}}\exp\!\bigl(h_{\mathrm{top}}(Y_m^{\mathrm{amb}})\,n\bigr)
+\]
+对某个常数 \(C_m^{\mathrm{lang}}>0\) 与所有充分大 \(n\) 成立（指数率由歧义壳本质分量的谱半径给出，等于 \(h_{\mathrm{top}}(Y_m^{\mathrm{amb}})\)）。
+\par
+将 (i)(ii) 代入并用并集上界，得对充分大 \(n\)
+\[
+\begin{aligned}
+\nu_m(T_m>n)
+&\le \sum_{w\in\mathcal{W}_{m}^{\mathrm{unsync}}(n)}\nu_m([w])\\
+&\le |\mathcal{W}_{m}^{\mathrm{unsync}}(n)|\cdot C_m^{\mathrm{cyl}}2^{-n}\\
+&\le (C_m^{\mathrm{cyl}}C_m^{\mathrm{lang}})\exp\!\bigl(-(\log 2-h_{\mathrm{top}}(Y_m^{\mathrm{amb}}))n\bigr),
+\end{aligned}
+\]
+即所示尾界，其中 \(\varepsilon_m=\log 2-h_{\mathrm{top}}(Y_m^{\mathrm{amb}})\)。
+\par
+期望界由
+\(
+\mathbb{E}[T_m]=\sum_{n\ge 0}\nu_m(T_m>n)
+\)
+与指数尾收敛得到；同步预算由解不等式 \(C_m e^{-\varepsilon_m n}\le\delta\) 得到。证毕。
+\end{proof}
+
+\begin{theorem}[同步尾的 Perron--Frobenius 尖锐渐近]\label{thm:Ym-sync-tail-pf-sharp}
+沿用定义 \ref{def:Ym-sync-time}--定理 \ref{thm:Ym-sync-tail} 的记号，并假设歧义壳子系统 \(Y_m^{\mathrm{amb}}\neq\varnothing\)。
+令 \(H_m^{\mathrm{amb}}\) 为定理 \ref{thm:Ym-ambiguity-shell-dag} 定义的非单点态诱导子图，记其（按边条数计数的）邻接矩阵为
+\[
+(A_m^{\mathrm{amb}})_{S,S'}:=\#\{\,a\in X_m:\ \delta_m(S,a)=S'\,\},\qquad
+S,S'\in\mathcal{S}_m^{\mathrm{amb}}.
+\]
+设 \(H_m^{\mathrm{amb}}\) 的最大本质不可约分量的 Perron--Frobenius 主特征值为 \(\rho_{\mathrm{amb}}(m)>1\)，从而
+\[
+h_{\mathrm{top}}(Y_m^{\mathrm{amb}})=\log\rho_{\mathrm{amb}}(m),
+\qquad
+\varepsilon_m=\log 2-\log\rho_{\mathrm{amb}}(m).
+\]
+若该本质分量的周期为 \(p\ge 1\)（原始情形即 \(p=1\)），则存在常数族
+\(\{c_r(m)\}_{r=0}^{p-1}\subset(0,\infty)\)
+使得在最大熵测度 \(\nu_m\) 下
+\[
+\nu_m(T_m>n)=c_{n\bmod p}(m)\,e^{-\varepsilon_m n}\,(1+o(1)),
+\qquad n\to\infty.
+\]
+从而极限指数存在且为
+\[
+\lim_{n\to\infty}\frac{1}{n}\log \nu_m(T_m>n)=-\varepsilon_m.
+\]
+\end{theorem}
+
+\begin{proof}
+仍记 \(\mathcal{W}_{m}^{\mathrm{unsync}}(n)\) 如定理 \ref{thm:Ym-sync-tail} 的证明中所定义。
+由确定性右解析性（定义 \ref{def:Phi_m-right-resolving}），当起点固定为 \(S_0=V_m\) 时，每个标记词决定唯一确定化滤波轨道，故 \(\mathcal{W}_{m}^{\mathrm{unsync}}(n)\) 与 \(H_m^{\mathrm{amb}}\) 中从 \(V_m\) 出发的长度 \(n\) 标记路径集合一一对应。
+因此 \(h_{\mathrm{top}}(Y_m^{\mathrm{amb}})=\log\rho_{\mathrm{amb}}(m)\) 且 \(\varepsilon_m=\log 2-\log\rho_{\mathrm{amb}}(m)\)。
+\par
+下面把同步尾写成一个有限矩阵幂的加权读出。
+取一个右解析且 follower-separated 的表示
+\(
+H_m=(\mathcal{S}_m,\mathcal{E}_m,\lambda_m)
+\)
+（例如右 Fischer cover），令 \(X_{A_m}\) 为其边移位、\(\mu_{A_m}^{\mathrm{Parry}}\) 为命题 \ref{prop:Phi_m-parry} 的 Parry 测度，并记 \(\nu_m=(\pi_m)_*\mu_{A_m}^{\mathrm{Parry}}\)（命题 \ref{prop:Phi_m-parry-pushforward}）。
+由命题 \ref{prop:Phi_m-entropy} 及 \(h_{\mathrm{top}}(Y_m)=\log 2\)，可取 \(\rho(A_m)=2\)。
+于是对任意长度-\(n\) 的 lift 边柱集 \([e_0\cdots e_{n-1}]\subset X_{A_m}\) 有 Parry 公式
+\[
+\mu_{A_m}^{\mathrm{Parry}}([e_0\cdots e_{n-1}])=\frac{l_{e_0}r_{e_{n-1}}}{2^{n-1}}.
+\]
+\par
+构造同步积图 \(\widetilde H_m^{\mathrm{amb}}\)：其状态集为
+\(
+\widetilde{\mathcal{S}}_m^{\mathrm{amb}}:=\mathcal{E}_m\times\mathcal{S}_m^{\mathrm{amb}}
+\)，并规定从 \((e,S)\) 到 \((e',S')\) 有边当且仅当
+\[
+t(e)=s(e'),\qquad S'=\delta_m(S,\lambda_m(e')).
+\]
+记其邻接矩阵为 \(\widetilde A_m^{\mathrm{amb}}\)。
+取初始/末端向量 \(\alpha,\beta\) 为
+\[
+\alpha_{(e,S)}:=l_e\,\mathbf{1}\{S=\delta_m(V_m,\lambda_m(e))\},
+\qquad
+\beta_{(e,S)}:=r_e.
+\]
+由“推前 = 对 lift 求和”及上式的 Parry 公式，可将同步尾写为
+\[
+\nu_m(T_m>n)=2^{-(n-1)}\,\alpha^{\mathsf T}(\widetilde A_m^{\mathrm{amb}})^{n-1}\beta.
+\]
+\par
+由于投影 \((e,S)\mapsto S\) 把 \(\widetilde H_m^{\mathrm{amb}}\) 有限对一下降到 \(H_m^{\mathrm{amb}}\)，两者的路径计数在指数标度上一致，故 \(\rho(\widetilde A_m^{\mathrm{amb}})=\rho_{\mathrm{amb}}(m)\)，且最大本质分量的周期仍为 \(p\)。
+对不可约周期 \(p\) 的 Perron--Frobenius 渐近，存在常数族 \(\{d_r(m)\}_{r=0}^{p-1}\subset(0,\infty)\) 使得
+\[
+\alpha^{\mathsf T}(\widetilde A_m^{\mathrm{amb}})^{n-1}\beta
+=d_{n\bmod p}(m)\,\rho_{\mathrm{amb}}(m)^{n-1}(1+o(1)).
+\]
+代回并把与 \(2^{-(n-1)}\) 的常数因子吸收进 \(c_r(m)\) 即得
+\[
+\nu_m(T_m>n)
+=c_{n\bmod p}(m)\left(\frac{\rho_{\mathrm{amb}}(m)}{2}\right)^{\!n}(1+o(1))
+=c_{n\bmod p}(m)e^{-\varepsilon_m n}(1+o(1)).
+\]
+最后取 \(\frac1n\log\) 并令 \(n\to\infty\) 得极限指数。证毕。
+\end{proof}
+
+\paragraph{从熵缺口到锐化曲线：未同步前缀的确定性计数律}
+定理 \ref{thm:Ym-sync-tail}--\ref{thm:Ym-sync-tail-pf-sharp} 把“未同步即统计型 \(\mathsf{NULL}\)”的时间层语义转化为可审计的指数尺度与 Perron--Frobenius 主项。
+然而，在同一确定化机制下，一个更为刚性的对象并非测度尾概率，而是\emph{未同步前缀集合本身}：
+它构成一个有限状态正则语言，因此其块计数不仅具有熵缺口，还满足带可计算主常数与二阶谱隙的尖锐渐近。
+该结果把“扫描更久 \(\Rightarrow\) 更清晰”的定性规律升级为一条有效可计算的“扫描--清晰度”锐化曲线。
+
+\begin{definition}[未同步前缀集合与计数]\label{def:Ym-unsync-prefix-count}
+沿用定理 \ref{thm:Ym-sync-tail} 的记号。
+对任意 \(n\in\NN\)，定义未同步长度-\(n\) 前缀集合
+\[
+\mathcal{W}_{m}^{\mathrm{unsync}}(n)
+:=\{\,w\in X_m^n:\ \text{从 }S_0=V_m\text{ 出发读入 }w\text{ 后满足 }|S_n|>1\,\},
+\]
+并记其计数为
+\[
+N_m^{\mathrm{unsync}}(n):=\#\mathcal{W}_{m}^{\mathrm{unsync}}(n).
+\]
+当 \(Y_m^{\mathrm{amb}}\neq\varnothing\) 时，\(\mathcal{W}_{m}^{\mathrm{unsync}}(n)\) 与 \(H_m^{\mathrm{amb}}\) 中从初始状态 \(V_m\) 出发、长度为 \(n\) 且始终停留在非单点态的标记路径一一对应。
+\end{definition}
+
+\begin{theorem}[歧义前缀计数的 Perron--Frobenius 锐化律：主项常数与二阶谱隙]\label{thm:Ym-unsync-prefix-pf-sharp}
+假设 \(Y_m^{\mathrm{amb}}\neq\varnothing\)。
+进一步假设非单点态诱导子图 \(H_m^{\mathrm{amb}}\) 存在唯一的最大谱半径强连通分量 \(C_m\)，且该分量是原始的（aperiodic/primitive）。
+记 \(A_m^{\mathrm{amb}}\) 为定理 \ref{thm:Ym-sync-tail-pf-sharp} 中定义的按边条数计数的邻接矩阵，并令
+\[
+\rho_{\mathrm{amb}}(m):=\rho(A_m^{\mathrm{amb}}),\qquad
+\rho_{\mathrm{amb},2}(m):=\max\bigl(\{\,|\lambda|:\ \lambda\in\sigma(A_m^{\mathrm{amb}}),\ |\lambda|<\rho_{\mathrm{amb}}(m)\,\}\cup\{0\}\bigr),
+\]
+则 \(\rho_{\mathrm{amb},2}(m)<\rho_{\mathrm{amb}}(m)\)，并存在显式常数 \(c_m>0\) 使得
+\[
+\boxed{\;
+N_m^{\mathrm{unsync}}(n)
+=c_m\,\rho_{\mathrm{amb}}(m)^{n}\ +\ O\!\bigl(\rho_{\mathrm{amb},2}(m)^{n}\bigr),
+\qquad n\to\infty.\;}
+\]
+令 \(\varepsilon_m=\log 2-\log\rho_{\mathrm{amb}}(m)\)（见定理 \ref{thm:Ym-sync-tail-pf-sharp}）。
+则有“锐化曲线”
+\[
+\boxed{\;
+\frac{N_m^{\mathrm{unsync}}(n)}{2^n}
+=c_m\,e^{-\varepsilon_m n}\ +\ O\!\Bigl(\bigl(\tfrac{\rho_{\mathrm{amb},2}(m)}{2}\bigr)^{n}\Bigr),
+\qquad n\to\infty.\;}
+\]
+当 \(\rho_{\mathrm{amb},2}(m)>0\) 时，定义二阶谱隙指数
+\[
+\Delta_{\mathrm{amb}}(m):=\log\!\Bigl(\frac{\rho_{\mathrm{amb}}(m)}{\rho_{\mathrm{amb},2}(m)}\Bigr)>0,
+\]
+则上述误差项亦可写成 \(O\!\bigl(e^{-(\varepsilon_m+\Delta_{\mathrm{amb}}(m))n}\bigr)\)。
+其中常数 \(c_m\) 具有可审计闭式：取 \(A_m^{\mathrm{amb}}\) 的 Perron--Frobenius 右/左特征向量对 \((v_m,w_m)\) 满足
+\[
+A_m^{\mathrm{amb}}v_m=\rho_{\mathrm{amb}}(m)v_m,\qquad
+w_m^{\mathsf T}A_m^{\mathrm{amb}}=\rho_{\mathrm{amb}}(m)w_m^{\mathsf T},\qquad
+w_m^{\mathsf T}v_m=1,
+\]
+并令 \(e_{V_m}\) 为初始状态 \(V_m\) 的坐标向量、\(\mathbf 1\) 为 \(\mathcal{S}_m^{\mathrm{amb}}\) 上的全 \(1\) 向量，则
+\[
+\boxed{\;
+c_m=(e_{V_m}^{\mathsf T}v_m)\,(w_m^{\mathsf T}\mathbf 1).\;}
+\]
+\end{theorem}
+
+\begin{proof}
+由定义 \ref{def:Ym-unsync-prefix-count} 与确定性右解析性可知：长度-\(n\) 标记词 \(w\) 使滤波状态仍为非单点，当且仅当从 \(V_m\) 出发沿 \(H_m^{\mathrm{amb}}\) 读入 \(w\) 得到一条长度-\(n\) 的标记路径。
+按定理 \ref{thm:Ym-sync-tail-pf-sharp} 的邻接矩阵定义，\(A_m^{\mathrm{amb}}\) 的条目正是一步标记选择的多重度；因此块计数满足矩阵幂公式
+\[
+N_m^{\mathrm{unsync}}(n)=e_{V_m}^{\mathsf T}(A_m^{\mathrm{amb}})^n\mathbf 1.
+\]
+\par
+在“唯一最大谱半径强连通分量且原始”的假设下，\(\rho_{\mathrm{amb}}(m)\) 是 \(A_m^{\mathrm{amb}}\) 的简单特征值且为谱圆上的唯一点谱；
+从而存在 \(0\le \rho_{\mathrm{amb},2}(m)<\rho_{\mathrm{amb}}(m)\) 使得矩阵幂满足 Perron--Frobenius 尖锐分解
+\[
+(A_m^{\mathrm{amb}})^n=\rho_{\mathrm{amb}}(m)^n\,v_m w_m^{\mathsf T}\ +\ O\!\bigl(\rho_{\mathrm{amb},2}(m)^n\bigr),
+\qquad n\to\infty,
+\]
+其中 \((v_m,w_m)\) 为归一化的 Perron 左/右特征向量对。
+左右乘以 \(e_{V_m}^{\mathsf T}\) 与 \(\mathbf 1\) 即得
+\[
+N_m^{\mathrm{unsync}}(n)
+=(e_{V_m}^{\mathsf T}v_m)(w_m^{\mathsf T}\mathbf 1)\,\rho_{\mathrm{amb}}(m)^n\ +\ O\!\bigl(\rho_{\mathrm{amb},2}(m)^n\bigr),
+\]
+从而主项常数闭式与第一条渐近成立。
+将 \(\rho_{\mathrm{amb}}(m)^n/2^n=e^{-(\log 2-\log\rho_{\mathrm{amb}}(m))n}=e^{-\varepsilon_m n}\) 与同样的误差缩放代入，即得“锐化曲线”形式；归一化误差由 \((\rho_{\mathrm{amb},2}(m)/2)^n\) 控制，而当 \(\rho_{\mathrm{amb},2}(m)>0\) 时其指数差为 \(\Delta_{\mathrm{amb}}(m)\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[给定清晰度阈值的渐近最优扫描长度]\label{cor:Ym-scan-length-asymptotic}
+在定理 \ref{thm:Ym-unsync-prefix-pf-sharp} 的假设下，给定 \(\eta\in(0,1)\)，定义最小扫描长度
+\[
+n_{\eta}:=\min\Bigl\{\,n\in\NN:\ \frac{N_m^{\mathrm{unsync}}(n)}{2^n}\le \eta\,\Bigr\}.
+\]
+则当 \(\eta\downarrow 0\) 时有渐近律
+\[
+n_{\eta}
+=\frac{1}{\varepsilon_m}\log\!\Bigl(\frac{c_m}{\eta}\Bigr)\ +\ O(1).
+\]
+特别地，\(\varepsilon_m^{-1}\) 给出分辨率 \(m\) 下内禀的“扫描--清晰度”尺度。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:Ym-unsync-prefix-pf-sharp}，
+\(
+\frac{N_m^{\mathrm{unsync}}(n)}{2^n}
+=c_m e^{-\varepsilon_m n}\Bigl(1+O\!\bigl((\rho_{\mathrm{amb},2}(m)/\rho_{\mathrm{amb}}(m))^{n}\bigr)\Bigr)
+\)。
+令 \(\eta\downarrow 0\) 并解不等式 \(c_m e^{-\varepsilon_m n}\lesssim \eta\)，即可得到
+\(
+n_{\eta}=\varepsilon_m^{-1}\log(c_m/\eta)+O(1)
+\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[有限延迟与谱尾的严格二分]\label{cor:Ym-finite-delay-spectral-tail}
+在定理 \ref{thm:Ym-sync-tail} 的记号下，非单点态诱导子图 \(H_m^{\mathrm{amb}}\) 无有向环当且仅当
+\[
+\rho_{\mathrm{amb}}(m)=0.
+\]
+在此情形下，存在 \(n_0<\infty\) 使得对所有 \(n\ge n_0\) 有 \(N_m^{\mathrm{unsync}}(n)=0\)（有限延迟同步）。
+反之，若 \(H_m^{\mathrm{amb}}\) 含有向环（从而 \(Y_m^{\mathrm{amb}}\neq\varnothing\)），则 \(1\le \rho_{\mathrm{amb}}(m)<2\) 并给出非平凡的指数型谱尾。
+\end{corollary}
+
+\begin{proof}
+若 \(H_m^{\mathrm{amb}}\) 无环，则在有限图上其邻接矩阵 \(A_m^{\mathrm{amb}}\) 为幂零矩阵（某次幂为零），从而谱半径 \(\rho(A_m^{\mathrm{amb}})=0\)，即 \(\rho_{\mathrm{amb}}(m)=0\)；并且 \((A_m^{\mathrm{amb}})^n=0\) 对充分大 \(n\) 成立，于是由
+\(
+N_m^{\mathrm{unsync}}(n)=e_{V_m}^{\mathsf T}(A_m^{\mathrm{amb}})^n\mathbf 1
+\)
+得 \(N_m^{\mathrm{unsync}}(n)=0\) 终止于有限处。
+\par
+反向蕴含同理：若 \(\rho_{\mathrm{amb}}(m)=0\)，则 \(A_m^{\mathrm{amb}}\) 为幂零，故 \(H_m^{\mathrm{amb}}\) 不含有向环。
+若 \(H_m^{\mathrm{amb}}\) 含有向环，则其最大强连通分量的谱半径至少为 \(1\)，故 \(\rho_{\mathrm{amb}}(m)\ge 1\)；另一方面由 \(h_{\mathrm{top}}(Y_m)=\log 2\) 及 \(\rho_{\mathrm{amb}}(m)=e^{h_{\mathrm{top}}(Y_m^{\mathrm{amb}})}\le e^{h_{\mathrm{top}}(Y_m)}=2\) 得 \(\rho_{\mathrm{amb}}(m)\le 2\)，并在“严格低熵壳”情形下有 \(\rho_{\mathrm{amb}}(m)<2\)。
+证毕。
+\end{proof}
+
+\paragraph{分层清晰度指数：残余歧义等级的谱级分解}
+上文以 \(|S_t|>1\) 作为统计型 \(\mathsf{NULL}\) 的判据，从而把“是否同步”视为最粗粒度的清晰度刻画。
+由于候选集合在读入下单调不增（命题 \ref{prop:det-candidate-set-monotone}），可以进一步按残余候选规模分层，从而得到一族严格可计算的清晰度指数（而非单一的同步指数）。
+
+\begin{definition}[残余歧义等级与诱导计数图]\label{def:Ym-ambiguity-level-k}
+对整数 \(k\ge 2\)，定义阈值态集合
+\[
+\mathcal{S}_{m,\ge k}:=\{\,S\in\mathcal{S}_m^{\mathrm{det}}:\ |S|\ge k\,\},
+\]
+并令 \(H_{m,\ge k}\) 为确定化表示 \(H_m^{\mathrm{det}}\) 在 \(\mathcal{S}_{m,\ge k}\) 上的诱导子图。
+记其按边条数计数的邻接矩阵为
+\[
+(A_{m,\ge k})_{S,S'}:=\#\{\,a\in X_m:\ \delta_m(S,a)=S'\,\},\qquad S,S'\in\mathcal{S}_{m,\ge k}.
+\]
+对任意 \(n\in\NN\)，定义长度-\(n\) 的 \(k\)-歧义前缀集合
+\[
+\mathcal{W}_{m,\ge k}(n)
+:=\{\,w\in X_m^n:\ \text{从 }S_0=V_m\text{ 出发读入 }w\text{ 后满足 }|S_n|\ge k\,\},
+\]
+并记其计数为 \(N_{m,\ge k}(n):=\#\mathcal{W}_{m,\ge k}(n)\)。
+显然 \(k=2\) 时有 \(N_{m,\ge 2}(n)=N_m^{\mathrm{unsync}}(n)\)。
+\end{definition}
+
+\begin{theorem}[歧义谱定理：残余歧义等级的 Perron--Frobenius 锐化律]\label{thm:Ym-ambiguity-spectrum-law}
+固定整数 \(k\ge 2\) 并假设诱导子图 \(H_{m,\ge k}\) 存在唯一的最大谱半径强连通分量且该分量为原始的。
+令
+\[
+\rho_{m,\ge k}:=\rho(A_{m,\ge k}),\qquad
+\rho_{m,\ge k,2}:=\max\bigl(\{\,|\lambda|:\ \lambda\in\sigma(A_{m,\ge k}),\ |\lambda|<\rho_{m,\ge k}\,\}\cup\{0\}\bigr),
+\]
+则存在显式常数 \(c_{m,\ge k}>0\) 使得
+\[
+N_{m,\ge k}(n)=c_{m,\ge k}\,\rho_{m,\ge k}^{\,n}\ +\ O\!\bigl(\rho_{m,\ge k,2}^{\,n}\bigr),
+\qquad n\to\infty.
+\]
+令 \(\varepsilon_{m,\ge k}:=\log 2-\log\rho_{m,\ge k}\)。
+则有分层锐化曲线
+\[
+\frac{N_{m,\ge k}(n)}{2^n}
+=c_{m,\ge k}\,e^{-\varepsilon_{m,\ge k} n}\ +\ O\!\Bigl(\bigl(\tfrac{\rho_{m,\ge k,2}}{2}\bigr)^{n}\Bigr),
+\qquad n\to\infty.
+\]
+当 \(\rho_{m,\ge k,2}>0\) 时，定义二阶谱隙指数
+\[
+\Delta_{m,\ge k}:=\log\!\Bigl(\frac{\rho_{m,\ge k}}{\rho_{m,\ge k,2}}\Bigr)>0,
+\]
+则上述误差项亦可写成 \(O\!\bigl(e^{-(\varepsilon_{m,\ge k}+\Delta_{m,\ge k})n}\bigr)\)。
+并且指数满足单调链
+\[
+\boxed{\ \varepsilon_{m,\ge 2}\ \le\ \varepsilon_{m,\ge 3}\ \le\ \varepsilon_{m,\ge 4}\ \le\ \cdots\ }.
+\]
+此外，若 \((v_{m,\ge k},w_{m,\ge k})\) 为 \(A_{m,\ge k}\) 的 Perron--Frobenius 右/左特征向量并归一化为 \(w_{m,\ge k}^{\mathsf T}v_{m,\ge k}=1\)，则主项常数可取闭式
+\[
+c_{m,\ge k}=(e_{V_m}^{\mathsf T}v_{m,\ge k})\,(w_{m,\ge k}^{\mathsf T}\mathbf 1),
+\]
+其中 \(e_{V_m}\) 为初始态坐标向量、\(\mathbf 1\) 为 \(\mathcal{S}_{m,\ge k}\) 上的全 \(1\) 向量。
+\end{theorem}
+
+\begin{proof}
+由确定性右解析性与定义 \ref{def:Ym-ambiguity-level-k} 可知：长度-\(n\) 标记词 \(w\) 使得 \(|S_n|\ge k\)，当且仅当从 \(V_m\) 出发沿诱导子图 \(H_{m,\ge k}\) 读入 \(w\) 得到一条长度-\(n\) 的标记路径。
+按邻接矩阵 \(A_{m,\ge k}\) 的多重度定义，块计数满足
+\[
+N_{m,\ge k}(n)=e_{V_m}^{\mathsf T}(A_{m,\ge k})^n\mathbf 1.
+\]
+在“唯一最大谱半径强连通分量且原始”的假设下，对 \(A_{m,\ge k}\) 应用 Perron--Frobenius 尖锐分解即可得到
+\(
+N_{m,\ge k}(n)=c_{m,\ge k}\rho_{m,\ge k}^{\,n}+O(\rho_{m,\ge k,2}^{\,n})
+\)
+及相应的归一化锐化曲线；主项常数闭式由左右乘 \(e_{V_m}^{\mathsf T}\) 与 \(\mathbf 1\) 立即得到。
+\par
+对单调链：由集合嵌套 \(\mathcal{S}_{m,\ge k+1}\subseteq\mathcal{S}_{m,\ge k}\)，图 \(H_{m,\ge k+1}\) 由 \(H_{m,\ge k}\) 诱导得到；
+因此（将缺失顶点按零行零列补齐到同一维数后）有逐项不等式 \(0\le A_{m,\ge k+1}\le A_{m,\ge k}\)。
+由非负矩阵谱半径的单调性得 \(\rho_{m,\ge k+1}\le \rho_{m,\ge k}\)，从而 \(\varepsilon_{m,\ge k}=\log 2-\log\rho_{m,\ge k}\) 随 \(k\) 单调不减，得到所示链式不等式。
+证毕。
+\end{proof}
+
+\begin{corollary}[时间层右可逆性的二分律：有限延迟或指数稀薄壳]\label{cor:Ym-time-layer-dichotomy}
+在推论 \ref{cor:Ym-singleton-essential-finite-delay} 的“单点本质态”假设下，窗口层的多对一（即 \(\Fold_m\) 在单窗上的非单射）在时间层的右可逆性上只可能表现为以下二者之一：
+\begin{enumerate}
+  \item \textbf{强可逆（有限延迟同步）：}若 \(Y_m^{\mathrm{amb}}=\varnothing\)，则存在统一有限同步步数 \(L_m<\infty\)（备注 \ref{rem:Ym-amb-empty}），并在延迟 \(L_m\) 之后右解码在线成立。
+  \item \textbf{弱不可逆（指数稀薄壳）：}若 \(Y_m^{\mathrm{amb}}\neq\varnothing\)，则歧义仅能长期驻留在严格低熵子系统上；对最大熵测度 \(\nu_m\)，同步时间 \(T_m\) 具有指数尾界
+  \(
+  \nu_m(T_m>n)\le C_m e^{-\varepsilon_m n}
+  \)
+（定理 \ref{thm:Ym-sync-tail}），从而“长期不可逆”在最大熵部分上以指数小概率出现。
+\end{enumerate}
+因此，“窗口多对一”与“时间多对一”在本模型中被严格区分：时间层的右不可逆要么根本不存在（有限延迟后必同步），要么仅存在于指数稀薄的歧义壳层中。
+\end{corollary}
+
+\begin{remark}[\texorpdfstring{$\eta_m$}{eta_m} 的可观测解释：最大熵层“可逆性”的谱级证书]\label{rem:eta_m_as_reversibility_certificate}
+命题 \ref{prop:Ym-zeta-residue-ratio} 引入的 \(\eta_m\) 是 cover-\(\zeta\) 与内禀-\(\zeta\) 在共同主极点处的留数比。
+它不改变指数尺度（熵/主极点模长），但以常数级方式量化“cover 上的周期结构在因子映射 \(\pi_m:X_{A_m}\to Y_m\) 下被合并”的强度。
+\par
+另一方面，在右解析确定化表示 \(H_m^{\mathrm{det}}\) 中，子集状态 \(S_t\subset V_m\) 记录“给定过去输出时可能的内部后缀集合”；
+\(|S_t|=1\) 表示已进入可右解码（局部一一）的熵层，而 \(|S_t|>1\) 则是歧义壳的非单点记忆。
+因此可把 \(\eta_m\) 视为“最大熵层可逆性”的\textbf{谱级指纹}：\(\eta_m\) 越接近 \(1\)，越接近“在熵主项上几乎不发生合并”的一一因子；
+\(\eta_m<1\) 则提示仍存在不可忽略的常数级合并（尽管该合并不会造成指数级丢熵；见命题 \ref{prop:periodic-count-sandwich} 与推论 \ref{cor:Ym-periodic-compression-ratio}）。
+\end{remark}
+
+\begin{definition}[单点态占比的在线估计器（无需行列式）]\label{def:eta_m_hat_singleton_rate}
+对任意输出序列 \(y=(y_t)_{t\in\ZZ}\in Y_m\)，从初始候选集 \(S_0:=V_m\) 出发递推
+\[
+S_{t+1}:=\delta_m(S_t,y_t)\qquad (t\ge 0),
+\]
+其中 \(\delta_m\) 由定义 \ref{def:Phi_m-right-resolving} 给出。
+定义长度 \(N\) 的单点态占比
+\[
+\widehat\eta_m(N;y):=\frac{1}{N}\#\{\,0\le t<N:\ |S_t|=1\,\}.
+\]
+\end{definition}
+
+\begin{proposition}[单点态占比的极限：最大熵测度下的可逆性常数]\label{prop:eta_m_hat_ergodic_limit}
+设 \(Y_m\) 不可约，从而其最大熵测度 \(\nu_m\) 存在且由命题 \ref{prop:Phi_m-parry-pushforward} 给出。则存在常数 \(\eta_m^{\mathrm{obs}}\in(0,1]\) 使得对 \(\nu_m\)-几乎处处的 \(y\in Y_m\)，定义 \ref{def:eta_m_hat_singleton_rate} 的在线统计量满足
+\[
+\widehat\eta_m(N;y)\ \xrightarrow[N\to\infty]{}\ \eta_m^{\mathrm{obs}}.
+\]
+在推论 \ref{cor:Ym-singleton-essential-finite-delay} 的“单点本质态”条件下，且把 \(\nu_m\) 限制在最大熵本质分量上时有 \(\eta_m^{\mathrm{obs}}=1\)；偏离 \(1\) 的程度可被视为“在最大熵层仍发生右解码歧义”的可观测强度。
+\end{proposition}
+\begin{proof}
+将 \((y_t,S_t)\) 视为有限状态扩展移位系统，对 \(f(y,S):=\mathbf{1}\{|S|=1\}\) 应用 Birkhoff 遍历定理得到
+\(
+\widehat\eta_m(N;y)\to \int f\,d\bar\nu_m=:\eta_m^{\mathrm{obs}}
+\)
+于 \(\nu_m\)-几乎处处成立。
+若满足推论 \ref{cor:Ym-singleton-essential-finite-delay} 的“单点本质态”条件，则在最大熵本质分量上几乎处处 \(|S_t|=1\)，故 \(\eta_m^{\mathrm{obs}}=1\)。证毕。
+\end{proof}

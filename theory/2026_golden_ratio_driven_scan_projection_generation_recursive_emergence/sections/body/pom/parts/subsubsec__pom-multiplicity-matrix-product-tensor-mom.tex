@@ -1,0 +1,539 @@
+\subsubsection{纤维多重度的矩阵积表示与张量化 MOM 编译：有限窗逆码下的非交换计数}\label{subsubsec:pom-multiplicity-matrix-product-tensor-mom}
+在正文的碰撞谱口径中，\(S_q(m)=\sum_{x\in X_m}d_m(x)^q\) 被视为一个“\(q\)-重纤维积”计数对象（定义 \ref{def:pom-moment-q}），并通过有限状态 moment-kernel 统一纳入 Perron--Frobenius/\(\zeta\) 接口（命题 \ref{prop:pom-moment-kernel-exists} 及定义 \ref{def:pom-moment-pressure}）。
+本段补充一个更细的结构层：在存在\emph{有限窗逆码}（finite-window inverse code）的制度下，单个纤维体积 \(d_m(x)\) 本身就具有矩阵积计数式；并且对任意整数阶 \(q\)，\((\mathrm{MOM}_q)\) 的碰撞核可显式写成“语法两态骨架 \(\times\) 逆码转移的 \(q\)-重同步直积”的 Kronecker 耦合。
+
+\paragraph{有限窗逆码 \texorpdfstring{$\Rightarrow$}{=>} 纤维体积的矩阵积计数}
+\begin{theorem}[纤维多重度的矩阵积表示与最小歧义态维数]\label{thm:pom-fiber-multiplicity-matrix-product}
+设 \(\Fold_\infty:\Omega_\infty=\{0,1\}^{\NN}\to X_\infty\) 为二元折叠因子，且 \(X_\infty\subseteq\{0,1\}^{\NN}\) 为黄金均值移位（禁止相邻 \(11\)）。
+假设 \(\Fold_\infty\) 存在一个有限窗逆码 \(\Psi\)，使得“给定输出前缀 \(x_1\cdots x_m\)”时其全部合法预像可由一个有限状态确定化系统逐位更新并计数（等价地，可取一个 follower-separated 的右解析表示并在其上做计数读出）。
+则存在有限状态集合 \(\mathcal S\)、边界向量 \(u,v\in\NN^{\mathcal S}\)，以及两矩阵
+\[
+T_0,T_1\in M_{|\mathcal S|}(\NN),
+\]
+使得对任意合法宏观词 \(x=x_1\cdots x_m\in X_m\)（\(m\ge 1\)）有精确计数式
+\[
+\boxed{\;
+d_m(x)=u^{\mathsf T}T_{x_1}T_{x_2}\cdots T_{x_m}v\; }.
+\]
+此外，在所有满足上述表示的选择中，最小可能维数 \(|\mathcal S|\) 等于右歧义类（follower ambiguity classes）的有限完备集合基数；
+因此当 \(\Psi\) 取为由最小在线延迟/最小同步结构诱导的规范逆码时，该最小维数由 \(\Fold_\infty\) 唯一确定。
+\end{theorem}
+\begin{proof}
+由假设，逆码可实现为一个确定性有限状态计数机：其状态记录“在给定输出前缀下仍可能的歧义类”，读入下一个输出符号 \(b\in\{0,1\}\) 后作确定更新。
+令 \(\mathcal S\) 为该计数机的（可达）状态集，并令 \((T_b)_{b\in\{0,1\}}\) 为按输出符号分解的转移计数矩阵（每一步的计数语义由逆码产生的分支数给出，因而条目为非负整数）。
+取 \(u\) 为初始状态分布（由边界/起始允许态确定），取 \(v\) 为末端读出向量（对允许终止态求和），则长度 \(m\) 的输出词 \(x_1\cdots x_m\) 的全部预像数正是沿该确定性计数机的路径计数，从而得到矩阵积公式。
+\par
+最小性结论是确定性有限自动机的标准最小化：将状态按“拥有相同 follower 集（同一切右延拓族）”的等价关系合并得到最小右解析 follower-separated 表示，其等价类数即为所述右歧义类完备集合基数；任何矩阵积表示必须区分这些等价类，故其维数不小于该基数，而由最小化构造可达该下界。
+\end{proof}
+
+\paragraph{张量化 MOM 编译：黄金语法骨架 \texorpdfstring{$\otimes$}{x} \(q\)-重逆码同步直积}
+\begin{proposition}[MOM\texorpdfstring{$\,_q$}{\_q} 的张量分解型碰撞核]\label{prop:pom-momq-tensor-kernel-construction}
+在定理 \ref{thm:pom-fiber-multiplicity-matrix-product} 的设定下，令
+\[
+G_0:=\begin{pmatrix}1&0\\[2pt]1&0\end{pmatrix},
+\qquad
+G_1:=\begin{pmatrix}0&1\\[2pt]0&0\end{pmatrix}
+\in M_2(\{0,1\})
+\]
+为黄金均值两态骨架的符号分解转移矩阵（满足 \(G_0+G_1=\bigl(\begin{smallmatrix}1&1\\1&0\end{smallmatrix}\bigr)\)）。
+对任意整数 \(q\ge 1\)，定义显式的 \(q\)-阶碰撞转移核
+\[
+A_q^{\mathrm{ten}}
+\;:=\;
+G_0\otimes T_0^{\otimes q}\;+\;G_1\otimes T_1^{\otimes q}
+\ \in\ M_{2|\mathcal S|^q}(\NN).
+\]
+令 \(e_0:=(1,0)^{\mathsf T}\in\NN^2\)、\(\mathbf 1:=(1,1)^{\mathsf T}\in\NN^2\)，并取边界向量
+\[
+\alpha_q:=e_0\otimes u^{\otimes q},
+\qquad
+\beta_q:=\mathbf 1\otimes v^{\otimes q}.
+\]
+则对所有 \(m\ge 1\) 有线性递推计数表示
+\[
+\boxed{\;
+S_q(m)=\sum_{x\in X_m}d_m(x)^q
+\;=\;
+\alpha_q^{\mathsf T}\bigl(A_q^{\mathrm{ten}}\bigr)^{m}\beta_q\; }.
+\]
+因此 \((\mathrm{MOM}_q)\) 的“有限状态编译”可取为张量分解型结构：\(q\)-体重合约束在核层面等同于逆码转移的 \(q\)-重同步直积，再与黄金语法两态骨架作 Kronecker 耦合。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-multiplicity-matrix-product}，
+\(
+d_m(x)=u^{\mathsf T}T_{x_1}\cdots T_{x_m}v
+\)。
+于是
+\[
+d_m(x)^q
+=
+\bigl(u^{\otimes q}\bigr)^{\mathsf T}\,
+\bigl(T_{x_1}^{\otimes q}\bigr)\cdots
+\bigl(T_{x_m}^{\otimes q}\bigr)\,
+v^{\otimes q}.
+\]
+对所有合法词 \(x\in X_m\) 求和可由黄金均值两态骨架的路径展开实现：每一步选择符号 \(b\in\{0,1\}\) 并按 \(G_b\) 更新语法态，同时在 \(\mathcal S^{\times q}\) 上施加 \(T_b^{\otimes q}\) 的同步更新。
+因此加权路径总和恰为 \(\alpha_q^{\mathsf T}(A_q^{\mathrm{ten}})^m\beta_q\)。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/prop__pom-momq-tensor-kernel-schur-determinant-noncommutative-fibonacci-powers}
+\input{sections/body/pom/parts/thm__pom-tensor-fold-resultant-recursion}
+
+\input{sections/body/pom/parts/thm__pom-momq-permutation-symmetry-schur-weyl}
+
+\paragraph{不交张量底座：\texorpdfstring{$M^{\otimes q}$}{M^⊗q} 的谱显式与四阶整数临界}
+令
+\(
+M:=G_0+G_1=\bigl(\begin{smallmatrix}1&1\\[2pt]1&0\end{smallmatrix}\bigr)
+\)。
+该两态矩阵不仅编码黄金均值语法骨架，亦给出一个更原初的张量硬核对象：不交图的邻接算子。
+
+\begin{theorem}[两态骨架的中心化半环与 Fibonacci 融合律]\label{thm:pom-centralizer-semiring-fibonacci-fusion}
+令
+\[
+M:=\begin{pmatrix}1&1\\[2pt]1&0\end{pmatrix},
+\qquad
+\mathcal C_+(M):=\{A\in M_2(\ZZ_{\ge 0}):\ AM=MA\}.
+\]
+则存在半环同构
+\[
+\boxed{\;
+\mathcal C_+(M)\ \cong\ \ZZ_{\ge 0}[\tau]/(\tau^2-\tau-1),\;}
+\]
+其同构由 \(\tau\mapsto M\) 实现。
+特别地，\(\mathcal C_+(M)\) 由 \(I\) 与 \(M\) 生成并满足
+\[
+M^2=M+I,
+\]
+从而其乘法结构与 Fibonacci 融合环的去范畴化融合律同型。
+\end{theorem}
+\begin{proof}
+任取 \(A=\bigl(\begin{smallmatrix}p&q\\ r&s\end{smallmatrix}\bigr)\in M_2(\ZZ)\)。直接计算
+\[
+AM=\begin{pmatrix}p+q&p\\ r+s&r\end{pmatrix},
+\qquad
+MA=\begin{pmatrix}p+r&q+s\\ p&q\end{pmatrix}.
+\]
+令 \(AM=MA\) 得方程组
+\(
+q=r,\ p=q+s
+\)。
+因此
+\[
+A=\begin{pmatrix}q+s&q\\ q&s\end{pmatrix}=s\,I+q\,M.
+\]
+若进一步要求 \(A\in M_2(\ZZ_{\ge 0})\)，则 \(q,s\ge 0\)，于是
+\(
+\mathcal C_+(M)=\{\,aI+bM:\ a,b\in\ZZ_{\ge 0}\,\}
+\)。
+另一方面，由直接乘法得 \(M^2=M+I\)。因此映射 \(\ZZ_{\ge 0}[\tau]\to\mathcal C_+(M)\)（\(\tau\mapsto M\)）为满射半环同态，其核包含 \((\tau^2-\tau-1)\)，并由表示 \(aI+bM\) 的唯一性知核恰为该主理想，故得所示同构。证毕。
+\end{proof}
+
+\begin{corollary}[Frobenius--Perron 维数的黄金参数]\label{cor:pom-centralizer-fpdim-golden}
+令 \(\mathrm{FPdim}(\tau)\) 以谱半径刻画，则
+\[
+\mathrm{FPdim}(\tau)=\rho(M)=\varphi,
+\]
+其中 \(\varphi=(1+\sqrt5)/2\)。
+\end{corollary}
+\begin{proof}
+\(M\) 的特征多项式为 \(\lambda^2-\lambda-1\)，其 Perron 根为 \(\varphi\)。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/prop__pom-centralizer-det-norm-mod5}
+
+\begin{proposition}[不交图的张量幂刻画与 \texorpdfstring{$\QQ(\sqrt5)$}{Q(sqrt5)} 的普适谱底座]\label{prop:pom-disjointness-graph-tensor-power-spectrum}
+令 \(\mathcal{D}_q\) 为顶点集 \(2^{[q]}\) 上的不交图：对 \(S,T\subseteq[q]\)，令 \(S\sim T\) 当且仅当 \(S\cap T=\varnothing\)。
+在自然基（以 \(\{0,1\}^q\cong 2^{[q]}\) 标号）下，\(\mathcal{D}_q\) 的邻接算子严格等于
+\[
+\boxed{\;A(\mathcal{D}_q)=M^{\otimes q}\;}
+\qquad\Bigl(M=\begin{pmatrix}1&1\\[2pt]1&0\end{pmatrix}\Bigr).
+\]
+从而其谱完全显式：若 \(\varphi=(1+\sqrt5)/2\)，则全部特征值为
+\[
+(-1)^k\varphi^{\,q-2k}\qquad(0\le k\le q),
+\]
+且代数重数为 \(\binom{q}{k}\)。
+因此不交张量底座的谱分解在每个 \(q\) 上均由 \(\QQ(\sqrt5)\) 统摄。
+\end{proposition}
+\begin{proof}
+将 \(S\subseteq[q]\) 识别为指示向量 \(s\in\{0,1\}^q\)，则 \(S\cap T=\varnothing\) 等价于对每个坐标 \(i\)，不允许出现局部对 \((s_i,t_i)=(1,1)\)。
+故邻接矩阵按坐标分解为 \(q\) 个独立的 \(2\times 2\) 局部允许矩阵之 Kronecker 乘积，即 \(A(\mathcal{D}_q)=M^{\otimes q}\)。
+又 \(M\) 的特征值为 \(\varphi\) 与 \(-\varphi^{-1}\)，故张量幂的特征值为 \(\varphi^{q-k}(-\varphi^{-1})^k=(-1)^k\varphi^{q-2k}\)，重数由二项式展开给出。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$q=4$}{q=4} 为不交图层面 Ramanujan 比率的唯一整数临界点]\label{cor:pom-disjointness-ramanujan-q4-critical}
+令 \(r_q^{\mathrm{disj}}:=\rho(A(\mathcal{D}_q))\) 为 Perron 根，并令 \(\Lambda_q^{\mathrm{disj}}\) 为非 Perron 最大模特征值。
+则
+\[
+r_q^{\mathrm{disj}}=\varphi^{\,q},\qquad \Lambda_q^{\mathrm{disj}}=\varphi^{\,q-2},\qquad
+\frac{\Lambda_q^{\mathrm{disj}}}{\sqrt{r_q^{\mathrm{disj}}}}=\varphi^{\,q/2-2}.
+\]
+因此对整数 \(q\le 3\) 有 \(\Lambda_q^{\mathrm{disj}}<\sqrt{r_q^{\mathrm{disj}}}\)，对 \(q=4\) 有临界等式 \(\Lambda_4^{\mathrm{disj}}=\sqrt{r_4^{\mathrm{disj}}}\)，而对整数 \(q\ge 5\) 必有 \(\Lambda_q^{\mathrm{disj}}>\sqrt{r_q^{\mathrm{disj}}}\)。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-disjointness-graph-tensor-power-spectrum}，\(r_q^{\mathrm{disj}}=\varphi^q\)，且非 Perron 模最大者来自 \(k=1\) 分支，故 \(\Lambda_q^{\mathrm{disj}}=\varphi^{q-2}\)。
+代入即得比率闭式，并由 \(\varphi>1\) 推出临界点的唯一性。证毕。
+\end{proof}
+
+\begin{conclusion}[Kronecker 不交核的量子化临界：\texorpdfstring{$S_q$}{Sq}-等变压缩的临界 \(q\) 被最小权阶量子化为 \(4k_0\)]\label{con:pom-disjointness-sq-equivariant-critical-quantization}
+沿命题 \ref{prop:pom-disjointness-graph-tensor-power-spectrum}，令
+\(
+M=\bigl(\begin{smallmatrix}1&1\\[2pt]1&0\end{smallmatrix}\bigr)
+\)
+并考虑 \(M^{\otimes q}\) 在 \((\RR^2)^{\otimes q}\) 上的作用。
+设 \(W\subset(\RR^2)^{\otimes q}\) 为任意 \(S_q\)-不变子空间，且包含 Perron 模态（等价地，包含 \(M^{\otimes q}\) 的 Perron 特征向量）。
+令
+\[
+T:=\mathrm{Proj}_W(M^{\otimes q})\mathrm{Proj}_W
+\]
+为相应的 \(S_q\)-等变压缩算子，并令 \(k_0\) 为 \(W\) 所包含的最小非零“权阶”：即最小的 \(k\ge 1\) 使得 \(W\) 在特征值 \((-1)^k\varphi^{q-2k}\) 的特征空间上的投影非零。
+则压缩算子仍满足 \(r=\rho(T)=\varphi^q\)，并且其最大非 Perron 模长精确为
+\[
+\Lambda=\varphi^{q-2k_0},
+\qquad
+\frac{\Lambda}{\sqrt r}=\varphi^{\,q/2-2k_0}.
+\]
+因此 Ramanujan 临界条件 \(\Lambda\le \sqrt r\) 等价于 \(q\le 4k_0\)，临界点被量子化为
+\[
+\boxed{\;q_c=4k_0\;}
+\]
+（在整数 \(q\) 上即表现为离散阈值序列）。
+特别地，\(k_0=1\) 对应的最小非平凡压缩给出 \(q=4\) 的临界性。
+\end{conclusion}
+
+\begin{proposition}[\texorpdfstring{$S_q$}{Sq}-对称压缩的 \texorpdfstring{$(q+1)$}{q+1} 维闭式矩阵与四阶整数 \(7\) 的谱不变量]\label{prop:pom-disjointness-symmetric-compression-bq}
+令 \(B_q\) 为 \(\mathcal{D}_q\) 在 \(S_q\) 轨道空间（按子集大小分层）上的诱导算子。
+则 \(B_q\) 为 \((q+1)\times(q+1)\) 矩阵；在以“大小层”标号的基下，其系数满足显式闭式
+\[
+\boxed{\;B_q(i,j)=\binom{q-j}{i}\;}\qquad(0\le i,j\le q).
+\]
+特别地，当 \(q=4\) 时其特征多项式严格因式分解为
+\[
+(\lambda-1)(\lambda^2-7\lambda+1)(\lambda^2+3\lambda+1),
+\]
+其五个特征值分别为
+\(
+1
+\)、\(
+\frac{7\pm 3\sqrt5}{2}=\varphi^{\pm 4}
+\)、\(
+\frac{-3\pm\sqrt5}{2}=-\varphi^{\pm 2}
+\)。
+因此四阶层面的“系数 \(7\)”在不交张量底座的最小非平凡对称压缩中已作为谱不变量出现。
+\end{proposition}
+\begin{proof}
+对固定 \(T\subseteq[q]\) 且 \(|T|=j\)，与之不交的 \(i\)-元子集数恰为从补集 \([q]\setminus T\)（大小 \(q-j\)）中取 \(i\) 元子集的计数 \(\binom{q-j}{i}\)，故 \(B_q(i,j)=\binom{q-j}{i}\)。
+当 \(q=4\) 时对该 \(5\times 5\) 矩阵直接计算特征多项式并因式分解即可得到所示闭式。证毕。
+\end{proof}
+
+% (User input window)
+
+\begin{proposition}[二项权内积下的严格对称化：\texorpdfstring{$B_q$}{Bq} 的带权自伴随性]\label{prop:pom-bq-weighted-selfadjoint-binomial}
+沿命题 \ref{prop:pom-disjointness-symmetric-compression-bq} 的记号，令 \(B_q\in M_{q+1}(\ZZ)\) 为满足 \(B_q(i,j)=\binom{q-j}{i}\) 的矩阵。
+定义对角权矩阵
+\[
+W_q:=\mathrm{diag}\Bigl(\binom{q}{0}^{-1},\binom{q}{1}^{-1},\dots,\binom{q}{q}^{-1}\Bigr).
+\]
+则成立严格恒等式
+\[
+\boxed{\;W_qB_q=B_q^{\mathsf T}W_q\;}
+\]
+从而 \(B_q\) 在加权内积 \(\langle u,v\rangle_{W_q}:=u^{\mathsf T}W_qv\) 下自伴随。
+等价地，令
+\[
+D_q:=\mathrm{diag}\Bigl(\sqrt{\binom{q}{0}},\dots,\sqrt{\binom{q}{q}}\Bigr),
+\qquad
+J_q:=D_q^{-1}B_qD_q,
+\]
+则 \(J_q\) 为实对称矩阵。
+因此 \(B_q\) 的全部谱为实数，并可取一组 \(W_q\)-正交特征向量基。
+\end{proposition}
+\begin{proof}
+对任意 \(0\le i,j\le q\)，由 \(B_q(i,j)=\binom{q-j}{i}\) 得
+\[
+(W_qB_q)(i,j)=\binom{q}{i}^{-1}\binom{q-j}{i},
+\qquad
+(B_q^{\mathsf T}W_q)(i,j)=\binom{q-i}{j}\binom{q}{j}^{-1}.
+\]
+当 \(i+j>q\) 时两者皆为 \(0\)。
+当 \(i+j\le q\) 时直接化简得
+\[
+\binom{q}{i}^{-1}\binom{q-j}{i}
+=\frac{(q-i)!(q-j)!}{q!(q-i-j)!}
+=\binom{q}{j}^{-1}\binom{q-i}{j},
+\]
+故 \(W_qB_q=B_q^{\mathsf T}W_q\)。
+另一方面，由 \(W_q=D_q^{-2}\)，上式等价于 \(J_q^{\mathsf T}=J_q\)，从而 \(J_q\) 可被正交对角化；回到相似变换即可得到 \(B_q\) 的谱实性与 \(W_q\)-正交特征基的存在性。证毕。
+\end{proof}
+
+% (User input window)
+
+\paragraph{Lucas 平方谱分解与闭式迹公式：\texorpdfstring{$B_q$}{Bq} 的完全可计算周期动力学}
+令
+\(
+M=\bigl(\begin{smallmatrix}1&1\\[2pt]1&0\end{smallmatrix}\bigr)
+\)
+并记 Lucas 数列为 \(L_0=2,L_1=1\) 且 \(L_{n+1}=L_n+L_{n-1}\)。
+
+\begin{proposition}[\texorpdfstring{$B_q=\mathrm{Sym}^q(M)$}{Bq=Sym^q(M)} 与谱闭式]\label{prop:pom-bq-is-symq-and-spectrum}
+对任意整数 \(q\ge 1\)，对称压缩核 \(B_q\) 与 \(M\) 的 \(q\)-次对称幂同构：
+\[
+\boxed{\;B_q\ \cong\ \mathrm{Sym}^q(M)\in \mathrm{GL}_{q+1}(\ZZ)\;}
+\]
+从而其全部特征值严格为
+\[
+\boxed{\;\mu_k=(-1)^k\varphi^{\,q-2k}\qquad(0\le k\le q)\;}
+\]
+且每个模态在 \(B_q\) 上的代数重数均为 \(1\)。
+\end{proposition}
+\begin{proof}
+令 \(V=\RR^2\) 并取基向量 \(e_0,e_1\)。
+用标准同构将 \(\mathrm{Sym}^q(V)\) 表示为齐次次数为 \(q\) 的二元多项式空间：形式变量 \(x,y\) 分别对应 \(e_0,e_1\)，从而 \(\{x^{q-j}y^j\}_{j=0}^{q}\) 构成一组基。
+矩阵 \(M\) 在基 \((e_0,e_1)\) 下满足 \(Me_0=e_0+e_1\)、\(Me_1=e_0\)，故其在该多项式模型中诱导代入作用
+\((x,y)\mapsto (x+y,x)\)。
+于是 \(x^{q-j}y^j\) 的像为 \((x+y)^{q-j}x^{j}\)，其在基 \(\{x^{q-i}y^i\}\) 下的展开系数恰为 \(\binom{q-j}{i}\)；
+从而 \(\mathrm{Sym}^q(M)\) 的矩阵系数与命题 \ref{prop:pom-disjointness-symmetric-compression-bq} 的闭式一致，得到 \(B_q\cong\mathrm{Sym}^q(M)\)。
+\par
+由于 \(M\) 的特征值为 \(\varphi\) 与 \(-\varphi^{-1}\)，对称幂的谱为所有乘积 \(\varphi^{q-k}(-\varphi^{-1})^{k}=(-1)^k\varphi^{q-2k}\ (0\le k\le q)\)，且次数为 \(q+1\)，故重数均为 \(1\)。证毕。
+\end{proof}
+
+\begin{proposition}[两条本征线性形式生成全谱：\texorpdfstring{$B_q$}{Bq} 的闭式特征向量]\label{prop:pom-bq-explicit-diagonalization-linear-forms}
+令 \(\varphi=(1+\sqrt5)/2\)、\(\psi=-\varphi^{-1}\)，并定义线性形式
+\[
+\ell_+(x,y)=\varphi x+y,\qquad \ell_-(x,y)=\psi x+y.
+\]
+则在代入作用 \((x,y)\mapsto(x+y,x)\) 下有
+\(
+\ell_\pm(x+y,x)=\lambda_\pm\,\ell_\pm(x,y)
+\)，其中 \(\lambda_+=\varphi\)、\(\lambda_-=\psi\)。
+对每个 \(k\in\{0,1,\dots,q\}\)，令
+\[
+P_{q,k}(x,y):=\ell_+(x,y)^{\,q-k}\,\ell_-(x,y)^{\,k}\in\QQ(\sqrt5)[x,y]_q.
+\]
+则 \(P_{q,k}\) 为 \(B_q\) 的本征向量，并满足严格本征关系
+\[
+\boxed{\;P_{q,k}(x+y,x)=(-1)^k\varphi^{\,q-2k}\,P_{q,k}(x,y)\;}
+\]
+其本征值与命题 \ref{prop:pom-bq-is-symq-and-spectrum} 的 \(\mu_k\) 一致。
+在基 \(e_j=x^{q-j}y^j\) 下写 \(P_{q,k}=\sum_{j=0}^{q} v^{(k)}_j\,e_j\)，则坐标分量具有闭式
+\[
+\boxed{\;
+v^{(k)}_j
+=\sum_{a=0}^{j}
+\binom{q-k}{a}\binom{k}{j-a}\,
+\varphi^{\,q-k-a}\,
+\psi^{\,k-j+a}\qquad(0\le j\le q)\; } .
+\]
+并且由于命题 \ref{prop:pom-bq-weighted-selfadjoint-binomial} 的 \(W_q\)-自伴随性与谱的单重性，向量族 \(\{v^{(k)}\}_{k=0}^{q}\) 可取为 \(\langle\cdot,\cdot\rangle_{W_q}\) 下两两正交的一组本征基。
+\end{proposition}
+\begin{proof}
+由定义，
+\[
+\ell_\pm(x+y,x)=\lambda_\pm(x+y)+x=(\lambda_\pm+1)x+\lambda_\pm y=\lambda_\pm^2 x+\lambda_\pm y=\lambda_\pm(\lambda_\pm x+y)=\lambda_\pm\,\ell_\pm(x,y),
+\]
+其中 \(\lambda_\pm\) 满足 \(\lambda_\pm^2=\lambda_\pm+1\)，故 \(\lambda_+=\varphi\)、\(\lambda_-=\psi\)。
+于是
+\[
+P_{q,k}(x+y,x)=\lambda_+^{\,q-k}\lambda_-^{\,k}\,P_{q,k}(x,y)=\varphi^{\,q-k}\psi^{\,k}\,P_{q,k}(x,y)=(-1)^k\varphi^{\,q-2k}P_{q,k}(x,y),
+\]
+给出本征关系与本征值。
+再将
+\(
+(\varphi x+y)^{q-k}(\psi x+y)^k
+\)
+作二项式展开并按 \(y\) 的幂次收集，即得到 \(v^{(k)}_j\) 的所示闭式。
+最后，由命题 \ref{prop:pom-bq-weighted-selfadjoint-binomial}，\(B_q\) 在 \(\langle\cdot,\cdot\rangle_{W_q}\) 下自伴随；由于本征值两两不同（命题 \ref{prop:pom-bq-is-symq-and-spectrum}），不同本征值对应的本征向量必两两正交，从而可取为 \(W_q\)-正交本征基。证毕。
+\end{proof}
+
+\begin{theorem}[Lucas 平方谱分解：\texorpdfstring{$\det(I-uB_q^2)$}{det(I-uBq^2)} 的完全因式分解]\label{thm:pom-bq-lucas-square-spectrum-factorization}
+对任意整数 \(q\ge 1\) 有严格恒等式
+\[
+\boxed{\;
+\det(I-uB_q^2)
+=(1-u)^{\mathbf 1_{\{q\ \mathrm{even}\}}}
+\prod_{\substack{1\le d\le q\\ d\equiv q\ (\mathrm{mod}\ 2)}}
+\bigl(u^2-L_{2d}\,u+1\bigr)\; } .
+\]
+特别地，当 \(q=4\) 时
+\[
+\det(I-uB_4^2)=(1-u)(u^2-7u+1)(u^2-47u+1),
+\]
+其中 \(7=L_4\)、\(47=L_8\) 给出四阶平方谱合迹的整系数来源。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-bq-is-symq-and-spectrum}，\(B_q\) 的特征值为 \(\mu_k=(-1)^k\varphi^{q-2k}\)，故 \(B_q^2\) 的特征值为 \(\lambda_k:=\mu_k^2=\varphi^{2(q-2k)}\)。
+当 \(q\) 为偶数时存在唯一自互反模态 \(k=q/2\) 使 \(\lambda_{q/2}=1\)，贡献因子 \(1-u\)；其余特征值按互反配对 \(\lambda\leftrightarrow 1/\lambda\)。
+对任意正整数 \(d\equiv q\ (\mathrm{mod}\ 2)\)（对应 \(\lambda=\varphi^{2d}\)），有 Lucas 偶指标恒等式
+\(
+L_{2d}=\varphi^{2d}+\varphi^{-2d}
+\)；
+从而
+\[
+(1-u\varphi^{2d})(1-u\varphi^{-2d})=u^2-(\varphi^{2d}+\varphi^{-2d})u+1=u^2-L_{2d}u+1.
+\]
+把所有互反对的因子相乘即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[闭式迹公式：\texorpdfstring{$\mathrm{Tr}(B_q^n)$}{Tr(Bq^n)} 的 Lucas 展开]\label{thm:pom-bq-trace-lucas}
+对任意整数 \(q\ge 1\)、\(n\ge 1\)，成立严格闭式
+\[
+\boxed{\;
+\mathrm{Tr}(B_q^{\,n})
+=
+\sum_{k=0}^{\lfloor q/2\rfloor-\mathbf 1_{\{q\ \mathrm{even}\}}}
+(-1)^{kn}\,L_{n(q-2k)}
+\;+\;
+\mathbf 1_{\{q\ \mathrm{even}\}}\cdot (-1)^{(q/2)n}\; } .
+\]
+因此对 \(B_q\) 的 primitive 轨道数（Möbius 反演）
+\[
+p_n(B_q):=\frac{1}{n}\sum_{d\mid n}\mu(d)\,\mathrm{Tr}\!\bigl(B_q^{\,n/d}\bigr)
+\]
+可在有限步内化为 Lucas 数的有限线性组合。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-bq-is-symq-and-spectrum}，
+\(
+\mathrm{Tr}(B_q^{\,n})=\sum_{k=0}^{q}(-1)^{kn}\varphi^{n(q-2k)}
+\)。
+对 \(k\) 与 \(q-k\) 配对，并注意 \(q-2k\equiv q\ (\mathrm{mod}\ 2)\) 使得 \((-1)^{n(q-2k)}=(-1)^{nq}\)，可得每对之和为
+\[
+(-1)^{kn}\Bigl(\varphi^{n(q-2k)}+(-1)^{n(q-2k)}\varphi^{-n(q-2k)}\Bigr)=(-1)^{kn}L_{n(q-2k)}.
+\]
+若 \(q\) 为偶数，还需加上中点模态 \(k=q/2\) 的贡献 \((-1)^{(q/2)n}\)。
+primitive 轨道数的 Lucas 表达由定义的 Möbius 反演直接代入得到。证毕。
+\end{proof}
+
+\paragraph{整数阶压力的离散凸性与二阶碰撞的协议下界}
+\begin{corollary}[离散凸性与 \texorpdfstring{$\rho(A_2)$}{rho(A2)} 的严格协议下界]\label{cor:pom-integer-pressure-discrete-convexity-strict-bound}
+记
+\[
+\tau_q:=\lim_{m\to\infty}\frac{1}{m}\log S_q(m)
+\qquad(q\in\NN),
+\]
+其中 \(\tau_0=\log\varphi\)（因 \(|X_m|=S_0(m)\asymp \varphi^m\)）且 \(\tau_1=\log 2\)（因 \(S_1(m)=\sum_x d_m(x)=|\Omega_m|=2^m\)）。
+则整数列 \((\tau_q)_{q\ge 0}\) 满足离散凸性
+\[
+\boxed{\;
+\tau_{q+1}-\tau_q\ \ge\ \tau_q-\tau_{q-1}\qquad(q\ge 1)\; }.
+\]
+若进一步处于定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的严格凸制度（例如纤维多重度势不与常数同调），则上述不等式对一切 \(q\ge 1\) 严格成立。
+特别地在非平凡折叠（严格凸）情形下，
+\[
+\boxed{\;
+\tau_2\ >\ 2\tau_1-\tau_0\ =\ 2\log 2-\log\varphi,
+\qquad\text{等价地}\qquad
+\rho\!\left(A_2^{\mathrm{ten}}\right)\ >\ \frac{4}{\varphi}\; }.
+\]
+\end{corollary}
+\begin{proof}
+离散凸性为推论 \ref{cor:pom-crossq-pressure-convexity} 的整点形式（亦可直接对每个固定 \(m\) 用 Hölder 不等式得到 \(S_q(m)^2\le S_{q-1}(m)S_{q+1}(m)\)，再取对数并除以 \(m\) 取极限）。
+严格性由定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的严格凸条件推出。
+将 \(q=1\) 代入即得所示二阶下界与谱半径不等式。证毕。
+\end{proof}
+
+\paragraph{二阶碰撞谱的可去因子分解：同步尾指数的谱反演}
+\begin{proposition}[同步吸收块与歧义尾核：碰撞 \texorpdfstring{$\zeta$}{zeta} 的可去因子]\label{prop:pom-collision-zeta-removable-sync-factor}
+在命题 \ref{prop:pom-momq-tensor-kernel-construction} 的 \(q=2\) 情形，按逆码歧义态空间 \(\mathcal S\) 的“已同步态/未同步态”（候选集为单元 vs.\ 非单元）作分解，
+可将 \(A_2^{\mathrm{ten}}\) 通过对基的置换重排为块三角矩阵
+\[
+A_2^{\mathrm{ten}}\ \sim\
+\begin{pmatrix}
+D & *\\
+0 & B
+\end{pmatrix},
+\]
+其中 \(D\) 为同步吸收块的计数核，\(B\) 为未同步歧义子系统的尾谱核。
+于是有行列式分解
+\[
+\boxed{\;
+\det(I-zA_2^{\mathrm{ten}})
+=
+\det(I-zD)\,\det(I-zB)\; }.
+\]
+因此，一旦同步吸收因子 \(\det(I-zD)\) 可显式计算，则“同步尾”主导极点半径 \(z_{\mathrm{sync}}:=\rho(B)^{-1}\) 可由二阶碰撞谱
+\(\det(I-zA_2^{\mathrm{ten}})\)
+在剔除 \(\det(I-zD)\) 后的剩余极点集合中单独反演得到。
+\end{proposition}
+\begin{proof}
+由“已同步态”在确定性逆码更新下保持为已同步态（候选集一旦为单元即永不再分裂），同步态张成的子空间为不变子空间，从而存在如上块三角分解。
+块三角矩阵的行列式等于对角块行列式之积，故得分解式；极点反演结论随之成立。证毕。
+\end{proof}
+
+\paragraph{黄金两态骨架诱导的二次特征方程：\texorpdfstring{$\rho(A_q)$}{rho(Aq)} 的固定点表征}
+\begin{proposition}[Perron 根的固定点方程与单调求根]\label{prop:pom-golden-grammar-fixed-point-rho-aq}
+在命题 \ref{prop:pom-momq-tensor-kernel-construction} 的设定下，\(A_q^{\mathrm{ten}}\) 可写为 \(2\times 2\) 块矩阵
+\[
+A_q^{\mathrm{ten}}
+\;=\;
+\begin{pmatrix}
+T_0^{\otimes q} & T_1^{\otimes q}\\[2pt]
+T_0^{\otimes q} & 0
+\end{pmatrix}.
+\]
+令 \(\lambda_q:=\rho(A_q^{\mathrm{ten}})>0\)。
+则 \(\lambda_q\) 等价于唯一满足
+\[
+\boxed{\;
+\rho\!\left(\lambda_q^{-1}T_0^{\otimes q}+\lambda_q^{-2}T_1^{\otimes q}T_0^{\otimes q}\right)=1\; }
+\]
+的正实数。
+并且函数
+\[
+F_q(\lambda):=\rho\!\left(\lambda^{-1}T_0^{\otimes q}+\lambda^{-2}T_1^{\otimes q}T_0^{\otimes q}\right)
+\]
+在 \(\lambda>0\) 上严格单调递减，从而可用二分法或单调迭代在一维上收敛求得 \(\lambda_q\)。
+\end{proposition}
+\begin{proof}
+对 Perron 本征对 \((\lambda_q,(u_0,u_1))\)（其中 \(u_0,u_1\ge 0\) 非零）写出本征方程：
+\[
+\lambda_q u_0=T_0^{\otimes q}u_0+T_1^{\otimes q}u_1,
+\qquad
+\lambda_q u_1=T_0^{\otimes q}u_0.
+\]
+消去 \(u_1=\lambda_q^{-1}T_0^{\otimes q}u_0\) 得
+\(
+u_0=\lambda_q^{-1}T_0^{\otimes q}u_0+\lambda_q^{-2}T_1^{\otimes q}T_0^{\otimes q}u_0
+\)，
+故 \(1\) 为矩阵 \(\lambda_q^{-1}T_0^{\otimes q}+\lambda_q^{-2}T_1^{\otimes q}T_0^{\otimes q}\) 的特征值；由非负性与不可约性，其谱半径必须为 \(1\)。
+反向方向同理：若存在 \(\lambda>0\) 使该谱半径为 \(1\)，取 Perron 向量 \(u_0\) 并令 \(u_1=\lambda^{-1}T_0^{\otimes q}u_0\) 即构造出 \(A_q^{\mathrm{ten}}\) 的 Perron 本征向量，从而 \(\lambda=\rho(A_q^{\mathrm{ten}})\)。
+\par
+单调性来自谱半径对非负矩阵条目的单调性：\(\lambda\) 增大时两项 \(\lambda^{-1},\lambda^{-2}\) 同时严格减小，故 \(F_q\) 严格递减。证毕。
+\end{proof}
+
+\paragraph{Rényi 熵率的谱公式与碰撞指数的离散凹性}
+\begin{corollary}[碰撞指数的凹性与 Rényi 熵率谱公式]\label{cor:pom-renyi-rate-spectral-formula-discrete-concavity}
+对整数 \(q\ge 2\) 定义未分离尾
+\[
+\Pi_q(m):=\sum_{x\in X_m}w_m(x)^q=\frac{S_q(m)}{2^{mq}},
+\]
+并令其指数衰减率（碰撞指数）为
+\[
+E_q:=\lim_{m\to\infty}-\frac{1}{m}\log \Pi_q(m).
+\]
+若 \(S_q(m)=\Theta(\rho(A_q^{\mathrm{ten}})^m)\)（例如 \(A_q^{\mathrm{ten}}\) 原始且边界向量非退化），则
+\[
+\boxed{\;
+E_q=q\log 2-\log\rho(A_q^{\mathrm{ten}})\;=\;h_q\;=\;-P(q)\; }
+\]
+（记号见定义 \ref{def:pom-moment-pressure}）。
+并且整数列 \((E_q)_{q\ge 2}\) 在 \(q\) 上满足离散凹性
+\[
+\boxed{\;
+E_{q+1}-E_q\ \le\ E_q-E_{q-1}\qquad(q\ge 3)\; }.
+\]
+相应的 Rényi 熵率（标准归一化，记为 \(h_q^{\mathrm R}\)）满足谱闭式
+\[
+\boxed{\;
+h_q^{\mathrm R}
+:=\lim_{m\to\infty}\frac{1}{m}\cdot\frac{1}{1-q}\log\sum_{x\in X_m}w_m(x)^q
+\;=\;\frac{E_q}{q-1}
+\;=\;\frac{q\log 2-\log\rho(A_q^{\mathrm{ten}})}{q-1}\; }.
+\]
+\end{corollary}
+\begin{proof}
+谱闭式由 \(\Pi_q(m)=S_q(m)/2^{mq}\) 与 \(\tau(q)=\log\rho(A_q^{\mathrm{ten}})\) 直接得到，并与 \(h_q=\log(2^q/r_q)\) 的定义一致（定义 \ref{def:pom-moment-pressure}）。
+离散凹性由 \(\tau_q\) 的离散凸性（推论 \ref{cor:pom-integer-pressure-discrete-convexity-strict-bound} 的非严格版本）经恒等变换 \(E_q=q\log2-\tau_q\) 立即推出。证毕。
+\end{proof}
+

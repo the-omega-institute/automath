@@ -1,0 +1,505 @@
+\paragraph{奇异环的解析不变量：常数项提取、端点判别式与逃逸量}
+本段以 \([-2,2]\) 为唯一分歧支集的 Joukowsky 二重覆盖为统一几何对象，将若干在不同接口上反复出现的解析不变量组织为可独立引用的陈述。
+下述公式均为自洽推导结果；其形式化验证不依赖外部分类。
+
+\begin{proposition}[椭圆调和测度平均的尺度不可见性与常数项提取]\label{prop:xi-joukowsky-ellipse-average-constant-term}
+沿用定理 \ref{thm:xi-cayley-joukowsky-harmonic-measure-ellipse} 的记号。
+令 \(L>0\)，并记
+\[
+J_L(e^{\mathrm{i}\theta})=\sqrt{L}\,e^{\mathrm{i}\theta}+\frac{1}{\sqrt{L}}e^{-\mathrm{i}\theta},
+\qquad
+E_L:=J_L(\TT),
+\qquad
+\nu_L=\frac{\dd\theta}{2\pi}\quad(\text{在 }E_L\text{ 的参数化下}).
+\]
+对任意整函数 \(f\) 定义椭圆平均泛函
+\[
+\mathcal{L}_L(f):=\int_{E_L} f(S)\,\dd\nu_L(S)
+=\frac{1}{2\pi}\int_{0}^{2\pi} f\!\left(\sqrt{L}\,e^{\mathrm{i}\theta}+\frac{1}{\sqrt{L}}e^{-\mathrm{i}\theta}\right)\dd\theta.
+\]
+则 \(\mathcal{L}_L(f)\) 与 \(L\) 无关；并且对任意 \(L>0\) 有常数项公式
+\[
+\boxed{\;
+\mathcal{L}_L(f)
+=\bigl[z^0\bigr]\;f(z+z^{-1})
+=\sum_{k\ge 0}\binom{2k}{k}\frac{f^{(2k)}(0)}{(2k)!}\; } ,
+\]
+其中 \(\bigl[z^0\bigr]\) 表示 Laurent 展开中的常数项系数抽取。
+\end{proposition}
+\begin{proof}
+令 \(r=\sqrt{L}\)，\(\zeta=e^{\mathrm{i}\theta}\)。
+由围道积分表示
+\[
+\mathcal{L}_L(f)
+=\frac{1}{2\pi\mathrm{i}}\oint_{|\zeta|=1} f(r\zeta+r^{-1}\zeta^{-1})\,\frac{\dd\zeta}{\zeta}.
+\]
+代换 \(z=r\zeta\) 得
+\[
+\mathcal{L}_L(f)
+=\frac{1}{2\pi\mathrm{i}}\oint_{|z|=r} f(z+z^{-1})\,\frac{\dd z}{z}.
+\]
+由于 \(f\) 为整函数，\(z\mapsto f(z+z^{-1})/z\) 在环域 \(\{r_1<|z|<r_2\}\)（\(0<r_1<r_2\)）内全纯（该域不含 \(0\)）。
+由 Cauchy 定理，不同半径的圆周积分相等，故 \(\mathcal{L}_L(f)\) 与 \(r\)（从而与 \(L\)）无关。
+
+常数项公式由 Laurent 系数抽取给出：对任意 \(r>0\)，
+\(
+\frac{1}{2\pi\mathrm{i}}\oint_{|z|=r} g(z)\,\dd z/z
+=\bigl[z^0\bigr]\,g(z)
+\)。
+取 \(g(z)=f(z+z^{-1})\) 得 \(\mathcal{L}_L(f)=\bigl[z^0\bigr]f(z+z^{-1})\)。
+再将 \(f(w)=\sum_{n\ge 0} a_n w^n\) 代入并展开
+\(
+(z+z^{-1})^{n}
+\)：
+常数项只来自偶次 \(n=2k\) 且系数为 \(\binom{2k}{k}\)，从而
+\[
+\bigl[z^0\bigr]\,f(z+z^{-1})
+=\sum_{k\ge 0}a_{2k}\binom{2k}{k}
+=\sum_{k\ge 0}\binom{2k}{k}\frac{f^{(2k)}(0)}{(2k)!}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[椭圆--线段塌缩的母体恒等式]\label{cor:xi-joukowsky-ellipse-collapse-arcsine-master}
+在命题 \ref{prop:xi-joukowsky-ellipse-average-constant-term} 的设定下，对任意整函数 \(f\) 与任意 \(L>0\) 有严格恒等式
+\[
+\int_{E_L} f(S)\,\dd\nu_L(S)
+=\frac{1}{2\pi}\int_{0}^{2\pi} f(2\cos\theta)\,\dd\theta
+=\int_{-2}^{2} f(x)\,\frac{\dd x}{\pi\sqrt{4-x^2}}.
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:xi-joukowsky-ellipse-average-constant-term}，左端与 \(L\) 无关，取 \(L=1\)。
+此时 \(E_1=[-2,2]\) 且 \(\nu_1\) 为弧正弦测度（定理 \ref{thm:xi-cayley-joukowsky-harmonic-measure-ellipse}），并且 \(J_1(e^{\mathrm{i}\theta})=2\cos\theta\)，故等式成立。证毕。
+\end{proof}
+
+\input{subsubsec__xi-joukowsky-L1-measure-lift-chebyshev-fourier}
+
+允许测试函数在椭圆外域携带极点时，椭圆平均出现由极点模长触发的离散壁穿越结构，并与 Cauchy 跳跃及对数势的 Green 表达形成统一接口。
+\input{subsubsec__xi-singular-ring-ellipse-wallcrossing-cauchy-mahler}
+\input{prop__xi-singular-ring-ellipse-wallcrossing-atomic-measure}
+\input{subsubsec__xi-singular-ring-cayley-phase-lissajous-endpoint-toeplitz}
+
+\begin{proposition}[Chebyshev--Satake 提升的判别式端点局部化]\label{prop:xi-chebyshev-satake-discriminant-endpoint-localization}
+设 \(K\) 为特征不为 \(2\) 的域，取次数 \(d\ge 1\) 的多项式 \(G(s)\in K[s]\)。
+定义 Chebyshev--Satake 提升
+\[
+F(u):=u^{d}G(u+u^{-1})\in K[u].
+\]
+则判别式满足严格恒等式
+\[
+\boxed{\;
+\Disc_u(F)=\Disc_s(G)^2\cdot G(2)\cdot G(-2)\quad\in K.\;}
+\]
+因此在平方类群 \(K^\times/(K^\times)^2\) 中有
+\[
+[\Disc_u(F)]=[G(2)G(-2)].
+\]
+\end{proposition}
+\begin{proof}
+在代数闭包中写 \(G(s)=a_d\prod_{j=1}^{d}(s-s_j)\)。
+则
+\[
+F(u)=u^{d}a_d\prod_{j=1}^{d}(u+u^{-1}-s_j)
+=a_d\prod_{j=1}^{d}(u^2-s_j u+1)
+  =:a_d\prod_{j=1}^{d}q_j(u),
+\]
+其中 \(q_j(u)=u^2-s_j u+1\) 为首一二次多项式。
+判别式与结果式满足乘法公式
+\[
+\Disc(PQ)=\Disc(P)\Disc(Q)\Res(P,Q)^2,
+\qquad
+\Disc(cP)=c^{2n-2}\Disc(P)\ (n=\deg P).
+\]
+于是
+\[
+\Disc_u(F)
+=a_d^{4d-2}\Bigl(\prod_{j=1}^{d}\Disc(q_j)\Bigr)\Bigl(\prod_{1\le i<j\le d}\Res(q_i,q_j)^2\Bigr).
+\]
+逐项计算：\(\Disc(q_j)=s_j^2-4\)。
+并且当 \(i\neq j\) 时，若 \(u\) 为 \(q_i\) 的根，则
+\(
+q_j(u)=u^2-s_j u+1=(s_i-s_j)u
+\)，
+故
+\[
+\Res(q_i,q_j)=\prod_{q_i(u)=0}q_j(u)=(s_i-s_j)^2\prod_{q_i(u)=0}u=(s_i-s_j)^2,
+\]
+其中用到 \(q_i\) 两根乘积为 \(1\)。
+因此
+\[
+\Disc_u(F)=a_d^{4d-2}\Bigl(\prod_{j=1}^{d}(s_j^2-4)\Bigr)\Bigl(\prod_{i<j}(s_i-s_j)^4\Bigr).
+\]
+另一方面，
+\[
+\Disc_s(G)^2=a_d^{4d-4}\prod_{i<j}(s_i-s_j)^4,
+\qquad
+G(2)G(-2)=a_d^{2}\prod_{j=1}^{d}(2-s_j)(-2-s_j)=a_d^2\prod_{j=1}^{d}(s_j^2-4).
+\]
+相乘即得所示恒等式。平方类结论随之成立。证毕。
+\end{proof}
+
+\begin{proposition}[Joukowsky 二重覆盖的单值化与反演单值群]\label{prop:xi-joukowsky-double-cover-uniformization}
+令
+\[
+J:\CC^\times\to\CC,\qquad J(z)=z+z^{-1}.
+\]
+则 \(J\) 在 \(\CC^\times\setminus\{\pm 1\}\) 上诱导两层覆盖
+\[
+J:\CC^\times\setminus\{\pm 1\}\longrightarrow \CC\setminus\{\pm 2\},
+\]
+其分歧点为 \(z=\pm 1\)，分歧值为 \(w=\pm 2\)。
+对 \(w\in\CC\setminus[-2,2]\) 取平方根分支 \(\sqrt{w^2-4}\sim w\)（\(w\to\infty\)），则单值化由
+\[
+z=\frac{w\pm\sqrt{w^2-4}}{2}
+\]
+给出；绕割线 \([-2,2]\) 的解析延拓交换两支，从而单值群为 \(\ZZ/2\ZZ\)，其作用对应于 \(z\mapsto z^{-1}\)。
+\end{proposition}
+\begin{proof}
+方程 \(J(z)=w\) 等价于 \(z^2-wz+1=0\)。
+当 \(w\neq\pm 2\) 时判别式非零，故有两互异根，且两根乘积为 \(1\)。
+当 \(w=\pm2\) 时两根并合为 \(z=\pm1\)，故为分歧点。
+在 \(\CC\setminus[-2,2]\) 上选取 \(\sqrt{w^2-4}\) 的解析分支并显式解出 \(z\) 得单值化公式；绕割线延拓使平方根变号，从而交换两支，即对应 \(z\mapsto z^{-1}\)。证毕。
+\end{proof}
+
+\begin{proposition}[奇异环的 Green 距离与弧正弦势的闭式]\label{prop:xi-singular-ring-green-potential-closed}
+令 \(\nu_1\) 为 \([-2,2]\) 上的弧正弦测度（定理 \ref{thm:xi-cayley-joukowsky-harmonic-measure-ellipse}）：
+\[
+\dd\nu_1(t)=\frac{\dd t}{\pi\sqrt{4-t^2}}.
+\]
+对 \(w\in\CC\setminus[-2,2]\) 取平方根分支 \(\sqrt{w^2-4}\sim w\)（\(w\to\infty\)），并定义
+\[
+\Phi(w):=\frac{w+\sqrt{w^2-4}}{2}.
+\]
+则函数
+\[
+g(w):=\log|\Phi(w)|
+\]
+满足精确势表示
+\[
+\boxed{\;
+g(w)=\int_{-2}^{2}\log|w-t|\,\dd\nu_1(t)\; } .
+\]
+从而 \(g\) 为 \(\CC\setminus[-2,2]\) 上以 \([-2,2]\) 为零边界值、极点在无穷远处的 Green 函数（规范到 \(g(w)=\log|w|+o(1)\)）。
+\end{proposition}
+\begin{proof}
+定义复对数势
+\(
+U(w):=\int_{-2}^{2}\log(w-t)\,\dd\nu_1(t)
+\)，其中对 \(w\notin[-2,2]\) 取一致的对数分支。
+对 \(w\in\CC\setminus[-2,2]\) 可在积分号下求导得到
+\[
+U'(w)=\int_{-2}^{2}\frac{1}{w-t}\,\dd\nu_1(t).
+\]
+弧正弦测度的 Cauchy 变换满足
+\(
+\int_{-2}^{2}\frac{1}{w-t}\,\dd\nu_1(t)=1/\sqrt{w^2-4}
+\)
+（这是 \([-2,2]\) 为分歧支集的平方根刚性；亦可由 \(t=2\cos\theta\) 直接计算）。
+另一方面，直接微分得
+\[
+\frac{\dd}{\dd w}\log\Phi(w)=\frac{1}{\sqrt{w^2-4}}.
+\]
+故 \(U'(w)=(\log\Phi(w))'\)，从而 \(U(w)-\log\Phi(w)\) 在 \(\CC\setminus[-2,2]\) 上为常数。
+当 \(w\to\infty\) 时 \(\Phi(w)\sim w\)，且 \(U(w)=\log w+o(1)\)（因 \(\nu_1\) 为概率测度），故该常数为 \(0\)，即 \(U(w)=\log\Phi(w)\)。
+取实部得到所示公式。证毕。
+\end{proof}
+
+\begin{proposition}[自互反多项式的逃逸量与 Jensen 平均的等式刻画]\label{prop:xi-selfreciprocal-escape-jensen}
+设 \(P(z)=a_n\prod_{j=1}^{n}(z-z_j)\in\CC[z]\) 次数 \(n\ge 1\)，并满足自互反性：存在 \(\vartheta\in\RR\) 使
+\[
+P(z)=e^{\mathrm{i}\vartheta}z^{n}\overline{P(1/\overline z)}.
+\]
+定义逃逸量
+\[
+\mathcal{E}(P):=\sum_{j=1}^{n}\log\max\{|z_j|,|z_j|^{-1}\}\ \ (\ge 0).
+\]
+则成立严格恒等式
+\[
+\boxed{\;
+\mathcal{E}(P)
+=2\left(\frac{1}{2\pi}\int_{0}^{2\pi}\log|P(e^{\mathrm{i}t})|\,\dd t-\log|a_n|\right). \;}
+\]
+特别地，\(\mathcal{E}(P)=0\) 当且仅当 \(P\) 的全部零点位于单位圆 \(|z|=1\)。
+\end{proposition}
+\begin{proof}
+由 Jensen 公式，
+\[
+\frac{1}{2\pi}\int_{0}^{2\pi}\log|P(e^{\mathrm{i}t})|\,\dd t
+=\log|a_n|+\sum_{|z_j|>1}\log|z_j|.
+\]
+自互反性蕴含零点集合在 \(z\mapsto 1/\overline z\) 下封闭：每个 \(|z_j|>1\) 的零点与一个 \(|z|<1\) 的零点配对，并且
+\(
+\log\max\{|z|,|z|^{-1}\}
+=\log|z|
+\)
+对 \(|z|>1\) 成立。
+因此
+\[
+\sum_{|z_j|>1}\log|z_j|=\frac12\sum_{j=1}^{n}\log\max\{|z_j|,|z_j|^{-1}\}=\frac12\,\mathcal{E}(P).
+\]
+代回得到恒等式。
+最后一条由各项非负且仅在 \(|z_j|=1\) 时取零得到。证毕。
+\end{proof}
+
+\begin{theorem}[自互反逃逸量的奇异环结式势表示]\label{thm:xi-selfreciprocal-escape-singular-ring-resultant}
+设 \(P(z)=a_n\prod_{j=1}^{n}(z-z_j)\in\CC[z]\) 次数 \(n\ge 1\)，并满足 \(a_0a_n\neq 0\) 以及自互反性（命题 \ref{prop:xi-selfreciprocal-escape-jensen}）。
+定义奇异环结式传输多项式
+\[
+Q_P(w):=\operatorname{Res}_{z}\!\bigl(P(z),\,z^2-wz+1\bigr)\in\CC[w].
+\]
+对 \(w\in\CC\setminus[-2,2]\) 取分支 \(\sqrt{w^2-4}\sim w\)（\(w\to\infty\)），令
+\[
+\Phi(w):=\frac{w+\sqrt{w^2-4}}{2},
+\qquad
+g(w):=\log|\Phi(w)|
+\]
+并将 \(g\) 连续延拓到 \([-2,2]\) 使 \(g|_{[-2,2]}=0\)。
+则成立以下恒等式：
+\begin{enumerate}
+  \item 结式根像分解（按重数计）：
+  \[
+  Q_P(w)=a_0a_n\prod_{j=1}^{n}\Bigl(w-\bigl(z_j+z_j^{-1}\bigr)\Bigr).
+  \]
+  \item 逃逸量的奇异环 Green 表示：
+  \[
+  \mathcal{E}(P)=\sum_{Q_P(\omega)=0} m(\omega)\,g(\omega),
+  \]
+  其中对 \(Q_P\) 的零点 \(\omega\) 按重数 \(m(\omega)\) 求和。
+  \item 逃逸量的弧正弦对数势平均：
+  \[
+  \mathcal{E}(P)=\int_{-2}^{2}\log|Q_P(t)|\,\dd\nu_1(t)-\log|a_0a_n|,
+  \]
+  其中 \(\nu_1\) 为命题 \ref{prop:xi-singular-ring-green-potential-closed} 的弧正弦测度。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+结式根表示给出
+\[
+Q_P(w)=a_n^2\prod_{j=1}^{n}(z_j^2-wz_j+1).
+\]
+并且
+\(
+z_j^2-wz_j+1=-z_j\bigl(w-(z_j+z_j^{-1})\bigr)
+\)，故
+\[
+Q_P(w)=a_n^2(-1)^n\Bigl(\prod_{j=1}^{n}z_j\Bigr)\prod_{j=1}^{n}\Bigl(w-(z_j+z_j^{-1})\Bigr).
+\]
+由 \(\prod_j z_j=(-1)^n a_0/a_n\) 得到 (1)。
+\par
+令 \(w=z+z^{-1}\)（\(z\in\CC^\times\)）。则 \(w^2-4=(z-z^{-1})^2\)。当 \(|z|>1\) 时外域分支给出 \(\sqrt{w^2-4}=z-z^{-1}\)，从而 \(\Phi(w)=z\) 且 \(g(w)=\log|z|\)；当 \(|z|<1\) 时 \(\sqrt{w^2-4}=z^{-1}-z\)，从而 \(\Phi(w)=z^{-1}\) 且 \(g(w)=\log|z|^{-1}\)。因此
+\[
+g(z+z^{-1})=\log\max\{|z|,|z|^{-1}\}.
+\]
+由 (1) 可知 \(Q_P\) 的零点（按重数）为 \(\omega_j=z_j+z_j^{-1}\)，从而
+\[
+\sum_{Q_P(\omega)=0}m(\omega)\,g(\omega)=\sum_{j=1}^{n}g(z_j+z_j^{-1})=\mathcal{E}(P),
+\]
+得到 (2)。
+\par
+由命题 \ref{prop:xi-singular-ring-green-potential-closed}，对任意 \(\omega\in\CC\) 有
+\(
+g(\omega)=\int_{-2}^{2}\log|\omega-t|\,\dd\nu_1(t)
+\)（在 \(\omega\in[-2,2]\) 处以连续延拓理解）。
+将其代入 (2) 并交换求和与积分，得到
+\[
+\mathcal{E}(P)=\int_{-2}^{2}\sum_{Q_P(\omega)=0}m(\omega)\log|\omega-t|\,\dd\nu_1(t).
+\]
+由 (1) 有
+\(
+\sum_{\omega}m(\omega)\log|\omega-t|=\log\bigl|Q_P(t)/(a_0a_n)\bigr|
+\)，再用 \(\nu_1\) 为概率测度即得 (3)。证毕。
+\end{proof}
+
+\begin{corollary}[单位圆根判据的奇异环迹化]\label{cor:xi-unit-circle-criterion-singular-ring-resultant}
+在定理 \ref{thm:xi-selfreciprocal-escape-singular-ring-resultant} 的记号下，以下三条命题等价：
+\begin{enumerate}
+  \item \(P\) 的全部零点满足 \(|z_j|=1\)；
+  \item \(Q_P\) 的全部零点落在闭区间 \([-2,2]\)；
+  \item \(\mathcal{E}(P)=0\)。
+\end{enumerate}
+并且若任一条件不成立，则严格有 \(\mathcal{E}(P)>0\)。
+\end{corollary}
+\begin{proof}
+若 \(|z_j|=1\)，则 \(z_j+z_j^{-1}=2\Re(z_j)\in[-2,2]\)，由定理 \ref{thm:xi-selfreciprocal-escape-singular-ring-resultant}(1) 得 \(Q_P\) 的根均落在 \([-2,2]\)。
+反之，若 \(\omega\in[-2,2]\)，则方程 \(z^2-\omega z+1=0\) 的两根乘积为 \(1\) 且互为共轭，从而均在单位圆上；由 (1) 的根像关系，\(P\) 的零点必在单位圆上。
+最后由定理 \ref{thm:xi-selfreciprocal-escape-singular-ring-resultant}(2) 与 \(g\ge 0\)、\(g|_{[-2,2]}=0\) 得 (2)\(\Leftrightarrow\)(3) 及严格性。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$L$}{L}-对偶自反多项式的奇异环结式平方结构]\label{thm:xi-L-selfreciprocal-resultant-square-structure}
+固定 \(L>0\)。设 \(q(z)=a_{2n}\prod_{k=1}^{2n}(z-z_k)\in\CC[z]\) 且 \(a_0a_{2n}\neq 0\)。
+定义对偶对合
+\[
+z^\square:=\frac{1}{Lz},
+\]
+以及迹坐标
+\[
+S_L(z):=\sqrt{L}\,z+\frac{1}{\sqrt{L}\,z}.
+\]
+再定义奇异环结式
+\[
+R_q(S):=\operatorname{Res}_{z}\!\bigl(q(z),\,Lz^2-\sqrt{L}\,Sz+1\bigr)\in\CC[S].
+\]
+则：
+\begin{enumerate}
+  \item 若 \(q\) 为 \(L\)-自反，即存在常数 \(c\neq 0\) 使
+  \[
+  q(z)=c\,z^{2n}q(z^\square),
+  \]
+  则存在首一多项式 \(P_q(S)\in\CC[S]\)（\(\deg P_q=n\)）使得
+  \[
+  R_q(S)=a_{2n}a_0\,L^{n}\,P_q(S)^2.
+  \]
+  \item 若进一步假设 \(q\) 平方自由且 \(q(\pm L^{-1/2})\neq 0\)，则反向亦成立：
+  \[
+  R_q(S)\ \text{在}\ \CC[S]\ \text{中为完全平方}
+  \quad\Longleftrightarrow\quad
+  q\ \text{为}\ L\text{-自反}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由结式根表示，
+\[
+R_q(S)=a_{2n}^2\prod_{k=1}^{2n}\bigl(Lz_k^2-\sqrt{L}\,Sz_k+1\bigr).
+\]
+并且
+\(
+Lz^2-\sqrt{L}\,Sz+1=-\sqrt{L}\,z\,(S-S_L(z))
+\)，故
+\[
+R_q(S)
+=a_{2n}^2(\sqrt{L})^{2n}\Bigl(\prod_{k=1}^{2n}z_k\Bigr)\prod_{k=1}^{2n}\bigl(S-S_L(z_k)\bigr)
+=a_{2n}a_0\,L^n\prod_{k=1}^{2n}\bigl(S-S_L(z_k)\bigr),
+\]
+其中用到 \(\prod_k z_k=a_0/a_{2n}\)。
+若 \(q\) 为 \(L\)-自反，则根多重集在 \(z\mapsto z^\square\) 下不变，而 \(S_L(z^\square)=S_L(z)\)，从而每个 \(S\)-像点的总重数为偶数，故乘积为某首一多项式平方 \(P_q(S)^2\)，得到 (1)。
+\par
+对 (2)，在平方自由且无固定点根（\(z\neq z^\square\)）的假设下，方程 \(S_L(u)=S_L(z)\) 的两解恰为 \(\{z,z^\square\}\)。
+因此 \(\prod_k(S-S_L(z_k))\) 的每个根为偶重当且仅当根集合按 \(z\leftrightarrow z^\square\) 成对出现；平方自由性把“偶重”提升为“成对且各一次”，从而等价于 \(q\) 的根多重集在对合下不变，即 \(q\) 为 \(L\)-自反。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$L$}{L}-逃逸量的奇异环 Green 平均]\label{cor:xi-L-escape-green-energy-singular-ring}
+在定理 \ref{thm:xi-L-selfreciprocal-resultant-square-structure} 的设定下，若 \(q\) 为 \(L\)-自反并令 \(P_q\) 为其中的首一平方根，则定义视界 \(|z|=L^{-1/2}\) 的逃逸量
+\[
+\mathcal{E}_L(q):=\sum_{q(z_k)=0}\log\max\{|\sqrt{L}\,z_k|,|\sqrt{L}\,z_k|^{-1}\}.
+\]
+则有恒等式
+\[
+\mathcal{E}_L(q)=2\sum_{P_q(\sigma)=0}m(\sigma)\,g(\sigma)
+=2\int_{-2}^{2}\log|P_q(t)|\,\dd\nu_1(t),
+\]
+其中 \(g\) 与 \(\nu_1\) 同命题 \ref{prop:xi-singular-ring-green-potential-closed}。
+\end{corollary}
+\begin{proof}
+令 \(y_k:=\sqrt{L}\,z_k\)，则 \(S_L(z_k)=y_k+y_k^{-1}\)，并由定理 \ref{thm:xi-selfreciprocal-escape-singular-ring-resultant} 的同型计算得
+\(
+g(S_L(z_k))=\log\max\{|y_k|,|y_k|^{-1}\}
+\)。
+因此 \(\mathcal{E}_L(q)=\sum_k g(S_L(z_k))\)。
+又由 \(L\)-自反性，\(z_k\leftrightarrow z_k^\square\) 成对出现且 \(S_L(z_k^\square)=S_L(z_k)\)，从而该和等于在 \(P_q\) 的根上按重数求和并乘 \(2\)，得到第一式。
+第二式由命题 \ref{prop:xi-singular-ring-green-potential-closed} 的势表示与交换求和/积分得到。证毕。
+\end{proof}
+
+\begin{proposition}[有限 Euler 层的局部--整体奇异环缺陷恒等式]\label{prop:xi-finite-euler-layer-local-global-singular-ring}
+设 \(\mathcal{V}\) 为有限指标集。对每个 \(v\in\mathcal{V}\) 给定复数 \(\alpha_{v,1},\dots,\alpha_{v,r_v}\in\CC^\times\)，并约定同时包含其倒数。
+定义局部逃逸缺陷
+\[
+\delta_v:=\sum_{i=1}^{r_v}\log\max\{|\alpha_{v,i}|,|\alpha_{v,i}|^{-1}\},
+\]
+并令迹根
+\[
+t_{v,i}:=\alpha_{v,i}+\alpha_{v,i}^{-1},
+\qquad
+H_{\mathcal{V}}(S):=\prod_{v\in\mathcal{V}}\ \prod_{i=1}^{r_v}(S-t_{v,i})\in\CC[S].
+\]
+则成立严格恒等式
+\[
+\sum_{v\in\mathcal{V}}\delta_v=\int_{-2}^{2}\log|H_{\mathcal{V}}(t)|\,\dd\nu_1(t).
+\]
+\end{proposition}
+\begin{proof}
+由 \(g(\alpha+\alpha^{-1})=\log\max\{|\alpha|,|\alpha|^{-1}\}\)（定理 \ref{thm:xi-selfreciprocal-escape-singular-ring-resultant} 的同型计算）得
+\(
+\delta_v=\sum_{i=1}^{r_v} g(t_{v,i})
+\)。
+再由命题 \ref{prop:xi-singular-ring-green-potential-closed} 的势表示并交换求和与积分，
+\[
+\sum_{v\in\mathcal{V}}\delta_v
+=\int_{-2}^{2}\log\Bigl|\prod_{v,i}(t-t_{v,i})\Bigr|\,\dd\nu_1(t)
+=\int_{-2}^{2}\log|H_{\mathcal{V}}(t)|\,\dd\nu_1(t).
+\]
+证毕。
+\end{proof}
+
+\input{subsubsec__xi-finite-euler-polynomial-escape-additivity}
+
+\begin{proposition}[秩一 Satake 非酉度的迹闭式：Cartan 长度与奇异环 Green 值]\label{prop:xi-rankone-satake-cartan-green-trace}
+设 \(\gamma\in\mathrm{SL}_2(\CC)\) 为半单元，其特征值为 \(\lambda,\lambda^{-1}\)。
+定义 Cartan 长度
+\[
+\ell(\gamma):=2\log\max\{|\lambda|,|\lambda|^{-1}\},
+\]
+并令 \(t:=\mathrm{tr}(\gamma)=\lambda+\lambda^{-1}\)。
+则在外域分支 \(\sqrt{t^2-4}\sim t\)（\(t\to\infty\)）下有
+\[
+\frac{\ell(\gamma)}{2}=g(t)=\log\left|\frac{t+\sqrt{t^2-4}}{2}\right|.
+\]
+并且 \(\ell(\gamma)=0\) 当且仅当 \(t\in[-2,2]\)。
+\end{proposition}
+\begin{proof}
+由 \(\lambda+\lambda^{-1}=t\) 得 \(\lambda\) 满足 \(\lambda^2-t\lambda+1=0\)，故
+\(
+\lambda=\frac{t\pm\sqrt{t^2-4}}{2}
+\)。
+外域分支对应的 \(\Phi(t)=\frac{t+\sqrt{t^2-4}}{2}\) 满足 \(|\Phi(t)|=\max\{|\lambda|,|\lambda|^{-1}\}\)，从而
+\(
+\log|\Phi(t)|=\ell(\gamma)/2
+\)。
+当且仅当 \(|\lambda|=1\) 时该值为 \(0\)，而此时 \(t=\lambda+\lambda^{-1}=2\Re(\lambda)\in[-2,2]\)。
+反向亦然。证毕。
+\end{proof}
+
+\begin{conjecture}[奇异环缺陷的局部--全局同一性：tempered 与临界线的统一逃逸判据]\label{conj:xi-singular-ring-langlands-rh-defect-identity}
+设 \(\pi\) 为自对偶自守表示，其局部（归一化）Satake 参数为 \(\{\alpha_{v,i}\}_{i=1}^{n}\subset\CC^\times\)，满足对偶配对 \(\alpha\leftrightarrow\alpha^{-1}\)。
+定义局部逃逸缺陷
+\[
+\delta_v(\pi):=\sum_{i=1}^{n}\log\max\{|\alpha_{v,i}|,|\alpha_{v,i}|^{-1}\}\ \ (\ge 0).
+\]
+对每个非分歧 \(v\) 令迹根 \(t_{v,i}:=\alpha_{v,i}+\alpha_{v,i}^{-1}\)。
+形式上记
+\[
+H_\pi(S)\stackrel{\mathrm{formal}}{=}\prod_v\ \prod_i (S-t_{v,i}).
+\]
+预期存在一种由显式公式/迹公式诱导的规范正则化，使该形式乘积提升为 \(\CC\setminus[-2,2]\) 上的全纯外函数（或等价的外因子）并满足如下同一性：
+\[
+\boxed{\ \mathcal{D}(\pi)=\int_{-2}^{2}\log|H_\pi(t)|\,\dd\nu_1(t)\ =\ \sum_v\delta_v(\pi)\ }.
+\]
+其中对任意有限截断层 \(\mathcal{V}\subset\{v\}\) 上的退化形式由命题 \ref{prop:xi-finite-euler-layer-local-global-singular-ring} 无条件给出。
+并且在该正规化口径下，\(\mathcal{D}(\pi)=0\) 同时等价于处处 tempered（所有 \(|\alpha_{v,i}|=1\)）与全局零点无离线逃逸（广义黎曼猜想意义下的临界线纯度）。
+\end{conjecture}
+
+\input{subsubsec__xi-singular-ring-defect-measure-upgrade}
+
+\begin{remark}[算术奇异环塔与局部--全局拼接的紧群载体]\label{rem:xi-arithmetic-singular-ring-tower}
+在相位协议层面，有限素数集 \(S\) 的“可逆性纪律”不仅给出终对象 \(\Sigma_S=\widehat{\ZZ[S^{-1}]}\) 及其到 \(\TT\) 的标准满射 \(\pi_S\)，还自然诱导出一个多素相位粘合对象 \(\mathfrak{R}_S=\Sigma_S\times_{\TT}\TT^{S}\)。
+当 \(S\subset S'\) 时，局部化嵌入 \(\ZZ[S^{-1}]\hookrightarrow \ZZ[{S'}^{-1}]\) 的对偶满射 \(\Sigma_{S'}\twoheadrightarrow \Sigma_S\) 与遗忘投影 \(\TT^{S'}\twoheadrightarrow \TT^{S}\) 共同诱导出 \(\mathfrak{R}_{S'}\twoheadrightarrow \mathfrak{R}_{S}\)，从而得到逆系统与其逆极限
+\[
+\mathfrak{R}_\infty:=\varprojlim_{S}\mathfrak{R}_S.
+\]
+此外，对每个素数 \(p\) 可在各层定义交换自同态 \([p]\)（对 \(\Sigma_S\) 与 \(\TT^{S}\) 分别取 \(p\)-次幂自同态，并利用纤维积兼容性），并在极限上得到一族可交换的自同态族。
+在此意义下，\(\mathfrak{R}_\infty\) 提供了一个与实现无关的紧群载体，用以把“局部可逆素方向”与“全局相位拼接”统一封装为单一对象。
+\end{remark}
+
+\begin{conjecture}[算术奇异环塔的转移算子与谱纯性判据]\label{conj:xi-arithmetic-singular-ring-transfer-operator}
+令 \(\mathfrak{R}_\infty\) 如注 \ref{rem:xi-arithmetic-singular-ring-tower}，并令 \([p]\) 表示其上由素数 \(p\) 诱导的交换自同态。
+预期存在一族自然定义的可迹类转移算子 \(\mathcal{L}_s\) 作用于 \(L^2(\mathfrak{R}_\infty)\)，使得其正规化 Fredholm 行列式在半平面 \(\Re(s)>1\) 上满足
+\[
+\det(1-\mathcal{L}_s)=\frac{\zeta(s-1)}{\zeta(s)}\cdot G(s),
+\]
+其中 \(G(s)\) 为显式的完备化因子，且其零极结构可由协议端点的正规化项完全控制。
+并且，Riemann 假设可被表述为临界线上算子族 \(\mathcal{L}_{1/2+\mathrm{i}t}\) 的一种谱纯性：例如其谱测度在单位圆上的绝对连续性、或等价的内因子平凡性（从而排除非平凡纯点/奇异连续谱分量在临界线束上的残留）。
+\end{conjecture}
+
+\endinput
+

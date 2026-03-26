@@ -1,0 +1,551 @@
+\paragraph{二级退化五次的最大对称性、子结式闭式与特征坍缩门槛}
+沿用结论 \ref{con:xi-terminal-zm-leyang-delta-quartic-discriminant-reflexive} 的四次 \(\delta\)-生成多项式
+\[
+F_\delta(T;y):=T^{4}+(8y-3)T^{3}+(2y^{2}-34y-4)T^{2}-y(y-1)\,P_{\mathrm{LY}}(y)\in\ZZ[y][T],
+\qquad
+P_{\mathrm{LY}}(y)=256y^{3}+411y^{2}+165y+32,
+\]
+及其判别式分解
+\[
+\mathrm{Disc}_{T}\bigl(F_\delta(T;y)\bigr)=-y(y-1)\,P_{\mathrm{LY}}(y)\cdot Q_{5}(y)^{2},
+\]
+其中
+\[
+Q_{5}(y)=4096y^{5}+5376y^{4}-464y^{3}-2749y^{2}-723y+80\in\ZZ[y].
+\]
+
+\begin{theorem}[二级退化五次的全对称伽罗瓦群]\label{thm:xi-q5-galois-s5}
+多项式 \(Q_5(y)\) 在 \(\QQ\) 上不可约，且其分裂域 \(L_5/\QQ\) 的伽罗瓦群满足
+\[
+\operatorname{Gal}(L_5/\QQ)\cong S_5.
+\]
+\end{theorem}
+\begin{proof}
+不可约性可由一次良性模素约化读出：在 \(\FF_7[y]\) 上，\(Q_5\bmod 7\) 仍为次数 \(5\) 的不可约多项式，
+故 \(Q_5\) 在 \(\QQ[y]\) 不可约。
+
+由结论 \ref{con:xi-terminal-zm-leyang-q5-discriminant-727}，
+\[
+\mathrm{Disc}(Q_5)=-2^{28}\cdot 3^{9}\cdot 11^{2}\cdot 31^{3}\cdot 727,
+\]
+从而 \(7\nmid \mathrm{Disc}(Q_5)\)，素数 \(7\) 在分裂域中不分歧。
+由于 \(Q_5\bmod 7\) 为不可约 \(5\) 次因子，Dedekind 分解型与 Frobenius 循环型对应给出
+\(\operatorname{Gal}(L_5/\QQ)\) 含一个 \(5\)-循环。
+
+另一方面，\(\nu_{727}(\mathrm{Disc}(Q_5))=1\)。
+并且在 \(\FF_{727}[y]\) 上出现唯一二重根型分解：
+存在 \(a\neq b\in\FF_{727}\) 与不可约二次因子 \(h_2\in\FF_{727}[y]\) 使
+\[
+Q_5(y)\equiv (y-a)^2(y-b)\,h_2(y)\quad(\bmod 727).
+\]
+因此 \(727\) 处的惯性群包含一个换位。
+在 \(S_5\) 中，一个 \(5\)-循环与一个换位生成 \(S_5\)，故伽罗瓦群为 \(S_5\)。
+可复现核验脚本：\texttt{scripts/exp\_xi\_leyang\_q5\_a7\_subresultant\_galois\_audit.py}。证毕。
+\end{proof}
+
+\begin{corollary}[二级退化参数的不可根式性]\label{cor:xi-q5-unsolvable-by-radicals}
+若 \(\alpha\) 为 \(Q_5\) 的任一根，则 \(\QQ(\alpha)/\QQ\) 不为可解扩张，因而 \(\alpha\) 不可由有理数经有限次四则运算与开方表示。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-q5-galois-s5}，分裂域伽罗瓦群为不可解群 \(S_5\)，与根式可解性判别矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[一阶子结式闭式与唯一二重根刚性]\label{thm:xi-fdelta-subresultant-unique-double-root}
+令 \(f(T):=F_\delta(T;y)\)、\(g(T):=\partial_TF_\delta(T;y)\)。
+则二者关于 \(T\) 的第一子结式满足严格闭式
+\[
+\mathrm{SRes}_1(f,g)(T)
+=
+-4A_7(y)\,T
+-y(y-1)(8y-3)(16y+11)(32y+19)\,P_{\mathrm{LY}}(y),
+\]
+其中
+\[
+A_7(y):=45056 y^7 + 60160 y^6 - 11984 y^5 - 19765 y^4 + 18906 y^3 + 14723 y^2 + 2216 y + 200.
+\]
+并且在特征 \(0\) 上成立：
+\begin{enumerate}
+  \item 若 \(y_0\in\overline{\QQ}\) 使 \(\mathrm{Disc}_T(F_\delta(\cdot;y_0))=0\)，则 \(F_\delta(T;y_0)\) 恰有且仅有一个二重根，其余两根为单根；
+  \item 该唯一二重根 \(\delta_\ast(y_0)\) 满足（当 \(A_7(y_0)\neq 0\) 时）
+  \[
+  \delta_\ast(y)
+  =
+  -\frac{y(y-1)(8y-3)(16y+11)(32y+19)\,P_{\mathrm{LY}}(y)}{4A_7(y)},
+  \]
+  且当 \(y\in\{0,1\}\cup\{P_{\mathrm{LY}}(y)=0\}\) 时 \(\delta_\ast(y)=0\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+子结式理论给出：当 \(\gcd(f,g)\) 在 \(\overline{\QQ}(y)[T]\) 中次数为 \(1\) 时，
+\(\mathrm{SRes}_1(f,g)\) 与该一次 \(\gcd\) 在 \(\overline{\QQ}(y)^\times\) 意义下成比例；
+因此其唯一零点即为二重根。
+所示闭式为直接子结式计算的恒等式。
+
+若存在 \(y_0\) 使 \(F_\delta(\cdot;y_0)\) 发生更高碰撞（出现三重根或两处不同二重根），则 \(\gcd(f,g)\) 的次数至少为 \(2\)，
+从而 \(\mathrm{SRes}_1(f,g)\) 作为 \(T\)-一次多项式必须恒等为零，等价于
+\[
+A_7(y_0)=0,
+\qquad
+y_0(y_0-1)(8y_0-3)(16y_0+11)(32y_0+19)P_{\mathrm{LY}}(y_0)=0.
+\]
+但在 \(\ZZ[y]\) 中有
+\[
+\gcd\!\bigl(A_7,\ y(y-1)P_{\mathrm{LY}}\bigr)=1,
+\qquad
+\gcd(A_7,Q_5)=1,
+\]
+故上述同时为零不可能发生。
+于是在判别式为零处 \(\gcd(f,g)\) 只能为一次，得到“唯一二重根”结论。
+解一次方程给出 \(\delta_\ast\) 的闭式；当 \(y\in\{0,1\}\cup\{P_{\mathrm{LY}}=0\}\) 时分子为零，故 \(\delta_\ast=0\)。
+可复现核验脚本：\texttt{scripts/exp\_xi\_leyang\_q5\_a7\_subresultant\_galois\_audit.py}。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$P_{\mathrm{LY}}$}{PLY} 与 \texorpdfstring{$Q_5$}{Q5} 的干涉素数刻画]\label{thm:xi-ply-q5-resultant-interference-primes}
+记 \(\mathrm{PLY}(y):=P_{\mathrm{LY}}(y)\)。
+则关于 \(y\) 的 Sylvester 结果式满足
+\[
+\operatorname{Res}_{y}\!\bigl(\mathrm{PLY}(y),Q_{5}(y)\bigr)
+=2^{20}\cdot 3^{12}\cdot 31^{4}\cdot 73.
+\]
+因此对任意素数 \(p\nmid 2\cdot 3\cdot 31\cdot 73\)，有
+\[
+\gcd\!\bigl(\overline{\mathrm{PLY}},\overline{Q_{5}}\bigr)=1
+\quad\text{于}\quad \FF_p[y],
+\]
+从而零点方案 \(V(\overline{\mathrm{PLY}})\) 与 \(V(\overline{Q_5})\) 在 \(\PP^1_{\FF_p}\) 上不相交。
+\end{theorem}
+\begin{proof}
+由结果式判别准则，
+\(
+\gcd(\overline{\mathrm{PLY}},\overline{Q_5})\neq 1
+\)
+当且仅当
+\(
+p\mid \operatorname{Res}_{y}(\mathrm{PLY},Q_5)
+\)。
+直接计算 Sylvester 行列式并分解即得所示恒等式。
+可复现核验脚本：\texttt{scripts/exp\_xi\_leyang\_ply\_q5\_a7\_interference\_geometry\_audit.py}。证毕。
+\end{proof}
+
+\begin{corollary}[奇素数上的公共根：仅 \texorpdfstring{$31$}{31} 与 \texorpdfstring{$73$}{73} 非平凡]\label{cor:xi-ply-q5-common-roots-prime31-73}
+令 \(p\ge 5\) 为素数。
+则存在 \(\bar y\in\FF_p\) 使
+\[
+\mathrm{PLY}(\bar y)\equiv Q_5(\bar y)\equiv 0\pmod p
+\]
+当且仅当 \(p\in\{31,73\}\)。
+并且：
+\begin{enumerate}
+  \item 若 \(p=73\)，唯一公共根为 \(\bar y\equiv -10\pmod{73}\)，且在两者中均为一次根；
+  \item 若 \(p=31\)，唯一公共根为 \(\bar y\equiv 12\pmod{31}\)，且在两者中均为二次根。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-ply-q5-resultant-interference-primes}，对 \(p\ge 5\) 的公共根只可能出现在 \(p=31,73\)。
+直接在有限域中分解可得：
+\[
+\overline{\mathrm{PLY}}=(y+10)(y+13)(y-4),\quad
+\overline{Q_5}=(y+10)\cdot(\text{四次因子})\quad(\bmod 73),
+\]
+\[
+\overline{\mathrm{PLY}}=(y-6)(y-12)^2,\quad
+\overline{Q_5}=(y-4)(y-12)^2(y^2+8y-8)\quad(\bmod 31).
+\]
+故结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[二级退化除子与主分支除子的交叉素数全集]\label{thm:xi-dprim-dsec-intersection-primes}
+定义
+\[
+D_{\mathrm{prim}}(y):=y(y-1)\mathrm{PLY}(y),
+\qquad
+D_{\mathrm{sec}}(y):=Q_5(y).
+\]
+则存在 \(\bar y\in\FF_p\) 使
+\[
+D_{\mathrm{prim}}(\bar y)\equiv D_{\mathrm{sec}}(\bar y)\equiv 0\pmod p
+\]
+当且仅当
+\[
+p\in\{2,3,5,13,31,73\}.
+\]
+其中对奇素数 \(p\in\{5,13,31,73\}\) 的交点可取为
+\[
+(p,\bar y)=(5,0),\ (13,1),\ (31,12),\ (73,-10).
+\]
+\end{theorem}
+\begin{proof}
+首先
+\[
+Q_5(0)=80=2^4\cdot 5,\qquad
+Q_5(1)=5616=2^4\cdot 3^3\cdot 13.
+\]
+故由 \(y=0,1\) 两条分支可得素数 \(2,3,5,13\)。
+其次，由推论 \ref{cor:xi-ply-q5-common-roots-prime31-73}，\(\mathrm{PLY}\) 与 \(Q_5\) 的交叉只在 \(31,73\) 出现，对应根分别为 \(12,-10\)。
+合并即得全集。证毕。
+\end{proof}
+
+\begin{theorem}[特征 \texorpdfstring{$73$}{73} 的横截干涉与普通节点]\label{thm:xi-fdelta-char73-transverse-node}
+在 \(\FF_{73}\) 中取 \(\bar y\equiv -10\)，则
+\[
+\overline{F_\delta}(T;\bar y)=T^2(T-5)^2.
+\]
+令 \(\overline{C_\delta}\subset\mathbb A^2_{\FF_{73}}\) 由 \(\overline{F_\delta}(T;y)=0\) 定义，则：
+\begin{enumerate}
+  \item 点 \((T,y)=(5,-10)\) 为普通二重点（\(A_1\)-节点）；
+  \item 点 \((T,y)=(0,-10)\) 为光滑点。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+代入 \(y=-10\) 直接得到分解式。
+在点 \((5,-10)\) 处取局部坐标 \(t:=T-5,\ s:=y+10\)，则
+\[
+\overline{F_\delta}(t+5;s-10)
+=25t^2+6ts-5s^2+\text{(总次数 }\ge 3\text{ 项)}.
+\]
+其二次主部判别式为
+\[
+6^2-4\cdot 25\cdot(-5)\equiv 25\not\equiv 0\pmod{73},
+\]
+故二次主部对应两条不同切线，奇点为普通节点。
+另一方面在 \((0,-10)\) 处，
+\[
+\partial_T\overline{F_\delta}(0,-10)=0,\qquad
+\partial_y\overline{F_\delta}(0,-10)\equiv 47\not\equiv 0\pmod{73},
+\]
+由 Jacobian 判据得该点光滑。证毕。
+\end{proof}
+
+\begin{theorem}[特征 \texorpdfstring{$31$}{31} 的唯一总坍缩纤维与几何 \texorpdfstring{$A_3$}{A3} 触节点]\label{thm:xi-fdelta-char31-total-collapse}
+对奇素数 \(p\neq 2\)，考虑 \(F_\delta(T;y)\) 在 \(\FF_p\) 上的约化。
+则：
+\begin{enumerate}
+  \item 存在 \(y_0\in\FF_p\) 使
+  \[
+  F_\delta(T;y_0)\equiv T^4\quad\text{于}\ \FF_p[T]
+  \]
+  当且仅当 \(p=31\)，且唯一解为 \(y_0\equiv 12\pmod{31}\)；
+  \item 在 \(\overline{C_\delta}:\overline{F_\delta}(T;y)=0\subset\mathbb A^2_{\FF_{31}}\) 上，点 \((T,y)=(0,12)\) 的几何解析类型为 \(A_3\)（触节点）。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一部分与系数消零判别相同：\(F_\delta(T;y_0)\equiv T^4\) 等价于
+\[
+8y_0-3\equiv 0,\qquad
+2y_0^2-34y_0-4\equiv 0,\qquad
+y_0(y_0-1)P_{\mathrm{LY}}(y_0)\equiv 0\ (\bmod p).
+\]
+前两式给出 \(y_0\equiv 3/8\) 且 \(p\in\{17,31\}\)。
+再用
+\[
+P_{\mathrm{LY}}\!\left(\frac{3}{8}\right)=\frac{10571}{64}=\frac{11\cdot 31^2}{2^6}
+\]
+可知仅 \(p=31\) 成立；由 \(8^{-1}\equiv 4\pmod{31}\) 得 \(y_0\equiv 12\)。
+
+第二部分取局部坐标 \(t:=T,\ s:=y-12\)。在 \(\FF_{31}\) 上展开：
+\[
+\overline{F_\delta}(t;12+s)
+=-12s^2+14t^2s+t^4+8t^3s+2t^2s^2+10s^3-15s^4-8s^5.
+\]
+令 \(s_1:=s+2t^2\)（可逆坐标变换），得到
+\[
+\overline{F_\delta}
+=-12s_1^2-13t^4+\text{(加权次数 }\ge 5,\ \text{其中 }w(t)=1,w(s_1)=2\text{)}.
+\]
+故其加权初始主部为非退化型 \(u^2-\lambda v^4\)（\(\lambda\neq 0\)），
+即与标准形 \(u^2=v^4\) 同解析类型，因而为 \(A_3\) 触节点。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$\operatorname{Res}_y(Q_5,A_7)$}{Res\_y(Q5,A7)} 分解与多重碰撞障碍素数]\label{thm:xi-q5-a7-resultant-double-collision-primes}
+关于 \(y\) 的结果式满足
+\[
+\operatorname{Res}_{y}\!\bigl(Q_5(y),A_7(y)\bigr)
+=-2^{47}\cdot 3^{16}\cdot 5\cdot 13\cdot 31^{8}\cdot 73.
+\]
+因此对任意素数 \(p\nmid 2\cdot 3\cdot 5\cdot 13\cdot 31\cdot 73\)，有
+\[
+\gcd(\overline{Q_5},\overline{A_7})=1
+\quad\text{于}\quad \FF_p[y].
+\]
+于是任意 \(\bar y\) 满足 \(\overline{Q_5}(\bar y)=0\) 时必有 \(\overline{A_7}(\bar y)\neq 0\)，
+从而 \(\overline{F_\delta}(T;\bar y)\) 不能出现“两处不同二重根”。
+另一方面：
+\[
+\overline{F_\delta}(T;0)=T^2(T+1)^2\ \text{于}\ \FF_5,\qquad
+\overline{F_\delta}(T;1)=T^2(T-4)^2\ \text{于}\ \FF_{13},
+\]
+\[
+\overline{F_\delta}(T;-10)=T^2(T-5)^2\ \text{于}\ \FF_{73},
+\]
+而在 \(p=31,\ \bar y=12\) 处有
+\[
+\overline{F_\delta}(T;12)=T^4,
+\]
+其几何类型由定理 \ref{thm:xi-fdelta-char31-total-collapse} 给出为 \(A_3\)。
+\end{theorem}
+\begin{proof}
+结果式分解与互素判别由 Sylvester 理论直接给出。
+对 \(p\nmid 2\cdot 3\cdot 5\cdot 13\cdot 31\cdot 73\)，\(\overline{Q_5}\) 与 \(\overline{A_7}\) 互素，
+配合定理 \ref{thm:xi-fdelta-subresultant-unique-double-root} 的一阶子结式公式，
+可知在 \(\overline{Q_5}(\bar y)=0\) 处不存在“二处不同二重根”情形。
+对 \(p=5,13,73,31\) 的显式分解由逐点代入 \(y=0,1,-10,12\) 直接核验。证毕。
+\end{proof}
+
+\begin{theorem}[主分歧三次与二级退化五次的线性互不相交与联合密度]\label{thm:xi-leyang-ply-q5-linearly-disjoint-chebotarev}
+令 \(L_3\) 为 \(P_{\mathrm{LY}}(y)\) 的分裂域，\(L_5\) 为 \(Q_5(y)\) 的分裂域。
+则：
+\begin{enumerate}
+  \item \(L_3\cap L_5=\QQ\)，从而 \(\operatorname{Gal}(L_3L_5/\QQ)\cong S_3\times S_5\)；
+  \item 对一切不分歧素数 \(p\nmid \mathrm{Disc}(P_{\mathrm{LY}})\mathrm{Disc}(Q_5)\)，两者模 \(p\) 的分解型联合分布为直积分布；
+  \item 特别地，
+  \[
+  \delta\bigl(P_{\mathrm{LY}}\ \text{全分裂且}\ Q_5\ \text{全分裂}\bigr)=\frac{1}{6}\cdot\frac{1}{120}=\frac{1}{720},
+  \]
+  \[
+  \delta\bigl(P_{\mathrm{LY}}\ \text{在}\ \FF_p\ \text{上有根且}\ Q_5\ \text{在}\ \FF_p\ \text{上有根}\bigr)
+  =\frac{2}{3}\cdot\frac{19}{30}=\frac{19}{45}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由结论 \ref{con:xi-terminal-37-squarefree-coupling}，
+\[
+\mathrm{Disc}(P_{\mathrm{LY}})=-3^9\cdot 31^2\cdot 37,
+\]
+故 \(L_3\) 的唯一二次子域为 \(\QQ(\sqrt{-111})\)。
+由结论 \ref{con:xi-terminal-zm-leyang-q5-discriminant-727}，
+\[
+\mathrm{Disc}(Q_5)=-2^{28}\cdot 3^{9}\cdot 11^{2}\cdot 31^{3}\cdot 727,
+\]
+故 \(L_5\) 的唯一二次子域为 \(\QQ(\sqrt{-67611})\)。
+两二次子域分歧素集不同，因而不相等；而 \(L_3/\QQ\) 的真非平凡子域仅有该二次子域，故 \(L_3\cap L_5=\QQ\)。
+直积伽罗瓦群同构随之得到。
+
+联合分布与密度由 Chebotarev 定理在直积群上的等分布给出。
+其中 \(P_{\mathrm{LY}}\) 的三类分解型密度由结论 \ref{con:xi-terminal-zm-elliptic-normalization} 给出为
+\((1)(1)(1)\) 密度 \(1/6\)、\((1)(2)\) 密度 \(1/2\)、\((3)\) 密度 \(1/3\)，故“有根”密度为 \(2/3\)。
+对 \(S_5\) 的共轭类计数给出 \(Q_5\) 的分解型密度：全分裂对应恒等类密度 \(1/120\)；
+“无一次因子”等价于无不动点，仅可能为 \(5\)-循环（密度 \(1/5\)）或 \((3)(2)\)（密度 \(1/6\)），故“有一次因子”密度为 \(1-(1/5+1/6)=19/30\)。
+乘积即得所示密度。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part44-delta-b5-disjointness-chebotarev}
+
+\begin{theorem}[\texorpdfstring{$A_7$}{A7} 的满对称伽罗瓦群与极点不可根式性]\label{thm:xi-a7-galois-s7}
+令 \(A_7(y)\) 如定理 \ref{thm:xi-fdelta-subresultant-unique-double-root}。
+则 \(A_7\) 在 \(\QQ\) 上不可约，且其分裂域 \(L_7/\QQ\) 满足
+\[
+\operatorname{Gal}(L_7/\QQ)\cong S_7.
+\]
+因此由 \(\delta_\ast\) 的分母诱导的极点参数集合在算术上达到最大对称性破缺，并不可由根式表示。
+\end{theorem}
+\begin{proof}
+首先，\(A_7\bmod 23\) 在 \(\FF_{23}[y]\) 上不可约（分解型为 \([7]\)），且 \(23\nmid \mathrm{Disc}(A_7)\)，
+故 Frobenius 元给出一个 \(7\)-循环。
+
+其次，判别式素因子分解为
+\[
+\mathrm{Disc}(A_7)=2^{38}\cdot 3^{19}\cdot 31^{7}\cdot 5651\cdot 12045409\cdot 258006961,
+\]
+从而 \(\nu_{5651}(\mathrm{Disc}(A_7))=1\)。
+并且 \(A_7\bmod 5651\) 亦出现唯一二重根型分解：
+存在 \(a\neq b\in\FF_{5651}\) 与不可约三次因子 \(h_3\in\FF_{5651}[y]\) 使
+\[
+A_7(y)\equiv (y-a)^2(y-b)\,h_3(y)\quad(\bmod 5651).
+\]
+故 \(5651\) 处的惯性群包含换位。
+在 \(S_7\) 中，一个 \(7\)-循环与一个换位生成 \(S_7\)，故伽罗瓦群为 \(S_7\)。
+可复现核验脚本：\texttt{scripts/exp\_xi\_leyang\_q5\_a7\_subresultant\_galois\_audit.py}。证毕。
+\end{proof}
+
+\begin{theorem}[次级退化七次层对三/五次层的完全独立性与直积伽罗瓦结构]\label{thm:xi-leyang-a7-disjoint-from-ply-q5}
+令 \(L_3:=\mathrm{Spl}(P_{\mathrm{LY}})\)、\(L_5:=\mathrm{Spl}(Q_5)\)、\(L_7:=\mathrm{Spl}(A_7)\)。
+则
+\[
+L_7\cap (L_3L_5)=\QQ,
+\qquad
+\Gal(L_3L_5L_7/\QQ)\cong \Gal(L_3L_5/\QQ)\times \Gal(L_7/\QQ)\cong (S_3\times S_5)\times S_7.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-leyang-ply-q5-linearly-disjoint-chebotarev} 已知 \(L_3\cap L_5=\QQ\) 且 \(\Gal(L_3L_5/\QQ)\cong S_3\times S_5\)。
+由定理 \ref{thm:xi-a7-galois-s7}，扩张 \(L_7/\QQ\) 为 \(S_7\)-伽罗瓦扩张。
+因此交域 \(L_7\cap (L_3L_5)\) 亦为 \(\QQ\) 上伽罗瓦扩张。
+\par
+由于 \(S_7\) 的非平凡真正规子群仅有 \(A_7\)，\(L_7\) 的非平凡真正规子扩张仅有其二次分辨子域
+\(
+K_7=\QQ(\sqrt{\Disc(A_7)})
+\)。
+由定理 \ref{thm:xi-a7-galois-s7} 的判别式分解，
+\[
+\Disc(A_7)=2^{38}\cdot 3^{19}\cdot 31^{7}\cdot 5651\cdot 12045409\cdot 258006961,
+\]
+故 \(K_7\) 在素数 \(5651,12045409,258006961\) 处必分歧。
+另一方面，合成域 \(L_3L_5\) 的分歧素数集合包含于
+\(\mathrm{Supp}(\Disc(P_{\mathrm{LY}})\Disc(Q_5))\)，
+其素支撑由定理 \ref{thm:xi-leyang-ply-q5-linearly-disjoint-chebotarev} 的判别式数据可见不含上述三素数。
+因此 \(K_7\not\subseteq L_3L_5\)，从而交域只能为 \(\QQ\)。
+直积伽罗瓦群同构随之得到。证毕。
+\end{proof}
+
+\begin{theorem}[节点双根与次级退化双根的同调消元恒等式：六次商多项式]\label{thm:xi-leyang-b6-from-node-vs-double-root}
+令
+\[
+P_4(y):=8192y^4+5888y^3-3680y^2-2848y+152,
+\qquad
+N(y):=y(y-1)(8y-3)(16y+11)(32y+19)\,P_{\mathrm{LY}}(y).
+\]
+则存在唯一六次多项式
+\[
+B_6(y)=360448y^6+267264y^5-221824y^4+18600y^3+149481y^2+25423y+1520\in\ZZ[y]
+\]
+使得在 \(\ZZ[y]\) 中有严格恒等式
+\[
+93\,N(y)+4\,A_7(y)\,P_4(y)=Q_5(y)\,B_6(y).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-fdelta-subresultant-unique-double-root}，在 \(\Disc_T(F_\delta(\cdot;y))=0\) 的情形下，\(F_\delta(T;y)\) 的唯一二重根满足
+\[
+\delta_\ast(y)=-\frac{N(y)}{4A_7(y)}.
+\]
+另一方面，节点消元给出（参见定理 \ref{thm:xi-terminal-zm-delta-node-preimage-elimination-r10} 的证明要点）：
+在结点条件 \(Q_5(y)=0\) 上，节点对应的 \(\delta\)-坐标满足
+\[
+93\,\delta=P_4(y).
+\]
+在 \(Q_5(y)=0\) 的每个根处，判别式退化的双根与节点 \(\delta\)-坐标一致，
+从而 \(\delta_\ast(y)=P_4(y)/93\) 在 \(Q_5(y)=0\) 上成立。
+于是
+\[
+93\,\delta_\ast(y)-P_4(y)\equiv 0\quad(\bmod\ Q_5(y)).
+\]
+代入 \(\delta_\ast(y)=-N(y)/(4A_7(y))\) 并清分母得到
+\[
+93\,N(y)+4A_7(y)P_4(y)\equiv 0\quad(\bmod\ Q_5(y)).
+\]
+因此 \(Q_5\) 在 \(\QQ[y]\) 中整除左端多项式。
+由于 \(Q_5\) 在 \(\ZZ[y]\) 中为本原多项式，Gauss 引理推出商多项式属于 \(\ZZ[y]\)；
+再由次数比较（\(\deg(93N+4A_7P_4)=11\)、\(\deg Q_5=5\)）知商为唯一的六次式。
+对该商作显式多项式除法即得所列 \(B_6\)。可复现核验脚本：\texttt{scripts/exp\_xi\_leyang\_b6\_s6\_discriminant\_audit.py}。证毕。
+\end{proof}
+
+\begin{theorem}[六次商多项式的满对称伽罗瓦群与敏感素数 \(59\)]\label{thm:xi-leyang-b6-galois-s6}
+令 \(L_6:=\mathrm{Spl}(B_6)\)。
+则：
+\begin{enumerate}
+  \item \(B_6\) 在 \(\QQ\) 上不可约；
+  \item \(\Gal(L_6/\QQ)\cong S_6\)；
+  \item 判别式满足
+  \[
+  \Disc(B_6)=2^{41}\cdot 3^{9}\cdot 31^{2}\cdot 59\cdot p_\ast,
+  \qquad
+  p_\ast=16381178872545177926239240820863,
+  \]
+  因而二次分辨子域 \(\QQ(\sqrt{\Disc(B_6)})\) 在素数 \(59\) 处必分歧。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+取素数 \(97\)。可检验 \(B_6\bmod 97\) 在 \(\FF_{97}[y]\) 上保持六次不可约，故 \(B_6\) 在 \(\QQ[y]\) 上不可约。
+\par
+记 \(G:=\Gal(L_6/\QQ)\)。
+由不可约性，\(G\subseteq S_6\) 为传递子群，且存在某个不分歧素数处 Frobenius 元为 \(6\)-循环（由模素不可约分解型给出）。
+由判别式分解可知 \(\Disc(B_6)\notin \QQ^{\times 2}\)，从而 \(G\nsubseteq A_6\)。
+进一步地，模 \(59\) 分解出现唯一二重根型分解：
+\[
+B_6(y)\equiv (y-23)^2\cdot h_2(y)\cdot h_2'(y)\quad(\bmod 59),
+\]
+其中 \(h_2,h_2'\) 为不可约二次因子。
+因此在 \(59\) 处的惯性群含有换位。
+在 \(S_6\) 中，\(6\)-循环与换位生成 \(S_6\)，故 \(G=S_6\)。
+判别式恒等式为直接计算并分解得到。
+可复现核验脚本：\texttt{scripts/exp\_xi\_leyang\_b6\_s6\_discriminant\_audit.py}。证毕。
+\end{proof}
+
+\begin{theorem}[四层非可解对称群的直积化与联合分解型的素数密度]\label{thm:xi-leyang-s3s5s6s7-product-and-densities}
+令 \(L_3,L_5,L_7\) 如上，\(L_6\) 如定理 \ref{thm:xi-leyang-b6-galois-s6}。
+则
+\[
+L_6\cap (L_3L_5L_7)=\QQ,
+\qquad
+\Gal(L_3L_5L_6L_7/\QQ)\cong S_3\times S_5\times S_6\times S_7.
+\]
+并且除去有限坏素数后，对素数 \(p\) 的自然密度成立以下精确公式：
+\begin{enumerate}
+  \item \(P_{\mathrm{LY}},Q_5,B_6,A_7\) 在 \(\FF_p\) 上同时存在一次因子的素数密度为
+  \[
+  \frac{2}{3}\cdot\frac{19}{30}\cdot\frac{91}{144}\cdot\frac{531}{840}
+  =\frac{14573}{86400};
+  \]
+  \item 四者在 \(\FF_p\) 上同时完全分解的素数密度为
+  \[
+  \frac{1}{|S_3||S_5||S_6||S_7|}=\frac{1}{2612736000}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-leyang-a7-disjoint-from-ply-q5} 已知 \(L_7\cap(L_3L_5)=\QQ\)，且 \(\Gal(L_3L_5L_7/\QQ)\cong S_3\times S_5\times S_7\)。
+由定理 \ref{thm:xi-leyang-b6-galois-s6}，扩张 \(L_6/\QQ\) 为 \(S_6\)-伽罗瓦扩张，其非平凡真正规子扩张仅有二次分辨子域
+\(
+K_6=\QQ(\sqrt{\Disc(B_6)})
+\)。
+由判别式分解，\(K_6\) 在素数 \(59\) 处必分歧。
+\par
+另一方面，\(\Gal(L_3L_5L_7/\QQ)\cong S_3\times S_5\times S_7\) 的一切二次子域由各因子的符号特征张成；
+因此任何二次子域的分歧素数集合包含于
+\(\mathrm{Supp}(\Disc(P_{\mathrm{LY}})\Disc(Q_5)\Disc(A_7))\)。
+由定理 \ref{thm:xi-leyang-ply-q5-linearly-disjoint-chebotarev} 与定理 \ref{thm:xi-a7-galois-s7} 的判别式数据可见，上述支撑不含 \(59\)，故 \(K_6\not\subseteq L_3L_5L_7\)，从而 \(L_6\cap (L_3L_5L_7)=\QQ\)。
+直积伽罗瓦结构随之得到。
+\par
+对不分歧素数，Chebotarev 定理给出 Frobenius 共轭类在直积群上的乘法性分布。
+事件“在 \(\FF_p\) 上有一次因子”等价于对应对称群因子中的置换有不动点，
+其在 \(S_3,S_5,S_6,S_7\) 上的比例分别为 \(2/3,19/30,91/144,531/840\)，相乘即得第一式；
+“完全分解”对应 Frobenius 为恒等元，比例为 \(1/|S_n|\)，相乘得到第二式。证毕。
+\end{proof}
+
+\begin{theorem}[Perron 三阶 Fuchs 算子的视在奇点五次层与二级退化五次层的独立性]\label{thm:xi-leyang-qapp-s5-disjoint-from-q5}
+令
+\[
+Q_{\mathrm{app}}(y)=168y^5+1260y^4-422y^3-183y^2-639y-76\in\ZZ[y],
+\]
+并记 \(L_{\mathrm{app}}:=\mathrm{Spl}(Q_{\mathrm{app}})\)、\(L_5:=\mathrm{Spl}(Q_5)\)。
+则：
+\begin{enumerate}
+  \item \(\Gal(L_{\mathrm{app}}/\QQ)\cong S_5\)；
+  \item \(L_{\mathrm{app}}\cap L_5=\QQ\)，从而 \(\Gal(L_{\mathrm{app}}L_5/\QQ)\cong S_5\times S_5\)；
+  \item \(Q_{\mathrm{app}}\) 与 \(Q_5\) 在 \(\FF_p\) 上同时具有一次因子的素数密度为
+  \[
+  \left(\frac{19}{30}\right)^2=\frac{361}{900}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+取不分歧素数 \(11\)，可检验 \(Q_{\mathrm{app}}\bmod 11\) 在 \(\FF_{11}[y]\) 上不可约，故 Frobenius 含 \(5\)-循环。
+另一方面，判别式含素数 \(109\) 的奇次幂因子，且模 \(109\) 分解出现单个二重根型因子，从而惯性群含换位。
+传递子群中由 \(5\)-循环与换位生成者必为 \(S_5\)，故 \(\Gal(L_{\mathrm{app}}/\QQ)\cong S_5\)。
+\par
+两者均为 \(S_5\)-伽罗瓦扩张，若交域非平凡，则二者的二次分辨子域必须相同。
+但 \(\QQ(\sqrt{\Disc(Q_{\mathrm{app}})})\) 的分歧素支撑包含 \(109\)，而 \(L_5\) 的唯一二次子域为 \(\QQ(\sqrt{\Disc(Q_5)})\)，其分歧支撑由 \(\Disc(Q_5)\) 的素因子集合给出并不含 \(109\)。
+因此二次分辨子域不相等，交域只能为 \(\QQ\)，从而直积伽罗瓦群同构成立。
+密度结论由线性互不相交下 Chebotarev 乘法性给出，且 \(S_5\) 上“有不动点”的比例为 \(19/30\)。可复现核验脚本：\texttt{scripts/exp\_xi\_leyang\_qapp\_s5\_disjointness\_audit.py}。证毕。
+\end{proof}
+
+\begin{corollary}[由 Lee--Yang 算术分层诱导的非可解 Artin 表示族：受控分歧与 Frobenius 独立性]\label{cor:xi-leyang-artin-family-s3s5s6s7}
+在定理 \ref{thm:xi-leyang-s3s5s6s7-product-and-densities} 的设定下，置 \(K:=L_3L_5L_6L_7\)。
+取各因子 \(S_n\) 的标准表示 \(\mathrm{Std}_n\)（维数 \(n-1\)），并作直和
+\[
+\rho:=\mathrm{Std}_3\oplus \mathrm{Std}_5\oplus \mathrm{Std}_6\oplus \mathrm{Std}_7.
+\]
+则 \(\rho\) 给出一个维数 \(17\) 的 Artin 表示，其分歧素数集合包含于
+\[
+\mathrm{Supp}\bigl(\Disc(P_{\mathrm{LY}}),\Disc(Q_5),\Disc(B_6),\Disc(A_7)\bigr),
+\]
+并且对几乎所有素数 \(p\)，\(\rho(\mathrm{Frob}_p)\) 在四个对称群因子上的投影在 Chebotarev 意义下相互独立。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-leyang-s3s5s6s7-product-and-densities}，\(\Gal(K/\QQ)\cong S_3\times S_5\times S_6\times S_7\)，取各因子投影并与标准表示复合即得 \(\rho\)。
+分歧支撑包含于各层判别式素支撑的并集为判别式基本性质的直接推论；
+独立性由直积伽罗瓦群下 Chebotarev 分布的乘法性给出。证毕。
+\end{proof}
+
+\endinput

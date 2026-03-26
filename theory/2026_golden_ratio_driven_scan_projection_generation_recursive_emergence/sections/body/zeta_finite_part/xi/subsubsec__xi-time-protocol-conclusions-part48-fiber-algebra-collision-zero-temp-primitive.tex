@@ -1,0 +1,600 @@
+\paragraph{纤维代数、碰撞统计与零温 primitive 谱的统一热力学接口}
+在 bin-fold 的纤维群胚代数、折叠同余商半环、碰撞统计、规范群表示谱以及零温四态极限之间，存在一条可由现有对象直接闭合的接口：有限尺度上的迹态极值由纤维多重度决定，折叠同余商的局部奇异性由 Fibonacci 模数的平方因子完全控制，二次碰撞矩正好等于相应半单代数的归一化维数，规范群的不可约表示按纤维分拆完全分离，而零温 primitive 轨道与 fold-gauge 常数的 Bernoulli 层级又分别把 Perron 谱、\(\,2\pi\) 的上侧逼近以及偶 \(\zeta\)-值的递阶恢复固定在同一条热力学账本上。
+
+\begin{theorem}[纤维群胚代数上的最大熵迹态唯一由均匀微态推前给出]\label{thm:xi-foldbin-groupoid-maxent-tracial-state}
+令
+\[
+A_m^{\mathrm{bin}}:=\CC[\mathcal R_m^{\mathrm{bin}}]
+\cong
+\bigoplus_{w\in X_m} M_{d_m^{\mathrm{bin}}(w)}(\CC),
+\qquad
+\mu_m(w):=\frac{d_m^{\mathrm{bin}}(w)}{2^m}.
+\]
+对任意 \(\pi\in\Delta(X_m)\)，定义
+\[
+\tau_\pi\!\left(\bigoplus_{w\in X_m}A_w\right)
+:=
+\sum_{w\in X_m}\pi(w)\,\operatorname{tr}_{d_m^{\mathrm{bin}}(w)}(A_w),
+\]
+其中 \(\operatorname{tr}_d\) 为 \(M_d(\CC)\) 上的归一化矩阵迹。则 \(A_m^{\mathrm{bin}}\) 的全部迹态恰为 \(\{\tau_\pi:\pi\in\Delta(X_m)\}\)，并且其 von Neumann 熵满足
+\[
+S(\tau_\pi)
+=
+H(\pi)+\sum_{w\in X_m}\pi(w)\log d_m^{\mathrm{bin}}(w),
+\qquad
+H(\pi):=-\sum_{w\in X_m}\pi(w)\log\pi(w).
+\]
+此外，
+\[
+m\log 2-S(\tau_\pi)=D_{\mathrm{KL}}(\pi\|\mu_m).
+\]
+特别地，
+\[
+S(\tau_{\mu_m})=m\log 2,
+\]
+且 \(\tau_{\mu_m}\) 是 \(A_m^{\mathrm{bin}}\) 上唯一的最大熵迹态。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-bin-groupoid-algebra-wedderburn}，
+\[
+A_m^{\mathrm{bin}}
+\cong
+\bigoplus_{w\in X_m} M_{d_m^{\mathrm{bin}}(w)}(\CC).
+\]
+每个矩阵块上的迹态唯一等于归一化矩阵迹，故有限直和代数上的任意迹态都唯一写成上述凸组合；其系数恰构成一个概率向量 \(\pi\in\Delta(X_m)\)。
+\par
+对总代数上的普通迹
+\(
+\Tr:=\sum_{w\in X_m}\Tr_{d_m^{\mathrm{bin}}(w)}
+\)，
+状态 \(\tau_\pi\) 的密度矩阵为
+\[
+\rho_\pi
+=
+\bigoplus_{w\in X_m}
+\frac{\pi(w)}{d_m^{\mathrm{bin}}(w)}I_{d_m^{\mathrm{bin}}(w)}.
+\]
+于是
+\[
+\begin{aligned}
+S(\tau_\pi)
+&=-\Tr(\rho_\pi\log\rho_\pi)\\
+&=
+-\sum_{w\in X_m}d_m^{\mathrm{bin}}(w)\,
+\frac{\pi(w)}{d_m^{\mathrm{bin}}(w)}
+\log\!\left(\frac{\pi(w)}{d_m^{\mathrm{bin}}(w)}\right)\\
+&=
+H(\pi)+\sum_{w\in X_m}\pi(w)\log d_m^{\mathrm{bin}}(w).
+\end{aligned}
+\]
+另一方面，
+\[
+\begin{aligned}
+D_{\mathrm{KL}}(\pi\|\mu_m)
+&=
+\sum_{w\in X_m}\pi(w)
+\log\frac{\pi(w)}{d_m^{\mathrm{bin}}(w)/2^m}\\
+&=
+-H(\pi)-\sum_{w\in X_m}\pi(w)\log d_m^{\mathrm{bin}}(w)+m\log 2\\
+&=
+m\log 2-S(\tau_\pi).
+\end{aligned}
+\]
+取 \(\pi=\mu_m\) 即得 \(S(\tau_{\mu_m})=m\log 2\)。又由 \(D_{\mathrm{KL}}(\pi\|\mu_m)\ge 0\) 且等号当且仅当 \(\pi=\mu_m\)，得到唯一最大熵性。证毕。
+\end{proof}
+
+\begin{theorem}[碰撞概率等于纤维群胚代数的归一化维数]\label{thm:xi-foldbin-collision-probability-normalized-groupoid-dimension}
+沿用定理 \ref{thm:xi-foldbin-groupoid-maxent-tracial-state} 的记号。若 \(U,V\) 为 \(\Omega_m=\{0,1\}^m\) 上独立均匀微态，则
+\[
+\PP\!\bigl(\Fold^{\mathrm{bin}}_m(U)=\Fold^{\mathrm{bin}}_m(V)\bigr)
+=
+\sum_{w\in X_m}\mu_m(w)^2
+=
+\frac{\dim_{\CC}A_m^{\mathrm{bin}}}{4^m}.
+\]
+等价地，
+\[
+\dim_{\CC}A_m^{\mathrm{bin}}
+=
+\sum_{w\in X_m}\bigl(d_m^{\mathrm{bin}}(w)\bigr)^2.
+\]
+\end{theorem}
+\begin{proof}
+仍由命题 \ref{prop:fold-bin-groupoid-algebra-wedderburn}，
+\[
+\dim_{\CC}A_m^{\mathrm{bin}}
+=
+\sum_{w\in X_m}
+\dim_{\CC}M_{d_m^{\mathrm{bin}}(w)}(\CC)
+=
+\sum_{w\in X_m}\bigl(d_m^{\mathrm{bin}}(w)\bigr)^2.
+\]
+另一方面，独立均匀抽样给出
+\[
+\PP\!\bigl(\Fold^{\mathrm{bin}}_m(U)=\Fold^{\mathrm{bin}}_m(V)\bigr)
+=
+\sum_{w\in X_m}
+\left(\frac{d_m^{\mathrm{bin}}(w)}{2^m}\right)^2
+=
+\frac{1}{4^m}
+\sum_{w\in X_m}\bigl(d_m^{\mathrm{bin}}(w)\bigr)^2.
+\]
+合并两式即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[bin-fold 规范群的表示分配律与 \texorpdfstring{$m=6$}{m=6} 的精确谱]\label{thm:xi-foldbin-gauge-representation-distribution-law-m6-spectrum}
+令
+\[
+G_m^{\mathrm{bin}}:=\Aut(\Fold^{\mathrm{bin}}_m)
+\cong
+\prod_{w\in X_m}\mathfrak S_{d_m^{\mathrm{bin}}(w)}.
+\]
+则 \(\widehat{G_m^{\mathrm{bin}}}\) 中的不可约复表示与分拆族
+\[
+\{\lambda_w\vdash d_m^{\mathrm{bin}}(w)\}_{w\in X_m}
+\]
+一一对应，因而
+\[
+|\widehat{G_m^{\mathrm{bin}}}|
+=
+\prod_{w\in X_m}p\!\bigl(d_m^{\mathrm{bin}}(w)\bigr),
+\]
+其中 \(p(n)\) 为分拆函数。并且表示 \(\zeta\)-函数具有完全乘积分解
+\[
+\zeta_{G_m^{\mathrm{bin}}}^{\mathrm{irr}}(s)
+:=
+\sum_{\rho\in\widehat{G_m^{\mathrm{bin}}}}(\dim\rho)^{-s}
+=
+\prod_{w\in X_m}
+\left(
+\sum_{\lambda\vdash d_m^{\mathrm{bin}}(w)}(\dim\lambda)^{-s}
+\right).
+\]
+若
+\[
+N_m:=\#\{w\in X_m:\ d_m^{\mathrm{bin}}(w)\ge 2\},
+\]
+则
+\[
+\bigl(G_m^{\mathrm{bin}}\bigr)^{\mathrm{ab}}\cong (\ZZ/2\ZZ)^{N_m},
+\qquad
+\bigl|\Hom(G_m^{\mathrm{bin}},\{\pm 1\})\bigr|=2^{N_m},
+\]
+从而 \(G_m^{\mathrm{bin}}\) 恰有 \(2^{N_m}-1\) 个指数为 \(2\) 的正规子群。
+特别地，在 \(m=6\) 时，
+\[
+G_6^{\mathrm{bin}}
+\cong
+S_2^{\,8}\times S_3^{\,4}\times S_4^{\,9},
+\qquad
+\bigl(G_6^{\mathrm{bin}}\bigr)^{\mathrm{ab}}\cong (\ZZ/2\ZZ)^{21},
+\]
+并且
+\[
+|\widehat{G_6^{\mathrm{bin}}}|
+=
+p(2)^8p(3)^4p(4)^9
+=
+2^8\cdot 3^4\cdot 5^9,
+\qquad
+\bigl|\Hom(G_6^{\mathrm{bin}},\{\pm 1\})\bigr|=2^{21}.
+\]
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:fold-bin-gauge-decomposition} 给出纤维直积分解。有限直积群的不可约表示恰为各因子不可约表示的外张量积，而 \(\mathfrak S_d\) 的不可约复表示由分拆 \(\lambda\vdash d\) 分类，故得到对 \(\widehat{G_m^{\mathrm{bin}}}\) 的参数化以及
+\[
+|\widehat{G_m^{\mathrm{bin}}}|
+=
+\prod_{w\in X_m}p\!\bigl(d_m^{\mathrm{bin}}(w)\bigr).
+\]
+维数在外张量积下相乘，遂有
+\[
+\zeta_{G_m^{\mathrm{bin}}}^{\mathrm{irr}}(s)
+=
+\prod_{w\in X_m}
+\left(
+\sum_{\lambda\vdash d_m^{\mathrm{bin}}(w)}(\dim\lambda)^{-s}
+\right).
+\]
+对一维表示，只需注意：\(\mathfrak S_1\) 只有平凡表示，而 \(\mathfrak S_d\)（\(d\ge 2\)）恰有平凡与符号两种一维表示。
+因此
+\[
+\Hom(G_m^{\mathrm{bin}},\{\pm 1\})
+\cong
+\prod_{w:\,d_m^{\mathrm{bin}}(w)\ge 2}\ZZ/2\ZZ,
+\]
+其基数为 \(2^{N_m}\)，并与 Abel 化同构。
+每个非平凡同态的核都为指数 \(2\) 的正规子群，反之任一指数 \(2\) 正规子群都来自某个非平凡 \(\{\pm1\}\)-角色，故数目为 \(2^{N_m}-1\)。
+最后在 \(m=6\) 时，代入推论 \ref{cor:fold-bin-gauge-m6} 的分解即可。证毕。
+\end{proof}
+
+\begin{theorem}[折叠同余商半环的奇异环判别与幂零层大小]\label{thm:xi-fold-congruence-semiring-singularity-nilpotent-profile}
+设
+\[
+\mathcal R_m:=\Omega_m/\!\equiv_m.
+\]
+并将 Fibonacci 模数分解写为
+\[
+F_{m+2}=\prod_{i=1}^{s}p_i^{e_i}.
+\]
+则在定理 \ref{thm:fold-congruence-mod-semirings} 的半环同构下，\(\mathcal R_m\) 作为交换环满足：
+\begin{enumerate}
+  \item 存在规范分解
+  \[
+  \mathcal R_m\cong \prod_{i=1}^{s}\ZZ/(p_i^{e_i}\ZZ).
+  \]
+  \item 幂等元个数恰为
+  \[
+  2^{s}=2^{\omega(F_{m+2})}.
+  \]
+  \item 幂零元个数恰为
+  \[
+  \frac{F_{m+2}}{\operatorname{rad}(F_{m+2})}
+  =
+  \prod_{i=1}^{s}p_i^{e_i-1}.
+  \]
+  \item \(\mathcal R_m\) 为约化环当且仅当 \(F_{m+2}\) 平方自由；为局部环当且仅当 \(F_{m+2}\) 为素数幂。
+\end{enumerate}
+因此，折叠同余商的非约化奇异性完全由 Fibonacci 模数的平方因子控制。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-congruence-mod-semirings}，
+\[
+\mathcal R_m\cong \ZZ/(F_{m+2}\ZZ).
+\]
+对整数模的 Chinese remainder 分解给出
+\[
+\ZZ/(F_{m+2}\ZZ)\cong \prod_{i=1}^{s}\ZZ/(p_i^{e_i}\ZZ),
+\]
+从而得到第一条。
+
+在每个局部因子 \(\ZZ/(p_i^{e_i}\ZZ)\) 中，幂等元只能取 \(0\) 或 \(1\)。因此全体幂等元可由各坐标独立选择 \(0/1\) 得到，数量恰为 \(2^s\)。这也与推论 \ref{cor:fold-mod-semirings-idempotents-crt-boolean} 一致。
+
+另一方面，在 \(\ZZ/(p_i^{e_i}\ZZ)\) 中，幂零元恰为所有 \(p_i\) 的倍数，其个数为 \(p_i^{e_i-1}\)。故乘积分解下的幂零元个数为
+\[
+\prod_{i=1}^{s}p_i^{e_i-1}
+=
+\frac{\prod_i p_i^{e_i}}{\prod_i p_i}
+=
+\frac{F_{m+2}}{\operatorname{rad}(F_{m+2})}.
+\]
+
+有限交换环约化当且仅当不存在非零幂零元，故等价于每个 \(e_i=1\)，亦即 \(F_{m+2}\) 平方自由。又有限交换环为局部环当且仅当其 Chinese remainder 分解只有一个因子，故等价于 \(s=1\)，亦即 \(F_{m+2}\) 为素数幂。证毕。
+\end{proof}
+
+\begin{theorem}[Fold 商半环 Jacobson 根基的 Loewy 长度与分层商公式]\label{thm:xi-fold-congruence-semiring-jacobson-loewy-profile}
+沿用定理 \ref{thm:fold-congruence-mod-semirings} 的记号，并写
+\[
+R_m:=\mathcal R_m\cong \ZZ/(F_{m+2}\ZZ),
+\qquad
+F_{m+2}=\prod_{i=1}^{s}p_i^{e_i}.
+\]
+记 \(J_m:=J(R_m)\) 为 Jacobson 根基。则有：
+\begin{enumerate}
+  \item 根基的显式描述为
+  \[
+  \boxed{\;
+  J_m=\left(\prod_{i=1}^{s}p_i\right)R_m.\;}
+  \]
+  \item 若记
+  \[
+  \ell_m:=\min\{t\ge 1:\ J_m^t=0\},
+  \]
+  则
+  \[
+  \boxed{\;
+  \ell_m=\max_{1\le i\le s}e_i.\;}
+  \]
+  \item 对每个整数 \(0\le t<\ell_m\)，有
+  \[
+  \boxed{\;
+  J_m^t/J_m^{t+1}\cong \prod_{i:\,e_i>t}\ZZ/p_i\ZZ,\qquad
+  \bigl|J_m^t/J_m^{t+1}\bigr|=\prod_{i:\,e_i>t}p_i,\;}
+  \]
+  其中约定 \(J_m^0:=R_m\)。
+\end{enumerate}
+因此，Fold 商半环的 Loewy 深度恰由 Fibonacci 模数中最大的素数幂指数决定。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-congruence-mod-semirings} 与 Chinese remainder 分解，
+\[
+R_m\cong \prod_{i=1}^{s}\ZZ/(p_i^{e_i}\ZZ).
+\]
+每个局部因子 \(\ZZ/(p_i^{e_i}\ZZ)\) 的 Jacobson 根基都是主理想
+\[
+(p_i)/(p_i^{e_i}),
+\]
+故整体根基为
+\[
+J_m\cong \prod_{i=1}^{s}(p_i)/(p_i^{e_i}),
+\]
+这恰等价于
+\[
+J_m=\left(\prod_{i=1}^{s}p_i\right)R_m.
+\]
+
+对任意 \(t\ge 0\)，于是有
+\[
+J_m^t\cong \prod_{i=1}^{s}(p_i^t)/(p_i^{e_i}).
+\]
+其中第 \(i\) 个因子当且仅当 \(t\ge e_i\) 时为零。因此 \(J_m^t=0\) 当且仅当对所有 \(i\) 都有 \(t\ge e_i\)，故满足 \(J_m^t=0\) 的最小整数恰为
+\[
+\ell_m=\max_{1\le i\le s}e_i.
+\]
+
+最后，对 \(0\le t<\ell_m\)，由上式得到
+\[
+J_m^t/J_m^{t+1}
+\cong
+\prod_{i=1}^{s}
+\frac{(p_i^t)/(p_i^{e_i})}{(p_i^{t+1})/(p_i^{e_i})}.
+\]
+若 \(e_i\le t\)，则该因子为零；若 \(e_i>t\)，则
+\[
+\frac{(p_i^t)/(p_i^{e_i})}{(p_i^{t+1})/(p_i^{e_i})}
+\cong
+\ZZ/p_i\ZZ.
+\]
+故
+\[
+J_m^t/J_m^{t+1}\cong \prod_{i:\,e_i>t}\ZZ/p_i\ZZ,
+\]
+并取基数即得
+\[
+\bigl|J_m^t/J_m^{t+1}\bigr|=\prod_{i:\,e_i>t}p_i.
+\]
+证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part48b-window6-residue-character-gap}
+\input{subsubsec__xi-time-protocol-conclusions-part48c-zero-temp-parry-primitive-refinement}
+
+\begin{theorem}[fold-gauge 常数序列的非 \texorpdfstring{$C$}{C}-有限性与前两阶 \texorpdfstring{$\zeta(2r)$}{zeta(2r)} 重整化极限]\label{thm:xi-foldbin-gauge-constant-not-cfinite-first-two-zeta-limits}
+令
+\[
+u_m:=\log C_m-\log(2\pi),
+\qquad
+q:=\frac{\varphi}{2}.
+\]
+则序列 \((u_m)_{m\ge 1}\) 不是 \(C\)-有限序列。
+并且有两阶显式展开
+\[
+u_m
+=
+\frac{1}{3\varphi}\,q^m
+-\frac{\sqrt5}{180}\,q^{3m}
++O(q^{5m}).
+\]
+因此
+\[
+\lim_{m\to\infty}q^{-m}u_m=\frac{1}{3\varphi},
+\qquad
+\lim_{m\to\infty}q^{-3m}\left(u_m-\frac{1}{3\varphi}q^m\right)
+=
+-\frac{\sqrt5}{180}.
+\]
+从而前两阶重整化极限已足以恢复
+\[
+B_2=\frac16,\qquad B_4=-\frac1{30},
+\]
+并进而恢复
+\[
+\zeta(2)=\frac{\pi^2}{6},
+\qquad
+\zeta(4)=\frac{\pi^4}{90}.
+\]
+\end{theorem}
+\begin{proof}
+非 \(C\)-有限性正是定理 \ref{thm:fold-bin-gauge-constant-not-c-finite} 的内容。
+另一方面，定理 \ref{thm:fold-bin-gauge-constant-stirling-bernoulli-hierarchy} 在 \(R=2\) 时给出
+\[
+u_m
+=
+A_1q^m+A_2q^{3m}+O(q^{5m}),
+\]
+其中
+\[
+A_1=
+\frac{B_2}{1\cdot 1}\bigl(\varphi^{-1}+\varphi^{-1}\bigr)
+=
+\frac16\cdot\frac{2}{\varphi}
+=
+\frac{1}{3\varphi},
+\]
+\[
+A_2=
+\frac{B_4}{2\cdot 3}\bigl(\varphi^{-1}+\varphi\bigr)
+=
+-\frac{1}{30}\cdot\frac{\varphi+\varphi^{-1}}{6}
+=
+-\frac{\sqrt5}{180}.
+\]
+于是得到所示两阶展开与两条重整化极限。
+最后用标准恒等式
+\[
+B_{2r}=(-1)^{r-1}\frac{2(2r)!}{(2\pi)^{2r}}\zeta(2r)
+\]
+即可从 \(B_2,B_4\) 恢复 \(\zeta(2),\zeta(4)\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[fold-gauge 常数对 \texorpdfstring{$2\pi$}{2pi} 的最终上侧逼近与首项刚性]\label{thm:xi-foldbin-gauge-constant-one-sided-approach-2pi}
+沿用定理 \ref{thm:xi-foldbin-gauge-constant-not-cfinite-first-two-zeta-limits} 的记号，令
+\[
+q:=\frac{\varphi}{2}\in(0,1).
+\]
+则当 \(m\to\infty\) 时，
+\[
+\log C_m
+=
+\log(2\pi)+\frac{1}{3\varphi}q^m+O(q^{3m}),
+\]
+从而
+\[
+C_m
+=
+2\pi\left(1+\frac{1}{3\varphi}q^m+O(q^{2m})\right).
+\]
+特别地，存在 \(m_0\) 使得对一切 \(m\ge m_0\) 都有
+\[
+C_m>2\pi.
+\]
+因此 \(C_m\) 对 \(2\pi\) 的收敛最终始终来自上侧，而非振荡式逼近。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-foldbin-gauge-constant-not-cfinite-first-two-zeta-limits}，
+\[
+\log C_m-\log(2\pi)
+=
+\frac{1}{3\varphi}q^m-\frac{\sqrt5}{180}q^{3m}+O(q^{5m})
+=
+\frac{1}{3\varphi}q^m+O(q^{3m}).
+\]
+由于首项系数 \(1/(3\varphi)\) 为正，故对充分大的 \(m\) 有 \(\log C_m>\log(2\pi)\)，即 \(C_m>2\pi\)。
+
+再令
+\[
+x_m:=\frac{1}{3\varphi}q^m+O(q^{3m})=O(q^m).
+\]
+则
+\[
+C_m=2\pi e^{x_m}
+=
+2\pi\bigl(1+x_m+O(x_m^2)\bigr)
+=
+2\pi\left(1+\frac{1}{3\varphi}q^m+O(q^{2m})\right),
+\]
+因为 \(x_m^2=O(q^{2m})\)。证毕。
+\end{proof}
+
+\begin{theorem}[fold-gauge 序列对 Bernoulli 数与偶整数 \texorpdfstring{$\zeta$}{zeta} 值的递阶逆谱公式]\label{thm:xi-foldbin-gauge-constant-recursive-bernoulli-zeta-recovery}
+沿用定理 \ref{thm:fold-bin-gauge-constant-stirling-bernoulli-hierarchy} 的记号，令
+\[
+E_m:=\log C_m-\log(2\pi),
+\qquad
+q:=\frac{\varphi}{2}.
+\]
+递归定义抽取序列
+\[
+R_m^{(1)}:=q^{-m}E_m,
+\qquad
+a_1^{\mathrm{ext}}:=\lim_{m\to\infty}R_m^{(1)},
+\]
+并对每个 \(r\ge 2\) 定义
+\[
+R_m^{(r)}
+:=
+q^{-(2r-1)m}
+\left(
+E_m-\sum_{j=1}^{r-1}a_j^{\mathrm{ext}}\,q^{(2j-1)m}
+\right),
+\qquad
+a_r^{\mathrm{ext}}:=\lim_{m\to\infty}R_m^{(r)}.
+\]
+则上述各极限都存在，并满足
+\[
+a_r^{\mathrm{ext}}
+=
+\frac{B_{2r}}{r(2r-1)}\bigl(\varphi^{-1}+\varphi^{2r-3}\bigr)
+\qquad(r\ge 1).
+\]
+因此对每个 \(r\ge 1\)，有显式恢复公式
+\[
+B_{2r}
+=
+\frac{r(2r-1)}{\varphi^{-1}+\varphi^{2r-3}}
+\lim_{m\to\infty}R_m^{(r)},
+\]
+以及
+\[
+\zeta(2r)
+=
+(-1)^{r-1}\frac{(2\pi)^{2r}}{2(2r)!}\,
+\frac{r(2r-1)}{\varphi^{-1}+\varphi^{2r-3}}
+\lim_{m\to\infty}R_m^{(r)}.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-bin-gauge-constant-stirling-bernoulli-hierarchy}，对任意固定 \(r\ge 1\) 有展开
+\[
+E_m
+=
+\sum_{j=1}^{r}\alpha_j q^{(2j-1)m}+O(q^{(2r+1)m}),
+\]
+其中
+\[
+\alpha_j
+:=
+\frac{B_{2j}}{j(2j-1)}\bigl(\varphi^{-1}+\varphi^{2j-3}\bigr).
+\]
+当 \(r=1\) 时，
+\[
+R_m^{(1)}=q^{-m}E_m=\alpha_1+O(q^{2m}),
+\]
+故极限存在且 \(a_1^{\mathrm{ext}}=\alpha_1\)。
+
+设对某个 \(r\ge 2\)，已知 \(a_j^{\mathrm{ext}}=\alpha_j\) 对 \(1\le j\le r-1\) 成立。则
+\[
+E_m-\sum_{j=1}^{r-1}a_j^{\mathrm{ext}}\,q^{(2j-1)m}
+=
+\alpha_r q^{(2r-1)m}+O(q^{(2r+1)m}),
+\]
+从而
+\[
+R_m^{(r)}
+=
+\alpha_r+O(q^{2m}).
+\]
+故极限存在且 \(a_r^{\mathrm{ext}}=\alpha_r\)。归纳完成。
+
+最后对上式解出 \(B_{2r}\)，再与标准恒等式
+\[
+B_{2r}=(-1)^{r-1}\frac{2(2r)!}{(2\pi)^{2r}}\zeta(2r)
+\]
+联立，即得所示偶整数 \(\zeta\)-值恢复公式。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part49-tail-capacity-localization-order}
+\input{subsubsec__xi-time-protocol-conclusions-part49a-prime-support-half-dimension-ledger}
+\input{subsubsec__xi-time-protocol-conclusions-part49b-prime-support-halfdimension-gap}
+\input{subsubsec__xi-time-protocol-conclusions-part49c-localization-solenoid-terminal-rigidity}
+\input{subsubsec__xi-time-protocol-conclusions-part50-projective-witt-rh-separation}
+\input{subsubsec__xi-time-protocol-conclusions-part50ba-dirichlet-fourier-radius-barrier}
+\input{subsubsec__xi-time-protocol-conclusions-part50d-projective-pressure-fourier-residue-control}
+\input{subsubsec__xi-time-protocol-conclusions-part50da-output-bucket-moment-pressure-anchor}
+\input{subsubsec__xi-time-protocol-conclusions-part50dc-residue-zeta-cyclotomic-witt}
+\input{subsubsec__xi-time-protocol-conclusions-part50db-torsion-rhu-density-conjecture}
+\input{subsubsec__xi-time-protocol-conclusions-part50-projective-witt-rh-separation-gaussian-arithmetic-split}
+\input{subsubsec__xi-time-protocol-conclusions-part50b-output-potential-legendre-groundstate-activation}
+\input{subsubsec__xi-time-protocol-conclusions-part50bc-output-edgeworth-median-shift}
+\input{subsubsec__xi-time-protocol-conclusions-part50bd-output-legendre-residue-rankone-truncation}
+\input{thm__xi-output-potential-zero-temp-square-root-critical-law}
+\input{subsubsec__xi-time-protocol-conclusions-part50b2-output-potential-legendre-groundstate-activation}
+\input{subsubsec__xi-time-protocol-conclusions-part50bb-dirichlet-global-j1-collapse}
+\input{subsubsec__xi-time-protocol-conclusions-part50b3-output-potential-legendre-groundstate-activation}
+\input{subsubsec__xi-time-protocol-conclusions-part50c-output-potential-mirror-relaxation}
+\input{subsubsec__xi-time-protocol-conclusions-part50cb-mirror-branch-parity-interference}
+\input{subsubsec__xi-time-protocol-conclusions-part50b4-output-potential-legendre-groundstate-activation}
+\input{subsubsec__xi-time-protocol-conclusions-part50ba-odd-prime-rh-obstruction-density}
+\input{subsubsec__xi-time-protocol-conclusions-part50c-ground-layer-oracle-spectral-gap}
+\input{subsubsec__xi-time-protocol-conclusions-part50ca-output-endpoint-logcusp-rigidity}
+\input{subsubsec__xi-time-protocol-conclusions-part50c2-ground-layer-oracle-spectral-gap}
+\input{subsubsec__xi-time-protocol-conclusions-part50cc-binfold-saturation-endpoint-shell-geometry}
+\input{subsubsec__xi-time-protocol-conclusions-part51-discrete-capacity-window6-root-center}
+\input{subsubsec__xi-time-protocol-conclusions-part51a-groundstate-capacity-window6-separation}
+\input{subsubsec__xi-time-protocol-conclusions-part51c-discrete-capacity-window6-root-center-continuation}
+\input{subsubsec__xi-time-protocol-conclusions-part51b-window6-c3-fiber-center-refinement}
+\input{subsubsec__xi-time-protocol-conclusions-part52-parity-center-leyang-rh}
+\input{subsubsec__xi-time-protocol-conclusions-part53-foldbin-escort-splitting-solvable}
+\input{subsubsec__xi-time-protocol-conclusions-part52b-parity-center-leyang-rh-continuation}
+\input{subsubsec__xi-time-protocol-conclusions-part52a-leyang-splitting-character-filter}
+\input{subsubsec__xi-time-protocol-conclusions-part52c-parity-center-leyang-rh-continuation}
+\input{subsubsec__xi-time-protocol-conclusions-part54-rh-threshold-quintic-galois-halfplane}
+\input{subsubsec__xi-time-protocol-conclusions-part53-fib-resonance-witt-w1-edgeworth-rootrigidity}
+\input{subsubsec__xi-time-protocol-conclusions-part53-smith-prime-register-primitive-surgery}
+\input{subsubsec__xi-time-protocol-conclusions-part51a-renyi2-bc3-kronecker-bifurcation}
+\input{subsubsec__xi-time-protocol-conclusions-part51aa-derived-cross-lucas-root-externality}
+\input{subsubsec__xi-time-protocol-conclusions-part50be-smith-binfold-finite-jet}
+\input{subsubsec__xi-time-protocol-conclusions-part50bb-activated-branch-scale-separation}
+
+\endinput

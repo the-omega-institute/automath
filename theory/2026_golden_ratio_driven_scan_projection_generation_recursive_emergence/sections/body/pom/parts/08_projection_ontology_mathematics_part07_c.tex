@@ -1,0 +1,728 @@
+
+\begin{remark}[可计算形式：用已核验的 \texorpdfstring{$r_q$}{rq} 给出显式预算上界]\label{rem:pom-quantile-budget-computable}
+在已核验范围内 \(S_q(m)=\Theta(r_q^m)\)（表 \ref{tab:fold_collision_moment_recursions}），从命题 \ref{prop:pom-quantile-chernoff} 直接得到
+$$
+\mathbb{P}_{w_m}\big[\gamma_m(X)\ge\gamma\big]\ \lesssim\
+\exp\!\Bigl(m\bigl(\log r_q-\log 2-(q-1)\gamma\bigr)\Bigr).
+$$
+因此当取
+\(
+\gamma>\frac{\log r_q-\log 2+\log(1/\varepsilon)/m}{q-1}
+\)
+时，上式给出一个可审计的尾部控制；把它代入推论 \ref{cor:pom-prime-register-quantile-budget} 即得到
+\(
+\log P_m
+\gtrsim
+m\gamma+\log 2
+\)
+的可计算配额上界（对固定 \(q\) 为线性函数）。
+这把“prime-register 的空间预算”从“最坏纤维”替换为“用 \(r_q\) 控制的尾部分位”，并与注 \ref{rem:pom-prime-carry} 的“残差素数承载”语义完全对齐。
+
+\medskip\noindent\textbf{最优化封装（把 \(q\) 作为可调 knob）}
+把上式对 \(q\ge 2\) 取下包络，可定义一个\emph{可证书}的尾部分位上界（以已核验的 \(r_q\) 为输入）：
+\[
+\gamma^{\mathrm{cert}}_m(\varepsilon)
+:=\inf_{q\in\ZZ_{\ge 2}}
+\frac{\log r_q-\log 2+\frac{1}{m}\log(1/\varepsilon)}{q-1},
+\qquad
+B^{\mathrm{cert}}_m(\varepsilon):=\exp\!\bigl(m\,\gamma^{\mathrm{cert}}_m(\varepsilon)\bigr).
+\]
+取达到极小值的 \(q^\star\) 即给出“最省预算”的 Chernoff 证书。
+进一步地，若用有限 \(m\) 的精确矩 \(S_q(m)\) 代替渐近主尺度 \(r_q\)，则可得到完全有限尺度的证书形式
+\[
+\gamma^{\mathrm{cert,fin}}_m(\varepsilon)
+:=\inf_{q\in\ZZ_{\ge 2}}
+\frac{\frac{1}{m}\log S_q(m)-\log 2+\frac{1}{m}\log(1/\varepsilon)}{q-1},
+\]
+其正确性由命题 \ref{prop:pom-quantile-chernoff} 直接保证（无需渐近假设）。
+
+\medskip\noindent\textbf{数值例（用已核验的精确 \texorpdfstring{$r_q$}{rq} 截断到 \(q\le 17\)，表 \ref{tab:fold_collision_renyi_spectrum}）}
+以 \(\varepsilon=10^{-6}\) 为例：
+\begin{itemize}
+  \item 当 \(m=512\) 时，最优证书出现在 \(q^\star=8\)，得到 \(\gamma^{\mathrm{cert}}_{512}(10^{-6})\approx 0.224915\)。
+  因而 \(\log B^{\mathrm{cert}}\approx 115.156\)，从条件 \(P>2B\) 得到最小预算阈值
+  \(\log_2 P\gtrsim (\log 2+\log B^{\mathrm{cert}})/\log 2\approx 167.1\) bits。
+  \item 当 \(m=4096\) 时，最优证书出现在 \(q^\star=3\)，得到 \(\gamma^{\mathrm{cert}}_{4096}(10^{-6})\approx 0.218572\)。
+  因而 \(\log B^{\mathrm{cert}}\approx 895.27\)，并得到 \(\log_2 P\gtrsim 1292.6\) bits 量级。
+\end{itemize}
+同一对偶也给出尾部稀有度的可读尺度：例如取 \(\gamma=0.23\)，在 \(q\le 17\) 的离散上确界下得到
+\(I(0.23)\approx 0.08059\)（最优在 \(q=17\) 处达到），从而 \(m=512\) 时有上界量级
+\(\mathbb{P}_{w_m}[\gamma_m(X)\ge 0.23]\lesssim e^{-m I(0.23)}\approx 10^{-18}\)。
+脚本模块 \texttt{scripts/common\_tail\_budget.py} 实现了上述两种 \(\gamma\)-证书的扫描最优化；
+脚本 \texttt{scripts/exp\_fold\_tail\_budget\_gamma\_cert.py} 进一步用 residue-DP 直方图对 \(w_m\) 下的真实尾部质量做核验并输出 JSON 证书。
+\par
+\medskip\noindent\textbf{单峰选择（为何最优 \(q^\star\) 可审计地“可搜索”）}
+由命题 \ref{prop:pom-pressure-convexity}，\(q\mapsto \log r_q\) 在整数点离散凸。
+于是对固定的 \((m,\varepsilon)\)，证书目标
+\[
+q\ \longmapsto\ \gamma^{(q)}_{m}(\varepsilon)
+:=\frac{\log r_q-\log 2+\frac{1}{m}\log(1/\varepsilon)}{q-1}
+\]
+是一个离散准凸函数：对任意阈值 \(\Gamma\)，不等式 \(\gamma^{(q)}_m(\varepsilon)\le \Gamma\) 等价于
+\(
+\log r_q \le (q-1)\Gamma+\log 2-\frac{1}{m}\log(1/\varepsilon)
+\)，
+右端是 \(q\) 的仿射函数；而“离散凸函数 \(-\) 仿射函数”的子水平集在整数上必为区间。
+因此最优 \(q^\star\) 的集合是一个（较短的）连续整数区间，既可全表扫描，也可用单峰搜索在 \(O(\log q_{\max})\) 次评估中定位。
+
+\medskip\noindent\textbf{prime-register 总预算的显式闭式（对 \(q\) 可优化）}
+由推论 \ref{cor:pom-prime-register-q-quota-family} 的 \(B_m^{(q)}(\varepsilon)\) 形式与 CRT 侧条件 \(P_m>2B\)，对任意 \(q\ge 2\) 得到一条完全显式、可审计的充分预算：
+\[
+\boxed{\;
+\log P_m\ \gtrsim\ \log 2\ +\ \frac{m}{q-1}\bigl(\log r_q-\log 2\bigr)\ +\ \frac{1}{q-1}\log(1/\varepsilon)\;}
+\]
+因此在给定的可审计矩阶集合 \(\mathcal{Q}\subseteq\ZZ_{\ge 2}\) 上，“选矩阶”可直接写为
+\[
+q^\star(m,\varepsilon)=\arg\min_{q\in\mathcal{Q}}\left(\beta_q+\frac{1}{m(q-1)}\log(1/\varepsilon)\right),
+\qquad
+\beta_q=\frac{\log r_q-\log 2}{q-1}.
+\]
+
+\medskip\noindent\textbf{最优矩阶选择的相图（精确断点形式见注 \ref{rem:pom-qstar-phase-diagram-breakpoints}）}
+断点闭式与 \(\varepsilon=10^{-6}\) 的显式相图表见注 \ref{rem:pom-qstar-phase-diagram-breakpoints} 与表 \ref{tab:fold_collision_qstar_breakpoints_eps1e6_q2_20}；它把“选 \(q\)”从启发式改写为由审计表 \(\{r_q\}\) 唯一决定的确定性选择律。
+记 \(\alpha:=\frac{1}{m}\log(1/\varepsilon)\)。
+
+更强地，由命题 \ref{prop:pom-pressure-convexity} 的离散凸性与端点恒等式 \(r_1=2\)（即 \(P(1)=\log 2\)），割线斜率
+\(
+\beta_q=\frac{P(q)-P(1)}{q-1}
+\)
+随 \(q\ge 2\) 单调不减：对离散凸性取 \((q_0,q_1,q_2)=(1,q,q+1)\) 得
+\[
+P(q)\ \le\ \frac{1}{q}P(1)+\frac{q-1}{q}P(q+1)
+\quad\Longleftrightarrow\quad
+\beta_q\le \beta_{q+1}.
+\]
+因此当 \(\log(1/\varepsilon)=o(m)\)（例如 \(\varepsilon\) 固定且 \(m\to\infty\)）时，
+\[
+\gamma_m^{(q)}(\varepsilon)=\beta_q+\frac{\alpha}{q-1}=\beta_q+o(1),
+\]
+其指数主项由 \(q=2\) 达到最小；提高 \(q\) 的收益主要来自有限 \(m\) 或极小 \(\varepsilon\) 时的可靠性项 \(\alpha/(q-1)\)。
+
+\medskip\noindent\textbf{（可靠性标度相变）}
+把 \(\varepsilon\) 视为随 \(m\) 变化的风险预算：若 \(\varepsilon_m=e^{-c m}\)（即 \(\alpha_m\to c>0\)），则在 \(r_q\) 证书口径下最优指数由
+\[
+\gamma^{\mathrm{cert}}(c)
+=\inf_{q\ge 2}\left(\beta_q+\frac{c}{q-1}\right)
+\]
+给出。
+当 \(c\downarrow 0\) 时恢复“常数失败率”相的 \(\beta_2=\log(r_2/2)\)；
+而当 \(c\to\infty\) 时，为压低 \(c/(q-1)\) 最优 \(q^\star\) 被推向大 \(q\)，并由 \(\lim_{q\to\infty}\beta_q=\log\sqrt{\varphi}\) 得
+\[
+\lim_{c\to\infty}\gamma^{\mathrm{cert}}(c)=\log\sqrt{\varphi},
+\]
+等价于逐步逼近“按最大纤维 provisioning”的端点指数：当误差容忍趋于 0 时，分位替代最坏值的收益将不可避免地消失。
+
+\medskip\noindent\textbf{可审计样例（\(m=30,\ \varepsilon=10^{-6}\)）}
+在精确指纹范围 \(q\le 17\)（表 \ref{tab:fold_collision_renyi_spectrum}）内，全表扫描得到最优矩阶 \(q^\star(30,10^{-6})=17\)，对应
+\[
+\gamma^{\mathrm{cert}}_{30}(10^{-6})\approx 0.253745,\qquad
+B^{\mathrm{cert}}_{30}(10^{-6})\approx 2.02\times 10^3,
+\]
+从而 prime-register 的乘积预算只需满足 \(P>2B\approx 4.05\times 10^3\)。
+脚本 \texttt{scripts/exp\_fold\_tail\_budget\_gamma\_cert.py} 的输出同时给出一组可直接使用的互素模数建议：例如取 \((2,3,5,7,11,13)\) 时其乘积 \(30030>2B\)。
+\par
+若允许把可审计范围扩展到 DP 扩展指纹 \(q\le 20\)（表 \ref{tab:fold_collision_renyi_spectrum_mod_dp_q20}），则同一工作点的最优矩阶会推到 \(q^\star=20\)，并把预算进一步压到 \(B\approx 1.81\times 10^3\)（同一组素数仍足够）。
+作为对比，仅用二阶证书 \(q=2\) 时会得到 \(B\sim 6\times 10^8\) 这一达到 $10^8$ 量级的预算，清晰体现了“高阶矩主要改善极小 \(\varepsilon\) 的可靠性项”这一结构性结论。
+
+\medskip\noindent\textbf{空间/时间对偶的 Pareto 前沿（可审计定义）}
+把证书侧的“时间成本”用可审计的 realization 规模代理量化：例如取
+\[
+T(q):=\text{实现/递推的阶数代理}\ d_q
+\]
+（在 Fold 情形下，\(d_q\) 可由已核验的整系数递推阶数读取；见表 \ref{tab:fold_collision_moment_spectrum_k2_8} 与表 \ref{tab:fold_collision_moment_spectrum_k9_17}）。
+把空间侧成本取为
+\(
+S(q):=\log_2 P_m^{(q)}(\varepsilon)
+\)
+的下界（由式 \(\log P_m\gtrsim \log2+m\beta_q+\frac{1}{q-1}\log(1/\varepsilon)\) 直接读出）。
+则离散点集
+\(
+\{(T(q),S(q)):\ q\in\mathcal{Q}_{\mathrm{cert}}\}
+\)
+的非支配子集给出一条可复核的 Pareto 前沿：它把“更高阶 moment 证书（更大 \(T\)）\(\Rightarrow\) 更小 prime-register（更小 \(S\)）”量化为一条离散前沿曲线。
+以样例 \((m,\varepsilon)=(30,10^{-6})\) 且 \(\mathcal{Q}_{\mathrm{cert}}=\{2,\dots,17\}\) 为例，扫描得到的前沿点出现在
+\[
+q\in\{3,5,9,11,15,17\},
+\]
+其 \((d_q,\log_2 P)\) 约为
+\[
+(3,20.35),\ (5,15.46),\ (7,13.08),\ (9,12.63),\ (11,12.13),\ (13,11.98),
+\]
+该 Pareto 前沿刻画了“时间/实现复杂度”与“空间/prime-register 预算”之间的可审计交换率。
+\end{remark}
+
+\begin{remark}[Chernoff 分位证书的 \(q^\star\) 断点相图（设计律；最终结论）]\label{rem:pom-qstar-phase-diagram-breakpoints}
+在注 \ref{rem:pom-quantile-budget-computable} 的 Chernoff 分位证书定义下，对每个整数 \(q\ge 2\) 记
+\[
+\gamma^{(q)}_m(\varepsilon)
+:=
+\frac{\log r_q-\log 2+\frac{1}{m}\log(1/\varepsilon)}{q-1},
+\qquad
+\gamma^{\mathrm{cert}}_m(\varepsilon)=\inf_{q\in\ZZ_{\ge 2}}\gamma^{(q)}_m(\varepsilon),
+\qquad
+q^\star(m,\varepsilon)\in\arg\min_{q\in\ZZ_{\ge 2}}\gamma^{(q)}_m(\varepsilon).
+\]
+则下列四条结论给出一条完全可审计的“选 \(q\) / 选 \(m\) / 设 \(\varepsilon\)”双尺度设计律（唯一输入为已审计的 \(\{r_q\}\)，不涉及任何经验拟合）：
+\begin{enumerate}
+  \item \textbf{（最优 \(q^\star\) 的精确断点）}
+  对每个 \(q\ge 2\)（且 \(r_{q+1}\) 已审计）定义
+  \[
+  A_q
+  :=
+  (q-1)\bigl(\log r_{q+1}-\log 2\bigr)-q\bigl(\log r_q-\log 2\bigr).
+  \]
+  则 \(q\) 与 \(q+1\) 两个候选在证书下包络中并列最优（即 \(\gamma^{(q)}_m(\varepsilon)=\gamma^{(q+1)}_m(\varepsilon)\)）当且仅当
+  \[
+  m=m_{q\to q+1}(\varepsilon):=\frac{\log(1/\varepsilon)}{A_q}.
+  \]
+  因此在 \(m\) 轴上，\(q^\star(m,\varepsilon)\) 随 \(m\) 增大按单位步长单调下降；其所有跃迁点精确由 \(\{m_{q\to q+1}(\varepsilon)\}_q\) 给出（在断点处出现两点并列最优）。
+  \item \textbf{（\(\varepsilon=10^{-6}\) 的显式相图；DP 审计 \(q\le 20\)）}
+  利用 DP 扩展审计表（表 \ref{tab:fold_collision_renyi_spectrum_mod_dp_q20}）的 \(\{r_q\}_{2\le q\le 20}\)，断点 \(m_{q\to q+1}(10^{-6})\) 的数值列于表 \ref{tab:fold_collision_qstar_breakpoints_eps1e6_q2_20}。
+  例如：若 \(m\in[513.01,643.28)\) 则 \(q^\star=7\)；若 \(m\ge 5344.31\) 则 \(q^\star=2\)。这些区间与断点均由定义直接决定，而非数值拟合。
+  \item \textbf{（固定 \(\varepsilon\) 的大尺度极限：\texorpdfstring{$\log(r_2/2)$}{log(r2/2)}）}
+  对固定 \(\varepsilon\in(0,1)\)，当 \(m\ge m_{2\to 3}(\varepsilon)\) 时最优解锁定在 \(q^\star=2\)，从而
+  \[
+  \lim_{m\to\infty}\gamma^{\mathrm{cert}}_m(\varepsilon)=\log\frac{r_2}{2}.
+  \]
+  用表 \ref{tab:fold_collision_renyi_spectrum_mod_dp_q20} 的审计值 \(r_2=2.481194304092\)，得到
+  \[
+  \boxed{\ \gamma_\infty=\log(r_2/2)=0.2155928379\ldots\ }.
+  \]
+  该极限严格小于最坏纤维端点指数 \(\log\sqrt{\varphi}\)（等价于 \(\lim_{q\to\infty}\beta_q\)，见注 \ref{rem:pom-betaq-isa}），表明分位证书在固定失败率 regime 下确实脱离最坏情形定标；其差额为显式常数 \(\log\sqrt{\varphi}-\log(r_2/2)\)。
+  \item \textbf{（证书包络为双曲线下包络：空间—时间前沿必现折点）}
+  对每个固定 \(q\ge 2\)，可写
+  \[
+  \gamma^{(q)}_m(\varepsilon)=\beta_q+\frac{1}{m(q-1)}\log(1/\varepsilon),
+  \qquad
+  \beta_q=\frac{\log r_q-\log 2}{q-1},
+  \]
+  因此 \(\gamma^{(q)}_m(\varepsilon)\) 作为 \(m\) 的函数是一族 \(1/m\) 型双曲线。由此
+  \[
+  \gamma^{\mathrm{cert}}_m(\varepsilon)=\min_{q\in\ZZ_{\ge 2}}\gamma^{(q)}_m(\varepsilon)
+  \]
+  是这些双曲线的分段下包络，其折点恰位于断点集合 \(\{m_{q\to q+1}(\varepsilon)\}\)。
+  因此任何以
+  \(
+  \log P_m\gtrsim \log 2+m\,\gamma^{\mathrm{cert}}_m(\varepsilon)
+  \)
+  （表 \ref{tab:pom-space-time-duality-prime-register} 的空间侧预算形式）作为约束的空间—时间可行带/ Pareto 前沿，都会自动继承这些折点：当 \(m\) 穿越任一断点，最优设计 regime（即最优 \(q^\star\)）发生离散跳变。
+\end{enumerate}
+\end{remark}
+
+\input{sections/generated/tab_fold_collision_qstar_breakpoints_eps1e6_q2_20}
+
+\begin{remark}[时间—空间—异常的三元 Pareto 边界]\label{rem:pom-pareto-ts-omega}
+\medskip\noindent\textbf{时间—空间—异常的三元 Pareto 边界}
+对同一语义目标的投影词 \(w\)，令
+\[
+\begin{aligned}
+\mathsf T(w)&:=\text{接口正规形中不可并行的层数/门计数},\\
+\mathsf S(w)&:=\text{空间谱预算曲线（如 }I_w(\gamma)\text{ 或 }\Sigma_{\mathrm{space}}(w)\text{）},\\
+\Omega(w)&:=\mathrm{anom}(\eta_w)
+\end{aligned}
+\]
+（异常累积定义 \ref{def:pom-anom-accumulation}）。
+则在等价重写类内部，重写路径给出一族三元组 \((\mathsf T,\mathsf S,\Omega)\)；其非支配子集构成“时间—空间—异常”的 Pareto 前沿，刻画了并行化把代价转移到空间或异常上的可审计边界。
+其中 \(\Omega=0\) 对应零曲率并行化（严格自然性）；若 \(\Omega\neq 0\) 但核版 GRH 的谱隙界成立（推论 \ref{cor:pom-grh-mix-upper}），则交换误差的长度依赖部分指数衰减，剩余仅为常数级残差，可视为“近自然性”；谱隙弱或 \(\Omega\) 大时则进入强耦合区，需保留异常证书随行。
+\end{remark}
+
+\begin{proposition}[Quantile-CRT 编译律：\texorpdfstring{$\varepsilon$}{eps}-sound 的序投影消元]\label{prop:pom-rcrt-epsilon}
+固定分辨率 \(m\) 与误差预算 \(\varepsilon\in(0,1)\)，在折叠读出口径下令 \(X\sim w_m\)。
+设序投影门 \(P_{\le}\) 作用的内部整数标签为随机变量 \(Y\)，并满足粗界
+\[
+|Y|\ \le\ d_m(X)
+\qquad(\text{例如：prime-register 承载的 fiber-index，或任何以纤维规模为上界的寄存器值}).
+\]
+取任意 \(B\ge 1\) 使得
+\[
+\mathbb{P}_{w_m}\big[d_m(X)>B\big]\ \le\ \varepsilon,
+\]
+并选择两两互素模数 \(p_1,\dots,p_r\) 使得其乘积 \(P=\prod_i p_i\) 满足 \(P>2B\)。
+则在误差富集口径（定义 \ref{def:pom-eps-sound-rewrite}）下存在 \(\varepsilon\)-sound 重写证书
+\[
+(\mathrm{RCRT}_\varepsilon)\qquad
+P_{\le}\ \Longrightarrow_{\varepsilon}\ \mathrm{CRT}_{\{p_i\}}\circ P_{\chi,\{p_i\}}.
+\]
+其中右端正是硬阈值版 (RCRT)（定义 \ref{def:pom-order-elimination-rewrite}）的空间化实现：先按模轴并行读出 residue（\(P_{\chi,\{p_i\}}\)），再用 CRT 重建（\(\mathrm{CRT}_{\{p_i\}}\)）。
+\end{proposition}
+\begin{proof}
+令坏事件 \(E:=\{|Y|>B\}\)。
+由假设 \(|Y|\le d_m(X)\) 得 \(E\subseteq\{d_m(X)>B\}\)，从而
+\(
+\mathbb{P}_{w_m}[E]\le \varepsilon
+\)。
+在好事件 \(E^c\) 上，\(Y\in[-B,B]\)，因此 \(P_{\le}\) 的序/区间判定可视为受限门 \(P_{\le,[-B,B]}\)。
+而在 \(P>2B\) 的侧条件下，硬阈值版 (RCRT) 对 \([-B,B]\) 上的整数读出保持正确（命题 \ref{prop:pom-order-elimination-correct}），故在 \(E^c\) 上有
+\(
+P_{\le}= \mathrm{CRT}_{\{p_i\}}\circ P_{\chi,\{p_i\}}
+\)
+（作为可见读出）。
+因此按定义 \ref{def:pom-eps-sound-rewrite}，上述重写在失败概率至多为 \(\varepsilon\) 的意义下成立。证毕。
+\end{proof}
+\begin{remark}[两条硬化路径与 \texorpdfstring{$(u,q,\varepsilon)$}{(u,q,eps)} 调度]\label{rem:pom-hardening-u-vs-q}
+序门的“硬化”在本文接口里至少有两条可执行路径：
+\begin{itemize}
+  \item \textbf{温度路径：}降低 \(u\)（注 \ref{rem:pom-order-as-zero-temp}）使软序门 \(\mathrm{PROJ}_u\) 硬化到 \(P_{\le}\)，其时间侧代价主要体现在扭曲谱隙/混合尺度 \(\tau_{\mathrm{mix}}(u)\)（命题 \ref{prop:pom-rewrite-audit-loop}）。
+  \item \textbf{moment-分位路径：}固定（或不极端降低）\(u\)，通过提高 \(q\) 并用 moment-kernel（\(\mathrm{MOM}_q\)）给出尾部证书，从而触发 \((\mathrm{RCRT}_\varepsilon)\)（命题 \ref{prop:pom-rcrt-epsilon}）把序门编译为空间化的 residue+CRT 读出；其空间侧代价主要体现在 prime-register 配额 \(\log P\)（推论 \ref{cor:pom-prime-register-quantile-budget} 与注 \ref{rem:pom-quantile-budget-computable} 的 \(\gamma\)-证书）。
+\end{itemize}
+因此编译器可以把 \((u,q,\varepsilon)\) 作为三旋钮：\(u\) 主控时间尺度、\(q\) 主控尾部放大与空间配额、\(\varepsilon\) 主控风险预算；并用命题 \ref{prop:pom-eps-sound-compose} 的加法律对多次近似消序门的总体失败概率做账。
+二维压力曲面 \(P(q,u)\) 提供把两条路径放入同一“谱相图”的统一坐标（\S\ref{subsec:pom-pressure-surface-qu}）。
+\end{remark}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{6pt}
+\caption{空间—时间对偶图：同一 prime-register 容量变量在两类读出任务上的闭式预算。第一行给出“纤维标签唯一重建”的空间配额（由碰撞矩谱 \(\{r_q\}\) 控制）；第二行给出“cylinder 同余等分布”的时间预算（由 profinite Chebotarev 的最坏扭曲谱隙 \(\Lambda_m/\lambda_m\) 控制）。在线读出语义下，时间侧以同步扣除后的可用深度 \(n_{\mathrm{eff}}=(n-n_{\mathrm{sync}})_+\) 计费（定理 \ref{thm:pom-sync-subtracted-chebotarev-capacity}）；忽略同步扣除时取 \(n_{\mathrm{eff}}=n\)，并退化为推论 \ref{cor:pom-profinite-cylinder-effective-n} 与反解推论 \ref{cor:pom-profinite-cylinder-capacity}。}
+\label{tab:pom-space-time-duality-prime-register}
+\begin{tabular}{p{0.25\linewidth} p{0.60\linewidth} p{0.12\linewidth}}
+\toprule
+读出任务 & 足够预算（闭式不等式族） & 指纹输入\\
+\midrule
+Quantile-CRT（纤维标签超界失败 \(\le\varepsilon\)） &
+\(
+P_m>2B_m^{(q)}(\varepsilon),
+\ \ 
+B_m^{(q)}(\varepsilon)=\varepsilon^{-1/(q-1)}(r_q/2)^{m/(q-1)}
+\)
+（推论 \ref{cor:pom-prime-register-q-quota-family}；有限尺度版用 \(S_q(m)\) 得 \(B_{m,q}^{\mathrm{fin}}\)） &
+\(\{r_q\}\)\\
+
+Chebotarev cylinder（相对误差 \(\le\delta\)） &
+若 \(\Lambda_m\le \lambda_m^{1/2-\varepsilon_{\mathrm{gap}}}\)，则
+\(
+n_{\mathrm{eff}}\gtrsim \log(|G_m|/\delta)/((1/2+\varepsilon_{\mathrm{gap}})\log\lambda_m)
+\)
+（定理 \ref{thm:pom-sync-subtracted-chebotarev-capacity}），等价地
+\(
+\log|G_m|\lesssim (1/2+\varepsilon_{\mathrm{gap}})n_{\mathrm{eff}}\log\lambda_m-\log(1/\delta)
+\)
+（同上） &
+\(\Lambda_m/\lambda_m\)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{拼接为同一“空间—时间直线带”}
+在 prime-register 轴取 \(G_m=\ZZ/P_m\ZZ\)（因此 \(|G_m|=P_m\)）。
+则表 \ref{tab:pom-space-time-duality-prime-register} 的两行预算通过同一容量变量 \(\log P_m\) 直接拼接：空间侧给出
+\(
+\log P_m\gtrsim \log 2+m\beta_q+\frac{1}{q-1}\log(1/\varepsilon)
+\)
+（推论 \ref{cor:pom-prime-register-q-quota-family}），时间侧给出
+\(
+\log P_m\lesssim (1/2+\varepsilon_{\mathrm{gap}})n_{\mathrm{eff}}\log\lambda_m-\log(1/\delta)
+\)；
+从而在 \((n_{\mathrm{eff}},\log P_m)\) 平面形成一条可审计的可行带：同一寄存器同时被 \(\{r_q\}\) 与 \(\Lambda_m/\lambda_m\) 这两类谱指纹约束。
+
+\begin{remark}[空间—时间—置信单行定律（prime-register 可行带）]\label{rem:pom-space-time-confidence-law}
+在同一 \(\gtrsim/\lesssim\) 常数口径下，上述两条预算可同时满足（即存在某个 \(P_m\) 使得 Quantile-CRT 失败概率 \(\le\varepsilon\) 且 Chebotarev cylinder 相对误差 \(\le\delta\)）当且仅当其端点相容；等价地，对任意 \(q\ge 2\) 有
+\[
+\boxed{
+\log 2+m\beta_q+\frac{1}{q-1}\log\frac{1}{\varepsilon}+\log\frac{1}{\delta}
+\ \lesssim\
+(1/2+\varepsilon_{\mathrm{gap}})\,n_{\mathrm{eff}}\log\lambda_m
+}
+\]
+其中 \(\beta_q=(\log r_q-\log 2)/(q-1)\)。
+该式把“空间配额（由 \(\{r_q\}\) 给出）”与“时间配额（由 \(\Lambda_m/\lambda_m\) 给出）”及两类置信旋钮 \((\varepsilon,\delta)\) 压缩为一条可核对的单行判据；其中 \(n_{\mathrm{eff}}=(n-n_{\mathrm{sync}})_+\) 的同步扣除由定理 \ref{thm:pom-sync-subtracted-chebotarev-capacity} 给出。
+\par
+若进一步以 Markov 源下的经验直方图 \(\hat{\pi}_{m,N}\) 校准 cylinder 读出（置信水平 \(1-\delta_{\mathrm{conf}}\)），则定理 \ref{thm:auditable-profinite-chebotarev-finite} 的“动力学尾项 + TV 估计项”分解与推论 \ref{cor:auditable-profinite-chebotarev-tradeoff} 的平衡边界曲线给出
+\[
+n_{\mathrm{eff}}\ \approx\
+\frac{1}{(1/2+\varepsilon_{\mathrm{gap}})\log\lambda_m}\left(\log|G_m|+\frac12\log N+\mathrm{const}(m,\delta_{\mathrm{conf}})\right),
+\]
+从而时间预算中出现不可消去的 \(\tfrac12\log N\) 校准附加项。
+\end{remark}
+
+\begin{remark}[谱隙税（spectral-tax）口径与“加轴不一定加速”]\label{rem:pom-spectral-tax-workload}
+推论 \ref{cor:pom-profinite-cylinder-effective-n} 的显式相对误差界在最坏情形（\(|A|=1\)）可读为
+\[
+\mathrm{Err}_m(n_{\mathrm{eff}})\ \lesssim\ |G_m|\left(\frac{\Lambda_m}{\lambda_m}\right)^{n_{\mathrm{eff}}}.
+\]
+令
+\(
+r_m:=\Lambda_m/\lambda_m\in(0,1]
+\)
+与谱隙税率
+\(
+\Delta_m:=-\log r_m
+\)
+（亦即 \(\tau_{\mathrm{mix}}(m):=1/\Delta_m\) 的步数混合尺度）。
+则只要
+\[
+n_{\mathrm{eff}}\ \gtrsim\ \frac{\log|G_m|+\log(1/\delta)}{\Delta_m},
+\]
+就可把相对误差压到 \(O(\delta)\) 的尺度（吸收常数到 \(\gtrsim\)）。
+因此“用更多同余/角色轴（空间）来替代更长 primitive 长度（时间）”并非免费：每加深一层会同时改变
+\(|G_m|\) 与 \(r_m\)，其净效应可由工作量指纹
+\[
+W(m):=\frac{\log|G_m|}{\Delta_m}=\log|G_m|\cdot\tau_{\mathrm{mix}}(m)
+\]
+直接审计：若加轴使 \(|G_m|\) 增大但 \(r_m\to 1\)（谱隙变小，\(\Delta_m\downarrow\)），则 \(W(m)\) 可能上升，从而“更慢”。
+真实输入 \(40\) 状态核在离散素数模轴上的扫描表 \ref{tab:real-input-40-spectral-tax-workload} 给出一个可复现的直接例证（例如 \(p=3\) 与 \(p=5\) 的对比）。
+\end{remark}
+\input{sections/generated/tab_real_input_40_spectral_tax_workload}
+
+\begin{remark}[最大模数控制律：乘法空间、平方时间（near-coboundary + 可证伪选择律）]\label{rem:pom-max-modulus-control-law}
+本段把表 \ref{tab:pom-space-time-duality-prime-register} 的“空间乘法预算”与“时间谱隙税”进一步拼成一条可检验的工程律：在可分离的 residue 直积轴上，prime-register 的\emph{空间容量}由乘积 \(P=|G|\) 决定，但\emph{时间扩散}主阶由“最坏小角/最大模数”决定，而非由 \(P\) 本身决定。
+\par
+\medskip\noindent\textbf{设定（直积 residue 轴）}
+取两两互素的模数组 \(\{p_1,\dots,p_k\}\) 并令
+\[
+G:=\prod_{i=1}^k\ZZ/p_i\ZZ,
+\qquad
+P:=|G|=\prod_{i=1}^k p_i,
+\qquad
+L:=\max_i p_i.
+\]
+其中由 CRT 有 \(G\cong \ZZ/P\ZZ\)，但直积坐标把“轴上的最小非平凡角”为 \(2\pi/p_i\) 的审计与“单轴慢模选择律”的表述写得更直接。
+把“cylinder 同余等分布”的最坏扭曲比值记为
+\(
+r_G:=\max_{\chi\neq\chi_0}\rho(M_\chi)/\lambda
+\)
+并令谱隙税率
+\(
+\Delta_G:=-\log r_G
+\)
+（与注 \ref{rem:pom-spectral-tax-workload} 记号一致）。
+\par
+\medskip\noindent\textbf{（小角二次律）}
+在 near-coboundary 小角 regime 下，扭曲缺口由方差密度控制：对任意一维方向 \(F\) 与最小非平凡角 \(2\pi/m\)，有
+\[
+\log\frac{\rho(M_{it_mF})}{\lambda}
+=-\frac{\sigma_F^2}{2}\left(\frac{2\pi}{m}\right)^2+O(m^{-4})
+\]
+（推论 \ref{cor:dirichlet-modulus-diffusion-barrier}；其中 \(\sigma_F^2=a^{\mathsf T}\Sigma a\)，\(\Sigma=\nabla^2P(0)\)）。
+因此沿第 \(i\) 轴的“纯轴扭曲”（仅在 \(\ZZ/p_i\) 上取 \(j=\pm1\)）的谱隙主阶为
+\[
+\Delta_i\ \approx\ 2\pi^2\,\sigma_i^2/p_i^2
+=4\pi^2\,\kappa_i/p_i^2,
+\qquad \kappa_i:=\sigma_i^2/2.
+\]
+\par
+\medskip\noindent\textbf{（可证伪选择律 \(\Rightarrow\) 最大模数控制）}
+若在该直积轴上满足“单轴慢模选择律”：
+\[
+\arg\max_{\chi\neq\chi_0}\frac{\rho(M_\chi)}{\lambda}
+\ \text{由某个纯轴字符达到（仅一轴非平凡），并且发生在最大模数 }p_{i^\star}=L,
+\]
+则 \(\Delta_G\) 的主阶由该最坏小角锁定，因而
+\[
+n\ \gtrsim\ \frac{\log|G|+\log(1/\delta)}{\Delta_G}
+\ \approx\
+\frac{L^2}{4\pi^2\,\kappa_{i^\star}}\Bigl(\log P+\log\tfrac{1}{\delta}\Bigr).
+\]
+这表明：在上述可审计前提下，\textbf{prime-register 的空间预算是乘法 \(P\)，但时间预算主阶是平方 \(L^2\)，且仅以 \(\log P\) 进入}。
+\par
+该“单轴慢模选择律”本身是可证伪/可审计的：例如在真实输入 40 状态核的 \(((3,3,p))\) 纯碰撞轴扫描中，最坏角色索引稳定为 \((0,0,\pm1)\)（表 \ref{tab:real_input_40_arity_335_n2_selection_law_primes}），与 near-coboundary 小角机制一致；更一般的选择律在二次近似下等价于一个带度量的最短向量问题（定理 \ref{thm:real-input-40-near-coboundary-svp}）。
+\end{remark}
+
+\begin{remark}[primorial 选模与 \texorpdfstring{$\mathrm{poly}(\log P)$}{poly(log P)} 时间闭环（外部数论事实）]\label{rem:pom-primorial-polylog-time}
+在推论 \ref{cor:pom-prime-register-quantile-budget} 给定的空间约束
+\(
+P>2B_m(\varepsilon)=2\exp(m\gamma_m(\varepsilon))
+\)
+下，容量主尺度满足 \(\log P\asymp m\gamma_m(\varepsilon)\)。
+\par
+若希望在满足 \(\prod_i p_i\ge P\) 的同时尽量压低最大模数 \(L=\max_i p_i\)，数论（Chebyshev \(\vartheta\) 函数的线性阶增长）表明：在给定截断 \(L\) 时，乘积 \(\prod_{p\le L}p\) 最大；并且
+\[
+\log\!\left(\prod_{p\le L}p\right)=\vartheta(L)=\Theta(L).
+\]
+因此当采用“取尽所有 \(\le L\) 的素数”的 primorial 方案时，有
+\[
+L\ =\ \Theta(\log P)\ =\ \Theta(m\gamma_m(\varepsilon)).
+\]
+将其代回注 \ref{rem:pom-max-modulus-control-law} 的时间预算（并把 \(\kappa_{i^\star}\) 视为由谱扫描/Poisson 方程接口可抽取的常数；见注记 \ref{rem:arity-335-kappa-poisson}），得到主阶复杂度律
+\[
+n\ \gtrsim\ \frac{(\log P)^2}{4\pi^2\kappa_{i^\star}}\Bigl(\log P+\log\tfrac{1}{\delta}\Bigr).
+\]
+特别地，当 \(\delta\) 为常数级（或多项式级）目标精度时，时间成本呈现一个显式的 \(\,O\big((\log P)^3\big)\,\) 量级：\textbf{空间指数（Euler 乘积），时间仅多项式于 \(\log P\)}。
+\end{remark}
+
+\begin{remark}[方差匹配的模数分配：把 \texorpdfstring{$\Sigma$}{Sigma} 变成寄存器设计律]\label{rem:pom-variance-matched-moduli}
+near-coboundary 二次律把“选哪些模数”转化为一个带度量的离散几何问题。
+在推论 \ref{cor:dirichlet-modulus-diffusion-barrier} 的记号下，对每条可独立扭曲的轴（或读出方向）\(F_i\) 记其方差密度为 \(\sigma_i^2=\mathrm{Var}_\infty(F_i)\)（更一般为 \(\sigma_F^2=a^{\mathsf T}\Sigma a\)，其中 \(\Sigma=\nabla^2P(0)\)）。
+则在纯轴小角 regime 中，第 \(i\) 轴模数 \(p_i\) 的缺口主阶为 \(\Delta_i\approx 2\pi^2\sigma_i^2/p_i^2\)。
+\par
+因此若整体慢模由“最坏轴”主导（单轴选择律成立），则混合时间的主控因子为
+\[
+\max_i\frac{p_i^2}{\sigma_i^2}.
+\]
+在给定容量约束 \(\prod_i p_i\ge P\) 的连续近似下，一个 minimax 的阻抗匹配原则是令各轴缺口同阶：
+\[
+\frac{\sigma_1^2}{p_1^2}\ \approx\ \frac{\sigma_2^2}{p_2^2}\ \approx\ \cdots\ \approx\ \frac{\sigma_k^2}{p_k^2},
+\qquad\text{即}\qquad
+p_i\ \propto\ \sigma_i.
+\]
+该分配律把压力 Hessian/协方差密度 \(\Sigma\) 直接耦合进 prime-register 的离散选模问题：把更大的模数分配给“更硬”（方差密度更大）的方向，以压低最坏轴带来的扩散时间上界。
+\end{remark}
+
+\subsubsection{多轴预算障碍：最短向量机制的几何数论下界}\label{subsubsec:pom-multi-axis-budget-barrier}
+注 \ref{rem:pom-variance-matched-moduli} 给出一种阻抗匹配式的设计律：若慢模确由某一“最坏轴”主导，则可通过令各轴缺口同阶来压低上界。
+然而，若允许 \(d\ge 1\) 条独立扭曲轴同时存在，则更基本的限制来自角格本身的几何数论结构：在 near-coboundary 小角二次律有效的 regime 中，最坏扭曲缺口近似等价于一个带度量的最短向量问题；
+由 Minkowski 凸体定理可得对任意选模策略都不可避免的预算指数障碍（指数为 \(2/d\)），并且该障碍可沿 Dirichlet 归一化翻译为 near-\(1\) 主极点的贴边律；再结合空间--时间换算律，可把贴边与有限部漂移在二阶精度上线性锁定。
+最后，若允许在 residue 轴上作 unimodular 重参数化（\(GL_d(\ZZ)\) 变换）并在同一共体积类内优化角格形状，则极限常数由 Hermite 常数控制；同时可得到贴边极点的主阶计数律。
+
+\paragraph{多轴扭曲与 near-coboundary 二次律}
+令 \(d\ge 1\)。
+考虑一族单位圆扭曲矩阵 \(M_{i\vartheta}\)（\(\vartheta\in\RR^d\)），记
+\[
+P(\vartheta):=\log\rho(M_{i\vartheta}),\qquad \lambda:=\rho(M_{0}),\qquad \Sigma:=\nabla^2P(0)\succ 0.
+\]
+在真实输入 \(40\) 状态核的三维观测中，上述 \(\Sigma\) 与小角二次律由附录定理 \ref{thm:real-input-40-near-coboundary-svp} 以“盒装式”给出；在一般有限维原始核上，其同型形式可由 Perron 分支的解析微扰与取实部得到（同一证明框架见 \ref{thm:real-input-40-near-coboundary-svp} 的证明）。
+本文在该小角 regime 内工作：假设存在 \(\delta_0>0\) 使得当 \(\|\vartheta\|\le \delta_0\) 时成立
+\begin{equation}\label{eq:pom-multi-axis-near-coboundary}
+\log\frac{\rho(M_{i\vartheta})}{\lambda}
+\;=\;
+-\frac12\,\vartheta^{\mathsf T}\Sigma\,\vartheta\ +\ O(\|\vartheta\|^4).
+\end{equation}
+
+\paragraph{角格与预算}
+给定模数组 \(m=(m_1,\dots,m_d)\in(\ZZ_{\ge 2})^d\)，引入未包裹角格
+\[
+L(m):=\frac{2\pi}{m_1}\ZZ\times\cdots\times\frac{2\pi}{m_d}\ZZ\subset\RR^d,
+\qquad
+\det L(m)=\frac{(2\pi)^d}{B},
+\qquad
+B:=\prod_{k=1}^d m_k.
+\]
+其中 \(\det L(m)\) 表示格的共体积，而 \(B\) 即 prime-register 的乘法预算（模积）。
+将角格按 \(2\pi\) 取主值代表元（逐坐标 \(\mathrm{wrap}(\cdot)\) 到 \([-\pi,\pi]\)），得到有限的包裹角格
+\[
+\Lambda(m):=\Bigl\{\vartheta(j)
+=\bigl(\mathrm{wrap}(2\pi j_1/m_1),\dots,\mathrm{wrap}(2\pi j_d/m_d)\bigr)\in[-\pi,\pi]^d:\ j\in(\ZZ/m_1)\times\cdots\times(\ZZ/m_d)\Bigr\}.
+\]
+（下文将 \(\ZZ/m_k\ZZ\) 简记为 \(\ZZ/m_k\)）。
+于是 \(\Lambda(m)\setminus\{0\}\) 恰对应全部非平凡角色通道的可达小角扭曲（\(\vartheta=0\) 对应平凡角色）。
+在二次近似下，最坏扭曲对应于在 \(\Lambda(m)\setminus\{0\}\) 上最小化二次型 \(\vartheta^{\mathsf T}\Sigma\vartheta\)。
+记
+\begin{equation}\label{eq:pom-multi-axis-qm}
+q(m):=\min_{\vartheta\in\Lambda(m)\setminus\{0\}}\ \vartheta^{\mathsf T}\Sigma\,\vartheta.
+\end{equation}
+当 \(B\) 足够大使得实现最小值的最短向量落入 \(\|\vartheta\|\le\delta_0\) 的有效域时，\eqref{eq:pom-multi-axis-near-coboundary} 可对该最短向量直接适用。
+
+\begin{theorem}[Minkowski 预算障碍：最短能量的普适上界]\label{thm:pom-minkowski-budget-barrier}
+令 \(V_d:=\mathrm{vol}\{x\in\RR^d:\ |x|\le 1\}=\pi^{d/2}/\Gamma(d/2+1)\)，并令
+\[
+C_d:=\Bigl(\frac{2^{d}}{V_d}\Bigr)^{2/d}.
+\]
+则对任意 \(m\in(\ZZ_{\ge 2})^d\)，当 \(B=\prod_k m_k\) 足够大以保证 \(q(m)\) 的最短向量落在小角有效域内时，有
+\begin{equation}\label{eq:pom-minkowski-qm-upper}
+q(m)\ \le\ (2\pi)^2\,C_d\,(\det\Sigma)^{1/d}\,B^{-2/d}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+令 \(E_r:=\{x\in\RR^d:\ x^{\mathsf T}\Sigma x\le r^2\}\)。
+该集合中心对称且凸，并满足体积公式
+\[
+\mathrm{vol}(E_r)=\frac{V_d\,r^d}{\sqrt{\det\Sigma}}.
+\]
+由 Minkowski 凸体定理（见例如 \cite{Cassels1957}），当 \(\mathrm{vol}(E_r)>2^d\det L(m)\) 时，存在非零向量 \(x\in L(m)\cap E_r\)，从而 \(x^{\mathsf T}\Sigma x\le r^2\)。
+当 \(B\) 足够大时，上述 \(r=r(B)\to 0\)，因此可取到的 \(x\) 落入包裹角域并代表某个非平凡角色通道，即 \(x\in\Lambda(m)\setminus\{0\}\)；
+于是 \(q(m)\le x^{\mathsf T}\Sigma x\le r^2\)。
+取 \(r\) 使得
+\(
+V_d r^d/\sqrt{\det\Sigma}=2^d\det L(m)
+\)
+并取严格大于即可推出
+\[
+q(m)
+\le r^2
+=\Bigl(\frac{2^d\,\det L(m)\,\sqrt{\det\Sigma}}{V_d}\Bigr)^{2/d}
+=(2\pi)^2\Bigl(\frac{2^d}{V_d}\Bigr)^{2/d}(\det\Sigma)^{1/d}B^{-2/d},
+\]
+即得到 \eqref{eq:pom-minkowski-qm-upper}。
+\end{proof}
+
+\begin{corollary}[谱缺口与混合时间的预算指数障碍]\label{cor:pom-multi-axis-mixing-budget-barrier}
+在定理 \ref{thm:pom-minkowski-budget-barrier} 的设定下，定义最坏扭曲谱比与缺口
+\[
+r_{\max}(m):=\max_{\vartheta\in \Lambda(m)\setminus\{0\}}\frac{\rho(M_{i\vartheta})}{\lambda},
+\qquad
+\Delta_{\mathrm{spec}}(m):=-\log r_{\max}(m),
+\qquad
+\tau_{\mathrm{mix}}(m):=\frac{1}{\Delta_{\mathrm{spec}}(m)}
+\]
+（\(\tau_{\mathrm{mix}}\) 的口径与 \S\ref{subsec:xi-near1-diffusive} 一致）。
+则当 \(B\to\infty\) 且处于小角有效域时，有
+\begin{equation}\label{eq:pom-multi-axis-gap-qm}
+\Delta_{\mathrm{spec}}(m)=\frac12\,q(m)\ +\ O\!\bigl(q(m)^2\bigr),
+\end{equation}
+并且
+\begin{equation}\label{eq:pom-multi-axis-taumix-lb}
+\tau_{\mathrm{mix}}(m)\ \ge\ \frac{B^{2/d}}{2\pi^2\,C_d\,(\det\Sigma)^{1/d}}\,(1+o(1)).
+\end{equation}
+从而：\emph{在任意选模策略下，时间成本的最优预算指数必为 \(2/d\)}；若希望把 \(\tau_{\mathrm{mix}}\) 压低到常数阶，则必须使预算 \(B\) 至少满足 \(B=\Omega(\tau_{\mathrm{mix}}^{d/2})\)。
+\end{corollary}
+
+\begin{proof}
+在小角域内，由 \eqref{eq:pom-multi-axis-near-coboundary} 得
+\(
+-\log(\rho(M_{i\vartheta})/\lambda)=\frac12\vartheta^{\mathsf T}\Sigma\vartheta+O(\|\vartheta\|^4)
+\)。
+对使 \(\vartheta^{\mathsf T}\Sigma\vartheta=q(m)\) 的最短向量取最大谱比（等价取最小缺口）即可得到 \eqref{eq:pom-multi-axis-gap-qm}，并将定理 \ref{thm:pom-minkowski-budget-barrier} 的 \eqref{eq:pom-minkowski-qm-upper} 代入得到 \eqref{eq:pom-multi-axis-taumix-lb}。
+\end{proof}
+
+\begin{corollary}[多维 Siegel-like 障碍：near-\texorpdfstring{$1$}{1} 主极点贴边律]\label{cor:pom-multi-axis-near1-pole-barrier}
+在 Dirichlet 归一化 \(z=\lambda^{-s}\) 下，定义
+\[
+s(\vartheta):=\frac{P(\vartheta)}{\log\lambda}
+=\frac{\log\rho(M_{i\vartheta})}{\log\lambda},
+\qquad
+\Delta(\vartheta):=-\log\frac{\rho(M_{i\vartheta})}{\lambda}.
+\]
+则在小角域内有
+\begin{equation}\label{eq:pom-multi-axis-near1-pole-translate}
+1-\Re s(\vartheta)=\frac{\Delta(\vartheta)}{\log\lambda}
+=\frac{1}{2\log\lambda}\,\vartheta^{\mathsf T}\Sigma\vartheta+O(\|\vartheta\|^4).
+\end{equation}
+并且对任意模数组 \(m\)（\(B\) 足够大），必存在某个非平凡扭曲 \(\vartheta_\star\in \Lambda(m)\setminus\{0\}\) 使得
+\begin{equation}\label{eq:pom-multi-axis-near1-pole-budget}
+1-\Re s(\vartheta_\star)
+\ \le\
+\frac{(2\pi)^2\,C_d}{2\log\lambda}\,(\det\Sigma)^{1/d}\,B^{-2/d}\ +\ o(B^{-2/d}).
+\end{equation}
+亦即：当可独立扭曲轴数为 \(d\) 时，near-\(1\) pole 的最优贴边速率由 \(B^{-2/d}\) 刻画，且不可被任何选模策略超越。
+\end{corollary}
+
+\begin{proof}
+式 \eqref{eq:pom-multi-axis-near1-pole-translate} 为 \eqref{eq:pom-multi-axis-near-coboundary} 的直接改写。
+取 \(\vartheta_\star\) 为实现 \(q(m)\) 的最短向量并用 \eqref{eq:pom-minkowski-qm-upper} 控制其二次型，即得 \eqref{eq:pom-multi-axis-near1-pole-budget}。
+\end{proof}
+
+\begin{corollary}[pole--drift 的预算绑定：贴边极点携带同阶有限部漂移]\label{cor:pom-multi-axis-pole-drift-binding}
+在推论 \ref{cor:pom-multi-axis-near1-pole-barrier} 的设定下，进一步假设 Abel 有限部常数 \(\log\mathfrak{M}(\theta)\) 在 \(\theta=0\) 的邻域内实解析（注 \ref{prop:logM-analytic}），并令
+\(
+H:=\nabla^2\log\mathfrak{M}(0)
+\)。
+对任意方向 \(v\neq 0\) 定义方向耦合比
+\[
+\mathcal{W}(v):=\frac{v^{\mathsf T}Hv}{v^{\mathsf T}\Sigma v},
+\]
+并对 \(\vartheta\neq 0\) 记 \(v(\vartheta):=\vartheta/\|\vartheta\|\)、\(\Delta_{\mathfrak{M}}(\vartheta):=\log\mathfrak{M}(0)-\Re\log\mathfrak{M}(i\vartheta)\)。
+则由空间--时间换算律（附录命题 \ref{prop:real-input-40-space-time-conversion-law} 的同型读法）得在 \(\|\vartheta\|\to 0\) 时
+\begin{equation}\label{eq:pom-multi-axis-pole-drift-conversion}
+\Delta_{\mathfrak{M}}(\vartheta)
+=(\log\lambda)\,\mathcal{W}\bigl(v(\vartheta)\bigr)\,\bigl(1-\Re s(\vartheta)\bigr)\ +\ O(\|\vartheta\|^4).
+\end{equation}
+特别地，对推论 \ref{cor:pom-multi-axis-near1-pole-barrier} 中不可避免的 \(\vartheta_\star\) 有
+\[
+|\Delta_{\mathfrak{M}}(\vartheta_\star)|=O(B^{-2/d}),
+\]
+即 near-\(1\) pole 的预算贴边在常数层必同时伴随同阶的有限部漂移。
+\end{corollary}
+
+\begin{proof}
+式 \eqref{eq:pom-multi-axis-pole-drift-conversion} 是命题 \ref{prop:real-input-40-space-time-conversion-law} 的记号替换：在二阶近似下，
+\(
+\Delta_{\mathfrak{M}}(\vartheta)=\frac12\vartheta^{\mathsf T}H\vartheta+O(\|\vartheta\|^4)
+\)
+与
+\(
+1-\Re s(\vartheta)=\frac{1}{2\log\lambda}\vartheta^{\mathsf T}\Sigma\vartheta+O(\|\vartheta\|^4)
+\)
+相除即可得到所示换算律。
+将 \eqref{eq:pom-multi-axis-near1-pole-budget} 代入并注意 \(\mathcal{W}(v)\) 在单位球面上的有界性（例如由 \(\mu_{\max}:=\|\Sigma^{-1/2}H\Sigma^{-1/2}\|_{\mathrm{op}}\) 控制）即可得到 \(|\Delta_{\mathfrak{M}}(\vartheta_\star)|=O(B^{-2/d})\)。
+\end{proof}
+
+\paragraph{极限常数：Hermite 常数刻画最优格致密度}
+上述三条推论给出了预算指数 \(2/d\) 的不可突破性。
+进一步地，若允许在 residue 轴上作可逆整系数重参数化（\(GL_d(\ZZ)\) 变换），并把角格在同一共体积类内视为可实现的一般格，则“最坏扭曲能量的最大化”（从而使混合最快）可提升为几何数论中的格致密度极值问题。
+
+\begin{theorem}[Hermite 常数刻画：同共体积类内的最优常数]\label{thm:pom-hermite-constant-characterization}
+令 \(\mathcal{L}(V)\) 表示 \(\RR^d\) 中共体积为 \(V\) 的全体格。
+对 \(\Sigma\succ 0\) 与 \(\Lambda\in\mathcal{L}(V)\) 定义第一最小值
+\[
+\lambda_1(\Lambda,\Sigma):=\min_{0\neq x\in\Lambda}x^{\mathsf T}\Sigma x.
+\]
+记欧氏 Hermite 常数
+\[
+\gamma_d:=\sup_{\Lambda}\ \frac{\min_{0\neq x\in\Lambda}|x|^{2}}{(\det\Lambda)^{2/d}}\quad(<\infty).
+\]
+则对任意 \(\Sigma\succ 0\) 与 \(V>0\) 成立
+\begin{equation}\label{eq:pom-hermite-sup}
+\sup_{\Lambda\in\mathcal{L}(V)}\ \lambda_1(\Lambda,\Sigma)
+\ =\ \gamma_d\,(\det\Sigma)^{1/d}\,V^{2/d}.
+\end{equation}
+特别地，当 \(\det L(m)=(2\pi)^d/B\) 时，若允许在同一共体积类内优化格形状，则最优谱缺口常数满足
+\[
+\Delta_{\mathrm{spec}}^{\mathrm{opt}}(B)\ \sim\ \frac12(2\pi)^2\gamma_d(\det\Sigma)^{1/d}B^{-2/d},
+\qquad
+\tau_{\mathrm{mix}}^{\mathrm{opt}}(B)\ \sim\ \frac{B^{2/d}}{2\pi^2\gamma_d(\det\Sigma)^{1/d}}.
+\]
+\end{theorem}
+
+\begin{proof}
+作线性变换 \(y=\Sigma^{1/2}x\)，则 \(x^{\mathsf T}\Sigma x=|y|^2\)，而格的共体积满足
+\(
+\det(\Sigma^{1/2}\Lambda)=(\det\Sigma)^{1/2}\det\Lambda
+\)。
+因此
+\[
+\lambda_1(\Lambda,\Sigma)
+=\min_{0\neq y\in\Sigma^{1/2}\Lambda}|y|^2.
+\]
+对欧氏情形应用 Hermite 常数的定义与尺度不变性，得到对任意共体积 \(W\) 有
+\(
+\sup_{\Omega:\det\Omega=W}\min_{0\neq y\in\Omega}|y|^2=\gamma_d\,W^{2/d}
+\)。
+取 \(W=(\det\Sigma)^{1/2}V\) 即得 \eqref{eq:pom-hermite-sup}。
+将 \(V=(2\pi)^d/B\) 代入并结合 \eqref{eq:pom-multi-axis-gap-qm} 即得最后两式。
+\end{proof}
+
+\begin{remark}[Minkowski 常数与 Hermite 常数]\label{rem:pom-minkowski-vs-hermite}
+定理 \ref{thm:pom-minkowski-budget-barrier} 中的常数 \(C_d\) 给出 Hermite 常数的一个无条件上界：\(\gamma_d\le C_d\)。
+因此 \eqref{eq:pom-multi-axis-taumix-lb} 提供了不依赖格最优化假设的通用预算下界；而定理 \ref{thm:pom-hermite-constant-characterization} 则在允许优化格形状时刻画其最优常数。
+\end{remark}
+
+\paragraph{贴边极点的密度律：体积比主项}
+定理 \ref{thm:pom-minkowski-budget-barrier} 与推论 \ref{cor:pom-multi-axis-near1-pole-barrier} 给出“至少存在一个”贴边极点通道。
+在小角有效域内还可得到贴边极点数的主阶计数律：对 \(\varepsilon>0\) 定义
+\[
+N_\varepsilon(m):=\#\Bigl\{\vartheta\in \Lambda(m)\setminus\{0\}:\ 1-\Re s(\vartheta)\le \varepsilon\Bigr\}.
+\]
+
+\begin{proposition}[贴边极点计数主项]\label{prop:pom-multi-axis-near1-density}
+在小角有效域内，若 \(\varepsilon\downarrow 0\)、\(B\to\infty\) 且满足 \(B\,\varepsilon^{d/2}\to\infty\)（以保证体积比近似稳定），则有渐近
+\begin{equation}\label{eq:pom-multi-axis-near1-density}
+N_{\varepsilon}(m)
+\ =\
+\frac{B}{(2\pi)^{d}}\cdot\frac{V_{d}}{\sqrt{\det\Sigma}}\cdot(2\log\lambda\cdot\varepsilon)^{d/2}
+\ +\ o\!\bigl(B\varepsilon^{d/2}\bigr).
+\end{equation}
+特别地，在自然贴边尺度 \(\varepsilon\asymp B^{-2/d}\) 上，\(N_\varepsilon(m)=O(1)\)：最靠近 \(1\) 的 pole 族在预算放大下保持稀疏，而不会出现宏观级别的多重贴边。
+\end{proposition}
+
+\begin{proof}
+由 \eqref{eq:pom-multi-axis-near1-pole-translate}，在忽略高阶项的意义下，
+\(
+1-\Re s(\vartheta)\le \varepsilon
+\)
+等价于
+\(
+\vartheta^{\mathsf T}\Sigma\vartheta\le 2\log\lambda\cdot\varepsilon
+\)。
+令 \(R:=\sqrt{2\log\lambda\cdot\varepsilon}\) 并记椭球 \(E_R=\{x:\ x^{\mathsf T}\Sigma x\le R^2\}\)。
+当角格足够细（由 \(B\,\varepsilon^{d/2}\to\infty\) 保证）时，格点计数以体积比近似：
+\[
+N_\varepsilon(m)
+\sim
+\frac{\mathrm{vol}(E_R)}{\det L(m)}
+=\frac{V_d R^d}{\sqrt{\det\Sigma}}\cdot\frac{B}{(2\pi)^d},
+\]
+代入 \(R^d=(2\log\lambda\cdot\varepsilon)^{d/2}\) 即得 \eqref{eq:pom-multi-axis-near1-density}。
+最后一句由把 \(\varepsilon\asymp B^{-2/d}\) 代回主项得到。
+\end{proof}
+
+\paragraph{闭合推论链（资源--谱--pole--有限部）}
+在 near-coboundary 二次律 \eqref{eq:pom-multi-axis-near-coboundary} 与空间--时间换算律（命题 \ref{prop:real-input-40-space-time-conversion-law}）的底座上，可得到一个闭合的可审计推论链条：
+\begin{itemize}
+  \item \textbf{预算 \(\Rightarrow\) 谱：}Minkowski 预算障碍给出 \(q(m)=O(B^{-2/d})\)（定理 \ref{thm:pom-minkowski-budget-barrier}），从而最坏谱缺口满足 \(\Delta_{\mathrm{spec}}(m)=O(B^{-2/d})\) 并强制 \(\tau_{\mathrm{mix}}(m)=\Omega(B^{2/d})\)（推论 \ref{cor:pom-multi-axis-mixing-budget-barrier}）。
+  \item \textbf{谱 \(\Rightarrow\) pole：}Dirichlet 归一化把同一缺口译码为 near-\(1\) 主极点贴边律 \(1-\Re s=O(B^{-2/d})\)（推论 \ref{cor:pom-multi-axis-near1-pole-barrier}）。
+  \item \textbf{pole \(\Rightarrow\) 有限部：}空间--时间换算把贴边与有限部漂移在二阶精度上线性锁定，从而不可避免的贴边通道必携带同阶的有限部漂移量级（推论 \ref{cor:pom-multi-axis-pole-drift-binding}）。
+  \item \textbf{常数优化与密度：}允许在同一共体积类内优化格形状时，极限常数由 Hermite 常数控制（定理 \ref{thm:pom-hermite-constant-characterization}）；同时贴边极点数满足 \(N_\varepsilon\sim B\varepsilon^{d/2}\) 的体积比主项（命题 \ref{prop:pom-multi-axis-near1-density}）。
+\end{itemize}
+
+\input{08_projection_ontology_mathematics_part07b}

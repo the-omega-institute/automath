@@ -1,0 +1,192 @@
+\paragraph{零点影随与递归误差闭合：局部横截证书到多尺度收敛}
+
+\begin{theorem}[递归近似链的零点影随原理与显式定位界]\label{thm:xi-recursive-zero-shadowing-explicit}
+设 \(I=[a,b]\subset\RR\)，\(f\in C^1(I)\) 为实值函数。给定近似链 \(f_m\in C^1(I)\) 与误差上界 \(\varepsilon_m,\delta_m\downarrow 0\)，满足
+\[
+|f(t)-f_m(t)|\le \varepsilon_m,\qquad |f'(t)-f_m'(t)|\le \delta_m,\qquad t\in I.
+\]
+固定某个 \(m\)。若存在 \(t_m\in I\) 与 \(r_m>0\) 使
+\[
+J_m:=[t_m-r_m,t_m+r_m]\subset I,\qquad f_m(t_m)=0,
+\]
+且满足：
+\begin{enumerate}
+  \item \(f_m'\) 在 \(J_m\) 上不变号；
+  \item 存在 \(\lambda_m>\delta_m\) 使 \(|f_m'(t)|\ge \lambda_m\)（\(t\in J_m\)）；
+  \item \(\varepsilon_m<(\lambda_m-\delta_m)\,r_m\)；
+\end{enumerate}
+则存在唯一 \(t_\ast\in J_m\) 使 \(f(t_\ast)=0\)，并有显式界
+\[
+\boxed{\;
+|t_\ast-t_m|\le \frac{\varepsilon_m}{\lambda_m-\delta_m}\; }.
+\]
+若进一步存在无穷子列 \(m_k\uparrow\infty\) 满足 \(J_{m_{k+1}}\subset J_{m_k}\)，则 \(t_{m_k}\to t_\ast\)。
+\end{theorem}
+\begin{proof}
+由 (1)(2) 知 \(f_m\) 在 \(J_m\) 严格单调，且
+\[
+|f_m(t)|\ge \lambda_m|t-t_m|,\qquad t\in J_m.
+\]
+于是端点满足 \(|f_m(t_m\pm r_m)|\ge \lambda_m r_m\)，并且两端异号。
+由误差约束 \(|f-f_m|\le\varepsilon_m<\lambda_m r_m\)，\(f\) 在两端与 \(f_m\) 同号，故仍异号；由介值定理，\(f\) 在 \(J_m\) 至少有一零点。
+\par
+再由
+\[
+|f'(t)|\ge |f_m'(t)|-|f'(t)-f_m'(t)|\ge \lambda_m-\delta_m>0,\qquad t\in J_m,
+\]
+知 \(f\) 在 \(J_m\) 严格单调，故零点唯一。
+设该零点为 \(t_\ast\)。均值定理给出某 \(\xi\) 介于 \(t_m,t_\ast\) 之间使
+\[
+f(t_m)-f(t_\ast)=f'(\xi)(t_m-t_\ast).
+\]
+由 \(f(t_\ast)=0\) 与 \(|f(t_m)|=|f(t_m)-f_m(t_m)|\le\varepsilon_m\) 得
+\[
+|t_\ast-t_m|
+=\frac{|f(t_m)|}{|f'(\xi)|}
+\le \frac{\varepsilon_m}{\lambda_m-\delta_m}.
+\]
+嵌套子列结论由区间套定理与唯一性交汇点直接得到。证毕。
+\end{proof}
+
+\begin{corollary}[黎曼--西格尔型截断的局部零点认证闭合]\label{cor:xi-rs-local-zero-certification}
+令 \(Z(t)\) 为 Hardy 的 \(Z\)-函数，\(Z_N(t)\) 为任一对称截断近似，并记余项
+\[
+R_N(t):=Z(t)-Z_N(t).
+\]
+设 \(I=[T_0,T_1]\) 上有显式界
+\[
+|R_N(t)|\le E_N,\qquad |R_N'(t)|\le F_N,\qquad t\in I.
+\]
+若存在 \(\tau\in I\) 与 \(r>0\) 使 \(J=[\tau-r,\tau+r]\subset I\)、\(Z_N(\tau)=0\)，并满足
+\begin{enumerate}
+  \item \(Z_N'\) 在 \(J\) 上不变号；
+  \item \(|Z_N'(t)|\ge \lambda>F_N\)（\(t\in J\)）；
+  \item \(E_N<(\lambda-F_N)r\)；
+\end{enumerate}
+则 \(Z\) 在 \(J\) 内存在唯一零点 \(\gamma\)，且
+\[
+\boxed{\;
+|\gamma-\tau|\le \frac{E_N}{\lambda-F_N}\; }.
+\]
+\end{corollary}
+\begin{proof}
+将定理 \ref{thm:xi-recursive-zero-shadowing-explicit} 应用于
+\(
+f=Z,\ f_m=Z_N,\ \varepsilon_m=E_N,\ \delta_m=F_N
+\)
+即可。证毕。
+\end{proof}
+
+\begin{proposition}[分辨率递归的零点漂移公式与可计算上界]\label{prop:xi-resolution-recursion-zero-drift}
+设 \(f_k\in C^1(I)\) 为实值递归链
+\[
+f_{k+1}(t)=f_k(t)+u_{k+1}(t),\qquad u_{k+1}\in C^1(I).
+\]
+设 \(\tau_k\in I\) 为 \(f_k\) 的简单零点。若存在 \(r>0\) 使
+\[
+J_k:=[\tau_k-r,\tau_k+r]\subset I
+\]
+并满足：
+\begin{enumerate}
+  \item \(f_{k+1}'\) 在 \(J_k\) 上不变号；
+  \item \(\inf_{t\in J_k}|f_{k+1}'(t)|\ge m_k>0\)；
+  \item \(\sup_{t\in J_k}|u_{k+1}(t)|<m_k r\)；
+\end{enumerate}
+则 \(f_{k+1}\) 在 \(J_k\) 内存在唯一零点 \(\tau_{k+1}\)，并存在
+\(\xi_k\in(\tau_k,\tau_{k+1})\) 使
+\[
+\tau_{k+1}-\tau_k=-\frac{u_{k+1}(\tau_k)}{f_{k+1}'(\xi_k)}.
+\]
+从而
+\[
+\boxed{\;
+|\tau_{k+1}-\tau_k|\le \frac{\sup_{t\in J_k}|u_{k+1}(t)|}{m_k}\; }.
+\]
+\end{proposition}
+\begin{proof}
+由 \(f_k(\tau_k)=0\) 得 \(f_{k+1}(\tau_k)=u_{k+1}(\tau_k)\)。
+对任意 \(s\in[-r,r]\)，均值定理给出
+\[
+f_{k+1}(\tau_k+s)=f_{k+1}(\tau_k)+f_{k+1}'(\eta_s)s,\qquad \eta_s\in J_k.
+\]
+故
+\[
+|f_{k+1}(\tau_k\pm r)|
+\ge m_k r-\sup_{J_k}|u_{k+1}|>0,
+\]
+且两端符号相反，因而存在零点。由 (1)(2) 严格单调得唯一性。
+再对
+\(
+0=f_{k+1}(\tau_{k+1})-f_{k+1}(\tau_k)
+\)
+应用均值定理即得漂移公式与上界。证毕。
+\end{proof}
+
+\begin{theorem}[多尺度漂移可加性与零点极限存在的充分条件]\label{thm:xi-multiscale-drift-summability-limit}
+在命题 \ref{prop:xi-resolution-recursion-zero-drift} 设定下，设从某 \(k_0\) 起存在嵌套区间族 \(J_k\) 使其假设对所有 \(k\ge k_0\) 成立，并且
+\[
+\sum_{k\ge k_0}\frac{\sup_{t\in J_k}|u_{k+1}(t)|}{m_k}<\infty.
+\]
+则 \(\{\tau_k\}_{k\ge k_0}\) 为柯西列，故收敛到某 \(\tau_\infty\in I\)。
+若进一步 \(f_k\to f\) 于 \(\bigcap_{k\ge k_0}J_k\) 一致收敛，则
+\[
+f(\tau_\infty)=0,
+\]
+并且
+\[
+\boxed{\;
+|\tau_\infty-\tau_{k_0}|
+\le \sum_{k\ge k_0}\frac{\sup_{t\in J_k}|u_{k+1}(t)|}{m_k}\; }.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:xi-resolution-recursion-zero-drift}，
+\(
+|\tau_{k+1}-\tau_k|\le A_k
+\)
+其中
+\(
+A_k:=\sup_{J_k}|u_{k+1}|/m_k
+\)。
+故对 \(k>\ell\ge k_0\) 有
+\[
+|\tau_k-\tau_\ell|\le \sum_{j=\ell}^{k-1}A_j\to 0\quad(\ell\to\infty),
+\]
+从而为柯西列。
+若 \(f_k\to f\) 一致且 \(f_k(\tau_k)=0\)，结合 \(\tau_k\to\tau_\infty\) 与连续性即得 \(f(\tau_\infty)=0\)。
+末式由望远镜估计直接成立。证毕。
+\end{proof}
+
+\paragraph{余项斜率支配接口：可证伪的负反馈条件}
+
+\begin{conjecture}[余项斜率支配律]\label{conj:xi-sdr-feedback-law}
+存在绝对常数 \(c\in(0,1)\) 与 \(T_0>0\)，使得对所有 \(t\ge T_0\)，取与高度 \(t\) 匹配的对称截断 \(Z_N\)（例如 \(N\asymp \sqrt{t/(2\pi)}\)）时，其余项 \(R_N:=Z-Z_N\) 满足
+\[
+|R_N(t)|\le c\,\frac{|Z_N'(t)|}{\log t}.
+\]
+可选加强为
+\[
+|R_N'(t)|\le c\,\frac{|Z_N'(t)|}{(\log t)^2}.
+\]
+\end{conjecture}
+
+\begin{proposition}[斜率支配律导出的全局影随闭合框架]\label{prop:xi-sdr-implies-global-shadowing}
+若猜想 \ref{conj:xi-sdr-feedback-law} 成立，并且在充分大高度区间 \([T,2T]\) 上，\(Z_N\) 的简单零点族满足局部覆盖与横截下界
+\[
+\inf |Z_N'|\gg 1,
+\]
+则存在尺度 \(r\asymp (\log T)^{-1}\) 使推论 \ref{cor:xi-rs-local-zero-certification} 的闭合条件在各局部窗口内同时成立。
+因此 \(Z\) 在对应窗口中逐一存在唯一影随零点，进而得到区间级的递归零点影随。
+\end{proposition}
+\begin{proof}
+在每个简单零点中心 \(\tau\) 附近，横截下界给出 \(|Z_N'|\) 的正下界 \(\lambda\)。
+猜想 \ref{conj:xi-sdr-feedback-law} 给出 \(E_N\) 与 \(\lambda\) 的定量支配，且可选 \(r\asymp (\log T)^{-1}\) 使
+\(
+E_N<(\lambda-F_N)r
+\)
+成立（若使用加强式则 \(F_N\) 同时受控）。
+由推论 \ref{cor:xi-rs-local-zero-certification}，每一窗口内得到唯一影随零点。
+对覆盖族逐窗应用并拼接即得区间级结论。证毕。
+\end{proof}
+
+\endinput

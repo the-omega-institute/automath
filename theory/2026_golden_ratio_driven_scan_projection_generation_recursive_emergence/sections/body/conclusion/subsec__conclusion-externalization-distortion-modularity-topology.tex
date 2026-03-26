@@ -1,0 +1,456 @@
+\subsection{外部化指数、失真阈值与模性拓扑的统一命题链}\label{subsec:conclusion-externalization-distortion-modularity-topology}
+本小节把外部化指数、率失真硬下界、\(\varepsilon\)-sound 稳定性、异常放大动力学以及 Lee--Yang 的 \(S_4\) 模性接口压缩为一组可独立调用的命题，并与前文已证结构保持同一依赖链。
+
+\begin{theorem}[外部化指数控制的最坏读出时间下界]\label{thm:conclusion-externalization-index-readout-time-lower-bound}
+固定分辨率 \(m\)，令
+\[
+\Fold_m:\Omega_m\to X_m,\qquad
+d_m(x):=\card{\Fold_m^{-1}(x)},\qquad
+D_m:=\max_{x\in X_m}d_m(x).
+\]
+考虑任意顺序读出--解码协议：在给定 \(x\in X_m\) 条件下，协议逐步读取字母表 \(\mathcal A\)（\(|\mathcal A|\ge 2\)）并在停止时输出 \(\widehat\omega\in \Fold_m^{-1}(x)\)，且要求在每条纤维上实现零误差单值复原。设 \(\mathbb E[T(x)]\) 为纤维 \(\Fold_m^{-1}(x)\) 上均匀先验下的停止时间期望，则
+\[
+\sup_{x\in X_m}\mathbb E[T(x)]
+\ \ge\
+\frac{\log D_m}{\log|\mathcal A|}.
+\]
+此外，对折叠诱导的条件期望 \(E_m\)（命题 \ref{prop:fold-condexp-index-maxfiber}），有
+\[
+\Ind(E_m)=D_m,
+\]
+从而同一界可写为
+\[
+\sup_{x\in X_m}\mathbb E[T(x)]
+\ \ge\
+\frac{\log \Ind(E_m)}{\log|\mathcal A|}.
+\]
+\end{theorem}
+\begin{proof}
+取 \(x_\star\in X_m\) 使 \(d_m(x_\star)=D_m\)。在纤维 \(\Fold_m^{-1}(x_\star)\) 上，零误差顺序读出对应一棵 \(|\mathcal A|\)-叉前缀树，其叶长记为 \(\ell_1,\dots,\ell_{D_m}\)。由 Kraft 不等式，
+\[
+\sum_{i=1}^{D_m}|\mathcal A|^{-\ell_i}\le 1.
+\]
+在均匀先验下，
+\[
+\mathbb E[T(x_\star)]=\frac1{D_m}\sum_{i=1}^{D_m}\ell_i.
+\]
+由上式与对数凸性（或等价的前缀码平均长度下界）得
+\[
+\frac1{D_m}\sum_{i=1}^{D_m}\ell_i\ge \log_{|\mathcal A|}D_m
+=\frac{\log D_m}{\log|\mathcal A|}.
+\]
+故 \(\sup_x\mathbb E[T(x)]\ge \mathbb E[T(x_\star)]\ge \log D_m/\log|\mathcal A|\)。
+再由命题 \ref{prop:fold-condexp-index-maxfiber} 的 \(\Ind(E_m)=D_m\) 即得指数表述。证毕。
+\end{proof}
+
+\begin{corollary}[面积律饱和下的边界读出时间下界]\label{cor:conclusion-area-law-page-time-lower-bound}
+若外部接口满足面积律饱和
+\[
+S_{\mathrm{BH}}=\frac{A}{4},
+\]
+并按本稿容量口径满足
+\[
+S_{\mathrm{BH}}=\log\Ind(E_m),
+\]
+则任意 \(|\mathcal A|\)-元顺序边界读出的最坏期望时间满足
+\[
+\sup_{x}\mathbb E[T(x)]
+\ \ge\
+\frac{A}{4\log|\mathcal A|}.
+\]
+特别地，当 \(|\mathcal A|=2\) 时，
+\[
+\sup_x\mathbb E[T(x)]\ge \frac{A}{4}.
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:dephys-horizon-fiber-capacity-area-law} 与定理 \ref{thm:conclusion-externalization-index-readout-time-lower-bound} 直接合并。证毕。
+\end{proof}
+
+\begin{theorem}[Fibonacci 稳定型输出的不可消除失真阈值]\label{thm:conclusion-fibonacci-hard-distortion-threshold}
+令 \(\omega\sim\mathrm{Unif}(\{0,1\}^m)\)，\(X=\Fold_m(\omega)\)。
+对任意（可随机化）解码器 \(\widehat\omega=\mathsf{Dec}(X)\)，定义归一化期望汉明失真
+\[
+\delta:=\frac1m\,\mathbb E[d_H(\omega,\widehat\omega)]\in[0,1/2].
+\]
+记二元熵函数
+\[
+h_2(t):=-t\log_2 t-(1-t)\log_2(1-t).
+\]
+则必有
+\[
+h_2(\delta)\ \ge\ 1-\frac1m\log_2|X_m|.
+\]
+若进一步 \(|X_m|=F_{m+2}\)，并以 \(\delta_m^\star\in(0,1/2)\) 定义
+\[
+h_2(\delta_m^\star)=1-\frac1m\log_2F_{m+2},
+\]
+则对任意解码器有 \(\delta\ge\delta_m^\star\)。并且当 \(m\to\infty\) 时，
+\[
+\delta_m^\star\to\delta_\infty^\star,\qquad
+h_2(\delta_\infty^\star)=1-\log_2\varphi,
+\]
+数值上 \(\delta_\infty^\star\approx 0.054632351165136\)。
+\end{theorem}
+\begin{proof}
+由数据处理不等式，
+\[
+I(\omega;\widehat\omega)\le I(\omega;X)\le H(X)\le \log_2|X_m|.
+\]
+另一方面，二元均匀源在平均汉明失真 \(\delta\) 下的率失真函数为 \(R(\delta)=1-h_2(\delta)\)（\(\delta\in[0,1/2]\)），故
+\[
+I(\omega;\widehat\omega)\ge m(1-h_2(\delta)).
+\]
+合并即得
+\[
+m(1-h_2(\delta))\le \log_2|X_m|,
+\]
+等价于所述不等式。
+当 \(|X_m|=F_{m+2}\) 时，\(h_2\) 在 \([0,1/2]\) 上严格单调，故 \(\delta_m^\star\) 唯一并给出 \(\delta\ge\delta_m^\star\)。
+再由 \(F_{m+2}\sim \varphi^m/\sqrt5\) 得
+\(
+\frac1m\log_2F_{m+2}\to\log_2\varphi
+\)，从而得到极限方程与数值。证毕。
+\end{proof}
+
+\begin{corollary}[侧信息预算与圆维下界]\label{cor:conclusion-sideinfo-distortion-cdim-lower-bound}
+在定理 \ref{thm:conclusion-fibonacci-hard-distortion-threshold} 的设定下，若引入侧信息 \(S\)（比特预算 \(L:=H(S)\)）并用 \(\widehat\omega=\mathsf{Dec}(X,S)\) 达到失真 \(\delta\)，则
+\[
+L\ \ge\ m(1-h_2(\delta))-\log_2|X_m|.
+\]
+若侧信息由相位圆离散化实现：设可见圆轴数为 \(\cdim(G)\)，每轴分辨率为 \(Q\)（每轴至多 \(\log_2 Q\) 比特），则必有
+\[
+\cdim(G)\ \ge\
+\frac{m(1-h_2(\delta))-\log_2|X_m|}{\log_2 Q}.
+\]
+在 \(|X_m|=F_{m+2}\) 且 \(\delta<\delta_m^\star\) 时，右端为正；特别地，若 \(Q\) 为常数则 \(\cdim(G)=\Omega(m)\)，若 \(Q=\mathrm{poly}(m)\) 则 \(\cdim(G)=\Omega(m/\log m)\)。
+\end{corollary}
+\begin{proof}
+与定理 \ref{thm:conclusion-fibonacci-hard-distortion-threshold} 同理，
+\[
+I(\omega;\widehat\omega)\le I(\omega;X,S)\le H(X)+H(S)\le \log_2|X_m|+L.
+\]
+而率失真下界仍给出
+\(
+I(\omega;\widehat\omega)\ge m(1-h_2(\delta))
+\)。
+故
+\[
+L\ge m(1-h_2(\delta))-\log_2|X_m|.
+\]
+若每个圆轴最多承载 \(\log_2Q\) 比特，则 \(H(S)\le \cdim(G)\log_2Q\)，代回即得圆维下界。最后两条增长律由 \(|X_m|=F_{m+2}\sim\varphi^m\) 的线性主阶直接给出。证毕。
+\end{proof}
+
+\begin{corollary}[Gödel 整数封装的超线性不可压缩性]\label{cor:conclusion-godel-sideinfo-superlinear-overhead}
+设侧信息最终以 prime-register 向量 \(v\) 封装为单个 Gödel 整数 \(N(v)\)，其向量长度记为 \(L(v)\)。
+则由定理 \ref{thm:xi-godel-integerization-log-overhead}，存在绝对常数 \(c_0,c_1>0\) 使
+\[
+\log_2N(v)\ \ge\ c_0\,L(v)\log_2L(v)-c_1L(v).
+\]
+特别地，在 \(|X_m|=F_{m+2}\) 且 \(\delta<\delta_\infty^\star\) 时，由推论 \ref{cor:conclusion-sideinfo-distortion-cdim-lower-bound} 得 \(L(v)=\Omega(m)\)，从而
+\[
+\log_2N(v)=\Omega(m\log m).
+\]
+\end{corollary}
+\begin{proof}
+第一式即定理 \ref{thm:xi-godel-integerization-log-overhead} 的量纲表述。
+第二式由 \(L(v)\ge L=\Omega(m)\) 代入第一式即得。证毕。
+\end{proof}
+
+\begin{theorem}[面积律预算下标量 Gödel 外置的结构不相容性]\label{thm:conclusion-area-law-scalar-godel-incompatibility}
+设边界可见自由度规模为 \(b\)，并假设存在与 \(b\) 无关的常数 \(C>0\) 使得边界实现层满足严格面积律预算
+\[
+\log_2\dim(\mathcal H_{\partial})\ \le\ C b.
+\]
+若试图以互异素数 \(q_1,\dots,q_b\) 将 \(\{0,1\}^b\) 标量 Gödel 化为
+\(
+g(\varepsilon):=\prod_{i=1}^b q_i^{\varepsilon_i}
+\)
+并以最坏情形 \(L_{\max}:=\max_{\varepsilon}g(\varepsilon)=\prod_{i=1}^b q_i\) 的位长 \(\log_2 L_{\max}\) 作为实现层资源度量，则必有
+\[
+\log_2 L_{\max}\ \ge\ \log_2(p_b\#)\ =\ \Omega(b\log b),
+\]
+其中 \(p_b\#:=\prod_{i=1}^b p_i\) 为 primorial（\(p_i\) 为第 \(i\) 个素数）。
+因此当 \(b\to\infty\) 时，该标量外置的最坏资源增长严格超出任何线性面积律预算。
+\end{theorem}
+\begin{proof}
+由素数序性质 \(q_i\ge p_i\) 得
+\(
+L_{\max}=\prod_{i=1}^b q_i\ge \prod_{i=1}^b p_i=p_b\#
+\)，从而 \(\log_2 L_{\max}\ge \log_2(p_b\#)\)。
+又由 \(p_i\ge i+1\) 得 \(p_b\#\ge (b+1)!\)，故 \(\log_2(p_b\#)\ge \log_2((b+1)!)=\Omega(b\log b)\)。
+结合线性面积律预算 \(\log_2\dim(\mathcal H_{\partial})\le Cb\) 即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{\(\varepsilon\)}{eps}-sound 预算的 Wasserstein--Stieltjes 解析稳定性]\label{thm:conclusion-epssound-w1-stieltjes-stability}
+固定接口对象 \(\mathcal I\) 并沿定义 \ref{def:pom-eps-sound-rewrite} 记
+\[
+w\Longrightarrow_\varepsilon w'.
+\]
+设同一读出通道给出的随机变量 \(A_w,A_{w'}\) 在同一概率空间上取值于 \([1,B]\)，且在好事件上满足 \(A_w=A_{w'}\)。
+记其分布为 \(\mu_w,\mu_{w'}\)。
+则
+\[
+W_1(\mu_w,\mu_{w'})\le 2B\varepsilon.
+\]
+进一步，对任意 \(t>0\) 的 Stieltjes 读出
+\[
+S_{\mu}(t):=\int\frac{1}{t+a}\,\dd\mu(a),
+\]
+有显式稳定界
+\[
+\bigl|S_{\mu_w}(t)-S_{\mu_{w'}}(t)\bigr|
+\le
+\frac{2B\varepsilon}{(t+1)^2}.
+\]
+\end{theorem}
+\begin{proof}
+由定义 \ref{def:pom-eps-sound-rewrite}，存在坏事件 \(E\) 满足 \(\mathbb P(E)\le\varepsilon\)，且在 \(E^c\) 上 \(A_w=A_{w'}\)。
+故
+\[
+\mathbb E|A_w-A_{w'}|
+=\mathbb E\!\bigl[|A_w-A_{w'}|\mathbf 1_E\bigr]
+\le 2B\,\mathbb P(E)\le 2B\varepsilon.
+\]
+由 Wasserstein 距离的耦合定义，\(W_1(\mu_w,\mu_{w'})\le \mathbb E|A_w-A_{w'}|\)，从而得第一式。
+再由命题 \ref{prop:xi-stieltjes-w1-lipschitz}，
+\[
+\bigl|S_{\mu_w}(t)-S_{\mu_{w'}}(t)\bigr|
+\le \frac{1}{(t+1)^2}W_1(\mu_w,\mu_{w'}),
+\]
+代入即可。证毕。
+\end{proof}
+
+\begin{theorem}[异常放大在环面上的扩张动力学与熵律]\label{thm:conclusion-anomaly-torus-expanding-entropy}
+设 lift 角色空间给出实向量空间
+\[
+A_G:=\RR^{\widehat G\setminus\{\chi_0\}},
+\]
+取满秩格 \(\Lambda\subset A_G\)，并记环面
+\[
+\mathbb T_G:=A_G/\Lambda,\qquad d:=\dim\mathbb T_G.
+\]
+对任意整数 \(q\ge 2\)，定义
+\[
+F_q:\mathbb T_G\to\mathbb T_G,\qquad F_q([a])=[qa].
+\]
+则：
+\begin{enumerate}
+  \item \(F_q\) 为 \(C^\infty\) 扩张覆叠映射，度数为 \(q^d\)；
+  \item 非游荡集等于 \(\mathbb T_G\) 本身；
+  \item 拓扑熵满足
+  \[
+  h_{\mathrm{top}}(F_q)=d\log q.
+  \]
+\end{enumerate}
+此外，若异常类满足矩放大律
+\[
+[\mathrm{Anom}(\mathrm{MOM}_q\circ w)]=q\,[\mathrm{Anom}(w)]
+\]
+（命题 \ref{prop:pom-anom-moment-amplification}），则其在环面坐标上的动力学由 \(F_q\) 给出。
+\end{theorem}
+\begin{proof}
+线性映射 \(a\mapsto qa\) 在商空间 \(\mathbb T_G\) 上诱导 \(F_q\)，其雅可比行为为常数 \(qI_d\)，故处处扩张且覆盖度为 \(|\det(qI_d)|=q^d\)。
+扩张环面端同态的非游荡集为全空间，且拓扑熵等于对数体积增长率 \(d\log q\)。
+最后一条由命题 \ref{prop:pom-anom-moment-amplification} 的线性放大公式与环面商映射兼容性直接得到。证毕。
+\end{proof}
+
+\begin{theorem}[Lee--Yang 的 \texorpdfstring{$S_4$}{S4} 专化、奇二维 Artin 表示与权一模性]\label{thm:conclusion-leyang-s4-odd-artin-weight-one}
+令
+\[
+P_{\mathrm{LY}}(y)=y^4-3y^3+4y^2-2y+1.
+\]
+取 \(y_0\in\QQ\setminus\{0,1\}\) 且 \(P_{\mathrm{LY}}(y_0)\neq 0\)，并设对应四次特化的分裂域满足
+\[
+\Gal(L_{y_0}/\QQ)\cong S_4.
+\]
+记
+\[
+K_{y_0}:=\QQ\!\left(\sqrt{-y_0(y_0-1)P_{\mathrm{LY}}(y_0)}\right).
+\]
+若 \(K_{y_0}\) 为虚二次域，则由 \(S_4\) 的二维不可约表示诱导的 Artin 表示 \(\rho_{y_0}\) 为奇表示，并存在权 \(1\) 本原尖点新形式 \(f_{y_0}\) 使
+\[
+L(s,f_{y_0})=L(s,\rho_{y_0}).
+\]
+并且可取无穷多 \(y_0>1\) 使上述结论同时成立。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9c-leyang-cover-s4-specialization} 与定理 \ref{thm:xi-time-part9c-leyang-s4-specialization-artin-weight1}，\(S_4\) 正则专化可诱导二维 Artin 表示，并在奇性条件下对应权一模形式。
+当 \(-y_0(y_0-1)P_{\mathrm{LY}}(y_0)<0\) 时，\(K_{y_0}\) 为虚二次域，从而满足奇性判别。
+另一方面，\(P_{\mathrm{LY}}(y)>0\) 在充分大 \(y>1\) 上成立，故上述负性条件在无穷多有理点成立；再由 Hilbert 不可约性可取无穷多 \(y_0\) 保持 \(S_4\) 专化。证毕。
+\end{proof}
+
+\begin{corollary}[折叠 \texorpdfstring{\(\chi\)}{chi}-twisted \texorpdfstring{\(\zeta\)}{zeta} 的条件模性闭包]\label{cor:conclusion-chi-twisted-zeta-conditional-modularity}
+设存在二维 Artin 表示 \(\rho\) 满足：除有限素数集外，折叠 \(\chi\)-twisted \(\zeta\) 的局部 Euler 因子与 \(L(s,\rho)\) 局部因子一致。
+若 \(\rho\) 满足定理 \ref{thm:conclusion-leyang-s4-odd-artin-weight-one} 的奇性与可解像条件，则存在权一新形式 \(f\) 使
+\[
+L(s,f)=L(s,\rho),
+\]
+并且该 \(\chi\)-twisted \(\zeta\) 的原始因子在除有限素数外与 \(L(s,f)\) 一致，故继承相应的解析延拓与函数方程结构。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-leyang-s4-odd-artin-weight-one}，\(L(s,\rho)\) 来自权一模形式。
+局部因子在有限外一致即给出 Euler 乘积的有限处同调修正，故原始部分同一并继承权一模形式的解析性质。证毕。
+\end{proof}
+
+\begin{theorem}[纤维内算法复杂度的平均精确律]\label{thm:conclusion-fold-fiber-average-algorithmic-complexity}
+对任意 \(m\ge1\) 与 \(x\in X_m\)，记 \(U_x\) 为纤维 \(\Fold_m^{-1}(x)\) 上的均匀分布。则存在绝对常数 \(C_1,C_2>0\)，使得
+\[
+\Bigl|
+\mathbb E_{\omega\sim U_x}K(\omega\mid m)
+-
+K(x\mid m)-\log_2 d_m(x)
+\Bigr|
+\le C_1\log m + C_2,
+\]
+并且该估计对所有纤维同时一致。
+\end{theorem}
+\begin{proof}
+主稿关于 Fold 算法全息账本的 Kolmogorov 上界给出：对任意 \(\omega\in \Fold_m^{-1}(x)\)，
+\[
+K(\omega\mid m)\le K(x\mid m)+\lceil \log_2 d_m(x)\rceil + O(\log m).
+\]
+对 \(U_x\) 取平均即得
+\[
+\mathbb E_{U_x}K(\omega\mid m)\le K(x\mid m)+\log_2 d_m(x)+O(\log m).
+\]
+
+另一方面，同一主稿定理的证明先固定纤维后作计数，因此实际上给出逐纤维尾估计：存在绝对常数 \(C>0\) 使对任意 \(c\ge1\),
+\[
+U_x\!\left(
+K(\omega\mid m)
+<
+K(x\mid m)+\lfloor \log_2 d_m(x)\rfloor - C(\log m+c)
+\right)\le 2^{-c}.
+\]
+令
+\[
+Z_x(\omega):=
+K(x\mid m)+\lfloor \log_2 d_m(x)\rfloor-K(\omega\mid m).
+\]
+则
+\[
+U_x\bigl(Z_x>C(\log m+c)\bigr)\le 2^{-c}.
+\]
+由尾积分公式，
+\[
+\mathbb E_{U_x}(Z_x)_+
+\le
+C\log m + C\sum_{c\ge1}2^{-c}
+=
+O(\log m).
+\]
+故
+\[
+\mathbb E_{U_x}K(\omega\mid m)
+\ge
+K(x\mid m)+\log_2 d_m(x)-O(\log m).
+\]
+上下界合并即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[全局算法复杂度的推前--纤维分解]\label{cor:conclusion-global-algorithmic-complexity-pushforward-fiber}
+记推前权重
+\[
+w_m(x):=\frac{d_m(x)}{2^m}\qquad (x\in X_m).
+\]
+则
+\[
+\mathbb E_{\omega\sim \mathrm{Unif}(\Omega_m)}K(\omega\mid m)
+=
+\sum_{x\in X_m} w_m(x)\,K(x\mid m)
++
+\frac1{2^m}\sum_{x\in X_m} d_m(x)\log_2 d_m(x)
++
+O(\log m).
+\]
+因此，微态算法复杂度在平均意义下精确裂解为两部分：稳定型本身的描述复杂度，与纤维几何所携带的隐藏对数体积。
+\end{corollary}
+\begin{proof}
+由全概率公式，
+\[
+\mathbb E_{\omega\sim \mathrm{Unif}(\Omega_m)}K(\omega\mid m)
+=
+\sum_{x\in X_m} w_m(x)\,
+\mathbb E_{\omega\sim U_x}K(\omega\mid m).
+\]
+将定理 \ref{thm:conclusion-fold-fiber-average-algorithmic-complexity} 逐纤维代入即可。证毕。
+\end{proof}
+
+\begin{theorem}[最大算法 uplift 与最大纤维对数的等价]\label{thm:conclusion-max-algorithmic-uplift-maxfiber-log}
+记
+\[
+M_m:=\max_{x\in X_m} d_m(x).
+\]
+则有
+\[
+\sup_{\omega\in\Omega_m}
+\Bigl(
+K(\omega\mid m)-K(\Fold_m(\omega)\mid m)
+\Bigr)
+=
+\log_2 M_m + O(\log m).
+\]
+换言之，Fold 在算法论意义下所能隐藏的最大信息量，精确等于最大纤维体积的对数，误差仅为对数量级。
+\end{theorem}
+\begin{proof}
+对任意 \(\omega\in\Omega_m\)，主稿中的统一上界给出
+\[
+K(\omega\mid m)-K(\Fold_m(\omega)\mid m)
+\le
+\lceil \log_2 d_m(\Fold_m(\omega))\rceil + O(\log m)
+\le
+\log_2 M_m + O(\log m).
+\]
+故得上界。
+
+取 \(x^\star\in X_m\) 使 \(d_m(x^\star)=M_m\)。由主稿的纤维内可达下界，存在 \(\omega^\star\in \Fold_m^{-1}(x^\star)\) 满足
+\[
+K(\omega^\star\mid m)\ge K(x^\star\mid m)+\lfloor \log_2 M_m\rfloor - O(\log m).
+\]
+于是
+\[
+K(\omega^\star\mid m)-K(x^\star\mid m)\ge \log_2 M_m - O(\log m),
+\]
+得所需下界。证毕。
+\end{proof}
+
+\begin{theorem}[最大纤维中的浅描述--深计算裂缝]\label{thm:conclusion-maxfiber-shallow-description-deep-computation-gap}
+令 \(t:\NN\to\NN\) 为任意可计算且无界的时间界函数。则存在无穷多尺度 \(m\) 与相应极大纤维达到者 \(x_m\in X_m\)，使得在纤维 \(\Fold_m^{-1}(x_m)\) 内存在微态 \(\omega_m\) 满足
+\[
+K(\omega_m\mid x_m,m)=O(\log m),
+\]
+而同时存在常数 \(c>0\) 使
+\[
+K^{t(m)}(\omega_m\mid x_m,m)\ge K(\omega_m\mid x_m,m)+c.
+\]
+因此，极大纤维并不只积累多重度；它们必然包含一类条件描述极浅而时间受限上不可压缩的微态。
+\end{theorem}
+
+\begin{proof}
+这正是定理 \ref{thm:fold-maxfiber-holographic-depth-amplification} 的结论重述。
+该定理利用最大纤维渐近 \(D_m=\Theta(\varphi^{m/2})\) 在每个足够大的极大纤维中剔除所有“长度 \(\le A\log m\)、时间 \(\le t(m)\)”程序可在条件输入 \((x_m,m)\) 下输出的元素，剩余集合仍非空；取其字典序最小者即得所求 \(\omega_m\)。
+于是普通条件复杂度仅为 \(O(\log m)\)，而时间受限复杂度与之保持严格正差。证毕。
+\end{proof}
+
+从同一 Fold 审计接口还可继续抽出一条此前未显式收束的信息几何--行列式链：概率侧的最大熵截面、KL 勾股分解、审计幂等的普适极小性以及 multiplicity determinant 的双端点读出，实际上共同刻画了“一次折叠已经饱和全部内部审计化”的严格含义。
+\input{thm__conclusion-fold-audit-maxent-determinant-saturation}
+\input{thm__conclusion-noncontractible-dpi-watatani-filter}
+
+\begin{conjecture}[Fold--Jones 谱拓扑同构]\label{conj:conclusion-fold-jones-spectral-topological-equivalence}
+存在自然 \(2\)-函子
+\[
+\mathcal J:\mathbf{PW}^{(\delta)}\longrightarrow \mathrm{TL}_{\delta},
+\qquad
+\delta=\sqrt{\Ind(E_m)},
+\]
+其中 \(\mathbf{PW}^{(\delta)}\) 为折叠 witness-block 可计算切片，\(\mathrm{TL}_{\delta}\) 为 loop 参数 \(\delta\) 的 Temperley--Lieb 平面代数。
+对任意由投影词编码的闭辫 \(L\)，其 Jones 评估与原始 \(\zeta\)-行列式读出满足同值对应；并且 Lee--Yang 参数 \(y\) 的解析延拓在 \((q,y)\)-平面上诱导受控分歧集合，与局部 Artin 因子匹配保持同构。
+该猜想与猜想 \ref{conj:pom-fold-jones-tower-symtft-doubled-fib}、猜想 \ref{conj:pom-fold-leyang-jones-boundary-value} 在接口层一致。
+最小可行验证路径为：在固定 \(m\) 的 witness-block 上显式构造 Jones 投影，核验 Temperley--Lieb 关系，并比较 Markov 迹与 \(\zeta\)-读出分母多项式。
+\end{conjecture}
+
+\noindent
+与此同时，非可缩筛子的加入也显示出另一条此前未单独写出的外部化链：受限数据处理损失不再由全体最大纤维控制，而由指标元 \(\mathrm{IndW}(E_{m,1})\) 的奇偶函数演算切出的奇纤维层控制；这一筛子对绝对极大块实行“全保留或全湮灭”的二值律，并把奇数层的全局最坏证书压回到同伦平凡、时间反演正号的最大块上。于是，Fold 的外部化理论不仅有全局最坏损失，还有一条由非可缩拓扑筛选出来的受限极值理论，两者只在一个模 \(6\) 周期的有限税上分岔。
+
+\endinput

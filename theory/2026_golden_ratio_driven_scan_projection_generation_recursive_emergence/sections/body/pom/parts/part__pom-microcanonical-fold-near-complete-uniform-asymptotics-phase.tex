@@ -1,0 +1,86 @@
+\paragraph{近完全查询的统一渐近：\texorpdfstring{$t\to\infty$}{t->infty} 时的 Bayes 成功率与标度相图}
+定理 \ref{thm:pom-microcanonical-fold-bayes-success-thermo-limit} 给出固定 \(t\) 的热力学极限：
+\((N-t)\) 查询的 Bayes 成功率收敛到完全齐次对称多项式 \(\mathsf{h}_t(w)\)。
+下述结果表明：当 \(t\) 随 \(N\) 增长但仍远小于 \(N\) 的特定统一尺度内，
+该逼近依然有效，并与定理 \ref{thm:pom-microcanonical-fold-dominant-pole-asymptotics} 的主极点律拼接为一条三段标度相图。
+
+\begin{theorem}[近完全查询的统一热力学逼近]\label{thm:pom-microcanonical-fold-bayes-success-near-complete-uniform}
+设字母表大小 \(n=\card{X_m}\) 固定，且存在分布 \(w\in\Delta(X_m)\)（各坐标严格正）使 \(d(x)/N\to w(x)\)。
+取 \(t=t(N)\to\infty\) 且满足
+\[
+t=o(N^{2/3}),
+\qquad
+k=N-t.
+\]
+则在均匀微正则先验 \(F\sim\mathrm{Unif}(\mathfrak{Fold}_m(d))\) 下，\((N-t)\) 查询的 Bayes 最优精确恢复成功率满足
+\[
+\boxed{\;
+\mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)
+=\mathsf{h}_t(w)\,(1+o(1))\;}
+\qquad(N\to\infty),
+\]
+其中 \(\mathsf{h}_t(w)\) 定义见定理 \ref{thm:pom-microcanonical-fold-bayes-success-thermo-limit}。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-microcanonical-fold-bayes-success-Nminus-t}，
+在 \(k=N-t\) 查询后未查询集上的剩余计数向量 \(R=(R_x)_{x\in X_m}\) 服从多元超几何分布，
+且
+\[
+\mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)=\EE\!\left[\frac{\prod_x R_x!}{t!}\right],
+\qquad
+0\le \frac{\prod_x R_x!}{t!}\le 1.
+\]
+令 \(\widetilde R\sim\mathrm{Mult}(t;w)\)。
+由定理 \ref{thm:pom-microcanonical-fold-bayes-success-thermo-limit} 的定义可知
+\(
+\EE[\prod_x \widetilde R_x!/t!]=\mathsf{h}_t(w)
+\)。
+因此
+\[
+\left|\mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)-\mathsf{h}_t(w)\right|
+\le D_{\mathrm{TV}}\!\left(\mathrm{Law}(R),\ \mathrm{Law}(\widetilde R)\right).
+\]
+当 \(n\) 固定且 \(w\) 严格正时，
+对超几何 pmf 与多项 pmf 的对数似然比作 Stirling 展开（对每个坐标的阶乘比展开到二阶，并控制余项），
+在 \(t=o(N^{2/3})\) 下余项为 \(o(1)\) 且在典型区域上一致；
+再结合多项分布的高斯集中（\(\widetilde R=tw+O_{\mathbb{P}}(\sqrt t)\)）可得上述对数似然比在概率意义下趋于 \(0\)，并由此推出总变差距离为 \(o(1)\)。
+代回即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[近完全查询的主指数与约化常数]\label{cor:pom-microcanonical-fold-bayes-success-near-complete-pole-law}
+在定理 \ref{thm:pom-microcanonical-fold-bayes-success-near-complete-uniform} 的条件下，若进一步 \(t\to\infty\)，
+则由定理 \ref{thm:pom-microcanonical-fold-dominant-pole-asymptotics}（记号 \(w_\star,r,C(w)\) 同该定理）得到
+\[
+\boxed{\;
+\mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)
+=\frac{C(w)}{(r-1)!}\,t^{\,r-1}\,w_\star^{\,t}\,(1+o(1))\;}
+\]
+从而
+\[
+\boxed{\;
+\log \mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)
+=t\log w_\star+(r-1)\log t+\log\!\left(\frac{C(w)}{(r-1)!}\right)+o(1)\;}
+\qquad(N\to\infty).
+\]
+\end{corollary}
+
+\begin{corollary}[全恢复成功率的三段标度相图]\label{cor:pom-microcanonical-fold-bayes-success-phase-diagram}
+在推论 \ref{cor:pom-microcanonical-fold-bayes-success-near-complete-pole-law} 的条件下（因此 \(n\) 与 \(w\) 固定且 \(w_\star<1\)），
+在 \(t=o(N^{2/3})\) 的近完全查询区间内有如下三段标度：
+\begin{enumerate}
+  \item \textbf{常数量级（\(t=O(1)\)）}：\(\mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)\to \mathsf{h}_t(w)\in(0,1]\)。
+  \item \textbf{幂律量级（\(t=\lfloor \lambda\log N\rfloor\)）}：对任意固定 \(\lambda>0\)，
+  \[
+  \mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)
+  =N^{\lambda\log w_\star+o(1)}(\log N)^{r-1+o(1)}.
+  \]
+  特别地，斜率 \(\lambda_\ast:=1/|\log w_\star|\) 对应主阶 \(\mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)=N^{-1+o(1)}(\log N)^{r-1+o(1)}\)。
+  \item \textbf{指数衰减（\(t/\log N\to\infty\)）}：若 \(t/\log N\to\infty\) 且仍有 \(t=o(N^{2/3})\)，则
+  \[
+  \frac{1}{t}\log \mathrm{Succ}^{\mathrm{Bayes}}_{N-t}(d)\ \to\ \log w_\star<0.
+  \]
+\end{enumerate}
+\end{corollary}
+
+\endinput
+

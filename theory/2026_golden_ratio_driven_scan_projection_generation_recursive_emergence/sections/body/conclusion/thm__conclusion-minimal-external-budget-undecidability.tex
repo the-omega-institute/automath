@@ -1,0 +1,119 @@
+\begin{theorem}[最小外置预算的不可判定性]\label{thm:conclusion-minimal-external-budget-undecidable}
+设 \(D,Y\) 为可数集合，并设 \(\pi:D\to Y\) 为全定义可计算映射，且具有有限纤维上界
+\[
+D(\pi):=\sup_{y\in Y}\#\pi^{-1}(y)<\infty.
+\]
+定义 \(\pi\) 的最小外置预算为
+\[
+b(\pi):=\min\Bigl\{B\in\NN_{\ge 1}:\ \exists\ \widetilde\pi:D\hookrightarrow Y\times\{0,1,\dots,B-1\}\ \text{单射},\ \operatorname{pr}_1\circ\widetilde\pi=\pi\Bigr\}.
+\]
+则：
+\begin{enumerate}
+  \item 对任意满足 \(D(\pi)<\infty\) 的 \(\pi\)，有
+  \[
+  b(\pi)=D(\pi).
+  \]
+  \item 存在一族显式可计算的投影算法 \(\{\pi_{M,x}\}\)（由图灵机 \(M\) 与输入 \(x\) 参数化）满足
+  \[
+  b(\pi_{M,x})=
+  \begin{cases}
+  1,& M(x)\ \text{不停机},\\
+  2,& M(x)\ \text{停机},
+  \end{cases}
+  \]
+  从而判定命题 \(b(\pi)=1\) 在该类算法上不可判定。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+第一条：记 \(d:=D(\pi)=\max_{y}\#\pi^{-1}(y)\)（有限性保证最大值存在）。
+若 \(B<d\)，取 \(y\) 使 \(\#\pi^{-1}(y)>B\)，则任意满足 \(\operatorname{pr}_1\circ\widetilde\pi=\pi\) 的 \(\widetilde\pi\) 在纤维 \(\pi^{-1}(y)\) 上第二坐标仅有 \(B\) 个取值，鸽巢原理给出 \(\widetilde\pi\) 不可能单射，故 \(b(\pi)\ge d\)。
+反之取 \(B=d\)，对每个纤维 \(\pi^{-1}(y)\) 固定一个注入编号 \(\mathrm{idx}:\pi^{-1}(y)\hookrightarrow\{0,\dots,d-1\}\)，并定义
+\(
+\widetilde\pi(x):=(\pi(x),\mathrm{idx}(x))
+\)，即得单射提升，故 \(b(\pi)\le d\)。于是 \(b(\pi)=d\)。
+\par
+第二条：对给定 \(M,x\)，令 \(H_{M,x}(n)\) 表示谓词“图灵机 \(M\) 在输入 \(x\) 上于 \(n\) 步内停机”。
+对每个 \(n\) 该谓词可计算（模拟 \(n\) 步即可）。
+取 \(D:=\NN\times\{0,1\}\)，并定义全可计算映射 \(\pi_{M,x}:D\to\NN\)：
+\[
+\pi_{M,x}(n,b):=
+\begin{cases}
+4n+2b,& H_{M,x}(n)=0,\\
+2n+1,& H_{M,x}(n)=1.
+\end{cases}
+\]
+若 \(M(x)\) 不停机，则 \(H_{M,x}(n)=0\) 对所有 \(n\) 成立，故 \(\pi_{M,x}(n,b)=4n+2b\) 为单射，从而 \(b(\pi_{M,x})=1\)。
+若 \(M(x)\) 于时刻 \(T\) 停机，则当 \(n\ge T\) 时 \(H_{M,x}(n)=1\)，于是 \(\pi_{M,x}(n,0)=\pi_{M,x}(n,1)=2n+1\)，故最大纤维大小至少为 \(2\)。
+另一方面，由输出奇偶性分离可知跨分支不发生碰撞，且停机分支中每个奇数 \(2n+1\)（\(n\ge T\)）恰有两个原像 \((n,0),(n,1)\)，故最大纤维大小恰为 \(2\)，即 \(b(\pi_{M,x})=2\)。
+因此 \(b(\pi_{M,x})=1\) 当且仅当 \(M(x)\) 不停机，故该判定问题不可判定。证毕。
+\end{proof}
+
+\begin{corollary}[外置预算的平方根观测：最弱二点范数判定仍不可判定]\label{cor:conclusion-budget-sqrt-observable-norm-undecidable}
+设 \(\pi:D\to Y\) 满足 \(D(\pi)<\infty\)，并记 \(d(y):=\#\pi^{-1}(y)\)。
+令 \(B_\pi:=\CC^{Y}\) 并以 \(\{\widetilde P_y\}_{y\in Y}\) 表示其极小幂等基（点投影）。
+定义“平方根观测”
+\[
+\delta_\pi:=\sum_{y\in Y}\sqrt{d(y)}\,\widetilde P_y\ \in\ B_\pi.
+\]
+则在 \(B_\pi\) 的 \(C^\ast\)-范数（即 \(\ell^\infty\) 范数）下成立恒等式
+\[
+\boxed{\;
+\|\delta_\pi\|_{C^\ast(B_\pi)}^{\,2}
+=\max_{y\in Y}d(y)
+=D(\pi)
+=b(\pi)\;}
+\]
+其中最后一式使用定理 \ref{thm:conclusion-minimal-external-budget-undecidable}(1)。
+特别地，对该定理中构造的族 \(\{\pi_{M,x}\}\) 有
+\[
+\|\delta_{\pi_{M,x}}\|_{C^\ast(B_{\pi_{M,x}})}^{\,2}\in\{1,2\},
+\]
+且判定命题 \(\|\delta_{\pi}\|_{C^\ast(B_{\pi})}=\sqrt2\) 在该类投影算法上不可判定。
+\end{corollary}
+\begin{proof}
+由 \(B_\pi\cong \CC^{Y}\) 的坐标识别，\(\delta_\pi\) 的 \(y\)-坐标为 \(\sqrt{d(y)}\)，故
+\(
+\|\delta_\pi\|_{C^\ast(B_\pi)}=\max_y \sqrt{d(y)}
+\)，平方即得 \(\|\delta_\pi\|^2=\max_y d(y)=D(\pi)\)。
+再由定理 \ref{thm:conclusion-minimal-external-budget-undecidable}(1) 得 \(\|\delta_\pi\|^2=b(\pi)\)。
+\par
+对 \(\pi_{M,x}\) 的二点取值由定理 \ref{thm:conclusion-minimal-external-budget-undecidable}(2) 给出：
+\(
+b(\pi_{M,x})\in\{1,2\}
+\) 且其值等价刻画停机与否。
+因此若能判定 \(\|\delta_{\pi_{M,x}}\|=\sqrt2\) 与否，即可判定停机问题，矛盾。证毕。
+\end{proof}
+
+\begin{corollary}[预算函数的不可计算性与非半可判定性]\label{cor:conclusion-external-budget-noncomputable-nonre}
+在上述有限纤维全定义可计算投影类上，映射 \(\pi\mapsto b(\pi)\) 不可计算；并且集合
+\[
+\{\pi:\ b(\pi)=1\}
+\]
+不是递归可枚举集。
+\end{corollary}
+
+\begin{proof}
+若 \(b(\cdot)\) 可计算，则可判定 \(b(\pi)=1\)，与定理 \ref{thm:conclusion-minimal-external-budget-undecidable} 矛盾。
+若集合 \(\{\pi:\ b(\pi)=1\}\) 为递归可枚举，则由同一定理中的构造可递归可枚举集合 \(\{(M,x):M(x)\text{不停机}\}\)，与经典结论矛盾。证毕。
+\end{proof}
+
+\begin{corollary}[有限素支撑可验证性与停机问题的等价归约]\label{cor:conclusion-squarefree-prime-register-halting-reduction}
+对 \(L\ge 2\) 定义平方自由素数寄存器证书空间
+\[
+\mathcal C_L:=\{n\in\NN_{\ge 1}:\ n\ \text{平方自由且所有素因子}\le L\},
+\]
+则 \(|\mathcal C_L|=2^{\pi(L)}\) 为有限集。
+设 \(U\) 为一台通用图灵机。对任意程序索引 \(e\)，令 \(\Omega_e\) 为其计算前缀配置集（按时间步枚举），并令 \(\pi:\Omega_e\to\{\ast\}\) 为常值读出。
+则存在某个 \(L\) 与单射证书 \(r:\Omega_e\hookrightarrow \mathcal C_L\) 使得扩展读出 \((\pi,r)\) 在对象层为单射，当且仅当 \(U(e)\) 停机。
+因此，判定“是否存在有限素上界 \(L\) 使得该程序实例可被平方自由素数寄存器完备外置”在计算论意义下不可判定。
+\end{corollary}
+
+\begin{proof}
+若 \(U(e)\) 于 \(T\) 步停机，则 \(\Omega_e\) 为有限集且 \(|\Omega_e|=T+1\)。
+取 \(L\) 使 \(2^{\pi(L)}\ge T+1\)，即可构造单射 \(r:\Omega_e\hookrightarrow \mathcal C_L\)，从而 \((\pi,r)\) 单射。
+若 \(U(e)\) 不停机，则 \(\Omega_e\) 可数无穷；但任意 \(L\) 下 \(\mathcal C_L\) 有限，故不存在单射 \(r\)。
+两向蕴含成立，而停机问题不可判定，故上述判定问题亦不可判定。证毕。
+\end{proof}
+
+\endinput

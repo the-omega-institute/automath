@@ -1,0 +1,147 @@
+\begin{theorem}[bin-fold 的尾谱极限诱导的线性预言机阈值与指数律]\label{thm:fold-bin-oracle-linear-threshold-exponent}
+在 bin-fold 口径下记 \(d^{\mathrm{bin}}_m(w):=\bigl|(\mathrm{Fold}^{\mathrm{bin}}_m)^{-1}(w)\bigr|\)（\(w\in X_m\)）。
+对整数 \(B\ge 0\) 定义预言机容量与最优成功率
+\[
+\mathcal C^{\mathrm{bin}}_m(B):=\sum_{w\in X_m}\min\bigl(d^{\mathrm{bin}}_m(w),2^B\bigr),
+\qquad
+\mathrm{Succ}^{\mathrm{bin}}_m(B):=\frac{\mathcal C^{\mathrm{bin}}_m(B)}{2^m}.
+\]
+令
+\[
+\alpha_c:=\log_2\!\Bigl(\frac{2}{\varphi}\Bigr)=1-\log_2\varphi.
+\]
+取 \(B_m=\lfloor \alpha m\rfloor\)。
+则：
+\begin{enumerate}
+  \item 若 \(\alpha>\alpha_c\)，则存在 \(m_0\) 使对所有 \(m\ge m_0\) 有 \(\mathrm{Succ}^{\mathrm{bin}}_m(B_m)=1\)。
+  \item 若 \(\alpha<\alpha_c\)，则极限存在且满足
+  \[
+  \lim_{m\to\infty}\frac{1}{m}\log_2 \mathrm{Succ}^{\mathrm{bin}}_m(B_m)=\alpha-\alpha_c.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定义 \(\mathcal C_m^{\mathrm{bin}}(B)=\mathcal C_m^{\mathrm{bin,cont}}(2^B)\)，其中 \(\mathcal C_m^{\mathrm{bin,cont}}\) 为命题 \ref{prop:fold-bin-degeneracy-tail-capacity-kinks} 的连续化容量曲线。
+并且 \(\mathrm{Succ}^{\mathrm{bin}}_m(B)=2^{-m}\mathcal C_m^{\mathrm{bin,cont}}(2^B)\)。
+\par
+令 \(D^{\mathrm{bin}}_m:=\max_{w\in X_m}d_m^{\mathrm{bin}}(w)\)。
+由定理 \ref{thm:fold-bin-two-state-asymptotic} 的一致展开可知
+\(
+D^{\mathrm{bin}}_m=(2/\varphi)^m+O(1)
+\)，从而 \(D^{\mathrm{bin}}_m\le 2^{\alpha m}\) 对充分大 \(m\) 成立（当 \(\alpha>\alpha_c\)）。
+于是对所有 \(w\) 有 \(\min(d_m^{\mathrm{bin}}(w),2^{B_m})=d_m^{\mathrm{bin}}(w)\)，从而
+\(
+\mathcal C_m^{\mathrm{bin}}(B_m)=\sum_w d_m^{\mathrm{bin}}(w)=2^m
+\)，即 \(\mathrm{Succ}^{\mathrm{bin}}_m(B_m)=1\)。
+\par
+当 \(\alpha<\alpha_c\) 时，对充分大 \(m\) 有 \(2^{B_m}\le \varphi^{-1}(2/\varphi)^m+O(1)\)，从而 \(2^{B_m}\le \min_w d_m^{\mathrm{bin}}(w)\) 成立。
+于是逐点有 \(\min(d_m^{\mathrm{bin}}(w),2^{B_m})=2^{B_m}\)，得到
+\[
+\mathcal C_m^{\mathrm{bin}}(B_m)=|X_m|\,2^{B_m},
+\qquad
+\mathrm{Succ}^{\mathrm{bin}}_m(B_m)=\frac{|X_m|}{2^m}\,2^{B_m}.
+\]
+由 \(|X_m|=F_{m+2}=\varphi^m\cdot \Theta(1)\) 得
+\(
+\frac{1}{m}\log_2(|X_m|/2^m)\to \log_2(\varphi/2)=-\alpha_c
+\)，
+又 \(B_m/m\to \alpha\)，合并即得所示指数律。证毕。
+\end{proof}
+
+\begin{theorem}[临界舍入的 log-periodic 非收敛与全子列极限区间]\label{thm:fold-bin-critical-rounding-logperiodic}
+令 \(\alpha_c=\log_2(2/\varphi)\) 且 \(B_m=\lfloor \alpha_c m\rfloor\)。
+定义
+\[
+r_m:=2^{B_m-\alpha_c m}\in(1/2,1].
+\]
+则 \(\mathrm{Succ}^{\mathrm{bin}}_m(B_m)\) 不收敛；其全部子列极限集合恰为闭区间
+\[
+\biggl[\frac{\varphi^2}{2\sqrt5},\,1\biggr].
+\]
+更精确地，若沿子列满足 \(r_m\to r\in[1/2,1]\)，则
+\[
+\lim \mathrm{Succ}^{\mathrm{bin}}_m(B_m)
+=
+\begin{cases}
+\dfrac{\varphi^2}{\sqrt5}\,r, & 1/2\le r\le\varphi^{-1},\\[10pt]
+\dfrac{r+\varphi^{-2}}{1+\varphi^{-2}}, & \varphi^{-1}\le r\le 1.
+\end{cases}
+\]
+\end{theorem}
+\begin{proof}
+先证 \(\alpha_c\notin\QQ\)。
+若 \(\alpha_c=p/q\in\QQ\)（互素 \(p,q\)），则 \(2^{\alpha_c}=2^{p/q}\) 为代数数且满足
+\(
+2^{\alpha_c}=2/\varphi
+\)，从而 \(\varphi^q=2^{q-p}\in\QQ\)。
+但 \(\varphi\) 为二次无理数，且对任意 \(q\ge 1\) 都有 \(\varphi^q\notin\QQ\)，矛盾。
+\par
+由 \(\alpha_c\notin\QQ\) 与 Kronecker 定理，\(\{m\alpha_c\}\) 在 \([0,1]\) 稠密，从而
+\(
+r_m=2^{-\{m\alpha_c\}}
+\)
+在 \((1/2,1]\) 稠密。
+\par
+另一方面，由命题 \ref{prop:fold-bin-degeneracy-tail-capacity-kinks} 的尺度化容量过程 \(\widehat C_m^{\mathrm{bin}}(s)\)（其中
+\(\widehat C_m^{\mathrm{bin}}(s)=2^{-m}\mathcal C_m^{\mathrm{bin,cont}}(s(2/\varphi)^m)\)），
+并注意 \(2^{B_m}=r_m(2/\varphi)^m\)，得
+\[
+\mathrm{Succ}^{\mathrm{bin}}_m(B_m)
+=2^{-m}\mathcal C_m^{\mathrm{bin,cont}}(2^{B_m})
+=\widehat C_m^{\mathrm{bin}}(r_m).
+\]
+由该命题，\(\widehat C_m^{\mathrm{bin}}\) 在 \([1/2,1]\) 上一致收敛到连续极限函数
+\[
+\widehat C_\infty^{\mathrm{bin}}(s)
+=\frac{\varphi}{\sqrt5}\min\{1,s\}+\frac{1}{\sqrt5}\min\{\varphi^{-1},s\}.
+\]
+因此若 \(r_m\to r\)，则 \(\mathrm{Succ}^{\mathrm{bin}}_m(B_m)\to \widehat C_\infty^{\mathrm{bin}}(r)\)。
+将 \(\widehat C_\infty^{\mathrm{bin}}\) 在区间 \([1/2,1]\) 上逐段展开即得所示分段闭式，
+并且 \(\widehat C_\infty^{\mathrm{bin}}([1/2,1])=[\widehat C_\infty^{\mathrm{bin}}(1/2),\widehat C_\infty^{\mathrm{bin}}(1)]=[\varphi^2/(2\sqrt5),1]\)。
+由于 \(r_m\) 稠密，子列极限集合即为该闭区间，且整体序列不收敛。证毕。
+\end{proof}
+
+\begin{theorem}[bin-fold 输出分布的 Rényi 质量谱仿射律]\label{thm:fold-bin-renyi-mass-spectrum-affine}
+令 \(\pi_m(w):=d_m^{\mathrm{bin}}(w)/2^m\) 为 bin-fold 在均匀微态输入下诱导的输出分布。
+则对任意 \(q>0\)，存在常数 \(K_q>0\) 使
+\[
+\sum_{w\in X_m}\pi_m(w)^q
+=
+K_q\cdot \varphi^{(1-q)m}\cdot\bigl(1+o(1)\bigr),
+\qquad
+K_q=\frac{\varphi+\varphi^{-q}}{\sqrt5}.
+\]
+从而 Rényi 质量谱（自然对数）满足
+\[
+h_q:=-\lim_{m\to\infty}\frac{1}{m}\log\sum_{w\in X_m}\pi_m(w)^q
+=(q-1)\log\varphi.
+\]
+\end{theorem}
+\begin{proof}
+由 \(\pi_m(w)^q=2^{-qm}\bigl(d_m^{\mathrm{bin}}(w)\bigr)^q\)，有
+\[
+\sum_{w\in X_m}\pi_m(w)^q
+=2^{-qm}S_q^{\mathrm{bin}}(m).
+\]
+由命题 \ref{prop:fold-bin-power-sum-asymptotic}，
+\[
+S_q^{\mathrm{bin}}(m)
+=\Bigl(\frac{2}{\varphi}\Bigr)^{qm}\bigl(F_{m+1}+\varphi^{-q}F_m\bigr)\bigl(1+o(1)\bigr),
+\]
+从而
+\[
+\sum_{w\in X_m}\pi_m(w)^q
+=\varphi^{-qm}\bigl(F_{m+1}+\varphi^{-q}F_m\bigr)\bigl(1+o(1)\bigr).
+\]
+由 Binet 渐近 \(F_{m+1}=\varphi^{m+1}/\sqrt5+o(\varphi^m)\)、\(F_m=\varphi^m/\sqrt5+o(\varphi^m)\)，得
+\[
+\sum_{w\in X_m}\pi_m(w)^q
+=\frac{\varphi^{m+1-qm}+\varphi^{m-qm-q}}{\sqrt5}\bigl(1+o(1)\bigr)
+=\frac{\varphi+\varphi^{-q}}{\sqrt5}\,\varphi^{(1-q)m}\bigl(1+o(1)\bigr),
+\]
+即所示常数 \(K_q\) 与主阶。
+取 \(-\frac{1}{m}\log\) 并令 \(m\to\infty\) 得 \(h_q=(q-1)\log\varphi\)。证毕。
+\end{proof}
+
+\endinput
+

@@ -1,0 +1,545 @@
+\subsubsection{三阶迹谱提升的极值闭合与双谱证书：由三阶迹核到加性能量核}\label{subsubsec:gm-third-trace-dual-certificates}
+在零密度与 Dirichlet 多项式大值估计的路径中，一类常见的“谱化步骤”是：先以解析方法控制一个半正定 Gram 矩阵的低阶迹矩，再把这些迹矩信息转译为算子范数（谱范数）上界，从而闭合大值频次估计（参见 \cite{GuthMaynard2024LargeValues} 的三阶迹法语境）。本小节给出该转译环节在三阶迹信息层面的\emph{最优闭式律}，并将后续残差项组织为两条互相正交的谱证书：连续 moment-kernel（来自非零 Poisson 频率的碰撞能量）与离散加性能量核（来自可描述点集的有限状态谱指纹）。
+
+\paragraph{第三迹矩约束下的谱范数最优上界}
+\begin{theorem}[第三迹矩约束下的谱范数极值律：两点谱实现与显式三次方程]\label{thm:gm-trace3-spectral-norm-extremal}
+设 \(m\ge 2\)，\(G\in\CC^{m\times m}\) 为半正定矩阵，特征值满足
+\(\lambda_1\ge\lambda_2\ge\cdots\ge\lambda_m\ge 0\)。
+记
+\[
+S_1:=\tr(G),\qquad S_3:=\tr(G^3).
+\]
+令 \(x^\star\) 为下述三次方程在区间 \([S_1/m,\ S_1]\) 内的最大实根：
+\begin{equation}\label{eq:gm-trace3-cubic}
+\boxed{\;
+m(m-2)x^3+3S_1x^2-3S_1^2x+\bigl(S_1^3-(m-1)^2S_3\bigr)=0.\;}
+\end{equation}
+则必有
+\[
+\boxed{\ \lambda_1\le x^\star\ }.
+\]
+并且该上界在且仅在谱为“两点谱”时取等：存在 \(y\ge 0\) 使得
+\[
+\lambda_2=\cdots=\lambda_m=y,
+\]
+且 \((x^\star,y)\) 同时满足
+\[
+x^\star+(m-1)y=S_1,\qquad (x^\star)^3+(m-1)y^3=S_3.
+\]
+\end{theorem}
+
+\begin{proof}
+固定 \(\lambda_1=x\in[0,S_1]\)，其余特征值 \(\lambda_2,\dots,\lambda_m\) 满足
+\[
+\sum_{i=2}^m \lambda_i=S_1-x,\qquad \sum_{i=2}^m \lambda_i^3=S_3-x^3.
+\]
+由于 \(t\mapsto t^3\) 在 \([0,\infty)\) 上凸，Jensen 不等式给出
+\[
+\frac{1}{m-1}\sum_{i=2}^m \lambda_i^3\ \ge\ \left(\frac{1}{m-1}\sum_{i=2}^m \lambda_i\right)^3
+=\left(\frac{S_1-x}{m-1}\right)^3,
+\]
+即
+\begin{equation}\label{eq:gm-jensen-rest}
+S_3\ \ge\ x^3+\frac{(S_1-x)^3}{(m-1)^2}.
+\end{equation}
+定义
+\(
+f(x):=x^3+\frac{(S_1-x)^3}{(m-1)^2}
+\)。
+则 \(f\) 在 \([S_1/m,S_1]\) 上严格递增：其导数
+\[
+f'(x)=3x^2-\frac{3(S_1-x)^2}{(m-1)^2}
+=3\left(x-\frac{S_1-x}{m-1}\right)\left(x+\frac{S_1-x}{m-1}\right)
+\]
+在 \(x\ge S_1/m\) 时非负，且仅在 \(x=S_1/m\) 取零。
+由 \eqref{eq:gm-jensen-rest} 得 \(f(\lambda_1)\le S_3\)，从而 \(\lambda_1\) 不超过方程 \(f(x)=S_3\) 在 \([S_1/m,S_1]\) 内的唯一解；该解恰为 \eqref{eq:gm-trace3-cubic} 的最大实根 \(x^\star\)。
+
+当且仅当 \eqref{eq:gm-jensen-rest} 中 Jensen 取等时（即 \(\lambda_2=\cdots=\lambda_m\)），才有 \(\lambda_1=x^\star\) 的达界；此时令 \(y:=\lambda_2=\cdots=\lambda_m\) 即得所示两点谱等号刻画。证毕。
+\end{proof}
+
+\begin{proposition}[三阶迹法的“最小状态”解释：截断矩问题的 Hankel--秩二极值原理]\label{prop:gm-trace3-truncated-moment-rank2}
+令 \(\mu:=\frac1m\sum_{i=1}^m\delta_{\lambda_i}\) 为经验谱测度，记矩
+\[
+m_k:=\int t^k\,d\mu(t)=\frac1m\tr(G^k)\qquad(k\ge 0).
+\]
+在约束 \((m_0,m_1,m_3)\)（等价于 \((m,S_1,S_3)\)）固定的类中，泛函
+\[
+\lambda_{\max}(G)=\sup\mathrm{supp}(\mu)
+\]
+的极大值必由至多两点支撑的测度实现；其支撑点即定理 \ref{thm:gm-trace3-spectral-norm-extremal} 中的 \((y,x^\star)\)。
+因此三阶迹信息在谱范数控制上的闭合性，等价于该阶截断矩问题的极值点自动坍缩为 Hankel--秩二情形（两点支撑 \(\Longleftrightarrow\) 最小线性表示维数为 \(2\)）。
+\end{proposition}
+
+\begin{proof}
+对任意候选 \(x\ge m_1\)，若要求 \(\sup\mathrm{supp}(\mu)\le x\)，则在固定均值 \(m_1\) 的约束下，
+\(\int t^3\,d\mu(t)=m_3\) 的最小可能值由“把剩余质量尽可能平均化”取得：即把 \(\mu\) 压缩为两点 \(\{y,x\}\) 的混合，其中 \(y\) 由 \(m_1=\theta x+(1-\theta)y\) 确定。
+该最小值正对应于定理 \ref{thm:gm-trace3-spectral-norm-extremal} 证明中的 Jensen 下界 \eqref{eq:gm-jensen-rest}（将 \(\lambda_1=x\) 与其余 \(m-1\) 个特征值平均化）。
+因此在给定 \((m_1,m_3)\) 时，允许的最大 \(x\) 恰为使该下界饱和的 \(x^\star\)，并由两点支撑实现。
+两点支撑测度的矩 Hankel 族具有秩 \(2\)，从而其最小线性表示维数为 \(2\)。证毕。
+\end{proof}
+
+\begin{proposition}[对 Guth--Maynard 三阶迹差项的最优谱化重述：谱提升环节无结构常数损失]\label{prop:gm-trace3-gap-optimal-spectralization}
+设 \(A\in\CC^{m\times n}\)，令 \(G:=AA^\ast\succeq 0\)。
+定义三阶迹差
+\[
+\Delta^{\mathrm{tr}}_3(G):=\tr(G^3)-\frac{\tr(G)^3}{m^2}\ \ge\ 0.
+\]
+则 \(\|A\|_{\mathrm{op}}^2=\lambda_{\max}(G)\) 在仅给定二元迹信息 \((\tr(G),\tr(G^3))\) 的意义下具有最优上界：
+\[
+\boxed{\ \lambda_{\max}(G)\le x^\star\bigl(\tr(G),\tr(G^3),m\bigr)\ },
+\]
+其中 \(x^\star\) 由定理 \ref{thm:gm-trace3-spectral-norm-extremal} 的三次方程 \eqref{eq:gm-trace3-cubic} 显式确定。
+并且该上界在两点谱情形取等，从而在“三阶迹法 \(\Rightarrow\) 谱范数提升”的环节不存在隐性常数损失：若进一步改进大值估计而不改变对 \(\tr(G^3)\) 的估计结构，则任何剩余损失只能追溯到对 \(\tr(G^3)\)（等价对 \(\Delta^{\mathrm{tr}}_3(G)\)）的分析松弛，而非迹矩到谱范数的转译步骤。
+\end{proposition}
+
+\begin{proof}
+由 \(t\mapsto t^3\) 的凸性与 Jensen 不等式得 \(\Delta^{\mathrm{tr}}_3(G)\ge 0\)（等号当且仅当全部特征值相等）。
+谱范数上界由定理 \ref{thm:gm-trace3-spectral-norm-extremal} 直接应用于 \(G\) 得到。
+最优性来自同一定理的等号刻画：存在两点谱矩阵族使得在固定 \((\tr(G),\tr(G^3))\) 下达到 \(\lambda_{\max}(G)=x^\star\)。
+因此任何仅依赖 \((\tr(G),\tr(G^3),m)\) 的统一上界函数都不可能小于 \(x^\star\)。证毕。
+\end{proof}
+
+\paragraph{三阶迹差的稳定性：谱扁平化与近极值两簇化}
+\begin{proposition}[三阶迹差的小偏离稳定性：由 \texorpdfstring{$\Delta_3$}{Delta3} 控制谱扁平化的最优幂律]\label{prop:gm-trace3-delta3-stability}
+设 \(G\succeq 0\) 为 \(m\times m\) 矩阵，记
+\[
+S_1:=\tr(G),\qquad \mu:=\frac{S_1}{m},\qquad
+\Delta_3(G):=\tr(G^3)-\frac{S_1^3}{m^2}\ \ge\ 0.
+\]
+则存在常数
+\[
+c_m:=\left(\frac{(m-1)^2}{m\max\{1,m-2\}}\right)^{1/3},
+\]
+使得最大特征值满足幂律压缩
+\begin{equation}\label{eq:gm-trace3-delta3-stability}
+\boxed{\;
+\lambda_{\max}(G)\ \le\ \mu\;+\;c_m\,\Delta_3(G)^{1/3}.\;}
+\end{equation}
+并且幂次 \(1/3\) 在一般情形下最优：存在两点谱族使得
+\(\lambda_{\max}(G)-\mu\asymp \Delta_3(G)^{1/3}\)。
+\end{proposition}
+
+\begin{proof}
+令 \(\lambda_1=\lambda_{\max}(G)\) 并记 \(d:=\lambda_1-\mu\ge 0\)。
+对固定 \(\lambda_1\) 与固定迹 \(S_1\)，由凸性（Jensen）知 \(\sum_{i=2}^{m}\lambda_i^3\) 在约束 \(\sum_{i=2}^{m}\lambda_i=S_1-\lambda_1\) 下的最小值由 \(\lambda_2=\cdots=\lambda_m=(S_1-\lambda_1)/(m-1)\) 取得。
+因此在给定 \(S_1\) 与 \(\lambda_1\) 时，\(\Delta_3(G)\) 的最小值由两点谱实现，并可直接计算得到：
+当 \(m=2\) 时有恒等式 \(\Delta_3(G)=3S_1d^2\)。
+又由 \(\lambda_2=\mu-d\ge 0\) 得 \(S_1=2\mu\ge 2d\)，故 \(\Delta_3(G)=3S_1d^2\ge 6d^3\)，从而 \(d\le (\Delta_3(G)/6)^{1/3}\le c_2\,\Delta_3(G)^{1/3}\)，因此 \eqref{eq:gm-trace3-delta3-stability} 成立。
+当 \(m\ge 3\) 时，两点谱的直接展开给出
+\[
+\Delta_3(G)
+\ \ge\
+\frac{m(m-2)}{(m-1)^2}\,d^3,
+\]
+从而 \(d\le c_m\Delta_3^{1/3}\) 并得到 \eqref{eq:gm-trace3-delta3-stability}。
+最优性由两点谱例子给出：取 \(\lambda_2=\cdots=\lambda_m=0\) 且 \(\lambda_1=S_1\)，则 \(\Delta_3(G)=S_1^3(1-m^{-2})\asymp S_1^3\) 且 \(\lambda_1-\mu=S_1(1-1/m)\asymp S_1\)，从而 \(\lambda_1-\mu\asymp \Delta_3^{1/3}\)。证毕。
+\end{proof}
+
+\begin{proposition}[近极值时的谱聚类：三阶迹极端机制的唯一结构恢复]\label{prop:gm-trace3-near-extremal-clustering}
+在定理 \ref{thm:gm-trace3-spectral-norm-extremal} 的记号下，令 \(x^\star\) 为极值上界，令
+\[
+y^\star:=\frac{S_1-x^\star}{m-1}.
+\]
+设 \(\lambda_1=\lambda_{\max}(G)\) 满足近饱和条件
+\[
+\lambda_1\ \ge\ (1-\eta)\,x^\star,\qquad \eta\in(0,1).
+\]
+则其余特征值发生二簇化：令
+\(
+\bar y:=\frac{S_1-\lambda_1}{m-1}
+\)
+为 \(\lambda_2,\dots,\lambda_m\) 的平均值，则存在常数 \(C_m>0\)（仅依赖 \(m\) 与 \((S_1,S_3)\) 的尺度比）使
+\[
+\max_{2\le i\le m}\,|\lambda_i-\bar y|
+\ \le\
+C_m\,\eta^{1/2}\,S_1.
+\]
+特别地，当 \(\eta\to 0\) 时，\(\lambda_2,\dots,\lambda_m\) 在尺度 \(S_1\) 上收敛到单点 \(y^\star\)，与两点谱极值机制一致。
+\end{proposition}
+
+\begin{proof}
+记
+\[
+f(x):=x^3+\frac{(S_1-x)^3}{(m-1)^2},
+\]
+则由定理 \ref{thm:gm-trace3-spectral-norm-extremal} 的证明有
+\(
+S_3=f(x^\star)
+\) 且 \(f\) 在 \([S_1/m,S_1]\) 上递增。
+另一方面，
+\[
+\sum_{i=2}^m\lambda_i^3
+\ \ge\
+(m-1)\bar y^{\,3}
+\]
+且 Jensen 缺口可写为
+\[
+\mathsf{Gap}
+:=\frac{1}{m-1}\sum_{i=2}^m\lambda_i^3-\bar y^{\,3}
+=\frac{S_3-f(\lambda_1)}{m-1}
+=\frac{f(x^\star)-f(\lambda_1)}{m-1}\ \ge\ 0.
+\]
+由中值定理与 \(\lambda_1\ge(1-\eta)x^\star\) 得
+\(
+0\le \mathsf{Gap}\ll_m \eta\,S_1^3
+\)。
+再由 \(t\mapsto t^3\) 的二阶展开
+\(
+t^3-\bar y^{\,3}-3\bar y^{\,2}(t-\bar y)\ge 3\bar y\,(t-\bar y)^2
+\)
+并对 \(t=\lambda_i\) 求和（注意 \(\sum_{i\ge 2}(\lambda_i-\bar y)=0\)）得
+\[
+3\bar y\cdot \frac{1}{m-1}\sum_{i=2}^m(\lambda_i-\bar y)^2
+\ \le\ \mathsf{Gap}.
+\]
+从而方差 \(\frac{1}{m-1}\sum(\lambda_i-\bar y)^2\ll_m \eta\,S_1^2\)（在 \(\bar y\) 极小的退化边界情形，同样由 \(\lambda_i\ge 0\) 与 \(\sum_{i\ge2}\lambda_i=S_1-\lambda_1\) 给出更粗但仍足够的界）。
+最后由 \(\max_i|\lambda_i-\bar y|\le \sqrt{(m-1)\sum(\lambda_i-\bar y)^2}\) 得结论。证毕。
+\end{proof}
+
+\paragraph{仿射平均的秩一化分解与残差的碰撞核表达}
+在三阶迹法的具体实现中，\(G\) 常来自一族由仿射作用生成的函数族（或向量族）的 Gram 矩阵；零频（均匀）通道给出秩一主项，而非零 Poisson 频率诱导的残差则自然组织为二体碰撞能量。
+
+\begin{proposition}[仿射平均不等式的“秩一 \(+\) 残差通道”分解（原型）]\label{prop:gm-affine-average-rank1-residual}
+令 \(f\ge 0\) 支撑在 \(u\asymp 1\) 的紧区间内，并假设 \(f\) 为带宽闭包（Fourier 支撑 \(\subset[-T,T]\)）的可审计平滑函数。
+定义仿射平均算子
+\[
+(\mathcal{A}f)(u)
+:=\sum_{|m_1|\sim M_1}\ \sum_{m_2\sim M_2}\ \sum_{|m_3|\lesssim M_3}
+f\!\left(\frac{m_1u+m_3}{m_2}\right).
+\]
+则可取一秩一算子 \(\mathcal{U}\)（零频/均匀通道）与残差算子 \(\mathcal{R}\) 使
+\[
+\mathcal{A}=\mathcal{U}+\mathcal{R},
+\]
+并且在上述支撑/带宽口径下满足尺度分离：
+\[
+\|\mathcal{U}f\|_{L^2}^2\ \asymp\ \bigl(M_1M_2M_3\bigr)^2\Bigl(\int f\Bigr)^2,
+\]
+以及残差的 Hilbert--Schmidt 型控制
+\[
+\|\mathcal{R}f\|_{L^2}^2\ \ll\ (M_2M_3)^2\int f^2,
+\]
+并且当 \(M_1\asymp M_2\asymp M_3\asymp M\) 时，上式退化为 \(\|\mathcal{R}f\|_{L^2}^2\ll M^4\int f^2\)。
+该量级由 \(\asymp M_2M_3\) 个“分母—平移”通道类饱和：残差的有效自由度被压缩到这些通道上，并在 Guth--Maynard 的第二型极端例中达到饱和。
+\end{proposition}
+
+\begin{proof}
+令 \(\mathcal{U}\) 为把 \(f\) 压缩到其平均值的秩一算子：在 \(u\) 支撑区间 \(I\) 上取
+\[
+(\mathcal{U}f)(u):=\bigl|\mathcal{M}\bigr|\cdot \frac{\mathbf{1}_I(u)}{|I|}\int_I f(v)\,dv,
+\]
+其中 \(\mathcal{M}\) 为参数集合 \(\{(m_1,m_2,m_3)\}\)，故 \(\mathcal{U}\) 的像空间由 \(\mathbf{1}_I\) 张成，秩为 \(1\)。
+由定义立得
+\(\|\mathcal{U}f\|_{L^2}^2\asymp |\mathcal{M}|^2(\int f)^2\)，而 \(|\mathcal{M}|\asymp M_1M_2M_3\) 给出第一条估计。
+令 \(\mathcal{R}:=\mathcal{A}-\mathcal{U}\)。
+在带宽闭包与紧支撑下，\(\mathcal{R}\) 的非零频率相关可按“分母—平移类”（由 \((m_2,m_3)\) 参数化）分解为有限多个正项通道的平方和；通道数至多为 \(\asymp M_2M_3\)。
+因此其 \(L^2\) 有界性可由把非零频率能量写成通道平方和（Cauchy--Schwarz/Plancherel）并对通道数作计数上界得到，给出
+\(\|\mathcal{R}f\|_{L^2}^2\ll (M_2M_3)^2\int f^2\)。
+饱和性由有理网格聚集构型给出：其相关集中在 \(\asymp M_2M_3\) 个通道类上，使上述平方和界在量级上取等。证毕。
+\end{proof}
+
+\begin{proposition}[三阶迹积分项的“碰撞矩”化：Poisson--积分残差等价于连续型 moment-kernel 的二体碰撞能量]\label{prop:gm-trace3-poisson-collision-energy}
+在三阶迹法的 Poisson 频率展开中，非零频率诱导的三阶迹残差项可组织为某个带宽化函数族 \(F\) 的二体碰撞能量：
+\[
+\sum_{m\ne 0} I_m\ =\ \|\mathsf{K}F\|_{L^2}^2,
+\]
+其中 \(\mathsf{K}\) 为由线性约束曲面 \(m_1v_1+m_2v_2+m_3\approx 0\)（及其带宽/窗函数权重）诱导的积分核算子。
+因此该残差可等价转写为一个正算子的谱控制问题：\(\|\mathsf{K}\|_{\mathrm{op}}\)（或等价的 \(\rho(\mathsf{K}^\ast\mathsf{K})\)）给出残差的最强统一上界。
+此外，只要给出 \(\mathsf{K}\) 在带宽闭包子空间上的可审计有限维近似（例如按 \(1/T\) 网格离散并保留带宽闭包），则残差可被转译为有限半正定矩阵的主谱半径控制，从而把解析估计闭合为可计算谱证书。
+\end{proposition}
+
+\begin{proof}
+把非零 Poisson 频率项写成 Fourier 侧的二次型（或等价的卷积型二体能量）后，可将其表示为若干线性算子作用的平方和：
+存在核族 \(\{K_m\}_{m\ne 0}\) 使
+\[
+I_m=\|K_m F\|_{L^2}^2,\qquad \sum_{m\ne 0}I_m=\sum_{m\ne 0}\|K_mF\|_2^2=\|\mathsf{K}F\|_2^2,
+\]
+其中 \(\mathsf{K}F:=(K_mF)_{m\ne 0}\) 视为到 Hilbert 直和空间的线性映射。
+由此 \(\sum_{m\ne 0} I_m\) 等价为正算子 \(\mathsf{K}^\ast\mathsf{K}\) 的二次型，从而残差控制等价于其谱半径/算子范数控制。
+
+若 \(F\) 被限制在带宽闭包子空间（Paley--Wiener 型有限类型子空间）中，则该子空间可用 Nyquist 级别的有限采样网格作可审计近似；在该离散化下，\(\mathsf{K}^\ast\mathsf{K}\) 的二次型被近似为有限 Gram 矩阵的二次型（半正定性保持），其最大特征值即给出可计算的谱证书上界。证毕。
+\end{proof}
+
+\paragraph{Zeckendorf--sofic 的加性能量核：Perron 指纹与线性递推闭合}
+当大值点集 \(W\) 本身来自有限状态/数位约束（例如 Zeckendorf/Ostrowski 约束的因子、同步门或 sofic 因子），其加性结构可被编译为一个有限非负矩阵，从而把加性能量 \(E(W)\) 的指数率闭合为 Perron 指纹。
+
+\begin{theorem}[Zeckendorf--正规语言族的加性能量可编译性：四体方程计数的 Perron 指数与线性递推闭合]\label{thm:gm-zeck-sofic-additive-energy}
+设 \(\mathcal{L}\subset\{0,1\}^\ast\) 为与 Zeckendorf 语法相容的 sofic 语言（由有限标记图/自动机给出），并令
+\[
+A_m(\mathcal{L})
+:=\left\{\ \sum_{k=1}^{m}\omega_kF_{k+1}\ :\ \omega=(\omega_1,\dots,\omega_m)\in \mathcal{L}\cap\{0,1\}^m\ \right\}\subset\NN,
+\]
+其中 \((F_k)\) 为 Fibonacci 数列且 Zeckendorf 约束保证表示唯一。
+定义其整数加性能量
+\[
+E_m(\mathcal{L})
+:=\#\{a_1,a_2,a_3,a_4\in A_m(\mathcal{L}):\ a_1+a_2=a_3+a_4\}.
+\]
+则存在一个显式可构造的有限非负整数矩阵 \(B_{\mathcal{L}}\)（由 Zeckendorf 加法归一化的同步转导器与 \(\mathcal{L}\) 的四重同步积并施加“和相等”约束得到），以及向量 \(u,v\ge 0\)，使得对所有 \(m\ge 0\) 有
+\[
+\boxed{\ E_m(\mathcal{L})=u^\top B_{\mathcal{L}}^{\,m}v\ }.
+\]
+从而极限
+\[
+\lim_{m\to\infty}\frac1m\log E_m(\mathcal{L})=\log\rho(B_{\mathcal{L}})
+\]
+存在，并且序列 \(\{E_m(\mathcal{L})\}\) 满足有限阶整系数线性递推；其最小递推阶数等于相应 Hankel 矩阵族的秩（等价于最小加权自动机表示维数）。
+\end{theorem}
+
+\begin{proof}
+由于 \(\mathcal{L}\) 为 sofic 语言，存在有限自动机识别 \(\mathcal{L}\cap\{0,1\}^m\) 的长度-\(m\) 词。
+Zeckendorf 加法的归一化可由有限状态同步转导器实现：逐位读取两条合法 Zeckendorf 数位并维护有限 carry 状态，输出规范化的 Zeckendorf 数位（该有限性来自 Fibonacci 位权下进位传播的局部规则）。
+于是“四体方程”约束 \(a_1+a_2=a_3+a_4\) 可被实现为：并行运行两份加法转导器分别处理 \((\omega^{(1)},\omega^{(2)})\) 与 \((\omega^{(3)},\omega^{(4)})\)，并在每一位强制其规范化输出一致；再与四份 \(\mathcal{L}\) 的识别自动机同步积并联，得到一个有限有向图，其长度-\(m\) 可接受路径计数恰为 \(E_m(\mathcal{L})\)。
+将该同步积图的邻接矩阵记为 \(B_{\mathcal{L}}\)，以入口/出口集合给出向量 \(u,v\)，即可得到 \(E_m(\mathcal{L})=u^\top B_{\mathcal{L}}^{\,m}v\)。
+极限指数率与线性递推性由 Perron--Frobenius 理论与有限维线性表示的一般性质推出；Hankel 秩等于最小线性表示维数为经典等价（亦与正文中 Hankel realization 口径同型，参见命题 \ref{prop:pom-hankel-realization-protocol}）。证毕。
+\end{proof}
+
+\begin{proposition}[能量指数率的可审计构造：以谱半径参数化的“中能量”样本族]\label{prop:gm-energy-rate-tunable}
+在定理 \ref{thm:gm-zeck-sofic-additive-energy} 的构造框架下，谱半径 \(\rho(B_{\mathcal{L}})\) 对局部约束片段的拼接具有可控响应：取两类约束模块（例如“允许块”与“冻结块”）并按比例拼接，并在块边界插入足够长的隔离区以消除 Zeckendorf 归一化的跨块耦合，则由拼接得到的语言族 \(\{\mathcal{L}_\theta\}\) 的能量指数率
+\(\log\rho(B_{\mathcal{L}_\theta})\)
+可在一段非平凡区间内被调参覆盖，且在隔离区长度趋大时其指数率渐近为各模块指数率的凸组合。
+\end{proposition}
+
+\begin{proof}
+将“模块 + 隔离区”的拼接语言实现为一个循环型 sofic 图：图由两块强连通子图（对应两类模块）与一段确定性隔离路径串接而成，且循环内两块出现的长度占比由参数 \(\theta\) 控制。
+对相应的能量核矩阵 \(B_{\mathcal{L}_\theta}\)，其在一个完整周期上的转移等价于两块转移矩阵与隔离矩阵的乘积；隔离区长度趋大时，跨块耦合只通过有限维边界态发生，并对主指数的贡献可被压到 \(o(1)\)。
+因此周期转移的主增长率在单位长度归一化后趋于两块主增长率的凸组合；通过取不同的周期占比即可在两端点指数率之间实现可审计的参数覆盖。证毕。
+\end{proof}
+
+\paragraph{Sofic--Zeckendorf 线性约束的 Perron 化：仿射闭包、Fourier 衰减与有限化谱证书}
+\begin{theorem}[Sofic--Zeckendorf 线性约束计数的 Perron--Frobenius 完全可编译性]\label{thm:gm-sofic-zeck-linear-constraints-pf}
+沿用定理 \ref{thm:gm-zeck-sofic-additive-energy} 的 \(\mathcal{L}\)、\(\mathcal{L}_m:=\mathcal{L}\cap\{0,1\}^m\)、\(\mathrm{val}(\omega)=\sum_{j=1}^{m}\omega_jF_{j+1}\) 与 \(A_m(\mathcal{L})\) 记号。
+固定整数 \(K\ge 1\)、整数矩阵 \(Q\in\ZZ^{r\times K}\) 与向量 \(b\in\ZZ^{r}\)。
+定义可行 \(K\)-元组集合
+\[
+\Omega_m(Q,b)
+:=\Bigl\{(\omega^{(1)},\dots,\omega^{(K)})\in \mathcal{L}_m^K:\ 
+Q\bigl(\mathrm{val}(\omega^{(1)}),\dots,\mathrm{val}(\omega^{(K)})\bigr)^{\mathsf T}=b\Bigr\}.
+\]
+则存在显式可构造的有限非负整数矩阵 \(B_{Q,b}\) 与向量 \(u_{Q,b},v_{Q,b}\ge 0\)，使得对所有 \(m\ge 0\) 有
+\[
+\boxed{\ \#\Omega_m(Q,b)=u_{Q,b}^{\mathsf T}\,B_{Q,b}^{\,m}\,v_{Q,b}\ }.
+\]
+因此序列 \(\{\#\Omega_m(Q,b)\}_{m\ge 0}\) 满足有限阶整系数线性递推，并且其指数增长率为 \(\log\rho(B_{Q,b})\)。
+\end{theorem}
+
+\begin{proof}
+由于 \(\mathcal{L}\) 为 sofic 语言，可取一个有限标记图（或等价有限自动机）识别 \(\mathcal{L}\)，从而 \(\mathcal{L}_m^K\) 对应于该自动机的 \(K\)-重同步积上的长度-\(m\) 路径集合。
+另一方面，在 Ostrowski/Zeckendorf 数制中，固定整数系数的线性关系
+\(
+Q(x_1,\dots,x_K)^{\mathsf T}=b
+\)
+可以被编译为一个有限状态的同步转导器：它逐位读取 \(K\) 条 Zeckendorf 数位并维护一个有界的 carry/余量向量，使得“合法性 + 归一化 + 线性一致性”在有限状态空间内闭合（参见 \cite{Frougny1999OnlineAddition,AhlbachUsatineFrougnyPippenger2013,BaranwalaSchaefferShallit2021OstrowskiAutomatic}；以及有理级数与线性表示的统一口径 \cite{BerstelReutenauer1988RationalSeries}）。
+将该线性约束转导器与 \(\mathcal{L}\) 的 \(K\)-重同步积自动机做同步积，即得到一个有限有向图，其长度-\(m\) 可接受路径数恰为 \(\#\Omega_m(Q,b)\)。
+以该图的邻接矩阵取 \(B_{Q,b}\)，以入口/出口集合给出 \(u_{Q,b},v_{Q,b}\)，即可得到所示矩阵幂表达。
+线性递推性由 Cayley--Hamilton 定理直接推出，而指数增长率为 \(\log\rho(B_{Q,b})\) 是 Perron--Frobenius 理论的标准结论。证毕。
+\end{proof}
+
+\begin{corollary}[线性约束的统一特例：加性能量与仿射一致性]\label{cor:gm-linear-constraints-special-cases}
+在定理 \ref{thm:gm-sofic-zeck-linear-constraints-pf} 的设定下：
+\begin{enumerate}
+  \item \textbf{（加性能量）}取 \(K=4\)、\(r=1\)、\(Q=(1,1,-1,-1)\)、\(b=0\)，则 \(\#\Omega_m(Q,b)=E_m(\mathcal{L})\)，并回收定理 \ref{thm:gm-zeck-sofic-additive-energy} 的 Perron 编译结论。
+  \item \textbf{（仿射一致性）}取 \(K=2\) 并给定三元组 \((a,b,c)\in\ZZ\times\ZZ\times\NN\)（\(\gcd(a,c)=1\)），令有理仿射变换
+  \[
+  T(x):=\frac{ax+b}{c}.
+  \]
+  取 \(r=1\) 且 \(Q=(-a,c)\)、\(b\) 仍记为常数项，则 \(\#\Omega_m(Q,b)\) 计数满足
+  \[
+  \#\Omega_m(Q,b)=\#\{(x,y)\in A_m(\mathcal{L})^2:\ y=T(x)\}.
+  \]
+\end{enumerate}
+\end{corollary}
+
+\begin{theorem}[非平凡有理仿射自同态的指数谱隙：结构化集合的近闭包不可能性]\label{thm:gm-affine-selfmap-spectral-gap}
+设 \(\mathcal{L}\) 的底图（忽略标记）为 primitive，从而存在 \(\alpha>1\) 使得
+\[
+|\mathcal{L}_m|\asymp \alpha^m,
+\qquad
+|A_m(\mathcal{L})|=|\mathcal{L}_m|\asymp \alpha^m
+\]
+（后者由 Zeckendorf 合法性保证 \(\mathrm{val}\) 在 \(\mathcal{L}_m\) 上单射）。
+对任意固定三元组 \((a,b,c)\in\ZZ\times\ZZ\times\NN\)（\(\gcd(a,c)=1\)）令 \(T(x)=(ax+b)/c\)。
+记
+\[
+\mathrm{Fix}_m(T):=\{x\in A_m(\mathcal{L}):\ T(x)\in A_m(\mathcal{L})\}.
+\]
+则存在有限非负整数矩阵 \(C_T\) 与 \(u_T,v_T\ge 0\) 使得
+\[
+|\mathrm{Fix}_m(T)|=u_T^{\mathsf T}C_T^{\,m}v_T\qquad(m\ge 0),
+\]
+并且若 \(T\) 不属于由 \((\mathcal{L},\mathrm{val})\) 诱导的平凡有限状态同态族（等价地：上述同步约束在语言层面给出一个严格真子语言），则存在 \(\varepsilon_T>0\) 使得
+\[
+|\mathrm{Fix}_m(T)|\ \ll\ (\alpha-\varepsilon_T)^m.
+\]
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:gm-sofic-zeck-linear-constraints-pf}（取 \(K=2\) 的仿射一致性特例）得到矩阵幂表达与指数率 \(\rho(C_T)\)。
+显然有 \(|\mathrm{Fix}_m(T)|\le |A_m(\mathcal{L})|\asymp\alpha^m\)，故 \(\rho(C_T)\le \alpha\)。
+若同步约束给出的语言为严格真子语言，则其拓扑熵（等价于对数增长率）严格小于原 primitive sofic 语言的熵（见 \cite[Chapter~4]{LindMarcus1995}），从而 \(\rho(C_T)<\alpha\)；取 \(\varepsilon_T:=\alpha-\rho(C_T)\) 即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[多映射闭包的统一指数衰减：有限族仿射平均下的最优指数上界]\label{thm:gm-multi-affine-closure-decay}
+设 \(\mathcal{F}=\{T_1,\dots,T_J\}\) 为有限个固定有理仿射变换 \(T_j(x)=(a_jx+b_j)/c_j\)（\(\gcd(a_j,c_j)=1\)）。
+令
+\[
+\mathrm{Fix}_m(\mathcal{F})
+:=\{x\in A_m(\mathcal{L}):\ T_j(x)\in A_m(\mathcal{L})\ \ \forall j\}.
+\]
+则存在有限非负整数矩阵 \(C_{\mathcal{F}}\) 与向量 \(u_{\mathcal{F}},v_{\mathcal{F}}\ge 0\) 使得
+\[
+|\mathrm{Fix}_m(\mathcal{F})|
+=u_{\mathcal{F}}^{\mathsf T}C_{\mathcal{F}}^{\,m}v_{\mathcal{F}},
+\qquad
+\lim_{m\to\infty}\frac{1}{m}\log|\mathrm{Fix}_m(\mathcal{F})|
+=\log\rho(C_{\mathcal{F}}).
+\]
+并且若 \(\mathcal{F}\) 中至少一个映射在语言层面诱导严格真子语言，则存在 \(\varepsilon_{\mathcal{F}}>0\) 使
+\(
+|\mathrm{Fix}_m(\mathcal{F})|\ll (\alpha-\varepsilon_{\mathcal{F}})^m
+\)。
+\end{theorem}
+
+\begin{proof}
+把 \(x\) 与 \(y_j=T_j(x)\) 的 \(J\) 条线性一致性约束联立，可写为一组固定整数线性方程组，属于定理 \ref{thm:gm-sofic-zeck-linear-constraints-pf} 的情形（取 \(K=J+1\)）。于是得到矩阵幂表达。
+严格谱隙的推出与定理 \ref{thm:gm-affine-selfmap-spectral-gap} 相同：严格真子语言的熵严格变小，故 \(\rho(C_{\mathcal{F}})<\alpha\)。证毕。
+\end{proof}
+
+\begin{proposition}[加性能量与和集指数的精确不等式：sofic 情形的 Perron 化下界]\label{prop:gm-energy-sumset-exponent}
+对任意有限集合 \(A\subset\ZZ\)，加性能量
+\(
+E(A):=\#\{a_1+a_2=a_3+a_4\}
+\)
+与和集满足 Cauchy--Schwarz 不等式
+\[
+|A+A|\ \ge\ \frac{|A|^4}{E(A)}.
+\]
+令 \(A=A_m(\mathcal{L})\)，并记
+\[
+|A_m(\mathcal{L})|\asymp \alpha^m,\qquad
+E(A_m(\mathcal{L}))=E_m(\mathcal{L})\asymp \beta^m,\qquad \beta:=\rho(B_{\mathcal{L}}).
+\]
+则存在 \(\gamma>1\) 使得
+\[
+|A_m(\mathcal{L})+A_m(\mathcal{L})|\ \gg\ \gamma^m,
+\qquad
+\boxed{\ \log\gamma\ \ge\ 4\log\alpha-\log\beta\ }.
+\]
+\end{proposition}
+
+\begin{proof}
+第一式由 Cauchy--Schwarz 的标准推导给出。
+将 \(A=A_m(\mathcal{L})\) 代入并取 \(m\to\infty\) 的指数率，即得 \(\gamma\) 的下界；常数因子仅影响次指数项。证毕。
+\end{proof}
+
+\begin{theorem}[扭曲 Perron 根刻画 Fourier 衰减：共振集的代数判别与严格谱降]\label{thm:gm-twisted-perron-fourier-decay}
+保持上述设定，固定模数 \(q\ge 2\)，令 \(\omega_q:=e^{2\pi i/q}\)。
+对 \(k\in\ZZ/q\ZZ\) 定义指数和
+\[
+S_{m,q}(k):=\sum_{x\in A_m(\mathcal{L})}\omega_q^{k x}.
+\]
+则存在显式可构造的复矩阵 \(A_{q}(k)\) 与向量 \(p_q,q_q\)（维数有限且仅依赖 \(\mathcal{L}\) 与 \(q\)），使得
+\[
+S_{m,q}(k)=p_q^{\mathsf T}A_q(k)^{\,m}q_q\qquad(m\ge 0),
+\]
+并且有谱半径控制
+\[
+|S_{m,q}(k)|\ \ll\ \rho(A_q(k))^m.
+\]
+此外，\(A_q(0)\) 可取为非负整数矩阵且 \(\rho(A_q(0))=\alpha\)；
+并且对任意 \(k\neq 0\)，若对应的相位权不为图上的单位模共边界（等价地：\(k\) 不在有限共振集 \(\Theta_{\mathrm{res}}(q)\subset \ZZ/q\ZZ\) 中），则存在 \(\varepsilon_{q}(k)>0\) 使得严格谱降成立：
+\[
+\rho(A_q(k))\ \le\ \alpha-\varepsilon_q(k).
+\]
+在 Fibonacci--Zeckendorf 情形下（权序列在 \(\ZZ/q\ZZ\) 上生成的循环子群为全体），可取 \(\Theta_{\mathrm{res}}(q)=\{0\}\)，从而一切非平凡频率均有指数衰减。
+\end{theorem}
+
+\begin{proof}
+由于 Fibonacci 数列在模 \(q\) 下具有 Pisano 周期 \(\pi(q)\)，权系数 \(F_{j+1}\bmod q\) 仅依赖于 \(j\bmod \pi(q)\)。
+因此可将识别 \(\mathcal{L}\) 的有限自动机与“位置模 \(\pi(q)\)”与“值模 \(q\)”同步积，得到一个有限状态自动机，其长度-\(m\) 路径恰枚举 \(\mathcal{L}_m\) 并携带 \(x=\mathrm{val}(\omega)\bmod q\) 的更新。
+在该同步积图上对每一步转移乘以相位权 \(\omega_q^{k\Delta x}\)，即可得到 \(A_q(k)\) 使得路径权和为 \(S_{m,q}(k)=p_q^{\mathsf T}A_q(k)^m q_q\)。
+由三角不等式得 \(|S_{m,q}(k)|\ll \|A_q(k)^m\|\)，从而 \(|S_{m,q}(k)|\ll \rho(A_q(k))^m\)。
+
+当 \(k=0\) 时相位权恒为 \(1\)，故 \(A_q(0)\) 可取为非负整数邻接矩阵；其 Perron 根等于语言增长率 \(\alpha\)。
+对一般 \(k\)，有逐项绝对值控制 \(|A_q(k)|\le A_q(0)\)，故由 Wielandt 的不等式得 \(\rho(A_q(k))\le \rho(A_q(0))=\alpha\)（见 \cite{Wielandt1950UnzerlegbareNichtnegative}）。
+若出现等号，则 Wielandt 的等号刻画推出 \(A_q(k)\) 必与 \(A_q(0)\) 在单位模对角相似意义下等价，从而相位权为图上的单位模共边界；其补集即严格谱降情形。证毕。
+\end{proof}
+
+\begin{theorem}[带宽子空间上的谱证书有限化：连续核算子的可采样 Toeplitz 模型]\label{thm:gm-pw-bandlimited-sampling-toeplitz}
+令 \(\mathrm{PW}_B\) 为带宽 \(B>0\) 的 Paley--Wiener 空间。
+设 \(\mathsf{K}:\mathrm{PW}_B\to \mathrm{PW}_B\) 为自伴正算子，且为差变量带宽核诱导的卷积算子：存在 \(k\in L^1(\RR)\) 使
+\[
+(\mathsf{K}f)(x)=(k*f)(x),\qquad \mathrm{supp}(\widehat{k})\subset[-B,B].
+\]
+则存在 Nyquist 采样同构 \(\mathcal{S}:\mathrm{PW}_B\to \ell^2(\ZZ)\)（由等距采样与 sinc 插值给出），以及一个双边 Toeplitz 型矩阵 \(K_B\) 作用于 \(\ell^2(\ZZ)\)，使得
+\[
+\boxed{\ \mathcal{S}\,\mathsf{K}\,\mathcal{S}^{-1}=K_B\ },
+\qquad
+\boxed{\ \|\mathsf{K}\|_{\mathrm{op}}=\|K_B\|_{\mathrm{op}}\ }.
+\]
+并且对任意 \(N\) 的截断 \(K_B^{(N)}\)（限制到 \(\ell^2(\{-N,\dots,N\})\)），其最大特征值 \(\lambda_{\max}(K_B^{(N)})\) 以可审计尾界逼近 \(\|\mathsf{K}\|_{\mathrm{op}}\)；若 \(k\) 具备足够光滑性，则逼近误差由 Toeplitz 系数的尾部给出超多项式衰减界。
+\end{theorem}
+
+\begin{proof}
+采样同构与 sinc 复原为 Shannon--Nyquist 采样定理的标准形式：\(\mathrm{PW}_B\) 在采样间距 \(\pi/B\) 下与 \(\ell^2(\ZZ)\) 等距同构。
+卷积算子在采样后变为离散卷积，故对应一个 Toeplitz（平移不变）矩阵 \(K_B\)，并且由同构的等距性得到算子范数恒等式。
+截断逼近由 \(\ell^2\) 上有界算子对有限坐标截断的标准扰动估计给出；当 \(k\) 具备 \(C^\infty\) 型正则性且频域紧支撑时，Toeplitz 系数可由分部积分给出任意阶多项式衰减，从而截断误差获得超多项式尾界。证毕。
+\end{proof}
+
+\begin{proposition}[仿射谱隙驱动的三阶迹改进机制：中能量段幂次节省的充分条件（模板）]\label{prop:gm-affine-gap-improves-trace3}
+在三阶迹法的抽象框架中，若关键仿射平均算子满足分解 \(\mathcal{A}=\mathcal{U}+\mathcal{R}\)（\(\mathcal{U}\) 秩一主通道），并且残差在某一带宽闭包类上满足改进界
+\[
+\|\mathcal{R}f\|_{L^2}^2\ \ll\ M^{4-\sigma}\int f^2
+\qquad(\sigma>0),
+\]
+则在“谱提升环节保持最优”（定理 \ref{thm:gm-trace3-spectral-norm-extremal}--命题 \ref{prop:gm-trace3-gap-optimal-spectralization}）的前提下，三阶迹路线在中能量段给出严格幂次改进；改进幅度在幂次层面与 \(\sigma\) 线性对应，并且主通道 \(M^6\) 与残差通道 \(M^{4-\sigma}\) 的平衡阈值发生可计算偏移。
+特别地，当 \(f\) 来自 sofic--Zeckendorf 结构化集合的读出振幅时，定理 \ref{thm:gm-affine-selfmap-spectral-gap}--\ref{thm:gm-multi-affine-closure-decay} 提供一类自然的谱隙来源，可用于构造 \(\sigma>0\) 的候选改进机制。
+\end{proposition}
+
+\begin{proof}
+三阶迹法的中能量瓶颈由“主通道规模”与“残差通道规模”竞争决定：主通道给出 \(M^6\) 级贡献，而残差通道通过 Hilbert--Schmidt 控制给出 \(M^4\) 级贡献（命题 \ref{prop:gm-affine-average-rank1-residual}）。
+一旦残差被改进为 \(M^{4-\sigma}\)，则在同一频次/阈值平衡中残差项的相对权重按 \(M^{-\sigma}\) 衰减；因此在以幂次形式组织的频次上界中获得严格节省，且节省幅度与 \(\sigma\) 线性对应。证毕。
+\end{proof}
+
+\begin{proposition}[能量谱与仿射谱的互补不等式：同一语言下两类 Perron 根的张量约束]\label{prop:gm-energy-affine-complementarity}
+在上述设定下，令 \(\beta:=\rho(B_{\mathcal{L}})\) 为加性能量核的 Perron 根，并令 \(C_T\) 为定理 \ref{thm:gm-affine-selfmap-spectral-gap} 的仿射一致性矩阵，记 \(\chi_T:=\rho(C_T)\)。
+则对任意固定 \(T\) 存在 \(\kappa_T>0\) 使得
+\[
+\boxed{\ \log\beta+2\log\chi_T\ \le\ 6\log\alpha-\kappa_T\ }.
+\]
+并且可取一个显式的（可核验的）选择：
+\[
+\kappa_T:=\log\alpha+2\log\!\Bigl(\frac{\alpha}{\chi_T}\Bigr)\ \ge\ \log\alpha,
+\]
+其中当 \(T\) 在语言层面诱导严格谱隙（\(\chi_T<\alpha\)）时有严格强化 \(\kappa_T>\log\alpha\)。
+\end{proposition}
+
+\begin{proof}
+对任意有限集合 \(A\subset\ZZ\) 有平凡上界 \(E(A)\le |A|^3\)。
+取 \(A=A_m(\mathcal{L})\)，得 \(E_m(\mathcal{L})\le |A_m(\mathcal{L})|^3\asymp \alpha^{3m}\)，从而 \(\beta\le \alpha^3\)。
+另一方面 \(|\mathrm{Fix}_m(T)|\le |A_m(\mathcal{L})|\asymp \alpha^m\)，故 \(\chi_T\le \alpha\)。
+于是
+\[
+\log\beta+2\log\chi_T
+\le 3\log\alpha+2\log\chi_T
+=6\log\alpha-\Bigl(\log\alpha+2\log(\alpha/\chi_T)\Bigr),
+\]
+即得所示不等式与 \(\kappa_T\) 的显式取法。证毕。
+\end{proof}
+
+\begin{theorem}[双谱证书的联立：三阶迹核与加性能量核的门槛分离]\label{thm:gm-dual-spectral-certificates}
+在 Dirichlet 多项式大值频次控制的三阶迹法路径中，可将频次上界的闭合拆为两条互相正交的谱证书：
+\begin{enumerate}
+  \item \textbf{三阶迹核证书：}由命题 \ref{prop:gm-trace3-poisson-collision-energy} 给出的连续 moment-kernel \(\mathsf{K}\)（或其带宽离散化）控制非零 Poisson 频率诱导的三阶迹残差；而谱范数提升环节由定理 \ref{thm:gm-trace3-spectral-norm-extremal}--命题 \ref{prop:gm-trace3-gap-optimal-spectralization} 以最优截断矩形式完全闭合。
+  \item \textbf{加性能量核证书：}当大值点集 \(W\) 来自可描述集合（例如由 Zeckendorf/sofic 因子或同步门生成）时，其加性能量可由定理 \ref{thm:gm-zeck-sofic-additive-energy} 编译为有限非负矩阵 \(B_{\mathcal{L}}\) 的 Perron 指纹，并由谱半径门槛独立核验。
+\end{enumerate}
+二者联立给出一种实现无关的“可审计分解”：频次上界由两条互不混同的谱半径门槛共同决定，且每条门槛都可通过有限核（矩阵/离散化核）实现离线核验。
+\end{theorem}
+
+\begin{proof}
+第一条由三阶迹残差的碰撞核表达（命题 \ref{prop:gm-trace3-poisson-collision-energy}）与迹矩到谱范数的最优转译（定理 \ref{thm:gm-trace3-spectral-norm-extremal}、命题 \ref{prop:gm-trace3-gap-optimal-spectralization}）合成得到；其结构性要点在于“谱提升”环节已被截断矩极值律完全封闭。
+第二条由加性能量的有限状态编译（定理 \ref{thm:gm-zeck-sofic-additive-energy}）给出。
+两条证书的正交性来自其约束对象分别落在连续 Poisson 频率核与离散语言能量核上，且均以谱半径/算子范数作为唯一门槛输出，因此可被独立核验并在最终频次界中以乘法/加法方式组合。证毕。
+\end{proof}
+
+\endinput

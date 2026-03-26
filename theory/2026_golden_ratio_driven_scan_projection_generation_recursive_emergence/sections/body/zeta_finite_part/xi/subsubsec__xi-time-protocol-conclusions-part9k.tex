@@ -1,0 +1,155 @@
+\paragraph{有限状态前向实现的不可逆预算、纤维根几何与 prime-register 视界}
+在定理 \ref{thm:online-delay-fold} 与命题 \ref{prop:pom-delay-min} 的口径下，\(\Fold_\infty\) 的前向归一化可由最小延迟 \(3\) 的有限状态在线核实现。
+下述结果说明：这种前向有限状态性并不导致后向可逆性的常数内存化；相反，纤维体积、层计数根几何与互素账本位长共同给出不可压缩下界。
+
+\begin{theorem}[Fold 的前向有限状态化不推出常数内存可逆性]\label{thm:xi-time-part9k-fold-forward-online-not-constant-memory-reversible}
+固定 \(m\ge 1\)。
+令
+\[
+\mathcal D_m:X_m\times\{0,1\}^{B}\to\Omega_m
+\]
+为任意译码器，并允许旁信息映射
+\(
+a_m:\Omega_m\to\{0,1\}^{B}
+\)
+依赖于输入微态。
+在均匀先验 \(\omega\sim\mathrm{Unif}(\Omega_m)\) 下，其恢复成功概率满足
+\[
+\mathbb P\!\Bigl(\mathcal D_m\bigl(\Fold_m(\omega),a_m(\omega)\bigr)=\omega\Bigr)
+\le
+\frac{|X_m|\,2^{B}}{2^m}.
+\]
+若进一步要求对所有 \(\omega\in\Omega_m\) 都精确恢复，则必要条件为
+\[
+2^{B}\ge D_m:=\max_{x\in X_m}|\Fold_m^{-1}(x)|.
+\]
+特别地，由 \(|X_m|=F_{m+2}\) 与定理 \ref{thm:pom-max-fiber}，
+\begin{align*}
+\mathbb P(\text{success})\ge p>0\ \text{与}\ m\ \text{无关}
+&\Longrightarrow
+B\ge m\log_2\!\frac{2}{\varphi}+O(1),\\
+\text{最坏情形精确可逆}
+&\Longrightarrow
+B\ge \frac{m}{2}\log_2\varphi+O(1).
+\end{align*}
+\end{theorem}
+\begin{proof}
+对每一对 \((x,b)\in X_m\times\{0,1\}^{B}\)，译码器至多输出一个候选微态 \(\mathcal D_m(x,b)\)。
+因此全部可能被正确恢复的微态总数至多为 \(|X_m|2^B\)。
+在均匀先验下，成功概率即不超过该覆盖比例，得到第一式。
+
+若要求对所有 \(\omega\) 都正确，则对任意固定 \(x\in X_m\)，纤维 \(\Fold_m^{-1}(x)\) 中的不同微态必须对应不同的旁信息值；否则在同一 \((x,b)\) 上译码输出唯一，无法同时恢复两个不同微态。
+故 \(d_m(x)\le 2^B\) 对所有 \(x\) 必要，特别地 \(D_m\le 2^B\)。
+
+最后，\(|X_m|=F_{m+2}=\Theta(\varphi^m)\) 给出平均情形下界，而定理 \ref{thm:pom-max-fiber} 的闭式
+\(
+D_m=\Theta(\varphi^{m/2})
+\)
+给出最坏情形下界。
+将两式取 \(\log_2\) 即得所述渐近结论。证毕。
+\end{proof}
+
+\begin{theorem}[Fold 纤维层计数多项式的全实负零点与强对数凹性]\label{thm:xi-time-part9k-fold-fiber-layer-count-realroot-logconcavity}
+对任意 \(x\in X_m\)，记
+\[
+Z_x(t)=\sum_{j\ge 0}N_j(x)t^j
+\]
+为纤维 \(\Fold_m^{-1}(x)\) 的逆代换层计数多项式。
+若 \(\Gamma_x\cong\bigsqcup_{i=1}^{r}P_{\ell_i}\) 是定理 \ref{thm:pom-fiber-indset-factorization} 的路径分量分解，则
+\[
+Z_x(t)=\prod_{i=1}^{r}I_{\ell_i}(t),
+\]
+且每个路径因子 \(I_{\ell}(t)\) 的零点显式为
+\[
+t_{\ell,k}=-\frac{1}{4\cos^2\!\left(\frac{\pi k}{\ell+2}\right)},
+\qquad
+1\le k\le \left\lfloor\frac{\ell+1}{2}\right\rfloor.
+\]
+从而 \(Z_x(t)\) 的全部零点均为严格负实数。
+特别地，系数列 \((N_j(x))_{j\ge 0}\) 满足 Newton 型不等式；在支持内部的可行指标上，
+\[
+N_j(x)^2> N_{j-1}(x)\,N_{j+1}(x),
+\]
+因而 \((N_j(x))_{j\ge 0}\) 严格对数凹并单峰。
+\end{theorem}
+\begin{proof}
+第一条分解由定理 \ref{thm:pom-fiber-indset-factorization} 给出。
+路径因子的零点闭式由定理 \ref{thm:pom-path-indset-leyang-cyclotomic-param} 给出，故每个 \(I_{\ell}\) 的全部零点都位于负实轴。
+乘积 \(Z_x(t)=\prod_i I_{\ell_i}(t)\) 因而同样仅有负实零点。
+
+随后由定理 \ref{thm:pom-fiber-rewrite-realroot-ulc}，\(Z_x(t)\) 的系数列为 ultra log-concave，特别满足 Newton 型不等式，并推出内部支持上的严格对数凹与单峰性。
+证毕。
+\end{proof}
+
+\begin{theorem}[互素寻址的常数内存视界]\label{thm:xi-time-part9k-coprime-ledger-memory-horizon}
+沿用定理 \ref{thm:pom-coprime-ledger-primorial-optimality} 的设定。
+若某一互素时间索引账本在任意时刻均以至多 \(B\) 比特精确存储其全局整数 \(G_T\)，则必有
+\[
+B\ge M\log_2(p_T\#),
+\qquad
+p_T\#:=\prod_{t=1}^{T}p_t.
+\]
+进一步，由 \(p_t\ge t+1\) 得
+\[
+B\ge M\log_2\bigl((T+1)!\bigr)
+\ge
+\frac{M}{\log 2}\Bigl((T+1)\log(T+1)-(T+1)+1\Bigr).
+\]
+因此 \(T\log T=O(B/M)\)；
+特别地，当 \(B=O(1)\) 时，允许的时间长度 \(T\) 被绝对上界束缚，无法在常数内存下无限延展地维持互素寻址。
+\end{theorem}
+\begin{proof}
+若账本由 \(B\) 比特精确存储，则最坏情形满足 \(G_T\le 2^B\)，即
+\[
+\log_2 G_T\le B.
+\]
+另一方面，定理 \ref{thm:pom-coprime-ledger-primorial-optimality} 给出
+\[
+\log G_T\ge M\log(p_T\#),
+\]
+等价于
+\[
+\log_2 G_T\ge M\log_2(p_T\#).
+\]
+两式合并即得第一条下界。
+
+再由 \(p_t\ge t+1\) 可得
+\(
+p_T\#\ge (T+1)!
+\)。
+最后用积分比较
+\[
+\log((T+1)!)=\sum_{k=1}^{T+1}\log k
+\ge
+\int_{1}^{T+1}\log x\,dx
+\]
+即可得到显式下界。证毕。
+\end{proof}
+
+\begin{conjecture}[prime Euler lift 的 pro-Čech 障碍增长律]\label{conj:xi-time-part9k-prime-euler-procech-growth}
+设 \(\{(\mathcal G_m,M_m,[\alpha_m])\}_{m\ge 1}\) 是一条细化塔，其中每个 \(M_m\) 产生有限层 Euler 对象
+\[
+\zeta_m(s):=\det(I-e^{-s}M_m)^{-1},
+\]
+而 \([\alpha_m]\in H^2(\mathcal G_m;\mathrm{Anom}_m)\) 表示结论 \ref{con:xi-implementation-moduli-h2-anom} 与定理 \ref{thm:xi-null-z2-cech-transfer-bockstein} 所刻画的有限层 strictification/Čech 障碍。
+记 \(G_m\) 为该层的可见 lift 群（其最大 strictification 商见结论 \ref{con:xi-terminal-strictification-maximal-cp-visible-quotient}）。
+定义最小有限 strictification 预算
+\[
+\mathfrak h_m
+:=
+\min\Bigl\{|Q|:\ \text{存在有限可见商 }G_m\twoheadrightarrow Q\ \text{使 }[\alpha_m]\text{ 在 }Q\text{-层上可 strictify}\Bigr\}.
+\]
+若 \(\zeta_m\) 在某个右半平面上经适当归一化收敛到 prime Euler 积
+\[
+\prod_{p}(1-p^{-s})^{-1},
+\]
+则必有 \(\mathfrak h_m\to\infty\)；
+更强地，预期存在常数 \(c>0\) 使
+\[
+\log \mathfrak h_m\ge c\,m
+\]
+沿任意此类细化塔成立。
+反之，若 \(\sup_m\mathfrak h_m<\infty\)，则该极限在严格化后仍停留在统一有限状态的 \(\zeta\)-语义层内，从而依定理 \ref{thm:operator-finite-state-zeta-2pii-periodic-separation} 必保留 \(2\pi i\)-周期零极晶格；这与经典 \(\zeta\) 在 \(s=1\) 的孤立极点结构不相容。
+\end{conjecture}
+
+\endinput

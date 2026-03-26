@@ -1,0 +1,220 @@
+\paragraph{统一泛函 \texorpdfstring{$\mathcal{A}(u)$}{A(u)} 的结构后果：精确抵消、局部最优性与代数证书}\label{par:gut-unification-functional-structures}
+本段在不重复注 \ref{rem:spec-gap-minimax-unification} 中定义的前提下，
+仅在其既有记号框架内抽取若干对统一泛函 \(\mathcal{A}(u)\) 本身具有非平凡后果的结论；
+这些结论与 \(\lambda_1(u)\) 的“平凡扇区”无关，且适于作为独立的数学性引用单元。
+
+\paragraph{几何均值坐标与平凡扇区的精确抵消}
+沿用注 \ref{rem:spec-gap-minimax-unification} 的记号，令
+\(
+\mathcal{R}:=\mathcal{R}_{\mathrm{obs}}
+\)
+且
+\(
+R:=|\mathcal{R}|
+\)。
+定义扭曲谱半径的几何均值与极值
+\[
+\eta_{\mathrm{geo}}(u):=\Bigl(\prod_{\varrho\in\mathcal{R}}\eta_\varrho(u)\Bigr)^{1/R},
+\qquad
+\eta_{\min}(u):=\min_{\varrho\in\mathcal{R}}\eta_\varrho(u),
+\qquad
+\eta_{\max}(u):=\max_{\varrho\in\mathcal{R}}\eta_\varrho(u).
+\]
+
+\begin{proposition}[精确抵消与内禀形式]\label{prop:gut-A-cancels-lambda1}
+对每个 \(u\in(0,1]\)，有恒等式
+\[
+\mathcal{A}(u)
+=\max_{\varrho\in\mathcal{R}}\Bigl|\log\eta_{\mathrm{geo}}(u)-\log\eta_\varrho(u)\Bigr|
+=\log\max\Bigl\{\frac{\eta_{\mathrm{geo}}(u)}{\eta_{\min}(u)},\ \frac{\eta_{\max}(u)}{\eta_{\mathrm{geo}}(u)}\Bigr\}.
+\]
+特别地，\(\mathcal{A}(u)\) 及其极小点对 \(\lambda_1(u)\) 完全\emph{不敏感}：尽管每个 \(g_\varrho(u)\) 含有 \(\lambda_1(u)\)，但在中心化之后其贡献精确抵消。
+\end{proposition}
+
+\begin{proof}
+由定义 \(g_\varrho(u)=\log\lambda_1(u)-\log\eta_\varrho(u)\) 得
+\[
+\bar g(u)=\log\lambda_1(u)-\frac{1}{R}\sum_{\sigma\in\mathcal{R}}\log\eta_\sigma(u),
+\]
+从而
+\[
+g_\varrho(u)-\bar g(u)
+=\frac{1}{R}\sum_{\sigma\in\mathcal{R}}\log\eta_\sigma(u)-\log\eta_\varrho(u)
+=\log\eta_{\mathrm{geo}}(u)-\log\eta_\varrho(u).
+\]
+取绝对值并对 \(\varrho\) 取最大得第一式。
+第二式由 \(\eta_{\min}\le \eta_{\mathrm{geo}}\le \eta_{\max}\) 直接推出。证毕。
+\end{proof}
+
+\begin{corollary}[两通道坍缩]\label{cor:gut-A-two-channel}
+若 \(R=2\)，则
+\[
+\mathcal{A}(u)=\frac12\log\frac{\eta_{\max}(u)}{\eta_{\min}(u)}.
+\]
+因此在两通道情形，极小化 \(\mathcal{A}(u)\) 与极小化对数扩散度 \(\log(\eta_{\max}/\eta_{\min})\) 完全等价。
+\end{corollary}
+
+\begin{corollary}[扩散度等价（常数因子内）]\label{cor:gut-A-spread-equivalence}
+对所有 \(R\ge 2\) 与 \(u\in(0,1]\)，有双侧界
+\[
+\frac12\log\frac{\eta_{\max}(u)}{\eta_{\min}(u)}
+\le
+\mathcal{A}(u)
+\le
+\log\frac{\eta_{\max}(u)}{\eta_{\min}(u)}.
+\]
+因此 \(\mathcal{A}(u)\) 等价于多重集 \(\{\eta_\varrho(u)\}_{\varrho\in\mathcal{R}}\) 的对数条件数（至多差一个因子 \(2\)）。
+\end{corollary}
+
+\paragraph{内禀 \texorpdfstring{$\beta$}{beta}-场与局部最优性的充要判据}
+在 \(\theta=\log u\) 的尺度上，令（在导数存在处）
+\[
+b_\varrho(u):=\frac{\dd}{\dd\log u}\log\eta_\varrho(u),
+\qquad
+b_{\mathrm{geo}}(u):=\frac{1}{R}\sum_{\sigma\in\mathcal{R}}b_\sigma(u)
+=\frac{\dd}{\dd\log u}\log\eta_{\mathrm{geo}}(u).
+\]
+并定义
+\[
+h_\varrho(u):=\log\eta_{\mathrm{geo}}(u)-\log\eta_\varrho(u),
+\qquad
+\mathcal{A}(u)=\max_{\varrho\in\mathcal{R}}|h_\varrho(u)|
+\]
+（由命题 \ref{prop:gut-A-cancels-lambda1}）。
+此外令 \(b_1(u):=\frac{\dd}{\dd\log u}\log\lambda_1(u)\)，则
+\(
+\beta_\varrho(u)=b_1(u)-b_\varrho(u)
+\)
+且中心化后满足
+\(
+\beta_\varrho(u)-\bar\beta(u)=-(b_\varrho(u)-b_{\mathrm{geo}}(u))
+\)；
+从而 \(\mathcal{A}(u)\) 的一阶变化仅依赖内禀中心化量 \(b_\varrho-b_{\mathrm{geo}}\)。
+
+\begin{theorem}[局部极小的充要条件（有限最大值的一维 KKT/Clarke 条件）]\label{thm:gut-A-local-optimality}
+设每个 \(u\mapsto \log\eta_\varrho(u)\) 在 \(u_\star\in(0,1]\) 处可微。
+定义活跃集与符号
+\[
+\mathcal{A}_{\mathrm{act}}(u_\star):=\Bigl\{\varrho\in\mathcal{R}:\ |h_\varrho(u_\star)|=\mathcal{A}(u_\star)\Bigr\},
+\qquad
+\sigma_\varrho:=\operatorname{sgn}\bigl(h_\varrho(u_\star)\bigr)\in\{\pm 1\}.
+\]
+则 \(u_\star\) 为 \(\mathcal{A}\) 的局部极小点，当且仅当
+\[
+0\in
+\operatorname{conv}\Bigl\{\sigma_\varrho\bigl(b_{\mathrm{geo}}(u_\star)-b_\varrho(u_\star)\bigr):\ \varrho\in\mathcal{A}_{\mathrm{act}}(u_\star)\Bigr\}.
+\]
+等价地，存在系数 \(\alpha_\varrho\ge 0\)（\(\varrho\in\mathcal{A}_{\mathrm{act}}(u_\star)\)）满足
+\(
+\sum_{\varrho\in\mathcal{A}_{\mathrm{act}}(u_\star)}\alpha_\varrho=1
+\)
+且
+\[
+\sum_{\varrho\in\mathcal{A}_{\mathrm{act}}(u_\star)}
+\alpha_\varrho\,\sigma_\varrho\,\bigl(b_{\mathrm{geo}}(u_\star)-b_\varrho(u_\star)\bigr)=0.
+\]
+在典型的“双活跃通道”情形（\(\mathcal{A}_{\mathrm{act}}(u_\star)=\{\varrho_+,\varrho_-\}\) 且 \(h_{\varrho_+}(u_\star)=\mathcal{A}(u_\star)\)、\(h_{\varrho_-}(u_\star)=-\mathcal{A}(u_\star)\)）下，上述条件等价于
+\[
+\bigl(b_{\mathrm{geo}}(u_\star)-b_{\varrho_+}(u_\star)\bigr)\cdot
+\bigl(b_{\mathrm{geo}}(u_\star)-b_{\varrho_-}(u_\star)\bigr)\le 0.
+\]
+\end{theorem}
+
+\begin{proof}
+令 \(\theta=\log u\) 并记 \(F(\theta):=\mathcal{A}(e^\theta)\)。
+由 \(h_\varrho\) 的定义可知 \(F\) 在 \(\theta_\star=\log u_\star\) 的邻域内可表为有限个可微函数的最大值：
+\(
+F(\theta)=\max_{\varrho\in\mathcal{R}}\max\{h_\varrho(e^\theta),-h_\varrho(e^\theta)\}.
+\)
+一维情形下，有限最大值函数在 \(\theta_\star\) 的局部极小当且仅当 \(0\) 属于其活跃分支导数的凸包（Clarke 次梯度的 KKT 判据）。
+对活跃分支 \(\sigma_\varrho h_\varrho(e^\theta)\) 计算导数得
+\[
+\frac{\dd}{\dd\theta}\bigl(\sigma_\varrho h_\varrho(e^\theta)\bigr)\Big|_{\theta=\theta_\star}
+=\sigma_\varrho\Bigl(\frac{\dd}{\dd\log u}\log\eta_{\mathrm{geo}}(u)-\frac{\dd}{\dd\log u}\log\eta_\varrho(u)\Bigr)\Big|_{u=u_\star}
+=\sigma_\varrho\bigl(b_{\mathrm{geo}}(u_\star)-b_\varrho(u_\star)\bigr),
+\]
+故得到所述充要条件。双活跃通道时，凸包条件等价于两个数异号或含零，即乘积不正。证毕。
+\end{proof}
+
+\paragraph{一致误差下的统一点稳定性：从 \texorpdfstring{$\|\widetilde{\mathcal A}-\mathcal A\|_\infty$}{sup} 到 argmin 误差条}
+\begin{theorem}[一致误差下的极小点稳定性]\label{thm:gut-argmin-stability}
+令 \(I\subset\RR\) 为紧区间（变量为 \(\theta=\log u\)），并记 \(F(\theta):=\mathcal{A}(e^\theta)\)。
+假设 \(F\) 在 \(I\) 上存在唯一极小点 \(\theta_\star\)，且满足尖锐性不等式
+\[
+F(\theta)\ge F(\theta_\star)+\kappa|\theta-\theta_\star|\qquad(\forall\,\theta\in I)
+\]
+其中 \(\kappa>0\)。
+若近似函数 \(\widetilde F\) 满足 \(\|\widetilde F-F\|_{L^\infty(I)}\le \varepsilon\)，则任一 \(\widetilde F\) 在 \(I\) 上的极小点 \(\widetilde\theta_\star\) 满足
+\[
+|\widetilde\theta_\star-\theta_\star|\le \frac{2\varepsilon}{\kappa},
+\qquad
+F(\widetilde\theta_\star)\le F(\theta_\star)+2\varepsilon.
+\]
+\end{theorem}
+
+\begin{proof}
+由 \(\widetilde\theta_\star\) 的最优性与一致误差界，有
+\[
+F(\widetilde\theta_\star)\le \widetilde F(\widetilde\theta_\star)+\varepsilon
+\le \widetilde F(\theta_\star)+\varepsilon
+\le F(\theta_\star)+2\varepsilon.
+\]
+再将尖锐性不等式作用于 \(\theta=\widetilde\theta_\star\)，得
+\(
+\kappa|\widetilde\theta_\star-\theta_\star|\le F(\widetilde\theta_\star)-F(\theta_\star)\le 2\varepsilon
+\)，
+从而结论成立。证毕。
+\end{proof}
+
+\paragraph{行列式消元证书：以 \texorpdfstring{$\det(I-zM(u))$}{det} 代替数值微分}
+在本文的核审计口径中，许多通道谱半径均来自有限维矩阵族 \(M_{K,\varrho}(u)\) 的 Perron 根；
+因此内禀 \(\beta\)-场 \(b_\varrho(u)=\frac{\dd}{\dd\log u}\log\eta_\varrho(u)\) 可通过行列式的偏导比值被完全代数化。
+
+\begin{proposition}[谱半径对数导数的偏导比值表示]\label{prop:gut-beta-determinant-ratio}
+设 \(M(u)\) 为一个有限矩阵，其元素为 \(u\) 的有理函数，且在某个连通开区间 \(U\subset(0,1]\) 上存在可微函数 \(z_\star(u)\in\RR_{>0}\)，使得
+\[
+\Delta(z,u):=\det(I-zM(u))=0\quad\text{在}\quad z=z_\star(u)
+\]
+并且 \(z_\star(u)^{-1}=\rho(M(u))\)，且该根在 \(U\) 上为单根（即 \(\partial_z\Delta(z_\star(u),u)\neq 0\)）。
+令 \(\eta(u):=\rho(M(u))=z_\star(u)^{-1}\) 并定义
+\(
+b(u):=\frac{\dd}{\dd\log u}\log\eta(u)
+\)。
+则对所有 \(u\in U\) 有恒等式
+\[
+b(u)=\frac{u}{z_\star(u)}\,
+\frac{\partial_u\Delta(z_\star(u),u)}{\partial_z\Delta(z_\star(u),u)}.
+\]
+此外，在把 \(\Delta\) 的分母清除后（使其落入某个 \(\ZZ[u^{\pm1},z]\) 中），\((b,u)\) 满足关于 \(z\) 的消元关系：存在一个非零多项式
+\(
+\mathcal{R}(b,u)\in\ZZ[u^{\pm1},b]
+\)
+使得 \(\mathcal{R}(b(u),u)=0\)（可取为关于 \(z\) 的 resultant）。
+\end{proposition}
+
+\begin{proof}
+对恒等式 \(\Delta(z_\star(u),u)=0\) 对 \(u\) 求导得
+\[
+\partial_z\Delta(z_\star(u),u)\,z_\star'(u)+\partial_u\Delta(z_\star(u),u)=0,
+\]
+由单根性可解得
+\(
+z_\star'(u)=-\partial_u\Delta/\partial_z\Delta
+\)
+（在 \(z=z_\star(u)\) 处取值）。
+又
+\(
+b(u)=\frac{\dd}{\dd\log u}\log(z_\star(u)^{-1})=-\frac{u\,z_\star'(u)}{z_\star(u)}
+\)，
+代入即得第一式。
+第二段为消元的直接推论：在 \(z=z_\star(u)\) 处同时满足
+\(
+\Delta(z,u)=0
+\)
+与
+\(
+b\,z\,\partial_z\Delta(z,u)-u\,\partial_u\Delta(z,u)=0
+\)，
+以 \(z\) 作 resultant 消元即可得到仅含 \((b,u)\) 的代数关系。证毕。
+\end{proof}
+

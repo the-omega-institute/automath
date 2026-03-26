@@ -1,0 +1,123 @@
+\paragraph{交换乘法账本的序信息障碍与二维非交换替代}
+上一段把在线乘法外置写为 \(G_T(a_1,\dots,a_T)=\prod_{t=1}^{T}h_t(a_t)\)，并以素因子支撑规模刻画“交换账本”的轴占用代价。
+若进一步要求编码在任意长度上与拼接严格兼容（幺半群同态），则交换性本身即强制抹除序信息；该结构性障碍解释了为何回放型 prime-register 需要引入时间索引互素轴（下一段），或等价地放弃纯交换同态口径而改用随位置迁移的坐标系。
+另一方面，只要允许载体非交换，则二维矩阵已足以把“素数乘积影子”与“顺序信息”在同一线性对象中分离承载。
+
+\begin{theorem}[交换型素数寄存器对序信息的不可恢复性]\label{thm:pom-commutative-prime-register-order-nonrecoverable}
+设 \(\Sigma\) 为有限字母表且 \(|\Sigma|\ge 2\)，\(\Sigma^{*}\) 为其自由幺半群（拼接为乘法，空字为单位元）。
+设 \(M\) 为任意交换幺半群，则不存在幺半群单射
+\[
+\Phi:\Sigma^{*}\hookrightarrow M.
+\]
+特别地，不存在仅依赖事件类型并以交换乘法累积的素数寄存器编码
+\(\mathrm{Enc}:\Sigma^{*}\to(\NN_{\ge 1},\times)\)
+使其同时满足 \(\mathrm{Enc}(uv)=\mathrm{Enc}(u)\mathrm{Enc}(v)\) 与单射性。
+\end{theorem}
+\begin{proof}
+取互异字母 \(a,b\in\Sigma\)。
+由于 \(\Phi\) 为幺半群同态且 \(M\) 交换，
+\[
+\Phi(ab)=\Phi(a)\Phi(b)=\Phi(b)\Phi(a)=\Phi(ba).
+\]
+而在自由幺半群中 \(ab\neq ba\)，故 \(\Phi\) 不可能为单射。
+取 \(M=(\NN_{\ge 1},\times)\) 得到关于 \(\mathrm{Enc}\) 的断言。
+\end{proof}
+
+\begin{theorem}[素数行列式的二维自由编码：显式构造与自由性]\label{thm:pom-prime-determinant-2x2-free-encoding}
+给定有限集合 \(\Sigma=\{s_1,\dots,s_k\}\) 及一一标记 \(p:\Sigma\to\mathbb{P}\)（\(\mathbb{P}\) 为素数集）。
+令
+\[
+P_{\max}:=\max_{s\in\Sigma}p(s),\qquad N:=P_{\max}+1.
+\]
+取互异正整数 \(b_1,\dots,b_k\) 且满足 \(b_i-b_j\ge 2\)（例如取 \(b_i=2i\)）。
+定义
+\[
+M_{s_i}:=
+\begin{pmatrix}
+b_iN+p(s_i) & b_i\\
+N & 1
+\end{pmatrix}\in\Mat_{2}(\NN).
+\]
+则满足：
+\begin{enumerate}
+  \item \(\det(M_{s_i})=p(s_i)\)；
+  \item 令 \(M_{\emptyset}:=I\) 且对非空词 \(w=a_1\cdots a_n\in\Sigma^{*}\) 定义 \(M_w:=M_{a_1}\cdots M_{a_n}\)，则 \(w\mapsto M_w\) 为幺半群同态单射。特别地，\(\langle M_{s_1},\dots,M_{s_k}\rangle\) 在矩阵乘法下自由生成一个秩为 \(k\) 的自由幺半群。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\textbf{(1)} 直接计算
+\(
+\det(M_{s_i})=(b_iN+p(s_i))\cdot 1-b_iN=p(s_i)
+\)。
+\par
+\textbf{(2)} 对任意矩阵 \(A=\begin{psmallmatrix}a&b\\ c&d\end{psmallmatrix}\)（\(c,d>0\)）定义其在 \((0,\infty)\) 上的线性分式作用
+\[
+f_A(t):=\frac{at+b}{ct+d}.
+\]
+直接计算可得 \(f_{AB}=f_A\circ f_B\)。对每个 \(s_i\) 记 \(f_{s_i}:=f_{M_{s_i}}\)，则
+\[
+f_{s_i}(t)=\frac{(b_iN+p(s_i))t+b_i}{Nt+1},\qquad t>0,
+\]
+并且
+\[
+f_{s_i}'(t)=\frac{\det(M_{s_i})}{(Nt+1)^2}=\frac{p(s_i)}{(Nt+1)^2}>0,
+\]
+故 \(f_{s_i}\) 严格递增，从而为单射。又有
+\[
+\lim_{t\to 0^+}f_{s_i}(t)=b_i,\qquad \lim_{t\to +\infty}f_{s_i}(t)=\frac{b_iN+p(s_i)}{N}=b_i+\frac{p(s_i)}{N}.
+\]
+因此
+\[
+f_{s_i}\bigl((0,\infty)\bigr)\subset I_i:=\Bigl(b_i,\ b_i+\frac{p(s_i)}{N}\Bigr).
+\]
+由于 \(N>P_{\max}\)，有 \(p(s_i)/N<1\)；再由 \(b_i-b_j\ge 2\) 得区间 \(I_i\) 两两不交。
+\par
+设 \(u,v\in\Sigma^{*}\) 满足 \(M_u=M_v\)。则对应的线性分式变换满足 \(f_u=f_v\)。
+若 \(u\) 非空，写 \(u=su'\)（\(s\in\Sigma\) 为首字母）；则对任意 \(t>0\)，有 \(f_{u}(t)=f_s(f_{u'}(t))\in I_s\)，从而 \(f_u((0,\infty))\subset I_s\)。
+同理，若 \(v=tv'\)，则 \(f_v((0,\infty))\subset I_t\)。由 \(f_u=f_v\) 与 \(I_s\cap I_t=\varnothing\) 可知 \(s=t\)。
+又因 \(f_s\) 单射，\(f_s\circ f_{u'}=f_s\circ f_{v'}\) 推出 \(f_{u'}=f_{v'}\)。
+迭代左消去得到 \(u=v\)。
+空字情形由 \(M_{\emptyset}=I\) 与上述左消去过程兼容；并且每个 \(M_{s_i}\) 的左上元严格大于 \(1\)，故任何非空积均不可能等于 \(I\)。
+综上，\(w\mapsto M_w\) 为单射，从而生成幺半群自由且分解唯一。
+\end{proof}
+
+\begin{corollary}[线性椭圆像的素数面积账本与顺序账本分离]\label{cor:pom-prime-determinant-ellipse-ledger}
+沿用定理 \ref{thm:pom-prime-determinant-2x2-free-encoding} 的构造。
+对任意词 \(w\in\Sigma^{*}\) 令 \(M_w\) 如上，并记单位圆 \(S^{1}\subset\RR^{2}\)、单位圆盘 \(D:=\{x\in\RR^{2}:\ \norm{x}\le 1\}\)。
+令
+\[
+\mathcal{E}_w:=M_w(S^{1})\subset\RR^{2}.
+\]
+则：
+\begin{enumerate}
+  \item \(w\mapsto M_w\) 为单射；因而若将“椭圆”按带标架的线性算子 \(M_w\)（而非仅其几何像集）理解，则 \(w\mapsto \mathcal{E}_w\) 在该意义下为单射；
+  \item \(\det(M_w)=\prod_{j=1}^{|w|}p(w_j)\)；
+  \item \(\mathrm{Area}(M_w(D))=\det(M_w)\,\mathrm{Area}(D)=\pi\,\det(M_w)=\pi\prod_{j=1}^{|w|}p(w_j)\)。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+第一条由定理 \ref{thm:pom-prime-determinant-2x2-free-encoding}。
+第二条由行列式乘法性与 \(\det(M_s)=p(s)\)。
+第三条由线性变换对 Lebesgue 面积的伸缩公式 \(\mathrm{Area}(A(E))=|\det(A)|\,\mathrm{Area}(E)\)；此处 \(\det(M_w)>0\) 且 \(\mathrm{Area}(D)=\pi\)。
+\end{proof}
+
+\begin{theorem}[无限素数轴与二维非交换外置的可互换性：一类信息守恒等价原理]\label{thm:pom-prime-axis-vs-2d-noncommutative-externalization}
+设 \(|\Sigma|\ge 2\)。考虑对轨迹 \(w\in\Sigma^{*}\) 的两类外置方式：
+\begin{enumerate}
+  \item \textbf{交换型外置：}将轨迹编码进入某个交换幺半群 \(M\)，并要求编码保持拼接同态；
+  \item \textbf{二维非交换外置：}将轨迹编码进入 \(\Mat_{2}(\NN)\) 的自由子幺半群，并要求编码保持拼接同态。
+\end{enumerate}
+则成立如下断言：
+\begin{enumerate}
+  \item 任意交换幺半群 \(M\) 上不存在可逆的拼接同态编码 \(\Sigma^{*}\hookrightarrow M\)；
+  \item 存在拼接同态单射 \(\Psi:\Sigma^{*}\hookrightarrow\Mat_{2}(\NN)\)，并且可指定 \(\det(\Psi(s))\) 为任意给定的素数标记 \(p(s)\)。
+\end{enumerate}
+因此，在“轨迹可逆外置 + 拼接同态”的约束下，若坚持交换性则必牺牲同态结构（例如改用随时间迁移的互素素数轴）；若坚持同态结构则必引入非交换载体，而二维矩阵已足够承载顺序信息，并使素数乘积以行列式形式保留为守恒账本。
+\end{theorem}
+\begin{proof}
+第一条由定理 \ref{thm:pom-commutative-prime-register-order-nonrecoverable}。
+第二条由定理 \ref{thm:pom-prime-determinant-2x2-free-encoding}：令 \(\Psi(s_i)=M_{s_i}\) 并按拼接延拓到词的乘积即可。
+\end{proof}
+
+以上结果给出一条封闭链条：定理 \ref{thm:pom-commutative-prime-register-order-nonrecoverable} 给出交换寄存器无法承载序信息的结构性障碍；定理 \ref{thm:pom-prime-determinant-2x2-free-encoding} 给出“素数行列式 + 自由轨迹”的二维显式实现；推论 \ref{cor:pom-prime-determinant-ellipse-ledger} 把该实现提升为“椭圆像—面积账本—轨迹唯一性”的严格命题；定理 \ref{thm:pom-prime-axis-vs-2d-noncommutative-externalization} 则把“时间索引的无限素数轴”与“二维非交换外置”在可逆外置约束下并置为两种可互换的实现范式。
+

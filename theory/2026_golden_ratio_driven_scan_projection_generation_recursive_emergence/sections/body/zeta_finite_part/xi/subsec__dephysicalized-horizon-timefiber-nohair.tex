@@ -1,0 +1,559 @@
+\subsubsection{去物理化的结构定理链：缺陷排斥、端点时间纤维与离散毛发的最小外置}\label{subsec:dephysicalized-horizon-timefiber-nohair}
+本段对应总览小节 \ref{subsubsec:xi-ramanujan-horizon-ledger-framework} 中关于“缺陷账本—端点压缩—无连续毛发”的结构归约部分，并在本文既定的最小闭包（尺度/素数/相位三寄存器）与 unitary slice 类型化核验设定下给出其技术化展开。其证明完全在文内闭合，且所有断言以前文编号结论为锚点；解释性术语仅用于对齐可审计语义而不作为推导前提。\par
+语义核心仍为“有限数据证书 + 确定性离线验证器”，并以固定的 dyadic/有理网格与区间算术口径保证跨平台可重复性（参见 \S\ref{subsec:xi-completion-audit} 与 \S\ref{subsec:xi-pw-type-safety-null} 的可机核验约定）。本段调用的主要接口为：圆盘化完成化 \(F_{\zeta}\) 与 Jensen 缺陷 \(D_{\zeta}(\varrho)\)（附录 \ref{app:unit-circle-phase-gate} 与 \S\ref{subsec:unit-disk-jensen-defect}），端点紧化下的时间纤维表示与端点局部化，以及 \(\mathbf{PW}\) 类型闭包在纯相位可见域中对径向自由度的拒绝（\S\ref{subsec:xi-pw-type-safety-null}）；离散证书侧则由 Big-Witt/Dwork/Hankel 的桥包接口承载（附录 \ref{app:witt-bridge-package} 与 \S\ref{subsubsec:pom-collision-kernel-family}）。此外，附录 \ref{subsubsec:app-horizon-weyl-carath-toeplitz} 给出与 Jensen/Blaschke 缺陷链路并行的正性判别（Carath\'eodory \(\Leftrightarrow\) Toeplitz--PSD），并在 \(|w|<1/3\) 内给出欧拉积的绝对收敛补丁。
+
+\begin{theorem}[缺陷诱导的排斥半径（视界审查的禁入律）]\label{thm:dephys-defect-repulsion-radius}
+令 \(F_{\zeta}\) 为附录 \ref{app:unit-circle-phase-gate} 的圆盘化完成化函数，\(D_{\zeta}(\varrho)\) 为 Jensen 缺陷（定义 \ref{def:app-jensen-defect}）。
+对任意 \(0<\varrho<1\) 定义排斥半径
+\[
+r_{\ast}(\varrho):=\varrho\exp\!\bigl(-D_{\zeta}(\varrho)\bigr)\in(0,\varrho].
+\]
+则 \(F_{\zeta}\) 在子盘 \(|w|<r_{\ast}(\varrho)\) 内无零点。
+更定量地，若 \(D_{\zeta}(\varrho)\le \varepsilon\)，则 \(r_{\ast}(\varrho)\ge \varrho e^{-\varepsilon}\)。
+此外，若存在 \(\varrho_n\uparrow 1\) 使 \(r_{\ast}(\varrho_n)\uparrow 1\)，则 \(F_{\zeta}\) 在 \(|w|<1\) 内无零点，从而 RH 成立。
+\end{theorem}
+
+\begin{proof}
+前两条断言由命题 \ref{prop:app-jensen-zero-repulsion-subdisk} 直接给出。
+最后的 RH 证书由推论 \ref{cor:app-jensen-repulsion-radius-to-one} 推出。证毕。
+\end{proof}
+
+\begin{proposition}[对数半径导数律：缺陷的导数即盘内零点计数]\label{prop:dephys-jensen-defect-log-derivative}
+令 \(N_{F_{\zeta}}(\varrho)\) 为 \(F_{\zeta}\) 在 \(|w|<\varrho\) 内的零点计数（按重数计）：
+\[
+N_{F_{\zeta}}(\varrho)
+:=\#\bigl\{a:\ F_{\zeta}(a)=0,\ |a|<\varrho\bigr\}.
+\]
+则对几乎处处的 \(\varrho\in(0,1)\) 有
+\[
+\frac{\dd}{\dd(\log\varrho)}D_{\zeta}(\varrho)=N_{F_{\zeta}}(\varrho),
+\qquad
+D_{\zeta}'(\varrho)=\frac{1}{\varrho}\,N_{F_{\zeta}}(\varrho).
+\]
+并且 \(D_{\zeta}\) 在 \((0,1)\) 上连续、非减，且若对某 \(\varrho_0\in(0,1)\) 有 \(D_{\zeta}(\varrho_0)=0\)，则对所有 \(0<\varrho\le \varrho_0\) 皆有 \(D_{\zeta}(\varrho)=0\)。
+\end{proposition}
+
+\begin{proof}
+见附录命题 \ref{prop:app-jensen-defect-log-derivative}。
+\end{proof}
+
+\begin{corollary}[排斥半径的零点计数驱动律]\label{cor:dephys-repulsion-radius-zero-count-driving}
+在命题 \ref{prop:dephys-jensen-defect-log-derivative} 的记号下，令 \(r_{\ast}(\varrho)=\varrho e^{-D_{\zeta}(\varrho)}\) 如定理 \ref{thm:dephys-defect-repulsion-radius}。
+则对几乎处处的 \(\varrho\in(0,1)\) 有
+\[
+\frac{\dd}{\dd(\log\varrho)}\log r_{\ast}(\varrho)
+=1-\frac{\dd}{\dd(\log\varrho)}D_{\zeta}(\varrho)
+=1-N_{F_{\zeta}}(\varrho).
+\]
+因此，一旦盘内出现零点（即对某 \(\varrho\) 有 \(N_{F_{\zeta}}(\varrho)\ge 1\)），则在其后的任意半径层上 \(\log r_{\ast}\) 的增长率不再为正；
+特别地，若存在盘内零点 \(a\) 满足 \(|a|<1\)，则对所有 \(\varrho\in(|a|,1)\) 有 \(N_{F_{\zeta}}(\varrho)\ge 1\)，从而 \(r_{\ast}(\varrho)\) 不能随 \(\varrho\uparrow 1\) 严格增长到 \(1\)。
+\end{corollary}
+
+\begin{proof}
+由 \(r_{\ast}(\varrho)=\varrho e^{-D_{\zeta}(\varrho)}\) 得 \(\log r_{\ast}=\log\varrho-D_{\zeta}\)，对 \(\log\varrho\) 求导并代入命题 \ref{prop:dephys-jensen-defect-log-derivative} 即得。
+最后一条断言由零点计数函数的单调性 \(N_{F_{\zeta}}(\varrho)\ge 1\)（当 \(\varrho>|a|\)）与上述导数公式直接推出。证毕。
+\end{proof}
+
+\begin{theorem}[时间纤维双端触及与端点压缩]\label{thm:dephys-timefiber-two-ended}
+对 \(0<\varrho<1\)，令 \(t(\varrho,\theta):=\mathcal{C}^{-1}(\varrho e^{i\theta})\in\mathbb{H}\)（命题 \ref{prop:app-jensen-defect-upperhalf-circle-average}），则 Jensen 缺陷可写为上半平面圆轨道平均
+\[
+D_{\zeta}(\varrho)=\frac{1}{2\pi}\int_{0}^{2\pi}\log\Bigl|\Xi_{\zeta}\!\Bigl(\tfrac12+\mathrm{i}\,t(\varrho,\theta)\Bigr)\Bigr|\,\dd\theta
+-\log\bigl|\Xi_{\zeta}(-\tfrac12)\bigr|,
+\]
+其中 \(t(\varrho,\theta)\) 具有显式分解（式 \eqref{eq:app-t-rho-theta-explicit}）
+\[
+t(\varrho,\theta)
+=\frac{2\varrho\sin\theta}{1+\varrho^2+2\varrho\cos\theta}
+\;+\;
+\mathrm{i}\,\frac{1-\varrho^2}{1+\varrho^2+2\varrho\cos\theta}.
+\]
+并且等半径层 \(|w|=\varrho\) 在上半平面中的逆像是一条显式圆（命题 \ref{prop:app-cayley-preimage-modulus-circle}），其与虚轴交点为
+\[
+y_{\pm}(\varrho)=\frac{1\pm\varrho}{1\mp\varrho},
+\qquad
+\varrho\uparrow 1\ \Longrightarrow\ y_{-}(\varrho)\downarrow 0,\ \ y_{+}(\varrho)\uparrow\infty.
+\]
+因此，当 \(\varrho\uparrow 1\) 时，同一条“等半径观测纤维”（本文称为时间纤维）在上半平面中必然同时触及
+\(y\downarrow 0\) 的近边界层与 \(y\uparrow\infty\) 的高高度层；高高度信息不是通过引入额外连续坐标进入接口，而被强制压缩到端点邻域（\(\theta\approx\pi\)，即 \(w\approx-1\)）的边界层贡献中。
+其可测的端点窗口版本见命题 \ref{prop:app-jensen-endpoint-angle-window}。
+\end{theorem}
+
+\begin{proof}
+圆轨道平均表示与显式参数化由命题 \ref{prop:app-jensen-defect-upperhalf-circle-average} 给出；
+圆方程、虚轴交点及其极限由命题 \ref{prop:app-cayley-preimage-modulus-circle} 给出；
+端点局部化与“\(\theta\approx\pi\)”的集中性由推论 \ref{cor:app-jensen-endpoint-localization} 与命题 \ref{prop:app-jensen-endpoint-angle-window} 给出。证毕。
+\end{proof}
+
+\input{para__xi-timefiber-leyang-singular-ring-two-branch-average}
+
+\begin{corollary}[Poisson--Busemann 恒等式：时间纤维坐标即端点 Poisson 权重]\label{cor:dephys-poisson-busemann-timefiber}
+对任意 \(w\in\mathbb{D}\)，令 \(t=\mathcal{C}^{-1}(w)=x+\mathrm{i}y\in\mathbb{H}\)。
+则成立严格恒等式
+\[
+\boxed{\;y=B^{-1}(w)=\frac{1-|w|^2}{|1+w|^2}\;}
+\]
+其中 \(B^{-1}\) 为以端点 \(-1\) 为基点的指数化 Busemann 坐标（命题 \ref{prop:app-busemann-poisson-minus1}）。
+因此，在端点紧化口径下，“时间纤维”并非额外引入的连续坐标轴，而是端点 \(-1\) 的谐测度密度（Poisson 核）本身。
+\end{corollary}
+
+\begin{proof}
+令 \(t=x+\mathrm{i}y\in\mathbb{H}\) 且 \(w=\mathcal{C}(t)=\frac{1+\mathrm{i}t}{1-\mathrm{i}t}\)。
+则有
+\[
+1+w
+=1+\frac{1+\mathrm{i}t}{1-\mathrm{i}t}
+=\frac{2}{1-\mathrm{i}t},
+\qquad
+|1+w|^2=\frac{4}{|1-\mathrm{i}t|^2}=\frac{4}{x^2+(1+y)^2}.
+\]
+并且由
+\(
+|w|^2=\frac{|1+\mathrm{i}t|^2}{|1-\mathrm{i}t|^2}
+\)
+得
+\[
+1-|w|^2
+=\frac{|1-\mathrm{i}t|^2-|1+\mathrm{i}t|^2}{|1-\mathrm{i}t|^2}
+=\frac{4y}{x^2+(1+y)^2}.
+\]
+两式相除即得 \(\frac{1-|w|^2}{|1+w|^2}=y\)，从而 \(B^{-1}(w)=y\)。
+特别地，出现在 \(1-|w|^2\) 与 \(|1+w|^2\) 中的常数 \(4\) 仅为 Cayley 规一化下共形因子 \(2\) 的平方，在该不变量比值中严格消去。证毕。
+\end{proof}
+
+\begin{remark}[Cayley 标尺与常数 \(4\) 的可规一化性：不变量只依赖比值与对数差]\label{rem:dephys-cayley-scale-gauge-four}
+上述推导中的“\(4\)”属于坐标规一化常数，而非新的动力学不变量。
+为说明这一点，考虑带标尺参数 \(\lambda>0\) 的 Cayley 族
+\[
+\mathcal{C}_{\lambda}(t):=\frac{\lambda+\mathrm{i}t}{\lambda-\mathrm{i}t}\qquad(t\in\mathbb{H}),
+\]
+它保持同一端点基准（\(t=\infty\) 仍映到 \(-1\)）但改变线性标尺。
+直接计算得到
+\[
+|1+\mathcal{C}_{\lambda}(x+\mathrm{i}y)|^2
+=\frac{4\lambda^2}{x^2+(\lambda+y)^2},
+\qquad
+1-|\mathcal{C}_{\lambda}(x+\mathrm{i}y)|^2
+=\frac{4\lambda y}{x^2+(\lambda+y)^2}.
+\]
+因此指数化 Busemann/Poisson 比值仍严格消去共形平方常数，并给出
+\[
+B^{-1}\!\bigl(\mathcal{C}_{\lambda}(x+\mathrm{i}y)\bigr)=\frac{y}{\lambda}.
+\]
+取对数得到 \(b_{-1}:=\log B^{-1}=\log y-\log\lambda\)，表明标尺变换只改变 \(b_{-1}\) 的加性零点；
+因此任何可观测几何量只能出现在对重标定不变的组合中（如 \(B^{-1}\) 的比值、或 \(b_{-1}\) 的对数差），而不可能依赖孤立的“\(4\)”常数。
+在账本语义中亦可把 \(b_{-1}\) 视作一类“熵势/对数势”，此时规一化常数只决定加性零点而不改变差分观测；其形式角色与几何熵公式中的固定规一化常数（例如黑洞熵中的 \(1/4\)）同型。
+\end{remark}
+
+\begin{remark}[共形紧化中的 \(2^2\) 因子与“面积律”形式类比]\label{rem:dephys-conformal-factor-2square-area-law}
+结论 \ref{cor:dephys-poisson-busemann-timefiber} 中的共形平方常数并非一维特例。
+在更高维的紧化/投影坐标中，同样出现共形因子 \(\Omega(x)=\frac{2}{1+|x|^2}\) 及其平方（或更一般幂次），从而球面度量与面积元的拉回密度带有“\(4\)”型常数。
+例如立体投影把二维球面度量写成
+\[
+\dd s^2=\frac{4}{(1+|z|^2)^2}|\dd z|^2,
+\qquad
+\dd A=\frac{4}{(1+|z|^2)^2}\,\dd A_{\RR^2}.
+\]
+这进一步表明：本文端点视界接口中出现的“\(4\)”应被理解为紧化共形因子的通用平方常数，而非特定算术对象所独有的不变量。
+\end{remark}
+
+\begin{proposition}[曲率规一化定律：圆盘双曲度量中的系数 \(4\) 等价于常曲率 \(-1\) 的唯一标尺]\label{prop:dephys-hyperbolic-curvature-normalization-four}
+上半平面模型取双曲度量
+\[
+\dd s_{\mathbb{H}}^{2}:=\frac{\dd x^{2}+\dd y^{2}}{y^{2}}
+\]
+则其高斯曲率为 \(-1\)。
+任取把 \(\mathbb{H}\) 共形等价到单位圆盘 \(\mathbb{D}\) 的 Möbius 变换 \(w=w(t)\)，圆盘上的双曲度量必可写为
+\[
+\boxed{\;
+\dd s_{\mathbb{D}}^{2}=\frac{4\,|\dd w|^{2}}{(1-|w|^{2})^{2}}\;}
+\]
+并且该系数 \(4\) 由“曲率规一化”为 \(-1\) 唯一锁定：
+若改写为
+\(
+\dd s_{\mathbb{D}}^{2}=\frac{\alpha\,|\dd w|^{2}}{(1-|w|^{2})^{2}}
+\),
+则曲率变为
+\[
+\boxed{\;K_{\alpha}=-\frac{4}{\alpha}.\;}
+\]
+\end{proposition}
+
+\begin{proof}
+对共形度量 \(\dd s^{2}=\rho(w)^{2}(\dd x^{2}+\dd y^{2})=\rho(w)^{2}|\dd w|^{2}\)，高斯曲率满足
+\(
+K=-\rho^{-2}\Delta(\log\rho)
+\)
+（\(\Delta\) 为欧氏拉普拉斯）。
+取 \(\rho_{\alpha}(w)=\frac{\sqrt{\alpha}}{1-|w|^{2}}\)，则
+\(
+\log\rho_{\alpha}=\frac12\log\alpha-\log(1-|w|^{2})
+\)，常数项拉普拉斯为零，且直接计算得
+\(
+\Delta\bigl(-\log(1-|w|^{2})\bigr)=\frac{4}{(1-|w|^{2})^{2}}
+\)。
+故
+\[
+K_{\alpha}
+=-\frac{(1-|w|^{2})^{2}}{\alpha}\cdot \frac{4}{(1-|w|^{2})^{2}}
+=-\frac{4}{\alpha}.
+\]
+因此 \(K_{\alpha}=-1\) 当且仅当 \(\alpha=4\)。
+而任意 Möbius 等价 \(w=w(t)\) 仅改变坐标，不改变“曲率 \(-1\) 的唯一共形完备度量”这一规范化结论，故圆盘模型必落在 \(\alpha=4\) 的标尺上。证毕。
+\end{proof}
+
+\begin{remark}[视界测度规一化：Poisson 核的单位质量与曲率 \(-1\) 标尺的相容性]\label{rem:dephys-poisson-kernel-unit-mass-curvature-gauge}
+在单位圆盘上，Poisson 核
+\[
+P_{w}(e^{\mathrm{i}\theta})=\frac{1-|w|^{2}}{|e^{\mathrm{i}\theta}-w|^{2}}
+\]
+满足严格归一化
+\[
+\boxed{\;\frac{1}{2\pi}\int_{0}^{2\pi}P_{w}(e^{\mathrm{i}\theta})\,\dd\theta=1.\;}
+\]
+该单位质量约定与本文固定的 Carath\'eodory/Herglotz 表示口径相容：边界测度以 \(\frac{1}{2\pi}\dd\theta\) 归一化为概率测度。
+\par
+从几何角度看，命题 \ref{prop:dephys-hyperbolic-curvature-normalization-four} 表明“系数 \(4\)”对应曲率 \(-1\) 的唯一标尺；一旦整体重标定该系数，就等价于改变曲率（从而改变几何单位），并将在以对数势/面积作账本的量（例如 \(b_{-1}=\log B^{-1}\) 或缺陷熵 \(S_{\mathrm{def}}\)）中体现为单位换算常数。
+因此，本文中反复出现的“\(4\)”可被理解为“视界测度与曲率的共同规一化”的代数影像，而非额外的动力学自由度。
+\end{remark}
+
+\begin{remark}[视界正则性条件：周期识别与无锥缺陷的唯一规一化]\label{rem:dephys-horizon-regularity-no-cone-defect}
+在 unitary-slice 的谱穿越表述中，高度参数对应的可见相位为 \(2\pi\)-周期角变量；
+而在端点紧化后，时间纤维坐标由端点 Poisson/Busemann 权重给出（推论 \ref{cor:dephys-poisson-busemann-timefiber}），并由伸缩半群 \(\psi_m\) 在线性化坐标中满足严格加法时间律（式 \eqref{eq:endpoint-busemann-addition-law}）。
+\par
+若在完成化识别中任意改变角度与线性坐标的换算标尺，则“一个完整谱环绕 \(\leftrightarrow\) 边界上一完整周期”的识别将产生锥角漂移，进而在绕数/指数读出中引入伪缺陷项（表现为伪指数/伪熵的偏移）。
+命题 \ref{prop:dephys-hyperbolic-curvature-normalization-four} 与注 \ref{rem:dephys-poisson-kernel-unit-mass-curvature-gauge} 表明：以曲率 \(-1\) 与 Poisson 单位质量同时规一化，即等价地固定了该周期识别，从而避免制度层面的锥缺陷并把所有可见异常严格压缩到“整数指数 + 连续深度/熵势”两类不变量上。
+\end{remark}
+
+\begin{theorem}[\texorpdfstring{$\mathbf{PW}$}{PW} 闭包的无连续毛发原理（径向自由度的类型拒绝与非局部外置）]\label{thm:dephys-pw-nohair}
+在本文采用的“unitary slice 可见域 + \(\mathbf{PW}\) 正规化闭包 + \(\mathsf{NULL}\) 语义”的审计口径下：
+\begin{enumerate}
+  \item 任何本质上需要 \(|u|\neq 1\) 的径向自由度（或等价的径向—相位双参结构）才能表达的对象，都不能在保持 pole/主尺度不变的前提下被常数层 strictification 吸收；若拒绝显式引入承载该径向数据的记录轴，则其读出按协议退化为 \(\mathsf{NULL}\)。
+  \item 若以减少 \(\mathsf{NULL}\) 为目标而允许外置侧信息，则该外置轴在结构上必然是全局非局部的 residue/逆极限轴（prime-register 及其一致性约束），而不可能表现为与相位 \(\theta\) 解耦的额外连续坐标寄存器。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+见定理 \ref{thm:xi-pw-no-continuous-hair}。证毕。
+\end{proof}
+
+\input{subsubsec__dephysicalized-horizon-quotient-data-structure}
+
+\paragraph{离散联络与曲率：交换失败的最小可见残余}
+定理 \ref{thm:dephys-pw-nohair} 排除了与相位并列的额外连续寄存器；因此在拒绝外置径向/prime-register 记录轴的制度下，任何“离线方向”的可见影响若仍需在闭环接口中保持可审计一致性，必须退化为离散残余。
+本文的投影词演算为该离散残余提供一个实现无关的表述：在分辨率/折叠轴 \(E_m\) 与标签轴 \(\mathrm{LIFT}_G\) 之间，交换失败被中心标签 \(\mathsf{Anom}\) 及其异常上同调类 \([\mathrm{Anom}]\) 完全承载（\S\ref{subsec:pom-three-generator-residual-closure}，尤其是 \S\ref{subsec:pom-anom-cohomology}；并见注 \ref{rem:pom-anom-as-curvature} 的离散联络观点）。
+下述定理将“离线毛发是否可被时间纤维吸收”的问题，严格归约为该离散曲率是否可在普适 strictification 下消去。
+
+\begin{theorem}[离散曲率归约：正规形—异常类—普适 strictification]\label{thm:dephys-offline-hair-curvature-reduction}
+在定义 \ref{def:pom-projword-2cat} 的投影词 \(2\)-范畴 \(\mathbf{PW}\) 中，取有界复杂度切片 \(\mathbf{PW}^{\ast}_{\le}\)（定义 \ref{def:pom-bounded-slice}），并把“严格交换/可见残余”的观测固定为本文的闭环接口
+\[
+\text{有限核/矩阵族}\Rightarrow \zeta \Rightarrow \log\mathfrak{M}
+\]
+（见 \S\ref{subsec:pom-three-generator-residual-closure} 与定义 \ref{def:abel-finite-part}）。
+则对任意 \(w\in\mathbf{PW}^{\ast}_{\le}\)：
+\begin{enumerate}
+  \item \textbf{（路径不变量：正规形 + 异常上同调类）}
+  在固定复杂度上界内，把投影词的判等取为
+  \(
+  \mathrm{NF}(w)\ \text{一致且}\ [\mathrm{Anom}(w)]\ \text{一致}
+  \)
+  是自然且与规约优先级无关的；异常是否为零亦为路径不变量
+  （命题 \ref{prop:pom-confluence-mod-anom-audited}，定义 \ref{def:pom-algorithmic-equivalence-nf-anom}，推论 \ref{cor:pom-three-gen-normal-form-decidable}）。
+  \item \textbf{（严格 Beck--Chevalley \texorpdfstring{$\Longleftrightarrow$}{<->} 零异常）}
+  对固定势参数与扭曲通道族，异常签名为零当且仅当
+  \(E_m\) 与 \(\mathrm{LIFT}_G\) 在闭环接口意义下严格交换（推论 \ref{cor:pom-zero-anom-pullback-exactness}）。
+  \item \textbf{（普适可交换化商：最大可见群寄存器与毛发方向核）}
+  对每个分辨率 \(m\)，存在普适群商 \(G\twoheadrightarrow G^{\mathrm{BC}}_m\) 使得在 \(G^{\mathrm{BC}}_m\) 上异常严格为零，
+  且任意使交换严格化的群商必唯一因子化通过 \(G^{\mathrm{BC}}_m\)；异常的支撑仅可能落在核 \(N^{\mathrm{BC}}_m\) 的对偶方向上
+  （定义 \ref{def:pom-bc-quotient}，命题 \ref{prop:pom-bc-quotient-strictify}、\ref{prop:pom-bc-quotient-universal}，推论 \ref{cor:pom-anom-supported-on-bc-kernel}）。
+  \item \textbf{（MOM 放大：线性 gap amplification）}
+  若 \([\mathrm{Anom}(w)]\neq 0\)，则对任意 \(q\ge 2\) 的 \(q\)-重 fiber-product/moment 化复制 \(w^{\boxtimes q}\)（命题 \ref{prop:pom-anom-gap-amplification} 的记号）有
+  \(
+  [\mathrm{Anom}(w^{\boxtimes q})]=q\cdot[\mathrm{Anom}(w)]
+  \)，从而可把微弱残差线性放大到任意预设的可审计阈值（命题 \ref{prop:pom-anom-gap-amplification}）。
+  \item \textbf{（有限帕累托前沿：strictification 的有限搜索完备性）}
+  在每个固定分辨率层级的有界切片内，“把曲率严格化为零（或最小化其支撑）”的证书化重写/实现选择问题退化为有限帕累托优化，
+  因而可由有限枚举与有限核对收束（定理 \ref{thm:xi-finite-frontier-certificate}）。
+  \item \textbf{（\texorpdfstring{$\varepsilon$}{eps}-sound 与 Lawvere 距离：风险预算的几何内化）}
+  近似重写证书 \(w\Longrightarrow_{\varepsilon} w'\) 的预算在复合下可加，并诱导最小预算距离 \(d_{\mathcal I}\) 的三角不等式；
+  因此任一有限证书链的总失败概率可被内化为可审计的路径长度上界（定义 \ref{def:pom-eps-sound-rewrite}、\ref{def:pom-eps-distance}，命题 \ref{prop:pom-eps-sound-compose}、\ref{prop:pom-eps-distance-lawvere}）。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+各条为既有结果在 no-hair 语境下的汇总重述：第 (1) 点由命题 \ref{prop:pom-confluence-mod-anom-audited}、定义 \ref{def:pom-algorithmic-equivalence-nf-anom} 与推论 \ref{cor:pom-three-gen-normal-form-decidable} 给出；第 (2) 点即推论 \ref{cor:pom-zero-anom-pullback-exactness}；第 (3) 点由定义 \ref{def:pom-bc-quotient}、命题 \ref{prop:pom-bc-quotient-strictify}、\ref{prop:pom-bc-quotient-universal} 与推论 \ref{cor:pom-anom-supported-on-bc-kernel} 给出；第 (4) 点为命题 \ref{prop:pom-anom-gap-amplification}；第 (5) 点为定理 \ref{thm:xi-finite-frontier-certificate}；第 (6) 点由定义 \ref{def:pom-eps-sound-rewrite}、\ref{def:pom-eps-distance} 与命题 \ref{prop:pom-eps-sound-compose}、\ref{prop:pom-eps-distance-lawvere} 给出。证毕。
+\end{proof}
+\input{subsubsec__dephys-eps-sound-budget-tv-law}
+
+\begin{corollary}[结论性归约：离线毛发 \texorpdfstring{$\Longleftrightarrow$}{<->} 非零曲率；无毛发 \texorpdfstring{$\Longleftrightarrow$}{<->} 普适 strictification]\label{cor:dephys-offline-hair-iff-curvature}
+在本文固定的 unitary slice 可见域与 \(\mathbf{PW}\) 闭包审计口径下，若拒绝引入与相位并列的额外连续寄存器（定理 \ref{thm:dephys-pw-nohair}），则任何在闭环接口中仍可观测的“离线”残余自由度必等价表现为某一分辨率层级上的非零异常上同调类 \([\mathrm{Anom}]\)（离散曲率）；反之，沿普适可交换化商 \(G^{\mathrm{BC}}_m\) 做逐层 strictification 可在所有可见扭曲通道上使异常严格为零，从而在可见语义中实现“无毛发”的严格闭合。
+进一步地，\(q\)-重 moment 化的线性放大（命题 \ref{prop:pom-anom-gap-amplification}）与有界切片帕累托前沿有限性（定理 \ref{thm:xi-finite-frontier-certificate}），使上述判别与 strictification 推进均可被收束为有限核对与有限搜索，并可在 \(\varepsilon\)-sound 预算几何下稳定组织为可审计证书链。
+\end{corollary}
+
+\begin{proof}
+在拒绝额外连续寄存器的制度下（定理 \ref{thm:dephys-pw-nohair}），闭环接口中“严格交换/交换失败”的全部可观测残余被压缩为异常签名与异常上同调类（定理 \ref{thm:dephys-offline-hair-curvature-reduction} 的第 (1)–(2) 点）。因此“存在可观测离线残余”与某层 \([\mathrm{Anom}]\neq 0\) 在该口径下等价。反向方向由普适可交换化商 \(G^{\mathrm{BC}}_m\) 的 strictification（定理 \ref{thm:dephys-offline-hair-curvature-reduction} 的第 (3) 点）给出：在所有可见扭曲通道上异常严格为零，从而闭环接口上的曲率残余消失。最后两句分别由线性放大律（第 (4) 点）与有限前沿/预算几何（第 (5)–(6) 点）合成即得。证毕。
+\end{proof}
+
+\paragraph{端点吸引半群与“时间”定义：唯一 Koenigs 深度}
+时间纤维在本文中并非外加坐标，而是端点紧化后由伸缩半群强迫出现的一维深度账本。
+下述定理把这一点严格化为端点线性化的刚性与唯一性：任何与尺度伸缩兼容的可逆审计，其连续累积只能沿这一维 Koenigs 深度发生。
+
+\begin{theorem}[端点线性化的刚性：Koenigs 深度的唯一性]\label{thm:dephys-endpoint-koenigs-rigidity}
+令 \(\Phi=\{\phi_m\}_{m>0}\subset \mathrm{Aut}(\mathbb{D})\) 为一族 Möbius 自同构，满足 \(\phi_{mn}=\phi_m\circ\phi_n\) 且对所有 \(m>0\) 有 \(\phi_m(\pm 1)=\pm 1\)。
+设存在在 \(u=-1\) 的某个邻域内解析的坐标 \(h\) 满足 \(h(-1)=0\)、\(h'(-1)\neq 0\) 且
+\begin{equation}\label{eq:dephys-koenigs-functional-equation}
+h\bigl(\phi_m(u)\bigr)=\frac{1}{m}\,h(u)\qquad(\forall\,m>0).
+\end{equation}
+则在该邻域内存在常数 \(c\neq 0\) 使 \(h(u)=c\,\mathfrak{w}(u)\)，其中 \(\mathfrak{w}(u)=\frac{1+u}{1-u}\) 为端点半平面坐标（式 \eqref{eq:scale-linearization-halfplane-coordinate}）；并且对所有 \(m>0\) 与所有 \(u\in\mathbb{D}\) 有 \(\phi_m=\psi_m\)，其中 \(\psi_m\) 由式 \eqref{eq:scale-psi-m} 给出。
+因此端点深度（Busemann/Koenigs 深度）
+\[
+Y(u):=-\log\bigl|\mathfrak{w}(u)\bigr|
+\]
+满足严格平移律
+\[
+Y\!\bigl(\psi_m(u)\bigr)=Y(u)+\log m
+\]
+（即式 \eqref{eq:endpoint-busemann-addition-law}）。
+\end{theorem}
+
+\begin{proof}
+由 \eqref{eq:dephys-koenigs-functional-equation} 在 \(u=-1\) 处求导并用 \(h'(-1)\neq 0\) 得 \(\phi_m'(-1)=1/m\)。
+另一方面，端点坐标 \(\mathfrak{w}\) 将 \(\mathbb{D}\) 共轭到右半平面 \(\mathbb{H}_{\mathrm{R}}\)（式 \eqref{eq:scale-linearization-halfplane-coordinate}），并把 \(\phi_m\) 共轭为 \(\mathbb{H}_{\mathrm{R}}\) 的自同构且保持 \(0\) 与 \(\infty\) 不动；故存在 \(a_m>0\) 使
+\(
+\mathfrak{w}(\phi_m(u))=a_m\,\mathfrak{w}(u)
+\)，并由链式法则得 \(a_m=\phi_m'(-1)=1/m\)。
+于是 \(\mathfrak{w}(\phi_m(u))=\mathfrak{w}(u)/m\)，与命题 \ref{prop:scale-linearization-identity-multipliers} 的 \(\mathfrak{w}(\psi_m(u))=\mathfrak{w}(u)/m\) 一致；因 \(\mathfrak{w}\) 单射，得 \(\phi_m=\psi_m\)。
+再令 \(g(u):=\frac{h(u)}{\mathfrak{w}(u)}\)（在 \(u=-1\) 邻域内解析），由 \eqref{eq:dephys-koenigs-functional-equation} 与 \(\mathfrak{w}(\psi_m(u))=\mathfrak{w}(u)/m\) 得 \(g(\psi_m(u))=g(u)\)；
+取任意 \(m>1\)，迭代 \(\psi_m^{\circ n}(u)\to-1\)（端点吸引），由连续性得 \(g(u)=g(-1)\) 在邻域内恒定，从而 \(h=c\,\mathfrak{w}\)。
+最后的平移律即为式 \eqref{eq:endpoint-busemann-addition-law}。证毕。
+\end{proof}
+
+\begin{remark}[端点伸缩半群中的另一处“\(4\)”：Möbius 判别式锁定时间参数]\label{rem:dephys-psi-discriminant-locks-time}
+对尺度伸缩诱导的端点自同构 \(\psi_m\)（式 \eqref{eq:scale-psi-m}），将其写作 Möbius 形式 \(\psi_m(u)=(au+b)/(cu+d)\)，其中
+\[
+a=d=m+1,\qquad b=c=1-m,
+\]
+则判别式（行列式）满足
+\[
+\boxed{\;ad-bc=(m+1)^2-(1-m)^2=4m.\;}
+\]
+该常数并不产生新的不变量：它只是端点规一化的代数影像，并通过导数公式
+\(
+\psi_m'(u)=\frac{ad-bc}{(cu+d)^2}
+\)
+唯一锁定端点乘子与时间加法律 \(Y(\psi_m(u))=Y(u)+\log m\)（见附录命题 \ref{prop:scale-linearization-identity-multipliers} 与式 \eqref{eq:endpoint-busemann-addition-law}）。
+与注 \ref{rem:dephys-cayley-scale-gauge-four} 同理，该类常数只影响势函数的加性零点，而不改变任何可审计差分。
+\end{remark}
+
+\paragraph{周期折叠的最小离散外置：绕数证书（winding certificate）}
+在 Dirichlet 参数化 \(z=\lambda^{-s}\) 中，虚向角变量天然折叠；若坚持用主值辐角 \(\mathrm{Arg}\) 作为可见角信息，则可逆化必然强迫外置一个至少可数的离散纤维。
+
+\begin{theorem}[Dirichlet 虚向折叠的最小可逆化：绕数证书的不可省略性]\label{thm:dephys-dirichlet-winding-minimal}
+固定 \(\lambda>1\)，令 \(s=\sigma+\mathrm{i}t\) 且 \(z=\lambda^{-s}\)（式 \eqref{eq:dirichlet-z-polar-decomposition}），并记 \(T_{\lambda}:=2\pi/\log\lambda\)。
+则对任意整数 \(k\in\ZZ\) 有
+\[
+z(\sigma,t+kT_{\lambda})=z(\sigma,t),
+\qquad\Longrightarrow\qquad
+\bigl(|z|,\mathrm{Arg}(z)\bigr)(\sigma,t+kT_{\lambda})=\bigl(|z|,\mathrm{Arg}(z)\bigr)(\sigma,t).
+\]
+因此对任意集合 \(S\)，若存在映射
+\[
+(\sigma,t)\longmapsto \bigl(|z|,\mathrm{Arg}(z),\eta(\sigma,t)\bigr)\in (0,1)\times(-\pi,\pi]\times S
+\]
+为单射，则存在单射 \(\iota:\ZZ\hookrightarrow S\)（即外置轴至少可数无穷）。
+此外，绕数证书 \(\kappa_{\lambda}(s)\in\ZZ\)（式 \eqref{eq:dirichlet-winding-certificate}）满足一致性约束
+\(
+t\log\lambda+\mathrm{Arg}(z)=2\pi\kappa_{\lambda}(s)\in 2\pi\ZZ
+\)
+（式 \eqref{eq:dirichlet-arg-consistency}），从而给出一条可审计离散外置；与非周期相位轴 \(u_{\mathrm C}(t)\)（式 \eqref{eq:dirichlet-cayley-phase-axis}）合并即得到三纤维注入坐标 \(\mathcal{E}_{\lambda}\)（定义 \ref{def:dirichlet-trifiber-injection}，命题 \ref{prop:dirichlet-trifiber-injection-audit}）。
+\end{theorem}
+
+\begin{proof}
+固定任意 \(\sigma>0\) 与 \(t_0\in\RR\)。对每个 \(k\in\ZZ\)，点 \((\sigma,t_0+kT_{\lambda})\) 在 \((|z|,\mathrm{Arg}(z))\) 下具有相同像。
+若扩展映射为单射，则 \(k\mapsto \eta(\sigma,t_0+kT_{\lambda})\) 必为单射，故 \(S\) 含有一份可数无穷子集，等价于存在 \(\ZZ\hookrightarrow S\) 的单射。
+后半部分由定义 \eqref{eq:dirichlet-winding-certificate} 与命题 \ref{prop:dirichlet-trifiber-injection-audit} 直接给出。证毕。
+\end{proof}
+
+\paragraph{\texorpdfstring{$p$}{p}-典型差分塔与稳定残差谱：把“尺度塔”编译为可审计离散毛发}
+在 Big-Witt/necklace 口径下，Dwork 型同余把 \(p\)-幂 ghost 子序列的 Frobenius 兼容性严格对象化为一个逐级可审计的 primitive 差分塔；进一步对 \(\theta\)-导数施加 \(p\)-进滤波可读出稳定首位残差，从而得到一族无限离散指纹。
+
+\begin{theorem}[\texorpdfstring{$p$}{p}-典型可逆化：Dwork 同余 \texorpdfstring{$\Leftrightarrow$}{<->} primitive 差分塔]\label{thm:dephys-ptypical-primitive-tower}
+令 \(a_n(u)\in\ZZ[u]\) 为迹 ghost 序列，固定素数 \(p\) 并考虑 \(p\)-幂子序列 \(\{a_{p^k}(u)\}_{k\ge 0}\)。
+则下列条件等价：
+\begin{enumerate}
+  \item 对所有 \(k\ge 1\)，有 Dwork 型同余
+  \[
+  a_{p^k}(u)\equiv a_{p^{k-1}}(u^p)\pmod{p^k}\qquad\text{于}\ \ZZ[u]
+  \]
+  （推论 \ref{cor:witt-dwork-congruence}）；
+  \item 存在（且由公式唯一确定的）primitive 差分坐标
+  \[
+  p_{p^k}(u):=\frac{a_{p^k}(u)-a_{p^{k-1}}(u^p)}{p^k}\in\ZZ[u]\qquad(k\ge 1)
+  \]
+  （命题 \ref{prop:witt-ppower-primitive-coordinate}），并满足逐级分解
+  \(a_{p^k}(u)=a_{p^{k-1}}(u^p)+p^k p_{p^k}(u)\)；
+  \item \(\{a_{p^k}(u)\}\) 作为 Big-Witt ghost 的 \(p\)-幂子序列在 Adams/Frobenius 操作 \(u\mapsto u^p\) 下满足 \(p\)-进兼容性（注 \ref{rem:witt-ptypical-ghost}）。
+\end{enumerate}
+因此，\(\{p_{p^k}(u)\}_{k\ge 1}\) 给出一条完全内部、可逐级复核的“尺度塔差分指纹”：伸缩信息不以新的连续轴泄漏，而以 \(p^k\)-精度逐层外置为 primitive 坐标。
+\end{theorem}
+
+\begin{proof}
+\((1)\Leftrightarrow(2)\) 由推论 \ref{cor:witt-dwork-congruence} 与命题 \ref{prop:witt-ppower-primitive-coordinate} 直接等价改写得到；\((3)\) 为同一事实在 ghost/Witt 口径下的解释性重述（注 \ref{rem:witt-ptypical-ghost}）。证毕。
+\end{proof}
+
+\begin{theorem}[稳定导数残差谱：无限可审计离散指纹族]\label{thm:dephys-stable-residue-spectrum}
+在定理 \ref{thm:dephys-ptypical-primitive-tower} 的等价条件下，令 \(u=e^{\theta}\) 并定义 \(\theta\)-导数矩
+\[
+A_n^{(r)}:=\left.\frac{\dd^r}{\dd\theta^r}a_n(e^\theta)\right|_{\theta=0}\in\ZZ\qquad(r\ge 0).
+\]
+则对每个素数 \(p\) 与每个阶 \(r\ge 1\)，存在稳定不变量 \(\alpha_{p,r}\in\mathbb{F}_p\)，其由任意层级 \(k>r\) 的归一化残差
+\[
+\alpha_{p,r}:=\bigl[p^{-(k-r)}A_{p^k}^{(r)}\bigr]\bmod p
+\]
+唯一确定且与 \(k\) 无关（推论 \ref{cor:witt-theta-stable-residue}）。
+特别地，当 \(p=2\) 时得到一族稳定奇偶指纹 \(\varepsilon_r\in\{0,1\}\)（推论 \ref{cor:witt-theta-binary-fingerprint}）。
+该可数无穷不变量族提供一条与连续相位轴正交的“相位毛发”模型：它们可被逐阶滤波稳定读出，并可作为实现层的可审计离散指纹输入。
+\end{theorem}
+
+\begin{proof}
+分别由推论 \ref{cor:witt-theta-stable-residue} 与 \ref{cor:witt-theta-binary-fingerprint} 直接给出。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$p$}{p}-进护栏与端点刚性：可复算算术指纹]\label{prop:dephys-padic-guardrails-endpoint-rigidity}
+在 Big-Witt/necklace 的桥包口径下，下述算术约束构成一组完全内部、逐层可复算的护栏：
+\begin{enumerate}
+  \item \textbf{（同余与稀疏化）}
+  对任意素数 \(p\) 与 \(k\ge 1\)，Dwork 型同余
+  \(
+  a_{p^k}(u)\equiv a_{p^{k-1}}(u^p)\ (\mathrm{mod}\ p^k)
+  \)
+  蕴含模 \(p^k\) 的 \(u^p\)-子环稀疏化
+  \(
+  a_{p^k}(u)\bmod p^k\in(\ZZ/p^k\ZZ)[u^p]
+  \)；
+  并且差分商
+  \(
+  p_{p^k}(u)=\frac{a_{p^k}(u)-a_{p^{k-1}}(u^p)}{p^k}
+  \)
+  在 \(\ZZ[u]\) 内良定义。
+  \item \textbf{（端点刚性指纹）}
+  在端点 \(u=-1\) 处，任意奇素数 \(p\) 满足 \(p\)-进超同余
+  \(
+  a_{p^k}(-1)\equiv 0\ (\mathrm{mod}\ p^k)
+  \)；
+  且在 primitive 扇区中，奇长度 \(n\ge 3\) 满足严格消隐 \(p_n(-1)=0\)。
+\end{enumerate}
+因此，任何声称给出 \(a_{p^k}(u)\)、\(p_{p^k}(u)\)（及其端点特化）的实现若违反上述任一约束，均可在整数层立即被离线复核地判定为偏离 Big-Witt 兼容结构；
+该护栏可作为可审计语义输出中的算术核验坐标，并与“签名 \(\times\) 谱”的有限化接口相容（定义 \ref{def:pom-sem-functor}）。
+\end{proposition}
+
+\begin{proof}
+同余与稀疏化分别由推论 \ref{cor:witt-dwork-congruence}、命题 \ref{prop:witt-pk-sparsification} 与命题 \ref{prop:witt-ppower-primitive-coordinate} 给出；
+端点超同余与奇长 primitive 消隐分别由推论 \ref{cor:witt-dwork-supercongruence-minus1} 与推论 \ref{cor:primitive-odd-vanish-u-minus1} 给出。证毕。
+\end{proof}
+
+\paragraph{有限可逆审计：Hankel-正规形与最小偏移证书}
+当对象被提升为有限样本可复核的 realization/transfer 口径时，“新增自由度必须外置”为一个纯代数的下界：最小实现维数由 Hankel 秩锁定，而窗口偏移 \(\ell_q\) 是不可省略的整数证书。
+
+\begin{theorem}[Hankel-正规形的有限判等：\texorpdfstring{$2d$}{2d} 点锁定全序列与全部谱指纹]\label{thm:dephys-hankel-finite-audit}
+固定 \(q\ge 2\)，令 \(a_n:=S_q(n+2)\) 并记其 Hankel 秩为 \(d\)。
+令 \(\ell_q\) 为使 Hankel 块 \(H_0^{(\ell)}=(a_{\ell+i+j})_{0\le i,j\le d-1}\) 可逆的最小偏移（定义 \ref{def:pom-hankel-normal-form}），并定义
+\(
+A=(H_0^{(\ell_q)})^{-1}H_1^{(\ell_q)}
+\)
+及相应 Hankel-正规形 \(\mathrm{HANKELNF}_q\)。
+则：
+\begin{enumerate}
+  \item \(\mathrm{HANKELNF}_q\) 仅由 \(2d\) 个采样点 \(S_q(\ell_q+2),\dots,S_q(\ell_q+2d+1)\) 确定，并由此唯一确定递推、特征多项式、Perron 根等全部谱指纹；
+  \item 任意两条实现若在上述 \(2d\) 点一致，则共享同一 \(\mathrm{HANKELNF}_q\)，从而对所有 \(m\ge 2\) 完全一致（命题 \ref{prop:pom-moment-finite-sampling-decidable}）。
+\end{enumerate}
+因此窗口偏移 \(\ell_q\) 与相应 Hankel 块即构成“信息不泄漏”的最强有限证书：在固定类型（固定 \(q\)）下，动态指纹被一个有限窗口完全锁定。
+\end{theorem}
+
+\begin{proof}
+由定义 \ref{def:pom-hankel-normal-form} 与命题 \ref{prop:pom-moment-finite-sampling-decidable} 直接推出。证毕。
+\end{proof}
+
+\input{para__xi-hankel-window-fiber-random-audit}
+
+\paragraph{闭合链：缺陷证书—端点压缩—类型拒绝}
+定理 \ref{thm:dephys-defect-repulsion-radius} 把“盘内零点是否存在”压缩为单参数标量缺陷 \(D_{\zeta}(\varrho)\) 的可审计半径证书；
+定理 \ref{thm:dephys-timefiber-two-ended} 表明 \(\varrho\uparrow 1\) 的边界层必然把高高度信息压缩到端点邻域的窗口贡献；
+定理 \ref{thm:dephys-pw-nohair} 则在 \(\mathbf{PW}\) 闭包与 unitary slice 可见域下排除了与相位并列的额外连续自由度。
+在此基础上，定理 \ref{thm:dephys-endpoint-koenigs-rigidity} 给出“时间”作为端点吸引半群的唯一 Koenigs 深度（不可外加与相位并列的连续坐标寄存器），定理 \ref{thm:dephys-dirichlet-winding-minimal} 进一步表明虚向折叠的可逆化必然强迫外置可数离散证书；而定理 \ref{thm:dephys-ptypical-primitive-tower}--\ref{thm:dephys-hankel-finite-audit} 则把该离散外置具体化为可审计毛发族：绕数证书 \(\kappa_{\lambda}\)、\((p)\)-典型 primitive 差分塔 \(\{p_{p^k}\}\)、稳定残差谱 \(\{\alpha_{p,r}\}\)（以及 \(p=2\) 的 \(\{\varepsilon_r\}\)）、与 Hankel 偏移证书 \(\ell_q\)（及其正规形 \(\mathrm{HANKELNF}_q\)）。
+此外，幂半群 \(w\mapsto w^m\) 在圆盘化接口上对 Jensen 缺陷满足严格共变 \(D_{F^{(m)}}(\varrho)=D_F(\varrho^m)\)（命题 \ref{prop:app-jensen-defect-power-covariance}），并在端点邻域分解为离散残差与精度势账本（命题 \ref{prop:endpoint-orthogonal-decomposition-z4-Rplus} 及命题 \ref{prop:chebyshev-endpoint-derivative-splitting}）；在 \(p\)-典型方向，Dwork 同余的模 \(p^\ell\) 迭代下降进一步表明高层对象的低精度投影仅依赖低层的迭代 Frobenius 推前（命题 \ref{prop:witt-frobenius-iterated-descent}）。
+
+\begin{theorem}[可审计闭环的 RH 证书工程：解析—演算—算术/谱三重证书]\label{thm:dephys-rh-certificate-audit-loop}
+在本文固定的“圆盘完成化 \(F_\zeta\) + unitary slice 类型化核验 + 有界切片语义 \(\mathsf{Sem}\)”协议下，RH 的核验任务可被分解为三类互相正交、且可独立离线复核的证书：
+\begin{enumerate}
+  \item \textbf{解析证书（缺陷链与正性—矩层级链）}：
+  在圆盘完成化接口下，“盘内零点禁入（RH）”可被压缩为两条等价但互补的可数证书链：
+  \begin{itemize}
+    \item \textbf{缺陷/排斥半径链：}
+    构造一列 \(\varrho_n\uparrow 1\) 并给出可核验上界 \(D_\zeta(\varrho_n)\le \delta_n\)（\(\delta_n\downarrow 0\)），或等价地证书化
+    \(
+    r_{\ast}(\varrho_n)=\varrho_n e^{-D_\zeta(\varrho_n)}\uparrow 1
+    \)；
+    其零点事件在半径方向的“折角/跳变”由对数半径导数律 \( \frac{\dd}{\dd(\log\varrho)}D_\zeta(\varrho)=N_{F_\zeta}(\varrho) \) 精确承载（命题 \ref{prop:dephys-jensen-defect-log-derivative}），并由排斥半径驱动律 \( \frac{\dd}{\dd(\log\varrho)}\log r_\ast(\varrho)=1-N_{F_\zeta}(\varrho) \) 给出可定位的停滞见证（推论 \ref{cor:dephys-repulsion-radius-zero-count-driving}）。
+    \item \textbf{正性—Toeplitz--PSD 层级链：}
+    令视界 Carath\'eodory 对数导数函数 \(\mathscr{C}_\zeta\) 如附录 \eqref{eq:app-horizon-carath-def} 定义。
+    则 RH 等价于 \(\mathscr{C}_\zeta\) 属于 Carath\'eodory 类，并等价于 Toeplitz--PSD 层级
+    \(
+    \mathbf{T}_N=(c_{j-k})_{0\le j,k\le N}\succeq 0
+    \)
+    对所有 \(N\ge 0\) 成立（定理 \ref{thm:app-horizon-toeplitz-lmi}）。
+    每一级失败都给出有限维否证器（负特征值），并在实结构下可进一步定位到最小 \(N_\star\) 与扇区符号 \(\epsilon\in\{+,-\}\)（推论 \ref{cor:app-horizon-toeplitz-z2-cert-split}）。
+    该层级在任一固定 \(N\) 上仅依赖 \(\Xi_\zeta\) 在 \(s=-\tfrac12\) 的有限阶局部导数数据（命题 \ref{prop:app-horizon-coeff-local}），并在 \(|w|<1/3\) 内可借欧拉积补丁把算术项置入一致绝对收敛域以逐项审计（定理 \ref{thm:app-horizon-euler-patch}）。
+  \end{itemize}
+  由此，两条链在数学上等价，但失败见证互补：前者以缺陷下界/排斥半径停滞为见证，后者以有限维负特征值为见证。
+  \item \textbf{演算证书（实现中立性）}：
+  在有界切片 \(\mathbf{PW}^{\ast}_{\le}\) 上，以保守语义函子 \(\mathsf{Sem}\)（定义 \ref{def:pom-sem-functor}）固化实现等价。
+  当缺陷上界链以 \(\mathsf{Sem}\) 的签名/谱输出为公共接口给出时，定理 \ref{thm:pom-sem-conservative} 保证该链仅依赖自然同构类，从而与实现选择无关（详见定理 \ref{thm:dephys-impl-independent-defect-certificate}）。
+  \item \textbf{算术/谱证书（有限指纹与整数护栏）}：
+  Hankel-正规形的 \(2d\) 点锁定（定理 \ref{thm:dephys-hankel-finite-audit}）把谱侧核心指纹降为有限窗口复算；
+  而 \(p\)-进同余链与端点刚性指纹（命题 \ref{prop:dephys-padic-guardrails-endpoint-rigidity}）提供独立的整数层一致性护栏。
+\end{enumerate}
+其结果是：在该协议口径下，任何“信息泄漏/实现漂移/端点异常”若要与可见核验结论共存，必须表现为至少一类证书的失败；
+从而 RH 的困难可被等价集中为两类可数化的解析任务之一：构造可审计的缺陷上界链（或排斥半径趋一链），或证书化视界对数导数的正性（等价地：证明 Toeplitz--PSD 层级全体成立）；其余证书仅用于隔离实现自由度与整数层一致性护栏，使核验难点不被实现细节稀释。
+\end{theorem}
+
+\begin{proof}
+解析证书的 soundness：缺陷/排斥半径链由定理 \ref{thm:dephys-defect-repulsion-radius} 给出；而正性—Toeplitz--PSD 层级链由定理 \ref{thm:app-horizon-toeplitz-lmi}（等价于推论 \ref{cor:app-horizon-carath-rh} 与定理 \ref{thm:app-horizon-weyl-herglotz}）给出。
+演算证书由定义 \ref{def:pom-sem-functor} 与定理 \ref{thm:pom-sem-conservative} 给出，并在定理 \ref{thm:dephys-impl-independent-defect-certificate} 中形式化；
+算术/谱证书分别由定理 \ref{thm:dephys-hankel-finite-audit} 与命题 \ref{prop:dephys-padic-guardrails-endpoint-rigidity} 给出。
+三类证书的正交性来自其约束对象分别落在缺陷标量、语义自然同构类与整数/有限窗口指纹三个互不混淆的输出域上（参见 \S\ref{subsec:xi-certificate-coherence-orthogonal-axis-capacity} 的地址三轴口径）。证毕。
+\end{proof}
+
+\begin{remark}[端点阻碍的二元正交分解：\texorpdfstring{$\zeta$}{zeta} 型对数主尺度与 \texorpdfstring{$L(\chi_4)$}{L(chi4)} 型反变本征通道]\label{rem:endpoint-obstruction-dichotomy}
+在端点 \(w\to-1\) 的符号分解口径下，端点载荷在偶/反变两类观测上呈现为一对严格正交的分量，其来源可归因于投影系统自同构在端点邻域所诱导的有限维不变子表示。
+其一为 \(\zeta\)-型对数主尺度：端点三通道权核的 Dirichlet 正则化系数具有闭式 \(\zeta(1+\sigma)\) 符号表示，且其发散结构由 \(\zeta\) 在 \(1\) 处的极点完全控制（命题 \ref{prop:endpoint-dirichlet-symbol-weights}）。
+其对应的重整化有限部在 \(\sigma\downarrow 0\) 下具有显式闭式（定理 \ref{thm:endpoint-even-finite-part-renormalization}）。
+其二为 \(\chi_4\)-型反变本征通道：在最小反变纤维坐标 \(\delta\) 上，端点反变观测抽出一维不变子表示，其符号为 \(L(1+\sigma,\chi_4)\)，并与上述 \(\zeta\)-型偶通道权核严格解耦（定理 \ref{thm:endpoint-zeta-Lchi4-symbol-pair}）；并且该通道在 \(\sigma\downarrow 0\) 处解析，极限输出为常数 \(L(1,\chi_4)=\pi/4\)（推论 \ref{cor:endpoint-odd-analytic-at-zero}）。
+此外，在 primitive 奇长扇区中，端点分支差分证书满足选择律消失，从而端点主刚性退化为纯 \(\zeta\)-型对数账本（注 \ref{rem:endpoint-logscale-parity-decouple}）。
+\end{remark}
+与有界切片上的语义保守性（定理 \ref{thm:pom-sem-conservative}）合并后，上述共变/下降律把“隐藏分量”约束为可审计的不变量输出域，从而将判等与实现自审计收束为有限可复核指纹。
+
+\begin{theorem}[实现无关的缺陷证书链：由 Jensen 缺陷到 RH]\label{thm:dephys-impl-independent-defect-certificate}
+固定一列半径 \(\varrho_n\uparrow 1\)。
+在有界切片 \(\mathbf{PW}^{\ast}_{\le}\) 上，设存在一列投影词 \(w_n\) 及一列可离线复核的有限证书对象 \(C_n\)，使得证书输出一个上界 \(\widehat D_n\in\RR_{\ge 0}\) 与误差预算 \(\varepsilon_n\ge 0\) 并满足
+\begin{equation}\label{eq:dephys-defect-certificate-soundness}
+D_{\zeta}(\varrho_n)\le \widehat D_n+\varepsilon_n\qquad(\forall n).
+\end{equation}
+若 \(\widehat D_n+\varepsilon_n\to 0\)，则 RH 成立。
+此外，若每个 \((\widehat D_n,\varepsilon_n)\) 仅依赖于 \(\mathsf{Sem}(w_n)\) 的有限输出（定义 \ref{def:pom-sem-functor}），则该缺陷证书链在切片内与实现选择无关：对任意 \(w_n'\in\mathbf{PW}^{\ast}_{\le}\) 若 \(\mathsf{Sem}(w_n')=\mathsf{Sem}(w_n)\)，则存在自然同构 \(w_n'\simeq w_n\)（定理 \ref{thm:pom-sem-conservative}），并且 \((\widehat D_n,\varepsilon_n)\) 在该语义意义下保持不变。
+\end{theorem}
+
+\begin{proof}
+由 \eqref{eq:dephys-defect-certificate-soundness} 与排斥半径定义 \(r_{\ast}(\varrho)=\varrho e^{-D_{\zeta}(\varrho)}\) 得
+\[
+r_{\ast}(\varrho_n)\ge \varrho_n\exp\!\bigl(-(\widehat D_n+\varepsilon_n)\bigr)\xrightarrow[n\to\infty]{}1,
+\]
+故由定理 \ref{thm:dephys-defect-repulsion-radius} 推出 RH。
+实现中立性部分：若 \((\widehat D_n,\varepsilon_n)\) 仅依赖 \(\mathsf{Sem}(w_n)\)，则 \(\mathsf{Sem}(w_n')=\mathsf{Sem}(w_n)\) 蕴含两者输出一致；并由定理 \ref{thm:pom-sem-conservative} 得 \(w_n'\simeq w_n\)。
+在“地址先于取值”的约定下（\S\ref{sec:recursive-addressing}），证书对象的存在性即其可寻址性；从而该上界链不携带实现侧的隐式自由度，
+亦不可能通过递归地址化引入新的可见事件（命题 \ref{prop:recursive-addressing-refinement} 与推论 \ref{cor:recursive-addressing-visible-sigma-nonexpansion}）。证毕。
+\end{proof}
+
+由此得到一个体系内闭合的可证伪重述：任何需要径向通道解释的偏离，若不经由 residue/逆极限轴或上述离散证书的非局部外置，就必在可见审计中触发 \(\mathsf{NULL}\) 并被协议拒绝；因而，零点审计的可见证书只能沿“缺陷—端点—相位”链路出现，而不会被额外连续坐标寄存器所稀释。相反，一切可逆化的新增自由度只能以离散毛发进入证书域，而不可能表现为与相位解耦的额外连续坐标寄存器。
+
+在此基础上，\S\ref{subsec:xi-certificate-coherence-orthogonal-axis-capacity} 进一步把“可见证书”的一致性提升为证书对象的逆极限同一性，并将离临界线信息的端点投影严格化为二次径向通道与由精度势诱导的容量下界，从而给出“构造离线零点”的可证伪接口表述。
+\endinput

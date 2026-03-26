@@ -1,0 +1,305 @@
+\begin{theorem}[停机问题嵌入温度门软核的谱自由能]\label{thm:conclusion-temperature-kernel-free-energy-halting-embedding}
+取常数 \(\alpha\in(0,1-\log_2\varphi)\)。
+对任意图灵机 \(M\) 与输入 \(x\)，令
+\[
+H_{M,x}(q):=\mathbf 1_{\{M(x)\ \text{在 }q\text{ 步内停机}\}}\qquad(q\in\NN),
+\]
+并定义停机驱动温度调度
+\[
+p_q(M,x):=2^{-\alpha q}\bigl(1-H_{M,x}(q)\bigr)\in\{0,2^{-\alpha q}\}.
+\]
+则序列 \(q\mapsto p_q(M,x)\) 为可计算序列，并且极限
+\[
+F_{M,x}:=\lim_{q\to\infty}\frac1q\log\rho\!\bigl(T^{(q)}_{p_q(M,x)}\bigr)
+\]
+存在且满足二值化：
+\[
+F_{M,x}=
+\begin{cases}
+\log\varphi, & M(x)\ \text{停机},\\[2pt]
+(1-\alpha)\log 2, & M(x)\ \text{不停机}.
+\end{cases}
+\]
+因此映射 \((M,x)\mapsto F_{M,x}\) 不可计算；并且集合 \(\{(M,x):F_{M,x}=(1-\alpha)\log 2\}\) 不是递归可枚举集。
+\end{theorem}
+
+\begin{proof}
+谓词“在 \(q\) 步内停机”可由对 \(M(x)\) 的 \(q\)-步模拟判定，故 \(p_q(M,x)\) 可计算。
+\par
+若 \(M(x)\) 于某时刻 \(T\) 停机，则对一切 \(q\ge T\) 有 \(H_{M,x}(q)=1\)，从而 \(p_q(M,x)=0\)。
+于是 \(T^{(q)}_{p_q(M,x)}=T^{(q)}_{0}=K^{\otimes q}\)，并由 \(\rho(K^{\otimes q})=\varphi^q\) 得
+\(
+q^{-1}\log\rho(T^{(q)}_{p_q(M,x)})=\log\varphi
+\)
+对所有充分大 \(q\) 成立，故 \(F_{M,x}=\log\varphi\)。
+\par
+若 \(M(x)\) 不停机，则对所有 \(q\) 有 \(H_{M,x}(q)=0\)，从而 \(p_q(M,x)=2^{-\alpha q}\)。
+由定理 \ref{thm:pom-replica-softcore-temperature-free-energy-phase-transition} 得
+\[
+F_{M,x}=F(\alpha)=\max\{\log\varphi,(1-\alpha)\log 2\}=(1-\alpha)\log 2,
+\]
+其中最后等号由 \(\alpha<1-\log_2\varphi\) 等价于 \((1-\alpha)\log 2>\log\varphi\) 得出。
+\par
+若 \((M,x)\mapsto F_{M,x}\) 可计算，则可由其值判定停机与否，从而与停机问题不可判定性矛盾。
+最后，“不是递归可枚举”由集合 \(\{(M,x):F_{M,x}=(1-\alpha)\log 2\}\) 与非停机集合一致推出。证毕。
+\end{proof}
+
+\begin{theorem}[亚满谱对称门核的停机嵌入泛化]\label{thm:conclusion-temperature-kernel-free-energy-halting-embedding-subfull-spectrum}
+令 \(A\in\RR_{\ge 0}^{d\times d}\) 为实对称非负矩阵，并记 \(\lambda:=\rho(A)\)。
+假设 \(\lambda<d\)，并取任意
+\[
+\alpha\in\bigl(0,\ 1-\log_d\lambda\bigr).
+\]
+对任意图灵机 \(M\) 与输入 \(x\)，定义
+\[
+H_{M,x}(q):=\mathbf 1_{\{M(x)\ \text{在 }q\text{ 步内停机}\}},
+\qquad
+p_q(M,x):=d^{-\alpha q}\bigl(1-H_{M,x}(q)\bigr)\in\{0,d^{-\alpha q}\}.
+\]
+并令 \(T^{(q)}_{p_q(M,x)}(A)\) 由 \eqref{eq:pom-perron-landauer-tensor-soft-kernel} 给出。
+则极限
+\[
+F^{(A)}_{M,x}:=\lim_{q\to\infty}\frac1q\log\rho\!\bigl(T^{(q)}_{p_q(M,x)}(A)\bigr)
+\]
+存在且满足二值化：
+\[
+F^{(A)}_{M,x}=
+\begin{cases}
+\log\lambda, & M(x)\ \text{停机},\\[2pt]
+(1-\alpha)\log d, & M(x)\ \text{不停机}.
+\end{cases}
+\]
+因此映射 \((M,x)\mapsto F^{(A)}_{M,x}\) 不可计算；并且集合 \(\{(M,x):F^{(A)}_{M,x}=(1-\alpha)\log d\}\) 不是递归可枚举集。
+\end{theorem}
+\begin{proof}
+谓词“在 \(q\) 步内停机”可由 \(q\)-步模拟判定，故 \(p_q(M,x)\) 为可计算序列。
+\par
+若 \(M(x)\) 于某时刻 \(T\) 停机，则对一切 \(q\ge T\) 有 \(p_q(M,x)=0\)，从而 \(T^{(q)}_{p_q(M,x)}(A)=A^{\otimes q}\)，并由 \(\rho(A^{\otimes q})=\lambda^q\) 得
+\(
+q^{-1}\log\rho(T^{(q)}_{p_q(M,x)}(A))=\log\lambda
+\)
+对充分大 \(q\) 成立，故 \(F^{(A)}_{M,x}=\log\lambda\)。
+\par
+若 \(M(x)\) 不停机，则对所有 \(q\) 有 \(p_q(M,x)=d^{-\alpha q}\)。
+此时
+\(
+\lim_{q\to\infty}\frac1q\log p_q(M,x)=-\alpha\log d
+\)。
+由定理 \ref{thm:pom-perron-landauer-limit-law}，
+\[
+F^{(A)}_{M,x}=\max\{\log\lambda,(1-\alpha)\log d\}=(1-\alpha)\log d,
+\]
+其中最后等号由 \(\alpha<1-\log_d\lambda\) 等价于 \((1-\alpha)\log d>\log\lambda\) 得出。
+\par
+若 \((M,x)\mapsto F^{(A)}_{M,x}\) 可计算，则可由其值判定停机与否，从而与停机问题不可判定性矛盾。
+最后，集合 \(\{(M,x):F^{(A)}_{M,x}=(1-\alpha)\log d\}\) 与非停机集合一致，故不是递归可枚举集。证毕。
+\end{proof}
+
+\begin{corollary}[可计算温度调度产生不可计算自由能常数]\label{cor:conclusion-temperature-kernel-free-energy-omega-uncomputable}
+令 \(K=\bigl(\begin{smallmatrix}1&1\\[2pt]1&0\end{smallmatrix}\bigr)\) 为 NAND 真值表矩阵（从而 \(\rho(K)=\varphi\)）。
+选取一台通用前缀自由图灵机 \(U\) 满足
+\[
+\Omega_U<1-\log_2\varphi,
+\]
+其中 \(\Omega_U\) 为其 Chaitin 停机概率（定理 \ref{thm:zeta-syntax-omega-regular-impossible}）。
+（通过对任意通用机施加固定前缀重编码，可将停机概率缩放到任意小常数，从而总可实现该不等式。）
+取一条可计算且单调递增的有理序列 \((\alpha_q)_{q\ge 1}\subset\QQ\cap[0,1]\) 使 \(\alpha_q\uparrow\Omega_U\)，并定义可计算温度调度
+\[
+p_q:=2^{-\lceil \alpha_q q\rceil}\in(0,1]\qquad(q\ge 1).
+\]
+则极限
+\[
+F_U:=\lim_{q\to\infty}\frac1q\log\rho\!\bigl(T^{(q)}_{p_q}(K)\bigr)
+\]
+存在且
+\[
+F_U=(1-\Omega_U)\log 2.
+\]
+因此 \(F_U\) 为不可计算实数。
+\end{corollary}
+\begin{proof}
+由枚举 \(\mathrm{HALT}_U\) 并逐步累加 Kraft 权重，可构造性得到 \(\Omega_U\) 的可计算单调递增有理下逼近，故存在所需的 \((\alpha_q)\)。
+由 \(\alpha_q\uparrow\Omega_U\) 与取整误差 \(|\lceil \alpha_q q\rceil-\alpha_q q|\le 1\)，有
+\[
+\frac1q\log p_q
+=-\frac{\lceil \alpha_q q\rceil}{q}\log 2
+\longrightarrow
+-\Omega_U\log 2.
+\]
+将 \(d=2\)、\(A=K\) 代入定理 \ref{thm:pom-perron-landauer-limit-law}，得到
+\[
+\lim_{q\to\infty}\frac1q\log\rho\!\bigl(T^{(q)}_{p_q}(K)\bigr)
+=\max\{\log\varphi,(1-\Omega_U)\log 2\}.
+\]
+由假设 \(\Omega_U<1-\log_2\varphi\) 得 \((1-\Omega_U)\log 2>\log\varphi\)，故右端等于 \((1-\Omega_U)\log 2\)。
+若 \(F_U\) 可计算，则可由等式 \(\Omega_U=1-F_U/\log 2\) 计算 \(\Omega_U\)，矛盾于定理 \ref{thm:zeta-syntax-omega-regular-impossible} 所述不可计算性。证毕。
+\end{proof}
+
+\begin{corollary}[二点谱的常数对可编译性]\label{cor:conclusion-temperature-kernel-free-energy-two-point-any-constants}
+沿用定理 \ref{thm:conclusion-temperature-kernel-free-energy-halting-embedding} 的设定，并记
+\[
+F_0:=\log\varphi,
+\qquad
+F_1:=(1-\alpha)\log 2,
+\qquad
+F_1-F_0>0.
+\]
+则对任意实常数 \(a<b\)，存在一个一致可计算的后处理编译，使得对每个 \((M,x)\) 可构造一族非负矩阵 \(\widetilde T_{M,x}^{(q)}\)（\(q\ge 1\)）并定义
+\[
+\widetilde F_{M,x}:=\lim_{q\to\infty}\frac1q\log\rho\!\bigl(\widetilde T^{(q)}_{M,x}\bigr),
+\]
+满足严格二值化
+\[
+M(x)\ \text{停机}\Longrightarrow \widetilde F_{M,x}=a,
+\qquad
+M(x)\ \text{不停机}\Longrightarrow \widetilde F_{M,x}=b.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-temperature-kernel-free-energy-halting-embedding}，对每个 \(q\) 可取
+\(
+T^{(q)}_{M,x}:=T^{(q)}_{p_q(M,x)}
+\)
+使
+\(
+q^{-1}\log\rho(T^{(q)}_{M,x})\to F_{M,x}\in\{F_0,F_1\}.
+\)
+\par
+取整数 \(k\ge \lceil (b-a)/(F_1-F_0)\rceil\)，并定义放大族
+\[
+U^{(q)}_{M,x}:=\bigl(T^{(q)}_{M,x}\bigr)^{\otimes k},
+\]
+则 \(\rho(U^{(q)}_{M,x})=\rho(T^{(q)}_{M,x})^{k}\)，故
+\(
+q^{-1}\log\rho(U^{(q)}_{M,x})\to kF_{M,x}.
+\)
+\par
+取常数 \(d:=b-kF_1\)，并对每个 \(q\) 令 \(C_d^{(q)}:=[e^{dq}]\) 为 \(1\times 1\) 标量矩阵。
+置
+\[
+V^{(q)}_{M,x}:=U^{(q)}_{M,x}\otimes C_d^{(q)},
+\]
+则 \(\rho(V^{(q)}_{M,x})=e^{dq}\rho(U^{(q)}_{M,x})\)，从而
+\(
+q^{-1}\log\rho(V^{(q)}_{M,x})\to kF_{M,x}+d
+\)
+并满足
+\[
+kF_1+d=b,
+\qquad
+kF_0+d=b-k(F_1-F_0)\le a.
+\]
+\par
+最后令 \(C_a^{(q)}:=[e^{aq}]\) 并取块对角直和
+\[
+\widetilde T^{(q)}_{M,x}:=C_a^{(q)}\oplus V^{(q)}_{M,x}.
+\]
+由 \(\rho(A\oplus B)=\max\{\rho(A),\rho(B)\}\) 得
+\[
+\frac1q\log\rho(\widetilde T^{(q)}_{M,x})
+=\max\!\left\{a,\ \frac1q\log\rho(V^{(q)}_{M,x})\right\},
+\]
+从而极限 \(\widetilde F_{M,x}=\max\{a,kF_{M,x}+d\}\)。
+若不停机，则 \(kF_{M,x}+d=b>a\)，故 \(\widetilde F_{M,x}=b\)；若停机，则 \(kF_{M,x}+d\le a\)，故 \(\widetilde F_{M,x}=a\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[谱自由能门系对单调布尔逻辑的完备嵌入]\label{thm:conclusion-free-energy-monotone-boolean-embedding}
+取推论 \ref{cor:conclusion-temperature-kernel-free-energy-two-point-any-constants} 的特例 \(a=0,b=1\)，并记
+\[
+Z(M,x):=\widetilde F_{M,x}\in\{0,1\}.
+\]
+则对任意单调布尔函数 \(f:\{0,1\}^n\to\{0,1\}\)，存在一个由下列三类操作生成的谱自由能门系模板，使得对任意输入 \((M_i,x_i)\)（\(1\le i\le n\)）有
+\[
+F_{\mathrm{out}}=f\bigl(Z(M_1,x_1),\dots,Z(M_n,x_n)\bigr)\in\{0,1\}.
+\]
+其中三类操作为：张量积（对应自由能加法）、块对角直和（对应自由能取 \(\max\)）、以及常数门（自由能恒为给定常数）。
+\end{theorem}
+\begin{proof}
+任意单调布尔函数存在单调析取范式
+\[
+f(z)=\bigvee_{j=1}^{m}\ \bigwedge_{i\in S_j} z_i,
+\qquad S_j\subseteq[n].
+\]
+对 \(S\subseteq[n]\) 定义
+\[
+A_S(z):=\max\Bigl\{0,\ \sum_{i\in S}z_i-(|S|-1)\Bigr\},
+\qquad
+T_f(z):=\max_{1\le j\le m}A_{S_j}(z).
+\]
+当 \(z\in\{0,1\}^n\) 时，直接验算 \(A_S(z)=\bigwedge_{i\in S}z_i\) 且 \(T_f(z)=f(z)\)。
+\par
+由推论 \ref{cor:conclusion-temperature-kernel-free-energy-two-point-any-constants}（取 \(a=0,b=1\)）得到输入谱比特 \(Z_i:=Z(M_i,x_i)\)。
+再利用张量积使自由能相加、常数门实现平移、块对角直和实现 \(\max\)，即可逐层编译上述由 \((+,\max,\text{常数})\) 生成的实函数 \(T_f\) 并得到所需恒等式。
+证毕。
+\end{proof}
+
+\begin{proposition}[谱自由能门系的单调性障碍]\label{prop:conclusion-free-energy-gates-monotonicity-obstruction}
+由张量积、块对角直和与常数门有限次复合得到的输出自由能函数，对每个输入变量均单调不减。
+因此当其限制在 \(\{0,1\}^n\) 并取值于 \(\{0,1\}\) 时，必对应单调布尔函数；特别地否定门与奇偶门不可由该闭包实现。
+\end{proposition}
+\begin{proof}
+加法与 \(\max\) 均为逐坐标单调不减运算，与常数相加不改变单调性，有限次复合保持单调不减。
+因此其在 \(\{0,1\}^n\) 上诱导的 \(\{0,1\}\)-值函数必为单调布尔函数；否定与奇偶均非单调，故不可表示。
+证毕。
+\end{proof}
+
+\input{thm__conclusion-temperature-kernel-monotone-clone-rigidity}
+
+\begin{corollary}[谱自由能的高精度近似不可判定]\label{cor:conclusion-temperature-kernel-free-energy-nonapproximable}
+沿用定理 \ref{thm:conclusion-temperature-kernel-free-energy-halting-embedding} 的设定，并取任意
+\[
+0<\delta<\frac12\Bigl((1-\alpha)\log 2-\log\varphi\Bigr).
+\]
+则不存在算法：对任意 \((M,x)\)，输出一个长度 \(<\delta\) 的有理区间 \(I_{M,x}\) 并保证 \(F_{M,x}\in I_{M,x}\)。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-temperature-kernel-free-energy-halting-embedding}，\(F_{M,x}\) 仅取两值 \(\log\varphi\) 与 \((1-\alpha)\log 2\)，且二者间距严格大于 \(2\delta\)。
+若存在上述算法，则由输出区间可判定 \(F_{M,x}\) 属于哪一常数值，从而判定 \(M(x)\) 是否停机，矛盾。证毕。
+\end{proof}
+
+\begin{proposition}[可逆辅助位指数与最小外置预算的二进制等价]\label{prop:conclusion-reversible-aux-bits-equals-log-budget}
+对任意全定义可计算映射 \(\pi:D\to Y\) 且 \(D(\pi)<\infty\)，定义其可逆辅助位指数
+\[
+\kappa(\pi):=\min\Bigl\{k\in\NN:\exists\ \widetilde\pi:D\hookrightarrow Y\times\{0,1\}^k\ \text{单射},\ \operatorname{pr}_1\circ\widetilde\pi=\pi\Bigr\}.
+\]
+则有严格等式
+\[
+\kappa(\pi)=\bigl\lceil\log_2 b(\pi)\bigr\rceil,
+\]
+其中 \(b(\pi)\) 为定理 \ref{thm:conclusion-minimal-external-budget-undecidable} 定义的最小外置预算。
+从而在族 \(\{\pi_{M,x}\}\) 上，判定命题 \(\kappa(\pi)=0\) 不可判定，且其真例集合不是递归可枚举集。
+\end{proposition}
+
+\begin{proof}
+若 \(b(\pi)\le B\)，则存在单射提升 \(\widehat\pi:D\hookrightarrow Y\times\{0,\dots,B-1\}\)。
+将 \(\{0,\dots,B-1\}\) 二进制编码嵌入 \(\{0,1\}^{\lceil\log_2 B\rceil}\)，得到单射提升至 \(Y\times\{0,1\}^{\lceil\log_2 B\rceil}\)，故
+\(
+\kappa(\pi)\le \lceil\log_2 b(\pi)\rceil
+\)。
+反之，若存在 \(\widetilde\pi:D\hookrightarrow Y\times\{0,1\}^k\) 单射提升，则每条输出纤维至多分裂为 \(2^k\) 种标签，故 \(b(\pi)\le 2^k\)，从而 \(\lceil\log_2 b(\pi)\rceil\le k\)。
+取最小 \(k\) 得等式。
+最后，定理 \ref{thm:conclusion-minimal-external-budget-undecidable} 给出 \(b(\pi_{M,x})\in\{1,2\}\) 的停机刻画，代入即得 \(\kappa(\pi_{M,x})\in\{0,1\}\) 的不可判定性与非递归可枚举性。证毕。
+\end{proof}
+
+\begin{proposition}[最小锁存器数与最小状态数的对数等价]\label{prop:conclusion-min-latches-equals-log-states}
+设 \(\pi:L\to L\) 为全定义序贯转导（定义域为正则语言）。
+记 \(s(\pi)\) 为实现 \(\pi\) 的最小确定性有限状态转导器的状态数。
+定义其最小锁存器数
+\[
+m(\pi):=\min\Bigl\{m\in\NN:\ \pi\ \text{可由含 \(m\) 位状态寄存器的同步序贯布尔电路实现}\Bigr\}.
+\]
+则成立精确等式
+\[
+m(\pi)=\bigl\lceil\log_2 s(\pi)\bigr\rceil.
+\]
+从而在定理 \ref{thm:conclusion-minimal-state-complexity-halting} 的族 \(\{\pi_{M,x}\}\) 上，映射 \((M,x)\mapsto m(\pi_{M,x})\) 不可计算。
+\end{proposition}
+
+\begin{proof}
+若某同步序贯电路含 \(m\) 位寄存器，则其可达内部配置数至多为 \(2^m\)，从而诱导的确定性转导器状态数满足 \(s(\pi)\le 2^m\)，即 \(m\ge\lceil\log_2 s(\pi)\rceil\)。
+反之，若存在 \(s(\pi)\)-状态的确定性有限状态转导器，则以 \(m=\lceil\log_2 s(\pi)\rceil\) 位对状态集合编码，并将状态转移与输出函数视为布尔函数实现，即得到含 \(m\) 位寄存器的同步序贯实现，故 \(m(\pi)\le\lceil\log_2 s(\pi)\rceil\)。
+合并得等式。
+最后由定理 \ref{thm:conclusion-minimal-state-complexity-halting} 的停机时间编码，得到 \((M,x)\mapsto m(\pi_{M,x})\) 不可计算。证毕。
+\end{proof}

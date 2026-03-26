@@ -1,0 +1,710 @@
+\subsubsection{碰撞核谱系：从递推到非负整数 realization（可审计协议）}\label{subsubsec:pom-collision-kernel-family}
+上文已经给出一条“从折叠纤维到碰撞谱”的统一入口：
+对任意整数 \(q\ge 2\)，
+\[
+S_q(m):=\sum_{x\in X_m}d_m(x)^q
+=\#\{(\omega^{(1)},\dots,\omega^{(q)})\in\Omega_m^q:\ \Fold_m(\omega^{(1)})=\cdots=\Fold_m(\omega^{(q)})\}.
+\]
+其中 \(q=2\) 是成对碰撞，\(q=3\) 是三元碰撞，依此类推；\(S_q(m)\) 因而描述的是一个“\(q\)-重纤维积”上的计数对象，而非对某个固定核的简单幂函数。
+\par
+\input{parts/subsubsec__pom-collision-moment-hardcore-homomorphization}
+
+\begin{theorem}[纤维谱 resolvent 的有理结构：固定 \(m\) 的幂和矩刻画全部多重度极点]\label{thm:pom-fiber-spectrum-resolvent-rational}
+固定分辨率 \(m\ge 1\)，并将幂和矩扩展定义为
+\[
+S_q(m):=\sum_{x\in X_m} d_m(x)^q\qquad(q\in\ZZ_{\ge 0}).
+\]
+令 \(\{a_1<\cdots<a_R\}\) 为多重度集合 \(\{d_m(x):x\in X_m\}\) 的不同取值，并记
+\(
+c_j:=|\{x\in X_m:\ d_m(x)=a_j\}|
+\)。
+定义形式幂级数（纤维谱 resolvent）
+\[
+H_m(u):=\sum_{q=0}^{\infty} S_q(m)\,u^q.
+\]
+则 \(H_m\) 为有理函数，并具有严格部分分式展开
+\[
+\boxed{\;
+H_m(u)=\sum_{j=1}^{R}\frac{c_j}{1-a_j u}\; }.
+\]
+因此 \(H_m\) 的全部极点集合恰为 \(\{1/a_j\}_{j=1}^{R}\)，并且对应留数恰为重数 \(c_j\)。
+\end{theorem}
+\begin{proof}
+由恒等式 \(\sum_{q\ge 0}(au)^q=(1-au)^{-1}\)（形式幂级数意义）得
+\[
+H_m(u)=\sum_{x\in X_m}\sum_{q\ge 0}(d_m(x)u)^q
+=\sum_{x\in X_m}\frac{1}{1-d_m(x)u}
+=\sum_{j=1}^{R}\frac{c_j}{1-a_j u}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[有限数据的完全重建与锐性：至多 \(2R\) 个幂和决定固定 \(m\) 的纤维谱]\label{thm:pom-fiber-spectrum-finite-reconstruction-sharp}
+沿用定理 \ref{thm:pom-fiber-spectrum-resolvent-rational} 的记号。
+则给定有限数据
+\(
+\{S_q(m)\}_{q=0}^{2R-1}
+\)
+即可唯一确定有理函数 \(H_m\)，从而唯一确定纤维谱多重集 \(\{(a_j,c_j)\}_{j=1}^{R}\)。
+并且在一般情形下，若只给定 \(\{S_q(m)\}_{q=0}^{2R-2}\)（少一项），则该纤维谱不再唯一可判定。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-spectrum-resolvent-rational} 可写 \(H_m(u)=P_m(u)/Q_m(u)\)，其中
+\(
+Q_m(u)=\prod_{j=1}^{R}(1-a_j u)
+\)
+为次数 \(R\) 的首一多项式，而 \(P_m\) 的次数 \(\le R-1\)。
+将恒等式 \(Q_m(u)H_m(u)=P_m(u)\) 在 \(u=0\) 处展开并比较系数可得：系数序列 \(q\mapsto S_q(m)\) 满足阶 \(\le R\) 的线性递推；反过来，由 \(\{S_q(m)\}_{q=0}^{2R-1}\) 可通过标准的 Pad\'e/Prony 方程唯一解出 \(Q_m\)（等价地解出该递推的最小特征多项式）。
+一旦 \(Q_m\) 确定，其零点给出全部 \(a_j\)；
+再由前 \(R\) 个矩方程 \(S_q(m)=\sum_{j=1}^{R}c_j a_j^q\ (0\le q\le R-1)\) 的 Vandermonde 可逆性，重数 \(c_j\) 亦被唯一确定。
+\par
+锐性可由参数计数给出：具有 \(R\) 个简单极点的部分分式族由 \(R\) 个极点位置与 \(R\) 个留数决定，因而自由参数为 \(2R\)；少一阶系数在一般情形下不足以排除非同构解。证毕。
+\end{proof}
+\par
+在 \(q=2,3,4\) 的情形，本文已经构造出低维的非负整数碰撞核 \(A_q\)，并把其 Perron 根 \(r_q=\rho(A_q)\) 与投影熵率 \(h_q=\log(2^q/r_q)\) 纳入同一 \(\zeta\)/primitive/有限部接口（见 \S\ref{subsec:pom-s2}--\S\ref{subsec:pom-s4} 及表 \ref{tab:fold_collision_renyi_spectrum}）。
+另一方面，对 \(q\ge 5\) 已经核验存在小阶整系数递推（表 \ref{tab:fold_collision_moment_recursions}），从而 \(r_q\) 与 \(h_q\) 可精确抽取，但递推本身并不自动给出“非负整数图核”的 realization。
+这引出一个自然的升级研究线：把“已知递推”进一步提升为“可解释的有限状态碰撞核谱系”。
+
+\begin{proposition}[碰撞矩谱的递推—谱半径等价：Rényi 指纹率由 Perron 根族统一封闭]\label{prop:pom-collision-renyi-perron-closure}
+固定整数 \(q\ge 2\)。
+设碰撞矩 \(S_q(m)=\sum_x d_m(x)^q\) 自某个 \(m\) 起满足一条最小阶常系数线性递推（等价于 Hankel 秩有限），并记其递推特征多项式的最大模根为 \(r_q\)（Perron 根）。
+则：
+\begin{enumerate}
+  \item 存在某个最小维线性实现（例如命题 \ref{prop:pom-hankel-realization-protocol} 的 Hankel realization）使得
+  \(
+  S_q(m)=\Theta(r_q^m)
+  \)，并且该 \(r_q\) 等于任意最小实现矩阵的谱半径（推论 \ref{cor:pom-hankel-free-energy-evaluator}）。
+  \item 若进一步存在自然的拼接次乘性（例如 \(S_q(m+n)\le S_q(m)S_q(n)\)），则极限
+  \[
+  \boxed{\ r_q=\lim_{m\to\infty}S_q(m)^{1/m}\ }
+  \]
+  存在且与上述 Perron 根一致。
+  \item 定义 Rényi 指纹率
+  \[
+  h_q:=\log\!\left(\frac{2^q}{r_q}\right),
+  \qquad
+  h_q^{\mathrm R}:=\frac{h_q}{q-1}.
+  \]
+  则一旦 \(h_q^{\mathrm R}\) 的极限口径成立（例如由上式直接定义于极限 \(r_q\)），
+  由有限支持分布的 Rényi 单调性可知 \(q\mapsto h_q^{\mathrm R}\) 单调递减，并且存在端点极限
+  \[
+  h_\infty^{\mathrm R}:=\lim_{q\to\infty}h_q^{\mathrm R}
+  =\log 2-\lim_{q\to\infty}\frac{1}{q}\log r_q.
+  \]
+  在 Fold 门上，该端点由命题 \ref{prop:pom-rq-qinfty-endpoint} 锁定为 \(h_\infty^{\mathrm R}=\log(2/\sqrt{\varphi})\)（亦见注 \ref{rem:pom-renyi-gap-to-hinfty}）。
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition}[指数极限一致性：最大纤维指数等于 Rényi 谱的 \texorpdfstring{$(q\to\infty)$}{(q->infty)} 边界]\label{prop:pom-maxfiber-exponent-equals-renyi-endpoint}
+设折叠半群 \(\Fold_m:\Omega_m\twoheadrightarrow X_m\) 满足拼接相容性，使得纤维多重度
+\(
+d_m(x):=\card{\Fold_m^{-1}(x)}
+\)
+具有次乘性：对任意 \(m,n\) 与任意 \(x\in X_{m+n}\)，存在 \(x_1\in X_m\)、\(x_2\in X_n\) 使
+\[
+d_{m+n}(x)\le d_m(x_1)\,d_n(x_2).
+\]
+并假设对每个整数 \(q\ge 1\)，碰撞矩满足次乘性 \(S_q(m+n)\le S_q(m)S_q(n)\)，且存在指数上界
+\(
+\sup_m \frac{1}{m}\log|X_m|<\infty
+\)。
+令
+\[
+M_m:=\max_{x\in X_m} d_m(x),\qquad
+\Lambda_\infty:=\lim_{m\to\infty}\frac{1}{m}\log M_m,\qquad
+r_q:=\lim_{m\to\infty} S_q(m)^{1/m}.
+\]
+则上述极限均存在，并满足严格恒等式
+\[
+\boxed{\ \Lambda_\infty=\lim_{q\to\infty}\frac{1}{q}\log r_q\ }.
+\]
+\end{proposition}
+\begin{proof}
+由拼接次乘性对极大值取上确界得 \(M_{m+n}\le M_mM_n\)，故由 Fekete 引理 \(\Lambda_\infty=\lim_{m\to\infty}\frac{1}{m}\log M_m\) 存在。
+另一方面，对任意 \(q\ge 1\) 与任意 \(m\) 有
+\[
+M_m^q\ \le\ \sum_{x\in X_m}d_m(x)^q=S_q(m)\ \le\ |X_m|\,M_m^q.
+\]
+取对数并除以 \(m\)，再令 \(m\to\infty\)（用 \(S_q\) 的次乘性保证 \(r_q\) 存在，并用 \(\sup_m \frac{1}{m}\log|X_m|<\infty\) 控制误差项）得到
+\[
+q\Lambda_\infty\le \log r_q\le q\Lambda_\infty+\sup_m\frac{1}{m}\log|X_m|.
+\]
+两边除以 \(q\) 并令 \(q\to\infty\) 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[双极限的交换性：\texorpdfstring{$q\to\infty$}{q->infty} 与 \texorpdfstring{$m\to\infty$}{m->infty} 在主指数处同归 \texorpdfstring{$\tfrac12\log\varphi$}{(1/2)logphi}]\label{cor:pom-double-limit-commute-principal-exponent}
+对碰撞矩 \(S_q(m)=\sum_{x\in X_m}d_m(x)^q\)，两条极限路线在主指数层面严格一致：
+\[
+\lim_{q\to\infty}\ \lim_{m\to\infty}\ \frac{1}{mq}\log S_q(m)
+\;=\;
+\lim_{m\to\infty}\ \lim_{q\to\infty}\ \frac{1}{mq}\log S_q(m)
+\;=\;\frac12\log\varphi.
+\]
+更具体地，固定 \(q\) 时由 \(r_q=\lim_{m\to\infty}S_q(m)^{1/m}\) 得
+\(
+\lim_{m\to\infty}\frac{1}{mq}\log S_q(m)=\frac{1}{q}\log r_q
+\)，再由端点定理 \ref{prop:pom-rq-qinfty-endpoint} 得 \(\lim_{q\to\infty}\frac{1}{q}\log r_q=\frac12\log\varphi\)；
+固定 \(m\) 时由最大项主导 \(\lim_{q\to\infty}S_q(m)^{1/q}=D_m\)，从而
+\(
+\lim_{q\to\infty}\frac{1}{mq}\log S_q(m)=\frac{1}{m}\log D_m
+\)，再由命题 \ref{prop:pom-maxfiber-exponent-equals-renyi-endpoint} 与 \ref{prop:pom-rq-qinfty-endpoint} 联合推出 \(\lim_{m\to\infty}\frac{1}{m}\log D_m=\frac12\log\varphi\)。
+\par
+因此两条路线的差异只能出现在低阶修正项：一类是 \(q\)-方向的端点残差（例如 \(\log r_q\) 的常数级自由能超额），另一类是 \(m\)-方向的有限分辨率相位/端点校正；主指数 \(\tfrac12\log\varphi\) 处不发生混叠。
+\end{corollary}
+
+\begin{proposition}[从递推到最小线性实现：Hankel realization]\label{prop:pom-hankel-realization-protocol}
+固定 \(q\ge 2\)，设序列 \(S_q(m)\) 满足某个最小阶的常系数线性递推（等价于其 Hankel 秩有限）。
+令 \(a_n:=S_q(n+2)\)（\(n\ge 0\)），并令 \(d:=\mathrm{rank}(H)\) 为其 Hankel 秩。
+则存在一个维数等于 \(d\) 的最小线性实现
+\[
+a_n=\alpha^{\mathsf T}A^n\beta\qquad(n\ge 0),
+\]
+其中 \(A\in M_d(\QQ)\) 可由 Hankel 矩阵 \(H_0=(a_{i+j})_{0\le i,j\le d-1}\) 与 \(H_1=(a_{i+j+1})_{0\le i,j\le d-1}\) 的闭式
+\[
+A=H_0^{-1}H_1=\frac{\mathrm{adj}(H_0)\,H_1}{\det(H_0)}
+\]
+直接构造。
+当 \(a_n\in\ZZ\) 时 \(H_0,H_1\in M_d(\ZZ)\)，从而 \(A\) 的所有分母均整除 \(\det(H_0)\)。
+\end{proposition}
+
+\begin{remark}[分母下界与 \texorpdfstring{$p$}{p}-进刚性指数：Hankel 证书的算术刚性]\label{rem:pom-hankel-denominator-stiffness}
+在 \(a_n\in\ZZ\) 的情形，上式表明 \(\det(H_0)\) 控制最小 realization 的有理分母。
+对素数 \(p\) 可定义刚性指数
+\[
+\mathsf{Stiff}_p:=v_p\!\bigl(\det(H_0)\bigr),
+\]
+它给出在 \(\ZZ_p\) 中无歧义恢复 \(A\) 条目所需的最小 \(p\)-进精度门槛。
+在本文的具体数据上，相应的 \(p\)-进刚性信号可由 Hankel 见证块行列式的赋值直接读出（注 \ref{rem:pom-hankel-stiffness-p5}）。
+\end{remark}
+
+\begin{theorem}[Smith 精度势与最小整化因子]\label{thm:pom-hankel-smith-minimal-denominator}
+在命题 \ref{prop:pom-hankel-realization-protocol} 的整数情形下，设 \(H_0,H_1\in M_d(\ZZ)\) 且 \(\det(H_0)\neq 0\)，并令
+\[
+A:=H_0^{-1}H_1\in M_d(\QQ).
+\]
+取 \(H_0\) 的 Smith 正规形：存在 \(U,V\in \mathrm{GL}_d(\ZZ)\) 使
+\[
+U H_0 V=D:=\mathrm{diag}(s_1,\dots,s_d),
+\qquad
+s_1\mid s_2\mid\cdots\mid s_d,\quad s_i\in\ZZ_{>0}.
+\]
+令 \(C:=U H_1\in M_d(\ZZ)\)，并对每一行定义
+\[
+g_i:=\gcd(C_{i1},C_{i2},\dots,C_{id})\in\ZZ_{>0}\qquad(1\le i\le d).
+\]
+再令
+\[
+e_i:=\frac{s_i}{\gcd(s_i,g_i)}\in\ZZ_{>0},
+\qquad
+N_\ast:=\operatorname{lcm}(e_1,\dots,e_d).
+\]
+则：
+\begin{enumerate}
+  \item \(N_\ast\) 是使 \(A\) 整化的最小正整数，即
+  \[
+  N_\ast=\min\{N\in\ZZ_{>0}:\ NA\in M_d(\ZZ)\}.
+  \]
+  \item 对任意素数 \(p\)，有显式公式
+  \[
+  v_p(N_\ast)=\max_{1\le i\le d}\max\{0,\ v_p(s_i)-v_p(g_i)\}.
+  \]
+  \item 严格整除链成立：
+  \[
+  N_\ast\mid s_d,
+  \qquad
+  N_\ast\mid \det(H_0),
+  \qquad
+  v_p(N_\ast)\le v_p(\det(H_0))=\mathsf{Stiff}_p\ \ (p\ \text{为素数}).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由 \(U H_0 V=D\) 得 \(H_0^{-1}=V D^{-1}U\)，故
+\[
+A=H_0^{-1}H_1=V D^{-1}C.
+\]
+因 \(V\in \mathrm{GL}_d(\ZZ)\)，对任意 \(N\in\ZZ_{>0}\) 有
+\(
+NA\in M_d(\ZZ)\iff N D^{-1}C\in M_d(\ZZ)
+\)。
+而 \(D^{-1}C\) 的第 \(i\) 行为 \(\frac{1}{s_i}C_{i\bullet}\)。
+将该行按最大公因子分解为 \(C_{i\bullet}=g_i\,\widetilde C_{i\bullet}\) 且 \(\gcd(\widetilde C_{i1},\dots,\widetilde C_{id})=1\)，则
+\[
+\frac{1}{s_i}C_{i\bullet}=\frac{g_i}{s_i}\,\widetilde C_{i\bullet}.
+\]
+在最简意义下清分母所需的最小因子恰为 \(e_i=s_i/\gcd(s_i,g_i)\)。
+因此 \(N D^{-1}C\) 为整数矩阵当且仅当对所有 \(i\) 有 \(e_i\mid N\)，等价于 \(N_\ast\mid N\)，从而得到最小性与第 (1) 点。
+第 (2) 点由
+\(
+v_p(e_i)=v_p(s_i)-v_p(\gcd(s_i,g_i))=\max\{0,v_p(s_i)-v_p(g_i)\}
+\)
+与 \(v_p(\operatorname{lcm}_i e_i)=\max_i v_p(e_i)\) 得到。
+第 (3) 点由 \(e_i\mid s_i\mid s_d\) 推出 \(N_\ast\mid s_d\)，再由 \(\det(H_0)=\prod_i s_i\) 得 \(s_d\mid \det(H_0)\)，从而 \(N_\ast\mid \det(H_0)\) 且 \(v_p(N_\ast)\le v_p(\det(H_0))\)。
+\end{proof}
+
+\begin{corollary}[Hankel 最小实现的整性判据]\label{cor:pom-hankel-integer-realization-criterion}
+沿用定理 \ref{thm:pom-hankel-smith-minimal-denominator} 的记号，则下列命题等价：
+\begin{enumerate}
+  \item \(A\in M_d(\ZZ)\)；
+  \item \(N_\ast=1\)；
+  \item 对所有 \(1\le i\le d\) 有 \(s_i\mid g_i\)（等价地，\(C\) 的第 \(i\) 行各条目均被 \(s_i\) 整除）；
+  \item 对所有素数 \(p\) 有 \(v_p(N_\ast)=0\)。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-hankel-smith-minimal-denominator}(1) 知 \(A\) 整当且仅当最小整化因子 \(N_\ast\) 为 \(1\)。
+而 \(N_\ast=1\) 当且仅当各 \(e_i=1\)，当且仅当 \(s_i=\gcd(s_i,g_i)\)，即 \(s_i\mid g_i\)。
+最后 \(v_p(N_\ast)\equiv 0\) 对所有素数等价于 \(N_\ast=1\)。
+\end{proof}
+
+\begin{theorem}[模 \(p^k\) 的 Hankel 线性系统：可解性与解空间规模]\label{thm:pom-hankel-modpk-solvability-count}
+沿用定理 \ref{thm:pom-hankel-smith-minimal-denominator} 的 \(U,V,D,C\)。
+给定素数 \(p\) 与整数 \(k\ge 1\)，考虑同余矩阵方程
+\[
+H_0X\equiv H_1\pmod{p^k},
+\qquad
+X\in M_d(\ZZ/p^k\ZZ).
+\]
+则：
+\begin{enumerate}
+  \item 该方程可解当且仅当对每个 \(1\le i\le d\)，行向量 \(C_{i\bullet}\) 的每个条目均被 \(p^{\min(v_p(s_i),k)}\) 整除；
+  \item 在可解的前提下，解的总数满足精确计数
+  \[
+  \#\{X\bmod p^k:\ H_0X\equiv H_1\}=
+  p^{\,d\sum_{i=1}^{d}\min(v_p(s_i),k)}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+令 \(Y:=V^{-1}X\)（模 \(p^k\) 下 \(V^{-1}\) 仍可逆），则
+\[
+H_0X\equiv H_1\pmod{p^k}
+\quad\Longleftrightarrow\quad
+D Y\equiv C\pmod{p^k}.
+\]
+按列分解，对每个 \(j\) 需解
+\(
+s_i y_{ij}\equiv c_{ij}\ (\mathrm{mod}\ p^k)
+\)（\(1\le i\le d\)）。
+一元同余可解当且仅当 \(\gcd(s_i,p^k)\mid c_{ij}\)，即 \(p^{\min(v_p(s_i),k)}\mid c_{ij}\)，得到第 (1) 点。
+在可解时，解数为 \(\gcd(s_i,p^k)=p^{\min(v_p(s_i),k)}\)；对 \(i\) 相乘再对 \(d\) 列独立相乘即得第 (2) 点。
+\end{proof}
+
+\begin{theorem}[Smith 精度势驱动的确定性模审计阈值]\label{thm:pom-hankel-deterministic-mod-audit-threshold}
+在定理 \ref{thm:pom-hankel-smith-minimal-denominator} 的设定下，设给定候选矩阵 \(\widehat A\in M_d(\QQ)\) 满足分母界
+\[
+N_\ast\,\widehat A\in M_d(\ZZ),
+\]
+并定义误差
+\[
+E:=H_0\widehat A-H_1\in M_d(\QQ),
+\qquad
+F:=N_\ast E\in M_d(\ZZ).
+\]
+令 \(\|F\|_\infty:=\max_{i,j}|F_{ij}|\)。
+取有限素数集 \(\mathcal P\) 并令 \(P:=\prod_{p\in\mathcal P}p\)，满足 \(\gcd(P,N_\ast)=1\)。
+若对每个 \(p\in\mathcal P\) 都有同余核验
+\[
+F\equiv 0\pmod p
+\qquad(\text{等价于 }H_0\widehat A\equiv H_1\pmod p),
+\]
+且同时满足
+\[
+P>2\|F\|_\infty,
+\]
+则必有 \(\widehat A=A\)。
+\end{theorem}
+\begin{proof}
+若 \(\widehat A\neq A\)，则 \(E\neq 0\)，从而 \(F\neq 0\)。
+取一非零条目 \(f\) 满足 \(|f|\le \|F\|_\infty\)。
+由同余核验，得对每个 \(p\in\mathcal P\) 有 \(p\mid f\)，因此 \(P\mid f\)。
+但 \(P>2\|F\|_\infty\ge 2|f|\) 时，仅可能 \(f=0\)，矛盾。
+故 \(F=0\)，从而 \(H_0\widehat A=H_1\)，左乘 \(H_0^{-1}\) 得 \(\widehat A=A\)。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$\mathsf{Stiff}_p$}{Stiffp} 的解空间熵解释与精度势分解]\label{prop:pom-hankel-stiffness-entropy-decomposition}
+在定理 \ref{thm:pom-hankel-modpk-solvability-count} 的设定下，若模 \(p^k\) 方程可解，定义其解空间对数规模（按列归一化）为
+\[
+\mathsf H_p(k):=\frac{1}{d}\log_p\#\{X\bmod p^k:\ H_0X\equiv H_1\}.
+\]
+则
+\[
+\mathsf H_p(k)=\sum_{i=1}^{d}\min(v_p(s_i),k),
+\qquad
+\lim_{k\to\infty}\mathsf H_p(k)=\sum_{i=1}^{d}v_p(s_i)=v_p(\det(H_0))=\mathsf{Stiff}_p.
+\]
+另一方面，定理 \ref{thm:pom-hankel-smith-minimal-denominator} 给出的 \(v_p(N_\ast)\) 是最小整化分母的 \(p\)-进指数。
+因此同一 \(p\)-轴同时承载两类互补量：\(\mathsf{Stiff}_p\) 记录模提升时解空间的总分支指数，而 \(v_p(N_\ast)\) 记录在可消去项剥离后的真实分母门槛。
+\end{proposition}
+\begin{proof}
+第一式由定理 \ref{thm:pom-hankel-modpk-solvability-count}(2) 直接得到。
+令 \(k\to\infty\)，得 \(\sum_i \min(v_p(s_i),k)\to \sum_i v_p(s_i)\)，而 \(\det(H_0)=\prod_i s_i\)，故极限等于 \(v_p(\det(H_0))\)，与 \(\mathsf{Stiff}_p\) 的定义一致。
+关于 \(v_p(N_\ast)\) 的陈述即定理 \ref{thm:pom-hankel-smith-minimal-denominator}(2)。
+\end{proof}
+
+\begin{remark}[非负整数碰撞核的搜索口径（建议作为新实验协议）]\label{rem:pom-nonneg-kernel-search-protocol}
+命题 \ref{prop:pom-hankel-realization-protocol} 给出的 \(A\) 一般带有符号（或出现负条目），但它携带“最小线性实现”的确定结构。
+为得到可解释的“有限状态碰撞核”\(A_q\)，可在 \(\mathrm{GL}_d(\ZZ)\) 上做可审计的相似变换搜索：
+\[
+A_q=P^{-1}AP,\qquad P\in\mathrm{GL}_d(\ZZ),
+\]
+目标是使 \(A_q\) 具有非负整数条目（从而可视为某个有限图/SFT 的邻接矩阵），并同步变换读出向量 \((\alpha,\beta)\) 得到同型的计数公式。
+由于 \(P\) 为 unimodular，\(P^{-1}\in M_d(\ZZ)\)，该相似变换不会引入新的分母；若能找到使 \(A_q\in M_d(\ZZ_{\ge 0})\) 的 \(P\)，则该纯整基变换在保持最小维数的同时把分母完全消去（对比注 \ref{rem:pom-hankel-denominator-stiffness}）。
+这一路径在 \(q=4\) 的五态核上已被脚本 \texttt{scripts/exp\_fold\_collision\_hankel\_realization\_q4.py} 以完全可复现方式实现；对更高阶 \(q\) 可按同一范式推广，并以“最小维数、最小最大条目、最小拓扑熵”等作为搜索准则，形成一个可无限上推的碰撞核谱系实验线路。
+\end{remark}
+
+\begin{conjecture}[最小 Hankel 实现的可组合核化原则]\label{conj:pom-minimal-hankel-kernelization}
+固定 \(q\ge 2\)，设 \(S_q(m)\) 的 Hankel 秩为 \(d_q\)，并令 \(A_q^{\mathrm{min}}\in M_{d_q}(\QQ)\) 为由 Hankel realization 得到的最小实现矩阵（命题 \ref{prop:pom-hankel-realization-protocol}）。
+猜想存在 \(P\in\mathrm{GL}_{d_q}(\ZZ)\) 使得
+\[
+P^{-1}A_q^{\mathrm{min}}P\in M_{d_q}(\ZZ_{\ge 0}).
+\]
+亦即，在保持最小实现维数不变的前提下，总可选取一个同维数的非负整数邻接矩阵作为 realization，从而把碰撞矩序列的最小线性实现提升为同维数的可组合有限图解释。
+\end{conjecture}
+
+\begin{corollary}[常数成本自由能求值器：由 Hankel 最小实现锁定 \texorpdfstring{$r_q$}{rq}]\label{cor:pom-hankel-free-energy-evaluator}
+在命题 \ref{prop:pom-hankel-realization-protocol} 的设定下，记最小维数为 \(d\)。
+则存在一个可审计偏移 \(\ell_q\ge 0\)（例如定义 \ref{def:pom-hankel-normal-form} 中使 Hankel 块可逆的最小偏移）使得仅由 \(2d\) 个样本点
+\(
+S_q(\ell_q+2),S_q(\ell_q+3),\dots,S_q(\ell_q+2d+1)
+\)
+即可构造 \(H_0^{(\ell_q)},H_1^{(\ell_q)}\)，从而得到最小实现矩阵 \(A=(H_0^{(\ell_q)})^{-1}H_1^{(\ell_q)}\)。
+其特征值集合给出递推特征多项式的根，因此指数增长主尺度满足
+\[
+r_q=\rho(A),
+\]
+并且一旦找到某个非负整数 realization \(A_q=P^{-1}AP\)，则同样有 \(r_q=\rho(A_q)\)（Perron 根）。
+从而对固定整数 \(q\)，自由能 \(\tau(q)=\log r_q\) 及“典型损失”母函数整点值
+\(
+\Lambda(q-1)=\log r_q-\log2
+\)
+（见命题 \ref{prop:pom-fiber-index-cgf} 与注 \ref{rem:pom-lambda-tau-shift}）都可在 \(O(d^3)\) 的矩阵代数成本内读出，而无需把 \(m\) 推至很大再拟合斜率。
+\end{corollary}
+
+\begin{definition}[Hankel-正规形：\texorpdfstring{$\mathrm{HANKELNF}_q$}{HANKELNFq}]\label{def:pom-hankel-normal-form}
+固定 \(q\ge 2\)，令 \(a_n:=S_q(n+2)\)（\(n\ge 0\)），并令 \(d:=\mathrm{rank}(H)\) 为其 Hankel 秩（等价于最小递推阶数/最小线性实现维数）。
+由于 \(\mathrm{rank}(H)=d\)，存在某个偏移 \(\ell\ge 0\) 使得 \(d\times d\) Hankel 块
+\[
+H_0^{(\ell)}:=(a_{\ell+i+j})_{0\le i,j\le d-1},
+\qquad
+H_1^{(\ell)}:=(a_{\ell+i+j+1})_{0\le i,j\le d-1},
+\]
+可逆。
+令 \(\ell_q\) 为使 \(\det(H_0^{(\ell)})\neq 0\) 的最小偏移（一个可审计的整数证书；在实践中可由 Hankel-minor 搜索脚本输出）。
+并定义 Hankel shift realization
+\[
+A:=(H_0^{(\ell_q)})^{-1}H_1^{(\ell_q)},
+\qquad
+\alpha^{\mathsf T}:=(a_{\ell_q},a_{\ell_q+1},\dots,a_{\ell_q+d-1}),
+\qquad
+\beta:=e_0.
+\]
+称
+\[
+\boxed{\;
+\mathrm{HANKELNF}_q:=\bigl(d,\ell_q;\ H_0^{(\ell_q)},H_1^{(\ell_q)};\ A,\alpha,\beta\bigr)\;}
+\]
+为 \(q\)-moment 的\textbf{Hankel-正规形}：它是从有限段 \(a_{\ell_q},\dots,a_{\ell_q+2d-1}\) 直接、确定地构造出的最小 realization（命题 \ref{prop:pom-hankel-realization-protocol}）。
+\end{definition}
+
+\begin{proposition}[moment 的有限采样判等：\texorpdfstring{$2d$}{2d} 点决定全序列]\label{prop:pom-moment-finite-sampling-decidable}
+在定义 \ref{def:pom-hankel-normal-form} 的设定下，设两条实现路径（例如两种编译/状态编码）给出两条 \(q\)-moment 序列 \(S_q,S'_q\)，并且二者的 Hankel 秩同为 \(d\)。
+若
+\[
+S_q(m)=S'_q(m)\qquad(m=\ell_q+2,\ \ell_q+3,\ \dots,\ \ell_q+2d+1),
+\]
+则它们具有同一个 Hankel-正规形 \(\mathrm{HANKELNF}_q\)，从而对所有 \(m\ge 2\) 都有 \(S_q(m)=S'_q(m)\)；并且由该正规形导出的全部指纹（递推、特征多项式、Perron 根 \(r_q\)、以及后续的压力/预算读出等）完全一致。
+\end{proposition}
+\begin{proof}
+将条件改写为 \(a_n=a'_n\) 对所有 \(\ell_q\le n\le \ell_q+2d-1\) 成立。
+因此两侧由该长度 \(2d\) 的窗口构造出的 \(H_0^{(\ell_q)},H_1^{(\ell_q)}\)（以及 \(A=(H_0^{(\ell_q)})^{-1}H_1^{(\ell_q)}\)、\(\alpha,\beta\)）逐项相同，故 \(\mathrm{HANKELNF}_q=\mathrm{HANKELNF}'_q\)。
+由 \(a_n=\alpha^{\mathsf T}A^n\beta\) 的最小 realization 表达（命题 \ref{prop:pom-hankel-realization-protocol}）立得对所有 \(n\ge 0\) 有 \(a_n=a'_n\)，即对所有 \(m\ge 2\) 有 \(S_q(m)=S'_q(m)\)。
+其余指纹一致性由同一正规形共享同一 \(A\) 与同一特征多项式直接推出。证毕。
+\end{proof}
+
+\begin{remark}[双路一致性审计：residue-DP 拟合 vs.\ realization Perron 根]\label{rem:pom-dp-vs-realization-audit}
+对每个固定 \(q\)，可并行输出两条可复核读出：
+\begin{itemize}
+  \item residue-DP 在有限窗口上计算 \(S_q(m)\) 并据此拟合得到的 \(\widehat r_q\)；
+  \item 由递推/伴随矩阵或 Hankel 最小实现（以及其非负整数核 \(A_q\)）读出的精确 \(r_q=\rho(A_q)\)。
+\end{itemize}
+二者应一致；若不一致，则要么 DP 窗口不足、要么 realization 并非同一序列的实现（或存在边界项未吸收进起止向量）。
+\end{remark}
+
+\subsubsection{内生 Gibbs 权重：由纤维体积诱导的输出平衡态与 transfer matrix}\label{subsubsec:pom-gibbs-pi}
+本文已将折叠输出分布定义为
+\[
+\pi_m(x):=\frac{d_m(x)}{2^m}\qquad(x\in X_m),
+\]
+其中 \(d_m(x)=|\Fold_m^{-1}(x)|\) 是纤维体积。
+这一形式可以被理解为一个完全内生的 Gibbs 权重：令能量
+\[
+E_m(x):=-\log d_m(x),
+\]
+则
+\[
+\pi_m(x)=\frac{e^{-E_m(x)}}{Z_m},
+\qquad
+Z_m:=\sum_{x\in X_m}e^{-E_m(x)}=\sum_{x\in X_m}d_m(x)=|\Omega_m|=2^m.
+\]
+因此 \(\pi_m\) 不是外加的基准分布，而是折叠映射作为“粗粒化”在稳定语法空间上诱导的自然平衡态：纤维越大（预像自由度越高），其输出质量越大。
+\par
+
+\begin{proposition}[纤维指数的大偏差原理：碰撞谱半径给出完整率函数]\label{prop:pom-fiber-index-ldp-from-collision-spectrum}
+令随机变量 \(X_m\sim\pi_m\) 且 \(Y_m:=\frac{1}{m}\log d_m(X_m)\)。
+若极限累积母函数
+\[
+\Lambda(q):=\lim_{m\to\infty}\frac{1}{m}\log\mathbb{E}_{\pi_m}\!\left[e^{qmY_m}\right]
+\]
+在某个包含 \(q=0\) 的开区间上存在、有限，并满足 Gartner--Ellis 定理所需的本质光滑等正则性条件（例如定理 \ref{thm:pom-fiber-index-ldp-thermo} 的设定），则 \((Y_m)\) 满足大偏差原理，其率函数为
+\[
+I(y)=\sup_{q\in\RR}\bigl(qy-\Lambda(q)\bigr).
+\]
+特别地，在上述本质光滑/严格凸的制度下，\(I\) 在其有效域内部严格凸并具有唯一零点
+\[
+y_\ast=\Lambda'(0),\qquad I(y_\ast)=0.
+\]
+若进一步 \(\Lambda\) 在 \(q=0\) 的邻域二次可微且 \(\Lambda''(0)>0\)，则 \(I\) 在 \(y_\ast\) 的邻域二次可微并满足曲率对偶恒等式
+\[
+\boxed{\ I'(y_\ast)=0,\qquad I''(y_\ast)=\frac{1}{\Lambda''(0)}\ }.
+\]
+并且在 \(|\Omega_m|=2^m\) 的 Fold 口径下，对任意整数 \(q\ge 0\) 有整点恒等式
+\[
+\boxed{\ \Lambda(q)=\log r_{q+1}-\log 2\ }
+\]
+（由命题 \ref{prop:pom-fiber-index-cgf} 的整点一致性得到；其中 \(r_{q+1}=\lim_{m\to\infty}S_{q+1}(m)^{1/m}\)）。
+\end{proposition}
+
+\begin{corollary}[中心极限定律与方差证书：二阶喷射给出纤维指数的典型涨落]\label{cor:pom-fiber-index-clt-variance-certificate}
+在命题 \ref{prop:pom-fiber-index-ldp-from-collision-spectrum} 的设定下，进一步假设 \(\Lambda\) 在 \(q=0\) 的邻域二次可微并满足谱隙/解析扰动条件（从而“取极限/求导”可交换；见定理 \ref{thm:pom-fiber-index-clt-thermo}）。
+则存在唯一典型指数 \(y_\ast=\Lambda'(0)\)，并有中心极限定律
+\[
+\sqrt{m}\,(Y_m-y_\ast)\ \Longrightarrow\ \mathcal N(0,\sigma^2),
+\qquad
+\sigma^2=\Lambda''(0).
+\]
+其中 \(\sigma^2\) 可由碰撞谱半径族在 \(q=1\) 的二阶喷射交叉审计（注 \ref{rem:pom-fiber-index-ldp} 与定理 \ref{thm:pom-fiber-index-clt-thermo}）。
+\end{corollary}
+
+\begin{proposition}[纤维典型指数的 Rényi 切线公式：\texorpdfstring{$q=1$}{q=1} 处导数即平均信息损失率]\label{prop:pom-typical-fiber-exponent-renyi-tangent}
+设微态指数率
+\[
+h_0:=\lim_{m\to\infty}\frac{1}{m}\log|\Omega_m|
+\]
+与宏态 Shannon 率
+\[
+h_{\mathrm{mac}}:=\lim_{m\to\infty}\frac{1}{m}H(\pi_m),
+\qquad
+H(\pi_m):=-\sum_{x\in X_m}\pi_m(x)\log\pi_m(x)
+\]
+均存在。
+并设典型纤维指数
+\[
+y_\ast:=\lim_{m\to\infty}\frac{1}{m}\mathbb{E}_{\pi_m}\!\bigl[\log d_m(X_m)\bigr]
+\]
+存在。
+则有严格恒等式
+\[
+\boxed{\ y_\ast=h_0-h_{\mathrm{mac}}\ }.
+\]
+若进一步 \(q\mapsto \log r_q\) 在 \(q=1\) 的邻域可微（例如由压力的解析扰动延拓保证），则亦有 Rényi 切线公式
+\[
+\boxed{\ y_\ast=\left.\frac{\mathrm d}{\mathrm dq}\log r_q\right|_{q=1}\ }.
+\]
+\end{proposition}
+\begin{proof}
+取 \(\mu\) 为 \(\Omega_m\) 上的均匀分布，则其折叠推前恰为 \(\pi_m\)，并且 \(\mu\) 在每条纤维上条件均匀，故在信息账本恒等式（定理 \ref{thm:pom-kl-ledger}）中残差项 \(D_{\mathrm{KL}}(\mu\|\mu^{e})=0\)。
+于是
+\[
+H(\mu)=H(\pi_m)+\mathbb{E}_{\pi_m}\!\bigl[\log d_m(X_m)\bigr].
+\]
+又 \(H(\mu)=\log|\Omega_m|\)，两边除以 \(m\) 并令 \(m\to\infty\) 即得 \(y_\ast=h_0-h_{\mathrm{mac}}\)。
+\par
+对第二式，记 \(\tau_m(q):=\frac{1}{m}\log S_q(m)\)。直接微分得
+\[
+\tau_m'(1)=\frac{1}{m}\cdot\frac{\sum_{x}d_m(x)\log d_m(x)}{\sum_x d_m(x)}
+=\frac{1}{m}\mathbb{E}_{\pi_m}\!\bigl[\log d_m(X_m)\bigr].
+\]
+若在 \(q=1\) 处可交换“取极限/求导”，则由 \(\tau_m(q)\to \log r_q\) 得
+\(
+y_\ast=\lim_{m\to\infty}\tau_m'(1)=\left.\frac{\mathrm d}{\mathrm dq}\log r_q\right|_{q=1}
+\)。
+证毕。
+\end{proof}
+
+\begin{proposition}[凸锥单调性：\texorpdfstring{$q\mapsto\log r_q$}{q->log rq} 的凸性强制 \texorpdfstring{$y_\ast\le\Lambda_\infty$}{y*<=Lambda_infty}]\label{prop:pom-convexity-forces-typical-le-worst}
+假设 \(q\mapsto \log r_q\) 在 \([1,\infty)\) 上有限并凸，且在 \(q=1\) 可微。
+令 Rényi 边界斜率
+\[
+\Lambda_\infty^{(\mathrm R)}:=\lim_{q\to\infty}\frac{1}{q}\log r_q
+\]
+存在。
+则必有
+\[
+\boxed{\ y_\ast\le \Lambda_\infty^{(\mathrm R)}\ }.
+\]
+若同时满足边界恒等式 \(\Lambda_\infty=\Lambda_\infty^{(\mathrm R)}\)（命题 \ref{prop:pom-maxfiber-exponent-equals-renyi-endpoint}），则得到严格比较
+\[
+\boxed{\ y_\ast\le \Lambda_\infty\ }.
+\]
+\end{proposition}
+\begin{proof}
+由凸性与在 \(q=1\) 处可微，任取 \(q>1\) 有支撑线不等式
+\[
+\log r_q\ \ge\ \log r_1+(q-1)\left.\frac{\mathrm d}{\mathrm dq}\log r_q\right|_{q=1}.
+\]
+两边除以 \(q\) 并令 \(q\to\infty\)，得
+\(
+\left.\frac{\mathrm d}{\mathrm dq}\log r_q\right|_{q=1}\le \liminf_{q\to\infty}\frac{1}{q}\log r_q
+\)。
+再由命题 \ref{prop:pom-typical-fiber-exponent-renyi-tangent} 的切线公式与 \(\Lambda_\infty^{(\mathrm R)}\) 的存在性即得第一式。
+若再用命题 \ref{prop:pom-maxfiber-exponent-equals-renyi-endpoint} 的 \(\Lambda_\infty^{(\mathrm R)}=\Lambda_\infty\)，即得第二式。证毕。
+\end{proof}
+
+\begin{proposition}[独立折叠的乘积律：碰撞谱与纤维指数的严格可加性]\label{prop:pom-product-fold-additivity}
+设两套折叠半群 \(\Fold_m^{(i)}:\Omega_m^{(i)}\twoheadrightarrow X_m^{(i)}\)（\(i=1,2\)）均满足本节对极限量的存在性假设，并令各自的纤维多重度为 \(d_m^{(i)}\)、碰撞矩为 \(S_q^{(i)}(m)=\sum_{x\in X_m^{(i)}}(d_m^{(i)}(x))^q\)。
+构造直积折叠
+\[
+\Fold_m^{(\otimes)}:\Omega_m^{(1)}\times\Omega_m^{(2)}\twoheadrightarrow X_m^{(1)}\times X_m^{(2)},
+\qquad
+\Fold_m^{(\otimes)}(\omega_1,\omega_2):=\bigl(\Fold_m^{(1)}(\omega_1),\Fold_m^{(2)}(\omega_2)\bigr).
+\]
+则其纤维多重度满足 \(d_m^{(\otimes)}(x_1,x_2)=d_m^{(1)}(x_1)d_m^{(2)}(x_2)\)，并且对一切 \(q\ge 1\) 有严格乘积律
+\[
+\boxed{\ S_q^{(\otimes)}(m)=S_q^{(1)}(m)\,S_q^{(2)}(m)\ }.
+\]
+从而在指数尺度上（于极限存在处）\(r_q^{(\otimes)}=r_q^{(1)}r_q^{(2)}\)；
+并且相应的典型纤维指数与最坏纤维指数满足可加性：
+\[
+\boxed{\ y_\ast^{(\otimes)}=y_\ast^{(1)}+y_\ast^{(2)},\qquad \Lambda_\infty^{(\otimes)}=\Lambda_\infty^{(1)}+\Lambda_\infty^{(2)}\ }.
+\]
+\end{proposition}
+\begin{proof}
+由定义，
+\(
+\bigl(\Fold_m^{(\otimes)}\bigr)^{-1}(x_1,x_2)=\bigl(\Fold_m^{(1)}\bigr)^{-1}(x_1)\times \bigl(\Fold_m^{(2)}\bigr)^{-1}(x_2)
+\)，
+故 \(d_m^{(\otimes)}(x_1,x_2)=d_m^{(1)}(x_1)d_m^{(2)}(x_2)\)。
+于是
+\[
+S_q^{(\otimes)}(m)
+=\sum_{x_1,x_2}\bigl(d_m^{(1)}(x_1)d_m^{(2)}(x_2)\bigr)^q
+=\left(\sum_{x_1}(d_m^{(1)}(x_1))^q\right)\left(\sum_{x_2}(d_m^{(2)}(x_2))^q\right),
+\]
+得到乘积律；取 \(m\to\infty\) 的 \(1/m\) 对数极限即得 \(r_q^{(\otimes)}=r_q^{(1)}r_q^{(2)}\)。
+对 \(\Lambda_\infty\) 与 \(y_\ast\)，分别由
+\(
+\max_{x_1,x_2}d_m^{(\otimes)}(x_1,x_2)=\bigl(\max_{x_1}d_m^{(1)}(x_1)\bigr)\bigl(\max_{x_2}d_m^{(2)}(x_2)\bigr)
+\)
+与
+\(
+\log d_m^{(\otimes)}(X_1,X_2)=\log d_m^{(1)}(X_1)+\log d_m^{(2)}(X_2)
+\)
+（在 \(\pi_m^{(\otimes)}=\pi_m^{(1)}\otimes\pi_m^{(2)}\) 下）直接得可加性。证毕。
+\end{proof}
+
+\begin{proposition}[饱和相的刻画：\texorpdfstring{$\Lambda_\infty=y_\ast$}{Lambda_infty=y*} 当且仅当纤维指数在指数尺度上集中]\label{prop:pom-saturation-phase-characterization}
+在命题 \ref{prop:pom-fiber-index-ldp-from-collision-spectrum} 的设定下，进一步假设 \(I\) 为良函数并在有效域内部严格凸（例如 \(\Lambda\) 本质光滑且 \(\Lambda''(0)>0\)）。
+令 \(y_\ast=\Lambda'(0)\)，并令 \(\Lambda_\infty\) 为最坏纤维指数（命题 \ref{prop:pom-maxfiber-exponent-equals-renyi-endpoint}）。
+则下列命题等价：
+\begin{enumerate}
+  \item \(\Lambda_\infty=y_\ast\)；
+  \item 对任意 \(\varepsilon>0\)，有
+  \[
+  \lim_{m\to\infty}\frac{1}{m}\log \pi_m\!\left(\left\{x\in X_m:\ \frac{1}{m}\log d_m(x)\ge \Lambda_\infty-\varepsilon\right\}\right)=0;
+  \]
+  \item \(I(\Lambda_\infty)=0\)。
+\end{enumerate}
+并且在上述等价条件成立时，纤维指数在指数尺度上强集中：对任意 \(\varepsilon>0\) 存在 \(c_\varepsilon>0\) 使
+\[
+\pi_m\bigl(|Y_m-y_\ast|>\varepsilon\bigr)\ \le\ \exp\!\bigl(-(c_\varepsilon+o(1))m\bigr).
+\]
+\end{proposition}
+\begin{proof}
+由 \(Y_m\le \frac{1}{m}\log M_m\) 与 \(\frac{1}{m}\log M_m\to \Lambda_\infty\)，可知事件 \(\{Y_m\ge \Lambda_\infty-\varepsilon\}\) 与命题中集合事件等价到 \(o(1)\) 误差。
+由大偏差上界，对闭集 \(F=[\Lambda_\infty-\varepsilon,\infty)\) 有
+\[
+\limsup_{m\to\infty}\frac{1}{m}\log \pi_m(Y_m\in F)\ \le\ -\inf_{y\in F}I(y).
+\]
+另一方面，由大偏差下界对开集 \(G=(\Lambda_\infty-\varepsilon,\infty)\) 得到相反方向的不等式，从而
+\[
+\lim_{m\to\infty}\frac{1}{m}\log \pi_m\bigl(Y_m\ge \Lambda_\infty-\varepsilon\bigr)
+=-\inf_{y\ge \Lambda_\infty-\varepsilon}I(y).
+\]
+因此第 (2) 条等价于 \(\inf_{y\ge \Lambda_\infty-\varepsilon}I(y)=0\) 对一切 \(\varepsilon>0\) 成立。
+由 \(I\) 的下半连续性与良性，令 \(\varepsilon\downarrow 0\) 即得该条件等价于 \(I(\Lambda_\infty)=0\)，从而 (2)\(\Leftrightarrow\)(3)。
+又由于严格凸性下 \(I\) 的零点唯一，且 \(I(y_\ast)=0\)（命题 \ref{prop:pom-fiber-index-ldp-from-collision-spectrum}），故 \(I(\Lambda_\infty)=0\) 当且仅当 \(\Lambda_\infty=y_\ast\)。于是 (1)\(\Leftrightarrow\)(3)，三者等价。
+\par
+最后，严格凸性与良性给出
+\(
+c_\varepsilon:=\inf_{|y-y_\ast|\ge \varepsilon}I(y)>0
+\)，
+由 LDP 上界即得集中不等式。证毕。
+\end{proof}
+
+\begin{proposition}[容量饱和的指数判别：最大纤维增长率与微态增长率的分界]\label{prop:pom-capacity-saturation-discriminant}
+令 \(M_m:=\max_{x\in X_m}d_m(x)\)，并记最大纤维指数
+\(
+\Lambda_\infty:=\lim_{m\to\infty}\frac{1}{m}\log M_m
+\)
+（在拼接次乘性下存在，见命题 \ref{prop:pom-maxfiber-exponent-equals-renyi-endpoint}）。
+则最大输出概率满足严格恒等式
+\[
+\max_{x\in X_m}\pi_m(x)=\frac{M_m}{2^m},
+\]
+从而指数稀薄率为
+\[
+-\lim_{m\to\infty}\frac{1}{m}\log\max_x\pi_m(x)=\log 2-\Lambda_\infty.
+\]
+因此两种制度严格分离：
+\begin{enumerate}
+  \item 若 \(\Lambda_\infty<\log 2\)，则最大纤维在 \(\pi_m\) 下指数稀薄：\(\max_x\pi_m(x)=\exp\!\bigl(-m(\log 2-\Lambda_\infty)+o(m)\bigr)\)。
+  \item 若 \(\Lambda_\infty=\log 2\)，则存在序列 \(x_m\in X_m\) 使 \(d_m(x_m)=\exp(m\log 2-o(m))\)，即折叠在指数层面达到容量饱和：最大纤维与 \(|\Omega_m|=2^m\) 同阶指数增长。
+\end{enumerate}
+并且由命题 \ref{prop:pom-maxfiber-exponent-equals-renyi-endpoint}，饱和判别可等价改写为
+\(
+\lim_{q\to\infty}\frac{1}{q}\log r_q=\log 2
+\)。
+\end{proposition}
+
+进一步，若希望把该 Gibbs 权重提升为一个可计算的 transfer matrix（以替代仅用 Parry/PF 作为外部基线的口径），一个可审计路线是：从 \(\pi_m\) 的加权块频率出发，构造一个有限阶 Markov（等价地：有限程 Gibbs）近似，并以 Perron--Frobenius 抽取其稳定态。
+
+\begin{remark}[可复现协议：由 \texorpdfstring{$\pi_m$}{pi_m} 拟合有限阶 transfer matrix]\label{rem:pom-gibbs-markov-fit}
+固定 \(m\)（取中等分辨率，如 \(m=18\)），枚举得到 \(\pi_m\) 后，对某个小块长 \(\ell\ge 2\) 计算 \(\pi_m\)-加权的 \(\ell\)-块频率，
+并由最大似然得到一个 \((\ell-1)\)-阶 Markov 链（其状态为空间 \(X_{\ell-1}\) 的合法块）。
+该链即为一个有限状态 transfer matrix 的概率规范化版本；其诱导的 1-步转移可与 Parry 基线作定量对照，从而得到“内生势函数偏离最大熵基线”的可审计证书。
+表 \ref{tab:fold_output_gibbs_markov_fit} 给出一个代表性输出（脚本 \texttt{scripts/exp\_fold\_output\_gibbs\_markov\_fit.py} 一键生成）。
+\end{remark}
+\input{sections/generated/tab_fold_output_gibbs_markov_fit}
+
+\begin{remark}[熵率/KL 证书：内生 Gibbs 权重与 Parry 最大熵基线的微比特级差异]\label{rem:pom-gibbs-parry-entropy-gap}
+在 golden-mean SFT 的两状态邻接
+\(
+A=\begin{psmallmatrix}1&1\\[2pt]1&0\end{psmallmatrix}
+\)
+下，Parry（PF）基线 \(P_{\mathrm{Parry}}\) 具有最大熵率
+\(
+h(P_{\mathrm{Parry}})=\log\varphi
+\)
+（其中 \(\varphi\) 为 Perron 根）。
+对任意与之同支撑的两状态 Markov 规格 \(P\)，其相对 Parry 的 KL 散度率满足
+\[
+D_{\mathrm{KL}}^{\mathrm{rate}}(P\|P_{\mathrm{Parry}})=\log\varphi-h(P),
+\]
+从而“最大熵缺口”可等价输出为一份 KL-率证书。
+\par
+对表 \ref{tab:fold_output_gibbs_markov_fit} 的拟合输出（\(m=18,\ell=4\)），该缺口已降至微比特级；脚本 \texttt{scripts/exp\_fold\_output\_gibbs\_markov\_fit.py} 同步输出如下可复算数值证书：
+\input{sections/generated/eq_fold_output_gibbs_entropy_gap}
+该量级支持“折叠诱导的内生势函数偏离最大熵基线主要体现为常数级指纹，而非熵率层面的结构崩塌”的解释框架。
+\end{remark}
+
+\begin{remark}[接口闭环：碰撞谱 \texorpdfstring{$\leftrightarrow$}{<->} 典型空间损失的三条可审计推论]\label{rem:pom-interface-loop-collision-loss}
+本节把两条接口（Hankel 最小实现与内生 Gibbs 权重）并排写出后，可得到如下三条闭环推论（均由文内机制直接推出，并可用现有脚本核验）：
+\begin{itemize}
+  \item \textbf{（同构）}对 \(X\sim\pi_m\) 与 \(L_m=\log d_m(X)\)，有
+  \(\mathbb{E}_{\pi_m}[e^{(q-1)L_m}]=S_q(m)/2^m\)，从而 \(\Lambda(t)=\tau(t+1)-\log2\)，并给出 \(\mu=\tau'(1)\)、\(\sigma^2=\tau''(1)\)（命题 \ref{prop:pom-fiber-index-cgf} 与注 \ref{rem:pom-lambda-tau-shift}）。
+  \item \textbf{（零参数夹逼）}\(\tau\) 的凸性把 \(\mu\) 用三点端点夹死：\(\log(2/\varphi)\le \mu\le \log(r_2/2)\)；并且有限 \(m\) 上已给出逐项可审计夹逼（推论 \ref{cor:pom-mu-secant-audit}）。
+  \item \textbf{（常数成本求值器）}一旦由 Hankel 口径恢复出某个 \(q\) 的最小 realization（并进一步找到非负整数核 \(A_q\)），则 \(r_q=\rho(A_q)\) 立刻锁定，从而同时锁定 \(\tau(q)=\log r_q\) 与 \(\Lambda(q-1)=\log r_q-\log2\)，并可与 residue-DP 拟合输出做双路一致性审计（推论 \ref{cor:pom-hankel-free-energy-evaluator} 与注 \ref{rem:pom-dp-vs-realization-audit}）。
+\end{itemize}
+\end{remark}
+

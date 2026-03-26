@@ -1,0 +1,120 @@
+\begin{theorem}[块约束下互信息极小化的降维恒等]\label{thm:conclusion-block-constraint-information-collapse}
+设 \(X\) 为有限集合，\(w\in\Delta^\circ(X)\)。
+给定满射 \(\pi:X\to S\)（诱导分割 \(\mathcal P=\{\pi^{-1}(s):s\in S\}\)），记推前分布 \(W:=\pi_*w\in\Delta^\circ(S)\)。
+对耦合 \(P\in\Delta(X\times X)\) 记其边缘为 \(P_X,P_Y\)，并以相对熵定义互信息
+\[
+I_P(X;Y):=D_{\mathrm{KL}}\!\left(P\,\middle\|\,P_X\otimes P_Y\right).
+\]
+给定任意约束集合 \(\mathcal C\subseteq\Delta(S\times S)\)（不假设凸性），定义
+\[
+\mathcal R_\pi(w;\mathcal C)
+:=\inf\Bigl\{ I_P(X;Y):\ P_X=P_Y=w,\ (\pi\times\pi)_*P\in\mathcal C\Bigr\},
+\]
+以及块级问题
+\[
+\mathcal R(W;\mathcal C)
+:=\inf\Bigl\{ I_Q(U;V):\ Q_U=Q_V=W,\ Q\in\mathcal C\Bigr\}.
+\]
+若可行集非空，则有严格恒等式
+\[
+\boxed{\ \mathcal R_\pi(w;\mathcal C)=\mathcal R(W;\mathcal C)\ }.
+\]
+并且若 \(Q^\star\) 取到右侧极小值，则存在左侧极小解 \(P^\star\) 使 \((\pi\times\pi)_*P^\star=Q^\star\) 且
+\[
+I_{P^\star}(X;Y)=I_{Q^\star}(U;V).
+\]
+\end{theorem}
+\begin{proof}
+\textbf{下界.}
+任取可行 \(P\) 并令 \((U,V):=(\pi(X),\pi(Y))\)。
+则 \(Q:=(\pi\times\pi)_*P\in\mathcal C\) 且 \(Q_U=Q_V=W\)。
+由数据处理不等式（\((U,V)\) 为 \((X,Y)\) 的确定函数），
+\[
+I_P(X;Y)\ge I_Q(U;V).
+\]
+对所有可行 \(P\) 取下确界得 \(\mathcal R_\pi(w;\mathcal C)\ge \mathcal R(W;\mathcal C)\)。
+\par
+\textbf{上界与达到.}
+任取可行 \(Q\in\mathcal C\) 且 \(Q_U=Q_V=W\)。
+定义块内条件分布
+\[
+w(x\mid s):=\frac{w(x)}{W(s)}\,\mathbf 1_{\{\pi(x)=s\}}.
+\]
+据此构造耦合
+\[
+P(x,y):=Q\!\bigl(\pi(x),\pi(y)\bigr)\,w(x\mid \pi(x))\,w(y\mid \pi(y)).
+\]
+直接求和可得 \(P_X=P_Y=w\) 且 \((\pi\times\pi)_*P=Q\)，故 \(P\) 可行。
+并且在该生成结构下 \(X\!\perp\!\!\!\perp Y\mid(U,V)\)，且 \(X\to U\to V\to Y\) 构成马尔可夫链，
+从而
+\[
+I_P(X;Y)=I_P(U;V)=I_Q(U;V).
+\]
+因此 \(\mathcal R_\pi(w;\mathcal C)\le I_Q(U;V)\)，对可行 \(Q\) 取下确界得 \(\mathcal R_\pi(w;\mathcal C)\le \mathcal R(W;\mathcal C)\)。
+合并上下界得到恒等式。
+当 \(Q=Q^\star\) 为极小解时，上述构造给出达到等号的 \(P^\star\)。证毕。
+\end{proof}
+
+\begin{corollary}[块一致性约束的最小互信息函数与极小解结构]\label{cor:conclusion-block-consistency-min-mi-reduction}
+沿用定理 \ref{thm:conclusion-block-constraint-information-collapse} 的记号。
+对 \(\delta\in[0,1]\) 定义
+\[
+R_{\mathcal P}^w(\delta)
+:=\inf\Bigl\{ I_P(X;Y):\ P_X=P_Y=w,\ \PP_P\!\bigl(\pi(X)=\pi(Y)\bigr)\ge 1-\delta\Bigr\},
+\]
+以及块级函数
+\[
+R_W(\delta)
+:=\inf\Bigl\{ I_Q(U;V):\ Q_U=Q_V=W,\ \PP_Q(U=V)\ge 1-\delta\Bigr\}.
+\]
+则对所有 \(\delta\)（在可行意义下）有
+\[
+\boxed{\ R_{\mathcal P}^w(\delta)=R_W(\delta)\ }.
+\]
+并且若 \(Q^\star\) 为右侧极小块级耦合，则存在极小解 \(P^\star\) 满足
+\[
+P^\star(x,y)
+=Q^\star\!\bigl(\pi(x),\pi(y)\bigr)\,w(x\mid \pi(x))\,w(y\mid \pi(y)),
+\]
+即在给定块标签后块内细节必为独立且边缘固定为 \(w(\cdot\mid s)\)。
+\end{corollary}
+\begin{proof}
+取 \(\mathcal C_\delta:=\{Q\in\Delta(S\times S): Q_U=Q_V=W,\ Q(U=V)\ge 1-\delta\}\) 并应用定理 \ref{thm:conclusion-block-constraint-information-collapse} 即得。证毕。
+\end{proof}
+
+\begin{proposition}[分割非平凡时块一致性最小互信息不具 Schur--凹性]\label{prop:conclusion-block-consistency-not-schur-concave}
+设分割 \(\mathcal P\) 既非离散分割（所有块为单点），亦非平凡分割（仅一块）。
+则映射
+\(
+w\mapsto R_{\mathcal P}^w(0)
+\)
+在 \(\Delta^\circ(X)\) 上不可能为 Schur--凹函数；更一般地，只要存在 \(\delta\) 使 \(R_W(\delta)\) 作为 \(W\) 的函数非恒定，则
+\(
+w\mapsto R_{\mathcal P}^w(\delta)
+\)
+亦不可能在 \(\Delta^\circ(X)\) 上 Schur--凹。
+\end{proposition}
+\begin{proof}
+任意 Schur--凹函数 \(F\) 必对全置换群不变：若 \(v=\sigma\cdot w\) 为 \(w\) 的置换，则 \(v\prec w\) 且 \(w\prec v\)，从而 \(F(v)=F(w)\)。
+\par
+由推论 \ref{cor:conclusion-block-consistency-min-mi-reduction}，当 \(\delta=0\) 时有
+\[
+R_{\mathcal P}^w(0)=R_W(0).
+\]
+而约束 \(U=V\) 几乎必然时，最小互信息等于块标签熵：
+\[
+R_W(0)=H(W),
+\]
+其中 \(H\) 为 Shannon 熵。
+由于 \(\mathcal P\) 非平凡且非离散，存在至少两个不同块 \(B_1,B_2\) 且其中某块（不妨 \(B_1\)）含至少两个元素。
+取 \(x_1,x_2\in B_1\)、\(y\in B_2\)，并取满支撑 \(w\) 使 \(w(x_1)\neq w(y)\) 且其余坐标为足够小的正数。
+令 \(\sigma\) 交换 \(x_1\) 与 \(y\) 并固定其余点，则 \(w'=\sigma\cdot w\) 仍满支撑，但 \(W=\pi_*w\) 与 \(W'=\pi_*w'\) 的块质量在 \(B_1,B_2\) 上发生改变，因而一般有 \(H(W')\neq H(W)\)。
+于是
+\(
+R_{\mathcal P}^{w'}(0)\neq R_{\mathcal P}^{w}(0)
+\)，说明该映射不具置换不变性，从而不可能 Schur--凹。
+\par
+对一般 \(\delta\)：若 \(R_W(\delta)\) 随 \(W\) 非恒定，则可同样选择跨块置换 \(\sigma\) 使 \(W\neq W'\) 且 \(R_W(\delta)\neq R_{W'}(\delta)\)，从而 \(w\mapsto R_{\mathcal P}^w(\delta)\) 非置换不变，故不可能 Schur--凹。证毕。
+\end{proof}
+
+\endinput

@@ -1,0 +1,163 @@
+\subsection{Parry(PF) 柱分布的端点塌缩与可审计桥包}\label{subsec:parry-endpoint-bridge}
+
+本小节抽取一组可直接核验的“端点桥包”结论：它把最大熵基准下的柱分布（统计侧）与
+邻接矩阵幂/迹（谱侧）通过一条严格等式链扣合起来。
+
+\begin{theorem}[Parry 柱分布的端点塌缩]\label{thm:parry-endpoint-collapse}
+设 \(X\) 为一个不可约有限型子移位，其邻接矩阵为 \(A\in\{0,1\}^{d\times d}\)，谱半径为 \(\lambda>0\)。
+取 Perron--Frobenius 左右特征向量 \(\ell,r\in\RR_{>0}^d\) 满足
+\(
+\ell^{\mathsf T}A=\lambda \ell^{\mathsf T},\ Ar=\lambda r
+\)。
+定义 Parry 最大熵马尔可夫链的转移概率
+\[
+P_{ij}:=\frac{A_{ij}r_j}{\lambda r_i},
+\qquad
+\pi(i):=\frac{\ell_i r_i}{\langle \ell,r\rangle},
+\qquad
+\langle \ell,r\rangle:=\sum_{v=1}^d \ell_v r_v,
+\]
+并令 \(\pi_m\) 为其长度 \(m\) 的柱分布：
+\(
+\pi_m(u_1\cdots u_m)=\pi(u_1)\prod_{t=1}^{m-1}P_{u_tu_{t+1}}
+\)（对任意合法词 \(u_1\cdots u_m\)）。
+则对任意合法词 \(u=u_1\cdots u_m\in X_m\)，有严格端点塌缩公式
+\[
+\boxed{\;
+\pi_m(u)=\frac{\ell_{u_1}\,r_{u_m}}{\langle \ell,r\rangle}\cdot \lambda^{-(m-1)}\;}
+\]
+从而 \(\pi_m(u)\) 只依赖端点 \((u_1,u_m)\)，与中间符号排列无关。
+\end{theorem}
+\begin{proof}
+对合法词有 \(A_{u_tu_{t+1}}=1\)，故
+\[
+\prod_{t=1}^{m-1}P_{u_tu_{t+1}}
+=
+\prod_{t=1}^{m-1}\frac{r_{u_{t+1}}}{\lambda r_{u_t}}
+=\frac{r_{u_m}}{\lambda^{m-1}r_{u_1}}.
+\]
+再用 \(\pi(u_1)=\ell_{u_1}r_{u_1}/\langle \ell,r\rangle\) 代回即得。
+\end{proof}
+
+\begin{corollary}[黄金均值链：三档柱概率与 Fibonacci 端点基数]\label{cor:parry-golden-three-levels}
+在注 \ref{prop:parry-measure-golden} 的黄金均值两状态情形下，长度 \(m\) 的柱分布 \(\pi_m\) 在 \(X_m\) 上仅取三档值，
+且由端点类型决定：
+\begin{enumerate}
+  \item \((u_1,u_m)=(0,0)\)：\(\pi_m(u)=\pi(0)\,\varphi^{-(m-1)}\)；
+  \item \((u_1,u_m)\in\{(0,1),(1,0)\}\)：\(\pi_m(u)=\pi(0)\,\varphi^{-m}\)；
+  \item \((u_1,u_m)=(1,1)\)：\(\pi_m(u)=\pi(1)\,\varphi^{-(m-1)}=\pi(0)\,\varphi^{-(m+1)}\)。
+\end{enumerate}
+并且各端点纤维的基数为
+\[
+\begin{aligned}
+\#\{u\in X_m:u_1=0,u_m=0\}&=F_m,\\
+\#\{u\in X_m:u_1\neq u_m\}&=2F_{m-1},\\
+\#\{u\in X_m:u_1=1,u_m=1\}&=F_{m-2},
+\end{aligned}
+\]
+其中 \(F_k\) 为 Fibonacci（本文沿用 \(|X_m|=F_{m+2}\) 的记号）。
+此外最大/最小柱概率比值与 \(m\) 无关：
+\[
+\boxed{\ \frac{\max_{u\in X_m}\pi_m(u)}{\min_{u\in X_m}\pi_m(u)}=\frac{\pi(0)}{\pi(1)}=\varphi^2\ }.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:parry-endpoint-collapse} 在两状态矩阵 \(A\) 上的特化得到端点只依赖式；
+再用注 \ref{prop:parry-measure-golden} 给出的 \((\pi,P)\) 显式值计算即可。
+端点纤维基数等于 \((A^{m-1})_{ij}\)，而 \(A^{m-1}\) 的各项为 Fibonacci 递推的标准闭式（与 \(|X_m|=F_{m+2}\) 同一口径）。
+比值公式由三档值中最大出现在端点 \(00\)、最小出现在端点 \(11\) 且 \(\pi(0)/\pi(1)=\varphi^2\) 得到。
+\end{proof}
+
+\begin{proposition}[端点质量矩阵：统计侧到矩阵幂侧的可审计桥包]\label{prop:parry-endpoint-mass-matrix}
+在定理 \ref{thm:parry-endpoint-collapse} 的一般设置下，定义长度 \(m\) 的端点质量矩阵
+\[
+M^{(m)}_{ij}
+:=
+\sum_{\substack{u\in X_m\\ u_1=i,\ u_m=j}}\pi_m(u).
+\]
+则有严格恒等式
+\[
+\boxed{\;
+M^{(m)}_{ij}
+=
+(A^{m-1})_{ij}\cdot \frac{\ell_i r_j}{\langle \ell,r\rangle}\cdot \lambda^{-(m-1)}\;}
+\]
+等价地，用 \(\pi(i)=\ell_i r_i/\langle \ell,r\rangle\) 与 \(P_{ij}=A_{ij}r_j/(\lambda r_i)\) 可写为
+\[
+M^{(m)}_{ij}
+=(A^{m-1})_{ij}\cdot \pi(i)\cdot \frac{r_j}{\lambda^{m-1}r_i}.
+\]
+因此在 Parry 模型下，端点统计 \(M^{(m)}\) 与归一化幂 \(A^{m-1}/\lambda^{m-1}\) 之间存在显式可审计的对角缩放关系。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:parry-endpoint-collapse}，对固定端点 \((i,j)\) 的每个词 \(u\) 都有同一概率
+\(\ell_i r_j\lambda^{-(m-1)}/\langle \ell,r\rangle\)；将其乘以该端点纤维的词数 \((A^{m-1})_{ij}\) 即得第一式。
+第二式为代数重写。
+\end{proof}
+
+\begin{corollary}[由端点质量反推出黄金常数的过定约束估计]\label{cor:parry-endpoint-phi-estimators}
+令 \(\hat\pi_{m,N}\) 为任意过程在分辨率 \(m\) 下的经验直方图（第 \ref{sec:experiments} 节记号），并定义端点质量
+\[
+\widehat M_{ij}(m):=\sum_{\substack{u\in X_m\\ u_1=i,\ u_m=j}}\hat\pi_{m,N}(u).
+\]
+若数据在该分辨率上接近黄金均值 Parry 基线，则可用端点质量构造两个相互独立的 \(\varphi\) 估计量：
+\[
+\boxed{\;
+\widehat\varphi_{(00/01)}(m)
+:=\frac{\widehat M_{00}(m)}{\widehat M_{01}(m)}\cdot \frac{F_{m-1}}{F_m}\;},
+\qquad
+\boxed{\;
+\widehat\varphi_{(01/11)}(m)
+:=\frac{\widehat M_{01}(m)}{\widehat M_{11}(m)}\cdot \frac{F_{m-2}}{F_{m-1}}\;}.
+\]
+在 Parry 真模型下它们（在极限意义下）收敛到同一常数 \(\varphi\)，从而提供一个低维、过定约束的自洽审计。
+\end{corollary}
+\begin{proof}
+在 Parry 基线下，命题 \ref{prop:parry-endpoint-mass-matrix} 给出
+\(
+M^{(m)}_{00}\propto (A^{m-1})_{00}\varphi^{-(m-1)}\),
+\(
+M^{(m)}_{01}\propto (A^{m-1})_{01}\varphi^{-m}\),
+\(
+M^{(m)}_{11}\propto (A^{m-1})_{11}\varphi^{-(m+1)}
+\)
+并且 \((A^{m-1})_{00}=F_m,(A^{m-1})_{01}=F_{m-1},(A^{m-1})_{11}=F_{m-2}\)。
+将比例消去即得到两条端点比值恒等式，经验版只需把 \(M\) 换为 \(\widehat M\)。
+\end{proof}
+
+\begin{definition}[端点扁平残差与局部交换方块残差]\label{def:endpoint-flatness-square-residue}
+对任意经验直方图 \(\hat\pi_{m,N}\in\Delta(X_m)\)，定义端点纤维
+\(
+\mathcal{F}_{ij}^{(m)}:=\{u\in X_m:\ u_1=i,\ u_m=j\}
+\)。
+定义端点扁平残差（span 形式）
+\[
+R_{ij}(m,N):=\max_{u\in \mathcal{F}_{ij}^{(m)}}\hat\pi_{m,N}(u)\ -\ \min_{u\in \mathcal{F}_{ij}^{(m)}}\hat\pi_{m,N}(u),
+\qquad
+R_{\max}(m,N):=\max_{i,j\in\{0,1\}}R_{ij}(m,N),
+\]
+其中约定对未观测词 \(\hat\pi_{m,N}(u)=0\)（因此当支撑稀疏时 span 会直接暴露“纤维不扁平”）。
+此外定义局部交换方块残差
+\[
+S(N):=\bigl|\hat\pi_{3,N}(000)-\hat\pi_{3,N}(010)\bigr|.
+\]
+在 Parry 基线下，由端点塌缩（定理 \ref{thm:parry-endpoint-collapse}）可知极限应满足 \(R_{\max}(m,N)\to 0\)；
+由命题 \ref{prop:parry-commuting-square-gives-phi} 的局部方块律可知 \(S(N)\to 0\)。
+\end{definition}
+
+\begin{proposition}[局部交换方块 \texorpdfstring{$\Rightarrow$}{=>} 黄金转移概率]\label{prop:parry-commuting-square-gives-phi}
+在黄金均值约束（禁止 \(11\)）下，考虑任意两状态马尔可夫链并假设 \(P_{10}=1\)。
+令 \(P_{00}=a\in(0,1)\)、\(P_{01}=1-a\)。
+若要求两条两步路径 \(0\to0\to0\) 与 \(0\to1\to0\) 在权重上满足局部“交换方块”守恒
+\[
+a^2=1-a,
+\]
+则必有
+\[
+\boxed{\ a=\varphi^{-1},\qquad P_{00}=\varphi^{-1},\quad P_{01}=\varphi^{-2}\ }.
+\]
+\end{proposition}
+\begin{proof}
+方程 \(a^2=1-a\) 等价于 \(a^2+a-1=0\)，在 \(a\in(0,1)\) 上唯一解为 \(a=(\sqrt5-1)/2=\varphi^{-1}\)。
+于是 \(1-a=\varphi^{-2}\)。
+\end{proof}

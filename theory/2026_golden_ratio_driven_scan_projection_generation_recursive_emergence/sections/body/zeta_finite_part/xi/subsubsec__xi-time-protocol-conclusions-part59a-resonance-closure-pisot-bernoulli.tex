@@ -1,0 +1,494 @@
+\paragraph{共振闭包级数、Pisot--Bernoulli 卷积与实零梯的若干解析后果}
+在推论 \ref{cor:fold-resonance-ladder-fib-luc-limits} 的 Fibonacci/Lucas 方向极限、
+定理 \ref{thm:fold-pisot-bernoulli-convolution-representation} 的 Fourier 采样表象以及
+定理 \ref{thm:fold-resonance-entire-lp} 的 Laguerre--P\'olya 闭包已经建立之后，
+还可进一步抽出下列若干条彼此兼容的结果。
+
+\begin{theorem}[共振闭包级数的显式对数下界与 Fibonacci--Lucas 双子列强化]\label{thm:xi-resonance-closure-log-lower-bound-fib-luc}
+沿用定义 \ref{def:fold-critical-resonance-ladder} 的记号，并令
+\[
+c_{\mathrm{Fib}}:=\lim_{n\to\infty}C_\varphi(F_n),
+\qquad
+c_{\mathrm{Luc}}:=\lim_{n\to\infty}C_\varphi(L_n),
+\]
+其中 \((F_n)_{n\ge 0}\) 与 \((L_n)_{n\ge 0}\) 分别为 Fibonacci 与 Lucas 数列。再定义部分共振闭包级数
+\[
+\Sigma_\varphi(N):=1+2\sum_{u=1}^{N}C_\varphi(u)^2.
+\]
+则有显式下界
+\[
+\boxed{\;
+\liminf_{N\to\infty}
+\frac{1}{\log N}\sum_{u=1}^{N}C_\varphi(u)^2
+\ge
+\frac{c_{\mathrm{Fib}}^2+c_{\mathrm{Luc}}^2}{\log\varphi}.\;}
+\]
+等价地，
+\[
+\boxed{\;
+\Sigma_\varphi(N)\ge
+\frac{2(c_{\mathrm{Fib}}^2+c_{\mathrm{Luc}}^2)}{\log\varphi}\,\log N+O(1).\;}
+\]
+因此，定理 \ref{thm:fold-sigma-phi-diverges} 中的抽象对数发散下界可由
+Fibonacci 与 Lucas 两条递推方向的极限常数显式强化。
+\end{theorem}
+
+\input{sections/generated/eq_fold_bulk_resonance_fibonacci_directional_limits_numeric}
+\input{sections/generated/eq_fold_bulk_resonance_fib_luc_log_lower_bound_numeric}
+
+\begin{proof}
+任取 \(\varepsilon>0\)。由推论 \ref{cor:fold-resonance-ladder-fib-luc-limits}，
+存在 \(n_0(\varepsilon)\) 使得对一切 \(n\ge n_0(\varepsilon)\) 都有
+\[
+C_\varphi(F_n)^2\ge c_{\mathrm{Fib}}^2-\varepsilon,
+\qquad
+C_\varphi(L_n)^2\ge c_{\mathrm{Luc}}^2-\varepsilon.
+\]
+另一方面，对 \(n\ge 3\) 由恒等式
+\[
+L_n=F_{n-1}+F_{n+1}
+\]
+以及 \(F_{n-1}<F_n\) 得
+\[
+F_{n+1}<L_n<F_{n+1}+F_n=F_{n+2},
+\]
+故 \(L_n\) 在 \(n\ge 3\) 时不可能为 Fibonacci 数。于是两集合
+\[
+\{F_n:\ n\ge n_0(\varepsilon)\},
+\qquad
+\{L_n:\ n\ge \max\{3,n_0(\varepsilon)\}\}
+\]
+最终互不相交。
+
+从而对充分大的 \(N\) 有
+\[
+\sum_{u=1}^{N}C_\varphi(u)^2
+\ge
+\sum_{\substack{n\ge n_0(\varepsilon)\\ F_n\le N}}C_\varphi(F_n)^2
++
+\sum_{\substack{n\ge n_0(\varepsilon)\\ L_n\le N}}C_\varphi(L_n)^2,
+\]
+故
+\[
+\sum_{u=1}^{N}C_\varphi(u)^2
+\ge
+(c_{\mathrm{Fib}}^2-\varepsilon)\,\#\{n:\ F_n\le N\}
++
+(c_{\mathrm{Luc}}^2-\varepsilon)\,\#\{n:\ L_n\le N\}
++O(1).
+\]
+由 Binet 公式
+\[
+F_n=\frac{\varphi^n-(-\varphi^{-1})^n}{\sqrt5},
+\qquad
+L_n=\varphi^n+(-\varphi^{-1})^n,
+\]
+可得
+\[
+\#\{n:\ F_n\le N\}=\frac{\log N}{\log\varphi}+O(1),
+\qquad
+\#\{n:\ L_n\le N\}=\frac{\log N}{\log\varphi}+O(1).
+\]
+代回并先令 \(N\to\infty\)，再令 \(\varepsilon\downarrow 0\)，便得到第一条盒装式。
+第二条仅由 \(\Sigma_\varphi(N)=1+2\sum_{u\le N}C_\varphi(u)^2\) 立即推出。证毕。
+\end{proof}
+
+\begin{theorem}[共振闭包常数序列在任意有限 \texorpdfstring{$\ell^p$}{lp} 上均不可和]\label{thm:xi-resonance-closure-no-finite-lp-summability}
+沿用定理 \ref{thm:xi-resonance-closure-log-lower-bound-fib-luc} 的记号。对任意
+\[
+0<p<\infty
+\]
+与任意
+\[
+0<\eta<c_{\mathrm{Fib}},
+\]
+定义阈值计数函数
+\[
+R_\eta(N):=\#\{1\le u\le N:\ C_\varphi(u)\ge \eta\}.
+\]
+则存在整数 \(n_0(\eta)\) 使得
+\[
+R_\eta(N)\ge \#\{n\ge n_0(\eta):\ F_n\le N\}
+=
+\frac{\log N}{\log\varphi}+O(1).
+\]
+因此
+\[
+\sum_{u=1}^{N}C_\varphi(u)^p
+\ge
+\eta^p\frac{\log N}{\log\varphi}+O(1),
+\]
+从而
+\[
+\bigl(C_\varphi(u)\bigr)_{u\in\ZZ}\notin \ell^p(\ZZ)
+\qquad
+(\forall\,0<p<\infty).
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:fold-resonance-ladder-fib-luc-limits}，
+\[
+C_\varphi(F_n)\longrightarrow c_{\mathrm{Fib}}>0.
+\]
+故对任意 \(0<\eta<c_{\mathrm{Fib}}\)，存在 \(n_0(\eta)\) 使得当 \(n\ge n_0(\eta)\) 时恒有
+\[
+C_\varphi(F_n)\ge \eta.
+\]
+于是对每个 \(N\) 都有
+\[
+R_\eta(N)\ge \#\{n\ge n_0(\eta):\ F_n\le N\}.
+\]
+再由 Binet 公式可知 \(F_n\asymp \varphi^n\)，从而
+\[
+\#\{n:\ F_n\le N\}
+=
+\frac{\log N}{\log\varphi}+O(1).
+\]
+这就得到阈值计数下界。
+
+随后由定义直接有
+\[
+\sum_{u=1}^{N}C_\varphi(u)^p
+\ge
+\sum_{\substack{1\le u\le N\\ C_\varphi(u)\ge \eta}}C_\varphi(u)^p
+\ge
+\eta^p R_\eta(N),
+\]
+代入上式即得
+\[
+\sum_{u=1}^{N}C_\varphi(u)^p
+\ge
+\eta^p\frac{\log N}{\log\varphi}+O(1).
+\]
+令 \(N\to\infty\)，可见正半轴上的 \(p\)-次幂和已经发散，因此双侧序列
+\[
+\bigl(C_\varphi(u)\bigr)_{u\in\ZZ}
+\]
+不属于任何有限 \(\ell^p(\ZZ)\)。证毕。
+\end{proof}
+
+\begin{theorem}[共振闭包常数不存在最终单调的一阶包络]\label{thm:xi-resonance-closure-no-eventually-monotone-envelope}
+沿用推论 \ref{cor:fold-resonance-ladder-no-decay-no-limit} 的记号。若
+\[
+r:\NN\to\RR
+\]
+是最终单调序列，则不可能成立
+\[
+C_\varphi(u)-r(u)\longrightarrow 0
+\qquad (u\to\infty).
+\]
+更强地，若 \(r(u)>0\) 对充分大的 \(u\) 成立，则也不可能有
+\[
+\frac{C_\varphi(u)}{r(u)}\longrightarrow 1
+\qquad (u\to\infty).
+\]
+\end{theorem}
+\begin{proof}
+先证第一条。若存在最终单调的 \(r(u)\) 使
+\[
+C_\varphi(u)-r(u)\longrightarrow 0,
+\]
+则由于 \(0\le C_\varphi(u)\le 1\)，序列 \(r(u)\) 亦最终有界。最终单调且有界的实序列必收敛，设
+\[
+r(u)\longrightarrow \ell.
+\]
+于是
+\[
+C_\varphi(u)=r(u)+o(1)\longrightarrow \ell,
+\]
+这与推论 \ref{cor:fold-resonance-ladder-no-decay-no-limit} 所给出的“整数方向不存在单一极限”矛盾。故第一条不可能。
+
+再证第二条。若 \(r(u)>0\) 最终成立且
+\[
+\frac{C_\varphi(u)}{r(u)}\longrightarrow 1,
+\]
+则对充分大的 \(u\) 有
+\[
+\frac12\le \frac{C_\varphi(u)}{r(u)}\le \frac32.
+\]
+由于 \(0\le C_\varphi(u)\le 1\)，可得最终
+\[
+0<r(u)\le 2.
+\]
+因此 \(r(u)\) 仍是最终单调且最终有界的序列，故必收敛。另一方面，
+\[
+C_\varphi(u)-r(u)
+=
+r(u)\left(\frac{C_\varphi(u)}{r(u)}-1\right)\longrightarrow 0.
+\]
+这就回到了第一条已排除的情形，矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[Pisot--Bernoulli 卷积的偶阶累积量闭式]\label{thm:xi-pisot-bernoulli-even-cumulants-closed}
+令 \(q=\varphi^{-1}\in(0,1)\)，并定义随机级数
+\[
+X=\sum_{n=2}^{\infty}\varepsilon_n q^n,
+\qquad
+\mathbb P(\varepsilon_n=\pm 1)=\frac12,
+\]
+其分布记为 \(\mu_q^{(2)}\)。则对每个整数 \(r\ge 1\)，
+\(X\) 的第 \(2r\) 阶累积量满足显式公式
+\[
+\boxed{\;
+\kappa_{2r}(X)
+=
+(-1)^{r-1}
+\frac{2^{2r}(2^{2r}-1)|B_{2r}|}{2r}
+\cdot
+\frac{\varphi^{-4r}}{1-\varphi^{-2r}}.\;}
+\]
+特别地，
+\[
+\kappa_2(X)=\varphi^{-3},
+\qquad
+\kappa_4(X)=-2\,\frac{\varphi^{-8}}{1-\varphi^{-4}},
+\qquad
+\kappa_6(X)=16\,\frac{\varphi^{-12}}{1-\varphi^{-6}}.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-pisot-bernoulli-convolution-representation}，
+\[
+\mathcal F_\varphi(z)
+=
+\prod_{n=2}^{\infty}\cos(\pi z\varphi^{-n})
+=
+\widehat{\mu_q^{(2)}}(\pi z).
+\]
+于是
+\[
+\log \mathcal F_\varphi(z)
+=
+\sum_{r\ge 1}\kappa_{2r}(X)\frac{(i\pi z)^{2r}}{(2r)!}
+=
+\sum_{r\ge 1}(-1)^r\kappa_{2r}(X)\frac{\pi^{2r}z^{2r}}{(2r)!},
+\]
+其中奇阶项由对称性自动消失。
+
+当 \(|z|<\varphi^2/2\) 时，对所有 \(n\ge 2\) 都有
+\(
+|\pi z\varphi^{-n}|<\pi/2
+\)，
+故可用经典展开
+\[
+\log\cos x
+=
+-\sum_{r=1}^{\infty}
+\frac{2^{2r}(2^{2r}-1)|B_{2r}|}{2r(2r)!}\,x^{2r}
+\qquad (|x|<\pi/2)
+\]
+逐项求和：
+\[
+\log \mathcal F_\varphi(z)
+=
+-\sum_{n=2}^{\infty}\sum_{r=1}^{\infty}
+\frac{2^{2r}(2^{2r}-1)|B_{2r}|}{2r(2r)!}
+(\pi z\varphi^{-n})^{2r}.
+\]
+由于
+\[
+\sum_{n=2}^{\infty}\sum_{r=1}^{\infty}
+\left|
+\frac{2^{2r}(2^{2r}-1)|B_{2r}|}{2r(2r)!}
+(\pi z\varphi^{-n})^{2r}
+\right|
+<\infty,
+\]
+可以交换求和顺序，得到
+\[
+\log \mathcal F_\varphi(z)
+=
+-\sum_{r=1}^{\infty}
+\frac{2^{2r}(2^{2r}-1)|B_{2r}|}{2r(2r)!}
+\pi^{2r}z^{2r}
+\sum_{n=2}^{\infty}\varphi^{-2rn}.
+\]
+又
+\[
+\sum_{n=2}^{\infty}\varphi^{-2rn}
+=
+\frac{\varphi^{-4r}}{1-\varphi^{-2r}}.
+\]
+比较 \(\log \mathcal F_\varphi(z)\) 的 \(z^{2r}\) 系数，即得
+\[
+(-1)^r\kappa_{2r}(X)\frac{\pi^{2r}}{(2r)!}
+=
+-
+\frac{2^{2r}(2^{2r}-1)|B_{2r}|}{2r(2r)!}
+\pi^{2r}
+\cdot
+\frac{\varphi^{-4r}}{1-\varphi^{-2r}},
+\]
+整理便得到盒装公式。将 \(r=1,2,3\) 代入即得三条特例。证毕。
+\end{proof}
+
+\begin{theorem}[Pisot--Bernoulli 卷积偶矩序列的 Tur\'an--Newton 约束]\label{thm:xi-pisot-bernoulli-even-moment-turan-newton}
+沿用定理 \ref{thm:xi-pisot-bernoulli-even-cumulants-closed} 的记号，并记
+\[
+m_{2r}:=\int_{\RR}x^{2r}\,d\mu_q^{(2)}(x)
+\qquad (r\ge 0).
+\]
+则对每个整数 \(r\ge 1\) 都有严格不等式
+\[
+\boxed{\;
+m_{2r}^2
+>
+\frac{(2r)(2r-1)}{(2r+1)(2r+2)}\,
+m_{2r-2}m_{2r+2}.\;}
+\]
+等价地，序列
+\[
+\gamma_r:=\frac{\pi^{2r}}{(2r)!}\,m_{2r}
+\qquad (r\ge 0)
+\]
+满足严格对数凹性
+\[
+\gamma_r^2>\gamma_{r-1}\gamma_{r+1}
+\qquad (r\ge 1).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-resonance-entire-lp}，\(\mathcal F_\varphi\) 的全部零点均为实单零点，
+且关于原点成对对称。将正零点按升序记为 \(\{\xi_j\}_{j\ge 1}\subset (0,\infty)\)，则
+\[
+\mathcal F_\varphi(z)=\prod_{j=1}^{\infty}\left(1-\frac{z^2}{\xi_j^2}\right)
+\]
+在紧集上一致收敛。另一方面，由
+\[
+\mathcal F_\varphi(z)=\widehat{\mu_q^{(2)}}(\pi z)
+=
+\sum_{r=0}^{\infty}(-1)^r\frac{\pi^{2r}m_{2r}}{(2r)!}\,z^{2r},
+\]
+可知
+\[
+\gamma_r=\frac{\pi^{2r}}{(2r)!}\,m_{2r}
+\]
+正是该偶幂级数的系数。
+
+对每个 \(N>r\)，定义有限截断
+\[
+P_N(z):=\prod_{j=1}^{N}\left(1-\frac{z^2}{\xi_j^2}\right)
+=
+\sum_{s=0}^{N}(-1)^s\gamma_s^{(N)}z^{2s}.
+\]
+则 \(\gamma_s^{(N)}\) 是正数列 \((\xi_1^{-2},\dots,\xi_N^{-2})\) 的第 \(s\) 个初等对称多项式。
+Newton 不等式给出
+\[
+\bigl(\gamma_r^{(N)}\bigr)^2
+\ge
+\frac{r+1}{r}\frac{N-r+1}{N-r}\,
+\gamma_{r-1}^{(N)}\gamma_{r+1}^{(N)}
+>
+\gamma_{r-1}^{(N)}\gamma_{r+1}^{(N)}.
+\]
+又因 \(P_N\to \mathcal F_\varphi\) 在零点外的紧集上一致，从而幂级数系数逐项收敛：
+\[
+\gamma_s^{(N)}\xrightarrow[N\to\infty]{}\gamma_s
+\qquad (s\ \text{固定}).
+\]
+令 \(N\to\infty\)，得到
+\[
+\gamma_r^2\ge \frac{r+1}{r}\,\gamma_{r-1}\gamma_{r+1}
+>
+\gamma_{r-1}\gamma_{r+1},
+\]
+这就证明了 \((\gamma_r)\) 的严格对数凹性。
+
+最后把
+\[
+\gamma_r=\frac{\pi^{2r}}{(2r)!}\,m_{2r}
+\]
+代回，可得
+\[
+\left(\frac{\pi^{2r}}{(2r)!}m_{2r}\right)^2
+\ge
+\frac{\pi^{2r-2}}{(2r-2)!}m_{2r-2}\cdot
+\frac{\pi^{2r+2}}{(2r+2)!}m_{2r+2}.
+\]
+约去 \(\pi^{4r}\) 并整理阶乘比
+\[
+\frac{(2r)!^2}{(2r-2)!(2r+2)!}
+=
+\frac{(2r)(2r-1)}{(2r+1)(2r+2)},
+\]
+即得所示矩不等式。证毕。
+\end{proof}
+
+\begin{theorem}[共振整函数的精确零点计数与 Weyl 型主项]\label{cor:xi-resonance-entire-zero-count-explicit-linear-density}
+沿用定理 \ref{thm:fold-resonance-entire-lp} 的记号，并定义
+\[
+N_\varphi(R):=\#\{z\in \mathcal Z(\mathcal F_\varphi):\ |z|\le R\}.
+\]
+则对每个 \(R>0\) 都有精确公式
+\[
+\boxed{\;
+N_\varphi(R)=
+2\sum_{n\ge 2}\left\lfloor \frac{R}{\varphi^n}+\frac12\right\rfloor.\;}
+\]
+特别地，
+\[
+\boxed{\;
+N_\varphi(R)=2R+O(\log R)
+\qquad (R\to\infty).\;}
+\]
+因此 \(\mathcal F_\varphi\) 的零点收敛指数恰为 \(1\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-resonance-entire-lp}，
+\[
+\mathcal Z(\mathcal F_\varphi)
+=
+\Bigl\{\bigl(k+\tfrac12\bigr)\varphi^n:\ k\in\ZZ,\ n\ge 2\Bigr\}.
+\]
+对固定 \(n\ge 2\)，第 \(n\) 层零点恰为
+\[
+\Bigl\{\bigl(k+\tfrac12\bigr)\varphi^n:\ k\in\ZZ\Bigr\}.
+\]
+其中满足
+\[
+\bigl|\bigl(k+\tfrac12\bigr)\varphi^n\bigr|\le R
+\]
+等价于
+\[
+\left|k+\frac12\right|\le R\varphi^{-n}.
+\]
+满足该不等式的整数 \(k\) 个数恰为
+\[
+2\left\lfloor \frac{R}{\varphi^n}+\frac12\right\rfloor.
+\]
+于是对全部 \(n\ge 2\) 求和便得到所示精确公式；其中当 \(R\varphi^{-n}<\frac12\) 时，对应项自动为 \(0\)，故该无穷和实际上只有有限个非零项。
+
+再由
+\[
+2\left\lfloor \frac{R}{\varphi^n}+\frac12\right\rfloor
+=
+\frac{2R}{\varphi^n}+O(1)
+\]
+对满足 \(R\varphi^{-n}\ge \frac12\) 的指标求和。记
+\[
+L(R):=\left\lfloor \log_\varphi(2R)\right\rfloor,
+\]
+则对充分大的 \(R\) 有
+\[
+N_\varphi(R)
+=
+2R\sum_{n=2}^{L(R)}\varphi^{-n}
++O(\log R).
+\]
+而
+\[
+\sum_{n=2}^{\infty}\varphi^{-n}
+=
+\frac{\varphi^{-2}}{1-\varphi^{-1}}
+=
+1,
+\]
+故
+\[
+N_\varphi(R)=2R+O(\log R).
+\]
+零点收敛指数为 \(1\) 因而立即成立；这也与推论
+\ref{cor:xi-fold-resonance-zero-density-exponent-one} 的结论一致。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part59ab-cartwright-periodized-nonsmoothing-logderivative}

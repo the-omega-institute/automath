@@ -1,0 +1,262 @@
+\subsubsection{最大纤维族的隐藏位信息律与相位判别：熵缺口、Chernoff 指数与充分统计}\label{subsubsec:pom-max-fiber-hidden-bit-phase-inference}
+
+本段把注 \ref{rem:pom-max-fiber-achievers-bsplit} 与推论
+\ref{cor:pom-max-fiber-achievers-hidden-bit-prob-spectrum}--\ref{cor:pom-max-fiber-phase-hidden-bit-mi}
+所给出的“最大纤维达到者的隐藏位分裂”进一步提升为一个\textbf{可审计的统计判别模型}：
+相位标签 \(\Theta\) 在达到者相位集合上取均匀先验，观测仅为隐藏位样本 \(B\in\{0,1\}\)（或其独立重复）。
+该模型的两条要点是：
+(i) 边缘上 \(B\) 在稳定阈值区间内仍严格无偏，但与 \(\Theta\) 的相关以一个纯常数级互信息缺口显性出现；
+(ii) 在偶数稳定相下，\(B\) 诱导出一个二假设 Bernoulli 对称互补对，从而 Chernoff/Bhattacharyya 指数与 MAP 规则均可闭式写出。
+
+\subsubsection{黄金偏置熵常数与相对熵缺口（bits）}
+
+\begin{proposition}[黄金偏置熵常数的闭式与相对熵缺口]\label{prop:pom-max-fiber-hphi-relative-entropy-gap}
+令 \(\varphi=\frac{1+\sqrt5}{2}\)，并令二元熵（bits）
+\[
+H_b(p):=-p\log_2 p-(1-p)\log_2(1-p).
+\]
+定义黄金偏置熵常数
+\[
+H_\varphi:=H_b(\varphi^{-1})=H_b(\varphi^{-2}).
+\]
+则有严格闭式
+\[
+\boxed{\;
+H_\varphi=(1+\varphi^{-2})\log_2\varphi=(3-\varphi)\log_2\varphi,\qquad
+1-H_\varphi=1-(1+\varphi^{-2})\log_2\varphi.\;}
+\]
+并且（以 bits 计）Bernoulli 的相对熵满足
+\[
+\boxed{\;
+D\!\left(\mathrm{Bern}(\varphi^{-1})\ \middle\|\ \mathrm{Bern}\!\left(\tfrac12\right)\right)=1-H_\varphi.\;}
+\]
+\end{proposition}
+
+\begin{proof}
+由 \(\varphi^{-1}+\varphi^{-2}=1\) 与 \(\log_2(\varphi^{-a})=-a\log_2\varphi\) 得
+\[
+H_\varphi
+=-\varphi^{-1}\log_2(\varphi^{-1})-\varphi^{-2}\log_2(\varphi^{-2})
+=(\varphi^{-1}+2\varphi^{-2})\log_2\varphi
+=(1+\varphi^{-2})\log_2\varphi,
+\]
+并用 \(\varphi^{-2}=2-\varphi\) 得等价闭式 \((3-\varphi)\log_2\varphi\)。
+\par
+另一方面，对任意 \(p\in(0,1)\) 有
+\[
+D\!\left(\mathrm{Bern}(p)\ \middle\|\ \mathrm{Bern}\!\left(\tfrac12\right)\right)
+=p\log_2(2p)+(1-p)\log_2(2(1-p))
+=1-H_b(p),
+\]
+代入 \(p=\varphi^{-1}\) 得结论。证毕。
+\end{proof}
+
+\subsubsection{“边缘无偏—相关有偏”信息律（稳定阈值区间）}
+
+\begin{corollary}[最大纤维族上的边缘无偏与互信息缺口]\label{cor:pom-max-fiber-hidden-bit-mi-gap}
+沿用推论 \ref{cor:pom-max-fiber-phase-hidden-bit-mi} 的随机化设定，并令 \(\Theta\) 为相位标签（在最大达到者集合上均匀）。
+则在稳定阈值区间内，隐藏位边缘分布严格无偏（\(H(B)=1\) bit），但互信息存在两条极限常数：
+\[
+\boxed{\;
+\lim_{k\to\infty} I(B;\Theta)\Big|_{m=2k}=1-H_\varphi,\qquad
+\lim_{k\to\infty} I(B;\Theta)\Big|_{m=2k+1}=\frac{1-H_\varphi}{2}. \;}
+\]
+\end{corollary}
+
+\begin{proof}
+这正是推论 \ref{cor:pom-max-fiber-phase-hidden-bit-mi} 的偶/奇两支极限式，
+并结合命题 \ref{prop:pom-max-fiber-hphi-relative-entropy-gap} 中 \(H_\varphi\) 的闭式即可。证毕。
+\end{proof}
+
+\begin{proposition}[条件 min-entropy 的二值谱与相位均匀平均]\label{prop:pom-max-fiber-hidden-bit-minentropy-spectrum}
+定义条件 min-entropy（bits）
+\[
+H_\infty(B\mid \Theta=\theta):=-\log_2\max\{\mathbb{P}(B=1\mid\Theta=\theta),\ \mathbb{P}(B=0\mid\Theta=\theta)\}.
+\]
+在稳定阈值区间内，最大达到者相位的隐藏位概率谱只出现三种聚点
+\(
+p_1\in\{1/2,\varphi^{-1},\varphi^{-2}\}
+\)
+（推论 \ref{cor:pom-max-fiber-achievers-hidden-bit-prob-spectrum}），从而条件 min-entropy 的极限谱仅为两点：
+\[
+\boxed{\;
+H_\infty(B\mid \Theta)\in\{1,\ \log_2\varphi\}\quad(\text{极限意义}).\;}
+\]
+并且在相位均匀先验下：
+\begin{itemize}
+  \item \textbf{偶数稳定相 \(m=2k\ge 10\)：}\(\mathbb{E}[H_\infty(B\mid\Theta)]\to \log_2\varphi\)（不出现 \(1\)）；
+  \item \textbf{奇数稳定相 \(m=2k+1\ge 13\)：}\(\mathbb{E}[H_\infty(B\mid\Theta)]\to \frac{1+\log_2\varphi}{2}\)（两相位取 \(1\)，两相位取 \(\log_2\varphi\)）。
+\end{itemize}
+\end{proposition}
+
+\begin{proof}
+当 \(p_1=1/2\) 时有 \(\max\{p_1,1-p_1\}=1/2\)，故 \(H_\infty=1\)。
+当 \(p_1\in\{\varphi^{-1},\varphi^{-2}\}\) 时，由互补性 \(\varphi^{-2}=1-\varphi^{-1}\) 得
+\(\max\{p_1,1-p_1\}=\varphi^{-1}\)，故 \(H_\infty=\log_2\varphi\)。
+\par
+偶数稳定相仅出现两条黄金偏置相位（注 \ref{rem:pom-max-fiber-achievers-bsplit}），故相位均匀平均只取 \(\log_2\varphi\)；
+奇数稳定相位族由两条平衡相（\(p_1=1/2\)）与两条偏置相（\(p_1\to\varphi^{-1}\) 或 \(\varphi^{-2}\)）构成，故平均极限为 \(\frac12\cdot 1+\frac12\cdot\log_2\varphi\)。证毕。
+\end{proof}
+
+\subsubsection{偶数稳定相：MAP 判别、Chernoff 指数与多数表决}
+
+\begin{proposition}[偶数稳定相的单样本相位判别（MAP）]\label{prop:pom-max-fiber-even-single-sample-map}
+设 \(m=2k\ge 10\)。
+由注 \ref{rem:pom-max-fiber-achievers-bsplit}，最大相位集合恰含两相位 \(\Theta\in\{\theta_1,\theta_2\}\)，并满足
+\[
+\mathbb{P}(B=1\mid \Theta=\theta_1)=\frac{F_{k+1}}{F_{k+2}}=:p_k,\qquad
+\mathbb{P}(B=1\mid \Theta=\theta_2)=\frac{F_{k}}{F_{k+2}}=1-p_k,
+\]
+且先验均匀。
+则仅观测单个隐藏位样本 \(B\) 时，MAP 规则为
+\[
+\widehat\Theta(B)=
+\begin{cases}
+\theta_1,& B=1,\\
+\theta_2,& B=0,
+\end{cases}
+\]
+其最优成功率与误差率为
+\[
+P(\widehat\Theta=\Theta)=p_k=\frac{F_{k+1}}{F_{k+2}},\qquad
+P(\widehat\Theta\neq\Theta)=1-p_k=\frac{F_{k}}{F_{k+2}}.
+\]
+并且当 \(k\to\infty\) 时有极限常数
+\[
+P(\widehat\Theta=\Theta)\to \varphi^{-1},\qquad
+P(\widehat\Theta\neq\Theta)\to \varphi^{-2}.
+\]
+\end{proposition}
+
+\begin{proof}
+由均匀先验与 Bayes 规则，
+\(
+\widehat\Theta(B)=\arg\max_{\theta\in\{\theta_1,\theta_2\}}\mathbb{P}(B\mid\Theta=\theta)
+\)。
+由于 \(p_k>1/2\)（对 \(k\ge 1\) 成立），故 \(B=1\) 时选 \(\theta_1\)，\(B=0\) 时选 \(\theta_2\)。
+成功率为
+\(
+\frac12\mathbb{P}(B=1\mid\theta_1)+\frac12\mathbb{P}(B=0\mid\theta_2)=\frac12 p_k+\frac12 p_k=p_k
+\)。
+极限由 \(F_{k+1}/F_{k+2}\to \varphi^{-1}\) 给出。证毕。
+\end{proof}
+
+\begin{theorem}[多样本相位判别的 Chernoff 指数闭式]\label{thm:pom-max-fiber-even-chernoff-exponent}
+沿用命题 \ref{prop:pom-max-fiber-even-single-sample-map}。
+取 \(n\) 个条件独立样本 \(B_1,\dots,B_n\)（给定 \(\Theta\)）。
+令 \(P_e(n)\) 为两相位均匀先验下的最小 Bayes 错误概率。
+则 Chernoff 信息满足
+\[
+-\lim_{n\to\infty}\frac{1}{n}\log_2 P_e(n)=C(p_k),
+\qquad
+C(p):=-\log_2\!\Bigl(2\sqrt{p(1-p)}\Bigr),
+\]
+并且在 \(k\to\infty\) 的稳定极限下，
+\[
+\boxed{\;
+C(p_k)\to C_\varphi:=\frac32\log_2\varphi-1,\qquad
+2\sqrt{\varphi^{-1}\varphi^{-2}}=2\varphi^{-3/2}. \;}
+\]
+\end{theorem}
+
+\begin{proof}
+两相位对应分布为 \(\mathrm{Bern}(p)\) 与 \(\mathrm{Bern}(1-p)\) 的对称互补对。
+对称性给出 Chernoff 极小点在 \(s=\tfrac12\)，从而 Bhattacharyya 系数为
+\[
+\min_{0\le s\le 1}\Big(p^s(1-p)^{1-s}+(1-p)^s p^{1-s}\Big)=2\sqrt{p(1-p)}.
+\]
+故 Chernoff 信息为 \(C(p)=-\log_2(2\sqrt{p(1-p)})\)。
+取 \(p=p_k\) 得第一式；取 \(p=\varphi^{-1}\) 并化简得 \(C_\varphi=\frac32\log_2\varphi-1\)。证毕。
+\end{proof}
+
+\begin{proposition}[幂律似然比与“多数表决”MAP 规则]\label{prop:pom-max-fiber-even-majority-vote}
+沿用命题 \ref{prop:pom-max-fiber-even-single-sample-map}，令
+\(
+S_n:=\sum_{i=1}^{n}B_i
+\)。
+则对数似然比满足严格幂律
+\[
+\log\frac{\mathbb{P}(B_1^n\mid\theta_1)}{\mathbb{P}(B_1^n\mid\theta_2)}
+=(2S_n-n)\log\!\left(\frac{p_k}{1-p_k}\right)
+=(2S_n-n)\log\!\left(\frac{F_{k+1}}{F_k}\right).
+\]
+因此在均匀先验下，MAP 判别等价于多数表决：
+\[
+\widehat\Theta=
+\begin{cases}
+\theta_1,& S_n>\frac n2,\\
+\theta_2,& S_n<\frac n2,
+\end{cases}
+\qquad(\text{平局时任意打破}).
+\]
+并且当 \(k\to\infty\) 时 \(\log(F_{k+1}/F_k)\to \log\varphi\)。
+\end{proposition}
+
+\begin{proof}
+由独立性，
+\(
+\mathbb{P}(B_1^n\mid\theta_1)=p_k^{S_n}(1-p_k)^{n-S_n}
+\)、
+\(
+\mathbb{P}(B_1^n\mid\theta_2)=(1-p_k)^{S_n}p_k^{n-S_n}
+\)。
+两式相除并取对数即得。
+均匀先验下 MAP 等价于似然比 \(\ge 1\) 的判别，即 \(S_n\gtrless n/2\)。
+极限由 \(F_{k+1}/F_k\to \varphi\) 给出。证毕。
+\end{proof}
+
+\begin{proposition}[隐藏位（与其和）是相位判别的最小充分统计]\label{prop:pom-max-fiber-hidden-bit-minimal-sufficient}
+在偶数稳定相的两相位模型（命题 \ref{prop:pom-max-fiber-even-single-sample-map}）下，
+对 \(n\) 个条件独立样本 \(B_1,\dots,B_n\) 令 \(S_n=\sum_{i=1}^n B_i\)。
+则统计量 \(S_n\) 对相位 \(\Theta\) 是\textbf{最小充分}的；特别地，当 \(n=1\) 时 \(B\) 本身是最小充分统计。
+\par
+并且单样本似然比满足闭式
+\[
+\boxed{\;
+\frac{\mathbb{P}(B=b\mid\theta_1)}{\mathbb{P}(B=b\mid\theta_2)}
+=\left(\frac{p_k}{1-p_k}\right)^{2b-1}
+=\left(\frac{F_{k+1}}{F_k}\right)^{2b-1}\qquad(b\in\{0,1\}),\;}
+\]
+从而在 \(k\to\infty\) 的稳定极限下有
+\(
+\frac{\mathbb{P}(B=b\mid\theta_1)}{\mathbb{P}(B=b\mid\theta_2)}\to \varphi^{2b-1}
+\)。
+\end{proposition}
+
+\begin{proof}
+由命题 \ref{prop:pom-max-fiber-even-majority-vote} 的似然比公式可知
+\(
+\mathbb{P}(B_1^n\mid\theta_1)/\mathbb{P}(B_1^n\mid\theta_2)
+\)
+只依赖于 \(S_n\)，因此 \(S_n\) 充分（Neyman--Fisher 分解）。
+同时该比值随 \(S_n\) 严格变化：若 \(S_n\neq S_n'\)，则似然比不同，因而任何充分统计必区分这两个取值；故 \(S_n\) 诱导的划分最细，从而为最小充分统计。
+单样本情形 \(n=1\) 即 \(S_1=B\)。
+闭式似然比由 \(n=1\) 代入命题 \ref{prop:pom-max-fiber-even-majority-vote} 得到；稳定极限由 \(F_{k+1}/F_k\to\varphi\) 给出。证毕。
+\end{proof}
+
+\subsubsection{奇数稳定相：不可辨识等价类与信息瓶颈}
+
+\begin{proposition}[奇数稳定相的不可辨识等价类（仅基于隐藏位）]\label{prop:pom-max-fiber-odd-indistinguishability}
+设 \(m=2k+1\ge 13\) 处于奇数稳定相（注 \ref{rem:pom-max-fiber-achievers-bsplit}）。
+则最大相位集合含四相位，其中两相位满足 \(p_1=\mathbb{P}(B=1\mid\Theta=\theta)=1/2\)（平衡分裂）。
+因此对任意 \(n\ge 1\)，仅基于隐藏位样本 \(B_1^n\) 的任何统计判别都无法区分这两相位：二者诱导同一分布 \(\mathrm{Bern}(\tfrac12)^{\otimes n}\)。
+\par
+换言之，隐藏位观测在相位空间上诱导一个不可约等价关系；其最细可辨识分割至多把四相位塌缩为三类（两平衡相合并、两黄金偏置相各自成类）。
+相应的信息瓶颈在 Shannon 意义下由推论 \ref{cor:pom-max-fiber-phase-hidden-bit-mi} 的极限常数 \(\frac{1-H_\varphi}{2}\) 精确刻画。
+\end{proposition}
+
+\begin{proof}
+平衡两相位满足 \(p_1=1/2\)，故对任意 \(n\) 都有
+\(
+\mathsf{Law}(B_1^n\mid\Theta=\theta)=\mathrm{Bern}(\tfrac12)^{\otimes n}
+\)；
+因此任意仅依赖 \(B_1^n\) 的判别无法区分它们。
+偏置两相位对应互补的非平凡 \(p_1\)（注 \ref{rem:pom-max-fiber-achievers-bsplit}），因而与平衡类不同；并且二者互补，故在 \(B\)-观测下可区分为两类。
+互信息常数来自推论 \ref{cor:pom-max-fiber-phase-hidden-bit-mi}。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/subsubsec__pom-max-fiber-hidden-bit-phase-inference-part2}
+\input{sections/body/pom/parts/subsubsec__pom-max-fiber-hidden-bit-phase-inference-part3}
+\input{sections/body/pom/parts/subsubsec__pom-max-fiber-hidden-bit-phase-inference-part4}
+
+\endinput

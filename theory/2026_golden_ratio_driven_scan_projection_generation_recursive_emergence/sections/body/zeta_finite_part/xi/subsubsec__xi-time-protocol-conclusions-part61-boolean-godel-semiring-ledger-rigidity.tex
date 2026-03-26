@@ -1,0 +1,599 @@
+\paragraph{布尔投影格、Fibonacci 模环分解与有限秩账本障碍}
+链上内算子的固定点算术、有限分辨率可见算术的 Fibonacci 模环结构以及有限秩加法账本的同态不可能性，在现有命题链下还可继续压缩为下列七条直接后果。前四条把链上规范投影完全布尔化，写成有限 Euler 乘积，并进一步刻画全部平方自由 \(\gcd/\mathrm{lcm}\) 算术化的唯一正规形及其 prime-register 码长的最优阶；其后三条把可见算术的幂等结构推进为分解刚性与跨分辨率障碍，并以 prime-power 分辨率收束为单链相图。
+
+\begin{theorem}[链上内算子格的布尔刚性与旗标闭式]\label{thm:xi-chain-interior-boolean-flag-closed-form}
+沿用定理 \ref{thm:killo-chain-interior-godel-gcd-lcm} 的记号，记
+\[
+\mathcal I_n:=\mathrm{Int}(C_n),
+\qquad
+\operatorname{rk}(I):=|\mathrm{Fix}(I)|-1.
+\]
+则：
+\begin{enumerate}
+  \item 有序格 \((\mathcal I_n,\preceq)\) 与布尔格 \(B_{n-1}\) 规范同构；
+  \item
+  \[
+  |\mathcal I_n|=2^{n-1};
+  \]
+  \item 秩生成多项式满足
+  \[
+  \sum_{I\in\mathcal I_n}q^{\operatorname{rk}(I)}=(1+q)^{n-1};
+  \]
+  \item 若定义
+  \[
+  Z_{\mathcal I_n}(k)
+  :=
+  \#\{I_1\preceq\cdots\preceq I_{k-1}:\ I_j\in\mathcal I_n\}
+  \qquad(k\ge 1),
+  \]
+  则
+  \[
+  Z_{\mathcal I_n}(k)=k^{n-1};
+  \]
+  \item 对任意 \(I\preceq J\)，区间 \([I,J]\) 仍为布尔格，且
+  \[
+  \mu_{\mathcal I_n}(I,J)=(-1)^{|\mathrm{Fix}(J)\setminus \mathrm{Fix}(I)|}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:killo-chain-interior-godel-gcd-lcm}，映射
+\[
+I\longmapsto \mathrm{Fix}(I)
+\]
+给出 \(\mathcal I_n\) 与
+\[
+\mathcal F_n:=\{F\subseteq \{0,1,\dots,n-1\}:0\in F\}
+\]
+之间的格同构，且 meet/join 分别对应集合交与并。去掉强制出现的元素 \(0\) 之后，\(\mathcal F_n\) 与 \(\mathcal P(\{1,\dots,n-1\})\) 规范同构，故 \((\mathcal I_n,\preceq)\) 即为秩 \(n-1\) 的布尔格。这给出第 \(1\) 条与第 \(2\) 条。
+
+在上述同构下，秩函数 \(\operatorname{rk}(I)\) 恰对应于子集大小，故
+\[
+\sum_{I\in\mathcal I_n}q^{\operatorname{rk}(I)}
+=
+\sum_{S\subseteq\{1,\dots,n-1\}}q^{|S|}
+=(1+q)^{n-1},
+\]
+从而第 \(3\) 条成立。
+
+再看 zeta 多项式。一个多重链
+\[
+I_1\preceq\cdots\preceq I_{k-1}
+\]
+对应于子集链
+\[
+S_1\subseteq \cdots\subseteq S_{k-1}\subseteq \{1,\dots,n-1\}.
+\]
+对每个 \(i\in\{1,\dots,n-1\}\)，只需记录它是在第几步首次进入该链；若始终不进入，则记为第 \(0\) 类。故每个 \(i\) 恰有 \(k\) 种独立选择，从而
+\[
+Z_{\mathcal I_n}(k)=k^{n-1}.
+\]
+
+最后，对任意 \(I\preceq J\)，对应子集满足
+\[
+\mathrm{Fix}(I)\subseteq \mathrm{Fix}(J).
+\]
+于是区间 \([I,J]\) 同构于差集 \(\mathrm{Fix}(J)\setminus \mathrm{Fix}(I)\) 上的布尔格，故 Möbius 函数等于相对秩的符号：
+\[
+\mu_{\mathcal I_n}(I,J)=(-1)^{|\mathrm{Fix}(J)\setminus \mathrm{Fix}(I)|}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[平方自由 Gödel 像的 Euler 因子化与 Möbius 扭曲闭式]\label{thm:xi-chain-interior-godel-euler-mobius-factorization}
+沿用定理 \ref{thm:killo-chain-interior-godel-gcd-lcm} 与定理 \ref{thm:xi-chain-interior-boolean-flag-closed-form} 的记号，并固定互异素数 \(q_0,\dots,q_{n-1}\)。则：
+\begin{enumerate}
+  \item 平方自由像集满足
+  \[
+  \kappa(\mathcal I_n)
+  =
+  \left\{
+  q_0\prod_{i\in S}q_i:\ S\subseteq\{1,\dots,n-1\}
+  \right\};
+  \]
+  \item 对任意 \(s\in\CC\)，有限 Dirichlet 生成函数满足
+  \[
+  \sum_{I\in\mathcal I_n}\kappa(I)^{-s}
+  =
+  q_0^{-s}\prod_{i=1}^{n-1}(1+q_i^{-s});
+  \]
+  \item 若 \(\widehat 0\) 表示最小内算子，则 Möbius 扭曲生成函数满足
+  \[
+  \sum_{I\in\mathcal I_n}\mu_{\mathcal I_n}(\widehat 0,I)\,\kappa(I)^{-s}
+  =
+  q_0^{-s}\prod_{i=1}^{n-1}(1-q_i^{-s}).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:killo-chain-interior-godel-gcd-lcm}，任意 \(I\in\mathcal I_n\) 唯一对应于一个固定点集
+\[
+\mathrm{Fix}(I)=\{0\}\cup S,
+\qquad
+S\subseteq\{1,\dots,n-1\},
+\]
+并且
+\[
+\kappa(I)=q_0\prod_{i\in S}q_i.
+\]
+这立刻给出第 \(1\) 条。
+
+于是
+\[
+\sum_{I\in\mathcal I_n}\kappa(I)^{-s}
+=
+\sum_{S\subseteq\{1,\dots,n-1\}}
+\left(q_0\prod_{i\in S}q_i\right)^{-s}
+=
+q_0^{-s}\prod_{i=1}^{n-1}(1+q_i^{-s}),
+\]
+得到第 \(2\) 条。
+
+再由定理 \ref{thm:xi-chain-interior-boolean-flag-closed-form}，对满足 \(\mathrm{Fix}(I)=\{0\}\cup S\) 的内算子有
+\[
+\mu_{\mathcal I_n}(\widehat 0,I)=(-1)^{|S|}.
+\]
+故
+\[
+\sum_{I\in\mathcal I_n}\mu_{\mathcal I_n}(\widehat 0,I)\,\kappa(I)^{-s}
+=
+\sum_{S\subseteq\{1,\dots,n-1\}}
+(-1)^{|S|}
+\left(q_0\prod_{i\in S}q_i\right)^{-s}
+=
+q_0^{-s}\prod_{i=1}^{n-1}(1-q_i^{-s}),
+\]
+即得第 \(3\) 条。证毕。
+\end{proof}
+
+\begin{corollary}[链上内算子格的 Dirichlet--Möbius 封闭与特征多项式]\label{cor:xi-chain-interior-dirichlet-mobius-characteristic-closure}
+沿用定理 \ref{thm:xi-chain-interior-boolean-flag-closed-form} 与定理 \ref{thm:xi-chain-interior-godel-euler-mobius-factorization} 的记号。记
+\[
+\Xi_n(s):=\sum_{I\in\mathcal I_n}\kappa(I)^{-s},
+\qquad
+\mathfrak M_n(s):=\sum_{I\in\mathcal I_n}\mu_{\mathcal I_n}(\widehat 0,I)\,\kappa(I)^{-s}.
+\]
+则有
+\[
+\Xi_n(s)=q_0^{-s}\prod_{i=1}^{n-1}(1+q_i^{-s}),
+\qquad
+\mathfrak M_n(s)=q_0^{-s}\prod_{i=1}^{n-1}(1-q_i^{-s}).
+\]
+更一般地，对任意 \(I\preceq J\) 都有
+\[
+\mu_{\mathcal I_n}(I,J)
+=
+(-1)^{|\mathrm{Fix}(J)\setminus \mathrm{Fix}(I)|}
+=
+\mu_{\mathrm{arith}}\!\left(\frac{\kappa(J)}{\kappa(I)}\right),
+\]
+其中 \(\mu_{\mathrm{arith}}\) 为经典算术 Möbius 函数。特别地，若定义特征多项式
+\[
+\chi_{\mathcal I_n}(x)
+:=
+\sum_{I\in\mathcal I_n}\mu_{\mathcal I_n}(\widehat 0,I)\,
+x^{\,n-1-\operatorname{rk}(I)},
+\]
+则
+\[
+\chi_{\mathcal I_n}(x)=(x-1)^{n-1}.
+\]
+\end{corollary}
+\begin{proof}
+前两式正是定理 \ref{thm:xi-chain-interior-godel-euler-mobius-factorization} 的第 \(2\)、\(3\) 条。
+对任意 \(I\preceq J\)，定理 \ref{thm:xi-chain-interior-boolean-flag-closed-form} 已给出
+\[
+\mu_{\mathcal I_n}(I,J)=(-1)^{|\mathrm{Fix}(J)\setminus \mathrm{Fix}(I)|}.
+\]
+另一方面，由定理 \ref{thm:killo-chain-interior-godel-gcd-lcm}，
+\[
+\frac{\kappa(J)}{\kappa(I)}
+=
+\prod_{i\in \mathrm{Fix}(J)\setminus \mathrm{Fix}(I)}q_i
+\]
+为平方自由整数，故其算术 Möbius 函数恰等于相同符号，得到第三式。
+
+最后，由 \(\widehat 0\) 对应的固定点集仅为 \(\{0\}\)，对每个满足 \(\mathrm{Fix}(I)=\{0\}\cup S\) 的内算子有
+\[
+\mu_{\mathcal I_n}(\widehat 0,I)=(-1)^{|S|},
+\qquad
+\operatorname{rk}(I)=|S|.
+\]
+于是
+\[
+\chi_{\mathcal I_n}(x)
+=
+\sum_{S\subseteq\{1,\dots,n-1\}}(-1)^{|S|}x^{n-1-|S|}
+=
+(x-1)^{n-1},
+\]
+其中最后一步是二项式展开。证毕。
+\end{proof}
+
+\begin{theorem}[链上规范投影的平方自由 \texorpdfstring{$\gcd/\mathrm{lcm}$}{gcd/lcm} 算术化具有唯一正规形]\label{thm:xi-chain-interior-squarefree-gcd-lcm-normalform}
+沿用定理 \ref{thm:killo-chain-interior-godel-gcd-lcm} 的记号，记
+\[
+\mathcal I_n:=\mathrm{Int}(C_n).
+\]
+设映射
+\[
+\eta:\mathcal I_n\to \NN_{\ge 1}
+\]
+满足：
+\begin{enumerate}
+  \item 对每个 \(I\in\mathcal I_n\)，\(\eta(I)\) 都是平方自由整数；
+  \item \(\eta\) 是单射；
+  \item 对任意 \(I,J\in\mathcal I_n\)，都有
+  \[
+  \eta(I\wedge J)=\gcd(\eta(I),\eta(J)),
+  \qquad
+  \eta(I\vee J)=\mathrm{lcm}(\eta(I),\eta(J)).
+  \]
+\end{enumerate}
+则存在唯一确定的平方自由整数 \(b\) 与两两互素的平方自由整数
+\[
+r_1,\dots,r_{n-1}>1
+\]
+使得对每个满足 \(0\in F\subseteq\{0,\dots,n-1\}\) 的集合 \(F\)，都有
+\[
+\boxed{\;
+\eta(I_F)=b\prod_{i\in F\setminus\{0\}}r_i,
+\;}
+\]
+其中空积按 \(1\) 解释。特别地，任何把链上规范投影算术化为平方自由整数整除格的 \(\gcd/\mathrm{lcm}\)-语义，都只可能与定理 \ref{thm:killo-chain-interior-godel-gcd-lcm} 中的规范编码相差一个公共底因子与一组两两互素坐标标签的重命名。
+\end{theorem}
+\begin{proof}
+记
+\[
+\widehat 0:=I_{\{0\}},
+\qquad
+A_i:=I_{\{0,i\}}
+\qquad (1\le i\le n-1).
+\]
+由定理 \ref{thm:killo-chain-interior-godel-gcd-lcm}，\(\mathcal I_n\) 与包含 \(0\) 的子集布尔格同构，因此 \(A_1,\dots,A_{n-1}\) 正是 \(\mathcal I_n\) 的全部原子，并且对 \(i\neq j\) 有
+\[
+A_i\wedge A_j=\widehat 0.
+\]
+
+令
+\[
+b:=\eta(\widehat 0).
+\]
+由假设，\(b\) 是平方自由整数。又因为
+\[
+\gcd(\eta(A_i),\eta(A_j))
+=
+\eta(A_i\wedge A_j)
+=
+\eta(\widehat 0)
+=
+b
+\qquad(i\neq j),
+\]
+可知 \(b\mid \eta(A_i)\) 对每个 \(i\) 都成立。于是可写
+\[
+\eta(A_i)=b\,r_i
+\qquad (1\le i\le n-1).
+\]
+由于 \(\eta(A_i)\) 与 \(b\) 都是平方自由整数，故 \(r_i\) 也是平方自由整数，且自动满足
+\[
+\gcd(b,r_i)=1.
+\]
+若某个 \(r_i=1\)，则
+\[
+\eta(A_i)=b=\eta(\widehat 0),
+\]
+与 \(\eta\) 的单射性矛盾，因此 \(r_i>1\)。
+
+再由
+\[
+\gcd(\eta(A_i),\eta(A_j))
+=
+\gcd(br_i,br_j)
+=
+b\,\gcd(r_i,r_j)
+=
+b
+\]
+得到
+\[
+\gcd(r_i,r_j)=1
+\qquad(i\neq j),
+\]
+故 \(r_1,\dots,r_{n-1}\) 两两互素。
+
+现在任取 \(F\subseteq\{0,\dots,n-1\}\) 且 \(0\in F\)。由同一定理的布尔格描述，
+\[
+I_F=\bigvee_{i\in F\setminus\{0\}}A_i,
+\]
+其中当 \(F=\{0\}\) 时右端为空 join，其值即为 \(\widehat 0\)。于是由 \(\eta\) 对 join 的保持性可得
+\[
+\eta(I_F)
+=
+\mathrm{lcm}\bigl(\eta(A_i):i\in F\setminus\{0\}\bigr).
+\]
+而 \(b,r_1,\dots,r_{n-1}\) 全部平方自由，且 \(b\) 与各 \(r_i\) 互素、各 \(r_i\) 彼此互素，故上式化为
+\[
+\eta(I_F)
+=
+\mathrm{lcm}\bigl(br_i:i\in F\setminus\{0\}\bigr)
+=
+b\prod_{i\in F\setminus\{0\}}r_i.
+\]
+这就证明了所述正规形。
+
+最后，\(b=\eta(\widehat 0)\) 且 \(r_i=\eta(A_i)/b\) 由 \(\eta\) 唯一决定，故该正规形唯一。证毕。
+\end{proof}
+
+\begin{corollary}[链上 canonical arithmeticization 在 prime-register 码长意义下达到最优阶]\label{cor:xi-chain-interior-canonical-arithmeticization-optimal-order}
+沿用定理 \ref{thm:xi-chain-interior-squarefree-gcd-lcm-normalform} 的记号。记 \(p_j\) 为第 \(j\) 个素数，并把 \(\{0,1\}^{n-1}\) 与 \(\mathcal I_n\) 通过对应
+\[
+(\varepsilon_1,\dots,\varepsilon_{n-1})
+\longleftrightarrow
+I_{\{0\}\cup\{i:\varepsilon_i=1\}}
+\]
+识别。定义规范编码
+\[
+E_n^{\mathrm{can}}(\varepsilon_1,\dots,\varepsilon_{n-1})
+:=
+p_1\prod_{i=1}^{n-1}p_{i+1}^{\varepsilon_i}.
+\]
+则有
+\[
+\boxed{\;
+\max_{\varepsilon\in\{0,1\}^{n-1}}
+\log E_n^{\mathrm{can}}(\varepsilon)
+=
+\sum_{j=1}^{n}\log p_j
+=
+\vartheta(p_n)
+=
+(1+o(1))\,n\log n.\;}
+\]
+另一方面，对任意满足定理 \ref{thm:xi-chain-interior-squarefree-gcd-lcm-normalform} 三条假设的算术化
+\[
+\eta:\mathcal I_n\to \NN_{\ge 1},
+\]
+都有
+\[
+\boxed{\;
+\max_{I\in\mathcal I_n}\log \eta(I)=\Omega(n\log n).\;}
+\]
+因此，在保持 \(\wedge/\vee\) 与 \(\gcd/\mathrm{lcm}\) 对应的平方自由 prime-register 算术化之中，规范编码的最坏码长阶恰为
+\[
+\Theta(n\log n),
+\]
+从而达到最优阶。并且，这一下界与定理 \ref{thm:xi-godel-prime-bit-complexity-lower-bound} 中对一般 prime-valuation 可寻址 Gödel 整数化给出的 \(T\log T\) 障碍完全一致。
+\end{corollary}
+\begin{proof}
+对规范编码，只需取全 \(1\) 向量，便有
+\[
+\max_{\varepsilon\in\{0,1\}^{n-1}}
+\log E_n^{\mathrm{can}}(\varepsilon)
+=
+\sum_{j=1}^{n}\log p_j
+=
+\vartheta(p_n).
+\]
+由素数定理的标准推论
+\[
+\vartheta(p_n)\sim p_n\sim n\log n,
+\]
+即得所示上界渐近式。
+
+再证下界。任取满足三条假设的 \(\eta\)。由定理 \ref{thm:xi-chain-interior-squarefree-gcd-lcm-normalform}，存在平方自由整数 \(b\) 与两两互素的平方自由整数 \(r_1,\dots,r_{n-1}>1\)，使
+\[
+\eta(I_F)=b\prod_{i\in F\setminus\{0\}}r_i.
+\]
+对每个 \(i\)，任选一个素因子 \(s_i\mid r_i\)。由于 \(r_i\) 两两互素，\(s_1,\dots,s_{n-1}\) 彼此不同。于是
+\[
+\max_{I\in\mathcal I_n}\eta(I)
+\ge
+\eta(I_{\{0,1,\dots,n-1\}})
+=
+b\prod_{i=1}^{n-1}r_i
+\ge
+\prod_{i=1}^{n-1}s_i.
+\]
+而任意 \(n-1\) 个互异素数的乘积都不小于前 \(n-1\) 个素数的乘积，故
+\[
+\max_{I\in\mathcal I_n}\eta(I)
+\ge
+\prod_{j=1}^{n-1}p_j.
+\]
+取对数即得
+\[
+\max_{I\in\mathcal I_n}\log \eta(I)
+\ge
+\sum_{j=1}^{n-1}\log p_j
+=
+\vartheta(p_{n-1})
+=
+\Omega(n\log n).
+\]
+于是规范编码给出的 \(O(n\log n)\) 上界与任何同类算术化都必须满足的 \(\Omega(n\log n)\) 下界同阶，故其最坏码长达到最优阶。最后一条只是在更一般的 prime-valuation 可寻址 Gödel 整数化语义下援引定理 \ref{thm:xi-godel-prime-bit-complexity-lower-bound} 的同型下界。证毕。
+\end{proof}
+
+\begin{theorem}[分辨率商半环的分解刚性由 \texorpdfstring{$\omega(F_{m+2})$}{omega(Fm+2)} 完全控制]\label{thm:xi-visible-arithmetic-omega-controlled-splitting}
+沿用定理 \ref{thm:fold-congruence-mod-semirings} 的记号，记
+\[
+R_m^{\mathrm{vis}}
+:=
+\Omega_m/\!\equiv_m
+\cong
+\ZZ/(N_m\ZZ),
+\qquad
+N_m:=F_{m+2},
+\qquad
+r_m:=\omega(N_m).
+\]
+则：
+\begin{enumerate}
+  \item \(R_m^{\mathrm{vis}}\) 的幂等元总数恰为
+  \[
+  2^{r_m};
+  \]
+  \item \(R_m^{\mathrm{vis}}\) 存在非平凡直积分解，当且仅当 \(r_m\ge 2\)；
+  \item \(R_m^{\mathrm{vis}}\) 直接不可分解，当且仅当 \(N_m\) 为素数幂；
+  \item 若 \(N_m=p\) 为素数，则
+  \[
+  R_m^{\mathrm{vis}}\cong \FF_p,
+  \]
+  从而其幂等元仅有 \(0,1\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+将 \(N_m\) 分解为
+\[
+N_m=\prod_{j=1}^{r_m}p_j^{a_j},
+\]
+其中 \(p_j\) 两两不同。由中国剩余定理，
+\[
+R_m^{\mathrm{vis}}
+\cong
+\ZZ/(N_m\ZZ)
+\cong
+\prod_{j=1}^{r_m}\ZZ/(p_j^{a_j}\ZZ).
+\]
+第 \(1\) 条正是定理 \ref{thm:xi-visible-arithmetic-unit-idempotent-count} 的幂等元计数公式。
+
+对交换环 \(A\)，非平凡直积分解
+\[
+A\simeq A_1\times A_2
+\qquad
+(A_1,A_2\neq 0)
+\]
+等价于存在非平凡幂等元：若分解存在，则 \(e=(1,0)\) 满足 \(e^2=e\) 且 \(e\neq 0,1\)；反之，若 \(e^2=e\) 且 \(e\neq 0,1\)，则
+\[
+A\cong eA\times (1-e)A.
+\]
+因此第 \(2\) 条等价于“存在非平凡幂等元”。由第 \(1\) 条，这恰当且仅当 \(2^{r_m}>2\)，亦即 \(r_m\ge 2\)。
+
+第 \(3\) 条随即成立，因为
+\[
+r_m=1
+\quad\Longleftrightarrow\quad
+N_m \text{ 为素数幂}.
+\]
+最后，若 \(N_m=p\) 为素数，则
+\[
+R_m^{\mathrm{vis}}\cong \ZZ/(p\ZZ)=\FF_p,
+\]
+故其仅有平凡幂等元 \(0,1\)。这也与推论 \ref{cor:field-phase-fib-prime} 一致。证毕。
+\end{proof}
+
+\begin{theorem}[跨分辨率相容的有限秩加法账本不能同态化全部可见乘法]\label{thm:xi-visible-arithmetic-no-compatible-finite-rank-ledger}
+设 \(L\) 为有限生成交换群。假设对每个 \(m\ge 1\) 都存在映射
+\[
+\Phi_m:\ZZ/(F_{m+2}\ZZ)\longrightarrow \ZZ\oplus L
+\]
+满足：
+\begin{enumerate}
+  \item \(\Phi_m\) 在乘法幺半群上单射；
+  \item 对任意 \(\overline a,\overline b\in \ZZ/(F_{m+2}\ZZ)\)，都有
+  \[
+  \Phi_m(\overline a\,\overline b)=\Phi_m(\overline a)+\Phi_m(\overline b);
+  \]
+  \item 对每个整数 \(n\ge 1\)，存在 \(m_0(n)\) 使得当 \(m\ge m_0(n)\) 时，\(\Phi_m(\overline n)\) 与 \(m\) 无关，其中 \(\overline n\) 表示 \(n\) 在 \(\ZZ/(F_{m+2}\ZZ)\) 中的剩余类。
+\end{enumerate}
+则这样的映射族不存在。
+\end{theorem}
+\begin{proof}
+由第 \(3\) 条，可对每个 \(n\ge 1\) 定义稳定值
+\[
+\Phi(n):=\Phi_m(\overline n)
+\qquad
+(m\ge m_0(n)).
+\]
+这给出映射
+\[
+\Phi:(\NN_{\ge 1},\times)\longrightarrow (\ZZ\oplus L,+).
+\]
+
+先证其单射。若 \(a\neq b\)，则由 \(F_{m+2}\to\infty\)，可取 \(m\) 足够大，使
+\[
+m\ge m_0(a),\qquad m\ge m_0(b),\qquad F_{m+2}>\max\{a,b\}.
+\]
+于是 \(\overline a\neq \overline b\) 于 \(\ZZ/(F_{m+2}\ZZ)\) 中成立。由第 \(1\) 条，
+\[
+\Phi(a)=\Phi_m(\overline a)\neq \Phi_m(\overline b)=\Phi(b),
+\]
+故 \(\Phi\) 为单射。
+
+再证其乘法--加法同态性。对任意 \(a,b\ge 1\)，取
+\[
+m\ge \max\{m_0(a),m_0(b),m_0(ab)\}.
+\]
+则由第 \(2\) 条，
+\[
+\Phi(ab)
+=
+\Phi_m(\overline{ab})
+=
+\Phi_m(\overline a\,\overline b)
+=
+\Phi_m(\overline a)+\Phi_m(\overline b)
+=
+\Phi(a)+\Phi(b).
+\]
+因此 \(\Phi:(\NN_{\ge 1},\times)\to (\ZZ\oplus L,+)\) 是单射幺半群同态。
+
+另一方面，由 \(L\) 有限生成，可知交换群 \(\ZZ\oplus L\) 作为加法幺半群亦为有限生成且可消去。于是定理 \ref{thm:killo-prime-freedom-non-finitizability} 排除任何从正整数乘法幺半群到 \((\ZZ\oplus L,+)\) 的单射幺半群同态。
+这与上面构造出的 \(\Phi\) 矛盾。故所述映射族不存在。证毕。
+\end{proof}
+
+\begin{corollary}[素数幂分辨率上的商格单链化]\label{cor:xi-visible-arithmetic-primepower-quotient-chain}
+沿用定理 \ref{thm:xi-visible-arithmetic-omega-controlled-splitting} 的记号。若
+\[
+N_m=F_{m+2}=p^a
+\]
+为某个素数幂，则 \(R_m^{\mathrm{vis}}\cong \ZZ/(p^a\ZZ)\) 的全部双边理想恰为
+\[
+(0)=(p^a)\subset (p^{a-1})\subset \cdots \subset (p)\subset (1),
+\]
+并且由定理 \ref{thm:xi-fold-congruence-quotient-divisor-lattice}，\(R_m^{\mathrm{vis}}\) 的全部半环商构成长度 \(a+1\) 的线性链。特别地，此时不存在彼此横向独立的算术粗化方向。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-visible-arithmetic-omega-controlled-splitting}，当 \(N_m=p^a\) 时，
+\[
+R_m^{\mathrm{vis}}\cong \ZZ/(p^a\ZZ).
+\]
+而 \(p^a\) 的全部正约数正好是
+\[
+1,p,\dots,p^a,
+\]
+它们在整除偏序下形成一条线性链。定理 \ref{thm:xi-fold-congruence-quotient-divisor-lattice} 已将 \(R_m^{\mathrm{vis}}\) 的商格与 \(N_m\) 的约数格规范等价起来，故全部半环商构成长度 \(a+1\) 的线性链。
+
+等价地，\(\ZZ/(p^a\ZZ)\) 的全部理想就是
+\[
+(p^j)/(p^a)
+\qquad
+(0\le j\le a),
+\]
+从而得到所示理想链。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part61a-prime-register-halfdimension-twoatom-rigidity}
+\input{subsubsec__xi-time-protocol-conclusions-part61aa-prime-register-composition-gcd-shadow}
+\input{subsubsec__xi-time-protocol-conclusions-part61ab-prime-register-automorphism-green-boolean-rigidity}
+\input{subsubsec__xi-time-protocol-conclusions-part61ad-chain-interior-incidence-euler-random}
+\input{subsubsec__xi-time-protocol-conclusions-part61ac-prime-register-canonical-section-sparsity}
+\input{subsubsec__xi-time-protocol-conclusions-part61aca-primeweighted-gaussian-whitening-tomography}
+\input{subsubsec__xi-time-protocol-conclusions-part61acb-chain-godel-average-budget}
+\input{subsubsec__xi-time-protocol-conclusions-part61acc-chain-godel-average-variance-budget}
+
+\input{subsubsec__xi-time-protocol-conclusions-part61ad-visible-arithmetic-nilradical-semisimple-thickness}
+\input{subsubsec__xi-time-protocol-conclusions-part61ae-resolution-arithmetic-geometry}
+\input{subsubsec__xi-time-protocol-conclusions-part61af-localized-clock-ledger-splitting}
+\input{subsubsec__xi-time-protocol-conclusions-part61b-dyadic-fibonacci-completion-birth-ledger}
+
+\input{subsubsec__xi-time-protocol-conclusions-part62-smith-zeta-ellipse-ancilla}
+\input{subsubsec__xi-time-protocol-conclusions-part62af-hankel-gap-mobius-interaction-rigidity}
+\input{subsubsec__xi-time-protocol-conclusions-part62ae-primegame-firstfit-localized-solenoid}
+\input{subsubsec__xi-time-protocol-conclusions-part62a-branch-primeslice-smith-geometry}
+\input{subsubsec__xi-time-protocol-conclusions-part62b-branch-inverse-limit-smith-euler-completeness}
+\input{subsubsec__xi-time-protocol-conclusions-part62bb-branch-image-infinite-prime-rank}
+\input{subsubsec__xi-time-protocol-conclusions-part62ba-prefix-godelization-localtail-pole}
+\input{subsubsec__xi-time-protocol-conclusions-part62c-fibonacci-fourier-zero-solenoid-selfcover}
+
+\endinput

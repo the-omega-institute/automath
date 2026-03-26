@@ -1,0 +1,221 @@
+% (User input window)
+
+\paragraph{两温度失败指数的变分结构：幂律耦合、主序链与临界二次律}
+本段把定理 \ref{thm:pom-microcanonical-hypergeometric-ldp-kl-sym} 的 KL--对称速率函数
+从 \((q\mapsto J_\beta(q))\) 的单变量表述提升为一个两温度变分问题，并在熵阈值的超临界侧给出唯一极小化器的结构。
+其结果可作为“剩余组成熵偏大”事件的指数级失败证书，并与定理 \ref{thm:pom-microcanonical-query-plus-bits-phase} 的临界窗叙述兼容。
+
+\begin{definition}[两温度失败指数：熵阈值的最小 KL--对称代价]\label{def:pom-microcanonical-two-temperature-failure-exponent}
+设 \(X\) 为有限集（\(|X|=n\ge 2\)），取全支撑分布 \(w\in\Delta(X)\)，并固定 \(\beta\in(0,1)\)。
+对任意 \(q,r\in\Delta(X)\) 满足质量守恒
+\[
+w=\beta q+(1-\beta)r,
+\]
+定义两温度散度泛函
+\[
+J_\beta(q,r):=\beta D(q\|w)+(1-\beta)D(r\|w).
+\]
+对熵阈值 \(h>H(w)\)，定义超临界失败指数
+\[
+E_{\mathrm{fail}}(\beta,h)
+:=
+\inf\Bigl\{J_\beta(q,r):\ q,r\in\Delta(X),\ w=\beta q+(1-\beta)r,\ H(r)\ge h\Bigr\}.
+\]
+若可行域为空，则约定 \(E_{\mathrm{fail}}(\beta,h)=+\infty\)。
+\end{definition}
+
+\begin{theorem}[两温度 KKT 结构：唯一极小化器的幂律耦合]\label{thm:pom-microcanonical-two-temperature-kkt-power-law}
+沿用定义 \ref{def:pom-microcanonical-two-temperature-failure-exponent}，并假设给定 \(h\) 使可行域非空且 \(h>\!H(w)\)。
+则极小化问题存在唯一极小点 \((q^\star,r^\star)\)，并且熵约束必饱和：
+\[
+H(r^\star)=h.
+\]
+此外，存在唯一乘子 \(\eta^\star>0\)（因而存在唯一指数 \(\gamma>1\)）使得对所有 \(x\in X\),
+\[
+q^\star(x)=\frac{(r^\star(x))^{\gamma}}{\sum_{y\in X}(r^\star(y))^{\gamma}},
+\qquad
+\gamma=1+\frac{\eta^\star}{1-\beta},
+\]
+等价地
+\(
+\log q^\star=\gamma\log r^\star+\mathrm{const}
+\)
+（常数在 \(x\) 上不依赖）。
+\end{theorem}
+\begin{proof}
+可行域由线性等式与凹函数 \(H\) 的上水平集给出，故为紧凸集；而 \(J_\beta\) 作为两项 KL 散度的正权和，在 \(\Delta(X)^2\) 的内点上严格凸，从而极小点唯一。
+\par
+由于 \(w\) 全支撑且 \(\beta\in(0,1)\)，若 \((q,r)\) 可行，则 \(q,r\) 自动全支撑；因此可在内点上写 KKT 系统。
+若熵约束不饱和，则对应乘子 \(\eta^\star=0\)，从而极小点必须同时极小化仅含质量守恒的松弛问题；而该松弛问题的唯一极小点为 \(q=r=w\)，与 \(h>H(w)\) 矛盾。
+故 \(\eta^\star>0\) 且 \(H(r^\star)=h\)。
+\par
+对约束写拉格朗日函数并对每个坐标取驻点条件，消去质量守恒的乘子后可得
+\(
+\log r^\star=\alpha\log q^\star+\mathrm{const}
+\),
+其中
+\(
+\alpha=\frac{1-\beta}{1-\beta+\eta^\star}\in(0,1)
+\)。
+从而 \(q^\star\propto (r^\star)^{1/\alpha}\)，并令 \(\gamma:=1/\alpha=1+\eta^\star/(1-\beta)\) 得到所示幂律耦合。
+唯一性迫使 \(\eta^\star\) 与 \(\gamma\) 唯一。证毕。
+\end{proof}
+
+\begin{proposition}[幂律轨道的存在唯一性与熵的严格单调性]\label{prop:pom-microcanonical-two-temperature-escort-orbit-entropy-monotone}
+沿用定义 \ref{def:pom-microcanonical-two-temperature-failure-exponent}。
+对每个 \(\gamma>1\)，定义幂 escort 变换
+\[
+\mathrm{Escort}_\gamma(r)(x):=\frac{r(x)^\gamma}{\sum_{y\in X}r(y)^\gamma}\qquad(r\in\Delta(X)).
+\]
+若存在 \((q,r)\in\Delta(X)^2\) 满足 \(w=\beta q+(1-\beta)r\) 且 \(q=\mathrm{Escort}_\gamma(r)\)，则该解唯一；记之为 \((q_\gamma,r_\gamma)\)。
+并且在其定义域上，映射
+\[
+\gamma\longmapsto H(r_\gamma)
+\]
+连续且严格递增，并满足
+\[
+\lim_{\gamma\downarrow 1}r_\gamma=w.
+\]
+令
+\[
+H_{\max}(\beta,w):=\sup\Bigl\{H(r):\ r\in\Delta(X),\ \frac{w-(1-\beta)r}{\beta}\in\Delta(X)\Bigr\}\in(H(w),\log n],
+\]
+则 \(\lim_{\gamma\to\infty}H(r_\gamma)=H_{\max}(\beta,w)\)。
+特别地，若均匀分布 \(U\) 可行（等价于 \(w(x)\ge (1-\beta)/n\) 对所有 \(x\) 成立），则 \(H_{\max}(\beta,w)=\log n\) 且 \(r_\gamma\to U\)。
+因此对任意 \(h\in(H(w),H_{\max}(\beta,w))\) 存在唯一 \(\gamma(h)>1\) 使 \(H(r_{\gamma(h)})=h\)，并且该 \((q_{\gamma(h)},r_{\gamma(h)})\) 与定理 \ref{thm:pom-microcanonical-two-temperature-kkt-power-law} 的极小化器一致。
+\end{proposition}
+\begin{proof}
+对固定 \(\eta>0\) 考虑惩罚型问题
+\[
+\mathcal{V}(\eta):=\inf\Bigl\{J_\beta(q,r)-\eta H(r):\ q,r\in\Delta(X),\ w=\beta q+(1-\beta)r\Bigr\}.
+\]
+由于 \(-H\) 为严格凸函数且 \(J_\beta\) 严格凸，故该问题存在唯一极小点 \((q_\eta,r_\eta)\)；
+其 KKT 系统给出幂律关系 \(q_\eta=\mathrm{Escort}_\gamma(r_\eta)\) 且 \(\gamma=1+\eta/(1-\beta)>1\)。
+因此对每个 \(\gamma>1\) 至多对应一个可行解，记为 \((q_\gamma,r_\gamma)\)。
+\par
+函数 \(\eta\mapsto \mathcal{V}(\eta)\) 为 \(\eta\) 的下确界包络，因而为凹函数；并且在唯一极小点下可微且满足
+\(
+\mathcal{V}'(\eta)=-H(r_\eta)
+\)。
+凹性推出 \(-\mathcal{V}'(\eta)=H(r_\eta)\) 随 \(\eta\)（从而随 \(\gamma\)）严格递增，连续性由隐函数/稳定性与唯一极小性给出。
+\par
+当 \(\eta\downarrow 0\) 时，惩罚项消失且松弛问题的唯一极小点为 \(q=r=w\)，故 \(r_\gamma\to w\)（\(\gamma\downarrow 1\)）。
+当 \(\eta\to\infty\) 时，\(-\eta H(r)\) 主导并迫使 \(r_\eta\) 收敛到“在可行多面体内最大化 \(H\)”的唯一解，从而 \(H(r_\gamma)\uparrow H_{\max}(\beta,w)\)；
+若 \(U\) 可行，则最大熵点即为 \(U\) 且极限为 \(\log n\)。
+最后，对 \(h\in(H(w),H_{\max})\) 由严格单调性得到唯一 \(\gamma(h)\)，并与定理 \ref{thm:pom-microcanonical-two-temperature-kkt-power-law} 的唯一极小化器匹配。证毕。
+\end{proof}
+
+\begin{corollary}[共同排序与主序链：\texorpdfstring{$r^\star\prec w\prec q^\star$}{r* ≺ w ≺ q*}]\label{cor:pom-microcanonical-two-temperature-majorization-chain}
+在定理 \ref{thm:pom-microcanonical-two-temperature-kkt-power-law} 的设定下，存在同一排列使得 \(r^\star,w,q^\star\) 的坐标按非增序排列后满足逐段和链
+\[
+\sum_{i=1}^k r^\star_{(i)}\ \le\ \sum_{i=1}^k w_{(i)}\ \le\ \sum_{i=1}^k q^\star_{(i)}\qquad(k=1,\dots,n-1),
+\]
+且至少对某个 \(k\) 严格不等；从而 \(r^\star\prec w\prec q^\star\)。
+\end{corollary}
+\begin{proof}
+由幂律耦合 \(q^\star=\mathrm{Escort}_\gamma(r^\star)\)（\(\gamma>1\)），两者具有相同坐标排序，且幂变换在主序意义上将分布严格冷化：\(r^\star\prec q^\star\)（Hardy--Littlewood--Pólya）。
+又因 \(w=\beta q^\star+(1-\beta)r^\star\) 为同序向量的凸组合，逐段和对凸组合线性，故得到链式不等式并推出 \(r^\star\prec w\prec q^\star\)。
+严格性由 \(h>H(w)\) 排除 \(r^\star=w\)（从而亦排除 \(q^\star=w\)）得到。证毕。
+\end{proof}
+
+\begin{proposition}[Jensen--Shannon 结构恒等式：\texorpdfstring{$J_\beta$}{Jbeta} 等于混合熵亏损]\label{prop:pom-microcanonical-two-temperature-js-identity}
+在约束 \(w=\beta q+(1-\beta)r\) 下，对任意可行 \((q,r)\) 有恒等式
+\[
+J_\beta(q,r)=H(w)-\beta H(q)-(1-\beta)H(r).
+\]
+因此当可行域非空且 \(h>H(w)\) 时，
+\[
+E_{\mathrm{fail}}(\beta,h)
+=H(w)-(1-\beta)h-\beta\sup\Bigl\{H(q):\exists r,\ w=\beta q+(1-\beta)r,\ H(r)=h\Bigr\}.
+\]
+\end{proposition}
+\begin{proof}
+由 \(D(p\|w)=-H(p)-\sum_x p(x)\log w(x)\)，并用质量守恒
+\(
+\beta q+(1-\beta)r=w
+\)
+消去 \(\sum_x(\beta q+(1-\beta)r)\log w\)，即得第一式。
+第二式由定理 \ref{thm:pom-microcanonical-two-temperature-kkt-power-law} 的 \(H(r^\star)=h\) 代入并对 \(q\) 作等价极大化得到。证毕。
+\end{proof}
+
+\begin{theorem}[强对偶、唯一乘子与敏感性公式]\label{thm:pom-microcanonical-two-temperature-strong-duality-sensitivity}
+沿用定义 \ref{def:pom-microcanonical-two-temperature-failure-exponent}，假设给定 \(h\in(H(w),H_{\max}(\beta,w))\) 使可行域非空。
+定义对偶值函数（\(\eta\ge 0\)）
+\[
+\mathcal{V}(\eta):=\inf\Bigl\{J_\beta(q,r)-\eta H(r):\ q,r\in\Delta(X),\ w=\beta q+(1-\beta)r\Bigr\}.
+\]
+则成立强对偶
+\[
+E_{\mathrm{fail}}(\beta,h)=\sup_{\eta\ge 0}\bigl(\mathcal{V}(\eta)+\eta h\bigr),
+\]
+且上确界在唯一 \(\eta^\star>0\) 处达到。
+并且函数 \(h\mapsto E_{\mathrm{fail}}(\beta,h)\) 在 \((H(w),H_{\max}(\beta,w))\) 上可微，且
+\[
+\frac{\partial}{\partial h}E_{\mathrm{fail}}(\beta,h)=\eta^\star,
+\qquad
+\gamma(h)=1+\frac{\eta^\star}{1-\beta},
+\]
+其中 \(\gamma(h)\) 为定理 \ref{thm:pom-microcanonical-two-temperature-kkt-power-law} 的唯一幂指数。
+\end{theorem}
+\begin{proof}
+约束 \(H(r)\ge h\) 等价于凸不等式 \(h-H(r)\le 0\)，并且在 \(h< H_{\max}(\beta,w)\) 时满足 Slater 条件（存在严格可行点）。
+因此强对偶成立，且由于原问题极小点唯一，KKT 乘子亦唯一且满足 \(\eta^\star>0\)（同定理 \ref{thm:pom-microcanonical-two-temperature-kkt-power-law}）。
+可微性与导数公式由凸对偶的一般敏感性定理（包络定理）推出；
+最后一式由幂律关系 \(\gamma=1+\eta/(1-\beta)\) 代入得到。证毕。
+\end{proof}
+
+\begin{theorem}[临界熵窗的二次律：\texorpdfstring{$h\downarrow H(w)$}{h↓H(w)} 时的精确起跳系数]\label{thm:pom-microcanonical-two-temperature-critical-quadratic-law}
+设 \(w\) 全支撑且非均匀，并记
+\[
+V(w):=\Var_{X\sim w}\bigl(\log w(X)\bigr)>0
+\]
+（同推论 \ref{cor:pom-microcanonical-information-clt}）。
+令 \(\delta:=h-H(w)\downarrow 0^+\) 且取 \(h\in(H(w),H_{\max}(\beta,w))\)。
+则有渐近展开
+\[
+E_{\mathrm{fail}}(\beta,h)
+=\frac{1-\beta}{2\beta}\cdot \frac{\delta^2}{V(w)}+o(\delta^2).
+\]
+若改用比特密度
+\(
+b:=\frac{(1-\beta)h}{\log 2}
+\)
+与临界点
+\(
+b_{\mathrm{crit}}:=\frac{(1-\beta)H(w)}{\log 2}
+\),
+则等价地
+\[
+E_{\mathrm{fail}}(\beta,b)
+=\frac{(b-b_{\mathrm{crit}})^2(\log 2)^2}{2\beta(1-\beta)V(w)}+o\!\left((b-b_{\mathrm{crit}})^2\right).
+\]
+\end{theorem}
+\begin{proof}
+当 \(\delta\downarrow 0\) 时，最优点 \((q^\star,r^\star)\) 逼近 \((w,w)\)。
+写 \(r=w+u\)（\(\sum_x u(x)=0\)），则由质量守恒 \(q=w-\frac{1-\beta}{\beta}u\)。
+对 KL 在 \(w\) 处作二阶展开可得
+\[
+J_\beta(q,r)
+=\frac{1-\beta}{2\beta}\sum_{x\in X}\frac{u(x)^2}{w(x)}+o(\|u\|_2^2).
+\]
+另一方面，熵的一阶变分（利用 \(\sum_x u(x)=0\)）给出
+\[
+H(w+u)-H(w)=-\sum_{x\in X}u(x)\log w(x)+o(\|u\|_2),
+\]
+故主阶约束为 \(\sum_x u(x)\log w(x)=-\delta\)。
+因此主阶问题化为：在二次型 \(\sum u^2/w\) 下最小化线性约束 \(\sum u\log w=-\delta\)。
+拉格朗日乘子法给出唯一主方向
+\[
+u^\star(x)=-\frac{\delta}{V(w)}\,w(x)\Bigl(\log w(x)-\EE_w[\log w]\Bigr),
+\]
+并满足
+\(
+\sum_x\frac{(u^\star(x))^2}{w(x)}=\delta^2/V(w)
+\)。
+代回即得
+\(
+E_{\mathrm{fail}}(\beta,h)=\frac{1-\beta}{2\beta}\cdot \frac{\delta^2}{V(w)}+o(\delta^2)
+\)。
+比特密度形式由 \(\delta=\frac{\log 2}{1-\beta}(b-b_{\mathrm{crit}})\) 代换得到。证毕。
+\end{proof}
+

@@ -1,0 +1,163 @@
+\paragraph{素数对数子集和的分辨率门槛：单参尺度读出下的指数多重度与碰撞下界}\label{par:group-jg-prime-register-logsubset-sum-indistinguishability}
+本段在 Gödel 素数寄存器的有限截断上讨论“单一对数尺度坐标”的分辨率极限：当微态空间为 \(\{0,1\}^k\) 的指数体积，而边界读出仅允许通过
+\(
+u=\frac12\sum_{i=1}^k b_i\log p_i
+\)
+这一单实参数进入时，有限精度必然诱发指数级多重度与大量不可分辨对。
+在 Joukowsky--Gödel 椭圆化门中，该坐标同时决定尺度
+\(
+\rho=e^{u}=\sqrt{N}
+\)
+以及椭圆半轴
+\(
+a=\rho+\rho^{-1}=2\cosh u
+\)、\(
+\beta=\rho-\rho^{-1}=2\sinh u
+\)
+（见命题 \ref{prop:group-jg-joukowsky-degenerate-branch-segment}）。
+
+\begin{theorem}[权重子集和的指数级最小间距上界]\label{thm:group-jg-weighted-subset-sum-min-gap-upper}
+设 \(w_1,\dots,w_k>0\)，并定义权重子集和集合
+\[
+\mathcal U:=\Bigl\{\sum_{i=1}^k w_i b_i:\ b\in\{0,1\}^k\Bigr\}.
+\]
+令随机向量 \(B\) 在 \(\{0,1\}^k\) 上均匀分布，并记
+\[
+X:=\sum_{i=1}^k w_iB_i,\qquad
+\mu:=\EE[X]=\frac12\sum_{i=1}^k w_i,\qquad
+\sigma^2:=\mathrm{Var}(X)=\frac14\sum_{i=1}^k w_i^2.
+\]
+则存在 \(u\neq v\in\mathcal U\) 使得
+\[
+|u-v|\ \le\ \frac{8\sigma}{2^k}.
+\]
+\end{theorem}
+\begin{proof}
+由 Chebyshev 不等式，
+\(
+\PP(|X-\mu|\ge 2\sigma)\le \frac14
+\)，
+故至少 \(\frac34\cdot 2^k\) 个取值落在区间 \(I:=[\mu-2\sigma,\mu+2\sigma]\) 内，且 \(|I|=4\sigma\)。
+将 \(I\cap\mathcal U\) 中的点按大小排序为 \(x_1<\cdots<x_N\)，其中 \(N\ge \frac34\cdot 2^k\)。
+由抽屉原理，
+\[
+\min_{1\le j\le N-1}(x_{j+1}-x_j)\le \frac{x_N-x_1}{N-1}\le \frac{4\sigma}{N-1}.
+\]
+当 \(k\ge 2\) 时，\(N-1\ge \frac34\cdot2^k-1\ge 2^{k-1}\)，故
+\(
+\min_j(x_{j+1}-x_j)\le 4\sigma/2^{k-1}=8\sigma/2^k
+\)。
+取相邻两点即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[Gödel 素数寄存器的对数尺度不可分辨阈值]\label{cor:group-jg-prime-register-logscale-indistinguishability-threshold}
+令 \(p_1<\cdots<p_k\) 为前 \(k\) 个素数。
+对 \(b=(b_1,\dots,b_k)\in\{0,1\}^k\) 定义
+\[
+N(b):=\prod_{i=1}^k p_i^{b_i},\qquad
+u(b):=\frac12\log N(b)=\frac12\sum_{i=1}^k b_i\log p_i,
+\qquad
+\rho(b):=e^{u(b)}=\sqrt{N(b)}.
+\]
+则存在两态 \(b\neq b'\) 使得
+\[
+|u(b)-u(b')|
+\le
+\frac{2}{2^k}\sqrt{\sum_{i=1}^k (\log p_i)^2}.
+\]
+因而任何仅能以对数尺度精度 \(\varepsilon\) 观测 \(\rho\)（等价地观测椭圆尺度 \(\rho\) 的相对误差尺度）且满足
+\[
+\varepsilon\ \ge\ \frac{2}{2^k}\sqrt{\sum_{i=1}^k (\log p_i)^2}
+\]
+的观测机制，都不可能在 \(\{0,1\}^k\) 上实现单射辨识。
+\end{corollary}
+\begin{proof}
+在定理 \ref{thm:group-jg-weighted-subset-sum-min-gap-upper} 中取 \(w_i=\frac12\log p_i\)。
+则
+\(
+X(b)=\sum_i w_i b_i=u(b)
+\)，且
+\(
+\sigma^2=\frac14\sum_i w_i^2=\frac{1}{16}\sum_i(\log p_i)^2
+\)。
+代入得到
+\(
+|u(b)-u(b')|\le 8\sigma/2^k
+=\frac{2}{2^k}\sqrt{\sum_i(\log p_i)^2}
+\)。
+若观测误差在 \(\log\rho=u\) 上不小于该阈值，则这两态在该观测下不可区分，从而单射辨识不成立。证毕。
+\end{proof}
+
+\begin{theorem}[固定精度下的指数级多重度]\label{thm:group-jg-fixed-precision-exponential-multiplicity}
+在定理 \ref{thm:group-jg-weighted-subset-sum-min-gap-upper} 的设定下，取任意 \(\varepsilon\in(0,2\sigma]\)。
+则存在长度为 \(2\varepsilon\) 的区间 \(J\subset\RR\) 使得
+\[
+\#\{b\in\{0,1\}^k:\ X(b)\in J\}
+\ \ge\
+\frac{3}{16}\cdot \frac{\varepsilon}{\sigma}\cdot 2^k.
+\]
+\end{theorem}
+\begin{proof}
+由 Chebyshev 不等式，至少 \(\frac34\cdot 2^k\) 个点落在 \(I=[\mu-2\sigma,\mu+2\sigma]\) 内。
+将 \(I\) 划分为长度 \(2\varepsilon\) 的子区间族，子区间数
+\[
+m\le \left\lceil\frac{|I|}{2\varepsilon}\right\rceil
+=\left\lceil\frac{2\sigma}{\varepsilon}\right\rceil
+\le \frac{2\sigma}{\varepsilon}+1\le \frac{4\sigma}{\varepsilon},
+\]
+其中最后一步使用 \(\varepsilon\le 2\sigma\)。
+由抽屉原理，存在某个子区间 \(J\) 使
+\[
+\#\{b:\ X(b)\in J\}
+\ge
+\frac{(3/4)2^k}{m}
+\ge
+(3/4)2^k\cdot \frac{\varepsilon}{4\sigma}
+=\frac{3}{16}\cdot\frac{\varepsilon}{\sigma}\cdot2^k.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[侧信息位数的不可避免下界]\label{cor:group-jg-side-information-bit-lower-bound}
+沿用定理 \ref{thm:group-jg-fixed-precision-exponential-multiplicity}，并假设观测者仅得到 \(X(b)\) 的近似信息：\(X(b)\) 落在某个长度 \(2\varepsilon\) 的不确定区间内（误差至多 \(\varepsilon\)）。
+若要求对所有 \(b\in\{0,1\}^k\) 实现确定性唯一复原，则在最坏情形下所需额外侧信息位数 \(s\) 必满足
+\[
+s\ \ge\ \log_2\!\left(\frac{3}{16}\cdot\frac{\varepsilon}{\sigma}\cdot2^k\right)
+=k-\log_2\!\left(\frac{16}{3}\cdot\frac{\sigma}{\varepsilon}\right),
+\qquad (0<\varepsilon\le 2\sigma).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:group-jg-fixed-precision-exponential-multiplicity}，存在某一观测区间 \(J\)（长度 \(2\varepsilon\)）容纳至少
+\(
+L:=\frac{3}{16}\cdot\frac{\varepsilon}{\sigma}\cdot2^k
+\)
+个不同态的 \(X\)-取值。
+在仅知 \(X(b)\in J\) 的条件下，候选态数至少为 \(L\)，故侧信息编码空间必须容纳至少 \(L\) 个标识：\(2^s\ge L\)。
+取对数即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[不可分辨对的指数级丰富性与碰撞概率下界]\label{prop:group-jg-indistinguishable-pairs-and-collision-probability}
+在定理 \ref{thm:group-jg-fixed-precision-exponential-multiplicity} 的设定下（\(0<\varepsilon\le 2\sigma\)），存在至少
+\[
+\binom{L}{2}
+\qquad\Bigl(L=\frac{3}{16}\cdot\frac{\varepsilon}{\sigma}\cdot2^k\Bigr)
+\]
+对不同态 \((b,b')\) 满足 \(|X(b)-X(b')|\le 2\varepsilon\)。
+等价地，若 \(B,B'\) 为独立均匀随机态，则有定量下界
+\[
+\PP\bigl(|X(B)-X(B')|\le 2\varepsilon\bigr)\ \ge\ \left(\frac{3}{16}\cdot\frac{\varepsilon}{\sigma}\right)^2.
+\]
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:group-jg-fixed-precision-exponential-multiplicity}，存在区间 \(J\)（长度 \(2\varepsilon\)）使 \(\#\{b:X(b)\in J\}\ge L\)。
+对任意两态 \(b,b'\) 满足 \(X(b),X(b')\in J\)，必有 \(|X(b)-X(b')|\le 2\varepsilon\)，故不可分辨对至少为 \(\binom{L}{2}\)。
+对概率下界，注意
+\[
+\PP\bigl(|X(B)-X(B')|\le 2\varepsilon\bigr)\ \ge\ \PP(B\in J)\PP(B'\in J)=\left(\frac{L}{2^k}\right)^2,
+\]
+代入 \(L\) 即得。证毕。
+\end{proof}
+
+\endinput
+

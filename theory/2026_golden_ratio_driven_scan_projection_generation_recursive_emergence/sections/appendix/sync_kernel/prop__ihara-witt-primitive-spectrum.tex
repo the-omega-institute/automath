@@ -1,0 +1,578 @@
+其中 $p$ 遍历 Ihara primes。该定义剔除了“立即撤销”的伪周期，更贴合可逆原子操作的不可约模式。
+
+\paragraph{带权 Ihara--Bass：carry 能量的谱指纹}
+令 $\kappa(e)$ 为每步 carry 触发能量，取权重 $u^{\kappa(e)}$。在无回溯边空间上定义 Hashimoto 算子 $B(u)$（边 $e\to e'$ 可接且不回溯时赋权 $u^{\kappa(e')}$）。则带权 Ihara \(\zeta\) 为
+\[
+Z_K(u,t):=\prod_{p}\left(1-t^{\ell(p)}u^{\kappa(p)}\right)^{-1}
+=\frac{1}{\det(I-tB(u))},
+\]
+从而“原子能量”进入谱指纹并保持行列式可计算性（Bass--Hashimoto 三项行列式公式可视为上述定义在无向骨架上的等价表述）。该双参数对象给出一族\textbf{矩阵多项式行列式不变量}，比单一的周期点迹更贴近“可逆重写群胚”的素数谱。
+
+\begin{proposition}[Ihara--Witt 复合桥包：无回溯 primes 的能量分辨 primitive 谱]\label{prop:ihara-witt-primitive-spectrum}
+对带权 Hashimoto 算子 \(B(u)\)，定义 Ihara 迹多项式
+\[
+b_n(u):=\Tr(B(u)^n)\in\ZZ[u],
+\]
+并定义 Ihara-primitive 多项式（Witt 坐标）
+\[
+q_n(u):=\frac{1}{n}\sum_{d\mid n}\mu(d)\,b_{n/d}(u^d)\in\QQ[u].
+\]
+则带权 Ihara \(\zeta\) 具有严格的 Witt Euler 乘积展开：
+\[
+\boxed{\ 
+Z_K(u,t)
+=\exp\!\left(\sum_{n\ge 1}\frac{b_n(u)}{n}t^n\right)
+=\prod_{n\ge 1}\bigl(1-t^n\bigr)^{-q_n(u)}
+\ }.
+\]
+写 \(q_n(u)=\sum_k q_{n,k}u^k\)，则 \(\{q_{n,k}\}\) 给出\textbf{无回溯 Ihara primes 的能量分辨 primitive 谱}。
+\end{proposition}
+\begin{proof}
+将本附录 \S\ref{app:witt-bridge-package} 中对任意带参矩阵族 \(T(u)\) 的 Big-Witt 恒等式应用于 \(T(u)=B(u)\)（并把变量 \(z\) 替换为 \(t\)）即可。证毕。
+\end{proof}
+
+\begin{corollary}[Ihara necklace 整除律与 Dwork 型同余]\label{cor:ihara-witt-dwork}
+在命题 \ref{prop:ihara-witt-primitive-spectrum} 的记号下：
+\begin{enumerate}
+  \item \textbf{（整性/整除）}对所有 \(n\ge 1\) 有 \(n\,q_n(u)\in\ZZ[u]\)；
+  \item \textbf{（\(p\)-幂同余）}对任意素数 \(p\) 与 \(k\ge 1\)，有
+  \[
+  \boxed{\ b_{p^k}(u)\equiv b_{p^{k-1}}(u^p)\ (\mathrm{mod}\ p^k)\quad\text{in }\ZZ[u]\ },
+  \]
+  等价地
+  \[
+  \boxed{\ p^k\,q_{p^k}(u)=b_{p^k}(u)-b_{p^{k-1}}(u^p)\in\ZZ[u]\ }.
+\]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+将命题 \ref{prop:witt-necklace-div} 与推论 \ref{cor:witt-dwork-congruence} 应用于 \(T(u)=B(u)\) 即得。证毕。
+\end{proof}
+
+\paragraph{核版 RH/Ramanujan 指标}
+记 $\lambda_1(u)=\rho(B(u))$ 为无回溯主谱半径，$\lambda_\star(u)$ 为最大非平凡特征值模。定义
+\[
+R_K(u):=\frac{\lambda_\star(u)}{\sqrt{\lambda_1(u)}}.
+\]
+当 $R_K(u)\le 1$ 时，prime cycle 的长度计数可达平方根级误差：对对应的 Ihara-primitive 计数 $q_n(u)$，谱分解给出主项
+\[
+q_n(u)=\frac{\lambda_1(u)^n}{n}+O\!\left(\frac{\lambda_1(u)^{n/2}}{n}\right),
+\]
+这在有限矩阵框架下无需额外 Tauberian 工具。该指标为“素数影子质量”的可检验谱界（Ihara--RH/Ramanujan 类比；参见 \cite{TerrasZetaGraphs,StarkTerras1996GraphCoverings} 的图版 RH 综述）。
+
+\begin{proposition}[Ihara--Mertens 常数的 Möbius--Abel 公式：无回溯 primes 的有限部常数具同型快速配方]\label{prop:ihara-mertens-constant}
+固定 \(u>0\)，令 \(\lambda_1(u):=\rho(B(u))\) 且 \(t_\star(u):=\lambda_1(u)^{-1}\)。设 \(B(u)\) 满足 Perron--Frobenius 型谱隙（从而 Ihara-primitive 多项式 \(q_n(u)\) 满足 \(q_n(u)=\lambda_1(u)^n/n+O(\rho(u)^n/n)\)）。
+定义 Ihara 口径的 Mertens Abel 和
+\[
+\mathcal{M}^{\mathrm{Ih}}_K(N;u):=\sum_{n\le N}\frac{q_n(u)}{\lambda_1(u)^n}.
+\]
+则存在常数 \(M^{\mathrm{Ih}}_K(u)\) 使得
+\[
+\boxed{\ \mathcal{M}^{\mathrm{Ih}}_K(N;u)=\log N+M^{\mathrm{Ih}}_K(u)+o(1)\ }.
+\]
+其 Abel 有限部常数 \(\log\mathfrak{M}^{\mathrm{Ih}}_K(u):=M^{\mathrm{Ih}}_K(u)-\gamma\) 具有与 \(\log\mathfrak{M}\) 平行的 Möbius--Abel 快速配方：
+\[
+\boxed{
+\begin{aligned}
+\log\mathfrak{M}^{\mathrm{Ih}}_K(u)
+&=\log C^{\mathrm{Ih}}_K(u)\\
+&\qquad +\sum_{m\ge 2}\frac{\mu(m)}{m}\log Z_K\!\bigl(u^m,\,t_\star(u)^m\bigr).
+\end{aligned}
+}
+\]
+\[
+C^{\mathrm{Ih}}_K(u):=\frac{1}{-t_\star(u)\,\partial_t\det(I-tB(u))\big|_{t=t_\star(u)}}.
+\]
+\end{proposition}
+
+\begin{conjecture}[自对偶的 Ihara 提升：无回溯 primitive 能量镜像对称]\label{conj:ihara-duality-lift}
+若状态层自对偶对合可提升到无回溯边空间，使得 \(B(u)\) 满足某种相似关系 \(B(u)\sim u\,B(1/u)\)，则 Ihara 迹多项式满足回文
+\(
+b_n(u)=u^n b_n(1/u)
+\)，从而 \(q_{n,k}=q_{n,n-k}\)。
+该条件可用“一行测试”审计：对小 \(n\) 计算 \(b_n(u)\) 并检验系数镜像对称。
+\end{conjecture}
+
+\paragraph{核版 Chebotarev：群标签的同余类分布}
+给每条边赋有限群标签 \(g(e)\in G\)（隐含属性），对 Ihara prime 环 \(p\) 定义 Frobenius 共轭类
+\(
+\mathrm{Fr}(p):=\prod_{e\in p}g(e)\in G/\!\sim
+\)（按共轭类理解）。对每个不可约表示 \(\rho\in\widehat G\)，可在无回溯边空间上定义扭曲 Hashimoto 算子 \(B_{\rho}(u)\) 与扭曲行列式
+\[
+L^{\mathrm{Ih}}_{K,\rho}(u,t):=\det(I-tB_\rho(u))^{-1}.
+\]
+
+\begin{proposition}[Artin 分解的 Ihara 版本（覆盖行列式因子化）]\label{prop:ihara-artin-factorization}
+令 \(B_{G}(u)\) 表示作用在“无回溯边空间 \(\otimes\CC[G]\)”上的群扩张 Hashimoto 算子（正则表示）。则有行列式恒等式
+\[
+\det(I-tB_{G}(u))=\prod_{\rho\in\widehat G}\det(I-tB_{\rho}(u))^{\dim\rho}.
+\]
+\end{proposition}
+
+\begin{proof}
+与命题 \ref{prop:kernel-artin-factorization} 同理：用正则表示分解
+\(
+\CC[G]\cong\bigoplus_{\rho\in\widehat G}\rho^{\oplus \dim\rho}
+\)
+把 \(B_G(u)\) 约化为不可约分量上的直和，取行列式即得。
+\end{proof}
+
+\begin{theorem}[图 \texorpdfstring{$\zeta$}{zeta} 函数的 cyclotomic 因子分类：模障碍的 Ihara--Artin 等价刻画]\label{thm:conclusion75-ihara-cyclotomic-factor-classification}
+沿用上段记号，并固定 \(u>0\)。
+对每个不可约表示 \(\rho\in\widehat G\) 的扭曲 Hashimoto 算子 \(B_\rho(u)\)，其扭曲 Ihara--Artin \(\zeta/L\) 因子可取为
+\[
+Z_{K}(u,t;\rho):=L^{\mathrm{Ih}}_{K,\rho}(u,t)=\det(I-tB_\rho(u))^{-1}.
+\]
+则存在\textbf{非平凡模障碍}当且仅当存在某个 \(\rho\neq\mathbf 1\) 使
+\[
+\boxed{\ \rho\!\bigl(B_\rho(u)\bigr)=\rho\!\bigl(B_{\mathbf 1}(u)\bigr)=:\lambda_1(u)\ }.
+\]
+并且在该情形下，\(\det(I-tB_\rho(u))\) 必含一个 cyclotomic 因子（等价地，归一化多项式 \(\det(I-(t/\lambda_1(u))B_\rho(u))\) 在单位圆上出现单位根因子），从而 \(Z_K(u,t;\rho)\) 的分母出现可枚举的 cyclotomic 因子结构。
+反之，若对某个 \(\rho\neq\mathbf 1\) 的 \(\det(I-tB_\rho(u))\) 出现 cyclotomic 因子，则必有 \(\rho(B_\rho(u))=\lambda_1(u)\)。
+\par
+因此，“有限模障碍/共振来源”可被等价归约为：某些非平凡扭曲通道的行列式是否含 cyclotomic 因子；该判别完全落在有限维代数因子分类层面，并把谱隙失败的来源压缩为可枚举的单位根结构。
+\end{theorem}
+
+\begin{proof}
+若存在 \(\rho\neq\mathbf 1\) 使 \(\rho(B_\rho(u))=\lambda_1(u)\)，则 \(B_\rho(u)\) 存在模长为 \(\lambda_1(u)\) 的特征值 \(\lambda\)。
+由于扭曲仅引入有限群表示的单位复权（角色值为单位根）且矩阵条目属于某个 cyclotomic 数域，处在谱边界的特征值必对应一个有限阶旋转；从而 \(\lambda/\lambda_1(u)\) 为单位根，等价于 \(\det(I-tB_\rho(u))\) 在 \(t=\lambda^{-1}\) 处出现单位根型因子，即含 cyclotomic 因子。
+反向蕴含同理：若出现 cyclotomic 因子，则存在单位根 \(\zeta\) 使 \(\det(I-(\zeta/\lambda_1(u))B_\rho(u))=0\)，从而 \(B_\rho(u)\) 存在模长 \(\lambda_1(u)\) 的特征值并推出 \(\rho(B_\rho(u))=\lambda_1(u)\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[符号通道的 Perron 等模判别：\texorpdfstring{$\ZZ_2$}{Z/2} 余边界 \texorpdfstring{$\Longleftrightarrow$}{<->} 极大谱半径与跨支退化]\label{cor:ihara-sgn-perron-coboundary-equivalence}
+取 \(G=S_4\)，并考虑符号通道 \(B_{\mathrm{sgn}}(u)\)。
+固定 \(u>0\)，并记 \(\lambda_1(u):=\rho(B_{\mathbf 1}(u))\)。
+令 \(\mathcal C\) 为 \(B_{\mathbf 1}(u)\) 的 Perron 极大强连通分量之一（即 \(\rho(B_{\mathbf 1}(u)|_{\mathcal C})=\lambda_1(u)\)），并假设 \(B_{\mathbf 1}(u)|_{\mathcal C}\) 为 primitive。
+把符号扭曲视为一维 \(\ZZ_2\) 局部系统 \(\beta_{\mathrm{LY}}\)（对 Ihara prime 环 \(p\) 的 holonomy 取 \(\chi_{\beta_{\mathrm{LY}}}(p):=\mathrm{sgn}(\mathrm{Fr}(p))\in\{\pm1\}\)）。
+则以下两条等价：
+\begin{enumerate}
+  \item \(\rho\!\bigl(B_{\mathrm{sgn}}(u)|_{\mathcal C}\bigr)=\rho\!\bigl(B_{\mathbf 1}(u)|_{\mathcal C}\bigr)=\lambda_1(u)\)；
+  \item \(\beta_{\mathrm{LY}}|_{\mathcal C}\) 为余边界：存在 \(s:V(\mathcal C)\to\ZZ_2\) 使对 \(\mathcal C\) 上每条边 \(e:v\to v'\) 有 \(\mathrm{sgn}(g(e))=(-1)^{s(v')-s(v)}\)；等价地，\(\mathcal C\) 内每一条无回溯闭环 \(p\) 都满足 \(\chi_{\beta_{\mathrm{LY}}}(p)=+1\)。
+\end{enumerate}
+在该等价条件下，符号通道与平凡通道在 \(\mathcal C\) 上对角相似，从而对应 Ihara 因子满足
+\[
+\det\bigl(I-tB_{\mathrm{sgn}}(u)|_{\mathcal C}\bigr)=\det\bigl(I-tB_{\mathbf 1}(u)|_{\mathcal C}\bigr),
+\qquad
+\det\bigl(I-tB_{\mathrm{sgn}}(u)|_{\mathcal C}\bigr)^{-1}\equiv \det\bigl(I-tB_{\mathbf 1}(u)|_{\mathcal C}\bigr)^{-1}.
+\]
+因此跨支比值在该主导子系统上严格退化为 \(1\)，并在结论 \ref{con:xi-split-tunneling-zeta-detect-aflip} 的口径下对应 \(A_{\mathrm{flip}}=+\infty\)（在 \(\mathcal C\) 的限制意义下）。
+\end{corollary}
+\begin{proof}[证明要点]
+\((2)\Rightarrow(1)\)：余边界条件给出一个对角矩阵 \(D\)（对角元为 \(\pm1\)），使
+\(
+B_{\mathrm{sgn}}(u)|_{\mathcal C}=D\,B_{\mathbf 1}(u)|_{\mathcal C}\,D^{-1}
+\)；
+故两者谱半径相同且行列式一致。
+\par
+\((1)\Rightarrow(2)\)：在 \(\mathcal C\) 上有 \(|B_{\mathrm{sgn}}(u)|=B_{\mathbf 1}(u)\) 且后者 primitive。
+谱半径等模意味着扭曲未在 Perron 层引入任何净相位抵消；由 Perron--Frobenius 型等模刚性（等价地：对 \(B_{\mathrm{sgn}}(u)\) 的极值特征向量逐边取模并比较三角不等式取等条件）推出符号只能来自顶点 \(\pm1\) 规一化的对角共轭，即 \(\beta_{\mathrm{LY}}|_{\mathcal C}\) 为余边界。
+最后一段由 \(\zeta\)/行列式定义与结论 \ref{con:xi-split-tunneling-zeta-detect-aflip} 的 \(\min\varnothing:=+\infty\) 约定得到。证毕。
+\end{proof}
+
+\begin{theorem}[Ihara--Chebotarev：按 Frobenius 共轭类的主项与指数误差]\label{thm:ihara-chebotarev-exp}
+固定 \(u>0\)。记 \(\lambda_1(u):=\rho(B(u))\) 为无回溯主谱半径，并记
+\[
+\lambda_\star(u):=\max_{\mu\in\mathrm{spec}(B(u))\setminus\{\lambda_1(u)\}}|\mu|,
+\qquad
+\eta(u):=\max_{\rho\in\widehat G,\ \rho\neq\mathbf 1}\rho(B_\rho(u)),
+\qquad
+\Lambda(u):=\max\{\lambda_\star(u),\eta(u)\}.
+\]
+对任一共轭类 \(C\subseteq G\)，定义按类分层的 Ihara-primitive 计数
+\[
+q_{n,C}(u):=\sum_{\substack{p\ \mathrm{Ihara\ prime}\\ \ell(p)=n\\ \mathrm{Fr}(p)\in C}}u^{\kappa(p)}.
+\]
+则当 \(n\to\infty\) 时有
+\[
+\boxed{\ 
+q_{n,C}(u)=\frac{|C|}{|G|}\cdot\frac{\lambda_1(u)^n}{n}
++O\!\left(\frac{\Lambda(u)^n}{n}\right)\ }.
+\]
+误差指数由 \(\Lambda(u)/\lambda_1(u)\) 显式控制；特别地若同时满足
+\(
+\lambda_\star(u)\le \lambda_1(u)^{1/2}
+\)
+与
+\(
+\eta(u)\le \lambda_1(u)^{1/2}
+\)
+（Ihara--RH/GRH 型谱隙），则误差为平方根级
+\(
+O(\lambda_1(u)^{n/2}/n)
+\)。
+\end{theorem}
+
+\begin{proof}
+证明与主文定理 \ref{thm:kernel-chebotarev-exp} 完全平行，只需把“周期迹 \(\Rightarrow\) Witt/Möbius 反演 \(\Rightarrow\) primitive”整条链中的算子 \(M(u)\) 替换为 \(B(u)\)，并把扭曲族 \(M_\rho(u)\) 替换为 \(B_\rho(u)\)。
+平凡表示给出主项 \(\lambda_1(u)^n/n\) 与误差 \(O(\lambda_\star(u)^n/n)\)；非平凡表示的贡献用粗界
+\(
+|\Tr(A^m)|\le (\dim A)\,\rho(A)^m
+\)
+控制为 \(O(\eta(u)^n/n)\)。再用类函数的角色正交把共轭类指示函数展开到表示分量上，即得结论。
+\end{proof}
+
+由该定理可定义可审计的偏差率指标
+\[
+\theta_K(u):=\max_{\rho\neq\mathbf 1}\frac{\rho(B_\rho(u))}{\rho(B_{\mathbf 1}(u))}
+=\frac{\eta(u)}{\lambda_1(u)},
+\]
+并据此量化“素数在同余类中的收敛速度”，形成“核版 Chebotarev/Artin-\(L\)”的完全可计算接口。
+
+\paragraph{零温能隙：最小平均回路的可计算性}
+把 $\kappa(e)$ 视为能量，定义 prime 环平均能量
+\(
+\bar\kappa(p)=\kappa(p)/\ell(p)
+\)
+并令
+\[
+\Delta_K:=\min_{p:\bar\kappa(p)>0}\bar\kappa(p).
+\]
+在无回溯边图（Hashimoto 图）上该问题等价于\textbf{最小平均回路}，可由 Karp 算法在多项式时间内求出（见 \cite{Karp1978MinCycleMean}）。$\Delta_K$ 给出“基态/第一激发态能隙”的可比不变量，并控制 $u\to 0$ 时第一个非平凡修正的主尺度。
+
+\begin{proposition}[密度能隙的退化机制与隧穿作用量]\label{prop:ihara-gap-degeneracy}
+若 carry-free 骨架含有任意长的无回溯闭环（即存在 \(\kappa(p)=0\) 的 prime 环族且 \(\ell(p)\to\infty\)），并且存在某个正能量无回溯闭环 \(q\)（\(\kappa(q)>0\)）能与任意长的零能量闭环通过局部改写拼接成无回溯闭环（保持 tailless 条件），则正能量闭环的平均密度 \(\bar\kappa=\kappa/\ell\) 可做到任意小，从而以“最小正密度”定义的 \(\Delta_K\) 要么为 \(0\)，要么仅有下确界而无最小值。
+\end{proposition}
+
+\begin{definition}[隧穿作用量 \texorpdfstring{$A_K$}{A_K}（替代的零温第一激发态指纹）]\label{def:ihara-tunneling-action}
+定义
+$$
+A_K:=\min\{\kappa(p)>0:\ p\ \text{primitive, nb}\}\in\ZZ_{>0},
+$$
+即“最少 carry 事件数的正能量 Ihara prime”。该量不受“拉长零能量段”稀释，因此比 \(\Delta_K\) 更稳定，并可作为零温下的第一激发态结构指纹。
+\end{definition}
+
+\begin{remark}[可复现计算：三核的 \texorpdfstring{$A_K$}{A_K}]\label{rem:ihara-AK-table}
+表 \ref{tab:parallel-addition-kernels-tunneling-action} 给出三核单流的隧穿作用量 \(A_K\)（均为 \(1\)），由脚本
+\texttt{scripts/exp\_parallel\_addition\_kernels\_tunneling\_action.py}
+基于 \texttt{artifacts/export/parallel\_addition\_kernels\_bfs.json} 自动生成并输出为可 \verb|\input| 的表格片段：
+\input{sections/generated/tab_parallel_addition_kernels_tunneling_action}
+\end{remark}
+
+\paragraph{大规模素数谱扩展：Hutch++ 的 PSD 化轨道}
+当需要把 primitive 分层谱 $B_{K,n}(u)$ 扩展到更大 $n$ 时，瓶颈在于 $a_n(u)=\Tr(M_K(u)^n)$ 的高次迹估计。对非对称 $M_K(u)$，可采用 PSD 化的轨道（例如估计 $\Tr((M_K(u)^n)^{\mathsf T}M_K(u)^n)$ 以控制谱半径与能量尺度，或在对称情形直接估计 $\Tr(M_K(u)^n)$），从而使用 Hutch++ 将样本复杂度从 $O(\varepsilon^{-2})$ 改进为 $O(\varepsilon^{-1})$（仅需 matvec；见 \cite{MeyerMuscoMuscoWoodruff2021Hutchpp}）。该路径与后文随机迹估计管线一致，可作为“可算闭环”的规模扩展接口。
+
+\paragraph{无回溯素数谱闭环（可证明/可算/可实验）}
+综上，可把“素数影子”的硬化流程压缩为一条可审计闭环：
+\begin{enumerate}
+  \item \textbf{Ihara primes 正规化：}以无回溯、无尾 primitive 环作为素数类对象；
+  \item \textbf{带权 Ihara--Bass：}用 $u^{\kappa}$ 将 carry 能量并入 $\zeta_K(u,t)$ 的行列式不变量；
+  \item \textbf{核版 RH/Ramanujan：}用 $R_K(u)$ 给出平方根级误差判据；
+  \item \textbf{核版 Chebotarev/Artin-$L$：}用 $\theta_K(u)$ 控制同余类偏差的指数衰减；
+  \item \textbf{零温能隙：}用 $\Delta_K$ 量化基态与第一激发态的分离；
+  \item \textbf{可扩展计算：}用 Hutch++/随机迹估计把谱指纹扩展到大 $n$。
+\end{enumerate}
+
+\paragraph{素数影子对比的规范接口}
+对任意核（无权或带权），可取“先算周期迹，再用反演提取 primitive”的规范计算接口。具体地：
+\[
+a_n=\Tr(M^n),\qquad
+p_n=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}.
+\]
+对带权情形（边权记作 $u^{\kappa}$，得到矩阵 $M(u)$），primitive 的加权谱满足（Witt 分解）
+\[
+p_n(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(u^d),
+\qquad a_n(u)=\Tr(M(u)^n),
+\]
+与本附录 \S\ref{app:witt-weighted} 的推导一致。
+而在全局块级直积装配下，若各流同构，则
+\[
+a_n^{\mathrm{glob}}(u)=a_n^{\mathrm{flow}}(u)^m,
+\]
+从而仅需单流的 $a_n(u)$ 即可得到全局的 primitive 谱（再作一次 Möbius 反演）。
+
+\begin{proposition}[carry-free 骨架的三种极限 SFT 与 \texorpdfstring{$\zeta_K(z,0)$}{zeta(z,0)}]\label{prop:carry-free-skeleton-three}
+对三类 $\beta=\varphi$ 的并行核（$9/13/21$-local），取 $u=0$ 等价于在同步图上仅保留 $\kappa=0$ 的边（完全不触发任何非零 $q$ 事件），得到 carry-free 骨架 SFT。其不可约骨架分别为：
+\begin{enumerate}
+  \item \textbf{$K_9$（$9$-local，SRZ）}：骨架为 $7$-全移位，因此
+  \[
+  \zeta_{9}(z,0)=\frac{1}{1-7z}.
+  \]
+  \item \textbf{$K_{13}$（$13$-local，WRZ 迭代）}：骨架为 $3$-全移位，因此
+  \[
+  \zeta_{13}(z,0)=\frac{1}{1-3z}.
+  \]
+  \item \textbf{$K_{21}$（$21$-local，Algorithm G）}：骨架为黄金均值移位（禁止相邻 $11$），因此
+  \[
+  \zeta_{21}(z,0)=\frac{1}{1-z-z^2}.
+  \]
+\end{enumerate}
+这给出 A-对比的严格区分点：仅最小字母表核在 $u=0$ 层面就强制黄金均值约束。
+\end{proposition}
+
+\begin{proof}
+\textbf{(1)} 对 $K_9$（Algorithm S / SRZ），强核一步的 $q_j$ 选择以“把 $z_j-q_jB$ 拉回内层字母表 $A'$”为准则（\cite{FrougnyHellerPelantovaSvobodovaParallelAlgorithmsSlides}，Example~9）。carry-free 即 $q\equiv 0$，等价于所有位置都已落在内层 $A'=\{-3,\dots,3\}$，因此每步有 $7$ 个自由输入符号且无额外约束，骨架为 $7$-全移位，$\zeta=1/(1-7z)$。
+
+\textbf{(2)} 对 $K_{13}$（Algorithm W / WRZ），每次迭代采用“若 $z_j\in A'$ 则 $q_j=0$，否则 $q_j=\mathrm{sgn}(z_j)$”的 neighbour-free 规则（\cite{FrougnyHellerPelantovaSvobodovaParallelAlgorithmsSlides}，Algorithm~W 与 Example~12）。carry-free 要求每次迭代均不触发非零 $q$，因此 $z_j$ 始终处于内层 $A'=\{-1,0,1\}$，得到 $3$-全移位骨架，$\zeta=1/(1-3z)$。
+
+\textbf{(3)} 对 $K_{21}$（Algorithm G），先经 Algorithm A 去除 $-2$，再经 Algorithm B 去除 $2$（\cite{FrougnyHellerPelantovaSvobodovaParallelAlgorithmsSlides}，Algorithm~A/B/G）。carry-free 要求两相均不触发：A 相的触发条件包含 $z_j=-2,-1$ 等，故排除这些；B 相首先排除 $z_j=2$，从而剩余符号为 $\{0,1\}$；并且 B 相的邻敏条件“$z_j=1$ 且 $(z_{j+2}\ge 1$ 或 $z_{j-2}\ge 1)$”在单流坐标上恰为“禁止相邻 $11$”。因此骨架为黄金均值移位，其邻接矩阵为 $\begin{pmatrix}1&1\\1&0\end{pmatrix}$，故 $\zeta=1/(1-z-z^2)$（\cite{LindMarcus1995}）。
+\end{proof}
+
+\begin{proposition}[carry-free 核心的块阶与出度指纹]\label{prop:carry-free-core-block}
+对三核的单流在线编译，取仅含 $\kappa=0$ 边的子图并取其最大强连通分量（carry-free core）。则：
+\begin{itemize}
+  \item $K_9$：core 大小为 $7$，且 core 内 $\kappa=0$ 出度恒为 $7$，等价于 $7$-全移位的 $1$-block 表示（$7=7^1$）。
+  \item $K_{13}$：core 大小为 $27$，且 core 内 $\kappa=0$ 出度恒为 $3$，等价于 $3$-全移位的 $3$-block 表示（$27=3^3$）。
+  \item $K_{21}$：core 大小为 $21$，且 core 内 $\kappa=0$ 出度只取 $\{1,2\}$，与黄金均值移位的 $L$-block 表示一致；由 $F_{L+2}=21$ 得 $L=6$。
+\end{itemize}
+因此 carry-free 骨架不仅给出“全移位/黄金均值移位”的类型，还给出具体块阶 $(1,3,6)$ 作为零温结构指纹。
+\end{proposition}
+
+\begin{proposition}[carry-free 泄漏与 Perron 支撑的非对称性]\label{prop:carry-free-leakage}
+记 $A_0=M_K(0)$，并在仅含 $\kappa=0$ 边的图上取 carry-free core。则：
+\begin{enumerate}
+  \item 对 $K_9,K_{13}$，core 在 $A_0$ 下封闭（无 $\kappa=0$ 外泄边）。
+  \item 对 $K_{21}$，core 内部 $\kappa=0$ 边数为 $34$，而从 core 外泄的 $\kappa=0$ 边为 $71$，从而 $A_0$ 可约且存在显著“泄漏”。
+\end{enumerate}
+在 $K_{21}$ 情形，$A_0$ 的 Perron 右特征向量支撑在 core 及其 $\kappa=0$ 下游（可达集大小为 $315$），而左特征向量支撑在可流入 core 的上游（可达集大小为 $1259$），形成明显的支撑非对称性。
+\end{proposition}
+
+\begin{proposition}[core 内无一次 carry 边]\label{prop:no-kappa1-in-core}
+对三核的 carry-free core，$\kappa=1$ 的边在 core 内部\textbf{不存在}。因此一阶响应常数
+\(
+c_1=\ell^{\mathsf T}A_1r/(\ell^{\mathsf T}r)
+\)
+只能由“core 外部的 $\kappa=1$ 跳转 + 非对称支撑”产生，这为 $K_{21}$ 中 $\sqrt5$ 的出现提供了结构性机制解释。
+\end{proposition}
+
+\begin{proposition}[支撑剪切（cut-flux）公式：\texorpdfstring{$\kappa=1$}{kappa=1} 不在 core 内部时的一阶通量]\label{prop:c1-cut-flux}
+设 \(A_0\ge 0\) 为 carry-free 骨架矩阵，\(\lambda_0=\rho(A_0)\) 为其 Perron 根，并取对应左/右 Perron 特征向量 \(\ell,r\ge 0\)（归一化任意但需 \(\ell^{\mathsf T}r>0\)）。
+令 \(A_1\ge 0\) 为 \(\kappa=1\) 边贡献矩阵，使得
+\[
+M(u)=A_0+uA_1+O(u^2).
+\]
+记支撑集合
+\(
+\mathrm{supp}(\ell):=\{i:\ell_i>0\}
+\),
+\(
+\mathrm{supp}(r):=\{j:r_j>0\}
+\)。
+若 \(A_1\) 在 carry-free core 的“core\(\to\)core”块为零（命题 \ref{prop:no-kappa1-in-core} 的结构情形），则零温一阶响应系数满足
+\[
+\boxed{\;
+c_1=\frac{\ell^{\mathsf T}A_1r}{\ell^{\mathsf T}r}
+=\frac{1}{\ell^{\mathsf T}r}\sum_{i\in\mathrm{supp}(\ell)}\sum_{j\in\mathrm{supp}(r)}\ell_i\,(A_1)_{ij}\,r_j\; }.
+\]
+从而 \(c_1\) 只由那些\textbf{跨越}左支撑到右支撑的 \(\kappa=1\) 跳转贡献，可解释为一个“带权 cut 通量”。
+\end{proposition}
+\begin{proof}
+一般地，由命题 \ref{prop:lambda-linear-response} 有
+\(
+c_1=\ell^{\mathsf T}A_1r/(\ell^{\mathsf T}r)
+\)。
+将双线性型展开得
+\[
+\ell^{\mathsf T}A_1r=\sum_{i,j}\ell_i(A_1)_{ij}r_j.
+\]
+由于 \(\ell_i=0\) 或 \(r_j=0\) 的项不贡献，可将求和限制到 \(i\in\mathrm{supp}(\ell)\)、\(j\in\mathrm{supp}(r)\)。
+当 \(A_1\) 在 core\(\to\)core 块为零时，任何内部跃迁均不贡献，剩余项恰为“跨 cut”的边贡献；从而得到所示公式。证毕。
+\end{proof}
+
+\paragraph{两变量 \texorpdfstring{$\zeta_K(z,u)$}{zeta(z,u)} 指纹（有限图版本）}
+上文已给出 $\zeta_K(z,u)$ 与 $B_{K,n}(u)$ 的严格定义；此处仅重申“有限图 $\Rightarrow$ 行列式 $\Rightarrow$ Euler 乘积”的封闭链条。对单流同步图的带权邻接矩阵族 $M_K(u)$，定义
+\[
+\zeta_K(z,u)
+:=\exp\!\left(\sum_{n\ge 1}\frac{\Tr(M_K(u)^n)}{n}z^n\right)
+=\frac{1}{\det(I-zM_K(u))},
+\]
+并以 Euler 乘积定义 primitive 分层谱多项式
+\(
+B_n(u)=\sum_{|\gamma|=n}u^{\kappa(\gamma)}
+\)。
+这些对象把“核的差异”压缩为同一组可比不变量：$\lambda(u)=\rho(M_K(u))$、$\zeta_K(z,u)$、以及 $\{B_n(u)\}_{n\le N}$（见 \cite{Ruelle1976ZetaExpanding,ParryPollicott1990Zeta,BrinStuck2002}）。
+
+\subsubsection{核指纹实验协议（端点闭式 + 中间 \texorpdfstring{$u\in(0,1)$}{u in (0,1)} 近似；一页版）}\label{app:kernel-fingerprint-protocol}
+本附录把 $9/13/21$-local 三核统一压到同一对象组
+\[
+\bigl(M_K(u),\ \zeta_K(z,u),\ \lambda_K(u),\ B_{K,n}(u)\bigr),
+\]
+并给出“端点闭式基准 + 中间 $u$ 可扩展近似”的统一可复现实验协议。
+
+\begin{algorithm}[核指纹实验协议]\label{alg:kernel-fingerprint-protocol}
+给定核 $K\in\{K_9,K_{13},K_{21}\}$，以及默认参数
+\[
+U:=\{0,0.25,0.5,0.75,1\},\quad N_{\mathrm{end}}:=20,\quad \mathcal{N}_{\mathrm{mid}}:=\{3,5,7\},\quad S:=200.
+\]
+执行：
+\begin{enumerate}
+  \item \textbf{单流编译（BFS）}：按同余流解耦（$K_9$ 取 $m=4$，$K_{13},K_{21}$ 取 $m=2$），对单流构造同步图 $\Gamma^{\mathrm{flow}}_K$，并在边上定义活动度势 $\kappa(e)$。得到单流带权邻接矩阵族 $M_K(u)$ 以及基本结构量（$\delta$、$|Q|$、$\mathbb{E}[\kappa]$）。
+  \item \textbf{端点闭式（零误差）}：
+  \begin{enumerate}
+    \item $u=0$：取 carry-free 骨架 $A_0:=M_K(0)$，计算 $\zeta_K(z,0)=\det(I-zA_0)^{-1}$，并由 Möbius 反演得到 primitive 轨道数 $p_n(0)$（$n\le N_{\mathrm{end}}$）。
+    \item $u=1$：取无权基线 $M_K(1)$，其 $\zeta_K(z,1)$ 与 $p_n(1)$ 退化为 full shift 的闭式（仅依赖输入字母表大小）。
+  \end{enumerate}
+  \item \textbf{多流提升（避免直积大图）}：用张量积闭式
+  \[
+  M_{\mathrm{glob}}(u)=M_{\mathrm{flow}}(u)^{\otimes m},\qquad
+  \Tr(M_{\mathrm{glob}}(u)^n)=\Tr(M_{\mathrm{flow}}(u)^n)^m,\qquad
+  \lambda_{\mathrm{glob}}(u)=\lambda_{\mathrm{flow}}(u)^m,
+  \]
+  并由一次 Möbius 反演得到全局 primitive 端点谱。
+  \item \textbf{中间 $u$（矩阵自由近似）}：对每个 $u\in U\cap(0,1)$：
+  \begin{enumerate}
+    \item 计算压力样本 $\lambda_K(u)=\rho(M_K(u))$（幂法，仅需稀疏乘向量）。
+    \item 对每个 $n\in\mathcal{N}_{\mathrm{mid}}$，用 Hutchinson 估计近似 $a_n(u)=\Tr(M_K(u)^n)$，并以 Möbius 反演得到 $\widehat B_{K,n}(u)$。为降低 Möbius 组合中的相消方差，默认使用 common random numbers（在所有 $u$ 与幂次间复用同一组 Rademacher 探针）。
+  \end{enumerate}
+  \item \textbf{输出（论文可直接 \texorpdfstring{$\backslash$}{\textbackslash}input）}：写出三类表格片段：
+  \begin{center}
+  \path{tab_parallel_addition_kernels_fingerprint_main.tex}\\
+  \path{tab_parallel_addition_kernels_endpoint_primitive.tex}\\
+  \path{tab_parallel_addition_kernels_fingerprint_u_samples.tex}
+  \end{center}
+  并将全部数值与采样参数写入 \path{artifacts/export/*.json} 以供审计复算。
+\end{enumerate}
+\end{algorithm}
+
+\paragraph{协议一页总表（结构量 + 端点指纹）}
+该总表已在正文中给出（表 \ref{tab:parallel-addition-kernels-fingerprint-main}）。为避免重复插入导致标签冲突，此处不再重复 \verb|\input|。
+
+\paragraph{端点谱表（闭式零误差，\texorpdfstring{$n\le 20$}{n<=20}）}
+端点谱表已在正文中给出（表 \ref{tab:parallel-addition-kernels-endpoint-primitive}）。为避免重复插入导致标签冲突，此处不再重复 \verb|\input|。
+
+\subsubsection{中间权重 u in (0,1) 的可控近似：随机迹估计 + Möbius 反演（协议）}\label{app:kernel-fingerprint-hutchinson}
+上一小节给出了端点 $u\in\{0,1\}$ 的闭式“零误差”谱表与指纹；但在 $u\in(0,1)$ 时，$M_K(u)^n$ 的非零结构会迅速变得致密，因而“显式形成 $M^n$ 再取迹/系数”的精确计算不可扩展。为把核指纹扩展到连续谱对比（压力曲线 $\lambda_K(u)$ 与分层 prime spectrum $\{B_{K,n}(u)\}$），本文采用一个只依赖\textbf{稀疏矩阵乘向量}的可控近似协议。
+
+\begin{definition}[Hutchinson 随机迹估计]\label{def:hutchinson-trace}
+令 $A\in\RR^{N\times N}$ 为任意矩阵。取随机向量 $\mathbf r\in\{\pm 1\}^N$，其坐标独立同分布且 $\mathbb{P}(r_i=1)=\mathbb{P}(r_i=-1)=1/2$。定义单样本估计量
+\[
+T(\mathbf r;A):=\mathbf r^{\mathsf T}A\mathbf r.
+\]
+对 $S$ 个独立样本 $\mathbf r_1,\dots,\mathbf r_S$，定义 Hutchinson 迹估计
+\[
+\widehat{\mathrm{Tr}}_S(A):=\frac{1}{S}\sum_{s=1}^{S}\mathbf r_s^{\mathsf T}A\mathbf r_s.
+\]
+\end{definition}
+
+\begin{proposition}[无偏性与矩阵自由实现]\label{prop:hutchinson-unbiased-mfree}
+对任意 $A\in\RR^{N\times N}$，若 $\mathbf r$ 为定义 \ref{def:hutchinson-trace} 的 Rademacher 向量，则
+\[
+\mathbb{E}\bigl[\mathbf r^{\mathsf T}A\mathbf r\bigr]=\mathrm{Tr}(A),
+\qquad
+\mathbb{E}\bigl[\widehat{\mathrm{Tr}}_S(A)\bigr]=\mathrm{Tr}(A).
+\]
+并且当 $A=M_K(u)^n$ 时，$\mathbf r^{\mathsf T}A\mathbf r$ 可通过 $n$ 次稀疏乘向量递推计算：
+\[
+\mathbf v_0=\mathbf r,\qquad \mathbf v_{t+1}=M_K(u)\mathbf v_t,\qquad
+\mathbf r^{\mathsf T}M_K(u)^n\mathbf r=\mathbf r^{\mathsf T}\mathbf v_n.
+\]
+\end{proposition}
+
+\begin{proof}
+由于 $\mathbb{E}[r_ir_j]=\delta_{ij}$，有
+\(
+\mathbb{E}[\mathbf r^{\mathsf T}A\mathbf r]=\sum_{i,j}A_{ij}\mathbb{E}[r_ir_j]=\sum_i A_{ii}=\mathrm{Tr}(A)
+\)。
+矩阵自由实现只需展开定义即可。
+\end{proof}
+
+\begin{remark}[误差口径与样本数选择]\label{rem:hutchinson-error}
+对一般矩阵 $A$，Hutchinson 估计的集中界可用标准 Monte Carlo 方式处理；在 $A$ 为\textbf{对称半正定}的常见情形，可使用更强的相对误差样本复杂度界（见 \cite{Hutchinson1989ASE,AvronToledo2011Trace}）。在本文的核指纹设定中，我们采用两层可审计策略：
+\begin{itemize}
+  \item \textbf{固定预算 + 标准误差：}给定样本数 $S$，同时输出 $\widehat{\mathrm{Tr}}_S(M(u)^n)$ 的样本标准误差 $\mathrm{se}=s/\sqrt{S}$（$s$ 为样本标准差），把误差控制写成 $O(S^{-1/2})$ 的可见量；
+  \item \textbf{pilot 自适应：}先用小 $S_0$ 估计方差与尺度，再按目标相对误差阈值放大到所需 $S$（该步骤只改变采样次数，不改变任何数学定义）。
+\end{itemize}
+由于本节的目的是给出一个“可落地、可复现”的协议口径，正文表格默认采用前一种固定预算输出，并把样本数 $S$ 写入表注以便审计。
+\end{remark}
+
+\begin{proposition}[Möbius/Witt 反演的误差传播（primitive 的 \texorpdfstring{$1/n$}{1/n} 滤波增益）]\label{prop:mobius-error-propagation}
+设 \(\{a_n\}_{n\ge 1}\) 为任意实数序列，并以 Möbius 反演定义 primitive 计数（按轨道计）
+\[
+p_n:=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}\qquad(n\ge 1).
+\]
+给定任意近似迹序列 \(\{\widehat a_n\}_{n\ge 1}\)，并用同一公式定义
+\[
+\widehat p_n:=\frac{1}{n}\sum_{d\mid n}\mu(d)\,\widehat a_{n/d}.
+\]
+则对每个 \(n\ge 1\) 都有确定性上界
+\[
+\boxed{\ 
+\bigl|p_n-\widehat p_n\bigr|
+\le \frac{1}{n}\sum_{d\mid n}\bigl|a_{n/d}-\widehat a_{n/d}\bigr|
+\ }.
+\]
+\end{proposition}
+\begin{proof}
+由线性性
+\(
+p_n-\widehat p_n=\frac{1}{n}\sum_{d\mid n}\mu(d)\,(a_{n/d}-\widehat a_{n/d})
+\)，
+取绝对值并用三角不等式即得。
+\end{proof}
+
+\begin{corollary}[指数型迹误差 \texorpdfstring{$\Rightarrow$}{=>} primitive 误差的 \texorpdfstring{$\tau(n)/n$}{tau(n)/n} 界]\label{cor:mobius-exp-bound}
+若存在常数 \(\epsilon>0\)、\(\rho\ge 1\) 使得对所有 \(m\le n\) 有
+\[
+|a_m-\widehat a_m|\le \epsilon\,\rho^m,
+\]
+则
+\[
+\boxed{\ 
+|p_n-\widehat p_n|
+\le \epsilon\,\frac{\tau(n)}{n}\,\rho^n
+\ },
+\]
+其中 \(\tau(n):=\sum_{d\mid n}1\) 为约数个数。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:mobius-error-propagation}，
+\(
+|p_n-\widehat p_n|
+\le \frac{1}{n}\sum_{d\mid n}\epsilon\,\rho^{n/d}
+\le \epsilon\,\frac{\tau(n)}{n}\,\rho^n
+\)
+（因 \(\rho^{n/d}\le \rho^n\) 对 \(\rho\ge 1\) 成立）。
+\end{proof}
+
+\begin{remark}[带权情形的逐点版本]\label{rem:mobius-error-weighted-pointwise}
+对带权核的 primitive 分层谱
+\(
+B_{K,n}(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(u^d)
+\)
+（其中 \(a_m(u)=\Tr(M_K(u)^m)\)），命题 \ref{prop:mobius-error-propagation} 可逐点应用在每个固定 \(u\) 上，从而把任意可审计的迹误差界直接传播到 \(B_{K,n}(u)\) 的误差界；这正是“交换图闭合 \(\Rightarrow\) 可算同时可证”的工程闭环。
+\end{remark}
+
+\begin{proposition}[由单流避免全局直积大图：\texorpdfstring{$m$}{m}-流提升]\label{prop:hutchinson-global-lift}
+若全局块级核由 $m$ 条同构同余流张量装配，则
+\[
+M_{\mathrm{glob}}(u)=M_{\mathrm{flow}}(u)^{\otimes m},
+\qquad
+\mathrm{Tr}\!\left(M_{\mathrm{glob}}(u)^n\right)=\left(\mathrm{Tr}\!\left(M_{\mathrm{flow}}(u)^n\right)\right)^m.
+\]
+因此对任意 $n$，只需估计单流的 $\mathrm{Tr}(M_{\mathrm{flow}}(u)^n)$ 即可得到全局迹，并进一步由 Möbius 反演得到全局 primitive 分层谱：
+\[
+B^{\mathrm{glob}}_{n}(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\left(\mathrm{Tr}\!\left(M_{\mathrm{flow}}(u^d)^{n/d}\right)\right)^m.
+\]
+\end{proposition}
+
+\paragraph{可复现实验输出：统一对比表模板}
+脚本 \path{scripts/exp_parallel_addition_kernels_trace_hutchinson.py} 对 $K_9/K_{13}/K_{21}$ 的单流同步图实现上述协议：在若干采样点 $u\in(0,1)$ 上输出 $\lambda_K(u)$ 与 $\widehat B_{K,n}(u)$ 的对比表（并记录样本数与随机种子），并写出可直接 \verb|\input| 的 \LaTeX\ 表格片段：
+\begin{center}
+\path{sections/generated/tab_parallel_addition_kernels_fingerprint_u_samples.tex}.
+\end{center}
+该表作为端点谱表（表 \ref{tab:parallel-addition-kernels-endpoint-primitive}）与精确低阶多项式指纹（表 \ref{tab:parallel-addition-kernels-weighted-primitive}）之间的“中间 $u$”桥接层。
+该表已在正文实验部分给出（表 \ref{tab:parallel-addition-kernels-fingerprint-u-samples}）。为避免重复插入导致标签冲突，此处不再重复 \verb|\input|。
+
+\paragraph{复现方式（只需运行一个新脚本）}
+表 \ref{tab:sync-kernel-A-compare} 可由下述单一入口脚本再生成（脚本会自动调用其依赖的已有实验脚本）：
+\begin{center}
+\texttt{python3} \path{scripts/exp_sync_kernel_A_compare.py}.
+\end{center}
+
+同理，表 \ref{tab:parallel-addition-kernels-bfs} 可由
+\begin{center}
+\texttt{python3} \path{scripts/exp_parallel_addition_kernels_bfs.py}
+\end{center}
+一键再生成。
+
+而表 \ref{tab:parallel-addition-kernels-weighted-primitive} 可由
+\begin{center}
+\texttt{python3} \path{scripts/exp_parallel_addition_kernels_weighted_primitive.py}
+\end{center}
+一键再生成。
+
+表 \ref{tab:parallel-addition-kernels-zeta-series} 可由
+\begin{center}
+\texttt{python3} \path{scripts/exp_parallel_addition_kernels_zeta_series.py}
+\end{center}
+一键再生成。

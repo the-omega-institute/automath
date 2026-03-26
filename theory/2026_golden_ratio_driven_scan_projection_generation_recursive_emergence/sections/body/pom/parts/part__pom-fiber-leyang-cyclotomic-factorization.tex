@@ -1,0 +1,312 @@
+\paragraph{路径分量的 Lee--Yang 零点与实循环域分裂域：cyclotomic 因子化与分量谱可逆性}
+定理 \ref{thm:pom-fiber-indset-factorization} 已将纤维多项式严格分解为路径独立集多项式的乘积。
+本段把该乘法结构提升到零点、分裂域与不可约因子层面，并给出一个反向可逆性：由 \(Z_x(t)\) 的整系数因子结构可唯一重建分量长度多重集 \(\{\ell_i\}\)，从而确定纤维格（定理 \ref{thm:pom-fiber-birkhoff-fence-ideal-lattice}）。
+
+\begin{definition}[Fibonacci 多项式]\label{def:pom-fibonacci-polynomial}
+定义 Fibonacci 多项式族 \(\mathcal F_n(t)\in\mathbb Z[t]\)（\(n\ge 0\)）为
+\[
+\mathcal F_0(t)=0,\qquad \mathcal F_1(t)=1,\qquad
+\mathcal F_{n+1}(t)=\mathcal F_n(t)+t\,\mathcal F_{n-1}(t)\quad(n\ge 1).
+\]
+\end{definition}
+
+\begin{theorem}[路径独立集多项式的 Lee--Yang 零点循环参数化]\label{thm:pom-path-indset-leyang-cyclotomic-param}
+对任意 \(\ell\ge 0\)，路径独立集多项式满足
+\[
+I_\ell(t)=\mathcal F_{\ell+2}(t).
+\]
+令 \(n=\ell+2\ge 2\)。则 \(I_\ell(t)\) 的全部零点皆为负实数，且可显式写成
+\[
+t_{n,k}=-\frac{1}{4\cos^2\!\left(\frac{\pi k}{n}\right)},
+\qquad
+1\le k\le \left\lfloor\frac{n-1}{2}\right\rfloor.
+\]
+等价地，令有理函数
+\[
+\mathcal J(u):=-\frac{u}{(1+u)^2},
+\]
+则 \(t_{n,k}=\mathcal J(\zeta_n^k)\)（其中 \(\zeta_n=e^{2\pi i/n}\)）。
+\end{theorem}
+
+\begin{proof}
+递推 \(I_\ell(t)=I_{\ell-1}(t)+tI_{\ell-2}(t)\) 及初值 \(I_0(t)=1\)、\(I_1(t)=1+t\) 来自“末端顶点取/不取”的分类（见命题 \ref{prop:pom-path-indset-thermo-constants}）。
+与定义 \ref{def:pom-fibonacci-polynomial} 的递推比较得 \(I_\ell(t)=\mathcal F_{\ell+2}(t)\)。
+
+为求零点，记 \(\Delta=\sqrt{1+4t}\) 并设
+\[
+\lambda=\frac{1+\Delta}{2},\qquad \mu=\frac{1-\Delta}{2}.
+\]
+可由递推归纳验证 Binet 形式
+\(
+\mathcal F_n(t)=\frac{\lambda^n-\mu^n}{\lambda-\mu}
+\)。
+因此 \(\mathcal F_n(t)=0\iff (\lambda/\mu)^n=1\)。
+令 \(r=\lambda/\mu\)，则
+\[
+r=\frac{1+\Delta}{1-\Delta}\quad\Longrightarrow\quad
+\Delta=\frac{r-1}{r+1}
+\quad\Longrightarrow\quad
+t=\frac{\Delta^2-1}{4}=-\frac{r}{(1+r)^2}=\mathcal J(r).
+\]
+取 \(r=\zeta_n^k\)（\(1\le k\le n-1\)）并用
+\(
+1+\zeta_n^k=2e^{\pi i k/n}\cos(\pi k/n)
+\)
+化简即得
+\(
+t=-1/(4\cos^2(\pi k/n))
+\)。
+又因 \(k\) 与 \(n-k\) 给出同一 \(\cos^2\)，互异零点由所示范围给出。证毕。
+\end{proof}
+
+\begin{proposition}[Lee--Yang 变换的单位圆抬升与 cyclotomic 分解]\label{prop:pom-fiber-leyang-unitcircle-lift-cyclotomic}
+令 \(P(t)\in\ZZ[t]\) 为非常数多项式，并记 \(d:=\deg P\)。
+定义 Lee--Yang 抬升
+\[
+\mathcal L_P(u):=(1+u)^{2d}\,P\!\left(-\frac{u}{(1+u)^2}\right)\in\ZZ[u].
+\]
+则 \(\mathcal L_P\) 的零点除去 \(u=-1\) 的代数重数部分后，恰由 \(P\) 的零点在 \(\mathcal J\) 下的原像给出；特别地，若 \(P\) 的零点全属于集合 \(\{\mathcal J(\zeta):\ \zeta\in S^1,\ \zeta\neq -1\}\)，则 \(\mathcal L_P\) 的全部非平凡零点都位于单位圆 \(S^1\) 上。
+\par
+对任意 \(x\in X_m\)，取纤维多项式 \(Z_x(t)=\sum_{S\in\mathsf{Ind}(\Gamma_x)}t^{|S|}\) 并令
+\[
+\mathcal L_x(u):=\mathcal L_{Z_x}(u).
+\]
+若 \(\Gamma_x\cong\bigsqcup_{i=1}^r P_{\ell_i}\) 且 \(n_i:=\ell_i+2\)，并记 \(m_d(x):=\#\{i:\ d\mid n_i\}\)（\(d\ge 3\)，见定理 \ref{thm:pom-fiber-psi-exponent-mobius-reconstruct}），则有分解恒等式
+\begin{equation}\label{eq:pom-fiber-leyang-Lx-cyclotomic}
+\boxed{\;
+\mathcal L_x(u)=(1+u)^{2\deg Z_x}\prod_{d\ge 3}\Phi_d(u)^{m_d(x)}\;}
+\end{equation}
+其中 \(\Phi_d\) 为第 \(d\) 个圆分多项式。
+从而 \(\mathcal L_x\) 的非平凡零点为有限多个单位根的并，其阶数分层指数向量 \((m_d(x))_{d\ge 3}\) 与 \(Z_x(t)\) 的 \((\Psi_d)\)-指数向量一一对应（定理 \ref{thm:pom-fiber-psi-exponent-mobius-reconstruct}），并可由 Möbius 反演唯一重建路径长度多重集。
+\end{proposition}
+
+\begin{proof}
+由定义，\(\mathcal L_P\) 仅通过乘以 \((1+u)^{2d}\) 清除 \(P(\mathcal J(u))\) 的分母，故其零点（除 \(u=-1\) 的可能贡献外）由方程 \(P(\mathcal J(u))=0\) 给出，亦即由 \(P\) 的零点在 \(\mathcal J\) 下的原像给出。
+当 \(t_0=\mathcal J(\zeta)\) 且 \(|\zeta|=1\)、\(\zeta\neq -1\) 时，\(\mathcal J(u)=t_0\) 的解满足 \(u\in\{\zeta,\zeta^{-1}\}\subset S^1\)，从而“单位圆零点 \(\Rightarrow\) 单位圆原像”成立。
+\par
+对 \(\mathcal L_x\) 的分解：由定理 \ref{thm:pom-fiber-indset-factorization}，
+\(
+Z_x(t)=\prod_{i=1}^r I_{\ell_i}(t)
+\)。
+对每个因子 \(I_{\ell_i}\)，由定理 \ref{thm:pom-path-indset-leyang-cyclotomic-param} 知其零点可写为 \(\mathcal J(\zeta_{n_i}^k)\)，故其 Lee--Yang 抬升的非平凡零点为 \(\zeta_{n_i}^k\) 的并（按重数）。
+因此对每个 \(d\ge 3\)，圆分多项式 \(\Phi_d\) 的出现次数正是满足 \(d\mid n_i\) 的分量个数 \(m_d(x)\)。
+将各分量相乘并保留清分母因子 \((1+u)^{2\deg Z_x}\) 即得 \eqref{eq:pom-fiber-leyang-Lx-cyclotomic}。
+最后，\(m_d(x)\) 与分量长度多重集的可逆性由定理 \ref{thm:pom-fiber-psi-exponent-mobius-reconstruct} 的 Möbius 反演公式给出。证毕。
+\end{proof}
+
+\begin{theorem}[Lee--Yang 抬升与 Möbius 反演的函子性交换]\label{thm:pom-leyang-lift-mobius-involution-functorial}
+令 \(P(t)\in\ZZ[t]\) 为非常数多项式并记 \(d:=\deg P\)，并令 Lee--Yang 抬升 \(\mathcal L_P\) 如命题 \ref{prop:pom-fiber-leyang-unitcircle-lift-cyclotomic} 所定义。
+定义多项式自算子 \(\mathcal I\) 为
+\[
+(\mathcal I P)(t):=(4t+1)^d\,P\!\left(-\frac{t}{4t+1}\right)\in\ZZ[t].
+\]
+则成立：
+\begin{enumerate}
+  \item \textnormal{（交换律）}在 \(\ZZ[u]\) 中恒有
+  \[
+  \boxed{\ \mathcal L_{\mathcal I P}(u)=\mathcal L_P(-u)\ }.
+  \]
+  \item \textnormal{（自反演）}\(\mathcal I(\mathcal I P)=P\)。
+  \item \textnormal{（Lee--Yang 性保持）}若 \(P\) 的全部零点属于 Lee--Yang 奇异环 \((-\infty,-\tfrac14]\)，则 \(\mathcal I P\) 的全部零点亦属于该射线；
+  等价地，\(\mathcal L_P\) 的全部非平凡零点位于单位圆当且仅当 \(\mathcal L_P(-u)\) 的全部非平凡零点位于单位圆。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+记 \(t=\mathcal J(u)=-\frac{u}{(1+u)^2}\)。
+直接化简得到
+\[
+4t+1=4\mathcal J(u)+1=\frac{(1-u)^2}{(1+u)^2},
+\qquad
+\mathcal J(-u)=-\frac{t}{4t+1}.
+\]
+于是
+\[
+\mathcal L_P(-u)
+=(1-u)^{2d}\,P\!\bigl(\mathcal J(-u)\bigr)
+=(1+u)^{2d}\,(4t+1)^d\,P\!\left(-\frac{t}{4t+1}\right)
+=(1+u)^{2d}\,(\mathcal I P)(t)
+=\mathcal L_{\mathcal I P}(u),
+\]
+得到交换律。
+\par
+自反演由线性分式变换 \(t\mapsto -\frac{t}{4t+1}\) 为 involution 且次数配平因子为 \((4t+1)^d\) 立即推出。
+\par
+若 \(P\) 的零点皆属于 \((-\infty,-\tfrac14]\)，则由于 \(t\mapsto -\frac{t}{4t+1}\) 保持该射线不变，\((\mathcal I P)(t)=(4t+1)^dP(-t/(4t+1))\) 的零点仍落在该射线上。
+最后一条等价性由 \(-u\) 保持单位圆以及命题 \ref{prop:pom-fiber-leyang-unitcircle-lift-cyclotomic} 的“奇异环 \(\Leftrightarrow\) 单位圆抬升”字典得到。证毕。
+\end{proof}
+
+\begin{theorem}[路径分量零点的分裂域为最大实循环域]\label{thm:pom-path-indset-splitting-field-real-cyclotomic}
+令 \(n\ge 3\) 并考虑 \(I_{n-2}(t)\) 在 \(\mathbb Q\) 上的分裂域 \(K_n\)。
+则
+\[
+K_n=\mathbb Q(\zeta_n+\zeta_n^{-1})=\mathbb Q\!\left(2\cos\frac{2\pi}{n}\right),
+\qquad
+\mathrm{Gal}(K_n/\mathbb Q)\cong (\mathbb Z/n\mathbb Z)^\times/\{\pm 1\}.
+\]
+因此，对任意稳定类型 \(x\) 的纤维多项式 \(Z_x(t)=\prod_i I_{\ell_i}(t)\)，其分裂域包含于有限个最大实循环域的合成中，因而必为 \(\mathbb Q\) 的 Abel 扩张。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:pom-path-indset-leyang-cyclotomic-param}，
+任意根可写为
+\[
+t_{n,k}
+=-\frac{1}{4\cos^2(\pi k/n)}
+=-\frac{1}{2\bigl(1+\cos(2\pi k/n)\bigr)}.
+\]
+而
+\(
+\cos(2\pi k/n)=\frac{\zeta_n^k+\zeta_n^{-k}}{2}\in \mathbb Q(\zeta_n+\zeta_n^{-1})
+\)，
+故 \(t_{n,k}\in\mathbb Q(\zeta_n+\zeta_n^{-1})\)，从而 \(K_n\subseteq\mathbb Q(\zeta_n+\zeta_n^{-1})\)。
+
+反向取 \(k=1\)，由上式反解得
+\[
+\cos\frac{2\pi}{n}=-\frac{1}{2t_{n,1}}-1\in\mathbb Q(t_{n,1})\subseteq K_n,
+\]
+因此 \(\mathbb Q(\zeta_n+\zeta_n^{-1})=\mathbb Q(\cos(2\pi/n))\subseteq K_n\)。
+合并得到 \(K_n=\mathbb Q(\zeta_n+\zeta_n^{-1})\)。
+Galois 群同构为循环域基本理论的标准结论，并因 \(\cos(2\pi k/n)=\cos(2\pi(-k)/n)\) 在 \(\{\pm 1\}\) 上取商。证毕。
+\end{proof}
+
+\begin{definition}[Fibonacci--循环因子]\label{def:pom-psi-cyclotomic-factor}
+对整数 \(d\ge 3\)，定义多项式
+\[
+\Psi_d(t):=
+\prod_{\substack{1\le k<d/2\\(k,d)=1}}
+\left(1+4\cos^2\!\left(\frac{\pi k}{d}\right)t\right).
+\]
+\end{definition}
+
+\begin{theorem}[路径独立集多项式的 cyclotomic 因子化与不可约性]\label{thm:pom-path-indset-psi-factorization-irreducible}
+对任意 \(d\ge 3\)，有 \(\Psi_d(t)\in\mathbb Z[t]\)，且在 \(\mathbb Q[t]\) 上不可约，并满足
+\[
+\deg \Psi_d=\frac{\varphi(d)}{2}.
+\]
+此外，对任意 \(n\ge 3\) 成立分解恒等式
+\[
+I_{n-2}(t)=\prod_{\substack{d\mid n\\ d\ge 3}} \Psi_d(t).
+\]
+\end{theorem}
+
+\begin{proof}
+由定义 \ref{def:pom-psi-cyclotomic-factor}，\(\Psi_d\) 的根集合恰为
+\[
+\left\{-\frac{1}{4\cos^2(\pi k/d)}:\ 1\le k<d/2,\ (k,d)=1\right\}.
+\]
+定理 \ref{thm:pom-path-indset-splitting-field-real-cyclotomic} 给出
+\(\mathbb Q(\zeta_d+\zeta_d^{-1})\) 的次数为 \(\varphi(d)/2\)，并且
+\(\mathrm{Gal}(\mathbb Q(\zeta_d+\zeta_d^{-1})/\mathbb Q)\) 在
+\(\{\cos(2\pi k/d):(k,d)=1\}\) 上传递作用；
+由于 \(\cos^2(\pi k/d)\) 与 \(k\mapsto -k\) 不变，故上述根集合为同一 Galois 轨道的去重版本，轨道大小为 \(\varphi(d)/2\)。
+因此 \(\Psi_d\) 为该轨道的最小多项式：在 \(\mathbb Q[t]\) 上不可约且次数为 \(\varphi(d)/2\)。
+注意对任意 \((k,d)=1\) 有
+\[
+4\cos^2\!\left(\frac{\pi k}{d}\right)
+=2+2\cos\!\left(\frac{2\pi k}{d}\right)
+=2+\zeta_d^k+\zeta_d^{-k},
+\]
+从而 \(\alpha_k:=4\cos^2(\pi k/d)\) 为代数整数且属于 \(\mathbb Q(\zeta_d+\zeta_d^{-1})\)。
+由 \(\Psi_d(t)=\prod_k(1+\alpha_k t)\) 可知其系数为 \(\{\alpha_k\}\) 的对称多项式，故均为代数整数；
+另一方面系数在 Galois 作用下不变，从而落在 \(\mathbb Q\) 中。
+因此每个系数属于 \(\mathbb Q\) 的同时为代数整数，只能是整数，故 \(\Psi_d\in\mathbb Z[t]\)。
+
+对因子化：由定理 \ref{thm:pom-path-indset-leyang-cyclotomic-param}，
+\(I_{n-2}(t)\) 的根为 \(\{-1/(4\cos^2(\pi k/n)):\ 1\le k<n/2\}\)。
+对给定 \(k\)，令 \(d=\mathrm{ord}(\zeta_n^k)=n/\gcd(k,n)\)，则
+\(\cos(\pi k/n)=\cos(\pi k'/d)\)（约去公因子后），从而相应根只依赖该原始阶 \(d\)。
+因此根集合按 \(d\mid n\) 分裂为互不相交并集，各部分恰为 \(\Psi_d\) 的根集合。
+两边常数项同为 \(1\)，且次数相加吻合，故分解恒等式成立。证毕。
+\end{proof}
+
+\begin{theorem}[由 \texorpdfstring{$Z_x(t)$}{Zx(t)} 的 cyclotomic 指数重建分量长度谱]\label{thm:pom-fiber-psi-exponent-mobius-reconstruct}
+取任意 \(x\in X_m\)，设 \(\Gamma_x\cong\bigsqcup_{i=1}^r P_{\ell_i}\)。
+记
+\[
+n_i:=\ell_i+2\quad(1\le i\le r).
+\]
+对 \(d\ge 3\) 定义指数统计量
+\[
+m_d(x):=\#\{\,i:\ d\mid n_i\,\}.
+\]
+则有：
+\[
+Z_x(t)=\prod_{d\ge 3}\Psi_d(t)^{m_d(x)}.
+\]
+进一步，令
+\(
+c_n(x):=\#\{\,i:\ n_i=n\,\}
+\)（\(n\ge 3\)），则满足 Möbius 反演公式
+\[
+c_n(x)=\sum_{d\mid n}\mu(d)\,m_{n/d}(x),
+\]
+其中 \(\mu\) 为整数 Möbius 函数。
+因此仅由 \(Z_x(t)\) 的 \(\mathbb Z[t]\) 因子化（等价地由全部指数 \(m_d(x)\)）即可唯一确定多重集 \(\{\ell_i\}\)，从而唯一确定纤维格 \(\mathcal L_x\) 的同构型（定理 \ref{thm:pom-fiber-birkhoff-fence-ideal-lattice}）。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:pom-fiber-indset-factorization}，
+\(
+Z_x(t)=\prod_{i=1}^r I_{\ell_i}(t)=\prod_{i=1}^r I_{n_i-2}(t)
+\)。
+对每个因子应用定理 \ref{thm:pom-path-indset-psi-factorization-irreducible} 的分解式得
+\(
+I_{n_i-2}(t)=\prod_{d\mid n_i,\ d\ge 3}\Psi_d(t)
+\)。
+相乘后 \(\Psi_d\) 的指数恰为满足 \(d\mid n_i\) 的分量个数，即 \(m_d(x)\)，从而得到第一式。
+
+对反演：由定义可知
+\[
+m_d(x)=\sum_{\substack{n\ge 3\\ d\mid n}} c_n(x),
+\]
+这是标准的“按倍数求和”关系，因此由 Möbius 反演立得
+\(
+c_n(x)=\sum_{d\mid n}\mu(d)m_{n/d}(x)
+\)。
+最后，由 \(\Psi_d\) 在 \(\mathbb Z[t]\) 的唯一分解可由 \(Z_x(t)\) 读出全部 \(m_d(x)\)，再由反演得全部 \(c_n(x)\)，等价得到 \(\{n_i\}\) 与 \(\{\ell_i\}\)。
+由定理 \ref{thm:pom-fiber-birkhoff-fence-ideal-lattice}，\(\{\ell_i\}\) 决定纤维格同构型，结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$Z_x(-1)$}{Zx(-1)} 的算术消失判别与闭式符号]\label{cor:pom-fiber-zx-minus-one-psi3-sign}
+沿用定理 \ref{thm:pom-fiber-psi-exponent-mobius-reconstruct} 的记号，并令 \(s(x):=Z_x(-1)\)。
+则
+\[
+s(x)=0\ \Longleftrightarrow\ m_3(x)\ge 1
+\ \Longleftrightarrow\ \Psi_3(t)\ \text{整除}\ Z_x(t).
+\]
+若 \(s(x)\neq 0\)，则有闭式符号公式
+\[
+s(x)=(-1)^{\sum_{i=1}^r \left\lfloor\frac{n_i-1}{3}\right\rfloor}
+=(-1)^{\sum_{i=1}^r \left\lfloor\frac{\ell_i+1}{3}\right\rfloor}.
+\]
+\end{corollary}
+
+\begin{proof}
+由 \(Z_x(t)=\prod_i I_{\ell_i}(t)\) 可知 \(s(x)=\prod_i I_{\ell_i}(-1)\)。
+对单个分量，令 \(G_n:=\mathcal F_n(-1)\)，则递推化为
+\(
+G_{n+1}=G_n-G_{n-1}
+\)，配以 \(G_0=0,G_1=1\)，从而 \((G_n)\) 具有 \(6\) 周期并满足
+\(
+G_n=0\iff 3\mid n
+\)，且当 \(3\nmid n\) 时
+\(
+G_n=(-1)^{\lfloor (n-1)/3\rfloor}
+\)。
+由 \(I_\ell(t)=\mathcal F_{\ell+2}(t)\) 得
+\[
+I_\ell(-1)=0\iff 3\mid(\ell+2)\iff \ell\equiv 1\pmod 3,
+\qquad
+I_\ell(-1)=(-1)^{\lfloor(\ell+1)/3\rfloor}\ \ (\ell\not\equiv 1\!\!\!\pmod 3).
+\]
+因此 \(s(x)=0\) 当且仅当存在某个 \(i\) 使 \(3\mid n_i\)，等价于 \(m_3(x)\ge 1\)。
+另一方面，由定义 \(\Psi_3(t)=1+t\)（因 \(\cos^2(\pi/3)=1/4\)），故
+\(
+m_3(x)\ge 1
+\iff
+\Psi_3\mid Z_x
+\)。
+非零情形下把符号相乘即得闭式公式。证毕。
+\end{proof}
+

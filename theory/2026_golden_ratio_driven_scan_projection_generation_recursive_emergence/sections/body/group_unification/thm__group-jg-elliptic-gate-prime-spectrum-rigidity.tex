@@ -1,0 +1,228 @@
+\paragraph{椭圆投影门的 Fourier--\(p\)-进谱与外置寄存器：刚性、不变量与不可判别下界}
+本段固定一类由单位圆到椭圆的 \(m\)-重覆盖，并以其对数速度的 Fourier 系数作为可审计读出；在有理参数制度下，该读出在各素数处产生一组 \(p\)-进斜率不变量，从而把“素数寄存器”与“参数重构/算法选择”对齐为严格命题。与此同时，有限模 \(p^K\) 的截断审计存在结构性盲区。
+
+\begin{definition}[椭圆投影门与对数速度谱]\label{def:group-jg-elliptic-gate-logspeed-spectrum}
+取 \(c\in(0,1)\cap\QQ\) 与 \(m\in\NN\)。
+定义椭圆投影门
+\[
+J_{c,m}:S^1\to\CC,\qquad
+J_{c,m}(e^{i\theta}):=e^{im\theta}+c\,e^{-im\theta}.
+\]
+记其像曲线为
+\[
+E_c:=\bigl\{(1+c)\cos t+i(1-c)\sin t:\ t\in\RR/2\pi\ZZ\bigr\}\subset\CC.
+\]
+定义对数速度偏差函数
+\[
+u_{c,m}(\theta):=\log\bigl|J_{c,m}'(e^{i\theta})\bigr|-\log m
+=\log\bigl|1-c\,e^{-2im\theta}\bigr|.
+\]
+并记其 Fourier 系数为
+\[
+\widehat u_{c,m}(k):=\frac{1}{2\pi}\int_{0}^{2\pi}u_{c,m}(\theta)\,e^{-ik\theta}\,\dd\theta\qquad(k\in\ZZ).
+\]
+\end{definition}
+
+\begin{theorem}[Gödel--椭圆门的素数谱刚性]\label{thm:group-jg-elliptic-gate-prime-spectrum-rigidity}
+在定义 \ref{def:group-jg-elliptic-gate-logspeed-spectrum} 的设定下，有：
+\begin{enumerate}
+  \item \textbf{（稀疏支持）}
+  \(\widehat u_{c,m}(k)=0\) 当且仅当 \(k\notin 2m\ZZ\)。
+  并且对任意 \(n\ge 1\)，
+  \[
+  \widehat u_{c,m}(\pm 2mn)=-\frac{c^n}{2n}.
+  \]
+  \item \textbf{（\(p\)-进斜率）}
+  对任意素数 \(p\) 与任意 \(n\ge 1\)，
+  \[
+  \nu_p\!\bigl(\widehat u_{c,m}(2mn)\bigr)=n\,\nu_p(c)-\nu_p(n)-\nu_p(2).
+  \]
+  特别地，当 \(p\neq 2\) 时
+  \[
+  \nu_p\!\bigl(\widehat u_{c,m}(2mn)\bigr)=n\,\nu_p(c)-\nu_p(n).
+  \]
+  \item \textbf{（参数可重构性）}
+  由 \(\widehat u_{c,m}\) 可唯一重构 \(m\) 与向量 \((\nu_p(c))_{p\ \mathrm{prime}}\)。
+  更具体地，
+  \[
+  m=\frac12\gcd\{\,|k|:\ \widehat u_{c,m}(k)\neq 0\,\},
+  \]
+  并且对任意奇素数 \(p\) 有
+  \[
+  \nu_p(c)=
+  \lim_{\substack{n\to\infty\\ p\nmid n}}
+  \frac{\nu_p\!\bigl(\widehat u_{c,m}(2mn)\bigr)}{n}.
+  \]
+\end{enumerate}
+从而 \((c,m)\) 的素数谱数据 \(\bigl((\nu_p(c))_p,(\nu_p(m))_p\bigr)\) 构成完备不变量：若两组参数 \((c,m)\)、\((c',m')\) 诱导相同的 \(u_{c,m}(\theta)\)（等价地相同的 Fourier 系数族），则 \(c=c'\) 且 \(m=m'\)。
+\end{theorem}
+
+\begin{proof}
+\textbf{(1)} 因 \(0<c<1\)，对 \(|z|<1\) 有解析恒等式
+\(
+\log(1-z)=-\sum_{n\ge 1}\frac{z^n}{n}
+\)。
+取 \(z=c e^{-2im\theta}\) 并取实部，得
+\[
+u_{c,m}(\theta)=\Re\log(1-ce^{-2im\theta})
+=-\sum_{n\ge 1}\frac{c^n}{n}\cos(2mn\theta).
+\]
+再用
+\(
+\cos(2mn\theta)=\tfrac12(e^{i2mn\theta}+e^{-i2mn\theta})
+\)
+展开，即得 \(\widehat u_{c,m}(\pm 2mn)=-c^n/(2n)\)，其余频率系数为 \(0\)，从而支持稀疏性成立。
+\par
+\textbf{(2)} 由 (1) 得 \(\widehat u_{c,m}(2mn)=-c^n/(2n)\)。
+写 \(c=a/b\) 为既约分式，则
+\(
+\widehat u_{c,m}(2mn)=-a^n/(2b^n n)
+\)，于是
+\[
+\nu_p\!\bigl(\widehat u_{c,m}(2mn)\bigr)
+=n(\nu_p(a)-\nu_p(b))-\nu_p(n)-\nu_p(2)
+=n\nu_p(c)-\nu_p(n)-\nu_p(2).
+\]
+\par
+\textbf{(3)} 由 (1) 知非零频率集合恰为 \(\{\pm 2m,\pm 4m,\dots\}\)，故其最大公因子为 \(2m\)，从而 \(m\) 由支持唯一确定。
+再由 (2) 对任意奇素数 \(p\)，取无穷多 \(n\) 使 \(p\nmid n\)，则 \(\nu_p(n)=0\) 且 \(\nu_p(2)=0\)，从而
+\(
+\nu_p(\widehat u_{c,m}(2mn))/n=\nu_p(c)
+\)，得到极限表达式。
+最后，有理数由全部素数赋值向量唯一确定，故 \(c\) 唯一。证毕。
+\end{proof}
+
+\begin{theorem}[对数速度谱的外函数刚性：谱形态强制 Joukowsky 椭圆]\label{thm:group-jg-outer-function-rigidity-joukowsky-ellipse}
+令 \(\Phi\) 在外圆盘 \(\{\,|z|>1\,\}\) 上全纯，并在无穷远处为极点。
+设边界值 \(\gamma(\theta):=\Phi(e^{i\theta})\) 为实解析浸入（即 \(\gamma'(\theta)\neq 0\)）。
+假设存在 \(m\in\NN\)、\(c\in(0,1)\) 与常数 \(A\in\CC^\times\) 使得
+\[
+\log|\gamma'(\theta)|
+=\log(m|A|)+\log|1-ce^{-2im\theta}|
+\qquad(\forall\theta).
+\]
+则存在常数 \(B\in\CC\) 与相位 \(\beta\in\RR\) 使
+\[
+\Phi(z)=e^{i\beta}A\bigl(z^m+c z^{-m}\bigr)+B.
+\]
+因此（忽略平移与旋转）曲线 \(\gamma(\theta)\) 刚性地为椭圆 \(E_c\) 的 \(m\)-重参数化。
+\end{theorem}
+
+\begin{proof}
+在外圆盘上定义
+\[
+F(z):=\frac{\Phi'(z)}{e^{i\beta}mA z^{m-1}},
+\]
+其中 \(\beta\) 稍后选取。
+当 \(z=e^{i\theta}\) 时，\(|\Phi'(e^{i\theta})|=|\gamma'(\theta)|\)，故由假设得
+\[
+|F(e^{i\theta})|=|1-ce^{-2im\theta}|=|1-c z^{-2m}|.
+\]
+令
+\[
+G(z):=\frac{F(z)}{1-c z^{-2m}}.
+\]
+则 \(G\) 在 \(|z|>1\) 上全纯，且 \(|G(e^{i\theta})|=1\)。
+又因 \(\Phi\) 在无穷远处为极点，\(\Phi'(z)\) 在无穷远处有主部 \(\sim mA e^{i\beta} z^{m-1}\)；可取 \(\beta\) 使 \(F(\infty)=1\)，从而 \(G(\infty)=1\)。
+\par
+函数 \(\log|G|\) 在外圆盘上调和，边界值为 \(0\)，且在无穷远处为 \(0\)，故 \(\log|G|\equiv 0\)，从而 \(G\) 常模为 \(1\)。
+结合归一化 \(G(\infty)=1\) 得 \(G\equiv 1\)，即
+\[
+F(z)\equiv 1-c z^{-2m}.
+\]
+于是
+\[
+\Phi'(z)=e^{i\beta}mA\bigl(z^{m-1}-c z^{-(m+1)}\bigr),
+\]
+积分得到
+\(
+\Phi(z)=e^{i\beta}A(z^m+c z^{-m})+B
+\)。
+证毕。
+\end{proof}
+
+\begin{proposition}[\(m\)-折椭圆投影的最小寄存器与素因子强制性]\label{prop:group-jg-elliptic-gate-minimal-register}
+取 \(c\in(0,1)\)、\(m\in\NN\)，并考虑覆盖 \(J_{c,m}:S^1\to E_c\)。
+设 \(R\) 为有限集合，存在映射 \(\iota:S^1\to E_c\times R\) 使 \(\pi_{E_c}\circ\iota=J_{c,m}\) 且 \(\iota\) 为单射。
+则：
+\begin{enumerate}
+  \item 必有 \(|R|\ge m\)，从而任何有限外置寄存器的最小信息量下界为 \(\log m\)。
+  \item 若进一步要求 \(\iota\) 对 deck 群 \(D_m\simeq\ZZ/m\ZZ\) 等变，即存在置换表示 \(\rho:D_m\to\mathrm{Sym}(R)\) 使得
+  \[
+  \iota(\zeta z)=\bigl(J_{c,m}(z),\ \rho(\zeta)(r(z))\bigr)\qquad(\zeta\in D_m),
+  \]
+  则 \(\rho\) 必含一个长度为 \(m\) 的轨道。
+  因而当 \(R\) 赋予有限阿贝尔群结构且 \(\rho\) 来自群平移时，\(R\) 必含阶为 \(m\) 的循环子群，进而
+  \[
+  \ZZ/m\ZZ\ \cong\ \prod_{p}\ZZ/p^{\nu_p(m)}\ZZ,
+  \qquad
+  \log m=\sum_p \nu_p(m)\log p.
+  \]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) 对任意 \(w\in E_c\)，纤维 \(|J_{c,m}^{-1}(w)|=m\)。
+若 \(\iota\) 单射，则该 \(m\) 个点在 \(E_c\times R\) 中第一坐标同为 \(w\)，故第二坐标必须两两不同，遂 \(|R|\ge m\)。
+\par
+(ii) deck 群 \(D_m\) 自由且传递地作用于每个纤维。
+等变性要求：同一纤维内不同点的标签在 \(R\) 中不能碰撞，故 \(\rho(D_m)\) 在某个子集上必须给出自由传递作用，等价于存在长度为 \(m\) 的轨道。
+若 \(\rho\) 由阿贝尔群 \(R\) 的平移实现，则该轨道同构于某个阶为 \(m\) 的子群之陪集，从而 \(R\) 含阶为 \(m\) 的循环子群。
+最后两式为有限交换群的主分解与对数分解。证毕。
+\end{proof}
+
+\begin{corollary}[有理椭圆投影门的素数谱分类]\label{cor:group-jg-elliptic-gate-prime-spectrum-classification}
+在命题 \ref{prop:group-jg-elliptic-gate-minimal-register} 的等变外置语义下，椭圆投影门 \(J_{c,m}\)（\(c\in(0,1)\cap\QQ\)、\(m\in\NN\)）在“旋转--平移--寄存器重标号”同构意义下由且仅由二元素数谱
+\[
+\Bigl(\ (\nu_p(c))_{p\ \mathrm{prime}},\ (\nu_p(m))_{p\ \mathrm{prime}}\ \Bigr)
+\]
+决定。
+反之，任取有限支撑赋值向量 \((\alpha_p)_p,(\beta_p)_p\in\bigoplus_p\ZZ\) 使
+\(
+c=\prod_p p^{\alpha_p}\in(0,1)\cap\QQ
+\)、\(
+m=\prod_p p^{\beta_p}\in\NN
+\)，则可构造唯一同构类的椭圆门 \(J_{c,m}\)。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:group-jg-elliptic-gate-prime-spectrum-rigidity}，\(\widehat u_{c,m}\) 唯一确定 \(m\) 与 \((\nu_p(c))_p\)。
+而等变外置下寄存器的最小结构被迫包含 \(\ZZ/m\ZZ\) 的循环轨道，故 \((\nu_p(m))_p\) 为内禀数据。
+反向构造由给定素数赋值向量唯一确定 \(c,m\)，代入定义 \ref{def:group-jg-elliptic-gate-logspeed-spectrum} 即得。证毕。
+\end{proof}
+
+\begin{theorem}[\(p\)-进盲区：有限谱核验的不可判别下界]\label{thm:group-jg-elliptic-gate-padics-blindspot}
+固定奇素数 \(p\ge 3\)、整数 \(K\ge 1\) 与截断阶 \(N\ge 1\)。
+则存在无穷多对不同的有理数 \(c\neq c'\)（均落在 \((0,1)\) 且在 \(\ZZ_{(p)}\) 中为 \(p\)-进单位）使得对所有 \(1\le n\le N\) 有同余
+\[
+\widehat u_{c,1}(2n)\equiv \widehat u_{c',1}(2n)\pmod{p^{K}}
+\qquad\text{于 }\ZZ_{(p)}.
+\]
+因此，任何仅检查有限个 Fourier 系数的模 \(p^{K}\) 审计协议，结构性地无法排除某些高 \(p\)-深度的参数差异。
+\end{theorem}
+
+\begin{proof}
+取任意 \(p\)-进单位 \(c\in(0,1)\cap\QQ\cap\ZZ_{(p)}^\times\)。
+取整数 \(t\in\ZZ\) 使 \(c':=c+p^K t\) 仍落在 \((0,1)\cap\QQ\) 且为 \(p\)-进单位，并令 \(p\nmid t\)。
+对任意 \(n\ge 1\)，二项式展开给出
+\[
+c'^n-c^n=\sum_{j=1}^{n}\binom{n}{j}c^{n-j}(p^{K}t)^{j}.
+\]
+由于 \(c\) 为 \(p\)-进单位且 \(p\nmid t\)，首项 \(j=1\) 的 \(p\)-进赋值为 \(\nu_p(n)+K\)，而对 \(j\ge 2\) 的各项至少含 \(p^{2K}\)，故
+\[
+\nu_p(c'^n-c^n)\ge K+\nu_p(n).
+\]
+由定理 \ref{thm:group-jg-elliptic-gate-prime-spectrum-rigidity}(1)（取 \(m=1\)）知 \(\widehat u_{c,1}(2n)=-c^n/(2n)\)，从而
+\[
+\widehat u_{c',1}(2n)-\widehat u_{c,1}(2n)=-\frac{c'^n-c^n}{2n}.
+\]
+又因 \(p\ge 3\) 故 \(\nu_p(2)=0\)，于是
+\[
+\nu_p\!\bigl(\widehat u_{c',1}(2n)-\widehat u_{c,1}(2n)\bigr)
+\ge (K+\nu_p(n))-\nu_p(n)=K,
+\]
+即得到模 \(p^K\) 的不可判别性。
+由 \(t\) 的可选性可构造无穷多对 \(c\neq c'\)。证毕。
+\end{proof}
+
+\endinput

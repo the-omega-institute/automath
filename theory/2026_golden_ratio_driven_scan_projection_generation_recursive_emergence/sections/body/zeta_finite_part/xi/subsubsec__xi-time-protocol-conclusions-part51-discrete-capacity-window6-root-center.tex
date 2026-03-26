@@ -1,0 +1,516 @@
+% (User input window)
+
+\paragraph{离散预算容量指数、基态驱动界与 window-\texorpdfstring{$6$}{6} 异常分离}
+前一组结果把离散比特预算下的预言机容量压缩为尾谱变分公式与由最大纤维数据驱动的粗相图；
+后一组结果则把 window-\(6\) 的奇偶荷格、\(B_3/C_3\) 根字典、中心结构与精确可逆阈值写成同一组
+可核验的离散分级结论。
+
+\begin{theorem}[预言机容量指数的尾谱变分界]\label{thm:xi-oracle-capacity-exponent-tail-variational-bounds}
+设折叠族满足
+\[
+\Fold_m:\Omega_m\to X_m,
+\qquad
+|X_m|=F_{m+2},
+\]
+并记纤维多重度
+\[
+d_m(x):=\bigl|\Fold_m^{-1}(x)\bigr|
+\qquad(x\in X_m).
+\]
+对整数预算 \(B\ge 0\)，定义预言机容量
+\[
+C_m(B):=\sum_{x\in X_m}\min\!\bigl(d_m(x),2^B\bigr).
+\]
+对 \(\lambda\ge 0\)，定义指数尾计数
+\[
+N_m(\lambda):=\#\{x\in X_m:\ d_m(x)\ge e^{\lambda m}\},
+\]
+并记
+\[
+s^{-}(\lambda):=\liminf_{m\to\infty}\frac1m\log N_m(\lambda),
+\qquad
+s^{+}(\lambda):=\limsup_{m\to\infty}\frac1m\log N_m(\lambda).
+\]
+对任意 \(\beta\ge 0\)，令
+\[
+B_m:=\left\lfloor \frac{\beta m}{\log 2}\right\rfloor,
+\]
+并定义容量指数
+\[
+\underline\Sigma(\beta):=\liminf_{m\to\infty}\frac1m\log C_m(B_m),
+\qquad
+\overline\Sigma(\beta):=\limsup_{m\to\infty}\frac1m\log C_m(B_m).
+\]
+则有严格变分界
+\[
+\boxed{\;
+\max\!\left\{\log\varphi,\ \sup_{0\le \lambda<\beta}\bigl(\lambda+s^{-}(\lambda)\bigr)\right\}
+\le
+\underline\Sigma(\beta)
+\le
+\overline\Sigma(\beta)
+\le
+\max\!\left\{\log\varphi,\ \sup_{0\le \lambda\le \beta}\bigl(\lambda+s^{+}(\lambda)\bigr)\right\}. \;}
+\]
+\end{theorem}
+\begin{proof}
+当 \(\beta=0\) 时，\(B_m=0\) 且
+\[
+C_m(B_m)=C_m(0)=\sum_{x\in X_m}1=|X_m|.
+\]
+于是
+\[
+\underline\Sigma(0)=\overline\Sigma(0)
+=
+\lim_{m\to\infty}\frac1m\log|X_m|
+=
+\log\varphi,
+\]
+结论成立。以下设 \(\beta>0\)。
+\par
+由
+\(
+B_m=\lfloor \beta m/\log 2\rfloor
+\)
+得
+\[
+2^{B_m}=e^{\beta m+O(1)}.
+\]
+\par
+\textbf{下界。}
+固定 \(0\le \lambda<\beta\)。
+当 \(m\) 充分大时，
+\(
+2^{B_m}\ge e^{\lambda m}
+\)。
+故若 \(x\in X_m\) 满足 \(d_m(x)\ge e^{\lambda m}\)，则
+\[
+\min\bigl(d_m(x),2^{B_m}\bigr)\ge e^{\lambda m}.
+\]
+于是
+\[
+C_m(B_m)\ge e^{\lambda m}N_m(\lambda).
+\]
+取 \(\liminf\) 得
+\[
+\underline\Sigma(\beta)\ge \lambda+s^{-}(\lambda).
+\]
+再对全部 \(0\le \lambda<\beta\) 取上确界，得到
+\[
+\underline\Sigma(\beta)\ge \sup_{0\le \lambda<\beta}\bigl(\lambda+s^{-}(\lambda)\bigr).
+\]
+另一方面，对每个 \(x\in X_m\) 都有
+\(
+\min(d_m(x),2^{B_m})\ge 1
+\)，故
+\[
+C_m(B_m)\ge |X_m|.
+\]
+于是
+\[
+\underline\Sigma(\beta)\ge
+\lim_{m\to\infty}\frac1m\log|X_m|
+=\log\varphi.
+\]
+二者合并即得左端不等式。
+\par
+\textbf{上界。}
+固定 \(\varepsilon\in(0,\beta)\)，并令
+\[
+J:=\left\lfloor\frac{\beta}{\varepsilon}\right\rfloor.
+\]
+由于 \(J\varepsilon\le \beta<(J+1)\varepsilon\)，对任意 \(x\in X_m\) 有三种可能：
+\begin{enumerate}
+  \item 若 \(d_m(x)<e^{\varepsilon m}\)，则
+  \(
+  \min(d_m(x),2^{B_m})\le e^{\varepsilon m}
+  \)；
+  \item 若对某个 \(1\le j\le J-1\) 有
+  \(
+  e^{j\varepsilon m}\le d_m(x)<e^{(j+1)\varepsilon m}
+  \)，则
+  \(
+  \min(d_m(x),2^{B_m})\le e^{(j+1)\varepsilon m}
+  \)；
+  \item 若 \(d_m(x)\ge e^{J\varepsilon m}\)，则
+  \(
+  \min(d_m(x),2^{B_m})\le 2^{B_m}=e^{\beta m+O(1)}
+  \)。
+\end{enumerate}
+因此
+\[
+\begin{aligned}
+C_m(B_m)
+&\le
+e^{\varepsilon m}|X_m|
++\sum_{j=1}^{J-1} e^{(j+1)\varepsilon m}N_m(j\varepsilon)
++e^{\beta m+O(1)}N_m(J\varepsilon).
+\end{aligned}
+\]
+取 \(\limsup\) 并用有限和的指数主导原则，得到
+\[
+\overline\Sigma(\beta)
+\le
+\max\!\left\{
+\log\varphi+\varepsilon,\
+\max_{1\le j\le J-1}\bigl((j+1)\varepsilon+s^{+}(j\varepsilon)\bigr),\
+\beta+s^{+}(J\varepsilon)
+\right\}.
+\]
+若 \(J=1\)，则中间最大值项省略。
+对中间各项，
+\[
+(j+1)\varepsilon+s^{+}(j\varepsilon)
+=
+\varepsilon+\bigl(j\varepsilon+s^{+}(j\varepsilon)\bigr)
+\le
+\varepsilon+\sup_{0\le \lambda\le \beta}\bigl(\lambda+s^{+}(\lambda)\bigr).
+\]
+而对最后一项，由 \(0\le \beta-J\varepsilon<\varepsilon\) 得
+\[
+\beta+s^{+}(J\varepsilon)
+\le
+\varepsilon+\bigl(J\varepsilon+s^{+}(J\varepsilon)\bigr)
+\le
+\varepsilon+\sup_{0\le \lambda\le \beta}\bigl(\lambda+s^{+}(\lambda)\bigr).
+\]
+故
+\[
+\overline\Sigma(\beta)
+\le
+\max\!\left\{
+\log\varphi+\varepsilon,\
+\varepsilon+\sup_{0\le \lambda\le \beta}\bigl(\lambda+s^{+}(\lambda)\bigr)
+\right\}.
+\]
+令 \(\varepsilon\downarrow 0\)，即得
+\[
+\overline\Sigma(\beta)
+\le
+\max\!\left\{
+\log\varphi,\
+\sup_{0\le \lambda\le \beta}\bigl(\lambda+s^{+}(\lambda)\bigr)
+\right\}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[若尾谱存在，则预言机容量指数具有精确闭式]\label{cor:xi-oracle-capacity-exponent-closed-form-tail-spectrum}
+沿用定理 \ref{thm:xi-oracle-capacity-exponent-tail-variational-bounds} 的记号。
+进一步假设对每个 \(\lambda\ge 0\)，极限
+\[
+s(\lambda):=\lim_{m\to\infty}\frac1m\log N_m(\lambda)
+\]
+存在，且 \(s\) 上半连续。
+则极限
+\[
+\Sigma(\beta):=\lim_{m\to\infty}\frac1m\log C_m(B_m)
+\]
+存在，并满足
+\[
+\boxed{\;
+\Sigma(\beta)=
+\max\!\left\{\log\varphi,\ \sup_{0\le \lambda\le \beta}\bigl(\lambda+s(\lambda)\bigr)\right\}. \;}
+\]
+特别地，若定义完美恢复的临界比特率
+\[
+\beta_c:=\inf\{\beta\ge 0:\ \Sigma(\beta)=\log 2\},
+\]
+则
+\[
+\boxed{\;
+\beta_c=
+\inf\!\left\{
+\beta\ge 0:\ 
+\sup_{0\le \lambda\le \beta}\bigl(\lambda+s(\lambda)\bigr)=\log 2
+\right\}. \;}
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-oracle-capacity-exponent-tail-variational-bounds}，
+\[
+\max\!\left\{\log\varphi,\ \sup_{0\le \lambda<\beta}\bigl(\lambda+s(\lambda)\bigr)\right\}
+\le
+\underline\Sigma(\beta)
+\le
+\overline\Sigma(\beta)
+\le
+\max\!\left\{\log\varphi,\ \sup_{0\le \lambda\le \beta}\bigl(\lambda+s(\lambda)\bigr)\right\}.
+\]
+当 \(\beta=0\) 时，由 \(N_m(0)=|X_m|=F_{m+2}\) 得
+\[
+s(0)=\lim_{m\to\infty}\frac1m\log N_m(0)=\log\varphi,
+\]
+故上、下界同为 \(\log\varphi\)，从而
+\[
+\Sigma(0)=\log\varphi.
+\]
+以下设 \(\beta>0\)。
+又由于每个 \(N_m(\lambda)\) 关于 \(\lambda\) 单调不增，故其指数极限 \(s(\lambda)\) 亦单调不增。
+于是对任意 \(\beta>0\) 与任意 \(\lambda<\beta\) 充分接近 \(\beta\)，都有
+\[
+\lambda+s(\lambda)\ge \lambda+s(\beta).
+\]
+令 \(\lambda\uparrow \beta\) 得
+\[
+\sup_{0\le \lambda<\beta}\bigl(\lambda+s(\lambda)\bigr)\ge \beta+s(\beta),
+\]
+从而
+\[
+\sup_{0\le \lambda<\beta}\bigl(\lambda+s(\lambda)\bigr)
+=
+\sup_{0\le \lambda\le \beta}\bigl(\lambda+s(\lambda)\bigr).
+\]
+故上下界一致，极限 \(\Sigma(\beta)\) 存在并等于所示闭式。
+\par
+此外，由平凡上界
+\[
+C_m(B_m)\le \sum_{x\in X_m}d_m(x)=2^m
+\]
+可知
+\[
+\Sigma(\beta)\le \log 2.
+\]
+又 \(\log\varphi<\log 2\)，因此
+\[
+\Sigma(\beta)=\log 2
+\quad\Longleftrightarrow\quad
+\sup_{0\le \lambda\le \beta}\bigl(\lambda+s(\lambda)\bigr)=\log 2,
+\]
+临界比特率公式随即由定义得到。
+最后，\(s\) 的上半连续性保证上述上确界在紧区间 \([0,\beta]\) 上可由某个极值点达到。证毕。
+\end{proof}
+
+\endinput
+\input{subsubsec__xi-time-protocol-conclusions-part51a-groundstate-capacity-window6-separation}
+
+\begin{theorem}[window-\texorpdfstring{$6$}{6} 奇偶荷格在 \texorpdfstring{$B_3$}{B3} 字典下的三分级]\label{thm:xi-window6-parity-charge-trigrading-b3}
+记
+\[
+G_6^{\mathrm{bin}}:=\Aut(\Fold_6^{\mathrm{bin}})=\mathcal G_6^{\mathrm{bin}},
+\]
+并沿用 \(X_6=X_6^{\mathrm{cyc}}\sqcup X_6^{\mathrm{bdry}}\) 的刚性分裂。
+固定表 \ref{tab:fold6_b3c3_root_dictionary_b3} 的 \(B_3\) 根字典
+\[
+\iota_B:X_6^{\mathrm{cyc}}\xrightarrow{\sim}\Phi(B_3).
+\]
+定义
+\[
+X_{6,\mathrm{short}}
+:=
+\iota_B^{-1}\bigl(\{\pm e_1,\pm e_2,\pm e_3\}\bigr),
+\]
+\[
+X_{6,\mathrm{long}}
+:=
+\iota_B^{-1}\bigl(\{\pm e_i\pm e_j:\ 1\le i<j\le 3\}\bigr).
+\]
+则
+\[
+X_6=X_6^{\mathrm{bdry}}\sqcup X_{6,\mathrm{short}}\sqcup X_{6,\mathrm{long}},
+\qquad
+|X_6^{\mathrm{bdry}}|=3,\quad |X_{6,\mathrm{short}}|=6,\quad |X_{6,\mathrm{long}}|=12,
+\]
+并且经由符号映射给出的坐标识别
+\[
+\bigl(G_6^{\mathrm{bin}}\bigr)^{\mathrm{ab}}\cong (\ZZ/2\ZZ)^{X_6}
+\]
+下，存在规范直和分解
+\[
+\boxed{\;
+\bigl(G_6^{\mathrm{bin}}\bigr)^{\mathrm{ab}}
+\cong
+(\ZZ/2\ZZ)^{X_6^{\mathrm{bdry}}}
+\oplus
+(\ZZ/2\ZZ)^{X_{6,\mathrm{short}}}
+\oplus
+(\ZZ/2\ZZ)^{X_{6,\mathrm{long}}}
+\cong
+(\ZZ/2\ZZ)^3_{\mathrm{bdry}}
+\oplus
+(\ZZ/2\ZZ)^6_{\mathrm{short}}
+\oplus
+(\ZZ/2\ZZ)^{12}_{\mathrm{long}}.\;}
+\]
+若改用表 \ref{tab:fold6_b3c3_root_dictionary_c3} 的 \(C_3\) 规范，则后两项仅交换“长/短”的名称，而各直和因子的维数保持不变。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:fold-bin-m6-fiber-hist}，window-\(6\) 的全部纤维大小只取 \(2,3,4\)，故每个
+\(w\in X_6\) 都贡献一个非平凡的 \(\ZZ/2\ZZ\) 符号坐标。
+再由定理 \ref{thm:xi-foldbin-gauge-representation-distribution-law-m6-spectrum}，
+\[
+\bigl(G_6^{\mathrm{bin}}\bigr)^{\mathrm{ab}}\cong (\ZZ/2\ZZ)^{21},
+\]
+并且该阿贝尔化可经由纤维符号映射识别为 \((\ZZ/2\ZZ)^{X_6}\) 的坐标格。
+\par
+另一方面，表 \ref{tab:fold6_b3c3_root_dictionary_b3} 给出一个确定的 \(B_3\) 根字典。
+其中
+\[
+\{\pm e_1,\pm e_2,\pm e_3\}
+\]
+恰对应六个轴根，故其原像集合 \(X_{6,\mathrm{short}}\) 具有 \(6\) 个元素；
+而
+\[
+\{\pm e_i\pm e_j:\ 1\le i<j\le 3\}
+\]
+恰为 \(B_3\) 的 \(12\) 个长根，故其原像集合 \(X_{6,\mathrm{long}}\) 具有 \(12\) 个元素。
+再与 boundary 集合 \(X_6^{\mathrm{bdry}}\)（大小 \(3\)）合并，即得
+\[
+X_6=X_6^{\mathrm{bdry}}\sqcup X_{6,\mathrm{short}}\sqcup X_{6,\mathrm{long}}.
+\]
+对坐标格按此分块，便得到所示直和分解。
+\par
+若改用 \(C_3\) 字典，则表 \ref{tab:fold6_b3c3_root_dictionary_c3} 仅把 \(B_3\) 规范中的长根与短根名称交换，而根集总数与 boundary 三维子格不变，故维数结论保持不变。证毕。
+\end{proof}
+
+\begin{theorem}[window-\texorpdfstring{$6$}{6} 的纤维多重度场在 \texorpdfstring{$B_3$}{B3} 根系上严格破坏 Weyl 轨道均匀性]\label{thm:xi-window6-fiber-multiplicity-weyl-breaking-b3}
+沿用定理 \ref{thm:xi-window6-parity-charge-trigrading-b3} 的记号。
+将纤维多重度函数
+\[
+d_6:X_6\to \{2,3,4\}
+\]
+经 \(B_3\) 字典传送到根系上，定义
+\[
+\widetilde d_6:\Phi(B_3)\to \{2,3,4\},
+\qquad
+\widetilde d_6(\alpha):=d_6\bigl(\iota_B^{-1}(\alpha)\bigr).
+\]
+则 \(\widetilde d_6\) 在 \(W(B_3)\) 的两个根轨道上都不是常数。更精确地：
+\begin{enumerate}
+  \item 在短根轨道上，数值 \(2\) 与 \(4\) 同时出现；
+  \item 在长根轨道上，数值 \(2,3,4\) 三者全部出现。
+\end{enumerate}
+因此 \(\widetilde d_6\) 既不是 \(W(B_3)\)-不变函数，也不是仅依赖根长的函数。
+\end{theorem}
+\begin{proof}
+由表 \ref{tab:fold6_b3c3_root_dictionary_b3}，
+\[
+\iota_B(\texttt{100000})=(1,0,0),
+\qquad
+\iota_B(\texttt{000001})=(-1,0,0).
+\]
+这两个根同属 \(B_3\) 的短根 Weyl 轨道。
+而由表 \ref{tab:fold_bin_gauge_m6_fibers}，
+\[
+d_6(\texttt{100000})=4,
+\qquad
+d_6(\texttt{000001})=2.
+\]
+故 \(\widetilde d_6\) 在短根轨道上不是常数。
+\par
+再由表 \ref{tab:fold6_b3c3_root_dictionary_b3}，
+\[
+\iota_B(\texttt{101000})=(1,-1,0),\qquad
+\iota_B(\texttt{100010})=(1,0,1),\qquad
+\iota_B(\texttt{010001})=(0,1,1).
+\]
+这三者都是 \(B_3\) 的长根，且同属唯一的长根 Weyl 轨道。
+由表 \ref{tab:fold_bin_gauge_m6_fibers}，
+\[
+d_6(\texttt{101000})=4,\qquad
+d_6(\texttt{100010})=3,\qquad
+d_6(\texttt{010001})=2.
+\]
+故在长根轨道上，\(\widetilde d_6\) 取到全部三种数值 \(2,3,4\)。
+\par
+综上，\(\widetilde d_6\) 不可能在任一 Weyl 根轨道上常值，特别地不可能只依赖“根长”这一粗分层。证毕。
+\end{proof}
+
+\begin{theorem}[window-\texorpdfstring{$6$}{6} 规范群中心的精确结构与 boundary 中心的余维]\label{thm:xi-window6-center-exact-splitting-bdry-cyclic}
+沿用定理 \ref{thm:xi-foldbin-gauge-representation-distribution-law-m6-spectrum} 的记号。
+令
+\[
+d_6(w):=\bigl|\Fold_6^{\mathrm{bin}}{}^{-1}(w)\bigr|
+\qquad(w\in X_6),
+\]
+\[
+X_6^{(2)}:=\{w\in X_6:\ d_6(w)=2\},
+\qquad
+X_{6,\mathrm{cyc},2}:=X_6^{(2)}\setminus X_6^{\mathrm{bdry}}.
+\]
+则
+\[
+X_6^{(2)}
+=
+\{\texttt{000001},\texttt{000101},\texttt{001001},\texttt{010001},\texttt{010101},
+\texttt{100001},\texttt{100101},\texttt{101001}\},
+\]
+\[
+X_{6,\mathrm{cyc},2}
+=
+\{\texttt{000001},\texttt{000101},\texttt{001001},\texttt{010001},\texttt{010101}\}.
+\]
+并且规范群中心满足精确分解
+\[
+\boxed{\;
+Z\!\bigl(G_6^{\mathrm{bin}}\bigr)
+\cong
+(\ZZ/2\ZZ)^{X_6^{(2)}}
+\cong
+(\ZZ/2\ZZ)^{X_6^{\mathrm{bdry}}}
+\oplus
+(\ZZ/2\ZZ)^{X_{6,\mathrm{cyc},2}}
+\cong
+(\ZZ/2\ZZ)^3_{\mathrm{bdry}}
+\oplus
+(\ZZ/2\ZZ)^5_{\mathrm{cyc},\,d=2}
+\cong
+(\ZZ/2\ZZ)^8.\;}
+\]
+特别地，boundary 中心子群 \((\ZZ/2\ZZ)^3_{\mathrm{bdry}}\) 是整个中心的一个规范直和因子，
+其在 \(Z(G_6^{\mathrm{bin}})\) 中的余维恰为 \(5\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-foldbin-gauge-representation-distribution-law-m6-spectrum}，
+\[
+G_6^{\mathrm{bin}}\cong \prod_{w\in X_6}\mathfrak S_{d_6(w)}.
+\]
+对有限直积群，中心满足
+\[
+Z\!\left(\prod_{w\in X_6}\mathfrak S_{d_6(w)}\right)
+\cong
+\prod_{w\in X_6} Z\!\left(\mathfrak S_{d_6(w)}\right).
+\]
+而
+\[
+Z(\mathfrak S_d)\cong
+\begin{cases}
+\ZZ/2\ZZ,& d=2,\\
+0,& d\ge 3,
+\end{cases}
+\]
+因为 \(\mathfrak S_2\) 本身阿贝尔，而 \(\mathfrak S_3,\mathfrak S_4\) 的中心平凡。
+故
+\[
+Z(G_6^{\mathrm{bin}})\cong (\ZZ/2\ZZ)^{X_6^{(2)}}.
+\]
+\par
+再由表 \ref{tab:fold_bin_gauge_m6_fibers} 可直接读出恰有八条 \(d_6=2\) 纤维，
+其词列表正是上式所列的 \(X_6^{(2)}\)。
+其中后三条
+\[
+X_6^{\mathrm{bdry}}=\{\texttt{100001},\texttt{100101},\texttt{101001}\}
+\]
+正是 boundary 扇区；前五条构成 cyclic 的 \(d=2\) 子集 \(X_{6,\mathrm{cyc},2}\)。
+于是
+\[
+X_6^{(2)}=X_6^{\mathrm{bdry}}\sqcup X_{6,\mathrm{cyc},2},
+\]
+从而中心按坐标分裂为
+\[
+(\ZZ/2\ZZ)^{X_6^{(2)}}
+\cong
+(\ZZ/2\ZZ)^{X_6^{\mathrm{bdry}}}
+\oplus
+(\ZZ/2\ZZ)^{X_{6,\mathrm{cyc},2}}
+\cong
+(\ZZ/2\ZZ)^3\oplus (\ZZ/2\ZZ)^5.
+\]
+这同时给出总中心维数 \(8\) 以及 boundary 中心子群的余维 \(5\)。
+\par
+最后，推论 \ref{cor:fold-bin-boundary-center-z2} 已把
+\((\ZZ/2\ZZ)^{X_6^{\mathrm{bdry}}}\)
+识别为 boundary sheet-flip 所生成的规范中心子格；故这里得到的是对该结果的完整中心精化。证毕。
+\end{proof}
+
+\endinput

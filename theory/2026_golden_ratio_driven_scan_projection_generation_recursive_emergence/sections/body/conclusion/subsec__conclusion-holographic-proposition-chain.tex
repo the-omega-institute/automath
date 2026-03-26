@@ -1,0 +1,231 @@
+\subsection{全息双通道预算、坏素谱与不可计算性：一条可抽取的命题链}\label{subsec:conclusion-holographic-proposition-chain}
+本小节将全文中若干彼此独立、但在同一外置语义下可互相锁定的结论组织为一条可直接抽取的命题链：
+连续相位门与离散 prime-register 的双通道预算守恒、Gödel--素数码的噪声阈值、全息边界极限量的一致误差控制不可能性、
+\(2\)-进扭子链的首次偏离停时、Lee--Yang 三次核的 Chebotarev 分解与权一模性、指数样本尺度下最小最大误差的多重分形尾律，
+以及 Lee--Yang 四次覆盖的本质素数谱最小性。
+
+\begin{theorem}[圆维–素数寄存器双通道的全息信息守恒不等式]\label{thm:conclusion-prime-torus-holographic-information-inequality}
+设
+\[
+B_N:=\{0,1,\dots,N\}^r\subset\ZZ^r.
+\]
+考虑编码器
+\[
+\mathsf{Enc}:B_N\to (\ZZ/P\ZZ)\times \mathcal Q_\delta(\TT^d),
+\]
+其中 \(P\in\NN\)，而 \(\mathcal Q_\delta(\TT^d)\) 为 \(\TT^d\) 的分辨率 \(\delta\in(0,1]\) 量化输出集合，满足
+\[
+|\mathcal Q_\delta(\TT^d)|\le C_d\,\delta^{-d}
+\]
+（常数 \(C_d\) 仅依赖于 \(d\)）。
+若存在解码器 \(\mathsf{Dec}\) 使得 \(\mathsf{Dec}\circ\mathsf{Enc}=\mathrm{id}\) 在 \(B_N\) 上成立，则
+\[
+\log_2 P+d\log_2\frac{1}{\delta}\ \ge\ r\log_2(N+1)-\log_2 C_d.
+\]
+特别地，当 \(\delta=2^{-b}\)（每个圆坐标保留 \(b\) 比特）时，
+\[
+\log_2 P+d\,b\ \ge\ r\log_2(N+1)-\log_2 C_d.
+\]
+\end{theorem}
+\begin{proof}
+由 \(|\ZZ/P\ZZ|=P\) 与量化状态数上界，编码输出空间大小不超过 \(P\cdot C_d\delta^{-d}\)。
+若 \(\mathsf{Enc}\) 在 \(B_N\) 上可逆（因而单射），则
+\[
+P\cdot C_d\delta^{-d}\ge |B_N|=(N+1)^r.
+\]
+取以 \(2\) 为底的对数即得结论。证毕。
+\end{proof}
+
+\begin{remark}[与速率圆维预算口径的一致性]\label{rem:conclusion-prime-torus-holographic-information-inequality-rate-alignment}
+定理 \ref{thm:conclusion-prime-torus-holographic-information-inequality} 是有限盒体与有限分辨率口径下的纯计数守恒律。
+在将 \(N\) 取为指数尺度并把 \(\delta\) 与相位门的层级深度一并折算为速率后，
+其与定理 \ref{thm:conclusion-rate-cdim-budget-inequality} 的“可见相位通道数 \(\,+\,\) 账本速率”预算形式同型。
+\end{remark}
+
+\begin{corollary}[Gödel--素数码的噪声阈值强制最小素数下界]\label{cor:conclusion-godel-prime-noise-threshold-pmin}
+在相对误差观测模型下，设以互异素数 \(\{p_i\}\) 及指数 \(\{b_i\}\) 进行 Gödel--素数指数编码，并要求对所有实例均能唯一恢复指数数据。
+记 \(p_{\min}:=\min_i p_i\)。
+则必须满足尖锐阈值
+\[
+\varepsilon<\frac{p_{\min}-1}{p_{\min}+1},
+\]
+从而等价推出
+\[
+p_{\min}>\frac{1+\varepsilon}{1-\varepsilon}.
+\]
+\end{corollary}
+\begin{proof}
+第一式即命题 \ref{prop:spg-relative-error-threshold-sharpness} 的必要条件。
+第二式为代数变形：\(\varepsilon(p_{\min}+1)<p_{\min}-1\iff (1-\varepsilon)p_{\min}>1+\varepsilon\)。证毕。
+\end{proof}
+
+\begin{theorem}[带可核验证书的随机化统一误差控制学习仍推出停机可判定]\label{thm:conclusion-certified-randomized-uniform-learning-implies-decidable-halting}
+沿用定义 \ref{def:fold-computability-fourier-moment-metric} 的 Fourier 矩度量 \(d\) 与定理 \ref{thm:fold-computability-halting-leyang-holographic-encoding} 的极限测度 \(\mu\)。
+设存在允许随机化的总停机过程 \(\mathcal A\)，对任意输入 \((N,\varepsilon)\) 输出 \((\widehat\mu,\mathsf{Cert})\)，并满足：
+\begin{enumerate}
+  \item \(\mathsf{Cert}\) 可由确定性算法核验，且核验通过蕴含 \(d(\widehat\mu,\mu)<\varepsilon\)；
+  \item 存在全可计算函数 \(N_0:\QQ_{>0}\to\NN\)，使得对所有 \(N\ge N_0(\varepsilon)\)，过程 \(\mathcal A\) 以至少 \(2/3\) 的概率输出可核验的证书；
+  \item 存在全可计算上界 \(R(N,\varepsilon)\) 控制 \(\mathcal A\) 使用的随机比特数。
+\end{enumerate}
+则停机集 \(\mathcal H\) 可判定；因此此类 \(\mathcal A\) 不存在。
+\end{theorem}
+\begin{proof}
+给定 \((N,\varepsilon)\)，枚举所有随机种子 \(r\in\{0,1\}^{R(N,\varepsilon)}\) 并运行 \(\mathcal A(N,\varepsilon;r)\)，对输出证书逐一核验。
+当 \(N\ge N_0(\varepsilon)\) 时，由成功概率 \(\ge 2/3\) 必存在某个 \(r\) 使核验通过；因此该枚举过程在有限步内输出一对 \((\widehat\mu,\mathsf{Cert})\)，并由核验结论得到 \(d(\widehat\mu,\mu)<\varepsilon\)。
+于是构造出满足推论 \ref{cor:fold-computability-halting-no-uniform-learning} 前提的确定性“一致误差控制”过程，与其结论矛盾。
+因此 \(\mathcal A\) 不存在；等价地，若其存在则 \(\mathcal H\) 可判定。证毕。
+\end{proof}
+
+\begin{proposition}[\(2\)-进扭子链的首次偏离层数等价于停机深度]\label{prop:conclusion-2adic-first-deviation-time-halting-depth}
+沿用定理 \ref{thm:xi-time-part9g-godel-leyang-hausdorff} 与命题 \ref{prop:xi-time-part9g-first-deviation-depth} 的记号。
+对 \(i\in\{1,2,3\}\) 取兼容链 \((P_{i,n})_{n\ge 0}\)，并在 \(\Pi_{i,\infty}\simeq P_i+T_2(E_{\min})\) 的识别下定义
+\[
+Q_{i,M,x}:=P_i+\alpha_{M,x}e,\qquad
+Q_{i,M,x}^{(n)}:=\mathrm{pr}_n(Q_{i,M,x}).
+\]
+进而定义同步首次偏离层数
+\[
+T_{\mathrm{dev}}(M,x):=\sup\Bigl\{n\in\NN:\ \forall i\in\{1,2,3\},\ Q_{i,M,x}^{(n)}=P_{i,n}\Bigr\}\in\NN\cup\{\infty\}.
+\]
+则 \(T_{\mathrm{dev}}(M,x)=\infty\) 当且仅当 \(M(x)\) 不停机。
+若 \(M(x)\) 的停机深度为 \(N\)，则
+\[
+T_{\mathrm{dev}}(M,x)=LN,
+\]
+并且 \(N\) 可由首次偏离层数精确反演。
+特别地，映射 \((M,x)\mapsto T_{\mathrm{dev}}(M,x)\) 不可计算。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:xi-time-part9g-first-deviation-depth}，对每个固定 \(i\)，非停机时投影在所有层级均保持一致；停机深度为 \(N\) 时一致性恰保持到层级 \(LN\) 并在下一层首次偏离。
+三分支同时成立仅对应于在每个分支扭子同构下同一 \(2\)-进指数条件，故得到所示 \(T_{\mathrm{dev}}\) 的刻画与反演式。
+若 \((M,x)\mapsto T_{\mathrm{dev}}(M,x)\) 可计算，则可判定是否存在有限偏离层数，从而可判定停机问题，矛盾。证毕。
+\end{proof}
+
+\begin{theorem}[Lee--Yang 三次核的 Chebotarev 分解型密度]\label{thm:conclusion-leyang-cubic-chebotarev-splitting-densities}
+令
+\[
+P_{\mathrm{LY}}(y)=256y^3+411y^2+165y+32\in\ZZ[y],
+\]
+并记其分裂域为 \(L_{\mathrm{LY}}/\QQ\)。
+则由定理 \ref{thm:xi-time-part9g-leyang-cubic-discriminant} 有 \(\Gal(L_{\mathrm{LY}}/\QQ)\cong S_3\)，且二次分辨子域为 \(\QQ(\sqrt{-111})\)。
+对任意素数 \(p\nmid 3\cdot 31\cdot 37\)，多项式 \(P_{\mathrm{LY}}\bmod p\) 的分解型由 \(\mathrm{Frob}_p\) 的共轭类决定，并且三类分解型的自然密度分别为
+\[
+(1)(1)(1):\ \frac16,\qquad (1)(2):\ \frac12,\qquad (3):\ \frac13.
+\]
+此外，对 \(p\nmid 111\) 有
+\[
+\Bigl(\frac{-111}{p}\Bigr)=-1\quad\Longleftrightarrow\quad P_{\mathrm{LY}}\ \text{在 }\FF_p\ \text{上恰有一个根},
+\]
+从而“存在 \(\FF_p\)-根”的素数集合密度为 \(2/3\)。
+\end{theorem}
+\begin{proof}
+对 \(p\nmid 3\cdot 31\cdot 37\)，\(\mathrm{Frob}_p\) 在 \(S_3\) 中定义良好。
+由 \(S_3\) 的三共轭类大小 \(|\{e\}|=1\)、\(|\text{换位类}|=3\)、\(|\text{三循环类}|=2\)，Chebotarev 密度定理给出相应素数密度为 \(1/6,1/2,1/3\)。
+而不可约三次在有限域上的分解型与 Frobenius 在三根上的循环分解一致：恒等元对应完全分裂，换位对应 \((1)(2)\) 型，三循环对应不可约型。
+\par
+由于二次分辨子域为 \(\QQ(\sqrt{-111})\)，其对应的二次特征即为 Frobenius 的符号。
+因此对 \(p\nmid 111\)，\(\bigl(\frac{-111}{p}\bigr)=-1\) 当且仅当 \(\mathrm{Frob}_p\) 为奇置换，亦即换位类，从而分解型为 \((1)(2)\) 并恰有一个 \(\FF_p\)-根。
+密度结论由 \(1/6+1/2=2/3\) 得到。证毕。
+\end{proof}
+
+\begin{corollary}[Lee--Yang 三次核由权一模形式的 Hecke 迹谱完全编码]\label{cor:conclusion-leyang-cubic-weight1-hecke-trace-encodes-splitting}
+沿用定理 \ref{thm:xi-time-part9c-leyang-cubic-artin-weight1} 的设定，存在权 \(1\) 模形式 \(f_{\mathrm{LY}}\in S_1(\Gamma_0(999),\chi_{-111})\)，使对任意 \(p\nmid 999\) 有
+\[
+a_p(f_{\mathrm{LY}})=\operatorname{tr}\bigl(\rho_{\mathrm{std}}(\mathrm{Frob}_p)\bigr)\in\{2,0,-1\},
+\]
+并且 \(a_p=2,0,-1\) 分别等价于 \(P_{\mathrm{LY}}\bmod p\) 的分解型为 \((1)(1)(1)\)、\((1)(2)\)、\((3)\)。
+\end{corollary}
+\begin{proof}
+见定理 \ref{thm:xi-time-part9c-leyang-cubic-artin-weight1}。证毕。
+\end{proof}
+
+\begin{theorem}[指数样本尺度下最小最大误差的多重分形尾质量律与阈值严格分离]\label{thm:conclusion-minimax-error-multifractal-tail-law}
+沿用定理 \ref{thm:pom-second-order-collision-common-bottleneck} 的最小最大误差 \(\mathrm{Err}_m^{\mathrm{mm}}(n)\) 与分布 \(w_m(x)=d_m(x)/2^m\)，并令 \(X\sim w_m\)。
+设随机变量
+\[
+Y_m:=\frac1m\log d_m(X)
+\]
+在 \(w_m\) 下满足大偏差原理，速率函数记为 \(I_w\)，且 \(I_w\) 具有唯一零点 \(y_\star\)。
+对指数尺度样本量 \(n_m:=\lceil e^{\kappa m}\rceil\) 定义信息阈值
+\[
+\kappa_{\mathrm{IT}}:=\log 2-y_\star.
+\]
+则：
+\begin{enumerate}
+  \item 若 \(\kappa<\kappa_{\mathrm{IT}}\)，则 \(\mathrm{Err}_m^{\mathrm{mm}}(n_m)\to \tfrac12\)。
+  \item 若 \(\kappa>\kappa_{\mathrm{IT}}\)，则 \(\mathrm{Err}_m^{\mathrm{mm}}(n_m)\) 以指数速率衰减，并且
+  \[
+  \lim_{m\to\infty}\frac1m\log\Bigl(2\,\mathrm{Err}_m^{\mathrm{mm}}(n_m)\Bigr)
+  =
+  -\inf_{y\le \log 2-\kappa} I_w(y).
+  \]
+  \item 记二阶碰撞谱半径 \(r_2\)（定理 \ref{thm:pom-second-order-collision-common-bottleneck} 的记号），并令
+  \[
+  \kappa_2:=\log\frac{4}{r_2}.
+  \]
+  则总有 \(\kappa_{\mathrm{IT}}\ge \kappa_2\)，且当且仅当碰撞谱压力 \(\tau\) 在区间 \([1,2]\) 上为仿射函数时取等号；在严格凸情形下存在非空区间 \(\kappa_2<\kappa<\kappa_{\mathrm{IT}}\)，使得尽管二阶碰撞已在指数尺度上饱和，最小最大误差仍趋于 \(1/2\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-second-order-collision-common-bottleneck} 的精确闭式，
+\[
+2\,\mathrm{Err}_m^{\mathrm{mm}}(n_m)=\EE_{w_m}\!\left[(1-w_m(X))^{n_m}\right],
+\qquad
+w_m(X)=e^{m(Y_m-\log 2)}\in(0,1].
+\]
+取任意 \(\delta>0\) 并分两事件估计。
+在事件 \(Y_m\le \log 2-\kappa-\delta\) 上，有 \(n_m w_m(X)\le e^{-\delta m+o(m)}\)，从而
+\[
+(1-w_m(X))^{n_m}\ge 1-n_m w_m(X)\ge 1-e^{-\delta m+o(m)}.
+\]
+在事件 \(Y_m\ge \log 2-\kappa+\delta\) 上，有 \(n_m w_m(X)\ge e^{\delta m+o(m)}\)，故
+\[
+(1-w_m(X))^{n_m}\le e^{-n_m w_m(X)}\le e^{-e^{\delta m+o(m)}}.
+\]
+于是得到夹逼
+\[
+\bigl(1-e^{-\delta m+o(m)}\bigr)\,\PP\!\left(Y_m\le \log 2-\kappa-\delta\right)
+\le
+2\,\mathrm{Err}_m^{\mathrm{mm}}(n_m)
+\le
+\PP\!\left(Y_m\le \log 2-\kappa+\delta\right)+e^{-e^{\delta m+o(m)}}.
+\]
+对两侧应用 \(Y_m\) 的大偏差原理并令 \(\delta\downarrow 0\)，得到第二条中的指数速率公式；并且当且仅当 \(\log 2-\kappa\ge y_\star\) 时，左尾集合包含典型值，故误差极限为 \(1/2\)，得到第一条。
+\par
+为比较 \(\kappa_{\mathrm{IT}}\) 与 \(\kappa_2\)，由 \(\Lambda_w(q)=\tau(1+q)-\tau(1)\) 的 G\"artner--Ellis 机制有 \(y_\star=\tau'(1)\)，且 \(\tau(1)=\log 2\)、\(\tau(2)=\log r_2\)。
+由凸性得 \(\tau'(1)\le \tau(2)-\tau(1)\)，从而
+\[
+\kappa_{\mathrm{IT}}
+\ge
+\log 2-(\tau(2)-\tau(1))
+=
+2\log 2-\log r_2
+=
+\log\frac{4}{r_2}
+=\kappa_2.
+\]
+等号当且仅当 \(\tau\) 在 \([1,2]\) 上仿射；严格凸则严格不等号，结合第一条即得中间区间上“碰撞饱和但仍不可学”的现象。证毕。
+\end{proof}
+
+\begin{corollary}[Lee--Yang 四次覆盖的最小障碍素数集合]\label{cor:conclusion-leyang-minimal-obstruction-primes}
+在定义 \ref{def:conclusion-essential-prime-spectrum} 的稳定反演语义下，Lee--Yang 四次覆盖 \(\pi_y\) 的本质素数谱为
+\[
+S_{\mathrm{ess}}(\pi_y)=\{2,3,31,37\},
+\]
+并且该集合在记录轴意义下为最小：对任意 \(p\notin S_{\mathrm{ess}}(\pi_y)\) 存在有限索引外置使 \(p\)-进提升稳定，而对任意 \(p\in S_{\mathrm{ess}}(\pi_y)\) 则不存在统一的有限外置能在坏特化同余塔上保持稳定注入。
+\end{corollary}
+\begin{proof}
+集合恒等式由定理 \ref{thm:conclusion-leyang-quartic-essential-prime-spectrum-explicit} 给出；
+最小性陈述由定理 \ref{thm:conclusion-essential-prime-axis-minimality} 直接推出。证毕。
+\end{proof}
+
+\begin{conjecture}[ADE--Jones--Lee--Yang：根单位分支塌缩与 Temperley--Lieb 单群化的全息对应]\label{conj:conclusion-ade-jones-leyang-cyclotomic-collapse}
+沿用命题 \ref{prop:pom-a4t-jones-ade-intersections} 的记号，令 \(r_4(t)\) 为碰撞核族 \(A_4(t)\) 的 Perron 根，并以 \(t=t(I)\) 参数化使 \(r_4(t(I))=I\)。
+对 ADE 的 Jones 指数值 \(I_{E_6},I_{E_7},I_{E_8}\) 记 \(t_{E_k}:=t(I_{E_k})\)。
+另一方面，结论 \ref{con:xi-terminal-zq-discriminant-factorization} 表明在 \(q=4\) 的重量细分下，谱分歧判别式强制出现割圆因子 \(y^2-y+1\)，对应根单位 \(y=e^{\pm i\pi/3}\) 处的不可约退化。
+\par
+猜想在 \(t=t_{E_6},t_{E_7},t_{E_8}\) 时，Lee--Yang 零点极限测度的支撑发生有限 cyclotomic 塌缩：其支撑被迫落在由 Coxeter 数 \(h\in\{12,18,30\}\) 所决定的有限根单位集合上；并且环绕该 cyclotomic 退化点的单值/奇异环表示在极限中通过 Temperley--Lieb/Jones 的根单位专化而因子化，从而在 Stokes/Lee--Yang 边界上出现 \(E_6/E_7/E_8\) 的分块分解，与四阶核族在这些指数点的交点机制相对齐。
+\end{conjecture}
+
+\endinput
+

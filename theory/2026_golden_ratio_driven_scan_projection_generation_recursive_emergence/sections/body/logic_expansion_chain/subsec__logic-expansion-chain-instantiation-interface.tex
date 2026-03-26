@@ -1,0 +1,178 @@
+\subsection{实例化接口}\label{subsec:logic-expansion-chain-instantiation-interface}
+
+前五小节已经给出了一套闭合的抽象逻辑系统：对象层事实被写成状态上的 forcing；对象不是先验给定，而是先以可接受引用进入语义域；整体对象通过局部片段、相容性与粘接形成；结构性空缺被组织为 \(\mathsf{NULL}\) 与失败模式；状态沿更新链推进，并被多轴结构、观察者索引与时空定位进一步丰富。到这一步，抽象层已经完成。接下来的问题不再是“还要增加什么逻辑结构”，而是“后续具体章节如何进入这套逻辑系统”。
+
+因此，本小节的任务不是再引入新的逻辑层，而是给出一个统一的实例化接口。这个接口的作用，是把本章建立的抽象观察者时空逻辑系统与后文可能出现的任何具体模型连接起来。这样，后文的每一个具体章节就不再是新的逻辑起点，而只是本章逻辑系统的一个实现。
+
+\paragraph{具体实现系统}
+先给出“实现”所需的最小数据。
+
+\begin{definition}[具体实现系统]\label{def:logic-expansion-concrete-implementation-system}
+称
+\[
+\mathcal C=
+\bigl(
+\{D_s\}_{s\in S},
+\{A_s\}_{s\in S_{\mathrm{ref}}},
+\{\mathcal B^{\mathcal C}_{p,s}\}_{p,s},
+\{F^{\mathcal C}_{p,s}\}_{p,s},
+\{\partial^{\mathcal C}_{p,s}\}_{p,s},
+\mathrm{Upd}^{\mathcal C},
+J^{\mathcal C},
+I^{\mathcal C},
+X^{\mathcal C},
+\iota^{\mathcal C},
+\lambda^{\mathcal C},
+\varrho^{\mathcal C},
+\mathrm{Com}^{\mathcal C}
+\bigr)
+\]
+为一个具体实现系统，若满足：
+\begin{enumerate}
+  \item 对每个抽象类型 \(s\)，给出一个具体载体 \(D_s\)；
+  \item 对每个可引用类型 \(s\in S_{\mathrm{ref}}\)，给出一个具体引用系统 \(A_s\)；
+  \item 对每个状态 \(p\) 与每个可引用类型 \(s\)，给出一个具体局部引用框架
+  \[
+  \mathcal B^{\mathcal C}_{p,s}
+  :=
+  \bigl(
+  \mathrm{Ref}^{\mathcal C}_s(p),
+  \sqsubseteq^{\mathcal C}_{p,s},
+  \mathrm{Cov}^{\mathcal C}_{p,s}
+  \bigr).
+  \]
+  \item 对每个 \((p,s)\)，给出局部对象系
+  \[
+  F^{\mathcal C}_{p,s}:(\mathcal B^{\mathcal C}_{p,s})^{op}\to \mathsf{Set}.
+  \]
+  \item 对每个 \((p,s)\)，给出部分分类器
+  \[
+  \partial^{\mathcal C}_{p,s},
+  \]
+  用以在具体模型中区分外域未定义、三类 \(\mathsf{NULL}\) 以及整体实现；
+  \item 给出具体更新机制 \(\mathrm{Upd}^{\mathcal C}\)、具体轴集 \(J^{\mathcal C}\)、具体观察者索引集 \(I^{\mathcal C}\)、具体事件—区域系统 \(X^{\mathcal C}\)，以及相应的观察者、事件与区域定位映射 \(\iota^{\mathcal C},\lambda^{\mathcal C},\varrho^{\mathcal C}\)；
+  \item 给出具体通信结构 \(\mathrm{Com}^{\mathcal C}\)。
+\end{enumerate}
+\end{definition}
+
+定义 \ref{def:logic-expansion-concrete-implementation-system} 说明：所谓“具体模型”，不是只提供若干对象或若干公式，而是要为本章逻辑系统的每一个核心槽位提供具体解释。只有这样，后续章节才不是零散结构的堆积，而是这套抽象 forcing 系统的不同实现。
+
+\paragraph{实例化映射}
+仅有具体实现系统还不够，还必须说明抽象层的对象如何进入具体层。因此引入实例化映射。
+
+\begin{definition}[实例化映射]\label{def:logic-expansion-instantiation-map}
+设 \(\mathbb L^{\mathrm{OST}}\) 为定义 \ref{def:logic-expansion-ost-system} 所给出的抽象观察者时空逻辑系统，\(\mathcal C\) 为一个具体实现系统。称
+\[
+\mathcal I:\mathbb L^{\mathrm{OST}}\leadsto \mathcal C
+\]
+为一个实例化映射，若它由下列解释组成：
+\begin{enumerate}
+  \item 对每个抽象类型 \(s\)，给出其在 \(\mathcal C\) 中的具体解释域；对每个抽象引用类型 \(\mathsf{Ref}_s\)，给出其在 \(\mathcal C\) 中的具体引用系统；
+  \item 把抽象状态 \(p\) 解释为 \(\mathcal C\) 中某个具体状态 \(\mathcal I(p)\)；把抽象公式 \(\varphi\) 解释为 \(\mathcal C\) 中相应的具体公式或具体断言条件 \(\mathcal I(\varphi)\)；
+  \item 把抽象的细化、覆盖、局部对象、相容性、粘接、失败模式、更新、多轴结构、观察者索引与时空定位，分别送到 \(\mathcal C\) 中的对应结构。
+\end{enumerate}
+\end{definition}
+
+定义 \ref{def:logic-expansion-instantiation-map} 表明：实例化映射不是简单的符号替换，而是一套逐层结构解释。它必须告诉我们，抽象层中的每一个关键概念在具体模型中究竟由什么承担。
+
+\paragraph{实现条件}
+为了使一个具体系统真正算作本章逻辑的实现，而不只是一个松散对应体，还必须要求实例化映射保持若干核心性质。由于本章坚持无公理原则，这些要求不是附加公理，而只是“何谓实现”的定义内容。
+
+\begin{definition}[实现]\label{def:logic-expansion-realization}
+称具体实现系统 \(\mathcal C\) 在实例化映射 \(\mathcal I\) 下实现了 \(\mathbb L^{\mathrm{OST}}\)，若满足以下条件：
+\begin{enumerate}
+  \item \textbf{类型保持：}抽象层中的分型项与分型公式在实例化之后仍落入对应的具体类型之中，不发生类型错配；
+  \item \textbf{状态保持：}抽象层的状态与细化关系在 \(\mathcal C\) 中被解释为具体状态与具体细化，且细化方向保持不变。换言之，若
+  \[
+  q\le p,
+  \]
+  则具体层中也必须有
+  \[
+  \mathcal I(q)\le_{\mathcal C}\mathcal I(p).
+  \]
+  \item \textbf{forcing 保持：}对任意抽象公式 \(\varphi\) 与任意抽象状态 \(p\)，都有
+  \[
+  p\Vdash \varphi
+  \quad\Longleftrightarrow\quad
+  \mathcal I(p)\Vdash_{\mathcal C}\mathcal I(\varphi).
+  \]
+  \item \textbf{局部性保持：}抽象层中的覆盖、局部片段、相容族与粘接，在具体层中必须被解释为真正的局部结构。特别地，若抽象层中某个引用支撑局部截面，则具体层中必须存在对应的具体局部对象；若抽象层中某族局部对象可粘接，则具体层中也必须存在相应的整体对象；
+  \item \textbf{失败模式保持：}抽象层中的
+  \[
+  \mathsf{Undef},
+  \quad
+  \mathsf{Null}^{\mathrm{loc}},
+  \quad
+  \mathsf{Null}^{\mathrm{cmp}},
+  \quad
+  \mathsf{Null}^{\mathrm{glue}},
+  \quad
+  \mathsf{Tot}
+  \]
+  在具体层中必须仍然对应到相同的结构位置；
+  \item \textbf{动态保持：}抽象更新在具体层中仍然必须是状态细化，而不是对既有 forcing 的回写；延迟定解与延迟分类在具体层中也必须体现为后继状态的进一步收缩，而不是对先前状态内容的修改；
+  \item \textbf{时空保持：}抽象层中的观察者索引、事件定位、区域支撑与因果可达性，在具体层中必须被解释为相容的具体结构，从而使观察者时空 forcing 仍然成立。
+\end{enumerate}
+\end{definition}
+
+这七项要求共同说明：后续章节若要被称为“本章逻辑系统的实例”，就必须逐层满足本章的 forcing 语义，而不是只在某几个局部定义上看起来相似。
+
+\paragraph{下层投影与层级回收}
+由于本章从一开始就是按保守扩张链组织起来的，因此，一个最终层的具体实现，应当自动给出所有低层的实现。这一点并不需要额外假设，而只是扩张链本身的后果。
+
+\begin{proposition}[下层投影]\label{prop:logic-expansion-lower-layer-projection}
+若具体实现系统 \(\mathcal C\) 在实例化映射 \(\mathcal I\) 下实现了最终层 \(\mathbb L^{\mathrm{OST}}\)，则对任意较低层 \(\mathbb L_n\)，通过遗忘掉高层附加结构，都可得到一个对应的低层实现
+\[
+\mathcal C|_n.
+\]
+\end{proposition}
+
+\begin{proof}
+由定义 \ref{def:logic-expansion-conservative-extension}，高层逻辑是通过在低层 forcing 骨架之上逐层增加新的结构槽位得到的。因而在具体实现 \(\mathcal C\) 中，观察者、时空、多轴、动态、\(\mathsf{NULL}\) 分类与局部对象系等高层数据，都只是附加在较低层 forcing 结构上的扩充。对任意 \(n\)，只需把高于 \(\mathbb L_n\) 的附加槽位遗忘，即得到一个截断系统 \(\mathcal C|_n\)。由于实现要求已经保证 forcing、细化与局部结构在各层上的相容性，这个截断系统仍满足 \(\mathbb L_n\) 的实现条件，故构成对应的低层实现。
+\end{proof}
+
+命题 \ref{prop:logic-expansion-lower-layer-projection} 的重要意义在于：后续章节一旦实现了较高层逻辑，就不只是实现了那一层，而是自动实现了其以下的全部逻辑层。于是，一个具体模型既可以被说成是观察者时空逻辑的实现，也可以同时被说成是指称逻辑、局部性逻辑、\(\mathsf{NULL}\) 逻辑或多轴逻辑的实现。
+
+\paragraph{语义保真}
+本章建立抽象逻辑的真正意义，不仅在于它能容纳很多具体模型，更在于它对这些模型的推理施加统一约束。也就是说，只要某个具体模型是本章逻辑的实现，那么抽象层成立的语义后承，必须在具体层继续成立。
+
+\begin{proposition}[语义保真]\label{prop:logic-expansion-semantic-fidelity}
+设 \(\Gamma\cup\{\varphi\}\) 是本章抽象逻辑中的一组公式。若
+\[
+\Gamma \models_{\mathrm{OST}} \varphi,
+\]
+且 \(\mathcal C\) 在 \(\mathcal I\) 下实现了 \(\mathbb L^{\mathrm{OST}}\)，则
+\[
+\mathcal I(\Gamma)\models_{\mathcal C}\mathcal I(\varphi).
+\]
+\end{proposition}
+
+\begin{proof}
+由 \(\Gamma \models_{\mathrm{OST}} \varphi\) 的定义可知：在抽象系统的任意状态上，只要 forcing \(\Gamma\)，就 forcing \(\varphi\)。另一方面，由定义 \ref{def:logic-expansion-realization} 的 forcing 保持条件，对任意抽象状态 \(p\) 都有
+\[
+p\Vdash \psi
+\quad\Longleftrightarrow\quad
+\mathcal I(p)\Vdash_{\mathcal C}\mathcal I(\psi)
+\qquad(\psi\in \Gamma\cup\{\varphi\}).
+\]
+因此，凡是在具体系统中 forcing \(\mathcal I(\Gamma)\) 的状态，必对应于抽象层中 forcing \(\Gamma\) 的状态，于是也必对应于抽象层中 forcing \(\varphi\) 的状态。再由 forcing 保持，得到具体层中 forcing \(\mathcal I(\varphi)\)。故
+\[
+\mathcal I(\Gamma)\models_{\mathcal C}\mathcal I(\varphi).
+\]
+\end{proof}
+
+命题 \ref{prop:logic-expansion-semantic-fidelity} 说明，本章不是一个与后文模型并列的概念总论，而是一套真正对后文模型有约束力的统一上位语义。
+
+\paragraph{后续章节的进入方式}
+有了上述实例化接口，后续章节就不应再被写成“新增某组公理”或“另起一套逻辑”，而应被写成：某种具体结构如何实现本章的哪几层逻辑。
+
+其一般写法应保持一致。首先，给出该具体章节的对象域、引用系统、局部结构、更新机制、多轴结构、观察者或时空背景。然后，明确这些对象分别对应本章哪一层的哪些槽位。接着，给出具体 forcing 的定义，并证明它与本章的抽象 forcing 相容。最后，说明该具体模型对相应层次是保守实现，从而使本章的抽象命题自动在该具体模型中成立。
+
+这样一来，后续的任何具体章节，无论它处理的是某种引用系统、局部截面系统、失败分类系统、多轴系统还是观察者时空背景，都不再是一个孤立专题，而是本章抽象逻辑链上的一个实现层。
+
+\input{subsubsec__logic-expansion-chain-spacetime-fiberization-interface}
+
+\paragraph{本章的完成方式}
+通过本小节，本章的角色已经完全确定。它不是全文之外的一套哲学性附录，也不是与后文并列的另一个专题，而是整篇论文的统一逻辑骨架。前五小节已经给出了这条骨架的生成：从状态 forcing 到指称与局部性，从 \(\mathsf{NULL}\) 与失败模式到动态、多轴，再到观察者时空系统。本小节则说明：后续具体章节如何进入这套骨架，而不需要再建立新的逻辑起点。
+
+因此，整章到这里是闭合的。它已经完成了两件事情：第一，建立了一条无公理的结构扩张链；第二，给出了这条扩张链与后续具体模型之间的实例化接口。接下来最自然的收束方式，便不再是新的逻辑层，而是对整条扩张链、各层核心概念以及它们与后续实现之间关系的章末压缩性结语。

@@ -1,0 +1,403 @@
+\begin{conclusion}[坏素数 \(37\) 处的 Latt\`es 稳定约化：公共平方因子、Chebyshev 共轭与结点退化的同步]\label{con:xi-terminal-zm-elliptic-lattes-badprime-37-degree-drop}
+沿用结论 \ref{con:xi-terminal-zm-elliptic-lattes-doubling} 的倍点 Latt\`es 自映射
+\[
+\Phi(X)=\frac{X^4+2X^2-2X+1}{4X^3-4X+1}\in\QQ(X).
+\]
+则在 \(\FF_{37}[X]\) 中出现非平凡公共因子，且满足显式同余分解
+\[
+X^4+2X^2-2X+1\equiv (X-5)^2\,(X^2+10X+3)\pmod{37},
+\]
+\[
+4X^3-4X+1\equiv (X-5)^2\,(4X+3)\pmod{37}.
+\]
+因此在稳定约化意义下（约去公共因子）得到次数严格下降的约化映射
+\[
+\boxed{\;
+\overline{\Phi}(X)=\frac{X^2+10X+3}{4X+3}\in\FF_{37}(X),\qquad \deg\overline{\Phi}=2<\deg\Phi=4\; } .
+\]
+\par
+并且在 \(\PP^{1}/\FF_{37}\) 上存在显式 Möbius 变换
+\[
+M(X)=\frac{2X+13}{X-5}\in \mathrm{PGL}_{2}(\FF_{37})
+\]
+使得
+\[
+\boxed{\;
+M\circ \overline{\Phi}\circ M^{-1}(X)=X^{2}-2\; } .
+\]
+因而 \(\overline{\Phi}\) 在 \(\FF_{37}\) 上与归一化 Chebyshev 多项式 \(T_{2}(X)=X^{2}-2\) 共轭。
+在该约化动力系统中，\(X=5\) 满足 \(\overline{\Phi}(5)=5\) 且 \(\overline{\Phi}'(5)=0\)，从而为唯一的临界不动点；
+同时 \(M\) 在 \(X=5\) 处具有极点并将其送至 \(\infty\)，从而把 \(\overline{\Phi}\) 刚性化为多项式正规形。
+\par
+另一方面，Lee--Yang 分歧点的三次控制多项式（结论 \ref{con:xi-terminal-zm-leyang-ramification-critical-values}）
+\[
+g(X):=16X^3-9X^2+1
+\]
+在 \(\FF_{37}[X]\) 中发生双根塌缩：
+\[
+g(X)\equiv 16\,(X-16)(X-5)^2\pmod{37}.
+\]
+并且 Lee--Yang 三次因子在 \(\FF_{37}[y]\) 上同样出现重根融合（结论 \ref{con:xi-terminal-zm-leyang-badprime-37-common-double-root}）：
+\[
+P_{\mathrm{LY}}(y)\equiv -3\,(y-14)(y-6)^2\pmod{37}.
+\]
+\par
+因此判别式二次脊曲线
+\[
+C:\quad W^{2}=-y(y-1)P_{\mathrm{LY}}(y)
+\]
+在 \(p=37\) 处出现由二重根 \(y\equiv 6\) 所触发的半稳定退化：
+其特殊纤维满足
+\[
+C_{\FF_{37}}:\quad W^{2}=3\,y(y-1)(y-14)(y-6)^{2},
+\]
+为不可约结点曲线。
+令 \(Z=W/(y-6)\)，则归一化为椭圆曲线
+\[
+E_{14}:\quad Z^{2}=3\,y(y-1)(y-14)
+\]
+并且该结点为非分裂结点（两支仅在 \(\FF_{37^{2}}\) 上分离）。
+从而对任意 \(n\ge 1\) 有点数恒等式
+\[
+\card{C(\FF_{37^{n}})}=\card{E_{14}(\FF_{37^{n}})}+(-1)^{n+1},
+\]
+并得到局部 \(\zeta\)-函数的显式分解
+\[
+Z_{C,37}(T)=(1+T)\,Z_{E_{14},37}(T),\qquad
+Z_{E_{14},37}(T)=\frac{1-2T+37T^{2}}{(1-T)(1-37T)}.
+\]
+\par
+综上，素数 \(37\) 同时承载：倍点 Latt\`es 自映射的稳定约化降阶与 Chebyshev 共轭、Lee--Yang 三次分歧的重根碰撞、以及判别式二次脊曲线的非分裂结点退化；
+这些同步现象共同刻画了该椭圆化机制在唯一坏素处的算术奇异性。
+\end{conclusion}
+\begin{proof}[证明要点]
+模 \(37\) 的因式分解与约去为有限整系数计算。
+Möbius 共轭可在 \(\FF_{37}(X)\) 中直接代入化简核验。
+结点曲线的归一化由代换 \(Z=W/(y-6)\) 给出，而非分裂性等价于归一化纤维在 \(y=6\) 处的两点仅在二次扩张上可见，从而点数差异呈 \((-1)^{n+1}\) 交替并推出所示 \(\zeta\)-因子。
+可复现核验脚本：\texttt{scripts/exp\_fold\_zm\_elliptic\_lattes\_rational\_points\_audit.py}（\(\overline{\Phi}\) 的约化、Chebyshev 共轭与周期枚举），\texttt{scripts/exp\_fold\_zm\_elliptic\_leyang\_cover\_geometry\_audit.py}（\(E_{14}\) 点数与 \((-1)^{n+1}\) 修正）。
+最后一条重根分解由结论 \ref{con:xi-terminal-zm-leyang-badprime-37-common-double-root} 给出。证毕。
+\end{proof}
+
+\begin{conclusion}[权坐标除法结果式的整系数性、根像刻画与次数律]\label{con:xi-terminal-zm-elliptic-division-resultant-integrality-degree}
+在椭圆曲线
+\[
+E:\ Y^{2}=X^{3}-X+\frac14,
+\qquad
+y:=X^{2}+Y-\frac12,
+\]
+与四次关系
+\[
+\Pi(X,y):=X^{4}-X^{3}-(2y+1)X^{2}+X+y(y+1)=0
+\]
+的设定下，对任意奇整数 \(n\ge 3\)，令 \(\psi_{n}(X)\in\ZZ[X]\) 为 \(E\) 的 \(n\)-division 多项式，并定义
+\[
+L_{n}(y):=\operatorname{Res}_{X}\!\bigl(\psi_{n}(X),\Pi(X,y)\bigr)\in\ZZ[y].
+\]
+则成立：
+\begin{enumerate}
+  \item \(L_{n}(y)\) 具有整系数，且 \(\deg L_{n}=n^{2}-1\)；
+  \item 根集满足
+  \[
+  \{\,\alpha\in\overline{\QQ}:L_{n}(\alpha)=0\,\}
+  =\{\,y(P):P\in E[n]\setminus\{O\}\,\},
+  \]
+  并且在特征 \(0\) 下 \(L_n\) 可分。
+\end{enumerate}
+\end{conclusion}
+\begin{proof}[证明要点]
+由 \(\psi_n(X)\in\ZZ[X]\) 与 \(\Pi(X,y)\in\ZZ[X,y]\)，结果式 \(L_n(y)\) 直接属于 \(\ZZ[y]\)。
+对任意 \(\psi_n(x_0)=0\)，多项式 \(\Pi(x_0,y)\) 关于 \(y\) 为首一二次式，故每个 \(x_0\) 贡献 \(2\) 次 \(y\)-度；
+结合奇数 \(n\) 的标准次数公式 \(\deg_X\psi_n=(n^2-1)/2\)，得到 \(\deg_y L_n=n^2-1\)。
+\par
+若 \(P=(x_0,Y_0)\in E[n]\setminus\{O\}\)，则 \(\psi_n(x_0)=0\)，且 \(y(P)=x_0^2+Y_0-\tfrac12\) 满足 \(\Pi(x_0,y(P))=0\)，故 \(L_n(y(P))=0\)。
+反之若 \(L_n(\alpha)=0\)，则存在 \(x_0\) 使 \(\psi_n(x_0)=0\) 且 \(\Pi(x_0,\alpha)=0\)；
+令 \(Y_0:=\alpha+\tfrac12-x_0^2\)，代回即得 \((x_0,Y_0)\in E(\overline{\QQ})\)，并由 \(\psi_n(x_0)=0\) 知其为非平凡 \(n\)-挠点。
+因此 \(\alpha=y(P)\) 对某 \(P\in E[n]\setminus\{O\}\) 成立。
+在 \(\mathrm{char}=0\) 下，\(E[n]\) 为 étale 群簇，故对应消元方程无不可分重根。证毕。
+\end{proof}
+
+\begin{conclusion}[三除点重量像在 \texorpdfstring{$\FF_{37}$}{F37} 上的六重坍缩]\label{con:xi-terminal-zm-elliptic-3torsion-y-image-mod37-collapse}
+仍沿用结论 \ref{con:xi-terminal-zm-elliptic-3torsion-y-image-octic} 的八次消元多项式
+\[
+L_{3}(y)=81 y^{8}-324 y^{7}+297 y^{6}+729 y^{5}-216 y^{4}-1395 y^{3}-480 y^{2}-120 y+7\in\ZZ[y].
+\]
+则在 \(\FF_{37}[y]\) 中发生高重塌缩分解
+\[
+L_{3}(y)\equiv 7\,(y-6)^{6}\,(y^{2}-5y-1)\pmod{37}.
+\]
+特别地，\(y\equiv 6\) 为 \(y\bigl(E[3]\setminus\{O\}\bigr)\) 的模 \(37\) 主聚集像，其重数为 \(6=3^{2}-3\)。
+\end{conclusion}
+\begin{proof}[证明要点]
+对 \(L_{3}(y)\) 作模 \(37\) 约化并在 \(\FF_{37}[y]\) 中因式分解即可得到所示同余分解。
+可复现核验脚本：\texttt{scripts/exp\_fold\_zm\_elliptic\_odd\_torsion\_mod37\_collapse\_audit.py}。证毕。
+\end{proof}
+
+\begin{conclusion}[五除点重量消元多项式的显式证书、模 \(37\) 分解与判别式平方类]\label{con:xi-terminal-zm-elliptic-5torsion-y-image-degree24-mod37-collapse}
+仍在椭圆曲线
+\(
+E:\ Y^{2}=X^{3}-X+\tfrac14
+\)
+与重量函数
+\(
+y=X^{2}+Y-\tfrac12
+\)
+的设定下，取 \(5\)-division 多项式（\(X\)-坐标形式）
+\[
+\psi_{5}(X)=5X^{12}-62X^{10}+95X^{9}-105X^{8}-60X^{7}+285X^{6}-174X^{5}-5X^{4}-5X^{3}+35X^{2}-15X+2\in\ZZ[X].
+\]
+令
+\[
+L_{5}(y):=\operatorname{Res}_{X}\bigl(\psi_{5}(X),\Pi(X,y)\bigr)\in\ZZ[y],
+\qquad
+\Pi(X,y):=X^{4}-X^{3}-(2y+1)X^{2}+X+y(y+1).
+\]
+则 \(L_{5}(y)\) 在 \(\QQ\) 上不可约，且 \(\deg L_{5}=24\)。
+其显式展开、模 \(37\) 分解及判别式平方类分解如下：
+\input{sections/generated/eq_fold_zm_elliptic_5torsion_discriminant_quadratic_character_audit}
+特别地，\(\operatorname{Disc}(L_5)\) 的平方自由核为 \(5\)。
+\end{conclusion}
+\begin{proof}[证明要点]
+由结果式的基本性质，\(L_{5}(y)\) 的根集合恰为 \(y\bigl(E[5]\setminus\{O\}\bigr)\) 的消元像。
+不可约性与模 \(37\) 分解可由脚本 \texttt{scripts/exp\_fold\_zm\_elliptic\_odd\_torsion\_mod37\_collapse\_audit.py} 核验；
+判别式分解与平方类由脚本 \texttt{scripts/exp\_fold\_zm\_elliptic\_5torsion\_discriminant\_quadratic\_character\_audit.py} 核验。证毕。
+\end{proof}
+
+\begin{corollary}[五次权除法分裂域的符号二次特征]\label{cor:xi-terminal-zm-elliptic-5torsion-sign-quadratic-field}
+设 \(K\) 为 \(L_{5}\) 的分裂域，\(G:=\mathrm{Gal}(K/\QQ)\)，并记
+\[
+\rho:G\longrightarrow S_{24}
+\]
+为 \(G\) 在 \(L_{5}\) 的 \(24\) 个根上的自然置换表示。
+则符号特征 \(\mathrm{sgn}\circ\rho\) 所对应的二次子域为
+\[
+\QQ(\sqrt5),
+\]
+等价地，
+\[
+\QQ\!\bigl(\sqrt{\operatorname{Disc}(L_{5})}\bigr)=\QQ(\sqrt5).
+\]
+\end{corollary}
+\begin{proof}
+对任意可分多项式 \(f\in\QQ[y]\)，\(\operatorname{Disc}(f)\) 的平方类对应于分裂域中由符号特征切出的二次子扩张。
+由结论 \ref{con:xi-terminal-zm-elliptic-5torsion-y-image-degree24-mod37-collapse}，
+\(\operatorname{Disc}(L_{5})\) 的平方自由核为 \(5\)，故结论成立。证毕。
+\end{proof}
+
+\begin{conclusion}[七除点重量像在模 \(37\) 下的四十二重坍缩]\label{con:xi-terminal-zm-elliptic-7torsion-y-image-mod37-collapse}
+令 \(\psi_{7}(X)\in\ZZ[X]\) 为同一曲线 \(E\) 的 \(7\)-division 多项式（\(X\)-坐标形式，次数 \(24\)）。
+在有限域 \(\FF_{37}\) 上定义
+\[
+L_{7}^{(37)}(y):=\operatorname{Res}_{X}\bigl(\psi_{7}(X),\Pi(X,y)\bigr)\in\FF_{37}[y],
+\]
+其中 \(\Pi(X,y)\) 如上。
+则在 \(\FF_{37}[y]\) 中存在精确分解
+\[
+L_{7}^{(37)}(y)= -4\,(y-6)^{42}\,\bigl(y^{6}-11y^{5}+18y^{4}+7y^{3}-6y^{2}-13y-9\bigr),
+\]
+其中指数 \(42=7^{2}-7\)，剩余因子次数 \(6=7-1\)。
+\end{conclusion}
+\begin{proof}[证明要点]
+在 \(\FF_{37}[X,y]\) 中计算结果式并因式分解即可得到所示恒等式；见脚本 \texttt{scripts/exp\_fold\_zm\_elliptic\_odd\_torsion\_mod37\_collapse\_audit.py}。证毕。
+\end{proof}
+
+\begin{theorem}[坏素数 \(37\) 处全阶 torsion 重量像坍缩定理]\label{con:xi-terminal-zm-elliptic-odd-torsion-mod37-collapse-exponent}\label{thm:xi-terminal-zm-elliptic-full-order-torsion-mod37-collapse}
+设
+\[
+E:\ Y^{2}=X^{3}-X+\tfrac14,
+\qquad
+y:=X^{2}+Y-\tfrac12,
+\]
+并令
+\[
+\Pi(X,y):=X^{4}-X^{3}-(2y+1)X^{2}+X+y(y+1)=0.
+\]
+对任意整数 \(n\ge 2\) 且 \(\gcd(n,37)=1\)，记 \(\psi_n(X)\) 为 \(E\) 的 \(n\)-division 多项式的 \(X\)-坐标形式（偶数 \(n\) 时取经典除点多项式去除因子 \(2Y\) 后所得的纯 \(X\) 多项式），并定义
+\[
+L_n(y):=\operatorname{Res}_{X}\!\bigl(\psi_n(X),\Pi(X,y)\bigr)\in\ZZ[y].
+\]
+则在 \(\FF_{37}[y]\) 中存在 \(c_n\in\FF_{37}^{\times}\) 与 \(R_n(y)\in\FF_{37}[y]\)，满足
+\[
+L_n(y)\equiv c_n\,(y-6)^{n^{2}-n}\,R_n(y)\pmod{37},
+\qquad
+\deg R_n=n-1,
+\qquad
+R_n(6)\neq 0.
+\]
+因此，对所有 \(\gcd(n,37)=1\) 的 \(n\ge 2\)，重量像在模 \(37\) 下具有精确主聚集重数 \(n^{2}-n\)，并保留严格 \(n-1\) 次的非坍缩自由度。
+\end{theorem}
+\begin{proof}
+在 \(p=37\) 处，\(E\) 具有非分裂乘法约化。令 \(K:=\QQ_{37}\)，取其唯一不分歧二次扩张 \(K^{(2)}\)，则 \(E/K^{(2)}\) 与某 Tate 曲线 \(E_q\) 同构。于是对任意 \(\gcd(n,37)=1\)，有标准分解
+\[
+E[n]\cong \mu_n\times \ZZ/n\ZZ
+\]
+（作为 \(K^{(2)}\)-点集的抽象群），并与结点参数化兼容。
+
+在 Tate 参数 \(u\in \overline{K^{(2)}}^{\times}/q^{\ZZ}\) 下，\(E[n]\) 的点写作 \(u=\zeta\,q^{k/n}\)（\(\zeta\in\mu_n,\ k\in\ZZ/n\ZZ\)）。当 \(k=0\) 时，\(|u|=1\)，约化落在特殊纤维的光滑分支；当 \(k\neq 0\) 时，\(|u|\neq 1\)，约化落在非分裂结点。故 \(k\neq 0\) 的点总数 \(n(n-1)=n^{2}-n\) 在特殊纤维上汇聚到同一结点。
+
+在本模型中，结点的重量坐标为 \(y\equiv 6\pmod{37}\)，故全部 \(k\neq 0\) 点对 \(L_n(y)\) 贡献因子 \((y-6)^{n^{2}-n}\)。而 \(k=0\) 的非平凡点仅有 \(n-1\) 个，且不约化到结点，故对应剩余因子在 \(y=6\) 处不消失。再由结果式次数恒等式 \(\deg L_n=n^{2}-1\)，得到
+\[
+\deg R_n=(n^{2}-1)-(n^{2}-n)=n-1,
+\qquad
+R_n(6)\neq 0.
+\]
+结论成立。
+\end{proof}
+
+\begin{theorem}[倍点 Latt\`es 逆像纤维的 \(2k\)-超立方体实现]\label{thm:xi-terminal-zm-lattes-preimage-hypercube-2k}
+设 \(E\) 为特征 \(\neq 2\) 的域上的椭圆曲线，\(x:E\to\PP^{1}\) 为商映射 \(P\mapsto x(P)\)，并令 \(\Phi\) 为倍点 \([2]:E\to E\) 在 \(\PP^{1}\) 上诱导的 Latt\`es 自映射，使
+\[
+x([2]P)=\Phi(x(P)).
+\]
+取 \(a\in\PP^{1}\) 使其不落在 \(\Phi\) 的后临界集，取 \(P\in E\) 满足 \(x(P)=a\) 且 \(P\notin E[2]\)。则对每个 \(k\ge 1\)：
+\begin{enumerate}
+  \item 存在自然双射
+  \[
+  \Phi^{-k}(a)\cong [2^{k}]^{-1}(P),
+  \]
+  从而 \(\Phi^{-k}(a)\) 是 \(E[2^k]\) 的 torsor，且
+  \[
+  |\Phi^{-k}(a)|=4^k=2^{2k}.
+  \]
+  \item \(2\)-幂挠群滤过
+  \[
+  E[2]\subset E[4]\subset\cdots\subset E[2^k]
+  \]
+  的关联分次给出
+  \[
+  \mathrm{gr}(E[2^k])\cong(\ZZ/2\ZZ)^{2k},
+  \]
+  因而在选定 \(E[2]\) 基后，\(\Phi^{-k}(a)\) 在集合层面诱导为 \(2k\) 维超立方体图 \(Q_{2k}\)。
+\end{enumerate}
+在曲线
+\[
+E:\ Y^{2}=X^{3}-X+\tfrac14
+\]
+上，对应的倍点 Latt\`es 映射为
+\[
+\Phi(X)=\frac{X^{4}+2X^{2}-2X+1}{4X^{3}-4X+1},
+\]
+故 \(k=3\) 时逆像纤维 \(\Phi^{-3}(a)\) 具有 \(64\) 顶点的 \(Q_{6}\) 结构。
+\end{theorem}
+\begin{proof}
+取 \(Q_0\in E\) 使 \([2^k]Q_0=P\)。定义
+\[
+E[2^k]\longrightarrow \Phi^{-k}(a),
+\qquad
+T\longmapsto x(Q_0+T).
+\]
+若 \(x(Q_0+T)=x(Q_0+T')\)，则 \(Q_0+T'=\pm(Q_0+T)\)。施加 \([2^k]\) 得
+\[
+P=[2^k](Q_0+T')=\pm[2^k](Q_0+T)=\pm P.
+\]
+因 \(P\notin E[2]\)，只能取正号，故 \(T'=T\)，映射单射。两侧基数同为 \(4^k\)，故为双射，得到第 1 点。
+
+再由短正合列
+\[
+0\to E[2^{j-1}]\to E[2^j]\xrightarrow{[2^{j-1}]}E[2]\to 0
+\]
+迭代，得到 \(E[2^k]\) 的二进层位编码，并将该编码平移到 torsor \([2^k]^{-1}(P)\)，遂得 \(Q_{2k}\) 的顶点坐标与单比特翻转边关系。结论成立。
+\end{proof}
+
+\begin{corollary}[坏素数 \(37\) 处的平方根全息压缩律]\label{cor:xi-terminal-zm-badprime37-square-root-holographic-compression}
+沿用定理 \ref{thm:xi-terminal-zm-elliptic-full-order-torsion-mod37-collapse} 的 \((E,y)\) 与定理 \ref{thm:xi-terminal-zm-lattes-preimage-hypercube-2k} 的 \(k\)-步 dyadic 逆像结构。令 \(n=2^k\)，并将 \(E[n]\)（等价地 \(\Phi^{-k}(a)\)）视为大小 \(4^k=2^{2k}\) 的体相空间。则
+\[
+E[n]\setminus\{O\}\xrightarrow{\ y\ }\PP^1\xrightarrow{\bmod\,37}\PP^1(\overline{\FF}_{37})
+\]
+的像集大小满足
+\[
+\#\bigl(y(E[n]\setminus\{O\})\bmod 37\bigr)\le n=2^k=\sqrt{|E[n]|}.
+\]
+且 \(y\equiv 6\pmod{37}\) 的纤维重数精确为
+\[
+n^2-n=2^{2k}-2^k.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-terminal-zm-elliptic-full-order-torsion-mod37-collapse}，
+\[
+L_n(y)\equiv c_n\,(y-6)^{n^2-n}R_n(y)\pmod{37},
+\qquad
+\deg R_n=n-1.
+\]
+因此除 \(y=6\) 外，模 \(37\) 可出现的其余 \(y\)-值至多为 \(n-1\) 个；连同 \(y=6\) 本身，总像集基数至多 \(n\)。重数结论直接来自 \((y-6)^{n^2-n}\) 的指数。证毕。
+\end{proof}
+
+\begin{proposition}[非坍缩边界的 Frobenius 周期与边界时间上界]\label{prop:xi-terminal-zm-noncollapsed-boundary-frobenius-period}
+在定理 \ref{thm:xi-terminal-zm-elliptic-full-order-torsion-mod37-collapse} 的设定下，取 \(n\ge 2\) 且 \(\gcd(n,37)=1\)。令 \(K^{(2)}/\QQ_{37}\) 为使 \(E\) 分裂乘法约化的不分歧二次扩张，其剩余域为 \(\FF_{37^2}\)。记
+\[
+f:=\operatorname{ord}_{n}(37^2).
+\]
+则：
+\begin{enumerate}
+  \item 定理 \ref{thm:xi-terminal-zm-elliptic-full-order-torsion-mod37-collapse} 中剩余因子 \(R_n(y)\) 的全部根都落在 \(\FF_{37^{2f}}\)；
+  \item Frobenius \(\mathrm{Fr}_{37^2}\) 对这些根的轨道长度均整除 \(f\)。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+在 \(K^{(2)}\) 上的 Tate 统一化下，分量群坐标 \(0\) 的 \(n\)-torsion 对应 \(\mu_n\)。Frobenius \(\mathrm{Fr}_{37^2}\) 在 \(\mu_n\) 上作用为 \(u\mapsto u^{37^2}\)，故任一 \(u\in\mu_n\) 的轨道长度整除 \(\operatorname{ord}_n(37^2)=f\)，且 \(\mu_n\subset \FF_{37^{2f}}\)。
+
+非坍缩 \(y\)-值来自该分量上的参数代入，因而属于同一有限扩张并继承同样的 Frobenius 轨道整除关系。证毕。
+\end{proof}
+
+\begin{theorem}[Tate--Hypercube 全息分解与坏素视界单层可见性]\label{thm:xi-terminal-zm-tate-hypercube-single-layer-visibility}
+取 \(p=37\) 与定理 \ref{thm:xi-terminal-zm-elliptic-full-order-torsion-mod37-collapse} 中的曲线 \(E\)。令 \(n=2^k\)（\(k\ge 1\)）。在 \(K^{(2)}\) 上有 Tate 分解
+\[
+E[n]\cong \mu_n\times \ZZ/n\ZZ.
+\]
+选取 \(\mu_n\) 与 \(\ZZ/n\ZZ\) 的生成元，并以 \(2\)-进数位分别识别为 \(\{0,1\}^k\)，得到
+\[
+E[n]\cong \{0,1\}^k\times \{0,1\}^k\cong Q_k\times Q_k\cong Q_{2k}.
+\]
+模 \(37\) 约化后，重量读出满足：
+\begin{enumerate}
+  \item 对所有 \((\zeta,m)\in \mu_n\times(\ZZ/n\ZZ)\) 且 \(m\neq 0\)，有
+  \[
+  y(\zeta,m)\equiv 6\pmod{37};
+  \]
+  \item 因而 \(y\bmod 37\) 在 \(Q_k\times (Q_k\setminus\{0\})\) 上为常数 \(6\)，仅在零层 \(Q_k\times\{0\}\) 上保留非平凡变化。
+\end{enumerate}
+特别地，\(k=3\) 时 \(E[8]\)（等价于 \(\Phi^{-3}(a)\)）的 \(Q_6\) 顶点可分为 \(8\) 个互不相交的 \(3\)-维子立方体，其中 \(7\) 层在模 \(37\) 下塌缩到 \(6\)，仅 \(1\) 层承载非坍缩边界信息。
+\end{theorem}
+\begin{proof}
+由 Tate 分解，点 \((\zeta,m)\) 对应参数 \(u=\zeta q^{m/n}\)。当 \(m\neq 0\) 时，\(u\) 赋值非零，约化落入非分裂结点，故重量约化恒为结点值 \(6\)。这与定理 \ref{thm:xi-terminal-zm-elliptic-full-order-torsion-mod37-collapse} 中因子 \((y-6)^{n^2-n}\) 的来源一致。
+
+当 \(n=2^k\) 时，两因子分别以 \(k\) 比特编码，得到超立方体直积表示；零层即 \(m=0\)。从而得到单层可见性。证毕。
+\end{proof}
+
+\begin{proposition}[Gödel 素数编码下的视界因子化与信息忘却]\label{prop:xi-terminal-zm-godel-horizon-factorization-forgetting}
+令 \(p_1<p_2<\cdots\) 为素数序列。对 \(k\ge 1\) 定义平方自由 Gödel 编码
+\[
+\mathrm{G}_k:\{0,1\}^k\to \NN_{\mathrm{sf}},
+\qquad
+\mathrm{G}_k(b_1,\dots,b_k):=\prod_{i=1}^k p_i^{\,b_i}.
+\]
+在定理 \ref{thm:xi-terminal-zm-tate-hypercube-single-layer-visibility} 的识别
+\(
+Q_{2k}\cong Q_k\times Q_k
+\)
+下，定义
+\[
+\mathrm{G}_{2k}(b,c):=\mathrm{G}_k(b)\cdot \prod_{i=1}^k p_{k+i}^{\,c_i}.
+\]
+则模 \(37\) 的重量读出塌缩等价于如下忘却因子化：存在函数 \(\mathcal B_k\) 使
+\[
+y\bmod 37=\mathcal B_k\circ \pi_k,
+\qquad
+\pi_k:\ \mathrm{G}_{2k}(b,c)\longmapsto \mathrm{G}_k(b),
+\]
+其中 \(\pi_k\) 即去除后 \(k\) 个素数块的投影。并且每条纤维
+\[
+\pi_k^{-1}\!\bigl(\mathrm{G}_k(b)\bigr)
+\]
+大小为 \(2^k\)，而坏素视界值 \(6\) 的最大坍缩重数为
+\[
+2^{2k}-2^k.
+\]
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:xi-terminal-zm-tate-hypercube-single-layer-visibility}，在 \(Q_{2k}\cong Q_k\times Q_k\) 中，除零层外第二因子 \(c\) 的全部取值在模 \(37\) 下均映到 \(6\)。故边界读出不区分后 \(k\) 个比特，只依赖前 \(k\) 个比特，即可写为 \(\mathcal B_k\circ\pi_k\)。
+
+Gödel 编码把比特翻转转写为素数幂的乘除，去除后 \(k\) 比特即对应去除后 \(k\) 个素数块。纤维大小为第二因子基数 \(2^k\)；最大坍缩重数由定理 \ref{thm:xi-terminal-zm-elliptic-full-order-torsion-mod37-collapse} 的指数 \(n^2-n\) 在 \(n=2^k\) 时给出 \(2^{2k}-2^k\)。证毕。
+\end{proof}
+
+\input{con__xi-terminal-zm-leyang-elliptic-prime-ledger-synthesis}

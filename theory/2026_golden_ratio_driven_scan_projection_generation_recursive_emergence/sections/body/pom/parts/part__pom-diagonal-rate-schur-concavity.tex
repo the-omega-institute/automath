@@ -1,0 +1,382 @@
+\begin{theorem}[对角约束最小互信息泛函的 Schur--凹性]\label{thm:pom-diagonal-rate-schur-concavity}
+固定有限字母表 \(X=\{1,\dots,n\}\)（\(n\ge 2\)）与 \(\delta\in[0,1]\)。
+对任意全支撑分布 \(w\in\Delta(X)\) 定义
+\[
+R_w(\delta):=\inf\Bigl\{I_P(X;Y):\ P_X=P_Y=w,\ \mathbb P_P(X=Y)\ge 1-\delta\Bigr\}.
+\]
+该泛函对字母表置换对称：对任意置换 \(\pi\in S_n\)，令 \((\pi_\#w)_i:=w_{\pi^{-1}(i)}\)，则 \(R_{\pi_\#w}(\delta)=R_w(\delta)\)。
+则映射 \(w\mapsto R_w(\delta)\) 在 \(\Delta(X)\) 的内点上为 Schur--凹：
+对任意 \(v,w\in\Delta(X)\)，若 \(v\prec w\)（Hardy--Littlewood--P\'olya 主序），则
+\[
+R_v(\delta)\ \ge\ R_w(\delta).
+\]
+\end{theorem}
+\begin{proof}
+记 \(p_2(w):=\sum_{i=1}^n w_i^2\)。
+若 \(\delta\ge 1-p_2(w)\)，则独立耦合 \(P=w\otimes w\) 满足
+\(
+\mathbb P(X=Y)=p_2(w)\ge 1-\delta
+\)
+且 \(I(X;Y)=0\)，从而 \(R_w(\delta)=0\)（命题 \ref{prop:pom-diagonal-rate-zero-threshold-collision}）。
+由于 \(t\mapsto t^2\) 凸，\(p_2\) 为 Schur--凸；因此 \(v\prec w\Rightarrow p_2(v)\le p_2(w)\Rightarrow \delta\ge 1-p_2(v)\)，并得到 \(R_v(\delta)=0\)。
+故以下仅需讨论 \(\delta<1-p_2(w)\) 的情形。
+\par
+当 \(\delta<1-p_2(w)\) 时，定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 给出唯一最优耦合
+\[
+P^\star_\delta(i,j)=\frac{u_i u_j\bigl(1+\kappa\,\mathbf 1_{\{i=j\}}\bigr)}{Z},
+\qquad
+w_i=\sum_j P^\star_\delta(i,j)=\frac{u_i(A+\kappa u_i)}{Z},
+\qquad
+A:=\sum_{j=1}^n u_j,
+\]
+其中 \(\kappa>0\)、\(u\in(0,\infty)^n\)、\(Z>0\)，且对角质量约束饱和。
+由定理 \ref{thm:pom-diagonal-rate-frechet-derivative-scaling-potential}，函数 \(w\mapsto R_w(\delta)\) 在内点处 Fr\'echet 可微；
+其切空间梯度可取
+\[
+\nabla R_w(\delta)\equiv 2\psi_\delta \pmod{\RR\mathbf 1},
+\qquad
+\psi_\delta(i):=\log\frac{u_i}{w_i}.
+\]
+\par
+由边缘自洽关系 \(\kappa u_i^2+A u_i=Zw_i\) 的正根表示，
+\[
+\frac{u_i}{w_i}
+=\frac{2Z}{A+\sqrt{A^2+4\kappa Zw_i}},
+\]
+右端随 \(w_i\) 严格递减，因而 \(w_i>w_j\Rightarrow \psi_\delta(i)<\psi_\delta(j)\)。
+\par
+最后应用 Hardy--Littlewood--P\'olya 的梯度判别准则：对置换不变的可微函数 \(F\)，\(F\) 为 Schur--凹当且仅当对任意 \(i\ne j\) 有
+\[
+(w_i-w_j)\Bigl(\frac{\partial F}{\partial w_i}-\frac{\partial F}{\partial w_j}\Bigr)\le 0.
+\]
+将 \(F(w)=R_w(\delta)\) 代入并用 \(\nabla R_w(\delta)\equiv 2\psi_\delta\pmod{\RR\mathbf 1}\) 消去常数项，即得
+\(
+(w_i-w_j)(\psi_\delta(i)-\psi_\delta(j))\le 0
+\)；
+由上一步严格单调性该判别式成立，从而 \(w\mapsto R_w(\delta)\) 为 Schur--凹。证毕。
+\end{proof}
+
+\begin{remark}[Schur--凹性猜想的肯定化]\label{rem:pom-diagonal-rate-schur-concavity-conjecture-81006}
+定理 \ref{thm:pom-diagonal-rate-schur-concavity} 与定理 \ref{thm:pom-diagonal-rate-strict-schur-concavity}
+共同给出如下结论：在固定 \(\delta\) 下，自耦合对角约束速率函数
+\[
+w\mapsto R_w(\delta)
+\]
+在主序意义上单调下降，且在活跃区间内具有严格版本。
+因此文内所述 Schur--凹性猜想（现行编号 8.1006，对应草稿编号 8.1003）得到严格证明。
+\end{remark}
+
+\begin{corollary}[固定字母表大小的最优上包络]\label{cor:pom-diagonal-rate-uniform-global-upper}
+令 \(|X|=n\ge 2\)，并固定 \(\delta\in[0,1-\tfrac1n)\)。
+对任意全支撑分布 \(w\in\Delta(X)\)，有
+\[
+R_w(\delta)\ \le\ R_{U_n}(\delta)
+=\log n-H_2(\delta)-\delta\log(n-1),
+\]
+其中
+\[
+H_2(\delta):=-(1-\delta)\log(1-\delta)-\delta\log\delta
+\]
+为二元熵函数（自然对数底）。
+并且等号成立当且仅当 \(w\) 为均匀分布 \(U_n\)（至多差一个置换）。
+\end{corollary}
+\begin{proof}
+均匀分布被任何 \(w\in\Delta(X)\) 主序化，即 \(U_n\prec w\)。
+由定理 \ref{thm:pom-diagonal-rate-schur-concavity} 的 Schur--凹性得
+\(
+R_{U_n}(\delta)\ge R_w(\delta)
+\)。
+由推论 \ref{cor:pom-diagonal-rate-uniform-entropy-rewrite}，\(R_{U_n}(\delta)\) 的闭式即为
+\(
+\log n-H_2(\delta)-\delta\log(n-1)
+\)。
+当 \(0\le\delta<1-\tfrac1n\) 时，\(R_{U_n}(\delta)>0\) 且严格性与等号情形由定理 \ref{thm:pom-diagonal-rate-strict-schur-concavity} 给出。证毕。
+\end{proof}
+
+\begin{theorem}[固定最大原子质量下的极值分布]\label{thm:pom-diagonal-rate-max-atom-extremizer}
+固定 \(n\ge 2\)、\(\delta\in[0,1)\) 与 \(m\in[1/n,1)\)。
+定义约束族
+\[
+\mathcal W_n(m):=\Bigl\{w\in\Delta_n:\ \|w\|_\infty=m\Bigr\},
+\]
+并记
+\[
+w^{(m)}:=\left(m,\frac{1-m}{n-1},\dots,\frac{1-m}{n-1}\right).
+\]
+则对任意 \(w\in\mathcal W_n(m)\) 成立
+\[
+w^{(m)}\prec w.
+\]
+从而
+\[
+\sup_{w\in\mathcal W_n(m)}R_w(\delta)=R_{w^{(m)}}(\delta).
+\]
+若 \(\delta\) 处于活跃区间且 \(w\) 不与 \(w^{(m)}\) 排列等价，则上述不等式严格。
+\end{theorem}
+\begin{proof}
+不妨令 \(w\) 按非增序排列，故 \(w_1=m\)。
+对任意 \(k\in\{2,\dots,n\}\)，\((w_2,\dots,w_n)\) 的平均值为 \((1-m)/(n-1)\)，
+故其前 \(k-1\) 个最大分量之和满足
+\[
+\sum_{i=2}^{k}w_i\ge (k-1)\frac{1-m}{n-1}.
+\]
+于是
+\[
+\sum_{i=1}^{k}w_i
+=m+\sum_{i=2}^{k}w_i
+\ge m+(k-1)\frac{1-m}{n-1}
+=\sum_{i=1}^{k}w_i^{(m)}.
+\]
+再结合两者总和同为 \(1\)，得到 \(w^{(m)}\prec w\)。
+由定理 \ref{thm:pom-diagonal-rate-schur-concavity} 即得
+\(
+R_{w^{(m)}}(\delta)\ge R_w(\delta)
+\)；
+严格性由定理 \ref{thm:pom-diagonal-rate-strict-schur-concavity} 给出。
+\end{proof}
+
+\begin{theorem}[严格 Schur--凹性与等号情形]\label{thm:pom-diagonal-rate-strict-schur-concavity}
+固定 \(n\ge 2\) 与 \(\delta\in(0,1)\)，并令 \(X=\{1,\dots,n\}\)。
+取 \(v,w\in\Delta(X)\) 全支撑且满足
+\[
+\delta<\delta_0(v):=1-p_2(v),
+\qquad
+\delta<\delta_0(w):=1-p_2(w),
+\]
+从而 \(R_v(\delta)>0\)、\(R_w(\delta)>0\)。
+若 \(v\prec w\) 且 \(v\) 不是 \(w\) 的置换，则必有严格不等式
+\[
+R_v(\delta)\ >\ R_w(\delta).
+\]
+另一方面，若 \(\delta\ge 1-p_2(w)\)，则 \(R_w(\delta)=0\)，并且对任何 \(v\prec w\) 亦有 \(R_v(\delta)=0\)。
+\end{theorem}
+\begin{proof}
+当 \(\delta\ge 1-p_2(w)\) 时，由定理 \ref{thm:pom-diagonal-rate-schur-concavity} 的证明已知 \(R_w(\delta)=0\) 且 \(v\prec w\Rightarrow R_v(\delta)=0\)。
+\par
+以下设 \(\delta<1-p_2(w)\) 且 \(w\) 全支撑。
+由定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 与定理 \ref{thm:pom-diagonal-rate-frechet-derivative-scaling-potential}，
+在内点处
+\(
+\nabla R_w(\delta)\equiv 2\psi_\delta\pmod{\RR\mathbf 1}
+\)
+且 \(\psi_\delta(i)=\log(u_i/w_i)\)。
+由
+\[
+\frac{u_i}{w_i}=\frac{2Z}{A+\sqrt{A^2+4\kappa Zw_i}}
+\]
+可知当 \(w_i\ne w_j\) 时有严格不等式 \(\psi_\delta(i)\ne \psi_\delta(j)\)，并满足同序反向性 \(w_i>w_j\Rightarrow \psi_\delta(i)<\psi_\delta(j)\)。
+因此对任意 \(i\ne j\) 且 \(w_i\ne w_j\)，Hardy--Littlewood--P\'olya 的梯度判别式严格成立：
+\[
+(w_i-w_j)\Bigl(\frac{\partial R_w(\delta)}{\partial w_i}-\frac{\partial R_w(\delta)}{\partial w_j}\Bigr)
+\equiv 2(w_i-w_j)\bigl(\psi_\delta(i)-\psi_\delta(j)\bigr)\ <\ 0.
+\]
+由严格梯度判别准则，\(w\mapsto R_w(\delta)\) 在该区间上为严格 Schur--凹；
+于是若 \(v\prec w\) 且非置换，则严格不等式 \(R_v(\delta)>R_w(\delta)\) 成立。证毕。
+\end{proof}
+
+\begin{proposition}[最优对偶势对权重的严格反单调性]\label{prop:pom-diagonal-rate-dual-potential-reverse-order}
+在定理 \ref{thm:pom-diagonal-rate-strict-schur-concavity} 的活跃区间假设下，记
+\[
+\psi_\delta(i):=\log\frac{u_i}{w_i},
+\]
+其中 \(u\) 来自最优缩放表示
+\(
+w_i=u_i(A+\kappa u_i)/Z
+\)。
+则成立：
+\begin{enumerate}
+\item \(w_i>w_j\iff u_i>u_j\)；
+\item \(w_i>w_j\iff \psi_\delta(i)<\psi_\delta(j)\)；
+\item 若 \(w_i\ne w_j\)，则
+\[
+(w_i-w_j)\bigl(\psi_\delta(i)-\psi_\delta(j)\bigr)<0.
+\]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+由
+\(
+w_i=u_i(A+\kappa u_i)/Z
+\)
+且 \(t\mapsto t(A+\kappa t)\) 在 \(t>0\) 上严格递增，得 \(w_i>w_j\iff u_i>u_j\)。
+再由
+\[
+\frac{u_i}{w_i}=\frac{2Z}{A+\sqrt{A^2+4\kappa Zw_i}},
+\]
+右端关于 \(w_i\) 严格递减，故 \(w_i>w_j\Rightarrow u_i/w_i<u_j/w_j\)，等价于
+\(\psi_\delta(i)<\psi_\delta(j)\)；
+从而第三条随之成立。证毕。
+\end{proof}
+
+\begin{proposition}[最优耦合的二阶子式符号刚性]\label{prop:pom-diagonal-rate-optimal-coupling-minor-sign-rigidity}
+设 \(\delta<1-p_2(w)\) 且 \(w\in\Delta(X)\) 全支撑，令 \(P^\star_\delta\) 为实现 \(R_w(\delta)\) 的唯一最优耦合，并写成
+\[
+P^\star_\delta(i,j)=\frac{u_i u_j\bigl(1+\kappa\,\mathbf 1_{\{i=j\}}\bigr)}{Z},
+\qquad
+\kappa>0,\ u\in(0,\infty)^n.
+\]
+则对任意两行指标 \(i\ne j\) 与两列指标 \(k\ne \ell\)，有
+\[
+\det\!\begin{pmatrix}
+P^\star_\delta(i,k) & P^\star_\delta(i,\ell)\\
+P^\star_\delta(j,k) & P^\star_\delta(j,\ell)
+\end{pmatrix}
+=\frac{u_i u_j u_k u_\ell}{Z^2}\Bigl(b_{ik}b_{j\ell}-b_{i\ell}b_{jk}\Bigr),
+\qquad
+b_{ab}:=1+\kappa\,\mathbf 1_{\{a=b\}}.
+\]
+特别地，若 \(\{i,j\}\cap\{k,\ell\}=\varnothing\) 则该子式为零；
+若交集为单点，则子式的绝对值恒为 \(\kappa\,u_i u_j u_k u_\ell/Z^2\)，其符号由该单一对角元位于主对角角点（\(i=k\) 或 \(j=\ell\)）或反对角角点（\(i=\ell\) 或 \(j=k\)）唯一决定；
+若 \(i=k\) 且 \(j=\ell\)，则子式为正且绝对值为 \(\kappa(\kappa+2)\,u_i u_j u_k u_\ell/Z^2\)。
+\end{proposition}
+\begin{proof}
+将 \(P^\star_\delta(i,j)=\frac{u_i u_j}{Z}b_{ij}\) 代入并将 \(u_i,u_j,u_k,u_\ell\) 提出到行列式外即得显式分解。
+由于 \(b_{ab}\in\{1,1+\kappa\}\) 仅依赖于指标相等关系，后三条结论为有限情形的直接枚举。证毕。
+\end{proof}
+
+\begin{remark}[文献边界说明]\label{rem:pom-diagonal-rate-literature-boundary-note}
+无输出边缘约束的经典率失真问题中，主序结构与极值现象已有早期研究；
+输出分布受限（或分布保持）率失真模型亦有系统化发展。
+本节处理的对象为
+\[
+P_X=P_Y=w,\qquad \PP(X=Y)\ge 1-\delta
+\]
+的自耦合约束单字母问题；
+上述定理链给出了该框架下的 Schur--凹性与严格性、均匀上包络以及固定 \(\|w\|_\infty\) 约束下的显式极值分布，形成可直接审计的封闭推导。
+\end{remark}
+
+\paragraph{主序极值与块一致扩展的整合结论}
+以下结果在同一记号下重述并整合本节主序结构，便于后续模块直接调用。
+
+\begin{theorem}[Schur--凹性与均匀极大原理的整合形式]\label{thm:pom-diagonal-rate-schur-concavity-uniform-max-principle}
+固定有限字母表 \(X=\{1,\dots,n\}\)（\(n\ge 2\)）与 \(\delta\in[0,1]\)。
+定义
+\[
+R_w(\delta):=\inf\Bigl\{I_P(X;Y):\ P_X=P_Y=w,\ \PP_P(X=Y)\ge 1-\delta\Bigr\},
+\qquad w\in\Delta_n^\circ.
+\]
+则映射 \(w\mapsto R_w(\delta)\) 在 \(\Delta_n^\circ\) 上 Schur--凹。
+并且在活跃区间
+\(
+\delta<1-p_2(w)
+\)
+内，若 \(v\prec w\) 且 \(v\) 不是 \(w\) 的置换，则
+\[
+R_v(\delta)>R_w(\delta).
+\]
+\end{theorem}
+\begin{proof}
+Schur--凹性由定理 \ref{thm:pom-diagonal-rate-schur-concavity} 已证。
+严格性由定理 \ref{thm:pom-diagonal-rate-strict-schur-concavity} 已证。
+其关键判别链为：
+\[
+\nabla R_w(\delta)\equiv 2\psi_\delta\pmod{\RR\mathbf 1},
+\qquad
+\psi_\delta(i)=\log\frac{u_i}{w_i},
+\]
+以及
+\[
+\frac{u_i}{w_i}
+=\frac{2Z}{A+\sqrt{A^2+4\kappa Zw_i}},
+\]
+后式随 \(w_i\) 严格递减，故
+\(
+w_i>w_j\Rightarrow \psi_\delta(i)<\psi_\delta(j)
+\)。
+代入 Hardy--Littlewood--P\'olya 梯度判别即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[均匀分布的唯一极大与最难边缘原则]\label{cor:pom-diagonal-rate-uniform-unique-maximizer-active}
+令 \(U_n=(1/n,\dots,1/n)\)。
+对任意 \(w\in\Delta_n^\circ\) 与任意 \(\delta\in[0,1]\)，有
+\[
+R_w(\delta)\le R_{U_n}(\delta).
+\]
+若 \(\delta<1-\frac1n\) 且 \(w\not\equiv U_n\)（至置换），则严格不等式
+\[
+R_w(\delta)<R_{U_n}(\delta)
+\]
+成立。
+\end{corollary}
+\begin{proof}
+由主序基本事实 \(U_n\prec w\) 与定理
+\ref{thm:pom-diagonal-rate-schur-concavity-uniform-max-principle}
+立即得到第一式。
+当 \(\delta<1-\frac1n\) 时，\(R_{U_n}(\delta)\) 处于活跃区间，严格性同理由该定理给出。证毕。
+\end{proof}
+
+\begin{corollary}[主序下的全曲线序与活跃区间单调嵌入]\label{cor:pom-diagonal-rate-majorization-full-curve-order}
+若 \(v,w\in\Delta_n^\circ\) 满足 \(v\prec w\)，则对所有 \(\delta\in[0,1]\) 有
+\[
+R_v(\delta)\ge R_w(\delta).
+\]
+并且 \(p_2(w):=\sum_{i=1}^n w_i^2\) 为 Schur--凸，故
+\[
+v\prec w\Longrightarrow p_2(v)\le p_2(w)\Longrightarrow
+1-p_2(v)\ge 1-p_2(w).
+\]
+因此在主序意义上越均匀的边缘，其活跃区间右端点越大。
+\end{corollary}
+\begin{proof}
+第一式由定理
+\ref{thm:pom-diagonal-rate-schur-concavity-uniform-max-principle}
+直接给出。
+第二条为 \(t\mapsto t^2\) 凸函数诱导的标准 Schur--凸结论。证毕。
+\end{proof}
+
+\begin{proposition}[梯度反序与 Robin--Hood 单调增益]\label{prop:pom-diagonal-rate-robinhood-gain}
+固定活跃区间内的 \(\delta\) 并令 \(w\in\Delta_n^\circ\) 满足
+\(
+w_1\ge\cdots\ge w_n
+\)。
+则势函数满足
+\[
+\psi_\delta(1)\le \psi_\delta(2)\le\cdots\le \psi_\delta(n).
+\]
+对任意 \(i<j\) 与足够小 \(\varepsilon>0\)，定义 Robin--Hood 平滑
+\[
+w^{(\varepsilon)}:=w-\varepsilon e_i+\varepsilon e_j\in\Delta_n^\circ.
+\]
+若 \(w_i>w_j\)，则
+\[
+R_{w^{(\varepsilon)}}(\delta)>R_w(\delta)
+\]
+对充分小 \(\varepsilon\) 成立；若 \(w_i=w_j\)，则一阶导数为 \(0\)。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:pom-diagonal-rate-dual-potential-reverse-order}，
+\(
+w_i>w_j\Rightarrow \psi_\delta(i)<\psi_\delta(j)
+\)，从而得反序链。
+再由定理 \ref{thm:pom-diagonal-rate-frechet-derivative-scaling-potential}：
+\[
+DR_w(\delta)[\dot w]=2\sum_{k=1}^n \dot w_k\,\psi_\delta(k).
+\]
+取 \(\dot w=-e_i+e_j\) 即得
+\[
+\left.\frac{d}{d\varepsilon}\right|_{\varepsilon=0^+}
+R_{w^{(\varepsilon)}}(\delta)
+=2\bigl(\psi_\delta(j)-\psi_\delta(i)\bigr).
+\]
+当 \(w_i>w_j\) 时右端严格为正，故得到局部严格增益；若 \(w_i=w_j\)，则由对称性得导数为零。证毕。
+\end{proof}
+
+\begin{conjecture}[块一致性约束下的 Schur--凹性]\label{conj:pom-block-consistency-schur-concavity}
+设 \(\mathcal P=\{B_1,\dots,B_m\}\) 为 \(X\) 的非平凡划分，并定义
+\[
+\mathbf 1_{\mathcal P}(x,y):=\mathbf 1\{x,y\ \text{处于同一块}\}.
+\]
+对 \(w\in\Delta(X)\) 与 \(\delta\in[0,1]\)，定义
+\[
+R_w^{\mathcal P}(\delta):=
+\inf\Bigl\{
+I_P(X;Y):
+P_X=P_Y=w,\ 
+\EE_P[\mathbf 1_{\mathcal P}(X,Y)]\ge 1-\delta
+\Bigr\}.
+\]
+猜想：对每个固定 \(\delta\)，映射 \(w\mapsto R_w^{\mathcal P}(\delta)\) 在 \(\Delta^\circ(X)\) 上 Schur--凹；
+并且在活跃区间内严格 Schur--凹。
+\end{conjecture}
+
+

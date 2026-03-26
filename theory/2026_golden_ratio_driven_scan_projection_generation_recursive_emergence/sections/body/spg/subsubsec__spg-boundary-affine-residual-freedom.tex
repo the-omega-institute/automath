@@ -1,0 +1,506 @@
+% Affine residual degrees of freedom under boundary constraints and externalization budgets.
+
+\subsubsection{边界方程的剩余自由度与外置预算}\label{subsubsec:spg-boundary-affine-residual-freedom}
+本小节把“边界决定体积偏差”与“自由度并不坍缩”统一为同一条可审计链条：边界约束在有限域上诱导线性边界方程，其解纤维为仿射空间；当边界邻接图的回路秩在面积密度非退化极限下随 \(n2^{n-1}\) 增长时，残余自由度呈指数规模。由此推出：任何试图以有限状态或常数轴数外置实现单值可核验的完备读出，必然遭遇指数级信息预算下界；折叠读出给出该机制在稳定语法压缩中的具体实例。
+
+\paragraph{超立方体粗粒化与边界邻接多图}
+令 \(\Omega_n:=\{0,1\}^n\)。
+把 \(\Omega_n\) 视为 \(n\)-维超立方体图的顶点集，并令 \(E_n\) 为其无向边集（相差恰一位的顶点对），则 \(\card{E_n}=n2^{n-1}\)。
+给定任意满射粗粒化
+\[
+f:\Omega_n\longtwoheadrightarrow X,
+\]
+定义其\emph{边界邻接多图} \(B_f\)：顶点集为 \(X\)，并对每条边 \(\{\omega,\omega'\}\in E_n\) 满足 \(f(\omega)\neq f(\omega')\)，在 \(B_f\) 中加入一条连接 \(f(\omega)\) 与 \(f(\omega')\) 的无向边（允许重边与自环被排除）。
+记 \(A(f)\) 为 \(B_f\) 的边数，\(c(B_f)\) 为连通分量数。
+
+\input{prop__spg-coarsegrained-cut-flux-volume-bias}
+
+\begin{theorem}[纤维一阶 Walsh 偏差的面积下界]\label{thm:spg-fiber-walsh-l1-area-lower-bound}
+在上述设定下，对每个 \(x\in X\) 令纤维
+\(
+S_x:=f^{-1}(x)\subseteq \Omega_n
+\)。
+对每个坐标 \(i\in\{1,\dots,n\}\) 定义纤维的坐标偏差
+\[
+b_i(x)
+:=\card{\{\omega\in S_x:\ \omega_i=0\}}-\card{\{\omega\in S_x:\ \omega_i=1\}}
+=\sum_{\omega\in S_x}(-1)^{\omega_i}\ \in\ \ZZ.
+\]
+令 \(E_i(f)\) 表示第 \(i\) 个坐标方向上跨纤维的微观边数
+\[
+E_i(f):=\#\bigl\{\{\omega,\omega^{(i)}\}\in E_n:\ f(\omega)\neq f(\omega^{(i)})\bigr\},
+\]
+并令 \(A(f)=\sum_{i=1}^{n}E_i(f)\)。
+则成立严格下界
+\[
+\boxed{\;
+A(f)\ \ge\ \frac12\sum_{i=1}^{n}\sum_{x\in X}\bigl|b_i(x)\bigr|\; }.
+\]
+\end{theorem}
+\begin{proof}
+对固定 \(x\in X\) 与 \(i\in\{1,\dots,n\}\)，令 \(f_x:=\ind_{S_x}\)。
+由定理 \ref{thm:spg-walsh-discrete-stokes-holography} 在 \(|I|=1\) 的情形，
+\[
+b_i(x)=b_{\{i\}}(S_x)=\sum_{\omega:\ \omega_i=0}\bigl(f_x(\omega)-f_x(\omega^{(i)})\bigr).
+\]
+取绝对值得
+\[
+\bigl|b_i(x)\bigr|
+\le
+\sum_{\omega:\ \omega_i=0}\bigl|f_x(\omega)-f_x(\omega^{(i)})\bigr|
+=:c_i(S_x),
+\]
+其中 \(c_i(S_x)\) 正是集合 \(S_x\) 在第 \(i\) 方向上的无向边界数（第 \(i\) 位翻转时跨越 \(S_x\) 与其补集的边数）。
+\par
+对固定 \(i\) 将 \(c_i(S_x)\) 对 \(x\) 求和。任一 \(i\)-方向边 \(\{\omega,\omega^{(i)}\}\) 若跨纤维（即 \(f(\omega)\neq f(\omega^{(i)})\)），则它恰在两端点所属的两条纤维的边界中各计一次；若不跨纤维则不被计入。
+因此
+\(
+\sum_{x\in X}c_i(S_x)=2E_i(f)
+\)，从而
+\[
+2E_i(f)=\sum_{x}c_i(S_x)\ge \sum_x |b_i(x)|
+\quad\Longrightarrow\quad
+E_i(f)\ge \frac12\sum_x |b_i(x)|.
+\]
+对 \(i\) 求和并用 \(A(f)=\sum_i E_i(f)\) 即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[边界方程的仿射纤维与回路秩]\label{thm:spg-boundary-affine-fiber-cycle-rank}
+在上述设定下，令
+\[
+r(f):=\rank_{\ZZ} H_1(B_f;\ZZ)=A(f)-\card{X}+c(B_f).
+\]
+取任意素数 \(p\)，并为 \(B_f\) 的每条边任选一个方向，从而得到模 \(p\) 的边界算子
+\[
+\partial_p:C_1(B_f;\FF_p)\to C_0(B_f;\FF_p).
+\]
+对任意 \(\delta\in \operatorname{im}(\partial_p)\)，定义边界方程的解纤维
+\[
+\FF_p(\delta):=\{\varphi\in C_1(B_f;\FF_p):\ \partial_p\varphi=\delta\}.
+\]
+则 \(\FF_p(\delta)\) 非空，且其基数满足
+\[
+\card{\FF_p(\delta)}=p^{\,r(f)}.
+\]
+\end{theorem}
+\begin{proof}
+对任意有限图 \(G\)，由欧拉恒等式与链复形 \(0\to C_1(G;\ZZ)\xrightarrow{\partial} C_0(G;\ZZ)\to 0\) 可得
+\[
+\rank_{\ZZ} H_1(G;\ZZ)
+=\rank_{\ZZ}\ker(\partial)
+=\card{E(G)}-\rank_{\ZZ}\operatorname{im}(\partial).
+\]
+而 \(\operatorname{im}(\partial)\subseteq C_0(G;\ZZ)\) 的秩等于 \(\card{V(G)}-c(G)\)，故
+\(
+\rank_{\ZZ}H_1(G;\ZZ)=\card{E(G)}-\card{V(G)}+c(G)
+\)。
+应用于 \(G=B_f\) 即得 \(r(f)=A(f)-\card{X}+c(B_f)\)。
+\par
+在域 \(\FF_p\) 上，\(\FF_p(\delta)\) 为线性方程组 \(\partial_p\varphi=\delta\) 的解集。
+当 \(\delta\in\operatorname{im}(\partial_p)\) 时该解集非空，并且为 \(\ker(\partial_p)\) 的一个平移，因此
+\[
+\card{\FF_p(\delta)}=\card{\ker(\partial_p)}.
+\]
+又由有限维向量空间计数，\(\card{\ker(\partial_p)}=p^{\dim_{\FF_p}\ker(\partial_p)}\)。
+对图而言 \(\dim_{\FF_p}\ker(\partial_p)=A(f)-\card{X}+c(B_f)=r(f)\)，从而 \(\card{\FF_p(\delta)}=p^{r(f)}\)。
+证毕。
+\end{proof}
+
+\input{thm__spg-boundary-torus-fiber-cycle-rank}
+\input{thm__spg-boundary-gauge-groupoid-capacity}
+
+\begin{theorem}[规范体积密度与面积密度的互补下界]\label{thm:spg-gauge-volume-area-complementarity}
+对任意满射粗粒化 \(f:\Omega_n\twoheadrightarrow X\)，定义其离散规范群为
+\[
+\mathcal G_f:=\prod_{x\in X} S_{\card{f^{-1}(x)}},
+\]
+并定义规范体积密度
+\[
+g(f):=\frac{1}{2^n}\log\card{\mathcal G_f}.
+\]
+令面积密度 \(a(f):=\frac{A(f)}{n2^{n-1}}\in[0,1]\)。
+则成立确定不等式
+\[
+\boxed{\;
+\frac{g(f)}{n}\ +\ (\log 2)\,a(f)\ \ge\ \log 2\ -\ \frac{1}{n}\; }.
+\]
+因此对任意一列满射粗粒化 \(f_n:\Omega_n\twoheadrightarrow X_n\) 都有
+\[
+\liminf_{n\to\infty}\frac{g(f_n)}{n}\ +\ (\log 2)\cdot \limsup_{n\to\infty}a(f_n)\ \ge\ \log 2.
+\]
+\end{theorem}
+\begin{proof}
+令 \(S_x=f^{-1}(x)\) 并记推前分布 \(p_x:=\card{S_x}/2^n\)。
+对任意整数 \(m\ge 1\) 有 \(\log(m!)\ge m\log m-m\)，故
+\[
+\log\card{\mathcal G_f}
+=\sum_{x\in X}\log\bigl(\card{S_x}!\bigr)
+\ge \sum_{x\in X}\bigl(\card{S_x}\log\card{S_x}-\card{S_x}\bigr)
+=2^n\Bigl(\sum_x p_x\log\card{S_x}-1\Bigr).
+\]
+两边除以 \(2^n\) 得
+\[
+g(f)\ge \sum_x p_x\log\card{S_x}-1.
+\]
+另一方面，Shannon 熵满足
+\[
+H(p):=-\sum_x p_x\log p_x
+=n\log 2-\sum_x p_x\log\card{S_x}.
+\]
+由命题 \ref{prop:hypercube-entropy-area-rigidity}\,\ref{it:hypercube-entropy-area}（同一满射粗粒化 \(f\)，其界面面积为切割边数 \(A(f)\)）有
+\[
+H(p)\le 2\log 2\cdot \frac{A(f)}{2^n}=n\,a(f)\,\log 2,
+\]
+从而
+\(
+\sum_x p_x\log\card{S_x}\ge n\log 2-H(p)\ge n(1-a(f))\log 2
+\)。
+代回 \(g(f)\ge \sum_x p_x\log\card{S_x}-1\) 即得
+\(
+g(f)\ge n(1-a(f))\log 2-1
+\)，整理得到所示互补下界；极限形式由取 \(\liminf/\limsup\) 得出。证毕。
+\end{proof}
+
+\begin{corollary}[推前熵的非退化性强迫回路秩的指数下界]\label{cor:spg-boundary-cycle-rank-from-entropy}
+在上述设定下，令推前分布
+\[
+p_x:=\frac{|f^{-1}(x)|}{2^n},\qquad x\in X,
+\]
+并记 Shannon 熵
+\[
+H(p):=-\sum_{x\in X}p_x\log p_x.
+\]
+则成立显式下界
+\[
+\boxed{\;
+r(f)\ \ge\ \frac{2^n}{2\log 2}\,H(p)\ -\ |X|\ +\ 1.\;}
+\]
+从而对任意素数 \(\wp\) 与任意 \(\delta\in \operatorname{im}(\partial_{\wp})\)，若解纤维 \(\FF_{\wp}(\delta)\) 非空，则任意单射编码
+\(
+\mathrm{Enc}:\FF_{\wp}(\delta)\hookrightarrow\{0,1\}^M
+\)
+都满足 \(M\ge r(f)\log_2 \wp\)。
+特别地，若存在常数 \(h_0>0\) 使 \(H(p)\ge h_0\) 且 \(|X|=o(2^n)\)，则 \(r(f)=\Omega(2^n)\)，从而任意上述外置唯一化所需比特预算亦为 \(\Omega(2^n)\)。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:hypercube-entropy-area-rigidity}\,\ref{it:hypercube-entropy-area}（应用于同一满射粗粒化 \(f:\Omega_n\twoheadrightarrow X\)，其中界面面积即切割边数 \(A(f)\)），有
+\[
+H(p)\le 2\log 2\cdot \frac{A(f)}{2^n},
+\qquad\text{从而}\qquad
+A(f)\ge \frac{2^n}{2\log 2}\,H(p).
+\]
+另一方面由定理 \ref{thm:spg-boundary-affine-fiber-cycle-rank} 的回路秩公式，
+\(
+r(f)=A(f)-|X|+c(B_f)\ge A(f)-|X|+1
+\)。
+合并即得所示显式下界。
+外置比特预算下界由定理 \ref{thm:spg-boundary-affine-fiber-cycle-rank} 给出的 \(|\FF_{\wp}(\delta)|=\wp^{r(f)}\) 与纯计数不等式 \(2^M\ge |\FF_{\wp}(\delta)|\) 立得。
+最后一段由 \(A(f)\ge \frac{2^n}{2\log 2}h_0=\Omega(2^n)\) 与 \(|X|=o(2^n)\) 代回 \(r(f)\ge A(f)-|X|+1\) 得到。
+证毕。
+\end{proof}
+
+\input{thm__spg-boundary-cycle-audit-query-lower-bound}
+
+\input{thm__spg-scalar-godelization-entropy-doubleexp}
+
+\begin{theorem}[面积密度非退化下的指数剩余自由度]\label{thm:spg-boundary-exponential-residual-dof}
+设存在一列满射 \(f_n:\Omega_n\longtwoheadrightarrow X_n\) 使得边界面积密度
+\[
+a_n:=\frac{A(f_n)}{n2^{n-1}}
+\]
+收敛到某个 \(a\in(0,1]\)，并且 \(\card{X_n}/2^n\to 0\)。
+则对任意素数 \(p\) 与任意 \(\delta\in\operatorname{im}(\partial_p)\)，边界方程解纤维满足指数尺度渐近
+\[
+\log\card{\FF_p(\delta)}
+=\bigl(a+o(1)\bigr)\,n2^{n-1}\log p.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:spg-boundary-affine-fiber-cycle-rank}，
+\(
+\log\card{\FF_p(\delta)}=r(f_n)\log p
+\)。
+另一方面，
+\[
+r(f_n)=A(f_n)-\card{X_n}+c(B_{f_n}).
+\]
+恒有 \(c(B_{f_n})\le \card{X_n}\)，故 \(r(f_n)=A(f_n)+O(\card{X_n})\)。
+由 \(\card{X_n}/2^n\to 0\) 且 \(n2^{n-1}\asymp 2^n n\) 得 \(\card{X_n}=o(n2^{n-1})\)，从而
+\[
+r(f_n)=A(f_n)+o(n2^{n-1})=\bigl(a_n+o(1)\bigr)\,n2^{n-1}=\bigl(a+o(1)\bigr)\,n2^{n-1}.
+\]
+代回即得结论。
+证毕。
+\end{proof}
+
+\paragraph{截断 prime-register 的完备外置预算}
+令 \(\mathcal P\) 为素数集，并令 \((p_i)_{i\ge 1}\) 为递增素数序列。
+对整数 \(k\ge 1\) 与 \(E\ge 0\)，定义截断 prime-register 状态空间
+\[
+\mathcal P_{k,E}
+:=\left\{r:\mathcal P\to\NN\ \text{有限支撑}:\ r(p_i)\in\{0,\dots,E\}\ (1\le i\le k),\ r(p)=0\ (p>p_k)\right\},
+\]
+则 \(\card{\mathcal P_{k,E}}=(E+1)^k\)。
+
+\begin{theorem}[常数轴数外置的预算下界]\label{thm:spg-prime-register-budget-lower-bound}
+沿用定理 \ref{thm:spg-boundary-affine-fiber-cycle-rank} 的设定，固定素数 \(p\) 并取 \(\delta\in\operatorname{im}(\partial_p)\)。
+若要求存在注入
+\[
+\iota:\FF_p(\delta)\hookrightarrow \mathcal P_{k,E},
+\]
+则必有
+\[
+(E+1)^k\ge \card{\FF_p(\delta)}=p^{r(f)},
+\qquad\text{等价地}\qquad
+k\log(E+1)\ge r(f)\log p.
+\]
+在定理 \ref{thm:spg-boundary-exponential-residual-dof} 的面积密度极限下，进一步得到
+\[
+k\log(E+1)\ge \bigl(a+o(1)\bigr)\,n2^{n-1}\log p.
+\]
+\end{theorem}
+\begin{proof}
+注入 \(\FF_p(\delta)\hookrightarrow \mathcal P_{k,E}\) 蕴含基数不等式 \(\card{\mathcal P_{k,E}}\ge \card{\FF_p(\delta)}\)。
+由定理 \ref{thm:spg-boundary-affine-fiber-cycle-rank} 的计数恒等式与 \(\card{\mathcal P_{k,E}}=(E+1)^k\) 得到第一组不等式；
+再取对数得等价形式。
+面积密度极限的结论由定理 \ref{thm:spg-boundary-exponential-residual-dof} 直接代入得到。
+证毕。
+\end{proof}
+
+\begin{corollary}[固定有限状态方案的可区分比例趋于零]\label{cor:spg-prime-register-distinguishable-fraction-vanishes}
+沿用定理 \ref{thm:spg-prime-register-budget-lower-bound} 的设定。
+若 \(k,E\) 与 \(n\) 无关，则对任意映射 \(\Phi:\FF_p(\delta)\to\mathcal P_{k,E}\) 有
+\[
+\frac{\max\{\card{\mathcal S}:\ \Phi|_{\mathcal S}\ \text{单射}\}}{\card{\FF_p(\delta)}}
+\le \frac{(E+1)^k}{p^{r(f)}}.
+\]
+当 \(r(f)\to\infty\)（尤其在面积密度非退化极限下 \(r(f)=\Theta(n2^{n-1})\)）时，右端趋于 \(0\)。
+\end{corollary}
+\begin{proof}
+由鸽巢原理，任意 \(\Phi\) 的单射限制最多覆盖 \(\card{\mathcal P_{k,E}}=(E+1)^k\) 个元素。
+再用 \(\card{\FF_p(\delta)}=p^{r(f)}\) 即得所示不等式；当 \(r(f)\to\infty\) 时分母指数增长，结论成立。
+证毕。
+\end{proof}
+
+\paragraph{折叠读出的单射化预算}
+折叠算子 \(\Fold_m:\Omega_m\to X_m\) 的稳定压缩率与黄金比例标度已在 \S\ref{subsec:folding-stable-compression-resolution} 给出。
+记纤维多重度 \(d_m(x):=\card{\Fold_m^{-1}(x)}\) 与最大纤维 \(D_m:=\max_{x\in X_m}d_m(x)\)。
+
+\begin{proposition}[折叠逆向单射化的记录轴下界]\label{prop:spg-fold-injectivization-register-lower-bound}
+若存在记录轴 \(r:\Omega_m\to R\) 使得扩展读出 \((\Fold_m,r):\Omega_m\to X_m\times R\) 为单射，则必有
+\[
+\card{R}\ge D_m.
+\]
+并且
+\[
+\log_2\card{R}\ge \log_2 D_m\ge \log_2\!\left(\frac{2^m}{\card{X_m}}\right)
+=m-\log_2\card{X_m}
+=\bigl(\log_2(2/\varphi)+o(1)\bigr)m.
+\]
+\end{proposition}
+\begin{proof}
+若 \((\Fold_m,r)\) 单射，则对任意 \(x\in X_m\)，映射 \(r\) 在纤维 \(\Fold_m^{-1}(x)\) 上必为单射，因此 \(\card{R}\ge d_m(x)\)；取最大值得 \(\card{R}\ge D_m\)。
+\par
+又由平均值不超过最大值，
+\(
+D_m\ge \frac{1}{\card{X_m}}\sum_{x\in X_m}d_m(x)=\frac{\card{\Omega_m}}{\card{X_m}}=\frac{2^m}{\card{X_m}}
+\)。
+最后用 \(\card{X_m}=F_{m+2}\asymp\varphi^m\) 即得线性下界。
+证毕。
+\end{proof}
+
+\begin{corollary}[无外置记录的确定性截面覆盖指数稀薄]\label{cor:spg-fold-section-exponentially-thin}
+任取截面 \(s:X_m\to\Omega_m\) 满足 \(\Fold_m(s(x))=x\)。
+令 \(\omega\sim\mathrm{Unif}(\Omega_m)\)，则
+\[
+\PP[\omega\in s(X_m)]
+=\frac{\card{X_m}}{2^m}
+=\frac{F_{m+2}}{2^m}
+=\bigl(\varphi/2+o(1)\bigr)^m.
+\]
+\end{corollary}
+\begin{proof}
+由截面定义，\(\card{s(X_m)}=\card{X_m}\)，分母为 \(\card{\Omega_m}=2^m\)。
+最后渐近由 \(\card{X_m}=F_{m+2}\asymp\varphi^m\) 给出。
+证毕。
+\end{proof}
+
+\begin{proposition}[可计算退折叠截面的复杂度上界与纤维典型性的不可达性]\label{prop:spg-computable-section-cannot-hit-typical-fiber}
+设 \(s_m:X_m\to\Omega_m\) 为一族可计算截面（即给定 \((m,x)\) 可在确定性时间 \(\mathrm{poly}(m)\) 内输出 \(s_m(x)\) 且满足 \(\Fold_m(s_m(x))=x\)）。
+则对所有 \(m\ge 1\) 与 \(x\in X_m\) 成立
+\[
+K\bigl(s_m(x)\mid m\bigr)\ \le\ K(x\mid m)+O(1).
+\]
+另一方面，沿用定理 \ref{thm:xi-fold-algorithmic-holographic-ledger} 的记号：对每个 \(x\in X_m\) 存在某个 \(\omega\in\Fold_m^{-1}(x)\) 使
+\[
+K(\omega\mid m)\ \ge\ K(x\mid m)+\lfloor \log_2 d_m(x)\rfloor-O(\log m).
+\]
+因此当 \(d_m(x)\) 在 \(m\) 上呈指数增长时，任意上述可计算截面在纤维内所选代表的条件复杂度与纤维内可达最大复杂度之间必存在与 \(\log_2 d_m(x)\) 同阶的缺口；换言之，可计算退折叠无法系统性命中纤维内的典型高复杂度微态。
+\end{proposition}
+\begin{proof}
+由可计算性，存在一固定长度的解释器：输入 \((m,x)\) 的最短描述即可输出 \(s_m(x)\)，故得
+\(
+K(s_m(x)\mid m)\le K(x\mid m)+O(1)
+\)。
+\par
+第二条由定理 \ref{thm:xi-fold-algorithmic-holographic-ledger}（或推论 \ref{cor:xi-fold-simple-type-complex-microstate}）给出：在固定纤维 \(\Fold_m^{-1}(x)\) 上，总有一部分微态达到 \(\log_2 d_m(x)\) 级的条件复杂度增益。
+合并两式即得所述不可达性结论。证毕。
+\end{proof}
+
+\paragraph{序信息、常数维寄存器与不可判定性}
+\begin{proposition}[固定轴数的 Gödel 外置无法承载序信息]\label{prop:spg-fixed-axis-godel-order-information}
+令字母表 \(\Sigma\) 满足 \(\card{\Sigma}=A\ge 2\)。
+取任意映射 \(\mathrm{Enc}_T:\Sigma^T\to \mathcal P_{k,E(T)}\)，其中 \(k\) 与 \(T\) 无关。
+若 \(\mathrm{Enc}_T\) 为单射，则必有
+\[
+A^T\le \card{\mathcal P_{k,E(T)}}=(E(T)+1)^k,
+\qquad\text{从而}\qquad
+E(T)\ge A^{T/k}-1.
+\]
+进一步，若把 \(r\in \mathcal P_{k,E}\) 压缩为单个 Gödel 整数 \(N(r)=\prod_{i=1}^k p_i^{r(p_i)}\)，并记
+\[
+E_\ast(T):=\max_{w\in\Sigma^T}\max_{1\le i\le k} r_i(w)\quad\text{其中}\quad r_i(w):=\mathrm{Enc}_T(w)(p_i),
+\]
+则任意单射 \(\mathrm{Enc}_T\) 必满足 \(E_\ast(T)\ge A^{T/k}-1\)，且
+\[
+\max_{w\in\Sigma^T}\log_2 N(\mathrm{Enc}_T(w))\ge E_\ast(T),
+\]
+从而在固定 \(k\) 下位长下界至少为 \(\exp(\Omega(T))\)。
+\end{proposition}
+\begin{proof}
+单射蕴含像集大小至少为 \(A^T\)，而 \(\card{\mathcal P_{k,E(T)}}=(E(T)+1)^k\)，故得第一组不等式并解出 \(E(T)\) 的下界。
+\par
+对任意 \(\mathrm{Enc}_T\)，其像集包含的坐标最大指数为 \(E_\ast(T)\) 时，像集大小至多为 \((E_\ast(T)+1)^k\)；
+单射要求 \(A^T\le (E_\ast(T)+1)^k\)，从而 \(E_\ast(T)\ge A^{T/k}-1\)。
+又 \(\log_2 N(r)=\sum_{i=1}^k r(p_i)\log_2 p_i\ge \max_i r(p_i)\)，取最大值得所示不等式。
+证毕。
+\end{proof}
+
+\begin{proposition}[固定维线性寄存器的比特预算下界]\label{prop:spg-fixed-dim-linear-register-bit-lower-bound}
+固定整数 \(d\ge 1\)。
+令 \(\mathcal M_d(M)\) 为所有条目落在 \([-M,M]\cap\ZZ\) 的 \(d\times d\) 整矩阵集合，则
+\[
+\card{\mathcal M_d(M)}=(2M+1)^{d^2}.
+\]
+因此任意注入 \(\iota:\{1,\dots,N\}\hookrightarrow\mathcal M_d(M)\) 必满足
+\[
+\log_2(2M+1)\ge \frac{1}{d^2}\log_2 N,
+\]
+从而存储一个矩阵所需比特数至少为
+\[
+d^2\log_2(2M+1)\ge \log_2 N.
+\]
+若取 \(N=\card{\FF_p(\delta)}=p^{r(f)}\)，则比特预算下界为 \(r(f)\log_2 p\)，在面积密度非退化极限下为 \(\Theta(n2^{n-1})\) 量级。
+\end{proposition}
+\begin{proof}
+由每个条目独立取值数相乘得到 \(\card{\mathcal M_d(M)}=(2M+1)^{d^2}\)。
+注入蕴含 \(N\le (2M+1)^{d^2}\)，取对数即得。
+最后代入 \(N=p^{r(f)}\) 得 \(d^2\log_2(2M+1)\ge r(f)\log_2 p\)。
+证毕。
+\end{proof}
+
+\begin{proposition}[不可判定等价下不存在有限值的可计算完备不变量]\label{prop:spg-undecidable-no-finite-computable-complete-invariant}
+设 \(\mathcal O\) 为一类对象，并设等价关系 \(\sim\) 在 \(\mathcal O\) 上不可判定。
+则不存在可计算映射
+\[
+I:\mathcal O\to\{1,\dots,M\}\qquad (M<\infty)
+\]
+满足对所有 \(A,B\in\mathcal O\),
+\[
+A\sim B\quad\Longleftrightarrow\quad I(A)=I(B).
+\]
+\end{proposition}
+\begin{proof}
+若存在上述 \(I\)，则可对输入 \((A,B)\) 计算 \(I(A)\) 与 \(I(B)\) 并比较是否相等，从而判定 \(A\sim B\)。
+这与 \(\sim\) 不可判定矛盾。
+故 \(I\) 不存在。
+证毕。
+\end{proof}
+
+\paragraph{有限核验闭包与资源屏障}
+\begin{theorem}[有限核验判定的双向证书结构]\label{thm:spg-finite-audit-bidirectional-certificates-np-conp}
+设一类实例集合 \(\mathcal I\) 上给定判定问题 \(\Pi\subseteq\mathcal I\)。
+对每个输入 \(x\in\mathcal I\)，设存在两个有限索引集 \(T(x),M(x)\) 与一个谓词
+\[
+\mathrm{Bad}(x;\theta,m)\in\{0,1\}\qquad(\theta\in T(x),\ m\in M(x)),
+\]
+满足
+\[
+x\in\Pi\quad\Longleftrightarrow\quad
+\forall\,\theta\in T(x)\ \forall\,m\in M(x):\ \mathrm{Bad}(x;\theta,m)=0.
+\]
+并假设：
+\begin{enumerate}
+  \item \(\mathrm{Bad}\) 可在时间 \(\mathrm{poly}(|x|)\) 内判定；
+  \item 存在证书 \(C(x)\) 给出 \(T(x)\) 与 \(M(x)\) 的显式编码，且 \(|T(x)|\cdot|M(x)|\) 与 \(|C(x)|\) 均被 \(\mathrm{poly}(|x|)\) 上界；
+  \item 给定 \(x\) 与候选索引 \((\theta,m)\)，可在时间 \(\mathrm{poly}(|x|)\) 内判定 \(\theta\in T(x)\) 且 \(m\in M(x)\)。
+\end{enumerate}
+则 \(\Pi\in \mathrm{NP}\cap \mathrm{coNP}\)。
+若更强地 \(T(x),M(x)\) 的编码可由确定性算法在时间 \(\mathrm{poly}(|x|)\) 内生成，则 \(\Pi\in\mathrm{P}\)。
+\end{theorem}
+\begin{proof}
+对 \(x\in\Pi\)，取证书为 \(C(x)\)。
+验证器从 \(C(x)\) 解码得到 \(T(x),M(x)\)，并枚举 \(T(x)\times M(x)\)：
+对每对 \((\theta,m)\) 先核验 \(\theta\in T(x)\) 且 \(m\in M(x)\)，再计算 \(\mathrm{Bad}(x;\theta,m)\) 并检查其为 \(0\)。
+由于枚举次数与每次核验均受 \(\mathrm{poly}(|x|)\) 控制，故存在多项式时间验证器，从而 \(\Pi\in\mathrm{NP}\)。
+\par
+对 \(x\notin\Pi\)，由等价刻画存在 \((\theta^\ast,m^\ast)\in T(x)\times M(x)\) 使 \(\mathrm{Bad}(x;\theta^\ast,m^\ast)=1\)。
+以 \((\theta^\ast,m^\ast)\) 作为证书，验证器核验 \(\theta^\ast\in T(x)\)、\(m^\ast\in M(x)\) 并计算 \(\mathrm{Bad}=1\)，即可在多项式时间内接受 \(\overline\Pi\) 的证书，故 \(\overline\Pi\in\mathrm{NP}\)，从而 \(\Pi\in\mathrm{coNP}\)。
+两者合并得 \(\Pi\in\mathrm{NP}\cap\mathrm{coNP}\)。
+\par
+若 \(T(x),M(x)\) 可由确定性算法在 \(\mathrm{poly}(|x|)\) 时间内生成，则可直接在多项式时间内枚举并核验全部 \((\theta,m)\)，从而在无证书情形下判定 \(x\in\Pi\)，即 \(\Pi\in\mathrm{P}\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[有限核验型目标的 \texorpdfstring{$\mathrm{NP}$}{NP}-完全屏障]\label{cor:spg-finite-audit-np-complete-barrier}
+在定理 \ref{thm:spg-finite-audit-bidirectional-certificates-np-conp} 的设定下，若存在多项式时间 many-one 约化 \(R\) 使 \(\mathrm{SAT}\le_m \Pi\)，则 \(\mathrm{NP}=\mathrm{coNP}\)。
+若更强地 \(\Pi\in\mathrm{P}\)，则 \(\mathrm{P}=\mathrm{NP}\)。
+\end{corollary}
+\begin{proof}
+由 \(\mathrm{SAT}\le_m\Pi\) 得 \(\mathrm{SAT}\in\mathrm{NP}\cap\mathrm{coNP}\)。
+因 \(\mathrm{SAT}\) 为 \(\mathrm{NP}\)-完全，故 \(\mathrm{NP}\subseteq\mathrm{coNP}\)，从而 \(\mathrm{NP}=\mathrm{coNP}\)。
+若再有 \(\Pi\in\mathrm{P}\)，则 \(\mathrm{SAT}\in\mathrm{P}\)，进而 \(\mathrm{P}=\mathrm{NP}\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[资源受限完备不变量屏障：多项式时间等价分类蕴含 \texorpdfstring{$\mathrm{P}=\mathrm{NP}$}{P=NP}]\label{thm:spg-polytime-complete-invariant-implies-p-equals-np}
+设 \(\mathrm{Inv}\) 为一个确定性多项式时间可计算映射，将任意 CNF 公式 \(\varphi\) 映射为有限字符串 \(\mathrm{Inv}(\varphi)\)，并满足完备性
+\[
+\mathrm{Inv}(\varphi)=\mathrm{Inv}(\psi)\ \Longleftrightarrow\ \varphi\equiv\psi
+\]
+（两者定义同一布尔函数）。
+则 \(\mathrm{P}=\mathrm{NP}\)。
+\end{theorem}
+\begin{proof}
+令 \(\bot\) 表示恒假公式。
+则 \(\varphi\) 不可满足当且仅当 \(\varphi\equiv\bot\)，当且仅当 \(\mathrm{Inv}(\varphi)=\mathrm{Inv}(\bot)\)。
+故 \(\mathrm{UNSAT}\in\mathrm{P}\)，从而 \(\mathrm{SAT}=\overline{\mathrm{UNSAT}}\in\mathrm{P}\)，即 \(\mathrm{P}=\mathrm{NP}\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[可审计离线验证器的多项式证书合成蕴含 \texorpdfstring{$\mathrm{P}=\mathrm{NP}$}{P=NP}]\label{thm:spg-polytime-certificate-synthesis-implies-p-equals-np}
+设 \(\mathsf{Ver}\) 为一个确定性多项式时间离线验证器，其输入为有限数据证书并输出 \(\mathrm{pass}/\mathrm{reject}/\mathsf{NULL}\)。
+假设存在确定性多项式时间算法 \(\mathsf{Synth}\)，对每个 CNF 公式 \(\varphi\) 输出一份证书 \(C(\varphi)\) 使
+\[
+\mathsf{Ver}(C(\varphi))=\mathrm{pass}\quad\Longleftrightarrow\quad \varphi\ \text{不可满足}.
+\]
+则 \(\mathrm{P}=\mathrm{NP}\)。
+\end{theorem}
+\begin{proof}
+给定 \(\varphi\)，在多项式时间内计算 \(C(\varphi)\) 并运行 \(\mathsf{Ver}\)，即可在多项式时间内判定 \(\varphi\) 是否不可满足，故 \(\mathrm{UNSAT}\in\mathrm{P}\)。
+于是 \(\mathrm{SAT}\in\mathrm{P}\)，从而 \(\mathrm{P}=\mathrm{NP}\)。
+证毕。
+\end{proof}
+
+\begin{conjecture}[简洁表示下有限核验集的超多项式不可避免性]\label{conj:spg-succinct-finite-audit-superpoly-unavoidable}
+将 primitive sofic--权系统或投影算法以简洁表示（例如电路/程序给出转移规则）作为输入 \(x\)。
+考虑一类有限核验范式：存在有限集合 \(T(x),M(x)\) 与多项式时间谓词 \(\mathrm{Bad}(x;\theta,m)\)，使
+\(
+x\in\Pi\iff \forall(\theta,m)\in T(x)\times M(x):\mathrm{Bad}(x;\theta,m)=0
+\)。
+猜想存在一族输入 \(x_n\)（\(|x_n|=n\)）使得对任意正确的核验集实现，\(\card{T(x_n)}\cdot\card{M(x_n)}\) 的最小可能规模为超多项式。
+并且该现象可被视为“统一有限核验原理在简洁编码类上不可能以多项式预算普适成立”的复杂性等价表达之一。
+\end{conjecture}
+
+\endinput
+

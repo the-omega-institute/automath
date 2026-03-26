@@ -1,0 +1,72 @@
+\paragraph{\texorpdfstring{$W_1$}{W1} 口径下的 Lee--Yang 极限测度不可统一逼近}
+沿用定理 \ref{thm:fold-computability-halting-leyang-holographic-encoding} 的极限测度
+\(
+\mu=\mu_{\mathcal H}
+\)。
+在闭单位圆盘 \(\overline{\mathbb D}\subset\CC\) 上取欧氏距离诱导的一阶 Wasserstein 距离 \(W_1\)。
+
+\begin{theorem}[Lee--Yang 极限测度在 \texorpdfstring{$W_1$}{W1} 距离下的统一逼近不可实现]\label{thm:fold-computability-halting-no-uniform-w1-learning}
+不存在总停机算法 \(\mathcal B\)，使得对每个 \(e\ge 1\) 都输出一概率测度 \(\nu_e\in\mathrm{Prob}(\overline{\mathbb D})\) 并满足
+\[
+W_1(\nu_e,\mu)\le \frac{2^{-e}}{12\,q_e},
+\]
+其中 \(q_e\) 为定理 \ref{thm:fold-computability-halting-leyang-holographic-encoding} 所用的第 \(e\) 个奇素数。
+\end{theorem}
+\begin{proof}
+对固定 \(e\)，取测试函数
+\[
+f_e(z):=z^{q_e}\qquad(z\in\overline{\mathbb D}).
+\]
+在 \(\overline{\mathbb D}\) 上有
+\(
+|f_e'(z)|\le q_e
+\)，
+故 \(f_e\) 是 \(q_e\)-Lipschitz。
+由 Kantorovich--Rubinstein 对偶表述，
+\[
+\left|\int_{\overline{\mathbb D}} z^{q_e}\,d\nu_e-\int_{\overline{\mathbb D}} z^{q_e}\,d\mu\right|
+\le q_e\,W_1(\nu_e,\mu)
+\le \frac{2^{-e}}{12}.
+\]
+另一方面，由定理 \ref{thm:fold-computability-halting-leyang-holographic-encoding}，
+\[
+\int_{\mathbb T} z^{q_e}\,d\mu=
+\frac{2^{-e}}{1+S}\,\mathbf 1_{\{e\in\mathcal H\}},
+\qquad
+1+S\le 2.
+\]
+于是
+\[
+e\notin\mathcal H
+\Longrightarrow
+\int z^{q_e}\,d\mu=0,
+\qquad
+e\in\mathcal H
+\Longrightarrow
+\int z^{q_e}\,d\mu\ge 2^{-e-1}.
+\]
+因此以上误差界允许用阈值 \(2^{-e}/6\) 有效区分 \(e\in\mathcal H\) 与 \(e\notin\mathcal H\)，从而判定停机集 \(\mathcal H\)，矛盾。
+证毕。
+\end{proof}
+
+\begin{corollary}[极限测度在 \texorpdfstring{$W_1$}{W1} 口径下不可计算]\label{cor:fold-computability-halting-measure-not-w1-computable}
+不存在总停机算法 \(\mathcal A\)，使得对每个精度参数 \(n\ge 1\) 都输出一概率测度 \(\widehat\mu_n\in\mathrm{Prob}(\overline{\mathbb D})\) 并满足
+\[
+W_1(\widehat\mu_n,\mu)\le 2^{-n}.
+\]
+亦即，\(\mu\) 在 \(W_1\) 度量下不是可计算概率测度。
+\end{corollary}
+\begin{proof}
+若存在这样的 \(\mathcal A\)，则对每个 \(e\) 取
+\[
+n(e):=e+\left\lceil \log_2(12q_e)\right\rceil.
+\]
+于是
+\[
+W_1(\widehat\mu_{n(e)},\mu)\le 2^{-n(e)}\le \frac{2^{-e}}{12q_e},
+\]
+与定理 \ref{thm:fold-computability-halting-no-uniform-w1-learning} 矛盾。
+证毕。
+\end{proof}
+
+\endinput

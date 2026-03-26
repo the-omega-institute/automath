@@ -1,0 +1,312 @@
+\paragraph{冻结相总变差、Shannon 熵率与精确反演位率的进一步闭合}
+
+\begin{theorem}[escort 测度到基态均匀测度的总变差精确公式]\label{thm:fold-escort-groundstate-tv-exact}
+沿用子小节 \ref{subsubsec:fold-fiber-groundstate-freezing-oracle-capacity} 的记号。对任意实参数 \(a>0\)，记
+\[
+S_a(m):=\sum_{x\in X_m}d_m(x)^a,
+\qquad
+\pi_{m,a}(x):=\frac{d_m(x)^a}{S_a(m)},
+\]
+\[
+A_m^{\max}:=\{x\in X_m:\ d_m(x)=M_m\},
+\qquad
+U_m^{\max}:=\mathrm{Unif}(A_m^{\max}).
+\]
+则对每个 \(m\) 与每个 \(a>0\)，都有严格恒等式
+\[
+\boxed{\;
+\|\pi_{m,a}-U_m^{\max}\|_{\mathrm{TV}}
+=
+1-\pi_{m,a}(A_m^{\max}).\;}
+\]
+若 \(a\) 进一步满足定理 \ref{thm:fold-escort-groundstate-concentration} 的冻结条件，则
+\[
+\boxed{\;
+\|\pi_{m,a}-U_m^{\max}\|_{\mathrm{TV}}
+\le
+\exp\!\bigl(-m\Delta(a)+o(m)\bigr),\;}
+\]
+其中
+\[
+\Delta(a):=a(\alpha_*-\alpha_*^{(2)})-(\log\varphi-g_*)>0.
+\]
+\end{theorem}
+\begin{proof}
+由于 \(d_m(x)\equiv M_m\) 在 \(A_m^{\max}\) 上恒定，\(\pi_{m,a}\) 在 \(A_m^{\max}\) 上本身就是均匀分布。记
+\[
+\theta_{m,a}:=\pi_{m,a}(A_m^{\max}),
+\]
+则对 \(x\in A_m^{\max}\) 有
+\[
+\pi_{m,a}(x)=\frac{\theta_{m,a}}{|A_m^{\max}|}
+=\frac{\theta_{m,a}}{K_m}.
+\]
+另一方面，对 \(x\notin A_m^{\max}\) 有 \(U_m^{\max}(x)=0\)。于是
+\[
+\begin{aligned}
+\|\pi_{m,a}-U_m^{\max}\|_{\mathrm{TV}}
+&=
+\frac12\sum_{x\in A_m^{\max}}
+\left|\frac{\theta_{m,a}}{K_m}-\frac{1}{K_m}\right|
++\frac12\sum_{x\notin A_m^{\max}}\pi_{m,a}(x)\\
+&=
+\frac12\bigl|\theta_{m,a}-1\bigr|
++\frac12\bigl(1-\theta_{m,a}\bigr)\\
+&=
+1-\theta_{m,a}\\
+&=
+1-\pi_{m,a}(A_m^{\max}),
+\end{aligned}
+\]
+得到精确公式。
+
+若 \(a\) 落在定理 \ref{thm:fold-escort-groundstate-concentration} 的冻结相内，则
+\[
+1-\pi_{m,a}(A_m^{\max})
+\le
+\exp\!\bigl(-m\Delta(a)+o(m)\bigr).
+\]
+与上式合并即得所示指数上界。证毕。
+\end{proof}
+
+\begin{theorem}[冻结相中 escort 测度的 Shannon 熵率锁定于 \texorpdfstring{$g_*$}{g*}]\label{thm:fold-escort-groundstate-shannon-rate-lock}
+在定理 \ref{thm:fold-escort-groundstate-concentration} 的假设下，取 \(a>a_{\mathrm c}\)，并记
+\[
+H(\pi_{m,a}):=-\sum_{x\in X_m}\pi_{m,a}(x)\log \pi_{m,a}(x).
+\]
+则有极限
+\[
+\boxed{\;
+\lim_{m\to\infty}\frac1mH(\pi_{m,a})=g_*.\;}
+\]
+特别地，冻结相不仅把 min-entropy 率锁定为 \(g_*\)（推论 \ref{cor:fold-escort-minentropy-rate}），也把 Shannon 熵率锁定到同一常数。
+\end{theorem}
+\begin{proof}
+记
+\[
+\theta_{m,a}:=\pi_{m,a}(A_m^{\max}),
+\qquad
+\delta_{m,a}:=1-\theta_{m,a}.
+\]
+若 \(\delta_{m,a}>0\)，定义尾部分布
+\[
+\rho_{m,a}(x):=\frac{\pi_{m,a}(x)}{\delta_{m,a}}\mathbf 1_{X_m\setminus A_m^{\max}}(x).
+\]
+由定理 \ref{thm:fold-escort-groundstate-tv-exact} 的证明，\(\pi_{m,a}\) 在 \(A_m^{\max}\) 上均匀，故当 \(\delta_{m,a}>0\) 时有支撑互不相交的分解
+\[
+\pi_{m,a}=\theta_{m,a}U_m^{\max}+\delta_{m,a}\rho_{m,a}.
+\]
+因此，当 \(\delta_{m,a}>0\) 时，Shannon 熵满足精确恒等式
+\[
+H(\pi_{m,a})
+=
+h_2(\theta_{m,a})+\theta_{m,a}\log K_m+\delta_{m,a}H(\rho_{m,a}),
+\]
+其中
+\[
+h_2(t):=-t\log t-(1-t)\log(1-t),
+\qquad 0\le t\le 1.
+\]
+若 \(\delta_{m,a}=0\)，则 \(\pi_{m,a}=U_m^{\max}\)，从而上式仍成立，只需将最后一项按约定解释为 \(0\)。
+因此
+\[
+\theta_{m,a}\log K_m
+\le
+H(\pi_{m,a})
+\le
+\theta_{m,a}\log K_m+h_2(\theta_{m,a})+\delta_{m,a}\log|X_m|.
+\]
+
+由定理 \ref{thm:fold-escort-groundstate-concentration}，
+\[
+\delta_{m,a}\le \exp\!\bigl(-m\Delta(a)+o(m)\bigr),
+\]
+故 \(\theta_{m,a}\to 1\)。另一方面，
+\[
+\log K_m=mg_*+o(m),
+\qquad
+\log|X_m|=m\log\varphi+o(m).
+\]
+又因 \(0\le h_2(\theta_{m,a})\le \log 2\)，故
+\[
+\frac{1}{m}h_2(\theta_{m,a})\to 0,
+\qquad
+\frac{\delta_{m,a}\log|X_m|}{m}\to 0.
+\]
+两边同除以 \(m\)，由夹逼定理可得
+\[
+\lim_{m\to\infty}\frac1mH(\pi_{m,a})=g_*.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[window-\texorpdfstring{$6$}{6} 的可变长精确反演率闭式与固定长阈值缺口]\label{thm:window6-variable-length-exact-inversion-rate-gap}
+沿用定理 \ref{thm:hypercube-kraft-godel-sideinfo-lower-bound} 的纤维内前缀码侧信息口径，并取
+\[
+f=\Fold_6^{\mathrm{bin}}:\Omega_6\to X_6.
+\]
+考虑全部映射
+\[
+\Phi:\Omega_6\longrightarrow X_6\times \{0,1\}^\ast,
+\qquad
+\Phi(\omega)=\bigl(f(\omega),\Phi_2(\omega)\bigr),
+\]
+其中 \(\Phi\) 为单射，且对每个 \(x\in X_6\)，集合
+\[
+\{\Phi_2(\omega):\ \omega\in f^{-1}(x)\}
+\]
+为二元前缀码。定义平均附加比特数
+\[
+L(\Phi):=2^{-6}\sum_{\omega\in\Omega_6}\bigl|\Phi_2(\omega)\bigr|,
+\qquad
+L_6^{\mathrm{var}}:=\inf_{\Phi}L(\Phi).
+\]
+则有精确闭式
+\[
+\boxed{\;
+L_6^{\mathrm{var}}=\frac{27}{16}.\;}
+\]
+若记相应平均可见比特为
+\[
+I_6^{\mathrm{var}}:=6-L_6^{\mathrm{var}},
+\]
+则
+\[
+\boxed{\;
+I_6^{\mathrm{var}}=\frac{69}{16}.\;}
+\]
+另一方面，由推论 \ref{cor:fold-oracle-full-invertibility-threshold} 与推论 \ref{cor:fold-bin-m6-fiber-hist} 可知，window-\(6\) 的最优固定长精确反演需要恰好 \(2\) 比特。故可变长与最优固定长之间存在严格缺口
+\[
+\boxed{\;
+2-\frac{27}{16}=\frac{5}{16}\ \mathrm{bits}.\;}
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:hypercube-kraft-godel-sideinfo-lower-bound}，在给定折叠输出 \(x\) 的条件下，逐纤维精确反演的可变长侧信息正对应于纤维 \(f^{-1}(x)\) 上的一组二元前缀码；因此总体平均长度可以逐纤维独立最优化。
+
+对正整数 \(d\)，记
+\[
+\ell^\star(d):=
+\inf\left\{
+\frac{1}{d}\sum_{j=1}^d\ell_j:\ 
+\ell_j\in \ZZ_{\ge 0},\
+\sum_{j=1}^d2^{-\ell_j}\le 1
+\right\}.
+\]
+则 \(\ell^\star(d)\) 就是 equiprobable \(d\)-元源在二元前缀码下的最优平均码长。
+
+当 \(d=2\) 时，Shannon 下界给出 \(\ell^\star(2)\ge \log_2 2=1\)，而码字 \(\{0,1\}\) 达到等号，故
+\[
+\ell^\star(2)=1.
+\]
+当 \(d=4\) 时，同理有 \(\ell^\star(4)\ge \log_2 4=2\)，而码字 \(\{00,01,10,11\}\) 达到等号，故
+\[
+\ell^\star(4)=2.
+\]
+当 \(d=3\) 时，若所有码长都至少为 \(2\)，则平均长度至少为 \(2\)。若存在长度为 \(1\) 的码字，则由 Kraft 不等式，其余两个码字长度都至少为 \(2\)，故平均长度至少为
+\[
+\frac{1+2+2}{3}=\frac{5}{3}.
+\]
+而码字 \(\{0,10,11\}\) 恰实现平均长度 \(5/3\)。因此
+\[
+\ell^\star(3)=\frac{5}{3}.
+\]
+
+现在由推论 \ref{cor:fold-bin-m6-fiber-hist}，window-\(6\) 的纤维直方图为
+\[
+2:8,\qquad 3:4,\qquad 4:9.
+\]
+在均匀微态输入下，总体平均长度等于各类纤维最优平均长度按微态数加权的平均值，因此
+\[
+\begin{aligned}
+L_6^{\mathrm{var}}
+&=
+\frac{1}{64}
+\left(
+8\cdot 2\cdot \ell^\star(2)
++4\cdot 3\cdot \ell^\star(3)
++9\cdot 4\cdot \ell^\star(4)
+\right)\\
+&=
+\frac{1}{64}
+\left(
+8\cdot 2\cdot 1
++4\cdot 3\cdot \frac{5}{3}
++9\cdot 4\cdot 2
+\right)\\
+&=
+\frac{16+20+72}{64}
+=
+\frac{27}{16}.
+\end{aligned}
+\]
+于是
+\[
+I_6^{\mathrm{var}}=6-\frac{27}{16}=\frac{69}{16}.
+\]
+
+最后，由推论 \ref{cor:fold-bin-m6-fiber-hist}，最大纤维大小为 \(M_6=4\)。再由推论 \ref{cor:fold-oracle-full-invertibility-threshold}，固定长精确反演的最小比特数为
+\[
+\left\lceil\log_2 4\right\rceil=2.
+\]
+故相应缺口即
+\[
+2-\frac{27}{16}=\frac{5}{16}\ \mathrm{bits}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[固定长精确反演的渐近比特率下界]\label{thm:fold-oracle-exact-inversion-joint-rate-lower-bound}
+设 \((B_m)_{m\ge 1}\) 为整数序列，并假设对每个 \(m\) 都存在一个 \(B_m\)-比特固定长预言机反演机制，使得
+\[
+{\rm Succ}_m(B_m)=1.
+\]
+亦即，该机制在分辨率 \(m\) 上实现精确反演。
+
+记
+\[
+M_m:=\max_{x\in X_m}d_m(x),
+\qquad
+\alpha_*:=\lim_{m\to\infty}\frac{1}{m}\log M_m
+\]
+（若极限存在）。则必有
+\[
+\boxed{\;
+\liminf_{m\to\infty}\frac{B_m}{m}
+\ge
+\max\left\{
+\frac{\alpha_*}{\log 2},
+\ \log_2\!\Bigl(\frac{2}{\varphi}\Bigr)
+\right\}.\;}
+\]
+\end{theorem}
+\begin{proof}
+由 \({\rm Succ}_m(B_m)=1\) 与推论 \ref{cor:fold-oracle-full-invertibility-threshold}，必有
+\[
+B_m\ge \left\lceil\log_2 M_m\right\rceil.
+\]
+因此
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}
+\ge
+\liminf_{m\to\infty}\frac{1}{m}\left\lceil\log_2 M_m\right\rceil
+=
+\frac{\alpha_*}{\log 2}.
+\]
+
+另一方面，由推论 \ref{cor:fold-oracle-pigeonhole-bound} 的同一鸽巢论证在 \({\rm Succ}_m(B_m)=1\) 的情形直接给出
+\[
+B_m\ge m-\log_2|X_m|.
+\]
+由于 \(|X_m|=F_{m+2}\) 且
+\[
+\lim_{m\to\infty}\frac{1}{m}\log_2|X_m|=\log_2\varphi,
+\]
+遂有
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}\ge 1-\log_2\varphi=\log_2\!\Bigl(\frac{2}{\varphi}\Bigr).
+\]
+两种独立必要条件取最大即得结论。证毕。
+\end{proof}
+
+\endinput

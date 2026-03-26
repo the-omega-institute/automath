@@ -1,0 +1,417 @@
+\paragraph{零点递归—误差控制下的两类可量化吸引机制}
+围绕端点递归压缩与离线缺陷耗散两条机制，给出一组可审计且可复算的渐近定律。
+端点侧以热核探针序列抽取局部几何喷流；缺陷侧以 Poisson 粗粒化场的 \(L^2\) 能量尾项识别宏观不变量。
+
+\begin{theorem}[端点热核探针的三阶渐近展开]\label{thm:xi-endpoint-heat-kernel-probe-third-order-expansion}
+设 \(\mu\) 为 \(\TT=\{e^{\mathrm{i}\theta}\}\) 上有限正 Borel 测度，且在 \(-1=e^{\mathrm{i}\pi}\) 的邻域可分解为
+\[
+\mu=m_{-1}\delta_{-1}+f(\theta)\,\dd\theta+\mu_\perp,
+\]
+其中 \(m_{-1}\ge 0\)，\(f\in C^4\)（于 \(\theta=\pi\) 邻域），且 \(\mu_\perp\) 在该邻域的限制为零。定义
+\[
+a_N:=\int_{\TT}\left|\frac{1-\xi}{2}\right|^{2N}\,\dd\mu(\xi),\qquad N\in\NN.
+\]
+则当 \(N\to\infty\) 时成立
+\begin{equation}\label{eq:xi-endpoint-heat-kernel-probe-third-order-expansion}
+\begin{aligned}
+a_N
+=m_{-1}
++2\sqrt{\pi}\,f(\pi)\,N^{-1/2}
++\sqrt{\pi}\!\left(2f''(\pi)-\frac14 f(\pi)\right)N^{-3/2}\\
++\sqrt{\pi}\!\left(f^{(4)}(\pi)-\frac54 f''(\pi)+\frac1{64}f(\pi)\right)N^{-5/2}
++O(N^{-7/2}).
+\end{aligned}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+令 \(\xi=e^{\mathrm{i}\theta}\)、\(\varphi=\theta-\pi\)。有
+\[
+\left|\frac{1-e^{\mathrm{i}\theta}}{2}\right|^2
+=\frac{1-\cos\theta}{2}
+=\cos^2\!\left(\frac{\varphi}{2}\right).
+\]
+故
+\[
+a_N-m_{-1}
+=\int \cos^{2N}\!\left(\frac{\varphi}{2}\right)f(\pi+\varphi)\,\dd\varphi
++\int \cos^{2N}\!\left(\frac{\varphi}{2}\right)\,\dd\mu_\perp(\varphi).
+\]
+由于 \(\mu_\perp\) 支撑与 \(\varphi=0\) 保持正距离，第二项为 \(O(q^N)\)（某 \(q\in(0,1)\)），可并入 \(O(N^{-7/2})\)。
+
+对主积分用 Laplace 法。利用
+\[
+\log\cos^2\!\left(\frac{\varphi}{2}\right)
+=-\frac{\varphi^2}{4}-\frac{\varphi^4}{96}-\frac{\varphi^6}{1440}+O(\varphi^8),
+\]
+作尺度变换 \(\varphi=2y/\sqrt N\)，得到
+\[
+a_N-m_{-1}
+=\frac{2}{\sqrt N}\int_{\RR}e^{-y^2}
+\left(1-\frac{y^4}{6N}+\frac{y^8/72-2y^6/45}{N^2}+O(N^{-3}(1+y^{12}))\right)
+\]
+\[
+\times
+\left(
+f(\pi)+\frac{2f''(\pi)y^2}{N}+\frac{2f^{(4)}(\pi)y^4}{3N^2}
++O(N^{-3/2}(1+|y|^5))
+\right)\dd y.
+\]
+奇次项由对称性消失。逐项积分并使用
+\[
+\int_{\RR}y^{2k}e^{-y^2}\dd y
+=\frac{(2k-1)!!}{2^k}\sqrt\pi,
+\]
+可得 \(N^{-1/2},N^{-3/2},N^{-5/2}\) 三阶系数恰为 \eqref{eq:xi-endpoint-heat-kernel-probe-third-order-expansion} 所示。
+余项由带权高斯可积估计给出 \(O(N^{-7/2})\)。证毕。
+\end{proof}
+
+\begin{corollary}[端点局部几何喷流的渐近反演]\label{cor:xi-endpoint-local-jet-inversion}
+在定理 \ref{thm:xi-endpoint-heat-kernel-probe-third-order-expansion} 条件下，记
+\[
+b_N:=a_N-m_{-1}.
+\]
+则
+\[
+b_N=A\,N^{-1/2}+B\,N^{-3/2}+C\,N^{-5/2}+O(N^{-7/2}),
+\]
+其中
+\[
+A=2\sqrt\pi\,f(\pi),\quad
+B=\sqrt\pi\!\left(2f''(\pi)-\frac14 f(\pi)\right),\quad
+C=\sqrt\pi\!\left(f^{(4)}(\pi)-\frac54 f''(\pi)+\frac1{64}f(\pi)\right).
+\]
+因而得到可计算反演
+\begin{equation}\label{eq:xi-endpoint-jet-inversion-f0}
+f(\pi)=\frac{\sqrt N}{2\sqrt\pi}\,b_N+O(N^{-1}),
+\end{equation}
+\begin{equation}\label{eq:xi-endpoint-jet-inversion-f2}
+f''(\pi)
+=\frac12\!\left[
+\frac{N^{3/2}}{\sqrt\pi}\!\left(
+b_N-\frac{2\sqrt\pi\,f(\pi)}{\sqrt N}
+\right)
++\frac14 f(\pi)\right]
++O(N^{-1}),
+\end{equation}
+\begin{equation}\label{eq:xi-endpoint-jet-inversion-f4}
+\begin{aligned}
+f^{(4)}(\pi)
+&=\frac{N^{5/2}}{\sqrt\pi}\!\left[
+b_N-\frac{2\sqrt\pi\,f(\pi)}{\sqrt N}
+-\frac{\sqrt\pi\left(2f''(\pi)-\tfrac14 f(\pi)\right)}{N^{3/2}}
+\right]\\
+&\quad+\frac54 f''(\pi)-\frac1{64}f(\pi)+O(N^{-1}).
+\end{aligned}
+\end{equation}
+将 \eqref{eq:xi-endpoint-jet-inversion-f0}--\eqref{eq:xi-endpoint-jet-inversion-f2} 依次代回 \eqref{eq:xi-endpoint-jet-inversion-f4}，
+即可得到仅由有限个 \(b_N\) 组成的递归估计式。
+\end{corollary}
+
+\begin{proof}
+由 \eqref{eq:xi-endpoint-heat-kernel-probe-third-order-expansion} 写出 \(A,B,C\) 后，逐级解线性关系即可。
+误差阶由余项 \(O(N^{-7/2})\) 乘以相应尺度 \(N^{1/2},N^{3/2},N^{5/2}\) 直接得到。证毕。
+\end{proof}
+
+\begin{theorem}[端点伸缩递归的两项展开与误差指数]\label{thm:xi-endpoint-recursive-rescaling-two-term}
+令 \(\mu\) 为 \(\TT\) 上有限正测度，Carath\'eodory 函数为
+\[
+C(w):=\int_{\TT}\frac{\xi+w}{\xi-w}\,\dd\mu(\xi),\qquad |w|<1.
+\]
+定义圆盘 Poisson 平滑
+\[
+u(w):=\int_{\TT}\frac{1-|w|^2}{|\xi-w|^2}\,\dd\mu(\xi)=\Re C(w).
+\]
+取 \(m>1\)，定义固定端点 \(-1\) 的双曲伸缩
+\[
+\psi_m(w):=\frac{(1-m)+(1+m)w}{(1+m)+(1-m)w},
+\]
+并记
+\[
+B(w):=\frac{1-|w|^2}{|1+w|^2}.
+\]
+假设在 \(-1\) 的邻域内
+\[
+\mu=m_{-1}\delta_{-1}+f(\theta)\,\frac{\dd\theta}{2\pi},
+\]
+其中 \(f\in C^\alpha\) 于 \(\theta=\pi\)（\(\alpha\in(0,1]\)）。
+则对任意紧集 \(K\Subset\mathbb D\)，当 \(n\to\infty\) 时一致成立
+\begin{equation}\label{eq:xi-endpoint-recursive-rescaling-two-term}
+m^{-n}u\!\left(\psi_m^{\circ n}(w)\right)
+=m_{-1}B(w)+f(\pi)\,m^{-n}+O\!\left(m^{-n(1+\alpha)}\right),\qquad w\in K.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+记 \(w_n:=\psi_m^{\circ n}(w)\)。由 \(\psi_m\) 在 \(-1\) 处的共形线性化，
+\[
+B(w_n)=m^nB(w).
+\]
+原子部分贡献为
+\[
+m_{-1}\frac{1-|w_n|^2}{|-1-w_n|^2}=m_{-1}m^nB(w).
+\]
+对绝对连续部分，Poisson 核族
+\(
+\frac{1-|w_n|^2}{|e^{\mathrm{i}\theta}-w_n|^2}
+\)
+在 \(\theta=\pi\) 处形成尺度 \(\asymp m^{-n}\) 的近似恒等核，故
+\[
+\left|
+\int_{\TT}\frac{1-|w_n|^2}{|\xi-w_n|^2}\,f(\xi)\,\frac{\dd\theta}{2\pi}
+-f(\pi)\right|
+\le C_K\,m^{-n\alpha}.
+\]
+于是
+\[
+u(w_n)=m_{-1}m^nB(w)+f(\pi)+O(m^{-n\alpha}),
+\]
+两边乘 \(m^{-n}\) 即得 \eqref{eq:xi-endpoint-recursive-rescaling-two-term}。证毕。
+\end{proof}
+
+\begin{theorem}[端点双通道重整化的可辨识极限与显式误差]\label{thm:xi-endpoint-two-channel-renormalization-identifiability}
+在定理 \ref{thm:xi-endpoint-recursive-rescaling-two-term} 的设定下，令 \(K\Subset\mathbb{D}\) 为任意紧集，并写
+\(
+w_n:=\psi_m^{\circ n}(w)
+\)（\(w\in K\)）。
+定义端点核归一化读出与绝对连续通道读出
+\[
+A_n(w):=\frac{m^{-n}u(w_n)}{B(w)},
+\qquad
+F_n(w):=u(w_n)-m_{-1}m^nB(w).
+\]
+则存在常数
+\(
+c_K:=\inf_{w\in K}B(w)>0
+\)
+与 \(C_K<\infty\)，使得对一切 \(n\ge 1\) 与一切 \(w\in K\) 均成立
+\[
+\boxed{\ \bigl|A_n(w)-m_{-1}\bigr|\ \le\ C_K\,c_K^{-1}\,m^{-n}\ },
+\qquad
+\boxed{\ \bigl|F_n(w)-f(\pi)\bigr|\ \le\ C_K\,m^{-n\alpha}\ }.
+\]
+并且进一步对任意 \(w,w'\in K\) 有一致性估计
+\[
+\boxed{\ \bigl|A_n(w)-A_n(w')\bigr|\ \le\ 2C_K\,c_K^{-1}\,m^{-n}\ },
+\qquad
+\boxed{\ \bigl|F_n(w)-F_n(w')\bigr|\ \le\ 2C_K\,m^{-n\alpha}\ }.
+\]
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:xi-endpoint-recursive-rescaling-two-term}，存在常数 \(C_K\) 使对一切 \(w\in K\) 有
+\[
+m^{-n}u(w_n)=m_{-1}B(w)+f(\pi)\,m^{-n}+O_K\!\left(m^{-n(1+\alpha)}\right).
+\]
+两边除以 \(B(w)\) 并用 \(B(w)\ge c_K>0\)，得
+\[
+A_n(w)-m_{-1}=\frac{f(\pi)}{B(w)}\,m^{-n}+O_K\!\left(\frac{m^{-n(1+\alpha)}}{B(w)}\right)
+=O_K\!\left(c_K^{-1}m^{-n}\right),
+\]
+即第一条盒装式。
+另一方面，由 \(B(w_n)=m^nB(w)\) 与 \(u(w_n)=m_{-1}m^nB(w)+f(\pi)+O_K(m^{-n\alpha})\) 得
+\(
+F_n(w)=f(\pi)+O_K(m^{-n\alpha})
+\)，即第二条盒装式。
+最后，两条一致性估计由三角不等式
+\(
+|A_n(w)-A_n(w')|\le |A_n(w)-m_{-1}|+|A_n(w')-m_{-1}|
+\)
+与 \(F_n\) 的同型估计直接推出。证毕。
+\end{proof}
+
+\begin{corollary}[二差分消元的端点值恢复与 Hölder 指数估计器]\label{cor:xi-endpoint-second-difference-elimination-holder-estimator}
+沿用定理 \ref{thm:xi-endpoint-recursive-rescaling-two-term} 的记号，固定 \(m>1\) 与 \(w\in\mathbb{D}\)，记
+\[
+u_n(w):=u\!\left(\psi_m^{\circ n}(w)\right),\qquad n\ge 0.
+\]
+定义二差分消元估计器
+\[
+\widehat f_n(w):=\frac{m\,u_n(w)-u_{n+1}(w)}{m-1}.
+\]
+则当 \(n\to\infty\) 时有一致渐近
+\[
+\widehat f_n(w)=f(\pi)+O\!\left(m^{1-n\alpha}\right),
+\]
+其中 \(\alpha\) 为端点 Hölder 指数。
+进一步地，若存在常数 \(c_\ast(w)>0\) 使
+\[
+\bigl|\widehat f_{n+1}(w)-\widehat f_n(w)\bigr|\sim c_\ast(w)\,m^{1-n\alpha}\qquad(n\to\infty),
+\]
+则 \(\alpha\) 可由相邻差分比率的极限读出：
+\[
+\alpha
+=
+-\lim_{n\to\infty}\frac{\log\!\left(\frac{\bigl|\widehat f_{n+1}(w)-\widehat f_n(w)\bigr|}{\bigl|\widehat f_{n}(w)-\widehat f_{n-1}(w)\bigr|}\right)}{\log m}.
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:xi-endpoint-recursive-rescaling-two-term}，存在误差项 \(\varepsilon_n(w)=O(m^{-n\alpha})\) 使
+\[
+u_n(w)=m_{-1}m^nB(w)+f(\pi)+\varepsilon_n(w),
+\qquad
+u_{n+1}(w)=m_{-1}m^{n+1}B(w)+f(\pi)+\varepsilon_{n+1}(w).
+\]
+从而
+\[
+m\,u_n(w)-u_{n+1}(w)=(m-1)f(\pi)+m\,\varepsilon_n(w)-\varepsilon_{n+1}(w),
+\]
+即
+\[
+\widehat f_n(w)=f(\pi)+\frac{m\,\varepsilon_n(w)-\varepsilon_{n+1}(w)}{m-1}
+=f(\pi)+O\!\left(\frac{m\cdot m^{-n\alpha}+m^{-(n+1)\alpha}}{m-1}\right)
+=f(\pi)+O\!\left(m^{1-n\alpha}\right).
+\]
+在非退化假设下，
+\(
+\frac{\bigl|\widehat f_{n+1}-\widehat f_n\bigr|}{\bigl|\widehat f_{n}-\widehat f_{n-1}\bigr|}\to m^{-\alpha}
+\)，
+取对数并除以 \(\log m\) 即得所示估计器公式。证毕。
+\end{proof}
+
+\begin{proposition}[递归误差指数与端点 Hölder 正则性的可观测等价]\label{prop:xi-endpoint-recursive-error-holder-equivalence}
+沿用定理 \ref{thm:xi-endpoint-recursive-rescaling-two-term} 记号，并假设 \(-1\) 邻域内无奇异连续部分。
+则以下两条件等价：
+\begin{enumerate}
+  \item \(f\in C^\alpha\) 于 \(\theta=\pi\)（某 \(\alpha\in(0,1]\)）；
+  \item 对某（等价地，对任意）\(m>1\) 与某（等价地，对任意）\(w\in\mathbb D\)，存在常数 \(C_w\) 使
+  \[
+  \left|
+  m^{-n}u\!\left(\psi_m^{\circ n}(w)\right)
+  -m_{-1}B(w)-f(\pi)m^{-n}
+  \right|
+  \le C_w\,m^{-n(1+\alpha)},\qquad n\ge 1.
+  \]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\((1)\Rightarrow(2)\) 即定理 \ref{thm:xi-endpoint-recursive-rescaling-two-term}。
+
+\((2)\Rightarrow(1)\)：固定 \(m,w\) 并记 \(w_n=\psi_m^{\circ n}(w)\)。
+由条件 (2) 得
+\[
+\left|
+\int_{\TT}\frac{1-|w_n|^2}{|\xi-w_n|^2}\,f(\xi)\,\frac{\dd\theta}{2\pi}
+-f(\pi)
+\right|
+\le C\,m^{-n\alpha}.
+\]
+左端是尺度 \(\varepsilon_n\asymp m^{-n}\) 的近似恒等平滑误差。标准反演定理表明：若近似恒等误差满足
+\(
+O(\varepsilon_n^\alpha)
+\)，则 \(f\) 在该点为 Hölder-\(\alpha\)。
+故 \(f\in C^\alpha\) 于 \(\pi\)。证毕。
+\end{proof}
+
+\begin{theorem}[Poisson 缺陷场的 \(L^2\) 能量闭式与三阶远场展开]\label{thm:xi-poisson-defect-l2-energy-closed-form-three-term}
+令
+\[
+P_t(x):=\frac{1}{\pi}\frac{t}{x^2+t^2},\qquad t>0.
+\]
+给定有限缺陷配置
+\(
+\{(\gamma_j,\delta_j,m_j)\}_{j=1}^J
+\)
+（\(\delta_j>0,\ m_j\in\NN\)），记
+\(
+a_j:=m_j\delta_j
+\)，定义
+\[
+G_t(x):=\sum_{j=1}^J a_j\,P_{t+\delta_j}(x-\gamma_j),
+\qquad
+E(t):=\|G_t\|_{L^2(\RR)}^2.
+\]
+则有闭式恒等式
+\begin{equation}\label{eq:xi-poisson-defect-l2-energy-closed-form}
+E(t)=\sum_{j,k=1}^J a_j a_k\,P_{2t+\delta_j+\delta_k}(\gamma_j-\gamma_k).
+\end{equation}
+再记
+\[
+\Phi:=\sum_{j=1}^J a_j,\quad
+G_1:=\sum_{j=1}^J a_j\gamma_j,\quad
+G_2:=\sum_{j=1}^J a_j\gamma_j^2,\quad
+D_1:=\sum_{j=1}^J a_j\delta_j,\quad
+D_2:=\sum_{j=1}^J a_j\delta_j^2,
+\]
+则当 \(t\to\infty\) 时
+\begin{equation}\label{eq:xi-poisson-defect-l2-energy-three-term-expansion}
+\begin{aligned}
+E(t)
+&=\frac{\Phi^2}{2\pi t}
+-\frac{\Phi D_1}{2\pi t^2}\\
+&\quad+\frac{1}{4\pi t^3}\Bigl[\Phi(D_2-G_2)+D_1^2+G_1^2\Bigr]
++O(t^{-4}).
+\end{aligned}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+展开平方并交换有限求和与积分：
+\[
+E(t)=\sum_{j,k}a_ja_k
+\int_{\RR}
+P_{t+\delta_j}(x-\gamma_j)\,P_{t+\delta_k}(x-\gamma_k)\,\dd x.
+\]
+由 Poisson 核卷积半群
+\(
+P_s*P_r=P_{s+r}
+\)
+（等价于 \(\widehat P_s(\xi)=e^{-s|\xi|}\)）得
+\[
+\int_{\RR}P_s(y)\,P_r(y-\Delta)\,\dd y=P_{s+r}(\Delta),
+\]
+取 \(s=t+\delta_j,\ r=t+\delta_k,\ \Delta=\gamma_j-\gamma_k\)，即得
+\eqref{eq:xi-poisson-defect-l2-energy-closed-form}。
+
+令 \(A_{jk}:=2t+\delta_j+\delta_k\)、\(\Delta_{jk}:=\gamma_j-\gamma_k\)。
+有
+\[
+P_{A_{jk}}(\Delta_{jk})
+=\frac{1}{\pi}\frac{A_{jk}}{\Delta_{jk}^2+A_{jk}^2}
+=\frac{1}{\pi}\left(\frac{1}{A_{jk}}-\frac{\Delta_{jk}^2}{A_{jk}^3}+O(t^{-5})\right),
+\]
+\[
+\frac{1}{A_{jk}}
+=\frac{1}{2t}-\frac{\delta_j+\delta_k}{4t^2}
++\frac{(\delta_j+\delta_k)^2}{8t^3}+O(t^{-4}),
+\qquad
+\frac{1}{A_{jk}^3}
+=\frac{1}{8t^3}+O(t^{-4}).
+\]
+代回后双和归并为
+\[
+\sum_{j,k}a_ja_k=\Phi^2,\quad
+\sum_{j,k}a_ja_k(\delta_j+\delta_k)=2\Phi D_1,
+\]
+\[
+\sum_{j,k}a_ja_k\bigl((\delta_j+\delta_k)^2-(\gamma_j-\gamma_k)^2\bigr)
+=2\bigl[\Phi(D_2-G_2)+D_1^2+G_1^2\bigr],
+\]
+遂得 \eqref{eq:xi-poisson-defect-l2-energy-three-term-expansion}。证毕。
+\end{proof}
+
+\begin{corollary}[能量尾项反演与宏观不变量重建]\label{cor:xi-poisson-defect-l2-energy-tail-inversion}
+在定理 \ref{thm:xi-poisson-defect-l2-energy-closed-form-three-term} 条件下，
+\begin{equation}\label{eq:xi-poisson-defect-energy-tail-limit-1}
+\lim_{t\to\infty}tE(t)=\frac{\Phi^2}{2\pi},
+\end{equation}
+\begin{equation}\label{eq:xi-poisson-defect-energy-tail-limit-2}
+\lim_{t\to\infty}t^2\!\left(E(t)-\frac{\Phi^2}{2\pi t}\right)
+=-\frac{\Phi D_1}{2\pi},
+\end{equation}
+\begin{equation}\label{eq:xi-poisson-defect-energy-tail-limit-3}
+\lim_{t\to\infty}t^3\!\left(E(t)-\frac{\Phi^2}{2\pi t}+\frac{\Phi D_1}{2\pi t^2}\right)
+=\frac{1}{4\pi}\Bigl[\Phi(D_2-G_2)+D_1^2+G_1^2\Bigr].
+\end{equation}
+特别地，
+\[
+\Phi=0\quad\Longleftrightarrow\quad \lim_{t\to\infty}tE(t)=0.
+\]
+\end{corollary}
+
+\begin{proof}
+由 \eqref{eq:xi-poisson-defect-l2-energy-three-term-expansion} 逐阶比较立即得到。证毕。
+\end{proof}
+
+\endinput

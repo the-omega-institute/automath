@@ -1,0 +1,595 @@
+\subsubsection{偏置 Bernoulli 源下的纤维硬核后验：推前闭式、KL 分解与浓缩律}\label{subsubsec:pom-fiber-biased-bernoulli-hardcore}
+在定义 \ref{def:pom-fiber-adm-path} 与定理 \ref{thm:pom-fiber-indset-factorization} 的“纤维--候选位点--独立集”框架中，
+纤维生成函数
+\(
+Z_x(t)=\sum_{\omega\in\Fold_m^{-1}(x)}t^{r(\omega)}
+\)
+已给出统一计数接口。
+本节固定偏置 Bernoulli 输入，给出推前分布、条件后验、Poisson--binomial 谱分解、统计推断结构以及相对熵链式分解的闭式表达。
+
+\begin{theorem}[偏置 Bernoulli 推前闭式与纤维后验硬核化]\label{thm:pom-fiber-biased-bernoulli-pushforward-hardcore}
+设 \(\Omega_m=\{0,1\}^m\)，并取
+\(
+\mu_{m,p}:=\mathrm{Bernoulli}(p)^{\otimes m}
+\)
+（\(p\in(0,1)\)）。
+令
+\[
+\nu_{m,p}:=(\Fold_m)_{\#}\mu_{m,p}.
+\]
+记
+\(
+t:=\frac{p}{1-p}
+\)。
+则对任意 \(x\in X_m\) 有
+\begin{equation}\label{eq:pom-fiber-biased-pushforward-closed}
+\nu_{m,p}(x)
+=
+p^{|x|_1}(1-p)^{m-|x|_1}\,Z_x(t).
+\end{equation}
+并且对任意 \(\omega\in\Fold_m^{-1}(x)\)，条件后验满足
+\begin{equation}\label{eq:pom-fiber-biased-posterior-hardcore}
+\mu_{m,p}(\omega\mid x)
+=
+\frac{t^{r(\omega)}}{Z_x(t)}.
+\end{equation}
+因此在规范同构
+\(
+\Fold_m^{-1}(x)\cong \mathsf{Ind}(\Gamma_x)
+\)
+下，后验正是活动度 \(t\) 的 hard-core 模型：
+\[
+\mathbb P_{x,p}(S)=\frac{t^{|S|}}{\sum_{T\in\mathsf{Ind}(\Gamma_x)}t^{|T|}}
+\qquad
+\bigl(S\in\mathsf{Ind}(\Gamma_x)\bigr).
+\]
+\end{theorem}
+\begin{proof}
+由逆代换 \(100\mapsto 011\) 的局部变化，每次触发使 \(|\cdot|_1\) 增加 \(1\)。
+故对任意 \(\omega\in\Fold_m^{-1}(x)\) 有
+\[
+|\omega|_1=|x|_1+r(\omega).
+\]
+于是
+\[
+\mu_{m,p}(\omega)
+=p^{|\omega|_1}(1-p)^{m-|\omega|_1}
+=p^{|x|_1}(1-p)^{m-|x|_1}\left(\frac{p}{1-p}\right)^{r(\omega)}.
+\]
+在纤维上求和即得
+\eqref{eq:pom-fiber-biased-pushforward-closed}；
+再除以该和即得
+\eqref{eq:pom-fiber-biased-posterior-hardcore}。
+最后由定理 \ref{thm:pom-fiber-indset-factorization} 的规范同构把 \(r(\omega)\) 识别为 \(|S|\)，得到 hard-core 形式。证毕。
+\end{proof}
+
+\begin{theorem}[权重--纤维生成函数的二项式守恒律]\label{thm:pom-fiber-biased-weighted-partition-identity}
+对任意 \(m\ge 1\) 与任意 \(t>0\)，成立
+\begin{equation}\label{eq:pom-fiber-biased-binomial-conservation}
+\sum_{x\in X_m} t^{|x|_1}Z_x(t)=(1+t)^m.
+\end{equation}
+\end{theorem}
+\begin{proof}
+由 \(\Omega_m=\bigsqcup_{x\in X_m}\Fold_m^{-1}(x)\) 与
+\(
+|\omega|_1=|x|_1+r(\omega)
+\)，有
+\[
+\sum_{x\in X_m} t^{|x|_1}Z_x(t)
+=\sum_{x\in X_m}\sum_{\omega\in\Fold_m^{-1}(x)}t^{|x|_1+r(\omega)}
+=\sum_{\omega\in\Omega_m}t^{|\omega|_1}.
+\]
+右端按 Hamming 权重分层即为 \((1+t)^m\)。证毕。
+\end{proof}
+
+\begin{theorem}[位置加权的全息守恒律：纤维分解的多变量形式]\label{thm:pom-fiber-multivariate-holographic-conservation}
+固定 \(m\ge 1\)，令 \(\Omega_m=\{0,1\}^m\) 且 \(\Fold_m:\Omega_m\twoheadrightarrow X_m\) 为折叠投影。
+取交换不定元 \(\boldsymbol{z}=(z_1,\dots,z_m)\)。
+对每个 \(x\in X_m\)，沿用定理 \ref{thm:pom-fiber-indset-factorization} 的规范双射
+\(
+\Theta_x:\Fold_m^{-1}(x)\to \mathsf{Ind}(\Gamma_x)
+\)，并记 \(S(\omega):=\Theta_x(\omega)\)。
+\par
+对每个候选位点 \(v\in V(\Gamma_x)\)，令 \(J_x(v)=\{j_x(v),j_x(v)+1,j_x(v)+2\}\subseteq\{1,\dots,m\}\) 为其对应的长度 \(3\) 局部区间，使得在该区间上触发一次逆代换恰将模式 \(100\) 改写为 \(011\)，并且当 \(v\) 在同一独立集内同时取值时，这些区间两两不交（该区间由折叠核与候选位点的规范回放口径唯一确定）。
+定义局部比值权
+\[
+w_{x,v}(\boldsymbol{z})
+:=\frac{z_{j_x(v)+1}\,z_{j_x(v)+2}}{z_{j_x(v)}}.
+\]
+并定义纤维的多变量生成多项式
+\[
+\mathcal H_x(\boldsymbol{z})
+:=\Bigl(\prod_{i=1}^{m}z_i^{x_i}\Bigr)
+\sum_{S\in\mathsf{Ind}(\Gamma_x)}\ \prod_{v\in S}w_{x,v}(\boldsymbol{z}).
+\]
+则成立全息守恒恒等式
+\begin{equation}\label{eq:pom-fiber-multivariate-holographic-conservation}
+\boxed{\ \sum_{x\in X_m}\mathcal H_x(\boldsymbol{z})\ =\ \prod_{i=1}^{m}(1+z_i)\ }.
+\end{equation}
+并且尽管 \(w_{x,v}\) 表面上为 Laurent 单项式，\(\mathcal H_x(\boldsymbol{z})\) 实为 \(\ZZ[z_1,\dots,z_m]\) 中的整系数多项式。
+\end{theorem}
+
+\begin{proof}
+由定义，
+\[
+\sum_{x\in X_m}\mathcal H_x(\boldsymbol{z})
+=\sum_{x\in X_m}\sum_{\omega\in\Fold_m^{-1}(x)}\prod_{i=1}^{m}z_i^{\omega_i},
+\]
+其中等号来自：对固定 \(x\)，任意 \(\omega\in\Fold_m^{-1}(x)\) 在规范双射下对应独立集 \(S(\omega)\)，且由“长度 \(3\) 局部区间两两不交”的结构事实，
+\[
+\prod_{i=1}^{m}z_i^{\omega_i}
+=\Bigl(\prod_{i=1}^{m}z_i^{x_i}\Bigr)\prod_{v\in S(\omega)}\frac{z_{j_x(v)+1}z_{j_x(v)+2}}{z_{j_x(v)}}.
+\]
+由于每次触发都发生在 \(x\) 的局部模式 \(100\) 上，分母中的 \(z_{j_x(v)}\) 被前因子 \(\prod z_i^{x_i}\) 抵消，从而每个 \(\mathcal H_x\) 仅含非负幂。
+\par
+再由 \(\Omega_m=\bigsqcup_{x\in X_m}\Fold_m^{-1}(x)\)，上式即为
+\(
+\sum_{\omega\in\Omega_m}\prod_i z_i^{\omega_i}
+\)，
+而右端按逐位二元选择展开得到 \(\prod_i(1+z_i)\)。
+故得 \eqref{eq:pom-fiber-multivariate-holographic-conservation}。证毕。
+\end{proof}
+
+\input{parts/cor__pom-fiber-walsh-hardcore-stokes-sign}
+\input{parts/thm__pom-fiber-walsh-signature-rademacher}
+\input{parts/thm__pom-fiber-walsh-mod2-rigidity-extremal}
+
+\begin{corollary}[非齐次 Bernoulli 源下的纤维后验为位置依赖 hard-core 模型]\label{cor:pom-fiber-inhom-bernoulli-posterior-hardcore}
+取 \(0<p_i<1\)（\(1\le i\le m\)），令 \(\mu_{\boldsymbol p}\) 为 \(\Omega_m\) 上独立但非同分布的 Bernoulli 乘积测度
+\[
+\mu_{\boldsymbol p}(\omega)=\prod_{i=1}^{m}p_i^{\omega_i}(1-p_i)^{1-\omega_i}.
+\]
+令 \(X=\Fold_m(\omega)\) 且记对数优势比 \(a_i:=\frac{p_i}{1-p_i}\)。
+则对任意 \(x\in X_m\)，条件分布 \(\mu_{\boldsymbol p}(\cdot\mid X=x)\) 在纤维 \(\Fold_m^{-1}(x)\) 上经由 \(\Theta_x\) 推前后满足
+\[
+\Theta_{x\#}\bigl(\mu_{\boldsymbol p}(\cdot\mid X=x)\bigr)(S)
+\ \propto\
+\prod_{v\in S}\ \frac{a_{j_x(v)+1}a_{j_x(v)+2}}{a_{j_x(v)}}
+\qquad\bigl(S\in\mathsf{Ind}(\Gamma_x)\bigr),
+\]
+其中 \(j_x(v)\) 为定理 \ref{thm:pom-fiber-multivariate-holographic-conservation} 的局部区间左端点。
+\end{corollary}
+
+\begin{proof}
+将 \(\mu_{\boldsymbol p}\) 写为
+\[
+\mu_{\boldsymbol p}(\omega)=\Bigl(\prod_{i=1}^{m}(1-p_i)\Bigr)\prod_{i=1}^{m}a_i^{\omega_i}.
+\]
+对固定 \(x\)，在纤维上条件化并用定理 \ref{thm:pom-fiber-multivariate-holographic-conservation} 的乘性分解把 \(\prod a_i^{\omega_i}\) 写为
+\(
+(\prod a_i^{x_i})\prod_{v\in S(\omega)}\frac{a_{j_x(v)+1}a_{j_x(v)+2}}{a_{j_x(v)}}
+\)；
+前因子仅依赖于 \(x\) 并被归一化吸收，余因子即为所示 hard-core 权。证毕。
+\end{proof}
+
+\begin{proposition}[局部活度场的离散可积性与两点可识别]\label{prop:pom-inhom-logit-activity-identifiability}
+取任意正序列 \((a_i)_{i=1}^{m}\subset(0,\infty)\)，并对 \(1\le i\le m-2\) 定义局部活度
+\[
+w_i:=\frac{a_{i+1}a_{i+2}}{a_i}.
+\]
+令 \(u_i:=\log a_i\)，则有离散曲率表达
+\[
+\log w_i=u_{i+1}+u_{i+2}-u_i.
+\]
+并且给定任意正序列 \((w_i)_{i=1}^{m-2}\) 与任意边界条件 \(a_1>0,a_2>0\)，递推
+\[
+a_{i+2}=\frac{w_i\,a_i}{a_{i+1}}\qquad(1\le i\le m-2)
+\]
+唯一确定 \((a_3,\dots,a_m)\)。
+\end{proposition}
+
+\begin{proof}
+第一式取对数即得。
+第二部分由恒等式 \(w_i a_i=a_{i+1}a_{i+2}\) 移项得到递推；由于每步分母 \(a_{i+1}>0\)，故 \(a_{i+2}\) 被唯一确定并迭代闭合。证毕。
+\end{proof}
+
+\begin{proposition}[条件均匀性与活度场平坦性]\label{prop:pom-fiber-inhom-conditional-uniformity}
+在推论 \ref{cor:pom-fiber-inhom-bernoulli-posterior-hardcore} 的设定下，固定 \(x\in X_m\)。
+则条件后验 \(\mu_{\boldsymbol p}(\cdot\mid X=x)\) 在纤维 \(\Fold_m^{-1}(x)\) 上为均匀分布，当且仅当对所有 \(v\in V(\Gamma_x)\) 有
+\[
+\frac{a_{j_x(v)+1}a_{j_x(v)+2}}{a_{j_x(v)}}=1.
+\]
+等价地，对所有出现的局部区间左端点 \(j=j_x(v)\) 满足
+\(
+u_{j}=u_{j+1}+u_{j+2}
+\)
+（其中 \(u_i=\log a_i\)）。
+\end{proposition}
+
+\begin{proof}
+由推论 \ref{cor:pom-fiber-inhom-bernoulli-posterior-hardcore}，
+\(\Theta_{x\#}(\mu_{\boldsymbol p}(\cdot\mid X=x))\) 在 \(\mathsf{Ind}(\Gamma_x)\) 上的权重正比于 \(\prod_{v\in S}w_{x,v}\)，其中
+\(
+w_{x,v}=a_{j_x(v)+1}a_{j_x(v)+2}/a_{j_x(v)}
+\)。
+该分布在有限集合 \(\mathsf{Ind}(\Gamma_x)\) 上均匀当且仅当所有 \(w_{x,v}=1\)；取对数即得等价表达。证毕。
+\end{proof}
+
+\input{parts/thm__pom-fiber-full-posterior-uniformization-product-source}
+\input{parts/thm__pom-fiber-posterior-equivalence-activity-gauge}
+\input{parts/thm__pom-fiber-ledger-prefix-sideinfo-length}
+
+\begin{conjecture}[折叠推前点过程的强 Rayleigh 性（实稳定性）]\label{conj:pom-fold-pushforward-strong-rayleigh}
+令 \(\mu_{\boldsymbol p}\) 如推论 \ref{cor:pom-fiber-inhom-bernoulli-posterior-hardcore}，并令 \(\nu_{\boldsymbol p}:=(\Fold_m)_{\#}\mu_{\boldsymbol p}\) 为其在 \(X_m\) 上的推前分布。
+将 \(X\sim \nu_{\boldsymbol p}\) 视为 \(\{1,\dots,m\}\) 上的点过程（以 \(X_i=1\) 为入点事件），并定义其生成多项式
+\[
+G_{\boldsymbol p}(\boldsymbol{z})
+:=\sum_{x\in X_m}\nu_{\boldsymbol p}(x)\prod_{i=1}^{m} z_i^{x_i}.
+\]
+猜想：对任意参数向量 \(\boldsymbol p\in(0,1)^m\)，多项式 \(G_{\boldsymbol p}\) 为实稳定多项式；等价地，该点过程为强 Rayleigh 测度，从而满足负相关与强对数凹等一系列闭包性质。
+\end{conjecture}
+
+\begin{theorem}[偏置后验下逆代换次数的 Poisson--binomial 谱分解]\label{thm:pom-fiber-biased-posterior-poisson-binomial}
+固定 \(x\in X_m\) 与 \(p\in(0,1)\)，令
+\[
+R_{x,p}:=r(\omega),\qquad \omega\sim \mu_{m,p}(\cdot\mid x),
+\qquad
+t=\frac{p}{1-p}.
+\]
+则其概率母函数为
+\begin{equation}\label{eq:pom-fiber-biased-pgf-ratio}
+\mathbb E\!\left[s^{R_{x,p}}\mid x\right]
+=\frac{Z_x(ts)}{Z_x(t)},\qquad s\ge 0.
+\end{equation}
+又由定理 \ref{thm:pom-fiber-rewrite-realroot-ulc}，\(Z_x\) 的根全在负实轴上。
+设
+\[
+Z_x(z)=C_x\prod_{j=1}^{d_x}\left(1+\frac{z}{\alpha_{x,j}}\right),
+\qquad
+\alpha_{x,j}>0,\ \ d_x=\deg Z_x,
+\]
+并定义
+\[
+q_{x,j}(t):=\frac{t}{t+\alpha_{x,j}}\in(0,1).
+\]
+则
+\begin{equation}\label{eq:pom-fiber-biased-poisson-binomial-factor}
+\frac{Z_x(ts)}{Z_x(t)}
+=\prod_{j=1}^{d_x}\bigl(1-q_{x,j}(t)+q_{x,j}(t)s\bigr),
+\end{equation}
+从而
+\[
+R_{x,p}\overset{d}{=}\sum_{j=1}^{d_x}\mathrm{Bernoulli}\bigl(q_{x,j}(t)\bigr).
+\]
+特别地，
+\[
+\mathbb E[R_{x,p}\mid x]=\sum_{j=1}^{d_x}q_{x,j}(t),\qquad
+\mathrm{Var}(R_{x,p}\mid x)=\sum_{j=1}^{d_x}q_{x,j}(t)\bigl(1-q_{x,j}(t)\bigr).
+\]
+\end{theorem}
+\begin{proof}
+式 \eqref{eq:pom-fiber-biased-pgf-ratio} 由
+\eqref{eq:pom-fiber-biased-posterior-hardcore} 直接计算：
+\[
+\mathbb E\!\left[s^{R_{x,p}}\mid x\right]
+=\sum_{\omega\in\Fold_m^{-1}(x)}s^{r(\omega)}\frac{t^{r(\omega)}}{Z_x(t)}
+=\frac{Z_x(ts)}{Z_x(t)}.
+\]
+将根分解代入并逐因子化简：
+\[
+\frac{1+ts/\alpha}{1+t/\alpha}
+=1-\frac{t}{t+\alpha}+\frac{t}{t+\alpha}s,
+\]
+得到 \eqref{eq:pom-fiber-biased-poisson-binomial-factor}。
+由概率母函数唯一性可得 Poisson--binomial 表示；均值方差由独立 Bernoulli 和的可加性给出。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/cor__pom-fiber-leyang-monotone-coupling-prime-register}
+
+\begin{proposition}[纤维后验族的一参数指数结构与 MLR]\label{prop:pom-fiber-biased-posterior-mlr}
+固定 \(x\in X_m\)。
+模型族
+\[
+\left\{\mu_{m,p}(\cdot\mid x):\ p\in(0,1)\right\}
+\]
+在有限样本空间 \(\Fold_m^{-1}(x)\) 上构成一参数指数族，自然参数
+\[
+\eta=\log\frac{p}{1-p},
+\]
+规范充分统计量为 \(r(\omega)\)。
+对任意 \(p,q\in(0,1)\)，似然比满足
+\begin{equation}\label{eq:pom-fiber-biased-lr-formula}
+\frac{\mu_{m,p}(\omega\mid x)}{\mu_{m,q}(\omega\mid x)}
+=
+\left(\frac{t_p}{t_q}\right)^{r(\omega)}
+\frac{Z_x(t_q)}{Z_x(t_p)},
+\qquad
+t_\bullet:=\frac{\bullet}{1-\bullet}.
+\end{equation}
+因此当 \(p>q\) 时，似然比关于 \(r(\omega)\) 严格递增，模型族对 \(r\) 具有单调似然比（MLR）性质。
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:pom-fiber-biased-posterior-hardcore}，
+\[
+\mu_{m,p}(\omega\mid x)
+=\exp\!\left(\eta\,r(\omega)-\log Z_x(e^\eta)\right),
+\]
+即指数族形式，且 \(r\) 为规范充分统计量。
+\eqref{eq:pom-fiber-biased-lr-formula} 由两参数后验比值直接相除得到。
+若 \(p>q\)，则 \(t_p/t_q>1\)，故似然比随 \(r(\omega)\) 严格递增，MLR 成立。证毕。
+\end{proof}
+
+\begin{theorem}[纤维条件 KL 闭式与全局信息链式分解]\label{thm:pom-fiber-biased-conditional-kl-chain}
+取 \(p,q\in(0,1)\)，并固定 \(x\in X_m\)。
+记 \(t_p=p/(1-p)\)、\(t_q=q/(1-q)\)。
+则
+\begin{equation}\label{eq:pom-fiber-biased-conditional-kl-closed}
+D_{\mathrm{KL}}\!\left(\mu_{m,p}(\cdot\mid x)\,\middle\|\,\mu_{m,q}(\cdot\mid x)\right)
+=
+\mathbb E_{\mu_{m,p}(\cdot\mid x)}[R_{x,p}]\,\log\frac{t_p}{t_q}
+-\log\frac{Z_x(t_p)}{Z_x(t_q)}.
+\end{equation}
+并且全局相对熵满足
+\begin{equation}\label{eq:pom-fiber-biased-global-kl-chain}
+D_{\mathrm{KL}}(\mu_{m,p}\,\|\,\mu_{m,q})
+=
+D_{\mathrm{KL}}(\nu_{m,p}\,\|\,\nu_{m,q})
++
+\mathbb E_{x\sim \nu_{m,p}}
+\!\left[
+D_{\mathrm{KL}}\!\left(\mu_{m,p}(\cdot\mid x)\,\middle\|\,\mu_{m,q}(\cdot\mid x)\right)
+\right].
+\end{equation}
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:pom-fiber-biased-lr-formula}，
+\[
+\log\frac{\mu_{m,p}(\omega\mid x)}{\mu_{m,q}(\omega\mid x)}
+=
+r(\omega)\log\frac{t_p}{t_q}
+-\log\frac{Z_x(t_p)}{Z_x(t_q)}.
+\]
+对 \(\omega\sim\mu_{m,p}(\cdot\mid x)\) 取期望，得
+\eqref{eq:pom-fiber-biased-conditional-kl-closed}。
+
+再对联合变量 \((\omega,\Fold_m(\omega))\) 应用相对熵链式法则：
+\[
+D_{\mathrm{KL}}\!\left(P_{\omega,X}^{(p)}\middle\|P_{\omega,X}^{(q)}\right)
+=
+D_{\mathrm{KL}}\!\left(P_X^{(p)}\middle\|P_X^{(q)}\right)
++
+\mathbb E_{X\sim P_X^{(p)}}
+\left[D_{\mathrm{KL}}\!\left(P_{\omega\mid X}^{(p)}\middle\|P_{\omega\mid X}^{(q)}\right)\right].
+\]
+由于 \(X=\Fold_m(\omega)\) 为确定函数，左端即
+\(
+D_{\mathrm{KL}}(\mu_{m,p}\,\|\,\mu_{m,q})
+\)，
+而 \(P_X^{(\cdot)}=\nu_{m,\cdot}\)，故得
+\eqref{eq:pom-fiber-biased-global-kl-chain}。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/thm__pom-fiber-leyang-divergence-decomposition}
+
+\begin{corollary}[偏置后验下逆代换次数的统一浓缩界]\label{cor:pom-fiber-biased-posterior-bernstein}
+在定理 \ref{thm:pom-fiber-biased-posterior-poisson-binomial} 的设定下，
+对任意 \(a>0\) 有
+\[
+\mathbb P\!\left(R_{x,p}-\mathbb E[R_{x,p}\mid x]\ge a\ \middle|\ x\right)
+\le
+\exp\!\left(
+-\frac{a^2}{2\,\mathrm{Var}(R_{x,p}\mid x)+\frac{2}{3}a}
+\right),
+\]
+以及对称下尾界。故
+\[
+\mathbb P\!\left(\left|R_{x,p}-\mathbb E[R_{x,p}\mid x]\right|\ge a\ \middle|\ x\right)
+\le
+2\exp\!\left(
+-\frac{a^2}{2\,\mathrm{Var}(R_{x,p}\mid x)+\frac{2}{3}a}
+\right).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-biased-posterior-poisson-binomial}，
+\(
+R_{x,p}
+\)
+为独立 Bernoulli 和。
+对其中心化和应用 Bernstein 不等式（每项振幅 \(\le 1\)）即得所示尾界。证毕。
+\end{proof}
+
+\begin{remark}[与均匀纤维模型的一致性]\label{rem:pom-fiber-biased-specializes-uniform}
+当 \(p=\frac12\) 时 \(t=1\)，本节结果退化为
+\(
+\mu_{m,1/2}(\cdot\mid x)
+\)
+下的均匀纤维模型；
+特别地，定理 \ref{thm:pom-fiber-biased-posterior-poisson-binomial} 在 \(t=1\) 的特例与推论 \ref{cor:pom-fiber-rewrite-poisson-binomial} 一致。
+\end{remark}
+
+\paragraph{纤维几何与后验重构：三倍等距性与最大权独立集}
+定理 \ref{thm:pom-fiber-biased-bernoulli-pushforward-hardcore} 已将条件后验识别为 \(\Gamma_x\) 上活动度 \(t=p/(1-p)\) 的 hard-core 模型。
+下面把该识别进一步提升为两条可直接核验的结构结论：其一是纤维在汉明度量下对独立集对称差度量的三倍等距性，
+其二是在汉明损失下的条件 Bayes 最优重构等价于一类最大权独立集问题（从而在路径分量上具备线性时间解码）。
+
+\begin{proposition}[纤维汉明度量的三倍等距性]\label{prop:pom-fiber-hamming-triple-isometry}
+固定 \(m\ge 2\) 与 \(x\in X_m\)。
+令 \(\Theta_x:\Fold_m^{-1}(x)\to \mathsf{Ind}(\Gamma_x)\) 为定理 \ref{thm:pom-fiber-indset-factorization} 给出的规范双射。
+对 \(\omega\in\Fold_m^{-1}(x)\) 记 \(S(\omega):=\Theta_x(\omega)\)。
+则对任意 \(\omega,\omega'\in\Fold_m^{-1}(x)\) 成立
+\[
+\boxed{\;
+|\omega\oplus\omega'|_0\ =\ 3\,\bigl|S(\omega)\triangle S(\omega')\bigr|\;}
+\]
+其中 \(\oplus\) 为逐位异或、\(|\cdot|_0\) 为汉明重量、\(\triangle\) 为对称差。
+特别地，
+\[
+|\omega\oplus x|_0=3\,|S(\omega)|.
+\]
+\end{proposition}
+\begin{proof}
+由定义 \ref{def:pom-fiber-adm-path}，纤维元素可由对 \(x\) 在若干候选位点处触发逆代换 \(100\mapsto 011\) 得到；
+而定理 \ref{thm:pom-fiber-indset-factorization} 的独立集约束正是“触发区间不可重叠”的等价表达。
+因此，当 \(v\in S(\omega)\triangle S(\omega')\) 时，\(v\) 对应的长度 \(3\) 局部区间在两者中恰有一者被触发，
+从而该区间上的局部模式在 \(100\) 与 \(011\) 之间切换，三个位点逐位互异，贡献恰为 \(3\)。
+当 \(v\notin S(\omega)\triangle S(\omega')\) 时两者在该区间的局部状态一致，贡献为 \(0\)。
+又由于独立集保证这些长度 \(3\) 区间两两不交，故贡献可加，得到
+\(
+|\omega\oplus\omega'|_0=3|S(\omega)\triangle S(\omega')|
+\)。
+取 \(\omega'=x\) 时 \(S(x)=\varnothing\)，即得第二式。证毕。
+\end{proof}
+
+\begin{theorem}[条件 Bayes 最优重构等价于最大权独立集]\label{thm:pom-fiber-posterior-bayes-mwis}
+固定 \(m\ge 2\)、\(p\in(0,1)\) 与 \(x\in X_m\)，并令 \(t=p/(1-p)\)。
+在定理 \ref{thm:pom-fiber-biased-bernoulli-pushforward-hardcore} 的后验下，
+将 \(\omega\sim\mu_{m,p}(\cdot\mid x)\) 通过 \(\Theta_x\) 识别为独立集随机元 \(S\in \mathsf{Ind}(\Gamma_x)\)。
+对任意可行估计 \(A\in\mathsf{Ind}(\Gamma_x)\)，令 \(\widehat\omega(A):=\Theta_x^{-1}(A)\)。
+考虑汉明损失
+\(
+L(\widehat\omega,\omega):=|\widehat\omega\oplus\omega|_0
+\)。
+令边缘概率
+\[
+\pi_v:=\mathbb P_{x,p}(v\in S)\qquad(v\in V(\Gamma_x)),
+\]
+并定义权重
+\(
+w_v:=2\pi_v-1
+\)。
+则任一条件 Bayes 最优估计集合 \(A^\star\) 满足
+\[
+\boxed{\;
+A^\star\ \in\ \arg\max_{A\in\mathsf{Ind}(\Gamma_x)}\ \sum_{v\in A} w_v\;}
+\]
+并且最小条件 Bayes 风险具有闭式表示
+\[
+\boxed{\;
+\inf_{A\in\mathsf{Ind}(\Gamma_x)}\ \mathbb E\!\left[L(\widehat\omega(A),\omega)\mid x\right]
+\ =\ 3\left(\sum_{v}\pi_v-\max_{A\in\mathsf{Ind}(\Gamma_x)}\sum_{v\in A}(2\pi_v-1)\right).\;}
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-fiber-hamming-triple-isometry}，
+\[
+L(\widehat\omega(A),\omega)
+=|\widehat\omega(A)\oplus\omega|_0
+=3\,|A\triangle S|.
+\]
+因此最小化条件期望损失等价于最小化 \(\mathbb E[|A\triangle S|\mid x]\)。
+对任意固定 \(A\in\mathsf{Ind}(\Gamma_x)\)，有
+\[
+\mathbb E[|A\triangle S|\mid x]
+=\sum_{v\notin A}\mathbb P(v\in S\mid x)+\sum_{v\in A}\mathbb P(v\notin S\mid x)
+=\sum_v \pi_v+\sum_{v\in A}(1-2\pi_v).
+\]
+其中第一项与 \(A\) 无关，
+故最小化等价于最大化 \(\sum_{v\in A}(2\pi_v-1)\)，即得到最大权独立集表述。
+将最小值写回即可得到风险闭式；再乘以 \(3\) 即得所示公式。证毕。
+\end{proof}
+
+\begin{proposition}[路径分量上的 hard-core 边缘概率闭式]\label{prop:pom-hardcore-path-marginal-closed-form}
+对路径 \(P_\ell\)（顶点按线性顺序编号 \(1,\dots,\ell\)）的 hard-core 分布
+\[
+\mathbb P_t(S)=\frac{t^{|S|}}{I_\ell(t)},\qquad S\in \mathsf{Ind}(P_\ell),
+\]
+其中 \(I_\ell(t)\) 为定义 \ref{def:pom-fiber-adm-path} 的独立集多项式，并约定 \(I_{-1}(t)=I_0(t)=1\)。
+则对任意 \(1\le i\le \ell\) 有边缘概率闭式
+\[
+\boxed{\;
+\mathbb P_t(i\in S)
+=\frac{t\,I_{i-2}(t)\,I_{\ell-i-1}(t)}{I_\ell(t)}\; }.
+\]
+\end{proposition}
+\begin{proof}
+包含顶点 \(i\) 的独立集必须不包含 \(i\pm 1\)，
+并且与左侧子路径 \(P_{i-2}\) 与右侧子路径 \(P_{\ell-i-1}\) 上的独立集选择自由组合一一对应；
+同时包含 \(i\) 贡献额外权重因子 \(t\)。
+因此
+\[
+\sum_{S\ni i} t^{|S|}
+=t\left(\sum_{S_L\in\mathsf{Ind}(P_{i-2})}t^{|S_L|}\right)\left(\sum_{S_R\in\mathsf{Ind}(P_{\ell-i-1})}t^{|S_R|}\right)
+=t\,I_{i-2}(t)\,I_{\ell-i-1}(t).
+\]
+除以配分函数 \(I_\ell(t)\) 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[后验两次抽样的条件汉明多样性泛函]\label{cor:pom-fiber-posterior-hamming-diversity}
+固定 \(m\ge 2\)、\(p\in(0,1)\) 与 \(x\in X_m\)，并令 \(\omega,\omega'\) 为在 \(\mu_{m,p}(\cdot\mid x)\) 下相互独立的两次抽样。
+记 \(\pi_v=\mathbb P_{x,p}(v\in S)\) 为后验 hard-core 的边缘概率（其中活动度 \(t=p/(1-p)\)）。
+则有恒等式
+\[
+\boxed{\;
+\mathbb E\!\left[|\omega\oplus\omega'|_0\mid x\right]
+=6\sum_{v\in V(\Gamma_x)}\pi_v(1-\pi_v)\;}
+\]
+并且
+\[
+\boxed{\;
+\mathbb E\!\left[|\omega\oplus x|_0\mid x\right]
+=3\sum_{v\in V(\Gamma_x)}\pi_v\; }.
+\]
+\end{corollary}
+\begin{proof}
+令 \(S,S'\) 为 \(\omega,\omega'\) 在 \(\mathsf{Ind}(\Gamma_x)\) 上的像。
+由命题 \ref{prop:pom-fiber-hamming-triple-isometry}，
+\(
+|\omega\oplus\omega'|_0=3|S\triangle S'|
+\)。
+由于 \(S,S'\) 独立同分布，
+\[
+\mathbb E[|S\triangle S'|\mid x]
+=\sum_v \mathbb P(v\in S\triangle S'\mid x)
+=\sum_v \bigl(2\pi_v-2\pi_v^2\bigr)
+=2\sum_v \pi_v(1-\pi_v).
+\]
+乘以 \(3\) 得第一式。
+第二式取 \(S'=\varnothing\)（对应 \(\omega'=x\)）即得。证毕。
+\end{proof}
+
+\begin{corollary}[路径图上的线性时间 Bayes 解码]\label{cor:pom-fiber-bayes-decoding-linear-scan}
+在定理 \ref{thm:pom-fiber-posterior-bayes-mwis} 的设定下，
+由于 \(\Gamma_x\) 为路径图的诱导子图（定义 \ref{def:pom-fiber-adm-path}），其连通分量为若干条不交路径。
+在任意路径分量 \(P_\ell\) 上，令顶点顺序为 \(1,\dots,\ell\)，并取权重 \(w_i=2\pi_i-1\)。
+定义动态规划递推
+\[
+W_0:=0,\qquad
+W_1:=\max\{0,w_1\},\qquad
+W_k:=\max\{W_{k-1},\,W_{k-2}+w_k\}\ (2\le k\le \ell).
+\]
+则 \(W_\ell=\max_{A\in\mathsf{Ind}(P_\ell)}\sum_{i\in A}w_i\)，并可由标准回溯恢复某个最优独立集 \(A^\star\)。
+对全部分量分别求解并取并，得到 \(\Gamma_x\) 上的一个 Bayes 最优估计集合 \(A^\star\)，从而 \(\widehat\omega^\star=\Theta_x^{-1}(A^\star)\)。
+\end{corollary}
+\begin{proof}
+对路径图，任取前 \(k\) 个顶点的最优独立集：
+要么不含顶点 \(k\)（最优值为 \(W_{k-1}\)），要么含顶点 \(k\)（则必不含 \(k-1\)，最优值为 \(W_{k-2}+w_k\)）。
+取最大即得递推并推出 \(W_\ell\) 的最优性。
+分量之间不相邻，目标函数与可行性在分量上可加/可分离，故整体最优可由分量最优并合得到。
+最后由定理 \ref{thm:pom-fiber-posterior-bayes-mwis}，该 \(A^\star\) 给出 Bayes 最优估计。证毕。
+\end{proof}
+
+\begin{proposition}[纤维均匀 lift 的似然分解与极大似然等价]\label{prop:pom-fiber-uniform-lift-mle-equivalence}
+固定 \(m\ge 1\)。
+设 \((q_\theta)_{\theta\in\Theta}\) 为 \(X_m\) 上任意参数化分布族。
+定义其在 \(\Omega_m\) 上的纤维均匀 lift 为
+\[
+p_\theta(\omega):=\frac{q_\theta(\Fold_m(\omega))}{d_m(\Fold_m(\omega))},
+\qquad
+d_m(x):=\bigl|\Fold_m^{-1}(x)\bigr|.
+\]
+则对任意样本 \(\omega\in\Omega_m\)，记 \(x=\Fold_m(\omega)\)，有精确分解
+\[
+\log p_\theta(\omega)=\log q_\theta(x)-\log d_m(x).
+\]
+因此对任意数据集 \(\{\omega_i\}_{i=1}^n\subset\Omega_m\)，其对数似然满足
+\[
+\sum_{i=1}^n\log p_\theta(\omega_i)
+=\sum_{i=1}^n\log q_\theta(x_i)-\sum_{i=1}^n\log d_m(x_i),
+\qquad x_i=\Fold_m(\omega_i),
+\]
+其中第二项与 \(\theta\) 无关。
+特别地，\((p_\theta)\) 在微态数据上的极大似然估计与 \((q_\theta)\) 在折叠数据 \(\{x_i\}\) 上的极大似然估计完全一致。
+\end{proposition}
+\begin{proof}
+由定义 \(p_\theta(\omega)=q_\theta(x)/d_m(x)\) 得单样本对数分解；对数据集求和得第二式。
+由于 \(-\sum_i\log d_m(x_i)\) 不依赖 \(\theta\)，两类极大似然优化具有相同的最优解集合。证毕。
+\end{proof}
+
+\begin{remark}[可解析后验推断的基准实例]\label{rem:pom-fiber-hardcore-bayes-baseline}
+命题 \ref{prop:pom-fiber-hamming-triple-isometry} 将纤维内的汉明几何严格降维为候选位点图上的对称差几何；
+定理 \ref{thm:pom-fiber-posterior-bayes-mwis} 与推论 \ref{cor:pom-fiber-bayes-decoding-linear-scan} 表明：在偏置 Bernoulli 源下，
+条件后验不仅为 hard-core 模型，而且在汉明损失下的 Bayes 最优重构可化约为路径图上的线性递推解码。
+因此该纤维族提供了一个完全闭式的“观测 \(x\) \(\Rightarrow\) 后验 \(\Rightarrow\) 最优重构 \(\Rightarrow\) 风险表达式”的可复核链条。
+\end{remark}
+

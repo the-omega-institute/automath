@@ -1,0 +1,269 @@
+\subsection{序投影参数边界、粗化指数律与空间化阈值}\label{subsec:conclusion-order-projection-parametric-completeness-watatani-renyi-crt}
+本小节在既有 \(P_{\le}\) 机制、prime-core first-fit 语义与折叠条件期望框架之上，给出一组关于参数有界化、图灵完备分界、值层外延商的 Lawvere 理论识别、Watatani 指标塔式关系及 CRT 空间化阈值的统一命题。
+
+\begin{theorem}[有界序投影的有限态塌缩]\label{thm:conclusion-bounded-order-projection-finite-state-collapse}
+沿定义 \ref{def:pom-proj-order} 的序投影接口，固定常数 \(b\in\NN\)，定义有界序判定门
+\[
+P_{\le,b}(r):=\ind\!\left[r<b\right].
+\]
+则存在仅依赖于 \(b\) 的有限分辨率 \(m(b)\)，使得该判定属于 \(\mathcal F_{m(b)}\)（见定义 \ref{def:stable-concept}），即 \(P_{\le,b}\) 仅依赖有限窗口读出。
+因此，\(P_{\le,b}\) 可由常延迟确定性有限状态转导器实现。
+
+进一步地，若某门库仅在有限态原语上加入有限多个固定阈值门 \(P_{\le,b_1},\dots,P_{\le,b_t}\)，则其闭包仍为有限状态转导器族；语义等价可判定，且该片段不可能语义图灵完备。
+\end{theorem}
+\begin{proof}
+在本文分辨率口径下，整数标签 \(r\) 的比较谓词 \(r<b\) 只需有限精度即可判定；
+在标准二进制读出口径可取
+\[
+m(b)=\left\lceil\log_2(b+1)\right\rceil+1,
+\]
+从而 \(\ind[r<b]\in\mathcal F_{m(b)}\)。
+故 \(P_{\le,b}\) 可编译为有限状态、常延迟的读出门。
+
+闭包结论由定理 \ref{thm:conclusion-finite-state-gate-fragment-decidable-order-gate-role} 直接推出：有限态门在有限串并组合下保持有限态，语义等价可判定，且不具语义图灵完备性。证毕。
+\end{proof}
+
+\begin{theorem}[序投影参数无界性与图灵完备分界]\label{thm:conclusion-order-parameter-unboundedness-turing-completeness}
+考虑如下门库模型：除序门外其余原语均为有限状态、局部且常延迟的流式逻辑门；序门允许实例族
+\[
+\{P_{\le,b}\}_{b\in\mathfrak B},\qquad \mathfrak B\subseteq\NN.
+\]
+定义
+\[
+\mathrm{ParamUnbd}(\mathfrak B)
+\ :\Longleftrightarrow\
+\forall K\ \exists b\in\mathfrak B\ \text{使}\ b\ge K.
+\]
+则以下三条等价：
+\begin{enumerate}
+  \item 门库闭包在语义上图灵完备；
+  \item \(\mathrm{ParamUnbd}(\mathfrak B)\) 成立；
+  \item 对任意指令表长度 \(k\)，门库可实现 prime-core 的 \texttt{FIRSTFIT}/\texttt{PROJ\_ORDER(first-fit)} 读出步骤，从而可编译 FRACTRAN-step 的一步更新语义。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\((2)\Rightarrow(3)\)：
+\(\mathrm{ParamUnbd}(\mathfrak B)\) 蕴含 \(\mathfrak B\) 中可抽取任意长度的严格增序列 \(b_1<\cdots<b_k\)，并可逐项调用对应的 \(P_{\le,b_i}\)。
+以有限状态控制寄存器维护“已命中首个可行索引”的标志，按优先级顺序扫描即可实现 first-fit 选择。
+该实现与 prime-core 口径下的一步更新语义对齐（命题 \ref{prop:pom-fractran-prime-translation}）。
+
+\((3)\Rightarrow(1)\)：
+若可对任意长度指令表实现 first-fit 选择与一步更新，则可在语义上编译 Conway FRACTRAN 的一步演化；由其计算普遍性得到图灵完备。
+同一结论亦与定理 \ref{thm:pom-firstfit-extensional-undecidable} 一致。
+
+\((1)\Rightarrow(2)\)（反证）：
+若 \(\mathrm{ParamUnbd}(\mathfrak B)\) 不成立，则存在 \(b_0\) 使全部可用序门阈值均满足 \(b\le b_0\)。
+由定理 \ref{thm:conclusion-bounded-order-projection-finite-state-collapse}，这些序门均有限态塌缩；再与“其余门均有限态”合并，整库闭包落在定理 \ref{thm:conclusion-finite-state-gate-fragment-decidable-order-gate-role} 的可判定有限态片段内，不可能语义图灵完备，矛盾。证毕。
+\end{proof}
+
+\begin{proposition}[确定性 first-fit 序投影聚合深度的线性精确阶]\label{prop:conclusion-firstfit-serial-depth-theta-k}
+设指令表长度为 \(k\)，记确定性 first-fit 一步实现的最坏序投影聚合深度为 \(T_{\le}(k)\)。
+则存在常数 \(c_1,c_2>0\) 使
+\[
+c_1k\ \le\ T_{\le}(k)\ \le\ c_2k,
+\]
+即 \(T_{\le}(k)=\Theta(k)\)。
+\end{proposition}
+\begin{proof}
+下界由命题 \ref{prop:pom-fractran-firstfit-serial-depth} 直接给出。
+
+上界由显式构造获得：按优先级 \(i=1,\dots,k\) 顺序执行可行性比较与常数次状态更新，一旦命中首个可行索引即冻结后续分支。
+该实现的序门调用链长度至多线性于 \(k\)，故 \(T_{\le}(k)=O(k)\)。
+合并上下界得结论。证毕。
+\end{proof}
+
+\begin{theorem}[Watatani 指标元的塔式余胚公式]\label{thm:conclusion-watatani-index-element-tower-formula}
+设 \(f:\Omega\to Y\)、\(g:Y\to Z\) 为有限满射。
+定义纤维多重度
+\[
+m_f(y):=\card{f^{-1}(y)},\qquad
+m_g(z):=\card{g^{-1}(z)},\qquad
+m_{g\circ f}(z):=\card{(g\circ f)^{-1}(z)}.
+\]
+令 \(E_f:C(\Omega)\to C(Y)\)、\(E_g:C(Y)\to C(Z)\) 分别为沿 \(f,g\) 纤维的平均条件期望。
+则在交换有限维口径下成立
+\[
+\Ind_{\mathrm W}(E_{g\circ f})
+\;=\;
+\Ind_{\mathrm W}(E_g)\cdot E_g\!\bigl(\Ind_{\mathrm W}(E_f)\bigr)
+\quad\text{于 }C(Z).
+\]
+等价地，对每个 \(z\in Z\) 有点态公式
+\[
+m_{g\circ f}(z)
+\;=\;
+\sum_{y\in g^{-1}(z)}m_f(y)
+\;=\;
+m_g(z)\cdot (E_gm_f)(z).
+\]
+\end{theorem}
+\begin{proof}
+由集合分解
+\[
+(g\circ f)^{-1}(z)=\bigsqcup_{y\in g^{-1}(z)}f^{-1}(y)
+\]
+即得
+\[
+m_{g\circ f}(z)=\sum_{y\in g^{-1}(z)}m_f(y).
+\]
+又
+\[
+(E_gm_f)(z)=\frac{1}{m_g(z)}\sum_{y\in g^{-1}(z)}m_f(y),
+\]
+故第二个等式成立。
+
+另一方面，定理 \ref{thm:op-algebra-fold-watatani-index-equals-multiplicity-field} 的准基计算仅依赖“有限分块 + 纤维平均”结构；
+对 \(h=f,g,g\circ f\) 可逐字复用，故 \(\Ind_{\mathrm W}(E_h)=m_h\)（作为中心函数）仍成立。
+代回前述点态恒等式即得塔式公式。证毕。
+\end{proof}
+
+\begin{corollary}[最大纤维多重度对 Rényi 亏损的统一控制]\label{cor:conclusion-max-fiber-controls-renyi-loss-all-orders}
+沿定理 \ref{thm:conclusion-watatani-index-element-tower-formula} 的记号，对任意 \(q\ge 2\) 定义
+\[
+S_q(h):=\sum_{u}\card{h^{-1}(u)}^q,\qquad
+D(h):=\max_{u}\card{h^{-1}(u)}.
+\]
+则同时成立
+\[
+S_q(g\circ f)\ \le\ D(g)^{q-1}S_q(f),
+\qquad
+S_q(g\circ f)\ \le\ D(f)^qS_q(g).
+\]
+若 \(U_\Omega\) 为 \(\Omega\) 上均匀分布，并记推前分布
+\[
+p_f(y):=\frac{m_f(y)}{|\Omega|},\qquad
+p_{g\circ f}(z):=\frac{m_{g\circ f}(z)}{|\Omega|},
+\]
+则 Rényi-\(q\) 熵满足
+\[
+H_q(p_{g\circ f})\ \ge\ H_q(p_f)-\log D(g),
+\]
+其中
+\[
+H_q(p):=\frac{1}{1-q}\log\!\Bigl(\sum_i p_i^q\Bigr).
+\]
+\end{corollary}
+\begin{proof}
+对任意 \(z\in Z\) 写
+\[
+m_{g\circ f}(z)=\sum_{y\in g^{-1}(z)}m_f(y).
+\]
+以 Hölder 不等式得
+\[
+m_{g\circ f}(z)^q
+\le |g^{-1}(z)|^{q-1}\sum_{y\in g^{-1}(z)}m_f(y)^q
+\le D(g)^{q-1}\sum_{y\in g^{-1}(z)}m_f(y)^q.
+\]
+对 \(z\) 求和即得第一条上界。
+
+另一方面，
+\[
+m_{g\circ f}(z)\le D(f)\,|g^{-1}(z)|=D(f)\,m_g(z),
+\]
+故
+\[
+m_{g\circ f}(z)^q\le D(f)^q\,m_g(z)^q.
+\]
+求和得第二条上界。
+
+再由
+\[
+\sum_z p_{g\circ f}(z)^q=\frac{S_q(g\circ f)}{|\Omega|^q}
+\le D(g)^{q-1}\frac{S_q(f)}{|\Omega|^q}
+=D(g)^{q-1}\sum_y p_f(y)^q,
+\]
+两边取对数并乘 \(\frac1{1-q}\)（注意 \(q>1\)）即得
+\[
+H_q(p_{g\circ f})\ge H_q(p_f)-\log D(g).
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[CRT 空间化阈值的必要且充分判据]\label{thm:conclusion-crt-threshold-necessary-sufficient-for-order-readout}
+设 \(\Pi=\{p_1,\dots,p_k\}\) 为两两互素模数集，\(P:=\prod_{i=1}^k p_i\)。
+考虑仅允许以下两步的读出制度：
+\begin{enumerate}
+  \item 输入整数 \(x\) 先映射为残数向量 \((x\bmod p_i)_{i\le k}\)；
+  \item 后续仅允许有限状态后处理，不再调用硬序门 \(P_{\le}\) 的跨窗口聚合。
+\end{enumerate}
+则对任意 \(B\ge 1\)，以下命题等价：
+\begin{enumerate}
+  \item 在整个区间 \([-B,B]\) 上可正确判定全部阈值/区间谓词（特别是 \(x<b\)）；
+  \item \(P>2B\)。
+\end{enumerate}
+因此，任何固定有限模轴集合（固定 \(P\)）都不能实现参数无界的序投影族 \(\{P_{\le,b}\}_{b\to\infty}\)。
+若要实现无界序投影，必须在时间侧引入无界序门聚合深度，或在空间侧令模轴预算（\(P\) 或轴数）无界增长。
+\end{theorem}
+\begin{proof}
+\((2)\Rightarrow(1)\) 为定理 \ref{thm:pom-order-spatialization} 的直接结论：当 \(P>2B\) 时，\([-B,B]\) 上整数由残数向量唯一确定，故可先模轴点算再 CRT 重建并完成全部序判定。
+
+\((1)\Rightarrow(2)\)：
+若 \(P\le 2B\)，则 \([-B,B]\) 含 \(2B+1>P\) 个整数，而模 \(P\) 仅有 \(P\) 个同余类。
+由鸽巢原理，存在 \(x\neq x'\in[-B,B]\) 使
+\[
+x\equiv x'\pmod{p_i}\quad(\forall i\le k),
+\]
+即二者残数向量相同。
+不妨设 \(x<x'\)，取阈值 \(b:=x'\)。
+则 \(\ind[x<b]=1\) 而 \(\ind[x'<b]=0\)。
+任何“残数向量 + 有限状态后处理”制度对二者输出必相同，矛盾。
+故必须 \(P>2B\)。证毕。
+\end{proof}
+
+\begin{theorem}[值层外延商与 \texorpdfstring{$\NN$}{N}-多项式 Lawvere 理论的等价，以及 first-fit 的判定性崩塌]\label{thm:conclusion-val-lawvere-equivalence-firstfit-collapse}
+沿定义 \ref{def:pom-rewriting-val} 的值层词语言 \(\mathbf{W}_{\mathrm{val}}\)，以自然数 \(n\) 表示 \(n\) 个输入寄存器与 \(k\) 个输出寄存器的型别，并把“在所有稳定输入上的值层外延相等”记为 \(\equiv_{\mathrm{ext}}\)。令 \(\mathcal C_{\mathrm{val}}\) 为对象集为 \(\NN\)、态射集为
+\[
+\Hom_{\mathcal C_{\mathrm{val}}}(n,k)
+:=
+\mathbf{W}_{\mathrm{val}}(n,k)\big/\!\equiv_{\mathrm{ext}}
+\]
+的商范畴。则成立：
+\begin{enumerate}
+\normalfont
+  \item \(\mathcal C_{\mathrm{val}}\) 与交换半环 \((\NN,+,\times)\) 的 Lawvere 理论
+  \[
+  \mathbf{Poly}_{\NN},
+  \qquad
+  \Hom_{\mathbf{Poly}_{\NN}}(n,k)=\bigl(\NN[x_1,\dots,x_n]\bigr)^k,
+  \]
+  等价；
+  \item 该等价可由函子
+  \[
+  \mathfrak F:\mathcal C_{\mathrm{val}}\to \mathbf{Poly}_{\NN},
+  \qquad
+  [w]\longmapsto F_w,
+  \]
+  实现，其中 \(F_w\) 为定理 \ref{thm:pom-val-polynomial-semantics} 赋予 \(w\) 的值层多项式语义；并且 \(\mathfrak F\) 在每个 Hom 集上都是双射；
+  \item 若在 prime-register 纤维上加入 \(\mathrm{PROJ\_ORDER}(\text{first-fit})\) 与相应的 \(\mathrm{EVOLVE}(\text{fractran-update})\)，则所得扩张语言的外延等价不可判定；因此它不可能承认任何把词类有效送入某个可计算呈现、且 Hom 集相等性可判定的 Lawvere 理论的有效等价。特别地，它不再落在半环多项式型 Lawvere 理论的可判定边界之内。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-val-polynomial-semantics}，每个值层词 \(w\in\mathbf{W}_{\mathrm{val}}(n,k)\) 都对应一个逐坐标非负整系数多项式映射
+\[
+F_w\in\bigl(\NN[x_1,\dots,x_n]\bigr)^k.
+\]
+并且词的复合在值层语义下正对应多项式映射的复合，因此 \([w]\mapsto F_w\) 给出一个保持对象与复合的函子 \(\mathfrak F\)。
+
+定理 \ref{thm:pom-val-extensional-equivalence-decidable} 的证明已经说明：对任意两词 \(w_1,w_2\)，
+\[
+w_1\equiv_{\mathrm{ext}} w_2
+\iff
+F_{w_1}=F_{w_2}
+\quad\text{作为多项式映射}.
+\]
+故 \(\mathfrak F\) 在每个 Hom 集上单射。
+
+为证满射，只需说明任意
+\[
+(f_1,\dots,f_k)\in\bigl(\NN[x_1,\dots,x_n]\bigr)^k
+\]
+都可由某个值层词实现。变量投影由寄存器保留与 \(\mathrm{CLEAN}\) 的有限复合给出；常数由值层清理/常量赋值实现；加法与乘法则由 \(\mathrm{EVOLVE}(\mathrm{op})\) 中对值层半环闭包 \((+,\times)\) 的实现给出（见定理 \ref{thm:pom-val-polynomial-semantics} 的证明）。由于 \(\NN\)-系数多项式映射在有限次复制、加法、乘法与逐坐标拼接下闭合，故任意 \((f_1,\dots,f_k)\) 都可逐坐标编译为某个词。于是 \(\mathfrak F\) 满射，从而在每个 Hom 集上都是双射；对象同为有限幂 \(n\)，故得到 \(\mathcal C_{\mathrm{val}}\simeq \mathbf{Poly}_{\NN}\)。
+
+第三条由定理 \ref{thm:pom-firstfit-extensional-undecidable} 直接推出：一旦加入 \(\mathrm{PROJ\_ORDER}(\text{first-fit})\) 与 FRACTRAN 一步更新，外延等价判定不可判定。若仍存在某个可计算呈现 Lawvere 理论与该扩张语言之间的有效等价，并且该理论的 Hom 集相等性可判定，则可先把两个扩张词有效送入目标理论，再判定其像是否相等，从而得到外延等价的判定算法，矛盾。故不存在此类有效等价。证毕。
+\end{proof}
+
+\begin{conjecture}[非有限态片段的最小序投影判据]\label{conj:conclusion-minimal-non-finite-state-order-projection}
+在满足“局部性与有限传播”的 PW/ISA 风格门库中，若某闭包片段超出有限态片段（即不再满足定理 \ref{thm:conclusion-finite-state-gate-fragment-decidable-order-gate-role} 的可判定有限态结论），
+则该片段必可在语义上定义参数无界的序投影族 \(\{P_{\le,b}\}_{b\to\infty}\)，等价地可实现 first-fit 选择器，并由此触发图灵完备性。
+\end{conjecture}
+

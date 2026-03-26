@@ -1,0 +1,64 @@
+\section{折叠算子 \texorpdfstring{$\Fold_m$}{Fold\_m} 的可计算性与基本性质}
+\label{app:fold-computability}
+
+Zeckendorf 规范形可由贪心算法计算：对给定 $N\in\NN$，反复减去不超过当前余量的最大 Fibonacci 权重，并跳过相邻权重以强制无相邻 $1$。算法终止且输出唯一规范形 $Z(N)=(c_1,c_2,\dots)$（\cite{Zeckendorf1972}）。
+
+对任意 $\omega=\omega_1\cdots\omega_m\in\Omega_m$，按定义 \ref{def:fold-word} 先计算 Fibonacci 加权值
+\[
+N(\omega)=\sum_{k=1}^m \omega_k F_{k+1},
+\]
+再取 $Z(N(\omega))$ 的前 $m$ 位得到 $\Fold_m(\omega)=\pi_m(Z(N(\omega)))\in X_m$。上述过程由有限次整数运算与 Zeckendorf 贪心规范化组成，因而给出对 $\Fold_m$ 的显式算法。
+
+命题 \ref{prop:fold-basic} 的三个性质可直接由 Zeckendorf 唯一性推出：
+\begin{itemize}
+  \item \textbf{规范性：} $\pi_m(Z(\cdot))$ 输出的前 $m$ 位满足无相邻 $1$，故落在 $X_m$；
+  \item \textbf{幂等性：}若 $\omega\in X_m$，则其加权值 $N(\omega)$ 已是合法 Zeckendorf 表示，唯一性迫使 $Z(N(\omega))$ 的前 $m$ 位等于 $\omega$；
+  \item \textbf{满射性：}对任意 $x\in X_m$，取 $\omega=x$ 即有 $\Fold_m(\omega)=x$。
+\end{itemize}
+
+\begin{lemma}[Zeckendorf 范围上的双射]\label{lem:zeckendorf-range-bijection}
+对任意 $m\ge 1$，若 $0\le N\le F_{m+2}-1$，则 $Z(N)$ 的非零位索引不超过 $m$，从而
+\[
+\pi_m(Z(N))=Z(N)\ \text{（作为长度 }m\text{ 的补零截断）}.
+\]
+因此映射 $N\mapsto \pi_m(Z(N))$ 在 $\{0,1,\dots,F_{m+2}-1\}$ 上给出到 $X_m$ 的双射，其逆映射为 $w\mapsto V_m(w)$。
+\end{lemma}
+
+\textbf{证明：}
+若 $Z(N)$ 在第 $m+1$ 位有 $1$，则 $N\ge F_{m+2}$（因为该位权重即为 $F_{m+2}$ 且其余项非负），与 $N\le F_{m+2}-1$ 矛盾。故 $c_{m+1}=c_{m+2}=\cdots=0$，从而截断不丢信息并给出双射结论。
+
+\subsection{FRACTRAN 编译、有限深度残差与归约长度}\label{subsec:fold-computability-fractran}
+\input{subsec__fold-computability-fractran-ledger-length}
+
+\subsection{块水库编码、纤维内可满足性与计数复杂性}\label{subsec:fold-computability-block-foldsat}
+\input{subsec__fold-computability-block-foldsat}
+
+\subsection{固定纤维中的复杂性浓缩与信息账本极限}\label{subsec:fold-computability-fixed-fiber-ledger-complexity}
+\input{subsec__fold-computability-fixed-fiber-ledger-complexity}
+\input{subsec__fold-computability-fixed-fiber-lipschitz-optimization}
+
+\subsection{逆代换层与精确分层计数的对数空间读出}\label{subsec:fold-computability-fiber-level-count-logspace}
+\input{subsec__fold-computability-fiber-level-count-logspace}
+
+\subsection{Lee--Yang 边界全息与停机不可计算性}\label{subsec:fold-computability-leyang-halting-holography}
+\input{subsec__fold-computability-leyang-halting-holography}
+\input{subsec__fold-computability-leyang-halting-w1-barrier}
+
+\subsection{Fold6 的 \texorpdfstring{$B_3/C_3$}{B3/C3} 根系字典（可复现审计产物）}
+\label{app:fold6-b3c3-seed-dictionary}
+
+脚本 \texttt{scripts/exp\_fold6\_b3c3\_seed.py} 把 \(m=6\) 的 rigid split
+\(
+X_6=X_6^{\mathrm{cyc}}\sqcup X_6^{\mathrm{bdry}}
+\)
+构造为一个可审计的“根系字典”产物：
+它生成主文 \S\ref{subsec:bdry-tower-zeck-gut} 中引用的摘要式片段
+\verb|\input{sections/generated/eq_fold6_b3c3_seed}|（如下），
+并导出两种规范化（长短根互换）的根字典表（表 \ref{tab:fold6_b3c3_root_dictionary_b3} 与表 \ref{tab:fold6_b3c3_root_dictionary_c3}）：
+
+\input{sections/generated/eq_fold6_b3c3_seed}
+
+\input{sections/generated/tab_fold6_b3c3_root_dictionary_B3}
+\input{sections/generated/tab_fold6_b3c3_root_dictionary_C3}
+
+同时，脚本写出机器可核验的 JSON 证书 \texttt{artifacts/export/fold6\_b3c3\_seed.json}（包含 \(18\oplus 3\)、\(6+12\) 指纹、两张字典以及 Weyl 群阶 \(48\) 的轨道大小核验）。

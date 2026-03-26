@@ -1,0 +1,399 @@
+\subsubsection{行列式体积熵的树/环分层：Chow--Liu 投影、条件互信息与四阶显影}\label{subsubsec:xi-det-entropy-tree-loop-hierarchy}
+在以 Gram/相关矩阵承载“体积势”的口径下，\(-\log\det\) 自然给出一个多体体积熵势；
+本段把该势的可审计下界压缩为 Chow--Liu 树投影，并将剩余缺口解释为由环结构承载的不可逆体积亏损。
+在一维排序与单调距离核制度中，最优树选择刚性退化为相邻链，从而把“树承载的体积熵”外部化为相邻间隔账本；
+而在弱相干区，环熵的首个系统性贡献由条件互信息控制并从四阶开始显影，与本文反复出现的 \(q=4\) 首触发结构同型。
+
+\begin{conclusion}[\texorpdfstring{$(\det)$}{(det)}-熵势的 Chow--Liu 树下界：行列式体积由最大生成树控制]\label{con:xi-det-entropy-chow-liu-tree-lower-bound}
+令 \(R\in\RR^{\kappa\times\kappa}\) 为相关矩阵（\(R\succ0\)、\(\mathrm{diag}(R)=\mathbf 1\)），定义行列式体积熵势
+\[
+S_{\det}(R):=-\log\det R.
+\]
+对每条无向边 \((i,j)\) 定义二体互信息权重
+\[
+w_{ij}:=-\log(1-R_{ij}^2).
+\]
+则对任意生成树 \(T\) 都有
+\[
+S_{\det}(R)\ \ge\ \sum_{(i,j)\in T} w_{ij},
+\qquad\text{从而}\qquad
+S_{\det}(R)\ \ge\ \max_{T}\sum_{(i,j)\in T} w_{ij}.
+\]
+并且对给定 \(T\)，等号成立当且仅当 \(R^{-1}\) 的非对角非零支撑包含于 \(T\)（等价于 \(\mathcal N(0,R)\) 在图 \(T\) 上为树形高斯马尔可夫场）。
+\end{conclusion}
+\begin{proof}[证明要点]
+取 \(X\sim\mathcal N(0,R)\)。
+在固定树 \(T\) 下，Chow--Liu 树投影 \(\mathcal N_T\)（见结论 \ref{con:xi-det-entropy-loop-entropy-kl-gap} 的设定）满足
+\(
+2D_{\mathrm{KL}}(\mathcal N(0,R)\,\|\,\mathcal N_T)
+=S_{\det}(R)-\sum_{(i,j)\in T}w_{ij}\ge 0
+\)，
+从而得下界。
+等号等价于 \(D_{\mathrm{KL}}=0\)，即 \(\mathcal N(0,R)=\mathcal N_T\)；
+对高斯族这等价于精度矩阵仅在 \(T\) 的边上允许出现非零项。证毕。
+\end{proof}
+
+\begin{conclusion}[环熵即树近似的 \texorpdfstring{$D_{\mathrm{KL}}$}{DKL} 缺口：体积亏损的精确树分解]\label{con:xi-det-entropy-loop-entropy-kl-gap}
+沿用结论 \ref{con:xi-det-entropy-chow-liu-tree-lower-bound} 的设定。
+对给定生成树 \(T\) 定义树环熵
+\[
+\mathcal L_T(R):=S_{\det}(R)-\sum_{(i,j)\in T}w_{ij}
+=-\log\det R+\sum_{(i,j)\in T}\log(1-R_{ij}^2).
+\]
+则 \(\mathcal L_T(R)\ge 0\) 恒成立。
+若 \(X\sim\mathcal N(0,R)\)，并令 \(\mathcal N_T\) 为以 \(T\) 为图的 Chow--Liu 树形高斯投影（其一维边缘与树边二元边缘与 \(\mathcal N(0,R)\) 一致），则成立严格恒等式
+\[
+\mathcal L_T(R)=2D_{\mathrm{KL}}\!\bigl(\mathcal N(0,R)\,\|\,\mathcal N_T\bigr).
+\]
+因此
+\(
+\arg\min_T\mathcal L_T(R)=\arg\max_T\sum_{(i,j)\in T}w_{ij}
+\)
+给出最优树近似。
+\end{conclusion}
+\begin{proof}[证明要点]
+令 \(R_T\) 为 \(\mathcal N_T\) 的相关矩阵。
+树形投影 \(\mathcal N_T\) 的协方差由树边相关唯一决定，并满足
+\[
+\det R_T=\prod_{(i,j)\in T}(1-R_{ij}^2)
+\]
+（树形高斯的逐边条件方差乘积公式）。
+另一方面，零均值高斯族的 KL 闭式给出
+\[
+2D_{\mathrm{KL}}(\mathcal N(0,R)\,\|\,\mathcal N(0,R_T))
+=\tr(R_T^{-1}R)-\kappa+\log\frac{\det R_T}{\det R}.
+\]
+由于 \(R_T^{-1}\) 的非对角支撑包含于 \(T\)，且 \(R\) 与 \(R_T\) 在对角与树边上取值一致，故
+\(
+\tr(R_T^{-1}R)=\tr(R_T^{-1}R_T)=\kappa
+\)，
+从而
+\(
+2D_{\mathrm{KL}}=\log\frac{\det R_T}{\det R}
+\)。
+代入行列式因子化即得所示恒等式。证毕。
+\end{proof}
+
+\begin{conclusion}[单调距离核的树选择刚性：一维排序点的最优树必为相邻链]\label{con:xi-det-entropy-monotone-kernel-chain-mst}
+设存在严格单调递减函数 \(A:(0,\infty)\to(0,1)\) 使
+\[
+R_{ij}=A(|s_i-s_j|),
+\qquad
+s_1<\cdots<s_\kappa.
+\]
+则边权 \(w_{ij}=-\log(1-A(|s_i-s_j|)^2)\) 亦严格随距离递减。
+因此最大生成树唯一为路径图（相邻链）
+\[
+T_{\mathrm{chain}}:=\{(1,2),(2,3),\dots,(\kappa-1,\kappa)\},
+\]
+从而得到最强树下界
+\[
+S_{\det}(R)\ \ge\ \sum_{j=1}^{\kappa-1}-\log\!\bigl(1-A(\Delta_j)^2\bigr),
+\qquad
+\Delta_j:=s_{j+1}-s_j.
+\]
+\end{conclusion}
+\begin{proof}[证明要点]
+对任意割 \(\{1,\dots,j\}\,\cup\,\{j+1,\dots,\kappa\}\)，跨割的距离最小边唯一为 \((j,j+1)\)，且其权重最大。
+由最大生成树的割性质（cut property），每条 \((j,j+1)\) 必属于最大生成树；合并所有 \(j\) 即得唯一性与链结构。证毕。
+\end{proof}
+
+\begin{conclusion}[三点局部环熵的闭式：链缺口等于条件互信息，且为部分相关的对数势]\label{con:xi-det-entropy-three-point-loop-entropy-partial-corr}
+取任意 \(a<b<c\)，记 \(\rho_{ab}=R_{ab}\)、\(\rho_{bc}=R_{bc}\)、\(\rho_{ac}=R_{ac}\)，并令 \(R_{abc}\) 为对应三元相关子矩阵。
+相对于链树 \((a,b)\)--\((b,c)\) 定义三点局部环熵
+\[
+\mathcal L^{(3)}_{a,b,c}
+:=-\log\det R_{abc}+\log(1-\rho_{ab}^2)+\log(1-\rho_{bc}^2).
+\]
+则有恒等式
+\[
+\mathcal L^{(3)}_{a,b,c}
+=-\log\bigl(1-\rho_{ac\mid b}^2\bigr),
+\qquad
+\rho_{ac\mid b}:=\frac{\rho_{ac}-\rho_{ab}\rho_{bc}}{\sqrt{(1-\rho_{ab}^2)(1-\rho_{bc}^2)}}.
+\]
+并且若 \(X\sim\mathcal N(0,R)\)，则
+\[
+\mathcal L^{(3)}_{a,b,c}=2I(X_a;X_c\mid X_b).
+\]
+\end{conclusion}
+\begin{proof}[证明要点]
+由三元相关矩阵行列式与部分相关的标准恒等式
+\(
+1-\rho_{ac\mid b}^2=\det R_{abc}/((1-\rho_{ab}^2)(1-\rho_{bc}^2))
+\)
+得到第一式。
+对高斯族，条件互信息满足
+\(
+2I(X_a;X_c\mid X_b)=-\log(1-\rho_{ac\mid b}^2)
+\)，
+从而得第二式。证毕。
+\end{proof}
+
+\begin{conclusion}[四阶首触发律：远距衰减型弱相干区的环熵从四阶开始显影]\label{con:xi-det-entropy-q4-trigger-weak-coherence}
+在结论 \ref{con:xi-det-entropy-three-point-loop-entropy-partial-corr} 的三点设定下，若
+\(
+|\rho_{ab}|,|\rho_{bc}|,|\rho_{ac}|\le\varepsilon\ll1
+\)，
+则有一致展开
+\[
+\rho_{ac\mid b}=(\rho_{ac}-\rho_{ab}\rho_{bc})+O(\varepsilon^3),
+\qquad
+\mathcal L^{(3)}_{a,b,c}=\rho_{ac\mid b}^2+O(\varepsilon^4).
+\]
+特别地，当满足远距衰减型关系 \(\rho_{ac}=\rho_{ab}\rho_{bc}+O(\varepsilon^3)\) 时，\(\rho_{ac\mid b}=O(\varepsilon^2)\) 且
+\[
+\mathcal L^{(3)}_{a,b,c}=O(\varepsilon^4),
+\]
+即局部环熵具有“最小四阶可见性”：二体相关 \(O(\varepsilon)\) 在该制度下不足以触发链缺口，缺口的首个系统性量级必为四阶。
+\end{conclusion}
+\begin{proof}[证明要点]
+分母 \(\sqrt{(1-\rho_{ab}^2)(1-\rho_{bc}^2)}=1+O(\varepsilon^2)\)，故部分相关可由分子线性化得到。
+又由 \(-\log(1-x)=x+O(x^2)\)（\(x\to0\)）并取 \(x=\rho_{ac\mid b}^2=O(\varepsilon^2)\)，得所示展开。证毕。
+\end{proof}
+
+\begin{conclusion}[指数尾尺度核下的显式四阶标度：\texorpdfstring{$\mathcal L^{(3)}$}{L(3)} 的可审计渐近]\label{con:xi-det-entropy-exp-tail-kernel-audit-asymptotics}
+取特定单调距离核
+\[
+A(\Delta):=\frac{\Delta}{2\sinh(\Delta/2)}\qquad(\Delta\ge0),
+\qquad
+A(0):=1,
+\]
+并令 \(\Delta_1=s_b-s_a\)、\(\Delta_2=s_c-s_b\)。
+当 \(\Delta_1,\Delta_2\to\infty\) 时有
+\[
+\rho_{ab}\sim \Delta_1e^{-\Delta_1/2},\quad
+\rho_{bc}\sim \Delta_2e^{-\Delta_2/2},\quad
+\rho_{ac}\sim (\Delta_1+\Delta_2)e^{-(\Delta_1+\Delta_2)/2}.
+\]
+从而
+\[
+\rho_{ac}-\rho_{ab}\rho_{bc}
+=e^{-(\Delta_1+\Delta_2)/2}\Bigl((\Delta_1+\Delta_2)-\Delta_1\Delta_2+o(\Delta_1\Delta_2)\Bigr),
+\]
+并在弱相干区得到可审计的四阶主导项
+\[
+\mathcal L^{(3)}_{a,b,c}
+=\bigl(\rho_{ac}-\rho_{ab}\rho_{bc}\bigr)^2\,(1+o(1))
+\asymp (\Delta_1\Delta_2)^2\,e^{-(\Delta_1+\Delta_2)}.
+\]
+\end{conclusion}
+\begin{proof}[证明要点]
+由 \(A(\Delta)\sim \Delta e^{-\Delta/2}\)（\(\Delta\to\infty\)）得三条相关渐近。
+再用结论 \ref{con:xi-det-entropy-q4-trigger-weak-coherence} 将 \(\mathcal L^{(3)}\) 线性化为 \(\rho_{ac\mid b}^2\)，并注意分母 \(1+o(1)\)，即可得到主导项与标度。证毕。
+\end{proof}
+
+\begin{conclusion}[链树环熵的链式分解：全局缺口等于远过去条件互信息之和]\label{con:xi-det-entropy-chain-loop-entropy-chain-rule}
+令 \(X=(X_1,\dots,X_\kappa)\sim\mathcal N(0,R)\)，并取相邻链树
+\(
+T_{\mathrm{chain}}=\{(1,2),\dots,(\kappa-1,\kappa)\}
+\)。
+定义全局链环熵
+\[
+\mathcal L_{\mathrm{chain}}(R):=\mathcal L_{T_{\mathrm{chain}}}(R)
+=-\log\det R+\sum_{j=1}^{\kappa-1}\log(1-R_{j,j+1}^2).
+\]
+则存在精确链式分解
+\[
+\mathcal L_{\mathrm{chain}}(R)
+=2\sum_{j=3}^{\kappa} I\!\bigl(X_j;X_{1:j-2}\mid X_{j-1}\bigr),
+\]
+从而
+\[
+\mathcal L_{\mathrm{chain}}(R)\ \ge\ 2\sum_{j=3}^{\kappa} I\!\bigl(X_j;X_{j-2}\mid X_{j-1}\bigr)
+=\sum_{j=3}^{\kappa}\mathcal L^{(3)}_{j-2,j-1,j}.
+\]
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-det-entropy-loop-entropy-kl-gap}，\(\mathcal L_{\mathrm{chain}}/2\) 等于 \(\mathcal N(0,R)\) 相对于链形 Chow--Liu 投影的 KL 缺口；
+对链形图该缺口等于一列条件互信息的和（链式法则）。
+下界由条件互信息的逐项非负分解
+\(
+I(X_j;X_{1:j-2}\mid X_{j-1})=\sum_{i=1}^{j-2}I(X_j;X_i\mid X_{i+1:j-1})\ge I(X_j;X_{j-2}\mid X_{j-1})
+\)
+给出。证毕。
+\end{proof}
+
+\begin{conclusion}[弱相干链的 \(q=4\) 体积律：环熵主导项为二阶差分偏离的平方和]\label{con:xi-det-entropy-weak-coherence-chain-q4-law}
+在结论 \ref{con:xi-det-entropy-monotone-kernel-chain-mst} 的相邻排序设定下，记 \(\rho_{j,j+1}=R_{j,j+1}\) 并定义二阶差分偏离
+\[
+\eta_j:=R_{j-2,j}-R_{j-2,j-1}R_{j-1,j}\qquad(3\le j\le\kappa).
+\]
+若整体处于弱相干区（例如对指数尾核取全部相邻间隔 \(\Delta_j\) 足够大，使所有 \(|R_{ij}|\) 一致足够小），则有一致近似
+\[
+\mathcal L_{\mathrm{chain}}(R)
+=\sum_{j=3}^{\kappa}\frac{\eta_j^2}{(1-\rho_{j-2,j-1}^2)(1-\rho_{j-1,j}^2)}
+\ +\ o\!\Bigl(\sum_{j=3}^{\kappa}\eta_j^2\Bigr).
+\]
+因此链环熵的首个系统性贡献由“二阶差分偏离”的平方和控制，并在远距衰减制度下呈现四阶主导量级。
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-det-entropy-chain-loop-entropy-chain-rule}，\(\mathcal L_{\mathrm{chain}}\) 的首项由一列条件互信息给出。
+在弱相干区，远过去对 \(X_j\) 的条件影响高阶可忽略，主导项由 \(I(X_j;X_{j-2}\mid X_{j-1})\) 给出；
+并由结论 \ref{con:xi-det-entropy-three-point-loop-entropy-partial-corr} 得
+\(
+\mathcal L^{(3)}_{j-2,j-1,j}=-\log(1-\rho_{j-2,j\mid j-1}^2)
+\)
+与
+\(
+\rho_{j-2,j\mid j-1}^2=\eta_j^2/((1-\rho_{j-2,j-1}^2)(1-\rho_{j-1,j}^2))
+\)。
+再用 \(-\log(1-x)=x+o(x)\) 线性化即可。证毕。
+\end{proof}
+
+\begin{conclusion}[马尔可夫体积与真实体积的比值：链环熵是精确的体积亏损对数]\label{con:xi-det-entropy-markov-volume-ratio}
+定义链马尔可夫相关矩阵 \(R^{\mathrm{MC}}\) 为满足
+\[
+R^{\mathrm{MC}}_{jj}=1,\qquad
+R^{\mathrm{MC}}_{j,j+1}=R_{j,j+1},
+\qquad
+(R^{\mathrm{MC}})^{-1}\ \text{为三对角},
+\]
+的唯一相关矩阵（即与 \(T_{\mathrm{chain}}\) 相容的树形高斯投影）。
+则成立行列式闭式
+\[
+\det R^{\mathrm{MC}}=\prod_{j=1}^{\kappa-1}\bigl(1-R_{j,j+1}^2\bigr),
+\qquad
+\mathcal L_{\mathrm{chain}}(R)= -\log\frac{\det R}{\det R^{\mathrm{MC}}}.
+\]
+因此链环熵是“真实体积”相对于“马尔可夫体积”的精确对数亏损，提供一种无需外部拟合的体积比较标尺。
+\end{conclusion}
+\begin{proof}[证明要点]
+链形树投影对应一列逐步回归表示
+\(
+X_{j+1}=R_{j,j+1}X_j+\sqrt{1-R_{j,j+1}^2}\,\varepsilon_{j+1}
+\)
+（\(\varepsilon_{j+1}\) 独立标准高斯），从而协方差行列式为条件方差乘积，给出 \(\det R^{\mathrm{MC}}\) 的因子化；
+再由结论 \ref{con:xi-det-entropy-loop-entropy-kl-gap} 对链树取 \(T=T_{\mathrm{chain}}\) 即得体积比恒等式。证毕。
+\end{proof}
+
+\begin{conclusion}[任意树的基环条件互信息证书：非树边的代价受全局环熵支配]\label{con:xi-det-entropy-tree-basecycle-cmi-certificate}
+对任意生成树 \(T\) 与任意非树边 \(e=(u,v)\notin T\)，令 \(P_T(u,v)\) 为树上连接 \(u\) 与 \(v\) 的唯一路径顶点集合，并记分离集
+\(
+S_e:=P_T(u,v)\setminus\{u,v\}
+\)。
+定义基环条件互信息势
+\[
+\mathcal I_e:=2I\!\bigl(X_u;X_v\mid X_{S_e}\bigr)
+=-\log\bigl(1-\rho_{uv\mid S_e}^2\bigr),
+\]
+其中 \(\rho_{uv\mid S_e}\) 为在高斯族下对 \(S_e\) 条件化的部分相关系数。
+则对高斯族恒有逐边支配
+\[
+\mathcal I_e\ \le\ \mathcal L_T(R)\qquad\text{对所有 }e\notin T.
+\]
+因此任意非树边的条件相关强度都被同一全局环熵所控制；在弱相干制度（非树边相关由路径相关乘积主导）下，每个 \(\mathcal I_e\) 的首项由四阶量级给出，从而 \(\mathcal L_T\) 的最小可见阶在该制度下被结构性锁定为 \(4\)。
+\end{conclusion}
+\begin{proof}[证明要点]
+树形投影 \(\mathcal N_T\) 在图 \(T\) 上满足分离性：对任意 \(e=(u,v)\notin T\)，必有 \(X_u\perp X_v\mid X_{S_e}\) 于 \(\mathcal N_T\) 下成立。
+设 \(\mathcal Q_e\) 为所有满足该条件独立性的分布族，则
+\(
+\mathcal N_T\in\mathcal Q_e
+\)。
+另一方面，\(D_{\mathrm{KL}}(\mathcal N(0,R)\,\|\,\mathcal Q_e)\) 的最小值恰为 \(I(X_u;X_v\mid X_{S_e})\)；
+因此
+\(
+D_{\mathrm{KL}}(\mathcal N(0,R)\,\|\,\mathcal N_T)\ge I(X_u;X_v\mid X_{S_e})
+\)。
+乘以 \(2\) 并用结论 \ref{con:xi-det-entropy-loop-entropy-kl-gap} 的恒等式即得所示支配。证毕。
+\end{proof}
+
+\begin{conclusion}[等距弱相干相的每步环熵标度：\texorpdfstring{$\Delta\to\infty$}{Delta->inf} 时 \texorpdfstring{$\mathcal L_{\mathrm{chain}}/\kappa$}{L_chain/kappa} 的显式衰减]\label{con:xi-det-entropy-equispaced-loop-entropy-scaling}
+取等距深度 \(s_j=s_0+(j-1)\Delta\) 并令 \(\Delta\to\infty\)。
+记
+\(
+a:=A(\Delta)\sim \Delta e^{-\Delta/2}
+\)、
+\(
+b:=A(2\Delta)\sim 2\Delta e^{-\Delta}
+\)，
+则每个相邻三点的二阶差分偏离满足
+\[
+\eta=b-a^2\sim-\Delta^2e^{-\Delta}.
+\]
+从而链环熵的每步强度满足
+\[
+\frac{1}{\kappa}\mathcal L_{\mathrm{chain}}(R)
+\sim \eta^2
+\asymp \Delta^{4}e^{-2\Delta},
+\qquad (\Delta\to\infty,\ \kappa\ \text{大}).
+\]
+该式把弱相干下的非马尔可夫性外部化为完全显式的指数律：指数率为 \(2\Delta\)，并以多项式 \(\Delta^4\) 作为前因子修正。
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-det-entropy-exp-tail-kernel-audit-asymptotics} 的核渐近得 \(a\)、\(b\) 的指数尾标度，并计算 \(\eta=b-a^2\)。
+再由结论 \ref{con:xi-det-entropy-weak-coherence-chain-q4-law}，弱相干区 \(\mathcal L_{\mathrm{chain}}\) 的主导项为 \(\sum \eta_j^2\)；等距情形各项同阶，除以 \(\kappa\) 得每步标度。证毕。
+\end{proof}
+
+\begin{conclusion}[体积—维度—熵的树/环分层：边界维度由树项给出，分形粗糙由环项给出]\label{con:xi-det-entropy-tree-loop-stratification}
+对任意相关矩阵 \(R\) 定义
+\[
+S_{\mathrm{tree}}(R):=\max_{T}\sum_{(i,j)\in T}-\log(1-R_{ij}^2),
+\qquad
+S_{\mathrm{loop}}(R):=S_{\det}(R)-S_{\mathrm{tree}}(R)\ (\ge0).
+\]
+则 \(S_{\mathrm{tree}}\) 给出“可由树结构承载的最强体积熵”，而 \(S_{\mathrm{loop}}\) 给出“必须由环结构承载的额外体积熵”。
+在单调距离核的一维排序情形，\(S_{\mathrm{tree}}\) 由结论 \ref{con:xi-det-entropy-monotone-kernel-chain-mst} 刚性退化为相邻间隔账本，并给出边界侧的主导体积熵贡献；
+而 \(S_{\mathrm{loop}}\) 在弱相干区由结论 \ref{con:xi-det-entropy-q4-trigger-weak-coherence}--\ref{con:xi-det-entropy-weak-coherence-chain-q4-law} 从四阶开始显影，从而可被视为刻画“分形粗糙度/相变临界性”的最小可见体积指标。
+\end{conclusion}
+\begin{proof}[证明要点]
+非负性由结论 \ref{con:xi-det-entropy-chow-liu-tree-lower-bound} 立即推出。
+一维排序下的链刚性由结论 \ref{con:xi-det-entropy-monotone-kernel-chain-mst} 给出；
+弱相干区的四阶显影由结论 \ref{con:xi-det-entropy-q4-trigger-weak-coherence} 与结论 \ref{con:xi-det-entropy-weak-coherence-chain-q4-law} 给出。
+因此树项与环项分别对应两类结构性承载。证毕。
+\end{proof}
+
+\subsubsection{树/环分层后的跨模块推进：矩阵核、算子封口与时序账本}\label{subsubsec:xi-det-entropy-cross-module-propagation}
+
+\input{subsubsec__xi-time-protocol-conclusions-part28}
+
+\input{subsubsec__xi-time-protocol-conclusions-part29}
+
+\input{subsubsec__xi-time-protocol-conclusions-part29b}
+
+\input{subsubsec__xi-time-protocol-conclusions-part29a}
+
+\input{subsubsec__xi-time-protocol-conclusions-part30}
+
+\subsubsection{例外谱幂和与二元 necklace 的指数分解链}\label{subsubsec:xi-exceptional-spectrum-necklace-chain}
+
+\input{subsubsec__xi-time-protocol-conclusions-part31}
+\input{subsubsec__xi-time-protocol-conclusions-part31u}
+
+\input{subsubsec__xi-time-protocol-conclusions-part32}
+
+\input{subsubsec__xi-time-protocol-conclusions-part33}
+
+\subsubsection{隧穿作用量与算术几何接口的末端汇总}\label{subsubsec:xi-tunneling-arithmetic-geometry-terminal-summary}
+
+\input{subsubsec__xi-time-protocol-conclusions-part34}
+
+\input{subsubsec__xi-time-protocol-conclusions-part35}
+
+\input{subsubsec__xi-time-protocol-conclusions-part36}
+\input{subsubsec__xi-time-protocol-conclusions-part36a}
+
+\input{subsubsec__xi-time-protocol-conclusions-part37}
+
+\input{subsubsec__xi-time-protocol-conclusions-part37a}
+
+\input{subsubsec__xi-time-protocol-conclusions-part37b}
+
+\input{subsubsec__xi-time-protocol-conclusions-part37c}
+
+\input{subsubsec__xi-time-protocol-conclusions-part38}
+
+\input{subsubsec__xi-time-protocol-conclusions-part39}
+
+\input{subsubsec__xi-time-protocol-conclusions-part40}
+
+\input{subsubsec__xi-time-protocol-conclusions-part41}
+
+\input{subsubsec__xi-time-protocol-conclusions-part42}
+
+\input{subsubsec__xi-time-protocol-conclusions-part43}
+
+\input{subsubsec__xi-time-protocol-conclusions-part44}
+\input{subsubsec__xi-time-protocol-conclusions-part45}
+\input{subsubsec__xi-time-protocol-conclusions-part46}
+\input{subsubsec__xi-time-protocol-conclusions-part47}

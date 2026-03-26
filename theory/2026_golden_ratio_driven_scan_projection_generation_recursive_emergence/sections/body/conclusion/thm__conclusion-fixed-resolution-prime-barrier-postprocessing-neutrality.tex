@@ -1,0 +1,40 @@
+\begin{theorem}[固定分辨率折叠界面上的素性有限状态屏障]\label{thm:conclusion-fixed-resolution-prime-finite-state-barrier}
+取任意固定 \(m\ge 3\)。设 \(\mathcal O_m\) 为如下任意观察协议：先将输入 Zeckendorf 词经固定分辨率的折叠--时间界面送入 \(Y_m\)，再施加任意确定性有限状态转导器，最后用任意正则语言判定接受。则 \(\mathcal O_m\) 不可能精确识别 Zeckendorf 素数语言 \(P_Z\)。
+\end{theorem}
+\begin{proof}
+正文定理 6.327 表明：当 \(m\ge 3\) 时，固定分辨率界面 \(\Phi_m:\{0,1\}^{\ZZ}\to Y_m\) 与全二移位拓扑共轭，并存在记忆 \(m-1\) 的有限窗逆码 \(\Psi_m\)。因此该 fixed-\(m\) 界面本身属于有限记忆/有限状态范畴。
+
+另一方面，正文推论 13.13 已证明：任意确定性 Mealy 转导器 \(T\) 与任意正则语言 \(L\) 的原像 \(T^{-1}(L)\) 仍为正则，尤其不可能恰等于 \(P_Z\)。
+
+若 \(\mathcal O_m\) 可以精确识别 \(P_Z\)，则把它与 \(\Psi_m\) 复合回输入侧，将得到一个“有限状态预处理 \(+\) 正则判别”的机制，其接受语言恰为 \(P_Z\)，这与推论 13.13 矛盾。故此类协议不存在。证毕。
+\end{proof}
+
+\begin{theorem}[有限状态后处理的双重中性]\label{thm:conclusion-finite-state-postprocessing-double-neutrality}
+设 \(\Sigma\) 为有限字母表，\(|\Sigma|=M\ge 2\)。考虑任意协议族
+\[
+\Psi_m:\Omega_m\hookrightarrow X_m\times \Sigma^{\le L_m},
+\qquad
+\mathrm{pr}_{X_m}\circ \Psi_m=\Fold_m,
+\]
+并在其后接任意 fixed-\(m\) 的有限状态后处理。则该后处理同时满足两种中性：
+
+\begin{enumerate}
+\item \emph{速率中性：} 它不能改善 exact reversibilization 的必要侧信息阈值，
+\[
+\liminf_{m\to\infty}\frac{L_m}{m}\ge \frac{\log(2/\varphi)}{\log M}.
+\]
+
+\item \emph{算术能力中性：} 它不能把稳定层 \(X_m\) 或界面层 \(Y_m\) 变成一个精确素性识别器。
+\end{enumerate}
+
+换言之，在有限状态范畴内，后处理既不能削减可逆化成本，也不能凭空生成精确的素数判定能力。
+\end{theorem}
+\begin{proof}
+第 (1) 条正是正文定理 19.820 的内容：任何确定性可逆提升的最坏侧信息长度都受
+\[
+L_m\ge \left\lceil \log_M\!\left(\frac{2^m}{F_{m+2}}\right)\right\rceil-1
+\]
+及其极限下界控制。该下界仅由纤维大小与 \(|X_m|=F_{m+2}\) 决定，与其后的有限状态处理无关。
+
+第 (2) 条由定理 \ref{thm:conclusion-fixed-resolution-prime-finite-state-barrier} 立即推出：fixed-\(m\) 的折叠/时间界面之后再接有限状态转导与正则判别，依然不能精确识别 Zeckendorf 素数语言。证毕。
+\end{proof}

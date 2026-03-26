@@ -1,0 +1,226 @@
+在定理 \ref{thm:conclusion-godel-semidirect-law} 与命题 \ref{prop:conclusion-prime-register-elliptic-representation} 的接口之外，还存在一类把“伸缩轴”与“平移外置”统一封装为二维线性对象的仿射正规形。
+该正规形的关键特征是：伸缩在主对角上以乘法聚合，而平移以半直积律携带次序敏感的进位结构；其几何像为单位圆的仿射椭圆族，参数可由横截距与切线斜率直接反演。
+
+\begin{theorem}[伸缩--平移外置的仿射正规形与半直积律]\label{thm:conclusion-affine-normal-form-semidirect}
+对 \(N\in\NN_{>0}\)、\(k\in\NN\) 定义
+\[
+A_{N,k}:=
+\begin{pmatrix}
+\sqrt N & \dfrac{k}{\sqrt N}\\[2mm]
+0 & \dfrac{1}{\sqrt N}
+\end{pmatrix}\in \mathrm{SL}_2(\RR),
+\qquad
+R:=A_{1,1}=
+\begin{pmatrix}
+1&1\\
+0&1
+\end{pmatrix},
+\qquad
+D_p:=A_{p,0}=
+\begin{pmatrix}
+\sqrt p&0\\
+0&1/\sqrt p
+\end{pmatrix}\ (p\ \text{素数}).
+\]
+令 \(\mathcal A^{+}\) 为由 \(\{R\}\cup\{D_p:\ p\ \text{素数}\}\) 在 \(\mathrm{SL}_2(\RR)\) 中生成的子幺半群（仅允许非负幂与有限乘积）。
+则存在显式同构
+\[
+\Phi:\NN_{>0}\ltimes \NN\ \xrightarrow{\ \cong\ }\ \mathcal A^{+},
+\qquad
+\Phi(N,k)=A_{N,k},
+\]
+其中半直积乘法为
+\[
+(N,k)\cdot(M,\ell)=(NM,\ k+N\ell).
+\]
+等价地，
+\[
+A_{N,k}A_{M,\ell}=A_{NM,\ k+N\ell}\qquad(\forall\,N,M\in\NN_{>0},\ k,\ell\in\NN),
+\]
+并且 \(\mathcal A^{+}\) 的每个元素在坐标 \((N,k)\) 下表出唯一。
+\end{theorem}
+\begin{proof}
+直接计算得
+\[
+\begin{pmatrix}\sqrt N & k/\sqrt N\\ 0&1/\sqrt N\end{pmatrix}
+\begin{pmatrix}\sqrt M & \ell/\sqrt M\\ 0&1/\sqrt M\end{pmatrix}
+=
+\begin{pmatrix}\sqrt{NM} & \dfrac{k+N\ell}{\sqrt{NM}}\\[2mm] 0 & \dfrac1{\sqrt{NM}}\end{pmatrix}
+=A_{NM,k+N\ell},
+\]
+从而 \(\{A_{N,k}\}\) 对乘法封闭并包含生成元 \(R=A_{1,1}\) 与 \(D_p=A_{p,0}\)，故 \(\mathcal A^{+}\subseteq \{A_{N,k}\}\)。
+反向包含由归纳与分解 \(A_{N,k}=R^{k}D_N\)、\(D_N=\prod_{p}D_p^{v_p(N)}\) 立即成立。
+唯一性由矩阵条目给出：若 \(A_{N,k}=A_{N',k'}\)，则左上角推出 \(N=N'\)，继而右上角推出 \(k=k'\)。
+\end{proof}
+
+\begin{theorem}[primorial 分层进位与素数伸缩门的可逆外置]\label{thm:conclusion-primorial-mixed-radix-affine}
+令 \(p_1<p_2<\cdots\) 为素数序列并定义 primorial 权重
+\[
+P_0:=1,\qquad P_t:=\prod_{j=1}^{t}p_j\quad(t\ge 1).
+\]
+对任意长度 \(T\) 的分层素数位数码 \(a=(a_1,\dots,a_T)\)（满足 \(0\le a_t<p_t\)），定义
+\[
+K(a):=\sum_{t=1}^{T}a_t\,P_{t-1}\in\NN.
+\]
+则：
+\begin{enumerate}
+  \item 映射 \(a\mapsto K(a)\) 给出集合双射
+  \[
+  \{(a_1,\dots,a_T):0\le a_t<p_t\}\ \xrightarrow{\ \cong\ }\ \{0,1,\dots,P_T-1\}.
+  \]
+  \item 定义
+  \[
+  G(a):=R^{a_1}D_{p_1}\,R^{a_2}D_{p_2}\cdots R^{a_T}D_{p_T}\in \mathrm{SL}_2(\RR),
+  \]
+  则有显式恒等式
+  \[
+  G(a)=A_{P_T,\ K(a)}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+双射性为混合进位表示的标准分解：对任意 \(0\le k<P_T\)，递归定义
+\[
+k_1:=k,\qquad a_t:=k_t\bmod p_t,\qquad k_{t+1}:=\frac{k_t-a_t}{p_t}\qquad(1\le t\le T),
+\]
+则 \(0\le a_t<p_t\)，且由 \(k<P_T\) 得 \(k_{T+1}=0\)，反向代入得到 \(k=K(a)\)，从而 \(K\) 为双射。
+\par
+矩阵恒等式由定理 \ref{thm:conclusion-affine-normal-form-semidirect} 的乘法律与 \(R^{m}=A_{1,m}\) 归纳得到：
+\[
+G(a)
+=A_{p_1,a_1}A_{p_2,a_2}\cdots A_{p_T,a_T}
+=A_{P_T,\ a_1+p_1a_2+\cdots+P_{T-1}a_T}
+=A_{P_T,K(a)}.
+\]
+\end{proof}
+
+\begin{corollary}[乘法 Gödel 编码与加法 primorial 编码的互逆]\label{cor:conclusion-primorial-additive-vs-godel-multiplicative}
+在定理 \ref{thm:conclusion-primorial-mixed-radix-affine} 的设定下，定义乘法式 Gödel 数
+\[
+G_{\times}(a):=\prod_{t=1}^{T}p_t^{a_t+1}\in\NN_{>0}.
+\]
+则存在显式互逆链
+\[
+a\ \longleftrightarrow\ K(a)\ \longleftrightarrow\ G_{\times}(a),
+\]
+其中 \(K(a)\to a\) 由逐层取模与整除给出，而 \(G_{\times}(a)\to a\) 由素因子分解得到 \(a_t=v_{p_t}(G_{\times}(a))-1\)。
+\end{corollary}
+\begin{proof}
+由算术基本定理，\(\{v_{p_t}(G_{\times}(a))\}\) 唯一确定 \(a\)；而 \(K(a)\) 的混合进位解码递归同样唯一恢复 \(a\)。
+两者均与 \(a\) 双射，从而互可恢复。
+\end{proof}
+
+\begin{proposition}[Gödel--仿射椭圆的代数方程与参数可识别性]\label{prop:conclusion-godel-affine-ellipse-equation-identifiability}
+对任意 \(N\in\NN_{>0}\)、\(k\in\NN\)，定义仿射椭圆
+\[
+\mathcal E_{N,k}:=A_{N,k}(S^1)\subset \RR^2.
+\]
+则：
+\begin{enumerate}
+  \item \(\mathcal E_{N,k}\) 的显式代数方程为
+  \[
+  \frac{(x-ky)^2}{N}+Ny^2=1.
+  \]
+  \item 椭圆 \(\mathcal E_{N,k}\) 唯一确定参数 \((N,k)\)。
+  更精确地，横截距满足
+  \[
+  N=\Bigl(\max\{|x|:(x,0)\in\mathcal E_{N,k}\}\Bigr)^2,
+  \]
+  且当 \(k\neq 0\) 时，点 \((\sqrt N,0)\) 处的切线斜率为 \(1/k\)；当 \(k=0\) 时该点切线为竖直线 \(x=\sqrt N\)。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+令 \(v=(x,y)^{\mathsf T}\)。由 \(\mathcal E_{N,k}=A_{N,k}(S^1)\) 得
+\(
+v\in\mathcal E_{N,k}\iff \|A_{N,k}^{-1}v\|^2=1
+\)，即
+\[
+v^{\mathsf T}\bigl(A_{N,k}^{-\mathsf T}A_{N,k}^{-1}\bigr)v=1.
+\]
+计算
+\[
+A_{N,k}^{-1}=
+\begin{pmatrix}
+1/\sqrt N&-k/\sqrt N\\
+0&\sqrt N
+\end{pmatrix},
+\qquad
+A_{N,k}^{-\mathsf T}A_{N,k}^{-1}
+=
+\begin{pmatrix}
+1/N & -k/N\\
+-k/N & k^2/N+N
+\end{pmatrix},
+\]
+展开即得所示方程。
+\par
+取 \(y=0\) 得 \(x=\pm\sqrt N\)，故 \(N\) 由横截距唯一恢复。
+对隐函数 \(F(x,y)=\frac{(x-ky)^2}{N}+Ny^2-1\) 有 \(\frac{\dd y}{\dd x}=-F_x/F_y\)。
+在 \((x,y)=(\sqrt N,0)\) 处，
+\(
+F_x=2/\sqrt N
+\) 且
+\(
+F_y=-2k/\sqrt N
+\)，故当 \(k\neq 0\) 有 \(\dd y/\dd x=1/k\)；当 \(k=0\) 时 \(F_y=0\) 给出竖直切线。
+\end{proof}
+
+\begin{theorem}[分层外置门的唯一分解与椭圆族充满性]\label{thm:conclusion-primorial-ellipse-unique-factorization}
+固定长度 \(T\) 与素数序列 \((p_1,\dots,p_T)\)。
+定义基本外置门
+\[
+g_t(a):=R^{a}D_{p_t}\qquad (0\le a<p_t),
+\]
+并定义
+\[
+g(a_1,\dots,a_T):=g_1(a_1)\,g_2(a_2)\cdots g_T(a_T),
+\qquad
+\mathcal E(a_1,\dots,a_T):=g(a_1,\dots,a_T)(S^1).
+\]
+则映射 \((a_1,\dots,a_T)\mapsto \mathcal E(a_1,\dots,a_T)\) 为单射，且其像恰为集合
+\[
+\{\mathcal E_{P_T,k}:\ 0\le k<P_T\}.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-primorial-mixed-radix-affine} 得
+\(
+g(a_1,\dots,a_T)=A_{P_T,K(a)}
+\)，故
+\(
+\mathcal E(a_1,\dots,a_T)=\mathcal E_{P_T,K(a)}
+\)。
+而 \(K\) 在 \(0\le k<P_T\) 上为双射，故像集为全体 \(\{\mathcal E_{P_T,k}\}\) 且对应唯一，从而单射成立。
+\end{proof}
+
+\begin{theorem}[交换外置的去序性与最小非交换补偿的初对象]\label{thm:conclusion-affine-ext-initial-object}
+设 \(\Sigma\) 为满足 \(|\Sigma|\ge 2\) 的字母表，\(\Sigma^\ast\) 为自由幺半群。
+交换幺半群同态对序信息的不可恢复性由定理 \ref{thm:pom-commutative-prime-register-order-nonrecoverable} 给出。
+为刻画“在保留可交换伸缩子幺半群的同时，以最小非交换自由度补偿次序”的结构，定义范畴 \(\mathbf{AffExt}\) 如下：
+对象为三元组 \((S,\iota,\tau)\)，其中 \(S\) 为幺半群，\(\iota:(\NN_{>0},\times)\hookrightarrow S\) 为单射幺半群同态且 \(\iota(\NN_{>0})\) 交换，\(\tau\in S\) 满足伸缩关系
+\[
+\iota(n)\tau=\tau^{n}\iota(n)\qquad(\forall\,n\in\NN_{>0}),
+\]
+态射为保持 \(\iota\) 与 \(\tau\) 的幺半群同态。
+则 \(\bigl(\NN_{>0}\ltimes\NN,\iota_0,\tau_0\bigr)\) 为 \(\mathbf{AffExt}\) 的初对象，其中
+\[
+\iota_0(n)=(n,0),\qquad \tau_0=(1,1),
+\qquad (N,k)(M,\ell)=(NM,k+N\ell).
+\]
+\end{theorem}
+\begin{proof}
+对任意对象 \((S,\iota,\tau)\)，定义
+\[
+F:\NN_{>0}\ltimes\NN\to S,\qquad F(N,k):=\tau^{k}\iota(N).
+\]
+利用关系 \(\iota(N)\tau^\ell=\tau^{N\ell}\iota(N)\)（对 \(\ell\) 归纳得到），有
+\[
+F(N,k)F(M,\ell)
+=\tau^k\iota(N)\tau^\ell\iota(M)
+=\tau^{k+N\ell}\iota(NM)
+=F(NM,k+N\ell),
+\]
+故 \(F\) 为幺半群同态，并满足 \(F\circ\iota_0=\iota\)、\(F(\tau_0)=\tau\)。
+若 \(F'\) 亦保持 \(\iota_0,\tau_0\)，则 \(F'(N,0)=\iota(N)\)、\(F'(1,1)=\tau\)，从而 \(F'(N,k)=\tau^k\iota(N)\) 被唯一确定，故初对象成立。
+\end{proof}
+

@@ -1,0 +1,292 @@
+\paragraph{容量反演、可并性缺陷与 dyadic uplift 的可审计闭式律}
+本段将若干在不同接口处出现的有限层对象统一为可直接调用的陈述：强可并性的失败给出一阶马尔可夫逼近的不可约误差下界；在“分边性”制度下，纤维瞬时热化核由超立方体边计数唯一确定并自动满足详细平衡；在 \(m=6\) 的 bin-fold 中，dyadic uplift 位移 \(F_9=34\) 的进位链触发一条纤维内汉明距离闭式公式；同时，规范群体积可写成由尾计数函数驱动的离散 Stieltjes 求和，从而被容量曲线所编码，并允许由二次碰撞矩对阈值尾计数给出统一上界。
+
+\begin{theorem}[强可并性缺陷的定量下界：\(m=6\) 的最优一阶马尔可夫逼近误差]\label{thm:foldbin6-strong-lumpability-minimax-markov-error}
+设 \(Q_6\) 为 \(6\)-维超立方体图，其顶点集 \(\Omega_6=\{0,1\}^6\) 以汉明距离 \(1\) 为邻接关系。
+令 \(F_6:\Omega_6\to X_6\) 为某一折叠标签映射，并假设存在两点
+\(
+\omega=\texttt{000000}
+\)
+与
+\(
+\omega'=\texttt{010101}
+\)
+满足
+\[
+F_6(\omega)=F_6(\omega')=\texttt{000000},
+\]
+且其一步邻域的标签集合不同（见式 \eqref{eq:foldbin6_strong_lumpability_counterexample}）。
+令 \(W_t\) 为 \(Q_6\) 上的简单随机游走，并定义观测过程 \(X_t:=F_6(W_t)\)。
+对任意初态 \(\zeta\in\Omega_6\)，记一步观测分布
+\[
+\nu_\zeta(\cdot):=\mathcal L(X_1\mid W_0=\zeta).
+\]
+则有
+\[
+\|\nu_\omega-\nu_{\omega'}\|_{\mathrm{TV}}=\frac{2}{3},
+\]
+从而对任意候选“一阶、无隐变量”的一步核 \(q\in\Delta(X_6)\) 都有极小极大下界
+\[
+\inf_{q\in\Delta(X_6)}\max\bigl\{\|\nu_\omega-q\|_{\mathrm{TV}},\ \|\nu_{\omega'}-q\|_{\mathrm{TV}}\bigr\}
+=\frac{1}{3}.
+\]
+\end{theorem}
+
+\begin{proof}
+由 \eqref{eq:foldbin6_strong_lumpability_counterexample}，两集合
+\(
+\{F_6(\eta):\eta\sim\omega\}
+\)
+与
+\(
+\{F_6(\eta'):\eta'\sim\omega'\}
+\)
+各含 \(6\) 个元素且交集基数为 \(2\)。
+由于简单随机游走在每个顶点从 \(6\) 个邻点中等概率转移，故 \(\nu_\omega,\nu_{\omega'}\) 均为各自支持集上的均匀分布，进而
+\[
+\|\nu_\omega-\nu_{\omega'}\|_{\mathrm{TV}}
+=1-\frac{|\,\mathrm{supp}(\nu_\omega)\cap \mathrm{supp}(\nu_{\omega'})\,|}{6}
+=1-\frac{2}{6}
+=\frac{2}{3}.
+\]
+对任意两分布 \(p,r\) 与任意 \(q\)，由三角不等式
+\(
+\|p-r\|_{\mathrm{TV}}\le \|p-q\|_{\mathrm{TV}}+\|q-r\|_{\mathrm{TV}}
+\)
+得
+\(
+\max\{\|p-q\|_{\mathrm{TV}},\|r-q\|_{\mathrm{TV}}\}\ge \frac12\|p-r\|_{\mathrm{TV}}
+\)。
+取 \(q=(p+r)/2\) 可取到该下界，故
+\[
+\inf_q\max\{\|p-q\|_{\mathrm{TV}},\|r-q\|_{\mathrm{TV}}\}
+=\frac12\|p-r\|_{\mathrm{TV}}.
+\]
+令 \((p,r)=(\nu_\omega,\nu_{\omega'})\) 即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[“纤维瞬时热化”核：由超立方体边计数导出]\label{prop:fold-thermal-kernel-from-edge-count}
+令 \(Q_m\) 为 \(m\)-维超立方体图，顶点集为 \(\Omega_m=\{0,1\}^m\)，边集记为 \(E(Q_m)\)。
+设 \(F_m:\Omega_m\to X_m\) 为标签映射，并满足分边性：若 \(\mathrm{Ham}(u,v)=1\) 则 \(F_m(u)\neq F_m(v)\)。
+记纤维多重度
+\(
+d_m(x):=\card{F_m^{-1}(x)}
+\)。
+对 \(x,y\in X_m\) 定义跨纤维边计数
+\[
+E_{xy}:=\card{\bigl\{\{u,v\}\in E(Q_m):\ F_m(u)=x,\ F_m(v)=y\bigr\}}.
+\]
+则 \(E_{xy}=E_{yx}\)、\(E_{xx}=0\)，且
+\[
+\sum_{y\in X_m}E_{xy}=m\,d_m(x).
+\]
+定义核
+\[
+P_m^{\mathrm{th}}(x,y):=\frac{E_{xy}}{m\,d_m(x)}.
+\]
+则 \(P_m^{\mathrm{th}}\) 为 \(X_m\) 上的转移核，并且对
+\[
+\pi(x):=\frac{d_m(x)}{2^m}
+\]
+满足详细平衡
+\[
+\pi(x)P_m^{\mathrm{th}}(x,y)=\pi(y)P_m^{\mathrm{th}}(y,x)=\frac{E_{xy}}{m\,2^m}.
+\]
+\end{proposition}
+
+\begin{proof}
+对称性 \(E_{xy}=E_{yx}\) 与 \(E_{xx}=0\) 由无向边定义与分边性立即得到。
+对固定 \(x\)，每个 \(u\in F_m^{-1}(x)\) 在 \(Q_m\) 中度数为 \(m\)，且分边性保证其 \(m\) 条相邻边均连接到某个 \(y\neq x\) 的纤维，因此从纤维 \(x\) 发出的邻接边总数为 \(m\,d_m(x)\)，并按终点标签 \(y\) 分解为 \(\sum_y E_{xy}\)，得所示恒等式。
+于是对任意 \(x\)，\(\sum_y P_m^{\mathrm{th}}(x,y)=1\)，故为转移核。
+最后
+\[
+\pi(x)P_m^{\mathrm{th}}(x,y)
+=\frac{d_m(x)}{2^m}\cdot\frac{E_{xy}}{m\,d_m(x)}
+=\frac{E_{xy}}{m\,2^m}
+=\pi(y)P_m^{\mathrm{th}}(y,x),
+\]
+即详细平衡。证毕。
+\end{proof}
+
+\begin{theorem}[dyadic uplift 位移的进位控制：\(m=6\) 的纤维内汉明距离闭式]\label{thm:foldbin6-carry-hamming-distance}
+在 \(m=6\) 的二进制区间折叠口径下（定义 \ref{def:fold-bin}），对任意 \(w\in X_6\) 令
+\(
+V:=V_6(w)
+\)（定义 \ref{def:K-of-m}），并记 \(F_9=34\)。
+当 \(w_6=1\) 时，由推论 \ref{cor:fold-bin-m6-fiber-hist} 有
+\[
+\mathrm{Fold}^{\mathrm{bin}}_6{}^{-1}(w)=\{V,\ V+F_9\},
+\qquad
+V<2^5.
+\]
+令 \(\mathbf b(n)\in\{0,1\}^6\) 表示整数 \(n\) 的 \(6\) 位二进制展开，并定义内部汉明距离
+\[
+\Delta(V):=\mathrm{Ham}\bigl(\mathbf b(V),\mathbf b(V+34)\bigr).
+\]
+将 \(V=\sum_{j=0}^{5}b_j2^j\) 写为二进制展开，并定义从 \(2^1\) 位起的进位链长度
+\[
+\rho(V):=\max\{r\ge 0:\ b_1=b_2=\cdots=b_r=1\},
+\]
+约定 \(\rho(V)=0\) 当 \(b_1=0\)。
+则对所有满足 \(w_6=1\) 的 \(V=V_6(w)\)，成立精确恒等式
+\[
+\Delta(V)=2+\rho(V).
+\]
+\end{theorem}
+
+\begin{proof}
+由于 \(34=2^5+2^1\) 且 \(V<2^5\)，加上 \(2^5\) 仅翻转最高位 \(b_5\) 且不产生进一步进位。
+加上 \(2^1\) 时，从位 \(2^1\) 开始触发进位链：连续 \(1\) 段 \(b_1=\cdots=b_{\rho(V)}=1\) 被翻转为 \(0\)，并将其后第一个 \(0\)（即 \(b_{\rho(V)+1}\)）置为 \(1\)。
+因此翻转位数为
+\[
+1\ (\text{来自 }2^5\text{ 位})\ +\ \rho(V)\ (\text{连续 }1\text{ 段})\ +\ 1\ (\text{进位终止位})
+=2+\rho(V),
+\]
+即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[规范群体积的离散 Stieltjes 求和：由尾计数函数决定]\label{prop:fold-bin-gauge-volume-stieltjes-sum}
+固定 \(m\ge 1\)，并在 bin-fold 口径下记
+\[
+d(w):=d^{\mathrm{bin}}_m(w):=\card{\mathrm{Fold}^{\mathrm{bin}}_m{}^{-1}(w)}\qquad(w\in X_m).
+\]
+令 \(\mathcal{G}^{\mathrm{bin}}_m:=\mathrm{Aut}(\mathrm{Fold}^{\mathrm{bin}}_m)\) 为纤维自同构群（定义 \ref{def:fold-bin-gauge-group}），则
+\[
+|\mathcal{G}^{\mathrm{bin}}_m|=\prod_{w\in X_m} d(w)!.
+\]
+对整数 \(k\ge 1\) 定义尾计数
+\[
+N(k):=\card{\{w\in X_m:\ d(w)\ge k\}}.
+\]
+则存在严格恒等式
+\[
+\log|\mathcal{G}^{\mathrm{bin}}_m|
+=\sum_{k=1}^{2^m}(\log k)\,N(k).
+\]
+此外，若定义连续化容量曲线
+\[
+C(t):=\sum_{w\in X_m}\min\{d(w),t\}\qquad(t\ge 0),
+\]
+则对任意整数 \(k\ge 1\) 有
+\[
+N(k)=C(k)-C(k-1),
+\]
+从而亦有离散差分形式
+\[
+\log|\mathcal{G}^{\mathrm{bin}}_m|
+=\sum_{k=1}^{2^m}\bigl(C(k)-C(k-1)\bigr)\log k,
+\]
+并且 \(\log|\mathcal{G}^{\mathrm{bin}}_m|\) 由 \(C(0),C(1),\dots,C(2^m)\) 唯一确定。
+\end{proposition}
+
+\begin{proof}
+由阶乘展开与换序，
+\[
+\sum_{w\in X_m}\log(d(w)!)
+=\sum_{w\in X_m}\sum_{k=1}^{d(w)}\log k
+=\sum_{k\ge 1}(\log k)\sum_{w\in X_m}\mathbf 1_{\{d(w)\ge k\}}
+=\sum_{k\ge 1}(\log k)\,N(k).
+\]
+又 \(d(w)\le 2^m\)（因为 \(\mathrm{Fold}^{\mathrm{bin}}_m\) 的定义域大小为 \(2^m\)），故求和可截断到 \(k\le 2^m\)。
+最后对任意整数 \(k\ge 1\)，对任意 \(d\in\NN\) 有
+\(
+\min(d,k)-\min(d,k-1)=\mathbf 1_{\{d\ge k\}}
+\)。
+对 \(w\in X_m\) 求和得
+\(
+C(k)-C(k-1)=\sum_{w\in X_m}\mathbf 1_{\{d(w)\ge k\}}=N(k)
+\)，代回即得命题的离散差分形式。证毕。
+\end{proof}
+
+\begin{proposition}[二次碰撞矩对阈值尾计数的普适上界]\label{prop:foldbin-tailcount-bound-from-s2}
+沿用命题 \ref{prop:fold-bin-gauge-volume-stieltjes-sum} 的记号。
+定义二次碰撞矩
+\[
+S_2^{\mathrm{bin}}(m):=\sum_{w\in X_m}d(w)^2.
+\]
+则对任意整数 \(k\ge 2\) 恒有
+\[
+\boxed{\;
+N(k)\ \le\ \frac{S_2^{\mathrm{bin}}(m)-|X_m|}{k^2-1}\; }.
+\]
+\end{proposition}
+\begin{proof}
+将 \(X_m\) 分为两部分：\(A_k:=\{w:\ d(w)\ge k\}\) 与其补集 \(A_k^{c}\)。
+对 \(w\in A_k\) 有 \(d(w)^2\ge k^2\)，对 \(w\in A_k^{c}\) 有 \(d(w)\ge 1\) 从而 \(d(w)^2\ge 1\)。
+因此
+\[
+S_2^{\mathrm{bin}}(m)=\sum_{w\in X_m}d(w)^2
+\ge
+k^2\,|A_k|+1\cdot|A_k^{c}|
+=|X_m|+(k^2-1)N(k).
+\]
+移项即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[中心 \texorpdfstring{$2$}{2}-扩张数目的矩谱证书]\label{cor:foldbin-central-2extension-moment-certificate}
+在命题 \ref{prop:foldbin-tailcount-bound-from-s2} 的记号下，令
+\[
+A_m:=\left\lfloor\frac{S_2^{\mathrm{bin}}(m)-|X_m|}{3}\right\rfloor,
+\qquad
+B_m:=\left\lfloor\frac{S_2^{\mathrm{bin}}(m)-|X_m|}{15}\right\rfloor.
+\]
+则 \(N(2)\le A_m\)、\(N(4)\le B_m\)，并且由定理 \ref{thm:window6-foldbin-gauge-low-degree-homology} 得
+\[
+\dim_{\ZZ_2}H_2(\mathcal{G}^{\mathrm{bin}}_m;\ZZ)
+\le
+B_m+\binom{A_m}{2},
+\]
+\[
+\card{H^2(\mathcal{G}^{\mathrm{bin}}_m;\ZZ_2)}
+\le
+2^{\,B_m+\binom{A_m+1}{2}}.
+\]
+\end{corollary}
+\begin{proof}
+命题 \ref{prop:foldbin-tailcount-bound-from-s2} 取 \(k=2,4\) 即得 \(N(2)\le (S_2^{\mathrm{bin}}(m)-|X_m|)/3\) 与 \(N(4)\le (S_2^{\mathrm{bin}}(m)-|X_m|)/15\)，取下整得 \(N(2)\le A_m\)、\(N(4)\le B_m\)。
+再由定理 \ref{thm:window6-foldbin-gauge-low-degree-homology} 的恒等式
+\(
+\dim_{\ZZ_2}H_2=N(4)+\binom{N(2)}{2}
+\)
+与
+\(
+\dim_{\ZZ_2}H^2=N(4)+\binom{N(2)+1}{2}
+\)
+并用单调性放缩即可。证毕。
+\end{proof}
+
+\begin{conjecture}[二值同调饱和与二次级中心扩张爆炸]\label{conj:foldbin-gauge-homology-saturation}
+存在 \(m_0\) 使得当 \(m\ge m_0\) 时满足
+\[
+N(2)=|X_m|
+\qquad\text{且}\qquad
+\liminf_{m\to\infty}\frac{N(4)}{|X_m|}>0,
+\]
+其中 \(N(k)=\#\{w\in X_m:\ d^{\mathrm{bin}}_m(w)\ge k\}\)。
+若该猜想成立，则由定理 \ref{thm:window6-foldbin-gauge-low-degree-homology} 得
+\[
+\dim_{\ZZ_2}H_1(\mathcal{G}^{\mathrm{bin}}_m;\ZZ)\asymp |X_m|,
+\qquad
+\dim_{\ZZ_2}H_2(\mathcal{G}^{\mathrm{bin}}_m;\ZZ)\sim \frac{|X_m|^2}{2},
+\]
+并且
+\(
+\card{H^2(\mathcal{G}^{\mathrm{bin}}_m;\ZZ_2)}=2^{\Theta(|X_m|^2)}
+\)。
+\end{conjecture}
+
+\begin{conjecture}[分辨率--动力学的不可马尔可夫化普适下界]\label{conj:fold-markovization-defect-universal-lower-bound}
+对任意 \(m\ge 6\)，令 \(W_t\) 为超立方体 \(Q_m\) 上的简单随机游走，并令 \(X_t:=F_m(W_t)\) 为某一折叠标签观测过程。
+定义内禀马尔可夫缺陷
+\[
+\delta_m:=
+\sup_{\substack{\omega,\omega'\in\Omega_m\\ F_m(\omega)=F_m(\omega')}}
+\left\|
+\mathcal L(X_1\mid W_0=\omega)-\mathcal L(X_1\mid W_0=\omega')
+\right\|_{\mathrm{TV}}.
+\]
+预期存在绝对常数 \(\delta_\ast>0\)，使对一切 \(m\ge 6\) 均有 \(\delta_m\ge \delta_\ast\)。
+在 \(m=6\) 的情形，定理 \ref{thm:foldbin6-strong-lumpability-minimax-markov-error} 给出显式见证 \(\delta_6\ge 2/3\)。
+\end{conjecture}
+
+\endinput

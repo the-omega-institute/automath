@@ -1,0 +1,74 @@
+\subsubsection{\texorpdfstring{$\log\mathfrak{M}(\theta)$}{logM(theta)} 的解析性与可微分特征量}\label{subsec:logM-analyticity}
+本小节记录 Abel 有限部常数接口的可微分工具：在有限维矩阵族口径下，$\theta\mapsto\log\mathfrak{M}(\theta)$ 的局部解析性与一阶导数可由解析微扰与 resolvent 恒等式给出。本文仅把这些结论作为实现接口使用。
+
+\begin{remark}[\texorpdfstring{$\log\mathfrak{M}(\theta)$}{logM(theta)} 的实解析性（局部）]\label{prop:logM-analytic}
+设 $M_\theta$ 为有限维非负矩阵族，且对每条边的权重为 $\exp\langle\theta,\Phi(e)\rangle$ 的有限和，因此 $\theta\mapsto M_\theta$ 为实解析矩阵函数。
+假设在 $\theta=0$ 处 $M_0$ 原始（Perron--Frobenius 主特征值 $\lambda(0)$ 为简单特征值），并令 $\lambda(\theta)=\rho(M_\theta)$、$z_\star(\theta)=\lambda(\theta)^{-1}$。
+则存在 $\theta=0$ 的某邻域 $\mathcal{U}$，使得 $\theta\mapsto\log\mathfrak{M}(\theta)$ 在 $\mathcal{U}$ 上为实解析函数。
+\end{remark}
+
+\begin{remark}[导数的 resolvent 表达（实现接口）]\label{prop:logM-derivative-resolvent}
+对 $\theta\in\mathcal{U}$，记 $R_\theta(z):=(I-zM_\theta)^{-1}$。
+则对任意参数方向 $v$（把 $\partial_v$ 视为方向导数），有
+\[
+\partial_v\log\zeta_\theta(z)=\mathrm{Tr}\!\left(R_\theta(z)\,z\,\partial_v M_\theta\right),
+\qquad
+\partial_z\log\zeta_\theta(z)=\mathrm{Tr}\!\left(R_\theta(z)\,M_\theta\right).
+\]
+因此在 $\theta\in\mathcal{U}$ 上，
+\[
+\partial_v\log\mathfrak{M}(\theta)
+=
+\partial_v\log C(\theta)
+\;+\;
+\sum_{k\ge 2}\frac{\mu(k)}{k}\left[
+\mathrm{Tr}\!\left(R_\theta(z_k)\,z_k\,\partial_v M_\theta\right)
+\;+\;
+\mathrm{Tr}\!\left(R_\theta(z_k)\,M_\theta\right)\,\partial_v z_k
+\right],
+\]
+其中 $z_k:=z_\star(\theta)^k$ 且 $\partial_v z_k = k z_\star(\theta)^k\,\partial_v\log z_\star(\theta)=-k z_k\,\partial_v P(\theta)$（$P(\theta)=\log\lambda(\theta)$）。
+\end{remark}
+
+\begin{remark}[Maxwell 型一致性：混合偏导对称作为数值自校验]\label{cor:logM-maxwell}
+在命题 \ref{prop:logM-derivative-resolvent} 的条件下，$\log\mathfrak{M}(\theta)$ 在 $\mathcal{U}$ 上实解析，
+因此对任意坐标方向 $\theta_i,\theta_j$ 均有
+\[
+\partial_{\theta_i}\partial_{\theta_j}\log\mathfrak{M}(\theta)=\partial_{\theta_j}\partial_{\theta_i}\log\mathfrak{M}(\theta).
+\]
+等价地，$d\log\mathfrak{M}$ 是一条可积一形式；把命题 \ref{prop:logM-derivative-resolvent} 的右端视为 $d\log\mathfrak{M}$ 的显式表达，即得到一组 Maxwell 型一致性约束。
+因此在多维参数相图的数值生成中，可用“离散混合偏导差”为强自校验指标：若
+\(
+\partial_{\theta_i}\partial_{\theta_j}\log\mathfrak{M}
+\)
+与
+\(
+\partial_{\theta_j}\partial_{\theta_i}\log\mathfrak{M}
+\)
+的数值差显著偏离误差条，则说明 resolvent 级数截断/留数常数求导或 $\lambda(\theta)$ 的微扰计算存在系统性误差。
+\end{remark}
+
+\begin{remark}[二尺度耦合：沿一维切片的常数漂移响应由压力导数驱动]\label{cor:logM-two-scale-coupling}
+取任意 $C^1$ 切片 $t\mapsto \theta(t)\in\mathcal{U}$，并记
+\[
+\dot{M}_t:=\frac{d}{dt}M_{\theta(t)},\qquad
+\dot{P}_t:=\frac{d}{dt}P(\theta(t)),\qquad
+z_k(t):=z_\star(\theta(t))^k.
+\]
+则有
+\[
+\begin{aligned}
+\frac{d}{dt}\log\mathfrak{M}(\theta(t))
+&=\frac{d}{dt}\log C(\theta(t))
+\;+\;\sum_{k\ge 2}\frac{\mu(k)}{k}\Bigl[
+\mathrm{Tr}\!\bigl(R_{\theta(t)}(z_k(t))\,z_k(t)\,\dot{M}_t\bigr)\\
+&\qquad -k z_k(t)\,\mathrm{Tr}\!\bigl(R_{\theta(t)}(z_k(t))\,M_{\theta(t)}\bigr)\dot{P}_t
+\Bigr].
+\end{aligned}
+\]
+该恒等式把“指数尺度”$P(\theta)$ 与“常数级漂移”$\log\mathfrak{M}(\theta)$ 放在同一条可计算的响应方程中：后者的变化由 resolvent--trace 项与压力导数 $\dot P_t$ 联合驱动。
+\end{remark}
+
+\input{thm__finite_part_logM_holomorphic_variation_and_truncation_bound}
+
+\input{prop__finite-part-logM-kernel-rh-explicit-bound}

@@ -1,0 +1,258 @@
+\paragraph{素数权硬核归一化常数、Mertens--Lee--Yang 渐近与系数不等式链}
+沿用定理 \ref{con:xi-zg-weighted-path-leyang-poisson-binomial} 的素数权路径独立集分区函数 \(P_N(t)\) 与其递推。
+\par
+\begin{theorem}[硬核归一化常数的存在性与显式尾项控制]\label{thm:xi-prime-hardcore-normalization-constant}
+对 \(t>0\) 与 \(N\ge 1\) 定义归一化比值
+\begin{equation}\label{eq:xi-prime-hardcore-RN-def}
+R_N(t)
+:=
+\frac{P_N(t)}{\prod_{k=1}^{N}\left(1+\frac{t}{p_k}\right)}\in(0,1].
+\end{equation}
+则：
+\begin{enumerate}
+  \item \((R_N(t))_{N\ge 1}\) 严格单调递减；
+  \item 极限
+  \begin{equation}\label{eq:xi-prime-hardcore-deltaHC-def}
+  \boxed{\ \delta_{\mathrm{HC}}(t):=\lim_{N\to\infty}R_N(t)\ }
+  \end{equation}
+  存在且满足 \(0<\delta_{\mathrm{HC}}(t)<1\)；
+  \item 对所有 \(N\ge 2\) 有尾项界
+  \begin{equation}\label{eq:xi-prime-hardcore-RN-tail}
+  \boxed{\;
+  0\ \le\ R_N(t)-\delta_{\mathrm{HC}}(t)\ \le\ \sum_{k\ge N}\frac{t^2}{p_kp_{k+1}}\; }.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+记 \(a_k:=t/p_k\) 与 \(D_N(t):=\prod_{k=1}^{N}(1+a_k)\)。
+由递推 \(P_N=P_{N-1}+a_NP_{N-2}\) 得
+\[
+R_N=\frac{R_{N-1}}{1+a_N}+\frac{a_N}{(1+a_{N-1})(1+a_N)}R_{N-2}.
+\]
+对 \(N\ge 3\) 进一步消元得到差分恒等式
+\[
+R_{N-1}-R_N
+=\frac{a_{N-1}a_N}{(1+a_{N-2})(1+a_{N-1})(1+a_N)}\,R_{N-3}\ >\ 0,
+\]
+从而 \((R_N)\) 严格递减。
+又由于 \(P_N\) 计数的独立集严格包含于所有子集，故 \(0<P_N\le D_N\)，从而 \(0<R_N\le 1\)。
+\par
+由上式立得上界 \(0<R_{N-1}-R_N\le a_{N-1}a_N=t^2/(p_{N-1}p_N)\)。
+由于 \(\sum_{N\ge 2}p_{N-1}^{-1}p_N^{-1}\) 收敛，故 \(\sum_{N\ge 2}(R_{N-1}-R_N)\) 收敛，进而 \(R_N\) 收敛并满足尾项界 \eqref{eq:xi-prime-hardcore-RN-tail}。
+\par
+最后证明极限严格为正。
+由 \(R_{N-2}\ge R_{N-1}\) 与上一差分恒等式得
+\[
+R_N
+\ge R_{N-1}\left(1-\frac{a_{N-1}a_N}{(1+a_{N-1})(1+a_N)}\right),
+\]
+对 \(N\) 连乘并用 \(\sum_{N\ge 2}a_{N-1}a_N<\infty\) 得无穷乘积下界严格为正，从而 \(\delta_{\mathrm{HC}}(t)>0\)。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$t=1$}{t=1} 与 \texorpdfstring{$\mathfrak C_{\mathrm{HC}}$}{C_HC} 的一致性]\label{cor:xi-prime-hardcore-deltaHC-matches-C_HC}
+在推论 \ref{cor:xi-zg-hardcore-constant-residue} 的记号下，有
+\[
+\delta_{\mathrm{HC}}(1)=\mathfrak C_{\mathrm{HC}}.
+\]
+从而
+\(
+\delta_{\mathrm{ZG}}=\delta_{\mathrm{HC}}(1)/\zeta(2)
+\)
+与推论 \ref{cor:xi-zg-hardcore-constant-residue} 的闭式一致。
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:xi-prime-hardcore-RN-def} 在 \(t=1\) 的定义，\(\delta_{\mathrm{HC}}(1)=\lim_{N\to\infty}P_N(1)/\prod_{k\le N}(1+1/p_k)\)。
+而推论 \ref{cor:xi-zg-hardcore-constant-residue} 中 \(\mathfrak C_{\mathrm{HC}}\) 正是同一极限。证毕。
+\end{proof}
+
+\begin{theorem}[Mertens--Lee--Yang 渐近与两常数分解]\label{thm:xi-prime-hardcore-mertens-leyang-asymptotic}
+令 \(\delta_{\mathrm{HC}}(t)\) 如定理 \ref{thm:xi-prime-hardcore-normalization-constant} 定义，并定义收敛欧拉乘积
+\begin{equation}\label{eq:xi-prime-hardcore-Ct-euler}
+C(t):=\prod_{p}\Bigl(1-\frac{1}{p}\Bigr)^{t}\Bigl(1+\frac{t}{p}\Bigr)\in(0,\infty).
+\end{equation}
+则当 \(N\to\infty\) 时有
+\begin{equation}\label{eq:xi-prime-hardcore-asymptotic}
+\boxed{\;
+P_N(t)\ \sim\ \delta_{\mathrm{HC}}(t)\,C(t)\,e^{\gamma t}\,(\log p_N)^{t}\;}
+\end{equation}
+其中 \(\gamma\) 为 Euler--Mascheroni 常数。
+\end{theorem}
+\begin{proof}
+由 \eqref{eq:xi-prime-hardcore-RN-def} 与 \eqref{eq:xi-prime-hardcore-deltaHC-def}，
+\(
+P_N(t)=R_N(t)\prod_{k\le N}(1+t/p_k)\sim \delta_{\mathrm{HC}}(t)\prod_{k\le N}(1+t/p_k)
+\)。
+将有限乘积分解为
+\[
+\prod_{k\le N}\Bigl(1+\frac{t}{p_k}\Bigr)
+=
+\Bigl(\prod_{k\le N}\Bigl(1-\frac{1}{p_k}\Bigr)^{-t}\Bigr)
+\cdot
+\Bigl(\prod_{k\le N}\Bigl(1-\frac{1}{p_k}\Bigr)^t\Bigl(1+\frac{t}{p_k}\Bigr)\Bigr).
+\]
+第二个括号内因子满足
+\(
+\bigl(1-\frac1p\bigr)^t(1+\frac{t}{p})
+=1-\frac{t(t+1)}{2p^2}+O(p^{-3})
+\)，
+其对数为 \(O(p^{-2})\)，故乘积收敛并趋于 \(C(t)\)。
+第一个括号由 Mertens 乘积渐近
+\(
+\prod_{p\le y}(1-\frac1p)\sim e^{-\gamma}/\log y
+\)
+（取 \(y=p_N\)）给出
+\(
+\prod_{k\le N}(1-\frac1{p_k})^{-t}\sim e^{\gamma t}(\log p_N)^t
+\)。
+合并即得 \eqref{eq:xi-prime-hardcore-asymptotic}。证毕。
+\end{proof}
+
+\begin{theorem}[素数权硬核 Gibbs 场的规模涨落与中心极限定理]\label{thm:xi-prime-hardcore-gibbs-clt}
+固定 \(t>0\)。
+在 \(\{1,\dots,N\}\) 的无相邻集合上按权重
+\(
+\propto t^{|S|}\prod_{k\in S}p_k^{-1}
+\)
+抽样，并记 \(K_N:=|S|\)。
+则存在仅依赖于 \(t\) 的常数 \(\mu(t),\nu(t)\in\RR\)，使得
+\[
+\EE[K_N]=t\log\log p_N+\mu(t)+o(1),
+\qquad
+\mathrm{Var}(K_N)=t\log\log p_N+\nu(t)+o(1).
+\]
+并且令 \(V_N:=\mathrm{Var}(K_N)\)，则 \(V_N\to\infty\) 且存在绝对常数 \(C>0\) 使
+\[
+\sup_{x\in\RR}\left|
+\PP\!\left(\frac{K_N-\EE[K_N]}{\sqrt{V_N}}\le x\right)-\Phi(x)
+\right|
+\le \frac{C}{\sqrt{V_N}}
+=O\!\left(\frac{1}{\sqrt{\log\log p_N}}\right),
+\]
+从而 \(\frac{K_N-\EE[K_N]}{\sqrt{V_N}}\Rightarrow\mathcal N(0,1)\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-prime-hardcore-mertens-leyang-asymptotic}，
+\[
+\log P_N(t)=t\log\log p_N+\log\delta_{\mathrm{HC}}(t)+\log C(t)+\gamma t+o(1).
+\]
+对该指数族分配，有标准恒等式
+\(
+\EE[K_N]=t\,\partial_t\log P_N(t)
+\)
+与
+\(
+\mathrm{Var}(K_N)=t\,\partial_t\EE[K_N]
+\)，
+从而得到所示两条渐近；其中常数 \(\mu(t),\nu(t)\) 由 \(\log\delta_{\mathrm{HC}}(t)+\log C(t)+\gamma t\) 的一、二阶导数给出。
+\par
+另一方面，由定理 \ref{con:xi-zg-weighted-path-leyang-poisson-binomial} 的 Poisson--binomial 分解，
+\(
+K_N\overset{d}{=}\sum_{j=1}^{m_N}B_{N,j}
+\)
+为独立 Bernoulli 和，且 \(\sum_j\mathrm{Var}(B_{N,j})=V_N\to\infty\)。
+对 Poisson--binomial 和应用 Berry--Esseen 型界（以第三绝对中心矩上界为代价）得到误差 \(O(V_N^{-1/2})\)，从而得到中心极限定理。证毕。
+\end{proof}
+
+\begin{corollary}[单位权素数硬核 Gibbs 场的中心极限定律]\label{cor:xi-prime-hardcore-gibbs-clt-t1-explicit}
+在定理 \ref{thm:xi-prime-hardcore-gibbs-clt} 中取 \(t=1\)。
+记
+\[
+I_N
+:=
+\sum_{\substack{S\subseteq\{1,\dots,N\}\\ S\ \mathrm{无相邻}}}\prod_{i\in S}\frac1{p_i},
+\qquad
+\PP_N(S):=\frac{1}{I_N}\prod_{i\in S}\frac1{p_i},
+\]
+并令 \(\omega_N:=|S|\)。
+则
+\[
+\frac{\omega_N-\mu_N}{\sigma_N}\Longrightarrow \mathcal N(0,1),
+\]
+其中
+\[
+\mu_N=\sum_{i=1}^{N}\frac{1}{p_i+1}+O(1),
+\qquad
+\sigma_N^2=\sum_{i=1}^{N}\frac{p_i}{(p_i+1)^2}+O(1),
+\]
+并且
+\[
+\sigma_N^2\sim \sum_{i\le N}\frac1{p_i}\sim \log\log p_N.
+\]
+\end{corollary}
+\begin{proof}
+定理 \ref{thm:xi-prime-hardcore-gibbs-clt} 在 \(t=1\) 时给出
+\[
+\EE[\omega_N]=\log\log p_N+O(1),
+\qquad
+\mathrm{Var}(\omega_N)=\log\log p_N+O(1),
+\]
+并且
+\(
+(\omega_N-\EE[\omega_N])/\sqrt{\mathrm{Var}(\omega_N)}
+\Rightarrow
+\mathcal N(0,1)
+\)。
+
+另一方面，
+\[
+\frac1{p_i}-\frac{1}{p_i+1}=\frac{1}{p_i(p_i+1)}=O(p_i^{-2}),
+\]
+以及
+\[
+\frac1{p_i}-\frac{p_i}{(p_i+1)^2}
+=
+\frac{2p_i+1}{p_i(p_i+1)^2}
+=
+O(p_i^{-2}).
+\]
+由于 \(\sum_i p_i^{-2}<\infty\)，故
+\[
+\sum_{i=1}^{N}\frac{1}{p_i+1}
+=
+\sum_{i=1}^{N}\frac1{p_i}+O(1),
+\qquad
+\sum_{i=1}^{N}\frac{p_i}{(p_i+1)^2}
+=
+\sum_{i=1}^{N}\frac1{p_i}+O(1).
+\]
+再由素数倒数和的 Mertens 渐近，
+\[
+\sum_{i=1}^{N}\frac1{p_i}=\log\log p_N+O(1),
+\]
+即得所示 \(\mu_N,\sigma_N^2\) 的表达式与发散结论。
+最后，由 \(\sigma_N^2=\mathrm{Var}(\omega_N)+O(1)\) 且 \(\sigma_N^2\to\infty\)，两种标准化只相差 \(1+o(1)\) 因子，从而极限正态性保持。证毕。
+\end{proof}
+
+\begin{proposition}[素数寄存器与 Lee--Yang 谱的 Newton--Maclaurin 对应及不等式链]\label{prop:xi-prime-hardcore-newton-maclaurin}
+设 \(m_N=\deg P_N=\lfloor(N+1)/2\rfloor\)，并写
+\[
+P_N(t)=\sum_{k=0}^{m_N}a_{N,k}\,t^k.
+\]
+则：
+\begin{enumerate}
+  \item 系数具有素数寄存器刻画
+  \[
+  a_{N,k}
+  =\sum_{\substack{S\subseteq\{1,\dots,N\}\\ S\ \mathrm{无相邻},\ |S|=k}}
+  \ \prod_{i\in S}\frac1{p_i}.
+  \]
+  \item 若 \(P_N(t)=\prod_{j=1}^{m_N}(1+t/\alpha_{N,j})\)（\(\alpha_{N,j}>0\)；定理 \ref{con:xi-zg-weighted-path-leyang-poisson-binomial}），则
+  \[
+  a_{N,k}=e_k\!\left(\frac{1}{\alpha_{N,1}},\dots,\frac{1}{\alpha_{N,m_N}}\right),
+  \]
+  其中 \(e_k\) 为第 \(k\) 个初等对称多项式；并且
+  \[
+  \sum_{j=1}^{m_N}\frac{1}{\alpha_{N,j}}=\sum_{i=1}^{N}\frac{1}{p_i}.
+  \]
+  \item 序列
+  \[
+  \left(\frac{a_{N,k}}{\binom{m_N}{k}}\right)^{1/k}\qquad(k=1,\dots,m_N)
+  \]
+  随 \(k\) 单调不增；并且 \(a_{N,k}\) 满足严格 Newton 不等式 \(a_{N,k}^2>a_{N,k-1}a_{N,k+1}\)（\(1\le k\le m_N-1\)）。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+前两条由 \(P_N\) 的独立集展开与 Lee--Yang 实根分解展开逐项比较得到。
+第三条由正数列的 Maclaurin 不等式与实负互异零点多项式的严格 Newton 不等式推出。证毕。
+\end{proof}
+

@@ -1,0 +1,582 @@
+\subsubsection{实参数压力与 escort 前沿：严格插值、精确大偏差与多重分形等号}\label{subsubsec:pom-real-q-pressure-thermo-frontier}
+本段把“整数 \(q\) 的 moment-kernel 指纹”提升为一条实参数压力曲线，并把由此诱导的 escort 族组织为一条可审计的变分前沿。
+其中严格插值由附录 \ref{app:pom-projective-pressure-operator} 的射影转移算子 \(\mathcal{L}_q\) 给出；
+而跨测度的大偏差与多重分形等号则以 \(\mathcal{L}_q\) 的谱隙/解析扰动作为制度假设的闭包后果。
+
+\paragraph{从整数 moment 到实参数压力}
+对任意实数 \(q\ge 0\) 与任意分辨率 \(m\)，定义幂和矩
+\[
+S_q(m):=\sum_{x\in X_m} d_m(x)^q,
+\qquad
+d_m(x):=\card{\Fold_m^{-1}(x)}\ge 1.
+\]
+对 \(q=0\) 有 \(S_0(m)=|X_m|\)，对 \(q=1\) 有 \(S_1(m)=\sum_x d_m(x)=|\Omega_m|=2^m\)。
+
+\input{parts/prop__pom-pressure-reflection-inequality}
+
+\paragraph{MOM 特征的交换对称完备性：碰撞矩生成全部可学习的对称可观测量}
+固定分辨率 \(m\) 并记 \(n:=|X_m|\)。
+对任意分布 \(w\in\Delta(X_m)\)，定义幂和特征
+\[
+p_q(w):=\sum_{x\in X_m}w(x)^q,\qquad q=2,3,\dots,n.
+\]
+当 \(w=w_m\) 为均匀微态推前 \(w_m(x)=d_m(x)/2^m\) 时，有严格恒等式
+\[
+p_q(w_m)=2^{-mq}S_q(m).
+\]
+令 \(\mathfrak{S}_{n}\) 作用于 \(\Delta(X_m)\) 为对坐标（即类型标签）的置换，
+并令 \(\mathcal{C}_{\mathrm{sym}}(\Delta(X_m))\) 表示在该作用下不变的连续函数空间（交换对称可观测量）。
+记 \(\mathcal{A}_m\) 为由 \(\{p_q\}_{q=2}^{n}\) 生成的多项式代数在一致范数 \(\|\cdot\|_\infty\) 下的闭包。
+
+\begin{theorem}[对称可观测量的统一逼近：\texorpdfstring{$\{p_q\}$}{pq} 的 Stone--Weierstrass 完备性]\label{thm:pom-mom-symmetric-observables-stone-weierstrass}
+\(\mathcal{A}_m\) 在 \(\mathcal{C}_{\mathrm{sym}}(\Delta(X_m))\) 中稠密。
+等价地：对任意交换对称连续统计量 \(F\in \mathcal{C}_{\mathrm{sym}}(\Delta(X_m))\) 与任意 \(\varepsilon>0\)，存在某个多项式 \(P\) 使
+\[
+\sup_{w\in\Delta(X_m)}\left|F(w)-P\bigl(p_2(w),\dots,p_{n}(w)\bigr)\right|<\varepsilon.
+\]
+\end{theorem}
+\begin{proof}
+考虑紧 Hausdorff 商空间 \(K:=\Delta(X_m)/\mathfrak{S}_{n}\)。
+对称连续函数空间 \(\mathcal{C}_{\mathrm{sym}}(\Delta(X_m))\) 与 \(C(K)\) 自然同构。
+幂和族 \(\{p_2,\dots,p_n\}\) 在 \(K\) 上分离点：若两轨道不同，则两分布的坐标多重集不同；
+由 Newton 恒等式可知 \(\{p_1,\dots,p_n\}\) 决定基本对称多项式，从而决定该多重集；而 \(p_1\equiv 1\) 在单纯形上已固定，故必存在某个 \(2\le q\le n\) 使 \(p_q\) 取值不同。
+因此 \(\mathcal{A}_m\) 对应于 \(C(K)\) 上一个含常数且分离点的交换子代数。
+由 Stone--Weierstrass 定理，\(\mathcal{A}_m\) 在 \(\mathcal{C}_{\mathrm{sym}}(\Delta(X_m))\) 中稠密。证毕。
+\end{proof}
+
+\begin{theorem}[碰撞矩坐标图：Vandermonde--Jacobian 判别]\label{thm:pom-power-sum-vandermonde-jacobian}
+令 \(\Delta^{n-1}_{\circ}:=\{(w_1,\dots,w_n)\in\RR^n:\ w_i>0,\ \sum_i w_i=1\}\) 为单纯形内点集，并定义幂和映射
+\[
+\Phi(w):=\bigl(p_2(w),p_3(w),\dots,p_n(w)\bigr)\in\RR^{n-1},
+\qquad
+p_k(w)=\sum_{i=1}^n w_i^k.
+\]
+在开稠密集合
+\[
+U:=\{w\in\Delta^{n-1}_{\circ}:\ w_i\ \text{两两不等}\}
+\]
+上，\(\Phi\) 在交换对称意义下给出局部坐标：其 Jacobian 在切空间 \(\{\delta w:\sum_i\delta w_i=0\}\) 上满秩 \(n-1\)。
+更具体地，扩展映射
+\(
+\widetilde\Phi(w):=(p_1(w),p_2(w),\dots,p_n(w))
+\)
+的 Jacobian 行列式满足
+\[
+\det\Bigl[\frac{\partial p_k}{\partial w_i}\Bigr]_{k,i=1}^{n}
+=
+n!\prod_{1\le i<j\le n}(w_j-w_i),
+\]
+从而在 \(U\) 上非零。
+\end{theorem}
+\begin{proof}
+有 \(\frac{\partial p_k}{\partial w_i}=k\,w_i^{k-1}\)。
+故 Jacobian 矩阵可写为
+\[
+J=\bigl[k\,w_i^{k-1}\bigr]_{k,i=1}^{n}
+=\mathrm{diag}(1,2,\dots,n)\cdot V,
+\qquad
+V_{k,i}:=w_i^{k-1},
+\]
+其中 \(V\) 为 Vandermonde 矩阵。
+因此
+\(
+\det J=(1\cdot2\cdots n)\det V
+\)
+并由 Vandermonde 行列式公式得到
+\(
+\det J=n!\prod_{i<j}(w_j-w_i)
+\)。
+在 \(U\) 上右端非零，故 \(\widetilde\Phi\) 为局部微分同胚。
+又因 \(p_1\equiv 1\) 在单纯形上固定，去掉第一坐标即得 \(\Phi\) 在切空间满秩；从而在 \(U/\mathfrak{S}_n\) 上诱导局部坐标图。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-power-sum-jacobian-entropy}
+
+\begin{corollary}[有限碰撞矩的局部可逆性：\texorpdfstring{$(p_2,\dots,p_n)$}{(p2,...,pn)} 在一般位置给出对称坐标]\label{cor:pom-power-sum-local-chart}
+在 \(U\) 上，分布 \(w\) 的交换对称轨道由有限向量 \((p_2(w),\dots,p_n(w))\) 在局部唯一确定。
+因此在一般位置，阶数不超过 \(n\) 的有限碰撞矩已构成对称分布空间的局部坐标系。
+\end{corollary}
+
+\begin{theorem}[实参数压力曲线：解析性、凸性与整数点严格插值]\label{thm:pom-real-q-pressure-analytic-interpolation}
+沿用附录 \ref{app:pom-projective-pressure-operator} 的射影转移算子 \(\mathcal{L}_q\)（定义 \ref{def:pom-projective-transfer-operator}），并假设存在一个 Hölder 型 Banach 空间 \(\mathcal{B}\subset C(\Delta)\)，使得：
+\begin{enumerate}
+  \item \(\mathcal{L}_q:\mathcal{B}\to\mathcal{B}\) 在某开区间 \(J\subset(0,\infty)\) 上构成实解析算子族；
+  \item \(\mathcal{L}_q\) 在每个紧区间 \(J_0\Subset J\) 上一致满足锥收缩/准紧性（quasi-compactness）与强正性，从而 Perron 主特征值 \(\lambda(q)>0\) 存在且为代数重数 \(1\) 的孤立谱点，并在 \(J_0\) 上具有一致谱隙。
+\end{enumerate}
+令
+\[
+\tau(q):=\log\lambda(q)\qquad(q\in J).
+\]
+则：
+\begin{enumerate}
+  \item \(\tau\) 在 \(J\) 上实解析且凸；若势函数 \(\log g_b\)（定义 \ref{def:pom-projective-transfer-operator}）在射影动力学上不与常数同调，则 \(\tau\) 严格凸。
+  \item 对每个整数 \(q\ge 2\)（且 \(q\in J\)），\(\mathcal{L}_q\) 在齐次多项式子空间 \(\mathcal{H}_q\) 上的限制严格退化为对称幂 moment-kernel \(\widetilde A_q\)（定理 \ref{thm:pom-projective-operator-degenerates-to-moment-kernel}），并且在上述谱隙制度下有严格一致性
+  \[
+  \boxed{\;
+  \lambda(q)=\rho(\widetilde A_q)=r_q,\qquad \tau(q)=\log r_q\; }.
+  \]
+  \item 因此 \(q\mapsto \tau(q)\) 给出一条与整数锚点 \(\{\log r_q\}_{q\ge 2}\) 严格对齐的实参数 moment 压力曲线；其归一化压力 \(\tau(q)-q\log 2\) 与正文的 R\'enyi/碰撞口径兼容（定义 \ref{def:pom-moment-pressure}）。
+\end{enumerate}
+\end{theorem}
+
+\input{sections/body/pom/parts/part__pom-boundary-pressure-nonanalytic-spectral-radius}
+
+\paragraph{escort 分布与有限窗热力学导数}
+对任意 \(m\) 与任意 \(q\ge 0\)，定义 \(q\)-escort 分布
+\[
+w_{m,q}(x):=\frac{d_m(x)^q}{S_q(m)}\qquad(x\in X_m).
+\]
+当 \(q=0\) 时 \(w_{m,0}=U_m:=\mathrm{Unif}(X_m)\) 为类型均匀测度；
+当 \(q=1\) 时 \(w_{m,1}(x)=d_m(x)/2^m=w_m(x)\) 为均匀微态推前（定义 \ref{def:pom-wm-baseline}）。
+\input{sections/body/pom/parts/prop__pom-escort-maxfiber-tv-bound}
+
+\begin{proposition}[escort 导数公式：对数配分函数的有限窗二阶喷射]\label{prop:pom-escort-derivative-identities}
+固定分辨率 \(m\ge 1\)，令
+\[
+F_m(q):=\log S_q(m)\qquad(q\ge 0).
+\]
+则 \(F_m\) 在 \(q\ge 0\) 上凸且处处二次可微，并满足精确恒等式
+\[
+\boxed{\;
+F_m'(q)=\mathbb{E}_{w_{m,q}}[\log d_m(X)],\qquad
+F_m''(q)=\mathrm{Var}_{w_{m,q}}\!\bigl(\log d_m(X)\bigr)\ \ge\ 0\; }.
+\]
+\end{proposition}
+\begin{proof}
+对每个固定 \(m\)，函数 \(q\mapsto S_q(m)=\sum_x e^{q\log d_m(x)}\) 为有限个指数函数之和，故 \(F_m=\log S_q(m)\) 为光滑凸函数。
+直接微分得
+\[
+F_m'(q)=\frac{\sum_x (\log d_m(x))\,d_m(x)^q}{\sum_x d_m(x)^q}
+=\sum_x w_{m,q}(x)\log d_m(x),
+\]
+再微分一次得到
+\(
+F_m''(q)=\mathbb{E}_{w_{m,q}}[(\log d_m)^2]-\mathbb{E}_{w_{m,q}}[\log d_m]^2
+\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[零温极限定量律：escort 在 \(q\sim m\) 标度下的超指数集中]\label{cor:pom-escort-zero-temperature-superexp-concentration}
+固定分辨率 \(m\ge 1\)。
+令最大纤维
+\(
+M_m:=\max_{x\in X_m} d_m(x)
+\)，并记
+\[
+\alpha_m:=\frac1m\log M_m,\qquad
+A_m(\varepsilon):=\left\{x\in X_m:\ \frac1m\log d_m(x)\le \alpha_m-\varepsilon\right\}\qquad(\varepsilon>0).
+\]
+则对任意整数 \(q\ge 1\) 有
+\[
+\boxed{\ w_{m,q}\bigl(A_m(\varepsilon)\bigr)\ \le\ |X_m|\,e^{-q\varepsilon m}\ }.
+\]
+从而当 \(q\) 随 \(m\) 线性增长（例如 \(q=\tau m\)）时，
+\[
+w_{m,q}\bigl(A_m(\varepsilon)\bigr)\ \le\ |X_m|\,\exp(-\tau\varepsilon m^2),
+\]
+表现为 \(m^2\) 级别的超指数收缩。
+\end{corollary}
+\begin{proof}
+对任意 \(x\in A_m(\varepsilon)\) 有 \(d_m(x)^q\le M_m^q e^{-q\varepsilon m}\)。
+因此
+\[
+\sum_{x\in A_m(\varepsilon)} d_m(x)^q \le |A_m(\varepsilon)|\,M_m^q e^{-q\varepsilon m}\le |X_m|\,M_m^q e^{-q\varepsilon m}.
+\]
+而 \(S_q(m)=\sum_x d_m(x)^q\ge M_m^q\)，故
+\[
+w_{m,q}(A_m(\varepsilon))
+=\frac{\sum_{x\in A_m(\varepsilon)} d_m(x)^q}{S_q(m)}
+\le |X_m|\,e^{-q\varepsilon m}.
+\]
+证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-diagonal-collapse-sample-partition-homogeneous-recovery}
+
+\input{sections/body/pom/parts/part__pom-pressure-multiplicative-chain-entropy-loss}
+
+\begin{theorem}[Gibbs--变分原理：\texorpdfstring{$\kappa_m$}{kappa} 的 Pareto 前沿由 escort 族严格刻画]\label{thm:pom-kappa-gibbs-variational-escort-frontier}
+固定分辨率 \(m\ge 1\)。对任意分布 \(\pi\in\Delta(X_m)\)，令
+\(
+\kappa_m(\pi):=\mathbb{E}_{\pi}[\log d_m(X)]
+\)
+（定义 \ref{def:pom-kappa}）。
+对任意 \(q\ge 0\) 令 \(F_m(q):=\log S_q(m)\)。
+则成立严格变分表述
+\[
+\boxed{\;
+F_m(q)=\sup_{\pi\in\Delta(X_m)}\Bigl(q\,\kappa_m(\pi)+H(\pi)\Bigr)\; }.
+\]
+并且最优解唯一，等于 \(q\)-escort 分布 \(w_{m,q}(x)=d_m(x)^q/S_q(m)\)。
+因此映射
+\(
+q\mapsto \bigl(H(w_{m,q}),\kappa_m(w_{m,q})\bigr)
+\)
+参数化了集合 \(\{(H(\pi),\kappa_m(\pi)):\pi\in\Delta(X_m)\}\) 的上支撑边界：在给定熵预算下 \(\kappa_m\) 的最优值严格由某个 escort 达到。
+\end{theorem}
+\begin{proof}
+对任意 \(q\ge 0\) 与任意 \(\pi\in\Delta(X_m)\)，按 \(w_{m,q}(x)=d_m(x)^q/S_q(m)\) 展开 KL 散度：
+\[
+\begin{aligned}
+D_{\mathrm{KL}}(\pi\|w_{m,q})
+&=\sum_x \pi(x)\log\frac{\pi(x)}{w_{m,q}(x)}
+=\sum_x \pi(x)\log\pi(x)-q\sum_x \pi(x)\log d_m(x)+\log S_q(m)\\
+&=-H(\pi)-q\,\kappa_m(\pi)+F_m(q).
+\end{aligned}
+\]
+移项得
+\(
+F_m(q)=q\,\kappa_m(\pi)+H(\pi)+D_{\mathrm{KL}}(\pi\|w_{m,q})
+\ge q\,\kappa_m(\pi)+H(\pi)
+\)。
+取上确界得到变分式；并由 \(D_{\mathrm{KL}}(\pi\|w_{m,q})=0\Leftrightarrow \pi=w_{m,q}\) 得唯一性。证毕。
+\end{proof}
+
+\begin{corollary}[极限热力学：\texorpdfstring{$\tau'(q),\tau''(q)$}{tau'(q),tau''(q)} 由 escort 极限给出]\label{cor:pom-pressure-derivatives-from-escort}
+在定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的设定下，若进一步对某个 \(q\in J\) 存在极限
+\[
+\tau(q)=\lim_{m\to\infty}\frac{1}{m}F_m(q),
+\]
+并且在该点可交换“取极限/求导”（例如由谱隙与解析扰动保证），则有
+\[
+\boxed{\;
+\tau'(q)=\lim_{m\to\infty}\frac{1}{m}\,\mathbb{E}_{w_{m,q}}[\log d_m(X)],\qquad
+\tau''(q)=\lim_{m\to\infty}\frac{1}{m}\,\mathrm{Var}_{w_{m,q}}\!\bigl(\log d_m(X)\bigr)\; }.
+\]
+\end{corollary}
+
+\begin{corollary}[极限前沿：\texorpdfstring{$(\alpha(q),h(q))$}{(alpha(q),h(q))}]\label{cor:pom-escort-frontier-limit-param}
+在定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的设定下，假设对某个 \(q\in J\) 存在极限
+\(
+\tau(q)=\lim_{m\to\infty}\frac{1}{m}\log S_q(m)
+\)
+且可交换“取极限/求导”（从而 \(\tau'(q)\) 存在）。
+则 escort 前沿的尺度极限满足参数方程
+\[
+\boxed{\;
+\alpha(q):=\tau'(q)=\lim_{m\to\infty}\frac{1}{m}\kappa_m(w_{m,q}),\qquad
+h(q):=\lim_{m\to\infty}\frac{1}{m}H(w_{m,q})=\tau(q)-q\tau'(q)\; }.
+\]
+从而“压缩（熵）--细化（纤维信息）”的最优权衡由 \(\tau\) 的 Legendre 几何完全刻画。
+\end{corollary}
+
+\paragraph{计数测度与 \texorpdfstring{$w_m$}{wm} 测度的双大偏差与多重分形等号}
+令
+\(
+Y_m(x):=\frac{1}{m}\log d_m(x)
+\)。
+在类型均匀测度 \(U_m=\mathrm{Unif}(X_m)\) 与推前测度 \(w_m\)（定义 \ref{def:pom-wm-baseline}）下，
+可分别考虑随机变量 \(Y_m(X)\) 的大偏差行为。
+
+\begin{theorem}[双版本大偏差原理与谱等号]\label{thm:pom-ldp-uniform-and-wm-exact-spectrum}
+在定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的设定下，进一步假设 \(q\mapsto \tau(q)\) 在某开区间上可微且满足 Gartner--Ellis 定理的本质光滑条件，并且对该区间内的 \(q\) 有
+\(
+\tau(q)=\lim_{m\to\infty}\frac{1}{m}\log S_q(m)
+\)
+（即 \(\tau\) 与实参数配分函数在指数尺度上一致）。
+记 \(\lim_{m\to\infty}\frac{1}{m}\log|X_m|=\log\varphi\)。
+则：
+\begin{enumerate}
+  \item \textbf{（计数测度 \(U_m\)）}
+  定义对数矩母函数
+  \[
+  \Lambda_U(q):=\lim_{m\to\infty}\frac{1}{m}\log \mathbb{E}_{U_m}[e^{qmY_m}]
+  =\lim_{m\to\infty}\frac{1}{m}\log\frac{S_q(m)}{|X_m|}
+  =\tau(q)-\log\varphi,
+  \]
+  并令
+  \[
+  I_U(\alpha):=\sup_{q\ge 0}\bigl(q\alpha-\Lambda_U(q)\bigr).
+  \]
+  则 \((Y_m(X))\) 在 \((X_m,U_m)\) 下满足完全大偏差原理，率函数为 \(I_U\)。
+  并且对任意 \(\alpha\) 的连续点有局部计数等号
+  \[
+  \boxed{\;
+  \lim_{\varepsilon\downarrow 0}\ \lim_{m\to\infty}\frac{1}{m}\log
+  \#\{x\in X_m:\ |Y_m(x)-\alpha|<\varepsilon\}
+  =\log\varphi-I_U(\alpha)\; }.
+  \]
+  \item \textbf{（推前测度 \(w_m\)）}
+  定义
+  \[
+  \Lambda_w(q):=\lim_{m\to\infty}\frac{1}{m}\log \mathbb{E}_{w_m}[e^{qmY_m}]
+  =\lim_{m\to\infty}\frac{1}{m}\log\frac{S_{q+1}(m)}{2^m}
+  =\tau(q+1)-\log 2,
+  \]
+  并令
+  \(
+  I_w(\alpha):=\sup_{q\ge 0}\bigl(q\alpha-\Lambda_w(q)\bigr)
+  \)。
+  则 \((Y_m(X))\) 在 \((X_m,w_m)\) 下亦满足完全大偏差原理，率函数为 \(I_w\)，并对尾部概率给出精确指数率。
+  \item \textbf{（多重分形谱等号）}
+  对谱函数 \(f(\gamma)\)（定义 \ref{def:pom-fiber-spectrum} 及命题 \ref{prop:pom-spectrum-legendre-upper} 的记号），在上述制度下可取
+  \[
+  \boxed{\;
+  f(\alpha)=\log\varphi-I_U(\alpha)\; }.
+  \]
+  因而正文中由压力凸共轭给出的上谱夹逼在该谱隙/严格凸制度下升级为精确 Legendre 对偶。
+\end{enumerate}
+\end{theorem}
+
+\input{sections/body/pom/parts/part__pom-variational-unified-volume-entropy-dimension-spectrum}
+
+\input{sections/body/pom/parts/part__pom-zero-temperature-two-term-maxfiber-freezing}
+
+\paragraph{预言机反演的预算曲线：成功指数、容量指数与热相切割}
+沿用 \(X_m,d_m,w_m,Y_m\) 与速率函数 \(I_w,I_U\) 的记号。
+考虑如下受限反演问题：给定稳定类型 \(x\in X_m\)，允许额外使用 \(B\) bits 的索引信息在纤维 \(\Fold_m^{-1}(x)\) 内猜测真实微态；在“纤维内条件均匀”的基线口径下，其最优成功率完全由纤维多重度谱决定。
+\input{sections/body/pom/parts/thm__pom-oracle-capacity-stieltjes-inversion-mellin}
+\input{sections/body/pom/parts/part__pom-capacity-coarsegraining-majorization}
+
+\begin{theorem}[预言机成功指数的折叠变分式：仅由 \texorpdfstring{$I_w$}{Iw} 给出的严格双支公式]\label{thm:pom-oracle-success-variational-laplace}
+对分辨率 \(m\) 与预算 \(B\in\ZZ_{\ge 0}\) 定义容量计数
+\[
+\mathcal{C}^{\mathrm{orc}}_m(B):=\sum_{x\in X_m}\min\{d_m(x),2^B\},
+\qquad
+\mathrm{Succ}^{\mathrm{orc}}_m(B):=\frac{\mathcal{C}^{\mathrm{orc}}_m(B)}{2^m}.
+\]
+令 \(a\in[0,\log 2]\) 并取 \(B_m(a):=\lfloor a m/\log 2\rfloor\)。
+若 \(Y_m\) 在 \((X_m,w_m)\) 下满足完全大偏差原理且速率函数为 \(I_w\)（定理 \ref{thm:pom-ldp-uniform-and-wm-exact-spectrum}），则极限
+\[
+\Sigma_{\mathrm{orc}}(a):=\lim_{m\to\infty}\frac{1}{m}\log \mathrm{Succ}^{\mathrm{orc}}_m\bigl(B_m(a)\bigr)
+\]
+存在并满足严格等式
+\[
+\boxed{\;
+\Sigma_{\mathrm{orc}}(a)=\sup_{\alpha\in[0,\log 2]}\bigl(h_a(\alpha)-I_w(\alpha)\bigr)\;},
+\]
+其中 \(h_a(\alpha)=0\) 当 \(\alpha\le a\)，且 \(h_a(\alpha)=a-\alpha\) 当 \(\alpha\ge a\)。
+等价地，
+\[
+\boxed{\;
+\Sigma_{\mathrm{orc}}(a)=
+\max\Bigl\{-\inf_{\alpha\le a}I_w(\alpha),\ a-\inf_{\alpha\ge a}\bigl(I_w(\alpha)+\alpha\bigr)\Bigr\}\; } .
+\]
+\end{theorem}
+\begin{proof}
+由 \(w_m(x)=d_m(x)/2^m\) 直接化简得
+\[
+\mathrm{Succ}^{\mathrm{orc}}_m(B)
+=\sum_{x\in X_m}w_m(x)\min\!\left(1,\frac{2^B}{d_m(x)}\right)
+=\mathbb{E}_{w_m}\!\left[\exp\!\bigl(m\,h_{a_m}(Y_m)\bigr)\right],
+\]
+其中 \(a_m:=B\log 2/m\) 且 \(h_{a_m}\) 如题设。
+在 \(B=B_m(a)\) 时 \(a_m=a+O(1/m)\)，而 \(Y_m\in[0,\log 2]\) 使 \(h_a\) 有界连续。
+对 \((Y_m)\) 应用 Laplace/Varadhan 原理即可得到
+\(
+\Sigma_{\mathrm{orc}}(a)=\sup_\alpha(h_a(\alpha)-I_w(\alpha))
+\)。
+将上确界按 \(\alpha\le a\) 与 \(\alpha\ge a\) 分裂即得双支形式。证毕。
+\end{proof}
+
+\begin{theorem}[热相切割恒等式：容量指数在 \texorpdfstring{$(a_0,a_1)$}{(a0,a1)} 上由单层 \texorpdfstring{$\alpha=a$}{alpha=a} 主导]\label{thm:pom-oracle-capacity-thermal-cut}
+在定理 \ref{thm:pom-ldp-uniform-and-wm-exact-spectrum} 的设定下，定义容量指数极限
+\[
+\Gamma_{\mathrm{orc}}(a):=\lim_{m\to\infty}\frac{1}{m}\log \mathcal{C}^{\mathrm{orc}}_m\bigl(B_m(a)\bigr)
+\qquad (a\in[0,\log 2]),
+\]
+并令计数谱 \(f(\alpha):=\log\varphi-I_U(\alpha)\)（同定理 \ref{thm:pom-ldp-uniform-and-wm-exact-spectrum} 的谱等号）。
+则有变分表述
+\[
+\Gamma_{\mathrm{orc}}(a)=\sup_{\alpha\in[0,\log 2]}\bigl(f(\alpha)+\min(\alpha,a)\bigr).
+\]
+进一步假设 \(\tau\) 在 \((0,1)\) 上严格凸且可微，并令
+\[
+a_0:=\tau'(0^+),\qquad a_1:=\tau'(1^-),
+\]
+称 \((a_0,a_1)\) 为热相区间。
+则对任意 \(a\in(a_0,a_1)\) 上式的最优必在折点 \(\alpha=a\) 处达到，从而成立严格恒等式
+\[
+\boxed{\;
+\Gamma_{\mathrm{orc}}(a)=f(a)+a,
+\qquad\text{等价地}\qquad
+f(a)=\Gamma_{\mathrm{orc}}(a)-a\; } .
+\]
+\end{theorem}
+\begin{proof}
+由定义
+\(
+\mathcal{C}^{\mathrm{orc}}_m(B)=\sum_{x\in X_m} \exp\!\bigl(m\min(Y_m(x),a_m)\bigr)
+\)
+（其中 \(a_m=B\log2/m\)），结合定理 \ref{thm:pom-ldp-uniform-and-wm-exact-spectrum} 的局部计数等号，可得指数尺度的极大项公式
+\(
+\Gamma_{\mathrm{orc}}(a)=\sup_\alpha(f(\alpha)+\min(\alpha,a))
+\)。
+\par
+对热相区间内的 \(a\)，由严格凸可微性知存在唯一 \(q_*(a)\in(0,1)\) 使 \(\tau'(q_*(a))=a\)。
+由 Legendre 对偶 \(f(\alpha)=\inf_{q\ge 0}(\tau(q)-q\alpha)\)（与定理 \ref{thm:pom-ldp-uniform-and-wm-exact-spectrum} 等价）得 \(f\) 在 \((a_0,a_1)\) 上可微且
+\(f'(a)=-q_*(a)\in(-1,0)\)。
+于是函数 \(\alpha\mapsto f(\alpha)+\min(\alpha,a)\) 在 \(\alpha=a\) 左侧的导数为 \(f'(\alpha)+1\)（在 \(\alpha=a\) 处为 \(f'(a)+1>0\)），右侧导数为 \(f'(\alpha)\)（在 \(\alpha=a\) 处为 \(f'(a)<0\)）。
+结合 \(f\) 的严格凹性即可知全局最优必在折点 \(\alpha=a\) 处，因而 \(\Gamma_{\mathrm{orc}}(a)=f(a)+a\)。证毕。
+\end{proof}
+
+\begin{corollary}[斜率识别与共轭参数读出：\texorpdfstring{$q_*(a)=1-\Gamma'_{\mathrm{orc}}(a)$}{q*=1-Gamma'}]\label{cor:pom-oracle-capacity-slope-readout}
+在定理 \ref{thm:pom-oracle-capacity-thermal-cut} 的热相区间 \((a_0,a_1)\) 内，
+令 \(q_*(a)\in(0,1)\) 为共轭参数（满足 \(\tau'(q_*(a))=a\)）。
+则 \(\Gamma_{\mathrm{orc}}\) 与 \(f\) 在该区间可微，并且
+\[
+\boxed{\;
+q_*(a)=1-\Gamma_{\mathrm{orc}}'(a),
+\qquad
+f'(a)=-q_*(a)\in(-1,0)\;}
+\]
+且 \(f\) 在 \((a_0,a_1)\) 上严格凹。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-oracle-capacity-thermal-cut} 的恒等式 \(\Gamma_{\mathrm{orc}}(a)=f(a)+a\) 直接得
+\(
+\Gamma_{\mathrm{orc}}'(a)=f'(a)+1
+\)。
+而 \(f'(a)=-q_*(a)\) 由 Legendre 对偶的驻点条件给出，从而 \(q_*(a)=1-\Gamma_{\mathrm{orc}}'(a)\)。
+严格凹性由 \(\tau\) 的严格凸性传递。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-escort-pareto-zero-temp-right-edge-barrier}
+
+\begin{theorem}[微正则条件化与 escort 的信息等价：层集上的相对熵率为零]\label{thm:pom-microcanonical-escort-kl-rate-zero}
+取 \(a\in(a_0,a_1)\) 并令 \(q=q_*(a)\in(0,1)\) 满足 \(\tau'(q)=a\)。
+对 \(\varepsilon>0\) 定义层集
+\[
+E_m(a,\varepsilon):=\{x\in X_m:\ |Y_m(x)-a|<\varepsilon\},
+\]
+并令
+\(
+U_m^{a,\varepsilon}:=U_m(\cdot\mid E_m(a,\varepsilon))
+\)
+与
+\(
+w_{m,q}^{a,\varepsilon}:=w_{m,q}(\cdot\mid E_m(a,\varepsilon))
+\)。
+在定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的谱隙/解析扰动制度下（从而局部大偏差与局部极限定理成立），有
+\[
+\lim_{\varepsilon\downarrow 0}\ \lim_{m\to\infty}\frac{1}{m}D_{\mathrm{KL}}\!\bigl(U_m^{a,\varepsilon}\ \|\ w_{m,q}^{a,\varepsilon}\bigr)=0,
+\qquad
+\lim_{\varepsilon\downarrow 0}\ \lim_{m\to\infty}\frac{1}{m}D_{\mathrm{KL}}\!\bigl(w_{m,q}^{a,\varepsilon}\ \|\ U_m^{a,\varepsilon}\bigr)=0.
+\]
+此外，由 \(w_{m,q}(E_m(a,\varepsilon))\to 1\)（固定 \(\varepsilon\)）可推出
+\[
+\lim_{\varepsilon\downarrow 0}\ \lim_{m\to\infty}\frac{1}{m}D_{\mathrm{KL}}\!\bigl(U_m^{a,\varepsilon}\ \|\ w_{m,q}\bigr)=0.
+\]
+\end{theorem}
+\begin{proof}
+对任意 \(x\in E_m(a,\varepsilon)\)，有
+\(
+\log w_{m,q}(x)=q\log d_m(x)-\log S_q(m)
+= m(q a-\tau(q))+O(\varepsilon m)+o(m),
+\)
+其中 \(o(m)\) 来自 \(\log S_q(m)=m\tau(q)+o(m)\)。
+因此 \(w_{m,q}\) 在 \(E_m(a,\varepsilon)\) 上的对数密度振幅为 \(O(\varepsilon m)+o(m)\)，而 \(U_m^{a,\varepsilon}\) 在 \(E_m\) 上严格常密度；于是两者在该层上的 Radon--Nikodym 比满足
+\[
+\sup_{x\in E_m(a,\varepsilon)}\left|\log\frac{U_m^{a,\varepsilon}(x)}{w_{m,q}^{a,\varepsilon}(x)}\right|
+=O(\varepsilon m)+o(m).
+\]
+代入 KL 定义得到两条熵率界为 \(O(\varepsilon)+o(1)\)，先令 \(m\to\infty\) 再令 \(\varepsilon\downarrow 0\) 得结论。
+最后一式由
+\(
+D_{\mathrm{KL}}(U_m^{a,\varepsilon}\|w_{m,q})
+=D_{\mathrm{KL}}(U_m^{a,\varepsilon}\|w_{m,q}^{a,\varepsilon})-\log w_{m,q}(E_m(a,\varepsilon))
+\)
+与 \(w_{m,q}(E_m(a,\varepsilon))\to 1\) 推出。证毕。
+\end{proof}
+
+\begin{theorem}[临界预算窗的高斯极限：\texorpdfstring{$B=\beta_{\mathrm{crit}}m+O(\sqrt m)$}{B=beta m+O(sqrt m)}]\label{thm:pom-oracle-critical-window-gaussian}
+令 \(w_m=w_{m,1}\)。
+假设 \(\tau\) 在 \(q=1\) 的左邻域二次可微且 \(\tau''(1^-)>0\)，并记
+\[
+a_1:=\tau'(1^-),\qquad \sigma^2:=\tau''(1^-),\qquad \beta_{\mathrm{crit}}:=\frac{a_1}{\log 2}.
+\]
+对任意固定 \(t\in\RR\) 令
+\[
+B_m(t):=\left\lfloor \beta_{\mathrm{crit}}m+\frac{t}{\log 2}\sqrt m\right\rfloor.
+\]
+则预言机最优成功率满足极限
+\[
+\boxed{\;
+\lim_{m\to\infty}\mathrm{Succ}^{\mathrm{orc}}_m\bigl(B_m(t)\bigr)
+=\Phi\!\left(\frac{t}{\sigma}\right)\;},
+\]
+其中 \(\Phi\) 为标准正态分布函数。
+\end{theorem}
+\begin{proof}
+令 \(a_m:=B_m(t)\log 2/m=a_1+t/\sqrt m+O(1/m)\)。
+由定理 \ref{thm:pom-oracle-success-variational-laplace} 的恒等式，
+\[
+\mathrm{Succ}^{\mathrm{orc}}_m\bigl(B_m(t)\bigr)
+=\mathbb{E}_{w_m}\!\left[\min\bigl(1,e^{m(a_m-Y_m)}\bigr)\right]
+=\mathbb{P}_{w_m}(Y_m\le a_m)+R_m,
+\]
+其中
+\(
+R_m:=\mathbb{E}_{w_m}[e^{m(a_m-Y_m)}\mathbf{1}_{\{Y_m>a_m\}}]
+\)。
+对任意 \(\eta>0\)，有
+\[
+R_m\le \mathbb{P}_{w_m}\!\left(a_m<Y_m\le a_m+\frac{\eta}{\sqrt m}\right)+e^{-\eta\sqrt m}.
+\]
+在谱隙制度下，\(q=1\) escort 下的中心极限定理成立（参见定理 \ref{thm:pom-fiber-index-clt-thermo} 的同型结论），故
+\(
+\sqrt m\,(Y_m-a_1)\Rightarrow \mathcal{N}(0,\sigma^2)
+\)。
+由此得
+\(
+\mathbb{P}_{w_m}(Y_m\le a_m)\to \Phi(t/\sigma)
+\)
+且
+\(
+\limsup_{m\to\infty}\mathbb{P}_{w_m}\!\left(a_m<Y_m\le a_m+\frac{\eta}{\sqrt m}\right)
+=\Phi\!\left(\frac{t+\eta}{\sigma}\right)-\Phi\!\left(\frac{t}{\sigma}\right)
+\)。
+令 \(\eta\downarrow 0\) 得 \(R_m\to 0\)，从而结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[二阶反演：达到给定成功率所需的最小比特预算]\label{cor:pom-oracle-critical-window-bit-inversion}
+在定理 \ref{thm:pom-oracle-critical-window-gaussian} 的设定下，对任意固定 \(p\in(0,1)\)，令 \(B_m(p)\) 为满足
+\(
+\mathrm{Succ}^{\mathrm{orc}}_m(B_m(p))=p+o(1)
+\)
+的最小预算，则
+\[
+\boxed{\;
+B_m(p)=\beta_{\mathrm{crit}}m+\frac{\sigma}{\log 2}\,\Phi^{-1}(p)\sqrt m+o(\sqrt m)\;}
+\qquad(m\to\infty).
+\]
+\end{corollary}
+\begin{proof}
+由 \(B\mapsto \mathrm{Succ}^{\mathrm{orc}}_m(B)\) 的单调性与定理 \ref{thm:pom-oracle-critical-window-gaussian}，
+在 \(B=\beta_{\mathrm{crit}}m+t\sqrt m/\log2\) 的窗内成功率极限为 \(\Phi(t/\sigma)\)。
+取 \(t=\sigma\Phi^{-1}(p)\) 并换回比特尺度即得。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/cor__pom-oracle-critical-quadratic-marginal-law}
+
+\input{sections/body/pom/parts/part__pom-oracle-critical-budget-entropy-decomposition}
+
+\input{sections/body/pom/parts/part__pom-oracle-fenchel-duality-area-law}
+\input{sections/body/pom/parts/part__pom-oracle-min-kernel-closure-tomography-bregman}
+\input{sections/body/pom/parts/part__pom-escort-multiplicative-microcanonical-oracle-curvature}
+\input{sections/body/pom/parts/part__pom-microcanonical-fold-moduli-unidentifiability}
+
+\paragraph{实参数 \texorpdfstring{$\zeta$}{zeta} 与主极点几何（Fredholm 口径）}
+对整数 \(q\ge 2\)，有限维核给出有理型接口 \(\zeta_{\widetilde A_q}(z)=\det(I-z\widetilde A_q)^{-1}\)（\S\ref{subsec:zeta-syntax-zeta}）。
+对实参数 \(q\in J\)，在满足迹类可执行性或 Fredholm 口径可定义的前提下（定义 \ref{def:fredholm-determinant}），可定义
+\[
+\zeta(q,z):=\frac{1}{\det(I-z\mathcal{L}_q)}.
+\]
+
+\begin{proposition}[主极点的解析运动与严格对数凸]\label{prop:pom-real-q-zeta-main-pole}
+在定理 \ref{thm:pom-real-q-pressure-analytic-interpolation} 的谱隙设定下，对每个 \(q\in J\)：
+\begin{enumerate}
+  \item \(\zeta(q,z)\) 在 \(|z|<e^{-\tau(q)}\) 内解析，且最近原点的奇点位于
+  \(
+  z_\star(q):=e^{-\tau(q)}=1/\lambda(q)
+  \)
+  并为单极点；
+  \item 映射 \(q\mapsto z_\star(q)\) 在 \(J\) 上实解析；并且在非退化（严格凸）情形下 \(\log z_\star(q)=-\tau(q)\) 严格凹，等价地 \(q\mapsto \lambda(q)\) 严格对数凸；
+  \item 当 \(q\in\ZZ_{\ge 2}\) 时，\(\zeta(q,z)\) 在有限维不变子空间 \(\mathcal{H}_q\) 上严格退化为
+  \[
+  \zeta(q,z)=\zeta_{\widetilde A_q}(z)=\det(I-z\widetilde A_q)^{-1},
+  \]
+  从而整数 moment 指纹的极点几何在实参数上获得解析延拓，并把“跨阶压力曲线的凸几何”固化为主极点的不可变约束。
+\end{enumerate}
+\end{proposition}
+

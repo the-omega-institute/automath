@@ -1,0 +1,196 @@
+\subsection{核心状态 forcing 层}\label{subsec:logic-expansion-chain-state-forcing}
+
+本节的真正中轴，不是类型、不是更新、也不是观察者，而是状态上的可断言性。只要这一层没有立住，后续的指称、局部片段、\(\mathsf{NULL}\)、动态更新、多轴与时空定位都会退化为互不相干的附加结构。因此，本小节先把整条扩张链压到最核心的一步：对象层事实不再写成无索引的“\(\varphi\) 为真”，而写成“\(\varphi\) 在状态 \(p\) 上被强制成立”。
+
+为此，先固定一个分型语言
+\[
+\Sigma=(S,F,R),
+\]
+其中 \(S\) 是类型集，\(F\) 是函数符号族，\(R\) 是关系符号族。对任意模型 \(M\)，记 \(D_s^M\) 为类型 \(s\) 的解释域。若
+\[
+\Gamma=(x_1:s_1,\dots,x_n:s_n)
+\]
+是一个上下文，则定义其在模型 \(M\) 中的实现集合为
+\[
+\mathrm{Val}_M(\Gamma)
+:=
+\bigl\{\rho \mid \rho(x_i)\in D_{s_i}^M,\ 1\le i\le n\bigr\}.
+\]
+若 \(\Gamma\preceq \Delta\) 表示 \(\Delta\) 扩张了 \(\Gamma\)，则每个 \(\Delta\)-实现 \(\sigma\) 都有自然限制
+\[
+\sigma|_\Gamma \in \mathrm{Val}_M(\Gamma).
+\]
+
+在这一步之后，状态便可理解为一组仍未被当前语境进一步区分开的实现。
+
+\begin{definition}[信息状态]\label{def:logic-expansion-information-state}
+在模型 \(M\) 中，称
+\[
+p=(\Gamma_p,R_p)
+\]
+为一个信息状态，若 \(\Gamma_p\) 是一个上下文，且
+\[
+\varnothing\neq R_p\subseteq \mathrm{Val}_M(\Gamma_p).
+\]
+记 \(\mathrm{St}(M)\) 为模型 \(M\) 中全部信息状态之集合。
+\end{definition}
+
+这里的 \(R_p\) 不是单条赋值，而是一簇仍被当前状态共同保留的可能实现。于是，状态所表达的不是“对象已经完全确定”，而是“在当前语境下，这些实现仍同时被允许”。只要 \(R_p\) 不是单点，状态内部就保留着真正的未定性。
+
+接着定义状态之间的粗细关系。
+
+\begin{definition}[细化]\label{def:logic-expansion-refinement}
+设
+\[
+p=(\Gamma_p,R_p),
+\qquad
+q=(\Gamma_q,R_q)
+\]
+是同一模型 \(M\) 中的两个状态。称 \(q\) 是 \(p\) 的一个细化，记作
+\[
+q\le p,
+\]
+若满足：
+\begin{enumerate}
+  \item \(\Gamma_p\preceq \Gamma_q\)；
+  \item 对任意 \(\sigma\in R_q\)，都有
+  \[
+  \sigma|_{\Gamma_p}\in R_p.
+  \]
+\end{enumerate}
+\end{definition}
+
+也就是说，细化有两层含义：一方面，上下文变大了，可以表达更多变量与关系；另一方面，允许的实现变少了，状态因此更精细。粗状态包含更多可能性，细状态排除了其中一部分。
+
+在此基础上，可以定义本文最核心的对象层判断。
+
+\begin{definition}[状态 forcing]\label{def:logic-expansion-state-forcing}
+设 \(p=(\Gamma_p,R_p)\) 是模型 \(M\) 中的一个状态，\(\varphi\) 是在 \(\Gamma_p\) 中良构的公式。定义
+\[
+M,p\Vdash \varphi
+\quad:\Longleftrightarrow\quad
+\forall \rho\in R_p,\ M,\rho\models \varphi.
+\]
+其中右侧的 \(\models\) 表示底层分型语义下的通常满足关系。
+\end{definition}
+
+定义 \ref{def:logic-expansion-state-forcing} 表明：一个命题在状态 \(p\) 上被强制成立，意味着它对 \(p\) 当前允许的全部实现都已稳定成立。对象层事实因此不再依赖某个抽象全局世界，而依赖于状态所保留的实现类。
+
+由 forcing 立刻可定义状态理论与已决定性。
+
+\begin{definition}[状态理论]\label{def:logic-expansion-state-theory}
+对任意状态 \(p\)，定义
+\[
+\mathrm{Th}_M(p)
+:=
+\{\varphi \mid M,p\Vdash \varphi\}.
+\]
+\end{definition}
+
+\begin{definition}[已决定性]\label{def:logic-expansion-decidedness}
+称公式 \(\varphi\) 在状态 \(p\) 上已决定，记作
+\[
+M,p\Downarrow \varphi,
+\]
+若
+\[
+M,p\Vdash \varphi
+\qquad\text{或}\qquad
+M,p\Vdash \neg\varphi.
+\]
+\end{definition}
+
+这一定义把“成立”与“已决定”严格区分开来。一个状态可以对某些命题已决定，而对另一些命题仍未决定。后者不是缺陷，而是整条逻辑扩张链能够运作的前提；如果一切命题在每个状态中都自动被决定，那么后续的更新、局部化与观察者结构便会失去意义。
+
+在 forcing 定义完成后，可以给出本节最基本的两个命题。
+
+\begin{proposition}[forcing 的持久性]\label{prop:logic-expansion-forcing-persistence}
+若
+\[
+q\le p
+\qquad\text{且}\qquad
+M,p\Vdash \varphi,
+\]
+则
+\[
+M,q\Vdash \varphi^\uparrow,
+\]
+其中 \(\varphi^\uparrow\) 表示把 \(\varphi\) 看作较大上下文中的同一公式。
+\end{proposition}
+
+\begin{proof}
+任取 \(\sigma\in R_q\)。由定义 \ref{def:logic-expansion-refinement} 知 \(\sigma|_{\Gamma_p}\in R_p\)。既然 \(M,p\Vdash \varphi\)，则
+\[
+M,\sigma|_{\Gamma_p}\models \varphi.
+\]
+因此在扩张语境中，
+\[
+M,\sigma\models \varphi^\uparrow.
+\]
+由于 \(\sigma\) 任意，故 \(M,q\Vdash \varphi^\uparrow\)。
+\end{proof}
+
+命题 \ref{prop:logic-expansion-forcing-persistence} 说明：细化不会推翻已建立的对象层事实。它只会收缩未定部分，而不会把已经 forcing 的内容重新变成非 forcing。后续的动态更新、观察者内部历史与时空未来算子，都必须建立在这条持久性之上。
+
+\begin{corollary}[状态理论的单调增长]\label{cor:logic-expansion-state-theory-monotonicity}
+若
+\[
+q\le p,
+\]
+则
+\[
+\mathrm{Th}_M(p)\subseteq \mathrm{Th}_M(q).
+\]
+\end{corollary}
+
+\begin{proof}
+这是命题 \ref{prop:logic-expansion-forcing-persistence} 的直接推论。
+\end{proof}
+
+第二个核心命题是单点保守性。它保证本小节的 forcing 不是凭空另造一套真值，而只是把通常的点式满足关系提升为状态满足关系。
+
+\begin{proposition}[单点保守性]\label{prop:logic-expansion-singleton-conservativity}
+设 \(\rho\in \mathrm{Val}_M(\Gamma)\)，并令
+\[
+p_\rho=(\Gamma,\{\rho\}).
+\]
+则对任意 \(\Gamma\)-公式 \(\varphi\)，都有
+\[
+M,p_\rho\Vdash \varphi
+\quad\Longleftrightarrow\quad
+M,\rho\models \varphi.
+\]
+\end{proposition}
+
+\begin{proof}
+由 \(R_{p_\rho}=\{\rho\}\) 及定义 \ref{def:logic-expansion-state-forcing}，forcing 的定义立刻退化为单点满足。
+\end{proof}
+
+命题 \ref{prop:logic-expansion-singleton-conservativity} 的意义在于：状态 forcing 对通常的分型语义是保守的。只要状态坍缩成单点实现，对象层 forcing 就与通常的点语义完全一致。因此，后文无论再加入多少结构，只要这些结构不触及旧语言中的公式，它们都不应改变旧公式在单点状态上的意义。
+
+由单点保守性，可把本小节的语义后承定义为真正的状态后承。
+
+\begin{definition}[状态语义后承]\label{def:logic-expansion-state-consequence}
+对任意公式集 \(\Phi\cup\{\varphi\}\)，定义
+\[
+\Phi \models_{\mathrm{S}} \varphi
+\]
+当且仅当对任意模型 \(M\) 与任意状态 \(p\in \mathrm{St}(M)\)，都有
+\[
+M,p\Vdash \Phi
+\Rightarrow
+M,p\Vdash \varphi.
+\]
+\end{definition}
+
+于是，从本小节开始，本文所谓“逻辑有效”都可以理解为：某个结论在一切允许的状态中被前提 forcing 所稳定推出。这里不需要先列公理，也不需要先选取一套固定演算；有效性本身已经由 forcing 语义定义出来。
+
+综上所述，本小节完成了整条扩张链中最关键的一步：把对象层事实统一写成状态上的可断言性。此时逻辑的最核心形式已经确定：
+\begin{itemize}
+  \item 状态是实现类，而不是单点；
+  \item 细化是语境扩张与实现收缩的统一；
+  \item 事实是 forcing，而不是全局真值；
+  \item 细化保持 forcing，而不回写既有内容；
+  \item 单点语义只是状态 forcing 的退化情形。
+\end{itemize}
+这意味着，后续所有高层结构都只能被解释为它们如何进一步丰富状态的内部结构，而不能改变 forcing 作为对象层基本关系的地位。下一小节将在这一 forcing 骨架之上引入指称与局部性，使逻辑第一次能够严格区分“一个对象是否已经进入可评价域”与“该对象上的命题是否成立”。

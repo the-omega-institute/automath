@@ -1,0 +1,574 @@
+% Fiberwise conditional statistics over Fibonacci residues.
+
+\subsubsection{纤维内条件统计与推前核的可逆重建}\label{subsubsec:fold-fiber-conditional-statistics}
+在附录 \ref{app:fold-multiplicity} 的模环口径下，多重度剖面 \(d_m(r)\) 把折叠纤维按余类 \(r\in\ZZ/(F_{m+2}\ZZ)\) 进行聚合计数。
+本段说明：在纤维上进一步加入有限坐标约束时，其条件计数满足严格的仿射差分/卷积方程；当模长为奇数时，这些局部统计可由 \(d_m\) 一次性可逆重建，并与上一小节的残差推前链 \(P_m\) 形成显式接口。
+
+\paragraph{单坐标约束的仿射差分方程}
+固定 \(m\ge 1\)，记 \(M:=F_{m+2}\)，并沿用
+\(
+r(\omega)\equiv \sum_{j=1}^m \omega_jF_{j+1}\ (\mathrm{mod}\ M)
+\)
+与多重度剖面
+\(
+d_m(r):=\card\{\omega\in\Omega_m:\ r(\omega)=r\}
+\)。
+对 \(1\le k\le m\) 定义纤维内坐标计数与条件概率
+\[
+b_{m,k}(r):=\card\{\omega\in\Omega_m:\ r(\omega)=r,\ \omega_k=1\},
+\qquad
+p_k(r):=\PP(\omega_k=1\mid r(\omega)=r)=\frac{b_{m,k}(r)}{d_m(r)}
+\]
+（当 \(d_m(r)>0\) 时）。
+
+\begin{proposition}[坐标翻转诱导的仿射差分方程]\label{prop:fold-fiber-single-coordinate-affine-difference}
+对一切 \(r\in\ZZ/(M\ZZ)\) 与一切 \(1\le k\le m\) 成立严格恒等式
+\[
+\boxed{\;
+b_{m,k}(r)+b_{m,k}\!\bigl(r+F_{k+1}\bigr)=d_m(r).\;}
+\]
+等价地，若 \(T_{F_{k+1}}\) 表示平移算子 \((T_{F_{k+1}}f)(r)=f(r+F_{k+1})\)，则
+\(
+(I+T_{F_{k+1}})b_{m,k}=d_m
+\)。
+\end{proposition}
+
+\begin{proof}
+令 \(\tau_k:\Omega_m\to\Omega_m\) 翻转第 \(k\) 位：\((\tau_k\omega)_k=1-\omega_k\) 且其余坐标不变。
+若 \(\omega_k=0\) 且 \(r(\omega)=r\)，则 \(r(\tau_k\omega)=r+F_{k+1}\)。
+因此 \(\tau_k\) 给出双射
+\[
+\{\omega:\ r(\omega)=r,\ \omega_k=0\}\ \longleftrightarrow\ \{\omega:\ r(\omega)=r+F_{k+1},\ \omega_k=1\},
+\]
+从而
+\(
+\card\{\omega:\ r(\omega)=r,\ \omega_k=0\}=b_{m,k}(r+F_{k+1})
+\)。
+左端等于 \(d_m(r)-b_{m,k}(r)\)，整理即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[轨道递推与偶周期交替和约束]\label{cor:fold-fiber-orbit-recurrence-alternating-sum}
+固定 \(k\)。把 \(\ZZ/(M\ZZ)\) 分解为平移 \(r\mapsto r+F_{k+1}\) 的轨道。
+对任一轨道 \(O=\{r_0+jF_{k+1}:j=0,\dots,L-1\}\)（\(L=|O|\)）记
+\[
+d_j:=d_m(r_0+jF_{k+1}),\qquad b_j:=b_{m,k}(r_0+jF_{k+1}).
+\]
+则 \((b_j)\) 满足线性递推
+\[
+b_{j+1}=d_j-b_j\qquad (j\ \mathrm{mod}\ L).
+\]
+并且闭合条件 \(b_L=b_0\) 蕴含：
+\begin{enumerate}
+\normalfont
+  \item 若 \(L\) 为偶数，则必有交替和消失
+  \[
+  \sum_{j=0}^{L-1}(-1)^j\,d_j=0.
+  \]
+  \item 若 \(L\) 为奇数，则该递推在轨道上有唯一解，因此 \(\{b_j\}_{j\in\ZZ/L\ZZ}\) 由 \(\{d_j\}_{j\in\ZZ/L\ZZ}\) 唯一确定。
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+将命题 \ref{prop:fold-fiber-single-coordinate-affine-difference} 依次代入轨道点 \(r_0+jF_{k+1}\) 即得递推 \(b_{j+1}=d_j-b_j\)。
+把其迭代 \(L\) 步得到
+\(
+b_L=(-1)^L b_0+\sum_{j=0}^{L-1}(-1)^{L-1-j}d_j
+\)。
+与闭合条件 \(b_L=b_0\) 比较：当 \(L\) 偶时 \(1-(-1)^L=0\) 使得 \(b_0\) 系数消失，从而闭合条件等价于交替和为零；当 \(L\) 奇时 \(1-(-1)^L=2\) 给出唯一的 \(b_0\) 并唯一确定全轨道。证毕。
+\end{proof}
+
+\input{thm__fold-translation-equation-orbit-solution-space}
+\input{prop__fold-translation-kernel-fourier-sgM}
+\input{prop__fold-fiber-single-coordinate-minimal-augmentation}
+
+\begin{corollary}[Fibonacci 模长下的自由度由 \texorpdfstring{$\gcd(m+2,k+1)$}{gcd(m+2,k+1)} 精确控制]\label{cor:fold-fiber-single-coordinate-fibonacci-gcd-freedom}
+在命题 \ref{prop:fold-fiber-single-coordinate-affine-difference} 的设定下，令 \(M=F_{m+2}\)、\(w=F_{k+1}\)，并记
+\[
+g_{m,k}:=\gcd(F_{m+2},F_{k+1})=F_{\gcd(m+2,k+1)}.
+\]
+则齐次自由度满足
+\[
+\dim_{\CC}\ker(I+T_{F_{k+1}})
+=
+\begin{cases}
+0,&\text{若 } \frac{F_{m+2}}{g_{m,k}}\text{ 为奇数},\\
+g_{m,k},&\text{若 } \frac{F_{m+2}}{g_{m,k}}\text{ 为偶数}.
+\end{cases}
+\]
+从而在 \(\frac{F_{m+2}}{g_{m,k}}\) 为偶数且方程可解时，解空间为 \(g_{m,k}\)-维仿射空间。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:fold-translation-equation-orbit-solution-space} 与命题 \ref{prop:fold-translation-kernel-fourier-sgM}，\(\dim\ker(I+T_w)=0\) 当且仅当 \(M/\gcd(M,w)\) 为奇数；否则维数等于 \(g=\gcd(M,w)\)。
+取 \(M=F_{m+2}\)、\(w=F_{k+1}\) 得第一条断言。
+第二条恒等式为 Fibonacci 的经典最大公因子恒等式 \(\gcd(F_a,F_b)=F_{\gcd(a,b)}\) 取 \(a=m+2\)、\(b=k+1\)。
+最后一段为仿射空间维数的直接语义重述。证毕。
+\end{proof}
+
+\begin{corollary}[偶模长的最小不可消自由度与奇偶角色]\label{cor:fold-fiber-even-modulus-minimal-defect-parity-character}
+若 \(M=F_{m+2}\) 为偶数，则取 \(k=1\)（\(w=F_2=1\)）时有
+\[
+\dim_{\CC}\ker(I+T_{1})=1,
+\]
+并且核空间由唯一的二阶角色生成：\(\ker(I+T_1)=\CC\cdot \chi_{M/2}\)（其中 \(\chi_{M/2}(r)=(-1)^r\)）。
+\end{corollary}
+
+\begin{proof}
+取 \(w=1\) 时 \(g=\gcd(M,1)=1\)，且 \(M\) 为偶数蕴含 \(M/g\) 为偶数。
+由命题 \ref{prop:fold-translation-kernel-fourier-sgM} 得 \(\dim\ker(I+T_1)=g=1\)，并且满足 \(\chi_t(1)=-1\) 的唯一频率为 \(t\equiv M/2\pmod M\)。
+因此核由 \(\chi_{M/2}(r)=e^{2\pi i (M/2)r/M}=(-1)^r\) 张成。证毕。
+\end{proof}
+
+\paragraph{多坐标约束的卷积分解与奇模长可逆性}
+取非空坐标子集 \(I\subseteq\{1,\dots,m\}\)。
+定义“全零子纤维计数”
+\[
+a_{m,I}(r):=\card\{\omega\in\Omega_m:\ r(\omega)=r,\ \omega_i=0\ \forall i\in I\}.
+\]
+并在群代数 \(\ZZ[\ZZ/(M\ZZ)]\) 中定义核
+\[
+K_I:=\sum_{S\subseteq I}\delta_{\sum_{i\in S}F_{i+1}},
+\qquad
+(\delta_x(r)=\mathbf 1_{r=x}).
+\]
+
+\begin{proposition}[有限坐标约束的卷积分解]\label{prop:fold-fiber-subset-convolution}
+对一切 \(r\in\ZZ/(M\ZZ)\) 有严格卷积恒等式
+\[
+\boxed{\;
+d_m\ =\ K_I*a_{m,I}\;}
+\]
+（卷积在 \(\ZZ/(M\ZZ)\) 上进行）。
+更一般地，对任意模式向量 \(v\in\{0,1\}^I\) 令
+\[
+A_{m,I}(r;v):=\card\{\omega\in\Omega_m:\ r(\omega)=r,\ \omega_i=v_i\ \forall i\in I\},
+\]
+则成立统一的平移表示
+\[
+\boxed{\;
+A_{m,I}(r;v)=a_{m,I}\!\Bigl(r-\sum_{i\in I:\ v_i=1}F_{i+1}\Bigr).\;}
+\]
+\end{proposition}
+
+\begin{proof}
+对每个 \(S\subseteq I\)，令 \(\tau_S:=\prod_{i\in S}\tau_i\) 翻转集合 \(S\) 上的坐标。
+在约束 \(\omega_i=0\)（\(i\in I\)）的集合上，\(\tau_S\) 恰把这些坐标从 \(0\) 置为 \(1\)，从而残差增量为 \(\sum_{i\in S}F_{i+1}\)。
+于是对任意 \(r\) 有双射
+\[
+\{\omega:\ r(\omega)=r-\textstyle\sum_{i\in S}F_{i+1},\ \omega_i=0\ \forall i\in I\}
+\ \longleftrightarrow\
+\{\omega:\ r(\omega)=r,\ \omega_i=\mathbf 1_S(i)\ \forall i\in I\},
+\]
+因此
+\(
+A_{m,I}(r;\mathbf 1_S)=a_{m,I}(r-\sum_{i\in S}F_{i+1})
+\)。
+对 \(S\subseteq I\) 求和得到
+\[
+d_m(r)=\sum_{S\subseteq I}A_{m,I}(r;\mathbf 1_S)=\sum_{S\subseteq I}a_{m,I}\!\Bigl(r-\sum_{i\in S}F_{i+1}\Bigr),
+\]
+即 \(d_m=K_I*a_{m,I}\)。
+对一般 \(v\) 取 \(S=\{i\in I:\ v_i=1\}\) 即得平移表示。证毕。
+\end{proof}
+
+\begin{corollary}[奇模长下的可逆重建]\label{cor:fold-fiber-conditional-reconstruction-odd-modulus}
+若 \(M=F_{m+2}\) 为奇数，则对任意非空 \(I\subseteq\{1,\dots,m\}\)，卷积算子
+\(
+f\mapsto K_I*f
+\)
+在 \(\CC[\ZZ/(M\ZZ)]\) 上可逆。
+因此 \(a_{m,I}\)、全部 \(A_{m,I}(\cdot;v)\) 以及由其导出的联合条件概率均由多重度剖面 \(d_m\) 唯一确定，并可通过离散 Fourier 反演显式求出。
+\end{corollary}
+
+\begin{proof}
+对任意角色 \(\chi:\ZZ/(M\ZZ)\to\CC^\times\)，有
+\(
+\widehat{K_I}(\chi)=\prod_{i\in I}(1+\chi(F_{i+1}))
+\)。
+当 \(M\) 为奇数时，\(\chi(F_{i+1})\) 为奇阶单位根，因而不可能等于 \(-1\)，故每一因子 \(1+\chi(F_{i+1})\neq 0\)，从而 \(\widehat{K_I}(\chi)\neq 0\)。
+由 Fourier 对角化可知卷积算子可逆并给出唯一性；再与命题 \ref{prop:fold-fiber-subset-convolution} 的平移表示合并即得结论。证毕。
+\end{proof}
+
+\paragraph{推前核的点态表达与互补配对消去}
+沿用上一小节的残差推前链 \(P_m\)：在 \(\Omega_m\) 上每一步等概率选择一个坐标并翻转该比特，并经 \(r\) 推前到 \(\ZZ/(M\ZZ)\)。
+其平稳分布为 \(\mu_m(r)=d_m(r)/2^m\)。
+
+\begin{proposition}[推前核的纤维条件表示]\label{prop:fold-residual-pushforward-kernel-by-fiber-probability}
+对任意 \(1\le k\le m\) 与任意 \(r\in\ZZ/(M\ZZ)\)，推前核满足
+\[
+P_m(r,r+F_{k+1})=\frac{1}{m}\bigl(1-p_k(r)\bigr),
+\qquad
+P_m(r,r-F_{k+1})=\frac{1}{m}p_k(r),
+\]
+其中 \(p_k(r)=b_{m,k}(r)/d_m(r)\) 为纤维内条件概率。
+因此当 \(M\) 为奇数时，\(d_m\) 唯一确定 \(P_m\) 在每个状态的全部出边概率。
+\end{proposition}
+
+\begin{proof}
+在纤维 \(r(\omega)=r\) 上，翻转第 \(k\) 位将残差改变量确定为 \(\pm F_{k+1}\)；并且发生 \(+F_{k+1}\) 当且仅当 \(\omega_k=0\)，发生 \(-F_{k+1}\) 当且仅当 \(\omega_k=1\)。
+在 \(\Omega_m\) 上每步以概率 \(1/m\) 选择第 \(k\) 位，条件化到纤维后即得所示公式。
+最后一句由推论 \ref{cor:fold-fiber-conditional-reconstruction-odd-modulus} 在 \(I=\{k\}\) 情形给出 \(b_{m,k}\) 的唯一性，从而 \(p_k\) 与 \(P_m\) 由 \(d_m\) 决定。证毕。
+\end{proof}
+
+\begin{corollary}[互补对合下的漂移奇性与配对消去]\label{cor:fold-fiber-drift-odd-and-pair-cancellation}
+沿用命题 \ref{prop:fold-complement-duality} 的对合
+\(
+\tau_m(r)\equiv(F_{m+1}-2)-r\ (\mathrm{mod}\ M)
+\)。
+则对一切 \(r\) 与 \(k\) 有
+\[
+p_k(\tau_m(r))=1-p_k(r).
+\]
+从而对推前链 \(P_m\) 的单坐标漂移
+\[
+\mathrm{drift}_k(r):=P_m(r,r+F_{k+1})-P_m(r,r-F_{k+1})=\frac{1}{m}\bigl(1-2p_k(r)\bigr)
+\]
+成立点态奇性
+\[
+\mathrm{drift}_k(\tau_m(r))=-\mathrm{drift}_k(r).
+\]
+因此对任意满足 \(f\circ\tau_m=f\) 的测试函数 \(f\)，都有严格配对消去恒等式
+\[
+\sum_{r\in\ZZ/(M\ZZ)}\mu_m(r)\,\mathrm{drift}_k(r)\,f(r)=0.
+\]
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:fold-complement-duality}，补位对合 \(C\) 给出纤维之间的双射
+\(
+r^{-1}(r)\leftrightarrow r^{-1}(\tau_m(r))
+\)
+且在该双射下 \(\omega_k\) 取值翻转。
+故 \(b_{m,k}(\tau_m(r))=d_m(r)-b_{m,k}(r)\) 且 \(d_m(\tau_m(r))=d_m(r)\)，从而 \(p_k(\tau_m(r))=1-p_k(r)\)。
+将其代入命题 \ref{prop:fold-residual-pushforward-kernel-by-fiber-probability} 得漂移奇性。
+最后由 \(\mu_m\circ\tau_m=\mu_m\) 与 \(\mathrm{drift}_k\circ\tau_m=-\mathrm{drift}_k\)，对和式按 \(\{r,\tau_m(r)\}\) 配对即得零和。证毕。
+\end{proof}
+
+\paragraph{条件偏置的 Fourier 乘子与二次能量}
+\begin{proposition}[条件偏置的 Fourier 闭式与 Parseval 能量]\label{prop:fold-fiber-bias-fourier-multiplier-energy}
+令 \(\mu_m(r):=d_m(r)/2^m\)，并定义条件偏置密度
+\[
+\nu_{m,k}(r):=\mu_m(r)\,(2p_k(r)-1)=\frac{2b_{m,k}(r)-d_m(r)}{2^m}.
+\]
+其离散 Fourier 变换
+\[
+\widehat{\nu}_{m,k}(t):=\sum_{r\in\ZZ/(M\ZZ)}\nu_{m,k}(r)\,e^{-2\pi i tr/M}
+\]
+满足显式乘子公式
+\[
+\boxed{\;
+\widehat{\nu}_{m,k}(t)
+=\frac{1}{2^{m+1}}\Bigl(e^{-2\pi i tF_{k+1}/M}-1\Bigr)
+\prod_{\substack{1\le j\le m\\ j\ne k}}\Bigl(1+e^{-2\pi i tF_{j+1}/M}\Bigr). \;}
+\]
+从而由 Parseval 恒等式得到严格二次能量表示
+\[
+\sum_{r\in\ZZ/(M\ZZ)}\nu_{m,k}(r)^2
+=\frac1M\sum_{t\in\ZZ/(M\ZZ)}
+\sin^2\!\Bigl(\pi tF_{k+1}/M\Bigr)\!
+\prod_{\substack{1\le j\le m\\ j\ne k}}
+\cos^2\!\Bigl(\pi tF_{j+1}/M\Bigr).
+\]
+\end{proposition}
+
+\begin{proof}
+由定义
+\(
+\nu_{m,k}=(2b_{m,k}-d_m)/2^m
+\)。
+另一方面，直接计算 \(b_{m,k}\) 的 Fourier 变换：
+\[
+\widehat b_{m,k}(t)
+=\sum_{r}b_{m,k}(r)e^{-2\pi i tr/M}
+=\sum_{\omega\in\Omega_m:\ \omega_k=1}e^{-2\pi i tN(\omega)/M}
+=e^{-2\pi i tF_{k+1}/M}\prod_{j\ne k}\bigl(1+e^{-2\pi i tF_{j+1}/M}\bigr).
+\]
+同理由定理 \ref{thm:fold-spectrum-factorization} 的因子化有
+\(
+\widehat d_m(t)=\prod_{j=1}^m(1+e^{-2\pi i tF_{j+1}/M})
+\)。
+故
+\[
+\widehat\nu_{m,k}(t)
+=\frac{1}{2^m}\bigl(2\widehat b_{m,k}(t)-\widehat d_m(t)\bigr)
+=\frac{1}{2^{m+1}}\Bigl(e^{-2\pi i tF_{k+1}/M}-1\Bigr)\prod_{j\ne k}\bigl(1+e^{-2\pi i tF_{j+1}/M}\bigr),
+\]
+得到乘子闭式。
+最后由离散 Parseval 恒等式
+\(
+\sum_r \nu_{m,k}(r)^2=\frac1M\sum_t|\widehat\nu_{m,k}(t)|^2
+\)
+并用
+\(
+|1-e^{-i\theta}|^2=4\sin^2(\theta/2)
+\)、
+\(
+|1+e^{-i\theta}|^2=4\cos^2(\theta/2)
+\)
+化简即得能量公式。证毕。
+\end{proof}
+
+\begin{theorem}[条件偏置的频域运输恒等式与谱平均能量]\label{thm:fold-fiber-bias-frequency-transport-identity}
+沿用命题 \ref{prop:fold-fiber-bias-fourier-multiplier-energy} 的记号，并定义残差分布的特征函数
+\[
+\widehat\mu_m(t):=\sum_{r\in\ZZ/(M\ZZ)}\mu_m(r)\,e^{-2\pi i tr/M}
+=\frac{\widehat d_m(t)}{2^m}
+\qquad (t\in\ZZ/(M\ZZ)).
+\]
+则对任意 \(1\le k\le m\) 与任意 \(t\in\ZZ/(M\ZZ)\)，成立严格恒等式
+\[
+\boxed{\;
+\Bigl(1+e^{-2\pi i tF_{k+1}/M}\Bigr)\widehat\nu_{m,k}(t)
+=\frac12\Bigl(e^{-2\pi i tF_{k+1}/M}-1\Bigr)\widehat\mu_m(t)\; }.
+\]
+特别地，若记条件偏置能量
+\[
+E_{m,k}:=\sum_{r\in\ZZ/(M\ZZ)}\nu_{m,k}(r)^2,
+\]
+则其具有等价的谱平均表达
+\[
+\boxed{\;
+E_{m,k}
+=\frac{1}{4M}\sum_{t\in\ZZ/(M\ZZ)}
+\Biggl(\frac{1-\cos(2\pi tF_{k+1}/M)}{1+\cos(2\pi tF_{k+1}/M)}\Biggr)\,
+\bigl|\widehat\mu_m(t)\bigr|^2\; } ,
+\]
+其中约定当分母为零时该项取 \(0\)；此时 \(1+e^{-2\pi i tF_{k+1}/M}=0\) 进而 \(\widehat\mu_m(t)=0\)，故该约定与极限一致。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-fiber-bias-fourier-multiplier-energy} 的乘子闭式
+\[
+\widehat\nu_{m,k}(t)
+=\frac{1}{2^{m+1}}\Bigl(e^{-2\pi i tF_{k+1}/M}-1\Bigr)
+\prod_{j\ne k}\Bigl(1+e^{-2\pi i tF_{j+1}/M}\Bigr),
+\]
+两边同乘 \(\bigl(1+e^{-2\pi i tF_{k+1}/M}\bigr)\) 得
+\[
+\Bigl(1+e^{-2\pi i tF_{k+1}/M}\Bigr)\widehat\nu_{m,k}(t)
+=\frac{1}{2^{m+1}}\Bigl(e^{-2\pi i tF_{k+1}/M}-1\Bigr)\widehat d_m(t)
+=\frac12\Bigl(e^{-2\pi i tF_{k+1}/M}-1\Bigr)\widehat\mu_m(t),
+\]
+即第一式。
+\par
+为得到谱平均式，先由 Parseval 恒等式
+\(
+E_{m,k}=\frac1M\sum_t|\widehat\nu_{m,k}(t)|^2
+\)
+并对每个 \(\theta\) 使用恒等式
+\[
+\left|\frac{e^{-i\theta}-1}{e^{-i\theta}+1}\right|^2=\frac{1-\cos\theta}{1+\cos\theta}
+\]
+（当 \(e^{-i\theta}+1\neq 0\) 时）：
+由第一式可将
+\(
+\widehat\nu_{m,k}(t)=\frac12\frac{e^{-i\theta}-1}{e^{-i\theta}+1}\widehat\mu_m(t)
+\)
+（其中 \(\theta=2\pi tF_{k+1}/M\)）。
+代入 Parseval 并取模平方即得所示谱平均表达；当分母为零时 \(\widehat\mu_m(t)=0\) 由 \(\widehat d_m\) 的 \(k\)-因子消失推出，故取零约定一致。
+证毕。
+\end{proof}
+
+\begin{theorem}[擦除因子后的碰撞概率增量等于条件偏置能量]\label{thm:fold-fiber-bias-energy-erasure-identity}
+沿用上述记号，令 \(\mu_m\) 为包含全部 \(m\) 个 Bernoulli 增量的残差分布。
+对固定 \(k\in\{1,\dots,m\}\) 定义“擦除分布” \(\mu_m^{(-k)}\) 为去掉第 \(k\) 个因子后的分布，其特征函数为
+\[
+\widehat\mu_m^{(-k)}(t)
+:=\frac{1}{2^{m-1}}\prod_{j\ne k}\Bigl(1+e^{-2\pi i tF_{j+1}/M}\Bigr),
+\qquad t\in\ZZ/(M\ZZ).
+\]
+记碰撞概率（Parseval--Riesz 形式）
+\[
+\mathsf{Col}_m:=\sum_{r}\mu_m(r)^2=\frac1M\sum_{t}\bigl|\widehat\mu_m(t)\bigr|^2,
+\qquad
+\mathsf{Col}_m^{(-k)}:=\sum_{r}\mu_m^{(-k)}(r)^2=\frac1M\sum_{t}\bigl|\widehat\mu_m^{(-k)}(t)\bigr|^2.
+\]
+则对每个 \(k\) 有严格恒等式
+\[
+\boxed{\;E_{m,k}=\mathsf{Col}_m^{(-k)}-\mathsf{Col}_m.\;}
+\]
+从而 \(E_{m,k}\ge 0\) 且 \(\mathsf{Col}_m\le \mathsf{Col}_m^{(-k)}\le 1\)。
+\end{theorem}
+\begin{proof}
+由 \(\widehat\mu_m(t)=\frac{1}{2}\bigl(1+e^{-2\pi i tF_{k+1}/M}\bigr)\widehat\mu_m^{(-k)}(t)\)，得
+\[
+\bigl|\widehat\mu_m^{(-k)}(t)\bigr|^2-\bigl|\widehat\mu_m(t)\bigr|^2
+=\left(1-\cos^2\!\Bigl(\pi tF_{k+1}/M\Bigr)\right)\prod_{j\ne k}\cos^2\!\Bigl(\pi tF_{j+1}/M\Bigr)
+=\sin^2\!\Bigl(\pi tF_{k+1}/M\Bigr)\prod_{j\ne k}\cos^2\!\Bigl(\pi tF_{j+1}/M\Bigr).
+\]
+对 \(t\) 求和并除以 \(M\)，再与命题 \ref{prop:fold-fiber-bias-fourier-multiplier-energy} 的 Parseval 能量公式
+\(
+E_{m,k}=\frac1M\sum_t\sin^2(\pi tF_{k+1}/M)\prod_{j\ne k}\cos^2(\pi tF_{j+1}/M)
+\)
+对照，即得 \(\mathsf{Col}_m^{(-k)}-\mathsf{Col}_m=E_{m,k}\)。
+不等式由碰撞概率的定义与 \(E_{m,k}\ge 0\) 立即推出。证毕。
+\end{proof}
+
+\begin{proposition}[条件偏置能量的决策论刻画]\label{prop:fold-fiber-bias-energy-decision-theoretic}
+对固定 \(k\in\{1,\dots,m\}\)，定义两条件分布
+\[
+\mu_{m,k}^{(1)}(r):=\PP\bigl(r(\omega)=r\mid \omega_k=1\bigr),
+\qquad
+\mu_{m,k}^{(0)}(r):=\PP\bigl(r(\omega)=r\mid \omega_k=0\bigr),
+\qquad r\in\ZZ/(M\ZZ),
+\]
+其中 \(\omega\sim\mathrm{Unif}(\Omega_m)\)。
+则有显式表达
+\[
+\mu_{m,k}^{(1)}(r)=\frac{b_{m,k}(r)}{2^{m-1}},
+\qquad
+\mu_{m,k}^{(0)}(r)=\frac{d_m(r)-b_{m,k}(r)}{2^{m-1}},
+\]
+并且能量 \(E_{m,k}=\sum_r \nu_{m,k}(r)^2\) 满足
+\[
+\boxed{\;E_{m,k}=\frac14\,\bigl\|\mu_{m,k}^{(1)}-\mu_{m,k}^{(0)}\bigr\|_{\ell^2(\ZZ/(M\ZZ))}^{2}.\;}
+\]
+特别地，总变差距离满足
+\[
+\bigl\|\mu_{m,k}^{(1)}-\mu_{m,k}^{(0)}\bigr\|_{\mathrm{TV}}
+\le \sqrt{M\,E_{m,k}}.
+\]
+\end{proposition}
+\begin{proof}
+由 \(b_{m,k}(r)=\card\{\omega:\ r(\omega)=r,\ \omega_k=1\}\) 的定义，条件于 \(\{\omega_k=1\}\) 后 \(\omega\) 在该半空间上均匀，故
+\(\mu_{m,k}^{(1)}(r)=b_{m,k}(r)/2^{m-1}\)。
+同理
+\(\mu_{m,k}^{(0)}(r)=(d_m(r)-b_{m,k}(r))/2^{m-1}\)。
+从而
+\[
+\mu_{m,k}^{(1)}(r)-\mu_{m,k}^{(0)}(r)
+=\frac{2b_{m,k}(r)-d_m(r)}{2^{m-1}}
+=2\,\nu_{m,k}(r),
+\]
+其中最后一步使用命题 \ref{prop:fold-fiber-bias-fourier-multiplier-energy} 中 \(\nu_{m,k}(r)=(2b_{m,k}(r)-d_m(r))/2^m\) 的定义。
+两边取 \(\ell^2\) 范数平方并求和即得
+\(
+\|\mu_{m,k}^{(1)}-\mu_{m,k}^{(0)}\|_2^2=4\sum_r\nu_{m,k}(r)^2=4E_{m,k}
+\)。
+\par
+对总变差距离，由 Cauchy--Schwarz
+\[
+\|\Delta\|_{\mathrm{TV}}
+=\frac12\sum_r|\Delta(r)|
+\le \frac12\sqrt{M}\,\|\Delta\|_2,
+\qquad
+\Delta:=\mu_{m,k}^{(1)}-\mu_{m,k}^{(0)},
+\]
+再代入 \(\|\Delta\|_2=2\sqrt{E_{m,k}}\) 得 \(\|\Delta\|_{\mathrm{TV}}\le \sqrt{M E_{m,k}}\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[同残差碰撞对的汉明相似度与条件偏置能量恒等式]\label{thm:fold-fiber-collision-hamming-similarity-bias-energy-identity}
+取 \(\omega,\omega'\overset{\mathrm{i.i.d.}}{\sim}\mathrm{Unif}(\Omega_m)\)，并令事件
+\[
+E:=\{\,r(\omega)=r(\omega')\,\}
+\]
+表示“残差碰撞”。
+记其碰撞概率
+\[
+c_m:=\PP(E)=\sum_{r\in\ZZ/(M\ZZ)}\mu_m(r)^2,
+\qquad \mu_m(r):=\frac{d_m(r)}{2^m}.
+\]
+则条件汉明距离满足严格恒等式
+\[
+\boxed{\;
+\EE\!\bigl[d_H(\omega,\omega')\mid E\bigr]
+=\frac{m}{2}-\frac{1}{2c_m}\sum_{k=1}^m\sum_{r\in\ZZ/(M\ZZ)}\nu_{m,k}(r)^2\; } ,
+\]
+其中 \(\nu_{m,k}\) 为命题 \ref{prop:fold-fiber-bias-fourier-multiplier-energy} 中的条件偏置密度
+\(
+\nu_{m,k}(r)=\mu_m(r)(2p_k(r)-1)
+\)。
+并且由 Parseval 恒等式，内层能量可写为
+\[
+\sum_{r}\nu_{m,k}(r)^2=\frac1M\sum_{t\in\ZZ/(M\ZZ)}\bigl|\widehat{\nu}_{m,k}(t)\bigr|^2,
+\]
+其中 \(\widehat{\nu}_{m,k}\) 的 Fourier 乘子闭式由命题 \ref{prop:fold-fiber-bias-fourier-multiplier-energy} 给出。
+\end{theorem}
+\begin{proof}
+令 \(\sigma_k(\omega):=2\omega_k-1\in\{\pm1\}\)。
+则
+\[
+\mathbf 1_{\{\omega_k\neq \omega'_k\}}=\frac{1-\sigma_k(\omega)\sigma_k(\omega')}{2},
+\qquad
+d_H(\omega,\omega')=\sum_{k=1}^m \mathbf 1_{\{\omega_k\neq \omega'_k\}}
+=\frac{m-\sum_{k=1}^m \sigma_k(\omega)\sigma_k(\omega')}{2}.
+\]
+对任意 \(r\)，在条件 \(\{r(\omega)=r(\omega')=r\}\) 下，\(\omega,\omega'\) 条件独立且同分布，从而
+\[
+\EE\!\bigl[\sigma_k(\omega)\sigma_k(\omega')\mid r(\omega)=r(\omega')=r\bigr]
+=\EE[\sigma_k(\omega)\mid r(\omega)=r]^2
+=(2p_k(r)-1)^2.
+\]
+由 Bayes 分解
+\(
+\PP(r(\omega)=r(\omega')=r)=\mu_m(r)^2
+\)，得到
+\[
+\EE\!\bigl[\sigma_k(\omega)\sigma_k(\omega')\mid E\bigr]
+=\sum_{r}\frac{\mu_m(r)^2}{c_m}(2p_k(r)-1)^2
+=\frac{1}{c_m}\sum_r \nu_{m,k}(r)^2.
+\]
+将其代回 \(d_H\) 的表示并对 \(k\) 求和即得结论。证毕。
+\end{proof}
+
+\input{thm__fold-collision-conditional-hamming-mgf}
+
+\begin{corollary}[条件偏置能量的群环常数项表示与二进制整性]\label{cor:fold-fiber-bias-energy-groupring-constant-term}
+沿用命题 \ref{prop:fold-fiber-bias-fourier-multiplier-energy} 的记号，并令 \(M:=F_{m+2}\)、\(\ZZ[C_M]\cong\ZZ[g]/(g^M-1)\)。
+对 \(1\le k\le m\) 定义二次能量
+\[
+E_{m,k}:=\sum_{r\in\ZZ/(M\ZZ)}\nu_{m,k}(r)^2.
+\]
+则成立严格恒等式
+\[
+2^{2m}E_{m,k}
+\;=\;
+[g^0]\Bigl(
+\bigl(2-g^{F_{k+1}}-g^{-F_{k+1}}\bigr)
+\prod_{\substack{1\le j\le m\\ j\ne k}}
+\bigl(2+g^{F_{j+1}}+g^{-F_{j+1}}\bigr)
+\Bigr),
+\]
+其中 \([g^0](\cdot)\) 表示在 \(\ZZ[C_M]\) 中取单位元系数（按模 \(M\) 合并指数后取 \(g^0\) 的系数）。
+特别地，
+\[
+2^{2m}E_{m,k}\in\ZZ_{\ge 0},
+\]
+从而 \(E_{m,k}\) 的分母整除 \(2^{2m}\)，且该整性由群环常数项计数给出。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:fold-fiber-bias-fourier-multiplier-energy} 的 Parseval 表示，并用恒等式
+\[
+\sin^2(u)=\frac{2-e^{2iu}-e^{-2iu}}{4},
+\qquad
+\cos^2(u)=\frac{2+e^{2iu}+e^{-2iu}}{4},
+\]
+可得
+\[
+E_{m,k}
+=2^{-2m}\cdot\frac{1}{M}\sum_{t=0}^{M-1}
+\Bigl(2-\zeta^{tF_{k+1}}-\zeta^{-tF_{k+1}}\Bigr)
+\prod_{\substack{1\le j\le m\\ j\ne k}}
+\Bigl(2+\zeta^{tF_{j+1}}+\zeta^{-tF_{j+1}}\Bigr),
+\qquad
+\zeta:=e^{2\pi i/M}.
+\]
+将
+\[
+G(g):=
+\bigl(2-g^{F_{k+1}}-g^{-F_{k+1}}\bigr)
+\prod_{j\ne k}\bigl(2+g^{F_{j+1}}+g^{-F_{j+1}}\bigr)\in\ZZ[C_M]
+\]
+在 \(g=\zeta^t\) 处取值并对 \(t\) 作平均。
+由离散正交性
+\(
+\frac{1}{M}\sum_{t=0}^{M-1}(\zeta^t)^s=\mathbf 1_{\{s\equiv 0\ (\mathrm{mod}\ M)\}}
+\)，
+该平均恰等于 \([g^0]G(g)\)，从而得到常数项恒等式。
+最后，\(G(g)\) 的系数均为非负整数，故 \([g^0]G(g)\in\ZZ_{\ge 0}\)。证毕。
+\end{proof}
+
+\input{thm__fold-fiber-parity-energy-simplex}
+
+\endinput
+

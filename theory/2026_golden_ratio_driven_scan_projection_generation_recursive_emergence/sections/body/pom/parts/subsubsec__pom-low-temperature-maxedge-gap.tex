@@ -1,0 +1,206 @@
+\subsubsection{低温截距与边权缺口：最大权子核的谱证书}\label{subsubsec:pom-low-temperature-maxedge-gap}
+本段给出一个对有限带权有向图（或有限核）通用的“低温/大 \(q\)”展开：当边权按 \(q\)-次幂放大时，谱半径对数（压力）由最大边权的指数率与最大边子图的 Perron 根给出，并且误差在边权缺口 \(\Delta\) 控制下指数衰减。
+进一步地，有限个大 \(q\) 的压力样本即可通过差分直接提取“地态能量、地态熵与缺口”的可核验证书。
+
+\begin{definition}[低温矩核与压力]\label{def:pom-low-temperature-weighted-adjacency}
+令 \(G\) 为有限有向图，顶点集为 \(V\)，边集为 \(E\)，并对每条边 \(e\in E\) 赋予权重 \(a(e)>0\)。
+对实数 \(q\ge 0\) 定义加权邻接矩阵
+\[
+A(q)_{ij}:=\sum_{e:i\to j} a(e)^{q},
+\qquad i,j\in V,
+\]
+并定义压力函数
+\[
+P(q):=\log\rho(A(q)).
+\]
+记最大边权 \(a_*:=\max_{e\in E}a(e)\)，并令 \(G_*\) 为由所有满足 \(a(e)=a_*\) 的边生成的子图。
+其邻接计数矩阵记为
+\[
+(A_*)_{ij}:=\#\{e:i\to j,\ a(e)=a_*\}.
+\]
+令次大边权
+\[
+a_{(2)}:=\max\{a(e):a(e)<a_*\},
+\]
+若不存在则约定 \(a_{(2)}=0\)。
+定义边权缺口
+\[
+\Delta:=\log(a_*/a_{(2)})\in(0,\infty]\qquad(\log(a_*/0):=+\infty).
+\]
+\end{definition}
+
+\begin{theorem}[低温三项展开与指数误差]\label{thm:pom-low-temperature-three-term-expansion}
+在定义 \ref{def:pom-low-temperature-weighted-adjacency} 的记号下，假设 \(\rho(A_*)>0\)（等价于 \(G_*\) 含有有向回路）。
+则当 \(q\to\infty\) 时成立
+\[
+\boxed{\;
+P(q)=q\log a_*+\log\rho(A_*)+O(e^{-q\Delta})\; },
+\]
+其中误差常数仅依赖于图的规模与边数。
+更具体地，存在常数 \(C>0\) 与 \(q_0\ge 0\) 使对一切 \(q\ge q_0\) 有
+\[
+0\ \le\ P(q)-q\log a_*-\log\rho(A_*)\ \le\ C\,e^{-q\Delta}.
+\]
+\end{theorem}
+\begin{proof}
+将 \(A(q)\) 写为
+\[
+A(q)=a_*^{q}\bigl(A_*+E(q)\bigr),
+\qquad
+E(q)_{ij}:=\sum_{e:i\to j,\ a(e)<a_*}\left(\frac{a(e)}{a_*}\right)^q.
+\]
+由定义知 \(E(q)\ge 0\) 且存在常数 \(C_0>0\) 使得对任意一致矩阵范数均有 \(\|E(q)\|\le C_0 e^{-q\Delta}\)。
+由于 \(\rho\) 在非负锥上单调，得 \(\rho(A_*+E(q))\ge \rho(A_*)\)；
+另一方面由 \(\rho(B)\le \|B\|\)（任意次乘法范数）与 \(\rho(A_*+E)\le \rho(A_*)+\rho(E)\) 得
+\[
+0\le \rho(A_*+E(q))-\rho(A_*)\le \rho(E(q))\le \|E(q)\|\le C_0 e^{-q\Delta}.
+\]
+再用 \(\rho(A_*)>0\) 与 \(\log(1+x)=x+O(x^2)\)（\(x\to 0\)）可得
+\[
+0\le \log\rho(A_*+E(q))-\log\rho(A_*)\le C\,e^{-q\Delta}
+\]
+对充分大 \(q\) 成立（取 \(C\) 吸收常数）。
+由
+\(
+P(q)=q\log a_*+\log\rho(A_*+E(q))
+\)
+即得结论。证毕。
+\end{proof}
+
+\begin{definition}[零温 Gibbs--Markov 转移与平衡态]\label{def:pom-zero-temperature-gibbs-markov}
+在定义 \ref{def:pom-low-temperature-weighted-adjacency} 的设定下，进一步假设 \(G\) 强连通，从而对每个 \(q\ge0\) 矩阵 \(A(q)\) 原始。
+令 \(r(q),\ell(q)\) 为 \(A(q)\) 的左右 Perron 向量，并归一化为 \(\ell(q)^\top r(q)=1\)。
+定义 Gibbs--Markov 转移核
+\[
+\mathsf{P}_q(i\to j):=\frac{A(q)_{ij}\,r_j(q)}{\rho(A(q))\,r_i(q)},
+\]
+并定义其平稳分布（Perron 平衡态）
+\[
+\pi_q(i):=\ell_i(q)\,r_i(q)\qquad(i\in V).
+\]
+\end{definition}
+
+\begin{theorem}[零温 Gibbs 态的 Perron 向量刚性：指数集中到最大权子核]\label{thm:pom-zero-temperature-gibbs-rigidity}
+沿用定义 \ref{def:pom-low-temperature-weighted-adjacency} 与定义 \ref{def:pom-zero-temperature-gibbs-markov} 的记号。
+令 \(G_*\) 为最大边权子图，并令 \(V_*\subseteq V\) 为其顶点集（等价地：存在 \(j\) 使 \((A_*)_{ij}+(A_*)_{ji}>0\)）。
+进一步假设把 \(A_*\) 视作作用在 \(\RR^{V_*}\) 上时为原始矩阵。
+则存在常数 \(C>0\) 与 \(q_0\) 使对所有 \(q\ge q_0\) 有
+\[
+\boxed{\;
+\sum_{i\notin V_*}\pi_q(i)\ \le\ C\,e^{-q\Delta}\; },
+\qquad
+\boxed{\;
+\max_{i\notin V_*}\frac{r_i(q)}{\max_{v\in V_*}r_v(q)}\ \le\ C\,e^{-q\Delta}\; },
+\qquad
+\boxed{\;
+\max_{i\notin V_*}\frac{\ell_i(q)}{\max_{v\in V_*}\ell_v(q)}\ \le\ C\,e^{-q\Delta}\; }.
+\]
+因此当 \(q\to\infty\) 时，零温平衡态以指数速度集中到最大权子核 \(G_*\)，且集中速率由边权缺口 \(\Delta\) 精确控制。
+\end{theorem}
+\begin{proof}
+将 \(A(q)\) 写为 \(A(q)=a_*^q(A_*+E(q))\)，其中 \(E(q)\ge0\) 且 \(\|E(q)\|\le C_0e^{-q\Delta}\)（定理 \ref{thm:pom-low-temperature-three-term-expansion} 的证明已给出）。
+由于 \(A_*\)（在 \(V_*\) 上）原始，其 Perron 投影在谱意义下与其余谱点严格分离。
+对 Perron 根与 Perron 向量应用标准的非负矩阵解析扰动估计，可得 \(r(q),\ell(q)\) 在 \(V_*\) 上收敛到 \(A_*\) 的 Perron 向量，而在补空间上的泄漏由扰动量级 \(O(e^{-q\Delta})\) 控制。
+将该估计代入 \(\pi_q=\ell\cdot r\) 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[零温极限平衡态与 TV 指数收敛]\label{cor:pom-zero-temperature-gibbs-limit}
+在定理 \ref{thm:pom-zero-temperature-gibbs-rigidity} 的条件下，存在极限平稳分布 \(\pi_\infty\) 支持于 \(V_*\)，并且
+\[
+D_{\mathrm{TV}}(\pi_q,\pi_\infty)\le C\,e^{-q\Delta}
+\]
+对充分大 \(q\) 成立，其中 \(C\) 与定理 \ref{thm:pom-zero-temperature-gibbs-rigidity} 同阶。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-zero-temperature-gibbs-rigidity}，\(\{\pi_q\}\) 在有限维单纯形中为 Cauchy 序列且泄漏质量指数衰减，故存在极限 \(\pi_\infty\) 且 \(\mathrm{supp}(\pi_\infty)\subseteq V_*\)。
+TV 距离界由质量泄漏与在 \(V_*\) 上的指数收敛给出。证毕。
+\end{proof}
+
+\begin{theorem}[差分证书：由有限个大 \texorpdfstring{$q$}{q} 的压力值提取截距与缺口]\label{thm:pom-low-temperature-difference-certificates}
+在定理 \ref{thm:pom-low-temperature-three-term-expansion} 的设定下，对整数 \(q\ge 1\) 定义差分量
+\[
+\widehat\alpha(q):=P(q+1)-P(q),\qquad
+\widehat h(q):=P(q)-q\,\widehat\alpha(q),\qquad
+\Delta^2P(q):=P(q+1)-2P(q)+P(q-1).
+\]
+则存在常数 \(C>0\) 与 \(q_0\) 使对所有整数 \(q\ge q_0\) 有
+\[
+\boxed{\;
+\bigl|\widehat\alpha(q)-\log a_*\bigr|\le C\,e^{-q\Delta}\; },
+\qquad
+\boxed{\;
+\bigl|\widehat h(q)-\log\rho(A_*)\bigr|\le C\,q\,e^{-q\Delta}\; }.
+\]
+并且
+\[
+\boxed{\;
+\Delta^2P(q)=O(e^{-q\Delta})\qquad(q\to\infty)\; }.
+\]
+此外，若存在常数 \(c\neq 0\) 使得 \(\Delta^2P(q)\sim c\,e^{-q\Delta}\)，则缺口满足可核验极限公式
+\[
+\boxed{\;
+\Delta=-\lim_{q\to\infty}\log\left|\frac{\Delta^2P(q+1)}{\Delta^2P(q)}\right|\; }.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-low-temperature-three-term-expansion} 写
+\(
+P(q)=q\log a_*+\log\rho(A_*)+R(q)
+\)
+其中 \(R(q)=O(e^{-q\Delta})\)。
+则
+\[
+\widehat\alpha(q)-\log a_*=R(q+1)-R(q)=O(e^{-q\Delta}),
+\]
+并且
+\[
+\widehat h(q)-\log\rho(A_*)
+=R(q)-q\bigl(R(q+1)-R(q)\bigr)
+=O(e^{-q\Delta})+q\,O(e^{-q\Delta})
+=O(qe^{-q\Delta}).
+\]
+同理
+\(
+\Delta^2P(q)=R(q+1)-2R(q)+R(q-1)=O(e^{-q\Delta})
+\)。
+若进一步 \(\Delta^2P(q)\sim c e^{-q\Delta}\)，则
+\(
+\Delta^2P(q+1)/\Delta^2P(q)\to e^{-\Delta}
+\)，取对数即得极限公式。证毕。
+\end{proof}
+
+\begin{remark}[tropical--Perron 二元识别：最大循环平均与临界图截距]\label{rem:pom-tropical-perron-binary-identification}
+一般地，令 \(w(e):=\log a(e)\)。对每条有向回路 \(\gamma=e_1\cdots e_n\) 定义其对数平均权
+\[
+\overline{w}(\gamma):=\frac{1}{n}\sum_{t=1}^{n}w(e_t),
+\qquad
+\alpha_{\max}:=\max_{\gamma}\ \overline{w}(\gamma)
+\]
+（max-plus 特征值/最大循环平均）。
+令临界图 \(G_{\mathrm{crit}}\) 为由达到 \(\alpha_{\max}\) 的回路所含边生成的子图，并令 \(A_{\mathrm{crit}}\) 为其邻接计数矩阵。
+则对压力 \(P(q)=\log\rho(A(q))\) 有极限识别
+\[
+\alpha_\ast:=\lim_{q\to\infty}\frac{P(q)}{q}=\alpha_{\max},
+\qquad
+h_\ast:=\lim_{q\to\infty}\bigl(P(q)-q\alpha_\ast\bigr)=\log\rho(A_{\mathrm{crit}}),
+\]
+并且在本段的最大边缺口制度（\(\rho(A_*)>0\)）下有 \(\alpha_{\max}=\log a_*\)，且 \(A_{\mathrm{crit}}\) 的谱半径与 \(A_*\) 一致，从而回到定理 \ref{thm:pom-low-temperature-three-term-expansion} 的两项展开形式。
+\end{remark}
+
+\begin{remark}[截断 cyclotomic 原子对零温截距的指数精度逼近（耦合制度）]\label{rem:pom-zero-temperature-intercept-cyclotomic-truncation}
+零温截距 \(h_\ast\) 可被理解为某个“最大相/临界子核”的拓扑熵（定理 \ref{thm:pom-low-temperature-three-term-expansion} 与推论 \ref{cor:pom-max-fiber-subshift-spectral-entropy}）。
+另一方面，常数层的 cyclotomic 原子序列 \(\mathbf{C}(M)=(\mathcal{C}_r(M))_{r\ge2}\) 构成归一化非 Perron 谱的完备坐标（定理 \ref{thm:finite-part-cyclotomic-atoms-complete-coordinate}）。
+\par
+在同时满足以下两类制度时：
+\begin{enumerate}
+  \item \textbf{（零温缺口制度）}存在 \(\Delta>0\) 使低温/零温误差项满足指数封口（例如定理 \ref{thm:pom-low-temperature-three-term-expansion} 与定理 \ref{thm:pom-zero-temperature-gibbs-rigidity} 的 \(e^{-q\Delta}\) 尺度）；
+  \item \textbf{（常数层耦合制度）}临界子核（从而 \(h_\ast\)）可由某个有限维矩阵的常数层谱坐标 \(\mathbf{C}\) 通过显式代数函数 \(R_\infty\) 读出，
+\end{enumerate}
+则 \(h_\ast\) 在原则上可由有限个原子截断以指数精度逼近：存在显式可计算函数 \(R_Q\)（仅依赖于 \(\mathcal{C}_2,\dots,\mathcal{C}_Q\) 与缺口参数 \(\Delta\)），使得
+\[
+\bigl|h_\ast-R_Q(\mathcal{C}_2,\dots,\mathcal{C}_Q)\bigr|\ \le\ K\,e^{-Q\Delta},
+\]
+其中常数 \(K\) 仅依赖于有限态核规模与所选读出实现。
+该结论可视为“零温结构 \(\leftrightarrow\) 常数层谱坐标”的一条可核验联通律：在缺口制度下，有限深度的常数层原子已足以锁定 \(h_\ast\) 的指数精度。
+\end{remark}
+

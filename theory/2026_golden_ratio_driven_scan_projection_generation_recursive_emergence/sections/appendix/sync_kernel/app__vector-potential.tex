@@ -1,0 +1,476 @@
+\subsubsection{多维势的向量化扩展}\label{app:vector-potential}
+若引入向量势
+\[
+\boldsymbol{\varphi}(e)=\bigl(\varphi_1(e),\dots,\varphi_d(e)\bigr),
+\qquad
+B(\boldsymbol{\theta})_{ij}=\sum_{e:i\to j}\exp\!\bigl(\langle\boldsymbol{\theta},\boldsymbol{\varphi}(e)\rangle\bigr),
+\]
+则压力
+\[
+P(\boldsymbol{\theta})=\log\rho\bigl(B(\boldsymbol{\theta})\bigr)
+\]
+与大偏差率函数
+\[
+I(\alpha)=\sup_{\boldsymbol{\theta}\in\RR^d}\bigl(\langle\boldsymbol{\theta},\alpha\rangle-(P(\boldsymbol{\theta})-P(0))\bigr)
+\]
+均保持"有限矩阵 + 行列式"的可审计口径；二维/三维实例见后续小节。
+
+\subsubsection{负携带势的显式闭式（可审计实例）}
+取
+\[
+Q_-:=\{0\overline{1}2,\,1\overline{1}2,\,01\overline{1},\,11\overline{1}\},
+\qquad
+\phi(s\to t):=\mathbf{1}_{\{t\in Q_-\}}.
+\]
+令 $u=e^\theta$。此时 $B_\theta$ 等价于把落入 $Q_-$ 的列整体乘上 $u$，并有显式因式分解
+\[
+\det(I-zB_\theta)
+\;=\;
+\bigl(u z^3-u z^2+u z+1\bigr)\bigl(3u z^3+u z^2-u z-2z^2-2z+1\bigr).
+\]
+主极点 $z_\star(\theta)=\lambda(\theta)^{-1}$ 由第二因子给出；代入 $z=1/\lambda$ 得三次方程
+\[
+\lambda^3-(u+2)\lambda^2+(u-2)\lambda+3u=0,\qquad u=e^\theta,
+\]
+从而压力 $P(\theta)=\log\lambda(\theta)$ 完全由该三次方程的最大实根确定。
+
+\begin{proposition}[负携带势的代数大偏差：斜率的有理参数化与闭式速率函数]\label{prop:vector-potential-phi-minus-ldp-param}
+沿用本小节的记号。令 \(u=e^{\theta}>0\)，并令 \(\lambda(u)\) 为三次方程
+\[
+F(\lambda,u):=\lambda^3-(u+2)\lambda^2+(u-2)\lambda+3u=0
+\]
+在 \(u>0\) 上的 Perron 分支（最大正实根）。
+定义压力 \(P(\theta)=\log\lambda(e^\theta)\) 与斜率 \(\alpha(\theta):=P'(\theta)\)，并以 Legendre 变换定义率函数
+\[
+I(\alpha):=\sup_{\theta\in\RR}\bigl(\theta\alpha-(P(\theta)-P(0))\bigr).
+\]
+则存在参数 \(\lambda\in(1+\sqrt3,\infty)\) 的显式有理参数化，使得
+\[
+u(\lambda)=\frac{\lambda(\lambda^{2}-2\lambda-2)}{\lambda^{2}-\lambda-3},
+\qquad
+\alpha(\lambda)=\frac{\lambda^{4}-3\lambda^{3}-3\lambda^{2}+8\lambda+6}{\lambda^{4}-2\lambda^{3}-5\lambda^{2}+12\lambda+6},
+\]
+并且在该参数表示下率函数具有闭式
+\[
+I(\alpha(\lambda))=\alpha(\lambda)\log u(\lambda)-\log\lambda+\log 3.
+\]
+\end{proposition}
+\begin{proof}
+由 \(F(\lambda,u)=0\) 视为关于 \(u\) 的线性方程，直接解得
+\[
+u=\frac{\lambda^{3}-2\lambda^{2}-2\lambda}{\lambda^{2}-\lambda-3}
+=\frac{\lambda(\lambda^{2}-2\lambda-2)}{\lambda^{2}-\lambda-3}
+=:u(\lambda).
+\]
+对 \(u=e^{\theta}\) 由隐函数微分得
+\[
+\lambda_u=-\frac{\partial_u F}{\partial_\lambda F},
+\qquad
+\alpha(\theta)=\frac{\dd}{\dd\theta}\log\lambda(e^\theta)=\frac{u\,\lambda_u}{\lambda}
+=-\frac{u\,\partial_u F(\lambda,u)}{\lambda\,\partial_\lambda F(\lambda,u)}\Bigg|_{\lambda=\lambda(u)}.
+\]
+对本例，
+\(
+\partial_u F(\lambda,u)=-(\lambda^2-\lambda-3)
+\)
+与
+\(
+\partial_\lambda F(\lambda,u)=3\lambda^2-2(u+2)\lambda+(u-2)
+\)。
+代入并用 \(u=u(\lambda)\) 化简，即得到所示有理式 \(\alpha(\lambda)\)。
+\par
+对率函数，在极值点满足 \(\alpha=P'(\theta)\) 的口径下有
+\[
+I(\alpha)=\theta\alpha-P(\theta)+P(0).
+\]
+此处 \(\theta=\log u(\lambda)\)、\(P(\theta)=\log\lambda\)。并且当 \(u=1\) 时
+\(
+F(\lambda,1)=\lambda^{3}-3\lambda^{2}-\lambda+3=(\lambda-3)(\lambda^{2}-1)
+\)，故 Perron 根为 \(\lambda(1)=3\)，从而 \(P(0)=\log 3\)。
+代入即得
+\(
+I(\alpha(\lambda))=\alpha(\lambda)\log u(\lambda)-\log\lambda+\log 3
+\)。
+证毕。
+\end{proof}
+
+由隐式微分或脚本数值（\texttt{--phi neg\_state}）可得
+\[
+P'(0)=\frac{1}{8}\ \ (\approx 0.1250000006),\qquad
+P''(0)=\frac{25}{128}\ \ (\approx 0.1953128548).
+\]
+进一步，由三次方程在 \(\theta=0\) 处的解析分支可把更高阶累积量（偏斜、峰度等）闭式导出；下式由脚本 \texttt{scripts/exp\_sync\_kernel\_phi\_minus\_cubic\_series.py} 一键生成并可回归测试：
+
+\input{sections/generated/eq_sync_kernel_phi_minus_cubic_series}
+因此典型频率 $\alpha_\star=P'(0)=1/8$，局部二次近似为
+\[
+I(\alpha)\approx \frac{(\alpha-\frac18)^2}{2P''(0)}=\frac{64}{25}\Bigl(\alpha-\frac18\Bigr)^2,
+\]
+并且端点代价满足
+\[
+I(0)=\log\frac{3}{1+\sqrt3},\qquad I(1)=\log 3.
+\]
+加权 primitive 轨道谱 $p_n(\theta)$ 仍由 Möbius 反演给出，并满足
+\[
+p_n(\theta)\asymp \frac{e^{nP(\theta)}}{n},
+\qquad
+M_{B,\theta}(N):=\sum_{n\le N}\frac{p_n(\theta)}{e^{nP(\theta)}}=\log N+\mathsf{M}_{B,\theta}+o(1),
+\]
+其中常数项 $\mathsf{M}_{B,\theta}$ 可由 Abel 有限部（$z\to 1/\lambda(\theta)$）读出。
+
+\subsubsection{二维加权素数谱（输出位 + 负携带）}
+定义二维势
+\[
+\varphi_e(e)=e,\qquad \varphi_-(s\to t)=\mathbf{1}_{\{t\in Q_-\}},
+\]
+并令
+\[
+u:=e^{\theta_e},\qquad v:=e^{\theta_-}.
+\]
+加权邻接矩阵条目为
+\[
+B(u,v)_{ij}=\sum_{e:i\to j}u^{\varphi_e(e)}v^{\varphi_-(e)}.
+\]
+对应行列式可化为 6 次多项式
+\[
+\begin{aligned}
+\Delta(z;u,v)=&\,1-(u+1)z-u(v^2+2v+2)z^2\\
+&+uv(uv+2u+v+2)z^3+uv^2(-u^2+3u-1)z^4\\
+&+\bigl(u^4v^2-2u^3v^2-u^3v-2u^2v^2-u^2v+uv^2\bigr)z^5\\
+&+u^2v^2(u^2+u+1)z^6,
+\end{aligned}
+\]
+因此
+\[
+\zeta(z;u,v)=\frac{1}{\Delta(z;u,v)}.
+\]
+记 $z_\star(u,v)$ 为最小正根，$\lambda(u,v)=1/z_\star(u,v)$，压力
+\[
+P(\theta_e,\theta_-)=\log\lambda(e^{\theta_e},e^{\theta_-}).
+\]
+在 $(\theta_e,\theta_-)=(0,0)$ 处有
+\[
+\partial_{\theta_e}P(0,0)=\frac12\ \ (\approx 0.5000000000),\qquad
+\partial_{\theta_-}P(0,0)=\frac18\ \ (\approx 0.1250000006),
+\]
+\[
+\partial^2_{\theta_e\theta_e}P(0,0)=\frac{11}{102}\ \ (\approx 0.1078436229),\quad
+\partial^2_{\theta_-\theta_-}P(0,0)=\frac{25}{128}\ \ (\approx 0.1953128548),\quad
+\partial^2_{\theta_e\theta_-}P(0,0)=0.
+\]
+因此局部二次近似为
+\[
+P(\theta_e,\theta_-)=\log 3+\frac12\theta_e+\frac18\theta_-+\frac{11}{204}\theta_e^2+\frac{25}{256}\theta_-^2+O(|\theta|^3).
+\]
+二维大偏差率函数
+\[
+I(\alpha_e,\alpha_-)=\sup_{\theta_e,\theta_-}\bigl(\theta_e\alpha_e+\theta_-\alpha_- - (P(\theta_e,\theta_-)-P(0,0))\bigr)
+\]
+在典型点附近满足
+\[
+I(\alpha_e,\alpha_-)\approx \frac{51}{11}\Bigl(\alpha_e-\frac12\Bigr)^2+\frac{64}{25}\Bigl(\alpha_- -\frac18\Bigr)^2.
+\]
+加权 primitive 轨道数
+\[
+p_n(\theta_e,\theta_-)\asymp \frac{e^{nP(\theta_e,\theta_-)}}{n}
+\]
+并由 Möbius 反演从 $a_n(\theta_e,\theta_-)=\mathrm{Tr}(B(u,v)^n)$ 提取。数值复现见脚本 \texttt{scripts/exp\_sync\_kernel\_weighted\_pressure\_2d.py}。
+
+\begin{proposition}[二维势的二阶严格解耦与首个非高斯混合项]\label{prop:sync-kernel-2d-exact-decouple}
+对本小节的二维势 \((\varphi_e,\varphi_-)\)，压力
+\(
+P(\theta_e,\theta_-)=\log\lambda(e^{\theta_e},e^{\theta_-})
+\)
+满足以下精确结构结论：
+\begin{enumerate}
+  \item \textbf{（二阶严格解耦）}
+  \[
+  \boxed{\ \partial^2_{\theta_e\theta_-}P(0,0)=0\ }.
+  \]
+  因而在典型点附近的二次型近似中\textbf{无交叉项}，二维局部率函数二次项严格可分离。
+  \item \textbf{（三阶“单向耦合”）}
+  \[
+  \boxed{\ \partial^3_{\theta_e\theta_-\theta_-}P(0,0)=0,\qquad
+  \partial^3_{\theta_e\theta_e\theta_-}P(0,0)=-\frac{1453}{36992}<0\ }.
+  \]
+  \item \textbf{（四阶混合曲率为负）}
+  \[
+  \boxed{\ \partial^4_{\theta_e\theta_e\theta_-\theta_-}P(0,0)=-\frac{422483}{10061824}<0,\qquad
+  \partial^4_{\theta_e\theta_-\theta_-\theta_-}P(0,0)=0\ }.
+  \]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+这里不需要数值差分。因为 \(\Delta(z;u,v)\) 是显式整系数多项式且
+\(
+z_\star(1,1)=1/3
+\)
+对应 \(\lambda(1,1)=3\)，可在 \((u,v)=(1,1)\) 邻域把最小正根写为解析分支
+\(
+z_\star(u,v)
+\)
+并用隐式方程 \(\Delta(z_\star(u,v);u,v)=0\) 对 \((\theta_e,\theta_-)\) 作隐式微分（或等价地作幂级数消元），得到所示导数值。
+脚本 \texttt{scripts/exp\_sync\_kernel\_weighted\_pressure\_2d\_exact\_mixed\_derivatives.py} 对该推导做了完全有理数的自动化核验并输出可直接 \verb|\input| 的 \LaTeX\ 片段：
+\input{sections/generated/eq_sync_kernel_weighted_pressure_2d_exact_mixed_derivatives}
+证毕。
+\end{proof}
+
+\begin{remark}[局部率函数的“严格可分离二次项”与可检验的非高斯耦合指纹]\label{rem:sync-kernel-2d-nongaussian-coupling}
+命题 \ref{prop:sync-kernel-2d-exact-decouple} 的第一条给出
+\(
+\nabla^2 P(0,0)
+\)
+在 \((\theta_e,\theta_-)\) 坐标下的严格对角结构，因此
+\[
+I(\alpha_e,\alpha_-)
+=\frac{(\alpha_e-\frac12)^2}{2\,\partial^2_{\theta_e\theta_e}P(0,0)}
+\;+\;
+\frac{(\alpha_--\frac18)^2}{2\,\partial^2_{\theta_-\theta_-}P(0,0)}
+\;+\;O(|\alpha-\alpha_\star|^3),
+\]
+且二次项\emph{严格无交叉项}。
+另一方面，三、四阶混合导数给出首个非高斯层面的耦合常数：例如三阶项
+\(
+\partial^3_{\theta_e\theta_e\theta_-}P(0,0)<0
+\)
+预测了在长样本下
+\(
+(\bar\varphi_e-\tfrac12)^2(\bar\varphi_- -\tfrac18)
+\)
+的中心化平均出现负号偏斜；四阶混合曲率为负则给出“联合尾部”相对于独立二次模型的偏离方向。
+\end{remark}
+
+\subsubsection{三维加权素数谱（输出位 + 负携带 + 碰撞）}
+定义三维势
+\[
+\varphi_e(e)=e,\qquad
+\varphi_-(s\to t)=\mathbf{1}_{\{t\in Q_-\}},\qquad
+\varphi_2(d)=\mathbf{1}_{\{d=2\}},
+\]
+并令
+\[
+u:=e^{\theta_e},\qquad v:=e^{\theta_-},\qquad w:=e^{\theta_2}.
+\]
+按状态顺序 $Q$，三维加权邻接矩阵为
+\[
+B(u,v,w)=
+\begin{pmatrix}
+1 & 1 & w & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 1 & 1 & w & 0 & 0 & 0 & 0\\
+u & uw & 0 & 0 & 0 & 0 & 0 & 0 & 0 & v\\
+0 & 0 & 0 & 0 & 1 & 1 & uvw & 0 & 0 & 0\\
+u & u & uw & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & u & u & uw & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 1 & w & 0 & 0 & 0 & v & 0\\
+0 & 0 & 0 & u & uw & 0 & 0 & 0 & uv & 0\\
+0 & 1 & 1 & 0 & 0 & 0 & 0 & vw & 0 & 0\\
+0 & u & u & 0 & 0 & 0 & 0 & uvw & 0 & 0
+\end{pmatrix}.
+\]
+对应行列式仍为 6 次多项式
+\[
+\Delta(z;u,v,w)=1+c_1z+c_2z^2+c_3z^3+c_4z^4+c_5z^5+c_6z^6,
+\]
+其中
+\[
+c_1=-(uw+1),\qquad
+c_2=-u(v^2w+vw+v+2),\qquad
+c_3=uv(uw+1)(vw+w+1),
+\]
+\[
+c_4=-u\bigl(u^2v^2w^3-3uv^2w+uv(w^2+w-2)+u(w^2-w)+v^2w\bigr),
+\]
+\[
+c_5=uvw\bigl(u^3 v w^3-2u^2 v w-u^2 w^3-u v(w+1)-u+v\bigr),
+\]
+\[
+c_6=u^2 v^2 w(2w-1)(u^2w+u+1).
+\]
+因此三观测量的加权 $\zeta$-函数具有有理闭式
+\[
+\zeta(z;u,v,w)=\frac{1}{\Delta(z;u,v,w)}.
+\]
+\begin{proposition}[内部临界超平面 \texorpdfstring{$w=\frac12$}{w=1/2}：有效谱维数的一阶坍缩]\label{prop:sync-kernel-3d-critical-w-half}
+对任意 \(u>0,v>0\)，当 \(w=\tfrac12\)（等价于 \(\theta_2=\log w=-\log 2\)）时，有
+\[
+c_6(u,v,\tfrac12)=0,
+\]
+从而
+\(
+\Delta(z;u,v,\tfrac12)
+\)
+从 \(6\) 次降为至多 \(5\) 次多项式。
+在本文“非零谱维数为 \(6\)”的接口口径下，这等价于：\(B(u,v,\tfrac12)\) 至少额外产生一个结构性零特征值，
+其非零谱维数从 \(6\) 降到至多 \(5\)。
+\end{proposition}
+\begin{proof}
+由显式公式 \(c_6=u^2v^2w(2w-1)(u^2w+u+1)\) 直接代入 \(w=\tfrac12\) 得 \(c_6=0\)。证毕。
+\end{proof}
+
+\begin{corollary}[周期迹递推阶数的骤降（可审计指纹）]\label{cor:sync-kernel-3d-recurrence-drop}
+令 \(a_n(u,v,w):=\Tr(B(u,v,w)^n)\)。
+在 \(w=\tfrac12\) 处，序列 \(a_n(u,v,\tfrac12)\) 存在阶数至多 \(5\) 的线性递推关系；
+而在一般正权重域 \(w\neq\tfrac12\) 时该接口给出的递推阶数为 \(6\)。
+\end{corollary}
+
+\begin{proposition}[临界五次式指纹：\texorpdfstring{$(u,v,w)=(1,1,\tfrac12)$}{(u,v,w)=(1,1,1/2)}]\label{prop:sync-kernel-3d-critical-quintic}
+在 \((u,v,w)=(1,1,\tfrac12)\) 处，\(\Delta(z;1,1,\tfrac12)\) 的 \(z^6\) 项严格消失，并具有可复现的五次式输出：
+\input{sections/generated/eq_sync_kernel_3d_critical_w_half_delta}
+\end{proposition}
+记 $\lambda(u,v,w)=1/z_\star(u,v,w)$，压力
+\[
+P(\theta_e,\theta_-,\theta_2)=\log\lambda(e^{\theta_e},e^{\theta_-},e^{\theta_2}).
+\]
+在 $\theta=0$ 处有
+\[
+\nabla P(0)=\left(\frac12,\frac18,\frac13\right)
+\ \ (\approx (0.5000000000,\ 0.1250000006,\ 0.3333333335)),
+\]
+并且 Hessian 满足
+\[
+\nabla^2P(0)=
+\begin{pmatrix}
+\frac{11}{102} & 0 & \frac{181}{1632}\\
+0 & \frac{25}{128} & \frac{5}{128}\\
+\frac{181}{1632} & \frac{5}{128} & \frac{2}{9}
+\end{pmatrix},
+\]
+即 $\partial^2_{\theta_e\theta_-}P(0)=0$，而 $\partial^2_{\theta_e\theta_2}P(0),\partial^2_{\theta_-\theta_2}P(0)>0$。因此
+\[
+P(\theta)=\log 3+\frac12\theta_e+\frac18\theta_-+\frac13\theta_2
++\frac{11}{204}\theta_e^2+\frac{25}{256}\theta_-^2+\frac19\theta_2^2
++\frac{181}{1632}\theta_e\theta_2+\frac{5}{128}\theta_-\theta_2+O(|\theta|^3).
+\]
+这意味着在二阶近似下 \(\varphi_e\) 与 \(\varphi_-\) \textbf{零相关}，但二者分别与 \(\varphi_2\) 正相关；因此在以 \(\varphi_2\) 为中介作条件化后会出现\textbf{条件负相关}（Schur 补读出）：
+
+\input{sections/generated/eq_sync_kernel_3d_conditional_covariance}
+
+\noindent
+从而“零相关但非独立”在本三势耦合中具有一个可审计的定量证书。
+三维大偏差率函数
+\[
+I(\alpha)=\sup_{\theta\in\mathbb{R}^3}\bigl(\theta\cdot\alpha-(P(\theta)-P(0))\bigr)
+\]
+在典型点 $\alpha_\star=(\frac12,\frac18,\frac13)$ 附近满足
+\[
+I(\alpha)\approx \tfrac12(\alpha-\alpha_\star)^\top\bigl(\nabla^2P(0)\bigr)^{-1}(\alpha-\alpha_\star),
+\]
+其中
+\[
+\bigl(\nabla^2P(0)\bigr)^{-1}\approx
+\begin{pmatrix}
+19.8119 & 2.04960 & -10.2480\\
+2.04960 & 5.51860 & -1.99298\\
+-10.2480 & -1.99298 & 9.96491
+\end{pmatrix}.
+\]
+\begin{proposition}[三势 Hessian 的精确逆矩阵（有理数证书）]\label{prop:sync-kernel-3d-hessian-inverse-exact}
+上式的逆矩阵可写成完全精确的有理数矩阵：
+\input{sections/generated/eq_sync_kernel_3d_hessian_inverse_exact}
+\end{proposition}
+
+\begin{corollary}[二阶解耦基：\texorpdfstring{$(2\!+\!1)$}{2+1} 正交分量的显式构造]\label{cor:sync-kernel-3d-orthobasis}
+令 \(\varphi_e,\varphi_-,\varphi_2\) 为本小节三条边势。由 \(\partial^2_{\theta_e\theta_-}P(0)=0\) 与 Hessian 的显式值，
+可构造一个可审计的二阶正交基 \((\eta,\psi',\varphi_2)\)：
+\input{sections/generated/eq_sync_kernel_3d_quadratic_orthobasis}
+其在 \(\theta=0\) 的二次近似下两两不相关（协方差为零），从而二次型可被严格对角化。
+\end{corollary}
+
+\begin{remark}[三通道势—响应辛相空间与 \texorpdfstring{$\mathrm{Sp}(6)$}{Sp(6)} 各向同性扫描（可复现）]\label{rem:sync-kernel-3d-sp6-isotropy-scan}
+在三维加权势的口径下，压力 \(P(\theta_e,\theta_-,\theta_2)\) 给出自然的“势—响应”共轭对：
+\[
+J_e:=\partial_{\theta_e}P,\qquad
+J_-:=\partial_{\theta_-}P,\qquad
+J_2:=\partial_{\theta_2}P.
+\]
+因此相空间坐标 \((\theta;J)\in\RR^6\) 携带标准辛形式
+\[
+\omega=\dd\theta_e\wedge \dd J_e+\dd\theta_-\wedge \dd J_-+\dd\theta_2\wedge \dd J_2,
+\]
+其保持群为 \(\mathrm{Sp}(6)\)（见注 \ref{rem:sp6-minimal-continuous-envelope} 的统一解释口径）。
+在二次近似层，涨落由 Fisher/协方差矩阵
+\(
+\Sigma(\theta):=\nabla^2P(\theta)
+\)
+控制；在最小块对角提升 \(C=\mathrm{diag}(\Sigma,\Sigma)\) 下，\(C\) 的辛特征值退化为 \(\Sigma\) 的三个特征值，
+从而“单尺度（各向同性）”可用一个完全可审计的标量分数度量：
+\[
+\mathcal{I}(\theta):=\log\frac{\lambda_{\max}(\Sigma(\theta))}{\lambda_{\min}(\Sigma(\theta))}.
+\]
+脚本 \texttt{\detokenize{scripts/exp_sync_kernel_weighted_sp6_isotropy_scan.py}} 对 \((u,v,w)=(e^{\theta_e},e^{\theta_-},e^{\theta_2})\) 作网格扫描并输出最优候选点（最小化 \(\mathcal{I}\)），其生成表格见表 \ref{tab:sync_kernel_weighted_sp6_isotropy_scan}。
+\end{remark}
+\input{sections/generated/tab_sync_kernel_weighted_sp6_isotropy_scan}
+
+由此得到一个自然的 arity-charge
+\[
+\chi:=\varphi_e-\varphi_2\in\{-1,0,1\},
+\]
+其典型密度与方差密度为
+\[
+\mathbb{E}[\chi]=\frac12-\frac13=\frac16,\qquad
+\mathrm{Var}_\infty(\chi)=\frac{11}{102}+\frac{2}{9}-2\cdot\frac{181}{1632}=\frac{265}{2448}\ (\approx 0.1082516340).
+\]
+三维加权 primitive 轨道数
+\[
+p_n(\theta_e,\theta_-,\theta_2)=\sum_{\substack{\tau\ \mathrm{primitive}\|\tau|=n}}
+\exp\!\bigl(\theta_e S_\tau\varphi_e+\theta_-S_\tau\varphi_-+\theta_2S_\tau\varphi_2\bigr)
+\]
+仍满足 $p_n(\theta)\asymp e^{nP(\theta)}/n$，并可由
+$a_n(\theta)=\mathrm{Tr}(B(u,v,w)^n)$ 经 Möbius 反演提取。数值复现见脚本 \texttt{scripts/exp\_sync\_kernel\_weighted\_pressure\_3d.py}。
+在未加权情形 $(u,v,w)=(1,1,1)$ 下，有
+\[
+(a_1,\dots,a_{10})=(2,14,20,94,222,770,2116,6694,19442,59494),
+\]
+\[
+(p_1,\dots,p_{10})=(2,6,6,20,44,123,302,825,2158,5926),
+\]
+并呈现典型 prime-orbit 主项 $p_n\sim 3^n/n$。
+
+\subsubsection{多维 Big-Witt 同余护栏的零成本推广：系数环升级不改变整除/同余结构}\label{app:multi-dim-witt-guardrails}
+本附录的二维/三维势并不改变 primitive--periodic 的 Big-Witt/necklace 结构：其差异仅在系数环从 \(\ZZ[u]\) 升级到多变量多项式环。
+因此，附录 \ref{app:witt-bridge-package} 的整除律与 Dwork 型同余可逐字推广为多维版本，并立即给出一个无需额外计算开销且可直接复算的“实现自审计护栏”。
+
+\paragraph{二维势：\texorpdfstring{$R=\ZZ[u,v]$}{R=Z[u,v]}}
+对二维加权矩阵 \(B(u,v)\)（\S\ref{app:vector-potential}），令
+\[
+a_n(u,v):=\Tr\bigl(B(u,v)^n\bigr)\in\ZZ[u,v],
+\qquad
+\psi^d:\ZZ[u,v]\to\ZZ[u,v],\ \ \psi^d(f)(u,v):=f(u^d,v^d).
+\]
+则由命题 \ref{prop:witt-necklace-dwork-R}（取 \(R=\ZZ[u,v]\)）直接推出：
+\begin{enumerate}
+  \item \textbf{（多维 necklace 整除）}对任意 \(n\ge 1\)，
+  \[
+  \boxed{\ \sum_{d\mid n}\mu(d)\,a_{n/d}(u^d,v^d)\in n\,\ZZ[u,v]\ }.
+  \]
+  \item \textbf{（多维 Dwork 同余）}对任意素数 \(p\) 与 \(k\ge 1\)，
+  \[
+  \boxed{\ a_{p^k}(u,v)\equiv a_{p^{k-1}}(u^p,v^p)\pmod{p^k}\quad\text{于}\ \ZZ[u,v]\ }.
+  \]
+\end{enumerate}
+
+\paragraph{三维势：\texorpdfstring{$R=\ZZ[u,v,w]$}{R=Z[u,v,w]}}
+对三维加权矩阵 \(B(u,v,w)\)（见本附录三维势小节给出的显式 \(10\times 10\) 矩阵），令
+\[
+a_n(u,v,w):=\Tr\bigl(B(u,v,w)^n\bigr)\in\ZZ[u,v,w],
+\qquad
+\psi^d(f)(u,v,w):=f(u^d,v^d,w^d).
+\]
+同理得到：
+\begin{enumerate}
+  \item \textbf{（多维 necklace 整除）}对任意 \(n\ge 1\)，
+  \[
+  \boxed{\ \sum_{d\mid n}\mu(d)\,a_{n/d}(u^d,v^d,w^d)\in n\,\ZZ[u,v,w]\ }.
+  \]
+  \item \textbf{（多维 Dwork 同余）}对任意素数 \(p\) 与 \(k\ge 1\)，
+  \[
+  \boxed{\ a_{p^k}(u,v,w)\equiv a_{p^{k-1}}(u^p,v^p,w^p)\pmod{p^k}\quad\text{于}\ \ZZ[u,v,w]\ }.
+  \]
+\end{enumerate}
+
+\begin{remark}[自审计要点：只用迹序列做模同余检查]\label{rem:multi-dim-self-audit}
+上述两条约束对任何“声称来自 Euler 乘积/primitive 分解”的多维核都是必要条件。
+因此无需谱分解、无需先算 primitive：只要能计算 \(a_n(\cdot)=\Tr(B(\cdot)^n)\)，就可在系数环内做
+\(\bmod n\) 的整除审计与 \(\bmod p^k\) 的 Frobenius 兼容审计；一旦失败，即可判定实现不可能来自本文的 \(\zeta\)--Euler 乘积体系。
+\end{remark}

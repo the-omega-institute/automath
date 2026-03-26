@@ -1,0 +1,383 @@
+\subsection{有界 prime-register 外置的可行域与尺度律}\label{subsec:conclusion-bounded-prime-register-godel-scaling}
+本小节给出 prime-register 外置在有限硬件约束下的四个结构性结论：有限轴/有限指数约束下的可行判据，固定轴数下的指数爆炸律，\(\Fold_m\) 纤维规模诱导的轴数--指数耦合下界，以及约数格证书库语义下的最优位长尺度。
+
+\begin{definition}[截断 prime-register]\label{def:conclusion-truncated-prime-register}
+记素数集合为 \(\mathfrak P=\{p_1<p_2<\cdots\}\)，并令
+\[
+\mathcal P:=\NN^{(\mathfrak P)}
+\]
+为有限支撑指数向量半群。
+定义 Gödel 映射
+\[
+N(r):=\prod_{p\in\mathfrak P} p^{r(p)}\qquad (r\in\mathcal P),
+\]
+由算术基本定理可知 \(N:\mathcal P\to\NN_{\ge 1}\) 为同构。
+对 \(k,E\in\NN\)，定义截断子集
+\[
+\mathcal P_{k,E}
+:=\left\{
+r\in\mathcal P:\ r(p_i)\in\{0,\dots,E\}\ (1\le i\le k),\ r(p)=0\ (p>p_k)
+\right\},
+\]
+故 \(|\mathcal P_{k,E}|=(E+1)^k\)。
+\end{definition}
+
+\begin{definition}[\texorpdfstring{$(k,E)$}{(k,E)}-Gödel 外置提升]\label{def:conclusion-kE-godel-lift}
+设 \(f:\Omega\twoheadrightarrow X\) 为有限集合间满射，定义纤维上界
+\[
+D(f):=\max_{x\in X}|f^{-1}(x)|.
+\]
+称映射 \(\iota:\Omega\to X\times\mathcal P_{k,E}\) 为 \(f\) 的 \((k,E)\)-Gödel 外置提升，若
+\[
+\operatorname{pr}_X\circ\iota=f,\qquad \iota\ \text{单射}.
+\]
+\end{definition}
+
+\begin{theorem}[有界 prime-register 的可行判据]\label{thm:conclusion-bounded-prime-register-feasibility}
+在定义 \ref{def:conclusion-truncated-prime-register} 与定义 \ref{def:conclusion-kE-godel-lift} 的记号下，
+\((k,E)\)-Gödel 外置提升存在当且仅当
+\[
+(E+1)^k\ge D(f).
+\]
+\end{theorem}
+\begin{proof}
+必要性：若 \(\iota\) 存在，则对任意 \(x\in X\)，\(\iota\) 在纤维 \(f^{-1}(x)\) 上诱导单射
+\[
+f^{-1}(x)\hookrightarrow \mathcal P_{k,E},
+\]
+故 \(|f^{-1}(x)|\le |\mathcal P_{k,E}|=(E+1)^k\)。取 \(x\) 的最大值得 \(D(f)\le (E+1)^k\)。
+
+充分性：设 \((E+1)^k\ge D(f)\)。固定每个纤维的枚举
+\[
+f^{-1}(x)=\{\omega_{x,0},\dots,\omega_{x,d(x)-1}\},\qquad d(x):=|f^{-1}(x)|.
+\]
+对 \(j\in\{0,\dots,d(x)-1\}\)，取其 \((E+1)\)-进展开
+\[
+j=\sum_{i=1}^{k} a_i(j)(E+1)^{i-1},\qquad a_i(j)\in\{0,\dots,E\},
+\]
+并定义 \(r_{x,j}\in\mathcal P_{k,E}\) 使 \(r_{x,j}(p_i)=a_i(j)\)（\(1\le i\le k\)）。
+进位展开唯一，故 \(j\mapsto r_{x,j}\) 单射。
+令
+\[
+\iota(\omega_{x,j}):=(x,r_{x,j}),
+\]
+即可得 \(\operatorname{pr}_X\circ\iota=f\) 且 \(\iota\) 单射。证毕。
+\end{proof}
+
+\input{thm__conclusion-minimal-external-budget-undecidability}
+\input{thm__conclusion-halting-time-external-budget-exact}
+\input{thm__conclusion-minimal-state-complexity-halting}
+\input{thm__conclusion-collision-moment-recurrence-halting}
+\input{cor__conclusion-boundary-cycle-rank-external-info-lower-bound}
+\input{thm__conclusion-boundary-padic-solenoid-phase-ledger}
+
+\begin{remark}[可审计切片与不可判定断裂的并置]\label{rem:conclusion-decidable-slice-vs-halting-wall}
+有限核/有限矩阵口径下，\(\zeta\)-有理性把谱侧谓词压缩为整系数多项式的根性质，从而落入可判定范畴（例如命题 \ref{prop:xi-finite-kernel-zeta-rational-decidability}）。
+与之正交地，定理 \ref{thm:conclusion-minimal-external-budget-undecidable} 与定理 \ref{thm:conclusion-minimal-state-complexity-halting} 表明：一旦允许更一般的全定义可计算投影或实现模型，即使每个纤维仍保持一致有界，也可在最小外置预算与最小状态复杂度层面触及停机不可判定性门槛。
+更进一步，定理 \ref{thm:conclusion-halting-time-external-budget-exact} 表明：在显式可计算族上，外置预算不仅区分停机/不停机，还可在停机实例上精确读出首次停机步数；结合推论 \ref{cor:conclusion-halting-time-prime-register-axis-lower-bound}，固定指数上界 \(E\) 的截断 prime-register 外置将不可规避地满足轴数对数下界。
+进一步，若某一语义等价已知不可判定，则不存在任何取值于可有效比较的有限数据域的可计算完备不变量（定理 \ref{thm:conclusion-semantic-equivalence-undecidable}），从而任何“常数内存/有限配置”的完备分类方案必然失真。
+与此类断裂一致的全局严格化不可判定猜想见 \ref{conj:pom-global-strictification-undecidable}。
+\end{remark}
+
+\begin{corollary}[固定素数轴数下的指数幅度爆炸]\label{cor:conclusion-fixed-axis-exponential-amplitude}
+设 \(\{f_m:\Omega_m\twoheadrightarrow X_m\}_{m\ge 1}\) 为满射族，且存在常数 \(\alpha>1,c_0>0\) 使
+\[
+D(f_m)\ge c_0\alpha^m.
+\]
+若存在 \((k,E(m))\)-Gödel 外置提升（\(k\) 与 \(m\) 无关），则
+\[
+E(m)\ge D(f_m)^{1/k}-1\ge c_0^{1/k}\alpha^{m/k}-1.
+\]
+进一步，若将证书写为单个 Gödel 整数 \(N(r)\)，记
+\[
+L_m:=\max_{\omega\in\Omega_m}\log_2 N\!\bigl(r_m(\omega)\bigr),
+\]
+则有
+\[
+L_m\ge D(f_m)^{1/k}-1.
+\]
+因此 \(L_m\) 至少指数增长，而 \(N\) 在 \(m\) 上至少双指数增长。
+\end{corollary}
+\begin{proof}
+第一不等式由定理 \ref{thm:conclusion-bounded-prime-register-feasibility} 直接给出：
+\((E(m)+1)^k\ge D(f_m)\)。
+
+再令
+\[
+E_m^\sharp:=\max_{\omega\in\Omega_m}\max_{1\le i\le k} r_m(\omega)(p_i)\le E(m).
+\]
+所有可能 \(r_m(\omega)\) 至多有 \((E_m^\sharp+1)^k\) 种。按同一必要性论证，必须
+\[
+(E_m^\sharp+1)^k\ge D(f_m),
+\]
+故 \(E_m^\sharp\ge D(f_m)^{1/k}-1\)。
+取达到 \(E_m^\sharp\) 的 \(\omega_\star\) 与坐标 \(i_\star\)，有
+\[
+\log_2 N\!\bigl(r_m(\omega_\star)\bigr)
+=\sum_{i=1}^k r_m(\omega_\star)(p_i)\log_2 p_i
+\ge r_m(\omega_\star)(p_{i_\star})
+=E_m^\sharp.
+\]
+故 \(L_m\ge E_m^\sharp\ge D(f_m)^{1/k}-1\)。
+由 \(D(f_m)\ge c_0\alpha^m\) 即得增长结论。证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$\Fold_m$}{Fold\_m} 的素数轴--指数耦合下界]\label{thm:conclusion-fold-prime-axis-exponent-lower-bound}
+令
+\[
+D_m:=\max_{x\in X_m}|\Fold_m^{-1}(x)|.
+\]
+若存在 \((k,E)\)-Gödel 外置提升
+\[
+\iota_m:\Omega_m\to X_m\times\mathcal P_{k,E},
+\qquad
+\operatorname{pr}_X\circ\iota_m=\Fold_m,
+\]
+则必有
+\[
+(E+1)^k\ge D_m.
+\]
+并且由定理 \ref{thm:pom-max-fiber}，
+\[
+D_{2j}=F_{j+2},\qquad D_{2j+1}=2F_{j+1},
+\]
+从而
+\[
+\log D_m=\frac{m}{2}\log\varphi+O(1),\qquad \varphi=\frac{1+\sqrt5}{2}.
+\]
+因此
+\[
+k\ \ge\ \frac{\frac{m}{2}\log\varphi-O(1)}{\log(E+1)}.
+\]
+特别地：
+\begin{enumerate}
+  \item 若 \(E=m^c\)（\(c>0\)），则
+  \[
+  k\ \ge\ \left(\frac{\log\varphi}{2c}+o(1)\right)\frac{m}{\log m}.
+  \]
+  \item 若 \(k=O(1)\) 固定，则
+  \[
+  E\ \ge\ \exp\!\left(\left(\frac{\log\varphi}{2k}+o(1)\right)m\right).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对 \(f=\Fold_m\) 应用定理 \ref{thm:conclusion-bounded-prime-register-feasibility} 即得 \((E+1)^k\ge D_m\)。
+再由定理 \ref{thm:pom-max-fiber} 的闭式与 Binet 公式，得 \(\log D_m=\frac{m}{2}\log\varphi+O(1)\)。
+对 \((E+1)^k\ge D_m\) 取对数即得
+\[
+k\ge \frac{\log D_m}{\log(E+1)}
+=\frac{\frac{m}{2}\log\varphi+O(1)}{\log(E+1)}.
+\]
+代入 \(E=m^c\) 与 \(k=O(1)\) 两种 regime 即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[约数格硬件证书库下的最优位长尺度]\label{thm:conclusion-divisor-lattice-optimal-bit-scaling}
+固定
+\[
+N=\prod_{i=1}^{s}p_i^{e_i}.
+\]
+若仅允许 prime-register 取值满足 \(0\le r(p_i)\le e_i\)，则可用证书态数等于约数函数
+\[
+d(N)=\prod_{i=1}^{s}(e_i+1).
+\]
+定义
+\[
+N_m^\star:=\min\{N\in\NN_{\ge 1}: d(N)\ge D_m\}.
+\]
+则当 \(m\to\infty\) 时有
+\[
+\log_2 N_m^\star
+=\left(\frac{\log_2\varphi}{2}+o(1)\right)m\log_2 m.
+\]
+\end{theorem}
+\begin{proof}
+令
+\[
+M(x):=\max_{n\le x}d(n).
+\]
+由约数函数最大阶（Wigert 定理；见 \cite[Ch.~13]{Apostol1976}）可写为
+\[
+\log M(x)=\left(\log2+o(1)\right)\frac{\log x}{\log\log x}.
+\]
+设
+\[
+N^\star(y):=\min\{N:d(N)\ge y\}.
+\]
+由 \(M(N^\star(y)-1)<y\le M(N^\star(y))\) 与上式的单调反演可得
+\[
+\log N^\star(y)
+=\left(\frac{1}{\log2}+o(1)\right)(\log y)(\log\log y).
+\]
+取 \(y=D_m\) 即 \(N_m^\star=N^\star(D_m)\)。
+
+再由定理 \ref{thm:pom-max-fiber}，
+\[
+\log D_m=\frac{m}{2}\log\varphi+O(1),\qquad
+\log\log D_m=\log m+O(1).
+\]
+代回得
+\[
+\log N_m^\star
+=\left(\frac{\log\varphi}{2\log2}+o(1)\right)m\log m.
+\]
+最后换底：
+\[
+\log_2 N_m^\star
+=\frac{\log N_m^\star}{\log2}
+=\left(\frac{\log_2\varphi}{2}+o(1)\right)m\log_2 m.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[约数格硬件证书库的 sharp 相变常数]\label{cor:conclusion-divisor-lattice-sharp-phase-constant}
+定义可行证书库集合
+\[
+\mathcal N_m:=\{N\in\NN_{\ge 1}: d(N)\ge D_m\}.
+\]
+则对任意序列 \(N_m\in\mathcal N_m\)，都有
+\[
+\liminf_{m\to\infty}\frac{\log_2 N_m}{m\log_2 m}
+\ge
+\frac12\log_2\varphi.
+\]
+反之，最优序列
+\[
+N_m^\star:=\min\{N\in\NN_{\ge 1}: d(N)\ge D_m\}
+\]
+满足
+\[
+\log_2 N_m^\star
+=
+\left(\frac12\log_2\varphi+o(1)\right)m\log_2 m.
+\]
+因此，约数格硬件证书库存在 sharp 相变常数
+\[
+c_\star=\frac12\log_2\varphi,
+\]
+低于该常数的位长密度不可能支持 \(\Fold_m\) 的全纤维外置，而该常数本身可达。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-divisor-lattice-optimal-bit-scaling}，
+\[
+\log_2 N_m^\star
+=
+\left(\frac12\log_2\varphi+o(1)\right)m\log_2 m.
+\]
+若 \(N_m\in\mathcal N_m\)，则按 \(N_m^\star\) 的极小性有 \(N_m\ge N_m^\star\)，故
+\[
+\log_2 N_m\ge \log_2 N_m^\star.
+\]
+两边除以 \(m\log_2 m\) 并取 \(\liminf\) 即得下界；可达性由取 \(N_m=N_m^\star\) 直接给出。证毕。
+\end{proof}
+
+\begin{corollary}[固定 prime-axis 家族的灾变性次优]\label{cor:conclusion-fixed-prime-axis-catastrophic-suboptimality}
+设 \(N_m\) 满足
+\[
+d(N_m)\ge D_m
+\]
+并且其不同素因子个数有统一上界
+\[
+\omega(N_m)\le k
+\qquad (k\ \text{与}\ m\ \text{无关}).
+\]
+则
+\[
+\log_2 N_m
+\ge
+\exp\!\left(\left(\frac{\log\varphi}{2k}+o(1)\right)m\right).
+\]
+特别地，
+\[
+\frac{\log_2 N_m}{m\log_2 m}\longrightarrow\infty.
+\]
+因此，固定 prime-axis 的任何 Gödel 证书库都远离 sharp 相变前沿：它们不是 \(m\log m\) 级，而是以 \(\exp(cm)\) 级增长其比特长度。
+\end{corollary}
+\begin{proof}
+将
+\[
+N_m=\prod_{i=1}^{s_m}p_i^{e_i^{(m)}},
+\qquad
+s_m=\omega(N_m)\le k,
+\]
+并记
+\[
+E_m:=\max_{1\le i\le s_m}e_i^{(m)}.
+\]
+则
+\[
+d(N_m)=\prod_{i=1}^{s_m}(e_i^{(m)}+1)\le (E_m+1)^k.
+\]
+由 \(d(N_m)\ge D_m\) 与
+\[
+\log D_m=\frac{m}{2}\log\varphi+O(1)
+\]
+得
+\[
+E_m+1\ge D_m^{1/k}
+=
+\exp\!\left(\left(\frac{\log\varphi}{2k}+o(1)\right)m\right).
+\]
+另一方面，\(N_m\) 至少含有一个指数为 \(E_m\) 的素幂因子，故
+\[
+N_m\ge 2^{E_m},
+\qquad
+\log_2 N_m\ge E_m.
+\]
+代回即得第一式。由于右端比任意 \(m\log m\) 都增长更快，第二式随即成立。证毕。
+\end{proof}
+
+\begin{corollary}[多项式指数约束下的 prime-axis 扩展律]\label{cor:conclusion-polynomial-exponent-prime-axis-expansion}
+设 \(N_m\) 满足
+\[
+d(N_m)\ge D_m,
+\]
+并且其最大素幂指数仅多项式增长：
+\[
+\max_{p^e\parallel N_m}e\le m^c
+\qquad(c>0\ \text{固定}).
+\]
+则不同素因子个数必满足
+\[
+\omega(N_m)
+\ge
+\left(\frac{\log\varphi}{2c}+o(1)\right)\frac{m}{\log m}.
+\]
+因此，在“指数不爆炸”的硬件制度下，prime-axis 数目必须以 \(m/\log m\) 的量级发散；任何接近 sharp 前沿的证书库都不可能停留在有限或缓慢增长的素数轴数上。
+\end{corollary}
+\begin{proof}
+记
+\[
+k_m:=\omega(N_m),
+\qquad
+E_m:=\max_{p^e\parallel N_m}e.
+\]
+则
+\[
+d(N_m)\le (E_m+1)^{k_m}\le (m^c+1)^{k_m}.
+\]
+由 \(d(N_m)\ge D_m\) 与
+\[
+\log D_m=\frac{m}{2}\log\varphi+O(1)
+\]
+得
+\[
+k_m\log(m^c+1)\ge \frac{m}{2}\log\varphi+O(1).
+\]
+再用
+\[
+\log(m^c+1)=c\log m+o(\log m)
+\]
+整理即可得到
+\[
+k_m
+\ge
+\left(\frac{\log\varphi}{2c}+o(1)\right)\frac{m}{\log m}.
+\]
+证毕。
+\end{proof}
+
+\noindent
+因此，Gödel 外置硬件在约数格语义下呈现出一条 sharp 而又强烈各向异性的相图：一方面，最优位长尺度精确落在 \(\frac12\log_2\varphi\) 所控制的 \(m\log m\) 前沿上；另一方面，任何把 prime-axis 数目冻结在常数级的实现都会立刻退化到 \(\exp(cm)\) 级别的灾变性次优，而任何试图把单轴指数压回多项式规模的实现，又必然以 \(m/\log m\) 的速度不断开启新的素数轴。于是，接近最优前沿的 Gödel 证书库不再是“在固定硬件上微调指数”的问题，而是一个 prime-axis 本身必须持续扩张的相变过程。
+
+\endinput

@@ -1,0 +1,569 @@
+\section{多尺度一致性（restriction 逆系统与逆极限）}\label{app:multiscale-inverse-limit}
+
+本附录补齐第 \ref{subsec:folding-multiscale} 小节的证明，严格化"分辨率 $m$ 不改变统一对象；不同 $m$ 的结论一致，仅精细程度不同"的数学含义。
+
+\begin{proof}[引理 \ref{lem:pi-functorial-golden} 的证明]
+对任意 $(x_1,\dots,x_{m_3})\in X_{m_3}$，两边都是截断到前 $m_1$ 位，故逐点相等。对 $\pi_{m_2}=\pi_{m_2}(\cdot)$ 的一致性同理：先截断到前 $m_2$ 位，再截断到前 $m_1$ 位，等于直接截断到前 $m_1$ 位。
+\end{proof}
+
+\begin{proof}[定理 \ref{thm:inverse-limit-golden} 的证明]
+定义映射
+\[
+\Phi:X_\infty\to \varprojlim X_m,\qquad
+\Phi(c):=\bigl(\pi_m(c)\bigr)_{m\ge 1}.
+\]
+由引理 \ref{lem:pi-functorial-golden}，$(\pi_m(c))_{m\ge 1}$ 满足逆极限的一致性条件，故 $\Phi$ 良定义。
+
+反向，给定一致族 $(x^{(m)})_{m\ge 1}\in\varprojlim X_m$，定义无穷序列 $c=(c_1,c_2,\dots)$ 为：令 $c_k:=x^{(m)}_k$（取任意 $m\ge k$）。一致性条件保证该定义与所取 $m$ 无关。并且每个 $x^{(m)}\in X_m$ 满足无相邻 $1$，从而 $c\in X_\infty$。
+
+最后验证互逆：对 $c\in X_\infty$，由定义可得反向构造返回 $c$；对一致族 $(x^{(m)})$，其反向构造的 $c$ 满足 $\pi_m(c)=x^{(m)}$，故返回原一致族。因而 $\Phi$ 为双射，且构造为自然同构。证毕。
+\end{proof}
+
+\subsection{归一化逆塔积分与广义斯托克斯一致性}\label{app:multiscale-normalized-stokes-inverse-tower}
+本附录前半部分讨论 restriction 逆系统与逆极限的\emph{一致性}。
+在若干几何接口（例如有限覆盖塔、solenoid 型逆极限与多尺度胞腔分解）中，还需要一个与逆塔相容的\emph{归一化积分口径}：
+它把“层间覆盖次数的膨胀”吸收到同一个可审计的标度中，使得积分型不变量在逆系统中保持层无关性。
+
+\begin{theorem}[高秩 solenoid 的 Pontryagin 复原与 Stokes 周期模块的完全性]\label{thm:app-high-rank-solenoid-pontryagin-stokes-period-module}
+该结论与后续用于归一化逆塔 Stokes 口径的离散周期表述一致，参见 \cite{Internal2026HighRankStokesSolenoidPontryaginCompleteness}。
+设 \(r\ge 1\) 并取一列整数矩阵 \(B_0,B_1,B_2,\dots\in M_r(\ZZ)\) 满足 \(|\det B_n|\ge 2\)。
+令
+\[
+\TT^r:=\RR^r/\ZZ^r,\qquad
+f_{B_n}:\TT^r\to\TT^r,\quad [x]\mapsto [B_nx],
+\]
+并定义逆极限紧连通交换群
+\[
+\mathcal S:=\varprojlim\bigl(\TT^r\xleftarrow{f_{B_0}}\TT^r\xleftarrow{f_{B_1}}\TT^r\xleftarrow{f_{B_2}}\cdots\bigr).
+\]
+记累积矩阵 \(A_0:=I_r\)、\(A_n:=B_{n-1}\cdots B_0\)（\(n\ge 1\)），并定义 Stokes 周期模块
+\[
+\Pi_{\mathrm{St}}(\mathcal S)
+:=
+\bigcup_{n\ge 0}(A_n^{\mathsf T})^{-1}\ZZ^r\ \subset\ \QQ^r,
+\]
+右端视为离散加法群。
+则成立：
+\begin{enumerate}
+  \item 存在自然同构
+  \[
+  \widehat{\mathcal S}:=\mathrm{Hom}_{\mathrm{cont}}(\mathcal S,\TT)\ \cong\ \Pi_{\mathrm{St}}(\mathcal S).
+  \]
+  \item 对任意两组数据 \((B_n)\)、\((B'_n)\) 所得 solenoid \(\mathcal S,\mathcal S'\)，有
+  \[
+  \mathcal S\cong \mathcal S'
+  \quad\Longleftrightarrow\quad
+  \Pi_{\mathrm{St}}(\mathcal S)\cong \Pi_{\mathrm{St}}(\mathcal S')
+  \]
+  （右侧为抽象交换群同构）。
+  更具体地，若将两者都嵌入 \(\QQ^r\) 的满秩子群，则上述同构等价于存在 \(Q\in\GL_r(\QQ)\) 使
+  \[
+  Q^{\mathsf T}\Pi_{\mathrm{St}}(\mathcal S)=\Pi_{\mathrm{St}}(\mathcal S').
+  \]
+  \item 当 \(r=1\) 时，\(\Pi_{\mathrm{St}}(\mathcal S)=\bigcup_{n\ge 0}\frac1{A_n}\ZZ\subset\QQ\)，与秩一逆塔覆盖下的周期模块刻画一致。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+回忆 \(\widehat{\TT^r}\cong\ZZ^r\)：任取 \(k\in\ZZ^r\)，字符 \(\chi_k:\TT^r\to\TT\) 由
+\[
+\chi_k([x])=[k^{\mathsf T}x]\quad(\mathrm{mod}\ \ZZ)
+\]
+给出。
+对覆盖 \(f_{B_n}\)，其对偶同态为
+\[
+\widehat{f_{B_n}}:\widehat{\TT^r}\to\widehat{\TT^r},\qquad k\mapsto B_n^{\mathsf T}k,
+\]
+从而对偶系统为直极限
+\(
+\varinjlim\bigl(\ZZ^r\xrightarrow{B_0^{\mathsf T}}\ZZ^r\xrightarrow{B_1^{\mathsf T}}\cdots\bigr)
+\)。
+Pontryagin 对偶把逆极限送到直极限，故
+\[
+\widehat{\mathcal S}\ \cong\ \varinjlim\bigl(\ZZ^r\xrightarrow{B_0^{\mathsf T}}\ZZ^r\xrightarrow{B_1^{\mathsf T}}\cdots\bigr).
+\]
+\par
+将该直极限显式嵌入 \(\QQ^r\)：把第 \(n\) 层的 \(\ZZ^r\) 中元素 \(v\) 送入 \((A_n^{\mathsf T})^{-1}v\in\QQ^r\)。
+若 \(v\in\ZZ^r\) 与 \(v'\in\ZZ^r\) 在直极限中相等，则存在 \(m\ge n,n'\) 使
+\(
+A_{m,n}^{\mathsf T}v=A_{m,n'}^{\mathsf T}v'
+\)
+（其中 \(A_{m,n}:=B_{m-1}\cdots B_n\)），从而在 \(\QQ^r\) 中
+\[
+(A_n^{\mathsf T})^{-1}v
+=(A_m^{\mathsf T})^{-1}A_{m,n}^{\mathsf T}v
+=(A_m^{\mathsf T})^{-1}A_{m,n'}^{\mathsf T}v'
+=(A_{n'}^{\mathsf T})^{-1}v'.
+\]
+因此该映射良定义，其像正是 \(\bigcup_{n\ge 0}(A_n^{\mathsf T})^{-1}\ZZ^r\)。
+反之，任取 \(u\in(A_n^{\mathsf T})^{-1}\ZZ^r\)，可写为 \(u=(A_n^{\mathsf T})^{-1}v\) 且 \(v\in\ZZ^r\)，其等价类来自直极限第 \(n\) 层。
+于是 \(\widehat{\mathcal S}\cong \Pi_{\mathrm{St}}(\mathcal S)\)，得 (1)。
+\par
+(2) 由 Pontryagin 对偶的反变等价性：紧交换群同构当且仅当其对偶离散群同构。
+因此 \(\mathcal S\cong\mathcal S'\iff \widehat{\mathcal S}\cong\widehat{\mathcal S'}\iff \Pi_{\mathrm{St}}(\mathcal S)\cong \Pi_{\mathrm{St}}(\mathcal S')\)。
+当把两者视为 \(\QQ^r\) 的满秩子群时，任一抽象群同构可延拓为 \(\QQ\)-线性同构，从而由某个 \(Q\in\GL_r(\QQ)\) 表示，得到所述具体化。
+(3) 由定义直接化简得到。证毕。
+\end{proof}
+
+\input{prop__app-stokes-visible-arithmetic-profinite-torus-extension}
+
+\input{prop__app-solenoid-stokes-period-module-godel-ellipsoid-counting}
+
+\begin{theorem}[有限覆盖逆塔的归一化广义斯托克斯公式]\label{thm:app-normalized-stokes-finite-cover-inverse-tower}
+令 \(\bigl((M_n,\pi_n)\bigr)_{n\ge 0}\) 为一列定向紧致光滑 \(m\)-维带角流形（允许边界与角），其中
+\[
+\pi_n:M_{n+1}\to M_n
+\]
+为定向保持的有限覆盖映射，覆盖次数记为 \(d_n\ge 2\)，并满足 \(\pi_n^{-1}(\partial M_n)=\partial M_{n+1}\)。
+记累积覆盖次数
+\[
+D_n:=\prod_{j=0}^{n-1}d_j,\qquad D_0:=1.
+\]
+称一族 \((m-1)\)-形式 \(\alpha=(\alpha_n)_{n\ge 0}\) \emph{逆塔相容}，若 \(\alpha_{n+1}=\pi_n^\ast\alpha_n\)；同理 \(m\)-形式族 \(\beta=(\beta_n)_{n\ge 0}\) 相容若 \(\beta_{n+1}=\pi_n^\ast\beta_n\)。
+
+对相容的 \(m\)-形式族 \(\beta\) 与 \((m-1)\)-形式族 \(\alpha\)，定义归一化积分泛函
+\[
+\mathcal I_M(\beta):=\frac1{D_n}\int_{M_n}\beta_n,\qquad
+\mathcal I_{\partial M}(\alpha):=\frac1{D_n}\int_{\partial M_n}\alpha_n.
+\]
+则：
+\begin{enumerate}
+  \item \(\mathcal I_M(\beta)\) 与 \(\mathcal I_{\partial M}(\alpha)\) 与所选层 \(n\) 无关，因而良定义；
+  \item 对任意逆塔相容的 \((m-1)\)-形式族 \(\alpha\)，成立归一化广义斯托克斯公式
+  \[
+  \mathcal I_M(d\alpha)=\mathcal I_{\partial M}(\alpha).
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+对任意 \(m\)-形式 \(\omega\) 与 \((m-1)\)-形式 \(\eta\)，覆盖次数公式给出
+\[
+\int_{M_{n+1}}\pi_n^\ast\omega=d_n\int_{M_n}\omega,
+\qquad
+\int_{\partial M_{n+1}}\pi_n^\ast\eta=d_n\int_{\partial M_n}\eta.
+\]
+取 \(\omega=\beta_n\)、\(\eta=\alpha_n\) 并用相容性 \(\beta_{n+1}=\pi_n^\ast\beta_n\)、\(\alpha_{n+1}=\pi_n^\ast\alpha_n\)，得到
+\[
+\frac1{D_{n+1}}\int_{M_{n+1}}\beta_{n+1}
+=\frac1{D_{n+1}}\int_{M_{n+1}}\pi_n^\ast\beta_n
+=\frac{d_n}{D_{n+1}}\int_{M_n}\beta_n
+=\frac1{D_n}\int_{M_n}\beta_n,
+\]
+以及同样的
+\(
+\frac1{D_{n+1}}\int_{\partial M_{n+1}}\alpha_{n+1}
+=\frac1{D_n}\int_{\partial M_n}\alpha_n
+\)。
+从而两归一化积分与 \(n\) 无关，得第 (1) 条。
+
+对第 (2) 条，对每个 \(n\) 的带角流形 \(M_n\) 适用经典广义斯托克斯定理
+\(
+\int_{M_n}d\alpha_n=\int_{\partial M_n}\alpha_n
+\)，
+两边同除以 \(D_n\) 并用第 (1) 条给出的层无关性，即得所示归一化公式。证毕。
+\end{proof}
+
+\begin{theorem}[有限覆盖逆极限的圆柱形式与极限 Stokes 泛函]\label{thm:app-solenoid-fundamental-current-and-stokes}
+在定理 \ref{thm:app-normalized-stokes-finite-cover-inverse-tower} 的设定下，记逆极限紧空间
+\[
+S:=\varprojlim(M_n,\pi_n),\qquad
+\partial S:=\varprojlim(\partial M_n,\pi_n|_{\partial}),
+\]
+并令 \(p_n:S\to M_n\) 为自然投影。
+定义圆柱形式的归纳极限
+\[
+\Omega^k_{\mathrm{cyl}}(S):=\varinjlim_{n}\Omega^k(M_n),
+\]
+其中过渡映射由拉回 \(\pi_{m,n}^\ast\)（\(m\ge n\)）给出；同理定义 \(\Omega^{k}_{\mathrm{cyl}}(\partial S)\)。
+则存在唯一线性泛函
+\[
+\mathcal I_S:\Omega^{m}_{\mathrm{cyl}}(S)\to\RR
+\]
+满足：对任意代表 \([\omega_n]\in\Omega^{m}_{\mathrm{cyl}}(S)\)（\(\omega_n\in\Omega^{m}(M_n)\)）有
+\[
+\mathcal I_S([\omega_n])=\frac{1}{D_n}\int_{M_n}\omega_n,
+\]
+并且存在同样唯一的边界泛函 \(\mathcal I_{\partial S}:\Omega^{m-1}_{\mathrm{cyl}}(\partial S)\to\RR\)。
+此外，对任意 \([\eta_n]\in\Omega^{m-1}_{\mathrm{cyl}}(S)\) 成立极限广义 Stokes 公式
+\[
+\mathcal I_S\bigl(d[\eta_n]\bigr)=\mathcal I_{\partial S}\bigl([\eta_n|_{\partial M_n}]\bigr).
+\]
+\end{theorem}
+\begin{proof}
+若 \([\omega_n]=[\pi_{m,n}^\ast\omega_n]\)（\(m\ge n\)）表示同一圆柱类，则由覆盖换元公式与 \(D_m=D_n\deg(\pi_{m,n})\) 得
+\[
+\frac{1}{D_m}\int_{M_m}\pi_{m,n}^\ast\omega_n
+=\frac{1}{D_m}\deg(\pi_{m,n})\int_{M_n}\omega_n
+=\frac{1}{D_n}\int_{M_n}\omega_n,
+\]
+故 \(\mathcal I_S\) 良定义；唯一性由圆柱类的代表性立得。
+边界泛函同理。
+最后对 \([\eta_n]\)，逐层广义 Stokes 给出
+\(
+\int_{M_n}d\eta_n=\int_{\partial M_n}\eta_n
+\)，
+两边同除以 \(D_n\) 即得所示恒等式。证毕。
+\end{proof}
+
+\input{thm__app-covering-tower-godel-boundary-normalized-stokes}
+\input{thm__app-solenoid-cylindrical-pl-duality}
+\input{thm__app-stokes-dirichlet-energy-multiscale-approx}
+
+\begin{proposition}[递归移位下的归一化守恒：极限 Stokes 泛函的移位不变性]\label{prop:app-solenoid-shift-invariance}
+设 \(f:M\to M\) 为紧定向 \(m\)-维带角流形上的定向保持有限覆盖，\(\deg(f)=N\)，且 \(f^{-1}(\partial M)=\partial M\)。
+取常值逆系统 \(M_n:=M\)、\(\pi_n:=f\)，其逆极限记为
+\[
+S_f:=\varprojlim(M\xleftarrow{f}M\xleftarrow{f}\cdots),
+\qquad
+\partial S_f:=\varprojlim(\partial M\xleftarrow{f}\partial M\xleftarrow{f}\cdots).
+\]
+令移位同胚 \(\sigma:S_f\to S_f\) 定义为 \(\sigma(x_0,x_1,\dots)=(x_1,x_2,\dots)\)。
+则定理 \ref{thm:app-solenoid-fundamental-current-and-stokes} 所构造的泛函满足：
+\[
+\mathcal I_{S_f}(\sigma^\ast[\omega])=\mathcal I_{S_f}([\omega])\qquad(\forall\,[\omega]\in\Omega^m_{\mathrm{cyl}}(S_f)),
+\]
+并且边界泛函同样满足 \(\mathcal I_{\partial S_f}(\sigma^\ast[\eta])=\mathcal I_{\partial S_f}([\eta])\)。
+\end{proposition}
+\begin{proof}
+任取 \([\omega]\) 的代表为某层的 \(\omega\in\Omega^m(M)\)。
+则同一圆柱类在第 \(n\) 层的代表可取为 \(f^{n\ast}\omega\)，从而
+\(
+\mathcal I_{S_f}([\omega])=N^{-n}\int_M f^{n\ast}\omega
+\)。
+另一方面，\(\sigma^\ast\) 将第 \(n\) 层代表提升到第 \(n+1\) 层代表，即 \(f^{(n+1)\ast}\omega\)，故
+\[
+\mathcal I_{S_f}(\sigma^\ast[\omega])
+=\frac{1}{N^{n+1}}\int_M f^{(n+1)\ast}\omega
+=\frac{1}{N^{n}}\int_M f^{n\ast}\omega
+=\mathcal I_{S_f}([\omega]),
+\]
+其中使用 \(\int_M f^\ast\alpha=N\int_M\alpha\)（顶次形式的覆盖次数公式）。
+边界情形以 \(\partial M\) 代替 \(M\) 同理。证毕。
+\end{proof}
+
+\input{thm__app-solenoid-normalized-stokes-l2-scaling-critical-degree}
+
+\begin{proposition}[有限对应的极限 Stokes 等变性]\label{prop:app-solenoid-stokes-equivariance-finite-correspondence}
+在定理 \ref{thm:app-solenoid-fundamental-current-and-stokes} 的逆塔设定下，
+设对每个 \(n\) 给定有限对应
+\[
+M_n\xleftarrow{s_n}C_n\xrightarrow{t_n}M_n,
+\]
+其中 \(s_n,t_n\) 均为定向保持有限覆盖且 \(\deg(s_n)=\deg(t_n)\)，并且该对应与逆塔结构相容（存在使得所有自然方块交换的提升 \(C_{n+1}\to C_n\)）。
+在顶次形式上定义算子
+\[
+T_n:\Omega^{m}(M_n)\to\Omega^{m}(M_n),\qquad
+T_n(\omega):=\frac{1}{\deg(s_n)}(s_n)_!\bigl(t_n^\ast\omega\bigr),
+\]
+其中 \((s_n)_!:\Omega^{m}(C_n)\to\Omega^{m}(M_n)\) 为有限覆盖在顶次形式上的推前（以
+\(\int_{M_n}(s_n)_!\alpha=\int_{C_n}\alpha\)
+刻画）。
+由相容性，\((T_n)\) 在圆柱极限上诱导算子 \(T:\Omega^{m}_{\mathrm{cyl}}(S)\to\Omega^{m}_{\mathrm{cyl}}(S)\)。
+则对任意 \([\omega]\in\Omega^{m}_{\mathrm{cyl}}(S)\) 有
+\[
+\mathcal I_S(T[\omega])=\mathcal I_S([\omega]).
+\]
+并且 \(T\) 与外微分及边界限制交换，从而保持极限 Stokes 恒等式：
+对任意 \([\eta]\in\Omega^{m-1}_{\mathrm{cyl}}(S)\) 有
+\[
+\mathcal I_S\bigl(d\,T[\eta]\bigr)=\mathcal I_{\partial S}\bigl((T[\eta])|_{\partial}\bigr).
+\]
+\end{proposition}
+\begin{proof}
+取 \([\omega]\) 的代表 \(\omega_n\in\Omega^{m}(M_n)\)。
+由推前的刻画与覆盖次数公式，
+\[
+\int_{M_n}T_n(\omega_n)
+=\frac{1}{\deg(s_n)}\int_{M_n}(s_n)_!(t_n^\ast\omega_n)
+=\frac{1}{\deg(s_n)}\int_{C_n}t_n^\ast\omega_n
+=\frac{\deg(t_n)}{\deg(s_n)}\int_{M_n}\omega_n
+=\int_{M_n}\omega_n.
+\]
+两边同除以 \(D_n\) 并取圆柱类，即得 \(\mathcal I_S(T[\omega])=\mathcal I_S([\omega])\)。
+外微分与有限覆盖的拉回/推前交换，且边界限制与二者亦交换，故极限 Stokes 恒等式在 \(T\) 下保持。证毕。
+\end{proof}
+
+\input{thm__app-solenoid-stokes-radon-measure-markov-dissipation}
+
+\input{cor__app-solenoid-stokes-equilibrium-markov-contraction}
+
+\begin{theorem}[\(\ell^1\)-缺陷逆塔的归一化积分极限与可审计误差预算]\label{thm:app-normalized-integration-l1-defect-inverse-tower}
+在定理 \ref{thm:app-normalized-stokes-finite-cover-inverse-tower} 的逆塔设定下，
+对任意 \(m\)-形式序列 \(\beta=(\beta_n)_{n\ge 0}\) 定义层间缺陷
+\[
+\Delta_n\beta:=\beta_{n+1}-\pi_n^\ast\beta_n\in\Omega^m(M_{n+1}).
+\]
+固定 \(M_0\) 上任意光滑黎曼度量并对各层取拉回度量族，记由该度量诱导的点态范数仍为 \(|\cdot|\)。
+若 \(\beta\) 满足可加的 \(\ell^1\)-缺陷条件
+\[
+\sum_{n\ge 0}\frac{1}{D_{n+1}}\int_{M_{n+1}}|\Delta_n\beta|<\infty,
+\]
+则归一化积分序列
+\[
+I_n(\beta):=\frac{1}{D_n}\int_{M_n}\beta_n
+\]
+收敛到有限极限 \(I_\infty(\beta)\)，并且：
+\begin{enumerate}
+  \item 递推恒等式与显式求和公式成立：
+  \[
+  I_{n+1}(\beta)-I_n(\beta)=\frac{1}{D_{n+1}}\int_{M_{n+1}}\Delta_n\beta,
+  \qquad
+  I_\infty(\beta)=I_0(\beta)+\sum_{n\ge 0}\frac{1}{D_{n+1}}\int_{M_{n+1}}\Delta_n\beta.
+  \]
+  \item 对任意 \(N\ge 0\) 有尾和误差上界
+  \[
+  \bigl|I_\infty(\beta)-I_N(\beta)\bigr|
+  \le
+  \sum_{n\ge N}\frac{1}{D_{n+1}}\int_{M_{n+1}}|\Delta_n\beta|.
+  \]
+\end{enumerate}
+此外，对任意 \((m-1)\)-形式序列 \(\alpha=(\alpha_n)_{n\ge 0}\) 若其边界缺陷满足
+\[
+\sum_{n\ge 0}\frac{1}{D_{n+1}}\int_{\partial M_{n+1}}\bigl|\alpha_{n+1}-\pi_n^\ast\alpha_n\bigr|<\infty,
+\]
+则归一化边界积分
+\[
+B_n(\alpha):=\frac{1}{D_n}\int_{\partial M_n}\alpha_n
+\]
+收敛到有限极限 \(B_\infty(\alpha)\)，并且（逐层广义 Stokes 与极限交换）
+\[
+\lim_{n\to\infty}\frac{1}{D_n}\int_{M_n}d\alpha_n
+=
+B_\infty(\alpha).
+\]
+\end{theorem}
+
+\begin{proof}
+覆盖换元公式给出
+\(
+\int_{M_{n+1}}\pi_n^\ast\beta_n=d_n\int_{M_n}\beta_n
+\)。
+因此
+\[
+I_{n+1}(\beta)
+=\frac{1}{D_{n+1}}\int_{M_{n+1}}(\pi_n^\ast\beta_n+\Delta_n\beta)
+=I_n(\beta)+\frac{1}{D_{n+1}}\int_{M_{n+1}}\Delta_n\beta,
+\]
+得到递推恒等式；对 \(n\) 望远镜求和并令上限趋于无穷，得到显式求和公式。
+由三角不等式
+\[
+\sum_{n\ge 0}\bigl|I_{n+1}(\beta)-I_n(\beta)\bigr|
+\le
+\sum_{n\ge 0}\frac{1}{D_{n+1}}\int_{M_{n+1}}|\Delta_n\beta|<\infty,
+\]
+可知 \((I_n(\beta))\) 为 Cauchy 列，从而收敛且尾和上界随之成立。
+\par
+边界情形同理：\(\pi_n|_{\partial M_{n+1}}:\partial M_{n+1}\to\partial M_n\) 仍为次数 \(d_n\) 的有限覆盖，
+故对 \(B_n(\alpha)\) 可完全复用上述递推与 Cauchy 论证。
+最后逐层广义 Stokes 给出
+\(
+\frac{1}{D_n}\int_{M_n}d\alpha_n=\frac{1}{D_n}\int_{\partial M_n}\alpha_n=B_n(\alpha)
+\)，令 \(n\to\infty\) 即得结论。证毕。
+\end{proof}
+
+\input{cor__app-robust-normalized-stokes-with-defect-budget}
+
+\begin{theorem}[纤维覆盖逆塔的归一化 Beck--Chevalley--Stokes 交换律]\label{thm:app-normalized-bc-stokes-fibered-inverse-tower}
+对每个 \(n\ge 0\) 设有交换方块
+\[
+\begin{CD}
+E_{n+1} @>{\Pi_n}>> E_n\\
+@V{p_{n+1}}VV @VV{p_n}V\\
+B_{n+1} @>{\pi_n}>> B_n
+\end{CD}
+\]
+满足：
+\begin{itemize}
+  \item \(p_n:E_n\to B_n\) 为光滑定向子沉，纤维为无边界紧定向 \(f\)-维流形 \(F\)；
+  \item \(\Pi_n,\pi_n\) 为定向保持有限覆盖，次数分别为 \(d_n^{E},d_n^{B}\)；
+  \item \(\Pi_n\) 在每条纤维上的限制为次数 \(d_n^{F}\) 的覆盖，且 \(d_n^{E}=d_n^{B}d_n^{F}\)；
+  \item 边界相容：\(\Pi_n^{-1}(\partial E_n)=\partial E_{n+1}\)、\(\pi_n^{-1}(\partial B_n)=\partial B_{n+1}\)，并且 \(\partial E_n=p_n^{-1}(\partial B_n)\)。
+\end{itemize}
+记累积次数 \(D_n^{E}:=\prod_{j<n}d_j^{E}\)、\(D_n^{B}:=\prod_{j<n}d_j^{B}\)、\(D_n^{F}:=\prod_{j<n}d_j^{F}\)（从而 \(D_n^{E}=D_n^{B}D_n^{F}\)）。
+\par
+对任意相容形式族 \(\alpha=(\alpha_n)_{n\ge 0}\)、\(\beta=(\beta_n)_{n\ge 0}\) 满足
+\[
+\alpha_n\in\Omega^{m+f-1}(E_n),\quad \beta_n\in\Omega^{m+f}(E_n),\qquad
+\alpha_{n+1}=\Pi_n^\ast\alpha_n,\ \beta_{n+1}=\Pi_n^\ast\beta_n,
+\]
+定义归一化纤维积分
+\[
+\widetilde{\alpha}_n:=\frac{1}{D_n^{F}}(p_n)_!\alpha_n\in\Omega^{m-1}(B_n),
+\qquad
+\widetilde{\beta}_n:=\frac{1}{D_n^{F}}(p_n)_!\beta_n\in\Omega^{m}(B_n).
+\]
+则成立：
+\begin{enumerate}
+  \item （归一化 Beck--Chevalley）\(\widetilde{\alpha}_{n+1}=\pi_n^\ast\widetilde{\alpha}_n\) 且 \(\widetilde{\beta}_{n+1}=\pi_n^\ast\widetilde{\beta}_n\)。
+  \item （归一化 Fubini 因子化）
+  \[
+  \frac{1}{D_n^{E}}\int_{E_n}\beta_n=\frac{1}{D_n^{B}}\int_{B_n}\widetilde{\beta}_n,
+  \qquad
+  \frac{1}{D_n^{E}}\int_{\partial E_n}\alpha_n=\frac{1}{D_n^{B}}\int_{\partial B_n}\widetilde{\alpha}_n.
+  \]
+  \item （Stokes 与纤维积分交换的一致性）对每个 \(n\ge 0\) 有
+  \[
+  \frac{1}{D_n^{E}}\int_{E_n}d\alpha_n=\frac{1}{D_n^{B}}\int_{B_n}d\widetilde{\alpha}_n,
+  \qquad
+  \frac{1}{D_n^{E}}\int_{\partial E_n}\alpha_n=\frac{1}{D_n^{B}}\int_{\partial B_n}\widetilde{\alpha}_n,
+  \]
+  从而 \(E_n\) 上的逐层广义 Stokes 与 \(B_n\) 上的逐层广义 Stokes 在上述归一化口径下严格等价。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+在局部平凡化 \(E_n\simeq B_n\times F\) 中，\(\Pi_n\) 分解为 \((\pi_n,\varphi_n)\)，其中 \(\varphi_n:F\to F\) 为次数 \(d_n^{F}\) 的覆盖。
+沿纤维换元公式给出对任意可积形式 \(\omega\)：
+\[
+(p_{n+1})_!(\Pi_n^\ast\omega)=d_n^{F}\,\pi_n^\ast(p_n)_!\omega.
+\]
+取 \(\omega=\alpha_n\) 并除以 \(D_{n+1}^{F}=D_n^{F}d_n^{F}\) 得
+\(
+\widetilde{\alpha}_{n+1}=\pi_n^\ast\widetilde{\alpha}_n
+\)，\(\widetilde{\beta}\) 同理，得 (1)。
+\par
+由 Fubini \(\int_{E_n}\beta_n=\int_{B_n}(p_n)_!\beta_n=D_n^{F}\int_{B_n}\widetilde{\beta}_n\)，
+两边除以 \(D_n^{E}=D_n^{B}D_n^{F}\) 得第一式。
+边界式由 \(\partial E_n=p_n^{-1}(\partial B_n)\) 与纤维无边界保证边界纤维积分与基底边界积分匹配，复用同一计算即得。
+\par
+由于纤维无边界，外微分与纤维积分交换 \(d\circ(p_n)_!=(p_n)_!\circ d\)。
+故 \(d\widetilde{\alpha}_n=\frac{1}{D_n^{F}}(p_n)_!(d\alpha_n)\)。
+将 (2) 分别应用于 \(d\alpha_n\) 与 \(\alpha_n\)，并结合逐层广义 Stokes，即得 (3)。证毕。
+\end{proof}
+
+\begin{proposition}[归一化 Stokes 迹在 \(\ell^1\)-缺陷完成中的唯一延拓]\label{prop:app-normalized-stokes-trace-l1-completion}
+在定理 \ref{thm:app-normalized-stokes-finite-cover-inverse-tower} 的设定下，令
+\[
+\Omega^m_{\ell^1}(\mathcal M)
+:=
+\Bigl\{\beta=(\beta_n)_{n\ge 0}\ :\ 
+\sum_{n\ge 0}\frac{1}{D_{n+1}}\int_{M_{n+1}}|\Delta_n\beta|<\infty
+\Bigr\},
+\]
+并赋予范数
+\[
+\|\beta\|_{\ell^1}
+:=
+\left|\int_{M_0}\beta_0\right|
+\;+\;
+\sum_{n\ge 0}\frac{1}{D_{n+1}}\int_{M_{n+1}}|\Delta_n\beta|.
+\]
+记 \(\Omega^m_{\mathrm{ev}}(\mathcal M)\subset \Omega^m_{\ell^1}(\mathcal M)\) 为最终相容子空间：存在 \(N\) 使得对所有 \(n\ge N\) 有 \(\Delta_n\beta=0\)。
+\par
+则存在唯一连续线性泛函 \(\mathcal I:\Omega^m_{\ell^1}(\mathcal M)\to\RR\) 满足：
+\begin{enumerate}
+  \item 对一切 \(\beta\in\Omega^m_{\mathrm{ev}}(\mathcal M)\)，\(\mathcal I(\beta)\) 等于其稳定值 \(\frac1{D_n}\int_{M_n}\beta_n\)（当 \(n\gg 1\)）；
+  \item 若 \(\alpha=(\alpha_n)_{n\ge 0}\) 为 \((m-1)\)-形式序列并满足定理 \ref{thm:app-normalized-integration-l1-defect-inverse-tower} 的边界 \(\ell^1\)-缺陷条件，则
+  \[
+  \mathcal I(d\alpha)=\lim_{n\to\infty}\frac{1}{D_n}\int_{\partial M_n}\alpha_n.
+  \]
+\end{enumerate}
+并且该泛函唯一地由
+\(
+\mathcal I(\beta)=I_\infty(\beta)
+\)
+给出，其中 \(I_\infty\) 为定理 \ref{thm:app-normalized-integration-l1-defect-inverse-tower} 的极限。
+\end{proposition}
+
+\begin{proof}
+存在性：对 \(\beta\in\Omega^m_{\ell^1}(\mathcal M)\)，令 \(\mathcal I(\beta):=I_\infty(\beta)\)。
+线性由积分线性与极限交换给出，连续性由尾和预算推出；若 \(\beta\) 最终相容，则缺陷尾段为零，故极限等于稳定值。
+对边界断言，逐层广义 Stokes 给出 \(\frac{1}{D_n}\int_{M_n}d\alpha_n=\frac{1}{D_n}\int_{\partial M_n}\alpha_n\)，令 \(n\to\infty\) 即得。
+\par
+唯一性：设 \(\beta\in\Omega^m_{\ell^1}(\mathcal M)\)。
+记 \(\pi_{N,n}:M_n\to M_N\) 为覆盖复合 \(\pi_{N,n}:=\pi_N\circ\cdots\circ\pi_{n-1}\)（\(n\ge N\)），并令 \(\beta^{(N)}\) 为最终相容截断
+\[
+\beta^{(N)}_n:=
+\begin{cases}
+\beta_n,& n\le N,\\
+\pi_{N,n}^\ast\beta_N,& n\ge N.
+\end{cases}
+\]
+则 \(\beta^{(N)}\in\Omega^m_{\mathrm{ev}}(\mathcal M)\)，并且由缺陷的望远镜分解可得
+\[
+\|\beta-\beta^{(N)}\|_{\ell^1}
+\le
+\sum_{n\ge N}\frac{1}{D_{n+1}}\int_{M_{n+1}}|\Delta_n\beta|
+\xrightarrow[N\to\infty]{}0.
+\]
+因此 \(\Omega^m_{\mathrm{ev}}(\mathcal M)\) 在 \(\|\cdot\|_{\ell^1}\) 下稠密。
+任何满足 (1) 且连续的线性泛函在稠密子空间上取值一致即在全空间上一致，从而唯一性成立。证毕。
+\end{proof}
+
+\begin{corollary}[solenoid 逆极限的叶向 Stokes 与规范测度的归一化刻画]\label{cor:app-solenoid-leafwise-stokes-normalized-trace}
+取 \(m=1\)，令 \(M_0=S^1\)，并取覆盖塔 \(\pi_n(z)=z^{d_n}\)（\(d_n\ge 2\)）形成逆系统 \(\mathcal M=(S^1,\pi_n)\)。
+其逆极限
+\[
+\Sigma:=\varprojlim(S^1,\pi_n)
+\]
+为紧致阿贝尔群。
+则存在唯一 Borel 概率测度 \(\mu_\Sigma\) 满足：对任意最终相容连续函数族 \(f=(f_n)\)（即存在 \(N\) 使得 \(f_{n+1}=f_n\circ\pi_n\) 对 \(n\ge N\) 成立），令 \(\beta_n:=f_n(\theta)\,\dd\theta\)（标准体积形式），则
+\[
+\int_\Sigma f\,\dd\mu_\Sigma
+=
+\lim_{n\to\infty}\frac{1}{D_n}\int_{S^1}f_n(\theta)\,\dd\theta.
+\]
+并且对任意满足定理 \ref{thm:app-normalized-integration-l1-defect-inverse-tower} 边界条件（此处 \(\partial S^1=\varnothing\)）的 \(0\)-形式序列 \(g=(g_n)\)，有叶向 Stokes 恒等式
+\[
+\int_\Sigma d_{\mathrm{leaf}}g\,\dd\mu_\Sigma=0,
+\]
+其中 \(d_{\mathrm{leaf}}\) 为 solenoid 的一维叶方向外微分。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:app-normalized-stokes-trace-l1-completion}，圆柱函数 \(f\) 上的线性泛函
+\(
+f\mapsto \lim_{n\to\infty}\frac{1}{D_n}\int_{S^1}f_n\,\dd\theta
+\)
+良定义且正，并满足对常函数 \(1\) 取值为 \(1\)。
+由 Riesz 表示定理，该泛函唯一对应于 Borel 概率测度 \(\mu_\Sigma\)。
+叶向 Stokes 由 \(\partial S^1=\varnothing\) 时逐层恒等式 \(\int_{S^1}dg_n=0\) 与上述极限交换性给出。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$p$}{p}-进超立方体的极限 Stokes：Haar 测度湮灭所有高阶差分边界]\label{prop:app-padic-hypercube-stokes-haar}
+令 \(G=\ZZ_p^{d}\) 取其 Haar 概率测度 \(\mu\)。
+对任意局部常值函数 \(f:G\to\RR\) 与任意向量 \(v_1,\dots,v_k\in G\)（\(k\ge 1\)），定义 \(k\)-维超立方体差分算子
+\[
+\Delta_{v_1,\dots,v_k}f(x)
+:=\sum_{\varepsilon\in\{0,1\}^{k}}(-1)^{|\varepsilon|}
+f\!\Bigl(x+\sum_{j=1}^{k}\varepsilon_j v_j\Bigr).
+\]
+则恒有
+\[
+\int_{G}\Delta_{v_1,\dots,v_k}f(x)\,\dd\mu(x)=0.
+\]
+该恒等式可视为有限商 \((\ZZ/p^{n}\ZZ)^{d}\) 上离散望远镜消去的稳定形式，并在逆极限 \(n\to\infty\) 下保持不变。
+\end{proposition}
+\begin{proof}
+由 Haar 测度的平移不变性，对每个 \(\varepsilon\in\{0,1\}^k\) 有
+\[
+\int_G f\!\Bigl(x+\sum_{j}\varepsilon_j v_j\Bigr)\dd\mu(x)=\int_G f(x)\dd\mu(x).
+\]
+因此
+\[
+\int_G \Delta_{v_1,\dots,v_k}f\,\dd\mu
+=\Bigl(\sum_{\varepsilon\in\{0,1\}^{k}}(-1)^{|\varepsilon|}\Bigr)\int_G f\,\dd\mu
+=(1-1)^{k}\int_G f\,\dd\mu=0.
+\]
+证毕。
+\end{proof}
+
+\begin{conjecture}[层级模曲线塔的边界 Stokes 迹与局部 \(L\)-因子的同一性]\label{conj:app-modular-curve-tower-stokes-trace-local-factor}
+令 \(p\) 为素数，取层级模曲线紧化塔 \(X_n:=X_1(p^{n+1})\) 与自然有限覆盖 \(\pi_n:X_{n+1}\to X_n\)，其保持 cusp 边界分解。
+取一固定权 \(2\) 的 Hecke 特征新形式 \(f\)，令 \(\omega_n\in\Omega^1(X_n)\) 为其对应的标准化 holomorphic \(1\)-形式在 \(X_n\) 上的拉回，使得 \(\omega_{n+1}=\pi_n^\ast\omega_n\)。
+设 \(\alpha_n\) 为一族定义在 \(X_n\setminus\mathrm{cusp}\) 上的 \(0\)-形式（或以 current 之对偶意义给出）满足
+\[
+d\alpha_n=\Re(\omega_n)\qquad\text{于 }X_n\setminus\mathrm{cusp},
+\]
+并且序列 \(\alpha=(\alpha_n)\) 的边界缺陷在定理 \ref{thm:app-normalized-integration-l1-defect-inverse-tower} 的意义下为 \(\ell^1\) 可和。
+令 \(D_n:=\prod_{j<n}\deg(\pi_j)\)。
+定义边界归一化 Stokes 迹
+\[
+\mathcal B_f:=\lim_{n\to\infty}\frac{1}{D_n}\int_{\partial X_n}\alpha_n.
+\]
+则在适当的 cyclotomic Mellin 变换框架下，\(\mathcal B_f\) 的 Fourier--Mellin 分解之局部因子与 \(f\) 所附 Galois 表示在 \(p\) 处的未分歧局部 \(L\)-因子一致（等价地，其 Satake 参数多项式一致），从而 \(\mathcal B_f\) 在 \(p\)-进角色方向的矩刻画与局部 Langlands 参数相符。
+\end{conjecture}
+
+\input{conj__app-hecke-stokes-reverse-martingale-satake}
+\input{conj__app-normalized-stokes-defect-measure-hecke-langlands}

@@ -1,0 +1,649 @@
+\subsection{规范差压力谱的复合外置结构：Beck--Chevalley 缺陷与树形分解}\label{subsec:pom-bc-gauge-anomaly-pressure}
+在定理 \ref{thm:pom-kl-ledger} 给出的单投影账本恒等式中，纤维均匀提升 \(Q_m\) 将“不可见信息”精确编码为 KL 缺陷项。本小节进一步刻画复合外置（两层与多层）下的非函子性结构，并给出其与 AM--GM 缺陷、Gibbs 变分、树形分解以及椭圆偏心率之间的严格同构关系。
+
+\begin{theorem}[均匀提升的 Beck--Chevalley AM--GM 缺陷恒等式]\label{thm:pom-bc-amgm-defect-identity}
+设 \(f:X\twoheadrightarrow Y\)、\(g:Y\twoheadrightarrow Z\) 为有限集上的满射。记纤维基数
+\[
+d_f(y):=\lvert f^{-1}(y)\rvert,\qquad
+d_g(z):=\lvert g^{-1}(z)\rvert,\qquad
+d_{g\circ f}(z):=\lvert(g\circ f)^{-1}(z)\rvert=\sum_{y\in g^{-1}(z)}d_f(y).
+\]
+对任意概率分布 \(\nu\in\Delta(Z)\)，定义纤维均匀提升核
+\[
+(L_h\pi)(u):=\frac{\pi(h(u))}{d_h(h(u))},
+\]
+其中 \(h:U\twoheadrightarrow V\) 为满射且 \(\pi\in\Delta(V)\)。令
+\[
+P:=L_fL_g\nu\in\Delta(X),\qquad
+Q:=L_{g\circ f}\nu\in\Delta(X).
+\]
+定义
+\[
+\mathrm{AM}_z:=\frac{1}{d_g(z)}\sum_{y\in g^{-1}(z)}d_f(y),\qquad
+\mathrm{GM}_z:=\exp\!\left(\frac{1}{d_g(z)}\sum_{y\in g^{-1}(z)}\log d_f(y)\right).
+\]
+则有恒等式
+\[
+\boxed{\;
+H(Q)-H(P)=D_{\mathrm{KL}}(P\|Q)
+=\mathbb E_{Z\sim\nu}\!\left[\log\frac{\mathrm{AM}_Z}{\mathrm{GM}_Z}\right].
+\;}
+\]
+特别地，右端非负，且为零当且仅当对每个 \(z\in Z\)，函数 \(d_f(\cdot)\) 在 \(g^{-1}(z)\) 上常值。
+\end{theorem}
+\begin{proof}
+取任意 \(x\in X\)，记 \(y=f(x)\)、\(z=g(y)\)。则
+\[
+P(x)=\frac{\nu(z)}{d_g(z)\,d_f(y)},\qquad
+Q(x)=\frac{\nu(z)}{d_{g\circ f}(z)}.
+\]
+故
+\[
+\log\frac{P(x)}{Q(x)}
+=\log d_{g\circ f}(z)-\log d_g(z)-\log d_f(y).
+\]
+在 \(P\) 下，给定 \(Z=z\) 时，\(Y\) 在 \(g^{-1}(z)\) 上均匀。于是
+\[
+\begin{aligned}
+D_{\mathrm{KL}}(P\|Q)
+&=\mathbb E_{P}\!\left[\log\frac{P}{Q}\right]\\
+&=\mathbb E_{Z\sim\nu}\!\left[
+\log d_{g\circ f}(Z)-\log d_g(Z)
+-\frac1{d_g(Z)}\sum_{y\in g^{-1}(Z)}\log d_f(y)
+\right]\\
+&=\mathbb E_{Z\sim\nu}\!\left[\log\frac{\mathrm{AM}_Z}{\mathrm{GM}_Z}\right].
+\end{aligned}
+\]
+另一方面，
+\[
+H(Q)=H(\nu)+\mathbb E_{Z\sim\nu}\!\big[\log d_{g\circ f}(Z)\big],
+\]
+且
+\[
+H(P)=H(\nu)+\mathbb E_{Z\sim\nu}\!\left[
+\log d_g(Z)+\frac1{d_g(Z)}\sum_{y\in g^{-1}(Z)}\log d_f(y)\right].
+\]
+二式相减即得 \(H(Q)-H(P)=D_{\mathrm{KL}}(P\|Q)\)。
+最后，\(\mathrm{AM}_z=\mathrm{GM}_z\) 当且仅当 \(\{d_f(y):y\in g^{-1}(z)\}\) 全部相等，由 AM--GM 取等条件即得。
+\end{proof}
+
+\begin{corollary}[均匀提升函子性的充要判据]\label{cor:pom-bc-functoriality-criterion}
+沿用定理 \ref{thm:pom-bc-amgm-defect-identity} 的记号。下列三条等价：
+\begin{enumerate}
+  \item 作为算子 \(\Delta(Z)\to\Delta(X)\)，有 \(L_fL_g=L_{g\circ f}\)；
+  \item 对每个 \(z\in Z\)，\(d_f(\cdot)\) 在 \(g^{-1}(z)\) 上常值；
+  \item 对每个 \(\nu\in\Delta(Z)\)，
+  \(D_{\mathrm{KL}}(L_fL_g\nu\|L_{g\circ f}\nu)=0\)。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+\((1)\Rightarrow(3)\) 显然。
+\((3)\Rightarrow(2)\) 由定理 \ref{thm:pom-bc-amgm-defect-identity} 的零缺陷判据直接得到。
+\((2)\Rightarrow(1)\)：取任意 \(x\in X\)，记 \(y=f(x),z=g(y)\)。若 \(d_f\) 在 \(g^{-1}(z)\) 上常值为 \(c(z)\)，则
+\[
+(L_fL_g\nu)(x)=\frac{\nu(z)}{d_g(z)c(z)}
+=\frac{\nu(z)}{\sum_{y'\in g^{-1}(z)}c(z)}
+=(L_{g\circ f}\nu)(x).
+\]
+故两算子相等。
+\end{proof}
+
+\begin{theorem}[Beck--Chevalley 缺陷的乘性分解与规范化 \(2\)-余圈]\label{thm:pom-bc-defect-multiplicative-2cocycle}
+设 \(\mathbf{Surj}\) 为有限集合与满射所成之范畴。
+对任意可复合满射 \(f:X\twoheadrightarrow Y\)、\(g:Y\twoheadrightarrow Z\)，以及任意 \(\nu\in\Delta(Z)\)，令
+\[
+P:=L_fL_g\nu\in\Delta(X),\qquad Q:=L_{g\circ f}\nu\in\Delta(X).
+\]
+定义点态缺陷函数
+\[
+\rho_{f,g}(x):=\frac{d_{g\circ f}(g(f(x)))}{d_g(g(f(x)))\,d_f(f(x))}\in\RR_{>0},\qquad x\in X,
+\]
+并以 \(\odot\) 表示在 \(X\) 上的逐点乘法：\((r\odot\mu)(x)=r(x)\mu(x)\)。
+则成立：
+\begin{enumerate}
+  \item 逐点恒等式（缺陷作为乘性扭结）
+  \[
+  \boxed{\;L_fL_g\nu=\rho_{f,g}\odot L_{g\circ f}\nu.\;}
+  \]
+  \item 对任意第三个满射 \(h:W\twoheadrightarrow X\)，在 \(W\) 上逐点成立 \(2\)-余圈恒等式
+  \[
+  \boxed{\;
+  \rho_{h,f}\cdot \rho_{f\circ h,g}
+  =(\rho_{f,g}\circ h)\cdot \rho_{h,g\circ f}\; }.
+  \]
+  等价地，令 \(\beta_{f,g}:=\log\rho_{f,g}\)，则 \(\beta\) 作为 \(\mathbf{Surj}\) 上的规范化实值 \(2\)-上链满足闭性 \(\delta\beta=0\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+取任意 \(x\in X\)，记 \(y=f(x)\)、\(z=g(y)\)。
+由定义
+\(
+(L_g\nu)(y)=\nu(z)/d_g(z)
+\)、
+\(
+(L_fL_g\nu)(x)=\nu(z)/(d_g(z)d_f(y))
+\)，而
+\(
+(L_{g\circ f}\nu)(x)=\nu(z)/d_{g\circ f}(z)
+\)。
+故
+\[
+\frac{(L_fL_g\nu)(x)}{(L_{g\circ f}\nu)(x)}
+=\frac{d_{g\circ f}(z)}{d_g(z)d_f(y)}
+=\rho_{f,g}(x),
+\]
+得到第一条。
+\par
+对第二条，对任意 \(\nu\in\Delta(Z)\) 比较 \(L_hL_fL_g\nu\) 的两种括号化。
+由第一条，
+\[
+L_hL_fL_g\nu
+=\rho_{h,f}\odot L_{f\circ h}L_g\nu
+=\bigl(\rho_{h,f}\rho_{f\circ h,g}\bigr)\odot L_{g\circ f\circ h}\nu,
+\]
+另一方面
+\[
+L_hL_fL_g\nu
+=L_h\bigl(\rho_{f,g}\odot L_{g\circ f}\nu\bigr)
+=(\rho_{f,g}\circ h)\odot L_hL_{g\circ f}\nu
+=\bigl((\rho_{f,g}\circ h)\rho_{h,g\circ f}\bigr)\odot L_{g\circ f\circ h}\nu.
+\]
+比较逐点系数即得所示恒等式；取对数得到 \(\delta\beta=0\)。证毕。
+\end{proof}
+
+\subsubsection{离散微分形式与上同调观点：纤维势、曲率与 Stokes 配对}\label{subsubsec:pom-bc-discrete-forms-stokes}
+本小节把上述“均匀提升的非函子性”与“缺陷即曲率”的结构进一步抽象为一套离散微分形式--上同调--Stokes 框架：纤维基数的对数给出 \(1\)-上链（势），其外微分给出 \(2\)-上链（曲率），而缺陷/相对熵为曲率在相应分布下的可观测平均。
+
+\begin{definition}[纤维势与曲率 \(2\)-上链]\label{def:pom-bc-fiber-potential-curvature}
+对任意满射 \(h:U\twoheadrightarrow V\)，定义纤维势 \(1\)-上链（在 \(U\) 上的函数）
+\[
+A_h(u):=\log d_h(h(u)),\qquad u\in U.
+\]
+对任意可复合满射 \(f:X\twoheadrightarrow Y\)、\(g:Y\twoheadrightarrow Z\)，定义曲率 \(2\)-上链（在 \(X\) 上的函数）
+\[
+\Omega_{f,g}(x):=\log d_{g\circ f}(g(f(x)))-\log d_g(g(f(x)))-\log d_f(f(x)),\qquad x\in X.
+\]
+\end{definition}
+
+\begin{proposition}[Radon--Nikodym 精确表达式]\label{prop:pom-bc-radon-nikodym-curvature}
+在定理 \ref{thm:pom-bc-amgm-defect-identity} 的设定下，令 \(P=L_fL_g\nu\)、\(Q=L_{g\circ f}\nu\)。
+则对一切 \(x\in X\) 有点态恒等式
+\[
+\boxed{\;\log\frac{P(x)}{Q(x)}=\Omega_{f,g}(x)\;}
+\]
+且右端仅由纤维基数 \(d_f,d_g,d_{g\circ f}\) 决定，与 \(\nu\) 无关。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:pom-bc-amgm-defect-identity} 的计算式
+\(
+P(x)=\nu(z)/(d_g(z)d_f(y))
+\)、
+\(
+Q(x)=\nu(z)/d_{g\circ f}(z)
+\)
+（其中 \(y=f(x)\)、\(z=g(y)\)），相除取对数即得。
+\end{proof}
+
+\begin{corollary}[缺陷作为曲率的可观测平均]\label{cor:pom-bc-kl-as-curvature-average}
+沿用命题 \ref{prop:pom-bc-radon-nikodym-curvature} 的记号，则
+\[
+\boxed{\;
+D_{\mathrm{KL}}(P\|Q)=\mathbb E_{X\sim P}\bigl[\Omega_{f,g}(X)\bigr].\;}
+\]
+\end{corollary}
+\begin{proof}
+由相对熵定义 \(D_{\mathrm{KL}}(P\|Q)=\sum_x P(x)\log\frac{P(x)}{Q(x)}\)，代入命题 \ref{prop:pom-bc-radon-nikodym-curvature} 即得。
+\end{proof}
+
+\begin{proposition}[曲率的上同调闭性与离散 Bianchi 恒等式]\label{prop:pom-bc-bianchi}
+令 \(\mathbf{Surj}\) 的 nerve 上的上链微分 \(\delta\) 作用于 \(1\)-上链 \(A\) 的典型形式为
+\[
+(\delta A)_{f,g}(x):=A_g(f(x))+A_f(x)-A_{g\circ f}(x).
+\]
+则在定义 \ref{def:pom-bc-fiber-potential-curvature} 下有点态恒等式
+\[
+\boxed{\;\Omega_{f,g}=-\,(\delta A)_{f,g}\;}
+\]
+从而 \(\delta\Omega=0\)；等价地，对任意可复合三元组
+\(
+X\xrightarrow{f}Y\xrightarrow{g}Z\xrightarrow{h}W
+\)
+在 \(X\) 上成立离散 Bianchi 恒等式
+\[
+\Omega_{g,h}(f(x))-\Omega_{g\circ f,h}(x)+\Omega_{f,h\circ g}(x)-\Omega_{f,g}(x)=0.
+\]
+\end{proposition}
+\begin{proof}
+由定义，
+\[
+A_g(f(x))+A_f(x)-A_{g\circ f}(x)
+=\log d_g(g(f(x)))+\log d_f(f(x))-\log d_{g\circ f}(g(f(x))),
+\]
+故 \(\Omega_{f,g}=-(\delta A)_{f,g}\)。
+再由 \(\delta^2=0\) 得 \(\delta\Omega=-\delta^2A=0\)，将其展开即为所示 Bianchi 恒等式。
+\end{proof}
+
+\begin{theorem}[广义离散 Stokes 公式（满射 nerve 上的链--上链配对）]\label{thm:pom-bc-discrete-stokes}
+取 \(\mathbf{Surj}\) 的任意有限子复形并在其上取链群 \(C_\bullet\) 与上链群 \(C^\bullet\)。
+对 \(2\)-链 \(\Sigma\in C_2\) 与曲率上链 \(\Omega\in C^2\) 的自然配对记作 \(\langle\Omega,\Sigma\rangle\)。
+则有
+\[
+\boxed{\;\langle \Omega,\Sigma\rangle=-\langle A,\partial\Sigma\rangle\;}
+\]
+其中 \(A\) 为纤维势 \(1\)-上链、\(\partial\) 为链边界算子。
+特别地，若 \(\partial\Sigma=0\)，则 \(\langle\Omega,\Sigma\rangle=0\)。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-bc-bianchi} 有 \(\Omega=-\delta A\)，故
+\(
+\langle\Omega,\Sigma\rangle=-\langle\delta A,\Sigma\rangle
+\)。
+由 \(\delta\) 与 \(\partial\) 的伴随关系（链--上链配对的定义）得
+\(
+\langle\delta A,\Sigma\rangle=\langle A,\partial\Sigma\rangle
+\)，从而得到结论。
+\end{proof}
+
+\begin{theorem}[投影塔上的全局平坦性判据：乘法纤维结构的充要条件]\label{thm:pom-bc-tower-flatness}
+给定满射塔
+\[
+X_0 \xrightarrow{f_1} X_1 \xrightarrow{f_2} \cdots \xrightarrow{f_n} X_n,
+\qquad F:=f_n\circ\cdots\circ f_1.
+\]
+对任意 \(\nu\in\Delta(X_n)\) 定义
+\[
+P_{\mathrm{seq}}:=L_{f_1}L_{f_2}\cdots L_{f_n}\nu\in\Delta(X_0),\qquad
+P_{\mathrm{tot}}:=L_F\nu\in\Delta(X_0).
+\]
+则对任意 \(x_0\in X_0\)，令 \(x_i=f_i(x_{i-1})\)（\(1\le i\le n\)），有点态恒等式
+\[
+\boxed{\;
+\log\frac{P_{\mathrm{seq}}(x_0)}{P_{\mathrm{tot}}(x_0)}
+=\log d_F(x_n)-\sum_{i=1}^n \log d_{f_i}(x_i)\; }.
+\]
+并且下列命题等价：
+\begin{enumerate}
+  \item 对所有 \(\nu\in\Delta(X_n)\) 皆有 \(P_{\mathrm{seq}}=P_{\mathrm{tot}}\)；
+  \item 对所有 \(x_0\in X_0\) 皆有 \(d_F(x_n)=\prod_{i=1}^n d_{f_i}(x_i)\)；
+  \item 对每一相邻对 \((f_i,f_{i+1})\) 有 \(\Omega_{f_i,f_{i+1}}\equiv 0\)（点态为零）；
+  \item 对每个 \(i\) 与每个 \(x_{i+1}\in X_{i+1}\)，函数 \(d_{f_i}(\cdot)\) 在 \(f_{i+1}^{-1}(x_{i+1})\subset X_i\) 上为常数。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由均匀提升的定义反复展开可得
+\(
+P_{\mathrm{seq}}(x_0)=\nu(x_n)\big/\prod_{i=1}^n d_{f_i}(x_i)
+\)、
+\(
+P_{\mathrm{tot}}(x_0)=\nu(x_n)\big/d_F(x_n)
+\)，相除取对数即得首个恒等式。
+\par
+\((1)\Leftrightarrow(2)\) 由点态恒等式立得。
+\((2)\Leftrightarrow(3)\) 由 \(\Omega\) 的定义与对数加性展开并作归纳即得。
+\((3)\Leftrightarrow(4)\) 由 \(\Omega_{f_i,f_{i+1}}\equiv 0\) 等价于
+\(
+d_{f_{i+1}\circ f_i}(x_{i+1})=d_{f_{i+1}}(x_{i+1})\,d_{f_i}(x_i)
+\)
+对所有 \(x_i\in f_{i+1}^{-1}(x_{i+1})\) 成立，而左端仅依赖 \(x_{i+1}\)，从而迫使 \(d_{f_i}\) 在每个 \(f_{i+1}\)-纤维上常值；反向推理同理。证毕。
+\end{proof}
+
+\begin{proposition}[线性化严格函子性与规范平直化]\label{prop:pom-bc-linearized-functoriality}
+对任意满射 \(f:X\twoheadrightarrow Y\) 定义线性算子 \(U_f:\RR^Y\to\RR^X\) 与对角乘子 \(D_f:\RR^X\to\RR^X\)：
+\[
+(U_f\pi)(x):=\pi(f(x)),\qquad (D_f\varphi)(x):=d_f(f(x))\cdot \varphi(x).
+\]
+则对任意可复合 \(f,g\) 有严格等式 \(U_fU_g=U_{g\circ f}\)，并且在概率单纯形的线性延拓意义下
+\[
+\boxed{\;U_f=D_f\circ L_f.\;}
+\]
+因此，均匀提升的非函子性完全由对角归一化 \(D_f\) 的选择诱导；其曲率 \(2\)-上链由 \(\log D_f\) 的离散外微分给出，并在定理 \ref{thm:pom-bc-discrete-stokes} 的意义下对闭 \(2\)-链必然消失。
+\end{proposition}
+\begin{proof}
+逐点计算得
+\(
+(U_fU_g\pi)(x)=\pi(g(f(x)))=(U_{g\circ f}\pi)(x)
+\)，故 \(U_fU_g=U_{g\circ f}\)。
+另一方面，
+\(
+(D_fL_f\pi)(x)=d_f(f(x))\cdot \pi(f(x))/d_f(f(x))=\pi(f(x))=(U_f\pi)(x)
+\)，从而 \(U_f=D_f\circ L_f\)。
+最后一条断言由命题 \ref{prop:pom-bc-bianchi} 与定理 \ref{thm:pom-bc-discrete-stokes} 直接推出。证毕。
+\end{proof}
+
+\begin{theorem}[均匀提升的伪函子严格化：对角 \(2\)-态射的五边形一致性]\label{thm:pom-bc-uniform-lift-pseudofunctor}
+构造 \(2\)-范畴 \(\mathbf{Stoch}^{\times}\) 如下：
+\begin{itemize}
+  \item 对象为有限集合；
+  \item \(1\)-态射 \(K:V\to U\) 为从 \(\Delta(V)\) 到 \(\Delta(U)\) 的 Markov 核；
+  \item \(2\)-态射 \(K\Rightarrow K'\) 由正函数 \(r:U\to\RR_{>0}\) 给出，满足对一切 \(\pi\in\Delta(V)\) 有 \(K\pi=r\odot K'\pi\)；
+  其纵向复合为逐点乘法，横向复合由拉回 \(r\circ h\) 实现。
+\end{itemize}
+则赋值
+\[
+\mathcal L:\mathbf{Surj}\longrightarrow \mathbf{Stoch}^{\times},\qquad
+(h:U\twoheadrightarrow V)\longmapsto L_h,
+\]
+一般并非严格函子，但可提升为伪函子：对任意可复合 \((f,g)\) 存在自然同构（\(2\)-态射）
+\[
+\alpha_{f,g}:L_f\circ L_g\Longrightarrow L_{g\circ f},
+\]
+其由定理 \ref{thm:pom-bc-defect-multiplicative-2cocycle} 的 \(\rho_{f,g}\) 给出，并且这些 \(\alpha_{f,g}\) 自动满足五边形一致性；该一致性精确等价于 \(\delta(\log\rho)=0\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-bc-defect-multiplicative-2cocycle}(1)，对任意 \(\nu\in\Delta(Z)\) 有
+\(
+L_fL_g\nu=\rho_{f,g}\odot L_{g\circ f}\nu
+\)，故 \(\rho_{f,g}\) 定义了 \(2\)-态射 \(\alpha_{f,g}\)。
+对任意三重复合 \((h,f,g)\)，沿两种括号化所得的对角因子分别为
+\(\rho_{h,f}\rho_{f\circ h,g}\) 与 \((\rho_{f,g}\circ h)\rho_{h,g\circ f}\)；
+两者相等当且仅当定理 \ref{thm:pom-bc-defect-multiplicative-2cocycle}(2) 成立。
+因此五边形一致性由 \(\delta(\log\rho)=0\) 给出。证毕。
+\end{proof}
+
+\begin{theorem}[层级外置的树形 KL 分解]\label{thm:pom-tree-kl-amgm-decomposition}
+设 \(T\) 为有限有根树，根为 \(r\)，叶集为 \(\mathcal L\)，内部结点集为 \(\mathcal I\)。对每个 \(v\in\mathcal I\)，记子结点集 \(\mathrm{Ch}(v)\)，度数 \(k(v):=\lvert\mathrm{Ch}(v)\rvert\ge 2\)，并记叶规模
+\[
+s(u):=\left|\{\ell\in\mathcal L:\ \ell\ \text{位于}\ u\ \text{的子树中}\}\right|.
+\]
+定义叶上的两种分布：
+\begin{itemize}
+  \item \(P\)：从根出发，在每个内部结点 \(v\) 上均匀选取下一子结点；
+  \item \(Q\)：在叶集 \(\mathcal L\) 上均匀分布。
+\end{itemize}
+对每个内部结点定义局部缺陷
+\[
+\alpha(v):=\log\frac{\mathrm{AM}_v}{\mathrm{GM}_v},
+\qquad
+\mathrm{AM}_v:=\frac1{k(v)}\sum_{u\in\mathrm{Ch}(v)}s(u),
+\qquad
+\mathrm{GM}_v:=\exp\!\left(\frac1{k(v)}\sum_{u\in\mathrm{Ch}(v)}\log s(u)\right).
+\]
+则
+\[
+\boxed{\;
+D_{\mathrm{KL}}(P\|Q)
+=\mathbb E_{\ell\sim P}\!\left[
+\sum_{v\in \mathrm{Path}(r,\ell)\cap\mathcal I}\alpha(v)\right].
+\;}
+\]
+因此 \(D_{\mathrm{KL}}(P\|Q)\ge 0\)，且当且仅当每个内部结点的子树叶规模在其子结点上常值。
+\end{theorem}
+\begin{proof}
+将 \(Q\) 写为同树上的 Markov 过程：在结点 \(v\) 处选子结点 \(u\in\mathrm{Ch}(v)\) 的条件概率定义为
+\[
+q_v(u):=\frac{s(u)}{s(v)}.
+\]
+则对任意叶 \(\ell\)，沿路径连乘得到
+\[
+Q(\ell)=\prod_{v\in\mathrm{Path}(r,\ell)\cap\mathcal I}\frac{s(\mathrm{next}_v(\ell))}{s(v)}
+=\frac{s(\ell)}{s(r)}=\frac1{|\mathcal L|},
+\]
+与均匀分布一致。
+另一方面，\(P\) 的局部转移为 \(p_v(u)=1/k(v)\)。
+
+于是
+\[
+\log\frac{P(\ell)}{Q(\ell)}
+=\sum_{v\in\mathrm{Path}(r,\ell)\cap\mathcal I}
+\log\frac{p_v(\mathrm{next}_v(\ell))}{q_v(\mathrm{next}_v(\ell))}.
+\]
+对 \(\ell\sim P\) 取期望并按结点分组，得到
+\[
+D_{\mathrm{KL}}(P\|Q)
+=\sum_{v\in\mathcal I}\mathbb P_P(v\ \text{被经过})\,
+\frac1{k(v)}\sum_{u\in\mathrm{Ch}(v)}
+\log\frac{1/k(v)}{s(u)/s(v)}.
+\]
+括号内化简为
+\[
+\log s(v)-\log k(v)-\frac1{k(v)}\sum_{u\in\mathrm{Ch}(v)}\log s(u)
+=\log\frac{\mathrm{AM}_v}{\mathrm{GM}_v}
+=\alpha(v),
+\]
+即得所述分解。零缺陷判据由每个 \(\alpha(v)=0\) 与 AM--GM 取等条件等价得到。
+\end{proof}
+
+\begin{proposition}[算法椭圆化：缺陷即偏心能量]\label{prop:pom-defect-eccentricity-energy}
+沿用定理 \ref{thm:pom-bc-amgm-defect-identity} 记号。对每个 \(z\in Z\) 定义椭圆
+\[
+E_z:\quad \frac{x^2}{a_z^2}+\frac{y^2}{b_z^2}=1,
+\qquad
+a_z:=\mathrm{AM}_z,\quad b_z:=\mathrm{GM}_z,
+\]
+偏心率
+\[
+e_z:=\sqrt{1-\left(\frac{b_z}{a_z}\right)^2}\in[0,1).
+\]
+则局部缺陷满足
+\[
+\log\frac{\mathrm{AM}_z}{\mathrm{GM}_z}
+=-\frac12\log(1-e_z^2),
+\]
+从而全局缺陷可写为
+\[
+\boxed{\;
+D_{\mathrm{KL}}(L_fL_g\nu\|L_{g\circ f}\nu)
+=\mathbb E_{Z\sim\nu}\!\left[-\frac12\log(1-e_Z^2)\right].
+\;}
+\]
+\end{proposition}
+\begin{proof}
+由偏心率定义得
+\(
+1-e_z^2=(b_z/a_z)^2
+\)。
+因此
+\[
+-\frac12\log(1-e_z^2)
+=-\frac12\log\!\left(\frac{b_z^2}{a_z^2}\right)
+=\log\frac{a_z}{b_z}
+=\log\frac{\mathrm{AM}_z}{\mathrm{GM}_z}.
+\]
+再对 \(Z\sim\nu\) 取期望并调用定理 \ref{thm:pom-bc-amgm-defect-identity} 即得。
+\end{proof}
+
+\begin{theorem}[局部缺陷的 Gibbs 变分原理与唯一极值]\label{thm:pom-local-defect-gibbs-variational}
+固定定理 \ref{thm:pom-bc-amgm-defect-identity} 中任意 \(z\in Z\)。记
+\[
+k:=d_g(z),\qquad g^{-1}(z)=\{y_1,\dots,y_k\},\qquad
+n_i:=d_f(y_i)\in\mathbb N_{>0}.
+\]
+定义均匀分布 \(u_i:=1/k\) 与尺寸偏置分布
+\[
+q_i:=\frac{n_i}{\sum_{j=1}^{k}n_j}.
+\]
+再记 \(\Delta_k:=\{\pi\in\RR_{\ge0}^{k}:\sum_i\pi_i=1\}\)。
+则局部缺陷
+\[
+\alpha(z):=\log\frac{\mathrm{AM}_z}{\mathrm{GM}_z}
+\]
+具有以下等价表述：
+\begin{enumerate}
+  \item Jensen--AM/GM 形式
+  \[
+  \alpha(z)
+  =\log\!\left(\frac1k\sum_{i=1}^{k}n_i\right)-\frac1k\sum_{i=1}^{k}\log n_i;
+  \]
+  \item 相对熵形式
+  \[
+  \alpha(z)=D_{\mathrm{KL}}(u\|q);
+  \]
+  \item Gibbs 变分形式
+  \[
+  \alpha(z)
+  =\sup_{\pi\in\Delta_k}\left\{
+  H(\pi)-\log k+\sum_{i=1}^{k}\pi_i\log n_i-\frac1k\sum_{i=1}^{k}\log n_i
+  \right\},
+  \]
+  且上确界唯一在 \(\pi=q\) 处取得。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\((1)\) 是定义展开。
+对 \((2)\)，直接计算
+\[
+\begin{aligned}
+D_{\mathrm{KL}}(u\|q)
+&=\sum_{i=1}^{k}\frac1k\log\frac{1/k}{n_i/\sum_j n_j}\\
+&=\log\!\left(\frac{\sum_j n_j}{k}\right)-\frac1k\sum_i\log n_i
+=\alpha(z).
+\end{aligned}
+\]
+对 \((3)\)，定义
+\[
+F(\pi):=H(\pi)+\sum_{i=1}^{k}\pi_i\log n_i.
+\]
+由
+\[
+F(\pi)=\log\!\left(\sum_{j=1}^{k}n_j\right)-D_{\mathrm{KL}}(\pi\|q),
+\]
+得 \(\sup_{\pi\in\Delta_k}F(\pi)=\log\sum_j n_j\)，且唯一极值点为 \(\pi=q\)。
+故
+\[
+\sup_{\pi\in\Delta_k}\left\{H(\pi)-\log k+\sum_i\pi_i\log n_i\right\}
+=\log\!\left(\frac1k\sum_i n_i\right),
+\]
+再减去常数 \(\frac1k\sum_i\log n_i\) 即得所述变分公式与唯一性。
+\end{proof}
+
+\begin{corollary}[小缺陷刚性：纤维近均匀的定量界]\label{cor:pom-small-defect-fiber-rigidity}
+沿用定理 \ref{thm:pom-local-defect-gibbs-variational} 记号。令
+\[
+\alpha(z)=\log\frac{\mathrm{AM}_z}{\mathrm{GM}_z}.
+\]
+则
+\[
+\boxed{\;
+\max_{1\le i\le k}\left|\frac{n_i}{\mathrm{AM}_z}-1\right|
+\le k\sqrt{2\alpha(z)}.
+\;}
+\]
+特别地，若 \(\alpha(z)\to 0\)，则 \(n_i/\mathrm{AM}_z\to 1\) 在 \(i=1,\dots,k\) 上一致成立。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-local-defect-gibbs-variational}(2) 有 \(\alpha(z)=D_{\mathrm{KL}}(u\|q)\)。
+由 Pinsker 不等式
+\[
+\|u-q\|_1^2\le 2D_{\mathrm{KL}}(u\|q)=2\alpha(z),
+\]
+故 \(\|u-q\|_1\le \sqrt{2\alpha(z)}\)。
+又
+\[
+\frac{n_i}{\mathrm{AM}_z}
+=\frac{n_i}{(\sum_j n_j)/k}
+=kq_i,
+\]
+从而
+\[
+\max_i\left|\frac{n_i}{\mathrm{AM}_z}-1\right|
+=k\max_i|q_i-u_i|
+\le k\|q-u\|_1
+\le k\sqrt{2\alpha(z)}.
+\]
+证毕。
+\end{proof}
+
+\begin{remark}[与规范差压力谱接口的对应关系]\label{rem:pom-bc-gauge-pressure-interface}
+定理 \ref{thm:pom-bc-amgm-defect-identity}--推论 \ref{cor:pom-small-defect-fiber-rigidity} 将“复合均匀提升的非函子性”精确化为一组可审计标量：
+\[
+\mathcal A_{\nu}(f,g):=D_{\mathrm{KL}}(L_fL_g\nu\|L_{g\circ f}\nu)
+=\mathbb E_{Z\sim\nu}\!\left[\log\frac{\mathrm{AM}_Z}{\mathrm{GM}_Z}\right].
+\]
+该量与定理 \ref{thm:pom-kl-ledger} 的单层缺陷属于同一账本类型，但在两层/树形外置下给出新的结构性超额项。由定理 \ref{thm:pom-tree-kl-amgm-decomposition} 的局部加和形式可见，这一超额可在层级图上分解为局部压力缺陷之和，从而与本节及第 \ref{sec:folding} 节中的规范差压力谱对象形成一致的多尺度审计接口。
+\end{remark}
+
+\begin{theorem}[投影塔上的账本残差增量：条件分布对尺寸偏置基准的 KL 曲率]\label{thm:pom-ledger-residual-stokes-increment}
+设 \(f:\Omega\twoheadrightarrow X\)、\(g:X\twoheadrightarrow Y\) 为有限集满射，记 \(h:=g\circ f:\Omega\twoheadrightarrow Y\)。
+对任意 \(\mu\in\Delta(\Omega)\)，记
+\[
+\pi:=f_\ast\mu\in\Delta(X),\qquad \tau:=g_\ast\pi\in\Delta(Y),
+\]
+并定义外置分布
+\[
+\mu_f^{e}:=L_f\pi,\qquad \mu_h^{e}:=L_h\tau.
+\]
+令账本残差
+\[
+\mathsf R_f(\mu):=D_{\mathrm{KL}}(\mu\|\mu_f^{e}),\qquad
+\mathsf R_h(\mu):=D_{\mathrm{KL}}(\mu\|\mu_h^{e}).
+\]
+对每个 \(y\in Y\) 定义纤维尺寸
+\[
+d_f(x):=\lvert f^{-1}(x)\rvert,\qquad
+d_h(y):=\lvert h^{-1}(y)\rvert=\sum_{x\in g^{-1}(y)}d_f(x),
+\]
+并在 \(g^{-1}(y)\) 上定义尺寸偏置基准分布
+\[
+\sigma_y(x):=\frac{d_f(x)}{d_h(y)},\qquad x\in g^{-1}(y),
+\]
+以及条件分布 \(\pi(\cdot\mid y)\)（在 \(g^{-1}(y)\) 上）。
+则有严格恒等式
+\[
+\boxed{\;
+\mathsf R_h(\mu)=\mathsf R_f(\mu)
+\;+\;
+\mathbb E_{Y\sim\tau}\!\left[D_{\mathrm{KL}}\bigl(\pi(\cdot\mid Y)\,\|\,\sigma_Y\bigr)\right].\;}
+\]
+从而 \(\mathsf R_h(\mu)\ge \mathsf R_f(\mu)\)，且取等当且仅当对 \(\tau\)-几乎处处的 \(y\) 有 \(\pi(\cdot\mid y)=\sigma_y\)。
+\end{theorem}
+\begin{proof}
+由定义
+\[
+\mathsf R_h(\mu)-\mathsf R_f(\mu)
+=\sum_{\omega\in\Omega}\mu(\omega)\log\frac{\mu_f^{e}(\omega)}{\mu_h^{e}(\omega)}.
+\]
+令 \(x=f(\omega)\)、\(y=g(x)\)。
+由均匀提升的定义，
+\(
+\mu_f^{e}(\omega)=\pi(x)/d_f(x)
+\)、
+\(
+\mu_h^{e}(\omega)=\tau(y)/d_h(y)
+\)。
+因此
+\[
+\mathsf R_h(\mu)-\mathsf R_f(\mu)
+=\sum_{x\in X}\pi(x)\bigl(\log\pi(x)-\log\tau(g(x))-\log d_f(x)+\log d_h(g(x))\bigr).
+\]
+按 \(y\in Y\) 分组并写成条件形式，得到
+\[
+\mathsf R_h(\mu)-\mathsf R_f(\mu)
+=\sum_{y\in Y}\tau(y)\sum_{x\in g^{-1}(y)}\pi(x\mid y)\log\frac{\pi(x\mid y)}{\sigma_y(x)}
+=\mathbb E_{Y\sim\tau}\!\left[D_{\mathrm{KL}}\bigl(\pi(\cdot\mid Y)\,\|\,\sigma_Y\bigr)\right],
+\]
+即所示恒等式。取等条件由相对熵的零判据给出。证毕。
+\end{proof}
+
+\begin{corollary}[多层递归投影的残差望远镜分解]\label{cor:pom-ledger-residual-telescoping}
+令
+\[
+\Omega=X_0 \xrightarrow{f_1} X_1 \xrightarrow{f_2}\cdots\xrightarrow{f_n} X_n
+\]
+为满射链，记 \(F_k:=f_k\circ\cdots\circ f_1:X_0\twoheadrightarrow X_k\)。
+对 \(\mu\in\Delta(X_0)\) 定义
+\[
+\mu^{e}_{(k)}:=L_{F_k}\bigl((F_k)_\ast\mu\bigr),\qquad
+\mathsf R_{(k)}(\mu):=D_{\mathrm{KL}}(\mu\|\mu^{e}_{(k)}).
+\]
+则对 \(k=0,\dots,n-1\) 有
+\[
+\mathsf R_{(k+1)}(\mu)-\mathsf R_{(k)}(\mu)
+=\mathbb E_{X_{k+1}}\!\left[D_{\mathrm{KL}}\bigl(\pi_k(\cdot\mid X_{k+1})\,\|\,\sigma^{(k)}_{X_{k+1}}\bigr)\right]\ge 0,
+\]
+其中 \(\pi_k:=(F_k)_\ast\mu\) 且 \(\sigma^{(k)}_{x_{k+1}}\) 为由 \(F_k\) 的纤维基数诱导的尺寸偏置基准。
+从而得到望远镜恒等式
+\[
+\boxed{\;
+\mathsf R_{(n)}(\mu)
+=\sum_{k=0}^{n-1}\mathbb E_{X_{k+1}}\!\left[D_{\mathrm{KL}}\bigl(\pi_k(\cdot\mid X_{k+1})\,\|\,\sigma^{(k)}_{X_{k+1}}\bigr)\right].\;}
+\]
+\end{corollary}
+\begin{proof}
+对每个 \(k\) 将定理 \ref{thm:pom-ledger-residual-stokes-increment} 应用于 \(f=F_k\)、\(g=f_{k+1}\) 即得增量公式。
+对 \(k=0,\dots,n-1\) 求和并注意 \(\mathsf R_{(0)}(\mu)=D_{\mathrm{KL}}(\mu\|\mu)=0\)，得到望远镜分解。证毕。
+\end{proof}
+
+\begin{conjecture}[Beck--Chevalley 曲率类的算术化：Lee--Yang 除子与模性配对]\label{conj:pom-bc-stokes-langlands-leyang}
+在折叠--投影塔诱导的 Beck--Chevalley 曲率 \(2\)-余圈 \(\beta=\log\rho\)（定理 \ref{thm:pom-bc-defect-multiplicative-2cocycle}）的背景下，存在一条自然的调和--算术提升机制，使得同调类 \([\beta]\) 可被函子地送入与 Lee--Yang 超曲线相关的动机上同调；并且其某个自然周期配对给出控制热力学极限中 Stokes 常数的标量不变量。
+进一步地，该动机在 Langlands 对应下落入权 \(2\) 的模形式或自守表示，其导子由投影塔的圆维/预算型不变量所刻画。
+\end{conjecture}

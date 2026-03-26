@@ -1,0 +1,416 @@
+\paragraph{bin-fold 饱和窗口、零温微正则尖点与近地基壳层上界}
+在 bin-fold 最大纤维的精确饱和判据、输出位势右端点的对数尖点以及地基层的正熵增长率都已固定之后，还可进一步把离散最大纤维、零温 Puiseux 展开与近端壳层计数压缩为同一条显式链。其共同特征在于：饱和窗口只由单个 Fibonacci 差值决定，而同一差值又经 Legendre--Fenchel 变换传递为右端点的对数尖点与近地基壳层的指数上界。
+
+\begin{theorem}[最大纤维饱和的差窗闭式与最大尾和公式]\label{thm:xi-foldbin-maxfiber-saturation-gap-window-closed}
+沿用定义 \ref{def:K-of-m}、命题 \ref{prop:fold-bin-digit-dp} 与推论 \ref{cor:fold-bin-saturation} 的记号。对任意 \(m\ge 1\)，令
+\[
+K:=K(m),
+\qquad
+L:=K-m,
+\qquad
+d_{\max}^{\mathrm{bin}}(m):=d_m^{\mathrm{bin}}(0^m).
+\]
+再定义
+\[
+S_{\max}(m):=
+\max\Bigl\{
+\sum_{k=m+1}^{K}c_kF_{k+1}:\ c_k\in\{0,1\},\ c_kc_{k+1}=0
+\Bigr\},
+\]
+并记
+\[
+\varepsilon_m:=
+\begin{cases}
+1,& L\equiv 0\pmod 2,\\
+0,& L\equiv 1\pmod 2.
+\end{cases}
+\]
+则 \(S_{\max}(m)\) 具有统一闭式
+\[
+\boxed{\;
+S_{\max}(m)
+=
+\sum_{j=0}^{\lfloor (L-1)/2\rfloor}F_{K+1-2j}
+=
+F_{K+2}-F_{m+1+\varepsilon_m},
+\;}
+\]
+其中当 \(L=0\) 时上式中的有限和按空和解释为 \(0\)。特别地，
+\[
+\boxed{\;
+d_{\max}^{\mathrm{bin}}(m)=F_{L+2}
+\iff
+S_{\max}(m)\le 2^m-1
+\iff
+0\le F_{K+2}-2^m\le F_{m+1+\varepsilon_m}-1.
+\;}
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:fold-bin-saturation}，最大纤维由 \(0^m\) 取得，并且
+\[
+d_{\max}^{\mathrm{bin}}(m)=F_{L+2}
+\iff
+S_{\max}(m)\le 2^m-1.
+\]
+因此只需把 \(S_{\max}(m)\) 写成统一闭式。
+
+当 \(L=0\) 时尾部为空，故 \(S_{\max}(m)=0\)，而此时 \(K=m\) 且
+\[
+F_{K+2}-F_{m+1+\varepsilon_m}=F_{m+2}-F_{m+2}=0.
+\]
+以下设 \(L\ge 1\)。
+
+由于权重 \(F_{k+1}\) 随 \(k\) 严格递增，若某个 admissible 尾部在位置 \(K\) 未取 \(1\)，则分两种情形：若 \(c_{K-1}=0\)，直接把 \(c_K\) 改为 \(1\) 即使尾和严格增大；若 \(c_{K-1}=1\)，则把 \(c_{K-1}\) 改为 \(0\) 并把 \(c_K\) 改为 \(1\)，尾和仍然严格增大。故任一极大尾部都必满足 \(c_K=1\)。去掉第 \(K\) 位后，同一论证可递归施加到区间 \(\{m+1,\dots,K-2\}\)，故极大模式只能是
+\[
+c_K=c_{K-2}=c_{K-4}=\cdots=1,
+\]
+其余各位皆为 \(0\)。因此
+\[
+S_{\max}(m)=\sum_{j=0}^{\lfloor (L-1)/2\rfloor}F_{K+1-2j}.
+\]
+
+再用恒等式
+\[
+\sum_{j=0}^{r}F_{n-2j}=F_{n+1}-F_{n-2r-1},
+\]
+取 \(n=K+1\)、\(r=\lfloor (L-1)/2\rfloor\)，得到
+\[
+S_{\max}(m)
+=
+F_{K+2}-F_{K-2\lfloor (L-1)/2\rfloor}.
+\]
+若 \(L=2s\) 为偶数，则 \(\lfloor (L-1)/2\rfloor=s-1\)，减项为 \(F_{m+2}\)；若 \(L=2s+1\) 为奇数，则减项为 \(F_{m+1}\)。这正好统一为
+\[
+S_{\max}(m)=F_{K+2}-F_{m+1+\varepsilon_m}.
+\]
+
+将该闭式代回饱和判据，便得到
+\[
+F_{K+2}-F_{m+1+\varepsilon_m}\le 2^m-1
+\iff
+F_{K+2}-2^m\le F_{m+1+\varepsilon_m}-1.
+\]
+而由 \(F_{K+1}\le 2^m-1<F_{K+2}\) 可知 \(2^m\le F_{K+2}\)，故左侧差值自动非负。证毕。
+\end{proof}
+
+\begin{theorem}[饱和点的指数级 Diophantine 逼近与有限性]\label{thm:xi-foldbin-saturation-diophantine-finiteness}
+定义饱和点集合
+\[
+\mathcal S
+:=
+\Bigl\{
+m\ge 1:\ d_{\max}^{\mathrm{bin}}(m)=F_{K(m)-m+2}
+\Bigr\}.
+\]
+则存在常数 \(C>0\)，使得对每个 \(m\in\mathcal S\) 都有
+\[
+\boxed{\;
+\Bigl|(K(m)+2)\log\varphi-m\log 2-\log\sqrt5\Bigr|
+\le
+C\Bigl(\frac{\varphi}{2}\Bigr)^m.
+\;}
+\]
+因此 \(\mathcal S\) 只能是有限集；特别地，它具有零自然密度。
+\end{theorem}
+\begin{proof}
+若 \(m\in\mathcal S\)，则由定理 \ref{thm:xi-foldbin-maxfiber-saturation-gap-window-closed}，
+\[
+0\le F_{K+2}-2^m\le F_{m+1+\varepsilon_m}-1\le F_{m+2}.
+\]
+令
+\[
+\widehat\varphi:=-\varphi^{-1},
+\qquad
+\Delta_m:=(K+2)\log\varphi-m\log 2-\log\sqrt5.
+\]
+把 Binet 公式
+\[
+F_n=\frac{\varphi^n-\widehat\varphi^n}{\sqrt5}
+\]
+代入，得到
+\[
+\left|
+\frac{\varphi^{K+2}}{\sqrt5}-2^m
+\right|
+\le
+F_{m+2}+\frac{|\widehat\varphi|^{K+2}}{\sqrt5}.
+\]
+由 \(F_{K+1}\le 2^m-1<F_{K+2}\) 可知 \(K=(\log 2/\log\varphi)m+O(1)\)，故
+\[
+F_{m+2}+\frac{|\widehat\varphi|^{K+2}}{\sqrt5}
+=
+O(\varphi^m).
+\]
+两边除以 \(2^m\) 即得
+\[
+|e^{\Delta_m}-1|
+\le
+C_1\Bigl(\frac{\varphi}{2}\Bigr)^m.
+\]
+由于 \(\varphi/2<1\)，当 \(m\) 足够大时右侧小于 \(1/2\)，于是
+\[
+|\Delta_m|
+\le
+2|e^{\Delta_m}-1|
+\le
+2C_1\Bigl(\frac{\varphi}{2}\Bigr)^m.
+\]
+把有限多个小 \(m\) 吸收到常数中，即得所示不等式。
+
+另一方面，\(\Delta_m\) 是关于代数数 \(2\) 与 \(\varphi\) 的非零对数线性形式；由 Baker--W\"ustholz/Matveev 型下界，它在指数 \(m\) 上只能达到至多多项式级的小量，不可能对无穷多个 \(m\) 满足上述指数级估计。故 \(\mathcal S\) 必为有限集。这正是注 \ref{rem:fold-bin-finite} 所记录的机制。有限集当然具有零自然密度。证毕。
+\end{proof}
+
+\begin{theorem}[零温端点微正则包络的极小点与显式尖点闭式]\label{thm:xi-output-microcanonical-logcusp-legendre-closed}
+沿用命题 \ref{prop:real-input-40-pressure-freezing} 的记号，定义
+\[
+h(\alpha):=\inf_{\theta\ge 0}\bigl(P(\theta)-\alpha\theta\bigr),
+\qquad
+0\le \alpha\le \frac12.
+\]
+再记
+\[
+a:=\frac{d}{c}>0,
+\qquad
+b:=\frac{e}{c}-\frac{d^2}{2c^2}.
+\]
+则存在 \(\delta_0>0\)，使得当
+\[
+\delta:=\frac12-\alpha\in(0,\delta_0)
+\]
+时，\(h(\alpha)\) 在 \([0,\infty)\) 上的极小点唯一，记为 \(\theta(\alpha)\)。并且
+\[
+\boxed{\;
+\theta(\alpha)
+=
+-2\log\frac{2\delta}{a}
++\frac{8b}{a^2}\delta
++O(\delta^2),
+\qquad
+\delta\downarrow 0,
+\;}
+\]
+以及
+\[
+\boxed{\;
+h\!\left(\frac12-\delta\right)
+=
+\log c
+-2\delta\log\delta
++2\left(1+\log\frac{a}{2}\right)\delta
++\frac{4b}{a^2}\delta^2
++O(\delta^3).
+\;}
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:real-input-40-alpha-max} 与命题 \ref{prop:real-input-40-output-cumulants-closed}，
+\[
+P'(0)<\frac12.
+\]
+因此当 \(\delta>0\) 充分小时，极小点不可能停在边界 \(\theta=0\)，而必须满足驻点方程
+\[
+P'(\theta)=\frac12-\delta.
+\]
+再由命题 \ref{prop:real-input-40-pressure-freezing}，
+\[
+P(\theta)
+=
+\frac{\theta}{2}+\log c+a e^{-\theta/2}+b e^{-\theta}+O(e^{-3\theta/2}),
+\]
+从而
+\[
+P'(\theta)
+=
+\frac12-\frac{a}{2}e^{-\theta/2}-b e^{-\theta}+O(e^{-3\theta/2}).
+\]
+令
+\[
+u:=e^{-\theta/2},
+\]
+则驻点方程改写为
+\[
+\delta=\frac{a}{2}u+b u^2+O(u^3).
+\]
+对该幂级数作反演，得到
+\[
+u=\frac{2\delta}{a}-\frac{8b}{a^3}\delta^2+O(\delta^3).
+\]
+取对数并乘以 \(-2\)，便有
+\[
+\theta(\alpha)
+=
+-2\log u
+=
+-2\log\frac{2\delta}{a}
++\frac{8b}{a^2}\delta
++O(\delta^2).
+\]
+由于同一邻域内
+\[
+P''(\theta)=\frac{a}{4}e^{-\theta/2}+O(e^{-\theta})>0,
+\]
+故该驻点唯一，并且就是 \(h(\alpha)\) 的唯一极小点。
+
+第二个展开正是结论 \ref{con:xi-terminal-real-input-output-microcanonical-logcusp-second-order} 的内容；将上式得到的 \(u\)-反演代回
+\[
+h(\alpha)=P(\theta(\alpha))-\alpha\theta(\alpha)
+\]
+亦可直接复得
+\[
+h\!\left(\frac12-\delta\right)
+=
+\log c
+-2\delta\log\delta
++2\left(1+\log\frac{a}{2}\right)\delta
++\frac{4b}{a^2}\delta^2
++O(\delta^3).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[零温端点微正则包络的斜率与曲率同时发散]\label{cor:xi-output-microcanonical-endpoint-slope-curvature-diverge}
+沿用定理 \ref{thm:xi-output-microcanonical-logcusp-legendre-closed} 的记号。当 \(\alpha\uparrow 1/2\) 时，有
+\[
+\boxed{\;
+h'(\alpha)
+=
+2\log\!\Bigl(\frac{2(1/2-\alpha)}{a}\Bigr)
++O\!\bigl(1/2-\alpha\bigr)
+\longrightarrow -\infty,
+\;}
+\]
+以及
+\[
+\boxed{\;
+h''(\alpha)
+=
+-\frac{2}{1/2-\alpha}+O(1)
+\longrightarrow -\infty.
+\;}
+\]
+因此 \(h\) 在右端点不可能具有有限斜率的 \(C^1\) 延拓，更不存在有限曲率的二阶延拓。
+\end{corollary}
+\begin{proof}
+令 \(\delta:=1/2-\alpha\)。由定理 \ref{thm:xi-output-microcanonical-logcusp-legendre-closed}，
+\[
+h\!\left(\frac12-\delta\right)
+=
+\log c
+-2\delta\log\delta
++2\left(1+\log\frac{a}{2}\right)\delta
++\frac{4b}{a^2}\delta^2
++O(\delta^3).
+\]
+对 \(\delta\) 求导得
+\[
+\frac{d}{d\delta}
+h\!\left(\frac12-\delta\right)
+=
+-2\log\delta
++2\log\frac{a}{2}
++\frac{8b}{a^2}\delta
++O(\delta^2).
+\]
+而 \(h'(\alpha)=-(d/d\delta)h(1/2-\delta)\)，故
+\[
+h'(\alpha)
+=
+2\log\frac{2\delta}{a}+O(\delta),
+\]
+这就给出第一式。再对上式求导，得到
+\[
+h''(\alpha)
+=
+-\frac{2}{\delta}+O(1)
+=
+-\frac{2}{1/2-\alpha}+O(1),
+\]
+因而二者都趋于 \(-\infty\)。证毕。
+\end{proof}
+
+\begin{theorem}[近地基壳层计数的统一 Legendre 上界]\label{thm:xi-near-ground-shell-counting-legendre-upper-bound}
+沿用命题 \ref{prop:real-input-40-pressure-freezing} 与定理 \ref{thm:xi-real-input-40-output-edgeworth-quasipowers} 的记号。记
+\[
+Z_n(u)=\sum_{k=0}^{n}A_{n,k}u^k,
+\qquad
+k_n(\alpha):=\lfloor \alpha n\rfloor
+\qquad
+\bigl(0\le \alpha\le 1/2\bigr).
+\]
+则对任意固定的 \(\alpha\in[0,1/2]\)，都有
+\[
+\boxed{\;
+\limsup_{n\to\infty}\frac{1}{n}\log A_{n,k_n(\alpha)}
+\le
+h(\alpha),
+\;}
+\]
+其中 \(h\) 为定理 \ref{thm:xi-output-microcanonical-logcusp-legendre-closed} 中的微正则包络。特别地，当 \(\delta\downarrow 0\) 且 \(\alpha=1/2-\delta\) 时，
+\[
+\boxed{\;
+\limsup_{n\to\infty}\frac{1}{n}\log A_{n,\lfloor(1/2-\delta)n\rfloor}
+\le
+\log c
+-2\delta\log\delta
++2\left(1+\log\frac{a}{2}\right)\delta
++\frac{4b}{a^2}\delta^2
++O(\delta^3).
+\;}
+\]
+\end{theorem}
+\begin{proof}
+任取 \(\theta\ge 0\)。由
+\[
+Z_n(e^\theta)=\sum_{k=0}^{n}A_{n,k}e^{\theta k},
+\]
+可得
+\[
+A_{n,k_n(\alpha)}e^{\theta k_n(\alpha)}
+\le
+Z_n(e^\theta).
+\]
+两边取对数并除以 \(n\)，注意到 \(k_n(\alpha)=\alpha n+O(1)\)，得到
+\[
+\frac{1}{n}\log A_{n,k_n(\alpha)}
+\le
+\frac{1}{n}\log Z_n(e^\theta)-\alpha\theta+O\!\left(\frac{1}{n}\right).
+\]
+对 \(n\to\infty\) 取上极限，并利用 Perron--Frobenius 压力极限
+\[
+\lim_{n\to\infty}\frac{1}{n}\log Z_n(e^\theta)=P(\theta),
+\]
+便有
+\[
+\limsup_{n\to\infty}\frac{1}{n}\log A_{n,k_n(\alpha)}
+\le
+P(\theta)-\alpha\theta.
+\]
+再对全部 \(\theta\ge 0\) 取下确界，便得到
+\[
+\limsup_{n\to\infty}\frac{1}{n}\log A_{n,k_n(\alpha)}
+\le
+\inf_{\theta\ge 0}\bigl(P(\theta)-\alpha\theta\bigr)
+=
+h(\alpha).
+\]
+当 \(\alpha=1/2-\delta\) 且 \(\delta\downarrow 0\) 时，只需把定理
+\ref{thm:xi-output-microcanonical-logcusp-legendre-closed} 的端点展开代入即可。证毕。
+\end{proof}
+
+\noindent
+综上，\(\log c\) 同时控制极端饱和层的最小完备外置率、无偏采样等待代价与微正则端点值；\(\Delta_\mu\) 继续刻画最大密度层与平衡均值之间的线性代数距离，而不消灭其正的指数熵；\(u_R\) 与 \(c^2=\rho(B_\infty)\) 之间的谱缝则说明 RH/Ramanujan 失效严格先于零温四次 Perron 尺度。进一步，bin-fold 最大纤维的离散异常饱和被压缩为单个 Fibonacci 差窗与指数级 Diophantine 逼近，而输出位势的零温 Puiseux 展开又把这一离散窗口传递为微正则端点的对数尖点与近地基壳层的统一上界。因而本段的零温结构可概括为
+\[
+\text{最大纤维饱和判据}
+\Longrightarrow
+\text{指数级 Diophantine 逼近}
+\Longrightarrow
+\text{零温端点 Puiseux 几何}
+\Longrightarrow
+\text{微正则对数尖点}
+\Longrightarrow
+\text{近地基壳层指数上界}.
+\]
+其中，从极端饱和层到其线性邻壳，主导几何始终由同一 Puiseux--Legendre 机制锁定。
+
+\endinput

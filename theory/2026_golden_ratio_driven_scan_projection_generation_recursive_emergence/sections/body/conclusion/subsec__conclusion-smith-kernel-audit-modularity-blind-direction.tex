@@ -1,0 +1,227 @@
+\subsection{整除格模性、离散 Hessian 反演与 Smith 审计盲向}\label{subsec:conclusion-smith-kernel-audit-modularity-blind-direction}
+沿用定理 \ref{thm:xi-kernel-loss-divisibility-valuation-rational-euler}、推论 \ref{cor:killo-kernel-size-general-modulus} 与推论 \ref{cor:conclusion-smith-local-zeta-complete-invariant} 的记号。前述链条已经给出：模核信息亏损在素数处的加法分解、任意模数下的核大小闭式，以及坏素数局部因子对 Smith 正规形的完备恢复。由此还可进一步抽出三条后果：亏损函数在整除格上的严格模性、素数幂剖面的离散 Hessian 反演，以及整数轴对齐椭圆模核审计对坐标分配的严格盲向。
+
+\begin{theorem}[信息亏损函数在整除格上的模性]\label{thm:conclusion-smith-loss-modularity-divisibility-lattice}
+设 \(A\in M_{m\times n}(\ZZ)\) 满足 \(\operatorname{rank}_{\QQ}(A)=m\)，其 Smith 不变量为
+\[
+d_1\mid d_2\mid\cdots\mid d_m.
+\]
+对每个 \(b\ge 1\) 记模 \(b\) 诱导映射为
+\[
+A_b:(\ZZ/b\ZZ)^n\to(\ZZ/b\ZZ)^m,
+\qquad
+\kappa_A(b):=\log\#\ker(A_b).
+\]
+则对任意 \(b,c\ge 1\) 都有精确恒等式
+\[
+\boxed{\;
+\kappa_A(\operatorname{lcm}(b,c))
++\kappa_A(\gcd(b,c))
+=
+\kappa_A(b)+\kappa_A(c).\;}
+\]
+等价地，
+\[
+\boxed{\;
+\#\ker(A_{\operatorname{lcm}(b,c)})\cdot \#\ker(A_{\gcd(b,c)})
+=
+\#\ker(A_b)\cdot \#\ker(A_c).\;}
+\]
+因此 \(b\mapsto \kappa_A(b)\) 在整除格 \((\NN_{>0},\mid)\) 上满足模函数恒等式。
+\end{theorem}
+\begin{proof}
+对每个素数 \(p\) 记
+\[
+\alpha_p:=v_p(b),
+\qquad
+\beta_p:=v_p(c),
+\qquad
+e_i(p):=v_p(d_i).
+\]
+由定理 \ref{thm:xi-kernel-loss-divisibility-valuation-rational-euler}，
+\[
+\kappa_A(b)
+=
+\sum_p
+\Bigl(
+\alpha_p(n-m)+\sum_{i=1}^{m}\min(\alpha_p,e_i(p))
+\Bigr)\log p.
+\]
+对 \(\operatorname{lcm}(b,c)\) 与 \(\gcd(b,c)\) 只需把 \(\alpha_p\) 分别改写为
+\[
+\max(\alpha_p,\beta_p),
+\qquad
+\min(\alpha_p,\beta_p).
+\]
+故问题逐素数化为验证
+\[
+\max(\alpha,\beta)+\min(\alpha,\beta)=\alpha+\beta
+\]
+以及
+\[
+\min(\max(\alpha,\beta),e)+\min(\min(\alpha,\beta),e)
+=
+\min(\alpha,e)+\min(\beta,e).
+\]
+第一式显然成立。对第二式，不妨设 \(\alpha\ge\beta\)，则左端化为
+\[
+\min(\alpha,e)+\min(\beta,e),
+\]
+恰与右端相同。逐素数求和即得所示恒等式。证毕。
+\end{proof}
+
+\begin{theorem}[素数幂亏损剖面的离散 Hessian 反演]\label{thm:conclusion-smith-primepower-hessian-inversion}
+在定理 \ref{thm:conclusion-smith-loss-modularity-divisibility-lattice} 的设定下，对每个素数 \(p\) 与每个 \(k\ge 0\) 定义约化亏损剖面
+\[
+\xi_{A,p}(k)
+:=
+\frac{\kappa_A(p^k)-k(n-m)\log p}{\log p}
+=
+\sum_{i=1}^{m}\min(k,e_i(p)).
+\]
+则对每个 \(k\ge 1\) 都有精确反演公式
+\[
+\boxed{\;
+\#\{i:\ e_i(p)=k\}
+=
+2\xi_{A,p}(k)-\xi_{A,p}(k-1)-\xi_{A,p}(k+1).\;}
+\]
+等价地，
+\[
+\boxed{\;
+\#\{i:\ e_i(p)=k\}
+=
+\frac{2\kappa_A(p^k)-\kappa_A(p^{k-1})-\kappa_A(p^{k+1})}{\log p}.\;}
+\]
+因此 \(\xi_{A,p}\) 是离散凹函数，而其负二阶差分恰好恢复 \(p\)-主 Smith 谱在每一层 \(k\) 上的多重度。
+\end{theorem}
+\begin{proof}
+由定义
+\[
+\xi_{A,p}(k)=\sum_{i=1}^{m}\min(k,e_i(p))
+\]
+可得一阶差分
+\[
+\xi_{A,p}(k)-\xi_{A,p}(k-1)
+=
+\sum_{i=1}^{m}\mathbf 1_{\{e_i(p)\ge k\}}
+=
+\#\{i:\ e_i(p)\ge k\}.
+\]
+于是
+\[
+\begin{aligned}
+2\xi_{A,p}(k)-\xi_{A,p}(k-1)-\xi_{A,p}(k+1)
+&=
+\bigl(\xi_{A,p}(k)-\xi_{A,p}(k-1)\bigr)
+-\bigl(\xi_{A,p}(k+1)-\xi_{A,p}(k)\bigr)\\
+&=
+\#\{i:\ e_i(p)\ge k\}-\#\{i:\ e_i(p)\ge k+1\}\\
+&=
+\#\{i:\ e_i(p)=k\}.
+\end{aligned}
+\]
+另一方面，线性项 \(k(n-m)\log p\) 在二阶差分中完全消去，从而得到 \(\kappa_A\) 版本的等价公式。右端非负，故 \(\xi_{A,p}\) 离散凹。证毕。
+\end{proof}
+
+\begin{theorem}[整数轴对齐椭圆的模核审计仅见 Smith 轨道]\label{thm:conclusion-ellipse-kernel-audit-smith-orbit-blindness}
+沿用定理 \ref{thm:killo-ellipse-diagonal-prime-register-equivalence} 的记号。对任意 \(a,b\in\NN_{>0}\)，记整数轴对齐椭圆
+\[
+E_{a,b}:\qquad \frac{x^2}{a^2}+\frac{y^2}{b^2}=1,
+\]
+并记对应对角算法为
+\[
+D_{a,b}:=\operatorname{diag}(a,b).
+\]
+定义完整模核审计剖面
+\[
+K_{a,b}(m):=\#\ker\!\bigl(D_{a,b}\bmod m\bigr)
+\qquad(m\ge 1).
+\]
+则成立：
+\begin{enumerate}
+  \item \(K_{a,b}(\cdot)=K_{c,d}(\cdot)\) 当且仅当
+  \[
+  \gcd(a,b)=\gcd(c,d),
+  \qquad
+  \operatorname{lcm}(a,b)=\operatorname{lcm}(c,d).
+  \]
+  换言之，完整模核审计只能恢复 \(D_{a,b}\) 的 Smith 轨道，而不能恢复坐标轴上的素数分配。
+  \item 记
+  \[
+  g:=\gcd(a,b),
+  \qquad
+  \ell:=\operatorname{lcm}(a,b),
+  \qquad
+  h:=\ell/g.
+  \]
+  则与 \(E_{a,b}\) 在完整模核审计下完全不可区分的有序参数对恰为
+  \[
+  \mathcal C(a,b)
+  :=
+  \left\{
+  \left(gu,\frac{gh}{u}\right):
+  u\mid h,\ \gcd\!\left(u,\frac{h}{u}\right)=1
+  \right\}.
+  \]
+  因而
+  \[
+  |\mathcal C(a,b)|=2^{\omega(h)},
+  \]
+  其中 \(\omega(h)\) 为 \(h\) 的不同素因子个数。若再按轴交换 \((a,b)\sim(b,a)\) 取商，则当 \(h>1\) 时相应不可区分类大小为
+  \[
+  2^{\omega(h)-1}.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对对角矩阵 \(D_{a,b}\)，其 Smith 不变量为
+\[
+d_1=\gcd(a,b)=g,
+\qquad
+d_2=\frac{ab}{g}=\operatorname{lcm}(a,b)=\ell.
+\]
+由推论 \ref{cor:conclusion-smith-local-zeta-complete-invariant}，完整模核剖面
+\[
+m\longmapsto K_{a,b}(m)
+\]
+已经足以可逆恢复全部 Smith 不变量。于是 \(K_{a,b}(\cdot)=K_{c,d}(\cdot)\) 当且仅当两者具有相同的 Smith 二元组，也即当且仅当
+\[
+(\gcd(a,b),\operatorname{lcm}(a,b))
+=(\gcd(c,d),\operatorname{lcm}(c,d)).
+\]
+这就证明了第 \(1\) 条。
+
+对第 \(2\) 条，设 \((a',b')\) 与 \((a,b)\) 具有同一对 \((g,\ell)\)，并令
+\[
+x:=a'/g,
+\qquad
+y:=b'/g.
+\]
+则
+\[
+\gcd(x,y)=1,
+\qquad
+xy=\frac{a'b'}{g^2}=\frac{\ell}{g}=h.
+\]
+因此 \(x\) 与 \(y\) 是 \(h\) 的一对互素互补因子：若
+\[
+h=\prod_{p^{t_p}\Vert h}p^{t_p},
+\]
+则每个素幂 \(p^{t_p}\) 必须整体分配给 \(x\) 或 \(y\)，而不能拆分到两边。故
+\[
+x=\prod_{p^{t_p}\Vert h}p^{\varepsilon_p t_p},
+\qquad
+y=\prod_{p^{t_p}\Vert h}p^{(1-\varepsilon_p)t_p},
+\qquad
+\varepsilon_p\in\{0,1\}.
+\]
+这给出恰好 \(2^{\omega(h)}\) 个有序选择。反之，任何此类分配都保持 \(\gcd\) 与 \(\operatorname{lcm}\) 不变，故由第 \(1\) 条保持完整模核审计不变。
+
+若按轴交换取商，则当 \(h>1\) 时不存在固定点，故类大小减半为 \(2^{\omega(h)-1}\)；当 \(h=1\) 时只有唯一点 \((g,g)\)。证毕。
+\end{proof}
+
+\noindent
+因此，完整模核审计所保留者并非坐标轴上的素数分配本身，而只是对应对角算法的 Smith 轨道：整除格模性把亏损函数压缩为可加局部数据，离散 Hessian 把这些局部数据逐层反演回 Smith 估值，而椭圆参数的轴向分配则恰落在这一审计接口的盲向之中。
+
+\endinput

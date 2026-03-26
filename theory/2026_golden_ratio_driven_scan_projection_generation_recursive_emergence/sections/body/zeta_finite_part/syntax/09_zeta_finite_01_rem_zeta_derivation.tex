@@ -1,0 +1,139 @@
+\subsection{动力学 \texorpdfstring{$\zeta$}{zeta} 函数（稳定语法层）}\label{subsec:zeta-syntax-zeta}
+
+在稳定语法层，本文只使用有限型子移位（SFT）口径：若邻接矩阵为 $A$，则动力学 $\zeta$ 满足
+\[
+\zeta_A(z)=\det(I-zA)^{-1}
+=\exp\!\left(\sum_{n\ge 1}\frac{\Tr(A^n)}{n}z^n\right)
+\]
+（参见 \cite{LindMarcus1995}）。对黄金均值约束
+\(
+A=\begin{pmatrix}1&1\\1&0\end{pmatrix}
+\)
+有
+\[
+\zeta(z)=\frac{1}{1-z-z^2},
+\]
+其主极点为 $z_\star=\varphi^{-1}$。
+
+\begin{remark}[差异对象：degeneracy-$\zeta$ 把 trace 侧与 primitive 侧同时对齐]\label{rem:degeneracy-zeta-bridge}
+为把“无稳定约束”（full $2$-shift）与“黄金稳定约束”的差异压缩为一个可计算对象，记
+\[
+\zeta_{\mathrm{full}}(z)=\frac{1}{1-2z},
+\qquad
+\zeta(z)=\frac{1}{1-z-z^2},
+\]
+并定义差异比值（degeneracy-$\zeta$）为
+\[
+\zeta_{\mathrm{deg}}(z):=\frac{\zeta_{\mathrm{full}}(z)}{\zeta(z)}
+=\frac{1-z-z^2}{1-2z}.
+\]
+则其对数系数直接打包“trace 侧差异”：
+\[
+\log \zeta_{\mathrm{deg}}(z)
+=\sum_{n\ge 1}\frac{2^n-\Tr(A^n)}{n}z^n
+\]
+在周期闭合（cyclic/trace）口径下，相应的“时间侧退化比”可取为
+\[
+\delta_n^{\mathrm{cyc}}:=\frac{2^n}{\Tr(A^n)},
+\]
+其指数率由谱半径之比 \(2/\varphi\) 给出。
+
+进一步：同一差异对象亦决定“prime-like（primitive 周期轨道）侧差异”。把迹序列记为
+\(
+a_n^{\mathrm{full}}:=2^n,\ a_n^{\mathrm{gold}}:=\Tr(A^n)
+\)，则 primitive 计数由 Witt/Möbius 反演给出（附录 \S\ref{app:witt-bridge-package}）：
+\[
+p_n=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}.
+\]
+因此差异 primitive 计数
+\(
+p_n^{\mathrm{deg}}:=p_n^{\mathrm{full}}-p_n^{\mathrm{gold}}
+\)
+由同一套 Möbius/Witt 变换从 \(\{2^n-\Tr(A^n)\}\) 中提取。换言之，\(\zeta_{\mathrm{deg}}\) 作为一个单一对象，既输出 trace 侧差异（周期点/闭路），也输出 primitive 侧差异（“素数类闭环”），从而把“trace \(\Rightarrow\) prime-like”的桥接函子化为可审计的差异封装。
+\end{remark}
+
+\begin{remark}[相对对象：\texorpdfstring{$\zeta_B/\zeta_A$}{zetaB/zetaA} 的 carry-excess primitive 谱与有限部位移]\label{rem:relative-zeta-sync-vs-grammar}
+本文同时拥有两类 SFT 的 \(\zeta\) 接口：其一为稳定语法层的黄金均值邻接矩阵 \(A\)（上文），其二为在线归一化机制诱导的同步核邻接矩阵 \(B\)（第 \ref{subsec:zeta-online-kernel} 小节与附录 \ref{app:sync-kernel-basic}）。
+两者共享同一条可审计恒等式链：
+\[
+\zeta_M(z)=\det(I-zM)^{-1}
+=\exp\!\left(\sum_{n\ge 1}\frac{\Tr(M^n)}{n}z^n\right),
+\qquad
+a_n(M)=\Tr(M^n),
+\]
+并由 Witt/Möbius 反演把周期迹序列 \(a_n\) 严格提取为 primitive 轨道数 \(p_n\)（按轨道计）：
+\[
+p_n(M)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(M).
+\]
+
+\paragraph{相对 ghost（trace）序列与严格乘法分解}
+定义“机制超出语法”的相对迹序列（relative ghost coordinates）
+\[
+r_n:=a_n(B)-a_n(A)=\Tr(B^n)-\Tr(A^n).
+\]
+并按同一指数/Fredholm 口径定义相对 \(\zeta\)
+\[
+\zeta_{B/A}(z):=\exp\!\left(\sum_{n\ge 1}\frac{r_n}{n}z^n\right).
+\]
+由于指数中的迹是线性的，立刻得到严格恒等式（非近似、非类比）
+$$
+\boxed{\ \zeta_B(z)=\zeta_A(z)\cdot \zeta_{B/A}(z)\ }.
+$$
+这给出一个“空间（语法）/时间（机制）”的严格交换封装：同步核的 \(\zeta_B\) 可分解为稳定语法的 \(\zeta_A\) 与纯机制超额项 \(\zeta_{B/A}\) 的乘积。
+
+\paragraph{carry-excess prime-like：相对 primitive 谱}
+由于 Möbius 反演在迹序列上是线性的，相对 primitive 计数
+\[
+q_n:=\frac{1}{n}\sum_{d\mid n}\mu(d)\,r_{n/d}
+\]
+满足严格差分恒等式
+$$
+\boxed{\ q_n=p_n(B)-p_n(A)\ }.
+$$
+因此相对 \(\zeta\) 自动具有 Euler 乘积（prime-like 侧）：
+$$
+\boxed{\ \zeta_{B/A}(z)=\prod_{n\ge 1}(1-z^n)^{-q_n}\ }.
+$$
+其中 \((q_n)\) 可被解释为“机制闭环中不可由语法闭环解释的 primitive 部分”（carry-excess primes）。
+
+\paragraph{相对指数与相对有限部常数（常数级指纹）}
+主谱尺度之差可由 Perron 根之比读出：
+\[
+\Delta h:=\log\rho(B)-\log\rho(A)=\log\frac{3}{\varphi}.
+\]
+另一方面，按命题 \ref{prop:abel-finite-part-mobius-zeta} 的 Möbius--\(\zeta\) 闭式，
+稳定语法层同样可定义 Abel/Hadamard 有限部常数 \(\log\mathfrak{M}_A\)；
+并可与同步核的 \(\log\mathfrak{M}_B\) 形成相对位移
+\[
+\log\mathfrak{M}_{B/A}:=\log\mathfrak{M}_B-\log\mathfrak{M}_A.
+\]
+该常数把“carry-excess prime-like”在 Abel 正则化意义下压缩为单一可对比标量。
+
+\paragraph{可复现数值（前 10 项与常数）}
+相对迹序列 \((r_n)\)、相对 primitive 谱 \((q_n)\)，以及 \(\log\mathfrak{M}_A,\log\mathfrak{M}_{B/A}\) 的可复现输出由脚本
+\texttt{scripts/exp\_relative\_zeta\_sync\_vs\_grammar.py} 一键生成并写入：
+\input{sections/generated/eq_relative_zeta_sync_vs_grammar}
+其中同时包含“\(\zeta_B=\zeta_A\zeta_{B/A}\)”的级数一致性校验与 \(q_n=p_n(B)-p_n(A)\) 的逐项审计。
+\end{remark}
+
+\begin{remark}[相对对象：\texorpdfstring{$\zeta_B/\zeta_M$}{zetaB/zetaM} 的 input-sieve primitive 谱与相对有限部常数]\label{rem:relative-zeta-sync-vs-real-input}
+沿用上一个 remark 的“相对 \(\zeta\) 作为差异封装”口径，但把对照对象从稳定语法层 \(A\) 换为真实算术输入约束的 40 状态核 \(M\)（附录 \ref{app:real-input-40-finite-rh} 给出其 \(\det(I-zM)\) 的因式分解与 Möbius--primitive 接口）。
+定义相对迹序列与相对 \(\zeta\) 为
+\[
+r_n:=a_n(B)-a_n(M),\qquad
+\zeta_{B/M}(z):=\exp\!\left(\sum_{n\ge 1}\frac{r_n}{n}z^n\right)=\frac{\zeta_B(z)}{\zeta_M(z)}.
+\]
+相对 primitive（input-sieve prime-like）定义为
+\[
+q_n:=\frac{1}{n}\sum_{d\mid n}\mu(d)\,r_{n/d}=\boxed{\ p_n(B)-p_n(M)\ }.
+\]
+由于 \(\rho(M)<3\)，\(\zeta_M\) 在 \(z_\star=1/3\) 处解析且 \(\zeta_M(1/3)\neq 0\)，从而 \(\zeta_{B/M}\) 在 \(z_\star\) 具有简单极点：
+$$
+\zeta_{B/M}(z)=\frac{C_{B/M}}{1-3z}+O(1),
+\qquad
+C_{B/M}=\frac{C_B}{\zeta_M(1/3)}.
+$$
+并可在 \(z_\star=1/3\) 尺度下定义一个同型的“相对有限部常数” \(\log M_{B/M}\)（复用命题 \ref{prop:abel-finite-part-mobius-zeta} 的 Möbius--\(\zeta\) 采样闭式；采样点 \(3^{-m}\) 为有理点，收敛极快）。
+
+\input{sections/generated/eq_relative_zeta_sync_vs_real_input}
+\end{remark}

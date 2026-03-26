@@ -1,0 +1,535 @@
+\paragraph{末位充分化、均匀基线判别与零点几何对碰撞缺口的指数失明}
+由末位两层塌缩、局部信息密度的一阶离散修正、均匀基线下的两原子似然比极限以及谱零点的半维稀疏律，可进一步抽出下列八条彼此衔接的终端后果：它们分别给出末位统计量的一样本渐近充分性、亚临界样本规模下完整输出实验与末位 Bernoulli 实验的 Le Cam 等价、隐藏对数多重度涨落的二点极限律、其 Laplace--累积闭式、相对稳定层均匀基线的一样本最优判别常数、全部经典散度的 Bernoulli 塌缩、零点数量与碰撞缺口主尺度之间的严格分离，以及零点相对密度在近零邻域无法控制归一化碰撞尺度。
+
+\begin{theorem}[末位统计量的渐近充分性]\label{thm:xi-fold-lastbit-asymptotic-sufficiency}
+设
+\[
+X_m:=\{w\in\{0,1\}^m:\ w_iw_{i+1}=0\ \ (1\le i<m)\},
+\qquad
+\mu_m(w):=\frac{d_m^{\mathrm{bin}}(w)}{2^m},
+\qquad
+\ell_m(w):=w_m\in\{0,1\},
+\]
+并将稳定层分成两块
+\[
+A_i:=\{w\in X_m:\ \ell_m(w)=i\}
+\qquad(i=0,1).
+\]
+定义 Markov 核
+\[
+K_m(i,\cdot):=\mathrm{Unif}(A_i),
+\]
+以及由末位统计量重构的块均匀近似
+\[
+\bar\mu_m:=K_m\circ (\ell_m)_\#\mu_m.
+\]
+则有
+\[
+\boxed{\;
+D_{\mathrm{TV}}(\mu_m,\bar\mu_m)
+=
+O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr).\;}
+\]
+因此 \(\ell_m\) 在 Le Cam 意义下对 \(\mu_m\) 是渐近充分统计量。
+
+更具体地，对任意有界函数 \(f_m:X_m\to\RR\)，若满足
+\[
+\sum_{w\in A_i}f_m(w)=0
+\qquad(i=0,1),
+\]
+则
+\[
+\boxed{\;
+\bigl|\mathbb E_{\mu_m}[f_m]\bigr|
+\le
+2\|f_m\|_\infty\,
+O\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr).\;}
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:fold-bin-lastbit-sufficient-tv}，存在绝对常数 \(C>0\) 使
+\[
+D_{\mathrm{TV}}(\mu_m,\bar\mu_m)\le C\Bigl(\frac{\varphi}{2}\Bigr)^m.
+\]
+这正是第一式。又因为 \(\bar\mu_m=K_m\circ(\ell_m)_\#\mu_m\)，已构造出一条把末位统计量提升回稳定层的重构核，其误差在全变差意义下指数消失，故 \(\ell_m\) 对 \(\mu_m\) 在 Le Cam 意义下渐近充分。
+
+对第二条，只需注意 \(\bar\mu_m\) 在每个 \(A_i\) 上为均匀分布，故
+\[
+\mathbb E_{\bar\mu_m}[f_m]
+=
+\sum_{i=0}^{1}\bar\mu_m(A_i)\,\frac{1}{|A_i|}\sum_{w\in A_i}f_m(w)=0.
+\]
+于是
+\[
+\bigl|\mathbb E_{\mu_m}[f_m]\bigr|
+=
+\bigl|\mathbb E_{\mu_m}[f_m]-\mathbb E_{\bar\mu_m}[f_m]\bigr|
+\le
+2\|f_m\|_\infty D_{\mathrm{TV}}(\mu_m,\bar\mu_m).
+\]
+代入第一式即得所示估计。证毕。
+\end{proof}
+
+\begin{theorem}[亚临界样本规模下完整 bin-fold 输出实验与末位 Bernoulli 实验的 Le Cam 等价]\label{thm:xi-fold-lastbit-subcritical-sample-lecam-equivalence}
+沿用定理 \ref{thm:xi-fold-lastbit-asymptotic-sufficiency} 的记号，并记
+\[
+p_m:=\mu_m(A_1)=\bar\mu_m(A_1).
+\]
+对任意 \(n\ge 1\)，定义单点统计实验
+\[
+\mathcal E_m^{(n)}:=\{\mu_m^{\otimes n}\}
+\qquad\text{定义在 }X_m^n\text{ 上},
+\]
+\[
+\mathcal B_m^{(n)}:=\{\mathrm{Bernoulli}(p_m)^{\otimes n}\}
+\qquad\text{定义在 }\{0,1\}^n\text{ 上}.
+\]
+并记
+\[
+\Delta(\mathcal E,\mathcal F):=\max\{\delta(\mathcal E,\mathcal F),\delta(\mathcal F,\mathcal E)\}
+\]
+为 Le Cam 距离。再定义确定性读出核
+\[
+L_m^{(n)}(w_1,\dots,w_n):=\bigl(\ell_m(w_1),\dots,\ell_m(w_n)\bigr),
+\]
+以及重构核
+\[
+K_m^{(n)}(b_1,\dots,b_n,\cdot):=
+K_m(b_1,\cdot)\otimes\cdots\otimes K_m(b_n,\cdot).
+\]
+则有精确恒等式
+\[
+L_{m\#}^{(n)}\mu_m^{\otimes n}
+=
+\mathrm{Bernoulli}(p_m)^{\otimes n},
+\qquad
+K_{m\#}^{(n)}\mathrm{Bernoulli}(p_m)^{\otimes n}
+=
+\bar\mu_m^{\otimes n},
+\]
+并且存在绝对常数 \(C>0\) 使
+\[
+\boxed{\;
+D_{\mathrm{TV}}\!\Bigl(
+\mu_m^{\otimes n},
+K_{m\#}^{(n)}\mathrm{Bernoulli}(p_m)^{\otimes n}
+\Bigr)
+\le
+nC\Bigl(\frac{\varphi}{2}\Bigr)^m.\;}
+\]
+因此 Le Cam 距离满足
+\[
+\boxed{\;
+\Delta\!\bigl(\mathcal E_m^{(n)},\mathcal B_m^{(n)}\bigr)
+\le
+nC\Bigl(\frac{\varphi}{2}\Bigr)^m.\;}
+\]
+特别地，若 \(n_m=o((2/\varphi)^m)\)，则
+\[
+\boxed{\;
+\Delta\!\bigl(\mathcal E_m^{(n_m)},\mathcal B_m^{(n_m)}\bigr)\longrightarrow 0.\;}
+\]
+\end{theorem}
+\begin{proof}
+由定义，\(L_m^{(n)}\) 只是逐坐标读取末位，因此
+\[
+L_{m\#}^{(n)}\mu_m^{\otimes n}
+=
+\bigl((\ell_m)_\#\mu_m\bigr)^{\otimes n}
+=
+\mathrm{Bernoulli}(p_m)^{\otimes n}.
+\]
+另一方面，\(K_m(i,\cdot)=\mathrm{Unif}(A_i)\) 且 \(\bar\mu_m=K_m\circ(\ell_m)_\#\mu_m\)，故
+\[
+K_{m\#}^{(n)}\mathrm{Bernoulli}(p_m)^{\otimes n}
+=
+\bar\mu_m^{\otimes n}.
+\]
+
+再由乘积测度的望远镜估计，对任意概率分布 \(\mu,\nu\) 都有
+\[
+D_{\mathrm{TV}}(\mu^{\otimes n},\nu^{\otimes n})
+\le
+n\,D_{\mathrm{TV}}(\mu,\nu).
+\]
+将 \((\mu,\nu)=(\mu_m,\bar\mu_m)\) 代入，并使用定理 \ref{thm:xi-fold-lastbit-asymptotic-sufficiency} 中
+\[
+D_{\mathrm{TV}}(\mu_m,\bar\mu_m)\le C\Bigl(\frac{\varphi}{2}\Bigr)^m,
+\]
+即得所示全变差界。
+
+按 deficiency 的定义，从 \(\mathcal E_m^{(n)}\) 到 \(\mathcal B_m^{(n)}\) 的缺陷为 \(0\)，因为 \(L_m^{(n)}\) 已实现精确推送；从 \(\mathcal B_m^{(n)}\) 到 \(\mathcal E_m^{(n)}\) 的缺陷至多为上述全变差误差。再由
+定理中的 Le Cam 距离定义，便得到所示距离界。若 \(n_m=o((2/\varphi)^m)\)，则右端趋于 \(0\)，故两实验渐近等价。证毕。
+\end{proof}
+
+\begin{corollary}[隐藏对数多重度涨落收敛为末位支配的二点律]\label{cor:xi-fold-hidden-logmultiplicity-branchbit-two-point-law}
+沿用 \(\mu_m\) 的记号，并令 \(W_m\sim\mu_m\)。定义
+\[
+Y_m:=\log d_m^{\mathrm{bin}}(W_m)-m\log\!\Bigl(\frac{2}{\varphi}\Bigr).
+\]
+则有分布收敛
+\[
+\boxed{\;
+Y_m\Longrightarrow
+\frac{\varphi}{\sqrt5}\,\delta_0
++\frac{1}{\varphi\sqrt5}\,\delta_{-\log\varphi}.\;}
+\]
+等价地，若 \(Y_\infty\) 为满足
+\[
+\mathbb P(Y_\infty=0)=\frac{\varphi}{\sqrt5},
+\qquad
+\mathbb P(Y_\infty=-\log\varphi)=\frac{1}{\varphi\sqrt5}
+\]
+的二点随机变量，则 \(Y_m\Rightarrow Y_\infty\)。特别地，
+\[
+\boxed{\;
+\lim_{m\to\infty}\operatorname{Var}(Y_m)
+=
+\frac{1}{\varphi\sqrt5}
+\left(1-\frac{1}{\varphi\sqrt5}\right)(\log\varphi)^2.\;}
+\]
+因此，隐藏对数多重度的首个非平凡涨落并不趋于非退化 Gaussian 律，而直接塌缩为由末位比特控制的 Bernoulli 二点极限。
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:xi-fold-local-information-density-first-order-discrete-law}，若记
+\[
+\gamma_m:=\frac{1}{m}\log d_m^{\mathrm{bin}}(W_m),
+\]
+则有
+\[
+m\left(\gamma_m-\log\!\frac{2}{\varphi}\right)\Longrightarrow
+\frac{\varphi}{\sqrt5}\,\delta_0
++\frac{1}{\varphi\sqrt5}\,\delta_{-\log\varphi}.
+\]
+而左端恰为 \(Y_m\)。方差极限亦即该推论中的 \(m^2\operatorname{Var}(\gamma_m)\) 极限，因为
+\[
+\operatorname{Var}(Y_m)=m^2\operatorname{Var}(\gamma_m).
+\]
+证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part60ca-hidden-logmultiplicity-cumulant-closure}
+
+\begin{theorem}[与稳定层均匀分布的一样本最优判别常数]\label{thm:xi-fold-uniform-baseline-testing-constant}
+沿用 \(\mu_m(w)=d_m^{\mathrm{bin}}(w)/2^m\) 的记号。令
+\[
+u_m(w):=\frac{1}{|X_m|}
+\qquad (w\in X_m)
+\]
+为稳定层均匀分布，并记似然比
+\[
+R_m(w):=\frac{\mu_m(w)}{u_m(w)}.
+\]
+则在 \(u_m\) 下，\(R_m\) 依分布收敛到二点随机变量
+\[
+R=
+\begin{cases}
+\dfrac{\varphi^2}{\sqrt5},& \text{以概率 }\dfrac1\varphi,\\[8pt]
+\dfrac{\varphi}{\sqrt5},& \text{以概率 }\dfrac1{\varphi^2}.
+\end{cases}
+\]
+从而有精确极限
+\[
+\boxed{\;
+\lim_{m\to\infty}D_{\mathrm{TV}}(\mu_m,u_m)
+=
+1-\frac{2}{\sqrt5}.\;}
+\]
+特别地，在等先验的一样本假设检验
+\[
+H_0:u_m,
+\qquad
+H_1:\mu_m
+\]
+中，最优 Bayes 错误概率满足
+\[
+\boxed{\;
+\lim_{m\to\infty}P_e^\ast(\mu_m,u_m)
+=
+\frac1{\sqrt5}.\;}
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-foldbin-likelihood-ratio-two-atom-transfer}，
+\[
+R_m(W_m)\Rightarrow R,
+\qquad
+W_m\sim u_m,
+\]
+并且对充分大的 \(m\)，随机变量 \(R_m(W_m)\) 落在某个固定闭区间 \(I\subset(0,\infty)\) 中。故
+\[
+D_{\mathrm{TV}}(\mu_m,u_m)
+=
+\frac12\,\mathbb E_{u_m}|R_m-1|
+\longrightarrow
+\frac12\,\mathbb E|R-1|.
+\]
+直接计算得到
+\[
+\frac12\,\mathbb E|R-1|
+=
+\frac12\left[
+\frac1\varphi\Bigl(\frac{\varphi^2}{\sqrt5}-1\Bigr)
++
+\frac1{\varphi^2}\Bigl(1-\frac{\varphi}{\sqrt5}\Bigr)
+\right].
+\]
+这与定理 \ref{thm:xi-foldbin-pushforward-uniform-two-atom-ledger} 给出的全变差极限常数
+\[
+\frac12\left(\frac1{\sqrt5}-\varphi^{-3}\right)
+\]
+一致；再用恒等式 \(\varphi^{-3}=\sqrt5-2\)，即得
+\[
+\lim_{m\to\infty}D_{\mathrm{TV}}(\mu_m,u_m)=1-\frac{2}{\sqrt5}.
+\]
+
+最后，由 Helstrom 公式
+\[
+P_e^\ast(\mu_m,u_m)=\frac12\bigl(1-D_{\mathrm{TV}}(\mu_m,u_m)\bigr),
+\]
+令 \(m\to\infty\) 即得
+\[
+\lim_{m\to\infty}P_e^\ast(\mu_m,u_m)=\frac1{\sqrt5}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[相对于稳定层均匀基线的全部经典散度塌缩为单一 Bernoulli 几何]\label{cor:xi-fold-uniform-baseline-classical-fdiv-bernoulli-collapse}
+沿用定理 \ref{thm:xi-fold-uniform-baseline-testing-constant} 的记号，并记
+\[
+q_*:=\varphi^{-2},
+\qquad
+p_*:=\frac{1}{\varphi\sqrt5}.
+\]
+则对任意凸函数 \(f:(0,\infty)\to\RR\) 满足 \(f(1)=0\)，有
+\[
+\boxed{\;
+D_f(\mu_m\Vert u_m)
+=
+D_f\!\bigl(\mathrm{Bernoulli}(p_*)\Vert \mathrm{Bernoulli}(q_*)\bigr)
++O_f\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr).\;}
+\]
+特别地，
+\[
+\boxed{\;
+\lim_{m\to\infty}D_{\mathrm{TV}}(\mu_m,u_m)
+=
+\left|p_*-q_*\right|
+=
+1-\frac{2}{\sqrt5},\;}
+\]
+\[
+\boxed{\;
+\lim_{m\to\infty}D_{\mathrm{KL}}(\mu_m\Vert u_m)
+=
+D_{\mathrm{KL}}\!\bigl(\mathrm{Bernoulli}(p_*)\Vert \mathrm{Bernoulli}(q_*)\bigr),\;}
+\]
+\[
+\boxed{\;
+\lim_{m\to\infty}\chi^2(\mu_m\Vert u_m)
+=
+\chi^2\!\bigl(\mathrm{Bernoulli}(p_*)\Vert \mathrm{Bernoulli}(q_*)\bigr).\;}
+\]
+换言之，\(\mu_m\) 相对于稳定层均匀基线 \(u_m\) 的全部经典 Csisz\'ar 几何，在极限中都严格塌缩为同一个二点 Bernoulli 对。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-foldbin-pushforward-uniform-two-atom-ledger}，对任意满足条件的 \(f\) 都有
+\[
+D_f(\mu_m\Vert u_m)
+=
+\frac1\varphi\,f\!\left(\frac{\varphi^2}{\sqrt5}\right)
++\frac1{\varphi^2}\,f\!\left(\frac{\varphi}{\sqrt5}\right)
++O_f\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr).
+\]
+另一方面，
+\[
+1-q_*=\frac1\varphi,
+\qquad
+1-p_*=\frac{\varphi}{\sqrt5},
+\]
+故
+\[
+\frac{1-p_*}{1-q_*}
+=
+\frac{\varphi/\sqrt5}{1/\varphi}
+=
+\frac{\varphi^2}{\sqrt5},
+\qquad
+\frac{p_*}{q_*}
+=
+\frac{1/(\varphi\sqrt5)}{\varphi^{-2}}
+=
+\frac{\varphi}{\sqrt5}.
+\]
+这正说明上式等于
+\[
+D_f\!\bigl(\mathrm{Bernoulli}(p_*)\Vert \mathrm{Bernoulli}(q_*)\bigr)
++O_f\!\Bigl(\Bigl(\frac{\varphi}{2}\Bigr)^m\Bigr).
+\]
+对全变差、KL 与 \(\chi^2\) 只需分别取
+\[
+f_{\mathrm{TV}}(t)=\frac12|t-1|,
+\qquad
+f_{\mathrm{KL}}(t)=t\log t,
+\qquad
+f_{\chi^2}(t)=(t-1)^2.
+\]
+其中全变差的极限常数也可写作
+\[
+|p_*-q_*|
+=
+\varphi^{-2}-\frac{1}{\varphi\sqrt5}
+=
+1-\frac{2}{\sqrt5},
+\]
+与定理 \ref{thm:xi-fold-uniform-baseline-testing-constant} 一致。证毕。
+\end{proof}
+
+\begin{theorem}[零点几何对碰撞缺口的指数失明]\label{thm:xi-fold-zero-geometry-collision-gap-blindness}
+沿用结论 \ref{con:xi-fold-collision-spectral-trace-parseval} 的记号，令
+\[
+M:=F_{m+2},
+\qquad
+\mathcal Z_m:=\{k\in \ZZ/(M\ZZ):\ \widehat d_m(k)=0\}.
+\]
+其中 \(C_\varphi>0\) 为定理 \ref{thm:fold-critical-resonance-constant} 的黄金共振常数。则碰撞缺口与零点密度满足严格分离：
+\[
+\boxed{\;
+M\Bigl(\mathsf{Col}_m-\frac1M\Bigr)
+\ge
+2C_\varphi^2+o(1),
+\qquad
+\frac{|\mathcal Z_m|}{M}
+\le
+\tau(m+2)\,O(\varphi^{-m/2}).\;}
+\]
+从而
+\[
+\boxed{\;
+\frac{\mathsf{Col}_m-\frac1M}{|\mathcal Z_m|/M^2}
+=
+\frac{M\bigl(\mathsf{Col}_m-\frac1M\bigr)}{|\mathcal Z_m|/M}
+\longrightarrow +\infty.\;}
+\]
+更显式地，
+\[
+\boxed{\;
+\frac{\mathsf{Col}_m-\frac1M}{|\mathcal Z_m|/M^2}
+\gtrsim
+\frac{2C_\varphi^2}{\tau(m+2)}\,\varphi^{m/2}.\;}
+\]
+\end{theorem}
+\begin{proof}
+由结论 \ref{con:xi-fold-chi2-constant-residual-energy}，
+\[
+M\Bigl(\mathsf{Col}_m-\frac1M\Bigr)\ge 2C_\varphi^2+o(1).
+\]
+另一方面，由定理 \ref{thm:fold-zero-density-sparse}，
+\[
+\frac{|\mathcal Z_m|}{M}
+\le
+\tau(m+2)\,\frac{F_{\lfloor (m+2)/2\rfloor}}{F_{m+2}}
+=
+\tau(m+2)\,O(\varphi^{-m/2}).
+\]
+将两式相除，即得
+\[
+\frac{M\bigl(\mathsf{Col}_m-\frac1M\bigr)}{|\mathcal Z_m|/M}
+\to +\infty.
+\]
+而
+\[
+\frac{M\bigl(\mathsf{Col}_m-\frac1M\bigr)}{|\mathcal Z_m|/M}
+=
+\frac{\mathsf{Col}_m-\frac1M}{|\mathcal Z_m|/M^2},
+\]
+故两种写法完全等价。
+
+最后，把上界
+\(
+|\mathcal Z_m|/M\le \tau(m+2)\,O(\varphi^{-m/2})
+\)
+写成倒数下界，再与
+\(
+M(\mathsf{Col}_m-1/M)\ge 2C_\varphi^2+o(1)
+\)
+合并，即得所示 \(\gtrsim\) 估计。证毕。
+\end{proof}
+
+\begin{theorem}[零点计数对碰撞缺口不存在消失模量]\label{cor:xi-fold-zero-density-no-bounded-control-on-normalized-collision}
+沿用定理 \ref{thm:xi-fold-zero-geometry-collision-gap-blindness} 的记号，并定义
+\[
+M_m:=F_{m+2},
+\qquad
+\delta_m:=\frac{|\mathcal Z_m|}{M_m},
+\qquad
+\Gamma_m:=M_m\!\left(\mathsf{Col}_m-\frac{1}{M_m}\right).
+\]
+则沿子列
+\[
+m\equiv 1\pmod 3
+\]
+有
+\[
+\boxed{\;
+\delta_m\longrightarrow 0,
+\qquad
+\liminf_{\substack{m\to\infty\\ m\equiv 1\!\!\!\!\pmod 3}}
+\Gamma_m
+\ge
+\frac{2C_\varphi^2}{\varphi}>0.\;}
+\]
+从而不存在任何函数 \(\eta:[0,1]\to[0,\infty)\) 满足
+\[
+\eta(t)\longrightarrow 0
+\qquad (t\to 0),
+\]
+并且对所有充分大的 \(m\equiv 1\pmod 3\) 都有
+\[
+\Gamma_m\le \eta(\delta_m).
+\]
+换言之，即使谱零点的相对密度趋于 \(0\)，它也不足以连续控制折叠碰撞的归一化缺口；非零频率振幅层仍是不可删除的数据层。
+\end{theorem}
+\begin{proof}
+当 \(m\equiv 1\pmod 3\) 时，\(m+2\equiv 0\pmod 3\)，故 Fibonacci 数 \(M_m=F_{m+2}\) 为偶数。于是由定理 \ref{thm:fold-zero-density-sparse}，
+\[
+\delta_m=\frac{|\mathcal Z_m|}{M_m}
+\le
+\tau(m+2)\,O(\varphi^{-m/2})
+\longrightarrow 0
+\qquad
+\bigl(m\to\infty,\ m\equiv 1\!\!\!\!\pmod 3\bigr).
+\]
+
+另一方面，定理 \ref{thm:xi-fold-zero-geometry-collision-gap-blindness} 已给出更强的全序列下界
+\[
+\Gamma_m
+=
+M_m\!\left(\mathsf{Col}_m-\frac1{M_m}\right)
+\ge
+2C_\varphi^2+o(1).
+\]
+因此沿任意子列，特别是沿 \(m\equiv 1\pmod 3\)，都有
+\[
+\liminf_{\substack{m\to\infty\\ m\equiv 1\!\!\!\!\pmod 3}}\Gamma_m
+\ge
+2C_\varphi^2
+>
+\frac{2C_\varphi^2}{\varphi},
+\]
+从而所示盒装下界成立。
+
+若存在函数 \(\eta\) 满足 \(\eta(t)\to 0\) 且对所有充分大的 \(m\equiv 1\pmod 3\) 都有
+\[
+\Gamma_m\le \eta(\delta_m),
+\]
+则由 \(\delta_m\to 0\) 可得
+\[
+\eta(\delta_m)\longrightarrow 0
+\qquad
+\bigl(m\to\infty,\ m\equiv 1\!\!\!\!\pmod 3\bigr),
+\]
+从而 \(\Gamma_m\to 0\) 沿该子列成立，这与上式的严格正下极限矛盾。故这样的消失模量不存在。证毕。
+\end{proof}
+
+\endinput

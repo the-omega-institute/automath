@@ -1,0 +1,466 @@
+\subsection{原子 primitive 手术的长度同余层析、core 扭曲门槛与零温微正则尖点}\label{subsec:conclusion-atomic-surgery-congruence-core-logcusp}
+在有限多 Euler 原子的 primitive 手术可加律、root-of-unity 长度筛、真实输入 \(40\) 状态核的 twisted 指数分裂，以及输出位势的零温 Puiseux 端点律都已建立之后，还可把这条主线进一步压缩为五条彼此闭合的终端命题。其共同结构是：单原子因子在长度同余筛中只留下唯一局域注入，而一切真正越过平方根门槛的 twisted 增长则完全由 core 谱承担；同一零温 Puiseux jet 再经 Legendre 变换传递为微正则包络的对数尖点及近地基壳层的显式指数上界。
+
+\begin{theorem}[atomic primitive surgery 的单同余注入律]\label{thm:conclusion-atomic-surgery-single-congruence-injection}
+设某个加权有限矩阵族/有限型子移位满足
+\[
+\zeta(z,u)=\frac{1}{(1-u^E z^\ell)^m}\,\zeta_{\mathrm{core}}(z,u),
+\qquad
+m\in\ZZ_{\ge 1},\ \ell\in\ZZ_{\ge 1},\ E\in\ZZ_{\ge 0},
+\]
+并令 primitive 生成函数
+\[
+P(z,u)=\sum_{n\ge 1}p_n(u)z^n,
+\qquad
+P_{\mathrm{core}}(z,u)=\sum_{n\ge 1}p_n^{\mathrm{core}}(u)z^n.
+\]
+则有
+\[
+P(z,u)=P_{\mathrm{core}}(z,u)+m\,u^Ez^\ell.
+\]
+对任意模数 \(q\ge 2\) 与剩余类 \(a\in\ZZ/q\ZZ\)，定义 root-of-unity 滤波
+\[
+P_{a,q}(z,u):=\frac1q\sum_{j=0}^{q-1}\omega_q^{-aj}P(\omega_q^j z,u),
+\qquad
+\omega_q:=e^{2\pi i/q},
+\]
+并对 \(P_{\mathrm{core}}\) 同样定义 \(P_{a,q}^{\mathrm{core}}(z,u)\)。则成立精确公式
+\[
+\boxed{\;
+P_{a,q}(z,u)-P_{a,q}^{\mathrm{core}}(z,u)
+=
+m\,u^Ez^\ell\,
+\mathbf 1_{\{a\equiv \ell\;(\mathrm{mod}\,q)\}}.\;}
+\]
+换言之，atomic primitive 因子在任意模 \(q\) 的长度筛中，只向唯一同余类 \(a\equiv \ell\pmod q\) 注入信号，且注入量恰为 \(m\,u^Ez^\ell\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-primitive-surgery-finite-congruence-tomography}，
+\[
+P(z,u)-P_{\mathrm{core}}(z,u)=m\,u^Ez^\ell.
+\]
+对两边施加 root-of-unity 滤波，得到
+\[
+\begin{aligned}
+P_{a,q}(z,u)-P_{a,q}^{\mathrm{core}}(z,u)
+&=
+\frac1q\sum_{j=0}^{q-1}\omega_q^{-aj}
+\bigl(P(\omega_q^j z,u)-P_{\mathrm{core}}(\omega_q^j z,u)\bigr)\\
+&=
+\frac1q\sum_{j=0}^{q-1}\omega_q^{-aj}\,m\,u^E(\omega_q^j z)^\ell\\
+&=
+m\,u^Ez^\ell\cdot\frac1q\sum_{j=0}^{q-1}\omega_q^{j(\ell-a)}.
+\end{aligned}
+\]
+有限 Fourier 求和给出
+\[
+\frac1q\sum_{j=0}^{q-1}\omega_q^{j(\ell-a)}
+=
+\mathbf 1_{\{a\equiv \ell\;(\mathrm{mod}\,q)\}},
+\]
+从而得到所示公式。证毕。
+\end{proof}
+
+\begin{theorem}[有限模层析足以唯一恢复 atomic surgery 参数]\label{thm:conclusion-atomic-surgery-finite-congruence-tomography}
+沿用定理 \ref{thm:conclusion-atomic-surgery-single-congruence-injection} 的设定。设未知原子参数为 \((m,\ell,E)\)。取两两互素模数
+\[
+q_1,\dots,q_r\ge 2,
+\qquad
+Q:=q_1\cdots q_r>\ell,
+\]
+并在两个不同正参数 \(u_1\neq u_2\) 下观测全部滤波差分
+\[
+\Delta_{a,q_i}(z;u_j):=
+P_{a,q_i}(z,u_j)-P_{a,q_i}^{\mathrm{core}}(z,u_j).
+\]
+则 \((m,\ell,E)\) 由这些有限数据唯一决定。更具体地：
+\begin{enumerate}
+  \item 对每个 \(q_i\)，存在唯一同余类 \(a_i\in\ZZ/q_i\ZZ\) 使 \(\Delta_{a_i,q_i}(z;u_j)\neq 0\)，并满足
+  \[
+  a_i\equiv \ell\pmod{q_i}.
+  \]
+  \item 由中国剩余定理，\(\ell\) 在区间 \([0,Q)\) 中唯一确定，因此 \(\ell\) 本身被唯一恢复。
+  \item 若定义
+  \[
+  c_i^{(j)}
+  :=
+  [z^\ell]\Delta_{a_i,q_i}(z;u_j)
+  =
+  m\,u_j^E
+  \qquad (j=1,2),
+  \]
+  则
+  \[
+  \boxed{\;
+  E=\frac{\log(c_i^{(2)}/c_i^{(1)})}{\log(u_2/u_1)},
+  \qquad
+  m=\frac{c_i^{(1)}}{u_1^E}.\;}
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一条直接由定理 \ref{thm:conclusion-atomic-surgery-single-congruence-injection} 得到。由于 \(q_1,\dots,q_r\) 两两互素，中国剩余定理给出唯一的
+\[
+\ell \pmod Q.
+\]
+又因 \(0\le \ell<Q\)，故 \(\ell\) 本身唯一确定。
+
+一旦 \(\ell\) 已知，每个非零滤波差分的 \(z^\ell\) 系数都等于 \(m\,u^E\)。于是
+\[
+\frac{c_i^{(2)}}{c_i^{(1)}}=\left(\frac{u_2}{u_1}\right)^E,
+\]
+从而
+\[
+E=\frac{\log(c_i^{(2)}/c_i^{(1)})}{\log(u_2/u_1)}.
+\]
+再代回
+\[
+c_i^{(1)}=m\,u_1^E
+\]
+即得
+\[
+m=\frac{c_i^{(1)}}{u_1^E}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[真实输入 \texorpdfstring{$40$}{40} 状态核的 RH-sharp 门槛失效完全由 core 谱造成]\label{thm:conclusion-realinput40-core-determined-twisted-rh-break}
+对真实输入 \(40\) 状态核，沿用分解
+\[
+\Delta(z,u)=(1-uz^2)\,F(z,u)
+\]
+的记号。对任意 \(m\ge 2\) 与 \(1\le j\le m-1\)，令
+\[
+u=\omega_m^j,
+\qquad
+\omega_m:=e^{2\pi i/m},
+\]
+\[
+\rho_{m,j}^{\mathrm{full}}
+:=
+\frac{1}{\min\{|z|:\ \Delta(z,u)=0\}},
+\qquad
+\rho_{m,j}^{\mathrm{core}}
+:=
+\frac{1}{\min\{|z|:\ F(z,u)=0\}}.
+\]
+并记
+\[
+\lambda:=\rho(M(1))=\varphi^2,
+\qquad
+\theta_{m,j}^{\mathrm{full}}
+:=
+\frac{\log\rho_{m,j}^{\mathrm{full}}}{\log\lambda}.
+\]
+则有
+\[
+\boxed{\;
+\rho_{m,j}^{\mathrm{full}}>1
+\quad\Longrightarrow\quad
+\rho_{m,j}^{\mathrm{full}}=\rho_{m,j}^{\mathrm{core}}.\;}
+\]
+特别地，凡满足
+\[
+\theta_{m,j}^{\mathrm{full}}>\frac12
+\]
+的坏模态，都只能来自 core 因子 \(F(z,\omega_m^j)\)；原子 Euler 因子 \((1-uz^2)^{-1}\) 不会制造任何真正越过平方根门槛的 twisted 增长。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-time-part57b-atomic-factor-zero-twisted-exponent}，
+\[
+\rho_{m,j}^{\mathrm{full}}=\max\{1,\rho_{m,j}^{\mathrm{core}}\}.
+\]
+因此一旦 \(\rho_{m,j}^{\mathrm{full}}>1\)，便必有
+\[
+\rho_{m,j}^{\mathrm{full}}=\rho_{m,j}^{\mathrm{core}}.
+\]
+又因为 \(\lambda=\varphi^2>1\)，若 \(\theta_{m,j}^{\mathrm{full}}>\tfrac12\)，则自动有 \(\rho_{m,j}^{\mathrm{full}}>1\)，故该模态同样完全由 core 决定。结合命题 \ref{prop:real-input-40-output-dirichlet-nonrh} 中坏模数的存在性，文稿里全部 RH-sharp 门槛失效都只能归因于 core 谱。证毕。
+\end{proof}
+
+\begin{theorem}[有限 cyclotomic 手术对一切正 twisted 指数完全透明]\label{thm:conclusion-finite-cyclotomic-surgery-positive-exponent-transparency}
+设
+\[
+G^{(N)}(z)=G^{\mathrm{core}}(z)+\sum_{\nu=1}^{N}\frac{2z^{\ell_\nu}}{1-z^{M_\nu}},
+\qquad
+M_\nu\ge 2,
+\]
+并记
+\[
+\rho^{\mathrm{core}}
+:=
+\frac{1}{\min\{|z|:\ z\text{ 为 }G^{\mathrm{core}}(z)\text{ 的奇点}\}},
+\qquad
+\rho^{(N)}
+:=
+\frac{1}{\min\{|z|:\ z\text{ 为 }G^{(N)}(z)\text{ 的奇点}\}}.
+\]
+再设 \(\lambda>1\) 为固定 Perron 标尺，并定义
+\[
+\theta^{\mathrm{core}}:=\frac{\log\rho^{\mathrm{core}}}{\log\lambda},
+\qquad
+\theta^{(N)}:=\frac{\log\rho^{(N)}}{\log\lambda}.
+\]
+则恒有
+\[
+\boxed{\;
+\rho^{(N)}=\max\{1,\rho^{\mathrm{core}}\},
+\qquad
+\theta^{(N)}=\max\{0,\theta^{\mathrm{core}}\}. \;}
+\]
+特别地，对任意阈值 \(\tau>0\)，成立
+\[
+\theta^{(N)}>\tau
+\iff
+\theta^{\mathrm{core}}>\tau.
+\]
+因此，任何有限个 cyclotomic 原子壳都不能制造、修复或改变任何真正正指数的 twisted 增长；尤其不可能修复平方根级门槛的失效。
+\end{theorem}
+\begin{proof}
+每个附加项
+\[
+\frac{2z^{\ell_\nu}}{1-z^{M_\nu}}
+\]
+的全部极点都位于单位根集合 \(\mu_{M_\nu}\) 上，因此其模长恒等于 \(1\)。故 \(G^{(N)}\) 的所有模长严格小于 \(1\) 的奇点与 \(G^{\mathrm{core}}\) 完全相同，而 cyclotomic 壳只可能在 \(|z|=1\) 上增加奇点。
+于是
+\[
+\min\{|z|:\ z\text{ 为 }G^{(N)}(z)\text{ 的奇点}\}
+=
+\min\Bigl\{1,\ \min\{|z|:\ z\text{ 为 }G^{\mathrm{core}}(z)\text{ 的奇点}\}\Bigr\}.
+\]
+取倒数便得
+\[
+\rho^{(N)}=\max\{1,\rho^{\mathrm{core}}\}.
+\]
+再除以 \(\log\lambda\) 取对数，即得
+\[
+\theta^{(N)}=\max\{0,\theta^{\mathrm{core}}\}.
+\]
+阈值不变性由此立即推出。证毕。
+\end{proof}
+
+\begin{theorem}[prime-length 完成化 primitive 数据在 \texorpdfstring{$\bmod p$}{mod p} 上塌缩为 Frobenius 像]\label{thm:conclusion-completed-prime-length-frobenius-collapse}
+沿用 completed ghost 的记号。对任意素数 \(p\)，有整系数同余
+\[
+\widehat a_p(s)\equiv C_p(s)\equiv s^p\pmod p.
+\]
+因此，prime-length 完成化 primitive 数据在 \(\FF_p\) 上不携带任何超出一次坐标 \(s\) 的新信息；它只是 Frobenius 自同态
+\[
+s\longmapsto s^p
+\]
+的重写。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:completed-prime-congruence}，
+\[
+\widehat a_p(s)\equiv C_p(s)\pmod p.
+\]
+再由推论 \ref{cor:completed-teichmueller-congruence}，
+\[
+C_p(s)\equiv s^p\pmod p.
+\]
+合并即得
+\[
+\widehat a_p(s)\equiv s^p\pmod p.
+\]
+因此任何 \(\FF_p\)-多项式可观测量 \(F\) 都满足
+\[
+F(\widehat a_p(s))=F(s^p)=F(s)^p,
+\]
+从而 prime-length 模 \(p\) 完成化信息完全因子化为 Frobenius 像。证毕。
+\end{proof}
+
+\begin{theorem}[prime-power 完成化 primitive 塔的 Dwork--Frobenius 刚性]\label{thm:conclusion-completed-primepower-dwork-frobenius-tower}
+沿用同一 completed ghost 记号。对任意素数 \(p\) 与整数 \(k\ge 1\)，有精确整系数同余
+\[
+\widehat a_{p^k}(s)-\widehat a_{p^{k-1}}\!\bigl(C_p(s)\bigr)\in p^k\ZZ[s].
+\]
+因此
+\[
+\widehat a_{p^k}(s)\equiv \widehat a_{p^{k-1}}\!\bigl(C_p(s)\bigr)\pmod{p^k}.
+\]
+进一步，模 \(p\) 约化后整条 prime-power 塔严格塌缩为 Frobenius 迭代：
+\[
+\widehat a_{p^k}(s)\equiv \widehat a_{p^{k-1}}(s^p)\equiv s^{p^k}\pmod p.
+\]
+\end{theorem}
+\begin{proof}
+推论 \ref{cor:completed-dwork-frobenius-tower} 的第一式已给出
+\[
+\widehat a_{p^k}(s)\equiv \widehat a_{p^{k-1}}\!\bigl(C_p(s)\bigr)\pmod{p^k}.
+\]
+将其降模到 \(\FF_p[s]\)，并用定理
+\ref{thm:conclusion-completed-prime-length-frobenius-collapse}
+中的同余
+\[
+C_p(s)\equiv s^p\pmod p
+\]
+替换自变量，即得
+\[
+\widehat a_{p^k}(s)\equiv \widehat a_{p^{k-1}}(s^p)\pmod p.
+\]
+对 \(k\) 递推，并用 \(\widehat a_1(s)=s\)，便得到
+\[
+\widehat a_{p^k}(s)\equiv s^{p^k}\pmod p.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[零温微正则包络的对数尖点闭式]\label{thm:conclusion-realinput40-zero-temp-microcanonical-logcusp}
+沿用命题 \ref{prop:real-input-40-pressure-freezing} 的记号。设输出位势压力满足
+\[
+P(\theta)=\log\lambda(e^\theta)
+=\frac{\theta}{2}+\log c+\frac{d}{c}e^{-\theta/2}
++\left(\frac{e}{c}-\frac{d^2}{2c^2}\right)e^{-\theta}
++O(e^{-3\theta/2})
+\qquad (\theta\to+\infty),
+\]
+并定义微正则包络
+\[
+h(\alpha):=\inf_{\theta\ge 0}\bigl(P(\theta)-\alpha\theta\bigr),
+\qquad
+0\le \alpha\le \frac12.
+\]
+记
+\[
+\delta:=\frac12-\alpha,
+\qquad
+a:=\frac{d}{c}>0,
+\qquad
+b:=\frac{e}{c}-\frac{d^2}{2c^2}.
+\]
+则存在 \(\delta_0>0\)，使得当 \(\delta\in(0,\delta_0)\) 时，\(h(\alpha)\) 的极小点唯一，记为 \(\theta(\alpha)\)，并满足
+\[
+\boxed{\;
+\theta(\alpha)
+=
+-2\log\frac{2\delta}{a}
++\frac{8b}{a^2}\delta
++O(\delta^2),
+\qquad
+\delta\downarrow 0,
+\;}
+\]
+以及
+\[
+\boxed{\;
+h\!\left(\frac12-\delta\right)
+=
+\log c
+-2\delta\log\delta
++2\left(1+\log\frac{a}{2}\right)\delta
++\frac{4b}{a^2}\delta^2
++O(\delta^3).
+\;}
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:real-input-40-alpha-max} 与命题 \ref{prop:real-input-40-output-cumulants-closed}，
+\[
+P'(0)<\frac12.
+\]
+因此当 \(\delta>0\) 充分小时，极小点不可能停在边界 \(\theta=0\)，而必须满足驻点方程
+\[
+P'(\theta)=\frac12-\delta.
+\]
+由命题 \ref{prop:real-input-40-pressure-freezing}，
+\[
+P'(\theta)
+=
+\frac12-\frac{a}{2}e^{-\theta/2}-b e^{-\theta}+O(e^{-3\theta/2}).
+\]
+令
+\[
+u:=e^{-\theta/2},
+\]
+则驻点方程化为
+\[
+\delta=\frac{a}{2}u+b u^2+O(u^3).
+\]
+对该幂级数作反演，得到
+\[
+u=\frac{2\delta}{a}-\frac{8b}{a^3}\delta^2+O(\delta^3).
+\]
+取对数并乘以 \(-2\)，即得
+\[
+\theta(\alpha)
+=
+-2\log\frac{2\delta}{a}
++\frac{8b}{a^2}\delta
++O(\delta^2).
+\]
+又由
+\[
+P''(\theta)=\frac{a}{4}e^{-\theta/2}+O(e^{-\theta})>0
+\]
+可知该驻点在同一邻域内唯一。最后将上述 \(u\)-反演代回
+\[
+h(\alpha)=P(\theta(\alpha))-\alpha\theta(\alpha)
+\]
+便得到
+\[
+h\!\left(\frac12-\delta\right)
+=
+\log c
+-2\delta\log\delta
++2\left(1+\log\frac{a}{2}\right)\delta
++\frac{4b}{a^2}\delta^2
++O(\delta^3).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[近地基壳层的显式指数上界]\label{cor:conclusion-realinput40-near-ground-shell-exponential-bound}
+沿用定理 \ref{thm:conclusion-realinput40-zero-temp-microcanonical-logcusp} 的记号。令
+\[
+A_{n,k}
+:=
+\#\{\gamma:\ |\gamma|=n,\ \text{其输出 }1\text{ 的总数为 }k\}.
+\]
+则对任意固定的 \(\delta\in(0,\delta_0)\)，有
+\[
+\boxed{\;
+\limsup_{n\to\infty}
+\frac1n\log A_{n,\lfloor(1/2-\delta)n\rfloor}
+\le
+\log c
+-2\delta\log\delta
++2\left(1+\log\frac{a}{2}\right)\delta
++\frac{4b}{a^2}\delta^2
++O(\delta^3).
+\;}
+\]
+特别地，推论 \ref{cor:real-input-40-ground-entropy} 所给出的极端饱和层指数
+\[
+\lim_{n\to\infty}\frac1n\log A_{n,\lfloor n/2\rfloor}=\log c
+\]
+并非孤立常数，而是近地基壳层指数谱的端点值。
+\end{corollary}
+\begin{proof}
+任取 \(\theta\ge 0\)，并定义
+\[
+Z_n(u):=\sum_{k=0}^{n}A_{n,k}u^k.
+\]
+则有基本不等式
+\[
+A_{n,\lfloor(1/2-\delta)n\rfloor}e^{\theta\lfloor(1/2-\delta)n\rfloor}
+\le
+Z_n(e^\theta).
+\]
+两边取对数并除以 \(n\)，令 \(n\to\infty\)，便得到
+\[
+\limsup_{n\to\infty}\frac1n\log A_{n,\lfloor(1/2-\delta)n\rfloor}
+\le
+P(\theta)-\left(\frac12-\delta\right)\theta.
+\]
+再对 \(\theta\ge 0\) 取下确界，即
+\[
+\limsup_{n\to\infty}\frac1n\log A_{n,\lfloor(1/2-\delta)n\rfloor}
+\le
+h\!\left(\frac12-\delta\right).
+\]
+最后把定理 \ref{thm:conclusion-realinput40-zero-temp-microcanonical-logcusp} 中的尖点展开代入即可。证毕。
+\end{proof}
+
+上述八条命题把单原子 primitive 手术、length-mod root-of-unity 滤波、有限 cyclotomic 壳对正 twisted 指数的完全透明性、prime-length 与 prime-power 完成化数据在 \(\bmod p\) 上的 Frobenius 塌缩、full/core twisted 指数分裂与零温端点 Puiseux 几何压缩为一条闭合链：atomic 因子在长度同余筛中只留下单类针尖注入，有限个 cyclotomic 补丁不能制造任何真正正指数的坏模态，prime-length 与 prime-power 完成化塔在剩余域上又进一步塌缩为纯 Frobenius 迭代，而任何真正越过平方根门槛的 twisted 模态都只能来自 core；同一 core 控制的零温 Puiseux jet 再经 Legendre 变换传递为微正则包络的 \(-2\delta\log\delta\) 型尖点及近地基壳层的显式指数上界。因而在该口径下，原子因子负责局域可见的同余针尖，剩余域上的 prime 塔负责 Frobenius 护栏，而主导阈值破裂与零温端点几何的则始终是 core 谱本身。
+
+\endinput

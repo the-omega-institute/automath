@@ -1,0 +1,149 @@
+\subsubsection{秩缺口与表示可见性}\label{subsec:pom-moment-visibility}
+从同余计数口径 \(c_m(r)\) 出发，\(S_q(m)=\sum_r c_m(r)^q\) 可理解为模 \(F_{m+2}\) 上的 \(L^q\) 量；其傅里叶展开等价于对角色空间做 \(q\)-重张量提升后再施加共轭对称与“输出一致”的投影。差分模态截断给出上界 \(2\lfloor q/2\rfloor+1\)，而表 \ref{tab:fold_collision_moment_recursions_9_17} 的秩缺口说明：在某些 \(q\) 上存在不可见的表示分量，使得可观测子空间维数下降，从而触发共振。
+
+\begin{remark}[Hankel 最小实现函子：把序列提升为最小线性表示]\label{rem:pom-minh-functor}
+为把“秩缺口 = 表示不可见性”写成可组合接口，可将 \(R\)-值序列视为对象范畴 \(\mathbf{Seq}(R)\)，并将线性表示对象取为三元组 \((u,A,v)\)（\(u,v\) 为向量，\(A\) 为有限维矩阵），其语义为
+\(
+a_n=u^{\mathsf T}A^n v
+\)。
+在该口径下，Hankel 方法定义一个（在同构意义下）规范的最小实现赋值
+\[
+\mathsf{MinH}:\mathbf{Seq}(R)\to \mathbf{LinRep}_{\min}(R),
+\]
+把序列送到其最小维数 realization（可由可观测/可达分解或伴随矩阵实现显式构造）。
+定理 \ref{thm:hankel-rank-minimal} 表明：该最小维数恰等于 Hankel 秩，从而 Hankel 秩下降可被解释为“序列语义所能看到的表示维数”小于名义模态空间维数。
+\end{remark}
+
+\begin{conjecture}[模态可见性与闭合维数]\label{conj:pom-moment-visible}
+设 \(V_q\) 为由同余角色张量提升并施加共轭对称与输出一致约束得到的模态空间，令 \(V_q^{\mathrm{vis}}\) 表示对碰撞读出可见的子空间。则
+\[
+d_q=\dim V_q^{\mathrm{vis}}\ \le\ 2\lfloor q/2\rfloor+1,
+\]
+并且在非共振情形下取等号；共振对应于 \(V_q^{\mathrm{vis}}\) 出现额外约束而降维。
+\end{conjecture}
+
+\begin{theorem}[Hankel 秩下界：高阶矩的最小线性实现维数]\label{thm:pom-moment-hankel}
+记 \(S_q(m)=\sum_{x\in X_m} d_m(x)^q\)，并令 \(a_n:=S_q(n+2)\)（对 \(q=2,3\) 可再作常数缩放 \(a_n:=S_q(n+2)/2\)，不影响以下结论）。则对 \(q=2,3,4,5,6,7,8\)，其 Hankel 矩阵 \(H=(a_{i+j})_{i,j\ge 0}\) 满足
+\[
+\mathrm{rank}(H)\ \ge\ 2\lfloor q/2\rfloor+1.
+\]
+更具体地，存在一个 \((2\lfloor q/2\rfloor+1)\times(2\lfloor q/2\rfloor+1)\) 的 Hankel 主子式行列式非零，见表 \ref{tab:fold_collision_moment_hankel_rank}。
+\end{theorem}
+\begin{proof}
+对每个 \(q\) 直接构造 Hankel 块 \(H_0=(a_{i+j})_{0\le i,j<d}\)（其中 \(d=2\lfloor q/2\rfloor+1\)）并计算其行列式；若 \(\det(H_0)\neq 0\) 则 \(\mathrm{rank}(H)\ge d\)。该计算由脚本 \texttt{scripts/exp\_fold\_collision\_moment\_hankel\_rank.py} 逐项给出并输出为可审计表格。证毕。
+\end{proof}
+
+\begin{corollary}[高阶矩的最小实现维数等于递推阶数（在已核验范围内）]\label{cor:pom-moment-minreal}
+对 \(q=4,5,6,7,8\)，表 \ref{tab:fold_collision_moment_recursions} 给出的递推阶数分别为 \(5,5,7,7,9\)，因此存在维数分别为 \(5,5,7,7,9\) 的线性表示（由递推的伴随/companion 实现给出），从而 Hankel 秩满足 \(\mathrm{rank}(H)\le d\)。结合定理 \ref{thm:pom-moment-hankel} 的下界，可得这些 \(q\) 下 \(\mathrm{rank}(H)=d\)，并且任何线性 realization \(a_n=u^{\mathsf T}A^n v\) 的维数至少为 \(d\)（等价地，任意加权自动机/有理级数实现的最小状态数至少为 \(d\)，见定理 \ref{thm:hankel-rank-minimal}）。
+\end{corollary}
+
+\input{sections/generated/tab_fold_collision_moment_hankel_rank}
+
+\begin{remark}[\texorpdfstring{$p$}{p}-进刚性指纹：\texorpdfstring{$p=5$}{p=5} 在 \texorpdfstring{$k=5$}{k=5} 的 Hankel 证书中首次显性出现]\label{rem:pom-hankel-stiffness-p5}
+表 \ref{tab:fold_collision_moment_hankel_rank} 的非零 Hankel 主子式行列式不仅给出秩下界，也携带一个完全内部的算术刚性信号。
+对素数 \(p\) 定义“刚性指数”
+\[
+\mathsf{Stiff}_p(k):=v_p(\det(H_k)),
+\]
+其中 \(v_p\) 为 \(p\)-进赋值，\(H_k\) 为表中用于 \(S_k\) 的 Hankel 见证块。
+在最小的两个可手工分解的例子里：
+\[
+\det(H_{k=4})=1179648=2^{17}\cdot 3^2,
+\qquad
+\det(H_{k=5})=155520000000=2^{13}\cdot 3^5\cdot 5^7.
+\]
+因此 \(\mathsf{Stiff}_5(4)=0\) 而 \(\mathsf{Stiff}_5(5)=7\)：第一个携带高 \(5\)-进赋值的 Hankel 刚性证书恰好出现在 \(k=5\)。
+这一跳变为后续追踪“模 \(5\)”类算术效应提供了一个可复核的起点指标（例如随 \(k\) 增大继续记录 \(\mathsf{Stiff}_5(k)\) 的增长与共振缺口 \(\Delta(k)\) 的对照）。
+\end{remark}
+
+\subsubsection{任意阶碰撞矩的 moment-kernel 构造与多重分形谱}\label{subsec:pom-moment-general}
+
+\paragraph{从 \texorpdfstring{$q$}{q}-重碰撞到有限态 moment-kernel}
+二阶与三阶的核心新点是：碰撞矩并非仅是一个“可枚举序列”，而是由一个\textbf{有限状态纤维积核}生成，从而完全落入 Perron--Frobenius/\(\zeta\) 的统一接口。
+这一事实对任意 \(q\ge 2\) 都成立：固定 \(q\) 后，“\(q\) 条窗口折叠到同一稳定类型”的约束是一个有限记忆条件，因此可被编译为一个有限图（SFT/sofic）并由整数邻接矩阵计数。
+
+\begin{definition}[\texorpdfstring{$q$}{q}-重碰撞关系与 moment 序列]\label{def:pom-moment-q}
+对整数 \(q\ge 2\)，定义 \(q\)-重碰撞关系
+$$
+R_m^{(q)}:=
+\{(\omega^{(1)},\dots,\omega^{(q)})\in\Omega_m^q:\ \Fold_m(\omega^{(1)})=\cdots=\Fold_m(\omega^{(q)})\},
+$$
+并定义 \(q\)-阶碰撞矩（moment）
+$$
+S_q(m):=|R_m^{(q)}|=\sum_{x\in X_m} d_m(x)^q.
+$$
+\end{definition}
+
+\begin{proposition}[任意阶 moment-kernel 的存在与可执行构造]\label{prop:pom-moment-kernel-exists}
+对每个固定的 \(q\ge 2\)，存在一个有限状态非负整数核（邻接矩阵）\(A_q\) 与整数读出向量 \(u_q,v_q\) 使得
+$$
+S_q(m)=u_q^{\mathsf T}A_q^{\,m-m_0}v_q\qquad(m\ge m_0),
+$$
+从而 \(\{S_q(m)\}_{m\ge m_0}\) 满足某个\textbf{有限阶整系数线性递推}。
+
+并且 \(A_q\) 可按下述“编译路线”显式构造（因此可推演、可重写、可计算）：
+\begin{enumerate}
+  \item 选取实现 \(\Fold_\infty\) 的确定性在线核（延迟 \(\delta_{\min}=3\) 的同步核，附录给出其显式有限状态表示）；
+  \item 取其 \(q\) 份拷贝并做同步直积，把状态扩展为 \(q\)-元组；
+  \item 在每一步只保留那些使 \(q\) 份拷贝产生\textbf{相同输出位}的转移，并投影到可达的本质强连通分量；
+  \item 得到的有限图即为一个 \(q\)-重碰撞的 fiber-product 核，其邻接矩阵就是所求 \(A_q\)，其路径计数即给出 \(S_q(m)\)。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+把 \(\Fold_\infty\) 视为一个确定性有限转导器：输入为窗口字母（或其由两条合法输入轨道诱导的输入字母），输出为稳定地址比特；其内部状态空间有限且具有常数延迟（命题 \ref{prop:pom-delay-min} 的在线核即是一个具体实现）。
+固定 \(q\) 后，约束“\(q\) 份输出逐位相同”是一个局部同步约束：它只需在每一步比较当前输出符号是否一致，因而仍是有限状态可识别的。
+因此可对该转导器做同步直积并施加“输出一致”的筛选，得到一个有限有向图 \(G^{(q)}\)。
+长度 \(m\) 的合法路径条数等于 \(R_m^{(q)}\) 的计数（即 \(S_q(m)\)），从而可写成某个非负整数邻接矩阵的矩阵幂读出形式 \(u_q^{\mathsf T}A_q^{m-m_0}v_q\)。
+线性递推由 Cayley--Hamilton 定理立得，且递推系数为整数（因为 \(A_q\) 为整数矩阵）。证毕。
+\end{proof}
+
+\begin{remark}[可计算的对称压缩：星形 fiber-product 的 \texorpdfstring{$O(q^2)$}{O(q^2)} 轨道表示]\label{rem:pom-star-sympress}
+命题 \ref{prop:pom-moment-kernel-exists} 的一般编译路线在 \(q\) 增大时会遇到同步直积状态数的指数爆炸。
+但在一类“星形耦合”情形下（即碰撞约束可被组织为“中心轨道与每条叶子轨道分别满足同一 pair 约束”，并且该 pair 约束带有\emph{中心输入符号}分解，例如存在 \(3\)-态 pair kernel 的分解 \(A_2=B_0+B_1\)），
+则 \(q\)-重碰撞的星形核天然具有叶子置换对称：
+未压缩态空间可取为 \(\{1,2,3\}^{q-1}\)，而 Perron 主特征值由对称子空间决定，从而可将其压缩到轨道计数态
+\((n_1,n_2,n_3)\)（满足 \(n_1+n_2+n_3=q-1\)）并把维度降至
+\(\binom{q+1}{2}\)。
+脚本 \texttt{scripts/exp\_fold\_collision\_star\_kernel\_sympress\_demo.py} 给出该“轨道压缩 \(\Rightarrow\) \(\widetilde A_q\) \(\Rightarrow\) Perron 根估计”的可执行转移计数接口（输入为分解矩阵 \(B_0,B_1\)）。
+\end{remark}
+
+\begin{remark}[两段压缩律：对称幂商核 \texorpdfstring{$+$}{+} Hankel 最小化]\label{rem:pom-sympower-then-minh}
+对固定的 \(q\)，moment-kernel 编译把 \(q\)-重碰撞约束落为有限核 \(A_q\)（命题 \ref{prop:pom-moment-kernel-exists}），其最朴素实现对应 \(q\)-份同步直积的指数态空间。
+注 \ref{rem:pom-star-sympress}（以及更一般的对称幂/轨道压缩观点，注 \ref{rem:pom-moment-symmetric-power-substitution-operator}）表明：当计数目标具有完全的叶子置换对称时，可先取对称群作用的商，把指数态空间压缩为多项式维度的“对称幂商核” \(\widetilde A_q\)。
+\par
+随后在序列侧对 \(S_q(m)\) 应用 Hankel 最小实现函子 \(\mathsf{MinH}\)（注 \ref{rem:pom-minh-functor}），得到真实可见的最小维数 \(d_q\)（表 \ref{tab:fold_collision_moment_recursions_9_17}）。
+因此得到一个可执行的两段式压缩接口：
+\[
+\boxed{\;
+\text{指数直积核}\ \Longrightarrow\ \text{对称幂商核 }\widetilde A_q\ \Longrightarrow\ \mathsf{MinH}(S_q)\ \text{的最小维数 }d_q\; }.
+\]
+当出现 \(\Delta(q)=(2\lfloor q/2\rfloor+1)-d_q>0\)（表 \ref{tab:fold_collision_resonance_gap_delta_q_9_17}）时，
+该缺口可被视为“对称幂商核的名义模态维数”与“序列语义真实可见维数”之间的不可约差异：
+它对应于一组由 Hankel 秩下降强制出现的共振线性约束（见表 \ref{tab:fold_collision_resonance_nullmodes_q9_17}），从而把“乘法式的 \(q\)-重交互”在可审计层面压缩为一个整数缺口证书与一组显式约束向量。
+\end{remark}
+
+\paragraph{从 \texorpdfstring{$r_q$}{r\_q} 到压力与“纤维多重度谱”：凸共轭上界（严格）}
+已核验的 \(q\)-阶碰撞核满足 \(S_q(m)=\Theta(r_q^m)\)，其中 \(r_q=\rho(A_q)\) 为 Perron 根（推论 \ref{cor:pom-s2-asymptotic}、\ref{cor:pom-s3-asymptotic}、\ref{cor:pom-s4-asymptotic} 及表 \ref{tab:fold_collision_moment_recursions}）。
+因此 moment 指纹不仅给出单点常数 \(h_q=\log(2^q/r_q)\)，还诱导出一条可做 Legendre 变换的“压力曲线”，从而把“空间损失”提升为真正的谱结构。
+
+\begin{definition}[moment 压力与归一化对数矩母函数]\label{def:pom-moment-pressure}
+对 \(q\ge 2\) 定义
+$$
+\tau(q):=\limsup_{m\to\infty}\frac{1}{m}\log S_q(m),
+$$
+并定义归一化压力（即输出分布 \(w_m(x)=d_m(x)/2^m\) 的 \(q\)-阶对数矩母函数）
+$$
+P(q):=\limsup_{m\to\infty}\frac{1}{m}\log\sum_{x\in X_m}w_m(x)^q
+=\tau(q)-q\log 2.
+$$
+当存在 Perron 根 \(r_q\) 使 \(S_q(m)=\Theta(r_q^m)\) 时，有 \(\tau(q)=\log r_q\)，并且 \(P(q)=\log(r_q/2^q)=-h_q\)。
+\end{definition}
+
+\input{08_projection_ontology_mathematics_part03c_pressure_multifractal_q60}
+
+\begin{definition}[纤维多重度的对数谱函数]\label{def:pom-fiber-spectrum}
+令
+$$
+\gamma_m(x):=\frac{1}{m}\log d_m(x)\qquad(x\in X_m).
+$$

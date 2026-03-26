@@ -1,0 +1,412 @@
+\paragraph{prime-register 外置的结构刚性：自由交换轴、规范化森林与痕迹—索引对偶}\label{para:pom-fold-prime-register-rigidity-forest-trace-index}
+本段在定义 \ref{def:pom-fold-prime-lift} 的“逐步事件写回”制度之上，提炼若干条可复用的结构断言。
+第一条刻画外置的代数刚性：若逐步写回在交换可消去口径下要保持单射，则外置轴在本质上必须是自由交换幺半群，从而与 prime-register 的标准模型同构。
+第二条刻画策略语义：确定性正规化策略等价于把重写图分解为一族以正规形为根的规范化森林，prime-register 残差即该森林路径的可回放标签。
+第三条刻画信息极小化：在固定稳定类型的纤维上，prime-register 痕迹与“纤维索引”严格等价，但二者分别保留可回放轨迹与最小充分信息。
+第四条刻画轨迹连接的代数化：事件序列的连接在 \(\mathcal P\) 上被编译为“坐标移位 + 坐标加法”，从而与自由单子严格同构。
+第五条刻画策略变换：更换确定性策略在无损提升像上诱导保持稳定坐标的群胚同构，并在每条纤维上实现 residual 集合的置换。
+
+\begin{theorem}[事件逐步外置的素数刚性：单射 \texorpdfstring{$\Longleftrightarrow$}{<->} 自由交换轴]\label{thm:pom-stepwise-externalization-free-commutative-rigidity}
+设 \((M,\cdot,1)\) 为交换且可消去的幺半群，取一列元素 \((g_t)_{t\ge 1}\subset M\)。
+对任意有限支撑指数向量 \(k=(k_t)_{t\ge 1}\in \mathbb{N}^{(\mathbb{N})}\) 定义
+\[
+\mathrm{Enc}(k):=\prod_{t\ge 1} g_t^{\,k_t}\in M.
+\]
+则以下两条等价：
+\begin{enumerate}
+  \item 映射 \(\mathrm{Enc}:\mathbb{N}^{(\mathbb{N})}\to M\) 为单射；
+  \item 子幺半群 \(\langle g_t:\,t\ge 1\rangle\subset M\) 为可数秩自由交换幺半群，且 \((g_t)_{t\ge 1}\) 为其自由生成元系。
+\end{enumerate}
+在上述等价条件成立时，取素数序列 \(p_1<p_2<\cdots\)，则存在一个注入幺半群同态
+\[
+\iota:\ \mathcal{P}=\mathbb{N}^{(\mathbb{P})}\hookrightarrow M,
+\qquad
+\iota(\mathbf r):=\prod_{t\ge 1} g_t^{\,\mathbf r(p_t)},
+\]
+从而“逐步追加式外置”在代数意义下必然包含一份与 prime-register \(\mathcal{P}\) 同构的自由交换轴（在同构选择下可将 \(g_t\) 规范化为第 \(t\) 个素数坐标）。
+\end{theorem}
+\begin{proof}
+记 \(F:=\mathbb{N}^{(\mathbb{N})}\) 为以坐标基 \(\{e_t\}_{t\ge 1}\) 为自由生成元的自由交换幺半群。
+由定义，\(\mathrm{Enc}\) 是唯一满足 \(\mathrm{Enc}(e_t)=g_t\) 的幺半群同态，且其像恰为 \(\langle g_t\rangle\)。
+因此 \(\mathrm{Enc}\) 单射当且仅当 \(F\xrightarrow{\sim}\langle g_t\rangle\) 为同构，而该同构性正是“\(\langle g_t\rangle\) 为自由交换幺半群且以 \((g_t)\) 为基”的定义性刻画。
+\par
+最后，素数集合 \(\mathbb{P}\) 与 \(\mathbb{N}_{\ge 1}\) 均为可数集，取一固定枚举 \(p_t\) 即给出同构 \(F\cong \mathcal{P}\)（把 \(e_t\) 对应到 \(\delta_{p_t}\)）。
+将该同构与 \(\mathrm{Enc}\) 复合即得所示注入 \(\iota\)。证毕。
+\end{proof}
+
+\begin{theorem}[确定性正规化策略 \texorpdfstring{$\Longleftrightarrow$}{<->} 规范化森林：路径化刻画]\label{thm:pom-deterministic-normalization-forest}
+设一局部重写系统在固定分辨率上终止且合流，从而每个可达配置均存在唯一正规形。
+令 \(\Gamma\) 为其可达配置的有向图：顶点为可达配置，边为一次原子重写 \(a\to a'\)。
+记 \(V_{\mathrm{NF}}\subset V(\Gamma)\) 为正规形顶点集合。
+则：
+\begin{enumerate}
+  \item 任意确定性正规化策略 \(\mathsf S\)（对每个 \(a\notin V_{\mathrm{NF}}\) 选择一条出边 \(a\to a'\)，并保证迭代后有限步到达正规形）唯一确定 \(\Gamma\) 的一族以正规形为根的有向树，其并为 \(\Gamma\) 的规范化森林；
+  \item 反之，任意此类规范化森林唯一确定一个确定性策略：对每个非根顶点取其唯一出边作为策略一步；
+  \item 在定义 \ref{def:pom-fold-prime-lift} 的设定下，prime-register 残差 \(r_{\mathsf S}(\omega)\) 所记录的正是由策略 \(\mathsf S\) 选定的路径标签序列 \((e_t(\omega))_{t=1}^{T}\)，因此残差同时可解释为“算法痕迹”（可回放）与“森林路径编码”。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由终止性，\(\Gamma\) 上不存在无限有向路径；由策略确定性，每个非正规顶点在策略子图中的出度为 \(1\)，而正规形顶点出度为 \(0\)。
+若存在有向环，则沿环可生成无限策略轨迹，矛盾；故策略子图无环。
+因此每个连通分量必为一棵以某个出度为 \(0\) 的顶点为根的有向树，而该根只能是正规形顶点；全体分量合并得到规范化森林。
+\par
+反向构造由“每个非根顶点具有唯一父边”立即给出。
+最后一条由定义 \ref{def:pom-fold-prime-lift} 对事件序列 \(e_t(\omega)\) 与残差坐标写回规则的逐步对应直接推出。证毕。
+\end{proof}
+
+\begin{theorem}[轨迹连接的 prime-register 编译：移位加法与自由单子]\label{thm:pom-prime-trace-shift-free-monoid}
+令 \(\mathcal E\) 为定义 \ref{def:pom-fold-prime-lift} 中出现的原子事件集合，并记其注入编码为 \(\mathrm{code}:\mathcal E\hookrightarrow\NN_{\ge 1}\)。
+固定素数序列 \(p_1<p_2<\cdots\)。
+对任意有限事件序列 \(\mathbf e=(e_1,\dots,e_T)\in\mathcal E^*\) 定义其 prime-register 轨迹像 \(\mathsf{tr}(\mathbf e)\in\mathcal P\) 为
+\[
+\mathsf{tr}(\mathbf e)(p_t):=\mathrm{code}(e_t)\quad(1\le t\le T),
+\qquad
+\mathsf{tr}(\mathbf e)(p)=0\ \text{对其余 }p.
+\]
+对 \(k\ge 0\) 定义坐标移位算子 \(\sigma^k:\mathcal P\to\mathcal P\)：
+\[
+(\sigma^k r)(p_t):=
+\begin{cases}
+0,&1\le t\le k,\\
+r(p_{t-k}),&t>k.
+\end{cases}
+\]
+并在 \(\mathsf{tr}(\mathcal E^*)\) 上定义长度 \(T(r)\) 为满足 \(r(p_t)=0\ (t>T(r))\) 的最小整数（约定 \(T(0)=0\)），以及二元运算
+\[
+r\odot s:=r+\sigma^{T(r)}s.
+\]
+则 \(\bigl(\mathsf{tr}(\mathcal E^*),\odot,0\bigr)\) 为自由单子，其生成元为 \(\mathsf{tr}(\mathcal E)\)，且
+\[
+\mathsf{tr}:\ (\mathcal E^*,\text{连接})\ \xrightarrow{\ \sim\ }\ \bigl(\mathsf{tr}(\mathcal E^*),\odot\bigr)
+\]
+为单子同构。
+特别地，对任意确定性策略 \(\mathsf S\) 与任意 \(\omega\)，若 \((e_t(\omega))_{t=1}^{T}\) 为定理 \ref{thm:pom-deterministic-normalization-forest} 所述轨迹标签序列，则 \(r_{\mathsf S}(\omega)=\mathsf{tr}(e_1(\omega),\dots,e_T(\omega))\)，从而轨迹连接在 prime-register 上严格实现为 \(\odot\)。
+\end{theorem}
+\begin{proof}
+先由定义得 \(\sigma^a\sigma^b=\sigma^{a+b}\)。
+若 \(r,s\in\mathsf{tr}(\mathcal E^*)\)，则 \(\sigma^{T(r)}s\) 的支撑落在 \(\{p_{T(r)+1},p_{T(r)+2},\dots\}\)，从而与 \(r\) 的支撑不相交，故
+\(
+T(r\odot s)=T(r)+T(s)
+\)。
+因此对任意 \(r,s,t\) 有
+\[
+(r\odot s)\odot t
+=\bigl(r+\sigma^{T(r)}s\bigr)+\sigma^{T(r)+T(s)}t
+=r+\sigma^{T(r)}\bigl(s+\sigma^{T(s)}t\bigr)
+=r\odot(s\odot t),
+\]
+从而 \(\odot\) 结合且 \(0\) 为幺元。
+\par
+对 \(\mathbf e\in\mathcal E^*\)（长 \(T\)）与 \(\mathbf f\in\mathcal E^*\)（长 \(U\)），由逐坐标定义可得
+\(
+\mathsf{tr}(\mathbf e\mathbf f)=\mathsf{tr}(\mathbf e)+\sigma^{T}\mathsf{tr}(\mathbf f)
+=\mathsf{tr}(\mathbf e)\odot \mathsf{tr}(\mathbf f)
+\)，
+故 \(\mathsf{tr}\) 为单子同态。
+若两事件序列在首个位置 \(t\) 处不同，则由 \(\mathrm{code}\) 的单射性知 \(\mathsf{tr}\) 在坐标 \(p_t\) 处取值不同，从而 \(\mathsf{tr}\) 单射；满射性由 \(\mathsf{tr}(\mathcal E^*)\) 的定义成立，故为同构。
+自由性即由 \(\mathcal E^*\) 为以 \(\mathcal E\) 为生成元的自由单子与同构传递得到。证毕。
+\end{proof}
+
+\begin{proposition}[痕迹—索引对偶：prime-register 可回放痕迹与纤维索引的严格等价]\label{prop:pom-prime-trace-index-duality}
+固定分辨率 \(m\) 与确定性策略 \(\mathsf S\)，并沿用定义 \ref{def:pom-fold-prime-lift} 的无损提升
+\(
+\widetilde{\Fold}^{\mathsf S}_m(\omega)=(\Fold_m(\omega),r_{\mathsf S}(\omega))
+\)。
+对任意 \(x\in X_m\) 定义纤维与残差像
+\[
+\Omega_x:=\{\omega\in\Omega_m:\ \Fold_m(\omega)=x\},
+\qquad
+R_x:=\{r_{\mathsf S}(\omega):\ \omega\in\Omega_x\}\subset \mathcal{P}.
+\]
+则成立：
+\begin{enumerate}
+  \item 映射 \(\omega\mapsto r_{\mathsf S}(\omega)\) 在每条纤维 \(\Omega_x\) 上为双射 \(\Omega_x\xrightarrow{\sim}R_x\)；
+  \item 由值映射 \(N:\mathcal{P}\to\mathbb{N}_{\ge 1}\)（定义 \ref{def:pom-prime-fiber}）在 \(R_x\) 上诱导全序
+  \(
+  r\prec r'\iff N(r)<N(r')
+  \)。
+  令 \(\mathrm{rank}_x:R_x\to\{0,\dots,|R_x|-1\}\) 为相应秩函数，并定义
+  \[
+  \mathrm{idx}_{\mathsf S}(\omega):=\mathrm{rank}_{\Fold_m(\omega)}\bigl(r_{\mathsf S}(\omega)\bigr).
+  \]
+  则从 \(\bigl(\Fold_m(\omega),\mathrm{idx}_{\mathsf S}(\omega)\bigr)\) 可唯一恢复 \(\omega\)。
+\end{enumerate}
+因此在同一无损外置框架内存在严格等价：
+\[
+\text{prime-register 痕迹 }r_{\mathsf S}(\omega)
+\quad\Longleftrightarrow\quad
+\text{纤维索引 }\mathrm{idx}_{\mathsf S}(\omega),
+\]
+两者差异仅在于：前者保留可回放的算法路径，后者仅保留纤维内的最小充分信息。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:pom-fold-prime-lift-injective}，映射 \(\omega\mapsto (\Fold_m(\omega),r_{\mathsf S}(\omega))\) 单射。
+故在固定 \(x\) 的纤维上，若 \(r_{\mathsf S}(\omega)=r_{\mathsf S}(\omega')\) 则 \(\omega=\omega'\)，从而 \(\Omega_x\to R_x\) 为单射；而 \(R_x\) 按定义为其像，故为双射。
+\par
+第二条中，\(N\) 为双射且 \(R_x\) 有限，故全序与秩函数良定义。
+给定 \((x,\mathrm{idx})\) 先由秩逆映射恢复唯一 \(r\in R_x\)，再由 \(\mathrm{UNLIFT}^{\mathsf S}_m(x,r)\)（命题 \ref{prop:pom-fold-prime-lift-injective}）唯一恢复 \(\omega\)。证毕。
+\end{proof}
+
+\begin{proposition}[策略变换的群胚律：保持稳定坐标的 residual 置换]\label{prop:pom-prime-register-strategy-gauge-groupoid}
+固定分辨率 \(m\) 并取两种确定性策略 \(\mathsf S,\mathsf S'\)。
+在无损提升像上定义变换
+\[
+\Xi_{m}^{\mathsf S\to\mathsf S'}
+:=\widetilde{\Fold}^{\mathsf S'}_m\circ \mathrm{UNLIFT}^{\mathsf S}_m:
+\ \widetilde{\Fold}^{\mathsf S}_m(\Omega_m)\ \longrightarrow\ \widetilde{\Fold}^{\mathsf S'}_m(\Omega_m).
+\]
+则：
+\begin{enumerate}
+  \item \(\Xi_{m}^{\mathsf S\to\mathsf S'}\) 为双射；
+  \item \(\Xi_{m}^{\mathsf S\to\mathsf S'}\) 保持稳定坐标：对任意 \((x,r)\in \widetilde{\Fold}^{\mathsf S}_m(\Omega_m)\) 有
+  \[
+  \Xi_{m}^{\mathsf S\to\mathsf S'}(x,r)=(x,\rho_x^{\mathsf S\to\mathsf S'}(r)),
+  \]
+  其中对每个 \(x\in X_m\)，\(\rho_x^{\mathsf S\to\mathsf S'}:R_x^{\mathsf S}\to R_x^{\mathsf S'}\) 为有限集置换，定义为
+  \[
+  \rho_x^{\mathsf S\to\mathsf S'}\bigl(r_{\mathsf S}(\omega)\bigr):=r_{\mathsf S'}(\omega),
+  \qquad \omega\in\Omega_x,
+  \]
+  且 \(R_x^{\mathsf S}:=\{r_{\mathsf S}(\omega):\omega\in\Omega_x\}\)；
+  \item 这些变换满足群胚律：
+  \[
+  \Xi_{m}^{\mathsf S\to\mathsf S}=\mathrm{id},\qquad
+  \Xi_{m}^{\mathsf S\to\mathsf S''}=\Xi_{m}^{\mathsf S'\to\mathsf S''}\circ \Xi_{m}^{\mathsf S\to\mathsf S'}.
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:pom-fold-prime-lift-injective}，\(\mathrm{UNLIFT}^{\mathsf S}_m\) 为 \(\widetilde{\Fold}^{\mathsf S}_m\) 在其像上的逆；同理 \(\widetilde{\Fold}^{\mathsf S'}_m\) 单射，故复合 \(\Xi_{m}^{\mathsf S\to\mathsf S'}\) 为双射。
+\par
+对任意 \((x,r)=\widetilde{\Fold}^{\mathsf S}_m(\omega)\)，有 \(\mathrm{UNLIFT}^{\mathsf S}_m(x,r)=\omega\)，从而
+\[
+\Xi_{m}^{\mathsf S\to\mathsf S'}(x,r)
+=\widetilde{\Fold}^{\mathsf S'}_m(\omega)
+=\bigl(\Fold_m(\omega),r_{\mathsf S'}(\omega)\bigr)
+=(x,r_{\mathsf S'}(\omega)),
+\]
+稳定坐标保持。
+另一方面，由命题 \ref{prop:pom-prime-trace-index-duality}(1) 可知在每条纤维 \(\Omega_x\) 上，\(r_{\mathsf S}\) 与 \(r_{\mathsf S'}\) 分别为到 \(R_x^{\mathsf S}\)、\(R_x^{\mathsf S'}\) 的双射，从而 \(\rho_x^{\mathsf S\to\mathsf S'}\) 良定义且为置换，并给出所示分解形式。
+群胚律由定义的复合与逆性直接推出。证毕。
+\end{proof}
+
+\begin{definition}[Steinitz 完成的素数寄存器（超自然扩张）]\label{def:pom-steinitz-prime-register}
+定义 Steinitz 完成
+\[
+\mathcal{P}^{\mathrm{St}}
+:=\left\{\ \prod_{p\in\mathbb{P}} p^{e(p)}:\ e(p)\in\mathbb{N}\cup\{\infty\}\ \right\},
+\]
+其中乘积为形式积并以指数函数 \(e:\mathbb{P}\to\mathbb{N}\cup\{\infty\}\) 唯一指定。
+对 \(G\in\mathcal{P}^{\mathrm{St}}\) 与素数 \(p\) 定义 \(p\)-进指数
+\[
+v_p(G):=e(p)\in\mathbb{N}\cup\{\infty\}.
+\]
+自然嵌入 \(\mathcal{P}=\mathbb{N}^{(\mathbb{P})}\hookrightarrow \mathcal{P}^{\mathrm{St}}\) 由把有限支撑指数向量视为形式积给出。
+\end{definition}
+
+\begin{theorem}[跨分辨率的 Gödel 塔嵌入：逆极限稳定类型 \texorpdfstring{$\times$}{x} Steinitz 完成单射化]\label{thm:pom-multiresolution-godel-tower-injection}
+取一条无限二元序列 \(\omega\in\Omega_\infty:=\{0,1\}^{\mathbb{N}}\)。
+对每个 \(m\ge 1\) 记其长度 \(m\) 前缀为 \(\omega|_m\in\Omega_m\)，并定义
+\[
+(x_m,r_m):=\widetilde{\Fold}^{\mathsf S}_m(\omega|_m)\in X_m\times\mathcal{P},
+\qquad
+g_m:=N(r_m)\in\mathbb{N}_{\ge 1},
+\]
+其中 \(N\) 为定义 \ref{def:pom-prime-fiber} 的值映射。
+再取一固定素数序列 \(q_1<q_2<\cdots\)，并在 Steinitz 完成 \(\mathcal{P}^{\mathrm{St}}\) 中定义
+\[
+G(\omega):=\prod_{m=1}^{\infty} q_m^{\,g_m}\in \mathcal{P}^{\mathrm{St}}.
+\]
+令 \(X_\infty:=\varprojlim_m X_m\)，并记 \(x(\omega):=(x_m)_{m\ge 1}\in X_\infty\)。
+则映射
+\[
+\Psi:\Omega_\infty\to X_\infty\times \mathcal{P}^{\mathrm{St}},
+\qquad
+\Psi(\omega):=\bigl(x(\omega),\,G(\omega)\bigr)
+\]
+为单射。
+\end{theorem}
+\begin{proof}
+给定 \(\Psi(\omega)=(x(\omega),G(\omega))\)。
+由定义 \ref{def:pom-steinitz-prime-register}，可读出每个 \(m\) 的指数
+\(
+g_m=v_{q_m}(G(\omega))
+\)。
+由 \(N:\mathcal{P}\to\mathbb{N}_{\ge 1}\) 的双射性（定义 \ref{def:pom-prime-fiber}），恢复唯一 \(r_m=N^{-1}(g_m)\in\mathcal{P}\)。
+另一方面，\(x(\omega)\) 给出每个分辨率的 \(x_m\)。
+因此对每个 \(m\) 都得到一对 \((x_m,r_m)\)，由命题 \ref{prop:pom-fold-prime-lift-injective} 的逆过程 \(\mathrm{UNLIFT}^{\mathsf S}_m\) 唯一恢复 \(\omega|_m\)。
+全体前缀 \((\omega|_m)_{m\ge 1}\) 兼容并唯一确定 \(\omega\)，从而 \(\Psi\) 单射。证毕。
+\end{proof}
+
+\begin{definition}[Gödel 塔像上的分辨率一致性超度量]\label{def:pom-godel-tower-resolution-ultrametric}
+沿用定理 \ref{thm:pom-multiresolution-godel-tower-injection} 的记号。
+对 \(\omega,\eta\in\Omega_\infty\) 定义共同前缀深度
+\[
+\ell(\omega,\eta):=\sup\{m\in\NN:\ \omega|_m=\eta|_m\}\in\NN\cup\{\infty\},
+\qquad \sup\varnothing:=0,
+\qquad 2^{-\infty}:=0,
+\]
+并定义前缀超度量
+\[
+d_{\mathrm{pre}}(\omega,\eta):=2^{-\ell(\omega,\eta)}.
+\]
+\par
+对 \((x,G),(x',G')\in X_\infty\times \mathcal P^{\mathrm{St}}\) 定义分辨率一致性深度
+\[
+\ell_\Psi\bigl((x,G),(x',G')\bigr)
+:=\sup\Bigl\{m\in\NN:\ x_m=x'_m\ \text{且}\ v_{q_m}(G)=v_{q_m}(G')\Bigr\}\in\NN\cup\{\infty\},
+\qquad \sup\varnothing:=0,
+\]
+并定义超度量
+\[
+d_\Psi\bigl((x,G),(x',G')\bigr):=2^{-\ell_\Psi((x,G),(x',G'))}.
+\]
+\end{definition}
+
+\begin{theorem}[Gödel--Steinitz 全息嵌入的等距刚性与柱球对应]\label{thm:pom-godel-steinitz-isometric-rigidity}
+沿用定义 \ref{def:pom-godel-tower-resolution-ultrametric}。
+则 \(\Psi:(\Omega_\infty,d_{\mathrm{pre}})\to (X_\infty\times \mathcal P^{\mathrm{St}},d_\Psi)\) 为等距嵌入。
+并且对任意 \(m\ge 1\) 与任意前缀 \(\sigma\in\Omega_m\)，柱集
+\(
+[\sigma]:=\{\omega\in\Omega_\infty:\ \omega|_m=\sigma\}
+\)
+在 \(\Psi\) 下恰对应于一闭球：对任意 \(\omega\in[\sigma]\)，
+\[
+\Psi([\sigma])=\overline{B}_{d_\Psi}\bigl(\Psi(\omega),2^{-m}\bigr).
+\]
+\end{theorem}
+
+\begin{proof}
+取 \(\omega,\eta\in\Omega_\infty\) 并记 \(\ell=\ell(\omega,\eta)\)。
+若 \(j\le \ell\)，则 \(\omega|_j=\eta|_j\)。
+由定理 \ref{thm:pom-multiresolution-godel-tower-injection} 的构造，\((x_j(\cdot),r_j(\cdot))\) 仅依赖长度 \(j\) 的前缀，故
+\[
+x_j(\omega)=x_j(\eta),\qquad r_j(\omega)=r_j(\eta),
+\qquad g_j(\omega)=g_j(\eta),
+\]
+从而
+\(
+v_{q_j}(G(\omega))=g_j(\omega)=g_j(\eta)=v_{q_j}(G(\eta))
+\)。
+因此 \(\ell_\Psi(\Psi(\omega),\Psi(\eta))\ge \ell\)，即
+\[
+d_\Psi(\Psi(\omega),\Psi(\eta))\le 2^{-\ell}=d_{\mathrm{pre}}(\omega,\eta).
+\]
+\par
+反之，若 \(\ell_\Psi(\Psi(\omega),\Psi(\eta))\ge \ell+1\)，则 \(x_{\ell+1}(\omega)=x_{\ell+1}(\eta)\) 且
+\(
+v_{q_{\ell+1}}(G(\omega))=v_{q_{\ell+1}}(G(\eta))
+\)，即 \(g_{\ell+1}(\omega)=g_{\ell+1}(\eta)\)。
+由 \(N:\mathcal P\to\NN_{\ge 1}\) 的双射性得 \(r_{\ell+1}(\omega)=r_{\ell+1}(\eta)\)。
+于是 \((x_{\ell+1},r_{\ell+1})\) 相同，借助 \(\mathrm{UNLIFT}^{\mathsf S}_{\ell+1}\) 的唯一反演性得到
+\(
+\omega|_{\ell+1}=\eta|_{\ell+1}
+\)，矛盾于 \(\ell\) 的极大性。
+故 \(\ell_\Psi(\Psi(\omega),\Psi(\eta))=\ell\)，从而
+\[
+d_\Psi(\Psi(\omega),\Psi(\eta))=2^{-\ell}=d_{\mathrm{pre}}(\omega,\eta),
+\]
+等距性成立。
+\par
+最后，对柱集对应：\(\eta\in[\sigma]\) 当且仅当 \(d_{\mathrm{pre}}(\omega,\eta)\le 2^{-m}\)（\(\omega\in[\sigma]\) 任取），
+由等距性这等价于 \(d_\Psi(\Psi(\omega),\Psi(\eta))\le 2^{-m}\)，即 \(\Psi(\eta)\in \overline{B}_{d_\Psi}(\Psi(\omega),2^{-m})\)。
+因此 \(\Psi([\sigma])\) 恰为该闭球。
+\end{proof}
+
+\begin{proposition}[Steinitz 完成的终端外置坐标：支撑约束下的唯一嵌入]\label{prop:pom-steinitz-terminal-external-coordinates}
+固定一列互异素数 \((q_m)_{m\ge 1}\)。
+设 \(Q\) 为交换幺半群，并给定一族幺半群同态 \(v_m:Q\to\NN\)（\(m\ge 1\)），满足分离性：映射
+\[
+\nu:Q\longrightarrow \NN^{\NN},\qquad \nu(u):=(v_m(u))_{m\ge 1}
+\]
+为单射。
+则存在唯一交换幺半群同态嵌入
+\[
+\iota:Q\hookrightarrow \mathcal{P}^{\mathrm{St}},\qquad
+\iota(u):=\prod_{m\ge 1} q_m^{\,v_m(u)},
+\]
+使得对一切 \(m\ge 1\) 都有
+\[
+v_{q_m}(\iota(u))=v_m(u).
+\]
+并且，若存在映射
+\(
+\Phi:\Omega_\infty\to X_\infty\times Q
+\),
+\(\Phi(\omega)=(x(\omega),u(\omega))\)，使得对每个 \(m\) 都存在统一可计算的译码算子 \(\mathsf{Dec}_m\) 满足
+\[
+\mathsf{Dec}_m\bigl(x_m(\omega),v_m(u(\omega))\bigr)=\omega|_m,
+\]
+则复合映射
+\[
+\widetilde\Psi:=(\mathrm{id}_{X_\infty}\times \iota)\circ\Phi:\Omega_\infty\longrightarrow X_\infty\times \mathcal{P}^{\mathrm{St}}
+\]
+为单射；此外，任意满足同一坐标兼容性 \(v_{q_m}(\iota'(u))=v_m(u)\) 的幺半群同态 \(\iota':Q\to\mathcal{P}^{\mathrm{St}}\) 必有 \(\iota'=\iota\)。
+\end{proposition}
+
+\begin{proof}
+由定义 \ref{def:pom-steinitz-prime-register}，形式积 \(\prod_{m\ge 1}q_m^{v_m(u)}\) 唯一确定 \(\mathcal{P}^{\mathrm{St}}\) 中元素，故 \(\iota\) 存在且唯一，并显然为幺半群同态。
+由分离性 \(\nu\) 单射可知 \(\iota\) 亦单射，从而为嵌入。
+若 \(\iota'\) 满足 \(v_{q_m}(\iota'(u))=v_m(u)\)（全体 \(m\)），则 \(\iota'(u)\) 在素数集合 \(\{q_m\}\) 上的指数函数与 \(\iota(u)\) 相同，故 \(\iota'(u)=\iota(u)\)。
+最后，对 \(\widetilde\Psi\) 的单射性：若 \(\widetilde\Psi(\omega)=\widetilde\Psi(\eta)\)，则 \(x_m(\omega)=x_m(\eta)\) 且 \(v_m(u(\omega))=v_m(u(\eta))\) 对每个 \(m\) 成立；由译码假设得 \(\omega|_m=\eta|_m\) 对每个 \(m\) 成立，从而 \(\omega=\eta\)。证毕。
+\end{proof}
+
+\begin{corollary}[移位在 Gödel 塔像上的共轭实现]\label{cor:pom-shift-conjugacy-on-godel-image}
+沿用定理 \ref{thm:pom-multiresolution-godel-tower-injection} 的记号，令 \(F:=\Psi(\Omega_\infty)\subseteq X_\infty\times\mathcal{P}^{\mathrm{St}}\)，并令 \(\sigma:\Omega_\infty\to\Omega_\infty\) 为左移 \((\sigma(\omega))_k=\omega_{k+1}\)。
+则存在唯一映射
+\[
+T:F\to F,\qquad T:=\Psi\circ\sigma\circ \Psi^{-1},
+\]
+使得 \(\Psi\circ\sigma=T\circ\Psi\)。特别地，\(\Psi\) 给出 \((\Omega_\infty,\sigma)\) 与 \((F,T)\) 的动力学共轭。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:pom-multiresolution-godel-tower-injection}，\(\Psi:\Omega_\infty\to F\) 为双射，故 \(T\) 良定义且唯一，并由定义满足交换关系。
+共轭性即该交换关系的陈述。证毕。
+\end{proof}
+
+\begin{corollary}[prime-register Gödel 整数的阶乘型点态下界]\label{cor:pom-prime-register-godel-factorial-pointwise}
+沿用定义 \ref{def:pom-fold-prime-lift}。
+对输入 \(\omega\in\Omega_m\) 记策略事件步数为 \(T_m^{\mathsf S}(\omega)\)。
+则成立点态下界
+\[
+\boxed{\;
+N\!\bigl(r_{\mathsf S}(\omega)\bigr)\ \ge\ \bigl(T_m^{\mathsf S}(\omega)+1\bigr)!\;}
+\]
+从而二进制位长满足
+\(
+\ell_2\!\bigl(N(r_{\mathsf S}(\omega))\bigr)\ge \log_2\!\bigl((T_m^{\mathsf S}(\omega)+1)!\bigr)
+\)。
+\par
+并且存在绝对常数 \(c_0,c_1>0\) 使对一切 \(T:=T_m^{\mathsf S}(\omega)\ge 1\) 成立
+\[
+\boxed{\;
+\log_2 N\!\bigl(r_{\mathsf S}(\omega)\bigr)
+\ \ge\
+T\log_2 T-c_0T-c_1\; }.
+\]
+\end{corollary}
+\begin{proof}
+由定义 \ref{def:pom-fold-prime-lift}，对 \(1\le t\le T:=T_m^{\mathsf S}(\omega)\) 有 \(r_{\mathsf S}(\omega)(p_t)=\mathrm{code}(e_t(\omega))\in\mathbb{N}_{\ge 1}\)，故
+\[
+N\!\bigl(r_{\mathsf S}(\omega)\bigr)
+=\prod_{p\in\mathbb{P}}p^{r_{\mathsf S}(\omega)(p)}
+\ge \prod_{t=1}^{T}p_t.
+\]
+又由 \(p_t\ge t+1\)（对任意 \(t\ge 1\)），得
+\(
+\prod_{t=1}^{T}p_t\ge \prod_{t=1}^{T}(t+1)=(T+1)!
+\)。
+合并得到阶乘型下界。
+\par
+为得位长形式，取对数并用积分下界（\(n\ge 1\)）
+\[
+\log((n+1)!)=\sum_{k=1}^{n+1}\log k\ \ge\ \int_{1}^{n+1}\log t\,\dd t
+=(n+1)\log(n+1)-(n+1)+1,
+\]
+令 \(n=T\) 并换底到 \(\log_2\)，再将 \((T+1)\log_2(T+1)\) 下界为 \(T\log_2 T\) 并把其余项吸收到线性误差，即得
+\(\log_2 N(r_{\mathsf S}(\omega))\ge T\log_2 T-c_0T-c_1\)（取足够大的绝对常数 \(c_0,c_1\)）。
+证毕。
+\end{proof}
+
+\endinput

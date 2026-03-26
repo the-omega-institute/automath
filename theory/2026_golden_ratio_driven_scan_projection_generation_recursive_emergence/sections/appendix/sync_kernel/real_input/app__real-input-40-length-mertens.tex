@@ -1,0 +1,108 @@
+\subsubsection{长度同余类的 Dirichlet/Mertens 理论（按 \texorpdfstring{$|\tau|\bmod m$}{|tau| mod m}）}\label{app:real-input-40-length-mertens}
+本小节把“长度 \(|\tau|\bmod m\)”视为最简单的时间 cocycle：每走一步加 \(1\in\ZZ/m\ZZ\)。
+它不依赖任何额外观测量，因此给出一条与 arity/碰撞同余分层正交、但更接近“按同余类分解 Dirichlet/Mertens 常数”的可审计接口。
+
+\begin{proposition}[长度 Dirichlet 扭曲的 primitive 和收敛与闭式]\label{prop:real-input-40-length-twist-converge}
+取任意单位复数 \(\omega\in\CC\) 满足 \(|\omega|=1\) 且 \(\omega\neq 1\)。定义长度扭曲的 primitive 和
+\[
+S(\omega;N):=\sum_{n\le N}\frac{p_n\,\omega^n}{\lambda^n}.
+\]
+则极限
+\[
+S(\omega;\infty):=\sum_{n\ge 1}\frac{p_n\,\omega^n}{\lambda^n}
+\]
+收敛（条件收敛），并且满足严格恒等式
+\[
+\boxed{\;
+S(\omega;\infty)=P\!\left(\frac{\omega}{\lambda}\right)\; }.
+\]
+此外，由 Möbius--log 反演
+\[
+P(z)=\sum_{k\ge 1}\frac{\mu(k)}{k}\log\zeta_M(z^k)
+\]
+可得指数收敛闭式
+\[
+\boxed{\;
+P\!\left(\frac{\omega}{\lambda}\right)
+=\sum_{k\ge 1}\frac{\mu(k)}{k}\log \zeta_M\!\left(\left(\frac{\omega}{\lambda}\right)^k\right)\; }.
+\]
+\end{proposition}
+\begin{proof}
+由 \(p_n=\lambda^n/n+O(\varphi^n/n)\)（其中 \(\varphi<\lambda\)；见推论 \ref{cor:real-input-40-Mertens-constant} 的证明）得
+\(
+p_n/\lambda^n=1/n+O(\lambda^{-n/2}/n)
+\)。
+当 \(\omega\neq 1\) 时，\(\sum_{n\ge 1}\omega^n/n\) 由 Dirichlet 判别收敛，而误差项绝对可和，故 \(S(\omega;\infty)\) 收敛。
+另一方面，由定义 \(P(z)=\sum_{n\ge 1}p_n z^n\)，取 \(z=\omega/\lambda\)（其模长 \(<1\)）即得 \(S(\omega;\infty)=P(\omega/\lambda)\)。证毕。
+\end{proof}
+
+\begin{theorem}[长度同余类的 Mertens 定理与常数分解]\label{thm:real-input-40-length-mertens-prog}
+对整数 \(m\ge 2\) 与 \(r\in\{0,1,\dots,m-1\}\)，定义长度同余类的 Mertens 和
+\[
+\mathcal{M}_{m,r}(N):=\sum_{\substack{n\le N\\ n\equiv r\ (\mathrm{mod}\ m)}}\frac{p_n}{\lambda^n}.
+\]
+则当 \(N\to\infty\) 时有渐近
+\[
+\boxed{\;
+\mathcal{M}_{m,r}(N)=\frac{1}{m}\log N+\mathsf{M}^{(\mathrm{len})}_{m,r}+o(1)\; }.
+\]
+其中常数项可由根单位的离散傅里叶显式给出：令 \(\zeta_m:=e^{2\pi i/m}\)，则
+\[
+\boxed{\;
+\mathsf{M}^{(\mathrm{len})}_{m,r}
+=\frac{\mathsf{M}}{m}
+\frac{1}{m}\sum_{j=1}^{m-1}\zeta_m^{-jr}\,P\!\left(\frac{\zeta_m^{\,j}}{\lambda}\right)\; },
+\]
+其中 \(\mathsf{M}\) 为推论 \ref{cor:real-input-40-Mertens-constant} 的总 Mertens 常数。
+\end{theorem}
+\begin{proof}
+用指标函数的离散傅里叶展开
+\[
+\mathbf{1}_{\{n\equiv r\ (m)\}}
+=\frac{1}{m}\sum_{j=0}^{m-1}\zeta_m^{\,j(n-r)}.
+\]
+代入 \(\mathcal{M}_{m,r}(N)\) 并交换求和得
+\[
+\mathcal{M}_{m,r}(N)
+=\frac{1}{m}\sum_{n\le N}\frac{p_n}{\lambda^n}
+\frac{1}{m}\sum_{j=1}^{m-1}\zeta_m^{-jr}\sum_{n\le N}\frac{p_n\,\zeta_m^{\,jn}}{\lambda^n}.
+\]
+第一项由推论 \ref{cor:real-input-40-Mertens-constant} 给出
+\(
+\frac{1}{m}\log N+\frac{\mathsf{M}}{m}+o(1)
+\)。
+对每个 \(j\ge 1\)，\(\omega=\zeta_m^{\,j}\neq 1\)，内层和由命题 \ref{prop:real-input-40-length-twist-converge} 收敛到 \(P(\zeta_m^{\,j}/\lambda)\)，从而得到常数项分解式。证毕。
+\end{proof}
+
+\begin{corollary}[长度符号特征的 \texorpdfstring{$L(1)$}{L(1)}：根式闭式]\label{cor:real-input-40-length-sign-L1}
+定义“长度符号特征”的 Euler 乘积（对 primitive 轨道按奇偶赋 \(\pm 1\)）
+\[
+L_-(s):=\prod_{\tau\ \mathrm{primitive}}\Bigl(1-(-1)^{|\tau|}\,N(\tau)^{-s}\Bigr)^{-1}.
+\]
+在本核上 \(N(\tau)=\lambda^{|\tau|}\)，因此 \(L_-(s)=\zeta_M(-\lambda^{-s})\)。特别地，
+\[
+\boxed{\;
+L_-(1)=\zeta_M\!\left(-\frac{1}{\lambda}\right)
+=\frac{41}{40}+\frac{11}{24}\sqrt5\; }.
+\]
+\end{corollary}
+\begin{proof}
+由 \(\zeta_M(z)=1/\Delta(z)\) 与 \(\Delta(z)=\det(I-zM)=(1-z)^2(1+z)^3(1-3z+z^2)(1+z-z^2)\)，把 \(z=-1/\lambda\) 代入并用 \(\lambda=\varphi^2=(3+\sqrt5)/2\) 化简即可。证毕。
+\end{proof}
+
+\begin{remark}[可审计数值锚点：\texorpdfstring{$m=2,3$}{m=2,3} 的长度同余常数]\label{rem:real-input-40-length-mertens-numeric}
+用定理 \ref{thm:real-input-40-length-mertens-prog} 的离散傅里叶公式与命题 \ref{prop:real-input-40-length-twist-converge} 的 Möbius--log 评估，可得
+\[
+\mathsf{M}^{(\mathrm{len})}_{2,0}\approx 0.444974882790,\qquad
+\mathsf{M}^{(\mathrm{len})}_{2,1}\approx -0.122071879790,
+\qquad
+P(-1/\lambda)\approx 0.567046762580.
+\]
+对 \(m=3\)：
+\[
+\mathsf{M}^{(\mathrm{len})}_{3,0}\approx -0.288125030686,\qquad
+\mathsf{M}^{(\mathrm{len})}_{3,1}\approx 0.038533764040,\qquad
+\mathsf{M}^{(\mathrm{len})}_{3,2}\approx 0.572494269646,
+\]
+且三者之和回到总常数 \(\mathsf{M}\approx 0.322903002999817\)。
+\end{remark}

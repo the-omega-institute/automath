@@ -1,0 +1,662 @@
+\subsection{代价函子化的投影词演算：证书等价、双向压力谱与空间—时间联合相图}\label{subsec:pom-cost-functorial-calculus}
+本小节把“可重写证书”（\(\mathbf{PW}\) 的 \(2\)-态射）与“代价语义”（到代价半环/半域的函子）并置，使下述三类对象在同一演算学框架内闭合：
+(i) 算法等价的严格证书化；
+(ii) 空间—时间代价的函子化与重写下的不变量/单调量；
+(iii) 由 \(\mathrm{PROJ}_u\)、moment-kernel 与 \(E_m\)（Schatten 谱）共同生成的双向压力谱与联合相图 \(P(q,u)\)。
+
+\subsubsection{算法等价的严格证书化：\texorpdfstring{$\mathbf{PW}$}{PW} 中的 \texorpdfstring{$2$}{2}-态射}\label{subsec:pom-alg-equivalence-as-2morphism}
+\begin{definition}[算法等价的证书化（exact 与 \texorpdfstring{$\varepsilon$}{eps}-sound 版本）]\label{def:pom-alg-equivalence-2morphism}
+在带参数的投影词 \(2\)-范畴 \(\mathbf{PW}\)（定义 \ref{def:pom-projword-2cat}）中，令 \(w,w'\) 为同源同靶的 \(1\)-态射（可复合门的投影词）。
+\begin{enumerate}
+  \item 称 \(w,w'\) \textbf{exact 等价}，若存在一条 \(2\)-态射证书
+  \[
+  \alpha:\ w\Rightarrow w'.
+  \]
+  \item 称 \(w,w'\) \textbf{exact 同构}，若存在 \(2\)-态射 \(\alpha:w\Rightarrow w'\) 与 \(\beta:w'\Rightarrow w\) 使得
+  \(
+  \beta\circ\alpha=\mathrm{id}_w
+  \)
+  且
+  \(
+  \alpha\circ\beta=\mathrm{id}_{w'}
+  \)；
+  记为 \(w\simeq w'\)。
+  \item 在给定抽样口径下（定义 \ref{def:pom-eps-sound-rewrite}），称 \(w,w'\) \textbf{\(\varepsilon\)-sound 等价}，若存在近似证书
+  \[
+  w\Longrightarrow_{\varepsilon} w'.
+  \]
+\end{enumerate}
+在本文的“可审计演算学”口径下，\emph{算法等价}不再被陈述为“实现细节不同但效果相同”，而被定义为：在 \(\mathbf{PW}\) 中存在可组合的 \(2\)-态射证书（或 \(\varepsilon\)-sound 证书）把一个投影词重写到另一个投影词。
+\end{definition}
+
+\subsubsection{保守语义函子：把判等收束为自然同构类}\label{subsec:pom-semantic-conservative-functor}
+投影词的重写系统并不要求在全局上“完备”（即：任意语义等价都可由给定规则推出）。
+在工程化/审计化口径下，更关键的是在\emph{有界复杂度切片}上构造一组可计算不变量，使之对等价类\emph{保守}：不变量相同 \(\Rightarrow\) 必然存在自然同构。
+
+\begin{definition}[有界复杂度切片（接口化）]\label{def:pom-bounded-slice}
+固定参数上界与抽样网格
+\[
+m\le m_{\max},\qquad |G|\le G_{\max},\qquad q\le q_{\max},\qquad \Theta_{\mathrm{grid}}\subset\Theta\ \text{有限}.
+\]
+令 \(\mathbf{PW}^{\ast}_{\le}\subseteq\mathbf{PW}\) 为由最小可推演片段
+\(\mathbf{PW}^{\ast}=\langle E_m,\mathrm{PROJ}_u,\mathrm{LIFT}_G,\mathrm{TWIST}(\chi),\mathrm{MOM}_q\rangle\)
+（注 \ref{rem:pom-pw-star-fragment}）在上述界内生成的满子 \(2\)-范畴（对象为接口 \(\mathcal{I}(m;K;\kappa)\) 的受限族，\(1\)-态射为相应参数受限的投影词）。
+\end{definition}
+
+\begin{remark}[unitary slice 上的无参相位参数化]\label{rem:pom-unitary-slice-param-by-real-line}
+在后续若将某一参数轴限制在 unitary slice（例如在完成化/扭曲核的审计口径下取 \(|u|=1\) 的单位圆权重），则相位变量 \(u\in\TT\) 可由附录 \ref{app:unit-circle-phase-gate} 的 Cayley 紧化门以实轴坐标 \(x\in\RR\) 无参生成：
+\(
+u=\iota(x)=\frac{1+\mathrm{i}x}{1-\mathrm{i}x}
+\)。
+因此该切片上的“调相”可等价理解为坐标来源的选择，而无需引入额外外参。
+\end{remark}
+
+\begin{definition}[语义函子 \texorpdfstring{$\mathsf{Sem}$}{Sem}（签名 \(\times\) 谱）]\label{def:pom-sem-functor}
+在切片 \(\mathbf{PW}^{\ast}_{\le}\) 上，定义一个“可审计语义”赋值
+\[
+\mathsf{Sem}:\mathbf{PW}^{\ast}_{\le}\longrightarrow \mathbf{Sig}_{\le}\times \mathbf{Spec}_{\le}
+\]
+如下：
+\begin{itemize}
+  \item \textbf{签名部分 \(\mathbf{Sig}_{\le}\)：}由接口正规形参数与有限异常采样组成，例如
+  \(\bigl(\mathrm{NF}(w),\ G^{\mathrm{BC}}_m(w),\ \mathsf{Anom}_{G}(K;\theta)\vert_{\theta\in\Theta_{\mathrm{grid}}}\bigr)\)
+  （其中 \(G^{\mathrm{BC}}_m(w)\) 为定义 \ref{def:pom-bc-quotient} 的普适可交换化商：由 \(w\) 中的折叠层 \(E_m\) 与 lift 轴 \(\mathrm{LIFT}_G\) 的标签耦合关系可计算抽取）。
+  （参见命题 \ref{prop:pom-three-gen-interface-normal-form} 与推论 \ref{cor:pom-three-gen-normal-form-decidable}，以及含 \(\mathrm{MOM}\) 的结构正规形命题 \ref{prop:pom-mom-interface-normal-form}）。
+  \item \textbf{谱部分 \(\mathbf{Spec}_{\le}\)：}由整数矩谱与扭曲谱等可计算谱指纹组成，例如
+  \(\bigl(r_q(u)\vert_{2\le q\le q_{\max}},\ \rho_\chi(u)/\lambda_1(u)\vert_{\chi\in\widehat G,\,\theta\in\Theta_{\mathrm{grid}}}\bigr)\)
+  及其派生的压力/对偶预算对象（见 \S\ref{subsec:pom-quantile-budget-law} 与 \S\ref{subsec:pom-spectral-resource-type}）。
+\end{itemize}
+在本文实现中，\(\mathsf{Sem}\) 的各坐标均由“矩阵族 \(\Rightarrow\zeta\Rightarrow\) 有限部/谱半径/矩谱”的闭环接口抽取（\S\ref{subsec:pom-implementable-interfaces}）。
+\end{definition}
+
+\begin{theorem}[保守性（有界切片）：\texorpdfstring{$\mathsf{Sem}$}{Sem} 反射自然同构]\label{thm:pom-sem-conservative}
+在定义 \ref{def:pom-bounded-slice} 的切片上，\(\mathsf{Sem}\) 是保守的：对任意同源同靶的投影词 \(w_1,w_2\in\mathbf{PW}^{\ast}_{\le}\)，若
+\[
+\mathsf{Sem}(w_1)=\mathsf{Sem}(w_2),
+\]
+则必存在自然同构 \(w_1\simeq w_2\)（定义 \ref{def:pom-alg-equivalence-2morphism}）。
+\end{theorem}
+
+\begin{remark}[含义：无需全局完备，只需切片保守]\label{rem:pom-sem-conservative-meaning}
+定理 \ref{thm:pom-sem-conservative} 把“算法等价”从“同一最终核指纹”提升为“同一自然同构类”的可判定版本：
+在有界切片内并不需要证明重写系统对所有语义等价都完备，只需保证语义输出 \(\mathsf{Sem}\) 足够细，使其在该切片上反射同构。
+这与本文的 completion/审计策略相契合：在固定 \(m,G,q\) 与有限参数网格下，通过临界对枚举与回归脚本核验“正规形一致 + 残差类一致”（注 \ref{rem:pom-threegen-kb-completion-audit}、注 \ref{rem:pom-fourgen-kb-completion-audit}），即可把等价检验收束为可复现的有限输出比较。
+\end{remark}
+
+\begin{remark}[有限签名化：把“等价 + 优化”统一为同一组可核对输出]\label{rem:pom-finite-signature-sigmam}
+在有界切片内，可把 \(\mathsf{Sem}\) 的关键坐标压缩为一个更接近“演算学级验收标准”的有限签名族：
+对任一投影词 \(w\)（其分辨率、lift 群与温度/势参数均受切片约束），定义
+\[
+\Sigma_m(w)
+:=
+\Bigl(
+G^{\mathrm{BC}}_m(w),\
+\{\mathsf{Anom}_{G}(K;\theta)\}_{\theta\in\Theta_{\mathrm{grid}}},\
+\{r_q(u)\}_{(q,u)\in\mathcal{G}_{\mathrm{grid}}}
+\Bigr),
+\]
+其中 \(G^{\mathrm{BC}}_m(w)\) 为普适可交换化商（定义 \ref{def:pom-bc-quotient}），\(\Theta_{\mathrm{grid}}\) 与 \(\mathcal{G}_{\mathrm{grid}}\subseteq\{2,\dots,q_{\max}\}\times(0,1]\) 为有限测试网格。
+则“判等”与“优化”可统一理解为：在满足 \(\Sigma_m\) 一致的候选实现中，借助代价函子在 \(\mathbb{T}^{(2)}\) 中取帕累托极小元（见命题 \ref{prop:pom-cost-optimization-decidable}）。
+\end{remark}
+
+\begin{remark}[可计算闭环：重写系统 \texorpdfstring{$+$}{+} 语义核对系统]\label{rem:pom-rewrite-semantic-check-loop}
+本节的组织可被压缩为一条可执行的“演算学闭环”：
+\begin{enumerate}
+  \item \textbf{语法层（证书化重写）：}
+  在 \(\mathbf{PW}\) 中进行正规化与重写，输出接口正规形 \(\mathrm{NF}(w)\) 及其 \(2\)-态射证书（定义 \ref{def:pom-alg-equivalence-2morphism}）。
+  若允许近似编译，则以 \(\varepsilon\)-sound 证书携带风险预算（定义 \ref{def:pom-eps-sound-rewrite}），并由最小预算距离 \(d_{\mathcal I}\) 将预算内化为同态类上的内禀量（定义 \ref{def:pom-eps-distance}；命题 \ref{prop:pom-eps-distance-lawvere}）。
+  \item \textbf{语义层（有限签名/谱指纹）：}
+  以保守语义函子 \(\mathsf{Sem}\) 将词送入“签名 \(\times\) 谱”的可计算输出域（定义 \ref{def:pom-sem-functor}），并在有界切片上用有限签名 \(\Sigma_m(w)\) 做核对（注 \ref{rem:pom-finite-signature-sigmam}）。
+  \item \textbf{核对层（判等/一致性）：}
+  在切片口径下，\(\mathsf{Sem}\) 的一致性反射自然同构（定理 \ref{thm:pom-sem-conservative}），从而“词法正规形一致 + 残差类一致 + 有限谱指纹一致”给出可终止的判等流程；
+  对近似编译，则以 \(d_{\mathcal I}(w_1,w_2)\le\varepsilon\) 作为“允许误差”口径的内禀判据。
+  此外，同余/角色轴的“无限寄存器”并不妨碍终止性：任何有限投影词只触及有限模支持，核验可归约到某个有限层 \(\widehat{G_{m_\ast}}\) 的穷举（命题 \ref{prop:pom-finite-modulus-stability}）。
+\end{enumerate}
+\end{remark}
+
+\subsubsection{代价半环与代价函子：从 \texorpdfstring{$\mathbf{PW}$}{PW} 到资源预序}\label{subsec:pom-cost-functor}
+\paragraph{代价半环}
+令 \(\overline{\RR}_{\ge 0}:=\RR_{\ge 0}\cup\{+\infty\}\)，并令
+$$
+\mathbb{T}:=\bigl(\overline{\RR}_{\ge 0},\ \oplus,\ \otimes,\ \mathsf 0,\ \mathsf 1\bigr),
+\qquad
+a\oplus b:=\min(a,b),\quad a\otimes b:=a+b,
+\qquad
+\mathsf 0:=+\infty,\ \mathsf 1:=0.
+$$
+则 \(\mathbb{T}\) 是幂等交换半环（热带半环）。对空间—时间联合资源，取直积半环
+$$
+\mathbb{T}^{(2)}:=\mathbb{T}\times \mathbb{T},
+\qquad
+(s,t)\oplus(s',t'):=(\min(s,s'),\min(t,t')),
+\quad
+(s,t)\otimes(s',t'):=(s+s',t+t').
+$$
+\(\mathbb{T}^{(2)}\) 上带有点wise 预序 \((s,t)\preceq(s',t')\iff s\le s'\ \wedge\ t\le t'\)。
+
+\begin{definition}[资源预序 \(2\)-范畴与代价函子]\label{def:pom-cost-functor}
+定义一个薄 \(2\)-范畴 \(\mathbf{Res}\)（resources）如下：
+\begin{itemize}
+  \item \textbf{对象：}与 \(\mathbf{PW}\) 相同的接口对象（定义 \ref{def:pom-projword-2cat} 的 \(\mathcal{I}(m;K;\kappa)\)）。
+  \item \textbf{\(1\)-态射（代价）：}对任意对象对 \((A,B)\)，令 \(\mathrm{Hom}_1(A,B):=\mathbb{T}^{(2)}\)。
+  \item \textbf{\(2\)-态射（比较）：}对任意 \(c,c'\in\mathbb{T}^{(2)}\)，存在唯一 \(2\)-态射
+  \(
+  c\Rightarrow c'
+  \)
+  当且仅当 \(c'\preceq c\)。
+  \item \textbf{复合与恒等：}由 \(\otimes\) 给出：
+  \[
+  c_2\circ c_1:=c_2\otimes c_1,
+  \qquad
+  \mathrm{id}_A:=(0,0).
+  \]
+\end{itemize}
+称一个（弱）\(2\)-函子 \(\mathcal{C}:\mathbf{PW}\to \mathbf{Res}\) 为\textbf{代价函子}，若其在 \(1\)-态射上满足
+\[
+\mathcal{C}(w_2\circ w_1)=\mathcal{C}(w_2)\otimes \mathcal{C}(w_1),
+\qquad
+\mathcal{C}(\mathrm{id}_A)=(0,0),
+\]
+并且对任意重写证书 \(\alpha:w\Rightarrow w'\) 都有
+\[
+\mathcal{C}(w')\preceq \mathcal{C}(w).
+\]
+若希望把某一类证书视为严格\emph{代价不变}（不变量口径），则额外要求对该类证书恒有 \(\mathcal{C}(w)=\mathcal{C}(w')\)。
+\end{definition}
+
+\begin{remark}[不变量与单调量的分层]\label{rem:pom-cost-invariant-vs-monotone}
+定义 \ref{def:pom-cost-functor} 允许把“重写”分成两类：一类为 strict 等价（应在语义与代价上都不变），另一类为编译型改写（允许改变代价，但要求在所选预序上单调）。
+本文的典型用法是：把 exact 判等交给 \(\Sigma/\zeta/\)有限部等指纹函子（定义 \ref{def:pom-sigma-functor} 与注 \ref{rem:pom-zeta-normal-form}），而把“空间换时间/时间换空间”的编译律写成 \(\mathbb{T}^{(2)}\) 中的单调证书（例如 \((\mathrm{RCRT}_\varepsilon)\) 的失败概率账本与 prime-register 配额）。
+\end{remark}
+
+\begin{definition}[代价富集的投影词演算 \texorpdfstring{$\mathbf{PW}^{\mathrm{cost}}$}{PWcost}]\label{def:pom-pw-cost}
+给定一个代价函子 \(\mathcal{C}:\mathbf{PW}\to\mathbf{Res}\)（定义 \ref{def:pom-cost-functor}），称二元组
+\[
+\mathbf{PW}^{\mathrm{cost}}:=\bigl(\mathbf{PW},\mathcal{C}\bigr)
+\]
+为\textbf{代价富集的投影词演算}。
+在该结构中，“语义等价”由 \(\mathbf{PW}\) 的 \(2\)-同构（或 \(\varepsilon\)-sound 证书）给出，而“编译优化”被理解为：在固定语义等价类内，于资源预序 \((\mathbb{T}^{(2)},\preceq)\) 下寻找帕累托最小的代价实现。
+\end{definition}
+
+\begin{proposition}[有界切片上的编译优化可判定（有限前沿）]\label{prop:pom-cost-optimization-decidable}
+在定义 \ref{def:pom-bounded-slice} 的有界切片上，固定一个可审计片段 \(\mathbf{PW}^{\ast}_{\le}\subseteq\mathbf{PW}\) 与一个可计算的代价函子 \(\mathcal{C}\)。
+则对任一投影词 \(w\in\mathbf{PW}^{\ast}_{\le}\)，其语义等价类
+\[
+[w]:=\{\,w'\in\mathbf{PW}^{\ast}_{\le}:\ w'\simeq w\,\}
+\]
+在代价域中的像
+\(
+\mathcal{C}([w])\subseteq \mathbb{T}^{(2)}
+\)
+具有下述性质：
+\begin{enumerate}
+  \item \textbf{（前沿有限）} \(\mathcal{C}([w])\) 的帕累托极小元集合是有限集；
+  \item \textbf{（可判定/可构造）} 该帕累托前沿可由有限枚举计算得到：在切片给定的参数网格与复杂度上界内，枚举候选接口正规形并以 \(\mathsf{Sem}\)（定理 \ref{thm:pom-sem-conservative}）做判等分桶，再在每个桶内取 \(\preceq\)-极小元即得。
+\end{enumerate}
+\end{proposition}
+\begin{proof}[证明要点]
+在有界切片上，生成元参数取自有限网格，且本文的关键片段均提供了终止的正规化策略，把任意词规约到有限长度的接口正规形族（例如三/四生成元正规形，命题 \ref{prop:pom-three-gen-interface-normal-form} 与 \ref{prop:pom-mom-interface-normal-form}）。
+因此在该切片内可出现的接口正规形参数组合仅有有限多个；从而“候选实现”的语义签名桶也只有有限多个。
+对每个桶，代价函子 \(\mathcal{C}\) 在生成元与复合下可计算，故可对有限候选集合直接取 \(\preceq\)-极小元并得到帕累托前沿。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/def__pom-cost-canonical-representative}
+
+\subsubsection{温度门的热带化：从 PF 主谱到 min-plus 本征值}\label{subsec:pom-proj-tropicalization}
+\begin{definition}[温度门的热带化代价]\label{def:pom-proj-tropical-cost}
+沿温度化序投影 \(\mathrm{PROJ}_u\) 的矩阵实现（定义 \ref{def:pom-proj-temp}），对带势核的加权邻接矩阵 \(M_E(u)\) 定义其\textbf{热带化代价}为
+$$
+c_{\mathrm{trop}}(E)
+:=\lim_{u\downarrow 0}\frac{\log \rho\!\bigl(M_E(u)\bigr)}{\log u},
+$$
+只要极限存在。
+\end{definition}
+
+\begin{proposition}[热带化极限=最小平均回路能量]\label{prop:pom-proj-tropical-minmean}
+在有限图核（有限状态 SFT）与非负整数边势 \(E\) 的设定下，定义 \ref{def:pom-proj-tropical-cost} 的极限存在，并满足
+$$
+\boxed{\;
+c_{\mathrm{trop}}(E)
+=
+\min_{\gamma\ \mathrm{cycle}}\ \frac{E(\gamma)}{|\gamma|}\;},
+$$
+其中 \(\gamma\) 取遍有向图的周期回路，\(E(\gamma)\) 为沿回路的势和、\(|\gamma|\) 为回路长度。
+\end{proposition}
+\begin{proof}[证明要点（组合证书）]
+令 \(u=e^{-\beta}\)（\(\beta\to+\infty\) 等价于 \(u\downarrow 0\)）。
+对有限图上的边势，零温极限把平衡态集中到最小平均代价的基态集合（注 \ref{rem:pom-order-as-zero-temp}），且最小平均代价等于图上的 min-mean-cycle 值并可由 Karp 算法求出（同注）。另一方面，\(\rho(M_E(e^{-\beta}))\) 的对数在 \(\beta\to\infty\) 具有斜率极限，且该斜率正是上述最小平均代价；换回变量 \(u\) 即得
+\(
+\log\rho(M_E(u))\sim c_{\mathrm{trop}}(E)\log u
+\)
+从而结论成立。
+\end{proof}
+
+\begin{remark}[同一门族统一平均/最坏]\label{rem:pom-proj-avg-worst-unified}
+\(\mathrm{PROJ}_u\) 在 \(u\in(0,1)\) 给出热力学（平均）读出；命题 \ref{prop:pom-proj-tropical-minmean} 表明其在 \(u\to 0\) 自动退化为“最省能证书”（最坏/硬约束）的 min-plus 读出。因而只要在 \(\mathbf{PW}\) 中完成词法层的证书化重写（定义 \ref{def:pom-alg-equivalence-2morphism}），同一条证书即可被 \(u\) 推送到“平均—最坏”两端的比较语义中。
+\end{remark}
+
+\subsubsection{正矩—负矩的双向压力谱：moment-kernel \texorpdfstring{$+$}{+} Schatten 谱}\label{subsec:pom-bidirectional-pressure}
+\begin{definition}[双向矩与双向压力]\label{def:pom-bidirectional-moments}
+对每个分辨率 \(m\)，记纤维多重度 \(d_m(x)=|\Fold_m^{-1}(x)|\)（\(x\in X_m\)）。
+对任意 \(t>0\) 定义\textbf{正矩}与\textbf{负矩}：
+$$
+S^{+}_{t}(m):=\sum_{x\in X_m} d_m(x)^{t},
+\qquad
+S^{-}_{t}(m):=\sum_{x\in X_m} d_m(x)^{-t}.
+$$
+并定义对应的指数尺度（上）压力为
+$$
+\tau^{+}(t):=\limsup_{m\to\infty}\frac{1}{m}\log S^{+}_{t}(m),
+\qquad
+\widetilde P(t):=\tau^{-}(t):=\limsup_{m\to\infty}\frac{1}{m}\log S^{-}_{t}(m).
+$$
+\end{definition}
+
+\begin{remark}[空间损失的谱算子实现：\texorpdfstring{$\mathcal{F}_m=(E_mE_m^\ast)^{-1}$}{Fm=(EmEm*)^{-1}}]\label{rem:pom-fiber-loss-as-spectral-operator}
+由附录定义 \ref{def:fold-fiber-multiplicity-operator} 与命题 \ref{prop:fold-fiber-multiplicity-trace-moments}，纤维多重度可被提升为 \(\ell^2(X_m)\) 上的正对角谱算子 \(\mathcal{F}_m\)（其谱为 \(\{d_m(x)\}_{x\in X_m}\)）。
+在该口径下，双向矩本身就是 \(\mathcal{F}_m\) 的迹矩：
+$$
+\boxed{\;
+S^{+}_{t}(m)=\Tr(\mathcal{F}_m^{t}),\qquad
+S^{-}_{t}(m)=\Tr(\mathcal{F}_m^{-t})\; }.
+$$
+因此压力函数 \(\tau^{\pm}(t)\) 可理解为该谱算子迹矩的热力学极限；moment-kernel 的 PF 主谱与 \(E_m\) 的 Schatten 谱分别对应于 \(\mathcal{F}_m\) 的正侧与负侧迹矩接口。
+\end{remark}
+
+\input{sections/body/pom/parts/rem__pom-multiplicity-zeta-mellin-body}
+
+\begin{remark}[负矩由 \texorpdfstring{$E_m$}{Em} 的 Schatten 谱直接读出]\label{rem:pom-negative-moment-from-schatten}
+由附录算子代数口径（推论 \ref{cor:fold-conditional-expectation-schatten}）当 \(t\ge \frac12\)（即 \(2t\ge 1\)）时，有精确恒等式
+$$
+\boxed{\;
+S^{-}_{t}(m)=\sum_{x\in X_m}d_m(x)^{-t}=\|E_m\|_{S_{2t}}^{2t}\;}.
+$$
+因此负矩谱是 \(\mathbf{PW}\) 生成元 \(E_m\) 的一条直接可计算语义：它不需要额外的 moment-kernel 编译。
+\end{remark}
+
+\begin{proposition}[正负矩耦合不等式（空间谱不确定性下界）]\label{prop:pom-positive-negative-coupling}
+对任意 \(t>0\) 与任意 \(m\)，有
+$$
+\boxed{\;
+S^{+}_{t}(m)\,S^{-}_{t}(m)\ \ge\ |X_m|^2\; }.
+$$
+从而在指数尺度上
+$$
+\tau^{+}(t)+\widetilde P(t)\ \ge\ 2\liminf_{m\to\infty}\frac{1}{m}\log|X_m|
+=2\log\varphi.
+$$
+\end{proposition}
+\begin{proof}
+取 \(a_x=d_m(x)^{t/2}\)、\(b_x=d_m(x)^{-t/2}\)，则 \(\sum_x a_xb_x=|X_m|\)。
+由 Cauchy--Schwarz 得
+\(
+|X_m|^2\le (\sum_x a_x^2)(\sum_x b_x^2)=S_t^+(m)S_t^-(m)
+\)。
+再取对数并除以 \(m\)，注意 \(|X_m|=F_{m+2}=\Theta(\varphi^m)\)，得第二式。证毕。
+\end{proof}
+
+\begin{remark}[双管线交叉审计不等式]\label{rem:pom-positive-negative-cross-audit}
+对任意 \(t\ge \frac12\)，由注 \ref{rem:pom-negative-moment-from-schatten} 可将命题 \ref{prop:pom-positive-negative-coupling} 改写为
+$$
+\boxed{\;
+S^{+}_{t}(m)\,\|E_m\|_{S_{2t}}^{2t}\ \ge\ |X_m|^2\; }.
+$$
+其中 \(S_t^{+}(m)\) 由 moment-kernel/残差 DP 路线计算（正矩管线），而 \(\|E_m\|_{S_{2t}}\) 则可直接由纤维直方图 \(d_m(\cdot)\) 或表 \ref{tab:fold_conditional_expectation_singular_spectrum} 的谱指纹读出（算子管线）。
+因此该不等式为两条互相独立的审计子系统提供一个确定性的一致性约束。
+\end{remark}
+
+\begin{corollary}[纤维离散度指数：算术/调和均值比]\label{cor:pom-fiber-dispersion-index}
+令 \(\overline d_m:=2^m/|X_m|\) 为纤维尺寸在均匀 \(X_m\) 取样下的算术均值，并令
+\[
+d_m^{\mathrm{harm}}
+:=
+\frac{|X_m|}{\sum_{x\in X_m} d_m(x)^{-1}}
+=
+\frac{|X_m|}{\|E_m\|_{HS}^2}
+\]
+为对应的调和均值（推论 \ref{cor:fold-conditional-expectation-schatten}）。
+定义\textbf{纤维离散度指数}
+\[
+\boxed{\;
+\mathfrak{D}_m
+:=
+\frac{\overline d_m}{d_m^{\mathrm{harm}}}
+=
+\frac{2^m}{|X_m|^2}\sum_{x\in X_m}\frac{1}{d_m(x)}
+=
+\frac{2^m}{|X_m|^2}\|E_m\|_{HS}^2\; }.
+\]
+则对所有 \(m\ge 1\) 有确定性下界
+\[
+\boxed{\;\mathfrak{D}_m\ge 1\;}
+\]
+且等号当且仅当所有纤维尺寸 \(d_m(x)\) 处处相等（完全均匀纤维）。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-positive-negative-coupling} 取 \(t=1\)，并注意 \(S_1^+(m)=\sum_x d_m(x)=|\Omega_m|=2^m\)，得到
+\[
+2^m\sum_{x\in X_m}\frac{1}{d_m(x)}\ \ge\ |X_m|^2,
+\]
+两边同除以 \(|X_m|^2\) 即得 \(\mathfrak{D}_m\ge 1\)。
+等号条件由 Cauchy--Schwarz 取等号的充要性给出：\(\bigl(d_m(x)^{1/2}\bigr)_x\) 与 \(\bigl(d_m(x)^{-1/2}\bigr)_x\) 成比例当且仅当 \(d_m(x)\) 为常数。
+\end{proof}
+\input{sections/generated/tab_fold_fiber_dispersion_index}
+
+\begin{remark}[审计窗口内的异质性趋势]\label{rem:pom-fiber-dispersion-trend}
+表 \ref{tab:fold_fiber_dispersion_index} 给出若干 \(m\) 的 \(\mathfrak{D}_m\) 可复现输出；在审计窗口 \(m=8,10,\dots,24\) 内，\(\mathfrak{D}_m\) 由约 \(1.2367\) 缓慢上升至约 \(1.3781\)，表明折叠纤维的异质性随分辨率增长而增强。
+该标量既不同于最大纤维统计，也不同于正矩谱 \(S_t^+(m)\)；
+它以均值比的形式度量“典型纤维”与“尖锐纤维”之间的异质性，并受下界 \(\mathfrak{D}_m\ge 1\) 的硬约束。
+\end{remark}
+
+\begin{remark}[与正矩压力 \texorpdfstring{$P(q)$}{P(q)} 的桥接]\label{rem:pom-negative-pressure-bridge-to-positive}
+当 \(t=q\in\ZZ_{\ge 2}\) 时，\(S_q^+(m)=S_q(m)\) 并由 moment-kernel 给出 \(\tau^{+}(q)=\log r_q\)（定理 \ref{thm:pom-collision-kernel-ak}）。
+因此命题 \ref{prop:pom-positive-negative-coupling} 给出一个把两条语义链条硬耦合起来的下界：
+$$
+\boxed{\;
+\widetilde P(q)\ \ge\ 2\log\varphi-\log r_q\; }.
+$$
+这把“空间损失不是一个数而是一条谱”的口径转写为可核验不等式：正矩尾部（大纤维）越重，负矩尾部（小纤维/尖锐纤维）越被迫增大。
+\end{remark}
+
+\paragraph{负矩—Schatten 左尾通道的接口化输出（审计接口）}\label{par:pom-left-tail-schatten-terminal}
+在正文的正矩碰撞谱 \(\{S_q(m)\}_{q\ge 2}\)（moment-kernel 管线）之外，附录 \ref{app:op-algebra} 以折叠条件期望 \(E_m\) 的奇异值谱为直接接口，给出一条与之正交的\textbf{负矩—Schatten 左尾通道}（注 \ref{rem:pom-negative-moment-from-schatten}）。
+该通道把“低多重度层”的经验描述转写为可复算证书体系：所有量均可由表 \ref{tab:fold_conditional_expectation_singular_spectrum} 及其派生表 \ref{tab:fold_conditional_expectation_left_tail_bases}、\ref{tab:fold_conditional_expectation_effective_support} 直接核验。
+
+\medskip\noindent\textbf{左尾自由能密度常数族在审计窗口内呈现稳定底数。}
+令
+\[
+T_s(m):=S_s^{-}(m)=\sum_{x\in X_m} d_m(x)^{-s},
+\qquad
+t_s:=\limsup_{m\to\infty}\frac{1}{m}\log T_s(m)=\tau^{-}(s).
+\]
+在审计窗口所覆盖的偶数网格 \(m=8,10,\dots,24\) 上取经验底数
+\[
+b_s(m):=\Bigl(\frac{T_s(m)}{T_s(m-2)}\Bigr)^{1/2}\qquad(m\ge 10),
+\]
+则表 \ref{tab:fold_conditional_expectation_left_tail_bases} 显示其在 \(s=\tfrac12,1,2\) 处快速趋稳；在 \(m=24\) 的审计点，
+\[
+b_{1/2}(24)\approx 1.458200,\qquad b_1(24)\approx 1.316686,\qquad b_2(24)\approx 1.092366,
+\]
+相应给出候选指数率（自然对数）
+\[
+t_{1/2}\approx 0.3772,\qquad t_1\approx 0.2751,\qquad t_2\approx 0.0884.
+\]
+
+\medskip\noindent\textbf{负矩通道无需 moment-kernel 编译；其信息可由 \(E_m\) 的 Schatten 谱直接读出。}
+在算子接口 \(\mathcal{F}_m=(E_mE_m^\ast)^{-1}\) 下，
+\[
+T_s(m)=\Tr(\mathcal{F}_m^{-s}),
+\qquad
+\text{且当 }s\ge \tfrac12\text{ 时 }T_s(m)=\|E_m\|_{S_{2s}}^{2s}
+\]
+（附录命题 \ref{prop:fold-fiber-multiplicity-trace-moments}）。
+因此左尾负矩谱是生成元 \(E_m\) 的直接语义输出，不依赖任何高阶碰撞核的额外构造。
+
+\medskip\noindent\textbf{两类有效支撑规模给出奇异值能量的双尺度浓缩，并在 \(m=24\) 出现稳定分离。}
+令奇异值能量分布 \(p_x\propto d_m(x)^{-1}\)，并定义
+\[
+N_2(m):=\frac{1}{\sum_x p_x^2},
+\qquad
+N_{1/2}(m):=\Bigl(\sum_x\sqrt{p_x}\Bigr)^2
+\]
+（表 \ref{tab:fold_conditional_expectation_effective_support} 由 Schatten 范数闭式读出）。
+在审计窗口 \(m=8,10,\dots,24\) 内，\(\frac{N_2(m)}{|X_m|}\) 单调下降，而 \(\frac{N_{1/2}(m)}{|X_m|}\) 始终保持在接近 \(1\) 的区间（表 \ref{tab:fold_conditional_expectation_effective_support}）。
+在 \(m=24\) 的审计点，
+\[
+\frac{N_2(24)}{|X_{24}|}\approx 0.455665,\qquad
+\frac{N_{1/2}(24)}{|X_{24}|}\approx 0.895533,\qquad
+\frac{N_{1/2}(24)}{N_2(24)}\approx 1.9653.
+\]
+这表明：在 Rényi-2（collision）意义下能量仅覆盖约 \(0.46|X_m|\) 的有效规模，而在 Rényi-\(\tfrac12\)（Bhattacharyya）意义下仍覆盖约 \(0.90|X_m|\) 的有效规模；该双尺度分离构成一个可复算的谱指纹。
+
+\medskip\noindent\textbf{低多重度层存在无参数左尾证书，且在 \(m=24\) 可给出数值级下界。}
+令 \(X\sim \mathrm{Unif}(X_m)\)。
+对任意 \(s>0\) 记
+\[
+d_{-}(m,s):=\Bigl(\frac{2|X_m|}{T_s(m)}\Bigr)^{1/s}.
+\]
+则由负矩 Paley--Zygmund 证书（附录命题 \ref{prop:fold-negative-moment-left-tail-certificate}）有
+\[
+\mathbb{P}\bigl(d_m(X)\le d_{-}(m,s)\bigr)\ \ge\ \frac14\,\frac{T_s(m)^2}{|X_m|\,T_{2s}(m)}.
+\]
+在 \(m=24\) 的可复算 Schatten 输出（表 \ref{tab:fold_conditional_expectation_singular_spectrum}、\ref{tab:fold_conditional_expectation_effective_support}）上直接得到两条数值级证书：
+\[
+\mathbb{P}\bigl(d_{24}(X)\le 200.57\bigr)\ge 11.39\% \quad(s=1),
+\qquad
+\mathbb{P}\bigl(d_{24}(X)\le 447.94\bigr)\ge 22.39\% \quad(s=\tfrac12).
+\]
+其中所需输入仅为表 \ref{tab:fold_conditional_expectation_singular_spectrum} 的 \(\|E_m\|_{S_1}\)、\(\|E_m\|_{HS}^2\)、\(\|E_m\|_{S_4}\)（从而得到 \(T_{1/2},T_1,T_2\)），以及表 \ref{tab:fold_conditional_expectation_effective_support} 的有效支撑规模读出。
+
+\medskip\noindent\textbf{空间谱不确定性下界把右尾压缩与左尾稀薄绑定为不可兼得约束。}
+命题 \ref{prop:pom-positive-negative-coupling} 给出
+\(
+S_t^+(m)\,S_t^-(m)\ge |X_m|^2
+\)
+以及指数尺度耦合
+\(
+\tau^{+}(t)+\tau^{-}(t)\ge 2\log\varphi
+\)。
+因此任何通过增大正矩压力以强化右尾证书的策略，必然以同量级推高左尾压力为代价，从而放大低多重度层的指数规模；该约束在证书层面不可规避。
+
+\medskip\noindent\textbf{双尾证书在同一审计接口上闭合为分位夹逼带，并可与 prime-register 预算并置。}
+将右尾的正矩 Markov/Chernoff 上界与左尾的负矩 Paley--Zygmund 下界并置，可得到显式阈值函数：
+对任意整数 \(q\ge 1\)、\(\varepsilon\in(0,1)\)，令
+\[
+d_{+}(m,q,\varepsilon):=\Bigl(\frac{S_q(m)}{\varepsilon\,|X_m|}\Bigr)^{1/q}.
+\]
+则在 \(X\sim \mathrm{Unif}(X_m)\) 下有
+\[
+\mathbb{P}\bigl(d_m(X)\le d_{-}(m,s)\bigr)\ \text{有显式下界（由负矩 Paley--Zygmund 证书给出）},
+\qquad
+\mathbb{P}\bigl(d_m(X)\ge d_{+}(m,q,\varepsilon)\bigr)\le \varepsilon.
+\]
+这意味着在同一分辨率 \(m\) 上，左尾比例下界（Schatten 负矩接口）与右尾尾部上界（moment-kernel 正矩接口）可被独立审计并并置，从而为 prime-register 的尾部预算约束提供一个与低多重度结构正交、但在数据接口层面闭合的附加控制面。
+
+\subsubsection{RCRT 空间化的压力削减律：纤维按 residue 细分必然打散碰撞}\label{subsec:pom-rcrt-pressure-reduction}
+\begin{definition}[residue 细分后的碰撞矩]\label{def:pom-residue-refined-moment}
+固定模数乘积 \(P\)（prime-register 容量），并把每条纤维按 residue 类细分：对每个 \(x\in X_m\)，令
+$$
+d_m(x)=\sum_{i=1}^{P} d_{m,i}(x),
+$$
+其中 \(d_{m,i}(x)\) 表示落在第 \(i\) 个 residue 桶内的微态数（允许为 \(0\)）。
+对整数 \(q>1\) 定义细分后的 \(q\)-矩
+$$
+S_q^{(P)}(m):=\sum_{x\in X_m}\sum_{i=1}^{P} d_{m,i}(x)^q.
+$$
+\end{definition}
+
+\begin{lemma}[细分矩的上下界（Jensen/凸性）]\label{lem:pom-residue-refinement-jensen}
+对任意 \(q>1\)、任意非负数列 \((d_i)_{i=1}^P\) 满足 \(\sum_i d_i=d\)，有
+$$
+\boxed{\;
+P^{1-q}d^q\ \le\ \sum_{i=1}^{P}d_i^q\ \le\ d^q\; }.
+$$
+\end{lemma}
+\begin{proof}
+右端由 \(\sum_i d_i^q\le (\sum_i d_i)^q=d^q\)（\(q>1\) 时 \(t\mapsto t^q\) 超可加）立得。
+左端由凸性（Jensen）：\(\frac{1}{P}\sum_i d_i^q\ge (\frac{1}{P}\sum_i d_i)^q=(d/P)^q\)。证毕。
+\end{proof}
+
+\begin{corollary}[压力削减的显式律]\label{cor:pom-rcrt-pressure-reduction-law}
+在定义 \ref{def:pom-residue-refined-moment} 的设定下，对任意 \(q>1\) 与任意 \(m\) 有
+$$
+P^{1-q}S_q(m)\ \le\ S_q^{(P)}(m)\ \le\ S_q(m).
+$$
+因此对固定 \(m\) 的有限尺度压力
+$$
+P_m^{(P)}(q):=\frac{1}{m}\log S_q^{(P)}(m)-q\log 2
+$$
+满足
+$$
+P_m(q)-\frac{q-1}{m}\log P\ \le\ P_m^{(P)}(q)\ \le\ P_m(q),
+$$
+其中 \(P_m(q):=\frac{1}{m}\log S_q(m)-q\log 2\)。
+若选取随 \(m\) 变化的 \(P=P_m\) 并满足
+\(
+\sigma:=\lim_{m\to\infty}\frac{1}{m}\log P_m
+\)
+存在（例如 prime-register 容量指数增长），则令
+\[
+P^{(P_\bullet)}(q):=\limsup_{m\to\infty} P_m^{(P_m)}(q),
+\]
+并在 \(P_m(q)\to P(q)\) 的口径下得到可计算的削减带
+$$
+\boxed{\;
+P(q)- (q-1)\sigma\ \le\ P^{(P_\bullet)}(q)\ \le\ P(q)\; }.
+$$
+\end{corollary}
+\begin{proof}
+对每个 \(x\) 应用引理 \ref{lem:pom-residue-refinement-jensen} 并对 \(x\) 求和得第一式；其余由取对数并除以 \(m\) 得到。证毕。
+\end{proof}
+
+\begin{remark}[含义：空间化不只是替换门，而是改变碰撞压力本身]\label{rem:pom-rcrt-pressure-meaning}
+当 (RCRT)（定义 \ref{def:pom-order-elimination-rewrite}）被用作序门消元时，prime-register 的 residue 轴不仅提供“可唯一重建”的语义通道；上述不等式表明：同一细分在统计层面必然打散碰撞，从而压低正矩压力与多重分形上包络（命题 \ref{prop:pom-fold-multifractal-envelope}）。
+这使 “空间换时间”具有一个可核验的谱侧变换律：用 \(\log P\) 购买 residue 维度，会在 \(q\)-矩上产生至少 \((q-1)\log P\) 量级的指数削减空间。
+\end{remark}
+
+\begin{corollary}[自洽平方根配额律：同一 prime-register 同时做承载与打散]\label{cor:pom-rcrt-self-consistent-sqrt-budget}
+在推论 \ref{cor:pom-prime-register-q-quota-family} 的有限尺度 \(q\)-证书口径下，对整数 \(q\ge 2\) 定义
+\[
+B_{m,q}^{\mathrm{fin}}(\varepsilon)
+:=\varepsilon^{-1/(q-1)}\left(\frac{S_q(m)}{2^m}\right)^{\!1/(q-1)}.
+\]
+在定义 \ref{def:pom-residue-refined-moment} 的 residue 细分下，相应定义细分证书
+\[
+B_{m,q}^{(P),\mathrm{fin}}(\varepsilon)
+:=\varepsilon^{-1/(q-1)}\left(\frac{S_q^{(P)}(m)}{2^m}\right)^{\!1/(q-1)}.
+\]
+则由推论 \ref{cor:pom-rcrt-pressure-reduction-law} 立得夹逼
+\[
+\boxed{\;
+\frac{1}{P}\,B_{m,q}^{\mathrm{fin}}(\varepsilon)
+\ \le\
+B_{m,q}^{(P),\mathrm{fin}}(\varepsilon)
+\ \le\
+B_{m,q}^{\mathrm{fin}}(\varepsilon)\;}
+\]
+（即：同一 residue 细分在 \(q\)-矩尾证书上至多给出 \(P\) 倍、至少不给出改进）。
+因此对同一 prime-register 容量变量 \(P\)：
+\begin{itemize}
+  \item \textbf{（保守阈值；不指望打散改进）} 若取 \(P>2B_{m,q}^{\mathrm{fin}}(\varepsilon)\)，则由推论 \ref{cor:pom-prime-register-q-quota-family} 与命题 \ref{prop:pom-rcrt-epsilon} 得到 \((\mathrm{RCRT}_\varepsilon)\) 的 \(\varepsilon\)-sound 编译足够条件。
+  \item \textbf{（Jensen 达界时的平方根前沿）} 若 residue 桶在统计上近均匀、使 \(S_q^{(P)}(m)\approx P^{1-q}S_q(m)\)（Jensen 下界近取等），则 \(B_{m,q}^{(P),\mathrm{fin}}(\varepsilon)\approx B_{m,q}^{\mathrm{fin}}(\varepsilon)/P\)，从而 \((\mathrm{RCRT}_\varepsilon)\) 的阈值近似闭合为自洽二分界
+  \[
+  \boxed{\;
+  P^2\ \gtrsim\ 2\,B_{m,q}^{\mathrm{fin}}(\varepsilon)\;}
+  \qquad
+  \Longleftrightarrow
+  \qquad
+  \log P\ \gtrsim\ \frac{\log 2+\log B_{m,q}^{\mathrm{fin}}(\varepsilon)}{2}.
+  \]
+  进一步地，若用 \(\gamma_m^{\mathrm{cert}}(\varepsilon)\) 的证书包络（\S\ref{subsec:pom-quantile-budget-law}，见 \(\gamma_m^{\mathrm{cert}}(\varepsilon)=\inf_{q\ge 2}\frac{\log r_q-\log 2+\frac{1}{m}\log(1/\varepsilon)}{q-1}\)）并记 \(B_m^{\mathrm{cert}}(\varepsilon):=\exp(m\gamma_m^{\mathrm{cert}}(\varepsilon))\)，则该平方根前沿可写为
+  \[
+  \boxed{\;
+  \log P\ \gtrsim\ \frac{\log 2+m\,\gamma_m^{\mathrm{cert}}(\varepsilon)}{2}
+  \qquad(\text{证书化平方根配额律}).\;}
+  \]
+\end{itemize}
+\end{corollary}
+
+\subsubsection{异常的局部化：纤维内 Fourier 变差与可逆重构}\label{subsec:pom-anom-localization-fourier}
+\begin{definition}[纤维内角色平均（Fourier 系数）]\label{def:pom-fiber-fourier-coeff}
+固定分辨率 \(m\) 与一个有限阿贝尔 lift 群 \(G\)，并把 lift 标签视为函数
+$$
+\ell:\Omega_m\to G.
+$$
+对任意角色 \(\chi\in\widehat G\)，定义纤维内角色平均
+$$
+\mu_\chi(x):=\frac{1}{d_m(x)}\sum_{\Fold_m(a)=x}\chi(\ell(a)),
+\qquad x\in X_m.
+$$
+\end{definition}
+
+\begin{proposition}[角色平均即条件期望；残差能量即条件方差]\label{prop:pom-fiber-fourier-variance}
+令 \(f_\chi:=\chi\circ \ell\)。
+对任意概率分布 \(\mu\in\Delta(\Omega_m)\)，记其推前 \(\pi=(\Fold_m)_*\mu\in\Delta(X_m)\)，并记
+\[
+E_{\mu,m}[\,\cdot\mid\Fold_m]:L^2(\Omega_m,\mu)\to L^2(X_m,\pi)
+\]
+为条件期望算子（即 \(x\in X_m\) 上的纤维条件平均）。
+则：
+\begin{enumerate}
+  \item 若 \(\mu\) 在每条纤维上条件均匀（例如 \(\mu=Q_m\pi\) 或 \(\mu\) 为 \(\Omega_m\) 上的均匀分布），则对每个 \(x\in X_m\) 有
+  \[
+  (E_{\mu,m}[f_\chi\mid\Fold_m])(x)=\mu_\chi(x),
+  \]
+  并且该坐标公式与折叠条件期望 \(E_m\) 的计数平均一致（命题 \ref{prop:fold-conditional-expectation}），因此亦可记作 \((E_m f_\chi)(x)=\mu_\chi(x)\)。
+  \item 在任意参考分布 \(\mu\) 下，都有精确方差分解
+  $$
+  \|f_\chi-E_{\mu,m}[f_\chi\mid\Fold_m]\|_{2,\mu}^2
+  =
+  \mathbb{E}_\mu\!\big[\mathrm{Var}_\mu(f_\chi\mid \Fold_m)\big],
+  $$
+  从而纤维内“非恒定部分”的能量就是纤维条件分布下的方差平均（数值核对见表 \ref{tab:fold_conditional_variance_decomposition}）。
+\end{enumerate}
+\end{proposition}
+\input{sections/generated/tab_fold_conditional_variance_decomposition}
+
+\begin{corollary}[纤维内标签分布的可逆重构]\label{cor:pom-fiber-label-distribution-inversion}
+对每个 \(x\in X_m\)，定义纤维内标签分布
+$$
+p_x(g):=\frac{1}{d_m(x)}\bigl|\{a\in\Omega_m:\ \Fold_m(a)=x,\ \ell(a)=g\}\bigr|.
+$$
+则 \(\mu_\chi(x)=\sum_{g\in G}p_x(g)\chi(g)\) 是 \(p_x\) 的 Fourier 变换；因此对有限阿贝尔群有显式反演
+$$
+\boxed{\;
+p_x(g)=\frac{1}{|G|}\sum_{\chi\in\widehat G}\mu_\chi(x)\,\overline{\chi(g)}\; }.
+$$
+从而“异常/混合”不仅可被全局有限部签名 \(\mathsf{Anom}_G\) 检测（定义 \ref{def:pom-anom-signature}），也可在纤维内以可逆局部统计被定位：哪些标签在同一纤维内混合、混合的强度与结构，均由 \(\{\mu_\chi(x)\}_{\chi}\) 的局部谱确定。
+\end{corollary}
+
+\begin{proposition}[Fourier 分配律：lift 后的 \(q\)-moment 的严格角色分解]\label{prop:pom-mom-lift-fourier-distribution}
+沿用定义 \ref{def:pom-fiber-fourier-coeff} 的 lift 标签 \(\ell:\Omega_m\to G\)。
+对每个 \(x\in X_m\) 与 \(g\in G\)，记
+\[
+d_m(x,g):=\bigl|\{a\in\Omega_m:\ \Fold_m(a)=x,\ \ell(a)=g\}\bigr|,
+\qquad
+d_m(x)=\sum_{g\in G}d_m(x,g).
+\]
+对每个角色 \(\chi\in\widehat G\) 定义纤维计数的 Fourier 变换
+\[
+\widehat d_m(x,\chi):=\sum_{g\in G} d_m(x,g)\,\overline{\chi(g)}.
+\]
+则对任意整数 \(q\ge 2\) 有严格恒等式
+\[
+\boxed{\;
+\sum_{x\in X_m}\sum_{g\in G} d_m(x,g)^q
+\;=\;
+\frac{1}{|G|^{q-1}}
+\sum_{\substack{\chi_1,\dots,\chi_q\in\widehat G\\ \chi_1\cdots\chi_q=\chi_0}}
+\ \sum_{x\in X_m}\ \prod_{i=1}^q \widehat d_m(x,\chi_i)\;}
+\]
+其中 \(\chi_0\) 为平凡角色。
+\end{proposition}
+\begin{proof}
+对每个固定 \(x\)，由 Fourier 反演
+\(
+d_m(x,g)=\frac{1}{|G|}\sum_{\chi\in\widehat G}\widehat d_m(x,\chi)\chi(g)
+\)。
+将其代入 \(d_m(x,g)^q\) 并对 \(g\in G\) 求和，展开后用角色正交性
+\(
+\sum_{g\in G}\chi_1(g)\cdots\chi_q(g)
+=|G|\cdot \mathbf{1}_{\chi_1\cdots\chi_q=\chi_0}
+\)
+筛出约束 \(\chi_1\cdots\chi_q=\chi_0\)，得到所示恒等式。证毕。
+\end{proof}
+
+\begin{remark}[从全局签名到局部调试补丁]\label{rem:pom-anom-localization-bridge}
+定义 \ref{def:pom-anom-signature} 的 \(\mathsf{Anom}_G(K;\theta)\) 是“交换失败”的常数级全局签名，适用于重写证书的可组合核验与 completion（注 \ref{rem:pom-anom-completion}）。
+推论 \ref{cor:pom-fiber-label-distribution-inversion} 则给出一个更细粒度的局部句法接口：当在某些纤维 \(x\) 上观测到 \(p_x\) 的显著非单点性时，可把“需要分裂/重标的 lift 通道”具体化为对 \(\ell\) 的局部重写（把混合的标签簇拆成独立桶），从而把异常从“签名”升级为“可生成补丁的结构定位量”。
+\end{remark}
+
+\subsubsection{联合相图的函子化读出：二维压力面 \texorpdfstring{$P(q,u)$}{P(q,u)} 的两端与对偶}\label{subsec:pom-joint-phase-functor}
+二维压力面 \(P(q,u)\) 已在 \S\ref{subsec:pom-pressure-surface-qu} 由加权碰撞 moment-kernel 构造并可复现计算。
+其在两个方向上的端点与对偶操作在演算学上具有函子意义：
+\begin{itemize}
+  \item \textbf{（\(q\)-端）}固定 \(u\) 后，\(q\mapsto P(q,u)\) 通过 Legendre--Fenchel 变换给出“空间损失多重分形”上包络（命题 \ref{prop:pom-fold-multifractal-envelope} 的同型操作；此处仅把 \(r_q\) 替换为 \(r_q(u)\)）；
+  \item \textbf{（\(u\)-端）}固定 \(q\) 后，\(u\downarrow 0\) 的热带化斜率
+  \(
+  \lim_{u\downarrow 0}\frac{\log r_q(u)}{\log u}
+  \)
+  给出 \(q\)-重碰撞编译后的最小平均能量证书（对 \(q=1\) 退化为命题 \ref{prop:pom-proj-tropical-minmean}）。
+\end{itemize}
+因此 \(P(q,u)\) 可被视为同一投影词在“空间矩谱—时间温度倾斜”两轴上的联合语义对象：它把 \(\mathbf{PW}\) 的证书化重写与代价函子化读出锁到同一张可计算相图上。

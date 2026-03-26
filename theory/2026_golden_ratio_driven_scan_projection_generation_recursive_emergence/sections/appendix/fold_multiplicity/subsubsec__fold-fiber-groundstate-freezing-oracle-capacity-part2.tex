@@ -1,0 +1,236 @@
+\paragraph{容量缺口反演与顶端仿射窗的有限层刚性}
+
+\begin{theorem}[容量缺口的 Mellin--Stieltjes 反演完备性]\label{thm:fold-capacity-gap-mellin-stieltjes-duality}
+固定分辨率 \(m\)，并定义容量缺口
+\[
+\mathcal R_m(T):=2^m-\mathcal C_m^{\mathrm{cont}}(T)
+=\sum_{x\in X_m}\bigl(d_m(x)-T\bigr)_+,\qquad T\ge 0.
+\]
+对任意复数 \(s\) 满足 \(\Re s>1\)，定义
+\[
+S_s(m):=\sum_{x\in X_m}d_m(x)^s.
+\]
+则有严格恒等式
+\[
+\boxed{\;
+S_s(m)=s(s-1)\int_{0}^{\infty}T^{s-2}\mathcal R_m(T)\,\dd T.\;}
+\]
+并且对任意 \(c>1\) 成立 Mellin 反演公式
+\[
+\boxed{\;
+\mathcal R_m(T)=\frac{1}{2\pi i}\int_{c-i\infty}^{c+i\infty}
+\frac{S_s(m)}{s(s-1)}\,T^{1-s}\,\dd s,
+\qquad
+\mathcal C_m^{\mathrm{cont}}(T)=2^m-\mathcal R_m(T).\;}
+\]
+因此，连续容量曲线 \(\mathcal C_m^{\mathrm{cont}}(\cdot)\) 与半平面 \(\Re s>1\) 上的全部正矩谱 \(\{S_s(m)\}\) 互相唯一决定；等价地，它们都完整刻画纤维多重度多重集 \(\{d_m(x)\}_{x\in X_m}\)。
+\end{theorem}
+\begin{proof}
+对任意正整数 \(d\) 与 \(\Re s>1\)，有 Beta 积分恒等式
+\[
+d^s=s(s-1)\int_{0}^{\infty}T^{s-2}(d-T)_+\,\dd T.
+\]
+事实上，
+\[
+\int_{0}^{\infty}T^{s-2}(d-T)_+\,\dd T
+=\int_{0}^{d}T^{s-2}(d-T)\,\dd T
+=d^s\int_{0}^{1}u^{s-2}(1-u)\,\dd u
+=\frac{d^s}{s(s-1)}.
+\]
+取 \(d=d_m(x)\) 并对 \(x\in X_m\) 求和，得到
+\[
+S_s(m)
+=s(s-1)\int_{0}^{\infty}T^{s-2}\sum_{x\in X_m}(d_m(x)-T)_+\,\dd T
+=s(s-1)\int_{0}^{\infty}T^{s-2}\mathcal R_m(T)\,\dd T.
+\]
+由于 \(X_m\) 有限且 \(\mathcal R_m(T)=0\) 当 \(T\ge M_m\) 时成立，\(\mathcal R_m\) 是紧支撑分段线性函数，上式在 \(\Re s>1\) 上绝对收敛。
+因此标准 Mellin 反演适用，得到所示反演公式。
+
+最后，由命题 \ref{prop:fold-oracle-capacity-slope-jumps-determine-histogram}，\(\mathcal C_m^{\mathrm{cont}}(\cdot)\) 已可唯一恢复纤维直方图；
+而上式与反演公式分别给出
+\[
+\mathcal C_m^{\mathrm{cont}}\Longrightarrow \{S_s(m)\}_{\Re s>1},
+\qquad
+\{S_s(m)\}_{\Re s>1}\Longrightarrow \mathcal C_m^{\mathrm{cont}},
+\]
+从而两者与纤维多重度多重集完全等价。证毕。
+\end{proof}
+
+\begin{theorem}[有限支撑纤维谱的截断矩完全可逆性]\label{thm:fold-fiber-truncated-moment-complete-inversion}
+固定分辨率 \(m\)，记
+\[
+M_m:=\max_{x\in X_m}d_m(x),
+\qquad
+h_m(d):=\#\{x\in X_m:\ d_m(x)=d\}
+\qquad(1\le d\le M_m),
+\]
+并把零阶矩约定为
+\[
+S_0(m):=|X_m|,
+\qquad
+S_q(m):=\sum_{x\in X_m}d_m(x)^q
+\qquad(q\ge 1).
+\]
+则向量
+\[
+\mathbf h_m:=(h_m(1),\dots,h_m(M_m))^{\mathsf T}
+\]
+已由有限截断矩
+\[
+\mathbf s_m:=(S_0(m),S_1(m),\dots,S_{M_m-1}(m))^{\mathsf T}
+\]
+唯一决定。更精确地，若定义 Vandermonde 型矩阵
+\[
+V_{M_m}:=(d^q)_{\substack{0\le q\le M_m-1\\ 1\le d\le M_m}},
+\]
+则
+\[
+\mathbf s_m=V_{M_m}\mathbf h_m,
+\qquad
+\det V_{M_m}=\prod_{1\le i<j\le M_m}(j-i)\neq 0.
+\]
+因而固定 \(m\) 时，连续容量曲线 \(\mathcal C_m^{\mathrm{cont}}\) 与全部正矩谱 \(\{S_q(m)\}_{q>0}\) 不仅互为充分统计量，而且事实上已经由有限个矩
+\[
+S_0(m),S_1(m),\dots,S_{M_m-1}(m)
+\]
+完全确定。
+
+特别地，在 window-\(6\) 的 bin-fold 审计中，已知纤维取值仅落在
+\[
+\{2,3,4\},
+\]
+故 \(M_6=4\) 且
+\[
+S_0(6),S_1(6),S_2(6),S_3(6)
+\]
+便足以唯一恢复完整直方图；对应解恰为
+\[
+h_6(1)=0,\qquad h_6(2)=8,\qquad h_6(3)=4,\qquad h_6(4)=9.
+\]
+\end{theorem}
+\begin{proof}
+按纤维大小分层，对每个整数 \(q\ge 0\) 都有
+\[
+S_q(m)=\sum_{x\in X_m}d_m(x)^q=\sum_{d=1}^{M_m}h_m(d)\,d^q.
+\]
+把 \(q=0,1,\dots,M_m-1\) 这些等式堆叠起来，正得
+\[
+\mathbf s_m=V_{M_m}\mathbf h_m.
+\]
+而
+\[
+\det V_{M_m}=\prod_{1\le i<j\le M_m}(j-i)\neq 0
+\]
+是标准 Vandermonde 行列式，故 \(V_{M_m}\) 可逆，从而 \(\mathbf h_m\) 被 \(\mathbf s_m\) 唯一决定。
+
+一旦 \(\{h_m(d)\}_{1\le d\le M_m}\) 已知，尾计数函数与连续容量曲线可显式恢复为
+\[
+N_m(t)=\sum_{d\ge t}h_m(d)
+\qquad(t\in\NN),
+\]
+以及
+\[
+\mathcal C_m^{\mathrm{cont}}(T)=\sum_{d=1}^{M_m}h_m(d)\min(d,T).
+\]
+故固定分辨率上的容量曲线已由上述有限截断矩完全决定。
+
+最后，在 \(m=6\) 时，由 bin-fold 的显式纤维直方图
+\(
+2:8,\ 3:4,\ 4:9
+\)
+可知 \(M_6=4\) 且 \(h_6(1)=0\)。因此前四个矩
+\(
+S_0(6),S_1(6),S_2(6),S_3(6)
+\)
+经可逆矩阵 \(V_4\) 唯一解出
+\(
+(0,8,4,9)^{\mathsf T}
+\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[顶端仿射窗控制的有限层冻结估计]\label{thm:fold-top-affine-window-controls-finite-freezing}
+固定分辨率 \(m\)，并记
+\[
+A_m^{\max}:=\{x\in X_m:\ d_m(x)=M_m\},
+\qquad
+K_m:=|A_m^{\max}|,
+\]
+\[
+M_m^{(2)}:=\max\{d_m(x):\ d_m(x)<M_m\},
+\]
+其中若 \(A_m^{\max}=X_m\) 则约定 \(M_m^{(2)}:=0\)。
+则有：
+\begin{enumerate}
+  \item 对任意 \(T\in[M_m^{(2)},M_m]\)，连续容量曲线在顶端满足精确仿射公式
+  \[
+  \boxed{\;
+  \mathcal C_m^{\mathrm{cont}}(T)=2^m-K_m(M_m-T).\;}
+  \]
+  \item 对任意实数 \(a>0\)，幂和满足双边界
+  \[
+  \boxed{\;
+  K_mM_m^a
+  \le
+  S_a(m)
+  \le
+  K_mM_m^a\left(1+\frac{|X_m|-K_m}{K_m}
+  \left(\frac{M_m^{(2)}}{M_m}\right)^a\right).\;}
+  \]
+  \item 若定义 escort 分布
+  \[
+  \pi_{m,a}(x):=\frac{d_m(x)^a}{S_a(m)}
+  \]
+  与最大层均匀分布
+  \[
+  U_m^{\max}:=\mathrm{Unif}(A_m^{\max}),
+  \]
+  则总变差距离满足
+  \[
+  \boxed{\;
+  \|\pi_{m,a}-U_m^{\max}\|_{\mathrm{TV}}
+  \le
+  \frac{|X_m|-K_m}{K_m}
+  \left(\frac{M_m^{(2)}}{M_m}\right)^a.\;}
+  \]
+\end{enumerate}
+因此，顶端仿射窗 \([M_m^{(2)},M_m]\) 的三元数据 \((M_m,K_m,M_m^{(2)})\) 已足以有限层地控制高阶矩的冻结强度与 escort 集中速度。
+\end{theorem}
+\begin{proof}
+若 \(T\in[M_m^{(2)},M_m]\)，则对 \(x\in A_m^{\max}\) 有 \(\min(d_m(x),T)=T\)，而对 \(x\notin A_m^{\max}\) 有 \(d_m(x)\le M_m^{(2)}\le T\)，故 \(\min(d_m(x),T)=d_m(x)\)。
+于是
+\[
+\mathcal C_m^{\mathrm{cont}}(T)
+=\sum_{x\notin A_m^{\max}}d_m(x)+K_mT
+=2^m-K_mM_m+K_mT,
+\]
+即得第一条。
+
+第二条由幂和分解
+\[
+S_a(m)=K_mM_m^a+\sum_{x\notin A_m^{\max}}d_m(x)^a
+\]
+直接推出：下界来自舍去余项；上界来自对每个 \(x\notin A_m^{\max}\) 使用 \(d_m(x)\le M_m^{(2)}\)。
+
+再证第三条。由于 \(d_m(x)=M_m\) 在 \(A_m^{\max}\) 上常值，\(\pi_{m,a}\) 在该集合上本身就是均匀分布，故
+\[
+\|\pi_{m,a}-U_m^{\max}\|_{\mathrm{TV}}
+=1-\pi_{m,a}(A_m^{\max}).
+\]
+另一方面，
+\[
+\pi_{m,a}(A_m^{\max})
+=\frac{K_mM_m^a}{S_a(m)}
+\ge
+\frac{K_mM_m^a}{K_mM_m^a+(|X_m|-K_m)(M_m^{(2)})^a},
+\]
+于是
+\[
+1-\pi_{m,a}(A_m^{\max})
+\le
+\frac{(|X_m|-K_m)(M_m^{(2)})^a}{K_mM_m^a}
+=
+\frac{|X_m|-K_m}{K_m}\left(\frac{M_m^{(2)}}{M_m}\right)^a.
+\]
+证毕。
+\end{proof}

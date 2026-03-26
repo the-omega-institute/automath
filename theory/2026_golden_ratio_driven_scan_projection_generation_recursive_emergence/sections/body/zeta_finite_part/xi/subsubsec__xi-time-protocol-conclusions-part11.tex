@@ -1,0 +1,355 @@
+\paragraph{跨接口终端结论：复位时钟、压缩编译与中间权重的可扩展估计}
+本段继续把正文/附录中已建立的若干终端断言，以“可审计、可独立引用”的格式汇总为结论条目；证明仅指向相应已完成的定理/命题，并在必要处补充由其直接推出的等价表述。
+
+\begin{conclusion}[复位事件点过程的“有界余项”时钟：密度 \texorpdfstring{$\varphi^{-(m+2)}$}{phi^{-(m+2)}} 与误差 \texorpdfstring{$O(1)$}{O(1)} 的严格线性化]\label{con:xi-terminal-reset-bounded-remainder-clock}
+令复位事件集合 \(\mathcal R_m\) 如定义 \ref{def:terminal-reset-events}，并记其递增枚举为 \(\mathcal R_m=\{r_1<r_2<\cdots\}\)。
+则：
+\begin{enumerate}
+  \item \textbf{返回时间二值谱：}对一切 \(n\ge 1\)，差分仅取两值
+  \[
+  r_{n+1}-r_n\in\{F_{m+3},F_{m+4}\}.
+  \]
+  \item \textbf{Sturmian 差分字：}令字母 \(A:=F_{m+4}\)、\(B:=F_{m+3}\)，则差分字在字母表 \(\{A,B\}\) 上为 Fibonacci 替换不动点（Sturmian，slope \(\varphi^{-1}\)）。
+  \item \textbf{密度与强一致误差界：}自然密度存在且为
+  \[
+  \lim_{N\to\infty}\frac{\#(\mathcal R_m\cap[0,N))}{N}=\varphi^{-(m+2)},
+  \qquad
+  \sup_{N\ge 1}\Bigl|\#(\mathcal R_m\cap[0,N))-\varphi^{-(m+2)}N\Bigr|\le 1.
+  \]
+  \item \textbf{返回时刻线性化：}存在常数 \(C_m<\infty\) 使
+  \[
+  \sup_{n\ge 1}\Bigl|\varphi^{-(m+2)}\,r_n-n\Bigr|\le C_m,
+  \]
+  因而复位时钟在尺度上为严格的 cut-and-project 点过程：主频率由 \(\varphi^{-(m+2)}\) 锚定，而偏差在 \(n\) 上不发散。
+\end{enumerate}
+\end{conclusion}
+\begin{proof}[证明]
+前三点见定理 \ref{thm:terminal-reset-events-sturmian}。
+令 \(A(N):=\#(\mathcal R_m\cap[0,N))\) 且 \(\delta:=\varphi^{-(m+2)}\)，则 \(|A(N)-\delta N|\le 1\) 对全体 \(N\in\NN\) 成立。
+对 \(N=r_n\) 有 \(A(r_n)=n-1\)，故 \(|(n-1)-\delta r_n|\le 1\)，从而 \(|n-\delta r_n|\le 2\)，可取 \(C_m=2\)。证毕。
+\end{proof}
+
+\begin{conclusion}[复位时钟的对数时间算法：仅用 Fibonacci 替换矩阵即可计算 \texorpdfstring{$r_n$}{rn}]\label{con:xi-terminal-reset-clock-logtime}
+沿用结论 \ref{con:xi-terminal-reset-bounded-remainder-clock} 的记号，并记差分字
+\(
+w=w_1w_2\cdots\in\{A,B\}^{\mathbb N}
+\)
+为 Fibonacci 替换
+\(
+\sigma(A)=AB,\ \sigma(B)=A
+\)
+的以 \(A\) 开头的不动点（定理 \ref{thm:terminal-reset-events-sturmian}）。
+对任意 \(L\ge 0\) 定义前缀计数
+\[
+c_A(L):=\#\{1\le t\le L:\ w_t=A\},\qquad
+c_B(L):=L-c_A(L),
+\]
+并记 \(A:=F_{m+4}\)、\(B:=F_{m+3}\)。
+则对一切 \(n\ge 1\) 有严格前缀和表达
+\[
+r_n=r_1+A\,c_A(n-1)+B\,c_B(n-1).
+\]
+并且向量 \((c_A(L),c_B(L))\) 可在 \(O(\log L)\) 时间内由替换矩阵
+\[
+M:=\begin{pmatrix}1&1\\ 1&0\end{pmatrix}
+\]
+的快速幂确定：对任意 \(k\ge 0\)，\(\sigma^k(A)\) 的字母计数等于 \(M^k(1,0)^{\mathsf T}\)，而其前缀计数可由拼接恒等式
+\(
+\sigma^{k+1}(A)=\sigma^k(A)\sigma^{k-1}(A)
+\)
+递归分解得到。
+因此复位时刻序列 \(\{r_n\}\) 可作为确定性的离散时钟在 \(O(\log n)\) 时间内计算，而该复杂度不依赖于 \(m\)。
+\end{conclusion}
+\begin{proof}[证明]
+由定理 \ref{thm:terminal-reset-events-sturmian}，差分字 \(w\) 为 Fibonacci 替换不动点，并满足
+\(
+\sigma^{k+1}(A)=\sigma^k(A)\sigma^{k-1}(A)
+\)
+的标准拼接结构。
+替换矩阵 \(M\) 的定义保证：若记 \(\sigma^k(A)\) 中两字母的计数向量为
+\[
+\mathbf c_k:=
+\begin{pmatrix}
+\#\{1\le t\le |\sigma^k(A)|:\ (\sigma^k(A))_t=A\}\\
+\#\{1\le t\le |\sigma^k(A)|:\ (\sigma^k(A))_t=B\}
+\end{pmatrix},
+\]
+则 \(\mathbf c_{k+1}=M\mathbf c_k\) 且 \(\mathbf c_0=(1,0)^{\mathsf T}\)，从而 \(\mathbf c_k=M^k(1,0)^{\mathsf T}\)。
+对给定 \(L\)，取最小 \(k\) 使 \(|\sigma^k(A)|\ge L\)，并沿上述拼接把长度 \(L\) 的前缀拆分为 \(O(k)\) 个块并累加字母计数，即得 \(c_A(L),c_B(L)\)。
+由于 \(|\sigma^k(A)|\) 为 Fibonacci 级增长，故 \(k=O(\log L)\)；同时 \(M^k\) 可由二分幂在 \(O(\log k)\) 次 \(2\times 2\) 矩阵乘法内得到。
+将 \((c_A(n-1),c_B(n-1))\) 代入前缀和表达式即得 \(r_n\)。证毕。
+\end{proof}
+
+\begin{conclusion}[Zeckendorf 时间因子图的最小非可逆性：一分支一汇聚 \texorpdfstring{$\Rightarrow$}{=>} 非单射仅支撑于 \texorpdfstring{$\mathcal R_m$}{R_m}]\label{con:xi-terminal-succ-minimal-noninvertibility}
+在时间因子图 \(G^{\mathrm{Succ}}_m\)（定义 \ref{def:terminal-succ-m}）中，除唯一分支点 \(b_m\) 外所有顶点满足 \(|\mathrm{Succ}_m(w)|=1\)，且
+\[
+\mathrm{Succ}_m(b_m)=\{0^m,0^{m-1}1\}.
+\]
+同时唯一入度为 \(2\) 的汇聚点为 \(0^m\)，其前驱恰为 \(u_m\) 与 \(b_m\)。
+因此 \(G^{\mathrm{Succ}}_m\) 是“单分支—单汇聚”的极小非可逆有向系统，且时间推进 \(N\mapsto N+1\) 的非单射性仅在复位事件集合 \(\mathcal R_m\)（定义 \ref{def:terminal-reset-events}）上出现。
+结合结论 \ref{con:xi-terminal-reset-bounded-remainder-clock}，该非可逆性以固定密度 \(\varphi^{-(m+2)}\) 出现且无长程漂移。
+\end{conclusion}
+\begin{proof}[证明]
+分支/汇聚结构见定理 \ref{thm:terminal-succ-unique-branch-merge}。
+“非单射仅发生于 \(\mathcal R_m\)”由定义 \ref{def:terminal-reset-events} 的刻画与同一定理中 \(b_m\) 的两分支对应得到。
+密度与有界余项性质由定理 \ref{thm:terminal-reset-events-sturmian} 给出，并已在结论 \ref{con:xi-terminal-reset-bounded-remainder-clock} 汇总。证毕。
+\end{proof}
+
+\begin{conclusion}[Parry 基线下的复位扇区闭式常数：\texorpdfstring{$\mathbb Q(\sqrt5)$}{Q(sqrt5)} 中的严格回返强度与条件等待时间]\label{con:xi-terminal-parry-reset-sector-constants}
+在命题 \ref{prop:real-input-40-reset-regeneration-constants} 的两路独立 Parry 基线输入下，定义复位扇区事件
+\[
+Z_{\ge 5}:=\{d_{k-4}\cdots d_k=0^5\},
+\]
+则其平稳时间占比为闭式常数
+\[
+\mathbb P(Z_{\ge 5})=\frac{9-4\sqrt5}{5},
+\]
+并由 Kac 公式给出平均回返间隔
+\[
+\mathbb E[\tau_{Z_{\ge 5}}]=\frac{1}{\mathbb P(Z_{\ge 5})}=45+20\sqrt5.
+\]
+此外，从典型非复位时刻（条件于 \(Z_{\ge 5}^c\)）到下一次进入 \(Z_{\ge 5}\) 的等待时间 \(T\) 满足
+\[
+\mathbb E[T]=\frac{555}{8}+\frac{127}{4}\sqrt5.
+\]
+因此再生门槛在 Parry 基线上可被提升为全闭式的强定标常数，为同步核的相关/混合上界提供可复核的数值锚点。
+\end{conclusion}
+\begin{proof}[证明]
+见命题 \ref{prop:real-input-40-reset-regeneration-constants}（及其证明中给出的可审计构造）。证毕。
+\end{proof}
+
+\begin{conclusion}[能量--长度 Newton 支撑的极端斜率可计算化，且真实输入核的饱和密度严格为 \texorpdfstring{$1/2$}{1/2}]\label{con:xi-terminal-newton-extreme-slopes-alpha-half}
+对联合 primitive 计数 \(p_{n,k}\)（长度 \(n\)、能量 \(k\)）的 Newton 支撑，定义极端斜率
+\[
+\alpha_{\min}:=\inf\left\{\frac{k}{n}:p_{n,k}>0\right\},\qquad
+\alpha_{\max}:=\sup\left\{\frac{k}{n}:p_{n,k}>0\right\}.
+\]
+则 \(\alpha_{\min},\alpha_{\max}\) 等价于有向回路的最小/最大平均能量密度，并可由 Karp 型 mean-cycle 算法在多项式时间内求出：
+\[
+\alpha_{\min}=\min_{\gamma\ \mathrm{cycle}}\frac{\sum_{e\in\gamma}\kappa(e)}{|\gamma|},\qquad
+\alpha_{\max}=\max_{\gamma\ \mathrm{cycle}}\frac{\sum_{e\in\gamma}\kappa(e)}{|\gamma|}.
+\]
+同时，对压力 \(P(\theta)=\log\rho(B(e^\theta))\) 的端点饱和成立
+\(
+\lim_{\theta\to\pm\infty}P'(\theta)=\alpha_{\max/\min}
+\)。
+在真实输入 \(40\) 状态核的输出位势加权中，极端饱和密度为
+\[
+\alpha_{\max}=\frac12,
+\]
+从而不存在平均能量密度超过 \(1/2\) 的回路；等价地联合 primitive 支撑满足硬楔形域约束 \(p_{n,k}>0\Rightarrow k\le n/2\)。
+\end{conclusion}
+\begin{proof}[证明]
+极端斜率的 mean-cycle 刻画与可计算性见命题 \ref{prop:sync-newton-extreme-slopes}。
+真实输入核的 \(\alpha_{\max}=1/2\) 见推论 \ref{cor:real-input-40-alpha-max}。证毕。
+\end{proof}
+
+\begin{conclusion}[对称幂商核 \texorpdfstring{$A^{\mathrm{eq}}_q$}{Aeq} 的多项式态精确编译：\texorpdfstring{$q$}{q}-重碰撞从指数态降为组合数态]\label{con:xi-terminal-sympower-quotient-kernel-poly-state}
+对实现 \(\Fold_\infty\) 的确定性在线核（内部状态集 \(Q\)），取 \(q\ge 2\) 份拷贝同步直积并施加“输出一致”筛选得到 \(q\)-重碰撞计数序列 \(S_q(m)\)。
+由于 \(S_q\) 对拷贝置换 \(S_q\) 完全对称，轨道可由占据向量
+\[
+N_q:=\Bigl\{(n_s)_{s\in Q}\in\ZZ_{\ge 0}^{Q}:\ \sum_{s\in Q}n_s=q\Bigr\}
+\]
+唯一决定，从而存在非负整数邻接矩阵 \(A^{\mathrm{eq}}_q\)（指标集 \(N_q\)）及整数读出向量 \(u^{\mathrm{eq}}_q,v^{\mathrm{eq}}_q\)，使得
+\[
+S_q(m)= (u^{\mathrm{eq}}_q)^{\mathsf T}\,(A^{\mathrm{eq}}_q)^{\,m-m_0}\,v^{\mathrm{eq}}_q\qquad(m\ge m_0),
+\]
+且状态数为
+\[
+|N_q|=\binom{q+|Q|-1}{|Q|-1}.
+\]
+此外，\(A^{\mathrm{eq}}_q\) 的条目可由一组转移多项式做显式系数提取而实现，从而给出可从第一性原理生成的后端核。
+\end{conclusion}
+\begin{proof}[证明]
+取 \(A^{\mathrm{eq}}_q:=\widetilde A_q\)、\(u^{\mathrm{eq}}_q:=\widetilde u_q\)、\(v^{\mathrm{eq}}_q:=\widetilde v_q\)，则结论即为命题 \ref{prop:pom-moment-symmetric-power}；
+系数提取实现见注 \ref{rem:pom-moment-symmetric-power-coefficient-extraction}。证毕。
+\end{proof}
+
+\begin{conclusion}[二段式可执行压缩：\texorpdfstring{$\text{直积}\Rightarrow A^{\mathrm{eq}}_q\Rightarrow \mathsf{MinH}(S_q)$}{product=>Aeq=>MinH} 给出“后端可生成--前端最小证书”双轨闭环]\label{con:xi-terminal-two-stage-compression-sympower-minh}
+在已核验的 \(q\le 16\) 窗内，存在严格的工程与证书分工：
+\(A^{\mathrm{eq}}_q\)（结论 \ref{con:xi-terminal-sympower-quotient-kernel-poly-state}）作为“可从第一性原理生成的后端 realization”，而序列侧可用 Hankel/递推最小实现函子 \(\mathsf{MinH}\) 从 \(\{S_q(m)\}\) 直接恢复远小于 \(|N_q|\) 的最小维数 \(d_q\)，作为“前端压缩与可审计证书”。
+并且该压缩可叠加：先对底层状态做碰撞计数等价类预压缩 \(Q\to Q/{\sim_{\mathrm{col}}}\)，再做对称幂商压缩；在“星形耦合”情形还可进一步压到轨道计数态 \((n_1,n_2,n_3)\)（维数 \(\binom{q+1}{2}\)）。
+因此“可生成（后端）--最小化（前端）”构成一个可组合、可复核的闭环接口。
+\end{conclusion}
+\begin{proof}[证明]
+两段压缩律与其在 \(q\le 16\) 的核验窗口的实现口径见注 \ref{rem:pom-sympower-then-minh} 与注 \ref{rem:pom-moment-symmetric-power-impl}。
+碰撞计数预压缩见命题 \ref{prop:pom-moment-col-lumping}；星形耦合的 \(\binom{q+1}{2}\) 轨道表示见注 \ref{rem:pom-star-sympress}。证毕。
+\end{proof}
+
+\begin{theorem}[Hankel 秩刻画最小线性实现维数，且可由两块相邻 Hankel 主块显式构造]\label{thm:xi-hankel-rank-minimal-linear-realization}
+设序列 \((a_m)_{m\ge 0}\subset\RR\) 的无穷 Hankel 矩阵为
+\[
+\mathrm{Hankel}(a):=\bigl(a_{i+j}\bigr)_{i,j\ge 0}.
+\]
+若其秩为有限整数 \(d:=\mathrm{rank}\,\mathrm{Hankel}(a)<\infty\)，并且主块
+\[
+H_0:=\bigl(a_{i+j}\bigr)_{0\le i,j\le d-1}
+\]
+可逆，则存在 \(A\in\RR^{d\times d}\) 与向量 \(\alpha,\beta\in\RR^{d}\) 使对所有 \(m\ge 0\) 成立
+\[
+a_m=\beta^{\mathsf T}A^{m}\alpha,
+\]
+并且可取显式构造
+\[
+H_1:=\bigl(a_{i+j+1}\bigr)_{0\le i,j\le d-1},
+\qquad
+A:=H_0^{-1}H_1,\qquad
+\alpha:=e_0,\qquad
+\beta:=(a_0,a_1,\dots,a_{d-1})^{\mathsf T}.
+\]
+反之，若存在表示 \(a_m=\tilde\beta^{\mathsf T}\tilde A^{m}\tilde\alpha\)（\(\tilde A\in\RR^{r\times r}\)），则
+\[
+\mathrm{rank}\,\mathrm{Hankel}(a)\le r.
+\]
+因此任意精确生成该序列的有限维线性状态空间实现的状态维数下界恰为 Hankel 秩 \(d\)。
+\end{theorem}
+\begin{proof}
+若 \(a_m=\tilde\beta^{\mathsf T}\tilde A^{m}\tilde\alpha\)，则
+\(
+a_{i+j}=(\tilde\beta^{\mathsf T}\tilde A^{i})(\tilde A^{j}\tilde\alpha)
+\)
+给出 Hankel 矩阵为秩至多 \(r\) 的分解，故 \(\mathrm{rank}\,\mathrm{Hankel}(a)\le r\)。
+\par
+若 \(\mathrm{rank}\,\mathrm{Hankel}(a)=d\) 且 \(H_0\) 可逆，则 Hankel 列空间由前 \(d\) 列生成且其在前 \(d\) 个坐标上的截断给出一组基；令 \(c_j^{\mathsf T}:=(a_{i+j})_{0\le i\le d-1}\in\RR^{d}\)，并定义线性算子 \(A\) 使 \(c_j^{\mathsf T}A=c_{j+1}^{\mathsf T}\)（\(0\le j\le d-2\)）。
+矩阵恒等式 \(H_0A=H_1\) 给出 \(A=H_0^{-1}H_1\)。
+取 \(\alpha=e_0\) 与 \(\beta\) 为前 \(d\) 项向量即可得到 \(a_m=\beta^{\mathsf T}A^{m}\alpha\)。
+\end{proof}
+
+\begin{theorem}[Hankel 主块几何律的算术强制：\texorpdfstring{$\det(A)\in\ZZ$}{det(A) in Z} 与 \texorpdfstring{$p$}{p}-进仿射漂移]\label{thm:xi-hankel-shift-det-integrality-padic-drift}
+设 \((a_m)_{m\ge 0}\subset\ZZ\) 为整数序列，满足 \(\mathrm{rank}\,\mathrm{Hankel}(a)=d<\infty\) 且
+\(
+H_0=(a_{i+j})_{0\le i,j\le d-1}
+\)
+可逆，并沿定理 \ref{thm:xi-hankel-rank-minimal-linear-realization} 记
+\(
+H_1=(a_{i+j+1})_{0\le i,j\le d-1}
+\)
+与 \(A:=H_0^{-1}H_1\)。
+对 \(r\ge 0\) 定义移位 Hankel 主块
+\[
+H_r:=\bigl(a_{i+j+r}\bigr)_{0\le i,j\le d-1}\in\ZZ^{d\times d}.
+\]
+若 \(A\) 可逆（等价于 \(\det(H_1)\neq 0\)），则：
+\begin{enumerate}
+  \item \(\det(A)\in\ZZ\setminus\{0\}\)，并且对一切 \(r\ge 0\) 有
+  \[
+  H_r=H_0A^{r},
+  \qquad
+  \det(H_r)=\det(H_0)\,\det(A)^{r}.
+  \]
+  \item 对任意素数 \(p\)，令 \(v_p\) 为标准 \(p\)-进赋值，则
+  \[
+  v_p(\det(H_r))=v_p(\det(H_0))+r\,v_p(\det(A)),
+  \qquad
+  v_p(\det(A))\ge 0.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由 Hankel 秩为 \(d\) 可知列向量族 \(c_j:=(a_{i+j})_{0\le i\le d-1}\in\QQ^{d}\) 的线性包络为 \(d\) 维，且 \(H_0=[c_0\,\cdots\,c_{d-1}]\) 可逆。
+定义移位算子 \(S\) 于该 \(d\) 维包络上，使 \(S(c_j)=c_{j+1}\)（\(j\ge 0\)）；因 \(\{c_0,\dots,c_{d-1}\}\) 为一组基且每个 \(c_{j+1}\) 都在其张成空间中，故 \(S\) 为良定义的线性算子。
+设 \(A\) 为 \(S\) 在基 \(\{c_0,\dots,c_{d-1}\}\) 下的矩阵，则第 \(j\) 列为 \(c_{j+1}\) 在该基下的坐标，从而 \(H_0A=H_1\)（亦即 \(A=H_0^{-1}H_1\)）。
+由 \(S^r(c_j)=c_{r+j}\) 得
+\(
+H_0A^{r}=[S^r(c_0)\ \cdots\ S^r(c_{d-1})]=[c_r\ \cdots\ c_{r+d-1}]=H_r
+\)。
+取行列式即得 \(\det(H_r)=\det(H_0)\det(A)^{r}\)。
+\par
+写 \(\det(A)=u/v\in\QQ\) 为既约分数（\(u\in\ZZ,\ v\in\ZZ_{>0},\ \gcd(u,v)=1\)）。
+由上式
+\[
+\det(H_r)=\det(H_0)\,\frac{u^{r}}{v^{r}}\in\ZZ\setminus\{0\}\qquad(\forall r\ge 0).
+\]
+故 \(v^{r}\mid \det(H_0)\) 对一切 \(r\) 成立，迫使 \(v=1\)，从而 \(\det(A)=u\in\ZZ\setminus\{0\}\)。
+对等式取 \(v_p\) 即得仿射律；并且因 \(\det(A)\in\ZZ\setminus\{0\}\)，故 \(v_p(\det(A))\ge 0\)。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$p$}{p}-进刚度漂移的二分律与“坏素数”判据]\label{cor:xi-hankel-padic-stiffness-drift-dichotomy-badprimes}
+在定理 \ref{thm:xi-hankel-shift-det-integrality-padic-drift} 的设定下，对任意素数 \(p\)：
+\begin{itemize}
+  \item 若 \(p\nmid\det(A)\)，则 \(v_p(\det(H_r))\) 对 \(r\ge 0\) 恒定不变；
+  \item 若 \(p\mid\det(A)\)，则 \(v_p(\det(H_r))\) 随 \(r\) 严格线性增长。
+\end{itemize}
+从而存在某个 \(r\ge 0\) 使 \(\det(H_r)\equiv 0\pmod p\) 当且仅当
+\[
+p\mid \det(H_0)\det(A).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-hankel-shift-det-integrality-padic-drift} 的仿射律，
+\(
+v_p(\det(H_r))=v_p(\det(H_0))+r\,v_p(\det(A))
+\)。
+当 \(v_p(\det(A))=0\) 时右端与 \(r\) 无关；当 \(v_p(\det(A))>0\) 时右端随 \(r\) 严格增大。
+最后一条等价于“存在 \(r\) 使 \(v_p(\det(H_r))\ge 1\)”并与仿射表达式等价，即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[有限 Hankel 证书原则：全域一致性可由有限前缀与移位约束封口]\label{prop:xi-hankel-finite-certificate-principle}
+在定理 \ref{thm:xi-hankel-rank-minimal-linear-realization} 的设定下，
+设候选三元组 \((\alpha,A,\beta)\)（\(A\in\RR^{d\times d}\)）诱导候选序列 \(b_m:=\beta^{\mathsf T}A^{m}\alpha\)。
+则以下两者等价：
+\begin{enumerate}
+  \item 对所有 \(m\ge 0\)，有 \(b_m=a_m\)；
+  \item 同时满足：\(\,b_m=a_m\) 对所有 \(0\le m\le 2d-1\) 成立，且 \(AH_0=H_1\)（等价 \(A=H_0^{-1}H_1\)）。
+\end{enumerate}
+因此当 \(\mathrm{rank}\,\mathrm{Hankel}(a)=d\) 且 \(H_0\) 可逆时，任意声称的 \(d\)-维线性实现都可由长度 \(2d\) 的前缀数据与一次矩阵等式构成可核验的有限证书。
+\end{proposition}
+\begin{proof}
+\((1)\Rightarrow(2)\) 为直接代入：由 \(b_m=a_m\) 得 \(H_0(b)=H_0(a)\)、\(H_1(b)=H_1(a)\)，且 \(AH_0(b)=H_1(b)\) 必成立，故 \(AH_0=H_1\)。
+\par
+\((2)\Rightarrow(1)\) 由移位算子刻画给出：条件 \(AH_0=H_1\) 表明 \(A\) 在 Hankel 列空间上实现“前缀到后继”的一致移位；因此 \((b_m)\) 与 \((a_m)\) 满足同一最小线性递推并在前 \(2d\) 项一致，归纳得全体项一致。
+\end{proof}
+
+\begin{conclusion}[含 \texorpdfstring{$\mathrm{MOM}[q]$}{MOM[q]} 与 \texorpdfstring{$\mathrm{TWIST}[\chi]$}{TWIST[chi]} 的投影词演算形成规范接口正规形；异常被压缩为最小标量并具同调不变性]\label{con:xi-terminal-projword-normal-form-mom-twist-anom}
+在规则族 \ref{def:pom-four-gen-rewrite-rules} 与三生成元规则族 \ref{def:pom-three-gen-rewrite-rules} 的联合闭包下，任意仅由
+\(\mathrm{PROJ}_u,E_m,\mathrm{LIFT}_G,\mathrm{MOM}_q\)
+生成的投影词都可重写为规范接口正规形
+\[
+\mathrm{MOM}_Q\circ \mathrm{LIFT}_{G'}\circ \mathrm{PROJ}_{u'}\circ E_{m'}.
+\]
+并伴随三类可核对输出：来自 \(E\)--lift 交换的异常签名 \(\mathsf{Anom}_{G'}\)，（可选）由 \((\mathrm{RMOML})\) 的角色域展开得到的高阶异常签名塔 \(\mathsf{Anom}^{(Q)}_{G'}\)，以及（必要时）来自 \(E\)--\(\mathrm{MOM}\) 外提的标量 moment-anomaly \(\mathsf{Anom}^{(Q)}_{\mathrm{mom}}\)。
+若 moment Beck--Chevalley 条件成立，则 \(\mathsf{Anom}^{(Q)}_{\mathrm{mom}}=0\)；否则两条编译路径的差异在 finite-part 层可被最小压缩为该单一标量。
+并且异常标签可并入扩展标签群，使得“改变规约优先级只改变边界项、残差是否为零仍为路径不变量”的 holonomy/coboundary 机制保持形式不变。
+\end{conclusion}
+\begin{proof}[证明]
+规范接口正规形与三类输出见命题 \ref{prop:pom-mom-interface-normal-form}。
+moment-anomaly 的最小标量压缩见定义 \ref{def:pom-moment-anom-signature} 与命题 \ref{prop:pom-em-mom-residual-swap}。
+同调不变性的统一表述见注 \ref{rem:pom-anom-cohomology-mom}。证毕。
+\end{proof}
+
+\begin{conclusion}[受限切片上的语义函子 \texorpdfstring{$\mathsf{Sem}$}{Sem} 为保守不变量：unitary slice 的相位参数化无外参]\label{con:xi-terminal-sem-conservative-unitary-slice}
+在有界切片 \(\mathbf{PW}^{\ast}_{\le}\) 上，unitary slice（例如 \(|u|=1\)）的相位变量 \(u\in\TT\) 可由 Cayley 紧化门以无参实轴坐标 \(x\in\RR\) 生成
+\(
+u=\iota(x)=\frac{1+\mathrm{i}x}{1-\mathrm{i}x}
+\)。
+并在该切片上存在可审计语义函子
+\[
+\mathsf{Sem}:\mathbf{PW}^{\ast}_{\le}\longrightarrow \mathbf{Sig}_{\le}\times \mathbf{Spec}_{\le},
+\]
+其签名部分由接口正规形参数与有限异常采样组成，谱部分由整数矩谱、扭曲谱及派生压力/预算对象组成。
+定理 \ref{thm:pom-sem-conservative} 给出保守性：\(\mathsf{Sem}\) 反射自然同构，从而“规范正规形 + 有限异常网格 + 有限谱指纹网格”构成实现无关且可复核的等价判据。
+\end{conclusion}
+\begin{proof}[证明]
+unitary slice 的无参参数化见注 \ref{rem:pom-unitary-slice-param-by-real-line}。
+\(\mathsf{Sem}\) 的定义见定义 \ref{def:pom-sem-functor}，其保守性见定理 \ref{thm:pom-sem-conservative}。证毕。
+\end{proof}
+
+\begin{conclusion}[中间权重 \texorpdfstring{$u\in(0,1)$}{u in (0,1)} 的 primitive 谱可扩展估计：Möbius--Hutchinson 的相关组合把相消噪声转化为可控方差]\label{con:xi-terminal-intermediate-u-mobius-hutchinson}
+当 \(u\in(0,1)\) 时，\(M_K(u)^n\) 随 \(n\) 增大迅速趋于稠密，显式构造难以扩展；
+可用 Hutchinson 随机迹估计在仅需 \(n\) 次稀疏 matvec 的代价下无偏估计
+\(
+a_n(u)=\Tr(M_K(u)^n)
+\)，并代入 Möbius 反演得到 primitive 近似
+\[
+\widehat B_{K,n}(u)=\frac1n\sum_{d\mid n}\mu(d)\,\widehat a_{n/d}(u^d).
+\]
+为抑制 Möbius 相消带来的噪声放大，可对同一组随机探针 \(\{\mathbf r_s\}\) 同时复用全部 \(u^d\) 与全部所需幂次，并在样本层面先完成 Möbius 组合再求均值（common random numbers + correlated combining），从而把不稳定性从“独立噪声差分”转为“相关噪声抵消”。
+当改为估计 PSD 对象（如 \(\Tr((M_K(u)^n)^{\mathsf T}M_K(u)^n)\) 或块对称化对象）时，Hutch++ 可将样本复杂度由 \(O(\varepsilon^{-2})\) 改进到 \(O(\varepsilon^{-1})\)（仅用 matvec）。
+此外，核的全局块级对象满足单流提升关系，从而昂贵计算可在单流完成并保持可复现性。
+\end{conclusion}
+\begin{proof}[证明]
+正文的实现口径见 \S\ref{sec:experiments} 中“中间权重 \(u\in(0,1)\)：矩阵自由的随机迹估计 + Möbius 反演”小节；
+协议化与误差传播见附录 \S\ref{app:kernel-fingerprint-hutchinson}，尤其是命题 \ref{prop:hutchinson-unbiased-mfree} 与命题 \ref{prop:mobius-error-propagation}。
+Hutch++ 的 PSD 轨道接口亦在该附录小节中给出。证毕。
+\end{proof}
+

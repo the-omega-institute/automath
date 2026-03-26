@@ -1,0 +1,219 @@
+\subsubsection{歧义壳的瞬态结构：单调性、无环性与同步延迟}\label{subsec:Ym-amb-transient}
+本节把推论 \ref{cor:Ym-ambiguity-shell-low-entropy} 的“歧义壳低熵”进一步细化为一个可审计的结构命题：在本文的 Zeckendorf 折叠下（$m\ge 3$），歧义并非可循环的“二义语法”，而是\textbf{有限步同步的纯瞬态层}；因此它不承载任何周期点，也不改变内禀 \(\zeta_{Y_m}\) 的周期点谱（见推论 \ref{cor:Phi_m-zeta-closed}）。
+
+\begin{proposition}[候选集合单调不增（右解析的集合动力学）]\label{prop:det-candidate-set-monotone}
+在定义 \ref{def:G_m} 的标记图 $G_m$ 上，若同一顶点的两条出边标记不同（即 $G_m$ 右解析；见定理 \ref{thm:pom-right-resolving}），则对任意候选集 $S\subset V_m$ 与任意输出符号 $a\in X_m$，若 $\delta_m(S,a)\neq\varnothing$ 则
+\[
+|\delta_m(S,a)|\le |S|.
+\]
+并且对任意单点集 $\{v\}$，其后继 $\delta_m(\{v\},a)$ 要么为空、要么仍为单点；换言之，$H_m^{\mathrm{det}}$ 中的单点态集合在前向读入下是封闭的：一旦进入单点态，就不可能回到非单点态。
+\end{proposition}
+\begin{proof}
+右解析性意味着：对每个 $v\in V_m$ 与每个 $a\in X_m$，从 $v$ 出发、标记为 $a$ 的出边至多一条。于是可定义一个部分函数
+\[
+f_a:V_m\rightharpoonup V_m,\qquad
+f_a(v):=
+\begin{cases}
+v' & \exists\,e:v\to v'\ \text{s.t. }\ell_m(e)=a,\\
+\text{undefined} & \text{otherwise}.
+\end{cases}
+\]
+按定义 \ref{def:Phi_m-right-resolving}，
+\(
+\delta_m(S,a)=\{f_a(v):v\in S,\ f_a(v)\text{ defined}\}
+\)
+是 $S$ 在 $f_a$ 下的像，因此其基数不超过 $|S|$。当 $S=\{v\}$ 时，$\delta_m(\{v\},a)$ 至多包含一个元素，故为单点或空集，从而单点态对前向读入封闭。证毕。
+\end{proof}
+
+\begin{theorem}[歧义壳无环：纯瞬态且无周期点]\label{thm:Ym-ambiguity-shell-dag}
+令 $H_m^{\mathrm{det}}$ 为定义 \ref{def:Phi_m-right-resolving} 的确定化右解析表示，其状态集记为 $\mathcal{S}_m^{\mathrm{det}}$。定义歧义态集合
+\[
+\mathcal{S}_m^{\mathrm{amb}}:=\{S\in\mathcal{S}_m^{\mathrm{det}}:\ |S|\ge 2\},
+\]
+并令 $H_m^{\mathrm{amb}}$ 为 $H_m^{\mathrm{det}}$ 在 $\mathcal{S}_m^{\mathrm{amb}}$ 上的诱导子图。
+则当 $m\ge 3$ 时，$H_m^{\mathrm{amb}}$ 为 DAG（不含任何有向环）。因此：
+\begin{enumerate}
+  \item $H_m^{\mathrm{amb}}$ 不承载任何周期轨道；等价地，$Y_m$ 的任何周期点都不可能在确定化滤波中永久停留在非单点态。
+  \item 对任意 $y\in Y_m$，从初始候选集 $S_0:=V_m$ 出发递推 $S_{t+1}:=\delta_m(S_t,y_t)$，则在有限步后必进入单点态并从此保持单点；更具体地，对所有 $t\ge m$ 有 $|S_t|=1$。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:Phi_m-conjugacy-threshold} 的“局部同步”部分（并见表 \ref{tab:phi_m_conjugacy_threshold}），当 $m\ge 3$ 时：对任意允许的长度-$m$ 输出块 $a_0\cdots a_{m-1}$，从 $S_0=V_m$ 出发按 $S_{j+1}=\delta_m(S_j,a_j)$ 递推得到的 $S_m$ 必为单点集。等价地，沿 $H_m^{\mathrm{det}}$ 从初始状态 $V_m$ 出发的任意长度-$m$ 标记路径，其终点都落在单点态集合中。
+
+结合命题 \ref{prop:det-candidate-set-monotone} 的“单点态前向封闭性”，立刻得到：对任意 $y\in Y_m$ 的滤波轨道 $(S_t)_{t\ge 0}$，一旦 $S_m$ 为单点，则对所有 $t\ge m$ 都保持单点，故结论 (2) 成立。
+
+为证 $H_m^{\mathrm{amb}}$ 无环，反设存在一个有向环完全落在 $\mathcal{S}_m^{\mathrm{amb}}$ 中。由于 $\mathcal{S}_m^{\mathrm{det}}$ 按定义是从初始状态 $V_m$ 可达的状态集合，该环上任取一状态必可由某条从 $V_m$ 出发的有限标记路径到达。随后沿该环循环可生成任意长的、始终停留在非单点态中的标记路径；这与“任意长度-$m$ 路径终点必落入单点态”矛盾。故 $H_m^{\mathrm{amb}}$ 不含有向环，为 DAG，从而也不承载周期轨道，结论 (1) 随之成立。证毕。
+\end{proof}
+
+\begin{theorem}[歧义壳的 \texorpdfstring{$\zeta$}{zeta} 因子平凡性与单点态骨架封口]\label{thm:Ym-ambiguity-shell-zeta-factor-trivial}
+设 \(m\ge 3\)。
+沿用定义 \ref{def:Phi_m-right-resolving} 与定理 \ref{thm:Ym-ambiguity-shell-dag} 的记号。
+记
+\[
+\mathcal S_m^{\mathrm{ess}}
+:=
+\bigl\{\{v\}:v\in V_m\bigr\}\cap \mathcal S_m^{\mathrm{det}}
+\]
+为 \(H_m^{\mathrm{det}}\) 中全部单点态所成的状态集，并令 \(H_m^{\mathrm{ess}}\) 表示其诱导子图。
+再分别记
+\[
+A_m^{\mathrm{det}},\qquad A_m^{\mathrm{ess}}
+\]
+为 \(H_m^{\mathrm{det}}\) 与 \(H_m^{\mathrm{ess}}\) 的按边条数计数的邻接矩阵。
+若按“先歧义态、后单点态”的顺序排列 \(\mathcal S_m^{\mathrm{det}}\)，则存在某个矩阵 \(R_m\) 使
+\[
+\boxed{\;
+A_m^{\mathrm{det}}
+=
+\begin{pmatrix}
+N_m & R_m\\
+0 & A_m^{\mathrm{ess}}
+\end{pmatrix},
+\qquad
+N_m^{\,m}=0.\;}
+\]
+因此
+\[
+\boxed{\;
+\det(I-zA_m^{\mathrm{det}})
+=
+\det(I-zA_m^{\mathrm{ess}}).\;}
+\]
+若进一步定义表示图层面的 edge-\(\zeta\) 函数
+\[
+\zeta_{H_m^{\mathrm{det}}}(z):=\frac{1}{\det(I-zA_m^{\mathrm{det}})},
+\qquad
+\zeta_{H_m^{\mathrm{ess}}}(z):=\frac{1}{\det(I-zA_m^{\mathrm{ess}})},
+\]
+则有
+\[
+\boxed{\;
+\zeta_{H_m^{\mathrm{det}}}(z)=\zeta_{H_m^{\mathrm{ess}}}(z).\;}
+\]
+换言之，歧义壳对表示图层面的 \(\zeta\)-函数贡献恒等因子 \(1\)。
+结合推论 \ref{cor:Phi_m-zeta-closed} 可知：\(Y_m\) 的全部周期谱由单点态骨架独自承载，并满足
+\[
+\zeta_{Y_m}(z)=\frac{1}{1-2z}.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:det-candidate-set-monotone}，单点态集合在前向读入下封闭，因此从单点态不可能返回歧义态。
+这正给出所示块上三角形状中的左下零块。
+
+接着证明 \(N_m^{\,m}=0\)。
+对任意允许的长度-\(m\) 输出块 \(a_0\cdots a_{m-1}\in\mathcal L_m(Y_m)\)，定理 \ref{thm:Phi_m-conjugacy-threshold} 的证明已经表明：该块对应唯一的长度-\((2m-1)\) lift 块，因而其终端顶点唯一确定。
+等价地，对任意可达候选集 \(S\subseteq V_m\)，沿递推
+\[
+S_{j+1}:=\delta_m(S_j,a_j),
+\qquad
+S_0:=S,
+\]
+在读入这 \(m\) 个输出符号后，所得 \(S_m\) 至多为单点。
+因此不可能存在完全停留在歧义态集合 \(\mathcal S_m^{\mathrm{amb}}\) 内的长度-\(m\) 路径。
+这正等价于 \(N_m^{\,m}=0\)。
+
+于是 \(N_m\) 为幂零矩阵，故
+\[
+\det(I-zN_m)=1.
+\]
+再由块上三角行列式分解，
+\[
+\det(I-zA_m^{\mathrm{det}})
+=
+\det(I-zN_m)\det(I-zA_m^{\mathrm{ess}})
+=
+\det(I-zA_m^{\mathrm{ess}}),
+\]
+从而得到所示 edge-\(\zeta\) 恒等式。
+
+最后，推论 \ref{cor:Phi_m-zeta-closed} 已给出 \(m\ge 3\) 时
+\(
+\zeta_{Y_m}(z)=1/(1-2z)
+\)；
+而定理 \ref{thm:Ym-ambiguity-shell-dag} 表明全部周期点都不可能永久驻留于歧义壳，故内禀周期谱完全由单点态骨架承载。证毕。
+\end{proof}
+
+\begin{corollary}[周期点刚性与内禀 \texorpdfstring{$\zeta_{Y_m}$}{zetaYm} 的退化]\label{cor:Ym-periodic-rigidity}
+当 $m\ge 3$ 时，对所有 $n\ge 1$ 有
+\[
+\#\mathrm{Fix}(\sigma^n|_{Y_m})=2^n,
+\qquad
+\zeta_{Y_m}(z)=\frac{1}{1-2z}.
+\]
+\end{corollary}
+\begin{proof}
+这是推论 \ref{cor:Phi_m-zeta-closed} 的直接重述（其证明基于定理 \ref{thm:Phi_m-conjugacy-threshold} 的共轭）。定理 \ref{thm:Ym-ambiguity-shell-dag} 进一步给出一个结构性解释：歧义壳为纯瞬态层，不贡献任何周期点，因此周期点谱完全由单点态骨架决定。证毕。
+\end{proof}
+
+\begin{corollary}[同步延迟的闭式与尖锐性]\label{cor:Ym-sync-delay}
+对 $y\in Y_m$ 定义确定化滤波轨道 $S_0:=V_m$、$S_{t+1}:=\delta_m(S_t,y_t)$（$t\ge 0$），并定义“最坏同步延迟”
+\[
+D_{\mathrm{sync}}(m):=\max\{\,t\ge 0:\exists\,y\in Y_m\ \text{s.t. }|S_t|>1\,\}.
+\]
+则当 $m\ge 3$ 时有
+\[
+\boxed{\ D_{\mathrm{sync}}(m)=m-1\ }.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:Phi_m-conjugacy-threshold}（并见表 \ref{tab:phi_m_conjugacy_threshold} 中 $R_m$ 的“non-singleton ends $(m)$”为 $0$），对任意 $y\in Y_m$ 都有 $|S_m|=1$，结合命题 \ref{prop:det-candidate-set-monotone} 的单调性知对所有 $t\ge m$ 亦有 $|S_t|=1$，从而 $D_{\mathrm{sync}}(m)\le m-1$。
+另一方面，同一张表同时给出 $R_{m-1}$ 的“non-singleton ends $(m-1)$”严格为正（$m\ge 3$），这意味着存在某个允许输出块使得 $|S_{m-1}|>1$，故 $D_{\mathrm{sync}}(m)\ge m-1$。两边合并即得等式。证毕。
+\end{proof}
+
+\begin{remark}[歧义壳作为子系统在 \texorpdfstring{$m\ge 3$}{m>=3} 时为空]\label{rem:Ym-amb-empty}
+在推论 \ref{cor:Ym-ambiguity-shell-low-entropy} 中，我们把“完全不进入单点本质分量”的点集记为歧义壳子系统 \(Y_m^{\mathrm{amb}}\)。
+而定理 \ref{thm:Ym-ambiguity-shell-dag} 的结论 (2) 表明：当 \(m\ge 3\) 时，从任意输出 \(y\in Y_m\) 出发的确定化滤波在至多 \(m\) 步内必进入并永远停留在单点态。
+因此在本文的 Zeckendorf 折叠模型里，\(Y_m^{\mathrm{amb}}=\varnothing\)（两边移位意义下不存在“永远保持歧义”的轨道）；所谓“歧义壳”真正表达的是一个\emph{有限步同步延迟层}，其最坏延迟由推论 \ref{cor:Ym-sync-delay} 精确给出。
+\par
+进一步，条件 \(Y_m^{\mathrm{amb}}=\varnothing\) 可在确定化状态图上提升为一个\textbf{可计算的同步延迟定理}：
+若在 $H_m^{\mathrm{det}}$ 中把所有单点态及其出边删去、得到非单点态诱导子图 $H_m^{\mathrm{amb}}$，则
+\[
+Y_m^{\mathrm{amb}}=\varnothing
+\quad\Longleftrightarrow\quad
+H_m^{\mathrm{amb}}\ \text{不含任何有向环}.
+\]
+事实上，若 $H_m^{\mathrm{amb}}$ 含有向环，则从初始状态可达性出发，沿该环可生成一条永不进入单点态的双边标记序列，从而得到 \(Y_m^{\mathrm{amb}}\neq\varnothing\)，矛盾；反向蕴含由定义即得。
+因此在 \(Y_m^{\mathrm{amb}}=\varnothing\) 时，$H_m^{\mathrm{amb}}$ 为 DAG，从而存在统一有限同步步数
+\[
+L_m:=D_{\mathrm{sync}}(m)+1<\infty,
+\]
+使得任意 \(y\in Y_m\) 的确定化滤波轨道在不超过 \(L_m\) 步内进入单点态并从此保持单点。并且 $L_m$ 可在有限图上直接审计：对 DAG 做最长路径 DP 即得最小的 \(D_{\mathrm{sync}}(m)\)（从而得到 \(L_m\)）。脚本 \texttt{scripts/exp\_phi\_m\_sync\_theory.py} 输出该计算的可复现证书（表 \ref{tab:phi_m_sync_theory}）。
+\end{remark}
+
+\input{sections/generated/tab_phi_m_sync_theory}
+
+\begin{proposition}[主极点留数比作为常数级核指纹]\label{prop:Ym-zeta-residue-ratio}
+设 cover 的 \(\zeta\) 与内禀 \(\zeta\) 在共同的主极点模长 \(z_\star=\rho_m^{-1}\)（其中 \(\rho_m:=\rho(A_m)=\rho(B_m)\)）处均为一阶极点。将其 Laurent 主部写为
+\[
+\zeta_{X_{A_m}}(z)\sim \frac{R_m^{\mathrm{cov}}}{1-\rho_m z},
+\qquad
+\zeta_{Y_m}(z)\sim \frac{R_m^{\mathrm{int}}}{1-\rho_m z},
+\qquad (z\to z_\star),
+\]
+并定义常数比值
+\[
+\boxed{\ \eta_m:=\frac{R_m^{\mathrm{int}}}{R_m^{\mathrm{cov}}}\ }.
+\]
+则 \(\eta_m\) 仅由 \((A_m,B_m)\) 的解析结构决定，因而是一个常数级的“折叠核指纹”。并且由命题 \ref{prop:periodic-count-sandwich} 的上界可推出
+\[
+0<\eta_m\le 1.
+\]
+\end{proposition}
+\begin{proof}
+\(\eta_m\) 的不变量性来自定义：\(R_m^{\mathrm{cov}},R_m^{\mathrm{int}}\) 是两类 \(\zeta\) 在主极点处的主部系数。
+
+由 \(\zeta\) 的周期点展开式（定义 \(\zeta_{Y_m}(z)=\exp(\sum_{n\ge 1}\#\mathrm{Fix}(\sigma^n|_{Y_m})z^n/n)\)）与命题 \ref{prop:periodic-count-sandwich} 的逐 \(n\) 上界
+\(\#\mathrm{Fix}(\sigma^n|_{Y_m})\le \#\mathrm{Fix}(\sigma^n|_{X_{A_m}})\)
+得到对任意 \(0\le z<z_\star\) 的比较：
+\[
+\log\zeta_{Y_m}(z)
+=\sum_{n\ge 1}\frac{\#\mathrm{Fix}(\sigma^n|_{Y_m})}{n}z^n
+\le
+\sum_{n\ge 1}\frac{\#\mathrm{Fix}(\sigma^n|_{X_{A_m}})}{n}z^n
+=\log\zeta_{X_{A_m}}(z),
+\]
+从而 \(\zeta_{Y_m}(z)\le \zeta_{X_{A_m}}(z)\)。令 \(z\uparrow z_\star\) 并乘以 \(1-\rho_m z\)，结合两者主部展开即得 \(R_m^{\mathrm{int}}\le R_m^{\mathrm{cov}}\)，从而 \(0<\eta_m\le 1\)。证毕。
+\end{proof}
+
+右 Fischer cover 的存在性、唯一性与最小性可由“确定化 + follower 最小化”构造给出（参见 \cite{LindMarcus1995,Kitchens1998SymbolicDynamics}）。
+

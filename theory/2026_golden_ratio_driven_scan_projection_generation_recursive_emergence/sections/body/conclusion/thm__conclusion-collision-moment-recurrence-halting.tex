@@ -1,0 +1,543 @@
+\begin{theorem}[二值纤维阈值序贯转导的碰撞矩序列与最小递推阶]\label{thm:conclusion-collision-moment-minrec-halting-time}
+沿用定理 \ref{thm:conclusion-minimal-state-complexity-halting} 中 \(\pi_{M,x}:L\to L\) 的构造与记号，并记停机时间 \(T=T(M,x)\in\NN\cup\{\infty\}\)（不停机记为 \(\infty\)）。
+对任意整数 \(q\ge 2\)，定义 \(q\) 阶碰撞矩序列
+\[
+S_q^{(M,x)}(n)
+:=\sum_{y\in L}\Bigl|\pi_{M,x}^{-1}(y)\cap\{1^n\#0,1^n\#1\}\Bigr|^q,
+\qquad n\ge 0.
+\]
+则：
+\begin{enumerate}
+  \item 若 \(T=\infty\)，则 \(S_q^{(M,x)}(n)\equiv 2\)，并且其满足的最小齐次常系数线性递推阶为 \(1\)。
+  \item 若 \(T<\infty\)，则
+  \[
+  S_q^{(M,x)}(n)=
+  \begin{cases}
+  2,& 0\le n<T,\\
+  2^q,& n\ge T,
+  \end{cases}
+  \]
+  并且其满足的最小齐次常系数线性递推阶恰为 \(T+1\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-minimal-state-complexity-halting} 中 \(\pi_{M,x}\) 的定义可知：当 \(n<T\) 时，\(\pi_{M,x}(1^n\#0)\) 与 \(\pi_{M,x}(1^n\#1)\) 的末位分别为 \(0\) 与 \(1\)，两点不碰撞，故两条纤维贡献为 \(1^q+1^q=2\)；
+当 \(n\ge T\) 时两点同像于 \(0^n\#0\) 并构成大小为 \(2\) 的纤维，故贡献为 \(2^q\)。
+于是闭式成立。
+
+若 \(T=\infty\)，则序列常值且对 \(n\ge 1\) 满足阶 \(1\) 递推 \(S(n)-S(n-1)=0\)；阶 \(0\) 的齐次递推只能强制 \(S\equiv 0\)，与 \(S\equiv 2\) 矛盾，故最小阶为 \(1\)。
+
+以下设 \(T<\infty\)，并写 \(a_n:=S_q^{(M,x)}(n)\)。
+若存在阶 \(r\le T\) 的齐次常系数递推
+\[
+a_n=\sum_{i=1}^{r}c_i a_{n-i}\qquad(n\ge r),
+\]
+则该递推同时适用于 \(n=T\) 与 \(n=2T\)。
+对 \(n=T\)，有 \(a_T=2^q\) 且 \(a_{T-i}=2\ (1\le i\le r)\)，故
+\[
+2^q=2\sum_{i=1}^{r}c_i.
+\]
+对 \(n=2T\)，由于 \(2T-i\ge T\)（因为 \(i\le r\le T\)），从而 \(a_{2T}=2^q\) 且 \(a_{2T-i}=2^q\)，于是
+\[
+2^q=2^q\sum_{i=1}^{r}c_i.
+\]
+由此得 \(\sum_{i=1}^{r}c_i=1\)，代回即推出 \(2^q=2\)，与 \(q\ge 2\) 矛盾。
+故最小递推阶 \(>T\)，即至少为 \(T+1\)。
+
+另一方面，由于 \(a_n\) 在 \(n\ge T\) 时恒等于 \(2^q\)，故对 \(n\ge T+1\) 有 \(a_n=a_{n-1}\)，从而存在阶 \(T+1\) 的齐次递推（取 \(c_1=1\) 且其余系数为 \(0\)）。
+合并上下界得到最小阶为 \(T+1\)。证毕。
+\end{proof}
+
+\begin{proposition}[碰撞矩序列的非负矩阵表示维数与不可计算性]\label{prop:conclusion-collision-moment-nn-realization-dim}
+固定 \(q\ge 2\)，对定理 \ref{thm:conclusion-collision-moment-minrec-halting-time} 的序列 \(S_q^{(M,x)}(n)\) 定义其非负矩阵表示维数
+\[
+d_q(M,x)
+:=\min\Bigl\{d\in\NN:\exists\,A\in\NN^{d\times d},\ u,v\in\NN^d\ \text{s.t.}\ S_q^{(M,x)}(n)=u^\top A^n v,\ \forall n\ge 0\Bigr\}.
+\]
+则
+\[
+d_q(M,x)=
+\begin{cases}
+1,& T(M,x)=\infty,\\
+T(M,x)+1,& T(M,x)<\infty.
+\end{cases}
+\]
+特别地，映射 \((M,x)\mapsto d_q(M,x)\) 不可计算；并且对任意常数 \(K\)，性质 \(d_q(M,x)\le K\) 在该族上不可判定。
+\end{proposition}
+\begin{proof}
+先证上界。
+若 \(T=\infty\)，取 \(d=1\)、\(A=[1]\)、\(u=[1]\)、\(v=[2]\)，则 \(u^\top A^n v\equiv 2\) 与 \(S_q^{(M,x)}\) 一致，故 \(d_q(M,x)\le 1\)。
+若 \(T<\infty\)，取 \(d=T+1\)，并令 \(A\in\NN^{d\times d}\) 为“链—吸收”矩阵：
+\[
+A_{i,i+1}=1\ (0\le i<T),\qquad A_{T,T}=1,
+\qquad\text{其余为 }0.
+\]
+取 \(u=e_0\)（第 \(0\) 个标准基），并取
+\[
+v=(\underbrace{2,2,\ldots,2}_{T\ \text{次}},2^q)^\top\in\NN^{d}.
+\]
+则 \(u^\top A^n v=v_n\) 给出
+\(
+u^\top A^n v=2
+\)
+（\(n<T\)）与
+\(
+u^\top A^n v=2^q
+\)
+（\(n\ge T\)），与定理 \ref{thm:conclusion-collision-moment-minrec-halting-time} 的闭式一致，故 \(d_q(M,x)\le T+1\)。
+
+再证下界。
+任意表示 \(S_q^{(M,x)}(n)=u^\top A^n v\)（\(A\in\NN^{d\times d}\)）蕴含 \(S_q^{(M,x)}\) 满足阶至多 \(d\) 的齐次常系数线性递推：由 Cayley--Hamilton 定理，\(A\) 的特征多项式 \(p(\lambda)=\lambda^d+\sum_{i=0}^{d-1}\alpha_i\lambda^i\) 满足 \(p(A)=0\)，两边左乘 \(u^\top A^{n-d}\) 右乘 \(v\) 得
+\[
+S_q^{(M,x)}(n)+\sum_{i=0}^{d-1}\alpha_i S_q^{(M,x)}(n-d+i)=0\qquad(n\ge d).
+\]
+故最小递推阶 \(\le d\)。
+结合定理 \ref{thm:conclusion-collision-moment-minrec-halting-time}：当 \(T=\infty\) 时最小递推阶为 \(1\)，从而 \(d\ge 1\)；
+当 \(T<\infty\) 时最小递推阶为 \(T+1\)，从而 \(d\ge T+1\)。
+与上界合并即得 \(d_q(M,x)\) 的闭式。
+
+最后，若 \((M,x)\mapsto d_q(M,x)\) 可计算，则由 \(d_q(M,x)=1\) 等价于 \(T(M,x)=\infty\) 可判定不停机集合，与停机问题不可判定性矛盾；因此亦得阈值谓词 \(d_q(M,x)\le K\) 不可判定。证毕。
+\end{proof}
+
+\begin{theorem}[停机时间、外置预算、状态复杂度与碰撞矩表示维数的精确同一]\label{thm:conclusion-halting-fourfold-complexity-identity}
+固定整数 \(q\ge 2\)。对定理 \ref{thm:conclusion-halting-time-external-budget-exact}、定理 \ref{thm:conclusion-minimal-state-complexity-halting} 与命题 \ref{prop:conclusion-collision-moment-nn-realization-dim} 中的对象，成立
+\[
+D\!\left(\pi^{\mathrm{time}}_{M,x}\right)
+=
+b\!\left(\pi^{\mathrm{time}}_{M,x}\right)
+=
+s(\pi_{M,x})
+=
+d_q(M,x)
+=
+\begin{cases}
+1,& T(M,x)=\infty,\\[2pt]
+T(M,x)+1,& T(M,x)<\infty.
+\end{cases}
+\]
+并且最小二值寄存器数满足
+\[
+k_{\min}(\pi_{M,x})=
+\begin{cases}
+0,& T(M,x)=\infty,\\[2pt]
+\left\lceil \log_2\!\bigl(T(M,x)+1\bigr)\right\rceil,& T(M,x)<\infty.
+\end{cases}
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-halting-time-external-budget-exact}，
+\[
+D\!\left(\pi^{\mathrm{time}}_{M,x}\right)
+=
+b\!\left(\pi^{\mathrm{time}}_{M,x}\right)
+=
+\begin{cases}
+1,& T(M,x)=\infty,\\
+T(M,x)+1,& T(M,x)<\infty.
+\end{cases}
+\]
+由命题 \ref{prop:conclusion-collision-moment-nn-realization-dim}，
+\[
+d_q(M,x)=
+\begin{cases}
+1,& T(M,x)=\infty,\\
+T(M,x)+1,& T(M,x)<\infty.
+\end{cases}
+\]
+再看状态复杂度。定理 \ref{thm:conclusion-minimal-state-complexity-halting} 已给出：当 \(T(M,x)<\infty\) 时，
+\[
+s(\pi_{M,x})=T(M,x)+1.
+\]
+当 \(T(M,x)=\infty\) 时，\(\pi_{M,x}\) 退化为逐符号转导
+\[
+1\mapsto 0,\qquad \#\mapsto \#,\qquad b\mapsto b,
+\]
+显然可由单状态实现，故 \(s(\pi_{M,x})\le 1\)；而状态数不可能为 \(0\)，故 \(s(\pi_{M,x})=1\)。于是四者完全一致。
+
+对最小二值寄存器数，推论 \ref{cor:conclusion-min-register-halting} 已给出下界
+\[
+k_{\min}(\pi_{M,x})\ge \left\lceil \log_2 s(\pi_{M,x})\right\rceil.
+\]
+反之，若 \(s(\pi_{M,x})=s\)，则可取一个 \(s\) 状态确定性有限状态转导器实现 \(\pi_{M,x}\)，并以 \(\lceil \log_2 s\rceil\) 个二值寄存器编码其内部状态；转移函数与输出函数皆为有限真值表，故存在同步序贯电路实现。于是
+\[
+k_{\min}(\pi_{M,x})\le \left\lceil \log_2 s(\pi_{M,x})\right\rceil.
+\]
+上下界合并即得
+\[
+k_{\min}(\pi_{M,x})=\left\lceil \log_2 s(\pi_{M,x})\right\rceil,
+\]
+再代入 \(s(\pi_{M,x})\) 的精确值即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[碰撞矩序列的一次脉冲律与精确生成函数]\label{thm:conclusion-collision-moment-single-pulse-ogf}
+固定整数 \(q\ge 2\)，并记
+\[
+a_n:=S_q^{(M,x)}(n)\qquad (n\ge 0).
+\]
+若 \(T:=T(M,x)<\infty\)，则
+\[
+a_n=2+(2^q-2)\mathbf 1_{\{n\ge T\}},
+\]
+从而其 backward difference
+\[
+\nabla a_n:=a_n-a_{n-1}\qquad(n\ge 1)
+\]
+满足
+\[
+\nabla a_n=(2^q-2)\mathbf 1_{\{n=T\}}.
+\]
+相应 ordinary generating function 为
+\[
+\mathcal G_{q,T}(z):=\sum_{n\ge 0}a_n z^n
+=
+\frac{2+(2^q-2)z^T}{1-z}.
+\]
+若 \(T(M,x)=\infty\)，则
+\[
+a_n\equiv 2,\qquad
+\nabla a_n\equiv 0,\qquad
+\mathcal G_{q,\infty}(z)=\frac{2}{1-z}.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-collision-moment-minrec-halting-time}，
+\[
+a_n=
+\begin{cases}
+2,& 0\le n<T,\\
+2^q,& n\ge T,
+\end{cases}
+\]
+故在 \(T<\infty\) 时可统一写成
+\[
+a_n=2+(2^q-2)\mathbf 1_{\{n\ge T\}}.
+\]
+于是对 \(n\ge 1\)，
+\[
+\nabla a_n
+=(2^q-2)\bigl(\mathbf 1_{\{n\ge T\}}-\mathbf 1_{\{n-1\ge T\}}\bigr)
+=(2^q-2)\mathbf 1_{\{n=T\}}.
+\]
+再对 \(a_n\) 求 ordinary generating function，得
+\[
+\mathcal G_{q,T}(z)
+=
+\sum_{n\ge 0}2z^n+(2^q-2)\sum_{n\ge T}z^n
+=
+\frac{2}{1-z}+\frac{(2^q-2)z^T}{1-z}
+=
+\frac{2+(2^q-2)z^T}{1-z}.
+\]
+当 \(T=\infty\) 时，定理 \ref{thm:conclusion-collision-moment-minrec-halting-time} 给出 \(a_n\equiv 2\)，其余结论随之立即成立。证毕。
+\end{proof}
+
+\begin{corollary}[碰撞生成函数分子零点的正多边形结构]\label{cor:conclusion-collision-numerator-regular-polygon-zeros}
+设 \(T:=T(M,x)<\infty\) 且 \(q\ge 2\)。记
+\[
+N_{q,T}(z):=2+(2^q-2)z^T.
+\]
+则 \(N_{q,T}\) 的全部零点恰为
+\[
+z_j=\rho_{q,T}\exp\!\left(\frac{(2j+1)\pi i}{T}\right),
+\qquad
+j=0,1,\dots,T-1,
+\]
+其中
+\[
+\rho_{q,T}:=\left(\frac{2}{2^q-2}\right)^{1/T}\in(0,1].
+\]
+因此 \(N_{q,T}\) 的零点构成半径 \(\rho_{q,T}\) 的正 \(T\)-边形；并且对固定 \(q\)，有 \(\rho_{q,T}\uparrow 1\) 当 \(T\to\infty\)。
+\end{corollary}
+\begin{proof}
+由 \(N_{q,T}(z)=0\) 等价于
+\[
+z^T=-\frac{2}{2^q-2},
+\]
+右端是模为 \(2/(2^q-2)\) 的负实数。故其全部 \(T\) 次根为
+\[
+z_j=
+\left(\frac{2}{2^q-2}\right)^{1/T}
+\exp\!\left(\frac{(2j+1)\pi i}{T}\right),
+\qquad
+j=0,\dots,T-1.
+\]
+这些根在圆周上等角分布，故构成正 \(T\)-边形。最后
+\[
+\rho_{q,T}
+=
+\exp\!\left(\frac{1}{T}\log\frac{2}{2^q-2}\right)\to 1
+\qquad(T\to\infty),
+\]
+从而结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[指数尺度碰撞谱指纹对停机时间不敏感]\label{cor:conclusion-collision-moment-perron-blindness}
+对固定 \(q\ge 2\) 定义指数尺度碰撞率
+\[
+\lambda_q(M,x):=\limsup_{n\to\infty}\frac{1}{n}\log S_q^{(M,x)}(n),
+\qquad
+r_q(M,x):=\exp(\lambda_q(M,x)).
+\]
+则对所有 \((M,x)\) 都有 \(\lambda_q(M,x)=0\) 与 \(r_q(M,x)=1\)。
+然而当 \(T(M,x)<\infty\) 时，由定理 \ref{thm:conclusion-minimal-state-complexity-halting} 有 \(s(\pi_{M,x})=T(M,x)+1\)，可取任意大。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-collision-moment-minrec-halting-time}，\(S_q^{(M,x)}(n)\) 在所有情形下均被常数 \(\max\{2,2^q\}\) 上界，故 \(\lambda_q(M,x)=0\) 且 \(r_q(M,x)=1\)。
+而 \(s(\pi_{M,x})\) 的增长由定理 \ref{thm:conclusion-minimal-state-complexity-halting} 直接给出。证毕。
+\end{proof}
+
+\begin{corollary}[有限碰撞谱指纹不可能构成完备不变量]\label{cor:conclusion-finite-collision-spectrum-incomplete}
+存在无限多对 \((M,x)\neq(M',x')\) 使得 \(\pi_{M,x}\not\equiv \pi_{M',x'}\)（外延不相等），但对任意有限集合 \(Q\subset\{2,3,\dots\}\) 都有
+\[
+\bigl(r_q(M,x)\bigr)_{q\in Q}=\bigl(r_q(M',x')\bigr)_{q\in Q}=(1,1,\dots,1).
+\]
+因此任何仅依赖有限多个 \(\{r_q\}_{q\in Q}\) 的谱指纹映射都不可能在该族上区分外延不等价对象。
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:conclusion-collision-moment-perron-blindness}，对所有 \((M,x)\) 与所有 \(q\ge 2\) 均有 \(r_q(M,x)=1\)，故任意有限 \(Q\) 上的指纹恒同。
+另一方面，若 \(T(M,x)\neq T(M',x')\)（或一者停机一者不停机），则取 \(n=\min\{T(M,x),T(M',x')\}\) 可由 \(\pi_{M,x}(1^n\#1)\) 的末位输出与 \(\pi_{M',x'}(1^n\#1)\) 的末位输出不同而区分两转导，故外延不等价而谱指纹一致的实例无限多。证毕。
+\end{proof}
+
+\begin{theorem}[前缀复杂度与渐近复杂度的严格断裂]\label{thm:conclusion-collision-hankel-prefix-asymptotic-dichotomy}
+设 \(T:=T(M,x)<\infty\) 且 \(q\ge 2\)，并令
+\[
+a_n:=S_q^{(M,x)}(n).
+\]
+则：
+\begin{enumerate}
+  \item \(a_n\) 所满足的最小齐次常系数线性递推阶恰为 \(T+1\)；
+  \item 无穷 Hankel 矩阵
+  \[
+  \mathcal H_q:=(a_{i+j})_{i,j\ge 0}
+  \]
+  的线性秩恰为 \(T+1\)；
+  \item 对任意 \(N\ge T\)，尾截断 Hankel 矩阵
+  \[
+  \mathcal H_q^{(N)}:=(a_{N+i+j})_{i,j\ge 0}
+  \]
+  满足 \(\operatorname{rank}\mathcal H_q^{(N)}=1\)；
+  \item 指数尺度碰撞率满足
+  \[
+  \lambda_q(M,x)=0,\qquad r_q(M,x)=1.
+  \]
+\end{enumerate}
+因此，该显式族的精确前缀复杂度完整记录停机时间，而其渐近谱复杂度却塌缩到平凡值。
+\end{theorem}
+\begin{proof}
+第 1 点正是定理 \ref{thm:conclusion-collision-moment-minrec-halting-time} 的结论，第 4 点正是推论 \ref{cor:conclusion-collision-moment-perron-blindness}。
+
+现证第 2 与第 3 点。记 \(\mathcal H_q\) 的第 \(j\) 列为
+\[
+c_j:=(a_j,a_{j+1},a_{j+2},\dots)^\top.
+\]
+由定理 \ref{thm:conclusion-collision-moment-single-pulse-ogf}，对 \(0\le j\le T-1\) 有
+\[
+c_j-c_{j+1}
+=(0,\dots,0,2-2^q,0,\dots)^\top,
+\]
+其中唯一非零坐标恰位于第 \(T-j-1\) 行。故
+\[
+c_0-c_1,\ c_1-c_2,\ \dots,\ c_{T-1}-c_T
+\]
+给出 \(T\) 个线性无关向量。又
+\[
+c_T=(2^q,2^q,\dots)^\top
+\]
+显然不在上述差分张成空间中，故 \(\operatorname{rank}\mathcal H_q\ge T+1\)。
+另一方面，第 1 点表明 \(a_n\) 满足阶 \(T+1\) 的齐次线性递推；标准 Hankel 理论遂给出所有列皆由前 \(T+1\) 列线性生成，故 \(\operatorname{rank}\mathcal H_q\le T+1\)。于是
+\[
+\operatorname{rank}\mathcal H_q=T+1.
+\]
+
+若 \(N\ge T\)，则
+\[
+a_{N+i+j}\equiv 2^q
+\qquad(i,j\ge 0),
+\]
+故
+\[
+\mathcal H_q^{(N)}=2^q\,\mathbf 1\mathbf 1^\top,
+\]
+从而 \(\operatorname{rank}\mathcal H_q^{(N)}=1\)。证毕。
+\end{proof}
+
+\begin{theorem}[单一碰撞阶在该显式族上的完备分类性]\label{thm:conclusion-single-q-collision-complete-classification}
+固定任意整数 \(q\ge 2\)。则在定理 \ref{thm:conclusion-minimal-state-complexity-halting} 所给出的转导族 \(\{\pi_{M,x}\}\) 上，以下三者等价：
+\[
+\pi_{M,x}=\pi_{M',x'},
+\qquad
+T(M,x)=T(M',x'),
+\qquad
+S_q^{(M,x)}(\cdot)=S_q^{(M',x')}(\cdot).
+\]
+更强地，若 \(T(M,x)<\infty\)，则
+\[
+T(M,x)=\min\bigl\{n\ge 0:\ S_q^{(M,x)}(n)=2^q\bigr\},
+\]
+而若该集合为空，则 \(T(M,x)=\infty\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-minimal-state-complexity-halting} 中 \(\pi_{M,x}\) 的显式定义可知，\(\pi_{M,x}\) 的外延仅由阈值 \(T(M,x)\) 决定。故若 \(T(M,x)=T(M',x')\)，则 \(\pi_{M,x}=\pi_{M',x'}\)。
+反之，若 \(T(M,x)\neq T(M',x')\)，不妨设 \(T(M,x)<T(M',x')\)。则在输入 \(1^{T(M,x)}\#1\) 上，
+\[
+\pi_{M,x}(1^{T(M,x)}\#1)=0^{T(M,x)}\#0,
+\]
+而
+\[
+\pi_{M',x'}(1^{T(M,x)}\#1)=0^{T(M,x)}\#1,
+\]
+故两转导外延不同。于是前两者等价。
+
+再由定理 \ref{thm:conclusion-collision-moment-minrec-halting-time}，
+\[
+S_q^{(M,x)}(n)=2+(2^q-2)\mathbf 1_{\{n\ge T(M,x)\}},
+\]
+故碰撞矩序列的首次跃迁时刻恰为 \(T(M,x)\)；若永不跃迁，则对应 \(T(M,x)=\infty\)。于是第三者与前两者亦等价。证毕。
+\end{proof}
+
+\begin{proposition}[全阶碰撞层级在碰撞阶方向上的仿射秩一塌缩]\label{prop:conclusion-collision-hierarchy-affine-rank-one}
+对任意 \(q,q'\ge 2\) 与任意 \(n\ge 0\)，都有精确恒等式
+\[
+S_{q'}^{(M,x)}(n)-2
+=
+\frac{2^{q'}-2}{2^q-2}\Bigl(S_q^{(M,x)}(n)-2\Bigr).
+\]
+因此，对每个固定 \(n\)，碰撞层级
+\[
+\bigl(S_q^{(M,x)}(n)\bigr)_{q\ge 2}
+\]
+全部落在一条仿射直线上；并且整个二元数组 \(\bigl(S_q^{(M,x)}(n)\bigr)_{q\ge 2,\ n\ge 0}\) 在 \(q\)-方向的线性秩恰为 \(1\)。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:conclusion-collision-moment-minrec-halting-time}，
+\[
+S_q^{(M,x)}(n)-2=(2^q-2)\mathbf 1_{\{n\ge T(M,x)\}}.
+\]
+因此
+\[
+S_{q'}^{(M,x)}(n)-2
+=(2^{q'}-2)\mathbf 1_{\{n\ge T(M,x)\}}
+=\frac{2^{q'}-2}{2^q-2}\Bigl(S_q^{(M,x)}(n)-2\Bigr).
+\]
+这表明任取一个固定 \(q\ge 2\)，所有其余碰撞阶序列皆由 \(S_q^{(M,x)}(\cdot)\) 经同一仿射缩放得到，从而 \(q\)-方向秩为 \(1\)。证毕。
+\end{proof}
+
+\begin{theorem}[停机时间的 prime-register 精确前沿]\label{thm:conclusion-halting-time-prime-register-frontier-exact}
+设 \(T:=T(M,x)<\infty\)。对固定整数 \(E\ge 1\)，定义
+\[
+\kappa_E(T)
+:=
+\min\Bigl\{
+k\ge 0:\ \pi^{\mathrm{time}}_{M,x}\ \text{admit a }(k,E)\text{-Gödel 外置提升}
+\Bigr\}.
+\]
+则有精确公式
+\[
+\kappa_E(T)=\left\lceil \log_{E+1}(T+1)\right\rceil.
+\]
+等价地，对固定整数 \(k\ge 1\)，使 \(\pi^{\mathrm{time}}_{M,x}\) admit \((k,E)\)-Gödel 外置提升的最小指数上界为
+\[
+E_k(T)=\left\lceil (T+1)^{1/k}\right\rceil-1.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-halting-time-external-budget-exact}，
+\[
+b\!\left(\pi^{\mathrm{time}}_{M,x}\right)=T+1.
+\]
+另一方面，定理 \ref{thm:conclusion-bounded-prime-register-feasibility} 表明：\((k,E)\)-Gödel 外置提升存在当且仅当
+\[
+(E+1)^k\ge D\!\left(\pi^{\mathrm{time}}_{M,x}\right).
+\]
+再由同一外置预算定理中的恒等式 \(D(\pi)=b(\pi)\)，上述条件等价于
+\[
+(E+1)^k\ge T+1.
+\]
+因此最小 \(k\) 恰为
+\[
+\kappa_E(T)=\left\lceil \log_{E+1}(T+1)\right\rceil.
+\]
+反过来，对固定 \(k\)，满足 \((E+1)^k\ge T+1\) 的最小整数 \(E\) 即为
+\[
+E_k(T)=\left\lceil (T+1)^{1/k}\right\rceil-1.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[停机时间 exactification 的三尺度分离]\label{thm:conclusion-halting-time-three-scale-separation}
+设 \(T:=T(M,x)<\infty\)，并定义三种预算尺度
+\[
+B_{\mathrm{ext}}(T):=b\!\left(\pi^{\mathrm{time}}_{M,x}\right),
+\]
+\[
+B_{\mathrm{bin}}(T):=k_{\min}(\pi_{M,x}),
+\]
+\[
+B_{\mathrm{G\ddot odel}}(T):=\log_2 N^\ast(T+1),
+\qquad
+N^\ast(y):=\min\{N\in\NN_{\ge 1}: d(N)\ge y\}.
+\]
+则有精确/渐近公式
+\[
+B_{\mathrm{ext}}(T)=T+1,
+\qquad
+B_{\mathrm{bin}}(T)=\left\lceil \log_2(T+1)\right\rceil,
+\]
+以及
+\[
+B_{\mathrm{G\ddot odel}}(T)
+=
+\frac{1}{(\log 2)^2}\,\log(T+1)\,\log\log(T+1)
++o\!\bigl(\log T\,\log\log T\bigr).
+\]
+因此
+\[
+B_{\mathrm{bin}}(T)\ll B_{\mathrm{G\ddot odel}}(T)\ll B_{\mathrm{ext}}(T),
+\qquad
+\frac{B_{\mathrm{G\ddot odel}}(T)}{T}\to 0,
+\qquad
+\frac{B_{\mathrm{G\ddot odel}}(T)}{\log_2(T+1)}\to\infty.
+\]
+\end{theorem}
+\begin{proof}
+前两式分别由定理 \ref{thm:conclusion-halting-time-external-budget-exact} 与定理 \ref{thm:conclusion-halting-fourfold-complexity-identity} 直接给出。
+
+对第三式，令
+\[
+M(x):=\max_{n\le x} d(n).
+\]
+由约数函数最大阶的 Wigert 定理，
+\[
+\log M(x)=\left(\log 2+o(1)\right)\frac{\log x}{\log\log x}.
+\]
+由 \(M(N^\ast(y)-1)<y\le M(N^\ast(y))\) 的单调反演，得到
+\[
+\log N^\ast(y)
+=
+\left(\frac{1}{\log 2}+o(1)\right)(\log y)(\log\log y).
+\]
+取 \(y=T+1\)，再换底为 \(\log_2\)，便有
+\[
+B_{\mathrm{G\ddot odel}}(T)
+=
+\log_2 N^\ast(T+1)
+=
+\frac{1}{(\log 2)^2}\,\log(T+1)\,\log\log(T+1)
++o\!\bigl(\log T\,\log\log T\bigr).
+\]
+最后，由
+\[
+\frac{\log T\,\log\log T}{T}\to 0,
+\qquad
+\frac{\log T\,\log\log T}{\log T}\to\infty
+\]
+即可推出
+\[
+B_{\mathrm{G\ddot odel}}(T)\ll B_{\mathrm{ext}}(T),
+\qquad
+B_{\mathrm{G\ddot odel}}(T)\gg B_{\mathrm{bin}}(T).
+\]
+证毕。
+\end{proof}
+
+\endinput

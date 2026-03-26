@@ -1,0 +1,582 @@
+\section{可复现实验：折叠直方图的收敛与 Parry(PF) 基准的定量对照}\label{sec:experiments}
+
+\input{para__experiments-positioning}
+
+在这一口径下，需要强调两点：
+\begin{itemize}
+  \item \textbf{可证的收敛对象：}对给定动力学与读出，折叠后稳定类型直方图 $\hat{\pi}_{m,N}$ 的极限分布应是 $\pi_m^{\mathrm{fold}}=(\Fold_m)_*\mu_m$（定理 \ref{thm:tv-certificate-hist}），其中 $\mu_m$ 是长度-$m$ 微态在真实过程下的极限分布。
+  \item \textbf{Parry(PF) 仅作基线：}本文使用黄金均值 SFT 的 Parry 最大熵柱分布 $\pi_m$ 作为“最大熵基准”。一般动力学（例如旋转产生的 Sturmian）下并\emph{不}主张 $\pi_m^{\mathrm{fold}}=\pi_m$；相反，二者差异由可审计的误差分解式控制（推论 \ref{cor:tv-decomposition-parry}）。
+\end{itemize}
+
+\subsection{实验清单与输出规范：复现入口}\label{subsec:experiments-manifest}
+\input{para__experiments-manifest-positioning}
+
+代表性复现入口包括：
+\begin{itemize}
+  \item 旋转扫描 vs.\ Parry 基线：\path{scripts/exp_rotation_fold_vs_parry.py}（导出 \texttt{artifacts/export/rotation\_fold\_vs\_parry.csv}）。
+  \item Parry 端点审计：\path{scripts/exp_parry_endpoint_audit.py}（生成表 \ref{tab:parry_endpoint_audit}）。
+  \item IID 块采样基线与 95\% TV 证书：\path{scripts/exp_iid_sources_fold_vs_parry.py}（导出 \texttt{artifacts/export/iid\_sources\_fold\_vs\_parry.csv}）。
+  \item 素数性与有限窗口互信息：\path{scripts/exp_prime_shadow_window_mi.py}（导出 \texttt{artifacts/export/prime\_shadow\_window\_mi.json}）。
+\end{itemize}
+
+\subsection{实验模型、数据流与偏差指标}
+\input{para__experiments-models-positioning}
+
+\textbf{模型（旋转扫描）}：取 $X=\TT^1$，$T(x)=x+\alpha\ (\mathrm{mod}\ 1)$，以区间窗 $W=[0,\beta)$ 生成二元读出 $s_t(x)=\ind_W(T^t x)$。给定长度 $m$，形成窗口微态
+\[
+\omega_m(x;t)=s_t(x)\cdots s_{t+m-1}(x)\in\Omega_m,
+\]
+再折叠得到稳定类型符号
+\[
+w_t=\Fold_m(\omega_m(x;t))\in X_m,
+\]
+从而定义经验直方图 $\hat{\pi}_m$（定义同第 \ref{sec:quant-fit} 节）。
+
+\textbf{参数族与网格}：为检验“黄金分支”相对于其他 $\alpha$ 的差异，本节采用两类可复现对照：
+\begin{itemize}
+  \item \textbf{金属平均族（常数型连分数）}：$\alpha=[0;A,A,A,\dots]$，覆盖 $A=1,2,3,5$（其中 $A=1$ 为黄金分支）；
+  \item \textbf{强共振压力测试}：$\alpha=[0;B,1,1,1,\dots]$，覆盖 $B=10,30,100$（首个部分商大，刻意增强低阶有理近似效应）。
+\end{itemize}
+在样本量与分辨率上使用多点网格 $(N,m)$，并在多个 $(\beta,x_0)$ 复现实例上取平均并报告标准差，用以量化对窗参数/相位的敏感性。
+
+\begin{remark}[数据与方案的脚本精确口径]\label{rem:exp-script-spec}
+为避免“只给概述”的不可审计问题，本节实验设置完全由脚本 \verb|scripts/exp_rotation_fold_vs_parry.py| 固化。其默认网格为：
+\[
+m\in\{6,8,10,12,14,16,18\},\qquad
+N\in\{10^4,3\times 10^4,10^5,3\times 10^5\},
+\]
+\[
+\beta\in\{0.2,0.3,0.5,0.6180339887\},\qquad
+x_0\in\{0.123,0.271,0.731\}.
+\]
+每个配置会输出偏差指标（TV/KL）、稳定类型数 \texttt{unique\_types}，以及差异度证书（\texttt{DN\_star\_upper\_bound} 与可直接排序核验的 \texttt{DN\_star\_exact}）。此外，对若干中等分辨率（例如 $m\le 14$）额外输出跨分辨率一致性残差 \texttt{tv\_multiscale\_residual}（定义 \ref{def:multiscale-residual}），用于审计“同一数据在相邻分辨率上的投影一致性”。
+\end{remark}
+
+\begin{remark}[原始数据文件与字段说明]\label{rem:exp-data-files}
+\begin{sloppypar}
+原始逐配置数据写入 \texttt{artifacts/export/rotation\_fold\_vs\_parry.csv}。CSV 字段（见表头）包括
+\begin{center}
+\path{alpha_name,alpha,beta,x0,m,N,tv,kl,unique_types,DN_star_upper_bound,DN_star_exact,tv_multiscale_residual,elapsed_s}
+\end{center}
+等。本文正文仅展示其中两个代表性切片：固定 $N$ 观察随 $m$ 的趋势、以及固定 $m$ 观察随 $N$ 的趋势；完整表可由该 CSV 再生成任意切片。
+\end{sloppypar}
+\end{remark}
+
+\textbf{基准分布（Parry/PF）}：对黄金均值约束的两状态邻接矩阵 $A$，其 Parry 最大熵测度为两状态马尔可夫链，长度 $m$ 的柱分布满足
+\[
+\pi_m(u)=\pi(u_1)\prod_{j=1}^{m-1}P_{u_j u_{j+1}},\qquad u\in X_m,
+\]
+其中 $(\pi,P)$ 的显式形式见注 \ref{prop:parry-measure-golden}。
+定理 \ref{thm:parry-endpoint-collapse}--命题 \ref{prop:parry-endpoint-mass-matrix} 进一步给出一个完全可审计的端点桥包：在 Parry 基线下，柱概率只依赖端点，端点质量矩阵与归一化幂 \(A^{m-1}/\varphi^{m-1}\) 之间存在显式对角缩放，从而可用低维端点统计构造过定约束的 \(\varphi\) 自洽检验（推论 \ref{cor:parry-endpoint-phi-estimators}）。
+
+\begin{remark}[端点审计（可复现）]\label{rem:parry-endpoint-audit}
+作为基线核对，脚本 \texttt{scripts/exp\_parry\_endpoint\_audit.py} 在 Parry 源的 IID 分块采样下同时报告
+两种端点比值估计 \(\widehat\varphi_{00/01}(m),\widehat\varphi_{01/11}(m)\)、
+端点纤维内的扁平残差（span\(_{\max}\)）以及局部交换方块残差 \(|\hat\pi_3(000)-\hat\pi_3(010)|\)；
+其输出表见表 \ref{tab:parry_endpoint_audit}。
+\end{remark}
+\input{sections/generated/tab_parry_endpoint_audit}
+
+\textbf{偏差指标}：使用第 \ref{sec:quant-fit} 节定义的
+\(
+D_{\mathrm{TV}}(\hat{\pi}_m,\pi_m)
+\)
+与
+\(
+D_{\mathrm{KL}}(\hat{\pi}_m\|\pi_m)
+\)
+作为“拟合优度”的无量纲量。
+
+\subsection{有限样本证书：可审计}
+\input{para__experiments-finite-sample-positioning}
+
+\begin{theorem}[从差异度到直方图：\texorpdfstring{$D_{\mathrm{TV}}$}{TV} 的可审计有限样本界]\label{thm:tv-certificate-hist}
+在旋转二分割模型中，令 $x_t=\{x_0+t\alpha\}$，令 $\hat{\mu}_{m,N}$ 为长度-$m$ 微态的经验分布（对 $t=0,\dots,N-1$ 的窗口计数并归一化），令 $\mu_m$ 为其极限分布（由 Lebesgue 测度诱导）。则对任意 $N\ge 1$，
+\[
+D_{\mathrm{TV}}(\hat{\mu}_{m,N},\mu_m)\ \le\ (m+1)\,D_N^*(\alpha;x_0).
+\]
+并且对折叠后的稳定类型直方图（经验分布）$\hat{\pi}_{m,N}:=(\Fold_m)_*\hat{\mu}_{m,N}$ 与其极限分布 $\pi_m^{\mathrm{fold}}:=(\Fold_m)_*\mu_m$，有
+\[
+D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})\ \le\ (m+1)\,D_N^*(\alpha;x_0).
+\]
+\end{theorem}
+
+\begin{corollary}[金属平均族的唯一最优驱动：黄金分支最小化确定性 TV 证书的主系数]\label{cor:metallic-mean-golden-unique-optimal-tv-constant}
+取常数型连分数 \(\alpha_A=[0;A,A,\dots]\)（定义 \ref{def:const-type}），并记
+\(\lambda_A=\frac{A+\sqrt{A^2+4}}{2}\)、
+\(\kappa(A):=\frac{A}{\log\lambda_A}\)（定理 \ref{thm:metallic-gap}）。
+则存在常数 \(C(A)<\infty\) 使得对任意 \(N\ge 2\) 与任意初相位 \(x_0\) 都有
+\[
+D_N^*(\alpha_A;x_0)\ \le\ \frac{\kappa(A)\log N+C(A)}{N}.
+\]
+从而对任意固定分辨率 \(m\ge 1\)，由定理 \ref{thm:tv-certificate-hist} 得到折叠后稳定类型直方图的确定性证书
+\[
+D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m^{\mathrm{fold}})
+\ \le\ (m+1)\,D_N^*(\alpha_A;x_0)
+\ \le\ (m+1)\frac{\kappa(A)\log N+C(A)}{N}.
+\]
+因此 \((\log N)/N\) 的主系数由 \((m+1)\kappa(A)\) 控制；并且由于 \(\kappa(A)\) 在 \(A\ge 1\) 上严格递增（定理 \ref{thm:metallic-gap}），黄金分支 \(A=1\) 在该确定性证书意义下唯一最优。
+\end{corollary}
+\begin{proof}
+由经典差异度上界（例如 \cite{KuipersNiederreiter1974}）：若 \(q_n\le N<q_{n+1}\)，则
+\(
+D_N^*(\alpha;x_0)\le (3+\sum_{j=1}^{n}a_j)/N
+\)。
+对常数型 \(\alpha_A=[0;A,A,\dots]\) 有 \(\sum_{j=1}^{n}a_j=nA\)，故 \(D_N^*\le (3+nA)/N\)。
+另一方面，分母递推 \(q_{n+1}=Aq_n+q_{n-1}\) 与恒等式 \(\lambda_A^2=A\lambda_A+1\) 给出归纳下界 \(q_n\ge \lambda_A^{n-1}\ (n\ge 1)\)，从而
+\(
+n\le 1+\frac{\log N}{\log\lambda_A}
+\)。
+代回即得
+\(
+D_N^*(\alpha_A;x_0)\le \frac{A}{\log\lambda_A}\frac{\log N}{N}+\frac{3+A}{N}
+\)，取 \(C(A):=3+A\) 完成第一式。
+其余由定理 \ref{thm:tv-certificate-hist} 与定理 \ref{thm:metallic-gap} 立得。证毕。
+\end{proof}
+
+\subsection{Markov 源下的 TV 置信包络：样本预算与 \texorpdfstring{$\kappa_m$}{kappa}-置信条}\label{subsec:markov-tv-envelope}
+\input{para__experiments-markov-tv-positioning}
+
+\begin{definition}[伪谱隙与经验直方图]\label{def:markov-pseudo-gap-hist}
+设 \((Z_t)_{t\ge 0}\) 为有限状态空间 \(S\) 上的不可约遍历 Markov 链，转移核为 \(P\)，平稳分布为 \(\pi\)。
+记经验直方图为
+\[
+\hat{\pi}_N(s):=\frac{1}{N}\sum_{t=0}^{N-1}\mathbf{1}_{\{Z_t=s\}},\qquad s\in S.
+\]
+记 \(\gamma_{\mathrm{ps}}\in(0,1]\) 为该链的伪谱隙（pseudo spectral gap，见 \cite{Paulin2015MarkovConcentration} 的定义与性质）。
+\end{definition}
+
+\begin{theorem}[Markov 直方图的 TV 置信包络（伪谱隙参数化）]\label{thm:markov-tv-envelope}
+在定义 \ref{def:markov-pseudo-gap-hist} 的设定下，若链从平稳分布启动（\(Z_0\sim\pi\)），则对任意 \(\delta\in(0,1)\)，以概率至少 \(1-\delta\) 有
+\[
+\boxed{\;
+D_{\mathrm{TV}}(\hat{\pi}_N,\pi)\le \frac12|S|\,\eta(N,|S|,\delta)\;},
+\qquad
+\eta(N,|S|,\delta):=\sqrt{\frac{2}{\gamma_{\mathrm{ps}}\,N}\log\frac{2|S|}{\delta}}.
+\]
+\end{theorem}
+
+\begin{corollary}[样本复杂度闭式：给定 \texorpdfstring{$\tau$}{tau} 与 \texorpdfstring{$\delta$}{delta} 的预算]\label{cor:markov-tv-sample-complexity}
+沿用定理 \ref{thm:markov-tv-envelope}。若希望以置信度 \(1-\delta\) 达到
+\(
+D_{\mathrm{TV}}(\hat{\pi}_N,\pi)\le \tau
+\)，
+则充分条件为
+\[
+\boxed{\;
+N\ \ge\ \frac{|S|^{2}}{2\,\gamma_{\mathrm{ps}}\,\tau^{2}}
+\log\frac{2|S|}{\delta}\; }.
+\]
+\end{corollary}
+
+\begin{corollary}[\texorpdfstring{$\kappa_m$}{kappa} 的置信区间：由 TV 包络直接给出误差条]\label{cor:kappa-confidence-from-tv}
+令 \(m\ge 1\)，并取 \(S=X_m\)。对任意分布 \(\pi\in\Delta(X_m)\)，\(\kappa_m(\pi):=\mathbb{E}_{\pi}[\log d_m(X)]\)（定义 \ref{def:pom-kappa}）。
+则对任意经验直方图 \(\hat{\pi}\in\Delta(X_m)\) 有确定性不等式
+\[
+\boxed{\;
+\bigl|\kappa_m(\hat{\pi})-\kappa_m(\pi)\bigr|
+\le 2\|\log d_m\|_{\infty}\,D_{\mathrm{TV}}(\hat{\pi},\pi)\;}
+\le 2\log D_m\cdot D_{\mathrm{TV}}(\hat{\pi},\pi),
+\]
+其中 \(D_m=\max_{x\in X_m}d_m(x)\)（定理 \ref{thm:pom-max-fiber}）。
+把定理 \ref{thm:markov-tv-envelope} 的 TV 包络代入，即得 \(\kappa_m\) 的显式置信半径：
+以概率至少 \(1-\delta\) 有
+\[
+\bigl|\kappa_m(\hat{\pi}_N)-\kappa_m(\pi)\bigr|
+\le \log D_m\cdot |X_m|\,
+\sqrt{\frac{2}{\gamma_{\mathrm{ps}}\,N}\log\frac{2|X_m|}{\delta}}.
+\]
+\end{corollary}
+
+\begin{remark}[可复现预算表（仅计算右端）]\label{rem:fold-kappa-tv-budget-repro}
+脚本 \texttt{scripts/exp\_fold\_kappa\_tv\_budget.py} 以闭式计算
+\[
+|X_m|=F_{m+2},\qquad D_m,\qquad
+N_{\min}=\frac{|X_m|^{2}}{2\,\gamma_{\mathrm{ps}}\,\tau^{2}}\log\frac{2|X_m|}{\delta}
+\]
+以及对应的 \(\kappa_m\) 置信半径上界 \(2\log D_m\cdot\tau\)，并输出表 \ref{tab:fold_kappa_tv_budget} 作为实验预算示例（不对概率事件做数值核验）。
+\input{sections/generated/tab_fold_kappa_tv_budget}
+\end{remark}
+
+\subsection{一个新的审计量：跨分辨率一致性残差}\label{subsec:multiscale-residual}
+
+\begin{definition}[跨分辨率一致性残差]\label{def:multiscale-residual}
+对同一数据流，令 \(\hat{\pi}_{m,N}\in\Delta(X_m)\) 与 \(\hat{\pi}_{m+1,N}\in\Delta(X_{m+1})\) 分别为分辨率 \(m\) 与 \(m+1\) 的折叠稳定类型直方图（定义 \ref{def:source-and-fold-output}）。令 \(\pi_{m+1\to m}:X_{m+1}\to X_m\) 为前缀限制映射（删去末位符号），并以 \(\pi_{m+1\to m*}\) 表示其对分布的推前。定义
+\[
+E_{m,N}
+:=
+D_{\mathrm{TV}}\!\left(\hat{\pi}_{m,N},\ \pi_{m+1\to m*}\hat{\pi}_{m+1,N}\right).
+\]
+\end{definition}
+
+\begin{remark}[语义与可判读性]
+量 \(E_{m,N}\) 不依赖任何外部基准（例如 Parry/PF），仅度量“相邻分辨率的经验分布是否可视为同一逆系统上的相容边缘”。因此它可作为一个额外的结构性审计量：当某个 \(m\) 上看似与某基准接近，但相邻层之间显著不相容时，\(E_{m,N}\) 会直接显现这种跨尺度不一致。
+\end{remark}
+
+\begin{definition}[折叠边界扰动事件]\label{def:fold-boundary-event}
+对任意 $m\ge 1$，令 $r_{m+1\to m}:\Omega_{m+1}\to\Omega_m$ 为朴素截断（定义见小节 \ref{subsec:fold-omega-restriction}），并定义两条由同一 $(m{+}1)$-窗诱导的“降分辨率”输出：
+\[
+f_m(\omega):=\Fold_m\bigl(r_{m+1\to m}(\omega)\bigr),\qquad
+g_m(\omega):=\pi_{m+1\to m}\bigl(\Fold_{m+1}(\omega)\bigr),\qquad \omega\in\Omega_{m+1}.
+\]
+定义折叠边界扰动事件
+\[
+\mathcal{B}_{m+1}:=\{\omega\in\Omega_{m+1}:\ f_m(\omega)\ne g_m(\omega)\}.
+\]
+\end{definition}
+
+\begin{proposition}[跨分辨率一致性残差的可审计上界（由边界扰动事件控制）]\label{prop:multiscale-residual-by-boundary}
+令 $\hat\mu_{m+1,N}$ 为长度-$(m{+}1)$ 微态 $\omega_{m+1}(x;t)=s_t\cdots s_{t+m}\in\Omega_{m+1}$（$t=0,\dots,N-1$）的经验分布。则
+\[
+E_{m,N}
+=D_{\mathrm{TV}}\!\left(\hat\pi_{m,N},\ \pi_{m+1\to m*}\hat\pi_{m+1,N}\right)
+\le\ \hat\mu_{m+1,N}(\mathcal{B}_{m+1}).
+\]
+并且 $\mathcal{B}_{m+1}$ 具有一个完全可计算的等价刻画：记 $x:=\Fold_m(r_{m+1\to m}(\omega))\in X_m$，则
+\[
+\omega\in\mathcal{B}_{m+1}\ \Longleftrightarrow\ \omega_{m+1}=1\ \text{且}\ x_m=1,
+\]
+其中 $x_m$ 为 $x$ 的末位符号。
+\end{proposition}
+
+\begin{proof}
+记 $\nu:=\hat\mu_{m+1,N}$。由定义，$\hat\pi_{m,N}=(f_m)_*\nu$ 且 $\pi_{m+1\to m*}\hat\pi_{m+1,N}=(g_m)_*\nu$。
+对任意集合 $A\subset X_m$，有
+\[
+\bigl|\nu(f_m\in A)-\nu(g_m\in A)\bigr|\le \nu(f_m\ne g_m)=\nu(\mathcal{B}_{m+1}).
+\]
+取上确界即得 $D_{\mathrm{TV}}((f_m)_*\nu,(g_m)_*\nu)\le \nu(\mathcal{B}_{m+1})$。
+
+下面给出等价刻画。取任意 $\omega\in\Omega_{m+1}$，记其前缀 $\omega^-:=r_{m+1\to m}(\omega)\in\Omega_m$，并记 $x:=\Fold_m(\omega^-)\in X_m$。
+若 $\omega_{m+1}=0$，则 $N(\omega)=N(\omega^-)$，从而
+\(
+\Fold_{m+1}(\omega)=\pi_{m+1}(Z(N(\omega^-)))
+\)
+的前 $m$ 位等于 $\pi_m(Z(N(\omega^-)))=x$，即 $g_m(\omega)=x=f_m(\omega)$。
+
+若 $\omega_{m+1}=1$，则 $N(\omega)=N(\omega^-)+F_{m+2}$。
+当 $x_m=0$ 时，$(x_1,\dots,x_m,1)$ 是合法 Zeckendorf 数字（无相邻 $11$），且其值恰为 $N(\omega^-)+F_{m+2}$；由 Zeckendorf 唯一性知
+\(
+\pi_{m+1}(Z(N(\omega)))=(x_1,\dots,x_m,1)
+\)，从而 $g_m(\omega)=x$。
+当 $x_m=1$ 时，$(x_1,\dots,x_m,1)$ 含有末端相邻 $11$，因此不可能是 $Z(N(\omega))$ 的长度-$(m{+}1)$ 前缀；等价地，规范化必须在第 $m,m{+}1$ 位触发合并并改变前 $m$ 位，从而 $g_m(\omega)\ne x$。
+综上，$f_m(\omega)\ne g_m(\omega)$ 当且仅当 $\omega_{m+1}=1$ 且 $x_m=1$。
+\end{proof}
+
+\begin{corollary}[稳定源的零残差（无边界扰动）]\label{cor:multiscale-zero-stable}
+若所观测到的长度-$(m{+}1)$ 微态几乎处处满足 $\omega_{m+1}(x;t)\in X_{m+1}$（等价地：底层二元序列不存在相邻 $11$，即 $s\in X_\infty$），则 $\mathcal{B}_{m+1}=\varnothing$，从而对任意样本量 $N$ 有
+\[
+E_{m,N}=0.
+\]
+特别地，在 Parry 源（黄金均值马尔可夫链）这类“输出过程本身即满足黄金均值约束”的基线下，跨分辨率一致性残差恒为零。
+\end{corollary}
+
+\begin{proposition}[与 Parry 基准偏差的确定性联系]\label{prop:multiscale-residual-parry-bound}
+令 \(\pi_m\) 为黄金均值 SFT 的 Parry 最大熵柱分布，则其满足投影一致性 \(\pi_m=\pi_{m+1\to m*}\pi_{m+1}\)。因此对任意 \(m,N\)，有
+\[
+E_{m,N}\ \le\ D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m)\ +\ D_{\mathrm{TV}}(\hat{\pi}_{m+1,N},\pi_{m+1}).
+\]
+\end{proposition}
+
+\input{sections/generated/tab_rotation_multiscale_residual_summary}
+
+\subsection{一个新的可审计结论：旋转微态的 \texorpdfstring{$D_{\mathrm{KL}}$}{KL} 证书}
+
+上一节给出了在旋转扫描（Sturmian）模型下，从星差异度导出的 \(D_{\mathrm{TV}}\) 有限样本证书。
+这里补充一个同样完全可审计的强化：在微态层面（\(\Omega_m\) 上），可以把该 \(D_{\mathrm{TV}}\) 证书进一步转译为 \(D_{\mathrm{KL}}\) 的上界证书。
+
+关键观察是：对固定 \(m\)，旋转模型产生的长度-\(m\) 微态只落在 \(m{+}1\) 个 Sturmian 因子上（参见 \cite{MorseHedlund1940,LindMarcus1995}），因此其极限分布 \(\mu_m\) 在该有限支撑上具有一个正的最小原子质量
+\(
+q_{\min}(m):=\min\{\mu_m(u):\ u\in\mathcal{W}_m\}>0
+\)。一旦得到 \(q_{\min}(m)\) 的下界，就可以把 \(D_{\mathrm{TV}}\) 控制转为 \(D_{\mathrm{KL}}\) 控制。
+
+\begin{lemma}[从 TV 到 KL：由最小原子下界给出的显式上界]\label{lem:kl-from-tv-qmin}
+设 \(p,q\) 为同一有限集合 \(S\) 上的两概率分布，并假设 \(p\ll q\)（即 \(p(s)>0\Rightarrow q(s)>0\)）。定义
+\(
+q_{\min}:=\min\{q(s):\ p(s)>0\}>0
+\)。则有
+\[
+D_{\mathrm{KL}}(p\|q)\ \le\ \ln\!\Bigl(1+\frac{\|p-q\|_1^2}{2q_{\min}}\Bigr)
+\ \le\ \frac{1}{2q_{\min}}\|p-q\|_1^2
+=\frac{2}{q_{\min}}\,D_{\mathrm{TV}}(p,q)^2,
+\]
+其中第一条不等式可由 \(D_{\mathrm{KL}}\le \ln(1+\chi^2)\) 与 \(\chi^2\le \|p-q\|_1^2/(2q_{\min})\) 推出（参见 \cite{SasonVerdu2016fDivergence}）。
+\end{lemma}
+
+接下来给出 \(q_{\min}(m)\) 的一个完全显式的下界。为简化叙述，我们取本文最常用的“规范窗”\(\beta=\alpha\)，此时长度-\(m\) 微态分割的端点集合退化为 \(\{ -k\alpha\}\ (k=0,\dots,m)\)（重复点合并后至多 \(m{+}1\) 个），每个原子就是这些点诱导的相邻间隙。
+
+\begin{proposition}[微态最小原子下界：由 Markov 常数控制]\label{prop:qmin-lowerbound-markov}
+在 Kronecker 旋转的二分割模型中，取 \(\beta=\alpha\)，并设 \(\alpha\) badly approximable（等价于 \(c(\alpha)>0\)，定义 \ref{def:markov-constant}）。则对任意 \(m\ge 1\)，
+\[
+q_{\min}(m)\ \ge\ \min_{1\le k\le m}\|k\alpha\|\ \ge\ \frac{c(\alpha)}{m},
+\]
+其中 \(\|x\|:=\min_{n\in\ZZ}|x-n|\)。特别地，对黄金分支 \(\alpha=\varphi^{-1}\)，有 \(c(\alpha)=1/\sqrt5\)，从而
+\[
+q_{\min}(m)\ \ge\ \frac{1}{\sqrt5\,m}.
+\]
+\end{proposition}
+
+\begin{corollary}[旋转微态的 KL 证书（显式）]\label{cor:rotation-microstate-kl-certificate}
+在旋转二分割模型下取 \(\beta=\alpha\)，令 \(\hat\mu_{m,N}\) 为长度-\(m\) 微态经验分布，\(\mu_m\) 为其极限分布。则由定理 \ref{thm:tv-certificate-hist}、引理 \ref{lem:kl-from-tv-qmin} 与命题 \ref{prop:qmin-lowerbound-markov}，得到
+\[
+D_{\mathrm{KL}}(\hat\mu_{m,N}\|\mu_m)
+\ \le\ \frac{2\,D_{\mathrm{TV}}(\hat\mu_{m,N},\mu_m)^2}{q_{\min}(m)}
+\ \le\ \frac{2\,(m+1)^2\,D_N^*(\alpha;x_0)^2}{q_{\min}(m)}.
+\]
+特别地，对黄金分支 \(\alpha=\varphi^{-1}\) 有显式下界 \(q_{\min}(m)\ge 1/(\sqrt5\,m)\)，从而获得一个完全显式、仅由 \((m,N)\) 控制的 KL 上界证书。
+\end{corollary}
+
+\input{sections/generated/tab_rotation_microstate_kl_certificate}
+
+\begin{lemma}[KL 对推前（粗化）的单调性]\label{lem:kl-monotone-pushforward}
+设 $S,T$ 为有限集合，$F:S\to T$ 为映射，$p,q$ 为 $S$ 上的概率分布且 $p\ll q$。则
+\[
+D_{\mathrm{KL}}(F_*p\|F_*q)\ \le\ D_{\mathrm{KL}}(p\|q).
+\]
+\end{lemma}
+
+\begin{corollary}[折叠后稳定类型的 KL 证书]\label{cor:rotation-folded-kl-certificate}
+在推论 \ref{cor:rotation-microstate-kl-certificate} 的条件下，令 $\hat\pi_{m,N}=(\Fold_m)_*\hat\mu_{m,N}$、$\pi_m^{\mathrm{fold}}=(\Fold_m)_*\mu_m$。则
+\[
+D_{\mathrm{KL}}(\hat\pi_{m,N}\|\pi_m^{\mathrm{fold}})\ \le\ D_{\mathrm{KL}}(\hat\mu_{m,N}\|\mu_m)\ \le\ \frac{2(m+1)^2D_N^*(\alpha;x_0)^2}{q_{\min}(m)}.
+\]
+特别地，对黄金分支可取 $q_{\min}(m)\ge 1/(\sqrt5\,m)$，从而获得完全显式的上界证书。
+\end{corollary}
+
+\input{sections/generated/tab_rotation_folded_kl_certificate}
+
+\begin{corollary}[到 Parry 基线的误差分解（可审计）]\label{cor:tv-decomposition-parry}
+在定理 \ref{thm:tv-certificate-hist} 的条件下，令 $\pi_m$ 为正文采用的 Parry(PF) 基线柱分布，则
+\[
+D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m)
+\ \le\
+(m+1)\,D_N^*(\alpha;x_0)\ +\ D_{\mathrm{TV}}(\pi_m^{\mathrm{fold}},\pi_m).
+\]
+\end{corollary}
+
+\begin{corollary}[在 ``真实极限等于 Parry'' 的情形下的纯证书界]\label{cor:tv-to-parry-when-gap-zero}
+若对所研究的数据生成过程满足
+\(
+\pi_m^{\mathrm{fold}}=\pi_m
+\)
+（即折叠后的极限分布恰为黄金均值 SFT 的 Parry(PF) 基线柱分布），则对任意 $N\ge 1$ 有显式界
+\[
+D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m)\ \le\ (m+1)\,D_N^*(\alpha;x_0).
+\]
+特别地，在 Parry 源（黄金均值马尔可夫链）这类 ``输出过程本身即为 $\pi_m$'' 的基线上，该不等式给出一个完全由差异度证书控制的有限样本 TV 误差界。
+\end{corollary}
+
+\begin{proposition}[低复杂度过程下与 Parry 基线的结构性偏离]\label{prop:parry-baseline-gap-sturmian}
+在旋转二分割产生的 Sturmian 过程中，对任意固定 $m$，长度-$m$ 微态的支撑大小为 $m+1$（参见 \cite{MorseHedlund1940,LindMarcus1995}）。因此折叠后极限分布 $\pi_m^{\mathrm{fold}}$ 的支撑大小满足
+\(
+|\mathrm{supp}(\pi_m^{\mathrm{fold}})|\le m+1
+\)。
+而 Parry 基线 $\pi_m$ 在 $X_m$ 上支持全部合法词（数量 $|X_m|=F_{m+2}$）。于是对任意 $m\ge 2$，
+\[
+D_{\mathrm{TV}}(\pi_m^{\mathrm{fold}},\pi_m)\ \ge\ 1-\pi_m\bigl(\mathrm{supp}(\pi_m^{\mathrm{fold}})\bigr)
+\ \ge\ 1-(m+1)\,\pi_m(0^m),
+\]
+其中 $0^m$ 为全零稳定词。由注 \ref{prop:parry-measure-golden} 的显式转移概率，
+\(
+\pi_m(0^m)=\pi(0)\,P_{00}^{m-1}=\pi(0)\,\varphi^{-(m-1)}
+\),
+从而得到显式下界
+\[
+D_{\mathrm{TV}}(\pi_m^{\mathrm{fold}},\pi_m)\ \ge\ 1-(m+1)\,\pi(0)\,\varphi^{-(m-1)}.
+\]
+特别地，当 $m\to\infty$ 时该下界趋于 $1$。这解释了实验中随 $m$ 增大 $D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m)$ 快速逼近 $1$ 的现象：它反映的是“Sturmian 低复杂度 $\Rightarrow$ 支撑稀疏”与“Parry 最大熵 $\Rightarrow$ 支撑弥散”的结构性不匹配，而非有限样本不足。
+\end{proposition}
+
+\begin{corollary}[Sturmian 情形下与 Parry 的指数逼近 $1$]\label{cor:parry-gap-exp}
+在命题 \ref{prop:parry-baseline-gap-sturmian} 的条件下，
+\[
+1-D_{\mathrm{TV}}(\pi_m^{\mathrm{fold}},\pi_m)
+\le (m+1)\,\pi(0)\,\varphi^{-(m-1)}
+=O(m\varphi^{-m}).
+\]
+因此 $D_{\mathrm{TV}}(\pi_m^{\mathrm{fold}},\pi_m)\to 1$，且收敛率为指数级。
+\end{corollary}
+
+\subsection{伯努利源/马尔可夫源：收敛保证的引用口径}
+
+\begin{remark}[伯努利源的极限与有限样本界的引用口径]\label{rem:bernoulli-source-guarantee}
+若输入为伯努利独立源（或更一般的有限状态不可约非周期马尔可夫链），则窗口过程可视为有限状态马尔可夫链的函数；对这类过程，经验直方图对其极限分布的收敛可由遍历定理给出，而有限样本偏差的指数型概率上界可由马尔可夫链的浓缩不等式给出（例如 \cite{Paulin2015MarkovConcentration}）。若采样为独立样本（无重叠窗口或独立符号），则经验分布的 $L^1$/TV 偏差具有指数尾界（例如 \cite{WeissmanEtAl2003L1Empirical}）。
+\end{remark}
+
+\subsection{基线模拟：\texorpdfstring{$\varphi^{-1}$}{phi} 旋转 vs. IID 源（含 95\% TV 证书）}\label{subsec:exp-iid-baselines}
+上一小节对旋转扫描给出了可审计的差异度证书，但该模型并不满足“强混合”意义下的独立性假设，因此更适合作为结构性示例（以及用于检验差异度证书的量纲/趋势）。若研究目标是“在合理的度量假设下，折叠直方图确实可以接近 Parry 基线”，则需要在满足独立性/混合的基线过程中进行模拟，并报告有限样本置信包络。
+
+为此，本文额外提供一组 IID 块采样实验（脚本 \texttt{scripts/exp\_iid\_sources\_fold\_vs\_parry.py}；导出 \texttt{artifacts/export/iid\_sources\_fold\_vs\_parry.csv}），其中每个样本是一段独立的长度-$m$ 比特块，折叠后得到一个独立的稳定类型样本。该设置下可直接使用 \cite{WeissmanEtAl2003L1Empirical} 的 $L^1$/TV 指数尾界生成 95\% TV 证书，并通过三角不等式把“采样误差”与“模型差异项（gap）”分离：
+\[
+D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m)\ \le\ D_{\mathrm{TV}}(\hat{\pi}_{m,N},\pi_m^{\mathrm{true}})\ +\ D_{\mathrm{TV}}(\pi_m^{\mathrm{true}},\pi_m).
+\]
+其中 $\pi_m^{\mathrm{true}}$ 为基线过程（例如 Parry 源或伯努利源）经折叠后的真实 $m$-块分布。Parry 源下第二项为 $0$（因为输出本身满足黄金均值约束，折叠为恒等），因此可以得到“随 $N$ 增大 TV 逼近 0”的直接数值验证；伯努利源下第二项一般非零，从而数值偏差会稳定在该 gap 附近，这与推论 \ref{cor:tv-decomposition-parry} 的结构性误差分解保持一致。
+
+\input{sections/generated/tab_iid_sources_fold_vs_parry_ci}
+\input{sections/generated/fig_iid_tv_vs_n}
+
+\begin{remark}[关于 \texorpdfstring{$D_{\mathrm{KL}}$}{KL} 的证书]
+总变差证书是对任意有限分割都成立的“无模型”界，因此在本文设置下最稳健。相对熵 $D_{\mathrm{KL}}(\hat{\pi}_{m,N}\|\pi_m)$ 额外依赖基线 $\pi_m$ 在支撑上的下界：若希望得到显式上界，需要对 $\min_{u\in X_m}\pi_m(u)$ 作下界估计（该量随 $m$ 指数衰减，因而得到的纯上界往往较松）。因此本文把 $D_{\mathrm{KL}}$ 主要作为经验判别量，并用 $D_{\mathrm{TV}}$ 与差异度证书给出可审计的收敛控制。
+\end{remark}
+
+\subsection{复现性声明：一键再生成}
+
+本节全部数值输出由脚本生成。复现方式：
+\begin{itemize}
+  \item 在论文目录下安装依赖：\verb|python3 -m pip install -r requirements.txt|；
+  \item 运行一键流水线：\verb|python3 scripts/run_all.py|；
+  \item 生成物：\verb|artifacts/export/*|（CSV/PNG 导出）与 \verb|sections/generated/*.tex|（可直接 \verb|\input| 的图表片段）。
+\end{itemize}
+
+\subsection{折叠直方图与 Parry 基准的系统对照}
+
+下表给出在旋转扫描模型中，折叠后稳定类型直方图与 Parry(PF) 柱分布的偏差；图中展示偏差随分辨率 $m$ 的变化趋势，以及在固定 $m$ 下随样本量 $N$ 的收敛趋势（对 $(\beta,x_0)$ 取平均；误差线为样本标准差，用以量化对相位/窗参数的敏感性）。
+
+\input{sections/generated/tab_rotation_fold_vs_parry_summary}
+\input{sections/generated/fig_rotation_tv_vs_m}
+\input{sections/generated/fig_rotation_kl_vs_m}
+\input{sections/generated/fig_rotation_tv_vs_n}
+\input{sections/generated/fig_rotation_kl_vs_n}
+
+\subsection{素数性与有限窗口：互信息的零证据}\label{subsec:prime-shadow-window-mi}
+为量化固定有限窗口对“素数性”的信息量，我们做一个直接可复现实验：对 $n=2,\dots,N$，取 $n$ 的 Zeckendorf 表示的\textbf{最低 $m$ 位窗口} $W_m$（即最小权重端的局部观察），计算素数指示函数 $\mathbf{1}_{\mathrm{prime}}(n)$ 与 $W_m$ 的互信息
+\(
+I(\mathbf{1}_{\mathrm{prime}};W_m)
+\)。
+见表 \ref{tab:prime_shadow_window_mi}：当 $m=6$（$|X_m|=21$）时互信息仅约 $8\times 10^{-3}$ bit；随着 $m$ 增大互信息上升，但这对应窗口逐渐接近全局表示。该实验提供了“固定有限核无法等价恢复整数素数集合”的可审计数值证据，并与正文关于 prime-like/primitive 轨道的层级区分一致。脚本 \texttt{scripts/exp\_prime\_shadow\_window\_mi.py} 导出 \texttt{artifacts/export/prime\_shadow\_window\_mi.json} 并生成表格片段。
+
+\input{sections/generated/tab_prime_shadow_window_mi}
+
+\begin{remark}[信息论下界：有限窗口判别素数性的算法约束]\label{rem:prime-shadow-window-mi-algorithmic-lb}
+令随机变量 \(Y:=\mathbf{1}_{\mathrm{prime}}(n)\in\{0,1\}\)，\(X:=W_m\) 为 Zeckendorf 低位窗口（本小节实验口径）。
+对任意仅依赖 \(X\) 的（可随机化）判别器 \(\widehat Y=f(X)\)，数据处理不等式给出
+\[
+I(Y;\widehat Y)\ \le\ I(Y;X).
+\]
+因此“有限窗口机制”对素数性的\textbf{可用信息增益}存在硬上界：任意算法至多减少
+\(
+I(\mathbf{1}_{\mathrm{prime}};W_m)
+\)
+比特量级的 Shannon 不确定性。
+进一步地，在二元判别情形下，Fano 不等式简化为
+\[
+h_b(P_e)\ \ge\ H(Y)-I(Y;X),
+\]
+其中 \(P_e=\mathbb{P}[\widehat Y\neq Y]\)，且 \(h_b(p):=-p\log_2 p-(1-p)\log_2(1-p)\)。
+在表 \ref{tab:prime_shadow_window_mi} 的审计切片（\(n\le 1000\)）里，当 \(m=6\) 时 \(I(Y;X)\approx 8\times 10^{-3}\) bits，
+故任何只读 \(W_6\) 的判别器在该口径下都不可能把 \(H(Y)\) 显著压缩为“近确定”；
+若观测到远超此量级的区分度提升，则其信息来源必然包含超出固定低位窗口的全局通道（例如更高分辨率、寄存器侧信息或逆极限轴束的补充坐标）。
+\end{remark}
+
+\subsection{谱指纹实验协议：并行加法三核的统一对比}\label{sec:exp-kernel-fingerprint}
+本小节给出一条可复现的“核对比”实验协议：把黄金比例基 $\beta=\varphi$ 上的三类并行加法核（$9/13/21$-local；AAMP VIII 总结为 Algorithm I/II/III，细节规则为 Algorithm S/W/G 与 A/B 触发条件，见 \cite{SvobodovaAAMPVIIIParallelAddition,FrougnyHellerPelantovaSvobodovaParallelAlgorithmsSlides}）统一压到同一组对象
+\[
+\bigl(M_K(u),\ \zeta_K(z,u),\ \lambda_K(u),\ B_{K,n}(u)\bigr),
+\]
+从而可系统比较不同核在“carry 活跃度”与“primitive（素数类）闭环结构”上的差异（定义/端点三分见第 \ref{sec:A-kernel-compare-main} 小节与附录 \ref{app:sync-kernel-A-compare}）。
+\par
+作为外部基线：黄金比例基下的加法可由 on-line 有限自动机实现（但在非冗余表示口径下并不满足并行/滑动块可计算性），见 \cite{Frougny1999OnlineAddition}。
+
+\subsubsection{统一输入接口：从在线同步图到带权矩阵族}
+对每个核 $K$，我们先把其局部并行规则编译为\textbf{单流}在线同步图 $\Gamma_K$（同余流解耦：强核 $m=4$ 条流，弱核 $m=2$ 条流；见附录 \ref{app:sync-kernel-A-compare}），并在每条同步边 $e:i\to j$ 上定义“原子活动度”
+\[
+\kappa(e)\in\ZZ_{\ge 0},
+\]
+为该步新触发的非零 $q$ 事件数（例如 $21$-local 取 $\kappa=\mathbf{1}(q^A\neq 0)+\mathbf{1}(q^B\neq 0)$）。
+据此定义带权邻接矩阵族
+\[
+(M_K(u))_{ij}=\sum_{e:i\to j}u^{\kappa(e)}.
+\]
+端点解释为：
+\[
+u=0:\ \text{仅保留 $\kappa=0$ 边（carry-free 骨架）},\qquad
+u=1:\ \text{忽略 carry 强度（无权基线）}.
+\]
+
+\subsubsection{两变量 zeta、压力曲线与 primitive 分层谱}
+对有限图（SFT）上的带权邻接矩阵，定义两变量 $\zeta$ 指纹（\cite{BrinStuck2002}，亦见第 \ref{sec:zeta-finite-part} 节）
+\[
+\zeta_K(z,u)
+=\exp\!\left(\sum_{n\ge 1}\frac{\Tr(M_K(u)^n)}{n}z^n\right)
+=\frac{1}{\det(I-zM_K(u))}.
+\]
+定义压力（谱半径）曲线
+\[
+\lambda_K(u)=\rho(M_K(u)),\qquad P_K(u)=\log\lambda_K(u),
+\]
+并定义 primitive 分层谱多项式（“素数影子”）
+\[
+B_{K,n}(u)=\sum_{\substack{\gamma\ \mathrm{primitive}\\|\gamma|=n}}u^{\kappa(\gamma)},
+\qquad \kappa(\gamma)=\sum_{e\in\gamma}\kappa(e).
+\]
+由 Witt/Möbius 反演（附录 \ref{app:sync-kernel-A-compare}）有完全显式的提取公式：
+\[
+B_{K,n}(u)=\frac{1}{n}\sum_{d\mid n}\mu(d)\,\Tr\!\left(M_K(u^d)^{\,n/d}\right).
+\]
+
+\subsubsection{端点基准（零误差）：carry-free 三分与无权退化}
+端点 $u=0$ 给出三核 carry-free 骨架的硬分化点：分别共轭于 $7$-全移位、$3$-全移位与黄金均值移位（禁相邻 $11$），对应
+\[
+\zeta_9(z,0)=\frac{1}{1-7z},\qquad
+\zeta_{13}(z,0)=\frac{1}{1-3z},\qquad
+\zeta_{21}(z,0)=\frac{1}{1-z-z^2},
+\]
+证明链见附录 \ref{app:sync-kernel-A-compare} 的命题 \ref{prop:carry-free-skeleton-three}。
+端点 $u=1$ 在确定性完备读入的编译口径下退化为“只看输入规模”的 full shift 基线：$\zeta_K(z,1)=1/(1-|B_K|z)$（推论 \ref{cor:par-add-u1-degeneracy}）。
+
+\subsubsection{端点 primitive（素数类）谱表：\texorpdfstring{$n\le 20$}{n<=20} 的零误差基准}
+端点 $u\in\{0,1\}$ 的 primitive 轨道数（按轨道计）可由闭式 Möbius 反演从 $\Tr(M_K(u)^n)$ 提取，因此可得到零误差、可跨实现核对的“端点谱表”到底座阶数 $n\le 20$。
+本稿将该谱表作为后续中间 $u\in(0,1)$ 近似指纹的基准底座，其单流与全局块级版本见表 \ref{tab:parallel-addition-kernels-endpoint-primitive}（由脚本 \path{scripts/exp_parallel_addition_kernels_endpoints_primitive.py} 再生成）。
+
+\subsubsection{中间权重 u in (0,1)：矩阵自由的随机迹估计 + Möbius 反演}
+当 $u\in(0,1)$ 时，$M_K(u)^n$ 随 $n$ 增大迅速趋于稠密，显式构造 $M_K(u)^n$ 导致计算与存储代价随之增长而难以扩展。为保证可扩展性，我们采用\textbf{稀疏矩阵-向量乘}与随机迹估计来近似
+\(
+t_n(u):=\Tr(M_K(u)^n),
+\)
+再通过 Möbius 反演提取 $\widehat B_{K,n}(u)$。
+
+\paragraph{Hutchinson 迹估计（无偏）}
+取 Rademacher 随机向量 $\mathbf r\in\{\pm1\}^N$（坐标独立同分布），则
+\[
+\mathbb{E}\bigl[\mathbf r^{\mathsf T}A\mathbf r\bigr]=\Tr(A),
+\qquad
+\widehat{\Tr}_S(A):=\frac{1}{S}\sum_{s=1}^{S}\mathbf r_s^{\mathsf T}A\mathbf r_s
+\]
+为无偏估计（\cite{Hutchinson1989ASE}；概率型样本复杂度分析见 \cite{AvronToledo2011Trace}）。
+在本文中取 $A=M_K(u)^n$，并通过递推
+\[
+\mathbf v_0=\mathbf r,\qquad \mathbf v_{k+1}=M_K(u)\mathbf v_k
+\]
+计算 $\mathbf r^{\mathsf T}M_K(u)^n\mathbf r=\mathbf r^{\mathsf T}\mathbf v_n$，从而全流程只需 $n$ 次稀疏 matvec。
+
+\paragraph{Hutch++（PSD 情形的最优阶迹估计）}
+当需要估计的是对称半正定矩阵（PSD）的迹时，可用 Hutch++ 将样本复杂度从 $O(\varepsilon^{-2})$ 改进到 $O(\varepsilon^{-1})$（仅用 matvec；\cite{MeyerMuscoMuscoWoodruff2021Hutchpp}）。
+在本文的核上，$M_K(u)$ 一般为非对称矩阵；但若改为估计 PSD 对象（例如 $\Tr((M_K(u)^n)^{\mathsf T}M_K(u)^n)$ 或块对称化后的迹），则 Hutch++ 可作为更高效的替代实现。
+
+\paragraph{primitive 分层谱的近似}
+对每个 $u$ 与每个 $n$，以 $\widehat t_n(u)\approx \Tr(M_K(u)^n)$ 代入 Möbius 反演：
+\[
+\widehat B_{K,n}(u):=\frac{1}{n}\sum_{d\mid n}\mu(d)\ \widehat t_{n/d}(u^d).
+\]
+实践中为降低“相消噪声”，我们对同一组随机探针 $\{\mathbf r_s\}$ 同时复用全部 $u^d$ 与全部所需幂次，并先在\textbf{样本层面}完成 Möbius 组合再求均值（common random numbers + correlated combining），以提升稳定性。
+
+\paragraph{多流提升（避免直积大图）}
+全局块级核由 $m\in\{4,2\}$ 条同构同余流张量装配，满足
+\(
+\Tr(M_{\mathrm{glob}}(u)^n)=\Tr(M_{\mathrm{flow}}(u)^n)^m
+\)
+与
+\(
+B_n^{\mathrm{glob}}(u)=\frac1n\sum_{d\mid n}\mu(d)\Tr(M_{\mathrm{flow}}(u^d)^{n/d})^m
+\)
+（推论 \ref{cor:par-add-global-lift-endpoints}），因此所有昂贵计算均可在单流上完成。
+
+\subsubsection{复现方式与输出：表格模板}
+该协议的可复现实现由脚本固化：
+\begin{itemize}
+  \item 单流 BFS 编译 + 端点基准 + 压力曲线采样：\path{scripts/exp_parallel_addition_kernels_bfs.py}；
+  \item 端点 primitive 谱表（闭式零误差）：\path{scripts/exp_parallel_addition_kernels_endpoints_primitive.py}；
+  \item 中间 $u$ 的随机迹估计 + Möbius 反演：\path{scripts/exp_parallel_addition_kernels_trace_hutchinson.py}。
+\end{itemize}
+表 \ref{tab:parallel-addition-kernels-fingerprint-u-samples} 给出一个最小可用的对比表模板：每行一个核，列包含端点 $\zeta_K(z,0)$、压力曲线 $\lambda_K(u)$ 的采样值、以及若干 $n$ 与 $u$ 下的 $\widehat B_{K,n}(u)$。
+\input{sections/generated/tab_parallel_addition_kernels_fingerprint_u_samples}

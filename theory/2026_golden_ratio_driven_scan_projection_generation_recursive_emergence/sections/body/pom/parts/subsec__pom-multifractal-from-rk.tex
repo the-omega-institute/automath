@@ -1,0 +1,364 @@
+\subsubsection{由 \texorpdfstring{$r_k$}{rk} 导出的空间损失谱：Rényi 族与多重分形上包络}\label{subsec:pom-multifractal-from-rk}
+定义 Fold 输出分布（对 $\Omega_m$ 上均匀输入的推前）为
+\[
+\pi_m(x):=\frac{d_m(x)}{2^m},\qquad x\in X_m,
+\]
+并记“空间损失密度”（每步保留的微态对数密度）
+\[
+s_m(x):=\frac{1}{m}\log d_m(x).
+\]
+对整数 $q\ge 2$，
+\[
+\sum_{x\in X_m}\pi_m(x)^q
+=\frac{1}{2^{qm}}\sum_x d_m(x)^q
+=\frac{S_q(m)}{2^{qm}}.
+\]
+由定理 \ref{thm:pom-collision-kernel-ak} 及 $S_q(m)=\Theta(r_q^m)$，可定义压力（离散 $q$-谱）
+\[
+P(q):=\log r_q-q\log 2,
+\]
+并得到 Rényi 投影熵率族（标准归一化）
+\[
+h_q^{\mathrm{R}}:=\frac{1}{q-1}\Bigl(q\log 2-\log r_q\Bigr)= -\frac{P(q)}{q-1}.
+\]
+对应的未归一化指纹为 \(h_q:=q\log 2-\log r_q=\log(2^q/r_q)\)，两者满足 \(h_q^{\mathrm{R}}=h_q/(q-1)\)。
+表 \ref{tab:fold_collision_renyi_spectrum} 给出了 $q=2,3,4$ 的精确值（有限状态核）与若干更高阶的枚举指纹。
+
+\begin{proposition}[两尺度下界与候选冻结阈值]\label{prop:pom-freeze-threshold}
+记平均纤维多重度
+\(
+\overline d_m:=2^m/|X_m|=2^m/F_{m+2}
+\)，
+最大纤维多重度
+\(
+D_m:=\max_{x\in X_m}d_m(x)
+\)，
+以及最大纤维达到者数 \(\kappa_m^{\mathrm{max}}\)（定义 \ref{def:pom-top-fiber-spectrum}）。
+则对任意整数 \(q\ge 2\) 与任意 \(m\ge 1\) 有两条严格下界：
+\[
+S_q(m)=\sum_{x\in X_m}d_m(x)^q\ \ge\ |X_m|\,\overline d_m^{\,q},
+\qquad
+S_q(m)\ \ge\ \kappa_m^{\mathrm{max}}\,D_m^{\,q}.
+\]
+从而结合 \(S_q(m)=\Theta(r_q^m)\)（定理 \ref{thm:pom-collision-kernel-ak}）与渐近
+\(|X_m|=\Theta(\varphi^m)\)、\(\overline d_m=\Theta((2/\varphi)^m)\)（命题 \ref{prop:pom-projection-entropy}）、
+\(D_m=\Theta(\varphi^{m/2})\)（定理 \ref{thm:pom-max-fiber}）以及 \(\kappa_m^{\mathrm{max}}=O(1)\)（定理 \ref{thm:pom-max-achievers-phase-stabilization}），得到指数尺度下界
+\[
+\boxed{\;
+\log r_q\ \ge\ \max\Bigl(\log\varphi+q(\log 2-\log\varphi),\ \tfrac{q}{2}\log\varphi\Bigr).\;}
+\]
+令 \(k_{\mathrm{freeze}}\) 为上述两条直线的交点，则
+\[
+\boxed{\;
+k_{\mathrm{freeze}}
+:=\frac{\log\varphi}{\tfrac32\log\varphi-\log 2}
+=\frac{\log\varphi}{\log(\varphi^{3/2}/2)}
+\approx 16.784. \;}
+\]
+因此在该“二尺度竞争”的口径下：当 \(q<k_{\mathrm{freeze}}\) 时 Jensen（平均尺度）下界更强；当 \(q>k_{\mathrm{freeze}}\) 时最大纤维（最坏尺度）下界更强。
+\end{proposition}
+\begin{proof}
+第一条下界由 Jensen 不等式给出：函数 \(t\mapsto t^q\)（\(q\ge 2\)）凸，故
+\(
+\frac1{|X_m|}\sum_x d_m(x)^q\ge \bigl(\frac1{|X_m|}\sum_x d_m(x)\bigr)^q=\overline d_m^q
+\)；
+第二条下界由最大值定义立得。
+再取 \(\frac1m\log(\cdot)\) 并令 \(m\to\infty\)，用所列渐近与定理 \ref{thm:pom-collision-kernel-ak} 的极限存在性即可得到 \(\log r_q\) 的下界。
+交点公式由解方程
+\(
+\log\varphi+q(\log 2-\log\varphi)=\frac{q}{2}\log\varphi
+\)
+得到；并注意 \(\tfrac32\log\varphi-\log2=\log(\varphi^{3/2}/2)\) 与注 \ref{rem:pom-defect-gap} 的“最坏/平均偏离基数”一致。证毕。
+\end{proof}
+
+\begin{remark}[可检验冻结预言：压力曲线的折点候选尺度]\label{rem:pom-freeze-prediction}
+命题 \ref{prop:pom-freeze-threshold} 给出一个完全由 Fold 的“平均尺度 vs 最坏尺度”推导出的可计算常数 \(k_{\mathrm{freeze}}\)。
+若进一步（可证伪目标）高多重度尾部的达到者数在指数尺度上仍为亚指数（即不存在一段新的“中间支”主导 \(S_q\) 的指数增长率），则压力
+\(
+P(q)=\log r_q-q\log2
+\)
+应在 \(q\approx k_{\mathrm{freeze}}\) 附近出现明显的曲率变化，并在高阶端逐步逼近由最坏尺度给出的线性支
+\(
+P(q)\approx q(\tfrac12\log\varphi-\log2)
+\)。
+表 \ref{tab:fold_collision_renyi_spectrum} 的 \(r_q\) 直接提供核验口径：对离散 \(q\) 计算 \(\Delta P(q)\) 与 \(\Delta^2P(q)\) 并观察其在 \(q\) 方向的收敛/衰减，即可把“冻结段/折点”从叙事转换为可审计判据。
+\end{remark}
+
+\begin{remark}[双极限尺度 $q=\alpha m$：立即冻结与可审计判据]\label{rem:pom-q-alpha-m-freeze}
+本节的压力/矩谱口径默认先取 $m\to\infty$、再取固定阶 $q$（或 $q\to\infty$）。若改取新的双极限尺度
+\[
+q_m:=\lfloor \alpha m\rfloor\qquad(\alpha>0\ \text{固定}),
+\]
+则碰撞矩
+\(
+S_{q_m}(m)=\sum_x d_m(x)^{q_m}
+\)
+进入“零温”区：任何与最大纤维 \(D_m\) 相比在\emph{指数密度}上有正差距的类型都会被超指数压制。
+把最大项因子提出：
+\[
+S_{q_m}(m)
+=D_m^{q_m}\sum_{x\in X_m}\Bigl(\frac{d_m(x)}{D_m}\Bigr)^{q_m}.
+\]
+因此真正可能产生非平凡竞争的，只有那些满足 \(d_m(x)/D_m=\Theta(1)\) 且达到者数在指数尺度上不稀薄的“近最大带”。
+\par
+在 Fold 的顶层谱上，已由推论 \ref{cor:pom-second-max-gap-constant} 得到显式间隙常数 \(\theta_\star<1\) 使
+\(
+D_m^{(2)}\le \theta_\star D_m
+\)，且由定理 \ref{thm:pom-max-achievers-phase-stabilization} 得到 \(\kappa_m^{\mathrm{max}}=O(1)\)。
+于是对任意 \(m,q\) 有粗上界
+\[
+S_q(m)\le \kappa_m^{\mathrm{max}}D_m^q+|X_m|\,(D_m^{(2)})^q
+\le D_m^q\Bigl(\kappa_m^{\mathrm{max}}+|X_m|\theta_\star^{\,q}\Bigr),
+\]
+从而当 \(\alpha>\alpha_{\mathrm{gap}}:=\log\varphi/(-\log\theta_\star)\) 时有
+\[
+\frac{S_{q_m}(m)}{\kappa_m^{\mathrm{max}}D_m^{q_m}}=1+O\!\left(\exp\!\bigl(m(\log\varphi+\alpha\log\theta_\star)\bigr)\right),
+\]
+即非最大纤维贡献在指数尺度上消失，$S_{q_m}$ 必由最大纤维族主导。
+\par
+更强的断言“任意 \(\alpha>0\) 都立即冻结”并不由上述粗界自动推出：它等价于近最大尾部在 $\theta\uparrow 1$ 时的达到者数仍为亚指数。
+这提供一个直接的可审计实验协议：在可计算窗口内用 residue DP 计算尾计数
+\(
+\#\{x:\ d_m(x)\ge \theta D_m\}
+\)
+的指数率，并检验其在 $\theta$ 接近 $1$ 的区间是否稳定为 $0$；若是，则双极限尺度下不存在非平凡的 \(\alpha_\ast>0\) 相变点（“冻结”在任何正斜率上立刻发生）。
+\end{remark}
+
+\begin{corollary}[\texorpdfstring{$q=\alpha m$}{q=alpha m} 零温冻结与 \texorpdfstring{$\chi$}{chi}-超选择]\label{cor:pom-diagonal-freeze-chi-superselection}
+在注 \ref{rem:pom-q-alpha-m-freeze} 的设定下，对任意 \(\alpha>0\) 令 \(q_m:=\lfloor \alpha m\rfloor\)，并定义 \(q_m\)-escort 测度
+\[
+\nu_{m,\alpha}(A):=\frac{\sum_{x\in A} d_m(x)^{q_m}}{\sum_{x\in X_m} d_m(x)^{q_m}}
+=\frac{\sum_{x\in A} d_m(x)^{q_m}}{S_{q_m}(m)}\qquad(A\subseteq X_m).
+\]
+设 \(\theta_\star<1\) 为推论 \ref{cor:pom-second-max-gap-constant} 的顶端间隙常数，使得对充分大的 \(m\) 有 \(D_m^{(2)}\le \theta_\star D_m\)，并令
+\[
+\alpha_{\mathrm{gap}}:=\frac{\log\varphi}{-\log\theta_\star}.
+\]
+则对任意 \(\alpha>\alpha_{\mathrm{gap}}\) 存在常数 \(c(\alpha)>0\) 使得当 \(m\) 充分大时成立：
+\begin{enumerate}
+\normalfont
+  \item \textbf{最大纤维冻结：}
+  \[
+  \nu_{m,\alpha}(\mathcal{M}_m)\ge 1-e^{-c(\alpha)m},
+  \qquad
+  \mathcal{M}_m:=\{x\in X_m:\ d_m(x)=D_m\}.
+  \]
+  \item \textbf{\(\chi\)-超选择：}设 \(\chi_m\) 为定理 \ref{thm:pom-maxfiber-orientation-charge-periodic} 给出的最大纤维族取向指纹常值，则
+  \[
+  \nu_{m,\alpha}\bigl(\{x\in X_m:\ \chi(x)=\chi_m\}\bigr)\ge 1-e^{-c(\alpha)m}.
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由注 \ref{rem:pom-q-alpha-m-freeze} 的分解与上界，
+\[
+S_{q_m}(m)=\sum_{x\in\mathcal{M}_m}D_m^{q_m}+\sum_{x\notin\mathcal{M}_m}d_m(x)^{q_m}
+\le \kappa_m^{\mathrm{max}}D_m^{q_m}+|X_m|(\theta_\star D_m)^{q_m}.
+\]
+因此
+\[
+1-\nu_{m,\alpha}(\mathcal{M}_m)
+\le
+\frac{|X_m|\theta_\star^{q_m}}{\kappa_m^{\mathrm{max}}}.
+\]
+由 \(|X_m|=\Theta(\varphi^m)\) 且 \(\kappa_m^{\mathrm{max}}=O(1)\)（定理 \ref{thm:pom-max-achievers-phase-stabilization}），并用 \(q_m\sim \alpha m\)，可得
+\[
+\frac{|X_m|\theta_\star^{q_m}}{\kappa_m^{\mathrm{max}}}
+\le
+\exp\!\bigl((\log\varphi+\alpha\log\theta_\star)m+O(1)\bigr)
+=e^{-c(\alpha)m}
+\]
+其中 \(c(\alpha):=-(\log\varphi+\alpha\log\theta_\star)>0\) 当且仅当 \(\alpha>\alpha_{\mathrm{gap}}\)。
+这给出第一条。
+\par
+第二条由集合包含关系
+\(
+\mathcal{M}_m\subseteq \{x:\chi(x)=\chi_m\}
+\)
+（定理 \ref{thm:pom-maxfiber-orientation-charge-periodic}）与第一条立得。证毕。
+\end{proof}
+
+\begin{theorem}[对角矩的 \(m^2\) 退化自由能：\texorpdfstring{$S_{\lfloor\tau m\rfloor}$}{S_{floor(tau m)}} 仅决定顶端指数]\label{thm:pom-diagonal-moment-free-energy-degeneracy}
+设 \(|X_m|=\exp(O(m))\)，并令
+\(
+D_m:=\max_{x\in X_m} d_m(x)
+\)
+与
+\(
+S_q(m)=\sum_{x\in X_m} d_m(x)^q
+\)
+如上。
+假设极限
+\[
+\alpha_*:=\lim_{m\to\infty}\frac{1}{m}\log D_m
+\]
+存在。
+对任意 \(\tau>0\) 令 \(q_m(\tau):=\lfloor\tau m\rfloor\)，则极限
+\[
+F(\tau):=\lim_{m\to\infty}\frac{1}{m^2}\log S_{q_m(\tau)}(m)
+\]
+存在且满足
+\[
+\boxed{\;F(\tau)=\tau\,\alpha_*.\;}
+\]
+因此对角尺度族 \(\{F(\tau):\tau>0\}\) 与单个常数 \(\alpha_*\) 等价，并在 \(m^2\) 指数尺度上对中层谱信息完全失明。
+\end{theorem}
+\begin{proof}
+由 \(D_m^{q}\le S_q(m)\le |X_m|D_m^q\) 得
+\[
+\frac{q_m(\tau)}{m^2}\log D_m
+\ \le\
+\frac{1}{m^2}\log S_{q_m(\tau)}(m)
+\ \le\
+\frac{\log|X_m|}{m^2}+\frac{q_m(\tau)}{m^2}\log D_m.
+\]
+由 \(\log|X_m|=O(m)\) 知 \(\log|X_m|/m^2\to 0\)，又 \(q_m(\tau)/m\to\tau\) 且 \(\frac{1}{m}\log D_m\to\alpha_*\)，夹逼即得。证毕。
+\end{proof}
+
+\begin{corollary}[对角观测的强不可识别性：固定顶端而中层压力仍可变]\label{cor:pom-diagonal-observation-strong-unidentifiability}
+在定理 \ref{thm:pom-diagonal-moment-free-energy-degeneracy} 的设定下，若另一族纤维谱 \(\tilde d_m\) 满足
+\(
+\lim_{m\to\infty}\frac{1}{m}\log \tilde D_m=\alpha_*
+\)
+且 \(|\tilde X_m|=\exp(O(m))\)，则对每个 \(\tau>0\) 有
+\[
+\frac{1}{m^2}\log \tilde S_{q_m(\tau)}(m)-\frac{1}{m^2}\log S_{q_m(\tau)}(m)\to 0,
+\]
+其中 \(\tilde D_m:=\max_x \tilde d_m(x)\)、\(\tilde S_q(m):=\sum_x \tilde d_m(x)^q\)。
+然而即使在保持 \(D_m\)（乃至 \(\kappa_m^{\mathrm{max}}\)）不变的前提下，固定阶碰撞矩（例如 \(S_2(m)\)）仍可通过重新分配非最大层质量在指数尺度上发生可观改变，从而对角矩并不能决定任何固定阶压力谱。
+\end{corollary}
+\begin{proof}
+第一式由定理 \ref{thm:pom-diagonal-moment-free-energy-degeneracy} 分别作用于两族谱立得。
+\par
+对第二句，固定 \(m\) 并记 \(N=2^m\)、\(n=|X_m|\)、\(D=D_m\)。
+取某个 \(x_\star\) 使 \(d_m(x_\star)=D\)，并令剩余质量 \(R:=N-D\)。
+在保持最大值仍为 \(D\) 的约束下，可构造两种分配：
+\begin{enumerate}
+  \item \emph{扩散型}：将 \(R\) 尽量均匀分配到 \(n-1\) 个非最大类型上（再作整数修正），则
+  \(
+  S_2(m)=D^2+\Theta\!\bigl(R^2/(n-1)\bigr)
+  \)；
+  \item \emph{集中型}：将 \(R\) 尽量集中在尽可能少的类型上并保持每项 \(<D\)（例如用若干个 \(D-1\) 填充并以余量收尾），则
+  \(
+  S_2(m)=D^2+\Theta(RD)
+  \)。
+\end{enumerate}
+当 \(n=\exp(\Theta(m))\) 且 \(D=\exp(\Theta(m))\) 时，上述两式在 \(\frac1m\log S_2(m)\) 的极限上给出不同常数；从而在保持顶端 \(D_m\) 不变的前提下，固定阶压力谱仍可发生正幅度改变。证毕。
+\end{proof}
+
+\begin{proposition}[矩谱给出的多重分形上包络（Legendre--Fenchel 口径）]\label{prop:pom-fold-multifractal-envelope}
+设 $P$ 仅在整数 $q\ge 2$ 上给定。令 $\widetilde P:\RR_{\ge 2}\to\RR\cup\{+\infty\}$ 为集合点 $\{(q,P(q)):\ q\in\ZZ_{\ge 2}\}$ 的\emph{下闭包凸延拓}（即最小的下半连续凸函数，使得 $\widetilde P(q)\le P(q)$ 对所有整数 $q\ge2$ 成立）。
+定义
+\[
+f^\star(s):=\inf_{q\ge 2}\bigl(qs-\widetilde P(q)\bigr)-\log 2,
+\]
+并定义“近似层集增长率”
+\[
+f(s):=\lim_{\varepsilon\to 0}\limsup_{m\to\infty}\frac{1}{m}\log\Bigl|\{x\in X_m:\ |s_m(x)-s|<\varepsilon\}\Bigr|.
+\]
+则对所有 $s$ 有上界 $f(s)\le f^\star(s)$。因此只要能计算 $\{r_q\}_{q\ge 2}$，就能得到一条可审计的“空间损失谱上包络” $f^\star(s)$。
+\end{proposition}
+\begin{proof}[证明要点]
+对任意 $q\ge 2$ 与任意集合 $A\subseteq X_m$，由 Markov 不等式与
+\(
+\sum_x \pi_m(x)^q=S_q(m)/2^{qm}
+\)
+可把层集基数用 $S_q(m)$ 控制；再用 $S_q(m)=\Theta(r_q^m)$ 得到指数上界。对 $q$ 取最优并以凸延拓吸收“只在整数处已知”的限制，即得结论。细节与第 \ref{subsec:chi-ldp} 小节的 Legendre 估价在结构上同型（只是此处的参数轴是 $q$ 而非连续倾斜参数 $t$）。
+\end{proof}
+
+\subsection{空间—时间对偶与资源函数}\label{subsec:pom-resources}
+\begin{definition}[嵌入—演化—投影正规形]\label{def:pom-normal-form}
+对规模参数 $n$（例如外表位长/输入大小）的一族运算 $f_n$，定义其正规形为
+\[
+f_n=\Pi_n\circ U^{T(n)}\circ \iota_n,
+\]
+其中 $\iota_n$ 为升维嵌入，$U^{T(n)}$ 为本体演化的迭代，$\Pi_n$ 为由 $P_Z,P_{\le}$ 组合的读出投影。
+\end{definition}
+
+\begin{definition}[空间代价与时间代价]\label{def:pom-space-time}
+令 $\mathcal M_n$ 为实现 $f_n$ 时被激活的隐纤维块（素数轴、相位轴、余量状态等），定义
+\[
+S(n):=\log|\mathcal M_n|.
+\]
+定义时间代价为最小稳定步数
+\[
+T(n):=\min\{t:\ \Pi_n(U^t(\iota_n(x)))\ \text{对所有输入稳定}\}.
+\]
+空间—时间对偶律指：增大 $S(n)$ 可将混合线性化并降低 $T(n)$，反之限制 $S(n)$ 将迫使信息沿局部传播累积。
+\end{definition}
+
+\begin{definition}[原子空间代价（prime-like 原子预算）]\label{def:pom-atom-space-cost}
+固定核/演化算子 $T$（或其带权版本 $T(u)$），令 $p_n$ 为 primitive 轨道数（或 primitive 分层谱在 $u=1$ 的取值；见定义 \ref{def:pom-proj-prim}）。定义长度 $n$ 的原子空间代价为
+$$
+S_{\mathrm{atom}}(n):=\log p_n.
+$$
+当 $p_n$ 带权（例如 $p_n(u)$ 或 $B_{K,n}(u)$）时，取 $u=1$ 可视为“无权原子预算”，取 $u=0$ 给出 carry-free 原子预算（推论 \ref{cor:Bn0-equals-primitive-skeleton}）。
+\end{definition}
+
+\begin{remark}[时间$\leftrightarrow$原子空间的可审计互译]\label{rem:pom-atom-audit}
+由命题 \ref{prop:time-space-commuting-diagram} 的交换图与 Möbius/Witt 反演（见注 \ref{rem:pom-trace-to-prime}），$p_n$ 与时间迹 $a_n=\Tr(T^n)$ 可互相确定：
+$$
+p_n=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d},
+\qquad
+a_n=\sum_{d\mid n} d\,p_d.
+$$
+因此 $S_{\mathrm{atom}}(n)$ 是把“时间侧不可约循环”压成空间侧 prime-like 原子谱的可审计指纹；尤其在素数长度 $\ell$ 上，primitive 项隔离“不可约循环”与“幂重复循环”的差异（参见注 \ref{rem:pom-prime-length-probe} 的素数长度探针公式），可用于检验张量装配的隐藏耦合与并行独立性。
+\end{remark}
+
+\begin{corollary}[折叠诱导的空间下界]\label{cor:pom-space-lower-bound}
+在分辨率 $m$ 上，若要求折叠纤维的微态可区分（即 $P_Z$ 不丢失该层信息），则隐纤维规模至少满足
+\[
+|\mathcal M_m|\ \ge\ \frac{|\Omega_m|}{|X_m|}=\frac{2^m}{F_{m+2}},
+\]
+等价地
+\[
+S(m)\ \ge\ S_Z(m)=\log\!\left(\frac{2^m}{F_{m+2}}\right).
+\]
+因此空间代价的紧确下界由折叠熵率直接锁定。
+\end{corollary}
+
+\subsection{统一算术：同一演化，不同读出}\label{subsec:pom-unified-arith}
+\paragraph{加法}由“逐位叠加 $\Rightarrow$ 规范投影”给出：
+\[
+a\oplus b=\Fold_\infty(a+b),
+\]
+其投影词为 $W=(1,0)$（推论 \ref{cor:add-as-fold}）。
+
+\begin{remark}[加法作为一次投影的空间损失谱：为何真实输入 $40$ 状态核具有独立价值]\label{rem:addition-as-projection-collision-spectrum}
+把加法视为“升维到两条输入轨道 \((x,y)\) 再投影回稳定类型”的一次读出，则其空间侧不可区分性可用
+\(\mathrm{MOM}_q\)（定义 \ref{def:pom-moment-q}）导出的碰撞谱常数 \(r_q^{\oplus}=\rho(A_q^{\oplus})\) 度量：它仅依赖于底层有限状态机制核（转导器的标记图），与工程层面的并行化/优化无关。
+附录 \ref{app:real-input-40-addition-collision-spectrum} 以“归一化核（$10$ 状态） vs.\ 真实算术核（$40$ 状态）”两种口径对同一加法投影计算 \(r_2^{\oplus}\)，得到指数尺度上可审计的常数因子差异（命题 \ref{prop:addition-collision-spectrum-sync10-vs-real40}）：
+忽略输入合法性约束会把二阶同像碰撞强度系统性夸大约一倍以上。
+因此，真实输入 $40$ 状态核并非对归一化器的纯工程性包裹，而是在“空间损失谱”这一可审计资源指标上携带独立信息。
+\end{remark}
+
+\paragraph{乘法}同样可视为“线性化 $\Rightarrow$ 规范投影”，其投影词仍为 $W=(1,0)$；差异体现在 $D_U(n)$ 与所选纤维：相位纤维路线把卷积对角化为点wise 乘，素数纤维路线把乘法线性化为指数坐标的加法（定义 \ref{def:pom-prime-fiber}）。该分解不改变本体原语，仅改变线性化深度与空间开销的分配。
+
+\paragraph{减法}有两条读出路径：
+（i）先以 $P_{\le}$ 判定符号/大小，再执行归一化；其投影词 $W=(1,1)$。
+（ii）在冗余字母表中把符号内化到 $P_Z$ 的更强归一化中，避免显式 $P_{\le}$，从而 $W=(1,0)$ 但 $\delta_Z$ 增大。这一分解把“序信息”转移到规范投影的本体核中。
+若序读出采用角色投影 $P_\chi$，则该步骤可视为对 residue/角色的稳定判定，其时间尺度由 $\tau_{\mathrm{mix}}$ 控制。
+
+\paragraph{除法/商余}满足
+\[
+a=bq+r,\quad 0\le r<b,
+\]
+因此 $P_{\le}$ 是不可约读出步骤。由注 \ref{rem:division-as-selection} 的“解方程 + 规范形选择”口径可得：长除式对应 $k_{\le}$ 的线性增长；倒数/迭代式把多次乘法吸收到 $D_U(n)$ 中并以常数次 $P_{\le}$ 校正。两者的差异是投影词的不同实现，而非本体原语的差异。
+在角色投影口径下，商余可由 $P_\chi$ 的同余分层稳定读出；其不可并行主尺度即为混合时间 $\tau_{\mathrm{mix}}$。
+
+\begin{remark}[生成机制与“数学体系”的含义]\label{rem:pom-math-world}
+“生成整个数学体系”在此不指形式系统的完备性，而指对象与运算的生成机制统一：对象作为本体态在投影族下的稳定读出，运算作为投影词的组合闭包。不同数学分支仅对应于所选纤维与投影闭包的差异，而非本体的差异。
+\end{remark}
+
+\begin{definition}[分辨率可判定与分辨率完备性]\label{def:pom-resolution-completeness}
+令 $\mathcal{F}_m$ 为由长度 $m$ 的柱事件生成的 $\sigma$-代数（等价于“只依赖有限窗口”的可观测闭包），并记 $\mathcal{F}_\infty:=\sigma\!\bigl(\bigcup_{m\ge 1}\mathcal{F}_m\bigr)$。
+\begin{itemize}
+  \item 称性质/命题 $\mathsf{P}$ \textbf{$m$-可判定}，若其指示函数属于 $\mathcal{F}_m$（即仅依赖有限窗口）。
+  \item 称 $\mathsf{P}$ \textbf{分辨率可判定}，若存在某个 $m$ 使其 $m$-可判定（即 $\mathbf{1}_{\mathsf P}\in\mathcal{F}_\infty$）。
+  \item 称一个概念体系在给定读出族下\textbf{分辨率完备}，若其全部基本可观测命题均为分辨率可判定。
+\end{itemize}
+\end{definition}
+
+\begin{remark}[分辨率边界与序投影]\label{rem:pom-resolution-boundary}
+条件期望塔性质表明：$P_Z$ 的可观测闭包自然落在 $\mathcal{F}_\infty$ 中；因此所有“稳定读出”的命题都属于分辨率可判定层级。相对地，序投影 $P_{\le}$ 典型对应跨窗口聚合与全局序约束（定义 \ref{def:pom-proj-order}），其判定一般不在任何固定 $\mathcal{F}_m$ 内闭合，从而在结构上形成分辨率边界：若不引入额外纤维轴束（例如模轴空间化，定理 \ref{thm:pom-order-spatialization}），则必须付出随规模增长的读出深度。
+\end{remark}

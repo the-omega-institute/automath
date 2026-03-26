@@ -1,0 +1,85 @@
+\subsubsection{加法作为投影的碰撞谱：10 状态同步核 vs.\ 40 状态真实输入核}\label{app:add-collision-spectrum}
+
+\paragraph{加法 = 升维到 \texorpdfstring{$\{0,1\}^2$}{\{0,1\}^2} 再投影回 \texorpdfstring{$X_\infty$}{X\_infty}}
+在稳定地址层，Zeckendorf 加法可写为
+\[
+c\oplus d=\Fold_\infty(c+d),
+\]
+其中 \((c+d)_j:=c_j+d_j\in\{0,1,2\}\) 为逐位和；\(\Fold_\infty\) 为把 \(\{0,1,2\}\) 归一化回 \(\{0,1\}\) 的在线归一化门，其可由 10 状态同步核 \(K_{\mathrm{sync}}\) 实现（表 \ref{tab:sync-kernel-A-compare}）。
+因此“加法作为一次投影”的机制可被视为：
+\[
+\{0,1\}^{\ZZ}\times\{0,1\}^{\ZZ}\xrightarrow{\ (x,y)\mapsto x+y\ }\{0,1,2\}^{\ZZ}\xrightarrow{\ K_{\mathrm{sync}}\ }\{0,1\}^{\ZZ}\supseteq X_\infty,
+\]
+即先把输入升维到两条比特流（本体场），再由归一化核投影回稳定地址外表。
+
+\paragraph{碰撞矩与空间损失谱常数}
+把上式视为一个确定性转导器（输入字母表 \(\{0,1\}^2\)，输出字母表 \(\{0,1\}\)）。
+对窗口长度 \(m\) 与输出块 \(y\in\{0,1\}^m\)，令
+\[
+d^{\mathrm{add}}_m(y):=\#\{(x,x')\in(\{0,1\}^m)^2:\ \Fold_m(x+x')=y\},
+\qquad
+S^{\mathrm{add}}_q(m):=\sum_{y\in\{0,1\}^m}d^{\mathrm{add}}_m(y)^q\quad(q\ge 2).
+\]
+则 \(S^{\mathrm{add}}_q(m)\) 的指数增长率由一族有限非负整数 moment-kernel \(A^{\mathrm{add}}_q\) 控制，记
+\[
+r^{\mathrm{add}}_q:=\rho\!\left(A^{\mathrm{add}}_q\right),
+\qquad
+S^{\mathrm{add}}_q(m)=\Theta\!\left((r^{\mathrm{add}}_q)^m\right).
+\]
+尤其当 \(q=2\) 时，有概率解释：若从 \(\{0,1\}^{2m}\) 上均匀独立抽取两对输入 \((x_1,x'_1),(x_2,x'_2)\)，则
+\[
+\mathbb{P}\bigl[\Fold_m(x_1+x'_1)=\Fold_m(x_2+x'_2)\bigr]=\frac{S^{\mathrm{add}}_2(m)}{16^m},
+\qquad
+h^{\mathrm{add}}_2=\log\!\left(\frac{16}{r^{\mathrm{add}}_2}\right).
+\]
+
+\paragraph{真实输入约束的 40 状态提升}
+若要求两条输入流本身为合法 Zeckendorf 轨道（各自禁止相邻 \(11\)），则可把该约束并入状态，得到 40 状态真实输入同步核 \(K_{\mathrm{real}}\)（表 \ref{tab:sync-kernel-A-compare}）。
+在该核上对同一“加法投影”做相同的碰撞 moment 编译，得到真实输入下的 \(r^{\mathrm{add,real}}_q\)。
+
+\begin{proposition}[输入合法性约束对碰撞主尺度的单调压缩]\label{prop:add-collision-spectrum-sofic-monotone-perron}
+对任意整数 \(q\ge 2\)，令 \(A_q^{\mathrm{add,sync}}\) 表示“无约束同步口径”下的 \(q\)-碰撞 moment-kernel realization，并令 \(A_q^{\mathrm{add,real}}\) 表示将输入从全移位收缩到任意 sofic 子语言（例如两条输入流各自禁止相邻 \(11\)）后得到的真实输入 moment-kernel realization。
+则可取两者满足逐项不等式
+\[
+0\le A_q^{\mathrm{add,real}}\ \le\ A_q^{\mathrm{add,sync}}
+\]
+从而其 Perron 主尺度满足
+\[
+\rho\!\left(A_q^{\mathrm{add,real}}\right)\ \le\ \rho\!\left(A_q^{\mathrm{add,sync}}\right).
+\]
+若该收缩确实删去了一条在 Perron 支撑上可达的同步碰撞路径，则严格不等号成立。
+\end{proposition}
+\begin{proof}
+将输入语言从全移位收缩到 sofic 子语言，等价于在“同步直积并施加逐步同输出约束”所得到的计数图上删去一族允许的输入边/状态；因此真实输入核可视为同步核的一个（可能带零化的）主子核，满足逐项不等式 \(0\le A^{\mathrm{add,real}}_q\le A^{\mathrm{add,sync}}_q\)。
+对非负矩阵，谱半径对逐项不等式单调（例如由 Collatz--Wielandt 公式直接推出），故得主尺度不等式。
+严格性由 Perron--Frobenius 理论：若差异边/态位于 Perron 正特征向量的支撑可达部分，则谱半径严格下降。证毕。
+\end{proof}
+
+\begin{corollary}[输入约束提高 Rényi 指纹率]\label{cor:add-collision-spectrum-renyi-monotone}
+沿用命题 \ref{prop:add-collision-spectrum-sofic-monotone-perron} 的记号，并以输入字母表 \(\Sigma_{\mathrm{in}}=\{0,1\}^2\) 计数定义
+\[
+h_q^{\mathrm{add}}:=\log\!\left(\frac{|\Sigma_{\mathrm{in}}|^{q}}{r_q^{\mathrm{add}}}\right)
+\qquad (q\ge 2).
+\]
+则对所有 \(q\ge 2\) 有
+\[
+h_q^{\mathrm{add,real}}\ \ge\ h_q^{\mathrm{add,sync}}.
+\]
+\end{corollary}
+\begin{proof}
+在 \(|\Sigma_{\mathrm{in}}|\) 固定时，\(h_q^{\mathrm{add}}\) 随 \(r_q^{\mathrm{add}}\) 单调递减。
+由命题 \ref{prop:add-collision-spectrum-sofic-monotone-perron} 得 \(r_q^{\mathrm{add,real}}\le r_q^{\mathrm{add,sync}}\)，代入即得结论。证毕。
+\end{proof}
+
+\begin{remark}[常数级差异（可复现）]\label{rem:add-collision-spectrum-10-vs-40}
+用仓库脚本 \texttt{scripts/exp\_add\_collision\_spectrum\_10\_vs\_40.py}（基于对称商/系数提取的 histogram-DP moment-kernel 实现）可复现计算：
+\(\;r^{\mathrm{add}}_2\approx 8.743\;\)、
+\(\;r^{\mathrm{add}}_3\approx 19.851\;\)，
+而在真实输入约束下
+\(\;r^{\mathrm{add,real}}_2\approx 3.999\;\)。
+对照表见表 \ref{tab:add-collision-spectrum-10-vs-40}。
+\input{sections/generated/tab_add_collision_spectrum_10_vs_40}
+
+该结论给出一个直接、可量化的“40 状态核的独立价值”锚点：把输入合法性约束提升为核几何后，“加法作为投影”的空间侧碰撞常数发生显著改变（常数因子级下降），从而其空间损失谱不再可由 10 状态归一化器的无约束口径替代。
+\end{remark}
+

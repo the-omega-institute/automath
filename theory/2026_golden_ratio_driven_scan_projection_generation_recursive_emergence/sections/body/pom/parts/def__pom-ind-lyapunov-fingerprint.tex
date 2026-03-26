@@ -1,0 +1,593 @@
+
+\begin{definition}[Lyapunov 指纹常数（典型独立集下界指数）]\label{def:pom-ind-lyapunov-fingerprint}
+令 $\nu$ 为黄金均值移位 $X\subset\{0,1\}^{\mathbb N}$ 上的一个平稳遍历概率分布。
+对 $\nu$-典型的无限序列 $x=x_1x_2\cdots$，记其长度-$m$ 前缀为 $x_{1..m}$，并据定义 \ref{def:pom-carry-interference-graph} 构造干涉图 $G(x_{1..m})$。
+若极限存在，则定义
+\[
+\Lambda_{\mathsf{Ind}}(\nu):=\lim_{m\to\infty}\frac{1}{m}\log \#\mathsf{Ind}(G(x_{1..m})).
+\]
+\end{definition}
+
+\begin{remark}[随机矩阵乘积视角]\label{rem:pom-ind-random-matrix}
+在推论 \ref{cor:pom-fiber-lower-bound-cascade} 与命题 \ref{prop:pom-ind-matrix-grammar} 的表达下，$\#\mathsf{Ind}(G(x_{1..m}))$ 可被视为“块乘积 + 块内二字母矩阵词”的复合对象。
+因此，在任何给定的平稳遍历来源下，块序列与块内缺陷模式诱导一个平稳的矩阵乘积过程；其顶 Lyapunov 指数（再按“块顶点密度/原始长度密度”重标度）提供了典型下界指数 $\Lambda_{\mathsf{Ind}}$ 的一个可审计解释与数值估计路线。
+\end{remark}
+
+\subsubsection{纤维的分量分解与独立集多项式：从计数到全分布}\label{subsec:pom-fiber-indset}
+在合流终止的局部重写口径下，固定稳定类型 \(x\in X_m\) 后，任一前像 \(\omega\in\Fold_m^{-1}(x)\) 都可由对 \(x\) 施加若干次逆代换 \(100\mapsto 011\) 生成（对应正向的 Fibonacci 进位 \(011\mapsto 100\)）。
+当两次逆代换占用的长度-\(3\) 局部区间发生重叠时，会在中间态产生非二元位（数字 \(2\)），因此合法选择必须满足“不可相邻选择”的冲突约束。
+下面把该机制收束为一个完全离散、可审计的对象：一条诱导路径图上的独立集系统。
+
+\begin{definition}[候选位点、诱导路径图与纤维生成函数]\label{def:pom-fiber-adm-path}
+固定分辨率 \(m\ge 2\)。记
+\[
+k:=\lfloor m/2\rfloor,
+\qquad
+k_{+}:=k+\mathbf{1}_{\{m\ \mathrm{odd}\}}=\lceil m/2\rceil .
+\]
+当 \(m\) 为奇数时，引理 \ref{lem:pom-one-bit} 的隐藏位分裂在逆代换链上表现为一个额外的端点自由度；记号 \(k_{+}\) 用于统一容纳这一端点。
+对 \(x\in X_m\)，令 \(\mathsf{Adm}(x)\subseteq\{1,\dots,k_{+}\}\) 为在“高位到低位”的逆代换执行口径下，\emph{可实施}逆代换 \(100\mapsto 011\) 的候选位点集合。
+候选位点的合法选择需满足不可相邻约束（否则区间重叠产生非二元位），这自然诱导一条路径图约束。
+令 \(P_{k_{+}}\) 为顶点 \(1,\dots,k_{+}\) 的路径图，并定义诱导子图
+\[
+\Gamma_x:=P_{k_{+}}[\mathsf{Adm}(x)].
+\]
+\par
+对 \(\omega\in\Fold_m^{-1}(x)\)，记 \(r(\omega)\) 为从 \(x\) 生成 \(\omega\) 所用逆代换次数（在定理 \ref{thm:pom-fiber-indset-factorization} 给出的规范双射下等于所选独立集的大小）。
+定义纤维的逆代换生成函数
+\[
+Z_x(t):=\sum_{\omega\in \Fold_m^{-1}(x)} t^{r(\omega)}.
+\]
+并对任意 \(\ell\ge 0\) 定义路径图 \(P_\ell\) 的独立集多项式
+\[
+I_\ell(t):=\sum_{S\in\mathsf{Ind}(P_\ell)} t^{|S|}.
+\]
+\end{definition}
+
+\begin{theorem}[纤维的精确分量分解：独立集系统与乘法因子化]\label{thm:pom-fiber-indset-factorization}
+对任意 \(x\in X_m\)，存在一个由 \(x\) 唯一确定的候选位点集合 \(\mathsf{Adm}(x)\) 使得
+\[
+\Fold_m^{-1}(x)\ \cong\ \mathsf{Ind}(\Gamma_x),
+\qquad
+\Gamma_x=P_{k_{+}}[\mathsf{Adm}(x)],
+\]
+其中 \(\mathsf{Ind}(\Gamma_x)\) 为 \(\Gamma_x\) 的独立集族。
+在该规范同构下，指数 \(r(\omega)\) 等于对应独立集的大小，因此
+\[
+Z_x(t)=\sum_{S\in\mathsf{Ind}(\Gamma_x)} t^{|S|}.
+\]
+进一步，若 \(\Gamma_x\) 的连通分量依次同构于若干条路径 \(P_{\ell_1},\dots,P_{\ell_r}\)，则生成函数与计数严格分解为
+\[
+Z_x(t)=\prod_{i=1}^r I_{\ell_i}(t),
+\qquad
+d_m(x):=|\Fold_m^{-1}(x)|=Z_x(1)=\prod_{i=1}^r F_{\ell_i+2}.
+\]
+\end{theorem}
+
+\begin{proof}
+固定本文在定义 \ref{def:pom-fold-prime-lift} 中采用的确定性正规化策略 \(\mathsf S\)，并用其诱导的逆向回放口径对纤维作规范枚举。
+由于正向重写系统合流终止（命题 \ref{prop:fold-rewrite-newman}），对任意 \(\omega\in\Omega_m\) 都存在有限轨迹把 \(\iota_m(\omega)\) 归约到唯一正规形；从而逆向回放给出“从 \(x=\Fold_m(\omega)\) 到 \(\omega\)”的一个确定性生成过程。
+\par
+在二元输入的口径下，该逆向生成过程中唯一需要记录的离散自由度来自逆代换 \(100\mapsto 011\) 的触发选择：若两次触发的局部区间重叠，则在回放中间态出现数字 \(2\)，从而失去二元性；因此可行选择必须满足不可相邻约束，等价于在路径图 \(P_{k_{+}}\) 上取独立集。
+记 \(\mathsf{Adm}(x)\) 为在该规范回放口径下\emph{确实可被触发}的候选位点集合，则每个前像 \(\omega\in\Fold_m^{-1}(x)\) 与一组独立集选择 \(S\in\mathsf{Ind}(\Gamma_x)\) 一一对应，且对应的逆代换次数恰为 \(|S|\)。
+于是 \(Z_x(t)=\sum_{S\in\mathsf{Ind}(\Gamma_x)}t^{|S|}\)。
+\par
+最后，\(\Gamma_x\) 的连通分量互不相连，独立集在各分量上独立选择，从而生成函数乘法分解成立；
+而路径 \(P_\ell\) 的独立集数为 \(F_{\ell+2}\)，故 \(d_m(x)=Z_x(1)=\prod_i F_{\ell_i+2}\)。证毕。
+\end{proof}
+
+\begin{theorem}[路径独立集多项式的闭式系数]\label{thm:pom-path-indset-poly-closed}
+对任意 \(\ell\ge 0\)，有
+\[
+I_{\ell}(t)=\sum_{j=0}^{\lceil \ell/2\rceil}\binom{\ell+1-j}{j}\,t^j.
+\]
+因此在定理 \ref{thm:pom-fiber-indset-factorization} 的分解下，纤维中“恰用 \(j\) 次逆代换”的前像个数由各分量系数作卷积乘积给出，从而 \(r(\omega)\) 的全分布可被完全闭式重建。
+\end{theorem}
+
+\begin{proof}
+大小为 \(j\) 的独立集等价于选取 \(1\le s_1<\cdots<s_j\le \ell\) 且满足 \(s_{a+1}-s_a\ge 2\)。
+令 \(u_a:=s_a-(a-1)\)，则得到严格递增序列 \(1\le u_1<\cdots<u_j\le \ell+1-j\)；反之亦然。
+故大小为 \(j\) 的独立集数为 \(\binom{\ell+1-j}{j}\)，对 \(j\) 求和得结论。证毕。
+\end{proof}
+
+\begin{lemma}[Fibonacci 融合恒等式与严格次乘性]\label{lem:pom-fib-fusion-submultiplicativity}
+取 Fibonacci 延拓 \(F_0=0,F_1=1\)。
+对任意整数 \(a,b\ge 1\)，有加法恒等式
+\[
+F_{a+b-1}=F_aF_b+F_{a-1}F_{b-1}.
+\]
+特别地，当 \((a,b)\neq(1,1)\) 时，
+\[
+F_aF_b< F_{a+b-1}<F_{a+b}.
+\]
+\end{lemma}
+\begin{proof}
+由标准加法公式 \(F_{n+m}=F_nF_{m+1}+F_{n-1}F_m\)（可由矩阵幂或归纳得到），取 \(n=a\)、\(m=b-1\) 即得第一式。
+当 \((a,b)\neq(1,1)\) 时有 \(F_{a-1}F_{b-1}>0\)，故 \(F_{a+b-1}>F_aF_b\)。
+又因 \(F_{a+b}=F_{a+b-1}+F_{a+b-2}\) 且 \(F_{a+b-2}\ge 1\)，得 \(F_{a+b}>F_{a+b-1}\)。证毕。
+\end{proof}
+
+\begin{corollary}[Fibonacci 乘积的分量合并增益（最小桥接）]\label{cor:pom-fib-component-fusion-gain}
+对任意整数 \(\ell,\ell'\ge 1\)，有严格不等式
+\[
+F_{\ell+2}F_{\ell'+2}<F_{\ell+\ell'+3},
+\]
+并且增量满足闭式
+\[
+F_{\ell+\ell'+3}-F_{\ell+2}F_{\ell'+2}=F_{\ell+1}F_{\ell'+1}\ge F_{\min\{\ell,\ell'\}+1}.
+\]
+在定理 \ref{thm:pom-fiber-indset-factorization} 的分量乘法分解口径下，上述不等式可被解读为：若两条路径分量 \(P_{\ell}\)、\(P_{\ell'}\) 之间可通过补齐一个桥接位点并接为一条更长路径，则对应的纤维基数在该局部并接操作下严格增大，且增益至少由较短分量的 Fibonacci 尾项控制。
+\end{corollary}
+
+\input{parts/lem__pom-shifted-fib-fusion-defect-positive}
+
+\input{parts/subsubsec__pom-multiplicity-composition-partition-sqrt17}
+
+\input{parts/subsubsec__pom-multiplicity-composition-exact-update-softcore}
+
+\input{parts/subsubsec__pom-multiplicity-composition-sharp-asymptotics-renewal}
+
+\subsubsection{纤维的带符号指数与 \texorpdfstring{$\bmod 3$}{mod 3} 阻碍}\label{subsec:pom-fiber-signed-index}
+在定理 \ref{thm:pom-fiber-indset-factorization} 的独立集模型下，纤维内部的“逆代换次数谱”不仅可计数，还自然诱导一个取值极刚性的带符号指数（独立集多项式在 \(t=-1\) 处的取值）。
+
+\begin{definition}[纤维的带符号指数]\label{def:pom-fiber-signed-index}
+对任意 \(x\in X_m\)，定义其纤维带符号指数为
+\[
+\mathfrak{s}_m(x):=Z_x(-1)=\sum_{\omega\in\Fold_m^{-1}(x)}(-1)^{r(\omega)}.
+\]
+在定理 \ref{thm:pom-fiber-indset-factorization} 的同构下，\(\mathfrak{s}_m(x)\) 等价于诱导图 \(\Gamma_x\) 的独立集多项式在 \(t=-1\) 的取值。
+\end{definition}
+
+\begin{theorem}[分量级周期律与消失判别]\label{thm:pom-fiber-signed-index-periodicity}
+令 \(J_\ell:=I_\ell(-1)\)（\(\ell\ge 0\)）。则 \((J_\ell)_{\ell\ge 0}\) 为 \(6\) 周期序列，并且
+\[
+(J_\ell)_{\ell=0}^{\infty}=(1,0,-1,-1,0,1,1,0,-1,-1,0,1,\dots),
+\qquad
+J_\ell=0\ \Longleftrightarrow\ \ell\equiv 1\ (\mathrm{mod}\ 3).
+\]
+因此，若 \(\Gamma_x\) 的连通分量依次同构于路径 \(P_{\ell_1},\dots,P_{\ell_r}\)，则
+\[
+\mathfrak{s}_m(x)=Z_x(-1)=\prod_{i=1}^r J_{\ell_i}\ \in\ \{0,\pm 1\},
+\]
+并且
+\[
+\mathfrak{s}_m(x)=0
+\quad\Longleftrightarrow\quad
+\exists\,i,\ \ell_i\equiv 1\ (\mathrm{mod}\ 3).
+\]
+\end{theorem}
+
+\begin{proof}
+路径独立集多项式满足递推
+\(
+I_\ell(t)=I_{\ell-1}(t)+t\,I_{\ell-2}(t)
+\)
+（按是否选择末端顶点分类），并具有初值 \(I_0(t)=1\)、\(I_1(t)=1+t\)。
+代入 \(t=-1\) 得
+\[
+J_0=1,\qquad J_1=0,\qquad J_\ell=J_{\ell-1}-J_{\ell-2}\quad(\ell\ge 2).
+\]
+由该线性递推直接计算前六项
+\(
+J_0=1,J_1=0,J_2=-1,J_3=-1,J_4=0,J_5=1
+\)，再由递推可得 \(J_{\ell+6}=J_\ell\)（对任意 \(\ell\) 归纳即得），从而序列 \(6\) 周期。
+同理可见零点恰发生在 \(\ell\equiv 1\pmod 3\)。
+\par
+最后，由定理 \ref{thm:pom-fiber-indset-factorization} 的乘法分解
+\(
+Z_x(t)=\prod_i I_{\ell_i}(t)
+\)，
+取 \(t=-1\) 即得 \(\mathfrak{s}_m(x)=\prod_i J_{\ell_i}\)，并给出取值集合与消失判别。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$\bmod 3$}{mod 3} 相位阻碍：由分量长度决定]\label{cor:pom-fiber-signed-index-mod3}
+\(\Gamma_x\) 的分量长度 \((\ell_i)\) 诱导一个可审计的阻碍类：是否出现 \(\ell_i\equiv 1\pmod 3\) 决定 \(\mathfrak{s}_m(x)\) 的消失与否。
+当 \(\mathfrak{s}_m(x)\neq 0\) 时，其符号由 \(\ell_i\) 在上述 \(6\) 周期表中的落点完全决定，从而 \(\mathfrak{s}_m(x)\) 只依赖于候选位点图 \(\Gamma_x\) 的分量结构而不依赖外部解释层。
+\end{corollary}
+
+\begin{corollary}[纤维基数的奇偶判据：\texorpdfstring{$\bmod 2$}{mod 2} 由分量长度的 \texorpdfstring{$\bmod 3$}{mod 3} 类完全决定]\label{cor:pom-fiber-parity-mod3}
+设 \(\Gamma_x\cong\bigsqcup_i P_{\ell_i}\)，并记
+\(
+d_m(x)=\card{\Fold_m^{-1}(x)}=\prod_i F_{\ell_i+2}
+\)
+（定理 \ref{thm:pom-fiber-indset-factorization}）。
+则
+\[
+d_m(x)\equiv 1\pmod 2
+\quad\Longleftrightarrow\quad
+\forall i,\ \ell_i\not\equiv 1\pmod 3,
+\]
+等价地
+\[
+d_m(x)\equiv 0\pmod 2
+\quad\Longleftrightarrow\quad
+\exists i,\ \ell_i\equiv 1\pmod 3.
+\]
+\end{corollary}
+\begin{proof}
+Fibonacci 数列在模 \(2\) 下的 Pisano 周期为 \(3\)，且
+\(
+F_n\equiv 0\pmod 2\iff n\equiv 0\pmod 3
+\)。
+因此
+\(
+F_{\ell_i+2}\equiv 0\pmod 2\iff \ell_i+2\equiv 0\pmod 3\iff \ell_i\equiv 1\pmod 3
+\)。
+由乘积表达式 \(d_m(x)=\prod_i F_{\ell_i+2}\)，可知 \(d_m(x)\) 为奇数当且仅当所有因子均为奇数，即对一切 \(i\) 有 \(\ell_i\not\equiv 1\pmod 3\)。证毕。
+\end{proof}
+
+\input{parts/cor__pom-fiber-modq-pisano-invariant}
+
+\subsubsection{最大纤维闭式与顶端谱缺口}\label{subsec:pom-top-fiber}
+\begin{theorem}[最大纤维闭式]\label{thm:pom-max-fiber}
+取 Fibonacci 延拓到 $F_0=0,F_1=1$。对 $m\ge 2$，有精确闭式
+\[
+D_{2k}=F_{k+2},
+\qquad
+D_{2k+1}=F_{k+2}+F_{k-1}\ (=2F_{k+1}).
+\]
+因此
+\[
+D_m\sim C'\,\varphi^{m/2},
+\]
+即最大纤维增长率为 $\sqrt{\varphi}$。特别地，存在常数 $C_1,C_2>0$ 使
+\[
+C_1\,\varphi^{m/2}\ \le\ D_m\ \le\ C_2\,\varphi^{m/2}.
+\]
+\end{theorem}
+\begin{proof}
+对 $\{0,1\}^m$ 的折叠规范化，唯一会被触发的局部重写是
+\(
+011\mapsto 100
+\)
+（Fibonacci 进位）。系统合流意味着每个 $\omega$ 的规范形唯一，因此固定 $x\in X_m$ 时，$\omega\in\Fold_m^{-1}(x)$ 当且仅当 $x$ 能通过若干次逆代换 $100\mapsto 011$ 生成 $\omega$。该逆代换占用长度 $3$ 的局部区间；若两次逆代换的起点相距 $1$ 或 $2$，区间重叠会在某一位产生 $2$，因此可选位点必须满足“不可相邻选择”的约束。令 $k=\lfloor m/2\rfloor$，把可选位点看作一条长度 $k$ 的路径图 $P_k$，记其独立集计数为 $I_k$。则
+\[
+I_0=1,\qquad I_1=2,\qquad I_k=I_{k-1}+I_{k-2}\ (k\ge 2),
+\qquad I_k=F_{k+2}.
+\]
+于是对任意 $x\in X_m$ 有 $d_m(x)\le I_k$。当 $m=2k+1$ 为奇数时，由引理 \ref{lem:pom-one-bit} 的溢出比特 $b\in\{0,1\}$ 分裂为两支；固定 $b$ 会冻结最顶端一处候选位点，使可选链长度降为 $k-1$，从而
+\[
+d_m(x)\le 2I_{k-1}=2F_{k+1}.
+\]
+
+下面构造达到上界的族。对 $m=2,3$ 取
+\(
+x^{(2)}=00,\ x^{(3)}=000
+\)；其余情形令 $m=4q+r$（$r\in\{0,1,2,3\}$）并定义
+\[
+x^{(m)}=
+\begin{cases}
+(0001)^{\,q-1}0000,& r=0,\ q\ge 1,\\[2pt]
+(0001)^{\,q-1}00100,& r=1,\ q\ge 1,\\[2pt]
+(0001)^{\,q}00,& r=2,\ q\ge 0,\\[2pt]
+(0001)^{\,q-1}0000100,& r=3,\ q\ge 1.
+\end{cases}
+\]
+该族满足 $x^{(m)}\in X_m$，且其局部零块足以保证：任取不相邻位点集合 $J\subseteq\{1,\dots,k\}$（奇数时为 $\{1,\dots,k-1\}$），按从高位到低位依次执行逆代换，所需的 $100$ 模式在每一步均可实现，从而得到唯一 $\omega\in\Fold_m^{-1}(x^{(m)})$。因此
+\[
+d_{2k}(x^{(2k)})=I_k=F_{k+2},
+\qquad
+d_{2k+1}(x^{(2k+1)})=2I_{k-1}=2F_{k+1}.
+\]
+上界可达即得 $D_m$ 的闭式；渐近式与常数界由 Fibonacci 渐近 $F_n\sim \varphi^n/\sqrt5$ 直接推出。证毕。
+\end{proof}
+
+\begin{corollary}[最大纤维概率端点与可审计极限常数]\label{cor:pom-max-fiber-rate-endpoint}
+令 \(w_m(x):=d_m(x)/2^m\) 为均匀微态的折叠推前，并定义最大纤维概率
+\[
+p_{\max}(m):=\max_{x\in X_m}w_m(x)=\frac{D_m}{2^m}.
+\]
+则由定理 \ref{thm:pom-max-fiber} 的闭式有显式表达
+\[
+p_{\max}(2k)=\frac{F_{k+2}}{2^{2k}},
+\qquad
+p_{\max}(2k+1)=\frac{2F_{k+1}}{2^{2k+1}}=\frac{F_{k+1}}{2^{2k}}.
+\]
+并且最大纤维率（亦即 min-entropy 端点率）
+\[
+h_{\max}(m):=-\frac{1}{m}\log p_{\max}(m)
+\]
+收敛到一个闭式常数：
+\[
+\boxed{\;
+\lim_{m\to\infty}h_{\max}(m)=\log\!\left(\frac{2}{\sqrt{\varphi}}\right)\; }.
+\]
+该常数同时是高阶 Rényi 指纹归一化端点的可审计锚点（见命题 \ref{prop:pom-rq-qinfty-endpoint} 中 \(\lim_{q\to\infty}h_q^{\mathrm R}=\log(2/\sqrt{\varphi})\)）。
+\end{corollary}
+\begin{proof}
+由上式的奇偶闭式与 Binet 渐近 \(F_n\asymp \varphi^n\)，可得
+\[
+-\frac{1}{2k}\log p_{\max}(2k)
+=-\frac{1}{2k}\Bigl(\log F_{k+2}-2k\log 2\Bigr)
+\longrightarrow \log 2-\frac12\log\varphi,
+\]
+奇数分支同理，从而极限为 \(\log(2/\sqrt{\varphi})\)。证毕。
+\end{proof}
+
+\input{parts/prop__pom-max-fiber-atomic-weight-parity-asymptotics}
+
+\begin{corollary}[二步递推与基值]\label{cor:pom-D-rec}
+$D_m$ 满足
+\[
+D_m=D_{m-2}+D_{m-4}\qquad(m\ge 6),
+\]
+并具有基值
+\[
+D_1=1,\quad D_2=2,\quad D_3=2,\quad D_4=3,\quad D_5=4.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-max-fiber} 的闭式，$D_{2k}=F_{k+2}$ 与 $D_{2k+1}=2F_{k+1}$，而 Fibonacci 数满足 $F_{k+2}=F_{k+1}+F_k$。分别代入 $m=2k$ 与 $m=2k+1$ 即得递推；基值由直接枚举或闭式代入给出。证毕。
+\end{proof}
+
+\begin{remark}[最大纤维序列的生成函数与四周期次主振荡]\label{rem:pom-D-generating-function}
+取约定 \(D_0:=1\) 且 \(D_1:=1\)。由推论 \ref{cor:pom-D-rec}，\(D_m\) 满足二步递推 \(D_m=D_{m-2}+D_{m-4}\)（\(m\ge 6\)），其特征多项式为 \(r^{4}-r^{2}-1\)，四个特征根为 \(\pm\sqrt{\varphi}\) 与 \(\pm i/\sqrt{\varphi}\)。
+相应生成函数为严格有理式
+\[
+\sum_{m\ge 0} D_m\,z^m=\frac{1+z+z^{2}+z^{3}+z^{5}}{1-z^{2}-z^{4}}.
+\]
+因此收敛半径为 \(1/\sqrt{\varphi}\)，主导增长率为 \(\sqrt{\varphi}\)；并且由次主特征根 \(\pm i/\sqrt{\varphi}\) 产生 \(4\) 周期相位（由 \(i^m\) 控制）的次主校正项，其幅度为 \(O(\varphi^{-m/2})\)。
+等价地，存在常数 \(A_\pm\) 使得
+\[
+D_m=A_+(\sqrt{\varphi})^{m}+A_-(-\sqrt{\varphi})^{m}+O(\varphi^{-m/2}).
+\]
+\end{remark}
+
+\begin{remark}[最坏投影缺口的比特量化]\label{rem:pom-D-delay}
+把“区分纤维内微态”视为必须携带的额外信息量，则最坏缺口可用
+\[
+\Delta_m^{\max}:=\left\lceil \log_2 D_m\right\rceil
+\]
+衡量。由定理 \ref{thm:pom-max-fiber} 得
+\(
+\Delta_m^{\max}\sim \frac{m}{2}\log_2\varphi
+\)，它给出一种与分辨率 $m$ 线性增长的“不可并行信息缺口”标尺。
+\end{remark}
+
+\begin{remark}[一比特溢出与二步递推的结构来源]\label{rem:pom-overflow-rec}
+由引理 \ref{lem:pom-one-bit}，每条纤维只分裂为 $b=0,1$ 两支；且 $b=1$ 必要求末位满足零相邻约束。结合局部逆代换的“不可相邻选择链”，最大纤维的计数等价于在步长为 $2$ 的链上作独立集计数，从而结构上解释了二步递推 $D_m=D_{m-2}+D_{m-4}$。
+\end{remark}
+
+\input{sections/generated/tab_fold_max_fiber_achievers_phase}
+\input{sections/generated/tab_fold_max_fiber_achievers_bsplit}
+\input{sections/generated/tab_fold_max_fiber_achievers_hiddenbit_metrics}
+
+\begin{definition}[顶层纤维谱与达到者数]\label{def:pom-top-fiber-spectrum}
+固定 \(m\ge 2\)。令
+\[
+\mathcal{V}_m:=\{d_m(x):x\in X_m\}\subseteq \NN.
+\]
+按降序列出其中\emph{不同}取值：
+\[
+D_m^{(1)} > D_m^{(2)} > D_m^{(3)} > \cdots.
+\]
+记 \(D_m:=D_m^{(1)}=\max_{x\in X_m}d_m(x)\)。并定义最大纤维达到者数
+\[
+\kappa_m^{\mathrm{max}}
+=\#\{x\in X_m:\ d_m(x)=D_m\}.
+\]
+（记号约定：本文另用 \(\kappa_m(\pi)=\mathbb{E}_\pi[\log d_m(X)]\) 表示“平均对数纤维缺陷”；为避免歧义，此处用上标 \(\mathrm{max}\) 标记“达到者数”。）
+在 residue 口径下，若
+\(
+c_m(r):=\#\{\omega\in\Omega_m:\ N(\omega)\equiv r\ (\mathrm{mod}\ F_{m+2})\}
+\),
+则 \(D_m^{(j)}\) 也是集合 \(\{c_m(r):r\in\ZZ/F_{m+2}\ZZ\}\) 的第 \(j\) 大不同取值，并且
+\[
+\kappa_m^{\mathrm{max}}=\#\{r\in\ZZ/F_{m+2}\ZZ:\ c_m(r)=D_m\}.
+\]
+\end{definition}
+
+\input{parts/rem__pom-fiber-value-set-complexity}
+
+\begin{remark}[最大纤维达到者的相位结构（可复现计算 + 闭式定律）]\label{rem:pom-max-fiber-achievers-phase}
+表 \ref{tab:fold_max_fiber_achievers_phase} 用模 \(F_{m+2}\) 的 residue DP 直接计算了
+\(
+c_m(r)=\#\{\omega\in\Omega_m:\ N(\omega)\equiv r\ (\mathrm{mod}\ F_{m+2})\}
+\)
+并取最大值 \(D_m=\max_r c_m(r)\)，同时统计达到最大值的同余类数
+\[
+\kappa_m^{\mathrm{max}}:=\#\{r\in\ZZ/F_{m+2}\ZZ:\ c_m(r)=D_m\}
+=\#\{x\in X_m:\ d_m(x)=D_m\}.
+\]
+在可审计窗口 \(m\le 32\) 内，\(\kappa_m^{\mathrm{max}}\) 呈现出稳定的“有限相位”行为（见表 \ref{tab:fold_max_fiber_achievers_phase}）：偶数 \(m\) 两相位达到、奇数 \(m\) 四相位达到；代表达到者在体相上呈现严格的 \(4\) 周期晶格相（对应近周期核 \(\texttt{0001}\) 的相位截断；除两端有限位修正外，其 \(1\)-支撑落在同一同余类 \(i\equiv 1\pmod 4\) 或 \(i\equiv 3\pmod 4\)）。
+由定理 \ref{thm:pom-max-achievers-phase-stabilization}，该有限相位行为在阈值之后被解析地封口（\(\kappa_{2k}^{\mathrm{max}}=2,\ \kappa_{2k+1}^{\mathrm{max}}=4\)）。
+因此达到者族的规模不发生指数增长：
+\[
+\limsup_{m\to\infty}\frac{1}{m}\log \kappa_m^{\mathrm{max}}=0,
+\]
+可视为一个零熵的极值相位子系统（其“语言复杂度”在指数尺度上为零）。
+并且在两种自然采样测度——类型均匀 \(U_m\) 与微态均匀推前 \(w_m\)——下，该极值族的命中率给出两条互异的指数稀薄率（推论 \ref{cor:pom-maxfiber-rarity-two-measures}）。
+同一表还给出次大多重度 \(D_m^{(2)}\) 与第三大多重度 \(D_m^{(3)}\)（定义 \ref{def:pom-top-fiber-spectrum}），以及比值 \(D_m^{(2)}/D_m\) 的奇偶交错。下述定理 \ref{thm:pom-max-achievers-phase-stabilization}、定理 \ref{thm:pom-second-max-fiber-closed-form} 与定理 \ref{thm:pom-third-max-fiber-even-closed-form} 给出该相位数与顶层谱缺口的解析封口（并给出显式最坏常数 \(\theta_{\mathrm{gap}}\)，见推论 \ref{cor:pom-second-max-gap-constant}）。
+\end{remark}
+
+\begin{theorem}[最大纤维达到者的相位数稳定化]\label{thm:pom-max-achievers-phase-stabilization}
+对所有充分大的 \(m\)，最大纤维达到者数 \(\kappa_m^{\mathrm{max}}\) 稳定为常数相位数：
+\[
+\kappa_{2k}^{\mathrm{max}}=2\quad(k\ge 5),
+\qquad
+\kappa_{2k+1}^{\mathrm{max}}=4\quad(k\ge 6).
+\]
+等价地（阈值版）：
+\[
+m\ge 10\ \text{且}\ m\ \text{偶}\ \Rightarrow\ \kappa_m^{\mathrm{max}}=2,
+\qquad
+m\ge 13\ \text{且}\ m\ \text{奇}\ \Rightarrow\ \kappa_m^{\mathrm{max}}=4.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-max-fiber} 的证明可知：达到最大纤维 \(D_m\) 的必要条件是“逆代换可选位点链被做满”，即在长度 \(k=\lfloor m/2\rfloor\) 的候选链上，每个独立集都必须可实现且给出互异的前像；这强制正规形 \(x\in X_m\) 具有一个近周期核（见定理 \ref{thm:pom-max-fiber} 中构造的 \((0001)\) 截断族），并且端点约束只允许有限多个相位。
+偶数端点约束恰保留两种相位；奇数情形还叠加引理 \ref{lem:pom-one-bit} 的隐藏位分裂 \(b\in\{0,1\}\)，从而把相位数翻倍为四。上述相位数与达到者的代表词在表 \ref{tab:fold_max_fiber_achievers_phase}（\(m\le 32\) 的可审计窗口）中可直接核验。
+\end{proof}
+
+\begin{remark}[最大达到者的诱导图结构刻画（稳定阈值）]\label{rem:pom-max-achievers-graph-structure}
+在定理 \ref{thm:pom-fiber-indset-factorization} 的诱导图表示 \(\Gamma_x\cong\bigsqcup_i P_{\ell_i}\) 下，纤维计数为 \(d_m(x)=\prod_i F_{\ell_i+2}\)，因此“达到最大纤维”可被视为一条纯组合结构约束。
+记最大达到者集合
+\[
+\mathcal{M}_m:=\{x\in X_m:\ d_m(x)=D_m\}.
+\]
+在稳定阈值区间（定理 \ref{thm:pom-max-achievers-phase-stabilization}）上，达到者的可逆位点结构进一步刚性化为唯一型：
+\[
+m=2k\ \Rightarrow\ x\in\mathcal{M}_m\iff \Gamma_x\cong P_k,
+\qquad
+m=2k+1\ \Rightarrow\ x\in\mathcal{M}_m\iff \Gamma_x\cong P_{k-1}\sqcup P_1.
+\]
+并且达到者集合在逆序 involution \(\mathrm{rev}\) 下封闭。
+从而 \(|\mathcal{M}_m|\) 在该区间内由有限相位数封口为 \(2\)（偶数）或 \(4\)（奇数），与表 \ref{tab:fold_max_fiber_achievers_phase} 的有限窗口审计一致。
+\end{remark}
+
+\begin{corollary}[最大纤维达到者在两种自然测度下的指数稀薄率]\label{cor:pom-maxfiber-rarity-two-measures}
+令
+\[
+\mathcal{M}_m:=\{x\in X_m:\ d_m(x)=D_m\},
+\qquad
+U_m:=\mathrm{Unif}(X_m),
+\qquad
+w_m(x):=\frac{d_m(x)}{2^m}\ \ (x\in X_m).
+\]
+则有两条\emph{精确}命中率公式：
+\[
+U_m(\mathcal{M}_m)=\frac{\kappa_m^{\mathrm{max}}}{|X_m|}
+=\frac{\kappa_m^{\mathrm{max}}}{F_{m+2}},
+\qquad
+w_m(\mathcal{M}_m)=\sum_{x\in\mathcal{M}_m}\frac{d_m(x)}{2^m}
+=\frac{\kappa_m^{\mathrm{max}}\,D_m}{2^m}.
+\]
+并且在稳定阈值区间（定理 \ref{thm:pom-max-achievers-phase-stabilization} 给出 \(\kappa_m^{\mathrm{max}}\in\{2,4\}\)），两者分别满足指数尺度渐近：
+\[
+U_m(\mathcal{M}_m)=\Theta(\varphi^{-m}),
+\qquad
+w_m(\mathcal{M}_m)=\Theta\!\left(\left(\frac{\sqrt{\varphi}}{2}\right)^m\right).
+\]
+\end{corollary}
+\begin{proof}
+第一条等式由计数恒等式 \(U_m(\mathcal{M}_m)=|\mathcal{M}_m|/|X_m|\) 与 \(|X_m|=F_{m+2}\) 得到；第二条等式由 \(w_m\) 的定义与 \(\mathcal{M}_m\) 上 \(d_m(x)\equiv D_m\) 得到。
+\par
+渐近方面，\(F_{m+2}=\Theta(\varphi^m)\)（Binet 公式），且由定理 \ref{thm:pom-max-fiber} 有 \(D_m=\Theta(\varphi^{m/2})\)，并结合定理 \ref{thm:pom-max-achievers-phase-stabilization} 的 \(\kappa_m^{\mathrm{max}}=O(1)\)，得到所述两条指数率。
+\end{proof}
+
+\begin{lemma}[禁配对导致的 Fibonacci 缺口]\label{lem:pom-forbidden-pair-fib-gap}
+令 \(P_k\) 为顶点 \(1,\dots,k\) 的路径图（边为 \(i\!\sim\! i{+}1\)），记其独立集数为 \(I_k\)（于是 \(I_k=F_{k+2}\)）。
+\begin{enumerate}
+  \item 若 \(k\ge 5\)，则在 \(P_k\) 上\emph{同时包含}顶点 \(2\) 与 \(5\) 的独立集数恰为 \(F_{k-4}\)（当 \(k\ge 6\) 时亦可写为 \(I_{k-6}\)）。
+  \item 若 \(k\ge 5\)，则在 \(P_k\) 上\emph{同时包含}顶点 \(1\) 与 \(4\) 的独立集数恰为 \(I_{k-5}=F_{k-3}\)。
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) 当 \(k=5\) 时，包含 \(\{2,5\}\) 的独立集唯一为 \(\{2,5\}\)，计数为 \(1=F_1\)。
+当 \(k\ge 6\) 时，若独立集包含 \(\{2,5\}\)，则顶点 \(1,3,4,6\) 均被排除，剩余可自由选择的部分为路径 \(7,\dots,k\)，同构于 \(P_{k-6}\)。反之，对 \(P_{k-6}\) 的任意独立集加上 \(\{2,5\}\) 即得 \(P_k\) 上包含 \(\{2,5\}\) 的独立集。故计数为 \(I_{k-6}=F_{k-4}\)。\;
+(2) 同理：包含 \(\{1,4\}\) 时顶点 \(2,3,5\) 被排除，剩余为路径 \(6,\dots,k\)，同构于 \(P_{k-5}\)。证毕。
+\end{proof}
+
+\begin{theorem}[次大纤维闭式与显式间隙常数]\label{thm:pom-second-max-fiber-closed-form}
+取 Fibonacci 延拓 \(F_0=0,F_1=1\)，并令 \(D_m^{(2)}\) 为第二大纤维多重度（定义 \ref{def:pom-top-fiber-spectrum}）。
+则当 \(k\ge 5\) 时有闭式：
+\[
+D_{2k}^{(2)} = F_{k+2}-F_{k-4},
+\qquad
+D_{2k+1}^{(2)} = 2F_{k+1}-F_{k-4}.
+\]
+\end{theorem}
+\begin{proof}
+证明思路与定理 \ref{thm:pom-max-fiber} 完全同构：最大值来自“满链独立集计数” \(I_k=F_{k+2}\)（偶数）或 \(2I_{k-1}=2F_{k+1}\)（奇数）。
+\par
+更精细地说：在干涉图独立集 DP（引理 \ref{lem:pom-independence-dp-radius2}）中，满链相位对应于所有局部步都落在 \(p(t)=t-2\) 的分支，从而由引理 \ref{lem:pom-ind-local-recurrence}(1) 得到纯 Fibonacci 递推 \(a_t=a_{t-1}+a_{t-2}\)，并在末端给出 \(a_k=I_k=F_{k+2}\)。
+当离开最大达到者的满链相位核时，最小可能的退化不是简单地缩短链（那会造成 \(\Theta(F_{k-1})\) 级别的下降），而是出现一次“半径 2 冲突”导致 \(p(t)\) 发生一次跳跃（引理 \ref{lem:pom-ind-local-recurrence}(2)：某一步由 \(a_t=a_{t-1}+a_{t-2}\) 变为 \(a_t=a_{t-1}+a_{t-3}\)）。
+在路径图 \(P_k\) 的口径下，这等价于在满链独立集选择中额外禁止某一对距离 \(3\) 的顶点同时出现；最早的非端点缺陷对应的正是禁配对 \(\{2,5\}\)。
+由引理 \ref{lem:pom-forbidden-pair-fib-gap}(1)，禁止配对 \(\{2,5\}\) 从满链计数中精确削去 \(F_{k-4}\)，于是得到
+\(
+D_{2k}^{(2)}=F_{k+2}-F_{k-4}
+\)。
+奇数情形同理：隐藏位分裂把总计数分解为两层之和，其中最小缺陷只在一层触发一次禁配对，从而总计数为
+\(
+D_{2k+1}^{(2)}=2F_{k+1}-F_{k-4}
+\)。
+细节可由与定理 \ref{thm:pom-max-fiber} 相同的“逆代换—冲突约束—Fibonacci 递推”链条逐步写出。
+\end{proof}
+
+\begin{corollary}[黄金常数极限、指数收敛与可审计 gap 证书]\label{cor:pom-second-max-gap-constant}
+设 \(\varphi=\frac{1+\sqrt5}{2}\)。当 \(k\ge 5\) 时，由定理 \ref{thm:pom-second-max-fiber-closed-form} 与定理 \ref{thm:pom-max-fiber} 的闭式可得精确比值
+\[
+\frac{D_{2k}^{(2)}}{D_{2k}}=1-\frac{F_{k-4}}{F_{k+2}},
+\qquad
+\frac{D_{2k+1}^{(2)}}{D_{2k+1}}=1-\frac{F_{k-4}}{2F_{k+1}}.
+\]
+因此两条奇偶支分别收敛到闭式黄金常数平台：
+\[
+\frac{D_{2k}^{(2)}}{D_{2k}}
+\longrightarrow
+1-\varphi^{-6}
+=1-\frac{1}{9+4\sqrt5},
+\qquad
+\frac{D_{2k+1}^{(2)}}{D_{2k+1}}
+\longrightarrow
+1-\frac12\varphi^{-5}
+=1-\frac{1}{11+5\sqrt5}.
+\]
+并且收敛误差为指数级：
+\[
+\left|\frac{D_{2k}^{(2)}}{D_{2k}}-\left(1-\varphi^{-6}\right)\right|=O(\varphi^{-2k}),
+\qquad
+\left|\frac{D_{2k+1}^{(2)}}{D_{2k+1}}-\left(1-\tfrac12\varphi^{-5}\right)\right|=O(\varphi^{-2k}).
+\]
+记奇数支（也是渐近最坏情形）的极限常数为
+\[
+\boxed{\;
+\theta_\star\;(:=\theta_{\mathrm{gap}})\;:=1-\frac{1}{11+5\sqrt5}
+=1-\tfrac12\varphi^{-5}
+\approx 0.9549150281<1.
+\;}
+\]
+则“存在 \(\theta<1\) 使 \(D_m^{(2)}\le \theta D_m\)”可取显式一刀切证书
+\[
+\boxed{\;
+\frac{D_m^{(2)}}{D_m}\le \frac{25}{26}\qquad(m\ge 2),
+\;}
+\]
+且该上界在 \(m=13\) 取等（从而为全局最优常数）。作为对照，渐近尺度上的最优候选常数为 \(\theta_\star\)，并且平台贴合误差满足 \(O(\varphi^{-2k})\)，解释了表 \ref{tab:fold_max_fiber_achievers_phase} 中 \(m\le 32\) 的“近常数”现象。
+\end{corollary}
+\begin{proof}
+比值公式由闭式直接相除得到。
+极限常数由 Binet 公式 \(F_n=\frac{1}{\sqrt5}(\varphi^n-\psi^n)\)（\(\psi=-\varphi^{-1}\)）给出：例如
+\[
+\frac{F_{k-4}}{F_{k+2}}
+=\varphi^{-6}\frac{1-(\psi/\varphi)^{k-4}}{1-(\psi/\varphi)^{k+2}}
+=\varphi^{-6}\left(1+O(\varphi^{-2k})\right),
+\]
+同理 \(\frac{F_{k-4}}{F_{k+1}}=\varphi^{-5}\left(1+O(\varphi^{-2k})\right)\)，代入即得两条指数级误差。
+闭式形式 \(\varphi^6=9+4\sqrt5\)、\(2\varphi^5=11+5\sqrt5\) 可由恒等式 \(\varphi^n=F_n\varphi+F_{n-1}\)（取 \(n=5,6\)）得到。
+
+最后给出统一证书：由上式，
+\[
+\frac{D_{2k+1}^{(2)}}{D_{2k+1}}=1-\frac{F_{k-4}}{2F_{k+1}}
+\le 1-\frac{1}{26}=\frac{25}{26},
+\]
+其中不等号等价于 \(F_{k+1}\le 13F_{k-4}\)。
+写 \(n:=k-4\ge 1\)，即需证对所有 \(n\ge 1\) 有 \(F_{n+5}\le 13F_n\)。
+该不等式在 \(n=1,2\) 成立（\(F_6=8\le 13F_1\)、\(F_7=13=13F_2\)），且若对 \(n,n+1\) 成立，则
+\(
+F_{n+7}=F_{n+6}+F_{n+5}\le 13F_{n+1}+13F_n=13F_{n+2}
+\)，
+从而由归纳对一切 \(n\) 成立；等号仅在 \(n=2\)（即 \(k=6,m=13\)）发生。
+偶数支更强：因 \(F_{k+2}=F_{k+1}+F_k<2F_{k+1}\)，故当 \(k\ge 5\) 时
+\[
+\frac{D_{2k}^{(2)}}{D_{2k}}
+=1-\frac{F_{k-4}}{F_{k+2}}
+\;<\;
+1-\frac{F_{k-4}}{2F_{k+1}}
+=\frac{D_{2k+1}^{(2)}}{D_{2k+1}}
+\le \frac{25}{26}.
+\]
+对 \(m<10\) 的有限个初值情形可由表 \ref{tab:fold_max_fiber_achievers_phase} 直接审计。证毕。
+\end{proof}
+
+\begin{remark}[极值—近极值隔离带（顶层谱的稳定分离）]\label{rem:pom-maxfiber-isolation-band}
+令 \(\mathcal{M}_m=\{x\in X_m:\ d_m(x)=D_m\}\) 为最大纤维达到者集合。
+则对任意 \(x\notin\mathcal{M}_m\) 恒有 \(d_m(x)\le D_m^{(2)}\)。
+由推论 \ref{cor:pom-second-max-gap-constant}，存在显式常数 \(\theta<1\)（例如全局一刀切 \(\theta=\tfrac{25}{26}\)，或渐近最坏常数 \(\theta_\star\approx 0.954915\)）使得对充分大的 \(m\) 有
+\[
+d_m(x)\le D_m^{(2)}\le \theta\,D_m\qquad(x\notin\mathcal{M}_m).
+\]
+因此顶层谱在比例意义下与近极值层之间存在稳定隔离带：极值层由有限相位 \(\kappa_m^{\mathrm{max}}=O(1)\) 承载（定理 \ref{thm:pom-max-achievers-phase-stabilization}），而所有非达到者的纤维多重度被统一压至 \(\theta D_m\) 之下。
+该隔离带为后续任何以高阶矩/压力函数强化尾部贡献的推断提供了一个无需额外假设的结构性输入。
+\end{remark}
+\input{parts/thm__pom-third-max-fiber-even-closed-form}

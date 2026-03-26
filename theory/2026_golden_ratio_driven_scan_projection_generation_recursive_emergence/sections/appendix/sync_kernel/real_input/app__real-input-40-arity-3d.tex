@@ -1,0 +1,659 @@
+\subsubsection{真实输入下的三维隐含属性统计}\label{app:real-input-40-arity-3d}
+在 40 状态核上引入三维观测
+\[
+\varphi_e=e,\qquad
+\varphi_-=\mathbf{1}_{\{t\in Q_-\}},\qquad
+\varphi_2=\mathbf{1}_{\{d=2\}},
+\]
+并定义加权矩阵
+\[
+(M_\theta)_{ij}=\sum_{i\to j}\exp(\theta_e\varphi_e+\theta_-\varphi_-+\theta_2\varphi_2),
+\qquad
+P(\theta)=\log\rho(M_\theta).
+\]
+在 $\theta=0$ 处，梯度（典型密度）为
+\[
+\begin{aligned}
+\partial_{\theta_e}P(0)&=\frac{23-7\sqrt5}{20}\ (\approx 0.3673762079),\\
+\partial_{\theta_-}P(0)&=\frac{5-\sqrt5}{20}\ (\approx 0.1381966011),\\
+\partial_{\theta_2}P(0)&=\frac{3-\sqrt5}{10}\ (\approx 0.0763932023),
+\end{aligned}
+\]
+Hessian（协方差密度）数值为
+\[
+\nabla^2P(0)\approx
+\begin{pmatrix}
+0.048741 & 0.032574 & 0.015964\\
+0.032574 & 0.275035 & 0.115735\\
+0.015964 & 0.115735 & 0.067331
+\end{pmatrix},
+\]
+\[
+\bigl(\nabla^2P(0)\bigr)^{-1}\approx
+\begin{pmatrix}
+22.4165 & -1.5120 & -2.7160\\
+-1.5120 & 13.2430 & -22.4049\\
+-2.7160 & -22.4049 & 54.0075
+\end{pmatrix}.
+\]
+因此局部大偏差率函数满足
+\[
+I(\alpha)\approx \tfrac12(\alpha-\alpha_\star)^\top\bigl(\nabla^2P(0)\bigr)^{-1}(\alpha-\alpha_\star),
+\qquad
+\alpha_\star=\left(\frac{23-7\sqrt5}{20},\frac{5-\sqrt5}{20},\frac{3-\sqrt5}{10}\right).
+\]
+数值复现见脚本 \path{scripts/exp_sync_kernel_real_input_40.py}。
+
+\subsubsection{压力--有限部的局部双几何：恒压漂移容量、精度矩阵与曲率错配谱}\label{app:real-input-40-local-bigeometry}
+上一段给出 \(\nabla P(0)\) 与 \(\Sigma:=\nabla^2P(0)\)（协方差密度）以及其逆矩阵（精度矩阵）。另一方面，\(\log\mathfrak{M}(\theta)\) 的梯度与 Hessian 的可复现数值见表 \ref{tab:real-input-40-logM-theta-taylor}（由脚本生成并在 \S\ref{subsec:chi-ldp} 中 \verb|\input|）。
+这允许在 \(\theta=0\) 的局部把“指数主尺度”（由 \(P\) 控制）与“常数级漂移”（由 \(\log\mathfrak{M}\) 控制）组织为一组可审计的二阶几何不变量。
+
+\begin{definition}[恒压漂移容量向量]\label{def:real-input-40-isobaric-drift-vector}
+在欧氏内积 \(\langle x,y\rangle=x^\top y\) 下，定义
+\[
+v_\perp
+:=\nabla\log\mathfrak{M}(0)-\mu\,\nabla P(0),
+\qquad
+\mu:=\frac{\langle\nabla P(0),\nabla\log\mathfrak{M}(0)\rangle}{\|\nabla P(0)\|^2}.
+\]
+\end{definition}
+
+\begin{proposition}[恒压漂移容量：一阶主尺度不变时的最强漂移方向]\label{prop:real-input-40-isobaric-drift-capacity}
+向量 \(v_\perp\) 满足 \( \langle\nabla P(0),v_\perp\rangle=0\)。
+因此在一阶恒压约束 \(dP=\langle\nabla P(0),d\theta\rangle=0\) 下，\(v_\perp\) 给出使 \(d(\log\mathfrak{M})=\langle\nabla\log\mathfrak{M}(0),d\theta\rangle\) 增大最快的切向方向。
+\par
+在真实输入 40 状态核的三维观测下，有数值
+\[
+\mu\approx 0.7113818,\qquad
+v_\perp\approx(-0.0289971,\ 0.1598969,\ -0.1498087),
+\qquad
+\|v_\perp\|\approx 0.2210215.
+\]
+\end{proposition}
+\begin{proof}
+由定义 \(\langle\nabla P(0),v_\perp\rangle=\langle\nabla P(0),\nabla\log\mathfrak{M}(0)\rangle-\mu\|\nabla P(0)\|^2=0\)。
+在约束 \(\langle\nabla P(0),d\theta\rangle=0\) 下，\(\langle\nabla\log\mathfrak{M}(0),d\theta\rangle\) 的最大值由把 \(\nabla\log\mathfrak{M}(0)\) 正交投影到该切空间得到，即为 \(v_\perp\)。证毕。
+\end{proof}
+
+\begin{corollary}[有限部漂移不可一维化：\texorpdfstring{$\log\mathfrak{M}$}{logM} 不可能只是 \texorpdfstring{$P$}{P} 的复合]\label{cor:real-input-40-logM-not-just-P}
+若在 \(\theta=0\) 的某邻域内存在一元函数 \(f\) 使得
+\[
+\log\mathfrak{M}(\theta)=f(P(\theta)),
+\]
+则必有 \(v_\perp=0\)。对真实输入 40 状态核，上述一维化关系不成立。
+\end{corollary}
+\begin{proof}
+对两侧在 \(\theta=0\) 处取梯度得
+\(
+\nabla\log\mathfrak{M}(0)=f'(P(0))\,\nabla P(0)
+\)，
+即两梯度共线。
+由定义 \ref{def:real-input-40-isobaric-drift-vector} 可知此时 \(v_\perp\) 为 \(\nabla\log\mathfrak{M}(0)\) 在 \(\nabla P(0)\) 的正交补上的投影，故必为零。
+而命题 \ref{prop:real-input-40-isobaric-drift-capacity} 已给出 \(\|v_\perp\|\approx 0.2210215\neq 0\)，因此该一维化假设与可复现数据矛盾。证毕。
+\end{proof}
+
+\begin{remark}[数量级：恒压切向贡献占比与梯度夹角]\label{rem:real-input-40-vperp-angle}
+在 \(\nabla\log\mathfrak{M}(0)=\mu\nabla P(0)+v_\perp\) 的正交分解下，
+\[
+\|\nabla\log\mathfrak{M}(0)\|\approx 0.360236,\qquad
+\frac{\|v_\perp\|}{\|\nabla\log\mathfrak{M}(0)\|}\approx 0.61355,
+\]
+即 \(\log\mathfrak{M}\) 的一阶变化中约 \(61\%\) 来自一阶恒压切空间方向。
+此外 \(\nabla\log\mathfrak{M}(0)\) 与 \(\nabla P(0)\) 的欧氏夹角约为 \(37.85^\circ\)，显著偏离平行。
+\end{remark}
+
+\begin{proposition}[精度矩阵诊断：部分相关显示的近中介结构]\label{prop:real-input-40-precision-matrix-mediation}
+令 \(\Sigma:=\nabla^2P(0)\) 并记精度矩阵 \(\Omega:=\Sigma^{-1}\)。
+定义相关系数与部分相关系数为
+\[
+\rho_{ij}:=\frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii}\Sigma_{jj}}},
+\qquad
+\rho_{ij\mid k}:=-\frac{\Omega_{ij}}{\sqrt{\Omega_{ii}\Omega_{jj}}}.
+\]
+则数值上
+\[
+\rho_{e,-}\approx 0.281335,\qquad
+\rho_{e,2}\approx 0.278670,\qquad
+\rho_{-,2}\approx 0.850481,
+\]
+并且
+\[
+\rho_{e,-\mid 2}\approx 0.087754,\qquad
+\rho_{e,2\mid -}\approx 0.078058,\qquad
+\rho_{-,2\mid e}\approx 0.837765.
+\]
+因此三通道依赖更接近“\((-,2)\)”为强边、而输出通道主要经由该强边被中介化的两层结构：条件化后 \((e,-)\) 与 \((e,2)\) 的耦合显著下降，而 \((-,2)\) 的条件耦合几乎保持不变。
+\end{proposition}
+
+\begin{theorem}[near-coboundary 二次选择律：最坏扭曲索引作为带度量格的最短向量]\label{thm:real-input-40-near-coboundary-svp}
+沿用 \(\Sigma:=\nabla^2P(0)\succ 0\) 的记号，并把三维观测向量记为
+\(
+\Phi=(\varphi_e,\varphi_-,\varphi_2)
+\)（见 \S\ref{app:real-input-40-arity-3d} 的定义）。
+对实向量 \(\vartheta=(\vartheta_e,\vartheta_-,\vartheta_2)\in\RR^3\)，定义单位圆扭曲矩阵
+\[
+(M_{i\vartheta})_{ij}:=\sum_{i\to j}\exp\bigl(i(\vartheta_e\varphi_e+\vartheta_-\varphi_-+\vartheta_2\varphi_2)\bigr),
+\qquad
+\rho(\vartheta):=\rho(M_{i\vartheta}),
+\qquad
+\lambda:=\rho(M_0).
+\]
+则存在 \(\delta>0\) 使得当 \(\|\vartheta\|\le \delta\) 时，有二次近似
+\[
+\boxed{\ \log\frac{\rho(\vartheta)}{\lambda}
+\;=\;
+-\frac{1}{2}\,\vartheta^{\mathsf T}\Sigma\,\vartheta\ +\ O(\|\vartheta\|^4)\ }.
+\]
+因此在小角 regime 下，“最慢衰减”（最大 \(\rho(\vartheta)/\lambda\)）近似等价于最小化二次型 \(\vartheta^{\mathsf T}\Sigma\vartheta\)。
+\par
+进一步，给定模数组 \((m_e,m_-,m_2)\) 与非零索引 \(j=(j_e,j_-,j_2)\)（每一分量按模取值），令包裹角向量
+\[
+\vartheta(j):=\bigl(\mathrm{wrap}(2\pi j_e/m_e),\ \mathrm{wrap}(2\pi j_-/m_-),\ \mathrm{wrap}(2\pi j_2/m_2)\bigr)\in[-\pi,\pi]^3,
+\]
+其中 \(\mathrm{wrap}\) 取主值代表元。则在小角 regime 下有选择律
+\[
+j_\star\ \approx\ \arg\min_{j\neq 0}\ \vartheta(j)^{\mathsf T}\Sigma\,\vartheta(j),
+\]
+即最坏扭曲索引近似由离散角格
+\(
+\Lambda=\frac{2\pi}{m_e}\ZZ\times\frac{2\pi}{m_-}\ZZ\times\frac{2\pi}{m_2}\ZZ
+\)
+上关于度量 \(\Sigma\) 的最短向量问题决定。
+\end{theorem}
+\begin{proof}
+由于 \(M_\theta\) 在 \(\theta=0\) 处为原始正矩阵，其 Perron 特征值为代数单根；由 Kato 解析微扰理论，存在邻域使主特征值分支 \(\lambda(\theta)\) 在复参数 \(\theta\) 上解析，且 \(P(\theta):=\log\lambda(\theta)\) 在该邻域解析。
+沿纯虚方向 \(\theta=i\vartheta\) 做 Taylor 展开并取实部，奇次项纯虚而消失，二次项给出
+\[
+\Re\bigl(P(i\vartheta)-P(0)\bigr)=-\frac12\,\vartheta^{\mathsf T}\nabla^2P(0)\,\vartheta+O(\|\vartheta\|^4).
+\]
+在足够小的邻域内，主特征值分支在模长上仍支配其余谱，从而 \(\rho(M_{i\vartheta})=|\lambda(i\vartheta)|\)，并且
+\(
+\log(\rho(\vartheta)/\lambda)=\Re(P(i\vartheta)-P(0))
+\)。
+合并即得第一条盒装式。
+离散索引 \(\vartheta(j)\) 的结论由把 \(\vartheta\) 限制到角格并对上述二次近似取最大（等价取二次型最小）得到。证毕。
+\end{proof}
+
+\begin{corollary}[Dirichlet 模数的 \texorpdfstring{$m^2$}{m2} 扩散障碍（由方差密度锁死）]\label{cor:dirichlet-modulus-diffusion-barrier}
+在定理 \ref{thm:real-input-40-near-coboundary-svp} 的设定下，固定一个整数值线性组合
+\(
+F:=a_e\varphi_e+a_-\varphi_-+a_2\varphi_2
+\)
+（\(a_e,a_-,a_2\in\ZZ\)），并沿该方向取一维单位圆扭曲
+\[
+M_{itF}:=M_{i(t a_e,\ t a_-,\ t a_2)},\qquad t\in\RR.
+\]
+令
+\(
+\sigma_F^2:=\mathrm{Var}_\infty(F)=a^{\mathsf T}\Sigma a
+\)
+为该组合的协方差密度（其中 \(a=(a_e,a_-,a_2)^{\mathsf T}\)，\(\Sigma=\nabla^2P(0)\)）。
+则当模数 \(m\to\infty\) 时，对最小非平凡角 \(t_m:=2\pi/m\) 有渐近
+\[
+\boxed{\;
+\log\frac{\rho(M_{it_mF})}{\lambda}
+=-\frac{\sigma_F^2}{2}\left(\frac{2\pi}{m}\right)^2+O(m^{-4})
+\;}
+\]
+从而
+\[
+\boxed{\;
+\frac{\rho(M_{it_mF})}{\lambda}
+=\exp\!\left(-\frac{2\pi^2\sigma_F^2}{m^2}+O(m^{-4})\right)
+=1-\frac{2\pi^2\sigma_F^2}{m^2}+O(m^{-4}).
+\;}
+\]
+因此，对 \(m\) 个余类的等分布误差项 \(O(\rho^n/n)\) 而言，其“有效衰减长度”满足
+\[
+n\ \gtrsim\ \frac{m^2}{2\pi^2\sigma_F^2},
+\]
+即模数提升在主导尺度上出现一个由方差密度决定的 \(m^2\) 扩散障碍。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:real-input-40-near-coboundary-svp} 的盒装式，对 \(\vartheta=t a\) 得
+\(
+\log(\rho(ta)/\lambda)=-\frac12 t^2 a^{\mathsf T}\Sigma a+O(t^4)
+=-\frac12\sigma_F^2 t^2+O(t^4)
+\)。
+取 \(t=t_m=2\pi/m\) 即得结论。
+\end{proof}
+
+\begin{remark}[数值闭环：输出位势的 \texorpdfstring{$m=5$}{m=5} 最坏比值]
+取 \(F=\varphi_e\)（输出位势），则 \(\sigma_F^2=\Sigma_{ee}\approx 0.04874118\)（由真实输入 40 状态核的 \(\nabla^2P(0)\) 读出）。
+代入推论 \ref{cor:dirichlet-modulus-diffusion-barrier} 给出一阶预测
+\(
+\rho/\lambda\approx \exp(-2\pi^2\Sigma_{ee}/m^2)
+\)，在 \(m=5\) 时约为 \(0.9623\)；
+而表 \ref{tab:real_input_40_output_potential_dirichlet_twists}（输出位势的一维单位根扭曲扫描与累积量预测）以及 \(((5,5,5))\) 的三维张量输出片段 \verb|\input{sections/generated/tab_real_input_40_arity_dirichlet_mertens_555}| 都给出实测
+\(
+\rho_{5,5,5}/\lambda\approx 0.962814
+\)，与该 \(m^{-2}\) 主项尺度一致；加入 \(\kappa_4=P^{(4)}(0)\) 的 \(m^{-4}\) 修正后（表 \ref{tab:real_input_40_output_potential_dirichlet_twists} 的“pred.”列）吻合进一步收紧到 \(10^{-6}\) 量级。
+\end{remark}
+
+\begin{remark}[“Siegel 条带”型逼近：扭曲主极点以 \texorpdfstring{$1/m^2$}{1/m2} 速度贴近 \texorpdfstring{$\Re(s)=1$}{Re(s)=1}]
+在一维扭曲设定下，扭曲 zeta 的主奇点位于
+\(
+z_\star(t)=\lambda(it)^{-1}
+\)。
+若用标准参数化 \(z=\lambda^{-s}\)（即 \(s=-\log z/\log\lambda\)，其中 \(\lambda=\lambda(0)\)），则对应的 \(s\)-坐标满足
+\[
+s(t)=\frac{P(it)}{\log\lambda}.
+\]
+因此对最小非平凡角 \(t_m=2\pi/m\)，由推论 \ref{cor:dirichlet-modulus-diffusion-barrier} 得到
+\[
+\Re s(t_m)
+=1-\frac{2\pi^2\sigma_F^2}{m^2\log\lambda}+O(m^{-4}),
+\]
+即当 \(m\to\infty\) 时出现一族主奇点以 \(1/m^2\) 的速率向 \(\Re(s)=1\) 逼近；其贴近速度完全由方差密度 \(\sigma_F^2\)（亦即 \(\nabla^2P(0)\) 的相应二次型）控制。
+\end{remark}
+
+\begin{proposition}[曲率错配谱：\texorpdfstring{$\log\mathfrak{M}$}{logM} 相对 Fisher 几何的鞍点签名]\label{prop:real-input-40-logM-curvature-mismatch-spectrum}
+令 \(g:=\nabla^2P(0)\succ 0\) 视为 Fisher 度量（协方差密度），并令 \(H:=\nabla^2\log\mathfrak{M}(0)\)（表 \ref{tab:real-input-40-logM-theta-taylor}）。
+考虑广义特征值问题
+\[
+Hv=\mu\,gv.
+\]
+则其特征值（等价于矩阵 \(g^{-1}H=\Sigma^{-1}\nabla^2\log\mathfrak{M}(0)\) 的谱）数值为
+\[
+\mu_1\approx 5.319900,\qquad
+\mu_2\approx -0.534795,\qquad
+\mu_3\approx -2.572439.
+\]
+因此在 \(g\) 所诱导的局部几何下，\(\log\mathfrak{M}\) 在 \(\theta=0\) 处呈现一正两负的鞍点签名：存在增强漂移曲率方向（\(\mu>0\)）以及两条抑制漂移曲率方向（\(\mu<0\)）。
+\end{proposition}
+
+\begin{definition}[方向耦合比：有限部二阶响应 / Fisher 二阶响应]\label{def:real-input-40-directional-coupling}
+在命题 \ref{prop:real-input-40-logM-curvature-mismatch-spectrum} 的记号下，
+对任意非零方向 \(v\in\RR^3\setminus\{0\}\) 定义\textbf{方向耦合比}
+\[
+\mathcal{W}(v):=\frac{v^{\mathsf T}Hv}{v^{\mathsf T}gv}.
+\]
+\end{definition}
+
+\begin{proposition}[空间--时间换算律：有限部漂移与 near-1 pole gap 的二次绑定]\label{prop:real-input-40-space-time-conversion-law}
+沿用以上记号，令 \(\lambda:=\rho(M_0)\) 并对任意方向 \(v\neq 0\) 考虑纯虚扭曲切片
+\(
+\theta(t):=i t v
+\)。
+定义 \(s\)-坐标（参见注 \ref{cor:dirichlet-modulus-diffusion-barrier} 之后的注释）为
+\[
+s_v(t):=\frac{P(itv)}{\log\lambda},
+\]
+并记有限部漂移差为
+\[
+\Delta_{\mathfrak{M},v}(t)
+:=\log\mathfrak{M}(0)-\Re\log\mathfrak{M}(itv).
+\]
+则当 \(t\to 0\) 时有二次近似
+\[
+1-\Re s_v(t)=\frac{t^2}{2\log\lambda}\,v^{\mathsf T}gv+O(t^4),
+\qquad
+\Delta_{\mathfrak{M},v}(t)=\frac{t^2}{2}\,v^{\mathsf T}Hv+O(t^4),
+\]
+从而得到可机核验的换算律
+\[
+\boxed{\;
+\frac{\Delta_{\mathfrak{M},v}(t)}{1-\Re s_v(t)}
+=(\log\lambda)\,\mathcal{W}(v)+O(t^2).\;}
+\]
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:real-input-40-near-coboundary-svp} 的盒装式，取 \(\vartheta=t v\) 得
+\[
+\log\frac{\rho(M_{itv})}{\lambda}
+=-\frac{t^2}{2}\,v^{\mathsf T}gv+O(t^4).
+\]
+另一方面，\(\log\mathfrak{M}(\theta)\) 在 \(\theta=0\) 邻域实解析（注 \ref{prop:logM-analytic}），沿切片 \(\theta(t)=itv\) 的 Taylor 展开给出
+\[
+\log\mathfrak{M}(itv)
+=\log\mathfrak{M}(0)+it\,\langle\nabla\log\mathfrak{M}(0),v\rangle-\frac{t^2}{2}\,v^{\mathsf T}Hv+O(t^3).
+\]
+取实部并注意奇次项纯虚，得到
+\(
+\Delta_{\mathfrak{M},v}(t)=\frac{t^2}{2}v^{\mathsf T}Hv+O(t^4)
+\)。
+再由 \(s_v(t)=P(itv)/\log\lambda\) 且 \(\Re P(itv)=\log\rho(M_{itv})\)（主特征值分支在模长上支配其余谱，见定理 \ref{thm:real-input-40-near-coboundary-svp} 的证明），可得
+\[
+1-\Re s_v(t)
+=\frac{\log\lambda-\log\rho(M_{itv})}{\log\lambda}
+=-\frac{1}{\log\lambda}\log\frac{\rho(M_{itv})}{\lambda}
+=\frac{t^2}{2\log\lambda}\,v^{\mathsf T}gv+O(t^4).
+\]
+将两条二次近似相除并整理，即得盒装换算律。证毕。
+\end{proof}
+
+\begin{proposition}[\(\mathcal{W}(v)\) 的驻点 \texorpdfstring{$\Leftrightarrow$}{<->} 曲率错配谱的本征模态]\label{prop:real-input-40-directional-coupling-eigs}
+在 \(g\succ 0\) 的设定下，函数 \(\mathcal{W}(v)\) 在约束面 \(\{v:\ v^{\mathsf T}gv=1\}\) 上的驻点，恰对应广义特征值问题 \(Hv=\mu gv\) 的本征向量。
+并且对任一本征向量 \(v\) 有
+\[
+\mathcal{W}(v)=\mu.
+\]
+\end{proposition}
+\begin{proof}
+在约束 \(v^{\mathsf T}gv=1\) 下极值化二次型 \(v^{\mathsf T}Hv\)。
+以拉格朗日函数
+\(
+\mathcal{L}(v,\mu)=v^{\mathsf T}Hv-\mu\,(v^{\mathsf T}gv-1)
+\)
+求驻点，得到一阶条件 \(2Hv-2\mu gv=0\)，即 \(Hv=\mu gv\)。
+此时 \(v^{\mathsf T}Hv=\mu\,v^{\mathsf T}gv=\mu\)，故 \(\mathcal{W}(v)=\mu\)。
+\end{proof}
+
+\begin{corollary}[本征模态下的换算常数：\texorpdfstring{$\mu_i$}{mu_i} 的“单位换算”解释]\label{cor:real-input-40-space-time-conversion-eigmodes}
+若 \(v\) 为广义特征值问题 \(Hv=\mu gv\) 的本征向量，则当 \(t\to 0\) 时有
+\[
+\frac{\log\mathfrak{M}(0)-\Re\log\mathfrak{M}(itv)}{1-\Re s_v(t)}
+=(\log\lambda)\,\mu+O(t^2).
+\]
+特别地，对命题 \ref{prop:real-input-40-logM-curvature-mismatch-spectrum} 中的三条曲率错配模态，上式的主导常数分别为 \((\log\lambda)\mu_1,(\log\lambda)\mu_2,(\log\lambda)\mu_3\)。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:real-input-40-space-time-conversion-law} 的盒装式与命题 \ref{prop:real-input-40-directional-coupling-eigs} 中 \(\mathcal{W}(v)=\mu\) 立即得到。证毕。
+\end{proof}
+
+\begin{proposition}[统一生成元方向：恒压漂移与唯一正曲率模态对齐]\label{prop:real-input-40-unified-generator-alignment}
+令 \(u_+\) 为 \(\mu_1>0\) 所对应的广义本征向量，并用欧氏归一化约定把其缩放到 \((u_+)_3=-1\)（且取符号使 \((u_+)_3<0\)）。
+则真实输入 40 状态核的数值不变量满足：恒压漂移容量向量 \(v_\perp\)（定义 \ref{def:real-input-40-isobaric-drift-vector}）与该唯一正模态高度对齐，
+其欧氏余弦 \(\cos(v_\perp,u_+)\) 为常数级 \(O(1)\) 且接近 \(0.85\)（见表 \ref{tab:real-input-40-local-bigeometry-invariants}）。
+\par
+进一步地，按定义 \ref{def:real-input-40-directional-coupling}，主导模态的方向耦合比
+\[
+W_{\mathrm{GUT}}:=\mathcal{W}(u_+)=\mu_1\approx 5.32
+\]
+可作为“有限部漂移 / Fisher 响应”在该核上的一个统一常数证书。
+\end{proposition}
+
+\begin{remark}[可复现输出（脚本与表格）]\label{rem:real-input-40-local-bigeometry-script}
+命题 \ref{prop:real-input-40-isobaric-drift-capacity}--\ref{prop:real-input-40-logM-curvature-mismatch-spectrum} 的数值由脚本 \texttt{scripts/exp\_real\_input\_40\_local\_bigeometry\_invariants.py} 一键生成，并写入表 \ref{tab:real-input-40-local-bigeometry-invariants}（用于回归核对与版本审计）。
+\end{remark}
+\input{sections/generated/tab_real_input_40_local_bigeometry_invariants}
+
+\begin{remark}[数值近似与可证伪问题：\texorpdfstring{$\cos(v_\perp,u_+)$}{cos} vs.\ \texorpdfstring{$\sqrt5/\varphi^2$}{sqrt5/phi^2}]\label{rem:alignment-cos-vs-sqrt5-phi2}
+由 \(\overline d_m=2^m/F_{m+2}\) 与 Fibonacci 渐近 \(F_{m+2}\sim \varphi^{m+2}/\sqrt5\) 可得归一化平均折叠退化度的闭式极限
+\(
+\overline d_m(\varphi/2)^m\to \sqrt5/\varphi^2
+\)。
+对真实输入 40 状态核，命题 \ref{prop:real-input-40-unified-generator-alignment} 的欧氏对齐余弦
+\(\cos(v_\perp,u_+)\) 与该常数在数值上接近但目前尚未一致（差异为 \(10^{-3}\) 量级）：
+\input{sections/generated/eq_alignment_cos_vs_sqrt5_phi2}
+由此得到一个可证伪问题：是否存在一个内禀的度量/归一化选择，使得对齐余弦在相应极限中严格等于 \(\sqrt5/\varphi^2\)？
+若成立，则“谱几何的统一方向”与“折叠统计的归一化常数”将被同一闭式锚点锁定。
+\end{remark}
+
+\begin{proposition}[碰撞势的三次压力方程]\label{prop:real-input-40-collision-pressure}
+令 $X$ 为黄金均值移位，取其邻接矩阵
+\(
+F=\begin{pmatrix}1&1\\[2pt]1&0\end{pmatrix}
+\)，则 $X\times X$ 的邻接矩阵为 $A:=F\otimes F$（按状态 $00,01,10,11$ 排列）。
+对碰撞势 $\varphi_2=\mathbf{1}_{\{11\}}$，令 $u=e^\theta$ 并定义权矩阵
+\[
+W(u):=D(u)A,\qquad D(u):=\mathrm{diag}(1,1,1,u).
+\]
+则特征多项式分解为
+\[
+\det(\lambda I-W(u))=(\lambda+1)\Bigl(\lambda^3-2\lambda^2-(u+1)\lambda+u\Bigr),
+\]
+从而 Perron 根 $\rho(u)$ 为三次方程
+\[
+\rho^3-2\rho^2-(u+1)\rho+u=0
+\]
+的最大实根，并有
+\[
+P_2(\theta)=\log\rho(e^\theta).
+\]
+\end{proposition}
+
+\begin{corollary}[碰撞势均值与方差的 $\sqrt5$ 闭式]\label{cor:real-input-40-collision-cumulants}
+在 $u=1$（即 $\theta=0$，$\rho(1)=\lambda=\varphi^2$）处，
+\[
+P_2'(0)=\frac{3-\sqrt5}{10},
+\qquad
+P_2''(0)=\frac{6\sqrt5-5}{125}.
+\]
+其中 $P_2''(0)$ 与上式 Hessian 的第三对角元一致。
+\end{corollary}
+
+\begin{corollary}[三、四阶累积量闭式]\label{cor:real-input-40-collision-cumulants-higher}
+在同样设定下，碰撞势压力的三、四阶导数在 $\theta=0$ 处亦有 $\sqrt5$ 闭式：
+\[
+\boxed{\;
+P_2^{(3)}(0)=\frac{9+10\sqrt5}{625},
+\qquad
+P_2^{(4)}(0)=\frac{7+24\sqrt5}{3125}.
+\;}
+\]
+\end{corollary}
+
+\begin{corollary}[单位根扭曲下的四阶谱隙渐近]\label{cor:real-input-40-collision-twist-fourth}
+令 $t\in\RR$，取单位根扭曲 $u=e^{it}$ 并记
+\(
+\rho(t):=\rho(e^{it})
+\)。
+则当 $t\to 0$ 时有
+\[
+\Re\bigl(P_2(it)-P_2(0)\bigr)
+=-\frac{P_2''(0)}{2}\,t^2+\frac{P_2^{(4)}(0)}{24}\,t^4+O(t^6),
+\]
+从而（记 $\lambda=\rho(1)=\varphi^2$）
+\[
+\boxed{\
+\log\frac{\rho(t)}{\lambda}
+=-\frac{6\sqrt5-5}{250}\,t^2+\frac{7+24\sqrt5}{75000}\,t^4+O(t^6).
+\ }
+\]
+特别地，对奇素数模 $p$ 的最小非平凡角 $t_p:=2\pi/p$，
+\[
+\log\frac{\rho(t_p)}{\lambda}
+=-\frac{6\sqrt5-5}{250}\left(\frac{2\pi}{p}\right)^2
+\frac{7+24\sqrt5}{75000}\left(\frac{2\pi}{p}\right)^4
+O\!\left(p^{-6}\right).
+\]
+\end{corollary}
+
+\begin{remark}[模 $2$ 的碰撞奇偶扭曲：极简三次代数数]\label{rem:real-input-40-collision-parity}
+当只记录“碰撞次数的奇偶”时取 $u=-1$，三次方程 \eqref{prop:real-input-40-collision-pressure} 中 $(u+1)$ 项消失，得到
+\[
+\rho^3-2\rho^2-1=0.
+\]
+因此非平凡谱半径 $\rho(-1)$ 即为该三次方程的最大实根（数值上 $\rho(-1)\approx 2.2055694304$，从而 $\rho(-1)/\lambda\approx 0.8425$），可作为“near-coboundary 慢混合”现象的一个对照基准：模 $2$ 扭曲远离 coboundary，谱隙更大、混合更快。
+\end{remark}
+
+\begin{remark}[碰撞频率的大偏差参数化]\label{rem:real-input-40-collision-ldp-param}
+由三次方程可消去 $u$，得到参数化表示
+\[
+u=\frac{\rho(\rho^2-2\rho-1)}{\rho-1}\qquad(\rho>1).
+\]
+进一步记 $\alpha(\theta)=P_2'(\theta)$，则可写成
+\[
+\alpha(\rho)=\frac{(\rho^2-2\rho-1)(\rho-1)}{2\rho^3-5\rho^2+4\rho+1},
+\]
+从而碰撞频率的速率函数可参数化为
+\[
+I_2(\alpha(\rho))=\alpha(\rho)\log u(\rho)-\log\rho+\log\lambda,\qquad \rho\in(1,\infty),
+\]
+其中 \(\lambda=\rho(1)=\varphi^2\)（基准压力 \(P_2(0)=\log\lambda\)）。
+\end{remark}
+
+\begin{proposition}[全实谱与根型在 \texorpdfstring{$u>0$}{u>0} 上固定]\label{prop:real-input-40-collision-all-real}
+对任意 \(u>0\)，三次多项式
+\[
+f(\lambda;u):=\lambda^3-2\lambda^2-(u+1)\lambda+u
+\]
+的判别式为
+\[
+\Delta(u)=4u^3+25u^2+88u+8>0.
+\]
+因此 \(f(\lambda;u)\) 在 \(\RR\) 上恒有三个互异实根；结合额外特征值 \(-1\)，矩阵 \(W(u)=D(u)A\) 的全部特征值均为实数。
+并且根型（按大小/符号）满足：
+\[
+\lambda_+(u)>1,\qquad 0<\lambda_0(u)<1,\qquad \lambda_-(u)<0,
+\]
+其中 \(\lambda_+(u)\) 为 Perron 根（命题 \ref{prop:real-input-40-collision-pressure}）。
+更具体地，\(u\le 1\) 时有 \(\lambda_-(u)\in[-1,0)\)，而 \(u>1\) 时有 \(\lambda_-(u)<-1\)。
+\end{proposition}
+\begin{proof}
+判别式直接计算得 \(\Delta(u)=4u^3+25u^2+88u+8>0\)（对 \(u>0\) 右端各项非负且常数项 \(8>0\)），故三根互异且全实。
+又有 \(f(0;u)=u>0,\ f(1;u)=1-2-(u+1)+u=-2<0\)，故在 \((0,1)\) 内存在一根 \(\lambda_0(u)\)。
+并且 \(f(\lambda;u)\to+\infty\) 当 \(\lambda\to+\infty\)，结合 \(f(1;u)<0\) 得在 \((1,\infty)\) 内存在一根 \(\lambda_+(u)>1\)。
+由 Vieta 关系，三根乘积为 \(\lambda_+(u)\lambda_0(u)\lambda_-(u)=-u<0\)，故第三根 \(\lambda_-(u)\) 为负数。
+最后计算
+\(
+f(-1;u)=2(u-1)
+\)：
+当 \(u\le 1\) 时 \(f(-1;u)\le 0\) 且 \(f(0;u)>0\)，故负根落在 \([-1,0)\)；
+当 \(u>1\) 时 \(f(-1;u)>0\) 且 \(f(\lambda;u)\to-\infty\) 当 \(\lambda\to-\infty\)，故负根满足 \(\lambda_-(u)<-1\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[复分歧点与 \texorpdfstring{$\theta=0$}{theta=0} 的解析半径]\label{cor:real-input-40-collision-branch-radius}
+把三次方程 \(f(\lambda;u)=0\) 视为关于 \(\lambda\) 的代数曲线，并令 \(\rho(u)\) 表示在 \(u=1\) 处取值为 \(\rho(1)=\varphi^2\) 的解析分支（Perron 分支的解析延拓）。
+则：
+\begin{enumerate}
+  \item \textbf{（分歧点判别）} \(\rho(u)\) 的代数分歧点恰是判别式的零点，即
+  \[
+  \Delta(u)=4u^3+25u^2+88u+8=0.
+  \]
+  \item \textbf{（\(\theta\)-平面晶格）} 令 \(u=e^\theta\)。则 \(P_2(\theta)=\log\rho(e^\theta)\) 的全部代数分歧点为
+  \[
+  \theta=\log u_j+2\pi i k,\qquad k\in\ZZ,
+  \]
+  其中 \(u_j\) 遍历 \(\Delta(u)=0\) 的三个根。
+  \item \textbf{（Taylor 收敛半径）} \(P_2(\theta)\) 在 \(\theta=0\) 的 Taylor 级数收敛半径由最近分歧点决定：
+  \[
+  \boxed{\ R_\theta=\min_{j}\ \min_{k\in\ZZ}\bigl|\log u_j+2\pi i k\bigr|\ }.
+  \]
+  数值上（由脚本 \texttt{scripts/exp\_real\_input\_40\_collision\_branch\_radius.py} 生成）有
+  \input{sections/generated/eq_real_input_40_collision_branch_radius}
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+\(\rho(u)\) 在 \(u\)-平面上的分歧点恰对应三次方程在 \(\lambda\) 上出现重根，等价于
+\(
+f(\lambda;u)=0
+\)
+与
+\(
+\partial_\lambda f(\lambda;u)=0
+\)
+有公共解。
+对一元多项式而言这当且仅当其判别式为零；而 \(\Delta(u)\) 已由命题 \ref{prop:real-input-40-collision-all-real} 计算给出。
+代入 \(u=e^\theta\) 并取复对数即得 \(\theta\)-平面的分歧点晶格；收敛半径由距离 \(\theta=0\) 最近的分歧点决定。证毕。
+\end{proof}
+
+\begin{proposition}[碰撞位势的核版 RH/Ramanujan 窗口与临界五次方程]\label{prop:real-input-40-collision-rhk-window}
+令 \(\lambda_1(u):=\lambda_+(u)\) 为 Perron 根，并记次谱半径
+\[
+\Lambda(u):=\max\{|\lambda_0(u)|,|\lambda_-(u)|,1\}.
+\]
+则核版 RH 条件 \(\textsf{RH}(u)\)（定义 \ref{def:kernel-rh}）在该 \(4\times4\) 碰撞位势上等价于
+\[
+\Lambda(u)\le \lambda_1(u)^{1/2}.
+\]
+存在唯一的临界参数 \(u_R>1\) 使得
+\[
+u_R^5+4u_R^4+3u_R^3-96u_R^2-42u_R-14=0,
+\]
+并且
+\[
+\textsf{RH}(u)\ \Longleftrightarrow\ 0<u\le u_R.
+\]
+数值上 \(u_R\approx 3.59262181344\)（\(\theta_R=\log u_R\approx 1.27888\)）。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:real-input-40-collision-all-real}，当 \(u\le 1\) 时 \(|\lambda_-(u)|\le 1\) 且 \(0<\lambda_0(u)<1\)，故 \(\Lambda(u)=1\)，而 \(\lambda_1(u)>1\) 给出 \(1\le \sqrt{\lambda_1(u)}\)，于是 \(\textsf{RH}(u)\) 自动成立。
+
+当 \(u>1\) 时有 \(\lambda_-(u)<-1\)，故 \(\Lambda(u)=-\lambda_-(u)\)。
+因此 \(\textsf{RH}(u)\) 等价于
+\[
+(-\lambda_-(u))^2\le \lambda_+(u).
+\]
+令 \(b:=-\lambda_-(u)>1\)。临界等号发生当且仅当存在 \(b>1\) 使得
+\(
+f(-b;u)=0
+\)
+且
+\(
+f(b^2;u)=0
+\)。
+消去参数 \(b\)（对 \(b\) 取 resultant）得到关于 \(u\) 的代数方程
+\(
+u(u^5+4u^4+3u^3-96u^2-42u-14)=0
+\)；
+由于 \(u>0\)，临界点由五次多项式的正实根给出。该五次的系数符号序列为 \((+,+,+,-,-,-)\)，由 Descartes 法则知其恰有一个正实根，记为 \(u_R\)。
+最后由根的连续性与不等式在 \(u=1\) 处为真，得 \(\textsf{RH}(u)\) 在 \((0,u_R]\) 成立且在 \((u_R,\infty)\) 失效。证毕。
+\end{proof}
+
+\begin{remark}[RH-sharp 等号点的两根碰撞与五次代数刻画]\label{rem:collision-cubic-rhsharp-quintic}
+对纯碰撞三次方程
+\[
+f(\lambda;u)=\lambda^3-2\lambda^2-(u+1)\lambda+u,
+\]
+考虑命题 \ref{prop:real-input-40-collision-rhk-window} 的临界点 \(u_\star:=u_R\)，并记
+\[
+s:=\abs{\lambda_-(u_\star)}=-\lambda_-(u_\star)>0.
+\]
+RH-sharp 等号 \(\Lambda(u_\star)=\sqrt{\lambda_+(u_\star)}\)（等价于 \(\beta(u_\star)=\tfrac12\)，见推论 \ref{cor:real-input-40-collision-error-phase}）由负根主导，因而强迫
+\[
+\boxed{\ \lambda_+(u_\star)=s^2,\qquad \lambda_-(u_\star)=-s,\qquad \lambda_0(u_\star)=2-s^2+s\ }.
+\]
+其中 \(\lambda_0(u_\star)\) 由 Vieta 关系 \(\lambda_+(u_\star)+\lambda_0(u_\star)+\lambda_-(u_\star)=2\) 立即给出。
+将三根代回多项式得阈值处的因式分解
+\[
+f(\lambda;u_\star)=(\lambda-s^2)(\lambda+s)\bigl(\lambda-(2-s^2+s)\bigr).
+\]
+比较常数项与一次项系数得到
+\[
+u_\star=s^3(2-s^2+s),
+\qquad
+s^5-3s^3-s^2+2s-1=0.
+\]
+该五次在 \(s>0\) 上恰有一个实根（例如可由 Sturm 链判定），故阈值处的谱三元组由单一代数数 \(s\) 唯一锁定。
+对 \(s\) 消元即回到命题 \ref{prop:real-input-40-collision-rhk-window} 中关于 \(u_\star\) 的五次代数方程；因此临界 \(u_R\) 为代数数。
+\end{remark}
+
+\begin{corollary}[素轨道计数误差指数的相变：\texorpdfstring{$\beta(u)$}{beta(u)} 从 \texorpdfstring{$\le 1/2$}{<=1/2} 连续劣化到 \texorpdfstring{$1$}{1}]\label{cor:real-input-40-collision-error-phase}
+在碰撞位势 \(W(u)\) 上，令 \(\lambda(u):=\lambda_1(u)=\lambda_+(u)\)，并记 \(\Lambda(u)\) 为命题 \ref{prop:real-input-40-collision-rhk-window} 的次谱半径。
+则 prime-orbit 计数的主项为 \(\lambda(u)^n/n\)，误差指数由
+\[
+\beta(u):=\frac{\log \Lambda(u)}{\log \lambda(u)}
+\]
+控制：
+\begin{itemize}
+  \item \(0<u\le 1\) 时 \(\Lambda(u)=1\)，故 \(\beta(u)=0\)（误差至多常数量级）；
+  \item \(1<u\le u_R\) 时 \(\Lambda(u)\le \sqrt{\lambda(u)}\)，故 \(\beta(u)\le \tfrac12\)（平方根相；推论 \ref{cor:kernel-rh-sqrt-error}），且等号仅在 \(u=u_R\) 发生；
+  \item \(u>u_R\) 时 \(\Lambda(u)>\sqrt{\lambda(u)}\)，故 \(\beta(u)>\tfrac12\)，并且当 \(u\to\infty\) 时 \(\beta(u)\to 1\)。
+\end{itemize}
+\par
+更具体地，当 \(u=t^2\to\infty\) 时三次方程的 Puiseux 展开给出
+\[
+\boxed{\ \lambda_+(u)=t+\frac12+\frac{9}{8t}+O(t^{-2}),\qquad
+\lambda_-(u)=-t+\frac12-\frac{9}{8t}+O(t^{-2})\ } ,
+\]
+从而当 \(u>1\)（于是 \(\Lambda(u)=\abs{\lambda_-(u)}=-\lambda_-(u)\)）时有
+\[
+\boxed{\ \beta(u)=\frac{\log\Lambda(u)}{\log\lambda_+(u)}
+=1-\frac{2}{\sqrt u\,\log u}+O\!\left(\frac{1}{u\log u}\right)\ } ,
+\]
+并且 \(\Lambda(u)/\lambda_+(u)\to 1\)（谱隙塌缩）。
+\end{corollary}
+
+\begin{remark}[可复现数值：临界点等号核验与 \texorpdfstring{$\beta(u)$}{beta(u)} 样本表]\label{rem:real-input-40-collision-beta-samples}
+下面两份片段由脚本 \path{scripts/exp_arity_pure_collision_cubic_rh_threshold_beta.py} 自动生成，用于逐点核验命题 \ref{prop:real-input-40-collision-rhk-window} 与推论 \ref{cor:real-input-40-collision-error-phase}：
+式 \eqref{eq:arity_pure_collision_cubic_rh_threshold_uR} 给出临界点 \(u_R\) 处三根与 RH-sharp 等号点（\(\lambda_+(u_R)=(-\lambda_-(u_R))^2\)）；
+表 \ref{tab:arity_pure_collision_cubic_rh_threshold_beta} 给出误差指数 \(\beta(u)\) 在若干代表性 \(u\) 上的数值（包括 \(u=u_R\)）。
+\end{remark}
+
+\input{sections/generated/eq_arity_pure_collision_cubic_rh_threshold_uR}
+\input{sections/generated/tab_arity_pure_collision_cubic_rh_threshold_beta}
+
+\begin{remark}[可复现数值：\texorpdfstring{$\beta(u)$}{beta(u)} 的渐近速率核验]\label{rem:arity-pure-collision-cubic-beta-asymptotic-rate}
+脚本 \path{scripts/exp_arity_pure_collision_cubic_beta_asymptotic_rate.py} 自动生成表 \ref{tab:arity_pure_collision_cubic_beta_asymptotic_rate}，
+用于核验推论 \ref{cor:real-input-40-collision-error-phase} 中
+\(
+\beta(u)=1-\frac{2}{\sqrt u\,\log u}+O\!\left(\frac{1}{u\log u}\right)
+\)
+的数值收敛与尺度。
+\end{remark}
+
+\input{sections/generated/tab_arity_pure_collision_cubic_beta_asymptotic_rate}

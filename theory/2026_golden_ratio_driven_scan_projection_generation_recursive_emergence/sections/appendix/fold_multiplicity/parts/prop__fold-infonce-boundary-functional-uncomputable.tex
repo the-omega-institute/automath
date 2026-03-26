@@ -1,0 +1,28 @@
+% Auto-split to keep each TeX source < 600 lines.
+
+\begin{proposition}[Bayes--InfoNCE 学习相变边界泛函的统一可逼近性不可计算]\label{prop:fold-infonce-boundary-functional-uncomputable}
+令 \(\mathcal F\) 为所有一致可计算的映射族 \(f=(f_m)_{m\ge 1}\) 的集合，
+并令 \(L_m^{K,\star}(f)\) 表示以 \(f\) 诱导的推前分布 \(w_m^{(f)}\) 代替 \(w_m\) 后的 Bayes 最优 InfoNCE 损失（定理 \ref{thm:fold-infonce-laplace-renyi-moment-expansion}）。
+对每个 \(f\in\mathcal F\) 定义边界泛函
+\[
+\mathfrak B(f)
+:=
+\sup\Bigl\{\alpha\in(0,1):\ \lim_{m\to\infty}\frac{1}{m}L_m^{2^{\alpha m},\star}(f)=0\Bigr\}\in[0,1].
+\]
+则不存在图灵机 \(\mathsf A\)，能够对任意输入 \((f,\epsilon)\in\mathcal F\times\QQ_{>0}\) 在有限步内输出有理数 \(r\) 使得
+\[
+|\mathfrak B(f)-r|<\epsilon.
+\]
+特别地，不存在对全体 \(f\in\mathcal F\) 同时有效的统一有限步数值近似程序，能够以任意预设精度逼近该学习相变边界。
+\end{proposition}
+
+\begin{proof}
+反证。
+若存在上述 \(\mathsf A\)，则取 \(\epsilon=\tfrac14\)。
+对定理 \ref{thm:fold-infonce-rate-undecidable} 的停机嵌入构造：给定任意 \((M,x)\)，得到一致可计算族 \(f\) 满足
+若 \(M(x)\) 停机，则 \(f_m\) 对充分大 \(m\) 为恒等映射，从而 \(\lim_{m\to\infty}m^{-1}L_m^{2^{\alpha m},\star}(f)=0\) 对一切 \(\alpha\in(0,1)\) 成立并推出 \(\mathfrak B(f)=1\)；
+若 \(M(x)\) 不停机，则 \(f_m\) 恒为常值映射，从而 \(\lim_{m\to\infty}m^{-1}L_m^{2^{\alpha m},\star}(f)=\alpha\log 2>0\) 并推出 \(\mathfrak B(f)=0\)。
+\par
+因此 \(\mathsf A(f,\tfrac14)\) 的输出 \(r\) 满足 \(r>\tfrac12\) 当且仅当 \(M(x)\) 停机，从而给出停机问题的判定算法，矛盾。证毕。
+\end{proof}
+

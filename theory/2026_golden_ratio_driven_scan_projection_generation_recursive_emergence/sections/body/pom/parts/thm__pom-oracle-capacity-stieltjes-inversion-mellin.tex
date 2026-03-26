@@ -1,0 +1,106 @@
+\begin{theorem}[预言机容量曲线的 Stieltjes 反演：多重度谱的可识别性与 Mellin 表示]\label{thm:pom-oracle-capacity-stieltjes-inversion-mellin}
+固定分辨率 \(m\)。
+令 \(X_m\) 为折叠诱导的有限状态空间，并记纤维多重度
+\[
+d_m(x):=\card{\Fold_m^{-1}(x)}\qquad(x\in X_m).
+\]
+定义 \(B\)-比特预言机容量（同定理 \ref{thm:pom-oracle-success-variational-laplace} 的口径）
+\[
+C_m(B):=\sum_{x\in X_m}\min\{d_m(x),2^B\}\qquad(B\in\ZZ_{\ge 0}),
+\]
+并引入连续化容量曲线
+\[
+\mathcal{C}_m(u):=\sum_{x\in X_m}\min\{d_m(x),u\}\qquad(u\ge 0),
+\]
+以及尾计数函数
+\[
+N_m(u):=\card{\{x\in X_m:\ d_m(x)>u\}}\qquad(u\ge 0).
+\]
+则成立：
+\begin{enumerate}
+  \item \textbf{（离散--连续一致性）}
+  \[
+  \mathcal{C}_m(2^B)=C_m(B)\qquad(B\in\ZZ_{\ge 0}).
+  \]
+  \item \textbf{（容量--尾分布恒等式）}
+  \[
+  \mathcal{C}_m(u)=\int_{0}^{u}N_m(v)\,\dd v\qquad(u\ge 0),
+  \]
+  从而 \(\mathcal{C}_m\) 为分段线性凹函数，且对 Lebesgue--a.e.\ \(u>0\) 有 \(\mathcal{C}_m'(u)=N_m(u)\)。
+  \item \textbf{（谱的可识别性）}
+  多重集 \(\{d_m(x):x\in X_m\}\) 由 \(\mathcal{C}_m(\cdot)\) 唯一确定；更具体地，对任意整数 \(k\ge 0\)，
+  \[
+  \card{\{x\in X_m:\ d_m(x)=k\}}
+  =
+  \lim_{\varepsilon\downarrow 0}\Bigl(\mathcal{C}_m'(k-\varepsilon)-\mathcal{C}_m'(k+\varepsilon)\Bigr).
+  \]
+  \item \textbf{（Mellin--Stieltjes 表示）}
+  对任意实数 \(a>0\)，幂和
+  \[
+  S_m(a):=\sum_{x\in X_m}d_m(x)^a
+  \]
+  满足
+  \[
+  S_m(a)=a\int_{0}^{\infty}u^{a-1}N_m(u)\,\dd u.
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{corollary}[容量曲线的折点与斜率跳跃]\label{cor:pom-oracle-capacity-kinks-slopes}
+沿用定理 \ref{thm:pom-oracle-capacity-stieltjes-inversion-mellin} 的记号。
+则 \(\mathcal{C}_m(\cdot)\) 为分段线性凹函数，其折点位置恰为多重度谱的不同取值；
+并且在任意非折点处，
+\[
+\mathcal{C}_m'(u)=N_m(u).
+\]
+因此每个整数 \(k\ge 0\) 的重数可由斜率的左右极限差读出。
+\end{corollary}
+
+\begin{proof}
+\textbf{第一条}由定义直接成立。
+\par
+\textbf{第二条}
+对任意 \(d,u\ge 0\) 有恒等式
+\[
+\min\{d,u\}=\int_{0}^{u}\mathbf 1_{\{v<d\}}\,\dd v,
+\]
+从而
+\[
+\mathcal{C}_m(u)
+:=\sum_{x\in X_m}\int_{0}^{u}\mathbf 1_{\{v<d_m(x)\}}\,\dd v
+=\int_{0}^{u}\sum_{x\in X_m}\mathbf 1_{\{d_m(x)>v\}}\,\dd v
+=\int_{0}^{u}N_m(v)\,\dd v.
+\]
+由于 \(N_m\) 为阶梯函数，基本微分定理给出 \(\mathcal{C}_m'(u)=N_m(u)\) 在 Lebesgue--a.e.\ \(u>0\) 成立。
+\par
+\textbf{第三条}
+对整数 \(k\ge 0\) 与任意 \(0<\varepsilon<1\)，有
+\[
+N_m(k-\varepsilon)=\card{\{x:\ d_m(x)\ge k\}},
+\qquad
+N_m(k+\varepsilon)=\card{\{x:\ d_m(x)\ge k+1\}},
+\]
+故
+\[
+\card{\{x:\ d_m(x)=k\}}=N_m(k-\varepsilon)-N_m(k+\varepsilon)
+=\mathcal{C}_m'(k-\varepsilon)-\mathcal{C}_m'(k+\varepsilon).
+\]
+令 \(\varepsilon\downarrow 0\) 即得斜率跳跃公式，从而由 \(\mathcal{C}_m\) 唯一恢复多重度谱。
+\par
+\textbf{第四条}
+恒等式
+\[
+d^a=a\int_{0}^{d}u^{a-1}\,\dd u\qquad(d\ge 0)
+\]
+给出
+\[
+S_m(a)
+=a\sum_{x\in X_m}\int_{0}^{d_m(x)}u^{a-1}\,\dd u
+=a\int_{0}^{\infty}u^{a-1}\sum_{x\in X_m}\mathbf 1_{\{d_m(x)>u\}}\,\dd u
+=a\int_{0}^{\infty}u^{a-1}N_m(u)\,\dd u.
+\]
+证毕。
+\end{proof}
+
+\endinput
+

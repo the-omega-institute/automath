@@ -1,0 +1,600 @@
+\begin{proposition}[Poisson 粗粒化的从属原理：唯一 \texorpdfstring{$1/2$}{1/2}-稳定子ordinator 的随机时间表示]\label{prop:xi-poisson-subordination-half-stable}
+在 \(\RR\) 上令热半群与 Poisson 半群分别为
+\[
+G_s f:=e^{s\Delta}f,
+\qquad
+P_t f:=e^{-t|D|}f
+\qquad(s,t>0),
+\]
+其 Fourier 乘子为 \(\widehat{G_s f}(\xi)=e^{-s\xi^2}\widehat f(\xi)\) 与 \(\widehat{P_t f}(\xi)=e^{-t|\xi|}\widehat f(\xi)\)。
+则存在唯一一族概率测度 \(\{\eta_t\}_{t>0}\)（\(1/2\)-稳定从属测度）满足
+\[
+\boxed{\;
+P_t f=\int_{0}^{\infty} G_s f\ \dd\eta_t(s)\qquad(t>0)\;}
+\]
+并且 \(\eta_t\) 由 Laplace 指数唯一确定：
+\[
+\boxed{\;
+\int_{0}^{\infty}e^{-\lambda s}\,\dd\eta_t(s)=e^{-t\sqrt{\lambda}}
+\qquad(\lambda>0)\; }.
+\]
+在密度意义下可取
+\[
+\dd\eta_t(s)=\frac{t}{2\sqrt{\pi}}\,s^{-3/2}\exp\!\left(-\frac{t^2}{4s}\right)\dd s.
+\]
+\end{proposition}
+\begin{proof}[证明要点]
+由上式 Laplace 指数，取 \(\lambda=\xi^2\ge 0\) 得
+\(
+\int_0^\infty e^{-s\xi^2}\dd\eta_t(s)=e^{-t|\xi|}
+\)。
+对任意 \(f\in L^1(\RR)\cap L^2(\RR)\)，在 Fourier 侧计算
+\[
+\widehat{\int_0^\infty G_s f\,\dd\eta_t(s)}(\xi)
+=\widehat f(\xi)\int_0^\infty e^{-s\xi^2}\dd\eta_t(s)
+=e^{-t|\xi|}\widehat f(\xi)
+=\widehat{P_t f}(\xi),
+\]
+从而得到从属表示；唯一性由 Laplace 变换的唯一性给出。证毕。
+\end{proof}
+
+\begin{proposition}[相对熵耗散的分数 Fisher 恒等式：Poisson 半群下的严格耗散律]\label{prop:xi-poisson-kl-dissipation-fractional-fisher}
+令 \(p,q\) 为 \(\RR\) 上概率密度，定义 Poisson 粗粒化 \(p_t:=P_t*p\)、\(q_t:=P_t*q\)。
+则相对熵
+\[
+D_{\mathrm{KL}}(p\mid q):=\int_{\RR} p(x)\log\!\frac{p(x)}{q(x)}\,\dd x
+\]
+沿 Poisson 流满足精确耗散恒等式
+\[
+\boxed{\;
+\frac{\dd}{\dd t}D_{\mathrm{KL}}(p_t\mid q_t)=-\mathcal I_1(p_t\mid q_t)\;}
+\]
+其中分数 Fisher 信息（耗散率）可取为非局部 Dirichlet 形式
+\[
+\boxed{\;
+\mathcal I_1(p\mid q)
+:=\frac{1}{2\pi}\iint_{\RR^2}
+\Bigl(\log\frac{p(x)}{q(x)}-\log\frac{p(y)}{q(y)}\Bigr)
+\Bigl(\frac{p(x)}{q(x)}-\frac{p(y)}{q(y)}\Bigr)
+\frac{q(x)q(y)}{(x-y)^2}\,\dd x\,\dd y\ \ge\ 0\;}
+\]
+（按主值理解；由于差分结构该积分在 \(p,q\) 足够正则时有限）。
+并且 \(\mathcal I_1(p_t\mid q_t)=0\) 当且仅当 \(p_t=q_t\)（a.e.）。
+\end{proposition}
+\begin{proof}[证明要点]
+把 \(|D|\) 视为 \((-\Delta)^{1/2}\) 的生成元，并用其 Lévy--Dirichlet 表示（核 \(\asymp |x-y|^{-2}\)）对
+\(
+\frac{\dd}{\dd t}\int p_t\log(p_t/q_t)
+\)
+作差分化计算，可将导数写成对称双重积分形式：
+\[
+\frac{\dd}{\dd t}D_{\mathrm{KL}}(p_t\mid q_t)
+=-\frac{1}{2\pi}\iint_{\RR^2}
+\Bigl(\log r_t(x)-\log r_t(y)\Bigr)\Bigl(r_t(x)-r_t(y)\Bigr)\,
+\frac{q_t(x)q_t(y)}{(x-y)^2}\,\dd x\,\dd y,
+\]
+其中 \(r_t:=p_t/q_t\)。
+由于函数 \(u\mapsto \log u\) 单调递增，故 \((r(x)-r(y))(\log r(x)-\log r(y))\ge 0\)，从而耗散率非负并在且仅在 \(r\) 常值（即 \(p_t=q_t\)）时为零。证毕。
+\end{proof}
+
+\begin{corollary}[Poisson 半群下的相对熵收缩与取等刚性]\label{cor:xi-poisson-kl-contraction-rigidity}
+在命题 \ref{prop:xi-poisson-kl-dissipation-fractional-fisher} 的条件下，对任意 \(t,s\ge 0\) 有链式收缩
+\[
+\boxed{\;
+D_{\mathrm{KL}}(p_{t+s}\mid q_{t+s})\le D_{\mathrm{KL}}(p_t\mid q_t)\le D_{\mathrm{KL}}(p\mid q)\;}
+\]
+并且若存在 \(t_0\ge 0\) 与 \(s_0>0\) 使
+\(
+D_{\mathrm{KL}}(p_{t_0+s_0}\mid q_{t_0+s_0})=D_{\mathrm{KL}}(p_{t_0}\mid q_{t_0})
+\)，
+则必有 \(p=q\)（a.e.）。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:xi-poisson-kl-dissipation-fractional-fisher}，\(t\mapsto D_{\mathrm{KL}}(p_t\mid q_t)\) 的导数为 \(-\mathcal I_1(p_t\mid q_t)\le 0\)，故得到链式收缩。
+若在 \(t_0\) 与 \(t_0+s_0\) 处取等，则 \(\int_{t_0}^{t_0+s_0}\mathcal I_1(p_t\mid q_t)\,\dd t=0\)，从而 \(\mathcal I_1(p_t\mid q_t)=0\) 在该区间几乎处处成立；
+由同一命题得 \(p_t=q_t\)（a.e.）在该区间几乎处处成立，特别地可取某个 \(t_\ast>0\) 使 \(p_{t_\ast}=q_{t_\ast}\) a.e.。
+取 Fourier 变换并用 \(\widehat{P_{t_\ast}}(\xi)=e^{-t_\ast|\xi|}\) 得 \(\widehat p(\xi)e^{-t_\ast|\xi|}=\widehat q(\xi)e^{-t_\ast|\xi|}\)，故 \(\widehat p=\widehat q\) 从而 \(p=q\)（a.e.）。证毕。
+\end{proof}
+
+\begin{proposition}[全变差与相对熵的最优矩控制：粗粒化信息损失的二阶精确项]\label{prop:xi-poisson-tv-kl-second-order}
+沿用命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form} 的记号，令
+\[
+g_t(x):=\frac{1}{\pi}\frac{t}{(x-\bar\gamma)^2+t^2}
+\qquad (t>0)
+\]
+为同重心 \(\bar\gamma\) 的单 Cauchy 基准密度。
+并假设三阶中心矩有限：
+\(
+\int_{\RR}|\gamma-\bar\gamma|^3\,\dd\tilde\nu(\gamma)<\infty
+\)。
+则当 \(t\to\infty\) 时成立二阶尺度与常数律：
+\[
+\|h_t-g_t\|_{L^1(\RR)}\ \asymp\ t^{-2}\cdot \mathrm{Var},
+\qquad
+\chi^2(h_t\mid g_t)=\frac{\mathrm{Var}^2}{4t^4}+o(t^{-4}),
+\qquad
+D_{\mathrm{KL}}(h_t\mid g_t)=\frac{\mathrm{Var}^2}{8t^4}+o(t^{-4}),
+\]
+其中
+\[
+D_{\mathrm{KL}}(h\mid g):=\int_{\RR} h(x)\log\!\frac{h(x)}{g(x)}\,\dd x,
+\qquad
+\chi^2(h\mid g):=\int_{\RR}\frac{(h(x)-g(x))^2}{g(x)}\,\dd x.
+\]
+并且二者在二次项上满足等价关系
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)=\frac12\,\chi^2(h_t\mid g_t)+o(t^{-4}).
+\]
+从而
+\(
+\lim_{t\to\infty} t^4D_{\mathrm{KL}}(h_t\mid g_t)=\mathrm{Var}^2/8
+\)
+且
+\(
+\lim_{t\to\infty} t^4\chi^2(h_t\mid g_t)=\mathrm{Var}^2/4
+\)。
+特别地，当 \(\mathrm{Var}=0\) 时 \(h_t\equiv g_t\) 从而上述距离与散度恒为 \(0\)；当 \(\mathrm{Var}>0\) 时，\(\|h_t-g_t\|_{L^1}\asymp t^{-2}\mathrm{Var}\) 中的隐含常数可取为与 \(\tilde\nu\) 无关的绝对常数。
+\end{proposition}
+\begin{proof}[证明要点]
+由命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form}，写作
+\[
+h_t(x)=g_t(x)+\mathrm{Var}\cdot r_t(x)+\varepsilon_t(x),
+\]
+其中
+\[
+r_t(x):=\frac{1}{\pi}\,
+\frac{t\bigl(3(x-\bar\gamma)^2-t^2\bigr)}{\bigl((x-\bar\gamma)^2+t^2\bigr)^3},
+\qquad
+\varepsilon_t(x)=O(t^{-4})
+\]
+且 \(\varepsilon_t\) 的 \(L^1\) 范数由三阶中心矩控制为 \(O(t^{-3})\)（由对 Poisson 核作三阶 Taylor 余项并用 \(\|P_t^{(3)}\|_{L^1}\asymp t^{-3}\)）。
+令 \(y=(x-\bar\gamma)/t\) 则
+\[
+\|r_t\|_{L^1(\RR)}=\frac{1}{t^2}\int_{\RR}\frac{|3y^2-1|}{\pi(1+y^2)^3}\,\dd y
+\asymp t^{-2},
+\]
+从而得到 \(\|h_t-g_t\|_{L^1}\asymp \mathrm{Var}\,t^{-2}\)。
+\par
+由定义
+\(
+\chi^2(h_t\mid g_t)=\int_{\RR}\frac{(h_t-g_t)^2}{g_t}\,\dd x
+\)。
+将 \(h_t-g_t=\mathrm{Var}\,r_t+\varepsilon_t\) 代入并展开平方，
+利用 \(\sup_x|\varepsilon_t(x)|=O(t^{-4})\) 与 \(\|\varepsilon_t\|_{L^1}=O(t^{-3})\)，得到
+\[
+\chi^2(h_t\mid g_t)
+=\mathrm{Var}^2\int_{\RR}\frac{r_t(x)^2}{g_t(x)}\,\dd x+o(t^{-4}).
+\]
+对主项作代换 \(x=\bar\gamma+ty\)，并用恒等式
+\[
+\frac{r_t(\bar\gamma+ty)^2}{g_t(\bar\gamma+ty)}=\frac{1}{\pi t^5}\,\frac{(3y^2-1)^2}{(1+y^2)^5},
+\]
+得到
+\[
+\int_{\RR}\frac{r_t(x)^2}{g_t(x)}\,\dd x
+=\frac{1}{t^4}\int_{\RR}\frac{(3y^2-1)^2}{\pi(1+y^2)^5}\,\dd y
+=\frac{1}{4t^4},
+\]
+其中最后一步可由标准积分
+\(
+\int_{\RR}(1+y^2)^{-n}\dd y=\pi\frac{(2n-3)!!}{(2n-2)!!}
+\)
+化简得到。
+从而 \(\chi^2(h_t\mid g_t)=\mathrm{Var}^2/(4t^4)+o(t^{-4})\)。
+\par
+对相对熵，令 \(u_t:=h_t/g_t-1\)。由 \(u_t=O(t^{-2})\) 与 \(\int g_tu_t=\int(h_t-g_t)=0\)，
+对 \((1+u)\log(1+u)\) 作二阶展开得到
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac12\int_{\RR} g_t\,u_t^2\,\dd x+O\!\left(\int_{\RR} g_t|u_t|^3\,\dd x\right)
+=\frac12\,\chi^2(h_t\mid g_t)+o(t^{-4}),
+\]
+其中 \(o(t^{-4})\) 由 \(\|u_t\|_\infty=O(t^{-2})\) 与 \(\int g_tu_t^2=\chi^2(h_t\mid g_t)=O(t^{-4})\) 保证。
+证毕。
+\end{proof}
+\input{con__xi-poisson-distinguishability-trinity}
+\input{cor__xi-poisson-density-ratio-second-order-profile}
+\begin{theorem}[Cauchy--Poisson 粗粒化下 \texorpdfstring{$L^1$}{L1} 距离的锐渐近常数]\label{thm:xi-cauchy-poisson-tv-sharp-constant}
+沿用命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form} 的设定，并记
+\[
+\sigma^2:=\int_{\RR}(\gamma-\bar\gamma)^2\,\dd\tilde\nu(\gamma)\in(0,\infty).
+\]
+若三阶中心绝对矩有限
+\(
+\int_{\RR}|\gamma-\bar\gamma|^3\,\dd\tilde\nu(\gamma)<\infty
+\)，则成立锐渐近
+\begin{equation}\label{eq:xi-cauchy-poisson-tv-sharp-constant}
+\boxed{\;
+\|h_t-g_t\|_{L^1(\RR)}
+=\frac{3\sqrt3}{4\pi}\,\frac{\sigma^2}{t^2}+O(t^{-3})
+\qquad(t\to\infty)\;}
+\end{equation}
+其中 \(h_t:=P_t*\tilde\nu\)，并且 \(g_t(x)=\frac{1}{\pi}\frac{t}{(x-\bar\gamma)^2+t^2}\) 为同重心的单 Cauchy 基准密度（见命题 \ref{prop:xi-poisson-tv-kl-second-order}）。
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form} 的二阶正规形，存在函数 \(r_t\) 与余项 \(\varepsilon_t\) 使
+\[
+h_t(x)=g_t(x)+\sigma^2 r_t(x)+\varepsilon_t(x),
+\qquad
+\|\varepsilon_t\|_{L^1(\RR)}=O(t^{-3}),
+\]
+其中
+\[
+r_t(x)=\frac{1}{\pi}\,
+\frac{t\bigl(3(x-\bar\gamma)^2-t^2\bigr)}{\bigl((x-\bar\gamma)^2+t^2\bigr)^3}.
+\]
+由三角不等式得到
+\(
+\bigl|\|h_t-g_t\|_{L^1}-\sigma^2\|r_t\|_{L^1}\bigr|
+\le \|\varepsilon_t\|_{L^1}
+\)，从而
+\[
+\|h_t-g_t\|_{L^1(\RR)}
+=\sigma^2\|r_t\|_{L^1(\RR)}+O(t^{-3})
+\qquad(t\to\infty).
+\]
+令 \(y=(x-\bar\gamma)/t\)，则
+\[
+t^2\|r_t\|_{L^1(\RR)}
+=\int_{\RR}\frac{|3y^2-1|}{\pi(1+y^2)^3}\,\dd y.
+\]
+把积分写为 \(2\) 倍的半轴积分并作代换 \(y=\tan\theta\)（\(\theta\in[0,\pi/2)\)），得到
+\[
+\int_{\RR}\frac{|3y^2-1|}{\pi(1+y^2)^3}\,\dd y
+=\frac{2}{\pi}\int_{0}^{\pi/2}|4\sin^2\theta-1|\,\cos^2\theta\,\dd\theta.
+\]
+由于零点满足 \(\sin^2\theta=1/4\)，即 \(\theta=\pi/6\)，分段积分并用
+\(
+\int \cos^2\theta\,\dd\theta=\theta/2+\sin(2\theta)/4
+\) 与
+\(
+\int \sin^2\theta\cos^2\theta\,\dd\theta=\theta/8-\sin(4\theta)/32
+\)
+可得
+\[
+\int_{\RR}\frac{|3y^2-1|}{\pi(1+y^2)^3}\,\dd y
+=\frac{2}{\pi}\left(\frac{3\sqrt3}{8}\right)=\frac{3\sqrt3}{4\pi}.
+\]
+代回即得 \eqref{eq:xi-cauchy-poisson-tv-sharp-constant}。证毕。
+\end{proof}
+
+\begin{theorem}[Cauchy--Poisson 粗粒化下相对熵的六阶锐渐近]\label{thm:xi-cauchy-poisson-kl-sharp-asymptotics}
+沿用命题 \ref{con:xi-poisson-coarsegraining-second-order-normal-form} 的设定，并记中心化随机变量
+\[
+X:=\gamma-\bar\gamma,
+\qquad
+\bar\gamma:=\int_{\RR}\gamma\,\dd\tilde\nu(\gamma),
+\qquad
+\mathbb{E}[f(X)]:=\int_{\RR}f(\gamma-\bar\gamma)\,\dd\tilde\nu(\gamma).
+\]
+假设五阶中心绝对矩有限 \(\mathbb{E}[|X|^5]<\infty\)，并记
+\[
+\sigma^2:=\mathbb{E}[X^2],\qquad
+\mu_3:=\mathbb{E}[X^3],\qquad
+\mu_4:=\mathbb{E}[X^4].
+\]
+则当 \(t\to\infty\) 时成立仅含偶次幂的渐近展开（特别地，\(t^{-5}\) 项恒等消失）
+\begin{equation}\label{eq:xi-cauchy-poisson-kl-sharp-asymptotics}
+\boxed{\;
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{\sigma^4}{8t^4}
+\;+\;\frac{1}{t^6}\left(
+\frac{3\mu_3^2}{32}
+-\frac{\sigma^2\mu_4}{8}
++\frac{\sigma^6}{64}
+\right)
+\;+\;O(t^{-8}).\;}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+相对熵在共同平移下不变：令 \(T_a f(x):=f(x-a)\)，则 \(D_{\mathrm{KL}}(T_a f\mid T_a g)=D_{\mathrm{KL}}(f\mid g)\)。
+故可在证明中取 \(\bar\gamma=0\)。
+记 \(g(y):=(1+y^2)^{-1}\) 并作尺度置换 \(x=ty\)。
+则
+\[
+g_t(ty)=\frac{1}{\pi t}g(y),
+\qquad
+h_t(ty)=\mathbb{E}\!\left[\frac{t}{\pi\bigl((ty-X)^2+t^2\bigr)}\right]
+=\frac{1}{\pi t}\,\mathbb{E}\!\left[\frac{1}{1+(y-X/t)^2}\right].
+\]
+于是密度比写作
+\[
+r_t(y):=\frac{h_t(ty)}{g_t(ty)}
+=\frac{\mathbb{E}\bigl[(1+(y-X/t)^2)^{-1}\bigr]}{(1+y^2)^{-1}}
+=1+\delta_t(y).
+\]
+并且
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\int_{\RR}h_t(x)\log\frac{h_t(x)}{g_t(x)}\,\dd x
+=\frac{1}{\pi}\int_{\RR} g(y)\,r_t(y)\log r_t(y)\,\dd y.
+\]
+注意 \(\frac{1}{\pi}\int g(y)\,r_t(y)\dd y=1\)，从而 \(\frac{1}{\pi}\int g\,\delta_t=0\)。
+\par
+令 \(f(y,\varepsilon):=(1+(y-\varepsilon)^2)^{-1}\) 并在 \(\varepsilon=0\) 处作 Taylor 展开到四阶，可得（逐项代数化简）
+\[
+\frac{f(y,\varepsilon)}{g(y)}
+=1+\frac{2y}{1+y^2}\varepsilon
+\;+\;\frac{3y^2-1}{(1+y^2)^2}\varepsilon^2
+\;+\;\frac{4y(y^2-1)}{(1+y^2)^3}\varepsilon^3
+\;+\;\frac{5y^4-10y^2+1}{(1+y^2)^4}\varepsilon^4
+\;+\;O(\varepsilon^5).
+\]
+取 \(\varepsilon=X/t\) 并取期望，利用 \(\mathbb{E}[X]=0\) 得
+\[
+\delta_t(y)
+=\frac{\sigma^2}{t^2}A(y)
+\;+\;\frac{\mu_3}{t^3}B(y)
+\;+\;\frac{\mu_4}{t^4}C(y)
+\;+\;O(t^{-5}),
+\]
+其中
+\[
+A(y)=\frac{3y^2-1}{(1+y^2)^2},\qquad
+B(y)=\frac{4y(y^2-1)}{(1+y^2)^3},\qquad
+C(y)=\frac{5y^4-10y^2+1}{(1+y^2)^4}.
+\]
+由于 \(\delta_t=O(t^{-2})\)，并用幂级数
+\[
+(1+u)\log(1+u)=u+\frac{u^2}{2}-\frac{u^3}{6}+O(u^4),
+\]
+结合 \(\frac{1}{\pi}\int g\,\delta_t=0\) 与 \(\frac{1}{\pi}\int g\,O(\delta_t^4)=O(t^{-8})\)，得到
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{1}{2\pi}\int g\,\delta_t^2
+-\frac{1}{6\pi}\int g\,\delta_t^3
++O(t^{-8}).
+\]
+利用 \(A,C\) 为偶函数而 \(B\) 为奇函数，所有奇 integrand 的积分消失，从而
+\[
+\frac{1}{\pi}\int g\,\delta_t^2
+=\frac{\sigma^4}{t^4}\cdot\frac{1}{\pi}\int gA^2
+\;+\;\frac{1}{t^6}\left(
+\mu_3^2\cdot\frac{1}{\pi}\int gB^2
++2\sigma^2\mu_4\cdot\frac{1}{\pi}\int gAC
+\right)
++O(t^{-8}),
+\]
+\[
+\frac{1}{\pi}\int g\,\delta_t^3
+=\frac{\sigma^6}{t^6}\cdot\frac{1}{\pi}\int gA^3
++O(t^{-8}).
+\]
+最后把 \(gA^2,gB^2,gAC,gA^3\) 化为 \((1+y^2)^{-n}\) 的线性组合并用标准积分
+\(
+\int_{\RR}(1+y^2)^{-n}\dd y
+=\pi\frac{(2n-3)!!}{(2n-2)!!}
+\)
+计算，得到常数
+\[
+\frac{1}{\pi}\int gA^2=\frac14,\quad
+\frac{1}{\pi}\int gB^2=\frac{3}{16},\quad
+\frac{1}{\pi}\int gAC=-\frac18,\quad
+\frac{1}{\pi}\int gA^3=-\frac{3}{32}.
+\]
+代回并化简即得 \eqref{eq:xi-cauchy-poisson-kl-sharp-asymptotics}。证毕。
+\end{proof}
+
+\input{para__xi-poisson-moment-gap-energy}
+
+\begin{proposition}[任意光滑 \texorpdfstring{$f$}{f}-散度的普适首项常数]\label{prop:xi-cauchy-poisson-fdiv-universal-constant}
+在定理 \ref{thm:xi-cauchy-poisson-kl-sharp-asymptotics} 的条件下，
+令 \(f:(0,\infty)\to\RR\) 为凸函数，满足 \(f(1)=0\)，并且在 \(1\) 的邻域二阶可微且 \(f''(1)<\infty\)。
+定义 Csiszár \texorpdfstring{$f$}{f}-散度
+\[
+D_f(h\mid g):=\int_{\RR} g(x)\,f\!\left(\frac{h(x)}{g(x)}\right)\,\dd x.
+\]
+则当 \(t\to\infty\) 时成立锐渐近
+\begin{equation}\label{eq:xi-cauchy-poisson-fdiv-sharp-asymptotics}
+\boxed{\;
+D_f(h_t\mid g_t)=\frac{f''(1)}{8}\,\frac{\sigma^4}{t^4}+o(t^{-4})\;}
+\end{equation}
+从而
+\(
+\lim_{t\to\infty}\frac{t^4}{\sigma^4}D_f(h_t\mid g_t)=\frac{f''(1)}{8}
+\)。
+\end{proposition}
+
+\begin{proof}
+沿用定理 \ref{thm:xi-cauchy-poisson-kl-sharp-asymptotics} 证明中的比值记号 \(r_t=h_t/g_t=1+\delta_t\)。
+由 Taylor 展开 \(f(1+u)=f(1)+f'(1)u+\tfrac12 f''(1)u^2+o(u^2)\)（\(u\to0\)）并乘以 \(g_t\) 积分得到
+\[
+D_f(h_t\mid g_t)
+=f'(1)\int_{\RR} g_t\,\delta_t\,\dd x+\frac{f''(1)}{2}\int_{\RR} g_t\,\delta_t^2\,\dd x+o\!\left(\int_{\RR} g_t\,\delta_t^2\,\dd x\right).
+\]
+其中 \(\int g_t\delta_t=\int(h_t-g_t)=0\) 使线性项消失。
+另一方面，定理 \ref{thm:xi-cauchy-poisson-kl-sharp-asymptotics} 的展开给出
+\(
+\int_{\RR} g_t\,\delta_t^2\,\dd x=\frac{\sigma^4}{4t^4}+O(t^{-6})
+\)
+（等价于其证明中 \(\frac{1}{\pi}\int gA^2=\frac14\) 的计算）。
+代回即得 \eqref{eq:xi-cauchy-poisson-fdiv-sharp-asymptotics}。证毕。
+\end{proof}
+
+\begin{corollary}[相对熵耗散量 \texorpdfstring{$\mathcal I_1$}{I1} 的锐渐近常数]\label{cor:xi-cauchy-poisson-fisher-sharp-asymptotics}
+在定理 \ref{thm:xi-cauchy-poisson-kl-sharp-asymptotics} 的条件下，
+沿 Poisson 流的耗散量满足
+\begin{equation}\label{eq:xi-cauchy-poisson-fisher-sharp-asymptotics}
+\boxed{\;
+\mathcal I_1(h_t\mid g_t)=\frac{\sigma^4}{2t^5}
+\;+\;\frac{3}{32t^7}\Bigl(\sigma^6-8\sigma^2\mu_4+6\mu_3^2\Bigr)
+\;+\;O(t^{-9})\qquad(t\to\infty).\;}
+\end{equation}
+并且由命题 \ref{prop:xi-cauchy-poisson-sixth-signature-negativity-rigidity}，\(t^{-7}\) 项系数严格为负。
+若记 \(C_6\) 如命题 \ref{prop:xi-cauchy-poisson-sixth-signature-negativity-rigidity} 所定义，则进一步有
+\[
+\lim_{t\to\infty}t^{7}\left(\mathcal I_1(h_t\mid g_t)-\frac{\sigma^4}{2t^5}\right)=6C_6\le -\frac{21}{32}\sigma^6,
+\]
+其中上界取等当且仅当 \(\tilde\nu=\frac12\delta_{\bar\gamma-\sigma}+\frac12\delta_{\bar\gamma+\sigma}\)。
+从而
+\(
+\lim_{t\to\infty}\frac{t^5}{\sigma^4}\mathcal I_1(h_t\mid g_t)=\frac12
+\)。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:xi-poisson-kl-dissipation-fractional-fisher} 的耗散恒等式
+\(
+\frac{\dd}{\dd t}D_{\mathrm{KL}}(h_t\mid g_t)=-\mathcal I_1(h_t\mid g_t)
+\)
+与 \eqref{eq:xi-cauchy-poisson-kl-sharp-asymptotics} 的展开，逐项求导得到
+\[
+\mathcal I_1(h_t\mid g_t)
+=\frac{\sigma^4}{2t^5}
++\frac{6}{t^7}\left(
+\frac{3\mu_3^2}{32}
+-\frac{\sigma^2\mu_4}{8}
++\frac{\sigma^6}{64}
+\right)
++O(t^{-9}),
+\]
+从而推出 \eqref{eq:xi-cauchy-poisson-fisher-sharp-asymptotics} 与极限常数。
+将括号内系数识别为命题 \ref{prop:xi-cauchy-poisson-sixth-signature-negativity-rigidity} 的 \(C_6\)，并应用其上界与取等刻画，即得所述普适上界与取等分布。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$t^{-4}$}{t^{-4}} 速率的刚性]\label{cor:xi-cauchy-poisson-kl-rigidity}
+在命题 \ref{prop:xi-poisson-tv-kl-second-order} 的矩条件下，
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)=o(t^{-4})\qquad(t\to\infty),
+\]
+当且仅当 \(\sigma^2=0\)。此时 \(\tilde\nu=\delta_{\bar\gamma}\)，并且对一切 \(t>0\) 有 \(h_t\equiv g_t\)。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:xi-poisson-tv-kl-second-order}，
+\(
+t^4D_{\mathrm{KL}}(h_t\mid g_t)\to \sigma^4/8
+\)。
+因此 \(D_{\mathrm{KL}}(h_t\mid g_t)=o(t^{-4})\) 等价于 \(\sigma^4=0\)，等价于 \(\sigma^2=0\)。
+当 \(\sigma^2=0\) 时 \(\tilde\nu=\delta_{\bar\gamma}\)，从而 \(h_t=P_t*\tilde\nu=g_t\) 并推出反向蕴含。证毕。
+\end{proof}
+
+\begin{corollary}[族内二阶 Pinsker 比值常数]\label{cor:xi-cauchy-poisson-pinsker-sharp-ratio}
+在定理 \ref{thm:xi-cauchy-poisson-tv-sharp-constant} 与定理 \ref{thm:xi-cauchy-poisson-kl-sharp-asymptotics} 的条件下，定义总变差距离
+\[
+d_{\mathrm{TV}}(p,q):=\frac12\|p-q\|_{L^1(\RR)}.
+\]
+若 \(\sigma^2>0\)，则极限存在且为
+\begin{equation}\label{eq:xi-cauchy-poisson-pinsker-sharp-ratio}
+\boxed{\;
+\lim_{t\to\infty}\frac{D_{\mathrm{KL}}(h_t\mid g_t)}{d_{\mathrm{TV}}(h_t,g_t)^2}
+=\frac{8\pi^2}{27}\; }.
+\end{equation}
+\noindent
+等价地，
+\(
+\lim_{t\to\infty}\frac{D_{\mathrm{KL}}(h_t\mid g_t)}{\|h_t-g_t\|_{L^1(\RR)}^2}
+=\frac{2\pi^2}{27}
+\)。
+\end{corollary}
+
+\begin{proof}
+由 \eqref{eq:xi-cauchy-poisson-tv-sharp-constant} 与 \eqref{eq:xi-cauchy-poisson-kl-sharp-asymptotics} 得
+\[
+\|h_t-g_t\|_{L^1(\RR)}
+=\frac{3\sqrt3}{4\pi}\,\frac{\sigma^2}{t^2}+O(t^{-3}),
+\qquad
+D_{\mathrm{KL}}(h_t\mid g_t)=\frac{\sigma^4}{8t^4}+o(t^{-4}).
+\]
+因此
+\[
+\frac{D_{\mathrm{KL}}(h_t\mid g_t)}{d_{\mathrm{TV}}(h_t,g_t)^2}
+=\frac{\frac{1}{8}+o(1)}{\left(\frac{3\sqrt3}{8\pi}\right)^2+o(1)}
+\to \frac{1/8}{27/(64\pi^2)}=\frac{8\pi^2}{27}.
+\]
+证毕。
+\end{proof}
+\begin{theorem}[双通道粗粒化的正交主模态分解]\label{thm:xi-cauchy-poisson-two-channel-orthogonal-leading}
+令 \((\Gamma,\Delta)\) 为 \(\RR\times[0,\infty)\) 上随机向量，满足
+\(
+\mathbb{E}\Gamma=\bar\gamma
+\)、\(
+\mathbb{E}\Delta=\bar\delta
+\) 且四阶矩有限。
+对 \(t>0\) 定义
+\[
+h_t(x):=\mathbb{E}\!\left[\frac{1}{\pi}\frac{t+\Delta}{(x-\Gamma)^2+(t+\Delta)^2}\right],
+\qquad
+g_t(x):=\frac{1}{\pi}\frac{t+\bar\delta}{(x-\bar\gamma)^2+(t+\bar\delta)^2},
+\]
+并记 \(T:=t+\bar\delta\) 以及中心二阶统计量
+\[
+\sigma_\gamma^2:=\mathrm{Var}(\Gamma),\qquad
+\sigma_\delta^2:=\mathrm{Var}(\Delta),\qquad
+\sigma_{\gamma\delta}:=\mathrm{Cov}(\Gamma,\Delta).
+\]
+则当 \(t\to\infty\)（等价于 \(T\to\infty\)）时成立主项展开
+\begin{equation}\label{eq:xi-cauchy-poisson-two-channel-kl-leading}
+\boxed{\;
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{(\sigma_\gamma^2-\sigma_\delta^2)^2}{8\,T^4}
+\;+\;\frac{\sigma_{\gamma\delta}^2}{2\,T^4}
+\;+\;O(T^{-6}).\;}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+由平移不变性，可在证明中取 \(\bar\gamma=0\)。
+记 \(U:=\Gamma-\bar\gamma\)、\(V:=\Delta-\bar\delta\)，则 \(\mathbb{E}U=\mathbb{E}V=0\) 且 \(T=t+\bar\delta\)。
+对函数 \((u,v)\mapsto \frac{1}{\pi}\frac{T+v}{(x-u)^2+(T+v)^2}\) 在 \((u,v)=(0,0)\) 处作二元 Taylor 展开至二阶并取期望，得到
+\begin{equation}\label{eq:xi-cauchy-poisson-two-channel-second-order}
+h_t
+=g_T
+\;+\;\frac{\sigma_\gamma^2}{2}\,\partial_x^2 g_T
+\;+\;\frac{\sigma_\delta^2}{2}\,\partial_T^2 g_T
+\;-\;\sigma_{\gamma\delta}\,\partial_x\partial_T g_T
+\;+\;O(T^{-3}),
+\end{equation}
+其中余项由四阶矩与 Poisson 核的高阶导数 \(L^1\) 范数统一控制。
+注意对单核 \(g_T(x)=\frac{1}{\pi}\frac{T}{x^2+T^2}\) 有恒等式 \(\partial_T^2 g_T=-\partial_x^2 g_T\)。
+因此令 \(y=x/T\)，并记
+\[
+g(y):=\frac{1}{1+y^2},\qquad
+a(y):=T^2\frac{\tfrac12\partial_x^2 g_T(Ty)}{g_T(Ty)}=\frac{3y^2-1}{(1+y^2)^2},\qquad
+c(y):=T^2\frac{-\partial_x\partial_T g_T(Ty)}{g_T(Ty)}=\frac{2y(y^2-3)}{(1+y^2)^2},
+\]
+则由 \eqref{eq:xi-cauchy-poisson-two-channel-second-order} 得到密度比 \(r_t(y):=\frac{h_t(Ty)}{g_T(Ty)}=1+\delta_t(y)\) 满足
+\[
+\delta_t(y)
+=\frac{1}{T^2}\Bigl((\sigma_\gamma^2-\sigma_\delta^2)a(y)+\sigma_{\gamma\delta}c(y)\Bigr)+O(T^{-3}).
+\]
+由于 \(\delta_t=O(T^{-2})\)，并沿用定理 \ref{thm:xi-cauchy-poisson-kl-sharp-asymptotics} 的相对熵展开（对 \((1+u)\log(1+u)\) 作二阶展开并用 \(\int g\,\delta_t=0\) 消去一次项），得到
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)
+=\frac{1}{2\pi}\int_{\RR} g(y)\,\delta_t(y)^2\,\dd y+O(T^{-6}).
+\]
+注意 \(a\) 为偶函数而 \(c\) 为奇函数，故 \(\int g\,a c=0\)。
+并且（由定理 \ref{thm:xi-cauchy-poisson-kl-sharp-asymptotics} 的计算与同类有理积分计算）
+\[
+\frac{1}{\pi}\int_{\RR} g(y)\,a(y)^2\,\dd y=\frac14,
+\qquad
+\frac{1}{\pi}\int_{\RR} g(y)\,c(y)^2\,\dd y=1.
+\]
+代回并整理即得 \eqref{eq:xi-cauchy-poisson-two-channel-kl-leading}。证毕。
+\end{proof}
+
+\input{para__xi-poisson-location-scale-uncentered-kl-expansion}
+
+\begin{corollary}[双通道主项消失的刚性条件]\label{cor:xi-cauchy-poisson-two-channel-rigidity}
+在定理 \ref{thm:xi-cauchy-poisson-two-channel-orthogonal-leading} 的设定下，若
+\[
+D_{\mathrm{KL}}(h_t\mid g_t)=o(T^{-4})\qquad(t\to\infty),
+\]
+则必有
+\[
+\sigma_{\gamma\delta}=0,\qquad \sigma_\gamma^2=\sigma_\delta^2.
+\]
+\end{corollary}
+
+\begin{proof}
+由 \eqref{eq:xi-cauchy-poisson-two-channel-kl-leading}，主项系数为
+\(
+\frac{(\sigma_\gamma^2-\sigma_\delta^2)^2}{8}+\frac{\sigma_{\gamma\delta}^2}{2}\ge 0
+\)。
+若 \(D_{\mathrm{KL}}(h_t\mid g_t)=o(T^{-4})\) 则该系数只能为零，从而两项分别为零，得到结论。证毕。
+\end{proof}
+
+\endinput
+

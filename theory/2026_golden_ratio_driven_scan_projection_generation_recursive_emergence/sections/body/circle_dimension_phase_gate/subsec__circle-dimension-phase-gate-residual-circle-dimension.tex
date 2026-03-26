@@ -1,0 +1,467 @@
+\subsection{残差圆维：把外置寄存器复杂度折算为圆维预算}\label{subsec:cdim-residual-circle-dimension}
+定义 \ref{def:circle-dimension}--\ref{def:half-circle-dimension} 的圆维/半圆维只计数对偶紧群的连通圆因子。
+因此，一切完全不连通的纤维标签、离散账本或残差寄存器不会改变结构圆维（备注 \ref{rem:circle-dimension-refinement}）。
+然而在扩展保存口径下（\S\ref{subsec:cdim-transport-and-reversibility}），不可逆读出的全部信息损失必须外置为残差寄存器并进入可核验账本；
+当协议以 dyadic 深度 \(b\) 类型化精度索引时，残差寄存器的可取值集合通常随 \(b\) 增长。
+为把这类实现层增长与结构圆维置于同一“圆维单位”的预算坐标中，本小节引入与 \(b\) 相容的残差圆维，并给出其与结构圆维严格对齐的下界、可达性与素数探针提取公式。
+
+\begin{definition}[残差圆维]\label{def:cdim-residual-circle-dimension}
+设 \((\mathcal{R}_b)_{b\ge 1}\) 为一族有限集合。
+将 \(\mathcal{R}_b\) 理解为：当可见相位地址精度为 dyadic 深度 \(b\) 时，协议允许外置的残差寄存器取值集合。
+定义其\textbf{上残差圆维}为
+\[
+\overline{\cdim}_{\mathrm{res}}(\mathcal{R}_\bullet)
+:=\limsup_{b\to\infty}\frac{\log_2\card{\mathcal{R}_b}}{b}\in[0,\infty].
+\]
+若极限存在，则记该极限为 \(\cdim_{\mathrm{res}}(\mathcal{R}_\bullet)\)。
+\end{definition}
+
+\begin{proposition}[单调性与乘积次可加]\label{prop:cdim-residual-circle-dimension-laws}
+对任意两族有限寄存器 \((\mathcal{R}_b)_{b\ge 1}\)、\((\mathcal{S}_b)_{b\ge 1}\)，有：
+\begin{enumerate}
+  \item 若存在 \(b_0\) 使对一切 \(b\ge b_0\) 有 \(\card{\mathcal{R}_b}\le \card{\mathcal{S}_b}\)，则
+  \(
+  \overline{\cdim}_{\mathrm{res}}(\mathcal{R}_\bullet)\le \overline{\cdim}_{\mathrm{res}}(\mathcal{S}_\bullet)
+  \)。
+  \item 设逐层直积寄存器 \((\mathcal{R}\times\mathcal{S})_b:=\mathcal{R}_b\times\mathcal{S}_b\)。
+  则
+  \[
+  \overline{\cdim}_{\mathrm{res}}\bigl((\mathcal{R}\times\mathcal{S})_\bullet\bigr)
+  \le
+  \overline{\cdim}_{\mathrm{res}}(\mathcal{R}_\bullet)+\overline{\cdim}_{\mathrm{res}}(\mathcal{S}_\bullet).
+  \]
+  \item 若 \(\cdim_{\mathrm{res}}(\mathcal{R}_\bullet)\)、\(\cdim_{\mathrm{res}}(\mathcal{S}_\bullet)\) 均存在，则上式取等号：
+  \[
+  \cdim_{\mathrm{res}}\bigl((\mathcal{R}\times\mathcal{S})_\bullet\bigr)
+  =
+  \cdim_{\mathrm{res}}(\mathcal{R}_\bullet)+\cdim_{\mathrm{res}}(\mathcal{S}_\bullet).
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) 由 \(\log_2\) 与 \(\limsup\) 的保序性即得。
+(2) \(\card{\mathcal{R}_b\times\mathcal{S}_b}=\card{\mathcal{R}_b}\card{\mathcal{S}_b}\)，故
+\[
+\frac{\log_2\card{\mathcal{R}_b\times\mathcal{S}_b}}{b}
+\;=\;
+\frac{\log_2\card{\mathcal{R}_b}}{b}
+\;+\;
+\frac{\log_2\card{\mathcal{S}_b}}{b},
+\]
+取 \(\limsup\) 得到次可加。
+(3) 若两项各自收敛，则和亦收敛且极限为极限之和。证毕。
+\end{proof}
+
+\input{para__circle-dimension-phase-gate-phase-separation-precision-exponent}
+
+\paragraph{相位字母表与窗口对象}
+对整数 \(k\ge 0\) 与 dyadic 深度 \(b\ge 1\)，定义 \(k\) 圆相位字母表
+\[
+\mathrm{Phase}_{b}^{(k)}:=(\ZZ/2^b\ZZ)^k,
+\qquad
+\card{\mathrm{Phase}_{b}^{(k)}}=2^{bk}.
+\]
+令 \(G\) 为有限生成离散交换群。
+由结构定理可取同构 \(G\simeq \ZZ^r\oplus T\)（\(T\) 有限），并由例 \ref{ex:circle-dimension-examples} 得 \(\cdim(G)=r\)。
+在此表示下定义深度 \(b\) 的\textbf{窗口对象集}
+\[
+W_b(G):=\{0,1,\dots,2^b-1\}^{r}\times T\subseteq \ZZ^r\oplus T\simeq G,
+\qquad
+\card{W_b(G)}=2^{br}\card{T}.
+\]
+
+\begin{theorem}[相位--残差圆维下界]\label{thm:cdim-phase-residual-budget-lower-bound}
+设存在一族实现层单射（深度 \(b\) 的可核验编码）
+\[
+\mathrm{Enc}_b:\ W_b(G)\hookrightarrow \mathrm{Phase}_b^{(k)}\times \mathcal{R}_b\qquad(b\ge 1),
+\]
+其中 \((\mathcal{R}_b)_{b\ge 1}\) 为有限残差寄存器族。
+则必有
+\[
+\overline{\cdim}_{\mathrm{res}}(\mathcal{R}_\bullet)\ \ge\ r-k,
+\qquad\text{等价地}\qquad
+k+\overline{\cdim}_{\mathrm{res}}(\mathcal{R}_\bullet)\ \ge\ \cdim(G).
+\]
+\end{theorem}
+\begin{proof}
+由单射得 \(\card{W_b(G)}\le \card{\mathrm{Phase}_b^{(k)}}\card{\mathcal{R}_b}\)，即
+\[
+2^{br}\card{T}\le 2^{bk}\card{\mathcal{R}_b}
+\quad\Longrightarrow\quad
+\log_2\card{\mathcal{R}_b}\ge (r-k)b+\log_2\card{T}.
+\]
+两边除以 \(b\) 并取 \(\limsup_{b\to\infty}\) 得所示下界。证毕。
+\end{proof}
+
+\begin{corollary}[单圆压缩的指数残差律]\label{cor:cdim-single-circle-exponential-residual}
+在定理 \ref{thm:cdim-phase-residual-budget-lower-bound} 中取 \(k=1\)。
+若 \(\cdim(G)=r\ge 2\)，则任何满足
+\(\mathrm{Enc}_b:W_b(G)\hookrightarrow \mathrm{Phase}_b^{(1)}\times \mathcal{R}_b\)
+的实现均满足
+\[
+\card{\mathcal{R}_b}\ \ge\ \card{T}\cdot 2^{(r-1)b},
+\qquad\text{从而}\qquad
+\overline{\cdim}_{\mathrm{res}}(\mathcal{R}_\bullet)\ge r-1.
+\]
+\end{corollary}
+\begin{proof}
+将 \(k=1\) 代入定理 \ref{thm:cdim-phase-residual-budget-lower-bound} 的不等式并指数化即可。证毕。
+\end{proof}
+
+\begin{remark}[审计含义：结构圆维缺口的不可替代外置]\label{rem:cdim-residual-budget-audit-meaning}
+定理 \ref{thm:cdim-phase-residual-budget-lower-bound} 仅比较深度 \(b\) 的窗口对象规模与可见相位容量 \(\card{\mathrm{Phase}_b^{(k)}}\)。
+其制度含义是：在要求 \(\mathrm{Enc}_b\) 于全窗口 \(W_b(G)\) 上保持单射的前提下，
+任何固定数目的相位通道不足以承载的结构圆维缺口都必须以残差寄存器的指数级取值增长外置，
+并且该增长率在 \(\overline{\cdim}_{\mathrm{res}}\) 中精确读出为缺口维数 \(r-k\)。
+\end{remark}
+
+\begin{theorem}[受限素数寄存器的 Gödel 压缩必然引入 \texorpdfstring{$b\log b$}{b log b} 级额外位长]\label{thm:cdim-restricted-prime-register-godel-bilogb-overhead}
+沿用定理 \ref{thm:cdim-phase-residual-budget-lower-bound} 的设定。
+进一步假设存在常数 \(B\ge 2\)（与 \(b\) 无关）以及一族单射编码
+\[
+\tau_b:\ \mathcal{R}_b\hookrightarrow \{1,2,\dots,B\}^{T_b}\qquad(b\ge 1),
+\]
+其中码长 \(T_b\in\NN\) 允许依赖于 \(b\)。
+将 \(\tau_b(z)=(\tau_1,\dots,\tau_{T_b})\) 通过 Gödel 规则压缩为单整数
+\[
+G(\tau_b(z)):=\prod_{t=1}^{T_b} p_t^{\tau_t},
+\]
+其中 \(p_t\) 为第 \(t\) 个素数，并定义最大位长
+\[
+L_b:=\max_{z\in\mathcal{R}_b}\log_2 G(\tau_b(z)).
+\]
+则对任意实现，存在仅依赖于 \(B\) 的常数 \(c>0\) 使
+\[
+L_b\ \ge\ c\,(r-k)\,b\log_2 b\ -\ O(b)\qquad(b\to\infty),
+\]
+其中 \(O(b)\) 项的常数可依赖于 \(B\) 与 \(\card{T}\) 但与 \(b\) 无关；并且可取 \(c\) 为 \(1/\log_2 B\) 的量纲。
+\end{theorem}
+\begin{proof}
+由 \(\tau_b\) 单射得 \(\card{\mathcal R_b}\le B^{T_b}\)，从而
+\[
+T_b\ \ge\ \frac{\log_2\card{\mathcal R_b}}{\log_2 B}.
+\]
+由定理 \ref{thm:cdim-phase-residual-budget-lower-bound} 的证明中不等式
+\(\log_2\card{\mathcal R_b}\ge (r-k)b+\log_2\card{T}\)，得到
+\[
+T_b\ \ge\ \frac{(r-k)b}{\log_2 B}\ -\ O(1).
+\]
+另一方面，对任意码字序列 \(\tau\in\NN_{\ge 1}^{T_b}\)，定理 \ref{thm:xi-godel-integerization-log-overhead} 给出
+\[
+\log_2 G(\tau)\ \ge\ T_b\log_2 T_b-O(T_b).
+\]
+取最大值并代入 \(T_b\ge \frac{(r-k)b}{\log_2 B}-O(1)\)，得到
+\[
+L_b\ \ge\ T_b\log_2 T_b-O(T_b)\ \ge\ \frac{(r-k)b}{\log_2 B}\log_2 b\ -\ O(b).
+\]
+证毕。
+\end{proof}
+
+\begin{definition}[最优残差圆维下界]\label{def:cdim-min-residual-budget}
+在上述编码模型下，定义给定 \(k\) 的最优残差圆维下界为
+\[
+\rho_k^{\min}(G)
+:=\inf\Bigl\{\overline{\cdim}_{\mathrm{res}}(\mathcal{R}_\bullet):
+\exists\,\mathrm{Enc}_b:\ W_b(G)\hookrightarrow \mathrm{Phase}_b^{(k)}\times \mathcal{R}_b\Bigr\}.
+\]
+\end{definition}
+
+\begin{theorem}[圆维预算区域的完备刻画与可达性]\label{thm:cdim-budget-completeness}
+设 \(G\simeq \ZZ^r\oplus T\)（\(T\) 有限，\(r=\cdim(G)\)）。
+则对任意整数 \(k\ge 0\) 有
+\[
+\rho_k^{\min}(G)=\max\{r-k,0\},
+\]
+并且该下界可由显式构造达到。
+\end{theorem}
+\begin{proof}
+下界由定理 \ref{thm:cdim-phase-residual-budget-lower-bound} 给出：若 \(k\le r\)，则任意可行残差族满足
+\(\overline{\cdim}_{\mathrm{res}}(\mathcal{R}_\bullet)\ge r-k\)，从而 \(\rho_k^{\min}(G)\ge r-k\)；
+若 \(k\ge r\)，则下界为非正数而 \(\rho_k^{\min}(G)\ge 0\) 显然，故 \(\rho_k^{\min}(G)\ge 0\)。
+\par
+为达成该下界：
+\begin{enumerate}
+  \item 若 \(k\ge r\)，取常值寄存器 \(\mathcal{R}_b:=T\)，并令
+  \(
+  \mathrm{Enc}_b((x_1,\dots,x_r),t):=((x_1,\dots,x_r,0,\dots,0)\bmod 2^b,\,t)
+  \)。
+  该映射为单射且 \(\overline{\cdim}_{\mathrm{res}}(\mathcal{R}_\bullet)=0\)。
+  \item 若 \(0\le k<r\)，取
+  \(
+  \mathcal{R}_b:=\{0,1,\dots,2^b-1\}^{r-k}\times T
+  \)。
+  则 \(\card{\mathcal{R}_b}=2^{(r-k)b}\card{T}\) 从而 \(\cdim_{\mathrm{res}}(\mathcal{R}_\bullet)=r-k\)。
+  定义
+  \[
+  \mathrm{Enc}_b\bigl((x_1,\dots,x_r),t\bigr)
+  :=
+  \Bigl(\ (x_1,\dots,x_k)\bmod 2^b\ ,\ (x_{k+1},\dots,x_r,t)\ \Bigr),
+  \]
+  其中第一分量落在 \(\mathrm{Phase}_b^{(k)}\)，第二分量落在 \(\mathcal{R}_b\)，且显然为单射。
+\end{enumerate}
+综上得到 \(\rho_k^{\min}(G)\le \max\{r-k,0\}\)，与下界合并即证。证毕。
+\end{proof}
+
+\begin{corollary}[非交换系统的交换化圆维瓶颈]\label{cor:cdim-abelianization-bottleneck}
+令 \(\Gamma\) 为有限生成群，\(\Gamma_{\mathrm{ab}}:=\Gamma/[\Gamma,\Gamma]\) 为其交换化。
+记
+\(
+r:=\cdim(\Gamma_{\mathrm{ab}})
+\)
+（等价地，\(\Gamma_{\mathrm{ab}}\simeq \ZZ^r\oplus T\) 的自由秩）。
+对给定整数 \(k\ge 0\)，设存在一族深度 \(b\) 的实现层单射
+\[
+\Phi_b:\ \Gamma_{\mathrm{ab}}/2^b\Gamma_{\mathrm{ab}}\hookrightarrow \mathrm{Phase}_b^{(k)}\times \mathcal{R}_b
+\qquad(b\ge 1),
+\]
+其中 \((\mathcal{R}_b)_{b\ge 1}\) 为有限残差寄存器族。
+则必有
+\[
+\liminf_{b\to\infty}\frac{\log_2\card{\mathcal{R}_b}}{b}
+\ \ge\
+\max\{r-k,0\}.
+\]
+特别地，若 \(k<r\)，则 \(\card{\mathcal{R}_b}\) 不可能一致有界。
+\end{corollary}
+
+\begin{proof}
+由有限生成交换群结构定理，取 \(\Gamma_{\mathrm{ab}}\simeq \ZZ^r\oplus T\)（\(T\) 有限）。
+则对每个 \(b\ge 1\),
+\[
+\Gamma_{\mathrm{ab}}/2^b\Gamma_{\mathrm{ab}}
+\;\simeq\;
+(\ZZ/2^b\ZZ)^r\oplus (T/2^bT),
+\qquad
+\card{T/2^bT}\le \card{T}.
+\]
+由单射 \(\Phi_b\) 得
+\[
+2^{br}\ \le\ \card{\Gamma_{\mathrm{ab}}/2^b\Gamma_{\mathrm{ab}}}
+\ \le\ 
+\card{\mathrm{Phase}_b^{(k)}}\card{\mathcal{R}_b}
+\ =\ 
+2^{bk}\card{\mathcal{R}_b},
+\]
+从而 \(\log_2\card{\mathcal{R}_b}\ge (r-k)b\)。
+当 \(r\le k\) 时右端为非正，结论平凡；当 \(r>k\) 时两边除以 \(b\) 并取 \(\liminf\) 即得所示下界。
+\end{proof}
+
+\begin{theorem}[残差熵的线性下界]\label{thm:cdim-residual-entropy-lower-bound}
+在定理 \ref{thm:cdim-phase-residual-budget-lower-bound} 的设定下，
+令 \(X_b\) 为 \(W_b(G)\) 上的均匀分布随机变量，并记
+\(\mathrm{Enc}_b(X_b)=(Y_b,Z_b)\) 取值于 \(\mathrm{Phase}_b^{(k)}\times\mathcal{R}_b\)。
+记 \(H_2\) 为以 \(\log_2\) 计的 Shannon 熵。
+则有
+\[
+H_2(Z_b)\ \ge\ (r-k)b+\log_2\card{T}.
+\]
+特别地，当 \(k<r\) 时，残差熵随深度 \(b\) 线性增长。
+\end{theorem}
+\begin{proof}
+由于 \(\mathrm{Enc}_b\) 为单射，\((Y_b,Z_b)\) 与 \(X_b\) 等信息，故
+\[
+H_2(Y_b,Z_b)=H_2(X_b)=\log_2\card{W_b(G)}=rb+\log_2\card{T}.
+\]
+另一方面，熵的次可加性给出 \(H_2(Y_b,Z_b)\le H_2(Y_b)+H_2(Z_b)\)，且
+\(
+H_2(Y_b)\le \log_2\card{\mathrm{Phase}_b^{(k)}}=kb
+\)。
+整理即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[残差熵下界取等的刚性判据]\label{prop:cdim-residual-entropy-lower-bound-rigidity}
+沿用定理 \ref{thm:cdim-residual-entropy-lower-bound} 的记号。
+则等号
+\[
+H_2(Z_b)= (r-k)b+\log_2\card{T}
+\]
+成立当且仅当同时满足：
+\begin{enumerate}
+  \item \(Y_b\) 在 \(\mathrm{Phase}_b^{(k)}\) 上均匀分布（从而 \(H_2(Y_b)=kb\)）；
+  \item \(Y_b\) 与 \(Z_b\) 独立（从而 \(H_2(Y_b,Z_b)=H_2(Y_b)+H_2(Z_b)\)）。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+定理 \ref{thm:cdim-residual-entropy-lower-bound} 的推导链包含两处不等式：
+\[
+H_2(Y_b)\le \log_2\card{\mathrm{Phase}_b^{(k)}}=kb,
+\qquad
+H_2(Y_b,Z_b)\le H_2(Y_b)+H_2(Z_b).
+\]
+上界 \(H_2(Y_b)\le \log_2\card{\mathrm{Phase}_b^{(k)}}\) 取等当且仅当 \(Y_b\) 在其支撑上均匀；而右端恰为全空间对数基数，故取等迫使 \(Y_b\) 在 \(\mathrm{Phase}_b^{(k)}\) 上均匀。
+次可加性取等当且仅当 \(Y_b\) 与 \(Z_b\) 独立。
+两处同时取等即与所示等号等价，结论成立。证毕。
+\end{proof}
+
+\paragraph{有限相位探针：从外部恢复结构圆维与素数残差谱}
+令 \(G\simeq \ZZ^r\oplus T\)（\(T\) 有限）。
+对每个 \(n\ge 1\) 定义
+\[
+a_n(G):=\card{\operatorname{Hom}(G,\ZZ/n\ZZ)}.
+\]
+
+\begin{theorem}[圆维的有限相位提取与 torsion 残差谱解码]\label{thm:cdim-finite-probe-extraction}
+有极限
+\[
+\cdim(G)=r=\lim_{n\to\infty}\frac{\log a_n(G)}{\log n}.
+\]
+并且对任意素数 \(p\) 与 \(k\ge 1\)，记
+\[
+b_{p}(k):=\log_p a_{p^k}(G)-kr,
+\]
+则 \(b_p(k)=\log_p\card{T_p[p^k]}\)，其中 \(T_p\) 为 \(T\) 的 \(p\)-初等分量、\(T_p[p^k]\) 为其 \(p^k\)-幂杀零子群。
+因此序列差分
+\[
+\Delta b_p(k):=b_p(k)-b_p(k-1)\qquad(b_p(0):=0)
+\]
+给出 \(T_p\) 的不变量：\(\Delta b_p(k)\) 等于 \(T_p\) 的循环直和分解中满足指数 \(\ge k\) 的直和项个数。
+\end{theorem}
+\begin{proof}
+自由部分满足 \(\operatorname{Hom}(\ZZ^r,\ZZ/n\ZZ)\simeq(\ZZ/n\ZZ)^r\)，故同态数为 \(n^r\)。
+有限部分按 \(T=\bigoplus_p T_p\) 分解且
+\(
+\operatorname{Hom}(T_p,\ZZ/p^k\ZZ)\simeq T_p[p^k]
+\)，从而
+\(
+a_{p^k}(G)=p^{kr}\card{T_p[p^k]}
+\)
+并得到 \(b_p(k)=\log_p\card{T_p[p^k]}\)。
+当 \(T_p\simeq\bigoplus_i \ZZ/p^{\alpha_i}\ZZ\) 时，
+\[
+\log_p\card{T_p[p^k]}=\sum_i \min(\alpha_i,k),
+\]
+差分 \(\Delta b_p(k)\) 即满足 \(\alpha_i\ge k\) 的项数。
+\par
+最后，由 \(1\le \card{\operatorname{Hom}(T,\ZZ/n\ZZ)}\le \card{T}\) 有界，且
+\(
+a_n(G)=n^r\cdot \card{\operatorname{Hom}(T,\ZZ/n\ZZ)}
+\)
+满足 \(\log a_n(G)=r\log n+O(1)\)，故 \(\log a_n(G)/\log n\to r\)。证毕。
+\end{proof}
+
+\begin{proposition}[残差商探针：由有限商的指数增长率提取圆维]\label{prop:cdim-residual-quotient-probe}
+继续设 \(G\simeq \ZZ^r\oplus T\)（\(T\) 有限）。
+则对任意整数 \(n\ge 1\) 有
+\[
+a_n(G)=\card{\operatorname{Hom}(G,\ZZ/n\ZZ)}=\card{G/nG}
+=n^r\cdot \card{T/nT}.
+\]
+特别地，对任意素数 \(p\) 与 \(k\ge 1\) 定义
+\[
+\rho_{p,k}(G):=\frac{1}{k}\log_p\card{G/p^kG},
+\]
+则极限 \(\lim_{k\to\infty}\rho_{p,k}(G)\) 存在且等于 \(\cdim(G)\)，并且对所有 \(k\ge 1\) 有显式界
+\[
+\Bigl|\rho_{p,k}(G)-\cdim(G)\Bigr|\le \frac{\log_p\card{T}}{k}.
+\]
+\end{proposition}
+\begin{proof}
+由分解 \(G\simeq \ZZ^r\oplus T\) 得
+\(
+G/nG\simeq (\ZZ/n\ZZ)^r\oplus (T/nT)
+\)，从而 \(\card{G/nG}=n^r\card{T/nT}\)。
+另一方面，
+\(
+\operatorname{Hom}(G,\ZZ/n\ZZ)\simeq \operatorname{Hom}(\ZZ^r,\ZZ/n\ZZ)\times \operatorname{Hom}(T,\ZZ/n\ZZ)
+\)
+且 \(\card{\operatorname{Hom}(\ZZ^r,\ZZ/n\ZZ)}=n^r\)，故只需证明
+\(\card{\operatorname{Hom}(T,\ZZ/n\ZZ)}=\card{T/nT}\)。
+\par
+对循环群 \(T=\ZZ/d\ZZ\) 直接计算可得
+\[
+\card{\operatorname{Hom}(\ZZ/d\ZZ,\ZZ/n\ZZ)}=\gcd(d,n)
+=\card{(\ZZ/d\ZZ)/n(\ZZ/d\ZZ)}.
+\]
+一般有限交换群由循环因子直和分解，且两边对直和均乘法，故结论成立，从而 \(a_n(G)=\card{G/nG}\)。
+\par
+取 \(n=p^k\)，得
+\[
+\rho_{p,k}(G)=\frac{1}{k}\log_p\bigl(p^{kr}\card{T/p^kT}\bigr)
+=r+\frac{1}{k}\log_p\card{T/p^kT}.
+\]
+由于 \(1\le \card{T/p^kT}\le \card{T}\)，于是
+\(
+\rho_{p,k}(G)\to r
+\)
+且误差界如上。最后由例 \ref{ex:circle-dimension-examples} 得 \(r=\cdim(G)\)。证毕。
+\end{proof}
+
+\begin{remark}[有限相位分辨率的角色数解释]\label{rem:cdim-mu-n-character-count}
+记 \(\mu_n\subset \TT\) 为 \(n\) 次单位根群，则 \(\mu_n\simeq \ZZ/n\ZZ\)（循环群）。
+因此 \(a_n(G)=\card{\operatorname{Hom}(G,\mu_n)}\) 亦可理解为“相位分辨率为 \(n\)”时可见的圆上角色总数。
+在该语义下，命题 \ref{prop:cdim-residual-quotient-probe} 表明：\(\cdim(G)\) 可由有限相位网格上的角色数（或由有限残差商 \(\card{G/nG}\)）的指数增长率唯一恢复，并具有显式收敛误差界。
+\end{remark}
+
+\begin{definition}[圆维 \texorpdfstring{$\zeta$}{zeta}-函数]\label{def:cdim-zeta-function}
+定义
+\[
+\zeta_G(s):=\sum_{n\ge 1}\frac{a_n(G)}{n^s}\qquad(\Re s\ \text{充分大}).
+\]
+\end{definition}
+
+\begin{theorem}[Euler 分解与最右端极点]\label{thm:cdim-zeta-euler-pole}
+设 \(G\simeq \ZZ^r\oplus T\)，令 \(e=\exp(T)\)。
+则：
+\begin{enumerate}
+  \item \(\zeta_G(s)\) 具有 Euler 乘积分解
+  \[
+  \zeta_G(s)=\prod_{p}\left(\sum_{k\ge 0}\frac{a_{p^k}(G)}{p^{ks}}\right).
+  \]
+  \item 对 \(p\nmid e\) 有 \(a_{p^k}(G)=p^{kr}\)，相应局部因子为 \((1-p^{r-s})^{-1}\)。
+  因此
+  \[
+  \zeta_G(s)=\zeta(s-r)\cdot \prod_{p\mid e} L_p(s),
+  \]
+  其中每个 \(L_p(s)\) 为 \(p^{-s}\) 的有理函数（由有限序列 \(\{a_{p^k}(G)\}_{k\ge 0}\) 决定）。
+  \item \(\zeta_G(s)\) 的最右端极点位于 \(s=r+1\) 且为单极点；
+  因而
+  \[
+  \cdim(G)=\bigl(\text{\(\zeta_G\) 最右端极点的实部}\bigr)-1.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(1) 由中国剩余定理 \(\ZZ/n\ZZ\simeq\prod_{p^k\Vert n}\ZZ/p^k\ZZ\) 得
+\(
+\operatorname{Hom}(G,\ZZ/n\ZZ)\simeq\prod_{p^k\Vert n}\operatorname{Hom}(G,\ZZ/p^k\ZZ)
+\)，故 \(a_n(G)\) 为乘法函数并推出 Euler 乘积。
+(2) 若 \(p\nmid e\)，则 \(T_p=0\) 从而 \(a_{p^k}(G)=p^{kr}\)。
+于是该素数的局部因子与 \(\zeta(s-r)\) 完全一致；偏离仅来自有限集合 \(\{p:p\mid e\}\)，其修正因子聚为有限乘积。
+(3) \(\zeta(s-r)\) 在 \(s=r+1\) 处有单极点且在更右侧解析；
+有限乘积 \(\prod_{p\mid e}L_p(s)\) 在该点解析且非零，故 \(\zeta_G\) 的最右端极点与 \(\zeta(s-r)\) 同位同阶。证毕。
+\end{proof}
+
+\begin{theorem}[挠点计数的 Tauber 型主项]\label{thm:cdim-zeta-tauber-asymptotic}
+沿用定义 \ref{def:cdim-zeta-function} 的 \(a_n(G)=\card{\operatorname{Hom}(G,\ZZ/n\ZZ)}\)，并记部分和
+\[
+A_G(N):=\sum_{n\le N}a_n(G).
+\]
+设 \(G\simeq \ZZ^r\oplus T\) 且 \(r=\cdim(G)\)。
+则存在常数 \(C_G>0\) 使
+\[
+A_G(N)=\frac{C_G}{r+1}\,N^{r+1}+o\!\left(N^{r+1}\right)\qquad(N\to\infty).
+\]
+其中 \(C_G\) 可取为 \(\zeta_G(s)\) 在 \(s=r+1\) 处的留数：
+\[
+C_G=\operatorname*{Res}_{s=r+1}\zeta_G(s).
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:cdim-zeta-euler-pole}，\(\zeta_G(s)\) 在 \(s=r+1\) 处具有唯一最右端单极点且留数为正数 \(C_G\)，并在 \(\Re(s)\ge r+1\) 的其余点解析。
+对非负系数 Dirichlet 级数应用 Ikehara--Wiener 型 Tauber 定理，得到
+\(
+\sum_{n\le N}a_n(G)\sim C_G N^{r+1}/(r+1)
+\)。
+证毕。
+\end{proof}
+
+\paragraph{统一口径}
+以上构造给出结构层与实现层的同一预算坐标：
+\begin{enumerate}
+  \item 结构层由圆维/半圆维 \((\cdim,\cdim_+)\) 刻画可见相位圆因子（定义 \ref{def:circle-dimension}--\ref{def:half-circle-dimension}）。
+  \item 实现层的一切外置账本/寄存器/纤维标签可用残差圆维 \(\overline{\cdim}_{\mathrm{res}}\) 折算为“等效圆维单位”，并与结构圆维满足不可违背的线性预算律与可达性（定理 \ref{thm:cdim-phase-residual-budget-lower-bound}、\ref{thm:cdim-budget-completeness}、\ref{thm:cdim-residual-entropy-lower-bound}）。
+  \item 素数在审计中以 \(p^k\) 探针序列 \(\{a_{p^k}(G)\}\) 的离散斜率出现，从而逐素数解码 torsion 残差谱（定理 \ref{thm:cdim-finite-probe-extraction}），并在 \(\zeta_G\) 中仅占据有限素数修正因子（定理 \ref{thm:cdim-zeta-euler-pole}）。
+\end{enumerate}
+
+\endinput
+

@@ -1,0 +1,13 @@
+\section{归一化运算的算法化实现（值层运算 + Zeckendorf 规范形）}
+\label{app:normalization}
+
+第 \ref{sec:emergent-arithmetic} 节中运算以 $\mathrm{Val}^{-1}$ 定义并由 Zeckendorf 唯一性保证良定义。其可计算实现可取最短闭环：
+\begin{itemize}
+  \item \textbf{加法：}给定 $c,d\in X_\infty$，先计算整数 $N=\mathrm{Val}(c)+\mathrm{Val}(d)$，再以附录 C 的 Zeckendorf 贪心算法求 $Z(N)$，输出 $c\oplus d=Z(N)$。
+  \item \textbf{乘法：}同理取 $N=\mathrm{Val}(c)\mathrm{Val}(d)$，再取 Zeckendorf 规范形。
+\end{itemize}
+该实现不依赖任何模拟或外加结构，且终止性与唯一性均由 Zeckendorf 定理给出（\cite{Zeckendorf1972}）。
+
+\begin{remark}[纯数字层（有限状态/局部重写）实现]\label{rem:zeckendorf-normalize-fst}
+Zeckendorf/黄金比例 Ostrowski 数制的在线加法与规范化可在纯数字串层面用局部重写/有限状态换能器实现，参见 \cite{Frougny1992NumbersAutomata,Frougny1999OnlineAddition,AhlbachUsatineFrougnyPippenger2013,HieronymiTerry2018OstrowskiAddition}。
+\end{remark}

@@ -1,0 +1,431 @@
+% (User input window)
+
+\paragraph{查询—失真任务：剩余类型上的均匀定型源、强逆平面与零比特碰撞阈值}
+在微正则先验 \(F\sim\mathrm{Unif}(\mathfrak{Fold}_m(d))\) 下，\(k\) 次互异查询只揭示计数信息；
+未查询部分在条件后验中退化为一个“剩余类型”约束下的均匀定型源（定理 \ref{thm:pom-microcanonical-count-sufficient-statistic-posterior-uniform}）。
+本段将该结构与允许相对 Hamming 失真的恢复任务对齐，得到一个在指数尺度上呈严格平面的强逆相图，
+并给出超临界失败指数的收缩变分式与临界窗的高斯转折。
+
+\begin{definition}[未查询标签向量与相对 Hamming 失真]\label{def:pom-microcanonical-query-distortion-setup}
+在定义 \ref{def:pom-microcanonical-adaptive-trajectory-counts} 的设定下，
+令 \(Q_k=\{\omega_1,\dots,\omega_k\}\subset\Omega_m\)、\(U_k:=\Omega_m\setminus Q_k\)，并记
+\[
+t:=\card{U_k}=N-k.
+\]
+固定 \(U_k\) 的任意排序 \(U_k=\{\upsilon_1,\dots,\upsilon_t\}\)，并定义未查询标签向量
+\[
+Y^t:=(F(\upsilon_1),\dots,F(\upsilon_t))\in X_m^t.
+\]
+对任意两向量 \(y^t,\widehat y^t\in X_m^t\) 定义 Hamming 距离与相对失真
+\[
+d_{\mathrm H}(y^t,\widehat y^t):=\card{\{i\in\{1,\dots,t\}:\ y_i\neq \widehat y_i\}},
+\qquad
+\frac{1}{t}d_{\mathrm H}(y^t,\widehat y^t)\in[0,1].
+\]
+\end{definition}
+
+\begin{definition}[查询 + 外置信息下的失真成功率]\label{def:pom-microcanonical-query-distortion-success}
+给定 \(k\) 次查询轨迹 \(T_{1:k}\) 后，允许额外获得 \(B\) 比特外置信息：
+编码器为任意映射 \(\mathrm{enc}:\mathfrak{Fold}_m(d)\to\{0,1\}^B\)，解码器为任意映射
+\[
+\mathrm{dec}:X_m^k\times\{0,1\}^B\to X_m^t,
+\qquad
+\widehat Y^t:=\mathrm{dec}(T_{1:k},\mathrm{enc}(F)).
+\]
+对 \(\delta\in[0,1]\) 定义最优（Bayes）失真成功率
+\[
+\mathrm{Succ}^{\mathrm{opt}}_{k,B}(\delta)
+:=\sup_{\mathrm{enc},\mathrm{dec}}\ \mathbb{P}\!\left(\frac{1}{t}d_{\mathrm H}(Y^t,\widehat Y^t)\le \delta\right).
+\]
+\end{definition}
+
+\begin{definition}[剩余计数、剩余类型与定型类]\label{def:pom-microcanonical-residual-type-class}
+对轨迹 \(T_{1:k}\) 的计数向量 \(C_k\)（定义 \ref{def:pom-microcanonical-adaptive-trajectory-counts}），定义剩余计数向量
+\[
+R_x:=d(x)-C_k(x),\qquad x\in X_m,
+\qquad
+\sum_{x\in X_m}R_x=t,
+\]
+以及剩余类型 \(r\in\Delta(X_m)\)：
+\[
+r(x):=\frac{R_x}{t}.
+\]
+定义相应的定型类（类型类）
+\[
+\mathcal{T}_t(r):=\left\{y^t\in X_m^t:\ \card{\{i:\ y_i=x\}}=R_x\ \ \forall x\in X_m\right\}.
+\]
+\end{definition}
+
+\begin{proposition}[策略不变的后验结构：未查询部分为均匀定型源]\label{prop:pom-microcanonical-query-distortion-strategy-invariant-posterior}
+沿用定义 \ref{def:pom-microcanonical-residual-type-class}。
+对任意确定性自适应互异查询策略与任意轨迹 \(T_{1:k}\)，有严格等式
+\[
+\mathrm{Law}\bigl(Y^t\mid T_{1:k}\bigr)=\mathrm{Unif}\bigl(\mathcal{T}_t(r)\bigr).
+\]
+特别地，条件后验仅依赖于剩余计数向量 \(R\)（等价于剩余类型 \(r\)），与查询点的自适应选择无关。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:pom-microcanonical-count-sufficient-statistic-posterior-uniform}，
+\(
+\mathrm{Law}(F|_{U_k}\mid T_{1:k})=\mathrm{Unif}(\mathfrak{F}_{U_k}(d-C_k))
+\)；
+固定 \(U_k\) 的排序后，映射 \(F|_{U_k}\) 与向量 \(Y^t\) 一一对应，且约束 \(\card{(F|_{U_k})^{-1}(x)}=R_x\) 等价于 \(Y^t\in\mathcal{T}_t(r)\)。
+故条件分布为 \(\mathrm{Unif}(\mathcal{T}_t(r))\)。
+查询策略不变性由上述后验仅依赖 \(C_k\)（从而仅依赖 \(R=d-C_k\)）直接推出。证毕。
+\end{proof}
+
+\begin{proposition}[查询—失真任务的充分统计]\label{prop:pom-microcanonical-query-distortion-sufficient-statistic}
+在定义 \ref{def:pom-microcanonical-query-distortion-success} 的设定下，
+对任意查询策略与任意轨迹 \(T_{1:k}\)，条件最优成功率
+\[
+\sup_{\mathrm{enc},\mathrm{dec}}\ \mathbb{P}\!\left(\frac{1}{t}d_{\mathrm H}(Y^t,\widehat Y^t)\le \delta\ \Big|\ T_{1:k}\right)
+\]
+仅为 \((t,r,B,\delta)\) 的函数。
+因此在 \(N\to\infty\) 的指数尺度上，\(\mathrm{Succ}^{\mathrm{opt}}_{k,B}(\delta)\) 的相图完全由 \((\beta,w,\delta)\) 与比特密度 \(b=B/N\) 决定。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:pom-microcanonical-query-distortion-strategy-invariant-posterior}，给定轨迹后 \(Y^t\) 为 \(\mathrm{Unif}(\mathcal{T}_t(r))\)，且该条件分布不再含 \(\Omega_m\) 的几何信息。
+于是任何编码/解码对在条件下的成功率仅由该均匀定型源、码长 \(B\) 与失真阈值 \(\delta\) 决定，即为 \((t,r,B,\delta)\) 的函数。
+最后一句由 \(k=\lfloor\beta N\rfloor\)（从而 \(t/N\to 1-\beta\)）以及 \(r\to w\) 的无放回抽样大数律（定理 \ref{thm:pom-microcanonical-information-linear-law} 的证明中使用的同型收敛）推出。证毕。
+\end{proof}
+
+\begin{definition}[定型—对角约束速率函数]\label{def:pom-typed-diagonal-rate-function}
+设 \(X\) 为有限集、\(p\in\Delta(X)\)、\(\delta\in[0,1]\)。
+定义速率函数（自然对数单位）
+\[
+R_p(\delta)
+:=\inf\Bigl\{I_P(X;Y):\ P_X=P_Y=p,\ \mathbb{P}(X=Y)\ge 1-\delta\Bigr\},
+\]
+其中下确界取遍 \(X\times X\) 上的所有联合分布 \(P\)，并以 \(I_P(X;Y)\) 表示其互信息（自然对数）。
+\end{definition}
+
+\begin{theorem}[查询比例—比特密度—失真的强逆平面]\label{thm:pom-microcanonical-query-distortion-strong-converse-plane}
+沿用定义 \ref{def:pom-microcanonical-query-distortion-success}--\ref{def:pom-typed-diagonal-rate-function}。
+固定 \(\delta\in[0,1]\)，取 \(k=\lfloor\beta N\rfloor\) 与 \(B=\lfloor bN\rfloor\)（\(\beta\in[0,1)\)、\(b\ge 0\)），并假设 \(n\log N=o(N)\) 且 \(w\) 固定。
+则极限存在并满足
+\[
+\boxed{\;
+\lim_{N\to\infty}\frac{1}{N}\log \mathrm{Succ}^{\mathrm{opt}}_{k,B}(\delta)
+=\min\Bigl\{0,\ b\log 2-(1-\beta)\,R_w(\delta)\Bigr\}\; }.
+\]
+因此临界平面可写为
+\[
+\boxed{\;
+b_{\mathrm{crit}}(\beta,\delta)=\frac{(1-\beta)\,R_w(\delta)}{\log 2}\; } .
+\]
+当 \(\delta=0\) 时有 \(R_w(0)=H(w)\)，从而 \(b_{\mathrm{crit}}(\beta,0)=(1-\beta)H(w)/\log 2\)，与定理 \ref{thm:pom-microcanonical-query-plus-bits-phase} 的精确恢复阈值一致。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-microcanonical-query-distortion-strategy-invariant-posterior}，条件于轨迹后源为 \(\mathrm{Unif}(\mathcal{T}_t(r))\)。
+\par
+\textbf{上界（覆盖体积）。}
+定型类规模满足 \(|\mathcal{T}_t(r)|=\exp(tH(r)+o(t))\)（Stirling 展开），其中 \(H(\cdot)\) 为 Shannon 熵（自然对数）。
+对任意重构中心 \(\widehat y^t\)，
+\(\mathcal{T}_t(r)\cap\{y^t:\ d_{\mathrm H}(y^t,\widehat y^t)\le \delta t\}\)
+可按联合类型分解为有限个条件类型类，其指数体积由 \(\sup H(X|Y)\) 控制；
+在边缘约束 \(P_X=P_Y=r\) 与对角约束 \(\mathbb{P}(X=Y)\ge 1-\delta\) 下，
+\[
+\sup H(X|Y)=H(r)-R_r(\delta)
+\]
+（由 \(I(X;Y)=H(X)-H(X|Y)\) 的等价改写）。
+因此存在函数 \(o(t)\)（对固定 \(r,\delta\)）使对所有 \(\widehat y^t\) 有
+\[
+\card{\mathcal{T}_t(r)\cap\{y^t:\ d_{\mathrm H}(y^t,\widehat y^t)\le \delta t\}}
+\le \exp\bigl(t(H(r)-R_r(\delta))+o(t)\bigr).
+\]
+任意 \(B\) 比特码至多包含 \(2^B\) 个重构中心，故条件成功率至多为覆盖比例：
+\[
+\mathrm{Succ}^{\mathrm{opt}}_{k,B}(\delta\mid T_{1:k})
+\le
+\min\!\left(1,\frac{2^B\exp(t(H(r)-R_r(\delta))+o(t))}{\exp(tH(r)+o(t))}\right)
+=\min\!\left(1,\exp\bigl(B\log 2-tR_r(\delta)+o(t)\bigr)\right).
+\]
+对轨迹取期望，并用无放回抽样下 \(r\to w\) 的大数律与 \(R_p(\delta)\) 的连续性（在单纯形内点上）得到指数上界
+\(\limsup \frac1N\log \mathrm{Succ}^{\mathrm{opt}}_{k,B}(\delta)\le \min\{0,b\log 2-(1-\beta)R_w(\delta)\}\)。
+\par
+\textbf{下界（定型覆盖构造）。}
+对任意 \(\varepsilon>0\)，在给定 \(r\) 时可选取一组大小 \(\exp(t(R_r(\delta)+\varepsilon))\) 的重构中心使其 \(\delta\)-球覆盖 \(\mathcal{T}_t(r)\) 的 \(1-o(1)\) 比例（定型覆盖的标准构造；以联合类型达到 \(\sup H(X|Y)\) 的分量为主）。
+当 \(B\log 2\ge t(R_r(\delta)+\varepsilon)\) 时可使条件成功率趋于 \(1\)；当 \(B\log 2\le t(R_r(\delta)-\varepsilon)\) 时可使条件成功率达到
+\(\exp(B\log 2-tR_r(\delta)-o(t))\) 的指数率。
+对随机 \(r\) 取期望，并用 \(r\to w\) 得到匹配的指数下界。
+令 \(\varepsilon\downarrow 0\) 即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[超临界失败指数：由剩余类型偏离触发的收缩变分式]\label{thm:pom-microcanonical-query-distortion-failure-exponent}
+在定理 \ref{thm:pom-microcanonical-query-distortion-strong-converse-plane} 的设定下，
+进一步假设处于超临界侧
+\[
+b\log 2>(1-\beta)\,R_w(\delta).
+\]
+令 \(\mathrm{Fail}^{\mathrm{opt}}_{k,B}(\delta):=1-\mathrm{Succ}^{\mathrm{opt}}_{k,B}(\delta)\)。
+则极限
+\[
+E_{\mathrm{fail}}(\beta,b,\delta)
+:=\lim_{N\to\infty}-\frac{1}{N}\log \mathrm{Fail}^{\mathrm{opt}}_{k,B}(\delta)
+\]
+存在并满足严格等式
+\[
+\boxed{\;
+E_{\mathrm{fail}}(\beta,b,\delta)
+=\inf\Bigl\{J_{1-\beta}(r):\ (1-\beta)\,R_r(\delta)\ge b\log 2\Bigr\}\; } ,
+\]
+其中 \(J_{1-\beta}\) 为剩余类型 \(R_N=r_N\) 的大偏差速率函数（定理 \ref{thm:pom-microcanonical-hypergeometric-ldp-kl-sym} 的对称形式）。
+当 \(\delta=0\) 时 \(R_r(0)=H(r)\)，上述公式退化为“剩余熵阈值”的两温度失败指数（定义 \ref{def:pom-microcanonical-two-temperature-failure-exponent}，取 \(h=b\log 2/(1-\beta)\)）。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-microcanonical-query-distortion-strong-converse-plane} 的条件形式，
+在给定剩余类型 \(r\) 时，若 \(b\log 2>(1-\beta)R_r(\delta)\) 则条件失败概率可压至 \(e^{-\Theta(N)}\)；
+若 \(b\log 2<(1-\beta)R_r(\delta)\)，则条件成功率在指数尺度上衰减，从而条件失败趋于 \(1\)。
+因此失败事件在指数尺度上等价于
+\[
+\{(1-\beta)R_{r_N}(\delta)\ge b\log 2\}.
+\]
+对随机 \(r_N\) 应用定理 \ref{thm:pom-microcanonical-hypergeometric-ldp-kl-sym} 的 LDP（以 \(R_N\) 为收缩像）并用收缩原理得到所示变分式。证毕。
+\end{proof}
+
+\begin{theorem}[临界窗的高斯律：\texorpdfstring{$\sqrt N$}{sqrtN} 比特尺度的正态转折]\label{thm:pom-microcanonical-query-distortion-critical-window-clt}
+在定理 \ref{thm:pom-microcanonical-query-distortion-strong-converse-plane} 的设定下，
+进一步假设映射 \(p\mapsto R_p(\delta)\) 在 \(p=w\)（单纯形内点）处可 Fr\'echet 可微；
+取其梯度代表 \(g_\delta\in\RR^{X_m}\) 并中心化
+\[
+\widetilde g_\delta:=g_\delta-\langle g_\delta,w\rangle\,\mathbf 1.
+\]
+令
+\[
+B_N=\left\lfloor \frac{(1-\beta)R_w(\delta)}{\log 2}\,N+\frac{s}{\log 2}\sqrt N\right\rfloor,\qquad s\in\RR.
+\]
+则当 \(N\to\infty\) 时有极限
+\[
+\boxed{\;
+\mathrm{Succ}^{\mathrm{opt}}_{k,B_N}(\delta)\ \longrightarrow\ \Phi\!\left(\frac{s}{\sigma_{\beta,\delta}}\right)\; } ,
+\]
+其中 \(\Phi\) 为标准正态分布函数，且
+\[
+\boxed{\;
+\sigma_{\beta,\delta}^2
+=\beta(1-\beta)\ \widetilde g_\delta^{\mathsf T}\bigl(\mathrm{diag}(w)-ww^{\mathsf T}\bigr)\widetilde g_\delta\; } .
+\]
+当 \(\delta=0\) 时 \(R_p(0)=H(p)\)，可取 \(\widetilde g_0(x)=-\log w(x)+\EE_{X\sim w}[\log w(X)]\)，从而 \(\sigma_{\beta,0}^2=\beta(1-\beta)V(w)\)，与定理 \ref{thm:pom-microcanonical-query-plus-bits-phase} 的高斯临界窗一致。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-microcanonical-hypergeometric-ldp-kl-sym} 同型的无放回抽样 CLT（定理 \ref{thm:pom-microcanonical-posterior-moduli-clt} 的证明中使用），有
+\[
+\sqrt N\,(r_N-w)\ \xrightarrow{d}\ \mathcal N\!\left(0,\frac{\beta}{1-\beta}\bigl(\mathrm{diag}(w)-ww^{\mathsf T}\bigr)\right),
+\qquad r_N:=\frac{d-C_k}{N-k}.
+\]
+对 \(R_{r_N}(\delta)\) 施加 delta 方法得
+\[
+(1-\beta)N\bigl(R_{r_N}(\delta)-R_w(\delta)\bigr)
+\ \xrightarrow{d}\ \mathcal N\bigl(0,\sigma_{\beta,\delta}^2\bigr).
+\]
+在临界标度下，
+\[
+B_N\log 2-(1-\beta)N R_{r_N}(\delta)=s\sqrt N-(1-\beta)N\bigl(R_{r_N}(\delta)-R_w(\delta)\bigr)+o_p(\sqrt N),
+\]
+其符号以极限正态变量决定。
+由强逆平面（定理 \ref{thm:pom-microcanonical-query-distortion-strong-converse-plane}）的条件形式可将条件成功率在该尺度上等价为阶跃函数，
+取期望即得所示高斯 CDF 极限。证毕。
+\end{proof}
+
+\begin{proposition}[零速率阈值：由二阶碰撞概率精确刻画]\label{prop:pom-diagonal-rate-zero-threshold-collision}
+设 \(X\) 为有限集、\(p\in\Delta(X)\)，并记二阶碰撞概率
+\[
+p_2(p):=\sum_{x\in X}p(x)^2.
+\]
+则对任意 \(\delta\in[0,1]\) 有严格充要条件
+\[
+\boxed{\;
+R_p(\delta)=0\quad\Longleftrightarrow\quad \delta\ge 1-p_2(p)\; } .
+\]
+\end{proposition}
+\begin{proof}
+若 \(\delta\ge 1-p_2(p)\)，取独立耦合 \(P(x,y)=p(x)p(y)\)，则 \(\mathbb{P}(X=Y)=p_2(p)\ge 1-\delta\) 且 \(I(X;Y)=0\)，从而 \(R_p(\delta)=0\)。
+\par
+反之，若 \(R_p(\delta)=0\)，则存在可行耦合使 \(I(X;Y)=0\)，而 \(I=0\) 当且仅当 \(X,Y\) 独立，故必有 \(P(x,y)=p(x)p(y)\)；
+其对角质量为 \(p_2(p)\)，因此可行性要求 \(p_2(p)\ge 1-\delta\)，即 \(\delta\ge 1-p_2(p)\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[速率函数的显式参数化与对偶导数]\label{thm:pom-diagonal-rate-explicit-param-and-derivative}
+设 \(X\) 为有限集，取全支撑分布 \(w\in\Delta(X)\)，并固定 \(\delta\in(0,1)\) 使 \(R_w(\delta)>0\)（等价于 \(\delta<1-p_2(w)\)，命题 \ref{prop:pom-diagonal-rate-zero-threshold-collision}）。
+则实现 \(R_w(\delta)\) 的最优耦合 \(P^\star_\delta\) 唯一存在，并具有如下结构：
+存在唯一参数 \(\kappa>0\) 与唯一向量 \(u\in\RR_{>0}^X\) 使
+\[
+\boxed{\;
+P^\star_\delta(x,y)=\frac{u_xu_y\bigl(1+\kappa\,\mathbf 1_{\{x=y\}}\bigr)}{Z}\;},
+\qquad
+Z=\sum_{a,b\in X}u_au_b\bigl(1+\kappa\,\mathbf 1_{\{a=b\}}\bigr).
+\]
+并且边缘约束 \(P_X=P_Y=w\) 等价于对每个 \(x\in X\) 的二次自洽关系
+\[
+\boxed{\;
+w(x)=\frac{u_x(A+\kappa u_x)}{Z}\;},
+\qquad
+A:=\sum_{y\in X}u_y.
+\]
+在上述参数化下，速率具有闭式表示
+\[
+\boxed{\;
+R_w(\delta)
+=2\sum_{x\in X}w(x)\log\frac{u_x}{w(x)}
+-\log Z+(1-\delta)\log(1+\kappa)\; } .
+\]
+令对偶变量 \(\lambda:=\log(1+\kappa)\ge 0\)，则 \(\delta\mapsto R_w(\delta)\) 在 \((0,1-p_2(w))\) 上可微且满足敏感性公式
+\[
+\boxed{\;
+\frac{\mathrm d}{\mathrm d\delta}R_w(\delta)=-\lambda(\delta)=-\log(1+\kappa(\delta))<0\; } .
+\]
+并且当 \(\delta\uparrow 1-p_2(w)\) 时有 \(\kappa(\delta)\downarrow 0\) 与 \(R_w(\delta)\downarrow 0\)。
+\end{theorem}
+\begin{proof}
+对角约束问题为有限维凸规划：以 \(P\) 为变量、目标 \(I_P(X;Y)\) 凸，约束线性且在 \(\delta<1-p_2(w)\) 时满足 Slater 条件（存在严格可行点）。
+故存在唯一最优解 \(P^\star_\delta\)，并且对角约束必饱和：\(\mathbb{P}_{P^\star_\delta}(X=Y)=1-\delta\)。
+\par
+写拉格朗日函数并对 \(P(x,y)\) 的驻点条件求解，可得指数族形式
+\(
+P^\star_\delta(x,y)\propto a_x b_y\exp(\lambda\mathbf 1_{\{x=y\}})
+\)；
+由对称性与边缘同为 \(w\) 可取 \(a=b=u\)，并将 \(\exp(\lambda)-1\) 记为 \(\kappa\)，得到所示的 \((u,\kappa)\) 参数化与归一化常数 \(Z\)。
+边缘条件即为对每个 \(x\) 的方程组 \(w(x)=\sum_y P^\star_\delta(x,y)\)，化简即得二次自洽关系。
+\par
+闭式表达由
+\(
+\log P^\star_\delta(x,y)=\log u_x+\log u_y+\log(1+\kappa\mathbf 1_{\{x=y\}})-\log Z
+\)
+展开，并对 \(w\) 的边缘约束分别在 \(x\) 与 \(y\) 侧取期望得到。
+\par
+对偶导数由包络定理给出：约束可写为 \((1-\delta)-\mathbb{P}(X=Y)\le 0\)，其最优乘子即为 \(\lambda\)，从而 \(\frac{\mathrm d}{\mathrm d\delta}R_w(\delta)=-\lambda(\delta)\)。
+当 \(\delta\uparrow 1-p_2(w)\) 时，独立耦合可行且给出 \(R=0\)，唯一性迫使 \(\lambda\downarrow 0\)（即 \(\kappa\downarrow 0\)）并导致 \(R_w(\delta)\downarrow 0\)。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-diagonal-rate-scalar-collapse-duality}
+
+\begin{corollary}[零比特走廊：碰撞概率决定无外置信息区]\label{cor:pom-query-distortion-zero-bit-corridor}
+在定理 \ref{thm:pom-microcanonical-query-distortion-strong-converse-plane} 的设定下，
+若 \(\delta\ge 1-p_2(w)\)，则 \(R_w(\delta)=0\) 且 \(b_{\mathrm{crit}}(\beta,\delta)=0\) 对所有 \(\beta\in[0,1)\) 成立；
+若 \(\delta<1-p_2(w)\)，则 \(R_w(\delta)>0\) 且对任意 \(\beta<1\) 有 \(b_{\mathrm{crit}}(\beta,\delta)>0\)。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-diagonal-rate-zero-threshold-collision}，\(\delta\ge 1-p_2(w)\) 当且仅当 \(R_w(\delta)=0\)。
+代入定理 \ref{thm:pom-microcanonical-query-distortion-strong-converse-plane} 的临界平面公式即得。
+证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$\ell^2$}{l2} 直方图不变量：零比特失真阈值的可审计性]\label{cor:pom-query-distortion-zero-bit-threshold-auditable}
+在 Fold 口径下，推前分布为 \(w_m(x)=d_m(x)/2^m\)。
+定义二阶碰撞概率（\(\ell^2\) 直方图）
+\[
+\mathrm{Col}_m:=\sum_{x\in X_m}w_m(x)^2=\frac{S_2(m)}{2^{2m}}.
+\]
+则零比特可达失真阈值
+\[
+\delta_{0,m}:=\inf\{\delta:\ R_{w_m}(\delta)=0\}
+\]
+满足严格等式
+\[
+\boxed{\;
+\delta_{0,m}=1-\mathrm{Col}_m
+=1-\frac{S_2(m)}{2^{2m}}\; } .
+\]
+若进一步存在极限 \(\mathrm{Col}_m\to \mathrm{Col}_\infty\)，则 \(\delta_{0,m}\to 1-\mathrm{Col}_\infty\)。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-diagonal-rate-zero-threshold-collision}，
+\(
+\delta_{0,m}=1-p_2(w_m)
+\)。
+而 \(p_2(w_m)=\sum_x w_m(x)^2=\mathrm{Col}_m=2^{-2m}S_2(m)\)，代入即得闭式。
+极限结论由连续性立即推出。证毕。
+\end{proof}
+
+\begin{theorem}[双边缘对角约束速率的 Fr\'echet 导数：由缩放势给出显式梯度]\label{thm:pom-diagonal-rate-frechet-derivative-scaling-potential}
+设 \(X\) 为有限字母表（\(|X|\ge 2\)），取全支撑分布 \(w\in\Delta(X)\)，并令 \(\delta\in(0,1-p_2(w))\)。
+令 \(P^\star_\delta\) 为定理 \ref{thm:pom-diagonal-rate-explicit-param-and-derivative} 的唯一最优耦合，并取其指数族表示
+\[
+P^\star_\delta(x,y)=\frac{u_\delta(x)u_\delta(y)\,\exp\!\bigl(\lambda_\delta\,\mathbf 1_{\{x=y\}}\bigr)}{Z_\delta},
+\qquad
+u_\delta\in\RR_{>0}^{X},\ \lambda_\delta>0,
+\]
+其中 \(u_\delta\) 在整体伸缩下唯一（伸缩吸收进 \(Z_\delta\)）。
+定义缩放势
+\[
+\psi_\delta(x):=\log\frac{u_\delta(x)}{w(x)}\qquad(x\in X),
+\]
+其在加常数意义下唯一。
+则映射 \(w\mapsto R_w(\delta)\) 在单纯形内点处 Fr\'echet 可微；对任意切向扰动 \(\dot w\)（满足 \(\sum_{x\in X}\dot w(x)=0\)）成立
+\[
+DR_w(\delta)[\dot w]=2\sum_{x\in X}\dot w(x)\,\psi_\delta(x).
+\]
+因此 \(R_w(\delta)\) 的梯度（切空间意义下）可取为
+\[
+\nabla R_w(\delta)\equiv 2\psi_\delta\pmod{\RR\mathbf 1}.
+\]
+\end{theorem}
+\begin{proof}
+当 \(P_X=P_Y=w\) 时，互信息满足恒等式
+\(
+I_P(X;Y)=H(w)+H(w)-H(P)
+=2H(w)-H(P)
+\)。
+因此
+\[
+R_w(\delta)
+=2H(w)-\sup\Bigl\{H(P):\ P_X=P_Y=w,\ \mathbb P_P(X=Y)\ge 1-\delta\Bigr\}.
+\]
+上确界问题对 \(P\) 为严格凹规划，且在 \(\delta<1-p_2(w)\) 时满足 Slater 条件；故极大元 \(P^\star_\delta\) 唯一，且 KKT 乘子在加常数规约下唯一。
+\par
+对极大问题写拉格朗日函数（以 \(\alpha,\beta\) 为两条边缘约束乘子、以 \(\lambda\) 为对角约束乘子）并对 \(P(x,y)\) 作驻点条件，可得
+\[
+P^\star_\delta(x,y)\propto \exp\!\bigl(-\alpha_x-\beta_y+\lambda\,\mathbf 1_{\{x=y\}}\bigr).
+\]
+令 \(u_\delta(x):=\exp(-\alpha_x)\) 且由交换对称性取 \(\alpha=\beta\)（相差常数吸收进 \(Z_\delta\)），即得到定理陈述中的指数族表示。
+\par
+记
+\(
+F(w):=\sup\{H(P):P_X=P_Y=w,\ \mathbb P(X=Y)\ge 1-\delta\}
+\)。
+由于极大元唯一且满足常规正则性，包络定理给出
+\[
+DF(w)[\dot w]=\sum_{x\in X}(\alpha_x+\beta_x)\,\dot w(x)
+=-2\sum_{x\in X}\dot w(x)\,\log u_\delta(x),
+\]
+其中最后一步使用 \(\alpha_x=\beta_x=-\log u_\delta(x)\)（加常数不影响切向配对）。
+又因 \(H(w)=-\sum_x w(x)\log w(x)\)，对切向扰动有 \(DH(w)[\dot w]=-\sum_x\dot w(x)\log w(x)\)。
+代回 \(R_w(\delta)=2H(w)-F(w)\) 得
+\[
+DR_w(\delta)[\dot w]
+=2DH(w)[\dot w]-DF(w)[\dot w]
+=2\sum_{x\in X}\dot w(x)\Bigl(\log u_\delta(x)-\log w(x)\Bigr)
+=2\sum_{x\in X}\dot w(x)\,\psi_\delta(x),
+\]
+即所示。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$\sqrt N$}{sqrtN} 比特窗的显式方差常数]\label{cor:pom-microcanonical-query-distortion-critical-window-variance-psi}
+在定理 \ref{thm:pom-microcanonical-query-distortion-critical-window-clt} 的设定下，若 \(\delta\in(0,1-p_2(w))\) 且 \(w\) 全支撑，则可取
+\(
+g_\delta\equiv 2\psi_\delta\pmod{\RR\mathbf 1}
+\)
+（\(\psi_\delta\) 见定理 \ref{thm:pom-diagonal-rate-frechet-derivative-scaling-potential}）。
+从而临界窗的方差常数具有闭式
+\[
+\sigma_{\beta,\delta}^2
+=\beta(1-\beta)\ \Var_{X\sim w}\!\bigl(2\psi_\delta(X)\bigr)
+=4\beta(1-\beta)\Bigl(\EE_w[\psi_\delta(X)^2]-\EE_w[\psi_\delta(X)]^2\Bigr).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-diagonal-rate-frechet-derivative-scaling-potential}，\(w\mapsto R_w(\delta)\) 的梯度在切空间意义下可取 \(g_\delta=2\psi_\delta\)。
+将其代入定理 \ref{thm:pom-microcanonical-query-distortion-critical-window-clt} 的
+\(
+\sigma_{\beta,\delta}^2=\beta(1-\beta)\ \widetilde g_\delta^{\mathsf T}(\mathrm{diag}(w)-ww^{\mathsf T})\widetilde g_\delta
+\)
+并注意 \(\widetilde g_\delta\) 即为对 \(w\) 去均值后的 \(2\psi_\delta\)，从而二次型等于 \(\Var_w(2\psi_\delta(X))\)。
+证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/part__pom-microcanonical-query-distortion-strong-converse-solvable-cases}
+
+\input{sections/body/pom/parts/part__pom-microcanonical-query-distortion-strong-converse-part2}
+\endinput
+

@@ -1,0 +1,563 @@
+\subsection{观察者时空层}\label{subsec:logic-expansion-chain-observer-spacetime}
+
+上一小节已经把状态推进写成了更新链，并进一步说明：状态的细化可以沿多个轴发生，某个命题是否被决定，取决于哪些轴的信息已经进入当前状态。然而，到目前为止，这些状态仍然是匿名的。我们可以说“某状态更细”“某状态在未来可达”“某组轴足以决定某命题”，却还不能说：这个状态属于谁，发生在何处，位于哪个事件位置之中，以及不同局部状态何时可以被放到同一时空背景下比较。因此，本小节的目标，是把前述 forcing 体系最终纤维化到观察者与时空之上。
+
+这一层并不改变 forcing 的基本形式。对象层事实仍然写成
+\[
+p\Vdash \varphi.
+\]
+变化的只是：状态 \(p\) 不再被看成匿名信息块，而被看成一个同时带有观察者索引、事件定位与区域支撑的局部状态。于是，forcing 第一次获得了真正的“谁在何处可断言什么”的含义。
+
+\paragraph{观察者索引}
+先引入观察者索引集 \(I\)，并把状态空间按观察者分纤维。
+
+\begin{definition}[观察者索引状态系]\label{def:logic-expansion-observer-indexed-state-system}
+称
+\[
+(P,\iota)
+\]
+为一个观察者索引状态系，若 \(P\) 为状态集，且
+\[
+\iota:P\to I
+\]
+为一个满射。对每个 \(i\in I\)，定义其状态纤维
+\[
+P_i:=\iota^{-1}(i).
+\]
+\end{definition}
+
+于是，总状态空间分解为
+\[
+P=\bigsqcup_{i\in I}P_i.
+\]
+这里的“观察者”不是特权主体，也不是公理中的原初对象，而只是状态的索引纤维。一个状态属于某个观察者，表示它位于该观察者的局部经验边界之内。
+
+在此基础上，可把 forcing 显式纤维化。
+
+\begin{definition}[观察者相对 forcing]\label{def:logic-expansion-observer-relative-forcing}
+若 \(p\in P_i\)，则记
+\[
+p\Vdash_i \varphi
+\quad:\Longleftrightarrow\quad
+p\Vdash \varphi.
+\]
+\end{definition}
+
+定义 \ref{def:logic-expansion-observer-relative-forcing} 并未发明一套新的真值，只是显式标出 forcing 发生在观察者 \(i\) 的状态纤维中。
+
+\paragraph{内部更新与通信}
+观察者一旦被引入，就必须区分两类状态变化：一类是在同一观察者纤维内部发生的更新，另一类是不同观察者之间的信息传递。
+
+\begin{definition}[内部更新]\label{def:logic-expansion-internal-update}
+对每个 \(i\in I\)，设
+\[
+\mathsf{Act}_i^{\mathrm{int}}
+\]
+为观察者 \(i\) 的内部动作集。对每个 \(\alpha\in \mathsf{Act}_i^{\mathrm{int}}\)，给定映射
+\[
+\mathrm{Upd}_\alpha:P_i\to \mathcal P(P_i),
+\]
+并要求：若
+\[
+p\in P_i,
+\qquad
+q\in \mathrm{Upd}_\alpha(p),
+\]
+则
+\[
+q\le p
+\qquad\text{且}\qquad
+q\in P_i.
+\]
+\end{definition}
+
+定义 \ref{def:logic-expansion-internal-update} 表示：内部更新不会改变观察者索引，它只会使同一观察者的局部状态更细。据此，定义
+\[
+p\rightsquigarrow_i q
+\]
+表示从 \(p\) 出发，仅通过观察者 \(i\) 的内部动作即可到达 \(q\)。
+
+与内部更新相对，定义通信结构。
+
+\begin{definition}[通信]\label{def:logic-expansion-communication}
+对每个有序对 \((i,j)\in I\times I\)，设
+\[
+\mathsf{Ch}_{i\to j}
+\]
+为从观察者 \(i\) 到观察者 \(j\) 的通信信道集。对每个
+\[
+\mu\in \mathsf{Ch}_{i\to j},
+\]
+给定映射
+\[
+\mathrm{Com}_\mu:P_i\to \mathcal P(P_j).
+\]
+若
+\[
+q\in \mathrm{Com}_\mu(p),
+\]
+则表示：当 \(i\) 处于状态 \(p\) 时，沿信道 \(\mu\) 传递后，\(j\) 可以进入状态 \(q\)。
+\end{definition}
+
+于是，观察者之间的联系不是通过共享同一状态实现，而是通过跨纤维的通信映射实现。
+
+\paragraph{事件与区域}
+为了把观察者状态真正放入时空背景中，还需要一个最小的事件—区域系统。
+
+\begin{definition}[事件—区域系统]\label{def:logic-expansion-event-region-system}
+称
+\[
+(X,\preceq_X,\mathcal U,\mathrm{Cov}_X,\chi)
+\]
+为一个事件—区域系统，若：
+\begin{enumerate}
+  \item \(X\) 是事件集；
+  \item \(\preceq_X\) 是 \(X\) 上的因果预序；
+  \item \(\mathcal U\subseteq \mathcal P(X)\) 是区域族，并对有限交封闭；
+  \item 对每个 \(U\in \mathcal U\)，\(\mathrm{Cov}_X(U)\) 是 \(U\) 的覆盖族；
+  \item \(\chi:X\to T\) 是到某个时间索引集 \(T\) 的单调映射。
+\end{enumerate}
+\end{definition}
+
+这里的“时空”不是预设的几何流形，而是最小的因果—区域结构：事件负责给出先后关系，区域负责给出局部片段，覆盖则负责这些片段的局部化组织。
+
+\paragraph{观察者时空状态}
+现在把观察者索引状态与事件—区域系统合并起来。
+
+\begin{definition}[观察者时空状态模型]\label{def:logic-expansion-observer-spacetime-state-model}
+称
+\[
+(P,\iota,\lambda,\varrho)
+\]
+为一个观察者时空状态模型，若：
+\begin{enumerate}
+  \item \((P,\iota)\) 是观察者索引状态系；
+  \item \(\lambda:P\to X\) 是事件定位映射；
+  \item \(\varrho:P\to \mathcal U\) 是区域支撑映射；
+  \item 对任意 \(p\in P\)，都有
+  \[
+  \lambda(p)\in \varrho(p).
+  \]
+\end{enumerate}
+\end{definition}
+
+于是，每个状态 \(p\) 同时携带三重信息：\(\iota(p)\) 指出它属于哪个观察者，\(\lambda(p)\) 指出它位于哪个事件，\(\varrho(p)\) 指出它支撑在哪个局部区域。时间投影则由事件时钟诱导为
+\[
+\tau:=\chi\circ \lambda.
+\]
+因此，本章中的时间不是独立于状态流动的背景，而是状态事件定位的一个投影。
+
+\paragraph{因果相容性}
+为了保证“更新”与“通信”不会破坏时空逻辑，需要要求它们与事件的因果顺序相容。
+
+\begin{definition}[因果相容性]\label{def:logic-expansion-causal-compatibility}
+称一个观察者时空状态模型满足因果相容性，若：
+\begin{enumerate}
+  \item 若
+  \[
+  p\rightsquigarrow_i q,
+  \]
+  则
+  \[
+  \lambda(p)\preceq_X \lambda(q).
+  \]
+  \item 若
+  \[
+  q\in \mathrm{Com}_\mu(p)
+  \]
+  对某个 \(\mu\in \mathsf{Ch}_{i\to j}\)，则
+  \[
+  \lambda(p)\preceq_X \lambda(q).
+  \]
+\end{enumerate}
+\end{definition}
+
+定义 \ref{def:logic-expansion-causal-compatibility} 表示：无论是观察者内部更新，还是观察者之间的通信，都不能逆着因果顺序进行。若进一步有
+\[
+\lambda(p)=\lambda(q),
+\]
+则可把 \(p\rightsquigarrow_i q\) 理解为同事件分类更新。这意味着：状态可以在同一事件位置上变得更细，而不必真的前进到更晚事件。这也正是本章对“延迟定解”最自然的时空解释。
+
+\paragraph{局部 forcing 与共享 forcing}
+既然状态已经定位到了区域上，forcing 也应被局部化。
+
+\begin{definition}[区域局部 forcing]\label{def:logic-expansion-regional-local-forcing}
+设 \(U\in \mathcal U\)。对任意 \(p\in P_i\)，定义
+\[
+p\Vdash_i \mathsf{Loc}_U\,\varphi
+\quad:\Longleftrightarrow\quad
+\varrho(p)\subseteq U
+\ \text{且}\
+p\Vdash_i \varphi.
+\]
+\end{definition}
+
+这表示：\(\varphi\) 不仅在观察者 \(i\) 的状态 \(p\) 上成立，而且该状态的区域支撑已完全落在 \(U\) 中。
+
+接着，需要允许不同观察者在共同背景下比较其局部 forcing。为此，引入有限观察者族的耦合状态。
+
+\begin{definition}[耦合状态]\label{def:logic-expansion-coupled-states}
+对有限非空观察者集 \(K\subseteq I\)，设 \(C_K\) 为 \(K\)-耦合状态集，并对每个 \(i\in K\) 给定投影
+\[
+\rho_i^K:C_K\to P_i.
+\]
+再给出共同区域支撑映射
+\[
+\mathrm{supp}_K:C_K\to \mathcal U,
+\]
+并要求对任意 \(c\in C_K\) 与任意 \(i\in K\)，都有
+\[
+\lambda(\rho_i^K(c))\in \mathrm{supp}_K(c).
+\]
+\end{definition}
+
+于是，耦合状态 \(c\) 提供了一个共同背景，使多个观察者的局部状态可以在同一区域内被比较。
+
+\begin{definition}[共享 forcing]\label{def:logic-expansion-shared-forcing}
+设 \(c\in C_K\)、\(U\in \mathcal U\)。定义
+\[
+c\Vdash^{\forall}_{K,U}\varphi
+\quad:\Longleftrightarrow\quad
+\mathrm{supp}_K(c)\subseteq U
+\ \text{且}\
+\forall i\in K,\ \rho_i^K(c)\Vdash_i \varphi.
+\]
+\end{definition}
+
+定义 \ref{def:logic-expansion-shared-forcing} 表示：在共同区域 \(U\) 的支撑下，观察者集合 \(K\) 的每个成员都在自己的局部状态上 forcing \(\varphi\)。据此，可以把所有观察者都 forcing \(\varphi\) 或都 forcing \(\neg\varphi\) 的情形视为区域共识；若存在 \(i,j\in K\) 使
+\[
+\rho_i^K(c)\Vdash_i \varphi,
+\qquad
+\rho_j^K(c)\Vdash_j \neg\varphi,
+\]
+则得到区域分歧。于是，不同观察者之间的一致与冲突第一次都获得了明确的局部时空背景。
+
+\paragraph{观察者对称性与无特权性}
+引入观察者索引后，最容易滑向的误解，就是偷偷把某个观察者当作“最终裁判者”。为了从结构上排除这一点，需要把无特权性写成一个对称条件。
+
+\begin{definition}[观察者对称性]\label{def:logic-expansion-observer-symmetry}
+称一个观察者时空状态模型满足观察者对称性，若对任意双射
+\[
+\sigma:I\to I,
+\]
+都存在状态空间上的双射
+\[
+\widehat{\sigma}:P\to P
+\]
+使得：
+\begin{enumerate}
+  \item
+  \[
+  \iota(\widehat{\sigma}(p))=\sigma(\iota(p)).
+  \]
+  \item \(\widehat{\sigma}\) 保持细化关系、内部更新、通信结构、事件定位、区域支撑与 forcing。
+\end{enumerate}
+\end{definition}
+
+定义 \ref{def:logic-expansion-observer-symmetry} 表示：任意观察者标签的重命名都可以被整个模型的自同构吸收。于是，模型结构本身并不会选出某个“特殊观察者”。
+
+\begin{proposition}[无特权观察者]\label{prop:logic-expansion-no-privileged-observer}
+在满足观察者对称性的模型中，任意两个观察者在逻辑结构上处于同等地位。只要某个性质仅依赖于模型结构，而不硬编码某个具体观察者标签，那么它对一个观察者成立，就对任何其它观察者都存在对应的成立方式。
+\end{proposition}
+
+\begin{proof}
+设 \(i,j\in I\)。取任一满足 \(\sigma(i)=j\) 的双射 \(\sigma:I\to I\)。由观察者对称性，存在与之对应的状态双射 \(\widehat{\sigma}:P\to P\)，且它保持细化、更新、通信、事件定位、区域支撑与 forcing。因而任何纯结构性陈述在 \(\widehat{\sigma}\) 作用下都会被送到同型的陈述，并把纤维 \(P_i\) 映到纤维 \(P_j\)。故只要某性质不依赖某个被硬编码的观察者标签，它在 \(i\) 上成立时，必在 \(j\) 上有对应的成立方式。于是任意观察者都不具逻辑上的特权。
+\end{proof}
+
+因此，观察者在本章中不是形而上的主体，而只是 forcing 状态的索引纤维。forcing 的中心始终是状态，而不是某个被特权化的“我”。
+
+\paragraph{选择谱与选择型自由意志}
+一旦观察者只被理解为状态纤维，而内部更新又始终停留在同一纤维中，最自然的新问题就不再是“系统是否已经为观察者选定了某个实际分支”，而是：在给定状态处，不同内部动作究竟能够把未来送入多少种 genuinely 不同的 forcing 类型。由此可以把自由意志问题改写为一个纯结构问题：在不引入额外对称破缺数据时，系统本身是否已经导出了一个非平凡的选择谱。
+
+\begin{definition}[选择型自由意志结构]\label{def:logic-expansion-choice-spectrum-structure}
+设 \(\mathbb{L}^{\mathrm{OST}}\) 为一个观察者时空逻辑系统，\(i\in I\)，且 \(p\in P_i\)。定义可用内部动作集
+\[
+\operatorname{En}_i(p)
+:=
+\{\alpha\in \mathsf{Act}_i^{\mathrm{int}}:\ \mathrm{Upd}_\alpha(p)\neq\varnothing\},
+\]
+以及一步后继集
+\[
+\operatorname{Succ}_i(p)
+:=
+\bigcup_{\alpha\in \operatorname{En}_i(p)}\mathrm{Upd}_\alpha(p)
+\subseteq P_i.
+\]
+
+在 \(\operatorname{Succ}_i(p)\) 上定义未来等价关系
+\[
+q\sim_i r
+\quad:\Longleftrightarrow\quad
+\forall \varphi,\ \bigl(q\Vdash_i\varphi \iff r\Vdash_i\varphi\bigr),
+\]
+其中 \(\varphi\) 遍历对象层 forcing 语言中的全部公式。由此定义一步未来商集
+\[
+\mathfrak W_i^{(1)}(p):=\operatorname{Succ}_i(p)/{\sim_i}.
+\]
+
+再定义选择对应
+\[
+\Gamma_i(p):\operatorname{En}_i(p)\to \mathcal P\bigl(\mathfrak W_i^{(1)}(p)\bigr),
+\qquad
+\Gamma_i(p)(\alpha):=
+\{[q]_{\sim_i}:\ q\in \mathrm{Upd}_\alpha(p)\}.
+\]
+
+对 \(\alpha,\beta\in \operatorname{En}_i(p)\)，定义动作等价
+\[
+\alpha\approx_{i,p}\beta
+\quad:\Longleftrightarrow\quad
+\Gamma_i(p)(\alpha)=\Gamma_i(p)(\beta),
+\]
+并令
+\[
+\mathfrak C_i(p):=\operatorname{En}_i(p)/{\approx_{i,p}}.
+\]
+
+称
+\[
+\mathfrak F_i^{\mathrm{sel}}(p)
+:=
+\bigl(\operatorname{En}_i(p),\mathfrak W_i^{(1)}(p),\Gamma_i(p)\bigr)
+\]
+为观察者 \(i\) 在状态 \(p\) 处的选择型自由意志结构；若
+\[
+|\mathfrak C_i(p)|\ge 2,
+\]
+则称观察者 \(i\) 在 \(p\) 处具有选择型自由意志。
+\end{definition}
+
+\begin{theorem}[良定义]\label{thm:logic-expansion-choice-spectrum-well-defined}
+对任意观察者时空逻辑系统、任意 \(i\in I\) 与任意 \(p\in P_i\)，结构
+\[
+\mathfrak F_i^{\mathrm{sel}}(p)
+\]
+良定义。因而 \(\mathfrak C_i(p)\) 以及“在 \(p\) 处具有选择型自由意志”这一性质也都良定义。
+\end{theorem}
+
+\begin{proof}
+由定义 \ref{def:logic-expansion-internal-update}，若 \(\alpha\in \mathsf{Act}_i^{\mathrm{int}}\) 且 \(q\in \mathrm{Upd}_\alpha(p)\)，则 \(q\in P_i\) 且 \(q\le p\)。因此
+\[
+\mathrm{Upd}_\alpha(p)\subseteq P_i,
+\qquad
+\operatorname{Succ}_i(p)\subseteq P_i.
+\]
+
+关系 \(\sim_i\) 在 \(\operatorname{Succ}_i(p)\) 上显然自反与对称；其传递性则来自双向 forcing 等价的传递性，故 \(\sim_i\) 的确是等价关系，因此商集 \(\mathfrak W_i^{(1)}(p)\) 存在。
+
+再者，对任意 \(\alpha\in \operatorname{En}_i(p)\)，因为 \(\mathrm{Upd}_\alpha(p)\subseteq \operatorname{Succ}_i(p)\)，故
+\[
+\Gamma_i(p)(\alpha)\subseteq \mathfrak W_i^{(1)}(p),
+\]
+从而 \(\Gamma_i(p)\) 的值域确实落在 \(\mathcal P(\mathfrak W_i^{(1)}(p))\) 中。
+
+最后，\(\approx_{i,p}\) 由 \(\Gamma_i(p)\) 的值相等定义，自反、对称与传递都显然成立，因此 \(\mathfrak C_i(p)\) 作为商集存在。由此全部对象均良定义。
+\end{proof}
+
+\begin{proposition}[选择谱的标准形]\label{prop:logic-expansion-choice-spectrum-standard-form}
+记
+\[
+\Xi_i(p):=
+\{\Gamma_i(p)(\alpha):\ \alpha\in \operatorname{En}_i(p)\}
+\subseteq \mathcal P\bigl(\mathfrak W_i^{(1)}(p)\bigr).
+\]
+则有自然双射
+\[
+\mathfrak C_i(p)\cong \Xi_i(p),
+\qquad
+[\alpha]_{\approx_{i,p}}\longmapsto \Gamma_i(p)(\alpha).
+\]
+特别地，观察者 \(i\) 在 \(p\) 处具有选择型自由意志，当且仅当
+\[
+|\Xi_i(p)|\ge 2.
+\]
+\end{proposition}
+
+\begin{proof}
+映射
+\[
+[\alpha]_{\approx_{i,p}}\longmapsto \Gamma_i(p)(\alpha)
+\]
+是良定义的，因为 \(\alpha\approx_{i,p}\beta\) 当且仅当两者的 \(\Gamma_i(p)\)-值相同。它显然满射到 \(\Xi_i(p)\)，也显然单射，故为双射。最后一条只是把
+\[
+|\mathfrak C_i(p)|\ge 2
+\]
+经由该双射改写成 \(|\Xi_i(p)|\ge 2\)。
+\end{proof}
+
+\begin{corollary}[一步判据]\label{cor:logic-expansion-choice-spectrum-one-step-criterion}
+若存在 \(\alpha,\beta\in \operatorname{En}_i(p)\) 使
+\[
+\Gamma_i(p)(\alpha)\neq \Gamma_i(p)(\beta),
+\]
+则观察者 \(i\) 在 \(p\) 处具有选择型自由意志。反之，若对所有 \(\alpha,\beta\in \operatorname{En}_i(p)\) 都有
+\[
+\Gamma_i(p)(\alpha)=\Gamma_i(p)(\beta),
+\]
+则观察者 \(i\) 在 \(p\) 处不具有选择型自由意志。
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:logic-expansion-choice-spectrum-standard-form}，
+\[
+|\mathfrak C_i(p)|=|\Xi_i(p)|.
+\]
+而 \(\Xi_i(p)\) 正是全部 \(\Gamma_i(p)(\alpha)\) 的像集，故结论立即成立。
+\end{proof}
+
+\begin{theorem}[观察者对称性下的不变性]\label{thm:logic-expansion-choice-spectrum-symmetry-invariance}
+若观察者时空逻辑系统满足观察者对称性，\(\sigma:I\to I\) 为任意双射，\(\widehat{\sigma}:P\to P\) 为定义 \ref{def:logic-expansion-observer-symmetry} 中与之对应的状态自同构，则对任意 \(p\in P_i\)，存在自然双射
+\[
+\mathfrak W_i^{(1)}(p)\cong \mathfrak W_{\sigma(i)}^{(1)}(\widehat{\sigma}(p)),
+\]
+并进一步诱导
+\[
+\Xi_i(p)\cong \Xi_{\sigma(i)}(\widehat{\sigma}(p)),
+\qquad
+\mathfrak C_i(p)\cong \mathfrak C_{\sigma(i)}(\widehat{\sigma}(p)).
+\]
+特别地，观察者 \(i\) 在 \(p\) 处具有选择型自由意志，当且仅当观察者 \(\sigma(i)\) 在 \(\widehat{\sigma}(p)\) 处具有选择型自由意志。
+\end{theorem}
+
+\begin{proof}
+由定义 \ref{def:logic-expansion-observer-symmetry}，\(\widehat{\sigma}\) 保持内部更新与 forcing。故若 \(q\in \operatorname{Succ}_i(p)\)，则 \(\widehat{\sigma}(q)\in \operatorname{Succ}_{\sigma(i)}(\widehat{\sigma}(p))\)。同时，对任意 \(q,r\in \operatorname{Succ}_i(p)\)，有
+\[
+q\sim_i r
+\iff
+\forall \varphi,\ \bigl(q\Vdash_i\varphi \iff r\Vdash_i\varphi\bigr)
+\iff
+\forall \varphi,\ \bigl(\widehat{\sigma}(q)\Vdash_{\sigma(i)}\varphi \iff \widehat{\sigma}(r)\Vdash_{\sigma(i)}\varphi\bigr)
+\iff
+\widehat{\sigma}(q)\sim_{\sigma(i)}\widehat{\sigma}(r).
+\]
+因此 \(\widehat{\sigma}\) 在未来商集上下降为双射
+\[
+[q]_{\sim_i}\longmapsto [\widehat{\sigma}(q)]_{\sim_{\sigma(i)}}.
+\]
+
+再由 \(\widehat{\sigma}\) 对内部更新结构的保持性，每个由某个 \(\alpha\in \operatorname{En}_i(p)\) 产生的未来像集合 \(\Gamma_i(p)(\alpha)\)，都会被送到 \(\Xi_{\sigma(i)}(\widehat{\sigma}(p))\) 中的某个元素；对 \(\widehat{\sigma}^{-1}\) 同理，故诱导出
+\[
+\Xi_i(p)\cong \Xi_{\sigma(i)}(\widehat{\sigma}(p)).
+\]
+结合命题 \ref{prop:logic-expansion-choice-spectrum-standard-form} 中 \(\mathfrak C_i(p)\cong \Xi_i(p)\) 与 \(\mathfrak C_{\sigma(i)}(\widehat{\sigma}(p))\cong \Xi_{\sigma(i)}(\widehat{\sigma}(p))\)，即得
+\[
+\mathfrak C_i(p)\cong \mathfrak C_{\sigma(i)}(\widehat{\sigma}(p)).
+\]
+最后一句只依赖这些集合的基数是否至少为 \(2\)，故结论成立。
+\end{proof}
+
+\begin{theorem}[局部对称下单值选择器的定义障碍]\label{thm:logic-expansion-choice-spectrum-no-definable-selector}
+设 \(p\in P_i\)。若存在两个不同的选择类
+\[
+A,B\in \mathfrak C_i(p),
+\qquad
+A\neq B,
+\]
+以及一个保持原有观察者时空逻辑结构的自同构 \(\tau:P\to P\)，满足
+\begin{enumerate}
+  \item \(\tau(p)=p\)；
+  \item \(\tau\) 保持细化、forcing、内部更新、通信、事件定位与区域支撑；
+  \item \(\tau\) 在 \(\mathfrak C_i(p)\) 上交换 \(A\) 与 \(B\)。
+\end{enumerate}
+则不存在一个仅由原有观察者时空逻辑结构与参数 \(p\) 纯定义出来的单值选择器
+\[
+\operatorname{Ch}_i(p)\in \mathfrak C_i(p)
+\]
+能够在 \(A\) 与 \(B\) 之间唯一选出一个。
+\end{theorem}
+
+\begin{proof}
+反设存在这样的纯定义单值选择器 \(\operatorname{Ch}_i(p)\)。由于它只依赖于原有观察者时空逻辑结构并以 \(p\) 为参数定义，任何固定 \(p\) 的结构自同构都必须保持其取值不变，因此
+\[
+\tau(\operatorname{Ch}_i(p))=\operatorname{Ch}_i(p).
+\]
+但 \(\tau\) 在 \(\mathfrak C_i(p)\) 上交换 \(A\) 与 \(B\)。于是若 \(\operatorname{Ch}_i(p)=A\)，则上式迫使
+\[
+\tau(\operatorname{Ch}_i(p))=B\neq A,
+\]
+矛盾；若 \(\operatorname{Ch}_i(p)=B\)，同理得到矛盾。故不存在这样的单值选择器。
+\end{proof}
+
+\begin{corollary}[无额外对称破缺下的定义极限]\label{cor:logic-expansion-choice-spectrum-definability-limit}
+在不向观察者时空逻辑系统加入任何额外公理或对称破缺数据时，能够从原有结构中稳定导出的最大对象，是定义 \ref{def:logic-expansion-choice-spectrum-structure} 中的选择型自由意志结构
+\[
+\mathfrak F_i^{\mathrm{sel}}(p)
+\]
+及其等价的选择谱
+\[
+\mathfrak C_i(p),
+\]
+而非一个普遍存在的单值实际选择算子。只有当原有结构本身已经唯一刻画出某一选择类，或者额外加入偏好、优先级、历史记忆、随机源、效用泛函等打破局部对称性的结构时，单值选择器才可能出现。
+\end{corollary}
+
+\begin{proof}
+命题 \ref{prop:logic-expansion-choice-spectrum-standard-form} 表明，原有结构总能导出不同未来像集合组成的选择谱。另一方面，定理 \ref{thm:logic-expansion-choice-spectrum-no-definable-selector} 说明：只要局部对称仍然交换不同选择类，纯定义的单值选择器就不可能存在。因此，在不额外打破对称的前提下，可稳定保留的最大对象只能是选择谱本身，而不能进一步压缩为单值既成选择。
+\end{proof}
+
+\paragraph{统一系统}
+至此，可以把本章前面所有结构汇总为最终系统。
+
+\begin{definition}[观察者时空逻辑系统]\label{def:logic-expansion-ost-system}
+称
+\[
+\mathbb{L}^{\mathrm{OST}}
+:=
+\bigl(
+P,\le,\Vdash,\{\mathrm{Upd}_\alpha\},J,I,\iota,
+X,\preceq_X,\mathcal U,\mathrm{Cov}_X,
+\lambda,\varrho,\{\mathrm{Com}_\mu\},
+\{C_K,\rho_i^K,\mathrm{supp}_K\}_{\varnothing\neq K\subseteq_{\mathrm{fin}} I}
+\bigr)
+\]
+为一个观察者时空逻辑系统，若满足：
+\begin{enumerate}
+  \item \((P,\le,\Vdash)\) 继承前述各小节的状态 forcing 结构；
+  \item 族
+  \[
+  \{\mathrm{Upd}_\alpha\}_{i\in I,\ \alpha\in \mathsf{Act}_i^{\mathrm{int}}}
+  \]
+  给出动态更新与时间推进；
+  \item \(J\) 给出多轴细化与轴支持结构；
+  \item \((I,\iota)\) 给出观察者纤维；
+  \item \((X,\preceq_X,\mathcal U,\mathrm{Cov}_X)\) 给出事件—区域系统；
+  \item \((\lambda,\varrho)\) 给出状态的事件定位与区域支撑；
+  \item 族
+  \[
+  \{\mathrm{Com}_\mu\}_{(i,j)\in I\times I,\ \mu\in \mathsf{Ch}_{i\to j}}
+  \]
+  与
+  \[
+  \{C_K,\rho_i^K,\mathrm{supp}_K\}_{\varnothing\neq K\subseteq_{\mathrm{fin}} I}
+  \]
+  给出通信与共享 forcing 的共同背景。
+\end{enumerate}
+\end{definition}
+
+定义 \ref{def:logic-expansion-ost-system} 表明：最终系统并没有引入一种新的真值，而是把同一个 forcing 关系从最初的抽象状态层，一步步扩张到了带有局部性、失败模式、动态更新、多轴结构、观察者索引与时空定位的复合状态之上。也就是说，整章最后得到的并不是很多套逻辑，而是同一个 forcing 系统的逐层非平凡化。
+
+\paragraph{本小节的作用}
+通过本小节，本章的逻辑骨架终于闭合。现在，对象层的一切核心表达都可以在同一个句型中写出：
+\begin{itemize}
+  \item 某命题在某状态上成立：
+  \[
+  p\Vdash \varphi;
+  \]
+  \item 它属于某观察者：
+  \[
+  p\in P_i;
+  \]
+  \item 它定位于某事件：
+  \[
+  \lambda(p)=x;
+  \]
+  \item 它支撑在某区域中：
+  \[
+  \varrho(p)\subseteq U;
+  \]
+  \item 它在共同区域下被若干观察者共享 forcing：
+  \[
+  c\Vdash^{\forall}_{K,U}\varphi.
+  \]
+\end{itemize}
+
+因此，本小节不是给前面内容再附加一个“物理解释”，而是把前面的全部结构最终嵌入一个统一的局部时空框架。下一小节将不再引入新的逻辑层，而是说明后续的递归地址化、前缀站点、局部截面、\(\mathsf{NULL}\) 三分解、多轴前缀等具体章节，如何作为本章各层的实现进入全文。

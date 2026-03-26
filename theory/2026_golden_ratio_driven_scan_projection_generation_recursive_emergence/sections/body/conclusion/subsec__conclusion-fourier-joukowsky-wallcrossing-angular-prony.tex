@@ -1,0 +1,281 @@
+\subsection{Fourier--Joukowsky 模态壁穿越与角向断层谱：可审计相位重构的 Prony 反演链}\label{subsec:conclusion-fourier-joukowsky-wallcrossing-angular-prony}
+本小节在奇异环椭圆平均的残数壁穿越框架（命题 \ref{prop:xi-elliptic-ring-average-residue-wallcrossing}、定理 \ref{thm:xi-singular-ring-ellipse-wallcrossing-rational}）之上，
+给出一个 Fourier 分辨的精确增强：在保持径向壁穿越阶梯结构的同时，将极点数据从“仅模长”提升为“辐角--留数的角向断层谱”，并与 Prony/Hankel 反演链严格对齐。
+
+\begin{theorem}[Fourier--分辨的 Joukowsky 壁穿越公式]\label{thm:conclusion-fourier-joukowsky-wallcrossing}
+令 \(f\in\CC(w)\) 为有理函数，并沿用命题 \ref{prop:xi-elliptic-ring-average-residue-wallcrossing} 的记号
+\[
+g(z):=f(z+z^{-1}),\qquad h(z):=\frac{g(z)}{z}.
+\]
+对 \(r>1\) 与整数 \(k\in\ZZ\) 定义归一化 Fourier--Joukowsky 平均
+\[
+\mathcal L_{r^2}^{(k)}(f)
+:=
+\frac{1}{2\pi\,r^{k}}
+\int_{0}^{2\pi}
+f\!\left(r e^{\mathrm{i}\theta}+r^{-1}e^{-\mathrm{i}\theta}\right)e^{-\mathrm{i}k\theta}\,\dd\theta.
+\]
+若 \(r\) 不等于 \(h\) 的任何非零极点模长，则成立严格恒等式
+\[
+\mathcal L_{r^2}^{(k)}(f)
+=
+\Res_{z=0}\!\bigl(h(z)z^{-k}\bigr)\;+\!\!\sum_{\substack{a\neq 0\\ a\ \text{为 }h\text{ 的极点}\\ |a|<r}}\!\!a^{-k}\Res_{z=a}h(z).
+\]
+并且当 \(r\) 穿越某个模长为 \(t>1\) 的极点簇时，其跳量满足
+\[
+\Delta_t^{(k)}(f)
+:=
+\lim_{r\downarrow t}\mathcal L_{r^2}^{(k)}(f)
+-\lim_{r\uparrow t}\mathcal L_{r^2}^{(k)}(f)
+=
+\sum_{\substack{a\neq 0\\ a\ \text{为 }h\text{ 的极点}\\ |a|=t}} a^{-k}\Res_{z=a}h(z).
+\]
+\end{theorem}
+\begin{proof}
+令 \(z=re^{\mathrm{i}\theta}\)，则 \(\dd\theta=\dd z/(\mathrm{i}z)\) 且 \(e^{-\mathrm{i}k\theta}=(z/r)^{-k}\)。
+于是
+\[
+\mathcal L_{r^2}^{(k)}(f)
+=
+\frac{1}{2\pi\mathrm{i}}\oint_{|z|=r} f(z+z^{-1})\,z^{-k}\,\frac{\dd z}{z}
+=
+\frac{1}{2\pi\mathrm{i}}\oint_{|z|=r} h(z)\,z^{-k}\,\dd z.
+\]
+当 \(r\) 避开非零极点模长时，留数定理给出该围道积分等于 \(|z|<r\) 内全部极点（包括 \(z=0\)）对被积函数 \(h(z)z^{-k}\) 的留数之和，从而得到第一式。
+半径穿越模长为 \(t\) 的极点圆周时，圆盘内新增/剔除的极点仅来自 \(|a|=t\) 的那一簇，对应的留数补偿项即为所示跳量。证毕。
+\end{proof}
+
+\begin{corollary}[角向留数原子测度的可审计重构]\label{cor:conclusion-angular-residue-measure-reconstruction}
+沿用定理 \ref{thm:conclusion-fourier-joukowsky-wallcrossing} 的记号，并固定 \(t>1\)。
+定义支撑于单位圆 \(\TT\) 的有限原子复测度
+\[
+\mu_{f,t}^{\angle}
+:=
+\sum_{\substack{a\neq 0\\ a\ \text{为 }h\text{ 的极点}\\ |a|=t}}
+\Res_{z=a}h(z)\ \delta_{a/t}.
+\]
+则其 Fourier 系数满足
+\[
+\widehat{\mu}_{f,t}^{\angle}(k)
+:=\int_{\TT}\zeta^{-k}\,\dd\mu_{f,t}^{\angle}(\zeta)
+=t^{k}\,\Delta_t^{(k)}(f)
+\qquad(k\in\ZZ).
+\]
+因此对每个固定 \(t>1\)，跳跃谱 \(\{\Delta_t^{(k)}(f)\}_{k\in\ZZ}\) 唯一确定 \(\mu_{f,t}^{\angle}\)，并从而唯一确定该模长圆周上全部极点的辐角与对应留数权重。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-fourier-joukowsky-wallcrossing} 的跳跃公式与恒等式
+\(
+a^{-k}=t^{-k}(a/t)^{-k}
+\)
+得
+\[
+t^{k}\Delta_t^{(k)}(f)
+=\sum_{|a|=t}\Res_{z=a}h(z)\,(a/t)^{-k}
+=\int_{\TT}\zeta^{-k}\,\dd\mu_{f,t}^{\angle}(\zeta)
+=\widehat{\mu}_{f,t}^{\angle}(k).
+\]
+有限复 Borel 测度由其全体 Fourier 系数唯一确定，故结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[有限模态可辨识阈值与 Prony 型反演]\label{thm:conclusion-angular-prony-identifiability}
+沿用推论 \ref{cor:conclusion-angular-residue-measure-reconstruction}。
+设对某个 \(t>1\)，角向测度 \(\mu_{f,t}^{\angle}\) 具有至多 \(m\) 个互异原子支撑点，且可写为
+\[
+\mu_{f,t}^{\angle}=\sum_{j=1}^{m} c_j\,\delta_{\zeta_j},
+\qquad
+\zeta_j\in\TT,\ \zeta_i\neq \zeta_j\ (i\neq j),\ c_j\in\CC\setminus\{0\}.
+\]
+则仅由有限跳跃数据
+\[
+\bigl\{\Delta_t^{(k)}(f)\bigr\}_{k=0}^{2m-1}
+\quad\text{（等价地 }\bigl\{\widehat{\mu}_{f,t}^{\angle}(k)\bigr\}_{k=0}^{2m-1}\text{）}
+\]
+即可唯一恢复参数多重集 \(\{(\zeta_j,c_j)\}_{j=1}^{m}\)（至多差一个置换），从而唯一恢复该半径上全部极点的辐角与留数权重。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:conclusion-angular-residue-measure-reconstruction}，可得矩序列
+\[
+\mu_k:=\widehat{\mu}_{f,t}^{\angle}(k)=\sum_{j=1}^{m}c_j\,\zeta_j^{-k}\qquad(k\ge 0).
+\]
+令
+\[
+Q(x):=\prod_{j=1}^{m}(1-\zeta_j^{-1}x)=\sum_{\ell=0}^{m}q_\ell x^\ell,\qquad q_0=1.
+\]
+则对任意 \(k\ge 0\) 有递推恒等式
+\[
+\sum_{\ell=0}^{m}q_\ell\,\mu_{k+\ell}=0.
+\]
+事实上，
+\[
+\sum_{\ell=0}^{m}q_\ell\,\mu_{k+\ell}
+=
+\sum_{j=1}^{m}c_j\zeta_j^{-k}\Bigl(\sum_{\ell=0}^{m}q_\ell\,\zeta_j^{-\ell}\Bigr)
+=
+\sum_{j=1}^{m}c_j\zeta_j^{-k}\,Q(\zeta_j^{-1})
+=0.
+\]
+取 \(k=0,1,\dots,m-1\) 得到一个 \(m\times m\) Hankel 线性系统，可唯一解出 \((q_1,\dots,q_m)\)（等价地：\(\mathrm{rank}(\mu_{i+j})_{0\le i,j\le m-1}=m\) 由 \(\zeta_j\) 互异且 \(c_j\neq 0\) 保证）。
+由 \(Q\) 的根得到 \(\{\zeta_j^{-1}\}\)，从而得到 \(\{\zeta_j\}\)。
+最后，将 \(k=0,\dots,m-1\) 的矩方程视为 Vandermonde 线性系统，即可唯一解出 \(\{c_j\}\)。
+证毕。
+\end{proof}
+
+\begin{proposition}[Joukowsky 互反对称与留数对偶律]\label{prop:conclusion-joukowsky-reciprocity-residue-duality}
+沿用定理 \ref{thm:conclusion-fourier-joukowsky-wallcrossing} 的记号，则 \(h\) 满足函数方程
+\[
+h(1/z)=z^{2}h(z).
+\]
+若 \(a\neq 0\) 为 \(h\) 的极点且 \(|a|\neq 1\)，则 \(1/a\) 亦为 \(h\) 的极点，并满足
+\[
+\Res_{z=1/a}h(z)=-\Res_{z=a}h(z).
+\]
+从而对任意 \(t>1\) 与任意 \(k\in\ZZ\)，外侧跳量可由内侧极点等价表达为
+\[
+\Delta_t^{(k)}(f)
+=-\!\!\sum_{\substack{b\neq 0\\ b\ \text{为 }h\text{ 的极点}\\ |b|=1/t}}\! b^{k}\Res_{z=b}h(z).
+\]
+\end{proposition}
+\begin{proof}
+由定义 \(h(z)=f(z+z^{-1})/z\) 直接得
+\[
+h(1/z)=\frac{f(1/z+z)}{1/z}=z\,f(z+z^{-1})=z^{2}h(z).
+\]
+若 \(h\) 在 \(z=a\) 有极点，则右端 \(z^2h(z)\) 在 \(z=a\) 有极点，从而左端 \(h(1/z)\) 在 \(z=a\) 有极点，即 \(h\) 在 \(z=1/a\) 有极点。
+对恒等式 \(h(1/z)=z^2h(z)\) 在 \(z=a\) 处取留数：右端留数为 \(a^2\Res_{z=a}h(z)\)。
+左端作变量替换 \(w=1/z\) 得
+\[
+\Res_{z=a}h(1/z)=-a^{2}\Res_{w=1/a}h(w).
+\]
+两者相等即得 \(\Res_{1/a}h=-\Res_{a}h\)。
+最后将 \(b=1/a\) 代入定理 \ref{thm:conclusion-fourier-joukowsky-wallcrossing} 的跳跃表达式并整理系数即可。证毕。
+\end{proof}
+
+\begin{proposition}[有限模态反演的稳定性：Hankel 可逆性与误差放大]\label{prop:conclusion-angular-prony-stability}
+沿用定理 \ref{thm:conclusion-angular-prony-identifiability} 的设定，并记 \(\mu_k=\widehat{\mu}_{f,t}^{\angle}(k)\)。
+令 \(H(\boldsymbol\mu)\) 为由 \(\mu_0,\dots,\mu_{2m-2}\) 生成的 \(m\times m\) Hankel 矩阵
+\[
+H(\boldsymbol\mu):=(\mu_{i+j})_{0\le i,j\le m-1}.
+\]
+设观测到扰动矩 \(\widetilde{\mu}_k\) 满足
+\[
+\max_{0\le k\le 2m-1}\bigl|\widetilde{\mu}_k-\mu_k\bigr|\le \varepsilon,
+\]
+并假设 \(H(\boldsymbol\mu)\) 可逆（等价于 \(\sigma_{\min}(H(\boldsymbol\mu))>0\)）。
+则当 \(\varepsilon\) 足够小时，Prony 反演所得到的参数 \(\{(\widetilde{\zeta}_j,\widetilde c_j)\}_{j=1}^m\) 在置换意义下唯一存在，并且误差满足局部 Lipschitz 型估计：
+\[
+\max_j|\widetilde{\zeta}_j-\zeta_j|+\max_j|\widetilde c_j-c_j|
+\ \le\
+K_m(\zeta,c)\,\frac{\varepsilon}{\sigma_{\min}(H(\boldsymbol\mu))},
+\]
+其中 \(K_m(\zeta,c)\) 为仅依赖于 \(m\) 与原参数 \(\{(\zeta_j,c_j)\}\) 的有限常数（可取为 Prony 系数线性系统与 Vandermonde 系统在该点处的条件数乘积）。
+\end{proposition}
+\begin{proof}
+Prony 第一步等价于求解 Hankel 线性系统以获得 annihilating 多项式系数 \((q_1,\dots,q_m)\)。
+在线性代数层面，该映射对数据的局部敏感度由 \(\|H(\boldsymbol\mu)^{-1}\|\) 控制，故存在常数 \(C_m\) 使
+\(
+\|\widetilde{\mathbf q}-\mathbf q\|
+\le C_m\,\|H(\boldsymbol\mu)^{-1}\|\,\varepsilon
+\),
+并可用 \(\sigma_{\min}(H)^{-1}\) 上界 \(\|H^{-1}\|\)。
+进一步，根映射在简单根处局部解析，且其局部 Lipschitz 常数由相应伴随矩阵的谱条件数控制；
+而权重由 Vandermonde 系统线性恢复，其误差放大由 Vandermonde 条件数控制。
+将以上三步的局部条件数相乘即可得到所示估计。证毕。
+\end{proof}
+
+\begin{proposition}[与有限维交换半单通道的角色分解相容]\label{prop:conclusion-fourier-joukowsky-character-compatibility}
+设 \(\mathcal A\) 为有限维交换半单 \(\CC\)-代数，并取其角色分解 \(\mathcal A\simeq\bigoplus_{\chi}\CC\)。
+令 \(f\in \mathcal A(w)\) 为 \(\mathcal A\)-值有理函数，并对每个 \(k\in\ZZ\) 以定理 \ref{thm:conclusion-fourier-joukowsky-wallcrossing} 的积分定义 \(\mathcal L_{r^2}^{(k)}(f)\in\mathcal A\) 与跳量 \(\Delta_t^{(k)}(f)\in\mathcal A\)。
+则对每个角色 \(\chi\) 与每个 \(r>1,t>1\) 有
+\[
+\chi\!\left(\mathcal L_{r^2}^{(k)}(f)\right)=\mathcal L_{r^2}^{(k)}(\chi\circ f),
+\qquad
+\chi\!\left(\Delta_t^{(k)}(f)\right)=\Delta_t^{(k)}(\chi\circ f).
+\]
+因此推论 \ref{cor:conclusion-angular-residue-measure-reconstruction} 与定理 \ref{thm:conclusion-angular-prony-identifiability} 的角向测度重构与有限模态反演可逐角色分量独立进行，并在 \(\mathcal A\) 中组装为 \(\mathcal A\)-值的“极点--留数断层谱”。
+\end{proposition}
+\begin{proof}
+角色 \(\chi:\mathcal A\to\CC\) 为代数同态，且 \(\mathcal L_{r^2}^{(k)}\) 的定义为对函数值的 \(\CC\)-线性积分算子，故 \(\chi\) 与积分交换，得到第一式。
+跳量由两侧极限差给出，亦与 \(\chi\) 交换；或等价地由定理 \ref{thm:conclusion-fourier-joukowsky-wallcrossing} 的残数表达式逐分量推出。证毕。
+\end{proof}
+
+\begin{theorem}[有限群通道下 Joukowsky 二值跳跃律的 Wedderburn 分块完全解耦]\label{thm:conclusion-joukowsky-finite-group-wedderburn-decoupling}
+设 \(G\) 为有限群，并取群代数
+\[
+\mathcal A:=\CC[G].
+\]
+沿 Wedderburn 分解存在 \(\CC\)-代数同构
+\[
+\mathcal A\ \cong\ \bigoplus_{\pi\in\widehat G}\mathrm{End}(V_\pi),
+\]
+其中 \(\widehat G\) 遍历 \(G\) 的全部不可约复表示。
+设 \(\rho:[0,2\pi]\to\mathcal A\) 为满足与定理 \ref{thm:xi-joukowsky-ellipse-jump-abelian-channel-decoupling} 相同可积性假设的 \(\mathcal A\)-值密度，
+并按 Joukowsky 参数化 \(w(\theta)=r e^{\mathrm i\theta}+r^{-1}e^{-\mathrm i\theta}\)（\(r>1\)）推前得到椭圆 \(E_L\)（\(L=r^2\)）上的 \(\mathcal A\)-值测度 \(\sigma_L\)。
+定义 \(\mathcal A\)-值 Cauchy 变换
+\[
+G_{\sigma_L}(w):=\int_{E_L}\frac{1}{w-\xi}\,\dd\sigma_L(\xi),
+\qquad
+w\in\CC\setminus E_L.
+\]
+则其两侧非切向边界值满足
+\[
+G_{\sigma_L}^{\mathrm{ext}}\!\bigl(w(\theta)\bigr)-G_{\sigma_L}^{\mathrm{int}}\!\bigl(w(\theta)\bigr)
+=
+-\frac{\rho(\theta)}{\sqrt{w(\theta)^2-4}}.
+\]
+并且在 Wedderburn 分解下，若记
+\[
+\rho^{(\pi)}:=\pi\circ\rho:[0,2\pi]\to \mathrm{End}(V_\pi),
+\qquad
+G_{\sigma_L}^{(\pi)}:=\pi\circ G_{\sigma_L},
+\]
+则对每个 \(\pi\in\widehat G\) 都有独立的矩阵值跳跃律
+\[
+\bigl(G_{\sigma_L}^{(\pi)}\bigr)^{\mathrm{ext}}\!\bigl(w(\theta)\bigr)
+-\bigl(G_{\sigma_L}^{(\pi)}\bigr)^{\mathrm{int}}\!\bigl(w(\theta)\bigr)
+=
+-\frac{\rho^{(\pi)}(\theta)}{\sqrt{w(\theta)^2-4}}.
+\]
+因此该 \(\mathcal A\)-值边界跳跃问题严格分解为一族彼此独立的 \(\mathrm{End}(V_\pi)\)-值边界跳跃问题。
+此外，分支交换在每个矩阵块上都仅作为中心标量 \(-1\) 作用；等价地，其在 \(V_\pi\) 上的作用为中央元 \(-\mathrm{Id}_{V_\pi}\) 的乘法。
+\end{theorem}
+\begin{proof}
+Wedderburn 同构把 \(\mathcal A\) 识别为有限维矩阵代数直和，因此 \(\rho\)、\(\sigma_L\) 与 \(G_{\sigma_L}\) 都可按块写为
+\[
+\rho=\bigoplus_{\pi\in\widehat G}\rho^{(\pi)},
+\qquad
+\sigma_L=\bigoplus_{\pi\in\widehat G}\sigma_L^{(\pi)},
+\qquad
+G_{\sigma_L}=\bigoplus_{\pi\in\widehat G}G_{\sigma_L}^{(\pi)}.
+\]
+由于 Cauchy 变换、非切向边界取值与取差操作都对取值空间线性，标量定理 \ref{thm:xi-joukowsky-ellipse-plemelj-jump} 逐块应用于每个矩阵元即可得到
+\[
+\bigl(G_{\sigma_L}^{(\pi)}\bigr)^{\mathrm{ext}}\!\bigl(w(\theta)\bigr)
+-\bigl(G_{\sigma_L}^{(\pi)}\bigr)^{\mathrm{int}}\!\bigl(w(\theta)\bigr)
+=
+-\frac{\rho^{(\pi)}(\theta)}{\sqrt{w(\theta)^2-4}}.
+\]
+把所有 \(\pi\)-块重新组装，即得 \(\mathcal A\)-值跳跃公式与完全解耦结论。
+
+最后，由定理 \ref{thm:xi-binary-jump-orientation-unification}，Joukowsky 二重覆盖的解析跳跃差本质上是取向 torsor \(\mathrm{Or}\) 的反变截面；
+故分支交换对应的非平凡 \(\ZZ_2\) 元只引入全局符号 \(-1\)。
+该符号是标量且位于每个矩阵块 \(\mathrm{End}(V_\pi)\) 的中心，因而在 \(\pi\)-块上恰表现为 \(-\mathrm{Id}_{V_\pi}\) 的乘法。证毕。
+\end{proof}
+
+\begin{conjecture}[单占据极点圆与一阶模态完备性]\label{conj:conclusion-single-occupied-pole-circle-first-order-completeness}
+在本文的动力学 \(\zeta\)-函数框架中，许多对象可写作
+\(
+\zeta_j(s)=\det(I-\lambda^{-s}M_j)^{-1}
+\)
+并因此在复平面上出现由本征值 \(\nu\in\sigma(M_j)\) 所诱导的竖直极点列
+\(
+s=(\log\nu+2\pi\mathrm{i}k)/\log\lambda
+\)（\(k\in\ZZ\)）。
+猜想对“几乎所有”角色扭曲或参数切片 \(j\)，谱在模长层面无退化：不存在两条不同本征轨道具有相同模长 \(|\nu|\)。
+等价地，对每个 \(t>1\)，与模长圆周 \(|z|=t\) 相对应的外侧极点集合至多由一个共轭对生成，从而在定理 \ref{thm:conclusion-angular-prony-identifiability} 的角向测度口径下可取 \(m=1\)。
+\par
+在该猜想下，角向断层谱在制度上塌缩为一阶完备性：仅需两模态跳量 \(\Delta_t^{(0)}(f),\Delta_t^{(1)}(f)\) 即可恢复该圆周上极点的辐角（并由 \(\Delta_t^{(0)}\) 给出权重），从而把“径向原子测度”提升为“相位可审计”的完整极点指纹。
+\end{conjecture}
+
+\endinput
+

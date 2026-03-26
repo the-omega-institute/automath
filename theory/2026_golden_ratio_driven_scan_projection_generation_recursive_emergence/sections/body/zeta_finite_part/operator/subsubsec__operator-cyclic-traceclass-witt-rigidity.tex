@@ -1,0 +1,200 @@
+\subsubsection{谱刚性与 Big-Witt 编译闭包：原子 Euler 数据的实现不变性、\texorpdfstring{$\gcd/\mathrm{lcm}$}{gcd/lcm} 乘法与 \texorpdfstring{$p$}{p}-典型伸缩}\label{subsec:operator-cyclic-traceclass-witt-rigidity}
+小节 \ref{subsec:cyclic-traceclass-lift} 与推论 \ref{cor:cyclic-euler-product-complex-section} 给出：对满足迹类可执行性（\(\ell^1\)）条件的原子 Euler 乘积，存在显式循环块直和算子 \(L_{\mathcal D}\) 使其 Fredholm \(\zeta\)-接口严格复原该乘积。
+本段记录三个互补的结构性后果：
+(i) 任意实现的\emph{非零谱多重集}由 Euler 因子刚性强迫；
+(ii) 循环块在张量积下封闭，并以 \(\gcd/\mathrm{lcm}\) 的离散组合律实现 Big-Witt 乘法；
+(iii) 在 \(p\)-幂长度族上可实现 Frobenius/Verschiebung 伸缩，给出 Dwork 型同余的谱实现模板。
+
+\begin{proposition}[原子 Euler 乘积的谱刚性：任意 Fredholm 实现的谱多重集被零点集合强迫]\label{prop:cyclic-euler-spectral-rigidity}
+设 \(\mathcal D=\{(\beta_j,n_j,m_j)\}_{j\in J}\subset \CC\times\NN_{\ge 1}\times\NN\) 为一族原子数据，并定义 Euler 型乘积
+\[
+\zeta_{\mathcal D}(r):=\prod_{j\in J}\bigl(1-\beta_j r^{n_j}\bigr)^{-m_j}.
+\]
+设 \(L\in\mathcal{S}_1\) 为某个迹类算子，且存在 \(r_0>0\) 使得在 \(|r|<r_0\) 上成立
+\[
+\det(I-rL)^{-1}=\zeta_{\mathcal D}(r).
+\]
+则 \(L\) 的非零特征值多重集（按代数重数计）被 \(\zeta_{\mathcal D}\) 的零点结构强迫如下：
+对每个 \(j\)，任选 \(\alpha_j\in\CC\) 满足 \(\alpha_j^{n_j}=\beta_j\)，则集合
+\[
+\{\alpha_j\omega:\ \omega^{n_j}=1\}
+\]
+中的每个元素都必须作为 \(L\) 的非零特征值出现，其代数重数至少为 \(m_j\)。
+特别地，
+\[
+\mathrm{rank}(L)\ \ge\ \sum_{j\in J}m_jn_j,
+\]
+并且当 \(J\) 有限时，\(L\) 的非零谱只包含有限多个点；因此其对应的非零谱 Riesz 投影之像空间为有限维，维数至少为 \(\sum_{j}m_jn_j\)。
+特别地，存在一个有限秩实现（例如循环块直和实现）达到该最小非零谱维数。
+若进一步假设不同原子不发生根集合重合（即上述根集合两两不交），则 \(L\) 的非零谱恰等于这些根的并（按重数计）。
+\end{proposition}
+
+\begin{proof}[证明要点]
+对迹类算子 \(L\)，Fredholm 行列式满足标准谱因子分解：其零点恰位于 \(r=\lambda^{-1}\)（\(\lambda\) 为 \(L\) 的非零特征值），且零点重数等于对应特征值的代数重数。
+另一方面，
+\(
+\prod_{j}(1-\beta_j r^{n_j})^{m_j}
+\)
+的零点集合由各因子 \(1-\beta_j r^{n_j}\) 的零点给出：取任意 \(\alpha_j^{n_j}=\beta_j\)，则零点为 \(r=(\alpha_j\omega)^{-1}\)（\(\omega^{n_j}=1\)），并且每个零点的重数至少为 \(m_j\)；根集合不重合时重数恰为 \(m_j\)。
+比较两边行列式的零点与重数即得谱刚性陈述。
+秩下界来自“非零谱广义特征空间的维数下界 \(\ge\) 非零谱代数重数之和”。
+当 \(J\) 有限时，行列式右端为多项式，因此 \(L\) 的非零谱点数有限，从而非零谱 Riesz 投影像空间有限维；
+而循环块直和实现给出一个达到该最小非零谱维数的显式有限秩模型。证毕。
+\end{proof}
+
+\begin{corollary}[Schatten--\texorpdfstring{$p$}{p} 范数的原子闭式与实现不变性（正规实现）]\label{cor:cyclic-euler-schatten-invariants}
+在命题 \ref{prop:cyclic-euler-spectral-rigidity} 的“根集合不重合”口径下，设 \(L\) 为一个\emph{正规}迹类实现（例如 \(L=L_{\mathcal D}\) 的循环块直和实现）。
+则对任意 \(p>0\)，其 Schatten--\(p\)（准）范数满足实现不变的闭式
+\[
+\|L\|_{S_p}^{p}
+=\sum_{\lambda\in\mathrm{Spec}(L)\setminus\{0\}}|\lambda|^{p}
+=\sum_{j\in J} m_j n_j\,|\beta_j|^{p/n_j}.
+\]
+因此 \(\{\|L\|_{S_p}\}_{p>0}\) 构成对原子 Euler 数据的可计算谱指纹族。
+\end{corollary}
+
+\begin{proof}
+对正规算子，奇异值即为特征值模长（按重数计）。
+由命题 \ref{prop:cyclic-euler-spectral-rigidity} 的谱刚性与“根集合不重合”假设，\(L\) 的非零特征值由各 \(j\) 贡献 \(n_j\) 个模长皆为 \(|\beta_j|^{1/n_j}\) 的点，每点代数重数为 \(m_j\)。
+故 \(\|L\|_{S_p}^p\) 等于把 \(|\beta_j|^{p/n_j}\) 以重数 \(m_jn_j\) 求和，得到所示闭式。证毕。
+\end{proof}
+
+\begin{proposition}[循环块张量积的分解定理：\texorpdfstring{$\gcd/\mathrm{lcm}$}{gcd/lcm} 控制的 Witt 乘法实现]\label{prop:cyclic-block-tensor-gcd-lcm}
+令 \(C(n,\alpha)=\alpha\Pi_n\) 为定义 \ref{def:cyclic-block} 的循环块。
+对任意 \(n,n'\ge 1\)，置
+\[
+\ell:=\operatorname{lcm}(n,n'),\qquad g:=\gcd(n,n').
+\]
+则存在显式置换酉 \(U\) 使得在 \(\CC^{n}\otimes\CC^{n'}\) 上成立酉等价
+\[
+\boxed{\;
+C(n,\alpha)\otimes C(n',\alpha')\ \simeq\
+\bigoplus_{i=1}^{g} C(\ell,\alpha\alpha')\; }.
+\]
+\end{proposition}
+
+\begin{proof}[证明要点]
+算子 \(\Pi_n\otimes\Pi_{n'}\) 是有限集合 \(\ZZ/n\ZZ\times\ZZ/n'\ZZ\) 上“同步平移 \((a,b)\mapsto(a+1,b+1)\)”的置换矩阵。
+该置换的轨道分解为 \(g=\gcd(n,n')\) 条不交轨道，每条轨道长度为 \(\ell=\operatorname{lcm}(n,n')\)；
+因此存在置换基变换 \(U\) 使
+\(
+U(\Pi_n\otimes\Pi_{n'})U^{-1}=\bigoplus_{i=1}^{g}\Pi_{\ell}
+\)。
+再乘以标量 \(\alpha\alpha'\) 得到所示分解。证毕。
+\end{proof}
+
+\begin{corollary}[张量积因子的行列式闭式]\label{cor:cyclic-block-tensor-determinant}
+在命题 \ref{prop:cyclic-block-tensor-gcd-lcm} 的设定下，对任意 \(r\in\CC\) 有
+\[
+\det\!\bigl(I-r\,(C(n,\alpha)\otimes C(n',\alpha'))\bigr)
+=\bigl(1-(\alpha\alpha' r)^{\ell}\bigr)^{g}.
+\]
+若进一步设 \(\beta=\alpha^n\)、\(\beta'=(\alpha')^{n'}\)，则等价地
+\[
+\det\!\bigl(I-r\,(C(n,\alpha)\otimes C(n',\alpha'))\bigr)
+=\bigl(1-\beta^{\ell/n}(\beta')^{\ell/n'}\,r^{\ell}\bigr)^{g}.
+\]
+\end{corollary}
+
+\begin{proof}
+由酉等价与行列式对直和的乘法性、以及命题 \ref{prop:cycle-permutation-determinant} 的恒等式
+\(
+\det(I-t\Pi_{\ell})=1-t^{\ell}
+\)
+立即得到第一式；第二式由 \((\alpha\alpha')^{\ell}=\alpha^{\ell}(\alpha')^{\ell}=\beta^{\ell/n}(\beta')^{\ell/n'}\)（指数为整数）化简得到。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$p$}{p}-典型 Frobenius/Verschiebung 的算子实现：循环长度伸缩与 ghost 兼容]\label{prop:cyclic-p-typical-frobenius-verschiebung}
+固定素数 \(p\)。
+在 \(p\)-幂循环块族 \(\{C(p^k,\alpha)\}_{k\ge 0}\) 上定义两种操作：
+\[
+\mathsf F_p\bigl(C(p^k,\alpha)\bigr):=
+\begin{cases}
+\bigoplus_{i=1}^{p} C(p^{k-1},\alpha^{p}),& k\ge 1,\\
+C(1,\alpha^{p}),& k=0,
+\end{cases}
+\qquad
+\mathsf V_p\bigl(C(p^k,\alpha)\bigr):=C(p^{k+1},\widetilde\alpha)\ \ (\widetilde\alpha^{p}=\alpha),
+\]
+并按直和逐块延拓到有限直和算子。
+则对任意由 \(p\)-幂循环块有限直和得到的算子 \(L\)，对一切 \(n\ge 1\) 都有 ghost 兼容性
+\[
+\boxed{\ \Tr\!\bigl(\mathsf F_p(L)^n\bigr)=\Tr\!\bigl(L^{pn}\bigr)\ }.
+\]
+并且在酉等价类与直和加法的意义下，
+\[
+\boxed{\ \mathsf F_p\!\bigl(\mathsf V_p(L)\bigr)\ \simeq\ L^{\oplus p}\ }.
+\]
+因此 \(\mathsf F_p\circ \mathsf V_p\) 在该 \(p\)-典型分量上实现“乘以 \(p\)”的 Verschiebung--Frobenius 关系。
+\end{proposition}
+
+\begin{proof}[证明要点]
+对单块 \(C(p^k,\alpha)\)，由 \(\Tr(\Pi_{p^k}^m)=p^k\mathbf{1}_{p^k\mid m}\) 得
+\[
+\Tr\!\bigl(C(p^k,\alpha)^{m}\bigr)=p^k\,\alpha^{m}\,\mathbf{1}_{p^k\mid m}.
+\]
+据此直接计算可验证：对任意 \(n\ge 1\)，
+\(\Tr(\mathsf F_p(C(p^k,\alpha))^n)=\Tr(C(p^k,\alpha)^{pn})\)；
+对直和按迹的可加性成立。
+第二式由 \((\widetilde\alpha)^p=\alpha\) 与定义立得：
+\(\mathsf F_p(C(p^{k+1},\widetilde\alpha))=\bigoplus_{i=1}^{p}C(p^k,\alpha)\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[Witt--算子函子：原子 Euler 数据的 Big-Witt 运算可编译为迹类算子组合]\label{thm:atomic-witt-into-tc1}
+令 \(\mathrm{TC}_1\) 表示迹类算子在“酉等价类”下的交换半环：加法为直和，乘法为张量积。
+令 \(\mathcal{W}_{\mathrm{atom}}\) 为由原子数据 \((\beta,n,m)\) 生成的 Big-Witt 型半环，其中加法对应 Euler 乘积相乘（原子多重集并置），乘法由 \(\gcd/\operatorname{lcm}\) 规则给出。
+则映射
+\[
+(\beta,n,m)\ \longmapsto\ \bigoplus_{i=1}^{m} C\!\left(n,\alpha\right),
+\qquad \alpha^{n}=\beta,
+\]
+在加法上对应直和，并在乘法上由命题 \ref{prop:cyclic-block-tensor-gcd-lcm} 保证与 \(\gcd/\operatorname{lcm}\) 规则严格一致；
+因此其延拓为一个构造性的半环同态
+\[
+\boxed{\ \mathcal{W}_{\mathrm{atom}}\ \longrightarrow\ \mathrm{TC}_1\ }.
+\]
+从而 Big-Witt 的抽象运算可被编译为迹类算子的可审计组合运算（直和/张量积），并与推论 \ref{cor:cyclic-euler-product-complex-section} 的 Fredholm \(\zeta\)-接口严格相容。
+\end{theorem}
+
+\begin{theorem}[Fredholm \texorpdfstring{$\zeta$}{zeta} 界面的等同性判定不可判定]\label{thm:operator-fredholm-zeta-equality-undecidable}
+存在一类满足迹类可执行性条件的原子数据流 \(\mathcal D\)（以可计算方式生成），使得如下判定问题不可判定：
+给定两份可计算原子数据流 \(\mathcal D_0,\mathcal D_1\)，判定其 Euler 乘积
+\[
+\zeta_{\mathcal D_0}(r)=\prod_{j}(1-\beta^{(0)}_j r^{n^{(0)}_j})^{-m^{(0)}_j},
+\qquad
+\zeta_{\mathcal D_1}(r)=\prod_{j}(1-\beta^{(1)}_j r^{n^{(1)}_j})^{-m^{(1)}_j}
+\]
+在某个圆盘 \(|r|<r_0\) 上作为解析函数是否恒等相等。
+等价地，借助循环块直和实现（推论 \ref{cor:cyclic-euler-product-complex-section}），判定
+\(
+\det(I-rL_{\mathcal D_0})^{-1}\equiv \det(I-rL_{\mathcal D_1})^{-1}
+\)
+是否成立亦不可判定。
+\end{theorem}
+
+\begin{proof}
+对任意图灵机 \(M\) 与输入 \(x\)，构造一份可计算原子数据流 \(\mathcal D_{M,x}\)：
+按步数 \(t=1,2,\dots\) 枚举并模拟 \(M(x)\) 至多 \(t\) 步；若在第 \(t\) 步首次停机，则输出单个原子因子 \((\beta,n,m)=(2^{-t},t,1)\)，并在其后输出空数据；若未停机则始终输出空数据。
+该流显然满足迹类可执行性（至多输出一个因子），且
+\[
+\zeta_{\mathcal D_{M,x}}(r)=
+\begin{cases}
+(1-2^{-t}r^{t})^{-1},& M(x)\ \text{于第 }t\text{ 步停机},\\
+1,& M(x)\ \text{不停机}.
+\end{cases}
+\]
+因此判定 \(\zeta_{\mathcal D_{M,x}}(r)\equiv 1\) 等价于判定 \(M(x)\) 是否停机，从而不可判定。
+将 \(\mathcal D_0=\mathcal D_{M,x}\)、\(\mathcal D_1=\varnothing\)（空数据，对应 \(\zeta\equiv 1\)）代入即得结论。
+Fredholm 行列式表述由推论 \ref{cor:cyclic-euler-product-complex-section} 把 \(\zeta_{\mathcal D}\) 实现为 \(\det(I-rL_{\mathcal D})^{-1}\) 立即推出。证毕。
+\end{proof}
+
+\begin{remark}[卷积--Fourier 对角化与 Witt--ghost 的统一解释]\label{rem:operator-fourier-witt-unification}
+注 \ref{rem:twist-commuting-cube} 已表明：折叠多重度的角色扭曲 \(\mathrm{Tw}_\chi\) 同时对齐 Fourier 对角化与 Witt/Euler 交换图。
+定理 \ref{thm:atomic-witt-into-tc1} 进一步给出一个可执行的“算子化提升”观点：在原子闭包子类上，可将 ghost 坐标（迹序列）视为某个迹类算子的 \(\Tr(L^n)\)，
+从而把“卷积--Fourier 的乘积分解”与“Witt--ghost 的坐标变换”统一为同一对象在不同函子下的读出。
+该统一口径为把折叠计数流接入 Fredholm \(\zeta\) 接口提供了最小的可审计编译模板。
+\end{remark}
+
+\endinput
+

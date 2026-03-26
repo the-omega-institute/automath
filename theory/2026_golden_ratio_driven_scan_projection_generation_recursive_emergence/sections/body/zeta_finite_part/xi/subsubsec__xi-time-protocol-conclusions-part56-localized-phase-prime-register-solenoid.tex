@@ -1,0 +1,602 @@
+\paragraph{局部化相位采样、solenoid 刚性与分层 prime-register 的极小性}
+以下条目把有限素数局部化数系的相位采样闭式、基本扩张的不分裂性、solenoid 端同态环以及有限指数子群/有限商/profinite 完成/连通 Lie 商的刚性分类、dyadic 读出的奇素失明、与有限生成离散交换群的严格不可混同性，以及分层 prime-register 外置在最坏情形下的锐最优性，压缩为同一条可直接调用的终端链条。
+
+\begin{theorem}[局部化数系相位采样函数的闭式与素数剥离律]\label{thm:xi-localized-phase-sampling-closed-form}
+设 \(S\subset\mathbb P\) 为有限素数集，并记
+\[
+G_S:=\ZZ[S^{-1}]
+\]
+为加法群。定义相位采样函数
+\[
+\Sigma^{\mathrm{ph}}_{G_S}(N):=\card{\operatorname{Hom}(G_S,\ZZ/N\ZZ)}
+\qquad(N\ge 1).
+\]
+则对一切 \(N\ge 1\) 都有闭式
+\[
+\boxed{\;
+\Sigma^{\mathrm{ph}}_{G_S}(N)
+=
+\prod_{\substack{q^{v_q(N)}\parallel N\\ q\notin S}}q^{v_q(N)}
+=
+\frac{N}{\prod_{p\in S}p^{v_p(N)}}.\;}
+\]
+等价地，\(\Sigma^{\mathrm{ph}}_{G_S}(N)\) 恰由 \(N\) 去掉全部 \(S\)-主部分得到。特别地，
+\[
+p\in S \iff \Sigma^{\mathrm{ph}}_{G_S}(p)=1,
+\qquad
+p\notin S \iff \Sigma^{\mathrm{ph}}_{G_S}(p)=p.
+\]
+因此 \(\Sigma^{\mathrm{ph}}_{G_S}\) 唯一恢复素数集 \(S\)，并因定理 \ref{thm:killo-localization-circle-dimension-prime-ledger-splitting} 进一步唯一恢复 Pontryagin 对偶短正合列
+\[
+0\to \prod_{p\in S}\ZZ_p\to \widehat{G_S}\to \TT\to 0
+\]
+中的 profinite 核；与此同时 \(\cdim_{\mathrm{fr}}(G_S)=1\) 与 \(S\) 无关。
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:xi-cdim-localization-zeta-AS} 已证明：若把同一加法群记作
+\(
+A_S=\ZZ[S^{-1}]
+\)，则
+\[
+\card{\operatorname{Hom}(A_S,\ZZ/N\ZZ)}
+=
+\prod_{\substack{q^{v_q(N)}\parallel N\\ q\notin S}}q^{v_q(N)}
+=
+\frac{N}{\prod_{p\in S}p^{v_p(N)}}
+\qquad(N\ge 1).
+\]
+将 \(A_S\) 记为 \(G_S\) 即得所述闭式。
+\par
+对任意素数 \(p\)，代入 \(N=p\) 得
+\[
+\Sigma^{\mathrm{ph}}_{G_S}(p)=
+\begin{cases}
+1,& p\in S,\\[1mm]
+p,& p\notin S.
+\end{cases}
+\]
+故 \(S\) 由 \(\Sigma^{\mathrm{ph}}_{G_S}\) 唯一恢复。
+再由定理 \ref{thm:killo-localization-circle-dimension-prime-ledger-splitting}，核
+\(\prod_{p\in S}\ZZ_p\) 的非平凡 \(p\)-主因子与 \(p\in S\) 等价，而 \(\cdim_{\mathrm{fr}}(G_S)=1\) 始终成立。证毕。
+\end{proof}
+
+\begin{corollary}[dyadic 相位谱对奇素支撑的完全失明]\label{cor:xi-localized-dyadic-phase-blindness}
+沿用定理 \ref{thm:xi-localized-phase-sampling-closed-form} 的记号，定义 dyadic 相位谱
+\[
+\Sigma^{(2)}_{G_S}(a):=\Sigma^{\mathrm{ph}}_{G_S}(2^a)
+\qquad(a\ge 1).
+\]
+则有严格二分
+\[
+\boxed{\;
+\Sigma^{(2)}_{G_S}(a)=
+\begin{cases}
+2^a,& 2\notin S,\\[1mm]
+1,& 2\in S.
+\end{cases}\;}
+\]
+因此若有限素数集 \(S,T\subset\mathbb P\) 满足
+\[
+2\in S \iff 2\in T,
+\]
+则
+\[
+\Sigma^{(2)}_{G_S}(a)=\Sigma^{(2)}_{G_T}(a)
+\qquad(a\ge 1).
+\]
+换言之，dyadic 相位谱只能探测 \(2\) 是否进入素数账本，而对全部奇素支撑严格失明。
+\end{corollary}
+\begin{proof}
+把 \(N=2^a\) 代入定理 \ref{thm:xi-localized-phase-sampling-closed-form} 即得
+\[
+\Sigma^{\mathrm{ph}}_{G_S}(2^a)
+=
+\frac{2^a}{\prod_{p\in S}p^{v_p(2^a)}}
+=
+\begin{cases}
+2^a,& 2\notin S,\\[1mm]
+1,& 2\in S.
+\end{cases}
+\]
+而对任意奇素 \(p\) 恒有 \(v_p(2^a)=0\)，故其是否属于 \(S\) 不会改变数值。证毕。
+\end{proof}
+
+\begin{theorem}[局部化数系对偶短正合列的分裂判据]\label{thm:xi-localized-basic-extension-strictly-nonsplit}
+设 \(S\subset\mathbb P\) 为有限素数集，并记
+\[
+G_S:=\ZZ[S^{-1}].
+\]
+再记
+\[
+\Sigma_S:=\widehat{G_S}.
+\]
+前述结果给出互为对偶的短正合列
+\[
+0\longrightarrow \ZZ\longrightarrow G_S\longrightarrow \bigoplus_{p\in S}\ZZ(p^\infty)\longrightarrow 0
+\]
+\[
+0\longrightarrow \prod_{p\in S}\ZZ_p\longrightarrow \widehat{G_S}\longrightarrow \TT\longrightarrow 0.
+\]
+则下列两条等价：
+\begin{enumerate}
+  \item \(S=\varnothing\)；
+  \item 上述两条短正合列在各自范畴中都分裂。
+\end{enumerate}
+等价地，
+\[
+S\neq\varnothing
+\quad\Longrightarrow\quad
+\Sigma_S\not\cong \TT\times \prod_{p\in S}\ZZ_p.
+\]
+特别地，当 \(S\neq\varnothing\) 时，不存在群同态截面
+\[
+\bigoplus_{p\in S}\ZZ(p^\infty)\longrightarrow G_S,
+\]
+也不存在连续群同态截面
+\[
+\TT\longrightarrow \widehat{G_S}.
+\]
+\end{theorem}
+\begin{proof}
+若 \(S=\varnothing\)，则 \(G_S=\ZZ\) 且 \(\Sigma_S=\widehat{\ZZ}\cong \TT\)，两条短正合列都退化为平凡扩张，故显然分裂。
+
+现设 \(S\neq\varnothing\)。若第一条短正合列分裂，则
+\[
+G_S\cong \ZZ\oplus \bigoplus_{p\in S}\ZZ(p^\infty).
+\]
+右端含有非零挠子群，而
+\[
+G_S=\ZZ[S^{-1}]\subset \QQ
+\]
+作为有理数加法群的子群无挠，矛盾。故离散侧不分裂。
+
+Pontryagin 对偶在局部紧交换群范畴中给出精确反变等价。若第二条短正合列分裂，则再对偶化便得到第一条离散短正合列分裂，与上一步矛盾。故紧侧亦不分裂。证毕。
+\end{proof}
+
+\begin{theorem}[局部化数系端同态环的完全分类与 solenoid 的直积不可分解性]\label{thm:xi-localized-endomorphism-ring-solenoid-indecomposable}
+沿用定理 \ref{thm:xi-localized-basic-extension-strictly-nonsplit} 的记号。则：
+\begin{enumerate}
+  \item 任意群同态 \(\phi:G_S\to G_S\) 都唯一地写成
+  \[
+  \phi(x)=qx
+  \qquad (x\in G_S)
+  \]
+  的形式，其中 \(q\in G_S\)。
+  \item 因而
+  \[
+  \operatorname{End}(G_S)\cong G_S
+  \]
+  作为交换环同构成立，其中加法为点态相加，乘法为复合。
+  \item \(\operatorname{End}(G_S)\) 的幂等元只有 \(0,1\)。等价地，
+  \[
+  \operatorname{End}_{\mathrm{cts}}(\widehat{G_S})
+  \cong
+  \operatorname{End}(G_S)^{\mathrm{op}}
+  \cong
+  G_S
+  \]
+  亦只含平凡幂等元；特别地，\(\widehat{G_S}\) 不存在非平凡连续幂等自同态，因而不能分解为两个非平凡紧交换群的直积。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+取任意 \(\phi\in \operatorname{End}(G_S)\)，记
+\[
+q:=\phi(1)\in G_S.
+\]
+对任意 \(x\in G_S\)，可写成
+\[
+x=\frac{a}{D},
+\qquad
+a\in \ZZ,
+\qquad
+D=\prod_{p\in S}p^{k_p}
+\]
+的形式。由 \(Dx=a\) 可得
+\[
+D\,\phi(x)=\phi(a)=aq.
+\]
+由于 \(G_S\subset \QQ\) 无挠，乘以 \(D\) 的映射单射，故
+\[
+\phi(x)=\frac{aq}{D}=qx.
+\]
+这证明了第 \(1\) 条；唯一性由在 \(x=1\) 处取值立即得到。反过来，任取 \(q\in G_S\)，映射 \(x\mapsto qx\) 因 \(G_S\) 为 \(\QQ\) 的子环而确为 \(G_S\) 的自同态。于是
+\[
+q\longmapsto m_q,\qquad m_q(x):=qx
+\]
+给出 \(\operatorname{End}(G_S)\) 与 \(G_S\) 之间的双射。
+
+该双射保持加法，且满足
+\[
+m_q\circ m_r=m_{qr},
+\]
+故第 \(2\) 条成立。
+
+由于 \(G_S=\ZZ[S^{-1}]\subset \QQ\) 是整环的子环，幂等方程
+\[
+e^2=e
+\]
+只可能有解 \(e=0\) 或 \(e=1\)。故 \(\operatorname{End}(G_S)\) 仅有平凡幂等元。Pontryagin 对偶把连续端同态环识别为离散端端同态环的反环；又因 \(G_S\) 交换，反环与自身一致，故 \(\operatorname{End}_{\mathrm{cts}}(\widehat{G_S})\) 同样只含平凡幂等元。
+
+若 \(\widehat{G_S}\cong K_1\times K_2\) 为两个非平凡紧交换群的直积，则合成
+\[
+\widehat{G_S}\xrightarrow{\ \mathrm{pr}_1\ }K_1
+\hookrightarrow
+K_1\times K_2\cong \widehat{G_S}
+\]
+给出一个既非零也非恒等的连续幂等自同态，矛盾。故 \(\widehat{G_S}\) 不能作非平凡直积分解。证毕。
+\end{proof}
+
+\begin{theorem}[有限商与有限相位层的完全分类]\label{thm:xi-localized-finite-quotient-phase-layer-classification}
+沿用定理 \ref{thm:xi-localized-basic-extension-strictly-nonsplit} 的记号。对任意正整数 \(n\)，定义
+\[
+n_{S^\perp}:=\frac{n}{\prod_{p\in S}p^{v_p(n)}},
+\]
+即从 \(n\) 中剥离全部 \(S\)-主因子后得到的 \(S\)-自由部分。则：
+\begin{enumerate}
+  \item 商群满足
+  \[
+  G_S/nG_S\cong \ZZ/n_{S^\perp}\ZZ.
+  \]
+  \item 因而 \(G_S\) 的全部有限商恰为循环群 \(\ZZ/d\ZZ\)，其中 \(d\) 的全部素因子都不属于 \(S\)。
+  \item 对偶地，\(\widehat{G_S}\) 的全部有限闭子群也恰为这些循环群。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+把 \(n\) 分解为
+\[
+n=n_S\,n_{S^\perp},
+\qquad
+n_S:=\prod_{p\in S}p^{v_p(n)}.
+\]
+对每个 \(p\in S\)，乘法映射 \(x\mapsto px\) 在 \(G_S=\ZZ[S^{-1}]\) 上是自同构，因为 \(x\mapsto x/p\) 仍取值于 \(G_S\)。故
+\[
+nG_S=n_{S^\perp}G_S.
+\]
+因此只需证明当 \(n\) 与 \(\prod_{p\in S}p\) 互素时，
+\[
+G_S/nG_S\cong \ZZ/n\ZZ.
+\]
+
+考虑自然映射
+\[
+\rho:\ZZ\longrightarrow G_S/nG_S.
+\]
+任取 \(x=a/b\in G_S\)，其中 \(a\in\ZZ\)，且 \(b\) 的全部素因子属于 \(S\)。由于 \(\gcd(b,n)=1\)，可取 \(c,k\in\ZZ\) 使
+\[
+bc=1+nk.
+\]
+于是
+\[
+x-ac
+=
+\frac{a}{b}-ac
+=
+\frac{a(1-bc)}{b}
+=
+-n\,\frac{ak}{b}\in nG_S,
+\]
+故 \(x\equiv ac\pmod{nG_S}\)。这说明 \(\rho\) 满射。
+
+再看核。若 \(m\in\ker\rho\)，则
+\[
+m=n\frac{a}{b}
+\]
+对某个 \(\frac{a}{b}\in G_S\) 成立，且 \(\gcd(b,n)=1\)。于是
+\[
+bm=na.
+\]
+由于 \(\gcd(b,n)=1\)，必有 \(b\mid a\)，从而 \(a/b\in \ZZ\)，进而 \(m\in n\ZZ\)。故
+\[
+\ker(\rho)=n\ZZ,
+\]
+于是
+\[
+G_S/nG_S\cong \ZZ/n\ZZ.
+\]
+把 \(n\) 替换回 \(n_{S^\perp}\) 即得第 \(1\) 条。
+
+若 \(F\) 为 \(G_S\) 的任一有限商，令 \(n\) 为 \(F\) 的指数，则满射 \(G_S\twoheadrightarrow F\) 经由 \(G_S/nG_S\) 因子化。由第 \(1\) 条，\(G_S/nG_S\) 为循环群，故 \(F\) 亦为循环群，且其阶的全部素因子都不属于 \(S\)。反之，若 \(d\) 的全部素因子都不属于 \(S\)，则 \(d=d_{S^\perp}\)，从而
+\[
+G_S/dG_S\cong \ZZ/d\ZZ.
+\]
+第 \(2\) 条得证。
+
+第 \(3\) 条由 Pontryagin 对偶把有限离散商与有限闭子群一一对应，并且有限循环群的对偶仍为同阶循环群，立即得到。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part56b-solenoid-cover-degree-periodic-spectrum}
+
+\input{subsubsec__xi-time-protocol-conclusions-part56a-localized-finite-index-profinite-completion}
+
+\input{subsubsec__xi-time-protocol-conclusions-part56c-solenoid-growth-subgroup-zeta-zsigmondy}
+
+\input{subsubsec__xi-time-protocol-conclusions-part56e-localized-subgroup-lattice-complement-completion}
+\input{subsubsec__xi-time-protocol-conclusions-part56ea-prime-support-kernel-poset-rigidity}
+
+\input{subsubsec__xi-time-protocol-conclusions-part56d-localized-quotient-torsion-zeta-ledger}
+
+\begin{theorem}[连通 Lie 商的圆周刚性]\label{thm:xi-localized-connected-lie-quotient-circle-rigidity}
+沿用定理 \ref{thm:xi-localized-basic-extension-strictly-nonsplit} 的记号。设 \(K\) 是 \(\widehat{G_S}\) 的连通紧 Lie 商。则必有
+\[
+K\cong \TT^r
+\qquad\text{且}\qquad
+r\le 1.
+\]
+特别地，任何非平凡连通紧 Lie 商都同构于 \(\TT\)。
+\end{theorem}
+\begin{proof}
+连通紧 Lie 交换群必同构于某个环面 \(\TT^r\)。设
+\[
+\pi:\widehat{G_S}\twoheadrightarrow K
+\]
+为满射，则对偶化得到单射
+\[
+\widehat K\hookrightarrow G_S.
+\]
+而
+\[
+\widehat K\cong \ZZ^r.
+\]
+由于 \(G_S=\ZZ[S^{-1}]\subset \QQ\)，有
+\[
+G_S\otimes_{\ZZ}\QQ\cong \QQ,
+\]
+故 \(G_S\) 的有理秩为 \(1\)。于是其任意自由阿贝尔子群的秩至多为 \(1\)，从而 \(r\le 1\)。若 \(K\) 非平凡，则 \(r\neq 0\)，故必有 \(r=1\)，即
+\[
+K\cong \TT.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[非平凡局部化数系与有限生成离散交换群的相位采样不可混同]\label{thm:xi-localized-phase-sampling-not-finitely-generated}
+设 \(S\subset\mathbb P\) 为非空有限集。则不存在有限生成离散交换群 \(H\) 使得
+\[
+\card{\operatorname{Hom}(H,\ZZ/N\ZZ)}
+=
+\Sigma^{\mathrm{ph}}_{G_S}(N)
+\qquad(\forall\,N\ge 1).
+\]
+\end{theorem}
+\begin{proof}
+反设存在
+\(
+H\cong \ZZ^{r}\oplus F
+\)
+满足上述恒等式。对任意素数 \(p\) 与 \(a\ge 1\)，由注 \ref{rem:xi-cdim-hom-quotient-consistency}，
+\[
+\card{\operatorname{Hom}(H,\ZZ/p^a\ZZ)}=\card{H/p^aH}.
+\]
+再由命题 \ref{prop:xi-cdim-local-inversion-delta}，定义
+\[
+c_p(a):=
+v_p\!\bigl(\card{H/p^aH}\bigr)-ar
+=
+\sum_{j=1}^{t_p}\min(\lambda_{p,j},a),
+\]
+其中 \(F_p\cong\bigoplus_{j=1}^{t_p}\ZZ/p^{\lambda_{p,j}}\ZZ\) 为 \(F\) 的 \(p\)-primary 分量。因而 \(c_p(a)\) 对 \(a\) 有界，从而
+\[
+\lim_{a\to\infty}\frac1a
+v_p\!\bigl(\card{\operatorname{Hom}(H,\ZZ/p^a\ZZ)}\bigr)
+=
+r
+\qquad\text{对每个素数 }p\text{ 都成立}.
+\]
+另一方面，由定理 \ref{thm:xi-localized-phase-sampling-closed-form}，
+\[
+\Sigma^{\mathrm{ph}}_{G_S}(p^a)=
+\begin{cases}
+1,& p\in S,\\[1mm]
+p^a,& p\notin S,
+\end{cases}
+\]
+故
+\[
+\frac1a v_p\!\bigl(\Sigma^{\mathrm{ph}}_{G_S}(p^a)\bigr)
+=
+\begin{cases}
+0,& p\in S,\\[1mm]
+1,& p\notin S.
+\end{cases}
+\]
+由于 \(S\) 非空且有限，可同时取到 \(p\in S\) 与 \(q\notin S\)，从而上述极限在素数间取两个不同值 \(0\) 与 \(1\)。这与有限生成离散交换群在全部素数上共享同一秩斜率 \(r\) 矛盾。故不存在这样的 \(H\)。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part56a-finite-prime-audit-cylinder-factorization}
+
+\begin{theorem}[有限 prime-audit 的指数级不完备性]\label{thm:xi-localized-finite-prime-audit-exponential-incompleteness}
+设 \(T\subset\mathbb P\) 为有限素数集。对任意 \(N\ge 1\)，存在至少 \(2^N\) 个两两非同构的有限素数局部化群
+\[
+G_E:=\ZZ[S_E^{-1}],
+\qquad
+S_E:=T\cup\{q_i:\ i\in E\},
+\qquad
+E\subseteq\{1,\dots,N\},
+\]
+其中 \(q_1,\dots,q_N\in\mathbb P\setminus T\) 互异，并且满足
+\[
+\cdim_{\mathrm{fr}}(G_E)=1,
+\qquad
+K_E^{(T)}:=\prod_{p\in S_E\cap T}\ZZ_p=\prod_{p\in T}\ZZ_p.
+\]
+因此，任何仅审计有限秩圆维与有限素数窗口 \(T\) 上可见 \(p\)-进核的制度，至少会把 \(2^N\) 个互不同构类压缩为同一个审计像。
+\end{theorem}
+\begin{proof}
+任选互异素数
+\[
+q_1,\dots,q_N\in\mathbb P\setminus T.
+\]
+对每个子集 \(E\subseteq\{1,\dots,N\}\)，定义
+\[
+S_E:=T\cup\{q_i:\ i\in E\},
+\qquad
+G_E:=\ZZ[S_E^{-1}].
+\]
+由定理 \ref{thm:xi-localized-phase-sampling-closed-form}，对一切有限素数集 \(S\) 都有
+\[
+\cdim_{\mathrm{fr}}(\ZZ[S^{-1}])=1,
+\]
+故全部 \(G_E\) 具有相同的有限秩圆维。
+
+另一方面，由构造
+\[
+S_E\cap T=T,
+\]
+于是
+\[
+K_E^{(T)}=\prod_{p\in S_E\cap T}\ZZ_p=\prod_{p\in T}\ZZ_p
+\]
+与 \(E\) 无关。故在有限素数窗口 \(T\) 上可见的 \(p\)-进核对这 \(2^N\) 个对象完全一致。
+
+若 \(E\neq E'\)，则 \(S_E\neq S_{E'}\)。由定理 \ref{thm:xi-localized-integers-padic-kernel-rigidity}，
+\[
+G_E\cong G_{E'}
+\iff
+S_E=S_{E'},
+\]
+故这些 \(G_E\) 两两非同构。由于子集总数恰为 \(2^N\)，结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[局部化对偶的同构刚性]\label{thm:xi-time-part56-localized-pontryagin-isomorphism-rigidity}
+对任意有限素数集 \(S,T\subset \mathbb P\)，记
+\[
+G_S:=\ZZ[S^{-1}],
+\qquad
+\Sigma_S:=\widehat{G_S},
+\]
+则
+\[
+\boxed{\;
+\Sigma_S\cong \Sigma_T
+\quad\Longleftrightarrow\quad
+S=T.\;}
+\]
+并且每个 \(\Sigma_S\) 都满足短正合列
+\[
+\boxed{\;
+0\longrightarrow \prod_{p\in S}\ZZ_p
+\longrightarrow \Sigma_S
+\longrightarrow \TT
+\longrightarrow 0,\;}
+\]
+同时
+\[
+\boxed{\;
+\cdim_{\mathrm{fr}}(G_S)=1.\;}
+\]
+因此，所有有限素数局部化在连通圆维与有限秩扩展维数层上都塌缩到同一个值，而全部算术差异只能由全不连通的 \(p\)-进核恢复。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-localized-phase-sampling-closed-form}，每个 \(G_S\) 的相位采样函数
+\[
+\Sigma^{\mathrm{ph}}_{G_S}(N)=\card{\operatorname{Hom}(G_S,\ZZ/N\ZZ)}
+\]
+唯一恢复素数集 \(S\)，并且同一定理已给出
+\[
+0\longrightarrow \prod_{p\in S}\ZZ_p
+\longrightarrow \Sigma_S
+\longrightarrow \TT
+\longrightarrow 0,
+\qquad
+\cdim_{\mathrm{fr}}(G_S)=1.
+\]
+若 \(\Sigma_S\cong \Sigma_T\)，则由 Pontryagin 对偶的反变等价得到
+\[
+G_S\cong G_T.
+\]
+于是对每个 \(N\ge 1\) 都有
+\[
+\card{\operatorname{Hom}(G_S,\ZZ/N\ZZ)}
+=
+\card{\operatorname{Hom}(G_T,\ZZ/N\ZZ)},
+\]
+即 \(\Sigma^{\mathrm{ph}}_{G_S}=\Sigma^{\mathrm{ph}}_{G_T}\)。由相位采样闭式的唯一恢复性，必有 \(S=T\)。反向 implication 显然。证毕。
+\end{proof}
+
+\begin{corollary}[单圆维下的指数级局部化多样性]\label{cor:xi-time-part56-single-circle-dimension-exponential-diversity}
+对每个整数 \(n\ge 1\)，都存在
+\[
+2^n
+\]
+个两两不同构的紧交换群，它们都具有相同的连通商 \(\TT\)，并且其 Pontryagin 对偶离散群都满足
+\[
+\cdim_{\mathrm{fr}}=1.
+\]
+\end{corollary}
+\begin{proof}
+取互异素数
+\[
+p_1,\dots,p_n,
+\]
+并对每个子集 \(E\subseteq\{1,\dots,n\}\) 定义
+\[
+S_E:=\{p_i:\ i\in E\},
+\qquad
+\Sigma_E:=\widehat{\ZZ[S_E^{-1}]}.
+\]
+由于子集总数为 \(2^n\)，只需证明这些 \(\Sigma_E\) 两两不同构。若 \(E\neq E'\)，则 \(S_E\neq S_{E'}\)，由定理 \ref{thm:xi-time-part56-localized-pontryagin-isomorphism-rigidity} 立得
+\[
+\Sigma_E\not\cong \Sigma_{E'}.
+\]
+另一方面，同一定理又给出每个 \(\Sigma_E\) 都满足短正合列
+\[
+0\longrightarrow \prod_{p\in S_E}\ZZ_p
+\longrightarrow \Sigma_E
+\longrightarrow \TT
+\longrightarrow 0,
+\]
+故其连通商恒为 \(\TT\)，并且
+\[
+\cdim_{\mathrm{fr}}\!\bigl(\ZZ[S_E^{-1}]\bigr)=1.
+\]
+结论成立。证毕。
+\end{proof}
+
+\begin{theorem}[分层 prime-register 外置的最坏情形下界与自然扩张闭合]\label{thm:xi-layered-prime-register-sharp-natural-extension}
+设 \((X_j)_{j=0}^{k}\) 为可数集合列，\(\pi_j:X_j\twoheadrightarrow X_{j+1}\) 为有限纤维满射，并假设对每个 \(j=0,\dots,k-1\) 都存在 \(y_j\in X_{j+1}\) 使
+\[
+\#\pi_j^{-1}(y_j)\ge 2.
+\]
+考虑任何分层外置
+\[
+\Psi(x_0)=(x_k,H(x_0)),
+\qquad
+H(x_0)=\prod_{j=0}^{k-1}h_j(x_0),
+\]
+其中每个 \(h_j(x_0)\) 的全部素因子均被限制在预先指定的 prime slice \(\mathcal P_j\)。若 \(\Psi\) 为单射，则最坏情形下每一层都必须有效占用对应的 prime slice；等价地，对每个 \(j\) 都存在微态 \(x_0^{(j)}\) 使
+\[
+h_j\bigl(x_0^{(j)}\bigr)\neq 1.
+\]
+另一方面，定理 \ref{thm:killo-layered-prime-slices-finite-depth} 给出恰在每层写入一枚素数的单射构造。故在“每层至少一处分支”的最坏情形下，分层 prime-register 外置所需的最小 prime-slice 数目恰等于层数 \(k\)。
+
+特别地，若 \(T:X\twoheadrightarrow X\) 为非单射有限纤维满射，则任意深度 \(k\) 的前史消歧都至少需要 \(k\) 个有效 prime slices；而定理 \ref{thm:killo-natural-extension-branch-register} 的分支指标寄存器实现把整个无穷前史歧义共轭为右移插入系统，从而把上述有限深度最优外置在逆极限上精确封闭。
+\end{theorem}
+\begin{proof}
+推论 \ref{cor:killo-layered-necessity-minimality} 断言：在每层都存在分支点的前提下，任何单射分层外置都迫使每个 prime slice \(\mathcal P_j\) 在某个微态上非平凡使用。故最坏情形下至少需要 \(k\) 个彼此独立的有效 prime slices。
+\par
+反向上，定理 \ref{thm:killo-layered-prime-slices-finite-depth} 已构造出单射映射
+\[
+\Phi(x_0)=(x_k,G(x_0)),
+\qquad
+G(x_0)=\prod_{j=0}^{k-1}q_j(x_0),
+\qquad
+q_j(x_0)\in\mathcal P_j,
+\]
+并且每层恰写入一枚素数。故上述下界可达，因而最小 prime-slice 数目正是 \(k\)。
+\par
+若 \(T:X\twoheadrightarrow X\) 为非单射有限纤维满射，则存在 \(y\in X\) 使 \(\#T^{-1}(y)\ge 2\)。对任意固定深度 \(k\)，取 \(X_j:=X\) 且 \(\pi_j:=T\)（\(0\le j\le k-1\)），便满足前述最坏情形假设，故至少需要 \(k\) 个有效 prime slices。
+最后，定理 \ref{thm:killo-natural-extension-branch-register} 把自然扩张
+\(
+X^{\leftarrow}
+\)
+与右移插入系统
+\[
+(x,(a_1,a_2,\dots))\longmapsto (T(x),(\beta(x),a_1,a_2,\dots))
+\]
+共轭，从而说明有限深度上的最优分层外置在逆极限上恰由规范分支指标寄存器闭合。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part56e-solenoid-terminal-prime-register-recovery}
+
+\input{subsubsec__xi-time-protocol-conclusions-part57-freezing-renyi-fullrate-chebotarev}
+
+\endinput

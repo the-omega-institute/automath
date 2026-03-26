@@ -1,0 +1,220 @@
+\subsubsection{Hölder 互反矩、混合碰撞核与反向 KL 指纹}\label{subsubsec:pom-hoelder-mixed-kl-bridge}
+本段在定义 \ref{def:pom-bidirectional-moments} 与推论 \ref{cor:pom-fiber-dispersion-index} 的记号下，
+给出三类纯代数的桥接工具：
+(i) 用高阶正矩 \(S_q(m)\) 下界离散度指数 \(\mathfrak{D}_m\)（Hölder 桥）；
+(ii) 两分布的混合碰撞同型概率仍可由有限态 moment 编译得到，从而形成可审计相似度指纹；
+(iii) \(\mathfrak{D}(w)\) 同时控制反向相对熵 \(D_{\mathrm{KL}}(U\|w)\) 并导出“常数级改写不改变压力谱”的稳定性原则。
+
+\begin{proposition}[Hölder 桥：由正矩下界纤维离散度]\label{prop:pom-hoelder-bridge-dispersion-from-Sq}
+对任意整数 \(q\ge 2\) 与任意分辨率 \(m\ge 1\)，成立不等式
+\[
+\boxed{\;
+|X_m|^{\,q+1}\ \le\ S_q(m)\cdot \|E_m\|_{HS}^{2q}\;}
+\]
+其中 \(S_q(m)=\sum_{x\in X_m}d_m(x)^q\)，且 \(\|E_m\|_{HS}^2=\sum_{x\in X_m}d_m(x)^{-1}\)。
+等价地，
+\[
+\|E_m\|_{HS}^2\ \ge\ \frac{|X_m|^{1+1/q}}{S_q(m)^{1/q}},
+\qquad
+\mathfrak{D}_m\ \ge\ \frac{2^m}{|X_m|^{1-1/q}\,S_q(m)^{1/q}}.
+\]
+\end{proposition}
+\begin{proof}
+取
+\(
+a_x:=d_m(x)^{\frac{q}{q+1}}
+\)、
+\(
+b_x:=d_m(x)^{-\frac{q}{q+1}}
+\)
+（\(x\in X_m\)），则 \(a_xb_x=1\) 且
+\(
+\sum_x a_x^{q+1}=S_q(m)
+\)、\(
+\sum_x b_x^{(q+1)/q}=\sum_x d_m(x)^{-1}=\|E_m\|_{HS}^2
+\)。
+对共轭指数对 \((q+1,(q+1)/q)\) 应用 Hölder 不等式得
+\[
+|X_m|
+=\sum_{x\in X_m}a_xb_x
+\le
+\Bigl(\sum_x a_x^{q+1}\Bigr)^{1/(q+1)}
+\Bigl(\sum_x b_x^{(q+1)/q}\Bigr)^{q/(q+1)}
+=S_q(m)^{1/(q+1)}\|E_m\|_{HS}^{2q/(q+1)}.
+\]
+两边升幂 \(q+1\) 得第一式；其余为代数变形并用 \(\mathfrak{D}_m=\frac{2^m}{|X_m|^2}\|E_m\|_{HS}^2\)（推论 \ref{cor:pom-fiber-dispersion-index}）。证毕。
+\end{proof}
+
+\begin{corollary}[输出分布的 \(L^q\) 口径]\label{cor:pom-dispersion-lq-lower-bound}
+令 \(w_m(x):=d_m(x)/2^m\) 为均匀微态的折叠推前分布（\(\sum_x w_m(x)=1\)），并记
+\(
+\|w_m\|_q:=\bigl(\sum_x w_m(x)^q\bigr)^{1/q}
+\)。
+则对任意整数 \(q\ge 2\) 与任意 \(m\ge 1\) 有
+\[
+\boxed{\;
+\mathfrak{D}_m\ \ge\ \frac{1}{|X_m|^{(q-1)/q}\,\|w_m\|_q}\; }.
+\]
+特别地，当 \(q=2\) 时若记
+\(
+\mathrm{Col}_m:=\sum_x w_m(x)^2
+\)
+（碰撞常数），则
+\[
+\boxed{\;
+\mathfrak{D}_m\ \ge\ \frac{1}{\sqrt{|X_m|\,\mathrm{Col}_m}}\; }.
+\]
+\end{corollary}
+\begin{proof}
+由定义 \(\|w_m\|_q^q=\sum_x (d_m(x)/2^m)^q=S_q(m)/2^{qm}\)。
+将命题 \ref{prop:pom-hoelder-bridge-dispersion-from-Sq} 的下界
+\(
+\mathfrak{D}_m \ge 2^m/(|X_m|^{1-1/q}S_q(m)^{1/q})
+\)
+代入并化简即得第一式；第二式取 \(q=2\) 并注意 \(\|w_m\|_2=\sqrt{\mathrm{Col}_m}\)。证毕。
+\end{proof}
+
+\begin{definition}[混合碰撞同型概率]\label{def:pom-mixed-collision-probability}
+设在同一稳定类型集合 \(X_m\) 上给定两分布 \(w_m^{(0)},w_m^{(1)}\in\Delta(X_m)\) 且处处为正。
+对任意整数 \(q\ge 1\)，定义 \textbf{\(2q\)-体混合碰撞同型概率}
+\[
+\boxed{\;
+\mathrm{Col}^{(0,1)}_q(m)
+:=
+\sum_{x\in X_m}\bigl(w_m^{(0)}(x)\bigr)^q\bigl(w_m^{(1)}(x)\bigr)^q\; }.
+\]
+当 \(q=1\) 时，\(\mathrm{Col}^{(0,1)}_1(m)=\langle w_m^{(0)},w_m^{(1)}\rangle_{\ell^2}\) 为 \(\ell^2\) 内积；当 \(q\ge 2\) 时，\(\mathrm{Col}^{(0,1)}_q(m)\) 量化更高阶同型约束下的相似性。
+\end{definition}
+
+\begin{proposition}[混合碰撞核的有限态可计算性]\label{prop:pom-mixed-collision-kernel-computable}
+若两分布 \(w_m^{(0)},w_m^{(1)}\) 均由某个有限状态在线核（确定性转导器/输出分桶核的口径）产生，
+则对每个固定整数 \(q\ge 1\)，序列 \(\{\mathrm{Col}^{(0,1)}_q(m)\}_{m\ge m_0}\) 可被编译为某个有限维非负矩阵幂读出，
+从而满足有限阶整系数线性递推；并且其指数增长主尺度由 Perron 根给出。
+\end{proposition}
+\begin{proof}
+将“全部拷贝输出逐位一致”的筛选视为局部同步约束。
+取来自机制 \((0)\) 的 \(q\) 份拷贝与来自机制 \((1)\) 的 \(q\) 份拷贝，总计 \(2q\) 份同步直积，
+并在每一步仅保留那些使全部 \(2q\) 份输出符号相同的转移。
+由有限状态闭包，所得同步核仍为有限图，其长度-\(m\) 合法路径计数按输出类型 \(x\in X_m\) 分组后恰为
+\(\sum_x d_m^{(0)}(x)^q d_m^{(1)}(x)^q\)。
+再用 \(w_m^{(i)}(x)=d_m^{(i)}(x)/2^m\)（或对应归一化）即可得到 \(\mathrm{Col}^{(0,1)}_q(m)\)。
+矩阵幂读出 \(\Rightarrow\) 线性递推由 Cayley--Hamilton 定理立得；Perron 主尺度由 Perron--Frobenius 理论给出。证毕。
+\end{proof}
+
+\begin{corollary}[Hilbert 特征嵌入与正定核]\label{cor:pom-mixed-collision-pd-kernel}
+对固定 \(m\) 与固定 \(q\ge 1\)，映射
+\(
+w\mapsto (w(x)^q)_{x\in X_m}\in \ell^2(X_m)
+\)
+给出一类显式特征嵌入，且
+\[
+\boxed{\;
+\mathrm{Col}^{(0,1)}_q(m)
+=\big\langle (w_m^{(0)})^q,\ (w_m^{(1)})^q\big\rangle_{\ell^2}\;}
+\]
+为对应内积核；因此 \(\mathrm{Col}^{(0,1)}_q(m)\) 在固定 \(m\) 上提供一族可审计的正定相似度指纹。
+\end{corollary}
+
+\begin{proposition}[反向 KL 的确定性上界：由离散度指数控制]\label{prop:pom-reverse-kl-bound-by-dispersion}
+设 \(X\) 为有限集，\(w\in\Delta(X)\) 且处处为正，记 \(U:=\mathrm{Unif}(X)\)。
+定义
+\[
+\mathfrak{D}(w):=\frac{1}{|X|^2}\sum_{x\in X}\frac{1}{w(x)}.
+\]
+则成立不等式
+\[
+\boxed{\;
+D_{\mathrm{KL}}(U\|w)\ \le\ \log \mathfrak{D}(w)\; }.
+\]
+特别地，在 Fold 输出分布 \(w=w_m\) 的口径下有 \(\mathfrak{D}(w_m)=\mathfrak{D}_m\)，从而 \(D_{\mathrm{KL}}(U_m\|w_m)\le \log \mathfrak{D}_m\)。
+\end{proposition}
+\begin{proof}
+写
+\[
+D_{\mathrm{KL}}(U\|w)
+=\sum_{x\in X}\frac{1}{|X|}\log\frac{1/|X|}{w(x)}
+=-\log|X|+\frac{1}{|X|}\sum_{x\in X}\log\frac{1}{w(x)}.
+\]
+由 Jensen 不等式（\(\log\) 凹）得
+\[
+\frac{1}{|X|}\sum_{x\in X}\log\frac{1}{w(x)}
+\le
+\log\!\left(\frac{1}{|X|}\sum_{x\in X}\frac{1}{w(x)}\right).
+\]
+代入并整理得
+\(
+D_{\mathrm{KL}}(U\|w)\le \log\!\left(\frac{1}{|X|^2}\sum_x \frac{1}{w(x)}\right)=\log \mathfrak{D}(w)
+\)。
+最后对 \(w_m(x)=d_m(x)/2^m\) 有
+\(
+\mathfrak{D}(w_m)=|X_m|^{-2}\sum_x 2^m/d_m(x)=\mathfrak{D}_m
+\)
+（推论 \ref{cor:pom-fiber-dispersion-index}）。证毕。
+\end{proof}
+
+\begin{corollary}[点质量的确定性上界：由 \texorpdfstring{$\mathfrak{D}(w)$}{D(w)} 控制]\label{cor:pom-max-mass-upper-bound-by-dispersion}
+在命题 \ref{prop:pom-reverse-kl-bound-by-dispersion} 的设定下，记 \(w_{\max}:=\max_{x\in X}w(x)\)。
+则有确定性不等式
+\[
+\boxed{\;
+\mathfrak{D}(w)\ \ge\ \frac{1}{|X|^2}\left(\frac{1}{w_{\max}}+\frac{(|X|-1)^2}{1-w_{\max}}\right)\; }.
+\]
+从而 \(w_{\max}\) 由一条显式二次约束上界控制；并且（忽略第一项得到的弱化式）
+\[
+\boxed{\;
+w_{\max}\ \le\ 1-\frac{(|X|-1)^2}{|X|^2\,\mathfrak{D}(w)}\; }.
+\]
+\end{corollary}
+\begin{proof}
+取 \(x_\ast\) 使 \(w(x_\ast)=w_{\max}\)，并记 \(X':=X\setminus\{x_\ast\}\)（\(|X'|=|X|-1\)）。
+由 Cauchy--Schwarz 不等式对向量 \(\bigl(\sqrt{w(x)}\bigr)_{x\in X'}\) 与 \(\bigl(1/\sqrt{w(x)}\bigr)_{x\in X'}\) 得
+\[
+\left(\sum_{x\in X'}1\right)^2
+\le
+\left(\sum_{x\in X'}w(x)\right)\left(\sum_{x\in X'}\frac{1}{w(x)}\right),
+\]
+即
+\(
+\sum_{x\in X'}\frac{1}{w(x)}\ge \frac{(|X|-1)^2}{1-w_{\max}}
+\)。
+于是
+\(
+\sum_{x\in X}\frac{1}{w(x)}\ge \frac{1}{w_{\max}}+\frac{(|X|-1)^2}{1-w_{\max}}
+\)，
+两边同除以 \(|X|^2\) 得第一式。
+再舍去正项 \(|X|^{-2}w_{\max}^{-1}\) 即得第二式。证毕。
+\end{proof}
+
+\begin{lemma}[有界乘性扰动不变性]\label{lem:pom-bounded-multiplicative-perturbation-invariance}
+设 \((a_m)_{m\ge 1}\)、\((b_m)_{m\ge 1}\) 为正序列。
+若存在常数 \(0<c\le C<\infty\) 与 \(m_0\) 使得对所有 \(m\ge m_0\) 有
+\(
+c\,a_m\le b_m\le C\,a_m
+\)，
+则
+\[
+\limsup_{m\to\infty}\frac{1}{m}\log a_m
+\;=\;
+\limsup_{m\to\infty}\frac{1}{m}\log b_m.
+\]
+若进一步两者的 \(m\) 次方根极限 \(\lim_{m\to\infty}a_m^{1/m}\)、\(\lim_{m\to\infty}b_m^{1/m}\) 均存在，则两极限相等。
+\end{lemma}
+\begin{proof}
+由夹逼
+\[
+\frac{1}{m}\log c+\frac{1}{m}\log a_m
+\le
+\frac{1}{m}\log b_m
+\le
+\frac{1}{m}\log C+\frac{1}{m}\log a_m
+\]
+取 \(m\to\infty\) 的 \(\limsup\) 即得第一结论。
+极限情形对不等式取 \(m\) 次方根并令 \(m\to\infty\) 得到。证毕。
+\end{proof}
+
+\begin{corollary}[压力谱与大偏差谱的稳定性原则]\label{cor:pom-pressure-stability-under-bounded-perturbation}
+在碰撞矩/压力谱框架下，若某一改写/strictification/counterterm 仅在常数级或有界乘性尺度上改变计数序列（即满足引理 \ref{lem:pom-bounded-multiplicative-perturbation-invariance} 的假设），
+则其导出的指数压力（例如 \(\tau(q)=\limsup_{m\to\infty}\frac{1}{m}\log S_q(m)\)）严格不变；
+进而由该压力作 Legendre--Fenchel 反演得到的任何指数级谱对象亦严格不变，差异只能落在有限部或亚指数修正层。
+\end{corollary}
+

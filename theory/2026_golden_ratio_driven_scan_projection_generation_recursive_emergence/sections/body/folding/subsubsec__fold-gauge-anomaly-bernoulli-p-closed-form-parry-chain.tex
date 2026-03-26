@@ -1,0 +1,450 @@
+\paragraph{Bernoulli\texorpdfstring{$(p)$}{(p)} 基线的归并闭式链：Parry 归一化、代数压力与端点指数}
+以下结果在段落 \ref{par:fold-gauge-anomaly-bernoulli-p} 的同一换能器口径下整理，符号与
+定理 \ref{thm:fold-gauge-anomaly-bernoulli-p-laws}、
+命题 \ref{prop:fold-gauge-anomaly-bernoulli-p-bitpair-law}、
+命题 \ref{prop:fold-gauge-anomaly-bernoulli-p-spectrum}、
+命题 \ref{prop:fold-gauge-anomaly-bernoulli-p-endpoint-ldp}
+保持一致。
+
+\begin{theorem}[规范差压力与 Parry 归一化链的显式闭式]\label{thm:fold-bernoulli-p-parry-pressure-chain}
+取 \(p\in(0,1)\)，记 \(q:=1-p\)。令失配计数
+\[
+G_m=\sum_{t=0}^{m-1}\mathbf 1_{\{X_t\neq Y_t\}},
+\]
+并定义扭曲矩阵
+\begin{equation}\label{eq:fold-bernoulli-p-parry-Atheta}
+A_{\theta}(p)=
+\begin{pmatrix}
+q&q e^\theta&0&p\\
+0&0&p e^\theta&0\\
+p e^\theta&1&0&0\\
+q&0&0&0
+\end{pmatrix}.
+\end{equation}
+记 \(\rho(\theta;p):=\rho(A_\theta(p))\)。则极限压力存在且
+\begin{equation}\label{eq:fold-bernoulli-p-parry-pressure}
+P_G(\theta;p):=\lim_{m\to\infty}\frac1m\log\EE_p[e^{\theta G_m}]
+=\log \rho(\theta;p).
+\end{equation}
+在 \(\theta=0\) 处有 \(\rho(0;p)=1\)，并可取 Perron 右、左特征向量为
+\begin{equation}\label{eq:fold-bernoulli-p-parry-eigenvectors}
+r(p)=\bigl(q,\ p^2,\ p,\ q^2\bigr)^{\mathsf T},
+\qquad
+\ell(p)=\bigl(1,\ 1,\ p,\ p\bigr).
+\end{equation}
+由 Parry 归一化得到
+\begin{equation}\label{eq:fold-bernoulli-p-parry-kernel}
+P(p)=\mathrm{diag}(r(p))^{-1}A_0(p)\,\mathrm{diag}(r(p))
+=
+\begin{pmatrix}
+q&p^2&0&pq\\
+0&0&1&0\\
+q&p&0&0\\
+1&0&0&0
+\end{pmatrix},
+\end{equation}
+其平稳分布
+\begin{equation}\label{eq:fold-bernoulli-p-parry-stationary}
+\pi(p)=\frac{\ell\odot r}{\langle \ell,r\rangle}
+=\frac1{1+p^3}\bigl(q,\ p^2,\ p^2,\ p q^2\bigr).
+\end{equation}
+\end{theorem}
+\begin{proof}
+\eqref{eq:fold-bernoulli-p-parry-Atheta} 与
+\eqref{eq:fold-bernoulli-p-parry-pressure} 即
+定理 \ref{thm:fold-gauge-anomaly-bernoulli-p-laws} 的矩阵接口重写。
+直接代入可验
+\[
+A_0(p)\,r(p)=r(p),\qquad
+\ell(p)A_0(p)=\ell(p),
+\]
+得 \eqref{eq:fold-bernoulli-p-parry-eigenvectors}。
+由公式
+\(
+P_{ij}=A_{0,ij}r_j/r_i
+\)
+得 \eqref{eq:fold-bernoulli-p-parry-kernel}。
+再由
+\(
+\pi_i\propto \ell_i r_i
+\)
+并归一化，得到 \eqref{eq:fold-bernoulli-p-parry-stationary}。证毕。
+\end{proof}
+
+\begin{proposition}[状态 \(a\) 的再生结构与回返时间的精确律]\label{prop:fold-bernoulli-p-return-time-a}
+沿用定理 \ref{thm:fold-bernoulli-p-parry-pressure-chain} 的链 \((S_t)_{t\ge 0}\) 与边势 \(g\)。
+从 \(a\) 出发令首次回返时刻
+\[
+\tau_a:=\inf\{t\ge 1:S_t=a\mid S_0=a\}.
+\]
+则 \(\tau_a\) 的支撑为 \(\{1,2\}\cup\{2n+3:n\ge 0\}\)，并且对 \(n\ge 0\) 有
+\begin{equation}\label{eq:fold-bernoulli-p-return-time-a-law}
+\PP_p(\tau_a=1)=q,\qquad
+\PP_p(\tau_a=2)=pq,\qquad
+\PP_p(\tau_a=2n+3)=p^{n+2}q.
+\end{equation}
+其概率母函数为
+\begin{equation}\label{eq:fold-bernoulli-p-return-time-a-pgf}
+\EE_p\!\left[z^{\tau_a}\right]
+=qz+pq\,z^2+\frac{p^2q\,z^3}{1-pz^2}.
+\end{equation}
+
+进一步令一次回返段长度 \(L_a:=\tau_a\)，并记该段内失配边数
+\[
+M_a:=\sum_{t=0}^{L_a-1} g(S_t,S_{t+1}).
+\]
+则联合分布完全显式：对 \(n\ge 0\),
+\begin{equation}\label{eq:fold-bernoulli-p-return-segment-a-joint}
+\PP_p(L_a=1,M_a=0)=q,\quad
+\PP_p(L_a=2,M_a=0)=pq,\quad
+\PP_p(L_a=2n+3,M_a=n+3)=p^{n+2}q,
+\end{equation}
+并且在 \(\{L_a\ge 3\}\) 上存在确定的仿射约束
+\begin{equation}\label{eq:fold-bernoulli-p-return-segment-a-affine}
+L_a=2M_a-3.
+\end{equation}
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:fold-bernoulli-p-parry-kernel} 可见：从 \(a\) 出发第一步以概率 \(q\) 走 \(a\to a\)，从而 \(\tau_a=1\)；
+以概率 \(pq\) 走 \(a\to d\) 且必有 \(d\to a\)，从而 \(\tau_a=2\)；
+以概率 \(p^2\) 走 \(a\to b\) 且必有 \(b\to c\)。
+在第三种分支上，处于 \(c\) 时以概率 \(q\) 走 \(c\to a\) 回返，以概率 \(p\) 走 \(c\to b\) 并必经 \(b\to c\) 回到 \(c\)。
+因此在 \(c\) 处选择 \(c\to b\) 的次数 \(N\) 服从参数为 \(q\) 的几何分布 \(\PP(N=n)=p^n q\)，并且 \(\tau_a=3+2N\)。
+与进入该分支的概率 \(p^2\) 相乘即得 \eqref{eq:fold-bernoulli-p-return-time-a-law}；母函数 \eqref{eq:fold-bernoulli-p-return-time-a-pgf} 由几何级数求和得到。
+
+对联合律，注意 \(\tau_a\in\{1,2\}\) 时路径仅经匹配边，故 \(M_a=0\)。
+当 \(N=n\) 时回返段轨道强制为
+\(
+a\to b\to c(\to b\to c)^n\to a
+\)，其长度 \(L_a=2n+3\)。
+由边势 \eqref{eq:fold-gauge-anomaly-bernoulli-p-edge-potential}，该段中失配边恰为 \(a\to b\)、全部 \(b\to c\) 以及末端 \(c\to a\)，故 \(M_a=1+(n+1)+1=n+3\)，从而得到 \eqref{eq:fold-bernoulli-p-return-segment-a-joint}。
+消去 \(n\) 立即得到 \eqref{eq:fold-bernoulli-p-return-segment-a-affine}。证毕。
+\end{proof}
+
+\begin{theorem}[平稳联合律、失配密度与输出压缩闭式]\label{thm:fold-bernoulli-p-bitpair-gamma-q-closed}
+在定理 \ref{thm:fold-bernoulli-p-parry-pressure-chain} 的平稳链上，\((X,Y)\) 的单点联合分布为
+\begin{align}
+\PP_p(X=0,Y=0)&=\frac{1-p-p^2+2p^3-p^4}{1+p^3},\nonumber\\
+\PP_p(X=0,Y=1)&=\frac{p^2(1-p)}{1+p^3},\nonumber\\
+\PP_p(X=1,Y=0)&=\frac{p^2(2-p)}{1+p^3},\label{eq:fold-bernoulli-p-bitpair-joint-law}\\
+\PP_p(X=1,Y=1)&=\frac{p\bigl(p^3+(1-p)^2\bigr)}{1+p^3}. \nonumber
+\end{align}
+从而失配密度
+\begin{equation}\label{eq:fold-bernoulli-p-gamma}
+\gamma(p):=\lim_{m\to\infty}\frac1m\EE_p[G_m]
+=\PP_p(X\neq Y)
+=\frac{p^2(3-2p)}{1+p^3}.
+\end{equation}
+输出端“1”密度满足
+\begin{equation}\label{eq:fold-bernoulli-p-output-density}
+q(p):=\PP_p(Y=1)
+=\frac{p(p^3-p+1)}{1+p^3},
+\qquad
+0<q(p)<p\quad(p\in(0,1)).
+\end{equation}
+\end{theorem}
+\begin{proof}
+\eqref{eq:fold-bernoulli-p-bitpair-joint-law} 与
+\eqref{eq:fold-bernoulli-p-gamma}
+由命题 \ref{prop:fold-gauge-anomaly-bernoulli-p-bitpair-law} 直接得到。
+\eqref{eq:fold-bernoulli-p-output-density} 的第一式来自
+\(
+\PP(Y=1)=\PP(0,1)+\PP(1,1)
+\)；
+第二式由恒等式
+\[
+p-q(p)=\frac{p^2}{1+p^3}>0
+\]
+给出。证毕。
+\end{proof}
+
+\begin{theorem}[代数压力四次方程与 CLT 方差率闭式]\label{thm:fold-bernoulli-p-pressure-quartic-clt-variance}
+令 \(u=e^\theta\)，记 \(\lambda(u,p):=\rho(A_{\log u}(p))\)。
+则 \(\lambda(u,p)\) 是下列四次方程在 \(\lambda>0\) 上的唯一最大实根：
+\begin{equation}\label{eq:fold-bernoulli-p-pressure-quartic-restated}
+\lambda^4+(p-1)\lambda^3+\bigl(p^2-p(u+1)\bigr)\lambda^2
++\bigl(p^3u^3-p^2u^3-p^2u+pu\bigr)\lambda
++\bigl(-p^3u+p^2u\bigr)=0.
+\end{equation}
+并且 \(P_G(\theta;p)=\log\lambda(e^\theta,p)\) 在 \(\theta\in\RR\) 上解析。
+
+进一步有中心极限定理
+\begin{equation}\label{eq:fold-bernoulli-p-clt-restated}
+\frac{G_m-m\gamma(p)}{\sqrt m}\ \Rightarrow\ \mathcal N\!\bigl(0,\sigma^2(p)\bigr),
+\end{equation}
+其中
+\begin{equation}\label{eq:fold-bernoulli-p-variance-closed}
+\sigma^2(p)=
+\frac{p^2(1-p)\bigl(21 p^5-6 p^4+14 p^3-36 p^2+7 p+9\bigr)}
+{(p+1)^3(p^2-p+1)^3}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+\eqref{eq:fold-bernoulli-p-pressure-quartic-restated} 与
+\eqref{eq:fold-bernoulli-p-variance-closed}
+与定理 \ref{thm:fold-gauge-anomaly-bernoulli-p-laws} 的四次特征方程与方差率闭式完全等价；
+\eqref{eq:fold-bernoulli-p-clt-restated} 则由同一定理的 CLT 结论给出。证毕。
+\end{proof}
+
+\begin{proposition}[偏置拆解 Jordan 共振与协方差纯指数混合]\label{prop:fold-bernoulli-p-jordan-resonance-only-half}
+矩阵 \(P(p)\) 的谱为
+\begin{equation}\label{eq:fold-bernoulli-p-spectrum}
+\mathrm{Spec}(P(p))
+=\left\{1,\ -p,\ \pm\sqrt{p(1-p)}\right\}.
+\end{equation}
+仅当 \(p=\tfrac12\) 时发生非主特征值碰撞
+\(
+-p=-\sqrt{p(1-p)}
+\)，并可能出现非半单 Jordan 块；
+该点确有 Jordan 退化（见命题 \ref{prop:fold-gauge-anomaly-bernoulli-p-spectrum}）。
+
+对任意 \(p\in(0,1)\setminus\{\tfrac12\}\)，特征值互异，\(P(p)\) 在 \(\RR\) 上可对角化。
+因此对任意平方可积边观测
+\(
+H_t=H(S_t,S_{t+1})
+\)
+（平稳初值）存在常数 \(C_H(p)<\infty\) 使
+\begin{equation}\label{eq:fold-bernoulli-p-covariance-exp-bound}
+\bigl|\mathrm{Cov}(H_0,H_k)\bigr|
+\le C_H(p)\,\Lambda(p)^k,\qquad
+\Lambda(p):=\max\!\left\{p,\sqrt{p(1-p)}\right\}<1.
+\end{equation}
+特别地，对 \(g_t=\mathbf 1_{\{X_t\neq Y_t\}}\)，当 \(p\neq\tfrac12\) 时协方差无任何 \(k\) 多项式前因子。
+\end{proposition}
+\begin{proof}
+\eqref{eq:fold-bernoulli-p-spectrum}
+由命题 \ref{prop:fold-gauge-anomaly-bernoulli-p-spectrum} 直接成立。
+当 \(p\neq\tfrac12\) 时可对角化，谱分解给出
+\eqref{eq:fold-bernoulli-p-covariance-exp-bound}。
+当 \(p=\tfrac12\) 时，\(-\tfrac12\) 二重根的几何重数为 \(1\)，故出现 Jordan 修正。证毕。
+\end{proof}
+
+\begin{theorem}[规范差密度的大偏差端点指数]\label{thm:fold-bernoulli-p-endpoint-ldp-restated}
+定义
+\[
+I_p(s):=\sup_{\theta\in\RR}\bigl(s\theta-P_G(\theta;p)\bigr).
+\]
+则端点指数具有闭式
+\begin{equation}\label{eq:fold-bernoulli-p-I1}
+I_p(1)=\frac13\log\frac{1}{p^2(1-p)},
+\end{equation}
+\begin{equation}\label{eq:fold-bernoulli-p-I0}
+I_p(0)=
+-\log\!\left(\frac{(1-p)+\sqrt{(1-p)(1+3p)}}{2}\right).
+\end{equation}
+等价地，
+\begin{equation}\label{eq:fold-bernoulli-p-endpoint-prob}
+\PP_p(G_m=m)=\exp\bigl(-mI_p(1)+o(m)\bigr),\qquad
+\PP_p(G_m=0)=\exp\bigl(-mI_p(0)+o(m)\bigr).
+\end{equation}
+\end{theorem}
+\begin{proof}
+\eqref{eq:fold-bernoulli-p-I1}--\eqref{eq:fold-bernoulli-p-I0}
+由命题 \ref{prop:fold-gauge-anomaly-bernoulli-p-endpoint-ldp} 直接给出；
+\eqref{eq:fold-bernoulli-p-endpoint-prob} 是端点点质量的指数等价表述。证毕。
+\end{proof}
+
+\begin{theorem}[平稳态端点事件的有限长闭式]\label{thm:fold-bernoulli-p-endpoint-exact-finite}
+在定理 \ref{thm:fold-bernoulli-p-parry-pressure-chain} 的平稳分布 \(\pi(p)\) 下，记
+\[
+\lambda_\pm(p):=\frac{q\pm \sqrt{q(1+3p)}}{2},
+\qquad
+t(p):=p^2q.
+\]
+则成立以下有限长精确闭式。
+
+\medskip
+\noindent\textbf{零失配事件。}
+对任意 \(m\ge 2\) 有
+\begin{equation}\label{eq:fold-bernoulli-p-stationary-zero-mismatch-exact}
+\PP_{\pi(p)}(G_m=0)=C_+(p)\,\lambda_+(p)^m+C_-(p)\,\lambda_-(p)^m,
+\end{equation}
+其中
+\[
+S_0(p):=\pi_a+\pi_d,\qquad
+S_1(p):=\pi_a\,q(1+p)+\pi_d,
+\]
+并且
+\begin{equation}\label{eq:fold-bernoulli-p-stationary-zero-mismatch-Cpm}
+C_+(p):=\frac{S_1(p)-\lambda_-(p)S_0(p)}{\lambda_+(p)-\lambda_-(p)},\qquad
+C_-(p):=\frac{\lambda_+(p)S_0(p)-S_1(p)}{\lambda_+(p)-\lambda_-(p)}.
+\end{equation}
+此外，
+\begin{equation}\label{eq:fold-bernoulli-p-stationary-zero-mismatch-m01}
+\PP_{\pi(p)}(G_0=0)=1,\qquad
+\PP_{\pi(p)}(G_1=0)=\frac{1-3p^2+3p^3}{1+p^3}.
+\end{equation}
+
+\medskip
+\noindent\textbf{满失配事件。}
+对任意 \(m\ge 1\)，写 \(m=3k+r\)（\(k\ge 0\)，\(r\in\{0,1,2\}\)），则
+\begin{equation}\label{eq:fold-bernoulli-p-stationary-full-mismatch-exact}
+\PP_{\pi(p)}(G_m=m)=t(p)^k\times
+\begin{cases}
+\dfrac{1-p+2p^2}{1+p^3}, & r=0,\\[1.0ex]
+\dfrac{p^2(3-2p)}{1+p^3}, & r=1,\\[1.0ex]
+\dfrac{p^2(1-p)(2+p^2)}{1+p^3}, & r=2.
+\end{cases}
+\end{equation}
+\end{theorem}
+\begin{proof}
+由边势 \eqref{eq:fold-gauge-anomaly-bernoulli-p-edge-potential} 可知零失配等价于在前 \(m\) 步内从未经过失配边 \((a,b)\)、\((b,c)\)、\((c,a)\)。
+当 \(m\ge 2\) 时，只要在时刻 \(<m\) 进入 \(b\) 则下一步必经 \(b\to c\) 产生失配，故零失配路径不可能在 \(\{0,\dots,m-1\}\) 进入 \(b\)，从而也不可能进入 \(c\)（唯一入边为 \(b\to c\)）。
+因此在 \(m\ge 2\) 的零失配约束下，链在区间 \(\{0,\dots,m\}\) 上被迫限制在 \(\{a,d\}\)，并仅使用匹配边 \(a\to a\)、\(a\to d\)、\(d\to a\)。
+令 \(\pi_{ad}:=(\pi_a,\pi_d)^{\mathsf T}\)，并记 \(\mathbf 1:=(1,1)^{\mathsf T}\)。
+对应的 \(2\times 2\) 转移矩阵（状态次序 \((a,d)\)）为
+\[
+P_{ad}:=
+\begin{pmatrix}
+q & pq\\
+1 & 0
+\end{pmatrix},
+\]
+从而
+\[
+\PP_{\pi(p)}(G_m=0)=\pi_{ad}^{\mathsf T}P_{ad}^{\,m}\mathbf 1\qquad(m\ge 2).
+\]
+矩阵 \(P_{ad}\) 的特征根正是 \(\lambda_\pm(p)\)，故存在常数 \(C_\pm(p)\) 使得
+\(\PP_{\pi(p)}(G_m=0)=C_+\lambda_+^m+C_-\lambda_-^m\)。
+由 \(m=0,1\) 的两点插值（即 \(C_++C_-=S_0\) 与 \(C_+\lambda_++C_-\lambda_-=S_1\)）得到 \eqref{eq:fold-bernoulli-p-stationary-zero-mismatch-Cpm}，并推出 \eqref{eq:fold-bernoulli-p-stationary-zero-mismatch-exact}。
+对 \(m=1\)，除 \(\{a,d\}\) 的贡献 \(S_1\) 外，还存在从 \(c\) 走匹配边 \(c\to b\) 的路径，其概率为 \(\pi_c\cdot p=p^3/(1+p^3)\)，从而得到 \eqref{eq:fold-bernoulli-p-stationary-zero-mismatch-m01}。
+
+对满失配事件，若每一步均为失配边，则轨道必须沿唯一三循环 \(a\to b\to c\to a\) 运行。
+三条失配边的概率依次为 \(a\to b:p^2\)、\(b\to c:1\)、\(c\to a:q\)，每三步乘积为 \(t(p)=p^2q\)。
+当 \(m=3k+r\) 时，从起点处于 \(\{a,b,c\}\) 的三种情形逐一写出首 \(r\) 步因子并乘以 \(t(p)^k\)，再以平稳权 \(\pi_a,\pi_b,\pi_c\) 加权求和即可得到 \eqref{eq:fold-bernoulli-p-stationary-full-mismatch-exact}。证毕。
+\end{proof}
+
+\begin{corollary}[对称基线的根式闭式与相位振荡]\label{cor:fold-bernoulli-half-endpoints-oscillation}
+取 \(p=\tfrac12\)（故 \(q=\tfrac12\)，\(\varphi=\frac{1+\sqrt5}{2}\)）。
+则对任意 \(m\ge 2\)，零失配概率具有根式闭式
+\begin{equation}\label{eq:fold-bernoulli-half-zero-mismatch}
+\PP_{\pi(1/2)}(G_m=0)=\frac{25+11\sqrt5}{90}\left(\frac{\varphi}{2}\right)^m
++\frac{25-11\sqrt5}{90}\left(\frac{1-\sqrt5}{4}\right)^m,
+\end{equation}
+其中第二项为严格的奇偶振荡修正。
+并且对任意 \(m\ge 1\)，写 \(m=3k+r\) 则满失配概率满足
+\begin{equation}\label{eq:fold-bernoulli-half-full-mismatch}
+\PP_{\pi(1/2)}(G_m=m)=\left(\frac18\right)^k\times
+\begin{cases}
+\dfrac{8}{9}, & r=0,\\[0.8ex]
+\dfrac{4}{9}, & r=1,\\[0.8ex]
+\dfrac{1}{4}, & r=2.
+\end{cases}
+\end{equation}
+\end{corollary}
+\begin{proof}
+将 \(p=q=\tfrac12\) 代入定理 \ref{thm:fold-bernoulli-p-endpoint-exact-finite}。
+此时 \(\lambda_+(1/2)=\varphi/2\)、\(\lambda_-(1/2)=(1-\sqrt5)/4<0\)，并且由
+\eqref{eq:fold-bernoulli-p-stationary-zero-mismatch-Cpm} 直接化简得到 \eqref{eq:fold-bernoulli-half-zero-mismatch}；
+\eqref{eq:fold-bernoulli-half-full-mismatch} 则由 \eqref{eq:fold-bernoulli-p-stationary-full-mismatch-exact} 代入并化简得到。证毕。
+\end{proof}
+
+\begin{corollary}[黄金根偏置处的等指数衰减与模 \(3\) 比值极限]\label{cor:fold-bernoulli-phi-half-ratio-limits}
+取
+\[
+p=\frac{\varphi}{2}=\frac{1+\sqrt5}{4},\qquad q=1-p=\frac{3-\sqrt5}{4}.
+\]
+则 \(\lambda_+(p)=\tfrac12\) 且 \(t(p)=\tfrac18\)，从而
+\[
+\PP_{\pi(p)}(G_m=0)=C_+(p)\,2^{-m}+O\!\left(|\lambda_-(p)|^m\right),\qquad
+\PP_{\pi(p)}(G_{3k+r}=3k+r)=d_r(p)\,2^{-(3k+r)}
+\]
+（其中 \(C_+(p)\) 与 \(d_r(p)\) 由定理 \ref{thm:fold-bernoulli-p-endpoint-exact-finite} 的闭式给出）。
+并且存在严格的模 \(3\) 比值极限：
+\begin{equation}\label{eq:fold-bernoulli-phi-half-ratio-limits}
+\lim_{k\to\infty}\frac{\PP_{\pi(p)}(G_{3k}=3k)}{\PP_{\pi(p)}(G_{3k}=0)}=6(\sqrt5-1),\qquad
+\lim_{k\to\infty}\frac{\PP_{\pi(p)}(G_{3k+1}=3k+1)}{\PP_{\pi(p)}(G_{3k+1}=0)}=4\sqrt5,\qquad
+\lim_{k\to\infty}\frac{\PP_{\pi(p)}(G_{3k+2}=3k+2)}{\PP_{\pi(p)}(G_{3k+2}=0)}=\frac{9\sqrt5-7}{2}.
+\end{equation}
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:fold-bernoulli-p-endpoint-exact-finite} 的零失配闭式，
+\(\PP_{\pi(p)}(G_m=0)=C_+\lambda_+^m+C_-\lambda_-^m\)。
+在所取参数下 \(\lambda_+(p)=1/2\) 且 \(|\lambda_-(p)|<1/2\)，从而
+\(\PP_{\pi(p)}(G_m=0)=C_+(p)\,2^{-m}+O(|\lambda_-(p)|^m)\)。
+另一方面，由 \eqref{eq:fold-bernoulli-p-stationary-full-mismatch-exact} 得
+\(\PP_{\pi(p)}(G_{3k+r}=3k+r)=d_r(p)\,2^{-(3k+r)}\)（\(d_r\) 为显式代数常数）。
+将两式相除并令 \(k\to\infty\) 消去误差项即得比值极限；在该 \(p\) 下代入闭式并化简得到 \eqref{eq:fold-bernoulli-phi-half-ratio-limits}。证毕。
+\end{proof}
+
+\begin{proposition}[失配密度的全局最大化与平方最大值恒等式]\label{prop:fold-bernoulli-p-gamma-global-max}
+函数
+\[
+\gamma(p)=\frac{p^2(3-2p)}{1+p^3}\qquad(p\in(0,1))
+\]
+具有唯一全局极大点 \(p_\star\in(0,1)\)，其由
+\begin{equation}\label{eq:fold-bernoulli-p-gamma-root}
+p_\star^3+2p_\star-2=0
+\end{equation}
+唯一刻画。
+并且极大值满足精确恒等式
+\begin{equation}\label{eq:fold-bernoulli-p-gamma-max-square}
+\max_{p\in(0,1)}\gamma(p)=\gamma(p_\star)=p_\star^2.
+\end{equation}
+\end{proposition}
+\begin{proof}
+命题
+\ref{prop:fold-gauge-anomaly-bernoulli-p-cumulant-denominator-law}
+之后的推论 \ref{cor:fold-gauge-anomaly-bernoulli-p-density-unimodal}
+已给出 \eqref{eq:fold-bernoulli-p-gamma-root} 与
+\eqref{eq:fold-bernoulli-p-gamma-max-square}。证毕。
+\end{proof}
+
+\begin{theorem}[Fold 输出密度的偏置衰减、饱和值与唯一拐点]\label{thm:fold-bernoulli-p-output-density-concavity-switch}
+令
+\[
+q(p):=\PP_p(Y=1)=\frac{p(p^3-p+1)}{1+p^3},\qquad p\in[0,1].
+\]
+则成立：
+\begin{enumerate}
+  \item 严格单调：\(q\) 在 \([0,1]\) 上严格递增；
+  \item 偏置衰减与饱和界：
+  \[
+  0<q(p)<p\quad(p\in(0,1)),\qquad
+  q(p)\le \frac12\quad(p\in[0,1]),
+  \]
+  且 \(q(p)=\tfrac12\) 当且仅当 \(p=1\)；
+  \item 唯一拐点：存在唯一 \(p_{\mathrm{inf}}\in(0,1)\) 使
+  \begin{equation}\label{eq:fold-bernoulli-p-output-inflection}
+  p_{\mathrm{inf}}^3=\frac{7-3\sqrt5}{2},
+  \end{equation}
+  并且 \(p<p_{\mathrm{inf}}\) 时 \(q\) 严格凹，\(p>p_{\mathrm{inf}}\) 时 \(q\) 严格凸。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由有理函数微分得
+\[
+q'(p)=\frac{p^6+p^4+2p^3-2p+1}{(p+1)^2(p^2-p+1)^2}>0,
+\]
+故严格递增。
+
+再由
+\[
+p-q(p)=\frac{p^2}{1+p^3}>0\quad(p\in(0,1))
+\]
+得 \(0<q(p)<p\)。
+并且
+\[
+q(p)\le \frac12
+\iff
+2p(p^3-p+1)\le 1+p^3
+\iff
+(p-1)(2p^3+p^2-p+1)\le 0.
+\]
+由于 \(2p^3+p^2-p+1>0\) 在 \([0,1]\) 上恒成立，得 \(q(p)\le \tfrac12\)，且仅 \(p=1\) 取等。
+
+二阶导数
+\[
+q''(p)=
+-\frac{2\,(p^6-7p^3+1)}{(p+1)^3(p^2-p+1)^3}.
+\]
+令 \(t=p^3\)，则符号由 \(t^2-7t+1\) 决定。
+在 \((0,1)\) 内仅有小根
+\(
+t_\ast=\frac{7-3\sqrt5}{2}
+\)，对应唯一拐点
+\eqref{eq:fold-bernoulli-p-output-inflection}，并给出凹凸区间。证毕。
+\end{proof}
+
+\endinput
+

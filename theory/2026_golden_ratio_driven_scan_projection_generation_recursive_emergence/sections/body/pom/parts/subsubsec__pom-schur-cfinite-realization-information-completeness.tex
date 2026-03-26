@@ -1,0 +1,166 @@
+\paragraph{Schur 通道的有限实现、递推闭性与固定矩阶信息完备性}
+沿用定理 \ref{thm:pom-fiber-multiplicity-matrix-product}、命题 \ref{prop:pom-momq-tensor-kernel-construction}、
+定理 \ref{thm:pom-schur-cycle-index-tomography} 与
+\ref{thm:pom-schur-tomography-inverse-partition-monomials} 的记号。
+对固定整数 \(r\ge 1\)，把序列 \(m\mapsto S_r(m)\) 的最小线性实现维数记为 \(d_r\)，并取一组最小实现
+\[
+S_r(m)=u_r^{\mathsf T}A_r^{\,m}v_r,
+\qquad
+A_r\in M_{d_r}(\ZZ_{\ge 0}).
+\]
+其存在性由命题 \ref{prop:pom-momq-tensor-kernel-construction} 给出的显式有限态实现与标准 Hankel--最小实现理论保证。
+
+\begin{theorem}[循环型单项式的对称幂实现与递推阶上界]\label{thm:pom-partition-monomials-symmetric-power-realization-bound}
+固定整数 \(q\ge 2\)，并令 \(\nu=1^{c_1}2^{c_2}\cdots\vdash q\)。
+定义循环型单项式
+\[
+\mathsf{M}_\nu(m):=\prod_{r\ge 1}S_r(m)^{c_r}.
+\]
+则 \(\mathsf{M}_\nu(m)\) 存在一个显式的非负整数线性实现，其状态维数不超过
+\[
+D_\nu:=\prod_{r\ge 1}\binom{d_r+c_r-1}{c_r}.
+\]
+从而序列 \(m\mapsto \mathsf{M}_\nu(m)\) 满足某个阶数至多为 \(D_\nu\) 的整系数线性递推，且其生成函数为有理函数。
+\end{theorem}
+\begin{proof}
+对固定 \(r\) 与 \(c:=c_r\)，由
+\[
+S_r(m)^c
+=
+\bigl(u_r^{\otimes c}\bigr)^{\mathsf T}(A_r^{\otimes c})^m v_r^{\otimes c}
+\]
+可知 \(S_r(m)^c\) 由 \(A_r^{\otimes c}\) 在 \(c\)-重张量空间上的作用实现。
+由于 \(u_r^{\otimes c}\) 与 \(v_r^{\otimes c}\) 都落在对称张量子空间
+\(
+\Sym^c(\QQ^{d_r})
+\)
+中，而该子空间在 \(A_r^{\otimes c}\) 下不变，故 \(S_r(m)^c\) 可压缩为
+\(\Sym^c(\QQ^{d_r})\)
+上的线性实现。
+在单项式基下，诱导矩阵 \(\Sym^c(A_r)\) 的条目由非负整数与多项式展开系数组成，因而仍为非负整数矩阵；
+并且
+\[
+\dim \Sym^c(\QQ^{d_r})=\binom{d_r+c-1}{c}.
+\]
+
+对不同 \(r\) 的因子作张量积，得到 \(\mathsf{M}_\nu(m)\) 的实现矩阵
+\[
+\bigotimes_{r\ge 1}\Sym^{c_r}(A_r),
+\]
+其状态维数即为各维数之积 \(D_\nu\)。
+最后由 Cayley--Hamilton 定理，任何维数为 \(D_\nu\) 的线性实现都诱导一个阶数至多为 \(D_\nu\) 的整系数线性递推，
+生成函数有理性随之成立。证毕。
+\end{proof}
+
+\begin{theorem}[Schur 通道的 C-finite 性与谱乘法半群约束]\label{thm:pom-schur-channels-cfinite-spectral-multiplicative-semigroup}
+固定整数 \(q\ge 2\)。
+对任意分拆 \(\lambda\vdash q\)，Schur 通道迹序列 \(m\mapsto T_{q,\lambda}(m)\) 满足一个整系数线性递推，其阶数不超过
+\[
+\mathfrak D_q:=\sum_{\nu\vdash q}D_\nu
+=
+\sum_{\nu\vdash q}\prod_{r\ge 1}\binom{d_r+c_r(\nu)-1}{c_r(\nu)}.
+\]
+因此生成函数
+\[
+\mathcal Z_{q,\lambda}(z):=\sum_{m\ge 0}T_{q,\lambda}(m)z^m
+\]
+是有理函数。
+进一步，\(\mathcal Z_{q,\lambda}\) 的全部极点都属于有限集合
+\[
+\bigcup_{\nu\vdash q}
+\left\{
+\mu^{-1}:\ 
+\mu\in
+\mathrm{Spec}\!\Bigl(\bigotimes_{r\ge 1}\Sym^{c_r(\nu)}(A_r)\Bigr)
+\right\}.
+\]
+换言之，Schur 通道的极点只能来自低阶碰撞矩序列的最小实现矩阵 \(A_r\) 的特征值经有限次对称幂与乘法耦合所生成的有限谱乘法半群。
+因此，正文中由“有效压力”表述的固定 \(q\) 指数率，在有限窗逆码制度下可具体落实为一个有限维谱对象。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-partition-monomials-symmetric-power-realization-bound}，
+每个 \(\mathsf{M}_\nu(m)\) 都是 C-finite 序列，且可由维数至多为 \(D_\nu\) 的有限维实现给出。
+另一方面，定理 \ref{thm:pom-schur-cycle-index-tomography} 与按共轭类压缩后的写法给出
+\[
+T_{q,\lambda}(m)
+=
+f^\lambda\sum_{\nu\vdash q}\frac{\chi^\lambda(\nu)}{z_\nu}\,\mathsf{M}_\nu(m).
+\]
+因此 \(T_{q,\lambda}(m)\) 是有限多个 C-finite 序列的线性组合，仍为 C-finite；
+把各 \(\nu\) 的实现作直和即可得到阶数上界 \(\mathfrak D_q\)，有理性亦随之成立。
+
+对每个 \(\nu\)，\(\mathsf{M}_\nu(m)\) 的实现矩阵可取为
+\(
+\bigotimes_r \Sym^{c_r(\nu)}(A_r)
+\)
+或其等价压缩，因此其生成函数极点只能落在该矩阵特征值的倒数处。
+对全部 \(\nu\vdash q\) 取并，便得到所述极点约束。证毕。
+\end{proof}
+
+\begin{theorem}[非平凡 Schur 通道同时消失的充要条件]\label{thm:pom-nontrivial-schur-vanishing-iff-single-fiber}
+固定分辨率 \(m\) 与整数 \(q\ge 2\)。
+记纤维多重度直方图为
+\[
+\mathcal D_m=\{a_1<\cdots<a_{r_m}\}\subset\NN,
+\qquad
+n_i:=\#\{x\in X_m:\ d_m(x)=a_i\}.
+\]
+则以下三条命题等价：
+\begin{enumerate}
+  \item 对所有非平凡分拆 \(\lambda\vdash q\) 且 \(\lambda\neq(q)\)，都有
+  \[
+  T_{q,\lambda}(m)=0;
+  \]
+  \item 对所有 \(\nu\vdash q\)，循环型单项式 \(\mathsf{M}_\nu(m)\) 都相等；
+  \item \(|X_m|=1\)，等价地 \(r_m=1\) 且全部质量集中在唯一一个纤维上。
+\end{enumerate}
+特别地，在 Fold 主线中 \(X_m\) 是长度 \(m\) 的黄金均值词集，故
+\[
+|X_m|=F_{m+2}>1\qquad(m\ge 1).
+\]
+因此对每个 \(m\ge 1\) 与每个 \(q\ge 2\)，至少存在一个非平凡分拆 \(\lambda\neq(q)\) 使
+\[
+T_{q,\lambda}(m)\neq 0.
+\]
+\end{theorem}
+\begin{proof}
+\((1)\Rightarrow(2)\)：
+由定理 \ref{thm:pom-schur-tomography-inverse-partition-monomials}，
+\[
+\mathsf{M}_\nu(m)=\sum_{\lambda\vdash q}\frac{\chi^\lambda(\nu)}{f^\lambda}\,T_{q,\lambda}(m).
+\]
+若所有非平凡通道都为零，则只剩平凡分拆 \((q)\)；
+而 \(\chi^{(q)}(\nu)\equiv 1\)、\(f^{(q)}=1\)，故
+\[
+\mathsf{M}_\nu(m)=T_{q,(q)}(m)\qquad(\forall\,\nu\vdash q),
+\]
+即全部 \(\mathsf{M}_\nu(m)\) 相等。
+
+\((2)\Rightarrow(3)\)：
+取 \(\nu=(q)\) 与 \(\nu=(1^q)\)，得到
+\[
+S_q(m)=\mathsf{M}_{(q)}(m)=\mathsf{M}_{(1^q)}(m)=S_1(m)^q.
+\]
+但对 \(q\ge 2\) 与一组正整数 \(\{d_m(x)\}_{x\in X_m}\)，若至少有两个正项，则严格不等式
+\[
+\sum_{x\in X_m}d_m(x)^q<\left(\sum_{x\in X_m}d_m(x)\right)^q
+\]
+成立。
+因此必须恰有一个正项；而在 Fold 纤维计数中每个 \(x\in X_m\) 都满足 \(d_m(x)\ge 1\)，故只能有 \(|X_m|=1\)。
+这与 \(r_m=1\) 且全部质量集中于唯一纤维等价。
+
+\((3)\Rightarrow(1)\)：
+若 \(|X_m|=1\)，则对任意 \(\sigma\in S_q\) 都有
+\[
+\mathcal C_\sigma(m)=S_1(m)^q,
+\]
+与 \(\sigma\) 无关。
+代入定理 \ref{thm:pom-schur-cycle-index-tomography}，
+\[
+T_{q,\lambda}(m)
+=
+S_1(m)^q\cdot \frac{f^\lambda}{q!}\sum_{\sigma\in S_q}\chi^\lambda(\sigma).
+\]
+对非平凡 \(\lambda\neq(q)\)，特征标总和为 \(0\)，故 \(T_{q,\lambda}(m)=0\)。
+特别地，在 Fold 主线中 \(|X_m|=F_{m+2}>1\)，因此不可能出现所有非平凡通道同时消失的情形。证毕。
+\end{proof}

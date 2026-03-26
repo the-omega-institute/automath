@@ -1,0 +1,194 @@
+\paragraph{分布式格、素数账本与椭圆度量的统一外置}
+在纤维侧，定理 \ref{thm:pom-fiber-birkhoff-fence-ideal-lattice} 给出 Fold 纤维的分布式格完备表示；在账本侧，定义 \ref{def:cdim-median-godel-prime-code}--定理 \ref{thm:cdim-squarefree-median-metric-ellipse-realization} 给出平方自由素数寄存器与中值度量的闭式表达及椭圆实现。
+本段在一般有限偏序的理想格层面给出同一外置链条，并给出可直接在纤维格上套用的等距与中值闭式。
+
+\begin{theorem}[Gödel--Birkhoff 算术外置：理想格的平方自由素数实现]\label{thm:xi-godel-birkhoff-ideal-lattice-squarefree}
+设 \(P\) 为有限偏序集，\(J(P)\) 为其序理想（下闭集）按包含关系组成的分布式格。
+取单射标号
+\[
+q:P\hookrightarrow \mathbb P
+\]
+（\(\mathbb P\) 为素数集合），并记
+\[
+\NN_{\square}:=\{n\in\NN:\ \nu_p(n)\in\{0,1\}\ \forall p\},
+\]
+其中 \(\nu_p\) 为 \(p\)-进赋值。
+定义 Gödel 乘积码
+\[
+\Phi_q:J(P)\longrightarrow \NN_{\square},\qquad
+\Phi_q(I):=\prod_{p\in I}q(p).
+\]
+则：
+\begin{enumerate}
+  \item \(\Phi_q\) 为单射且为格同态；对任意 \(I,J\in J(P)\)，有
+  \[
+  \Phi_q(I\wedge J)=\gcd(\Phi_q(I),\Phi_q(J)),\qquad
+  \Phi_q(I\vee J)=\operatorname{lcm}(\Phi_q(I),\Phi_q(J)).
+  \]
+  \item 设 \(n\in\NN_{\square}\) 的素因子均属于 \(q(P)\)，则
+  \[
+  n\in\Phi_q(J(P))
+  \quad\Longleftrightarrow\quad
+  \forall\, a\le_P b,\ \ q(b)\mid n\Rightarrow q(a)\mid n.
+  \]
+  换言之，像集由偏序诱导的“素因子下闭性”完全刻画。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+在 \(J(P)\) 中有 \(I\wedge J=I\cap J\) 与 \(I\vee J=I\cup J\)。
+由于 \(q\) 单射，\(\Phi_q\) 将集合交/并分别送为平方自由整数的 \(\gcd/\operatorname{lcm}\)，从而得同态关系。
+单射性由素因子唯一分解定理立得：\(\Phi_q(I)=\Phi_q(J)\) 蕴含两边素因子集合相同，从而 \(I=J\)。
+
+对第二条，若 \(n=\Phi_q(I)\)，则 \(q(b)\mid n\) 等价于 \(b\in I\)，又 \(I\) 下闭给出 \(a\le_P b\Rightarrow a\in I\)，故 \(q(a)\mid n\)。
+反之，若 \(n\) 满足所示蕴含，定义
+\[
+I(n):=\{p\in P:\ q(p)\mid n\}.
+\]
+若 \(b\in I(n)\) 且 \(a\le_P b\)，则由蕴含得 \(q(a)\mid n\)，故 \(a\in I(n)\)，从而 \(I(n)\in J(P)\)，且 \(\Phi_q(I(n))=n\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[Möbius 函数的算术化：区间 Möbius 与数论 Möbius 的同一闭式]\label{cor:xi-ideal-lattice-mobius-arithmeticization}
+在定理 \ref{thm:xi-godel-birkhoff-ideal-lattice-squarefree} 的设定下，记 \(\mu_{J(P)}\) 为格 \(J(P)\) 的 Möbius 函数，\(\mu\) 为数论 Möbius 函数。
+对任意 \(I\subseteq J\)（序理想包含），记
+\[
+D:=J\setminus I\subseteq P,\qquad
+r:=\frac{\Phi_q(J)}{\Phi_q(I)}=\prod_{p\in D}q(p)\in\NN_{\square}.
+\]
+则
+\[
+\mu_{J(P)}(I,J)=
+\begin{cases}
+\mu(r),& D\ \text{在 \(P\) 中为反链},\\
+0,& \text{否则}.
+\end{cases}
+\]
+\end{corollary}
+\begin{proof}
+映射 \(K\mapsto K\setminus I\) 给出区间同构 \([I,J]\cong J(D)\)（\(D\) 取诱导偏序），故
+\(\mu_{J(P)}(I,J)=\mu_{J(D)}(\hat 0,\hat 1)\)。
+若 \(D\) 为反链，则 \(J(D)\) 为布尔格，故 \(\mu_{J(D)}(\hat 0,\hat 1)=(-1)^{|D|}\)。
+若 \(D\) 含可比对，则 \(J(D)\) 非布尔且顶端 Möbius 数为 \(0\)（见定理 \ref{thm:pom-fence-mobius-rigidity} 的同型论证）。
+另一方面，\(r\) 为平方自由，故 \(\mu(r)=(-1)^{|D|}\)。
+合并即得结论。证毕。
+\end{proof}
+
+\begin{proposition}[多链谱的偏序分层分解：zeta 多链计数与素因子分层计数一致]\label{prop:xi-ideal-lattice-multichain-prime-stratification}
+沿用定理 \ref{thm:xi-godel-birkhoff-ideal-lattice-squarefree} 的记号。
+对 \(k\in\NN\)，记
+\[
+\mathcal C_k(P):=\{I_0\subseteq I_1\subseteq\cdots\subseteq I_k\subseteq P:\ I_t\in J(P)\},
+\qquad
+Z_{J(P)}(k):=|\mathcal C_k(P)|.
+\]
+令顶元 Gödel 码
+\(
+n_{\max}:=\Phi_q(P)=\prod_{p\in P}q(p)
+\)。
+则 \(Z_{J(P)}(k)\) 等于满足下述条件的 \((k+1)\)-元组 \((a_0,\dots,a_k)\) 的数目：
+\begin{enumerate}
+  \item \(a_0a_1\cdots a_k=n_{\max}\) 且两两互素（等价于把素因子集合 \(q(P)\) 划分为 \(k+1\) 个层）；
+  \item 由 \(q(p)\mid a_{\lambda(p)}\) 唯一确定的 \(\lambda:P\to\{0,\dots,k\}\) 为保序映射：
+  \[
+  a\le_P b\ \Longrightarrow\ \lambda(a)\le \lambda(b).
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+给定多链 \(I_0\subseteq\cdots\subseteq I_k\)，令 \(S_0:=I_0\) 且 \(S_t:=I_t\setminus I_{t-1}\)（\(t\ge 1\)），则 \(P=\bigsqcup_{t=0}^k S_t\)。
+置 \(a_t:=\prod_{p\in S_t}q(p)\)，得 \(a_0\cdots a_k=n_{\max}\) 且互素。
+由每个 \(I_t\) 的下闭性，若 \(a\le_P b\) 且 \(b\in S_j\)，则 \(b\in I_j\Rightarrow a\in I_j\)，从而 \(a\in S_i\) 且 \(i\le j\)，即 \(\lambda\) 保序。
+
+反向地，若给定 \((a_0,\dots,a_k)\) 满足两条，则由唯一分解得到划分 \(P=\bigsqcup S_t\)，并令 \(I_t:=\bigsqcup_{j\le t}S_j\)。
+保序性保证每个 \(I_t\) 下闭，从而得到一条多链。
+两构造互逆，故计数相等。证毕。
+\end{proof}
+
+\begin{theorem}[素数权 Hasse 度量与 \texorpdfstring{$\delta$}{delta} 的等距性：测地线与线性扩张]\label{thm:xi-ideal-lattice-hasse-metric-delta-geodesics}
+在 \(J(P)\) 的 Hasse 覆盖图上赋权：若 \(I\prec I\cup\{p\}\) 为覆盖关系，则令边长
+\[
+\ell(I,I\cup\{p\}):=\log q(p).
+\]
+记诱导的最短路度量为 \(d_q\)。
+则对任意 \(I,J\in J(P)\) 有严格恒等式
+\[
+d_q(I,J)
+=
+\log\!\frac{\operatorname{lcm}(\Phi_q(I),\Phi_q(J))}{\gcd(\Phi_q(I),\Phi_q(J))}
+=
+\sum_{p\in I\triangle J}\log q(p).
+\]
+特别地，从 \(\varnothing\) 到 \(P\) 的 \(d_q\)-测地线与 \(P\) 的线性扩张一一对应，从而测地线条数等于 \(e(P)\)，并且
+\[
+\log\#\{\text{从 }\varnothing\text{ 到 }P\text{ 的 }d_q\text{-测地线}\}=\log e(P).
+\]
+\end{theorem}
+\begin{proof}
+任一边对应于添加（或删除）一个元素 \(p\)，并贡献长度 \(\log q(p)\)。
+因此任意路径从 \(I\) 到 \(J\) 至少需要对每个 \(I\triangle J\) 中元素执行一次变更，故长度不小于 \(\sum_{p\in I\triangle J}\log q(p)\)。
+另一方面，总可先删去 \(I\setminus J\) 中的极大元，再加入 \(J\setminus I\) 中的极小元，且每步保持下闭性；该路径长度恰为该下界，从而得到距离等式。
+将集合对称差在 \(\Phi_q\) 下写为平方自由整数的 \(\operatorname{lcm}/\gcd\) 比值，得到第一条恒等式。
+
+当 \(I=\varnothing,J=P\) 时，最短路必须恰添加每个元素一次；下闭性强制添加顺序与偏序兼容，即线性扩张。
+反向由线性扩张取前缀下闭包得到测地线，故二者一一对应。证毕。
+\end{proof}
+
+\begin{theorem}[平方自由账本到椭圆族的等距中值实现]\label{thm:xi-ideal-lattice-ellipse-median-realization}
+定义椭圆族
+\[
+\mathcal E:=\{E_n:\ n\in\NN_{\square}\},
+\qquad
+E_n:=\left\{(x,y)\in\RR^2:\ \frac{x^2}{n^2}+y^2n^2\le 1\right\}.
+\]
+并令 \(\delta_{\mathcal E}(E_n,E_m):=\log(\operatorname{lcm}(n,m)/\gcd(n,m))\)。
+定义复合映射
+\[
+\Psi_q:J(P)\to\mathcal E,\qquad \Psi_q(I):=E_{\Phi_q(I)}.
+\]
+则 \(\Psi_q\) 为等距嵌入：
+\[
+\delta_{\mathcal E}(\Psi_q(I),\Psi_q(J))=d_q(I,J)\qquad(\forall I,J\in J(P)).
+\]
+并且 \(\Psi_q\) 保持三元中值；若记
+\[
+\mathrm{med}_{J(P)}(I_1,I_2,I_3):=(I_1\cap I_2)\cup(I_2\cap I_3)\cup(I_3\cap I_1),
+\qquad n_i:=\Phi_q(I_i),
+\]
+则
+\[
+\Phi_q(\mathrm{med}_{J(P)}(I_1,I_2,I_3))
+=
+\frac{\gcd(n_1,n_2)\gcd(n_2,n_3)\gcd(n_3,n_1)}{\gcd(n_1,n_2,n_3)^2}.
+\]
+\end{theorem}
+\begin{proof}
+等距性由定理 \ref{thm:xi-ideal-lattice-hasse-metric-delta-geodesics} 与 \(\delta_{\mathcal E}\) 的定义直接给出。
+中值闭式由定理 \ref{thm:cdim-squarefree-median-metric-ellipse-realization} 的平方自由中值公式与定理 \ref{thm:xi-godel-birkhoff-ideal-lattice-squarefree} 的 \(\gcd/\operatorname{lcm}\) 同态性得到；集合公式即分布式格的中值恒等式
+\(
+\mathrm{med}(a,b,c)=(a\wedge b)\vee(b\wedge c)\vee(c\wedge a)
+\)
+在 \(J(P)\) 上的具体化。证毕。
+\end{proof}
+
+\begin{corollary}[Fold 纤维格的素数账本外置与椭圆等距实现]\label{cor:xi-fold-fiber-ideal-lattice-prime-ledger-ellipse-isometry}
+固定 \(x\in X_m\)，令纤维分布式格 \(\mathcal L_x\) 由定理 \ref{thm:pom-fiber-birkhoff-fence-ideal-lattice} 给出，并取其 Birkhoff 基底偏序
+\(
+P_x\simeq \bigsqcup_i Z_{\ell_i}
+\)
+使 \(\mathcal L_x\simeq J(P_x)\)。
+则任选单射标号 \(q:P_x\hookrightarrow\mathbb P\)，由定理 \ref{thm:xi-godel-birkhoff-ideal-lattice-squarefree}--定理 \ref{thm:xi-ideal-lattice-ellipse-median-realization} 得到纤维的平方自由账本嵌入与椭圆等距实现：
+\[
+\mathcal L_x
+\xhookrightarrow{\ \Phi_q\ }
+\NN_{\square}
+\xhookrightarrow{\ n\mapsto E_n\ }
+\mathcal E,
+\]
+并且纤维上的素数权 Hasse 距离与算术度量
+\(
+\delta(n,m)=\log(\operatorname{lcm}(n,m)/\gcd(n,m))
+\)
+严格一致，三元中值由 \(\gcd\) 闭式唯一确定。
+\end{corollary}
+
+\endinput

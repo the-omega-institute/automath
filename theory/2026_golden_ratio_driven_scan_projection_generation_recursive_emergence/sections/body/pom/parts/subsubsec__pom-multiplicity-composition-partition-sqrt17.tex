@@ -1,0 +1,681 @@
+\subsubsection{乘法多重度的配分函数与典型分解：\texorpdfstring{$\mathbb{Q}(\sqrt{17})$}{Q(sqrt(17))} 的熵率常数}\label{subsec:pom-multiplicity-composition-partition-sqrt17}
+在定理 \ref{thm:pom-fiber-indset-factorization} 的分量乘法分解下，纤维多重度由分量长度 \((\ell_i)\) 的乘法型权重
+\(
+\prod_i F_{\ell_i+2}
+\)
+给出。
+为刻画该乘法结构在“全体分量分解”上的统计力学基线，本小节在固定总长度 \(L\) 的全体有序分解（composition）上引入配分函数，并给出其可审计的代数闭式与典型律。
+
+\begin{definition}[乘法多重度的配分函数（有序分解）]\label{def:pom-multiplicity-composition-partition}
+令 \(L\ge 0\)。
+记 \(\mathcal{C}_L\) 为 \(L\) 的全体有序分解集合：\(\boldsymbol{\ell}=(\ell_1,\dots,\ell_r)\) 满足
+\(\ell_i\in\NN_{\ge 1}\) 且 \(\sum_{i=1}^r \ell_i=L\)；并约定 \(\mathcal{C}_0=\{()\}\)（空分解）。
+定义乘法权重与配分函数
+\[
+w(\boldsymbol{\ell})
+:=\prod_{i=1}^r F_{\ell_i+2},
+\qquad
+Z_L:=\sum_{\boldsymbol{\ell}\in\mathcal{C}_L} w(\boldsymbol{\ell}),
+\]
+其中空乘积取 \(w(())=1\)，故 \(Z_0=1\)。
+\end{definition}
+
+\begin{proposition}[配分函数的有理母函数与 \texorpdfstring{$\sqrt{17}$}{sqrt(17)} 熵率常数]\label{prop:pom-multiplicity-composition-partition-rational}
+设 \(Z_L\) 如定义 \ref{def:pom-multiplicity-composition-partition}。
+则母函数为严格有理式
+\begin{equation}\label{eq:pom-multiplicity-composition-partition-gf}
+\boxed{\;
+\sum_{L\ge 0} Z_L\,t^L=\frac{1-t-t^2}{1-3t-2t^2}.\;}
+\end{equation}
+从而 \((Z_L)\) 在 \(L\ge 3\) 上满足线性递推
+\[
+\boxed{\;
+Z_L=3Z_{L-1}+2Z_{L-2}\qquad(L\ge 3),\;}
+\]
+并具有完全闭式
+\begin{equation}\label{eq:pom-multiplicity-composition-partition-closed-form}
+\boxed{\;
+Z_L=\frac{17+\sqrt{17}}{34}\,\lambda_+^{L}
+\;+\;
+\frac{17-\sqrt{17}}{34}\,\lambda_-^{L},\qquad
+\lambda_\pm=\frac{3\pm\sqrt{17}}{2}.\;}
+\end{equation}
+特别地，自由能密度（熵率）存在且等于
+\begin{equation}\label{eq:pom-multiplicity-composition-partition-free-energy}
+\boxed{\;
+\lim_{L\to\infty}\frac1L\log Z_L=\log\lambda_+,\;}
+\end{equation}
+并且次主项按 \(\bigl|\lambda_-/\lambda_+\bigr|^L\) 指数衰减。
+\end{proposition}
+\begin{proof}
+设
+\(
+W(t):=\sum_{k\ge 1}F_{k+2}t^k
+\)。
+由于有序分解是部件集合的有序串接，且权重对串接为乘法，故
+\[
+\sum_{L\ge 0} Z_L\,t^L
+=\sum_{r\ge 0} W(t)^r
+=\frac{1}{1-W(t)}.
+\]
+由 Fibonacci 生成函数
+\(
+\sum_{n\ge 0}F_n t^n=\frac{t}{1-t-t^2}
+\)
+可得
+\[
+\sum_{k\ge 0}F_{k+2}t^k=\frac{1+t}{1-t-t^2}
+\quad\Longrightarrow\quad
+W(t)=\sum_{k\ge 1}F_{k+2}t^k=\frac{2t+t^2}{1-t-t^2}.
+\]
+代入并化简得 \eqref{eq:pom-multiplicity-composition-partition-gf}。
+递推式由分母 \(1-3t-2t^2\) 的系数比较得到，且需从 \(L\ge 3\) 起生效（由初值 \(Z_0=1,Z_1=2,Z_2=7\) 可直接审计）。
+\par
+闭式由特征方程
+\(
+\lambda^2-3\lambda-2=0
+\)
+的两根 \(\lambda_\pm=\frac{3\pm\sqrt{17}}{2}\) 给出；系数由 \(Z_0=1,Z_1=2\) 解线性方程组得到，化简即为 \eqref{eq:pom-multiplicity-composition-partition-closed-form}。
+最后 \(\lambda_+>|\lambda_-|\) 给出 \eqref{eq:pom-multiplicity-composition-partition-free-energy} 及指数级误差。证毕。
+\end{proof}
+
+\begin{corollary}[“最大细化态”的指数稀有性：最大—总配分缺口常数]\label{cor:pom-multiplicity-composition-all-ones-exponential-rarity}
+令 \(\boldsymbol{1}*L:=(1,1,\dots,1)\in\mathcal{C}_L\)（全为长度 \(1\) 的最细分解），则其权重为 \(w(\boldsymbol{1}*L)=2^L\)。
+在下面定义 \ref{def:pom-multiplicity-induced-composition-measure} 的 \(\mathbb{P}_L\) 下，其精确概率为
+\[
+\mathbb{P}_L(\boldsymbol{\ell}=\boldsymbol{1}*L)=\frac{2^L}{Z_L}.
+\]
+并且存在严格指数衰减律
+\begin{equation}\label{eq:pom-multiplicity-composition-all-ones-rate}
+\boxed{\;
+-\lim_{L\to\infty}\frac1L\log_2\mathbb{P}_L(\boldsymbol{\ell}=\boldsymbol{1}*L)
+=\log_2\lambda_+-1,
+\qquad \lambda_+=\frac{3+\sqrt{17}}{2}.\;}
+\end{equation}
+因此，“单态最大权重”与“全体权重和”之间存在严格线性信息缺口（bits/length），其常数为 \(\log_2\lambda_+-1\)。
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:pom-multiplicity-composition-partition-closed-form}，
+\(
+Z_L=\frac{17+\sqrt{17}}{34}\lambda_+^L\bigl(1+O((|\lambda_-|/\lambda_+)^L)\bigr)
+\)。
+于是
+\[
+\frac1L\log_2\mathbb{P}_L(\boldsymbol{1}*L)
+=1-\frac1L\log_2 Z_L
+\longrightarrow
+1-\log_2\lambda_+,
+\]
+即得 \eqref{eq:pom-multiplicity-composition-all-ones-rate}。证毕。
+\end{proof}
+
+\begin{definition}[多重度诱导的典型分解测度]\label{def:pom-multiplicity-induced-composition-measure}
+在 \(\mathcal{C}_L\) 上定义概率测度
+\[
+\mathbb{P}_L(\boldsymbol{\ell})
+:=\frac{w(\boldsymbol{\ell})}{Z_L}.
+\]
+记 \(R_L:=R(\boldsymbol{\ell})=r\) 为随机分解的部件数（长度），并记 \(M_L:=\max_{1\le i\le R_L}\ell_i\) 为最大部件长度。
+\end{definition}
+
+\begin{proposition}[部件数的指数母函数闭式与特征根]\label{prop:pom-multiplicity-composition-part-count-bivariate-gf}
+定义带部件计数的多项式配分函数
+\[
+Z_L(y):=\sum_{\boldsymbol{\ell}\in\mathcal{C}_L} y^{R(\boldsymbol{\ell})}\,w(\boldsymbol{\ell})
+\qquad(y>0).
+\]
+则二元母函数为严格有理式
+\begin{equation}\label{eq:pom-multiplicity-composition-bivariate-gf}
+\boxed{\;
+\sum_{L\ge 0} Z_L(y)\,t^L=\frac{1-t-t^2}{1-(2y+1)t-(y+1)t^2}.\;}
+\end{equation}
+从而对每个固定 \(y>0\)，序列 \(L\mapsto Z_L(y)\) 为二阶线性递推，且具有特征根
+\[
+\Lambda_\pm(y)=\frac{(2y+1)\pm\sqrt{4y^2+8y+5}}{2}.
+\]
+并且对任意 \(t\in\RR\) 有指数矩极限
+\begin{equation}\label{eq:pom-multiplicity-composition-cgf-limit}
+\boxed{\;
+\lim_{L\to\infty}\frac1L\log \mathbb{E}_{\mathbb{P}_L}\!\bigl[e^{tR_L}\bigr]
+=\log\frac{\Lambda_+(e^{t})}{\Lambda_+(1)}.\;}
+\end{equation}
+\end{proposition}
+\begin{proof}
+对每个部件长度 \(\ell\ge 1\)，其权重为 \(F_{\ell+2}\)，并额外贡献计数因子 \(y\) 与长度权重 \(t^\ell\)。
+因此部件的“原子母函数”为
+\(
+y\sum_{\ell\ge 1}F_{\ell+2}t^\ell=y\,W(t)
+\)，其中 \(W(t)\) 与命题 \ref{prop:pom-multiplicity-composition-partition-rational} 相同。
+有序串接给出
+\[
+\sum_{L\ge 0}Z_L(y)t^L
+=\sum_{r\ge 0}\bigl(yW(t)\bigr)^r
+=\frac{1}{1-yW(t)}
+=\frac{1-t-t^2}{1-(2y+1)t-(y+1)t^2},
+\]
+即得 \eqref{eq:pom-multiplicity-composition-bivariate-gf}。
+特征根由分母二次方程直接读出。
+\par
+对指数矩，注意
+\(
+\mathbb{E}_{\mathbb{P}_L}[e^{tR_L}]
+=Z_L(e^t)/Z_L(1)
+\)。
+由二阶线性递推的闭式解，
+\(
+Z_L(y)=A(y)\Lambda_+(y)^L+B(y)\Lambda_-(y)^L
+\)
+且对固定 \(y>0\) 有 \(|\Lambda_-(y)|<\Lambda_+(y)\)。
+故
+\(
+\frac1L\log Z_L(y)\to \log\Lambda_+(y)
+\)，从而得到 \eqref{eq:pom-multiplicity-composition-cgf-limit}。证毕。
+\end{proof}
+
+\begin{theorem}[典型分解：部件密度的强大数律与中心极限定律]\label{thm:pom-multiplicity-composition-part-count-clt}
+在测度 \(\mathbb{P}_L\) 下，存在严格常数
+\begin{equation}\label{eq:pom-multiplicity-composition-part-count-mean-var}
+\mu=\frac{17+5\sqrt{17}}{68},
+\qquad
+\sigma^2=\frac{289+73\sqrt{17}}{2312},
+\end{equation}
+使得
+\[
+\frac{R_L}{L}\xrightarrow[L\to\infty]{}\mu
+\qquad(\text{依概率}),
+\]
+并且
+\[
+\frac{R_L-\mu L}{\sqrt{L}}\Longrightarrow \mathcal{N}(0,\sigma^2).
+\]
+等价地，典型单部件长度满足
+\[
+\frac{L}{R_L}\xrightarrow[L\to\infty]{}\frac{1}{\mu}=\frac{5\sqrt{17}-17}{2}
+\qquad(\text{依概率}).
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-multiplicity-composition-part-count-bivariate-gf}，
+\[
+\psi(t)
+:=\lim_{L\to\infty}\frac1L\log \mathbb{E}_{\mathbb{P}_L}\!\bigl[e^{tR_L}\bigr]
+=\log\frac{\Lambda_+(e^{t})}{\Lambda_+(1)}
+\]
+在 \(t=0\) 的邻域解析。
+并且由于闭式
+\(
+Z_L(y)=A(y)\Lambda_+(y)^L+B(y)\Lambda_-(y)^L
+\)
+的次主根指数衰减，存在邻域使得
+\[
+\log \mathbb{E}_{\mathbb{P}_L}\!\bigl[e^{tR_L}\bigr]
+=L\psi(t)+O(1)\qquad(L\to\infty).
+\]
+因此可由标准的 quasi-power/解析鞍点型中心极限定理推出 \(R_L\) 的 CLT，
+其均值与方差由
+\(
+\mu=\psi'(0),\ \sigma^2=\psi''(0)
+\)
+给出；直接对
+\(
+\Lambda_+(y)=\frac{(2y+1)+\sqrt{4y^2+8y+5}}{2}
+\)
+求导并在 \(y=1\) 化简得到 \eqref{eq:pom-multiplicity-composition-part-count-mean-var}。
+由 CLT 立得 \(R_L/L\to\mu\)（依概率），进而 \(L/R_L\to 1/\mu\)。证毕。
+\end{proof}
+
+\begin{proposition}[极限部件长度分布与指数尾参数]\label{prop:pom-multiplicity-composition-part-length-iid-limit}
+令
+\[
+\lambda_+:=\Lambda_+(1)=\frac{3+\sqrt{17}}{2},
+\qquad
+\rho_\star:=\lambda_+^{-1}=\frac{\sqrt{17}-3}{4}\in(0,1).
+\]
+则在 \(\mathbb{P}_L\) 下，任取固定 \(r\ge 1\)，随机前缀 \((\ell_1,\dots,\ell_r)\) 在 \(L\to\infty\) 时收敛到独立同分布极限，其单步分布为
+\begin{equation}\label{eq:pom-multiplicity-composition-part-length-limit-law}
+\boxed{\;
+\mathbb{P}(\ell=k)=F_{k+2}\,\rho_\star^{k}\qquad(k\ge 1).\;}
+\end{equation}
+并满足完全显式矩
+\[
+\boxed{\;
+\mathbb{E}[\ell]=\frac{5\sqrt{17}-17}{2},\qquad
+\mathrm{Var}(\ell)=18-4\sqrt{17}.\;}
+\]
+记 \(\varphi=\frac{1+\sqrt5}{2}\) 并令
+\[
+a:=\rho_\star\varphi=\frac{(\sqrt{17}-3)(1+\sqrt5)}{8}\in(0,1),
+\qquad
+c_\star:=\frac{\varphi^2}{\sqrt5(1-a)}.
+\]
+则尾部满足严格几何级渐近：存在常数 \(c_\star>0\) 使
+\[
+\mathbb{P}(\ell\ge k)\sim c_\star\,a^{k}\qquad(k\to\infty).
+\]
+\end{proposition}
+\begin{proof}
+对任意固定 \((k_1,\dots,k_r)\) 令 \(s:=k_1+\cdots+k_r\)。
+由串接结构与定义 \ref{def:pom-multiplicity-induced-composition-measure}，
+\[
+\mathbb{P}_L(\ell_1=k_1,\dots,\ell_r=k_r)
+=\frac{F_{k_1+2}\cdots F_{k_r+2}\,Z_{L-s}}{Z_L}.
+\]
+由命题 \ref{prop:pom-multiplicity-composition-partition-rational} 的闭式，
+\(
+Z_{L-s}/Z_L\to \lambda_+^{-s}=\rho_\star^{s}
+\)。
+从而得到联合分布极限为 \(\prod_{i=1}^r F_{k_i+2}\rho_\star^{k_i}\)，并且因
+\(
+\sum_{k\ge 1}F_{k+2}\rho_\star^k=W(\rho_\star)=1
+\)
+该极限确为概率分布，遂得 \eqref{eq:pom-multiplicity-composition-part-length-limit-law} 与独立同分布性。
+\par
+矩的闭式可由 \(W(t)=\sum_{k\ge 1}F_{k+2}t^k=\frac{2t+t^2}{1-t-t^2}\) 在 \(t=\rho_\star\) 的导数计算得到：
+\(
+\mathbb{E}[\ell]=\rho_\star W'(\rho_\star)
+\)，
+\(
+\mathbb{E}[\ell^2]=\rho_\star W'(\rho_\star)+\rho_\star^2 W''(\rho_\star)
+\)，化简即得所示表达。
+尾部渐近由 Binet 公式
+\(
+F_{k+2}=\frac{\varphi^{k+2}}{\sqrt5}\bigl(1+O(\varphi^{-2k})\bigr)
+\)
+给出：
+\(
+\mathbb{P}(\ell=k)\sim \frac{\varphi^2}{\sqrt5}a^{k}
+\)，进而求和得
+\(
+\mathbb{P}(\ell\ge k)\sim \frac{\varphi^2}{\sqrt5(1-a)}a^{k}=c_\star a^{k}
+\)。证毕。
+\end{proof}
+
+\begin{theorem}[最大部件长度的对数标度与 Gumbel 极值律]\label{thm:pom-multiplicity-composition-max-part-gumbel}
+令 \(M_L:=\max_{1\le i\le R_L}\ell_i\)，并取
+\[
+m_L(x):=\left\lfloor \frac{\log(\mu L c_\star)+x}{-\log a}\right\rfloor ,
+\]
+其中常数 \(\mu,c_\star,a\) 如定理 \ref{thm:pom-multiplicity-composition-part-count-clt} 与命题 \ref{prop:pom-multiplicity-composition-part-length-iid-limit}。
+则在 \(\mathbb{P}_L\) 下成立极值极限
+\[
+\lim_{L\to\infty}\mathbb{P}_L\bigl(M_L\le m_L(x)\bigr)=\exp\bigl(-e^{-x}\bigr).
+\]
+从而
+\(
+M_L=\frac{\log L}{-\log a}+O_{\mathbb{P}}(1)
+\)，其涨落属于 Gumbel 普适类；尺度常数由代数数 \(a=\rho_\star\varphi\) 完全决定。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-multiplicity-composition-part-length-iid-limit}，极限部件长度分布具有几何级尾
+\(
+\mathbb{P}(\ell\ge k)\sim c_\star a^k
+\) 且 \(a\in(0,1)\)。
+另一方面，由定理 \ref{thm:pom-multiplicity-composition-part-count-clt} 有 \(R_L=\mu L+o_{\mathbb{P}}(L)\)。
+因此可将 \(M_L\) 的极值行为与 \(n\approx \mu L\) 个 i.i.d.\ 几何尾样本的最大值对齐；
+对后者，经典极值理论给出在中心化标度 \(m_L(x)\) 下的极限分布为 \(\exp(-e^{-x})\)。
+将随机样本量 \(R_L\) 的相对涨落（\(o_{\mathbb{P}}(L)\)）并入尺度对数项即可得到所述极限。证毕。
+\end{proof}
+
+\begin{theorem}[部件密度的大偏差原理：代数可审计的速率函数]\label{thm:pom-multiplicity-composition-part-density-ldp}
+令 \(\theta\in(0,1)\)。
+则 \(\frac{R_L}{L}\) 在 \(\mathbb{P}_L\) 下满足 Cramér 型大偏差原理，其速率函数为
+\[
+I(\theta)=\sup_{t\in\RR}\{t\theta-\psi(t)\},
+\qquad
+\psi(t)=\log\frac{\Lambda_+(e^{t})}{\Lambda_+(1)},
+\]
+其中
+\(
+\Lambda_+(y)=\frac{(2y+1)+\sqrt{4y^2+8y+5}}{2}
+\)。
+等价地，\(I(\theta)\) 具有参数 \(y>0\) 的代数闭式参数化
+\[
+I(\theta(y))=\theta(y)\log y-\log\frac{\Lambda_+(y)}{\Lambda_+(1)},
+\qquad
+\theta(y)=y\,\frac{d}{dy}\log \Lambda_+(y),
+\]
+并且唯一极小点满足
+\(
+\theta(1)=\mu
+\)
+（定理 \ref{thm:pom-multiplicity-composition-part-count-clt}）。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:pom-multiplicity-composition-part-count-bivariate-gf} 的指数矩极限 \eqref{eq:pom-multiplicity-composition-cgf-limit}，
+\(\psi(t)\) 在全体 \(t\in\RR\) 上有限且可微，并在 \(t=0\) 的邻域解析。
+因此可应用 G\"artner--Ellis 定理得到 \(\frac{R_L}{L}\) 的大偏差原理，速率函数为 Legendre 变换
+\(
+I(\theta)=\sup_t(t\theta-\psi(t))
+\)。
+参数化形式取 \(y=e^t\) 并记 \(\theta(y)=\psi'(t)\) 得到；
+极小点由 \(\psi'(0)=\mu\)（定理 \ref{thm:pom-multiplicity-composition-part-count-clt}）唯一性给出。证毕。
+\end{proof}
+
+\paragraph{整阶矩层级与 Rényi 熵率：纤维权概率谱的代数常数族}
+上一小节在 \(q=1\) 的“线性权重”口径下建立了配分函数 \(Z_L\) 的可审计闭式与典型律。
+下面把乘法多重度的整阶矩层级引入为一个统一谱族：其一方面给出 \(P_L\) 的 Rényi 熵率闭式，
+另一方面为碰撞概率、与均匀测度的散度率、以及均匀分解下多重度的非集中性提供同一组代数指数常数。
+
+\begin{definition}[整阶矩配分函数与增长常数]\label{def:pom-multiplicity-composition-integer-moment-partition}
+沿用定义 \ref{def:pom-multiplicity-composition-partition} 的权重 \(w(\boldsymbol{\ell})=\prod_i F_{\ell_i+2}\)。
+对任意整数 \(q\ge 1\) 定义整阶矩配分函数与母函数
+\[
+Z_L^{(q)}
+:=\sum_{\boldsymbol{\ell}\in\mathcal{C}_L} w(\boldsymbol{\ell})^{q}
+=\sum_{\boldsymbol{\ell}=(\ell_1,\dots,\ell_r)\in\mathcal{C}_L}\ \prod_{i=1}^{r}F_{\ell_i+2}^{\,q},
+\qquad
+G_q(t):=\sum_{L\ge 0} Z_L^{(q)}t^L.
+\]
+并约定 \(Z_L^{(1)}=Z_L\)。
+\end{definition}
+
+\begin{proposition}[整阶矩配分函数的有理性与主指数增长常数]\label{prop:pom-multiplicity-composition-moment-hierarchy-rational-growth}
+在定义 \ref{def:pom-multiplicity-composition-integer-moment-partition} 的设定下，对任意整数 \(q\ge 1\) 有
+\begin{equation}\label{eq:pom-multiplicity-composition-moment-hierarchy-gf}
+\boxed{\;
+G_q(t)=\frac{1}{1-W_q(t)},
+\qquad
+W_q(t):=\sum_{k\ge 1}F_{k+2}^{\,q}\,t^k.\;}
+\end{equation}
+并且 \(W_q(t)\) 与 \(G_q(t)\) 均为严格有理函数。
+令 \(r_q\in(0,1)\) 为 \(G_q\) 的收敛半径（等价为其分母的最小正根），定义主增长常数
+\[
+\boxed{\;\lambda_q:=r_q^{-1}>1.\;}
+\]
+则有指数律
+\[
+\boxed{\;Z_L^{(q)}=\Theta(\lambda_q^{L}),\qquad
+\lim_{L\to\infty}\frac1L\log Z_L^{(q)}=\log\lambda_q.\;}
+\]
+\end{proposition}
+\begin{proof}
+对任意 \(\boldsymbol{\ell}=(\ell_1,\dots,\ell_r)\in\mathcal{C}_L\) 取首部长度 \(k:=\ell_1\ge 1\)，则尾部 \(\boldsymbol{\ell}':=(\ell_2,\dots,\ell_r)\)（允许为空分解）属于 \(\mathcal{C}_{L-k}\)，并且
+\(
+w(\boldsymbol{\ell})^{q}=F_{k+2}^{q}w(\boldsymbol{\ell}')^{q}
+\)。
+对 \(L\ge 1\) 求和得递推
+\[
+Z_L^{(q)}=\sum_{k=1}^{L}F_{k+2}^{q}\,Z_{L-k}^{(q)},
+\qquad Z_0^{(q)}=1,
+\]
+从而母函数满足
+\(
+G_q(t)=1+W_q(t)\,G_q(t)
+\)，即得 \eqref{eq:pom-multiplicity-composition-moment-hierarchy-gf}。
+\par
+证明有理性：由 Binet 公式
+\(
+F_n=\frac{1}{\sqrt5}(\varphi^n-\psi^n)
+\)（\(\psi=-\varphi^{-1}\)），有
+\[
+F_n^{q}=5^{-q/2}\sum_{j=0}^{q}\binom{q}{j}(-1)^j\bigl(\varphi^{\,q-j}\psi^{\,j}\bigr)^{n},
+\]
+故序列 \(n\mapsto F_n^{q}\) 是有限个几何指数项的线性组合，因而其普通母函数为有理式。
+从而
+\(
+W_q(t)=\sum_{k\ge 1}F_{k+2}^{q}t^k
+\)
+为有理函数；代入 \eqref{eq:pom-multiplicity-composition-moment-hierarchy-gf} 得 \(G_q\) 亦为有理函数。
+\par
+由于 \(Z_L^{(q)}>0\)，由 Pringsheim 定理可知收敛圆上的主奇点发生在正实轴，故 \(r_q\in(0,1)\) 为分母的最小正根且控制指数增长。
+由有理母函数与部分分式分解，\(Z_L^{(q)}\) 为有限个指数项的线性组合，主项为 \(\lambda_q^{L}\) 级，从而得到所述 \(\Theta(\lambda_q^L)\) 与极限 \(\frac1L\log Z_L^{(q)}\to\log\lambda_q\)。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$q=2,3$}{q=2,3} 的完全闭式母函数与代数增长常数]\label{cor:pom-multiplicity-composition-moment-q2-q3-closed}
+在命题 \ref{prop:pom-multiplicity-composition-moment-hierarchy-rational-growth} 的设定下，
+\[
+\boxed{\;
+\sum_{L\ge 0} Z_L^{(2)}t^L=\frac{(1+t)(t^2-3t+1)}{1-6t-3t^2+2t^3}.}
+\]
+从而 \(\lambda_2\) 为方程
+\[
+\boxed{\;\lambda^3-6\lambda^2-3\lambda+2=0\;}
+\]
+的最大实根，数值上 \(\lambda_2\approx 6.41883267597\)。
+\par
+并且
+\[
+\boxed{\;
+\sum_{L\ge 0} Z_L^{(3)}t^L=\frac{(t^2-t-1)(t^2+4t-1)}{1-11t-9t^2+7t^3+2t^4}.}
+\]
+从而 \(\lambda_3\) 为方程
+\[
+\boxed{\;\lambda^4-11\lambda^3-9\lambda^2+7\lambda+2=0\;}
+\]
+的最大实根，数值上 \(\lambda_3\approx 11.71594345552\)。
+\end{corollary}
+\begin{proof}
+将 \(q=2,3\) 代入 Binet 展开并对几何级数逐项求和，再用 \eqref{eq:pom-multiplicity-composition-moment-hierarchy-gf} 化简即可得到所示有理式；
+对应特征多项式由分母系数比较直接读出。证毕。
+\end{proof}
+
+\begin{proposition}[纤维权测度的 Rényi 熵率闭式]\label{prop:pom-multiplicity-composition-renyi-entropy-rate}
+令 \(P_L:=\mathbb{P}_L\) 为定义 \ref{def:pom-multiplicity-induced-composition-measure} 的纤维权测度，并令 \(q>1\)。
+定义 Rényi 熵
+\[
+H_q(P_L):=\frac{1}{1-q}\log_2\sum_{\boldsymbol{\ell}\in\mathcal{C}_L}P_L(\boldsymbol{\ell})^{q}.
+\]
+则熵率极限存在并满足
+\begin{equation}\label{eq:pom-multiplicity-composition-renyi-entropy-rate}
+\boxed{\;
+\lim_{L\to\infty}\frac{1}{L}H_q(P_L)
+=\frac{1}{1-q}\Bigl(\log_2\lambda_q-q\log_2\lambda_1\Bigr),\qquad
+\lambda_1=\frac{3+\sqrt{17}}{2}.\;}
+\end{equation}
+特别地，
+\[
+\boxed{\;
+\lim_{L\to\infty}\frac{1}{L}H_2(P_L)=\log_2(\lambda_1^2/\lambda_2)\approx 0.98270181338,\;}
+\]
+\[
+\boxed{\;
+\lim_{L\to\infty}\frac{1}{L}H_3(P_L)=\frac12\log_2(\lambda_1^3/\lambda_3)\approx 0.97355896018.\;}
+\]
+并且极限最小熵率满足
+\begin{equation}\label{eq:pom-multiplicity-composition-min-entropy-rate}
+\boxed{\;
+\lim_{q\to\infty}\ \lim_{L\to\infty}\frac{1}{L}H_q(P_L)
+=\log_2(\lambda_1/2)\approx 0.83250638358.\;}
+\end{equation}
+\end{proposition}
+\begin{proof}
+由 \(P_L(\boldsymbol{\ell})=w(\boldsymbol{\ell})/Z_L^{(1)}\) 与定义 \ref{def:pom-multiplicity-composition-integer-moment-partition}，
+\[
+\sum_{\boldsymbol{\ell}}P_L(\boldsymbol{\ell})^q
+=\frac{1}{(Z_L^{(1)})^q}\sum_{\boldsymbol{\ell}}w(\boldsymbol{\ell})^q
+=\frac{Z_L^{(q)}}{(Z_L^{(1)})^q}.
+\]
+故
+\(
+H_q(P_L)=\frac{1}{1-q}\bigl(\log_2 Z_L^{(q)}-q\log_2 Z_L^{(1)}\bigr)
+\)。
+由命题 \ref{prop:pom-multiplicity-composition-moment-hierarchy-rational-growth}，
+\(
+\frac{1}{L}\log Z_L^{(q)}\to \log\lambda_q
+\)
+与
+\(
+\frac{1}{L}\log Z_L^{(1)}\to \log\lambda_1
+\)，
+代入并取极限即得 \eqref{eq:pom-multiplicity-composition-renyi-entropy-rate}；\(q=2,3\) 的常数由推论 \ref{cor:pom-multiplicity-composition-moment-q2-q3-closed} 代入得到。
+\par
+对最小熵率：由命题 \ref{prop:pom-path-component-multiplicity-refinement-monotone-extrema} 的上界，
+\(
+\max_{\boldsymbol{\ell}\in\mathcal{C}_L}w(\boldsymbol{\ell})=w(\boldsymbol{1}*L)=2^L
+\)。
+因此
+\[
+H_\infty(P_L):=-\log_2\max_{\boldsymbol{\ell}}P_L(\boldsymbol{\ell})
+=-\log_2\frac{2^L}{Z_L^{(1)}}=\log_2 Z_L^{(1)}-L,
+\]
+除以 \(L\) 并令 \(L\to\infty\) 得
+\(
+\lim_{L\to\infty}\frac{1}{L}H_\infty(P_L)=\log_2\lambda_1-1=\log_2(\lambda_1/2)
+\)。
+又因 \(q\mapsto H_q(P_L)\) 随 \(q\) 单调不增且 \(H_q\downarrow H_\infty\)，得 \eqref{eq:pom-multiplicity-composition-min-entropy-rate}。证毕。
+\end{proof}
+
+\begin{corollary}[碰撞概率的指数律与碰撞指数]\label{cor:pom-multiplicity-composition-collision-exponent}
+定义碰撞概率
+\(
+C_L:=\sum_{\boldsymbol{\ell}\in\mathcal{C}_L}P_L(\boldsymbol{\ell})^2
+\)。
+则
+\[
+\boxed{\;C_L=\frac{Z_L^{(2)}}{(Z_L^{(1)})^2}.\;}
+\]
+并存在常数 \(0<c_-\le c_+<\infty\) 使对充分大 \(L\) 有
+\[
+c_-\Bigl(\frac{\lambda_2}{\lambda_1^2}\Bigr)^L
+\le C_L\le
+c_+\Bigl(\frac{\lambda_2}{\lambda_1^2}\Bigr)^L.
+\]
+等价地，
+\[
+\boxed{\;-\lim_{L\to\infty}\frac{1}{L}\log_2 C_L=\log_2(\lambda_1^2/\lambda_2).\;}
+\]
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:pom-multiplicity-composition-moment-hierarchy-rational-growth}，
+\(
+Z_L^{(2)}=c_2\lambda_2^L(1+o(1))
+\)
+与
+\(
+Z_L^{(1)}=c_1\lambda_1^L(1+o(1))
+\)
+对某些 \(c_1,c_2>0\) 成立，故
+\(
+C_L=(c_2/c_1^2)(\lambda_2/\lambda_1^2)^L(1+o(1))
+\)。
+由此可取常数 \(c_\pm\) 给出双侧界并得到极限指数。证毕。
+\end{proof}
+
+\begin{corollary}[与均匀分解测度的 Rényi-\texorpdfstring{$2$}{2} 散度率]\label{cor:pom-multiplicity-composition-renyi2-divergence-to-uniform}
+对 \(L\ge 1\) 令 \(U_L\) 为 \(\mathcal{C}_L\) 上的均匀测度：\(U_L(\boldsymbol{\ell})=2^{-(L-1)}\)。
+则 Rényi-\(2\) 散度满足
+\[
+D_2(P_L\|U_L)
+=\log_2\sum_{\boldsymbol{\ell}\in\mathcal{C}_L}\frac{P_L(\boldsymbol{\ell})^2}{U_L(\boldsymbol{\ell})}
+=\log_2\bigl(2^{L-1}C_L\bigr).
+\]
+从而散度率存在并具有闭式
+\[
+\boxed{\;
+\lim_{L\to\infty}\frac{1}{L}D_2(P_L\|U_L)
+=\log_2\!\Bigl(\frac{2\lambda_2}{\lambda_1^2}\Bigr)
+=1-\log_2(\lambda_1^2/\lambda_2)\approx 0.01729818662>0.\;}
+\]
+\end{corollary}
+\begin{proof}
+由定义 \(U_L(\boldsymbol{\ell})=2^{-(L-1)}\) 与碰撞概率 \(C_L=\sum P_L^2\) 立得等式。
+再由推论 \ref{cor:pom-multiplicity-composition-collision-exponent} 的指数极限得散度率闭式。证毕。
+\end{proof}
+
+\begin{corollary}[均匀分解下多重度的方差爆炸率]\label{cor:pom-multiplicity-composition-uniform-variance-explosion}
+在 \(U_L\) 下把 \(W_L:=w(\boldsymbol{\ell})\) 视为随机变量，则
+\[
+\mathbb{E}_{U_L}[W_L]=\frac{Z_L^{(1)}}{2^{L-1}},
+\qquad
+\mathbb{E}_{U_L}[W_L^2]=\frac{Z_L^{(2)}}{2^{L-1}}.
+\]
+因此变异系数满足精确恒等式
+\[
+\boxed{\;
+\frac{\mathrm{Var}_{U_L}(W_L)}{\mathbb{E}_{U_L}[W_L]^2}
+=2^{L-1}\frac{Z_L^{(2)}}{(Z_L^{(1)})^2}-1
+=2^{L-1}C_L-1.\;}
+\]
+并且存在指数极限
+\[
+\boxed{\;
+\lim_{L\to\infty}\frac{1}{L}\log_2\Bigl(1+\frac{\mathrm{Var}_{U_L}(W_L)}{\mathbb{E}_{U_L}[W_L]^2}\Bigr)
+=\log_2\!\Bigl(\frac{2\lambda_2}{\lambda_1^2}\Bigr).\;}
+\]
+\end{corollary}
+\begin{proof}
+由均匀测度与定义 \ref{def:pom-multiplicity-composition-integer-moment-partition} 直接计算得到期望与二阶矩；
+代入 \(\mathrm{Var}(W)=\mathbb{E}[W^2]-\mathbb{E}[W]^2\) 得恒等式。
+指数极限由推论 \ref{cor:pom-multiplicity-composition-renyi2-divergence-to-uniform}（或推论 \ref{cor:pom-multiplicity-composition-collision-exponent}）立即推出。证毕。
+\end{proof}
+
+\begin{proposition}[纤维权测度下的矩移位律]\label{prop:pom-multiplicity-composition-moment-shift-law}
+在纤维权测度 \(P_L\) 下，对任意整数 \(q\ge 0\) 有精确恒等式
+\[
+\boxed{\;
+\mathbb{E}_{P_L}[W_L^{\,q}]
+=\sum_{\boldsymbol{\ell}\in\mathcal{C}_L}\frac{w(\boldsymbol{\ell})^{q+1}}{Z_L^{(1)}}
+=\frac{Z_L^{(q+1)}}{Z_L^{(1)}}.\;}
+\]
+因此存在指数极限
+\[
+\boxed{\;
+\lim_{L\to\infty}\frac{1}{L}\log \mathbb{E}_{P_L}[W_L^{\,q}]
+=\log\Bigl(\frac{\lambda_{q+1}}{\lambda_1}\Bigr),\;}
+\]
+并特别地
+\(
+\lim_{L\to\infty}\frac{1}{L}\log \mathbb{E}_{P_L}[W_L]=\log(\lambda_2/\lambda_1)
+\)。
+\end{proposition}
+\begin{proof}
+第一式由 \(P_L(\boldsymbol{\ell})=w(\boldsymbol{\ell})/Z_L^{(1)}\) 展开并与 \(Z_L^{(q+1)}\) 的定义比较得到。
+指数极限由命题 \ref{prop:pom-multiplicity-composition-moment-hierarchy-rational-growth} 的增长常数直接推出。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$\lambda_q$}{lambda_q} 的对数凸性与 Rényi 熵率的严格单调]\label{prop:pom-multiplicity-composition-logconvex-lambdaq}
+对整数 \(q\ge 2\)，主增长常数满足对数凸性不等式
+\[
+\boxed{\;
+\log \lambda_q-\frac12\bigl(\log \lambda_{q-1}+\log \lambda_{q+1}\bigr)\le 0.\;}
+\]
+并且在多重度非退化（存在至少两种不同分解权重）时严格成立。
+令
+\(
+h_q:=\lim_{L\to\infty}\frac{1}{L}H_q(P_L)
+\)
+为命题 \ref{prop:pom-multiplicity-composition-renyi-entropy-rate} 的 Rényi 熵率，则 \(q\mapsto h_q\) 在 \(q>1\) 上严格递减，且
+\[
+\boxed{\;
+\lim_{q\to\infty}h_q=\log_2(\lambda_1/2).\;}
+\]
+\end{proposition}
+\begin{proof}
+对固定 \(L\) 与 \(q\ge 2\)，对权重族 \(\{w(\boldsymbol{\ell})\}_{\boldsymbol{\ell}\in\mathcal{C}_L}\) 应用 Cauchy--Schwarz 不等式：
+令 \(a_{\boldsymbol{\ell}}:=w(\boldsymbol{\ell})^{(q-1)/2}\)、\(b_{\boldsymbol{\ell}}:=w(\boldsymbol{\ell})^{(q+1)/2}\)，则
+\[
+\Bigl(\sum_{\boldsymbol{\ell}}w(\boldsymbol{\ell})^{q}\Bigr)^2
+=\Bigl(\sum_{\boldsymbol{\ell}}a_{\boldsymbol{\ell}}b_{\boldsymbol{\ell}}\Bigr)^2
+\le
+\Bigl(\sum_{\boldsymbol{\ell}}a_{\boldsymbol{\ell}}^2\Bigr)\Bigl(\sum_{\boldsymbol{\ell}}b_{\boldsymbol{\ell}}^2\Bigr)
+=Z_L^{(q-1)}Z_L^{(q+1)}.
+\]
+取对数、除以 \(L\) 并令 \(L\to\infty\)，用命题 \ref{prop:pom-multiplicity-composition-moment-hierarchy-rational-growth} 得到
+\(
+2\log\lambda_q\le \log\lambda_{q-1}+\log\lambda_{q+1}
+\)。
+若存在两种不同权重，则 Cauchy--Schwarz 的等号条件（\(a_{\boldsymbol{\ell}}\propto b_{\boldsymbol{\ell}}\)）不成立，故严格不等式成立。
+\par
+由 \eqref{eq:pom-multiplicity-composition-renyi-entropy-rate}，
+\[
+h_q
+=\frac{q\log_2\lambda_1-\log_2\lambda_q}{q-1}
+=\log_2\lambda_1-\frac{\log_2\lambda_q-\log_2\lambda_1}{q-1}.
+\]
+记 \(s_q:=\frac{\log_2\lambda_q-\log_2\lambda_1}{q-1}\) 为点 \((q,\log_2\lambda_q)\) 与 \((1,\log_2\lambda_1)\) 的割线斜率。
+对数凸性意味着 \(s_q\) 随 \(q\) 严格递增，故 \(h_q=\log_2\lambda_1-s_q\) 严格递减。
+\par
+最后，由 \(\max_{\boldsymbol{\ell}}w(\boldsymbol{\ell})=2^L\) 与 \(|\mathcal{C}_L|=2^{L-1}\)（\(L\ge 1\)）得
+\[
+2^{qL}\le Z_L^{(q)}\le 2^{L-1}\cdot 2^{qL}=2^{-1}\cdot 2^{(q+1)L}.
+\]
+从而 \(2^q\le \lambda_q\le 2^{q+1}\)，故 \(\frac{1}{q}\log_2\lambda_q\to 1\)。
+代回 \(h_q=\frac{1}{1-q}(\log_2\lambda_q-q\log_2\lambda_1)\) 即得
+\(
+\lim_{q\to\infty}h_q=\log_2\lambda_1-1=\log_2(\lambda_1/2)
+\)。证毕。
+\end{proof}
+
+\input{sections/body/pom/parts/subsubsec__pom-multiplicity-composition-real-q-pressure}
+
+\endinput

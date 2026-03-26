@@ -1,0 +1,61 @@
+\begin{theorem}[bin-fold 纤维 uplift 的单位跳跃与 $\delta$-集合反演]\label{thm:foldbin-uplift-unit-jump-delta-inversion}
+令 \(m\ge 1\)。
+设二进制区间折叠
+\(\mathrm{Fold}^{\mathrm{bin}}_m:\{0,1,\dots,2^m-1\}\twoheadrightarrow X_m\)
+以及 Fibonacci 权重 \((F_k)_{k\ge 0}\) 与合法 Zeckendorf 位串（禁止相邻 \(11\)）为既定数据。
+对 \(w=w_1\cdots w_m\in X_m\) 定义其前缀值
+\[
+V_m(w):=\sum_{k=1}^{m} w_k\,F_{k+1}.
+\]
+令 \(K=K(m)\) 为满足 \(F_{K+1}\le 2^m-1\) 的最大指标，并定义尾部可行集合
+\[
+\mathcal C_m(w):=
+\Bigl\{c=(c_{m+1},\dots,c_{K})\in\{0,1\}^{K-m}:\ 
+c_kc_{k+1}=0,\ \ w_m c_{m+1}=0\Bigr\},
+\]
+及其偏移量映射
+\[
+\delta(c):=\sum_{k=m+1}^{K} c_k\,F_{k+1}\in\ZZ_{\ge 0}.
+\]
+对 \(C\in\ZZ_{\ge 0}\) 定义阶梯计数函数
+\[
+N_{m,w}(C):=\#\{c\in\mathcal C_m(w):\ \delta(c)\le C\},
+\qquad N_{m,w}(-1):=0.
+\]
+并定义可达偏移集合
+\[
+\Delta_m(w):=\Bigl\{\delta(c):c\in\mathcal C_m(w),\ \ V_m(w)+\delta(c)\le 2^m-1\Bigr\}.
+\]
+则成立：
+\begin{enumerate}
+  \item \textbf{（单位跳跃）}对一切 \(C\ge 0\) 都有
+  \[
+  N_{m,w}(C)-N_{m,w}(C-1)\in\{0,1\}.
+  \]
+  \item \textbf{（跳跃点反演）}对一切 \(C\ge 0\) 都有集合恒等式
+  \[
+  \Delta_m(w)\cap\{0,1,\dots,C\}
+  =
+  \Bigl\{t\in\{0,1,\dots,C\}:\ N_{m,w}(t)-N_{m,w}(t-1)=1\Bigr\}.
+  \]
+  \item \textbf{（纤维双射）}映射 \(n\mapsto n-V_m(w)\) 将 \(\mathrm{Fold}^{\mathrm{bin}}_m{}^{-1}(w)\) 双射到 \(\Delta_m(w)\)。
+  因此 \(d^{\mathrm{bin}}_m(w):=\bigl|\mathrm{Fold}^{\mathrm{bin}}_m{}^{-1}(w)\bigr|=|\Delta_m(w)|\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由 bin-fold 的尾部表征（见附录 \ref{app:fold-multiplicity} 中对 \(\mathrm{Fold}^{\mathrm{bin}}_m\) 的 uplift 尾部充要条件），
+\(
+n\in \mathrm{Fold}^{\mathrm{bin}}_m{}^{-1}(w)
+\)
+当且仅当存在 \(c\in\mathcal C_m(w)\) 使
+\(
+n=V_m(w)+\delta(c)
+\)
+且 \(0\le n\le 2^m-1\)。
+因此 \(\Delta_m(w)\) 正是该纤维在 \(V_m(w)\) 平移后的偏移集合，从而第 (3) 条等价于证明 \(\delta:\mathcal C_m(w)\to\ZZ_{\ge 0}\) 在约束 \(V_m(w)+\delta(c)\le 2^m-1\) 下的值域不发生碰撞。
+\par
+若 \(c\neq c'\) 但 \(\delta(c)=\delta(c')\)，则 \(V_m(w)+\delta(c)\) 具有两种不同的合法 Zeckendorf 位串表示（它们在尾部位串处不同，且仍满足相邻 \(11\) 禁止及边界拼接合法性），这与 Zeckendorf 唯一性矛盾。
+故 \(\delta\) 在 \(\mathcal C_m(w)\) 上为单射。
+由此：当阈值从 \(C-1\) 增至 \(C\) 时，新增的可行尾部位串至多对应一个新的偏移值，得到第 (1) 条；第 (2) 条为第 (1) 条的等价改写；而第 (3) 条由“纤维尾部表征 + \(\delta\) 单射”立得。证毕。
+\end{proof}
+

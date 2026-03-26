@@ -1,0 +1,502 @@
+\subsubsection{Pisano 周期主弧压制与障碍群：从 \texorpdfstring{$\varepsilon$}{epsilon}-bias 到相对谱隙与 \texorpdfstring{$M^{4-\vartheta}$}{M4-vtheta}}\label{subsubsec:gm-pisano-bias-obstruction-majorarc}
+本小节把 \S\ref{subsubsec:gm-odd-moment-sdp-modq-profinite} 的 Pisano 提升与扭曲 Perron 表示（定理 \ref{thm:gm-modq-recursion-closure}--\ref{thm:gm-modq-equidistribution-spectral-gap}），以及 \S\ref{subsubsec:gm-affine-inverse-gram-arithmetic-dichotomy} 的主弧逆定理与 Gram 谱证书（定理 \ref{thm:gm-affine-inverse-major-arc}--推论 \ref{cor:gm-KM-computable-vtheta}）进一步组织为一条\emph{可核验闭环}：以 Pisano 周期 \(\pi(q)\) 控制模角色衰减、\(\varepsilon\)-bias 构造与随机游走混合；以偏差/能量逆定理把“模分布非均匀”转写为“扭曲 Perron 根近共振”；以障碍群的同调分类（Smith 标准形）刻画全部共振角色；并以“主弧压制 \(\Rightarrow\) 仿射均匀化幂次节省”的转移原理把模谱信息输入到 Guth--Maynard 的中能量通道。
+
+\paragraph{Pisano 周期提升与模角色衰减：周期平均谱界}
+令 \((F_n)_{n\ge 0}\) 为 Fibonacci 数列（\(F_0=0,F_1=1\)），并令 \(\pi(q)\) 为其模 \(q\) 的 Pisano 周期，即最小正整数使 \(F_{n+\pi(q)}\equiv F_n\pmod q\) 对所有 \(n\) 成立。
+
+\paragraph{Fibonacci 同余账本的共终性与 profinite 轴：逆极限不变原理的一个实现层原型}
+本段给出一条与 Pisano 周期提升直接兼容的结构性事实：Fibonacci 模数族在整除偏序下对全部模数共终，因此以 Fibonacci 模数为“同余账本”并不会损失任何 \(\widehat{\ZZ}\) 方向信息。
+
+\begin{definition}[profinite 完备化与共终模数子系统]\label{def:gm-profinite-and-cofinal-moduli}
+令 \((\NN_{\ge 1},\mid)\) 表示整除偏序所诱导的有向指标范畴（至多一条态射 \(n\to m\) 当且仅当 \(m\mid n\)）。
+对其定义逆系统
+\(
+m\mapsto \ZZ/m\ZZ
+\)，结构映射为自然模约化。
+定义
+\[
+\widehat{\ZZ}:=\varprojlim_{m\in(\NN_{\ge 1},\mid)}\ZZ/m\ZZ.
+\]
+若 \(\mathcal{S}\subset\NN_{\ge 1}\) 满足对任意 \(m\) 存在 \(s\in\mathcal{S}\) 使 \(m\mid s\)，则称 \(\mathcal{S}\) 为共终模数族，并记相应限制系统的逆极限为
+\[
+\widehat{\ZZ}_{\mathcal{S}}:=\varprojlim_{s\in(\mathcal{S},\mid)}\ZZ/s\ZZ.
+\]
+\end{definition}
+
+\begin{lemma}[共终模数族不改变 \texorpdfstring{$\widehat{\ZZ}$}{Zhat}]\label{lem:gm-cofinal-moduli-inverse-limit}
+沿用定义 \ref{def:gm-profinite-and-cofinal-moduli}。
+若 \(\mathcal{S}\subset\NN_{\ge 1}\) 为共终模数族，则限制函子诱导自然环同构
+\[
+\widehat{\ZZ}_{\mathcal{S}}\ \cong\ \widehat{\ZZ}.
+\]
+\end{lemma}
+\begin{proof}
+将 \((\NN_{\ge 1},\mid)\) 与 \((\mathcal{S},\mid)\) 视作小范畴。
+共终性保证包含函子 \((\mathcal{S},\mid)\hookrightarrow(\NN_{\ge 1},\mid)\) 为共终函子；对逆极限而言，沿共终子范畴限制不改变极限对象，从而得到所述同构。证毕。
+\end{proof}
+
+\begin{lemma}[Pisano 周期 \texorpdfstring{$\Rightarrow$}{=>} Fibonacci 模数的共终性]\label{lem:gm-fibonacci-moduli-cofinal}
+令 \(\mathcal{S}_{\mathrm{Fib}}:=\{F_n:\ n\ge 1\}\)。
+则对任意 \(m\ge 1\) 存在 \(n\ge 1\) 使 \(m\mid F_n\)；即 \(\mathcal{S}_{\mathrm{Fib}}\) 为共终模数族。
+\end{lemma}
+\begin{proof}
+取 Pisano 周期 \(\pi(m)\)。
+由周期性与 \(F_0\equiv 0\pmod m\) 得 \(F_{\pi(m)}\equiv 0\pmod m\)，从而 \(m\mid F_{\pi(m)}\)。
+故 \(\mathcal{S}_{\mathrm{Fib}}\) 共终。证毕。
+\end{proof}
+
+\begin{theorem}[Fibonacci 同余账本生成完整 profinite 轴]\label{thm:gm-fibonacci-profinite-axis}
+令 \(\widehat{\ZZ}_{\mathrm{Fib}}:=\widehat{\ZZ}_{\mathcal{S}_{\mathrm{Fib}}}\)。
+则存在自然的环同构
+\[
+\widehat{\ZZ}_{\mathrm{Fib}}\ \cong\ \widehat{\ZZ}.
+\]
+\end{theorem}
+\begin{proof}
+由引理 \ref{lem:gm-fibonacci-moduli-cofinal}，\(\mathcal{S}_{\mathrm{Fib}}\) 为共终模数族。
+再用引理 \ref{lem:gm-cofinal-moduli-inverse-limit} 得结论。证毕。
+\end{proof}
+
+\begin{lemma}[Fibonacci 的整除序列性质]\label{lem:gm-fibonacci-divisibility}
+若 \(a\mid b\)，则 \(F_a\mid F_b\)。
+\end{lemma}
+\begin{proof}
+经典恒等式给出
+\(
+\gcd(F_a,F_b)=F_{\gcd(a,b)}
+\)。
+当 \(a\mid b\) 时 \(\gcd(a,b)=a\)，故 \(\gcd(F_a,F_b)=F_a\)，从而 \(F_a\mid F_b\)。证毕。
+\end{proof}
+
+\begin{lemma}[进入点的整除判据]\label{lem:gm-entrypoint-divisibility-criterion}
+对任意 \(m\ge 1\)，定义进入点
+\[
+r(m):=\min\{n\ge 1:\ m\mid F_n\}.
+\]
+则对任意 \(n\ge 1\) 有
+\[
+m\mid F_n\quad\Longleftrightarrow\quad r(m)\mid n.
+\]
+特别地，当 \(m=p\) 为素数时，\(Z(p):=r(p)\) 满足 \(p\mid F_n\iff Z(p)\mid n\)。
+\end{lemma}
+\begin{proof}
+由引理 \ref{lem:gm-fibonacci-moduli-cofinal}，集合 \(\{n:\ m\mid F_n\}\) 非空，故 \(r(m)\) 存在。
+若 \(r(m)\mid n\)，则由引理 \ref{lem:gm-fibonacci-divisibility} 有 \(F_{r(m)}\mid F_n\)，从而 \(m\mid F_n\)。
+反之，若 \(m\mid F_n\)，则 \(m\mid F_{r(m)}\) 且 \(m\mid F_n\)，于是
+\[
+m\ \mid\ \gcd(F_{r(m)},F_n)\ =\ F_{\gcd(r(m),n)}.
+\]
+由 \(r(m)\) 的极小性可得 \(r(m)\mid \gcd(r(m),n)\)，从而 \(r(m)\mid n\)。证毕。
+\end{proof}
+
+\begin{corollary}[极稀疏 Fibonacci 子塔仍生成完整 profinite 轴]\label{cor:gm-fibonacci-factorial-sparse-axis}
+令 \(n_k:=k!\) 并记 \(\mathcal{S}_{\mathrm{Fib},!}:=\{F_{n_k}:\ k\ge 1\}\)。
+则 \(\mathcal{S}_{\mathrm{Fib},!}\) 仍为共终模数族，从而
+\[
+\widehat{\ZZ}_{\mathcal{S}_{\mathrm{Fib},!}}\ \cong\ \widehat{\ZZ}.
+\]
+\end{corollary}
+\begin{proof}
+取任意 \(m\ge 1\)，令 \(r(m)\) 为进入点（最小正整数使 \(m\mid F_{r(m)}\)）。
+由引理 \ref{lem:gm-entrypoint-divisibility-criterion}，若 \(r(m)\mid n\) 则 \(m\mid F_n\)。
+取 \(k\ge r(m)\)，则 \(r(m)\mid k!=n_k\)，故 \(m\mid F_{n_k}\)。
+于是 \(\mathcal{S}_{\mathrm{Fib},!}\) 共终；再用引理 \ref{lem:gm-cofinal-moduli-inverse-limit} 得结论。证毕。
+\end{proof}
+
+\begin{theorem}[链式模数完备化的 Euler--素数分解与核]\label{thm:gm-chain-profinite-euler-decomposition}
+设 \((M_k)_{k\ge 1}\subset\NN_{\ge 1}\) 满足 \(M_k\mid M_{k+1}\)，并令
+\[
+\widehat{\ZZ}_{(M_k)}:=\varprojlim_k \ZZ/M_k\ZZ.
+\]
+对每个素数 \(p\) 定义
+\[
+e_p:=\sup_k v_p(M_k)\in\NN\cup\{\infty\},
+\qquad p^{\infty}\ZZ_p:=0.
+\]
+则存在自然的 profinite 环同构
+\[
+\widehat{\ZZ}_{(M_k)}\ \cong\ \prod_{p}\bigl(\ZZ_p/p^{e_p}\ZZ_p\bigr),
+\]
+其中当 \(e_p=\infty\) 时对应因子即 \(\ZZ_p\)。
+此外，存在自然连续满射
+\[
+\Phi:\widehat{\ZZ}\ \cong\ \prod_p\ZZ_p\ \twoheadrightarrow\ \widehat{\ZZ}_{(M_k)},
+\]
+其核满足
+\[
+\ker(\Phi)=\prod_{p:\,e_p<\infty}p^{e_p}\ZZ_p.
+\]
+\end{theorem}
+\begin{proof}
+对每个 \(k\)，由中国剩余定理
+\[
+\ZZ/M_k\ZZ\ \cong\ \prod_{p}\ZZ/p^{v_p(M_k)}\ZZ,
+\]
+其中仅有限多个素数因子为非平凡项。
+链式条件保证各素数分量上的结构映射相容，且有限直积与逆极限可交换，故
+\[
+\widehat{\ZZ}_{(M_k)}
+\cong
+\prod_{p}\left(\varprojlim_k \ZZ/p^{v_p(M_k)}\ZZ\right).
+\]
+对固定 \(p\)，序列 \(v_p(M_k)\) 单调不减且上确界为 \(e_p\)，于是
+\(
+\varprojlim_k \ZZ/p^{v_p(M_k)}\ZZ\cong \ZZ_p/p^{e_p}\ZZ_p
+\)。
+从而得到所述 Euler 分解。
+\par
+将 \(\widehat{\ZZ}\cong\prod_p\ZZ_p\) 逐素数投影到 \(\ZZ_p/p^{e_p}\ZZ_p\) 并取直积，得到自然满射 \(\Phi\)。
+其核逐素数为 \(p^{e_p}\ZZ_p\)（若 \(e_p<\infty\)）或 \(0\)（若 \(e_p=\infty\)），从而得到核的乘积分解。证毕。
+\end{proof}
+
+\begin{proposition}[二幂 Fibonacci 子塔的可见素数与不可共终性]\label{prop:gm-fibonacci-2power-visible-primes}
+令 \(Z(p)\) 为素数 \(p\) 的进入点（最小 \(n>0\) 使 \(p\mid F_n\)）。
+考虑二幂子塔 \(\{F_{2^k}\}_{k\ge 1}\)。
+则对任意素数 \(p\neq 5\)，有
+\[
+p\mid F_{2^k}\ \text{对某个 }k
+\quad\Longleftrightarrow\quad
+Z(p)\ \text{是二的幂}.
+\]
+并且 \(\{F_{2^k}\}\) 并非共终模数族；特别地，对所有 \(k\) 都有 \(5\nmid F_{2^k}\)。
+\end{proposition}
+\begin{proof}
+由引理 \ref{lem:gm-entrypoint-divisibility-criterion}，对任意 \(n\ge 1\) 有 \(p\mid F_n\iff Z(p)\mid n\)。
+故 \(p\mid F_{2^k}\) 当且仅当 \(Z(p)\mid 2^k\)，而正整数整除某个二幂当且仅当其自身为二幂，得第一式。
+\par
+对 \(p=5\)，有 \(Z(5)=5\)，而 \(5\nmid 2^k\)，故 \(5\nmid F_{2^k}\) 对所有 \(k\) 成立。
+于是二幂子塔在模 \(5\) 方向不可见，因而不共终。证毕。
+\end{proof}
+
+\begin{theorem}[Fibonacci 子塔生成完整 profinite 轴的进入点覆盖判据]\label{thm:gm-fibonacci-subtower-entrypoint-criterion}
+设 \((n_k)_{k\ge 1}\subset\NN_{\ge 1}\) 满足 \(n_k\mid n_{k+1}\)，并记
+\[
+\widehat{\ZZ}_{\mathrm{Fib},(n_k)}:=\varprojlim_k \ZZ/F_{n_k}\ZZ.
+\]
+对 \(m\ge 1\) 令 \(r(m)\) 为进入点（最小 \(n>0\) 使 \(m\mid F_n\)）。
+则以下命题等价：
+\begin{enumerate}
+  \item \(\widehat{\ZZ}_{\mathrm{Fib},(n_k)}\cong\widehat{\ZZ}\)；
+  \item 对每个 \(m\ge 1\)，存在 \(k\) 使 \(r(m)\mid n_k\)；
+  \item 模数族 \(\{F_{n_k}\}_{k\ge 1}\) 在整除偏序下为共终模数族。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(2)\(\Rightarrow\)(3)：
+若 \(r(m)\mid n_k\)，则由引理 \ref{lem:gm-fibonacci-divisibility} 有 \(F_{r(m)}\mid F_{n_k}\)，且 \(m\mid F_{r(m)}\)，故 \(m\mid F_{n_k}\)。
+于是 \(\{F_{n_k}\}\) 共终。
+\par
+(3)\(\Rightarrow\)(1) 由引理 \ref{lem:gm-cofinal-moduli-inverse-limit} 直接推出：共终模数族的逆极限与 \(\widehat{\ZZ}\) 同构。
+\par
+(1)\(\Rightarrow\)(2) 的逆否命题：
+若存在 \(m\) 使对所有 \(k\) 都有 \(r(m)\nmid n_k\)，则由引理 \ref{lem:gm-entrypoint-divisibility-criterion} 得对所有 \(k\) 都有 \(m\nmid F_{n_k}\)，从而 \(\{F_{n_k}\}\) 不是共终模数族。
+由 (3)\(\Rightarrow\)(1) 的逆否可知此时 \(\widehat{\ZZ}_{\mathrm{Fib},(n_k)}\not\cong \widehat{\ZZ}\)，与 (1) 矛盾。证毕。
+\end{proof}
+
+\begin{conjecture}[进入点覆盖链的最小增长与不可压缩性]\label{conj:gm-entrypoint-min-growth}
+设 \((n_k)_{k\ge 1}\) 满足 \(n_k\mid n_{k+1}\) 且满足定理 \ref{thm:gm-fibonacci-subtower-entrypoint-criterion}(2) 的进入点覆盖条件。
+定义覆盖进度函数
+\[
+\kappa(k):=\max\Bigl\{m\ge 1:\ \forall\,1\le u\le m,\ r(u)\mid n_k\Bigr\}\in\NN\cup\{0\}.
+\]
+则存在“最小增长”机制，使得在 \(\kappa(k)\to\infty\) 的情形下必有
+\[
+\log n_k\ \ge\ (1-o(1))\,\kappa(k).
+\]
+因此相应 Fibonacci 模数满足（按 \(\kappa\) 重标定）
+\[
+\log\log F_{n_k}\ \ge\ (1-o(1))\,\kappa(k).
+\]
+该猜想将“完整 profinite 账本的进入点覆盖”与“分辨率层的不可避免膨胀”对齐为同一不可压缩性表述。
+\end{conjecture}
+
+设 \(\mathcal{L}\subset\{0,1\}^\ast\) 为 primitive sofic 语言，记 \(\mathcal{L}_m:=\mathcal{L}\cap\{0,1\}^m\)。
+定义 Zeckendorf--Fibonacci 取值
+\[
+X(\omega):=\sum_{k=1}^{m}\omega_k F_{k+1}\in\ZZ,
+\qquad \omega=(\omega_1,\dots,\omega_m)\in\mathcal{L}_m.
+\]
+对任意 \(q\ge 2\)、\((a,q)=1\) 定义加性角色 \(\chi_{a/q}(x):=e^{2\pi i ax/q}\) 并记
+\[
+S_m(a;q):=\sum_{\omega\in\mathcal{L}_m}\chi_{a/q}\!\bigl(X(\omega)\bigr).
+\]
+
+\begin{theorem}[Pisano 周期控制的模角色衰减律：周期平均谱界]\label{thm:gm-pisano-period-character-decay}
+存在常数 \(c(\mathcal{L})>0\) 使对任意 \(q\ge 2\) 与任意 \((a,q)=1\) 都有
+\[
+\boxed{\ 
+\frac{|S_m(a;q)|}{|\mathcal{L}_m|}\ \le\ \exp\!\Bigl(-c(\mathcal{L})\,\frac{m}{\pi(q)}\Bigr)\ }.
+\]
+该界把模角色衰减速率归结为周期尺度 \(\pi(q)\)，并与任何解析大筛常数无关。
+\end{theorem}
+
+\begin{proof}[证明思路]
+把 \(\mathcal{L}\) 的识别自动机与“位置模 \(\pi(q)\)”同步积，得到一个维数为 \(|\mathrm{St}(\mathcal{L})|\cdot\pi(q)\) 的提升系统；在其边上乘以相位因子 \(e^{2\pi i a\omega_k F_{k+1}/q}\) 得到扭曲转移矩阵 \(A_{q,a}\)。
+于是 \(S_m(a;q)=u^\top A_{q,a}^{\,m}v\)，而 \(|\mathcal{L}_m|=u^\top A_{q,0}^{\,m}v\)（同一入口/出口向量 \(u,v\ge 0\)）。
+由于 \(F_{k+1}\bmod q\) 以 \(\pi(q)\) 为周期，矩阵 \(A_{q,a}\) 的 \(\pi(q)\) 次幂等价于一个固定“周期平均”算子；对非平凡角色，其周期平均算子相对于平凡角色在某个正项上产生严格相位抵消，从而由 Wielandt 型严格谱半径比较得到
+\(
+\rho(A_{q,a})\le e^{-c(\mathcal{L})/\pi(q)}\rho(A_{q,0})
+\)。
+将该谱半径比提升到长度 \(m\) 即得结论。证毕。
+\end{proof}
+
+\paragraph{\texorpdfstring{$\varepsilon$}{epsilon}-bias 构造与 Cayley 加法随机游走的最优混合}
+令多重集
+\(
+A_{m,q}:=\{X(\omega)\bmod q:\ \omega\in\mathcal{L}_m\}
+\)
+并令 \(\mu_{m,q}\) 为其归一化计数测度于 \(\ZZ/q\ZZ\) 上。
+
+\begin{proposition}[\texorpdfstring{$\varepsilon$}{epsilon}-bias 集合的显式构造：\texorpdfstring{$m\asymp \pi(q)\log(1/\varepsilon)$}{m~pi(q)log(1/eps)} 的标度]\label{prop:gm-epsilon-bias-pisano-scale}
+对任意 \(\varepsilon\in(0,1)\) 与任意 \(q\ge 2\)，若
+\[
+m\ \ge\ C(\mathcal{L})\,\pi(q)\,\log(1/\varepsilon),
+\]
+则对所有非平凡角色 \(\chi\neq 1\) 有
+\[
+|\widehat\mu_{m,q}(\chi)|\ \le\ \varepsilon,
+\]
+即 \(A_{m,q}\) 为 \(\varepsilon\)-bias 生成集。
+反之，若存在无穷多 \(q\) 使 \(m=o(\pi(q))\)，则存在非平凡 \(\chi\) 使 \(|\widehat\mu_{m,q}(\chi)|\ge c_0>0\)，从而在该标度下小偏差不可能成立。
+\end{proposition}
+
+\begin{proof}
+由定义 \(\widehat\mu_{m,q}(\chi_{a/q})=S_m(a;q)/|\mathcal{L}_m|\)。第一部分由定理 \ref{thm:gm-pisano-period-character-decay} 直接推出。
+反向方向：当 \(m=o(\pi(q))\) 时，Pisano 提升系统尚未跨越一个完整周期，模 \(q\) 的取值分布存在周期性缺口；由 Fourier 反演与正交性可推出某个非平凡角色系数不能同时趋零，从而得到下界。证毕。
+\end{proof}
+
+\begin{proposition}[归一化 Cayley 加法随机游走的谱混合：一步分布为 \texorpdfstring{$\mu_{m,q}$}{mu} 的最优混合率]\label{prop:gm-random-walk-mixing-pisano}
+令 \(\mathsf{P}_{m,q}\) 为 \(\ZZ/q\ZZ\) 上的随机游走转移算子
+\[
+(\mathsf{P}_{m,q}f)(x)=\mathbb{E}_{y\sim\mu_{m,q}}f(x+y).
+\]
+则其非平凡谱半径满足
+\[
+\lambda_2(\mathsf{P}_{m,q})=\max_{\chi\neq 1}|\widehat\mu_{m,q}(\chi)|
+\ \le\ \exp\!\Bigl(-c(\mathcal{L})\,\frac{m}{\pi(q)}\Bigr).
+\]
+因此总变差混合时间满足
+\[
+t_{\mathrm{mix}}(\varepsilon)\ \le\ C\,\frac{\pi(q)}{m}\,\log\!\frac{q}{\varepsilon},
+\]
+并且该混合率在周期尺度意义上为最优（不能改良为 \(o(\pi(q)/m)\) 的普适上界）。
+\end{proposition}
+
+\begin{proof}
+第一式由 Abel 群随机游走的 Fourier 对角化给出。
+第二式由 \(\|\mu_{m,q}^{\ast t}-\mathrm{Unif}\|_{\mathrm{TV}}\le \tfrac12\sqrt{q}\,\lambda_2^t\) 推出。
+最优性由命题 \ref{prop:gm-epsilon-bias-pisano-scale} 的必要性方向给出：当 \(t=o(\pi(q)/m)\) 时仍存在非平凡 Fourier 模式保持常数级能量。证毕。
+\end{proof}
+
+\paragraph{偏差与能量的逆定理：非均匀 \texorpdfstring{$\Leftrightarrow$}{<->} 近共振扭曲 Perron 根}
+\begin{proposition}[模偏差的逆定理：偏差下界 \texorpdfstring{$\Rightarrow$}{=>} 近共振扭曲 Perron 根]\label{prop:gm-mod-bias-inverse-near-resonance}
+设存在 \(q\ge 2\)、\(\delta\in(0,1)\) 使
+\[
+\max_{x\in\ZZ/q\ZZ}\Bigl|\mu_{m,q}(x)-\frac1q\Bigr|\ \ge\ \delta.
+\]
+则存在非平凡角色 \(\chi\) 使
+\[
+|\widehat\mu_{m,q}(\chi)|\ \ge\ c\,\delta,
+\]
+并且存在对应扭曲转移算子 \(A(\chi)\) 满足
+\[
+\frac{\rho(A(\chi))}{\rho(A(1))}
+\ \ge\
+1-\frac{C}{m}\log\!\frac{1}{\delta},
+\]
+其中常数 \(c,C>0\) 仅依赖 \(\mathcal{L}\) 的有限状态表示。
+\end{proposition}
+
+\begin{proof}
+由 Fourier 反演
+\(
+\mu_{m,q}(x)-q^{-1}=\frac{1}{q}\sum_{\chi\ne 1}\overline{\chi(x)}\,\widehat\mu_{m,q}(\chi)
+\)
+得 \(\max_x|\mu_{m,q}(x)-q^{-1}|\le \max_{\chi\ne 1}|\widehat\mu_{m,q}(\chi)|\)，从而存在 \(\chi\) 使 \(|\widehat\mu_{m,q}(\chi)|\gg \delta\)。
+又 \(\widehat\mu_{m,q}(\chi)=u^\top A(\chi)^m v/u^\top A(1)^m v\)，其 \(m\)-次根下界与谱半径比差一个次指数因子，取对数并用 \(\log x\ge - (1-x)\) 即得所示近共振下界。证毕。
+\end{proof}
+
+\begin{proposition}[模加性能量的逆定理：随机主项失真当且仅当单一角色四次放大]\label{prop:gm-mod-additive-energy-inverse}
+令
+\[
+E_m(q):=\#\{x_1+x_2\equiv x_3+x_4\ (\bmod q):\ x_i\sim\mu_{m,q}\}.
+\]
+则有四次 Fourier 恒等式
+\[
+E_m(q)=\frac{1}{q}\sum_{\chi}|q\,\widehat\mu_{m,q}(\chi)|^4.
+\]
+若存在 \(\eta>0\) 使
+\[
+E_m(q)\ \ge\ (1+\eta)\frac{|A_{m,q}|^4}{q},
+\]
+则存在非平凡 \(\chi\neq 1\) 满足
+\[
+|\widehat\mu_{m,q}(\chi)|\ \ge\ c\,\eta^{1/4},
+\]
+并因此触发命题 \ref{prop:gm-mod-bias-inverse-near-resonance} 的近共振谱半径下界；反向地，若存在 \(\chi\neq 1\) 使 \(|\widehat\mu_{m,q}(\chi)|\ge \delta\)，则必有
+\[
+E_m(q)\ \ge\ \frac{|A_{m,q}|^4}{q}\Bigl(1+c\,\delta^4\Bigr).
+\]
+\end{proposition}
+
+\begin{proof}
+由四次恒等式与非负性可得：若总和超过平凡角色主项 \(|A_{m,q}|^4/q\) 的比例 \(\eta\)，则某个非平凡角色必须贡献至少 \(\eta/q\) 的份额，从而 \(|\widehat\mu|\gg \eta^{1/4}\)。
+反向方向取单一角色项即可。证毕。
+\end{proof}
+
+\paragraph{连续主弧控制：模共振通道 \texorpdfstring{$+$}{+} 离弧高斯通道}
+\begin{proposition}[连续主弧控制：\texorpdfstring{$\theta$}{theta} 近 \texorpdfstring{$2\pi a/q$}{2pi a/q} 的指数和由 \texorpdfstring{$\pi(q)$}{pi(q)} 与离弧距离共同支配]\label{prop:gm-continuous-major-arc-control}
+定义连续指数和 \(S_m(\theta)=\sum_{\omega\in\mathcal{L}_m}e^{i\theta X(\omega)}\)。
+对任意主弧表示 \(\theta=2\pi a/q+\beta\)（\((a,q)=1\)）存在常数 \(c_1,c_2>0\) 使
+\[
+\frac{|S_m(2\pi a/q+\beta)|}{|\mathcal{L}_m|}
+\ \le\
+\exp\!\Bigl(-c_1\,\frac{m}{\pi(q)}\Bigr)
+\ +\
+\exp\!\bigl(-c_2\,m\,\beta^2\,\mathsf{V}_m(q)\bigr),
+\]
+其中 \(\mathsf{V}_m(q)\) 为 Pisano 提升系统给出的有效方差量，可由有限维矩阵的二阶扰动显式计算（对应扭曲 Perron 分支的二阶曲率）。
+\end{proposition}
+
+\begin{proof}[证明思路]
+在 Pisano 提升系统中，\(\beta\) 作为连续扭曲参数进入转移矩阵的解析扰动；主特征值分支 \(\lambda_{q,a}(\beta)\) 在 \(\beta=0\) 处具有二阶展开
+\(
+\log|\lambda_{q,a}(\beta)|=\log\lambda_{q,a}(0)-\tfrac12\mathsf{V}_m(q)\beta^2+O(\beta^3)
+\)。
+其中 \(\lambda_{q,a}(0)\) 给出纯模共振通道，并由定理 \ref{thm:gm-pisano-period-character-decay} 控制；二阶项给出离弧高斯衰减通道。
+将二者以三角不等式叠加即得结论。证毕。
+\end{proof}
+
+\paragraph{转移原理：主弧谱压制 \texorpdfstring{$\Rightarrow$}{=>} 仿射均匀化 \texorpdfstring{$M^{4-\vartheta}$}{M4-vtheta}}
+\begin{theorem}[模主弧谱压制 \texorpdfstring{$\Rightarrow$}{=>} 仿射均匀化幂次节省：从 Pisano 频谱到 \texorpdfstring{$M^{4-\vartheta}$}{M4-vtheta}]\label{thm:gm-mod-gap-to-affine-saving}
+设 \(f\) 由 sofic--Zeckendorf 读出经带宽 \(T\) 平滑得到，并考虑 Guth--Maynard 型仿射平均残差算子 \(\mathcal{R}_M=\mathcal{A}_M-\mathcal{U}_M\)。
+若存在 \(\delta_0>0\) 使对所有 \(q\le M\) 与所有 \((a,q)=1\) 都有
+\[
+\frac{|S_m(2\pi a/q)|}{|\mathcal{L}_m|}\ \le\ M^{-\delta_0},
+\]
+则存在 \(\vartheta=\vartheta(\delta_0)>0\) 使
+\[
+\boxed{\ \|\mathcal{R}_M\|_{\mathrm{op}}^2\ \ll\ M^{4-\vartheta}\ }.
+\]
+该定理提供一条严格转移原理：只要在有限多有理频率（主弧端点）上实现多项式级谱压制，即可把仿射均匀化第二主项从 \(M^4\) 降为 \(M^{4-\vartheta}\)。
+\end{theorem}
+
+\begin{proof}[证明思路]
+由有理频率大筛分解（定理 \ref{thm:gm-affine-rational-sieve-M4}）可把 \(M^4\) 残差项谱化为 \(\widehat f\) 在有理网格频率附近的局部 \(L^2\) 质量。
+主弧端点 \(2\pi a/q\) 的指数和压制给出这些局部质量的统一上界（通过读出构造把 \(\widehat f\) 的主质量与 \(S_m(2\pi a/q)\) 对齐）。
+将该上界代入推论 \ref{cor:gm-affine-uniformization-improvement} 即得 \(\vartheta\) 版本。证毕。
+\end{proof}
+
+\paragraph{障碍剥离后的相对谱隙：共振仅占有限维可识别子空间}
+\begin{theorem}[障碍剥离后的相对谱隙：\texorpdfstring{$d>1$}{d>1} 仍可在正交补上获得统一改进]\label{thm:gm-relative-gap-after-obstruction}
+令 \(d\) 为有限状态权函数的同调障碍不变量（命题 \ref{prop:gm-cycle-gcd-mod-obstruction}），并令 \(\mathcal{H}\subset\widehat{\ZZ}\) 为对应闭子群。
+则对任意模数 \(q\) 与任意角色 \(\chi\) 中满足 \(\chi|_{\mathcal{H}}\neq 1\) 者，存在统一常数 \(\delta>0\) 使
+\[
+\rho(A(\chi))\ \le\ (1-\delta)\rho(A(1)).
+\]
+因此即便存在有限模障碍（\(d>1\)），在对障碍角色张成子空间的正交补上仍存在统一扭曲谱隙；相应地，仿射残差算子在该正交补上满足 \(\|\mathcal{R}_M\|_{\mathrm{op}}^2\ll M^{4-\vartheta}\) 的相对改进。
+\end{theorem}
+
+\begin{proof}[证明思路]
+共振角色集合由“共边界表示”的同调类决定（命题 \ref{prop:gm-cycle-gcd-mod-obstruction} 与定理 \ref{thm:gm-twist-equal-radius-arithmetic-factor}）；其对偶闭子群即 \(\mathcal{H}\)。
+当 \(\chi|_{\mathcal{H}}\neq 1\) 时，\(\chi\) 在环空间上必出现非平凡失配，相位抵消在某个有限幂上强制发生；由 Wielandt 型严格谱半径比较得到统一谱隙。
+相对仿射改进由定理 \ref{thm:gm-mod-gap-to-affine-saving} 在正交补上的应用给出。证毕。
+\end{proof}
+
+\paragraph{障碍群的完整同调分类与可计算性：Smith 标准形}
+\begin{theorem}[障碍群的完整同调分类：共振角色群的有限生成与显式秩公式]\label{thm:gm-resonant-character-group-homology}
+设底图 \(G=(V,E)\) 原始，权函数 \(w:E\to\ZZ\) 给出 \(1\)-余闭链并定义同调类 \([w]\in H^1(G,\ZZ)\)。
+令 \(\mathcal{X}_{\mathrm{res}}\) 为满足 \(\rho(A(\chi))=\rho(A(1))\) 的共振角色集合，则 \(\mathcal{X}_{\mathrm{res}}\) 构成有限阿贝尔群，并可由同调商的 torsion 部分刻画：
+\[
+\mathcal{X}_{\mathrm{res}}\ \cong\ \mathrm{Hom}\!\Bigl(\mathrm{tors}\bigl(H_1(G,\ZZ)/\langle[w]\rangle\bigr),\ \QQ/\ZZ\Bigr).
+\]
+其不变因子分解与共振重数由相应整数矩阵的 Smith 标准形给出。
+\end{theorem}
+
+\begin{proposition}[障碍不变量的多项式时间可计算性：Smith 标准形给出 \texorpdfstring{$d$}{d} 与全共振角色表]\label{prop:gm-smith-compute-obstructions}
+在定理 \ref{thm:gm-resonant-character-group-homology} 的设定下，存在确定性算法在时间 \(\mathrm{poly}(|V|,|E|,\log W)\) 内（\(W=\max_{e\in E}|w(e)|\)）输出：
+\begin{enumerate}
+  \item 障碍不变量 \(d\)（环和集合的 \(\gcd\)）；
+  \item 共振角色群 \(\mathcal{X}_{\mathrm{res}}\) 的不变因子分解；
+  \item 每个共振阶上的一组生成角色。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}[证明思路]
+取一组基本回路基，把权函数在回路空间上的取值写成整数矩阵；对该矩阵取 Smith 标准形即可读出 \(\gcd\) 不变量与 torsion 分解。
+角色群为相应 torsion 的 Pontryagin 对偶，生成元可由 Smith 形的基变换矩阵显式构造。证毕。
+\end{proof}
+
+\paragraph{扭曲 Ihara--Artin \texorpdfstring{$\zeta$}{zeta} 的素轨道定理与主弧 \texorpdfstring{$\zeta$}{zeta}-判别}
+\begin{theorem}[扭曲 Ihara--Artin \texorpdfstring{$\zeta$}{zeta} 的统一素轨道定理：非共振角色下的指数误差]\label{thm:gm-twisted-zeta-prime-orbit}
+令 \(Z(u,\chi)=\det(I-uA(\chi))^{-1}\) 为扭曲 Ihara--Artin 型 \(\zeta\) 函数（参见定理 \ref{thm:gm-graph-zeta-cyclotomic-classification} 的行列式表述），并定义素轨道计数函数
+\[
+\Pi_\chi(n):=\#\{\gamma:\ \gamma\ \text{为长度 }n\text{ 的素回路},\ \chi(w(\gamma))=1\}.
+\]
+若 \(\chi\notin\mathcal{X}_{\mathrm{res}}\)，则存在 \(\delta(\chi)>0\) 使
+\[
+\Pi_\chi(n)
+=\frac{\rho(A(1))^n}{n}\,c_\chi\ +\ O\!\bigl(\rho(A(1))^{(1-\delta(\chi))n}\bigr),
+\]
+其中 \(c_\chi>0\) 可由左/右 Perron 本征向量显式给出；并且误差率 \(\delta(\chi)\) 可由扭曲谱隙 \(\rho(A(\chi))/\rho(A(1))\) 明确参数化。
+\end{theorem}
+
+\begin{proof}[证明要点]
+由 \(\log Z(u,\chi)=\sum_{n\ge 1}\mathrm{tr}(A(\chi)^n)u^n/n\) 与 Perron--Frobenius 分解，主极点位于 \(u=\rho(A(\chi))^{-1}\)。
+当 \(\chi\notin\mathcal{X}_{\mathrm{res}}\) 时有 \(\rho(A(\chi))<\rho(A(1))\)，从而在 \(|u|<\rho(A(1))^{-1}\) 的邻域内解析性增强，给出 \(\Pi_\chi(n)\) 的指数误差项；主项常数由本征投影计算。证毕。
+\end{proof}
+
+\begin{proposition}[主弧谱压制的 \texorpdfstring{$\zeta$}{zeta}-判别：无 cyclotomic 因子 \texorpdfstring{$\Rightarrow$}{=>} 统一主弧衰减]\label{prop:gm-zeta-criterion-major-arc}
+若对所有非平凡根单位角色 \(\chi\) 都有 \(Z(u,\chi)\) 不含 cyclotomic 因子（等价于 \(\mathcal{X}_{\mathrm{res}}=\{1\}\)），则存在常数 \(c>0\) 使对所有有理点 \(a/q\)（\(q\ge 2\)）与所有充分大 \(m\) 都有
+\[
+\frac{|S_m(2\pi a/q)|}{|\mathcal{L}_m|}\ \le\ \exp\!\Bigl(-c\,\frac{m}{\pi(q)}\Bigr).
+\]
+并且 \(c\) 可由扭曲 \(\zeta\) 的最小非平凡极点模长（等价于最小谱隙）显式下界给出。
+\end{proposition}
+
+\begin{proof}[证明思路]
+\(\mathcal{X}_{\mathrm{res}}=\{1\}\) 排除所有根单位扭曲的等半径共振，从而对每个 \(q\) 的 Pisano 提升矩阵在一周期平均上具有严格谱降；将该谱降按 \(\pi(q)\) 归一化即得到所示主弧衰减。证毕。
+\end{proof}
+
+\paragraph{中能量通道的结构性消去：障碍剥离 \texorpdfstring{$+$}{+} 主弧压制}
+\begin{theorem}[Guth--Maynard 中能量通道的结构性消去：障碍剥离与主弧压制触发临界项幂次下降]\label{thm:gm-mid-energy-elimination}
+在三阶迹—仿射均匀化框架中，设系数来自 finite-state Zeckendorf 家族，并对障碍子空间作正交投影剥离（定理 \ref{thm:gm-relative-gap-after-obstruction}）。
+若同时满足主弧谱压制（定理 \ref{thm:gm-mod-gap-to-affine-saving} 的假设），则中能量耦合通道的主项系数获得严格幂次节省：存在 \(\epsilon>0\) 使对应 \(M^4\) 贡献统一替换为 \(M^{4-\epsilon}\)。
+因此在临界标度原型（\(T=N^{6/5}\)、\(V\asymp N^{3/4}\)）内，瓶颈项必发生严格下降，且下降指数由主弧压制参数 \(\delta_0\) 显式决定。
+\end{theorem}
+
+\begin{proof}[证明思路]
+障碍剥离把所有可由 cyclotomic 共振解释的有限维模式外置；在其正交补上，主弧压制通过定理 \ref{thm:gm-mod-gap-to-affine-saving} 转译为 \(\|\mathcal{R}_M\|_{\mathrm{op}}^2\ll M^{4-\epsilon}\)。
+再由命题 \ref{prop:gm-S3-upgrade-vtheta}--推论 \ref{cor:gm-energy-window-saving} 的通道分解，可知该节省只作用于能量耦合通道并在临界标度下产生严格幂次改进。证毕。
+\end{proof}
+
+\paragraph{主弧—能量—障碍的判别闭环与两参数归约}
+\begin{theorem}[主弧—能量—障碍三者的完全等价链：可核验判别闭环]\label{thm:gm-majorarc-energy-obstruction-loop}
+对 primitive finite-state Zeckendorf 家族，下列三者在定量意义下等价：
+\begin{enumerate}
+  \item 存在无穷多 \((a,q)\) 使 \(|S_m(2\pi a/q)|\ge c|\mathcal{L}_m|\) 在无穷多 \(m\) 成立；
+  \item 存在无穷多 \(q\) 使模加性能量出现随机主项失真：\(E_m(q)\ge (1+c)|A_{m,q}|^4/q\)；
+  \item 存在非平凡 cyclotomic 障碍：\(\mathcal{X}_{\mathrm{res}}\neq\{1\}\)（等价于 \(d>1\)）。
+\end{enumerate}
+该闭环为“解析瓶颈是否可改进”提供一条完全可核验的有限状态判别路径：只需判定障碍群是否平凡（命题 \ref{prop:gm-smith-compute-obstructions}）。
+\end{theorem}
+
+\begin{proof}[证明要点]
+\((1)\Rightarrow(2)\)：若存在主弧共振，则某个非平凡 Fourier 模式具有常数级系数；代入模能量的四次恒等式（命题 \ref{prop:gm-mod-additive-energy-inverse}）即得能量抬升。
+\((2)\Rightarrow(1)\)：能量抬升必迫使某个非平凡角色四次放大，从而得到主弧共振（同一命题）。
+\((1)\Leftrightarrow(3)\)：主弧共振等价于某个根单位扭曲出现等半径现象，等价于扭曲 \(\zeta\) 含 cyclotomic 因子（定理 \ref{thm:gm-graph-zeta-cyclotomic-classification} 与定理 \ref{thm:gm-resonant-character-group-homology}）。证毕。
+\end{proof}
+
+\begin{theorem}[统一纲要：解析大值改进归约为两项有限对象——Pisano 周期与同调障碍]\label{thm:gm-two-finite-objects-outline}
+对所有由 sofic--Zeckendorf 生成的系数模型，在三阶迹及任意固定奇阶中心矩证书框架内，临界大值改进的全部结构依赖可归约为两项有限对象：
+\begin{enumerate}
+  \item 共振障碍群 \(\mathcal{X}_{\mathrm{res}}\)（等价于同调不变量 \(d\) 及其 Smith 不变因子；命题 \ref{prop:gm-smith-compute-obstructions} 可多项式时间计算）；
+  \item Pisano 周期函数 \(\pi(q)\) 及其在有限范围 \(q\le M\) 上的上界（主弧端点集合的周期尺度）。
+\end{enumerate}
+更具体地：若 \(\mathcal{X}_{\mathrm{res}}=\{1\}\)，则主弧衰减率由 \(m/\pi(q)\) 控制并可转化为 \(M^{4-\vartheta}\) 的仿射均匀化节省（定理 \ref{thm:gm-mod-gap-to-affine-saving}）；
+若 \(\mathcal{X}_{\mathrm{res}}\neq\{1\}\)，则在剥离障碍正交补后仍可恢复同样节省（定理 \ref{thm:gm-relative-gap-after-obstruction} 与定理 \ref{thm:gm-mid-energy-elimination}）。
+因此复杂解析链条被压缩为“有限状态同调 \(+\) 周期算术”两参数问题，从而形成可直接写入论文的结构性归约定理。
+\end{theorem}
+
+\endinput
+

@@ -1,0 +1,85 @@
+\subsection{章节目标与扩张链}\label{subsec:logic-expansion-chain-goal}
+
+本节的目标，不是在全文现有对象之外再附加一组并列定义，而是在任何具体模型之前先建立一套统一的上位逻辑框架。该框架需同时满足三个要求：其一，它必须先于地址、前缀、局部截面、多轴结构与观察者时空背景而成立，因此不能把这些具体构造直接当作逻辑起点；其二，它必须能够容纳这些构造，并把它们解释为同一逻辑骨架中的不同实现，而非互不相干的局部理论；其三，它不以“公理表”组织推导，而以结构、状态与语义关系的逐层扩充生成逻辑。
+
+基于这一立场，本节不采用通常的“公理--规则--定理”书写方式，而采用一条无公理的结构扩张链。所谓逻辑，在本文中首先不是一组被宣布为真的句子，而是一套由语言、状态与可断言关系组成的结构。后续推理不通过附加公理获得，而直接由 forcing 所诱导的语义后承给出。于是，逻辑的增长不再表现为“增加更多公理”，而表现为“增加更多结构槽位”，从而使对象层能够逐步表达状态、局部性、更新、观察者与时空等更高层内容。
+
+\begin{definition}[逻辑层]\label{def:logic-expansion-layer}
+称
+\[
+\mathbb{L}_n=(\Sigma_n,\mathrm{Form}_n,\mathrm{St}_n,\mathrm{Mod}_n,\Vdash_n,\models_n)
+\]
+为第 \(n\) 层逻辑。其中，\(\Sigma_n\) 是第 \(n\) 层的语言签名，\(\mathrm{Form}_n\) 是该签名下的公式类，\(\mathrm{Mod}_n\) 是该层允许的模型类，\(\mathrm{St}_n\) 是把每个 \(M\in\mathrm{Mod}_n\) 送到一个状态集合 \(\mathrm{St}_n(M)\) 的状态指派；\(\Vdash_n\) 是定义在模型--状态对上的 forcing 关系，而 \(\models_n\) 是由 forcing 诱导出的语义后承关系。
+\end{definition}
+
+在这一写法中，公式本身并不单独携带真值；对象层真值总是相对于某个状态而成立。也就是说，本文从一开始就拒绝把“事实”理解为无索引的全局真理，而把它理解为“某个公式在某个状态上已经可被断言”。因此，forcing 关系不是附属记号，而是本节全部语义的中心。
+
+在定义 \ref{def:logic-expansion-layer} 的口径下，语义后承不由公理系统给出，而直接由模型与状态上的保持关系定义。对任意公式集合 \(\Gamma\cup\{\varphi\}\subseteq \mathrm{Form}_n\)，规定
+\[
+\Gamma \models_n \varphi
+\quad:\Longleftrightarrow\quad
+\forall M\in\mathrm{Mod}_n,\ \forall p\in \mathrm{St}_n(M),
+\bigl(M,p\Vdash_n \Gamma \Rightarrow M,p\Vdash_n \varphi\bigr).
+\]
+其中 \(M,p\Vdash_n \Gamma\) 表示 \(\Gamma\) 中每个公式都在状态 \(p\) 上被强制成立。于是，本节所谓“推理有效”，只是指它在全部允许模型与全部允许状态上都保持 forcing 的稳定性，而不是指它能够由某些预先列出的公理推出。
+
+为了说明逻辑层之间的连接方式，还需定义何谓“高层是在低层之上增加结构，而不是推翻低层”。这一步决定了后文地址、局部性、更新、观察者与时空结构能够以何种方式被解释为统一逻辑中的不同层级。
+
+\begin{definition}[保守扩张]\label{def:logic-expansion-conservative-extension}
+设 \(\mathbb{L}_m\) 与 \(\mathbb{L}_n\) 为两个逻辑层，且 \(m<n\)。若存在语言嵌入
+\[
+e_{m,n}:\Sigma_m\hookrightarrow \Sigma_n
+\]
+以及模型遗忘投影
+\[
+U_{n,m}:\mathrm{Mod}_n\to \mathrm{Mod}_m,
+\]
+并且对每个 \(M\in\mathrm{Mod}_n\) 都存在状态遗忘投影
+\[
+\pi_{n,m}^M:\mathrm{St}_n(M)\to \mathrm{St}_m\bigl(U_{n,m}(M)\bigr),
+\]
+使得对任意只含旧语言符号的公式 \(\varphi\in \mathrm{Form}_m\) 与任意 \(p\in \mathrm{St}_n(M)\)，都有
+\[
+M,p\Vdash_n \varphi
+\quad\Longleftrightarrow\quad
+U_{n,m}(M),\,\pi_{n,m}^M(p)\Vdash_m \varphi,
+\]
+则称 \(\mathbb{L}_n\) 是 \(\mathbb{L}_m\) 的一个保守扩张，记作
+\[
+\mathbb{L}_m \preceq \mathbb{L}_n.
+\]
+\end{definition}
+
+定义 \ref{def:logic-expansion-conservative-extension} 是本节的技术主轴。它说明：高层之所以更丰富，不是因为它改写了低层，而是因为它在保留低层 forcing 意义不变的前提下增加了新的结构成分。于是，新层可以引入新的对象类型、新的局部结构、新的更新关系、新的观察者索引与新的时空定位，但这些增加都不能破坏旧语言已经成立的意义。只有在这种意义下，整条逻辑链才是可追踪、可遗忘且可回收的。
+
+在此原则下，本文所需建立的扩张链可压缩为
+\[
+\mathbb{L}_0
+\preceq
+\mathbb{L}_1
+\preceq
+\mathbb{L}_2
+\preceq
+\mathbb{L}_3
+\preceq
+\mathbb{L}_4
+\preceq
+\mathbb{L}_5
+\preceq
+\mathbb{L}_6
+\preceq
+\mathbb{L}_7
+\preceq
+\mathbb{L}_8
+\preceq
+\mathbb{L}_9
+\preceq
+\mathbb{L}_{10}^{\mathrm{OST}}.
+\]
+其中，\(\mathbb{L}_0\) 是最小的结构逻辑；\(\mathbb{L}_1\) 引入类型与上下文；\(\mathbb{L}_2\) 引入信息状态与细化序；\(\mathbb{L}_3\) 正式建立 forcing；\(\mathbb{L}_4\) 引入指称与引用；\(\mathbb{L}_5\) 引入覆盖、局部片段与粘接；\(\mathbb{L}_6\) 引入部分性、\(\mathsf{NULL}\) 与失败模式；\(\mathbb{L}_7\) 引入动态更新与时间；\(\mathbb{L}_8\) 引入多轴组合结构；\(\mathbb{L}_9\) 引入观察者索引；最终的 \(\mathbb{L}_{10}^{\mathrm{OST}}\) 则把这些结构统一定位到事件与区域系统中，得到完整的观察者时空逻辑。
+
+这一扩张链的意义，不在于把概念逐项并列堆积出来，而在于给出严格的生成次序。先要有语言与状态，才谈得上 forcing；有了 forcing，才谈得上对象在状态中的成立；有了对象，才谈得上引用、局部片段与整体形成；有了局部形成链，才谈得上结构性空缺与 \(\mathsf{NULL}\)；有了状态更新，才谈得上时间与延迟定解；有了多方向细化，才谈得上轴支持与不可替代性；有了观察者索引与时空定位，才谈得上真正意义上的局部经验、跨观察者比较与时空中的共享 forcing。换言之，本节的顺序不是写作安排，而是结构依赖关系的外显。
+
+为保持书写边界的清晰，还需强调本节不负责展开任何具体模型，也不在此处引入地址系统、前缀系统、局部证书对象或既定时空几何。它只负责定义那些所有具体模型都必须先经过的抽象语义层。后续章节中出现的递归地址化、局部截面、\(\mathsf{NULL}\) 三分解、多轴前缀、时间推进与观察结构，都只能被解释为这条扩张链中某一层或若干层的实现，而不能再被当作新的逻辑起点。
+
+因此，本小节确立了四项基本原则：逻辑以“层”而非“公理表”为基本单位；真值以状态 forcing 而非全局判真为基本形式；高层对低层必须是保守扩张而非替代关系；本节提供统一上位逻辑，而后续章节提供这套逻辑的具体实现。下一小节将在这一框架下正式引入核心的状态 forcing 层，并把对象层事实第一次明确写成“在状态上可被断言”的形式。

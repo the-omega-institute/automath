@@ -1,0 +1,542 @@
+\emph{整数算术指纹补充：}在定理 \ref{thm:terminal-window6-edge-flux-skeleton} 的设定下，
+由同一穷举审计（脚本 \texttt{scripts/exp\_window6\_edge\_flux\_skeleton.py}）可进一步得到四块骨架的 Smith 形式、临界群与判别式等整数不变量：
+\input{sections/generated/eq_window6_edge_flux_skeleton_arithmetic}
+
+\begin{corollary}[6D 四块 edge--flux 骨架的 Smith 判别与“非单纯性”整数证据]\label{cor:window6-edge-flux-skeleton-smith-nonsimple}
+在定理 \ref{thm:terminal-window6-edge-flux-skeleton} 的记号下，
+四块相互作用矩阵 \(E\in\ZZ^{4\times 4}\) 的 Smith 正规形为
+\(\mathrm{SNF}(E)=\mathrm{diag}(1,1,3,3450)\)，因而
+\(\mathrm{coker}(E)\cong \ZZ/3\ZZ\oplus \ZZ/3450\ZZ\)，并且 \(\det(E)=10350\)（见 \eqref{eq:window6_edge_flux_skeleton_arithmetic}）。
+\par
+特别地，\(E\) 不可能在 \(\mathrm{GL}_4(\ZZ)\) 下与任何秩 \(4\) 的有限型不可约 Cartan 矩阵同值；
+因此，若将该四块骨架解释为“连续李对称的离散痕迹”，则其整数判别群排除“单纯有限型 Cartan 数据”的识别，
+并要求在最小意义下引入 Levi 型可约性（可能含阿贝尔因子）以容纳该算术指纹。
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:window6_edge_flux_skeleton_arithmetic} 的显式 SNF 立即得到 \(\mathrm{coker}(E)\) 与 \(\det(E)\)。
+另一方面，秩 \(4\) 的有限型不可约 Cartan 矩阵对应 \(A_4,B_4,C_4,D_4,F_4\)，其行列式分别为 \(5,2,2,4,1\)，
+故不可能与 \(\det(E)=10350\) 相容；从而 \(E\) 亦不可能与其在 \(\mathrm{GL}_4(\ZZ)\) 下同值。证毕。
+\end{proof}
+
+\begin{corollary}[模 \(3\) 的可解性障碍与三阶挠率]\label{cor:window6-edge-flux-mod3-obstruction}
+在推论 \ref{cor:window6-edge-flux-skeleton-smith-nonsimple} 的设定下，
+存在非零群同态
+\[
+\chi:\ZZ^4\longrightarrow \ZZ/3\ZZ
+\]
+使得对一切 \(v\in\ZZ^4\) 都有 \(\chi(Ev)=0\)。
+等价地，对任意 \(b\in\ZZ^4\)，若线性丢番图方程 \(Ex=b\) 在 \(\ZZ^4\) 中可解，则必有 \(\chi(b)=0\)；
+因此 \(\chi(b)\neq 0\) 给出一个模 \(3\) 的可解性障碍。
+\end{corollary}
+\begin{proof}
+由 \(\mathrm{SNF}(E)=\mathrm{diag}(1,1,3,3450)\) 得
+\(\mathrm{coker}(E):=\ZZ^4/E\ZZ^4\cong \ZZ/3\ZZ\oplus \ZZ/3450\ZZ\)，
+从而 \(\mathrm{Hom}(\mathrm{coker}(E),\ZZ/3\ZZ)\neq 0\)。
+取任一非零 \(\bar\chi\in \mathrm{Hom}(\mathrm{coker}(E),\ZZ/3\ZZ)\)，并令 \(\pi:\ZZ^4\to \mathrm{coker}(E)\) 为商映射，定义 \(\chi:=\bar\chi\circ \pi\)。
+由于 \(Ev\in E\ZZ^4\) 在 \(\mathrm{coker}(E)\) 中为零元，故 \(\chi(Ev)=0\) 对所有 \(v\) 成立。
+若 \(Ex=b\) 在 \(\ZZ^4\) 中可解，则 \(b\in E\ZZ^4\)，从而 \(\pi(b)=0\)，故 \(\chi(b)=0\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[由三阶挠率诱导的同余类不变量]\label{cor:window6-edge-flux-mod3-invariant}
+取推论 \ref{cor:window6-edge-flux-mod3-obstruction} 中的任一非零同态 \(\chi\)。
+对任意 \(b\in\ZZ^4\) 定义其模 \(3\) 类
+\[
+[b]_3:=\chi(b)\in \ZZ/3\ZZ.
+\]
+则对任意 \(v\in\ZZ^4\)，在变换 \(b\mapsto b+Ev\) 下不变量保持：
+\[
+[b+Ev]_3=[b]_3.
+\]
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:window6-edge-flux-mod3-obstruction}，对一切 \(v\) 有 \(\chi(Ev)=0\)。
+因此 \([b+Ev]_3=\chi(b+Ev)=\chi(b)+\chi(Ev)=\chi(b)=[b]_3\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[\texorpdfstring{$\ZZ_2$}{Z2}–\texorpdfstring{$\ZZ_3$}{Z3} 挠率的函子性拼接强制 \texorpdfstring{$\ZZ_6$}{Z6} 读出]\label{thm:window6-z2z3-to-z6-readout}
+在 window-\(6\) 的审计接口下，boundary sheet-flip 给出规范中心寄存器
+\(
+\mathcal C_{\mathrm{bdry}}\cong (\ZZ/2\ZZ)^3
+\)
+（推论 \ref{cor:fold-bin-boundary-center-z2}），
+而 edge--flux skeleton 的 Smith 指纹给出一个规范的三阶挠率来源
+\(
+T:=\mathrm{Tor}_3(\mathrm{coker}(E))\cong \ZZ/3\ZZ
+\)
+以及非零同态 \(\chi:\ZZ^4\to \ZZ/3\ZZ\) 使 \(\chi(Ev)=0\)（推论 \ref{cor:window6-edge-flux-mod3-obstruction}）。
+则存在满射群同态
+\[
+\Psi:\ \mathcal C_{\mathrm{bdry}}\times T\longrightarrow \ZZ/6\ZZ,
+\]
+并且该 \(\Psi\) 在 \(\mathrm{Aut}(\ZZ/6\ZZ)\) 意义下由协议数据唯一确定：其在 \(\mathcal C_{\mathrm{bdry}}\) 上的限制必经由三轴置换作用下唯一的非平凡不变字符
+\[
+\pi_{\mathrm{bdry}}:\ (\ZZ/2\ZZ)^3\longrightarrow \ZZ/2\ZZ,
+\qquad
+\pi_{\mathrm{bdry}}(x_1,x_2,x_3):=x_1+x_2+x_3\pmod 2,
+\]
+而其在 \(T\) 上的限制由 \(T\cong\ZZ/3\ZZ\) 与中国剩余同构 \(\ZZ/2\ZZ\times\ZZ/3\ZZ\cong\ZZ/6\ZZ\) 复合给出。
+\par
+从而任意与该读出相容的 \(U(1)\) 型观测（即任一群同态 \(\rho:\ZZ/6\ZZ\to U(1)\)）的像必包含于六次单位根群 \(\mu_6\subset U(1)\)；
+等价地，任一由 \(\rho\circ\Psi\) 所诱导的加性电荷读出只能取值于 \(\frac{1}{6}\ZZ/\ZZ\)。
+\end{theorem}
+
+\begin{proof}
+推论 \ref{cor:fold-bin-boundary-center-z2} 给出规范同构 \(\mathcal C_{\mathrm{bdry}}\cong(\ZZ/2\ZZ)^3\) 及三轴置换对称；
+该对称在抽象层面等价于 \(S_3\) 对三坐标的自然作用。
+于是
+\[
+\mathrm{Hom}(\mathcal C_{\mathrm{bdry}},\ZZ/2\ZZ)\cong(\ZZ/2\ZZ)^3
+\]
+作为 \(\FF_2\)-向量空间，其 \(S_3\)-不变子空间为一维，并由 \((1,1,1)\) 张成；
+因此存在且仅存在一个 \(S_3\)-不变非平凡字符 \(\pi_{\mathrm{bdry}}\)。
+\par
+另一方面，由推论 \ref{cor:window6-edge-flux-skeleton-smith-nonsimple} 与推论 \ref{cor:window6-edge-flux-mod3-obstruction}，
+存在三阶挠率 \(T\cong\ZZ/3\ZZ\)，且生成元仅差一个自同构。
+取任一中国剩余同构
+\(
+\alpha:\ZZ/2\ZZ\times\ZZ/3\ZZ\overset{\sim}{\to}\ZZ/6\ZZ
+\)
+（其选择仅差 \(\mathrm{Aut}(\ZZ/6\ZZ)\)），并定义
+\[
+\Psi(c,t):=\alpha\bigl(\pi_{\mathrm{bdry}}(c),\,t\bigr).
+\]
+则 \(\Psi\) 为满射群同态；并且由于 \(\pi_{\mathrm{bdry}}\) 的不变性与 \(\alpha\) 的中国剩余同构类型均在自同构意义下唯一，
+可知 \(\Psi\) 在 \(\mathrm{Aut}(\ZZ/6\ZZ)\) 意义下无额外自由度。
+最后，有限循环群到 \(U(1)\) 的任意角色的像均落在相应单位根群内，故 \(\rho(\ZZ/6\ZZ)\subseteq\mu_6\)，电荷量子化结论随即成立。证毕。
+\end{proof}
+
+\begin{corollary}[标号刚性下的 edge--flux 算术指纹为协议绝对不变量]\label{cor:window6-edge-flux-arithmetic-protocol-invariant}
+在定理 \ref{thm:terminal-window6-edge-flux-skeleton} 的设定下，
+四块相互作用矩阵 \(E\) 的 Smith 形、余核分解与行列式等整数指纹在“保持推送计数”的协议等价下保持不变。
+更精确地：若另一实现与本协议在推送邻接多重度数据上一致，使得其对应矩阵 \(E'\) 与 \(E\) 相差至多一个块标号置换所诱导的置换相似 \(E'=PEP^{-1}\)（\(P\) 为置换矩阵），
+则 \(E\) 与 \(E'\) 在 \(\ZZ\)-同余意义下等价，从而 \(\mathrm{SNF}(E)\)、\(\mathrm{coker}(E)\) 与 \(\det(E)\) 一致。
+在标号刚性口径下（推论 \ref{cor:terminal-gamma6-multiplicity-rigidity}；亦见注 \ref{rem:terminal-window6-structure-defined-uniqueness}），该置换必为恒等，因而 \(E'=E\)。
+\end{corollary}
+\begin{proof}
+块标号置换对应以置换矩阵 \(P\in\mathrm{GL}_4(\ZZ)\) 作同时的行列重排，即 \(E\mapsto PEP^{-1}\)；
+该变换属于 \(\ZZ\)-同余变换，Smith 形、余核分解与行列式均为同余不变量，故第一部分成立。
+若进一步施加推论 \ref{cor:terminal-gamma6-multiplicity-rigidity}（见注 \ref{rem:terminal-window6-structure-defined-uniqueness}），则保持推送计数的数据不允许任何非平凡重标号，从而 \(P=I\)，结论得证。证毕。
+\end{proof}
+
+\begin{corollary}[edge--flux skeleton 的最大熵粗粒化核唯一性]\label{cor:window6-edge-flux-max-entropy-kernel-uniqueness}
+沿用定理 \ref{thm:terminal-window6-edge-flux-skeleton} 的记号，并令 \(\pi_\alpha:=|U_\alpha|/64\)。
+设 \(K\) 为四状态空间 \(\{2,1,L,R\}\) 上的 Markov 核（行随机矩阵），并满足对所有 \(\alpha\neq\beta\) 的边通量约束
+\[
+\pi_\alpha K_{\alpha\beta}=\frac{E_{\alpha\beta}}{6|\Omega_6|}=\frac{E_{\alpha\beta}}{6\cdot 64}.
+\]
+则 \(K\) 被上述约束唯一确定，且必与定理 \ref{thm:terminal-window6-edge-flux-skeleton} 定义的粗粒化核 \(T\) 一致。
+特别地，由 \(E_{\alpha\beta}=E_{\beta\alpha}\) 得到详细平衡
+\(
+\pi_\alpha T_{\alpha\beta}=\pi_\beta T_{\beta\alpha}
+\)，因此 \(T\) 为可逆核；并且在“通量固定 + 详细平衡”的口径下可行集为单点 \(\{T\}\)，从而 \(T\) 亦为熵率极大核（且唯一）。
+\end{corollary}
+\begin{proof}
+对 \(\alpha\neq\beta\)，由约束立得
+\[
+K_{\alpha\beta}=\frac{E_{\alpha\beta}}{6|\Omega_6|}\cdot\frac{1}{\pi_\alpha}
+=\frac{E_{\alpha\beta}}{6|U_\alpha|},
+\]
+与定理 \ref{thm:terminal-window6-edge-flux-skeleton} 中 \(T_{\alpha\beta}\) 的定义一致。
+由于 \(K\) 为行随机矩阵，故
+\(
+K_{\alpha\alpha}=1-\sum_{\beta\neq\alpha}K_{\alpha\beta}
+\)
+亦被唯一确定；而该对角元恰等于 \(T_{\alpha\alpha}\)（等价于把块内无向边数 \(E_{\alpha\alpha}\) 计为两条有向留在块内的边）。
+因此 \(K=T\)。
+对可逆性与详细平衡，由 \(E_{\alpha\beta}=E_{\beta\alpha}\) 直接推出
+\(
+\pi_\alpha T_{\alpha\beta}=E_{\alpha\beta}/(6|\Omega_6|)=\pi_\beta T_{\beta\alpha}
+\)。
+最后，由可行集为单点可知任何在该可行集上定义的熵率极大问题均由 \(T\) 唯一实现。证毕。
+\end{proof}
+
+\begin{corollary}[6D 四块骨架的 Kirchhoff 复杂度与临界群循环性]\label{cor:window6-edge-flux-critical-group-cyclic}
+仍在定理 \ref{thm:terminal-window6-edge-flux-skeleton} 的记号下，
+令 \(\mathcal{G}_E\) 为忽略块内自环后的加权多重图：顶点为四块 \(\{2,1,L,R\}\)，且当 \(\alpha\neq\beta\) 时边重数为 \(E_{\alpha\beta}\)。
+记 \(L_E\) 为其加权 Laplacian，并取任意删行删列得到的约化 Laplacian \(L_E^{\mathrm{red}}\)。
+则其临界群
+\(
+K(\mathcal{G}_E):=\mathrm{coker}(L_E^{\mathrm{red}})
+\)
+为循环群，且其阶等于生成树数
+\[
+K(\mathcal{G}_E)\cong \ZZ/123336\ZZ,
+\qquad
+\tau(\mathcal{G}_E)=123336
+\]
+（见 \eqref{eq:window6_edge_flux_skeleton_arithmetic}）。
+\end{corollary}
+\begin{proof}
+由矩阵树定理，\(\tau(\mathcal{G}_E)=\det(L_E^{\mathrm{red}})\)。
+而由 \eqref{eq:window6_edge_flux_skeleton_arithmetic}，
+\(\mathrm{SNF}(L_E^{\mathrm{red}})=\mathrm{diag}(1,1,123336)\)，
+从而 \(K(\mathcal{G}_E)\cong \ZZ/123336\ZZ\)。证毕。
+\end{proof}
+
+\begin{theorem}[\(\ZZ\lbrack 1/6\rbrack\)-局部化下的 Kirchhoff--Green 单阶阻塞与 \texorpdfstring{$p_\star=571$}{p*=571}-进刚性]\label{thm:window6-kirchhoff-green-single-order-padic-rigidity}
+沿用推论 \ref{cor:window6-edge-flux-critical-group-cyclic} 的记号，并令
+\[
+R_\zeta:=\ZZ[1/6],
+\qquad
+p_\star:=571.
+\]
+则在 \(R_\zeta\) 上成立：
+\begin{enumerate}
+  \item 作为 \(R_\zeta\)-模，有自然同构
+  \[
+  \mathrm{coker}_{R_\zeta}(L_E^{\mathrm{red}})
+  :=R_\zeta^{3}/L_E^{\mathrm{red}}R_\zeta^{3}
+  \ \cong\
+  R_\zeta/p_\star R_\zeta.
+  \]
+  因而在 \(\{2,3\}\)-局部化后，临界群的全部非平凡阻塞压缩为一个一维的 \(p_\star\)-扭结分量。
+  \item 令 \(\overline L\) 为 \(L_E^{\mathrm{red}}\) 在 \(\FF_{p_\star}\) 上的化简，则 \(\overline L\) 的余秩恰为 \(1\)。
+  因此存在非零线性泛函
+  \[
+  \ell:(\FF_{p_\star})^3\to \FF_{p_\star},
+  \]
+  且在乘以 \((\FF_{p_\star})^\times\) 的意义下唯一，使得对任意 \(b\in R_\zeta^3\) 有等价判别
+  \[
+  b\in \mathrm{Im}\bigl(L_E^{\mathrm{red}}:R_\zeta^3\to R_\zeta^3\bigr)
+  \quad\Longleftrightarrow\quad
+  \ell(\bar b)=0,
+  \]
+  其中 \(\bar b\) 为 \(b\) 在 \((\FF_{p_\star})^3\) 中的像。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+由 \(\mathrm{SNF}(L_E^{\mathrm{red}})=\mathrm{diag}(1,1,123336)\)（\eqref{eq:window6_edge_flux_skeleton_arithmetic}），存在 \(U,V\in \GL_3(\ZZ)\) 使得
+\(
+UL_E^{\mathrm{red}}V=\mathrm{diag}(1,1,123336)
+\)。
+在 \(R_\zeta=\ZZ[1/6]\) 上 \(U,V\) 仍可逆，且 \(123336=2^3\cdot 3^3\cdot p_\star\) 中的 \(2^3\cdot 3^3\) 在 \(R_\zeta\) 中为单位，故
+\[
+\mathrm{coker}_{R_\zeta}(L_E^{\mathrm{red}})
+\cong
+\mathrm{coker}_{R_\zeta}\!\bigl(\mathrm{diag}(1,1,p_\star)\bigr)
+\cong
+R_\zeta/p_\star R_\zeta,
+\]
+得到 (1)。
+\par
+由 (1) 立得模 \(p_\star\) 化简后 \(\mathrm{coker}_{\FF_{p_\star}}(\overline L)\) 为一维 \(\FF_{p_\star}\)-向量空间，等价于 \(\overline L\) 余秩为 \(1\)。
+取任意非零 \(\ell\) 生成 \(\ker(\overline L^{\mathsf T})\subset (\FF_{p_\star})^3\)，则对任意 \(\bar b\in(\FF_{p_\star})^3\)，有
+\(\bar b\in\mathrm{Im}(\overline L)\iff \ell(\bar b)=0\)。
+将其应用于 \(\bar b\) 为 \(b\in R_\zeta^3\) 的约化像，得到所示等价判别。
+唯一性来自 \(\ker(\overline L^{\mathsf T})\) 的一维性。证毕。
+\end{proof}
+
+\begin{remark}[“Kirchhoff 新素数” \texorpdfstring{$571$}{571}：全局生成树复杂度引入的不可见素因子]\label{rem:window6-kirchhoff-prime-571}
+由 \eqref{eq:window6_edge_flux_skeleton_arithmetic}，
+\(
+\tau(\mathcal{G}_E)=123336=2^3\cdot 3^3\cdot 571
+\)，
+从而临界群 \(K(\mathcal{G}_E)\cong \ZZ/123336\ZZ\) 含唯一的 \(571\)-初级扭结分量。
+另一方面，同一式给出
+\(
+\det(E)=10350=2\cdot 3^2\cdot 5^2\cdot 23
+\)
+与
+\(
+\Delta(f)=2^2\cdot 3^6\cdot 5^2\cdot 11\cdot 23\cdot 5894101
+\)，
+其中均不含素因子 \(571\)。
+因此 \(571\) 可被视为一种纯 Kirchhoff 型算术证据：它在局部骨架的 Smith 判别与三次谱域的分歧支撑中均不可见，却在全局生成树复杂度（等价于临界群）中被强制生成，体现出从局部骨架到全局图复形的层级分离。
+\end{remark}
+
+\begin{theorem}[\texorpdfstring{$\{2,3\}$}{2,3}-局部化的累积量环与 Green 核分母素数 \texorpdfstring{$p_\star=571$}{p*=571} 的不可约分叉]\label{thm:window6-zeta-cumulant-localization-vs-green-kernel-prime571}
+令 \(\kappa_r(p)\) 为 Berstel--Zeckendorf 失配加性泛函的密度累积量（命题 \ref{prop:fold-gauge-anomaly-bernoulli-p-cumulant-denominator-law}），并定义
+\[
+\kappa_r^\infty:=\kappa_r(1/2),
+\qquad
+R_\zeta:=\ZZ[1/6].
+\]
+则对一切 \(r\ge 1\) 都有
+\[
+\kappa_r^\infty\in R_\zeta.
+\]
+另一方面，对 window-\(6\) 的四状态粗粒化核 \(T\) 的基本矩阵
+\(
+Z=(I-T+\mathbf 1\pi^\top)^{-1}
+\)，其不可约分意义下的分母结构必含素数 \(p_\star=571\)（推论 \ref{cor:window6-modpstar-spectral-collision}，并见 \eqref{eq:window6_green_kernel_audit_prime_571}）。
+因此 \(Z\) 不可能落入 \(M_4(R_\zeta)\)。
+\end{theorem}
+
+\begin{corollary}[Green 核在 \(\ZZ\lbrack 1/6\rbrack\) 上的最小公共分母之 \texorpdfstring{$p_\star$}{p*}-进阶为 \(1\)]\label{cor:window6-green-kernel-pstar-valuation-one}
+在定理 \ref{thm:window6-zeta-cumulant-localization-vs-green-kernel-prime571} 的设定下，
+令 \(Z=(I-T+\mathbf 1\pi^{\mathsf T})^{-1}\) 为 window-\(6\) 四态粗粒化核 \(T\) 的基本矩阵（Green 核）。
+记 \(D\) 为满足 \(DZ\in M_4(\ZZ[1/6])\) 的最小正整数（即 \(Z\) 在 \(\ZZ[1/6]\) 上的最小公共分母）。
+则
+\[
+v_{p_\star}(D)=1.
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:window6-zeta-cumulant-localization-vs-green-kernel-prime571} 与推论 \ref{cor:window6-modpstar-spectral-collision}，\(p_\star\) 在不可约分意义下对 \(Z\) 的分母是强迫性的，故 \(v_{p_\star}(D)\ge 1\)。
+\par
+另一方面，定理 \ref{thm:window6-kirchhoff-green-single-order-padic-rigidity} 的 (1) 表明在 \(R_\zeta=\ZZ[1/6]\) 上相关的线性求逆阻塞仅为单阶 \(p_\star\)-扭结：
+在 Smith 形意义下其 \(p_\star\)-初级部分同构于 \(R_\zeta/p_\star R_\zeta\)，不存在 \(p_\star^2\) 或更高阶的初级成分。
+因此任何在该接口上由线性求逆产生的分母，其 \(p_\star\)-部分至多出现一次，得到 \(v_{p_\star}(D)\le 1\)。
+合并两侧不等式即得 \(v_{p_\star}(D)=1\)。证毕。
+\end{proof}
+
+\begin{conjecture}[\(\ZZ\lbrack 1/6\rbrack\)-局部化下 Kirchhoff 新素数的单阶性]\label{conj:window-kirchhoff-prime-single-order-localization}
+对一般 window-\(m\) 的骨架图，设其约化 Laplacian 为 \(L_{\mathrm{red}}^{(m)}\)，并在生成树复杂度（等价于临界群阶）中出现新的 Kirchhoff 素数 \(p_m\)（即该素因子不能由 \(\{2,3\}\) 的局部数据解释）。
+则猜想在 \(R_\zeta=\ZZ[1/6]\) 上有
+\[
+\mathrm{coker}_{R_\zeta}\!\bigl(L_{\mathrm{red}}^{(m)}\bigr)\ \cong\ R_\zeta/p_mR_\zeta,
+\]
+从而相应 Green 核（基本矩阵）的最小公共分母在 \(p_m\) 处的赋值恒为 \(1\)。
+\end{conjecture}
+
+\begin{proof}
+由命题 \ref{prop:fold-gauge-anomaly-bernoulli-p-cumulant-denominator-law}，
+\(
+\kappa_r(p)=N_r(p)/(1+p^3)^{2r-1}
+\)
+且 \(N_r(p)\in\ZZ[p]\)。
+取 \(p=\tfrac12\) 得 \(1+p^3=1+\tfrac18=\tfrac98\)，从而
+\[
+\kappa_r^\infty=\frac{N_r(1/2)}{(9/8)^{2r-1}}\in \ZZ[1/2,1/3]=\ZZ[1/6]=R_\zeta.
+\]
+第二部分由推论 \ref{cor:window6-modpstar-spectral-collision}：模 \(p_\star\) 的谱碰撞强制 \(I-T+\mathbf 1\pi^\top\) 在 \(\FF_{p_\star}\) 上奇异，故其有理逆在不可约分意义下必引入 \(p_\star\) 的分母素因子，因而不属于 \(M_4(R_\zeta)\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[模 \texorpdfstring{$p_\star$}{p*} 的谱碰撞与 Green 核的 \texorpdfstring{$p_\star$}{p*}-分母强迫]\label{cor:window6-modpstar-spectral-collision}
+在定理 \ref{thm:terminal-window6-edge-flux-skeleton} 的设定下，令 \(T\) 为四状态粗粒化核，并令
+\(
+f(t)=48114t^3+7263t^2-506t-55
+\)
+如推论 \ref{cor:window6-edge-flux-coarse-markov-galois}。
+取 \(p_\star=571\)（定义见 \eqref{eq:window6_green_kernel_audit_prime_571}），则在有限域 \(\FF_{p_\star}\) 上成立分解证书
+\[
+f(t)\equiv 150(t-1)\bigl(t^2+38t-209\bigr)\pmod{p_\star},
+\]
+从而 \(\chi_T(t)\) 在模 \(p_\star\) 意义下满足
+\[
+\chi_T(t)\equiv (t-1)^2\bigl(t^2+38t-209\bigr)\pmod{p_\star},
+\]
+即 \(t=1\) 在 \(\FF_{p_\star}\) 上成为重根，出现模谱碰撞（证书见 \eqref{eq:window6_mod571_spectral_collision_audit}，并可追溯至 \cite{Internal2026Window6Mod571SpectralCollisionAudit20260227}）。
+\par
+因此矩阵 \(I-T+\mathbf 1\pi^\top\) 的行列式在分母清除后必被 \(p_\star\) 整除；等价地，该矩阵在 \(\FF_{p_\star}\) 上奇异，从而其有理逆（基本矩阵/平均首达时闭式）在不可约分意义下必引入 \(p_\star\) 作为分母素因子。
+\end{corollary}
+\begin{proof}
+分解证书 \eqref{eq:window6_mod571_spectral_collision_audit} 直接给出 \(t=1\) 同时为 \(f\) 与 \(\chi_T\) 的模 \(p_\star\) 根，且与本征因子 \((t-1)\) 叠加得到 \((t-1)^2\)。
+另一方面，由基本矩阵定义 \(Z=(I-T+\mathbf 1\pi^\top)^{-1}\)（脚本见 \texttt{scripts/exp\_window6\_green\_kernel\_audit\_prime\_571.py}），其存在性要求 \(\det(I-T+\mathbf 1\pi^\top)\neq 0\) 于 \(\QQ\) 成立，而模 \(p_\star\) 的重根现象强制该行列式在清分母后为零，从而 \(Z\) 的分母结构不可避免地含 \(p_\star\)。
+证毕。
+\end{proof}
+\input{sections/generated/eq_window6_mod571_spectral_collision_audit}
+
+\begin{proposition}[\texorpdfstring{$\delta=34$}{δ=34} 在 \texorpdfstring{$\FF_{p_\star}^\times$}{F*^×} 中生成平方子群]\label{prop:window6-delta34-generates-squares}
+令 \(p_\star=571\) 并视 \(\FF_{p_\star}^\times\) 为阶 \(p_\star-1=570\) 的循环群。
+则 window-\(6\) 的 boundary uplift 主位移 \(\delta=34\)（表 \ref{tab:foldbin_boundary_lift_m6_m8}）满足
+\[
+\ord_{p_\star}(34)=\frac{p_\star-1}{2}=285,
+\]
+从而 \(34\) 生成二次剩余子群 \((\FF_{p_\star}^\times)^2\)。
+\end{proposition}
+\begin{proof}
+由 \eqref{eq:window6_mod571_spectral_collision_audit}，存在平方根证据 \(264^2\equiv 34\pmod{p_\star}\)，故 \(34\in(\FF_{p_\star}^\times)^2\)。
+同一证书给出 \(\ord_{p_\star}(34)=285\)，从而 \(34\) 必生成阶为 \(285\) 的平方子群。证毕。
+\end{proof}
+
+\begin{proposition}[跨分辨率的 boundary uplift 在 \texorpdfstring{$\FF_{p_\star}^\times$}{F*^×} 中诱导剩余分层]\label{prop:window6-bdry-uplift-residue-stratification}
+沿用 \(p_\star=571\)。
+对 \(m\in\{6,7,8\}\)，令 \(\Delta_m^{\mathrm{bdry}}\) 为 boundary 扇区在 dyadic uplift 下的位移集合（表 \ref{tab:foldbin_boundary_lift_m6_m8}）。
+则在 \(\FF_{p_\star}^\times\) 上成立如下阶证书（见 \eqref{eq:window6_mod571_spectral_collision_audit}）：
+\[
+\ord_{p_\star}(34)=285,\quad
+\ord_{p_\star}(144)=285,\quad
+\ord_{p_\star}(55)=19,\quad
+\ord_{p_\star}(89)=570.
+\]
+因此 \(\Delta_6^{\mathrm{bdry}}\setminus\{0\}\subset(\FF_{p_\star}^\times)^2\)，而 \(\Delta_7^{\mathrm{bdry}}\) 与 \(\Delta_8^{\mathrm{bdry}}\) 通过引入本原元 \(89\) 生成整个乘法群 \(\FF_{p_\star}^\times\)。
+\end{proposition}
+\begin{proof}
+表 \ref{tab:foldbin_boundary_lift_m6_m8} 给出 \(\Delta^{\mathrm{bdry}}_6=\{0,34\}\)、\(\Delta^{\mathrm{bdry}}_7=\{0,55,89\}\)、\(\Delta^{\mathrm{bdry}}_8=\{0,89,144\}\)。
+阶断言由 \eqref{eq:window6_mod571_spectral_collision_audit} 的显式模幂审计与乘法阶定义直接推出；
+并且 \(\ord_{p_\star}(89)=p_\star-1\) 等价于 \(89\) 为本原元，从而与任意非平凡平方子群生成元并置即可生成全体 \(\FF_{p_\star}^\times\)。
+证毕。
+\end{proof}
+
+\begin{conjecture}[\texorpdfstring{$p_\star$}{p*}-进重锁门控：三层 uplift 的二层压缩与残余 \texorpdfstring{$\ZZ_2$}{Z2} parity 的可审计复原]\label{conj:window6-pstar-parity-restoration-gate}
+取 \(p_\star=571\)，并令 \(Q:=(\FF_{p_\star}^\times)^2=\langle 34\rangle\) 为平方剩余子群（命题 \ref{prop:window6-delta34-generates-squares}）。
+对 \(m\ge 7\) 的 boundary uplift，设存在一个仅依赖于 uplift-choice 的协议门控规则 \(\mathsf G_{p_\star}\)，满足：在任意 boundary 纤维上，仅允许选择那些满足
+\[
+\delta\in Q\ \ \text{或}\ \ \delta=0
+\]
+的 uplift 位移（在 \(\FF_{p_\star}\) 中理解），并且门控后的可行 uplift-choice 在每条 boundary 纤维上恰剩二个分支。
+则门控后的 uplift 在集合论层面重新获得 free 的二层对合结构，从而诱导一个残余 \(\ZZ_2\) sheet parity 分级；并且在 \(m=7,8\) 的审计表 \ref{tab:foldbin_boundary_lift_m6_m8} 上该门控与 \(Q\) 的分层一致：
+\[
+\Delta_7^{\mathrm{bdry}}=\{0,55,89\}\ \leadsto\ \{0,55\},
+\qquad
+\Delta_8^{\mathrm{bdry}}=\{0,89,144\}\ \leadsto\ \{0,144\},
+\]
+其中 \(55,144\in Q\) 而 \(89\) 为本原元（命题 \ref{prop:window6-bdry-uplift-residue-stratification}）。
+\end{conjecture}
+
+\begin{corollary}[三点权在 \texorpdfstring{$\FF_{p_\star}^\times$}{F*^×} 上的严格滤过：平方子群与唯一阶 \texorpdfstring{$19$}{19} 子群]\label{cor:window6-three-point-weight-residue-filtration}
+在 \(p_\star=571\) 下，令 \(Q:=(\FF_{p_\star}^\times)^2\) 为平方剩余子群。
+则 window-\(6\) 的三点交集权 \(\{21,34,55\}\) 在 \(\FF_{p_\star}^\times\) 中满足
+\[
+Q=\langle 34\rangle=\langle 21\rangle\ \supset\ \langle 55\rangle,
+\qquad [Q:\langle 55\rangle]=15,
+\]
+并且存在幂关系
+\[
+55\equiv 34^{15}\equiv 21^{30}\pmod{p_\star}.
+\]
+\end{corollary}
+\begin{proof}
+由 \eqref{eq:window6_mod571_spectral_collision_audit} 得 \(\ord_{p_\star}(34)=\ord_{p_\star}(21)=285=\frac{p_\star-1}{2}\)，故 \(\langle 34\rangle=\langle 21\rangle=Q\)。
+同一证书给出 \(\ord_{p_\star}(55)=19\) 与幂关系 \(55\equiv 34^{15}\equiv 21^{30}\)。
+由于 \(Q\) 为循环群，阶 \(19\) 的子群唯一，故 \(\langle 55\rangle\subset Q\)，并且指数为 \(285/19=15\)。
+证毕。
+\end{proof}
+
+\begin{conjecture}[素数—边界—谱的三联锁定原则]\label{conj:window-prime-bdry-spectrum-triple-lock}
+对一般分辨率 \(m\)，若在该窗口的粗粒化图/核审计中出现新的 Kirchhoff 素数 \(p_m\)（即生成树复杂度或等价的临界群阶含有此前不可见的素因子），
+则预期以下性质以同一 \(p_m\) 为锁定参数同步出现：
+\begin{enumerate}
+  \item 对应的粗粒化核的非平凡谱因子在模 \(p_m\) 上含额外的 \((t-1)\) 因子，从而在 \(\FF_{p_m}\) 上发生 \(t=1\) 的模谱碰撞；
+  \item boundary uplift 的主位移 \(\delta_m\) 在 \(\FF_{p_m}^\times\) 中生成平方子群 \((\FF_{p_m}^\times)^2\)；
+  \item boundary 的 sheet parity 分级与 \(\FF_{p_m}\) 上的二次特征在可观测层面兼容，从而把几何 \(\ZZ_2\) 提升为同一素点上的算术特征。
+\end{enumerate}
+在 \(m=6\) 时，上述三条分别由推论 \ref{cor:window6-modpstar-spectral-collision}、命题 \ref{prop:window6-delta34-generates-squares} 与推论 \ref{cor:terminal-delta-parity-rule} 的联合证书实现。
+\end{conjecture}
+
+\begin{corollary}[四状态粗粒化核的代数数论指纹：\texorpdfstring{$\mathrm{Gal}\cong S_3$}{Gal=S3} 与判别式含 \texorpdfstring{$23$}{23}]\label{cor:window6-edge-flux-coarse-markov-galois}
+在定理 \ref{thm:terminal-window6-edge-flux-skeleton} 的记号下，
+\(\chi_T(t)\) 的三次因子可写为
+\[
+f(t):=48114t^3+7263t^2-506t-55.
+\]
+则 \(f\) 在 \(\QQ\) 上不可约，其分裂域的 Galois 群满足
+\[
+\mathrm{Gal}(f/\QQ)\ \cong\ S_3,
+\]
+并且其判别式为
+\[
+\Delta(f)=108709030613700
+=2^2\cdot 3^6\cdot 5^2\cdot 11\cdot 23\cdot 5894101
+\]
+（见 \eqref{eq:window6_edge_flux_skeleton_arithmetic}）。
+此外，
+\(\det(T)=\frac{5}{4374}\)（同见 \eqref{eq:window6_edge_flux_skeleton_arithmetic}）。
+\end{corollary}
+\begin{proof}
+将 \(f\) 在 \(\FF_{13}\) 上约化得
+\(
+\bar f(t)=t^3+9t^2+t+10
+\)；
+逐一代入 \(t\in\FF_{13}\) 可检验 \(\bar f\) 无根，故 \(\bar f\) 在 \(\FF_{13}\) 上不可约，从而 \(f\) 在 \(\QQ\) 上不可约。
+\par
+对不可约三次多项式，Galois 群为 \(A_3\) 当且仅当判别式为 \(\QQ\) 中平方；
+由 \eqref{eq:window6_edge_flux_skeleton_arithmetic} 的显式分解可见 \(\Delta(f)\) 含素因子 \(23\)，从而非平方，故 \(\mathrm{Gal}(f/\QQ)\cong S_3\)。证毕。
+\end{proof}
+
+\begin{remark}[“共同奇点素数” \texorpdfstring{$23$}{23}：整数骨架挠性与三次谱域分歧的共同敏感口径]\label{rem:window6-common-singular-prime-23}
+由推论 \ref{cor:window6-edge-flux-skeleton-smith-nonsimple}，
+\(\mathrm{coker}(E)\cong \ZZ/3\ZZ\oplus \ZZ/3450\ZZ\)，且 \(23\mid 3450\)，故 \(\mathrm{coker}(E)\) 的 \(23\)-初级分量非平凡。
+另一方面，推论 \ref{cor:window6-edge-flux-coarse-markov-galois} 给出 \(23\mid \Delta(f)\)，从而 \(f\) 在模 \(23\) 约化下不分离，等价地三次谱域的分裂域在素点 \(p=23\) 处必发生分歧。
+因此，模 \(23\) 同时是块级整数骨架（\(\mathrm{coker}(E)\)）与三次谱域分歧（\(\Delta(f)\)）的共同敏感口径：任何声称“保持三次谱指纹”或“保持骨架挠性”的局部改写/等价，若其断言在另一侧失败，则该失配在模 \(23\) 的约化审计上必可被直接暴露。
+\end{remark}
+
+\begin{corollary}[黄金域与三次谱域的线性互素性：自然六次“审计域”]\label{cor:window6-golden-cubic-audit-field-degree6}
+令 \(K_\varphi:=\QQ(\varphi)=\QQ(\sqrt5)\) 为黄金域，并令 \(K_T:=\QQ(\lambda)\)，其中 \(\lambda\) 为四状态粗粒化核 \(T\) 的任一非平凡特征值（定理 \ref{thm:terminal-window6-edge-flux-skeleton}）。
+则 \([K_\varphi:\QQ]=2\)、\([K_T:\QQ]=3\)，并且 \(K_\varphi\cap K_T=\QQ\)。
+因此其合成域 \(K:=K_\varphi K_T\) 满足
+\[
+[K:\QQ]=6.
+\]
+进一步，记
+\[
+\mathcal A:=\QQ[\lambda,\varphi]\subset K,
+\]
+则 \(\mathcal A=K\)，从而 \(\dim_{\QQ}\mathcal A=6\)。
+并且若以 \((1,\lambda,\lambda^2)\) 为 \(K_T\) 的 \(\QQ\)-基、以 \((1,\varphi)\) 为 \(K_\varphi\) 的 \(\QQ\)-基，则 \(\mathcal A\) 具有显式乘积基
+\[
+\{\,1,\ \varphi,\ \lambda,\ \lambda\varphi,\ \lambda^2,\ \lambda^2\varphi\,\}.
+\]
+该六次合成域把 6D cut-and-project 的黄金尺度（\(\S\ref{subsec:icosahedral-6d-model-set}\)）与 window-\(6\) 粗粒化谱指纹（推论 \ref{cor:window6-edge-flux-coarse-markov-galois}）统一为同一代数载体，从而提供一个可移植的数域级审计接口。
+\end{corollary}
+\begin{proof}
+\([K_\varphi:\QQ]=2\) 由 \(\varphi^2-\varphi-1=0\) 立即得到。
+由推论 \ref{cor:window6-edge-flux-coarse-markov-galois}，\(f\) 在 \(\QQ\) 上不可约且次数为 \(3\)，故其任一根 \(\lambda\) 生成的扩张满足 \([K_T:\QQ]=3\)。
+于是 \([K_\varphi\cap K_T:\QQ]\) 同时整除 \(2\) 与 \(3\)，只能为 \(1\)，即 \(K_\varphi\cap K_T=\QQ\)。
+从而
+\(
+[K_\varphi K_T:\QQ]=[K_\varphi:\QQ][K_T:\QQ]=6
+\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[自然的 \texorpdfstring{$12$}{12} 次 Galois 审计覆叠：\texorpdfstring{$S_3\times C_2$}{S3xC2} 作为“黄金尺度 + 三次谱指纹”的统一载体]\label{cor:window6-golden-s3c2-audit-cover-degree12}
+沿用推论 \ref{cor:window6-edge-flux-coarse-markov-galois} 的记号，令 \(L\) 为三次多项式 \(f\) 的分裂域。
+并令黄金域 \(K_\varphi=\QQ(\sqrt5)\)。
+则合成域
+\[
+\widehat K:=L\cdot K_\varphi
+\]
+是一个 \(12\) 次 Galois 扩张，且其 Galois 群满足
+\[
+\mathrm{Gal}(\widehat K/\QQ)\cong S_3\times C_2.
+\]
+\end{corollary}
+\begin{proof}
+由推论 \ref{cor:window6-edge-flux-coarse-markov-galois}，\(f\) 在 \(\QQ\) 上不可约且 \(\mathrm{Gal}(f/\QQ)\cong S_3\)，故 \(L/\QQ\) 为次数 \(6\) 的 Galois 扩张。
+在 \(S_3\) 中唯一的指数 \(2\) 子群为 \(A_3\)，因此 \(L\) 含唯一二次子域 \(L^{A_3}\)。
+对不可约三次多项式，\(L^{A_3}=\QQ(\sqrt{\Delta_{\mathrm{sf}}})\)，其中 \(\Delta_{\mathrm{sf}}\) 为判别式 \(\Delta(f)\) 的平方自由部分。
+\par
+由 \eqref{eq:window6_edge_flux_skeleton_arithmetic}，
+\(
+\Delta(f)=2^2\cdot 3^6\cdot 5^2\cdot 11\cdot 23\cdot 5894101
+\)，
+从而 \(\Delta_{\mathrm{sf}}=11\cdot 23\cdot 5894101\)，特别地 \(\QQ(\sqrt{\Delta_{\mathrm{sf}}})\neq \QQ(\sqrt5)\)。
+因此 \(K_\varphi\) 不嵌入 \(L\)，即 \(K_\varphi\cap L=\QQ\)。
+\par
+由于 \(L/\QQ\) 与 \(K_\varphi/\QQ\) 均为 Galois 扩张且交为 \(\QQ\)，它们线性互素，故
+\[
+[\widehat K:\QQ]=[L:\QQ]\,[K_\varphi:\QQ]=6\cdot 2=12,
+\qquad
+\mathrm{Gal}(\widehat K/\QQ)\cong \mathrm{Gal}(L/\QQ)\times \mathrm{Gal}(K_\varphi/\QQ)\cong S_3\times C_2.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$S_3\times C_2$}{S3xC2} 内生的阶 \texorpdfstring{$6$}{6} 循环子群]\label{cor:window6-golden-s3c2-c6-phase-source}
+在推论 \ref{cor:window6-golden-s3c2-audit-cover-degree12} 的设定下，
+\(\mathrm{Gal}(\widehat K/\QQ)\cong S_3\times C_2\) 含有一个阶为 \(6\) 的循环子群。
+\end{corollary}
+\begin{proof}
+取 \(S_3\) 中任一 \(3\)-循环 \(\sigma\) 与 \(C_2\) 的非平凡元 \(\varepsilon\)，则 \((\sigma,\varepsilon)\in S_3\times C_2\) 的阶为 \(\mathrm{lcm}(3,2)=6\)。
+故其生成的子群同构于 \(\ZZ_6\)。证毕。
+\end{proof}
+
+\begin{corollary}[谱—响应双重素因子：\texorpdfstring{$23$}{23} 的分歧/挠性并存]\label{cor:window6-prime23-spectral-response}
+沿用推论 \ref{cor:window6-edge-flux-coarse-markov-galois} 的记号，记 \(L\) 为 \(f\) 的分裂域。
+则 \(23\mid \Delta(f)\) 蕴含 \(23\) 为 \(L/\QQ\) 的分歧素数（等价地：\(f\) 在模 \(23\) 约化下不分离）。
+另一方面，由推论 \ref{cor:terminal-window6-coupling-response-group-23-torsion}，
+由类型耦合矩阵 \(M\) 定义的有限阿贝尔响应群 \(\mathcal{C}_6=\ZZ^{21}/M\ZZ^{21}\) 具有非平凡的 \(23\)-torsion。
+因此在 window-\(6\) 的审计接口中，素数 \(23\) 同时作为粗粒化谱域的分歧标记与耦合响应群的本征挠性素因子出现，构成一条可复核的“谱—响应”耦合算术指纹。
+\end{corollary}
+\begin{proof}
+第一部分由判别式的标准性质：对分裂域 \(L\)，任何整系数分离多项式的判别式所含素因子均为 \(L/\QQ\) 的分歧素数（亦即约化多项式出现重根的素数）。
+第二部分由推论 \ref{cor:terminal-window6-coupling-response-group-23-torsion}。
+将二者并置即可。证毕。
+\end{proof}
+
+\begin{conjecture}[\texorpdfstring{$23$}{23}-初级阻碍类：块级与类型级判别群的共同素因子假说]\label{conj:window6-23-primary-obstruction-class}
+在 \eqref{eq:window6_edge_flux_skeleton_arithmetic} 与 \eqref{eq:window6_fiber_edge_coupling_det} 的口径下，
+\(\det(E)\)、\(\Delta(f)\) 与 \(\det(M)\) 均含素因子 \(23\)，从而
+\(\mathrm{coker}(E)\) 与 \(\mathrm{coker}(M)\) 的 \(23\)-初级分量均非平凡。
+猜想：对所有与 window-\(6\) 审计接口相容的局部扰动推送（例如保持边分离与类型邻接刚性的扰动类，见定理 \ref{thm:terminal-foldbin6-cube-edge-separation} 与命题 \ref{prop:terminal-gamma6-rigidity}），
+存在一个自然定义的 \(23\)-挠元/同调类 \(\kappa_{23}\)（由 \(\mathrm{coker}(M)\) 与 \(\mathrm{coker}(E)\) 的比较构造诱导），
+其消失当且仅当该扰动允许把相应的块级推送动力学提升为某种全局线性/半线性表示而不破坏类型邻接刚性。
+\end{conjecture}
+

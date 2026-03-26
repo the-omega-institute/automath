@@ -1,0 +1,371 @@
+\paragraph{Frobenius 特征与原始纤维坐标：Schur 断层的整性、Euler 分解与模 \texorpdfstring{$p$}{p} 可审计直方图}
+本段把定理 \ref{thm:pom-schur-cycle-index-tomography} 的角色加权显式式进一步压缩为对称函数恒等式：
+Schur 通道迹在严格意义上等同于“纤维多重度对角矩阵”的 Schur 多项式取值。
+该识别一方面给出整性与可审计整除性，另一方面允许以单一生成函数导出 Euler 分解与原始纤维坐标，
+并据此得到由高阶碰撞矩恢复 \(d_m\bmod p\) 直方图的严格反演公式。
+
+\begin{corollary}[Schur 通道迹的 Frobenius--特征标识别：等变 MOM 的输出即 \texorpdfstring{$\mathrm{GL}$}{GL}-迹]\label{cor:pom-schur-trace-frobenius-character-identification}
+在分辨率 \(m\) 上，设稳定类型集 \(X_m\) 与纤维多重度 \(d_m:X_m\to\NN\) 已定，令碰撞矩
+\[
+S_r(m):=\sum_{x\in X_m} d_m(x)^r\qquad(r\ge 1).
+\]
+定义对角矩阵
+\[
+D_m:=\mathrm{diag}\bigl(d_m(x)\bigr)_{x\in X_m}.
+\]
+对固定整数 \(q\ge 2\) 与任意 \(\lambda\vdash q\)，令 \(T_{q,\lambda}(m)\) 为定理 \ref{thm:pom-schur-cycle-index-tomography} 的 Schur 通道迹。
+记 \(s_\lambda\) 为 Schur 对称函数，并以 \(D_m\) 的对角元作为变量取值；其幂和满足
+\[
+p_r(D_m):=\Tr(D_m^r)=S_r(m).
+\]
+则成立恒等式
+\[
+\boxed{\;
+T_{q,\lambda}(m)=f^\lambda\, s_\lambda(D_m)\; } ,
+\qquad f^\lambda:=\dim S^\lambda.
+\]
+从而对每个 \((m,q,\lambda)\) 都有整性与可审计整除性：
+\[
+\frac{T_{q,\lambda}(m)}{f^\lambda}=s_\lambda(D_m)\in\ZZ,
+\qquad\text{并因此}\qquad
+f^\lambda\mid T_{q,\lambda}(m).
+\]
+特别地，平凡通道与符号通道分别满足
+\[
+T_{q,(q)}(m)=h_q(D_m),\qquad
+T_{q,(1^q)}(m)=e_q(D_m),
+\]
+其中 \(h_q,e_q\) 为完全对称与基本对称函数。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-schur-cycle-index-tomography}，
+\[
+\frac{T_{q,\lambda}(m)}{f^\lambda}
+=\frac{1}{q!}\sum_{\sigma\in S_q}\chi^\lambda(\sigma)\prod_{r\ge 1}S_r(m)^{c_r(\sigma)}.
+\]
+而 Frobenius 特征同构给出 Schur 函数的幂和展开
+\[
+s_\lambda=\frac{1}{q!}\sum_{\sigma\in S_q}\chi^\lambda(\sigma)\prod_{r\ge 1}p_r^{c_r(\sigma)}.
+\]
+代入 \(p_r=p_r(D_m)=S_r(m)\) 即得 \(T_{q,\lambda}(m)=f^\lambda s_\lambda(D_m)\)。
+由于 \(s_\lambda\) 为整系数对称多项式且 \(D_m\) 的对角元为整数，故 \(s_\lambda(D_m)\in\ZZ\)，从而 \(f^\lambda\mid T_{q,\lambda}(m)\)。
+最后两式为 Schur 函数在 \(\lambda=(q)\)、\(\lambda=(1^q)\) 的特例。证毕。
+\end{proof}
+
+\begin{proposition}[单一生成函数控制全 Schur 断层：Jacobi--Trudi 与原始纤维坐标的 Euler 分解]\label{prop:pom-schur-trace-jacobi-trudi-euler-primitive-fiber}
+令一元生成函数
+\[
+H_m(z):=\sum_{q\ge 0}h_q(D_m)\,z^q
+=\prod_{x\in X_m}\frac{1}{1-d_m(x)z}
+=\exp\!\left(\sum_{r\ge 1}\frac{S_r(m)}{r}z^r\right).
+\]
+则对任意 \(\lambda\vdash q\) 有 Jacobi--Trudi 确定式表达
+\[
+\boxed{\;
+s_\lambda(D_m)=\det\bigl(h_{\lambda_i-i+j}(D_m)\bigr)_{1\le i,j\le \ell(\lambda)}\;}
+\]
+（约定 \(h_0=1,h_k=0\ (k<0)\)）。
+\par
+进一步，引入原始纤维坐标
+\[
+b_n(m):=\frac{1}{n}\sum_{d\mid n}\mu(d)\,S_{n/d}(m)\qquad(n\ge 1),
+\]
+则存在严格 Euler 分解
+\[
+\boxed{\;
+H_m(z)=\prod_{n\ge 1}(1-z^n)^{-b_n(m)}\;}
+\]
+并且 \(b_n(m)\in\ZZ_{\ge 0}\)。
+若令有向多重图 \(G_m\) 的顶点集为 \(X_m\)，并在每个顶点 \(x\) 上附加恰好 \(d_m(x)\) 条带标签自环，
+则 \(S_n(m)=\Tr(A(G_m)^n)\) 为长度 \(n\) 闭路数，且 \(b_n(m)\) 正是该图中长度 \(n\) 的原始闭路数（按循环移位取商）。
+\end{proposition}
+\begin{proof}
+生成函数的乘积式由 \(h_q\) 的定义（完全对称函数的基本生成函数）给出；
+对数后用
+\(
+\log(1-t)^{-1}=\sum_{r\ge 1}t^r/r
+\)
+并代入 \(p_r(D_m)=S_r(m)\) 得指数式。
+Jacobi--Trudi 为 Schur 函数的标准确定式表达。
+\par
+Euler 分解由指数式与幂级数恒等式推得：
+\[
+\log\prod_{n\ge 1}(1-z^n)^{-b_n}
+=\sum_{n\ge 1}b_n\sum_{k\ge 1}\frac{z^{nk}}{k}
+=\sum_{r\ge 1}\frac{1}{r}\left(\sum_{n\mid r}n b_n\right)z^r.
+\]
+令 \(\sum_{n\mid r}n b_n=S_r(m)\) 并作 Möbius 反演即得 \(b_n(m)\) 的公式。
+整性由反演系数为整数给出；非负性可由图 \(G_m\) 的闭路与 primitive 闭路分解（necklace 分解）解释：长度 \(n\) 的闭路按最小周期分解，primitive 计数满足 \(S_n=\sum_{d\mid n} d\,b_d\)。证毕。
+\end{proof}
+
+\begin{theorem}[平凡通道的极值谱抽取：由 \texorpdfstring{$q$}{q}-轴渐近精确恢复最大纤维与其重数]\label{thm:pom-trivial-channel-extreme-spectrum-extraction}
+固定分辨率 \(m\)，并记平凡通道系数序列
+\[
+Z_m(q):=T_{q,(q)}(m)=h_q(D_m),
+\qquad
+H_m(z):=\sum_{q\ge 0}Z_m(q)\,z^q=\prod_{x\in X_m}(1-d_m(x)z)^{-1}.
+\]
+令
+\[
+M_m:=\max_{x\in X_m}d_m(x),\qquad
+N_m:=\card{\{x\in X_m:\ d_m(x)=M_m\}},
+\]
+并定义常数
+\[
+R_m:=\prod_{\substack{x\in X_m\\ d_m(x)<M_m}}\Bigl(1-\frac{d_m(x)}{M_m}\Bigr)^{-1}\in(1,\infty).
+\]
+则当 \(q\to\infty\) 时有完整主项展开
+\[
+Z_m(q)=\frac{R_m}{(N_m-1)!}\,q^{N_m-1}M_m^{\,q}\Bigl(1+O\!\bigl(q^{-1}\bigr)\Bigr).
+\]
+从而最大纤维与其重数可由比值在 \(q\)-轴上严格抽取：
+\[
+M_m=\lim_{q\to\infty}\frac{Z_m(q+1)}{Z_m(q)},
+\qquad
+N_m-1=\lim_{q\to\infty}q\left(\frac{Z_m(q+1)}{M_m Z_m(q)}-1\right)
+=-\lim_{q\to\infty}q\left(\frac{M_m Z_m(q)}{Z_m(q+1)}-1\right).
+\]
+\end{theorem}
+\begin{proof}
+将
+\(
+\prod_{x\in X_m}(1-d_m(x)z)^{-1}
+\)
+按最大纤维与其余因子分组，写为
+\[
+H_m(z)=(1-M_m z)^{-N_m}\,G_m(z),
+\qquad
+G_m(z):=\prod_{\substack{x\in X_m\\ d_m(x)<M_m}}(1-d_m(x)z)^{-1}.
+\]
+由于对所有 \(x\) 有 \(d_m(x)\le M_m\)，函数 \(G_m\) 在 \(|z|\le 1/M_m\) 的邻域内解析，并满足
+\[
+G_m(1/M_m)=\prod_{d_m(x)<M_m}\Bigl(1-\frac{d_m(x)}{M_m}\Bigr)^{-1}=R_m.
+\]
+由 \((1-M_m z)^{-N_m}=\sum_{q\ge 0}\binom{N_m+q-1}{N_m-1}M_m^{\,q}z^q\) 与解析因子的系数抽取（或等价的有限部分分式展开）得到
+\[
+Z_m(q)=R_m\,\binom{N_m+q-1}{N_m-1}M_m^{\,q}+O\!\bigl(q^{N_m-2}M_m^{\,q}\bigr),
+\]
+而
+\(
+\binom{N_m+q-1}{N_m-1}=\frac{q^{N_m-1}}{(N_m-1)!}\bigl(1+O(q^{-1})\bigr)
+\)
+给出主项展开。
+比值极限由
+\(
+Z_m(q+1)/Z_m(q)=M_m\bigl(1+(N_m-1)/q+O(q^{-2})\bigr)
+\)
+直接推出。证毕。
+\end{proof}
+
+\begin{proposition}[平凡通道的有限可判定性：仅由有限个 \texorpdfstring{$q$}{q}-值唯一重构纤维谱与全部碰撞矩]\label{prop:pom-trivial-channel-finite-decidability}
+仍固定分辨率 \(m\)，记 \(n:=|X_m|\) 并令 \(Z_m(q)=h_q(D_m)\)。
+定义次数 \(n\) 的多项式
+\[
+Q_m(z):=\prod_{x\in X_m}(1-d_m(x)z)=:1+a_1(m)z+\cdots+a_n(m)z^n\in\ZZ[z],
+\]
+则 \(Z_m(q)\) 满足阶为 \(n\) 的最小线性递推
+\[
+Z_m(q+n)+a_1(m)Z_m(q+n-1)+\cdots+a_n(m)Z_m(q)=0\qquad(q\ge 0).
+\]
+从而成立：
+\begin{enumerate}
+  \item 给定有限数据窗 \(\{Z_m(0),Z_m(1),\dots,Z_m(2n-1)\}\) 可唯一确定 \((a_1(m),\dots,a_n(m))\)；
+  \item \(Q_m\) 的根多重集（等价于 \(\{d_m(x)^{-1}\}_{x\in X_m}\) 的多重集）可唯一恢复纤维多重度多重集 \(\{d_m(x)\}_{x\in X_m}\)；
+  \item 由 \(\{d_m(x)\}\) 可恢复全部碰撞矩 \(S_r(m)=\sum_x d_m(x)^r\)（任意 \(r\ge 1\)）以及全部 Schur 断层值 \(s_\lambda(D_m)=T_{q,\lambda}(m)/f^\lambda\)（任意 \(q\) 与 \(\lambda\vdash q\)）。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+由生成函数恒等式
+\(
+H_m(z)=\sum_{q\ge 0}Z_m(q)z^q=\prod_x(1-d_m(x)z)^{-1}
+\)
+可得 \(Q_m(z)H_m(z)=1\)。
+比较 \(z^{q+n}\) 的系数即得所示递推。
+由于 \(Q_m\) 为分母的最小多项式（其次数等于极点阶之和 \(n=|X_m|\)），该递推为最小阶。
+\par
+对 (1)，由恒等式 \(Q_m(z)H_m(z)=1\) 比较低阶系数即可唯一确定 \((a_1(m),\dots,a_n(m))\)：
+\[
+Z_m(k)+a_1(m)Z_m(k-1)+\cdots+a_k(m)Z_m(0)=0,\qquad 1\le k\le n.
+\]
+由于 \(Z_m(0)=1\)，可递归唯一求出
+\[
+a_k(m)=-Z_m(k)-\sum_{j=1}^{k-1}a_j(m)Z_m(k-j)\qquad(1\le k\le n).
+\]
+因此 \(\{Z_m(0),Z_m(1),\dots,Z_m(n)\}\)（从而任意更长数据窗如 \(\{Z_m(0),\dots,Z_m(2n-1)\}\)）唯一确定 \((a_1(m),\dots,a_n(m))\)。
+\par
+对 (2)，由定义 \(Q_m(z)=\prod_x(1-d_m(x)z)\)，其根为 \(\{d_m(x)^{-1}\}\) 并按重数计入。
+对 (3) 属于定义层面的直接恢复：碰撞矩由幂和 \(S_r(m)=\sum_x d_m(x)^r\) 得到，而 Schur 断层值由 \(\lambda\mapsto s_\lambda(D_m)\) 作为整系数对称多项式在对角元 \(\{d_m(x)\}\) 上的取值确定（推论 \ref{cor:pom-schur-trace-frobenius-character-identification} 与命题 \ref{prop:pom-schur-trace-jacobi-trudi-euler-primitive-fiber}）。证毕。
+\end{proof}
+
+\input{parts/thm__pom-fiber-spectrum-stieltjes-rigidity-determinant-schatten}
+
+\begin{proposition}[平凡通道的 \texorpdfstring{$p$}{p}-进 Newton 多边形断层：由 \texorpdfstring{$Q_m$}{Q\_m} 的系数恢复 \texorpdfstring{$v_p(d_m(x))$}{vp} 的完整多重集]\label{prop:pom-trivial-channel-padic-newton-polygon-valuations}
+沿用命题 \ref{prop:pom-trivial-channel-finite-decidability} 的多项式 \(Q_m(z)=\prod_x(1-d_m(x)z)\)。
+对任意素数 \(p\)，在 \(\QQ_p\) 上考虑 \(Q_m\) 的 Newton 多边形（以点 \((k,v_p(a_k(m)))\) 的下凸包定义，其中 \(Q_m(z)=\sum_{k=0}^{n}a_k(m)z^k\) 且 \(a_0(m)=1\)）。
+则其 Newton 斜率（按 \(s:=-\Delta y/\Delta x\) 计，并以水平长度计重数）的多重集恰为
+\[
+\{-v_p(d_m(x)):\ x\in X_m\}.
+\]
+因此，结合命题 \ref{prop:pom-trivial-channel-finite-decidability} 的有限恢复，可由有限窗口
+\(
+\{T_{q,(q)}(m)\}_{0\le q\le 2|X_m|-1}
+\)
+在纯代数步骤中恢复每个素数 \(p\) 下的估值分布 \(\{v_p(d_m(x))\}\)（按重数）。
+\end{proposition}
+\begin{proof}
+Newton 多边形基本定理断言：对任意 \(p\)-进多项式，其 Newton 斜率多重集等于其在代数闭包中根的 \(p\)-进估值多重集。
+而 \(Q_m(z)=\prod_x(1-d_m(x)z)\) 的根为 \(z_x=d_m(x)^{-1}\)，故 \(v_p(z_x)=-v_p(d_m(x))\)。
+将其代回即得所示斜率多重集恒等式；最后一条为把命题 \ref{prop:pom-trivial-channel-finite-decidability} 的 \(Q_m\) 恢复与 Newton 多边形读出组合而得。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$p$}{p}-典型 Frobenius 同余与 Teichm\"uller 极限：由高阶碰撞矩恢复 \texorpdfstring{$d_m\bmod p$}{d\_m mod p} 的完整直方图]\label{prop:pom-collision-moment-ptypical-congruence-teichmuller-histogram}
+取素数 \(p\) 并固定 \(m\)。
+\begin{enumerate}
+  \item 对任意整数 \(k\ge 1\) 成立同余
+  \[
+  \boxed{\;
+  S_{p^k}(m)\equiv S_{p^{k-1}}(m)\pmod{p^k}\;}
+  \]
+  从而序列 \(\{S_{p^k}(m)\}_{k\ge 0}\) 在 \(\ZZ_p\) 中为 Cauchy 列，极限
+  \(
+  S_{p^\infty}(m):=\lim_{k\to\infty}S_{p^k}(m)\in\ZZ_p
+  \)
+  存在。
+  \item 记 \(\omega_p:\FF_p\to\ZZ_p\) 为 Teichm\"uller 提升（约定 \(\omega_p(0)=0\)，且对 \(a\in\FF_p^\times\) 有 \(\omega_p(a)^{p-1}=1\) 与 \(\omega_p(a)\equiv a\ (\mathrm{mod}\ p)\)）。
+  对任意 \(j\in\{1,\dots,p-2\}\)，极限
+  \[
+  U_j(m):=\lim_{k\to\infty}S_{j p^k}(m)\in\ZZ_p
+  \]
+  存在且满足恒等式
+  \[
+  \boxed{\;
+  U_j(m)=\sum_{x\in X_m}\omega_p\!\bigl(d_m(x)\bigr)^j\;}
+  \]
+  （右端在 \(\ZZ_p\) 中求和）。
+  另外定义
+  \[
+  U_0(m):=\lim_{k\to\infty}S_{(p-1)p^k}(m)=\sum_{x\in X_m}\omega_p\!\bigl(d_m(x)\bigr)^{p-1}\in\ZZ
+  \]
+  （该值等于 \(\card{\{x\in X_m:\ p\nmid d_m(x)\}}\)，对应于 \(\FF_p^\times\) 的平凡乘法角色按 \(0\mapsto 0\) 的延拓）。
+  令模 \(p\) 直方图
+  \[
+  N_a(m):=\card{\{x\in X_m:\ d_m(x)\equiv a\ (\mathrm{mod}\ p)\}}\qquad(a\in\FF_p),
+  \]
+  则对任意 \(a\in\FF_p^\times\) 有有限 Fourier 反演
+  \[
+  \boxed{\;
+  N_a(m)=\frac{1}{p-1}\left(U_0(m)+\sum_{j=1}^{p-2}a^{-j}\,U_j(m)\right),\qquad
+  N_0(m)=|X_m|-\sum_{a\in\FF_p^\times}N_a(m)\;}
+  \]
+  从而在不接触单点纤维的前提下，仅通过一族高阶碰撞矩沿 \(n=j p^k\)（\(1\le j\le p-2\)）与 \(n=(p-1)p^k\)（\(k\to\infty\)）的取值，即可严格恢复 \(d_m\bmod p\) 的完整计数。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+对任意整数 \(a\) 有基本同余 \(a^{p^k}\equiv a^{p^{k-1}}\ (\mathrm{mod}\ p^k)\)；对每个 \(x\) 取 \(a=d_m(x)\) 并求和即得 (1)。
+\par
+对 (2)：对任意整数 \(t\)，\(t^{p^k}\) 在 \(\ZZ_p\) 中收敛到 \(\omega_p(t\bmod p)\)。
+因此对 \(1\le j\le p-2\) 有 \(t^{j p^k}=(t^j)^{p^k}\to \omega_p(t)^j\)，而
+\(
+t^{(p-1)p^k}=(t^{p-1})^{p^k}\to \omega_p(t)^{p-1}
+\)（当 \(t\equiv 0\ (\mathrm{mod}\ p)\) 时极限为 \(0\)，当 \(t\not\equiv 0\) 时极限为 \(1\)）。
+逐项求和即得 \(U_j(m)\)（\(1\le j\le p-2\)）与 \(U_0(m)\) 的表示式。
+\par
+最后在乘法群 \(\FF_p^\times\) 上对函数 \(a\mapsto N_a(m)\) 作离散 Fourier 反演：由上式，
+对 \(1\le j\le p-2\) 有
+\(
+U_j(m)=\sum_{a\in\FF_p^\times}N_a(m)\omega_p(a)^j
+\)，而 \(U_0(m)=\sum_{a\in\FF_p^\times}N_a(m)\) 对应平凡角色。
+对固定 \(a\in\FF_p^\times\) 求和
+\(
+U_0+\sum_{j=1}^{p-2}a^{-j}U_j
+=\sum_{b\in\FF_p^\times}N_b\sum_{j=0}^{p-2}(b/a)^j
+=(p-1)N_a
+\)
+即得反演公式；\(N_0\) 由总数守恒得到。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$p$}{p}-进 Schur 断层的有限确定性：模 \texorpdfstring{$p^N$}{p^N} 意义下由有限 \texorpdfstring{$p$}{p}-幂碰撞矩决定]\label{prop:pom-schur-channels-mod-pN-from-ptypical-ghost}
+固定分辨率 \(m\)、素数 \(p\) 与整数 \(N\ge 1\)。
+给定有限矩数据（\(p\)-典型 ghost 窗）
+\[
+\mathcal G_{m,p^N}:=\bigl(S_{p^0}(m),S_{p^1}(m),\dots,S_{p^{N-1}}(m)\bigr)\subset\ZZ.
+\]
+假设存在一条可审计反演过程，使得由 \(\mathcal G_{m,p^N}\) 可唯一确定模 \(p^N\) 的残基直方图
+\[
+N_a^{(N)}(m):=\card{\{x\in X_m:\ d_m(x)\equiv a\ (\mathrm{mod}\ p^N)\}}\qquad(a\in\ZZ/p^N\ZZ).
+\]
+在系数环 \(\ZZ/p^N\ZZ\) 上定义生成函数
+\[
+H_{m,p^N}(z)
+:=\prod_{a\ (\mathrm{mod}\ p^N)}(1-az)^{-N_a^{(N)}(m)}
+=\sum_{q\ge 0}h_q^{(p^N)}(m)\,z^q,
+\]
+并对任意分拆 \(\lambda\vdash q\) 以 Jacobi--Trudi 确定式定义
+\[
+s_\lambda^{(p^N)}(m):=\det\bigl(h_{\lambda_i-i+j}^{(p^N)}(m)\bigr)_{1\le i,j\le \ell(\lambda)}
+\in \ZZ/p^N\ZZ.
+\]
+则对所有 \(q\ge 0\) 与 \(\lambda\vdash q\) 成立同余
+\[
+\boxed{\;
+\frac{T_{q,\lambda}(m)}{f^\lambda}
+=s_\lambda(D_m)
+\equiv
+s_\lambda^{(p^N)}(m)\pmod{p^N}\;}
+\]
+从而在模 \(p^N\) 意义下，全部 Schur 断层表 \(\{T_{q,\lambda}(m)\}\)（对任意 \(q\) 与 \(\lambda\vdash q\)）由有限 \(p\)-幂矩窗 \(\mathcal G_{m,p^N}\) 唯一决定。
+\end{proposition}
+\begin{proof}
+由推论 \ref{cor:pom-schur-trace-frobenius-character-identification}，
+\(
+T_{q,\lambda}(m)/f^\lambda=s_\lambda(D_m)\in\ZZ
+\)。
+由于 \(s_\lambda\) 为整系数对称多项式，其在 \(\ZZ/p^N\ZZ\) 上的取值仅依赖于对角元 \(\{d_m(x)\}\) 的模 \(p^N\) 剩余类及其重数；
+把这些重数按残基 \(a\in\ZZ/p^N\ZZ\) 聚合，得到恰为 \(H_{m,p^N}\) 的乘积式。
+在 \(\ZZ/p^N\ZZ\) 上由 \(H_{m,p^N}\) 的系数给出完全对称函数 \(h_q^{(p^N)}(m)\)，并由 Jacobi--Trudi 计算得到 \(s_\lambda^{(p^N)}(m)\)。
+因此 \(s_\lambda(D_m)\) 的模 \(p^N\) 归约与 \(s_\lambda^{(p^N)}(m)\) 一致，得到所示同余。
+最后，“由 \(\mathcal G_{m,p^N}\) 唯一决定”是把假设中的残基直方图反演与上述确定式计算组合而得。证毕。
+\end{proof}
+
+\begin{proposition}[平凡通道的原始纤维展开：\texorpdfstring{$T_{q,(q)}(m)$}{T\_{q,(q)}(m)} 为 \texorpdfstring{$b_n(m)$}{b\_n(m)} 的正整系数多项式]\label{prop:pom-schur-trace-trivial-channel-primitive-fiber-expansion}
+沿用命题 \ref{prop:pom-schur-trace-jacobi-trudi-euler-primitive-fiber} 的 Euler 分解
+\(
+H_m(z)=\prod_{n\ge 1}(1-z^n)^{-b_n(m)}=\sum_{q\ge 0}h_q(D_m)z^q
+\)。
+记平凡通道 \(T_{q,(q)}(m)=h_q(D_m)\)。
+则系数抽取给出完全显式有限和：
+\[
+\boxed{\;
+T_{q,(q)}(m)=
+\sum_{\substack{(k_n)_{n\ge 1}\subset\NN\\ \sum_{n\ge 1}n k_n=q}}
+\ \prod_{n\ge 1}\binom{b_n(m)+k_n-1}{k_n}\;}
+\]
+从而对固定 \(m\)，\(T_{q,(q)}(m)\) 是 \(\{b_n(m)\}_{1\le n\le q}\) 的正整系数多项式。
+\end{proposition}
+\begin{proof}
+由 Euler 分解
+\(
+(1-z^n)^{-b_n}=\sum_{k\ge 0}\binom{b_n+k-1}{k}z^{nk}
+\)。
+对全部 \(n\ge 1\) 取乘积并抽取 \(z^q\) 系数，得到对所有满足 \(\sum n k_n=q\) 的 \((k_n)\) 求和的闭式，即所示表达。证毕。
+\end{proof}
+
+\begin{corollary}[全 Schur 通道的原始纤维坐标化：\texorpdfstring{$T_{q,\lambda}(m)/f^\lambda\in\ZZ[b_1(m),\dots,b_q(m)]$}{T/f in Z[b]} 且可由有限确定式构造]\label{cor:pom-schur-trace-all-channels-primitive-fiber-coordinate}
+在命题 \ref{prop:pom-schur-trace-jacobi-trudi-euler-primitive-fiber} 的记号下，
+对任意 \(\lambda\vdash q\)，Jacobi--Trudi 确定式给出
+\[
+\frac{T_{q,\lambda}(m)}{f^\lambda}
+=s_\lambda(D_m)
+=\det\bigl(h_{\lambda_i-i+j}(D_m)\bigr)_{1\le i,j\le \ell(\lambda)}.
+\]
+而每个 \(h_n(D_m)\) 由命题 \ref{prop:pom-schur-trace-trivial-channel-primitive-fiber-expansion} 是 \(\{b_r(m)\}_{r\le n}\) 的整系数多项式，
+故
+\[
+\boxed{\;
+\frac{T_{q,\lambda}(m)}{f^\lambda}\in \ZZ[b_1(m),\dots,b_q(m)]\;}
+\]
+并由一次有限确定式计算可显式构造全部 Schur 通道迹。
+\end{corollary}
+\begin{proof}
+将 \(h_{\lambda_i-i+j}(D_m)\) 的 \(b\)-坐标多项式表示逐项代入 Jacobi--Trudi 确定式即可。证毕。
+\end{proof}

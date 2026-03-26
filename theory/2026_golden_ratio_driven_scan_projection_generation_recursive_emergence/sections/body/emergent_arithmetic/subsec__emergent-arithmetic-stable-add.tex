@@ -1,0 +1,186 @@
+\subsection{加法作为归一化：从规范形到交换幺半群}\label{subsec:emergent-arithmetic-stable-add}
+
+前面几节已经建立了三层结构：其一，尺度计数配置空间 \(\mathcal D\) 的自由交换幺半群结构；其二，Fibonacci 关系生成的值保持重写与唯一规范横截面 \(X_\infty\)；其三，有限分辨率与跨尺度完成给出的模结构与 Fibonacci-adic 逆极限环。本节说明：在这一框架下，加法并不是额外输入的新原语，而是“逐位叠加之后再归一化”的结果。换言之，稳定加法的本质不是外加一个运算符号，而是把配置层的自由叠加沿值保持轨道投影回唯一规范形。
+
+为此，记无限 Zeckendorf 规范地址空间为
+\[
+X_\infty
+:=
+\{c=(c_1,c_2,\dots): c_k\in\{0,1\},\ c_kc_{k+1}=0,\ \text{仅有限个 }c_k\neq 0\}.
+\]
+并记值映射为
+\[
+\mathrm{Val}(c):=\sum_{k\ge 1} c_k F_{k+1}\in \NN.
+\]
+这里 \(X_\infty\) 既可看作规范地址空间，也可看作配置空间 \(\mathcal D\) 中不可约元的集合；前者强调对象层的稳定表示，后者强调它作为自由计数结构商后的规范横截面。
+
+\begin{definition}[原始叠加配置]
+对任意 \(c,d\in X_\infty\)，把它们视为配置空间 \(\mathcal D\) 中的元素，并定义其原始叠加为
+\[
+S(c,d):=c+d\in \mathcal D,
+\]
+即逐位求和：
+\[
+S(c,d)_k=c_k+d_k.
+\]
+因此 \(S(c,d)\) 的数字一般不再属于 \(\{0,1\}\)，而属于 \(\{0,1,2\}\)；同时它也可能出现相邻非零位，因而通常不再是 Zeckendorf 规范形。
+\end{definition}
+
+\begin{definition}[稳定加法]\label{def:stable-add}
+对任意 \(c,d\in X_\infty\)，定义其稳定和为
+\[
+c\oplus d
+:=
+\Fold_\infty\bigl(S(c,d)\bigr)
+\in X_\infty.
+\]
+也就是说，先在配置层逐位叠加，再把所得配置沿值保持轨道归一化到唯一 Zeckendorf 规范形。
+\end{definition}
+
+\begin{theorem}[稳定加法与值拉回的一致性]\label{thm:stable-add-value-consistency}
+对任意 \(c,d\in X_\infty\)，有
+\[
+\mathrm{Val}(c\oplus d)=\mathrm{Val}(c)+\mathrm{Val}(d).
+\]
+等价地，
+\[
+c\oplus d
+=
+Z\bigl(\mathrm{Val}(c)+\mathrm{Val}(d)\bigr),
+\]
+其中 \(Z(n)\) 表示整数 \(n\) 的唯一 Zeckendorf 规范形。
+\end{theorem}
+\begin{proof}
+由原始叠加的定义，
+\[
+\mathrm{Val}(S(c,d))
+=
+\sum_{k\ge 1}(c_k+d_k)F_{k+1}
+=
+\mathrm{Val}(c)+\mathrm{Val}(d).
+\]
+而定理 \ref{thm:zeckendorf-transversal} 已经说明，\(\Fold_\infty\) 恰是“沿值保持轨道投影到唯一规范横截面”的算子，因此
+\[
+\mathrm{Val}\bigl(\Fold_\infty(S(c,d))\bigr)=\mathrm{Val}(S(c,d)).
+\]
+再由 Zeckendorf 规范形的唯一性，\(\Fold_\infty(S(c,d))\) 必等于值为 \(\mathrm{Val}(c)+\mathrm{Val}(d)\) 的唯一规范地址 \(Z(\mathrm{Val}(c)+\mathrm{Val}(d))\)。证毕。
+\end{proof}
+
+\begin{theorem}[交换幺半群结构]\label{thm:stable-add-commutative-monoid}
+在运算 \(\oplus\) 下，\(X_\infty\) 构成交换幺半群；其单位元为零地址
+\[
+0_X:=0_\infty:=(0,0,0,\dots).
+\]
+并且值映射
+\[
+\mathrm{Val}:(X_\infty,\oplus)\to (\NN,+)
+\]
+是交换幺半群同构。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:stable-add-value-consistency}，
+\[
+\mathrm{Val}(c\oplus d)=\mathrm{Val}(c)+\mathrm{Val}(d).
+\]
+于是交换律与结合律可由 \((\NN,+)\) 的交换律与结合律立刻推出。又 \(\mathrm{Val}(0_X)=0\)，故对任意 \(c\in X_\infty\)，
+\[
+\mathrm{Val}(c\oplus 0_X)=\mathrm{Val}(c)+0=\mathrm{Val}(c),
+\]
+再由 \(\mathrm{Val}\) 的单射性得 \(c\oplus 0_X=c\)。另一方面，\(\mathrm{Val}\) 在 \(X_\infty\) 上与自然数之间本就是双射，而它又保持加法，故为交换幺半群同构。证毕。
+\end{proof}
+
+\begin{corollary}[规范横截面上的商幺半群实现]
+配置空间 \(\mathcal D\) 在 Fibonacci 同余下的商幺半群 \(\mathcal D/\!\equiv\)，经唯一规范横截面 \(X_\infty\) 表示后，恰好就是交换幺半群 \((X_\infty,\oplus)\)。特别地，\(X_\infty\) 上的加法不是额外附会的结构，而是自由配置幺半群在 Fibonacci 关系下取商之后的规范实现。
+\end{corollary}
+\begin{proof}
+前文已知 \(\mathcal D/\!\equiv\cong \NN\)，并且每个同余类在 \(X_\infty\) 中有唯一代表。由定理 \ref{thm:stable-add-commutative-monoid}，类加法在规范代表上正对应 \(\oplus\)。证毕。
+\end{proof}
+
+\begin{proposition}[有限分辨率数值化与稳定加法的兼容性]\label{prop:stable-add-finite-resolution-compatibility}
+对任意 \(c,d\in X_\infty\) 与任意 \(m\ge 1\)，有
+\[
+\operatorname{Addr}_m\!\bigl(\mathrm{Val}(c\oplus d)\bigr)
+=
+\operatorname{Addr}_m\!\bigl(\mathrm{Val}(c)\bigr)
+\boxplus_m
+\operatorname{Addr}_m\!\bigl(\mathrm{Val}(d)\bigr),
+\]
+其中 \(\operatorname{Addr}_m\) 与 \(\boxplus_m\) 为上一节定义的有限分辨率地址化与有限分辨率加法。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:stable-add-value-consistency}，
+\[
+\mathrm{Val}(c\oplus d)=\mathrm{Val}(c)+\mathrm{Val}(d).
+\]
+再由上一节的数值化自然性，
+\[
+\operatorname{Addr}_m(x+y)=\operatorname{Addr}_m(x)\boxplus_m \operatorname{Addr}_m(y),
+\]
+对 \(x=\mathrm{Val}(c)\)、\(y=\mathrm{Val}(d)\) 代入即可。证毕。
+\end{proof}
+
+\begin{corollary}[无绕回情形的截断一致性]
+若对某个 \(m\ge 1\) 有
+\[
+\mathrm{Val}(c)+\mathrm{Val}(d)<F_{m+2},
+\]
+则
+\[
+\operatorname{Addr}_m\!\bigl(\mathrm{Val}(c\oplus d)\bigr)
+=
+w_m\!\bigl(\mathrm{Val}(c)+\mathrm{Val}(d)\bigr).
+\]
+因此，在该无绕回范围内，有限分辨率地址就是无限稳定和的真截断，而不是模意义下的回绕地址。
+\end{corollary}
+\begin{proof}
+在无绕回条件下，模 \(F_{m+2}\) 的约化不改变整数本身，故命题 \ref{prop:stable-add-finite-resolution-compatibility} 中的有限地址化退化为直接取规范地址。证毕。
+\end{proof}
+
+\begin{definition}[对象层可定义的稳定加法]
+设 \(p\) 为一个信息状态，\(a,b\) 为两个对象层地址。若二者在状态 \(p\) 上都已通过对象化与非 \(\mathsf{NULL}\) 判据，并且其读出属于同一稳定值类型，则定义
+\[
+a\oplus_p b
+:=
+\mathrm{Read}_{\mathrm{US},p}(a)\oplus \mathrm{Read}_{\mathrm{US},p}(b).
+\]
+若任一读出未定义、为 \(\mathsf{NULL}\)，或类型不兼容，则表达式 \(a\oplus_p b\) 在对象层上不定义。
+\end{definition}
+
+\begin{proposition}[加法不跨越 \texorpdfstring{\(\mathsf{NULL}\)}{NULL} 边界创造事实]\label{prop:stable-add-no-null-creation}
+若 \(a\) 或 \(b\) 在状态 \(p\) 上尚未对象化、读出为 \(\mathsf{NULL}\)，或类型不兼容，则 \(a\oplus_p b\) 不定义。特别地，稳定加法不能把两个未成立的对象层项“归一化”成一个已成立值。
+\end{proposition}
+\begin{proof}
+由对象层加法的定义，\(\oplus_p\) 的前提是两个输入都已在对象层形成合法、单值且可核验的读出。若该前提不成立，则对象层中不存在作为 \(\oplus\) 输入的值对象，因而表达式无语义基础。归一化只作用于已经存在的配置或值读出，不产生新的对象层资格。证毕。
+\end{proof}
+
+\begin{definition}[局部值保持加法规约]
+令 \(s=S(c,d)\) 为原始叠加配置。称一条规约 \(s\to s'\) 为局部值保持加法规约，若它是 \S\ref{subsec:directed-rewrite} 中给出的四类 Fibonacci 值保持局部重写之一，即相邻合并、底位去重、第二位去重与一般位去重。
+\end{definition}
+
+\begin{theorem}[稳定加法的归一化实现]\label{thm:stable-add-normalization-realization}
+对任意 \(c,d\in X_\infty\)，从原始叠加配置 \(S(c,d)\) 出发，反复施加局部值保持加法规约，必在有限步后终止于唯一不可约元；该不可约元恰为 \(c\oplus d\)。
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:directed-rewrite-termination} 已经证明，这组局部规约强终止，并且其不可约元恰为 \(X_\infty\) 中的 Zeckendorf 规范形。又每一步规约都保持 \(\mathrm{Val}\) 不变，因此从 \(S(c,d)\) 出发得到的终态与 \(S(c,d)\) 同值。由定理 \ref{thm:stable-add-value-consistency}，值为 \(\mathrm{Val}(c)+\mathrm{Val}(d)\) 的唯一规范形正是 \(c\oplus d\)。故终态唯一且等于 \(c\oplus d\)。证毕。
+\end{proof}
+
+\begin{corollary}[加法的可计算性]\label{cor:stable-add-computable}
+若 \(c,d\in X_\infty\) 具有有限支撑，则 \(c\oplus d\) 可由有限步局部规约算法计算。进一步，按标准 Zeckendorf/Ostrowski 归一化实现，可将这一过程编译为仅依赖有限局部状态的顺序换能器，从而得到线性时间的流式算法。
+\end{corollary}
+\begin{proof}
+有限支撑保证原始叠加配置亦有限支撑，定理 \ref{thm:stable-add-normalization-realization} 给出有限步终止性。至于顺序换能器与线性时间实现，则是相应 Zeckendorf/Ostrowski 归一化自动机理论的标准实现结论；其数学核心仍然只是“局部值保持 + 唯一规范形”。证毕。
+\end{proof}
+
+\begin{remark}[加法不是新原语]
+本节表明，加法在配置层与值层都不需要作为额外原语输入。配置层只需要：
+\begin{enumerate}
+  \item 逐位叠加这一自由交换幺半群操作；
+  \item Fibonacci 值保持局部重写；
+  \item 规范横截面算子 \(\Fold_\infty\)。
+\end{enumerate}
+一旦这三者给定，\(\oplus\) 就被迫唯一确定。于是，加法并不是独立发明出来的，而是“自由叠加经值保持归一化后在规范横截面上的投影”。
+\end{remark}
+
+\begin{remark}[与后续各节的关系]
+本节只处理加法，因为加法正好对应配置层的自由叠加。后续乘法不会在同一层面被直接给出，而将通过两条互补路线出现：一条是外置到账本的普通整数乘法；另一条是过程层的复合与迭代。也正因为如此，本节建立的是交换幺半群，而不是一开始就建立所有高阶算术原语。
+\end{remark}

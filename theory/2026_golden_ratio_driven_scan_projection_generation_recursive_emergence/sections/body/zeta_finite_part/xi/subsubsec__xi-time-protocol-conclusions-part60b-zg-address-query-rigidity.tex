@@ -1,0 +1,403 @@
+\paragraph{Gödel--Zeckendorf 地址极限的黄金自仿射闭合、自然尺度维数与查询刚性}
+在地址前缀等距、Zeckendorf 有限截面递推与归一化复杂度界之间，还可抽出一组更紧的终端闭合：其一把“禁止相邻 \(1\)”直接压缩为一维 \(2^L\)-进地址线上的严格二分自仿射方程；其二把该极限集的自然尺度覆盖数、Hausdorff 维数与 Minkowski 内容写成 Fibonacci 常数的显式闭式；其三把折叠与稳定运算的可计算性提升为可精确审计的位查询刚性，并进一步把稳定算术层锁定为与自然数半环 PTIME 双向可解释的同一表示；最终它再与真实输入 \(40\)-状态核的一阶 Edgeworth 指纹汇合为同一条可复核链。
+
+\begin{theorem}[Gödel--Zeckendorf 地址极限的严格二分自仿射方程]\label{thm:xi-zg-address-binary-self-affine}
+取整数 \(L\ge 1\)，令
+\[
+B:=2^L,
+\qquad
+v\in T_2(E_{\min})\setminus 2T_2(E_{\min}),
+\qquad
+L_v:=\ZZ_2v.
+\]
+定义 admissible 序列空间
+\[
+\Sigma_{\mathrm{ZG}}
+:=
+\bigl\{
+(z_t)_{t\ge 1}\in\{0,1\}^{\NN}:\ z_tz_{t+1}=0\ \ (t\ge 1)
+\bigr\},
+\]
+以及地址极限集
+\[
+K_{B,v}
+:=
+\left\{
+\sum_{t\ge 1}z_tB^{t-1}v:\ (z_t)_{t\ge 1}\in\Sigma_{\mathrm{ZG}}
+\right\}
+\subseteq L_v.
+\]
+则上述级数在 \(L_v\) 中收敛，\(\Sigma_{\mathrm{ZG}}\to K_{B,v}\) 的地址映射为单射，并且成立严格不交并分解
+\[
+\boxed{\;
+K_{B,v}
+=
+BK_{B,v}\ \sqcup\ \bigl(v+B^2K_{B,v}\bigr).\;}
+\]
+\end{theorem}
+\begin{proof}
+由于 \(B=2^L\) 在 \(2\)-进绝对值下满足 \(|B|_2<1\)，故对任意 \((z_t)\in\Sigma_{\mathrm{ZG}}\)，级数
+\[
+\sum_{t\ge 1}z_tB^{t-1}v
+\]
+在完备群 \(L_v\) 中收敛。
+
+再把 \(\mathcal E=\{0,1\}\)、\(\mathrm{code}(0)=0\)、\(\mathrm{code}(1)=1\) 代入定理
+\ref{thm:xi-time-part9g-holographic-prefix-isometry-on-line}，即可知不同 admissible 无限序列给出不同地址，因而地址映射在 \(\Sigma_{\mathrm{ZG}}\) 上为单射。
+
+现证自仿射分解。任取
+\[
+x=\sum_{t\ge 1}z_tB^{t-1}v\in K_{B,v},
+\qquad
+(z_t)\in\Sigma_{\mathrm{ZG}}.
+\]
+若 \(z_1=0\)，则尾序列 \((z_{t+1})_{t\ge 1}\) 仍属 \(\Sigma_{\mathrm{ZG}}\)，并且
+\[
+x
+=
+\sum_{t\ge 2}z_tB^{t-1}v
+=
+B\sum_{u\ge 1}z_{u+1}B^{u-1}v
+\in BK_{B,v}.
+\]
+若 \(z_1=1\)，则 admissibility 强制 \(z_2=0\)，故 \((z_{t+2})_{t\ge 1}\in\Sigma_{\mathrm{ZG}}\)，并且
+\[
+x
+=
+v+\sum_{t\ge 3}z_tB^{t-1}v
+=
+v+B^2\sum_{u\ge 1}z_{u+2}B^{u-1}v
+\in v+B^2K_{B,v}.
+\]
+因此
+\[
+K_{B,v}\subseteq BK_{B,v}\cup\bigl(v+B^2K_{B,v}\bigr).
+\]
+
+反向包含直接成立：若 \(y=\sum_{t\ge 1}z_tB^{t-1}v\in K_{B,v}\)，则
+\[
+By=\sum_{t\ge 2}z_{t-1}B^{t-1}v\in K_{B,v},
+\]
+而
+\[
+v+B^2y
+=
+v+\sum_{t\ge 3}z_{t-2}B^{t-1}v
+\in K_{B,v},
+\]
+因为两条扩展序列仍满足禁止相邻 \(1\) 约束。
+
+最后证不交。若
+\[
+Bx=v+B^2y
+\qquad
+(x,y\in K_{B,v}),
+\]
+则左端对应一条首位为 \(0\) 的 admissible 序列，右端对应一条首两位为 \(10\) 的 admissible 序列。由定理
+\ref{thm:xi-time-part9g-holographic-prefix-isometry-on-line} 的地址单射性，二者不可能相等，故并为不交并。证毕。
+\end{proof}
+
+\begin{theorem}[Gödel--Zeckendorf 地址极限的精确 Minkowski 维数与自然尺度内容]\label{thm:xi-zg-address-minkowski-dimension-content}
+沿用定理 \ref{thm:xi-zg-address-binary-self-affine} 的记号，并在 \(L_v\) 上取定理 \ref{thm:xi-time-part9g-holographic-prefix-isometry-on-line} 的 \(B\)-进超度量。对 \(n\ge 0\)，令 \(N_{B,v}(n)\) 表示覆盖 \(K_{B,v}\) 所需的最少 \(B^{-n}\)-球个数；等价地，\(N_{B,v}(n)\) 为商 \(L_v/B^nL_v\) 中与 \(K_{B,v}\) 相交的余类数。则
+\[
+\boxed{\;
+N_{B,v}(n)=F_{n+2}\qquad (n\ge 0).\;}
+\]
+从而
+\[
+\boxed{\;
+\dim_{\mathrm H}(K_{B,v})
+=
+\dim_{\mathrm M}(K_{B,v})
+=
+\frac{\log\varphi}{\log B}
+=
+\frac{\log\varphi}{L\log 2}.\;}
+\]
+并且沿自然 \(B\)-进尺度存在精确内容极限
+\[
+\boxed{\;
+\lim_{n\to\infty}
+N_{B,v}(n)\,B^{-n\dim_{\mathrm M}(K_{B,v})}
+=
+\frac{\varphi^2}{\sqrt5}.\;}
+\]
+此外，\(K_{B,v}\) 在 \(L_v\) 的 Haar 概率测度下为零测集。
+\end{theorem}
+\begin{proof}
+对每个 \(n\ge 0\)，记
+\[
+\mathcal A_n
+:=
+\bigl\{
+(z_1,\dots,z_n)\in\{0,1\}^n:\ z_tz_{t+1}=0\ \ (1\le t<n)
+\bigr\},
+\]
+并约定 \(\mathcal A_0=\{\varnothing\}\)。对 \(a=(z_1,\dots,z_n)\in\mathcal A_n\)，定义对应 cylinder
+\[
+[a]
+:=
+\bigl\{
+(w_t)_{t\ge 1}\in\Sigma_{\mathrm{ZG}}:\ w_1=z_1,\dots,w_n=z_n
+\bigr\},
+\]
+以及前缀地址
+\[
+X_n(a):=\sum_{t=1}^{n}z_tB^{t-1}v.
+\]
+由定理 \ref{thm:xi-time-part9g-holographic-prefix-isometry-on-line}，
+\[
+X([a])=\bigl(X_n(a)+B^nL_v\bigr)\cap K_{B,v},
+\]
+且不同 \(a\in\mathcal A_n\) 给出不同的 \(B^nL_v\)-余类。于是 \(K_{B,v}\) 在尺度 \(B^{-n}\) 上恰分解为 \(|\mathcal A_n|\) 个互不相交 cylinder，故
+\[
+N_{B,v}(n)=|\mathcal A_n|.
+\]
+
+另一方面，定理 \ref{thm:xi-time-part9g-zg-primorial-fibonacci-affine-recursion} 已证明
+\[
+|\mathcal A_n|=F_{n+2},
+\]
+故第一条公式成立。
+
+记
+\[
+D:=\frac{\log\varphi}{\log B}.
+\]
+则由 Binet 公式
+\[
+F_{n+2}\sim \frac{\varphi^{n+2}}{\sqrt5}
+\]
+得到
+\[
+\frac{\log N_{B,v}(n)}{n\log B}
+=
+\frac{\log F_{n+2}}{n\log B}
+\longrightarrow
+\frac{\log\varphi}{\log B}
+=
+D.
+\]
+因此 Minkowski 维数为 \(D\)。
+
+再证 Hausdorff 维数。若 \(s>D\)，则第 \(n\) 层 cylinder 覆盖给出
+\[
+\mathcal H^s_{B^{-n}}(K_{B,v})
+\le
+N_{B,v}(n)\,B^{-ns}
+=
+F_{n+2}B^{-ns}
+\to 0,
+\]
+故 \(\mathcal H^s(K_{B,v})=0\)。
+
+反之，若 \(s<D\)，则任一直径不超过 \(B^{-n}\) 的集合都包含于某个 \(B^{-n}\)-球中，而任一此类球至多与一个第 \(n\) 层 cylinder 相交；否则它将同时命中两个不同的 \(B^nL_v\)-余类，与定理
+\ref{thm:xi-time-part9g-holographic-prefix-isometry-on-line} 给出的严格余类分离矛盾。故任意直径不超过 \(B^{-n}\) 的覆盖都至少需要 \(N_{B,v}(n)\) 个集合，从而
+\[
+\mathcal H^s_{B^{-n}}(K_{B,v})
+\ge
+N_{B,v}(n)\,B^{-ns}
+=
+F_{n+2}B^{-ns}
+\to \infty.
+\]
+因此 \(\mathcal H^s(K_{B,v})=\infty\)。综上 \(\dim_{\mathrm H}(K_{B,v})=D=\dim_{\mathrm M}(K_{B,v})\)。
+
+再由 \(B^D=\varphi\)，有
+\[
+N_{B,v}(n)\,B^{-nD}
+=
+F_{n+2}\varphi^{-n}
+\longrightarrow
+\frac{\varphi^2}{\sqrt5},
+\]
+即得自然尺度内容极限。
+
+最后，记 \(\lambda_v\) 为 \(L_v\) 的 Haar 概率测度。每个 \(B^nL_v\)-余类的测度均为 \(B^{-n}\)，而 \(K_{B,v}\) 只与其中 \(N_{B,v}(n)=F_{n+2}\) 个余类相交，故
+\[
+\lambda_v(K_{B,v})
+\le
+F_{n+2}B^{-n}
+\sim
+\frac{\varphi^2}{\sqrt5}\Bigl(\frac{\varphi}{B}\Bigr)^n.
+\]
+由于 \(B=2^L\ge 2>\varphi\)，令 \(n\to\infty\) 即得 \(\lambda_v(K_{B,v})=0\)。证毕。
+\end{proof}
+
+\begin{theorem}[折叠算子的确定性位查询复杂度恰为分辨率]\label{thm:xi-fold-query-complexity-exact-m}
+对 \(m\ge 1\)，定义 \(Q_{\det}(\Fold_m)\) 为：在最坏情形下，为精确输出 \(\Fold_m(\omega)\)，确定性算法必须读取的输入位数的最小值。则
+\[
+\boxed{\;
+Q_{\det}(\Fold_m)=m.\;}
+\]
+\end{theorem}
+\begin{proof}
+上界由命题 \ref{prop:fold-complexity} 直接给出：顺序读取全部 \(m\) 位并执行 Zeckendorf 规范化即可，故
+\[
+Q_{\det}(\Fold_m)\le m.
+\]
+
+现证下界。任取一个精确计算 \(\Fold_m\) 的确定性算法 \(\mathcal A\)，并考察其在输入
+\[
+\mathbf0:=0^m
+\]
+上的运行。若 \(\mathcal A\) 在该输入上未查询某一位置 \(j\in\{1,\dots,m\}\)，则令
+\[
+e_j:=00\cdots010\cdots0
+\]
+为仅第 \(j\) 位为 \(1\) 的字。由于 \(\mathbf0\) 与 \(e_j\) 在 \(\mathcal A\) 已查询的全部坐标上取值相同，算法在两输入上将经历完全相同的查询转录并输出同一结果。
+
+然而 \(e_j\in X_m\)，由命题 \ref{prop:fold-basic} 的幂等性，
+\[
+\Fold_m(\mathbf0)=\mathbf0,
+\qquad
+\Fold_m(e_j)=e_j,
+\]
+二者显然不同，矛盾。故 \(\mathcal A\) 在输入 \(\mathbf0\) 上必须读取全部 \(m\) 位，从而
+\[
+Q_{\det}(\Fold_m)\ge m.
+\]
+合并上下界即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[稳定加法的全输入查询饱和与稳定乘法单位切片的满查询刚性]\label{cor:xi-stable-add-query-saturation-mul-unit-slice}
+沿用定义 \ref{def:stable-add} 与 \ref{def:stable-mul} 的记号。对支撑包含于 \(\{1,\dots,m\}\) 的合法输入，记 \(Q_{\det}^{\oplus}(m)\) 为稳定加法 \(c\oplus d\) 的最坏情形总位查询复杂度。再令
+\[
+\mathbf1:=10\cdots0\in X_\infty,
+\qquad
+\mathrm{Val}(\mathbf1)=1,
+\]
+并定义乘法的单位切片
+\[
+L_m^{\otimes}(c):=c\otimes \mathbf1,
+\qquad
+R_m^{\otimes}(d):=\mathbf1\otimes d.
+\]
+则有
+\[
+\boxed{\;
+Q_{\det}^{\oplus}(m)=2m,\qquad
+Q_{\det}(L_m^{\otimes})=Q_{\det}(R_m^{\otimes})=m.\;}
+\]
+\end{corollary}
+\begin{proof}
+先看稳定加法。上界由命题 \ref{prop:stable-arith-complexity} 直接给出：读取两输入全部 \(2m\) 位后执行值层加法与 Zeckendorf 规范化即可，故
+\[
+Q_{\det}^{\oplus}(m)\le 2m.
+\]
+
+现证下界。任取一个精确计算 \(c\oplus d\) 的确定性算法 \(\mathcal A\)，并考察其在输入
+\[
+(\mathbf0,\mathbf0)
+\]
+上的运行，其中 \(\mathbf0:=0^\infty\)，并令 \(e_j\) 表示第 \(j\) 位为 \(1\)、其余位为 \(0\) 的合法无限字。若 \(\mathcal A\) 在该运行中未查询第一输入的某一位置 \(j\le m\)，则与输入
+\[
+(e_j,\mathbf0)
+\]
+相比，所有已查询坐标取值仍完全相同，故 \(\mathcal A\) 将给出同一输出；但
+\[
+e_j\oplus \mathbf0=e_j,
+\qquad
+\mathbf0\oplus \mathbf0=\mathbf0,
+\]
+矛盾。故第一输入的前 \(m\) 位必须全部被查询。
+
+若 \(\mathcal A\) 未查询第二输入的某一位置 \(j\le m\)，同理比较
+\[
+(\mathbf0,\mathbf0)
+\qquad\text{与}\qquad
+(\mathbf0,e_j),
+\]
+即可得到矛盾，因为
+\[
+\mathbf0\oplus e_j=e_j
+\neq
+\mathbf0.
+\]
+故在输入 \((\mathbf0,\mathbf0)\) 上，两侧前 \(m\) 位都必须全部读取，从而
+\[
+Q_{\det}^{\oplus}(m)\ge 2m.
+\]
+于是 \(Q_{\det}^{\oplus}(m)=2m\)。
+
+再看乘法单位切片。由 \(\mathrm{Val}(\mathbf1)=1\) 与定义 \ref{def:stable-mul}，
+\[
+L_m^{\otimes}(c)=c\otimes\mathbf1=c,
+\qquad
+R_m^{\otimes}(d)=\mathbf1\otimes d=d.
+\]
+因此两条切片在约束输入类上就是恒等映射。其查询下界可用与定理 \ref{thm:xi-fold-query-complexity-exact-m} 同样的零字--单点字对抗得到：若在输入 \(\mathbf0\) 上遗漏某个位置 \(j\le m\)，则无法区分 \(\mathbf0\) 与 \(e_j\)。故
+\[
+Q_{\det}(L_m^{\otimes})\ge m,
+\qquad
+Q_{\det}(R_m^{\otimes})\ge m.
+\]
+显然读取前 \(m\) 位即可输出该合法字本身，故反向不等式也成立，从而
+\[
+Q_{\det}(L_m^{\otimes})=Q_{\det}(R_m^{\otimes})=m.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[稳定算术层与自然数半环在 PTIME 内双向可解释]\label{thm:xi-stable-semiring-ptime-biinterpretability}
+沿用定义 \ref{def:stable-add}、\ref{def:stable-mul} 与命题
+\ref{prop:stable-arith-complexity} 的记号。则值映射
+\[
+\mathrm{Val}:X_\infty\longrightarrow \NN
+\]
+及其逆映射 \(Z:=\mathrm{Val}^{-1}\) 给出交换半环同构
+\[
+\boxed{\;
+\mathrm{Val}(c\oplus d)=\mathrm{Val}(c)+\mathrm{Val}(d),\qquad
+\mathrm{Val}(c\otimes d)=\mathrm{Val}(c)\,\mathrm{Val}(d).\;}
+\]
+更进一步，在有效分辨率 \(m\) 的输入口径下，两侧运算可在多项式时间内双向模拟：
+\begin{enumerate}
+  \item 从 \(c,d\in X_\infty\) 计算 \(c\oplus d\) 与 \(c\otimes d\)，在比特口径下分别需要
+  \[
+  O(m^2),\qquad O(M(m)+m^2)
+  \]
+  位运算，其中 \(M(m)\) 为 \(m\)-比特整数乘法成本；
+  \item 从 \(m\)-比特整数 \(N\) 计算 Zeckendorf 规范形 \(Z(N)\)，以及从 \(c\in X_\infty\) 计算 \(\mathrm{Val}(c)\)，都可在 \(O(m^2)\) 位运算内完成。
+\end{enumerate}
+因此
+\[
+\boxed{\;
+(X_\infty,\oplus,\otimes)\ \text{与}\ (\NN,+,\times)
+\ \text{在 semiring 意义下同构，并在 PTIME 内双向可解释。}\;}
+\]
+\end{theorem}
+\begin{proof}
+交换半环同构本身是定义性的：由定理 \ref{thm:stable-add-value-consistency} 与定义 \ref{def:stable-mul}，
+\[
+\mathrm{Val}(c\oplus d)=\mathrm{Val}(c)+\mathrm{Val}(d),
+\qquad
+c\otimes d=\mathrm{Val}^{-1}\!\bigl(\mathrm{Val}(c)\mathrm{Val}(d)\bigr),
+\]
+而 \(\mathrm{Val}\) 由 Zeckendorf 唯一性给出双射，因此半环同构正是定理 \ref{thm:mul-definitional} 的内容。
+
+算法复杂度则给出真正的计算内容。对第一条，命题 \ref{prop:stable-arith-complexity} 已经证明：在有效分辨率 \(m\) 的输入上，稳定加法与稳定乘法可按“值层运算 \(+\) Zeckendorf 规范化”实现，并分别满足
+\[
+O(m^2),\qquad O(M(m)+m^2)
+\]
+的比特复杂度。
+
+对第二条，若给定 \(m\)-比特整数 \(N\)，则其 Zeckendorf 规范形 \(Z(N)\) 可由附录复杂度界中的贪心规范化实现；命题 \ref{prop:fold-complexity} 对 Fibonacci 权重的分析表明，这一步需要 \(O(m^2)\) 位运算。反过来，若给定支撑包含于 \(\{1,\dots,m\}\) 的 \(c\in X_\infty\)，则
+\[
+\mathrm{Val}(c)=\sum_{k=1}^{m}c_kF_{k+1}
+\]
+只是 \(O(m)\) 项、每项位长 \(O(m)\) 的加权求和，因此同样可在 \(O(m^2)\) 位运算内完成。
+
+于是，自然数加乘可先经 \(Z\) 送入稳定地址层，再用 \(\oplus,\otimes\) 模拟并用 \(\mathrm{Val}\) 读回；稳定地址层运算也可先经 \(\mathrm{Val}\) 送回整数值层完成。两侧都具有多项式时间实现，故得到所述 PTIME 双向可解释性。证毕。
+\end{proof}
+
+\paragraph{真实输入 \texorpdfstring{$40$}{40}-状态核的一阶 Edgeworth 指纹闭合}
+与上述地址几何与查询刚性并行，定理 \ref{thm:xi-real-input-40-output-edgeworth-nongaussian} 已给出真实输入 \(40\)-状态核在输出位势方向上的显式符号指纹
+\[
+\gamma_1\approx -1.476481644016533,
+\qquad
+\gamma_2\approx 2.3928814165461985.
+\]
+因此输出计数的一阶 Edgeworth 修正严格左偏且严格厚尾。于是，Gödel--Zeckendorf 地址极限的黄金维数律、折叠与稳定接口的查询刚性，以及真实输入核的非高斯统计指纹，便在同一审计口径下封闭为一条统一的可复核链。
+
+\endinput

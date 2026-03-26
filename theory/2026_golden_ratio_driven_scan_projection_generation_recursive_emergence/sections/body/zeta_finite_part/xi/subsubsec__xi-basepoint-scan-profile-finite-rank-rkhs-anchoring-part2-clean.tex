@@ -1,0 +1,487 @@
+% (User input window)
+
+\paragraph{有限秩锚定核的完备关系与 Gram 逆闭式：由离散锚点完全重构连续核}
+沿用定理 \ref{thm:xi-basepoint-scan-finite-rank-rkhs} 的记号：极点 \(\{p_k\}_{k=1}^{\kappa}\subset\CC_{-}\)、权 \(\{w_k\}_{k=1}^{\kappa}\subset\RR_{>0}\)、特征映射 \(v\) 与核 \(K\)。
+
+\begin{proposition}[满秩锚集的核完备关系：由离散锚点完全重构连续核]\label{prop:xi-basepoint-scan-kernel-completeness-full-rank}
+对任意 \(x\in\RR\) 定义
+\[
+v(x)_k:=\frac{\sqrt{w_k}}{x-p_k}\in\CC,\qquad
+K(x,y):=\langle v(x),v(y)\rangle_{\CC^\kappa}
+:=\sum_{k=1}^{\kappa}\frac{w_k}{(x-p_k)(y-\overline{p_k})}\qquad(x,y\in\RR).
+\]
+取互异实锚点 \(A=\{a_1,\dots,a_\kappa\}\subset\RR\)，并记 Gram 矩阵
+\[
+G_A:=(K(a_i,a_j))_{1\le i,j\le \kappa}.
+\]
+则 \(G_A\) 可逆，且对一切 \(x,y\in\RR\) 成立完备恒等式
+\[
+\boxed{\;
+K(x,y)=K(x,A)\,G_A^{-1}\,K(A,y)\; },
+\]
+其中
+\(
+K(x,A)=(K(x,a_1),\dots,K(x,a_\kappa))
+\)、
+\(
+K(A,y)=(K(a_1,y),\dots,K(a_\kappa,y))^{\mathsf T}
+\)。
+\end{proposition}
+\begin{proof}
+令矩阵 \(V\in\CC^{\kappa\times\kappa}\) 为
+\(
+V_{ik}:=v(a_i)_k=\sqrt{w_k}/(a_i-p_k)
+\)。
+则 \(G_A=VV^\ast\)。
+由定理 \ref{thm:xi-basepoint-scan-finite-rank-rkhs} 证明中 Cauchy 非退化性可知 \(V\) 可逆，
+故
+\[
+I_\kappa=V^\ast G_A^{-1}V.
+\]
+两边左乘 \(v(x)^\ast\)、右乘 \(v(y)\) 得
+\[
+K(x,y)
+:=\langle v(x),v(y)\rangle
+:=\langle v(x),V^\ast G_A^{-1}Vv(y)\rangle
+:=K(x,A)\,G_A^{-1}\,K(A,y),
+\]
+即所示完备关系。证毕。
+\end{proof}
+
+\begin{proposition}[满秩 Gram 逆的全闭式：由 Cauchy 逆显式给出 \texorpdfstring{$G_A^{-1}$}{G\_A^{-1}}]\label{prop:xi-basepoint-scan-gram-inverse-closed-form}
+在命题 \ref{prop:xi-basepoint-scan-kernel-completeness-full-rank} 的满秩设定下，令
+\[
+\Pi(z):=\prod_{k=1}^{\kappa}(z-p_k),\qquad
+y(z):=\prod_{j=1}^{\kappa}(z-a_j).
+\]
+记 \(V_{ik}=\sqrt{w_k}/(a_i-p_k)\)，则 \(V=C\,\mathrm{diag}(\sqrt w)\)，其中 \(C_{ik}=(a_i-p_k)^{-1}\)。
+由结论 \ref{con:xi-terminal-cauchy-lagrange-rational-interpolation-cauchy-inverse} 的 Cauchy 逆闭式可得
+\[
+(V^{-1})_{k i}
+:=\frac{1}{\sqrt{w_k}}\,(C^{-1})_{k i}
+:=\frac{1}{\sqrt{w_k}}\cdot
+\frac{y(p_k)\,\Pi(a_i)}{(p_k-a_i)\,\Pi'(p_k)\,y'(a_i)}.
+\]
+从而
+\[
+G_A^{-1}=(V^{-1})^\ast V^{-1},
+\]
+并且其元素具有显式表达：对 \(1\le i,j\le \kappa\),
+\[
+\boxed{\;
+(G_A^{-1})_{ij}
+:=
+\frac{\overline{\Pi(a_i)}\,\Pi(a_j)}{y'(a_i)\,y'(a_j)}
+\sum_{k=1}^{\kappa}
+\frac{|y(p_k)|^2}{w_k\,|\Pi'(p_k)|^2}\cdot
+\frac{1}{(a_i-\overline{p_k})(a_j-p_k)}\; }.
+\]
+\end{proposition}
+\begin{proof}
+由 \(G_A=VV^\ast\) 且 \(V\) 可逆，得 \(G_A^{-1}=(V^{-1})^\ast V^{-1}\)。
+而 \(V=C\,\mathrm{diag}(\sqrt w)\) 给出 \(V^{-1}=\mathrm{diag}(w^{-1/2})\,C^{-1}\)，代入结论 \ref{con:xi-terminal-cauchy-lagrange-rational-interpolation-cauchy-inverse} 的 \(C^{-1}\) 闭式即得 \((V^{-1})_{ki}\)。
+将
+\(
+(G_A^{-1})_{ij}=\sum_{k}\overline{(V^{-1})_{ki}}(V^{-1})_{kj}
+\)
+逐项代入并整理得到所示表达式。证毕。
+\end{proof}
+
+\input{subsubsec__xi-basepoint-scan-profile-finite-rank-rkhs-anchoring-part2a-fullrank}
+
+\begin{proposition}[行列式增量与正交缺口：Schur 补的几何意义]\label{prop:xi-basepoint-scan-gram-determinant-schur-increment}
+对任意锚集 \(A=\{a_1,\dots,a_n\}\subset\RR\)（\(n<\kappa\)）假设 \(G_A:=(K(a_i,a_j))_{i,j}\) 可逆，并定义
+\[
+k_A(x):=(K(x,a_1),\dots,K(x,a_n))^{\mathsf T},\qquad
+H(x):=K(x,x).
+\]
+则对任意 \(x\in\RR\setminus A\) 有严格恒等式
+\[
+\boxed{\;
+\det G_{A\cup\{x\}}=\det G_A\cdot\Bigl(H(x)-k_A(x)^\ast G_A^{-1}k_A(x)\Bigr)\; } .
+\]
+并且括号内量非负，且满足正交缺口表示
+\[
+H(x)-k_A(x)^\ast G_A^{-1}k_A(x)
+:=\bigl\|v(x)-\mathrm{proj}_{\Span\{v(a_i)\}}v(x)\bigr\|_{\CC^\kappa}^{2}.
+\]
+\end{proposition}
+\begin{proof}
+写成分块矩阵
+\[
+G_{A\cup\{x\}}=
+\begin{pmatrix}
+G_A & k_A(x)\\
+k_A(x)^\ast & H(x)
+\end{pmatrix}.
+\]
+对分块行列式用 Schur 补公式即得第一式。
+第二式由 \(G_A=V_AV_A^\ast\)（\(V_A\) 为由 \(v(a_i)\) 组成的 \(n\times\kappa\) 矩阵）与最小二乘投影恒等式推出：
+\(
+k_A(x)=V_A v(x)
+\)，从而 Schur 补等于 \(v(x)\) 在 \(\Span\{v(a_i)\}\) 的正交缺口平方范数。证毕。
+\end{proof}
+
+\begin{corollary}[Gram 行列式的杠杆分解：有限秩核下的乘法因子化与全局上界]\label{cor:xi-basepoint-scan-gram-determinant-leverage-product}
+对任意有序锚列 \((a_1,\dots,a_n)\)（互异，且每步 \(G_{A_m}\) 可逆），记递增锚集 \(A_m:=\{a_1,\dots,a_m\}\)（\(A_0=\varnothing\)），并定义杠杆缺口
+\[
+\ell_{A_{m-1}}(a_m):=
+H(a_m)-k_{A_{m-1}}(a_m)^\ast G_{A_{m-1}}^{-1}k_{A_{m-1}}(a_m)\ \ge 0.
+\]
+则成立严格乘法分解
+\[
+\boxed{\;
+\det G_{A_n}=\prod_{m=1}^{n}\ell_{A_{m-1}}(a_m)\; }.
+\]
+从而对任意 \(n\) 点锚集 \(A\)（忽略顺序）有上界
+\[
+\det G_A\le \prod_{m=1}^{n}\Bigl(\sup_{x\in\RR}\ell_{A_{m-1}}(x)\Bigr),
+\]
+且当且仅当存在某个排列使得每一步 \(a_m\) 都实现相应的上确界时取等。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:xi-basepoint-scan-gram-determinant-schur-increment} 对 \(m=1,\dots,n\) 逐步应用得
+\[
+\det G_{A_m}=\det G_{A_{m-1}}\cdot \ell_{A_{m-1}}(a_m),
+\]
+连乘即得分解。
+上界由每因子 \(\ell_{A_{m-1}}(a_m)\le \sup_x\ell_{A_{m-1}}(x)\) 逐项相乘得到；
+取等条件由每步取等的必要充分性给出。证毕。
+\end{proof}
+
+\begin{theorem}[余维一锚定的杠杆缺口闭式：权重与形状的完全分离]\label{thm:xi-basepoint-scan-leverage-gap-codim1-closed-form}
+沿用命题 \ref{prop:xi-basepoint-scan-gram-determinant-schur-increment} 的记号，并假设 \(|A|=\kappa-1\) 且 \(G_A\) 可逆。
+令
+\[
+\Pi(z):=\prod_{k=1}^{\kappa}(z-p_k),
+\qquad
+y_A(z):=\prod_{a\in A}(z-a).
+\]
+则对任意 \(x\in\RR\setminus A\) 有严格恒等式
+\[
+\boxed{\;
+\ell_A(x)
+:=
+\frac{\bigl|\frac{y_A(x)}{\Pi(x)}\bigr|^2}{
+\displaystyle\sum_{k=1}^{\kappa}\frac{|y_A(p_k)|^2}{w_k\,|\Pi'(p_k)|^2}
+}\; }.
+\]
+特别地，\(\ell_A(x)\) 作为 \(x\) 的函数，其形状仅由 \((A,\{p_k\})\) 决定；权重 \(\{w_k\}\) 仅通过整体比例常数
+\(
+\Bigl(\sum_{k=1}^{\kappa}\frac{|y_A(p_k)|^2}{w_k|\Pi'(p_k)|^2}\Bigr)^{-1}
+\)
+进入。
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:xi-basepoint-scan-gram-determinant-schur-increment}，
+\(
+\ell_A(x)=\| \mathrm{proj}_{\Span\{v(a):a\in A\}^\perp}v(x)\|^2
+\)。
+当 \(|A|=\kappa-1\) 时，\(\Span\{v(a):a\in A\}^\perp\) 为一维。
+令
+\[
+d_k:=\frac{y_A(p_k)}{\Pi'(p_k)},
+\qquad
+c_k:=\frac{\overline{d_k}}{\sqrt{w_k}}
+\qquad(1\le k\le \kappa),
+\]
+并记 \(c=(c_k)_{k=1}^{\kappa}\in\CC^\kappa\)。
+对任意 \(a\in A\)，有
+\[
+\langle v(a),c\rangle
+:=\sum_{k=1}^{\kappa}\frac{\sqrt{w_k}}{a-p_k}\cdot\overline{c_k}
+:=\sum_{k=1}^{\kappa}\frac{d_k}{a-p_k}.
+\]
+另一方面，由部分分式恒等式
+\[
+\frac{y_A(z)}{\Pi(z)}
+:=\sum_{k=1}^{\kappa}\frac{y_A(p_k)}{\Pi'(p_k)}\cdot\frac{1}{z-p_k}
+:=\sum_{k=1}^{\kappa}\frac{d_k}{z-p_k},
+\]
+代入 \(z=a\in A\) 得
+\(
+\sum_k\frac{d_k}{a-p_k}=\frac{y_A(a)}{\Pi(a)}=0
+\)，故 \(c\perp v(a)\) 对所有 \(a\in A\) 成立，从而
+\(
+\Span\{v(a):a\in A\}^\perp=\Span\{c\}
+\)。
+于是由一维投影公式
+\[
+\ell_A(x)=\frac{|\langle v(x),c\rangle|^2}{\|c\|^2}.
+\]
+再由同一部分分式恒等式，
+\[
+\langle v(x),c\rangle
+:=\sum_{k=1}^{\kappa}\frac{\sqrt{w_k}}{x-p_k}\cdot\overline{c_k}
+:=\sum_{k=1}^{\kappa}\frac{d_k}{x-p_k}
+:=\frac{y_A(x)}{\Pi(x)}.
+\]
+并且
+\(
+\|c\|^2=\sum_{k=1}^{\kappa}|c_k|^2=\sum_{k=1}^{\kappa}\frac{|d_k|^2}{w_k}
+:=\sum_{k=1}^{\kappa}\frac{|y_A(p_k)|^2}{w_k|\Pi'(p_k)|^2}
+\)。
+代回即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[余维一锚定的临界点方程：与权重无关的平衡式]\label{cor:xi-basepoint-scan-leverage-gap-codim1-critical-points}
+在定理 \ref{thm:xi-basepoint-scan-leverage-gap-codim1-closed-form} 的假设下，对任意 \(x\in\RR\setminus A\) 有
+\[
+\boxed{\;
+\frac{\dd}{\dd x}\log \ell_A(x)
+:=
+2\sum_{a\in A}\frac{1}{x-a}
+-2\,\Re\sum_{k=1}^{\kappa}\frac{1}{x-p_k}\; }.
+\]
+因此 \(\ell_A\) 的临界点全体满足
+\[
+\boxed{\;
+\sum_{a\in A}\frac{1}{x-a}
+:=
+\Re\sum_{k=1}^{\kappa}\frac{1}{x-p_k}\; },
+\]
+并且该方程与权重 \(\{w_k\}\) 无关。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-basepoint-scan-leverage-gap-codim1-closed-form}，
+\(
+\ell_A(x)=C(A,P,w)\,\bigl|\frac{y_A(x)}{\Pi(x)}\bigr|^2
+\)
+且 \(C(A,P,w)\) 与 \(x\) 无关。
+对实变量 \(x\) 与可微复值函数 \(f\) 有恒等式
+\(
+\frac{\dd}{\dd x}\log|f(x)|^2=2\Re\bigl(f'(x)/f(x)\bigr)
+\)。
+又
+\[
+\frac{y_A'(x)}{y_A(x)}=\sum_{a\in A}\frac{1}{x-a},
+\qquad
+\frac{\Pi'(x)}{\Pi(x)}=\sum_{k=1}^{\kappa}\frac{1}{x-p_k}.
+\]
+合并即得。证毕。
+\end{proof}
+
+\begin{theorem}[一般余维下的杠杆缺口矩阵闭式：由极点离散矩完全控制]\label{thm:xi-basepoint-scan-leverage-gap-general-codim-matrix}
+沿用命题 \ref{prop:xi-basepoint-scan-gram-determinant-schur-increment} 的记号，并设 \(|A|=n<\kappa\) 且 \(G_A\) 可逆。
+记 \(m:=\kappa-n\ge 1\)，仍令 \(\Pi(z):=\prod_{k=1}^{\kappa}(z-p_k)\)、\(y_A(z):=\prod_{a\in A}(z-a)\)。
+对 \(r=0,1,\dots,m-1\) 定义向量 \(c^{(r)}\in\CC^\kappa\)：
+\[
+c^{(r)}_k:=\frac{\overline{p_k^{\,r}y_A(p_k)/\Pi'(p_k)}}{\sqrt{w_k}}
+\qquad(1\le k\le\kappa).
+\]
+令
+\[
+C_A:=[c^{(0)}\ \cdots\ c^{(m-1)}]\in\CC^{\kappa\times m},
+\qquad
+M_A:=C_A^\ast C_A\in\CC^{m\times m},
+\qquad
+r_A(x):=C_A^\ast v(x)\in\CC^{m}.
+\]
+则 \(M_A\) 正定，且对任意 \(x\in\RR\setminus A\) 有
+\[
+\boxed{\;
+\ell_A(x)=r_A(x)^\ast M_A^{-1}r_A(x)\; }.
+\]
+并且 \(r_A(x)\) 具有完全显式形式
+\[
+\boxed{\;
+r_A(x)
+:=\left(\frac{y_A(x)}{\Pi(x)},\ \frac{x\,y_A(x)}{\Pi(x)},\ \dots,\ \frac{x^{m-1}y_A(x)}{\Pi(x)}\right)^{\mathsf T}\; }.
+\]
+等价地，\(\ell_A(x)\) 为有限维正定二次型在向量 \(r_A(x)\) 上的取值，其中离散矩阵元素为
+\[
+(M_A)_{rs}
+:=\sum_{k=1}^{\kappa}\frac{p_k^{\,r}\overline{p_k^{\,s}}\ |y_A(p_k)|^2}{w_k\,|\Pi'(p_k)|^2}
+\qquad(0\le r,s\le m-1).
+\]
+\end{theorem}
+\begin{proof}
+对每个多项式 \(q\)（\(\deg q\le m-1\)），由部分分式恒等式
+\[
+\frac{q(z)\,y_A(z)}{\Pi(z)}
+:=\sum_{k=1}^{\kappa}\frac{q(p_k)\,y_A(p_k)}{\Pi'(p_k)}\cdot\frac{1}{z-p_k}
+\]
+并代入 \(z=a\in A\) 得到右端为零，因而向量
+\(
+d(q)_k:=q(p_k)\,y_A(p_k)/\Pi'(p_k)
+\)
+满足 \(\sum_k d(q)_k/(a-p_k)=0\) 对所有 \(a\in A\) 成立。
+这意味着 \(\ker(V_A)\)（其中 \(V_A\) 为以 \(v(a)^\ast\) 为行的矩阵）包含由 \(\{c^{(r)}\}_{r=0}^{m-1}\) 张成的 \(m\)-维子空间；
+而由定理 \ref{thm:xi-basepoint-scan-finite-rank-rkhs} 给出的 \(\dim\Span\{v(x):x\in\RR\}=\kappa\) 与 \(|A|=n\) 可得 \(\dim\ker(V_A)=m\)，故
+\(\ker(V_A)=\Span\{c^{(0)},\dots,c^{(m-1)}\}\)。
+于是正交投影算子满足
+\(
+\mathrm{proj}_{\ker(V_A)}=C_A(M_A)^{-1}C_A^\ast
+\)，从而
+\[
+\ell_A(x)
+:=\|\mathrm{proj}_{\ker(V_A)}v(x)\|^2
+:=v(x)^\ast C_A(M_A)^{-1}C_A^\ast v(x)
+:=r_A(x)^\ast M_A^{-1}r_A(x).
+\]
+最后，对 \(r=0,\dots,m-1\),
+\[
+(r_A(x))_r
+:=\langle c^{(r)},v(x)\rangle
+:=\sum_{k=1}^{\kappa}\frac{p_k^{\,r}y_A(p_k)}{\Pi'(p_k)}\cdot\frac{1}{x-p_k}
+:=\frac{x^r y_A(x)}{\Pi(x)},
+\]
+其中最后一步取 \(q(z)=z^r\) 即得。证毕。
+\end{proof}
+
+\begin{theorem}[一般余维杠杆缺口的普适 \texorpdfstring{$x^{-2}$}{x^-2} 尾律]\label{thm:xi-basepoint-scan-leverage-gap-universal-xminus2-tail}
+在定理 \ref{thm:xi-basepoint-scan-leverage-gap-general-codim-matrix} 的设定下，记 \(e_m\in\CC^m\) 为最后一个标准基向量，并定义
+\[
+c_A:=e_m^\ast M_A^{-1}e_m>0.
+\]
+则当 \(|x|\to\infty\) 时，杠杆缺口满足普适渐近
+\[
+\boxed{\;
+\ell_A(x)=\frac{c_A}{x^2}+O(x^{-3}).\;}
+\]
+特别地，该衰减指数恒等于 \(2\)，与余维 \(m=\kappa-|A|\)、锚点个数 \(|A|\) 以及极点总数 \(\kappa\) 无关。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-basepoint-scan-leverage-gap-general-codim-matrix}，
+\[
+\ell_A(x)=r_A(x)^\ast M_A^{-1}r_A(x),
+\qquad
+r_A(x)=\frac{y_A(x)}{\Pi(x)}(1,x,\dots,x^{m-1})^{\mathsf T}.
+\]
+又因 \(\deg y_A=\kappa-m\)、\(\deg\Pi=\kappa\)，故
+\[
+\frac{y_A(x)}{\Pi(x)}=x^{-m}\bigl(1+O(x^{-1})\bigr)
+\qquad(|x|\to\infty).
+\]
+于是
+\[
+r_A(x)
+=
+\bigl(x^{-m},x^{1-m},\dots,x^{-1}\bigr)^{\mathsf T}\bigl(1+O(x^{-1})\bigr)
+=
+x^{-1}e_m+O(x^{-2}).
+\]
+代入二次型得到
+\[
+\ell_A(x)
+=
+\bigl(x^{-1}e_m+O(x^{-2})\bigr)^\ast
+M_A^{-1}
+\bigl(x^{-1}e_m+O(x^{-2})\bigr)
+=
+x^{-2}e_m^\ast M_A^{-1}e_m+O(x^{-3}),
+\]
+即所求渐近式。
+由于 \(M_A\) 正定，故其逆矩阵亦正定，进而 \(c_A=e_m^\ast M_A^{-1}e_m>0\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[严格非退化性：任取不超过 \texorpdfstring{$\kappa$}{kappa} 个互异锚点均给出可逆 Gram]\label{cor:xi-basepoint-scan-gram-nondegeneracy-up-to-kappa}
+在定理 \ref{thm:xi-basepoint-scan-finite-rank-rkhs} 的设定下，若 \(A\subset\RR\) 为互异锚点族且 \(|A|\le\kappa\)，则 \(G_A\) 自动可逆。
+并且当 \(|A|<\kappa\) 时，对任意 \(x\in\RR\setminus A\) 有 \(\ell_A(x)>0\)，从而
+\[
+\det G_{A\cup\{x\}}=\det G_A\cdot \ell_A(x)\ >\ 0.
+\]
+\end{corollary}
+\begin{proof}
+取 \(|A|=n\le\kappa\)。从 \(\RR\setminus A\) 中任选 \(\kappa-n\) 个点补齐为 \(\kappa\) 个互异实点 \(A'\supseteq A\)。
+由定理 \ref{thm:xi-basepoint-scan-finite-rank-rkhs} 的证明，\(\{v(a):a\in A'\}\) 线性无关，从而其任意子集（特别地 \(\{v(a):a\in A\}\)）亦线性无关。
+因此 \(G_A\) 作为 Gram 矩阵为正定并可逆。
+\par
+若 \(|A|<\kappa\) 且 \(x\notin A\)，同理可把 \(A\cup\{x\}\) 补齐为 \(\kappa\) 点集，从而 \(\{v(a):a\in A\cup\{x\}\}\) 线性无关。
+于是 \(v(x)\notin\Span\{v(a):a\in A\}\)，由命题 \ref{prop:xi-basepoint-scan-gram-determinant-schur-increment} 的正交缺口表示得 \(\ell_A(x)>0\)。
+最后的行列式正性由 Schur 补增量公式给出。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$\mathrm{PSL}(2,\RR)$}{PSL(2,R)} 共变性下的杠杆缺口变换律与比值不变量]\label{prop:xi-basepoint-scan-leverage-gap-psl2r-invariant-ratio}
+在命题 \ref{prop:xi-basepoint-scan-psl2r-covariance} 的设定下，取任意锚集 \(A\subset\RR\)（\(|A|<\kappa\)）与 \(x\in\RR\setminus A\)。
+令 \(A':=m(A)\)、\(x':=m(x)\)，并以共变重标定后的数据定义 \(\ell_{A'}'(x')\)、\(H'(x')\)。
+则有严格变换律
+\[
+\boxed{\;
+\ell_{A'}'(x')=(cx+d)^2\,\ell_A(x),
+\qquad
+H'(x')=(cx+d)^2\,H(x)\; }.
+\]
+从而归一化杠杆比值
+\[
+\boxed{\;
+\frac{\ell_A(x)}{H(x)}
+\quad\text{在}\ \mathrm{PSL}(2,\RR)\ \text{作用下不变。}\;}
+\]
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:xi-basepoint-scan-psl2r-covariance}，对任意 \(u,v\in\RR\) 有
+\(
+K'(m(u),m(v))=(cu+d)(cv+d)K(u,v)
+\)。
+取 \(u=v=x\) 得 \(H'(x')=(cx+d)^2H(x)\)。
+同时对锚点 \(A=\{a_i\}_{i=1}^{n}\) 写 \(D=\mathrm{diag}(ca_i+d)\)，则 \(G_{A'}'=DG_A D\)，且 \(k_{A'}'(x')=(cx+d)\,D\,k_A(x)\)。
+代入 \(\ell_{A'}'(x')=H'(x')-k_{A'}'(x')^\ast (G_{A'}')^{-1}k_{A'}'(x')\) 即得 \(\ell_{A'}'(x')=(cx+d)^2\ell_A(x)\)。
+比值不变量立得。证毕。
+\end{proof}
+
+\input{subsubsec__xi-basepoint-scan-profile-finite-rank-rkhs-anchoring-part2b-residual-frame}
+
+\begin{corollary}[余维一“最后一步”\texorpdfstring{$D$}{D}-最优补全：目标函数的权重无关性]\label{cor:xi-basepoint-scan-doptimal-last-step-weight-free}
+固定任意 \((\kappa-1)\) 点锚集 \(A\subset\RR\)（互异）并假设 \(G_A\) 可逆。
+则在所有 \(x\in\RR\setminus A\) 中最大化 \(\det G_{A\cup\{x\}}\) 的问题等价于
+\[
+\boxed{\;
+x\in\arg\max_{t\in\RR\setminus A}\ \left|\frac{y_A(t)}{\Pi(t)}\right|\; }.
+\]
+因此“最后一步”最优补全点的集合完全由 \((A,\{p_k\})\) 决定，与权重 \(\{w_k\}\) 无关。
+\end{corollary}
+\begin{proof}
+由命题 \ref{prop:xi-basepoint-scan-gram-determinant-schur-increment}，
+\(
+\det G_{A\cup\{x\}}=\det G_A\cdot \ell_A(x)
+\)，其中 \(\det G_A\) 与 \(x\) 无关。
+当 \(|A|=\kappa-1\) 时，定理 \ref{thm:xi-basepoint-scan-leverage-gap-codim1-closed-form} 给出
+\(
+\ell_A(x)=C(A,P,w)\cdot\bigl|\frac{y_A(x)}{\Pi(x)}\bigr|^2
+\)
+且 \(C(A,P,w)\) 与 \(x\) 无关。
+故最大化 \(\det G_{A\cup\{x\}}\) 等价于最大化 \(\left|\frac{y_A(x)}{\Pi(x)}\right|\)。证毕。
+\end{proof}
+
+\begin{theorem}[余维一精确贪婪补全的权重独立性]\label{thm:xi-basepoint-scan-codim1-exact-greedy-weight-independence}
+设 \(|A|=\kappa-1\) 且 \(G_A\) 可逆。
+则所有使
+\[
+x\longmapsto \det G_{A\cup\{x\}}
+\]
+达到全局最大值的实点集合，与权重 \(\{w_k\}_{k=1}^{\kappa}\) 无关；它仅由锚集 \(A\) 与极点集合 \(\{p_k\}_{k=1}^{\kappa}\) 决定。
+更具体地，任一极大点 \(x_\ast\in\RR\setminus A\) 都满足权重无关的平衡方程
+\[
+\boxed{\;
+\sum_{a\in A}\frac{1}{x_\ast-a}
+=
+\Re\sum_{k=1}^{\kappa}\frac{1}{x_\ast-p_k}.\;}
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:xi-basepoint-scan-doptimal-last-step-weight-free}，
+最大化 \(\det G_{A\cup\{x\}}\) 等价于最大化
+\(
+\bigl|\frac{y_A(x)}{\Pi(x)}\bigr|
+\)，
+故极大点集合不依赖于权重 \(\{w_k\}\)。
+
+另一方面，由推论 \ref{cor:xi-basepoint-scan-leverage-gap-codim1-critical-points}，
+任意内点临界值都满足
+\[
+\sum_{a\in A}\frac{1}{x-a}
+=
+\Re\sum_{k=1}^{\kappa}\frac{1}{x-p_k}.
+\]
+而在余维一情形 \(m=1\) 时，定理 \ref{thm:xi-basepoint-scan-leverage-gap-universal-xminus2-tail} 给出
+\(
+\ell_A(x)=c_Ax^{-2}+O(x^{-3})
+\)，
+故 \(\ell_A(x)\to 0\) 当 \(|x|\to\infty\)。
+又由定理 \ref{thm:xi-basepoint-scan-leverage-gap-codim1-closed-form}，对 \(a\in A\) 有 \(\ell_A(a)=0\)。
+因此全局极大值只能在 \(\RR\setminus A\) 的某个有界连通分支内作为内点取得，从而必满足上述临界方程。证毕。
+\end{proof}
+
+\endinput

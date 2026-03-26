@@ -1,0 +1,414 @@
+\begin{theorem}[有限样本相等模式对有限分辨率对称接口的完备性]\label{thm:conclusion-sample-pattern-complete-symmetric-interface}
+固定分辨率 \(m\)，记
+\[
+n_m:=|X_m|,
+\qquad
+w_m(x):=\frac{d_m(x)}{2^m}\qquad (x\in X_m).
+\]
+设 \(\Pi_{n_m}\) 为 \(n_m\) 个独立样本
+\[
+X_1,\dots,X_{n_m}\sim w_m
+\]
+的相等模式分割。则 \(\Pi_{n_m}\) 的精确分布唯一决定如下整套有限分辨率对称接口：
+\[
+\mathcal I_m:=
+\Bigl(
+\{w_m(x)\}_{x\in X_m}^{\mathrm{mult}},
+\ \{h_t(w_m)\}_{t\ge 0},
+\ \{S_q(m)\}_{q\in\RR},
+\ H_m,
+\ \{\mathrm{Succ}^{\mathrm{orc}}_m(B)\}_{B\ge 0}
+\Bigr).
+\]
+亦即，在固定分辨率上，一次大小恰为 \(n_m\) 的相等模式定律已构成全部对称推断接口的有限完备统计。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-closure-partition-to-full-recovery-curve}，\(\Pi_{n_m}\) 的精确分布唯一决定坐标多重集
+\[
+\{w_m(x):x\in X_m\},
+\]
+并进而唯一决定全体完全齐次曲线
+\[
+\{h_t(w_m)\}_{t\ge 0}.
+\]
+一旦 \(\{w_m(x)\}\) 已知，则对任意实参数 \(q\) 都可直接计算
+\[
+S_q(m)=\sum_{x\in X_m} d_m(x)^q
+=2^{mq}\sum_{x\in X_m} w_m(x)^q.
+\]
+故整条实参数幂和曲线由 \(\Pi_{n_m}\) 唯一恢复。
+
+再记
+\[
+F_m(q):=\log S_q(m).
+\]
+由定理 \ref{thm:pom-oracle-capacity-thermal-cut} 与推论 \ref{cor:pom-oracle-capacity-slope-readout} 所用的有限分辨率记号，Pareto 上边界 \(H_m\) 沿 escort 轨道由 \(F_m\) 的 Legendre 数据参数化，因此 \(H_m\) 亦由 \(\{w_m(x)\}\) 唯一确定。
+
+最后，由定理 \ref{thm:fold-oracle-capacity-closed-form}，
+\[
+\mathrm{Succ}^{\mathrm{orc}}_m(B)
+=\frac{\mathcal C_m^{\mathrm{orc}}(B)}{2^m}
+=\sum_{x\in X_m} w_m(x)\min\!\left(1,\frac{2^B}{d_m(x)}\right),
+\]
+它只依赖于 \(\{w_m(x)\}\)。故整条预言机成功曲线同样被 \(\Pi_{n_m}\) 的分布唯一决定。证毕。
+\end{proof}
+
+\begin{theorem}[Bayes 全恢复尾部的顶端极点渐近]\label{thm:conclusion-bayes-full-recovery-top-pole}
+设有限概率多重集按降序排列为
+\[
+w_1=\cdots=w_{r_\ast}=w_\ast>w_{r_\ast+1}\ge\cdots\ge w_{n_m}>0.
+\]
+记 Bayes 全恢复极限曲线为
+\[
+h_t(w):=[z^t]\prod_{i=1}^{n_m}(1-w_i z)^{-1}.
+\]
+则存在显式常数
+\[
+C_w=\frac{1}{(r_\ast-1)!}\prod_{i>r_\ast}\left(1-\frac{w_i}{w_\ast}\right)^{-1}>0
+\]
+使得
+\[
+h_t(w)=C_w\,t^{r_\ast-1}w_\ast^t\bigl(1+O(t^{-1})\bigr)
+\qquad (t\to\infty).
+\]
+从而
+\[
+\frac{h_{t+1}(w)}{h_t(w)}
+=
+w_\ast\left(1+\frac{r_\ast-1}{t}+O(t^{-2})\right).
+\]
+特别地，
+\[
+w_\ast=\lim_{t\to\infty}\frac{h_{t+1}(w)}{h_t(w)},
+\qquad
+r_\ast
+=
+1+\lim_{t\to\infty}
+t\left(\frac{h_{t+1}(w)}{w_\ast h_t(w)}-1\right).
+\]
+因而 Bayes 全恢复尾部不仅恢复顶端质量 \(w_\ast\)，还恢复其精确重数 \(r_\ast\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-closure-partition-to-full-recovery-curve} 与其证明中的生成函数记号，
+\[
+H_w(z):=\sum_{t\ge 0} h_t(w)z^t
+=
+\prod_{i=1}^{n_m}(1-w_i z)^{-1}.
+\]
+将其写成
+\[
+H_w(z)=(1-w_\ast z)^{-r_\ast}G(z),
+\qquad
+G(z):=\prod_{i>r_\ast}(1-w_i z)^{-1}.
+\]
+由于 \(w_i<w_\ast\) 对所有 \(i>r_\ast\) 成立，函数 \(G\) 在 \(z=1/w_\ast\) 的某邻域解析，且
+\[
+G(1/w_\ast)=\prod_{i>r_\ast}\left(1-\frac{w_i}{w_\ast}\right)^{-1}\neq 0.
+\]
+故 \(z=1/w_\ast\) 是 \(H_w\) 的唯一主导奇点，其阶数恰为 \(r_\ast\)。于是
+\[
+G(z)=G(1/w_\ast)+O(1-w_\ast z)
+\qquad (z\to 1/w_\ast),
+\]
+并且
+\[
+[z^t](1-w_\ast z)^{-r_\ast}
+=
+\binom{t+r_\ast-1}{r_\ast-1}w_\ast^t
+=
+\frac{t^{r_\ast-1}}{(r_\ast-1)!}w_\ast^t\bigl(1+O(t^{-1})\bigr).
+\]
+两式相乘即得
+\[
+h_t(w)
+=
+\frac{G(1/w_\ast)}{(r_\ast-1)!}\,
+t^{r_\ast-1}w_\ast^t\bigl(1+O(t^{-1})\bigr),
+\]
+这正是所需渐近，其中常数即为 \(C_w\)。
+
+再对相邻比值求商，得到
+\[
+\frac{h_{t+1}(w)}{h_t(w)}
+=
+w_\ast
+\left(\frac{t+1}{t}\right)^{r_\ast-1}
+\bigl(1+O(t^{-1})\bigr)
+=
+w_\ast\left(1+\frac{r_\ast-1}{t}+O(t^{-2})\right).
+\]
+最后两条恢复公式由上述相邻比值渐近直接取极限即得。证毕。
+\end{proof}
+
+\begin{corollary}[深尾查询制度的双参数对数律]\label{cor:conclusion-bayes-deep-tail-two-parameter-log-law}
+沿用定理 \ref{thm:conclusion-bayes-full-recovery-top-pole} 的记号，定义
+\[
+T(\varepsilon):=\min\{t\ge 0:\ h_t(w)\le \varepsilon\},
+\qquad
+\varepsilon\downarrow 0.
+\]
+则有两项渐近
+\[
+T(\varepsilon)
+=
+\frac{\log(1/\varepsilon)}{\log(1/w_\ast)}
++
+\frac{r_\ast-1}{\log(1/w_\ast)}\log\log(1/\varepsilon)
++
+O(1).
+\]
+因此，深尾 Bayes 全恢复的查询难度并非只由顶端质量 \(w_\ast\) 决定；顶端重数 \(r_\ast\) 以不可消去的 \(\log\log\)-级校正进入主项。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-bayes-full-recovery-top-pole}，
+\[
+h_t(w)=C_w\,t^{r_\ast-1}w_\ast^t(1+o(1)).
+\]
+令 \(t=T(\varepsilon)\)，取对数得
+\[
+\log\frac{1}{\varepsilon}
+=
+t\log\frac{1}{w_\ast}
+-(r_\ast-1)\log t
+-\log C_w
++o(1).
+\]
+以
+\[
+t_0:=\frac{\log(1/\varepsilon)}{\log(1/w_\ast)}
+\]
+为第一近似代入右端的 \(\log t\)，便得到
+\[
+t
+=
+t_0+\frac{r_\ast-1}{\log(1/w_\ast)}\log t_0+O(1).
+\]
+再用
+\[
+\log t_0=\log\log(1/\varepsilon)+O(1)
+\]
+即得所述展开。证毕。
+\end{proof}
+
+\begin{theorem}[热相预言机容量与压力的严格互反]\label{thm:conclusion-hot-phase-oracle-legendre-reciprocity}
+在定理 \ref{thm:pom-oracle-capacity-thermal-cut}、推论 \ref{cor:pom-oracle-capacity-slope-readout} 与定理 \ref{thm:derived-oracle-thermal-differential-geometry} 的设定下，设热相区间为 \((a_0,a_1)\)，并记预言机容量指数为 \(\Gamma_{\mathrm{orc}}(a)\)，共轭参数为 \(q_\ast(a)\in(0,1)\)。则在整个热相区间上成立严格互反公式
+\[
+q_\ast(a)=1-\Gamma_{\mathrm{orc}}'(a),
+\qquad
+a=\tau'(q_\ast(a)),
+\]
+\[
+\tau(q_\ast(a))
+=
+\Gamma_{\mathrm{orc}}(a)-a\,\Gamma_{\mathrm{orc}}'(a),
+\]
+\[
+\Gamma_{\mathrm{orc}}(a)
+=
+\tau(q_\ast(a))+a\bigl(1-q_\ast(a)\bigr),
+\]
+以及 Hessian 互反律
+\[
+\tau''(q_\ast(a))=-\frac{1}{\Gamma_{\mathrm{orc}}''(a)}.
+\]
+因此，热相中的预言机容量函数与实参数压力 \(\tau\) 在微分几何上构成一对严格可逆的接触变换。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-oracle-capacity-thermal-cut}，
+\[
+\Gamma_{\mathrm{orc}}(a)=f(a)+a
+\qquad (a\in(a_0,a_1)).
+\]
+再由推论 \ref{cor:pom-oracle-capacity-slope-readout}，
+\[
+f'(a)=-q_\ast(a),
+\qquad
+q_\ast(a)=1-\Gamma_{\mathrm{orc}}'(a).
+\]
+另一方面，热相内的 Legendre 对偶给出
+\[
+a=\tau'(q_\ast(a)),
+\qquad
+f(a)=\tau(q_\ast(a))-q_\ast(a)a.
+\]
+将 \(f(a)=\Gamma_{\mathrm{orc}}(a)-a\) 代入可得
+\[
+\Gamma_{\mathrm{orc}}(a)-a
+=
+\tau(q_\ast(a))-q_\ast(a)a,
+\]
+从而
+\[
+\tau(q_\ast(a))
+=
+\Gamma_{\mathrm{orc}}(a)-a\bigl(1-q_\ast(a)\bigr)
+=
+\Gamma_{\mathrm{orc}}(a)-a\,\Gamma_{\mathrm{orc}}'(a).
+\]
+反写即得
+\[
+\Gamma_{\mathrm{orc}}(a)
+=
+\tau(q_\ast(a))+a\bigl(1-q_\ast(a)\bigr).
+\]
+最后，由定理 \ref{thm:derived-oracle-thermal-differential-geometry}，
+\[
+\Gamma_{\mathrm{orc}}''(a)=-\frac{1}{\tau''(q_\ast(a))},
+\]
+等价改写即为 Hessian 互反律。证毕。
+\end{proof}
+
+\begin{theorem}[热相无幽灵扇区]\label{thm:conclusion-hot-phase-no-ghost-sector}
+在定理 \ref{thm:conclusion-hot-phase-oracle-legendre-reciprocity} 的设定下，热相区间 \((a_0,a_1)\) 具有如下刚性：
+\[
+\Gamma_{\mathrm{orc}}'(a)\in(0,1),
+\qquad
+\Gamma_{\mathrm{orc}}''(a)<0,
+\]
+并且
+\[
+a\longmapsto q_\ast(a)=1-\Gamma_{\mathrm{orc}}'(a)
+\]
+给出从 \((a_0,a_1)\) 到 \((0,1)\) 的 \(C^1\)-微分同胚。尤其，
+\[
+\Gamma_{\mathrm{orc}}(a)
+=
+\sup_{\alpha}\bigl(f(\alpha)+\min(\alpha,a)\bigr)
+\]
+在热相内的极大化子唯一且恰为 \(\alpha=a\)。
+因此，热相中不存在离散 secant 扇那类由采样外壳造成的伪暴露相；每个内点 \(a\) 都是真正暴露的连续相。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:derived-oracle-thermal-differential-geometry}，
+\[
+q_\ast(a)\in(0,1),
+\qquad
+\Gamma_{\mathrm{orc}}'(a)=1-q_\ast(a)\in(0,1),
+\qquad
+\Gamma_{\mathrm{orc}}''(a)=-\frac{1}{\tau''(q_\ast(a))}<0.
+\]
+由于 \(\tau\) 在 \((0,1)\) 上严格凸，\(\tau'\) 严格递增，从而
+\[
+q_\ast(a)=(\tau')^{-1}(a)
+\]
+在 \((a_0,a_1)\) 上是 \(C^1\)-微分同胚。
+
+再由定理 \ref{thm:pom-oracle-capacity-thermal-cut} 的热相切割恒等式，
+\[
+\Gamma_{\mathrm{orc}}(a)=f(a)+a
+\]
+恰对应于变分式
+\[
+\Gamma_{\mathrm{orc}}(a)=\sup_\alpha\bigl(f(\alpha)+\min(\alpha,a)\bigr)
+\]
+在唯一折点 \(\alpha=a\) 处取得最优值。由此热相内不存在任何伪暴露扇区；每个内点都由真实接触点唯一暴露。证毕。
+\end{proof}
+
+\begin{theorem}[样本模式族对热相热力学的闭包]\label{thm:conclusion-sample-pattern-family-closes-hot-thermodynamics}
+假设定理 \ref{thm:pom-closure-partition-to-full-recovery-curve}、定理 \ref{thm:pom-oracle-capacity-thermal-cut} 与推论 \ref{cor:pom-oracle-capacity-slope-readout} 的全部条件成立。则跨尺度族
+\[
+\bigl\{\mathrm{Law}(\Pi_{|X_m|})\bigr\}_{m\ge 1}
+\]
+唯一决定热相中的全部宏观热力学对象，即
+\[
+f(a)\qquad (a\in(a_0,a_1)),
+\]
+\[
+\tau(q)\qquad (q\in(0,1)),
+\]
+以及共轭热计量映射
+\[
+a\longleftrightarrow q_\ast(a).
+\]
+换言之，跨尺度的有限样本相等模式族已经闭合为热相多重分形几何与实参数压力的完整可观测量。
+\end{theorem}
+\begin{proof}
+对每个固定 \(m\)，由定理 \ref{thm:conclusion-sample-pattern-complete-symmetric-interface}，\(\mathrm{Law}(\Pi_{|X_m|})\) 唯一决定整条有限分辨率预言机成功曲线
+\[
+B\longmapsto \mathrm{Succ}^{\mathrm{orc}}_m(B),
+\]
+也就唯一决定容量函数
+\[
+\mathcal C_m^{\mathrm{orc}}(B)=2^m\mathrm{Succ}^{\mathrm{orc}}_m(B).
+\]
+因此，在任意宏观比特率 \(a\) 下，跨尺度样本模式族唯一决定极限
+\[
+\Gamma_{\mathrm{orc}}(a)
+=
+\lim_{m\to\infty}\frac1m\log \mathcal C_m^{\mathrm{orc}}\bigl(B_m(a)\bigr),
+\]
+只要该极限存在。
+
+在热相区间内，定理 \ref{thm:pom-oracle-capacity-thermal-cut} 给出
+\[
+\Gamma_{\mathrm{orc}}(a)=f(a)+a.
+\]
+于是
+\[
+f(a)=\Gamma_{\mathrm{orc}}(a)-a
+\]
+被唯一恢复。再由定理 \ref{thm:conclusion-hot-phase-oracle-legendre-reciprocity}，
+\[
+q_\ast(a)=1-\Gamma_{\mathrm{orc}}'(a),
+\qquad
+\tau(q_\ast(a))
+=
+\Gamma_{\mathrm{orc}}(a)-a\,\Gamma_{\mathrm{orc}}'(a).
+\]
+因此 \(q_\ast\) 与 \(\tau\) 在热相中的全部取值亦由 \(\{\mathrm{Law}(\Pi_{|X_m|})\}_{m\ge1}\) 唯一决定。证毕。
+\end{proof}
+
+\begin{theorem}[热相预言机容量指数的局部刚性]\label{thm:conclusion-oracle-hot-phase-local-rigidity}
+设两套折叠系统都满足定理 \ref{thm:pom-closure-partition-to-full-recovery-curve}、定理 \ref{thm:pom-oracle-capacity-thermal-cut} 与推论 \ref{cor:pom-oracle-capacity-slope-readout} 的热相假设，并记其预言机容量指数分别为
+\[
+\Gamma_{\mathrm{orc}}^{(1)},
+\qquad
+\Gamma_{\mathrm{orc}}^{(2)}.
+\]
+若存在开区间 \(J\subset(a_0,a_1)\) 使
+\[
+\Gamma_{\mathrm{orc}}^{(1)}(a)=\Gamma_{\mathrm{orc}}^{(2)}(a)
+\qquad (a\in J),
+\]
+则在该区间上两系统的计数谱完全一致：
+\[
+f_1(a)=f_2(a)\qquad (a\in J),
+\]
+并且在对应的 \(q\)-像区间
+\[
+q(J):=\left\{1-\bigl(\Gamma_{\mathrm{orc}}^{(1)}\bigr)'(a):a\in J\right\}
+\]
+上，其实参数压力亦完全一致：
+\[
+\tau_1(q)=\tau_2(q)\qquad (q\in q(J)).
+\]
+因此，热相中的预言机容量指数不是粗糙的投影影子，而是一个局部刚性的完全不变量。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-hot-phase-oracle-legendre-reciprocity}，
+\[
+f_i(a)=\Gamma_{\mathrm{orc}}^{(i)}(a)-a,
+\qquad
+q_i(a)=1-\bigl(\Gamma_{\mathrm{orc}}^{(i)}\bigr)'(a),
+\]
+以及
+\[
+\tau_i(q_i(a))
+=
+\Gamma_{\mathrm{orc}}^{(i)}(a)-a\bigl(\Gamma_{\mathrm{orc}}^{(i)}\bigr)'(a)
+\qquad (i=1,2).
+\]
+若两条 \(\Gamma_{\mathrm{orc}}\) 在 \(J\) 上一致，则其导数在 \(J\) 上亦一致，因而
+\[
+f_1(a)=f_2(a),
+\qquad
+q_1(a)=q_2(a)
+\qquad (a\in J).
+\]
+对同一 \(a\in J\) 将上述等式代回 \(\tau_i(q_i(a))\) 的表达式，即得
+\[
+\tau_1(q(a))=\tau_2(q(a))
+\qquad (q(a)\in q(J)).
+\]
+证毕。
+\end{proof}

@@ -1,0 +1,386 @@
+\paragraph{scaled multiplicity law、双折点容量骨架与 fold-gauge 的正 Laplace 传输}
+在 H.81 的最优可逆容量、H.95 的两尺度一致渐近、H.110 的精确 Stirling 余项表示以及 H.111 的 Bernoulli 奇层 tail 都已建立之后，还可把这四条此前分散出现的接口压缩为同一对象：一个支撑在两点上的 scaled multiplicity law。
+其一侧经 \(x\mapsto \min(x,s)\) 变换给出临界预言机预算下的 recoverability 相图，另一侧经 \(x\mapsto x^{-(2r-1)}\) 给出 fold-\(\pi\) tail 的 Bernoulli 权重，而 H.110 的余项恒等式则把同一纤维谱进一步送入一个严格正的 Laplace 传输核。
+
+\begin{theorem}[临界预言机预算的双折点相变律]\label{thm:xi-time-part9zbd-scaled-multiplicity-double-kink}
+设
+\[
+\mathrm{Succ}_m(B):=
+2^{-m}\sum_{w\in X_m}\min\!\bigl(d_m^{\mathrm{bin}}(w),2^B\bigr)
+\qquad (B\in\ZZ_{\ge 0}),
+\]
+并令整数序列 \((B_m)_{m\ge 1}\) 满足
+\[
+2^{B_m}\left(\frac{\varphi}{2}\right)^m\longrightarrow s\ge 0.
+\]
+则
+\[
+\mathrm{Succ}_m(B_m)\longrightarrow \mathsf S_\varphi(s),
+\]
+其中
+\[
+\mathsf S_\varphi(s):=
+\frac{\varphi^2}{\sqrt5}
+\left(
+\frac1\varphi \min\{1,s\}
++
+\frac1{\varphi^2}\min\{\varphi^{-1},s\}
+\right).
+\]
+等价地，
+\[
+\mathsf S_\varphi(s)=
+\begin{cases}
+\dfrac{\varphi^2}{\sqrt5}\,s, & 0\le s\le \varphi^{-1},\\[6pt]
+\dfrac{\varphi s+\varphi^{-1}}{\sqrt5}, & \varphi^{-1}\le s\le 1,\\[6pt]
+1, & s\ge 1.
+\end{cases}
+\]
+因此，在临界 bit-budget 尺度
+\[
+B_m\asymp m\log_2\!\left(\frac{2}{\varphi}\right)
+\]
+上，recoverability 极限恰有两个且仅两个不可消去折点，位置精确为
+\[
+s=\varphi^{-1},
+\qquad
+s=1.
+\]
+\end{theorem}
+\begin{proof}
+记
+\[
+A_m:=\left(\frac{2}{\varphi}\right)^m,
+\qquad
+\Psi_m(\tau):=
+2^{-m}\mathcal C_m^{\mathrm{bin,cont}}(\tau A_m).
+\]
+由定义，
+\[
+\mathrm{Succ}_m(B_m)=\Psi_m(s_m),
+\qquad
+s_m:=2^{B_m}\left(\frac{\varphi}{2}\right)^m.
+\]
+另一方面，定理 \ref{thm:xi-time-part70b-center-capacity-two-kink-skeleton} 已给出：对每个固定 \(\tau\ge 0\)，都有
+\[
+\Psi_m(\tau)\longrightarrow
+\frac{\varphi}{\sqrt5}\min\{1,\tau\}
++
+\frac{1}{\sqrt5}\min\{\varphi^{-1},\tau\}
+=
+\mathsf S_\varphi(\tau).
+\]
+又因 \(\mathcal C_m^{\mathrm{bin,cont}}\) 对阈值变量的斜率至多为 \(|X_m|=F_{m+2}\)，故
+\[
+\abs{\Psi_m(\tau_1)-\Psi_m(\tau_2)}
+\le
+\frac{A_mF_{m+2}}{2^m}\abs{\tau_1-\tau_2}
+=
+\frac{F_{m+2}}{\varphi^m}\abs{\tau_1-\tau_2}.
+\]
+由 Binet 公式，\(\sup_m F_{m+2}\varphi^{-m}<2\)，故 \((\Psi_m)\) 在每个有界区间上一致 Lipschitz。
+于是
+\[
+\abs{\Psi_m(s_m)-\mathsf S_\varphi(s)}
+\le
+\abs{\Psi_m(s_m)-\Psi_m(s)}
++
+\abs{\Psi_m(s)-\mathsf S_\varphi(s)}
+\longrightarrow 0,
+\]
+因为 \(s_m\to s\)。最后把 \(\mathsf S_\varphi\) 逐段化简，便得到所示分段闭式。证毕。
+\end{proof}
+
+\begin{theorem}[同一两原子极限律同时控制容量相图与 Bernoulli 奇层]\label{thm:xi-time-part9zbd-scaled-multiplicity-min-oddmoment}
+定义两原子概率测度
+\[
+\nu_\varphi^{\mathrm{sc}}
+:=
+\frac1\varphi\,\delta_1+\frac1{\varphi^2}\,\delta_{\varphi^{-1}}.
+\]
+则它同时满足以下两条表示：
+\begin{enumerate}
+  \item 临界成功率曲线可写为
+  \[
+  \mathsf S_\varphi(s)
+  =
+  \frac{\varphi^2}{\sqrt5}
+  \int \min\{x,s\}\,\dd\nu_\varphi^{\mathrm{sc}}(x).
+  \]
+  \item 对任意整数 \(r\ge 1\)，其负奇矩满足
+  \[
+  \int x^{-(2r-1)}\,\dd\nu_\varphi^{\mathrm{sc}}(x)
+  =
+  \varphi^{-1}+\varphi^{2r-3}.
+  \]
+\end{enumerate}
+因此，对任意固定 \(R\ge 1\)，fold-gauge 常数的奇层 tail 可重写为
+\[
+\log C_m
+=
+\log(2\pi)
++
+\sum_{r=1}^{R}
+\frac{B_{2r}}{r(2r-1)}
+\left(
+\int x^{-(2r-1)}\,\dd\nu_\varphi^{\mathrm{sc}}(x)
+\right)
+\left(\frac{\varphi}{2}\right)^{(2r-1)m}
++
+O\!\left(\left(\frac{\varphi}{2}\right)^{(2R+1)m}\right).
+\]
+换言之，项目中的临界可逆性相图与 H.111 的 Bernoulli 奇层 tail 并非两条并列结构，而是同一两原子尺度律的 \(\min\)-变换与 inverse-odd-moment 变换。
+\end{theorem}
+\begin{proof}
+第一式只是把定理 \ref{thm:xi-time-part9zbd-scaled-multiplicity-double-kink} 中的闭式写成测度积分：
+\[
+\frac1\varphi \min\{1,s\}+\frac1{\varphi^2}\min\{\varphi^{-1},s\}
+=
+\int \min\{x,s\}\,\dd\nu_\varphi^{\mathrm{sc}}(x).
+\]
+第二式直接计算得
+\[
+\int x^{-(2r-1)}\,\dd\nu_\varphi^{\mathrm{sc}}(x)
+=
+\frac1\varphi\cdot 1^{-(2r-1)}
++
+\frac1{\varphi^2}\cdot(\varphi^{-1})^{-(2r-1)}
+=
+\varphi^{-1}+\varphi^{2r-3}.
+\]
+将该恒等式代回定理 \ref{thm:fold-bin-gauge-constant-stirling-bernoulli-hierarchy} 的系数表达，便得到最后一式。证毕。
+\end{proof}
+
+\begin{theorem}[有限原子尺度律的折点数与指数 ladder 刚性]\label{thm:xi-time-part9zbd-finite-atomic-kink-ladder-rigidity}
+设
+\[
+\nu=\sum_{j=1}^{J}p_j\delta_{\sigma_j}
+\]
+是任意有限原子概率测度，其中
+\[
+0<\sigma_1<\cdots<\sigma_J,
+\qquad
+p_j>0,
+\qquad
+\sum_{j=1}^{J}p_j=1.
+\]
+对某个正常数 \(\kappa\) 定义
+\[
+\mathsf S_\nu(s):=
+\kappa\int \min\{x,s\}\,\dd\nu(x)
+=
+\kappa\sum_{j=1}^{J}p_j\min\{\sigma_j,s\},
+\]
+以及负奇矩序列
+\[
+M_r(\nu):=
+\int x^{-(2r-1)}\,\dd\nu(x)
+=
+\sum_{j=1}^{J}p_j\sigma_j^{-(2r-1)}
+\qquad (r\ge 1).
+\]
+则成立：
+\begin{enumerate}
+  \item \(\mathsf S_\nu\) 在每个 \(\sigma_j\) 处恰有一个 kink；计入末端饱和区后，\(\mathsf S_\nu\) 恰有 \(J+1\) 个 affine 线性区间。
+  \item 序列 \((M_r(\nu))_{r\ge 1}\) 恰是 \(J\) 条互异指数 ladder 的和。
+  \item 因而，在有限原子范畴内，若某一模型的临界容量曲线恰有两个折点，而其 Bernoulli 奇层权重又恰是两项指数型和，则其 scaled multiplicity law 必为两原子测度。
+\end{enumerate}
+特别地，定理 \ref{thm:xi-time-part9zbd-scaled-multiplicity-double-kink} 与定理 \ref{thm:xi-time-part9zbd-scaled-multiplicity-min-oddmoment} 联合表明，项目中的两尺度律并非近似简化，而是结构刚性：任意带正质量的第三尺度都会同时强制产生一个新的容量折点与一条新的 Bernoulli 指数 ladder。
+\end{theorem}
+\begin{proof}
+对 \(s\notin\{\sigma_1,\dots,\sigma_J\}\)，逐段求导得到
+\[
+\frac{\dd}{\dd s}\mathsf S_\nu(s)
+=
+\kappa\,\nu((s,\infty))
+=
+\kappa\sum_{\sigma_j>s}p_j.
+\]
+故 \(\mathsf S_\nu\) 在每个 \(\sigma_j\) 处的斜率跳跃量正为 \(\kappa p_j\)，于是每个原子对应一个且仅一个 kink，而线性区间则为
+\[
+(0,\sigma_1),\ (\sigma_1,\sigma_2),\ \dots,\ (\sigma_J,\infty),
+\]
+共 \(J+1\) 段。
+
+另一方面，
+\[
+M_r(\nu)=\sum_{j=1}^{J}p_j(\sigma_j^{-1})^{2r-1},
+\]
+这正是 \(J\) 条互异指数序列之和。若再增加一条新尺度 \(\sigma_{J+1}\) 且其质量为正，则 \(\mathsf S_\nu\) 中必新增一个 kink，而 \(M_r(\nu)\) 中必新增一条指数 ladder。
+因此，在有限原子范畴内，“折点数”与“指数 ladder 数”都精确记录原子个数。将此一般论断应用于前两条定理，即得最后结论。证毕。
+\end{proof}
+
+\begin{theorem}[fold-gauge 缺陷的精确 Binet--Laplace 传输]\label{thm:xi-time-part9zbd-foldgauge-binet-laplace-transport}
+定义 Stirling 余项
+\[
+\varepsilon(x):=
+\log\Gamma(x+1)-x\log x+x-\frac12\log(2\pi x)
+\qquad (x>0),
+\]
+以及纤维 multiplicity spectrum 的 Laplace 轮廓
+\[
+\mathcal L_m(t):=
+\frac1{|X_m|}\sum_{w\in X_m}e^{-d_m^{\mathrm{bin}}(w)t}
+\qquad (t>0).
+\]
+则有精确恒等式
+\[
+\log\frac{C_m}{2\pi}
+=
+\int_0^\infty K(t)\,\mathcal L_m(t)\,\dd t,
+\]
+其中
+\[
+K(t):=
+2\left(\frac12-\frac1t+\frac1{e^t-1}\right)\frac1t
+=
+\frac{\coth(t/2)-2/t}{t}
+>0
+\qquad (t>0).
+\]
+特别地，\(\log(C_m/2\pi)\) 不是一条后验拟合的渐近尾，而是纤维 multiplicity spectrum 的精确正 Laplace 传输。进一步，\(\varepsilon\) 是完全单调函数，即对任意整数 \(n\ge 0\) 与任意 \(x>0\)，都有
+\[
+(-1)^n\varepsilon^{(n)}(x)>0.
+\]
+\end{theorem}
+\begin{proof}
+主文 H.110 的精确 Stirling 余项表示给出
+\[
+\log C_m
+=
+\log(2\pi)
++
+\frac{2}{|X_m|}\sum_{w\in X_m}\varepsilon\bigl(d_m^{\mathrm{bin}}(w)\bigr).
+\]
+另一方面，由 Binet 公式可得（见 \href{https://dlmf.nist.gov/5.9}{DLMF 5.9}）
+\[
+\varepsilon(x)
+=
+\int_0^\infty
+\left(\frac12-\frac1t+\frac1{e^t-1}\right)e^{-xt}\frac{\dd t}{t}
+\qquad (x>0).
+\]
+把该表示代回并交换有限求和与积分，得到
+\[
+\log\frac{C_m}{2\pi}
+=
+\frac{2}{|X_m|}
+\sum_{w\in X_m}
+\int_0^\infty
+\left(\frac12-\frac1t+\frac1{e^t-1}\right)e^{-d_m^{\mathrm{bin}}(w)t}\frac{\dd t}{t}.
+\]
+于是
+\[
+\log\frac{C_m}{2\pi}
+=
+\int_0^\infty
+2\left(\frac12-\frac1t+\frac1{e^t-1}\right)\frac1t
+\cdot
+\frac1{|X_m|}\sum_{w\in X_m}e^{-d_m^{\mathrm{bin}}(w)t}\,\dd t,
+\]
+即所求第一式。
+
+再用恒等式
+\[
+\frac1{e^t-1}=\frac12\coth(t/2)-\frac12
+\]
+便得
+\[
+K(t)=\frac{\coth(t/2)-2/t}{t}.
+\]
+对 \(u>0\) 恒有 \(\coth u>1/u\)，故 \(K(t)>0\)。
+
+最后，把
+\[
+B(t):=
+\left(\frac12-\frac1t+\frac1{e^t-1}\right)\frac1t
+\]
+记作正核，则
+\[
+\varepsilon(x)=\int_0^\infty B(t)e^{-xt}\,\dd t.
+\]
+逐次对 \(x\) 求导即得
+\[
+(-1)^n\varepsilon^{(n)}(x)
+=
+\int_0^\infty t^n B(t)e^{-xt}\,\dd t
+>0.
+\]
+因此 \(\varepsilon\) 完全单调。证毕。
+\end{proof}
+
+\begin{corollary}[fold-gauge 常数对 \texorpdfstring{$2\pi$}{2pi} 的严格上逼近与非渐近双边夹逼]\label{cor:xi-time-part9zbd-foldgauge-jensen-sandwich}
+记平均纤维大小与最小纤维大小分别为
+\[
+\bar d_m:=\frac{2^m}{|X_m|},
+\qquad
+d_{\min}(m):=\min_{w\in X_m}d_m^{\mathrm{bin}}(w).
+\]
+则对每个 \(m\ge 1\) 都有
+\[
+C_m>2\pi,
+\]
+并且满足完全显式的双边夹逼
+\[
+2\,\varepsilon(\bar d_m)
+\le
+\log\frac{C_m}{2\pi}
+\le
+\frac{1}{6|X_m|}\sum_{w\in X_m}d_m^{\mathrm{bin}}(w)^{-1}
+\le
+\frac{1}{6\,d_{\min}(m)}.
+\]
+因此，项目中的 \(\pi\)-恢复并不是在 \(2\pi\) 的两侧摇摆逼近，而是对 \(2\pi\) 的严格上侧校正；其偏离量同时受平均纤维尺度的 Jensen 下界与最小纤维尺度的倒数上界控制。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9zbd-foldgauge-binet-laplace-transport}，\(\varepsilon(x)>0\) 对一切 \(x>0\) 成立，且
+\[
+\log\frac{C_m}{2\pi}
+=
+\frac{2}{|X_m|}\sum_{w\in X_m}\varepsilon\bigl(d_m^{\mathrm{bin}}(w)\bigr).
+\]
+故立得 \(C_m>2\pi\)。
+
+再由完全单调性，\(\varepsilon\) 尤其凸。于是 Jensen 不等式给出
+\[
+\frac{2}{|X_m|}\sum_{w\in X_m}\varepsilon\bigl(d_m^{\mathrm{bin}}(w)\bigr)
+\ge
+2\,\varepsilon\!\left(
+\frac1{|X_m|}\sum_{w\in X_m}d_m^{\mathrm{bin}}(w)
+\right)
+=
+2\,\varepsilon(\bar d_m),
+\]
+其中用到
+\[
+\sum_{w\in X_m}d_m^{\mathrm{bin}}(w)=2^m.
+\]
+
+上界则由经典 Stirling 余项界
+\[
+0<\varepsilon(x)\le \frac{1}{12x}
+\qquad (x>0)
+\]
+得到
+\[
+\log\frac{C_m}{2\pi}
+\le
+\frac{2}{|X_m|}\sum_{w\in X_m}\frac{1}{12\,d_m^{\mathrm{bin}}(w)}
+=
+\frac{1}{6|X_m|}\sum_{w\in X_m}d_m^{\mathrm{bin}}(w)^{-1}.
+\]
+最后，由 \(d_m^{\mathrm{bin}}(w)\ge d_{\min}(m)\) 对全部 \(w\) 成立，
+\[
+\frac{1}{|X_m|}\sum_{w\in X_m}d_m^{\mathrm{bin}}(w)^{-1}
+\le
+d_{\min}(m)^{-1}.
+\]
+三式合并即得结论。证毕。
+\end{proof}
+
+\noindent
+由此，项目中的 \((2\pi)\) 不再只是一个被动出现的极限常数。
+同一条 scaled multiplicity law \(\nu_\varphi^{\mathrm{sc}}\) 一方面给出临界 bit-budget 下的双折点 recoverability 相图，另一方面给出 H.111 的 Bernoulli 奇层权重；而 H.110 的精确 Stirling 余项表示又把有限窗规范缺陷送入一个严格正的 Laplace 传输核。
+于是，可逆资源临界相变、fold-\(\pi\) 奇层 tail 与规范常数缺陷三者便不再是并列现象，而是同一纤维 multiplicity spectrum 在 \(\min\)、inverse-odd-moment 与 Laplace 三种变换下的不同投影。
+
+\endinput

@@ -1,0 +1,789 @@
+\subsection{折叠指标与投影熵率}\label{subsec:pom-projection-entropy}
+本节以论文中的“全移位窗口 $\Omega_m$ 到黄金均值 SFT 语言 $X_m$ 的规范化截面”为基底：$X_m$ 是禁词 $(11)$ 的长度 $m$ 语言，$\Fold_m:\Omega_m\to X_m$ 把任意窗口微态投影到该语法块上，$\Phi_m$ 把窗口输出提升为序列级 sofic 因子化；相应的标记图 $G_m$ 由长度 $(m-1)$ 后缀状态与追加一比特构造（定义 \ref{def:G_m}）。在此框架下，纤维多重度 $d_m(x)$ 与条件期望 $E_m$ 是规范投影 $P_Z$ 的两类接口，以下结论给出其尺度结构。
+\begin{definition}[折叠指标与投影熵率]\label{def:pom-fold-index}
+令
+\[
+I_m:=\frac{|\Omega_m|}{|X_m|}=\frac{2^m}{F_{m+2}},
+\qquad
+S_Z(m):=\log I_m,
+\qquad
+h_Z:=\lim_{m\to\infty}\frac{S_Z(m)}{m}.
+\]
+$I_m$ 是折叠诱导的平均多重度指标，$S_Z(m)$ 与 $h_Z$ 分别刻画分辨率 $m$ 与单位分辨率的投影熵率。
+\end{definition}
+
+\begin{proposition}[折叠指标的渐近]\label{prop:pom-projection-entropy}
+有
+\[
+S_Z(m)=m\log\!\left(\frac{2}{\varphi}\right)+O(1),
+\qquad
+h_Z=\log\!\left(\frac{2}{\varphi}\right).
+\]
+\end{proposition}
+\begin{proof}
+由附录 \ref{app:fold-multiplicity} 的渐近式
+\(
+I_m\sim C(2/\varphi)^m
+\)
+直接得到。证毕。
+\end{proof}
+
+\begin{corollary}[分辨率不足的空间门槛]\label{cor:pom-resolution-threshold}
+若希望“每个稳定类型平均只对应不超过 $R$ 个微态”，则必须满足
+\[
+m\lesssim \frac{\log R}{\log(2/\varphi)}.
+\]
+换言之，在稳定词汇 $X_m$ 固定为禁词 $(11)$ 的口径下，平均折叠多重度 $I_m\asymp (2/\varphi)^m$ 随 $m$ 增大而增长；若希望把平均多重度控制在 $R$ 以内，则窗口分辨率 $m$ 不能无限增大。
+\end{corollary}
+
+\begin{remark}[折叠熵的二进制斜率]\label{rem:pom-fold-bits}
+定义二进制单位的折叠熵
+\[
+S_Z^{(2)}(m):=\log_2\frac{2^m}{F_{m+2}}.
+\]
+则
+\[
+S_Z^{(2)}(m)=m\log_2\!\left(\frac{2}{\varphi}\right)+O(1)
+\approx 0.305758\,m+O(1),
+\]
+给出每增加一位分辨率所“压扁”的平均信息量常数。
+\end{remark}
+
+\subsubsection{窗口折叠的最大纤维多重度}\label{subsec:pom-max-fiber}
+记
+\[
+d_m(x):=\left|\Fold_m^{-1}(x)\right|,
+\qquad
+D_m:=\max_{x\in X_m} d_m(x).
+\]
+
+\begin{remark}[平均约束 vs 最坏约束：分辨率门槛的常数比]\label{rem:pom-avg-vs-max-threshold}
+固定阈值 $R$。若要求平均约束 $\overline d_m=I_m\le R$，由命题 \ref{prop:pom-projection-entropy} 得
+\[
+m_{\mathrm{avg}}(R)=\frac{\log R}{\log(2/\varphi)}+O(1).
+\]
+若要求最坏约束 $D_m\le R$，由定理 \ref{thm:pom-max-fiber} 的 $D_m=\Theta(\varphi^{m/2})$ 得
+\[
+m_{\max}(R)=\frac{2\log R}{\log\varphi}+O(1).
+\]
+因此两种门槛在主阶上的比值为常数
+\[
+\boxed{\;
+\frac{m_{\max}(R)}{m_{\mathrm{avg}}(R)}
+\approx
+\frac{2\log(2/\varphi)}{\log\varphi}
+\approx 0.881\; }.
+\]
+这表明：在同一阈值 $R$ 下，“控制最坏纤维”相对“控制平均纤维”只额外严格一个常数因子（约 $12\%$），与注 \ref{rem:pom-defect-gap} 中“最坏/平均的指数基数极小”一致。
+\end{remark}
+\subsubsection{信息账本：可见熵 + 纤维体积 - 残差信息}\label{subsec:pom-information-ledger}
+固定分辨率 $m$，令 $\Omega_m=\{0,1\}^m$，$X_m$ 为禁词 $(11)$ 的稳定语言块，并设 $\Fold_m:\Omega_m\to X_m$ 为折叠投影。
+记概率单纯形为 $\Delta(\Omega_m),\Delta(X_m)$。
+定义推前（读出）算子
+\[
+P_m:=(\Fold_m)_*:\Delta(\Omega_m)\to\Delta(X_m),
+\qquad
+(P_m\mu)(x)=\sum_{\Fold_m(a)=x}\mu(a),
+\]
+以及纤维均匀提升（最大对称提升）核
+\[
+Q_m:\Delta(X_m)\to\Delta(\Omega_m),
+\qquad
+(Q_m\pi)(a)=\frac{\pi(\Fold_m(a))}{d_m(\Fold_m(a))}.
+\]
+则 $P_m\circ Q_m=\mathrm{id}_{\Delta(X_m)}$（见附录 \ref{app:op-algebra} 的定理 \ref{prop:fold-pushforward-lift}）。
+
+上述读出—提升结构使账本三项具有明确的类型化解释：$H(\pi)$ 是可见稳定类型的熵，$\mathbb{E}_{\pi}[\log d_m(X)]$ 是纤维残差规模（不可见容量），而 $D_{\mathrm{KL}}(\mu\|\mu^{e})$ 则是同一宏观下微观分布偏离纤维均匀提升的可审计残差信息（其中 $\mu^{e}:=Q_m\pi$）；定理 \ref{thm:pom-kl-ledger} 给出其严格恒等式。
+
+\begin{theorem}[相对熵缺陷恒等式：信息账本闭式]\label{thm:pom-kl-ledger}
+取任意 $\mu\in\Delta(\Omega_m)$，记其稳定推前为 $\pi:=P_m\mu\in\Delta(X_m)$，并令
+\[
+\mu^{e}:=Q_m\pi\in\Delta(\Omega_m)
+\]
+为 $\pi$ 的纤维均匀提升（即在每条纤维上条件均匀）。
+定义 Shannon 熵与 KL 散度（取自然对数）
+\[
+H(\nu):=-\sum_{s}\nu(s)\log\nu(s),
+\qquad
+D_{\mathrm{KL}}(\mu\|\nu):=\sum_{s}\mu(s)\log\frac{\mu(s)}{\nu(s)}.
+\]
+则有严格恒等式
+\[
+\boxed{\;
+H(\mu)=H(\pi)+\mathbb{E}_{\pi}\!\bigl[\log d_m(X)\bigr]\;-\;D_{\mathrm{KL}}(\mu\|\mu^{e}).
+\;}
+\]
+\end{theorem}
+\begin{proof}
+由 KL 定义展开得
+\(
+D_{\mathrm{KL}}(\mu\|\mu^{e})=-H(\mu)-\sum_{a\in\Omega_m}\mu(a)\log\mu^{e}(a)
+\)。
+而
+\(
+\log\mu^{e}(a)=\log\pi(x)-\log d_m(x)
+\)
+其中 $x=\Fold_m(a)$。
+因此
+\[
+\sum_{a}\mu(a)\log\pi(\Fold_m(a))
+=\sum_{x\in X_m}\left(\sum_{\Fold_m(a)=x}\mu(a)\right)\log\pi(x)
+=\sum_{x}\pi(x)\log\pi(x)
+=-H(\pi),
+\]
+并且
+\[
+\sum_{a}\mu(a)\log d_m(\Fold_m(a))
+=\sum_{x\in X_m}\left(\sum_{\Fold_m(a)=x}\mu(a)\right)\log d_m(x)
+=\sum_{x}\pi(x)\log d_m(x)
+=\mathbb{E}_{\pi}[\log d_m(X)].
+\]
+代回整理即得结论。证毕。
+\end{proof}
+
+\begin{remark}[把账本/反射子嵌入 prime-like 交换图]\label{rem:pom-ledger-glue-zeta}
+信息账本恒等式（定理 \ref{thm:pom-kl-ledger}）不仅把“空间/时间”严格钉成三项分解，
+其生成的读出—提升对 \((P_m,Q_m)\) 与纤维反射子 \(K_m\) 也提供了一个\emph{可审计}的算子压缩接口：把微观算子压缩到稳定层可读出算子并保持迹序列不变。
+该接口如何与第 \ref{subsec:operator-zeta-interface} 节的“迹$\to$primitive$\to$Euler”严格交换桥包拼接（并进一步接入 Lyapunov‑SDP 谱证书层），见注 \ref{rem:reflected-witt-euler-bridge}。
+\end{remark}
+
+\begin{corollary}[“不丢信息”的严格含义：最大熵提升与残差的唯一承载]\label{cor:pom-kl-ledger-bound}
+对任意 $\mu\in\Delta(\Omega_m)$ 与 $\pi=P_m\mu$，有上界
+\[
+H(\mu)\le H(\pi)+\mathbb{E}_{\pi}[\log d_m(X)],
+\]
+且等号当且仅当 $\mu=\mu^{e}$（即 $\mu$ 在每条折叠纤维上条件均匀）。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-kl-ledger} 与 $D_{\mathrm{KL}}\ge 0$ 得上界；且 $D_{\mathrm{KL}}(\mu\|\mu^e)=0$ 当且仅当 $\mu=\mu^e$。证毕。
+\end{proof}
+
+\begin{corollary}[最坏熵缺口上界]\label{cor:pom-entropy-gap-bound}
+对任意 $\mu\in\Delta(\Omega_m)$，令 $\pi=P_m\mu$。则
+\[
+H(\mu)-H(\pi)\le \log D_m.
+\]
+因此最大可见熵缺口满足
+\[
+\sup_{\mu\in\Delta(\Omega_m)}\bigl(H(\mu)-H(\pi)\bigr)\le \log D_m.
+\]
+并由定理 \ref{thm:pom-max-fiber} 得
+\[
+\limsup_{m\to\infty}\frac{1}{m}\sup_{\mu}\bigl(H(\mu)-H(\pi)\bigr)\le \frac12\log\varphi.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-kl-ledger}，
+\(
+H(\mu)-H(\pi)=\mathbb{E}_{\pi}[\log d_m(X)]-D_{\mathrm{KL}}(\mu\|\mu^e)
+\)。
+注意该差异可为负，但其上界由 $\mathbb{E}_{\pi}[\log d_m(X)]\le \log D_m$ 给出。取上确界即得前两式。再由定理 \ref{thm:pom-max-fiber} 的渐近得到单位分辨率上界。证毕。
+\end{proof}
+
+\begin{lemma}[纤维 KL 分解：残差为纤维内非均匀的平均]\label{lem:pom-fiberwise-kl}
+取任意 $\mu\in\Delta(\Omega_m)$，令 $\pi=P_m\mu$。对每个 $x\in X_m$ 定义纤维条件分布
+\[
+\mu_x(a):=
+\begin{cases}
+\mu(a)/\pi(x),& a\in \Fold_m^{-1}(x),\ \pi(x)>0,\\
+0,& a\in \Fold_m^{-1}(x),\ \pi(x)=0,
+\end{cases}
+\]
+并令 $u_x$ 为该纤维上的均匀分布 $u_x(a)=1/d_m(x)$（$a\in\Fold_m^{-1}(x)$）。
+则对纤维均匀提升 $\mu^e=Q_m\pi$，有链式恒等式
+\[
+\boxed{\;
+D_{\mathrm{KL}}(\mu\|\mu^e)=\sum_{x\in X_m}\pi(x)\,D_{\mathrm{KL}}(\mu_x\|u_x).
+\;}
+\]
+\end{lemma}
+\begin{proof}
+当 $\pi(x)=0$ 时，$\mu$ 在纤维 $\Fold_m^{-1}(x)$ 上亦为零测，因此该纤维对两端均无贡献。
+对任意满足 $\pi(x)>0$ 的纤维，若 $a\in\Fold_m^{-1}(x)$，则
+\(
+\mu(a)=\pi(x)\mu_x(a)
+\)
+且
+\(
+\mu^e(a)=\pi(x)u_x(a)
+\)。
+代入 KL 定义并按纤维分组得
+\[
+D_{\mathrm{KL}}(\mu\|\mu^e)
+=\sum_{x}\sum_{a\in\Fold_m^{-1}(x)}\pi(x)\mu_x(a)\log\frac{\mu_x(a)}{u_x(a)}
+=\sum_x \pi(x)\,D_{\mathrm{KL}}(\mu_x\|u_x).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[纤维熵亏恒等式：\texorpdfstring{$D_{\mathrm{KL}}(\mu\|\mu^e)$}{KL} 的显式形式]\label{cor:pom-fiber-entropy-deficit}
+沿用引理 \ref{lem:pom-fiberwise-kl} 的记号。记纤维条件熵
+\[
+H(\mu_x):=-\sum_{a\in\Fold_m^{-1}(x)}\mu_x(a)\log \mu_x(a).
+\]
+则对每个满足 $\pi(x)>0$ 的纤维，有
+\[
+D_{\mathrm{KL}}(\mu_x\|u_x)=\log d_m(x)-H(\mu_x),
+\]
+从而
+\[
+\boxed{\;
+D_{\mathrm{KL}}(\mu\|\mu^e)
+=\sum_{x\in X_m}\pi(x)\bigl(\log d_m(x)-H(\mu_x)\bigr).
+\;}
+\]
+因此 $D_{\mathrm{KL}}(\mu\|\mu^e)$ 正是纤维熵亏 \(\log d_m(x)-H(\mu_x)\ge 0\) 的 \(\pi\)-加权平均；并且 $D_{\mathrm{KL}}(\mu\|\mu^e)=0$ 当且仅当 $\mu$ 在每条折叠纤维上条件均匀。
+\end{corollary}
+
+\begin{proof}
+对固定纤维 \(x\)（且 \(\pi(x)>0\)），由 \(u_x(a)=1/d_m(x)\) 得
+\[
+D_{\mathrm{KL}}(\mu_x\|u_x)
+=\sum_{a}\mu_x(a)\log\frac{\mu_x(a)}{1/d_m(x)}
+=\sum_a \mu_x(a)\log\mu_x(a)+\log d_m(x)
+=\log d_m(x)-H(\mu_x).
+\]
+再代回引理 \ref{lem:pom-fiberwise-kl} 即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[熵增恒等式：最大熵提升的增量等于残差 KL]\label{cor:pom-ent-increase-equals-kl}
+沿用上述记号，则有严格恒等式
+\[
+\boxed{\;
+H(\mu^e)-H(\mu)=D_{\mathrm{KL}}(\mu\|\mu^e).
+\;}
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-kl-ledger} 得
+\(
+H(\mu)=H(\pi)+\mathbb{E}_{\pi}[\log d_m(X)]-D_{\mathrm{KL}}(\mu\|\mu^e)
+\)。
+另一方面，直接对 $\mu^e$ 代入（或等价地用“纤维条件均匀”）可得
+\(
+H(\mu^e)=H(\pi)+\mathbb{E}_{\pi}[\log d_m(X)]
+\)。
+两式相减即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[纤维反射子：幂等 Markov 投影与固定点刻画]\label{thm:pom-fiber-reflector}
+定义 Markov 算子
+\[
+K_m:=Q_m\circ P_m:\Delta(\Omega_m)\to\Delta(\Omega_m).
+\]
+则：
+\begin{enumerate}
+  \item $K_m$ 幂等：$K_m^2=K_m$；
+  \item 对任意 $\mu$，若 $\pi=P_m\mu$，则 $K_m\mu=\mu^e$ 为 $\pi$ 的纤维均匀提升；
+  \item 固定点满足：$K_m\mu=\mu$ 当且仅当 $\mu$ 在每条纤维上条件均匀（等价地 $\mu=\mu^e$）。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由 $P_m\circ Q_m=\mathrm{id}$ 得
+\(
+K_m^2=Q_mP_mQ_mP_m=Q_m(P_mQ_m)P_m=Q_mP_m=K_m
+\)。
+对任意 $\mu$，令 $\pi=P_m\mu$，则 $K_m\mu=Q_m\pi=\mu^e$ 是定义。
+最后，$K_m$ 的像空间恰为 $\{Q_m\pi:\pi\in\Delta(X_m)\}$；因此 $K_m\mu=\mu$ 当且仅当 $\mu$ 属于该像空间，即在每条纤维上条件均匀。证毕。
+\end{proof}
+
+\begin{corollary}[熵单调化通道：\texorpdfstring{$Q_m\circ P_m$}{Q∘P} 的“窗口第二定律”]\label{cor:pom-second-law-Km}
+对任意 $\mu\in\Delta(\Omega_m)$，有严格恒等式
+\[
+\boxed{\;
+H(K_m\mu)-H(\mu)=D_{\mathrm{KL}}(\mu\|K_m\mu)\ \ge\ 0,
+\;}
+\]
+并且等号当且仅当 $K_m\mu=\mu$（等价于 $\mu$ 在每条纤维上条件均匀）。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:pom-fiber-reflector}，对任意 $\mu$ 有 $K_m\mu=\mu^e$。
+将此代入推论 \ref{cor:pom-ent-increase-equals-kl} 即得
+\(
+H(K_m\mu)-H(\mu)=D_{\mathrm{KL}}(\mu\|K_m\mu)
+\)；
+非负性与取等号条件由 KL 的基本性质与定理 \ref{thm:pom-fiber-reflector} 的固定点刻画给出。证毕。
+\end{proof}
+
+\begin{proposition}[\texorpdfstring{$K_m$}{Km} 的核矩阵：对称、双随机与纤维平均]\label{prop:pom-Km-bistochastic}
+把 $K_m$ 视为 $\Omega_m$ 上的 Markov 核，其转移核为
+\[
+K_m(a,b):=
+\begin{cases}
+\dfrac{1}{d_m(\Fold_m(a))},& \Fold_m(b)=\Fold_m(a),\\[6pt]
+0,& \text{否则}.
+\end{cases}
+\]
+则：
+\begin{enumerate}
+  \item \textbf{（幂等）} $K_m^2=K_m$；
+  \item \textbf{（对称）} $K_m(a,b)=K_m(b,a)$；
+  \item \textbf{（双随机）} 对任意 $a$ 有 $\sum_b K_m(a,b)=1$，且对任意 $b$ 有 $\sum_a K_m(a,b)=1$；
+  \item \textbf{（函数版 = 纤维平均）} 对任意函数 $f:\Omega_m\to\RR$，
+  \[
+  (K_m f)(a):=\sum_{b\in\Omega_m}K_m(a,b)f(b)
+  =\frac{1}{d_m(\Fold_m(a))}\sum_{\Fold_m(b)=\Fold_m(a)} f(b),
+  \]
+  即 $K_m$ 在观测量层面就是“按折叠纤维做算术平均”的条件期望接口。
+\end{enumerate}
+特别地，$\Omega_m$ 上的均匀分布 $u_{\Omega_m}(a)\equiv 2^{-m}$ 为不变分布（由双随机性立得）。
+\end{proposition}
+\begin{proof}
+将 $\Omega_m$ 分解为折叠纤维。对每个 $x\in X_m$，$K_m$ 在块 $\Fold_m^{-1}(x)\times\Fold_m^{-1}(x)$ 上是常数矩阵 $J/d_m(x)$（其余块为 $0$）。因此 $(J/d)^2=J/d$、$J$ 对称且行列和一致，给出幂等/对称/双随机；函数版公式是矩阵作用的逐项展开。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$K_m$}{Km} 的谱与投影解释]\label{cor:pom-Km-spectrum}
+把 $K_m$ 视为作用在 $\RR^{\Omega_m}$（或 $\CC^{\Omega_m}$）上的线性算子，则：
+\begin{enumerate}
+  \item $K_m$ 是（计数内积下的）正交投影，其像空间恰为纤维常值函数空间
+  \[
+  \mathrm{Im}(K_m)=\{f:\Omega_m\to\RR:\ f(a)=f(b)\ \text{当且仅当}\ \Fold_m(a)=\Fold_m(b)\}.
+  \]
+  \item $\mathrm{rank}(K_m)=|X_m|$，并且其谱仅由 $\{0,1\}$ 构成：特征值 $1$ 的重数为 $|X_m|$，特征值 $0$ 的重数为 $|\Omega_m|-|X_m|=2^m-|X_m|$。
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+由命题 \ref{prop:pom-Km-bistochastic} 知 $K_m^2=K_m$ 且 $K_m$ 对称，故它是正交投影。
+对每个 $x\in X_m$，限制到块 $\Fold_m^{-1}(x)$ 上，$K_m$ 就是 $J/d$（其中 $d=d_m(x)$）。该块的像为常值向量张成的一维子空间，核为“纤维内和为 $0$”的余维 $1$ 子空间。
+于是全空间分解为各纤维的直和，$\mathrm{Im}(K_m)$ 正是纤维常值函数；因此秩为纤维数 $|X_m|$。
+每个块贡献一个特征值 $1$ 与 $d-1$ 个特征值 $0$，汇总得到谱与重数公式。证毕。
+\end{proof}
+
+\begin{proposition}[任意权重下的条件期望：正交投影与精确方差分解]\label{prop:pom-weighted-condexp-variance}
+取任意 $\mu\in\Delta(\Omega_m)$，令 $\pi:=P_m\mu\in\Delta(X_m)$，并沿用引理 \ref{lem:pom-fiberwise-kl} 的纤维条件分布 $\{\mu_x\}_{x\in X_m}$。
+对任意函数 $f:\Omega_m\to\RR$，定义（依赖 $\mu$ 的）条件期望算子
+\[
+(E_{m}^{(\mu)}f)(a):=
+\begin{cases}
+\displaystyle \sum_{b\in \Fold_m^{-1}(x)} f(b)\,\mu_x(b),& x=\Fold_m(a),\ \pi(x)>0,\\[6pt]
+0,& x=\Fold_m(a),\ \pi(x)=0.
+\end{cases}
+\]
+并定义加权内积
+\[
+\langle f,g\rangle_\mu:=\sum_{a\in\Omega_m} f(a)g(a)\,\mu(a).
+\]
+则：
+\begin{enumerate}
+  \item $E_m^{(\mu)}f$ 仅依赖于 $x=\Fold_m(a)$，因此属于纤维常值子空间（等价于由 $X_m$ 上的某个函数拉回）；
+  \item $E_m^{(\mu)}$ 是 $L^2(\mu)$ 中到纤维常值子空间的正交投影：对任意函数 $f$ 与任意纤维常值函数 $g$，恒有
+  \[
+  \boxed{\;\langle f-E_m^{(\mu)}f,\ g\rangle_\mu=0.\;}
+  \]
+  \item 写
+  \(
+  \mathbb{E}_\mu[f]:=\sum_a f(a)\mu(a)
+  \)
+  与
+  \(
+  \mathrm{Var}_\mu(f):=\mathbb{E}_\mu[(f-\mathbb{E}_\mu[f])^2]
+  \)。
+  则有精确的方差分解（全为有限求和）：
+  \[
+  \boxed{\;
+  \mathrm{Var}_\mu(f)=\mathrm{Var}_\mu(E_m^{(\mu)}f)\;+\;\sum_{x\in X_m}\pi(x)\,\mathrm{Var}_{\mu_x}(f).
+  \;}
+  \]
+\end{enumerate}
+特别地，若 $\mu$ 在每条纤维上条件均匀（即 $\mu=\mu^e=K_m\mu$），则 $E_m^{(\mu)}$ 与 $K_m$ 的函数版作用一致：$E_m^{(\mu)}f=K_m f$。
+\end{proposition}
+\begin{proof}
+（1）由定义，若 $\Fold_m(a)=\Fold_m(a')=x$ 且 $\pi(x)>0$，则
+\(
+E_m^{(\mu)}f(a)=\sum_{b\in\Fold_m^{-1}(x)}f(b)\mu_x(b)=E_m^{(\mu)}f(a')
+\)；当 $\pi(x)=0$ 时该纤维在 $\mu$ 下零测，按定义取零不影响任何 $\mu$-积分。
+
+（2）任取纤维常值 $g$。存在 $\bar g:X_m\to\RR$ 使 $g(a)=\bar g(\Fold_m(a))$。
+按纤维分组并用 $\mu(a)=\pi(x)\mu_x(a)$（$\pi(x)>0$）得
+\[
+\langle f-E_m^{(\mu)}f,\ g\rangle_\mu
+=\sum_{x\in X_m}\sum_{a\in\Fold_m^{-1}(x)}\pi(x)\mu_x(a)\bigl(f(a)-\mathbb{E}_{\mu_x}[f]\bigr)\bar g(x)=0,
+\]
+因为对每个固定 $x$，内层和为
+\(
+\bar g(x)\pi(x)\bigl(\mathbb{E}_{\mu_x}[f]-\mathbb{E}_{\mu_x}[f]\bigr)=0
+\)。
+故 $E_m^{(\mu)}$ 为正交投影，由正交投影之定义可知其必满足幂等性。
+
+（3）由（2）的正交性，对 $g:=E_m^{(\mu)}f-\mathbb{E}_\mu[f]$（它是纤维常值）应用勾股分解：
+\[
+\mathbb{E}_\mu\!\bigl[(f-\mathbb{E}_\mu[f])^2\bigr]
+=\mathbb{E}_\mu\!\bigl[(E_m^{(\mu)}f-\mathbb{E}_\mu[f])^2\bigr]+\mathbb{E}_\mu\!\bigl[(f-E_m^{(\mu)}f)^2\bigr].
+\]
+第一项即 $\mathrm{Var}_\mu(E_m^{(\mu)}f)$。第二项按纤维分组并用 $\mu(a)=\pi(x)\mu_x(a)$ 得
+\[
+\mathbb{E}_\mu[(f-E_m^{(\mu)}f)^2]
+=\sum_{x\in X_m}\pi(x)\sum_{a\in\Fold_m^{-1}(x)}\mu_x(a)\bigl(f(a)-\mathbb{E}_{\mu_x}[f]\bigr)^2
+=\sum_{x\in X_m}\pi(x)\,\mathrm{Var}_{\mu_x}(f).
+\]
+合并即得方差分解。最后一段：若 $\mu$ 在每条纤维上条件均匀，则 $\mu_x=u_x$，从而
+\(
+E_m^{(\mu)}f(a)=\frac{1}{d_m(x)}\sum_{\Fold_m(b)=x}f(b)=(K_m f)(a)
+\)。
+证毕。
+\end{proof}
+
+\begin{definition}[折叠可见度：方差保留比例指标]\label{def:pom-fold-visibility}
+对任意 $\mu\in\Delta(\Omega_m)$ 与任意非零方差观测 $f:\Omega_m\to\RR$（即 $\mathrm{Var}_\mu(f)>0$），定义“折叠可见度”
+\[
+\mathcal{R}_{m,\mu}(f):=\frac{\mathrm{Var}_\mu(E_m^{(\mu)}f)}{\mathrm{Var}_\mu(f)}\in(0,1].
+\]
+当 $\mathcal{R}_{m,\mu}(f)\approx 1$ 时，观测 $f$ 的主要起伏已由稳定类型 $x=\Fold_m(a)$ 决定（宏观可见）；当 $\mathcal{R}_{m,\mu}(f)\approx 0$ 时，起伏主要发生在纤维内部（宏观不可见）。
+\end{definition}
+
+\begin{theorem}[折叠可见度与判错剖面的二侧界]\label{thm:pom-visibility-to-error-two-sided}
+取事件 $P\subseteq\Omega_m$ 并令 $f:=\ind_P$，假设 $0<\mu(P)<1$。
+令 $\mathcal{G}_m:=\sigma(\Fold_m)$，并定义“仅允许访问稳定类型”的最小判错概率
+\[
+\varepsilon_m^{\mathrm{fold}}(P;\mu)
+:=\inf\left\{\mu(g\neq f): g\in L^\infty(\mathcal{G}_m),\ g(\Omega_m)\subseteq\{0,1\}\right\}.
+\]
+则令
+\[
+p:=E_m^{(\mu)}f=\mathbb{E}_\mu[f\,|\,\mathcal{G}_m]\in[0,1],
+\]
+有精确表达式
+\[
+\varepsilon_m^{\mathrm{fold}}(P;\mu)=\mathbb{E}_\mu\bigl[\min\{p,1-p\}\bigr],
+\]
+并且满足无参数二侧估计
+\[
+\mathrm{Var}_\mu(f)\bigl(1-\mathcal{R}_{m,\mu}(f)\bigr)
+\ \le\
+\varepsilon_m^{\mathrm{fold}}(P;\mu)
+\ \le\
+\sqrt{\mathrm{Var}_\mu(f)\bigl(1-\mathcal{R}_{m,\mu}(f)\bigr)}.
+\]
+\end{theorem}
+
+\begin{corollary}[最大熵提升的 I-投影表述]\label{cor:pom-Iproj-maxent}
+记 $u_{\Omega_m}$ 为 $\Omega_m$ 上的均匀分布。对任意固定 $\pi\in\Delta(X_m)$，约束集
+\[
+\mathcal{C}_\pi:=\{\nu\in\Delta(\Omega_m):P_m\nu=\pi\}
+\]
+为凸集，且其唯一最大熵元 $\mu^e=Q_m\pi$ 同时满足
+\[
+\boxed{\;
+\mu^e=\arg\min_{\nu\in\mathcal{C}_\pi}D_{\mathrm{KL}}(\nu\|u_{\Omega_m})
+\;=\;
+\arg\max_{\nu\in\mathcal{C}_\pi}H(\nu).
+\;}
+\]
+\end{corollary}
+\begin{proof}
+因为 $u_{\Omega_m}(a)\equiv 2^{-m}$，对任意 $\nu$ 有
+\(
+D_{\mathrm{KL}}(\nu\|u_{\Omega_m})=\sum_a \nu(a)\log\nu(a)+m\log 2=\log(2^m)-H(\nu)
+\)，
+故在同一约束集 $\mathcal{C}_\pi$ 上，“最小 KL 到均匀”与“最大熵”等价。
+而最大熵解的唯一性由定理 \ref{thm:pom-maxent-lift}（或按纤维逐块严格凹性）给出。证毕。
+\end{proof}
+
+\begin{theorem}[到均匀微态的 KL 勾股分解（精确三项恒等式）]\label{thm:pom-kl-pythagoras-uniform}
+记 $u_{\Omega_m}$ 为 $\Omega_m$ 上的均匀分布，并定义其稳定推前（均匀微态基准）
+\[
+w_m:=P_m u_{\Omega_m}\in\Delta(X_m),\qquad
+w_m(x)=\frac{d_m(x)}{2^m}.
+\]
+取任意 $\mu\in\Delta(\Omega_m)$，令 $\pi:=P_m\mu\in\Delta(X_m)$，并令 $\mu^e:=Q_m\pi$ 为其纤维均匀提升。
+则有严格恒等式
+\[
+\boxed{\;
+D_{\mathrm{KL}}(\mu\|u_{\Omega_m})
+=D_{\mathrm{KL}}(\pi\|w_m)\;+\;D_{\mathrm{KL}}(\mu\|\mu^e).
+\;}
+\]
+\end{theorem}
+\begin{proof}
+按 KL 定义展开，并用 $u_{\Omega_m}(a)\equiv 2^{-m}$ 得
+\[
+D_{\mathrm{KL}}(\mu\|u_{\Omega_m})
+=\sum_{a\in\Omega_m}\mu(a)\log\mu(a)+m\log 2
+=m\log 2-H(\mu).
+\]
+另一方面，由定理 \ref{thm:pom-kl-ledger}（信息账本恒等式）
+\(
+H(\mu)=H(\pi)+\mathbb{E}_\pi[\log d_m(X)]-D_{\mathrm{KL}}(\mu\|\mu^e)
+\)，
+代回可得
+\[
+D_{\mathrm{KL}}(\mu\|u_{\Omega_m})
+=m\log 2-H(\pi)-\mathbb{E}_\pi[\log d_m(X)]\;+\;D_{\mathrm{KL}}(\mu\|\mu^e).
+\]
+而由 $w_m(x)=d_m(x)/2^m$ 直接计算
+\[
+D_{\mathrm{KL}}(\pi\|w_m)
+=\sum_{x\in X_m}\pi(x)\log\frac{\pi(x)}{d_m(x)/2^m}
+=m\log 2-H(\pi)-\mathbb{E}_\pi[\log d_m(X)].
+\]
+合并即得所示恒等式。证毕。
+\end{proof}
+
+\begin{corollary}[I-投影的精确误差刻画：KL 距离即为“微观残差”]\label{cor:pom-Iproj-gap-exact}
+沿用定理 \ref{thm:pom-kl-pythagoras-uniform} 的记号，固定任意 $\pi\in\Delta(X_m)$ 并取任意 $\mu\in\mathcal{C}_\pi$。
+则
+\[
+\boxed{\;
+D_{\mathrm{KL}}(\mu\|u_{\Omega_m})-D_{\mathrm{KL}}(\mu^e\|u_{\Omega_m})
+=D_{\mathrm{KL}}(\mu\|\mu^e).
+\;}
+\]
+\end{corollary}
+\begin{proof}
+对固定 $\pi$，由定理 \ref{thm:pom-kl-pythagoras-uniform} 先对一般 $\mu\in\mathcal{C}_\pi$ 写出分解；
+再对 $\mu=\mu^e$ 代入同一分解，因 $P_m\mu^e=\pi$ 得其宏观项相同，二式相减即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[固定宏观直方图下的“微观滑移窗”（显式区间律）]\label{cor:pom-micro-slip-window}
+在固定分辨率 $m$ 下，给定宏观直方图 $\pi\in\Delta(X_m)$，定义其\textbf{不可见容量}（纤维体积预算）
+\[
+\mathcal{W}^{\mathrm{inv}}(\pi):=\mathbb{E}_\pi[\log d_m(X)].
+\]
+则对任意满足 $P_m\mu=\pi$ 的微观分布 $\mu\in\Delta(\Omega_m)$，有显式夹逼
+\[
+\boxed{\;
+D_{\mathrm{KL}}(\pi\|w_m)\ \le\ D_{\mathrm{KL}}(\mu\|u_{\Omega_m})\ \le\ D_{\mathrm{KL}}(\pi\|w_m)+\mathcal{W}^{\mathrm{inv}}(\pi)
+\;}
+\]
+等价地，
+\[
+0\le D_{\mathrm{KL}}(\mu\|\mu^e)\le \mathcal{W}^{\mathrm{inv}}(\pi).
+\]
+因此同一个宏观直方图 $\pi$ 下，“离均匀微态基线有多远”并非单值，而是在长度为 $\mathcal{W}^{\mathrm{inv}}(\pi)$ 的可审计区间内滑移；该区间长度完全由宏观 $\pi$ 与纤维多重度 $d_m$ 决定。
+\end{corollary}
+\begin{proof}
+左端下界由定理 \ref{thm:pom-kl-pythagoras-uniform} 与 $D_{\mathrm{KL}}(\mu\|\mu^e)\ge 0$ 立得。
+\par
+对右端上界，由引理 \ref{lem:pom-fiberwise-kl}，
+\(
+D_{\mathrm{KL}}(\mu\|\mu^e)=\sum_x \pi(x)\,D_{\mathrm{KL}}(\mu_x\|u_x)
+\)。
+而对任意有限集合大小为 $d$ 的纤维，分布到均匀分布的 KL 散度满足
+\(
+D_{\mathrm{KL}}(\nu\|u)\le \log d
+\)
+（最大值在点质量取到）。
+因此
+\[
+D_{\mathrm{KL}}(\mu\|\mu^e)\le \sum_x \pi(x)\log d_m(x)=\mathbb{E}_\pi[\log d_m(X)]=\mathcal{W}^{\mathrm{inv}}(\pi).
+\]
+代回定理 \ref{thm:pom-kl-pythagoras-uniform} 即得所示区间律。证毕。
+\end{proof}
+
+\begin{theorem}[规范的粗粒化动力学：先提升—再演化—再读出]\label{thm:pom-coarse-grained-kernel}
+设 $K:\Delta(\Omega_m)\to\Delta(\Omega_m)$ 为任意 Markov 核（窗口层动力学）。
+定义稳定层的粗粒化核
+\[
+\overline K:=P_m\circ K\circ Q_m:\Delta(X_m)\to\Delta(X_m).
+\]
+则对任意初始稳定分布 $\pi_0\in\Delta(X_m)$，令 $\mu_0:=Q_m\pi_0$，有
+\[
+\pi_1=\overline K\,\pi_0=P_m(K\mu_0).
+\]
+并且 $\overline K$ 是满足该“先提升—再演化—再读出”语义的唯一稳定层 Markov 核。
+\end{theorem}
+\begin{proof}
+第一式为定义展开。若 $\widetilde K$ 亦满足对所有 $\pi_0$ 有
+\(
+\widetilde K\pi_0=P_m(K(Q_m\pi_0))
+\)，
+则逐点相等推出 $\widetilde K=\overline K$。证毕。
+\end{proof}
+
+\begin{definition}[可并行逆代换位点与干涉图]\label{def:pom-carry-interference-graph}
+对 $x=x_1\cdots x_m\in X_m$，定义其\emph{可并行逆代换位点集合}
+\[
+J(x):=\{i\in\{1,\dots,m-2\}:\ x_ix_{i+1}x_{i+2}=100\}.
+\]
+定义干涉图 $G(x)$：其顶点集为 $J(x)$，并在 $i\neq j$ 时连边当且仅当区间 $[i,i+2]$ 与 $[j,j+2]$ 相交（等价于 $|i-j|\le 2$）。记 $\mathsf{Ind}(G(x))$ 为 $G(x)$ 的独立集族。
+\end{definition}
+
+\begin{lemma}[自由逆代换给出的纤维下界]\label{lem:pom-fiber-lower-bound-independent-sets}
+对任意 $x\in X_m$，有
+\[
+d_m(x)\ \ge\ \#\mathsf{Ind}(G(x)).
+\]
+\end{lemma}
+
+\begin{proof}
+取任意独立集 $S\in\mathsf{Ind}(G(x))$。由于 $S$ 中任意两点对应的长度 $3$ 区间不相交，故可在 $x$ 上对所有 $i\in S$ 同时（或任意顺序）执行逆代换 $100\mapsto 011$，得到一个二元词 $\omega_S\in\Omega_m$。
+将该过程反向，即对 $\omega_S$ 在这些位点执行正向进位 $011\mapsto 100$，可恢复 $x$；因此 $\Fold_m(\omega_S)=x$。
+又因为 $S$ 可由 $\omega_S$ 中发生改变的那些长度-$3$ 位置唯一恢复（区间互不相交使得这些局部改变互不混淆），映射 $S\mapsto \omega_S$ 为单射。
+于是 $\#\Fold_m^{-1}(x)=d_m(x)\ge \#\mathsf{Ind}(G(x))$。证毕。
+\end{proof}
+
+\begin{lemma}[独立集计数的线性时间递推（半径 2 冲突）]\label{lem:pom-independence-dp-radius2}
+令 $x\in X_m$，并将 $J(x)$ 升序写为
+\[
+J(x)=\{i_1<i_2<\cdots<i_k\}.
+\]
+对 $t\in\{1,\dots,k\}$ 定义
+\[
+p(t):=\max\{s\in\{0,1,\dots,t-1\}:\ i_t-i_s>2\},
+\]
+其中约定 $i_0:=-\infty$（等价地：$p(t)$ 是满足 $i_t-i_{p(t)}>2$ 的最大下标；若对所有 $s\le t-1$ 都有 $i_t-i_s\le 2$，则 $p(t)=0$）。
+定义序列 $a_0:=1$ 且对 $t\ge 1$ 递推
+\[
+a_t:=a_{t-1}+a_{p(t)}.
+\]
+则有
+\[
+\#\mathsf{Ind}(G(x))=a_k.
+\]
+\end{lemma}
+
+\begin{proof}
+按 $\{i_1,\dots,i_t\}$ 的前缀递推计数独立集数。
+任取独立集 $S\subseteq\{i_1,\dots,i_t\}$，分两类：
+\begin{enumerate}
+  \item 若 $i_t\notin S$，则 $S$ 是前缀 $\{i_1,\dots,i_{t-1}\}$ 的独立集，计数为 $a_{t-1}$；
+  \item 若 $i_t\in S$，则由 $G(x)$ 的边定义（$|i-j|\le 2$ 冲突），$S$ 不能包含任何 $i_s$ 满足 $i_t-i_s\le 2$。因此 $S\setminus\{i_t\}$ 必为前缀 $\{i_1,\dots,i_{p(t)}\}$ 的独立集，计数为 $a_{p(t)}$。
+\end{enumerate}
+两类互斥且覆盖全部情形，因此 $a_t=a_{t-1}+a_{p(t)}$。
+取 $t=k$ 得 $\#\mathsf{Ind}(G(x))=a_k$。证毕。
+\end{proof}
+
+\begin{corollary}[一个可计算的纤维下界]\label{cor:pom-fiber-lower-bound-dp}
+对任意 $x\in X_m$，用引理 \ref{lem:pom-independence-dp-radius2} 的递推计算出 $a_k$，则
+\[
+d_m(x)\ge a_k.
+\]
+\end{corollary}
+
+\begin{proof}
+由引理 \ref{lem:pom-fiber-lower-bound-independent-sets} 与引理 \ref{lem:pom-independence-dp-radius2} 直接得到。
+\end{proof}
+
+\begin{lemma}[干涉图的块分解与独立集乘法公式]\label{lem:pom-ind-factorization}
+令 $x\in X_m$，并将 $J(x)$ 升序写为 $\{i_1<\cdots<i_k\}$。
+把指标集合按“断点”分解为若干连续块：记 $t$ 为断点当且仅当 $i_{t+1}-i_t>2$，并据此把 $J(x)$ 分解为若干不相交子集
+\[
+J(x)=J_1\sqcup\cdots\sqcup J_r,
+\]
+其中每个 $J_\ell$ 在升序下满足相邻差 $\le 2$。
+则干涉图 $G(x)$ 分裂为互不相连的诱导子图直和
+\(
+G(x)=G[J_1]\sqcup\cdots\sqcup G[J_r]
+\)，
+并且独立集计数满足乘法公式
+\[
+\#\mathsf{Ind}(G(x))=\prod_{\ell=1}^r \#\mathsf{Ind}(G[J_\ell]).
+\]
+\end{lemma}
+
+\begin{proof}
+若 $i\in J_a$、$j\in J_b$ 且 $a\neq b$，则由分块定义有 $|i-j|>2$，故 $G(x)$ 中不存在跨块边，从而图为不相连直和。
+对不相连图，独立集在各连通分量上独立选择，计数乘法性成立。
+\end{proof}
+
+\begin{corollary}[纤维下界的块级乘法级联]\label{cor:pom-fiber-lower-bound-cascade}
+沿用定义 \ref{def:pom-carry-interference-graph}，并把 $J(x)=J_1\sqcup\cdots\sqcup J_r$ 按引理 \ref{lem:pom-ind-factorization} 分解为块。
+记每块贡献
+\[
+I(J_\ell):=\#\mathsf{Ind}(G[J_\ell])\qquad(\ell=1,\dots,r).
+\]
+则对任意 $x\in X_m$ 都有
+\[
+\boxed{\;
+d_m(x)\ \ge\ \prod_{\ell=1}^r I(J_\ell)\;}
+\]
+从而其对数纤维体积至少具有可加分解
+\[
+\boxed{\;
+\log d_m(x)\ \ge\ \sum_{\ell=1}^r \log I(J_\ell).\;}
+\]
+\end{corollary}
+\begin{proof}
+由引理 \ref{lem:pom-fiber-lower-bound-independent-sets} 得 $d_m(x)\ge \#\mathsf{Ind}(G(x))$，再由引理 \ref{lem:pom-ind-factorization} 的乘法公式得到乘积下界。取对数即得第二式。证毕。
+\end{proof}
+
+\begin{lemma}[单块情形的局部递推：\texorpdfstring{$a_t=a_{t-1}+a_{t-2}$}{a=a+a} 与 \texorpdfstring{$a_t=a_{t-1}+a_{t-3}$}{a=a+a} 的分岔]\label{lem:pom-ind-local-recurrence}
+沿用引理 \ref{lem:pom-independence-dp-radius2} 的记号。
+设 $J(x)$ 自身为单块（即对所有 $t$ 有 $i_{t+1}-i_t\le 2$）。则对 $t\ge 3$：
+\begin{enumerate}
+  \item 若 $i_t-i_{t-2}>2$，则 $p(t)=t-2$，从而
+  \[
+  a_t=a_{t-1}+a_{t-2};
+  \]
+  \item 若 $i_t-i_{t-2}=2$（等价于 $i_{t-1}=i_t-1$ 且 $i_{t-2}=i_t-2$），则 $p(t)=t-3$，从而
+  \[
+  a_t=a_{t-1}+a_{t-3}.
+  \]
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+在单块条件下，必有 $i_t-i_{t-1}\le 2$，故 $p(t)\le t-2$。
+若 $i_t-i_{t-2}>2$，则 $s=t-2$ 满足定义条件且为最大者，故 $p(t)=t-2$。
+若 $i_t-i_{t-2}=2$，则 $s=t-2$ 不满足条件；而由于 $i_{t-2}-i_{t-3}\ge 1$，得 $i_t-i_{t-3}\ge 3$，故 $p(t)=t-3$。
+代入引理 \ref{lem:pom-independence-dp-radius2} 的递推即得。
+\end{proof}
+
+\begin{proposition}[单块的二字母矩阵语法]\label{prop:pom-ind-matrix-grammar}
+设 $J(x)=\{i_1<\cdots<i_k\}$ 为单块，并取引理 \ref{lem:pom-independence-dp-radius2} 的序列 $a_t$。
+对 $t\in\{3,\dots,k\}$ 定义“局部字母”
+\[
+\sigma_t:=
+\begin{cases}
+2,& i_t-i_{t-2}>2\quad(\text{等价于 }p(t)=t-2),\\
+3,& i_t-i_{t-2}=2\quad(\text{等价于 }p(t)=t-3),
+\end{cases}
+\]
+并令状态向量
+\(
+v_t:=(a_t,a_{t-1},a_{t-2})^\top
+\)。
+则对每个 $t=3,\dots,k$，递推都等价于两种固定线性更新之一：
+\[
+v_t=M_{\sigma_t}\,v_{t-1},
+\qquad
+M_2=
+\begin{pmatrix}
+1&1&0\\
+1&0&0\\
+0&1&0
+\end{pmatrix},
+\qquad
+M_3=
+\begin{pmatrix}
+1&0&1\\
+1&0&0\\
+0&1&0
+\end{pmatrix}.
+\]
+从而块贡献（单块独立集计数）可写为一个二生成元矩阵词的评价：
+\[
+I(J(x))=\#\mathsf{Ind}(G[J(x)])=a_k
+=e_1^\top\Bigl(\prod_{t=3}^k M_{\sigma_t}\Bigr)v_2,
+\]
+其中 $e_1=(1,0,0)^\top$，并且在单块情形下初值固定为
+\(
+v_2=(a_2,a_1,a_0)^\top=(3,2,1)^\top
+\)。
+\end{proposition}
+\begin{proof}
+由引理 \ref{lem:pom-ind-local-recurrence}，在单块中对 $t\ge 3$ 只有两种情形：
+若 $p(t)=t-2$ 则 $a_t=a_{t-1}+a_{t-2}$，等价于 $v_t=M_2v_{t-1}$；
+若 $p(t)=t-3$ 则 $a_t=a_{t-1}+a_{t-3}$，等价于 $v_t=M_3v_{t-1}$。
+将 $t=3,\dots,k$ 逐步迭代并取第一坐标即得矩阵词表达式。
+最后，单块意味着 $i_2-i_1\le 2$，从而 $p(1)=p(2)=0$，故 $a_0=1,a_1=2,a_2=3$。证毕。
+\end{proof}
+
+\begin{definition}[缺陷集]\label{def:pom-ind-defect-set}
+在命题 \ref{prop:pom-ind-matrix-grammar} 的单块设定下，定义缺陷位置集合
+\[
+\mathcal D(J(x)):=\{t\in\{3,\dots,k\}:\ \sigma_t=3\}
+=\{t\in\{3,\dots,k\}:\ i_t-i_{t-2}=2\}.
+\]
+\end{definition}
+
+\begin{remark}[谱层级的缺陷集分类原则]\label{rem:pom-ind-defect-class}
+命题 \ref{prop:pom-ind-matrix-grammar} 给出一个可审计的组织方式：
+\begin{enumerate}
+  \item \emph{块内：}单块贡献 $I(J)$ 由二字母矩阵词（等价地：由缺陷集 $\mathcal D(J)$）决定；缺陷自由的情形 $\mathcal D(J)=\emptyset$ 给出纯 Fibonacci 递推与最大指数增长（$M_2$ 的 Perron 根为 $\varphi$）。
+  \item \emph{全局：}由推论 \ref{cor:pom-fiber-lower-bound-cascade}，下界 $\#\mathsf{Ind}(G(x))$ 在块层面乘法级联，因此 $\log d_m(x)$ 的一个可计算下包络天然分解为各块 $\log I(J_\ell)$ 的和。
+\end{enumerate}
+这把“近极大谱层级为何呈现规律性缺口/分岔”的机制统一为：\emph{谱层级}可视为“块上缺陷集合的组合类”，并由块乘法级联拼装。
+\end{remark}
+最后，附录 \ref{subsec:unit-circle-phase-precision-ledger}—注 \ref{rem:unit-circle-phase-precision-ledger-vs-pom} 给出连续相位紧化的精度势账本，与此处离散折叠账本在结构上同型。

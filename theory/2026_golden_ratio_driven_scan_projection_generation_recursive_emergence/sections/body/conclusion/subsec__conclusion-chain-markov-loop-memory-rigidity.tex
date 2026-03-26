@@ -1,0 +1,255 @@
+\subsection{链 Markov 刚性、环熵筛蔽与长距核的四次记忆律}\label{subsec:conclusion-chain-markov-loop-memory-rigidity}
+沿用正文关于行列式体积熵、Chow--Liu 树投影、单调距离核的一维链刚性以及弱相干环熵显影的记号。前文已经分别证明：对高斯相关矩阵，\(-\log\det\) 相对任意生成树的缺口恰等于树投影的 KL 缺口；在一维有序点列与严格单调距离核制度中，最大权生成树唯一退化为相邻链；链形环熵又可被条件互信息与二阶差分偏离的平方和精确控制；对显式长距核 \(A(\Delta)=\Delta/(2\sinh(\Delta/2))\)，每步环熵还具有完全显式的指数衰减标度。把这些接口并置后，可进一步压出如下几条刚性后果：链 Markov 性、零环熵、最近邻行列式极大化与精度矩阵三对角性在一维单调制度中彼此等价；弱相干缺陷在固定最近邻纤维内从二阶开始显影且没有一次响应；全局环熵对所有被树剔除的条件耦合给出统一的平方根筛蔽；而在显式长距核上，真正的非 Markov 记忆严格落在四次阶。
+
+\begin{theorem}[链 Markov 刚性的四重等价]\label{thm:conclusion-chain-markov-rigidity-fourfold-equivalence}
+设 \(R=(R_{ij})_{1\le i,j\le \kappa}\) 为一维有序点列
+\[
+s_1<\cdots<s_\kappa
+\]
+上的正定相关矩阵，并满足
+\[
+R_{ij}=A(|s_i-s_j|),
+\]
+其中 \(A:(0,\infty)\to(0,1)\) 严格单调递减。定义
+\[
+S_{\det}(R):=-\log\det R,
+\]
+\[
+S_{\mathrm{tree}}(R):=\max_T\sum_{(i,j)\in T}-\log(1-R_{ij}^2),
+\]
+\[
+S_{\mathrm{loop}}(R):=S_{\det}(R)-S_{\mathrm{tree}}(R)\ge 0.
+\]
+再令 \(R_{\mathrm{MC}}\) 为与 \(R\) 具有相同最近邻相关
+\[
+R_{j,j+1}\qquad (1\le j\le \kappa-1)
+\]
+且满足 \((R_{\mathrm{MC}})^{-1}\) 三对角的链 Markov 相关矩阵。则下列四条等价：
+\begin{enumerate}
+  \item \(S_{\mathrm{loop}}(R)=0\)；
+  \item
+  \[
+  S_{\det}(R)=\sum_{j=1}^{\kappa-1}-\log(1-R_{j,j+1}^2);
+  \]
+  \item \(R=R_{\mathrm{MC}}\)；
+  \item \(R^{-1}\) 为三对角矩阵。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由结论 \ref{con:xi-det-entropy-monotone-kernel-chain-mst}，一维单调距离核下的最大权生成树唯一为相邻链
+\[
+T_{\mathrm{chain}}=\{(1,2),(2,3),\dots,(\kappa-1,\kappa)\},
+\]
+故
+\[
+S_{\mathrm{tree}}(R)=\sum_{j=1}^{\kappa-1}-\log(1-R_{j,j+1}^2).
+\]
+于是 \(\textup{(1)}\iff\textup{(2)}\) 只是定义改写。
+
+再由结论 \ref{con:xi-det-entropy-markov-volume-ratio}，
+\[
+S_{\mathrm{loop}}(R)=\mathcal L_{\mathrm{chain}}(R)
+=-\log\frac{\det R}{\det R^{\mathrm{MC}}},
+\]
+而结论 \ref{con:xi-det-entropy-loop-entropy-kl-gap} 对链树给出
+\[
+\mathcal L_{\mathrm{chain}}(R)=0
+\iff
+R=R^{\mathrm{MC}}.
+\]
+这就得到 \(\textup{(1)}\iff\textup{(3)}\)。
+
+由 \(R_{\mathrm{MC}}\) 的定义，\(\textup{(3)}\Rightarrow\textup{(4)}\) 显然。反过来，若 \(R^{-1}\) 为三对角，则 \(R\) 本身已是与给定最近邻相关相容的链形高斯 Markov 相关矩阵；按链 Markov 相关矩阵的唯一性，只能有 \(R=R_{\mathrm{MC}}\)。故 \(\textup{(4)}\Rightarrow\textup{(3)}\)。四条遂互相等价。证毕。
+\end{proof}
+
+\begin{theorem}[固定最近邻数据下的行列式极大化]\label{thm:conclusion-chain-markov-determinant-maximization-fixed-nearest-neighbor}
+在定理 \ref{thm:conclusion-chain-markov-rigidity-fourfold-equivalence} 的设定下，固定最近邻相关数据
+\[
+r_j:=R_{j,j+1}\in(-1,1)
+\qquad (1\le j\le \kappa-1).
+\]
+则在全部与该最近邻数据相容的正定相关矩阵中，\(R_{\mathrm{MC}}\) 唯一极大化行列式；亦即
+\[
+\det R\le \det R_{\mathrm{MC}}
+=\prod_{j=1}^{\kappa-1}(1-r_j^2),
+\]
+且等号当且仅当 \(R=R_{\mathrm{MC}}\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-chain-markov-rigidity-fourfold-equivalence}，
+\[
+S_{\mathrm{loop}}(R)
+=
+-\log\det R+\sum_{j=1}^{\kappa-1}\log(1-r_j^2)
+\ge 0.
+\]
+移项即得
+\[
+\det R\le \prod_{j=1}^{\kappa-1}(1-r_j^2).
+\]
+而结论 \ref{con:xi-det-entropy-markov-volume-ratio} 已经给出
+\[
+\det R_{\mathrm{MC}}=\prod_{j=1}^{\kappa-1}(1-r_j^2),
+\]
+故 \(R_{\mathrm{MC}}\) 达到该上界。等号判据由 \(S_{\mathrm{loop}}(R)=0\iff R=R_{\mathrm{MC}}\) 立得。证毕。
+\end{proof}
+
+\begin{theorem}[二次缺陷坐标下的无一次响应]\label{thm:conclusion-chain-defect-coordinates-no-linear-response}
+在定理 \ref{thm:conclusion-chain-markov-rigidity-fourfold-equivalence} 的一维单调制度下，进入弱相干区并定义链缺陷坐标
+\[
+\eta_j:=R_{j-2,j}-R_{j-2,j-1}R_{j-1,j}
+\qquad (3\le j\le \kappa).
+\]
+则有渐近展开
+\[
+S_{\mathrm{loop}}(R)
+=
+\sum_{j=3}^{\kappa}
+\frac{\eta_j^2}{(1-R_{j-2,j-1}^2)(1-R_{j-1,j}^2)}
++o\!\left(\sum_{j=3}^{\kappa}\eta_j^2\right).
+\]
+特别地，\(S_{\mathrm{loop}}\) 在 \((\eta_j)\) 坐标下不存在一次项；因此 \(R_{\mathrm{MC}}\) 在固定最近邻数据的纤维中是 \(S_{\det}\) 的二阶刚性极小点。
+\end{theorem}
+\begin{proof}
+由结论 \ref{con:xi-det-entropy-monotone-kernel-chain-mst}，在当前一维单调距离核制度中，
+\[
+S_{\mathrm{loop}}(R)=\mathcal L_{\mathrm{chain}}(R).
+\]
+而结论 \ref{con:xi-det-entropy-weak-coherence-chain-q4-law} 已给出弱相干区的精确首项展开
+\[
+\mathcal L_{\mathrm{chain}}(R)
+=
+\sum_{j=3}^{\kappa}
+\frac{\eta_j^2}{(1-R_{j-2,j-1}^2)(1-R_{j-1,j}^2)}
++o\!\left(\sum_{j=3}^{\kappa}\eta_j^2\right).
+\]
+这正是所求。由于首项为非负二次型，故线性响应严格消失。又在最近邻数据固定时，\(S_{\mathrm{tree}}(R)\) 为常数，故 \(S_{\det}=S_{\mathrm{tree}}+S_{\mathrm{loop}}\) 与 \(S_{\mathrm{loop}}\) 共享同一二阶极小结构。证毕。
+\end{proof}
+
+\begin{corollary}[树熵在三阶内的完备性]\label{cor:conclusion-tree-entropy-third-order-complete-under-quadratic-defect}
+在定理 \ref{thm:conclusion-chain-defect-coordinates-no-linear-response} 的设定下，若存在参数 \(\varepsilon\downarrow 0\) 使
+\[
+\eta_j(\varepsilon)=O(\varepsilon^2)
+\qquad (3\le j\le \kappa),
+\]
+则
+\[
+S_{\det}(R(\varepsilon))
+=
+S_{\mathrm{tree}}(R(\varepsilon))
++O(\varepsilon^4).
+\]
+换言之，在该缺陷尺度下，树熵对行列式熵在三阶内完备；真正的非树贡献至少从四阶始显。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-chain-defect-coordinates-no-linear-response}，
+\[
+S_{\mathrm{loop}}(R(\varepsilon))
+=
+O\!\left(\sum_{j=3}^{\kappa}\eta_j(\varepsilon)^2\right)
+=
+O(\varepsilon^4).
+\]
+再由恒等式
+\[
+S_{\det}=S_{\mathrm{tree}}+S_{\mathrm{loop}}
+\]
+即可得到所述结论。证毕。
+\end{proof}
+
+\begin{theorem}[全局环熵对条件偏相关的平方根筛蔽]\label{thm:conclusion-global-loop-entropy-square-root-screening}
+设 \(T\) 为任意生成树，\(e=(u,v)\notin T\) 为任意非树边，\(S_e\) 为 \(u\) 与 \(v\) 在 \(T\) 上唯一路径所对应的分离集。记其条件偏相关为 \(\rho_{uv\mid S_e}\)，并定义
+\[
+L_T(R):=
+S_{\det}(R)-\sum_{(i,j)\in T}-\log(1-R_{ij}^2)\ge 0.
+\]
+则有统一上界
+\[
+|\rho_{uv\mid S_e}|
+\le
+\sqrt{1-e^{-L_T(R)}}
+\le
+\min\{1,\sqrt{L_T(R)}\}.
+\]
+因此，一旦全局环熵亏损 \(L_T(R)\) 足够小，则所有被树剔除的条件耦合都会被统一压到平方根尺度。
+\end{theorem}
+\begin{proof}
+由结论 \ref{con:xi-det-entropy-tree-basecycle-cmi-certificate}，对每个非树边 \(e\) 都有
+\[
+-\log(1-\rho_{uv\mid S_e}^2)\le L_T(R).
+\]
+指数化得
+\[
+1-\rho_{uv\mid S_e}^2\ge e^{-L_T(R)},
+\qquad
+\rho_{uv\mid S_e}^2\le 1-e^{-L_T(R)}.
+\]
+取平方根便得第一条不等式。再用
+\[
+1-e^{-x}\le x
+\qquad (x\ge 0)
+\]
+即可推出
+\[
+\sqrt{1-e^{-L_T(R)}}\le \sqrt{L_T(R)}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[长距核的四次记忆律]\label{thm:conclusion-long-range-kernel-quartic-memory-law}
+考虑显式一维核
+\[
+A(\Delta)=\frac{\Delta}{2\sinh(\Delta/2)},
+\]
+并取等距采样
+\[
+s_j=s_0+(j-1)\Delta.
+\]
+记相应相关矩阵为 \(R_\Delta\)，并令
+\[
+a_\Delta:=A(\Delta).
+\]
+则当 \(\Delta\to\infty\) 时，
+\[
+\frac{1}{\kappa}S_{\mathrm{loop}}(R_\Delta)\asymp \Delta^4e^{-2\Delta}.
+\]
+更强地，
+\[
+a_\Delta\sim \Delta e^{-\Delta/2},
+\qquad
+\frac{1}{\kappa}S_{\mathrm{loop}}(R_\Delta)\sim a_\Delta^4.
+\]
+因此，在该核上真正的不可约记忆既不同于相关幅度本身的量级，也不同于平方阶，而是严格落在四次阶。
+\end{theorem}
+\begin{proof}
+由结论 \ref{con:xi-det-entropy-monotone-kernel-chain-mst}，等距单调核制度下有
+\[
+S_{\mathrm{loop}}(R_\Delta)=\mathcal L_{\mathrm{chain}}(R_\Delta).
+\]
+而结论 \ref{con:xi-det-entropy-equispaced-loop-entropy-scaling} 已给出
+\[
+\frac{1}{\kappa}\mathcal L_{\mathrm{chain}}(R_\Delta)\sim \Delta^4e^{-2\Delta}.
+\]
+另一方面，
+\[
+a_\Delta=A(\Delta)\sim \Delta e^{-\Delta/2}
+\]
+由同一结论中的核渐近立即得到。于是
+\[
+a_\Delta^4\sim \Delta^4e^{-2\Delta},
+\]
+从而
+\[
+\frac{1}{\kappa}S_{\mathrm{loop}}(R_\Delta)\sim a_\Delta^4.
+\]
+证毕。
+\end{proof}
+
+\input{thm__conclusion-chowliu-cutbudget-cyclelattice-doublescale}
+
+\input{thm__conclusion-scalekernel-tree-fourthorder-dichotomy}
+
+\noindent
+因此，链形 Chow--Liu 刚性在结论层已压缩为一条更强的双约化结构：在几何侧，相邻链不只是某个近似树，而是在一维单调距离核制度中唯一承载最近邻体积熵的极值对象；任何偏离链 Markov 的真实缺陷都会在固定最近邻纤维内以二次项出现，并统一平方根地筛蔽一切非树条件耦合。进一步地，在等距弱相干显式核 \(A(\Delta)=\Delta/(2\sinh(\Delta/2))\) 上，链树的组合冻结以 \(\Delta^2e^{-\Delta}\) 的显式缺口先行发生，而每点环熵直到 \(\Delta^4e^{-2\Delta}\) 才开始显影；在尺度侧，质量塔的有限壳粗反卷积又把全部奇阶尾偏差系统性压平到零，并把首个非 Gaussian 缺陷锁定为四阶超额峰度。于是 Gaussian 化与 tree 化不再是两种彼此无关的技术近似，而把可见宿主压到同一个四阶首障碍上：三阶以内的协议在双侧都绝对失明，而四阶缺陷虽然可以在有限分辨率制度下稳定看见，却不能在不付出指数病态代价的情况下被完全消除。再与基本割容量乘积的 Hadamard 刚性相合，体积熵、树近似、条件偏相关、tail-kernel 非 Gaussian 性、cut-budget 与回路格热核便不再是彼此平行的几套量，而被同一条树/环/尺度分层机制精确锁定。
+
+\endinput

@@ -1,0 +1,112 @@
+\paragraph{外置可逆记录轴的条件复杂度下界与 Lee--Yang 零点定量误差界}
+本段把两类“不可压缩预算”与“可审计等分布速度”并置到同一时间账本链条中：前者把纤维多重度转化为外置记录在条件 Kolmogorov 复杂度上的硬下界；后者把 Fibonacci--Lee--Yang 零点的 Fourier 系数显式化为可求和的误差尾，从而得到椭圆推前下的同型定量界。
+
+\begin{proposition}[可逆外置记录的条件复杂度障碍]\label{prop:xi-external-record-conditional-K-lb}
+沿用定理 \ref{thm:xi-fold-algorithmic-holographic-ledger} 的 \(\Fold_m,\Omega_m,X_m,d_m,w_m\) 记号。
+设 \(r:\Omega_m\to\{0,1\}^\ast\) 为可计算映射，且
+\[
+\omega\ \longmapsto\ (\Fold_m(\omega),r(\omega))
+\]
+为单射。
+令 \(U\sim\mathrm{Unif}(\Omega_m)\)，并记 \(X:=\Fold_m(U)\)。
+则对任意整数 \(c\ge 1\)，存在与 \(m,c\) 无关的绝对常数 \(C>0\) 使
+\[
+\PP\!\left(
+K\bigl(r(U)\mid X,m\bigr)
+\ge
+\bigl\lfloor \log_2 d_m(X)\bigr\rfloor -c-C
+\right)\ \ge\ 1-2^{1-c}.
+\]
+从而
+\[
+\EE\Bigl[K\bigl(r(U)\mid X,m\bigr)\Bigr]
+\ge
+\EE\bigl[\log_2 d_m(X)\bigr]-O(1).
+\]
+\end{proposition}
+
+\begin{proof}
+固定 \(x\in X_m\)，令纤维 \(S_x:=\Fold_m^{-1}(x)\)（\(|S_x|=d_m(x)\)），并记像集
+\(
+R_x:=\{r(\omega):\omega\in S_x\}
+\)。
+单射假设给出 \(|R_x|=d_m(x)\)。
+前缀 Kolmogorov 复杂度的计数界断言：满足 \(K(y\mid x,m)\le k\) 的二进制串至多 \(2^{k+1}\) 个。
+取
+\(
+k=\lfloor\log_2 d_m(x)\rfloor-c-C
+\)
+得到
+\[
+\#\Bigl\{y\in R_x:\ K(y\mid x,m)\le \log_2 d_m(x)-c-C\Bigr\}
+\le 2^{1-c}\,d_m(x).
+\]
+在条件分布 \(U\mid(X=x)\) 的均匀性下，上式等价于
+\[
+\PP\Bigl(K(r(U)\mid x,m)\le \log_2 d_m(x)-c-C\mid X=x\Bigr)\le 2^{1-c}.
+\]
+对 \(X\sim w_m\) 去条件得到概率结论。
+期望下界由对阈值事件取期望或用 \(\EE Z\ge a\cdot \PP(Z\ge a)\) 得到。证毕。
+\end{proof}
+
+\begin{theorem}[Fibonacci--Lee--Yang 零点的可求和 Fourier 误差界与椭圆推前稳定性]\label{thm:xi-fibonacci-leyang-summable-fourier-error}
+沿用定理 \ref{thm:xi-fibonacci-leyang-haar-equidistribution} 的 \(P_m,\mu_m\) 记号，并记 \(D_m=\deg P_m\)。
+设可积测试函数 \(f\) 在单位圆上的 Fourier 系数为
+\[
+f(e^{i\theta})=\sum_{k\in\ZZ} c_k e^{ik\theta},
+\qquad
+\sum_{k\neq 0}|c_k|\,|k|\log(1+|k|)<\infty.
+\]
+则存在绝对常数 \(C>0\) 使对所有 \(m\ge 1\) 有
+\[
+\left|\int f\,d\mu_m-\int f\,d\mu_{\mathrm{Haar}}\right|
+\ \le\
+\frac{C}{D_m}\sum_{k\neq 0}|c_k|\,|k|\log(1+|k|).
+\]
+进一步，对任意 \(r>0\) 与推论 \ref{cor:xi-joukowsky-godel-ellipse-transport-equidistribution} 的椭圆零点测度 \(\nu_{m,r}\)，若 \(F\) 为椭圆 \(E_r\) 上的测试函数且 \(f:=F\circ J_r\) 满足上述可求和条件，则同样成立
+\[
+\left|\int F\,d\nu_{m,r}-\int F\,d\mu_r\right|
+\ \le\
+\frac{C}{D_m}\sum_{k\neq 0}|c_k|\,|k|\log(1+|k|).
+\]
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:xi-fibonacci-leyang-haar-equidistribution} 的分解
+\(
+\mu_m=\frac{1}{D_m}\sum_{j=1}^m F_{j+1}\nu_{F_{j+1}}
+\)
+与 \(\widehat{\nu_n}(k)=0\)（\(n\nmid k\)）可得
+\[
+\widehat\mu_m(k)
+=\frac{1}{D_m}\sum_{\substack{1\le j\le m\\ F_{j+1}\mid k}}F_{j+1}\,\widehat{\nu_{F_{j+1}}}(k),
+\qquad k\neq 0,
+\]
+从而
+\[
+|\widehat\mu_m(k)|
+\le
+\frac{1}{D_m}\sum_{\substack{1\le j\le m\\ F_{j+1}\mid k}}F_{j+1}
+\le
+\frac{|k|}{D_m}\cdot \#\{j:\ F_{j+1}\le |k|\}.
+\]
+Fibonacci 指数增长给出 \(\#\{j:\ F_{j+1}\le |k|\}\le C_0\log(1+|k|)\)，故
+\[
+|\widehat\mu_m(k)|\le \frac{C_1}{D_m}\,|k|\log(1+|k|).
+\]
+于是
+\[
+\int f\,d\mu_m-\int f\,d\mu_{\mathrm{Haar}}
+=\sum_{k\neq 0} c_k\,\widehat\mu_m(k),
+\]
+由三角不等式与可求和条件即得第一式。
+\par
+椭圆情形由 \(\nu_{m,r}=(J_r)_{\#}\mu_m\)、\(\mu_r=(J_r)_{\#}\mu_{\mathrm{Haar}}\) 得
+\(
+\int F\,d\nu_{m,r}-\int F\,d\mu_r=\int (F\circ J_r)\,d\mu_m-\int (F\circ J_r)\,d\mu_{\mathrm{Haar}}
+\)，
+代入第一式即得。证毕。
+\end{proof}
+
+\endinput
+

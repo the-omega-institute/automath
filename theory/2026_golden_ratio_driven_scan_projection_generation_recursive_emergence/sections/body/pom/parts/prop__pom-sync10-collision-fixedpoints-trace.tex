@@ -1,0 +1,41 @@
+\begin{proposition}[10 状态同步核的两固定点刚性]\label{prop:pom-sync10-collision-two-fixedpoints}
+沿用 \S\ref{subsec:online-delay} 中定理 \ref{thm:online-delay-fold} 给出的确定性 Mealy 转导器 \(\mathcal K=(Q,\delta,\eta)\)（输入字母表 \(\{0,1,2\}\)，输出字母表 \(\{0,1\}\)）及其显式转移表。
+对任意整数 \(q\ge 2\)，按 \S\ref{subsec:pom-state-evolution} 的构造取 \(q\)-重同步直积并施加“输出一致”筛选，得到有向多重图 \(G^{(q)}\)：顶点为 \(Q^q\)，边重数等于满足输出一致约束的可行输入 \(q\)-元组数。
+则 \(G^{(q)}\) 的长度 \(1\) 闭路（自环边，按重数计）恰有两条；等价地，对应的有限型移位具有恰好两个不动点。
+\end{proposition}
+\begin{proof}
+由 \S\ref{subsec:online-delay} 的边表，状态 \(000\) 的一步转移为 \(000\xrightarrow{d/0}00d\ (d=0,1,2)\)，其中仅当 \(d=0\) 时回到自身且输出为 \(0\)；
+状态 \(101\) 的一步转移为 \(101\xrightarrow{2/1}101\)（并且其余两条出边均指向不同后继），因此仅当输入为 \(2\) 时存在输出为 \(1\) 的自环。
+对其余状态，边表中不存在回到自身的出边。
+\par
+对 \(G^{(q)}\) 的一条长度 \(1\) 同步自环，要求 \(q\) 个坐标状态分别发生长度 \(1\) 自环且输出一致。
+由于原核中仅有上述两类自环，输出一致的同步自环只可能是：
+\[
+(000,\dots,000)\xrightarrow{(0,\dots,0)/(0,\dots,0)}(000,\dots,000),
+\qquad
+(101,\dots,101)\xrightarrow{(2,\dots,2)/(1,\dots,1)}(101,\dots,101),
+\]
+并且每种情形对应的输入 \(q\)-元组唯一，故自环边重数均为 \(1\)。
+因此长度 \(1\) 闭路总数为 \(2\)。
+对有限型移位，其不动点与自环边一一对应，结论成立。证毕。
+\end{proof}
+
+\begin{corollary}[同步碰撞核的迹恒等式与首系数刚性]\label{cor:pom-sync10-collision-trace-two}
+在命题 \ref{prop:pom-sync10-collision-two-fixedpoints} 的设定下，令 \(A_q\) 为 \(G^{(q)}\) 的邻接矩阵（以边重数计）。
+则
+\[
+\mathrm{Tr}(A_q)=2.
+\]
+因此若记特征多项式 \(P_q(\lambda):=\det(\lambda I-A_q)\)（其次数为 \(\dim A_q\)），则
+\[
+P_q(\lambda)=\lambda^{\dim A_q}-2\,\lambda^{\dim A_q-1}+\cdots.
+\]
+\end{corollary}
+\begin{proof}
+由邻接矩阵定义，\(\mathrm{Tr}(A_q)=\sum_v (A_q)_{vv}\) 等于 \(G^{(q)}\) 的自环边数（按重数计）。
+而命题 \ref{prop:pom-sync10-collision-two-fixedpoints} 已给出该数为 \(2\)，故 \(\mathrm{Tr}(A_q)=2\)。
+特征多项式首两项展开通式 \( \det(\lambda I-A)=\lambda^{n}-(\mathrm{Tr}(A))\lambda^{n-1}+\cdots \) 适用于任意 \(n\times n\) 矩阵，代入 \(\mathrm{Tr}(A_q)=2\) 即得。证毕。
+\end{proof}
+
+\endinput
+

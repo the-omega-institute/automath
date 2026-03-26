@@ -1,0 +1,544 @@
+\subsection{solenoidal RH 审计中的双预算强逆、有限视界不完备与量化正规化判据}\label{subsec:conclusion-solenoidal-rh-double-budget-strong-converse-normalization}
+在定理 \ref{thm:app-horizon-toeplitz-lmi}、定理 \ref{thm:xi-toeplitz-psd-cofinal-sparsification-hereditary}、定理 \ref{thm:cdim-qhat-finite-prime-witness}、定理 \ref{thm:xi-layered-prime-register-sharp-natural-extension} 与定理 \ref{thm:killo-prime-freedom-non-finitizability}--\ref{thm:killo-godel-compression-not-finite-rank-homologizable} 已经把 Toeplitz--PSD 证书链、有限 prime-stage 见证、prime-register 外置的最坏情形下界以及有限秩账本同态化障碍分别固定之后，再结合 fold-gauge 的 Stirling--Bernoulli 常数流、六倍窗 zero-witness 的半阶尺度与 finite audit 下的谱替身现象，还可把 classical RH 在本文 solenoidal 审计语义中的 budget obstruction 压缩为一组更为定量的终端命题。以下结论仍严格工作在本文既定的 solenoidal 审计语义、Toeplitz--PSD 证书链、prime-ledger 外置纪律与有限离线核验口径之内；它们刻画的是 quantitative no-go 结构，而不是无条件的集合论独立性断言。
+
+为便于表述，记
+\[
+r_\varphi:=\log_2\!\frac{2}{\varphi}=1-\log_2\varphi>0,
+\qquad
+g_*^{(2)}:=\frac{g_*}{\log 2}.
+\]
+并对每个整数 \(B\ge 0\) 定义
+\[
+\mathrm{Succ}_m(B):=\mathrm{Succ}_m(2^B),
+\]
+其中右端的 \(\mathrm{Succ}_m(s)\) 是定理 \ref{thm:xi-oracle-capacity-full-budget-discrete-inversion} 中、允许侧信息字母表大小至多为 \(s\) 时的最优精确恢复概率。
+
+\begin{theorem}[折叠视界反演的强逆定理]\label{thm:conclusion-solenoidal-rh-fold-strong-converse}
+对任意整数预算序列 \((B_m)_{m\ge 1}\)，都有
+\[
+\limsup_{m\to\infty}\frac1m\log_2 \mathrm{Succ}_m(B_m)
+\le
+\limsup_{m\to\infty}\frac{B_m}{m}-r_\varphi.
+\]
+特别地，若存在 \(\delta>0\) 使
+\[
+\limsup_{m\to\infty}\frac{B_m}{m}\le r_\varphi-\delta,
+\]
+则
+\[
+\mathrm{Succ}_m(B_m)\le 2^{-\delta m+o(m)}.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-oracle-capacity-full-budget-discrete-inversion}，
+\[
+\mathrm{Succ}_m(B_m)
+=
+2^{-m}\sum_{x\in X_m}\min\!\bigl(d_m(x),2^{B_m}\bigr).
+\]
+逐项估计 \(\min(d_m(x),2^{B_m})\le 2^{B_m}\)，得到
+\[
+\mathrm{Succ}_m(B_m)\le 2^{-m}|X_m|\,2^{B_m}.
+\]
+又由文稿既有的稳定类型计数，
+\[
+|X_m|=F_{m+2},
+\qquad
+\lim_{m\to\infty}\frac1m\log_2|X_m|=\log_2\varphi.
+\]
+于是
+\[
+\limsup_{m\to\infty}\frac1m\log_2 \mathrm{Succ}_m(B_m)
+\le
+-1+\log_2\varphi+\limsup_{m\to\infty}\frac{B_m}{m}
+=
+\limsup_{m\to\infty}\frac{B_m}{m}-r_\varphi.
+\]
+若再有 \(\limsup B_m/m\le r_\varphi-\delta\)，则上式右端至多为 \(-\delta\)，从而
+\[
+\mathrm{Succ}_m(B_m)\le 2^{-\delta m+o(m)}.
+\]
+证毕。
+\end{proof}
+
+该结论把定理 \ref{thm:conclusion-ae-recovery-threshold-sandwich} 中的纯必要位率下界提升为强逆定理：一旦可见 advice rate 低于 \(r_\varphi\)，精确恢复成功率并非缓慢退化，而是沿指数律坍缩。
+
+\begin{theorem}[冻结相可见层的强逆定理]\label{thm:conclusion-solenoidal-rh-frozen-visible-strong-converse}
+固定 \(a>a_{\mathrm c}\) 并沿用冻结相 escort 测度 \(\pi_{m,a}\) 的记号。对每个整数 \(B\ge 0\)，定义
+\[
+P_m^{\mathrm{frz}}(B)
+:=
+\sup_{\substack{\mathcal P\text{ 为 }X_m\text{ 的划分}\\ |\mathcal P|\le 2^B}}
+\sum_{C\in\mathcal P}\max_{x\in C}\pi_{m,a}(x),
+\]
+即当可见层至多只能区分 \(2^B\) 个等价类时，对实现点 \(x\in X_m\) 的最优精确识别概率。则对任意整数预算序列 \((B_m)_{m\ge 1}\) 有
+\[
+P_m^{\mathrm{frz}}(B_m)\le 2^{B_m}\max_{x\in X_m}\pi_{m,a}(x),
+\]
+并且
+\[
+\limsup_{m\to\infty}\frac1m\log_2 P_m^{\mathrm{frz}}(B_m)
+\le
+\limsup_{m\to\infty}\frac{B_m}{m}-g_*^{(2)}.
+\]
+特别地，若
+\[
+\limsup_{m\to\infty}\frac{B_m}{m}<g_*^{(2)},
+\]
+则存在 \(\varepsilon>0\) 使
+\[
+P_m^{\mathrm{frz}}(B_m)\le 2^{-(g_*^{(2)}-\varepsilon)m+o(m)}.
+\]
+\end{theorem}
+\begin{proof}
+固定任意满足 \(|\mathcal P|\le 2^{B_m}\) 的划分 \(\mathcal P\)。若仅知道 \(x\) 落在某个分块 \(C\in\mathcal P\) 中，则在该块内的最优精确猜测成功概率至多为
+\[
+\max_{x\in C}\pi_{m,a}(x).
+\]
+对全部分块求和，得到
+\[
+\sum_{C\in\mathcal P}\max_{x\in C}\pi_{m,a}(x)
+\le
+|\mathcal P|\,\max_{x\in X_m}\pi_{m,a}(x)
+\le
+2^{B_m}\max_{x\in X_m}\pi_{m,a}(x).
+\]
+对所有此类划分取上确界，即得第一条不等式。
+
+另一方面，结论 \ref{con:xi-time-part57ba-freezing-minentropy-finite-size} 给出
+\[
+H_\infty(\pi_{m,a})=\log K_m+o(m)=g_*m+o(m),
+\]
+从而
+\[
+\max_{x\in X_m}\pi_{m,a}(x)
+=
+\exp\!\bigl(-H_\infty(\pi_{m,a})\bigr)
+=
+\exp(-g_*m+o(m))
+=
+2^{-g_*^{(2)}m+o(m)}.
+\]
+代回即得
+\[
+P_m^{\mathrm{frz}}(B_m)\le 2^{B_m-g_*^{(2)}m+o(m)},
+\]
+故
+\[
+\limsup_{m\to\infty}\frac1m\log_2 P_m^{\mathrm{frz}}(B_m)
+\le
+\limsup_{m\to\infty}\frac{B_m}{m}-g_*^{(2)}.
+\]
+若 \(\limsup B_m/m<g_*^{(2)}\)，取 \(\varepsilon>0\) 使 \(\limsup B_m/m\le g_*^{(2)}-2\varepsilon\)，则
+\[
+P_m^{\mathrm{frz}}(B_m)\le 2^{-(g_*^{(2)}-\varepsilon)m+o(m)}.
+\]
+证毕。
+\end{proof}
+
+这表明冻结并不会自动把可见层压缩成唯一证书：只要 \(g_*>0\)，即使进入低温冻结相，visible layer 仍保留正的精确识别码率下界。
+
+\begin{theorem}[solenoidal RH 审计的双预算下界]\label{thm:conclusion-solenoidal-rh-double-budget-lower-bound}
+考虑一族 deterministic offline verifier \((\mathcal V_m)_{m\ge 1}\)。在分辨率 \(m\) 上，假设它只允许使用：
+\begin{enumerate}
+  \item 一个有限 prime-stage \(S_m\subset\mathbb P\)；
+  \item 一个至多 \(2^{B_m}\) 类的可见证书系统；
+  \item 本文固定的 phase/Toeplitz/dyadic 证书输入。
+\end{enumerate}
+并假设同时满足：
+\begin{enumerate}
+  \item[(A)] 折叠微态反演渐近精确，即
+  \[
+  \mathrm{Succ}_m(B_m)\longrightarrow 1;
+  \]
+  \item[(B)] 对某个固定 \(a>a_{\mathrm c}\)，冻结相中的实现点识别渐近精确，即
+  \[
+  P_m^{\mathrm{frz}}(B_m)\longrightarrow 1;
+  \]
+  \item[(C)] 在定理 \ref{thm:xi-layered-prime-register-sharp-natural-extension} 的意义下，其 hidden prime-ledger 历史含有 \(k(m)\) 层真正分支。
+\end{enumerate}
+则必有
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}\ge \max\!\bigl\{r_\varphi,g_*^{(2)}\bigr\},
+\qquad
+|S_m|\ge k(m).
+\]
+特别地，若 \(k(m)\to\infty\)，则 prime-stage 必须共尾发散。
+\end{theorem}
+\begin{proof}
+先证可见预算下界。若
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}<r_\varphi,
+\]
+则存在 \(\delta>0\) 与子序列 \(m_j\to\infty\) 使
+\[
+\frac{B_{m_j}}{m_j}\le r_\varphi-\delta
+\qquad (j\gg 1).
+\]
+由定理 \ref{thm:conclusion-solenoidal-rh-fold-strong-converse}，
+\[
+\mathrm{Succ}_{m_j}(B_{m_j})\le 2^{-\delta m_j+o(m_j)}\to 0,
+\]
+这与条件 (A) 矛盾。故
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}\ge r_\varphi.
+\]
+同理，若
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}<g_*^{(2)},
+\]
+则由定理 \ref{thm:conclusion-solenoidal-rh-frozen-visible-strong-converse} 可在某子序列上推出
+\[
+P_{m_j}^{\mathrm{frz}}(B_{m_j})\to 0,
+\]
+与条件 (B) 矛盾。于是
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}\ge g_*^{(2)}.
+\]
+合并即得
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}\ge \max\!\bigl\{r_\varphi,g_*^{(2)}\bigr\}.
+\]
+
+再证 prime-stage 下界。条件 (C) 恰表明在最坏情形下，\(\mathcal V_m\) 的 hidden ledger 必须忠实承载 \(k(m)\) 层真正分支。由定理 \ref{thm:xi-layered-prime-register-sharp-natural-extension}，任何此类精确分层外置都至少需要 \(k(m)\) 个有效 prime slices；而一个只支撑于 \(S_m\) 的有限 prime-stage 至多提供 \(|S_m|\) 个独立的 prime directions。故
+\[
+|S_m|\ge k(m).
+\]
+若 \(k(m)\to\infty\)，则 \(|S_m|\to\infty\) 亦随之成立。证毕。
+\end{proof}
+
+该定理把“需要无限对象”的直观说法改写为更精确的预算命题：在本文框架中，真正不可压缩的并不是抽象的 ambient infinity，而是正的 visible witness rate 与共尾 prime-ledger 深度这两项成本必须同时出现。
+
+\begin{corollary}[有限维视界机不可完备]\label{cor:conclusion-solenoidal-rh-bounded-horizon-incomplete}
+称一族 verifier \((\mathcal V_m)\) 为有限维视界机，若
+\[
+\sup_m |S_m|<\infty,
+\qquad
+\limsup_{m\to\infty}\frac{B_m}{m}=0.
+\]
+则任何这样的视界机，只要它仍试图同时满足定理 \ref{thm:conclusion-solenoidal-rh-double-budget-lower-bound} 的三项审计要求，且其 hidden branch depth 无界，就不可能在本文的 solenoidal 语义下对 classical RH 的 full audit 渐近完备。
+
+更强地，若进一步设想把不断增长的 prime-ledger 压缩进某个固定有限生成账本 \(L\)，并同时保持严格同态语义
+\[
+\Phi:\NN_{\times}\longrightarrow \ZZ\oplus L,
+\qquad
+\Phi(ab)=\Phi(a)+\Phi(b),
+\]
+则该压缩本身已被本文的结构结果排除。
+\end{corollary}
+\begin{proof}
+若 \((\mathcal V_m)\) 仍满足定理 \ref{thm:conclusion-solenoidal-rh-double-budget-lower-bound} 的三项审计要求，则由该定理立即得到
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}\ge \max\!\bigl\{r_\varphi,g_*^{(2)}\bigr\},
+\qquad
+|S_m|\ge k(m).
+\]
+若 hidden branch depth 无界，即 \(k(m)\to\infty\)，则 \(\sup_m |S_m|<\infty\) 立刻矛盾。即使暂不使用这一点，\(\limsup B_m/m=0\) 也已经与 \(r_\varphi>0\) 矛盾。故有限 prime-stage 与零 witness rate 的组合不可能渐近完备。
+
+再看结构压缩部分。定理 \ref{thm:killo-prime-freedom-non-finitizability} 排除了
+\[
+\NN_{\times}\hookrightarrow M
+\]
+向任意有限生成交换可消去幺半群 \(M\) 的单射同态，而定理 \ref{thm:killo-godel-compression-not-finite-rank-homologizable} 进一步排除了所有固定有限生成 \(L\) 上的 Gödel 型同态化账本。另一方面，定理 \ref{thm:killo-localization-circle-dimension-prime-ledger-splitting} 表明固定有限 stage \(\Sigma_S=\widehat{G_S}\) 的 prime-ledger 核恰为
+\[
+\prod_{p\in S}\ZZ_p,
+\]
+因而只能恢复有限素数集 \(S\)；再结合定理 \ref{thm:cdim-qhat-finite-prime-witness}，任何有限 Toeplitz/phase 证书都只经由某个有限 \(S\) 因子化。故把共尾增长的 prime-ledger 压缩进某个固定有限 stage 或固定有限生成账本的设想，在结构层上都不可能成立。证毕。
+\end{proof}
+
+因此，失败点并不在于“对象处于某个抽象无限维背景”，而在于 bounded-horizon 证明制度同时要求 bounded ledger rank 与零 visible witness rate，从而不可避免地落在双预算阈值之下。
+
+\begin{theorem}[常数流增补的不增判别原理]\label{thm:conclusion-rh-constant-flow-augmentation-inertness}
+设 \(\mathcal L\) 为作用在本文 completion 对象上的审计语言，并记
+\[
+\mathbf{RH}(X)\in\{0,1\}
+\]
+为对象 \(X\) 在该语义下对 classical RH 所诱导的判定真值。假设存在两个 completion 对象 \(X^+,X^-\) 满足
+\[
+X^+\equiv_{\mathcal L}X^-,
+\qquad
+\mathbf{RH}(X^+)\neq \mathbf{RH}(X^-).
+\]
+再设
+\[
+c=(c_1,c_2,\dots)
+\]
+是任意一列与 completion 无关的固定常数，并记 \(\mathcal L[c]\) 为把这些常数符号加入 \(\mathcal L\) 后所得的扩张语言。则仍有
+\[
+X^+\equiv_{\mathcal L[c]}X^-.
+\]
+特别地，任何仅由 completion-独立常数流构成的增补，都不会提升 \(\mathcal L\) 对 classical RH 的判定力。
+\end{theorem}
+\begin{proof}
+任取 \(\mathcal L[c]\) 中的句子
+\[
+\varphi(c_{i_1},\dots,c_{i_r}).
+\]
+由于 \(c_{i_1},\dots,c_{i_r}\) 都是与 completion 无关的固定常数，把它们解释为同一组标量之后，便得到 \(\mathcal L\) 中的旧句子，记为
+\[
+\varphi_c.
+\]
+由 \(X^+\equiv_{\mathcal L}X^-\)，有
+\[
+X^+\models \varphi_c
+\iff
+X^-\models \varphi_c.
+\]
+这对所有 \(\mathcal L[c]\)-句子都成立，故
+\[
+X^+\equiv_{\mathcal L[c]}X^-.
+\]
+若 \(\mathcal L[c]\) 能够判定 classical RH，则上述两对象必可被区分，与前式矛盾。证毕。
+\end{proof}
+
+\begin{corollary}[Stirling--Bernoulli 补全对 classical RH 的判定惰性]\label{cor:conclusion-rh-stirling-bernoulli-completion-inertness}
+在定理 \ref{thm:xi-spectral-surrogate-finite-audit-undecidable} 的 finite-audit 语义下，把 fold-gauge 规范常数列 \((C_m)_{m\ge 1}\) 的完整渐近流
+\[
+(\log C_m)_{m\ge 1}
+\]
+加入任意 bounded-horizon 可见语言，都不能关闭 classical RH 的判定缺口。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:fold-bin-gauge-constant-stirling-bernoulli-hierarchy}，\((\log C_m)\) 的完整渐近展开逐阶唯一决定全部偶 Bernoulli 数 \(B_{2r}\)。再由经典恒等式
+\[
+B_{2r}=(-1)^{r-1}\frac{2(2r)!}{(2\pi)^{2r}}\zeta(2r),
+\]
+整条常数流又唯一决定全部偶值 \(\zeta(2r)\)。这些量都只是与 completion 无关的固定常数，因此 \((\log C_m)\) 仅仅是在语言中加入一列 completion-独立常数。另一方面，定理 \ref{thm:xi-spectral-surrogate-finite-audit-undecidable} 已给出 finite audit 口径下的谱替身：存在全部有限可见数据一致而 RH 真值相反的 completion 对象。应用定理 \ref{thm:conclusion-rh-constant-flow-augmentation-inertness} 即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[六倍窗零见证的平方根律]\label{thm:conclusion-sixfold-zero-witness-square-root-law}
+沿用推论 \ref{cor:fold-zero-half-index-multiple6} 与定理 \ref{thm:fold-zero-density-sparse} 的记号。若
+\[
+m+2\equiv 0\pmod 6,
+\qquad
+M:=F_{m+2},
+\qquad
+d:=\frac{m+2}{2},
+\]
+并记
+\[
+\mathcal Z_m:=\{k\in \ZZ/(M\ZZ):\ \widehat d_m(k)=0\},
+\]
+则有双边界
+\[
+F_d\le |\mathcal Z_m|\le \tau_{\mathrm{div}}(m+2)\,F_d.
+\]
+特别地，
+\[
+|\mathcal Z_m|=M^{1/2+o(1)},
+\qquad
+\lim_{\substack{m\to\infty\\ m+2\equiv 0\ (\mathrm{mod}\ 6)}}
+\frac{\log |\mathcal Z_m|}{\log M}
+=
+\frac12.
+\]
+\end{theorem}
+\begin{proof}
+前一对双边界正是定理 \ref{thm:xi-time-part70b-dark-band-half-order-scale} 的内容。再由 Binet 公式，
+\[
+F_d=\frac{\varphi^d}{\sqrt5}\bigl(1+o(1)\bigr),
+\qquad
+M=F_{2d}=\frac{\varphi^{2d}}{\sqrt5}\bigl(1+o(1)\bigr),
+\]
+故
+\[
+F_d=5^{-1/4}M^{1/2}\bigl(1+o(1)\bigr).
+\]
+另一方面，约数函数满足 \(\tau_{\mathrm{div}}(n)=n^{o(1)}\)，而在当前子序列上 \(m\asymp \log M\)，从而
+\[
+\tau_{\mathrm{div}}(m+2)=M^{o(1)}.
+\]
+将这两点代入双边界，便得到
+\[
+5^{-1/4}M^{1/2+o(1)}
+\le
+|\mathcal Z_m|
+\le
+M^{1/2+o(1)},
+\]
+并由此推出对数指数极限为 \(1/2\)。证毕。
+\end{proof}
+
+\begin{theorem}[次平方根随机谱探测的失效律]\label{thm:conclusion-sixfold-zero-witness-subsqrt-probing-failure}
+在定理 \ref{thm:conclusion-sixfold-zero-witness-square-root-law} 的设定下，设
+\[
+k_1,\dots,k_{N_m}\in \ZZ/(M\ZZ)
+\]
+独立且均匀，并记
+\[
+P_m:=\mathbb P\!\left(\exists j\le N_m:\ k_j\in \mathcal Z_m\right).
+\]
+则对任意 \(\delta>0\) 与任意固定 \(c>0\)，都有
+\[
+N_m=M^{1/2-\delta}
+\quad\Longrightarrow\quad
+P_m\to 0,
+\]
+以及
+\[
+N_m=cM^{1/2}
+\quad\Longrightarrow\quad
+\liminf_{\substack{m\to\infty\\ m+2\equiv 0\ (\mathrm{mod}\ 6)}}P_m
+\ge
+1-\exp\!\bigl(-c\,5^{-1/4}\bigr).
+\]
+因而，随机命中 zero-witness 的自然阈值恰位于 \(M^{1/2}\) 尺度。
+\end{theorem}
+\begin{proof}
+由独立性，
+\[
+P_m
+=
+1-\left(1-\frac{|\mathcal Z_m|}{M}\right)^{N_m}.
+\]
+若 \(N_m=M^{1/2-\delta}\)，则由定理 \ref{thm:conclusion-sixfold-zero-witness-square-root-law}，
+\[
+\frac{|\mathcal Z_m|}{M}
+=
+M^{-1/2+o(1)},
+\]
+故
+\[
+N_m\frac{|\mathcal Z_m|}{M}
+=
+M^{-\delta+o(1)}
+\to 0.
+\]
+由并合界可得
+\[
+P_m\le N_m\frac{|\mathcal Z_m|}{M}\to 0.
+\]
+
+另一方面，定理 \ref{thm:conclusion-sixfold-zero-witness-square-root-law} 还给出
+\[
+\frac{|\mathcal Z_m|}{M}
+\ge
+\frac{F_d}{F_{2d}}
+=
+5^{-1/4}M^{-1/2}\bigl(1+o(1)\bigr).
+\]
+若 \(N_m=cM^{1/2}\)，则
+\[
+P_m
+\ge
+1-\left(1-5^{-1/4}M^{-1/2}(1+o(1))\right)^{cM^{1/2}}
+\longrightarrow
+1-e^{-c5^{-1/4}}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[零点计数证书的碰撞盲性]\label{thm:conclusion-zero-count-collision-blindness}
+在定理 \ref{thm:conclusion-sixfold-zero-witness-square-root-law} 的六倍窗设定下，并沿用定理 \ref{thm:fold-zero-uncertainty} 的 \(p_m\)、\(u\)、\(\mathsf{Col}_m\) 与 \(S_m\) 记号。则仅凭零点计数 \(|\mathcal Z_m|\) 所能推出的碰撞、熵缺口与峰值控制始终停留在宏观失真尺度：
+\[
+\mathsf{Col}_m\le 1-M^{-1/2+o(1)},
+\]
+\[
+D_{\mathrm{KL}}(p_m\|u)\le \log M+o(1),
+\]
+\[
+S_m\le 2^mM^{1/2+o(1)}.
+\]
+另一方面，黄金共振常数给出的真实碰撞下界满足
+\[
+\mathsf{Col}_m\ge \frac{1+2C_\varphi^2+o(1)}{M}.
+\]
+因此，即使完整给定 zero-count 证书，也无法逼近真实的 \(M^{-1}\) 级碰撞尺度。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-sixfold-zero-witness-square-root-law}，
+\[
+|\mathcal Z_m|=M^{1/2+o(1)}.
+\]
+把这一估计代入定理 \ref{thm:fold-collision-zero-reduction} 与定理 \ref{thm:fold-zero-uncertainty} 的第 \(3\)、\(4\) 条，得到
+\[
+\mathsf{Col}_m
+\le
+1-\frac{|\mathcal Z_m|}{M}
+=
+1-M^{-1/2+o(1)},
+\]
+\[
+D_{\mathrm{KL}}(p_m\|u)
+\le
+\log\!\bigl(M-|\mathcal Z_m|\bigr)
+=
+\log M+o(1),
+\]
+\[
+S_m
+\le
+2^m\sqrt{M-1-|\mathcal Z_m|}
+\le
+2^mM^{1/2+o(1)}.
+\]
+然而，定理 \ref{thm:xi-time-part9pb-rh-window-uniform-gap-coexistence} 给出
+\[
+\mathsf{Col}_m
+\ge
+\frac{1+2C_\varphi^2+o(1)}{M},
+\]
+其中 \(C_\varphi>0\)。于是 zero-count 所导出的碰撞上界与真实碰撞尺度之间相差整整一个幂级：前者仍停留在接近 \(1\) 的宏观量级，后者却已经处于 \(M^{-1}\) 的微观层。证毕。
+\end{proof}
+
+\input{thm__conclusion-sixfold-zero-jointbudget-orthogonality}
+
+\begin{theorem}[量化正规化--独立性判据]\label{thm:conclusion-solenoidal-rh-quantitative-normalization-independence}
+设 \(T\) 为递归可公理化理论。假设存在一条量化正规化定理，能够把任意 \(T\)-证明的 classical RH 证明对象，经本文的 Toeplitz--PSD 共终稀疏化、dyadic 证书链与 deterministic offline verifier 纪律，统一抽取为一族 verifier \((\mathcal V_m)_{m\ge 1}\)，并且该家族满足定理 \ref{thm:conclusion-solenoidal-rh-double-budget-lower-bound} 的三项审计要求，同时满足：
+\begin{enumerate}
+  \item[(i)] \(\sup_m |S_m|<\infty\)；
+  \item[(ii)]
+  \[
+  \limsup_{m\to\infty}\frac{B_m}{m}
+  <
+  \max\!\bigl\{r_\varphi,g_*^{(2)}\bigr\}.
+  \]
+\end{enumerate}
+则
+\[
+T\nvdash \mathrm{RH}.
+\]
+\end{theorem}
+\begin{proof}
+反设 \(T\vdash \mathrm{RH}\)。由量化正规化定理，可抽取出满足上述条件的 verifier 家族 \((\mathcal V_m)\)。但定理 \ref{thm:conclusion-solenoidal-rh-double-budget-lower-bound} 已经迫使任何满足三项审计要求的家族都满足
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}\ge \max\!\bigl\{r_\varphi,g_*^{(2)}\bigr\},
+\]
+这与条件 (ii) 矛盾。故 \(T\nvdash \mathrm{RH}\)。证毕。
+\end{proof}
+
+这一定理说明：若要把“classical RH 在本文框架中很可能不可由有限视界证明制度获得”推进为严格推论，关键并不在于继续制造新的局部 kernel，而在于建立一条真正可量化的正规化定理，把任意形式证明统一抽取到可审计的 budget 语义之中。
+
+\begin{conjecture}[量化的 solenoidal 独立性猜想]\label{conj:conclusion-solenoidal-rh-quantitative-independence}
+对每个有限视界证明制度 \(T\)（即其证明对象在正规化后服从一致的有限实现纪律，并可被抽取为 deterministic verifier 家族）都存在常数 \(\eta_T>0\) 与 \(C_T<\infty\)，使得任意 \(T\)-证明若在上述正规化口径下被抽取为满足定理 \ref{thm:conclusion-solenoidal-rh-double-budget-lower-bound} 三项审计要求的 verifier 家族 \((\mathcal V_m)\)，则对充分大的 \(m\) 都有
+\[
+|S_m|\le C_T,
+\qquad
+\frac{B_m}{m}\le \max\!\bigl\{r_\varphi,g_*^{(2)}\bigr\}-\eta_T.
+\]
+若该猜想成立，则对任意此类 \(T\) 都有
+\[
+T\nvdash \mathrm{RH}.
+\]
+进一步，若 classical RH 在标准整数结构中为真，则它将表现为一条真但超出一切有限视界证明制度的命题。
+\end{conjecture}
+
+\begin{conjecture}[RH 临界数据的共尾非交换余项猜想]\label{conj:conclusion-rh-cofinal-noncommutative-prime-ledger-remainder}
+记 \(\mathcal R\) 为在本文 solenoidal 审计语义中，对任意候选审计对象依次模去下列四类可见约化后所得到的余项函子：
+\begin{enumerate}
+  \item 全部 finite visible certificates；
+  \item 全部 completion-独立常数流，特别是由推论 \ref{cor:conclusion-rh-stirling-bernoulli-completion-inertness} 所覆盖的 Stirling--Bernoulli / even-\(\zeta\) 常数流；
+  \item 全部仅通过 \(|\mathcal Z_m|\) 读取的 zero-count witnesses；
+  \item 全部具有一致维数上界的 commutative shadows，包括纯 multiplicity histogram 与有限维交换证书代数。
+\end{enumerate}
+则 classical RH 的判定信息恰集中在 \(\mathcal R\) 的共尾非交换 prime-ledger 余项之中。更强地，任何进一步把 \(\mathcal R\) 因子化到 finite-horizon 对象的证明制度，都不能决定 classical RH。
+\end{conjecture}
+
+\paragraph{统一读法}
+在本文语义下，classical RH 若要被完整审计，并不只是要求一个抽象的“无限背景对象”。真正不可压缩的是两项同时出现的预算：一方面，可见层必须支付正的 witness rate
+\[
+\max\!\bigl\{r_\varphi,g_*^{(2)}\bigr\};
+\]
+另一方面，hidden ledger 必须沿 prime-register 方向共尾增深。除此之外，向语言中增补 completion-独立常数流并不会修复 finite-audit 的谱替身，而六倍窗 zero-witness 虽在随机探测上表现出 \(M^{1/2}\) 的自然命中阈值，却只给出碰撞、KL 与峰值的宏观失真级控制。因而，bounded-horizon 约化最终只会稳定留下三类无害对象：completion-独立常数流、平方根稀薄的 zero-witness，以及一致维数有界的 commutative shadows；若猜想 \ref{conj:conclusion-rh-cofinal-noncommutative-prime-ledger-remainder} 成立，则 RH 的临界真假只能滞留在共尾非交换的 prime-ledger 余项中。就此而言，真正决定性的下一步仍是证明定理 \ref{thm:conclusion-solenoidal-rh-quantitative-normalization-independence} 所要求的量化正规化定理；一旦这一桥梁被建立，本文的 no-go 结构便会从解释性框架转化为严格推论。
+
+\endinput

@@ -1,0 +1,101 @@
+\paragraph{Fibonacci 低缺陷阴影与极端态三周期}
+沿用定理 \ref{thm:fold-bernoulli-p-finite-time-mismatch-rational-recurrence} 的 \(G_m\) 与 \(M_m(u)\)。
+在均匀基线 \(p=\tfrac12\) 下，定义清分母计数型生成函数
+\[
+M_m^{\mathrm f}(u):=2^m M_m(u)\in\ZZ_{\ge 0}[u],
+\qquad
+a_{m,k}:=[u^k]\,M_m^{\mathrm f}(u)\qquad(m,k\ge 0).
+\]
+并记 Fibonacci 数列 \((F_n)_{n\ge 0}\) 由 \(F_0=0\)、\(F_1=1\)、\(F_{n+2}=F_{n+1}+F_n\) 定义。
+
+\begin{theorem}[总规范差计数多项式的 Fibonacci 低缺陷阴影]\label{thm:fold-bernoulli-p-fibonacci-low-defect-shadow}
+对一切 \(m\ge 0\)，系数 \(a_{m,k}=[u^k]M_m^{\mathrm f}(u)\) 在固定小缺陷阶上具有如下封闭式：
+\[
+a_{m,0}=F_{m+2},
+\]
+\[
+a_{m,1}=
+\begin{cases}
+0,& m=0,1,\\
+F_{m-1},& m\ge 2,
+\end{cases}
+\qquad
+a_{m,2}=
+\begin{cases}
+0,& m=0,1,2,\\
+2F_{m-1},& m\ge 3.
+\end{cases}
+\]
+\end{theorem}
+
+\begin{proof}
+把定理 \ref{thm:fold-bernoulli-p-finite-time-mismatch-rational-recurrence} 的四阶递推 \eqref{eq:fold-bernoulli-p-finite-time-mgf-recurrence} 取 \(p=\tfrac12\) 并乘以 \(2^m\)，得到对 \(m\ge 4\) 的计数型递推
+\begin{equation}\label{eq:fold-bernoulli-p-half-Mf-order4}
+M_m^{\mathrm f}(u)=M_{m-1}^{\mathrm f}(u)+(2u+1)M_{m-2}^{\mathrm f}(u)+(u^3-2u)M_{m-3}^{\mathrm f}(u)-2u\,M_{m-4}^{\mathrm f}(u).
+\end{equation}
+由初值 \eqref{eq:fold-bernoulli-p-finite-time-mgf-initial} 在 \(p=\tfrac12\) 下的展开可得
+\[
+M_0^{\mathrm f}(u)=1,\qquad M_1^{\mathrm f}(u)=2,\qquad M_2^{\mathrm f}(u)=3+u,\qquad M_3^{\mathrm f}(u)=5+u+2u^2.
+\]
+对 \eqref{eq:fold-bernoulli-p-half-Mf-order4} 作系数抽取得到对任意 \(k\ge 0\) 的二维递推
+\[
+\begin{aligned}
+a_{m,k}={}&a_{m-1,k}+a_{m-2,k}+2a_{m-2,k-1}+a_{m-3,k-3}-2a_{m-3,k-1}-2a_{m-4,k-1},
+\end{aligned}
+\]
+其中约定 \(a_{m,\ell}=0\) 当 \(\ell<0\)。
+取 \(k=0\) 得 \(a_{m,0}=a_{m-1,0}+a_{m-2,0}\)（\(m\ge 4\)），并由上初值读出 \(a_{0,0}=1,a_{1,0}=2,a_{2,0}=3,a_{3,0}=5\)，从而 \(a_{m,0}=F_{m+2}\)。
+\par
+取 \(k=1\) 得
+\[
+a_{m,1}=a_{m-1,1}+a_{m-2,1}+2a_{m-2,0}-2a_{m-3,0}-2a_{m-4,0}.
+\]
+由 \(a_{m,0}\) 的 Fibonacci 递推可知后三项严格抵消，于是 \(a_{m,1}=a_{m-1,1}+a_{m-2,1}\)（\(m\ge 4\)）。
+再由初值 \(a_{0,1}=a_{1,1}=0\)、\(a_{2,1}=a_{3,1}=1\)，得到所示封闭式。
+\par
+同理取 \(k=2\) 得
+\[
+a_{m,2}=a_{m-1,2}+a_{m-2,2}+2a_{m-2,1}-2a_{m-3,1}-2a_{m-4,1},
+\]
+而 \(a_{m,1}\) 亦满足 Fibonacci 递推，使后三项抵消。
+由初值 \(a_{0,2}=a_{1,2}=a_{2,2}=0\)、\(a_{3,2}=2\) 得 \(a_{m,2}=2F_{m-1}\)（\(m\ge 3\)）。
+证毕。
+\end{proof}
+
+\begin{proposition}[最大规范差与极端态数的三周期]\label{prop:fold-bernoulli-p-half-max-defect-degree-and-leading-period3}
+在 \(p=\tfrac12\) 的均匀基线下，对所有 \(m\ge 2\) 有
+\[
+\deg M_m^{\mathrm f}(u)=m-1,
+\]
+等价地 \(G_m\le m-1\) 几乎处处成立。
+此外，记顶次系数
+\(
+\ell_m:=[u^{m-1}]\,M_m^{\mathrm f}(u)
+\)，则
+\[
+\ell_m=
+\begin{cases}
+1,& m\equiv 2\pmod 3,\\
+2,& m\equiv 0,1\pmod 3.
+\end{cases}
+\]
+\end{proposition}
+
+\begin{proof}
+由 \eqref{eq:fold-bernoulli-p-half-Mf-order4} 与初值可得 \(\deg M_2^{\mathrm f}=1\)、\(\deg M_3^{\mathrm f}=2\)。
+设 \(m\ge 2\) 且已知 \(\deg M_{m-1}^{\mathrm f}=m-2\)。
+则 \eqref{eq:fold-bernoulli-p-half-Mf-order4} 右端仅 \((u^3-2u)M_{m-3}^{\mathrm f}(u)\) 的 \(u^3 M_{m-3}^{\mathrm f}\) 项可贡献次数 \((m-3-1)+3=m-1\)，其余各项次数至多为 \(m-2\)；
+从而 \(\deg M_m^{\mathrm f}=m-1\)，归纳完成第一式。
+\par
+对顶次系数，注意到 \(\deg M_m^{\mathrm f}=m-1\) 后，\eqref{eq:fold-bernoulli-p-half-Mf-order4} 中 \(M_{m-1}^{\mathrm f}\)、\((2u+1)M_{m-2}^{\mathrm f}\) 与 \(-2u\,M_{m-4}^{\mathrm f}\) 的次数均严格小于 \(m-1\)，故顶次项仅来自 \(u^3M_{m-3}^{\mathrm f}(u)\)，从而
+\[
+\ell_m=\ell_{m-3}\qquad(m\ge 5).
+\]
+由初值 \(M_2^{\mathrm f}(u)=3+u\)、\(M_3^{\mathrm f}(u)=5+u+2u^2\) 以及由 \eqref{eq:fold-bernoulli-p-half-Mf-order4} 计算得到的
+\(
+\ell_4=[u^3]M_4^{\mathrm f}(u)=2
+\)，得到 \(\ell_2=1,\ell_3=2,\ell_4=2\)，从而 \((\ell_m)\) 以 \(3\) 为周期并取值如上。证毕。
+\end{proof}
+
+\endinput
+

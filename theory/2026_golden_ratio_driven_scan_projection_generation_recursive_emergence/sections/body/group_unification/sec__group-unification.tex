@@ -1,0 +1,140 @@
+\section{群论统一：从扫描半群到稳定类型半环}\label{sec:group-unification}
+
+本节将前文已建立的“稳定类型算术同构、Parry 最大熵基线、扭曲谱/碰撞谱指纹”等结论组织为一组面向审计的接口，并据此讨论若干环论分裂与统一窗的结构后果。为避免与主证明链混排，本节中带“解释性/讨论”标记的段落不作为任何证明前提；凡涉及严格推导者均以已编号的定义/定理/命题为锚点。
+
+\subsection{迭代作为“数”的生成}
+
+在单生成半群 \(\langle g\rangle\) 中，元素 \(g^t\) 由迭代计数 \(t\) 参数化；当把迭代对象通过稳定类型与值同态接口编码到算术横截面上（例如第 \ref{sec:emergent-arithmetic} 节的模结构同构），可在严格意义下将“迭代复合”转译为稳定地址空间中的代数运算。
+
+\subsection{黄金比例的代数后果：递归尺度与自相似}
+
+Fibonacci 递归由 $\varphi$ 的特征方程 $x^2=x+1$ 统摄。稳定类型基数 $\abs{X_m}=F_{m+2}$ 的渐近增长率为 $\varphi^m$，折叠多重度的增长率为 $(2/\varphi)^m$。这给出一个严格的“尺度流”模型：分辨率提高（$m\to m+1$）时稳定类型空间自相似增长，但微态空间增长更快，从而必然需要折叠；折叠的统计结构由 $\varphi$ 决定。
+
+\paragraph{分辨率算术的统一窗（域相）}
+由定理 \ref{thm:finite-resolution-mod}，分辨率 $m$ 的稳定类型算术满足
+\((X_m,\boxplus_m,\boxtimes_m)\cong \ZZ/(F_{m+2}\ZZ)\)。
+因此“统一/破缺”首先是模数的环论性质：当 $F_{m+2}$ 为素数时进入域相（推论 \ref{cor:field-phase-fib-prime}），不会产生非平凡 CRT 直积分裂；
+当 $F_{m+2}$ 含多个不同素因子时，CRT 给出规范的多因子分裂模板（推论 \ref{cor:crt-factorization}）。
+表 \ref{tab:fib_prime_resolution_windows} 列出一组 Fibonacci-prime 分辨率窗口（域相“壳层”）及其尺度 $\varepsilon_m=\varphi^{-m}$。
+\input{sections/generated/tab_fib_prime_resolution_windows}
+
+\input{subsubsec__group-unification-fibprime-pgl2-pisano}
+
+\paragraph{最小多轴统一窗（2/3/5 轴的 CRT 并存）}
+若把“可观测的离散同余轴”最小化为 \(\bmod 2,\bmod 3,\bmod 5\) 三条基本轴，
+则在模结构同构下其并存读出等价于
+\(
+2,3,5\mid F_{m+2}
+\)
+（从而 CRT 投影到 \(\ZZ/2\ZZ,\ZZ/3\ZZ,\ZZ/5\ZZ\) 同时存在）。
+命题 \ref{prop:crt-235-min-depth} 给出该条件的最小解为 \(m_{\min}=58\)（即 \(m_{\min}+2=60\)），
+并由注 \ref{rem:crt-235-m58-factorization} 可见该最小窗的模数 \(F_{60}\) 同时携带一组额外素因子分量。
+因此“算术统一深度”可被组织为一个纯环论的选择律：先由三轴并存强制出最小候选窗，
+再在该窗及其同余子塔上用扭曲谱/碰撞谱等可审计指纹判定进一步的“对齐/破缺”结构。
+
+\begin{remark}[三轴最小窗上的折叠碰撞耦合量级]\label{rem:gut-m58-collision-gap-scale}
+附录 \ref{app:fold-multiplicity} 已将折叠输出的均匀性缺口记为 \(g_{\mathrm{col}}^2(m)=\mathsf{Col}_m-1/F_{m+2}\)。
+在最小三轴窗 \(m=58\) 上，由三态碰撞核 \(A_2\) 的精确递推（命题 \ref{prop:pom-s2-recurrence}）可直接计算得到
+\input{sections/generated/eq_gut_crt_235_m58_collision_gap}
+\par
+另一方面，推论 \ref{cor:fold-col-gap-exp-upper} 给出对所有 \(m\ge 2\) 的显式指数上界
+\(
+g_{\mathrm{col}}^2(m)\le \mathsf{Col}_m\le C_2\,(r_2/4)^m
+\)
+（其中 \(r_2=\rho(A_2)\)、\(C_2=2(\mathbf{1}^{\mathsf T}v)/r_2^2\)），
+从而“深窗 \(\Rightarrow\) 弱耦合”可被完全归约为可计算的 Perron 常数与有限维核读出。
+\end{remark}
+
+\subsection{稳定状态作为“黄金本征态”}
+
+考虑黄金均值约束对应的邻接矩阵
+\[
+A=\begin{pmatrix}
+1 & 1\\
+1 & 0
+\end{pmatrix},
+\]
+其谱半径为 $\rho(A)=\varphi$。由 Perron--Frobenius 理论得到唯一正特征向量（归一化后给出平稳分布/最大熵马尔可夫测度）。在符号动力系统语境中，该平稳测度是对语法约束最稳定的统计状态，可作为“稳定本征态”的纯数学对应物：
+其显式形式（Parry 最大熵测度）见注 \ref{prop:parry-measure-golden}。
+
+\begin{remark}[黄金均值 SFT 的 Parry 基线]\label{prop:parry-measure-golden}
+黄金均值 shift 的 Parry 最大熵测度为两状态马尔可夫链，其转移概率为
+\[
+P_{00}=\varphi^{-1},\quad P_{01}=\varphi^{-2},\quad P_{10}=1.
+\]
+其平稳分布为
+\[
+\pi(0)=\frac{\varphi^2}{\varphi^2+1},\qquad
+\pi(1)=\frac{1}{\varphi^2+1}.
+\]
+参见 \cite{LindMarcus1995}。
+\end{remark}
+
+由此可把该测度在长度 $m$ 的稳定词空间 $X_m$ 上具体写为：对 $u=u_1\cdots u_m\in X_m$，
+\[
+\pi_m(u)=\pi(u_1)\prod_{j=1}^{m-1} P_{u_j u_{j+1}}.
+\]
+注 \ref{prop:parry-measure-golden} 因而为第 \ref{sec:quant-fit} 节的“拟合准则”提供一个封闭基线；其推导与一般有限型子移位完全一致，见 \cite{LindMarcus1995}。
+
+\subsection{时间的协议刻度：熵率时间与对象层等距因子的可审计拆解}\label{subsec:time-protocol-entropy-vs-rotation}
+\paragraph{问题的两层拆分（对象层 \texorpdfstring{$\neq$}{≠} 协议层）}
+在本文的扫描—投影读出与可审计证书口径下，“时间是否本质上为黄金切面旋转”并非单一命题，而可精确拆解为两个互相独立、且可分别审计的断言：
+\begin{enumerate}
+  \item \textbf{对象层（等距因子）：}给定可观测系统 \((X,\mathcal{B},\mu,T)\)，其最大等距因子（若存在）是否可取为紧交换群上的 Kronecker 平移；在一维圆周情形下，该平移即 \(S^1\) 上的无理旋转，并可用第 \ref{sec:principles} 节固定的反共振规范代表 \(\alpha=\varphi^{-1}\) 作为一条可审计基线分支（并见附录 \ref{app:kronecker-discrepancy}）。
+  \item \textbf{协议层（内生时间计量）：}在固定读出与稳定语法后，“时间单位”应由信息精化/不确定性收缩的指数刻度给出，其不可约刻度由熵率（等价地由谱半径的对数尺度）锁定；该刻度与对象层是否采用圆周旋转坐标化无关。
+\end{enumerate}
+上述拆分把“黄金旋转”严格定位为对象层的一种\emph{表示选择}，并把 \(\log\varphi\) 严格定位为协议层的\emph{可审计刻度不变量}。
+\par
+
+\begin{definition}[熵率时间（information-time）]\label{def:entropy-rate-time}
+在频率语句的设定（小节 \ref{subsec:freq-setting}）下，令 \(\mathcal{P}\) 为由读出 \(s_t(x)=\ind_W(T^t x)\in\{0,1\}\) 所诱导的可观测划分。
+对任意有限观测串 \(a_0^{t-1}:=a_0a_1\cdots a_{t-1}\in\{0,1\}^t\)，记其柱集
+\[
+C(a_0^{t-1})
+:=\bigl\{x\in X:\ s_0(x)=a_0,\ s_1(x)=a_1,\ \dots,\ s_{t-1}(x)=a_{t-1}\bigr\}\in\sigma(\mathcal{P},T^{-1}\mathcal{P},\dots,T^{-(t-1)}\mathcal{P}).
+\]
+定义 \textbf{熵率时间}（或信息时间）
+\[
+\tau_{\mathrm{info}}(t)
+:=-\log \mu\bigl(C(a_0^{t-1})\bigr).
+\]
+在 \(\mathcal{P}\) 可生成且 \(T\) 遍历等标准假设下，Shannon--McMillan--Breiman 定理（亦可视为 AEP 的遍历形式）给出
+\[
+\frac{1}{t}\tau_{\mathrm{info}}(t)\ \longrightarrow\ h_\mu(T,\mathcal{P})
+\qquad\text{几乎处处},
+\]
+其中 \(h_\mu(T,\mathcal{P})\) 为 Kolmogorov--Sinai 熵（参见 \cite{WaltersErgodicTheory,CoverThomas2006}）。
+\end{definition}
+
+\begin{proposition}[\texorpdfstring{$\log\varphi$}{log phi} 刻度锁定：时间单位来自熵率而非旋转]\label{prop:time-unit-logphi-protocol}
+在稳定语法选取为黄金均值约束 \(X_\infty\) 且协议层以其最大熵平衡态（Parry 测度；注 \ref{prop:parry-measure-golden}）作为标定基线时，
+取对象层为该 SFT 的左移 \(T=\sigma\)、取 \(\mathcal{P}\) 为单步划分，则 Kolmogorov--Sinai 熵满足
+\[
+h_\mu(\sigma,\mathcal{P})=\log\varphi.
+\]
+由定义 \ref{def:entropy-rate-time} 与 Shannon--McMillan--Breiman 定理，对几乎处处样本串 \(a_0^{t-1}\) 有
+\[
+\tau_{\mathrm{info}}(t)=t\log\varphi+o(t),
+\qquad
+\mu\bigl(C(a_0^{t-1})\bigr)=\exp\!\bigl(-(\log\varphi+o(1))t\bigr)=\varphi^{-t+o(t)}.
+\]
+因此，“时间单位”的协议刻度由 \(\log\varphi\) 锁定：把 \(\tau_{\mathrm{info}}\) 归一化为步数刻度的自然单位为 \((\log\varphi)^{-1}\)，该刻度不依赖对象层是否采用 Kronecker 旋转作为扫描相位的坐标化。\par
+作为与上述熵率刻度相互独立的谱学锚点，真实输入 \(40\) 状态核在 \(t=0\) 的相关时间满足闭式
+\(\tau_{\mathrm{corr}}(0)=1/\log\varphi\)（注 \ref{cor:chi-slice-t0-golden-tau}），从而在本文的可审计管线中，\(\log\varphi\) 同时以熵率刻度与谱隙刻度两种方式出现并相互核对。
+\end{proposition}
+
+\begin{remark}[对象层的 Kronecker 相位与协议层时间的不可约性]\label{rem:isometric-factor-vs-time-metric}
+对象层若存在最大等距因子，则可将“扫描相位”理解为紧交换群上的 Kronecker 平移；在一维圆周情形下，其规范实现即无理旋转（经典 Sturmian/rotation 图像可参见 \cite{MorseHedlund1940}）。
+本文在第 \ref{sec:principles} 节以 Hurwitz/Markov 最坏逼近口径选取黄金分支 \(\alpha=\varphi^{-1}\) 作为反共振基线，其作用是为\emph{对象层相位}提供一个可审计的 minimax 代表。\par
+然而，协议层“时间”的不可约表达是由柱集质量（定义 \ref{def:entropy-rate-time}）或谱隙衰减（注 \ref{prop:chi-slice-time-correlation}）所导出的对数刻度：在黄金语法选择下，该刻度被 \(\log\varphi\) 锁定并可在不同审计通道中交叉核对。
+因此，“黄金切面旋转”在本文口径下应被理解为对象层的一个可替换表示，而非协议层时间计量的必要前提。
+\end{remark}
+
+\input{subsec__parry-endpoint-bridge}
+
+\input{subsec__bdry-tower-zeck-gut}
+\input{subsec__fib-lie-resonance}
+\input{subsec__group-unification-spectral-alignment}
+\input{subsec__group-unification-gut-forward}
+\input{subsec__group-unification-joukowsky-godel-transport}
+\input{subsec__group-unification-audit-pointers}

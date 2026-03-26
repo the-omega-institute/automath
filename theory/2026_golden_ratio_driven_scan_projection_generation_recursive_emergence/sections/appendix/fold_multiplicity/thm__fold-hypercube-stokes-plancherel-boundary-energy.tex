@@ -1,0 +1,119 @@
+% Stokes--Plancherel boundary identity on the hypercube.
+
+\begin{theorem}[Stokes--Plancherel 边界谱分解：割面积的完全通量公式]\label{thm:fold-hypercube-stokes-plancherel-boundary-energy}
+设 \(n\ge 1\)，\(\Omega_n:=\{0,1\}^n\)。
+令 \(S\subseteq\Omega_n\)，并记 \(f:=\mathbf 1_S\)。
+对任意 \(a\in\Omega_n\) 定义 Walsh 字符
+\[
+\chi_a(\omega):=(-1)^{a\cdot \omega},
+\qquad \omega\in\Omega_n,
+\qquad |a|:=\#\{i:\ a_i=1\}.
+\]
+采用归一化 Fourier--Walsh 系数
+\[
+\widehat f(a):=2^{-n}\sum_{\omega\in\Omega_n} f(\omega)\chi_a(\omega).
+\]
+对每个 \(1\le i\le n\) 定义 Stokes 通量观测量
+\[
+J_{a,i}(S):=\sum_{\omega\in\Omega_n}\bigl(f(\omega)-f(\omega^{(i)})\bigr)\chi_a(\omega),
+\]
+其中 \(\omega^{(i)}\) 表示翻转第 \(i\) 位后的顶点。
+则对每个 \(a\neq 0\) 成立：
+\begin{enumerate}
+  \item \label{it:fold-hypercube-stokes-readout} \textbf{（广义 Stokes 读出）}
+  \[
+  \widehat f(a)=\frac{2^{-(n+1)}}{|a|}\sum_{i:\ a_i=1}J_{a,i}(S).
+  \]
+  \item \label{it:fold-hypercube-plancherel-cut} \textbf{（边界 Plancherel 恒等式）}
+  记 \(|\partial S|\) 为超立方体图上 \(S\) 的割边数，则
+  \[
+  |\partial S|
+  =
+  2^{n+1}\sum_{a\neq 0}|a|\,\widehat f(a)^2
+  =
+  2^{-(n+1)}\sum_{a\neq 0}\frac{1}{|a|}
+  \Bigl(\sum_{i:\ a_i=1}J_{a,i}(S)\Bigr)^2.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对任意 \(a\in\Omega_n\) 与任意 \(i\) 有
+\[
+\chi_a(\omega^{(i)})=
+\begin{cases}
+\chi_a(\omega),& a_i=0,\\
+-\chi_a(\omega),& a_i=1.
+\end{cases}
+\]
+因此对 \(a_i=1\)，变量替换 \(\omega\mapsto\omega^{(i)}\) 给出
+\[
+\sum_{\omega} f(\omega^{(i)})\chi_a(\omega)
+=\sum_{\omega}f(\omega)\chi_a(\omega^{(i)})
+=-\sum_{\omega}f(\omega)\chi_a(\omega),
+\]
+从而
+\(
+J_{a,i}(S)=2\sum_{\omega}f(\omega)\chi_a(\omega)=2^{n+1}\widehat f(a)
+\)；
+而当 \(a_i=0\) 时同理得 \(J_{a,i}(S)=0\)。
+于是
+\(
+\sum_{i:\ a_i=1}J_{a,i}(S)=|a|\cdot 2^{n+1}\widehat f(a)
+\)，得到 \eqref{it:fold-hypercube-stokes-readout}。
+\par
+为证明 \eqref{it:fold-hypercube-plancherel-cut}，注意对指示函数 \(f=\mathbf 1_S\) 有
+\[
+\sum_{\omega\in\Omega_n}\bigl(f(\omega)-f(\omega^{(i)})\bigr)^2=2\,c_i(S),
+\]
+其中 \(c_i(S)\) 为第 \(i\) 坐标方向的无向割边数；故
+\[
+|\partial S|=\sum_{i=1}^n c_i(S)=\frac12\sum_{i=1}^n\sum_{\omega\in\Omega_n}\bigl(f(\omega)-f(\omega^{(i)})\bigr)^2.
+\]
+另一方面，对差分算子 \(D_i f(\omega):=f(\omega)-f(\omega^{(i)})\) 用 Walsh--Parseval 恒等式并利用 \(a_i=1\) 时 \(D_i\chi_a=2\chi_a\)（否则为 \(0\)），得到
+\[
+2^{-n}\sum_{\omega}(D_i f(\omega))^2
+=
+\sum_{a\in\Omega_n} (2a_i)^2\,\widehat f(a)^2
+=4\sum_{a:\ a_i=1}\widehat f(a)^2.
+\]
+乘以 \(2^n\) 后对 \(i\) 求和并代入上式，得
+\[
+|\partial S|
+=\frac12\sum_{i=1}^n 2^n\cdot 4\sum_{a:\ a_i=1}\widehat f(a)^2
+=2^{n+1}\sum_{a\neq 0}|a|\,\widehat f(a)^2.
+\]
+再将 \eqref{it:fold-hypercube-stokes-readout} 代入即得通量平方和表示。证毕。
+\end{proof}
+
+\begin{corollary}[平方偏差下界与低阶模式截断]\label{cor:fold-hypercube-stokes-plancherel-truncation}
+在定理 \ref{thm:fold-hypercube-stokes-plancherel-boundary-energy} 的设定下：
+\begin{enumerate}
+  \item \textbf{（平方偏差下界）} 记位偏差 \(b_i(S):=\sum_{\omega\in S}(-1)^{\omega_i}\)，则
+  \[
+  |\partial S|\ \ge\ 2^{1-n}\sum_{i=1}^n b_i(S)^2.
+  \]
+  \item \textbf{（低阶模式截断与非负残差）} 对任意整数 \(k\ge 1\)，令
+  \[
+  L_k(S):=2^{-(n+1)}\sum_{\substack{a\neq 0\\ |a|\le k}}\frac{1}{|a|}
+  \Bigl(\sum_{i:\ a_i=1}J_{a,i}(S)\Bigr)^2.
+  \]
+  则 \(|\partial S|\ge L_k(S)\)，并且差值具有严格非负分解
+  \[
+  |\partial S|-L_k(S)
+  =
+  2^{-(n+1)}\sum_{\substack{a\neq 0\\ |a|> k}}\frac{1}{|a|}
+  \Bigl(\sum_{i:\ a_i=1}J_{a,i}(S)\Bigr)^2.
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+第一条由定理 \ref{thm:fold-hypercube-stokes-plancherel-boundary-energy} 的通量平方和式保留 \(|a|=1\) 项并丢弃其余非负项得到。
+注意当 \(a=e_i\) 时 \(\widehat f(e_i)=2^{-n}b_i(S)\)，并由定理 \ref{thm:fold-hypercube-stokes-plancherel-boundary-energy}\ref{it:fold-hypercube-stokes-readout} 得
+\(
+J_{e_i,i}(S)=2^{n+1}\widehat f(e_i)=2b_i(S)
+\)；
+代回即得系数 \(2^{1-n}\)。
+第二条由同一定理的恒等式按 \(|a|\le k\) 与 \(|a|>k\) 分拆即可。证毕。
+\end{proof}
+
+\endinput

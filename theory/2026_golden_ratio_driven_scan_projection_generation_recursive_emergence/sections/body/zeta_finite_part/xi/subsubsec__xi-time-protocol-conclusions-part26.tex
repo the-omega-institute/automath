@@ -1,0 +1,219 @@
+% (User input window)
+
+\subsubsection{尺度核的质量塔分解与粗反卷积：有限阶局部算子、尾核矩与带宽良定性}\label{subsubsec:xi-scale-kernel-mass-tower-deconvolution}
+以下条目把 logistic 尺度核在 Fourier 侧的 \(\sinh\) 乘积结构实现为一个可执行的质量塔卷积模型，
+并由此导出一族有限阶局部反卷积算子及其在带宽受控制度下的稳定性证书；
+尾核的可计算矩与四阶累积量给出最小非高斯偏差的可观测刻度，从而把 \(q=4\) 的首触发机制提升为结构必然性。
+
+\begin{conclusion}[尺度核的无穷质量塔分解：logistic 核等价于独立 Laplace 级联系统]\label{con:xi-terminal-scale-kernel-mass-tower-laplace}
+令尺度单峰核为
+\[
+\phi(s):=\frac{1}{4\cosh^{2}(s/2)}=\frac{e^{s}}{(1+e^{s})^{2}}\qquad(s\in\RR).
+\]
+对每个整数 \(n\ge 1\) 定义 Laplace 核
+\[
+g_n(s):=\frac{n}{2}e^{-n|s|},
+\qquad
+\widehat g_n(\xi)=\frac{1}{1+\xi^{2}/n^{2}}.
+\]
+则存在一族独立随机变量 \((X_n)_{n\ge 1}\)（\(X_n\) 的密度为 \(g_n\)），使得级数
+\[
+Y:=\sum_{n\ge 1}X_n
+\]
+在 \(L^{2}\) 与几乎处处意义下收敛，并且其和的密度严格等于 \(\phi\)。
+等价地，令 \(\phi_{\le N}:=g_1*\cdots*g_N\)，则 \(\phi_{\le N}\to\phi\)（\(L^2\) 且弱收敛），从而在分布意义下可记为
+\[
+\phi=g_1*g_2*\cdots .
+\]
+该分解把 \(\phi\) 解释为一条“整数质量谱”\(\{n\}_{n\ge 1}\) 的逐层卷积封口：每一层 \(g_n\) 是一维局部算子 \((1-\frac{1}{n^{2}}\partial_s^{2})^{-1}\) 的 Green 核，整条质量塔的乘积谱恰闭合为 \(\phi\)。
+\end{conclusion}
+\begin{proof}[证明要点]
+由命题 \ref{prop:xi-bulk-curvature-tomography-identifiability} 的 Fourier 闭式 \(\widehat\phi(\xi)=\pi\xi/\sinh(\pi\xi)\) 及 \(\sinh\) 的 Hadamard 乘积
+\(
+\sinh(\pi\xi)=\pi\xi\prod_{n\ge 1}(1+\xi^{2}/n^{2})
+\)
+得
+\(
+\widehat\phi(\xi)=\prod_{n\ge 1}\widehat g_n(\xi)
+\)。
+取独立随机变量 \(X_n\)（密度为 \(g_n\)），则其特征函数为 \(\widehat g_n\)。
+令部分和 \(Y_N=\sum_{n=1}^{N}X_n\)，则 \(Y_N\) 的特征函数为 \(\prod_{n=1}^{N}\widehat g_n\)，故 \(Y_N\) 的密度为 \(\phi_{\le N}\)。
+又因 \(\sum_{n\ge 1}\Var(X_n)=2\sum_{n\ge 1}n^{-2}<\infty\)，得 \((Y_N)\) 在 \(L^2\) 中 Cauchy，且由 Kolmogorov 判据可得几乎处处收敛。
+极限变量 \(Y\) 的特征函数为 \(\widehat\phi\)，从而其密度为 \(\phi\)。证毕。
+\end{proof}
+
+\begin{conclusion}[部分反卷积即分辨率旋钮：有限阶局部算子把无限反卷积降为尾核卷积]\label{con:xi-terminal-scale-kernel-partial-deconvolution-resolution}
+对 \(N\ge 1\) 定义有限阶局部算子（以 Fourier 乘子理解）
+\[
+\mathcal D_N:=\prod_{n=1}^{N}\Bigl(1-\frac{1}{n^2}\partial_s^2\Bigr),
+\qquad
+\widehat{(\mathcal D_N f)}(\xi)=M_N(\xi)\,\widehat f(\xi),
+\qquad
+M_N(\xi):=\prod_{n=1}^{N}(1+\xi^{2}/n^{2}).
+\]
+并令尾核 \(\phi_{>N}\) 为结论 \ref{con:xi-terminal-scale-kernel-mass-tower-laplace} 中尾部和
+\(
+Y_{>N}:=\sum_{n>N}X_n
+\)
+的密度（亦即 \(\widehat{\phi_{>N}}(\xi)=\prod_{n>N}(1+\xi^{2}/n^{2})^{-1}\)）。
+则对任意有限符号测度 \(\nu\)，若 \(p=\phi*\nu\)，则成立严格恒等式
+\[
+\boxed{\;
+\mathcal D_N p=\phi_{>N}*\nu.\;}
+\]
+因而 \(\mathcal D_N\) 在制度上实现“去除前 \(N\) 层质量壳”的粗反卷积：当 \(N\to\infty\) 时 \(\phi_{>N}\Rightarrow\delta_0\)，从而 \(\mathcal D_N p\Rightarrow \nu\) 于分布意义下成立。
+该结论给出一条可执行的连续族：反卷积由 \(N\) 明确调控的分辨率流替代了“要么精确要么崩溃”的二元机制。
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-terminal-scale-kernel-mass-tower-laplace}，\(\widehat\phi(\xi)=M_N(\xi)^{-1}\widehat{\phi_{>N}}(\xi)\)。
+对 \(p=\phi*\nu\) 取 Fourier 变换得 \(\widehat p=\widehat\phi\cdot\widehat\nu\)，从而
+\[
+\widehat{(\mathcal D_N p)}(\xi)=M_N(\xi)\widehat p(\xi)=\widehat{\phi_{>N}}(\xi)\widehat\nu(\xi)=\widehat{(\phi_{>N}*\nu)}(\xi),
+\]
+得到恒等式。
+又因 \(\Var(Y_{>N})\to 0\)，故 \(\phi_{>N}\Rightarrow\delta_0\)，从而 \(\phi_{>N}*\nu\Rightarrow\nu\)。证毕。
+\end{proof}
+
+\begin{conclusion}[尾核的矩完全可计算：分辨率尺度 \texorpdfstring{$\sigma_N\sim \sqrt{2/N}$}{sigma\_N ~ sqrt(2/N)} 与 Wasserstein 控制]\label{con:xi-terminal-scale-kernel-tail-moments-w2}
+沿用结论 \ref{con:xi-terminal-scale-kernel-mass-tower-laplace} 的随机变量 \(X_n\)，令 \(Y_{>N}:=\sum_{n>N}X_n\)，其密度为 \(\phi_{>N}\)。
+则有可加矩证书
+\[
+\Var(Y_{>N})=\sum_{n>N}\Var(X_n)=2\sum_{n>N}\frac{1}{n^2}=: \sigma_N^2,
+\qquad
+\kappa_4(Y_{>N})=\sum_{n>N}\kappa_4(X_n)=12\sum_{n>N}\frac{1}{n^4}.
+\]
+并且对任意具有有限二阶矩的概率测度 \(\nu\) 有可证书化的 \(W_2\) 上界
+\[
+\boxed{\;
+W_2\bigl(\phi_{>N}*\nu,\nu\bigr)\ \le\ \sigma_N
+\ =\ \sqrt{2\sum_{n>N}n^{-2}}
+\ \sim\ \sqrt{\frac{2}{N}}\quad(N\to\infty).\;}
+\]
+因此若允许分辨率 \(\sigma>0\)，取 \(N\asymp 2/\sigma^{2}\) 即可保证 \(W_2\)-误差 \(\le \sigma\)；
+在该制度下，分辨率成本从指数型降为幂律型。
+\end{conclusion}
+\begin{proof}[证明要点]
+对 \(X_n\sim g_n\) 直接计算得到 \(\Var(X_n)=2/n^2\)、\(\kappa_4(X_n)=12/n^4\)，累积量对独立和可加，从而得矩证书。
+对 \(W_2\) 上界，取耦合：令 \(U\sim \nu\)，令 \(V\sim \phi_{>N}\) 且独立，则 \((U+V,U)\) 是 \((\phi_{>N}*\nu,\nu)\) 的一个耦合，故
+\(
+W_2^2(\phi_{>N}*\nu,\nu)\le \EE[|V|^2]=\Var(V)=\sigma_N^2
+\)。
+渐近 \(\sum_{n>N}n^{-2}\sim 1/N\) 由积分判别法得到。证毕。
+\end{proof}
+
+\begin{conclusion}[尾核的高斯化与四阶首破缺：非高斯性由 \texorpdfstring{$q=4$}{q=4} 量级唯一主导]\label{con:xi-terminal-scale-kernel-tail-gaussianization-kurtosis}
+令 \(\sigma_N^2=\Var(Y_{>N})\)，并定义标准化尾变量 \(Z_N:=Y_{>N}/\sigma_N\)。
+则有弱收敛 \(Z_N\Rightarrow \mathcal N(0,1)\)，且其标准化超额峰度（excess kurtosis）具有闭式
+\[
+\boxed{\;
+\gamma_2(N):=\frac{\kappa_4(Y_{>N})}{\sigma_N^4}
+=3\,\frac{\sum_{n>N}n^{-4}}{\bigl(\sum_{n>N}n^{-2}\bigr)^2}
+\sim \frac{1}{N}\quad(N\to\infty).\;}
+\]
+并且所有奇阶累积量严格为零。
+因此尾核的首个非高斯偏差不可避免地发生在四阶：在尺度流的可观测校正中，最小破缺阶被结构性锁定为 \(4\)，并以 \(N^{-1}\) 的强度进入。
+\end{conclusion}
+\begin{proof}[证明要点]
+由于 \(X_n\) 对称，故全部奇阶累积量为零，并在独立和下保持为零。
+对 \(Z_N\) 的中心极限定理可由 Lindeberg 条件给出：\(\max_{n>N}\Var(X_n)/\sigma_N^2\to 0\) 且 \(\sum_{n>N}\Var(X_n)=\sigma_N^2\)。
+峰度公式由结论 \ref{con:xi-terminal-scale-kernel-tail-moments-w2} 的累积量证书代入并化简得到；
+渐近由 \(\sum_{n>N}n^{-4}\sim (3N^3)^{-1}\)、\(\sum_{n>N}n^{-2}\sim N^{-1}\) 给出。证毕。
+\end{proof}
+
+\begin{conclusion}[带宽约束下的条件数上界：粗反卷积在任何固定带宽内均一致良定]\label{con:xi-terminal-scale-kernel-bandwidth-conditioned}
+设观测为 \(\widetilde p=p+\eta\)，并假设噪声在频带 \(|\xi|\le\Omega\) 内满足
+\[
+\sup_{|\xi|\le\Omega}|\widehat\eta(\xi)|\le\varepsilon.
+\]
+则对任意 \(N\ge 1\)，有限阶算子输出误差在同一频带内满足
+\[
+\sup_{|\xi|\le\Omega}\bigl|\widehat{(\mathcal D_N\eta)}(\xi)\bigr|
+\le
+\varepsilon\cdot \sup_{|\xi|\le\Omega}M_N(\xi)
+\le
+\varepsilon\cdot \exp\!\Bigl(\Omega^2\sum_{n=1}^{\infty}\frac{1}{n^2}\Bigr)
+=\varepsilon\cdot \exp\!\Bigl(\frac{\pi^2}{6}\Omega^2\Bigr).
+\]
+因此在任何固定带宽 \(\Omega\) 内，\(\mathcal D_N\) 的噪声放大因子对 \(N\) 一致有界；
+粗反卷积的病态性并非来自“阶数增大”，而来自“试图在无限带宽上实现 \(\delta_0\) 极限”。
+该结论为尺度流的可计算相图提供严格基础：在带宽受控的制度下，分辨率可按 \(N\sim\sigma^{-2}\) 幂律提升而不触发指数型条件数爆炸。
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-terminal-scale-kernel-partial-deconvolution-resolution} 的 Fourier 乘子表示，
+\(
+\widehat{(\mathcal D_N\eta)}=M_N\widehat\eta
+\)
+于 \(|\xi|\le\Omega\) 上成立。
+并且对 \(x\ge 0\) 有 \(\log(1+x)\le x\)，故
+\[
+\log M_N(\xi)=\sum_{n=1}^{N}\log\Bigl(1+\frac{\xi^2}{n^2}\Bigr)\le \xi^2\sum_{n=1}^{N}\frac{1}{n^2}
+\le \Omega^2\sum_{n=1}^{\infty}\frac{1}{n^2}=\frac{\pi^2}{6}\Omega^2,
+\]
+从而得所示一致上界。证毕。
+\end{proof}
+
+\begin{conclusion}[有限阶谱乘子的 \texorpdfstring{$\Gamma$}{Gamma}-闭式与小频率展开：局部算子的解析完备性]\label{con:xi-terminal-scale-kernel-gamma-closed-form}
+记有限阶谱乘子
+\[
+M_N(\xi):=\prod_{n=1}^{N}(1+\xi^2/n^2).
+\]
+则 \(M_N\) 具有严格的 \(\Gamma\)-比闭式
+\[
+\boxed{\;
+M_N(\xi)=\frac{\Gamma(N+1+\mathrm{i}\xi)\Gamma(N+1-\mathrm{i}\xi)}{(N!)^2\,\Gamma(1+\mathrm{i}\xi)\Gamma(1-\mathrm{i}\xi)}.\;}
+\]
+从而在 \(|\xi|=o(N)\) 下有可审计展开
+\[
+\log M_N(\xi)=\xi^2\sum_{n=1}^{N}\frac{1}{n^2}-\frac{\xi^4}{2}\sum_{n=1}^{N}\frac{1}{n^4}+O\!\Bigl(\xi^6\sum_{n=1}^{N}\frac{1}{n^6}\Bigr),
+\]
+揭示出“二阶（\(\zeta(2)\)）决定主放大、四阶（\(\zeta(4)\)）决定首修正”的严格层级。
+该闭式使 \(\mathcal D_N\) 的解析结构可被有限步复算，并允许在带宽与精度给定时对 \(N\) 作可证伪的最优截断。
+\end{conclusion}
+\begin{proof}[证明要点]
+将 \(M_N(\xi)=\prod_{n=1}^{N}(n^2+\xi^2)/n^2=\prod_{n=1}^{N}(n+\mathrm{i}\xi)(n-\mathrm{i}\xi)/(N!)^2\)，再用有限乘积恒等式
+\(
+\prod_{n=1}^{N}(n+z)=\Gamma(N+1+z)/\Gamma(1+z)
+\)
+即得 \(\Gamma\)-比闭式。
+对小频率展开，使用 \(\log(1+u)=u-\frac{u^2}{2}+O(u^3)\) 并对 \(u=\xi^2/n^2\) 求和即可。证毕。
+\end{proof}
+
+\begin{conclusion}[尺度流的两阶段可恢复性：幂律分辨率与指数精确性的制度分离]\label{con:xi-terminal-scale-kernel-two-regime-recoverability}
+对任意 \(\sigma>0\)，取 \(N(\sigma)\) 使 \(\sigma_{N(\sigma)}\le\sigma\)（其中 \(\sigma_N\) 如结论 \ref{con:xi-terminal-scale-kernel-tail-moments-w2}）。
+则由结论 \ref{con:xi-terminal-scale-kernel-partial-deconvolution-resolution} 有
+\[
+\mathcal D_{N(\sigma)}p=\phi_{>N(\sigma)}*\nu,
+\]
+给出一条分辨率为 \(\sigma\) 的稳定重建；其代价为局部算子阶数 \(2N(\sigma)\asymp\sigma^{-2}\)，且在固定带宽下条件数一致可控（结论 \ref{con:xi-terminal-scale-kernel-bandwidth-conditioned}）。
+\par
+相反，若要求 \(\sigma\downarrow 0\) 的精确极限（即 \(\phi_{>N}\Rightarrow\delta_0\) 的无带宽极限），则必然进入指数不适定区：尾核逼近 \(\delta_0\) 要求同时控制任意高频，制度上必须允许带宽 \(\Omega\to\infty\)。
+更精确地，由 \(\sinh(\pi\xi)=\pi\xi\prod_{n\ge 1}(1+\xi^2/n^2)\) 得极限乘子
+\[
+M_\infty(\xi):=\lim_{N\to\infty}M_N(\xi)=\frac{\sinh(\pi\xi)}{\pi\xi},
+\qquad
+M_\infty(\xi)\sim \frac{1}{2\pi|\xi|}\,e^{\pi|\xi|}\quad(|\xi|\to\infty).
+\]
+因此若把“精确”理解为需要在 \(|\xi|\lesssim \Omega\) 上逼近 \(\delta_0\)，则噪声放大随 \(\Omega\) 指数增长；
+若进一步把制度分辨率 \(\sigma\) 视为要求可见带宽 \(\Omega\asymp \sigma^{-1}\)，则放大因子量级为 \(\exp(\pi/\sigma)\)（仅差多项式因子），从而精度位数随 \(1/\sigma\) 线性增长。
+因此“幂律可控”与“指数不可控”并非矛盾，而是由尺度选择（是否接受 \(\sigma\)-分辨率）所分离的两种制度。
+\end{conclusion}
+\begin{proof}[证明要点]
+稳定重建部分由结论 \ref{con:xi-terminal-scale-kernel-partial-deconvolution-resolution} 的恒等式与结论 \ref{con:xi-terminal-scale-kernel-tail-moments-w2} 的 \(\sigma_N\) 控制给出；
+在带宽受控制度下的良定性由结论 \ref{con:xi-terminal-scale-kernel-bandwidth-conditioned} 给出。
+精确极限要求 \(\Omega\) 不受界，从而噪声放大必随 \(\Omega\) 发散，给出指数不适定区。证毕。
+\end{proof}
+
+\begin{conclusion}[\texorpdfstring{$(q=4)$}{(q=4)} 的正则化地位：四阶破缺决定可见相变的最小矩阶]\label{con:xi-terminal-scale-kernel-q4-minimal-visible-order}
+在结论 \ref{con:xi-terminal-scale-kernel-mass-tower-laplace}--\ref{con:xi-terminal-scale-kernel-tail-gaussianization-kurtosis} 的质量塔模型中，尾核的全部奇阶累积量严格为零，而首个非高斯项由四阶累积量 \(\kappa_4\) 给出并以
+\(\gamma_2(N)\sim N^{-1}\)
+控制。
+故任何以“二阶近似（Gaussian）+ 带宽受控的粗反卷积”为基底的可审计推断体系，其最小系统性偏差必出现在四阶；
+换言之，若仅允许有限矩阶作为统计可见接口，则最小能够检测“非高斯边界/相变临界”之矩阶必为 \(4\)。
+该事实为 \(q=4\) 的首越线现象提供完全结构性的解释：它并非偶然数值，而是尺度核尾部的对称性与质量塔叠加所共同强制的最小破缺阶。
+\end{conclusion}
+\begin{proof}[证明要点]
+由结论 \ref{con:xi-terminal-scale-kernel-tail-gaussianization-kurtosis}，标准化尾变量的奇阶累积量为零，且四阶累积量给出首个非高斯偏差并以 \(N^{-1}\) 量级衰减。
+在以二阶高斯近似为基底的制度中，任何有限阶矩统计量的系统偏差由最低非零累积量阶决定，故最小可见矩阶为 \(4\)。证毕。
+\end{proof}
+
+\input{subsubsec__xi-time-protocol-conclusions-part27}

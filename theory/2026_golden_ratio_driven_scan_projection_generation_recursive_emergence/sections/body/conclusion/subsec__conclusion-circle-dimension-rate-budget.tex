@@ -1,0 +1,261 @@
+\subsection{圆维预算与账本速率的线性边界}\label{subsec:conclusion-circle-dimension-rate-budget}
+本小节在定义 \ref{def:circle-dimension}、定义 \ref{def:half-circle-dimension} 与命题 \ref{prop:circle-dimension-laws} 的结构层语义下，
+把“可见相位通道数”与“外置账本容量”统一为同一速率预算不等式。
+稳定类型空间的规模采用 \S\ref{subsec:folding-fibonacci-stable-syntax} 的计数口径
+\(
+|X_m|=F_{m+2}\sim \varphi^m
+\)。
+
+\begin{definition}[相对 \texorpdfstring{$\varphi$}{phi} 的速率圆维]\label{def:conclusion-rate-cdim}
+固定 \(\varphi>1\)。
+对任意有限寄存器族 \(R_\bullet=\{R_m\}_{m\ge 1}\)（每个 \(R_m\) 为有限集合），定义其速率圆维为
+\[
+\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)
+:=\limsup_{m\to\infty}\frac{\log|R_m|}{m\log\varphi}\in[0,\infty].
+\]
+\end{definition}
+
+\begin{proposition}[速率圆维的乘积可加性与亚指数消失]\label{prop:conclusion-rate-cdim-arithmetic}
+沿用定义 \ref{def:conclusion-rate-cdim}。
+对两族 \(R_\bullet,S_\bullet\) 定义逐层直积
+\(
+(R\times S)_m:=R_m\times S_m
+\)。
+则有：
+\begin{enumerate}
+  \item \[
+  \overline{\mathrm{cdim}}_{\varphi}(R_\bullet\times S_\bullet)
+  =
+  \overline{\mathrm{cdim}}_{\varphi}(R_\bullet)
+  +
+  \overline{\mathrm{cdim}}_{\varphi}(S_\bullet).
+  \]
+  \item 若 \(\log|R_m|=o(m)\)（特别地，\(|R_m|\) 仅多项式增长），则
+  \[
+  \overline{\mathrm{cdim}}_{\varphi}(R_\bullet)=0.
+  \]
+  \item 若 \(R_m\) 为有限阿贝尔群且 \(|R_m|=P_m\)（例如 CRT 模数积为 \(P_m\) 的 prime-register），则
+  \[
+  \overline{\mathrm{cdim}}_{\varphi}(R_\bullet)
+  =\limsup_{m\to\infty}\frac{\log P_m}{m\log\varphi}.
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+由 \(|R_m\times S_m|=|R_m||S_m|\) 取对数并除以 \(m\log\varphi\) 得 (1)。
+(2) 与 (3) 由定义直接得到。证毕。
+\end{proof}
+
+\begin{theorem}[可见相位与账本速率的预算守恒不等式]\label{thm:conclusion-rate-cdim-budget-inequality}
+设 \(\Omega_m=\{0,1\}^m\)、\(|\Omega_m|=2^m\)，并设 \(X_m\) 为稳定类型集合，满足 \(|X_m|=F_{m+2}\sim\varphi^m\)（\S\ref{subsec:folding-fibonacci-stable-syntax}）。
+给定整数 \(k\ge 1\) 与有限寄存器族 \(R_\bullet=\{R_m\}\)。
+若对每个 \(m\) 存在单射
+\[
+E_m:\Omega_m\hookrightarrow X_m^{\,k}\times R_m,
+\]
+则必有
+\[
+k+\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)\ \ge\ \frac{\log 2}{\log\varphi}.
+\]
+\end{theorem}
+\begin{proof}
+单射给出
+\[
+2^m=|\Omega_m|
+\le |X_m|^k|R_m|
+=F_{m+2}^{\,k}|R_m|.
+\]
+取对数并除以 \(m\log\varphi\)：
+\[
+\frac{\log 2}{\log\varphi}
+\le
+k\frac{\log F_{m+2}}{m\log\varphi}
+\frac{\log|R_m|}{m\log\varphi}.
+\]
+令 \(m\to\infty\)，由 \(F_{m+2}\sim\varphi^m\) 与定义 \ref{def:conclusion-rate-cdim} 得结论。证毕。
+\end{proof}
+
+\begin{corollary}[二圆阈值与一圆缺口]\label{cor:conclusion-rate-cdim-two-circle-threshold}
+在定理 \ref{thm:conclusion-rate-cdim-budget-inequality} 的条件下：
+\begin{enumerate}
+  \item 若 \(\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)=0\)，则
+  \[
+  k\ge \left\lceil\frac{\log 2}{\log\varphi}\right\rceil=2.
+  \]
+  \item 若 \(k=1\)，则
+  \[
+  \overline{\mathrm{cdim}}_{\varphi}(R_\bullet)
+  \ge
+  \frac{\log 2}{\log\varphi}-1
+  =
+  \frac{\log(2/\varphi)}{\log\varphi}\approx 0.44042.
+  \]
+\end{enumerate}
+换言之，单相位可见口径下，账本容量必须承载严格正的指数速率缺口。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-rate-cdim-budget-inequality} 直接得到。
+\end{proof}
+
+\begin{theorem}[缺口可达性：两相位零账本与单相位最小账本]\label{thm:conclusion-rate-cdim-achievability}
+记 \(M_m:=|X_m|=F_{m+2}\)。
+则存在如下两类显式单射构造：
+\begin{enumerate}
+  \item \textbf{两相位零账本可达。}
+  存在 \(m_0\) 使得对所有 \(m\ge m_0\)，存在单射
+  \[
+  E_m:\{0,1\}^m\hookrightarrow X_m\times X_m.
+  \]
+  因而可取 \(R_m=\{\ast\}\)，即 \(\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)=0\)。
+
+  \item \textbf{单相位最小账本可达。}
+  定义
+  \[
+  R_m:=\{0,1,\dots,\lceil 2^m/M_m\rceil-1\}.
+  \]
+  则存在单射
+  \[
+  E_m:\{0,1\}^m\hookrightarrow X_m\times R_m,
+  \]
+  且
+  \[
+  \overline{\mathrm{cdim}}_{\varphi}(R_\bullet)=\frac{\log 2}{\log\varphi}-1.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+先固定任意双射 \(\chi_m:\{0,\dots,M_m-1\}\xrightarrow{\sim}X_m\)。
+
+\textbf{(1)} 由 \(M_m\sim \varphi^m\) 且 \(\varphi^2>2\)，对充分大 \(m\) 有 \(2^m\le M_m^2\)。
+将 \(w\in\{0,1\}^m\) 视作整数 \(n(w)\in\{0,\dots,2^m-1\}\)，并令
+\[
+a:=n(w)\bmod M_m,\qquad
+b:=\left\lfloor\frac{n(w)}{M_m}\right\rfloor.
+\]
+则 \((a,b)\in\{0,\dots,M_m-1\}^2\)，且 \(n\mapsto(a,b)\) 单射。
+令
+\[
+E_m(w):=\bigl(\chi_m(a),\chi_m(b)\bigr),
+\]
+即得单射。
+
+\textbf{(2)} 仍取 \(n(w)\) 并令
+\[
+a:=n(w)\bmod M_m,\qquad
+r:=\left\lfloor\frac{n(w)}{M_m}\right\rfloor.
+\]
+则 \(0\le r\le \lceil 2^m/M_m\rceil-1\)，故 \(r\in R_m\)。
+定义
+\[
+E_m(w):=(\chi_m(a),r),
+\]
+由整除算法唯一性得单射。
+此外
+\[
+|R_m|=\left\lceil\frac{2^m}{M_m}\right\rceil
+\]
+故
+\[
+\frac{\log|R_m|}{m\log\varphi}
+=
+\frac{\log 2^m-\log M_m+o(m)}{m\log\varphi}
+\longrightarrow
+\frac{\log 2}{\log\varphi}-1,
+\]
+其中使用 \(\log M_m\sim m\log\varphi\)。证毕。
+\end{proof}
+
+\begin{theorem}[乘法同态与热带可加性的对数刚性]\label{thm:conclusion-log-rigidity-under-tropical}
+设 \(\delta:\NN_{\ge 1}\to\RR\) 满足：
+\begin{enumerate}
+  \item \textbf{乘法同态：}\(\delta(ab)=\delta(a)+\delta(b)\)；
+  \item \textbf{热带可加性：}存在常数 \(C\ge 0\) 使对任意 \(a,b\in\NN_{\ge 1}\)，
+  \[
+  \bigl|\delta(a+b)-\max\{\delta(a),\delta(b)\}\bigr|\le C;
+  \]
+  \item \textbf{正向归一化：}\(\delta(2)\ge 0\)。
+\end{enumerate}
+记 \(c:=\delta(2)/\log 2\)。
+则
+\[
+\delta(n)=c\log n+O(\log\log n)\qquad(n\to\infty).
+\]
+\end{theorem}
+\begin{proof}
+由乘法同态，\(\delta(2^k)=k\delta(2)\)。
+
+取 \(n\ge 2\)，令 \(k=\lfloor\log_2 n\rfloor\)，并写 \(n=2^k+t\)（\(0\le t<2^k\)）。
+由热带下界与 \(\delta(2)\ge 0\)：
+\[
+\delta(n)\ge \max\{\delta(2^k),\delta(t)\}-C\ge k\delta(2)-C.
+\]
+又 \(k=\log_2 n+O(1)\)，故
+\[
+\delta(n)\ge c\log n+O(1).
+\]
+
+再把 \(n\) 作二进制分解
+\(
+n=\sum_{j=0}^{k}\varepsilon_j2^j
+\)
+（\(\varepsilon_j\in\{0,1\}\)），非零项数记为 \(\ell\le k+1\)。
+以平衡二叉树方式合并求和，每一层应用
+\(
+\delta(x+y)\le \max\{\delta(x),\delta(y)\}+C
+\)。
+深度至多 \(\lceil\log_2\ell\rceil\)，故
+\[
+\delta(n)\le \max_{j:\varepsilon_j=1}\delta(2^j)+C\lceil\log_2\ell\rceil
+\le k\delta(2)+O(\log\ell).
+\]
+又 \(\ell\le k+1\)，故 \(\log\ell=O(\log k)=O(\log\log n)\)。
+于是
+\[
+\delta(n)\le c\log n+O(\log\log n).
+\]
+合并上下界得结论。证毕。
+\end{proof}
+
+\begin{corollary}[素数权重的渐近对数律]\label{cor:conclusion-prime-weight-log-law}
+在定理 \ref{thm:conclusion-log-rigidity-under-tropical} 的条件下，
+对任意 \(n=\prod_p p^{v_p(n)}\) 有
+\[
+\delta(n)=\sum_{p}v_p(n)\,\delta(p),
+\]
+并且当 \(p\to\infty\)（\(p\) 为素数）时，
+\[
+\delta(p)=c\log p+O(\log\log p),\qquad c=\delta(2)/\log 2.
+\]
+\end{corollary}
+\begin{proof}
+第一式由乘法同态对素因子分解逐项展开得到。
+第二式对定理 \ref{thm:conclusion-log-rigidity-under-tropical} 取 \(n=p\) 直接成立。证毕。
+\end{proof}
+
+\input{thm__conclusion-phase-ledger-halfspace-logrigidity}
+
+\begin{conjecture}[圆维预算前沿的线性最优性]\label{conj:conclusion-circle-dimension-linear-frontier}
+在本文固定的可审计协议类（相位轴、残差账本、prime-register、绕数证书轴及其扩展保存约束）下，
+定理 \ref{thm:conclusion-rate-cdim-budget-inequality} 的必要不等式同时为充分条件：
+对任意整数 \(k\ge 1\)，存在满足协议约束的实现使
+\[
+k+\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)
+=
+\max\!\left\{\frac{\log 2}{\log\varphi},\,k\right\},
+\]
+特别地，当 \(k<\frac{\log 2}{\log\varphi}\) 时可达到最小账本速率
+\[
+\overline{\mathrm{cdim}}_{\varphi}(R_\bullet)
+=
+\frac{\log 2}{\log\varphi}-k.
+\]
+\end{conjecture}
+
+\begin{remark}[与现有 prime-register 阈值律的对接]\label{rem:conclusion-rate-cdim-prime-register-interface}
+若进一步采用定义 \ref{def:pom-order-elimination-rewrite} 的区间重建制度，
+则推论 \ref{cor:pom-prime-register-quantile-budget} 给出概率容错口径下的阈值
+\(
+P_m>2B_m(\varepsilon)
+\)。
+该阈值可视为本小节“速率预算边界”在有限精度与给定失败率下的实现层细化。
+\end{remark}

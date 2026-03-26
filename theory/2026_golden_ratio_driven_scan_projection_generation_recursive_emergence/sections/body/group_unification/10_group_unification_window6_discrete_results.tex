@@ -1,0 +1,130 @@
+\subsubsection{window-\texorpdfstring{\(6\)}{6} 的离散结构与不变量汇总}\label{subsubsec:window6-discrete-results}
+为突出 window-\(6\) 的“最小锚点”角色，并便于将其向一般分辨率 \(m\) 的推广以可审计方式引用，可把若干已在正文与附录建立的结果收束为一组相互补充的陈述，并尽量避免解释性叙事。
+它们共同呈现结构、不变量与判别式三类离散结构在本框架内的闭合形态：一方面由 \(\Fold_m/\Fold^{\mathrm{bin}}_m\) 的纤维直方图与 Fourier 谱决定统计/信息缺口；另一方面由边界层塔与 Zeckendorf 唯一性把统一维数压缩为可审计的分辨率签名；并进一步通过碰撞核的代数证书与零点集的约数尺度计数把谱侧常数与算术调制纳入可复核接口。
+
+\begin{enumerate}
+  \item \textbf{折叠规范体积的 Stirling 线性缺陷：\texorpdfstring{$g_m$}{gm} 与 \texorpdfstring{$\kappa_m$}{kappa} 的差趋于 \(1\)。}
+  令
+  \(\mathcal{G}^{\mathrm{bin}}_m:=\mathrm{Aut}(\Fold^{\mathrm{bin}}_m)\)
+  为由二进制区间折叠 \(\Fold^{\mathrm{bin}}_m\) 诱导的 fold-gauge 规范群，并定义规范体积密度
+  \[
+  g_m:=\frac{1}{2^m}\log\card{\mathcal{G}^{\mathrm{bin}}_m},
+  \qquad
+  \kappa_m
+  :=\frac{1}{2^m}\sum_{w\in X_m}d^{\mathrm{bin}}_m(w)\log d^{\mathrm{bin}}_m(w)
+  =\mathbb{E}_{\pi_m}\!\bigl[\log d^{\mathrm{bin}}_m(X)\bigr],
+  \quad
+  \pi_m(w):=\frac{d^{\mathrm{bin}}_m(w)}{2^m}.
+  \]
+  则对所有 \(m\ge 1\) 有夹逼
+  \(
+  \kappa_m-1\le g_m\le \kappa_m
+  \)
+  （命题 \ref{prop:fold-bin-gauge-volume}），并且 Stirling 首项在指数精度上给出线性差展开
+  \[
+  g_m=\kappa_m-1+O\!\left(\frac{|X_m|\,m}{2^m}\right)
+  =\kappa_m-1+O\!\left(m\left(\frac{\varphi}{2}\right)^m\right),
+  \qquad
+  \kappa_m-g_m=1+o(1)
+  \]
+  （定理 \ref{thm:fold-bin-gauge-volume-stirling}）。
+  该结论把“规范体积（阶乘乘积）”与“折叠缺陷（\(d\log d\) 平均）”严格联结为同一热力学量的两种正规化，其误差为指数小量。
+
+  \item \textbf{最大纤维的组合上界何时饱和：显式判别式与有限共振窗。}
+  记
+  \(d^{\mathrm{bin}}_{\max}(m):=\max_{w\in X_m}d^{\mathrm{bin}}_m(w)\)。
+  则最大值由 \(w=0^m\) 取得，且满足组合上界
+  \(d^{\mathrm{bin}}_{\max}(m)\le F_{K(m)-m+2}\)；
+  并且上界饱和当且仅当阈值约束对所有合法尾部冗余，即
+  \[
+  d^{\mathrm{bin}}_{\max}(m)=F_{K(m)-m+2}
+  \quad\Longleftrightarrow\quad
+  2^m-1\ge S_{\max}(m),
+  \]
+  其中 \(S_{\max}(m)\) 具有完全显式闭式（推论 \ref{cor:fold-bin-saturation}）。
+  该饱和条件进一步强迫 \(2^m\) 与某一 Fibonacci 数发生指数级逼近，从而导出“仅有限次饱和”的 Diophantine 刚性（注 \ref{rem:fold-bin-finite}）。
+  在 \(m\le 400\) 的全扫描审计中，饱和点集合为表 \ref{tab:fold_binary_saturation_points} 所列有限集，从而形成一列离散“共振分辨率窗”。
+
+  \item \textbf{最大纤维的 Fourier–能量驱动机制与常数级偏置下界。}
+  在模 \(F_{m+2}\) 的地址上令 \(d_m(r)\) 为折叠多重度函数、\(\widehat d_m(k)\) 为其离散 Fourier 系数，
+  并记均值 \(\overline d_m=2^m/F_{m+2}\)、最大值 \(M_m:=\max_r d_m(r)\)、谱峰 \(S_m:=\max_{k\neq 0}|\widehat d_m(k)|\)。
+  则最大纤维由非平凡频谱能量定量强迫：
+  \[
+  M_m\ge \overline d_m+\frac{1}{F_{m+2}}\Biggl(\sum_{k\ne 0}\abs{\widehat d_m(k)}^2\Biggr)^{1/2}
+  \quad\text{（定理 \ref{thm:fold-max-fiber-spectrum}）},
+  \qquad
+  M_m\ge \overline d_m+\frac{S_m}{F_{m+2}}
+  \quad\text{（定理 \ref{thm:fold-max-fiber-fourier}）}.
+  \]
+  特别地，由一个固定 Fibonacci 模的可审计下界推出常数级乘性偏置：
+  \[
+  \liminf_{m\to\infty}\frac{M_m}{\overline d_m}\ \ge\ 1+C_\varphi\ \approx\ 1.2244178274
+  \qquad\text{（推论 \ref{cor:fold-max-fiber-constant-bias}）}.
+  \]
+  因此最大纤维的“超额”并非偶发，而由非平凡频谱幅度在极限上至少保留约 \(22.44\%\) 的乘性偏置。
+
+  \item \textbf{Zeckendorf--Fibonacci 分辨率签名 \texorpdfstring{$\Sigma(\mathfrak g)$}{Sigma(g)} 的唯一性与 NAP 选择器的最小解。}
+  对候选统一李代数 \(\mathfrak g\)，令 \(D=\dim\mathfrak g\)，并以 Zeckendorf 唯一分解写
+  \(D=\sum_{k\in S}F_k\)（\(S\) 无相邻指标）。
+  定义分辨率签名
+  \[
+  \Sigma(\mathfrak g):=\{\,m=k+2:\ k\in S\,\}.
+  \]
+  由于边界层计数满足 \(\card{X_m^{\mathrm{bdry}}}=F_{m-2}\)，从而
+  \(D=\sum_{m\in\Sigma(\mathfrak g)}\card{X_m^{\mathrm{bdry}}}\)，并由 Zeckendorf 唯一性知 \(\Sigma(\mathfrak g)\) 亦唯一（见 \S\ref{subsec:bdry-tower-zeck-gut} 与表 \ref{tab:zeckendorf_gut_signatures}）。
+  在此基础上，施加非阿贝尔保留约束（NAP）\(\{6,8\}\subset \Sigma(\mathfrak g)\) 并在简单李代数族中最小化 \(D\)，得到最小解为
+  \(
+  \mathfrak g=\mathfrak{so}(10),\ D=45,\ \Sigma(\mathfrak g)=\{6,8,11\}
+  \)
+  （表 \ref{tab:nap_selector_so10} 与式 \ref{eq_nap_selector_so10}）。
+  该构造把“统一维数”提升为可审计的离散层签名函子，并给出完全离散、可复核的统一代数选择器。
+
+  \item \textbf{高退化尾部的多重分形骨架：上包络（Legendre）与下包络（Paley--Zygmund）的同构接口。}
+  令 \(\gamma_m(x)=(1/m)\log d_m(x)\)，并按定义 \ref{def:pom-fiber-spectrum} 定义谱函数 \(f(\gamma)\)。
+  则 moment 压力 \(\tau(q)\)（或在已核验口径下的 \(\tau(q)=\log r_q\)）给出严格上包络
+  \[
+  f(\gamma)\ \le\ \inf_{q\ge 2}\bigl(\tau(q)-q\gamma\bigr)
+  \qquad\text{（命题 \ref{prop:pom-spectrum-legendre-upper}）},
+  \]
+  并在标准热力学形式条件下可提升为等号，从而把谱形压缩为 \(\{r_q\}\) 的可计算信息。
+  同时 Paley--Zygmund 下包络由 \((r_q,r_{2q})\) 直接给出（命题 \ref{prop:pom-spectrum-pz-lower}），并以亏损
+  \(
+  \delta(q):=\log\varphi-\underline f(q)
+  \)
+  量化“厚尾保证指数”的衰减（推论 \ref{cor:pom-spectrum-intermittency-deficit}）。
+  在 \(q=2,\dots,10\) 的审计点上，\(\delta(q)\) 随 \(q\) 增大显著上升，典型数值见表 \ref{tab:fold_collision_multifractal_envelope_pz_q10} 与图 \ref{fig:fold-collision-multifractal-envelope-pz}（注 \ref{rem:pom-spectrum-pz-numerics}）。
+  此外，由有限分辨率下的低阶矩 \((\mu_m,\sigma_m^2)\) 可得到“典型窗平台”计数下界
+  \[
+  \card{A_m(\varepsilon)}
+  \ \ge\
+  \left(1-\frac{\sigma_m^2}{m\varepsilon^2}\right)
+  \exp\!\bigl(m(\log 2-\mu_m-\varepsilon)\bigr),
+  \qquad
+  A_m(\varepsilon):=\{x\in X_m:\ \abs{\gamma_m(x)-\mu_m}\le \varepsilon\}
+  \]
+  （命题 \ref{prop:pom-spectrum-finite-m-plateau}），为厚尾与典型集的并置提供完全可审计的有限 \(m\) 接口。
+
+  \item \textbf{碰撞核主极点留数常数的代数证书：仅由 \texorpdfstring{$(\chi_A,r)$}{(chiA,r)} 决定。}
+  对有限状态碰撞核的邻接矩阵 \(A\)，令 \(\chi_A(\lambda)=\det(\lambda I-A)\)（首项归一），并设 Perron 根 \(r=\rho(A)\) 为单根。
+  定义
+  \(
+  \zeta_A(z)=\det(I-zA)^{-1}
+  \)
+  与主极点留数常数
+  \[
+  C(A):=\lim_{z\to 1/r}(1-rz)\,\zeta_A(z).
+  \]
+  则有闭式恒等式
+  \[
+  C(A)=\frac{r^{d-1}}{\chi_A'(r)}
+  =\prod_{\lambda\in\sigma(A)\setminus\{r\}}\left(1-\frac{\lambda}{r}\right)^{-1},
+  \qquad d:=\deg\chi_A,
+  \]
+  因而一旦 \(\chi_A\) 与 \(r\) 被独立审计，\(C(A)\) 即可在不求全谱的前提下精确重建；并可进一步给出整系数最小多项式级证书（见定义 \ref{def:pom-collision-zeta-a4} 及表 \ref{tab:collision_kernel_A2_finite_part}--\ref{tab:collision_kernel_A4_finite_part} 的审计输出）。
+
+  \item \textbf{零点集 \texorpdfstring{$\card{\mathcal{Z}_m}$}{|Z_m|} 的“约数尺度”精确计数：从扫频到扫 \texorpdfstring{$m+2$}{m+2} 的约数。}
+  当 \(F_{m+2}\) 为偶数时，零点集 \(\mathcal{Z}_m\) 可表示为若干等差余类的并，从而其精确计算可降维为：
+  枚举 \(d\mid(m+2)\) 的少量约数并做有限次整除筛选，构造相应同余类并用有限交集兼容判据计数，最后以 inclusion--exclusion 完成并集精确计数。
+  该流程把“扫所有频率 \(k\)”降为“扫 \(m+2\) 的约数结构”，可直接嵌入审计流水线（见注 \ref{rem:fold-zero-coset-algorithm}；实现脚本 \texttt{\detokenize{scripts/exp_fold_zero_coset_union_count.py}}）。
+\end{enumerate}
+

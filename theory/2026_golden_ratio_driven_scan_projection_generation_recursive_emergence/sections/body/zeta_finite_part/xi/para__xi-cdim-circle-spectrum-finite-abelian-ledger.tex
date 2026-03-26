@@ -1,0 +1,562 @@
+\paragraph{圆维谱：有限 torsion 账本的相位—寄存器 Pareto 前沿}
+本段在定义 \ref{def:circle-dimension}--\ref{def:half-circle-dimension} 的圆维记号背景下，给出一类完全可计算的“相位圆数 \(\leftrightarrow\) 离散账本规模”权衡谱。
+其目标并非改变结构圆维（有限标签在结构层恒满足 \(\cdim=0\)），而是把实现层的“可逆分流”约束压缩为一条可逆恢复的资源谱，从而将有限交换账本的同构类型以最小剩余函数的形式显式化。
+
+\begin{definition}[相位—寄存器实现与最小剩余函数]\label{def:xi-cdim-minimal-residual-function}
+设 \(F\) 为有限交换群，\(k\in\NN\cup\{0\}\)。
+称 \((\alpha,\beta)\) 为 \(F\) 的一个\textbf{\(k\)-相位—寄存器实现}，若存在有限交换群 \(R\) 及群同态
+\[
+\alpha:F\to \TT^{k},\qquad \beta:F\to R
+\]
+使得联合映射
+\[
+(\alpha,\beta):F\to \TT^{k}\times R
+\]
+为单射。
+\par
+定义 \(F\) 的\textbf{最小剩余寄存器阶函数}为
+\[
+\Lambda_F(k):=\min\Bigl\{|R|:\ \exists\,(\alpha,\beta)\ \text{为 }k\text{-相位—寄存器实现}\Bigr\}\in\NN.
+\]
+并定义 \(F\) 的\textbf{圆维谱}为有限序列
+\[
+\operatorname{Spec}_{\circ}(F):=\bigl(\Lambda_F(0),\Lambda_F(1),\dots,\Lambda_F(t)\bigr),
+\qquad
+t:=\min\{k\ge 0:\Lambda_F(k)=1\}.
+\]
+\end{definition}
+
+\begin{lemma}[有限交换群的 \(k\)-生成商最大阶]\label{lem:xi-cdim-k-generated-quotient-max-order}
+设 \(F\cong \ZZ_{n_1}\oplus\cdots\oplus\ZZ_{n_t}\) 为有限交换群的不变量因子分解（\(1<n_1\mid\cdots\mid n_t\)）。
+若 \(Q\) 为 \(F\) 的商群且可由不超过 \(k\) 个元素生成，则
+\[
+|Q|\ \le\ \prod_{i=t-k+1}^{t}n_i.
+\]
+并且该上界由投影商 \(F\twoheadrightarrow \ZZ_{n_{t-k+1}}\oplus\cdots\oplus\ZZ_{n_t}\) 达到。
+\end{lemma}
+\begin{proof}
+达到性由尾部投影立即给出，故只需证明上界。
+\par
+设 \(Q\cong F/K\)。对任意素数 \(p\) 记 \(F_p\)、\(Q_p\) 为其 \(p\)-primary 分量，则 \(Q_p\) 为 \(F_p\) 的商群且同样可由不超过 \(k\) 个元素生成。
+写
+\(
+e_{i,p}:=v_p(n_i)\in\ZZ_{\ge 0}
+\)。
+则
+\[
+F_p\ \cong\ \ZZ_{p^{e_{1,p}}}\oplus\cdots\oplus\ZZ_{p^{e_{t,p}}},\qquad
+0\le e_{1,p}\le\cdots\le e_{t,p}.
+\]
+对有限 \(p\)-群 \(A\) 令
+\[
+a_r(A):=\dim_{\FF_p}\bigl(p^{r-1}A/p^rA\bigr)\qquad(r\ge 1).
+\]
+由链 \(A\supset pA\supset p^2A\supset\cdots\supset 0\)，有
+\(
+|A|=\prod_{r\ge 1}\bigl|p^{r-1}A/p^rA\bigr|
+\)
+从而
+\begin{equation}\label{eq:xi-cdim-kquot-logp-sum}
+\log_p|A|=\sum_{r\ge 1}a_r(A).
+\end{equation}
+对 \(A=F_p\)，由直和分解可知
+\(
+a_r(F_p)=\#\{i:\ e_{i,p}\ge r\}
+\)。
+对 \(A=Q_p\)，商映射 \(F_p\twoheadrightarrow Q_p\) 在每个层级诱导满射
+\(
+p^{r-1}F_p/p^rF_p \twoheadrightarrow p^{r-1}Q_p/p^rQ_p
+\)，
+故
+\(
+a_r(Q_p)\le a_r(F_p)
+\)。
+又因 \(Q_p\) 可由 \(\le k\) 个元素生成，故
+\(
+a_1(Q_p)=\dim_{\FF_p}(Q_p/pQ_p)\le k
+\)，并由单调性 \(a_{r+1}(Q_p)\le a_r(Q_p)\) 得对所有 \(r\ge 1\) 有 \(a_r(Q_p)\le k\)。
+于是结合 \eqref{eq:xi-cdim-kquot-logp-sum} 得
+\[
+\log_p|Q_p|
+\le
+\sum_{r\ge 1}\min\{a_r(F_p),k\}.
+\]
+最后记 \(a_r:=a_r(F_p)=\#\{i:\ e_{i,p}\ge r\}\)。
+有恒等式
+\begin{equation}\label{eq:xi-cdim-min-sum-largest-exponents}
+\sum_{r\ge 1}\min\{a_r,k\}=\sum_{i=t-k+1}^{t}e_{i,p},
+\end{equation}
+其证明为：将左端改写为
+\(
+\sum_{r\ge 1}\sum_{j=1}^{k}\ind_{\{a_r\ge j\}}
+=\sum_{j=1}^{k}\sum_{r\ge 1}\ind_{\{a_r\ge j\}}
+\)；
+而 \(a_r\ge j\) 当且仅当第 \(t-j+1\) 个最大指数满足 \(e_{t-j+1,p}\ge r\)，故内层求和等于 \(e_{t-j+1,p}\)，从而得到 \eqref{eq:xi-cdim-min-sum-largest-exponents}。
+因此
+\(
+|Q_p|\le p^{\sum_{i=t-k+1}^{t}e_{i,p}}=\prod_{i=t-k+1}^{t}p^{e_{i,p}}
+\)。
+对所有素数相乘即得
+\[
+|Q|=\prod_{p}|Q_p|
+\le
+\prod_{p}\prod_{i=t-k+1}^{t}p^{e_{i,p}}
+\;=\;
+\prod_{i=t-k+1}^{t}\prod_{p}p^{v_p(n_i)}
+\;=\;
+\prod_{i=t-k+1}^{t}n_i,
+\]
+完成证明。
+\end{proof}
+
+\begin{theorem}[闭式 Pareto 前沿：\texorpdfstring{$\Lambda_F(k)$}{Lambda(k)} 的显式公式]\label{thm:xi-cdim-lambda-closed-form}
+设有限交换群 \(F\) 的不变量因子分解为
+\[
+F\ \cong\ \ZZ_{n_1}\oplus\cdots\oplus\ZZ_{n_t},
+\qquad
+1<n_1\mid n_2\mid\cdots\mid n_t,
+\]
+其中 \((n_1,\dots,n_t)\) 唯一确定。
+则对任意 \(k\ge 0\)，有
+\[
+\Lambda_F(k)=
+\begin{cases}
+\displaystyle \prod_{i=1}^{t-k} n_i,& 0\le k\le t,\\[6pt]
+1,& k\ge t.
+\end{cases}
+\]
+特别地，\(\Lambda_F(k)=1\) 当且仅当 \(k\ge t\)，从而定义 \ref{def:xi-cdim-minimal-residual-function} 中的 \(t\) 等于 \(F\) 的不变量因子个数（亦即最小生成元数）。
+\end{theorem}
+\begin{proof}
+取任意 \(k\)-相位—寄存器实现 \((\alpha,\beta)\) 及其残余群 \(R\)，并记
+\(
+K:=\ker(\alpha)\le F
+\)。
+由于 \((\alpha,\beta)\) 单射，\(\beta|_{K}:K\to R\) 亦为单射，故
+\begin{equation}\label{eq:xi-cdim-lambda-lb1}
+|R|\ \ge\ |K|.
+\end{equation}
+另一方面，\(\alpha(F)\) 是 \(\TT^{k}\) 的有限子群，因而同构于某个 \((\mu_N)^k\cong(\ZZ_{N})^{k}\) 的子群（对某个 \(N\)），从而可由不超过 \(k\) 个元素生成。
+记 \(Q:=\alpha(F)\cong F/K\)。
+由引理 \ref{lem:xi-cdim-k-generated-quotient-max-order}（注意 \(Q\) 可由不超过 \(k\) 个元素生成）得
+\(
+|Q|\le \prod_{i=t-k+1}^{t}n_i
+\)。
+由 \(|K|=|F|/|Q|\) 与 \eqref{eq:xi-cdim-lambda-lb1} 得
+\[
+|R|\ \ge\ |K|
+\ \ge\
+\frac{\prod_{i=1}^{t}n_i}{\prod_{i=t-k+1}^{t}n_i}
+\ =\
+\prod_{i=1}^{t-k}n_i.
+\]
+从而 \(\Lambda_F(k)\ge \prod_{i=1}^{t-k}n_i\)（当 \(k\le t\)）。
+\par
+为构造达到等号的实现，写
+\[
+F\ \cong\ K_0\oplus Q_0,\qquad
+K_0:=\ZZ_{n_1}\oplus\cdots\oplus\ZZ_{n_{t-k}},\quad
+Q_0:=\ZZ_{n_{t-k+1}}\oplus\cdots\oplus\ZZ_{n_t}.
+\]
+令 \(\alpha\) 为投影到 \(Q_0\) 后将每个循环因子嵌入一维圆的根单位子群（从而得到 \(Q_0\hookrightarrow \TT^{k}\)）；
+令 \(R:=K_0\) 且 \(\beta\) 为投影到 \(K_0\)。
+则 \((\alpha,\beta)\) 显然为单射，且 \(|R|=|K_0|=\prod_{i=1}^{t-k}n_i\)，从而下界可达，给出所示闭式。
+当 \(k\ge t\) 时取 \(R\) 为平凡群即得 \(\Lambda_F(k)=1\)。
+\end{proof}
+
+\begin{corollary}[圆维谱的完备性：由 \texorpdfstring{$\operatorname{Spec}_{\circ}(F)$}{Spec(F)} 恢复不变量因子]\label{cor:xi-cdim-spectrum-completeness}
+沿用定理 \ref{thm:xi-cdim-lambda-closed-form} 的记号。
+令 \(t=\min\{k:\Lambda_F(k)=1\}\)。
+则对 \(k=0,1,\dots,t-1\) 有递推恒等式
+\[
+n_{t-k}=\frac{\Lambda_F(k)}{\Lambda_F(k+1)}.
+\]
+因此 \(\operatorname{Spec}_{\circ}(F)\) 与不变量因子序列 \((n_1,\dots,n_t)\) 互相可逆确定，从而决定 \(F\) 的同构类型。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-cdim-lambda-closed-form}，
+\(
+\Lambda_F(k)=\prod_{i=1}^{t-k}n_i
+\)
+与
+\(
+\Lambda_F(k+1)=\prod_{i=1}^{t-k-1}n_i
+\)
+相除即得。
+其余断言由不变量因子分解唯一性立得。
+\end{proof}
+
+\begin{proposition}[有限生成交换群的圆维—账本可计算签名]\label{prop:xi-cdim-circle-ledger-signature}
+对任意有限生成交换群 \(G\)，记其 torsion 子群为
+\(
+G_{\mathrm{tor}}:=\{x\in G:\ \exists\,n\ge 1,\ nx=0\}
+\)。
+定义
+\[
+\Sigma_{\circ}^{\mathrm{ab}}(G)
+:=\Bigl(\cdim(G),\ \operatorname{Spec}_{\circ}(G_{\mathrm{tor}})\Bigr).
+\]
+则：
+\begin{enumerate}
+  \item \(\Sigma_{\circ}^{\mathrm{ab}}(G)\) 可由 \(G\cong \ZZ^{d}\oplus G_{\mathrm{tor}}\) 的分解计算得到，并满足 \(\cdim(G)=d\)；
+  \item \(\Sigma_{\circ}^{\mathrm{ab}}(G)\) 决定 \(G\) 的同构类型：若 \(G,H\) 为有限生成交换群，则
+  \[
+  \Sigma_{\circ}^{\mathrm{ab}}(G)=\Sigma_{\circ}^{\mathrm{ab}}(H)
+  \quad\Longleftrightarrow\quad
+  G\cong H.
+  \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+有限生成交换群结构定理给出 \(G\cong \ZZ^{d}\oplus G_{\mathrm{tor}}\)，且该分解在同构意义下唯一。
+由定义 \ref{def:circle-dimension}，\(\widehat{\ZZ^{d}}\cong \TT^{d}\) 的连通分量维数为 \(d\)，而 \(\widehat{G_{\mathrm{tor}}}\) 有限从而不贡献连通分量维数，故 \(\cdim(G)=d\)。
+再由推论 \ref{cor:xi-cdim-spectrum-completeness}，\(\operatorname{Spec}_{\circ}(G_{\mathrm{tor}})\) 可逆确定 \(G_{\mathrm{tor}}\) 的不变量因子，从而确定 torsion 部分的同构类型；与秩 \(d\) 合并即得结论。
+\end{proof}
+
+\begin{definition}[圆维谱配分多项式]\label{def:xi-cdim-spectrum-partition-polynomial}
+对有限交换群 \(F\)（记 \(t=\min\{k:\Lambda_F(k)=1\}\)），定义其圆维谱配分多项式为
+\[
+Z_F(z):=\sum_{k=0}^{t}\Lambda_F(k)\,z^{k}\ \in\ \RR[z].
+\]
+\end{definition}
+
+\begin{theorem}[零点环带界：圆维谱配分多项式的 Lee--Yang 型几何定律]\label{thm:xi-cdim-spectrum-zeros-annulus}
+设 \(F\cong \ZZ_{n_1}\oplus\cdots\oplus\ZZ_{n_t}\) 为定理 \ref{thm:xi-cdim-lambda-closed-form} 的不变量因子分解，并令 \(Z_F\) 如定义 \ref{def:xi-cdim-spectrum-partition-polynomial}。
+则 \(Z_F\) 的全部零点满足环带约束
+\[
+n_1\ \le\ |z|\ \le\ n_t.
+\]
+\end{theorem}
+\begin{proof}
+令 \(a_k:=\Lambda_F(k)\)（\(0\le k\le t\)）。由定理 \ref{thm:xi-cdim-lambda-closed-form} 得
+\[
+\frac{a_k}{a_{k+1}}=\frac{\Lambda_F(k)}{\Lambda_F(k+1)}=n_{t-k}\qquad(0\le k<t),
+\]
+从而
+\[
+\min_{0\le k<t}\frac{a_k}{a_{k+1}}=n_1,\qquad
+\max_{0\le k<t}\frac{a_k}{a_{k+1}}=n_t.
+\]
+对具有正系数的多项式 \(P(z)=\sum_{k=0}^{t}a_k z^k\)，经典 Enestr\"om--Kakeya 环带定理断言：其零点均落在
+\(
+\min_{k}\frac{a_k}{a_{k+1}}\le |z|\le \max_{k}\frac{a_k}{a_{k+1}}
+\)
+所界定的环带内。
+将 \(P=Z_F\) 代入即得结论。
+\end{proof}
+
+\begin{corollary}[同阶均匀 torsion 的圆定律]\label{cor:xi-cdim-spectrum-homocyclic-circle-law}
+若 \(F\cong (\ZZ_{n})^{m}\)（\(n>1\)），则
+\[
+Z_F(z)=\sum_{k=0}^{m} n^{m-k}z^{k}=n^{m}\sum_{k=0}^{m}(z/n)^{k},
+\]
+其零点恰为
+\[
+z_j=n\,e^{\frac{2\pi i j}{m+1}},\qquad j=1,2,\dots,m.
+\]
+特别地，当 \(n=p\) 为素数且 \(F\cong (\ZZ_{p})^{m}\) 时，零点严格落在圆 \(|z|=p\) 上并等角分布。
+\end{corollary}
+\begin{proof}
+由几何级数闭式 \(1+w+\cdots+w^m=(w^{m+1}-1)/(w-1)\) 得
+\(
+Z_F(z)=n^{m}\frac{(z/n)^{m+1}-1}{z/n-1}
+\)。
+因此零点由 \((z/n)^{m+1}=1\) 且 \(z\ne n\) 给出，即所示集合。
+\end{proof}
+
+\begin{example}[典型对象的“同圆维不同谱”判别]\label{ex:xi-cdim-same-cdim-different-spectrum}
+\begin{enumerate}
+  \item \textbf{有限域的加法群.}
+        对任意素数 \(p\) 与 \(m\ge 1\)，有 \((\FF_{p^m},+)\cong (\ZZ_{p})^{m}\)。
+        因而由推论 \ref{cor:xi-cdim-spectrum-homocyclic-circle-law}，其 \(Z\)-零点严格落在 \(|z|=p\) 上，并由半径 \(p\) 给出一个仅依赖底素数的刚性几何指纹。
+  \item \textbf{类群与任意有限 torsion 账本.}
+        对任意数域 \(K\)，理想类群 \(\mathrm{Cl}(K)\) 为有限交换群且 \(\cdim(\mathrm{Cl}(K))=0\)。
+        推论 \ref{cor:xi-cdim-spectrum-completeness} 表明：即便结构圆维同为零，\(\operatorname{Spec}_{\circ}(\mathrm{Cl}(K))\) 仍可作为同构类型的完备离散签名。
+  \item \textbf{同圆维的严格区分范式.}
+        令 \(G_1=\ZZ^{d}\oplus \ZZ_{n}\)、\(G_2=\ZZ^{d}\oplus \ZZ_{m}\)。
+        则 \(\cdim(G_1)=\cdim(G_2)=d\)，但
+        \(
+        \operatorname{Spec}_{\circ}(\ZZ_{n})=(n,1)\neq(m,1)=\operatorname{Spec}_{\circ}(\ZZ_{m})
+        \)
+        当 \(n\neq m\)，从而 \(\Sigma_{\circ}^{\mathrm{ab}}(G_1)\neq \Sigma_{\circ}^{\mathrm{ab}}(G_2)\)。
+\end{enumerate}
+\end{example}
+
+\paragraph{圆维的可观测重构：素数局部账本、解析极点与相位精度指数}
+以下结果把结构层圆维 \(\cdim\) 与实现层“有限分辨率可逆性”联结到同一组可计算对象上：
+一方面，\(|G/nG|\) 形成 Dirichlet 解析账本并将 \(\cdim\) 编码为收敛临界指数；
+另一方面，\(\ZZ^r\to\TT^d\) 的相位压缩必然产生 \(B^{-r/d}\) 量级的最小分离衰减，从而给出不可规避的精度守恒律。
+
+\begin{theorem}[圆维 \texorpdfstring{$\zeta$}{zeta} 函数的欧拉分解与收敛界]\label{thm:xi-cdim-zeta-euler-abscissa-locality}
+设 \(G\) 为有限生成离散交换群，并记
+\[
+r:=\cdim(G)\in\NN.
+\]
+对每个 \(n\ge 1\) 定义
+\[
+a_G(n):=\card{G/nG},
+\qquad
+\zeta_{\circ}(G;s):=\sum_{n\ge 1}a_G(n)\,n^{-s}.
+\]
+则成立：
+\begin{enumerate}
+  \item \(a_G\) 为乘法函数，故在收敛半平面内
+  \[
+  \zeta_{\circ}(G;s)=\prod_{p}\left(\sum_{k\ge 0}a_G(p^k)\,p^{-ks}\right).
+  \]
+  \item \(\zeta_{\circ}(G;\cdot)\) 的收敛 abscissa 为
+  \[
+  \sigma_c\!\bigl(\zeta_{\circ}(G;\cdot)\bigr)=r+1.
+  \]
+  \item 若 \(G\cong \ZZ^r\oplus F\)（\(F\) 有限），则存在仅依赖于有限坏素数集
+  \[
+  S(G):=\{p:\ p\mid |F|\}
+  \]
+  的欧拉修正因子 \(E_G(s)\)，使
+  \[
+  \zeta_{\circ}(G;s)=\zeta(s-r)\,E_G(s),
+  \]
+  其中 \(E_G(s)\) 为 \(S(G)\) 上有理局部因子的有限乘积。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+先证乘法性。取 \(\gcd(m,n)=1\)，考虑
+\[
+\phi:G\to G/mG\times G/nG,\qquad g\mapsto (g\bmod mG,\ g\bmod nG).
+\]
+有 \(\ker\phi=mG\cap nG\)。由 Bezout 等式取 \(u,v\in\ZZ\) 使 \(um+vn=1\)。
+若 \(g\in mG\cap nG\)，写 \(g=ma=nb\)，则
+\[
+g=(um+vn)g=um(nb)+vn(ma)=mn(ub+va)\in mnG,
+\]
+故 \(mG\cap nG=mnG\)。
+另一方面，任取 \((x\bmod mG,\ y\bmod nG)\)，令 \(g:=vnx+umy\)，则
+\[
+g-x=um(y-x)\in mG,\qquad g-y=vn(x-y)\in nG,
+\]
+故 \(\phi\) 满射。
+于是 \(G/mnG\cong G/mG\times G/nG\)，即
+\[
+a_G(mn)=a_G(m)a_G(n),
+\]
+故 \(a_G\) 为乘法函数，欧拉积成立。
+
+再证收敛界。写 \(G\cong \ZZ^r\oplus F\)（\(F\) 有限），则
+\[
+G/nG\cong (\ZZ/n\ZZ)^r\oplus (F/nF),
+\qquad
+a_G(n)=n^r\,|F/nF|.
+\]
+由 \(1\le |F/nF|\le |F|\)，得
+\[
+\sum_{n\ge 1}n^{r-s}
+\le
+\zeta_{\circ}(G;s)
+\le
+|F|\sum_{n\ge 1}n^{r-s}.
+\]
+故其收敛当且仅当 \(\Re(s)>r+1\)，从而 \(\sigma_c=r+1\)。
+
+最后证局部性。对 \(p\nmid |F|\)，乘以 \(p^k\) 在 \(F\) 上为自同构，故 \(F/p^kF\) 平凡，因而
+\[
+\sum_{k\ge 0}a_G(p^k)p^{-ks}
+=
+\sum_{k\ge 0}p^{k(r-s)}
+=
+\frac{1}{1-p^{r-s}}.
+\]
+把这些好素数局部因子相乘得到 \(\zeta(s-r)\)；坏素数仅在 \(S(G)\) 中有限多个，其局部比值合并为有限欧拉修正 \(E_G(s)\)。证毕。
+\end{proof}
+
+\input{para__xi-cdim-circle-zeta-hom-localization}
+
+\begin{theorem}[由素数账本 \texorpdfstring{$|G/p^kG|$}{|G/p^kG|} 完整重构有限生成交换群]\label{thm:xi-cdim-prime-ledger-complete-reconstruction}
+设 \(G,H\) 为有限生成离散交换群。若对所有素数 \(p\) 与所有 \(k\ge 1\) 都有
+\[
+|G/p^kG|=|H/p^kH|,
+\]
+则 \(G\cong H\)。
+特别地，若对所有 \(n\ge 1\) 有 \(|G/nG|=|H/nH|\)，亦推出 \(G\cong H\)。
+\end{theorem}
+\begin{proof}
+写
+\[
+G\cong \ZZ^{r_G}\oplus F,\qquad H\cong \ZZ^{r_H}\oplus F',
+\]
+其中 \(F,F'\) 有限。
+定义
+\[
+e_G(p):=\log_p|G/pG|,\qquad e_H(p):=\log_p|H/pH|.
+\]
+由
+\[
+|G/pG|=p^{r_G}|F/pF|,\qquad |H/pH|=p^{r_H}|F'/pF'|
+\]
+知 \(e_G(p)\ge r_G\)、\(e_H(p)\ge r_H\)，且当 \(p\nmid |F|\)（分别 \(p\nmid |F'|\)）时取等。
+故
+\[
+r_G=\min_p e_G(p),\qquad r_H=\min_p e_H(p).
+\]
+由假设 \(e_G(p)=e_H(p)\) 对所有 \(p\) 成立，得 \(r_G=r_H=:r\)。
+
+固定素数 \(p\)，定义
+\[
+b_{G,p}(k):=v_p(|G/p^kG|)-kr,\qquad
+b_{H,p}(k):=v_p(|H/p^kH|)-kr.
+\]
+把 \(F\) 的 \(p\)-primary 分量写为
+\[
+F_p\cong \bigoplus_{i=1}^{t_p}\ZZ/p^{\alpha_i}\ZZ,\qquad
+\alpha_1\ge\cdots\ge\alpha_{t_p}\ge 1.
+\]
+则
+\[
+b_{G,p}(k)=v_p(|F_p/p^kF_p|)=\sum_{i=1}^{t_p}\min(\alpha_i,k).
+\]
+令
+\[
+m_{G,p}(k):=b_{G,p}(k)-b_{G,p}(k-1)=\#\{i:\alpha_i\ge k\},
+\]
+则
+\[
+\#\{i:\alpha_i=k\}=m_{G,p}(k)-m_{G,p}(k+1).
+\]
+因此序列 \(\{b_{G,p}(k)\}_{k\ge 1}\) 唯一决定 \(F_p\) 的不变量因子；同理对 \(H\) 成立。
+由假设 \(b_{G,p}(k)=b_{H,p}(k)\)，得所有 \(p\)-primary 分量一致，故 \(F\cong F'\)。
+再结合 \(r_G=r_H\)，即得 \(G\cong H\)。
+
+若 \(|G/nG|=|H/nH|\) 对所有 \(n\) 成立，则取 \(n=p^k\) 即回到上式条件。证毕。
+\end{proof}
+
+\begin{proposition}[好素数一次观测给出圆维，坏素数支撑给出有限账本]\label{prop:xi-cdim-good-prime-readout-and-bad-support}
+设 \(G\cong \ZZ^r\oplus F\)（\(r=\cdim(G)\)），并记
+\[
+S(G):=\{p:\ p\mid |F|\}.
+\]
+则：
+\begin{enumerate}
+  \item 对任意 \(p\notin S(G)\) 与任意 \(k\ge 1\)，
+  \[
+  |G/p^kG|=p^{kr}.
+  \]
+  \item 若某素数 \(p\) 满足 \(|G/pG|>p^r\)，则 \(p\in S(G)\)。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+若 \(p\nmid |F|\)，则乘以 \(p^k\) 在 \(F\) 上可逆，故 \(F/p^kF\) 平凡，于是
+\[
+|G/p^kG|=|(\ZZ/p^k\ZZ)^r|\,|F/p^kF|=p^{kr}.
+\]
+反过来，若 \(p\mid |F|\)，则 \(F/pF\) 非平凡，故
+\[
+|G/pG|=p^r|F/pF|>p^r.
+\]
+命题两条即得。证毕。
+\end{proof}
+
+\input{para__xi-godel-loewner-exterior-volume-holography}
+
+\begin{theorem}[单位圆相位压缩的混叠指数等于 \texorpdfstring{$r/d$}{r/d}]\label{thm:xi-cdim-phase-compression-aliasing-exponent}
+取 \(\TT:=\RR/\ZZ\cong S^1\)，并令
+\[
+\mathrm{dist}_{\TT^d}(x,y):=\min_{m\in\ZZ^d}|x-y-m|_{\infty}.
+\]
+对群同态 \(\phi:\ZZ^r\to\TT^d\)，定义
+\[
+Q_B:=\{u\in\ZZ^r:\ |u|_{\infty}\le B\},
+\]
+\[
+\Delta_B(\phi):=
+\min\Bigl\{\mathrm{dist}_{\TT^d}\!\bigl(\phi(u),\phi(v)\bigr):
+u\neq v,\ u,v\in Q_B\Bigr\}.
+\]
+再定义
+\[
+\alpha_d:=
+\inf_{\substack{\phi\in\mathrm{Hom}(\ZZ^r,\TT^d)\\ \phi\ \text{单射}}}
+\ \limsup_{B\to\infty}\frac{\log(1/\Delta_B(\phi))}{\log B}.
+\]
+则
+\[
+\alpha_d=\frac{r}{d}.
+\]
+\end{theorem}
+\begin{proof}
+先证下界。对任意单射 \(\phi\)，\(\phi(Q_B)\) 有 \((2B+1)^r\) 个不同点。
+若 \(\Delta_B(\phi)\ge \varepsilon\)，则这些点两两 \(\varepsilon\)-分离。
+而 \(\TT^d\) 中任意 \(\varepsilon\)-分离集的基数至多 \(C_d\varepsilon^{-d}\)（由 \(\ell^\infty\)-球装填/网格覆盖）。
+故
+\[
+(2B+1)^r\le C_d\,\Delta_B(\phi)^{-d},
+\qquad
+\Delta_B(\phi)\le C'_d\,B^{-r/d}.
+\]
+于是
+\[
+\limsup_{B\to\infty}\frac{\log(1/\Delta_B(\phi))}{\log B}\ge \frac{r}{d}.
+\]
+对所有单射 \(\phi\) 取下确界得 \(\alpha_d\ge r/d\)。
+
+再证上界。由经典 Schmidt 型坏可逼近系统存在定理（见 \cite{Schmidt1969BadlyApproximableSystems}），存在矩阵
+\[
+A\in M_{d\times r}(\RR),\quad c>0,
+\]
+使得对所有 \(m\in\ZZ^r\setminus\{0\}\) 有
+\[
+\mathrm{dist}_{\TT^d}(Am,0)\ge c\,|m|_{\infty}^{-r/d}.
+\]
+定义 \(\phi_A(u):=Au\bmod\ZZ^d\)。上式立即推出 \(\phi_A\) 单射。
+对任意不同 \(u,v\in Q_B\)，令 \(m=u-v\neq 0\)，则 \(|m|_{\infty}\le 2B\)，故
+\[
+\mathrm{dist}_{\TT^d}(\phi_A(u),\phi_A(v))
+=
+\mathrm{dist}_{\TT^d}(Am,0)
+\ge c(2B)^{-r/d}.
+\]
+即
+\[
+\Delta_B(\phi_A)\ge c'B^{-r/d}.
+\]
+于是
+\[
+\limsup_{B\to\infty}\frac{\log(1/\Delta_B(\phi_A))}{\log B}\le \frac{r}{d},
+\]
+从而 \(\alpha_d\le r/d\)。
+结合上下界得 \(\alpha_d=r/d\)。证毕。
+\end{proof}
+
+\begin{corollary}[圆维—精度守恒律：相位压缩的可逆实现下界]\label{cor:xi-cdim-precision-conservation-law}
+在定理 \ref{thm:xi-cdim-phase-compression-aliasing-exponent} 的设定下，设实现层相位分辨率为 \(\varepsilon>0\)：当两点距离 \(<\varepsilon\) 时不可区分。
+若要求在 \(Q_B\) 上实现 \(\varepsilon\)-意义下可逆解码，则必须满足
+\[
+\varepsilon\ \lesssim\ B^{-r/d},
+\]
+等价地，
+\[
+d\log\frac1\varepsilon\ \gtrsim\ r\log B.
+\]
+\end{corollary}
+\begin{proof}
+对任意单射 \(\phi\)，由定理 \ref{thm:xi-cdim-phase-compression-aliasing-exponent} 证明中的装填估计，有
+\[
+\Delta_B(\phi)\le C_d' B^{-r/d}.
+\]
+若要在分辨率 \(\varepsilon\) 下可逆区分 \(Q_B\) 中所有点，必要条件是 \(\varepsilon<\Delta_B(\phi)\)。
+故必有 \(\varepsilon\le C_d'B^{-r/d}\)，即第一式。
+两侧取对数并吸收常数得第二式。证毕。
+\end{proof}
+
+\begin{remark}[半圆维口径下的同一指数]\label{rem:xi-cdim-plus-phase-precision-index}
+若 \(M\) 为有限生成可消去交换幺半群，且其 Grothendieck 群完成 \(G(M)\) 的自由秩为 \(r_M\)，则
+\[
+\cdim_{+}(M)=\frac{r_M}{2}.
+\]
+把上述定理应用到 \(G(M)\) 可得对应实现指数
+\[
+\frac{r_M}{d}=\frac{2\cdim_{+}(M)}{d}.
+\]
+因此半圆维同样给出可检验的精度收缩率，只是以 \(2\cdim_{+}\) 进入幂指数。
+\end{remark}
+
+\endinput
+

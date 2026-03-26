@@ -1,0 +1,150 @@
+\paragraph{一轴 \texorpdfstring{$p$}{p}-进寄存器的可逆化与最小资源界}
+本段聚焦于如下问题：在“有限对一折叠”导致的不可逆性中，何时可通过外置 prime-register 将因子映射提升为可回放的单射嵌入，以及该外置资源在 \(\operatorname{pcdim}\) 意义下的最小门槛。
+在本文语境下，“审计纪律”指寄存器态空间属于交换 profinite 群的逆极限范畴，并且对任意有限商像（例如模 \(p^N\) 的余数）均可由有限深度信息确定，从而寄存器可被有限深度读出且可由逆极限结构复核。
+\par
+\begin{conjecture}[一轴 prime-register 的普适可实现性与 \texorpdfstring{$\operatorname{pcdim}=1$}{pcdim=1} 资源阈值]\label{conj:conclusion-uniaxial-prime-register-universality}
+设 \(f:\Omega\to X\) 为零维紧致系统之间的连续有限对一因子映射，并要求外置寄存器 \(r\) 满足上述审计纪律。
+则存在某一素数 \(p\) 与连续映射 \(r:\Omega\to \ZZ_p\subset \widehat{\ZZ}\) 使 \(\omega\mapsto (f(\omega),r(\omega))\) 单射。
+并且若 \(f\) 非单射，则由 \(r(\Omega)\) 在 \(\ZZ_p\) 中生成的闭子群
+\(
+K:=\overline{\langle r(\Omega)\rangle}
+\)
+为无限闭子群，从而 \(\operatorname{pcdim}(K)=1\)。
+\end{conjecture}
+
+\begin{theorem}[有限状态可审计范畴下的一轴 \texorpdfstring{$\ZZ_p$}{Zp} 可逆化]\label{thm:conclusion-uniaxial-zp-replay-reversibilization}
+设 \(\Omega\subseteq A^{\NN}\) 为有限字母表 \(A\) 上的零维紧致系统，\(X\subseteq B^{\NN}\) 为另一有限字母表 \(B\) 上的零维紧致系统。
+令 \(f:\Omega\to X\) 为连续有限对一因子映射，并假定 \(f\) 可由有限状态转导器实现（等价地，经有限阶块共轭归约后可视为有限记忆/有限前瞻的滑动块码实现）。
+\par
+则存在素数 \(p\) 与连续映射
+\[
+r:\Omega\longrightarrow \ZZ_p\subset \widehat{\ZZ}
+\]
+使得
+\[
+\Omega\longrightarrow X\times \ZZ_p,\qquad \omega\longmapsto \bigl(f(\omega),r(\omega)\bigr)
+\]
+为单射；并且该 \(r\) 满足“有限深度可读出、逆极限可复核”的审计纪律：对任意 \(N\ge 1\)，余数 \(r(\omega)\bmod p^N\) 由 \(\omega\) 的有限前缀决定。
+\par
+若 \(f\) 非单射，则由
+\(
+K:=\overline{\langle r(\Omega)\rangle}\le \ZZ_p
+\)
+生成的闭子群 \(K\) 为无限群，从而 \(\operatorname{pcdim}(K)=1\)。
+\end{theorem}
+\begin{proof}
+取实现 \(f\) 的有限状态转导器，其内部状态集合记为 \(S\)。
+在每一步读入中，给定上一时刻状态 \(s\in S\) 与当前输出符号 \(x\in \mathrm{alph}(X)\)，可产生该输出的输入候选集合记为 \(\mathcal B(s,x)\subseteq A\)。
+由于系统有限状态且 \(f\) 有限对一，存在一致上界
+\[
+L:=\max_{s\in S,\ x\in\mathrm{alph}(X)}|\mathcal B(s,x)|<\infty.
+\]
+取素数 \(p>L\)，并对每对 \((s,x)\) 固定一个枚举
+\[
+\mathcal B(s,x)=\bigl\{a^{(0)}(s,x),\dots,a^{(|\mathcal B(s,x)|-1)}(s,x)\bigr\}.
+\]
+对任意 \(\omega\in\Omega\)，令 \(x=f(\omega)\)，并令 \((s_n)_{n\ge 0}\) 为转导器在读入 \(\omega\) 时的内部状态轨道。
+定义分支数字 \(d_n(\omega)\in\{0,1,\dots,p-1\}\) 为满足
+\[
+\omega_n=a^{(d_n(\omega))}\bigl(s_{n-1},x_n\bigr)
+\]
+的唯一指标（存在且唯一性由枚举与实际转移确定；并且 \(d_n(\omega)\) 只依赖有限步局部数据）。
+令
+\[
+r(\omega):=\sum_{n\ge 1} d_n(\omega)\,p^{n-1}\in\ZZ_p.
+\]
+则对任意 \(N\)，截断 \(r(\omega)\bmod p^N\) 仅依赖于有限多项 \((d_1(\omega),\dots,d_N(\omega))\)，而这些数字由 \(\omega\) 的有限前缀与有限状态递推确定；因此 \(r\) 连续并满足有限深度可读出与逆极限可复核。
+\par
+下证单射性。给定 \(\bigl(x,r(\omega)\bigr)\)，可由 \(p\)-进展开唯一读出全部数字 \(d_n(\omega)\)。
+由初态与递推规则，可逐步确定每一时刻 \(\omega_n\)（在集合 \(\mathcal B(s_{n-1},x_n)\) 中由 \(d_n(\omega)\) 选出唯一输入符号），从而 \(\omega\) 被唯一复原，故 \(\omega\mapsto (f(\omega),r(\omega))\) 单射。
+\par
+若 \(f\) 非单射，则存在 \(\omega\neq\omega'\) 使 \(f(\omega)=f(\omega')\)。由单射性得 \(r(\omega)\neq r(\omega')\)，令 \(\Delta:=r(\omega)-r(\omega')\neq 0\)。
+\(\ZZ_p\) 为无扭紧赋值环，其闭循环子群 \(\overline{\langle \Delta\rangle}\) 必为无限闭子群，且
+\(\overline{\langle \Delta\rangle}\subseteq \overline{\langle r(\Omega)\rangle}=K\)，故 \(K\) 亦无限。
+对任意无限闭子群 \(K\le \ZZ_p\)，有 \(K/pK\cong\FF_p\)，从而 \(\dim_{\FF_p}(K/pK)=1\) 且 \(\operatorname{pcdim}(K)=1\)。证毕。
+\end{proof}
+
+\begin{proposition}[任意深度歧义排除有限寄存器：\texorpdfstring{$\operatorname{pcdim}\ge 1$}{pcdim>=1} 的必要性]\label{prop:conclusion-pcdim-lowerbound-deep-ambiguity}
+在定理 \ref{thm:conclusion-uniaxial-zp-replay-reversibilization} 的设定下，进一步假定 \(f\) 具有任意深度歧义：对任意 \(N\ge 1\) 都存在 \(\omega\neq \omega'\) 使
+\[
+f(\omega)=f(\omega')\qquad\text{且}\qquad \omega_{[1,N]}=\omega'_{[1,N]}.
+\]
+则不存在取值于任意满足 \(\operatorname{pcdim}(K)=0\) 的交换 profinite 群 \(K\) 的连续寄存器 \(r:\Omega\to K\) 使得 \(\omega\mapsto (f(\omega),r(\omega))\) 单射。
+因此，在该审计纪律下使 \(f\) 可逆化的外置寄存器必满足 \(\operatorname{pcdim}\ge 1\)；与定理 \ref{thm:conclusion-uniaxial-zp-replay-reversibilization} 结合，\(\operatorname{pcdim}=1\) 为最小可行值。
+\end{proposition}
+\begin{proof}
+对拓扑有限生成的交换 profinite 群 \(K\)，若 \(\operatorname{pcdim}(K)=0\)，则 \(d_p(K)=0\) 对所有素数 \(p\) 成立，即 \(K/pK=0\)。
+这排除了 \(\ZZ_p\)-型无限分量；由拓扑有限生成的结构分解可知此时 \(K\) 只能由有限 \(p\)-群分量组成，从而 \(K\) 为有限离散群。
+\par
+令 \(r:\Omega\to K\) 连续。由于 \(K\) 离散且有限，\(r\) 的纤维 \(r^{-1}(k)\) 为开闭集。
+而 \(\Omega\subseteq A^{\NN}\) 的开闭集由有限长度柱集生成，故存在 \(N_0\) 使得 \(r(\omega)\) 仅依赖于前缀 \(\omega_{[1,N_0]}\)。
+由任意深度歧义，取 \(N=N_0\) 可得 \(\omega\neq\omega'\) 使 \(f(\omega)=f(\omega')\) 且 \(\omega_{[1,N_0]}=\omega'_{[1,N_0]}\)，从而 \(r(\omega)=r(\omega')\)，与单射性矛盾。证毕。
+\end{proof}
+
+\begin{proposition}[有限字母表审计轨道的单轴 \texorpdfstring{$p$}{p}-进回放编码]\label{prop:conclusion-uniaxial-padic-trace-encoding}
+设 \(E\) 为有限集合，考虑轨道空间 \(E^{\NN}\)（积拓扑）。
+则存在素数 \(p>|E|\) 与连续单射
+\[
+\mathrm{Enc}:E^{\NN}\longrightarrow \ZZ_p
+\]
+满足：对任意 \(N\ge 1\)，\(\mathrm{Enc}(\mathbf e)\bmod p^N\) 仅依赖于 \(\mathbf e\) 的前 \(N\) 项。
+\par
+因此，若某一审计/策略机在有限边集（或一般有限标记集）上生成的标记轨道 \(\mathbf e(\omega)\in E^{\NN}\) 满足
+\(\omega\mapsto\bigl(f(\omega),\mathbf e(\omega)\bigr)\) 单射（即标记轨道与纤维索引等价），
+则 \(\tilde r(\omega):=\mathrm{Enc}\bigl(\mathbf e(\omega)\bigr)\in\ZZ_p\) 给出同样的可回放嵌入：
+\[
+\omega\longmapsto \bigl(f(\omega),\tilde r(\omega)\bigr)
+\quad\text{仍为单射，且 }\tilde r(\omega)\bmod p^N\text{ 由有限前缀数据确定。}
+\]
+\end{proposition}
+\begin{proof}
+取素数 \(p>|E|\) 并固定单射 \(\delta:E\hookrightarrow\{0,1,\dots,p-1\}\)。
+如需将有限长度轨道统一为 \(E^{\NN}\) 形式，可向 \(E\) 增添一个吸收标记并在停机后重复该标记，从而不改变可回放信息。
+定义
+\[
+\mathrm{Enc}\bigl((e_t)_{t\ge 1}\bigr):=\sum_{t\ge 1}\delta(e_t)\,p^{t-1}\in\ZZ_p.
+\]
+该映射连续且由 \(p\)-进展开唯一性知其单射；并且模 \(p^N\) 的截断只涉及前 \(N\) 项，结论成立。证毕。
+\end{proof}
+
+\begin{proposition}[等价关系群胚的单轴可逆化约化]\label{prop:conclusion-relation-groupoid-reduction-zp}
+在定理 \ref{thm:conclusion-uniaxial-zp-replay-reversibilization} 的构造下，令
+\[
+\iota:\Omega\hookrightarrow X\times \ZZ_p,\qquad \iota(\omega):=\bigl(f(\omega),r(\omega)\bigr).
+\]
+考虑 \(\ZZ_p\) 按第二坐标平移作用于 \(X\times \ZZ_p\) 的变换群胚
+\(
+\mathcal{G}:=(X\times \ZZ_p)\rtimes \ZZ_p
+\)。
+则 \(f\) 的等价关系群胚
+\[
+\mathcal{R}_f:=\{(\omega,\omega')\in\Omega\times\Omega:\ f(\omega)=f(\omega')\}
+\]
+与约化群胚 \(\mathcal{G}|_{\iota(\Omega)}\) 同构。
+\end{proposition}
+\begin{proof}
+在 \(\mathcal{G}\) 中，箭头由三元组 \(((x,z),g)\) 表示，其源为 \((x,z)\)，靶为 \((x,z+g)\)。
+定义函子
+\[
+\Phi:\mathcal{R}_f\to \mathcal{G}|_{\iota(\Omega)},\qquad
+\Phi(\omega,\omega'):=\bigl(\iota(\omega),\,r(\omega')-r(\omega)\bigr).
+\]
+若 \(f(\omega)=f(\omega')\)，则 \(\iota(\omega)\) 与 \(\iota(\omega')\) 第一坐标相同，并且
+\[
+\bigl(f(\omega),\,r(\omega)+\bigl(r(\omega')-r(\omega)\bigr)\bigr)=\bigl(f(\omega'),r(\omega')\bigr),
+\]
+故 \(\Phi\) 良定且保持单位与合成。
+\par
+给定 \(\mathcal{G}|_{\iota(\Omega)}\) 中任一箭头 \(((x,z),g)\)，其源与靶均落在 \(\iota(\Omega)\) 内。
+由 \(\iota\) 单射，存在唯一 \(\omega,\omega'\in\Omega\) 使 \(\iota(\omega)=(x,z)\) 且 \(\iota(\omega')=(x,z+g)\)，从而 \(f(\omega)=x=f(\omega')\) 且 \(\Phi(\omega,\omega')=((x,z),g)\)。
+因此 \(\Phi\) 为群胚同构。证毕。
+\end{proof}
+
+\begin{remark}[与对称性扩张的形式接口]\label{rem:conclusion-zp-reversibilization-symmetry-extension}
+命题 \ref{prop:conclusion-relation-groupoid-reduction-zp} 将“多对一折叠所诱导的非可逆等价关系”重写为在扩展空间 \(X\times \ZZ_p\) 上由可逆的一维 profinite 群作用所给出的约化。
+在仅关心形式结构的层面，该机制与对非可逆/范畴对称进行对称性扩张并用可逆对象实现的通用框架在语言上兼容（例如 SymTFT 语境中对非可逆对称的处理可参照 \cite{SchaferNamekiTiwariWarmanZhang2025SymTFTMixedStatesNonInvertible}）。
+\end{remark}
+
+\par
+由定理 \ref{thm:conclusion-uniaxial-zp-replay-reversibilization} 与命题 \ref{prop:conclusion-pcdim-lowerbound-deep-ambiguity} 可见，在有限状态可审计的折叠范畴中，一轴 \(\ZZ_p\) 既给出普适的可回放可逆化实现，也在任意深度歧义存在时构成不可再降的最小 \(\operatorname{pcdim}\) 资源门槛；命题 \ref{prop:conclusion-uniaxial-padic-trace-encoding} 与 \ref{prop:conclusion-relation-groupoid-reduction-zp} 进一步表明，该一轴化既可作用于审计轨道的可回放编码，也可在群胚层面实现对折叠等价关系的可逆化约化。
+

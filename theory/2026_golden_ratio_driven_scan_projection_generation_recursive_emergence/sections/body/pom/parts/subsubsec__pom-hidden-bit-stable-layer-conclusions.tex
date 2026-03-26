@@ -1,0 +1,246 @@
+% (User input window)
+
+\subsubsection{稳定层上的隐藏位约束：质量守恒、偏置与信息常数}\label{subsubsec:pom-hidden-bit-stable-layer-conclusions}
+引理 \ref{lem:pom-one-bit} 给出单隐藏位分解
+\(
+N(\omega)=V_m(\Fold_m(\omega))+b(\omega)F_{m+2}
+\)；
+其中隐藏位 \(b(\omega)\in\{0,1\}\) 表示是否触发权重 \(F_{m+2}\) 的溢出。
+在均匀微态基线 \(u_{\Omega_m}\) 下，该一比特残差不仅决定全局密度（定理 \ref{thm:pom-hidden-bit-count}），亦在稳定层上诱导一组与纤维细节解耦的守恒与信息常数。
+下列条目将这些后果压缩为可直接引用的结论链，并与折叠因子链 \(\overline P_m^{\square}\)（定义 \ref{def:pom-fold-factor-chain}）及谱零点判别（定理 \ref{thm:fold-spectrum-zero-criterion}）对齐。
+
+\begin{conclusion}[隐藏位质量守恒与 \texorpdfstring{$1/3$}{1/3} 的二进制截断]\label{con:pom-hidden-bit-mass-conservation-truncation}
+对任意 \(m\ge 1\)，对任意 \(x\in X_m\) 与 \(b\in\{0,1\}\) 定义纤维内分裂计数
+\[
+d_{m,b}(x):=\card{\{\omega\in\Omega_m:\ \Fold_m(\omega)=x,\ b(\omega)=b\}},
+\qquad
+d_m(x):=d_{m,0}(x)+d_{m,1}(x),
+\]
+并定义均匀微态的折叠推前分布 \(w_m(x):=d_m(x)/2^m\)（定义 \ref{def:pom-wm-baseline}）。
+再令 \(B_m:=\{\omega\in\Omega_m:\ b(\omega)=1\}\)（定理 \ref{thm:pom-hidden-bit-count}）。
+则有严格恒等式
+\[
+\boxed{\;
+\mathbb E_{X\sim w_m}\Bigl[\frac{d_{m,1}(X)}{d_m(X)}\Bigr]
+=\mathbb P_{\omega\sim\mathrm{Unif}(\Omega_m)}[b(\omega)=1]
+=\frac{\card{B_m}}{2^m}
+=\frac13-\frac{\varepsilon_m}{3\cdot 2^m}\;},
+\]
+其中 \(\varepsilon_m=1\)（\(m\) 偶）或 \(\varepsilon_m=2\)（\(m\) 奇）。
+因此在任意分辨率 \(m\) 上，“上层质量”（\(b=1\)）的加权占比不依赖于 \(\{d_m(x)\}\) 的细节，仅由二进制截断强制为 \(1/3+O(2^{-m})\)（另见注 \ref{rem:pom-hidden-bit-dyadic-trunc}）。
+\end{conclusion}
+
+\begin{conclusion}[隐藏位净偏置的全局钉死：\texorpdfstring{$-1/3+O(2^{-m})$}{-1/3+O(2^-m)}]\label{con:pom-hidden-bit-global-sign-bias}
+在结论 \ref{con:pom-hidden-bit-mass-conservation-truncation} 的记号下，定义纤维内符号偏置
+\[
+\beta(x):=\frac{d_{m,1}(x)-d_{m,0}(x)}{d_m(x)}
+=2\frac{d_{m,1}(x)}{d_m(x)}-1.
+\]
+则在均匀推前 \(w_m\) 下有精确恒等式
+\[
+\boxed{\;
+\mathbb E_{X\sim w_m}\bigl[\beta(X)\bigr]
+=2\,\mathbb P[b(\omega)=1]-1
+=-\frac13-\frac{2\varepsilon_m}{3\cdot 2^m}\; }.
+\]
+因此隐藏位在全局平均意义下对 \(b=0\) 一侧具有严格、不可消去的负偏置；其主常数与 \(m\) 无关，仅存在 \(2^{-m}\) 级修正。
+\end{conclusion}
+
+\begin{conclusion}[隐藏位与末位的互信息常数：\texorpdfstring{$I(b;\omega_m)\to 0.4591479$}{I(b;omega_m)->0.4591479} bits]\label{con:pom-hidden-bit-topbit-mutual-information}
+在均匀微态 \(\omega\sim\mathrm{Unif}(\Omega_m)\) 下，定理 \ref{thm:pom-hidden-bit-count} 的构造给出严格蕴含
+\[
+b(\omega)=1\ \Longrightarrow\ \omega_m=1,
+\]
+并且当 \(\omega_m=1,\ \omega_{m-1}=0\) 时，事件 \(\{b(\omega)=1\}\) 等价于长度 \(m-2\) 的同型阈值事件（从而诱导精确递推 \(\card{B_m}=2^{m-2}+\card{B_{m-2}}\)，\(m\ge 3\)）。
+因此当 \(m\to\infty\) 时有极限条件分布
+\[
+\mathbb P[b=1]\to\tfrac13,\qquad
+\mathbb P[\omega_m=1\mid b=1]\to 1,\qquad
+\mathbb P[\omega_m=1\mid b=0]\to\tfrac14,
+\]
+并据此得到极限互信息常数（以比特计）
+\[
+\lim_{m\to\infty}I(b;\omega_m)
+=1-\frac{2}{3}\,H_{\mathrm{bin}}\!\Bigl(\tfrac14\Bigr)
+=0.4591479170\ldots\ \mathrm{bits},
+\]
+其中 \(H_{\mathrm{bin}}(p):=-p\log_2 p-(1-p)\log_2(1-p)\)。
+因此隐藏位作为“超出前 \(m\) 位的最小残余”，对末位 \(\omega_m\) 携带一枚严格正的信息常数，而非渐近消失的噪声。
+\end{conclusion}
+
+\begin{corollary}[互信息常数的闭式化简与二分等量律]\label{cor:pom-hidden-bit-topbit-mi-half-entropy}
+在结论 \ref{con:pom-hidden-bit-topbit-mutual-information} 的设定下，
+\[
+\lim_{m\to\infty} I(b;\omega_m)
+=\frac12\,H_{\mathrm{bin}}\!\Bigl(\tfrac13\Bigr)
+=\frac12\log_2 3-\frac13.
+\]
+因此边界末位在极限中恰好抽取隐藏位 Shannon 熵的一半：
+\[
+\lim_{m\to\infty}I(b;\omega_m)=\frac12\lim_{m\to\infty}H(b),
+\qquad
+\lim_{m\to\infty}H(b\mid \omega_m)=\frac12\lim_{m\to\infty}H(b).
+\]
+\end{corollary}
+\begin{proof}
+由二元熵闭式
+\[
+H_{\mathrm{bin}}\!\Bigl(\tfrac14\Bigr)=2-\frac34\log_2 3,
+\]
+代入结论 \ref{con:pom-hidden-bit-topbit-mutual-information} 的表达式
+\(
+1-\frac23 H_{\mathrm{bin}}(\tfrac14)
+\)
+即得
+\(
+\lim I(b;\omega_m)=\frac12\log_2 3-\frac13
+\)。
+另一方面，
+\[
+H_{\mathrm{bin}}\!\Bigl(\tfrac13\Bigr)=\log_2 3-\frac23,
+\]
+从而 \(\frac12H_{\mathrm{bin}}(\tfrac13)=\frac12\log_2 3-\frac13\)。
+最后两式由恒等式 \(I(b;\omega_m)=H(b)-H(b\mid\omega_m)\) 立得，并用结论 \ref{con:pom-hidden-bit-redundancy-constant} 的极限 \(H(b)\to H_{\mathrm{bin}}(\tfrac13)\) 收束。证毕。
+\end{proof}
+
+\begin{conclusion}[模同余坐标下的折叠因子链显式核：条件化 Fibonacci 步长随机游走]\label{con:pom-fold-factor-chain-explicit-kernel}
+令 \(M:=F_{m+2}\)，并令同余坐标
+\[
+r(\omega):=N(\omega)\bmod M\in\ZZ/M\ZZ.
+\]
+由引理 \ref{lem:pom-fold-congruence} 与命题 \ref{prop:pom-fold-as-section}，稳定类型 \(x=\Fold_m(\omega)\) 仅由 \(r(\omega)\) 决定，从而 \(X_m\) 与 \(\ZZ/M\ZZ\) 可经规范截面识别。
+在定义 \ref{def:pom-fold-factor-chain} 的折叠因子链 \(\overline P_m^{\square}\) 下，从余类 \(r\) 的一步演化等价于：
+在条件 \(\{r(\omega)=r\}\) 下于纤维中均匀抽样 \(\omega\)，再等概率选取坐标 \(k\in\{1,\dots,m\}\) 翻转 \(\omega_k\)。
+令
+\[
+p_k(r):=\mathbb P[\omega_k=1\mid r(\omega)=r].
+\]
+则在同余坐标上，\(\overline P_m^{\square}\) 的转移核具有完全显式的步长形式：
+\[
+\boxed{\;
+\overline P_m^{\square}(r,\ r+F_{k+1})=\frac{1}{m}\bigl(1-p_k(r)\bigr),\qquad
+\overline P_m^{\square}(r,\ r-F_{k+1})=\frac{1}{m}p_k(r)\; }.
+\]
+并且不存在自环：\(\overline P_m^{\square}(r,r)=0\)（与命题 \ref{prop:pom-fold-factor-chain-reversible-noloop} 一致）。
+因此 \(\overline P_m^{\square}\) 可视为在 \(\ZZ/M\ZZ\) 上、步长集合为 \(\{\pm F_{k+1}\}\) 的随机游走，其符号概率由条件化位频 \(p_k(r)\) 精细控制。
+\end{conclusion}
+
+\begin{proposition}[隐藏位上层支撑的阈值律与可行类型计数]\label{prop:pom-hiddenbit-upper-support-threshold}
+固定 \(m\ge 1\)。
+对 \(x\in X_m\) 与 \(b\in\{0,1\}\) 记纤维分裂计数 \(d_{m,b}(x)\) 如结论 \ref{con:pom-hidden-bit-mass-conservation-truncation}。
+令 \(r:=V_m(x)\in\{0,1,\dots,F_{m+2}-1\}\)。
+则有严格等价
+\[
+\boxed{\;
+d_{m,1}(x)>0\ \Longleftrightarrow\ r\le F_{m+1}-2\;}
+\]
+并且满足该不等式的稳定类型数为
+\[
+\boxed{\;
+\card{\{x\in X_m:\ d_{m,1}(x)>0\}}=F_{m+1}-1\; }.
+\]
+\end{proposition}
+\begin{proof}
+由单隐藏位分解 \(N(\omega)=V_m(\Fold_m(\omega))+b(\omega)F_{m+2}\)（引理 \ref{lem:pom-one-bit}），对固定 \(x\) 与 \(r=V_m(x)\) 有
+\[
+d_{m,1}(x)>0\ \Longleftrightarrow\ \exists\,\omega\in\Omega_m:\ \Fold_m(\omega)=x,\ N(\omega)=r+F_{m+2}.
+\]
+而由 \(0\le N(\omega)\le T_m=F_{m+3}-2\)（见 \S\ref{subsubsec:fold-zeckendorf-mod-topbits} 的记号），上述存在性等价于
+\[
+r+F_{m+2}\le F_{m+3}-2\ \Longleftrightarrow\ r\le F_{m+1}-2.
+\]
+计数式由 \(V_m:X_m\to\{0,1,\dots,F_{m+2}-1\}\) 为双射（命题 \ref{prop:pom-fold-as-section} 的证明所用）推出：满足 \(r\le F_{m+1}-2\) 的余数恰有 \(F_{m+1}-1\) 个。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{$m=6$}{m=6} 的数值实例：上层可行类型数为 \texorpdfstring{$12$}{12}]\label{cor:pom-hiddenbit-upper-support-m6-12}
+取 \(m=6\)，则
+\[
+\card{\{x\in X_6:\ d_{6,1}(x)>0\}}=F_7-1=12.
+\]
+\end{corollary}
+
+\begin{conclusion}[逐坐标严格无漂移：每个 Fibonacci 步长的正负通量在平稳态下精确抵消]\label{con:pom-fold-factor-chain-no-drift}
+在结论 \ref{con:pom-fold-factor-chain-explicit-kernel} 的记号下，定义余类坐标上的推前分布
+\[
+w_m^{\mathrm{res}}(r):=\mathbb P[r(\omega)=r]=\frac{\card{\{\omega\in\Omega_m:\ r(\omega)=r\}}}{2^m}\qquad(r\in\ZZ/M\ZZ),
+\]
+它在识别 \(X_m\simeq\ZZ/M\ZZ\) 下与定义 \ref{def:pom-wm-baseline} 的 \(w_m\) 同义。
+则对任意 \(1\le k\le m\) 有严格恒等式
+\[
+\boxed{\;
+\mathbb E_{r\sim w_m^{\mathrm{res}}}[p_k(r)]
+=\mathbb P_{\omega\sim\mathrm{Unif}(\Omega_m)}[\omega_k=1]
+=\frac12\; }.
+\]
+从而在平稳态下，每个步长 \(\pm F_{k+1}\) 的全局通量精确平衡：
+\[
+\sum_{r}w_m^{\mathrm{res}}(r)\,\overline P_m^{\square}(r,r+F_{k+1})
+=\sum_{r}w_m^{\mathrm{res}}(r)\,\overline P_m^{\square}(r,r-F_{k+1})
+=\frac{1}{2m}.
+\]
+该逐坐标无漂移分解把 \(\overline P_m^{\square}\) 的可逆性细化为每个 Fibonacci 步长上的正反流量抵消律。
+\end{conclusion}
+
+\begin{conclusion}[Fold 标记图的双端一步可判别性：同时右解析与左解析]\label{con:pom-fold-biresolving}
+对任意 \(m\ge 2\)，对任意 \(v\in\{0,1\}^{m-1}\) 都有
+\[
+\Fold_m(v0)\ne \Fold_m(v1),\qquad
+\Fold_m(0v)\ne \Fold_m(1v).
+\]
+因此标记图 \(G_m\)（定义 \ref{def:G_m}）在符号动力系统意义下同时为 right-resolving 与 left-resolving（biresolving）表示。
+\end{conclusion}
+\begin{proof}[证明]
+第一式由定理 \ref{thm:pom-right-resolving} 给出，第二式由定理 \ref{thm:pom-left-resolving} 给出。
+按 right/left-resolving 的定义，这两条一步可判别性即推出双解析性。证毕。
+\end{proof}
+
+\begin{conclusion}[隐藏位分层强制的矩编译降维：相关层数为 \texorpdfstring{$\lfloor k/2\rfloor+1$}{floor(k/2)+1}]\label{con:pom-hidden-bit-moment-compilation-dim-reduction}
+在单隐藏位二支分裂（引理 \ref{lem:pom-one-bit}）与上层质量非稀疏（定理 \ref{thm:pom-hidden-bit-count}）同时成立的口径下，
+\(k\)-阶矩算子（\(\mathrm{MOM}_k\)）的编译不必以“\(k\) 份同步直积”为唯一入口。
+沿用命题 \ref{prop:pom-hiddenbit-mixed-moment-cluster} 的混合矩分裂记号，
+对
+\(
+S_k(m)=\sum_{x\in X_m}d_m(x)^k
+\)
+有严格表示
+\[
+S_k(m)=\sum_{a=0}^{\lfloor k/2\rfloor}\binom{k}{a}\,\widetilde M_a^{(k)}(m),
+\]
+因此客观相关自由度恰为 \(\lfloor k/2\rfloor+1\) 层。
+该分层把高阶碰撞矩的相关结构制度性压缩为有限层级，为构造可解释的有限状态碰撞核谱系提供一条严格的降维编译路径（见注 \ref{rem:pom-hiddenbit-mixed-moment-typing}）。
+\end{conclusion}
+
+\input{parts/thm__pom-hidden-bit-jump-collision-isomorphism}
+
+\begin{conclusion}[谱零点的三周期选择律：\texorpdfstring{$\mathcal Z_m\neq\varnothing$}{Z_m nonempty} 必迫使 \texorpdfstring{$m\equiv 1\ (\mathrm{mod}\ 3)$}{m=1 mod 3}]\label{con:pom-fold-spectrum-zero-selection}
+令 \(M:=F_{m+2}\)，并令谱零点集合 \(\mathcal Z_m\subseteq \ZZ/M\ZZ\) 如定义 \ref{def:fold-spectrum-zero-set}。
+若 \(\mathcal Z_m\neq\varnothing\)，则由谱零点的同余判别（定理 \ref{thm:fold-spectrum-zero-criterion}）存在 \(k\in\ZZ/M\ZZ\) 与 \(j\in\{1,\dots,m\}\) 使
+\[
+e^{-2\pi i kF_{j+1}/M}=-1.
+\]
+该条件蕴含 \(M\) 必为偶数（否则上式左端不可能取半周相位），从而得到必要条件
+\[
+\boxed{\;
+\mathcal Z_m\neq\varnothing\ \Longrightarrow\ M\ \text{为偶数}\ \Longleftrightarrow\ m+2\equiv 0\pmod 3\ \Longleftrightarrow\ m\equiv 1\pmod 3\; }.
+\]
+因此谱零点触发具有三周期门控：仅在 \(m\equiv 1\ (\mathrm{mod}\ 3)\) 的分辨率子序列上才可能出现非平凡零点结构。
+\end{conclusion}
+
+\begin{conclusion}[隐藏位非均匀成本的稳定常数：\texorpdfstring{$5/3-\log_2 3$}{5/3-log2 3} bits]\label{con:pom-hidden-bit-redundancy-constant}
+由定理 \ref{thm:pom-hidden-bit-count} 与推论 \ref{cor:pom-hidden-bit-entropy}，均匀微态下 \(\mathbb P[b(\omega)=1]\to 1/3\)。
+因此隐藏位熵（bits）存在极限
+\[
+H(b)\ \longrightarrow\ H_{\mathrm{bin}}\!\Bigl(\tfrac13\Bigr)
+=\log_2 3-\frac{2}{3}
+=0.9182958340\ldots\ \mathrm{bits},
+\]
+其相对于“理想均匀一比特”的冗余（亦即到 \(\mathrm{Bern}(\tfrac12)\) 的 KL 偏移，按 bits 计）为不可消去的常数
+\[
+\boxed{\;
+1-H_{\mathrm{bin}}\!\Bigl(\tfrac13\Bigr)
+=\frac53-\log_2 3
+=0.0817041659\ldots\ \mathrm{bits}\; }.
+\]
+该常数不随分辨率 \(m\) 衰减，表明隐藏位在信息论意义下携带稳定的非均匀成本。
+\end{conclusion}
+

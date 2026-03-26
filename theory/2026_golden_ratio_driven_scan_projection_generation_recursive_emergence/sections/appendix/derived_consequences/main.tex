@@ -1,0 +1,552 @@
+\documentclass[../../../main.tex]{subfiles}
+
+\begin{document}
+\section{由既有机制导出的若干结构推论}\label{app:derived-structure-consequences}
+
+本节把正文与附录中已经建立的 Fold/Zeckendorf 模半环、Zeckendorf--Gödel 的 Euler 因子分离、Lee--Yang dyadic 分歧塔以及三轴地址证书语义，组织为若干可独立提取的结构命题。除末尾的条件性推论外，以下结论均不引入新的假设，而只是把既有结果压缩为更直接的代数、谱与熵陈述。关于同式表述的文献优先性，本文在当前可核查范围内不作绝对断言；正式投稿前仍需完成系统性的检索与复核。
+
+\subsection{Fold 多重度的仿射互反与相位刚性}
+
+\begin{theorem}[折叠多重度的仿射互反对称]\label{thm:derived-fold-affine-reciprocity}
+令
+\[
+M_m:=F_{m+2},
+\qquad
+\kappa_m:=\sum_{j=1}^{m}F_{j+1}=F_{m+3}-2\equiv F_{m+1}-2 \pmod{M_m},
+\]
+并沿用命题 \ref{prop:fold-multiplicity-group-algebra} 的记号
+\[
+D_m(x):=\sum_{r\in \ZZ/(M_m\ZZ)}d_m(r)\,x^r.
+\]
+则在群环 \(\CC[x]/(x^{M_m}-1)\) 中成立严格恒等式
+\[
+x^{\kappa_m}D_m(x^{-1})\equiv D_m(x)\qquad (\mathrm{mod}\ x^{M_m}-1).
+\]
+特别地，对任意 \(r\in \ZZ/(M_m\ZZ)\) 都有
+\[
+d_m(r)=d_m(\kappa_m-r).
+\]
+因此，多重度剖面不仅具有循环平移结构，而且关于仿射对合 \(r\mapsto \kappa_m-r\) 具有严格互反对称。
+\end{theorem}
+
+\begin{proof}
+由命题 \ref{prop:fold-multiplicity-group-algebra}，
+\[
+D_m(x)\equiv \prod_{j=1}^{m}\left(1+x^{F_{j+1}}\right)\qquad (\mathrm{mod}\ x^{M_m}-1).
+\]
+于是
+\[
+\begin{aligned}
+x^{\kappa_m}D_m(x^{-1})
+&\equiv
+x^{\sum_{j=1}^{m}F_{j+1}}
+\prod_{j=1}^{m}\left(1+x^{-F_{j+1}}\right) \\
+&=
+\prod_{j=1}^{m}\left(x^{F_{j+1}}+1\right)
+\equiv D_m(x)
+\qquad (\mathrm{mod}\ x^{M_m}-1).
+\end{aligned}
+\]
+比较 \(x^r\) 的系数便得
+\(
+d_m(r)=d_m(\kappa_m-r)
+\)。
+\end{proof}
+
+\begin{corollary}[Fourier 频谱的相位刚性与正弦模态消失]\label{cor:derived-fold-fourier-phase-rigidity}
+沿用定理 \ref{thm:derived-fold-affine-reciprocity} 的记号，并定义离散 Fourier 系数
+\[
+\widehat d_m(k):=
+\sum_{r\in \ZZ/(M_m\ZZ)}d_m(r)e^{-2\pi i kr/M_m}.
+\]
+则对任意 \(k\in \ZZ/(M_m\ZZ)\) 有
+\[
+\widehat d_m(k)=e^{-2\pi i k\kappa_m/M_m}\,\overline{\widehat d_m(k)}.
+\]
+等价地，
+\[
+e^{\pi i k\kappa_m/M_m}\widehat d_m(k)\in \RR.
+\]
+因而对任意 \(k\) 都有
+\[
+\sum_{r\in \ZZ/(M_m\ZZ)}
+d_m(r)\,
+\sin\!\Bigl(\frac{2\pi k}{M_m}\bigl(r-\kappa_m/2\bigr)\Bigr)=0.
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:derived-fold-affine-reciprocity}，
+\[
+d_m(r)=d_m(\kappa_m-r).
+\]
+因此
+\[
+\begin{aligned}
+\widehat d_m(k)
+&=
+\sum_{r}d_m(\kappa_m-r)e^{-2\pi i kr/M_m} \\
+&=
+e^{-2\pi i k\kappa_m/M_m}
+\sum_{r'}d_m(r')e^{2\pi i kr'/M_m} \\
+&=
+e^{-2\pi i k\kappa_m/M_m}\,\overline{\widehat d_m(k)}.
+\end{aligned}
+\]
+两边同乘 \(e^{\pi i k\kappa_m/M_m}\) 即得实值性。最后一式正是该实数的虚部恒为零的展开写法。
+\end{proof}
+
+\subsection{Zeckendorf--Gödel Dirichlet 级数的硬核因子化}
+
+\begin{theorem}[ZG Dirichlet 级数的硬核因子化与单侧 Mertens 律]\label{thm:derived-zg-hardcore-factorization}
+记
+\[
+\mathcal D_{\mathrm{ZG}}(\sigma):=\sum_{n\in \mathrm{ZG}}n^{-\sigma}
+\qquad (\sigma>1),
+\]
+并令 \(p_i\) 为第 \(i\) 个素数。对每个 \(\sigma>1\)，取独立 Bernoulli 变量
+\(
+(X_i^{(\sigma)})_{i\ge 1}
+\)
+满足
+\[
+\PP_{\sigma}\!\bigl(X_i^{(\sigma)}=1\bigr)
+:=
+q_i(\sigma):=\frac{1}{p_i^{\sigma}+1},
+\]
+并定义硬核事件
+\[
+\mathcal E_{\sigma}:=
+\left\{
+X_i^{(\sigma)}X_{i+1}^{(\sigma)}=0
+\text{ for all } i\ge 1
+\right\}.
+\]
+则存在严格正函数
+\[
+H_{\mathrm{ZG}}(\sigma):=\PP_{\sigma}(\mathcal E_{\sigma})\in (0,1]
+\]
+使得
+\[
+\mathcal D_{\mathrm{ZG}}(\sigma)=\frac{\zeta(\sigma)}{\zeta(2\sigma)}\,H_{\mathrm{ZG}}(\sigma).
+\]
+并且
+\[
+\prod_{i\ge 1}
+\left(
+1-\frac{1}{(p_i^{\sigma}+1)(p_{i+1}^{\sigma}+1)}
+\right)
+\le H_{\mathrm{ZG}}(\sigma)\le 1.
+\]
+函数 \(H_{\mathrm{ZG}}(\sigma)\) 关于 \(\sigma\) 单调递增，因此右极限
+\[
+H_{\mathrm{ZG}}(1+):=\lim_{\sigma\downarrow 1}H_{\mathrm{ZG}}(\sigma)
+\]
+存在且满足 \(0<H_{\mathrm{ZG}}(1+)\le 1\)。从而
+\[
+\mathcal D_{\mathrm{ZG}}(\sigma)\sim
+\frac{H_{\mathrm{ZG}}(1+)}{\zeta(2)}\cdot \frac{1}{\sigma-1}
+\qquad (\sigma\downarrow 1).
+\]
+\end{theorem}
+
+\begin{proof}
+记 \(a_i:=p_i^{-\sigma}\)。由定理 \ref{con:xi-zg-weighted-path-leyang-poisson-binomial} 的独立集展开，
+\[
+\mathcal D_{\mathrm{ZG}}(\sigma)
+=
+\sum_{\substack{S\subseteq \NN\\ S\ \mathrm{无相邻}}}\ \prod_{i\in S}a_i.
+\]
+对 \(N\ge 1\) 定义截断和
+\[
+\mathcal D_{\mathrm{ZG},N}(\sigma):=
+\sum_{\substack{S\subseteq \{1,\dots,N\}\\ S\ \mathrm{无相邻}}}\ \prod_{i\in S}a_i,
+\]
+以及有限硬核事件
+\[
+\mathcal E_{\sigma,N}:=
+\left\{
+X_i^{(\sigma)}X_{i+1}^{(\sigma)}=0,\ 1\le i<N
+\right\}.
+\]
+独立性给出
+\[
+\begin{aligned}
+\PP_{\sigma}(\mathcal E_{\sigma,N})
+&=
+\sum_{\substack{S\subseteq \{1,\dots,N\}\\ S\ \mathrm{无相邻}}}
+\prod_{i\in S}\frac{a_i}{1+a_i}
+\prod_{\substack{1\le i\le N\\ i\notin S}}\frac{1}{1+a_i} \\
+&=
+\frac{\mathcal D_{\mathrm{ZG},N}(\sigma)}{\prod_{i=1}^{N}(1+a_i)}.
+\end{aligned}
+\]
+由于 \(\sum_i a_i<\infty\)（\(\sigma>1\)），有
+\(
+\mathcal D_{\mathrm{ZG},N}(\sigma)\uparrow \mathcal D_{\mathrm{ZG}}(\sigma)
+\)
+且
+\(
+\prod_{i=1}^{N}(1+a_i)\uparrow \prod_{i\ge 1}(1+a_i)
+\)。
+又 \(\mathcal E_{\sigma,N}\downarrow \mathcal E_{\sigma}\)，故由概率测度的上连续性，
+\[
+H_{\mathrm{ZG}}(\sigma)
+=
+\PP_{\sigma}(\mathcal E_{\sigma})
+=
+\lim_{N\to\infty}\frac{\mathcal D_{\mathrm{ZG},N}(\sigma)}{\prod_{i=1}^{N}(1+a_i)}
+=
+\frac{\mathcal D_{\mathrm{ZG}}(\sigma)}{\prod_{i\ge 1}(1+a_i)}.
+\]
+整理即得
+\[
+\mathcal D_{\mathrm{ZG}}(\sigma)
+=
+\Bigl(\prod_{i\ge 1}(1+p_i^{-\sigma})\Bigr)H_{\mathrm{ZG}}(\sigma).
+\]
+而
+\[
+\prod_{p}(1+p^{-\sigma})
+=
+\prod_{p}\frac{1-p^{-2\sigma}}{1-p^{-\sigma}}
+=
+\frac{\zeta(\sigma)}{\zeta(2\sigma)},
+\]
+从而得到所示因子化。
+
+下证双边界。上界 \(H_{\mathrm{ZG}}(\sigma)\le 1\) 显然。再令
+\[
+A_n:=\PP_{\sigma}(\mathcal E_{\sigma,n},X_n^{(\sigma)}=0),
+\qquad
+B_n:=\PP_{\sigma}(\mathcal E_{\sigma,n},X_n^{(\sigma)}=1),
+\qquad
+P_n:=A_n+B_n.
+\]
+则
+\[
+A_n=P_{n-1}(1-q_n(\sigma)),
+\qquad
+B_n=A_{n-1}q_n(\sigma),
+\]
+故
+\[
+P_n
+=
+P_{n-1}-A_{n-2}q_{n-1}(\sigma)q_n(\sigma).
+\]
+另一方面，
+\[
+P_{n-1}=A_{n-2}+B_{n-2}(1-q_{n-1}(\sigma))\ge A_{n-2},
+\]
+于是
+\[
+P_n\ge P_{n-1}\bigl(1-q_{n-1}(\sigma)q_n(\sigma)\bigr).
+\]
+归纳得到
+\[
+P_n\ge
+\prod_{i=1}^{n-1}
+\bigl(1-q_i(\sigma)q_{i+1}(\sigma)\bigr).
+\]
+令 \(n\to\infty\) 即得
+\[
+H_{\mathrm{ZG}}(\sigma)\ge
+\prod_{i\ge 1}
+\left(
+1-\frac{1}{(p_i^{\sigma}+1)(p_{i+1}^{\sigma}+1)}
+\right).
+\]
+又因
+\[
+\sum_{i\ge 1}\frac{1}{(p_i+1)(p_{i+1}+1)}
+\le
+\sum_{i\ge 1}\frac{1}{p_ip_{i+1}}
+<\infty,
+\]
+上述无穷乘积在 \(\sigma\downarrow 1\) 时仍有统一正下界。
+
+现证单调性。取一列独立均匀变量 \(U_i\sim \mathrm{Unif}[0,1]\)，并定义
+\[
+X_i^{(\sigma)}:=\ind_{\{U_i\le q_i(\sigma)\}}.
+\]
+若 \(\sigma_1<\sigma_2\)，则 \(q_i(\sigma_2)\le q_i(\sigma_1)\)，从而
+\(
+X_i^{(\sigma_2)}\le X_i^{(\sigma_1)}
+\)
+逐坐标成立。事件 \(\mathcal E_{\sigma}\) 作为“相邻坐标不可同时为 \(1\)”的条件，是关于坐标偏序的递减事件，因此
+\[
+\ind_{\mathcal E_{\sigma_2}}\!\bigl(X^{(\sigma_2)}\bigr)
+\ge
+\ind_{\mathcal E_{\sigma_1}}\!\bigl(X^{(\sigma_1)}\bigr).
+\]
+取期望即得 \(H_{\mathrm{ZG}}(\sigma_2)\ge H_{\mathrm{ZG}}(\sigma_1)\)。于是右极限 \(H_{\mathrm{ZG}}(1+)\) 存在，且由统一正下界得 \(H_{\mathrm{ZG}}(1+)>0\)。
+
+最后，由 \(\zeta(\sigma)\sim (\sigma-1)^{-1}\)、\(\zeta(2\sigma)\to \zeta(2)\) 以及 \(H_{\mathrm{ZG}}(\sigma)\to H_{\mathrm{ZG}}(1+)\)，得到
+\[
+\mathcal D_{\mathrm{ZG}}(\sigma)
+=
+\frac{\zeta(\sigma)}{\zeta(2\sigma)}H_{\mathrm{ZG}}(\sigma)
+\sim
+\frac{H_{\mathrm{ZG}}(1+)}{\zeta(2)}\cdot \frac{1}{\sigma-1},
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[ZG Dirichlet 级数在 \texorpdfstring{$s=1$}{s=1} 的简单极点留数等于自然密度]\label{cor:derived-zg-simple-pole-density-residue}
+记 \(\delta_{\mathrm{ZG}}\) 为定理 \ref{thm:xi-zg-abel-residue-log-density} 中 \(\mathrm{ZG}\) 的自然密度。则
+\[
+\lim_{\sigma\downarrow 1}(\sigma-1)\mathcal D_{\mathrm{ZG}}(\sigma)=\delta_{\mathrm{ZG}}.
+\]
+等价地，
+\[
+H_{\mathrm{ZG}}(1+)=\zeta(2)\,\delta_{\mathrm{ZG}}.
+\]
+因此，定理 \ref{thm:derived-zg-hardcore-factorization} 中的 hard-core 极限常数并非独立的新参数，而是自然密度在 Euler 因子归一化后的精确重写。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:xi-zg-abel-residue-log-density}，
+\[
+\lim_{\sigma\downarrow 1}(\sigma-1)\mathcal D_{\mathrm{ZG}}(\sigma)=\delta_{\mathrm{ZG}}.
+\]
+另一方面，定理 \ref{thm:derived-zg-hardcore-factorization} 已给出
+\[
+\mathcal D_{\mathrm{ZG}}(\sigma)\sim
+\frac{H_{\mathrm{ZG}}(1+)}{\zeta(2)}\cdot \frac{1}{\sigma-1}.
+\]
+比较两式的主导项即得
+\[
+\delta_{\mathrm{ZG}}=\frac{H_{\mathrm{ZG}}(1+)}{\zeta(2)},
+\]
+亦即 \(H_{\mathrm{ZG}}(1+)=\zeta(2)\delta_{\mathrm{ZG}}\)。证毕。
+\end{proof}
+
+\begin{theorem}[ZG Dirichlet 级数的标量 Euler 乘积不可约性]\label{thm:derived-zg-no-scalar-euler-product}
+不存在幂级数族
+\[
+F_i(T)\in 1+T\CC[[T]]
+\qquad (i\ge 1)
+\]
+使得
+\[
+\mathcal D_{\mathrm{ZG}}(s)=\prod_{i\ge 1}F_i(p_i^{-s})
+\]
+在 Dirichlet 系数逐项展开的意义下成立。换言之，\(\mathrm{ZG}\) 的 Euler 结构本质上是最近邻耦合的矩阵型结构，不能退化为彼此独立的标量局部因子乘积。
+\end{theorem}
+
+\begin{proof}
+反设存在这样的标量 Euler 分解，并记
+\[
+F_i(T)=1+\sum_{k\ge 1}c_{i,k}T^k.
+\]
+由于 \(\mathrm{ZG}\) 中不含任何平方因子 \(p_i^2\)，Dirichlet 级数里 \(p_i^{-2s}\) 的系数必须为 \(0\)。而该系数正是 \(c_{i,2}\)，故
+\[
+c_{i,2}=0.
+\]
+同理，对任意 \(k\ge 2\)，\(p_i^k\notin \mathrm{ZG}\) 都迫使
+\[
+c_{i,k}=0.
+\]
+因此每个局部因子都只能写成
+\[
+F_i(T)=1+c_{i,1}T.
+\]
+
+另一方面，单个素数 \(p_i\) 总属于 \(\mathrm{ZG}\)，因为只选取一个素数位不会违反相邻约束，故 \(\mathcal D_{\mathrm{ZG}}(s)\) 中 \(p_i^{-s}\) 的系数为 \(1\)。于是
+\[
+c_{i,1}=1,
+\qquad
+F_i(T)=1+T.
+\]
+从而
+\[
+\mathcal D_{\mathrm{ZG}}(s)=\prod_{i\ge 1}(1+p_i^{-s}).
+\]
+但该乘积中 \(p_i^{-s}p_{i+1}^{-s}\) 的系数等于 \(1\)，这意味着相邻素数积 \(p_ip_{i+1}\) 必以非零系数出现。另一方面，\(\mathrm{ZG}\) 的定义禁止相邻素数同时被选中，故
+\[
+p_ip_{i+1}\notin \mathrm{ZG},
+\]
+对应系数必须为 \(0\)，矛盾。
+
+故不存在任何这样的标量 Euler 因子分解。于是定理 \ref{thm:xi-zg-zeta-factorization} 中的矩阵 Euler 乘积所编码的最近邻约束是不可压缩的。证毕。
+\end{proof}
+
+\subsection{Lee--Yang 分支塔的 profinite 刚性与四元地址约束}
+
+\begin{theorem}[Lee--Yang 分支塔的 profinite 刚性与熵值定标]\label{thm:derived-leyang-profinite-rigidity}
+对每个 \(n\ge 0\) 与 \(i\in\{0,\dots,4\}\)，记
+\[
+\Pi_{i,n}:=[2^n]^{-1}(P_i),
+\qquad
+\mathcal R_n:=\bigsqcup_{i=0}^{4}\Pi_{i,n}.
+\]
+则在推论 \ref{cor:xi-terminal-zm-leyang-branchpoint-tate-torsor-decomposition} 的设定下，一旦选定每个分支族的一条相容提升以及 \(T_2(E_{\min})\) 的一组 \(\ZZ_2\)-基，便得到层间相容的逆系统同构
+\[
+(\mathcal R_n,[2])
+\cong
+\bigsqcup_{i=0}^{4}\bigl(\{0,1\}^{2n},\mathrm{trunc}\bigr),
+\]
+其中 \(\mathrm{trunc}\) 表示删除最高位二比特对的截断映射。因而
+\[
+\varprojlim_n \mathcal R_n
+\cong
+\bigsqcup_{i=0}^{4}\bigl(\{0,1\}^{2}\bigr)^{\NN}
+\cong
+\bigsqcup_{i=0}^{4}\ZZ_2^2.
+\]
+由截断诱导的规范地址移位与四符号满移位共轭，因此其拓扑熵恰为
+\[
+h_{\mathrm{top}}=\log 4=2\log 2.
+\]
+\end{theorem}
+
+\begin{proof}
+由推论 \ref{cor:xi-terminal-zm-leyang-branchpoint-tate-torsor-decomposition}，每个 \(\Pi_{i,n}\) 都是 \(E_{\min}[2^n]\) 的平移余类；在选定相容提升后，可逐层识别为
+\[
+\Pi_{i,n}\cong E_{\min}[2^n].
+\]
+再选定 \(T_2(E_{\min})\) 的一组 \(\ZZ_2\)-基，便得到
+\[
+E_{\min}[2^n]\cong (\ZZ/2^n\ZZ)^2.
+\]
+把每个坐标写成长度 \(n\) 的二进展开，即得
+\[
+(\ZZ/2^n\ZZ)^2\cong \{0,1\}^{2n}.
+\]
+在该表示下，倍点映射 \([2]\) 恰对应于删除最高位二比特对的截断；因此对每个 \(i\) 都有
+\[
+(\Pi_{i,n},[2])\cong \bigl(\{0,1\}^{2n},\mathrm{trunc}\bigr),
+\]
+五个分支族互不相交，遂得到整个逆系统的同构。
+
+取逆极限后，每个分支族都给出一份无限二比特序列空间
+\(
+\bigl(\{0,1\}^{2}\bigr)^{\NN}
+\),
+并与 \(\ZZ_2^2\) 的标准二进展开同构。于是
+\[
+\varprojlim_n \mathcal R_n
+\cong
+\bigsqcup_{i=0}^{4}\ZZ_2^2.
+\]
+最后，\(\bigl(\{0,1\}^{2}\bigr)^{\NN}\) 上的地址移位是四符号满移位，其拓扑熵为 \(\log 4\)；有限个不交并不改变最大熵值，因此整体熵仍为 \(2\log 2\)。
+\end{proof}
+
+\begin{corollary}[Lee--Yang branch lamination 的 dyadic 维数恰为 \texorpdfstring{$2$}{2}]\label{cor:derived-leyang-dyadic-dimension-two}
+对每个 \(i\in\{0,\dots,4\}\)，记
+\[
+\mathfrak X_i:=\varprojlim_n \Pi_{i,n},
+\qquad
+\mathfrak X_{\mathrm{LY}}:=\varprojlim_n \mathcal R_n\cong \bigsqcup_{i=0}^{4}\mathfrak X_i.
+\]
+在每个逆极限空间上赋予标准 dyadic 圆柱超度量：若两点第一次在第 \(n\) 层被区分，则其距离定义为 \(2^{-n}\)。则对每个分支 sheet \(\mathfrak X_i\) 都有
+\[
+\dim_H(\mathfrak X_i)
+=
+\underline{\dim}_M(\mathfrak X_i)
+=
+\overline{\dim}_M(\mathfrak X_i)
+=
+2.
+\]
+整个有限不交并 \(\mathfrak X_{\mathrm{LY}}\) 亦满足
+\[
+\dim_H(\mathfrak X_{\mathrm{LY}})
+=
+\underline{\dim}_M(\mathfrak X_{\mathrm{LY}})
+=
+\overline{\dim}_M(\mathfrak X_{\mathrm{LY}})
+=
+2.
+\]
+因此，Lee--Yang 分支逆极限在 dyadic 尺度上是一族二维 \(2\)-进 sheet，而非一维 Cantor 型地址链。
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:derived-leyang-profinite-rigidity}，每个 \(\mathfrak X_i\) 都与 \(\ZZ_2^2\) 同构，并且第 \(n\) 层恰分解为
+\[
+|E_{\min}[2^n]|=4^n
+\]
+个互不相交的圆柱集合，每个圆柱直径都是 \(2^{-n}\)。故盒计数满足
+\[
+N_{\mathfrak X_i}(2^{-n})=4^n,
+\]
+从而
+\[
+\lim_{n\to\infty}\frac{\log N_{\mathfrak X_i}(2^{-n})}{-\log 2^{-n}}
+=
+\lim_{n\to\infty}\frac{\log 4^n}{n\log 2}
+=2.
+\]
+因此上下 Minkowski 维数都等于 \(2\)。
+
+再令 \(m_i\) 为 \(\mathfrak X_i\cong \ZZ_2^2\) 上的 Haar 概率测度。长度 \(n\) 的任一圆柱集合都满足
+\[
+m_i(C)=4^{-n}=(2^{-n})^2.
+\]
+于是对任意 \(x\in \mathfrak X_i\) 与任意 dyadic 半径 \(r=2^{-n}\) 都有
+\[
+m_i(B(x,r))=r^2.
+\]
+由质量分布原理得到 \(\dim_H(\mathfrak X_i)\ge 2\)。另一方面，\(\mathfrak X_i\) 可被 \(4^n\) 个直径 \(2^{-n}\) 的圆柱覆盖，故对任意 \(s>2\) 有
+\[
+\mathcal H^s_{2^{-n}}(\mathfrak X_i)\le 4^n(2^{-n})^s=2^{(2-s)n}\to 0,
+\]
+于是 \(\dim_H(\mathfrak X_i)\le 2\)。因此 \(\dim_H(\mathfrak X_i)=2\)。
+
+最后，有限个不交并的 Hausdorff 维数与上下 Minkowski 维数都等于各分量维数的上确界；由于五个分量的维数全为 \(2\)，整个 \(\mathfrak X_{\mathrm{LY}}\) 的三种维数也都等于 \(2\)。证毕。
+\end{proof}
+
+\begin{corollary}[Gödel--Lee--Yang 精确实现的四元刚性]\label{cor:derived-leyang-fourary-rigidity}
+固定一个分支族 \((\Pi_{i,n})_{n\ge 0}\)。设存在某个仿射实现
+\[
+T_d(x):=2^Lx+d,
+\qquad
+d\in D\subset E_{\min}[2^L],
+\]
+并满足如下两项同步条件：其一，任意深度 \(n\) 的地址词 \(d_1\cdots d_n\in D^n\) 与第 \(n\) 层分支点之间一一对应，从而不存在有限深度精确重叠；其二，一次 SPG 推进恰对应层数 \(n\mapsto n+1\)。则必有
+\[
+|D|=4.
+\]
+因此，任何与 Lee--Yang 分支塔严格同步且无重叠的精确仿射实现，都不可约地是四元地址系统。
+\end{corollary}
+
+\begin{proof}
+由推论 \ref{cor:xi-terminal-zm-leyang-ramification-pullback-2n}，
+\[
+|\Pi_{i,n}|=|E_{\min}[2^n]|=4^n.
+\]
+另一方面，在无重叠与层同步假设下，深度 \(n\) 的地址词总数恰为 \(|D|^n\)，并且全部对应于层 \(n\) 的不同分支点。因此
+\[
+|D|^n=4^n
+\qquad (n\ge 1),
+\]
+从而 \(|D|=4\)。
+\end{proof}
+
+\begin{remark}[三轴地址语义下的熵下界]\label{rem:derived-leyang-entropy-floor}
+在定义 \ref{def:multi_axis_address} 的三轴前缀
+\(
+a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}})
+\)
+以及命题 \ref{prop:xi-null-three-way} 的单射化原则下，推论 \ref{cor:derived-leyang-fourary-rigidity} 表明：若希望在不引入精确重叠的前提下把 Lee--Yang 分支塔实现为严格同步的符号地址系统，则 residue/逆极限轴的每层地址熵至少为 \(2\log 2\)。任何满足 \(|D|<4\) 的实现，都只能通过把多个地址词压缩到同一点来完成层数匹配；在本文语义中，这正对应碰撞型 \(\mathsf{NULL}\) 或与之等价的信息丢失，除非额外外置足以恢复单射性的残差记录轴。
+\end{remark}
+
+\input{cont__derived_dynamics_freezing_gauge}
+\input{cont__derived_laurent_rose_lissajous}
+\input{cont__derived_joukowsky_lissajous_groupoid_hardy}
+\input{cont__derived_leyang_branch_hypercube_measures_zeta}
+\input{cont__derived_zg_evenzeta_carry_radius}
+\input{cont__derived_fiber_stieltjes_t5_rootcount}
+\input{cont__derived_oracle_capacity_binfold_pressure}
+\input{cont__derived_binfold_logpotential_stirling}
+\input{cont__derived_oracle_thermal_schur_capacity}
+\input{cont__derived_window6_gauge_zeta_freezing}
+\input{cont__derived_zero_chain_squarefree_gibbs}
+\input{cont__derived_exterior_smith_minsector_rootcloud}
+\input{cont__derived_fold_multiplicity_convex_envelope}
+\input{cont__derived_foldbin_homotopy_witten_phase}
+\input{cont__derived_twist_completion_nonabelian_ledger}
+
+\end{document}

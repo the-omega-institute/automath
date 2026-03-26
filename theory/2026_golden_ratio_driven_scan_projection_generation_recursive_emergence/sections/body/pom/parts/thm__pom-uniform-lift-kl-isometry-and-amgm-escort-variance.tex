@@ -1,0 +1,253 @@
+% KL isometry/uniqueness of uniform lift and escort-variance representation of AM--GM defect.
+
+\begin{theorem}[均匀纤维提升的 KL 等距性与唯一性刻画]\label{thm:pom-uniform-lift-kl-isometry-uniqueness}
+设 \(f:X\twoheadrightarrow Y\) 为有限集上的满射，记纤维基数 \(d_f(y):=\lvert f^{-1}(y)\rvert\)。
+对任意 \(\pi\in\Delta(Y)\) 定义均匀纤维提升
+\[
+(L_f\pi)(x):=\frac{\pi(f(x))}{d_f(f(x))}\qquad(x\in X),
+\]
+并令推前 \(f_\ast:\Delta(X)\to\Delta(Y)\) 为 \((f_\ast\mu)(y):=\sum_{x\in f^{-1}(y)}\mu(x)\)。
+则：
+\begin{enumerate}
+  \item 对任意 \(\pi,\pi'\in\Delta(Y)\)，成立严格恒等式
+  \[
+  \boxed{\;D_{\mathrm{KL}}\!\bigl(L_f\pi\,\|\,L_f\pi'\bigr)=D_{\mathrm{KL}}(\pi\|\pi').\;}
+  \]
+  \item 设 \(T:\Delta(Y)\to\Delta(X)\) 为仿射映射，满足 \(f_\ast\circ T=\mathrm{id}_{\Delta(Y)}\)，并且对一切 \(\pi,\pi'\in\Delta(Y)\) 有
+  \(
+  D_{\mathrm{KL}}\!\bigl(T(\pi)\,\|\,T(\pi')\bigr)=D_{\mathrm{KL}}(\pi\|\pi')
+  \)。
+  则必有 \(T=L_f\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+对 (1)，对任意 \(x\in X\) 有
+\(
+\frac{(L_f\pi)(x)}{(L_f\pi')(x)}=\frac{\pi(f(x))}{\pi'(f(x))}
+\)，
+故
+\[
+\begin{aligned}
+D_{\mathrm{KL}}(L_f\pi\|L_f\pi')
+&=\sum_{x\in X}\frac{\pi(f(x))}{d_f(f(x))}\log\frac{\pi(f(x))}{\pi'(f(x))}\\
+&=\sum_{y\in Y}\sum_{x\in f^{-1}(y)}\frac{\pi(y)}{d_f(y)}\log\frac{\pi(y)}{\pi'(y)}
+=\sum_{y\in Y}\pi(y)\log\frac{\pi(y)}{\pi'(y)}
+=D_{\mathrm{KL}}(\pi\|\pi').
+\end{aligned}
+\]
+\par
+对 (2)，取点质量 \(\delta_y\in\Delta(Y)\)。
+由 \(f_\ast T(\delta_y)=\delta_y\) 知 \(T(\delta_y)\) 的支持包含于 \(f^{-1}(y)\)。
+若存在 \(y\neq y'\) 使得 \(T(\delta_y)\) 与 \(T(\delta_{y'})\) 的支持相交，则
+\(
+D_{\mathrm{KL}}(T(\delta_y)\|T(\delta_{y'}))<\infty
+\)，
+而 \(D_{\mathrm{KL}}(\delta_y\|\delta_{y'})=+\infty\)，与等距性矛盾。
+因此 \(T(\delta_y)\) 的支持在不同纤维间两两不交，且必等于对应纤维。
+\par
+再对任意 \(y\in Y\) 与 \(\varepsilon\in(0,1)\) 考虑
+\(
+\pi:=\delta_y
+\) 与
+\(
+\pi':=(1-\varepsilon)\delta_y+\varepsilon\delta_{y'}
+\)
+（其中 \(y'\neq y\) 任取）。
+由等距性得
+\[
+D_{\mathrm{KL}}(T(\delta_y)\|T(\pi'))=D_{\mathrm{KL}}(\delta_y\|\pi')=-\log(1-\varepsilon).
+\]
+而 \(T(\pi')=(1-\varepsilon)T(\delta_y)+\varepsilon T(\delta_{y'})\)，并且第二项在纤维 \(f^{-1}(y)\) 上为零；
+因此在 \(f^{-1}(y)\) 上有 \(T(\pi')=(1-\varepsilon)T(\delta_y)\)，从而
+\[
+D_{\mathrm{KL}}(T(\delta_y)\|T(\pi'))
+=\sum_{x\in f^{-1}(y)}T(\delta_y)(x)\log\frac{T(\delta_y)(x)}{(1-\varepsilon)T(\delta_y)(x)}
+=-\log(1-\varepsilon).
+\]
+要使上述等式对任意 \(y'\neq y\) 皆成立，唯一可能是：\(T(\delta_y)\) 在其纤维支持上不区分点，即为均匀分布。
+于是对所有 \(y\) 有 \(T(\delta_y)=L_f\delta_y\)。
+由仿射性，任意 \(\pi=\sum_y\pi(y)\delta_y\) 满足
+\(
+T(\pi)=\sum_y\pi(y)T(\delta_y)=\sum_y\pi(y)L_f\delta_y=L_f\pi
+\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[离散雅可比修正：将 Beck--Chevalley 缺陷严格化为交换]\label{thm:pom-bc-discrete-jacobian-strictification}
+设 \(f:X\twoheadrightarrow Y\)、\(g:Y\twoheadrightarrow Z\) 为有限集上的满射，并沿用纤维基数记号
+\[
+d_f(y):=\lvert f^{-1}(y)\rvert,\qquad
+d_{g\circ f}(z):=\lvert(g\circ f)^{-1}(z)\rvert=\sum_{y\in g^{-1}(z)}d_f(y).
+\]
+定义依赖上游满射 \(f\) 的修正提升核 \(\widetilde L_{g,f}:\Delta(Z)\to\Delta(Y)\) 为
+\[
+(\widetilde L_{g,f}\nu)(y):=\nu(g(y))\,\frac{d_f(y)}{d_{g\circ f}(g(y))}\qquad(y\in Y).
+\]
+则：
+\begin{enumerate}
+  \item 作为算子 \(\Delta(Z)\to\Delta(X)\)，成立严格恒等式
+  \[
+  \boxed{\;L_f\,\widetilde L_{g,f}=L_{g\circ f}.\;}
+  \]
+  \item 若 \(\mathsf K:\Delta(Z)\to\Delta(Y)\) 为任意 Markov 核且对一切 \(\nu\in\Delta(Z)\) 满足
+  \(
+  L_f\,\mathsf K\nu=L_{g\circ f}\nu
+  \)，
+  则必有 \(\mathsf K=\widetilde L_{g,f}\)。
+  \item 对任意 \(\nu\in\Delta(Z)\)，Beck--Chevalley 缺陷满足
+  \[
+  \boxed{\;
+  D_{\mathrm{KL}}(L_fL_g\nu\|L_{g\circ f}\nu)
+  =D_{\mathrm{KL}}(L_g\nu\|\widetilde L_{g,f}\nu)
+  =\mathbb E_{Z\sim\nu}\!\left[\log\frac{\mathrm{AM}_Z}{\mathrm{GM}_Z}\right],\;}
+  \]
+  其中 \(\mathrm{AM}_z,\mathrm{GM}_z\) 与定理 \ref{thm:pom-bc-amgm-defect-identity} 同一。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+先证 \(\widetilde L_{g,f}\) 为 Markov 核：对任意 \(z\in Z\)，有
+\[
+\sum_{y\in g^{-1}(z)}(\widetilde L_{g,f}\delta_z)(y)
+=\sum_{y\in g^{-1}(z)}\frac{d_f(y)}{d_{g\circ f}(z)}
+=1.
+\]
+\par
+(1) 对任意 \(x\in X\)，记 \(y=f(x)\)、\(z=g(y)\)。则
+\[
+(L_f\widetilde L_{g,f}\nu)(x)
+=\frac{(\widetilde L_{g,f}\nu)(f(x))}{d_f(f(x))}
+=\frac{\nu(z)\,d_f(y)}{d_{g\circ f}(z)\,d_f(y)}
+=\frac{\nu((g\circ f)(x))}{d_{g\circ f}((g\circ f)(x))}
+=(L_{g\circ f}\nu)(x).
+\]
+\par
+(2) 取 \(\nu=\delta_z\)。由 \(L_{g\circ f}\delta_z\) 在 \((g\circ f)^{-1}(z)\) 上均匀可知：对任意 \(y\in g^{-1}(z)\) 与任意 \(x\in f^{-1}(y)\)，
+\[
+(L_f\mathsf K\delta_z)(x)=\frac{(\mathsf K\delta_z)(y)}{d_f(y)}=\frac1{d_{g\circ f}(z)}.
+\]
+从而 \((\mathsf K\delta_z)(y)=d_f(y)/d_{g\circ f}(z)\)，即 \(\mathsf K\delta_z=\widetilde L_{g,f}\delta_z\)。
+由 Markov 核的仿射性，推广到任意 \(\nu\) 得 \(\mathsf K=\widetilde L_{g,f}\)。
+\par
+(3) 由定理 \ref{thm:pom-uniform-lift-kl-isometry-uniqueness} 的 KL 等距性，
+\[
+D_{\mathrm{KL}}(L_fL_g\nu\|L_f\widetilde L_{g,f}\nu)=D_{\mathrm{KL}}(L_g\nu\|\widetilde L_{g,f}\nu).
+\]
+再由 (1) 的严格交换 \(L_f\widetilde L_{g,f}\nu=L_{g\circ f}\nu\) 得到第一处等号。
+最后一处等号由定理 \ref{thm:pom-bc-amgm-defect-identity} 给出。证毕。
+\end{proof}
+
+\begin{proposition}[Beck--Chevalley 的 AM--GM 缺陷之 escort 方差能量表示]\label{prop:pom-bc-amgm-defect-escort-variance-energy}
+在定理 \ref{thm:pom-bc-amgm-defect-identity} 的设定下，固定任意 \(z\in Z\) 并令 \(A_z:=g^{-1}(z)\)。
+定义
+\[
+\alpha_{f,g}(z)
+:=\log\!\Bigl(\frac{1}{d_g(z)}\sum_{y\in A_z}d_f(y)\Bigr)
+\;-\;
+\frac{1}{d_g(z)}\sum_{y\in A_z}\log d_f(y).
+\]
+对每个 \(t\in[0,1]\) 定义 escort 权重
+\[
+p_{z,t}(y):=\frac{d_f(y)^t}{\sum_{y'\in A_z}d_f(y')^t}\qquad(y\in A_z).
+\]
+则成立严格能量表示
+\[
+\boxed{\;
+\alpha_{f,g}(z)
+=\int_0^1 (1-t)\,\mathrm{Var}_{Y\sim p_{z,t}}\!\bigl(\log d_f(Y)\bigr)\,\dd t.\;}
+\]
+从而
+\(
+D_{\mathrm{KL}}(L_fL_g\nu\|L_{g\circ f}\nu)=\EE_{Z\sim\nu}\bigl[\alpha_{f,g}(Z)\bigr]
+\)
+可视作该 escort 方差能量的 \(\nu\)-平均。
+\end{proposition}
+\begin{proof}
+固定 \(z\in Z\) 并记 \(n:=d_g(z)=|A_z|\)。
+设多重集 \(\{a_y\}_{y\in A_z}\) 由 \(a_y:=d_f(y)\in\NN_{>0}\) 给出，并定义
+\[
+\Phi(t):=\log\Bigl(\frac{1}{n}\sum_{y\in A_z}a_y^{t}\Bigr)\qquad(0\le t\le 1).
+\]
+则 \(\Phi(0)=0\)，且对 \(t\in(0,1)\) 有
+\[
+\Phi'(t)=\sum_{y\in A_z}p_{z,t}(y)\log a_y,\qquad
+\Phi''(t)=\mathrm{Var}_{Y\sim p_{z,t}}(\log a_Y).
+\]
+由带积分余项的 Taylor 公式，
+\[
+\Phi(1)=\Phi(0)+\Phi'(0)+\int_0^1(1-t)\Phi''(t)\,\dd t,
+\]
+从而
+\[
+\Phi(1)-\Phi'(0)=\int_0^1(1-t)\,\mathrm{Var}_{Y\sim p_{z,t}}(\log a_Y)\,\dd t.
+\]
+注意
+\[
+\Phi(1)=\log\Bigl(\frac1n\sum_{y\in A_z}a_y\Bigr),\qquad
+\Phi'(0)=\frac1n\sum_{y\in A_z}\log a_y,
+\]
+故左端恰为 \(\alpha_{f,g}(z)\)。
+将 \(a_y=d_f(y)\) 代回即得结论。证毕。
+\end{proof}
+
+\begin{theorem}[纤维对数基数的熵势余边界与离散 Bianchi 恒等式]\label{thm:pom-bc-information-stokes-coboundary}
+设 \(f:X\twoheadrightarrow Y\)、\(g:Y\twoheadrightarrow Z\) 为有限集上的满射，并记 \(d_f(y)=|f^{-1}(y)|\)、\(d_g(z)=|g^{-1}(z)|\)。
+对任意 \(\pi\in\Delta(Y)\) 定义熵势泛函
+\[
+\kappa(f;\pi):=\EE_{Y\sim \pi}\bigl[\log d_f(Y)\bigr].
+\]
+并对任意 \(\nu\in\Delta(Z)\) 定义 Beck--Chevalley 标量缺陷
+\[
+\Omega_{\mathrm{KL}}(f,g;\nu):=
+D_{\mathrm{KL}}\!\bigl(L_fL_g\nu\,\|\,L_{g\circ f}\nu\bigr).
+\]
+则成立严格恒等式
+\[
+\boxed{\;
+\Omega_{\mathrm{KL}}(f,g;\nu)
+=\kappa(g\circ f;\nu)-\kappa(g;\nu)-\kappa\!\bigl(f;L_g\nu\bigr).\;}
+\]
+并且对任意满射链
+\(
+X_0\xrightarrow{f}X_1\xrightarrow{g}X_2\xrightarrow{h}X_3
+\)
+与任意 \(\nu\in\Delta(X_3)\)，若记 \(\nu_2:=L_h\nu\in\Delta(X_2)\)，则有离散 Bianchi 恒等式
+\[
+\boxed{\;
+\Omega_{\mathrm{KL}}(g,h;\nu)
+-\Omega_{\mathrm{KL}}(f\circ g,h;\nu)
++\Omega_{\mathrm{KL}}(f,g\circ h;\nu)
+-\Omega_{\mathrm{KL}}(f,g;\nu_2)=0.\;}
+\]
+\end{theorem}
+\begin{proof}
+先注意：对任意满射 \(p:U\twoheadrightarrow V\) 与任意 \(\pi\in\Delta(V)\)，由提升定义
+\(
+(L_p\pi)(u)=\pi(p(u))/d_p(p(u))
+\)
+直接计算得
+\[
+H(L_p\pi)=H(\pi)+\kappa(p;\pi).
+\]
+因此对 \(\nu\in\Delta(Z)\) 有
+\[
+H(L_fL_g\nu)=H(L_g\nu)+\kappa(f;L_g\nu)=H(\nu)+\kappa(g;\nu)+\kappa(f;L_g\nu),
+\]
+而
+\(
+H(L_{g\circ f}\nu)=H(\nu)+\kappa(g\circ f;\nu)
+\)。
+由定理 \ref{thm:pom-bc-amgm-defect-identity} 的恒等式
+\(
+D_{\mathrm{KL}}(L_fL_g\nu\|L_{g\circ f}\nu)=H(L_{g\circ f}\nu)-H(L_fL_g\nu)
+\)
+立得
+\[
+\Omega_{\mathrm{KL}}(f,g;\nu)
+=\kappa(g\circ f;\nu)-\kappa(g;\nu)-\kappa(f;L_g\nu).
+\]
+\par
+对三元组 \(f,g,h\)，将上式应用于 \((g,h;\nu)\)、\((f\circ g,h;\nu)\)、\((f,g\circ h;\nu)\) 与 \((f,g;L_h\nu)\) 并作代数消去，可得四项交错和为零。
+等价地，上述恒等式表明 \(\Omega_{\mathrm{KL}}\) 是 \(1\)-上链 \(\kappa\) 的余边界，从而由 \(\delta^2=0\) 得到 Bianchi 恒等式。证毕。
+\end{proof}
+
+\endinput

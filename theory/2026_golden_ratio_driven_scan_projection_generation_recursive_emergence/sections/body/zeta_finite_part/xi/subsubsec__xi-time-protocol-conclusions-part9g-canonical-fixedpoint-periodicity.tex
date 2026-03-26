@@ -1,0 +1,554 @@
+\paragraph{规范 Gödel 半直积的 \texorpdfstring{$B$}{B}-进固定点、前缀地址与 Fibonacci 截面}
+在上述唯一不动点、仿射余循环与压缩刚性的基础上，进一步回到定理 \ref{thm:killo-godel-semidir-affine-2adic} 的规范编码情形：取
+\[
+\mathcal R=\NN^{(\mathbb P)},
+\qquad
+B=2^L>M,
+\qquad
+H_{\mathrm{can}}
+:=
+\{(r,k)\in \mathcal R\rtimes_{\Sigma}\NN:\ \mathrm{supp}(r)\subseteq\{p_1,\dots,p_k\},\ 0\le r(p_t)\le M\}.
+\]
+此时每个规范元的固定点都可写成严格纯周期的 \(B\)-进地址，而不同规范块之间的重合恰由 primitive 周期核控制；同一地址系统还同时锁定规范忠实性的最小进位阈值、无限事件流的前缀拼接律以及 Zeckendorf--Gödel 有限截面的 Fibonacci 仿射递推。
+
+\begin{theorem}[规范编码子单子与有限字母自由单子的严格同构]\label{thm:xi-time-part9g-canonical-submonoid-free-monoid}
+沿用上段记号，并记
+\[
+\{0,\dots,M\}^{\ast}:=\bigsqcup_{k\ge 0}\{0,\dots,M\}^{k}
+\]
+为字母表 \(\{0,\dots,M\}\) 上的自由单子，其乘法为词连接。定义映射
+\[
+\Theta:H_{\mathrm{can}}\longrightarrow \{0,\dots,M\}^{\ast},
+\qquad
+\Theta(r,k):=\bigl(r(p_1),\dots,r(p_k)\bigr),
+\]
+并约定 \(\Theta(0,0)=\varnothing\) 为单位空词。则 \(H_{\mathrm{can}}\) 是
+\(
+\mathcal R\rtimes_{\Sigma}\NN
+\)
+的子单子，并且 \(\Theta\) 是单子同构。换言之，规范编码子集并非半直积中的任意稀薄子集，而恰是字母表大小 \(M+1\) 的自由单子。
+\end{theorem}
+\begin{proof}
+先证封闭性。设
+\[
+(r,k),(s,\ell)\in H_{\mathrm{can}}.
+\]
+由定义，
+\[
+\mathrm{supp}(r)\subseteq\{p_1,\dots,p_k\},
+\qquad
+\mathrm{supp}(s)\subseteq\{p_1,\dots,p_{\ell}\}.
+\]
+故移位后有
+\[
+\mathrm{supp}(\Sigma^k s)\subseteq\{p_{k+1},\dots,p_{k+\ell}\},
+\]
+从而
+\[
+\mathrm{supp}(r+\Sigma^k s)\subseteq\{p_1,\dots,p_{k+\ell}\}.
+\]
+并且两段支撑区间不交，因此对 \(1\le t\le k+\ell\) 有
+\[
+(r+\Sigma^k s)(p_t)=
+\begin{cases}
+r(p_t),& 1\le t\le k,\\[2pt]
+s(p_{t-k}),& k<t\le k+\ell.
+\end{cases}
+\]
+故仍满足
+\(
+0\le (r+\Sigma^k s)(p_t)\le M
+\)。
+于是
+\[
+(r,k)\cdot (s,\ell)=\bigl(r+\Sigma^k s,\ k+\ell\bigr)\in H_{\mathrm{can}},
+\]
+且单位元 \((0,0)\) 也显然属于 \(H_{\mathrm{can}}\)。因此 \(H_{\mathrm{can}}\) 为子单子。
+
+再证 \(\Theta\) 为双射。若
+\[
+\Theta(r,k)=\Theta(s,\ell),
+\]
+则两侧词长相同，故 \(k=\ell\)；再逐坐标比较可得
+\[
+r(p_t)=s(p_t)\qquad (1\le t\le k).
+\]
+而 \(r,s\) 在其余素数坐标上都为零，故 \(r=s\)。因此 \(\Theta\) 单射。
+
+任取一词
+\[
+(a_1,\dots,a_k)\in\{0,\dots,M\}^{k},
+\]
+定义 \(r\in\mathcal R\) 为
+\[
+r(p_t)=a_t\quad(1\le t\le k),
+\qquad
+r(p)=0\quad(p\notin\{p_1,\dots,p_k\}).
+\]
+则 \((r,k)\in H_{\mathrm{can}}\) 且
+\(
+\Theta(r,k)=(a_1,\dots,a_k)
+\)。
+故 \(\Theta\) 满射。
+
+最后比较乘法。对任意 \((r,k),(s,\ell)\in H_{\mathrm{can}}\)，由上面的分段公式，
+\[
+\Theta\bigl((r,k)\cdot(s,\ell)\bigr)
+=
+\Theta\bigl(r+\Sigma^k s,\ k+\ell\bigr)
+=
+\bigl(r(p_1),\dots,r(p_k),s(p_1),\dots,s(p_{\ell})\bigr),
+\]
+这正是词连接
+\(
+\Theta(r,k)\Theta(s,\ell)
+\)。
+因此 \(\Theta\) 为单子同构。证毕。
+\end{proof}
+
+\begin{theorem}[规范仿射元的固定点展开与纯周期 \texorpdfstring{$B$}{B}-进实现]\label{thm:xi-time-part9g-canonical-fixed-point-badic-periodic}
+沿用前述 \(\Psi\)、\(\operatorname{ev}_B\)、\(T_2(E_{\min})\) 与 \(v\) 的记号。设
+\[
+h=(r,k)\in H_{\mathrm{can}},
+\qquad
+k\ge 1.
+\]
+则定理 \ref{thm:xi-time-part9g-affine-semigroup-unique-fixed-point} 给出的唯一不动点
+\[
+x_h=(1-B^k)^{-1}\operatorname{ev}_B(r)
+\]
+满足收敛展开
+\[
+x_h
+=
+\sum_{j\ge 0}B^{jk}\operatorname{ev}_B(r)
+=
+\sum_{j\ge 0}\sum_{t=1}^{k} r(p_t)\,B^{t-1+jk}v.
+\]
+因此 \(x_h\) 恰由长度 \(k\) 的数字块
+\[
+\bigl(r(p_1),\dots,r(p_k)\bigr)\in\{0,\dots,M\}^{k}
+\]
+作无限纯周期重复得到。
+
+反之，对任意长度 \(k\) 的数字块
+\[
+(a_1,\dots,a_k)\in\{0,\dots,M\}^{k},
+\]
+若定义 \(r\in\mathcal R\) 满足
+\[
+r(p_t)=a_t\quad (1\le t\le k),
+\qquad
+r(p)=0\quad (p\notin\{p_1,\dots,p_k\}),
+\]
+则 \(h=(r,k)\in H_{\mathrm{can}}\)，且
+\[
+x=\sum_{j\ge 0}\sum_{t=1}^{k} a_t\,B^{t-1+jk}v
+\]
+正是 \(\Psi(h)\) 的唯一不动点。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9g-affine-semigroup-unique-fixed-point}，
+\[
+x_h=(1-B^k)^{-1}\operatorname{ev}_B(r).
+\]
+由于 \(B=2^L\) 且 \(k\ge 1\)，有 \(|B^k|_2<1\)，故几何级数在 \(\ZZ_2\) 中收敛并给出
+\[
+(1-B^k)^{-1}=\sum_{j\ge 0}B^{jk}.
+\]
+另一方面，由 \(h\in H_{\mathrm{can}}\) 的支撑约束，
+\[
+\operatorname{ev}_B(r)=\sum_{t=1}^{k}r(p_t)\,B^{t-1}v.
+\]
+将两式相乘即得
+\[
+x_h
+=
+\sum_{j\ge 0}B^{jk}\operatorname{ev}_B(r)
+=
+\sum_{j\ge 0}\sum_{t=1}^{k} r(p_t)\,B^{t-1+jk}v,
+\]
+这正是对应数字块的纯周期 \(B\)-进展开。
+
+反向地，给定任意 \((a_1,\dots,a_k)\in\{0,\dots,M\}^{k}\)，按题述定义 \(r\) 即有
+\((r,k)\in H_{\mathrm{can}}\)，并满足
+\[
+\operatorname{ev}_B(r)=\sum_{t=1}^{k}a_t\,B^{t-1}v.
+\]
+于是同一几何级数计算给出
+\[
+(1-B^k)^{-1}\operatorname{ev}_B(r)
+=
+\sum_{j\ge 0}\sum_{t=1}^{k} a_t\,B^{t-1+jk}v=x.
+\]
+再由定理 \ref{thm:xi-time-part9g-affine-semigroup-unique-fixed-point}，\(x\) 确为 \(\Psi(h)\) 的唯一不动点。证毕。
+\end{proof}
+
+\begin{corollary}[固定点重合的 primitive word 分类与最小周期]\label{cor:xi-time-part9g-fixed-point-primitive-word-classification}
+沿用定理 \ref{thm:xi-time-part9g-canonical-fixed-point-badic-periodic} 的记号。设
+\[
+h=(r,k),\qquad h'=(s,\ell)\in H_{\mathrm{can}},
+\]
+并记对应数字块为
+\[
+\mathbf r:=\bigl(r(p_1),\dots,r(p_k)\bigr),
+\qquad
+\mathbf s:=\bigl(s(p_1),\dots,s(p_\ell)\bigr).
+\]
+则下列条件等价：
+\begin{enumerate}
+  \item \(x_h=x_{h'}\)；
+  \item 两条无限数字序列逐位相同，即
+  \[
+  \mathbf r^\infty=\mathbf s^\infty;
+  \]
+  \item 存在某个 primitive word \(u\)，以及正整数 \(a,b\)，使得
+  \[
+  \mathbf r=u^a,\qquad \mathbf s=u^b.
+  \]
+\end{enumerate}
+特别地，若 \(\mathbf r\) 本身为 primitive word，则其对应固定点的最小周期恰为 \(k\)；因此不存在任何 \(\ell<k\) 的规范元素 \(h'\in H_{\mathrm{can}}\) 满足 \(x_{h'}=x_h\)。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-time-part9g-canonical-fixed-point-badic-periodic}，
+\[
+x_h=\sum_{n\ge 0}a_n B^n v,
+\qquad
+x_{h'}=\sum_{n\ge 0}a_n' B^n v,
+\]
+其中 \((a_n)_{n\ge 0}\)、\((a_n')_{n\ge 0}\) 分别由 \(\mathbf r,\mathbf s\) 作无限纯周期重复得到，且所有 digits 都落在 \(\{0,\dots,M\}\subset[0,B-1]\) 内。
+
+若 \(x_h=x_{h'}\)，则
+\[
+\sum_{n\ge 0}(a_n-a_n')B^n v=0.
+\]
+由于 \(v\neq 0\) 且 \(T_2(E_{\min})\cong \ZZ_2^2\) 对 \(\ZZ_2\) 无挠，上式等价于
+\[
+\sum_{n\ge 0}(a_n-a_n')B^n=0
+\]
+在 \(\ZZ_2\) 中成立。由 digits 取值于 \([0,B-1]\) 的 \(B\)-进展开唯一性，必有 \(a_n=a_n'\) 对一切 \(n\) 成立，即 \(\mathbf r^\infty=\mathbf s^\infty\)。反向蕴含显然，故 (1) 与 (2) 等价。
+
+而对有限字的标准组合论事实表明：两条纯周期无限字相同，当且仅当它们都可写成同一个 primitive word 的整数次幂。故 (2) 与 (3) 等价。
+
+最后，若 \(\mathbf r\) 为 primitive word，则 \(\mathbf r^\infty\) 的最小周期正是 \(k\)。因而它不可能同时等于任何长度 \(\ell<k\) 的纯周期块重复；等价地，不存在 \(\ell<k\) 的规范元素与 \(h\) 共享固定点。证毕。
+\end{proof}
+
+\begin{theorem}[规范账本表示的最小进位阈值]\label{thm:xi-time-part9g-canonical-faithful-minimal-radix-threshold}
+沿用定理 \ref{thm:killo-godel-semidir-affine-2adic} 的记号，但仅假设 \(B=2^L\ge 2\)。
+则
+\[
+\Psi|_{H_{\mathrm{can}}}\ \text{为忠实表示}
+\quad\Longleftrightarrow\quad
+B>M.
+\]
+\end{theorem}
+\begin{proof}
+充分性正是定理 \ref{thm:killo-godel-semidir-affine-2adic} 的结论。
+若 \(B\le M\)，则取 \(k=2\)，并定义 \(r,s\in\mathcal R\) 为
+\[
+r(p_1)=B,\qquad r(p_2)=0,
+\]
+\[
+s(p_1)=0,\qquad s(p_2)=1,
+\]
+其余素数坐标全为 \(0\)。
+于是 \((r,2),(s,2)\in H_{\mathrm{can}}\)，且
+\[
+\operatorname{ev}_B(r)=Bv=\operatorname{ev}_B(s).
+\]
+故对任意 \(x\in T_2(E_{\min})\)，都有
+\[
+\Psi(r,2)(x)=B^2x+Bv=\Psi(s,2)(x).
+\]
+但 \((r,2)\neq (s,2)\)，故 \(\Psi|_{H_{\mathrm{can}}}\) 不忠实。
+因此规范忠实性当且仅当 \(B>M\)。
+\end{proof}
+
+\begin{theorem}[无限事件流地址的前缀拼接与精确超度量]\label{thm:xi-time-part9g-holographic-prefix-concatenation-ultrametric}
+沿用推论 \ref{cor:killo-infinite-stream-2adic-holographic-point} 的记号，并进一步假设
+\[
+v\notin 2T_2(E_{\min}).
+\]
+对任意有限事件词
+\[
+\mathbf a=(a_1,\dots,a_k)\in\mathcal E^k,
+\]
+定义 \(r_{\mathbf a}\in\mathcal R\) 为
+\[
+r_{\mathbf a}(p_t)=\mathrm{code}(a_t)\quad (1\le t\le k),
+\qquad
+r_{\mathbf a}(p)=0\quad (p\notin\{p_1,\dots,p_k\}).
+\]
+则对任意无限事件流 \(\mathbf e\in\mathcal E^{\NN}\) 都有
+\[
+\Psi(r_{\mathbf a},k)\bigl(X(\mathbf e)\bigr)=X(\mathbf a\mathbf e),
+\]
+其中 \(\mathbf a\mathbf e\) 表示把 \(\mathbf a\) 作为前缀接到 \(\mathbf e\) 之前。
+
+进一步，若 \(\mathbf e,\mathbf e'\in\mathcal E^{\NN}\) 的最长公共前缀长度恰为 \(n\)，则
+\[
+X(\mathbf e)-X(\mathbf e')\in B^nT_2(E_{\min})\setminus B^{n+1}T_2(E_{\min}).
+\]
+等价地，对每个 \(n\ge 0\) 都有
+\[
+X(\mathbf e)\equiv X(\mathbf e')\pmod{B^nT_2(E_{\min})}
+\quad\Longleftrightarrow\quad
+\mathrm{pref}_n(\mathbf e)=\mathrm{pref}_n(\mathbf e').
+\]
+因此，全息地址的 \(B\)-进分辨率层级与事件流的前缀超度量完全一致。
+\end{theorem}
+\begin{proof}
+由定义，
+\[
+\Psi(r_{\mathbf a},k)\bigl(X(\mathbf e)\bigr)
+=
+B^k\sum_{u\ge 1}\mathrm{code}(e_u)\,B^{u-1}v
++\sum_{t=1}^{k}\mathrm{code}(a_t)\,B^{t-1}v.
+\]
+整理得
+\[
+\Psi(r_{\mathbf a},k)\bigl(X(\mathbf e)\bigr)
+=
+\sum_{t=1}^{k}\mathrm{code}(a_t)\,B^{t-1}v
++\sum_{u\ge 1}\mathrm{code}(e_u)\,B^{u+k-1}v
+=
+X(\mathbf a\mathbf e).
+\]
+
+对第二部分，由编码的单射性，\(\mathbf e,\mathbf e'\) 的最长公共前缀长度与其编码序列的最长公共前缀长度相同。
+又因 \(v\notin 2T_2(E_{\min})\) 蕴含 \(v\notin BT_2(E_{\min})\)，故可将定理 \ref{thm:killo-2adic-holographic-exact-cylinder-separation} 应用于编码序列，立得
+\[
+X(\mathbf e)-X(\mathbf e')\in B^nT_2(E_{\min})\setminus B^{n+1}T_2(E_{\min}).
+\]
+由同一定理中的柱分离等价式，也立即得到模 \(B^nT_2(E_{\min})\) 同余与长度 \(n\) 前缀相等之间的等价关系。
+\end{proof}
+
+\begin{theorem}[无限事件流地址在自然地址线上的严格前缀等距性]\label{thm:xi-time-part9g-holographic-prefix-isometry-on-line}
+沿用推论 \ref{cor:killo-infinite-stream-2adic-holographic-point} 的设定，并记
+\[
+T_v:=\ZZ_2 v\subset T_2(E_{\min}).
+\]
+对任意 \(\mathbf e,\mathbf e'\in\mathcal E^{\NN}\)，定义首个分歧位置
+\[
+N(\mathbf e,\mathbf e')
+:=
+\min\{t\ge 1:\ e_t\neq e_t'\}\in\NN\cup\{\infty\}.
+\]
+若 \(\mathbf e\neq \mathbf e'\)，则
+\[
+\boxed{\;
+X(\mathbf e)-X(\mathbf e')
+\in
+B^{N(\mathbf e,\mathbf e')-1}T_v\setminus B^{N(\mathbf e,\mathbf e')}T_v.\;}
+\]
+因此，若定义前缀超度量
+\[
+d_{\mathrm{pref}}(\mathbf e,\mathbf e')
+:=
+\begin{cases}
+0,& \mathbf e=\mathbf e',\\[2pt]
+|B|_2^{\,N(\mathbf e,\mathbf e')-1},& \mathbf e\neq \mathbf e',
+\end{cases}
+\]
+以及 \(T_v\) 上的 \(B\)-进超度量
+\[
+d_B(x,y)
+:=
+\begin{cases}
+0,& x=y,\\[2pt]
+|B|_2^{\,\nu_B(x-y)},& x\neq y,
+\end{cases}
+\qquad
+\nu_B(z):=\max\{n\ge 0:\ z\in B^nT_v\},
+\]
+则
+\[
+\boxed{\;
+d_B\bigl(X(\mathbf e),X(\mathbf e')\bigr)=d_{\mathrm{pref}}(\mathbf e,\mathbf e').\;}
+\]
+进一步，对任意有限前缀
+\[
+a=(e_1,\dots,e_n)\in\mathcal E^n
+\]
+记
+\[
+[a]:=\{\mathbf e\in\mathcal E^{\NN}:\ e_1,\dots,e_n\ \text{固定}\},
+\qquad
+X_n(a):=\sum_{t=1}^{n}\mathrm{code}(e_t)\,B^{t-1}v.
+\]
+则
+\[
+\boxed{\;
+X([a])=\bigl(X_n(a)+B^nT_v\bigr)\cap X(\mathcal E^{\NN}).\;}
+\]
+因此，长度 \(n\) 的 cylinder 在商模 \(T_v/B^nT_v\) 中给出两两不交的剩余类。
+\end{theorem}
+\begin{proof}
+把 \(\mathbf e,\mathbf e'\) 通过编码识别为 digit 序列
+\[
+a_t:=\mathrm{code}(e_t),
+\qquad
+a_t':=\mathrm{code}(e_t').
+\]
+若 \(\mathbf e\neq \mathbf e'\)，记 \(N:=N(\mathbf e,\mathbf e')\)。则
+\[
+X(\mathbf e)-X(\mathbf e')
+=
+\sum_{t\ge N}(a_t-a_t')B^{t-1}v
+=
+B^{N-1}uv,
+\]
+其中
+\[
+u:=(a_N-a_N')+\sum_{t>N}(a_t-a_t')B^{t-N}\in\ZZ_2.
+\]
+由于 \(0\le a_t,a_t'\le M<B\) 且 \(a_N\neq a_N'\)，有
+\[
+u\equiv a_N-a_N'\not\equiv 0\pmod B.
+\]
+故 \(u\notin B\ZZ_2\)，于是
+\[
+uv\in T_v\setminus B T_v.
+\]
+从而
+\[
+X(\mathbf e)-X(\mathbf e')
+\in
+B^{N-1}T_v\setminus B^N T_v,
+\]
+即得第一条。\(d_B\) 与 \(d_{\mathrm{pref}}\) 的等式只是该 \(B\)-进阶数结论的直接重述。
+
+若 \(\mathbf e\in[a]\)，则由推论 \ref{cor:killo-infinite-stream-2adic-holographic-point} 的前缀截断公式，
+\[
+X(\mathbf e)-X_n(a)=\sum_{t>n}\mathrm{code}(e_t)\,B^{t-1}v\in B^nT_v,
+\]
+故
+\[
+X([a])\subseteq X_n(a)+B^nT_v.
+\]
+反之，设
+\[
+X(\mathbf e)\in \bigl(X_n(a)+B^nT_v\bigr)\cap X(\mathcal E^{\NN}).
+\]
+任取 \(\mathbf f\in[a]\)，则同样有
+\[
+X(\mathbf f)-X_n(a)\in B^nT_v,
+\]
+从而
+\[
+X(\mathbf e)-X(\mathbf f)\in B^nT_v.
+\]
+若 \(\mathbf e\notin[a]\)，则 \(\mathbf e\) 与 \(\mathbf f\) 在某个 \(j\le n\) 处首次分歧；由第一条可知
+\[
+X(\mathbf e)-X(\mathbf f)\in B^{j-1}T_v\setminus B^jT_v,
+\]
+这与其属于 \(B^nT_v\) 矛盾。故 \(\mathbf e\in[a]\)，于是
+\[
+X([a])=\bigl(X_n(a)+B^nT_v\bigr)\cap X(\mathcal E^{\NN}).
+\]
+若两个长度 \(n\) 的前缀 \(a,b\) 不同，则任取 \(\mathbf e\in[a]\)、\(\mathbf e'\in[b]\)，它们在某个 \(j\le n\) 处首次分歧，故
+\[
+X(\mathbf e)-X(\mathbf e')\notin B^nT_v.
+\]
+因此对应的 \(B^nT_v\)-剩余类必然互不相交。证毕。
+\end{proof}
+
+\begin{theorem}[Zeckendorf--Gödel 有限截面的 Fibonacci 仿射递推]\label{thm:xi-time-part9g-zg-primorial-fibonacci-affine-recursion}
+取二值事件集
+\[
+\mathcal E=\{0,1\},
+\qquad
+\mathrm{code}(0)=0,\qquad \mathrm{code}(1)=1,
+\]
+并固定 \(B=2^L>1\) 与原始向量
+\[
+v\in T_2(E_{\min})\setminus 2T_2(E_{\min}).
+\]
+对 \(n\ge 1\) 定义 admissible 前缀集
+\[
+\mathcal A_n
+:=
+\bigl\{
+(z_1,\dots,z_n)\in\{0,1\}^n:\ z_tz_{t+1}=0\ \ (1\le t<n)
+\bigr\},
+\]
+并约定 \(\mathcal A_0:=\{\varnothing\}\)。
+再定义
+\[
+\mathcal D_n:=
+\left\{
+\prod_{t=1}^{n}p_t^{z_t}:\ (z_1,\dots,z_n)\in\mathcal A_n
+\right\}\subset \mathrm{ZG},
+\]
+\[
+\mathcal X_n:=
+\left\{
+\sum_{t=1}^{n}z_t\,B^{t-1}v:\ (z_1,\dots,z_n)\in\mathcal A_n
+\right\}\subset T_2(E_{\min}),
+\]
+并约定 \(\mathcal D_0:=\{1\}\)、\(\mathcal X_0:=\{0\}\)。
+则成立：
+\begin{enumerate}
+  \item 对每个 \(n\ge 0\)，对应
+  \[
+  \prod_{t=1}^{n}p_t^{z_t}
+  \longmapsto
+  \sum_{t=1}^{n}z_t\,B^{t-1}v
+  \]
+  给出 \(\mathcal D_n\) 与 \(\mathcal X_n\) 的双射；
+  \item 对每个 \(n\ge 2\)，有严格不交并分解
+  \[
+  \mathcal X_n
+  =
+  \mathcal X_{n-1}\ \sqcup\ \bigl(B^{n-1}v+\mathcal X_{n-2}\bigr);
+  \]
+  \item 因而
+  \[
+  |\mathcal D_n|=|\mathcal X_n|=F_{n+2}
+  \qquad (n\ge 0).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由唯一素因子分解，映射
+\[
+(z_1,\dots,z_n)\longmapsto \prod_{t=1}^{n}p_t^{z_t}
+\]
+给出 \(\mathcal A_n\) 与 \(\mathcal D_n\) 的双射。
+
+再看地址像。
+对任意 \((z_1,\dots,z_n)\in\mathcal A_n\)，附加零尾得到 \(\widetilde{\mathbf z}\in\{0,1\}^{\NN}\)。
+由于 \(M=1<B\) 且 \(v\notin 2T_2(E_{\min})\)，定理 \ref{thm:xi-time-part9g-holographic-prefix-concatenation-ultrametric} 表明不同前缀对应不同的全息地址。
+因此
+\[
+(z_1,\dots,z_n)\longmapsto \sum_{t=1}^{n}z_t\,B^{t-1}v
+\]
+在 \(\mathcal A_n\) 上为单射，从而给出 \(\mathcal A_n\) 与 \(\mathcal X_n\) 的双射。
+与上一段合并即得第 \(1\) 条。
+
+现证递推。
+对任意 admissible 词 \((z_1,\dots,z_n)\in\mathcal A_n\)，若 \(z_n=0\)，则 \((z_1,\dots,z_{n-1})\in\mathcal A_{n-1}\)，其地址落在 \(\mathcal X_{n-1}\)；
+若 \(z_n=1\)，则 admissibility 强制 \(z_{n-1}=0\)，故 \((z_1,\dots,z_{n-2})\in\mathcal A_{n-2}\)，并且相应地址恰为
+\[
+B^{n-1}v+\mathcal X_{n-2}.
+\]
+于是
+\[
+\mathcal X_n=\mathcal X_{n-1}\cup \bigl(B^{n-1}v+\mathcal X_{n-2}\bigr).
+\]
+该并实际上不交：若二者有公共点，则会给出两个不同的 admissible 前缀产生同一地址，这与第 \(1\) 条的单射性矛盾。
+
+取基数得
+\[
+|\mathcal X_n|=|\mathcal X_{n-1}|+|\mathcal X_{n-2}|
+\qquad (n\ge 2),
+\]
+并且
+\[
+|\mathcal X_0|=1,\qquad |\mathcal X_1|=2.
+\]
+故 \(|\mathcal X_n|=F_{n+2}\)。
+再由第 \(1\) 条，\(|\mathcal D_n|=|\mathcal X_n|\)，于是第 \(3\) 条成立。
+\end{proof}
+
+\endinput

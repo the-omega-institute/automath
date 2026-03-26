@@ -1,0 +1,371 @@
+\subsection{稳定类型集合 \texorpdfstring{$X_m$}{X\_m} 的计数}
+\label{subsec:sync-kernel-counting}
+记 $a_m=|X_m|$。按末位分类：
+\begin{itemize}
+  \item 若末位为 $0$，则前 $m-1$ 位任意稳定词，共 $a_{m-1}$ 个；
+  \item 若末位为 $1$，则倒数第二位必为 $0$，前 $m-2$ 位任意稳定词，共 $a_{m-2}$ 个。
+\end{itemize}
+故 $a_m=a_{m-1}+a_{m-2}$，且 $a_1=2,a_2=3$，从而 $a_m=F_{m+2}$。
+
+\subsection{从在线延迟核到一个 10 状态 SFT（同步核）}
+在 Zeckendorf 加法的"纯数字串实现"口径中，先在字母表 $\{0,1,2\}$ 上做逐位叠加，再用有限状态换能器完成规范化。参考文献中给出黄金比例/Zeckendorf 计数下的在线有限自动机实现（例如 \cite{Frougny1999OnlineAddition}）。
+抽取该在线换能器的\textbf{同步部分}（忽略起始 transient 与末端输出函数），得到一个有限状态图 $\Gamma$。其状态集合可取为（$\overline{1}$ 表示 $-1$）
+\[
+Q=\{000,001,002,010,100,101,0\overline{1}2,1\overline{1}2,01\overline{1},11\overline{1}\},
+\]
+并且对每个状态与每个输入 $d\in\{0,1,2\}$ 都有唯一下一状态，因此同步核是一个\textbf{出度恒为 3}的有向图（从而给出一个边移位/拓扑 Markov 链，也即一个 SFT）。
+
+\input{sections/generated/fig_sync_kernel_10_state_graph}
+
+\input{thm__sync-kernel-mealy-minimality}
+\input{sections/generated/eq_sync_kernel_10_state_mealy_minimality}
+
+\begin{remark}[与主文 \texorpdfstring{$\zeta$}{zeta} 行列式接口对齐]
+主文第 \ref{sec:zeta-finite-part} 节把 SFT 的 \(\zeta\) 作为行列式接口（\(\zeta_\sigma(z)=1/\det(I-zA)\)）组织为可审计链条。这里做的是同一件事：只是把“语法 SFT”换成“机制 SFT（同步核）”。
+\end{remark}
+
+\subsection{同步自动机结构：最短复位词长度与目标分层}\label{app:sync-kernel-reset-automaton}
+把上述 Mealy 机\emph{忘掉输出}后，可视为输入字母表 $\{0,1,2\}$ 上的确定自动机
+\(
+\delta:Q\times\{0,1,2\}\to Q
+\)。
+称词 $w\in\{0,1,2\}^\ast$ 为\textbf{同步复位词 / reset word}，若 $\delta(q,w)$ 与初态 $q\in Q$ 无关（等价地 $\delta(Q,w)$ 为单点集）。
+
+\begin{proposition}[10 态同步核的最短同步长度恰为 $5$]\label{prop:sync10-reset-length-5}
+存在长度 $5$ 的复位词；例如
+\[
+\delta(Q,00000)=\{000\}.
+\]
+并且不存在任何长度 $<5$ 的复位词。
+\end{proposition}
+
+\begin{remark}[阈值 $5$ 的结构原因：$0000$ 先压缩到两态]\label{rem:sync10-reset-mechanism}
+该“恰为 $5$”并非偶然枚举输出：直接计算得
+\[
+\delta(Q,0000)=\{000,100\},
+\]
+而由转移表可见对任意输入 $d\in\{0,1,2\}$，
+\(
+\delta(000,d)=\delta(100,d)=00d
+\)，
+故对任意 $d$ 都有
+\(
+\delta(Q,0000d)=\{00d\}
+\)。
+因此 $00000$（以及一般的 $0000d$）在最后一步把两态合并为单态，从而解释了最短同步长度的“$4+1$”结构。
+\end{remark}
+
+\begin{proposition}[复位词诱导的严格再生点：同步状态在 \texorpdfstring{$00000$}{00000} 处完全忘却]\label{prop:sync10-regeneration}
+固定任意输入序列 \(\mathbf d=(d_t)_{t\ge 0}\in\{0,1,2\}^{\NN}\)。
+对任意初态 \(q\in Q\)，定义同步核的状态演化
+\[
+q^{(q)}_0:=q,\qquad q^{(q)}_{t+1}:=\delta\!\bigl(q^{(q)}_t,d_t\bigr)\qquad(t\ge 0).
+\]
+若对某个时刻 \(t\ge 0\) 有 \(d_t d_{t+1}\cdots d_{t+4}=00000\)，则对任意初态 \(q\in Q\) 都有
+\[
+q^{(q)}_{t+5}=000,
+\]
+从而时刻 \(t+5\) 的同步状态与初态及此前全部输入 \((d_0,\dots,d_{t-1})\) 无关。
+更一般地，若 \(d_t\cdots d_{t+3}d_{t+4}=0000d\)（\(d\in\{0,1,2\}\)），则对任意 \(q\in Q\) 有 \(q^{(q)}_{t+5}=00d\)。
+\par
+因此可定义由复位词诱导的再生点集合（以片段起点计）
+\[
+\mathcal T(\mathbf d):=\{t\ge 0:\ d_t\cdots d_{t+4}=00000\}.
+\]
+对任意 \(t\in\mathcal T(\mathbf d)\)，时刻 \(t+5\) 起的同步状态轨道仅由未来输入 \((d_{t+5},d_{t+6},\dots)\) 决定，而与过去完全切断。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:sync10-reset-length-5} 有 \(\delta(Q,00000)=\{000\}\)，故对任意状态 \(q_t\in Q\)，读入词 \(00000\) 后到达状态恒为 \(000\)，即 \(q^{(q)}_{t+5}=000\)。
+“\(0000d\)”的结论由注 \ref{rem:sync10-reset-mechanism} 的 \(\delta(Q,0000d)=\{00d\}\) 直接推出。
+最后一段是上述两条结论的语义重述。证毕。
+\end{proof}
+
+\begin{corollary}[相关/混合的再生上界：把“相关长度”替换为可审计的等待时间量]\label{cor:sync10-regeneration-correlation-bound}
+设 \((D_t)_{t\ge 0}\) 为取值于 \(\{0,1,2\}\) 的随机输入序列（不要求独立同分布）。
+对任意初态 \(q\in Q\)，记 \((Q^{(q)}_t)_{t\ge 0}\) 为由同一输入序列 \((D_t)\) 驱动的同步状态轨道：
+\[
+Q^{(q)}_0:=q,\qquad Q^{(q)}_{t+1}:=\delta\!\bigl(Q^{(q)}_t,D_t\bigr)\qquad(t\ge 0).
+\]
+令
+\[
+T:=\inf\{t\ge 0:\ D_t\cdots D_{t+4}=00000\}\in\NN\cup\{\infty\}
+\]
+为第一次出现复位词 \(\texttt{00000}\) 的起点等待时间。
+则对任意两个初态 \(q,q'\in Q\) 与任意 \(n\ge 0\)，在事件 \(\{T\le n-5\}\) 上必有 \(Q^{(q)}_n=Q^{(q')}_n\)。
+等价地，
+\[
+\{T\le n-5\}\subseteq \{Q^{(q)}_n=Q^{(q')}_n\},
+\]
+从而得到概率上界
+\[
+\mathbb{P}\!\left(Q^{(q)}_n\neq Q^{(q')}_n\right)\ \le\ \mathbb{P}(T>n-5).
+\]
+若进一步假设输入 \((D_t)\) 独立同分布，则 \((Q^{(q)}_t)\) 为齐次 Markov 链，其一步转移核 \(P\) 由
+\[
+P(s,s'):=\mathbb{P}\bigl(\delta(s,D_0)=s'\bigr),\qquad s,s'\in Q,
+\]
+给出。此时对任意两初始分布 \(\nu,\nu'\)（视为 \(Q\) 上概率向量）与任意 \(n\ge 0\)，由上述共输入耦合与全变差的耦合刻画可得
+\[
+\bigl\|\nu P^{n}-\nu'P^{n}\bigr\|_{\mathrm{TV}}\le \mathbb{P}(T>n-5).
+\]
+特别地，任何由同步状态\emph{确定性生成}的可观测量（例如输出位、带权累加势等）的滞后 \(n\) 相关都只能来自事件 \(\{T>n-5\}\)；
+因此可将“相关长度/混合速度”的上界替换为等待时间尾分布 \(n\mapsto \mathbb{P}(T>n)\)，而该尾分布仅由输入模型对片段 \(\texttt{00000}\) 的出现统计所决定（无需谱估计或数值拟合）。
+\end{corollary}
+\begin{proof}
+取两条轨道共用同一输入序列 \((D_t)\)，但初态分别为 \(q,q'\)。
+在事件 \(\{T\le n-5\}\) 上，存在 \(t\le n-5\) 使得 \(D_t\cdots D_{t+4}=00000\)；
+由命题 \ref{prop:sync10-regeneration} 得两条轨道在时刻 \(t+5\) 被同时复位到同一确定状态 \(000\)，并因随后输入完全相同而在所有后续时刻保持相同，故 \(Q^{(q)}_n=Q^{(q')}_n\)。
+因此 \(\{T\le n-5\}\subseteq \{Q^{(q)}_n=Q^{(q')}_n\}\)。对两边取概率并取补集即得所示不等式。
+最后一段为命题 \ref{prop:sync10-regeneration} 的“忘却”语义：任意只依赖于同步状态的可观测量在 \(\{T\le n-5\}\) 上与初态无关，其滞后相关只能来自 \(\{T>n-5\}\)。
+证毕。
+\end{proof}
+
+\begin{proposition}[i.i.d. 输入下的复位等待时间尾界与期望界]\label{prop:sync10-reset-waitingtime-iid-bound}
+沿用推论 \ref{cor:sync10-regeneration-correlation-bound} 的记号。
+设输入 \((D_t)_{t\ge 0}\) 独立同分布，并设存在同步复位词 \(w_0\in\{0,1,2\}^L\) 使得 \(\delta(Q,w_0)\) 为单点集（于是读入 \(w_0\) 后同步状态完全忘却初态）。
+记
+\[
+\pi_0:=\mathbb P(D_0D_1\cdots D_{L-1}=w_0)\in(0,1].
+\]
+令
+\[
+T:=\inf\{t\ge 0:\ D_tD_{t+1}\cdots D_{t+L-1}=w_0\}\in\NN\cup\{\infty\}
+\]
+为第一次出现复位词的起点等待时间。
+则对任意 \(t\ge 0\) 有尾界
+\[
+\mathbb P(T>t)\ \le\ (1-\pi_0)^{\lfloor t/L\rfloor},
+\]
+并且期望满足
+\[
+\mathbb E[T]\ \le\ \frac{L}{\pi_0}.
+\]
+\end{proposition}
+\begin{proof}
+将时间轴按块 \(0,1,\dots\) 分解为长度 \(L\) 的不交区间 \([jL,(j+1)L-1]\)。
+若在每个块的起点处均不出现 \(w_0\)，则必有 \(T>kL\)。
+由于输入独立同分布，事件 \(\{D_{jL}\cdots D_{jL+L-1}=w_0\}\) 在不同 \(j\) 上独立，且各自概率为 \(\pi_0\)。
+因此
+\[
+\mathbb P(T>kL)\le (1-\pi_0)^k,
+\]
+从而对一般 \(t\) 取 \(k=\lfloor t/L\rfloor\) 得到尾界。
+期望界由
+\[
+\mathbb E[T]=\sum_{t\ge 0}\mathbb P(T>t)\le \sum_{k\ge 0}\sum_{t=kL}^{(k+1)L-1}\mathbb P(T>t)
+\le \sum_{k\ge 0}L(1-\pi_0)^k=\frac{L}{\pi_0}
+\]
+推出。证毕。
+\end{proof}
+
+\begin{corollary}[10 态同步核在稀疏零输入下的记忆视界增长]\label{cor:sync10-memory-horizon-input-statistics}
+在 \(10\) 态同步核上，命题 \ref{prop:sync10-reset-length-5} 给出同步复位词 \(w_0=\texttt{00000}\) 且 \(L=5\)。
+若输入独立同分布且 \(\mathbb P(D_0=0)=q>0\)，则 \(\pi_0=q^5\)，从而
+\[
+\mathbb P(T>t)\le (1-q^5)^{\lfloor t/5\rfloor},
+\qquad
+\mathbb E[T]\le 5q^{-5}.
+\]
+因此在 \(q\downarrow 0\) 的稀疏零输入极限下，尽管状态数固定为 \(10\)，由复位词触发的统计遗忘时间尺度仍可无界增长。
+\end{corollary}
+
+\begin{proposition}[复位深度谱的“几乎全常量”性质与常量映射长度直径]\label{prop:sync10-reset-depth-spectrum}
+对任一目标态 \(t\in Q\) 定义复位深度
+\[
+\ell(t):=\min\{|w|:\ \delta(Q,w)=\{t\}\}.
+\]
+则除两态 \(0\overline{1}2\)、\(11\overline{1}\) 外，所有目标态均满足 \(\ell(t)\le 5\)；并且仅有这两态满足 \(\ell(t)=6\)。
+因此同步转移半群在常量映射层面的生成长度直径为
+\[
+\max_{t\in Q}\ell(t)=6,
+\]
+且“长度 \(6\) 的例外”仅占 \(2/10\)。
+最短 witness 词见表 \ref{tab:sync-kernel-reset-target-depth}（例如 \(\ell(0\overline{1}2)=6\) 的见证为 \texttt{000102}，\(\ell(11\overline{1})=6\) 的见证为 \texttt{000020}）。
+上述枚举证书由脚本 \texttt{scripts/exp\_sync\_kernel\_10\_state\_automaton\_invariants.py} 自动生成。
+\end{proposition}
+
+\input{sections/generated/tab_sync_kernel_reset_targets}
+
+\begin{proposition}[复位深度谱的集中与常量映射理想的长度直径]\label{prop:sync10-reset-depth-diameter}
+以 \(\ell(t)\) 为复位深度（见上文定义）。
+则在该 \(10\) 态同步核上，
+\[
+\max_{t\in Q}\ell(t)=6,
+\]
+并且除 \(t\in\{0\overline{1}2,\ 11\overline{1}\}\) 外的其余 \(8\) 个目标态均满足 \(\ell(t)=5\)。
+因此由 \(\{f_0,f_1,f_2\}\) 生成的变换半群中，全部常量映射（把 \(Q\) 压到单点的幂等元）在词长意义下形成一个长度直径为 \(6\) 的层；并且“深度 \(6\)”的例外仅占目标态的 \(2/10\)。
+\end{proposition}
+\begin{proof}
+由表 \ref{tab:sync-kernel-reset-target-depth} 的逐目标态最短 witness，可直接读出 \(\ell(t)\le 6\) 对所有 \(t\) 成立，并且恰有两态取到 \(6\)，其余取到 \(5\)。
+常量映射到 \(t\) 与复位词 \(w\) 的一一对应由定义给出：\(\delta(Q,w)=\{t\}\) 当且仅当 \(f_w\) 为常量映射且值为 \(t\)。
+因此 \(\max_t\ell(t)\) 即常量映射层的词长直径。证毕。
+\end{proof}
+
+\subsection{变换半群不变量：大小、单位群与局部 \texorpdfstring{$\mathbb{Z}_2$}{Z2} 周期}\label{app:sync-kernel-semigroup}
+把每个输入字母 $d\in\{0,1,2\}$ 视为对 $Q$ 的函数 $f_d:q\mapsto\delta(q,d)$，考虑其生成的变换幺半群
+\[
+\mathcal{S}:=\langle f_0,f_1,f_2\rangle\subseteq Q^Q.
+\]
+表 \ref{tab:sync-kernel-transition-semigroup-invariants} 汇总了 $\mathcal{S}$ 的可复现不变量（大小、rank 分布、单位元个数等）。
+注意：虽然全局可逆元（置换）只有恒等一个，但 $\mathcal{S}$ 中确实出现 $2$-周期（局部 $\mathbb{Z}_2$ 子群），因此该变换半群\emph{并非} aperiodic（“无群”）情形。
+同样由脚本 \texttt{scripts/exp\_sync\_kernel\_10\_state\_automaton\_invariants.py} 自动生成可审计表格与 witness。
+
+\input{sections/generated/tab_sync_kernel_transition_semigroup_invariants}
+
+\subsection{邻接矩阵 B 与同步核移位 (X\_B, sigma)}\label{app:sync-kernel-basic}
+固定状态顺序
+\[
+(000,001,002,010,100,101,0\overline{1}2,1\overline{1}2,01\overline{1},11\overline{1}),
+\]
+令 $B_{ij}$ 为从状态 $i$ 到状态 $j$ 的输入边数（每条边对应一个输入符号 $d\in\{0,1,2\}$）。则同步核的邻接矩阵为
+\[
+B=
+\begin{pmatrix}
+1&1&1&0&0&0&0&0&0&0\\
+0&0&0&1&1&1&0&0&0&0\\
+1&1&0&0&0&0&0&0&0&1\\
+0&0&0&0&1&1&1&0&0&0\\
+1&1&1&0&0&0&0&0&0&0\\
+0&0&0&1&1&1&0&0&0&0\\
+0&0&0&1&1&0&0&0&1&0\\
+0&0&0&1&1&0&0&0&1&0\\
+0&1&1&0&0&0&0&1&0&0\\
+0&1&1&0&0&0&0&1&0&0
+\end{pmatrix}.
+\]
+记由该邻接矩阵定义的边移位为 $(X_B,\sigma)$。
+
+\subsection{\texorpdfstring{$\zeta_B(z)$}{zeta\_B(z)} 的闭式与因式分解（可审计口径）}
+主文第 \ref{sec:zeta-finite-part} 节对一般动力系统定义动力学 $\zeta$：
+\[
+\zeta_S(z):=\exp\!\left(\sum_{n\ge 1}\frac{\#\mathrm{Fix}(S^n)}{n}z^n\right),
+\]
+并给出对 SFT 的恒等式
+\[
+\zeta_\sigma(z)=\frac{1}{\det(I-zA)},\qquad
+\#\mathrm{Fix}(\sigma^n)=\mathrm{Tr}(A^n),
+\]
+其推导是"周期点 $\leftrightarrow$ 闭路径计数 + 矩阵恒等式"；在主文的 Fredholm 行列式口径中也被再次写成可核验链条。
+
+因此对同步核 $(X_B,\sigma)$ 有
+\[
+a_n:=\#\mathrm{Fix}(\sigma^n)=\mathrm{Tr}(B^n),\qquad
+\zeta_B(z)=\frac{1}{\det(I-zB)}.
+\]
+
+对上面显式 $B$，可直接计算得到行列式分解
+\[
+\det(I-zB)=(z-1)(z+1)(3z-1)\bigl(z^3-z^2+z+1\bigr),
+\]
+从而
+\[
+\zeta_B(z)=\frac{1}{(z-1)(z+1)(3z-1)(z^3-z^2+z+1)}.
+\]
+因此在 $z_\star=1/3$ 附近可写成
+\[
+\zeta_B(z)=\frac{C_B}{1-3z}+O(1),
+\qquad
+C_B=\frac{243}{272}.
+\]
+由此主极点位于 $z_\star=1/3$，对应 Perron--Frobenius 主特征值 $\lambda=3$。
+
+\subsection{primitive 轨道谱 \texorpdfstring{$p_n$}{p\_n}（"素数类对象"）与 Möbius 反演}
+令 $a_n=\mathrm{Tr}(B^n)$。定义 $p_n$ 为长度恰为 $n$ 的 \textbf{primitive 周期轨道数}（按轨道计）。周期轨道分解为 primitive 轨道的幂重复给出标准关系：
+\[
+a_n=\sum_{d\mid n} d\,p_d,
+\qquad
+p_n=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d},
+\]
+其中 $\mu$ 为 Möbius 函数。该关系可视作 $\zeta$ 的欧拉乘积结构在"周期/primitive"分解上的等价表达（与主文第 \ref{sec:zeta-finite-part} 节的周期点计数接口一致）。
+
+\subsection{显式数值与渐近：\texorpdfstring{$p_n\sim 3^n/n$}{p\_n ~ 3**n/n}}
+对该 $B$，前 10 项周期点计数（迹）为
+\[
+(a_1,\dots,a_{10})=(2,14,20,94,222,770,2116,6694,19442,59494),
+\]
+primitive 轨道数为
+\[
+(p_1,\dots,p_{10})=(2,6,6,20,44,123,302,825,2158,5926).
+\]
+因此 $\Pi_B(10)=\sum_{n\le 10}p_n=9412$。
+
+此外，由于该图是原始的（例如 $B^5$ 全正），Perron--Frobenius 给出
+\[
+a_n=\mathrm{Tr}(B^n)=3^n+O(\rho^n)
+\quad(\rho<3),
+\]
+并由 Möbius 反演立刻得到
+\[
+p_n=\frac{3^n}{n}+O\!\left(\frac{\rho^n}{n}\right).
+\]
+在本例中次大特征值模可取 $\rho\approx 1.839286755$（来自三次因子 $z^3-z^2+z+1$ 的根所对应的特征值）。
+
+\subsection{"素数计数曲线" \texorpdfstring{$\Pi_B(N)$}{Pi\_B(N)}}
+若定义（按"长度"计的）轨道素数计数函数
+\[
+\Pi_B(N):=\sum_{n\le N}p_n,
+\]
+则由 $p_n\sim 3^n/n$ 的指数主导性可得更贴合离散情形的主项：
+\[
+\Pi_B(N)\sim \frac{3}{2}\cdot \frac{3^N}{N}.
+\]
+事实上，由 $p_n = \frac{3^n}{n} + O(\frac{\rho^n}{n})$ 可知 $\Pi_B(N) = \sum_{n=1}^N \frac{3^n}{n} + O(\frac{\rho^N}{N})$。通过代换 $k = N - n$，主项求和可表示为
+\[
+\sum_{n=1}^N \frac{3^n}{n} = \frac{3^N}{N} \sum_{k=0}^{N-1} 3^{-k} \left( 1 - \frac{k}{N} \right)^{-1} = \frac{3^N}{N} \left( \sum_{k=0}^{N-1} 3^{-k} + O\left(\frac{1}{N}\sum_{k=0}^{N-1} k 3^{-k}\right) \right).
+\]
+由于级数 $\sum_{k=0}^\infty 3^{-k} = 3/2$ 且 $\sum_{k=0}^\infty k 3^{-k}$ 收敛，上式给出 $\Pi_B(N) = \frac{3}{2} \frac{3^N}{N} + O\left(\frac{3^N}{N^2}\right)$。
+
+若希望写成"$x/\log x$"的形状，可令 $X:=3^N$，则
+\[
+\Pi_B(\lfloor \log_3 X\rfloor)\sim \frac{3}{2}\log 3\cdot \frac{X}{\log X},
+\]
+于是"prime-like counting curve"的尺度与素数计数具有同型外观（差异只在常数）。
+
+\subsection{与 Abel 有限部接口对齐：一个可审计常数输出}
+主文第 \ref{sec:zeta-finite-part} 节把 Abel 正则化 + Hadamard 有限部作为"离散化—正则化—有限部"的稳定接口并形式化为定义 \ref{def:abel-finite-part}。对同步核的 primitive 轨道谱，也可以给出完全同口径的"边界有限部读出"，从而把它并入"有限部接口"。
+
+定义 primitive 生成函数
+\[
+P_B(z):=\sum_{n\ge 1}p_n z^n.
+\]
+由欧拉乘积有
+\[
+\log\zeta_B(z)=\sum_{m\ge 1}\frac{1}{m}P_B(z^m),
+\]
+因此 $P_B(z)=\log\zeta_B(z)-H_B(z)$，其中 $H_B$ 在 $z=1/3$ 解析。
+由于 $p_n\sim 3^n/n$，它在 $z\to 1/3$ 时出现对数发散。把变量缩放到单位圆盘的 Abel 口径
+\[
+r:=3z\in(0,1),\qquad
+\widetilde P_B(r):=P_B(r/3)=\sum_{n\ge 1}p_n\left(\frac{r}{3}\right)^n,
+\]
+则 $r\uparrow 1$ 时
+\[
+\widetilde P_B(r)= -\log(1-r)+\log\mathfrak{M}_B+o(1).
+\]
+据此定义一个"轨道 Mertens 常数"（有限部输出）
+\[
+\log\mathfrak{M}_B
+:=\mathrm{fp}_{r=1}\bigl(\widetilde P_B(r)+\log(1-r)\bigr),
+\]
+这正是主文第 \ref{sec:zeta-finite-part} 节所强调的"Abel 正则化后取 Laurent 常数项/有限部"思想在 $\zeta$-型对象上的直接应用。
+
+对本例的 10 状态同步核，计算得到
+\[
+\log \mathfrak{M}_B\approx -0.3033268788310883,
+\qquad
+\mathfrak{M}_B\approx 0.7383577034164908.
+\]
+更高精度的 $\log\mathfrak{M}_B$ 及其对应的 Dirichlet 留数与 $s=1$ 有限部常数（见附录 \ref{app:real-input-40-dirichlet} 的接口）汇总于表 \ref{tab:sync-kernel-B-dirichlet-constants}（由脚本生成并 \verb|\input|）：
+\input{sections/generated/tab_sync_kernel_B_dirichlet_constants}
+
+\begin{remark}[与主文第 \ref{sec:zeta-finite-part} 节的接口说明]
+\begin{itemize}
+  \item 主文第 \ref{sec:zeta-finite-part} 节给出"语法 SFT"的 $\zeta$ 行列式接口；这里给出"机制 SFT（在线归一化核）"的 $\zeta_B$。两者共享同一条可审计推导链：闭路径计数 $\Rightarrow \mathrm{Tr}(A^n) \Rightarrow \det(I-zA)$。
+  \item 主文第 \ref{sec:zeta-finite-part} 节给出 Abel/有限部作为解析层读出；这里展示它如何把 primitive 谱压缩成一个可比较的标量 $\mathfrak{M}_B$。
+  \item 若关心 "sofic 还是 SFT"的口径一致性：正文已强调对一般 sofic shift 使用覆盖 SFT（Fischer cover）来获得 $\det(I-zA)$ 的 $\zeta$ 接口；本构造直接在同步核（状态图）上得到一个 SFT，因此属于"覆盖口径"的最干净情形。
+\end{itemize}
+\end{remark}
+
+\begin{remark}[加权 primitive 谱的可审计扩展]
+进一步可在同步核的边上引入与 carry、负携带或状态含 $\overline{1}$ 等相关的权重，构造加权矩阵 $B_\theta$ 与 $\zeta_{B,\theta}$，并在 $r\uparrow 1$ 时抽取加权有限部常数族。这样"隐含属性"由状态名转为一组可审计的解析不变量（均值、方差、偏差常数），仍完全落在主文第 \ref{sec:zeta-finite-part} 节的接口体系内。
+\end{remark}

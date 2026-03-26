@@ -1,0 +1,117 @@
+% (User input window)
+
+\paragraph{离散残差模型下的连通性维数、可核对稀疏化与指纹复杂度}
+在固定预算层上，将可审计残差抽象为有限维整格标签，可把“连通性增长”与“审计自由度增长”之间的硬约束完全降维为有限图上的计数与同调问题。
+下列结论给出三类可复核后果：异常维数的不可压缩下界、全局一致性的有限检验、以及跨预算层同时保持可达与残差核算的线性规模骨架。
+
+\begin{conclusion}[稳定概念熵与异常维数的不可压缩下界]\label{con:xi-stable-concept-entropy-anom-dimension-lower-bound}
+设有一有限有向图 \(G=(V,E)\)。
+每条边 \(e\in E\) 赋予两类可审计数据：预算阈值 \(c(e)\in\NN\) 与残差 \(r(e)\in\ZZ^d\)；
+并约定反向边 \(e^{-1}\) 的残差为 \(-r(e)\)。
+对任意路径词 \(w=e_1\cdots e_\ell\) 定义
+\[
+c(w):=\max_{1\le i\le \ell} c(e_i),
+\qquad
+r(w):=\sum_{i=1}^{\ell} r(e_i).
+\]
+给定预算 \(B\)，令 \(\mathcal{W}_B:=\{w:\ c(w)\le B\}\)。
+对对象对 \((x,y)\) 引入零残差可达关系：记 \(x\to_B y\) 当且仅当存在 \(w\in\mathcal{W}_B\) 使 \(w:x\to y\) 且 \(r(w)=0\)。
+令 \(N(B)\) 为由 \(\to_B\) 诱导的可达类数（等价地，可取零残差强连通分量的个数）。
+
+若存在常数 \(R\) 使对所有边有 \(\|r(e)\|_\infty\le R\)，并且在预算 \(B\) 下任意零残差可达的最短证书长度不超过 \(L(B)\)，
+则有计数上界
+\[
+N(B)\ \le\ \bigl(2R\,L(B)+1\bigr)^d,
+\]
+从而得到维数下界
+\[
+d\ \ge\ \frac{\log N(B)}{\log\bigl(2R\,L(B)+1\bigr)}.
+\]
+特别地，若 \(L(B)\le \lambda B\) 且 \(N(B)\) 随 \(B\) 指数增长，则异常维数 \(d\) 必随 \(B\) 至少线性增长。
+因此，在固定维数的异常层之下，连通性密度的持续增加若不伴随可审计自由度的增长，最终只能通过合并稳定概念类实现，而不能维持严格的语义分裂。
+\end{conclusion}
+
+\begin{conclusion}[树势函数--回路基的残差分解与端点可压缩性]\label{con:xi-tree-potential-cycle-basis-residual-decomposition}
+固定预算 \(B\)，令 \(G_{\le B}\) 为由满足 \(c(e)\le B\) 的边生成的无向化底图，并取其一生成森林 \(T\)。
+在每个连通分量选根 \(o\)，对任意顶点 \(v\) 定义树势函数
+\[
+\Phi_B(v):=\sum_{e\in P_T(o,v)} \epsilon_e\, r(e),
+\]
+其中 \(P_T(o,v)\) 为树上唯一路径，\(\epsilon_e\in\{\pm1\}\) 由遍历方向决定。
+记所有非树边集合为 \(E^\ast\)；对每条 \(f\in E^\ast\)，由 \(T\cup\{f\}\) 生成的基本回路定义其回路残差 \(h_B(f)\in\ZZ^d\)。
+则对任意同分量内从 \(x\) 至 \(y\) 的任一路径词 \(w\)（允许重复边），存在整数系数 \(n_f(w)\in\ZZ\) 使得
+\[
+r(w)=\Phi_B(y)-\Phi_B(x)+\sum_{f\in E^\ast} n_f(w)\,h_B(f).
+\]
+因此，残差在商群
+\(
+\ZZ^d/\langle h_B(f):f\in E^\ast\rangle
+\)
+中仅由端点决定；换言之，在由基本回路残差张成的有限生成子模之外，残差部分可被端点势函数完全压缩。
+\end{conclusion}
+
+\begin{conclusion}[全局审计一致性的有限检验原理]\label{con:xi-global-audit-consistency-finite-test}
+沿用结论 \ref{con:xi-tree-potential-cycle-basis-residual-decomposition} 的记号。
+称预算 \(B\) 下审计为路径独立，若对同一对端点 \((x,y)\) 任意两条路径词 \(w,w'\) 都满足 \(r(w)=r(w')\)。
+则路径独立当且仅当所有基本回路残差同时为零：对一切 \(f\in E^\ast\) 有 \(h_B(f)=0\)。
+在该情形下存在势函数 \(\Psi_B:V\to\ZZ^d\) 使每条边 \(e:u\to v\) 满足
+\[
+r(e)=\Psi_B(v)-\Psi_B(u),
+\]
+从而任意路径残差恒等于端点差 \(r(w)=\Psi_B(y)-\Psi_B(x)\)。
+该判据给出一种严格的局部证书完备性：审计是否全局一致无需枚举所有回路或所有重写，只需检验不超过
+\(
+|E_{\le B}|-|V|+\#\mathrm{comp}(G_{\le B})
+\)
+条基本回路的残差即可决定。
+\end{conclusion}
+
+\begin{conclusion}[自证稀疏骨架：同时保持所有预算层的可达与残差核算]\label{con:xi-self-certifying-skeleton-all-budgets}
+设预算取值集合为边阈值的有限集合
+\(
+\mathcal{B}:=\{c(e):e\in E\}
+\)。
+在每个 \(B\in\mathcal{B}\) 上考虑图 \(G_{\le B}\) 及其回路残差子模
+\(
+H_B:=\langle h_B(f):f\in E^\ast\rangle\subseteq\ZZ^d
+\)。
+则存在一子图 \(S\subseteq G\)（自证骨架）满足：
+\begin{enumerate}
+  \item 对每个 \(B\in\mathcal{B}\)，\(S_{\le B}\) 与 \(G_{\le B}\) 具有相同的连通分量划分；
+  \item 对每个 \(B\in\mathcal{B}\)，由 \(S_{\le B}\) 诱导的回路残差子模等于 \(H_B\)；
+  \item 骨架具自证性：\(S\) 中每条边 \(e\) 都存在一条仅用 \(S\) 中边构成的审计证书，证明其残差标签与“势函数--回路基”分解相容，从而任一预算层上的残差核算均可在 \(S\) 内闭合完成；
+  \item 边数满足上界
+  \[
+  |E(S)|\le |V|-\#\mathrm{comp}(G_{\le \max\mathcal{B}})+d\cdot|\mathcal{B}|.
+  \]
+\end{enumerate}
+因此，只要异常维数 \(d\) 固定，则图谱在全部预算层上的“连通性 + 审计残差结构”可被压缩到线性规模的可核对骨架，而不牺牲任何预算层面的可达与残差可计算性。
+\end{conclusion}
+
+\begin{conclusion}[多尺度指纹的最优位长定律：稳定类数与误判率决定复杂度]\label{con:xi-multiscale-fingerprint-optimal-bitlength}
+对每个预算 \(B\)，令 \(\mathcal{C}_B\) 为预算 \(B\) 下的稳定概念类集合（例如零残差强连通分量的集合）。
+设需构造指纹映射 \(F_B:\mathcal{C}_B\to\{0,1\}^{k_B}\)，使任意两不同类发生碰撞的概率不超过 \(\delta_B\)（在随机指纹族意义下，或在对抗性模型中对所有对的最坏界）。
+则必有信息论下界
+\[
+k_B\ \ge\ \left\lceil \log_2 |\mathcal{C}_B|+\log_2\frac1{\delta_B}\right\rceil.
+\]
+更强地，存在一前缀一致的多尺度指纹
+\(
+F:\bigcup_B \mathcal{C}_B\to\{0,1\}^\infty
+\)，
+使得对每个 \(B\) 取其前 \(k_B\) 位即得到满足上述碰撞约束的 \(F_B\)。
+因此，在预算细化过程中，指纹位长的不可压缩增长率完全由 \(|\mathcal{C}_B|\) 的增长与可容许误判率 \(\delta_B\) 所决定，而与图中冗余连边与路径数量无关。
+\end{conclusion}
+
+\begin{conclusion}[连通性增长的层级律：稳定类合并仅发生在有限临界预算上]\label{con:xi-connectivity-hierarchy-finite-critical-budgets}
+定义 \(x\sim_B y\) 当且仅当在预算 \(B\) 下存在零残差证书实现 \(x\to_B y\) 且 \(y\to_B x\)。
+则 \(\sim_B\) 为等价关系，并且随 \(B\) 单调粗化：若 \(B\le B'\) 则 \(\sim_B\) 细于 \(\sim_{B'}\)。
+设 \(|V|=n\)，则存在至多 \(n-1\) 个临界预算
+\(
+B_1<\cdots<B_m
+\)
+（每个 \(B_i\in\mathcal{B}\)），使得等价关系仅在这些 \(B_i\) 处发生严格合并；在所有非临界 \(B\) 上，\(\sim_B\) 保持不变。
+并且每一次合并都可由一个原子证书见证：存在一对等价类 \(C\neq C'\) 与一条预算恰为 \(B_i\) 的边 \(e\)，使得该合并由使用 \(e\) 的零残差闭合所触发。
+因此，连通性随预算增长的可观察结构变化是一条有限步的合并链；若新增边不引入新的临界预算或新的闭路残差生成元，则在稳定类层面不可见。
+\end{conclusion}
+

@@ -1,0 +1,215 @@
+\paragraph{截面可学习性的覆盖时刻：策略不变性、精确尾公式与 \texorpdfstring{$n\log n$}{n log n} cutoff}
+在微正则先验下，任意自适应互异查询产生的类型轨迹与无放回抽样同分布（定理 \ref{thm:pom-microcanonical-adaptive-no-gain-without-replacement}）。
+因此，“首次收齐全部稳定类型”的覆盖时刻与策略无关，并可写成包含--排除闭式；
+在均衡纤维条件下，该覆盖时刻呈现 \(n\log n\) 标度与 Gumbel cutoff。
+这为“获得一条右逆截面”与“精确识别整张映射”之间的复杂度分离提供了可审计的精确模型。
+
+\begin{definition}[覆盖时刻与缺失类型数]\label{def:pom-microcanonical-section-cover-time}
+令 \(F\sim\mathrm{Unif}(\mathfrak{Fold}_m(d))\)，并令 \(\mathcal{A}\) 为任意确定性自适应算法进行互异查询（定义 \ref{def:pom-microcanonical-adaptive-trajectory-counts}），得到轨迹 \(T_1,T_2,\dots\in X_m\)。
+定义覆盖时刻
+\[
+\tau_{\mathcal A}:=\min\Bigl\{t\in\{0,1,\dots,N\}:\ \{T_1,\dots,T_t\}=X_m\Bigr\},
+\]
+并对任意 \(t\in\{0,1,\dots,N\}\) 定义缺失类型数
+\[
+M(t):=\card{X_m\setminus\{T_1,\dots,T_t\}}.
+\]
+\end{definition}
+
+\begin{theorem}[覆盖时刻的策略不变性]\label{thm:pom-microcanonical-cover-time-strategy-invariance}
+在定义 \ref{def:pom-microcanonical-section-cover-time} 的设定下，对任意两种自适应互异查询策略 \(\mathcal{A},\mathcal{A}'\)，有
+\[
+\boxed{\;
+\tau_{\mathcal A}\ \stackrel{d}{=}\ \tau_{\mathcal A'}\;}
+\qquad\text{并且}\qquad
+\boxed{\;
+M_{\mathcal A}(t)\ \stackrel{d}{=}\ M_{\mathcal A'}(t)\ \ \forall\,t\;}
+\]
+其中 \(M_{\mathcal A}(t)\) 表示策略 \(\mathcal A\) 下的缺失类型数过程。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:pom-microcanonical-adaptive-no-gain-without-replacement}，
+\((T_i)_{i\ge 1}\) 的联合分布与策略无关，且等价于从多重集 \(\{x^{\times d(x)}\}_{x\in X_m}\) 的无放回抽样。
+覆盖时刻 \(\tau_{\mathcal A}\) 与缺失过程 \(M_{\mathcal A}(t)\) 均是轨迹 \((T_i)\) 的对称泛函，
+从而其分布亦与策略无关。证毕。
+\end{proof}
+
+\begin{theorem}[覆盖时刻的精确尾概率：包含--排除闭式]\label{thm:pom-microcanonical-cover-time-tail-inclusion-exclusion}
+沿用定义 \ref{def:pom-microcanonical-fold-class} 的记号，并对任意子集 \(A\subseteq X_m\) 记
+\[
+d(A):=\sum_{x\in A}d(x).
+\]
+令 \(\tau\) 为无放回抽样覆盖时刻（与 \(\tau_{\mathcal A}\) 同分布，见定理 \ref{thm:pom-microcanonical-cover-time-strategy-invariance}）。
+则对任意 \(t\in\{0,1,\dots,N\}\)，成立严格恒等式
+\[
+\boxed{\;
+\mathbb{P}(\tau>t)
+=\sum_{\emptyset\neq A\subseteq X_m}(-1)^{\card{A}+1}\,
+\frac{\binom{N-d(A)}{t}}{\binom{N}{t}}\;}
+\]
+其中当 \(N-d(A)<t\) 时相应项按 \(0\) 解释。
+\end{theorem}
+\begin{proof}
+事件 \(\{\tau>t\}\) 等价于“存在某些类型在前 \(t\) 次抽样中从未出现”。
+对固定非空 \(A\subseteq X_m\)，事件“\(A\) 中全部类型在前 \(t\) 步均缺失”当且仅当
+从 \(N-d(A)\) 个非 \(A\) 元素中无放回取出 \(t\) 个，故其概率为 \(\binom{N-d(A)}{t}/\binom{N}{t}\)。
+对“至少一个类型缺失”应用包含--排除即可得到所示公式。证毕。
+\end{proof}
+
+\begin{corollary}[覆盖时刻的期望闭式]\label{cor:pom-microcanonical-cover-time-mean}
+在定理 \ref{thm:pom-microcanonical-cover-time-tail-inclusion-exclusion} 的设定下，
+\[
+\boxed{\;
+\EE[\tau]
+=\sum_{t=0}^{N-1}\mathbb{P}(\tau>t)
+=\sum_{t=0}^{N-1}\ \sum_{\emptyset\neq A\subseteq X_m}(-1)^{\card{A}+1}\,
+\frac{\binom{N-d(A)}{t}}{\binom{N}{t}}\;}
+\]
+并且对任意策略 \(\mathcal A\) 有 \(\EE[\tau_{\mathcal A}]=\EE[\tau]\)。
+\end{corollary}
+\begin{proof}
+由非负整数值随机变量的恒等式 \(\EE[\tau]=\sum_{t\ge 0}\mathbb{P}(\tau>t)\) 且 \(\tau\le N\)，得第一式。
+第二句由定理 \ref{thm:pom-microcanonical-cover-time-strategy-invariance} 立得。证毕。
+\end{proof}
+
+\begin{theorem}[均衡纤维下的 \texorpdfstring{$n\log n$}{n log n} 标度]\label{thm:pom-microcanonical-cover-time-nlogn-scale}
+令 \(n=\card{X_m}\to\infty\)，并假设均衡条件：存在常数 \(0<c_-\le c_+<\infty\) 使对所有 \(x\in X_m\) 有
+\[
+c_-\frac{N}{n}\ \le\ d(x)\ \le\ c_+\frac{N}{n}.
+\]
+再假设 \(n\log n=o(N)\)。
+则存在常数 \(C_1,C_2>0\)（仅依赖 \(c_\pm\)）使
+\[
+\boxed{\;
+n\log n-C_1n\ \le\ \EE[\tau]\ \le\ n\log n+C_2n\;}
+\]
+并且有概率型集中
+\[
+\boxed{\;
+\tau=n\log n+O_{\mathbb{P}}(n)\;}
+\qquad(n\to\infty).
+\]
+\end{theorem}
+\begin{proof}
+对任意单点集合 \(\{x\}\) 由无放回抽样得
+\[
+\mathbb{P}(x\ \text{在前 }t\ \text{步缺失})
+=\frac{\binom{N-d(x)}{t}}{\binom{N}{t}}
+=\prod_{j=0}^{t-1}\left(1-\frac{d(x)}{N-j}\right).
+\]
+当 \(t\le n\log n+O(n)\) 且 \(n\log n=o(N)\) 时，右端与
+\(\exp(-t\,d(x)/N)\) 在指数阶上一致。
+由均衡性 \(d(x)/N\asymp 1/n\)，对 \(t=n(\log n+s)\) 有
+\[
+\mathbb{P}(x\ \text{缺失})\asymp \frac{e^{-s}}{n}.
+\]
+\par
+\textbf{上界：}并集界给出 \(\mathbb{P}(\tau>t)\le\sum_{x}\mathbb{P}(x\ \text{缺失})\le C e^{-s}\)，
+对 \(t\) 求和（或积分比较）得到 \(\EE[\tau]\le n\log n+O(n)\)。
+\par
+\textbf{下界：}令 \(M(t)\) 为时刻 \(t\) 的缺失类型数。
+在无放回抽样下，缺失指示族满足负相关性，从而 \(\Var(M(t))\le \EE[M(t)]\)。
+取 \(t=n(\log n-s)\) 使 \(\EE[M(t)]\ge c e^{s}\)。
+由 Paley--Zygmund 不等式得到 \(\mathbb{P}(M(t)>0)\) 有界离零，
+从而 \(\mathbb{P}(\tau>t)\) 在该尺度上不趋于 \(0\)；
+再对 \(t\) 求和得到 \(\EE[\tau]\ge n\log n-O(n)\)。
+概率型集中由对 \(\mathbb{P}(\tau>n(\log n+s))\) 的指数尾界与相同尺度的下界合并推出。证毕。
+\end{proof}
+
+\begin{corollary}[Fibonacci 尺度下的指数分离：截面获得 \texorpdfstring{$\ll 2^m$}{<<2^m} 而全识别需 \texorpdfstring{$2^m$}{2^m} 级别]\label{cor:pom-microcanonical-cover-time-fibonacci-separation}
+在本文折叠主线 \(N=\card{\Omega_m}=2^m\)、\(n=\card{X_m}=F_{m+2}\asymp\varphi^m\)（见 \S\ref{subsec:pom-fold-compression}）下，
+若均衡条件在该尺度族上成立，则由定理 \ref{thm:pom-microcanonical-cover-time-nlogn-scale} 得
+\[
+\EE[\tau]=n\log n+O(n)=\Theta(m\varphi^m),
+\qquad
+\frac{\EE[\tau]}{2^m}=\Theta\!\bigl(m(\varphi/2)^m\bigr)\xrightarrow[m\to\infty]{}0.
+\]
+因此，在微正则先验下“获得一条右逆截面（每类取一微态代表）”的典型查询规模为 \(\Theta(m\varphi^m)\)，
+而“精确识别整张映射”在最坏情形至少需要 \(N-1=2^m-1\) 次查询（定理 \ref{thm:pom-microcanonical-fold-worstcase-query-rigidity}），两者发生指数分离。
+\end{corollary}
+
+\begin{theorem}[无放回均衡收集的 Gumbel 极限：覆盖时刻出现 cutoff]\label{thm:pom-microcanonical-cover-time-gumbel-cutoff}
+设 \(N\to\infty\)、\(n\to\infty\)，并给定计数 \(d_1,\dots,d_n\in\NN\) 满足 \(\sum_{i=1}^n d_i=N\)。
+假设均衡性
+\[
+\max_{1\le i\le n}\left|\frac{d_i}{N}-\frac{1}{n}\right|=o\!\left(\frac{1}{n}\right),
+\qquad
+n(\log n)^2=o(N).
+\]
+令 \(\tau\) 为无放回抽样下首次出现全部 \(n\) 种类型的时间（定理 \ref{thm:pom-microcanonical-cover-time-strategy-invariance} 表明：微正则先验下任意自适应互异查询的覆盖时刻与该 \(\tau\) 同分布）。
+对任意固定 \(c\in\RR\)，令
+\[
+t_n(c):=\left\lfloor n(\log n+c)\right\rfloor.
+\]
+则成立极限
+\[
+\boxed{\;
+\lim_{N\to\infty}\mathbb{P}(\tau\le t_n(c))=\exp(-e^{-c})\;},
+\qquad
+\frac{\tau-n\log n}{n}\xrightarrow{d}G,
+\]
+其中 \(G\) 为标准 Gumbel 分布（\(\mathbb{P}(G\le c)=\exp(-e^{-c})\)）。
+\end{theorem}
+\begin{proof}
+对任意非空子集 \(A\subseteq[n]\)，记 \(d(A):=\sum_{i\in A}d_i\)。
+由无放回抽样，事件“\(A\) 中全部类型在前 \(t\) 步缺失”的概率为
+\[
+\frac{\binom{N-d(A)}{t}}{\binom{N}{t}}
+=\prod_{j=0}^{t-1}\left(1-\frac{d(A)}{N-j}\right).
+\]
+在 \(t=t_n(c)=O(n\log n)\) 与 \(n(\log n)^2=o(N)\) 下，有一致展开
+\[
+\log\prod_{j=0}^{t-1}\left(1-\frac{d(A)}{N-j}\right)
+=t\log\!\left(1-\frac{d(A)}{N}\right)+o(1).
+\]
+由均衡性得 \(d(A)=\frac{\card{A}}{n}N(1+o(1))\)，从而
+\[
+\frac{\binom{N-d(A)}{t}}{\binom{N}{t}}
+=\exp\!\Bigl(-\frac{\card{A}}{n}t+o(1)\Bigr)
+=\exp\!\bigl(-\card{A}(\log n+c)+o(1)\bigr).
+\]
+代入定理 \ref{thm:pom-microcanonical-cover-time-tail-inclusion-exclusion} 的包含--排除表示并按 \(\card{A}=r\) 分组，得到
+\[
+\mathbb{P}(\tau>t_n(c))
+=\sum_{r=1}^n(-1)^{r+1}\binom{n}{r}\exp\!\bigl(-r(\log n+c)+o(1)\bigr)
+=1-\Bigl(1-\frac{e^{-c}}{n}+o\!\bigl(\tfrac1n\bigr)\Bigr)^n+o(1),
+\]
+从而 \(\mathbb{P}(\tau\le t_n(c))\to \exp(-e^{-c})\)。证毕。
+\end{proof}
+
+\begin{theorem}[缺失类型数的 Poisson 极限：cutoff 的更强刻画]\label{thm:pom-microcanonical-missing-types-poisson}
+在定理 \ref{thm:pom-microcanonical-cover-time-gumbel-cutoff} 的假设下，取 \(t=t_n(c)\) 并记缺失类型数为 \(M(t)\)（定义 \ref{def:pom-microcanonical-section-cover-time}）。
+则对任意固定 \(c\in\RR\)，有分布收敛
+\[
+\boxed{\;
+M(t)\xrightarrow{d}\mathrm{Poisson}(e^{-c})\;},
+\qquad
+\mathbb{P}(\tau\le t)=\mathbb{P}(M(t)=0)\to e^{-e^{-c}}.
+\]
+\end{theorem}
+\begin{proof}
+对任意固定整数 \(r\ge 1\)，考虑下降阶乘矩
+\[
+\EE\bigl[(M(t))_r\bigr]
+=\sum_{\substack{A\subseteq[n]\\ \card{A}=r}}
+\mathbb{P}\bigl(\text{\(A\) 中全部类型在前 \(t\) 步缺失}\bigr)
+=\sum_{\card{A}=r}\frac{\binom{N-d(A)}{t}}{\binom{N}{t}}.
+\]
+由定理 \ref{thm:pom-microcanonical-cover-time-gumbel-cutoff} 证明中的一致近似，
+当 \(\card{A}=r\) 固定时
+\(
+\binom{N-d(A)}{t}/\binom{N}{t}
+=\exp(-rt/n+o(1))
+=\exp(-r(\log n+c)+o(1))
+\)。
+故
+\[
+\EE\bigl[(M(t))_r\bigr]
+=\binom{n}{r}n^{-r}e^{-rc}(1+o(1))\to \frac{e^{-rc}}{r!}.
+\]
+Poisson 分布由全部下降阶乘矩刻画，从而 \(M(t)\Rightarrow\mathrm{Poisson}(e^{-c})\)。
+最后一式由 \(\mathbb{P}(\tau\le t)=\mathbb{P}(M(t)=0)\) 得到。证毕。
+\end{proof}
+
+\endinput
+

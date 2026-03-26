@@ -1,0 +1,499 @@
+\subsubsection{同态审计补全与异常账本的圆维算律}\label{subsubsec:cdim-hom-completion-anomaly-ledger}
+本小节固定在定义 \ref{def:circle-dimension} 与定义 \ref{def:half-circle-dimension} 的口径下工作，并将备注 \ref{rem:circle-dimension-refinement} 的“有限纤维不增圆维”作为可调用背景原则。
+目标是把同态压缩导致的可见圆维损失，系统编译为最小审计补全成本与二阶异常账本的可加律。
+
+\begin{definition}[圆维损失与审计补全]\label{def:cdim-audit-completion-loss}
+设 \(f:G\to H\) 为有限生成离散交换群同态。
+定义其圆维损失为
+\[
+\mathcal L(f):=\cdim(G)-\cdim(\operatorname{im}f).
+\]
+称一对 \((R,r)\) 为 \(f\) 的\textbf{审计补全}，若 \(R\) 为有限生成离散交换群、\(r:G\to R\) 为同态，且
+\[
+\Phi_f:G\longrightarrow H\times R,\qquad \Phi_f(g):=(f(g),r(g))
+\]
+为单射。
+定义其圆维成本为
+\[
+\operatorname{Cost}_{\cdim}(R,r):=\cdim(R).
+\]
+\end{definition}
+
+\begin{theorem}[同态的最小圆维审计补全]\label{thm:cdim-minimal-audit-completion}
+在定义 \ref{def:cdim-audit-completion-loss} 的记号下：
+\begin{enumerate}
+  \item \(\operatorname{Cost}_{\cdim}(R,r)\) 在全部审计补全上存在最小值，且
+  \[
+  \min_{(R,r)}\operatorname{Cost}_{\cdim}(R,r)=\mathcal L(f).
+  \]
+  \item 存在达到该下界的补全，使
+  \[
+  R\cong \ZZ^{\mathcal L(f)}\oplus\operatorname{Tor}(G).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+写 \(T_G:=\operatorname{Tor}(G)\)，并记 \(G_{\mathrm{fr}}:=G/T_G\cong\ZZ^r\)，其中 \(r=\cdim(G)\)。
+令 \(f_{\mathrm{fr}}:G_{\mathrm{fr}}\to H_{\mathrm{fr}}\) 为诱导同态，记
+\[
+K_{\mathrm{fr}}:=\ker(f_{\mathrm{fr}}).
+\]
+则
+\[
+\operatorname{rank}(K_{\mathrm{fr}})
+=\cdim(G)-\cdim(\operatorname{im}f_{\mathrm{fr}})
+=\cdim(G)-\cdim(\operatorname{im}f)
+=\mathcal L(f).
+\]
+由 \(G_{\mathrm{fr}}\) 自由，存在分解 \(G_{\mathrm{fr}}\cong K_{\mathrm{fr}}\oplus C\)，故可取投影同态
+\(
+\pi:G_{\mathrm{fr}}\to K_{\mathrm{fr}}
+\)
+满足 \(\pi|_{K_{\mathrm{fr}}}=\mathrm{id}\)。
+再取 \(G\cong G_{\mathrm{fr}}\oplus T_G\) 下的挠部投影 \(\tau:G\to T_G\)。
+
+定义
+\[
+R_0:=K_{\mathrm{fr}}\oplus T_G,\qquad
+r_0(g):=\bigl(\pi(\bar g),\tau(g)\bigr),
+\]
+其中 \(\bar g\) 为 \(g\) 在 \(G_{\mathrm{fr}}\) 中的像。
+若 \(\Phi_f(g)=(0,0)\)，则 \(f(g)=0\Rightarrow \bar g\in K_{\mathrm{fr}}\)，从而
+\(
+\pi(\bar g)=\bar g
+\)。
+又 \(r_0(g)=0\) 给出 \(\pi(\bar g)=0\) 与 \(\tau(g)=0\)，故 \(\bar g=0\) 且 \(g\in T_G\) 并满足 \(g=\tau(g)=0\)。
+故 \(\Phi_f\) 单射，\((R_0,r_0)\) 为审计补全。
+并且
+\[
+\cdim(R_0)=\operatorname{rank}(K_{\mathrm{fr}})=\mathcal L(f).
+\]
+
+反向下界：任取审计补全 \((R,r)\)。
+由 \(\Phi_f\) 单射可知 \(r|_{\ker f}\) 单射，故
+\[
+\operatorname{rank}(\ker f)\le \operatorname{rank}(R)=\cdim(R).
+\]
+而 \(\operatorname{rank}(\ker f)=\operatorname{rank}(K_{\mathrm{fr}})=\mathcal L(f)\)，故
+\(
+\cdim(R)\ge \mathcal L(f)
+\)。
+与上构造合并即得结论。证毕。
+\end{proof}
+
+\begin{corollary}[圆维损失的链式法则与最小成本可加性]\label{cor:cdim-loss-chain-rule}
+设 \(G\xrightarrow{f}H\xrightarrow{g}K\) 为有限生成离散交换群同态，则
+\[
+\mathcal L(g\circ f)=\mathcal L(f)+\mathcal L\!\bigl(g|_{\operatorname{im}f}\bigr).
+\]
+等价地，若定义
+\(
+C(f):=\min_{(R,r)}\operatorname{Cost}_{\cdim}(R,r)
+\)，则
+\[
+C(g\circ f)=C(f)+C\!\bigl(g|_{\operatorname{im}f}\bigr).
+\]
+\end{corollary}
+\begin{proof}
+由定义
+\[
+\mathcal L(g\circ f)=\cdim(G)-\cdim(\operatorname{im}(g\circ f)),
+\]
+且
+\(
+\operatorname{im}(g\circ f)=\operatorname{im}\bigl(g|_{\operatorname{im}f}\bigr)
+\)。
+故
+\[
+\mathcal L(g\circ f)
+=\bigl(\cdim(G)-\cdim(\operatorname{im}f)\bigr)
++\bigl(\cdim(\operatorname{im}f)-\cdim(\operatorname{im}(g|_{\operatorname{im}f}))\bigr),
+\]
+即得链式法则。
+再由定理 \ref{thm:cdim-minimal-audit-completion} 的等价刻画 \(C(\cdot)=\mathcal L(\cdot)\) 即得成本可加性。证毕。
+\end{proof}
+
+\begin{proposition}[审计补全有限部的素数支撑不可避免性]\label{prop:cdim-completion-prime-support-necessity}
+设 \(f:G\to H\) 如上，记
+\[
+K_{\mathrm{tor}}:=\operatorname{Tor}(\ker f),\qquad
+\operatorname{Supp}(K_{\mathrm{tor}})
+:=\{p\ \text{prime}:p\mid |K_{\mathrm{tor}}|\}.
+\]
+则对任一审计补全 \((R,r)\) 均有
+\[
+\operatorname{Supp}(K_{\mathrm{tor}})
+\subseteq
+\operatorname{Supp}(\operatorname{Tor}(R)).
+\]
+并且存在达到定理 \ref{thm:cdim-minimal-audit-completion} 最小圆维成本的补全，使
+\[
+\operatorname{Supp}(\operatorname{Tor}(R))
+=
+\operatorname{Supp}(K_{\mathrm{tor}}).
+\]
+\end{proposition}
+\begin{proof}
+对任意补全，\(\Phi_f\) 单射推出 \(r|_{\ker f}\) 单射，故 \(r|_{K_{\mathrm{tor}}}\) 亦单射。
+同态保持挠性，故 \(K_{\mathrm{tor}}\hookrightarrow \operatorname{Tor}(R)\)，从而得到素数支撑包含关系。
+
+令 \(P:=\operatorname{Supp}(K_{\mathrm{tor}})\)，并写 \(T_G=\operatorname{Tor}(G)\)。
+按主分解取 \(P\)-primary 直和部分 \((T_G)_P\subseteq T_G\)，记自然投影 \(\tau_P:G\to (T_G)_P\)。
+在定理 \ref{thm:cdim-minimal-audit-completion} 的构造中，用
+\[
+r_P(g):=\bigl(\pi(\bar g),\tau_P(g)\bigr),\qquad
+R_P:=K_{\mathrm{fr}}\oplus (T_G)_P
+\]
+替换 \(r_0\) 与 \(R_0\)。
+与同一证明完全平行可得 \(\Phi_f\) 仍单射，且
+\[
+\cdim(R_P)=\operatorname{rank}(K_{\mathrm{fr}})=\mathcal L(f),
+\]
+故圆维成本仍最小。
+又 \(\operatorname{Tor}(R_P)=(T_G)_P\) 的素数支撑恰为 \(P\)，即所述等号。证毕。
+\end{proof}
+
+\begin{theorem}[二阶相位异常的圆维二次律]\label{thm:cdim-anomaly-quadratic-law}
+设 \(G\) 为有限生成离散交换群，令
+\[
+\mathcal A(G):=H^2(G,\TT),
+\]
+其中 \(\TT\) 视为平凡 \(G\)-模。
+则 \(\mathcal A(G)\) 为紧交换 Lie 群，且其连通分量维数满足
+\[
+\dim\bigl(\mathcal A(G)^0\bigr)=\binom{\cdim(G)}{2}.
+\]
+\end{theorem}
+\begin{proof}
+对交换群 \(G\) 与平凡作用系数 \(A\)，有经典分解
+\[
+H^2(G,A)\cong \operatorname{Ext}_{\ZZ}^1(G,A)\oplus \operatorname{Hom}(\wedge^2 G,A).
+\]
+取 \(A=\TT\)。
+因 \(\TT\) 为可除群，作为 \(\ZZ\)-模是内射对象，故
+\(
+\operatorname{Ext}_{\ZZ}^1(G,\TT)=0
+\)。
+从而
+\[
+\mathcal A(G)\cong \operatorname{Hom}(\wedge^2 G,\TT).
+\]
+写 \(G\cong \ZZ^r\oplus F\)（\(F\) 有限，\(r=\cdim(G)\)），则
+\[
+\wedge^2 G\cong \wedge^2\ZZ^r\oplus(\ZZ^r\otimes F)\oplus \wedge^2 F,
+\]
+其中 \(\wedge^2\ZZ^r\cong \ZZ^{\binom r2}\)，后两项有限。
+故
+\[
+\mathcal A(G)\cong
+\operatorname{Hom}(\ZZ^{\binom r2},\TT)\times(\text{finite})
+\cong
+\TT^{\binom r2}\times(\text{finite}),
+\]
+因此 \(\mathcal A(G)^0\cong \TT^{\binom r2}\)，维数即 \(\binom r2\)。证毕。
+\end{proof}
+
+\begin{corollary}[压缩圆维下的异常相位二次开销]\label{cor:cdim-anomaly-compression-overhead}
+设 \(\pi:G\twoheadrightarrow H\) 为有限生成离散交换群满射，记
+\[
+r:=\cdim(G),\qquad d:=\cdim(G)-\cdim(H)\ (\ge 0).
+\]
+则拉回同态
+\[
+\pi^\ast:\mathcal A(H)^0\longrightarrow \mathcal A(G)^0
+\]
+为单射，且
+\[
+\dim\bigl(\mathcal A(G)^0\bigr)-\dim\bigl(\pi^\ast(\mathcal A(H)^0)\bigr)
+=\binom r2-\binom{r-d}{2}
+=\frac{d(2r-d-1)}{2}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:cdim-anomaly-quadratic-law}，
+\[
+\dim(\mathcal A(G)^0)=\binom r2,\qquad
+\dim(\mathcal A(H)^0)=\binom{r-d}{2}.
+\]
+对满射 \(\pi\)，其自由部分诱导 \(\pi_{\mathrm{fr}}:G_{\mathrm{fr}}\twoheadrightarrow H_{\mathrm{fr}}\) 亦满射，
+故 \(\wedge^2\pi_{\mathrm{fr}}\) 满射。
+在 \(\operatorname{Hom}(\wedge^2-,\TT)\) 上作预合成即得 \(\pi^\ast\) 在连通分量层面的单射。
+维数差即为上述二项式差，化简得最终公式。证毕。
+\end{proof}
+
+\begin{proposition}[离散异常账本的显式分解与素因子判据]\label{prop:cdim-discrete-anomaly-ledger}
+设 \(G\cong \ZZ^r\oplus F\)（\(F\) 有限），定义
+\[
+\mathcal D(G):=\pi_0(\mathcal A(G)).
+\]
+则有同构
+\[
+\mathcal D(G)\cong
+\operatorname{Hom}(\ZZ^r\otimes F,\TT)\times \operatorname{Hom}(\wedge^2F,\TT),
+\]
+从而 \(\mathcal D(G)\) 为有限交换群。
+进一步地，对任意素数 \(p\)，其 \(p\)-primary 分量 \(\mathcal D(G)_{(p)}\) 非平凡当且仅当满足下列之一：
+\begin{enumerate}
+  \item \(r\ge 1\) 且 \(F\) 含非平凡 \(p\)-挠元；
+  \item \(F_{(p)}\) 非循环（等价于 \(\wedge^2(F_{(p)})\neq 0\)）。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:cdim-anomaly-quadratic-law} 的分解过程，
+\[
+\mathcal A(G)\cong
+\TT^{\binom r2}
+\times\operatorname{Hom}(\ZZ^r\otimes F,\TT)
+\times\operatorname{Hom}(\wedge^2F,\TT),
+\]
+其中后两项皆有限，且正是 \(\pi_0\) 部分，故得所述同构。
+
+对给定素数 \(p\)：
+第一因子 \(\operatorname{Hom}(\ZZ^r\otimes F,\TT)\cong \operatorname{Hom}(F,\TT)^r\) 的 \(p\)-primary 非平凡，当且仅当 \(r\ge 1\) 且 \(F\) 含 \(p\)-挠元。
+第二因子的 \(p\)-primary 非平凡，当且仅当 \(\wedge^2(F_{(p)})\neq 0\)，这等价于 \(F_{(p)}\) 非循环。
+二者并集即为判据。证毕。
+\end{proof}
+
+\begin{theorem}[异常正则形的函子性分裂不成立]\label{conj:cdim-anomaly-functorial-splitting}
+设 \(\mathbf{Ab}_{\mathrm{fg}}\) 为有限生成离散交换群范畴，并记
+\[
+\mathcal A(-)=H^2(-,\TT):\mathbf{Ab}_{\mathrm{fg}}^{\mathrm{op}}\to\mathbf{CptAb},
+\qquad
+\mathcal D(G):=\pi_0(\mathcal A(G)).
+\]
+则不存在自然同构
+\[
+\mathcal A(G)\ \cong\ \mathcal A(G)^0\times \mathcal D(G)
+\]
+使其与任意同态诱导的拉回 \(u^\ast\) 交换。
+并且最小反例可取
+\(
+G=\ZZ^2\oplus C_2
+\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:cdim-anomaly-quadratic-law} 的证明，\(\mathcal A(G)\cong \Hom(\wedge^2G,\TT)\)。
+取
+\(
+G=\ZZ^2\oplus C_2
+\)，令 \((e_1,e_2)\) 为 \(\ZZ^2\) 的基，\(t\) 为 \(C_2\) 的生成元。
+则
+\[
+\wedge^2G\cong
+\langle a:=e_1\wedge e_2\rangle
+\oplus
+\langle b_1:=e_1\wedge t,\ b_2:=e_2\wedge t\rangle,
+\]
+其中 \(a\) 为无穷阶元，\(b_1,b_2\) 为 \(2\)-挠元。
+因而
+\(
+\mathcal A(G)^0\cong \Hom(\langle a\rangle,\TT)\cong \TT
+\)，且
+\(
+\mathcal D(G)\cong \Hom(\langle b_1,b_2\rangle,\TT)\cong C_2^2
+\)。
+
+定义自同构 \(\varphi\in\Aut(G)\) 为
+\[
+\varphi(e_1)=e_1+t,\qquad
+\varphi(e_2)=e_2,\qquad
+\varphi(t)=t.
+\]
+其在外积上诱导
+\[
+\wedge^2\varphi(a)=(e_1+t)\wedge e_2=a+b_2,
+\qquad
+\wedge^2\varphi(b_1)=b_1,\qquad
+\wedge^2\varphi(b_2)=b_2.
+\]
+故对任意 \(\chi\in\mathcal A(G)=\Hom(\wedge^2G,\TT)\) 有
+\[
+(\varphi^\ast\chi)(a)=\chi(a+b_2)=\chi(a)+\chi(b_2),
+\qquad
+(\varphi^\ast\chi)|_{\langle b_1,b_2\rangle}=\chi|_{\langle b_1,b_2\rangle}.
+\]
+由命题 \ref{prop:cdim-discrete-anomaly-ledger}，\(\mathcal D(G)\) 由对 \(\ZZ^2\otimes C_2\)（等价于 \(\langle b_1,b_2\rangle\)）的限制刻画，因而 \(\varphi^\ast\) 在 \(\mathcal D(G)\) 上为恒等。
+
+若存在所述自然同构，则等价于存在自然分裂截面
+\(
+s_G:\mathcal D(G)\to\mathcal A(G)
+\)
+使投影 \(\pi:\mathcal A(G)\twoheadrightarrow\mathcal D(G)\) 满足 \(\pi\circ s_G=\mathrm{id}\)。
+自然性要求对任意 \(\varphi\in\Aut(G)\) 有
+\(
+\varphi^\ast\circ s_G=s_G\circ (\varphi^\ast|_{\mathcal D(G)})=s_G
+\)。
+取 \(d\in\mathcal D(G)\) 使 \(d(b_2)=\tfrac12\) 且 \(d(b_1)=0\)，令 \(\chi:=s_G(d)\)。
+则 \(\chi(b_2)=\tfrac12\)，而由 \(\varphi^\ast\chi=\chi\) 得
+\[
+\chi(a)=(\varphi^\ast\chi)(a)=\chi(a)+\chi(b_2)=\chi(a)+\tfrac12,
+\]
+矛盾。
+故自然分裂不存在，从而自然直积分裂不成立。证毕。
+\end{proof}
+
+\begin{theorem}[分裂失败的结构条件]\label{thm:cdim-anomaly-functorial-splitting-obstruction-rge2-tor}
+设 \(G\cong \ZZ^r\oplus F\)（\(F=\operatorname{Tor}(G)\) 有限，\(r=\cdim(G)\)）。
+则以下命题等价：
+\begin{enumerate}
+  \item 存在自然同构 \(\mathcal A(G)\cong \mathcal A(G)^0\times \mathcal D(G)\) 与拉回同态交换；
+  \item \(r\le 1\) 或 \(F=0\)。
+\end{enumerate}
+特别地，当 \(r\ge 2\) 且 \(F\neq 0\) 时，上述自然分裂必不存在。
+\end{theorem}
+\begin{proof}
+若 \(F=0\)，则 \(\mathcal D(G)=0\) 且 \(\mathcal A(G)=\mathcal A(G)^0\)，自然分裂平凡成立。
+若 \(r\le 1\)，则 \(\wedge^2\ZZ^r=0\)，由命题 \ref{prop:cdim-discrete-anomaly-ledger} 得 \(\mathcal A(G)^0=0\) 且 \(\mathcal A(G)\cong\mathcal D(G)\)，自然分裂亦平凡成立。
+
+反之，设 \(r\ge 2\) 且 \(F\neq 0\)。
+取 \(0\neq t\in F\)，其阶记为 \(n\ge 2\)。
+令 \(L:=G/F\cong \ZZ^r\)，取线性无关 \(u,v\in L\) 并取满射 \(\ell:L\to \ZZ/n\ZZ\) 使 \(\ell(u)=1,\ \ell(v)=0\)。
+记自然商映射 \(q:G\to L\)，定义自同构
+\[
+\varphi(g):=g+\ell(q(g))\,t,\qquad g\in G,
+\]
+则 \(\varphi\) 在 \(L\) 与 \(F\) 上均诱导恒等，从而在 \(\mathcal D(G)\) 上诱导恒等。
+取 \(u,v\) 的 lifts \(\tilde u,\tilde v\in G\)，则
+\[
+\wedge^2\varphi(\tilde u\wedge \tilde v)
+=(\tilde u+t)\wedge \tilde v
+=\tilde u\wedge \tilde v+t\wedge \tilde v.
+\]
+交叉项 \(t\wedge \tilde v\) 在分解 \(\wedge^2G\cong \wedge^2\ZZ^r\oplus(\ZZ^r\otimes F)\oplus\wedge^2F\) 中对应 \(v\otimes t\in \ZZ^r\otimes F\)。
+选取 \(d\in \Hom(\ZZ^r\otimes F,\TT)\subset \mathcal D(G)\) 使 \(d(v\otimes t)=\tfrac1n\neq 0\)。
+若存在自然分裂 \(s_G\)，令 \(\chi:=s_G(d)\)，则 \(\varphi^\ast\chi=\chi\)，但上式推出
+\[
+(\varphi^\ast\chi)(\tilde u\wedge \tilde v)
+=\chi(\tilde u\wedge \tilde v)+d(v\otimes t),
+\]
+与不动性矛盾。
+故自然分裂不存在。证毕。
+\end{proof}
+
+\begin{corollary}[障碍的素数支撑刻画]\label{cor:cdim-anomaly-splitting-prime-support}
+设 \(G\cong \ZZ^r\oplus F\) 且 \(r\ge 2\)，并写主分解 \(F=\bigoplus_{p}F_{(p)}\)。
+则自然分裂不存在当且仅当存在素数 \(p\) 使 \(F_{(p)}\neq 0\)。
+并且对每个满足 \(F_{(p)}\neq 0\) 的素数 \(p\)，存在一族自同构在 \(\mathcal D(G)\) 上诱导恒等而在 \(\mathcal A(G)^0\) 上诱导非平凡平移，从而排除任何 \(\Aut(G)\)-不变分裂截面。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:cdim-anomaly-functorial-splitting-obstruction-rge2-tor}，自然分裂不存在当且仅当 \(F\neq 0\)。
+而 \(F\neq 0\) 等价于存在素数 \(p\) 使 \(F_{(p)}\neq 0\)。
+给定 \(p\) 时，取 \(t\in F_{(p)}\) 的阶为 \(p^k\)，重复定理 \ref{thm:cdim-anomaly-functorial-splitting-obstruction-rge2-tor} 证明中的扭切自同构构造即可得到所述平移机制。证毕。
+\end{proof}
+
+\begin{proposition}[分裂截面的 torsor 与同调障碍类]\label{prop:cdim-anomaly-splitting-torsor-obstruction}
+对任意有限生成离散交换群 \(G\)，记短正合列
+\[
+0\longrightarrow \mathcal A(G)^0\longrightarrow \mathcal A(G)\overset{\pi}{\longrightarrow}\mathcal D(G)\longrightarrow 0.
+\]
+令
+\[
+\mathrm{Spl}(G):=\left\{s:\mathcal D(G)\to\mathcal A(G)\ \middle|\ \pi\circ s=\mathrm{id},\ s\ \text{为连续群同态}\right\}.
+\]
+则 \(\mathrm{Spl}(G)\neq\varnothing\)，且在点态加法下为 \(\Hom(\mathcal D(G),\mathcal A(G)^0)\) 的主齐次空间。
+并且 \(\Aut(G)\) 的拉回作用在 \(\mathrm{Spl}(G)\) 上诱导一个同调类
+\[
+\kappa_G\in H^1\!\bigl(\Aut(G),\,\Hom(\mathcal D(G),\mathcal A(G)^0)\bigr),
+\]
+满足 \(\kappa_G=0\) 当且仅当存在 \(\Aut(G)\)-不变的分裂截面。
+\end{proposition}
+\begin{proof}
+由于 \(\mathcal D(G)\) 有限离散，连续同态等同于抽象群同态。
+又 \(\TT\) 可除，从而 \(\Hom(-,\TT)\) 在有限交换群上给出充足的提升；结合 \(\mathcal A(G)\cong\Hom(\wedge^2G,\TT)\) 的显式模型可构造分裂截面，故 \(\mathrm{Spl}(G)\neq\varnothing\)。
+
+若 \(s,s'\in\mathrm{Spl}(G)\)，则 \(\pi\circ(s'-s)=0\)，故 \((s'-s)(\mathcal D(G))\subseteq \mathcal A(G)^0\)，从而 \(s'-s\in\Hom(\mathcal D(G),\mathcal A(G)^0)\)。
+反之，任取 \(h\in\Hom(\mathcal D(G),\mathcal A(G)^0)\)，则 \(s+h\) 仍满足 \(\pi\circ(s+h)=\mathrm{id}\)。
+故 \(\mathrm{Spl}(G)\) 为所述 torsor。
+
+取任意 \(s\in\mathrm{Spl}(G)\)，对 \(\alpha\in\Aut(G)\) 定义
+\[
+\kappa_s(\alpha):=\alpha^\ast\circ s\circ(\alpha^\ast|_{\mathcal D(G)})^{-1}-s\in\Hom(\mathcal D(G),\mathcal A(G)^0).
+\]
+直接计算可知 \(\kappa_s\) 为 \(1\)-余循环；更换 \(s\mapsto s+h\) 仅改变一个余界，故同调类 \([\kappa_s]\) 与选择无关，记为 \(\kappa_G\)。
+当且仅当存在 \(s\) 使 \(\kappa_s\equiv 0\) 时，存在 \(\Aut(G)\)-不变截面。证毕。
+\end{proof}
+
+\begin{theorem}[异常正则形的仿射化：分裂 torsor 的局部直积坐标]\label{thm:cdim-anomaly-affine-regular-form}
+在命题 \ref{prop:cdim-anomaly-splitting-torsor-obstruction} 的记号下，对每个 \(s\in\mathrm{Spl}(G)\) 定义映射
+\[
+\Phi_s:\mathcal A(G)^0\times \mathcal D(G)\longrightarrow \mathcal A(G),
+\qquad
+\Phi_s(a,d):=a+s(d).
+\]
+则 \(\Phi_s\) 为紧交换群同构。
+并且若 \(s'=s+h\)（其中 \(h\in\Hom(\mathcal D(G),\mathcal A(G)^0)\)），则有恒等式
+\[
+\Phi_{s'}=\Phi_s\circ T_h,
+\qquad
+T_h(a,d):=(a+h(d),d).
+\]
+因此，虽然不存在使 \(\Phi_s\) 在 \(\mathbf{Ab}_{\mathrm{fg}}^{\mathrm{op}}\) 上自然化的全局选择 \(s\)，但对每个固定对象 \(G\)，\(\mathrm{Spl}(G)\) 提供了一个以 \(\Hom(\mathcal D(G),\mathcal A(G)^0)\) 为结构群的仿射坐标族；其在 \(\Aut(G)\) 下的不变性由障碍类 \(\kappa_G\) 完全刻画。
+\end{theorem}
+\begin{proof}
+由 \(\pi\circ s=\mathrm{id}\) 可知 \(\Phi_s\) 为满射且核为 \(\{0\}\times\{0\}\)，故为同构；连续性由紧性与有限性立即得到。
+若 \(s'=s+h\)，则
+\[
+\Phi_{s'}(a,d)=a+s(d)+h(d)=\Phi_s(a+h(d),d)=\Phi_s(T_h(a,d)),
+\]
+得所示恒等式。
+最后一段由命题 \ref{prop:cdim-anomaly-splitting-torsor-obstruction} 中 torsor 与障碍类的定义直接给出。证毕。
+\end{proof}
+
+\begin{theorem}[扭切自同构的双线性耦合公式]\label{thm:cdim-anomaly-twist-ledger-bilinear-coupling}
+设 \(G=\ZZ^r\oplus F\)（\(F\) 有限），并采用命题 \ref{prop:cdim-discrete-anomaly-ledger} 的分解
+\[
+\mathcal A(G)\cong
+\TT^{\binom r2}\times \Hom(\ZZ^r\otimes F,\TT)\times \Hom(\wedge^2F,\TT).
+\]
+对任意 \(\lambda\in\Hom(\ZZ^r,F)\)，定义扭切自同构
+\[
+\psi_\lambda(x,f):=(x,f+\lambda(x)).
+\]
+则存在规范双线性映射
+\[
+\tau_G:\Hom(\ZZ^r,F)\times \Hom(\ZZ^r\otimes F,\TT)\longrightarrow \Hom(\wedge^2\ZZ^r,\TT)
+\]
+使对一切 \((\theta,d,\eta)\in \mathcal A(G)\) 有
+\[
+\psi_\lambda^\ast(\theta,d,\eta)=\bigl(\theta+\tau_G(\lambda,d),\ d,\ \eta\bigr),
+\]
+并且坐标公式为
+\[
+\bigl[\tau_G(\lambda,d)\bigr](x\wedge y)=d(x\otimes \lambda(y))-d(y\otimes \lambda(x)),
+\qquad x,y\in\ZZ^r.
+\]
+\end{theorem}
+\begin{proof}
+在 \(\wedge^2G\cong \wedge^2\ZZ^r\oplus(\ZZ^r\otimes F)\oplus\wedge^2F\) 的分解下，\(\psi_\lambda\) 在 \(F\) 上为恒等，故 \(\wedge^2F\) 分量不变；并且 \(\psi_\lambda\) 在 \(\ZZ^r\otimes F\) 上诱导恒等。
+对 \(x,y\in\ZZ^r\subset G\) 有
+\[
+\psi_\lambda(x,0)\wedge\psi_\lambda(y,0)
+=(x,\lambda(x))\wedge(y,\lambda(y))
+=x\wedge y+x\wedge\lambda(y)-y\wedge\lambda(x)+\lambda(x)\wedge\lambda(y).
+\]
+其中交叉项在 \(\ZZ^r\otimes F\) 分量上对应 \(x\otimes\lambda(y)-y\otimes\lambda(x)\)，从而对 \((\theta,d,\eta)\) 的拉回在 \(\wedge^2\ZZ^r\) 分量上增加上述反对称化，得到所述坐标公式；其余两分量不变。证毕。
+\end{proof}
+
+\begin{corollary}[秩 \(2\) 情形的满挠平移与不变截面不存在]\label{cor:cdim-anomaly-rank2-full-torsion-translation}
+令 \(G=\ZZ^2\oplus C_n\)（\(n\ge 2\)）。
+则扭切自同构子群 \(\Hom(\ZZ^2,C_n)\) 在 \(\mathcal A(G)^0\cong\TT\) 上诱导的平移包含全部 \(n\)-挠子 \(\TT[n]\)。
+因此不存在 \(\Aut(G)\)-不变的分裂截面。
+\end{corollary}
+\begin{proof}
+取 \(\ZZ^2\) 的基 \((e_1,e_2)\) 与 \(C_n=\langle t\rangle\)。
+取 \(\lambda\) 使 \(\lambda(e_1)=t,\ \lambda(e_2)=0\)。
+取 \(d\in\Hom(\ZZ^2\otimes C_n,\TT)\) 使 \(d(e_2\otimes t)=\tfrac1n\) 且 \(d(e_1\otimes t)=0\)。
+由定理 \ref{thm:cdim-anomaly-twist-ledger-bilinear-coupling}，
+\[
+\tau_G(\lambda,d)(e_1\wedge e_2)=d(e_1\otimes\lambda(e_2))-d(e_2\otimes\lambda(e_1))=-\tfrac1n.
+\]
+故 \(\mathcal A(G)^0\) 出现 \(\tfrac1n\) 平移，从而由迭代得到 \(\TT[n]\)。
+若存在 \(\Aut(G)\)-不变截面，则其像必须在上述平移下不变，与 \(\TT[n]\) 的自由平移矛盾。证毕。
+\end{proof}
+
+\input{sections/generated/eq_cdim_hom_completion_anomaly_audit}
+\input{sections/generated/tab_cdim_hom_completion_examples}
+\input{sections/generated/tab_cdim_discrete_anomaly_primary_examples}
+
+\endinput
+

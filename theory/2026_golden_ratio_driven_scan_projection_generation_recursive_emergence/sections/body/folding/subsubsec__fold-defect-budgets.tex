@@ -1,0 +1,95 @@
+\begin{corollary}[Hamming--Lipschitz 曲率预算与可加误差控制]\label{cor:fold-hamming-lipschitz-budget}
+令 \(n>m\)，并约定对 \(u\in\{0,1\}^m\) 记 \(\abs{u}_0\) 为汉明重量（非零位计数），并以
+\(
+d_{\mathrm H}(x,y):=\abs{x\oplus y}_0
+\)
+定义 \(X_m\) 上的汉明距离。
+若 \(f:X_m\to\RR\) 对 \(d_{\mathrm H}\) 为 \(L\)-Lipschitz，即对任意 \(x,y\in X_m\) 有
+\(
+\abs{f(x)-f(y)}\le L\,d_{\mathrm H}(x,y)
+\)，
+则对任意 \(\Omega_n\) 上的概率分布 \(\mu\) 与 \(\omega\sim\mu\) 成立
+\[
+\abs{\EE_\mu f\!\bigl(\Fold_m(r_{n\to m}(\omega))\bigr)-\EE_\mu f\!\bigl(\pi_{n\to m}(\Fold_n(\omega))\bigr)}
+\ \le\ L\,\EE_\mu\abs{D_{n\to m}(\omega)}_0
+\ \le\ L\sum_{j=m}^{n-1}\EE_\mu\abs{\kappa_{j+1\to j}\!\bigl(r_{n\to j+1}(\omega)\bigr)}_0.
+\]
+\end{corollary}
+
+\begin{proof}
+记
+\(
+x=\Fold_m(r_{n\to m}(\omega))
+\)、
+\(
+y=\pi_{n\to m}(\Fold_n(\omega))
+\)。
+由 Lipschitz 性得
+\(
+\abs{f(x)-f(y)}\le L\abs{x\oplus y}_0=L\abs{D_{n\to m}(\omega)}_0
+\)，取期望即得第一不等式。
+由定理 \ref{thm:fold-discrete-stokes-defect} 的异或分解，
+\[
+D_{n\to m}(\omega)=\bigoplus_{j=m}^{n-1}\pi_{j\to m}\!\left(\kappa_{j+1\to j}\!\bigl(r_{n\to j+1}(\omega)\bigr)\right).
+\]
+利用 \(\abs{u\oplus v}_0\le \abs{u}_0+\abs{v}_0\) 与截断 \(\pi_{j\to m}\) 不增大汉明重量，得到
+\(
+\abs{D_{n\to m}(\omega)}_0
+\le \sum_{j=m}^{n-1}\abs{\kappa_{j+1\to j}(r_{n\to j+1}(\omega))}_0
+\)。
+取期望得第二不等式。证毕。
+\end{proof}
+
+\begin{proposition}[全局缺陷的余因子恒等式与三角型上界]\label{prop:fold-defect-cocycle}
+令 \(m<k<n\)。则对任意 \(\omega\in\Omega_n\) 成立严格恒等式
+\[
+D_{n\to m}(\omega)
+\ =\
+D_{k\to m}\!\bigl(r_{n\to k}(\omega)\bigr)\ \oplus\ \pi_{k\to m}\!\bigl(D_{n\to k}(\omega)\bigr).
+\]
+从而若记 \(\Delta_{n,m}(\omega):=\abs{D_{n\to m}(\omega)}_0\)，则有三角型上界
+\[
+\Delta_{n,m}(\omega)\ \le\ \Delta_{k,m}\!\bigl(r_{n\to k}(\omega)\bigr)+\Delta_{n,k}(\omega).
+\]
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:fold-discrete-stokes-defect}，
+\[
+D_{n\to m}(\omega)
+=\Bigl(\bigoplus_{j=m}^{k-1}\pi_{j\to m}\!\left(\kappa_{j+1\to j}(r_{n\to j+1}(\omega))\right)\Bigr)
+\ \oplus\
+\Bigl(\bigoplus_{j=k}^{n-1}\pi_{j\to m}\!\left(\kappa_{j+1\to j}(r_{n\to j+1}(\omega))\right)\Bigr).
+\]
+第一段仅依赖于前缀 \(r_{n\to k}(\omega)\)，并按同一定理等于 \(D_{k\to m}(r_{n\to k}(\omega))\)；
+第二段由 \(\pi_{j\to m}=\pi_{k\to m}\circ \pi_{j\to k}\)（引理 \ref{lem:pi-functorial-golden}）可提出 \(\pi_{k\to m}\)，从而等于 \(\pi_{k\to m}(D_{n\to k}(\omega))\)。
+三角型上界由 \(\abs{u\oplus v}_0\le \abs{u}_0+\abs{v}_0\) 立得。证毕。
+\end{proof}
+
+\begin{proposition}[相邻尺度缺陷终止时的一致 lift]\label{prop:fold-naive-prefix-lift}
+令 \(\omega^\infty\in\{0,1\}^{\NN}\)，并定义前缀截断
+\(
+r_{\infty\to m}(\omega^\infty):=\omega_1\cdots\omega_m\in\Omega_m
+\)。
+令
+\(
+x_m:=\Fold_m(r_{\infty\to m}(\omega^\infty))\in X_m
+\)，并定义相邻尺度缺陷
+\[
+\delta_m:=x_m\ \oplus\ \pi_{m+1\to m}(x_{m+1})\in\{0,1\}^m.
+\]
+若
+\(
+\sum_{m\ge 1}\abs{\delta_m}_0<\infty
+\)，则存在 \(M\) 使得对所有 \(m\ge M\) 有 \(\delta_m=0\)，从而 \((x_m)_{m\ge M}\) 与 restriction 逆系统相容并确定唯一的 \(x^\infty\in X_\infty\) 满足
+\(
+\pi_{\infty\to m}(x^\infty)=x_m
+\)
+对所有 \(m\ge M\) 成立。
+\end{proposition}
+
+\begin{proof}
+由于 \(\abs{\delta_m}_0\) 为非负整数且和有限，故仅有限多个 \(m\) 使 \(\delta_m\neq 0\)；取 \(M\) 大于其最大者即可得到对所有 \(m\ge M\) 有 \(\delta_m=0\)，即 \(x_m=\pi_{m+1\to m}(x_{m+1})\)。
+因此 \((x_m)_{m\ge M}\) 为一个相容族，按定理 \ref{thm:inverse-limit-golden}（或命题 \ref{prop:fold-inverse-limit-xm-xinfty}）它对应唯一的逆极限点 \(x^\infty\in X_\infty\)，并满足所述一致性。证毕。
+\end{proof}
+
