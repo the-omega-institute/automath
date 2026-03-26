@@ -1,0 +1,71 @@
+name: Release main.pdf
+
+on:
+  push:
+    tags:
+      - v*
+
+permissions:
+  contents: write
+
+concurrency:
+  group: main-pdf-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-release-pdf:
+    name: Build release main.pdf
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/xu-cheng/texlive-full:latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure release tag points to main
+        run: |
+          git fetch origin main --depth=1
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main
+
+      - name: Build main.pdf
+        run: |
+          if locale -a | grep -Eiq '^en_US\.utf-?8$'; then
+            export LANG=en_US.UTF-8
+            export LC_ALL=en_US.UTF-8
+          fi
+
+          latexmk -pdfxe -interaction=nonstopmode -halt-on-error -file-line-error main.tex
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-main-pdf
+          path: theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.pdf
+          if-no-files-found: error
+
+  publish-release:
+    name: Publish GitHub release
+    runs-on: ubuntu-latest
+    needs:
+      - build-release-pdf
+    steps:
+      - name: Download release artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-main-pdf
+          path: release-assets
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          files: release-assets/main.pdf
+          fail_on_unmatched_files: true
+          generate_release_notes: true

@@ -1,0 +1,50 @@
+name: Build main.pdf CI
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/main-pdf-ci.yml
+      - .github/workflows/main-pdf-release.yml
+      - theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/**
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/main-pdf-ci.yml
+      - .github/workflows/main-pdf-release.yml
+      - theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/**
+  workflow_dispatch:
+
+concurrency:
+  group: main-pdf-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-main-pdf:
+    name: Build main.pdf
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/xu-cheng/texlive-full:latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build main.pdf
+        run: |
+          if locale -a | grep -Eiq '^en_US\.utf-?8$'; then
+            export LANG=en_US.UTF-8
+            export LC_ALL=en_US.UTF-8
+          fi
+
+          latexmk -pdfxe -interaction=nonstopmode -halt-on-error -file-line-error main.tex
+
+      - name: Upload main.pdf artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: main-pdf
+          path: theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/main.pdf
+          if-no-files-found: error
