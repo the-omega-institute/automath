@@ -6,6 +6,7 @@ on:
       - v*
 
 permissions:
+  actions: read
   contents: write
 
 concurrency:
@@ -13,30 +14,72 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-release-pdf:
-    uses: ./.github/workflows/build-main-pdf.yml
-    with:
-      artifact_name: release-main-pdf
-      fetch_depth: 0
-      require_main_ancestor: true
-
   publish-release:
     name: Publish GitHub release
     runs-on: ubuntu-latest
-    needs:
-      - build-release-pdf
     steps:
-      - name: Download release artifact
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure release tag points to main
+        run: |
+          git fetch origin main --depth=1
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main
+
+      - name: Find successful main build for this commit
+        id: find-build
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runs = await github.paginate(github.rest.actions.listWorkflowRuns, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: ".github/workflows/main-pdf-ci.yml",
+              branch: "main",
+              event: "push",
+              status: "completed",
+              head_sha: context.sha,
+              per_page: 100,
+            });
+
+            const run = runs.find((item) => item.conclusion === "success");
+            if (!run) {
+              core.setFailed(
+                `No successful Build main.pdf CI run was found for ${context.sha}. Wait for main CI to succeed before creating the release tag.`
+              );
+              return;
+            }
+
+            core.info(`Using CI run ${run.id} for ${context.sha}.`);
+            core.setOutput("run_id", String(run.id));
+
+      - name: Download main.pdf artifact from CI
         uses: actions/download-artifact@v4
         with:
-          name: release-main-pdf
+          name: main-pdf
           path: release-assets
+          repository: ${{ github.repository }}
+          run-id: ${{ steps.find-build.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve release asset
+        id: resolve-asset
+        run: |
+          pdf_path="$(find release-assets -maxdepth 1 -type f -name 'main_*.pdf' -print -quit)"
+          if [ -z "$pdf_path" ]; then
+            echo "Expected a dated PDF artifact in release-assets" >&2
+            exit 1
+          fi
+
+          echo "pdf_path=$pdf_path" >> "$GITHUB_OUTPUT"
 
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
-          files: release-assets/${{ needs.build-release-pdf.outputs.pdf_name }}
+          files: ${{ steps.resolve-asset.outputs.pdf_path }}
           fail_on_unmatched_files: true
           generate_release_notes: true
