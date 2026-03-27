@@ -1,5 +1,7 @@
 # Automath — The Omega Project
 
+[中文版](README.zh-CN.md)
+
 ## The Question
 
 What happens when you start from a single algebraic identity — $x^{2} = x + 1$ — and derive everything you can, with zero axioms, in a formally verified proof assistant?
