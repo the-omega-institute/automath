@@ -115,14 +115,14 @@ The **shift map** $\sigma: X_{m} \to X_{m}$ gives the golden-mean shift its dyna
 - **Topological entropy**: $h_{\text{top}} = \log \varphi$, proved via Fibonacci ratio convergence → logarithm continuity → Cesaro averaging → telescoping (`topological_entropy_eq_log_phi`)
 - **Transfer matrix**: the golden-mean adjacency matrix and its Fibonacci identities:
 
-  $$
-  A = \begin{pmatrix}
-  1 & 1 \\
-  1 & 0
-  \end{pmatrix},
-  \qquad
-  A^{2} = A + I
-  $$
+$$
+A = \begin{pmatrix}
+1 & 1 \\
+1 & 0
+\end{pmatrix},
+\qquad
+A^{2} = A + I
+$$
 
   together with Cassini's identity $F_{n+1}F_{n-1} - F_{n}^{2} = (-1)^{n}$ and Lucas trace $\text{tr}(A^{n}) = L_{n}$
 - **Perron-Frobenius**: positive eigenvector, real eigenvalue constraint to $x^{2} - x - 1 = 0$, dominant root $\varphi$
