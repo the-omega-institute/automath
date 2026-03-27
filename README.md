@@ -59,7 +59,11 @@ $$S_2(m+3) + 2\,S_2(m) = 2\,S_2(m+2) + 2\,S_2(m+1)$$
 
 Proved in 4 lines of Lean from the preceding chain, with zero `native_decide`. This was unexpected: a purely combinatorial quantity (fiber collision count) satisfies a linear recurrence with small integer coefficients, suggesting hidden linearity in the fiber dynamics.
 
-**Consequences**: strict monotonicity ($S_2(m) < S_2(m+1)$ for $m \geq 1$), positivity, Cauchy-Schwarz bounds ($S_2(m) \cdot F_{m+2} \geq 4^m$), and a general moment hierarchy ($S_q(m) \leq S_{q+1}(m)$).
+**Consequences**:
+- strict monotonicity: $S_2(m) < S_2(m+1)$ for $m \geq 1$
+- positivity
+- Cauchy-Schwarz bound: $S_2(m) \cdot F_{m+2} \geq 4^m$
+- general moment hierarchy: $S_q(m) \leq S_{q+1}(m)$
 
 **S₃ and beyond**: The collision triple framework extends to $S_3$, with its own companion matrix and Cayley-Hamilton relation. The S₃ recurrence $S_3(m+3) = 2S_3(m+2) + 4S_3(m+1) - 2S_3(m)$ is verified for bounded $m$; the unconditional proof is a current frontier.
 
@@ -107,7 +111,18 @@ The SPG framework is the paper's central construction — a recursive process ge
 The **shift map** $\sigma: X_m \to X_m$ gives the golden-mean shift its dynamics:
 
 - **Topological entropy**: $h_{\text{top}} = \log\varphi$, proved via Fibonacci ratio convergence → logarithm continuity → Cesaro averaging → telescoping (`topological_entropy_eq_log_phi`)
-- **Transfer matrix**: the golden-mean adjacency matrix $A = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$ with $A^2 = A + I$, Cassini's identity $F_{n+1}F_{n-1} - F_n^2 = (-1)^n$, Lucas trace $\text{tr}(A^n) = L_n$
+- **Transfer matrix**: the golden-mean adjacency matrix and its Fibonacci identities:
+
+  $$
+  A = \begin{pmatrix}
+  1 & 1 \\
+  1 & 0
+  \end{pmatrix},
+  \qquad
+  A^2 = A + I
+  $$
+
+  together with Cassini's identity $F_{n+1}F_{n-1} - F_n^2 = (-1)^n$ and Lucas trace $\text{tr}(A^n) = L_n$
 - **Perron-Frobenius**: positive eigenvector, real eigenvalue constraint to $x^2 - x - 1 = 0$, dominant root $= \varphi$
 - **Unique fixed point**: $\sigma$ has exactly one fixed point (the all-false word)
 - **Periodic orbits**: period-2, period-3, period-4 orbits with minimality proofs
