@@ -4,30 +4,20 @@ on:
   pull_request:
     paths:
       - .github/workflows/lean4-ci.yml
-      - lean4/**
-  push:
-    branches:
-      - main
-    paths:
-      - .github/workflows/lean4-ci.yml
+      - .github/workflows/reusable-lean4.yml
+      - .github/workflows/main-gate.yml
+      - .github/workflows/main-pdf-release.yml
       - lean4/**
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 concurrency:
   group: lean4-ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-lean4:
-    name: Build Lean4
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Build Lean4 project
-        uses: leanprover/lean-action@v1
-        with:
-          lake-package-directory: lean4
-          build: true
-          use-mathlib-cache: true
+  lean4:
+    uses: ./.github/workflows/reusable-lean4.yml
+    secrets: inherit

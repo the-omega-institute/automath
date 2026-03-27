@@ -1,0 +1,29 @@
+name: Main Gate
+
+on:
+  # Do not path-filter pushes to main. The release workflow expects one
+  # canonical gate run for every release candidate SHA on main.
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: main-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pdf:
+    uses: ./.github/workflows/reusable-pdf.yml
+    with:
+      upload_artifact: true
+      artifact_name: main-pdf
+      artifact_retention_days: 90
+    secrets: inherit
+
+  lean4:
+    uses: ./.github/workflows/reusable-lean4.yml
+    secrets: inherit
