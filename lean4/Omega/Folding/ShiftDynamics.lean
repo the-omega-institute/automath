@@ -367,6 +367,14 @@ theorem lucasNum_sq (n : Nat) (hn : 1 ≤ n) :
     have := @Nat.fib_add_two m; push_cast; linarith
   push_cast; nlinarith
 
+/-- L(n)² = 5·F(n)² + 4·(-1)^n, unconditional (handles n=0 separately).
+    prop:lucas-fibonacci-square-unconditional -/
+theorem lucas_sq_eq_five_fib_sq (n : Nat) :
+    (lucasNum n : ℤ) ^ 2 = 5 * (Nat.fib n : ℤ) ^ 2 + 4 * (-1 : ℤ) ^ n := by
+  cases n with
+  | zero => simp [lucasNum]
+  | succ m => exact lucasNum_sq (m + 1) (by omega)
+
 /-- L(n) + F(n) = 2·F(n+1) for n ≥ 1.
     bridge:lucas-add-fib -/
 theorem lucasNum_add_fib (n : Nat) (hn : 1 ≤ n) :

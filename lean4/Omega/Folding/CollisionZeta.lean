@@ -689,4 +689,24 @@ theorem collisionKernel4_trace_pow_5 : (collisionKernel4 ^ 5).trace = 812 := by 
 /-- def:pom-collision-zeta-a4-trace-pow-6 -/
 theorem collisionKernel4_trace_pow_6 : (collisionKernel4 ^ 6).trace = 3294 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R38: A_4 trace powers 7-10
+-- ══════════════════════════════════════════════════════════════
+
+set_option maxHeartbeats 1600000 in
+/-- def:pom-collision-zeta-a4-trace-pow-7 -/
+theorem collisionKernel4_trace_pow_7 : (collisionKernel4 ^ 7).trace = 12336 := by native_decide
+
+set_option maxHeartbeats 3200000 in
+/-- def:pom-collision-zeta-a4-trace-pow-8 -/
+theorem collisionKernel4_trace_pow_8 : (collisionKernel4 ^ 8).trace = 48098 := by native_decide
+
+set_option maxHeartbeats 6400000 in
+/-- def:pom-collision-zeta-a4-trace-pow-9 -/
+theorem collisionKernel4_trace_pow_9 : (collisionKernel4 ^ 9).trace = 183704 := by native_decide
+
+set_option maxHeartbeats 12800000 in
+/-- def:pom-collision-zeta-a4-trace-pow-10 -/
+theorem collisionKernel4_trace_pow_10 : (collisionKernel4 ^ 10).trace = 709058 := by native_decide
+
 end Omega
