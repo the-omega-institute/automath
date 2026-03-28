@@ -812,4 +812,10 @@ noncomputable def foldQuotientEquiv (m : Nat) : Quotient (foldSetoid m) ≃ X m 
      fun x => let ⟨w, hw⟩ := Fold_surjective m x
         ⟨Quotient.mk _ w, hw⟩⟩)
 
+/-- Fold-aware restriction: folding the restriction of a folded word is a no-op.
+    thm:pom-fold-aware-restrict -/
+theorem Fold_foldAwareRestrict (w : Word (m + 1)) :
+    Fold (X.restrict (Fold w)).1 = X.restrict (Fold w) :=
+  Fold_stable (X.restrict (Fold w))
+
 end Omega

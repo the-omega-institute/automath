@@ -1070,4 +1070,55 @@ theorem fiberHiddenBitCount_one_pos_iff (x : X m) (hm : 2 ≤ m) :
     stableValue x + Nat.fib (m + 2) ≤ Nat.fib (m + 3) - 2 := by
   rw [fiberHiddenBitCount_one_eq_ewc, exactWeightCount_pos_iff]
 
+/-- The upper support count: |{x : X_m | d_{m,1}(x) > 0}| = F_{m+1} − 1.
+    thm:pom-upper-support-card -/
+theorem upper_support_card (m : Nat) (hm : 2 ≤ m) :
+    (Finset.univ.filter (fun x : X m => 0 < fiberHiddenBitCount 1 x)).card =
+    Nat.fib (m + 1) - 1 := by
+  -- Rewrite filter condition: 0 < d_{m,1}(x) ↔ sv(x) ≤ F_{m+1} - 2
+  have hfibpos : 0 < Nat.fib (m + 1) := Nat.fib_pos.mpr (by omega)
+  have hfib3 : Nat.fib (m + 3) = Nat.fib (m + 1) + Nat.fib (m + 2) :=
+    Nat.fib_add_two (n := m + 1)
+  have hfib1ge : 2 ≤ Nat.fib (m + 1) := by
+    calc Nat.fib (m + 1) ≥ Nat.fib 3 := Nat.fib_mono (by omega)
+      _ = 2 := by native_decide
+  have hcongr : ∀ x : X m, x ∈ Finset.univ →
+      (0 < fiberHiddenBitCount 1 x ↔ stableValue x ≤ Nat.fib (m + 1) - 2) := by
+    intro x _
+    rw [fiberHiddenBitCount_one_pos_iff x hm]
+    -- sv(x) + F_{m+2} ≤ F_{m+3} - 2 ↔ sv(x) ≤ F_{m+1} - 2
+    -- with F_{m+3} = F_{m+1} + F_{m+2} and F_{m+2} ≥ 2
+    constructor
+    · intro h
+      have : stableValue x + Nat.fib (m + 2) ≤
+          Nat.fib (m + 1) + Nat.fib (m + 2) - 2 := by rw [← hfib3]; exact h
+      omega
+    · intro h
+      show stableValue x + Nat.fib (m + 2) ≤ Nat.fib (m + 3) - 2
+      rw [hfib3]
+      -- Need: sv(x) + F_{m+2} ≤ F_{m+1} + F_{m+2} - 2
+      -- From h: sv(x) ≤ F_{m+1} - 2 and hfibpos: 0 < F_{m+1}
+      calc stableValue x + Nat.fib (m + 2)
+          ≤ Nat.fib (m + 1) - 2 + Nat.fib (m + 2) := Nat.add_le_add_right h _
+        _ = Nat.fib (m + 1) + Nat.fib (m + 2) - 2 := by omega
+  rw [Finset.filter_congr hcongr]
+  -- Use card_bij with stableValue mapping to Finset.range (F_{m+1} - 1)
+  rw [← Finset.card_range (Nat.fib (m + 1) - 1)]
+  apply Finset.card_bij (fun (x : X m) _ => stableValue x)
+  -- hi: Maps into range
+  · intro x hx
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hx
+    rw [Finset.mem_range]; omega
+  -- i_inj: Injective
+  · intro x _ y _ heq
+    exact (Function.HasLeftInverse.injective ⟨X.ofNat m, X.ofNat_stableValue⟩) heq
+  -- i_surj: Surjective onto range
+  · intro r hr
+    rw [Finset.mem_range] at hr
+    have hfib1le2 : Nat.fib (m + 1) ≤ Nat.fib (m + 2) := Nat.fib_mono (by omega)
+    have hrlt : r < Nat.fib (m + 2) := by omega
+    refine ⟨X.ofNat m r, Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩,
+      X.stableValue_ofNat_lt r hrlt⟩
+    rw [X.stableValue_ofNat_lt r hrlt]; omega
+
 end Omega
