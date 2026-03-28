@@ -494,4 +494,22 @@ theorem localDefect_lastFalse (w : Word (m + 1)) (h : w ⟨m, Nat.lt_succ_self m
     rw [hw, truncate_snoc]
     exact (restrict_Fold_snoc_false (truncate w)).symm
 
+/-- Gauge anomaly max instance: ∃ w : Word 2 with localDefect support size 1.
+    thm:fold-gauge-anomaly-max -/
+theorem gauge_anomaly_max_one :
+    ∃ w : Word 2, (Finset.univ.filter (fun i => localDefect w i = true)).card = 1 := by
+  exact ⟨![true, true], by native_decide⟩
+
+/-- Gauge anomaly max instance: ∃ w : Word 4 with localDefect support size 2.
+    thm:fold-gauge-anomaly-max -/
+theorem gauge_anomaly_max_two :
+    ∃ w : Word 4, (Finset.univ.filter (fun i => localDefect w i = true)).card = 2 := by
+  exact ⟨![true, true, true, true], by native_decide⟩
+
+/-- Gauge anomaly max instance: ∃ w : Word 5 with localDefect support size 3.
+    thm:fold-gauge-anomaly-max -/
+theorem gauge_anomaly_max_three :
+    ∃ w : Word 5, (Finset.univ.filter (fun i => localDefect w i = true)).card = 3 := by
+  exact ⟨![true, true, true, true, true], by native_decide⟩
+
 end Omega
