@@ -255,4 +255,25 @@ theorem stableAdd_nsmul_one_eq_zero (m : Nat) (hm : 1 ≤ m) :
     (instCharP (m := m)).cast_eq_zero_iff _ |>.mpr (dvd_refl _)
   rw [this, zero_mul]
 
+/-- Every ring automorphism of X_m is the identity: the finite resolution ring is rigid.
+    cor:finite-resolution-automorphism-rigidity -/
+theorem ringEquiv_eq_id (m : Nat) (f : X m ≃+* X m) :
+    ∀ x : X m, f x = x := by
+  intro x
+  -- Conjugate through e : X m ≃+* ZMod (Nat.fib (m + 2))
+  let e := stableValueRingEquiv m
+  -- g = e⁻¹ ; f ; e : ZMod n ≃+* ZMod n
+  let g : ZMod (Nat.fib (m + 2)) ≃+* ZMod (Nat.fib (m + 2)) :=
+    (e.symm.trans f).trans e
+  -- By ZMod.subsingleton_ringEquiv, g = RingEquiv.refl
+  have hg : g = RingEquiv.refl _ := Subsingleton.elim _ _
+  -- So for all z, g z = z
+  have hgid : ∀ z, g z = z := fun z => by
+    have := RingEquiv.congr_fun hg z; simpa using this
+  -- Apply to z = e x: e (f (e.symm (e x))) = e x, i.e. e (f x) = e x
+  have h := hgid (e x)
+  change e (f (e.symm (e x))) = e x at h
+  rw [RingEquiv.symm_apply_apply] at h
+  exact e.injective h
+
 end Omega.X

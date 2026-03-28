@@ -3,6 +3,7 @@ import Mathlib.Algebra.Polynomial.Derivative
 import Mathlib.Algebra.Polynomial.Monic
 import Mathlib.Algebra.Polynomial.Degree.Operations
 import Mathlib.Data.Nat.Fib.Basic
+import Mathlib.Data.Nat.Choose.Basic
 import Mathlib.Tactic.LinearCombination
 import Omega.Core.Fib
 
@@ -422,6 +423,116 @@ theorem detPoly_coeff_sub_leading :
       rwa [Polynomial.Monic, Polynomial.leadingCoeff, detPoly_natDegree] at hm
     rw [hlc, hdk]
     push_cast; ring
+
+/-- Constant term of detPoly k is 1.
+    lem:detpoly-coeff-zero -/
+private theorem detPoly_coeff_zero : ∀ k : Nat, (detPoly k).coeff 0 = 1
+  | 0 => by simp [detPoly]
+  | 1 => by simp [detPoly, coeff_add, coeff_one, coeff_X]
+  | k + 2 => by
+    simp only [detPoly_succ_succ, coeff_sub]
+    rw [show (X : Polynomial ℤ) + 2 = X + C 2 from by simp]
+    simp only [add_mul, coeff_add, coeff_C_mul]
+    rw [mul_comm X (detPoly (k + 1)), Polynomial.coeff_mul_X_zero]
+    rw [detPoly_coeff_zero (k + 1), detPoly_coeff_zero k]; ring
+
+/-- Binomial recurrence: C(n+2, m+1) = C(n, m-1) + 2·C(n+1, m+1) - C(n, m+1)
+    when stated as: the detPoly coefficient recursion matches.
+    lem:binom-detpoly-recurrence -/
+private theorem choose_detPoly_recurrence (k j : Nat) (hj : 1 ≤ j) :
+    (Nat.choose (k + 2 + j) (2 * j) : ℤ) =
+    Nat.choose (k + j) (2 * (j - 1)) + 2 * Nat.choose (k + 1 + j) (2 * j) -
+    Nat.choose (k + j) (2 * j) := by
+  -- Pascal step 1: C(k+2+j, 2j) = C(k+1+j, 2j-1) + C(k+1+j, 2j)
+  have hp1 : Nat.choose (k + 2 + j) (2 * j) =
+      Nat.choose (k + 1 + j) (2 * j - 1) + Nat.choose (k + 1 + j) (2 * j) := by
+    rw [show k + 2 + j = (k + 1 + j) + 1 from by omega,
+        show 2 * j = (2 * j - 1) + 1 from by omega]
+    exact (Nat.choose_succ_succ' _ _).symm
+  -- Pascal step 2: C(k+1+j, 2j-1) = C(k+j, 2j-2) + C(k+j, 2j-1)
+  have hp2 : Nat.choose (k + 1 + j) (2 * j - 1) =
+      Nat.choose (k + j) (2 * j - 2) + Nat.choose (k + j) (2 * j - 1) := by
+    rw [show k + 1 + j = (k + j) + 1 from by omega,
+        show 2 * j - 1 = (2 * j - 2) + 1 from by omega]
+    exact (Nat.choose_succ_succ' _ _).symm
+  -- Pascal step 3: C(k+j, 2j-1) + C(k+j, 2j) = C(k+1+j, 2j)
+  have hp3 : Nat.choose (k + j) (2 * j - 1) + Nat.choose (k + j) (2 * j) =
+      Nat.choose (k + 1 + j) (2 * j) := by
+    rw [show k + 1 + j = (k + j) + 1 from by omega,
+        show 2 * j = (2 * j - 1) + 1 from by omega]
+    exact (Nat.choose_succ_succ' _ _).symm
+  -- 2*(j-1) = 2*j - 2
+  have hj2 : 2 * (j - 1) = 2 * j - 2 := by omega
+  rw [hj2]
+  push_cast [hp1, hp2]
+  linarith [hp3.symm]
+
+/-- The j-th coefficient of detPoly k equals C(k+j, 2j) for j ≤ k.
+    prop:pom-Lk-det-coeff-binomial -/
+theorem detPoly_coeff_binomial : ∀ (k j : Nat), j ≤ k →
+    (detPoly k).coeff j = (Nat.choose (k + j) (2 * j) : ℤ)
+  | 0, 0, _ => by simp [detPoly]
+  | 1, 0, _ => by simp [detPoly, coeff_add, coeff_one, coeff_X]
+  | 1, 1, _ => by simp [detPoly, coeff_add, coeff_one, coeff_X]
+  | k + 2, 0, _ => by rw [detPoly_coeff_zero]; simp
+  | k + 2, j + 1, hj => by
+    -- D_{k+2} = (X+2) * D_{k+1} - D_k
+    -- coeff_{j+1} D_{k+2} = coeff_j D_{k+1} + 2 * coeff_{j+1} D_{k+1} - coeff_{j+1} D_k
+    simp only [detPoly_succ_succ, coeff_sub]
+    rw [show (X : Polynomial ℤ) + 2 = X + C 2 from by simp]
+    simp only [add_mul, coeff_add, coeff_C_mul]
+    rw [mul_comm X (detPoly (k + 1)), Polynomial.coeff_mul_X]
+    -- IH for coeff_j D_{k+1}: j ≤ k+1 always holds
+    rw [detPoly_coeff_binomial (k + 1) j (by omega)]
+    -- Now handle coeff_{j+1} D_{k+1} and coeff_{j+1} D_k based on range of j
+    by_cases hjk2 : j + 1 ≤ k + 1
+    · -- j ≤ k, so both coeff_{j+1} D_{k+1} and possibly coeff_{j+1} D_k are reachable
+      rw [detPoly_coeff_binomial (k + 1) (j + 1) hjk2]
+      by_cases hjk : j + 1 ≤ k
+      · -- All three IH apply
+        rw [detPoly_coeff_binomial k (j + 1) hjk]
+        have hrec := choose_detPoly_recurrence k (j + 1) (by omega)
+        rw [show 2 * ((j + 1) - 1) = 2 * j from by omega] at hrec
+        -- Normalize index: k + 1 + j = k + (j + 1) for alignment
+        conv_lhs => rw [show k + 1 + j = k + (j + 1) from by omega]
+        push_cast at hrec ⊢
+        linarith
+      · -- j + 1 = k + 1, so coeff_{j+1} D_k = 0, and j = k
+        have hcoeff0 : (detPoly k).coeff (j + 1) = 0 :=
+          Polynomial.coeff_eq_zero_of_natDegree_lt (by rw [detPoly_natDegree]; omega)
+        rw [hcoeff0]
+        -- Goal: C(k+1+j, 2j) + 2*C(k+1+(j+1), 2(j+1)) - 0 = C(k+2+(j+1), 2(j+1))
+        -- Since j = k, substitute via have lemmas for each choose value
+        have hc_lhs1 : Nat.choose (k + 1 + j) (2 * j) = 2 * k + 1 := by
+          rw [show k + 1 + j = 2 * k + 1 from by omega,
+              show 2 * j = 2 * k from by omega]
+          exact Nat.choose_succ_self_right _
+        have hc_lhs2 : Nat.choose (k + 1 + (j + 1)) (2 * (j + 1)) = 1 := by
+          rw [show k + 1 + (j + 1) = 2 * k + 2 from by omega,
+              show 2 * (j + 1) = 2 * k + 2 from by omega]
+          exact Nat.choose_self _
+        have hc_rhs : Nat.choose (k + 2 + (j + 1)) (2 * (j + 1)) = 2 * k + 3 := by
+          rw [show k + 2 + (j + 1) = 2 * k + 3 from by omega,
+              show 2 * (j + 1) = 2 * k + 2 from by omega]
+          exact Nat.choose_succ_self_right _
+        push_cast [hc_lhs1, hc_lhs2, hc_rhs]; ring
+    · -- j + 1 > k + 1, so j = k + 1. Leading coefficient case.
+      -- coeff_{j+1} D_{k+1} = 0 and coeff_{j+1} D_k = 0
+      have hcoeff1 : (detPoly (k + 1)).coeff (j + 1) = 0 :=
+        Polynomial.coeff_eq_zero_of_natDegree_lt (by rw [detPoly_natDegree]; omega)
+      have hcoeff2 : (detPoly k).coeff (j + 1) = 0 :=
+        Polynomial.coeff_eq_zero_of_natDegree_lt (by rw [detPoly_natDegree]; omega)
+      rw [hcoeff1, hcoeff2]
+      -- j = k + 1. Both sides are C(n, n) = 1.
+      have hc_lhs : Nat.choose (k + 1 + j) (2 * j) = 1 := by
+        rw [show k + 1 + j = 2 * (k + 1) from by omega,
+            show 2 * j = 2 * (k + 1) from by omega]
+        exact Nat.choose_self _
+      have hc_rhs : Nat.choose (k + 2 + (j + 1)) (2 * (j + 1)) = 1 := by
+        rw [show k + 2 + (j + 1) = 2 * (k + 2) from by omega,
+            show 2 * (j + 1) = 2 * (k + 2) from by omega]
+        exact Nat.choose_self _
+      simp [hc_lhs, hc_rhs]
 
 /-- 2·D_k'(0) = k·(k+1).
     prop:pom-detpoly-deriv-eval -/
