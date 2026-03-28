@@ -642,4 +642,42 @@ theorem zeckendorf_15Fn_leading_term (n : Nat) (hn : 8 ≤ n) :
       rw [h14, h13, h12, h11, h10, h9, h8, h7, h6, h5, h4]; ring
     rw [hF8, hF14]; nlinarith
 
+/-- 15·F_n < F_{n+6} for n ≥ 2 (fails at n=1 since 15·1 = 15 > 13 = F_7).
+    thm:pom-fifteen-fib-lt-fib-add-six -/
+theorem fifteen_fib_lt_fib_add_six (n : Nat) (hn : 2 ≤ n) :
+    15 * Nat.fib n < Nat.fib (n + 6) := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
+  show 15 * Nat.fib (2 + k) < Nat.fib (2 + k + 6)
+  have e1 : Nat.fib (2 + k) = Nat.fib (k + 2) := by ring_nf
+  have e2 : Nat.fib (2 + k + 6) = Nat.fib (k + 8) := by ring_nf
+  rw [e1, e2]
+  -- F(k+2) = a, F(k+3) = b, F(k+8) = 5a + 8b
+  -- 15a < 5a + 8b ↔ 10a < 8b ↔ 5a < 4b
+  -- Since b = F(k+3) = F(k+2) + F(k+1) ≥ a + 1 (for k ≥ 0, F(k+1) ≥ 1)
+  -- 4b ≥ 4(a+1) = 4a + 4 > 5a requires 4 > a, i.e., a ≤ 3
+  -- Actually need a different bound. F(k+3) > F(k+2) always for k ≥ 0.
+  -- Actually 5a < 4b ↔ 5a < 4(a + F(k+1)) = 4a + 4F(k+1) ↔ a < 4F(k+1)
+  -- Since a = F(k+2) = F(k+1) + F(k), we need F(k+1) + F(k) < 4F(k+1), i.e., F(k) < 3F(k+1), true for all k.
+  have h4 := Omega.fib_succ_succ' (k + 2)
+  have h5 := Omega.fib_succ_succ' (k + 3)
+  have h6 := Omega.fib_succ_succ' (k + 4)
+  have h7 := Omega.fib_succ_succ' (k + 5)
+  have h8 := Omega.fib_succ_succ' (k + 6)
+  have hpos := Omega.fib_succ_pos (k + 1)
+  -- Express in terms of a = F(k+2), b = F(k+3)
+  have hF8 : Nat.fib (k + 8) = 5 * Nat.fib (k + 2) + 8 * Nat.fib (k + 3) := by
+    rw [h8, h7, h6, h5, h4]; ring
+  -- Need 15*F(k+2) < 5*F(k+2) + 8*F(k+3), i.e., 10*F(k+2) < 8*F(k+3)
+  -- F(k+3) = F(k+2) + F(k+1) with F(k+1) ≥ 1
+  -- 8*(F(k+2) + F(k+1)) = 8*F(k+2) + 8*F(k+1) > 10*F(k+2) ↔ 8*F(k+1) > 2*F(k+2)
+  -- F(k+2) = F(k+1) + F(k) ≤ 2*F(k+1) (since F(k) ≤ F(k+1)), so 2*F(k+2) ≤ 4*F(k+1) < 8*F(k+1)
+  have hle : Nat.fib k ≤ Nat.fib (k + 1) := Nat.fib_mono (by omega)
+  have hk2 := Omega.fib_succ_succ' k       -- F(k+2) = F(k+1) + F(k)
+  have hk3 := Omega.fib_succ_succ' (k + 1) -- F(k+3) = F(k+2) + F(k+1)
+  rw [hF8]
+  -- Need: 10*F(k+2) < 8*F(k+3) = 8*(F(k+2) + F(k+1)) = 8*F(k+2) + 8*F(k+1)
+  -- i.e., 2*F(k+2) < 8*F(k+1), i.e., F(k+2) < 4*F(k+1)
+  -- F(k+2) = F(k+1) + F(k) ≤ 2*F(k+1), so F(k+2) < 4*F(k+1) ✓ (since F(k+1) ≥ 1)
+  nlinarith
+
 end Omega.ZeckSig

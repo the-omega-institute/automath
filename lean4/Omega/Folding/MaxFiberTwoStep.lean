@@ -850,4 +850,60 @@ theorem hiddenBitCount_near_third (m : Nat) :
   have h := paper_hiddenBitCount_closed m
   split_ifs at h with heven <;> omega
 
+/-- Hidden bit is 0 when the last position is false: weight < threshold.
+    lem:pom-hidden-bit-last-false -/
+theorem hiddenBit_last_false (w : Word (m + 1))
+    (hLast : w ⟨m, Nat.lt_succ_self m⟩ = false) :
+    hiddenBit w = 0 := by
+  unfold hiddenBit
+  simp only [show m + 1 + 2 = m + 3 from by omega]
+  rw [if_neg]
+  intro h
+  have hwt := weight_of_lastFalse hLast
+  have hlt := X.weight_lt_fib (truncate w)
+  omega
+
+/-- Hidden bit is 1 when both last and penultimate are true.
+    lem:pom-hidden-bit-boolean-recurrence-true -/
+theorem hiddenBit_boolean_recurrence (w : Word (m + 3))
+    (hLast : w ⟨m + 2, by omega⟩ = true)
+    (hPenult : w ⟨m + 1, by omega⟩ = true) :
+    hiddenBit w = 1 := by
+  unfold hiddenBit
+  rw [if_pos]
+  -- weight w = weight(truncate w) + F(m+4)
+  have hw := weight_of_lastTrue (m := m + 2) hLast
+  have hPenult' : (truncate w) ⟨m + 1, by omega⟩ = true := by
+    show w ⟨m + 1, by omega⟩ = true; exact hPenult
+  have hw2 := weight_of_lastTrue (m := m + 1) (by convert hPenult')
+  have hfib := Omega.fib_succ_succ' (m + 3)
+  simp only [show m + 2 + 2 = m + 4 from by omega, show m + 1 + 2 = m + 3 from by omega,
+    show m + 3 + 2 = m + 5 from by omega, show m + 3 + 1 = m + 4 from by omega
+    ] at hw hw2 hfib ⊢
+  omega
+
+/-- Hidden bit recurrence when last is true and penultimate is false:
+    hiddenBit w = hiddenBit (truncate (truncate w)).
+    lem:pom-hidden-bit-boolean-recurrence-false -/
+theorem hiddenBit_boolean_recurrence_false (w : Word (m + 3))
+    (hLast : w ⟨m + 2, by omega⟩ = true)
+    (hPenult : w ⟨m + 1, by omega⟩ = false) :
+    hiddenBit w = hiddenBit (truncate (truncate w)) := by
+  unfold hiddenBit
+  -- weight w = weight(truncate w) + F(m+4)
+  have hw := weight_of_lastTrue (m := m + 2) hLast
+  -- weight(truncate w) = weight(truncate² w) since penultimate is false
+  have hPenult' : (truncate w) ⟨m + 1, by omega⟩ = false := by
+    show w ⟨m + 1, by omega⟩ = false; exact hPenult
+  have hw2 := weight_of_lastFalse (m := m + 1) (by convert hPenult')
+  have hfib := Omega.fib_succ_succ' (m + 3)
+  simp only [show m + 2 + 2 = m + 4 from by omega, show m + 1 + 2 = m + 3 from by omega,
+    show m + 3 + 2 = m + 5 from by omega, show m + 3 + 1 = m + 4 from by omega
+    ] at hw hw2 hfib ⊢
+  split_ifs with h1 h2 h2
+  · rfl
+  · exfalso; omega
+  · exfalso; omega
+  · rfl
+
 end Omega
