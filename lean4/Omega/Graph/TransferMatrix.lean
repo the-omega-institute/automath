@@ -354,4 +354,35 @@ theorem goldenMeanAdjacency_cayley_hamilton :
     goldenMeanAdjacency ^ 2 = goldenMeanAdjacency + 1 :=
   goldenMeanAdjacency_sq
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 209: Row sum + fusion rule (named wrappers)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Row 0 sum of A^m = F(m+2). Counts all length-m paths from state 0.
+    thm:folding-stable-syntax-fib-fusion-ring -/
+theorem goldenMeanAdjacency_pow_row0_sum (m : Nat) (hm : 1 ≤ m) :
+    (goldenMeanAdjacency ^ m) 0 0 + (goldenMeanAdjacency ^ m) 0 1 = (Nat.fib (m + 2) : ℤ) :=
+  goldenMeanAdjacency_row_sum m
+
+/-- Fibonacci fusion rule: A^2 = A + I. Matrix realization of tau^2 = 1 + tau.
+    thm:folding-stable-syntax-fib-fusion-ring -/
+theorem goldenMeanAdjacency_fusion_rule :
+    goldenMeanAdjacency ^ 2 = goldenMeanAdjacency + 1 :=
+  goldenMeanAdjacency_sq
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 222: Transfer matrix symmetry
+-- ══════════════════════════════════════════════════════════════
+
+/-- Transfer matrix is symmetric: A^T = A.
+    prop:Phi_m-entropy -/
+theorem goldenMeanAdjacency_symmetric :
+    goldenMeanAdjacency.transpose = goldenMeanAdjacency := by native_decide
+
+/-- A^m is symmetric for all m.
+    prop:Phi_m-entropy -/
+theorem goldenMeanAdjacency_pow_symmetric (m : Nat) :
+    (goldenMeanAdjacency ^ m).transpose = goldenMeanAdjacency ^ m := by
+  rw [Matrix.transpose_pow, goldenMeanAdjacency_symmetric]
+
 end Omega.Graph

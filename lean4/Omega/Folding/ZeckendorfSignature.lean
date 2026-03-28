@@ -430,4 +430,56 @@ theorem double_12_constraints_intersection_m6
   · -- m = 6: done
     rfl
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 201: Lie resonance scarcity
+-- ══════════════════════════════════════════════════════════════
+
+/-- F(4) = 3 = dim(su(2)) = 2^2 - 1.
+    cor:fib-lie-resonance-scarcity-su2-su3 -/
+theorem fib_lie_resonance_su2 : Nat.fib 4 = 2 ^ 2 - 1 := by native_decide
+
+/-- F(6) = 8 = dim(su(3)) = 3^2 - 1.
+    cor:fib-lie-resonance-scarcity-su2-su3 -/
+theorem fib_lie_resonance_su3 : Nat.fib 6 = 3 ^ 2 - 1 := by native_decide
+
+/-- For m in {3,5,6,7,8}, F(m+2)+1 is not a perfect square (no A-type Lie resonance).
+    cor:fib-lie-resonance-scarcity-su2-su3 -/
+theorem fib_lie_no_resonance_m3_to_m8 :
+    ¬ IsSquare (Nat.fib 5 + 1) ∧
+    ¬ IsSquare (Nat.fib 7 + 1) ∧
+    ¬ IsSquare (Nat.fib 8 + 1) ∧
+    ¬ IsSquare (Nat.fib 9 + 1) ∧
+    ¬ IsSquare (Nat.fib 10 + 1) := by
+  -- F(5)+1=6, F(7)+1=14, F(8)+1=22, F(9)+1=35, F(10)+1=56: none is a perfect square.
+  rw [show Nat.fib 5 = 5 from by native_decide, show Nat.fib 7 = 13 from by native_decide,
+      show Nat.fib 8 = 21 from by native_decide, show Nat.fib 9 = 34 from by native_decide,
+      show Nat.fib 10 = 55 from by native_decide]
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> intro ⟨k, hk⟩ <;> (have hk_le : k ≤ 8 := by nlinarith) <;>
+    interval_cases k <;> omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 212: Fibonacci shift identities
+-- ══════════════════════════════════════════════════════════════
+
+/-- F(n+3) = 3*F(n) + 2*F(n-1). prop:resolution-shift4-fib-matrix-law -/
+theorem fib_shift3 (n : Nat) (hn : 1 ≤ n) :
+    Nat.fib (n + 3) = 3 * Nat.fib n + 2 * Nat.fib (n - 1) := by
+  obtain ⟨j, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : n ≠ 0)
+  simp only [show j + 1 - 1 = j from by omega]
+  have h1 := Nat.fib_add_two (n := j)
+  have h2 := Nat.fib_add_two (n := j + 1)
+  have h3 := Nat.fib_add_two (n := j + 2)
+  linarith
+
+/-- F(n+4) = 5*F(n) + 3*F(n-1). prop:resolution-shift4-fib-matrix-law -/
+theorem fib_shift4 (n : Nat) (hn : 1 ≤ n) :
+    Nat.fib (n + 4) = 5 * Nat.fib n + 3 * Nat.fib (n - 1) := by
+  obtain ⟨j, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : n ≠ 0)
+  simp only [show j + 1 - 1 = j from by omega]
+  have h1 := Nat.fib_add_two (n := j)
+  have h2 := Nat.fib_add_two (n := j + 1)
+  have h3 := Nat.fib_add_two (n := j + 2)
+  have h4 := Nat.fib_add_two (n := j + 3)
+  linarith
+
 end Omega.ZeckSig

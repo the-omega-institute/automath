@@ -796,6 +796,46 @@ theorem step_locallyConfluent {a b c : DigitCfg} (hab : Step a b) (hac : Step a 
     Relation.Join (Relation.ReflTransGen Step) b c :=
   step_confluent (Relation.ReflTransGen.single hab) (Relation.ReflTransGen.single hac)
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 233: Weight rigidity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Weight rigidity: w(k+2)=w(k+1)+w(k) with w(0)=1,w(1)=2 forces w=digitWeight.
+    lem:fold-local-weight-rigidity-fibonacci -/
+theorem weight_rigidity_fibonacci (w : Nat → Nat)
+    (hadj : ∀ k, w k + w (k + 1) = w (k + 2))
+    (hw0 : w 0 = 1) (hw1 : w 1 = 2) :
+    ∀ k, w k = digitWeight k := by
+  intro k
+  induction k using Nat.strongRecOn with
+  | _ k ih =>
+    match k with
+    | 0 => rw [hw0, digitWeight_zero]
+    | 1 => rw [hw1, digitWeight_one]
+    | k + 2 =>
+      have hadj' := hadj k
+      have h1 := ih k (by omega)
+      have h2 := ih (k + 1) (by omega)
+      have h3 := digitWeight_adj k
+      omega
+
+/-- Value is invariant under all rewrite rules. prop:val-invariant -/
+theorem value_invariant_step (a b : DigitCfg) (h : Step a b) : value a = value b :=
+  (step_value h).symm
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 241
+-- ══════════════════════════════════════════════════════════════
+
+/-- The adjacency rewrite e_{k+1}+e_{k+2} → e_{k+3} preserves Val.
+    Equivalently: F(k+2) + F(k+3) = F(k+4) for all k.
+    prop:orbits-preserve-val -/
+theorem paper_orbits_preserve_val (k : Nat) :
+    Nat.fib (k + 2) + Nat.fib (k + 3) = Nat.fib (k + 4) := by
+  have := Nat.fib_add_two (n := k + 2)
+  rw [show k + 2 + 2 = k + 4 from by omega, show k + 2 + 1 = k + 3 from by omega] at this
+  omega
+
 end Rewrite
 
 end Omega

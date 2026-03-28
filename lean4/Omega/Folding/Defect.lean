@@ -1,4 +1,5 @@
 import Omega.Folding.InverseLimit
+import Omega.Folding.MaxFiber
 
 namespace Omega
 
@@ -72,6 +73,12 @@ theorem restrictLE_comp (h₁ : m ≤ n) (h₂ : n ≤ k) (x : X k) :
     restrictLE (Nat.le_trans h (Nat.le_succ n)) x = restrictLE h (restrict x) := by
   apply Subtype.ext
   exact restrictWord_trans_succ h x.1
+
+/-- Restriction is functorial: restrictLE(m3→m1) = restrictLE(m2→m1) ∘ restrictLE(m3→m2).
+    lem:pi-functorial-golden -/
+theorem restrict_functorial (h₁ : m₁ ≤ m₂) (h₂ : m₂ ≤ m₃) (x : X m₃) :
+    restrictLE h₁ (restrictLE h₂ x) = restrictLE (Nat.le_trans h₁ h₂) x :=
+  restrictLE_comp h₁ h₂ x
 
 end X
 
@@ -469,5 +476,22 @@ theorem localDefect_compose (η : Word (m + 2)) :
   have h := globalDefect_step (h := Nat.le_succ m) (ω := η)
   rw [localDefect_eq_globalDefect] at h
   convert h using 2
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 210: Last-false defect vanishes
+-- ══════════════════════════════════════════════════════════════
+
+/-- If the last bit of a word is false, its local defect vanishes.
+    prop:fold-rewrite-newman -/
+theorem localDefect_lastFalse (w : Word (m + 1)) (h : w ⟨m, Nat.lt_succ_self m⟩ = false) :
+    localDefect w = zeroWord m := by
+  cases m with
+  | zero => funext i; exact (Nat.not_lt_zero i.1 i.isLt).elim
+  | succ k =>
+    rw [localDefect_eq_zero_iff_fold_commutes]
+    have hw : w = snoc (truncate w) false := by
+      rw [← h]; exact (X.snoc_truncate_last w).symm
+    rw [hw, truncate_snoc]
+    exact (restrict_Fold_snoc_false (truncate w)).symm
 
 end Omega

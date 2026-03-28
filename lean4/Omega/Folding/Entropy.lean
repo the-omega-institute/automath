@@ -127,6 +127,32 @@ theorem fibRadius_zero_modulus_lower_bound_of_log_defect_bound
   intro m
   exact zero_modulus_lower_bound_of_log_defect_bound (A (fibRadius m)) (eps m) (ha m) (hdef m)
 
+/-- If `u_m → 1` and `ε_m → 0`, then `u_m * exp(-ε_m) → 1`. -/
+theorem tendsto_mul_exp_neg_of_tendsto_one_zero
+    (u eps : ℕ → ℝ)
+    (hu : Tendsto u atTop (𝓝 1))
+    (heps : Tendsto eps atTop (𝓝 0)) :
+    Tendsto (fun m : ℕ => u m * Real.exp (-eps m)) atTop (𝓝 1) := by
+  have hExp : Tendsto (fun m : ℕ => Real.exp (-eps m)) atTop (𝓝 1) := by
+    have hNeg : Tendsto (fun m : ℕ => -eps m) atTop (𝓝 0) := by
+      simpa using heps.neg
+    simpa using Real.continuous_exp.continuousAt.tendsto.comp hNeg
+  simpa using hu.mul hExp
+
+/-- A real number dominates `1` if it eventually dominates a sequence converging to `1`. -/
+theorem one_le_of_eventually_ge_tendsto_one
+    (u : ℕ → ℝ)
+    (a : ℝ)
+    (hu : Tendsto u atTop (𝓝 1))
+    (hbound : ∀ᶠ m in atTop, u m ≤ a) :
+    1 ≤ a := by
+  by_contra ha
+  have ha' : a < 1 := lt_of_not_ge ha
+  have hu' : ∀ᶠ m in atTop, a < u m := by
+    exact hu (isOpen_Ioi.mem_nhds ha')
+  obtain ⟨m, hm_lt, hm_le⟩ := (hu'.and hbound).exists
+  linarith
+
 /-- For a probability measure, the reverse KL divergence to an exponential tilt splits into the
 normalizing log-partition term minus the average tilt.
     con:cdim-jensen-average-reverse-kl-splitting -/

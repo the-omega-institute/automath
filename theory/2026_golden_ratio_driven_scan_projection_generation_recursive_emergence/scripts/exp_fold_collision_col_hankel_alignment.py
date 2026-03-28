@@ -3,7 +3,7 @@
 """
 Align Fold collision scaling with a local Hankel conditioning profile.
 
-Context (paper, main_fast.pdf):
+Context (paper PDF):
   - Collision probability (Fold output distribution pi_m):
       Col_m = sum_x pi_m(x)^2 = S2(m) / 4^m,
     where S2(m) = sum_x d_m(x)^2.
@@ -286,4 +286,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

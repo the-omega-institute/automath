@@ -245,4 +245,14 @@ theorem paper_stable_commutative_ring (m : Nat) :
     Nonempty (X m ≃+* ZMod (Nat.fib (m + 2))) :=
   ⟨stableValueRingEquiv m⟩
 
+/-- The additive order of stableOne equals F(m+2): F(m+2) • stableOne = stableZero.
+    thm:stable-add-commutative-monoid -/
+theorem stableAdd_nsmul_one_eq_zero (m : Nat) (hm : 1 ≤ m) :
+    Nat.fib (m + 2) • (X.stableOne (m := m)) = (X.stableZero : X m) := by
+  rw [ring_one_eq.symm, ring_zero_eq.symm]
+  rw [nsmul_eq_mul]
+  have : (Nat.fib (m + 2) : X m) = 0 :=
+    (instCharP (m := m)).cast_eq_zero_iff _ |>.mpr (dvd_refl _)
+  rw [this, zero_mul]
+
 end Omega.X

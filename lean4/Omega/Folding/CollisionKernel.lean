@@ -154,4 +154,99 @@ theorem paper_collision_zeta_a3_invariants :
     collisionKernel3 ^ 3 = 2 • collisionKernel3 ^ 2 + 4 • collisionKernel3 - 2 • 1 :=
   ⟨collisionKernel3_trace, collisionKernel3_det, collisionKernel3_cayley_hamilton⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 214: S_5 companion matrix
+-- ══════════════════════════════════════════════════════════════
+
+/-- The 5x5 companion matrix for the S_5 recurrence.
+    prop:pom-s5-recurrence -/
+def collisionKernel5 : Matrix (Fin 5) (Fin 5) ℤ :=
+  !![0, 1, 0, 0, 0; 0, 0, 1, 0, 0; 0, 0, 0, 1, 0; 0, 0, 0, 0, 1; 10, -20, -8, -11, -2]
+
+/-- prop:pom-s5-recurrence (trace) -/
+theorem collisionKernel5_trace : collisionKernel5.trace = -2 := by native_decide
+
+/-- prop:pom-s5-recurrence (det) -/
+theorem collisionKernel5_det : collisionKernel5.det = 10 := by native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 215: Bowen-Franks determinants
+-- ══════════════════════════════════════════════════════════════
+
+/-- BF det for collision kernel 2: det(I-A_2) = -1. prop:pom-collision-bf-snf-q234 -/
+def bowenFranksMatrix2 : Matrix (Fin 3) (Fin 3) ℤ :=
+  !![1, -1, 0; 0, 1, -1; 2, -2, -1]
+theorem bowenFranksMatrix2_det : bowenFranksMatrix2.det = -1 := by native_decide
+
+/-- BF det for collision kernel 3: det(I-A_3) = -3. prop:pom-collision-bf-snf-q234 -/
+def bowenFranksMatrix3 : Matrix (Fin 3) (Fin 3) ℤ :=
+  !![1, -1, 0; 0, 1, -1; 2, -4, -1]
+theorem bowenFranksMatrix3_det : bowenFranksMatrix3.det = -3 := by native_decide
+
+/-- BF det ratio: det(I-A_3) = 3 * det(I-A_2). prop:pom-collision-bf-snf-q234 -/
+theorem collisionKernel_bf_det_ratio :
+    bowenFranksMatrix3.det = 3 * bowenFranksMatrix2.det := by
+  rw [bowenFranksMatrix2_det, bowenFranksMatrix3_det]; ring
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 216: A_4 BF det + S_5 base value + S_4 trace invariants
+-- ══════════════════════════════════════════════════════════════
+
+/-- BF matrix for A_4: I - collisionKernel4. prop:pom-collision-bf-snf-q234 -/
+def bowenFranksMatrix4 : Matrix (Fin 5) (Fin 5) ℤ :=
+  !![1, -1, 0, 0, 0;
+     0, 1, -1, 0, 0;
+     0, 0, 1, -1, 0;
+     0, 0, 0, 1, -1;
+     2, -2, 0, -7, -1]
+
+/-- det(I - A_4) = -8. prop:pom-collision-bf-snf-q234 -/
+theorem bowenFranksMatrix4_det : bowenFranksMatrix4.det = -8 := by native_decide
+
+/-- S_5 base values: m = 7,8. prop:pom-s5-recurrence -/
+@[simp] theorem momentSum_five_seven : momentSum 5 7 = 62168 := by
+  rw [← cMomentSum_eq]; native_decide
+@[simp] theorem momentSum_five_eight : momentSum 5 8 = 304456 := by
+  rw [← cMomentSum_eq]; native_decide
+
+/-- tr(A_4^2) = 18. rem:pom-s4-zero-coefficient-lock -/
+theorem collisionKernel4_trace_sq :
+    (collisionKernel4 ^ 2).trace = 18 := by native_decide
+
+/-- Newton identity: tr(A_4^2) = tr(A_4)^2 - 2*e_2(A_4), so e_2(A_4) = (4-18)/2 = -7.
+    rem:pom-s4-zero-coefficient-lock -/
+theorem collisionKernel4_e2 :
+    collisionKernel4.trace ^ 2 - (collisionKernel4 ^ 2).trace = -14 := by
+  rw [collisionKernel4_trace, collisionKernel4_trace_sq]; ring
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 217: Collision kernel family signatures
+-- ══════════════════════════════════════════════════════════════
+
+/-- Collision kernel trace signature: q=2..5. prop:pom-collision-kernel-family -/
+theorem collisionKernel_trace_family :
+    collisionKernel2.trace = 2 ∧ collisionKernel3.trace = 2 ∧
+    collisionKernel4.trace = 2 ∧ collisionKernel5.trace = -2 :=
+  ⟨collisionKernel2_trace, collisionKernel3_trace,
+   collisionKernel4_trace, collisionKernel5_trace⟩
+
+/-- Collision kernel det family: q=2..4 all have det=-2, q=5 has det=10.
+    prop:pom-collision-kernel-family -/
+theorem collisionKernel_det_family :
+    collisionKernel2.det = -2 ∧ collisionKernel3.det = -2 ∧
+    collisionKernel4.det = -2 ∧ collisionKernel5.det = 10 :=
+  ⟨collisionKernel2_det, collisionKernel3_det,
+   collisionKernel4_det, collisionKernel5_det⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 222: A_5 Cayley-Hamilton
+-- ══════════════════════════════════════════════════════════════
+
+/-- Cayley-Hamilton for A_5: A^5 + 2A^4 + 11A^3 + 8A^2 + 20A - 10·I = 0.
+    prop:pom-s5-recurrence -/
+theorem collisionKernel5_cayley_hamilton :
+    collisionKernel5 ^ 5 + 2 * collisionKernel5 ^ 4 + 11 * collisionKernel5 ^ 3 +
+    8 * collisionKernel5 ^ 2 + 20 * collisionKernel5 - 10 * (1 : Matrix (Fin 5) (Fin 5) ℤ) = 0 := by
+  ext i j; fin_cases i <;> fin_cases j <;> native_decide
+
 end Omega

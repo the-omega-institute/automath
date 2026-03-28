@@ -551,4 +551,340 @@ theorem lucasNum_fib_wronskian_odd (n : Nat) (hn : 1 ≤ n) (hodd : ¬ Even n) :
   have hcas := fib_cassini_odd n hodd
   nlinarith [sq_nonneg (Nat.fib n), sq_nonneg (Nat.fib (n - 1))]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 202: Lucas-Fibonacci squared identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- L(n)^2 = 5*F(n)^2 + 4 for even n >= 1.
+    bridge:lucas-fibonacci-identity -/
+theorem lucasNum_sq_even (n : Nat) (hn : 1 ≤ n) (heven : Even n) :
+    lucasNum n ^ 2 = 5 * Nat.fib n ^ 2 + 4 := by
+  rw [lucasNum_eq_fib n hn]
+  have h1 := Nat.fib_add_two (n := n)
+  have h2 := Nat.fib_add_two (n := n - 1)
+  rw [show n - 1 + 2 = n + 1 from by omega, show n - 1 + 1 = n from by omega] at h2
+  have hcas := fib_cassini_even n heven
+  nlinarith [sq_nonneg (Nat.fib n), sq_nonneg (Nat.fib (n - 1)),
+             sq_nonneg (Nat.fib (n + 1))]
+
+/-- L(n)^2 + 4 = 5*F(n)^2 for odd n.
+    bridge:lucas-fibonacci-identity -/
+theorem lucasNum_sq_odd (n : Nat) (hodd : ¬ Even n) :
+    lucasNum n ^ 2 + 4 = 5 * Nat.fib n ^ 2 := by
+  have hn : 1 ≤ n := by rcases n with _ | n; exact absurd ⟨0, rfl⟩ hodd; omega
+  rw [lucasNum_eq_fib n hn]
+  have h1 := Nat.fib_add_two (n := n)
+  have h2 := Nat.fib_add_two (n := n - 1)
+  rw [show n - 1 + 2 = n + 1 from by omega, show n - 1 + 1 = n from by omega] at h2
+  have hcas := fib_cassini_odd n hodd
+  nlinarith [sq_nonneg (Nat.fib n), sq_nonneg (Nat.fib (n - 1)),
+             sq_nonneg (Nat.fib (n + 1))]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 205: Trace = Lucas number (lucasNum form)
+-- ══════════════════════════════════════════════════════════════
+
+/-- tr(N_tau^m) = L(m), trace of golden mean adjacency power = Lucas number.
+    thm:folding-stable-syntax-fib-fusion-ring -/
+theorem goldenMeanAdjacency_pow_trace_lucas (m : Nat) (hm : 1 ≤ m) :
+    (Graph.goldenMeanAdjacency ^ m).trace = (lucasNum m : ℤ) := by
+  rw [goldenMeanAdjacency_pow_trace m hm, lucasNum_eq_fib m hm]; push_cast; ring
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 206: Lucas addition formula + partial sum
+-- ══════════════════════════════════════════════════════════════
+
+/-- Lucas-Fibonacci addition formula: L(m+n+2) = L(m+1)*F(n+2) + L(m)*F(n+1).
+    bridge:lucas-fib-addition-formula -/
+theorem lucasNum_add_formula : ∀ (m n : Nat),
+    (lucasNum (m + n + 2) : ℤ) =
+    (lucasNum (m + 1) : ℤ) * (Nat.fib (n + 2) : ℤ) +
+    (lucasNum m : ℤ) * (Nat.fib (n + 1) : ℤ)
+  | m, 0 => by simp [lucasNum_succ_succ]
+  | m, 1 => by
+    simp only [lucasNum_succ_succ, show Nat.fib 3 = 2 from rfl, show Nat.fib 2 = 1 from rfl]
+    push_cast; ring
+  | m, n + 2 => by
+    -- L(m+n+4) = L(m+n+3) + L(m+n+2) by Lucas recurrence
+    have h1 : lucasNum (m + (n + 2) + 2) = lucasNum (m + (n + 1) + 2) + lucasNum (m + n + 2) := by
+      rw [show m + (n + 2) + 2 = (m + (n + 1) + 2) + 1 from by omega]; rfl
+    push_cast [h1, lucasNum_add_formula m (n + 1), lucasNum_add_formula m n]
+    -- F(n+4) = F(n+3) + F(n+2), F(n+3) = F(n+2) + F(n+1)
+    have hf1 : (Nat.fib (n + 2 + 2) : ℤ) = Nat.fib (n + 2 + 1) + Nat.fib (n + 2) := by
+      have := Nat.fib_add_two (n := n + 2); push_cast [this]; ring
+    have hf2 : (Nat.fib (n + 2 + 1) : ℤ) = Nat.fib (n + 1 + 1) + Nat.fib (n + 1) := by
+      have := Nat.fib_add_two (n := n + 1)
+      rw [show n + 1 + 2 = n + 2 + 1 from by omega, show n + 1 + 1 = n + 1 + 1 from rfl] at this
+      push_cast [this]; ring
+    rw [hf1, hf2]; ring
+
+/-- Lucas partial sum: Σ_{k=0}^n L(k) = L(n+2) - 1.
+    bridge:lucas-partial-sum -/
+theorem lucasNum_partial_sum (n : Nat) :
+    ∑ k ∈ Finset.range (n + 1), lucasNum k = lucasNum (n + 2) - 1 := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    rw [Finset.sum_range_succ, ih]
+    have hrec : lucasNum (n + 1 + 2) = lucasNum (n + 2) + lucasNum (n + 1) := by
+      rw [show n + 1 + 2 = (n + 2) + 1 from by omega]; rfl
+    rw [hrec]
+    have := lucasNum_pos (n + 2)
+    omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 209: Lucas square sum
+-- ══════════════════════════════════════════════════════════════
+
+/-- L(n)*L(n+1) >= 2 for n >= 1. -/
+private theorem lucasNum_mul_succ_ge_two : ∀ n : Nat, 1 ≤ n →
+    2 ≤ lucasNum n * lucasNum (n + 1)
+  | 1, _ => by simp [lucasNum_succ_succ]
+  | n + 2, _ => by
+    have h1 := lucasNum_pos (n + 2)
+    have h2 := lucasNum_pos (n + 3)
+    have : 1 ≤ lucasNum (n + 2) := h1
+    have : 2 ≤ lucasNum (n + 3) := by
+      rw [show n + 3 = (n + 1) + 1 + 1 from by omega, lucasNum_succ_succ]
+      have := lucasNum_pos (n + 1 + 1)
+      have := lucasNum_pos (n + 1)
+      omega
+    calc 2 ≤ 1 * 2 := by omega
+      _ ≤ lucasNum (n + 2) * lucasNum (n + 2 + 1) := Nat.mul_le_mul ‹_› ‹_›
+
+/-- Lucas square sum: Sigma_{k=1}^n L(k)^2 = L(n)*L(n+1) - 2.
+    bridge:lucas-sq-sum -/
+theorem lucasNum_sq_sum : ∀ (n : Nat), 1 ≤ n →
+    ∑ k ∈ Finset.range n, lucasNum (k + 1) ^ 2 = lucasNum n * lucasNum (n + 1) - 2
+  | 0, h => by omega
+  | 1, _ => by simp [lucasNum_succ_succ]
+  | n + 2, _ => by
+    rw [Finset.sum_range_succ]
+    -- Normalize n+1+1 to n+2 everywhere
+    have hnorm : lucasNum (n + 1 + 1) = lucasNum (n + 2) := by congr 1
+    rw [hnorm]
+    rw [lucasNum_sq_sum (n + 1) (by omega), hnorm]
+    -- Goal: L(n+1)*L(n+2) - 2 + L(n+2)^2 = L(n+2)*L(n+3) - 2
+    have hrec : lucasNum (n + 2 + 1) = lucasNum (n + 2) + lucasNum (n + 1) := by
+      rw [show n + 2 + 1 = (n + 1) + 1 + 1 from by omega]; rfl
+    rw [hrec]
+    have hge := lucasNum_mul_succ_ge_two (n + 1) (by omega)
+    rw [hnorm] at hge
+    -- Key: L(n+1)*L(n+2) - 2 + L(n+2)^2 = L(n+2)*(L(n+2)+L(n+1)) - 2
+    -- Both sides equal L(n+1)*L(n+2) + L(n+2)^2 - 2
+    have h1 : lucasNum (n + 1) * lucasNum (n + 2) - 2 + lucasNum (n + 2) ^ 2 =
+        lucasNum (n + 1) * lucasNum (n + 2) + lucasNum (n + 2) ^ 2 - 2 := by omega
+    have h2 : lucasNum (n + 2) * (lucasNum (n + 2) + lucasNum (n + 1)) - 2 =
+        lucasNum (n + 1) * lucasNum (n + 2) + lucasNum (n + 2) ^ 2 - 2 := by
+      rw [Nat.mul_add, sq]; ring_nf
+    rw [h1, h2]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 222: Lucas numbers strictly increasing
+-- ══════════════════════════════════════════════════════════════
+
+/-- Lucas numbers strictly increasing for n >= 1: L(n) < L(n+1).
+    thm:pom-parry-limit-chain-explicit -/
+theorem lucasNum_strict_mono (n : Nat) (hn : 1 ≤ n) : lucasNum n < lucasNum (n + 1) := by
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+  -- Goal: L(m+1) < L(m+2) = L(m+1) + L(m)
+  rw [lucasNum_succ_succ]
+  exact Nat.lt_add_of_pos_right (lucasNum_pos m)
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 223: Total closed paths = Lucas number
+-- ══════════════════════════════════════════════════════════════
+
+/-- Total closed paths of length m = A^m[0,0] + A^m[1,1] = L(m) (Lucas number).
+    thm:pom-parry-limit-chain-explicit -/
+theorem goldenMean_total_closed_paths (m : Nat) (hm : 1 ≤ m) :
+    (Graph.goldenMeanAdjacency ^ m) 0 0 + (Graph.goldenMeanAdjacency ^ m) 1 1 =
+      (lucasNum m : ℤ) := by
+  obtain ⟨k, rfl⟩ : ∃ k, m = k + 1 := ⟨m - 1, by omega⟩
+  rw [Graph.goldenMeanAdjacency_pow_00, Graph.goldenMeanAdjacency_pow_11,
+    lucasNum_eq_fib (k + 1) (by omega)]
+  simp only [show k + 1 - 1 = k from by omega]
+  push_cast; ring
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 226: Lucas square identity (all n)
+-- ══════════════════════════════════════════════════════════════
+
+/-- L(n)² = 5·F(n)² + 4·(-1)^n in ℤ, for all n.
+    thm:pom-parry-limit-chain-explicit -/
+theorem lucasNum_sq_eq_int (n : Nat) :
+    (lucasNum n : ℤ) ^ 2 = 5 * (Nat.fib n : ℤ) ^ 2 + 4 * (-1) ^ n := by
+  rcases Nat.eq_zero_or_pos n with rfl | hn
+  · simp [lucasNum_zero]
+  · exact lucasNum_sq n hn
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 229: Lucas >= Fibonacci
+-- ══════════════════════════════════════════════════════════════
+
+/-- L_n >= F_n unconditionally. thm:pom-parry-limit-chain-explicit -/
+theorem lucasNum_ge_fib (n : Nat) : Nat.fib n ≤ lucasNum n := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => simp
+    | 1 => simp
+    | n + 2 =>
+      rw [Nat.fib_add_two, lucasNum_succ_succ, Nat.add_comm (lucasNum (n + 1))]
+      exact Nat.add_le_add (ih n (by omega)) (ih (n + 1) (by omega))
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 232: Fib shifted fusion defect + Lucas mod p
+-- ══════════════════════════════════════════════════════════════
+
+/-- F(a+2)*F(b+2) = F(a+b+2) + F(a)*F(b).
+    lem:pom-shifted-fib-fusion-defect-positive -/
+theorem fib_shifted_fusion_defect (a b : Nat) :
+    Nat.fib (a + 2) * Nat.fib (b + 2) = Nat.fib (a + b + 2) + Nat.fib a * Nat.fib b := by
+  -- From fib_add_formula(a+1, b): F(a+b+2) = F(a+2)*F(b+1) + F(a+1)*F(b)
+  have hadd := fib_add_formula (a + 1) b
+  rw [show a + 1 + b + 1 = a + b + 2 from by omega, show a + 1 + 1 = a + 2 from by omega] at hadd
+  -- F(b+2) = F(b+1) + F(b), F(a+2) = F(a+1) + F(a)
+  have hb := Nat.fib_add_two (n := b)
+  have ha := Nat.fib_add_two (n := a)
+  nlinarith
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 233: Fib determinant volume law + fusion defect cocycle
+-- ══════════════════════════════════════════════════════════════
+
+/-- F(a+2)*F(b+2) - F(a)*F(b) = F(a+b+2) in ℤ.
+    cor:pom-fib-determinant-volume-law -/
+theorem fib_determinant_volume_law (a b : Nat) :
+    (Nat.fib (a + 2) : ℤ) * Nat.fib (b + 2) - (Nat.fib a : ℤ) * Nat.fib b =
+    Nat.fib (a + b + 2) := by
+  have := fib_shifted_fusion_defect a b; push_cast; omega
+
+/-- Fusion defect 2-cocycle: associativity consistency of ω(a,b)=F(a)*F(b).
+    prop:pom-fusion-defect-2cocycle-identity -/
+theorem fib_fusion_defect_cocycle (a b c : Nat) :
+    Nat.fib a * Nat.fib b * Nat.fib (c + 2) + Nat.fib (a + b) * Nat.fib c =
+    Nat.fib b * Nat.fib c * Nat.fib (a + 2) + Nat.fib (b + c) * Nat.fib a := by
+  -- Work in ℤ to use ring reasoning
+  suffices h : (Nat.fib a * Nat.fib b * Nat.fib (c + 2) + Nat.fib (a + b) * Nat.fib c : ℤ) =
+      (Nat.fib b * Nat.fib c * Nat.fib (a + 2) + Nat.fib (b + c) * Nat.fib a : ℤ) by
+    exact_mod_cast h
+  -- Abbreviate
+  set Fa := (Nat.fib a : ℤ); set Fa1 := (Nat.fib (a + 1) : ℤ)
+  set Fb := (Nat.fib b : ℤ); set Fb1 := (Nat.fib (b + 1) : ℤ)
+  set Fc := (Nat.fib c : ℤ); set Fc1 := (Nat.fib (c + 1) : ℤ)
+  set Fab := (Nat.fib (a + b) : ℤ); set Fbc := (Nat.fib (b + c) : ℤ)
+  -- Key lemma: from two expansions of F(a+b+c+1)
+  have h1 := fib_add_formula a (b + c)
+  have h2 := fib_add_formula (a + b) c
+  have h3 := fib_add_formula a b
+  have h4 := fib_add_formula b c
+  rw [show a + (b + c) + 1 = a + b + c + 1 from by omega] at h1
+  -- h1 = h2 gives: Fa1*F(b+c+1) + Fa*Fbc = F(a+b+1)*Fc1 + Fab*Fc
+  -- Substituting h4 and h3:
+  -- Fa1*(Fb1*Fc1 + Fb*Fc) + Fa*Fbc = (Fa1*Fb1 + Fa*Fb)*Fc1 + Fab*Fc
+  -- Cancel Fa1*Fb1*Fc1: Fa1*Fb*Fc + Fa*Fbc = Fa*Fb*Fc1 + Fab*Fc
+  -- From h1=h2 and h3,h4: derive the key identity
+  -- h1: F(a+b+c+1) = Fa1*F(b+c+1) + Fa*Fbc
+  -- h4: F(b+c+1) = Fb1*Fc1 + Fb*Fc
+  -- So: F(a+b+c+1) = Fa1*(Fb1*Fc1 + Fb*Fc) + Fa*Fbc
+  --                 = Fa1*Fb1*Fc1 + Fa1*Fb*Fc + Fa*Fbc
+  -- h2: F(a+b+c+1) = F(a+b+1)*Fc1 + Fab*Fc
+  -- h3: F(a+b+1) = Fa1*Fb1 + Fa*Fb
+  -- So: F(a+b+c+1) = (Fa1*Fb1 + Fa*Fb)*Fc1 + Fab*Fc
+  --                 = Fa1*Fb1*Fc1 + Fa*Fb*Fc1 + Fab*Fc
+  -- Equating: Fa1*Fb*Fc + Fa*Fbc = Fa*Fb*Fc1 + Fab*Fc
+  have haux : Fa1 * Fb * Fc + Fa * Fbc = Fa * Fb * Fc1 + Fab * Fc := by
+    have eq1 : (Nat.fib (a + b + c + 1) : ℤ) =
+        Fa1 * Fb1 * Fc1 + Fa1 * Fb * Fc + Fa * Fbc := by
+      have := h1; have := h4; push_cast at h1 h4 ⊢; nlinarith
+    have eq2 : (Nat.fib (a + b + c + 1) : ℤ) =
+        Fa1 * Fb1 * Fc1 + Fa * Fb * Fc1 + Fab * Fc := by
+      have := h2; have := h3; push_cast at h2 h3 ⊢; nlinarith
+    linarith
+  -- Target: Fa*Fb*F(c+2) + Fab*Fc = Fb*Fc*F(a+2) + Fbc*Fa
+  -- Expand F(c+2) = Fc1+Fc, F(a+2) = Fa1+Fa
+  have hc : (Nat.fib (c + 2) : ℤ) = Fc1 + Fc := by
+    push_cast [Nat.fib_add_two]; ring
+  have ha : (Nat.fib (a + 2) : ℤ) = Fa1 + Fa := by
+    push_cast [Nat.fib_add_two]; ring
+  push_cast; rw [hc, ha]; nlinarith
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 234: Fib strict supermultiplicativity
+-- ══════════════════════════════════════════════════════════════
+
+/-- F(a+2)*F(b+2) > F(a+b+2) when a,b ≥ 1.
+    prop:pom-path-component-multiplicity-refinement-monotone-extrema -/
+theorem fib_shifted_strict_supermul (a b : Nat) (ha : 1 ≤ a) (hb : 1 ≤ b) :
+    Nat.fib (a + b + 2) < Nat.fib (a + 2) * Nat.fib (b + 2) := by
+  have h := fib_shifted_fusion_defect a b
+  have hpos : 0 < Nat.fib a * Nat.fib b :=
+    Nat.mul_pos (Nat.fib_pos.mpr (by omega)) (Nat.fib_pos.mpr (by omega))
+  omega
+
+/-- L(n) ≥ F(n+1) for n ≥ 1. Tight bound from L = F(n+1) + F(n-1).
+    bridge:lucas-ge-fib-succ -/
+theorem lucasNum_ge_fib_succ (n : Nat) (hn : 1 ≤ n) :
+    Nat.fib (n + 1) ≤ lucasNum n := by
+  rw [lucasNum_eq_fib n hn]; omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 238: Lucas-Fib cross identities
+-- ══════════════════════════════════════════════════════════════
+
+/-- L(m)*F(n) + L(n)*F(m) = 2*F(m+n) for m, n ≥ 1.
+    Fundamental Lucas-Fibonacci cross product identity.
+    bridge:lucas-fib-cross-sum -/
+theorem lucasNum_fib_cross_sum (m n : Nat) (hm : 1 ≤ m) (hn : 1 ≤ n) :
+    lucasNum m * Nat.fib n + lucasNum n * Nat.fib m = 2 * Nat.fib (m + n) := by
+  obtain ⟨m', rfl⟩ := Nat.exists_eq_add_of_le hm
+  obtain ⟨n', rfl⟩ := Nat.exists_eq_add_of_le hn
+  simp only [show 1 + m' = m' + 1 from by omega, show 1 + n' = n' + 1 from by omega]
+  rw [lucasNum_eq_fib (m' + 1) (by omega), lucasNum_eq_fib (n' + 1) (by omega)]
+  simp only [show m' + 1 + 1 = m' + 2 from by omega, show m' + 1 - 1 = m' from by omega,
+             show n' + 1 + 1 = n' + 2 from by omega, show n' + 1 - 1 = n' from by omega]
+  -- LHS = (F(m'+2)+F(m'))*F(n'+1) + (F(n'+2)+F(n'))*F(m'+1)
+  -- Nat.fib_add m' (n'+1): F(m'+n'+2) = F(m')*F(n'+1) + F(m'+1)*F(n'+2)
+  have h1 := Nat.fib_add m' (n' + 1)
+  rw [show m' + (n' + 1) + 1 = m' + n' + 2 from by omega,
+      show n' + 1 + 1 = n' + 2 from by omega] at h1
+  -- Nat.fib_add (m'+1) n': F(m'+n'+2) = F(m'+1)*F(n') + F(m'+2)*F(n'+1)
+  have h2 := Nat.fib_add (m' + 1) n'
+  rw [show m' + 1 + n' + 1 = m' + n' + 2 from by omega,
+      show m' + 1 + 1 = m' + 2 from by omega] at h2
+  rw [show m' + 1 + (n' + 1) = m' + n' + 2 from by omega]
+  nlinarith
+
+/-- L(m+n+1)*F(n+1) - L(n+1)*F(m+n+1) = 2*(-1)^n * F(m) in ℤ.
+    bridge:lucas-fib-cross-diff -/
+theorem lucasNum_fib_cross_diff (m n : Nat) :
+    (lucasNum (m + n + 1) : ℤ) * Nat.fib (n + 1) -
+    (lucasNum (n + 1) : ℤ) * Nat.fib (m + n + 1) =
+    2 * (-1) ^ n * Nat.fib m := by
+  rw [lucasNum_eq_fib (m + n + 1) (by omega), lucasNum_eq_fib (n + 1) (by omega)]
+  simp only [show m + n + 1 + 1 = m + n + 2 from by omega,
+             show m + n + 1 - 1 = m + n from by omega,
+             show n + 1 + 1 = n + 2 from by omega,
+             show n + 1 - 1 = n from by omega]
+  push_cast
+  -- Nat.fib_add m (n+1): F(m+n+2) = F(m)*F(n+1) + F(m+1)*F(n+2)
+  have hadd1 := Nat.fib_add m n
+  have hadd2 := Nat.fib_add m (n + 1)
+  rw [show m + (n + 1) + 1 = m + n + 2 from by omega,
+      show n + 1 + 1 = n + 2 from by omega] at hadd2
+  -- Cassini: F(n+2)*F(n) - F(n+1)^2 = (-1)^(n+1)
+  have hcas := Graph.fib_cassini (n + 1) (by omega)
+  simp only [show n + 1 + 1 = n + 2 from by omega, show n + 1 - 1 = n from by omega] at hcas
+  -- F(n+1)^2 - F(n)*F(n+2) = (-1)^n
+  have key : (Nat.fib (n + 1) : ℤ) ^ 2 - (Nat.fib n : ℤ) * Nat.fib (n + 2) =
+      (-1 : ℤ) ^ n := by
+    have : (-1 : ℤ) ^ (n + 1) = (-1) ^ n * (-1) := pow_succ (-1) n
+    linarith
+  -- fib_add_two
+  have hfn := Nat.fib_add_two (n := n)
+  have hfmn := Nat.fib_add_two (n := m + n)
+  push_cast at hadd1 hadd2 hfn hfmn ⊢
+  nlinarith [key, sq_nonneg ((Nat.fib (n + 1) : ℤ))]
+
 end Omega

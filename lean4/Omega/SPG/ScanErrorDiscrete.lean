@@ -1057,4 +1057,16 @@ theorem prefix_error_of_univ (μ : PMF (Word n)) (h : m ≤ n) :
 
 end
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 241
+-- ══════════════════════════════════════════════════════════════
+
+/-- F + 2E = 2nN: boundary face count = 2n*cubes - 2*internal adjacencies.
+    prop:spg-dyadic-polyclube-boundary-vs-adjacency-identity -/
+theorem paper_boundary_vs_adjacency (totalFaces externalFaces internalPairs cubeCount dim : Nat)
+    (h : totalFaces = 2 * dim * cubeCount)
+    (hdecomp : totalFaces = externalFaces + 2 * internalPairs) :
+    externalFaces = 2 * dim * cubeCount - 2 * internalPairs := by
+  omega
+
 end Omega.SPG

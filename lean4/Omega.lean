@@ -2,6 +2,7 @@ import Omega.Core.Fib
 import Omega.Core.Word
 import Omega.Core.No11
 import Omega.Core.CoprimeSMul
+import Omega.Core.PowerInequality
 import Omega.Folding.StableSyntax
 import Omega.Folding.Weight
 import Omega.Folding.Value
@@ -12,6 +13,7 @@ import Omega.Folding.MaxFiber
 import Omega.Folding.MaxFiberHigh
 import Omega.Folding.MaxFiberTwoStep
 import Omega.Folding.FiberWeightCount
+import Omega.Folding.FiberWeightCountComplement
 import Omega.Folding.CollisionDecomp
 import Omega.Folding.MomentRecurrence
 import Omega.Folding.MomentTriple
@@ -64,3 +66,4 @@ import Omega.Frontier.Conjectures
 import Omega.Frontier.Certificates
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
+import Omega.Combinatorics.GramDet

@@ -352,4 +352,130 @@ theorem path_independent_set_count' (n : Nat) :
     = Nat.fib (n + 2) :=
   path_independent_set_count n
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 208: Strict monotonicity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Path independent set count is strictly increasing for n >= 2.
+    prop:folding-stable-syntax-fibonacci-count -/
+theorem pathIndCount_strict_mono (n : Nat) (hn : 2 ≤ n) :
+    pathIndCount n < pathIndCount (n + 1) := by
+  rw [path_independent_set_count, path_independent_set_count]
+  exact fib_strict_mono (n + 2) (by omega)
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 212: Path independent set size upper bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- The halving map i ↦ i/2 is injective on path-independent sets. -/
+private theorem half_injOn_pathInd (n : Nat) (S : Finset (Fin n))
+    (hS : IsPathIndependent n S) :
+    Set.InjOn (fun i : Fin n => i.val / 2) (↑S) := by
+  intro i hi j hj (heq : i.val / 2 = j.val / 2)
+  ext
+  by_contra hne
+  -- WLOG i.val < j.val
+  have hne_val : i.val ≠ j.val := hne
+  rcases Nat.lt_or_gt_of_ne hne_val with hlt | hlt
+  · have hnotadj : ¬ (i.val + 1 = j.val) := hS i hi j hj
+    have hge2 : i.val + 2 ≤ j.val := by omega
+    have : (i.val + 2) / 2 ≤ j.val / 2 := Nat.div_le_div_right hge2
+    have : i.val / 2 + 1 ≤ j.val / 2 := by
+      calc i.val / 2 + 1 = (i.val + 2) / 2 := by omega
+        _ ≤ j.val / 2 := this
+    omega
+  · have hnotadj : ¬ (j.val + 1 = i.val) := hS j hj i hi
+    have hge2 : j.val + 2 ≤ i.val := by omega
+    have : (j.val + 2) / 2 ≤ i.val / 2 := Nat.div_le_div_right hge2
+    have : j.val / 2 + 1 ≤ i.val / 2 := by
+      calc j.val / 2 + 1 = (j.val + 2) / 2 := by omega
+        _ ≤ i.val / 2 := this
+    omega
+
+/-- Any path-independent set on P_n has at most ⌈n/2⌉ elements.
+    thm:pom-fibcube-eccentricity-closed-form -/
+theorem pathIndSet_card_le (n : Nat) (S : Finset (Fin n))
+    (hS : IsPathIndependent n S) :
+    S.card ≤ (n + 1) / 2 := by
+  have hInj := half_injOn_pathInd n S hS
+  have hImage : S.image (fun i : Fin n => i.val / 2) ⊆ Finset.range ((n + 1) / 2) := by
+    intro x hx
+    rw [Finset.mem_image] at hx
+    obtain ⟨i, _, rfl⟩ := hx
+    simp only [Finset.mem_range]
+    exact Nat.div_lt_of_lt_mul (by omega)
+  calc S.card
+      = (S.image (fun i : Fin n => i.val / 2)).card :=
+          (Finset.card_image_of_injOn hInj).symm
+      _ ≤ (Finset.range ((n + 1) / 2)).card := Finset.card_le_card hImage
+      _ = (n + 1) / 2 := Finset.card_range _
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 229: maximum path-independent set achievability
+-- ══════════════════════════════════════════════════════════════
+
+/-- Maximum path-independent set achievability: exists S with card = ceil(n/2).
+    thm:pom-fibcube-eccentricity-closed-form -/
+theorem pathIndSet_exists_max (n : Nat) (hn : 1 ≤ n) :
+    ∃ S : Finset (Fin n), IsPathIndependent n S ∧ S.card = (n + 1) / 2 := by
+  -- Construct the even-index set {i : Fin n | i.val % 2 = 0}
+  refine ⟨Finset.univ.filter (fun i : Fin n => i.val % 2 = 0), ?_, ?_⟩
+  · -- IsPathIndependent: no two elements are adjacent
+    intro i hi j hj hadj
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
+    -- i.val is even, j.val = i.val + 1 is odd
+    omega
+  · -- Card = (n+1)/2: count of even positions in Fin n
+    -- Biject with Fin ((n+1)/2) via k ↦ 2*k
+    rw [show (n + 1) / 2 = Fintype.card (Fin ((n + 1) / 2)) from by simp,
+      ← Finset.card_univ (α := Fin ((n + 1) / 2))]
+    symm
+    have hdiv : (n + 1) / 2 * 2 ≤ n + 1 := Nat.div_mul_le_self (n + 1) 2
+    have hbound : ∀ k, k < (n + 1) / 2 → 2 * k < n := by intro k hk; omega
+    apply Finset.card_nbij (fun (k : Fin ((n + 1) / 2)) =>
+      (⟨2 * k.val, hbound k.val k.isLt⟩ : Fin n))
+    · intro ⟨k, hk⟩ _
+      show (⟨2 * k, _⟩ : Fin n) ∈ Finset.univ.filter (fun i : Fin n => i.val % 2 = 0)
+      simp [Finset.mem_filter, Nat.mul_mod_right]
+    · intro ⟨k₁, _⟩ _ ⟨k₂, _⟩ _ h
+      have h1 := congrArg Fin.val h; simp only [Fin.val_mk] at h1
+      exact Fin.ext (by linarith)
+    · intro ⟨i, hi⟩ hx
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_coe] at hx
+      have hlt : i / 2 < (n + 1) / 2 := by omega
+      exact ⟨⟨i / 2, hlt⟩, Finset.mem_coe.mpr (Finset.mem_univ _),
+        Fin.ext (by simp only [Fin.val_mk]; omega)⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 230: Cassini identity for pathIndCount
+-- ══════════════════════════════════════════════════════════════
+
+/-- Cassini identity for path independent set counts.
+    thm:pom-path-indset-thermo-constants -/
+theorem pathIndCount_cassini (n : Nat) :
+    pathIndCount (n + 2) * pathIndCount n + (n + 1) % 2 =
+    pathIndCount (n + 1) ^ 2 + n % 2 := by
+  simp only [path_independent_set_count]
+  -- Goal: F(n+4)*F(n+2) + (n+1)%2 = F(n+3)^2 + n%2
+  by_cases heven : Even n
+  · -- Even n: (n+1)%2 = 1, n%2 = 0
+    have h1 : (n + 1) % 2 = 1 := by rcases heven with ⟨k, rfl⟩; omega
+    have h0 : n % 2 = 0 := by rcases heven with ⟨k, rfl⟩; omega
+    rw [h1, h0, Nat.add_zero]
+    -- F(n+2) is even, so fib_cassini_even at (n+2): F(n+2)*F(n+4) + 1 = F(n+3)^2
+    have heven2 : Even (n + 2) := by rcases heven with ⟨k, rfl⟩; exact ⟨k + 1, by omega⟩
+    have := fib_cassini_even (n + 2) heven2
+    linarith [Nat.mul_comm (Nat.fib (n + 2)) (Nat.fib (n + 4))]
+  · -- Odd n: (n+1)%2 = 0, n%2 = 1
+    have hmod : n % 2 = 1 := by
+      rcases Nat.even_or_odd n with ⟨k, rfl⟩ | ⟨k, rfl⟩
+      · exact absurd ⟨k, rfl⟩ heven
+      · omega
+    have h0 : (n + 1) % 2 = 0 := by omega
+    rw [h0, hmod, Nat.add_zero]
+    -- F(n+2) is odd, so fib_cassini_odd at (n+2): F(n+2)*F(n+4) = F(n+3)^2 + 1
+    have hodd2 : ¬ Even (n + 2) := by intro ⟨k, hk⟩; exact heven ⟨k - 1, by omega⟩
+    have := fib_cassini_odd (n + 2) hodd2
+    linarith [Nat.mul_comm (Nat.fib (n + 2)) (Nat.fib (n + 4))]
+
 end Omega

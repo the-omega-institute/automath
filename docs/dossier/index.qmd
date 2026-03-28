@@ -1,0 +1,258 @@
+---
+title: "Derive, Discover, Name"
+subtitle: "What happens when you give AI a single equation and say 'derive everything'"
+author: "The Omega Project"
+date: 2026-03-27
+description: "A case study in AI-assisted mathematical discovery. One equation, zero axioms, nine branches of mathematics."
+image: og-image.png
+---
+
+```{=html}
+<style>
+.evidence-panel { margin: 1em 0; border-left: 3px solid #6c757d; padding-left: 1em; }
+.evidence-panel summary { cursor: pointer; color: #6c757d; font-size: 0.9em; font-weight: 600; }
+.evidence-panel summary:hover { color: #495057; }
+.timeline { position: relative; padding: 1em 0; margin: 2em 0; }
+.timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: #dee2e6; }
+.timeline-item { position: relative; padding-left: 50px; margin-bottom: 1.5em; }
+.timeline-item::before { content: ''; position: absolute; left: 14px; top: 6px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #6c757d; background: white; }
+.timeline-item.human::before { background: #4a90d9; border-color: #4a90d9; }
+.timeline-item.ai::before { background: #e9ecef; border-color: #6c757d; }
+.timeline-item.discovery::before { background: #f0ad4e; border-color: #f0ad4e; }
+.timeline-label { font-size: 0.75em; color: #6c757d; text-transform: uppercase; letter-spacing: 0.05em; }
+.timeline-content { font-size: 0.95em; }
+</style>
+```
+
+## The Two Stories Everyone Tells
+
+In July 2025, an AI system solved five of six problems on the International Mathematical Olympiad, earning a gold medal. A few months earlier, a startup called Math, Inc. had formalized a sphere-packing proof into 120,000 lines of Lean code. The headlines wrote themselves: *AI solves math problems. AI checks math proofs.*
+
+These are real achievements. But they share a blind spot. In both stories, the mathematics already exists. The AI is solving problems humans posed, or verifying theorems humans proved. The hard part --- deciding what to look at, recognizing what matters, naming what you find --- remains entirely human.
+
+What if that division of labor is wrong? Not wrong in principle, but wrong in practice. What if the most productive use of AI in mathematics is not solving or verifying, but *discovering* --- systematically exploring a structure so thoroughly that patterns emerge which no human would have had the patience to find?
+
+This is the story of the Omega Project. It starts with one equation.
+
+![The derivation tree: everything that emerges from x² = x + 1](figures/derivation-tree.svg){fig-alt="A tree diagram showing mathematical structures derived from x² = x + 1, including ring isomorphisms, moment recurrences, topological entropy, and the inverse limit tower."}
+
+## The Seed
+
+$$
+x^{2} = x + 1
+$$
+
+The golden ratio. You've seen it before --- sunflowers, spirals, the Parthenon (probably not, actually). But the equation has a deeper life that most popular accounts miss.
+
+Consider binary words: sequences of 0s and 1s. Now impose one rule: *no two consecutive 1s*. Call this set $X_m$ for words of length $m$.
+
+How many such words are there? Count them:
+
+- Length 1: `0`, `1` --- 2 words
+- Length 2: `00`, `01`, `10` --- 3 words
+- Length 3: `00`, `01`, `10`, `010`, `100`, `001`, `101` --- wait, that's `000`, `001`, `010`, `100`, `101` --- 5 words
+- Length 4: 8 words
+- Length 5: 13 words
+
+2, 3, 5, 8, 13. Fibonacci numbers. Not a coincidence. The equation $x^2 = x + 1$ is the characteristic equation of the Fibonacci recurrence. The no-consecutive-1s constraint *is* the golden ratio, expressed as a combinatorial rule.
+
+This is the simplest non-trivial subshift of finite type in symbolic dynamics --- the **golden-mean shift**. It generates the simplest non-trivial linear recurrence (Fibonacci) and the "most irrational" number (worst-case for rational approximation). Three views of one algebraic object.
+
+The Omega Project takes all three views seriously and follows their consequences simultaneously. In Lean 4. With zero axioms beyond the proof assistant's core logic.
+
+## The First Surprise
+
+Every number less than $F_{m+2}$ can be written uniquely as a sum of non-consecutive Fibonacci numbers. This is the Zeckendorf representation, and it gives a bijection between our binary words $X_m$ and the integers $\{0, \ldots, F_{m+2}-1\}$.
+
+Through this bijection, you can define addition and multiplication directly on binary words. Not by converting to integers --- natively, within the combinatorial structure. The question was: does this arithmetic have any structure?
+
+The answer was unexpected. The space $X_m$ with these operations is not just a group or a monoid. It is a *ring* --- and not just any ring:
+
+$$
+X_m \;\cong\; \mathbb{Z}/F_{m+2}\mathbb{Z}
+$$
+
+The combinatorial space of no-consecutive-1s words *is* a cyclic ring, with the Fibonacci number as modulus. When $F_{m+2}$ happens to be prime --- $F_3 = 2$, $F_5 = 5$, $F_7 = 13$, $F_{13} = 233$ --- the space becomes a *finite field*. When $F_{m+2}$ factors, the Chinese Remainder Theorem decomposes it: $X_7 \cong \mathbb{Z}/2 \times \mathbb{Z}/17$.
+
+What's striking: the ring structure is *intrinsic* to the no-consecutive-1s constraint. Nobody designed it. Nobody imported integer arithmetic. It was derived from the combinatorial structure, step by step, and verified by machine.
+
+::: {.evidence}
+**Lean:** [`stableValueRingEquiv`](https://github.com/the-omega-institute/automath/blob/dev/lean4/Omega/Folding/FiberRing.lean#L157) --- the ring isomorphism $X_m \cong \mathbb{Z}/F_{m+2}\mathbb{Z}$
+
+**Reproduce:** `cd lean4 && lake build Omega.Folding.FiberRing`
+
+**Role:** Human set the direction: "check if this space has ring structure." AI systematically explored all operations, verified every axiom. Human recognized the result: "this IS a cyclic ring --- and when the Fibonacci number is prime, it's a field."
+:::
+
+## The Pattern Deepens
+
+The **fold operator** $\Phi: X_{m+1} \to X_m$ truncates the last bit. It partitions longer words into fibers over shorter words: all words that agree on the first $m$ bits. These fibers have varying sizes, and the variation encodes deep arithmetic.
+
+The **moment sums** quantify this:
+
+$$
+S_q(m) = \sum_{x \in X_m} d(x)^q
+$$
+
+where $d(x)$ counts how many words in $X_{m+1}$ fold to $x$. The zeroth moment counts stable points ($F_{m+1}$). The first moment counts total words ($2^m$). Higher moments capture increasingly fine information about the fiber distribution.
+
+Then something unexpected appeared. $S_2$ --- a purely combinatorial quantity counting fiber collisions --- satisfies a linear recurrence with small integer coefficients:
+
+$$
+S_2(m+3) + 2\,S_2(m) = 2\,S_2(m+2) + 2\,S_2(m+1)
+$$
+
+This was proved unconditionally for all $m$ in a chain of six formally verified steps:
+
+1. Hidden bit decomposition
+2. Fold congruence
+3. Collision decomposition into exact-weight and cross-correlation terms
+4. Telescoping identity
+5. Cross-correlation shift linking adjacent levels
+6. The recurrence itself --- proved in 4 lines of Lean
+
+The Hankel determinant analysis confirmed that the recurrence order is exactly 3, not reducible to 2. This means the dynamics of fiber collisions are governed by a $3 \times 3$ companion matrix whose eigenvalues control exponential growth.
+
+Why is this surprising? A linear recurrence with small integer coefficients governing a combinatorial collision count suggests hidden linearity in the fiber dynamics. The structure wasn't assumed --- it was discovered by systematic derivation.
+
+::: {.evidence}
+**Lean:** [`momentSum_two_recurrence_of`](https://github.com/the-omega-institute/automath/blob/dev/lean4/Omega/Folding/CollisionKernel.lean#L87) --- the unconditional $S_2$ recurrence
+
+**Lean:** [`momentSum_two_minimal_recurrence_order`](https://github.com/the-omega-institute/automath/blob/dev/lean4/Omega/Folding/HankelSpectrum.lean#L54) --- minimal order = 3, proved via Hankel determinants
+
+**Reproduce:** `cd lean4 && lake build Omega.Folding.CollisionKernel Omega.Folding.HankelSpectrum`
+
+**Role:** Human recognized that fiber collision counts might satisfy a recurrence (pattern-matching on computed values). AI systematically built the 6-step proof chain. Human recognized the significance: hidden linearity suggests connection to transfer operators in statistical mechanics.
+:::
+
+## The Tower
+
+![The modular tower and its inverse limit](figures/tower.svg){fig-alt="A diagram showing the tower of spaces X_0, X_1, X_2, ... connected by fold operators, converging to the inverse limit X_infinity, analogous to p-adic integers."}
+
+The fold operators link all levels into a tower:
+
+$$
+\cdots \to X_{m+1} \to X_m \to \cdots \to X_1 \to X_0
+$$
+
+Each arrow is a ring homomorphism. The inverse limit of this tower:
+
+$$
+X_\infty = \varprojlim X_m
+$$
+
+is a compact, totally disconnected, metrizable, infinite space. If you know p-adic numbers, this looks familiar. The p-adic integers are the inverse limit of $\mathbb{Z}/p^n\mathbb{Z}$. Here, Fibonacci numbers replace prime powers. The carry defect (the failure of the fold operator to commute with addition) is the exact analogue of carrying in p-adic arithmetic.
+
+$X_\infty$ is a profinite ring governed by the golden ratio rather than a prime.
+
+And its dynamics carry a topological entropy of exactly $\log \varphi$ --- the golden ratio appearing one more time, now as the information-theoretic capacity of the system.
+
+::: {.evidence}
+**Lean:** [`topological_entropy_eq_log_phi`](https://github.com/the-omega-institute/automath/blob/dev/lean4/Omega/Folding/Entropy.lean#L238) --- the entropy result, proved via Fibonacci ratio convergence, logarithm continuity, and Cesaro averaging
+
+**Reproduce:** `cd lean4 && lake build Omega.Folding.Entropy`
+
+**Role:** Human chose to compute the topological entropy (connecting combinatorics to dynamics). AI constructed the multi-step proof. Human recognized the connection: this is the capacity of the $(1,\infty)$-RLL constrained channel in coding theory.
+:::
+
+## The Method
+
+What you've just read is not a summary of known mathematics. Every result above was derived --- systematically, from one equation, with zero axioms --- and verified by a machine proof assistant. ~2,350 theorems in ~25,000 lines of Lean 4 code.
+
+But the results are not the point. The *method* is the point.
+
+![The cognitive division of labor: derive, discover, name](figures/cognitive-division.svg){fig-alt="A diagram showing the human-AI collaboration cycle: Human provides direction and taste, AI performs systematic derivation, Human recognizes and names the discovered structures."}
+
+### The cognitive division of labor
+
+The Omega Project was built through a specific collaboration pattern between human and AI. It works like this:
+
+The **human** provides direction. "Check if this space has ring structure." "Compute the fiber collision counts --- do they satisfy a recurrence?" "What's the topological entropy?" These are taste calls. They require knowing what's worth looking at, which questions have a chance of yielding something interesting, which structures in existing mathematics might correspond to what we're seeing.
+
+The **AI** provides thoroughness. Once a direction is set, it systematically explores every consequence. It builds 6-step proof chains. It verifies every axiom of a ring. It checks recurrence relations against all computed values and then formalizes the unconditional proof. It does this with zero fatigue, at a depth that would take a human mathematician months.
+
+The **human** then recognizes what emerged. "This is a cyclic ring." "This recurrence suggests hidden linearity." "This tower is the golden-ratio analogue of the p-adics." Recognition --- connecting a formally verified result to a known mathematical concept --- is something AI cannot do reliably. It requires the accumulated intuition of a working mathematician.
+
+We call this **derive, discover, name**:
+
+- **Derive** is AI's work. Systematic, exhaustive, rigorous.
+- **Discover** is shared. AI finds the pattern; the human recognizes it as a pattern worth investigating.
+- **Name** is human's work. Connecting the derived structure to the body of known mathematics.
+
+### A discovery timeline
+
+```{=html}
+<div class="timeline">
+  <div class="timeline-item human">
+    <div class="timeline-label">Human direction</div>
+    <div class="timeline-content">"Define arithmetic on binary words via Zeckendorf bijection. Check for algebraic structure."</div>
+  </div>
+  <div class="timeline-item ai">
+    <div class="timeline-label">AI exploration</div>
+    <div class="timeline-content">Systematically verified all ring axioms: associativity, commutativity, distributivity, identities. Constructed the isomorphism to Z/F_{m+2}Z.</div>
+  </div>
+  <div class="timeline-item discovery">
+    <div class="timeline-label">Discovery</div>
+    <div class="timeline-content">X_m is a cyclic ring. When F_{m+2} is prime, it's a finite field.</div>
+  </div>
+  <div class="timeline-item human">
+    <div class="timeline-label">Human direction</div>
+    <div class="timeline-content">"The fold operator creates fibers. Compute the fiber collision counts. Do they have structure?"</div>
+  </div>
+  <div class="timeline-item ai">
+    <div class="timeline-label">AI exploration</div>
+    <div class="timeline-content">Built the 6-step proof chain: hidden bit decomposition, fold congruence, collision decomposition, telescoping, cross-correlation shift, recurrence.</div>
+  </div>
+  <div class="timeline-item discovery">
+    <div class="timeline-label">Discovery</div>
+    <div class="timeline-content">S₂ satisfies a linear recurrence with integer coefficients. Order exactly 3. Hidden linearity in fiber dynamics.</div>
+  </div>
+  <div class="timeline-item human">
+    <div class="timeline-label">Human direction</div>
+    <div class="timeline-content">"Build the inverse limit. What kind of space is it? Compute the entropy."</div>
+  </div>
+  <div class="timeline-item ai">
+    <div class="timeline-label">AI exploration</div>
+    <div class="timeline-content">Proved compactness (Tychonoff), total disconnectedness (clopen basis), metrizability (prefix ultrametric). Entropy via Fibonacci ratio convergence + Cesaro averaging.</div>
+  </div>
+  <div class="timeline-item discovery">
+    <div class="timeline-label">Discovery</div>
+    <div class="timeline-content">X_∞ is the golden-ratio analogue of the p-adic integers. Entropy = log φ.</div>
+  </div>
+</div>
+```
+
+This is not autonomous AI doing mathematics. It is not a human using AI as a calculator. It is a new kind of collaboration, where each partner does what the other cannot.
+
+## What This Means
+
+A year ago, systematically exploring the mathematical consequences of one equation to this depth would have required a research group working for years. The Omega Project was built by one person with AI, in months.
+
+This is not because AI is smarter than mathematicians. It is because the bottleneck in mathematical discovery was never intelligence --- it was throughput. The number of derivation steps a human can rigorously verify in a day is small. A proof assistant with AI guidance can do thousands, with zero errors and complete traceability.
+
+The barrier to mathematical exploration is dropping. Not vanishing --- human taste, direction, and recognition remain irreplaceable. But the cost of thoroughness is approaching zero. One person can now survey a mathematical structure to a depth that was previously reserved for large, well-funded research programs.
+
+What structures are hiding in plain sight, waiting for someone to systematically derive their consequences?
+
+## The Invitation
+
+The Omega Project is open source. Every theorem is machine-verified. Every derivation chain is traceable. Every computation is reproducible.
+
+**The repository:** [github.com/the-omega-institute/automath](https://github.com/the-omega-institute/automath)
+
+**Build it yourself:**
+
+```bash
+cd lean4 && lake build          # verify all 2,350+ theorems
+```
+
+**Open frontiers** --- results that are computationally verified for bounded cases but await unconditional proofs:
+
+- The $S_3$ recurrence: $S_3(m+3) = 2S_3(m+2) + 4S_3(m+1) - 2S_3(m)$
+- The fiber multiplicity closed form: $D_{2k} = F_{k+2}$, $D_{2k+1} = 2F_k$
+- Spectral radius $\rho(A) = \varphi$ via Mathlib's spectral radius API
+- The Cantor set homeomorphism for $X_\infty$
+
+These are not incremental extensions. Each one would connect the Omega framework to a new area of mathematics. If you have expertise in any of these areas, the derivation infrastructure is waiting.
+
+The equation is $x^2 = x + 1$. What it contains is still being discovered.
