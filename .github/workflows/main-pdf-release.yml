@@ -7,13 +7,12 @@ on:
   workflow_dispatch:
     inputs:
       target_ref:
-        description: Branch, tag, or SHA to validate against main-gate.
+        description: Branch, tag, or SHA to validate or release from.
         required: false
         default: main
         type: string
 
 permissions:
-  actions: read
   contents: write
 
 concurrency:
@@ -21,22 +20,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  publish-release:
-    name: Publish GitHub release
+  resolve_target:
+    name: Resolve release target
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    outputs:
+      target_sha: ${{ steps.resolve_target.outputs.target_sha }}
+      release_tag: ${{ steps.resolve_target.outputs.release_tag }}
+      publish_release: ${{ steps.resolve_target.outputs.publish_release }}
     steps:
       - name: Check out repository
-        if: ${{ github.event_name == 'push' }}
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
-          fetch-depth: 0
-
-      - name: Check out target ref for validation
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-        with:
-          ref: ${{ inputs.target_ref }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.target_ref || github.ref }}
           fetch-depth: 0
 
       - name: Resolve release target
@@ -57,43 +53,38 @@ jobs:
           git fetch origin main --depth=1
           git merge-base --is-ancestor "${{ steps.resolve_target.outputs.target_sha }}" origin/main
 
-      - name: Find successful main gate run for this commit
-        id: find_main_gate
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
-        env:
-          TARGET_SHA: ${{ steps.resolve_target.outputs.target_sha }}
-        with:
-          script: |
-            const runs = await github.paginate(github.rest.actions.listWorkflowRuns, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: ".github/workflows/main-gate.yml",
-              branch: "main",
-              event: "push",
-              status: "completed",
-              head_sha: process.env.TARGET_SHA,
-              per_page: 100,
-            });
+      - name: Write validation summary
+        run: |
+          {
+            echo "Validated release target."
+            echo
+            echo "- target SHA: \`${{ steps.resolve_target.outputs.target_sha }}\`"
+            echo "- publish release: \`${{ steps.resolve_target.outputs.publish_release }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
-            const run = runs.find((item) => item.conclusion === "success");
-            if (!run) {
-              core.setFailed(
-                `No successful Main Gate run was found for ${process.env.TARGET_SHA}. Wait for main-gate to succeed before publishing a release.`
-              );
-              return;
-            }
+  build_pdf:
+    name: Build main.pdf
+    needs: resolve_target
+    uses: ./.github/workflows/reusable-pdf.yml
+    with:
+      checkout_ref: ${{ needs.resolve_target.outputs.target_sha }}
+      upload_artifact: true
+      artifact_name: release-pdf
+      artifact_retention_days: 7
+    secrets: inherit
 
-            core.info(`Using Main Gate run ${run.id} for ${process.env.TARGET_SHA}.`);
-            core.setOutput("run_id", String(run.id));
-
-      - name: Download main.pdf artifact from main gate
+  publish-release:
+    name: Publish GitHub release
+    needs: [resolve_target, build_pdf]
+    if: ${{ always() && needs.resolve_target.result == 'success' && needs.build_pdf.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Download built main.pdf artifact
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
-          name: main-pdf
+          name: release-pdf
           path: release-assets
-          repository: ${{ github.repository }}
-          run-id: ${{ steps.find_main_gate.outputs.run_id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Resolve release asset
         id: resolve-asset
@@ -109,19 +100,18 @@ jobs:
       - name: Write validation summary
         run: |
           {
-            echo "Validated release prerequisites."
+            echo "Built release PDF."
             echo
-            echo "- target SHA: \`${{ steps.resolve_target.outputs.target_sha }}\`"
-            echo "- main-gate run: \`${{ steps.find_main_gate.outputs.run_id }}\`"
+            echo "- target SHA: \`${{ needs.resolve_target.outputs.target_sha }}\`"
             echo "- PDF asset: \`${{ steps.resolve-asset.outputs.pdf_path }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Publish release
-        if: ${{ steps.resolve_target.outputs.publish_release == 'true' }}
+        if: ${{ needs.resolve_target.outputs.publish_release == 'true' }}
         uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2
         with:
-          tag_name: ${{ steps.resolve_target.outputs.release_tag }}
-          name: ${{ steps.resolve_target.outputs.release_tag }}
+          tag_name: ${{ needs.resolve_target.outputs.release_tag }}
+          name: ${{ needs.resolve_target.outputs.release_tag }}
           files: ${{ steps.resolve-asset.outputs.pdf_path }}
           fail_on_unmatched_files: true
           generate_release_notes: true
