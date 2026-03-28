@@ -2,6 +2,7 @@ import Omega.Core.Fib
 import Mathlib.Data.Nat.Factorization.Defs
 import Mathlib.Data.Nat.Totient
 import Mathlib.Data.ZMod.Basic
+import Mathlib.Data.Nat.Fib.Zeckendorf
 import Mathlib.Tactic.IntervalCases
 
 /-! ### Zeckendorf signatures of Lie algebra dimensions
@@ -481,5 +482,37 @@ theorem fib_shift4 (n : Nat) (hn : 1 ≤ n) :
   have h3 := Nat.fib_add_two (n := j + 2)
   have h4 := Nat.fib_add_two (n := j + 3)
   linarith
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R36: Zeckendorf no-carry additivity (concrete instances)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Zeckendorf no-carry additivity: F(2) + F(4) has Zeckendorf rep [4, 2]
+    (no carry because gap ≥ 2).
+    thm:zeckendorf-no-carry-additivity -/
+theorem zeckendorf_no_carry_pair_2_4 :
+    Nat.zeckendorf (Nat.fib 2 + Nat.fib 4) = [4, 2] := by native_decide
+
+/-- Zeckendorf no-carry: F(2) + F(4) + F(6) = 12, and zeckendorf 12 = [6, 4, 2].
+    thm:zeckendorf-no-carry-additivity -/
+theorem zeckendorf_no_carry_triple_2_4_6 :
+    Nat.zeckendorf (Nat.fib 2 + Nat.fib 4 + Nat.fib 6) = [6, 4, 2] := by native_decide
+
+/-- Zeckendorf no-carry: F(4) + F(6) + F(9) = 45, and zeckendorf 45 = [9, 6, 4].
+    thm:zeckendorf-no-carry-additivity -/
+theorem zeckendorf_no_carry_triple_4_6_9 :
+    Nat.zeckendorf (Nat.fib 4 + Nat.fib 6 + Nat.fib 9) = [9, 6, 4] := by native_decide
+
+/-- No-carry additivity principle for two non-adjacent Fibonacci numbers:
+    when gap(i, j) ≥ 2, the Zeckendorf representation of F(i) + F(j) is [j, i].
+    Verified for small cases.
+    thm:zeckendorf-no-carry-additivity -/
+theorem zeckendorf_no_carry_gap2_instances :
+    Nat.zeckendorf (Nat.fib 2 + Nat.fib 4) = [4, 2] ∧
+    Nat.zeckendorf (Nat.fib 3 + Nat.fib 5) = [5, 3] ∧
+    Nat.zeckendorf (Nat.fib 4 + Nat.fib 6) = [6, 4] ∧
+    Nat.zeckendorf (Nat.fib 5 + Nat.fib 7) = [7, 5] ∧
+    Nat.zeckendorf (Nat.fib 2 + Nat.fib 5) = [5, 2] ∧
+    Nat.zeckendorf (Nat.fib 3 + Nat.fib 6) = [6, 3] := by native_decide
 
 end Omega.ZeckSig

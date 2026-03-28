@@ -278,6 +278,32 @@ theorem card_eq_fib : ∀ m : Nat, Fintype.card (X m) = Nat.fib (m + 2)
       simpa [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using
         (fib_succ_succ' (m + 2)).symm
 
+/-- Number of stable words ending in 1 equals F(m).
+    thm:card-X-ending-true -/
+theorem card_endsInOne_eq_fib : ∀ (m : Nat), 1 ≤ m →
+    Fintype.card {x : X m // EndsInOne x} = Nat.fib m
+  | 1, _ => by
+    classical
+    rw [card_endsInOne_succ 0]
+    simp [Nat.fib]
+  | m + 2, _ => by
+    classical
+    rw [card_endsInOne_succ (m + 1), card_endsInZero_succ m, card_eq_fib m]
+
+/-- The cardinality of X_m words with last bit true equals F(m), expressed as a Finset filter.
+    thm:card-X-ending-true-filter -/
+theorem card_X_endingTrue (m : Nat) (hm : 1 ≤ m) :
+    (Finset.univ.filter (fun w : X m => w.1 ⟨m - 1, by omega⟩ = true)).card
+    = Nat.fib m := by
+  classical
+  rw [← card_endsInOne_eq_fib m hm]
+  rw [Fintype.card_subtype]
+  congr 1
+  ext w
+  simp only [EndsInOne, Omega.get, Finset.mem_filter, Finset.mem_univ, true_and]
+  have hlt : m - 1 < m := by omega
+  rw [dif_pos hlt]
+
 end X
 
 end Omega

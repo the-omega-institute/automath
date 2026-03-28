@@ -534,6 +534,13 @@ theorem detPoly_coeff_binomial : ∀ (k j : Nat), j ≤ k →
         exact Nat.choose_self _
       simp [hc_lhs, hc_rhs]
 
+/-- All coefficients of D_k are positive (immediate from the binomial formula).
+    prop:pom-Lk-det-coeff-pos -/
+theorem detPoly_coeff_pos (k j : Nat) (hj : j ≤ k) :
+    0 < (detPoly k).coeff j := by
+  rw [detPoly_coeff_binomial k j hj]
+  exact_mod_cast Nat.choose_pos (by omega)
+
 /-- 2·D_k'(0) = k·(k+1).
     prop:pom-detpoly-deriv-eval -/
 theorem detPoly_deriv_eval_zero_double :
