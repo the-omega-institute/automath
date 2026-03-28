@@ -6,8 +6,8 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~32,294 |
-| 定理/定义数 | ~2,514 |
+| 总行数 | ~29,049 |
+| 定理/定义数 | ~3,198 |
 | 论文接口包装 | 360 |
 | 文件数 | 69 |
 | 公理数 | 0 |
@@ -40,7 +40,7 @@
 **矩谱（Round 8）**：momentSum（S_q(m) 定义）; momentSum_zero（S_0=F_{m+1}）; momentSum_one（S_1=2^m）; momentSum_le_max_pow（S_q ≤ D_m^{q-1}·2^m）; paperFib_le_pow（F_{m+1} ≤ 2^m 增长上界）
 **矩谱 S_2 基值（Round 9）**：cMomentSum（S_q 可计算版本）; cMomentSum_eq（可计算=noncomputable 桥接）; momentSum_two_zero..six（S_2(m) 基值 m=0..6，native_decide 验证）
 **碰撞核矩阵（Round 10）**：collisionKernel2（S_2 递推的 3×3 伴随矩阵定义）; collisionKernel2_trace（tr=2）; collisionKernel2_det（det=-2）; collisionKernel2_cayley_hamilton（Cayley-Hamilton：M³=2M²+2M-2I）; momentSum_two_recurrence_verified（S_2 递推 m=0..3 数值验证）
-**Fibonacci 多项式（Round 11）**：fibPoly（Fibonacci 多项式 F_n(x) 定义，递推 F_{n+2}=F_{n+1}+x·F_n）; fibPoly_zero/one/succ_succ（simp 引理）; fibPoly_eval_one（F_n(1)=fib(n)）; fibPoly_two/three（具体值）; pathIndSetPoly（路径独立集多项式 I_ℓ(x)=F_{ℓ+2}(x) 定义）; pathIndSetPoly_eval_one（I_ℓ(1)=fib(ℓ+2)）；闭式系数公式留后续（def:pom-fibonacci-polynomial 完整，thm:pom-path-indset-poly-closed 部分）
+**Fibonacci 多项式（Round 11 + R19）**：fibPoly（Fibonacci 多项式 F_n(x) 定义，递推 F_{n+2}=F_{n+1}+x·F_n）; fibPoly_zero/one/succ_succ（simp 引理）; fibPoly_eval_one（F_n(1)=fib(n)）; fibPoly_two/three（具体值）; pathIndSetPoly（路径独立集多项式 I_ℓ(x)=F_{ℓ+2}(x) 定义）; pathIndSetPoly_eval_one（I_ℓ(1)=fib(ℓ+2)）；**detPoly**（行列式多項式 D_k(t) 定義，cor:pom-Lk-det-lucas-unit；Cassini-Pell 恒等式 D_{k+1}D_{k-1}-D_k²=t，prop:pom-Lk-det-cassini-pell；D_k(1)=F(2k+1) Fibonacci 特化，Round R19）；闭式系数公式留后续（def:pom-fibonacci-polynomial 完整，thm:pom-path-indset-poly-closed 部分）
 **路径图独立集计数（Round 67）**：Combinatorics/PathIndSet.lean（350行，新文件）——IsPathIndependent（路径图 P_n 独立集定义：无相邻顶点）; pathIndCount（独立集计数定义）; pathIndCount_recurrence（递推：pathIndCount(n+2)=pathIndCount(n+1)+pathIndCount(n)，通过 notContainingLast/containingLast 分划 + 双射证明）; path_independent_set_count（主定理：pathIndCount(n)=Nat.fib(n+2)，强归纳）; path_independent_set_count'（Finset.filter 等价形式）——辅助基础设施：liftIndSet/liftWithLast（两类独立集的提升函数）; pathInd_partition/disjoint（分划与不相交性）; card_notContainingLast/containingLast（基数等式）——作为 thm:pom-max-fiber / cor:pom-D-rec 完整组合证明的前置基础设施（Phase 70）
 **隐藏位计数理论（Round 68）**：Folding/MaxFiberTwoStep.lean（拓展至208行）——hiddenBitCount（def:pom-hidden-bit-count，定义：weight ≥ fib(m+2) 的 Word m 个数）; hiddenBitCount_zero/one（基例 B_0=B_1=0，decide 验证）; hiddenBitCount_recurrence（thm:pom-hidden-bit-count 递推：B_{m+2}=2^m+B_m，通过 BF/BT 分划 + 双射证明，BF↔Word m（截断双射），BT↔Word m（snoc double-true 双射））; hiddenBitCount_closed（闭式：B_m·3+δ=2^m，其中 δ=1 若 m 偶，δ=2 若 m 奇，强归纳证明）——辅助引理：last_true_of_heavy（weight≥fib(m+4) → 末位为 true，private）; ofNat_last_false_of_lt（n < fib(m+3) 时末位为 false，Phase 71 infra）; ofNat_last_true_of_ge（fib(m+3) ≤ n < fib(m+4) 时末位为 true，Phase 71 infra）——POM 覆盖率 ~16% → ~16.2%（+7 条目，thm:pom-hidden-bit-count 完整覆盖）（Phase 71）
 **单隐藏位分解（Round 69，Phase 72）**：Folding/MaxFiberTwoStep.lean（拓展至273行）——hiddenBit（def:pom-hidden-bit，定义：weight ≥ fib(m+2) 时为 1，否则为 0）; hiddenBit_le_one（隐藏位 ≤ 1）; ofNat_sub_fib_of_ge（lem:pom-ofNat-sub-fib：fib(m+2) ≤ n < fib(m+3) 时 ofNat m n = ofNat m (n - fib(m+2))，Zeckendorf 头指标 m+2 在 m 层不可见）; weight_eq_stableValue_add_hiddenBit（lem:pom-one-bit 主定理：weight w = stableValue(Fold w) + hiddenBit(w)·fib(m+2)，按 b=0/b=1 两支证明，b=1 用 ofNat_sub_fib_of_ge + stableValue_ofNat_lt）——POM 覆盖率 ~16.2% → ~17.1%（+4 条目）（Phase 72）
@@ -112,6 +112,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R19: POM 行列式多项式 detPoly D_k(t)（Round R19）**：FibonacciPolynomial.lean（188→298 行）——detPoly（def + cor:pom-Lk-det-lucas-unit（**新标签**）：D_0=1, D_1=1+t, D_{k+2}=(t+2)D_{k+1}-D_k 递推定义）; detPoly\_zero/one/succ\_succ（simp 引理）; detPoly\_two（D_2=1+3t+t²）; detPoly\_three（D_3=1+6t+5t²+t³）——以上覆盖 cor:pom-Lk-det-lucas-unit Lucas 型递推与基值闭式; detPoly\_cassini\_pell（prop:pom-Lk-det-cassini-pell：D_{k+1}·D_{k-1}-D_k²=t，Cassini-Pell 恒等式）; detPoly\_eval\_one（prop:pom-Lk-det-cassini-pell：D_k(1)=F(2k+1)，奇指标 Fibonacci 特化）——**1 个新论文标签**（cor:pom-Lk-det-lucas-unit；prop:pom-Lk-det-cassini-pell 已在 Phase 190 注册，本轮以 detPoly 代数多项式形式深化）——POM ~579→~582（+3），全局 ~1,422→~1,430（+8 含 def+5基值+cassini+eval_one），commit f1f6286
+
 **Phase R18: S_q 通用幂次下界 + 碰撞无重叠分拆 + complement 作用（Round R18）**：三文件 MomentBounds.lean（:974）+ MomentBounds.lean（:980-1003）+ FiberWeightCountComplement.lean（:191）——momentSum\_ge\_pow\_general（prop:pom-sq-lower：S_q(m) ≥ 2^m 对所有 q,m 的通用幂次下界，MomentBounds.lean:974）; collisionFreeCount（def:collision-partition 定义：无碰撞计数，MomentBounds.lean:980）; collisionFreeCount\_add\_collision\_eq\_fib（bridge:collision-partition：collisionFreeCount + collision = F_{m+2}，分拆等式，MomentBounds.lean:1003）; fiberMultiplicity\_complementAction（prop:fold-fiber-count-reciprocity：d(complementAction x) = d(x)，complement 作用保纤维多重度，FiberWeightCountComplement.lean:191）——**0 个新论文标签**（prop:pom-sq-lower 已在 Round 17 注册；bridge:collision-partition 不计入论文覆盖率；prop:fold-fiber-count-reciprocity 已注册多轮）——Folding ~115→~116（+1），POM ~578→~579（+1），全局 ~1,419→~1,422（Phase R18，commit 295ba04）
 
 **Phase R17: q-矩严格单调 + 稳定值平方和 + complement 代数（Round R17）**：三文件 MomentBounds.lean（:960）+ MomentRecurrence.lean（:664）+ FiberWeightCountComplement.lean（:105-128）——momentSum\_strict\_mono\_q\_general（prop:pom-moment-congruence-q：S_q(m) 对 q 严格单调，:960）; stableValue\_sq\_sum\_mul6（thm:pom-stableValue-sq-gauss（**新标签**）：6·Σ sv(x)² = F_{m+2}·(F_{m+2}-1)·(2F_{m+2}-1)，稳定值平方和 Gauss 公式，MomentRecurrence.lean:664）; stableValue\_Fold\_add\_complement（prop:fold-fiber-count-reciprocity：sv(Fold(x⊕̄y)) = complement 加法结构，FiberWeightCountComplement.lean:105）; complementAction（def + prop:fold-fiber-count-reciprocity：complement 群作用定义，:123）; complementAction\_involutive（prop:fold-fiber-count-reciprocity：complement 对合性，:128）——**1 个新论文标签**（thm:pom-stableValue-sq-gauss；prop:pom-moment-congruence-q + prop:fold-fiber-count-reciprocity 已注册，本轮深化）——Folding ~112→~115（+3），POM ~577→~578（+1），全局 ~1,413→~1,419（Phase R17，commit eaca852）
@@ -254,7 +256,7 @@
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
-## 2. 论文总覆盖率分析（2026-03-28 Phase R18 登记版）
+## 2. 论文总覆盖率分析（2026-03-28 Phase R19 登记版）
 
 ### 论文规模（Phase 7 重新扫描）
 
@@ -266,16 +268,16 @@
 
 ### Lean4 形式化状态
 
-- ~2,810 个 Lean4 声明（含内部引理、定义）
-- ~28,766 行代码，69 个文件
+- ~3,198 个 Lean4 声明（含内部引理、定义）
+- ~29,049 行代码，69 个文件
 - 0 公理，0 sorry，lake build 通过
-- 87 个 LaTeX `\leanverified` / `\leanpartial` 标注
+- 94 个 LaTeX `\leanverified` / `\leanpartial` 标注
 
 ### 覆盖率
 
 | 度量 | 数值 |
 |---|---|
-| 全局覆盖率（body） | ~1,422/9,958 = **~14.3%** |
+| 全局覆盖率（body） | ~1,425/9,958 = **~14.3%** |
 | 强覆盖（一般性 ∀ 证明） | ~65 (0.7%) |
 | 中覆盖（有界 + 条件） | ~162 (1.6%) |
 | 弱覆盖（native_decide / 代理） | ~723 (7.3%) |
@@ -353,15 +355,15 @@
 |---|---|---|---|
 | SPG | 127 | ~71 | ~55.9% |
 | 新生算术 | 151 | ~112 | ~74.2% |
-| Folding | 317 | ~116 | ~36.6% |
+| Folding | 317 | ~119 | ~37.5% |
 | 群统一 | 457 | ~110 | ~24.1% |
-| POM | 1,526 | ~579 | ~37.9% |
+| POM | 1,526 | ~582 | ~38.1% |
 | 圆维度 | 342 | ~62 | ~18.1% |
 | Zeta 有限部分 | 4,437 | ~255 | ~6% |
 | 结论 | 2,458 | ~83 | ~3.4% |
 | 其他 body | ~143 | ~2 | ~1% |
 | 附录 | 1,320 | 0 | 0% |
-| **body 总计** | **9,958** | **~1,422** | **~14.3%** |
+| **body 总计** | **9,958** | **~1,425** | **~14.3%** |
 
 ## 3. 未来工作：30 条具体计划
 
