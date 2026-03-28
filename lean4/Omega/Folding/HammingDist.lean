@@ -187,4 +187,55 @@ theorem fibcubeDiam_eq (m : Nat) (hm : 1 ≤ m) :
    ⟨alternatingOdd m, no11_alternatingOdd m⟩,
    hammingDist_alternating m⟩
 
+/-- Hamming distance decomposes under snoc.
+    thm:pom-fibcube-eccentricity-closed-form -/
+theorem hammingDist_snoc (a c : Word m) (b1 b2 : Bool) :
+    hammingDist (snoc a b1) (snoc c b2) =
+    hammingDist a c + if b1 = b2 then 0 else 1 := by
+  simp only [hammingDist]
+  -- Use Fin.lastCases-style split: positions < m use truncation, position m uses last bit
+  -- Split filter into {i < m} and {i = m}
+  have hsplit : (Finset.univ : Finset (Fin (m + 1))).filter
+      (fun i => snoc a b1 i ≠ snoc c b2 i) =
+    (Finset.univ.filter (fun i : Fin (m + 1) => i.val < m ∧ snoc a b1 i ≠ snoc c b2 i)) ∪
+    (Finset.univ.filter (fun i : Fin (m + 1) => i.val = m ∧ snoc a b1 i ≠ snoc c b2 i)) := by
+    ext i; simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_union]
+    constructor
+    · intro h
+      by_cases hi : i.val < m
+      · left; exact ⟨hi, h⟩
+      · right; exact ⟨by omega, h⟩
+    · rintro (⟨_, h⟩ | ⟨_, h⟩) <;> exact h
+  rw [hsplit, Finset.card_union_of_disjoint (by
+    apply Finset.disjoint_filter.mpr; intro i _ ⟨h1, _⟩ ⟨h2, _⟩; omega)]
+  congr 1
+  · -- Positions < m: snoc a b1 i = a ⟨i, _⟩ and snoc c b2 i = c ⟨i, _⟩
+    -- Map Fin m → Fin (m+1) via castSucc
+    rw [show (Finset.univ.filter (fun i : Fin (m + 1) =>
+        i.val < m ∧ snoc a b1 i ≠ snoc c b2 i)) =
+      (Finset.univ.filter (fun j : Fin m => a j ≠ c j)).map (Fin.castSuccEmb (n := m)) from by
+        ext i; simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_map,
+          Fin.castSuccEmb]
+        constructor
+        · intro ⟨him, hne⟩
+          exact ⟨⟨i.val, him⟩, by simp [snoc, him] at hne; exact hne, Fin.ext rfl⟩
+        · rintro ⟨j, hj, rfl⟩; exact ⟨j.isLt, by simp [snoc, j.isLt, hj]⟩]
+    exact Finset.card_map _
+  · -- Position m: b1 ≠ b2 iff last bits differ
+    by_cases hb : b1 = b2
+    · simp only [hb, ite_true]
+      apply Finset.card_eq_zero.mpr
+      simp only [Finset.filter_eq_empty_iff]
+      intro i _; simp only [not_and]; intro him
+      simp [snoc, show ¬i.val < m from by omega, hb]
+    · simp only [hb, ite_false]
+      have : (Finset.univ.filter (fun i : Fin (m + 1) =>
+          i.val = m ∧ snoc a b1 i ≠ snoc c b2 i)) = {⟨m, by omega⟩} := by
+        apply Finset.ext; intro i
+        simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_singleton]
+        constructor
+        · intro ⟨him, _⟩; exact Fin.ext him
+        · intro h; subst h; exact ⟨rfl, by simp [snoc, hb]⟩
+      rw [this, Finset.card_singleton]
+
 end Omega

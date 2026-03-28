@@ -884,6 +884,27 @@ theorem momentSum_two_ge_three_pow (m : Nat) (hm : 6 ≤ m) :
         _ ≤ 2 * momentSum 2 (m + 6) := by omega
         _ ≤ momentSum 2 (m + 7) := hge
 
+/-- 4·S_2(m) < S_2(m+2) for m ≥ 2.
+    prop:pom-s2-recurrence -/
+theorem momentSum_two_strict_super_quadratic (m : Nat) (hm : 2 ≤ m) :
+    4 * momentSum 2 m < momentSum 2 (m + 2) := by
+  -- S_2(m+2) = E00(m+2) + 2·S_2(m) where E00(m+2) > 2·S_2(m)
+  -- E00(m+2) = 1 + Σ_{k<m+2} S_2(k) ≥ 1 + S_2(m) + S_2(m+1) ≥ 1 + 2·S_2(m)
+  -- S_2(m+2) = E00(m+2) + 2·cwc(m+2) = E00(m+2) + 2·S_2(m)
+  have hdecomp : momentSum 2 (m + 2) = exactWeightCollision (m + 2) + 2 * momentSum 2 m := by
+    have h1 := momentSum_two_eq_E00_add_cwc (m + 2)
+    have h2 := crossWeightCorrelation_eq_momentSum_two m
+    omega
+  have hEsum := exactWeightCollision_eq_sum (m + 2)
+  -- E00(m+2) ≥ 1 + S_2(m) + S_2(m+1)
+  have hm_in : momentSum 2 m ≤ ∑ k ∈ Finset.range (m + 2), momentSum 2 k :=
+    Finset.single_le_sum (fun k _ => Nat.zero_le _) (Finset.mem_range.mpr (by omega))
+  have hm1_in : momentSum 2 (m + 1) ≤ ∑ k ∈ Finset.range (m + 2), momentSum 2 k :=
+    Finset.single_le_sum (fun k _ => Nat.zero_le _) (Finset.mem_range.mpr (by omega))
+  -- S_2(m+1) ≥ 2·S_2(m) by momentSum_two_succ_ge_double
+  have hdouble := momentSum_two_succ_ge_double m hm
+  linarith
+
 /-- D(m) < 2^m for m ≥ 2.
     cor:pom-max-fiber-rate-endpoint -/
 theorem maxFiberMultiplicity_strict_lt_pow (m : Nat) (hm : 2 ≤ m) :

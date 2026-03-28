@@ -1032,4 +1032,16 @@ theorem exactWeightCollision_eq_S2_sub (m : Nat) :
   have h4 := momentSum_two_quadruple_le m
   omega
 
+/-- cwc(m) > 0 for m ≥ 2.
+    def:pom-crossWeightCorrelation -/
+theorem crossWeightCorrelation_pos (m : Nat) (hm : 2 ≤ m) :
+    0 < crossWeightCorrelation m := by
+  obtain ⟨k, rfl⟩ : ∃ k, m = k + 2 := ⟨m - 2, by omega⟩
+  rw [crossWeightCorrelation_eq_momentSum_two]
+  -- S_2(k) ≥ E00(k) ≥ 1
+  have hdecomp := momentSum_two_eq_E00_add_cwc k
+  have hEpos : 0 < exactWeightCollision k := by
+    rw [exactWeightCollision_eq_sum]; omega
+  omega
+
 end Omega
