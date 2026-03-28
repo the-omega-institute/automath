@@ -770,4 +770,22 @@ theorem restrict_ringHom_exists_iff (d e : Nat) (hd : 3 ≤ d) (he : 3 ≤ e) :
     have hdvd_fib : Nat.fib d ∣ Nat.fib e := Nat.fib_dvd d e hde
     exact ⟨ZMod.castHom hdvd_fib (ZMod (Nat.fib d)), map_one _⟩
 
+/-- Carry in stable addition: the quotient (sv(x)+sv(y))/F_{m+2} is at most 1.
+    Since sv(x) < F and sv(y) < F, their sum < 2F, so the quotient is 0 or 1.
+    thm:pom-stable-addition-carry-defect -/
+theorem stableAdd_carry_binary (x y : X m) :
+    (stableValue x + stableValue y) / Nat.fib (m + 2) ≤ 1 := by
+  have hx := stableValue_lt_fib x
+  have hy := stableValue_lt_fib y
+  have hF : 0 < Nat.fib (m + 2) := Nat.fib_pos.mpr (by omega)
+  rw [Nat.div_le_iff_le_mul hF]
+  omega
+
+/-- X_m has exactly F_{m+2} elements and characteristic F_{m+2}.
+    prop:pom-fold-as-section -/
+theorem X_card_eq_char (m : Nat) (hm : 1 ≤ m) :
+    Fintype.card (X m) = ringChar (X m) := by
+  rw [X.card_eq_fib]
+  exact (ringChar.eq_iff.mpr X.instCharP).symm
+
 end Omega
