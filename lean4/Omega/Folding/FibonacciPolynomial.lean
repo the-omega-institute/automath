@@ -4,6 +4,7 @@ import Mathlib.Algebra.Polynomial.Monic
 import Mathlib.Algebra.Polynomial.Degree.Operations
 import Mathlib.Data.Nat.Fib.Basic
 import Mathlib.Tactic.LinearCombination
+import Omega.Core.Fib
 
 namespace Omega
 
@@ -451,5 +452,46 @@ theorem detPoly_deriv_eval_zero_double :
     -- Use ring_nf to normalize
     push_cast at ih1 ih0 ⊢
     nlinarith [ih1, ih0]
+
+/-- fenceDet k = D_k(1) (bridge from Nat to polynomial evaluation).
+    cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_eq_detPoly_eval_one (k : Nat) :
+    (fenceDet k : ℤ) = (detPoly k).eval 1 := by
+  rw [detPoly_eval_one, fenceDet_eq_fib]
+
+/-- D_k(t) > 0 for all t ≥ 0. Positivity of the determinant polynomial.
+    cor:pom-Lk-det-logconvex-ratio -/
+theorem detPoly_eval_pos : ∀ k : Nat, ∀ t : ℤ, 0 ≤ t → 0 < (detPoly k).eval t
+  | 0, t, _ => by simp [detPoly]
+  | 1, t, ht => by simp [detPoly, eval_add, eval_X]; linarith
+  | k + 2, t, ht => by
+    have ih0 := detPoly_eval_pos k t ht
+    have ih1 := detPoly_eval_pos (k + 1) t ht
+    -- From Cassini-Pell: D_{k+2}*D_k - D_{k+1}^2 = X (as polynomials)
+    -- Evaluated at t: D_{k+2}(t)*D_k(t) = D_{k+1}(t)^2 + t
+    have hcassini := detPoly_cassini_pell (k + 1) (by omega)
+    -- hcassini: detPoly (k+2) * detPoly k - detPoly (k+1)^2 = X
+    -- Cassini-Pell evaluated: D_{k+2}(t)*D_k(t) - D_{k+1}(t)^2 = t
+    -- Need to normalize k+1+1 = k+2 and k+1-1 = k in hcassini
+    have h11 : k + 1 + 1 = k + 2 := by omega
+    have h10 : k + 1 - 1 = k := by omega
+    simp only [h11, h10] at hcassini
+    have heval : (detPoly (k + 2)).eval t * (detPoly k).eval t -
+        ((detPoly (k + 1)).eval t) ^ 2 = t := by
+      have := congr_arg (fun p => p.eval t) hcassini
+      simp only [eval_sub, eval_mul, eval_pow, eval_X] at this
+      linarith
+    -- D_{k+2}(t) * D_k(t) = D_{k+1}(t)^2 + t
+    have hprod : (detPoly (k + 2)).eval t * (detPoly k).eval t =
+        ((detPoly (k + 1)).eval t) ^ 2 + t := by linarith
+    -- Product > 0 since D_{k+1}(t)^2 ≥ 1 (D_{k+1}(t) ≥ 1) and t ≥ 0
+    have hpos_prod : 0 < (detPoly (k + 2)).eval t * (detPoly k).eval t := by
+      rw [hprod]; nlinarith [sq_nonneg ((detPoly (k + 1)).eval t)]
+    -- Since D_k(t) > 0 and product > 0, D_{k+2}(t) > 0
+    -- 0 < a * b and 0 < b implies 0 < a
+    by_contra h; push_neg at h
+    have : (detPoly (k + 2)).eval t * (detPoly k).eval t ≤ 0 :=
+      Int.mul_nonpos_of_nonpos_of_nonneg h (le_of_lt ih0)
+    linarith
 
 end Omega

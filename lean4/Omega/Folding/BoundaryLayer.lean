@@ -138,4 +138,35 @@ theorem bdry_square_identity (n : Nat) :
     Nat.fib (2 * n + 1) = Nat.fib n ^ 2 + Nat.fib (n + 1) ^ 2 :=
   (fib_sq_add_sq n).symm
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R24: Three-window boundary sum uniqueness
+-- ══════════════════════════════════════════════════════════════
+
+/-- The only even triple 2 ≤ m1 < m2 < m3 with F(m1-2)+F(m2-2)+F(m3-2)=12 is (4,6,8).
+    thm:bdry-three-window-sum12-unique-even-triple -/
+theorem bdry_three_window_sum12_unique (m1 m2 m3 : Nat)
+    (hm1_even : Even m1) (hm2_even : Even m2) (hm3_even : Even m3)
+    (h12 : m1 < m2) (h23 : m2 < m3) (hm1_pos : 2 ≤ m1)
+    (hsum : Nat.fib (m1 - 2) + Nat.fib (m2 - 2) + Nat.fib (m3 - 2) = 12) :
+    m1 = 4 ∧ m2 = 6 ∧ m3 = 8 := by
+  -- m3 ≤ 8: if m3 ≥ 10 (even), F(m3-2) ≥ F(8) = 21 > 12
+  have hm3_le : m3 ≤ 8 := by
+    by_contra h; push_neg at h
+    have : 10 ≤ m3 := by obtain ⟨k, rfl⟩ := hm3_even; omega
+    have : Nat.fib 8 ≤ Nat.fib (m3 - 2) := Nat.fib_mono (by omega)
+    have : Nat.fib 8 = 21 := by native_decide
+    omega
+  -- Even constraints: m1 ∈ {2,4,6,...}, m2 ∈ {2,4,6,...}, m3 ∈ {2,4,6,8}
+  -- With 2 ≤ m1 < m2 < m3 ≤ 8 and all even:
+  -- m3 ∈ {4,6,8}, m2 < m3 and even, m1 < m2 and even, 2 ≤ m1
+  obtain ⟨k3, rfl⟩ := hm3_even
+  obtain ⟨k2, rfl⟩ := hm2_even
+  obtain ⟨k1, rfl⟩ := hm1_even
+  -- k3*2 ≤ 8 means k3 ≤ 4; k1*2 ≥ 2 means k1 ≥ 1; k1 < k2 < k3
+  have hk3 : k3 ≤ 4 := by omega
+  have hk1 : 1 ≤ k1 := by omega
+  have hk12 : k1 < k2 := by omega
+  have hk23 : k2 < k3 := by omega
+  interval_cases k3 <;> interval_cases k2 <;> interval_cases k1 <;> simp_all [Nat.fib]
+
 end Omega
