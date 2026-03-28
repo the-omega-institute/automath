@@ -3,6 +3,11 @@ name: Reusable PDF Build
 on:
   workflow_call:
     inputs:
+      checkout_ref:
+        description: Branch, tag, or SHA to check out before building.
+        required: false
+        type: string
+        default: ""
       upload_artifact:
         description: Upload the dated PDF as a workflow artifact.
         required: false
@@ -33,6 +38,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          ref: ${{ inputs.checkout_ref != '' && inputs.checkout_ref || github.sha }}
+          fetch-depth: 0
 
       - name: Allow git metadata access in container
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -50,7 +58,7 @@ jobs:
         if: ${{ inputs.upload_artifact }}
         id: package_pdf
         run: |
-          pdf_name="main_$(git show -s --format=%cs "$GITHUB_SHA").pdf"
+          pdf_name="main_$(git show -s --format=%cs HEAD).pdf"
           cp main.pdf "$pdf_name"
           echo "pdf_name=$pdf_name" >> "$GITHUB_OUTPUT"
 
