@@ -828,7 +828,7 @@ theorem paper_large_fiber_moment_bound (q m D : Nat) (hD : 1 ≤ D) (hq : 1 ≤ 
   unfold momentSum
   set S := Finset.univ.filter (fun x : X m => D ≤ X.fiberMultiplicity x)
   have h1 : D ^ q * S.card = S.sum (fun _ => D ^ q) := by
-    rw [Finset.sum_const, Nat.smul_eq_mul]
+    rw [Finset.sum_const, smul_eq_mul, Nat.mul_comm]
   have h2 : S.sum (fun _ => D ^ q) ≤ S.sum (fun x => X.fiberMultiplicity x ^ q) := by
     apply Finset.sum_le_sum
     intro x hx
