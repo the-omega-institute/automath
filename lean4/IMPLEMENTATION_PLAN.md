@@ -6,8 +6,8 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~31,640 |
-| 定理/定义数 | ~2,484 |
+| 总行数 | ~31,675 |
+| 定理/定义数 | ~2,487 |
 | 论文接口包装 | 353 |
 | 文件数 | 69 |
 | 公理数 | 0 |
@@ -112,6 +112,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R2: Cauchy-Schwarz 下界 + S_3 全局严格单调 + D < 2^m 严格版（Round R2）**：单文件 MomentBounds.lean（+34行，新增至877行）——momentSum\_two\_ge\_spike\_flat（thm:fold-collision-convex-lower-bounds：S_2(m)·F_{m+2} ≥ (2^m)²，Cauchy-Schwarz 下界，由 momentSum\_two\_ge\_pow（2^m ≤ S_2）+ fib\_succ\_pos + Nat.le\_mul\_of\_pos 推导，MomentBounds.lean:849）; momentSum\_three\_strict\_mono\_all（prop:pom-s3-recurrence：S_3(m) < S_3(m+1) for all m，全局严格单调，强归纳，base m=0..6 直接展开，step m+7 用 S_3 递推，MomentBounds.lean:865）; maxFiberMultiplicity\_strict\_lt\_pow（cor:pom-max-fiber-rate-endpoint：D(m) < 2^m for m≥2，严格版（先前仅 D(m) ≤ 2^m 弱上界），由 maxFiberMultiplicity\_le\_fibCard + fib\_lt\_pow 推导，MomentBounds.lean:873）——三个论文标签均已注册（thm:fold-collision-convex-lower-bounds: Round 12/Phase 170, prop:pom-s3-recurrence: Round 13/Phase 182, cor:pom-max-fiber-rate-endpoint: Phase 170）——+3 定理，论文覆盖率数字不变，强覆盖质量深化（Phase R2，commit ea0c4fd）
+
 **Phase R1b: wcc 反射对称性（Round R1）**：新文件 FiberWeightCountComplement.lean（40行，Omega.lean +1 import）——weightCongruenceCount\_complement（prop:fold-fiber-count-reciprocity：wcc(m, F_{m+1}-2-r) = wcc(m, r) 反射对称性，条件 m≥2, r<F_{m+2}, r≤F_{m+1}-2，通过 weightCongruenceCount\_eq\_sum\_ewc 展开 + exactWeightCount\_symmetric 两次应用推导，FiberWeightCountComplement.lean:11）——论文标签已注册（prop:fold-fiber-count-reciprocity: Phase 172/208/229），本轮为 wcc 直接反射对称性（先前覆盖互易恒等式 f=a+a' 形式，本轮给出 wcc 等式形式）——+1 定理，论文覆盖率数字不变，Folding 强覆盖质量深化（Phase R1b，commit 2a14609）
 
 **Phase R1: coordOneCount 一般闭式 + 边数双重计数（Round R1）**：两文件 FibonacciCube.lean（+~160行，新增至1307行）+ MomentBounds.lean（修复 Nat.smul\_eq\_mul → smul\_eq\_mul）——coordOneCount\_eq\_fib\_prod（thm:pom-fibcube-theta-class-size / cor:pom-fibcube-marginal-boundary-layer：coordOneCount n i = fib(i+1)·fib(n-i) 一般性证明，强归纳，n≥7 用 coordOneCount\_succ\_succ + coordOneCount\_symm 递推归约，FibonacciCube.lean:1119）; fibcubeEdgeCount\_eq\_sum\_coordOneCount（thm:pom-fibcube-theta-class-size：fibcubeEdgeCount n = ∑ i : Fin n, coordOneCount n i，双重计数，FibonacciCube.lean:951）; 辅助引理 coordOneCount\_succ\_succ（末位递推，private，FibonacciCube.lean:1017）; coordOneCount\_symm（对称性 coordOneCount n i = coordOneCount n (n-1-i)，FibonacciCube.lean:982）——两个论文标签均已注册（thm:pom-fibcube-theta-class-size: Phase 217, cor:pom-fibcube-marginal-boundary-layer: Phase 231），本轮为一般性闭式证明（先前仅 n≤6 有界验证）——+2 主定理 + 辅助引理，论文覆盖率数字不变，FibonacciCube.lean 强覆盖质量 弱→强（Phase R1，commit fd65b02）
