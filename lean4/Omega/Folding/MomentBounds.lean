@@ -1028,4 +1028,15 @@ theorem momentSum_two_sq_le_pow_three (m : Nat) :
   simp only [show 2 - 1 = 1 from rfl, show 2 + 1 = 3 from rfl] at h
   rwa [momentSum_one] at h
 
+/-- 4·S_3(m) ≤ S_3(m+2) for m ≥ 4 (super-quadratic growth).
+    Apply momentSum_three_double twice: S_3(m+2) ≥ 2·S_3(m+1) ≥ 4·S_3(m).
+    prop:pom-s3-super-quadratic -/
+theorem momentSum_three_super_quadratic (m : Nat) (hm : 4 ≤ m) :
+    4 * momentSum 3 m ≤ momentSum 3 (m + 2) := by
+  have h1 : 2 * momentSum 3 m ≤ momentSum 3 (m + 1) :=
+    momentSum_three_double m (by omega)
+  have h2 : 2 * momentSum 3 (m + 1) ≤ momentSum 3 (m + 2) :=
+    momentSum_three_double (m + 1) (by omega)
+  linarith
+
 end Omega

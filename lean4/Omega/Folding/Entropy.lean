@@ -679,4 +679,12 @@ theorem fib_ratio_error_lt_one (n : Nat) (hn : 1 ≤ n) :
     _ = |ψ| := pow_one _
     _ < 1 := abs_goldenConj_lt_one
 
+/-- F(n+2)/F(n+1) → φ (shifted Fibonacci ratio convergence).
+    Follows from fib_ratio_tendsto composed with the shift n ↦ n+1.
+    prop:cdim-fib-ratio-tendsto-golden -/
+theorem fib_ratio_tendsto_golden :
+    Tendsto (fun n => (Nat.fib (n + 2) : ℝ) / (Nat.fib (n + 1) : ℝ))
+    atTop (nhds φ) :=
+  fib_ratio_tendsto.comp (tendsto_add_atTop_nat 1)
+
 end Omega.Entropy
