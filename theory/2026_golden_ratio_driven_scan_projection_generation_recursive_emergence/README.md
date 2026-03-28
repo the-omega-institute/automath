@@ -12,8 +12,9 @@ This paper develops a theory of scan-projection generation driven by the golden 
 
 - **Root entry points**
   - `main.tex` — Full build entry point
-  - `main_fast.tex` — Fast build entry point (defines `\FASTBUILD`, reuses `main.tex`)
+  - `sections/frontmatter/fm__titlepage_meta.tex` — Title and author metadata; update this file when the author list changes
   - `references.bib` — Bibliography database
+  - `AUTHORSHIP.md` — Authorship rules, submission checklist, and contribution record template
 - **sections/**
   - `sections/frontmatter/main.tex` — Front matter (independently compilable)
   - `sections/body/main.tex` — Body (independently compilable)
@@ -27,13 +28,7 @@ This paper develops a theory of scan-projection generation driven by the golden 
 
 Run experiments first, then compile. New experiment scripts must be added to `scripts/run_all.py`.
 
-Fast build:
-
-```bash
-latexmk -pdfxe -interaction=nonstopmode -halt-on-error -file-line-error main_fast.tex
-```
-
-Full build (for final export):
+Build for export:
 
 ```bash
 latexmk -pdfxe -interaction=nonstopmode -halt-on-error -file-line-error main.tex
@@ -69,7 +64,13 @@ This generates:
 
 ## Writing Conventions
 
+### Authorship Maintenance
+
 ### Label addressing
+
+- If the paper's author list changes, update `sections/frontmatter/fm__titlepage_meta.tex`.
+- If authorship qualification, ordering rules, or pre-submission checks change, update `AUTHORSHIP.md`.
+- `main.tex` only references the shared title/author metadata and should not hard-code individual author information anymore.
 
 - **Primary label:** Each content file provides a `\label{...}` at its first anchor point, serving as the file's unique address identifier (globally unique).
 - **Filename mapping:** File basenames are deterministically derived from the primary label:
