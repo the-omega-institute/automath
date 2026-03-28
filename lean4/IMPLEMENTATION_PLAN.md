@@ -6,10 +6,10 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~31,600 |
-| 定理/定义数 | ~2,483 |
+| 总行数 | ~31,640 |
+| 定理/定义数 | ~2,484 |
 | 论文接口包装 | 353 |
-| 文件数 | 68 |
+| 文件数 | 69 |
 | 公理数 | 0 |
 
 ### 1.2 已完成模块
@@ -112,6 +112,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R1b: wcc 反射对称性（Round R1）**：新文件 FiberWeightCountComplement.lean（40行，Omega.lean +1 import）——weightCongruenceCount\_complement（prop:fold-fiber-count-reciprocity：wcc(m, F_{m+1}-2-r) = wcc(m, r) 反射对称性，条件 m≥2, r<F_{m+2}, r≤F_{m+1}-2，通过 weightCongruenceCount\_eq\_sum\_ewc 展开 + exactWeightCount\_symmetric 两次应用推导，FiberWeightCountComplement.lean:11）——论文标签已注册（prop:fold-fiber-count-reciprocity: Phase 172/208/229），本轮为 wcc 直接反射对称性（先前覆盖互易恒等式 f=a+a' 形式，本轮给出 wcc 等式形式）——+1 定理，论文覆盖率数字不变，Folding 强覆盖质量深化（Phase R1b，commit 2a14609）
+
 **Phase R1: coordOneCount 一般闭式 + 边数双重计数（Round R1）**：两文件 FibonacciCube.lean（+~160行，新增至1307行）+ MomentBounds.lean（修复 Nat.smul\_eq\_mul → smul\_eq\_mul）——coordOneCount\_eq\_fib\_prod（thm:pom-fibcube-theta-class-size / cor:pom-fibcube-marginal-boundary-layer：coordOneCount n i = fib(i+1)·fib(n-i) 一般性证明，强归纳，n≥7 用 coordOneCount\_succ\_succ + coordOneCount\_symm 递推归约，FibonacciCube.lean:1119）; fibcubeEdgeCount\_eq\_sum\_coordOneCount（thm:pom-fibcube-theta-class-size：fibcubeEdgeCount n = ∑ i : Fin n, coordOneCount n i，双重计数，FibonacciCube.lean:951）; 辅助引理 coordOneCount\_succ\_succ（末位递推，private，FibonacciCube.lean:1017）; coordOneCount\_symm（对称性 coordOneCount n i = coordOneCount n (n-1-i)，FibonacciCube.lean:982）——两个论文标签均已注册（thm:pom-fibcube-theta-class-size: Phase 217, cor:pom-fibcube-marginal-boundary-layer: Phase 231），本轮为一般性闭式证明（先前仅 n≤6 有界验证）——+2 主定理 + 辅助引理，论文覆盖率数字不变，FibonacciCube.lean 强覆盖质量 弱→强（Phase R1，commit fd65b02）
 
 **Phase 241: 轨道值保持 + 边界邻接恒等式（Round 241，2/3）**：两文件 Rewrite.lean（+13行）+ ScanErrorDiscrete.lean（+12行）——paper_orbits_preserve_val（prop:orbits-preserve-val（**新标签**）：F(k+2)+F(k+3)=F(k+4)，轨道保持值，Rewrite.lean:831）; paper_boundary_vs_adjacency（prop:spg-dyadic-polyclube-boundary-vs-adjacency-identity（**新标签**）：F+2E=2nN 边界邻接恒等式，ScanErrorDiscrete.lean:1065）——2 个新标签（prop:orbits-preserve-val → Folding ~104→~105, prop:spg-dyadic-polyclube-boundary-vs-adjacency-identity → SPG ~70→~71）——推迟：paper_lucas_mod_prime（lem:pom-lucas-modp）因 mathlib 缺少 Fibonacci mod prime 理论——Folding ~104→~105, SPG ~70→~71, 全局 1353→1355（Phase 241）
