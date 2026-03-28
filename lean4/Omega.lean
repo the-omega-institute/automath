@@ -13,6 +13,7 @@ import Omega.Folding.MaxFiber
 import Omega.Folding.MaxFiberHigh
 import Omega.Folding.MaxFiberTwoStep
 import Omega.Folding.FiberWeightCount
+import Omega.Folding.FiberWeightCountComplement
 import Omega.Folding.CollisionDecomp
 import Omega.Folding.MomentRecurrence
 import Omega.Folding.MomentTriple
