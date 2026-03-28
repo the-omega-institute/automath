@@ -645,9 +645,39 @@ theorem collisionKernel4_cayley_hamilton :
     2 * collisionKernel4 - 2 * (1 : Matrix (Fin 5) (Fin 5) ℤ) := by
   ext i j; fin_cases i <;> fin_cases j <;> native_decide
 
--- Note: collisionKernel4_trace_recurrence (for all m) deferred — requires
--- Matrix.trace linearity over integer scalar multiplication (2*M).trace = 2*M.trace,
--- which needs explicit proof that (n : Matrix) * M = n • M for integer scalars.
+-- ══════════════════════════════════════════════════════════════
+-- Phase R34: A_4 trace recurrence (general)
+-- ══════════════════════════════════════════════════════════════
+
+/-- General trace recurrence for A_4: tr(A^{n+5}) = 2·tr(A^{n+4}) + 7·tr(A^{n+3}) + 2·tr(A^{n+1}) - 2·tr(A^n).
+    prop:pom-s4-recurrence -/
+theorem collisionKernel4_trace_recurrence (n : Nat) :
+    (collisionKernel4 ^ (n + 5)).trace =
+    2 * (collisionKernel4 ^ (n + 4)).trace + 7 * (collisionKernel4 ^ (n + 3)).trace +
+    2 * (collisionKernel4 ^ (n + 1)).trace - 2 * (collisionKernel4 ^ n).trace := by
+  -- From Cayley-Hamilton: A^5 = 2A^4 + 7A^3 + 2A - 2I
+  -- Multiply by A^n: A^{n+5} = 2A^{n+4} + 7A^{n+3} + 2A^{n+1} - 2A^n
+  have hmat : collisionKernel4 ^ (n + 5) =
+      2 * collisionKernel4 ^ (n + 4) + 7 * collisionKernel4 ^ (n + 3) +
+      2 * collisionKernel4 ^ (n + 1) - 2 * collisionKernel4 ^ n := by
+    have hCH := collisionKernel4_cayley_hamilton
+    calc collisionKernel4 ^ (n + 5)
+        = collisionKernel4 ^ n * collisionKernel4 ^ 5 := pow_add _ _ _
+      _ = collisionKernel4 ^ n * (2 * collisionKernel4 ^ 4 + 7 * collisionKernel4 ^ 3 +
+          2 * collisionKernel4 - 2 * 1) := by rw [hCH]
+      _ = 2 * collisionKernel4 ^ (n + 4) + 7 * collisionKernel4 ^ (n + 3) +
+          2 * collisionKernel4 ^ (n + 1) - 2 * collisionKernel4 ^ n := by
+        simp only [pow_add, mul_one]
+        noncomm_ring
+  -- Take trace of both sides using linearity
+  rw [hmat]
+  -- In the goal, `2 * M` means `(2 : Matrix) * M`. Since 2 = 2 • 1, this is 2 • M.
+  have h2 : (2 : Matrix (Fin 5) (Fin 5) ℤ) = (2 : ℤ) • (1 : Matrix (Fin 5) (Fin 5) ℤ) := by
+    ext i j; fin_cases i <;> fin_cases j <;> native_decide
+  have h7 : (7 : Matrix (Fin 5) (Fin 5) ℤ) = (7 : ℤ) • (1 : Matrix (Fin 5) (Fin 5) ℤ) := by
+    ext i j; fin_cases i <;> fin_cases j <;> native_decide
+  simp only [h2, h7, smul_mul_assoc, one_mul, Matrix.trace_sub, Matrix.trace_add,
+    Matrix.trace_smul, smul_eq_mul]
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase R32: A_4 trace powers 5 and 6

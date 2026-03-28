@@ -733,4 +733,17 @@ theorem momentSum_three_determined {f : Nat → Nat}
     (by rw [h1, momentSum_three_one])
     (by rw [h2, momentSum_three_two])
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R34: S_3 high-order values by pure recurrence
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_3(13) = 2170784.
+    prop:pom-s3-recurrence -/
+theorem momentSum_three_thirteen : momentSum 3 13 = 2170784 := by
+  have h : momentSum 3 13 + 2 * 73888 = 2 * 703504 + 4 * 227888 := by
+    have := momentSum_three_recurrence 10
+    change momentSum 3 13 + 2 * momentSum 3 10 = 2 * momentSum 3 12 + 4 * momentSum 3 11 at this
+    rw [momentSum_three_ten, momentSum_three_eleven, momentSum_three_twelve] at this; linarith
+  omega
+
 end Omega
