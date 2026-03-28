@@ -37,4 +37,62 @@ theorem weightCongruenceCount_complement (m : Nat) (hm : 2 ≤ m) (r : Nat)
     congr 1; omega
   rw [h1, h2]; ring
 
+/-- Complement preserves fiber multiplicity: d(Fold(complement w)) = d(Fold w).
+    prop:fold-fiber-count-reciprocity -/
+theorem fiberMultiplicity_complement (w : Word m) :
+    X.fiberMultiplicity (Fold (complement w)) = X.fiberMultiplicity (Fold w) := by
+  classical
+  simp only [X.fiberMultiplicity]
+  -- Bijection: complement maps fiber(Fold w) to fiber(Fold(complement w))
+  -- Bijection: complement maps fiber(Fold w) ↔ fiber(Fold(complement w))
+  -- Key: Fold v = Fold w ↔ weight v ≡ weight w (mod F)
+  --   ↔ T-weight v ≡ T-weight w (mod F)
+  --   ↔ weight(compl v) ≡ weight(compl w) (mod F)
+  --   ↔ Fold(compl v) = Fold(compl w)
+  -- Key helper: Fold_complement_mod gives stableValue(Fold(complement v)) = (T-weight v) % F
+  -- So Fold(complement v) = Fold(complement w) iff (T-weight v) % F = (T-weight w) % F
+  -- which follows from weight v % F = weight w % F
+  have hkey : ∀ (a b : Word m), Fold a = Fold b →
+      Fold (complement a) = Fold (complement b) := by
+    intro a b hv
+    -- Fold(complement v) = X.ofNat m (weight(complement v) % F)
+    -- weight(complement v) = T - weight v, weight(complement w) = T - weight w
+    -- Fold v = Fold w means weight v % F = weight w % F
+    -- From weight_complement: weight(comp v) + weight v = T
+    -- So weight(comp v) = T - weight v, weight(comp w) = T - weight w
+    -- weight(comp v) - weight(comp w) = weight w - weight v (or vice versa)
+    -- Hence weight(comp v) % F = weight(comp w) % F
+    rw [Fold_eq_iff_weight_mod] at hv ⊢
+    have hcv := weight_complement a
+    have hcw := weight_complement b
+    -- hcv: weight(comp v) + weight v = T
+    -- hcw: weight(comp w) + weight w = T
+    -- So weight(comp v) - weight(comp w) = weight w - weight v (in Z)
+    -- which means they're congruent mod anything
+    -- In Nat: we need to show a % n = b % n when a + x = T and b + y = T and x % n = y % n
+    have hsum : weight (complement a) + weight a = weight (complement b) + weight b := by omega
+    -- weight(comp v) + weight v ≡ weight(comp w) + weight w (mod F)  [equal]
+    -- weight v ≡ weight w (mod F)  [hypothesis hv]
+    -- ⇒ weight(comp v) ≡ weight(comp w) (mod F)
+    -- Proof: (a + b) % n = (c + d) % n and b % n = d % n ⇒ a % n = c % n
+    have h1 : Nat.ModEq (Nat.fib (m + 2)) (weight (complement a) + weight a)
+        (weight (complement b) + weight b) := by
+      show _ % _ = _ % _; rw [hsum]
+    exact (Nat.ModEq.add_right_cancel (show Nat.ModEq _ (weight a) (weight b) from hv) h1)
+  -- Map fiber(Fold w) → fiber(Fold(complement w)) via complement
+  symm
+  apply Finset.card_bij (fun v _ => complement v)
+  · intro v hv; rw [X.mem_fiber] at hv ⊢; exact hkey v w hv
+  · intro v₁ _ v₂ _ h
+    have := congr_arg complement h
+    rwa [complement_involution, complement_involution] at this
+  · intro u hu
+    rw [X.mem_fiber] at hu
+    refine ⟨complement u, ?_, complement_involution u⟩
+    rw [X.mem_fiber]
+    -- hu: Fold u = Fold(complement w). Apply hkey u (complement w) to get
+    -- Fold(complement u) = Fold(complement(complement w)) = Fold w
+    have := hkey u (complement w) hu
+    rwa [complement_involution] at this
+
 end Omega
