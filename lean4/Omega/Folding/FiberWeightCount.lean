@@ -643,4 +643,59 @@ theorem fiberHiddenBitCount_zero_sum (m : Nat) :
       rw [hsplit x]; omega)
   omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R5: hiddenBit sum, weight decomp, S2 expand
+-- ══════════════════════════════════════════════════════════════
+
+/-- Sum of hiddenBit indicator equals hiddenBitCount.
+    cor:pom-branch-mass-law -/
+theorem hiddenBit_sum_eq_hiddenBitCount (m : Nat) :
+    ∑ w : Word m, hiddenBit w = hiddenBitCount m := by
+  simp only [hiddenBit, hiddenBitCount, Finset.card_eq_sum_ones, Finset.sum_filter]
+
+/-- Weight total sum = Σ d(x)·sv(x) + hiddenBitCount(m)·F_{m+2}.
+    lem:pom-one-bit -/
+theorem weight_sum_fiber_decomp (m : Nat) :
+    ∑ w : Word m, weight w =
+    ∑ x : X m, X.fiberMultiplicity x * stableValue x +
+    hiddenBitCount m * Nat.fib (m + 2) := by
+  -- Step 1: weight = stableValue(Fold w) + hiddenBit(w) * F
+  conv_lhs => arg 2; ext w; rw [weight_eq_stableValue_add_hiddenBit w]
+  rw [Finset.sum_add_distrib]
+  congr 1
+  · -- ∑ stableValue(Fold w) = ∑ d(x) * sv(x) via fiber partition
+    classical
+    have hDisjoint : (↑(Finset.univ : Finset (X m)) : Set (X m)).PairwiseDisjoint X.fiber := by
+      intro x _ y _ hxy; rw [Function.onFun, Finset.disjoint_left]
+      intro w hwx hwy; exact hxy ((X.mem_fiber.1 hwx).symm.trans (X.mem_fiber.1 hwy))
+    have hUnion : (Finset.univ : Finset (Word m)) = Finset.univ.biUnion X.fiber := by
+      ext w; simp only [Finset.mem_univ, Finset.mem_biUnion, true_iff]
+      exact ⟨Fold w, trivial, X.mem_fiber_Fold w⟩
+    change Finset.univ.sum (fun w => stableValue (Fold w)) = _
+    rw [hUnion, Finset.sum_biUnion hDisjoint]
+    apply Finset.sum_congr rfl; intro x _
+    have : ∀ w ∈ X.fiber x, stableValue (Fold w) = stableValue x :=
+      fun w hw => by rw [X.mem_fiber.1 hw]
+    rw [Finset.sum_congr rfl this, Finset.sum_const, smul_eq_mul, X.fiberMultiplicity]
+  · -- ∑ hiddenBit(w) * F = hiddenBitCount(m) * F
+    rw [← Finset.sum_mul, hiddenBit_sum_eq_hiddenBitCount]
+
+/-- S_2(m) = Σ d_0² + 2·Σ d_0·d_1 + Σ d_1² (hidden-bit expansion).
+    prop:pom-hiddenbit-mixed-moment-cluster -/
+theorem momentSum_two_hiddenBit_expand (m : Nat) :
+    momentSum 2 m =
+    ∑ x : X m, fiberHiddenBitCount 0 x ^ 2 +
+    2 * ∑ x : X m, fiberHiddenBitCount 0 x * fiberHiddenBitCount 1 x +
+    ∑ x : X m, fiberHiddenBitCount 1 x ^ 2 := by
+  simp only [momentSum]
+  -- d(x)^2 = (d_0(x) + d_1(x))^2 = d_0^2 + 2*d_0*d_1 + d_1^2
+  have hsplit : ∀ x : X m, X.fiberMultiplicity x ^ 2 =
+      fiberHiddenBitCount 0 x ^ 2 +
+      2 * (fiberHiddenBitCount 0 x * fiberHiddenBitCount 1 x) +
+      fiberHiddenBitCount 1 x ^ 2 := by
+    intro x
+    rw [fiberMultiplicity_split_by_hiddenBit x]
+    ring
+  simp_rw [hsplit, Finset.sum_add_distrib, Finset.mul_sum]
+
 end Omega
