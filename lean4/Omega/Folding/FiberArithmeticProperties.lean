@@ -656,6 +656,65 @@ theorem stableSucc_iterate_eq_stableAdd (x y : X m) (hm : 1 ≤ m) :
   apply eq_of_stableValue_eq
   rw [stableValue_stableSucc_iterate x (stableValue y) hm, stableValue_stableAdd]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R16: iterated add = mul + succ/pred bijective
+-- ══════════════════════════════════════════════════════════════
+
+/-- n-fold addition of x starting from zero.
+    thm:mul-by-iterated-add -/
+noncomputable def iteratedStableAdd (x : X m) (n : Nat) : X m :=
+  (fun z => stableAdd z x)^[n] stableZero
+
+/-- stableValue of iterated addition: sv(n·x) = (n * sv(x)) % F.
+    thm:mul-by-iterated-add -/
+theorem stableValue_iteratedStableAdd (x : X m) (n : Nat) :
+    stableValue (iteratedStableAdd x n) =
+    (n * stableValue x) % Nat.fib (m + 2) := by
+  induction n with
+  | zero =>
+    simp only [iteratedStableAdd, Function.iterate_zero_apply, stableValue_stableZero, Nat.zero_mul,
+      Nat.zero_mod]
+  | succ n ih =>
+    simp only [iteratedStableAdd, Function.iterate_succ_apply'] at ih ⊢
+    rw [stableValue_stableAdd, ih, Nat.add_mod, Nat.mod_mod_of_dvd _ (dvd_refl _), ← Nat.add_mod]
+    congr 1; ring
+
+/-- Iterated addition equals multiplication: n·x via iteration = stableMul.
+    thm:mul-by-iterated-add -/
+theorem iteratedStableAdd_eq_stableMul (x y : X m) (hm : 1 ≤ m) :
+    iteratedStableAdd x (stableValue y) = stableMul y x := by
+  apply eq_of_stableValue_eq
+  rw [stableValue_iteratedStableAdd, stableValue_stableMul]
+
+/-- Successor is surjective (pred is a right inverse).
+    thm:successor-structure -/
+theorem stableSucc_surjective (m : Nat) :
+    Function.Surjective (stableSucc (m := m)) :=
+  fun y => ⟨stablePred y, stableSucc_stablePred y⟩
+
+/-- Successor is bijective.
+    thm:successor-structure -/
+theorem stableSucc_bijective (m : Nat) :
+    Function.Bijective (stableSucc (m := m)) :=
+  ⟨stableSucc_injective m, stableSucc_surjective m⟩
+
+/-- Predecessor is surjective (succ is a right inverse).
+    thm:successor-structure -/
+theorem stablePred_surjective (m : Nat) :
+    Function.Surjective (stablePred (m := m)) :=
+  fun y => ⟨stableSucc y, stablePred_stableSucc y⟩
+
+/-- Predecessor is bijective.
+    thm:successor-structure -/
+theorem stablePred_bijective (m : Nat) :
+    Function.Bijective (stablePred (m := m)) :=
+  ⟨stablePred_injective m, stablePred_surjective m⟩
+
+/-- Successor as an equivalence.
+    thm:successor-structure -/
+noncomputable def stableSuccEquiv (m : Nat) : X m ≃ X m :=
+  Equiv.ofBijective stableSucc (stableSucc_bijective m)
+
 end
 
 end X
