@@ -13,26 +13,26 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,507 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 228 |
+| \leanverified 标注数 | 230 |
 | \leanpartial 标注数 | 8 |
-| 总标注数 | 236 |
-| 轮次 | R45（round_count=46） |
+| 总标注数 | 238 |
+| 轮次 | R46（round_count=47） |
 
-**Phase 7 校准（R45 轮，2026-03-28）**：按章节覆盖率分布：
+**Phase 7 校准（R46 轮，2026-03-28）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 104 | 6.1% |
+| POM | 1,707 | 105 | 6.1% |
 | Emergent Arithmetic | 185 | 52 | 28.1% |
 | Folding | 337 | 36 | 10.7% |
 | Conclusion | 2,550 | 19 | 0.7% |
-| Group Unification | 469 | 13 | 2.8% |
+| Group Unification | 469 | 14 | 3.0% |
 | SPG | 129 | 6 | 4.7% |
 | Circle Dimension | 393 | 3 | 0.8% |
 | Zeta Finite Part | 4,524 | 0 | 0.0% |
 | Discussion | 67 | 0 | 0.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,507** | **233** | **2.2%** |
+| **合计（body）** | **10,507** | **235** | **2.2%** |
 
 ### 1.2 已完成模块
 
@@ -134,6 +134,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R46: 纤维隐藏位正性条件 + 边界平方恒等式一般化（Round R46）**：两文件 MomentBounds.lean（:1053）+ BoundaryLayer.lean（:236）——fiberHiddenBitCount\_one\_pos\_iff（thm:pom-hidden-bit-one-pos-iff（新标签，tex 无环境，标注于 cor:pom-branch-mass-law 深化位置）：d_{m,1}(x)>0 的充要条件，:1053）; cBoundaryCount\_square\_identity\_general（prop:bdry-fib-square-identity（**从弱→强覆盖升级，一般形式**）：b(2m-1)=b(m)²+b(m+1)² 无条件一般归纳证明，:236）——注：S2 三项递推数学不成立（formalizer 反例验证，丢弃）；upper_support_count 推迟——**0 个新论文标签计入覆盖率**（thm:pom-hidden-bit-one-pos-iff tex 无环境；prop:bdry-fib-square-identity 已注册，升级为强覆盖）——POM 标注 +1（cor:pom-branch-mass-law 深化），Group Unification 标注 +1（prop:bdry-fib-square-identity 升级），标注 236→238（+2），commit 408e04c
+
 **Phase R45: 纤维 ewc 分解和 + X6 CRT 分裂 + 隐藏位密度极限（Round R45）**：三文件 FiberWeightCount.lean（:752）+ FiberRing.lean（:219-224）+ Entropy.lean（:757）——fiberMultiplicity\_eq\_ewc\_sum（thm:pom-fiber-ewc-sum（新标签，tex 无环境，标注于 prop:pom-power-sum-hankel-psd 深化位置）：d(x) = ewc(sv(x)) + ewc(sv(x)+F_{m+2})，:752）; X6\_decomposition（cor:crt-factorization（深化，m=6 实例）：X 6 ≃+* ZMod 3 × ZMod 7，FiberRing.lean:219）; X6\_crt\_split（cor:crt-factorization + thm:conclusion-window6-visible-crt-arithmetic-phase-space（已由 formalizer 541b890 标注）：nonemptiness witness，:224）; hiddenBitDensity\_tendsto\_third（cor:pom-hidden-bit-entropy（**新标签**，tex 有环境，双重复出现标注：subsec__pom-entropy-maxent.tex + subsec__pom-overflow-global.tex）：B(m)/2^m → 1/3，Entropy.lean:757）——注：formalizer 541b890 另行标注 5 个（X6\_crt\_split@conclusion, crt\_idempotent\_7/15/product/sum）——**1 个新论文标签计入覆盖率**（cor:pom-hidden-bit-entropy；thm:pom-fiber-ewc-sum tex 无环境，cor:crt-factorization 已注册新深化）——POM 覆盖率：~1,447（不变），标注 232→236（+4 registrar，总含 formalizer 232→232+4=236），commit f557436
 
 **Phase R44: 折叠商等价 + 矩 wcc alias + Binet alias（Round R44）**：三文件 FiberArithmeticProperties.lean（:799-813）+ MomentRecurrence.lean（:110）+ Entropy.lean（:449）——foldSetoid（def:fold-setoid（新标签，tex 无环境，标注于 prop:op-algebra-fold-quotient-universal 深化位置）：Word m / Fold 等价关系定义）; foldQuotientEquiv（thm:fold-quotient-equiv（新标签，同上位置）：Quotient(foldSetoid) ≃ X m，Equiv.ofBijective）; momentSum\_eq\_weightCongruenceCount\_pow（alias:momentSum\_eq\_congr\_pow\_sum，不新增标注，已覆盖）; fib\_nearest\_integer\_of\_pos（alias:fib\_nearest\_integer，不新增标注，已覆盖）——**0 个新论文标签计入覆盖率**（两新标签 tex 无对应环境，两 alias 重名无须重标）——注：formalizer c762bfc 另行新增 2 个标注（cassini\_gap\_33\_factorization, paper\_orbits\_preserve\_val）——全局 ~1,447（不变），标注 229→231（+2 \leanverified），commit 470f3f2
