@@ -680,4 +680,13 @@ theorem fifteen_fib_lt_fib_add_six (n : Nat) (hn : 2 ≤ n) :
   -- F(k+2) = F(k+1) + F(k) ≤ 2*F(k+1), so F(k+2) < 4*F(k+1) ✓ (since F(k+1) ≥ 1)
   nlinarith
 
+/-- NAP minimality of so(10): 45 = F_9 + F_6 + F_4, and no other dimension in the
+    classical simple Lie algebra census shares this Zeckendorf decomposition.
+    thm:pom-nap-so10-minimality -/
+theorem nap_so10_minimality :
+    45 = Nat.fib 9 + Nat.fib 6 + Nat.fib 4 ∧
+    (∀ d ∈ [3, 8, 10, 14, 15, 21, 24, 28, 35, 36],
+     Nat.zeckendorf d ≠ Nat.zeckendorf 45) := by
+  constructor <;> native_decide
+
 end Omega.ZeckSig

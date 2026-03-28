@@ -241,4 +241,19 @@ theorem cBoundaryCount_square_identity_general (m : Nat) (hm : 3 ≤ m) :
   rw [h, h1.symm]
   exact bdry_square_identity (m - 2)
 
+/-- Endpoint fiber sum identity: F_m + 2·F_{m-1} + F_{m-2} = F_{m+2}.
+    thm:pom-endpoint-fiber-sum -/
+theorem endpoint_fiber_sum (m : Nat) (hm : 2 ≤ m) :
+    Nat.fib m + 2 * Nat.fib (m - 1) + Nat.fib (m - 2) = Nat.fib (m + 2) := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hm
+  simp only [show 2 + k - 1 = k + 1 from by omega, show 2 + k - 2 = k from by omega]
+  show Nat.fib (2 + k) + 2 * Nat.fib (k + 1) + Nat.fib k = Nat.fib (2 + k + 2)
+  have e1 : Nat.fib (2 + k) = Nat.fib (k + 2) := by ring_nf
+  have e2 : Nat.fib (2 + k + 2) = Nat.fib (k + 4) := by ring_nf
+  rw [e1, e2]
+  have h1 := Omega.fib_succ_succ' k
+  have h2 := Omega.fib_succ_succ' (k + 1)
+  have h3 := Omega.fib_succ_succ' (k + 2)
+  rw [h3, h2, h1]; ring
+
 end Omega
