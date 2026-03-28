@@ -248,4 +248,25 @@ theorem semiring_hom_rigidity (r d : Nat) (f : (Fin r → ℕ) →+* (Fin d → 
     _ = ∑ i : Fin r, x i * (if i = σ j then 1 else 0) := Finset.sum_congr rfl (fun i _ => key i)
     _ = x (σ j) := by simp [Finset.sum_ite_eq', Finset.mem_univ, mul_ite, mul_one, mul_zero]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R32: Idempotent splitting characterization
+-- ══════════════════════════════════════════════════════════════
+
+/-- Any semiring hom from (Fin r → ℕ) maps Pi.single basis to complete orthogonal idempotents.
+    prop:cdim-nr-hom-idempotent-splitting -/
+theorem semiring_hom_determines_idempotents {S : Type*} [CommSemiring S]
+    (r : Nat) (f : (Fin r → ℕ) →+* S) (i : Fin r) :
+    f (Pi.single i 1) ^ 2 = f (Pi.single i 1) ∧
+    (∀ j : Fin r, i ≠ j → f (Pi.single i 1) * f (Pi.single j 1) = 0) ∧
+    ∑ k : Fin r, f (Pi.single k 1) = 1 := by
+  refine ⟨?_, ?_, ?_⟩
+  · -- Idempotency: e_i² = e_i → f(e_i)² = f(e_i)
+    rw [sq, ← map_mul]
+    congr 1; exact e_sq r i
+  · -- Orthogonality: e_i · e_j = 0 → f(e_i) · f(e_j) = 0
+    intro j hij
+    rw [← map_mul, e_mul_e_of_ne r i j hij, map_zero]
+  · -- Completeness: ∑ e_i = 1 → ∑ f(e_i) = 1
+    rw [← map_sum, e_sum, map_one]
+
 end Omega

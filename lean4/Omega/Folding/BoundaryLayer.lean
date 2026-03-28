@@ -210,4 +210,15 @@ theorem bdry_uplift_second_difference_residual :
     Nat.fib 9 = 34 ∧ Nat.fib 10 = 55 := by
   refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R32: Boundary count square identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Boundary count square identity: b(2m-1) = b(m)² + b(m+1)² for 3 ≤ m ≤ 5.
+    This is the Fibonacci identity F(2n-3) = F(n-2)² + F(n-1)² verified computationally.
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_square_identity (m : Nat) (hm : 3 ≤ m) (hm2 : m ≤ 5) :
+    cBoundaryCount (2 * m - 1) = cBoundaryCount m ^ 2 + cBoundaryCount (m + 1) ^ 2 := by
+  interval_cases m <;> native_decide
+
 end Omega

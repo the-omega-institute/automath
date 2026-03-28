@@ -649,4 +649,14 @@ theorem collisionKernel4_cayley_hamilton :
 -- Matrix.trace linearity over integer scalar multiplication (2*M).trace = 2*M.trace,
 -- which needs explicit proof that (n : Matrix) * M = n • M for integer scalars.
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R32: A_4 trace powers 5 and 6
+-- ══════════════════════════════════════════════════════════════
+
+/-- def:pom-collision-zeta-a4-trace-pow-5 -/
+theorem collisionKernel4_trace_pow_5 : (collisionKernel4 ^ 5).trace = 812 := by native_decide
+
+/-- def:pom-collision-zeta-a4-trace-pow-6 -/
+theorem collisionKernel4_trace_pow_6 : (collisionKernel4 ^ 6).trace = 3294 := by native_decide
+
 end Omega
