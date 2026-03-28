@@ -742,4 +742,42 @@ theorem hiddenBitCount_pos (m : Nat) (hm : 2 ≤ m) :
   obtain ⟨k, rfl⟩ : ∃ k, m = k + 2 := ⟨m - 2, by omega⟩
   rw [hiddenBitCount_recurrence]; positivity
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R20: Right-resolving property
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fold is right-resolving: appending different bits always yields different stable words.
+    thm:pom-right-resolving -/
+theorem Fold_snoc_false_ne_snoc_true (w : Word m) :
+    Fold (snoc w false) ≠ Fold (snoc w true) := by
+  intro heq
+  -- Use stableValue injectivity: if Fold equal, stableValues equal
+  have hsv_eq : stableValue (Fold (snoc w false)) = stableValue (Fold (snoc w true)) := by
+    rw [heq]
+  rw [stableValue_Fold_snoc_false, stableValue_Fold_snoc_true] at hsv_eq
+  -- hsv_eq: weight w % F_{m+3} = (weight w + F_{m+2}) % F_{m+3}
+  have hF2_lt : Nat.fib (m + 2) < Nat.fib (m + 3) := fib_lt_fib_succ m
+  have hF2_pos : 0 < Nat.fib (m + 2) := fib_succ_pos (m + 1)
+  have hF3_pos : 0 < Nat.fib (m + 3) := fib_succ_pos (m + 2)
+  -- Reduce (weight w + F_{m+2}) % F to (a + F_{m+2}) % F using Nat.add_mod
+  have hred : (weight w + Nat.fib (m + 2)) % Nat.fib (m + 3) =
+      (weight w % Nat.fib (m + 3) + Nat.fib (m + 2) % Nat.fib (m + 3)) % Nat.fib (m + 3) :=
+    Nat.add_mod _ _ _
+  rw [Nat.mod_eq_of_lt hF2_lt] at hred
+  -- hred: (weight w + F_{m+2}) % F = (a + F_{m+2}) % F where a = weight w % F
+  set a := weight w % Nat.fib (m + 3) with ha_def
+  rw [hred] at hsv_eq
+  -- hsv_eq: a = (a + F_{m+2}) % F_{m+3}
+  have ha_lt : a < Nat.fib (m + 3) := Nat.mod_lt _ hF3_pos
+  by_cases hle : a + Nat.fib (m + 2) < Nat.fib (m + 3)
+  · rw [Nat.mod_eq_of_lt hle] at hsv_eq; omega
+  · push_neg at hle
+    have : (a + Nat.fib (m + 2)) % Nat.fib (m + 3) =
+        a + Nat.fib (m + 2) - Nat.fib (m + 3) := by
+      conv_lhs => rw [show a + Nat.fib (m + 2) =
+        (a + Nat.fib (m + 2) - Nat.fib (m + 3)) + Nat.fib (m + 3) from by omega]
+      rw [Nat.add_mod_right]
+      exact Nat.mod_eq_of_lt (by omega)
+    rw [this] at hsv_eq; omega
+
 end Omega

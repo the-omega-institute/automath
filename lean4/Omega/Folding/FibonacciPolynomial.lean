@@ -297,4 +297,28 @@ theorem detPoly_eval_one : ∀ k : Nat, (detPoly k).eval 1 = (Nat.fib (2 * k + 1
         3 * (Nat.fib (2 * k + 3) : ℤ) := by exact_mod_cast hfib
     linarith
 
+/-- D_k(0) = 1 for all k.
+    prop:pom-detpoly-eval-zero -/
+theorem detPoly_eval_zero : ∀ k : Nat, (detPoly k).eval 0 = 1
+  | 0 => by simp [detPoly]
+  | 1 => by simp [detPoly, eval_add, eval_X]
+  | k + 2 => by
+    simp only [detPoly_succ_succ, eval_sub, eval_mul, eval_add, eval_X, eval_ofNat]
+    rw [detPoly_eval_zero (k + 1), detPoly_eval_zero k]; ring
+
+/-- D_0(2) = 1.
+    prop:pom-detpoly-eval-two -/
+theorem detPoly_eval_two_zero : (detPoly 0).eval 2 = 1 := by simp [detPoly]
+
+/-- D_1(2) = 3.
+    prop:pom-detpoly-eval-two -/
+theorem detPoly_eval_two_one : (detPoly 1).eval 2 = 3 := by
+  simp [detPoly, eval_add, eval_X]
+
+/-- D_{k+2}(2) = 4·D_{k+1}(2) - D_k(2).
+    prop:pom-detpoly-eval-two -/
+theorem detPoly_eval_two_recurrence (k : Nat) :
+    (detPoly (k + 2)).eval 2 = 4 * (detPoly (k + 1)).eval 2 - (detPoly k).eval 2 := by
+  simp only [detPoly_succ_succ, eval_sub, eval_mul, eval_add, eval_X, eval_ofNat]; ring
+
 end Omega
