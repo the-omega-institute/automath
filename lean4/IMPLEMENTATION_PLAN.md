@@ -112,6 +112,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R22: 结论章三重刚性尺度 + detPoly monic/degree（Round R22）**：两文件 BinFold.lean（:224-233）+ FibonacciPolynomial.lean（:388, :392）——cBinFiberHist\_6\_5（cor:conclusion-window6-three-rigidity-scales（**新标签，结论章**）：BinFold m=6 第5分箱直方图值，BinFold.lean:224）; three\_rigidity\_scales\_six（cor:conclusion-window6-three-rigidity-scales：4<21<64 三重刚性尺度联合证书，BinFold.lean:233；注：使用已有 cBinFiberMax 而非新建 cMaxBinFiberMult）; detPoly\_monic（prop:pom-Lk-det-coeff-binomial：D_k(t) 是首一多项式，FibonacciPolynomial.lean:388）; detPoly\_natDegree（prop:pom-Lk-det-coeff-binomial：natDegree(D_k) = k，:392）——**1 个新论文标签**（cor:conclusion-window6-three-rigidity-scales；prop:pom-Lk-det-coeff-binomial 已注册，深化）——结论 ~83→~84（+1），全局 ~1,427→~1,428（+1），commit c4b8c44
+
 **Phase R21: 左解析性 + 单位翻转可判别 + detPoly t=-1 周期（Round R21）**：两文件 MaxFiberTwoStep.lean（:790, :830）+ FibonacciPolynomial.lean（:324-345）——Fold\_ne\_of\_bit\_flip（bridge:fold-single-bit-resolving：翻转单个 bit 后 Fold 值改变，MaxFiberTwoStep.lean:790）; Fold\_ne\_of\_first\_bit\_flip（thm:pom-left-resolving（**新标签**）：Fold_m(0v)≠Fold_m(1v) for m≥2，首位翻转可判别，MaxFiberTwoStep.lean:830）; detPoly\_eval\_neg\_one\_rec（cor:pom-Lk-det-lucas-unit：D_{k+2}(-1)=D_{k+1}(-1)-D_k(-1)，t=-1 递推，FibonacciPolynomial.lean:324）; detPoly\_eval\_neg\_one\_periodic（cor:pom-Lk-det-lucas-unit：D_k(-1) 具有周期 6，FibonacciPolynomial.lean:345）——**1 个新论文标签**（thm:pom-left-resolving；bridge:fold-single-bit-resolving 不计入论文覆盖率；cor:pom-Lk-det-lucas-unit 已注册，深化）——POM ~583→~584（+1），全局 ~1,426→~1,427（+1），commit 6d747db
 
 **Phase R20: detPoly eval 扩展 + 右解析性（Round R20）**：两文件 FibonacciPolynomial.lean（:300-312）+ MaxFiberTwoStep.lean（:750）——detPoly\_eval\_zero（prop:pom-Lk-det-coeff-binomial：D_k(0)=1，t=0 特化验证闭式常数项，:300）; detPoly\_eval\_two\_zero（cor:pom-Lk-det-lucas-unit：D_0(2)=1，Lucas t=2 基例，:308）; detPoly\_eval\_two\_one（cor:pom-Lk-det-lucas-unit：D_1(2)=3，:310）; detPoly\_eval\_two\_recurrence（cor:pom-Lk-det-lucas-unit：D_{k+2}(2)=4·D_{k+1}(2)-D_k(2)，t=2 时递推，:312）; Fold\_snoc\_false\_ne\_snoc\_true（thm:pom-right-resolving（**新标签**）：Fold_m(v0)≠Fold_m(v1) for m≥2，MaxFiberTwoStep.lean:750）——**1 个新论文标签**（thm:pom-right-resolving；prop:pom-Lk-det-coeff-binomial 已在 Phase 191/192 注册，cor:pom-Lk-det-lucas-unit 已在 R19 注册，本轮深化）——POM ~582→~583（+1），全局 ~1,425→~1,426（+1），commit 76b8ff1
@@ -260,7 +262,7 @@
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
-## 2. 论文总覆盖率分析（2026-03-28 Phase R21 登记版）
+## 2. 论文总覆盖率分析（2026-03-28 Phase R22 登记版）
 
 ### 论文规模（Phase 7 重新扫描）
 
@@ -275,13 +277,13 @@
 - ~3,198 个 Lean4 声明（含内部引理、定义）
 - ~29,049 行代码，69 个文件
 - 0 公理，0 sorry，lake build 通过
-- 102 个 LaTeX `\leanverified` / `\leanpartial` 标注
+- 106 个 LaTeX `\leanverified` / `\leanpartial` 标注
 
 ### 覆盖率
 
 | 度量 | 数值 |
 |---|---|
-| 全局覆盖率（body） | ~1,427/9,958 = **~14.3%** |
+| 全局覆盖率（body） | ~1,428/9,958 = **~14.3%** |
 | 强覆盖（一般性 ∀ 证明） | ~65 (0.7%) |
 | 中覆盖（有界 + 条件） | ~162 (1.6%) |
 | 弱覆盖（native_decide / 代理） | ~723 (7.3%) |
@@ -364,10 +366,10 @@
 | POM | 1,526 | ~584 | ~38.2% |
 | 圆维度 | 342 | ~62 | ~18.1% |
 | Zeta 有限部分 | 4,437 | ~255 | ~6% |
-| 结论 | 2,458 | ~83 | ~3.4% |
+| 结论 | 2,458 | ~84 | ~3.4% |
 | 其他 body | ~143 | ~2 | ~1% |
 | 附录 | 1,320 | 0 | 0% |
-| **body 总计** | **9,958** | **~1,427** | **~14.3%** |
+| **body 总计** | **9,958** | **~1,428** | **~14.3%** |
 
 ## 3. 未来工作：30 条具体计划
 
