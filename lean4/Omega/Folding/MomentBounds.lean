@@ -1045,4 +1045,29 @@ theorem momentSum_ge_card_fintype (q m : Nat) (hq : 1 ≤ q) :
     Fintype.card (X m) ≤ momentSum q m := by
   rw [X.card_eq_fib]; exact momentSum_ge_card q m
 
+/-- exactWeightCount is positive iff the weight is achievable (≤ F_{m+3}-2).
+    aux:ewc-pos-iff -/
+theorem exactWeightCount_pos_iff (m n : Nat) :
+    0 < exactWeightCount m n ↔ n ≤ Nat.fib (m + 3) - 2 := by
+  constructor
+  · intro h
+    rw [Nat.pos_iff_ne_zero] at h
+    unfold exactWeightCount at h
+    rw [Finset.card_ne_zero] at h
+    obtain ⟨w, hw⟩ := h
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hw
+    rw [← hw]; exact weight_le_allTrue w
+  · intro h
+    obtain ⟨w, hw⟩ := weight_surjective m n h
+    apply Nat.pos_of_ne_zero; unfold exactWeightCount
+    rw [Finset.card_ne_zero]
+    exact ⟨w, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hw⟩⟩
+
+/-- d_{m,1}(x) > 0 iff sv(x) + F_{m+2} is an achievable weight.
+    thm:pom-hidden-bit-one-pos-iff -/
+theorem fiberHiddenBitCount_one_pos_iff (x : X m) (hm : 2 ≤ m) :
+    0 < fiberHiddenBitCount 1 x ↔
+    stableValue x + Nat.fib (m + 2) ≤ Nat.fib (m + 3) - 2 := by
+  rw [fiberHiddenBitCount_one_eq_ewc, exactWeightCount_pos_iff]
+
 end Omega

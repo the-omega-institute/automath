@@ -231,4 +231,14 @@ theorem cBoundaryCount_square_identity (m : Nat) (hm : 3 ≤ m) (hm2 : m ≤ 5) 
     cBoundaryCount (2 * m - 1) = cBoundaryCount m ^ 2 + cBoundaryCount (m + 1) ^ 2 := by
   interval_cases m <;> native_decide
 
+/-- General boundary square identity: F(2m-3) = F(m-2)² + F(m-1)² for m ≥ 3.
+    Direct consequence of F(2n+1) = F(n)² + F(n+1)² with n = m-2.
+    prop:bdry-fib-square-identity-general -/
+theorem cBoundaryCount_square_identity_general (m : Nat) (hm : 3 ≤ m) :
+    Nat.fib (2 * m - 3) = Nat.fib (m - 2) ^ 2 + Nat.fib (m - 1) ^ 2 := by
+  have h : 2 * m - 3 = 2 * (m - 2) + 1 := by omega
+  have h1 : m - 2 + 1 = m - 1 := by omega
+  rw [h, h1.symm]
+  exact bdry_square_identity (m - 2)
+
 end Omega
