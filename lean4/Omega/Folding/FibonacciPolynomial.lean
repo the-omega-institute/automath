@@ -494,4 +494,32 @@ theorem detPoly_eval_pos : ∀ k : Nat, ∀ t : ℤ, 0 ≤ t → 0 < (detPoly k)
       Int.mul_nonpos_of_nonpos_of_nonneg h (le_of_lt ih0)
     linarith
 
+/-- Strict log-convexity: D_k(t)² < D_{k-1}(t)·D_{k+1}(t) for k ≥ 1 and t > 0.
+    cor:pom-Lk-det-logconvex-ratio -/
+theorem detPoly_eval_strict_log_convex (k : Nat) (hk : 1 ≤ k) (t : ℤ) (ht : 0 < t) :
+    (detPoly k).eval t ^ 2 < (detPoly (k - 1)).eval t * (detPoly (k + 1)).eval t := by
+  -- From Cassini-Pell: D_{k+1}*D_{k-1} - D_k^2 = X (as polynomials)
+  have hcassini := detPoly_cassini_pell k hk
+  -- Evaluate at t
+  have heval := congr_arg (fun p => p.eval t) hcassini
+  simp only [eval_sub, eval_mul, eval_pow, eval_X] at heval
+  -- heval: D_{k+1}(t) * D_{k-1}(t) - D_k(t)^2 = t
+  linarith
+
+/-- Strict monotonicity in k: D_k(t) < D_{k+1}(t) for t > 0.
+    cor:pom-Lk-det-logconvex-ratio -/
+theorem detPoly_eval_strict_mono (t : ℤ) (ht : 0 < t) :
+    ∀ k : Nat, (detPoly k).eval t < (detPoly (k + 1)).eval t
+  | 0 => by simp [detPoly, eval_add, eval_X]; linarith
+  | k + 1 => by
+    have ih := detPoly_eval_strict_mono t ht k
+    -- D_{k+2} = (t+2)*D_{k+1} - D_k (from recurrence)
+    -- D_{k+2} - D_{k+1} = (t+1)*D_{k+1} - D_k > (t+1)*D_k - D_k = t*D_k > 0
+    have hpos := detPoly_eval_pos k t (le_of_lt ht)
+    simp only [detPoly_succ_succ, eval_sub, eval_mul, eval_add, eval_X, eval_ofNat]
+    -- Goal: D_{k+1}(t) < (t+2)*D_{k+1}(t) - D_k(t)
+    -- i.e., D_k(t) < (t+1)*D_{k+1}(t)
+    -- Since D_k < D_{k+1} and t+1 ≥ 2, we have D_k < D_{k+1} ≤ (t+1)*D_{k+1}
+    nlinarith
+
 end Omega

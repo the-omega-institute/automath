@@ -256,4 +256,25 @@ theorem index_compression_gap_six :
     cBinFiberMax 6 * Fintype.card (X 6) - 2 ^ 6 = 20 := by
   rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R25: m=7 BinFold separation + three rigidity scales
+-- ══════════════════════════════════════════════════════════════
+
+/-- Maximum BinFold multiplicity at m=7 is 5.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem cBinFiberMax_seven : cBinFiberMax 7 = 5 := by native_decide
+
+/-- Minimum BinFold multiplicity at m=7 is 3.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem cBinFiberMin_seven : cBinFiberMin 7 = 3 := by native_decide
+
+/-- Three rigidity scales at m=7: max fiber mult < |X_7| < 2^7.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem three_rigidity_scales_seven :
+    cBinFiberMax 7 < Fintype.card (X 7) ∧
+    Fintype.card (X 7) < 2 ^ 7 := by
+  refine ⟨?_, ?_⟩
+  · rw [cBinFiberMax_seven, X.card_eq_fib]; native_decide
+  · rw [X.card_eq_fib]; native_decide
+
 end Omega
