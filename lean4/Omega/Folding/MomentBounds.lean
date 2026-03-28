@@ -868,6 +868,22 @@ theorem momentSum_three_strict_mono_all (m : Nat) :
   | 0 => rw [momentSum_three_zero, momentSum_three_one]; omega
   | m + 1 => exact momentSum_three_strict_mono (m + 1) (by omega)
 
+/-- S_2(m) ≥ 3 · 2^m for m ≥ 6.
+    prop:pom-s2-recurrence -/
+theorem momentSum_two_ge_three_pow (m : Nat) (hm : 6 ≤ m) :
+    3 * 2 ^ m ≤ momentSum 2 m := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 | 1 | 2 | 3 | 4 | 5 => omega
+    | 6 => rw [momentSum_two_six]; omega
+    | m + 7 =>
+      have hge := momentSum_two_succ_ge_double (m + 6) (by omega)
+      have hih := ih (m + 6) (by omega) (by omega)
+      calc 3 * 2 ^ (m + 7) = 2 * (3 * 2 ^ (m + 6)) := by ring
+        _ ≤ 2 * momentSum 2 (m + 6) := by omega
+        _ ≤ momentSum 2 (m + 7) := hge
+
 /-- D(m) < 2^m for m ≥ 2.
     cor:pom-max-fiber-rate-endpoint -/
 theorem maxFiberMultiplicity_strict_lt_pow (m : Nat) (hm : 2 ≤ m) :

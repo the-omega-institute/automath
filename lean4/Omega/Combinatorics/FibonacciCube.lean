@@ -1318,6 +1318,89 @@ theorem fibcubeFVector_eq_zero_of_gt (n k : Nat) (hk : (n + 1) / 2 < k) :
       · have h3 : (n + 1) / 2 < k - 1 := by omega
         rw [ih n (by omega) (k - 1) h3]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R7: total f-vector and positivity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Extending range doesn't change fibcubeFVector sum when extra terms vanish. -/
+private theorem fibcubeFVector_sum_extend (n p : Nat) (hp : (n + 1) / 2 < p) :
+    ∑ k ∈ Finset.range (p + 1), fibcubeFVector n k =
+    ∑ k ∈ Finset.range p, fibcubeFVector n k := by
+  rw [Finset.sum_range_succ, fibcubeFVector_eq_zero_of_gt n p hp, Nat.add_zero]
+
+/-- Total subcube count C_n(1) = ∑_k C(n,k).
+    cor:pom-fibcube-fpoly-growth-constant -/
+noncomputable def totalFibcubeFVector (n : Nat) : Nat :=
+  ∑ k ∈ Finset.range (n + 1), fibcubeFVector n k
+
+@[simp] theorem totalFibcubeFVector_zero : totalFibcubeFVector 0 = 1 := by
+  simp [totalFibcubeFVector, fibcubeFVector]
+
+@[simp] theorem totalFibcubeFVector_one : totalFibcubeFVector 1 = 3 := by
+  unfold totalFibcubeFVector
+  simp [Finset.sum_range_succ]
+
+/-- The shifted sum ∑_{k=0}^{p} (if k=0 then 0 else f(n,k-1)) = ∑_{k=0}^{p-1} f(n,k). -/
+private theorem fibcubeFVector_shifted_sum (n p : Nat) :
+    ∑ k ∈ Finset.range (p + 1),
+      (if k = 0 then 0 else fibcubeFVector n (k - 1)) =
+    ∑ k ∈ Finset.range p, fibcubeFVector n k := by
+  rw [Finset.sum_range_succ]
+  induction p with
+  | zero => simp
+  | succ p ih =>
+    rw [Finset.sum_range_succ (fun k => if k = 0 then 0 else fibcubeFVector n (k - 1))]
+    simp only [show ¬(p + 1 = 0) from by omega, ite_false, show p + 1 - 1 = p from by omega]
+    rw [Finset.sum_range_succ]
+    omega
+
+/-- C_{n+2}(1) = C_{n+1}(1) + 2·C_n(1).
+    cor:pom-fibcube-fpoly-growth-constant -/
+theorem totalFibcubeFVector_succ_succ (n : Nat) :
+    totalFibcubeFVector (n + 2) =
+    totalFibcubeFVector (n + 1) + 2 * totalFibcubeFVector n := by
+  simp only [totalFibcubeFVector, show n + 2 + 1 = n + 3 from rfl]
+  -- Expand using fibcubeFVector_succ_succ
+  conv_lhs => arg 2; ext k; rw [fibcubeFVector_succ_succ]
+  simp only [Finset.sum_add_distrib]
+  -- Three sums: ∑ f(n+1,k) + ∑ f(n,k) + ∑ (if k=0 then 0 else f(n,k-1))
+  -- Sum 1: extend range(n+1+1) → range(n+3) with one vanishing term
+  rw [show n + 1 + 1 = n + 2 from rfl]
+  -- Sum 3 (shifted): = ∑_{k=0}^{n+1} f(n,k) by shifted_sum
+  rw [fibcubeFVector_shifted_sum n (n + 2)]
+  -- Collapse all extended ranges using vanishing
+  rw [fibcubeFVector_sum_extend n (n + 2) (by omega)]
+  rw [fibcubeFVector_sum_extend (n + 1) (n + 2) (by omega)]
+  -- LHS: ∑(n+2) f(n+1) + ∑(n+2) f(n) + ∑(n+2) f(n)
+  -- RHS: ∑(n+2) f(n+1) + 2 * ∑(n+1) f(n)  (from totalFibcubeFVector unfolding)
+  -- Collapse ∑(n+2) f(n) → ∑(n+1) f(n) using vanishing
+  conv_lhs =>
+    rw [show ∀ a b c : Nat, a + b + c = a + (b + c) from by omega]
+  congr 1
+  rw [fibcubeFVector_sum_extend n (n + 1) (by omega)]
+  omega
+
+/-- f-vector positivity: f(n,k) > 0 when 2k ≤ n.
+    thm:pom-fibcube-fvector-closed (positivity) -/
+theorem fibcubeFVector_pos (n k : Nat) (hk : 2 * k ≤ n) :
+    0 < fibcubeFVector n k := by
+  suffices h : ∀ n k : Nat, 2 * k ≤ n → 0 < fibcubeFVector n k from h n k hk
+  intro n
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    intro k hk
+    match n, k with
+    | 0, 0 => simp
+    | 1, 0 => simp
+    | n + 2, 0 =>
+      rw [fibcubeFVector_zero_eq_fib]
+      exact Nat.fib_pos.mpr (by omega)
+    | n + 2, k + 1 =>
+      simp only [fibcubeFVector_succ_succ, show ¬(k + 1 = 0) from by omega, ite_false,
+        show k + 1 - 1 = k from by omega]
+      have : 0 < fibcubeFVector n k := ih n (by omega) k (by omega)
+      omega
+
 /-- 2*e(n) ≥ n*F(n) for n ≥ 3: linear average degree growth.
     cor:pom-fibcube-edge-closed-form -/
 theorem fibcubeEdgeCount_ge_n_fib (n : Nat) (hn : 3 ≤ n) :
