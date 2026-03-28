@@ -646,6 +646,42 @@ theorem stableValue_sum (m : Nat) :
   rw [this, Finset.sum_range_id]
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R17: sum of squares Gauss formula
+-- ══════════════════════════════════════════════════════════════
+
+/-- Standard identity: 6·∑_{i<n} i² = n·(n-1)·(2n-1). -/
+private theorem six_mul_sum_sq (n : Nat) :
+    6 * ∑ i ∈ Finset.range n, i ^ 2 = n * (n - 1) * (2 * n - 1) := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    rw [Finset.sum_range_succ, Nat.mul_add, ih]
+    cases n with
+    | zero => simp
+    | succ n =>
+      simp only [Nat.succ_sub_one, show 2 * (n + 2) - 1 = 2 * n + 3 from by omega,
+        show 2 * (n + 1) - 1 = 2 * n + 1 from by omega]
+      ring
+
+/-- 6 · Σ sv(x)² = F·(F-1)·(2F-1) where F = F_{m+2}.
+    thm:pom-stableValue-sq-gauss -/
+theorem stableValue_sq_sum_mul6 (m : Nat) :
+    6 * ∑ x : X m, stableValue x ^ 2 =
+    Nat.fib (m + 2) * (Nat.fib (m + 2) - 1) * (2 * Nat.fib (m + 2) - 1) := by
+  have hbij := X.stableValueFin_bijective m
+  have hsum : ∑ x : X m, stableValue x ^ 2 =
+      ∑ i : Fin (Nat.fib (m + 2)), i.val ^ 2 := by
+    rw [show (fun x : X m => stableValue x ^ 2) =
+      ((fun i : Fin (Nat.fib (m + 2)) => i.val ^ 2) ∘ X.stableValueFin) from by
+        ext x; simp [X.stableValueFin]]
+    exact hbij.sum_comp (fun i : Fin (Nat.fib (m + 2)) => i.val ^ 2)
+  rw [hsum]
+  rw [show ∑ i : Fin (Nat.fib (m + 2)), (i : Nat) ^ 2 =
+      ∑ i ∈ Finset.range (Nat.fib (m + 2)), i ^ 2 from by
+    rw [← Fin.sum_univ_eq_sum_range]]
+  exact six_mul_sum_sq (Nat.fib (m + 2))
+
+-- ══════════════════════════════════════════════════════════════
 -- S_2 cross-verification and growth bounds
 -- ══════════════════════════════════════════════════════════════
 

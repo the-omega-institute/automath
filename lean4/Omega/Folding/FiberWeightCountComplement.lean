@@ -1,5 +1,6 @@
 import Omega.Folding.FiberWeightCount
 import Omega.Folding.MomentRecurrence
+import Omega.Folding.FiberArithmetic
 
 namespace Omega
 
@@ -94,5 +95,47 @@ theorem fiberMultiplicity_complement (w : Word m) :
     -- Fold(complement u) = Fold(complement(complement w)) = Fold w
     have := hkey u (complement w) hu
     rwa [complement_involution] at this
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R17: Fold + complement algebra
+-- ══════════════════════════════════════════════════════════════
+
+/-- sv(Fold(complement w)) + sv(Fold w) ≡ F_{m+1}-2 (mod F_{m+2}).
+    prop:fold-fiber-count-reciprocity -/
+theorem stableValue_Fold_add_complement (w : Word m) (hm : 2 ≤ m) :
+    (stableValue (Fold (complement w)) + stableValue (Fold w)) % Nat.fib (m + 2) =
+    (Nat.fib (m + 1) - 2) % Nat.fib (m + 2) := by
+  rw [stableValue_Fold_mod, stableValue_Fold_mod]
+  have hcomp := weight_complement w
+  have hF3 : Nat.fib (m + 3) = Nat.fib (m + 1) + Nat.fib (m + 2) := Nat.fib_add_two
+  have hF1_ge2 : 2 ≤ Nat.fib (m + 1) := by
+    calc Nat.fib (m + 1) ≥ Nat.fib 3 := Nat.fib_mono (by omega)
+      _ = 2 := by native_decide
+  -- weight(comp w) + weight w = F_{m+3} - 2 = (F_{m+1} - 2) + F_{m+2}
+  have heq : weight (complement w) + weight w = Nat.fib (m + 1) - 2 + Nat.fib (m + 2) := by omega
+  -- (a % F + b % F) % F = (a + b) % F
+  rw [← Nat.add_mod, heq]
+  -- (F_{m+1} - 2 + F_{m+2}) % F_{m+2} = (F_{m+1} - 2) % F_{m+2}
+  rw [Nat.add_mod, Nat.mod_self, Nat.add_zero, Nat.mod_mod]
+
+/-- The complement action on X m: x ↦ (F_{m+1}-2) - x in Z/F_{m+2}Z.
+    prop:fold-fiber-count-reciprocity -/
+noncomputable def complementAction (x : X m) : X m :=
+  X.stableSub (X.ofNat m (Nat.fib (m + 1) - 2)) x
+
+/-- The complement action is involutive: comp(comp(x)) = x.
+    prop:fold-fiber-count-reciprocity -/
+theorem complementAction_involutive (m : Nat) (hm : 2 ≤ m) :
+    Function.Involutive (complementAction (m := m)) := by
+  intro x
+  unfold complementAction
+  set c := X.ofNat m (Nat.fib (m + 1) - 2)
+  show X.stableSub c (X.stableSub c x) = x
+  -- c - (c - x) = x, proved via: (c - x) + x = c, so c - (c-x) has the same add-with-(c-x) as x
+  have h1 : X.stableAdd x (X.stableSub c x) = c := by
+    rw [X.stableAdd_comm]; exact X.stableSub_add_cancel c x
+  have h2 : X.stableAdd (X.stableSub c (X.stableSub c x)) (X.stableSub c x) = c :=
+    X.stableSub_add_cancel c (X.stableSub c x)
+  exact X.stableAdd_right_cancel (x := X.stableSub c x) (h2.trans h1.symm)
 
 end Omega

@@ -952,4 +952,17 @@ theorem momentSum_two_gt_two_fib_strict (m : Nat) (hm : 4 ≤ m) :
       -- S_2(m+6) ≥ 2·S_2(m+5) > 4·F(m+7) > 2·F(m+8) since F(m+6) < F(m+7)
       linarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R17: strict q-monotonicity general
+-- ══════════════════════════════════════════════════════════════
+
+/-- Strict q-monotonicity: S_a(m) < S_b(m) when 1 ≤ a < b and m ≥ 2.
+    prop:pom-moment-congruence-q -/
+theorem momentSum_strict_mono_q_general (a b m : Nat) (ha : 1 ≤ a) (hab : a < b) (hm : 2 ≤ m) :
+    momentSum a m < momentSum b m := by
+  calc momentSum a m
+      ≤ momentSum (b - 1) m := momentSum_mono_q_of_le (by omega) ha
+    _ < momentSum ((b - 1) + 1) m := momentSum_strict_mono_q (b - 1) m (by omega) hm
+    _ = momentSum b m := by congr 1; omega
+
 end Omega
