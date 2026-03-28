@@ -6,9 +6,9 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~32,230 |
-| 定理/定义数 | ~2,511 |
-| 论文接口包装 | 358 |
+| 总行数 | ~32,294 |
+| 定理/定义数 | ~2,514 |
+| 论文接口包装 | 360 |
 | 文件数 | 69 |
 | 公理数 | 0 |
 
@@ -112,6 +112,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R11: Fibonacci 立方离心率闭式 + E00 望远镜和延伸（Round R11）**：三文件 HammingDist.lean（+46行，新增至190行）+ FibonacciCube.lean（+10行，新增至1472行）+ CollisionDecomp.lean（+8行，新增至1035行）——fibcubeDiam\_eq（thm:pom-fibcube-eccentricity-closed-form（**新标签**）：diam(Γ_n) = ⌊n/2⌋·2 + (n mod 2)，Fibonacci 立方直径闭式，HammingDist.lean:150）; ecc\_allFalse\_achieved（thm:pom-fibcube-eccentricity-closed-form：ecc(allFalse, Γ_n) = diam(Γ_n)，全零词达到直径，FibonacciCube.lean:1447）; exactWeightCollision\_eq\_S2\_sub（thm:pom-e00-telescoping（**新标签**）：E00(m+1) = S_2(m) + E00(m)（精确重量碰撞等于 S_2 累加展开），CollisionDecomp.lean:1029）——**2 个新论文标签**（thm:pom-fibcube-eccentricity-closed-form, thm:pom-e00-telescoping）——POM ~568→~570（+2 新标签，thm:pom-fibcube-eccentricity-closed-form 强覆盖深化, thm:pom-e00-telescoping 已在 Phase 81 注册，本轮 +1 新 Lean 定理），全局 ~1,381→~1,383（Phase R11，commit a002c3b）
+
 **Phase R10: 隐藏位偏差能量 Int 版（Round R10）**：单文件 CollisionDecomp.lean（+29行，新增至1027行）——hiddenBitBiasEnergy\_int（thm:pom-hiddenbit-bias-energy-identity（**新标签**）：∑(↑d_0-↑d_1)²=↑S_2(m+2)-4·↑S_2(m)，Int 版偏差能量守恒律，CollisionDecomp.lean:1000）——**部分覆盖**（\leanpartial：Int 版已证，Nat 版推迟，原因：fiberHiddenBitCount\_one\_le\_zero d_0≥d_1 单调性需更精细组合论证）——**1 个新论文标签**（thm:pom-hiddenbit-bias-energy-identity）——POM ~567→~568（+1，中覆盖），全局 ~1,380→~1,381（Phase R10，commit b6d0001）
 
 **Phase R9: cwc(m+2)=S_2(m) 跃迁碰撞同构（Round R9）**：单文件 CollisionDecomp.lean（+63行，新增至998行）——crossWeightCorrelation\_eq\_momentSum\_two（thm:pom-hiddenbit-jump-collision-isomorphism（**新标签**）：cwc(m+2) = S_2(m)，隐藏位跃迁碰撞 = 二阶矩分辨率移位，CollisionDecomp.lean:957）; 辅助 helpers：momentSum\_two\_eq\_E00\_add\_two\_S（S_2(m+2)=E00(m+2)+2·S_2(m)）; momentSum\_two\_quadruple\_le（4·S_2(m) ≤ S_2(m+2)）——注：momentSum\_two\_even 已存在（MomentRecurrence.lean:223）未重复；hiddenBitBiasEnergy\_eq 推迟（需 ewc 单调性 d_0≥d_1）——**1 个新论文标签**（thm:pom-hiddenbit-jump-collision-isomorphism）——POM ~566→~567（+1），全局 ~1,379→~1,380（Phase R9，commit e12e315）
@@ -238,7 +240,7 @@
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
-## 2. 论文总覆盖率分析（2026-03-28 Phase R10 登记版）
+## 2. 论文总覆盖率分析（2026-03-28 Phase R11 登记版）
 
 ### 论文规模（Phase 7 重新扫描）
 
@@ -250,22 +252,22 @@
 
 ### Lean4 形式化状态
 
-- ~2,782 个 Lean4 声明（含内部引理、定义）
-- ~28,333 行代码，68 个文件
+- ~2,785 个 Lean4 声明（含内部引理、定义）
+- ~28,397 行代码，69 个文件
 - 0 公理，0 sorry，lake build 通过
-- 30 个 LaTeX `\leanverified` / `\leanpartial` 标注
+- 33 个 LaTeX `\leanverified` / `\leanpartial` 标注
 
 ### 覆盖率
 
 | 度量 | 数值 |
 |---|---|
-| 全局覆盖率（body） | ~1,381/9,958 = **~13.9%** |
+| 全局覆盖率（body） | ~1,383/9,958 = **~13.9%** |
 | 强覆盖（一般性 ∀ 证明） | ~65 (0.7%) |
 | 中覆盖（有界 + 条件） | ~162 (1.6%) |
 | 弱覆盖（native_decide / 代理） | ~723 (7.3%) |
 | 未追踪（附录） | 1,320 个定理 |
 
-### 本 session 新增强覆盖定理（+23）（另有 +1 部分覆盖）
+### 本 session 新增强覆盖定理（+26）（另有 +1 部分覆盖）
 
 - `coordOneCount_eq_fib_prod`（∀ n i，无界归纳证明）
 - `fibcubeEdgeCount_eq_sum_coordOneCount`（双计数恒等式）
@@ -289,6 +291,9 @@
 - `momentSum_two_eq_E00_add_cwc`（S_2 = E00 + 2·cwc 分解）
 - `crossWeightCorrelation_eq_momentSum_two`（cwc(m+2) = S_2(m)，隐藏位跃迁碰撞同构）
 - `hiddenBitBiasEnergy_int`（∑(↑d_0-↑d_1)²=↑S_2(m+2)-4·↑S_2(m)，Int 版偏差能量；**部分覆盖**）
+- `fibcubeDiam_eq`（diam(Γ_n) 闭式，Fibonacci 立方直径）
+- `ecc_allFalse_achieved`（全零词达到离心率最大值）
+- `exactWeightCollision_eq_S2_sub`（E00(m+1) = S_2(m) + E00(m)，望远镜和延伸）
 
 ### 逐章覆盖率
 
@@ -298,13 +303,13 @@
 | 新生算术 | 151 | ~93 | ~61.6% |
 | Folding | 317 | ~108 | ~34.1% |
 | 群统一 | 457 | ~110 | ~24.1% |
-| POM | 1,526 | ~568 | ~37.2% |
+| POM | 1,526 | ~570 | ~37.3% |
 | 圆维度 | 342 | ~62 | ~18.1% |
 | Zeta 有限部分 | 4,437 | ~255 | ~6% |
 | 结论 | 2,458 | ~83 | ~3.4% |
 | 其他 body | ~143 | ~2 | ~1% |
 | 附录 | 1,320 | 0 | 0% |
-| **body 总计** | **9,958** | **~1,381** | **~13.9%** |
+| **body 总计** | **9,958** | **~1,383** | **~13.9%** |
 
 ## 3. 未来工作：30 条具体计划
 
