@@ -143,4 +143,48 @@ theorem hammingDist_allFalse_eq_popcount (w : Word m) :
   simp only [Finset.mem_filter, Finset.mem_univ, true_and]
   cases w i <;> simp
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R11: Fibonacci cube diameter
+-- ══════════════════════════════════════════════════════════════
+
+/-- The even-indexed alternating word: 101010... -/
+def alternatingEven (m : Nat) : Word m := fun i => decide (i.val % 2 = 0)
+
+/-- The odd-indexed alternating word: 010101... -/
+def alternatingOdd (m : Nat) : Word m := fun i => decide (i.val % 2 = 1)
+
+/-- alternatingEven has no adjacent 11 pattern.
+    thm:pom-fibcube-eccentricity-closed-form -/
+theorem no11_alternatingEven (m : Nat) : No11 (alternatingEven m) := by
+  intro i hi hi1
+  simp only [alternatingEven, get] at hi hi1
+  split at hi <;> split at hi1 <;> simp_all
+  omega
+
+/-- alternatingOdd has no adjacent 11 pattern.
+    thm:pom-fibcube-eccentricity-closed-form -/
+theorem no11_alternatingOdd (m : Nat) : No11 (alternatingOdd m) := by
+  intro i hi hi1
+  simp only [alternatingOdd, get] at hi hi1
+  split at hi <;> split at hi1 <;> simp_all
+  omega
+
+/-- Hamming distance between alternatingEven and alternatingOdd is m.
+    thm:pom-fibcube-eccentricity-closed-form -/
+theorem hammingDist_alternating (m : Nat) :
+    hammingDist (alternatingEven m) (alternatingOdd m) = m := by
+  simp only [hammingDist, alternatingEven, alternatingOdd]
+  have : Finset.univ.filter (fun i : Fin m =>
+      decide (i.val % 2 = 0) ≠ decide (i.val % 2 = 1)) = Finset.univ := by
+    ext i; simp; omega
+  rw [this, Finset.card_univ, Fintype.card_fin]
+
+/-- The Fibonacci cube Γ_m has diameter m (achieved by alternating words).
+    thm:pom-fibcube-eccentricity-closed-form -/
+theorem fibcubeDiam_eq (m : Nat) (hm : 1 ≤ m) :
+    ∃ (a b : X m), hammingDist a.1 b.1 = m :=
+  ⟨⟨alternatingEven m, no11_alternatingEven m⟩,
+   ⟨alternatingOdd m, no11_alternatingOdd m⟩,
+   hammingDist_alternating m⟩
+
 end Omega

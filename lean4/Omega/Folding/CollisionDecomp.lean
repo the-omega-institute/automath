@@ -1024,4 +1024,12 @@ theorem hiddenBitBiasEnergy_int (m : Nat) :
       (momentSum 2 m : Int) := by norm_cast; exact hcross.trans hcwc
   linarith
 
+/-- E00(m+2) = S_2(m+2) - 2·S_2(m).
+    thm:pom-e00-telescoping -/
+theorem exactWeightCollision_eq_S2_sub (m : Nat) :
+    exactWeightCollision (m + 2) = momentSum 2 (m + 2) - 2 * momentSum 2 m := by
+  have h := momentSum_two_eq_E00_add_two_S m
+  have h4 := momentSum_two_quadruple_le m
+  omega
+
 end Omega

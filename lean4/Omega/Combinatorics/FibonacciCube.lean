@@ -1444,6 +1444,15 @@ theorem totalFibcubeFVector_closed_odd (n : Nat) (hn : n % 2 = 1) :
     3 * totalFibcubeFVector n = 2 ^ (n + 2) + 1 :=
   (totalFibcubeFVector_closed_aux n).2 hn
 
+/-- There exists a stable word with popcount = ⌊(m+1)/2⌋.
+    thm:pom-fibcube-eccentricity-closed-form -/
+theorem ecc_allFalse_achieved (m : Nat) (hm : 1 ≤ m) :
+    ∃ (x : X m), popcount x.1 = (m + 1) / 2 := by
+  obtain ⟨S, hS, hcard⟩ := pathIndSet_exists_max m hm
+  exact ⟨(xEquivPathIndSet m).invFun ⟨S, hS⟩,
+    show (wordSupport ((xEquivPathIndSet m).invFun ⟨S, hS⟩).1).card = (m + 1) / 2 by
+      simp only [popcount, xEquivPathIndSet, wordSupport_indSetToWord]; exact hcard⟩
+
 /-- 2*e(n) ≥ n*F(n) for n ≥ 3: linear average degree growth.
     cor:pom-fibcube-edge-closed-form -/
 theorem fibcubeEdgeCount_ge_n_fib (n : Nat) (hn : 3 ≤ n) :
