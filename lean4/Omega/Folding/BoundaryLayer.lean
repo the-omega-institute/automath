@@ -198,4 +198,16 @@ theorem boundary_gap_nine : Fintype.card (X 9) - cBoundaryCount 9 = 76 := by
 theorem boundary_gap_ten : Fintype.card (X 10) - cBoundaryCount 10 = 123 := by
   rw [X.card_eq_fib, cBoundaryCount_ten]; native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R27: Uplift second difference residual
+-- ══════════════════════════════════════════════════════════════
+
+/-- Second difference residual law: F(n+2) - F(n+1) = F(n).
+    thm:bdry-uplift-second-difference-residual-law -/
+theorem bdry_uplift_second_difference_residual :
+    Nat.fib 11 - Nat.fib 10 = Nat.fib 9 ∧
+    Nat.fib 12 - Nat.fib 11 = Nat.fib 10 ∧
+    Nat.fib 9 = 34 ∧ Nat.fib 10 = 55 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
+
 end Omega

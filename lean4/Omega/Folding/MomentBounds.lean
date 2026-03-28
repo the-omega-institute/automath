@@ -1002,4 +1002,22 @@ theorem collisionFreeCount_add_collision_eq_fib (m : Nat) :
     · intro h; omega
   rw [heq] at hcompl; linarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R27: Fiber multiplicity excess sum
+-- ══════════════════════════════════════════════════════════════
+
+/-- The excess sum: Σ(d(x)-1) = 2^m - |X_m|.
+    prop:pom-fiberMultiplicity-excess -/
+theorem fiberMultiplicity_excess_sum (m : Nat) :
+    (Finset.univ : Finset (X m)).sum (fun x => X.fiberMultiplicity x - 1) =
+    2 ^ m - Fintype.card (X m) := by
+  -- ∑(d-1) = ∑d - ∑1 = 2^m - |X_m|
+  have hle : ∀ x ∈ (Finset.univ : Finset (X m)), (fun _ : X m => 1) x ≤ X.fiberMultiplicity x :=
+    fun x _ => X.fiberMultiplicity_pos x
+  rw [show (fun x : X m => X.fiberMultiplicity x - 1) =
+    (fun x => X.fiberMultiplicity x - (fun _ => 1) x) from by ext; simp]
+  rw [Finset.sum_tsub_distrib _ hle]
+  rw [X.fiberMultiplicity_sum_eq_pow, Finset.sum_const, smul_eq_mul, mul_one,
+    Finset.card_univ, X.card_eq_fib]
+
 end Omega

@@ -972,4 +972,37 @@ theorem momentSum_two_strict_mono_all (m : Nat) :
   | 0 => rw [momentSum_two_zero, momentSum_two_one]; omega
   | m + 1 => exact momentSum_two_strict_mono' (m + 1) (by omega)
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R27: ewc partition of unity
+-- ══════════════════════════════════════════════════════════════
+
+/-- ewc(m, F_{m+3}-1) = 0: no word has weight exactly F_{m+3}-1.
+    prop:pom-ewc-partition-of-unity -/
+private theorem exactWeightCount_fib_sub_one (m : Nat) :
+    exactWeightCount m (Nat.fib (m + 3) - 1) = 0 := by
+  unfold exactWeightCount
+  apply Finset.card_eq_zero.mpr
+  apply Finset.filter_false_of_mem
+  intro w _
+  have hcomp := weight_complement w
+  -- weight(complement w) + weight w = F_{m+3} - 2
+  -- weight w ≤ F_{m+3} - 2
+  have hle : weight w ≤ Nat.fib (m + 3) - 2 := by
+    have := @Nat.zero_le (weight (complement w)); omega
+  have hF : 2 ≤ Nat.fib (m + 3) := by
+    calc Nat.fib (m + 3) ≥ Nat.fib 3 := Nat.fib_mono (by omega)
+      _ = 2 := by native_decide
+  omega
+
+/-- The ewc sum over [0, F_{m+3}-2] equals 2^m.
+    prop:pom-ewc-partition-of-unity -/
+theorem exactWeightCount_total_sum (m : Nat) :
+    (Finset.range (Nat.fib (m + 3) - 1)).sum (exactWeightCount m) = 2 ^ m := by
+  have hF : 1 ≤ Nat.fib (m + 3) := Nat.fib_pos.mpr (by omega)
+  have hkey := exactWeightCount_sum m
+  rw [show Nat.fib (m + 3) = Nat.fib (m + 3) - 1 + 1 from by omega,
+    Finset.sum_range_succ] at hkey
+  rw [exactWeightCount_fib_sub_one] at hkey
+  linarith
+
 end Omega
