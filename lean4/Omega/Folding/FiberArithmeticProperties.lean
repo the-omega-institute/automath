@@ -601,6 +601,61 @@ theorem stableSucc_injective (m : Nat) :
   intro a b h
   exact stableAdd_right_cancel (show stableAdd a stableOne = stableAdd b stableOne from h)
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R15: stablePred + iterate successor = add
+-- ══════════════════════════════════════════════════════════════
+
+/-- The predecessor function on X m.
+    def:successor-fold -/
+noncomputable def stablePred (x : X m) : X m := stableSub x stableOne
+
+/-- stableValue(pred(x)) = (stableValue(x) + F_{m+2} - 1) % F_{m+2}.
+    def:successor-fold -/
+theorem stableValue_stablePred (x : X m) (hm : 1 ≤ m) :
+    stableValue (stablePred x) =
+    (stableValue x + Nat.fib (m + 2) - 1) % Nat.fib (m + 2) := by
+  rw [stablePred, stableValue_stableSub, stableValue_stableOne_of_ge_one hm]
+  have hF : 1 ≤ Nat.fib (m + 2) := by have := (Nat.fib_pos (n := m + 2)).mpr (by omega); omega
+  congr 1; omega
+
+/-- pred(succ(x)) = x.
+    def:successor-fold -/
+theorem stablePred_stableSucc (x : X m) :
+    stablePred (stableSucc x) = x := by
+  simp only [stablePred, stableSucc]
+  exact stableSub_stableAdd_cancel x stableOne
+
+/-- succ(pred(x)) = x.
+    def:successor-fold -/
+theorem stableSucc_stablePred (x : X m) :
+    stableSucc (stablePred x) = x := by
+  simp only [stableSucc, stablePred]
+  exact stableSub_add_cancel x stableOne
+
+/-- Predecessor is injective.
+    def:successor-fold -/
+theorem stablePred_injective (m : Nat) :
+    Function.Injective (stablePred (m := m)) :=
+  Function.HasLeftInverse.injective ⟨stableSucc, stableSucc_stablePred⟩
+
+/-- stableValue of n-fold successor: sv(succ^n(x)) = (sv(x) + n) % F_{m+2}.
+    cor:add-from-successor -/
+theorem stableValue_stableSucc_iterate (x : X m) (n : Nat) (hm : 1 ≤ m) :
+    stableValue (stableSucc^[n] x) = (stableValue x + n) % Nat.fib (m + 2) := by
+  induction n with
+  | zero => simp [Nat.mod_eq_of_lt (stableValue_lt_fib x)]
+  | succ n ih =>
+    rw [Function.iterate_succ_apply', stableValue_stableSucc _ hm, ih]
+    rw [Nat.add_mod, Nat.mod_mod_of_dvd _ (dvd_refl _), ← Nat.add_mod]
+    ring_nf
+
+/-- n-fold successor equals stableAdd: succ^{sv(y)}(x) = x + y.
+    cor:add-from-successor -/
+theorem stableSucc_iterate_eq_stableAdd (x y : X m) (hm : 1 ≤ m) :
+    stableSucc^[stableValue y] x = stableAdd x y := by
+  apply eq_of_stableValue_eq
+  rw [stableValue_stableSucc_iterate x (stableValue y) hm, stableValue_stableAdd]
+
 end
 
 end X
