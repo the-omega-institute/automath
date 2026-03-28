@@ -13,26 +13,26 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,507 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 217 |
-| \leanpartial 标注数 | 7 |
-| 总标注数 | 224 |
-| 轮次 | R44（round_count=45） |
+| \leanverified 标注数 | 228 |
+| \leanpartial 标注数 | 8 |
+| 总标注数 | 236 |
+| 轮次 | R45（round_count=46） |
 
 **Phase 7 校准（R45 轮，2026-03-28）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 101 | 5.9% |
-| Emergent Arithmetic | 185 | 51 | 27.6% |
+| POM | 1,707 | 104 | 6.1% |
+| Emergent Arithmetic | 185 | 52 | 28.1% |
 | Folding | 337 | 36 | 10.7% |
-| Conclusion | 2,550 | 14 | 0.5% |
+| Conclusion | 2,550 | 19 | 0.7% |
 | Group Unification | 469 | 13 | 2.8% |
 | SPG | 129 | 6 | 4.7% |
 | Circle Dimension | 393 | 3 | 0.8% |
 | Zeta Finite Part | 4,524 | 0 | 0.0% |
 | Discussion | 67 | 0 | 0.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,507** | **224** | **2.1%** |
+| **合计（body）** | **10,507** | **233** | **2.2%** |
 
 ### 1.2 已完成模块
 
@@ -134,6 +134,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R45: 纤维 ewc 分解和 + X6 CRT 分裂 + 隐藏位密度极限（Round R45）**：三文件 FiberWeightCount.lean（:752）+ FiberRing.lean（:219-224）+ Entropy.lean（:757）——fiberMultiplicity\_eq\_ewc\_sum（thm:pom-fiber-ewc-sum（新标签，tex 无环境，标注于 prop:pom-power-sum-hankel-psd 深化位置）：d(x) = ewc(sv(x)) + ewc(sv(x)+F_{m+2})，:752）; X6\_decomposition（cor:crt-factorization（深化，m=6 实例）：X 6 ≃+* ZMod 3 × ZMod 7，FiberRing.lean:219）; X6\_crt\_split（cor:crt-factorization + thm:conclusion-window6-visible-crt-arithmetic-phase-space（已由 formalizer 541b890 标注）：nonemptiness witness，:224）; hiddenBitDensity\_tendsto\_third（cor:pom-hidden-bit-entropy（**新标签**，tex 有环境，双重复出现标注：subsec__pom-entropy-maxent.tex + subsec__pom-overflow-global.tex）：B(m)/2^m → 1/3，Entropy.lean:757）——注：formalizer 541b890 另行标注 5 个（X6\_crt\_split@conclusion, crt\_idempotent\_7/15/product/sum）——**1 个新论文标签计入覆盖率**（cor:pom-hidden-bit-entropy；thm:pom-fiber-ewc-sum tex 无环境，cor:crt-factorization 已注册新深化）——POM 覆盖率：~1,447（不变），标注 232→236（+4 registrar，总含 formalizer 232→232+4=236），commit f557436
+
 **Phase R44: 折叠商等价 + 矩 wcc alias + Binet alias（Round R44）**：三文件 FiberArithmeticProperties.lean（:799-813）+ MomentRecurrence.lean（:110）+ Entropy.lean（:449）——foldSetoid（def:fold-setoid（新标签，tex 无环境，标注于 prop:op-algebra-fold-quotient-universal 深化位置）：Word m / Fold 等价关系定义）; foldQuotientEquiv（thm:fold-quotient-equiv（新标签，同上位置）：Quotient(foldSetoid) ≃ X m，Equiv.ofBijective）; momentSum\_eq\_weightCongruenceCount\_pow（alias:momentSum\_eq\_congr\_pow\_sum，不新增标注，已覆盖）; fib\_nearest\_integer\_of\_pos（alias:fib\_nearest\_integer，不新增标注，已覆盖）——**0 个新论文标签计入覆盖率**（两新标签 tex 无对应环境，两 alias 重名无须重标）——注：formalizer c762bfc 另行新增 2 个标注（cassini\_gap\_33\_factorization, paper\_orbits\_preserve\_val）——全局 ~1,447（不变），标注 229→231（+2 \leanverified），commit 470f3f2
 
 **Phase R43: 矩基数下界 + 折叠指标定义/单调性 + BinFold m=8 压缩缺口（Round R43）**：三文件 MomentBounds.lean（:1044）+ Entropy.lean（:715-746）+ BinFold.lean（:313-326）——momentSum\_ge\_card\_fintype（prop:pom-moment-ge-card（新标签，tex 无环境，标注于 prop:pom-moment-congruence-q 深化位置）：|X_m| ≤ S_q(m)，:1044）; foldIndex（def:pom-fold-index（深化）：I_m = 2^m/F_{m+2} 定义，:715）; foldIndex\_gt\_one（prop:fold-index-gt-one（新标签）：I_m > 1 for m≥2（条件修正：非 m≥1），:728）; foldIndex\_strict\_mono\_of\_ge\_one（prop:fold-index-strict-mono（新标签）：I_m 严格单调 for m≥1，:735）; local\_index\_ne\_global\_compression\_eight（thm:conclusion-window6-local-index-global-compression-separation（深化，m=8）：max_mult×|X_8| ≠ 2^8，BinFold.lean:313）; index\_compression\_gap\_eight（同上（深化，m=8）：gap = 74，:326）——**0 个新论文标签计入覆盖率**（三新标签 tex 无对应环境；def:pom-fold-index、thm:conclusion-window6-local-index-global-compression-separation 已注册，深化）——工程变更：批量迁移所有旧格式 \leanverified\{path:line\}\{name\} → \leanverified\{name\}（22处，符合稳定标识符规范）——全局 ~1,447（不变），标注 218→224（+6 新增，-22 格式迁移不改总数），commit c337529
