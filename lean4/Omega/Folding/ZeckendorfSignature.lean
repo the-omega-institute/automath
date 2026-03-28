@@ -515,4 +515,88 @@ theorem zeckendorf_no_carry_gap2_instances :
     Nat.zeckendorf (Nat.fib 2 + Nat.fib 5) = [5, 2] ∧
     Nat.zeckendorf (Nat.fib 3 + Nat.fib 6) = [6, 3] := by native_decide
 
+/-- Fibonacci carry identity: F_{n+2} + 2·F_n + F_{n-3} = F_{n+3} + F_{n-1} for n ≥ 5.
+    lem:pom-fib-15to16-carry -/
+theorem fib_15to16_carry (n : Nat) (hn : 5 ≤ n) :
+    Nat.fib (n + 2) + 2 * Nat.fib n + Nat.fib (n - 3) =
+    Nat.fib (n + 3) + Nat.fib (n - 1) := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
+  rw [show 5 + k - 3 = k + 2 from by omega, show 5 + k - 1 = k + 4 from by omega]
+  have e1 : Nat.fib (5 + k + 2) = Nat.fib (k + 7) := by ring_nf
+  have e2 : Nat.fib (5 + k + 3) = Nat.fib (k + 8) := by ring_nf
+  have e3 : Nat.fib (5 + k) = Nat.fib (k + 5) := by ring_nf
+  rw [e1, e2, e3]
+  -- Use fib_succ_succ' which gives Nat.fib (n+2) = Nat.fib (n+1) + Nat.fib n
+  -- with properly normalized indices
+  have h4 : Nat.fib (k + 4) = Nat.fib (k + 3) + Nat.fib (k + 2) :=
+    Omega.fib_succ_succ' (k + 2)
+  have h5 : Nat.fib (k + 5) = Nat.fib (k + 4) + Nat.fib (k + 3) :=
+    Omega.fib_succ_succ' (k + 3)
+  have h6 : Nat.fib (k + 6) = Nat.fib (k + 5) + Nat.fib (k + 4) :=
+    Omega.fib_succ_succ' (k + 4)
+  have h7 : Nat.fib (k + 7) = Nat.fib (k + 6) + Nat.fib (k + 5) :=
+    Omega.fib_succ_succ' (k + 5)
+  have h8 : Nat.fib (k + 8) = Nat.fib (k + 7) + Nat.fib (k + 6) :=
+    Omega.fib_succ_succ' (k + 6)
+  omega
+
+/-- Zeckendorf representation of 15·F_n for n ≥ 8.
+    thm:pom-zeckendorf-15fn-general -/
+theorem zeckendorf_15Fn_general (n : Nat) (hn : 8 ≤ n) :
+    15 * Nat.fib n = Nat.fib (n + 5) + Nat.fib (n + 2) + Nat.fib n +
+                     Nat.fib (n - 3) + Nat.fib (n - 6) := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
+  show 15 * Nat.fib (8 + k) = Nat.fib (8 + k + 5) + Nat.fib (8 + k + 2) +
+    Nat.fib (8 + k) + Nat.fib (8 + k - 3) + Nat.fib (8 + k - 6)
+  rw [show 8 + k - 3 = k + 5 from by omega, show 8 + k - 6 = k + 2 from by omega]
+  have e1 : Nat.fib (8 + k) = Nat.fib (k + 8) := by ring_nf
+  have e2 : Nat.fib (8 + k + 5) = Nat.fib (k + 13) := by ring_nf
+  have e3 : Nat.fib (8 + k + 2) = Nat.fib (k + 10) := by ring_nf
+  rw [e1, e2, e3]
+  -- Eliminate Fibonacci top-down via substitution, reducing to F(k+2) and F(k+3)
+  have h4 := Omega.fib_succ_succ' (k + 2)
+  have h5 := Omega.fib_succ_succ' (k + 3)
+  have h6 := Omega.fib_succ_succ' (k + 4)
+  have h7 := Omega.fib_succ_succ' (k + 5)
+  have h8 := Omega.fib_succ_succ' (k + 6)
+  have h9 := Omega.fib_succ_succ' (k + 7)
+  have h10 := Omega.fib_succ_succ' (k + 8)
+  have h11 := Omega.fib_succ_succ' (k + 9)
+  have h12 := Omega.fib_succ_succ' (k + 10)
+  have h13 := Omega.fib_succ_succ' (k + 11)
+  -- Substitute upward: eliminate F(k+13) down to F(k+2), F(k+3)
+  rw [h13, h12, h11, h10, h9, h8, h7, h6, h5, h4]
+  ring
+
+/-- Zeckendorf representation of 16·F_n for n ≥ 8.
+    thm:pom-zeckendorf-16fn-general -/
+theorem zeckendorf_16Fn_general (n : Nat) (hn : 8 ≤ n) :
+    16 * Nat.fib n = Nat.fib (n + 5) + Nat.fib (n + 3) +
+                     Nat.fib (n - 1) + Nat.fib (n - 6) := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
+  show 16 * Nat.fib (8 + k) = Nat.fib (8 + k + 5) + Nat.fib (8 + k + 3) +
+    Nat.fib (8 + k - 1) + Nat.fib (8 + k - 6)
+  rw [show 8 + k - 1 = k + 7 from by omega, show 8 + k - 6 = k + 2 from by omega]
+  have e1 : Nat.fib (8 + k) = Nat.fib (k + 8) := by ring_nf
+  have e2 : Nat.fib (8 + k + 5) = Nat.fib (k + 13) := by ring_nf
+  have e3 : Nat.fib (8 + k + 3) = Nat.fib (k + 11) := by ring_nf
+  rw [e1, e2, e3]
+  have h4 := Omega.fib_succ_succ' (k + 2)
+  have h5 := Omega.fib_succ_succ' (k + 3)
+  have h6 := Omega.fib_succ_succ' (k + 4)
+  have h7 := Omega.fib_succ_succ' (k + 5)
+  have h8 := Omega.fib_succ_succ' (k + 6)
+  have h9 := Omega.fib_succ_succ' (k + 7)
+  have h10 := Omega.fib_succ_succ' (k + 8)
+  have h11 := Omega.fib_succ_succ' (k + 9)
+  have h12 := Omega.fib_succ_succ' (k + 10)
+  have h13 := Omega.fib_succ_succ' (k + 11)
+  rw [h13, h12, h11, h10, h9, h8, h7, h6, h5, h4]
+  ring
+
+/-- Zeckendorf representation of 15·F_4 = 45 = F_9 + F_6 + F_4 at m = 6.
+    thm:pom-zeckendorf-resolution-lock-m6 -/
+theorem zeckendorf_resolution_lock_m6 :
+    15 * Nat.fib 4 = Nat.fib 9 + Nat.fib 6 + Nat.fib 4 := by native_decide
+
 end Omega.ZeckSig
