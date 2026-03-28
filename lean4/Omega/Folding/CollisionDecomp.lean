@@ -991,8 +991,37 @@ private theorem momentSum_two_quadruple_le (m : Nat) :
       -- i.e. 4S(m) ≤ 2S(m+2) + 2S(m+1), which follows from ih0: 4S(m) ≤ S(m+2)
       linarith
 
--- Phase R9 theorem 3 (hiddenBitBiasEnergy_eq) deferred:
--- Requires `fiberHiddenBitCount 1 x ≤ fiberHiddenBitCount 0 x` (ewc monotonicity under shift)
--- which needs `exactWeightCount m n ≥ exactWeightCount m (n + Nat.fib (m + 2))` — a separate lemma.
+-- ══════════════════════════════════════════════════════════════
+-- Phase R10: hidden-bit bias energy
+-- ══════════════════════════════════════════════════════════════
+
+/-- Hidden-bit bias energy (Int version):
+    ∑ (↑d_0 - ↑d_1)² = ↑S_2(m+2) - 4·↑S_2(m).
+    thm:pom-hiddenbit-bias-energy-identity -/
+theorem hiddenBitBiasEnergy_int (m : Nat) :
+    ∑ x : X (m + 2),
+      ((fiberHiddenBitCount 0 x : Int) - fiberHiddenBitCount 1 x) ^ 2 =
+    (momentSum 2 (m + 2) : Int) - 4 * momentSum 2 m := by
+  -- (a-b)^2 + 4ab = (a+b)^2 in ℤ, rearranged
+  have hcross := fiberHiddenBitCount_cross_eq_cwc (m + 2)
+  have hcwc := crossWeightCorrelation_eq_momentSum_two m
+  -- Rewrite: ∑(a-b)² = ∑(a+b)² - 4·∑(ab) using Int arithmetic
+  -- Step 1: ∑(a-b)² + 4·∑(ab) = ∑(a+b)² (pointwise (a-b)²+4ab=(a+b)²)
+  have hadd : ∑ x : X (m + 2),
+      ((fiberHiddenBitCount 0 x : Int) - fiberHiddenBitCount 1 x) ^ 2 +
+      4 * ∑ x : X (m + 2), ((fiberHiddenBitCount 0 x : Int) * fiberHiddenBitCount 1 x) =
+      ∑ x : X (m + 2), (X.fiberMultiplicity x : Int) ^ 2 := by
+    rw [Finset.mul_sum, ← Finset.sum_add_distrib]
+    congr 1; ext x
+    have hsplit := fiberMultiplicity_split_by_hiddenBit x
+    push_cast [hsplit]; ring
+  -- Step 2: ∑ d² = S_2 and ∑ d_0·d_1 = S_2(m) in ℤ
+  -- ∑ ↑(fM x)^2 = ↑(∑ fM(x)^2) = ↑S_2
+  have hS : (∑ x : X (m + 2), (X.fiberMultiplicity x : Int) ^ 2) =
+      (momentSum 2 (m + 2) : Int) := by
+    norm_cast
+  have hP : (∑ x : X (m + 2), (fiberHiddenBitCount 0 x : Int) * fiberHiddenBitCount 1 x) =
+      (momentSum 2 m : Int) := by norm_cast; exact hcross.trans hcwc
+  linarith
 
 end Omega

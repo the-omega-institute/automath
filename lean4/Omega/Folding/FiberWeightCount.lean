@@ -692,6 +692,7 @@ theorem fiberHiddenBitCount_one_eq_ewc (x : X m) :
       exact X.mem_fiber.mp ((mem_fiber_iff_weight_mod x w).mpr hmod)
     · unfold hiddenBit; simp only [show Nat.fib (m + 2) ≤ weight w from by omega, ite_true]
 
+-- Phase R10 theorem 2: d_0 ≥ d_1 via ewc shift monotonicity — deferred (complex recursion)
 -- Phase R5: hiddenBit sum, weight decomp, S2 expand
 -- ══════════════════════════════════════════════════════════════
 
