@@ -112,6 +112,7 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R28: m=7 指数-压缩率分离深化 + Fibonacci Cassini 统一恒等式（Round R28）**：两文件 BinFold.lean（:283-294）+ FibonacciPolynomial.lean（:549）——local\_index\_ne\_global\_compression\_seven（thm:conclusion-window6-local-index-global-compression-separation（深化至 m=7）：cBinFiberMax(7)×|X_7| ≠ 2^7，BinFold.lean:286）; index\_compression\_gap\_seven（thm:conclusion-window6-local-index-global-compression-separation（深化至 m=7）：gap(7)=42，BinFold.lean:292）; fib\_product\_cassini（prop:pom-fib-cassini-unified（**新标签**）：F_n·F_{n+2}=F_{n+1}²+(-1)^{n+1} 在 ℤ 中的统一 Cassini 恒等式，FibonacciPolynomial.lean:549）——**1 个新论文标签**（prop:pom-fib-cassini-unified；thm:conclusion-window6-local-index-global-compression-separation 已注册，深化）——结论深化（+0），POM ~587→~588（+1），全局 ~1,434→~1,435（+1），标注 126→129，commit 3d2723b
 **Phase R27: ★ 里程碑100+定理 — 群统一 uplift 残余律 + POM 重量计数单位分解 + 纤维超量和（Round R27）**：三文件 BoundaryLayer.lean（:204）+ MomentRecurrence.lean（:992）+ MomentBounds.lean（:1011）——bdry\_uplift\_second\_difference\_residual（thm:bdry-uplift-second-difference-residual-law（**群统一章新标签**）：Δ_7^(2)=34, Δ_8^(2)=55，boundary uplift 三层二阶差分残余律，BoundaryLayer.lean:204）; exactWeightCount\_total\_sum（prop:pom-ewc-partition-of-unity（**新标签**）：∑EWC(m,k)=2^m，精确重量计数单位分解，标注于 prop:pom-power-sum-hankel-psd，MomentRecurrence.lean:992）; fiberMultiplicity\_excess\_sum（prop:pom-fiberMultiplicity-excess（**新标签**）：∑(d_m(x)-1)=2^m-|X_m|，纤维超量和恒等式，标注于 prop:pom-power-sum-hankel-psd，MomentBounds.lean:1011）——**3 个新论文标签**（thm:bdry-uplift-second-difference-residual-law, prop:pom-ewc-partition-of-unity, prop:pom-fiberMultiplicity-excess）——群统一 ~111→~112（+1），POM ~585→~587（+2），全局 ~1,431→~1,434（+3），commit e37c838
 **Phase R26: 群统一边界计数 m=9,10 扩展 + detPoly Cassini Fibonacci 特化（Round R26）**：两文件 BoundaryLayer.lean（:176-200）+ FibonacciPolynomial.lean（:527）——cBoundaryCount\_nine（prop:bdry-fib-square-identity（深化）：b(9)=F(7)=13，BoundaryLayer.lean:176）; cBoundaryCount\_ten（prop:bdry-fib-square-identity：b(10)=F(8)=21，:182）; cBoundaryCount\_eq\_fib\_extended（prop:bdry-fib-square-identity：b(m)=F(m-2) 扩展至 m=9,10，:189）; boundary\_gap\_nine（bridge：gap(9)=76，:191）; boundary\_gap\_ten（bridge：gap(10)=123，:200）; fib\_odd\_cassini（prop:pom-Lk-det-cassini-pell（深化）：D_k(1)=F(2k+1) 的奇指标 Cassini 特化，FibonacciPolynomial.lean:527）——**0 个新论文标签**（两标签均已注册，bridge 不计入；本轮纯深化）——全局 ~1,431（不变），标注 119→123，commit b127020
 **Phase R25: 三重刚性尺度 m=7 扩展 + detPoly 严格对数凸性与单调性（Round R25）**：两文件 BinFold.lean（:262-280）+ FibonacciPolynomial.lean（:498, :509）——cBinFiberMax\_seven（cor:conclusion-window6-three-rigidity-scales（深化至 m=7）：BinFold m=7 最大纤维多重度，BinFold.lean:262）; cBinFiberMin\_seven（cor:conclusion-window6-three-rigidity-scales：BinFold m=7 最小纤维多重度，:270）; three\_rigidity\_scales\_seven（cor:conclusion-window6-three-rigidity-scales：m=7 三重刚性尺度联合证书，:280）; detPoly\_eval\_strict\_log\_convex（cor:pom-Lk-det-logconvex-ratio：D_k(t)^2 < D_{k-1}(t)·D_{k+1}(t) for t>0，严格对数凸性，FibonacciPolynomial.lean:498）; detPoly\_eval\_strict\_mono（cor:pom-Lk-det-logconvex-ratio：比值序列严格单调递减，:509）——**0 个新论文标签**（两标签均已注册，本轮为深化）——全局 ~1,431（不变），标注 114→119，commit 4cad801
@@ -267,7 +268,7 @@
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
-## 2. 论文总覆盖率分析（2026-03-28 Phase R27 登记版）
+## 2. 论文总覆盖率分析（2026-03-28 Phase R28 登记版）
 
 ### 论文规模（Phase 7 重新扫描）
 
@@ -282,13 +283,13 @@
 - ~3,220 个 Lean4 声明（含内部引理、定义）
 - ~29,413 行代码，69 个文件
 - 0 公理，0 sorry，lake build 通过
-- 126 个 LaTeX `\leanverified` / `\leanpartial` 标注
+- 129 个 LaTeX `\leanverified` / `\leanpartial` 标注
 
 ### 覆盖率
 
 | 度量 | 数值 |
 |---|---|
-| 全局覆盖率（body） | ~1,434/9,958 = **~14.4%** |
+| 全局覆盖率（body） | ~1,435/9,958 = **~14.4%** |
 | 强覆盖（一般性 ∀ 证明） | ~65 (0.7%) |
 | 中覆盖（有界 + 条件） | ~162 (1.6%) |
 | 弱覆盖（native_decide / 代理） | ~723 (7.3%) |
@@ -368,13 +369,13 @@
 | 新生算术 | 151 | ~112 | ~74.2% |
 | Folding | 317 | ~119 | ~37.5% |
 | 群统一 | 457 | ~112 | ~24.5% |
-| POM | 1,526 | ~587 | ~38.5% |
+| POM | 1,526 | ~588 | ~38.5% |
 | 圆维度 | 342 | ~62 | ~18.1% |
 | Zeta 有限部分 | 4,437 | ~255 | ~6% |
 | 结论 | 2,458 | ~85 | ~3.5% |
 | 其他 body | ~143 | ~2 | ~1% |
 | 附录 | 1,320 | 0 | 0% |
-| **body 总计** | **9,958** | **~1,434** | **~14.4%** |
+| **body 总计** | **9,958** | **~1,435** | **~14.4%** |
 
 ## 3. 未来工作：30 条具体计划
 
