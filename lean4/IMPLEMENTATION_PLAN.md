@@ -112,6 +112,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R34: A4 迹递推一般定理 + S3(13) 纯递推值（Round R34）**：两文件 CollisionZeta.lean（:654-691）+ CCSPrime8Split.lean（:742-749）——collisionKernel4\_trace\_recurrence（prop:pom-s4-recurrence（深化，一般性迹递推）：tr(A_4^{n+5})=2·tr(A_4^{n+4})+7·tr(A_4^{n+3})+2·tr(A_4^{n+1})-2·tr(A_4^n) for all n，Cayley-Hamilton 乘以 A^n + 迹线性性，CollisionZeta.lean:654）; momentSum\_three\_thirteen（prop:pom-s3-recurrence（深化）：S_3(13)=2170784 by pure recurrence，CCSPrime8Split.lean:742）——**0 个新论文标签**（两标签均已注册；本轮为深化覆盖）——注：popcount\_le\_half 已存在（FibonacciCube.lean:437，formalizer 确认）——POM ~591（不变，深化），全局 ~1,443（不变），标注 145→147（+2 \leanverified），commit dfd06ba
+
 **Phase R33: S3 递推唯一性 + Aut(N^r)≅S_r（Circle Dimension 新标签）（Round R33）**：两文件 CCSPrime8Split.lean（:705-734）+ CircleDimension.lean（:276-294）——momentSum\_three\_determined（prop:pom-s3-recurrence（深化，升级为完整 \leanverified）：S_3 递推唯一性，初值修正 f(0)=S_3(0)=1，CCSPrime8Split.lean:705）; semiring\_aut\_is\_perm（cor:cdim-nr-nd-semiring-hom-inj-auto（**Circle Dimension 新标签**）：Aut_Semiring(NN^r)≅S_r，CircleDimension.lean:276）——**1 个新论文标签**（cor:cdim-nr-nd-semiring-hom-inj-auto；prop:pom-s3-recurrence 已注册，\leanpartial → \leanverified 升级 + momentSum_three_determined 追加）——注：基值修正 S_3(0)=1（spec 有误，论文命题从 m=2 起陈述，无需修改正文）——圆维度 ~64→~65（+1），全局 ~1,442→~1,443（+1），标注 143→145（\leanpartial 替换为 2×\leanverified + 新增 1），commit a757898
 **Phase R32: 幂等分割刻画（Circle Dimension 新标签）+ 边界平方恒等式深化 + A4 迹幂（Round R32）**：三文件 CircleDimension.lean（:255-270）+ BoundaryLayer.lean（:217-222）+ CollisionZeta.lean（:655-660）——semiring\_hom\_determines\_idempotents（prop:cdim-nr-hom-idempotent-splitting（**Circle Dimension 新标签**）：Hom(NN^r,S) 与幂等族的自然双射，CircleDimension.lean:255）; cBoundaryCount\_square\_identity（prop:bdry-fib-square-identity（深化，条件 3≤m≤5）：b(2m-1)=b(m)²+b(m+1)²，BoundaryLayer.lean:217）; collisionKernel4\_trace\_pow\_5（def:pom-collision-zeta-a4（深化）：tr(A_4^5)=812，CollisionZeta.lean:657）; collisionKernel4\_trace\_pow\_6（def:pom-collision-zeta-a4（深化）：tr(A_4^6)=3294，:660）——**1 个新论文标签**（prop:cdim-nr-hom-idempotent-splitting；其余已注册，深化）——注：A4 迹幂修正值 tr(A^5)=812, tr(A^6)=3294（spec 值 642/2434 有误，generated table 已正确）——圆维度 ~63→~64（+1），全局 ~1,441→~1,442（+1），标注 139→143，commit fb9ccd3
 **Phase R31: 迭代复合两层读出 + 乘法后继内生 + Fibonacci cube 半径图心（Round R31）**：两文件 FiberArithmeticProperties.lean（:728-741）+ FibonacciCube.lean（:1822-1841）——iterate\_add\_comp（thm:composition-two-layer（**新生算术新标签**）：ι_0(m+n)=ι_0(m)∘ι_0(n)，迭代加法复合，:728）; iterate\_iterate\_mul（thm:composition-two-layer：ι_1(mn)=ι_1(m)∘ι_1(n)，迭代乘法复合，:733）; stableMul\_from\_successor（thm:mul-from-successor（**新生算术新标签**）：c⊗_S d = c⊗d，乘法由后继迭代内生，:739）; max\_popcount\_eq（cor:pom-fibcube-radius-center-classification（**POM 新标签**）：最大 popcount 闭式，FibonacciCube.lean:1822）——**3 个新论文标签**（thm:composition-two-layer, thm:mul-from-successor, cor:pom-fibcube-radius-center-classification）——新生算术 ~112→~114（+2），POM ~590→~591（+1），全局 ~1,438→~1,441（+3），标注 135→139，commit 4731e2d
@@ -273,7 +275,7 @@
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
-## 2. 论文总覆盖率分析（2026-03-28 Phase R33 登记版）
+## 2. 论文总覆盖率分析（2026-03-28 Phase R34 登记版）
 
 ### 论文规模（Phase 7 重新扫描）
 
@@ -288,7 +290,7 @@
 - ~3,220 个 Lean4 声明（含内部引理、定义）
 - ~29,413 行代码，69 个文件
 - 0 公理，0 sorry，lake build 通过
-- 145 个 LaTeX `\leanverified` / `\leanpartial` 标注
+- 147 个 LaTeX `\leanverified` / `\leanpartial` 标注
 
 ### 覆盖率
 
