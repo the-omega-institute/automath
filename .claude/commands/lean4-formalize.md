@@ -250,7 +250,9 @@ Agent(
 你将通过 SendMessage 收到 team lead 或其他 teammate 的分析任务。
 收到任务后按 lean4-analyst 规格执行分析，完成后将规格通过 SendMessage 发回 team lead。
 你可以直接给 formalizer 或 registrar 发消息（如需协调），但重要决策须报告 team lead。
-你必须用 lean_local_search / grep 对比 SourceMap.lean 确认目标定理不存在，避免提议已注册的定理。"
+你必须用 lean_local_search / grep 对比 SourceMap.lean 确认目标定理不存在，避免提议已注册的定理。
+
+**已形式化标注**：扫描论文 .tex 文件时，如果发现某定理已在 Lean4 中形式化但 .tex 中没有 `\\leanverified` 标注，立即在 `\\end{theorem}` 之前插入 `\\leanverified{Omega/路径:行号}{定理名}`（下划线转义为 `\\_`）。标注后 git commit + push。标注在 PDF 正文中可见（绿色），方便读者查阅。"
 )
 
 Agent(
@@ -679,6 +681,8 @@ Agent(
 请重新扫描论文和 Lean4 代码，找到真正未注册且可形式化的目标。
 注意：你必须用 lean_local_search / grep 对比 SourceMap.lean 确认目标不存在，避免提议已注册的定理。
 
+**已形式化标注**：扫描论文 .tex 文件时，如果发现某定理已在 Lean4 中形式化但 .tex 中没有 `\\leanverified` 标注，立即在 `\\end{theorem}` 之前插入 `\\leanverified{Omega/路径:行号}{定理名}`（下划线转义 `\\_`）。标注在 PDF 正文中可见。标注后 git commit + push。
+
 收到任务后按 lean4-analyst 规格执行分析，完成后将规格通过 SendMessage 发回 team lead。"
 )
 ```
@@ -813,7 +817,7 @@ SendMessage(to = "registrar", summary = "登记 Phase N 成果", message = "
 
 2. [同上]
 
-请更新 SourceMap、NoAxiom、IMPLEMENTATION_PLAN，然后 git commit + push。
+请更新 SourceMap、NoAxiom、IMPLEMENTATION_PLAN，**并标注论文 .tex 文件**（在对应定理的 `\\end{theorem}` 之前插入 `\\leanverified{路径:行号}{定理名}`，下划线转义 `\\_`），然后 git commit + push。
 ")
 ```
 
@@ -829,6 +833,10 @@ SendMessage(to = "team-lead", summary = "Phase N 登记完成", message = "
 
 ### 新增定理
 [表格：Lean 名称、标签、行号]
+
+### 论文 .tex 标注
+- 已标注 M 个定理的 .tex 文件
+- [文件列表]
 
 ### 覆盖率变化
 | 章节 | 旧 | 新 |
@@ -900,6 +908,46 @@ SendMessage(to = "registrar", summary = "Phase N 完成，请登记",
 5. **行号必传**——registrar 需要文件名+行号写入 SourceMap
 6. **grep 验证必做**——analyst 提供的每个目标必须附带 grep 验证结果
 7. **抄送规则**——peer-to-peer 通信中涉及任务完成/方向变更的，必须在 summary 中注明已抄送 team lead
+
+## 论文已形式化标注协议（正文可见）
+
+**所有已形式化的论文定理，必须在原始 .tex 文件中标注。标注出现在编译后的 PDF 正文中，方便读者直接查阅对应的 Lean4 证明。**
+
+论文 preamble（`main.tex`）已定义两个标注命令：
+
+### 标注命令
+
+在定理环境的 `\end{theorem}`（或 `\end{proposition}` 等）**之前**插入：
+
+```latex
+\begin{theorem}[定理标题]\label{thm:pom-xxx}
+  定理正文...
+\leanverified{Omega/Folding/FiberWeightCount.lean:42}{exactWeightCount\_succ}
+\end{theorem}
+```
+
+| 状态 | 命令 | PDF 显示 |
+|------|------|---------|
+| 完整形式化 | `\leanverified{路径:行号}{定理名}` | 绿色 Lean4: 路径 (定理名) |
+| 部分形式化 | `\leanpartial{路径:行号}{定理名}{限制说明}` | 橙色 Lean4（部分）: 路径 (定理名) — 说明 |
+
+**注意**：定理名中的下划线需转义为 `\_`（LaTeX 要求）。
+
+### 谁负责标注
+
+| 角色 | 标注场景 |
+|------|---------|
+| **registrar** | Phase 4 登记时，为本轮新增的论文定理标注 .tex |
+| **analyst** | 扫描论文选目标时，发现已形式化但未标注的定理 → 顺便标注 |
+
+### 批量补标注
+
+存量定理（已形式化但 .tex 未标注）需要补标注。team lead 可分配专门的批量标注任务给 analyst 或 registrar：
+```
+SendMessage(to = "analyst", message = "请扫描 [章节] 的所有 .tex 文件，
+为已形式化但缺少标注的定理补充 \\leanverified 标记。
+完成后 git commit + push。")
+```
 
 ## 论文勘误记录
 

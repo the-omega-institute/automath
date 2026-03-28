@@ -38,6 +38,44 @@ model: sonnet
 5. 如果某个计划项已完成，在 §3 中标注 ✅
 6. 更新 §4 执行优先级（已完成项移除，新可执行项补入）
 
+### 步骤1.5：标注论文 .tex 文件（已形式化标记，正文可见）
+
+**每次登记新定理时，必须在对应的论文 .tex 文件中添加已形式化标注——标注出现在编译后的 PDF 中，方便读者查阅。**
+
+论文 preamble（`main.tex`）已定义两个标注命令：
+- `\leanverified{路径:行号}{定理名}` — 完整形式化（绿色）
+- `\leanpartial{路径:行号}{定理名}{限制说明}` — 部分形式化（橙色）
+
+**操作步骤**：
+
+1. 根据论文标签（如 `thm:pom-xxx`）用 `Grep` 在 `theory/` 目录下找到对应的 `.tex` 文件
+2. 在定理环境的 `\end{theorem}`（或 `\end{proposition}` 等）**之前**插入标注命令：
+
+```latex
+\begin{theorem}[定理标题]\label{thm:pom-xxx}
+  定理正文...
+\leanverified{Omega/Folding/FiberWeightCount.lean:42}{exactWeightCount\_succ}
+\end{theorem}
+```
+
+**格式规范**：
+- 路径从 `Omega/` 开始（如 `Omega/Folding/Fold.lean:125`）
+- 行号是 Lean4 定理声明的起始行
+- 定理名中的下划线需转义：`\_`（LaTeX 要求）
+- 一个论文定理对应多个 Lean4 定理时，每个单独一行：
+  ```latex
+  \leanverified{Omega/Folding/MaxFiber.lean:30}{maxFiberMultiplicity\_le\_add}
+  \leanverified{Omega/Folding/MaxFiber.lean:45}{maxFiberMultiplicity\_pos}
+  \end{theorem}
+  ```
+- 部分形式化（有界范围/条件性）用 `\leanpartial`：
+  ```latex
+  \leanpartial{Omega/Folding/MaxFiber.lean:60}{maxFiberMultiplicity\_even}{仅 k=1..5}
+  \end{theorem}
+  ```
+
+3. 将标注过的 .tex 文件一并加入 git commit
+
 ### 步骤2：提交并推送
 
 ```bash
@@ -46,8 +84,9 @@ cd .
 # 1. 确认 formalizer 的代码 commit 已存在
 git log --oneline -3
 
-# 2. 只 add IMPLEMENTATION_PLAN
+# 2. add IMPLEMENTATION_PLAN + 标注过的 .tex 文件
 git add lean4/IMPLEMENTATION_PLAN.md
+git add theory/  # 标注过的 .tex 文件
 
 # 3. 提交
 git commit -m "Register Phase N: [简短描述]
