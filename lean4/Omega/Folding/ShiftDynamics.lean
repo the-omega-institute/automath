@@ -329,6 +329,14 @@ theorem lucasNum_double (n : Nat) (hn : 1 ≤ n) :
     rw [show k + 1 + 1 = k + 2 from by omega] at *
     rw [hrec1, hpow]; nlinarith
 
+/-- Lucas doubling unconditional: L(2n) = L(n)² - 2·(-1)^n for all n.
+    prop:lucas-double-unconditional -/
+theorem lucasNum_double_uncond (n : Nat) :
+    (lucasNum (2 * n) : ℤ) = (lucasNum n : ℤ) ^ 2 - 2 * (-1 : ℤ) ^ n := by
+  cases n with
+  | zero => simp [lucasNum]
+  | succ m => exact lucasNum_double (m + 1) (by omega)
+
 /-- L(n)² = 5·F(n)² + 4·(-1)^n for n ≥ 1.
     bridge:lucas-fibonacci-square -/
 theorem lucasNum_sq (n : Nat) (hn : 1 ≤ n) :

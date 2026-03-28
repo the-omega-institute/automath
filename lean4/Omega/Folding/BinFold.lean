@@ -293,4 +293,18 @@ theorem index_compression_gap_seven :
     cBinFiberMax 7 * Fintype.card (X 7) - 2 ^ 7 = 42 := by
   rw [cBinFiberMax_seven, X.card_eq_fib]; native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R39: BinFold m=8
+-- ══════════════════════════════════════════════════════════════
+
+set_option maxHeartbeats 1600000 in
+/-- Maximum binary fiber multiplicity at m=8.
+    cor:conclusion-window8-max-fiber -/
+theorem cBinFiberMax_eight : cBinFiberMax 8 = 6 := by native_decide
+
+set_option maxHeartbeats 1600000 in
+/-- Minimum binary fiber multiplicity at m=8.
+    cor:conclusion-window8-min-fiber -/
+theorem cBinFiberMin_eight : cBinFiberMin 8 = 3 := by native_decide
+
 end Omega

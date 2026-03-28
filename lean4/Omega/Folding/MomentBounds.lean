@@ -1020,4 +1020,12 @@ theorem fiberMultiplicity_excess_sum (m : Nat) :
   rw [X.fiberMultiplicity_sum_eq_pow, Finset.sum_const, smul_eq_mul, mul_one,
     Finset.card_univ, X.card_eq_fib]
 
+/-- S_2(m)² ≤ 2^m · S_3(m): log-convexity at q=2, r=1.
+    cor:pom-crossq-S2-sq-le-pow-S3 -/
+theorem momentSum_two_sq_le_pow_three (m : Nat) :
+    momentSum 2 m ^ 2 ≤ 2 ^ m * momentSum 3 m := by
+  have h := momentSum_log_convex_gap 2 1 m (by omega)
+  simp only [show 2 - 1 = 1 from rfl, show 2 + 1 = 3 from rfl] at h
+  rwa [momentSum_one] at h
+
 end Omega
