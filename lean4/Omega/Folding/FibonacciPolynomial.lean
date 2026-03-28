@@ -522,4 +522,26 @@ theorem detPoly_eval_strict_mono (t : ℤ) (ht : 0 < t) :
     -- Since D_k < D_{k+1} and t+1 ≥ 2, we have D_k < D_{k+1} ≤ (t+1)*D_{k+1}
     nlinarith
 
+/-- Odd Fibonacci Cassini: F(2k+3)·F(2k-1) = F(2k+1)² + 1.
+    Direct from detPoly_cassini_pell evaluated at t=1.
+    prop:pom-Lk-det-cassini-pell -/
+theorem fib_odd_cassini (k : Nat) (hk : 1 ≤ k) :
+    Nat.fib (2 * k + 3) * Nat.fib (2 * k - 1) = Nat.fib (2 * k + 1) ^ 2 + 1 := by
+  -- From detPoly_cassini_pell: D_{k+1}*D_{k-1} - D_k^2 = X
+  have hcassini := detPoly_cassini_pell k hk
+  -- Evaluate at t=1
+  have heval := congr_arg (fun p => p.eval (1 : ℤ)) hcassini
+  simp only [eval_sub, eval_mul, eval_pow, eval_X] at heval
+  -- Replace D_j(1) = F(2j+1)
+  rw [detPoly_eval_one, detPoly_eval_one, detPoly_eval_one] at heval
+  -- Normalize indices
+  have hk1 : 2 * (k - 1) + 1 = 2 * k - 1 := by omega
+  have hk2 : 2 * (k + 1) + 1 = 2 * k + 3 := by omega
+  rw [hk1, hk2] at heval
+  -- heval: (↑F(2k+3) : ℤ) * ↑F(2k-1) - (↑F(2k+1))^2 = 1
+  -- Convert to Nat: a * b = c^2 + 1
+  have : (Nat.fib (2 * k + 3) * Nat.fib (2 * k - 1) : ℤ) =
+      (Nat.fib (2 * k + 1)) ^ 2 + 1 := by linarith
+  exact_mod_cast this
+
 end Omega

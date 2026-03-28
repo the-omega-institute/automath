@@ -169,4 +169,33 @@ theorem bdry_three_window_sum12_unique (m1 m2 m3 : Nat)
   have hk23 : k2 < k3 := by omega
   interval_cases k3 <;> interval_cases k2 <;> interval_cases k1 <;> simp_all [Nat.fib]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R26: Boundary count extension to m=9,10
+-- ══════════════════════════════════════════════════════════════
+
+set_option maxHeartbeats 800000 in
+/-- prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_nine : cBoundaryCount 9 = 13 := by native_decide
+
+set_option maxHeartbeats 800000 in
+/-- prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_ten : cBoundaryCount 10 = 21 := by native_decide
+
+set_option maxHeartbeats 800000 in
+/-- Boundary count = F(m-2) for m ∈ [3,10].
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_eq_fib_extended (m : Nat) (hm1 : 3 ≤ m) (hm : m ≤ 10) :
+    cBoundaryCount m = Nat.fib (m - 2) := by
+  interval_cases m <;> native_decide
+
+/-- Boundary gap at m=9: |X_9| - b(9) = F(11) - F(7) = 89 - 13 = 76.
+    prop:bdry-fib-square-identity -/
+theorem boundary_gap_nine : Fintype.card (X 9) - cBoundaryCount 9 = 76 := by
+  rw [X.card_eq_fib, cBoundaryCount_nine]; native_decide
+
+/-- Boundary gap at m=10: |X_10| - b(10) = F(12) - F(8) = 144 - 21 = 123.
+    prop:bdry-fib-square-identity -/
+theorem boundary_gap_ten : Fintype.card (X 10) - cBoundaryCount 10 = 123 := by
+  rw [X.card_eq_fib, cBoundaryCount_ten]; native_decide
+
 end Omega
