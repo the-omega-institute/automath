@@ -184,4 +184,117 @@ theorem fibPoly_eval_neg_one_periodic (n : Nat) :
       rw [show n + 6 + 1 = (n + 1) + 6 from by omega]
       rw [ih (n + 1) (by omega), ih n (by omega)]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R19: Determinant polynomial D_k(t)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Determinant polynomial D_k(t) of the k×k Gram-like matrix.
+    D_0=1, D_1=1+t, D_{k+2}=(t+2)·D_{k+1}-D_k.
+    def:pom-detpoly -/
+noncomputable def detPoly : Nat → Polynomial ℤ
+  | 0 => 1
+  | 1 => 1 + X
+  | n + 2 => (X + 2) * detPoly (n + 1) - detPoly n
+
+/-- def:pom-detpoly-simp -/
+@[simp] theorem detPoly_zero : detPoly 0 = 1 := rfl
+@[simp] theorem detPoly_one : detPoly 1 = 1 + X := rfl
+@[simp] theorem detPoly_succ_succ (n : Nat) :
+    detPoly (n + 2) = (X + 2) * detPoly (n + 1) - detPoly n := rfl
+
+/-- def:pom-detpoly-two -/
+theorem detPoly_two : detPoly 2 = 1 + 3 * X + X ^ 2 := by simp [detPoly]; ring
+
+/-- def:pom-detpoly-three -/
+theorem detPoly_three : detPoly 3 = 1 + 6 * X + 5 * X ^ 2 + X ^ 3 := by simp [detPoly]; ring
+
+/-- Cassini-Pell identity for detPoly: D_{k+1}·D_{k-1} - D_k² = X.
+    prop:pom-Lk-det-cassini-pell -/
+theorem detPoly_cassini_pell (k : Nat) (hk : 1 ≤ k) :
+    detPoly (k + 1) * detPoly (k - 1) - detPoly k ^ 2 = X := by
+  induction k with
+  | zero => omega
+  | succ n ih =>
+    match n, ih with
+    | 0, _ =>
+      -- k = 1: D_2 * D_0 - D_1^2 = (1+3X+X^2)*1 - (1+X)^2 = X
+      simp [detPoly]; ring
+    | n + 1, ih =>
+      -- k = n+2, IH at k = n+1: D_{n+2} * D_n - D_{n+1}^2 = X
+      have ih' := ih (by omega)
+      -- D_{n+3} = (X+2)*D_{n+2} - D_{n+1}
+      -- Goal: D_{n+3} * D_{n+1} - D_{n+2}^2 = X
+      show detPoly (n + 3) * detPoly (n + 1) - detPoly (n + 2) ^ 2 = X
+      -- D_{n+3} * D_{n+1} - D_{n+2}^2
+      -- = ((X+2)*D_{n+2} - D_{n+1}) * D_{n+1} - D_{n+2}^2
+      -- = (X+2)*D_{n+2}*D_{n+1} - D_{n+1}^2 - D_{n+2}^2
+      -- From IH: D_{n+1}^2 = D_{n+2}*D_n - X
+      -- = (X+2)*D_{n+2}*D_{n+1} - (D_{n+2}*D_n - X) - D_{n+2}^2
+      -- = D_{n+2}*((X+2)*D_{n+1} - D_n - D_{n+2}) + X
+      -- = D_{n+2}*(D_{n+2} - D_{n+2}) + X = X
+      -- Normalize ih' indices: n+1-1 = n
+      have hn : n + 1 - 1 = n := by omega
+      rw [hn] at ih'
+      -- ih' now: detPoly (n + 1 + 1) * detPoly n - detPoly (n + 1) ^ 2 = X
+      -- = detPoly (n + 2) * detPoly n - detPoly (n + 1) ^ 2 = X
+      -- But Lean still has n+1+1, not n+2. We need to convince ring they're equal.
+      -- Goal after show: D(n+3)*D(n+1) - D(n+2)^2 = X
+      show detPoly (n + 3) * detPoly (n + 1) - detPoly (n + 2) ^ 2 = X
+      have hn2 : n + 1 + 1 = n + 2 := by omega
+      rw [hn2] at ih'
+      -- ih': detPoly (n + 2) * detPoly n - detPoly (n + 1) ^ 2 = X
+      -- Recurrence: D(n+3) = (X+2)*D(n+2) - D(n+1)
+      have hrec : detPoly (n + 3) = (X + 2) * detPoly (n + 2) - detPoly (n + 1) :=
+        detPoly_succ_succ (n + 1)
+      -- Goal: ((X+2)*D(n+2) - D(n+1)) * D(n+1) - D(n+2)^2 = X
+      -- LHS = (X+2)*D(n+2)*D(n+1) - D(n+1)^2 - D(n+2)^2
+      -- From ih': D(n+1)^2 = D(n+2)*D(n) - X
+      -- LHS = (X+2)*D(n+2)*D(n+1) - D(n+2)*D(n) + X - D(n+2)^2
+      --     = D(n+2)*((X+2)*D(n+1) - D(n) - D(n+2)) + X
+      --     = D(n+2)*(D(n+2) - D(n+2)) + X = X  [by recurrence at n]
+      -- Use hrec to rewrite D(n+3), keep ih' for D(n+1)^2
+      rw [hrec]
+      have hrec2 : detPoly (n + 2) = (X + 2) * detPoly (n + 1) - detPoly n :=
+        detPoly_succ_succ n
+      -- Key identity: linear_combination with ih' and hrec2
+      -- We need: ((X+2)*D(n+2) - D(n+1))*D(n+1) - D(n+2)^2 - X = 0
+      -- = (X+2)*D(n+2)*D(n+1) - D(n+1)^2 - D(n+2)^2 - X
+      -- Use ih': D(n+2)*D(n) - D(n+1)^2 - X = 0, so D(n+1)^2 = D(n+2)*D(n) - X
+      -- Use hrec2: D(n+2) - (X+2)*D(n+1) + D(n) = 0
+      -- Coefficient of ih' = 1, coefficient of hrec2 = -D(n+2)
+      linear_combination ih' - detPoly (n + 2) * hrec2
+
+/-- Fibonacci identity: F(n+4) = 3·F(n+2) - F(n).
+    lem:pom-fib-skip-two-recurrence -/
+private theorem fib_add_four (n : Nat) :
+    Nat.fib (n + 4) + Nat.fib n = 3 * Nat.fib (n + 2) := by
+  have h1 : Nat.fib (n + 4) = Nat.fib (n + 2) + Nat.fib (n + 3) := by
+    exact_mod_cast Nat.fib_add_two (n := n + 2)
+  have h2 : Nat.fib (n + 3) = Nat.fib (n + 1) + Nat.fib (n + 2) := by
+    exact_mod_cast Nat.fib_add_two (n := n + 1)
+  have h3 : Nat.fib (n + 2) = Nat.fib n + Nat.fib (n + 1) :=
+    Nat.fib_add_two (n := n)
+  omega
+
+/-- D_k(1) = F(2k+1): the determinant polynomial evaluated at 1 gives odd Fibonacci numbers.
+    prop:pom-Lk-det-cassini-pell -/
+theorem detPoly_eval_one : ∀ k : Nat, (detPoly k).eval 1 = (Nat.fib (2 * k + 1) : ℤ)
+  | 0 => by simp [detPoly]
+  | 1 => by simp [detPoly, eval_add, eval_X]; norm_num [Nat.fib]
+  | k + 2 => by
+    simp only [detPoly_succ_succ, eval_sub, eval_mul, eval_add, eval_X, eval_ofNat]
+    rw [detPoly_eval_one (k + 1), detPoly_eval_one k]
+    -- Goal: 3 * ↑F(2k+3) - ↑F(2k+1) = ↑F(2k+5)
+    -- Normalize: 2*(k+1)+1 = 2*k+3, 2*(k+2)+1 = 2*k+5
+    -- Normalize Fibonacci indices
+    have h2k3 : 2 * (k + 1) + 1 = 2 * k + 3 := by omega
+    have h2k5 : 2 * (k + 2) + 1 = 2 * k + 5 := by omega
+    rw [h2k3, h2k5]
+    -- Use: F(2k+5) + F(2k+1) = 3 * F(2k+3)
+    have hfib := fib_add_four (2 * k + 1)
+    -- hfib: Nat.fib (2*k+5) + Nat.fib (2*k+1) = 3 * Nat.fib (2*k+3)
+    have : (Nat.fib (2 * k + 5) : ℤ) + (Nat.fib (2 * k + 1) : ℤ) =
+        3 * (Nat.fib (2 * k + 3) : ℤ) := by exact_mod_cast hfib
+    linarith
+
 end Omega
