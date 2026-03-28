@@ -184,13 +184,13 @@ theorem paperThm_xxx :
 ```latex
 \begin{theorem}[定理标题]\label{thm:pom-xxx}
   定理正文...
-\leanverified{Omega/Folding/FiberWeightCount.lean:42}{exactWeightCount\_succ}
+\leanverified{exactWeightCount\_succ}
 \end{theorem}
 ```
 
-- **完整形式化**：`\leanverified{路径:行号}{定理名}`（PDF 中显示绿色）
-- **部分形式化**：`\leanpartial{路径:行号}{定理名}{限制说明}`（PDF 中显示橙色）
-- 路径从 `Omega/` 开始
+- **完整形式化**：`\leanverified{定理名}`（PDF 中显示绿色）
+- **部分形式化**：`\leanpartial{定理名}{限制说明}`（PDF 中显示橙色）
+- 不写文件路径和行号（会变）
 - 定理名中的下划线需转义：`\_`
 - 一个论文定理对应多个 Lean4 定理时，每个单独一行
 

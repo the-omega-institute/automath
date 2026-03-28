@@ -43,8 +43,8 @@ model: sonnet
 **每次登记新定理时，必须在对应的论文 .tex 文件中添加已形式化标注——标注出现在编译后的 PDF 中，方便读者查阅。**
 
 论文 preamble（`main.tex`）已定义两个标注命令：
-- `\leanverified{路径:行号}{定理名}` — 完整形式化（绿色）
-- `\leanpartial{路径:行号}{定理名}{限制说明}` — 部分形式化（橙色）
+- `\leanverified{定理名}` — 完整形式化（绿色）
+- `\leanpartial{定理名}{限制说明}` — 部分形式化（橙色）
 
 **操作步骤**：
 
@@ -54,23 +54,22 @@ model: sonnet
 ```latex
 \begin{theorem}[定理标题]\label{thm:pom-xxx}
   定理正文...
-\leanverified{Omega/Folding/FiberWeightCount.lean:42}{exactWeightCount\_succ}
+\leanverified{exactWeightCount\_succ}
 \end{theorem}
 ```
 
 **格式规范**：
-- 路径从 `Omega/` 开始（如 `Omega/Folding/Fold.lean:125`）
-- 行号是 Lean4 定理声明的起始行
+- 只写定理名，不写文件路径和行号（路径和行号会因编辑/重构而改变）
 - 定理名中的下划线需转义：`\_`（LaTeX 要求）
 - 一个论文定理对应多个 Lean4 定理时，每个单独一行：
   ```latex
-  \leanverified{Omega/Folding/MaxFiber.lean:30}{maxFiberMultiplicity\_le\_add}
-  \leanverified{Omega/Folding/MaxFiber.lean:45}{maxFiberMultiplicity\_pos}
+  \leanverified{maxFiberMultiplicity\_le\_add}
+  \leanverified{maxFiberMultiplicity\_pos}
   \end{theorem}
   ```
 - 部分形式化（有界范围/条件性）用 `\leanpartial`：
   ```latex
-  \leanpartial{Omega/Folding/MaxFiber.lean:60}{maxFiberMultiplicity\_even}{仅 k=1..5}
+  \leanpartial{maxFiberMultiplicity\_even}{仅 k=1..5}
   \end{theorem}
   ```
 

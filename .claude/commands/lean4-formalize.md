@@ -252,7 +252,7 @@ Agent(
 你可以直接给 formalizer 或 registrar 发消息（如需协调），但重要决策须报告 team lead。
 你必须用 lean_local_search / grep 对比 SourceMap.lean 确认目标定理不存在，避免提议已注册的定理。
 
-**已形式化标注**：扫描论文 .tex 文件时，如果发现某定理已在 Lean4 中形式化但 .tex 中没有 `\\leanverified` 标注，立即在 `\\end{theorem}` 之前插入 `\\leanverified{Omega/路径:行号}{定理名}`（下划线转义为 `\\_`）。标注后 git commit + push。标注在 PDF 正文中可见（绿色），方便读者查阅。"
+**已形式化标注**：扫描论文 .tex 文件时，如果发现某定理已在 Lean4 中形式化但 .tex 中没有 `\\leanverified` 标注，立即在 `\\end{theorem}` 之前插入 `\\leanverified{定理名}`（下划线转义为 `\\_`）。标注后 git commit + push。标注在 PDF 正文中可见（绿色），方便读者查阅。"
 )
 
 Agent(
@@ -681,7 +681,7 @@ Agent(
 请重新扫描论文和 Lean4 代码，找到真正未注册且可形式化的目标。
 注意：你必须用 lean_local_search / grep 对比 SourceMap.lean 确认目标不存在，避免提议已注册的定理。
 
-**已形式化标注**：扫描论文 .tex 文件时，如果发现某定理已在 Lean4 中形式化但 .tex 中没有 `\\leanverified` 标注，立即在 `\\end{theorem}` 之前插入 `\\leanverified{Omega/路径:行号}{定理名}`（下划线转义 `\\_`）。标注在 PDF 正文中可见。标注后 git commit + push。
+**已形式化标注**：扫描论文 .tex 文件时，如果发现某定理已在 Lean4 中形式化但 .tex 中没有 `\\leanverified` 标注，立即在 `\\end{theorem}` 之前插入 `\\leanverified{定理名}`（下划线转义 `\\_`）。标注在 PDF 正文中可见。标注后 git commit + push。
 
 收到任务后按 lean4-analyst 规格执行分析，完成后将规格通过 SendMessage 发回 team lead。"
 )
@@ -817,7 +817,7 @@ SendMessage(to = "registrar", summary = "登记 Phase N 成果", message = "
 
 2. [同上]
 
-请更新 SourceMap、NoAxiom、IMPLEMENTATION_PLAN，**并标注论文 .tex 文件**（在对应定理的 `\\end{theorem}` 之前插入 `\\leanverified{路径:行号}{定理名}`，下划线转义 `\\_`），然后 git commit + push。
+请更新 SourceMap、NoAxiom、IMPLEMENTATION_PLAN，**并标注论文 .tex 文件**（在对应定理的 `\\end{theorem}` 之前插入 `\\leanverified{定理名}`，下划线转义 `\\_`），然后 git commit + push。
 ")
 ```
 
@@ -922,16 +922,16 @@ SendMessage(to = "registrar", summary = "Phase N 完成，请登记",
 ```latex
 \begin{theorem}[定理标题]\label{thm:pom-xxx}
   定理正文...
-\leanverified{Omega/Folding/FiberWeightCount.lean:42}{exactWeightCount\_succ}
+\leanverified{exactWeightCount\_succ}
 \end{theorem}
 ```
 
 | 状态 | 命令 | PDF 显示 |
 |------|------|---------|
-| 完整形式化 | `\leanverified{路径:行号}{定理名}` | 绿色 Lean4: 路径 (定理名) |
-| 部分形式化 | `\leanpartial{路径:行号}{定理名}{限制说明}` | 橙色 Lean4（部分）: 路径 (定理名) — 说明 |
+| 完整形式化 | `\leanverified{定理名}` | 绿色 Lean4 ✓ 定理名 |
+| 部分形式化 | `\leanpartial{定理名}{限制说明}` | 橙色 Lean4（部分）定理名 — 说明 |
 
-**注意**：定理名中的下划线需转义为 `\_`（LaTeX 要求）。
+**注意**：定理名中的下划线需转义为 `\_`（LaTeX 要求）。不写文件路径和行号（会变）。
 
 ### 谁负责标注
 
