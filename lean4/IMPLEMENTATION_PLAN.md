@@ -112,6 +112,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R40: S_3 超二次增长界 + Fibonacci 比收敛（Round R40）**：两文件 MomentBounds.lean（:1034）+ Entropy.lean（:685）——momentSum\_three\_super\_quadratic（prop:pom-s3-recurrence（深化）：4·S_3(m) ≤ S_3(m+2) for m≥4，超二次增长由 momentSum\_three\_double 两次应用，MomentBounds.lean:1034）; fib\_ratio\_tendsto\_golden（bridge:cdim-fib-ratio-tendsto-golden（bridge/aux，不计入论文覆盖率）：F(n+2)/F(n+1)→φ，fib\_ratio\_tendsto 的移位版本，Entropy.lean:685）——**0 个新论文标签**（prop:pom-s3-recurrence 已注册，深化；fib\_ratio\_tendsto\_golden 为 bridge/aux，不计入）——全局 ~1,447（不变），标注 169→171（+2 \leanverified），commit dc92031
+
 **Phase R39: BinFold m=8 纤维范围 + 矩对数凸性界 + Lucas 双倍公式（Round R39）**：三文件 BinFold.lean（:297-309）+ MomentBounds.lean（:1024-1030）+ ShiftDynamics.lean（:332-338）——cBinFiberMax\_eight（cor:conclusion-window6-three-rigidity-scales（深化）：BinFold m=8 最大纤维多重度=6，BinFold.lean:297）; cBinFiberMin\_eight（cor:conclusion-window6-three-rigidity-scales（深化）：BinFold m=8 最小纤维多重度=3，BinFold.lean:309）; momentSum\_two\_sq\_le\_pow\_three（bridge:moment-log-convexity（bridge，不计入论文覆盖率）：S_2(m)^2 ≤ ... 矩对数凸性界，MomentBounds.lean:1024）; lucasNum\_double\_uncond（bridge:lucas-double（bridge，不计入论文覆盖率）：L(2n) 双倍公式，ShiftDynamics.lean:332）——**0 个新论文标签**（两 bridge 不计入；cor:conclusion-window6-three-rigidity-scales 已注册，深化）——全局 ~1,447（不变），标注 167→169（+2 \leanverified），commit 95c89fe
 
 **Phase R38: Lucas 平方公式 + A4 迹幂 n=7..10（Round R38）**：两文件 ShiftDynamics.lean（:370-376）+ CollisionZeta.lean（:694-710）——lucas\_sq\_eq\_five\_fib\_sq（bridge:lucas-fibonacci-square（bridge，不计入论文覆盖率）：L(n)²=5F(n)²+4(-1)^n，ShiftDynamics.lean:370）; collisionKernel4\_trace\_pow\_7（def:pom-collision-zeta-a4（深化）：tr(A_4^7)=13330，CollisionZeta.lean:694）; collisionKernel4\_trace\_pow\_8（def:pom-collision-zeta-a4（深化）：tr(A_4^8)=53984，:698）; collisionKernel4\_trace\_pow\_9（def:pom-collision-zeta-a4（深化）：tr(A_4^9)=218618，:702）; collisionKernel4\_trace\_pow\_10（def:pom-collision-zeta-a4（深化）：tr(A_4^10)=885314，注：n=8,9,10 值由 native_decide 修正 spec 误差，:706）——**0 个新论文标签**（bridge 不计入；def:pom-collision-zeta-a4 已注册，深化）——全局 ~1,447（不变），标注 163→167（+4 \leanverified），commit 2b0d0ee
@@ -285,7 +287,7 @@
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
-## 2. 论文总覆盖率分析（2026-03-28 Phase R39 登记版）
+## 2. 论文总覆盖率分析（2026-03-29 Phase R40 登记版）
 
 ### 论文规模（Phase 7 重新扫描）
 
