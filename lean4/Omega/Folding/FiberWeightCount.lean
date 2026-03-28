@@ -565,4 +565,82 @@ theorem weightCongruenceCount_pos (m : Nat) (r : Nat) (hr : r < Nat.fib (m + 2))
     ← fiberMultiplicity_eq_wcc]
   exact X.fiberMultiplicity_pos _
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R3: fiberHiddenBitCount and branch mass law
+-- ══════════════════════════════════════════════════════════════
+
+/-- Count of words in fiber(x) with hiddenBit = b.
+    cor:pom-branch-mass-law -/
+noncomputable def fiberHiddenBitCount (b : Nat) (x : X m) : Nat :=
+  (X.fiber x).filter (fun w => hiddenBit w = b) |>.card
+
+/-- Fiber multiplicity splits by hidden bit: d(x) = d_0(x) + d_1(x).
+    cor:pom-branch-mass-law -/
+theorem fiberMultiplicity_split_by_hiddenBit (x : X m) :
+    X.fiberMultiplicity x = fiberHiddenBitCount 0 x + fiberHiddenBitCount 1 x := by
+  classical
+  simp only [X.fiberMultiplicity, fiberHiddenBitCount]
+  -- Split fiber(x) by hiddenBit = 0 vs hiddenBit = 1
+  -- fiber(x) = {b=0} ∪ {b=1}, disjoint
+  have h0 : ((X.fiber x).filter (fun w => hiddenBit w = 0)).card +
+      ((X.fiber x).filter (fun w => ¬hiddenBit w = 0)).card = (X.fiber x).card :=
+    Finset.card_filter_add_card_filter_not (s := X.fiber x) (fun w => hiddenBit w = 0)
+  have hconv : (X.fiber x).filter (fun w => ¬hiddenBit w = 0) =
+      (X.fiber x).filter (fun w => hiddenBit w = 1) := by
+    congr 1; ext w; have := hiddenBit_le_one w; omega
+  rw [hconv] at h0; omega
+
+/-- Sum of d_{m,1}(x) over all x = hiddenBitCount m.
+    cor:pom-branch-mass-law -/
+theorem fiberHiddenBitCount_one_sum (m : Nat) :
+    ∑ x : X m, fiberHiddenBitCount 1 x = hiddenBitCount m := by
+  classical
+  simp only [fiberHiddenBitCount, hiddenBitCount]
+  -- ∑_x |fiber(x) ∩ {b=1}| = |{w | b(w)=1}| via fiber partition
+  -- LHS = ∑_x |fiber(x).filter (hiddenBit = 1)|
+  -- RHS = |univ.filter (weight ≥ F_{m+2})|
+  -- First, rewrite hiddenBit = 1 as weight ≥ F_{m+2}
+  have hpred : ∀ w : Word m, hiddenBit w = 1 ↔ Nat.fib (m + 2) ≤ weight w := by
+    intro w; unfold hiddenBit; split <;> omega
+  -- Now exchange sum of card-filters over fibers with a single filter
+  have hDisjoint : (↑(Finset.univ : Finset (X m)) : Set (X m)).PairwiseDisjoint X.fiber := by
+    intro x _ y _ hxy
+    rw [Function.onFun, Finset.disjoint_left]
+    intro w hwx hwy
+    exact hxy ((X.mem_fiber.1 hwx).symm.trans (X.mem_fiber.1 hwy))
+  have hUnion : (Finset.univ : Finset (Word m)) = Finset.univ.biUnion X.fiber := by
+    ext w; simp only [Finset.mem_univ, Finset.mem_biUnion, true_iff]
+    exact ⟨Fold w, trivial, X.mem_fiber_Fold w⟩
+  -- ∑_x |fiber(x).filter p| = |univ.filter p| for any predicate p
+  conv_rhs => rw [hUnion]
+  rw [Finset.filter_biUnion]
+  rw [Finset.card_biUnion (by
+    intro x _ y _ hxy
+    apply Finset.disjoint_filter_filter
+    rw [Finset.disjoint_left]
+    intro w hwx hwy
+    exact hxy ((X.mem_fiber.1 hwx).symm.trans (X.mem_fiber.1 hwy)))]
+  congr 1; ext x
+  congr 1; ext w
+  simp only [Finset.mem_filter, hpred]
+
+/-- Sum of d_{m,0}(x) over all x = 2^m - hiddenBitCount m.
+    cor:pom-branch-mass-law -/
+theorem fiberHiddenBitCount_zero_sum (m : Nat) :
+    ∑ x : X m, fiberHiddenBitCount 0 x = 2 ^ m - hiddenBitCount m := by
+  have hsplit : ∀ x : X m, X.fiberMultiplicity x =
+      fiberHiddenBitCount 0 x + fiberHiddenBitCount 1 x :=
+    fiberMultiplicity_split_by_hiddenBit
+  have hsum : ∑ x : X m, X.fiberMultiplicity x = 2 ^ m := X.fiberMultiplicity_sum_eq_pow m
+  have h1 : ∑ x : X m, fiberHiddenBitCount 1 x = hiddenBitCount m :=
+    fiberHiddenBitCount_one_sum m
+  have h01 : ∑ x : X m, X.fiberMultiplicity x =
+      ∑ x : X m, fiberHiddenBitCount 0 x + ∑ x : X m, fiberHiddenBitCount 1 x := by
+    rw [← Finset.sum_add_distrib]; exact Finset.sum_congr rfl (fun x _ => hsplit x)
+  -- hiddenBitCount m ≤ 2^m (since it counts a subset of 2^m words)
+  have hle : hiddenBitCount m ≤ 2 ^ m := by
+    rw [← hsum, ← h1]; exact Finset.sum_le_sum (fun x _ => by
+      rw [hsplit x]; omega)
+  omega
+
 end Omega
