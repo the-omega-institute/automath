@@ -112,6 +112,7 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R26: 群统一边界计数 m=9,10 扩展 + detPoly Cassini Fibonacci 特化（Round R26）**：两文件 BoundaryLayer.lean（:176-200）+ FibonacciPolynomial.lean（:527）——cBoundaryCount\_nine（prop:bdry-fib-square-identity（深化）：b(9)=F(7)=13，BoundaryLayer.lean:176）; cBoundaryCount\_ten（prop:bdry-fib-square-identity：b(10)=F(8)=21，:182）; cBoundaryCount\_eq\_fib\_extended（prop:bdry-fib-square-identity：b(m)=F(m-2) 扩展至 m=9,10，:189）; boundary\_gap\_nine（bridge：gap(9)=76，:191）; boundary\_gap\_ten（bridge：gap(10)=123，:200）; fib\_odd\_cassini（prop:pom-Lk-det-cassini-pell（深化）：D_k(1)=F(2k+1) 的奇指标 Cassini 特化，FibonacciPolynomial.lean:527）——**0 个新论文标签**（两标签均已注册，bridge 不计入；本轮纯深化）——全局 ~1,431（不变），标注 119→123，commit b127020
 **Phase R25: 三重刚性尺度 m=7 扩展 + detPoly 严格对数凸性与单调性（Round R25）**：两文件 BinFold.lean（:262-280）+ FibonacciPolynomial.lean（:498, :509）——cBinFiberMax\_seven（cor:conclusion-window6-three-rigidity-scales（深化至 m=7）：BinFold m=7 最大纤维多重度，BinFold.lean:262）; cBinFiberMin\_seven（cor:conclusion-window6-three-rigidity-scales：BinFold m=7 最小纤维多重度，:270）; three\_rigidity\_scales\_seven（cor:conclusion-window6-three-rigidity-scales：m=7 三重刚性尺度联合证书，:280）; detPoly\_eval\_strict\_log\_convex（cor:pom-Lk-det-logconvex-ratio：D_k(t)^2 < D_{k-1}(t)·D_{k+1}(t) for t>0，严格对数凸性，FibonacciPolynomial.lean:498）; detPoly\_eval\_strict\_mono（cor:pom-Lk-det-logconvex-ratio：比值序列严格单调递减，:509）——**0 个新论文标签**（两标签均已注册，本轮为深化）——全局 ~1,431（不变），标注 114→119，commit 4cad801
 **Phase R24: 群统一三窗唯一性 + POM 黄金耦合 Fibonacci det-Green + 对数凸性正性（Round R24）**：两文件 BoundaryLayer.lean（:142）+ FibonacciPolynomial.lean（:457, :462）——bdry\_three\_window\_sum12\_unique（thm:bdry-three-window-sum12-unique-even-triple（**群统一章新标签**）：三偶窗边界计数和为12 → 三元组唯一为(4,6,8)，BoundaryLayer.lean:142）; fenceDet\_eq\_detPoly\_eval\_one（cor:pom-Lk-t1-fibonacci-det-green（**新标签**）：fenceDet k = detPoly k 在 t=1 的求值 = F_{2k+1}，黄金耦合处行列式与 Fibonacci 数统一，FibonacciPolynomial.lean:457）; detPoly\_eval\_pos（cor:pom-Lk-det-logconvex-ratio：D_k(t) > 0 for t > 0，严格正性，:462）——**2 个新论文标签**（thm:bdry-three-window-sum12-unique-even-triple, cor:pom-Lk-t1-fibonacci-det-green；cor:pom-Lk-det-logconvex-ratio 已注册，深化）——群统一 ~110→~111（+1），POM ~584→~585（+1），全局 ~1,429→~1,431（+2），commit 0d8abff
 **Phase R23: 结论章局域指数-全局压缩率分离 + detPoly 次高项系数与导数（Round R23）**：两文件 BinFold.lean（:240-258）+ FibonacciPolynomial.lean（:392, :427）——local\_index\_ne\_global\_compression\_six（thm:conclusion-window6-local-index-global-compression-separation（**结论章新标签**）：PP 指数=4 ≠ 64/21 全局压缩率，局域与全局指数严格不等，BinFold.lean:240）; local\_index\_gt\_global\_ratio\_six（thm:conclusion-window6-local-index-global-compression-separation：4 > 64/21，BinFold.lean:248）; index\_compression\_gap\_six（thm:conclusion-window6-local-index-global-compression-separation：gap = 4 - 64/21 精确量化，BinFold.lean:258）; detPoly\_coeff\_sub\_leading（prop:pom-Lk-det-coeff-binomial：[t^{k-1}]D_k = 2k-1 次高项系数，FibonacciPolynomial.lean:392）; detPoly\_deriv\_eval\_zero\_double（prop:pom-Lk-det-coeff-binomial：D_k'(0) = 2k-1，导数端点刚性，:427）——**1 个新论文标签**（thm:conclusion-window6-local-index-global-compression-separation；prop:pom-Lk-det-coeff-binomial 已注册，深化）——结论 ~84→~85（+1），全局 ~1,428→~1,429（+1），commit 8b92977
@@ -265,7 +266,7 @@
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
-## 2. 论文总覆盖率分析（2026-03-28 Phase R25 登记版）
+## 2. 论文总覆盖率分析（2026-03-28 Phase R26 登记版）
 
 ### 论文规模（Phase 7 重新扫描）
 
@@ -280,7 +281,7 @@
 - ~3,220 个 Lean4 声明（含内部引理、定义）
 - ~29,413 行代码，69 个文件
 - 0 公理，0 sorry，lake build 通过
-- 119 个 LaTeX `\leanverified` / `\leanpartial` 标注
+- 123 个 LaTeX `\leanverified` / `\leanpartial` 标注
 
 ### 覆盖率
 
