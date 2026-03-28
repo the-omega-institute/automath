@@ -687,4 +687,28 @@ theorem fib_ratio_tendsto_golden :
     atTop (nhds φ) :=
   fib_ratio_tendsto.comp (tendsto_add_atTop_nat 1)
 
+/-- The fold index ratio log(2^m / F_{m+2}) / m → log(2/φ).
+    This is the per-step entropy defect: log 2 - log φ = log(2/φ).
+    thm:fold-entropy-defect-tendsto -/
+theorem foldIndex_tendsto_log_two_div_phi :
+    Tendsto (fun m => Real.log (2 ^ m / (Nat.fib (m + 2) : ℝ)) / m)
+    atTop (nhds (Real.log (2 / φ))) := by
+  -- Rewrite target: log(2/φ) = log 2 - log φ
+  rw [Real.log_div (by norm_num : (2 : ℝ) ≠ 0) (ne_of_gt Real.goldenRatio_pos)]
+  -- The function equals log 2 - log F(m+2)/m eventually (for m ≥ 1)
+  have hent := topological_entropy_eq_log_phi
+  -- We need: (fun m => log(2^m / F(m+2)) / m) → log 2 - log φ
+  -- i.e., (fun m => (m * log 2 - log F(m+2)) / m) → log 2 - log φ
+  -- i.e., (fun m => log 2 - log F(m+2) / m) → log 2 - log φ
+  -- This is tendsto_const_nhds.sub hent
+  refine (tendsto_const_nhds.sub hent).congr' ?_
+  filter_upwards [Filter.eventually_ge_atTop 1] with m hm
+  have hm_pos : (0 : ℝ) < m := Nat.cast_pos.mpr (by omega)
+  have hm_ne : (m : ℝ) ≠ 0 := ne_of_gt hm_pos
+  have hF_pos : (0 : ℝ) < (Nat.fib (m + 2) : ℝ) := by
+    exact_mod_cast Nat.fib_pos.mpr (by omega)
+  have hF_ne : (Nat.fib (m + 2) : ℝ) ≠ 0 := ne_of_gt hF_pos
+  have h2m_pos : (0 : ℝ) < 2 ^ m := pow_pos (by norm_num) m
+  rw [Real.log_div (ne_of_gt h2m_pos) hF_ne, Real.log_pow, sub_div, mul_div_cancel_left₀ _ hm_ne]
+
 end Omega.Entropy

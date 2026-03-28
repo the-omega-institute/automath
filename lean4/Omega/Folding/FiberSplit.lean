@@ -294,4 +294,19 @@ theorem maxFiberMultiplicity_four_step_verified (m : Nat) (hm1 : 6 ≤ m) (hm2 :
   · exact X.maxFiberMultiplicity_two_step_9
   · exact X.maxFiberMultiplicity_two_step_10
 
+/-- Four-step upper bound: D(m+4) ≤ 2·D(m+2) + D(m+1) + D(m).
+    Follows from two applications of the splitting inequality D(n+2) ≤ D(n+1) + D(n).
+    cor:pom-D-rec-four-step -/
+theorem maxFiberMultiplicity_four_step (m : Nat) (hm : 2 ≤ m) :
+    X.maxFiberMultiplicity (m + 4) ≤
+    2 * X.maxFiberMultiplicity (m + 2) + X.maxFiberMultiplicity (m + 1) +
+    X.maxFiberMultiplicity m := by
+  have h1 := X.maxFiberMultiplicity_le_add (m + 2)
+  have h2 := X.maxFiberMultiplicity_le_add (m + 1)
+  -- h1: D(m+4) ≤ D(m+3) + D(m+2)
+  -- h2: D(m+3) ≤ D(m+2) + D(m+1)
+  -- Combined: D(m+4) ≤ 2·D(m+2) + D(m+1) ≤ 2·D(m+2) + D(m+1) + D(m)
+  have hpos : 0 ≤ X.maxFiberMultiplicity m := Nat.zero_le _
+  linarith
+
 end Omega

@@ -788,4 +788,12 @@ theorem X_card_eq_char (m : Nat) (hm : 1 ≤ m) :
   rw [X.card_eq_fib]
   exact (ringChar.eq_iff.mpr X.instCharP).symm
 
+/-- Every word whose weight is congruent to sv(x) mod F_{m+2} folds to x.
+    thm:pom-fold-fiber-covers-val-class -/
+theorem Fold_fiber_covers_val_class (m : Nat) (x : X m) :
+    ∀ w : Word m, weight w % Nat.fib (m + 2) = stableValue x →
+    Fold w = x := by
+  intro w hw
+  exact X.eq_of_stableValue_eq (by rw [stableValue_Fold_mod, hw])
+
 end Omega
