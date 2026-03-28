@@ -965,4 +965,41 @@ theorem momentSum_strict_mono_q_general (a b m : Nat) (ha : 1 ≤ a) (hab : a < 
     _ < momentSum ((b - 1) + 1) m := momentSum_strict_mono_q (b - 1) m (by omega) hm
     _ = momentSum b m := by congr 1; omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R18: S_q ≥ 2^m + collisionFreeCount
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_q(m) ≥ 2^m for q ≥ 1.
+    prop:pom-sq-lower -/
+theorem momentSum_ge_pow_general (q m : Nat) (hq : 1 ≤ q) :
+    2 ^ m ≤ momentSum q m := by
+  rw [← momentSum_one m]; exact momentSum_mono_q_of_le hq (by omega)
+
+/-- Count of collision-free stable words (fiber multiplicity = 1).
+    def:pom-collision-free -/
+noncomputable def collisionFreeCount (m : Nat) : Nat :=
+  (Finset.univ : Finset (X m)).filter (fun x => X.fiberMultiplicity x = 1) |>.card
+
+/-- Collision-free + collision = F_{m+2}.
+    prop:pom-collision-free -/
+theorem collisionFreeCount_add_collision_eq_fib (m : Nat) :
+    collisionFreeCount m +
+    ((Finset.univ : Finset (X m)).filter (fun x => 2 ≤ X.fiberMultiplicity x)).card =
+    Nat.fib (m + 2) := by
+  unfold collisionFreeCount
+  have htotal : (Finset.univ : Finset (X m)).card = Nat.fib (m + 2) := by
+    rw [Finset.card_univ, X.card_eq_fib]
+  have hcompl :
+    ((Finset.univ : Finset (X m)).filter (fun x => X.fiberMultiplicity x = 1)).card +
+    ((Finset.univ : Finset (X m)).filter (fun x => ¬ X.fiberMultiplicity x = 1)).card =
+    (Finset.univ : Finset (X m)).card :=
+    Finset.filter_card_add_filter_neg_card_eq_card _
+  have heq : ((Finset.univ : Finset (X m)).filter (fun x => ¬ X.fiberMultiplicity x = 1)) =
+    ((Finset.univ : Finset (X m)).filter (fun x => 2 ≤ X.fiberMultiplicity x)) := by
+    ext x; simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    constructor
+    · intro h; have := X.fiberMultiplicity_pos x; omega
+    · intro h; omega
+  rw [heq] at hcompl; linarith
+
 end Omega

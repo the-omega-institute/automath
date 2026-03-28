@@ -138,4 +138,69 @@ theorem complementAction_involutive (m : Nat) (hm : 2 ≤ m) :
     X.stableSub_add_cancel c (X.stableSub c x)
   exact X.stableAdd_right_cancel (x := X.stableSub c x) (h2.trans h1.symm)
 
+/-- complementAction (Fold w) = Fold (complement w).
+    prop:fold-fiber-count-reciprocity -/
+theorem complementAction_eq_Fold_complement (w : Word m) (hm : 2 ≤ m) :
+    complementAction (Fold w) = Fold (complement w) := by
+  apply X.eq_of_stableValue_eq
+  -- Both have the same stableValue: use stableValue_Fold_add_complement
+  -- sv(complementAction(Fold w)) = sv(stableSub c (Fold w))
+  -- sv(Fold(comp w)) satisfies: sv(Fold(comp w)) + sv(Fold w) ≡ c (mod F)
+  -- sv(stableSub c (Fold w)) satisfies the same by definition of stableSub
+  -- Since both are in [0, F), they must be equal.
+  have hadd := stableValue_Fold_add_complement w hm
+  -- hadd: (sv(Fold(comp w)) + sv(Fold w)) % F = (F1-2) % F
+  unfold complementAction
+  have hF : 0 < Nat.fib (m + 2) := fib_succ_pos (m + 1)
+  have hF1_lt : Nat.fib (m + 1) - 2 < Nat.fib (m + 2) := by
+    have := Nat.fib_mono (show m + 1 ≤ m + 2 by omega); omega
+  -- sv(stableSub c x) where c = ofNat(F1-2), x = Fold w
+  -- = (sv(c) + (F - sv(x))) % F = (F1-2 + (F - sv(Fold w))) % F
+  rw [X.stableValue_stableSub, X.stableValue_ofNat_lt _ hF1_lt]
+  -- sv(Fold(comp w)) also satisfies:
+  -- sv(Fold(comp w)) = (F1-2 + F - sv(Fold w)) % F  (from hadd, since sv < F)
+  -- They're equal because (a + (F - b)) % F = (a + F - b) % F when b < F
+  have hsvlt := stableValue_lt_fib (Fold w)
+  have hsvlt2 := stableValue_lt_fib (Fold (complement w))
+  -- From hadd: sv(Fold(comp w)) ≡ F1-2 - sv(Fold w) (mod F)
+  -- Our goal: (F1-2 + (F - sv(Fold w))) % F = sv(Fold(comp w))
+  -- Since sv(Fold(comp w)) < F, we have sv(Fold(comp w)) = (F1-2 - sv(Fold w) + F) % F
+  -- = (F1-2 + (F - sv(Fold w))) % F. Done!
+  -- From hadd: (sv(Fold(comp w)) + sv(Fold w)) % F = (F1-2) % F
+  -- Since both sides < 2F, and F1-2 < F:
+  rw [Nat.mod_eq_of_lt hF1_lt] at hadd
+  -- hadd : (sv(comp) + sv(w)) % F = F1-2
+  -- sum < 2F, so sum = F1-2 or sum = F1-2+F
+  set s := stableValue (Fold (complement w))
+  set v := stableValue (Fold w)
+  have hsum_lt : s + v < 2 * Nat.fib (m + 2) := by omega
+  -- From a % n = b with a < 2n and b < n: a = b or a = b + n
+  have : s + v = Nat.fib (m + 1) - 2 ∨ s + v = Nat.fib (m + 1) - 2 + Nat.fib (m + 2) := by
+    -- a % n = b with a < 2n and b < n implies a = b or a = b + n
+    have h1 := Nat.div_add_mod (s + v) (Nat.fib (m + 2))
+    have h2 : (s + v) / Nat.fib (m + 2) < 2 := (Nat.div_lt_iff_lt_mul hF).mpr hsum_lt
+    have h3 : (s + v) % Nat.fib (m + 2) = Nat.fib (m + 1) - 2 := hadd
+    interval_cases ((s + v) / Nat.fib (m + 2)) <;> omega
+  -- Goal: (F1-2 + (F - v)) % F = s
+  -- Case 1: s + v = F1-2, so s = F1-2-v, and F1-2+F-v = s+F, so (s+F) % F = s. ✓
+  -- Case 2: s + v = F1-2+F, so s = F1-2+F-v, and F1-2+F-v = s, so s % F = s (since s < F). ✓
+  have hF1F2 : Nat.fib (m + 1) ≤ Nat.fib (m + 2) := Nat.fib_mono (by omega)
+  rcases this with h | h
+  · -- s + v = F1-2, so F1-2+(F-v) = s+F
+    have : Nat.fib (m + 1) - 2 + (Nat.fib (m + 2) - v) = s + Nat.fib (m + 2) := by omega
+    rw [this, show s + Nat.fib (m + 2) = s + 1 * Nat.fib (m + 2) from by ring,
+      Nat.add_mul_mod_self_right, Nat.mod_eq_of_lt (by omega : s < Nat.fib (m + 2))]
+  · -- s + v = F1-2+F, so F1-2+(F-v) = s
+    have : Nat.fib (m + 1) - 2 + (Nat.fib (m + 2) - v) = s := by omega
+    rw [this, Nat.mod_eq_of_lt (by omega : s < Nat.fib (m + 2))]
+
+/-- d(complementAction x) = d(x).
+    prop:fold-fiber-count-reciprocity -/
+theorem fiberMultiplicity_complementAction (x : X m) (hm : 2 ≤ m) :
+    X.fiberMultiplicity (complementAction x) = X.fiberMultiplicity x := by
+  -- x = Fold w for some w (via Fold surjectivity)
+  obtain ⟨w, rfl⟩ := Fold_surjective m x
+  rw [complementAction_eq_Fold_complement w hm]
+  exact fiberMultiplicity_complement w
+
 end Omega
