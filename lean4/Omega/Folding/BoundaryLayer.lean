@@ -198,6 +198,16 @@ theorem boundary_gap_nine : Fintype.card (X 9) - cBoundaryCount 9 = 76 := by
 theorem boundary_gap_ten : Fintype.card (X 10) - cBoundaryCount 10 = 123 := by
   rw [X.card_eq_fib, cBoundaryCount_ten]; native_decide
 
+set_option maxHeartbeats 1600000 in
+/-- Boundary count at m=11: b(11) = 34 = F(9).
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_eleven : cBoundaryCount 11 = 34 := by native_decide
+
+set_option maxHeartbeats 3200000 in
+/-- Boundary count at m=12: b(12) = 55 = F(10).
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_twelve : cBoundaryCount 12 = 55 := by native_decide
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R27: Uplift second difference residual
 -- ══════════════════════════════════════════════════════════════

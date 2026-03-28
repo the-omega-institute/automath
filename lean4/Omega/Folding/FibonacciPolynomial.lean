@@ -325,6 +325,30 @@ theorem detPoly_eval_two_recurrence (k : Nat) :
     (detPoly (k + 2)).eval 2 = 4 * (detPoly (k + 1)).eval 2 - (detPoly k).eval 2 := by
   simp only [detPoly_succ_succ, eval_sub, eval_mul, eval_add, eval_X, eval_ofNat]; ring
 
+/-- D_0(-1) = 1. prop:pom-detpoly-eval-neg-one-values -/
+theorem detPoly_eval_neg_one_zero : (detPoly 0).eval (-1 : ℤ) = 1 := by
+  simp [detPoly]
+
+/-- D_1(-1) = 0. prop:pom-detpoly-eval-neg-one-values -/
+theorem detPoly_eval_neg_one_one : (detPoly 1).eval (-1 : ℤ) = 0 := by
+  simp [detPoly, eval_add, eval_X]
+
+/-- D_2(-1) = -1. prop:pom-detpoly-eval-neg-one-values -/
+theorem detPoly_eval_neg_one_two : (detPoly 2).eval (-1 : ℤ) = -1 := by
+  simp [detPoly, eval_sub, eval_mul, eval_add, eval_X, eval_ofNat]
+
+/-- D_3(-1) = -1. prop:pom-detpoly-eval-neg-one-values -/
+theorem detPoly_eval_neg_one_three : (detPoly 3).eval (-1 : ℤ) = -1 := by
+  simp [detPoly, eval_sub, eval_mul, eval_add, eval_X, eval_ofNat]
+
+/-- D_4(-1) = 0. prop:pom-detpoly-eval-neg-one-values -/
+theorem detPoly_eval_neg_one_four : (detPoly 4).eval (-1 : ℤ) = 0 := by
+  simp [detPoly, eval_sub, eval_mul, eval_add, eval_X, eval_ofNat]
+
+/-- D_5(-1) = 1. prop:pom-detpoly-eval-neg-one-values -/
+theorem detPoly_eval_neg_one_five : (detPoly 5).eval (-1 : ℤ) = 1 := by
+  simp [detPoly, eval_sub, eval_mul, eval_add, eval_X, eval_ofNat]
+
 /-- Recurrence at t=-1: D_{k+2}(-1) = D_{k+1}(-1) - D_k(-1).
     prop:pom-detpoly-eval-neg-one -/
 theorem detPoly_eval_neg_one_rec (k : Nat) :
