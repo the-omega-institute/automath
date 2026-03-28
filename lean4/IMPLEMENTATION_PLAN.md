@@ -6,8 +6,8 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~31,811 |
-| 定理/定义数 | ~2,492 |
+| 总行数 | ~31,866 |
+| 定理/定义数 | ~2,495 |
 | 论文接口包装 | 353 |
 | 文件数 | 69 |
 | 公理数 | 0 |
@@ -112,6 +112,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R5: hiddenBit 求和 + 权重纤维分解 + S_2 隐藏位展开（Round R5）**：单文件 FiberWeightCount.lean（+55行，新增至701行）——hiddenBit\_sum\_eq\_hiddenBitCount（cor:pom-branch-mass-law：∑_w hiddenBit w = hiddenBitCount m，隐藏位全局求和等于隐藏位计数，FiberWeightCount.lean:652）; weight\_sum\_fiber\_decomp（lem:pom-one-bit + cor:pom-branch-mass-law：∑ weight = ∑_x d(x)·sv(x) + hiddenBitCount·F_{m+2}，权重全局分解为稳定值贡献 + 隐藏位贡献，FiberWeightCount.lean:658）; momentSum\_two\_hiddenBit\_expand（prop:pom-hiddenbit-mixed-moment-cluster（**新标签**）：S_2 = ∑d_0² + 2∑d_0·d_1 + ∑d_1²，S_2 按隐藏位分裂的混合矩展开，FiberWeightCount.lean:685）——**1 个新论文标签**（prop:pom-hiddenbit-mixed-moment-cluster）——POM ~543→~544（+1 新标签），全局 1356→1357（Phase R5，commit 312bf5c）
+
 **Phase R4: complement 双射保纤维多重度（Round R4）**：单文件 FiberWeightCountComplement.lean（+58行，新增至98行）——fiberMultiplicity\_complement（prop:fold-fiber-count-reciprocity：d(Fold(complement w)) = d(Fold w)，complement 双射保纤维多重度，通过 Fold\_eq\_iff\_weight\_mod + complement weight 关系 (T-weight) % F 建立纤维间双射，FiberWeightCountComplement.lean:42）——论文标签已注册（prop:fold-fiber-count-reciprocity: Phase 172/208/229/R1b），本轮为 complement 双射形式（先前覆盖 wcc 反射对称性、互易恒等式形式）——推迟：totalFibcubeFVector（需 fibcubeF ector n k = 0 for 2k>n vanishing lemma）; fiberHiddenBitCount cross-term（需 fiberHiddenBitCount b x = ewc(...) bridge lemmas）——+1 定理，论文覆盖率不变，Folding prop:fold-fiber-count-reciprocity 强覆盖再深化（Phase R4，commit 8dad53c）
 
 **Phase R3: fiberHiddenBitCount 定义 + 分支质量守恒律（Round R3）**：单文件 FiberWeightCount.lean（+78行，新增至646行）——fiberHiddenBitCount（def + cor:pom-branch-mass-law（**新标签**）：d_{m,b}(x) 定义，纤维内隐藏位 b 的分裂计数，FiberWeightCount.lean:574）; fiberMultiplicity\_split\_by\_hiddenBit（cor:pom-branch-mass-law：d(x) = d_0(x) + d_1(x)，纤维多重度按隐藏位分裂，FiberWeightCount.lean:579）; fiberHiddenBitCount\_one\_sum（cor:pom-branch-mass-law：∑_x d_1(x) = hiddenBitCount m，全局分支-1 质量守恒，FiberWeightCount.lean:595）; fiberHiddenBitCount\_zero\_sum（cor:pom-branch-mass-law：∑_x d_0(x) = 2^m - hiddenBitCount m，全局分支-0 质量守恒，FiberWeightCount.lean:629）——**1 个新论文标签**（cor:pom-branch-mass-law）——POM ~542→~543（+1 新标签），全局 1355→1356（Phase R3，commit 5037945）
@@ -237,7 +239,7 @@
 
 ### Lean4 形式化状态
 
-- **1,299 个论文标签已注册**到 SourceMap（bridge 标签另计）
+- **1,300 个论文标签已注册**到 SourceMap（bridge 标签另计）
 - ~2,553 个 Lean4 定理（含内部引理）
 - 0 公理，0 sorry，lake build 通过
 
@@ -245,7 +247,7 @@
 
 | 度量 | 数值 |
 |---|---|
-| 全局覆盖率 | 1356/10,588 = **12.8%** |
+| 全局覆盖率 | 1357/10,588 = **12.8%** |
 | 强覆盖（一般性 ∀ 证明） | ~52 (0.5%) |
 | 中覆盖（有界 + 条件） | ~161 (1.5%) |
 | 弱覆盖（native_decide / 代理） | ~723 (6.8%) |
@@ -259,13 +261,13 @@
 | 新生算术 | 151 | ~93 | ~61.6% |
 | Folding | 317 | ~105 | ~33.1% |
 | 群统一 | 457 | ~110 | ~24.1% |
-| POM | 1,525 | ~543 | ~35.6% |
+| POM | 1,525 | ~544 | ~35.7% |
 | 圆维度 | 342 | 62 | 18.1% |
 | Zeta 有限部分 | 4,437 | ~255 | ~6% |
 | 结论 | 1,727 | 83 | 4.8% |
 | 未追踪 body | 143 | 2 | ~1% |
 | 附录 | 1,316 | 0 | 0% |
-| **总计** | **10,588** | **1356** | **12.8%** |
+| **总计** | **10,588** | **1357** | **12.8%** |
 
 ## 3. 未来工作：30 条具体计划
 
