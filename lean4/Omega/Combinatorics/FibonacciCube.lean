@@ -1754,4 +1754,65 @@ theorem twoPointCount_eq_fib_prod (n : Nat) (i j : Fin n)
         have hnj : n' + 3 - j.val = 1 := by omega
         rw [hnj, Nat.fib_one, Nat.mul_one, hji]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R30: Fibonacci cube Euler characteristic
+-- ══════════════════════════════════════════════════════════════
+
+/-- Euler characteristic of the Fibonacci cube equals 1: Σ_k (-1)^k · f(n,k) = 1.
+    thm:pom-fibcube-fvector-closed -/
+theorem fibcubeFVector_euler_char (n : Nat) :
+    (Finset.range (n + 1)).sum (fun k =>
+      ((-1 : ℤ) ^ k) * (fibcubeFVector n k : ℤ)) = 1 := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+  match n with
+  | 0 => simp
+  | 1 => simp [Finset.sum_range_succ]
+  | n + 2 =>
+    -- Expand using f(n+2,k) = f(n+1,k) + f(n,k) + [k≠0]f(n,k-1)
+    have hexpand : ∀ k, (fibcubeFVector (n + 2) k : ℤ) =
+        (fibcubeFVector (n + 1) k : ℤ) + (fibcubeFVector n k : ℤ) +
+        (if k = 0 then 0 else (fibcubeFVector n (k - 1) : ℤ)) := by
+      intro k; push_cast [fibcubeFVector_succ_succ]; split <;> ring
+    simp_rw [hexpand, mul_add, Finset.sum_add_distrib]
+    -- Now have three sums:
+    -- S1 = Σ (-1)^k f(n+1,k)
+    -- S2 = Σ (-1)^k f(n,k)
+    -- S3 = Σ (-1)^k [k≠0] f(n,k-1)
+    -- Extend S1 to range(n+2) by adding zero terms
+    have hS1 : (Finset.range (n + 3)).sum (fun k => (-1 : ℤ) ^ k * (fibcubeFVector (n + 1) k : ℤ)) =
+        (Finset.range (n + 2)).sum (fun k => (-1 : ℤ) ^ k * (fibcubeFVector (n + 1) k : ℤ)) := by
+      rw [Finset.sum_range_succ]
+      simp [fibcubeFVector_eq_zero_of_gt (n + 1) (n + 2) (by omega)]
+    rw [hS1, ih (n + 1) (by omega)]
+    -- Extend S2 to range(n+1) by adding zero terms
+    have hS2 : (Finset.range (n + 3)).sum (fun k => (-1 : ℤ) ^ k * (fibcubeFVector n k : ℤ)) =
+        (Finset.range (n + 1)).sum (fun k => (-1 : ℤ) ^ k * (fibcubeFVector n k : ℤ)) := by
+      rw [Finset.sum_range_succ, Finset.sum_range_succ]
+      simp [fibcubeFVector_eq_zero_of_gt n (n + 2) (by omega),
+            fibcubeFVector_eq_zero_of_gt n (n + 1) (by omega)]
+    rw [hS2, ih n (by omega)]
+    -- S3: shift index. Σ_{k<n+3} (-1)^k [k≠0] f(n,k-1) = Σ_{j<n+2} (-1)^{j+1} f(n,j) = -χ(n)
+    have hS3 : (Finset.range (n + 3)).sum (fun k =>
+        (-1 : ℤ) ^ k * if (k : Nat) = 0 then (0 : ℤ) else (fibcubeFVector n (k - 1) : ℤ)) =
+        -(Finset.range (n + 1)).sum (fun k => (-1 : ℤ) ^ k * (fibcubeFVector n k : ℤ)) := by
+      -- Peel off k=0 term (which is 0)
+      rw [Finset.sum_range_succ' (fun k =>
+        (-1 : ℤ) ^ k * if (k : Nat) = 0 then (0 : ℤ) else (fibcubeFVector n (k - 1) : ℤ))]
+      simp only [pow_zero, one_mul, ite_true, show (0 : Nat) = 0 from rfl, Nat.zero_add]
+      -- Remaining: Σ_{k<n+2} (-1)^{k+1} f(n,k)
+      have hshift : ∀ k ∈ Finset.range (n + 2),
+          (-1 : ℤ) ^ (k + 1) * (if (k + 1 : Nat) = 0 then (0 : ℤ)
+          else (fibcubeFVector n (k + 1 - 1) : ℤ)) =
+          -((-1 : ℤ) ^ k * (fibcubeFVector n k : ℤ)) := by
+        intro k _
+        simp [show ¬(k + 1 = 0) from by omega, show k + 1 - 1 = k from by omega,
+          pow_succ, neg_mul, mul_comm]
+      rw [Finset.sum_congr rfl hshift, Finset.sum_neg_distrib]
+      -- Extend from range(n+2) to range(n+1) by showing extra term is 0
+      rw [Finset.sum_range_succ]
+      simp [fibcubeFVector_eq_zero_of_gt n (n + 1) (by omega)]
+    rw [hS3, ih n (by omega)]
+    ring
+
 end Omega
