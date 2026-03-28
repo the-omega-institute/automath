@@ -711,4 +711,38 @@ theorem foldIndex_tendsto_log_two_div_phi :
   have h2m_pos : (0 : ℝ) < 2 ^ m := pow_pos (by norm_num) m
   rw [Real.log_div (ne_of_gt h2m_pos) hF_ne, Real.log_pow, sub_div, mul_div_cancel_left₀ _ hm_ne]
 
+/-- The fold index: I(m) = 2^m / F_{m+2}, measuring compression ratio.
+    def:fold-index -/
+noncomputable def foldIndex (m : Nat) : ℝ := 2 ^ m / (Nat.fib (m + 2) : ℝ)
+
+/-- The fold index exceeds 1 for m ≥ 2 (since F_{m+2} < 2^m).
+    prop:fold-index-gt-one -/
+theorem foldIndex_gt_one (m : Nat) (hm : 2 ≤ m) : 1 < foldIndex m := by
+  have hF_pos : (0 : ℝ) < (Nat.fib (m + 2) : ℝ) := by exact_mod_cast Nat.fib_pos.mpr (by omega)
+  rw [foldIndex, one_lt_div hF_pos]
+  exact_mod_cast fib_lt_pow_two_of_ge_two m hm
+
+/-- The fold index is strictly increasing for m ≥ 1:
+    I(m) < I(m+1) iff F_{m+3} < 2·F_{m+2} iff F_{m+1} < F_{m+2}.
+    prop:fold-index-strict-mono -/
+theorem foldIndex_strict_mono_of_ge_one (m : Nat) (hm : 1 ≤ m) :
+    foldIndex m < foldIndex (m + 1) := by
+  have hFm : (0 : ℝ) < (Nat.fib (m + 2) : ℝ) := by exact_mod_cast Nat.fib_pos.mpr (by omega)
+  have hFm1 : (0 : ℝ) < (Nat.fib (m + 3) : ℝ) := by exact_mod_cast Nat.fib_pos.mpr (by omega)
+  rw [foldIndex, foldIndex, div_lt_div_iff₀ hFm hFm1]
+  -- Goal: 2^m * F(m+3) < 2^(m+1) * F(m+2)
+  -- Nat version: 2^m * F(m+3) < 2^(m+1) * F(m+2)
+  -- Since F(m+3) = F(m+1) + F(m+2) and F(m+1) < F(m+2):
+  -- 2^m * (F(m+1) + F(m+2)) < 2 * 2^m * F(m+2)
+  -- ↔ F(m+1) + F(m+2) < 2 * F(m+2) ↔ F(m+1) < F(m+2) ✓
+  have hnat : 2 ^ m * Nat.fib (m + 3) < 2 ^ (m + 1) * Nat.fib (m + 2) := by
+    have h2m : 0 < 2 ^ m := Nat.pos_of_ne_zero (pow_ne_zero m (by omega))
+    have hfib_lt : Nat.fib (m + 3) < 2 * Nat.fib (m + 2) := by
+      rw [Nat.fib_add_two, Nat.two_mul]
+      exact Nat.add_lt_add_right (Nat.fib_lt_fib_succ (by omega)) _
+    calc 2 ^ m * Nat.fib (m + 3)
+        < 2 ^ m * (2 * Nat.fib (m + 2)) := by exact (Nat.mul_lt_mul_left h2m).mpr hfib_lt
+      _ = 2 ^ (m + 1) * Nat.fib (m + 2) := by rw [pow_succ]; ring
+  exact_mod_cast hnat
+
 end Omega.Entropy

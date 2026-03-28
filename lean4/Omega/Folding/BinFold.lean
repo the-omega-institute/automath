@@ -307,4 +307,22 @@ set_option maxHeartbeats 1600000 in
     cor:conclusion-window8-min-fiber -/
 theorem cBinFiberMin_eight : cBinFiberMin 8 = 3 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R43: BinFold m=8 index-compression gap
+-- ══════════════════════════════════════════════════════════════
+
+set_option maxHeartbeats 1600000 in
+/-- Max fiber mult x |X_8| ≠ 2^8 (non-uniform compression at m=8).
+    thm:conclusion-window8-local-index-global-compression-separation -/
+theorem local_index_ne_global_compression_eight :
+    cBinFiberMax 8 * Fintype.card (X 8) ≠ 2 ^ 8 := by
+  rw [cBinFiberMax_eight, X.card_eq_fib]; native_decide
+
+set_option maxHeartbeats 1600000 in
+/-- Index-compression gap at m=8: max_mult x |X_8| - 2^8 = 74.
+    thm:conclusion-window8-local-index-global-compression-separation -/
+theorem index_compression_gap_eight :
+    cBinFiberMax 8 * Fintype.card (X 8) - 2 ^ 8 = 74 := by
+  rw [cBinFiberMax_eight, X.card_eq_fib]; native_decide
+
 end Omega

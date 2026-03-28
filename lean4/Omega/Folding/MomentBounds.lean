@@ -1039,4 +1039,10 @@ theorem momentSum_three_super_quadratic (m : Nat) (hm : 4 ≤ m) :
     momentSum_three_double (m + 1) (by omega)
   linarith
 
+/-- S_q(m) ≥ |X_m| for q ≥ 1: each fiber contributes d(x)^q ≥ 1.
+    prop:pom-moment-ge-card -/
+theorem momentSum_ge_card_fintype (q m : Nat) (hq : 1 ≤ q) :
+    Fintype.card (X m) ≤ momentSum q m := by
+  rw [X.card_eq_fib]; exact momentSum_ge_card q m
+
 end Omega
