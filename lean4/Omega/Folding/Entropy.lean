@@ -446,6 +446,12 @@ theorem fib_nearest_integer (n : Nat) :
   rw [abs_neg]
   exact abs_psi_pow_div_sqrt5_lt_half n
 
+/-- Named alias with positivity hypothesis: |F(n) - φ^n/√5| < 1/2 for n ≥ 1.
+    prop:cdim-fibonacci-nearest-integer -/
+theorem fib_nearest_integer_of_pos (n : Nat) (hn : 1 ≤ n) :
+    |(Nat.fib n : ℝ) - φ ^ n / Real.sqrt 5| < 1 / 2 :=
+  fib_nearest_integer n
+
 /-! ### Chebyshev phase -/
 
 /-- (φ/2)² = (φ+1)/4.

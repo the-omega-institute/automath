@@ -796,4 +796,20 @@ theorem Fold_fiber_covers_val_class (m : Nat) (x : X m) :
   intro w hw
   exact X.eq_of_stableValue_eq (by rw [stableValue_Fold_mod, hw])
 
+/-- The fold setoid: two words are equivalent iff they fold to the same stable word.
+    def:fold-setoid -/
+def foldSetoid (m : Nat) : Setoid (Word m) where
+  r w w' := Fold w = Fold w'
+  iseqv := ⟨fun _ => rfl, fun h => h.symm, fun h1 h2 => h1.trans h2⟩
+
+/-- The quotient Word m / foldSetoid is equivalent to X m.
+    thm:fold-quotient-equiv -/
+noncomputable def foldQuotientEquiv (m : Nat) : Quotient (foldSetoid m) ≃ X m :=
+  (Equiv.ofBijective
+    (Quotient.lift Fold (fun _ _ h => h))
+    ⟨fun a b => Quotient.inductionOn₂ a b (fun _ _ h =>
+        Quotient.sound (show (foldSetoid m).r _ _ from h)),
+     fun x => let ⟨w, hw⟩ := Fold_surjective m x
+        ⟨Quotient.mk _ w, hw⟩⟩)
+
 end Omega

@@ -107,6 +107,13 @@ theorem momentSum_eq_congr_pow_sum (q m : Nat) :
     exact hbij.sum_comp (fun r : Fin (Nat.fib (m + 2)) => weightCongruenceCount m r.val ^ q)
   rw [step, ← Fin.sum_univ_eq_sum_range]
 
+/-- Named alias: S_q(m) = Σ_{r<F} wcc(m,r)^q.
+    prop:pom-moment-congruence-q-general -/
+theorem momentSum_eq_weightCongruenceCount_pow (q m : Nat) :
+    momentSum q m =
+    (Finset.range (Nat.fib (m + 2))).sum (fun r => weightCongruenceCount m r ^ q) :=
+  momentSum_eq_congr_pow_sum q m
+
 -- ══════════════════════════════════════════════════════════════
 -- exactWeightTriple definition
 -- ══════════════════════════════════════════════════════════════
