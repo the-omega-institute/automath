@@ -840,4 +840,38 @@ theorem paper_large_fiber_moment_bound (q m D : Nat) (hD : 1 ≤ D) (hq : 1 ≤ 
     exact Finset.filter_subset _ _
   linarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R2: Cauchy-Schwarz lower bound, S_3 strict mono, D < 2^m
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_2(m) * F_{m+2} ≥ (2^m)², discrete Cauchy-Schwarz lower bound.
+    thm:fold-collision-convex-lower-bounds -/
+theorem momentSum_two_ge_spike_flat (m : Nat) :
+    momentSum 2 m * Nat.fib (m + 2) ≥ (2 ^ m) ^ 2 := by
+  -- Cauchy-Schwarz: (∑ f)² ≤ |S| * ∑ f²
+  have hCS : (∑ x ∈ (Finset.univ : Finset (X m)), (X.fiberMultiplicity x : Nat)) ^ 2 ≤
+      (Finset.univ : Finset (X m)).card *
+      ∑ x ∈ (Finset.univ : Finset (X m)), (X.fiberMultiplicity x : Nat) ^ 2 :=
+    sq_sum_le_card_mul_sum_sq
+  simp only [Finset.card_univ, X.card_eq_fib] at hCS
+  rw [show ∑ x ∈ (Finset.univ : Finset (X m)), X.fiberMultiplicity x = 2 ^ m from by
+    simp [X.fiberMultiplicity_sum_eq_pow]] at hCS
+  rw [show ∑ x ∈ (Finset.univ : Finset (X m)), X.fiberMultiplicity x ^ 2 = momentSum 2 m from by
+    simp [momentSum]] at hCS
+  linarith [Nat.mul_comm (momentSum 2 m) (Nat.fib (m + 2))]
+
+/-- S_3(m) < S_3(m+1) for all m.
+    prop:pom-s3-recurrence -/
+theorem momentSum_three_strict_mono_all (m : Nat) :
+    momentSum 3 m < momentSum 3 (m + 1) := by
+  match m with
+  | 0 => rw [momentSum_three_zero, momentSum_three_one]; omega
+  | m + 1 => exact momentSum_three_strict_mono (m + 1) (by omega)
+
+/-- D(m) < 2^m for m ≥ 2.
+    cor:pom-max-fiber-rate-endpoint -/
+theorem maxFiberMultiplicity_strict_lt_pow (m : Nat) (hm : 2 ≤ m) :
+    X.maxFiberMultiplicity m < 2 ^ m :=
+  maxFiber_lt_wordcount m hm
+
 end Omega
