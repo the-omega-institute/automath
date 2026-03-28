@@ -6,7 +6,7 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~29,049 |
+| 总行数 | ~29,413 |
 | 定理/定义数 | ~3,198 |
 | 论文接口包装 | 360 |
 | 文件数 | 69 |
@@ -112,6 +112,7 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R24: 群统一三窗唯一性 + POM 黄金耦合 Fibonacci det-Green + 对数凸性正性（Round R24）**：两文件 BoundaryLayer.lean（:142）+ FibonacciPolynomial.lean（:457, :462）——bdry\_three\_window\_sum12\_unique（thm:bdry-three-window-sum12-unique-even-triple（**群统一章新标签**）：三偶窗边界计数和为12 → 三元组唯一为(4,6,8)，BoundaryLayer.lean:142）; fenceDet\_eq\_detPoly\_eval\_one（cor:pom-Lk-t1-fibonacci-det-green（**新标签**）：fenceDet k = detPoly k 在 t=1 的求值 = F_{2k+1}，黄金耦合处行列式与 Fibonacci 数统一，FibonacciPolynomial.lean:457）; detPoly\_eval\_pos（cor:pom-Lk-det-logconvex-ratio：D_k(t) > 0 for t > 0，严格正性，:462）——**2 个新论文标签**（thm:bdry-three-window-sum12-unique-even-triple, cor:pom-Lk-t1-fibonacci-det-green；cor:pom-Lk-det-logconvex-ratio 已注册，深化）——群统一 ~110→~111（+1），POM ~584→~585（+1），全局 ~1,429→~1,431（+2），commit 0d8abff
 **Phase R23: 结论章局域指数-全局压缩率分离 + detPoly 次高项系数与导数（Round R23）**：两文件 BinFold.lean（:240-258）+ FibonacciPolynomial.lean（:392, :427）——local\_index\_ne\_global\_compression\_six（thm:conclusion-window6-local-index-global-compression-separation（**结论章新标签**）：PP 指数=4 ≠ 64/21 全局压缩率，局域与全局指数严格不等，BinFold.lean:240）; local\_index\_gt\_global\_ratio\_six（thm:conclusion-window6-local-index-global-compression-separation：4 > 64/21，BinFold.lean:248）; index\_compression\_gap\_six（thm:conclusion-window6-local-index-global-compression-separation：gap = 4 - 64/21 精确量化，BinFold.lean:258）; detPoly\_coeff\_sub\_leading（prop:pom-Lk-det-coeff-binomial：[t^{k-1}]D_k = 2k-1 次高项系数，FibonacciPolynomial.lean:392）; detPoly\_deriv\_eval\_zero\_double（prop:pom-Lk-det-coeff-binomial：D_k'(0) = 2k-1，导数端点刚性，:427）——**1 个新论文标签**（thm:conclusion-window6-local-index-global-compression-separation；prop:pom-Lk-det-coeff-binomial 已注册，深化）——结论 ~84→~85（+1），全局 ~1,428→~1,429（+1），commit 8b92977
 **Phase R22: 结论章三重刚性尺度 + detPoly monic/degree（Round R22）**：两文件 BinFold.lean（:224-233）+ FibonacciPolynomial.lean（:388, :392）——cBinFiberHist\_6\_5（cor:conclusion-window6-three-rigidity-scales（**新标签，结论章**）：BinFold m=6 第5分箱直方图值，BinFold.lean:224）; three\_rigidity\_scales\_six（cor:conclusion-window6-three-rigidity-scales：4<21<64 三重刚性尺度联合证书，BinFold.lean:233；注：使用已有 cBinFiberMax 而非新建 cMaxBinFiberMult）; detPoly\_monic（prop:pom-Lk-det-coeff-binomial：D_k(t) 是首一多项式，FibonacciPolynomial.lean:388）; detPoly\_natDegree（prop:pom-Lk-det-coeff-binomial：natDegree(D_k) = k，:392）——**1 个新论文标签**（cor:conclusion-window6-three-rigidity-scales；prop:pom-Lk-det-coeff-binomial 已注册，深化）——结论 ~83→~84（+1），全局 ~1,427→~1,428（+1），commit c4b8c44
 
@@ -263,7 +264,7 @@
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
-## 2. 论文总覆盖率分析（2026-03-28 Phase R23 登记版）
+## 2. 论文总覆盖率分析（2026-03-28 Phase R24 登记版）
 
 ### 论文规模（Phase 7 重新扫描）
 
@@ -275,16 +276,16 @@
 
 ### Lean4 形式化状态
 
-- ~3,198 个 Lean4 声明（含内部引理、定义）
-- ~29,049 行代码，69 个文件
+- ~3,220 个 Lean4 声明（含内部引理、定义）
+- ~29,413 行代码，69 个文件
 - 0 公理，0 sorry，lake build 通过
-- 111 个 LaTeX `\leanverified` / `\leanpartial` 标注
+- 113 个 LaTeX `\leanverified` / `\leanpartial` 标注
 
 ### 覆盖率
 
 | 度量 | 数值 |
 |---|---|
-| 全局覆盖率（body） | ~1,429/9,958 = **~14.4%** |
+| 全局覆盖率（body） | ~1,431/9,958 = **~14.4%** |
 | 强覆盖（一般性 ∀ 证明） | ~65 (0.7%) |
 | 中覆盖（有界 + 条件） | ~162 (1.6%) |
 | 弱覆盖（native_decide / 代理） | ~723 (7.3%) |
@@ -363,14 +364,14 @@
 | SPG | 127 | ~71 | ~55.9% |
 | 新生算术 | 151 | ~112 | ~74.2% |
 | Folding | 317 | ~119 | ~37.5% |
-| 群统一 | 457 | ~110 | ~24.1% |
-| POM | 1,526 | ~584 | ~38.2% |
+| 群统一 | 457 | ~111 | ~24.3% |
+| POM | 1,526 | ~585 | ~38.3% |
 | 圆维度 | 342 | ~62 | ~18.1% |
 | Zeta 有限部分 | 4,437 | ~255 | ~6% |
 | 结论 | 2,458 | ~85 | ~3.5% |
 | 其他 body | ~143 | ~2 | ~1% |
 | 附录 | 1,320 | 0 | 0% |
-| **body 总计** | **9,958** | **~1,429** | **~14.4%** |
+| **body 总计** | **9,958** | **~1,431** | **~14.4%** |
 
 ## 3. 未来工作：30 条具体计划
 
