@@ -112,6 +112,7 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R30: 半环同态刚性（Circle Dimension 新标签）+ Fibonacci cube Euler 特征（Round R30）**：两文件 CircleDimension.lean（:176-249）+ FibonacciCube.lean（:1760-1820）——semiring\_hom\_rigidity（thm:cdim-nr-nd-semiring-hom-rigidity（**Circle Dimension 新标签**）：NN^r→NN^d 的任意交换幺半环同态均为坐标抽取，CircleDimension.lean:176）; fibcubeFVector\_euler\_char（thm:pom-fibcube-fvector-closed（深化）：Fibonacci cube Euler 特征 χ(Γ_n)，FibonacciCube.lean:1763）——**1 个新论文标签**（thm:cdim-nr-nd-semiring-hom-rigidity；thm:pom-fibcube-fvector-closed 已注册，深化）——圆维度 ~62→~63（+1），全局 ~1,437→~1,438（+1），标注 133→135，commit 76a13aa
 **Phase R29: 隐藏位密度界 + 二点计数乘积分解 + Fibonacci 卷积和（Round R29）**：三文件 MaxFiberTwoStep.lean（:845-851）+ FibonacciCube.lean（:1475-1754）+ Core/Fib.lean（:1075-1107）——hiddenBitCount\_near\_third（cor:pom-hidden-bit-entropy（**新标签**）：3B(m) ≤ 2^m ≤ 3B(m)+2，隐藏位密度趋于 1/3，MaxFiberTwoStep.lean:848）; twoPointCount/cTwoPointCount（定义：k-点函数计数，FibonacciCube.lean:1478）; twoPointCount\_adjacent（thm:pom-fibcube-kpoint-count（**新标签**）：相邻指标时 k-点计数为零，FibonacciCube.lean:1498）; twoPointCount\_eq\_fib\_prod（thm:pom-fibcube-kpoint-count：间隔条件下乘积公式，FibonacciCube.lean:1609）; fib\_product\_sum（thm:pom-fibcube-theta-class-size（深化）：∑F_i·F_{n-i+1} Fibonacci 卷积和，Core/Fib.lean:1075）——**2 个新论文标签**（cor:pom-hidden-bit-entropy, thm:pom-fibcube-kpoint-count；thm:pom-fibcube-theta-class-size 已注册，深化）——POM ~588→~590（+2），全局 ~1,435→~1,437（+2），标注 129→133，commit cd1f7f9
 **Phase R28: m=7 指数-压缩率分离深化 + Fibonacci Cassini 统一恒等式（Round R28）**：两文件 BinFold.lean（:283-294）+ FibonacciPolynomial.lean（:549）——local\_index\_ne\_global\_compression\_seven（thm:conclusion-window6-local-index-global-compression-separation（深化至 m=7）：cBinFiberMax(7)×|X_7| ≠ 2^7，BinFold.lean:286）; index\_compression\_gap\_seven（thm:conclusion-window6-local-index-global-compression-separation（深化至 m=7）：gap(7)=42，BinFold.lean:292）; fib\_product\_cassini（prop:pom-fib-cassini-unified（**新标签**）：F_n·F_{n+2}=F_{n+1}²+(-1)^{n+1} 在 ℤ 中的统一 Cassini 恒等式，FibonacciPolynomial.lean:549）——**1 个新论文标签**（prop:pom-fib-cassini-unified；thm:conclusion-window6-local-index-global-compression-separation 已注册，深化）——结论深化（+0），POM ~587→~588（+1），全局 ~1,434→~1,435（+1），标注 126→129，commit 3d2723b
 **Phase R27: ★ 里程碑100+定理 — 群统一 uplift 残余律 + POM 重量计数单位分解 + 纤维超量和（Round R27）**：三文件 BoundaryLayer.lean（:204）+ MomentRecurrence.lean（:992）+ MomentBounds.lean（:1011）——bdry\_uplift\_second\_difference\_residual（thm:bdry-uplift-second-difference-residual-law（**群统一章新标签**）：Δ_7^(2)=34, Δ_8^(2)=55，boundary uplift 三层二阶差分残余律，BoundaryLayer.lean:204）; exactWeightCount\_total\_sum（prop:pom-ewc-partition-of-unity（**新标签**）：∑EWC(m,k)=2^m，精确重量计数单位分解，标注于 prop:pom-power-sum-hankel-psd，MomentRecurrence.lean:992）; fiberMultiplicity\_excess\_sum（prop:pom-fiberMultiplicity-excess（**新标签**）：∑(d_m(x)-1)=2^m-|X_m|，纤维超量和恒等式，标注于 prop:pom-power-sum-hankel-psd，MomentBounds.lean:1011）——**3 个新论文标签**（thm:bdry-uplift-second-difference-residual-law, prop:pom-ewc-partition-of-unity, prop:pom-fiberMultiplicity-excess）——群统一 ~111→~112（+1），POM ~585→~587（+2），全局 ~1,431→~1,434（+3），commit e37c838
@@ -269,7 +270,7 @@
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
-## 2. 论文总覆盖率分析（2026-03-28 Phase R29 登记版）
+## 2. 论文总覆盖率分析（2026-03-28 Phase R30 登记版）
 
 ### 论文规模（Phase 7 重新扫描）
 
@@ -284,13 +285,13 @@
 - ~3,220 个 Lean4 声明（含内部引理、定义）
 - ~29,413 行代码，69 个文件
 - 0 公理，0 sorry，lake build 通过
-- 133 个 LaTeX `\leanverified` / `\leanpartial` 标注
+- 135 个 LaTeX `\leanverified` / `\leanpartial` 标注
 
 ### 覆盖率
 
 | 度量 | 数值 |
 |---|---|
-| 全局覆盖率（body） | ~1,437/9,958 = **~14.4%** |
+| 全局覆盖率（body） | ~1,438/9,958 = **~14.4%** |
 | 强覆盖（一般性 ∀ 证明） | ~65 (0.7%) |
 | 中覆盖（有界 + 条件） | ~162 (1.6%) |
 | 弱覆盖（native_decide / 代理） | ~723 (7.3%) |
@@ -371,12 +372,12 @@
 | Folding | 317 | ~119 | ~37.5% |
 | 群统一 | 457 | ~112 | ~24.5% |
 | POM | 1,526 | ~590 | ~38.6% |
-| 圆维度 | 342 | ~62 | ~18.1% |
+| 圆维度 | 342 | ~63 | ~18.4% |
 | Zeta 有限部分 | 4,437 | ~255 | ~6% |
 | 结论 | 2,458 | ~85 | ~3.5% |
 | 其他 body | ~143 | ~2 | ~1% |
 | 附录 | 1,320 | 0 | 0% |
-| **body 总计** | **9,958** | **~1,437** | **~14.4%** |
+| **body 总计** | **9,958** | **~1,438** | **~14.4%** |
 
 ## 3. 未来工作：30 条具体计划
 
