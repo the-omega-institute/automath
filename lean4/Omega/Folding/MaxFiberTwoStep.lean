@@ -535,6 +535,40 @@ theorem paper_hiddenBitCount_closed (m : Nat) :
     3 * hiddenBitCount m + (if m % 2 = 0 then 1 else 2) = 2 ^ m := by
   have := hiddenBitCount_closed m; omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R13: hiddenBitCount even/odd closed forms
+-- ══════════════════════════════════════════════════════════════
+
+/-- 2^(2k) = 4^k. -/
+private theorem two_pow_two_mul (k : Nat) : 2 ^ (2 * k) = 4 ^ k := by
+  induction k with
+  | zero => simp
+  | succ k ih => rw [show 2 * (k + 1) = 2 * k + 2 from by omega, pow_add]; simp [ih]; ring
+
+/-- 3·A(2k) = 4^k - 1 for k ≥ 1.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem hiddenBitCount_even_closed (k : Nat) (hk : 1 ≤ k) :
+    3 * hiddenBitCount (2 * k) = 4 ^ k - 1 := by
+  have h := hiddenBitCount_closed (2 * k)
+  have hmod : (2 * k) % 2 = 0 := by omega
+  simp only [hmod, ite_true] at h
+  rw [two_pow_two_mul] at h
+  omega
+
+/-- 3·A(2k+1) = 2·4^k - 2 for all k.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem hiddenBitCount_odd_closed (k : Nat) :
+    3 * hiddenBitCount (2 * k + 1) = 2 * 4 ^ k - 2 := by
+  have h := paper_hiddenBitCount_closed (2 * k + 1)
+  have hmod : (2 * k + 1) % 2 = 1 := by omega
+  rw [hmod] at h; simp at h
+  -- h : 3 * hiddenBitCount (2 * k + 1) + 2 = 2 ^ (2 * k + 1)
+  have h4 : 2 ^ (2 * k + 1) = 2 * 4 ^ k := by
+    have : 2 ^ (2 * k + 1) = 2 ^ (2 * k) * 2 := pow_succ 2 (2 * k)
+    rw [two_pow_two_mul] at this; linarith
+  have hge : 1 ≤ 4 ^ k := Nat.one_le_pow k 4 (by omega)
+  omega
+
 /-- Fold + hiddenBit jointly determine weight.
     prop:pom-fold-prime-lift-injective -/
 theorem fold_hiddenBit_determines_weight (w1 w2 : Word m)

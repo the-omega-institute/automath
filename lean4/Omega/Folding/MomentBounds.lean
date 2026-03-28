@@ -911,4 +911,45 @@ theorem maxFiberMultiplicity_strict_lt_pow (m : Nat) (hm : 2 ≤ m) :
     X.maxFiberMultiplicity m < 2 ^ m :=
   maxFiber_lt_wordcount m hm
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R13: S_q lower bound + strict Fibonacci bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- Monotonicity of S_q in q for general gap: a ≤ b → 1 ≤ a → S_a(m) ≤ S_b(m). -/
+theorem momentSum_mono_q_of_le {a b m : Nat} (hab : a ≤ b) (ha : 1 ≤ a) :
+    momentSum a m ≤ momentSum b m := by
+  obtain ⟨d, rfl⟩ := Nat.exists_eq_add_of_le hab
+  clear hab
+  induction d with
+  | zero => simp
+  | succ d ih => exact le_trans ih (momentSum_mono_q (a + d) m (by omega))
+
+/-- 3·2^m ≤ S_q(m) for q ≥ 2, m ≥ 6.
+    prop:pom-sq-lower-three-pow -/
+theorem momentSum_q_ge_three_pow (q m : Nat) (hq : 2 ≤ q) (hm : 6 ≤ m) :
+    3 * 2 ^ m ≤ momentSum q m :=
+  le_trans (momentSum_two_ge_three_pow m hm) (momentSum_mono_q_of_le hq (by omega))
+
+/-- 2·F_{m+2} < S_2(m) for m ≥ 4.
+    prop:pom-s2-strict-fib-lower -/
+theorem momentSum_two_gt_two_fib_strict (m : Nat) (hm : 4 ≤ m) :
+    2 * Nat.fib (m + 2) < momentSum 2 m := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 | 1 | 2 | 3 => omega
+    | 4 => rw [momentSum_two_four]; decide
+    | 5 => rw [momentSum_two_five]; decide
+    | m + 6 =>
+      have h5 := ih (m + 5) (by omega) (by omega)
+      have hge := momentSum_two_succ_ge_double (m + 5) (by omega)
+      -- F(m+8) = F(m+6) + F(m+7), and F(m+6) < F(m+7)
+      have hfib8 : Nat.fib (m + 8) = Nat.fib (m + 6) + Nat.fib (m + 7) := by
+        have := @Nat.fib_add_two (m + 6); omega
+      have hfib7 : Nat.fib (m + 7) = Nat.fib (m + 5) + Nat.fib (m + 6) := by
+        have := @Nat.fib_add_two (m + 5); omega
+      have hfib_pos : 0 < Nat.fib (m + 5) := Nat.fib_pos.mpr (by omega)
+      -- S_2(m+6) ≥ 2·S_2(m+5) > 4·F(m+7) > 2·F(m+8) since F(m+6) < F(m+7)
+      linarith
+
 end Omega
