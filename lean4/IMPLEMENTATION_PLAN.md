@@ -112,6 +112,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R35: 自同构刚性 + detPoly 完整二项系数闭式 + 跨分辨率同态存在性（Round R35）**：三文件 FiberRing.lean（:258-271）+ FibonacciPolynomial.lean（:471-539）+ FiberArithmeticProperties.lean（:749-769）——ringEquiv\_eq\_id（cor:finite-resolution-automorphism-rigidity（**新生算术新标签**）：X_m 的每个环自同构均为恒等，via ZMod subsingleton，FiberRing.lean:258）; detPoly\_coeff\_binomial（prop:pom-Lk-det-coeff-binomial（深化，完整系数闭式）：[t^j]D_k = C(k+j, 2j)，完全显式二项系数公式，FibonacciPolynomial.lean:471）; restrict\_ringHom\_exists\_iff（cor:cross-resolution-morphism-existence（**新生算术新标签**）：unit-preserving ZMod(F_e)→+*ZMod(F_d) 存在 ↔ d|e，FiberArithmeticProperties.lean:749）——**2 个新论文标签**（cor:finite-resolution-automorphism-rigidity, cor:cross-resolution-morphism-existence；prop:pom-Lk-det-coeff-binomial 已注册，深化）——新生算术 ~114→~116（+2），POM ~591（不变，深化），全局 ~1,443→~1,445（+2），标注 147→150（+3 \leanverified），commit d8e2beb
+
 **Phase R34: A4 迹递推一般定理 + S3(13) 纯递推值（Round R34）**：两文件 CollisionZeta.lean（:654-691）+ CCSPrime8Split.lean（:742-749）——collisionKernel4\_trace\_recurrence（prop:pom-s4-recurrence（深化，一般性迹递推）：tr(A_4^{n+5})=2·tr(A_4^{n+4})+7·tr(A_4^{n+3})+2·tr(A_4^{n+1})-2·tr(A_4^n) for all n，Cayley-Hamilton 乘以 A^n + 迹线性性，CollisionZeta.lean:654）; momentSum\_three\_thirteen（prop:pom-s3-recurrence（深化）：S_3(13)=2170784 by pure recurrence，CCSPrime8Split.lean:742）——**0 个新论文标签**（两标签均已注册；本轮为深化覆盖）——注：popcount\_le\_half 已存在（FibonacciCube.lean:437，formalizer 确认）——POM ~591（不变，深化），全局 ~1,443（不变），标注 145→147（+2 \leanverified），commit dfd06ba
 
 **Phase R33: S3 递推唯一性 + Aut(N^r)≅S_r（Circle Dimension 新标签）（Round R33）**：两文件 CCSPrime8Split.lean（:705-734）+ CircleDimension.lean（:276-294）——momentSum\_three\_determined（prop:pom-s3-recurrence（深化，升级为完整 \leanverified）：S_3 递推唯一性，初值修正 f(0)=S_3(0)=1，CCSPrime8Split.lean:705）; semiring\_aut\_is\_perm（cor:cdim-nr-nd-semiring-hom-inj-auto（**Circle Dimension 新标签**）：Aut_Semiring(NN^r)≅S_r，CircleDimension.lean:276）——**1 个新论文标签**（cor:cdim-nr-nd-semiring-hom-inj-auto；prop:pom-s3-recurrence 已注册，\leanpartial → \leanverified 升级 + momentSum_three_determined 追加）——注：基值修正 S_3(0)=1（spec 有误，论文命题从 m=2 起陈述，无需修改正文）——圆维度 ~64→~65（+1），全局 ~1,442→~1,443（+1），标注 143→145（\leanpartial 替换为 2×\leanverified + 新增 1），commit a757898
@@ -275,7 +277,7 @@
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
-## 2. 论文总覆盖率分析（2026-03-28 Phase R34 登记版）
+## 2. 论文总覆盖率分析（2026-03-28 Phase R35 登记版）
 
 ### 论文规模（Phase 7 重新扫描）
 
@@ -290,7 +292,7 @@
 - ~3,220 个 Lean4 声明（含内部引理、定义）
 - ~29,413 行代码，69 个文件
 - 0 公理，0 sorry，lake build 通过
-- 147 个 LaTeX `\leanverified` / `\leanpartial` 标注
+- 150 个 LaTeX `\leanverified` / `\leanpartial` 标注
 
 ### 覆盖率
 
@@ -373,7 +375,7 @@
 | 章节 | LaTeX 定理数 | SourceMap 注册 | 覆盖率 |
 |---|---|---|---|
 | SPG | 127 | ~71 | ~55.9% |
-| 新生算术 | 151 | ~114 | ~75.5% |
+| 新生算术 | 151 | ~116 | ~76.8% |
 | Folding | 317 | ~119 | ~37.5% |
 | 群统一 | 457 | ~112 | ~24.5% |
 | POM | 1,526 | ~591 | ~38.7% |
@@ -382,7 +384,7 @@
 | 结论 | 2,458 | ~85 | ~3.5% |
 | 其他 body | ~143 | ~2 | ~1% |
 | 附录 | 1,320 | 0 | 0% |
-| **body 总计** | **9,958** | **~1,443** | **~14.5%** |
+| **body 总计** | **9,958** | **~1,445** | **~14.5%** |
 
 ## 3. 未来工作：30 条具体计划
 
