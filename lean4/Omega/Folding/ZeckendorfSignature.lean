@@ -599,4 +599,47 @@ theorem zeckendorf_16Fn_general (n : Nat) (hn : 8 ≤ n) :
 theorem zeckendorf_resolution_lock_m6 :
     15 * Nat.fib 4 = Nat.fib 9 + Nat.fib 6 + Nat.fib 4 := by native_decide
 
+/-- The leading Fibonacci term in the Zeckendorf decomposition of 15·F_n.
+    thm:pom-zeckendorf-15fn-leading-term -/
+theorem zeckendorf_15Fn_leading_term (n : Nat) (hn : 8 ≤ n) :
+    Nat.fib (n + 5) ≤ 15 * Nat.fib n ∧
+    15 * Nat.fib n < Nat.fib (n + 6) := by
+  constructor
+  · -- Left: F(n+5) ≤ 15*F(n), from Zeckendorf decomposition (sum ≥ largest term)
+    have := zeckendorf_15Fn_general n hn
+    omega
+  · -- Right: 15*F(n) < F(n+6), by Fibonacci expansion
+    obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
+    show 15 * Nat.fib (8 + k) < Nat.fib (8 + k + 6)
+    have e1 : Nat.fib (8 + k) = Nat.fib (k + 8) := by ring_nf
+    have e2 : Nat.fib (8 + k + 6) = Nat.fib (k + 14) := by ring_nf
+    rw [e1, e2]
+    -- Use Zeckendorf decomposition: 15*F(k+8) = F(k+13) + F(k+10) + F(k+8) + F(k+5) + F(k+2)
+    -- and F(k+14) = F(k+13) + F(k+12), so F(k+14) > F(k+13) ≥ 15*F(k+8) - other terms
+    -- Simpler: directly show F(k+14) > 15*F(k+8) using closed form
+    -- F(k+14)/F(k+8) → φ^6 ≈ 17.94 > 15
+    -- Algebraically: express both in terms of F(k+2), F(k+3)
+    have h4 := Omega.fib_succ_succ' (k + 2)
+    have h5 := Omega.fib_succ_succ' (k + 3)
+    have h6 := Omega.fib_succ_succ' (k + 4)
+    have h7 := Omega.fib_succ_succ' (k + 5)
+    have h8 := Omega.fib_succ_succ' (k + 6)
+    have h9 := Omega.fib_succ_succ' (k + 7)
+    have h10 := Omega.fib_succ_succ' (k + 8)
+    have h11 := Omega.fib_succ_succ' (k + 9)
+    have h12 := Omega.fib_succ_succ' (k + 10)
+    have h13 := Omega.fib_succ_succ' (k + 11)
+    have h14 := Omega.fib_succ_succ' (k + 12)
+    have hpos := Omega.fib_succ_pos (k + 1)
+    -- F(k+8) = 13*F(k+2) + 8*F(k+3) (from substitution chain)
+    -- F(k+14) = 233*F(k+2) + 144*F(k+3) (Fibonacci coefficients)
+    -- 15 * (13a + 8b) = 195a + 120b
+    -- 233a + 144b > 195a + 120b ↔ 38a + 24b > 0, true since a = F(k+2) ≥ 1
+    -- Express F(k+8) and F(k+14) in terms of a = F(k+2), b = F(k+3):
+    have hF8 : Nat.fib (k + 8) = 5 * Nat.fib (k + 2) + 8 * Nat.fib (k + 3) := by
+      rw [h8, h7, h6, h5, h4]; ring
+    have hF14 : Nat.fib (k + 14) = 89 * Nat.fib (k + 2) + 144 * Nat.fib (k + 3) := by
+      rw [h14, h13, h12, h11, h10, h9, h8, h7, h6, h5, h4]; ring
+    rw [hF8, hF14]; nlinarith
+
 end Omega.ZeckSig

@@ -304,6 +304,79 @@ theorem card_X_endingTrue (m : Nat) (hm : 1 ≤ m) :
   have hlt : m - 1 < m := by omega
   rw [dif_pos hlt]
 
+/-- Reversal on X m: an involution swapping first/last bits.
+    aux:x-reverse-local -/
+noncomputable def rev (x : X m) : X m := ⟨wordReverse x.1, no11_reverse x.2⟩
+
+theorem rev_involutive : Function.Involutive (rev (m := m)) := by
+  intro x; apply Subtype.ext; funext i
+  show (rev (rev x)).1 i = x.1 i
+  simp only [rev, wordReverse]
+  have : m - 1 - (m - 1 - i.val) = i.val := by omega
+  exact congrArg (x.1 ·) (Fin.ext this)
+
+theorem rev_first_eq_last (x : X m) (hm : 1 ≤ m) :
+    (rev x).1 ⟨0, by omega⟩ = x.1 ⟨m - 1, by omega⟩ := rfl
+
+theorem rev_last_eq_first (x : X m) (hm : 1 ≤ m) :
+    get (rev x).1 (m - 1) = x.1 ⟨0, by omega⟩ := by
+  rw [Omega.get, dif_pos (show m - 1 < m by omega)]
+  show x.1 ⟨m - 1 - (m - 1), by omega⟩ = x.1 ⟨0, by omega⟩
+  simp only [Nat.sub_self]
+
+/-- Reversal gives a bijection from starts-in-0 to ends-in-0.
+    aux:rev-starts-ends-zero -/
+noncomputable def revStartsZeroEquivEndsZero (m : Nat) (hm : 1 ≤ m) :
+    {x : X m // x.1 ⟨0, by omega⟩ = false} ≃ {x : X m // EndsInZero x} where
+  toFun x := ⟨rev x.1, by
+    show get (rev x.1).1 (m - 1) = false
+    rw [rev_last_eq_first x.1 hm]; exact x.2⟩
+  invFun x := ⟨rev x.1, by
+    rw [rev_first_eq_last x.1 hm]
+    have := x.2; show x.1.1 ⟨m - 1, by omega⟩ = false
+    change get x.1.1 (m - 1) = false at this
+    rwa [Omega.get, dif_pos (show m - 1 < m by omega)] at this⟩
+  left_inv x := Subtype.ext (rev_involutive x.1)
+  right_inv x := Subtype.ext (rev_involutive x.1)
+
+/-- Reversal gives a bijection from starts-in-1 to ends-in-1.
+    aux:rev-starts-ends-one -/
+noncomputable def revStartsOneEquivEndsOne (m : Nat) (hm : 1 ≤ m) :
+    {x : X m // x.1 ⟨0, by omega⟩ = true} ≃ {x : X m // EndsInOne x} where
+  toFun x := ⟨rev x.1, by
+    show get (rev x.1).1 (m - 1) = true
+    rw [rev_last_eq_first x.1 hm]; exact x.2⟩
+  invFun x := ⟨rev x.1, by
+    rw [rev_first_eq_last x.1 hm]
+    have := x.2; show x.1.1 ⟨m - 1, by omega⟩ = true
+    change get x.1.1 (m - 1) = true at this
+    rwa [Omega.get, dif_pos (show m - 1 < m by omega)] at this⟩
+  left_inv x := Subtype.ext (rev_involutive x.1)
+  right_inv x := Subtype.ext (rev_involutive x.1)
+
+/-- The number of stable words starting with 0 equals F_{m+1}.
+    thm:pom-card-starts-in-zero -/
+theorem card_startsInZero (m : Nat) (hm : 1 ≤ m) :
+    Fintype.card {x : X m // x.1 ⟨0, by omega⟩ = false} = Nat.fib (m + 1) := by
+  classical
+  rw [Fintype.card_congr (revStartsZeroEquivEndsZero m hm)]
+  -- card(EndsInZero) = card(X (m-1)) = F(m-1+2) = F(m+1)
+  -- For m = n+1: card_endsInZero_succ n gives card(EndsInZero in X(n+1)) = card(X n)
+  -- card(X n) = F(n+2) = F(m+1)
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_add_of_le hm
+  -- m = 1 + n, goal: card(EndsInZero in X(1+n)) = F(1+n+1)
+  show Fintype.card {x : X (1 + n) // EndsInZero x} = Nat.fib (1 + n + 1)
+  rw [show (1 : Nat) + n = n + 1 from by omega]
+  rw [card_endsInZero_succ n, card_eq_fib n]
+
+/-- The number of stable words starting with 1 equals F_m.
+    thm:pom-card-starts-in-one -/
+theorem card_startsInOne (m : Nat) (hm : 1 ≤ m) :
+    Fintype.card {x : X m // x.1 ⟨0, by omega⟩ = true} = Nat.fib m := by
+  classical
+  rw [Fintype.card_congr (revStartsOneEquivEndsOne m hm)]
+  exact card_endsInOne_eq_fib m hm
+
 end X
 
 end Omega
