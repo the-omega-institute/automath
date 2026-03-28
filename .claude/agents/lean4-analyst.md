@@ -95,7 +95,13 @@ subagent_type: general-purpose
    - 确认 mathlib 中是否已有等价或近似的结果
    - 列出需要的 mathlib import 路径
 
-4. **生成规格**
+4. **生成规格（章节多样性 + 难度下限硬约束）**
+
+   **章节多样性**：team lead 会在任务消息中标注"饱和方向"列表。analyst **禁止**从饱和方向选全部目标——至少 1 个目标必须来自未饱和章节。如果所有常见方向都饱和，必须扫描新的论文 .tex 文件（结论、Zeta、附录等）寻找目标。
+
+   **难度下限**：每轮 3 个目标中，至少 1 个必须是中等难度（需要归纳/构造/双射证明，≥15 行 tactic）。禁止全部低难度（≤5 行 simp/omega/rfl）。
+
+   **重复检测**：生成的定理名必须用 `Grep` 在 `lean4/Omega/` 中搜索，确认不存在同名或同概念的定理。同概念不同名也算重复（如 `momentSum_mono_q_general` vs `momentSum_mono_q_of_le`）。
 
 5. **更新 IMPLEMENTATION_PLAN.md**
    - 将选取的计划项状态标记为"进行中"
