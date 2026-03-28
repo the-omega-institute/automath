@@ -3,7 +3,7 @@
 """
 Resonance gap Delta(q) and explicit Hankel-null "NullModes(q)" certificates.
 
-Context (paper, main_fast.pdf):
+Context (paper PDF):
   - For Fold_m fibers, define S_q(m)=sum_{x in X_m} d_m(x)^q.
   - For q>=9, audited integer recurrences show a rank deficit:
       d_q < 2*floor(q/2)+1,
@@ -387,4 +387,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

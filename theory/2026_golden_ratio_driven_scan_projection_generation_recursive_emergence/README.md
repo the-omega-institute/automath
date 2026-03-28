@@ -6,8 +6,9 @@
 
 - **根入口**
   - `main.tex`：主文档入口（全量编译）。
-  - `main_fast.tex`：快速编译入口（定义 `\FASTBUILD` 后复用 `main.tex`）。
+  - `sections/frontmatter/fm__titlepage_meta.tex`：标题与作者名单元数据；作者变更优先改这里。
   - `references.bib`：参考文献数据库。
+  - `AUTHORSHIP.md`：署名规则、投稿前检查项与贡献记录模板。
 - **sections/**
   - `sections/frontmatter/main.tex`：前置材料入口（可独立编译）。
   - `sections/body/main.tex`：正文入口（可独立编译）。
@@ -21,11 +22,7 @@
 
 先 run_all.py 然后 build；若新增实验脚本，必须加入 `scripts/run_all.py` 的 steps 列表。
 
-```bash
-latexmk -pdfxe -interaction=nonstopmode -halt-on-error -file-line-error main_fast.tex
-```
-
-正式全量编译（用于最终导出）使用 `main.tex`：
+正式编译（用于导出）使用 `main.tex`：
 
 ```bash
 latexmk -pdfxe -interaction=nonstopmode -halt-on-error -file-line-error main.tex
@@ -61,6 +58,12 @@ python3 scripts/run_all.py
 - `artifacts/export/*`：CSV/PNG 等导出（用于审计与复核）
 
 ## 写作与拆分规范（label 地址化）
+
+## 署名维护
+
+- 若论文作者名单发生变化，只修改 `sections/frontmatter/fm__titlepage_meta.tex`。
+- 若要调整作者资格、顺序规则或投稿前核对流程，修改 `AUTHORSHIP.md`。
+- `main.tex` 只保留对标题/作者元数据的引用，不再直接硬编码个人作者信息。
 
 ### label 唯一与文件命名
 

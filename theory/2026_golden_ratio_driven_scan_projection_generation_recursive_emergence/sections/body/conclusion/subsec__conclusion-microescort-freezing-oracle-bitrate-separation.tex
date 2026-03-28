@@ -1,0 +1,383 @@
+\subsection{微观 escort 冻结、预言机容量与双阈值分离}\label{subsec:conclusion-microescort-freezing-oracle-bitrate-separation}
+沿用小节 \ref{subsec:conclusion-maxfiber-freezing-capacity-entropy-separation}、
+小节 \ref{subsec:conclusion-escort-capacity-gauge-supermean-bernstein-mellin}
+与小节 \ref{subsec:conclusion-infonce-freezing-fourier-maxfiber-three-exponent-splitting}
+的记号。
+前述链条已经把宏观 escort 律的冻结阈值、基态集中、
+Rényi 熵率塌缩以及精确可逆恢复的线性位率
+\(\alpha_\ast/\log 2\) 固定下来。
+若把 escort 律从稳定型层 \(X_m\) 提升到全微态层 \(\Omega_m\)，
+则还能进一步抽出一条以微观 min-entropy、逐纤维预言机容量闭式、
+以及均匀输入/冻结输入双阈值分离为核心的后继链。
+
+对整数 \(a\ge 1\)，定义微观 escort 分布
+\[
+\pi_{m,a}^{\mathrm{micro}}(\omega)
+:=
+\frac{d_m(\Fold_m(\omega))^{a-1}}{S_a(m)},
+\qquad
+S_a(m):=\sum_{x\in X_m}d_m(x)^a,
+\qquad
+\omega\in\Omega_m.
+\]
+则其在每条纤维 \(\Fold_m^{-1}(x)\) 上条件均匀，
+且推前到 \(X_m\) 后恰恢复宏观 escort 分布
+\[
+\pi_{m,a}(x)=\frac{d_m(x)^a}{S_a(m)}.
+\]
+同时记
+\[
+M_m:=\max_{x\in X_m}d_m(x),
+\qquad
+A_m^{\max}:=\{x\in X_m:\ d_m(x)=M_m\},
+\qquad
+K_m:=|A_m^{\max}|.
+\]
+
+\begin{theorem}[微观 escort 律下的预言机容量闭式]\label{thm:conclusion-microescort-oracle-capacity-closed-form}
+对任意整数 \(B\ge 0\)，定义在微观 escort 输入 \(\pi_{m,a}^{\mathrm{micro}}\) 下的最优
+\(B\)-比特成功率
+\[
+\mathrm{Succ}^{\mathrm{micro}}_{m,a}(B)
+:=
+\sup_{(\mathrm{enc},\mathrm{dec})}
+\pi_{m,a}^{\mathrm{micro}}\!\bigl(\mathcal G_{\mathrm{enc},\mathrm{dec}}\bigr),
+\]
+其中 \((\mathrm{enc},\mathrm{dec})\) 满足定理 \ref{thm:fold-oracle-capacity-closed-form}
+中的逐纤维可逆条件，而 \(\mathcal G_{\mathrm{enc},\mathrm{dec}}\subseteq\Omega_m\) 为成功恢复集。
+则有精确闭式
+\[
+\mathrm{Succ}^{\mathrm{micro}}_{m,a}(B)
+=
+\frac{1}{S_a(m)}
+\sum_{x\in X_m}
+d_m(x)^{a-1}\min\bigl(d_m(x),2^B\bigr).
+\]
+\end{theorem}
+\begin{proof}
+固定一条纤维 \(\Fold_m^{-1}(x)\)。
+在微观 escort 律下，该纤维内每个微态的概率都等于
+\[
+\frac{d_m(x)^{a-1}}{S_a(m)}.
+\]
+因此在该纤维上，任何合法的 \(B\)-比特逐纤维反演机制至多只能恢复
+\(\min(d_m(x),2^B)\) 个微态；
+其在该纤维上的最大可恢复质量正是
+\[
+\frac{d_m(x)^{a-1}}{S_a(m)}\min\bigl(d_m(x),2^B\bigr).
+\]
+对全部纤维求和即得上界
+\[
+\mathrm{Succ}^{\mathrm{micro}}_{m,a}(B)
+\le
+\frac{1}{S_a(m)}
+\sum_{x\in X_m}
+d_m(x)^{a-1}\min\bigl(d_m(x),2^B\bigr).
+\]
+反向构造与定理 \ref{thm:fold-oracle-capacity-closed-form} 完全相同：
+在每条纤维中任选 \(\min(d_m(x),2^B)\) 个微态赋予互异码字，即可逐纤维达到该上界。
+故等式成立。证毕。
+\end{proof}
+
+\begin{theorem}[冻结相中的微观 min-entropy 率]\label{thm:conclusion-microescort-frozen-minentropy-rate}
+设 \(a>a_{\mathrm c}\)，并假设极限
+\[
+h_\infty^{\mathrm{micro}}(a)
+:=
+\lim_{m\to\infty}\frac1m
+\Bigl(
+-\log \max_{\omega\in\Omega_m}\pi_{m,a}^{\mathrm{micro}}(\omega)
+\Bigr)
+\]
+存在。
+则有
+\[
+h_\infty^{\mathrm{micro}}(a)=\alpha_\ast+g_\ast.
+\]
+更精确地，在冻结相中成立
+\[
+\max_{\omega\in\Omega_m}\pi_{m,a}^{\mathrm{micro}}(\omega)
+=
+\frac{1}{K_mM_m}\bigl(1+o(1)\bigr),
+\]
+其中
+\[
+M_m:=\max_{x\in X_m}d_m(x),
+\qquad
+K_m:=\#\{x\in X_m:\ d_m(x)=M_m\}.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:fold-pressure-freezing-threshold} 与其证明中的同一分解，
+当 \(a>a_{\mathrm c}\) 时有
+\[
+S_a(m)=K_mM_m^a\bigl(1+o(1)\bigr).
+\]
+另一方面，\(\pi_{m,a}^{\mathrm{micro}}\) 在最大纤维上的微态处达到最大值，且
+\[
+\max_{\omega\in\Omega_m}\pi_{m,a}^{\mathrm{micro}}(\omega)
+=
+\frac{M_m^{a-1}}{S_a(m)}
+=
+\frac{1}{K_mM_m}\bigl(1+o(1)\bigr).
+\]
+两端取 \(-\log\) 并除以 \(m\)，再用
+\[
+\frac1m\log M_m\to \alpha_\ast,
+\qquad
+\frac1m\log K_m\to g_\ast,
+\]
+便得到
+\[
+h_\infty^{\mathrm{micro}}(a)=\alpha_\ast+g_\ast.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[宏观与微观冻结的 min-entropy 差恰为最大纤维指数]\label{cor:conclusion-micro-vs-macro-freezing-minentropy-gap}
+在定理 \ref{thm:conclusion-microescort-frozen-minentropy-rate} 的设定下，
+若宏观 escort 的 min-entropy 率 \(h_\infty(a)\) 存在，则
+\[
+h_\infty(a)=g_\ast,
+\qquad
+h_\infty^{\mathrm{micro}}(a)=\alpha_\ast+g_\ast,
+\]
+从而
+\[
+h_\infty^{\mathrm{micro}}(a)-h_\infty(a)=\alpha_\ast.
+\]
+\end{corollary}
+\begin{proof}
+第一式即推论 \ref{cor:fold-escort-minentropy-rate}，
+第二式由定理 \ref{thm:conclusion-microescort-frozen-minentropy-rate} 给出。
+两式相减即可。证毕。
+\end{proof}
+
+\begin{theorem}[深冻结区的微观预言机相变阈值]\label{thm:conclusion-deepfrozen-microescort-oracle-threshold}
+记
+\[
+b_\ast:=\frac{\alpha_\ast}{\log 2}.
+\]
+若 \(a>a_{\mathrm c}+1\)，则在微观 escort 律 \(\pi_{m,a}^{\mathrm{micro}}\) 下存在精确速率阈值 \(b_\ast\)，满足：
+\begin{enumerate}
+  \item 对任意 \(\varepsilon>0\)，若整数预算序列 \((B_m)_{m\ge 1}\) 满足
+  \[
+  B_m\le (b_\ast-\varepsilon)m,
+  \]
+  则
+  \[
+  \mathrm{Succ}^{\mathrm{micro}}_{m,a}(B_m)
+  \le
+  \exp\!\bigl(-\varepsilon(\log 2)m+o(m)\bigr)
+  \xrightarrow[m\to\infty]{}0.
+  \]
+  \item 对任意 \(\varepsilon>0\)，若
+  \[
+  B_m\ge (b_\ast+\varepsilon)m,
+  \]
+  则
+  \[
+  \mathrm{Succ}^{\mathrm{micro}}_{m,a}(B_m)
+  \ge
+  1-\exp\!\bigl(-m\Delta(a)+o(m)\bigr)
+  \xrightarrow[m\to\infty]{}1,
+  \]
+  其中
+  \[
+  \Delta(a):=a(\alpha_\ast-\alpha_\ast^{(2)})-(\log\varphi-g_\ast)>0.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+先证第一条。
+由定理 \ref{thm:conclusion-microescort-oracle-capacity-closed-form}，
+\[
+\mathrm{Succ}^{\mathrm{micro}}_{m,a}(B)
+\le
+\frac{2^B}{S_a(m)}
+\sum_{x\in X_m}d_m(x)^{a-1}
+=
+2^B\frac{S_{a-1}(m)}{S_a(m)}.
+\]
+由于 \(a>a_{\mathrm c}+1\)，故 \(a-1>a_{\mathrm c}\)，从而
+\[
+S_a(m)=K_mM_m^a\bigl(1+o(1)\bigr),
+\qquad
+S_{a-1}(m)=K_mM_m^{a-1}\bigl(1+o(1)\bigr).
+\]
+于是
+\[
+\mathrm{Succ}^{\mathrm{micro}}_{m,a}(B)
+\le
+\frac{2^B}{M_m}\bigl(1+o(1)\bigr).
+\]
+若 \(B_m\le (b_\ast-\varepsilon)m\)，则
+\[
+B_m\log 2-\log M_m
+\le
+-\varepsilon(\log 2)m+o(m),
+\]
+故得到所示指数衰减。
+
+再证第二条。
+若 \(B_m\ge (b_\ast+\varepsilon)m\)，则
+\[
+2^{B_m}\ge \exp\!\bigl((\alpha_\ast+\varepsilon\log 2)m\bigr)\ge M_m
+\]
+对充分大的 \(m\) 成立，
+因而最大纤维中的全部微态都可被完整恢复。
+于是
+\[
+\mathrm{Succ}^{\mathrm{micro}}_{m,a}(B_m)
+\ge
+\pi_{m,a}^{\mathrm{micro}}\!\bigl(\Fold_m^{-1}(A_m^{\max})\bigr)
+=
+\pi_{m,a}(A_m^{\max}).
+\]
+最后由定理 \ref{thm:fold-escort-groundstate-concentration}，
+\[
+\pi_{m,a}(A_m^{\max})
+\ge
+1-\exp\!\bigl(-m\Delta(a)+o(m)\bigr).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[固定置信度下的微观最小位率]\label{cor:conclusion-deepfrozen-microescort-fixed-confidence-bitrate}
+固定 \(a>a_{\mathrm c}+1\) 与 \(\eta\in(0,1)\)。
+定义
+\[
+B_{m,a}^{\mathrm{micro}}(\eta)
+:=
+\min\Bigl\{
+B\in\ZZ_{\ge 0}:\ 
+\mathrm{Succ}^{\mathrm{micro}}_{m,a}(B)\ge \eta
+\Bigr\}.
+\]
+则有
+\[
+\lim_{m\to\infty}\frac{B_{m,a}^{\mathrm{micro}}(\eta)}{m}
+=
+\frac{\alpha_\ast}{\log 2}.
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-deepfrozen-microescort-oracle-threshold}，
+任意低于 \((\alpha_\ast/\log 2-\varepsilon)m\) 的预算都会使成功率趋于 \(0\)，
+而任意高于 \((\alpha_\ast/\log 2+\varepsilon)m\) 的预算都会使成功率趋于 \(1\)。
+对固定 \(\eta\in(0,1)\) 用夹逼即可得到所示极限。证毕。
+\end{proof}
+
+\begin{theorem}[冻结自由能的一次差分识别最大纤维指数]\label{thm:conclusion-frozen-first-difference-recovers-maxfiber-exponent}
+若整数 \(a\) 满足
+\[
+a>a_{\mathrm c}+1,
+\]
+则
+\[
+\lim_{m\to\infty}\frac1m
+\log\frac{S_a(m)}{S_{a-1}(m)}
+=
+\alpha_\ast.
+\]
+等价地，
+\[
+P_a-P_{a-1}=\alpha_\ast,
+\qquad
+P_t:=\lim_{m\to\infty}\frac1m\log S_t(m).
+\]
+\end{theorem}
+\begin{proof}
+由 \(a-1>a_{\mathrm c}\) 可知 \(a-1\) 与 \(a\) 同时处于冻结区间，
+故
+\[
+S_a(m)=K_mM_m^a\bigl(1+o(1)\bigr),
+\qquad
+S_{a-1}(m)=K_mM_m^{a-1}\bigl(1+o(1)\bigr).
+\]
+因此
+\[
+\frac{S_a(m)}{S_{a-1}(m)}
+=
+M_m\bigl(1+o(1)\bigr).
+\]
+取 \(\frac1m\log\) 并令 \(m\to\infty\)，即得
+\[
+\lim_{m\to\infty}\frac1m
+\log\frac{S_a(m)}{S_{a-1}(m)}
+=
+\alpha_\ast.
+\]
+由于 \(P_t=\lim_{m\to\infty}\frac1m\log S_t(m)\)，
+第二式只是第一式的等价改写。证毕。
+\end{proof}
+
+\begin{theorem}[均匀微观律与冻结微观律的双阈值分离]\label{thm:conclusion-uniform-vs-frozen-micro-bitrate-separation}
+定义
+\[
+r_{\mathrm{uni}}:=\log_2\frac{2}{\varphi},
+\qquad
+r_{\mathrm{frz}}:=\frac{\alpha_\ast}{\log 2}.
+\]
+则在同一逐纤维预言机模型下存在两条本质不同的临界位率轴：
+\begin{enumerate}
+  \item 若在均匀微观输入下存在常数 \(\eta>0\) 使
+  \[
+  \liminf_{m\to\infty}\mathrm{Succ}_m(B_m)\ge \eta,
+  \]
+  则必有
+  \[
+  \liminf_{m\to\infty}\frac{B_m}{m}\ge r_{\mathrm{uni}}.
+  \]
+  \item 对任意固定 \(a>a_{\mathrm c}+1\) 与任意 \(\eta\in(0,1)\)，有
+  \[
+  \lim_{m\to\infty}\frac{B_{m,a}^{\mathrm{micro}}(\eta)}{m}
+  =
+  r_{\mathrm{frz}}.
+  \]
+\end{enumerate}
+因此，均匀微观输入的可逆性阈值由总体可见空间增长
+\(|X_m|\sim \varphi^m\) 决定，
+而冻结微观输入的可逆性阈值则由最大纤维增长
+\(M_m\sim e^{\alpha_\ast m}\) 决定。
+\end{theorem}
+\begin{proof}
+对第一条，由定理 \ref{thm:fold-oracle-capacity-closed-form}，
+\[
+\mathrm{Succ}_m(B_m)
+=
+\frac{1}{2^m}\sum_{x\in X_m}\min\bigl(d_m(x),2^{B_m}\bigr)
+\le
+|X_m|\,2^{B_m-m}.
+\]
+若 \(\mathrm{Succ}_m(B_m)\ge \eta/2\) 对充分大的 \(m\) 成立，
+则
+\[
+2^{B_m}\ge \frac{\eta}{2}\cdot \frac{2^m}{|X_m|}.
+\]
+取 \(\log_2\)、除以 \(m\)，并用 \(|X_m|=F_{m+2}=\varphi^m e^{o(m)}\)，即得
+\[
+\liminf_{m\to\infty}\frac{B_m}{m}
+\ge
+1-\log_2\varphi
+=
+\log_2\frac{2}{\varphi}.
+\]
+
+第二条正是推论 \ref{cor:conclusion-deepfrozen-microescort-fixed-confidence-bitrate}。
+因此两条位率轴分别由 \(|X_m|\) 与 \(M_m\) 的指数增长控制，且一般并不由同一不变量决定。证毕。
+\end{proof}
+
+\begin{conjecture}[双阈值间隙的严格正性]\label{conj:conclusion-microescort-bitrate-gap-positive}
+在稳定类型空间中应有严格不等式
+\[
+\alpha_\ast>\log\frac{2}{\varphi},
+\qquad\text{等价地}\qquad
+r_{\mathrm{frz}}>r_{\mathrm{uni}}.
+\]
+若该猜想成立，则冻结微观律相较于均匀微观律具有严格更高的可逆位率门槛。
+换言之，热力学冻结不仅是幂和自由能与 escort 集中的统计相变，
+同时也是逐纤维精确反演的位率相变线。
+\end{conjecture}
+
+\endinput
