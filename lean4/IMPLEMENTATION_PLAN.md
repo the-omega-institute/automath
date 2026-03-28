@@ -17,7 +17,7 @@
 | 模块 | 文件 | 定理数 | 覆盖率 |
 |---|---|---|---|
 | Core (Fib, Word, No11) | 3 | ~25 | 100% |
-| Folding (StableSyntax, Weight, Value, Zeckendorf, Fold, Fiber, MaxFiber, FiberSpectrum, FibonacciField, FiberRing, MomentSum, CollisionKernel, CollisionZeta, CollisionZetaOperator, Rewrite, Defect, InverseLimit, InverseLimitTopology, CarryDefect, FiberFusion, ModularTower, ShiftDynamics, FibonacciPolynomial, HankelSpectrum, FiberArithmeticProperties, FiberSplit, BoundaryLayer, Window6, ZeckendorfSignature, BinFold, HammingDist, Entropy, MaxFiberTwoStep, FiberWeightCount, CollisionDecomp, MomentRecurrence, MomentBounds, MomentTriple) | 38 | ~599 | 100% |
+| Folding (StableSyntax, Weight, Value, Zeckendorf, Fold, Fiber, MaxFiber, FiberSpectrum, FibonacciField, FiberRing, MomentSum, CollisionKernel, CollisionZeta, CollisionZetaOperator, Rewrite, Defect, InverseLimit, InverseLimitTopology, CarryDefect, FiberFusion, ModularTower, ShiftDynamics, FibonacciPolynomial, HankelSpectrum, FiberArithmeticProperties, FiberSplit, BoundaryLayer, Window6, ZeckendorfSignature, BinFold, HammingDist, Entropy, MaxFiberTwoStep, FiberWeightCount, CollisionDecomp, MomentRecurrence, MomentBounds, MomentTriple) | 38 | ~604 | 100% |
 | SPG (Cylinder, PrefixMetric, Clopen, ScanErrorDiscrete, ScanErrorMeasure) | 5 | ~210 | 95% |
 | Graph (LabeledGraph, Sofic, TransferMatrix) | 3 | ~37 | 100% |
 | Frontier (Assumptions, Certificates, Conditional, Conjectures, ConditionalSummary) | 5 | ~347 | 99% |
@@ -112,6 +112,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R13: S_q 通用下界 + S_2 Fibonacci 严格下界 + 隐藏位计数偶奇闭式（Round R13）**：两文件 MomentBounds.lean（+41行，新增至955行）+ MaxFiberTwoStep.lean（+163行，新增至706行）——momentSum\_mono\_q\_of\_le（helper：S_a ≤ S_b for a≤b，单调性推广）; momentSum\_q\_ge\_three\_pow（prop:pom-rq-universal-bounds（**新标签**）：3·2^m ≤ S_q(m) for q≥2, m≥6，高阶矩三倍指数下界，MomentBounds.lean:930）; momentSum\_two\_gt\_two\_fib\_strict（cor:pom-s2-asymptotic（**新标签**）：2·F_{m+2} < S_2(m) for m≥4，S_2 严格 Fibonacci 下界，MomentBounds.lean:935）; hiddenBitCount\_even\_closed（thm:fold-top-two-zeckendorf-trisect（**新标签**）：3·A(2k) = 4^k-1 for k≥1，偶数隐藏位计数闭式，MaxFiberTwoStep.lean:550）; hiddenBitCount\_odd\_closed（thm:fold-top-two-zeckendorf-trisect：3·A(2k+1) = 2·4^k-2，奇数隐藏位计数闭式，MaxFiberTwoStep.lean:560）——**3 个新论文标签**（prop:pom-rq-universal-bounds, cor:pom-s2-asymptotic, thm:fold-top-two-zeckendorf-trisect）——POM ~573→~577（+4），Folding ~3（+1），全局 ~1,386→~1,391（Phase R13，commit 21c0358）
+
 **Phase R12: Hamming snoc 分解 + S_2 严格超二次增长 + cwc 正性（Round R12）**：三文件 HammingDist.lean（+55行，新增至241行）+ MomentBounds.lean（+18行，新增至914行）+ CollisionDecomp.lean（+11行，新增至1047行）——hammingDist\_snoc（thm:pom-fibcube-eccentricity-closed-form：d(snoc a b1, snoc c b2) = d(a,c) + [b1≠b2]，Hamming 距离 snoc 分解，HammingDist.lean:192）; momentSum\_two\_strict\_super\_quadratic（prop:pom-s2-recurrence：4·S_2(m) < S_2(m+2) for m≥2，S_2 严格超二次增长，MomentBounds.lean:889）; crossWeightCorrelation\_pos（def:pom-crossWeightCorrelation/prop:pom-s2-recurrence：cwc(m) > 0 for m≥2，交叉权重相关正性，CollisionDecomp.lean:1037）——**0 个新论文标签**（均深化已注册标签：thm:pom-fibcube-eccentricity-closed-form, prop:pom-s2-recurrence）——POM ~570→~573（+3 Lean 定理，强覆盖深化），全局 ~1,383→~1,386（Phase R12，commit dd9a9b1）
 
 **Phase R11: Fibonacci 立方离心率闭式 + E00 望远镜和延伸（Round R11）**：三文件 HammingDist.lean（+46行，新增至190行）+ FibonacciCube.lean（+10行，新增至1472行）+ CollisionDecomp.lean（+8行，新增至1035行）——fibcubeDiam\_eq（thm:pom-fibcube-eccentricity-closed-form（**新标签**）：diam(Γ_n) = ⌊n/2⌋·2 + (n mod 2)，Fibonacci 立方直径闭式，HammingDist.lean:150）; ecc\_allFalse\_achieved（thm:pom-fibcube-eccentricity-closed-form：ecc(allFalse, Γ_n) = diam(Γ_n)，全零词达到直径，FibonacciCube.lean:1447）; exactWeightCollision\_eq\_S2\_sub（thm:pom-e00-telescoping（**新标签**）：E00(m+1) = S_2(m) + E00(m)（精确重量碰撞等于 S_2 累加展开），CollisionDecomp.lean:1029）——**2 个新论文标签**（thm:pom-fibcube-eccentricity-closed-form, thm:pom-e00-telescoping）——POM ~568→~570（+2 新标签，thm:pom-fibcube-eccentricity-closed-form 强覆盖深化, thm:pom-e00-telescoping 已在 Phase 81 注册，本轮 +1 新 Lean 定理），全局 ~1,381→~1,383（Phase R11，commit a002c3b）
@@ -242,7 +244,7 @@
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
-## 2. 论文总覆盖率分析（2026-03-28 Phase R12 登记版）
+## 2. 论文总覆盖率分析（2026-03-28 Phase R13 登记版）
 
 ### 论文规模（Phase 7 重新扫描）
 
@@ -254,22 +256,22 @@
 
 ### Lean4 形式化状态
 
-- ~2,788 个 Lean4 声明（含内部引理、定义）
-- ~28,481 行代码，69 个文件
+- ~2,793 个 Lean4 声明（含内部引理、定义）
+- ~28,645 行代码，69 个文件
 - 0 公理，0 sorry，lake build 通过
-- 36 个 LaTeX `\leanverified` / `\leanpartial` 标注
+- 41 个 LaTeX `\leanverified` / `\leanpartial` 标注
 
 ### 覆盖率
 
 | 度量 | 数值 |
 |---|---|
-| 全局覆盖率（body） | ~1,386/9,958 = **~13.9%** |
+| 全局覆盖率（body） | ~1,391/9,958 = **~14.0%** |
 | 强覆盖（一般性 ∀ 证明） | ~65 (0.7%) |
 | 中覆盖（有界 + 条件） | ~162 (1.6%) |
 | 弱覆盖（native_decide / 代理） | ~723 (7.3%) |
 | 未追踪（附录） | 1,320 个定理 |
 
-### 本 session 新增强覆盖定理（+29）（另有 +1 部分覆盖）
+### 本 session 新增强覆盖定理（+33）（另有 +1 部分覆盖）
 
 - `coordOneCount_eq_fib_prod`（∀ n i，无界归纳证明）
 - `fibcubeEdgeCount_eq_sum_coordOneCount`（双计数恒等式）
@@ -299,6 +301,10 @@
 - `hammingDist_snoc`（d(snoc a b1, snoc c b2) = d(a,c) + [b1≠b2]，Hamming snoc 分解）
 - `momentSum_two_strict_super_quadratic`（4·S_2(m) < S_2(m+2) for m≥2，S_2 严格超二次增长）
 - `crossWeightCorrelation_pos`（cwc(m) > 0 for m≥2，交叉权重相关正性）
+- `momentSum_q_ge_three_pow`（3·2^m ≤ S_q(m) for q≥2, m≥6，高阶矩三倍指数下界）
+- `momentSum_two_gt_two_fib_strict`（2·F_{m+2} < S_2(m) for m≥4，S_2 严格 Fibonacci 下界）
+- `hiddenBitCount_even_closed`（3·A(2k) = 4^k-1，偶数隐藏位计数闭式）
+- `hiddenBitCount_odd_closed`（3·A(2k+1) = 2·4^k-2，奇数隐藏位计数闭式）
 
 ### 逐章覆盖率
 
@@ -306,15 +312,15 @@
 |---|---|---|---|
 | SPG | 127 | ~71 | ~55.9% |
 | 新生算术 | 151 | ~93 | ~61.6% |
-| Folding | 317 | ~108 | ~34.1% |
+| Folding | 317 | ~109 | ~34.4% |
 | 群统一 | 457 | ~110 | ~24.1% |
-| POM | 1,526 | ~573 | ~37.5% |
+| POM | 1,526 | ~577 | ~37.8% |
 | 圆维度 | 342 | ~62 | ~18.1% |
 | Zeta 有限部分 | 4,437 | ~255 | ~6% |
 | 结论 | 2,458 | ~83 | ~3.4% |
 | 其他 body | ~143 | ~2 | ~1% |
 | 附录 | 1,320 | 0 | 0% |
-| **body 总计** | **9,958** | **~1,386** | **~13.9%** |
+| **body 总计** | **9,958** | **~1,391** | **~14.0%** |
 
 ## 3. 未来工作：30 条具体计划
 
