@@ -1288,6 +1288,36 @@ theorem fibcubeFVector_three_strict_mono (n : Nat) (hn : 5 ≤ n) :
     linarith [fibcubeFVector_two_four]
   linarith
 
+/-- f-vector vanishing: C(n,k) = 0 when k > ⌊(n+1)/2⌋.
+    thm:pom-fibcube-fvector-closed (vanishing range) -/
+theorem fibcubeFVector_eq_zero_of_gt (n k : Nat) (hk : (n + 1) / 2 < k) :
+    fibcubeFVector n k = 0 := by
+  suffices h : ∀ n k : Nat, (n + 1) / 2 < k → fibcubeFVector n k = 0 from h n k hk
+  intro n
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    intro k hk
+    match n with
+    | 0 =>
+      match k with
+      | 0 => omega
+      | k + 1 => rfl
+    | 1 =>
+      match k with
+      | 0 => omega
+      | 1 => omega
+      | k + 2 => rfl
+    | n + 2 =>
+      simp only [fibcubeFVector_succ_succ]
+      have h1 : (n + 1 + 1) / 2 < k := by omega
+      have h2 : (n + 1) / 2 < k := by omega
+      rw [ih (n + 1) (by omega) k h1, ih n (by omega) k h2]
+      simp only [Nat.zero_add]
+      split
+      · rfl
+      · have h3 : (n + 1) / 2 < k - 1 := by omega
+        rw [ih n (by omega) (k - 1) h3]
+
 /-- 2*e(n) ≥ n*F(n) for n ≥ 3: linear average degree growth.
     cor:pom-fibcube-edge-closed-form -/
 theorem fibcubeEdgeCount_ge_n_fib (n : Nat) (hn : 3 ≤ n) :

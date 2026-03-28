@@ -644,6 +644,54 @@ theorem fiberHiddenBitCount_zero_sum (m : Nat) :
   omega
 
 -- ══════════════════════════════════════════════════════════════
+-- ══════════════════════════════════════════════════════════════
+-- Phase R6: hidden-bit ↔ ewc bridges
+-- ══════════════════════════════════════════════════════════════
+
+/-- d_{m,0}(x) = ewc(m, stableValue(x)).
+    cor:pom-branch-mass-law (hidden-bit ↔ ewc bridge) -/
+theorem fiberHiddenBitCount_zero_eq_ewc (x : X m) :
+    fiberHiddenBitCount 0 x = exactWeightCount m (stableValue x) := by
+  simp only [fiberHiddenBitCount, exactWeightCount]
+  congr 1
+  ext w
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and, X.mem_fiber]
+  constructor
+  · -- Fold w = x ∧ hiddenBit w = 0 → weight w = stableValue x
+    rintro ⟨hfold, hhid⟩
+    have heq := weight_eq_stableValue_add_hiddenBit w
+    rw [hfold, hhid] at heq; omega
+  · -- weight w = stableValue x → Fold w = x ∧ hiddenBit w = 0
+    intro hw
+    have hsv_lt := stableValue_lt_fib x
+    constructor
+    · have hmod : weight w % Nat.fib (m + 2) = stableValue x := by
+        rw [hw, Nat.mod_eq_of_lt hsv_lt]
+      exact X.mem_fiber.mp ((mem_fiber_iff_weight_mod x w).mpr hmod)
+    · unfold hiddenBit; simp only [show ¬(Nat.fib (m + 2) ≤ weight w) from by omega, ite_false]
+
+/-- d_{m,1}(x) = ewc(m, stableValue(x) + F_{m+2}).
+    cor:pom-branch-mass-law (hidden-bit ↔ ewc bridge) -/
+theorem fiberHiddenBitCount_one_eq_ewc (x : X m) :
+    fiberHiddenBitCount 1 x = exactWeightCount m (stableValue x + Nat.fib (m + 2)) := by
+  simp only [fiberHiddenBitCount, exactWeightCount]
+  congr 1
+  ext w
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and, X.mem_fiber]
+  constructor
+  · -- Fold w = x ∧ hiddenBit w = 1 → weight w = stableValue x + F_{m+2}
+    rintro ⟨hfold, hhid⟩
+    have heq := weight_eq_stableValue_add_hiddenBit w
+    rw [hfold, hhid] at heq; omega
+  · -- weight w = stableValue x + F_{m+2} → Fold w = x ∧ hiddenBit w = 1
+    intro hw
+    have hsv_lt := stableValue_lt_fib x
+    constructor
+    · have hmod : weight w % Nat.fib (m + 2) = stableValue x := by
+        rw [hw, Nat.add_mod_right, Nat.mod_eq_of_lt hsv_lt]
+      exact X.mem_fiber.mp ((mem_fiber_iff_weight_mod x w).mpr hmod)
+    · unfold hiddenBit; simp only [show Nat.fib (m + 2) ≤ weight w from by omega, ite_true]
+
 -- Phase R5: hiddenBit sum, weight decomp, S2 expand
 -- ══════════════════════════════════════════════════════════════
 
