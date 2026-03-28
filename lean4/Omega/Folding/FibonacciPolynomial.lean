@@ -388,4 +388,68 @@ theorem detPoly_monic (k : Nat) : (detPoly k).Monic :=
 theorem detPoly_natDegree (k : Nat) : (detPoly k).natDegree = k :=
   (detPoly_monic_and_natDegree k).2
 
+/-- Sub-leading coefficient of D_k is 2k-1 for k ≥ 1.
+    prop:pom-detpoly-sub-leading -/
+theorem detPoly_coeff_sub_leading :
+    ∀ k : Nat, 1 ≤ k → (detPoly k).coeff (k - 1) = (2 * k - 1 : ℤ)
+  | 0, hk => absurd hk (by omega)
+  | 1, _ => by simp [detPoly, coeff_add, coeff_one, coeff_X]
+  | k + 2, _ => by
+    -- D_{k+2} = (X + 2) * D_{k+1} - D_k
+    -- coeff_{k+1} of D_{k+2} = coeff_{k+1} of (X+2)*D_{k+1} - coeff_{k+1} of D_k
+    simp only [detPoly_succ_succ, coeff_sub]
+    -- coeff_{k+1} of D_k = 0 (since deg D_k = k < k+1)
+    have hdk : (detPoly k).coeff (k + 1) = 0 :=
+      Polynomial.coeff_eq_zero_of_natDegree_lt (by rw [detPoly_natDegree]; omega)
+    -- coeff_{k+1} of (X+2)*D_{k+1}:
+    -- = coeff_{k+1} of (X*D_{k+1} + 2*D_{k+1})
+    -- = [X*D_{k+1}]_{k+1} + 2*[D_{k+1}]_{k+1}
+    -- = [D_{k+1}]_k + 2*leadingCoeff(D_{k+1})
+    -- = (2(k+1)-1) + 2*1 = 2k+3
+    rw [show (X : Polynomial ℤ) + 2 = X + C 2 from by simp]
+    simp only [add_mul, coeff_add, coeff_C_mul]
+    rw [show k + 2 - 1 = k + 1 from by omega]
+    -- [X*D_{k+1}]_{k+1} = [D_{k+1}]_k
+    rw [mul_comm X (detPoly (k + 1)), Polynomial.coeff_mul_X]
+    -- [D_{k+1}]_k = 2*(k+1)-1
+    have ih := detPoly_coeff_sub_leading (k + 1) (by omega)
+    simp only [show k + 1 - 1 = k from by omega] at ih
+    rw [ih]
+    -- [D_{k+1}]_{k+1} = leading coeff = 1
+    have hlc : (detPoly (k + 1)).coeff (k + 1) = 1 := by
+      have hm := detPoly_monic (k + 1)
+      rwa [Polynomial.Monic, Polynomial.leadingCoeff, detPoly_natDegree] at hm
+    rw [hlc, hdk]
+    push_cast; ring
+
+/-- 2·D_k'(0) = k·(k+1).
+    prop:pom-detpoly-deriv-eval -/
+theorem detPoly_deriv_eval_zero_double :
+    ∀ k : Nat,
+    2 * (Polynomial.derivative (detPoly k)).eval (0 : ℤ) = (k : ℤ) * ((k : ℤ) + 1)
+  | 0 => by simp [detPoly]
+  | 1 => by simp [detPoly, derivative_add, derivative_X, derivative_C]
+  | k + 2 => by
+    -- D_{k+2} = (X+C 2)*D_{k+1} - D_k
+    -- D'_{k+2} = (1+0)*D_{k+1} + (X+C 2)*D'_{k+1} - D'_k
+    -- At 0: D'_{k+2}(0) = D_{k+1}(0) + (0+2)*D'_{k+1}(0) - D'_k(0)
+    --      = 1 + 2*D'_{k+1}(0) - D'_k(0)
+    -- D'_{k+2}(0) = D_{k+1}(0) + 2*D'_{k+1}(0) - D'_k(0) = 1 + 2*D'_{k+1}(0) - D'_k(0)
+    simp only [detPoly_succ_succ, map_sub, derivative_mul, eval_sub, eval_add, eval_mul]
+    simp only [derivative_add, derivative_X, derivative_ofNat, add_zero]
+    simp only [eval_one, one_mul, eval_add, eval_X, eval_ofNat, zero_add]
+    have ih1 := detPoly_deriv_eval_zero_double (k + 1)
+    have ih0 := detPoly_deriv_eval_zero_double k
+    have heval := detPoly_eval_zero (k + 1)
+    rw [heval]
+    -- 2*(1 + 2*D'_{k+1}(0) - D'_k(0)) = (k+2)*(k+3)
+    -- = 2 + 2*(2*D'_{k+1}(0)) - 2*D'_k(0)
+    -- = 2 + 2*(k+1)*(k+2) - k*(k+1) = (k+2)*(k+3)
+    have h1 : eval 0 (derivative (detPoly (k + 1))) * 2 =
+        (↑(k + 1) : ℤ) * (↑(k + 1) + 1) := by linarith
+    have h0 : eval 0 (derivative (detPoly k)) * 2 = (↑k : ℤ) * (↑k + 1) := by linarith
+    -- Use ring_nf to normalize
+    push_cast at ih1 ih0 ⊢
+    nlinarith [ih1, ih0]
+
 end Omega

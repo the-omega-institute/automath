@@ -234,4 +234,26 @@ theorem three_rigidity_scales_six :
   · rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
   · rw [X.card_eq_fib]; native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R23: Index-compression gap
+-- ══════════════════════════════════════════════════════════════
+
+/-- Max fiber mult × |X_6| ≠ 2^6 (non-uniform compression).
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem local_index_ne_global_compression_six :
+    cBinFiberMax 6 * Fintype.card (X 6) ≠ 2 ^ 6 := by
+  rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
+
+/-- Max fiber mult > floor(2^6 / |X_6|).
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem local_index_gt_global_ratio_six :
+    cBinFiberMax 6 > 2 ^ 6 / Fintype.card (X 6) := by
+  rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
+
+/-- Index-compression gap: max_mult × |X_6| - 2^6 = 20.
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem index_compression_gap_six :
+    cBinFiberMax 6 * Fintype.card (X 6) - 2 ^ 6 = 20 := by
+  rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
+
 end Omega
