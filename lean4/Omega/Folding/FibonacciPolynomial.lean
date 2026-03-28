@@ -544,4 +544,23 @@ theorem fib_odd_cassini (k : Nat) (hk : 1 ≤ k) :
       (Nat.fib (2 * k + 1)) ^ 2 + 1 := by linarith
   exact_mod_cast this
 
+/-- Unified Fibonacci Cassini identity in ℤ: F(n)·F(n+2) = F(n+1)² + (-1)^{n+1}.
+    prop:pom-fib-cassini-unified -/
+theorem fib_product_cassini (n : Nat) :
+    (Nat.fib n : ℤ) * Nat.fib (n + 2) = (Nat.fib (n + 1) : ℤ) ^ 2 + (-1) ^ (n + 1) := by
+  by_cases heven : Even n
+  · -- Even case: F(n)*F(n+2) + 1 = F(n+1)^2
+    -- (-1)^{n+1} = -1 since n+1 is odd
+    have hcas := fib_cassini_even n heven
+    have hodd : Odd (n + 1) := Even.add_one heven
+    rw [hodd.neg_one_pow]
+    push_cast; linarith
+  · -- Odd case: F(n)*F(n+2) = F(n+1)^2 + 1
+    -- (-1)^{n+1} = 1 since n+1 is even
+    have hcas := fib_cassini_odd n heven
+    rw [Nat.not_even_iff_odd] at heven
+    have heven2 : Even (n + 1) := Odd.add_one heven
+    rw [heven2.neg_one_pow]
+    push_cast; linarith
+
 end Omega

@@ -277,4 +277,20 @@ theorem three_rigidity_scales_seven :
   · rw [cBinFiberMax_seven, X.card_eq_fib]; native_decide
   · rw [X.card_eq_fib]; native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R28: m=7 index-compression gap
+-- ══════════════════════════════════════════════════════════════
+
+/-- Max fiber mult × |X_7| ≠ 2^7 (non-uniform compression at m=7).
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem local_index_ne_global_compression_seven :
+    cBinFiberMax 7 * Fintype.card (X 7) ≠ 2 ^ 7 := by
+  rw [cBinFiberMax_seven, X.card_eq_fib]; native_decide
+
+/-- Index-compression gap at m=7: max_mult × |X_7| - 2^7 = 42.
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem index_compression_gap_seven :
+    cBinFiberMax 7 * Fintype.card (X 7) - 2 ^ 7 = 42 := by
+  rw [cBinFiberMax_seven, X.card_eq_fib]; native_decide
+
 end Omega
