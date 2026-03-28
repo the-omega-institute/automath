@@ -6,6 +6,7 @@ import Mathlib.MeasureTheory.Measure.Tilted
 import Mathlib.NumberTheory.Real.GoldenRatio
 import Omega.Folding.CircleDimension
 import Omega.Folding.ShiftDynamics
+import Omega.Folding.MomentBounds
 
 open scoped goldenRatio
 open Filter Topology
@@ -750,5 +751,51 @@ theorem foldIndex_strict_mono_of_ge_one (m : Nat) (hm : 1 ≤ m) :
         < 2 ^ m * (2 * Nat.fib (m + 2)) := by exact (Nat.mul_lt_mul_left h2m).mpr hfib_lt
       _ = 2 ^ (m + 1) * Nat.fib (m + 2) := by rw [pow_succ]; ring
   exact_mod_cast hnat
+
+/-- The hidden bit density B(m)/2^m tends to 1/3 as m → ∞.
+    B(m) = ⌊2^m/3⌋, so B(m)/2^m = 1/3 - r/(3·2^m) where r ∈ {1,2}.
+    cor:pom-hidden-bit-entropy -/
+theorem hiddenBitDensity_tendsto_third :
+    Tendsto (fun m => (hiddenBitCount m : ℝ) / 2 ^ m) atTop (nhds (1 / 3)) := by
+  -- B(m) = ⌊2^m/3⌋. Show |B(m)/2^m - 1/3| ≤ 1/2^m → 0
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  obtain ⟨N, hN⟩ := exists_pow_lt_of_lt_one hε (show (2 : ℝ)⁻¹ < 1 by norm_num)
+  refine ⟨N, fun m hm => ?_⟩
+  rw [Real.dist_eq]
+  -- Work with B = hiddenBitCount m as a Nat
+  set B := hiddenBitCount m with hB_def
+  have hclosed := hiddenBitCount_closed m
+  -- B * 3 + r = 2^m where r ∈ {1, 2}
+  set r := if m % 2 = 0 then 1 else 2 with hr_def
+  have hr_pos : 0 < r := by simp [hr_def]; split <;> omega
+  have hr_le : r ≤ 2 := by simp [hr_def]; split <;> omega
+  have hkey : B * 3 + r = 2 ^ m := hclosed
+  -- Upper: B/2^m ≤ 1/3  (since 3B ≤ 2^m)
+  have h2m_pos : (0 : ℝ) < 2 ^ m := pow_pos (by norm_num) m
+  have h3B_le : 3 * B ≤ 2 ^ m := by omega
+  -- Key ℝ facts
+  have hBr : (B : ℝ) * 3 + (r : ℝ) = (2 : ℝ) ^ m := by
+    have h := hkey
+    exact_mod_cast h
+  have hr_le_real : (r : ℝ) ≤ 2 := by exact_mod_cast hr_le
+  have hr_pos_real : (0 : ℝ) < r := by exact_mod_cast hr_pos
+  -- Upper: B * 3 ≤ 2^m → B / 2^m ≤ 1/3
+  have hupper : (B : ℝ) / 2 ^ m ≤ 1 / 3 := by
+    rw [div_le_div_iff₀ h2m_pos (by norm_num : (0 : ℝ) < 3)]
+    nlinarith
+  -- Lower: 1/3 - 1/2^m ≤ B/2^m
+  have hlower : 1 / 3 - 1 / 2 ^ m ≤ (B : ℝ) / 2 ^ m := by
+    have h1 : (0 : ℝ) < 3 * 2 ^ m := by positivity
+    rw [div_sub_div _ _ (ne_of_gt (show (0:ℝ) < 3 by norm_num)) (ne_of_gt h2m_pos),
+        div_le_div_iff₀ h1 h2m_pos]
+    nlinarith
+  have hbound : |(B : ℝ) / 2 ^ m - 1 / 3| ≤ 1 / 2 ^ m := by
+    rw [abs_le]; constructor <;> linarith
+  calc |(B : ℝ) / 2 ^ m - 1 / 3|
+      ≤ 1 / 2 ^ m := hbound
+    _ = (2⁻¹) ^ m := by rw [one_div, inv_pow]
+    _ ≤ (2⁻¹) ^ N := pow_le_pow_of_le_one (by positivity) (by norm_num) hm
+    _ < ε := hN
 
 end Omega.Entropy

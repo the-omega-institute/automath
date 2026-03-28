@@ -747,4 +747,14 @@ theorem momentSum_two_hiddenBit_expand (m : Nat) :
     ring
   simp_rw [hsplit, Finset.sum_add_distrib, Finset.mul_sum]
 
+/-- Fiber multiplicity equals the sum of two exact weight counts.
+    d(x) = ewc(m, sv(x)) + ewc(m, sv(x) + F_{m+2}).
+    thm:pom-fiber-ewc-sum -/
+theorem fiberMultiplicity_eq_ewc_sum (x : X m) :
+    X.fiberMultiplicity x =
+    exactWeightCount m (stableValue x) +
+    exactWeightCount m (stableValue x + Nat.fib (m + 2)) := by
+  rw [fiberMultiplicity_split_by_hiddenBit x,
+    fiberHiddenBitCount_zero_eq_ewc x, fiberHiddenBitCount_one_eq_ewc x]
+
 end Omega

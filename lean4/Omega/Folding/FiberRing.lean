@@ -213,6 +213,16 @@ noncomputable def crtDecomposition (m : Nat) (p q : Nat)
 noncomputable def X7_decomposition : X 7 ≃+* ZMod 2 × ZMod 17 :=
   crtDecomposition 7 2 17 (by native_decide) (by native_decide)
 
+-- X_6: F_8 = 21 = 3 × 7, gcd(3,7) = 1.
+/-- X_6 ≃+* ZMod 3 × ZMod 7 via CRT (since F_8 = 21 = 3 × 7).
+    cor:crt-X6-decomposition -/
+noncomputable def X6_decomposition : X 6 ≃+* ZMod 3 × ZMod 7 :=
+  crtDecomposition 6 3 7 (by native_decide) (by native_decide)
+
+/-- X_6 admits a CRT splitting into ZMod 3 × ZMod 7.
+    cor:crt-X6-split -/
+theorem X6_crt_split : Nonempty (X 6 ≃+* ZMod 3 × ZMod 7) := ⟨X6_decomposition⟩
+
 -- X_10: F_12 = 144 = 16 × 9, gcd(16,9) = 1.
 /-- crt-X10-decomposition -/
 noncomputable def X10_decomposition : X 10 ≃+* ZMod 16 × ZMod 9 :=
