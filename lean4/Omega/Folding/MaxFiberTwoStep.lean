@@ -703,4 +703,43 @@ theorem truncation_curvature_eq_hiddenBit (w : Word (m + 1)) :
       exact weight_truncate_mod w
     simp only [heq, ite_true]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R14: hiddenBitCount bounds
+-- ══════════════════════════════════════════════════════════════
+
+/-- #{weight < F} = 2^m - hiddenBitCount.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem complement_hiddenBitCount (m : Nat) :
+    (Finset.univ.filter (fun w : Word m => weight w < Nat.fib (m + 2))).card =
+    2 ^ m - hiddenBitCount m := by
+  have hle : hiddenBitCount m ≤ 2 ^ m := by
+    unfold hiddenBitCount
+    calc (Finset.univ.filter (fun w : Word m => Nat.fib (m + 2) ≤ weight w)).card
+        ≤ (Finset.univ : Finset (Word m)).card := Finset.card_filter_le _ _
+      _ = 2 ^ m := by simp [Fintype.card_fun, Fintype.card_bool]
+  have htotal : (Finset.univ : Finset (Word m)).card = 2 ^ m := by
+    simp [Fintype.card_fun, Fintype.card_bool]
+  have hcompl : (Finset.univ.filter (fun w : Word m => weight w < Nat.fib (m + 2))).card +
+      (Finset.univ.filter (fun w : Word m => Nat.fib (m + 2) ≤ weight w)).card =
+      (Finset.univ : Finset (Word m)).card := by
+    rw [← Finset.card_union_of_disjoint (by
+      apply Finset.disjoint_filter.mpr; intro w _ h1 h2; omega)]
+    congr 1; ext w; simp; omega
+  rw [htotal] at hcompl; unfold hiddenBitCount; omega
+
+/-- hiddenBitCount m < 2^m for m ≥ 2.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem hiddenBitCount_lt_pow (m : Nat) (hm : 2 ≤ m) :
+    hiddenBitCount m < 2 ^ m := by
+  have h := paper_hiddenBitCount_closed m
+  -- 3 * A(m) + δ = 2^m where δ ≥ 1, so 3 * A(m) < 2^m, so A(m) < 2^m
+  split_ifs at h with heven <;> omega
+
+/-- hiddenBitCount m > 0 for m ≥ 2.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem hiddenBitCount_pos (m : Nat) (hm : 2 ≤ m) :
+    0 < hiddenBitCount m := by
+  obtain ⟨k, rfl⟩ : ∃ k, m = k + 2 := ⟨m - 2, by omega⟩
+  rw [hiddenBitCount_recurrence]; positivity
+
 end Omega

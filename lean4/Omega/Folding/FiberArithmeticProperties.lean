@@ -570,4 +570,39 @@ theorem paper_symmetric_remainder (a : ℤ) (b : ℤ) (hb : 0 < b) :
       omega
     · omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R14: stableSucc definition and properties
+-- ══════════════════════════════════════════════════════════════
+
+namespace X
+
+noncomputable section
+
+/-- The successor function on X m.
+    def:successor-fold -/
+noncomputable def stableSucc (x : X m) : X m := stableAdd x stableOne
+
+/-- stableValue(succ(x)) = (stableValue(x) + 1) % F_{m+2}.
+    thm:successor-structure -/
+theorem stableValue_stableSucc (x : X m) (hm : 1 ≤ m) :
+    stableValue (stableSucc x) = (stableValue x + 1) % Nat.fib (m + 2) := by
+  simp only [stableSucc, stableValue_stableAdd, stableValue_stableOne_of_ge_one hm]
+
+/-- succ(0) = 1.
+    thm:successor-structure -/
+theorem stableSucc_zero (hm : 1 ≤ m) :
+    stableSucc (stableZero (m := m)) = stableOne := by
+  simp only [stableSucc, stableAdd_zero_left]
+
+/-- Successor is injective.
+    thm:successor-structure -/
+theorem stableSucc_injective (m : Nat) :
+    Function.Injective (stableSucc (m := m)) := by
+  intro a b h
+  exact stableAdd_right_cancel (show stableAdd a stableOne = stableAdd b stableOne from h)
+
+end
+
+end X
+
 end Omega
