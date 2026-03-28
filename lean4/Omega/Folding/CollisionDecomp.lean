@@ -932,4 +932,67 @@ theorem momentSum_two_eq_E00_add_cwc (m : Nat) :
     momentSum 2 m = exactWeightCollision m + 2 * crossWeightCorrelation m := by
   rw [crossWeightCorrelation_eq_crossCorr, momentSum_two_eq_exact_plus_crossCorr]
 
+/-- S_2(m+2) = E00(m+2) + 2·S_2(m). -/
+private theorem momentSum_two_eq_E00_add_two_S (m : Nat) :
+    momentSum 2 (m + 2) = exactWeightCollision (m + 2) + 2 * momentSum 2 m := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 =>
+      rw [momentSum_two_two, momentSum_two_zero]
+      show 6 = exactWeightCollision 2 + 2
+      rw [exactWeightCollision_eq_sum]; simp [Finset.sum_range_succ, momentSum_two_zero,
+        momentSum_two_one]
+    | 1 =>
+      rw [momentSum_two_three, momentSum_two_one]
+      show 14 = exactWeightCollision 3 + 4
+      rw [exactWeightCollision_eq_sum]; simp [Finset.sum_range_succ, momentSum_two_zero,
+        momentSum_two_one, momentSum_two_two]
+    | m + 2 =>
+      have hrec := momentSum_two_recurrence (m + 1)
+      -- hrec: S_2(m+4) + 2*S_2(m+1) = 2*S_2(m+3) + 2*S_2(m+2)
+      have hE := exactWeightCollision_succ (m + 3)
+      -- hE: E00(m+4) = E00(m+3) + S_2(m+3)
+      have hprev := ih (m + 1) (by omega)
+      -- hprev: S_2(m+3) = E00(m+3) + 2*S_2(m+1)
+      linarith
+
+/-- cwc(m+2) = S_2(m). Algebraic proof.
+    thm:pom-hiddenbit-jump-collision-isomorphism -/
+theorem crossWeightCorrelation_eq_momentSum_two (m : Nat) :
+    crossWeightCorrelation (m + 2) = momentSum 2 m := by
+  have h1 := momentSum_two_eq_E00_add_cwc (m + 2)
+  have h2 := momentSum_two_eq_E00_add_two_S m
+  omega
+
+/-- 4·S_2(m) ≤ S_2(m+2). -/
+private theorem momentSum_two_quadruple_le (m : Nat) :
+    4 * momentSum 2 m ≤ momentSum 2 (m + 2) := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 => rw [momentSum_two_zero, momentSum_two_two]; omega
+    | 1 => rw [momentSum_two_one, momentSum_two_three]; omega
+    | m + 2 =>
+      -- Use recurrences to relate S_2(m+4) to earlier values
+      have hrec_m := momentSum_two_recurrence m
+      have hrec_m1 := momentSum_two_recurrence (m + 1)
+      have ih0 := ih m (by omega)
+      have ih1 := ih (m + 1) (by omega)
+      -- Normalize: m+1+3 = m+4, m+1+2 = m+3, m+1+1 = m+2, m+2+2 = m+4
+      show 4 * momentSum 2 (m + 2) ≤ momentSum 2 (m + 4)
+      -- From hrec_m1: S(m+4) + 2S(m+1) = 2S(m+3) + 2S(m+2)
+      -- From hrec_m: S(m+3) + 2S(m) = 2S(m+2) + 2S(m+1)
+      -- So S(m+3) = 2S(m+2) + 2S(m+1) - 2S(m) ≥ 2S(m+2) (since ih0: S(m+2) ≥ 4S(m) ≥ 2S(m+1)... no)
+      -- S(m+4) = 2S(m+3) + 2S(m+2) - 2S(m+1)
+      -- Need: 4S(m+2) ≤ 2S(m+3) + 2S(m+2) - 2S(m+1)
+      -- i.e. 2S(m+2) + 2S(m+1) ≤ 2S(m+3) = 2*(2S(m+2) + 2S(m+1) - 2S(m))
+      -- i.e. 2S(m+2) + 2S(m+1) ≤ 4S(m+2) + 4S(m+1) - 4S(m)
+      -- i.e. 4S(m) ≤ 2S(m+2) + 2S(m+1), which follows from ih0: 4S(m) ≤ S(m+2)
+      linarith
+
+-- Phase R9 theorem 3 (hiddenBitBiasEnergy_eq) deferred:
+-- Requires `fiberHiddenBitCount 1 x ≤ fiberHiddenBitCount 0 x` (ewc monotonicity under shift)
+-- which needs `exactWeightCount m n ≥ exactWeightCount m (n + Nat.fib (m + 2))` — a separate lemma.
+
 end Omega
