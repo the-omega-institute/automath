@@ -780,4 +780,63 @@ theorem Fold_snoc_false_ne_snoc_true (w : Word m) :
       exact Nat.mod_eq_of_lt (by omega)
     rw [this] at hsv_eq; omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R21: Bit-resolving and left-resolving
+-- ══════════════════════════════════════════════════════════════
+
+/-- Flipping any single bit changes the Fold image: right-resolving at arbitrary position.
+    thm:pom-right-resolving -/
+theorem Fold_ne_of_bit_flip {m : Nat} (w : Word m) (i : Fin m) :
+    Fold (Function.update w i false) ≠ Fold (Function.update w i true) := by
+  intro heq
+  -- Key: weight(update w i true) = weight(update w i false) + F_{i+2}
+  -- because update (update w i false) i true = update w i true, and bit i is false in update w i false
+  have hi_false : Function.update w i false i = false := Function.update_self i false w
+  have hweight : weight (Function.update w i true) =
+      weight (Function.update w i false) + Nat.fib (i.val + 2) := by
+    have : Function.update (Function.update w i false) i true = Function.update w i true := by
+      ext j; by_cases hj : j = i
+      · subst hj; simp [Function.update_self]
+      · simp [Function.update_of_ne hj]
+    rw [← this]
+    exact weight_update_true_add (Function.update w i false) i hi_false
+  -- From Fold_eq_iff_weight_mod: weights are congruent mod F_{m+2}
+  rw [Fold_eq_iff_weight_mod] at heq
+  -- heq: weight(update w i false) % F_{m+2} = weight(update w i true) % F_{m+2}
+  -- So F_{i+2} ≡ 0 (mod F_{m+2}), but 0 < F_{i+2} ≤ F_{m+1} < F_{m+2}
+  have hFi_pos : 0 < Nat.fib (i.val + 2) := fib_succ_pos (i.val + 1)
+  have hFi_lt : Nat.fib (i.val + 2) < Nat.fib (m + 2) := by
+    apply Nat.fib_lt_fib_succ (by omega : 2 ≤ i.val + 2) |>.trans_le
+    exact Nat.fib_mono (by omega : i.val + 2 + 1 ≤ m + 2)
+  have hFm_pos : 0 < Nat.fib (m + 2) := fib_succ_pos (m + 1)
+  -- From heq and hweight: a % F = (a + F_{i+2}) % F where a = weight(update w i false), F = F_{m+2}
+  set a := weight (Function.update w i false)
+  rw [hweight] at heq
+  -- heq: a % F_{m+2} = (a + F_{i+2}) % F_{m+2}
+  -- Same modular arithmetic as Fold_snoc_false_ne_snoc_true
+  have hred : (a + Nat.fib (i.val + 2)) % Nat.fib (m + 2) =
+      (a % Nat.fib (m + 2) + Nat.fib (i.val + 2) % Nat.fib (m + 2)) % Nat.fib (m + 2) :=
+    Nat.add_mod _ _ _
+  rw [Nat.mod_eq_of_lt hFi_lt] at hred
+  set b := a % Nat.fib (m + 2) with hb_def
+  rw [hred] at heq
+  have hb_lt : b < Nat.fib (m + 2) := Nat.mod_lt _ hFm_pos
+  by_cases hle : b + Nat.fib (i.val + 2) < Nat.fib (m + 2)
+  · rw [Nat.mod_eq_of_lt hle] at heq; omega
+  · push_neg at hle
+    have : (b + Nat.fib (i.val + 2)) % Nat.fib (m + 2) =
+        b + Nat.fib (i.val + 2) - Nat.fib (m + 2) := by
+      conv_lhs => rw [show b + Nat.fib (i.val + 2) =
+        (b + Nat.fib (i.val + 2) - Nat.fib (m + 2)) + Nat.fib (m + 2) from by omega]
+      rw [Nat.add_mod_right]
+      exact Nat.mod_eq_of_lt (by omega)
+    rw [this] at heq; omega
+
+/-- Left-resolving: flipping the first bit changes Fold. Specialization of Fold_ne_of_bit_flip.
+    thm:pom-left-resolving -/
+theorem Fold_ne_of_first_bit_flip {m : Nat} (w : Word m) (hm : 2 ≤ m) :
+    Fold (Function.update w ⟨0, by omega⟩ false) ≠
+    Fold (Function.update w ⟨0, by omega⟩ true) :=
+  Fold_ne_of_bit_flip w ⟨0, by omega⟩
+
 end Omega

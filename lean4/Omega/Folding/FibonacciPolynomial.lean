@@ -321,4 +321,26 @@ theorem detPoly_eval_two_recurrence (k : Nat) :
     (detPoly (k + 2)).eval 2 = 4 * (detPoly (k + 1)).eval 2 - (detPoly k).eval 2 := by
   simp only [detPoly_succ_succ, eval_sub, eval_mul, eval_add, eval_X, eval_ofNat]; ring
 
+/-- Recurrence at t=-1: D_{k+2}(-1) = D_{k+1}(-1) - D_k(-1).
+    prop:pom-detpoly-eval-neg-one -/
+theorem detPoly_eval_neg_one_rec (k : Nat) :
+    (detPoly (k + 2)).eval (-1 : ℤ) =
+    (detPoly (k + 1)).eval (-1 : ℤ) - (detPoly k).eval (-1 : ℤ) := by
+  simp only [detPoly_succ_succ, eval_sub, eval_mul, eval_add, eval_X, eval_ofNat]; ring
+
+/-- detPoly at t=-1 is period-6: D_{k+6}(-1) = D_k(-1).
+    prop:pom-detpoly-eval-neg-one -/
+theorem detPoly_eval_neg_one_periodic (k : Nat) :
+    (detPoly (k + 6)).eval (-1 : ℤ) = (detPoly k).eval (-1 : ℤ) := by
+  induction k using Nat.strongRecOn with
+  | _ k ih =>
+    match k with
+    | 0 => simp [detPoly, eval_sub, eval_mul, eval_add, eval_X, eval_ofNat]
+    | 1 => simp [detPoly, eval_sub, eval_mul, eval_add, eval_X, eval_ofNat]
+    | k + 2 =>
+      rw [detPoly_eval_neg_one_rec (k + 6)]
+      rw [detPoly_eval_neg_one_rec k]
+      rw [show k + 6 + 1 = (k + 1) + 6 from by omega]
+      rw [ih (k + 1) (by omega), ih k (by omega)]
+
 end Omega
