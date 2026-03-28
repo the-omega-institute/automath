@@ -1,5 +1,7 @@
 import Mathlib.Algebra.Polynomial.Eval.Defs
 import Mathlib.Algebra.Polynomial.Derivative
+import Mathlib.Algebra.Polynomial.Monic
+import Mathlib.Algebra.Polynomial.Degree.Operations
 import Mathlib.Data.Nat.Fib.Basic
 import Mathlib.Tactic.LinearCombination
 
@@ -342,5 +344,48 @@ theorem detPoly_eval_neg_one_periodic (k : Nat) :
       rw [detPoly_eval_neg_one_rec k]
       rw [show k + 6 + 1 = (k + 1) + 6 from by omega]
       rw [ih (k + 1) (by omega), ih k (by omega)]
+
+/-- D_k is monic and has degree k.
+    prop:pom-detpoly-monic-degree -/
+theorem detPoly_monic_and_natDegree :
+    ∀ k : Nat, (detPoly k).Monic ∧ (detPoly k).natDegree = k
+  | 0 => ⟨monic_one, by simp [detPoly]⟩
+  | 1 => by
+    constructor
+    · show (1 + X : Polynomial ℤ).Monic
+      rw [add_comm]; exact monic_X_add_C 1
+    · show (1 + X : Polynomial ℤ).natDegree = 1
+      rw [add_comm]; exact natDegree_X_add_C 1
+  | k + 2 => by
+    obtain ⟨hm1, hd1⟩ := detPoly_monic_and_natDegree (k + 1)
+    obtain ⟨hm0, hd0⟩ := detPoly_monic_and_natDegree k
+    -- (X+2) * D_{k+1} is monic of degree k+2, D_k has degree k < k+2
+    have hmX : (X + C (2 : ℤ)).Monic := monic_X_add_C 2
+    have hmul : ((X + C 2) * detPoly (k + 1)).Monic := hmX.mul hm1
+    have hdmul : ((X + C 2) * detPoly (k + 1)).natDegree = k + 2 := by
+      rw [hmX.natDegree_mul hm1, natDegree_X_add_C, hd1]; ring
+    have hdeg_lt : (detPoly k).degree < ((X + C 2) * detPoly (k + 1)).degree := by
+      rw [Polynomial.degree_eq_natDegree hm0.ne_zero,
+        Polynomial.degree_eq_natDegree hmul.ne_zero, hdmul, hd0]
+      exact Nat.cast_lt.mpr (by omega)
+    constructor
+    · -- monic: leading coeff of (X+2)*D_{k+1} - D_k = leading coeff of (X+2)*D_{k+1} = 1
+      show ((X + C 2) * detPoly (k + 1) - detPoly k).Monic
+      exact Polynomial.Monic.sub_of_left hmul hdeg_lt
+    · -- natDegree = k+2
+      show ((X + C 2) * detPoly (k + 1) - detPoly k).natDegree = k + 2
+      have hdlt2 : (detPoly k).natDegree < ((X + C 2) * detPoly (k + 1)).natDegree := by
+        rw [hdmul, hd0]; omega
+      rw [natDegree_sub_eq_left_of_natDegree_lt hdlt2, hdmul]
+
+/-- D_k is monic.
+    prop:pom-detpoly-monic -/
+theorem detPoly_monic (k : Nat) : (detPoly k).Monic :=
+  (detPoly_monic_and_natDegree k).1
+
+/-- deg(D_k) = k.
+    prop:pom-detpoly-natDegree -/
+theorem detPoly_natDegree (k : Nat) : (detPoly k).natDegree = k :=
+  (detPoly_monic_and_natDegree k).2
 
 end Omega

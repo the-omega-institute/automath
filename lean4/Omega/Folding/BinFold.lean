@@ -217,4 +217,21 @@ theorem compression_bounds_six :
 theorem multiplicity_spread_six : cBinFiberMax 6 - cBinFiberMin 6 = 2 := by
   rw [cBinFiberMax_six, cBinFiberMin_six]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R22: Three rigidity scales (conclusion chapter)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Histogram entry: no stable words with BinFold multiplicity 5 at m=6.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem cBinFiberHist_6_5 : cBinFiberHist 6 5 = 0 := by native_decide
+
+/-- Three rigidity scales at m=6: max fiber mult < |X_6| < 2^6.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem three_rigidity_scales_six :
+    cBinFiberMax 6 < Fintype.card (X 6) ∧
+    Fintype.card (X 6) < 2 ^ 6 := by
+  constructor
+  · rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
+  · rw [X.card_eq_fib]; native_decide
+
 end Omega
