@@ -1815,4 +1815,28 @@ theorem fibcubeFVector_euler_char (n : Nat) :
     rw [hS3, ih n (by omega)]
     ring
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R31: max popcount = ⌊(m+1)/2⌋
+-- ══════════════════════════════════════════════════════════════
+
+/-- The maximum popcount over X_m equals ⌊(m+1)/2⌋.
+    cor:pom-fibcube-radius-center-classification -/
+theorem max_popcount_eq (m : Nat) (hm : 1 ≤ m) :
+    (Finset.univ.image (fun x : X m => popcount x.1)).max'
+      ⟨popcount (⟨fun _ => false, no11_allFalse⟩ : X m).1,
+       Finset.mem_image.mpr ⟨⟨fun _ => false, no11_allFalse⟩, Finset.mem_univ _, rfl⟩⟩ =
+    (m + 1) / 2 := by
+  apply le_antisymm
+  · -- max ≤ (m+1)/2: every popcount is bounded
+    apply Finset.max'_le
+    intro n hn
+    rw [Finset.mem_image] at hn
+    obtain ⟨x, _, rfl⟩ := hn
+    exact popcount_le_half x
+  · -- (m+1)/2 ≤ max: there exists x achieving the bound
+    obtain ⟨y, hy⟩ := ecc_allFalse_achieved m hm
+    have hmem : popcount y.1 ∈ Finset.univ.image (fun x : X m => popcount x.1) :=
+      Finset.mem_image.mpr ⟨y, Finset.mem_univ _, rfl⟩
+    linarith [Finset.le_max' _ _ hmem]
+
 end Omega

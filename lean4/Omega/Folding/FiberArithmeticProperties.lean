@@ -719,4 +719,25 @@ end
 
 end X
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R31: iterate composition + stableMul from successor
+-- ══════════════════════════════════════════════════════════════
+
+/-- Iterate of a sum decomposes as composition: g^[m+n] = g^[m] ∘ g^[n].
+    thm:composition-two-layer -/
+theorem iterate_add_comp {α : Type*} (g : α → α) (m n : Nat) :
+    g^[m + n] = g^[m] ∘ g^[n] := Function.iterate_add g m n
+
+/-- Iterate of an iterate is a single iterate with multiplied exponent.
+    thm:composition-two-layer -/
+theorem iterate_iterate_mul {α : Type*} (f : α → α) (m n : Nat) :
+    (f^[n])^[m] = f^[m * n] := by
+  rw [mul_comm]; exact (Function.iterate_mul f n m).symm
+
+/-- Iterated addition by stableValue equals stableMul: multiplication from successor.
+    thm:mul-from-successor -/
+theorem stableMul_from_successor {m : Nat} (x y : X m) (hm : 1 ≤ m) :
+    X.iteratedStableAdd x (stableValue y) = X.stableMul y x :=
+  X.iteratedStableAdd_eq_stableMul x y hm
+
 end Omega
