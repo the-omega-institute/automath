@@ -76,4 +76,39 @@ theorem no11_append_true {w : Word m} (h : No11 w) (hLast : get w (m - 1) = fals
 
 
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 220: Word reversal + No11 preservation
+-- ══════════════════════════════════════════════════════════════
+
+/-- Index reversal of a word: wordReverse w maps position i to w[m-1-i].
+    thm:pom-fibcube-aut-z2 -/
+def wordReverse (w : Word m) : Word m :=
+  fun i => w ⟨m - 1 - i.val, by omega⟩
+
+/-- Index reversal preserves No11. thm:pom-fibcube-aut-z2 -/
+theorem no11_reverse {w : Word m} (hw : No11 w) : No11 (wordReverse w) := by
+  intro k hk hk1
+  have hkLt : k < m := lt_of_get_eq_true hk
+  have hk1Lt : k + 1 < m := lt_of_get_eq_true hk1
+  -- Use No11 on w at position (m-2-k): w[m-2-k] and w[m-1-k] both true
+  -- From hk1: get (wordReverse w) (k+1) = w[m-1-(k+1)] = w[m-2-k] = true
+  -- From hk:  get (wordReverse w) k     = w[m-1-k]           = true
+  apply hw (m - 2 - k)
+  · -- get w (m-2-k) = true
+    show get w (m - 2 - k) = true
+    have hlt : m - 2 - k < m := by omega
+    rw [get_of_lt _ hlt]
+    rw [get_of_lt _ hk1Lt] at hk1
+    simp only [wordReverse] at hk1
+    have : (⟨m - 1 - (k + 1), by omega⟩ : Fin m) = ⟨m - 2 - k, hlt⟩ := by
+      apply Fin.ext; simp; omega
+    rw [this] at hk1; exact hk1
+  · -- get w (m-2-k+1) = get w (m-1-k) = true
+    show get w (m - 2 - k + 1) = true
+    have heq : m - 2 - k + 1 = m - 1 - k := by omega
+    have hlt2 : m - 1 - k < m := by omega
+    rw [heq, get_of_lt _ hlt2]
+    rw [get_of_lt _ hkLt] at hk
+    simp only [wordReverse] at hk; exact hk
+
 end Omega

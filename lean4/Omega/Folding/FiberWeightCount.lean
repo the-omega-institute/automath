@@ -496,4 +496,73 @@ theorem sum_word_apply_weight (f : Nat → Nat) :
     fun w hw => by rw [(Finset.mem_filter.mp hw).2]
   rw [Finset.sum_congr rfl this, Finset.sum_const, smul_eq_mul, exactWeightCount]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 224: exactWeightCount upper bound
+-- ══════════════════════════════════════════════════════════════
+
+private theorem exactWeightCount_zero_le_one (n : Nat) : exactWeightCount 0 n ≤ 1 := by
+  rcases n with _ | n
+  · rw [exactWeightCount_zero_zero]
+  · rw [exactWeightCount_zero_succ]; omega
+
+/-- Helper: ewc(m+1, n) ≤ 2^m for all n. -/
+private theorem exactWeightCount_succ_le (m n : Nat) :
+    exactWeightCount (m + 1) n ≤ 2 ^ m := by
+  induction m generalizing n with
+  | zero =>
+    -- ewc(1, n) = ewc(0,n) + (if 1≤n then ewc(0,n-1) else 0); case split on n
+    rw [exactWeightCount_succ]
+    simp only [show Nat.fib (0 + 2) = 1 from by simp [Nat.fib]]
+    rcases n with _ | _ | n
+    · simp [exactWeightCount_zero_zero]
+    · simp [exactWeightCount_zero_succ, exactWeightCount_zero_zero]
+    · simp [exactWeightCount_zero_succ]
+  | succ m ih =>
+    rw [exactWeightCount_succ]
+    have h1 := ih n
+    have hpow : 2 ^ m + 2 ^ m = 2 ^ (m + 1) := by ring
+    split
+    · have h2 := ih (n - Nat.fib (m + 1 + 2)); linarith
+    · linarith
+
+/-- Each weight class has at most 2^(m-1) words.
+    prop:pom-ewc-upper-bound -/
+theorem exactWeightCount_le_pow (m n : Nat) (hm : 1 ≤ m) :
+    exactWeightCount m n ≤ 2 ^ (m - 1) := by
+  obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : m ≠ 0)
+  exact exactWeightCount_succ_le m n
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 224: pigeonhole on maxFiberMultiplicity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Σ d(x) = 2^m (wrapper with paper tag). prop:pom-fold-partition -/
+theorem fiberMultiplicity_sum_eq_pow' (m : Nat) :
+    ∑ x : X m, X.fiberMultiplicity x = 2 ^ m :=
+  X.fiberMultiplicity_sum_eq_pow m
+
+/-- 2^m ≤ D(m) * F(m+2) (pigeonhole). cor:pom-D-le-avg -/
+theorem pow_le_maxFiberMultiplicity_mul_fib (m : Nat) :
+    2 ^ m ≤ X.maxFiberMultiplicity m * Nat.fib (m + 2) := by
+  calc 2 ^ m = ∑ x : X m, X.fiberMultiplicity x := (X.fiberMultiplicity_sum_eq_pow m).symm
+    _ ≤ ∑ _ : X m, X.maxFiberMultiplicity m :=
+        Finset.sum_le_sum (fun x _ => X.fiberMultiplicity_le_max x)
+    _ = Fintype.card (X m) * X.maxFiberMultiplicity m := by
+        rw [Finset.sum_const, smul_eq_mul, Finset.card_univ]
+    _ = X.maxFiberMultiplicity m * Fintype.card (X m) := Nat.mul_comm _ _
+    _ = X.maxFiberMultiplicity m * Nat.fib (m + 2) := by
+        rw [X.card_eq_fib]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 227: weightCongruenceCount positivity
+-- ══════════════════════════════════════════════════════════════
+
+/-- wcc(m,r) > 0 for r < F(m+2). prop:pom-moment-congruence-q -/
+theorem weightCongruenceCount_pos (m : Nat) (r : Nat) (hr : r < Nat.fib (m + 2)) :
+    0 < weightCongruenceCount m r := by
+  -- wcc(m, r) = fiberMultiplicity(ofNat m r) which is always positive
+  rw [show r = stableValue (X.ofNat m r) from (X.stableValue_ofNat_lt r hr).symm,
+    ← fiberMultiplicity_eq_wcc]
+  exact X.fiberMultiplicity_pos _
+
 end Omega

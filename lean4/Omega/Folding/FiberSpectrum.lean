@@ -232,6 +232,22 @@ theorem cEvenFiberCount_four : cEvenFiberCount 4 = 4 := by simp
 theorem cEvenFiberCount_five : cEvenFiberCount 5 = 5 := by simp
 theorem cEvenFiberCount_six : cEvenFiberCount 6 = 9 := by simp
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 227: odd+even fiber partition
+-- ══════════════════════════════════════════════════════════════
+
+/-- Odd+even fiber counts = |X_m|. cor:pom-fiber-parity-mod3 -/
+theorem oddEvenFiber_sum_eq_card (m : Nat) :
+    cOddFiberCount m + cEvenFiberCount m = Fintype.card (X m) := by
+  simp only [cOddFiberCount, cEvenFiberCount]
+  rw [← Finset.card_union_of_disjoint (by
+    apply Finset.disjoint_filter.mpr
+    intro x _ h1 h2; omega)]
+  congr 1
+  ext x
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_union]
+  rcases Nat.even_or_odd (cFiberMult x) with ⟨k, hk⟩ | ⟨k, hk⟩ <;> simp [hk] <;> omega
+
 end Parity
 
 end Omega

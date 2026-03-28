@@ -2,6 +2,7 @@ import Omega.Core.Fib
 import Omega.Core.Word
 import Omega.Core.No11
 import Omega.Core.CoprimeSMul
+import Omega.Core.PowerInequality
 import Omega.Folding.StableSyntax
 import Omega.Folding.Weight
 import Omega.Folding.Value
@@ -64,3 +65,4 @@ import Omega.Frontier.Conjectures
 import Omega.Frontier.Certificates
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
+import Omega.Combinatorics.GramDet

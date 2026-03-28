@@ -508,3 +508,66 @@ theorem paper_fold_order_independent :
 theorem paper_truncation_not_commute :
     ∃ (w : Word 3), Fold (truncate w) ≠ X.restrict (Fold w) := by
   native_decide
+
+end X
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 242: Integer division identities
+-- ══════════════════════════════════════════════════════════════
+
+/-- Integer division: for b > 0 and any a, unique (q,r) with a = q*b + r and 0 ≤ r < b.
+    thm:pom-division-section -/
+theorem paper_division_section (a : ℤ) (b : ℤ) (hb : 0 < b) :
+    ∃! p : ℤ × ℤ, a = p.1 * b + p.2 ∧ 0 ≤ p.2 ∧ p.2 < b := by
+  refine ⟨(a / b, a % b), ⟨?_, ?_, ?_⟩, ?_⟩
+  · -- a = (a / b) * b + a % b
+    have := Int.ediv_add_emod a b  -- a = b * (a / b) + a % b
+    linarith
+  · exact Int.emod_nonneg a (by omega)
+  · exact Int.emod_lt_of_pos a hb
+  · rintro ⟨q', r'⟩ ⟨heq, hr0, hrb⟩
+    simp only [Prod.mk.injEq]
+    have hdiv : a = (a / b) * b + a % b := by
+      have := Int.ediv_add_emod a b; linarith
+    have hmod_nn : 0 ≤ a % b := Int.emod_nonneg a (by omega)
+    have hmod_lt : a % b < b := Int.emod_lt_of_pos a hb
+    -- From heq and hdiv: q' * b + r' = (a/b) * b + a%b
+    -- With 0 ≤ r' < b and 0 ≤ a%b < b, uniqueness follows
+    have h1 : (q' - a / b) * b = a % b - r' := by linarith
+    have h2 : |a % b - r'| < b := by
+      rw [abs_lt]; constructor <;> linarith
+    have h3 : q' = a / b := by
+      by_contra hne
+      have : |((q' - a / b) * b : ℤ)| ≥ b := by
+        rw [abs_mul]
+        calc |q' - a / b| * |b| ≥ 1 * |b| := by
+              apply mul_le_mul_of_nonneg_right _ (abs_nonneg _)
+              exact Int.one_le_abs (sub_ne_zero.mpr hne)
+          _ = |b| := one_mul _
+          _ = b := abs_of_pos hb
+      rw [h1] at this; linarith
+    constructor
+    · exact h3
+    · -- From h1 and h3: (q' - a/b) * b = 0, so a%b - r' = 0
+      have h4 : a % b - r' = 0 := by rw [h3, sub_self, zero_mul] at h1; linarith
+      linarith
+
+/-- Symmetric division: for b > 0, exists (q,r) with a = q*b + r and -⌊b/2⌋ ≤ r < ⌈b/2⌉.
+    cor:pom-symmetric-remainder -/
+theorem paper_symmetric_remainder (a : ℤ) (b : ℤ) (hb : 0 < b) :
+    ∃ q r : ℤ, a = q * b + r ∧ -(b / 2) ≤ r ∧ r < (b + 1) / 2 := by
+  set r₀ := a % b with hr₀_def
+  set q₀ := a / b with hq₀_def
+  have hdiv : a = q₀ * b + r₀ := by
+    have := Int.ediv_add_emod a b; linarith
+  have hr₀_nonneg : 0 ≤ r₀ := Int.emod_nonneg a (by omega)
+  have hr₀_lt : r₀ < b := Int.emod_lt_of_pos a hb
+  by_cases h : r₀ < (b + 1) / 2
+  · exact ⟨q₀, r₀, hdiv, by omega, h⟩
+  · refine ⟨q₀ + 1, r₀ - b, ?_, ?_, ?_⟩
+    · linarith
+    · have : (b + 1) / 2 ≤ r₀ := by omega
+      omega
+    · omega
+
+end Omega

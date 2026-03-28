@@ -52,4 +52,34 @@ theorem anom_oracle_collapse {G : Type*} [AddCommGroup G] (a : G) :
     have ha : a = 0 := coprime_smul_eq_zero_of_both a q₁ q₂ h1 h2 hcop
     intro q _; rw [ha, smul_zero]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 202: Torsion order divisibility
+-- ══════════════════════════════════════════════════════════════
+
+/-- q • a = 0 iff ord(a) | q, for element of finite order in an additive group.
+    thm:pom-anom-torsion-eliminability-min-order -/
+theorem smul_eq_zero_iff_order_dvd {G : Type*} [AddCommGroup G]
+    (a : G) (n : ℕ) (hn : 0 < n)
+    (hord : n • a = 0)
+    (hmin : ∀ k : ℕ, 0 < k → k < n → k • a ≠ 0)
+    (q : ℕ) :
+    q • a = 0 ↔ n ∣ q := by
+  constructor
+  · intro hq
+    -- Euclidean division: q = n * (q / n) + q % n
+    have hrem := Nat.div_add_mod q n
+    -- (q % n) • a = q • a - n * (q / n) • a = 0 - 0 = 0
+    have hmod : (q % n) • a = 0 := by
+      have h1 : (n * (q / n)) • a = 0 := by rw [mul_nsmul, hord, smul_zero]
+      have h2 : q • a = (n * (q / n)) • a + (q % n) • a := by
+        rw [← add_smul]; congr 1; omega
+      rw [h1, zero_add] at h2; rw [← h2, hq]
+    -- By minimality: q % n = 0, hence n | q
+    by_contra h
+    have hlt : q % n < n := Nat.mod_lt q hn
+    have hpos : 0 < q % n := Nat.pos_of_ne_zero (fun h0 => h (Nat.dvd_of_mod_eq_zero h0))
+    exact hmin (q % n) hpos hlt hmod
+  · rintro ⟨k, rfl⟩
+    rw [mul_nsmul, hord, smul_zero]
+
 end Omega

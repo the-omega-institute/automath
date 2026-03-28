@@ -118,4 +118,64 @@ theorem stableValue_nonneg (x : X m) : 0 ≤ stableValue x :=
 theorem stableValue_eq_weight (x : X m) : stableValue x = weight x.1 := rfl
 
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 204: stableValue injectivity
+-- ══════════════════════════════════════════════════════════════
+
+/-- stableValue is injective on X m: distinct stable words have distinct values.
+    thm:fold-zeckendorf-mod-decomposition-unique -/
+theorem stableValue_injective (m : Nat) : Function.Injective (fun x : X m => stableValue x) := by
+  intro x y hval
+  -- Simplify: (fun x => stableValue x) a = ... → stableValue a = ...
+  simp only at hval
+  induction m with
+  | zero =>
+    exact Subtype.ext (funext (fun i => (Nat.not_lt_zero i.1 i.2).elim))
+  | succ n ih =>
+    -- Decompose both values using last-bit split
+    have hx := stableValue_eq_restrict_add_last x
+    have hy := stableValue_eq_restrict_add_last y
+    -- Case split on last bits of x and y
+    by_cases hxlast : x.1 ⟨n, Nat.lt_succ_self n⟩ = true <;>
+    by_cases hylast : y.1 ⟨n, Nat.lt_succ_self n⟩ = true
+    · -- Both end in true: restrict values must be equal
+      simp only [hxlast, hylast, ite_true] at hx hy
+      have hrestr : stableValue (X.restrict x) = stableValue (X.restrict y) := by omega
+      have hreq := ih hrestr
+      -- Reconstruct: x and y have same restrict and same last bit
+      exact Subtype.ext (funext fun i => by
+        by_cases hi : i.1 < n
+        · -- For indices < n: use restrict equality
+          have h1 : (X.restrict x).1 ⟨i.1, hi⟩ = (X.restrict y).1 ⟨i.1, hi⟩ :=
+            congr_arg (fun z => z.1 ⟨i.1, hi⟩) hreq
+          simp [X.restrict] at h1; exact h1
+        · have : i = ⟨n, Nat.lt_succ_self n⟩ := Fin.ext (Nat.eq_of_lt_succ_of_not_lt i.2 hi)
+          subst this; rw [hxlast, hylast])
+    · -- x ends in true, y ends in false: value range contradiction
+      simp only [hxlast, ite_true, hylast, Bool.false_eq_true, ite_false] at hx hy
+      have hyr : stableValue (X.restrict y) < Nat.fib (n + 2) :=
+        stableValue_lt_fib (X.restrict y)
+      omega
+    · -- x ends in false, y ends in true: symmetric contradiction
+      simp only [hxlast, Bool.false_eq_true, ite_false, hylast, ite_true] at hx hy
+      have hxr : stableValue (X.restrict x) < Nat.fib (n + 2) :=
+        stableValue_lt_fib (X.restrict x)
+      omega
+    · -- Both end in false: restrict values must be equal
+      simp only [hxlast, hylast, Bool.false_eq_true, ite_false] at hx hy
+      have hrestr : stableValue (X.restrict x) = stableValue (X.restrict y) := by omega
+      have hreq := ih hrestr
+      exact Subtype.ext (funext fun i => by
+        by_cases hi : i.1 < n
+        · have h1 : (X.restrict x).1 ⟨i.1, hi⟩ = (X.restrict y).1 ⟨i.1, hi⟩ :=
+            congr_arg (fun z => z.1 ⟨i.1, hi⟩) hreq
+          simp [X.restrict] at h1; exact h1
+        · have : i = ⟨n, Nat.lt_succ_self n⟩ := Fin.ext (Nat.eq_of_lt_succ_of_not_lt i.2 hi)
+          subst this
+          have hxf : x.1 ⟨n, Nat.lt_succ_self n⟩ = false := by
+            cases h : x.1 ⟨n, _⟩ <;> simp_all
+          have hyf : y.1 ⟨n, Nat.lt_succ_self n⟩ = false := by
+            cases h : y.1 ⟨n, _⟩ <;> simp_all
+          rw [hxf, hyf])
+
 end Omega

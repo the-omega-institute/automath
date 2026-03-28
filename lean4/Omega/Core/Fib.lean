@@ -915,4 +915,155 @@ theorem fib_cross_product (k : Nat) (hk : 1 ≤ k) :
   have hfj : (Nat.fib j : ℤ) = Nat.fib (j + 2) - Nat.fib (j + 1) := by omega
   rw [hfj]; ring
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 201: Fibonacci tail matrix determinant
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fibonacci tail matrix G_m has det = 1 when m is even:
+    F(m+3)^2 = F(m+2)*F(m+4) + 1.
+    prop:fib-tail-reversibility -/
+theorem fib_tail_matrix_det_even (m : Nat) (hm : Even m) :
+    Nat.fib (m + 3) ^ 2 = Nat.fib (m + 2) * Nat.fib (m + 4) + 1 := by
+  -- Cassini even: F(n)*F(n+2) + 1 = F(n+1)^2 for even n.
+  -- Apply with n = m+2 (even since m is even): F(m+2)*F(m+4) + 1 = F(m+3)^2.
+  have heven : Even (m + 2) := by obtain ⟨k, rfl⟩ := hm; exact ⟨k + 1, by omega⟩
+  exact (fib_cassini_even (m + 2) heven).symm
+
+/-- Fibonacci tail matrix G_m has det = -1 when m is odd:
+    F(m+2)*F(m+4) = F(m+3)^2 + 1.
+    prop:fib-tail-reversibility -/
+theorem fib_tail_matrix_det_odd (m : Nat) (hm : ¬ Even m) :
+    Nat.fib (m + 2) * Nat.fib (m + 4) = Nat.fib (m + 3) ^ 2 + 1 := by
+  -- Cassini odd: F(n)*F(n+2) = F(n+1)^2 + 1 for odd n.
+  -- Apply with n = m+2 (odd since m is odd).
+  have hodd : ¬ Even (m + 2) := by intro ⟨k, hk⟩; exact hm ⟨k - 1, by omega⟩
+  exact fib_cassini_odd (m + 2) hodd
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 203: Fibonacci subtraction + coprimality
+-- ══════════════════════════════════════════════════════════════
+
+/-- F(n+2) - F(n+1) = F(n), the Fibonacci subtraction identity.
+    thm:bdry-uplift-second-difference-residual-law -/
+theorem fib_sub_consecutive (n : Nat) :
+    Nat.fib (n + 2) - Nat.fib (n + 1) = Nat.fib n := by
+  have h := Nat.fib_add_two (n := n); omega
+
+/-- F(11) - F(10) = F(9) = 34.
+    thm:bdry-uplift-second-difference-residual-law (m=7) -/
+theorem bdry_uplift_second_diff_m7 :
+    Nat.fib 11 - Nat.fib 10 = Nat.fib 9 :=
+  fib_sub_consecutive 9
+
+/-- F(12) - F(11) = F(10) = 55.
+    thm:bdry-uplift-second-difference-residual-law (m=8) -/
+theorem bdry_uplift_second_diff_m8 :
+    Nat.fib 12 - Nat.fib 11 = Nat.fib 10 :=
+  fib_sub_consecutive 10
+
+/-- Consecutive Fibonacci numbers are coprime: gcd(F(n), F(n+1)) = 1.
+    bridge:fib-coprime-consecutive -/
+theorem fib_coprime_consecutive_general (n : Nat) :
+    Nat.gcd (Nat.fib n) (Nat.fib (n + 1)) = 1 :=
+  fib_coprime_succ n
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 204: Fibonacci alternating skip sum
+-- ══════════════════════════════════════════════════════════════
+
+/-- Σ_{k < ⌊(n+1)/2⌋} F(n+1-2k) = F(n+2) - 1, the alternating skip Fibonacci sum.
+    prop:fold-endpoint-Mm-minus-one-unique -/
+theorem fib_alternating_skip_sum (n : Nat) :
+    ∑ k ∈ Finset.range ((n + 1) / 2), Nat.fib (n + 1 - 2 * k) = Nat.fib (n + 2) - 1 := by
+  -- Prove the "+1" version: ∑ + 1 = F(n+2), avoiding Nat subtraction on the RHS
+  suffices h : ∑ k ∈ Finset.range ((n + 1) / 2), Nat.fib (n + 1 - 2 * k) + 1 = Nat.fib (n + 2) by
+    omega
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+  match n with
+  | 0 => simp
+  | 1 => simp [Finset.sum_range_succ]; rfl
+  | n + 2 =>
+    -- (n+3)/2 = (n+1)/2 + 1
+    rw [show (n + 2 + 1) / 2 = (n + 1) / 2 + 1 from by omega, Finset.sum_range_succ]
+    -- Shift remaining terms: F(n+3-2k) = F((n+1-2k)+2) for k < (n+1)/2
+    have hshift : ∀ k ∈ Finset.range ((n + 1) / 2),
+        Nat.fib (n + 2 + 1 - 2 * k) = Nat.fib ((n + 1 - 2 * k) + 2) := by
+      intro k hk; congr 1; have := Finset.mem_range.mp hk; omega
+    rw [Finset.sum_congr rfl hshift]
+    -- Expand F(a+2) = F(a) + F(a+1)
+    have hexp : ∀ k ∈ Finset.range ((n + 1) / 2),
+        Nat.fib ((n + 1 - 2 * k) + 2) =
+          Nat.fib (n + 1 - 2 * k) + Nat.fib ((n + 1 - 2 * k) + 1) := by
+      intro k _; exact Nat.fib_add_two
+    rw [Finset.sum_congr rfl hexp, Finset.sum_add_distrib]
+    -- First sub-sum = F(n+2) - 1 by IH(n)
+    have ih_n := ih n (by omega)
+    -- Second sub-sum: ∑_{k<(n+1)/2} F(n+1+1-2k)
+    -- Shift to match IH(n+1): F((n+1-2k)+1) = F(n+1+1-2k) for k < (n+1)/2
+    have hshift2 : ∀ k ∈ Finset.range ((n + 1) / 2),
+        Nat.fib ((n + 1 - 2 * k) + 1) = Nat.fib (n + 1 + 1 - 2 * k) := by
+      intro k hk; congr 1; have := Finset.mem_range.mp hk; omega
+    rw [Finset.sum_congr rfl hshift2]
+    -- IH(n+1): ∑_{k<(n+2)/2} F(n+2-2k) + 1 = F(n+3)
+    have ih_n1 := ih (n + 1) (by omega)
+    -- Normalize Fib indices to canonical form
+    have hfib_n4 : Nat.fib (n + 2 + 2) = Nat.fib (n + 4) := by congr 1
+    have hfib_n3a : Nat.fib (n + 2 + 1) = Nat.fib (n + 3) := by congr 1
+    have hfib_n3b : Nat.fib (n + 1 + 2) = Nat.fib (n + 3) := by congr 1
+    rw [hfib_n4]
+    -- Relate our ∑_{k<(n+1)/2} F(n+2-2k) to ih_n1's ∑_{k<(n+2)/2} F(n+2-2k)
+    rw [hfib_n3b] at ih_n1
+    by_cases hpar : (n + 1 + 1) / 2 = (n + 1) / 2
+    · -- odd n case: (n+2)/2 = (n+1)/2, ranges match directly
+      rw [hpar] at ih_n1
+      have htail : Nat.fib (n + 2 + 1 - 2 * ((n + 1) / 2)) = 1 := by
+        have : n + 2 + 1 - 2 * ((n + 1) / 2) = 2 := by omega
+        rw [this]; rfl
+      rw [htail]
+      have hfib : Nat.fib (n + 4) = Nat.fib (n + 2) + Nat.fib (n + 3) := by
+        have := Nat.fib_add_two (n := n + 2)
+        rw [hfib_n4, hfib_n3a] at this; exact this
+      omega
+    · -- even n case: (n+2)/2 = (n+1)/2 + 1
+      have hrng : (n + 1 + 1) / 2 = (n + 1) / 2 + 1 := by omega
+      rw [hrng, Finset.sum_range_succ] at ih_n1
+      have hextra : n + 1 + 1 - 2 * ((n + 1) / 2) = 2 := by omega
+      rw [hextra] at ih_n1
+      have hfib2 : Nat.fib 2 = 1 := rfl
+      rw [hfib2] at ih_n1
+      have htail : Nat.fib (n + 2 + 1 - 2 * ((n + 1) / 2)) = 2 := by
+        have : n + 2 + 1 - 2 * ((n + 1) / 2) = 3 := by omega
+        rw [this]; rfl
+      rw [htail]
+      have hfib : Nat.fib (n + 4) = Nat.fib (n + 2) + Nat.fib (n + 3) := by
+        have := Nat.fib_add_two (n := n + 2)
+        rw [hfib_n4, hfib_n3a] at this; exact this
+      omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 215: FenceDet additive recurrence and ratio bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- FenceDet additive recurrence: D(k+1) + D(k-1) = 3*D(k).
+    cor:pom-Lk-golden-coupling-unique -/
+theorem fenceDet_additive (k : Nat) (hk : 1 ≤ k) :
+    fenceDet (k + 1) + fenceDet (k - 1) = 3 * fenceDet k := by
+  obtain ⟨j, rfl⟩ : ∃ j, k = j + 1 := ⟨k - 1, by omega⟩
+  simp only [show j + 1 - 1 = j from by omega]
+  -- fenceDet(j+2) = 3*fenceDet(j+1) - fenceDet(j) by definition
+  -- So fenceDet(j+2) + fenceDet(j) = 3*fenceDet(j+1)
+  show fenceDet (j + 2) + fenceDet j = 3 * fenceDet (j + 1)
+  have hrec : fenceDet (j + 2) = 3 * fenceDet (j + 1) - fenceDet j := rfl
+  have hmono : fenceDet j ≤ fenceDet (j + 1) := fenceDet_mono j
+  omega
+
+/-- FenceDet ratio bound: D(k+1) < 3*D(k).
+    cor:pom-Lk-golden-coupling-unique -/
+theorem fenceDet_succ_lt_triple (k : Nat) (hk : 1 ≤ k) :
+    fenceDet (k + 1) < 3 * fenceDet k := by
+  have hadd := fenceDet_additive k hk
+  have hpos := fenceDet_pos (k - 1)
+  omega
+
 end Omega

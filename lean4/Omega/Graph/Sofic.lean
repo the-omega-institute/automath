@@ -178,4 +178,11 @@ theorem accepted_implies_no11 {w : Word m}
     (h : AcceptsWord goldenMeanGraph false w) : No11 w :=
   no11_of_acceptsWord_goldenMean h
 
+/-- The stable language grows strictly: |X m| < |X (m+1)|.
+    cor:folding-stable-syntax-entropy-logqdim -/
+theorem stableLanguage_strict_mono (m : Nat) (hm : 1 ≤ m) :
+    Fintype.card (X m) < Fintype.card (X (m + 1)) := by
+  rw [X.card_eq_fib, X.card_eq_fib]
+  exact fib_strict_mono (m + 2) (by omega)
+
 end Omega.Graph

@@ -719,4 +719,125 @@ theorem momentSum_log_convex_audit_base :
     momentSum_three_six]
   omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 213: Cross-order moment inequality
+-- ══════════════════════════════════════════════════════════════
+
+/-- Cross-order moment inequality: (2^m)^q ≤ S_q(m) * F(m+2)^(q-1) for q≥1.
+    prop:pom-crossq-g-monotone -/
+theorem momentSum_crossq_from_base (q m : Nat) (hq : 1 ≤ q) :
+    (2 ^ m) ^ q ≤ momentSum q m * Nat.fib (m + 2) ^ (q - 1) := by
+  have := momentSum_power_mean_lower q m hq
+  linarith [Nat.mul_comm (Nat.fib (m + 2) ^ (q - 1)) (momentSum q m)]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 217: S_4 strict monotonicity (extended base)
+-- ══════════════════════════════════════════════════════════════
+
+theorem momentSum_four_seven : momentSum 4 7 = 12208 := by
+  rw [← cMomentSum_eq]; native_decide
+theorem momentSum_four_eight : momentSum 4 8 = 47480 := by
+  rw [← cMomentSum_eq]; native_decide
+theorem momentSum_four_nine : momentSum 4 9 = 181576 := by
+  rw [← cMomentSum_eq]; native_decide
+theorem momentSum_four_ten : momentSum 4 10 = 700384 := by
+  rw [← cMomentSum_eq]; native_decide
+
+/-- S_4 is strictly increasing for 2 ≤ m ≤ 9. prop:pom-s4-recurrence -/
+theorem momentSum_four_strict_mono (m : Nat) (hm : 2 ≤ m) (hm' : m ≤ 9) :
+    momentSum 4 m < momentSum 4 (m + 1) := by
+  have h23 : momentSum 4 2 < momentSum 4 3 := by
+    rw [momentSum_four_two, momentSum_four_three]; omega
+  have h34 : momentSum 4 3 < momentSum 4 4 := by
+    rw [momentSum_four_three, momentSum_four_four]; omega
+  have h45 : momentSum 4 4 < momentSum 4 5 := by
+    rw [momentSum_four_four, momentSum_four_five]; omega
+  have h56 : momentSum 4 5 < momentSum 4 6 := by
+    rw [momentSum_four_five, momentSum_four_six]; omega
+  have h67 : momentSum 4 6 < momentSum 4 7 := by
+    rw [momentSum_four_six, momentSum_four_seven]; omega
+  have h78 : momentSum 4 7 < momentSum 4 8 := by
+    rw [momentSum_four_seven, momentSum_four_eight]; omega
+  have h89 : momentSum 4 8 < momentSum 4 9 := by
+    rw [momentSum_four_eight, momentSum_four_nine]; omega
+  have h910 : momentSum 4 9 < momentSum 4 10 := by
+    rw [momentSum_four_nine, momentSum_four_ten]; omega
+  interval_cases m <;> assumption
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 218: S_2(m)^q ≤ S_{2q}(m) · F(m+2)^{q-1}
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_2(m)^q ≤ S_{2q}(m) · F(m+2)^{q-1}. By power mean inequality applied to
+    f(x) = d_m(x)^2 over the Fibonacci cube X_m.
+    prop:pom-sq-quasi-multiplicative -/
+theorem momentSum_two_pow_le (q m : Nat) (hq : 1 ≤ q) :
+    momentSum 2 m ^ q ≤ momentSum (2 * q) m * Nat.fib (m + 2) ^ (q - 1) := by
+  obtain ⟨q, rfl⟩ : ∃ q', q = q' + 1 := ⟨q - 1, by omega⟩
+  simp only [Nat.add_sub_cancel]
+  simp only [momentSum]
+  rw [← X.card_eq_fib, ← Finset.card_univ (α := X m)]
+  have key : ∀ x ∈ (Finset.univ : Finset (X m)), 0 ≤ X.fiberMultiplicity x ^ 2 :=
+    fun _ _ => Nat.zero_le _
+  have h := pow_sum_le_card_mul_sum_pow key q
+  simp_rw [show ∀ x : X m, (X.fiberMultiplicity x ^ 2) ^ (q + 1) =
+    X.fiberMultiplicity x ^ (2 * (q + 1)) from
+    fun x => by rw [← pow_mul]] at h
+  rw [Nat.mul_comm] at h
+  exact h
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 226: S_2 strict doubling
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_2(m+1) > 2*S_2(m) for m ≥ 2. prop:pom-s2-recurrence -/
+theorem momentSum_two_succ_gt_double (m : Nat) (hm : 2 ≤ m) :
+    2 * momentSum 2 m < momentSum 2 (m + 1) := by
+  -- Base cases m=2,3,4 by values, then induction using the 3-step recurrence.
+  -- Recurrence: S_2(m+3) = 2*S_2(m+2) + 2*S_2(m+1) - 2*S_2(m)
+  -- So S_2(m+3) > 2*S_2(m+2) ⟺ 2*S_2(m+1) > 2*S_2(m) ⟺ S_2(m+1) > S_2(m),
+  -- which follows from IH since 2*S_2(m) < S_2(m+1) implies S_2(m) < S_2(m+1).
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 | 1 => omega
+    | 2 => rw [momentSum_two_two, momentSum_two_three]; omega
+    | 3 => rw [momentSum_two_three, momentSum_two_four]; omega
+    | 4 => rw [momentSum_two_four, momentSum_two_five]; omega
+    | m + 5 =>
+      -- Use recurrence for m+3: S_2(m+6) + 2*S_2(m+3) = 2*S_2(m+5) + 2*S_2(m+4)
+      have hrec := momentSum_two_recurrence (m + 3)
+      -- IH at m+3: 2*S_2(m+3) < S_2(m+4)
+      have h3 := ih (m + 3) (by omega) (by omega)
+      -- IH at m+4: 2*S_2(m+4) < S_2(m+5)
+      have h4 := ih (m + 4) (by omega) (by omega)
+      -- From hrec: S_2(m+6) = 2*S_2(m+5) + 2*S_2(m+4) - 2*S_2(m+3)
+      -- Need: 2*S_2(m+5) < S_2(m+6), i.e., 2*(S_2(m+4) - S_2(m+3)) > 0
+      -- From h3: S_2(m+4) > 2*S_2(m+3) > S_2(m+3)
+      linarith
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 242: Markov bound for large fibers
+-- ══════════════════════════════════════════════════════════════
+
+/-- D^q * |{x : d(x) ≥ D}| ≤ S_q(m) — Markov bound for large fibers.
+    prop:fold-large-fiber-moment-upperbounds -/
+theorem paper_large_fiber_moment_bound (q m D : Nat) (hD : 1 ≤ D) (hq : 1 ≤ q) :
+    D ^ q * (Finset.univ.filter (fun x : X m => D ≤ X.fiberMultiplicity x)).card
+    ≤ momentSum q m := by
+  unfold momentSum
+  set S := Finset.univ.filter (fun x : X m => D ≤ X.fiberMultiplicity x)
+  have h1 : D ^ q * S.card = S.sum (fun _ => D ^ q) := by
+    rw [Finset.sum_const, Nat.smul_eq_mul]
+  have h2 : S.sum (fun _ => D ^ q) ≤ S.sum (fun x => X.fiberMultiplicity x ^ q) := by
+    apply Finset.sum_le_sum
+    intro x hx
+    rw [Finset.mem_filter] at hx
+    exact Nat.pow_le_pow_left hx.2 q
+  have h3 : S.sum (fun x => X.fiberMultiplicity x ^ q) ≤
+      ∑ x : X m, X.fiberMultiplicity x ^ q := by
+    apply Finset.sum_le_sum_of_subset
+    exact Finset.filter_subset _ _
+  linarith
+
 end Omega

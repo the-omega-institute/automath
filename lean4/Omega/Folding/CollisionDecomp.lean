@@ -1,5 +1,6 @@
 import Omega.Folding.FiberWeightCount
 import Omega.Folding.CollisionZeta
+import Mathlib.Algebra.Order.Chebyshev
 
 namespace Omega
 
@@ -803,5 +804,80 @@ theorem exactWeightCollision_recurrence (m : Nat) :
         momentSum 2 (m + 3) := by have := exactWeightCollision_succ (m + 3); linarith
     have sr := momentSum_two_recurrence m
     linarith
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 228: E00 Cauchy-Schwarz + crossCorr bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- E00(m) * F(m+3) ≥ 4^m (Cauchy-Schwarz on ewc). thm:pom-s2-exact-crossCorr -/
+theorem exactWeightCollision_cauchy_schwarz (m : Nat) :
+    4 ^ m ≤ exactWeightCollision m * Nat.fib (m + 3) := by
+  -- Cauchy-Schwarz: (Σ f)² ≤ |S| * Σ f²
+  -- Here f = ewc, S = range(F(m+3)), Σ ewc = 2^m, Σ ewc² = E00
+  have hCS : (∑ n ∈ Finset.range (Nat.fib (m + 3)), exactWeightCount m n) ^ 2 ≤
+      (Finset.range (Nat.fib (m + 3))).card *
+      ∑ n ∈ Finset.range (Nat.fib (m + 3)), exactWeightCount m n ^ 2 :=
+    sq_sum_le_card_mul_sum_sq
+  rw [exactWeightCount_sum, Finset.card_range] at hCS
+  rw [show 4 = 2 * 2 from rfl, Nat.mul_pow, show (2 ^ m) * (2 ^ m) = (2 ^ m) ^ 2 from by ring]
+  calc (2 ^ m) ^ 2 ≤ Nat.fib (m + 3) * exactWeightCollision m := hCS
+    _ = exactWeightCollision m * Nat.fib (m + 3) := Nat.mul_comm _ _
+
+/-- Shifted ewc² sum is bounded by E00. -/
+private theorem shifted_ewc_sq_le (m d : Nat) :
+    ∑ n ∈ Finset.range (Nat.fib (m + 3)), exactWeightCount m (n + d) ^ 2 ≤
+    exactWeightCollision m := by
+  unfold exactWeightCollision
+  -- Split into terms where n+d < F(m+3) (contribute to E00) and n+d ≥ F(m+3) (contribute 0)
+  rw [← Finset.sum_filter_add_sum_filter_not (Finset.range (Nat.fib (m + 3)))
+    (fun n => n + d < Nat.fib (m + 3))]
+  -- The "out of range" terms are all zero
+  have hzero : ∑ n ∈ (Finset.range (Nat.fib (m + 3))).filter
+      (fun n => ¬(n + d < Nat.fib (m + 3))),
+      exactWeightCount m (n + d) ^ 2 = 0 := by
+    apply Finset.sum_eq_zero; intro n hn
+    simp only [Finset.mem_filter, Finset.mem_range] at hn
+    rw [exactWeightCount_eq_zero_of_ge_fib m (n + d) (by omega)]; simp
+  rw [hzero, Nat.add_zero]
+  -- The "in range" terms inject into the full E00 sum
+  let S := (Finset.range (Nat.fib (m + 3))).filter (fun n => n + d < Nat.fib (m + 3))
+  let T := Finset.range (Nat.fib (m + 3))
+  -- Map n ↦ n+d sends S injectively into T
+  calc ∑ n ∈ S, exactWeightCount m (n + d) ^ 2
+      = ∑ n ∈ S.image (· + d), exactWeightCount m n ^ 2 := by
+        rw [Finset.sum_image]; intro n₁ _ n₂ _ h; simp only [Nat.add_right_cancel_iff] at h; exact h
+    _ ≤ ∑ n ∈ T, exactWeightCount m n ^ 2 := by
+        apply Finset.sum_le_sum_of_subset
+        intro k hk; simp only [S, T, Finset.mem_image, Finset.mem_filter, Finset.mem_range] at hk ⊢
+        obtain ⟨n, hn, rfl⟩ := hk; exact hn.2
+
+/-- C(m,d) ≤ E00(m). thm:pom-s2-exact-crossCorr -/
+theorem crossCorr_le_exactWeightCollision (m d : Nat) :
+    crossCorr m d ≤ exactWeightCollision m := by
+  -- AM-GM: 2*a*b ≤ a² + b², so 2*C ≤ Σ(ewc(n)² + ewc(n+d)²) = E00 + shifted_E00 ≤ 2*E00
+  -- Hence C ≤ E00
+  suffices h : 2 * crossCorr m d ≤ 2 * exactWeightCollision m by omega
+  calc 2 * crossCorr m d
+      = 2 * ∑ n ∈ Finset.range (Nat.fib (m + 3)),
+          exactWeightCount m n * exactWeightCount m (n + d) := rfl
+    _ = ∑ n ∈ Finset.range (Nat.fib (m + 3)),
+          2 * (exactWeightCount m n * exactWeightCount m (n + d)) := by
+        rw [Finset.mul_sum]
+    _ ≤ ∑ n ∈ Finset.range (Nat.fib (m + 3)),
+          (exactWeightCount m n ^ 2 + exactWeightCount m (n + d) ^ 2) := by
+        apply Finset.sum_le_sum; intro n _
+        -- 2ab ≤ a² + b² (cast to ℤ then nlinarith on (a-b)² ≥ 0)
+        have : (2 * (exactWeightCount m n * exactWeightCount m (n + d)) : ℤ) ≤
+            (exactWeightCount m n ^ 2 + exactWeightCount m (n + d) ^ 2 : ℤ) := by
+          nlinarith [sq_nonneg ((exactWeightCount m n : ℤ) - exactWeightCount m (n + d))]
+        exact_mod_cast this
+    _ = (∑ n ∈ Finset.range (Nat.fib (m + 3)), exactWeightCount m n ^ 2) +
+        (∑ n ∈ Finset.range (Nat.fib (m + 3)), exactWeightCount m (n + d) ^ 2) :=
+        Finset.sum_add_distrib
+    _ ≤ exactWeightCollision m + exactWeightCollision m := by
+        apply Nat.add_le_add
+        · exact le_refl _
+        · exact shifted_ewc_sq_le m d
+    _ = 2 * exactWeightCollision m := by ring
 
 end Omega

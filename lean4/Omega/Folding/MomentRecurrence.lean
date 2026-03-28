@@ -868,4 +868,72 @@ theorem weight_add_complement (w : Word m) :
     weight w + weight (complement w) = Nat.fib (m + 3) - 2 := by
   have := weight_complement w; omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 229: E00 symmetric rewrite
+-- ══════════════════════════════════════════════════════════════
+
+/-- E00 = Σ ewc(n)*ewc(F-2-n). prop:fold-fiber-count-reciprocity -/
+theorem exactWeightCollision_eq_symmetric_sum (m : Nat) :
+    exactWeightCollision m =
+    ∑ n ∈ Finset.range (Nat.fib (m + 3)),
+      exactWeightCount m n * exactWeightCount m (Nat.fib (m + 3) - 2 - n) := by
+  unfold exactWeightCollision
+  -- Peel off the last term n = F-1 where ewc(F-1)=0 (weight never achieves F-1)
+  have hF : 2 ≤ Nat.fib (m + 3) :=
+    le_trans (show 2 ≤ Nat.fib 3 from by decide) (Nat.fib_mono (by omega))
+  rw [show Nat.fib (m + 3) = Nat.fib (m + 3) - 1 + 1 from by omega,
+    Finset.range_succ, Finset.sum_insert (by simp [Finset.mem_range]),
+    Finset.sum_insert (by simp [Finset.mem_range])]
+  -- At n = F-1: ewc(F-1) = 0 by exactWeightCount_eq_zero_of_ge_fib (F-1 ≥ F-1, but F ≤ F-1?)
+  -- Actually weight(w) ≤ F-2 for No11 words, so ewc(F-1)=0. Use weight_complement:
+  -- The complement of a word with weight F-2-k has weight k. So all weights are ≤ F-2.
+  have hewc_last : exactWeightCount m (Nat.fib (m + 3) - 1) = 0 := by
+    unfold exactWeightCount
+    rw [Finset.card_eq_zero, Finset.filter_eq_empty_iff]
+    intro w _
+    have := X.weight_lt_fib w
+    have := weight_complement w
+    -- weight(w) + weight(compl w) = F-2, so weight(w) ≤ F-2 < F-1
+    omega
+  rw [hewc_last]
+  simp only [show (0 : Nat) ^ 2 = 0 from by norm_num, Nat.zero_mul, Nat.zero_add]
+  conv_rhs => arg 2; ext x; rw [show Nat.fib (m + 3) - 1 + 1 = Nat.fib (m + 3) from by omega]
+  apply Finset.sum_congr rfl; intro n hn
+  rw [Finset.mem_range] at hn
+  rw [sq, exactWeightCount_symmetric m n (by omega)]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 239: moment lower bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_2(m) ≥ 2·F(m+2) for m ≥ 2.
+    prop:pom-s2-recurrence (strengthened lower bound) -/
+theorem momentSum_two_ge_two_fib_succ (m : Nat) (hm : 2 ≤ m) :
+    2 * Nat.fib (m + 2) ≤ momentSum 2 m := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 | 1 => omega
+    | 2 => rw [momentSum_two_two]; simp [Nat.fib]
+    | 3 => rw [momentSum_two_three]; simp [Nat.fib]
+    | m + 4 =>
+      have h3 := ih (m + 3) (by omega) (by omega)
+      have hge := momentSum_two_succ_ge_double (m + 3) (by omega)
+      have hfib := Nat.fib_add_two (n := m + 4)
+      rw [show m + 4 + 2 = m + 6 from by omega, show m + 4 + 1 = m + 5 from by omega] at hfib
+      have hmono : Nat.fib (m + 4) ≤ Nat.fib (m + 5) := Nat.fib_mono (by omega)
+      linarith
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 240: S_2 global strict monotonicity
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_2(m) < S_2(m+1) for all m (including m=0).
+    prop:pom-s2-recurrence -/
+theorem momentSum_two_strict_mono_all (m : Nat) :
+    momentSum 2 m < momentSum 2 (m + 1) := by
+  match m with
+  | 0 => rw [momentSum_two_zero, momentSum_two_one]; omega
+  | m + 1 => exact momentSum_two_strict_mono' (m + 1) (by omega)
+
 end Omega

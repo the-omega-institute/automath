@@ -487,3 +487,20 @@ theorem zeckRep_injective (m : Nat) : Function.Injective (X.zeckRep (m := m)) :=
 theorem stableValue_eq_zeckRep_fib_sum (x : X m) :
     stableValue x = ((X.zeckRep x).val.map Nat.fib).sum :=
   (X.sum_fib_zeckRep x).symm
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase 210: Zero carry
+-- ══════════════════════════════════════════════════════════════
+
+/-- Adding zero never produces a carry: carryIndicator(0, x) = 0.
+    def:pom-carry-interference-graph -/
+theorem carryIndicator_stableZero_left (x : X (m + 1)) :
+    carryIndicator stableZero x = 0 :=
+  carryIndicator_zero_of_lt _ _ (by
+    rw [stableValue_stableZero, Nat.zero_add]
+    exact Nat.lt_of_lt_of_le (stableValue_lt_fib x) (Nat.fib_mono (by omega)))
+
+/-- sv(x+y) = (sv(x)+sv(y)) % F(m+2). thm:add-definitional -/
+theorem stableValue_stableAdd_eq (x y : X m) :
+    stableValue (stableAdd x y) = (stableValue x + stableValue y) % Nat.fib (m + 2) :=
+  stableValue_stableAdd x y

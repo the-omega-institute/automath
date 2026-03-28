@@ -633,4 +633,20 @@ theorem paper_discriminant_positive :
       18 * (-2) * (-4) * 2 - 27 * 2 ^ 2 = 564 :=
   ⟨charPoly_A2_discriminant_positive, charPoly_A3_discriminant_positive⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase 223: A_4 Cayley-Hamilton
+-- ══════════════════════════════════════════════════════════════
+
+/-- Cayley-Hamilton for A_4: A^5 = 2A^4 + 7A^3 + 2A - 2·I.
+    prop:pom-s4-recurrence-trace -/
+theorem collisionKernel4_cayley_hamilton :
+    collisionKernel4 ^ 5 =
+    2 * collisionKernel4 ^ 4 + 7 * collisionKernel4 ^ 3 +
+    2 * collisionKernel4 - 2 * (1 : Matrix (Fin 5) (Fin 5) ℤ) := by
+  ext i j; fin_cases i <;> fin_cases j <;> native_decide
+
+-- Note: collisionKernel4_trace_recurrence (for all m) deferred — requires
+-- Matrix.trace linearity over integer scalar multiplication (2*M).trace = 2*M.trace,
+-- which needs explicit proof that (n : Matrix) * M = n • M for integer scalars.
+
 end Omega
