@@ -839,4 +839,15 @@ theorem Fold_ne_of_first_bit_flip {m : Nat} (w : Word m) (hm : 2 ≤ m) :
     Fold (Function.update w ⟨0, by omega⟩ true) :=
   Fold_ne_of_bit_flip w ⟨0, by omega⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R29: hiddenBitCount density bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- hiddenBitCount is approximately 2^m / 3: 3B ≤ 2^m ≤ 3B + 2.
+    thm:pom-hidden-bit-density -/
+theorem hiddenBitCount_near_third (m : Nat) :
+    3 * hiddenBitCount m ≤ 2 ^ m ∧ 2 ^ m ≤ 3 * hiddenBitCount m + 2 := by
+  have h := paper_hiddenBitCount_closed m
+  split_ifs at h with heven <;> omega
+
 end Omega
