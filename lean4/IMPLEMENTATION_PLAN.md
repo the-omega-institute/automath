@@ -112,6 +112,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R16: 加法迭代等于乘法 + 后继双射（Round R16）**：单文件 FiberArithmeticProperties.lean（+59行，新增至718行）——iteratedStableAdd（thm:mul-by-iterated-add（**新标签**）：X m 上迭代加法定义，iteratedStableAdd x n = succ^n(0) + x·n，:664）; stableValue\_iteratedStableAdd（thm:mul-by-iterated-add：sv(itAdd x n) = (n * sv(x)) % F_{m+2}，迭代加法值公式，:670）; iteratedStableAdd\_eq\_stableMul（thm:mul-by-iterated-add：itAdd x (sv(y)) = stableMul y x，迭代加法等于乘法，:683）; stableSucc\_surjective（thm:successor-structure：后继满射，:690）; stableSucc\_bijective（thm:successor-structure：后继双射，:695）; stablePred\_surjective（thm:successor-structure：前驱满射，:701）; stablePred\_bijective（thm:successor-structure：前驱双射，:706）; stableSuccEquiv（thm:successor-structure：后继等价映射 X m ≃ X m，:712）——**1 个新论文标签**（thm:mul-by-iterated-add；thm:successor-structure 已在 R14 注册，本轮深化）——新生算术 ~104→~112（+8），全局 ~1,405→~1,413（Phase R16，commit ef87f3d）
+
 **Phase R15: 前驱函数 + 后继迭代等于加法（Round R15）**：单文件 FiberArithmeticProperties.lean（+55行，新增至663行）——stablePred（def:successor-fold：X m 上的前驱函数定义，stablePred = stableSub · stableOne，:609）; stableValue\_stablePred（def:successor-fold：sv(pred x) = (sv(x)+F-1)%F，前驱值公式，:614）; stablePred\_stableSucc（def:successor-fold：pred(succ(x))=x，:621）; stableSucc\_stablePred（def:successor-fold：succ(pred(x))=x，:627）; stablePred\_injective（def:successor-fold：前驱单射，:633）; stableValue\_stableSucc\_iterate（cor:add-from-successor（**新标签**）：sv(succ^n(x)) = (sv(x)+n) % F_{m+2}，:641）; stableSucc\_iterate\_eq\_stableAdd（cor:add-from-successor：succ^{sv(y)}(x) = x+y，:653）——**1 个新论文标签**（cor:add-from-successor；def:successor-fold 已在 R14 注册，本轮深化）——新生算术 ~97→~104（+7），全局 ~1,398→~1,405（Phase R15，commit a640ef9）
 
 **Phase R14: 后继结构定义与同构 + 隐藏位计数界（Round R14）**：两文件 FiberArithmeticProperties.lean（+27行，新增至608行）+ MaxFiberTwoStep.lean（+39行，新增至745行）——stableSucc（def:successor-fold（**新标签**）：X m 上的后继函数定义，stableSucc = stableAdd · stableOne，FiberArithmeticProperties.lean:583）; stableValue\_stableSucc（thm:successor-structure（**新标签**）：stableValue(succ x) = (sv(x)+1) % F_{m+2}，后继值递增，:587）; stableSucc\_zero（thm:successor-structure：succ(0) = 1，:593）; stableSucc\_injective（thm:successor-structure：后继单射，:599）; complement\_hiddenBitCount（thm:fold-top-two-zeckendorf-trisect：#{weight<F} = 2^m - A(m)，MaxFiberTwoStep.lean:712）; hiddenBitCount\_lt\_pow（thm:fold-top-two-zeckendorf-trisect：A(m) < 2^m for m≥2，:732）; hiddenBitCount\_pos（thm:fold-top-two-zeckendorf-trisect：A(m) > 0 for m≥2，:740）——**2 个新论文标签**（def:successor-fold, thm:successor-structure；注：thm:fold-top-two-zeckendorf-trisect 已在 R13 注册，本轮深化）——新生算术 ~93→~97（+4），Folding ~109→~112（+3），全局 ~1,391→~1,398（Phase R14，commit af82bb6）
@@ -248,7 +250,7 @@
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
-## 2. 论文总覆盖率分析（2026-03-28 Phase R15 登记版）
+## 2. 论文总覆盖率分析（2026-03-28 Phase R16 登记版）
 
 ### 论文规模（Phase 7 重新扫描）
 
@@ -263,13 +265,13 @@
 - ~2,807 个 Lean4 声明（含内部引理、定义）
 - ~28,766 行代码，69 个文件
 - 0 公理，0 sorry，lake build 通过
-- 63 个 LaTeX `\leanverified` / `\leanpartial` 标注
+- 79 个 LaTeX `\leanverified` / `\leanpartial` 标注
 
 ### 覆盖率
 
 | 度量 | 数值 |
 |---|---|
-| 全局覆盖率（body） | ~1,405/9,958 = **~14.1%** |
+| 全局覆盖率（body） | ~1,413/9,958 = **~14.2%** |
 | 强覆盖（一般性 ∀ 证明） | ~65 (0.7%) |
 | 中覆盖（有界 + 条件） | ~162 (1.6%) |
 | 弱覆盖（native_decide / 代理） | ~723 (7.3%) |
@@ -327,13 +329,21 @@
 - `stablePred_injective`（前驱单射）
 - `stableValue_stableSucc_iterate`（sv(succ^n(x)) = (sv(x)+n) % F_{m+2}，cor:add-from-successor）
 - `stableSucc_iterate_eq_stableAdd`（succ^{sv(y)}(x) = x+y）
+- `iteratedStableAdd`（迭代加法定义，thm:mul-by-iterated-add）
+- `stableValue_iteratedStableAdd`（迭代加法值公式）
+- `iteratedStableAdd_eq_stableMul`（迭代加法等于乘法）
+- `stableSucc_surjective`（后继满射，thm:successor-structure）
+- `stableSucc_bijective`（后继双射）
+- `stablePred_surjective`（前驱满射）
+- `stablePred_bijective`（前驱双射）
+- `stableSuccEquiv`（后继等价映射 X m ≃ X m）
 
 ### 逐章覆盖率
 
 | 章节 | LaTeX 定理数 | SourceMap 注册 | 覆盖率 |
 |---|---|---|---|
 | SPG | 127 | ~71 | ~55.9% |
-| 新生算术 | 151 | ~104 | ~68.9% |
+| 新生算术 | 151 | ~112 | ~74.2% |
 | Folding | 317 | ~112 | ~35.3% |
 | 群统一 | 457 | ~110 | ~24.1% |
 | POM | 1,526 | ~577 | ~37.8% |
@@ -342,7 +352,7 @@
 | 结论 | 2,458 | ~83 | ~3.4% |
 | 其他 body | ~143 | ~2 | ~1% |
 | 附录 | 1,320 | 0 | 0% |
-| **body 总计** | **9,958** | **~1,405** | **~14.1%** |
+| **body 总计** | **9,958** | **~1,413** | **~14.2%** |
 
 ## 3. 未来工作：30 条具体计划
 
