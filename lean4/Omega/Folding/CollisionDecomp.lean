@@ -880,4 +880,56 @@ theorem crossCorr_le_exactWeightCollision (m d : Nat) :
         · exact shifted_ewc_sq_le m d
     _ = 2 * exactWeightCollision m := by ring
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R8: cross-term = cwc bridge + S2 decomposition
+-- ══════════════════════════════════════════════════════════════
+
+/-- crossWeightCorrelation = crossCorr at shift F_{m+2}. -/
+theorem crossWeightCorrelation_eq_crossCorr (m : Nat) :
+    crossWeightCorrelation m = crossCorr m (Nat.fib (m + 2)) := by
+  unfold crossWeightCorrelation crossCorr
+  -- range(F_{m+2}) vs range(F_{m+3}): extra terms for n ≥ F_{m+2} are zero
+  symm
+  rw [show Nat.fib (m + 3) = Nat.fib (m + 2) + Nat.fib (m + 1) from by
+    rw [Nat.fib_add_two]; ring]
+  rw [Finset.sum_range_add]
+  suffices h : ∑ i ∈ Finset.range (Nat.fib (m + 1)),
+      exactWeightCount m (Nat.fib (m + 2) + i) *
+      exactWeightCount m (Nat.fib (m + 2) + i + Nat.fib (m + 2)) = 0 by omega
+  apply Finset.sum_eq_zero
+  intro i hi
+  have him1 : i < Nat.fib (m + 1) := Finset.mem_range.mp hi
+  have hge : Nat.fib (m + 3) ≤ Nat.fib (m + 2) + i + Nat.fib (m + 2) := by
+    have hfib3 : Nat.fib (m + 3) = Nat.fib (m + 1) + Nat.fib (m + 2) := Nat.fib_add_two
+    linarith [Nat.fib_mono (show m + 1 ≤ m + 2 from by omega)]
+  rw [exactWeightCount_eq_zero_of_ge_fib m _ hge, Nat.mul_zero]
+
+/-- ∑_x d_0(x)·d_1(x) = crossWeightCorrelation m.
+    prop:pom-hiddenbit-mixed-moment-cluster -/
+theorem fiberHiddenBitCount_cross_eq_cwc (m : Nat) :
+    ∑ x : X m, fiberHiddenBitCount 0 x * fiberHiddenBitCount 1 x =
+    crossWeightCorrelation m := by
+  simp_rw [fiberHiddenBitCount_zero_eq_ewc, fiberHiddenBitCount_one_eq_ewc]
+  unfold crossWeightCorrelation
+  have hbij := X.stableValueFin_bijective m
+  have step : ∑ x : X m, exactWeightCount m (stableValue x) *
+      exactWeightCount m (stableValue x + Nat.fib (m + 2)) =
+      ∑ r : Fin (Nat.fib (m + 2)), exactWeightCount m r.val *
+        exactWeightCount m (r.val + Nat.fib (m + 2)) := by
+    rw [show (fun x : X m => exactWeightCount m (stableValue x) *
+        exactWeightCount m (stableValue x + Nat.fib (m + 2))) =
+      (fun r : Fin (Nat.fib (m + 2)) => exactWeightCount m r.val *
+        exactWeightCount m (r.val + Nat.fib (m + 2))) ∘
+      X.stableValueFin from by ext x; simp [X.stableValueFin]]
+    exact hbij.sum_comp (fun r : Fin (Nat.fib (m + 2)) => exactWeightCount m r.val *
+      exactWeightCount m (r.val + Nat.fib (m + 2)))
+  rw [step, ← Fin.sum_univ_eq_sum_range (n := Nat.fib (m + 2))
+    (f := fun n => exactWeightCount m n * exactWeightCount m (n + Nat.fib (m + 2)))]
+
+/-- S_2(m) = E00(m) + 2·cwc(m).
+    thm:pom-s2-exact-crossCorr -/
+theorem momentSum_two_eq_E00_add_cwc (m : Nat) :
+    momentSum 2 m = exactWeightCollision m + 2 * crossWeightCorrelation m := by
+  rw [crossWeightCorrelation_eq_crossCorr, momentSum_two_eq_exact_plus_crossCorr]
+
 end Omega

@@ -1401,6 +1401,49 @@ theorem fibcubeFVector_pos (n k : Nat) (hk : 2 * k ≤ n) :
       have : 0 < fibcubeFVector n k := ih n (by omega) k (by omega)
       omega
 
+/-- Combined closed form: for even n, 3T(n)+1 = 2^{n+2}; for odd n, 3T(n) = 2^{n+2}+1. -/
+private theorem totalFibcubeFVector_closed_aux (n : Nat) :
+    (n % 2 = 0 → 3 * totalFibcubeFVector n + 1 = 2 ^ (n + 2)) ∧
+    (n % 2 = 1 → 3 * totalFibcubeFVector n = 2 ^ (n + 2) + 1) := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => exact ⟨fun _ => by simp, fun h => absurd h (by omega)⟩
+    | 1 => exact ⟨fun h => absurd h (by omega), fun _ => by simp⟩
+    | n + 2 =>
+      have ⟨ih0_even, ih0_odd⟩ := ih n (by omega)
+      have ⟨ih1_even, ih1_odd⟩ := ih (n + 1) (by omega)
+      have hpow : 2 ^ (n + 1 + 2) = 2 ^ (n + 3) := by ring_nf
+      constructor
+      · intro heven
+        rw [totalFibcubeFVector_succ_succ]
+        have h0 := ih0_even (by omega)
+        have h1 := ih1_odd (by omega); rw [hpow] at h1
+        -- 3*(T1 + 2*T0) + 1 where 3*T1 = 2^(n+3)+1, 3*T0 + 1 = 2^(n+2)
+        -- = 3*T1 + 6*T0 + 1 = (2^(n+3)+1) + 2*(2^(n+2)-1) + 1 = 2^(n+4)
+        have hp4 : 2 ^ (n + 2 + 2) = 2 * 2 ^ (n + 3) := by ring
+        have hp3 : 2 ^ (n + 3) = 2 * 2 ^ (n + 2) := by ring
+        rw [hp4]; nlinarith
+      · intro hodd
+        rw [totalFibcubeFVector_succ_succ]
+        have h0 := ih0_odd (by omega)
+        have h1 := ih1_even (by omega); rw [hpow] at h1
+        have hp4 : 2 ^ (n + 2 + 2) = 2 * 2 ^ (n + 3) := by ring
+        have hp3 : 2 ^ (n + 3) = 2 * 2 ^ (n + 2) := by ring
+        rw [hp4]; nlinarith
+
+/-- Closed form for even n: 3·T(n)+1 = 2^{n+2}.
+    cor:pom-fibcube-fpoly-growth-constant -/
+theorem totalFibcubeFVector_closed_even (n : Nat) (hn : n % 2 = 0) :
+    3 * totalFibcubeFVector n + 1 = 2 ^ (n + 2) :=
+  (totalFibcubeFVector_closed_aux n).1 hn
+
+/-- Closed form for odd n: 3·T(n) = 2^{n+2}+1.
+    cor:pom-fibcube-fpoly-growth-constant -/
+theorem totalFibcubeFVector_closed_odd (n : Nat) (hn : n % 2 = 1) :
+    3 * totalFibcubeFVector n = 2 ^ (n + 2) + 1 :=
+  (totalFibcubeFVector_closed_aux n).2 hn
+
 /-- 2*e(n) ≥ n*F(n) for n ≥ 3: linear average degree growth.
     cor:pom-fibcube-edge-closed-form -/
 theorem fibcubeEdgeCount_ge_n_fib (n : Nat) (hn : 3 ≤ n) :
