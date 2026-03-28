@@ -828,7 +828,7 @@ theorem paper_large_fiber_moment_bound (q m D : Nat) (hD : 1 ≤ D) (hq : 1 ≤ 
   unfold momentSum
   set S := Finset.univ.filter (fun x : X m => D ≤ X.fiberMultiplicity x)
   have h1 : D ^ q * S.card = S.sum (fun _ => D ^ q) := by
-    rw [Finset.sum_const, Nat.smul_eq_mul]
+    rw [Finset.sum_const, smul_eq_mul, Nat.mul_comm]
   have h2 : S.sum (fun _ => D ^ q) ≤ S.sum (fun x => X.fiberMultiplicity x ^ q) := by
     apply Finset.sum_le_sum
     intro x hx
@@ -839,5 +839,130 @@ theorem paper_large_fiber_moment_bound (q m D : Nat) (hD : 1 ≤ D) (hq : 1 ≤ 
     apply Finset.sum_le_sum_of_subset
     exact Finset.filter_subset _ _
   linarith
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R2: Cauchy-Schwarz lower bound, S_3 strict mono, D < 2^m
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_2(m) * F_{m+2} ≥ (2^m)², discrete Cauchy-Schwarz lower bound.
+    thm:fold-collision-convex-lower-bounds -/
+theorem momentSum_two_ge_spike_flat (m : Nat) :
+    momentSum 2 m * Nat.fib (m + 2) ≥ (2 ^ m) ^ 2 := by
+  -- Cauchy-Schwarz: (∑ f)² ≤ |S| * ∑ f²
+  have hCS : (∑ x ∈ (Finset.univ : Finset (X m)), (X.fiberMultiplicity x : Nat)) ^ 2 ≤
+      (Finset.univ : Finset (X m)).card *
+      ∑ x ∈ (Finset.univ : Finset (X m)), (X.fiberMultiplicity x : Nat) ^ 2 :=
+    sq_sum_le_card_mul_sum_sq
+  simp only [Finset.card_univ, X.card_eq_fib] at hCS
+  rw [show ∑ x ∈ (Finset.univ : Finset (X m)), X.fiberMultiplicity x = 2 ^ m from by
+    simp [X.fiberMultiplicity_sum_eq_pow]] at hCS
+  rw [show ∑ x ∈ (Finset.univ : Finset (X m)), X.fiberMultiplicity x ^ 2 = momentSum 2 m from by
+    simp [momentSum]] at hCS
+  linarith [Nat.mul_comm (momentSum 2 m) (Nat.fib (m + 2))]
+
+/-- S_3(m) < S_3(m+1) for all m.
+    prop:pom-s3-recurrence -/
+theorem momentSum_three_strict_mono_all (m : Nat) :
+    momentSum 3 m < momentSum 3 (m + 1) := by
+  match m with
+  | 0 => rw [momentSum_three_zero, momentSum_three_one]; omega
+  | m + 1 => exact momentSum_three_strict_mono (m + 1) (by omega)
+
+/-- S_2(m) ≥ 3 · 2^m for m ≥ 6.
+    prop:pom-s2-recurrence -/
+theorem momentSum_two_ge_three_pow (m : Nat) (hm : 6 ≤ m) :
+    3 * 2 ^ m ≤ momentSum 2 m := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 | 1 | 2 | 3 | 4 | 5 => omega
+    | 6 => rw [momentSum_two_six]; omega
+    | m + 7 =>
+      have hge := momentSum_two_succ_ge_double (m + 6) (by omega)
+      have hih := ih (m + 6) (by omega) (by omega)
+      calc 3 * 2 ^ (m + 7) = 2 * (3 * 2 ^ (m + 6)) := by ring
+        _ ≤ 2 * momentSum 2 (m + 6) := by omega
+        _ ≤ momentSum 2 (m + 7) := hge
+
+/-- 4·S_2(m) < S_2(m+2) for m ≥ 2.
+    prop:pom-s2-recurrence -/
+theorem momentSum_two_strict_super_quadratic (m : Nat) (hm : 2 ≤ m) :
+    4 * momentSum 2 m < momentSum 2 (m + 2) := by
+  -- S_2(m+2) = E00(m+2) + 2·S_2(m) where E00(m+2) > 2·S_2(m)
+  -- E00(m+2) = 1 + Σ_{k<m+2} S_2(k) ≥ 1 + S_2(m) + S_2(m+1) ≥ 1 + 2·S_2(m)
+  -- S_2(m+2) = E00(m+2) + 2·cwc(m+2) = E00(m+2) + 2·S_2(m)
+  have hdecomp : momentSum 2 (m + 2) = exactWeightCollision (m + 2) + 2 * momentSum 2 m := by
+    have h1 := momentSum_two_eq_E00_add_cwc (m + 2)
+    have h2 := crossWeightCorrelation_eq_momentSum_two m
+    omega
+  have hEsum := exactWeightCollision_eq_sum (m + 2)
+  -- E00(m+2) ≥ 1 + S_2(m) + S_2(m+1)
+  have hm_in : momentSum 2 m ≤ ∑ k ∈ Finset.range (m + 2), momentSum 2 k :=
+    Finset.single_le_sum (fun k _ => Nat.zero_le _) (Finset.mem_range.mpr (by omega))
+  have hm1_in : momentSum 2 (m + 1) ≤ ∑ k ∈ Finset.range (m + 2), momentSum 2 k :=
+    Finset.single_le_sum (fun k _ => Nat.zero_le _) (Finset.mem_range.mpr (by omega))
+  -- S_2(m+1) ≥ 2·S_2(m) by momentSum_two_succ_ge_double
+  have hdouble := momentSum_two_succ_ge_double m hm
+  linarith
+
+/-- D(m) < 2^m for m ≥ 2.
+    cor:pom-max-fiber-rate-endpoint -/
+theorem maxFiberMultiplicity_strict_lt_pow (m : Nat) (hm : 2 ≤ m) :
+    X.maxFiberMultiplicity m < 2 ^ m :=
+  maxFiber_lt_wordcount m hm
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R13: S_q lower bound + strict Fibonacci bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- Monotonicity of S_q in q for general gap: a ≤ b → 1 ≤ a → S_a(m) ≤ S_b(m). -/
+theorem momentSum_mono_q_of_le {a b m : Nat} (hab : a ≤ b) (ha : 1 ≤ a) :
+    momentSum a m ≤ momentSum b m := by
+  obtain ⟨d, rfl⟩ := Nat.exists_eq_add_of_le hab
+  clear hab
+  induction d with
+  | zero => simp
+  | succ d ih => exact le_trans ih (momentSum_mono_q (a + d) m (by omega))
+
+/-- 3·2^m ≤ S_q(m) for q ≥ 2, m ≥ 6.
+    prop:pom-sq-lower-three-pow -/
+theorem momentSum_q_ge_three_pow (q m : Nat) (hq : 2 ≤ q) (hm : 6 ≤ m) :
+    3 * 2 ^ m ≤ momentSum q m :=
+  le_trans (momentSum_two_ge_three_pow m hm) (momentSum_mono_q_of_le hq (by omega))
+
+/-- 2·F_{m+2} < S_2(m) for m ≥ 4.
+    prop:pom-s2-strict-fib-lower -/
+theorem momentSum_two_gt_two_fib_strict (m : Nat) (hm : 4 ≤ m) :
+    2 * Nat.fib (m + 2) < momentSum 2 m := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 | 1 | 2 | 3 => omega
+    | 4 => rw [momentSum_two_four]; decide
+    | 5 => rw [momentSum_two_five]; decide
+    | m + 6 =>
+      have h5 := ih (m + 5) (by omega) (by omega)
+      have hge := momentSum_two_succ_ge_double (m + 5) (by omega)
+      -- F(m+8) = F(m+6) + F(m+7), and F(m+6) < F(m+7)
+      have hfib8 : Nat.fib (m + 8) = Nat.fib (m + 6) + Nat.fib (m + 7) := by
+        have := @Nat.fib_add_two (m + 6); omega
+      have hfib7 : Nat.fib (m + 7) = Nat.fib (m + 5) + Nat.fib (m + 6) := by
+        have := @Nat.fib_add_two (m + 5); omega
+      have hfib_pos : 0 < Nat.fib (m + 5) := Nat.fib_pos.mpr (by omega)
+      -- S_2(m+6) ≥ 2·S_2(m+5) > 4·F(m+7) > 2·F(m+8) since F(m+6) < F(m+7)
+      linarith
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R17: strict q-monotonicity general
+-- ══════════════════════════════════════════════════════════════
+
+/-- Strict q-monotonicity: S_a(m) < S_b(m) when 1 ≤ a < b and m ≥ 2.
+    prop:pom-moment-congruence-q -/
+theorem momentSum_strict_mono_q_general (a b m : Nat) (ha : 1 ≤ a) (hab : a < b) (hm : 2 ≤ m) :
+    momentSum a m < momentSum b m := by
+  calc momentSum a m
+      ≤ momentSum (b - 1) m := momentSum_mono_q_of_le (by omega) ha
+    _ < momentSum ((b - 1) + 1) m := momentSum_strict_mono_q (b - 1) m (by omega) hm
+    _ = momentSum b m := by congr 1; omega
 
 end Omega

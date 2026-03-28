@@ -535,6 +535,40 @@ theorem paper_hiddenBitCount_closed (m : Nat) :
     3 * hiddenBitCount m + (if m % 2 = 0 then 1 else 2) = 2 ^ m := by
   have := hiddenBitCount_closed m; omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R13: hiddenBitCount even/odd closed forms
+-- ══════════════════════════════════════════════════════════════
+
+/-- 2^(2k) = 4^k. -/
+private theorem two_pow_two_mul (k : Nat) : 2 ^ (2 * k) = 4 ^ k := by
+  induction k with
+  | zero => simp
+  | succ k ih => rw [show 2 * (k + 1) = 2 * k + 2 from by omega, pow_add]; simp [ih]; ring
+
+/-- 3·A(2k) = 4^k - 1 for k ≥ 1.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem hiddenBitCount_even_closed (k : Nat) (hk : 1 ≤ k) :
+    3 * hiddenBitCount (2 * k) = 4 ^ k - 1 := by
+  have h := hiddenBitCount_closed (2 * k)
+  have hmod : (2 * k) % 2 = 0 := by omega
+  simp only [hmod, ite_true] at h
+  rw [two_pow_two_mul] at h
+  omega
+
+/-- 3·A(2k+1) = 2·4^k - 2 for all k.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem hiddenBitCount_odd_closed (k : Nat) :
+    3 * hiddenBitCount (2 * k + 1) = 2 * 4 ^ k - 2 := by
+  have h := paper_hiddenBitCount_closed (2 * k + 1)
+  have hmod : (2 * k + 1) % 2 = 1 := by omega
+  rw [hmod] at h; simp at h
+  -- h : 3 * hiddenBitCount (2 * k + 1) + 2 = 2 ^ (2 * k + 1)
+  have h4 : 2 ^ (2 * k + 1) = 2 * 4 ^ k := by
+    have : 2 ^ (2 * k + 1) = 2 ^ (2 * k) * 2 := pow_succ 2 (2 * k)
+    rw [two_pow_two_mul] at this; linarith
+  have hge : 1 ≤ 4 ^ k := Nat.one_le_pow k 4 (by omega)
+  omega
+
 /-- Fold + hiddenBit jointly determine weight.
     prop:pom-fold-prime-lift-injective -/
 theorem fold_hiddenBit_determines_weight (w1 w2 : Word m)
@@ -668,5 +702,44 @@ theorem truncation_curvature_eq_hiddenBit (w : Word (m + 1)) :
       rw [fold_eq_iff_sv, Nat.mod_eq_of_lt (by omega : weight w < Nat.fib (m + 3))]
       exact weight_truncate_mod w
     simp only [heq, ite_true]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R14: hiddenBitCount bounds
+-- ══════════════════════════════════════════════════════════════
+
+/-- #{weight < F} = 2^m - hiddenBitCount.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem complement_hiddenBitCount (m : Nat) :
+    (Finset.univ.filter (fun w : Word m => weight w < Nat.fib (m + 2))).card =
+    2 ^ m - hiddenBitCount m := by
+  have hle : hiddenBitCount m ≤ 2 ^ m := by
+    unfold hiddenBitCount
+    calc (Finset.univ.filter (fun w : Word m => Nat.fib (m + 2) ≤ weight w)).card
+        ≤ (Finset.univ : Finset (Word m)).card := Finset.card_filter_le _ _
+      _ = 2 ^ m := by simp [Fintype.card_fun, Fintype.card_bool]
+  have htotal : (Finset.univ : Finset (Word m)).card = 2 ^ m := by
+    simp [Fintype.card_fun, Fintype.card_bool]
+  have hcompl : (Finset.univ.filter (fun w : Word m => weight w < Nat.fib (m + 2))).card +
+      (Finset.univ.filter (fun w : Word m => Nat.fib (m + 2) ≤ weight w)).card =
+      (Finset.univ : Finset (Word m)).card := by
+    rw [← Finset.card_union_of_disjoint (by
+      apply Finset.disjoint_filter.mpr; intro w _ h1 h2; omega)]
+    congr 1; ext w; simp; omega
+  rw [htotal] at hcompl; unfold hiddenBitCount; omega
+
+/-- hiddenBitCount m < 2^m for m ≥ 2.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem hiddenBitCount_lt_pow (m : Nat) (hm : 2 ≤ m) :
+    hiddenBitCount m < 2 ^ m := by
+  have h := paper_hiddenBitCount_closed m
+  -- 3 * A(m) + δ = 2^m where δ ≥ 1, so 3 * A(m) < 2^m, so A(m) < 2^m
+  split_ifs at h with heven <;> omega
+
+/-- hiddenBitCount m > 0 for m ≥ 2.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem hiddenBitCount_pos (m : Nat) (hm : 2 ≤ m) :
+    0 < hiddenBitCount m := by
+  obtain ⟨k, rfl⟩ : ∃ k, m = k + 2 := ⟨m - 2, by omega⟩
+  rw [hiddenBitCount_recurrence]; positivity
 
 end Omega

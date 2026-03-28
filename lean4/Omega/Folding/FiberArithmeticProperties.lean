@@ -570,4 +570,153 @@ theorem paper_symmetric_remainder (a : ℤ) (b : ℤ) (hb : 0 < b) :
       omega
     · omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R14: stableSucc definition and properties
+-- ══════════════════════════════════════════════════════════════
+
+namespace X
+
+noncomputable section
+
+/-- The successor function on X m.
+    def:successor-fold -/
+noncomputable def stableSucc (x : X m) : X m := stableAdd x stableOne
+
+/-- stableValue(succ(x)) = (stableValue(x) + 1) % F_{m+2}.
+    thm:successor-structure -/
+theorem stableValue_stableSucc (x : X m) (hm : 1 ≤ m) :
+    stableValue (stableSucc x) = (stableValue x + 1) % Nat.fib (m + 2) := by
+  simp only [stableSucc, stableValue_stableAdd, stableValue_stableOne_of_ge_one hm]
+
+/-- succ(0) = 1.
+    thm:successor-structure -/
+theorem stableSucc_zero (hm : 1 ≤ m) :
+    stableSucc (stableZero (m := m)) = stableOne := by
+  simp only [stableSucc, stableAdd_zero_left]
+
+/-- Successor is injective.
+    thm:successor-structure -/
+theorem stableSucc_injective (m : Nat) :
+    Function.Injective (stableSucc (m := m)) := by
+  intro a b h
+  exact stableAdd_right_cancel (show stableAdd a stableOne = stableAdd b stableOne from h)
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R15: stablePred + iterate successor = add
+-- ══════════════════════════════════════════════════════════════
+
+/-- The predecessor function on X m.
+    def:successor-fold -/
+noncomputable def stablePred (x : X m) : X m := stableSub x stableOne
+
+/-- stableValue(pred(x)) = (stableValue(x) + F_{m+2} - 1) % F_{m+2}.
+    def:successor-fold -/
+theorem stableValue_stablePred (x : X m) (hm : 1 ≤ m) :
+    stableValue (stablePred x) =
+    (stableValue x + Nat.fib (m + 2) - 1) % Nat.fib (m + 2) := by
+  rw [stablePred, stableValue_stableSub, stableValue_stableOne_of_ge_one hm]
+  have hF : 1 ≤ Nat.fib (m + 2) := by have := (Nat.fib_pos (n := m + 2)).mpr (by omega); omega
+  congr 1; omega
+
+/-- pred(succ(x)) = x.
+    def:successor-fold -/
+theorem stablePred_stableSucc (x : X m) :
+    stablePred (stableSucc x) = x := by
+  simp only [stablePred, stableSucc]
+  exact stableSub_stableAdd_cancel x stableOne
+
+/-- succ(pred(x)) = x.
+    def:successor-fold -/
+theorem stableSucc_stablePred (x : X m) :
+    stableSucc (stablePred x) = x := by
+  simp only [stableSucc, stablePred]
+  exact stableSub_add_cancel x stableOne
+
+/-- Predecessor is injective.
+    def:successor-fold -/
+theorem stablePred_injective (m : Nat) :
+    Function.Injective (stablePred (m := m)) :=
+  Function.HasLeftInverse.injective ⟨stableSucc, stableSucc_stablePred⟩
+
+/-- stableValue of n-fold successor: sv(succ^n(x)) = (sv(x) + n) % F_{m+2}.
+    cor:add-from-successor -/
+theorem stableValue_stableSucc_iterate (x : X m) (n : Nat) (hm : 1 ≤ m) :
+    stableValue (stableSucc^[n] x) = (stableValue x + n) % Nat.fib (m + 2) := by
+  induction n with
+  | zero => simp [Nat.mod_eq_of_lt (stableValue_lt_fib x)]
+  | succ n ih =>
+    rw [Function.iterate_succ_apply', stableValue_stableSucc _ hm, ih]
+    rw [Nat.add_mod, Nat.mod_mod_of_dvd _ (dvd_refl _), ← Nat.add_mod]
+    ring_nf
+
+/-- n-fold successor equals stableAdd: succ^{sv(y)}(x) = x + y.
+    cor:add-from-successor -/
+theorem stableSucc_iterate_eq_stableAdd (x y : X m) (hm : 1 ≤ m) :
+    stableSucc^[stableValue y] x = stableAdd x y := by
+  apply eq_of_stableValue_eq
+  rw [stableValue_stableSucc_iterate x (stableValue y) hm, stableValue_stableAdd]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R16: iterated add = mul + succ/pred bijective
+-- ══════════════════════════════════════════════════════════════
+
+/-- n-fold addition of x starting from zero.
+    thm:mul-by-iterated-add -/
+noncomputable def iteratedStableAdd (x : X m) (n : Nat) : X m :=
+  (fun z => stableAdd z x)^[n] stableZero
+
+/-- stableValue of iterated addition: sv(n·x) = (n * sv(x)) % F.
+    thm:mul-by-iterated-add -/
+theorem stableValue_iteratedStableAdd (x : X m) (n : Nat) :
+    stableValue (iteratedStableAdd x n) =
+    (n * stableValue x) % Nat.fib (m + 2) := by
+  induction n with
+  | zero =>
+    simp only [iteratedStableAdd, Function.iterate_zero_apply, stableValue_stableZero, Nat.zero_mul,
+      Nat.zero_mod]
+  | succ n ih =>
+    simp only [iteratedStableAdd, Function.iterate_succ_apply'] at ih ⊢
+    rw [stableValue_stableAdd, ih, Nat.add_mod, Nat.mod_mod_of_dvd _ (dvd_refl _), ← Nat.add_mod]
+    congr 1; ring
+
+/-- Iterated addition equals multiplication: n·x via iteration = stableMul.
+    thm:mul-by-iterated-add -/
+theorem iteratedStableAdd_eq_stableMul (x y : X m) (hm : 1 ≤ m) :
+    iteratedStableAdd x (stableValue y) = stableMul y x := by
+  apply eq_of_stableValue_eq
+  rw [stableValue_iteratedStableAdd, stableValue_stableMul]
+
+/-- Successor is surjective (pred is a right inverse).
+    thm:successor-structure -/
+theorem stableSucc_surjective (m : Nat) :
+    Function.Surjective (stableSucc (m := m)) :=
+  fun y => ⟨stablePred y, stableSucc_stablePred y⟩
+
+/-- Successor is bijective.
+    thm:successor-structure -/
+theorem stableSucc_bijective (m : Nat) :
+    Function.Bijective (stableSucc (m := m)) :=
+  ⟨stableSucc_injective m, stableSucc_surjective m⟩
+
+/-- Predecessor is surjective (succ is a right inverse).
+    thm:successor-structure -/
+theorem stablePred_surjective (m : Nat) :
+    Function.Surjective (stablePred (m := m)) :=
+  fun y => ⟨stableSucc y, stablePred_stableSucc y⟩
+
+/-- Predecessor is bijective.
+    thm:successor-structure -/
+theorem stablePred_bijective (m : Nat) :
+    Function.Bijective (stablePred (m := m)) :=
+  ⟨stablePred_injective m, stablePred_surjective m⟩
+
+/-- Successor as an equivalence.
+    thm:successor-structure -/
+noncomputable def stableSuccEquiv (m : Nat) : X m ≃ X m :=
+  Equiv.ofBijective stableSucc (stableSucc_bijective m)
+
+end
+
+end X
+
 end Omega

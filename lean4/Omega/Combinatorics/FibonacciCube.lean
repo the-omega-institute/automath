@@ -698,10 +698,6 @@ noncomputable def coordOneCount (n : Nat) (i : Fin n) : Nat :=
   haveI : DecidablePred (fun w : Word n => No11 w ∧ w i = true) := Classical.decPred _
   (Finset.univ.filter (fun w : Word n => No11 w ∧ w i = true)).card
 
--- Note: coordOneCount_eq_fib_prod general proof deferred —
--- requires bijective decomposition of No11 words with a fixed bit into
--- independent left/right No11 segments. Bounded verification below.
-
 /-- Computable version of coordOneCount. -/
 private def cCoordOneCount (n : Nat) (i : Fin n) : Nat :=
   (@Finset.univ (X n) (fintypeX n)).filter (fun x => x.1 i = true) |>.card
@@ -942,6 +938,22 @@ theorem totalPopcount_eq_edgeCount (m : Nat) :
       rw [totalPopcount_succ_succ, ih (m + 1) (by omega), ih m (by omega),
         fibcubeEdgeCount_succ_succ]
 
+/-- Computable totalPopcount equals sum of computable coordOneCounts (double counting). -/
+private theorem cTotalPopcount_eq_sum_cCoordOneCount (n : Nat) :
+    cTotalPopcount n = ∑ i : Fin n, cCoordOneCount n i := by
+  simp only [cTotalPopcount, cCoordOneCount, popcount, wordSupport,
+    Finset.card_eq_sum_ones, Finset.sum_filter]
+  exact Finset.sum_comm
+
+/-- Edge count equals sum of coord-one counts (double counting: each edge corresponds
+    to a bit position where the word has a 1).
+    thm:pom-fibcube-theta-class-size -/
+theorem fibcubeEdgeCount_eq_sum_coordOneCount (n : Nat) :
+    fibcubeEdgeCount n = ∑ i : Fin n, coordOneCount n i := by
+  rw [← totalPopcount_eq_edgeCount, ← cTotalPopcount_eq,
+    cTotalPopcount_eq_sum_cCoordOneCount]
+  congr 1; ext i; exact cCoordOneCount_eq_coordOneCount n i
+
 /-- fibcubeEdgeCount is positive for n ≥ 1. -/
 private theorem fibcubeEdgeCount_pos (n : Nat) (hn : 1 ≤ n) : 0 < fibcubeEdgeCount n := by
   induction n with
@@ -995,6 +1007,165 @@ theorem coordOneCount_symm (n : Nat) (i : Fin n) :
     exact ⟨no11_reverse hw'.1, by
       show wordReverse w' i = true
       rw [wordReverse_apply]; exact hw'.2⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- coordOneCount = fib product (general proof)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Recursion: coordOneCount(n+2, i) = coordOneCount(n+1, i) + coordOneCount(n, i) for i < n.
+    Split X(n+2) by last bit: last=false bijects with X(n+1), last=true bijects with X(n). -/
+private theorem coordOneCount_succ_succ (n : Nat) (i : Fin n) :
+    coordOneCount (n + 2) ⟨i.val, by omega⟩ =
+    coordOneCount (n + 1) ⟨i.val, by omega⟩ + coordOneCount n i := by
+  -- Work with cCoordOneCount to avoid Classical.decPred issues
+  rw [← cCoordOneCount_eq_coordOneCount, ← cCoordOneCount_eq_coordOneCount,
+    ← cCoordOneCount_eq_coordOneCount]
+  -- Define the three filtered sets using fintypeX
+  let S2 := (@Finset.univ (X (n + 2)) (fintypeX (n + 2))).filter
+    (fun x => x.1 ⟨i.val, by omega⟩ = true)
+  let S1 := (@Finset.univ (X (n + 1)) (fintypeX (n + 1))).filter
+    (fun x => x.1 ⟨i.val, by omega⟩ = true)
+  let S0 := (@Finset.univ (X n) (fintypeX n)).filter (fun x => x.1 i = true)
+  change S2.card = S1.card + S0.card
+  -- Split S2 by last bit
+  let S2f := S2.filter (fun x => x.1 ⟨n + 1, by omega⟩ = false)
+  let S2t := S2.filter (fun x => x.1 ⟨n + 1, by omega⟩ = true)
+  have hS2 : S2 = S2f ∪ S2t := by
+    simp only [S2f, S2t]; ext x
+    simp only [Finset.mem_filter, Finset.mem_union]
+    constructor
+    · intro h; cases hb : x.1 ⟨n + 1, by omega⟩ <;> simp [h, hb]
+    · rintro (⟨h, _⟩ | ⟨h, _⟩) <;> exact h
+  rw [hS2, Finset.card_union_of_disjoint (by
+    simp only [S2f, S2t]; apply Finset.disjoint_filter.mpr
+    intro x _ h1 h2; simp_all)]
+  congr 1
+  -- Part 1: S2f bijects with S1 via restrict
+  · apply Finset.card_bij (fun x _ => X.restrict x)
+    · intro x hx
+      simp only [S2f, S2, Finset.mem_filter, Finset.mem_univ, true_and] at hx
+      simp only [S1, Finset.mem_filter, Finset.mem_univ, true_and]
+      show truncate x.1 ⟨i.val, by omega⟩ = true
+      simp [truncate, show i.val < n + 1 from by omega, hx.1]
+    · intro x₁ hx₁ x₂ hx₂ h
+      simp only [S2f, S2, Finset.mem_filter, Finset.mem_univ, true_and] at hx₁ hx₂
+      apply Subtype.ext; funext ⟨j, hj⟩
+      by_cases hjn : j < n + 1
+      · have := congr_arg (fun y => y.1 ⟨j, by omega⟩) h
+        simp [X.restrict, truncate, hjn] at this; exact this
+      · have hj1 : j = n + 1 := by omega
+        subst hj1; simp [hx₁.2, hx₂.2]
+    · intro y hy
+      simp only [S1, Finset.mem_filter, Finset.mem_univ, true_and] at hy
+      simp only [S2f, S2, Finset.mem_filter, Finset.mem_univ, true_and]
+      exact ⟨X.appendFalse y,
+        ⟨by simp [snoc, show i.val < n + 1 from by omega, hy],
+         by simp [snoc, show ¬(n + 1 < n + 1) from by omega]⟩,
+        X.restrict_appendFalse y⟩
+  -- Part 2: S2t bijects with S0 via restrict ∘ restrict
+  · apply Finset.card_bij (fun x _ => X.restrict (X.restrict x))
+    · intro x hx
+      simp only [S2t, S2, Finset.mem_filter, Finset.mem_univ, true_and] at hx
+      simp only [S0, Finset.mem_filter, Finset.mem_univ, true_and]
+      show truncate (truncate x.1) i = true
+      simp [truncate, show i.val < n from i.isLt, show i.val < n + 1 from by omega, hx.1]
+    · -- Injectivity: if restrict(restrict(x₁)) = restrict(restrict(x₂)) then x₁ = x₂
+      -- because x₁.1[n]=x₂.1[n]=false (No11+last=true) and x₁.1[n+1]=x₂.1[n+1]=true (filter)
+      intro x₁ hx₁ x₂ hx₂ h
+      simp only [S2t, S2, Finset.mem_filter, Finset.mem_univ, true_and] at hx₁ hx₂
+      apply Subtype.ext; funext ⟨j, hj⟩
+      -- For j < n: follows from restrict∘restrict equality
+      -- For j = n: both are false (No11 constraint)
+      -- For j = n+1: both are true (filter constraint)
+      have hval := congr_arg Subtype.val h
+      by_cases hj1 : j < n
+      · have := congr_arg (fun w => w ⟨j, by omega⟩) hval
+        simp [X.restrict, truncate, show j < n + 1 from by omega, hj1] at this; exact this
+      · by_cases hj2 : j < n + 1
+        · -- j = n
+          have hjn : j = n := by omega
+          have hfin : (⟨j, hj⟩ : Fin (n + 2)) = ⟨n, by omega⟩ := Fin.ext (by omega)
+          have : x₁.1 ⟨j, hj⟩ = false := by
+            rw [hfin]; by_contra hc
+            have ht := eq_true_of_ne_false hc
+            exact x₁.2 n (by rw [get]; simp [show n < n + 2 from by omega]; exact ht)
+              (by rw [get]; simp [show n + 1 < n + 2 from by omega]; exact hx₁.2)
+          have : x₂.1 ⟨j, hj⟩ = false := by
+            rw [hfin]; by_contra hc
+            have ht := eq_true_of_ne_false hc
+            exact x₂.2 n (by rw [get]; simp [show n < n + 2 from by omega]; exact ht)
+              (by rw [get]; simp [show n + 1 < n + 2 from by omega]; exact hx₂.2)
+          simp_all
+        · -- j = n+1
+          have hjn1 : j = n + 1 := by omega
+          have hfin : (⟨j, hj⟩ : Fin (n + 2)) = ⟨n + 1, by omega⟩ := Fin.ext hjn1
+          rw [show x₁.1 ⟨j, hj⟩ = x₁.1 ⟨n + 1, by omega⟩ from by rw [hfin],
+            show x₂.1 ⟨j, hj⟩ = x₂.1 ⟨n + 1, by omega⟩ from by rw [hfin],
+            hx₁.2, hx₂.2]
+    · intro z hz
+      simp only [S0, Finset.mem_filter, Finset.mem_univ, true_and] at hz
+      simp only [S2t, S2, Finset.mem_filter, Finset.mem_univ, true_and]
+      refine ⟨embedFalseTrue ⟨z.1, z.2⟩, ⟨?_, ?_⟩, ?_⟩
+      · show snoc (snoc z.1 false) true ⟨i.val, by omega⟩ = true
+        simp [snoc, show i.val < n from i.isLt, show i.val < n + 1 from by omega, hz]
+      · show snoc (snoc z.1 false) true ⟨n + 1, by omega⟩ = true
+        simp [snoc, show ¬(n + 1 < n + 1) from by omega]
+      · apply Subtype.ext; funext ⟨j, hj⟩
+        show truncate (truncate (snoc (snoc z.1 false) true)) ⟨j, hj⟩ = z.1 ⟨j, hj⟩
+        simp [truncate, snoc, show j < n + 1 from by omega, show j < n from hj]
+
+/-- coordOneCount n i = fib(i+1) * fib(n-i) for all n, i.
+    thm:pom-fibcube-theta-class-size / cor:pom-fibcube-marginal-boundary-layer -/
+theorem coordOneCount_eq_fib_prod (n : Nat) (i : Fin n) :
+    coordOneCount n i = Nat.fib (i.val + 1) * Nat.fib (n - i.val) := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n, i with
+    | 0, i => exact i.elim0
+    | 1, i => exact coordOneCount_eq_fib_prod_verified 1 (by omega) i
+    | 2, i => exact coordOneCount_eq_fib_prod_verified 2 (by omega) i
+    | 3, i => exact coordOneCount_eq_fib_prod_verified 3 (by omega) i
+    | 4, i => exact coordOneCount_eq_fib_prod_verified 4 (by omega) i
+    | 5, i => exact coordOneCount_eq_fib_prod_verified 5 (by omega) i
+    | 6, i => exact coordOneCount_eq_fib_prod_verified 6 (by omega) i
+    | n + 7, ⟨j, hj⟩ =>
+      -- n+7 ≥ 7, so n ≥ 0 and n+5 ≥ 5
+      by_cases hjn : j < n + 5
+      · -- j < n+5: direct recursion
+        have hrec := coordOneCount_succ_succ (n + 5) ⟨j, hjn⟩
+        rw [hrec, ih (n + 6) (by omega) ⟨j, by omega⟩,
+          ih (n + 5) (by omega) ⟨j, hjn⟩, ← Nat.left_distrib]
+        congr 1
+        have h1 : n + 7 - j = (n + 5 - j) + 2 := by omega
+        have h2 : n + 6 - j = (n + 5 - j) + 1 := by omega
+        rw [h1, Nat.fib_add_two, h2]; ring
+      · -- j ≥ n+5: symmetric index n+6-j ≤ 1 < n+5
+        have hjle : n + 5 ≤ j := by omega
+        rw [coordOneCount_symm]
+        have hklt : n + 6 - j < n + 5 := by omega
+        have hrec := coordOneCount_succ_succ (n + 5) ⟨n + 6 - j, hklt⟩
+        conv_lhs =>
+          rw [show (⟨n + 7 - 1 - j, _⟩ : Fin (n + 7)) = ⟨n + 6 - j, by omega⟩ from rfl]
+        rw [hrec, ih (n + 6) (by omega) ⟨n + 6 - j, by omega⟩,
+          ih (n + 5) (by omega) ⟨n + 6 - j, hklt⟩, ← Nat.left_distrib]
+        -- Goal: fib(n+6-j+1) * (fib(n+6-(n+6-j)) + fib(n+5-(n+6-j))) = fib(j+1) * fib(n+7-j)
+        -- After simplification: fib(n+7-j) * (fib(j) + fib(j-1)) = fib(j+1) * fib(n+7-j)
+        -- Use fib(j+1) = fib(j) + fib(j-1) (Fibonacci recurrence, j ≥ 2)
+        show Nat.fib (n + 6 - j + 1) *
+          (Nat.fib (n + 6 - (n + 6 - j)) + Nat.fib (n + 5 - (n + 6 - j))) =
+          Nat.fib (j + 1) * Nat.fib (n + 7 - j)
+        rw [show n + 6 - (n + 6 - j) = j from Nat.sub_sub_self (by omega : j ≤ n + 6),
+          show n + 5 - (n + 6 - j) = j - 1 from by omega,
+          show n + 6 - j + 1 = n + 7 - j from by omega]
+        -- Goal: fib(n+7-j) * (fib(j) + fib(j-1)) = fib(j+1) * fib(n+7-j)
+        -- Suffices to show fib(j) + fib(j-1) = fib(j+1)
+        rw [Nat.mul_comm]
+        congr 1
+        obtain ⟨j', rfl⟩ := Nat.exists_eq_add_of_le (show 2 ≤ j by omega)
+        rw [show 2 + j' - 1 = j' + 1 from by omega,
+          show 2 + j' + 1 = (j' + 1) + 2 from by omega, Nat.fib_add_two,
+          show 2 + j' = (j' + 1) + 1 from by omega]
+        omega
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase 226: f-vector k=2 strict monotonicity
@@ -1116,6 +1287,171 @@ theorem fibcubeFVector_three_strict_mono (n : Nat) (hn : 5 ≤ n) :
     have hmono := fibcubeFVector_two_strict_mono (k + 3) (by omega)
     linarith [fibcubeFVector_two_four]
   linarith
+
+/-- f-vector vanishing: C(n,k) = 0 when k > ⌊(n+1)/2⌋.
+    thm:pom-fibcube-fvector-closed (vanishing range) -/
+theorem fibcubeFVector_eq_zero_of_gt (n k : Nat) (hk : (n + 1) / 2 < k) :
+    fibcubeFVector n k = 0 := by
+  suffices h : ∀ n k : Nat, (n + 1) / 2 < k → fibcubeFVector n k = 0 from h n k hk
+  intro n
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    intro k hk
+    match n with
+    | 0 =>
+      match k with
+      | 0 => omega
+      | k + 1 => rfl
+    | 1 =>
+      match k with
+      | 0 => omega
+      | 1 => omega
+      | k + 2 => rfl
+    | n + 2 =>
+      simp only [fibcubeFVector_succ_succ]
+      have h1 : (n + 1 + 1) / 2 < k := by omega
+      have h2 : (n + 1) / 2 < k := by omega
+      rw [ih (n + 1) (by omega) k h1, ih n (by omega) k h2]
+      simp only [Nat.zero_add]
+      split
+      · rfl
+      · have h3 : (n + 1) / 2 < k - 1 := by omega
+        rw [ih n (by omega) (k - 1) h3]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R7: total f-vector and positivity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Extending range doesn't change fibcubeFVector sum when extra terms vanish. -/
+private theorem fibcubeFVector_sum_extend (n p : Nat) (hp : (n + 1) / 2 < p) :
+    ∑ k ∈ Finset.range (p + 1), fibcubeFVector n k =
+    ∑ k ∈ Finset.range p, fibcubeFVector n k := by
+  rw [Finset.sum_range_succ, fibcubeFVector_eq_zero_of_gt n p hp, Nat.add_zero]
+
+/-- Total subcube count C_n(1) = ∑_k C(n,k).
+    cor:pom-fibcube-fpoly-growth-constant -/
+noncomputable def totalFibcubeFVector (n : Nat) : Nat :=
+  ∑ k ∈ Finset.range (n + 1), fibcubeFVector n k
+
+@[simp] theorem totalFibcubeFVector_zero : totalFibcubeFVector 0 = 1 := by
+  simp [totalFibcubeFVector, fibcubeFVector]
+
+@[simp] theorem totalFibcubeFVector_one : totalFibcubeFVector 1 = 3 := by
+  unfold totalFibcubeFVector
+  simp [Finset.sum_range_succ]
+
+/-- The shifted sum ∑_{k=0}^{p} (if k=0 then 0 else f(n,k-1)) = ∑_{k=0}^{p-1} f(n,k). -/
+private theorem fibcubeFVector_shifted_sum (n p : Nat) :
+    ∑ k ∈ Finset.range (p + 1),
+      (if k = 0 then 0 else fibcubeFVector n (k - 1)) =
+    ∑ k ∈ Finset.range p, fibcubeFVector n k := by
+  rw [Finset.sum_range_succ]
+  induction p with
+  | zero => simp
+  | succ p ih =>
+    rw [Finset.sum_range_succ (fun k => if k = 0 then 0 else fibcubeFVector n (k - 1))]
+    simp only [show ¬(p + 1 = 0) from by omega, ite_false, show p + 1 - 1 = p from by omega]
+    rw [Finset.sum_range_succ]
+    omega
+
+/-- C_{n+2}(1) = C_{n+1}(1) + 2·C_n(1).
+    cor:pom-fibcube-fpoly-growth-constant -/
+theorem totalFibcubeFVector_succ_succ (n : Nat) :
+    totalFibcubeFVector (n + 2) =
+    totalFibcubeFVector (n + 1) + 2 * totalFibcubeFVector n := by
+  simp only [totalFibcubeFVector, show n + 2 + 1 = n + 3 from rfl]
+  -- Expand using fibcubeFVector_succ_succ
+  conv_lhs => arg 2; ext k; rw [fibcubeFVector_succ_succ]
+  simp only [Finset.sum_add_distrib]
+  -- Three sums: ∑ f(n+1,k) + ∑ f(n,k) + ∑ (if k=0 then 0 else f(n,k-1))
+  -- Sum 1: extend range(n+1+1) → range(n+3) with one vanishing term
+  rw [show n + 1 + 1 = n + 2 from rfl]
+  -- Sum 3 (shifted): = ∑_{k=0}^{n+1} f(n,k) by shifted_sum
+  rw [fibcubeFVector_shifted_sum n (n + 2)]
+  -- Collapse all extended ranges using vanishing
+  rw [fibcubeFVector_sum_extend n (n + 2) (by omega)]
+  rw [fibcubeFVector_sum_extend (n + 1) (n + 2) (by omega)]
+  -- LHS: ∑(n+2) f(n+1) + ∑(n+2) f(n) + ∑(n+2) f(n)
+  -- RHS: ∑(n+2) f(n+1) + 2 * ∑(n+1) f(n)  (from totalFibcubeFVector unfolding)
+  -- Collapse ∑(n+2) f(n) → ∑(n+1) f(n) using vanishing
+  conv_lhs =>
+    rw [show ∀ a b c : Nat, a + b + c = a + (b + c) from by omega]
+  congr 1
+  rw [fibcubeFVector_sum_extend n (n + 1) (by omega)]
+  omega
+
+/-- f-vector positivity: f(n,k) > 0 when 2k ≤ n.
+    thm:pom-fibcube-fvector-closed (positivity) -/
+theorem fibcubeFVector_pos (n k : Nat) (hk : 2 * k ≤ n) :
+    0 < fibcubeFVector n k := by
+  suffices h : ∀ n k : Nat, 2 * k ≤ n → 0 < fibcubeFVector n k from h n k hk
+  intro n
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    intro k hk
+    match n, k with
+    | 0, 0 => simp
+    | 1, 0 => simp
+    | n + 2, 0 =>
+      rw [fibcubeFVector_zero_eq_fib]
+      exact Nat.fib_pos.mpr (by omega)
+    | n + 2, k + 1 =>
+      simp only [fibcubeFVector_succ_succ, show ¬(k + 1 = 0) from by omega, ite_false,
+        show k + 1 - 1 = k from by omega]
+      have : 0 < fibcubeFVector n k := ih n (by omega) k (by omega)
+      omega
+
+/-- Combined closed form: for even n, 3T(n)+1 = 2^{n+2}; for odd n, 3T(n) = 2^{n+2}+1. -/
+private theorem totalFibcubeFVector_closed_aux (n : Nat) :
+    (n % 2 = 0 → 3 * totalFibcubeFVector n + 1 = 2 ^ (n + 2)) ∧
+    (n % 2 = 1 → 3 * totalFibcubeFVector n = 2 ^ (n + 2) + 1) := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => exact ⟨fun _ => by simp, fun h => absurd h (by omega)⟩
+    | 1 => exact ⟨fun h => absurd h (by omega), fun _ => by simp⟩
+    | n + 2 =>
+      have ⟨ih0_even, ih0_odd⟩ := ih n (by omega)
+      have ⟨ih1_even, ih1_odd⟩ := ih (n + 1) (by omega)
+      have hpow : 2 ^ (n + 1 + 2) = 2 ^ (n + 3) := by ring_nf
+      constructor
+      · intro heven
+        rw [totalFibcubeFVector_succ_succ]
+        have h0 := ih0_even (by omega)
+        have h1 := ih1_odd (by omega); rw [hpow] at h1
+        -- 3*(T1 + 2*T0) + 1 where 3*T1 = 2^(n+3)+1, 3*T0 + 1 = 2^(n+2)
+        -- = 3*T1 + 6*T0 + 1 = (2^(n+3)+1) + 2*(2^(n+2)-1) + 1 = 2^(n+4)
+        have hp4 : 2 ^ (n + 2 + 2) = 2 * 2 ^ (n + 3) := by ring
+        have hp3 : 2 ^ (n + 3) = 2 * 2 ^ (n + 2) := by ring
+        rw [hp4]; nlinarith
+      · intro hodd
+        rw [totalFibcubeFVector_succ_succ]
+        have h0 := ih0_odd (by omega)
+        have h1 := ih1_even (by omega); rw [hpow] at h1
+        have hp4 : 2 ^ (n + 2 + 2) = 2 * 2 ^ (n + 3) := by ring
+        have hp3 : 2 ^ (n + 3) = 2 * 2 ^ (n + 2) := by ring
+        rw [hp4]; nlinarith
+
+/-- Closed form for even n: 3·T(n)+1 = 2^{n+2}.
+    cor:pom-fibcube-fpoly-growth-constant -/
+theorem totalFibcubeFVector_closed_even (n : Nat) (hn : n % 2 = 0) :
+    3 * totalFibcubeFVector n + 1 = 2 ^ (n + 2) :=
+  (totalFibcubeFVector_closed_aux n).1 hn
+
+/-- Closed form for odd n: 3·T(n) = 2^{n+2}+1.
+    cor:pom-fibcube-fpoly-growth-constant -/
+theorem totalFibcubeFVector_closed_odd (n : Nat) (hn : n % 2 = 1) :
+    3 * totalFibcubeFVector n = 2 ^ (n + 2) + 1 :=
+  (totalFibcubeFVector_closed_aux n).2 hn
+
+/-- There exists a stable word with popcount = ⌊(m+1)/2⌋.
+    thm:pom-fibcube-eccentricity-closed-form -/
+theorem ecc_allFalse_achieved (m : Nat) (hm : 1 ≤ m) :
+    ∃ (x : X m), popcount x.1 = (m + 1) / 2 := by
+  obtain ⟨S, hS, hcard⟩ := pathIndSet_exists_max m hm
+  exact ⟨(xEquivPathIndSet m).invFun ⟨S, hS⟩,
+    show (wordSupport ((xEquivPathIndSet m).invFun ⟨S, hS⟩).1).card = (m + 1) / 2 by
+      simp only [popcount, xEquivPathIndSet, wordSupport_indSetToWord]; exact hcard⟩
 
 /-- 2*e(n) ≥ n*F(n) for n ≥ 3: linear average degree growth.
     cor:pom-fibcube-edge-closed-form -/

@@ -71,10 +71,11 @@ subagent_type: general-purpose
    - "论文可能说..."、"论文应该有..."——要么找到原文，要么明确标注"论文中未找到"
    - 提出的定理命题没有在论文中找到对应——必须先确认论文是否有此结果
 
-2. **扫描现有Lean4代码**
+2. **扫描现有Lean4代码 + 标注已形式化定理**
    - 读 `lean4/Omega.lean`（总导入文件）了解模块结构
    - 读相关模块的.lean文件，找到已有的定义和定理
    - 确认哪些前置依赖已形式化，哪些缺失
+   - **标注已形式化**：扫描过程中发现论文定理已在 Lean4 中形式化但 .tex 文件中没有标注时，**立即在 .tex 文件中添加标注**（格式见下方"已形式化标注协议"）。这样后续扫描不会重复分析已完成的定理。
 
 3. **查找 mathlib 支持（lean4-skills LSP 搜索协议）**
 
@@ -163,6 +164,52 @@ theorem paperThm_xxx :
 
 ### 注意事项
 - [特殊情况、边界条件、已知陷阱]
+```
+
+## 已形式化标注协议（正文可见）
+
+**在扫描论文 .tex 文件寻找目标时，若发现某定理已在 Lean4 中形式化但 .tex 中缺少标注，必须立即标注。标注出现在编译后的 PDF 正文中，方便读者查阅。**
+
+### 判断方法
+
+1. 读取 .tex 文件中的 `\label{thm:xxx}` / `\label{prop:xxx}` 等标签
+2. 检查该定理环境内是否已有 `\leanverified` 或 `\leanpartial` 命令
+3. 如果没有标注，用 `Grep` 在 `lean4/Omega/` 中搜索该论文标签（docstring 或注释中可能引用）
+4. 如果找到对应的 Lean4 定理，添加标注
+
+### 标注命令（已在 main.tex preamble 中定义）
+
+在定理环境的 `\end{theorem}`（或 `\end{proposition}` 等）**之前**插入：
+
+```latex
+\begin{theorem}[定理标题]\label{thm:pom-xxx}
+  定理正文...
+\leanverified{exactWeightCount\_succ}
+\end{theorem}
+```
+
+- **完整形式化**：`\leanverified{定理名}`（PDF 中显示绿色）
+- **部分形式化**：`\leanpartial{定理名}{限制说明}`（PDF 中显示橙色）
+- 不写文件路径和行号（会变）
+- 定理名中的下划线需转义：`\_`
+- 一个论文定理对应多个 Lean4 定理时，每个单独一行
+
+### 标注时机
+
+- **分析新目标时**：扫描 .tex 发现已形式化 → 标注 + 跳过（不再作为目标）
+- **汇总报告**：在规格回复中附带"本轮已标注 N 个已形式化定理"
+
+### 标注后提交
+
+标注完成后用 `git add` + `git commit` 提交标注变更（可与规格分析独立提交）：
+```bash
+git add theory/
+git commit -m "Annotate formalized theorems in LaTeX sources
+
+- Marked N theorems as Lean4-verified in [chapter] .tex files
+
+Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
+git push
 ```
 
 ## 批量派发策略
