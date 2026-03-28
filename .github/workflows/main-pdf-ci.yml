@@ -1,60 +1,23 @@
-name: Build main.pdf CI
+name: PDF CI
 
 on:
   pull_request:
     paths:
       - .github/workflows/main-pdf-ci.yml
-      - .github/workflows/main-pdf-release.yml
-      - theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/**
-  push:
-    branches:
-      - main
-    paths:
-      - .github/workflows/main-pdf-ci.yml
+      - .github/workflows/reusable-pdf.yml
+      - .github/workflows/main-gate.yml
       - .github/workflows/main-pdf-release.yml
       - theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/**
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
-  group: main-pdf-ci-${{ github.ref }}
+  group: pdf-ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-main-pdf:
-    name: Build main.pdf
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/xu-cheng/texlive-full:latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Allow git metadata access in container
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-      - name: Build main.pdf
-        run: |
-          if locale -a | grep -Eiq '^en_US\.utf-?8$'; then
-            export LANG=en_US.UTF-8
-            export LC_ALL=en_US.UTF-8
-          fi
-
-          latexmk -pdfxe -interaction=nonstopmode -halt-on-error -file-line-error main.tex
-
-      - name: Package dated PDF
-        id: package-pdf
-        run: |
-          pdf_name="main_$(git show -s --format=%cs "$GITHUB_SHA").pdf"
-          cp main.pdf "$pdf_name"
-          echo "pdf_name=$pdf_name" >> "$GITHUB_OUTPUT"
-
-      - name: Upload main.pdf artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: main-pdf
-          path: theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/${{ steps.package-pdf.outputs.pdf_name }}
-          if-no-files-found: error
+  pdf:
+    uses: ./.github/workflows/reusable-pdf.yml
+    secrets: inherit
