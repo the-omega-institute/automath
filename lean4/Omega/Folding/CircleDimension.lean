@@ -269,4 +269,28 @@ theorem semiring_hom_determines_idempotents {S : Type*} [CommSemiring S]
   · -- Completeness: ∑ e_i = 1 → ∑ f(e_i) = 1
     rw [← map_sum, e_sum, map_one]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R33: Aut(N^r) ≅ S_r
+-- ══════════════════════════════════════════════════════════════
+
+/-- Any semiring automorphism of (Fin r → ℕ) is a coordinate permutation.
+    cor:cdim-nr-nd-semiring-hom-inj-auto -/
+theorem semiring_aut_is_perm (r : Nat) (f : (Fin r → ℕ) ≃+* (Fin r → ℕ)) :
+    ∃ σ : Equiv.Perm (Fin r), ∀ x : Fin r → ℕ, ∀ j : Fin r, f x j = x (σ j) := by
+  obtain ⟨σ, hσ⟩ := semiring_hom_rigidity r r f.toRingHom
+  -- σ is injective: if σ j₁ = σ j₂ then f.toRingHom maps Pi.single j₁ 1 and Pi.single j₂ 1
+  -- to functions agreeing at all coords → f injective forces j₁ = j₂.
+  have hinj : Function.Injective σ := by
+    intro j₁ j₂ hσeq
+    by_contra h
+    -- f is surjective: take preimage of Pi.single j₁ 1
+    obtain ⟨y, hy⟩ := f.surjective (Pi.single j₁ 1)
+    have h1 : (f y) j₁ = 1 := by rw [hy]; simp [Pi.single_apply]
+    have h2 : (f y) j₂ = 0 := by rw [hy]; simp [Pi.single_apply, h]
+    -- But f y j₁ = y (σ j₁) and f y j₂ = y (σ j₂) = y (σ j₁)
+    rw [show (f y) j₁ = f.toRingHom y j₁ from rfl, hσ y j₁] at h1
+    rw [show (f y) j₂ = f.toRingHom y j₂ from rfl, hσ y j₂] at h2
+    rw [← hσeq] at h2; linarith
+  exact ⟨Equiv.ofBijective σ ⟨hinj, Finite.surjective_of_injective hinj⟩, hσ⟩
+
 end Omega

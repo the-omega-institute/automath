@@ -699,4 +699,38 @@ theorem ccs_prime_recurrence (m : Nat) :
     have := crossCorrSq_recurrence (m + 1); linarith
   linarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R33: S_3 recurrence uniqueness
+-- ══════════════════════════════════════════════════════════════
+
+/-- A 3rd-order recurrence with S_3 coefficients is uniquely determined by initial values.
+    thm:pom-s3-recurrence-unique -/
+private theorem recurrence_unique_s3 {f g : Nat → Nat}
+    (hf : ∀ m, f (m + 3) + 2 * f m = 2 * f (m + 2) + 4 * f (m + 1))
+    (hg : ∀ m, g (m + 3) + 2 * g m = 2 * g (m + 2) + 4 * g (m + 1))
+    (h0 : f 0 = g 0) (h1 : f 1 = g 1) (h2 : f 2 = g 2) :
+    ∀ m, f m = g m := by
+  intro m; induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 => exact h0
+    | 1 => exact h1
+    | 2 => exact h2
+    | m + 3 =>
+      have := hf m; have := hg m
+      have := ih m (by omega); have := ih (m + 1) (by omega); have := ih (m + 2) (by omega)
+      omega
+
+/-- S_3 is the unique sequence satisfying f(m+3)+2f(m) = 2f(m+2)+4f(m+1) with
+    initial values f(0)=1, f(1)=2, f(2)=10.
+    thm:mul-from-successor -/
+theorem momentSum_three_determined {f : Nat → Nat}
+    (hrec : ∀ m, f (m + 3) + 2 * f m = 2 * f (m + 2) + 4 * f (m + 1))
+    (h0 : f 0 = 1) (h1 : f 1 = 2) (h2 : f 2 = 10) :
+    ∀ m, f m = momentSum 3 m :=
+  recurrence_unique_s3 hrec momentSum_three_recurrence
+    (by rw [h0, momentSum_three_zero])
+    (by rw [h1, momentSum_three_one])
+    (by rw [h2, momentSum_three_two])
+
 end Omega
