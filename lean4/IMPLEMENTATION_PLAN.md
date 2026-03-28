@@ -112,6 +112,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R18: S_q 通用幂次下界 + 碰撞无重叠分拆 + complement 作用（Round R18）**：三文件 MomentBounds.lean（:974）+ MomentBounds.lean（:980-1003）+ FiberWeightCountComplement.lean（:191）——momentSum\_ge\_pow\_general（prop:pom-sq-lower：S_q(m) ≥ 2^m 对所有 q,m 的通用幂次下界，MomentBounds.lean:974）; collisionFreeCount（def:collision-partition 定义：无碰撞计数，MomentBounds.lean:980）; collisionFreeCount\_add\_collision\_eq\_fib（bridge:collision-partition：collisionFreeCount + collision = F_{m+2}，分拆等式，MomentBounds.lean:1003）; fiberMultiplicity\_complementAction（prop:fold-fiber-count-reciprocity：d(complementAction x) = d(x)，complement 作用保纤维多重度，FiberWeightCountComplement.lean:191）——**0 个新论文标签**（prop:pom-sq-lower 已在 Round 17 注册；bridge:collision-partition 不计入论文覆盖率；prop:fold-fiber-count-reciprocity 已注册多轮）——Folding ~115→~116（+1），POM ~578→~579（+1），全局 ~1,419→~1,422（Phase R18，commit 295ba04）
+
 **Phase R17: q-矩严格单调 + 稳定值平方和 + complement 代数（Round R17）**：三文件 MomentBounds.lean（:960）+ MomentRecurrence.lean（:664）+ FiberWeightCountComplement.lean（:105-128）——momentSum\_strict\_mono\_q\_general（prop:pom-moment-congruence-q：S_q(m) 对 q 严格单调，:960）; stableValue\_sq\_sum\_mul6（thm:pom-stableValue-sq-gauss（**新标签**）：6·Σ sv(x)² = F_{m+2}·(F_{m+2}-1)·(2F_{m+2}-1)，稳定值平方和 Gauss 公式，MomentRecurrence.lean:664）; stableValue\_Fold\_add\_complement（prop:fold-fiber-count-reciprocity：sv(Fold(x⊕̄y)) = complement 加法结构，FiberWeightCountComplement.lean:105）; complementAction（def + prop:fold-fiber-count-reciprocity：complement 群作用定义，:123）; complementAction\_involutive（prop:fold-fiber-count-reciprocity：complement 对合性，:128）——**1 个新论文标签**（thm:pom-stableValue-sq-gauss；prop:pom-moment-congruence-q + prop:fold-fiber-count-reciprocity 已注册，本轮深化）——Folding ~112→~115（+3），POM ~577→~578（+1），全局 ~1,413→~1,419（Phase R17，commit eaca852）
 
 **Phase R16: 加法迭代等于乘法 + 后继双射（Round R16）**：单文件 FiberArithmeticProperties.lean（+59行，新增至718行）——iteratedStableAdd（thm:mul-by-iterated-add（**新标签**）：X m 上迭代加法定义，iteratedStableAdd x n = succ^n(0) + x·n，:664）; stableValue\_iteratedStableAdd（thm:mul-by-iterated-add：sv(itAdd x n) = (n * sv(x)) % F_{m+2}，迭代加法值公式，:670）; iteratedStableAdd\_eq\_stableMul（thm:mul-by-iterated-add：itAdd x (sv(y)) = stableMul y x，迭代加法等于乘法，:683）; stableSucc\_surjective（thm:successor-structure：后继满射，:690）; stableSucc\_bijective（thm:successor-structure：后继双射，:695）; stablePred\_surjective（thm:successor-structure：前驱满射，:701）; stablePred\_bijective（thm:successor-structure：前驱双射，:706）; stableSuccEquiv（thm:successor-structure：后继等价映射 X m ≃ X m，:712）——**1 个新论文标签**（thm:mul-by-iterated-add；thm:successor-structure 已在 R14 注册，本轮深化）——新生算术 ~104→~112（+8），全局 ~1,405→~1,413（Phase R16，commit ef87f3d）
@@ -252,7 +254,7 @@
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
-## 2. 论文总覆盖率分析（2026-03-28 Phase R17 登记版）
+## 2. 论文总覆盖率分析（2026-03-28 Phase R18 登记版）
 
 ### 论文规模（Phase 7 重新扫描）
 
@@ -264,16 +266,16 @@
 
 ### Lean4 形式化状态
 
-- ~2,807 个 Lean4 声明（含内部引理、定义）
+- ~2,810 个 Lean4 声明（含内部引理、定义）
 - ~28,766 行代码，69 个文件
 - 0 公理，0 sorry，lake build 通过
-- 84 个 LaTeX `\leanverified` / `\leanpartial` 标注
+- 87 个 LaTeX `\leanverified` / `\leanpartial` 标注
 
 ### 覆盖率
 
 | 度量 | 数值 |
 |---|---|
-| 全局覆盖率（body） | ~1,419/9,958 = **~14.2%** |
+| 全局覆盖率（body） | ~1,422/9,958 = **~14.3%** |
 | 强覆盖（一般性 ∀ 证明） | ~65 (0.7%) |
 | 中覆盖（有界 + 条件） | ~162 (1.6%) |
 | 弱覆盖（native_decide / 代理） | ~723 (7.3%) |
@@ -351,15 +353,15 @@
 |---|---|---|---|
 | SPG | 127 | ~71 | ~55.9% |
 | 新生算术 | 151 | ~112 | ~74.2% |
-| Folding | 317 | ~115 | ~36.3% |
+| Folding | 317 | ~116 | ~36.6% |
 | 群统一 | 457 | ~110 | ~24.1% |
-| POM | 1,526 | ~578 | ~37.9% |
+| POM | 1,526 | ~579 | ~37.9% |
 | 圆维度 | 342 | ~62 | ~18.1% |
 | Zeta 有限部分 | 4,437 | ~255 | ~6% |
 | 结论 | 2,458 | ~83 | ~3.4% |
 | 其他 body | ~143 | ~2 | ~1% |
 | 附录 | 1,320 | 0 | 0% |
-| **body 总计** | **9,958** | **~1,419** | **~14.2%** |
+| **body 总计** | **9,958** | **~1,422** | **~14.3%** |
 
 ## 3. 未来工作：30 条具体计划
 
