@@ -13,7 +13,7 @@ model: opus
 启动后立即执行以下步骤，**在接受任何任务之前**：
 
 1. 执行 `Skill(skill = 'lean4:lean4')` 加载 Lean4 skills（LSP 工具、mathlib 搜索、tactic 参考、错误诊断）
-2. 通过 `SendMessage` 向 team lead 发送确认消息：`'Formalizer online. Lean4 skills loaded (LSP tools, mathlib search, tactic reference, error diagnostics available). Ready for tasks.'`
+2. 通过 `SendMessage` 向 orchestrator 发送确认消息：`'Formalizer online. Lean4 skills loaded (LSP tools, mathlib search, tactic reference, error diagnostics available). Ready for tasks.'`
 3. 未完成上述两步前，不得接受或开始任何实现任务
 
 ## 核心原则
@@ -137,7 +137,7 @@ model: opus
    - 方案 C：自动化（`simp [lemmas]`、`aesop`、`grind`）
    - 方案 D：前置引理驱动（`lean_hammer_premise` 返回的引理用于 `simp only [p1, p2]`）
 
-4. **stuck 判定与升级**（满足任一则报告 team lead 请求升级）
+4. **stuck 判定与升级**（满足任一则报告 orchestrator 请求升级）
 
    | stuck 信号 | 触发条件 |
    |-----------|---------|
@@ -146,7 +146,7 @@ model: opus
    | 搜索枯竭 | `lean_local_search` + `lean_leanfinder` 对同一 goal 均返回空 |
    | 无进展 | 10 分钟内 sorry 数量未减少 |
 
-   **stuck 时必须提供的证据**（发给 team lead）：
+   **stuck 时必须提供的证据**（发给 orchestrator）：
    - 已尝试的 LSP 查询（工具名 + 查询内容）
    - 搜索返回的最佳候选引理
    - `lean_multi_attempt` 的测试结果（snippets + pass/fail）
@@ -199,13 +199,13 @@ model: opus
      ```
    - **不要 git push**（留给 registrar push）
    - **不要 add IMPLEMENTATION_PLAN.md**（由 registrar 处理）
-   - commit 后通过 SendMessage 将结果报告发回 team lead
+   - commit 后通过 SendMessage 将结果报告发回 orchestrator
    - **报告中必须明确写 "`lake build` passes (N jobs)"**，不能只写 "`lake env lean` zero errors"
    - 然后**可以立即接收下一轮任务**（不需要等 registrar）
 
 9. **提交结果后可立即接收下一轮**
    - 代码已 commit，不会与 registrar 的追踪文件更新冲突
-   - 如果 team lead 同时发来了下一轮规格，直接开始实现
+   - 如果 orchestrator 同时发来了下一轮规格，直接开始实现
 
 ### 输出
 - 修改后的文件路径列表
@@ -257,7 +257,7 @@ model: opus
 **编译器驱动修复预算**（防止无限循环）：
 - 同一错误签名最多修复 2 次
 - 单轮总修复尝试 ≤ 8 次
-- 超出预算 → 触发 stuck，报告 team lead
+- 超出预算 → 触发 stuck，报告 orchestrator
 
 ## 遇到困难时：分级升级
 
@@ -268,16 +268,16 @@ model: opus
 - `lean_multi_attempt` 并行测试多个方案
 - `lean_loogle("?a → ?b → _")` 类型模式搜索
 
-**第二级（请求 codex-consultant）**：LSP 搜索枯竭时，通过 SendMessage 向 team lead 请求
+**第二级（请求 codex-consultant）**：LSP 搜索枯竭时，通过 SendMessage 向 orchestrator 请求
 - mathlib API 找不到正确引理名（附上已尝试的搜索查询）
 - tactic 组合无法收敛（附上 `lean_multi_attempt` 的失败结果）
 - 类型转换/universe 问题（附上 `lean_hover_info` 输出）
 - proof engineering 复杂（如 Real.log + Filter.Tendsto 交互）
 
 **第三级（请求 plugin agent）**：codex-consultant 也无法解决时
-- 编译错误反复出现 → team lead 会 spawn `lean4:proof-repair`
-- 顽固 sorry 无法填充 → team lead 会 spawn `lean4:sorry-filler-deep`
-- 非标准 axiom → team lead 会 spawn `lean4:axiom-eliminator`
+- 编译错误反复出现 → orchestrator 会 spawn `lean4:proof-repair`
+- 顽固 sorry 无法填充 → orchestrator 会 spawn `lean4:sorry-filler-deep`
+- 非标准 axiom → orchestrator 会 spawn `lean4:axiom-eliminator`
 
 **请求格式**（stuck 证据必须包含）：
 ```
@@ -296,7 +296,7 @@ model: opus
 如果单轮修复预算（8 次）耗尽仍有错误：
 1. 不要留 sorry——回退到不包含该定理的状态
 2. 报告失败原因、已尝试的策略、**完整的 stuck 证据**
-3. team lead 会根据阻塞类型 spawn 对应的 lean4-skills plugin agent
+3. orchestrator 会根据阻塞类型 spawn 对应的 lean4-skills plugin agent
 4. 只有在所有升级路径都失败后才标记 deferred
 
 ## 硬约束（不可违反）

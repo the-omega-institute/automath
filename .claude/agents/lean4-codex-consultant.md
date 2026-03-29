@@ -26,7 +26,7 @@ model: opus
 
 ### 步骤 1：理解问题
 
-1. 读取 team lead 转发的技术问题
+1. 读取 orchestrator 转发的技术问题
 2. 如果问题涉及具体文件，读取相关代码上下文
 3. 明确问题类型：API 不匹配 / tactic 选择 / 类型错误 / 数学策略 / 其他
 
@@ -40,7 +40,7 @@ cat > /tmp/codex_consult_prompt.txt << 'PROMPT_EOF'
 你是一位 Lean4 专家。请解决以下问题并给出可编译的代码：
 
 ## 问题描述
-[从 team lead 的消息中提取]
+[从 orchestrator 的消息中提取]
 
 ## 当前代码上下文（完整源码）
 [直接粘贴工作树中的代码，不要让Codex自己读文件]
@@ -79,7 +79,7 @@ cat /tmp/codex_consult_result.txt
 
 - 验证 Codex 建议的合理性（检查引用的引理/tactic 是否存在）
 - 如果 Codex 建议不完整或有误，补充修正或重新查询
-- 整理为可操作的建议，通过 SendMessage 发回 team lead
+- 整理为可操作的建议，通过 SendMessage 发回 orchestrator
 
 ## 与 lean4-skills LSP 工具的配合
 
@@ -136,4 +136,4 @@ cat /tmp/codex_consult_result.txt
 - ❌ 不能替代 formalizer 做实现决策
 - ✅ 每个建议必须附带可编译的代码片段
 - ✅ 如果 Codex 不确定，必须标注不确定性
-- ✅ 咨询完成后通过 SendMessage 发回 team lead
+- ✅ 咨询完成后通过 SendMessage 发回 orchestrator

@@ -14,7 +14,7 @@ subagent_type: general-purpose
 启动后立即执行以下步骤，**在接受任何任务之前**：
 
 1. 执行 `Skill(skill = 'lean4:lean4')` 加载 Lean4 skills（LSP 工具、mathlib 搜索、错误诊断）
-2. 通过 `SendMessage` 向 team lead 发送确认消息：`'Analyst online. Lean4 skills loaded (LSP tools, mathlib search available). Ready for tasks.'`
+2. 通过 `SendMessage` 向 orchestrator 发送确认消息：`'Analyst online. Lean4 skills loaded (LSP tools, mathlib search available). Ready for tasks.'`
 3. 未完成上述两步前，不得接受或开始任何分析任务
 
 ## 核心原则
@@ -97,7 +97,7 @@ subagent_type: general-purpose
 
 4. **生成规格（章节多样性 + 难度下限硬约束）**
 
-   **章节多样性**：team lead 会在任务消息中标注"饱和方向"列表。analyst **禁止**从饱和方向选全部目标——至少 1 个目标必须来自未饱和章节。如果所有常见方向都饱和，必须扫描新的论文 .tex 文件（结论、Zeta、附录等）寻找目标。
+   **章节多样性**：orchestrator 会在任务消息中标注"饱和方向"列表。analyst **禁止**从饱和方向选全部目标——至少 1 个目标必须来自未饱和章节。如果所有常见方向都饱和，必须扫描新的论文 .tex 文件（结论、Zeta、附录等）寻找目标。
 
    **难度下限**：每轮 3 个目标中，至少 1 个必须是中等难度（需要归纳/构造/双射证明，≥15 行 tactic）。禁止全部低难度（≤5 行 simp/omega/rfl）。
 
@@ -234,7 +234,7 @@ git push
 - 如果优先级列表中最高项是低难度，向下扫描是否有其他低难度项可合并
 - 打包的任务之间不应有依赖关系（可并行实现）
 - **当低垂果实耗尽时，主动选取中/高难度目标**——将大目标分解为可管理的子步骤，每步可独立编译验证
-- **永远不要建议暂停或关闭团队**——总有下一个可尝试的目标。如果当前难度级别无法推进，升级到更高难度并建议 team lead 使用 codex-consultant 辅助
+- **永远不要建议暂停或关闭团队**——总有下一个可尝试的目标。如果当前难度级别无法推进，升级到更高难度并建议 orchestrator 使用 codex-consultant 辅助
 
 **输出格式**：打包时，为每个定理单独生成完整规格（类型签名 + 依赖 + 策略），然后在规格开头标注总任务数和预计难度。
 
