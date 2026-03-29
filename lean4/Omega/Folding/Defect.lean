@@ -512,4 +512,31 @@ theorem gauge_anomaly_max_three :
     ∃ w : Word 5, (Finset.univ.filter (fun i => localDefect w i = true)).card = 3 := by
   exact ⟨![true, true, true, true, true], by native_decide⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R53: periodicWord110 and Fold instances
+-- ══════════════════════════════════════════════════════════════
+
+/-- The 110-periodic word of length m: positions i with i % 3 ≠ 2 are true.
+    def:fold-periodic-word-110 -/
+def periodicWord110 (m : Nat) : Word m := fun i => i.val % 3 ≠ 2
+
+/-- Fold(110) for m=3 produces the word 001.
+    thm:fold-periodic-word-110-instance -/
+theorem Fold_periodicWord110_three :
+    ∀ i : Fin 3, (Fold (periodicWord110 3)).1 i = (i.val % 3 == 2) := by native_decide
+
+/-- Fold(periodicWord110 4) is idempotent (it is already a stable word).
+    thm:fold-periodic-word-110-instance -/
+theorem Fold_periodicWord110_four_stable :
+    Fold (Fold (periodicWord110 4)).1 = Fold (periodicWord110 4) :=
+  Fold_idempotent (periodicWord110 4)
+
+/-- The weight of periodicWord110 3 equals 3.
+    thm:fold-periodic-word-110-instance -/
+theorem weight_periodicWord110_three : weight (periodicWord110 3) = 3 := by native_decide
+
+/-- The weight of periodicWord110 4 equals 8.
+    thm:fold-periodic-word-110-instance -/
+theorem weight_periodicWord110_four : weight (periodicWord110 4) = 8 := by native_decide
+
 end Omega
