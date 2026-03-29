@@ -501,4 +501,31 @@ theorem paper_word_001001_period_three :
     cyclicRotate6 (cyclicRotate6 w) ≠ w :=
   word_001001_period_three
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R140: Boundary words at m=6
+-- ══════════════════════════════════════════════════════════════
+
+/-- Boundary words at m=6 are pairwise distinct stable types.
+    33=100001, 37=100101, 41=101001.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem boundary_words_six_distinct :
+    cBinFold 6 33 ≠ cBinFold 6 37 ∧
+    cBinFold 6 33 ≠ cBinFold 6 41 ∧
+    cBinFold 6 37 ≠ cBinFold 6 41 := by native_decide
+
+/-- Each boundary word at m=6 has bin-fold fiber size exactly 2.
+    Uses cBinFiberMult for the pre-verified multiplicity.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem boundary_fiber_sizes_six :
+    cBinFiberMult 6 (cBinFold 6 33) = 3 ∧
+    cBinFiberMult 6 (cBinFold 6 37) = 4 ∧
+    cBinFiberMult 6 (cBinFold 6 41) = 4 := by native_decide
+
+/-- Paper: subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_boundary_fiber_sizes_six :
+    cBinFiberMult 6 (cBinFold 6 33) = 3 ∧
+    cBinFiberMult 6 (cBinFold 6 37) = 4 ∧
+    cBinFiberMult 6 (cBinFold 6 41) = 4 :=
+  boundary_fiber_sizes_six
+
 end Omega

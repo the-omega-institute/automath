@@ -766,4 +766,30 @@ set_option maxHeartbeats 12800000 in
 /-- def:pom-collision-zeta-a4-trace-pow-10 -/
 theorem collisionKernel4_trace_pow_10 : (collisionKernel4 ^ 10).trace = 709058 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R140: A₅ collision kernel trace powers
+-- ══════════════════════════════════════════════════════════════
+
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_0 : (collisionKernel5 ^ 0).trace = 5 := by native_decide
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_1 : (collisionKernel5 ^ 1).trace = -2 := by native_decide
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_2 : (collisionKernel5 ^ 2).trace = -18 := by native_decide
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_3 : (collisionKernel5 ^ 3).trace = 34 := by native_decide
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_4 : (collisionKernel5 ^ 4).trace = 66 := by native_decide
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_5 : (collisionKernel5 ^ 5).trace = -272 := by native_decide
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_6 : (collisionKernel5 ^ 6).trace = -114 := by native_decide
+
+/-- Paper: prop:pom-s5-recurrence (trace powers) -/
+theorem paper_collisionKernel5_trace_powers :
+    (collisionKernel5 ^ 0).trace = 5 ∧ (collisionKernel5 ^ 1).trace = -2 ∧
+    (collisionKernel5 ^ 2).trace = -18 ∧ (collisionKernel5 ^ 3).trace = 34 :=
+  ⟨collisionKernel5_trace_pow_0, collisionKernel5_trace_pow_1,
+   collisionKernel5_trace_pow_2, collisionKernel5_trace_pow_3⟩
+
 end Omega

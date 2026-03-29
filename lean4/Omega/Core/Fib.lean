@@ -1326,4 +1326,27 @@ theorem paper_two_pow_gt_fib (m : Nat) (hm : 4 ≤ m) :
     Nat.fib (m + 2) < 2 ^ m :=
   two_pow_gt_fib m hm
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R140: Hidden bit count parity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Parity of ⌊2^m/3⌋ for m=2..12: odd when m is even, even when m is odd.
+    thm:pom-hidden-bit-count -/
+theorem floor_pow_div3_parity_bounded (m : Nat) (hm1 : 2 ≤ m) (hm2 : m ≤ 12) :
+    (2 ^ m / 3) % 2 = if Even m then 1 else 0 := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hm1
+  have hk : k ≤ 10 := by omega
+  -- Enumerate k = 0..10, m = 2..12
+  match k, hk with
+  | 0, _ => native_decide  | 1, _ => native_decide  | 2, _ => native_decide
+  | 3, _ => native_decide  | 4, _ => native_decide  | 5, _ => native_decide
+  | 6, _ => native_decide  | 7, _ => native_decide  | 8, _ => native_decide
+  | 9, _ => native_decide  | 10, _ => native_decide
+  | k + 11, hk => omega
+
+/-- Paper: thm:pom-hidden-bit-count -/
+theorem paper_floor_pow_div3_parity_bounded (m : Nat) (hm1 : 2 ≤ m) (hm2 : m ≤ 12) :
+    (2 ^ m / 3) % 2 = if Even m then 1 else 0 :=
+  floor_pow_div3_parity_bounded m hm1 hm2
+
 end Omega
