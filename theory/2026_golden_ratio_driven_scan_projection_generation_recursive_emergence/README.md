@@ -156,6 +156,9 @@ builds a program-level sync report instead of creating new paper skeletons local
 python3 automation/publication_sync.py sync \
   --publication-root /path/to/the-omega/docs/papers/auric-golden-phi/publication \
   --slug auric_publication_sync
+python3 automation/publication_sync.py audit \
+  --publication-root /path/to/the-omega/docs/papers/auric-golden-phi/publication \
+  --slug auric_publication_sync
 python3 automation/publication_sync.py validate \
   artifacts/export/publication_sync/auric_publication_sync
 ```
@@ -165,9 +168,13 @@ This writes `artifacts/export/publication_sync/<slug>/` with:
 - `sync_manifest.json` — workspace path, counts by publication phase, and unmapped sections
 - `publication_inventory.json` — one record per publication directory, including target journal and covered source sections
 - `section_status.json` — one record per `sections/body/<section>` directory with publication status and recommended program action
+- `lean_linkage.json` — publication-to-Lean linkage via `SOURCE_MAP.md`, `THEOREM_LIST.md`, or section-level fallback labels
+- `publication_audit.json` — contract audit summary and per-directory issues for missing `README.md`, `main.tex`, `SOURCE_MAP.md`, `THEOREM_LIST.md`, and submission status markers
+- `publication_audit_report.md` — human-readable audit report suitable for gating the external publication workspace
 - `publication_sync_report.md` — human-readable dashboard showing which sections are already submitted, planned, frozen, or still unmapped
 
 Use this when publication splitting is managed elsewhere and `automath` only needs to stay aligned with that external submission program.
+`audit` exits nonzero on hard contract violations; `audit --strict` also fails on mapping gaps and missing submission metadata.
 
 ## Writing Conventions
 
