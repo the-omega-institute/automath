@@ -6,25 +6,25 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~30,200 |
-| 定理/定义数 | ~3,262 |
+| 总行数 | ~31,700 |
+| 定理/定义数 | ~3,265 |
 | 论文接口包装 | 370+ |
 | 文件数 | 69 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,507 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 343 |
+| \leanverified 标注数 | 360 |
 | \leanpartial 标注数 | 10 |
-| 总标注数 | 353 |
-| 轮次 | R65（round_count=66） |
+| 总标注数 | 370 |
+| 轮次 | R66（round_count=67） |
 
-**Phase 7 校准（R65 轮，2026-03-29）**：按章节覆盖率分布：
+**Phase 7 校准（R66 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 141 | 8.3% |
-| Emergent Arithmetic | 185 | 61 | 33.0% |
-| Folding | 337 | 58 | 17.2% |
+| POM | 1,707 | 145 | 8.5% |
+| Emergent Arithmetic | 185 | 63 | 34.1% |
+| Folding | 337 | 59 | 17.5% |
 | Conclusion | 2,550 | 37 | 1.5% |
 | Group Unification | 469 | 22 | 4.7% |
 | SPG | 129 | 9 | 7.0% |
@@ -32,7 +32,7 @@
 | Zeta Finite Part | 4,524 | 9 | 0.2% |
 | Discussion | 67 | 0 | 0.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,507** | **353** | **3.4%** |
+| **合计（body）** | **10,507** | **360** | **3.4%** |
 
 ### 1.2 已完成模块
 
@@ -134,6 +134,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R66: 三基础定理 + 分析员标注7条（Round R66）**：三文件 Core/Fib.lean（:1129）+ Folding/MomentSum.lean（:354）+ Folding/Weight.lean（:125）——fib\_add\_fib\_eq\_fib\_succ（prop:pom-fib-add-fib-eq-fib-succ（新标签，tex 无环境）：F_n + F_{n+1} = F_{n+2}，Fibonacci 加法递推具名包装，Core/Fib.lean:1129）; fiberMultiplicity\_sum\_sq\_eq\_momentSum\_two（prop:pom-fiberMultiplicity-sum-sq-eq-momentSum-two（新标签，tex 无环境）：∑ d(x)^2 = S_2(m)，定义等式 via rfl，MomentSum.lean:354）; weight\_allFalse\_eq\_zero（lem:weight-allFalse-eq-zero（新标签，tex 无环境）：weight(allFalse) = 0，simp，Weight.lean:125）——**0 个新论文标签计入覆盖率**（三新标签均 tex 无环境）——analyst（a98328c）标注7条：def:pom-s5（cMomentSum，POM）; prop:pom-s5-recurrence（collisionKernel5 + collisionKernel5\_trace + collisionKernel5\_det，POM ×3）; prop:val-invariant（value\_invariant\_step，EA）; thm:add-definitional（stableValue\_stableAdd\_eq，EA）; prop:folding-stable-syntax-terminal-recursion（card\_recurrence，Folding）——POM 141→145（+4，8.5%），EA 61→63（+2，34.1%），Folding 58→59（+1，17.5%），全局标注 353→360（+7），Lean 定理 ~3,262→~3,265（+3），commit 0be4108+a98328c
+
 **Phase R65: ewc 三点闭式族 + analyst EA 标注3条（Round R65）**：两文件 Folding/FiberWeightCount.lean + Folding/MomentTriple.lean（:899-925）——exactWeightCount\_fib\_closed（prop:pom-ewc-fib-closed（新标签，tex 无环境）：ewc(m, F_{m+2}) = ⌊m/2⌋，通过 fiberMultiplicity\_allFalse\_closed，FiberWeightCount.lean）; exactWeightCount\_three（prop:pom-ewc-weight-three（新标签，tex 无环境）：ewc(m,3) = 2 for m≥3，两个 Zeckendorf 表示：F(4) 和 F(2)+F(3)，归纳 + exactWeightCount\_succ\_of\_lt，MomentTriple.lean:899）; exactWeightCount\_fib\_sub\_five（prop:pom-ewc-fib-sub-five（新标签，tex 无环境）：ewc(m, F_{m+3}-5) = 2 for m≥3，与 ewc(m,3) 对称性，:925）——**0 个新论文标签计入覆盖率**（三新标签均 tex 无环境）——analyst（d05c655）标注3条（均 EA）：thm:finite-resolution-mod（stable\_ring\_isomorphism）、cor:field-phase-fib-prime（stable\_field\_of\_prime）、prop:crt-235-min-depth（crt\_235\_min\_depth）——EA 58→61（+3，33.0%），全局标注 350→353（+3），Lean 定理 ~3,259→~3,262（+3），commit 1c40143+0f40e61+d05c655
 
 **Phase R64: S₂(14)/S₃(14) 值 + ewc 端点对称族 + analyst 标注5条（Round R64）**：两文件 Folding/MomentTriple.lean（:857-889）+ Folding/CCSPrime8Split.lean（:750）——momentSum\_two\_fourteen\_rec（prop:pom-moment-s2-fourteen（新标签，tex 无环境）：S_2(14)=315296，:857）; exactWeightCount\_two（prop:pom-ewc-weight-two（新标签，tex 无环境）：ewc(m,2)=1 for m≥2，归纳 + exactWeightCount\_succ\_of\_lt，:864）; exactWeightCount\_fib\_sub\_four（prop:pom-ewc-fib-sub-four（新标签，tex 无环境）：ewc(m, F_{m+3}-4)=1 for m≥2，与 ewc(m,2) 对称性，:889）; momentSum\_three\_fourteen（prop:pom-s3-fourteen（新标签，tex 无环境）：S_3(14)=6699808，CCSPrime8Split.lean:750）——**0 个新论文标签计入覆盖率**（四新标签均 tex 无环境）——analyst（1091e07）标注5条（均 POM）：def:pom-s4（paper\_def\_moment\_q）、def:pom-s5（paper\_def\_moment\_q）、prop:pom-s3-orbit-decomposition（momentSum\_three\_succ\_three\_term + tripleCollisionClass\_swap12 + swap23 ×3）——POM 136→141（+5），全局标注 345→350（+5），Lean 定理 ~3,255→~3,259（+4），commit e8554ae+1091e07
