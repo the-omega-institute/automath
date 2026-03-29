@@ -606,4 +606,13 @@ theorem eq_allFalse_of_weight_eq_zero (w : Word m) (hw : weight w = 0) :
     w = fun _ => false :=
   (weight_zero_iff_allFalse w).mp hw
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R61
+-- ══════════════════════════════════════════════════════════════
+
+/-- The finite folding map is surjective onto the stable syntax space (paper-facing wrapper).
+    prop:fold-surjective -/
+theorem paper_fold_surjective (m : Nat) : Function.Surjective (fun w : Word m => Fold w) :=
+  Fold_surjective m
+
 end Omega
