@@ -101,4 +101,9 @@ theorem fib_fiber_godelLift_instances :
   refine ⟨by native_decide, by norm_num, by native_decide, by norm_num,
     by native_decide, by norm_num, by native_decide, by norm_num, by norm_num⟩
 
+/-- The mod-6 period shell is lcm(8, 18) = 72.
+    prop:conclusion-mod6-period-shell-72 -/
+theorem conclusion_mod6_period_shell_72 :
+    Nat.lcm 8 18 = 72 := by native_decide
+
 end Omega.Conclusion

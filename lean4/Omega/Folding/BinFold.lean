@@ -235,6 +235,27 @@ theorem three_rigidity_scales_six :
   · rw [X.card_eq_fib]; native_decide
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R102: Window-6 capacity bifurcation
+-- ══════════════════════════════════════════════════════════════
+
+/-- Window-6 capacity formula C_6(B) = 8·min(2,2^B) + 4·min(3,2^B) + 9·min(4,2^B)
+    evaluates to 21 at B=0, 42 at B=1, and saturates at 64 for all B ≥ 2.
+    thm:conclusion-window6-capacity-bifurcation -/
+theorem conclusion_window6_capacity_bifurcation :
+    8 * min 2 (2 ^ 0) + 4 * min 3 (2 ^ 0) + 9 * min 4 (2 ^ 0) = 21 ∧
+    8 * min 2 (2 ^ 1) + 4 * min 3 (2 ^ 1) + 9 * min 4 (2 ^ 1) = 42 ∧
+    (∀ B : Nat, 2 ≤ B →
+      8 * min 2 (2 ^ B) + 4 * min 3 (2 ^ B) + 9 * min 4 (2 ^ B) = 64) := by
+  refine ⟨by omega, by omega, fun B hB => ?_⟩
+  have h4 : 4 ≤ 2 ^ B := by
+    calc 4 = 2 ^ 2 := by norm_num
+      _ ≤ 2 ^ B := Nat.pow_le_pow_right (by omega) hB
+  have hmin2 : min 2 (2 ^ B) = 2 := Nat.min_eq_left (by omega)
+  have hmin3 : min 3 (2 ^ B) = 3 := Nat.min_eq_left (by omega)
+  have hmin4 : min 4 (2 ^ B) = 4 := Nat.min_eq_left h4
+  rw [hmin2, hmin3, hmin4]
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R23: Index-compression gap
 -- ══════════════════════════════════════════════════════════════
 
