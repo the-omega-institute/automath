@@ -1270,4 +1270,32 @@ theorem fib_shift5 (n : Nat) : Nat.fib (n + 5) = 5 * Nat.fib (n + 1) + 3 * Nat.f
 
 theorem fib_fourteen_eq : Nat.fib 14 = 377 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R135: 2^m > F(m+2) for m >= 4
+-- ══════════════════════════════════════════════════════════════
+
+/-- 2^m > F(m+2) for m ≥ 4: full binary tree strictly exceeds golden-mean count.
+    cor:discussion-horizon-boundarylayer-phi-scaling -/
+theorem two_pow_gt_fib (m : Nat) (hm : 4 ≤ m) :
+    Nat.fib (m + 2) < 2 ^ m := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m, hm with
+    | 4, _ => native_decide
+    | 5, _ => native_decide
+    | m + 6, _ =>
+      have h1 := ih (m + 5) (by omega) (by omega)
+      have h2 := ih (m + 4) (by omega) (by omega)
+      have hfib : Nat.fib ((m + 6) + 2) = Nat.fib (m + 6) + Nat.fib ((m + 6) + 1) :=
+        Nat.fib_add_two
+      rw [show (m + 6) + 2 = m + 8 from by omega, show (m + 6) + 1 = m + 7 from by omega] at hfib
+      have hpow : 2 ^ (m + 6) = 2 ^ (m + 5) + 2 ^ (m + 5) := by ring
+      have hle : 2 ^ (m + 4) ≤ 2 ^ (m + 5) := Nat.pow_le_pow_right (by omega) (by omega)
+      linarith
+
+/-- Paper: cor:discussion-horizon-boundarylayer-phi-scaling -/
+theorem paper_two_pow_gt_fib (m : Nat) (hm : 4 ≤ m) :
+    Nat.fib (m + 2) < 2 ^ m :=
+  two_pow_gt_fib m hm
+
 end Omega

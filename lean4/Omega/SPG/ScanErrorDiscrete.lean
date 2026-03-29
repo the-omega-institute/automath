@@ -738,6 +738,26 @@ theorem paper_scanError_le_setMass {α β : Type*} [Fintype α] [Fintype β]
     scanError μ obs P ≤ setMass μ P :=
   scanError_le_setMass μ obs P
 
+/-- Scan error for symmetric difference bounded by event masses.
+    prop:spg-scan-error-cylinder consequence -/
+theorem scanError_symmDiff_le_setMass {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) :
+    scanError μ obs (symmDiff P Q) ≤ setMass μ P + setMass μ Q := by
+  calc scanError μ obs (symmDiff P Q)
+      ≤ setMass μ (symmDiff P Q) := scanError_le_setMass μ obs _
+    _ ≤ setMass μ (P ∪ Q) := by
+        apply setMass_mono; intro x hx
+        rcases hx with ⟨hp, _⟩ | ⟨hq, _⟩
+        · exact Or.inl hp
+        · exact Or.inr hq
+    _ ≤ setMass μ P + setMass μ Q := setMass_union_le μ P Q
+
+/-- Paper: scan error symmetric difference ≤ event masses -/
+theorem paper_scanError_symmDiff_le_setMass {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) :
+    scanError μ obs (symmDiff P Q) ≤ setMass μ P + setMass μ Q :=
+  scanError_symmDiff_le_setMass μ obs P Q
+
 /-- Scan error is bounded by the complement mass alone (single-sided bound). -/
 theorem scanError_le_setMass_compl {α β : Type*} [Fintype α] [Fintype β]
     (μ : PMF α) (obs : α → β) (P : Set α) :

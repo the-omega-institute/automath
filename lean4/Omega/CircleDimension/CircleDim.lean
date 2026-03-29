@@ -131,4 +131,15 @@ theorem paper_circleDim_axiomatic_rigidity (f : Nat → Nat → Nat)
     ∀ n t, f n t = circleDim n t :=
   circleDim_axiomatic_rigidity f hAdd hNorm hFin
 
+/-- Half circle dimension is positive iff free rank is positive.
+    prop:circle-dimension-laws -/
+theorem halfCircleDim_pos_iff (r t : Nat) :
+    0 < halfCircleDim r t ↔ 0 < r := by
+  simp [halfCircleDim, circleDim, Nat.cast_pos]
+
+/-- Paper: prop:circle-dimension-laws -/
+theorem paper_halfCircleDim_pos_iff (r t : Nat) :
+    0 < halfCircleDim r t ↔ 0 < r :=
+  halfCircleDim_pos_iff r t
+
 end Omega.CircleDimension
