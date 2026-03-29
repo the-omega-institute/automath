@@ -81,6 +81,11 @@ theorem fredholmGoldenMean_at_four : (fredholmGoldenMean 4).det = -19 := by
 theorem fredholmGoldenMean_at_five : (fredholmGoldenMean 5).det = -29 := by
   rw [fredholmGoldenMean_det]; ring
 
+/-- Fredholm determinant at z=0: det(I - 0·A) = 1 (normalization).
+    subsec:operator-zeta-interface -/
+theorem fredholmGoldenMean_at_zero : (fredholmGoldenMean 0).det = 1 := by
+  rw [fredholmGoldenMean_det]; ring
+
 /-! ## Trace sequence for golden-mean matrix
 
 The trace sequence Tr(A^n) satisfies the Fibonacci-like recurrence
@@ -240,6 +245,24 @@ theorem lucasNum_pos (n : ℕ) : 0 < lucasNum n := by
     | n + 2 =>
       rw [lucasNum_succ_succ]
       linarith [ih (n + 1) (by omega), ih n (by omega)]
+
+/-- The degeneracy ghost 2^n - L(n) is strictly positive for n ≥ 3,
+    proved by strong induction using 2^(n+2) - L(n+2) = 2·(2^(n+1) - L(n+1)) - (2^n - L(n)).
+    rem:degeneracy-zeta-bridge -/
+theorem degeneracy_ghost_positive (n : ℕ) (hn : 3 ≤ n) : 0 < (2 : ℤ) ^ n - lucasNum n := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n, hn with
+    | 3, _ => simp [lucasNum]
+    | 4, _ => simp [lucasNum]
+    | n + 5, _ =>
+      rw [lucasNum_succ_succ]
+      have h1 := ih (n + 4) (by omega) (by omega)
+      have h2 := ih (n + 3) (by omega) (by omega)
+      have hp1 : (2 : ℤ) ^ (n + 5) = 2 * 2 ^ (n + 4) := by ring
+      have hp2 : (2 : ℤ) ^ (n + 4) = 2 * 2 ^ (n + 3) := by ring
+      have hp3 : (0 : ℤ) < 2 ^ (n + 3) := by positivity
+      linarith
 
 /-- Trace of A^(n+2) equals F(n+1) + F(n+3), combining trace=Lucas and Lucas=Fib sum.
     thm:zeta-syntax-trace-linear-recurrence -/

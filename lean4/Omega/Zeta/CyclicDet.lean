@@ -338,6 +338,16 @@ theorem cyclicPerm2_rank : (cyclicPerm2 ^ 0).trace = 2 := by native_decide
     Trace(Π_3^0) = 3 = dim. -/
 theorem cyclicPerm3_rank : (cyclicPerm3 ^ 0).trace = 3 := by native_decide
 
+/-- For Π_4: exactly 4 eigenvalues on the unit circle.
+    Trace(Π_4^0) = 4 = dim.
+    thm:operator-resolvent-trace-jump-index -/
+theorem cyclicPerm4_rank : (cyclicPerm4 ^ 0).trace = 4 := by native_decide
+
+/-- For Π_5: exactly 5 eigenvalues on the unit circle.
+    Trace(Π_5^0) = 5 = dim.
+    thm:operator-resolvent-trace-jump-index -/
+theorem cyclicPerm5_rank : (cyclicPerm5 ^ 0).trace = 5 := by native_decide
+
 /-- For Π_6: exactly 6 eigenvalues on the unit circle.
     Trace(Π_6^0) = 6 = dim. -/
 theorem cyclicPerm6_rank : (cyclicPerm6 ^ 0).trace = 6 := by native_decide
