@@ -177,6 +177,13 @@ theorem stableValueFin_bijective (m : Nat) :
     Function.Bijective (stableValueFin (m := m)) :=
   ⟨stableValueFin_injective m, stableValueFin_surjective m⟩
 
+/-- The Zeckendorf value map gives a bijection X_m ↔ Fin(F_{m+2}), proving that
+    the Fibonacci quotient monoid is isomorphic to {0,...,F_{m+2}-1}.
+    thm:monoid-quotient-is-N -/
+theorem paper_monoid_quotient_is_N (m : Nat) :
+    Function.Bijective (stableValueFin (m := m)) :=
+  stableValueFin_bijective m
+
 /-- The fiber multiplicity of a stable word x: the number of raw words folding to x. -/
 def fiberMultiplicity (x : X m) : Nat := (fiber x).card
 

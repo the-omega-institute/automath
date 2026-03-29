@@ -954,4 +954,12 @@ theorem hiddenBitCount_floor_div_three (m : Nat) :
   have hmod := two_pow_mod_three m
   split_ifs at hclosed hmod with heven <;> omega
 
+/-- Fold is canonical (value-preserving), idempotent, and surjective.
+    prop:fold-basic-paper -/
+theorem paper_fold_basic (m : Nat) :
+    (∀ w : Word m, Fold (Fold w).1 = Fold w) ∧
+    (Function.Surjective (Fold (m := m))) ∧
+    (∀ w : Word m, stableValue (Fold w) = weight w % Nat.fib (m + 2)) :=
+  ⟨fun w => Fold_idempotent w, Fold_surjective m, fun w => stableValue_Fold_mod w⟩
+
 end Omega

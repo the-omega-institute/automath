@@ -259,6 +259,24 @@ theorem paper_stable_commutative_ring (m : Nat) :
     Nonempty (X m ≃+* ZMod (Nat.fib (m + 2))) :=
   ⟨stableValueRingEquiv m⟩
 
+/-- The stable type X_m is isomorphic to ℤ/F_{m+2}ℤ as a commutative ring.
+    thm:finite-resolution-mod -/
+theorem paper_finite_resolution_mod (m : Nat) :
+    Nonempty (X m ≃+* ZMod (Nat.fib (m + 2))) :=
+  ⟨stableValueRingEquiv m⟩
+
+/-- When F(m+2) is prime, X_m is a field (the Fibonacci field phase).
+    cor:field-phase-fib-prime -/
+theorem paper_field_phase_fib_prime (m : Nat) (hp : Nat.Prime (Nat.fib (m + 2))) :
+    Nonempty (Field (X m)) :=
+  ⟨instFieldOfPrime hp⟩
+
+/-- (X_m, stableAdd, stableMul) is a commutative ring isomorphic to ℤ/F_{m+2}ℤ.
+    thm:mul-definitional -/
+theorem paper_mul_definitional (m : Nat) :
+    Nonempty (CommRing (X m)) ∧ Nonempty (X m ≃+* ZMod (Nat.fib (m + 2))) :=
+  ⟨⟨inferInstance⟩, ⟨stableValueRingEquiv m⟩⟩
+
 /-- The additive order of stableOne equals F(m+2): F(m+2) • stableOne = stableZero.
     thm:stable-add-commutative-monoid -/
 theorem stableAdd_nsmul_one_eq_zero (m : Nat) (hm : 1 ≤ m) :
