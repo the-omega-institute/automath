@@ -394,6 +394,21 @@ theorem paper_scanError_union_le {α β : Type*} [Fintype α] [Fintype β]
     scanError μ obs (P ∪ Q) ≤ scanError μ obs P + scanError μ obs Q :=
   scanError_union_le μ obs P Q
 
+/-- Scan error of intersection bounded by sum of individual scan errors.
+    cor:spg-clarity-basic -/
+theorem scanError_inter_le {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) :
+    scanError μ obs (P ∩ Q) ≤ scanError μ obs P + scanError μ obs Q := by
+  -- P ∩ Q = (Pᶜ ∪ Qᶜ)ᶜ by De Morgan
+  rw [show P ∩ Q = (Pᶜ ∪ Qᶜ)ᶜ from by ext x; simp [not_or]]
+  -- scanError((Pᶜ ∪ Qᶜ)ᶜ) = scanError(Pᶜ ∪ Qᶜ) by complement symmetry
+  rw [scanError_compl]
+  -- ≤ scanError(Pᶜ) + scanError(Qᶜ) by union sub-additivity
+  calc scanError μ obs (Pᶜ ∪ Qᶜ)
+      ≤ scanError μ obs Pᶜ + scanError μ obs Qᶜ := scanError_union_le μ obs Pᶜ Qᶜ
+    _ = scanError μ obs P + scanError μ obs Q := by
+        rw [scanError_compl μ obs P, scanError_compl μ obs Q]
+
 /-- Discrete observable purity: every observation cell is all-in or all-out.
     def:spg-discrete-observable-purity -/
 def ObservablePure {α β : Type*} [Fintype α] [Fintype β]

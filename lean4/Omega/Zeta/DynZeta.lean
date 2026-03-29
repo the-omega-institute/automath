@@ -390,6 +390,25 @@ theorem degeneracy_ghost_strict_mono (n : ℕ) (hn : 3 ≤ n) :
     have hpow_pos : (0 : ℤ) < 2 ^ (n + 3) := by positivity
     linarith
 
+/-- Lucas numbers mod 3 have period 8: L(n+8) % 3 = L(n) % 3 for all n.
+    rem:degeneracy-zeta-bridge -/
+theorem lucasNum_mod3_period_eight (n : ℕ) :
+    lucasNum (n + 8) % 3 = lucasNum n % 3 := by
+  -- Expand L(n+8) step by step using the recurrence L(n+2) = L(n+1) + L(n)
+  simp only [show n + 8 = (n + 6) + 2 from by omega, lucasNum_succ_succ (n + 6),
+    show n + 6 = (n + 4) + 2 from by omega, lucasNum_succ_succ (n + 4),
+    show n + 4 = (n + 2) + 2 from by omega, lucasNum_succ_succ (n + 2),
+    show (n + 6) + 1 = (n + 5) + 2 from by omega, lucasNum_succ_succ (n + 5),
+    show n + 5 = (n + 3) + 2 from by omega, lucasNum_succ_succ (n + 3),
+    show n + 3 = (n + 1) + 2 from by omega, lucasNum_succ_succ (n + 1),
+    show (n + 5) + 1 = (n + 4) + 2 from by omega,
+    show (n + 3) + 1 = (n + 2) + 2 from by omega,
+    show (n + 4) + 1 = (n + 3) + 2 from by omega,
+    show (n + 2) + 1 = (n + 1) + 2 from by omega,
+    show (n + 1) + 1 = n + 2 from by omega,
+    lucasNum_succ_succ n]
+  omega
+
 /-! ## Zeta rationality and pole structure
 
 For a d×d matrix, ζ_A(z) = det(I-zA)⁻¹ is a rational function with

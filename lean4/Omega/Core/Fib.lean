@@ -1,5 +1,6 @@
 import Mathlib.Data.Nat.Fib.Basic
 import Mathlib.Tactic.Linarith
+import Mathlib.Data.Nat.Prime.Defs
 
 /-! ### Convenience lemmas for `Nat.fib`
 
@@ -1368,5 +1369,36 @@ theorem floor_pow_div3_parity_bounded (m : Nat) (hm1 : 2 ≤ m) (hm2 : m ≤ 12)
 theorem paper_floor_pow_div3_parity_bounded (m : Nat) (hm1 : 2 ≤ m) (hm2 : m ≤ 12) :
     (2 ^ m / 3) % 2 = if Even m then 1 else 0 :=
   floor_pow_div3_parity_bounded m hm1 hm2
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R147: Fibonacci prime entry point
+-- ══════════════════════════════════════════════════════════════
+
+/-- For prime p dividing F(k), p divides F(n) iff k divides n.
+    thm:conclusion-valuation-fib-gcd-instances -/
+theorem fib_prime_entry_point (p k n : Nat) (hp : Nat.Prime p) (hk : 1 ≤ k)
+    (hentry : p ∣ Nat.fib k) (hmin : ∀ j, 1 ≤ j → j < k → ¬ (p ∣ Nat.fib j)) :
+    p ∣ Nat.fib n ↔ k ∣ n := by
+  constructor
+  · -- (→) p | F(n) → k | n
+    intro hpn
+    -- p | gcd(F(k), F(n)) = F(gcd(k,n))
+    have hgcd_dvd : p ∣ Nat.fib (Nat.gcd k n) := by
+      rw [← fib_gcd]
+      exact Nat.dvd_gcd hentry hpn
+    -- gcd(k,n) ≤ k
+    by_cases hn0 : n = 0
+    · subst hn0; simp
+    · have hgcd_pos : 0 < Nat.gcd k n := Nat.pos_of_ne_zero (by
+        intro h; exact hn0 (Nat.eq_zero_of_gcd_eq_zero_right h))
+      -- If gcd(k,n) < k, then by minimality, p ∤ F(gcd(k,n)), contradiction
+      by_contra hndvd
+      have hgcd_lt : Nat.gcd k n < k := by
+        have hle := Nat.gcd_le_left n (by omega : 0 < k)
+        exact Nat.lt_of_le_of_ne hle (fun h => hndvd (h ▸ Nat.gcd_dvd_right k n))
+      exact hmin (Nat.gcd k n) (by omega) hgcd_lt hgcd_dvd
+  · -- (←) k | n → p | F(n)
+    intro hkn
+    exact dvd_trans hentry (Nat.fib_dvd k n hkn)
 
 end Omega
