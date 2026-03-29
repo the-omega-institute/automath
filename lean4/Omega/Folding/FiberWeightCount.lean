@@ -362,6 +362,15 @@ theorem fiberMultiplicity_allFalse_closed (m : Nat) :
       -- (m + 2) / 2 = m / 2 + 1 for natural number division
       omega
 
+/-- Exact weight count at weight F_{m+2} equals ⌊m/2⌋.
+    prop:pom-ewc-fib-closed -/
+theorem exactWeightCount_fib_closed (m : Nat) :
+    exactWeightCount m (Nat.fib (m + 2)) = m / 2 := by
+  have h1 := fiberMultiplicity_allFalse m
+  have h2 := fiberMultiplicity_allFalse_closed m
+  unfold exactWeightCount
+  omega
+
 -- ══════════════════════════════════════════════════════════════
 -- Weight congruence class count
 -- ══════════════════════════════════════════════════════════════
