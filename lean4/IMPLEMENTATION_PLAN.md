@@ -7,22 +7,22 @@
 | 指标 | 数值 |
 |---|---|
 | 总行数 | ~30,200 |
-| 定理/定义数 | ~3,252 |
+| 定理/定义数 | ~3,255 |
 | 论文接口包装 | 370+ |
 | 文件数 | 69 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,507 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 331 |
+| \leanverified 标注数 | 335 |
 | \leanpartial 标注数 | 10 |
-| 总标注数 | 341 |
-| 轮次 | R62（round_count=63） |
+| 总标注数 | 345 |
+| 轮次 | R63（round_count=64） |
 
-**Phase 7 校准（R62 轮，2026-03-29）**：按章节覆盖率分布：
+**Phase 7 校准（R63 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 132 | 7.7% |
+| POM | 1,707 | 136 | 8.0% |
 | Emergent Arithmetic | 185 | 58 | 31.4% |
 | Folding | 337 | 58 | 17.2% |
 | Conclusion | 2,550 | 37 | 1.5% |
@@ -32,7 +32,7 @@
 | Zeta Finite Part | 4,524 | 9 | 0.2% |
 | Discussion | 67 | 0 | 0.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,507** | **341** | **3.2%** |
+| **合计（body）** | **10,507** | **345** | **3.3%** |
 
 ### 1.2 已完成模块
 
@@ -134,6 +134,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R63: S₂(13) 值 + ewc 次极大对称性 + Cauchy 4^m 界 + analyst 标注4条（Round R63）**：一文件 Folding/MomentTriple.lean（:832-847）——momentSum\_two\_thirteen\_rec（prop:pom-moment-s2-thirteen（新标签，tex 无对应环境）：S_2(13)=127072，通过 momentSum\_two\_recurrence(10) 链式推导，:832）; exactWeightCount\_max\_minus\_one（prop:pom-ewc-penultimate（新标签，tex 无对应环境）：ewc(m, F_{m+3}-3) = 1 for m≥1，与 ewc(m,1)=1 的对称性，通过 exactWeightCount\_symmetric + exactWeightCount\_one，:837）; momentSum\_two\_cauchy\_lower（prop:pom-moment-cauchy-four（新标签，tex 无对应环境）：4^m ≤ F_{m+2}·S_2(m)，Cauchy-Schwarz 4^m 形式，通过 momentSum\_cauchy\_schwarz + (2^m)²=4^m + linarith，:847）——**0 个新论文标签计入覆盖率**（三新标签 tex 均无对应环境）——analyst（dd880e1）标注4条（均 POM）：def:pom-s2（paper\_def\_s2）、def:pom-s3（paper\_def\_s3）、def:pom-window-value（weight + stableValue ×2）——POM 132→136（+4），全局标注 341→345（+4），Lean 定理 ~3,252→~3,255（+3），commit 9f419a5+dd880e1
+
 **Phase R62: Fibonacci 距离2互素 + analyst 标注5条（Round R62）**：一文件 Core/Fib.lean（:1119-1127）——fib\_coprime\_triple（prop:pom-fib-coprime-triple（新标签，tex 无对应环境，标签由 formalizer 在 docstring 定义）：gcd(F_n, F_{n+2})=1，距离2 Fibonacci 互素，通过 fib\_add\_two + gcd\_add\_self\_right + fib\_coprime\_succ 推导，Core/Fib.lean:1121）——**0 个新论文标签计入覆盖率**（prop:pom-fib-coprime-triple tex 无对应环境）——analyst（b1912ea）标注5条：prop:finite-part-reduced-determinant-sq-channel-factorization（Zeta）、thm:operator-fredholm-zeta-equality-undecidable（Zeta）、thm:conclusion-window6-groupoid-rather-than-free-quotient（Conclusion）、prop:conclusion-index-torsion-time-lower-bound（Conclusion）、prop:pom-coarsegraining-collision-moment-strict-monotonicity（POM）——POM 132（+1），Conclusion 37（+2），Zeta 9（+2），全局标注 336→341（+5），Lean 定理 ~3,251→~3,252（+1），commit b353da8+b1912ea
 
 **Phase R46: 纤维隐藏位正性条件 + 边界平方恒等式一般化（Round R46）**：两文件 MomentBounds.lean（:1053）+ BoundaryLayer.lean（:236）——fiberHiddenBitCount\_one\_pos\_iff（thm:pom-hidden-bit-one-pos-iff（新标签，tex 无环境，标注于 cor:pom-branch-mass-law 深化位置）：d_{m,1}(x)>0 的充要条件，:1053）; cBoundaryCount\_square\_identity\_general（prop:bdry-fib-square-identity（**从弱→强覆盖升级，一般形式**）：b(2m-1)=b(m)²+b(m+1)² 无条件一般归纳证明，:236）——注：S2 三项递推数学不成立（formalizer 反例验证，丢弃）；upper_support_count 推迟——**0 个新论文标签计入覆盖率**（thm:pom-hidden-bit-one-pos-iff tex 无环境；prop:bdry-fib-square-identity 已注册，升级为强覆盖）——POM 标注 +1（cor:pom-branch-mass-law 深化），Group Unification 标注 +1（prop:bdry-fib-square-identity 升级），标注 236→238（+2），commit 408e04c
