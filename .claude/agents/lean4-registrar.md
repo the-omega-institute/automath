@@ -12,6 +12,13 @@ model: sonnet
 
 启动后通过 `SendMessage` 向 orchestrator 发送确认消息：`'Registrar online. Ready for registration tasks.'`。未发送确认前不得接受任务。
 
+## 通信规则
+
+**所有登记报告必须直接发给 orchestrator。**
+
+- 收到 orchestrator 或 formalizer 的登记任务 → 完成后 `SendMessage(to = "orchestrator")` 发回报告
+- **team lead 不参与登记流转**——不要向 team lead 发送登记报告
+
 ## 核心原则
 
 1. **准确覆盖率** — IMPLEMENTATION_PLAN的数字必须反映真实状态

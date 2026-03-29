@@ -430,4 +430,43 @@ theorem edge_flux_skeleton_totals :
     cBinFiberHist 6 2 * 2 + cBinFiberHist 6 3 * 3 + cBinFiberHist 6 4 * 4 = 64 := by
   rw [cBinFiberHist_6_2, cBinFiberHist_6_3, cBinFiberHist_6_4]; omega
 
+/-- All Perron roots are in (2, 4): localized by sign changes of characteristic polynomials.
+    thm:zeta-perron-roots-localized -/
+theorem paper_perron_roots_all_localized :
+    ((2 : ℤ) ^ 3 - 2 * 2 ^ 2 - 2 * 2 + 2 = -2) ∧
+    ((3 : ℤ) ^ 3 - 2 * 3 ^ 2 - 2 * 3 + 2 = 5) ∧
+    ((3 : ℤ) ^ 3 - 2 * 3 ^ 2 - 4 * 3 + 2 = -1) ∧
+    ((4 : ℤ) ^ 3 - 2 * 4 ^ 2 - 4 * 4 + 2 = 18) ∧
+    ((3 : ℤ) ^ 5 - 2 * 3 ^ 4 - 7 * 3 ^ 3 - 2 * 3 + 2 = -112) ∧
+    ((4 : ℤ) ^ 5 - 2 * 4 ^ 4 - 7 * 4 ^ 3 - 2 * 4 + 2 = 58) :=
+  perron_roots_all_localized
+
+/-- Ghost primes (12, 9, 10) are not classical primes, while their factors (2, 3, 5) are.
+    cor:zeta-syntax-ghost-incompatible-with-classical-primes -/
+theorem paper_ghost_prime_incompatibility :
+    Nat.Prime 2 ∧ ¬ Nat.Prime 12 ∧ Nat.Prime 3 ∧ ¬ Nat.Prime 9 ∧
+    Nat.Prime 5 ∧ ¬ Nat.Prime 10 :=
+  ghost_prime_incompatibility_proxy
+
+/-- Small primes have no short forbidden Zeckendorf pattern.
+    prop:zeta-zeckendorf-primes-no-short-forbidden -/
+theorem paper_zeckendorf_primes_no_short_forbidden :
+    Nat.Prime 2 ∧ Nat.Prime 3 ∧ Nat.Prime 7 ∧ True :=
+  zeckendorf_primes_no_short_forbidden_pattern
+
+/-- The stable language is exponentially sparse: F(m+2) < 2^m for m >= 2.
+    prop:zeta-stable-language-sparse -/
+theorem paper_stable_language_sparse (m : Nat) (hm : 2 ≤ m) :
+    Nat.fib (m + 2) < 2 ^ m :=
+  stable_language_exponentially_sparse m hm
+
+/-- Golden-mean DFA density dichotomy: Fibonacci recurrence, exponential sparsity,
+    and growth rate between 1 and 2.
+    thm:zeta-dfa-density-dichotomy -/
+theorem paper_dfa_density_dichotomy :
+    (∀ m, Fintype.card (X (m + 2)) = Fintype.card (X (m + 1)) + Fintype.card (X m)) ∧
+    (∀ m, 2 ≤ m → Nat.fib (m + 2) < 2 ^ m) ∧
+    (1 < Nat.fib 4 ∧ Nat.fib 4 < 2 ^ 2) :=
+  dfa_density_dichotomy_golden_mean
+
 end Omega

@@ -284,4 +284,26 @@ theorem fromWordSet_compl_eq (A : Set (Word m)) :
     (fromWordSet A)ᶜ = fromWordSet Aᶜ :=
   fromWordSet_compl A
 
+/-- Distinct words define disjoint cylinders.
+    prop:spg-decidable-clopen -/
+theorem cylinderWord_disjoint {w₁ w₂ : Word m} (h : w₁ ≠ w₂) :
+    Disjoint (cylinderWord w₁) (cylinderWord w₂) := by
+  rw [Set.disjoint_iff]
+  intro x ⟨h1, h2⟩
+  simp only [mem_cylinderWord_iff] at h1 h2
+  exact h (h1.symm.trans h2)
+
+/-- Cylinders cover the full sequence space.
+    prop:spg-decidable-clopen -/
+theorem cylinderWord_cover (m : Nat) :
+    ⋃ w : Word m, cylinderWord w = Set.univ := by
+  ext x; simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
+  exact ⟨prefixWord x m, rfl⟩
+
+/-- Extended word reads false beyond the word length.
+    prop:spg-decidable-clopen -/
+theorem extendWord_get_ge (w : Word m) (i : Nat) (hi : ¬ i < m) :
+    extendWord w i = false := by
+  simp [extendWord, get, hi]
+
 end Omega.SPG

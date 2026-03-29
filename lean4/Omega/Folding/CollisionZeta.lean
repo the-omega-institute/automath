@@ -66,6 +66,47 @@ theorem collisionKernel3_trace_recurrence :
       2 * (collisionKernel3 ^ 2).trace = (collisionKernel3 ^ 5).trace) := by
   native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R129: Unbounded trace recurrence for A₂
+-- ══════════════════════════════════════════════════════════════
+
+/-- Trace recurrence for A₂ (all n): Tr(A₂^{n+3}) = 2·Tr(A₂^{n+2}) + 2·Tr(A₂^{n+1}) - 2·Tr(A₂^n).
+    Proved algebraically via Cayley-Hamilton: A₂³ = 2A₂² + 2A₂ - 2I.
+    rem:pom-a2-primitive-fast -/
+theorem collisionKernel2_trace_recurrence_unbounded (n : ℕ) :
+    (collisionKernel2 ^ (n + 3)).trace =
+      2 * (collisionKernel2 ^ (n + 2)).trace +
+      2 * (collisionKernel2 ^ (n + 1)).trace -
+      2 * (collisionKernel2 ^ n).trace := by
+  have hCH := collisionKernel2_cayley_hamilton
+  -- A^(n+3) = A^n * A^3 = A^n * (2·A^2 + 2·A - 2·I)
+  -- A³ = 2•A² + 2•A - 2•I, so A^(n+3) = A^n · A³ = 2•A^(n+2) + 2•A^(n+1) - 2•A^n
+  have hpow : collisionKernel2 ^ (n + 3) =
+      2 • collisionKernel2 ^ (n + 2) + 2 • collisionKernel2 ^ (n + 1) -
+      2 • collisionKernel2 ^ n := by
+    calc collisionKernel2 ^ (n + 3)
+        = collisionKernel2 ^ n * collisionKernel2 ^ 3 := by rw [← pow_add]
+      _ = collisionKernel2 ^ n * (2 • collisionKernel2 ^ 2 + 2 • collisionKernel2 - 2 • 1) := by
+          rw [hCH]
+      _ = 2 • (collisionKernel2 ^ n * collisionKernel2 ^ 2) +
+          2 • (collisionKernel2 ^ n * collisionKernel2) -
+          2 • (collisionKernel2 ^ n * 1) := by
+          simp only [mul_add, mul_sub, mul_smul_comm]
+      _ = 2 • collisionKernel2 ^ (n + 2) + 2 • collisionKernel2 ^ (n + 1) -
+          2 • collisionKernel2 ^ n := by
+          rw [← pow_add, ← pow_succ, mul_one]
+  rw [hpow, Matrix.trace_sub, Matrix.trace_add, Matrix.trace_smul, Matrix.trace_smul,
+    Matrix.trace_smul]
+  ring
+
+/-- Paper: rem:pom-a2-primitive-fast -/
+theorem paper_collisionKernel2_trace_recurrence_unbounded (n : ℕ) :
+    (collisionKernel2 ^ (n + 3)).trace =
+      2 * (collisionKernel2 ^ (n + 2)).trace +
+      2 * (collisionKernel2 ^ (n + 1)).trace -
+      2 * (collisionKernel2 ^ n).trace :=
+  collisionKernel2_trace_recurrence_unbounded n
+
 /-! ### Identity matrix trace -/
 
 /-- tr(I_3) = tr(A^0) = 3 for both collision kernels.
@@ -297,6 +338,22 @@ theorem pisano_period_7 : Nat.fib 16 % 7 = 0 ∧ Nat.fib 17 % 7 = 1 := by native
 /-- Pisano period π(6) = 24: F(24) ≡ 0 (mod 6) and F(25) ≡ 1 (mod 6).
     def:pom-pisano-period-6 -/
 theorem pisano_period_6 : Nat.fib 24 % 6 = 0 ∧ Nat.fib 25 % 6 = 1 := by native_decide
+
+/-- Pisano period π(8) = 12: F(12) ≡ 0 (mod 8) and F(13) ≡ 1 (mod 8).
+    def:pom-pisano-period-2 -/
+theorem pisano_period_8 : Nat.fib 12 % 8 = 0 ∧ Nat.fib 13 % 8 = 1 := by native_decide
+
+/-- Pisano period π(11) = 10: F(10) ≡ 0 (mod 11) and F(11) ≡ 1 (mod 11).
+    def:pom-pisano-period-2 -/
+theorem pisano_period_11 : Nat.fib 10 % 11 = 0 ∧ Nat.fib 11 % 11 = 1 := by native_decide
+
+/-- Pisano period π(9) = 24: F(24) ≡ 0 (mod 9) and F(25) ≡ 1 (mod 9).
+    def:pom-pisano-period-2 -/
+theorem pisano_period_9 : Nat.fib 24 % 9 = 0 ∧ Nat.fib 25 % 9 = 1 := by native_decide
+
+/-- Pisano period π(10) = 60: F(60) ≡ 0 (mod 10) and F(61) ≡ 1 (mod 10).
+    def:pom-pisano-period-2 -/
+theorem pisano_period_10 : Nat.fib 60 % 10 = 0 ∧ Nat.fib 61 % 10 = 1 := by native_decide
 
 /-- The Fibonacci entry point for 21: α(21) = 8.
     F(8) ≡ 0 (mod 21) and F(k) ≢ 0 (mod 21) for 1 ≤ k < 8.

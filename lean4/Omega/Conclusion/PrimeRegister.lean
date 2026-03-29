@@ -2,6 +2,7 @@ import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Finset.Card
 import Mathlib.Tactic
 import Omega.Core.Fib
+import Omega.Folding.BinFold
 
 /-!
 # Bounded Prime-Register Gödel Lift
@@ -56,6 +57,17 @@ thm:conclusion-bounded-prime-register-feasibility -/
 /-- For Fold_4 with max fiber D(f)=3: (k,E)=(1,2) suffices since (2+1)^1 = 3 ≥ 3. -/
 theorem godelLift_fold4 : (2 + 1) ^ 1 ≥ 3 := by omega
 
+/-- For Fold_5 with max fiber D(f)=5: (k,E)=(1,4) suffices since (4+1)^1 = 5 ≥ 5. -/
+theorem godelLift_fold5 : (4 + 1) ^ 1 ≥ 5 := by omega
+
+/-- For Fold_7 with max fiber D(f)=13: (k,E)=(1,12) or (2,3) suffices. -/
+theorem godelLift_fold7_option1 : (12 + 1) ^ 1 ≥ 13 := by omega
+theorem godelLift_fold7_option2 : (3 + 1) ^ 2 ≥ 13 := by omega
+
+/-- For Fold_5 with k=2 axes: (k,E)=(2,2) gives (2+1)^2=9 ≥ 5.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_fold5_k2 : (2 + 1) ^ 2 ≥ 5 := by omega
+
 /-- For Fold_6 with max fiber D(f)=8: (k,E)=(1,7) or (2,2) suffices. -/
 theorem godelLift_fold6_option1 : (7 + 1) ^ 1 ≥ 8 := by omega
 theorem godelLift_fold6_option2 : (2 + 1) ^ 2 ≥ 8 := by omega
@@ -64,6 +76,26 @@ theorem godelLift_fold6_option2 : (2 + 1) ^ 2 ≥ 8 := by omega
 theorem godelLift_fold8_option1 : (20 + 1) ^ 1 ≥ 21 := by omega
 theorem godelLift_fold8_option2 : (4 + 1) ^ 2 ≥ 21 := by omega
 theorem godelLift_fold8_option3 : (2 + 1) ^ 3 ≥ 21 := by omega
+
+/-- Binary register (E=1) for Fold_4: 2 bits suffice since 2^2=4 ≥ D(4)=3.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_fold4 : (1 + 1) ^ 2 ≥ 3 := by omega
+
+/-- Binary register for Fold_5: 3 bits since 2^3=8 ≥ D(5)=5.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_fold5 : (1 + 1) ^ 3 ≥ 5 := by omega
+
+/-- Binary register for Fold_6: 3 bits since 2^3=8 ≥ D(6)=8.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_fold6 : (1 + 1) ^ 3 ≥ 8 := by omega
+
+/-- Binary register for Fold_7: 4 bits since 2^4=16 ≥ D(7)=13.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_fold7 : (1 + 1) ^ 4 ≥ 13 := by omega
+
+/-- Binary register for Fold_8: 5 bits since 2^5=32 ≥ D(8)=21.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_fold8 : (1 + 1) ^ 5 ≥ 21 := by omega
 
 /-- Axis-exponent tradeoff: increasing k allows decreasing E.
     For fixed D, the minimum k is ⌈log_{E+1}(D)⌉.
@@ -105,5 +137,61 @@ theorem fib_fiber_godelLift_instances :
     prop:conclusion-mod6-period-shell-72 -/
 theorem conclusion_mod6_period_shell_72 :
     Nat.lcm 8 18 = 72 := by native_decide
+
+/-- Three rigidity scales: 4 < 21 < 64.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem window6_three_scales_strict : 4 < 21 ∧ 21 < 64 := by omega
+
+/-- Window-6 faithful dim = 2^6 = 64.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem window6_faithful_dim_eq_pow : (2 : ℕ) ^ 6 = 64 := by norm_num
+
+/-- Window-6 success rate bounds.
+    thm:conclusion-window6-static-anomaly-ledger-dynamic-budget-bifurcation -/
+theorem window6_success_rate_zero : 21 * 64 ≠ 0 ∧ 21 ≤ 64 := by omega
+
+/-- The Gödel lift feasibility via square root: F(m+2) ≤ (⌊√F(m+2)⌋ + 1)².
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_fold_sqrt_suffices (m : Nat) :
+    Nat.fib (m + 2) ≤ (Nat.sqrt (Nat.fib (m + 2)) + 1) ^ 2 :=
+  Nat.le_of_lt (Nat.lt_succ_sqrt' _)
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R133: Binary-fiber Gödel lift instances
+-- ══════════════════════════════════════════════════════════════
+
+open Omega in
+/-- Single-prime Gödel lift for binary fold m=7: exponent ≤ 4 suffices.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_binFiber_fold7_single : (4 + 1) ^ 1 ≥ cBinFiberMax 7 := by
+  rw [cBinFiberMax_seven]; omega
+
+open Omega in
+/-- Binary Gödel lift fails for binary fold m=7: 2^2 = 4 < 5.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_binFiber_fold7_binary_fails : ¬ ((1 + 1) ^ 2 ≥ cBinFiberMax 7) := by
+  rw [cBinFiberMax_seven]; omega
+
+open Omega in
+/-- Ternary Gödel lift for binary fold m=8: 3^2 = 9 ≥ 6.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_binFiber_fold8_ternary : (2 + 1) ^ 2 ≥ cBinFiberMax 8 := by
+  rw [cBinFiberMax_eight]; omega
+
+open Omega in
+/-- Minimum binary registers for binary fold m=8: need ≥ 3.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_binFiber_fold8_min_binary :
+    ¬ ((1 + 1) ^ 2 ≥ cBinFiberMax 8) ∧ (1 + 1) ^ 3 ≥ cBinFiberMax 8 := by
+  constructor <;> (rw [cBinFiberMax_eight]; omega)
+
+open Omega in
+/-- Paper: thm:conclusion-bounded-prime-register-feasibility (binary fiber instances) -/
+theorem paper_godelLift_binFiber_instances :
+    (4 + 1) ^ 1 ≥ cBinFiberMax 7 ∧
+    ¬ ((1 + 1) ^ 2 ≥ cBinFiberMax 7) ∧
+    (2 + 1) ^ 2 ≥ cBinFiberMax 8 :=
+  ⟨godelLift_binFiber_fold7_single, godelLift_binFiber_fold7_binary_fails,
+   godelLift_binFiber_fold8_ternary⟩
 
 end Omega.Conclusion

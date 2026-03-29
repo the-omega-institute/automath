@@ -1839,4 +1839,33 @@ theorem max_popcount_eq (m : Nat) (hm : 1 ≤ m) :
       Finset.mem_image.mpr ⟨y, Finset.mem_univ _, rfl⟩
     linarith [Finset.le_max' _ _ hmem]
 
+/-- Edge count ≥ vertex count for n ≥ 3: E(n) ≥ F(n+2).
+    cor:pom-fibcube-edge-closed-form -/
+theorem fibcubeEdgeCount_ge_vertex (n : Nat) (hn : 3 ≤ n) :
+    Nat.fib (n + 2) ≤ fibcubeEdgeCount n := by
+  -- From fibcubeEdgeCount_closed: 5*E(n) = n*F(n+1) + 2*(n+1)*F(n)
+  have hclosed := fibcubeEdgeCount_closed n
+  -- Need: 5*F(n+2) ≤ 5*E(n) = n*F(n+1)+2*(n+1)*F(n)
+  -- i.e., 5*(F(n+1)+F(n)) ≤ n*F(n+1)+2*(n+1)*F(n)
+  -- i.e., (n-5)*F(n+1) + (2n-3)*F(n) ≥ 0
+  have hfib := Nat.fib_add_two (n := n)
+  -- For n ≥ 3: 2n-3 ≥ 3, and F(n+1) ≥ F(n) ≥ 1
+  -- Case-split: n=3, n=4, n≥5
+  match n, hn with
+  | 3, _ => native_decide
+  | 4, _ => native_decide
+  | n + 5, _ =>
+    -- For n ≥ 5: (n-5)*F(n+1) ≥ 0 and (2n-3)*F(n) ≥ 0, so sum ≥ 5*F(n+2)
+    have hfn_pos : 0 < Nat.fib (n + 5) := Nat.fib_pos.mpr (by omega)
+    have hfn1_pos : 0 < Nat.fib (n + 6) := Nat.fib_pos.mpr (by omega)
+    nlinarith [hclosed, hfib]
+
+/-- f-vector k=4 recurrence: f(n+2,4) = f(n+1,4) + f(n,4) + f(n,3).
+    thm:pom-fibcube-fvector-closed -/
+theorem fibcubeFVector_four_recurrence (n : Nat) :
+    fibcubeFVector (n + 2) 4 = fibcubeFVector (n + 1) 4 + fibcubeFVector n 4 +
+      fibcubeFVector n 3 := by
+  simp only [fibcubeFVector_succ_succ, show (4 : Nat) ≠ 0 from by omega, ite_false,
+    show 4 - 1 = 3 from rfl]
+
 end Omega

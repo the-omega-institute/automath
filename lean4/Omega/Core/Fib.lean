@@ -98,6 +98,16 @@ theorem fib_coprime_succ (m : Nat) : Nat.Coprime (Nat.fib m) (Nat.fib (m + 1)) :
 theorem fib_dvd_mul (m k : Nat) : Nat.fib m ∣ Nat.fib (k * m) :=
   Nat.fib_dvd m (k * m) ⟨k, (Nat.mul_comm m k).symm⟩
 
+/-- F_m divides F_{m*k} (argument-order convenience wrapper).
+    infra:fib-divisibility -/
+theorem fib_dvd_fib_mul (m k : ℕ) : Nat.fib m ∣ Nat.fib (m * k) := by
+  rw [Nat.mul_comm]; exact fib_dvd_mul m k
+
+/-- fib(6) | fib(12).
+    infra:fib-divisibility -/
+theorem fib_six_dvd_fib_twelve : Nat.fib 6 ∣ Nat.fib 12 :=
+  fib_dvd_fib_mul 6 2
+
 /-- F_{2n} = F_n · (2·F_{n+1} - F_n).
     prop:fib-double-formula -/
 theorem fib_double (n : Nat) :
@@ -261,6 +271,28 @@ theorem fib_even_sum (n : Nat) :
     have : 0 < Nat.fib (2 * n + 1) := fib_succ_pos (2 * n)
     have : 0 < Nat.fib (2 * n + 2) := fib_succ_pos (2 * n + 1)
     omega
+
+/-- Adding F_2=1 to the alternating pattern value gives F_{m+1}.
+    thm:zeckendorf-parallel-propagation-lower-bound -/
+theorem fib_even_sum_add_one (n : Nat) (hn : 1 ≤ n) :
+    ∑ k ∈ Finset.range n, Nat.fib (2 * (k + 1)) + 1 = Nat.fib (2 * n + 1) := by
+  rw [fib_even_sum]
+  have : 0 < Nat.fib (2 * n + 1) := fib_succ_pos (2 * n)
+  omega
+
+/-- The parallel propagation value pair certificate:
+    Val(x^(m)) = F_{m+1}-1 and Val(x^(m)) + F_2 = F_{m+1}.
+    thm:zeckendorf-parallel-propagation-lower-bound -/
+theorem parallel_propagation_value_pair (n : Nat) (hn : 1 ≤ n) :
+    (∑ k ∈ Finset.range n, Nat.fib (2 * (k + 1)) = Nat.fib (2 * n + 1) - 1) ∧
+    (∑ k ∈ Finset.range n, Nat.fib (2 * (k + 1)) + Nat.fib 2 = Nat.fib (2 * n + 1)) := by
+  exact ⟨fib_even_sum n, by simp [Nat.fib]; exact fib_even_sum_add_one n hn⟩
+
+/-- Paper: thm:zeckendorf-parallel-propagation-lower-bound -/
+theorem paper_parallel_propagation_value_pair (n : Nat) (hn : 1 ≤ n) :
+    (∑ k ∈ Finset.range n, Nat.fib (2 * (k + 1)) = Nat.fib (2 * n + 1) - 1) ∧
+    (∑ k ∈ Finset.range n, Nat.fib (2 * (k + 1)) + Nat.fib 2 = Nat.fib (2 * n + 1)) :=
+  parallel_propagation_value_pair n hn
 
 /-- Σ_{k<n} F_{2k+1} = F_{2n}.
     thm:fib-odd-sum -/
@@ -1163,5 +1195,107 @@ theorem fib_sq_gt_fib_shift (n : Nat) (hn : 6 ≤ n) :
         linarith
       rw [hrec, hrec_n]
       nlinarith
+
+/-- Vajda's identity: F(n+i)·F(n+j) - F(n)·F(n+i+j) = (-1)^n · F(i)·F(j).
+    bridge:fibonacci-vajda-identity -/
+theorem fib_vajda (n i j : Nat) :
+    (Nat.fib (n + i) : ℤ) * Nat.fib (n + j) -
+    (Nat.fib n : ℤ) * Nat.fib (n + i + j) =
+    (-1) ^ n * (Nat.fib i : ℤ) * Nat.fib j := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    -- Key identity: F(i)*F(j+1) + F(i+1)*F(j) - F(i+j) = F(i)*F(j)
+    have hgZ : (Nat.fib (i + j) : ℤ) =
+        Nat.fib i * Nat.fib (j + 1) + Nat.fib (i + 1) * Nat.fib j - Nat.fib i * Nat.fib j := by
+      have h1 : Nat.fib (i + j + 2) = Nat.fib (i + j) + Nat.fib (i + j + 1) := Nat.fib_add_two
+      have h2 : Nat.fib (i + j + 1) = Nat.fib i * Nat.fib j + Nat.fib (i + 1) * Nat.fib (j + 1) := Nat.fib_add i j
+      have h3 := Nat.fib_add i (j + 1)
+      rw [show i + (j + 1) + 1 = i + j + 2 from by omega, show j + 1 + 1 = j + 2 from by omega] at h3
+      have h4 : Nat.fib (j + 2) = Nat.fib j + Nat.fib (j + 1) := Nat.fib_add_two
+      -- h3: F(i+j+2) = F(i)*F(j+1) + F(i+1)*F(j+2)
+      -- = F(i)*F(j+1) + F(i+1)*(F(j)+F(j+1))
+      -- h1+h2: F(i+j+2) = F(i+j) + F(i)*F(j) + F(i+1)*F(j+1)
+      -- Equating: F(i+j) + F(i)*F(j) + F(i+1)*F(j+1) = F(i)*F(j+1) + F(i+1)*F(j) + F(i+1)*F(j+1)
+      -- F(i+j) = F(i)*F(j+1) + F(i+1)*F(j) - F(i)*F(j)
+      push_cast; nlinarith [h1, h2, h3, h4]
+    -- Cassini at n
+    have hcassini : (Nat.fib (n + 1) : ℤ) ^ 2 - Nat.fib n * Nat.fib (n + 1) -
+        (Nat.fib n : ℤ) ^ 2 = (-1) ^ n := by
+      have hfn2 : Nat.fib (n + 2) = Nat.fib n + Nat.fib (n + 1) := Nat.fib_add_two
+      by_cases heven : Even n
+      · have hcas := fib_cassini_even n heven
+        have : (-1 : ℤ) ^ n = 1 := Even.neg_one_pow heven
+        push_cast; nlinarith [hcas, hfn2]
+      · have hcas := fib_cassini_odd n heven
+        have : (-1 : ℤ) ^ n = -1 := Odd.neg_one_pow (Nat.not_even_iff_odd.mp heven)
+        push_cast; nlinarith [hcas, hfn2]
+    -- Rewrite indices
+    rw [show n + 1 + i = n + i + 1 from by omega,
+        show n + 1 + j = n + j + 1 from by omega,
+        show n + i + 1 + j = n + (i + j) + 1 from by omega]
+    -- Use fib_add decompositions
+    have ha := Nat.fib_add n i
+    have hb := Nat.fib_add n j
+    have hc' := Nat.fib_add n (i + j)
+    have : (-1 : ℤ) ^ (n + 1) = -((-1) ^ n) := by ring
+    -- Cast fib_add identities to ℤ
+    have haZ : (Nat.fib (n + i + 1) : ℤ) = Nat.fib n * Nat.fib i +
+        Nat.fib (n + 1) * Nat.fib (i + 1) := by push_cast; linarith [ha]
+    have hbZ : (Nat.fib (n + j + 1) : ℤ) = Nat.fib n * Nat.fib j +
+        Nat.fib (n + 1) * Nat.fib (j + 1) := by push_cast; linarith [hb]
+    have hcZ : (Nat.fib (n + (i + j) + 1) : ℤ) = Nat.fib n * Nat.fib (i + j) +
+        Nat.fib (n + 1) * Nat.fib (i + j + 1) := by push_cast; linarith [hc']
+    have hijZ : (Nat.fib (i + j + 1) : ℤ) = Nat.fib i * Nat.fib j +
+        Nat.fib (i + 1) * Nat.fib (j + 1) := by push_cast; linarith [Nat.fib_add i j]
+    -- Step 1: algebraic identity (ring)
+    have halg : (Nat.fib (n + i + 1) : ℤ) * Nat.fib (n + j + 1) -
+        Nat.fib (n + 1) * Nat.fib (n + (i + j) + 1) =
+        -((Nat.fib (n + 1) : ℤ) ^ 2 - Nat.fib n * Nat.fib (n + 1) -
+        (Nat.fib n : ℤ) ^ 2) * Nat.fib i * Nat.fib j := by
+      rw [haZ, hbZ, hcZ, hgZ, hijZ]; ring
+    -- Step 2: substitute Cassini
+    rw [this, halg, hcassini]
+
+/-- F(n+5) = 5*F(n+1) + 3*F(n).
+    bridge:fib-shift-5 -/
+theorem fib_shift5 (n : Nat) : Nat.fib (n + 5) = 5 * Nat.fib (n + 1) + 3 * Nat.fib n := by
+  -- F(n+2) = F(n)+F(n+1), F(n+3) = F(n+1)+F(n+2) = 2F(n+1)+F(n),
+  -- F(n+4) = 3F(n+1)+2F(n), F(n+5) = 5F(n+1)+3F(n)
+  have h2 : Nat.fib (n + 2) = Nat.fib n + Nat.fib (n + 1) := Nat.fib_add_two
+  have h3 : Nat.fib (n + 3) = Nat.fib (n + 1) + Nat.fib (n + 2) := Nat.fib_add_two
+  have h4 : Nat.fib (n + 4) = Nat.fib (n + 2) + Nat.fib (n + 3) := Nat.fib_add_two
+  have h5 : Nat.fib (n + 5) = Nat.fib (n + 3) + Nat.fib (n + 4) := Nat.fib_add_two
+  linarith
+
+theorem fib_fourteen_eq : Nat.fib 14 = 377 := by native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R135: 2^m > F(m+2) for m >= 4
+-- ══════════════════════════════════════════════════════════════
+
+/-- 2^m > F(m+2) for m ≥ 4: full binary tree strictly exceeds golden-mean count.
+    cor:discussion-horizon-boundarylayer-phi-scaling -/
+theorem two_pow_gt_fib (m : Nat) (hm : 4 ≤ m) :
+    Nat.fib (m + 2) < 2 ^ m := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m, hm with
+    | 4, _ => native_decide
+    | 5, _ => native_decide
+    | m + 6, _ =>
+      have h1 := ih (m + 5) (by omega) (by omega)
+      have h2 := ih (m + 4) (by omega) (by omega)
+      have hfib : Nat.fib ((m + 6) + 2) = Nat.fib (m + 6) + Nat.fib ((m + 6) + 1) :=
+        Nat.fib_add_two
+      rw [show (m + 6) + 2 = m + 8 from by omega, show (m + 6) + 1 = m + 7 from by omega] at hfib
+      have hpow : 2 ^ (m + 6) = 2 ^ (m + 5) + 2 ^ (m + 5) := by ring
+      have hle : 2 ^ (m + 4) ≤ 2 ^ (m + 5) := Nat.pow_le_pow_right (by omega) (by omega)
+      linarith
+
+/-- Paper: cor:discussion-horizon-boundarylayer-phi-scaling -/
+theorem paper_two_pow_gt_fib (m : Nat) (hm : 4 ≤ m) :
+    Nat.fib (m + 2) < 2 ^ m :=
+  two_pow_gt_fib m hm
 
 end Omega

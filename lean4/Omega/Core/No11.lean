@@ -111,4 +111,20 @@ theorem no11_reverse {w : Word m} (hw : No11 w) : No11 (wordReverse w) := by
     rw [get_of_lt _ hkLt] at hk
     simp only [wordReverse] at hk; exact hk
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R133: All-true word not stable
+-- ══════════════════════════════════════════════════════════════
+
+/-- The all-true word is not stable for m ≥ 2 (contains adjacent 11).
+    prop:fold-basic -/
+theorem allTrue_not_no11 (hm : 2 ≤ m) : ¬ No11 (fun _ : Fin m => true) := by
+  intro h
+  have h0 : get (fun _ : Fin m => true) 0 = true := by simp [get, show (0 : Nat) < m from by omega]
+  have h1 : get (fun _ : Fin m => true) 1 = true := by simp [get, show (1 : Nat) < m from by omega]
+  exact h 0 h0 h1
+
+/-- Paper: prop:fold-basic (all-ones forbidden) -/
+theorem paper_allTrue_not_no11 (hm : 2 ≤ m) : ¬ No11 (fun _ : Fin m => true) :=
+  allTrue_not_no11 hm
+
 end Omega

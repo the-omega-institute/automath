@@ -7,32 +7,32 @@
 | 指标 | 数值 |
 |---|---|
 | 总行数 | ~32,000 |
-| 定理/定义数 | ~3,306 |
-| 论文接口包装 | 418+ |
-| 文件数 | 72 |
+| 定理/定义数 | ~3,341 |
+| 论文接口包装 | 609+ |
+| 文件数 | 74 |
 | 公理数 | 0 |
-| 论文定理环境总数（body） | ~10,507 |
+| 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 408 |
+| \leanverified 标注数 | 607 |
 | \leanpartial 标注数 | 10 |
-| 总标注数 | 418 |
-| 轮次 | R79（round_count=80） |
+| 总标注数 | 618 |
+| 轮次 | R135（round_count=136） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 167 | 9.8% |
-| Emergent Arithmetic | 185 | 63 | 34.1% |
-| Folding | 337 | 59 | 17.5% |
-| Conclusion | 2,550 | 41 | 1.6% |
-| Group Unification | 469 | 24 | 5.1% |
-| SPG | 129 | 9 | 7.0% |
-| Circle Dimension | 393 | 19 | 4.8% |
-| Zeta Finite Part | 4,524 | 17 | 0.4% |
-| Discussion | 67 | 0 | 0.0% |
+| POM | 1,707 | 190 | 11.1% |
+| Emergent Arithmetic | 185 | 71 | 38.4% |
+| Folding | 337 | 70 | 20.8% |
+| Conclusion | 2,550 | 108 | 4.2% |
+| Group Unification | 469 | 48 | 10.2% |
+| SPG | 129 | 15 | 11.6% |
+| Circle Dimension | 393 | 31 | 7.9% |
+| Zeta Finite Part | 4,524 | 63 | 1.4% |
+| Discussion | 67 | 3 | 4.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,507** | **403** | **3.8%** |
+| **合计（body）** | **10,508** | **602** | **5.7%** |
 
 ### 1.2 已完成模块
 
@@ -45,6 +45,7 @@
 | Frontier (Assumptions, Certificates, Conditional, Conjectures, ConditionalSummary) | 5 | ~347 | 99% |
 | Combinatorics (PathIndSet, FibonacciCube) | 2 | ~510 | 100% |
 | Audit (SourceMap, Inventory, NoAxiom) | 3 | ~5 | 同步 |
+| Conclusion (RamanujanCollapse, Window6Collision) | 2 | ~7 | 100% |
 
 ### 1.3 已完成的核心数学结果
 
@@ -96,6 +97,36 @@
 **循环置换行列式 + Euler 因子（Round 97，Phase 100）**：Zeta/CyclicDet.lean（新文件，155 行）——cyclicPerm2..cyclicPerm6（def:cycle-permutation-determinant：n×n 循环置换矩阵具体定义）; cyclicPerm2_fredholm_det（prop:cycle-permutation-determinant：det(I-t·Π_2)=1-t²，simp+ring）; cyclicPerm3_fredholm_det（prop:cycle-permutation-determinant：det(I-t·Π_3)=1-t³，simp+ring）; cyclicPerm2_sq..cyclicPerm6_sixth（Π_n^n=I 周期性，n=2..6，native_decide）; cyclicPerm2/3_trace_powers（subsec:operator-zeta-interface：Tr(Π_n^k) 周期模式）; euler_factor_n2/n3（cor:cyclic-euler-product：Euler 因子 det(I-r·α·Π_n)=1-(αr)^n）; cyclic_periodicity_orders（thm:operator-finite-state-zeta-2pii-periodic-separation：全部周期性汇总）——Zeta 覆盖率 0.3% → 0.4%（+4 标注）（Phase 100）
 
 **Zeckendorf 进位吸收 + Fibonacci 平方移位 + SM 平方余量刚性（Round 98，Phase 101）**：两文件 Omega/Core/Fib.lean + Omega/Folding/ZeckendorfSignature.lean（+62 行）——zeckendorf\_carry\_absorption\_m9（cor:zeckendorf-carry-absorption-m9：F_6+F_7=F_8，Zeckendorf 规范化将 m=8,9 并入 m=10，ZeckendorfSignature.lean:694，native_decide）; fib\_sq\_gt\_fib\_shift（infra：F_{n+4} < F_n^2 for n≥6，thm:sm-square-residual-rigidity-m6 证明的强归纳辅助引理，Fib.lean:1139）; sm\_square\_residual\_rigidity\_m6（thm:sm-square-residual-rigidity-m6：F_{m+2}-12=F_{m-2}^2 在 m≥6 上唯一解为 m=6，ZeckendorfSignature.lean:698，fib\_sq\_gt\_fib\_shift + interval\_cases）——**2 个新论文标签计入覆盖率**（cor:zeckendorf-carry-absorption-m9 + thm:sm-square-residual-rigidity-m6，tex 环境在 theory/.../group\_unification/subsubsec\_\_bdry-tower-zeck-gut-sm-zeckendorf-rigidity.tex，fib\_sq\_gt\_fib\_shift 为辅助引理标注于 thm:sm-square-residual-rigidity-m6 之内）——群统一 22→24（+2，4.7%→5.1%），全局标注 402→404（+2），commit 8bf77de
+
+**R119: Fredholm z=5（Round 119）**：commit 2238e0e——fredholmGoldenMean\_at\_five（def:fredholm-determinant：Fredholm 行列式 z=5 特殊值，Zeta/DynZeta.lean）——注：fib\_fourteen\_eq（bridge:fib-concrete-value）+ lucasNum\_nine（bridge:lucas-concrete-value）+ fib\_lucas\_wronskian（bridge:fib-lucas-wronskian）+ lucasNum\_fib\_gcd\_eq（bridge:lucas-fib-gcd-exact）均为桥接基础设施，不计入论文覆盖率——注：500 里程碑尚未到达（4/5 为 bridge，总标注仅 497→498）——Zeta 34→35（+1，0.8%），全局标注 497→498（+1），commit 2238e0e
+
+**R118: window-6 最大纤维平方 + 柱集扩展词 + f-向量k=4递推 + 隐藏层可见-隐藏分裂（Round 118）**：commit ea66afa——conclusion\_window6\_max\_fiber\_sq（thm:conclusion-window6-groupoid-collision-dimension-identity：window-6 最大纤维大小平方恒等式，Folding/Window6.lean）; extendWord\_get\_ge（prop:spg-decidable-clopen：柱集扩展词索引越界性质，SPG/Cylinder.lean）; fibcubeFVector\_four\_recurrence（thm:pom-fibcube-fvector-closed：f-向量 k=4 递推，Combinatorics/FibonacciCube.lean）; conclusion\_window6\_visible\_hidden\_split（thm:conclusion-window6-hidden-a-type-weyl-package【首次标注】：window-6 可见层/隐藏层分裂，Folding/Window6.lean）——注：lucasNum\_sq\_pair\_sum（bridge:lucas-sq-pair-sum）为桥接基础设施，不计入论文覆盖率——POM 174→175（+1，10.2%→10.3%），Conclusion 58→60（+2，2.3%→2.4%），SPG 11→12（+1，8.5%→9.3%），全局标注 493→497（+4），commit ea66afa
+
+**R117: Fredholm z=4 + 半圆维可加性 + ewc 单权重等式 + 矩阵幂正性（Round 117）**：commit cebcdd4——fredholmGoldenMean\_at\_four（def:fredholm-determinant：Fredholm 行列式 z=4 特殊值，Zeta/DynZeta.lean）; halfCircleDim\_add（prop:circle-dimension-laws：半圆维直和可加性，CircleDimension/CircleDim.lean）; exactWeightCount\_one\_eq（prop:fold-basic：精确权重计数 n=1 等式，Folding/FiberWeightCount.lean）; goldenMeanAdjacency\_pow\_positive（thm:folding-stable-syntax-fib-fusion-ring：黄金均值邻接矩阵幂严格正性，Graph/TransferMatrix.lean）——注：lucasNum\_tripling（bridge:lucas-tripling）为桥接基础设施，不计入论文覆盖率——Zeta 33→34（+1，0.7%→0.8%），Folding 62→64（+2，18.4%→19.0%），Circle Dimension 24→25（+1，6.1%→6.4%），全局标注 489→493（+4），commit cebcdd4
+
+**R116: Fredholm z=-2 特殊值 + 稳定值上界 + window-6 超额容量（Round 116）**：commit 051ada4——fredholmGoldenMean\_at\_neg\_two（def:fredholm-determinant：Fredholm 行列式 z=-2 特殊值，Zeta/DynZeta.lean）; stableValue\_Fold\_lt（prop:fold-basic：稳定值严格小于 F(m+4) 的上界，修正为 F(m+4) 界，Folding/ConditionalArithmetic.lean）; window6\_excess\_capacity（thm:conclusion-window6-groupoid-collision-dimension-identity：window-6 超额容量恒等式，Folding/Window6.lean）——注：fib\_tripling（bridge:fibonacci-tripling）为桥接基础设施，不计入论文覆盖率——延迟：fib\_lucas\_cross\_sum（需 lucasNum\_mul\_fib 辅助引理 + sum telescoping 技术）——Zeta 32→33（+1，0.7%），Folding 61→62（+1，18.1%→18.4%），Conclusion 57→58（+1，2.2%→2.3%），全局标注 486→489（+3），commit 051ada4
+
+**R115: 圆维单调性 + 矩阵幂非负性 + Fibonacci cube 边数顶点数下界（Round 115）**：commit 29577e8——circleDim\_mono（prop:circle-dimension-laws：圆维单调性，CircleDimension/CircleDim.lean）; goldenMeanAdjacency\_pow\_nonneg（thm:folding-stable-syntax-fib-fusion-ring：黄金均值邻接矩阵幂非负性，Graph/TransferMatrix.lean）; fibcubeEdgeCount\_ge\_vertex（cor:pom-fibcube-edge-closed-form：Fibonacci cube 边数 ≥ 顶点数，Combinatorics/FibonacciCube.lean）——注：fib\_shift5（bridge:fib-shift-5）+ lucasNum\_double\_odd（bridge:lucas-odd-double）为桥接基础设施，不计入论文覆盖率——POM 173→174（+1，10.1%→10.2%），Folding 60→61（+1，17.8%→18.1%），Circle Dimension 23→24（+1，5.9%→6.1%），全局标注 483→486（+3），commit 29577e8
+
+**R114: Fredholm z=3 特殊值 + X8 CRT 分解 + window-8 BinFold 直方图 + 群胚碰撞维数（Round 114）**：commit 2e1e3cf——fredholmGoldenMean\_at\_three（def:fredholm-determinant：Fredholm 行列式 z=3 特殊值，Zeta/Operator）; X8\_decomposition（cor:crt-factorization：X_8 的 CRT 分解，Folding/FiberArithmeticProperties）; cBinFiberHist\_8\_3（thm:terminal-foldbin8-256-to-55-hist【新论文定理】：m=8 BinFold 纤维大小3的直方图计数=21）; cBinFiberHist\_8\_5（thm:terminal-foldbin8-256-to-55-hist：纤维大小5的直方图计数=11）; cBinFiberHist\_8\_6（thm:terminal-foldbin8-256-to-55-hist：纤维大小6的直方图计数=23）; window8\_histogram\_count\_sum（thm:terminal-foldbin8-256-to-55-hist：|X_8|=55计数和验证）; window8\_histogram\_fiber\_sum（thm:terminal-foldbin8-256-to-55-hist：∑纤维大小=256纤维和验证）; window8\_collision\_dimension（thm:conclusion-window8-groupoid-collision-dimension-identity【新论文定理，Conclusion章】：S_2(8)=21·9+11·25+23·36=1292 群胚碰撞维数）——注：fib\_five\_dvd\_iff 已存在，本轮不重复登记——Zeta 31→32（+1，0.7%），EA 64→65（+1，34.6%→35.1%），Group Unification 38→43（+5，8.1%→9.2%），Conclusion 56→57（+1，2.2%），全局标注 475→483（+8），commit 2e1e3cf
+
+**R113: 柱集覆盖 + 黄金均值邻接矩阵不可约性 + fib 矩形恒等式（Round 113）**：commit 0378d00——cylinderWord\_cover（prop:spg-decidable-clopen：柱集覆盖全空间性质，SPG/Cylinder.lean）; goldenMeanAdjacency\_irreducible（thm:folding-stable-syntax-fib-fusion-ring：黄金均值邻接矩阵不可约性，Graph/TransferMatrix.lean）; fib\_rectangle（bridge:fib-rectangle-identity：Fibonacci 矩形恒等式，桥接基础设施，不计入论文覆盖率）——注：fib\_seven\_dvd\_iff 已存在；延迟：lucasNum\_coprime\_five（需 pair-state mod-5 证明技术）——Folding 59→60（+1，17.5%→17.8%），SPG 10→11（+1，7.8%→8.5%），全局标注 473→475（+2），commit 0378d00
+
+**R112: Pisano 周期扩展 + window-7 汇总 + Vajda 恒等式 + 环特征（Round 112）**：commit e9bd917——pisano\_period\_9（cor:pom-fiber-modq-pisano-invariant：π(9) Pisano 周期数值验证）; pisano\_period\_10（cor:pom-fiber-modq-pisano-invariant：π(10) Pisano 周期数值验证）; window7\_histogram\_count\_sum（thm:terminal-foldbin7-128-to-34-hist：|X_7|=34 计数和验证）; window7\_histogram\_fiber\_sum（thm:terminal-foldbin7-128-to-34-hist：∑纤维大小=128 纤维和验证）; window7\_collision\_dimension（thm:terminal-foldbin7-128-to-34-hist：S_2(7) 碰撞维数验证）; fib\_vajda（bridge:fibonacci-vajda-identity：Vajda 恒等式，桥接基础设施，不计入论文覆盖率）; ringChar\_X\_eq\_fib（thm:finite-resolution-mod：char(X_m)=F_{m+2}，环特征等于 Fibonacci 数）——注：cBinFiberMax\_seven + window7\_index\_compression\_gap 已存在，本轮不重复登记——POM 171→173（+2，10.0%→10.1%），Emergent Arithmetic 63→64（+1，34.1%→34.6%），Group Unification 35→38（+3，7.5%→8.1%），全局标注 467→473（+6），commit e9bd917
+
+**R111: 碰撞质量/anomaly 分裂 + Pisano 周期 + Lucas 乘法（Round 111）**：commit f5e375a——conclusion\_window6\_collision\_mass（prop:conclusion-window6-quadratic-collision-mass-anomaly-discriminant-closure：ℭ_6=53，二次碰撞质量闭式）; conclusion\_window6\_anomaly\_collision\_splitting（prop:conclusion-window6-quadratic-collision-mass-anomaly-discriminant-closure：74=21+53 anomaly/collision 分裂恒等式）; pisano\_period\_8（cor:pom-fiber-modq-pisano-invariant：π(8)=12 Pisano 周期数值验证）; pisano\_period\_11（cor:pom-fiber-modq-pisano-invariant：π(11)=10 Pisano 周期数值验证）; lucasNum\_mul\_formula / lucasNum\_four\_dvd（bridge:lucas-multiplication-formula / bridge:lucas-four-divisibility：桥接基础设施，不计入论文覆盖率）——**永久删除**：exactWeightCount\_shift\_mono 已证伪（反例：m=4, n=0），从延迟列表移除——POM 169→171（+2，9.9%→10.0%），Conclusion 54→56（+2，2.1%→2.2%），全局标注 463→467（+4），commit f5e375a
+
+**R110: momentSum 四倍界公开化 + sqrt 可行判据 + Lucas-Fib GCD（Round 110）**：commit ea2ca69——momentSum\_two\_quadruple\_le（thm:pom-hiddenbit-bias-energy-identity：4·S_2(m) ≤ S_2(m+2) 四倍下界，由 private 提升为 public）; godelLift\_fold\_sqrt\_suffices（thm:conclusion-bounded-prime-register-feasibility：sqrt 界充分性：(⌊√D⌋+1)^2≥D，sqrt 规模的 Gödel lift 存在性）; lucasNum\_fib\_gcd\_dvd\_two（bridge:lucas-fib-gcd：gcd(L_n, F_n) ∣ 2，桥接基础设施，不计入论文覆盖率）——延迟：lucasNum\_modp（需 mathlib Fib-mod-prime 基础）——POM 168→169（+1，9.8%→9.9%），Conclusion 53→54（+1，2.1%不变），全局标注 461→463（+2），commit ea2ca69
+
+**R109: 柱集不相交性 + m=7 BinFold 退化直方图（Round 109）**：commit efd857d——cylinderWord\_disjoint（prop:spg-decidable-clopen：不同词定义不相交柱集，SPG/Cylinder.lean）; cBinFiberHist\_7\_0..5（thm:terminal-foldbin7-128-to-34-hist【新增论文定理】：m=7 BinFold 纤维直方图，值(3:13,4:16,5:5)，注：规格书预期值有误，已按实际计算结果 0,0,0,13,16,5 更正）; binFold7\_histogram\_certificate（thm:terminal-foldbin7-128-to-34-hist：13·3+16·4+5·5=128 配分验证）——注：hammingDist\_triangle（def:pom-hamming-metric）和 momentSum\_four\_five/six（prop:pom-s4-base-value-5/6）为已存在的 infra 定理，对应论文标签在 .tex 中尚无环境，本轮不标注——Group Unification 28→35（+7，6.0%→7.5%），SPG 9→10（+1，7.0%→7.8%），全局标注 453→461（+8），commit efd857d
+
+**R108: Fredholm 特殊值 + Fibonacci 整除 + Window-6 三重刚性尺度（Round 108）**：commit 62be436——goldenMean\_trace\_eq\_fib\_sum（thm:zeta-syntax-trace-linear-recurrence：黄金均值矩阵迹等于 Fibonacci 和）; fredholmGoldenMean\_at\_two（subsec:operator-zeta-interface：det(I-2A)=特殊值，Fredholm 行列式在 z=2 的值）; fredholmGoldenMean\_at\_neg\_one（subsec:operator-zeta-interface：det(I+A)=特殊值，Fredholm 行列式在 z=-1 的值）; fib\_dvd\_fib\_mul / fib\_six\_dvd\_fib\_twelve（infra:fib-divisibility：Fibonacci 整除性辅助引理，基础设施）; window6\_three\_scales\_strict（cor:conclusion-window6-three-rigidity-scales：三重刚性尺度严格不等式 4<21<64）; window6\_faithful\_dim\_eq\_pow（cor:conclusion-window6-three-rigidity-scales：忠实维数等于 2^6=64）; window6\_success\_rate\_zero（cor:conclusion-window6-three-rigidity-scales：成功率零性质）——Zeta 28→31（+3，0.6%→0.7%），Conclusion 50→53（+3，2.0%→2.1%），全局标注 447→453（+6），commit 62be436
+
+**R107: Lucas-Fibonacci 关系 + 二进制 Godel lift + exactWeightCount 总和（Round 107）**：commits b18ad80 + 92577c0——lucasNum\_eq\_fib\_sum / lucasNum\_pos（thm:zeta-syntax-trace-linear-recurrence：L_n = F_{n-1}+F_{n+1} 及 Lucas 数正性）; godelLift\_binary\_fold4 / godelLift\_binary\_fold5 / godelLift\_binary\_fold6 / godelLift\_binary\_fold7 / godelLift\_binary\_fold8（thm:conclusion-bounded-prime-register-feasibility：Fold_m 二进制寄存器 lift 可行实例，m=4..8）; exactWeightCount\_sum\_eq\_pow（prop:pom-power-sum-hankel-psd：∑_n ewc(m,n) = 2^m，精确权重计数总和等于2^m）——Zeta 26→28（+2，0.6%不变），Conclusion 45→50（+5，1.8%→2.0%），POM 167→168（+1，9.8%不变），全局标注 439→447（+8），commits b18ad80+92577c0
+
+**R106: Lucas 数迹恒等式 + SM Zeckendorf 刚性 + 相邻层不可能性 + 圆维法则（Round 106）**：commit 10e89f9——lucasNum\_zero / lucasNum\_one / lucasNum\_succ\_succ / trace\_eq\_lucasNum（thm:zeta-syntax-trace-linear-recurrence：Lucas 数定义与迹恒等式 Tr(A^n)=L_n）; sm\_zeckendorf\_twelve / sm\_boundary\_count / sm\_zeckendorf\_no\_adjacent（prop:sm-zeckendorf-lie-algebra-rigidity：D=12 Zeckendorf 分解唯一、边界层计数、相邻层禁激活）; zeckendorf\_no\_adjacent\_strict\_inclusion（cor:zeckendorf-no-adjacent-strict-inclusion-impossible：相邻层禁激活导致 strict 包含不可能）; circleDim\_iso / circleDim\_finite\_extension / circleDim\_eq\_zero\_iff / halfCircleDim\_nat（prop:circle-dimension-laws：同构不变、有限扩张不变、零维刻画、半圆维数值公式）——Zeta 22→26（+4，0.5%→0.6%），群统一 24→28（+4，5.1%→6.0%），圆维 19→23（+4，4.8%→5.9%），全局标注 427→439（+12），commit 10e89f9
+
+**R105: 无界迹递推 + Euler 因子 n=5,6 + 循环迹幂 n=5,6 + Godel Lift 实例（Round 105）**：commit 44c7d04——goldenMean\_trace\_recurrence\_unbounded（thm:zeta-syntax-trace-linear-recurrence：Tr(A^n) 满足无界递推，适用所有 n）; euler\_factor\_n5（cor:cyclic-euler-product：Euler 因子 det(I-r·α·Π_5)=1-(αr)^5）; euler\_factor\_n6（cor:cyclic-euler-product：Euler 因子 det(I-r·α·Π_6)=1-(αr)^6）; cyclicPerm5\_trace\_powers（subsec:operator-zeta-interface：Tr(Π_5^k) 周期模式）; cyclicPerm6\_trace\_powers（subsec:operator-zeta-interface：Tr(Π_6^k) 周期模式）; godelLift\_fold5（thm:conclusion-bounded-prime-register-feasibility：D_5=5，(1,4)-lift 可行）; godelLift\_fold7\_option1（thm:conclusion-bounded-prime-register-feasibility：D_7=13，(1,12)-lift 可行）; godelLift\_fold7\_option2（thm:conclusion-bounded-prime-register-feasibility：D_7=13，(2,3)-lift 可行）; godelLift\_fold5\_k2（thm:conclusion-bounded-prime-register-feasibility：D_5=5，(2,2)-lift 可行）——Zeta 17→22（+5，0.4%→0.5%），Conclusion 41→45（+4，1.6%→1.8%），全局标注 418→427（+9），commit 44c7d04
 
 **POM 单射化界 + Fold-6 二进制辅助位 + Conclusion 不可兑换资源（Round 101，Phase 104）**：commit f49bf39——maxFiberMult\_le\_two\_pow\_of\_injective\_sideinfo（prop:pom-injectivization-sideinfo-exact-alphabet：若(Fold,r)单射则 D_m≤2^k，由鸽巢原理）; fold6\_binary\_auxbits（cor:pom-injectivization-binary-auxbits-exact：D_6=5，⌈log₂ 5⌉=3，m=6 需3个辅助位）; conclusion\_window6\_nonexchangeable\_resources（cor:conclusion-window6-static-dynamic-resources-nonexchangeable：21≠2 ∧ 8·2+4·3+9·4=64 ∧ 静态账本维数=21 ∧ 动态预算1比特容量=42，资源不可兑换的数值基础）——**延迟：cBinFiberMax_nine/ten（native_decide 太慢）**——POM 165→167（+2，9.7%→9.8%），Conclusion 40→41（+1，1.6%不变），全局标注 415→418（+3），commit f49bf39
 
@@ -351,6 +382,10 @@
 **圆维度 Fibonacci 时间平台有限证书（Round 123）**：fib_platform_certificate_of_eq_succ / fib_platform_certificate_of_eq_succ_succ（把相邻或隔一层 Fibonacci 时间标签相等时的平台刚性压缩为有限证据判别，支撑论文中的有限证书等价形式）
 **圆维度 RH 缺陷的 Fibonacci 半径离散承载（Round 124）**：tendsto_zero_of_nonneg_le_of_tendsto_zero / fibRadius_discretization_of_le_tendsto_zero（把连续趋零判据压缩为 Fibonacci 半径链上的非负上界收敛证书，支撑 RH 缺陷离散承载结论）
 **圆维度零点模长下界证书（Round 125）**：zero_modulus_lower_bound_of_log_defect_bound / fibRadius_zero_modulus_lower_bound_of_log_defect_bound（把对数缺陷上界转为零点模长的定量下界，并包装到 Fibonacci 半径离散链上）
+**★ 500 标注里程碑 — 论文接口包装（Phase R120）**：FiberRing.lean（3 定理）+ Fiber.lean（1 定理）+ MaxFiberTwoStep.lean（1 定理）；论文标注：paper\_finite\_resolution\_mod（thm:finite-resolution-mod，Emergent Arithmetic）; paper\_field\_phase\_fib\_prime（cor:field-phase-fib-prime，Emergent Arithmetic）; paper\_fold\_basic（prop:fold-basic，Folding）; paper\_mul\_definitional（thm:mul-definitional，Emergent Arithmetic）; paper\_monoid\_quotient\_is\_N（thm:monoid-quotient-is-N，Emergent Arithmetic）——总标注数 498 → 503，Emergent Arithmetic 覆盖率 35.1% → 37.3%，Folding 覆盖率 19.0% → 19.3%
+**Lucas/ShiftDynamics 标注批次（Phase R123 Target 1）**：POM +4（shift\_continuous, shift\_surjective, shift\_fixed\_iff, shift\_not\_injective → cor:pom-shift-conjugacy-on-godel-image）; Zeta +6（lucasNum\_cassini, lucasNum\_double, lucas\_sq\_eq\_five\_fib\_sq, lucasNum\_even\_iff, lucasNum\_add\_formula, lucasNum\_mul\_formula → thm:zeta-syntax-trace-linear-recurrence）——总标注数 529 → 539，POM 10.3% → 10.5%，Zeta 0.9% → 1.1%，总覆盖率 4.9% → 5.0%
+**Window6.lean → Conclusion + GU 标注批次（Phase R122 Target 1+2）**：Target 1 新增 6 条（card\_Word\_six, card\_X\_six', zmod21\_idempotents\_complete, zmod21\_unit\_count, hidden\_reflection\_dim\_six, hidden\_reflection\_from\_histogram）; Target 2 新增 3 条：paper\_abelianization\_rank\_six → thm:window6-foldbin-gauge-abelianization-even-parity (GU); paper\_compression\_ratio\_six → thm:conclusion-window6-visible-crt-arithmetic-phase-space; paper\_nontrivial\_microstate\_count\_six → cor:conclusion-window6-three-rigidity-scales——总标注数 520 → 529，Conclusion 2.7% → 3.0%，Group Unification 9.2% → 9.4%
+**论文接口包装 Targets 1+2+3（Phase R121）**：Conclusion +8（tqft\_sphere\_eq\_momentSum\_two, total\_free\_generators\_eq\_hidden\_dim, conclusion\_window6\_boundary\_parity\_residual, curvature\_parenthesization, invariant\_ring\_from\_histogram, poincare\_A2\_coeffs, poincare\_A3\_coeffs, quadratic\_collision\_mass\_six）; Zeta +5（cyclicPerm2\_rank, cyclicPerm3\_rank, cyclicPerm4\_rank, cyclicPerm5\_rank, cyclicPerm6\_rank at thm:operator-resolvent-trace-jump-index; fredholmGoldenMean\_at\_zero at operator-zeta-interface; degeneracy\_ghost\_positive at rem:degeneracy-zeta-bridge）; Circle Dimension +2（audit\_stability\_iff\_badly\_approximable, hurwitz\_covering\_genus + riemann\_hurwitz\_s4）——总标注数 503 → 520，Conclusion 2.4% → 2.7%，Zeta 0.8% → 0.9%，Circle Dimension 6.4% → 6.9%
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 

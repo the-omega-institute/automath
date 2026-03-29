@@ -717,4 +717,36 @@ theorem sm_square_residual_rigidity_m6 (m : Nat) (hm : 6 ≤ m)
       -- But h says F(m+2) - 12 = F(m-2)², contradiction
       omega
 
+/-- The SM gauge group dimensions 1+3+8=12 has Zeckendorf representation F(6)+F(4)+F(2).
+    prop:sm-zeckendorf-lie-algebra-rigidity -/
+theorem sm_zeckendorf_twelve :
+    Nat.fib 6 + Nat.fib 4 + Nat.fib 2 = 12 := by norm_num [Nat.fib]
+
+/-- SM boundary count verification with individual Fibonacci values.
+    cor:sm-minimal-triple-selection-law -/
+theorem sm_boundary_count :
+    Nat.fib 2 + Nat.fib 4 + Nat.fib 6 = 12 ∧
+    Nat.fib 2 = 1 ∧ Nat.fib 4 = 3 ∧ Nat.fib 6 = 8 := by
+  norm_num [Nat.fib]
+
+/-- Zeckendorf gap condition: indices 2,4,6 are pairwise ≥ 2 apart.
+    prop:sm-zeckendorf-lie-algebra-rigidity -/
+theorem sm_zeckendorf_no_adjacent :
+    4 - 2 ≥ 2 ∧ 6 - 4 ≥ 2 := by omega
+
+/-- In a gap-≥2 index set containing 4, 6, 8, neither 5 nor 7 can appear.
+    cor:zeckendorf-no-adjacent-strict-inclusion-impossible -/
+theorem zeckendorf_no_adjacent_strict_inclusion
+    (S : Finset ℕ)
+    (h_gap : ∀ a ∈ S, ∀ b ∈ S, a ≠ b → (a : ℤ) - b ≠ 1 ∧ (a : ℤ) - b ≠ -1)
+    (h4 : 4 ∈ S) (h6 : 6 ∈ S) (h8 : 8 ∈ S) :
+    5 ∉ S ∧ 7 ∉ S := by
+  constructor
+  · intro h5
+    have := (h_gap 5 h5 4 h4 (by omega)).1
+    omega
+  · intro h7
+    have := (h_gap 7 h7 6 h6 (by omega)).1
+    omega
+
 end Omega.ZeckSig

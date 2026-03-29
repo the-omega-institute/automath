@@ -43,6 +43,69 @@ theorem binFold6_sum_check :
   rw [cBinFiberHist_6_0, cBinFiberHist_6_1, cBinFiberHist_6_2,
     cBinFiberHist_6_3, cBinFiberHist_6_4]
 
+/-! ### m = 7 BinFold histogram -/
+
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_0 : cBinFiberHist 7 0 = 0 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_1 : cBinFiberHist 7 1 = 0 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_2 : cBinFiberHist 7 2 = 0 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_3 : cBinFiberHist 7 3 = 13 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_4 : cBinFiberHist 7 4 = 16 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_5 : cBinFiberHist 7 5 = 5 := by native_decide
+
+/-- thm:terminal-foldbin-hist -/
+theorem binFold7_histogram_certificate : 13 * 3 + 16 * 4 + 5 * 5 = 128 := by omega
+
+/-- Total stable words at m=7: |X_7| = 34.
+    thm:terminal-foldbin-hist -/
+theorem window7_histogram_count_sum :
+    cBinFiberHist 7 3 + cBinFiberHist 7 4 + cBinFiberHist 7 5 = 34 := by
+  rw [cBinFiberHist_7_3, cBinFiberHist_7_4, cBinFiberHist_7_5]
+
+/-- Fiber sum at m=7: 13·3 + 16·4 + 5·5 = 128 = 2^7.
+    thm:terminal-foldbin-hist -/
+theorem window7_histogram_fiber_sum :
+    cBinFiberHist 7 3 * 3 + cBinFiberHist 7 4 * 4 + cBinFiberHist 7 5 * 5 = 128 := by
+  rw [cBinFiberHist_7_3, cBinFiberHist_7_4, cBinFiberHist_7_5]
+
+/-- Collision dimension at m=7: Σ h_k · k² = 498.
+    thm:terminal-foldbin-hist -/
+theorem window7_collision_dimension :
+    cBinFiberHist 7 3 * 3 ^ 2 + cBinFiberHist 7 4 * 4 ^ 2 + cBinFiberHist 7 5 * 5 ^ 2 = 498 := by
+  rw [cBinFiberHist_7_3, cBinFiberHist_7_4, cBinFiberHist_7_5]; omega
+
+/-! ### m = 8 BinFold histogram -/
+
+set_option maxHeartbeats 800000 in
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_8_3 : cBinFiberHist 8 3 = 21 := by native_decide
+set_option maxHeartbeats 800000 in
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_8_5 : cBinFiberHist 8 5 = 11 := by native_decide
+set_option maxHeartbeats 800000 in
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_8_6 : cBinFiberHist 8 6 = 23 := by native_decide
+
+/-- thm:terminal-foldbin-hist -/
+theorem window8_histogram_count_sum :
+    cBinFiberHist 8 3 + cBinFiberHist 8 5 + cBinFiberHist 8 6 = 55 := by
+  rw [cBinFiberHist_8_3, cBinFiberHist_8_5, cBinFiberHist_8_6]
+
+/-- thm:terminal-foldbin-hist -/
+theorem window8_histogram_fiber_sum :
+    cBinFiberHist 8 3 * 3 + cBinFiberHist 8 5 * 5 + cBinFiberHist 8 6 * 6 = 256 := by
+  rw [cBinFiberHist_8_3, cBinFiberHist_8_5, cBinFiberHist_8_6]
+
+/-- thm:conclusion-window8-groupoid-collision-dimension-identity -/
+theorem window8_collision_dimension :
+    cBinFiberHist 8 3 * 3 ^ 2 + cBinFiberHist 8 5 * 5 ^ 2 + cBinFiberHist 8 6 * 6 ^ 2 = 1292 := by
+  rw [cBinFiberHist_8_3, cBinFiberHist_8_5, cBinFiberHist_8_6]; omega
+
 /-! ### Edge separation at m = 6 -/
 
 /-- BinFold separates hypercube edges at m = 6: flipping any single bit always
@@ -360,5 +423,59 @@ theorem conclusion_window6_nonexchangeable_resources :
     8 * 1 + 4 * 1 + 9 * 1 = 21 ∧
     8 * 2 + 4 * 2 + 9 * 2 = 42 := by
   refine ⟨by omega, by omega, by omega, by omega⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R127: Geometric stabilizer mask identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- The geometric stabilizer action on {0,1}^6: complement+swap bits 0 and 4. -/
+def geoStabilizerAction (ω : Fin 6 → Bool) : Fin 6 → Bool := fun i =>
+  if i.val = 0 then !ω ⟨4, by omega⟩
+  else if i.val = 4 then !ω ⟨0, by omega⟩
+  else ω i
+
+/-- Binary encoding: int₆(ω) = Σ ω_k · 2^(5-k). -/
+def binaryEncode6 (ω : Fin 6 → Bool) : ℤ :=
+  ∑ k : Fin 6, if ω k then (2 : ℤ) ^ (5 - k.val) else 0
+
+/-- The ±34 mask identity: the geometric stabilizer action shifts the binary encoding by
+    ±34 depending on the values of bits 0 and 4.
+    cor:foldbin6-geo-mask-34 -/
+theorem geoStabilizer_mask_34 (ω : Fin 6 → Bool) :
+    binaryEncode6 (geoStabilizerAction ω) - binaryEncode6 ω
+    = 34 * (1 - (if ω ⟨0, by omega⟩ then 1 else 0) - (if ω ⟨4, by omega⟩ then 1 else 0)) := by
+  unfold binaryEncode6 geoStabilizerAction
+  simp only [Fin.sum_univ_six, Fin.isValue]
+  norm_num
+  have : (0 : Fin 6) = ⟨0, by omega⟩ := rfl
+  have : (4 : Fin 6) = ⟨4, by omega⟩ := rfl
+  rcases Bool.eq_false_or_eq_true (ω 0) with h0 | h0 <;>
+    rcases Bool.eq_false_or_eq_true (ω 4) with h4 | h4 <;>
+    simp_all <;> omega
+
+/-- Paper: cor:foldbin6-geo-mask-34 -/
+theorem paper_geoStabilizer_mask_34 (ω : Fin 6 → Bool) :
+    binaryEncode6 (geoStabilizerAction ω) - binaryEncode6 ω
+    = 34 * (1 - (if ω ⟨0, by omega⟩ then 1 else 0) - (if ω ⟨4, by omega⟩ then 1 else 0)) :=
+  geoStabilizer_mask_34 ω
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R134: Type adjacency total edge count
+-- ══════════════════════════════════════════════════════════════
+
+/-- Total directed edges in type adjacency graph at m=6: Σ row_sums = 6 · 2^6 = 384.
+    Each row sum = 6 · d(x), and Σ d(x) = 2^6 = 64.
+    thm:terminal-window6-edge-flux-skeleton -/
+theorem typeAdj_total_edges_six :
+    (Finset.univ : Finset (Fin 21)).sum (fun i =>
+      (Finset.univ : Finset (Fin 21)).sum (fun j =>
+        cTypeAdjCount 6 (X.ofNat 6 i) (X.ofNat 6 j))) = 384 := by native_decide
+
+/-- Paper: thm:terminal-window6-edge-flux-skeleton -/
+theorem paper_typeAdj_total_edges_six :
+    (Finset.univ : Finset (Fin 21)).sum (fun i =>
+      (Finset.univ : Finset (Fin 21)).sum (fun j =>
+        cTypeAdjCount 6 (X.ofNat 6 i) (X.ofNat 6 j))) = 384 :=
+  typeAdj_total_edges_six
 
 end Omega

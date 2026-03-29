@@ -228,6 +228,10 @@ theorem X6_crt_split : Nonempty (X 6 ≃+* ZMod 3 × ZMod 7) := ⟨X6_decomposit
 noncomputable def X10_decomposition : X 10 ≃+* ZMod 16 × ZMod 9 :=
   crtDecomposition 10 16 9 (by native_decide) (by native_decide)
 
+-- X_8: F_10 = 55 = 5 × 11, gcd(5,11) = 1.
+/-- cor:crt-factorization -/
+noncomputable def X8_decomposition : X 8 ≃+* ZMod 5 × ZMod 11 :=
+  crtDecomposition 8 5 11 (by native_decide) (by native_decide)
 
 /-! ### Characteristic -/
 
@@ -254,6 +258,24 @@ end
 theorem paper_stable_commutative_ring (m : Nat) :
     Nonempty (X m ≃+* ZMod (Nat.fib (m + 2))) :=
   ⟨stableValueRingEquiv m⟩
+
+/-- The stable type X_m is isomorphic to ℤ/F_{m+2}ℤ as a commutative ring.
+    thm:finite-resolution-mod -/
+theorem paper_finite_resolution_mod (m : Nat) :
+    Nonempty (X m ≃+* ZMod (Nat.fib (m + 2))) :=
+  ⟨stableValueRingEquiv m⟩
+
+/-- When F(m+2) is prime, X_m is a field (the Fibonacci field phase).
+    cor:field-phase-fib-prime -/
+theorem paper_field_phase_fib_prime (m : Nat) (hp : Nat.Prime (Nat.fib (m + 2))) :
+    Nonempty (Field (X m)) :=
+  ⟨instFieldOfPrime hp⟩
+
+/-- (X_m, stableAdd, stableMul) is a commutative ring isomorphic to ℤ/F_{m+2}ℤ.
+    thm:mul-definitional -/
+theorem paper_mul_definitional (m : Nat) :
+    Nonempty (CommRing (X m)) ∧ Nonempty (X m ≃+* ZMod (Nat.fib (m + 2))) :=
+  ⟨⟨inferInstance⟩, ⟨stableValueRingEquiv m⟩⟩
 
 /-- The additive order of stableOne equals F(m+2): F(m+2) • stableOne = stableZero.
     thm:stable-add-commutative-monoid -/
@@ -285,5 +307,38 @@ theorem ringEquiv_eq_id (m : Nat) (f : X m ≃+* X m) :
   change e (f (e.symm (e x))) = e x at h
   rw [RingEquiv.symm_apply_apply] at h
   exact e.injective h
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R133: Stable value power formula
+-- ══════════════════════════════════════════════════════════════
+
+/-- Power formula: stableValue(x^n) = (stableValue x)^n mod F(m+2).
+    thm:mul-definitional -/
+theorem stableValue_pow (x : X m) (n : Nat) :
+    stableValue (x ^ n) = (stableValue x) ^ n % Nat.fib (m + 2) := by
+  induction n with
+  | zero =>
+    simp only [pow_zero, Nat.pow_zero]
+    rw [ring_one_eq]
+    have hF : 0 < Nat.fib (m + 2) := Nat.fib_pos.mpr (by omega)
+    cases m with
+    | zero =>
+      have : Subsingleton (X 0) := by
+        rw [← Fintype.card_le_one_iff_subsingleton]; simp [X.card_eq_fib]
+      rw [show (stableOne : X 0) = stableZero from Subsingleton.elim _ _, stableValue_stableZero]
+      simp [Nat.fib]
+    | succ n =>
+      rw [stableValue_stableOne (fib_gt_one_of_ge_two (by omega))]
+      exact (Nat.mod_eq_of_lt (fib_gt_one_of_ge_two (by omega))).symm
+  | succ n ih =>
+    rw [pow_succ, ring_mul_eq, stableValue_stableMul, ih, pow_succ]
+    conv_rhs => rw [Nat.mul_mod]
+    congr 1; congr 1
+    exact (Nat.mod_eq_of_lt (stableValue_lt_fib x)).symm
+
+/-- Paper: thm:mul-definitional (power) -/
+theorem paper_stableValue_pow (x : X m) (n : Nat) :
+    stableValue (x ^ n) = (stableValue x) ^ n % Nat.fib (m + 2) :=
+  stableValue_pow x n
 
 end Omega.X
