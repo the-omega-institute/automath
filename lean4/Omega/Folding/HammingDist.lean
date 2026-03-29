@@ -238,4 +238,53 @@ theorem hammingDist_snoc (a c : Word m) (b1 b2 : Bool) :
         · intro h; subst h; exact ⟨rfl, by simp [snoc, hb]⟩
       rw [this, Finset.card_singleton]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R56: Defect triangle inequality
+-- ══════════════════════════════════════════════════════════════
+
+/-- Popcount of xor is bounded by sum of popcounts.
+    lem:popcount-xor-triangle -/
+theorem popcount_xorWord_le (a b : Word m) :
+    popcount (xorWord a b) ≤ popcount a + popcount b := by
+  rw [← hammingDist_eq_popcount_xor]
+  exact hammingDist_le_popcount_add a b
+
+/-- Restricting a word cannot increase its popcount.
+    lem:popcount-restrict-le -/
+theorem popcount_restrictWord_le (h : m ≤ n) (w : Word n) :
+    popcount (restrictWord h w) ≤ popcount w := by
+  simp only [popcount_eq_count_true]
+  set embed := fun i : Fin m => (⟨i.1, Nat.lt_of_lt_of_le i.2 h⟩ : Fin n)
+  set S := Finset.univ.filter (fun i : Fin m => restrictWord h w i = true)
+  set T := Finset.univ.filter (fun i : Fin n => w i = true)
+  have hinj : Function.Injective embed := by
+    intro a b hab
+    simp only [embed, Fin.mk.injEq] at hab
+    exact Fin.ext hab
+  have hsub : S.image embed ⊆ T := by
+    intro j hj
+    simp only [S, T, embed, Finset.mem_image, Finset.mem_filter, Finset.mem_univ, true_and] at hj ⊢
+    obtain ⟨i, hi, rfl⟩ := hj
+    exact hi
+  calc S.card = (S.image embed).card := (Finset.card_image_of_injective S hinj).symm
+    _ ≤ T.card := Finset.card_le_card hsub
+
+/-- Global defect triangle inequality: the defect across a composite resolution gap
+    is bounded by the sum of defects at each level.
+    prop:fold-defect-triangle -/
+theorem globalDefect_triangle (hmk : m ≤ k) (hkn : k ≤ n) (ω : Word n) :
+    popcount (globalDefect (Nat.le_trans hmk hkn) ω)
+    ≤ popcount (globalDefect hmk (restrictWord hkn ω))
+      + popcount (globalDefect hkn ω) := by
+  rw [globalDefect_compose hmk hkn ω]
+  calc popcount (xorWord (globalDefect hmk (restrictWord hkn ω))
+          (restrictWord hmk (globalDefect hkn ω)))
+      ≤ popcount (globalDefect hmk (restrictWord hkn ω))
+        + popcount (restrictWord hmk (globalDefect hkn ω)) :=
+          popcount_xorWord_le _ _
+    _ ≤ popcount (globalDefect hmk (restrictWord hkn ω))
+        + popcount (globalDefect hkn ω) := by
+          apply Nat.add_le_add_left
+          exact popcount_restrictWord_le hmk _
+
 end Omega

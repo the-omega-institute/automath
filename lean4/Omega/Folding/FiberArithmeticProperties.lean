@@ -818,4 +818,15 @@ theorem Fold_foldAwareRestrict (w : Word (m + 1)) :
     Fold (X.restrict (Fold w)).1 = X.restrict (Fold w) :=
   Fold_stable (X.restrict (Fold w))
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R56: stableAdd value modular identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- The stable value of x + y equals the sum of stable values modulo F_{m+2}.
+    prop:fold-stable-add-value-mod -/
+theorem stableAdd_value_mod (x y : X m) :
+    stableValue (x + y) = (stableValue x + stableValue y) % Nat.fib (m + 2) := by
+  show stableValue (X.stableAdd x y) = _
+  exact X.stableValue_stableAdd x y
+
 end Omega
