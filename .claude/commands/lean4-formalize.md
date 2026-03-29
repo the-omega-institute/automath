@@ -56,14 +56,14 @@ orchestrator 在每轮开始时问自己：
 
 ## 反退化机制（最高优先级）
 
-### 4 小时定时全刷新（CronJob 驱动）
+### 3 小时定时全刷新（CronJob 驱动）
 
-启动团队后，**必须创建 4 小时定时刷新 CronJob**：
+启动团队后，**必须创建 3 小时定时刷新 CronJob**：
 
 ```
 CronCreate(
-  cron = "7 */4 * * *",
-  prompt = "lean4-formalization 4小时定时全刷新。
+  cron = "7 */3 * * *",
+  prompt = "lean4-formalization 3小时定时全刷新。
 
   **前置条件：必须等待当前轮次工作完成后才执行刷新。**
 
@@ -80,7 +80,7 @@ CronCreate(
   5. **重新加载流程文件**：Read lean4-formalize.md、IMPLEMENTATION_PLAN.md、MEMORY.md，刷新 team lead 对当前状态的理解
   6. **输出审计报告**：汇总本周期 commit 的数学深度评估，然后自动续轮
 
-  注意：这是定期刷新——每 4 小时触发一次，但必须等待当前轮次完成后才执行。目的是预防性地清除所有 agent 和 team lead 的上下文累积偏差，同时不打断正在进行的工作。"
+  注意：这是定期刷新——每 3 小时触发一次，但必须等待当前轮次完成后才执行。目的是预防性地清除所有 agent 和 team lead 的上下文累积偏差，同时不打断正在进行的工作。"
 )
 ```
 
@@ -418,21 +418,33 @@ formalizer:  [实现 R(N)] ────────> [commit] → [实现 R(N+1)
 registrar:           [登记 R(N-1)] → [push]        [登记 R(N)] → ...
 ```
 
-**触发规则——强制 checklist**（orchestrator 收到**任何消息**后，必须逐项检查并执行）：
+**并行调度硬规则（最高优先级）**：
+
+**orchestrator 收到任何消息后，必须在同一个 turn 中发出所有必要的 SendMessage——严禁分批发送。**
 
 ```
-□ analyst 是否空闲且没有下一轮任务？ → 发消息请求下一轮规格
-□ formalizer 是否空闲且有待实现的规格？ → 立即发送规格
-□ registrar 是否空闲且有未登记的 commit？ → 发送登记请求
-□ formalizer 刚完成并 commit？ → 同一条回复中同时发三条消息：
-    ① registrar：登记本轮
-    ② analyst：设计下一轮（如果还没在做）
-    ③ formalizer：如果 analyst 已有规格 → 发送；否则 → 告知等待
-□ analyst 刚完成规格？ → 如果 formalizer idle → 立即发送
-□ registrar 刚完成登记？ → 如果 formalizer 在等规格且 analyst 已有 → 转发
+收到任何消息后，在同一个 response 中执行以下全部检查并发送：
+
+□ analyst 空闲且没有下一轮任务？ → SendMessage(to="analyst", ...) 请求规格
+□ formalizer 空闲且有待实现的规格？ → SendMessage(to="formalizer", ...) 发送规格
+□ registrar 空闲且有未登记的 commit？ → SendMessage(to="registrar", ...) 登记请求
+
+以上三条必须在同一个 turn 中全部发出，不要发一条等回复再发下一条。
 ```
 
-**关键：永远不要只回复一条消息就停下来。每次都检查所有三个 agent 的状态。**
+**典型场景——formalizer 完成 commit 后，orchestrator 必须在同一 turn 发出 3 条消息**：
+```
+SendMessage(to = "registrar", message = "登记 R(N)...")    // ① 登记
+SendMessage(to = "formalizer", message = "实现 R(N+1)...")  // ② 下一轮（如果规格已有）
+SendMessage(to = "analyst", message = "设计 R(N+2)...")     // ③ 提前规格
+```
+
+**禁止的模式**：
+- ❌ 发一条消息给 registrar，然后等 idle → 再发给 formalizer → 再等 → 再发给 analyst
+- ❌ 只发一条消息就 idle，等 cron 唤醒再发下一条
+- ✅ 在同一个 response 中发出所有独立的 SendMessage
+
+**关键：永远不要只回复一条消息就停下来。每次都检查所有三个 agent 的状态，一次性发出所有消息。**
 
 ## 每轮循环流程（由 orchestrator 执行）
 
@@ -790,14 +802,14 @@ Agent(
 
 | 角色 | agent 定义 | 生命周期 | 刷新策略 |
 |------|-----------|----------|----------|
-| **orchestrator** | lean4-orchestrator | **每 4 小时刷新** | team lead 管理；等待当前轮次完成后刷新；shutdown 前 orchestrator 保存状态到 memory，respawn 后从 memory 恢复 |
+| **orchestrator** | lean4-orchestrator | **每 3 小时刷新** | team lead 管理；等待当前轮次完成后刷新；shutdown 前 orchestrator 保存状态到 memory，respawn 后从 memory 恢复 |
 | analyst | lean4-analyst | **每 10 轮刷新**（由 orchestrator 管理） | orchestrator 在 round_count % 10 == 0 时刷新 |
-| formalizer | lean4-formalizer | **每 4 小时刷新**（与 orchestrator 同步） | team lead 的 4h cron 同时刷新，等待当前轮次完成 |
-| registrar | lean4-registrar | **每 4 小时刷新**（与 orchestrator 同步） | team lead 的 4h cron 同时刷新，等待当前轮次完成 |
+| formalizer | lean4-formalizer | **每 3 小时刷新**（与 orchestrator 同步） | team lead 的 3h cron 同时刷新，等待当前轮次完成 |
+| registrar | lean4-registrar | **每 3 小时刷新**（与 orchestrator 同步） | team lead 的 3h cron 同时刷新，等待当前轮次完成 |
 | reviewer | lean4-reviewer | 按需 | orchestrator spawn，审核完 shutdown |
 | codex-consultant | lean4-codex-consultant | 按需 | orchestrator spawn，咨询完 shutdown |
 
-**刷新流程**（由 team lead 的 4h cron 触发，等待当前轮次完成后执行）：
+**刷新流程**（由 team lead 的 3h cron 触发，等待当前轮次完成后执行）：
 1. team lead 发 shutdown_request 给 orchestrator + formalizer + registrar（analyst 由 orchestrator 管理）
 2. 等待确认
 3. respawn 全部（orchestrator prompt 中包含从 memory 读取的当前状态）
