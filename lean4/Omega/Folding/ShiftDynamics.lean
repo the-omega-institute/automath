@@ -1236,4 +1236,12 @@ theorem paper_lucas_add_formula (m n : Nat) :
 theorem paper_lucas_strict_mono (n : Nat) (hn : 1 ≤ n) : lucasNum n < lucasNum (n + 1) :=
   lucasNum_strict_mono n hn
 
+/-- Paper: thm:pom-entropy-saturation (period-2 orbit) -/
+theorem paper_shift_period2Seq : X.shiftN 2 X.period2Seq = X.period2Seq :=
+  X.shiftN_two_period2
+
+/-- Paper: thm:pom-entropy-saturation (period-2 not fixed) -/
+theorem paper_shift_period2Seq_ne : X.shift X.period2Seq ≠ X.period2Seq :=
+  X.shift_period2_ne
+
 end Omega

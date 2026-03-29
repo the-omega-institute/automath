@@ -142,4 +142,34 @@ theorem paper_halfCircleDim_pos_iff (r t : Nat) :
     0 < halfCircleDim r t ↔ 0 < r :=
   halfCircleDim_pos_iff r t
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R139: Subtraction + strict monotonicity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Circle dimension subtraction: cdim(b-a) = cdim(b) - cdim(a) when a ≤ b.
+    thm:cdim-short-exact-additivity -/
+theorem circleDim_sub (a b t1 t2 : Nat) (_h : a ≤ b) :
+    circleDim (b - a) t1 = circleDim b t2 - circleDim a t2 := rfl
+
+/-- Circle dimension strict monotonicity.
+    thm:cdim-short-exact-additivity -/
+theorem circleDim_strictMono (a b t1 t2 : Nat) (h : a < b) :
+    circleDim a t1 < circleDim b t2 := h
+
+/-- Half circle dimension strict monotonicity.
+    thm:cdim-short-exact-additivity -/
+theorem halfCircleDim_strictMono (a b t1 t2 : Nat) (h : a < b) :
+    halfCircleDim a t1 < halfCircleDim b t2 := by
+  unfold halfCircleDim circleDim
+  exact div_lt_div_of_pos_right (by exact_mod_cast h) (by norm_num)
+
+/-- Paper: thm:cdim-short-exact-additivity -/
+theorem paper_circleDim_sub (a b t1 t2 : Nat) (h : a ≤ b) :
+    circleDim (b - a) t1 = circleDim b t2 - circleDim a t2 :=
+  circleDim_sub a b t1 t2 h
+
+theorem paper_circleDim_strictMono (a b t1 t2 : Nat) (h : a < b) :
+    circleDim a t1 < circleDim b t2 :=
+  circleDim_strictMono a b t1 t2 h
+
 end Omega.CircleDimension

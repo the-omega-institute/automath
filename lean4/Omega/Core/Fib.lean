@@ -472,6 +472,34 @@ theorem fib_cassini_odd (n : Nat) (hodd : ¬ Even n) :
       nlinarith [sq_nonneg (Nat.fib n), sq_nonneg (Nat.fib (n + 1))]
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R139: Indexed Cassini identities
+-- ══════════════════════════════════════════════════════════════
+
+/-- Cassini even case indexed by k: F(2k+1)² = F(2k)·F(2k+2) + 1.
+    cor:discussion-horizon-boundarylayer-phi-scaling -/
+theorem fib_cassini_even_indexed (k : Nat) :
+    Nat.fib (2 * k + 1) ^ 2 = Nat.fib (2 * k) * Nat.fib (2 * k + 2) + 1 := by
+  have := fib_cassini_even (2 * k) (even_two_mul k)
+  omega
+
+/-- Cassini odd case indexed by k: F(2k+2)² + 1 = F(2k+1)·F(2k+3).
+    cor:discussion-horizon-boundarylayer-phi-scaling -/
+theorem fib_cassini_odd_indexed (k : Nat) :
+    Nat.fib (2 * k + 2) ^ 2 + 1 = Nat.fib (2 * k + 1) * Nat.fib (2 * k + 3) := by
+  have := fib_cassini_odd (2 * k + 1) (by intro ⟨j, hj⟩; omega)
+  -- this : F(2k+1) * F(2k+3) = F(2k+2)^2 + 1
+  linarith
+
+/-- Paper: cor:discussion-horizon-boundarylayer-phi-scaling (Cassini) -/
+theorem paper_fib_cassini_even_indexed (k : Nat) :
+    Nat.fib (2 * k + 1) ^ 2 = Nat.fib (2 * k) * Nat.fib (2 * k + 2) + 1 :=
+  fib_cassini_even_indexed k
+
+theorem paper_fib_cassini_odd_indexed (k : Nat) :
+    Nat.fib (2 * k + 2) ^ 2 + 1 = Nat.fib (2 * k + 1) * Nat.fib (2 * k + 3) :=
+  fib_cassini_odd_indexed k
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase 178
 -- ══════════════════════════════════════════════════════════════
 
