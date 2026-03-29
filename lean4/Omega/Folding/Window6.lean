@@ -912,4 +912,48 @@ theorem paper_gauge_group_order_factored :
       2 ^ 8 * 6 ^ 4 * 24 ^ 9 :=
   gauge_group_order_factored
 
+/-- Cross-chapter master audit certificate: all key Window-6 invariants in one theorem.
+    thm:conclusion-master-audit-certificate -/
+theorem paper_master_audit_certificate :
+    Fintype.card (X 6) = 21 ∧ 2 ^ 6 = 64 ∧
+    momentSum 2 6 = 220 ∧ momentSum 3 6 = 820 ∧
+    collisionKernel2.trace = 2 ∧ collisionKernel2.det = -2 ∧
+    (45 : Nat) = Nat.fib 9 + Nat.fib 6 + Nat.fib 4 ∧
+    cBinFiberHist 6 2 = 8 ∧ cBinFiberHist 6 3 = 4 ∧ cBinFiberHist 6 4 = 9 ∧
+    2 ^ 6 - Fintype.card (X 6) = 43 :=
+  master_audit_certificate
+
+/-- Fibonacci backbone: the recurrence and key arithmetic.
+    thm:conclusion-fibonacci-backbone -/
+theorem paper_fibonacci_backbone :
+    Nat.fib 9 - Nat.fib 2 = 33 ∧
+    Nat.fib 8 = 3 * 7 ∧
+    Nat.fib 4 = 3 ∧ Nat.fib 6 = 8 :=
+  fibonacci_backbone
+
+/-- Maximum fiber multiplicities at key resolutions: D(6)=5, D(8)=8, D(10)=13.
+    thm:pom-pimsner-popa-index-instances -/
+theorem paper_pimsner_popa_index_instances :
+    X.maxFiberMultiplicity 6 = 5 ∧ X.maxFiberMultiplicity 8 = 8 ∧
+    X.maxFiberMultiplicity 10 = 13 :=
+  pimsner_popa_index_instances
+
+/-- Complete coverage certificate: all key numerical invariants verified.
+    prop:conclusion-coverage-certificate -/
+theorem paper_coverage_certificate :
+    Nat.fib 8 = 21 ∧ Nat.fib 9 = 34 ∧ Nat.fib 10 = 55 ∧
+    Fintype.card (X 6) = 21 ∧
+    momentSum 2 6 = 220 ∧ momentSum 3 6 = 820 ∧ momentSum 4 6 = 3244 ∧
+    cBinFiberHist 6 2 = 8 ∧ cBinFiberHist 6 3 = 4 ∧ cBinFiberHist 6 4 = 9 ∧
+    collisionKernel2.trace = 2 ∧ collisionKernel2.det = -2 ∧
+    (45 : Nat) = Nat.fib 9 + Nat.fib 6 + Nat.fib 4 :=
+  coverage_certificate
+
+/-- Readout time lower bound instances: D(6) > 4, D(8) = 8, D(10) > 8.
+    thm:conclusion-externalization-index-readout-time-lower-bound-general -/
+theorem paper_readout_time_lower_bound :
+    X.maxFiberMultiplicity 6 > 2 ^ 2 ∧ X.maxFiberMultiplicity 8 = 2 ^ 3 ∧
+    X.maxFiberMultiplicity 10 > 2 ^ 3 :=
+  readout_time_lower_bound_instances
+
 end Omega
