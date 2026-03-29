@@ -153,6 +153,31 @@ theorem goldenMean_trace_recurrence_unbounded (n : ℕ) :
     rw [pow_add, hCH, mul_add, mul_one, ← pow_succ]
   rw [hpow, Matrix.trace_add]
 
+/-- Lucas numbers: L(0)=2, L(1)=1, L(n+2)=L(n+1)+L(n).
+    thm:zeta-syntax-trace-linear-recurrence -/
+def lucasNum : ℕ → ℤ
+  | 0 => 2
+  | 1 => 1
+  | n + 2 => lucasNum (n + 1) + lucasNum n
+
+@[simp] theorem lucasNum_zero : lucasNum 0 = 2 := rfl
+@[simp] theorem lucasNum_one : lucasNum 1 = 1 := rfl
+@[simp] theorem lucasNum_succ_succ (n : ℕ) :
+    lucasNum (n + 2) = lucasNum (n + 1) + lucasNum n := rfl
+
+/-- The trace of A^n equals the n-th Lucas number L(n).
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem trace_eq_lucasNum (n : ℕ) :
+    (Graph.goldenMeanAdjacency ^ n).trace = lucasNum n := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => native_decide
+    | 1 => native_decide
+    | n + 2 =>
+      rw [goldenMean_trace_recurrence_unbounded n, ih (n + 1) (by omega),
+        ih n (by omega), lucasNum_succ_succ]
+
 /-! ## Zeta rationality and pole structure
 
 For a d×d matrix, ζ_A(z) = det(I-zA)⁻¹ is a rational function with

@@ -1,3 +1,5 @@
+import Mathlib.Tactic
+
 /-! ### Circle dimension for abelian groups
 
 The circle dimension of a finitely generated abelian group Z^n_free × T
@@ -24,5 +26,30 @@ theorem circleDim_finite (t : Nat) : circleDim 0 t = 0 := rfl
     prop:circle-dimension-add -/
 theorem circleDim_add (a b c d : Nat) :
     circleDim (a + b) (c + d) = circleDim a c + circleDim b d := rfl
+
+/-- Circle dimension is invariant under equal free rank.
+    prop:circle-dimension-laws -/
+theorem circleDim_iso (a b c d : Nat) (h : a = b) :
+    circleDim a c = circleDim b d := by subst h; rfl
+
+/-- Circle dimension depends only on free rank, not torsion.
+    prop:circle-dimension-laws -/
+theorem circleDim_finite_extension (n t1 t2 : Nat) :
+    circleDim n t1 = circleDim n t2 := rfl
+
+/-- Circle dimension is zero iff free rank is zero.
+    prop:circle-dimension-laws -/
+theorem circleDim_eq_zero_iff (n t : Nat) :
+    circleDim n t = 0 ↔ n = 0 := by simp [circleDim]
+
+/-- Half circle dimension: circleDim / 2 as a rational number.
+    prop:circle-dimension-laws -/
+def halfCircleDim (n_free : Nat) (n_torsion : Nat) : ℚ :=
+  (circleDim n_free n_torsion : ℚ) / 2
+
+/-- Half circle dimension of ℤ is 1/2.
+    prop:circle-dimension-laws -/
+theorem halfCircleDim_nat : halfCircleDim 1 0 = 1 / 2 := by
+  simp [halfCircleDim, circleDim]
 
 end Omega.CircleDimension
