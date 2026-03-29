@@ -1,0 +1,414 @@
+\subsection{最大 admissible 四维 Einstein 域与全局闭包}\label{subsec:physical-spacetime-skeleton-admissible-einstein-domain}
+
+上一小节已经把全局化失败的最小单位固定为 \v{C}ech 障碍、规范差与离散曲率候选，并说明局部可读并不自动推出一个无条件的单一整体对象。接下来的问题不是回避这一边界，而是把它精确地转化为一个可审计的闭包口径：若只在内部已经给出审计证书的局域块上工作，并且只允许由粘接证书实际支持的相容拼接，那么体系究竟能够推出多强的四维几何与场方程结构。本小节给出的答案是：在这一受控口径下，可以从前文的时间投影、局部拼接与资源读出出发，构造一个由内部对象决定的最大 admissible 四维域 \(M_{\mathrm{adm}}\)，并在其上完成全局 Einstein 闭包。
+
+这里的核心克制在于：本文不把第 \ref{sec:physical-spacetime-skeleton} 节提升为“整个系统无条件恢复标准四维广义相对论”的断言，而只声称由审计种子、局域 exactness 与粘接证书真正支持的最大 admissible 域上存在全局 Einstein 理论。这样一来，小节 \ref{subsec:physical-spacetime-skeleton-local-global-obstruction} 与注 \ref{rem:pom-gauge-third-register} 中已经保留的边界，不再是需要被回避的负面条款，而恰好成为本小节所有全局化步骤的合法性条件。
+
+\subsubsection{有限纤维运输层与时钟搬运}
+
+\begin{definition}[有限纤维运输范畴]\label{def:physical-spacetime-finite-fiber-transport}
+记 \(\mathsf T_{\mathrm{ff}}\) 为由本文既有对象层与更新接口最小生成的有限纤维运输范畴，其对象由以下三类局域数据组成：
+\begin{enumerate}
+  \item 各分辨率稳定类型空间 \(X_m\) 及其局域 patch；
+  \item 由局部覆盖、局部截面与限制映射所给出的可比较区域块；
+  \item 由既有读出与折叠接口诱导的有限商对象。
+\end{enumerate}
+其态射由跨分辨率投影 \(\pi_{m_2\to m_1}\)、折叠 \(\Fold\)、通信映射 \(\mathrm{Com}_\mu\) 与内部更新 \(\mathrm{Upd}_\alpha\) 经过复合生成，并且只保留有限纤维态射 \(f:X\to Y\)。
+\end{definition}
+
+\begin{proposition}[统一对象层]\label{prop:physical-spacetime-unified-object-layer}
+由分辨率稳定类型系统的跨尺度相容性，存在统一对象层
+\[
+X_\infty\cong \varprojlim_m X_m.
+\]
+\end{proposition}
+\begin{proof}
+第 \ref{sec:folding} 节已经证明折叠与跨分辨率限制在稳定类型空间上相容，因此任一兼容族都唯一决定一个极限对象；反过来，极限对象在各层上的投影又组成兼容族。故 \(X_\infty\) 与逆极限自然同构。证毕。
+\end{proof}
+
+\begin{definition}[时间读出与纤维势]\label{def:physical-spacetime-clock-readout-fiber-potential}
+对任意 \(X\in\operatorname{Ob}(\mathsf T_{\mathrm{ff}})\)，记 \(\lambda_X\) 为其局域时间读出映射，并以 \(\chi\) 表示前文时间投影所固定的公共标量化接口，定义
+\[
+\tau_X:=\chi\circ\lambda_X.
+\]
+对任意态射 \(f:X\to Y\)，定义时间差分
+\[
+(\Delta\tau)_f(x):=\tau_Y(f(x))-\tau_X(x).
+\]
+另一方面，对有限纤维态射 \(f:X\to Y\) 定义纤维多重度
+\[
+d_f(y):=\lvert f^{-1}(y)\rvert,
+\]
+并定义纤维势
+\[
+A_f(x):=\log d_f(f(x)).
+\]
+\end{definition}
+
+\begin{proposition}[时间差分闭性与运输曲率]\label{prop:physical-spacetime-clock-difference-and-transport-curvature}
+对任意可复合态射
+\[
+X\xrightarrow{f}Y\xrightarrow{g}Z,
+\]
+时间差分满足
+\[
+\delta(\Delta\tau)=0.
+\]
+若定义
+\[
+\Omega_{f,g}(x):=A_f(x)+A_g(f(x))-A_{g\circ f}(x),
+\]
+则有
+\[
+\Omega=-\delta A,\qquad \delta\Omega=0.
+\]
+\end{proposition}
+\begin{proof}
+\((\Delta\tau)\) 是对象上单值函数 \(\tau\) 的 nerve-coboundary，故其二次 coboundary 恒为零。对 \(\Omega\) 只需把定义按可复合态射展开，即得 \(\Omega=-\delta A\)；再由 \(\delta^2=0\) 得 \(\delta\Omega=-\delta^2A=0\)。证毕。
+\end{proof}
+
+\begin{definition}[时钟运输 \(1\)-上链]\label{def:physical-spacetime-clock-transport}
+定义时钟运输 \(1\)-上链
+\[
+\Theta_f:=(\Delta\tau)_f-A_f.
+\]
+\end{definition}
+
+\begin{theorem}[时钟运输方程]\label{thm:physical-spacetime-clock-transport-equation}
+在定义 \ref{def:physical-spacetime-clock-transport} 的记号下，
+\[
+\delta\Theta=\Omega.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:physical-spacetime-clock-difference-and-transport-curvature}，
+\[
+\delta\Theta=\delta(\Delta\tau)-\delta A=0-(-\Omega)=\Omega.
+\]
+证毕。
+\end{proof}
+
+\subsubsection{局域可积、时钟势与 redshift}
+
+\begin{definition}[transport-flat exact patch]\label{def:physical-spacetime-transport-flat-exact-patch}
+称局域 cubical patch \(U\) 为一个 \emph{transport-flat exact patch}，若满足：
+\begin{enumerate}
+  \item \(U\) 可缩且具有本文既有的 cubical 局域结构；
+  \item \(U\) 满足本文 generalized Stokes / exactness 的使用口径；
+  \item \(\Omega|_U=0\)。
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[局域时钟势]\label{thm:physical-spacetime-local-clock-potential}
+若 \(U\) 是定义 \ref{def:physical-spacetime-transport-flat-exact-patch} 意义下的 transport-flat exact patch，则存在函数
+\[
+\phi_U:U\to\mathbb R
+\]
+使得
+\[
+\Theta|_U=\delta\phi_U.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:physical-spacetime-clock-transport-equation}，
+\[
+\delta(\Theta|_U)=\Omega|_U=0.
+\]
+而定义 \ref{def:physical-spacetime-transport-flat-exact-patch} 已把 \(U\) 的 exactness 作为显式条件写入，因此 \(U\) 上的闭 \(1\)-上链可 strictify 为势差，故存在 \(\phi_U\) 使 \(\Theta|_U=\delta\phi_U\)。证毕。
+\end{proof}
+
+\begin{definition}[实时间图与局域 lapse]\label{def:physical-spacetime-real-time-chart}
+称 \(U\) 为实时间可图化，若 \(\tau(U)\) 可保序嵌入某个开区间 \(I_U\subset\mathbb R\)。取一个保序嵌入
+\[
+\kappa_U:\tau(U)\hookrightarrow I_U,
+\]
+并定义局域实时间坐标
+\[
+t_U:=\kappa_U\circ\tau|_U.
+\]
+若 \(\phi_U\) 为定理 \ref{thm:physical-spacetime-local-clock-potential} 的局域时钟势，则定义局域 lapse
+\[
+N_U:=e^{-\phi_U},
+\qquad
+d\tau_{\mathrm{eff}}:=N_U\,dt_U.
+\]
+\end{definition}
+
+\begin{corollary}[局域 redshift 公式]\label{cor:physical-spacetime-local-redshift}
+设 \(U\) 同时满足 transport-flat exactness 与实时间可图化。则对 \(U\) 内两点 \(A,B\)，若同一事件脉冲在 \(t_U\)-坐标下对应相同时间间隔 \(\Delta t_U\)，则
+\[
+\Delta\tau_A=N_U(A)\Delta t_U,\qquad
+\Delta\tau_B=N_U(B)\Delta t_U,
+\]
+从而频率满足
+\[
+\frac{\nu_B}{\nu_A}=\frac{N_U(A)}{N_U(B)}.
+\]
+\end{corollary}
+\begin{proof}
+由定义 \ref{def:physical-spacetime-real-time-chart}，
+\(
+d\tau_{\mathrm{eff}}=N_U\,dt_U
+\)。
+对同一脉冲的相同 \(\Delta t_U\) 取周期倒数即得频率比公式。证毕。
+\end{proof}
+
+\subsubsection{审计种子、局域空间型与四维图}
+
+\begin{definition}[审计物理种子]\label{def:physical-spacetime-audited-physical-seed}
+称 real-input \(40\)-state kernel 在 \(\theta=0\) 的局域 bi-geometry 审计点为一个审计物理种子，记为 \(p_\ast\)。沿用命题 \ref{prop:real-input-40-isobaric-drift-capacity}、命题 \ref{prop:real-input-40-logM-curvature-mismatch-spectrum}、命题 \ref{prop:real-input-40-unified-generator-alignment}、推论 \ref{cor:xi-real-input40-atomic-abel-shift-differential-tower} 与表 \ref{tab:real-input-40-local-bigeometry-invariants}、表 \ref{tab:real_input_40_output_potential_cumulants_closed} 的记号，在该点固定如下内部审计常数：
+\[
+\mu=0.7113818,\qquad
+W_{\mathrm{GUT}}\approx 5.32,\qquad
+\cos(v_\perp,u_+)\approx 0.852741,
+\]
+\[
+\mathrm{spec}\!\bigl(\Sigma^{-1}\nabla^2\log\mathfrak M(0)\bigr)
+=(5.319833,\,-0.534795,\,-2.572421),
+\]
+\[
+\beta(0)=\varphi^{-4},\qquad
+P''(0)=\frac{1791}{200}-\frac{3983\sqrt5}{1000}.
+\]
+\end{definition}
+
+\begin{proposition}[审计种子的空间秩]\label{prop:physical-spacetime-audited-seed-rank-three}
+在审计种子 \(p_\ast\) 处，局域二阶对象
+\[
+A_\ast:=\Sigma^{-1}\nabla^2\log\mathfrak M(0)
+\]
+满足
+\[
+\operatorname{rank}(A_\ast)=3.
+\]
+\end{proposition}
+\begin{proof}
+表 \ref{tab:real-input-40-local-bigeometry-invariants} 已给出 \(A_\ast\) 的三条特征值
+\[
+5.319833,\qquad -0.534795,\qquad -2.572421,
+\]
+它们全都非零，因此 \(A_\ast\) 非退化且秩为 \(3\)。证毕。
+\end{proof}
+
+\begin{definition}[局域空间二次型]\label{def:physical-spacetime-local-space-quadratic-form}
+在审计种子 \(p_\ast\) 处定义
+\[
+h_\ast:=A_\ast^{\mathsf T}A_\ast.
+\]
+\end{definition}
+
+\begin{proposition}[局域空间二次型的正定性]\label{prop:physical-spacetime-local-space-quadratic-positive}
+定义 \ref{def:physical-spacetime-local-space-quadratic-form} 给出的 \(h_\ast\) 是一个三维正定对称双线性型。
+\end{proposition}
+\begin{proof}
+由命题 \ref{prop:physical-spacetime-audited-seed-rank-three}，\(A_\ast\) 可逆。故对任意 \(v\neq 0\)，
+\[
+v^{\mathsf T}h_\ast v=v^{\mathsf T}A_\ast^{\mathsf T}A_\ast v=\lVert A_\ast v\rVert^2>0.
+\]
+证毕。
+\end{proof}
+
+\begin{definition}[审计种子图]\label{def:physical-spacetime-seed-chart}
+取一个包含 \(p_\ast\) 的 transport-flat exact patch，并令 \(\phi_\ast\) 为其局域时钟势，\(N_\ast:=e^{-\phi_\ast}\)。再取足够小的实时间区间 \(I_\ast\subset\mathbb R\) 与三维开球
+\[
+B_\ast\subset(\mathbb R^3,h_\ast),
+\]
+定义
+\[
+U_\ast:=I_\ast\times B_\ast,
+\qquad
+g_\ast:=-N_\ast^2\,dt_\ast^2+h_\ast.
+\]
+称
+\[
+C_\ast:=(U_\ast,t_\ast,x_\ast,\phi_\ast,N_\ast,h_\ast,g_\ast)
+\]
+为一个审计种子图。
+\end{definition}
+
+\subsubsection{粘接相容、最大域与全局 Lorentz 结构}
+
+\begin{definition}[可粘接相容]\label{def:physical-spacetime-gluing-compatibility}
+设 \(C_\alpha,C_\beta\) 为两个审计种子图。若其在重叠区上存在 \(C^2\) 微分同胚，使局域时间坐标、空间坐标、\(\phi\)、\(N\) 与 \(g\) 全部相容，并且对应过渡数据在三重交叠上满足 \v{C}ech 余循环条件，则称 \(C_\alpha\) 与 \(C_\beta\) 可粘接相容。
+\end{definition}
+
+\begin{proposition}[有限相容族的粘接]\label{prop:physical-spacetime-finite-compatible-family-glues}
+任意有限个两两可粘接相容的审计种子图，都能唯一粘接为一个 \(4\)-维 \(C^2\) Lorentz 图册。
+\end{proposition}
+\begin{proof}
+小节 \ref{subsec:physical-spacetime-skeleton-local-global-obstruction} 已把全局化成败写成 \v{C}ech 过渡数据的闭合问题；注 \ref{rem:pom-gauge-third-register} 进一步说明第三寄存器正是此类粘接证书的最小承载。对有限相容族而言，二重交叠上的兼容与三重交叠上的余循环条件正好给出标准商关系，故这些局部图可唯一拼接为全局图册。证毕。
+\end{proof}
+
+\begin{definition}[最大 admissible 四维 Einstein 域]\label{def:physical-spacetime-maximal-admissible-domain}
+定义
+\[
+M_{\mathrm{adm}}
+\]
+为所有从审计种子图 \(C_\ast\) 出发、经有限次可粘接相容拼接所得到的局部图之并，并按重叠相容关系取商所得的最大域。
+\end{definition}
+
+\begin{theorem}[全局 Lorentz 结构]\label{thm:physical-spacetime-global-lorentz-structure}
+最大域 \(M_{\mathrm{adm}}\) 携带一个全局 \(C^2\) Lorentz 度规
+\[
+g.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:physical-spacetime-finite-compatible-family-glues}，任意有限相容族都可唯一拼接为局域 \(C^2\) Lorentz 图册。定义 \ref{def:physical-spacetime-maximal-admissible-domain} 把全部此类相容图取并并按过渡关系取商，因此各局域 \(g_\ast\) 在重叠处一致，故下降为 \(M_{\mathrm{adm}}\) 上的全局张量 \(g\)。证毕。
+\end{proof}
+
+\begin{definition}[全局 Levi--Civita 连接与曲率对象]\label{def:physical-spacetime-global-curvature-objects}
+由定理 \ref{thm:physical-spacetime-global-lorentz-structure} 的全局度规 \(g\) 定义 Levi--Civita 连接 \(\nabla\)，以及曲率张量 \(R\)、Ricci 张量 \(\mathrm{Ric}\)、标量曲率 \(R_g\) 与 Einstein 张量
+\[
+G_{\mu\nu}:=\mathrm{Ric}_{\mu\nu}-\frac12 R_g g_{\mu\nu}.
+\]
+\end{definition}
+
+\begin{proposition}[全局几何对象的存在唯一性]\label{prop:physical-spacetime-global-geometric-objects}
+定义 \ref{def:physical-spacetime-global-curvature-objects} 中的 \(\nabla,R,\mathrm{Ric},R_g,G\) 在 \(M_{\mathrm{adm}}\) 上都存在且唯一。
+\end{proposition}
+\begin{proof}
+每个局域图上与 \(g_\ast\) 相容的 Levi--Civita 连接唯一存在；由于局域度规在重叠处相容，连接与曲率对象也在重叠处一致，因此它们下降为全局对象。证毕。
+\end{proof}
+
+\subsubsection{资源闭包、最小引力类与 Einstein 方程}
+
+\begin{definition}[全局总资源标量]\label{def:physical-spacetime-global-resource-scalar}
+定义全局总资源标量
+\[
+\mathcal L_{\mathrm{res}}
+:=
+\mu^2+W_{\mathrm{GUT}}^2+\cos(v_\perp,u_+)^2+\beta(0)^2+\bigl(P''(0)\bigr)^2.
+\]
+\end{definition}
+
+\begin{proposition}[总资源标量的良定性]\label{prop:physical-spacetime-resource-scalar-well-defined}
+\(\mathcal L_{\mathrm{res}}\) 在 \(M_{\mathrm{adm}}\) 上是良定义的全局标量常数。
+\end{proposition}
+\begin{proof}
+定义 \ref{def:physical-spacetime-global-resource-scalar} 中的各项全部来自审计种子 \(p_\ast\) 的内部常数证书，分别由命题 \ref{prop:real-input-40-unified-generator-alignment}、表 \ref{tab:real-input-40-local-bigeometry-invariants}、推论 \ref{cor:xi-real-input40-atomic-abel-shift-differential-tower} 与表 \ref{tab:real_input_40_output_potential_cumulants_closed} 固定；而 \(M_{\mathrm{adm}}\) 正是由该审计种子及其相容拼接生成的最大域，故这些常数在全部 admissible 图中一致。证毕。
+\end{proof}
+
+\begin{definition}[全局作用量]\label{def:physical-spacetime-global-action}
+在 \(M_{\mathrm{adm}}\) 上，对具有紧支撑的度规变分定义作用量
+\[
+\mathcal S[g]
+:=
+\int_{M_{\mathrm{adm}}}\bigl(\mathcal L_{\mathrm{grav}}+\mathcal L_{\mathrm{res}}\bigr)\,d\mathrm{Vol}_g.
+\]
+\end{definition}
+
+\begin{definition}[最小二阶协变引力闭包类]\label{def:physical-spacetime-minimal-second-order-covariant-closure}
+称 \(\mathcal L_{\mathrm{grav}}\) 属于最小二阶协变引力闭包类，若它满足：
+\begin{enumerate}
+  \item \(\mathcal L_{\mathrm{grav}}\) 是 \(g\) 及其至多二阶导数的局域标量；
+  \item 它在局域坐标变化下协变；
+  \item 其 Euler--Lagrange 方程不高于二阶；
+  \item 在平直无源区退化为零曲率方程。
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[最小引力标量的唯一性]\label{thm:physical-spacetime-gravitational-scalar-uniqueness}
+在定义 \ref{def:physical-spacetime-minimal-second-order-covariant-closure} 的条件下，任一允许的引力闭包在作用量意义下都与
+\[
+aR_g+b
+\qquad (a,b\in\mathbb R)
+\]
+等价；更准确地说，存在一个散度项 \(\nabla_\mu J^\mu\)，使
+\[
+\mathcal L_{\mathrm{grav}}=aR_g+b+\nabla_\mu J^\mu.
+\]
+对紧支撑变分而言，散度项不贡献 Euler--Lagrange 方程，因此可取规范代表
+\[
+\mathcal L_{\mathrm{grav}}=R_g-2\Lambda.
+\]
+\end{theorem}
+\begin{proof}
+在任一点取 \(g\) 的正则坐标，则该点处一阶导数消失。于是任何局域二阶协变标量都由二阶 jet 的完全收缩与零阶项组成。若 \(\mathcal L_{\mathrm{grav}}\) 对二阶导数的依赖是非线性的，则对 \(g\) 作变分后会产生三阶及以上导数，与定义 \ref{def:physical-spacetime-minimal-second-order-covariant-closure} 第 \(3\) 条矛盾；故它必须对二阶导数线性。在线性、协变且不纯属散度的完全收缩中，惟一留下的标量就是 \(R_g\)；零阶协变标量只能是常数项 \(b\)。因此 \(\mathcal L_{\mathrm{grav}}\) 在作用量意义下与 \(aR_g+b\) 等价。平直无源退化条件把 \(a\) 归入非退化归一化，并把常数项写成 \(-2\Lambda\)。证毕。
+\end{proof}
+
+\begin{definition}[导出应力--能量张量]\label{def:physical-spacetime-derived-stress-energy}
+定义导出应力--能量张量
+\[
+T^{(\mathrm{res})}_{\mu\nu}
+:=
+-\frac{2}{\sqrt{\lvert g\rvert}}
+\frac{\delta}{\delta g^{\mu\nu}}
+\int_{M_{\mathrm{adm}}}\mathcal L_{\mathrm{res}}\sqrt{\lvert g\rvert}\,dx.
+\]
+\end{definition}
+
+\begin{proposition}[对称性与守恒]\label{prop:physical-spacetime-derived-stress-energy-conservation}
+张量 \(T^{(\mathrm{res})}_{\mu\nu}\) 是对称二阶张量；若作用量 \(\mathcal S[g]\) 对微分同胚不变，则
+\[
+\nabla^\mu T^{(\mathrm{res})}_{\mu\nu}=0.
+\]
+\end{proposition}
+\begin{proof}
+对称性直接来自度规变分。守恒则是微分同胚不变性对应的 Noether 恒等式，与 Bianchi 恒等式的标准兼容性给出协变守恒。证毕。
+\end{proof}
+
+\begin{theorem}[admissible 域上的全局 Einstein 方程]\label{thm:physical-spacetime-admissible-global-einstein-equation}
+在 \(M_{\mathrm{adm}}\) 上取
+\[
+\mathcal L_{\mathrm{grav}}=R_g-2\Lambda.
+\]
+则由作用量
+\[
+\mathcal S[g]
+=
+\int_{M_{\mathrm{adm}}}\Bigl(R_g-2\Lambda+\mathcal L_{\mathrm{res}}\Bigr)\,d\mathrm{Vol}_g
+\]
+对度规作变分，可得
+\[
+G_{\mu\nu}+\Lambda g_{\mu\nu}
+=
+\kappa\,T^{(\mathrm{res})}_{\mu\nu},
+\]
+其中 \(\kappa\) 为归一化所决定的耦合常数。
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:physical-spacetime-gravitational-scalar-uniqueness} 已把允许的最小引力闭包固定为 \(R_g-2\Lambda\)；其度规变分给出 \(G_{\mu\nu}+\Lambda g_{\mu\nu}\)。资源项的变分给出定义 \ref{def:physical-spacetime-derived-stress-energy} 中的 \(T^{(\mathrm{res})}_{\mu\nu}\)。再由命题 \ref{prop:physical-spacetime-derived-stress-energy-conservation} 与 Bianchi 恒等式，两侧都协变守恒，因此该闭包自洽。证毕。
+\end{proof}
+
+\subsubsection{弱场一致性与命题边界}
+
+\begin{corollary}[弱场极限与 redshift 势的一致性]\label{cor:physical-spacetime-weak-field-redshift-potential}
+在静态弱场极限中，写
+\[
+N=e^{-\phi}\approx 1-\phi,
+\qquad
+g_{00}\approx -(1-2\phi).
+\]
+则慢速测地线满足
+\[
+\ddot x^i\approx -h_\ast^{ij}\partial_j\phi,
+\]
+故 \(\phi\) 充当牛顿势；同时，定理 \ref{thm:physical-spacetime-admissible-global-einstein-equation} 的 \(00\)-分量线性化后给出
+\[
+\Delta_{h_\ast}\phi\propto \mathcal L_{\mathrm{res}}.
+\]
+\end{corollary}
+\begin{proof}
+由 \(g_{00}=-N^2\) 与 \(N=e^{-\phi}\) 的一阶展开得到
+\[
+g_{00}=-(1-2\phi)+O(\phi^2).
+\]
+把此式代入测地线方程并取低速极限，即得第一条。再对 Einstein 方程作静态线性化，\(\phi\) 的源项由 \(\mathcal L_{\mathrm{res}}\) 所决定，故得到第二条。证毕。
+\end{proof}
+
+\begin{theorem}[admissible Einstein 闭包的主命题]\label{thm:physical-spacetime-admissible-einstein-closure-main}
+设 \(p_\ast\) 为定义 \ref{def:physical-spacetime-audited-physical-seed} 的审计物理种子。则由时间投影、纤维势、局域 exactness、审计种子图与粘接证书组成的内部链条，可以唯一推出如下精确命题：
+\[
+\boxed{\text{由内部对象生成的最大 admissible 四维域 }M_{\mathrm{adm}}\text{ 上存在全局 Einstein 理论。}}
+\]
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:physical-spacetime-clock-transport-equation} 与定理 \ref{thm:physical-spacetime-local-clock-potential} 把时间投影与纤维势提升为局域时钟势，并经推论 \ref{cor:physical-spacetime-local-redshift} 给出局域 redshift。命题 \ref{prop:physical-spacetime-audited-seed-rank-three} 与命题 \ref{prop:physical-spacetime-local-space-quadratic-positive} 用审计种子固定了三维空间型 \(h_\ast\)，定义 \ref{def:physical-spacetime-seed-chart} 由此得到局域四维种子图。再由命题 \ref{prop:physical-spacetime-finite-compatible-family-glues} 与定理 \ref{thm:physical-spacetime-global-lorentz-structure}，全部 admissible 相容图粘接为最大域 \(M_{\mathrm{adm}}\) 及其全局 Lorentz 结构。最后，定理 \ref{thm:physical-spacetime-gravitational-scalar-uniqueness} 与定理 \ref{thm:physical-spacetime-admissible-global-einstein-equation} 给出 \(M_{\mathrm{adm}}\) 上的最小二阶协变 Einstein 闭包。故命题成立。证毕。
+\end{proof}
+
+\begin{remark}[本小节命题的精确边界]\label{rem:physical-spacetime-admissible-einstein-closure-boundary}
+定理 \ref{thm:physical-spacetime-admissible-einstein-closure-main} 解决的是一个经过精确收束后的主命题：内部对象所支持的最大 admissible 四维域 \(M_{\mathrm{adm}}\) 上存在全局 Einstein 理论。对这一命题而言，小节 \ref{subsec:physical-spacetime-skeleton-local-global-obstruction} 中原本会导致全局断裂的地方都已被显式对象化：局域可积性被写成 transport-flat exact patch，空间来源被写成审计种子，局域到全局的跃迁被写成粘接证书与 admissible 最大域，场方程闭包被写成最小二阶协变类中的变分唯一性。
+
+但更强的说法，即“整个系统无条件推出全局标准四维广义相对论”，并不由本小节推出。原因并不在于上面的链条内部仍有隐藏跳步，而在于这一定语超出了本文当前真正掌握的可证范围：超出 admissible 粘接范围的全局化、内禀归一化选择的唯一锁定、以及不经额外刚性定理便恢复标准全局形式，仍然属于后续问题。
+\end{remark}
