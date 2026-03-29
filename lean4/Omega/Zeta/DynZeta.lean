@@ -71,6 +71,11 @@ theorem fredholmGoldenMean_at_three : (fredholmGoldenMean 3).det = -11 := by
 theorem fredholmGoldenMean_at_neg_two : (fredholmGoldenMean (-2)).det = -1 := by
   rw [fredholmGoldenMean_det]; ring
 
+/-- Fredholm determinant at z=4: det(I - 4A) = -19.
+    subsec:operator-zeta-interface -/
+theorem fredholmGoldenMean_at_four : (fredholmGoldenMean 4).det = -19 := by
+  rw [fredholmGoldenMean_det]; ring
+
 /-! ## Trace sequence for golden-mean matrix
 
 The trace sequence Tr(A^n) satisfies the Fibonacci-like recurrence

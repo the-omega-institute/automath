@@ -58,4 +58,10 @@ theorem circleDim_mono {n₁ n₂ t : Nat} (h : n₁ ≤ n₂) :
     circleDim n₁ t ≤ circleDim n₂ t := by
   simp [circleDim]; exact h
 
+/-- Half circle dimension is additive under direct sum.
+    prop:circle-dimension-laws -/
+theorem halfCircleDim_add (a b c d : Nat) :
+    halfCircleDim (a + b) (c + d) = halfCircleDim a c + halfCircleDim b d := by
+  simp [halfCircleDim, circleDim]; push_cast; ring
+
 end Omega.CircleDimension

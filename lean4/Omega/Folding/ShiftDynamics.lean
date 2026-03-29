@@ -1111,4 +1111,25 @@ theorem fib_tripling (n : Nat) :
       rw [hprod, hF2sq, hLsq]; ring
     exact mul_left_cancel₀ hfpos hmul
 
+/-- Lucas tripling: L(3n) = L(n) * (L(n)^2 - 3*(-1)^n).
+    bridge:lucas-tripling -/
+theorem lucasNum_tripling (n : Nat) :
+    (lucasNum (3 * n) : ℤ) = lucasNum n * ((lucasNum n : ℤ) ^ 2 - 3 * (-1) ^ n) := by
+  -- Step 1: L(2n)*L(n) = L(3n) + (-1)^n*L(n) from lucasNum_mul_formula
+  have hmul := lucasNum_mul_formula (2 * n) n (by omega)
+  rw [show 2 * n + n = 3 * n from by omega, show 2 * n - n = n from by omega] at hmul
+  -- hmul: L(2n)*L(n) = L(3n) + (-1)^n*L(n)
+  -- Step 2: L(2n) = L(n)^2 - 2*(-1)^n
+  have hdbl := lucasNum_double_uncond n
+  -- Step 3: L(3n) = L(n)*L(2n) - (-1)^n*L(n) = L(n)*(L(2n)-(-1)^n)
+  -- = L(n)*(L(n)^2-2(-1)^n-(-1)^n) = L(n)*(L(n)^2-3(-1)^n)
+  -- L(3n) = L(n)*L(2n) - (-1)^n*L(n) (from hmul)
+  -- = L(n)*(L(n)^2-2(-1)^n) - (-1)^n*L(n) (from hdbl)
+  -- = L(n)^3 - 2(-1)^n*L(n) - (-1)^n*L(n)
+  -- = L(n)^3 - 3(-1)^n*L(n) = L(n)*(L(n)^2 - 3(-1)^n)
+  have key : (lucasNum (2 * n) : ℤ) * lucasNum n =
+      (lucasNum n : ℤ) ^ 3 - 2 * (-1) ^ n * lucasNum n := by
+    rw [hdbl]; ring
+  nlinarith [key]
+
 end Omega

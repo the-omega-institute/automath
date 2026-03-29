@@ -409,4 +409,21 @@ theorem goldenMeanAdjacency_pow_nonneg (n : Nat) (i j : Fin 2) :
     | zero => native_decide
     | succ m => linarith [h11 m]
 
+/-- All entries of A^n are strictly positive for n ≥ 2 (primitive matrix).
+    thm:folding-stable-syntax-fib-fusion-ring -/
+theorem goldenMeanAdjacency_pow_positive (n : Nat) (hn : 2 ≤ n) (i j : Fin 2) :
+    0 < (goldenMeanAdjacency ^ n) i j := by
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 2 := ⟨n - 2, by omega⟩
+  have h00 := goldenMeanAdjacency_pow_00 (m + 2)
+  have h01 := goldenMeanAdjacency_pow_01 (m + 2)
+  have h10 := goldenMeanAdjacency_pow_10 (m + 2)
+  have h11 := goldenMeanAdjacency_pow_11 (m + 1)
+  rw [show m + 1 + 1 = m + 2 from by omega] at h11
+  fin_cases i <;> fin_cases j <;> simp only [show (0 : Fin 2) = ⟨0, by omega⟩ from rfl,
+    show (1 : Fin 2) = ⟨1, by omega⟩ from rfl] at *
+  · linarith [Nat.fib_pos.mpr (show 0 < m + 3 from by omega)]
+  · linarith [Nat.fib_pos.mpr (show 0 < m + 2 from by omega)]
+  · linarith [Nat.fib_pos.mpr (show 0 < m + 2 from by omega)]
+  · linarith [Nat.fib_pos.mpr (show 0 < m + 1 from by omega)]
+
 end Omega.Graph

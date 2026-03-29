@@ -784,4 +784,20 @@ theorem exactWeightCount_sum_eq_pow (m : Nat) :
   rw [← Finset.card_eq_sum_card_fiberwise hmap, Finset.card_univ,
     Fintype.card_fun, Fintype.card_bool, Fintype.card_fin]
 
+/-- ewc(m, 1) = 1 for m ≥ 1: exactly one word of weight 1 at each resolution.
+    bridge:ewc-weight-one -/
+theorem exactWeightCount_one_eq (m : Nat) (hm : 1 ≤ m) :
+    exactWeightCount m 1 = 1 := by
+  induction m with
+  | zero => omega
+  | succ k ih =>
+    cases k with
+    | zero => native_decide
+    | succ j =>
+      rw [exactWeightCount_succ_of_lt (j + 1) 1 (by
+        calc 1 < 2 := by omega
+          _ = Nat.fib 3 := by native_decide
+          _ ≤ Nat.fib (j + 1 + 2) := Nat.fib_mono (by omega))]
+      exact ih (by omega)
+
 end Omega
