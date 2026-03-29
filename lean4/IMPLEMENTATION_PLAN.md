@@ -8,15 +8,15 @@
 |---|---|
 | 总行数 | ~32,000 |
 | 定理/定义数 | ~3,306 |
-| 论文接口包装 | 418+ |
+| 论文接口包装 | 427+ |
 | 文件数 | 72 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,507 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 408 |
+| \leanverified 标注数 | 417 |
 | \leanpartial 标注数 | 10 |
-| 总标注数 | 418 |
-| 轮次 | R79（round_count=80） |
+| 总标注数 | 427 |
+| 轮次 | R105（round_count=106） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -25,14 +25,14 @@
 | POM | 1,707 | 167 | 9.8% |
 | Emergent Arithmetic | 185 | 63 | 34.1% |
 | Folding | 337 | 59 | 17.5% |
-| Conclusion | 2,550 | 41 | 1.6% |
+| Conclusion | 2,550 | 45 | 1.8% |
 | Group Unification | 469 | 24 | 5.1% |
 | SPG | 129 | 9 | 7.0% |
 | Circle Dimension | 393 | 19 | 4.8% |
-| Zeta Finite Part | 4,524 | 17 | 0.4% |
+| Zeta Finite Part | 4,524 | 22 | 0.5% |
 | Discussion | 67 | 0 | 0.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,507** | **403** | **3.8%** |
+| **合计（body）** | **10,507** | **412** | **3.9%** |
 
 ### 1.2 已完成模块
 
@@ -96,6 +96,8 @@
 **循环置换行列式 + Euler 因子（Round 97，Phase 100）**：Zeta/CyclicDet.lean（新文件，155 行）——cyclicPerm2..cyclicPerm6（def:cycle-permutation-determinant：n×n 循环置换矩阵具体定义）; cyclicPerm2_fredholm_det（prop:cycle-permutation-determinant：det(I-t·Π_2)=1-t²，simp+ring）; cyclicPerm3_fredholm_det（prop:cycle-permutation-determinant：det(I-t·Π_3)=1-t³，simp+ring）; cyclicPerm2_sq..cyclicPerm6_sixth（Π_n^n=I 周期性，n=2..6，native_decide）; cyclicPerm2/3_trace_powers（subsec:operator-zeta-interface：Tr(Π_n^k) 周期模式）; euler_factor_n2/n3（cor:cyclic-euler-product：Euler 因子 det(I-r·α·Π_n)=1-(αr)^n）; cyclic_periodicity_orders（thm:operator-finite-state-zeta-2pii-periodic-separation：全部周期性汇总）——Zeta 覆盖率 0.3% → 0.4%（+4 标注）（Phase 100）
 
 **Zeckendorf 进位吸收 + Fibonacci 平方移位 + SM 平方余量刚性（Round 98，Phase 101）**：两文件 Omega/Core/Fib.lean + Omega/Folding/ZeckendorfSignature.lean（+62 行）——zeckendorf\_carry\_absorption\_m9（cor:zeckendorf-carry-absorption-m9：F_6+F_7=F_8，Zeckendorf 规范化将 m=8,9 并入 m=10，ZeckendorfSignature.lean:694，native_decide）; fib\_sq\_gt\_fib\_shift（infra：F_{n+4} < F_n^2 for n≥6，thm:sm-square-residual-rigidity-m6 证明的强归纳辅助引理，Fib.lean:1139）; sm\_square\_residual\_rigidity\_m6（thm:sm-square-residual-rigidity-m6：F_{m+2}-12=F_{m-2}^2 在 m≥6 上唯一解为 m=6，ZeckendorfSignature.lean:698，fib\_sq\_gt\_fib\_shift + interval\_cases）——**2 个新论文标签计入覆盖率**（cor:zeckendorf-carry-absorption-m9 + thm:sm-square-residual-rigidity-m6，tex 环境在 theory/.../group\_unification/subsubsec\_\_bdry-tower-zeck-gut-sm-zeckendorf-rigidity.tex，fib\_sq\_gt\_fib\_shift 为辅助引理标注于 thm:sm-square-residual-rigidity-m6 之内）——群统一 22→24（+2，4.7%→5.1%），全局标注 402→404（+2），commit 8bf77de
+
+**R105: 无界迹递推 + Euler 因子 n=5,6 + 循环迹幂 n=5,6 + Godel Lift 实例（Round 105）**：commit 44c7d04——goldenMean\_trace\_recurrence\_unbounded（thm:zeta-syntax-trace-linear-recurrence：Tr(A^n) 满足无界递推，适用所有 n）; euler\_factor\_n5（cor:cyclic-euler-product：Euler 因子 det(I-r·α·Π_5)=1-(αr)^5）; euler\_factor\_n6（cor:cyclic-euler-product：Euler 因子 det(I-r·α·Π_6)=1-(αr)^6）; cyclicPerm5\_trace\_powers（subsec:operator-zeta-interface：Tr(Π_5^k) 周期模式）; cyclicPerm6\_trace\_powers（subsec:operator-zeta-interface：Tr(Π_6^k) 周期模式）; godelLift\_fold5（thm:conclusion-bounded-prime-register-feasibility：D_5=5，(1,4)-lift 可行）; godelLift\_fold7\_option1（thm:conclusion-bounded-prime-register-feasibility：D_7=13，(1,12)-lift 可行）; godelLift\_fold7\_option2（thm:conclusion-bounded-prime-register-feasibility：D_7=13，(2,3)-lift 可行）; godelLift\_fold5\_k2（thm:conclusion-bounded-prime-register-feasibility：D_5=5，(2,2)-lift 可行）——Zeta 17→22（+5，0.4%→0.5%），Conclusion 41→45（+4，1.6%→1.8%），全局标注 418→427（+9），commit 44c7d04
 
 **POM 单射化界 + Fold-6 二进制辅助位 + Conclusion 不可兑换资源（Round 101，Phase 104）**：commit f49bf39——maxFiberMult\_le\_two\_pow\_of\_injective\_sideinfo（prop:pom-injectivization-sideinfo-exact-alphabet：若(Fold,r)单射则 D_m≤2^k，由鸽巢原理）; fold6\_binary\_auxbits（cor:pom-injectivization-binary-auxbits-exact：D_6=5，⌈log₂ 5⌉=3，m=6 需3个辅助位）; conclusion\_window6\_nonexchangeable\_resources（cor:conclusion-window6-static-dynamic-resources-nonexchangeable：21≠2 ∧ 8·2+4·3+9·4=64 ∧ 静态账本维数=21 ∧ 动态预算1比特容量=42，资源不可兑换的数值基础）——**延迟：cBinFiberMax_nine/ten（native_decide 太慢）**——POM 165→167（+2，9.7%→9.8%），Conclusion 40→41（+1，1.6%不变），全局标注 415→418（+3），commit f49bf39
 
