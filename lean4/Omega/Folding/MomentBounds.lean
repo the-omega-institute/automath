@@ -1175,4 +1175,19 @@ theorem fold6_binary_auxbits :
   refine ⟨X.maxFiberMultiplicity_six, ?_⟩
   native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R145: S_2 doubling lower bound (cMomentSum form)
+-- ══════════════════════════════════════════════════════════════
+
+/-- 2·S_2(m-1) ≤ S_2(m) for m ≥ 3, in cMomentSum form.
+    thm:pom-s2-succ-ge-double -/
+theorem momentSum_two_double_lower (m : Nat) (hm : 3 ≤ m) :
+    2 * cMomentSum 2 (m - 1) ≤ cMomentSum 2 m := by
+  rw [cMomentSum_eq, cMomentSum_eq]
+  have hm1 : 2 ≤ m - 1 := by omega
+  have hshift := momentSum_two_succ_ge_double (m - 1) hm1
+  have hsub : m - 1 + 1 = m := by omega
+  rw [hsub] at hshift
+  exact hshift
+
 end Omega

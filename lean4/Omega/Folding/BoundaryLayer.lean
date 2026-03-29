@@ -204,6 +204,171 @@ theorem cBoundaryCount_eq_fib_extended (m : Nat) (hm1 : 3 ≤ m) (hm : m ≤ 10)
     cBoundaryCount m = Nat.fib (m - 2) := by
   interval_cases m <;> native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R145: General boundary-Fibonacci theorem
+-- ══════════════════════════════════════════════════════════════
+
+/-- The boundary embedding: v ∈ X_n maps to (1,0,v,0,1) ∈ X_{n+4}. -/
+private def bdryToWord (n : Nat) (v : X n) : Word (n + 4) := fun i =>
+  if i.val = 0 then true
+  else if i.val = 1 then false
+  else if h : i.val - 2 < n then v.1 ⟨i.val - 2, h⟩
+  else if i.val = n + 2 then false
+  else true
+
+private theorem bdryToWord_get (n : Nat) (v : X n) (k : Nat) (hk : k < n + 4) :
+    get (bdryToWord n v) k = bdryToWord n v ⟨k, hk⟩ := get_of_lt _ hk
+
+private theorem bdryToWord_no11 (n : Nat) (v : X n) : No11 (bdryToWord n v) := by
+  intro k hk hk1
+  have hkLt : k < n + 4 := lt_of_get_eq_true hk
+  have hk1Lt : k + 1 < n + 4 := lt_of_get_eq_true hk1
+  rw [bdryToWord_get _ _ _ hkLt] at hk
+  rw [bdryToWord_get _ _ _ hk1Lt] at hk1
+  -- Case on k position
+  simp only [bdryToWord] at hk hk1
+  by_cases h0 : k = 0
+  · subst h0; simp at hk1
+  · by_cases h1 : k = 1
+    · subst h1; simp [show ¬((1 : Nat) = 0) from by omega] at hk
+    · simp only [h0, ↓reduceIte, h1] at hk
+      simp only [show ¬(k + 1 = 0) from by omega, ↓reduceIte,
+        show ¬(k + 1 = 1) from by omega] at hk1
+      -- k ≥ 2, check if interior
+      by_cases hk_int : k - 2 < n
+      · simp only [hk_int, ↓dite_true] at hk
+        by_cases hk1_int : k + 1 - 2 < n
+        · -- Both k and k+1 interior
+          simp only [hk1_int, ↓dite_true] at hk1
+          exact v.2 (k - 2)
+            (by rw [get_of_lt v.1 hk_int]; exact hk)
+            (by rw [get_of_lt v.1 (by omega)]
+                have : (⟨k - 2 + 1, by omega⟩ : Fin n) = ⟨k + 1 - 2, hk1_int⟩ :=
+                  Fin.ext (by simp; omega)
+                rw [this]; exact hk1)
+        · -- k+1 at penultimate (false)
+          simp only [hk1_int, ↓dite_false] at hk1
+          split at hk1 <;> simp_all <;> omega
+      · -- k ≥ n+2
+        simp only [hk_int, ↓dite_false] at hk
+        split at hk <;> simp_all <;> omega
+
+private theorem bdryToWord_first (n : Nat) (v : X n) :
+    bdryToWord n v ⟨0, by omega⟩ = true := by simp [bdryToWord]
+
+private theorem bdryToWord_last (n : Nat) (v : X n) :
+    bdryToWord n v ⟨n + 3, by omega⟩ = true := by
+  simp only [bdryToWord, show ¬((n + 3 : Nat) = 0) from by omega, ↓reduceIte,
+    show ¬((n + 3 : Nat) = 1) from by omega, show ¬(n + 3 - 2 < n) from by omega,
+    show ¬((n + 3 : Nat) = n + 2) from by omega, ↓dite_false]
+
+private theorem bdryToWord_at_shift (n : Nat) (v : X n) (j : Fin n) :
+    bdryToWord n v ⟨j.val + 2, by omega⟩ = v.1 j := by
+  unfold bdryToWord
+  simp only [show j.val + 2 ≠ 0 from by omega, ↓reduceIte,
+    show j.val + 2 ≠ 1 from by omega, show j.val + 2 - 2 < n from j.isLt, ↓dite_true]
+  -- Goal: v.1 ⟨j.val + 2 - 2, _⟩ = v.1 j
+  have : j.val + 2 - 2 = j.val := by omega
+  simp [this]
+
+/-- Boundary count equals card of X(m-4) for m ≥ 5.
+    thm:boundary-shift4-uplift-isomorphism-general -/
+private theorem cBoundaryCount_eq_card_shift (n : Nat) :
+    cBoundaryCount (n + 5) = Fintype.card (X (n + 1)) := by
+  -- Strategy: rewrite both sides as Nat.fib via X.card_eq_fib, then use card_bij
+  -- to show the boundary-filtered set has the same cardinality
+  rw [X.card_eq_fib]
+  -- Now: boundary filter count = Nat.fib (n + 3)
+  -- Show this by constructing a bijection with X(n+1) which has card fib(n+3)
+  show ((@Finset.univ (X ((n + 3) + 2)) (fintypeX ((n + 3) + 2))).filter
+      (fun x => x.1 ⟨0, by omega⟩ = true ∧ x.1 ⟨(n + 3) + 1, by omega⟩ = true)).card =
+      Nat.fib (n + 3)
+  -- Use the bounded version for small n, and induction with bdryToWord for general n
+  -- Actually, we can directly show this equals Finset.card of X(n+1) filtered as univ
+  -- The key is: boundary words biject with X(n+1) via bdryToWord/extract
+  -- Approach: show filter.card = Finset.univ.card for X(n+1) via card_bij
+  -- then Finset.univ.card = Fintype.card = fib(n+3) by X.card_eq_fib
+  -- Prove (filter ...).card = Nat.fib(n+3) via bijection with X(n+1)
+  -- Both use fintypeX instance consistently
+  -- Step 1: Show filtered.card = @Finset.univ(fintypeX(n+1)).card via card_bij
+  -- Step 2: @Finset.univ.card = Nat.fib(n+3) by native_decide or X.card_eq_fib
+  suffices h : ((@Finset.univ (X (n + 5)) (fintypeX (n + 5))).filter
+      (fun x => x.1 ⟨0, by omega⟩ = true ∧ x.1 ⟨n + 4, by omega⟩ = true)).card =
+      (@Finset.univ (X (n + 1)) (fintypeX (n + 1))).card from by
+    rw [h]
+    -- @Finset.univ(fintypeX(n+1)).card = @Fintype.card(fintypeX(n+1)) = Nat.fib(n+3)
+    rw [@Finset.card_univ _ (fintypeX (n + 1))]
+    -- Now: @Fintype.card(fintypeX(n+1)) = Nat.fib(n+3)
+    -- Use that fintypeX and X.instFintype are both Fintype (X (n+1))
+    -- They must give the same card by Subsingleton of Fintype
+    have h1 := @Finset.card_univ _ (fintypeX (n + 1))
+    have h2 := @Finset.card_univ _ (X.instFintype (n + 1))
+    have h3 := X.card_eq_fib (n + 1)
+    -- h3 : @Fintype.card _ (X.instFintype (n+1)) = Nat.fib(n+1+2)
+    -- All Fintype instances on the same type produce univ of the same card
+    -- Finset.univ always contains all elements, so both have card = |X(n+1)|
+    -- Use Fintype.card_eq_of_equiv or show univ_eq
+    have h4 : @Finset.univ _ (fintypeX (n + 1)) = @Finset.univ _ (X.instFintype (n + 1)) := by
+      ext x; simp [Finset.mem_univ]
+    rw [show @Fintype.card _ (fintypeX (n + 1)) = (@Finset.univ _ (fintypeX (n + 1))).card
+      from h1.symm, h4, h2, h3]
+  symm
+  apply @Finset.card_bij (X (n + 1)) (X (n + 5))
+    (@Finset.univ _ (fintypeX (n + 1)))
+    ((@Finset.univ _ (fintypeX (n + 5))).filter
+      (fun x => x.1 ⟨0, by omega⟩ = true ∧ x.1 ⟨n + 4, by omega⟩ = true))
+    (fun v _ => ⟨bdryToWord (n + 1) v, bdryToWord_no11 (n + 1) v⟩)
+  · intro v _
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    exact ⟨bdryToWord_first (n + 1) v, bdryToWord_last (n + 1) v⟩
+  · intro v1 _ v2 _ heq
+    have heqw : bdryToWord (n + 1) v1 = bdryToWord (n + 1) v2 :=
+      congrArg Subtype.val heq
+    apply Subtype.ext; funext i
+    have := congrFun heqw ⟨i.val + 2, by omega⟩
+    simp only [bdryToWord_at_shift] at this
+    exact this
+  · intro ⟨w, hw⟩ hmem
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hmem
+    obtain ⟨h0, hlast⟩ := hmem
+    have hinterior : No11 (fun i : Fin (n + 1) => w ⟨i.val + 2, by omega⟩) := by
+      intro k hk hk1
+      have hkLt := lt_of_get_eq_true hk; have hk1Lt := lt_of_get_eq_true hk1
+      rw [get_of_lt _ hkLt] at hk; rw [get_of_lt _ hk1Lt] at hk1
+      exact hw (k + 2)
+        (by rw [get_of_lt w (by omega)]; exact hk)
+        (by rw [get_of_lt w (by omega)]; exact hk1)
+    refine ⟨⟨fun i => w ⟨i.val + 2, by omega⟩, hinterior⟩,
+      @Finset.mem_univ _ (fintypeX (n + 1)) _, ?_⟩
+    apply Subtype.ext; funext i
+    simp only [bdryToWord]
+    split_ifs with h0' h1' h2' h3'
+    · have : i = ⟨0, by omega⟩ := Fin.ext (by omega); rw [this]; exact h0.symm
+    · have : i = ⟨1, by omega⟩ := Fin.ext (by omega); rw [this]
+      symm; by_contra h1t
+      have h1true : w ⟨1, by omega⟩ = true := by cases hw1 : w ⟨1, by omega⟩ <;> simp_all
+      exact hw 0 (by rw [get_of_lt w (by omega)]; exact h0)
+        (by rw [get_of_lt w (by omega)]; exact h1true)
+    · congr 1; exact Fin.ext (by simp; omega)
+    · have : i = ⟨n + 3, by omega⟩ := Fin.ext (by omega); rw [this]
+      symm; by_contra hnt
+      have htrue : w ⟨n + 3, by omega⟩ = true := by cases hw1 : w ⟨n + 3, by omega⟩ <;> simp_all
+      exact hw (n + 3) (by rw [get_of_lt w (by omega)]; exact htrue)
+        (by rw [get_of_lt w (by omega)]; exact hlast)
+    · have hiLast : i.val = n + 4 := by have := i.isLt; omega
+      have : i = ⟨n + 4, by omega⟩ := Fin.ext hiLast
+      rw [this]; exact hlast.symm
+
+/-- Boundary count equals Fibonacci: b(m) = F(m-2) for all m ≥ 3.
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_eq_fib_general (m : Nat) (hm : 3 ≤ m) :
+    cBoundaryCount m = Nat.fib (m - 2) := by
+  match m, hm with
+  | 3, _ => exact cBoundaryCount_three
+  | 4, _ => exact cBoundaryCount_four
+  | n + 5, _ =>
+    rw [cBoundaryCount_eq_card_shift n, X.card_eq_fib, show n + 5 - 2 = n + 1 + 2 from by omega]
+
 /-- Boundary gap at m=9: |X_9| - b(9) = F(11) - F(7) = 89 - 13 = 76.
     prop:bdry-fib-square-identity -/
 theorem boundary_gap_nine : Fintype.card (X 9) - cBoundaryCount 9 = 76 := by
