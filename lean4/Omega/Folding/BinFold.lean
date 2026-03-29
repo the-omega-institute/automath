@@ -424,4 +424,39 @@ theorem conclusion_window6_nonexchangeable_resources :
     8 * 2 + 4 * 2 + 9 * 2 = 42 := by
   refine ⟨by omega, by omega, by omega, by omega⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R127: Geometric stabilizer mask identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- The geometric stabilizer action on {0,1}^6: complement+swap bits 0 and 4. -/
+def geoStabilizerAction (ω : Fin 6 → Bool) : Fin 6 → Bool := fun i =>
+  if i.val = 0 then !ω ⟨4, by omega⟩
+  else if i.val = 4 then !ω ⟨0, by omega⟩
+  else ω i
+
+/-- Binary encoding: int₆(ω) = Σ ω_k · 2^(5-k). -/
+def binaryEncode6 (ω : Fin 6 → Bool) : ℤ :=
+  ∑ k : Fin 6, if ω k then (2 : ℤ) ^ (5 - k.val) else 0
+
+/-- The ±34 mask identity: the geometric stabilizer action shifts the binary encoding by
+    ±34 depending on the values of bits 0 and 4.
+    cor:foldbin6-geo-mask-34 -/
+theorem geoStabilizer_mask_34 (ω : Fin 6 → Bool) :
+    binaryEncode6 (geoStabilizerAction ω) - binaryEncode6 ω
+    = 34 * (1 - (if ω ⟨0, by omega⟩ then 1 else 0) - (if ω ⟨4, by omega⟩ then 1 else 0)) := by
+  unfold binaryEncode6 geoStabilizerAction
+  simp only [Fin.sum_univ_six, Fin.isValue]
+  norm_num
+  have : (0 : Fin 6) = ⟨0, by omega⟩ := rfl
+  have : (4 : Fin 6) = ⟨4, by omega⟩ := rfl
+  rcases Bool.eq_false_or_eq_true (ω 0) with h0 | h0 <;>
+    rcases Bool.eq_false_or_eq_true (ω 4) with h4 | h4 <;>
+    simp_all <;> omega
+
+/-- Paper: cor:foldbin6-geo-mask-34 -/
+theorem paper_geoStabilizer_mask_34 (ω : Fin 6 → Bool) :
+    binaryEncode6 (geoStabilizerAction ω) - binaryEncode6 ω
+    = 34 * (1 - (if ω ⟨0, by omega⟩ then 1 else 0) - (if ω ⟨4, by omega⟩ then 1 else 0)) :=
+  geoStabilizer_mask_34 ω
+
 end Omega

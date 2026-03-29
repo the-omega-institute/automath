@@ -70,4 +70,5 @@ import Omega.Combinatorics.GramDet
 import Omega.Zeta.DynZeta
 import Omega.Zeta.CyclicDet
 import Omega.Conclusion.PrimeRegister
+import Omega.Conclusion.RamanujanCollapse
 import Omega.CircleDimension.CircleDim

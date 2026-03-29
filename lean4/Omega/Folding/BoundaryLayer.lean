@@ -64,6 +64,22 @@ theorem cFirstBitTrueCount_eq_fib (m : Nat) (hm1 : 3 ≤ m) (hm : m ≤ 7) :
   interval_cases m <;> native_decide
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R127: Boundary shift-4 uplift
+-- ══════════════════════════════════════════════════════════════
+
+/-- Boundary shift-4 uplift: |X_{n+4}^bdry| = |X_n| for n = 2..4.
+    thm:boundary-shift4-uplift-isomorphism -/
+theorem boundaryUplift_card (n : Nat) (hn1 : 2 ≤ n) (hn2 : n ≤ 4) :
+    cBoundaryCount (n + 4) = Fintype.card (X n) := by
+  rw [X.card_eq_fib]
+  interval_cases n <;> native_decide
+
+/-- Paper: thm:boundary-shift4-uplift-isomorphism -/
+theorem paper_boundaryUplift_card (n : Nat) (hn1 : 2 ≤ n) (hn2 : n ≤ 4) :
+    cBoundaryCount (n + 4) = Fintype.card (X n) :=
+  boundaryUplift_card n hn1 hn2
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase 201: Involution obstruction
 -- ══════════════════════════════════════════════════════════════
 
