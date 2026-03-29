@@ -647,6 +647,11 @@ theorem stable_ring_isomorphism (m : Nat) :
 theorem stable_field_of_prime (hp : Nat.Prime (Nat.fib (m + 2))) :
     Nonempty (Field (X m)) := ⟨X.instFieldOfPrime hp⟩
 
+/-- The ring characteristic of X_m equals F_{m+2}.
+    thm:finite-resolution-mod -/
+theorem ringChar_X_eq_fib (m : Nat) : ringChar (X m) = Nat.fib (m + 2) :=
+  ringChar.eq_iff.mpr X.instCharP
+
 end
 
 end Omega.Frontier

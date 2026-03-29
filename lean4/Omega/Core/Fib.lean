@@ -1174,4 +1174,65 @@ theorem fib_sq_gt_fib_shift (n : Nat) (hn : 6 ≤ n) :
       rw [hrec, hrec_n]
       nlinarith
 
+/-- Vajda's identity: F(n+i)·F(n+j) - F(n)·F(n+i+j) = (-1)^n · F(i)·F(j).
+    bridge:fibonacci-vajda-identity -/
+theorem fib_vajda (n i j : Nat) :
+    (Nat.fib (n + i) : ℤ) * Nat.fib (n + j) -
+    (Nat.fib n : ℤ) * Nat.fib (n + i + j) =
+    (-1) ^ n * (Nat.fib i : ℤ) * Nat.fib j := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    -- Key identity: F(i)*F(j+1) + F(i+1)*F(j) - F(i+j) = F(i)*F(j)
+    have hgZ : (Nat.fib (i + j) : ℤ) =
+        Nat.fib i * Nat.fib (j + 1) + Nat.fib (i + 1) * Nat.fib j - Nat.fib i * Nat.fib j := by
+      have h1 : Nat.fib (i + j + 2) = Nat.fib (i + j) + Nat.fib (i + j + 1) := Nat.fib_add_two
+      have h2 : Nat.fib (i + j + 1) = Nat.fib i * Nat.fib j + Nat.fib (i + 1) * Nat.fib (j + 1) := Nat.fib_add i j
+      have h3 := Nat.fib_add i (j + 1)
+      rw [show i + (j + 1) + 1 = i + j + 2 from by omega, show j + 1 + 1 = j + 2 from by omega] at h3
+      have h4 : Nat.fib (j + 2) = Nat.fib j + Nat.fib (j + 1) := Nat.fib_add_two
+      -- h3: F(i+j+2) = F(i)*F(j+1) + F(i+1)*F(j+2)
+      -- = F(i)*F(j+1) + F(i+1)*(F(j)+F(j+1))
+      -- h1+h2: F(i+j+2) = F(i+j) + F(i)*F(j) + F(i+1)*F(j+1)
+      -- Equating: F(i+j) + F(i)*F(j) + F(i+1)*F(j+1) = F(i)*F(j+1) + F(i+1)*F(j) + F(i+1)*F(j+1)
+      -- F(i+j) = F(i)*F(j+1) + F(i+1)*F(j) - F(i)*F(j)
+      push_cast; nlinarith [h1, h2, h3, h4]
+    -- Cassini at n
+    have hcassini : (Nat.fib (n + 1) : ℤ) ^ 2 - Nat.fib n * Nat.fib (n + 1) -
+        (Nat.fib n : ℤ) ^ 2 = (-1) ^ n := by
+      have hfn2 : Nat.fib (n + 2) = Nat.fib n + Nat.fib (n + 1) := Nat.fib_add_two
+      by_cases heven : Even n
+      · have hcas := fib_cassini_even n heven
+        have : (-1 : ℤ) ^ n = 1 := Even.neg_one_pow heven
+        push_cast; nlinarith [hcas, hfn2]
+      · have hcas := fib_cassini_odd n heven
+        have : (-1 : ℤ) ^ n = -1 := Odd.neg_one_pow (Nat.not_even_iff_odd.mp heven)
+        push_cast; nlinarith [hcas, hfn2]
+    -- Rewrite indices
+    rw [show n + 1 + i = n + i + 1 from by omega,
+        show n + 1 + j = n + j + 1 from by omega,
+        show n + i + 1 + j = n + (i + j) + 1 from by omega]
+    -- Use fib_add decompositions
+    have ha := Nat.fib_add n i
+    have hb := Nat.fib_add n j
+    have hc' := Nat.fib_add n (i + j)
+    have : (-1 : ℤ) ^ (n + 1) = -((-1) ^ n) := by ring
+    -- Cast fib_add identities to ℤ
+    have haZ : (Nat.fib (n + i + 1) : ℤ) = Nat.fib n * Nat.fib i +
+        Nat.fib (n + 1) * Nat.fib (i + 1) := by push_cast; linarith [ha]
+    have hbZ : (Nat.fib (n + j + 1) : ℤ) = Nat.fib n * Nat.fib j +
+        Nat.fib (n + 1) * Nat.fib (j + 1) := by push_cast; linarith [hb]
+    have hcZ : (Nat.fib (n + (i + j) + 1) : ℤ) = Nat.fib n * Nat.fib (i + j) +
+        Nat.fib (n + 1) * Nat.fib (i + j + 1) := by push_cast; linarith [hc']
+    have hijZ : (Nat.fib (i + j + 1) : ℤ) = Nat.fib i * Nat.fib j +
+        Nat.fib (i + 1) * Nat.fib (j + 1) := by push_cast; linarith [Nat.fib_add i j]
+    -- Step 1: algebraic identity (ring)
+    have halg : (Nat.fib (n + i + 1) : ℤ) * Nat.fib (n + j + 1) -
+        Nat.fib (n + 1) * Nat.fib (n + (i + j) + 1) =
+        -((Nat.fib (n + 1) : ℤ) ^ 2 - Nat.fib n * Nat.fib (n + 1) -
+        (Nat.fib n : ℤ) ^ 2) * Nat.fib i * Nat.fib j := by
+      rw [haZ, hbZ, hcZ, hgZ, hijZ]; ring
+    -- Step 2: substitute Cassini
+    rw [this, halg, hcassini]
+
 end Omega

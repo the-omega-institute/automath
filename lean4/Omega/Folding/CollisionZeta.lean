@@ -306,6 +306,14 @@ theorem pisano_period_8 : Nat.fib 12 % 8 = 0 ∧ Nat.fib 13 % 8 = 1 := by native
     def:pom-pisano-period-2 -/
 theorem pisano_period_11 : Nat.fib 10 % 11 = 0 ∧ Nat.fib 11 % 11 = 1 := by native_decide
 
+/-- Pisano period π(9) = 24: F(24) ≡ 0 (mod 9) and F(25) ≡ 1 (mod 9).
+    def:pom-pisano-period-2 -/
+theorem pisano_period_9 : Nat.fib 24 % 9 = 0 ∧ Nat.fib 25 % 9 = 1 := by native_decide
+
+/-- Pisano period π(10) = 60: F(60) ≡ 0 (mod 10) and F(61) ≡ 1 (mod 10).
+    def:pom-pisano-period-2 -/
+theorem pisano_period_10 : Nat.fib 60 % 10 = 0 ∧ Nat.fib 61 % 10 = 1 := by native_decide
+
 /-- The Fibonacci entry point for 21: α(21) = 8.
     F(8) ≡ 0 (mod 21) and F(k) ≢ 0 (mod 21) for 1 ≤ k < 8.
     def:pom-fib-entry-point-21 -/

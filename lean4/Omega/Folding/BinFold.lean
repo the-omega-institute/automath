@@ -61,6 +61,24 @@ theorem cBinFiberHist_7_5 : cBinFiberHist 7 5 = 5 := by native_decide
 /-- thm:terminal-foldbin-hist -/
 theorem binFold7_histogram_certificate : 13 * 3 + 16 * 4 + 5 * 5 = 128 := by omega
 
+/-- Total stable words at m=7: |X_7| = 34.
+    thm:terminal-foldbin-hist -/
+theorem window7_histogram_count_sum :
+    cBinFiberHist 7 3 + cBinFiberHist 7 4 + cBinFiberHist 7 5 = 34 := by
+  rw [cBinFiberHist_7_3, cBinFiberHist_7_4, cBinFiberHist_7_5]
+
+/-- Fiber sum at m=7: 13·3 + 16·4 + 5·5 = 128 = 2^7.
+    thm:terminal-foldbin-hist -/
+theorem window7_histogram_fiber_sum :
+    cBinFiberHist 7 3 * 3 + cBinFiberHist 7 4 * 4 + cBinFiberHist 7 5 * 5 = 128 := by
+  rw [cBinFiberHist_7_3, cBinFiberHist_7_4, cBinFiberHist_7_5]
+
+/-- Collision dimension at m=7: Σ h_k · k² = 498.
+    thm:terminal-foldbin-hist -/
+theorem window7_collision_dimension :
+    cBinFiberHist 7 3 * 3 ^ 2 + cBinFiberHist 7 4 * 4 ^ 2 + cBinFiberHist 7 5 * 5 ^ 2 = 498 := by
+  rw [cBinFiberHist_7_3, cBinFiberHist_7_4, cBinFiberHist_7_5]; omega
+
 /-! ### Edge separation at m = 6 -/
 
 /-- BinFold separates hypercube edges at m = 6: flipping any single bit always
