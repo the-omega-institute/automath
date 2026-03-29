@@ -689,4 +689,32 @@ theorem nap_so10_minimality :
      Nat.zeckendorf d ≠ Nat.zeckendorf 45) := by
   constructor <;> native_decide
 
+/-- Zeckendorf carry absorption at m=9: F(6) + F(7) = F(8), i.e. 8 + 13 = 21.
+    prop:pom-zeckendorf-carry-absorption-m9 -/
+theorem zeckendorf_carry_absorption_m9 :
+    Nat.fib 6 + Nat.fib 7 = Nat.fib 8 := by native_decide
+
+/-- The equation F(m+2) - 12 = F(m-2)² has unique solution m = 6 among m ≥ 6.
+    For m = 7 direct computation refutes; for m ≥ 8, fib_sq_gt_fib_shift gives
+    F(m-2)² > F(m+2), making F(m+2) - 12 < F(m+2) < F(m-2)² a contradiction.
+    thm:pom-sm-square-residual-rigidity-m6 -/
+theorem sm_square_residual_rigidity_m6 (m : Nat) (hm : 6 ≤ m)
+    (h : Nat.fib (m + 2) - 12 = Nat.fib (m - 2) ^ 2) : m = 6 := by
+  -- Eliminate m = 6, 7 by computation
+  by_cases h6 : m = 6
+  · exact h6
+  · by_cases h7 : m = 7
+    · subst h7; revert h; native_decide
+    · -- m ≥ 8, so m - 2 ≥ 6
+      exfalso
+      have hm8 : 8 ≤ m := by omega
+      have hm2_ge : 6 ≤ m - 2 := by omega
+      -- F((m-2) + 4) < F(m-2)², i.e. F(m+2) < F(m-2)²
+      have hsq := Omega.fib_sq_gt_fib_shift (m - 2) hm2_ge
+      rw [show m - 2 + 4 = m + 2 from by omega] at hsq
+      -- From hypothesis: F(m-2)² = F(m+2) - 12
+      -- From hsq: F(m+2) < F(m-2)², so F(m-2)² > F(m+2) ≥ F(m+2) - 12
+      -- But h says F(m+2) - 12 = F(m-2)², contradiction
+      omega
+
 end Omega.ZeckSig

@@ -1130,4 +1130,38 @@ theorem fib_add_fib_eq_fib_succ (n : Nat) :
     Nat.fib n + Nat.fib (n + 1) = Nat.fib (n + 2) :=
   (Nat.fib_add_two (n := n)).symm
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R101
+-- ══════════════════════════════════════════════════════════════
+
+/-- F(n+4) < F(n)² for n ≥ 6. Used for square residual rigidity.
+    prop:pom-fib-sq-gt-fib-shift -/
+theorem fib_sq_gt_fib_shift (n : Nat) (hn : 6 ≤ n) :
+    Nat.fib (n + 4) < Nat.fib n ^ 2 := by
+  -- Write n = 6 + k and induct on k
+  obtain ⟨k, rfl⟩ : ∃ k, n = 6 + k := ⟨n - 6, by omega⟩
+  induction k using Nat.strongRecOn with
+  | _ k ih =>
+    match k with
+    | 0 => native_decide  -- F(10) = 55 < 64 = 8²
+    | 1 => native_decide  -- F(11) = 89 < 169 = 13²
+    | k + 2 =>
+      -- IH at k and k+1: F(k+10) < F(k+6)² and F(k+11) < F(k+7)²
+      have ih1 := ih k (by omega) (by omega)
+      have ih2 := ih (k + 1) (by omega) (by omega)
+      -- F(k+12) = F(k+11) + F(k+10)
+      have hrec : Nat.fib (6 + (k + 2) + 4) = Nat.fib (6 + (k + 1) + 4) + Nat.fib (6 + k + 4) := by
+        have := Nat.fib_add_two (n := 6 + k + 4)
+        rw [show 6 + k + 4 + 2 = 6 + (k + 2) + 4 from by omega,
+            show 6 + k + 4 + 1 = 6 + (k + 1) + 4 from by omega] at this
+        linarith
+      -- F(k+8) = F(k+7) + F(k+6)
+      have hrec_n : Nat.fib (6 + (k + 2)) = Nat.fib (6 + (k + 1)) + Nat.fib (6 + k) := by
+        have := Nat.fib_add_two (n := 6 + k)
+        rw [show 6 + k + 2 = 6 + (k + 2) from by omega,
+            show 6 + k + 1 = 6 + (k + 1) from by omega] at this
+        linarith
+      rw [hrec, hrec_n]
+      nlinarith
+
 end Omega
