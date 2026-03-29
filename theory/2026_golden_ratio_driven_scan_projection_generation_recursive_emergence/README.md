@@ -89,6 +89,8 @@ python3 automation/research_cycle.py journal-pack artifacts/export/paper_seeds/f
 python3 automation/research_cycle.py validate-journal-pack artifacts/export/journal_packs/jpa_folding_note
 python3 automation/publication_sync.py sync --publication-root /path/to/the-omega/docs/papers/auric-golden-phi/publication --slug auric_publication_sync
 python3 automation/publication_sync.py validate artifacts/export/publication_sync/auric_publication_sync
+python3 automation/publication_journal_fit.py run --publication-root /path/to/the-omega/docs/papers/auric-golden-phi/publication --slug auric_journal_fit
+python3 automation/publication_journal_fit.py validate artifacts/export/publication_journal_fit/auric_journal_fit
 ```
 
 This generates a cycle directory under `artifacts/export/research_cycles/<slug>/` containing:
@@ -175,6 +177,34 @@ This writes `artifacts/export/publication_sync/<slug>/` with:
 
 Use this when publication splitting is managed elsewhere and `automath` only needs to stay aligned with that external submission program.
 `audit` exits nonzero on hard contract violations; `audit --strict` also fails on mapping gaps and missing submission metadata.
+
+## Publication Journal Fit
+
+If the external publication workspace already contains draft manuscripts, `automation/publication_journal_fit.py`
+adds a second layer on top of `publication_sync.py`:
+
+```bash
+python3 automation/publication_journal_fit.py run \
+  --publication-root /path/to/the-omega/docs/papers/auric-golden-phi/publication \
+  --slug auric_journal_fit
+python3 automation/publication_journal_fit.py validate \
+  artifacts/export/publication_journal_fit/auric_journal_fit
+```
+
+This writes `artifacts/export/publication_journal_fit/<slug>/` with:
+
+- `journal_fit_manifest.json` - aggregate counts for track-level journal-fit coverage
+- `journal_fit_records.json` - one record per active publication track with manuscript metrics and citation audit
+- `journal_fit_report.md` - top-level dashboard across the active submission program
+- `tracks/<directory>/journal_fit_profile.json` - target-journal profile, local manuscript metrics, recon counts, and issues
+- `tracks/<directory>/journal_fit_report.md` - human-readable audit of structure, appendix pressure, and bibliography fit
+- `tracks/<directory>/revision_prompt.md` - journal-specific revision prompt keyed to recent-paper style signals
+- `tracks/<directory>/JOURNAL_FIT.template.md` - scaffold for venue alignment notes inside the publication workspace
+- `tracks/<directory>/BIB_SCOPE.template.md` - scaffold for bibliography scope and target-journal citation review
+- `tracks/<directory>/SOURCE_MAP.template.md` - scaffold for source-to-draft traceability when `SOURCE_MAP.md` is still missing
+- `tracks/<directory>/THEOREM_LIST.template.md` - scaffold for theorem inventory and Lean anchors
+
+The command uses the target journal declared in each publication `README.md`, pulls recent-paper style signals through `automation/journal_recon.py`, audits `main.tex` and `references.bib`, and compares local references against recent target-journal papers when possible. Use it when the next bottleneck is no longer section splitting, but turning an existing draft into a venue-fit submission package.
 
 ## Writing Conventions
 
