@@ -8,14 +8,14 @@
 |---|---|
 | 总行数 | ~32,000 |
 | 定理/定义数 | ~3,341 |
-| 论文接口包装 | 516+ |
+| 论文接口包装 | 520+ |
 | 文件数 | 72 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 505 |
+| \leanverified 标注数 | 509 |
 | \leanpartial 标注数 | 10 |
-| 总标注数 | 516 |
+| 总标注数 | 520 |
 | 轮次 | R121（round_count=122） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
@@ -29,10 +29,10 @@
 | Group Unification | 469 | 43 | 9.2% |
 | SPG | 129 | 12 | 9.3% |
 | Circle Dimension | 393 | 27 | 6.9% |
-| Zeta Finite Part | 4,524 | 38 | 0.8% |
+| Zeta Finite Part | 4,524 | 42 | 0.9% |
 | Discussion | 67 | 0 | 0.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **501** | **4.8%** |
+| **合计（body）** | **10,508** | **505** | **4.8%** |
 
 ### 1.2 已完成模块
 
@@ -382,7 +382,7 @@
 **圆维度 RH 缺陷的 Fibonacci 半径离散承载（Round 124）**：tendsto_zero_of_nonneg_le_of_tendsto_zero / fibRadius_discretization_of_le_tendsto_zero（把连续趋零判据压缩为 Fibonacci 半径链上的非负上界收敛证书，支撑 RH 缺陷离散承载结论）
 **圆维度零点模长下界证书（Round 125）**：zero_modulus_lower_bound_of_log_defect_bound / fibRadius_zero_modulus_lower_bound_of_log_defect_bound（把对数缺陷上界转为零点模长的定量下界，并包装到 Fibonacci 半径离散链上）
 **★ 500 标注里程碑 — 论文接口包装（Phase R120）**：FiberRing.lean（3 定理）+ Fiber.lean（1 定理）+ MaxFiberTwoStep.lean（1 定理）；论文标注：paper\_finite\_resolution\_mod（thm:finite-resolution-mod，Emergent Arithmetic）; paper\_field\_phase\_fib\_prime（cor:field-phase-fib-prime，Emergent Arithmetic）; paper\_fold\_basic（prop:fold-basic，Folding）; paper\_mul\_definitional（thm:mul-definitional，Emergent Arithmetic）; paper\_monoid\_quotient\_is\_N（thm:monoid-quotient-is-N，Emergent Arithmetic）——总标注数 498 → 503，Emergent Arithmetic 覆盖率 35.1% → 37.3%，Folding 覆盖率 19.0% → 19.3%
-**论文接口包装 Targets 1+2（Phase R121）**：Conclusion 章节 +8 标注（tqft\_sphere\_eq\_momentSum\_two, total\_free\_generators\_eq\_hidden\_dim, conclusion\_window6\_boundary\_parity\_residual, curvature\_parenthesization, invariant\_ring\_from\_histogram, poincare\_A2\_coeffs, poincare\_A3\_coeffs, quadratic\_collision\_mass\_six）; Zeta Finite Part +3 标注（cyclicPerm2\_rank, cyclicPerm3\_rank, cyclicPerm6\_rank at thm:operator-resolvent-trace-jump-index）; Circle Dimension +2 标注（audit\_stability\_iff\_badly\_approximable, hurwitz\_covering\_genus + riemann\_hurwitz\_s4）——总标注数 503 → 516，Conclusion 2.4% → 2.7%，Circle Dimension 6.4% → 6.9%
+**论文接口包装 Targets 1+2+3（Phase R121）**：Conclusion +8（tqft\_sphere\_eq\_momentSum\_two, total\_free\_generators\_eq\_hidden\_dim, conclusion\_window6\_boundary\_parity\_residual, curvature\_parenthesization, invariant\_ring\_from\_histogram, poincare\_A2\_coeffs, poincare\_A3\_coeffs, quadratic\_collision\_mass\_six）; Zeta +5（cyclicPerm2\_rank, cyclicPerm3\_rank, cyclicPerm4\_rank, cyclicPerm5\_rank, cyclicPerm6\_rank at thm:operator-resolvent-trace-jump-index; fredholmGoldenMean\_at\_zero at operator-zeta-interface; degeneracy\_ghost\_positive at rem:degeneracy-zeta-bridge）; Circle Dimension +2（audit\_stability\_iff\_badly\_approximable, hurwitz\_covering\_genus + riemann\_hurwitz\_s4）——总标注数 503 → 520，Conclusion 2.4% → 2.7%，Zeta 0.8% → 0.9%，Circle Dimension 6.4% → 6.9%
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
