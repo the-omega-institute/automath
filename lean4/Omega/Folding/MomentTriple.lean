@@ -820,4 +820,37 @@ theorem momentSum_ratio_mono (q m : Nat) :
     momentSum q m * momentSum (q + 2) m := by
   have := momentSum_log_convex q m; rwa [sq] at this
 
+-- ══════════════════════════════════════════════════════════════
+-- R63: S₂(13), penultimate exactWeightCount, Cauchy 4^m form
+-- ══════════════════════════════════════════════════════════════
+
+/-- S₂(13) = 127072, computed via the three-step recurrence from S₂(10..12).
+    prop:pom-moment-s2-thirteen -/
+theorem momentSum_two_thirteen_rec : momentSum 2 13 = 127072 := by
+  have h := momentSum_two_recurrence 10
+  rw [show (10 : Nat) + 1 = 11 from rfl, show (10 : Nat) + 2 = 12 from rfl,
+    show (10 : Nat) + 3 = 13 from rfl, momentSum_two_ten_rec,
+    momentSum_two_eleven_rec, momentSum_two_twelve_rec] at h; omega
+
+/-- The penultimate weight F_{m+3}−3 has exactly one word, by symmetry with weight 1.
+    prop:pom-ewc-penultimate -/
+theorem exactWeightCount_max_minus_one (m : Nat) (hm : 1 ≤ m) :
+    exactWeightCount m (Nat.fib (m + 3) - 3) = 1 := by
+  have hfib : Nat.fib (m + 3) ≥ 3 := by
+    calc Nat.fib (m + 3) ≥ Nat.fib 4 := Nat.fib_mono (by omega)
+      _ = 3 := by native_decide
+  have hsub : Nat.fib (m + 3) - 2 - (Nat.fib (m + 3) - 3) = 1 := by omega
+  rw [exactWeightCount_symmetric m (Nat.fib (m + 3) - 3) (by omega), hsub]
+  exact exactWeightCount_one m hm
+
+/-- Cauchy–Schwarz in 4^m form: 4^m ≤ F_{m+2} · S₂(m).
+    prop:pom-moment-cauchy-four -/
+theorem momentSum_two_cauchy_lower (m : Nat) :
+    4 ^ m ≤ Nat.fib (m + 2) * momentSum 2 m := by
+  have h := momentSum_cauchy_schwarz m
+  have : (2 ^ m) ^ 2 = 4 ^ m := by
+    rw [← pow_mul, show m * 2 = 2 * m from by omega, pow_mul]
+    norm_num
+  linarith
+
 end Omega
