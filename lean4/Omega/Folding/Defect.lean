@@ -213,6 +213,32 @@ theorem globalDefect_eq_defectChain (m k : Nat) (ω : Word (m + k)) :
         _ = defectChain m (k + 1) ω := by
               rfl
 
+/-- Defect cocycle identity: global defect composes via xor across three resolutions.
+    prop:fold-defect-cocycle -/
+theorem globalDefect_compose (hmk : m ≤ k) (hkn : k ≤ n) (ω : Word n) :
+    globalDefect (Nat.le_trans hmk hkn) ω =
+    xorWord
+      (globalDefect hmk (restrictWord hkn ω))
+      (restrictWord hmk (globalDefect hkn ω)) := by
+  simp only [globalDefect, X.restrictLE_val, restrictWord_xor, restrictWord_comp]
+  funext i
+  simp only [xorWord]
+  cases (Fold (restrictWord (Nat.le_trans hmk hkn) ω)).1 i
+    <;> cases restrictWord hmk (Fold (restrictWord hkn ω)).1 i
+    <;> cases restrictWord hmk (restrictWord hkn (Fold ω).1) i
+    <;> simp_all [Bool.xor]
+
+/-- Poincaré band identity: the defect boundary relation at adjacent resolutions.
+    The global defect from m to n decomposes as the local defect at m+1 xor'd with the
+    restricted global defect from m+1 to n.
+    prop:fold-discrete-poincare-band -/
+theorem globalDefect_poincare_band (hmn : m + 1 ≤ n) (ω : Word n) :
+    globalDefect (Nat.le_trans (Nat.le_succ m) hmn) ω =
+    xorWord
+      (globalDefect (Nat.le_succ m) (restrictWord hmn ω))
+      (restrictWord (Nat.le_succ m) (globalDefect hmn ω)) :=
+  globalDefect_compose (Nat.le_succ m) hmn ω
+
 /-- Two words are equal iff their xor is the zero word. -/
 theorem xorWord_eq_zero_iff {a b : Word m} :
     xorWord a b = zeroWord m ↔ a = b := by
