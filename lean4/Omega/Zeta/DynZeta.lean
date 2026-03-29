@@ -322,4 +322,92 @@ theorem goldenMean_trace_eq_one :
 theorem goldenMean_det_eq_neg_one :
     Graph.goldenMeanAdjacency.det = -1 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R131: 2^n > L(n), Lucas monotonicity, Lucas-Cassini
+-- ══════════════════════════════════════════════════════════════
+
+section
+open Omega.Zeta in
+
+/-- The full 2-shift has strictly more periodic points than the golden-mean SFT:
+    2^n > L(n) for all n >= 1.
+    rem:degeneracy-zeta-bridge -/
+theorem two_pow_gt_lucasNum (n : Nat) (hn : 1 ≤ n) :
+    lucasNum n < 2 ^ n := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n, hn with
+    | 1, _ => simp [lucasNum]
+    | 2, _ => simp [lucasNum]
+    | n + 3, _ =>
+      rw [lucasNum_succ_succ]
+      have h1 := ih (n + 2) (by omega) (by omega)
+      have h2 := ih (n + 1) (by omega) (by omega)
+      have hp : (2 : ℤ) ^ (n + 3) = 2 ^ (n + 2) + 2 ^ (n + 2) := by ring
+      have hle : (2 : ℤ) ^ (n + 1) ≤ 2 ^ (n + 2) := by
+        have : (2 : ℤ) ^ (n + 2) = 2 * 2 ^ (n + 1) := by ring
+        have : (0 : ℤ) < 2 ^ (n + 1) := by positivity
+        linarith
+      linarith
+
+/-- Paper: rem:degeneracy-zeta-bridge -/
+theorem paper_two_pow_gt_lucasNum (n : Nat) (hn : 1 ≤ n) :
+    lucasNum n < 2 ^ n := two_pow_gt_lucasNum n hn
+
+open Omega.Zeta in
+/-- Lucas numbers are strictly increasing for n >= 1.
+    Used in boundary tower and degeneracy analysis. -/
+theorem lucasNum_strictMono (n : Nat) (hn : 1 ≤ n) :
+    lucasNum n < lucasNum (n + 1) := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n, hn with
+    | 1, _ => simp [lucasNum]
+    | n + 2, _ =>
+      show lucasNum (n + 2) < lucasNum (n + 2 + 1)
+      rw [show n + 2 + 1 = (n + 1) + 2 from by omega, lucasNum_succ_succ (n + 1)]
+      linarith [lucasNum_pos (n + 1)]
+
+/-- Paper: Lucas strict monotonicity (GU boundary tower) -/
+theorem paper_lucasNum_strictMono (n : Nat) (hn : 1 ≤ n) :
+    lucasNum n < lucasNum (n + 1) := lucasNum_strictMono n hn
+
+open Omega.Zeta in
+/-- Cassini identity for Lucas numbers: L(n+1)·L(n-1) - L(n)² = -5·(-1)^n.
+    cor:discussion-horizon-boundarylayer-phi-scaling -/
+private theorem lucasNum_cassini_aux (m : Nat) :
+    lucasNum (m + 2) * lucasNum m - lucasNum (m + 1) ^ 2 = -5 * (-1) ^ (m + 1) := by
+  induction m with
+  | zero => simp [lucasNum]
+  | succ m ih =>
+    -- L(m+3) * L(m+1) - L(m+2)² = -5 * (-1)^(m+2)
+    have hL3 : lucasNum (m + 3) = lucasNum (m + 2) + lucasNum (m + 1) :=
+      lucasNum_succ_succ (m + 1)
+    have hL2 : lucasNum (m + 2) = lucasNum (m + 1) + lucasNum m :=
+      lucasNum_succ_succ m
+    have hsign : (-1 : ℤ) ^ (m + 2) = -((-1) ^ (m + 1)) := by ring
+    rw [hL3, hsign]
+    -- Goal: (L(m+2)+L(m+1))*L(m+1) - L(m+2)^2 = -(-5*(-1)^(m+1))
+    -- IH: L(m+2)*L(m) - L(m+1)^2 = -5*(-1)^(m+1)
+    -- hL2: L(m+2) = L(m+1) + L(m)
+    -- Substitute hL2 into goal and IH, everything should simplify
+    rw [hL2] at ih ⊢
+    nlinarith [sq_nonneg (lucasNum m - lucasNum (m + 1))]
+
+theorem lucasNum_cassini (n : Nat) (hn : 1 ≤ n) :
+    lucasNum (n + 1) * lucasNum (n - 1) - lucasNum n ^ 2 = -5 * (-1) ^ n := by
+  obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_le hn
+  simp only [show 1 + m - 1 = m from by omega]
+  have h1 : 1 + m + 1 = m + 2 := by omega
+  have h2 : 1 + m = m + 1 := by omega
+  rw [h1, h2]
+  exact lucasNum_cassini_aux m
+
+/-- Paper: cor:discussion-horizon-boundarylayer-phi-scaling (Lucas-Cassini) -/
+theorem paper_lucasNum_cassini (n : Nat) (hn : 1 ≤ n) :
+    lucasNum (n + 1) * lucasNum (n - 1) - lucasNum n ^ 2 = -5 * (-1) ^ n :=
+  lucasNum_cassini n hn
+
+end
+
 end Omega.Zeta
