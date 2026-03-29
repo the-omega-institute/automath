@@ -787,4 +787,17 @@ theorem momentSum_three_fifteen : momentSum 3 15 = 20675744 := by
     momentSum_three_twelve, momentSum_three_thirteen, momentSum_three_fourteen] at h
   omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R72: S_3(16) chain value
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_3(16) = 63809152.
+    prop:pom-s3-sixteen -/
+theorem momentSum_three_sixteen : momentSum 3 16 = 63809152 := by
+  have h := momentSum_three_recurrence 13
+  rw [show (13 : Nat) + 1 = 14 from rfl, show (13 : Nat) + 2 = 15 from rfl,
+    show (13 : Nat) + 3 = 16 from rfl,
+    momentSum_three_thirteen, momentSum_three_fourteen, momentSum_three_fifteen] at h
+  omega
+
 end Omega

@@ -1023,6 +1023,52 @@ theorem exactWeightCount_fib_sub_seven (m : Nat) (hm : 4 ≤ m) :
   exact exactWeightCount_five m hm
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R72: ewc(8)=3 + ewc(F-10)=3
+-- ══════════════════════════════════════════════════════════════
+
+/-- Weight 8 is achieved by exactly three words for m ≥ 5.
+    prop:pom-ewc-weight-eight -/
+theorem exactWeightCount_eight (m : Nat) (hm : 5 ≤ m) :
+    exactWeightCount m 8 = 3 := by
+  induction m with
+  | zero => omega
+  | succ n ih =>
+    cases n with
+    | zero => omega
+    | succ k =>
+      cases k with
+      | zero => omega
+      | succ j =>
+        cases j with
+        | zero => omega
+        | succ i =>
+          cases i with
+          | zero => omega
+          | succ p =>
+            cases p with
+            | zero =>
+              -- base case: m = 5
+              native_decide
+            | succ q =>
+              -- inductive step: ewc(q+6, 8) = ewc(q+5, 8) since 8 < fib(q+7)
+              rw [exactWeightCount_succ_of_lt]
+              · exact ih (by omega)
+              · calc 8 < 13 := by omega
+                  _ = Nat.fib 7 := by native_decide
+                  _ ≤ Nat.fib (q + 7) := Nat.fib_mono (by omega)
+
+/-- The weight F_{m+3}−10 has exactly three words for m ≥ 5, by symmetry with weight 8.
+    prop:pom-ewc-fib-sub-ten -/
+theorem exactWeightCount_fib_sub_ten (m : Nat) (hm : 5 ≤ m) :
+    exactWeightCount m (Nat.fib (m + 3) - 10) = 3 := by
+  have hfib : Nat.fib (m + 3) ≥ 21 := by
+    calc Nat.fib (m + 3) ≥ Nat.fib 8 := Nat.fib_mono (by omega)
+      _ = 21 := by native_decide
+  have hsub : Nat.fib (m + 3) - 2 - (Nat.fib (m + 3) - 10) = 8 := by omega
+  rw [exactWeightCount_symmetric m (Nat.fib (m + 3) - 10) (by omega), hsub]
+  exact exactWeightCount_eight m hm
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R70: S₂(16) chain value
 -- ══════════════════════════════════════════════════════════════
 
