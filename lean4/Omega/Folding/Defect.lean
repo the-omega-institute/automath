@@ -580,4 +580,10 @@ theorem Fold_truncate_eq_restrict_iff (ω : Word (m + 1)) :
     Fold (truncate ω) = X.restrict (Fold ω) ↔ localDefect ω = zeroWord m :=
   (localDefect_eq_zero_iff_fold_commutes ω).symm
 
+/-- The all-false word is the unique word of weight zero (theorem #200).
+    prop:pom-weight-zero-unique -/
+theorem eq_allFalse_of_weight_eq_zero (w : Word m) (hw : weight w = 0) :
+    w = fun _ => false :=
+  (weight_zero_iff_allFalse w).mp hw
+
 end Omega
