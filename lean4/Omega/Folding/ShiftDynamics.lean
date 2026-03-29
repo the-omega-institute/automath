@@ -1204,4 +1204,36 @@ theorem lucasNum_tripling (n : Nat) :
     rw [hdbl]; ring
   nlinarith [key]
 
+/-- Lucas-Cassini identity: L(n)^2 - L(n-1)*L(n+1) = 5*(-1)^n for n >= 1.
+    prop:lucas-fibonacci-identity -/
+theorem paper_lucas_cassini (n : Nat) (hn : 1 ≤ n) :
+    (lucasNum n : ℤ) ^ 2 - (lucasNum (n - 1) : ℤ) * (lucasNum (n + 1) : ℤ) =
+    5 * (-1) ^ n :=
+  lucasNum_cassini n hn
+
+/-- Lucas doubling: L(2n) = L(n)^2 - 2*(-1)^n for n >= 1.
+    prop:fib-double-lucas -/
+theorem paper_lucas_double (n : Nat) (hn : 1 ≤ n) :
+    (lucasNum (2 * n) : ℤ) = (lucasNum n : ℤ) ^ 2 - 2 * (-1) ^ n :=
+  lucasNum_double n hn
+
+/-- L(n)^2 = 5*F(n)^2 + 4*(-1)^n (unconditional).
+    prop:lucas-fibonacci-square-unconditional -/
+theorem paper_lucas_five_fib_sq (n : Nat) :
+    (lucasNum n : ℤ) ^ 2 = 5 * (Nat.fib n : ℤ) ^ 2 + 4 * (-1 : ℤ) ^ n :=
+  lucas_sq_eq_five_fib_sq n
+
+/-- Lucas-Fibonacci addition formula: L(m+n+2) = L(m+1)*F(n+2) + L(m)*F(n+1).
+    thm:folding-stable-syntax-fib-fusion-ring -/
+theorem paper_lucas_add_formula (m n : Nat) :
+    (lucasNum (m + n + 2) : ℤ) =
+    (lucasNum (m + 1) : ℤ) * (Nat.fib (n + 2) : ℤ) +
+    (lucasNum m : ℤ) * (Nat.fib (n + 1) : ℤ) :=
+  lucasNum_add_formula m n
+
+/-- Lucas numbers strictly increasing for n >= 1: L(n) < L(n+1).
+    thm:pom-parry-limit-chain-explicit -/
+theorem paper_lucas_strict_mono (n : Nat) (hn : 1 ≤ n) : lucasNum n < lucasNum (n + 1) :=
+  lucasNum_strict_mono n hn
+
 end Omega
