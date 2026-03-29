@@ -308,4 +308,37 @@ theorem ringEquiv_eq_id (m : Nat) (f : X m ≃+* X m) :
   rw [RingEquiv.symm_apply_apply] at h
   exact e.injective h
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R133: Stable value power formula
+-- ══════════════════════════════════════════════════════════════
+
+/-- Power formula: stableValue(x^n) = (stableValue x)^n mod F(m+2).
+    thm:mul-definitional -/
+theorem stableValue_pow (x : X m) (n : Nat) :
+    stableValue (x ^ n) = (stableValue x) ^ n % Nat.fib (m + 2) := by
+  induction n with
+  | zero =>
+    simp only [pow_zero, Nat.pow_zero]
+    rw [ring_one_eq]
+    have hF : 0 < Nat.fib (m + 2) := Nat.fib_pos.mpr (by omega)
+    cases m with
+    | zero =>
+      have : Subsingleton (X 0) := by
+        rw [← Fintype.card_le_one_iff_subsingleton]; simp [X.card_eq_fib]
+      rw [show (stableOne : X 0) = stableZero from Subsingleton.elim _ _, stableValue_stableZero]
+      simp [Nat.fib]
+    | succ n =>
+      rw [stableValue_stableOne (fib_gt_one_of_ge_two (by omega))]
+      exact (Nat.mod_eq_of_lt (fib_gt_one_of_ge_two (by omega))).symm
+  | succ n ih =>
+    rw [pow_succ, ring_mul_eq, stableValue_stableMul, ih, pow_succ]
+    conv_rhs => rw [Nat.mul_mod]
+    congr 1; congr 1
+    exact (Nat.mod_eq_of_lt (stableValue_lt_fib x)).symm
+
+/-- Paper: thm:mul-definitional (power) -/
+theorem paper_stableValue_pow (x : X m) (n : Nat) :
+    stableValue (x ^ n) = (stableValue x) ^ n % Nat.fib (m + 2) :=
+  stableValue_pow x n
+
 end Omega.X

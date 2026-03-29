@@ -2,6 +2,7 @@ import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Finset.Card
 import Mathlib.Tactic
 import Omega.Core.Fib
+import Omega.Folding.BinFold
 
 /-!
 # Bounded Prime-Register Gödel Lift
@@ -154,5 +155,43 @@ theorem window6_success_rate_zero : 21 * 64 ≠ 0 ∧ 21 ≤ 64 := by omega
 theorem godelLift_fold_sqrt_suffices (m : Nat) :
     Nat.fib (m + 2) ≤ (Nat.sqrt (Nat.fib (m + 2)) + 1) ^ 2 :=
   Nat.le_of_lt (Nat.lt_succ_sqrt' _)
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R133: Binary-fiber Gödel lift instances
+-- ══════════════════════════════════════════════════════════════
+
+open Omega in
+/-- Single-prime Gödel lift for binary fold m=7: exponent ≤ 4 suffices.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_binFiber_fold7_single : (4 + 1) ^ 1 ≥ cBinFiberMax 7 := by
+  rw [cBinFiberMax_seven]; omega
+
+open Omega in
+/-- Binary Gödel lift fails for binary fold m=7: 2^2 = 4 < 5.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_binFiber_fold7_binary_fails : ¬ ((1 + 1) ^ 2 ≥ cBinFiberMax 7) := by
+  rw [cBinFiberMax_seven]; omega
+
+open Omega in
+/-- Ternary Gödel lift for binary fold m=8: 3^2 = 9 ≥ 6.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_binFiber_fold8_ternary : (2 + 1) ^ 2 ≥ cBinFiberMax 8 := by
+  rw [cBinFiberMax_eight]; omega
+
+open Omega in
+/-- Minimum binary registers for binary fold m=8: need ≥ 3.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_binFiber_fold8_min_binary :
+    ¬ ((1 + 1) ^ 2 ≥ cBinFiberMax 8) ∧ (1 + 1) ^ 3 ≥ cBinFiberMax 8 := by
+  constructor <;> (rw [cBinFiberMax_eight]; omega)
+
+open Omega in
+/-- Paper: thm:conclusion-bounded-prime-register-feasibility (binary fiber instances) -/
+theorem paper_godelLift_binFiber_instances :
+    (4 + 1) ^ 1 ≥ cBinFiberMax 7 ∧
+    ¬ ((1 + 1) ^ 2 ≥ cBinFiberMax 7) ∧
+    (2 + 1) ^ 2 ≥ cBinFiberMax 8 :=
+  ⟨godelLift_binFiber_fold7_single, godelLift_binFiber_fold7_binary_fails,
+   godelLift_binFiber_fold8_ternary⟩
 
 end Omega.Conclusion
