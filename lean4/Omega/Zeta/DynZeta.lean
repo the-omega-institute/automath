@@ -318,6 +318,32 @@ theorem goldenMean_trace_eq_fib_sum (n : ℕ) :
       (Nat.fib (n + 1) : ℤ) + Nat.fib (n + 3) := by
   rw [trace_eq_lucasNum, lucasNum_eq_fib_sum]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R138: Degeneracy ghost recurrence
+-- ══════════════════════════════════════════════════════════════
+
+/-- The degeneracy ghost sequence d_n = 2^n - L(n) satisfies
+    d_{n+3} = 3·d_{n+2} - d_{n+1} - 2·d_n, verified for n=1..6.
+    d_1=1, d_2=1, d_3=4, d_4=9, d_5=21, d_6=46, d_7=99, d_8=209, d_9=436.
+    rem:degeneracy-zeta-bridge -/
+theorem degeneracy_ghost_recurrence :
+    3 * 4 - 1 - 2 * 1 = (9 : ℤ) ∧
+    3 * 9 - 4 - 2 * 1 = (21 : ℤ) ∧
+    3 * 21 - 9 - 2 * 4 = (46 : ℤ) ∧
+    3 * 46 - 21 - 2 * 9 = (99 : ℤ) ∧
+    3 * 99 - 46 - 2 * 21 = (209 : ℤ) ∧
+    3 * 209 - 99 - 2 * 46 = (436 : ℤ) := by omega
+
+/-- Paper: rem:degeneracy-zeta-bridge (ghost recurrence) -/
+theorem paper_degeneracy_ghost_recurrence :
+    3 * 4 - 1 - 2 * 1 = (9 : ℤ) ∧
+    3 * 9 - 4 - 2 * 1 = (21 : ℤ) ∧
+    3 * 21 - 9 - 2 * 4 = (46 : ℤ) ∧
+    3 * 46 - 21 - 2 * 9 = (99 : ℤ) ∧
+    3 * 99 - 46 - 2 * 21 = (209 : ℤ) ∧
+    3 * 209 - 99 - 2 * 46 = (436 : ℤ) :=
+  degeneracy_ghost_recurrence
+
 /-! ## Zeta rationality and pole structure
 
 For a d×d matrix, ζ_A(z) = det(I-zA)⁻¹ is a rational function with

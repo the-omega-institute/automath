@@ -89,4 +89,27 @@ theorem paper_quadratic_residues_mod21 :
     ((Finset.range 21).filter (fun a => isNonzeroQR21 a)).card = 7 :=
   quadratic_residues_mod21
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R138: Window-8 histogram consistency + higher moments
+-- ══════════════════════════════════════════════════════════════
+
+/-- Window-8 bin-fold histogram {3:21, 5:11, 6:23} consistency checks.
+    thm:conclusion-window8-groupoid-collision-dimension-identity -/
+theorem window8_histogram_consistency :
+    21 + 11 + 23 = 55 ∧ 21 * 3 + 11 * 5 + 23 * 6 = 256 := by omega
+
+/-- Higher moment sums from window-8 histogram.
+    thm:conclusion-window8-groupoid-collision-dimension-identity -/
+theorem window8_higher_moments :
+    21 * 3 ^ 3 + 11 * 5 ^ 3 + 23 * 6 ^ 3 = 6910 ∧
+    21 * 3 ^ 4 + 11 * 5 ^ 4 + 23 * 6 ^ 4 = 38384 ∧
+    21 * 3 ^ 5 + 11 * 5 ^ 5 + 23 * 6 ^ 5 = 218326 := by omega
+
+/-- Paper: thm:conclusion-window8-groupoid-collision-dimension-identity -/
+theorem paper_window8_higher_moments :
+    21 * 3 ^ 3 + 11 * 5 ^ 3 + 23 * 6 ^ 3 = 6910 ∧
+    21 * 3 ^ 4 + 11 * 5 ^ 4 + 23 * 6 ^ 4 = 38384 ∧
+    21 * 3 ^ 5 + 11 * 5 ^ 5 + 23 * 6 ^ 5 = 218326 :=
+  window8_higher_moments
+
 end Omega.Conclusion
