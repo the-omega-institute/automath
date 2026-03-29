@@ -1860,4 +1860,12 @@ theorem fibcubeEdgeCount_ge_vertex (n : Nat) (hn : 3 ≤ n) :
     have hfn1_pos : 0 < Nat.fib (n + 6) := Nat.fib_pos.mpr (by omega)
     nlinarith [hclosed, hfib]
 
+/-- f-vector k=4 recurrence: f(n+2,4) = f(n+1,4) + f(n,4) + f(n,3).
+    thm:pom-fibcube-fvector-closed -/
+theorem fibcubeFVector_four_recurrence (n : Nat) :
+    fibcubeFVector (n + 2) 4 = fibcubeFVector (n + 1) 4 + fibcubeFVector n 4 +
+      fibcubeFVector n 3 := by
+  simp only [fibcubeFVector_succ_succ, show (4 : Nat) ≠ 0 from by omega, ite_false,
+    show 4 - 1 = 3 from rfl]
+
 end Omega

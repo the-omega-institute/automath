@@ -300,4 +300,10 @@ theorem cylinderWord_cover (m : Nat) :
   ext x; simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
   exact ⟨prefixWord x m, rfl⟩
 
+/-- Extended word reads false beyond the word length.
+    prop:spg-decidable-clopen -/
+theorem extendWord_get_ge (w : Word m) (i : Nat) (hi : ¬ i < m) :
+    extendWord w i = false := by
+  simp [extendWord, get, hi]
+
 end Omega.SPG

@@ -852,4 +852,15 @@ theorem window6_excess_capacity :
     Nat.fib 8 * (cBinFiberMax 6 - 1) = 2 ^ 6 - 1 := by
   rw [cBinFiberMax_six]; native_decide
 
+/-- D_max(6)^2 = 16.
+    thm:conclusion-window6-groupoid-collision-dimension-identity -/
+theorem conclusion_window6_max_fiber_sq :
+    cBinFiberMax 6 ^ 2 = 16 := by rw [cBinFiberMax_six]; norm_num
+
+/-- 2^6 = |X_6| + hidden dimensions, split by multiplicity excess.
+    thm:conclusion-window6-hidden-a-type-weyl-package -/
+theorem conclusion_window6_visible_hidden_split :
+    2 ^ 6 = Nat.fib 8 + (cBinFiberHist 6 2 * 1 + cBinFiberHist 6 3 * 2 + cBinFiberHist 6 4 * 3) := by
+  rw [cBinFiberHist_6_2, cBinFiberHist_6_3, cBinFiberHist_6_4]; native_decide
+
 end Omega

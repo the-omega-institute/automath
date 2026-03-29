@@ -1111,6 +1111,26 @@ theorem fib_tripling (n : Nat) :
       rw [hprod, hF2sq, hLsq]; ring
     exact mul_left_cancel₀ hfpos hmul
 
+/-- L(n)^2 + L(n+1)^2 = 5*F(2n+1).
+    bridge:lucas-sq-pair-sum -/
+theorem lucasNum_sq_pair_sum (n : Nat) :
+    lucasNum n ^ 2 + lucasNum (n + 1) ^ 2 = 5 * Nat.fib (2 * n + 1) := by
+  have h1 := lucas_sq_eq_five_fib_sq n
+  have h2 := lucas_sq_eq_five_fib_sq (n + 1)
+  have h3 := fib_sq_add_sq n
+  -- h1: L(n)^2 = 5*F(n)^2 + 4*(-1)^n
+  -- h2: L(n+1)^2 = 5*F(n+1)^2 + 4*(-1)^(n+1)
+  -- Sum: 5*(F(n)^2+F(n+1)^2) + 4*((-1)^n+(-1)^(n+1)) = 5*F(2n+1) + 0
+  -- since (-1)^n + (-1)^(n+1) = 0
+  have hcancel : (-1 : ℤ) ^ n + (-1) ^ (n + 1) = 0 := by ring
+  -- Cast h3 to ℤ
+  have h3Z : (Nat.fib n : ℤ) ^ 2 + (Nat.fib (n + 1) : ℤ) ^ 2 = Nat.fib (2 * n + 1) := by
+    have := h3; push_cast at this ⊢; linarith
+  -- In Nat, L(n)^2+L(n+1)^2 ≥ 0 and equals a Nat, so we can work in ℤ
+  suffices hsuff : (lucasNum n ^ 2 + lucasNum (n + 1) ^ 2 : ℤ) =
+      5 * Nat.fib (2 * n + 1) from Nat.cast_injective hsuff
+  push_cast; linarith [h1, h2, h3Z, hcancel]
+
 /-- Lucas tripling: L(3n) = L(n) * (L(n)^2 - 3*(-1)^n).
     bridge:lucas-tripling -/
 theorem lucasNum_tripling (n : Nat) :
