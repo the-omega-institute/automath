@@ -344,6 +344,52 @@ theorem paper_degeneracy_ghost_recurrence :
     3 * 209 - 99 - 2 * 46 = (436 : ℤ) :=
   degeneracy_ghost_recurrence
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R146: General degeneracy ghost recurrence + mod2 period + monotonicity
+-- ══════════════════════════════════════════════════════════════
+
+/-- The degeneracy ghost d_n = 2^n - L(n) satisfies
+    d_{n+3} = 3·d_{n+2} - d_{n+1} - 2·d_n for all n.
+    rem:degeneracy-zeta-bridge -/
+theorem degeneracy_ghost_recurrence_general (n : ℕ) :
+    (2 : ℤ) ^ (n + 3) - lucasNum (n + 3) =
+      3 * ((2 : ℤ) ^ (n + 2) - lucasNum (n + 2)) -
+      ((2 : ℤ) ^ (n + 1) - lucasNum (n + 1)) -
+      2 * ((2 : ℤ) ^ n - lucasNum n) := by
+  rw [lucasNum_succ_succ (n + 1), lucasNum_succ_succ n]
+  ring
+
+/-- Lucas numbers mod 2 have period 3: L(n+3) ≡ L(n) (mod 2) for all n.
+    rem:degeneracy-zeta-bridge -/
+theorem lucasNum_mod2_period_three (n : Nat) :
+    lucasNum (n + 3) % 2 = lucasNum n % 2 := by
+  -- L(n+3) = L(n+2) + L(n+1) = (L(n+1) + L(n)) + L(n+1) = 2·L(n+1) + L(n)
+  rw [lucasNum_succ_succ (n + 1), lucasNum_succ_succ n]
+  omega
+
+/-- The degeneracy ghost d_n = 2^n - L(n) is strictly increasing for n ≥ 3.
+    rem:degeneracy-zeta-bridge -/
+theorem degeneracy_ghost_strict_mono (n : ℕ) (hn : 3 ≤ n) :
+    (2 : ℤ) ^ n - lucasNum n < (2 : ℤ) ^ (n + 1) - lucasNum (n + 1) := by
+  -- d_{n+1} - d_n = 2^n - L(n-1) > 0 for n ≥ 3
+  -- Suffices: L(n-1) < 2^n
+  match n, hn with
+  | 3, _ => simp [lucasNum]
+  | n + 4, _ =>
+    -- L(n+4+1) = L(n+4) + L(n+3), so need 2^(n+4) - L(n+4) < 2^(n+5) - L(n+5)
+    -- L(n+5) = L(n+4) + L(n+3)
+    rw [show n + 4 + 1 = (n + 3) + 2 from by omega, lucasNum_succ_succ (n + 3)]
+    -- Need: L(n+3) < 2^(n+4)
+    have hpos := degeneracy_ghost_positive (n + 3) (by omega)
+    -- hpos: 0 < 2^(n+3) - L(n+3), so L(n+3) < 2^(n+3) ≤ 2^(n+4)
+    have hp1 : (2 : ℤ) ^ (n + 3 + 2) = 4 * 2 ^ (n + 3) := by ring
+    have hp2 : (2 : ℤ) ^ (n + 4) = 2 * 2 ^ (n + 3) := by ring
+    -- Normalize n + 3 + 1 to n + 4; then linarith with power-of-2 identities
+    have hn34 : lucasNum (n + 3 + 1) = lucasNum (n + 4) := by congr 1
+    simp only [hn34, hp1, hp2]
+    have hpow_pos : (0 : ℤ) < 2 ^ (n + 3) := by positivity
+    linarith
+
 /-! ## Zeta rationality and pole structure
 
 For a d×d matrix, ζ_A(z) = det(I-zA)⁻¹ is a rational function with
