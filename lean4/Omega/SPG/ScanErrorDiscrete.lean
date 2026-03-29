@@ -312,6 +312,88 @@ theorem scanError_compl {α β : Type*} [Fintype α] [Fintype β]
   refine Finset.sum_congr rfl (fun b _ => ?_)
   rw [cellEventMass_compl, cellComplMass_compl, min_comm]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R128: Scan error sub-additivity for union
+-- ══════════════════════════════════════════════════════════════
+
+private theorem setMass_union_le {α : Type*} [Fintype α] (μ : PMF α) (S T : Set α) :
+    setMass μ (S ∪ T) ≤ setMass μ S + setMass μ T := by
+  simp only [setMass]
+  rw [← Finset.sum_add_distrib]
+  refine Finset.sum_le_sum (fun x _ => ?_)
+  by_cases hS : x ∈ S <;> by_cases hT : x ∈ T <;>
+    simp [Set.indicator, hS, hT, Set.mem_union]
+
+private theorem cellEventMass_union_le {α β : Type*} [Fintype α]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) (b : β) :
+    cellEventMass μ obs (P ∪ Q) b ≤ cellEventMass μ obs P b + cellEventMass μ obs Q b := by
+  unfold cellEventMass
+  have hsub : (P ∪ Q) ∩ observableCell obs b ⊆
+      P ∩ observableCell obs b ∪ Q ∩ observableCell obs b := by
+    intro x ⟨hpq, hc⟩
+    rcases hpq with hp | hq
+    · exact Or.inl ⟨hp, hc⟩
+    · exact Or.inr ⟨hq, hc⟩
+  calc setMass μ ((P ∪ Q) ∩ observableCell obs b)
+      ≤ setMass μ (P ∩ observableCell obs b ∪ Q ∩ observableCell obs b) :=
+        setMass_mono μ hsub
+    _ ≤ setMass μ (P ∩ observableCell obs b) + setMass μ (Q ∩ observableCell obs b) :=
+        setMass_union_le μ _ _
+
+private theorem cellComplMass_union_le_left {α β : Type*} [Fintype α]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) (b : β) :
+    cellComplMass μ obs (P ∪ Q) b ≤ cellComplMass μ obs P b := by
+  apply setMass_mono
+  intro x hx
+  exact ⟨hx.1, fun hp => hx.2 (Or.inl hp)⟩
+
+private theorem cellComplMass_union_le_right {α β : Type*} [Fintype α]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) (b : β) :
+    cellComplMass μ obs (P ∪ Q) b ≤ cellComplMass μ obs Q b := by
+  apply setMass_mono
+  intro x hx
+  exact ⟨hx.1, fun hq => hx.2 (Or.inr hq)⟩
+
+private theorem min_le_min_add_min {a b a₁ a₂ b₁ b₂ : ENNReal}
+    (ha : a ≤ a₁ + a₂) (hb1 : b ≤ b₁) (hb2 : b ≤ b₂) :
+    min a b ≤ min a₁ b₁ + min a₂ b₂ := by
+  rcases le_total a₁ b₁ with h₁ | h₁
+  · -- a₁ ≤ b₁, so min(a₁, b₁) = a₁
+    rcases le_total a₂ b₂ with h₂ | h₂
+    · -- a₂ ≤ b₂, RHS = a₁ + a₂ ≥ a ≥ min(a, b)
+      calc min a b ≤ a := min_le_left _ _
+        _ ≤ a₁ + a₂ := ha
+        _ = min a₁ b₁ + min a₂ b₂ := by rw [min_eq_left h₁, min_eq_left h₂]
+    · -- b₂ ≤ a₂, RHS = a₁ + b₂ ≥ b₂ ≥ b ≥ min(a, b)
+      calc min a b ≤ b := min_le_right _ _
+        _ ≤ b₂ := hb2
+        _ ≤ a₁ + b₂ := le_add_left (le_refl b₂)
+        _ = min a₁ b₁ + min a₂ b₂ := by rw [min_eq_left h₁, min_eq_right h₂]
+  · -- b₁ ≤ a₁, so min(a₁, b₁) = b₁
+    calc min a b ≤ b := min_le_right _ _
+      _ ≤ b₁ := hb1
+      _ ≤ b₁ + min a₂ b₂ := le_add_right (le_refl b₁)
+      _ = min a₁ b₁ + min a₂ b₂ := by rw [min_eq_right h₁]
+
+/-- Scan error is sub-additive: ε(P ∪ Q) ≤ ε(P) + ε(Q).
+    Consequence of prop:spg-scan-error-cylinder -/
+theorem scanError_union_le {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) :
+    scanError μ obs (P ∪ Q) ≤ scanError μ obs P + scanError μ obs Q := by
+  unfold scanError
+  rw [← Finset.sum_add_distrib]
+  refine Finset.sum_le_sum (fun b _ => ?_)
+  exact min_le_min_add_min
+    (cellEventMass_union_le μ obs P Q b)
+    (cellComplMass_union_le_left μ obs P Q b)
+    (cellComplMass_union_le_right μ obs P Q b)
+
+/-- Paper: scan error sub-additivity (consequence of prop:spg-scan-error-cylinder) -/
+theorem paper_scanError_union_le {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) :
+    scanError μ obs (P ∪ Q) ≤ scanError μ obs P + scanError μ obs Q :=
+  scanError_union_le μ obs P Q
+
 /-- Discrete observable purity: every observation cell is all-in or all-out.
     def:spg-discrete-observable-purity -/
 def ObservablePure {α β : Type*} [Fintype α] [Fintype β]

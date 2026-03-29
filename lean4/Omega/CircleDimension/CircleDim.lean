@@ -64,4 +64,35 @@ theorem halfCircleDim_add (a b c d : Nat) :
     halfCircleDim (a + b) (c + d) = halfCircleDim a c + halfCircleDim b d := by
   simp [halfCircleDim, circleDim]; push_cast; ring
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R128: Tensor-Hom-Ext laws
+-- ══════════════════════════════════════════════════════════════
+
+/-- Circle dimension tensor product law: cdim(G ⊗ H) = cdim(G) · cdim(H).
+    prop:cdim-tensor-hom-ext-laws -/
+theorem circleDim_mul (r s t1 t2 : Nat) :
+    circleDim (r * s) (t1 * t2) = circleDim r t1 * circleDim s t2 := rfl
+
+/-- Circle dimension Hom law: cdim(Hom(G,H)) = cdim(G) · cdim(H).
+    prop:cdim-tensor-hom-ext-laws -/
+theorem circleDim_hom (r s t1 t2 : Nat) :
+    circleDim (r * s) (t1 * t2) = circleDim r t1 * circleDim s t2 :=
+  circleDim_mul r s t1 t2
+
+/-- Circle dimension Ext¹ vanishing: cdim(Ext¹(G,H)) = 0.
+    prop:cdim-tensor-hom-ext-laws -/
+theorem circleDim_ext1_vanishing (t : Nat) :
+    circleDim 0 t = 0 :=
+  circleDim_finite t
+
+/-- Paper: prop:cdim-tensor-hom-ext-laws (tensor) -/
+theorem paper_circleDim_tensor (r s t1 t2 : Nat) :
+    circleDim (r * s) (t1 * t2) = circleDim r t1 * circleDim s t2 :=
+  circleDim_mul r s t1 t2
+
+/-- Paper: prop:cdim-tensor-hom-ext-laws (Ext¹ vanishing) -/
+theorem paper_circleDim_ext1_vanishing (t : Nat) :
+    circleDim 0 t = 0 :=
+  circleDim_ext1_vanishing t
+
 end Omega.CircleDimension

@@ -288,6 +288,38 @@ theorem goldenMean_charPoly_discriminant : 1 ^ 2 + 4 * 1 = (5 : ℤ) := by omega
     subsec:operator-zeta-interface -/
 theorem goldenMean_zeta_roots_exist : (5 : ℤ) > 0 := by omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R128: Reduced determinant and matrix invariants
+-- ══════════════════════════════════════════════════════════════
+
+/-- The reduced determinant identity: 1 - ψ/φ = √5/φ.
+    Equivalently: φ - ψ = √5 (the eigenvalue gap equals √5).
+    prop:finite-part-residue-reduced-determinant -/
+theorem reduced_det_golden_mean :
+    1 - Real.goldenConj / Real.goldenRatio = Real.sqrt 5 / Real.goldenRatio := by
+  have hφ_ne : Real.goldenRatio ≠ 0 := ne_of_gt Real.goldenRatio_pos
+  have hgap : Real.goldenRatio - Real.goldenConj = Real.sqrt 5 := by
+    rw [Real.goldenRatio, Real.goldenConj]; ring
+  have : (1 : ℝ) - Real.goldenConj / Real.goldenRatio =
+      (Real.goldenRatio - Real.goldenConj) / Real.goldenRatio := by
+    rw [sub_div, div_self hφ_ne]
+  rw [this, hgap]
+
+/-- Paper: prop:finite-part-residue-reduced-determinant -/
+theorem paper_reduced_det_golden_mean :
+    1 - Real.goldenConj / Real.goldenRatio = Real.sqrt 5 / Real.goldenRatio :=
+  reduced_det_golden_mean
+
 end
+
+/-- Golden-mean adjacency trace: Tr(A) = 1.
+    prop:finite-part-residue-reduced-determinant -/
+theorem goldenMean_trace_eq_one :
+    Graph.goldenMeanAdjacency.trace = 1 := by native_decide
+
+/-- Golden-mean adjacency determinant: det(A) = -1.
+    prop:finite-part-residue-reduced-determinant -/
+theorem goldenMean_det_eq_neg_one :
+    Graph.goldenMeanAdjacency.det = -1 := by native_decide
 
 end Omega.Zeta
