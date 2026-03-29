@@ -622,11 +622,13 @@ def write_outputs(
             raise AssertionError("Missing delta_patterns in boundary lift scan.")
         if len(patterns) == 1:
             k = next(iter(patterns.keys()))
-            pat_tex = f"\\{{{k.replace(',',',\\ ')}\\}}"
+            pattern_tex = k.replace(",", ",\\ ")
+            pat_tex = f"\\{{{pattern_tex}\\}}"
         else:
             parts: List[str] = []
             for k, v in patterns.items():
-                parts.append(f"\\{{{k.replace(',',',\\ ')}\\}}\\times {v}")
+                pattern_tex = k.replace(",", ",\\ ")
+                parts.append(f"\\{{{pattern_tex}\\}}\\times {v}")
             pat_tex = ";\\ ".join(parts)
         stab_lines.append(f"{mm} & {cnt} & {size_tex} & ${pat_tex}$\\\\")
     stab_lines.append("\\bottomrule")

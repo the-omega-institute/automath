@@ -115,8 +115,8 @@ def main() -> None:
     )
 
     print(f"[ok] parsed n={len(qs)} rows from {table_path.name}")
-    print(f"[ok] delta_q ≈ {a6} * q {b6}")
-    print(f"[ok] log R_q ≈ {a2_6} * q {b2_6}")
+    print(f"[ok] delta_q ~= {a6} * q {b6}")
+    print(f"[ok] log R_q ~= {a2_6} * q {b2_6}")
 
 
 if __name__ == "__main__":

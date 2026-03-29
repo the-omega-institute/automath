@@ -30,3 +30,12 @@ jobs:
           lake-package-directory: lean4
           build: true
           use-mathlib-cache: true
+
+      - name: Audit Lean sources
+        run: python3 lean4/scripts/omega_ci.py audit
+
+      - name: Build Lean inventory
+        run: python3 lean4/scripts/omega_ci.py inventory --strict --json "${RUNNER_TEMP}/omega-lean-inventory.json"
+
+      - name: Build paper coverage report
+        run: python3 lean4/scripts/omega_ci.py paper-coverage --sections body --json "${RUNNER_TEMP}/omega-paper-coverage.json"
