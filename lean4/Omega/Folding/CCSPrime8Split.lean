@@ -746,4 +746,13 @@ theorem momentSum_three_thirteen : momentSum 3 13 = 2170784 := by
     rw [momentSum_three_ten, momentSum_three_eleven, momentSum_three_twelve] at this; linarith
   omega
 
+/-- S_3(14) = 6699808.
+    prop:pom-s3-fourteen -/
+theorem momentSum_three_fourteen : momentSum 3 14 = 6699808 := by
+  have h : momentSum 3 14 + 2 * 227888 = 2 * 2170784 + 4 * 703504 := by
+    have := momentSum_three_recurrence 11
+    change momentSum 3 14 + 2 * momentSum 3 11 = 2 * momentSum 3 13 + 4 * momentSum 3 12 at this
+    rw [momentSum_three_eleven, momentSum_three_twelve, momentSum_three_thirteen] at this; linarith
+  omega
+
 end Omega

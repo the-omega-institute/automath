@@ -853,4 +853,46 @@ theorem momentSum_two_cauchy_lower (m : Nat) :
     norm_num
   linarith
 
+/-- S₂(14) = 315296, computed via the three-step recurrence from S₂(11..13).
+    prop:pom-moment-s2-fourteen -/
+theorem momentSum_two_fourteen_rec : momentSum 2 14 = 315296 := by
+  have h := momentSum_two_recurrence 11
+  rw [show (11 : Nat) + 1 = 12 from rfl, show (11 : Nat) + 2 = 13 from rfl,
+    show (11 : Nat) + 3 = 14 from rfl, momentSum_two_eleven_rec,
+    momentSum_two_twelve_rec, momentSum_two_thirteen_rec] at h; omega
+
+/-- Weight 2 is achieved by exactly one word for m ≥ 2.
+    prop:pom-ewc-weight-two -/
+theorem exactWeightCount_two (m : Nat) (hm : 2 ≤ m) :
+    exactWeightCount m 2 = 1 := by
+  induction m with
+  | zero => omega
+  | succ n ih =>
+    cases n with
+    | zero => omega
+    | succ k =>
+      cases k with
+      | zero =>
+        -- base case: m = 2
+        native_decide
+      | succ j =>
+        -- inductive step: ewc(j+3, 2) = ewc(j+2, 2) since 2 < fib(j+4)
+        rw [exactWeightCount_succ_of_lt]
+        · exact ih (by omega)
+        · -- 2 < Nat.fib (j + 4)
+          calc 2 < 3 := by omega
+            _ = Nat.fib 4 := by native_decide
+            _ ≤ Nat.fib (j + 4) := Nat.fib_mono (by omega)
+
+/-- The weight F_{m+3}−4 has exactly one word, by symmetry with weight 2.
+    prop:pom-ewc-fib-sub-four -/
+theorem exactWeightCount_fib_sub_four (m : Nat) (hm : 2 ≤ m) :
+    exactWeightCount m (Nat.fib (m + 3) - 4) = 1 := by
+  have hfib : Nat.fib (m + 3) ≥ 5 := by
+    calc Nat.fib (m + 3) ≥ Nat.fib 5 := Nat.fib_mono (by omega)
+      _ = 5 := by native_decide
+  have hsub : Nat.fib (m + 3) - 2 - (Nat.fib (m + 3) - 4) = 2 := by omega
+  rw [exactWeightCount_symmetric m (Nat.fib (m + 3) - 4) (by omega), hsub]
+  exact exactWeightCount_two m hm
+
 end Omega
