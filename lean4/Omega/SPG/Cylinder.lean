@@ -293,4 +293,11 @@ theorem cylinderWord_disjoint {w₁ w₂ : Word m} (h : w₁ ≠ w₂) :
   simp only [mem_cylinderWord_iff] at h1 h2
   exact h (h1.symm.trans h2)
 
+/-- Cylinders cover the full sequence space.
+    prop:spg-decidable-clopen -/
+theorem cylinderWord_cover (m : Nat) :
+    ⋃ w : Word m, cylinderWord w = Set.univ := by
+  ext x; simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
+  exact ⟨prefixWord x m, rfl⟩
+
 end Omega.SPG

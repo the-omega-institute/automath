@@ -385,4 +385,10 @@ theorem goldenMeanAdjacency_pow_symmetric (m : Nat) :
     (goldenMeanAdjacency ^ m).transpose = goldenMeanAdjacency ^ m := by
   rw [Matrix.transpose_pow, goldenMeanAdjacency_symmetric]
 
+/-- The adjacency matrix A + A² has all positive entries (irreducibility/primitivity).
+    thm:folding-stable-syntax-fib-fusion-ring -/
+theorem goldenMeanAdjacency_irreducible :
+    ∀ i j : Fin 2, 0 < (goldenMeanAdjacency + goldenMeanAdjacency ^ 2) i j := by
+  native_decide
+
 end Omega.Graph

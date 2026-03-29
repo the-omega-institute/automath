@@ -546,6 +546,24 @@ theorem fib_adjacent_product (n : Nat) (hn : 1 ≤ n) :
   have hpow : ((-1 : ℤ) ^ (n + 1)) = -((-1) ^ n) := by ring
   linarith
 
+/-- Fibonacci rectangle identity: F(n)·F(n+3) = F(n+1)·F(n+2) + (-1)^(n+1).
+    bridge:fib-rectangle-identity -/
+theorem fib_rectangle (n : Nat) :
+    (Nat.fib n : ℤ) * Nat.fib (n + 3) =
+    (Nat.fib (n + 1) : ℤ) * Nat.fib (n + 2) + (-1) ^ (n + 1) := by
+  -- F(n+3) = F(n+2) + F(n+1), so F(n)*F(n+3) = F(n)*F(n+2) + F(n)*F(n+1)
+  -- F(n)*F(n+2) = F(n+1)^2 + (-1)^(n+1) by fib_adjacent_product
+  -- F(n)*F(n+1) = F(n+1)*F(n)
+  -- So F(n)*F(n+3) = F(n+1)^2 + (-1)^(n+1) + F(n+1)*F(n) = F(n+1)*(F(n+1)+F(n)) + (-1)^(n+1)
+  -- = F(n+1)*F(n+2) + (-1)^(n+1) ✓
+  -- Special case of Vajda: fib_vajda n 1 2 gives
+  -- F(n+1)*F(n+2) - F(n)*F(n+3) = (-1)^n*F(1)*F(2) = (-1)^n
+  have hv := fib_vajda n 1 2
+  simp only [show Nat.fib 1 = 1 from rfl, show Nat.fib 2 = 1 from rfl,
+    show n + 1 + 2 = n + 3 from by omega, Nat.cast_one, mul_one] at hv
+  have hpow : (-1 : ℤ) ^ (n + 1) = -((-1) ^ n) := by ring
+  linarith [hv, hpow]
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase 186
 -- ══════════════════════════════════════════════════════════════
@@ -1024,5 +1042,8 @@ theorem lucasNum_four_dvd (n : Nat) : 4 ∣ lucasNum n ↔ n % 6 = 3 := by
     | succ j ih =>
       rw [show 6 * (j + 1) + 3 = (6 * j + 3) + 6 from by ring]
       exact (hperiod (6 * j + 3)).mpr (ih (by omega))
+
+-- lucasNum_coprime_five deferred: needs pair-state tracking for L mod 5 period proof
+-- bridge:lucas-five-coprimality
 
 end Omega
