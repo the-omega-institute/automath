@@ -863,4 +863,22 @@ theorem conclusion_window6_visible_hidden_split :
     2 ^ 6 = Nat.fib 8 + (cBinFiberHist 6 2 * 1 + cBinFiberHist 6 3 * 2 + cBinFiberHist 6 4 * 3) := by
   rw [cBinFiberHist_6_2, cBinFiberHist_6_3, cBinFiberHist_6_4]; native_decide
 
+/-- The abelianization of the window-6 fold gauge group has rank |X_6| - #{x : d(x)=1} = 19.
+    thm:window6-foldbin-gauge-abelianization-even-parity -/
+theorem paper_abelianization_rank_six :
+    Fintype.card (X 6) - cFiberHist 6 1 = 19 :=
+  abelianization_rank_six
+
+/-- Window-6 compression ratio: |Word 6| = 64 and |X 6| = 21.
+    cor:window6-compression-ratio -/
+theorem paper_compression_ratio_six :
+    Fintype.card (Word 6) = 64 ∧ Fintype.card (X 6) = 21 :=
+  compression_ratio_six
+
+/-- Nontrivial fibers account for 64 - 2 = 62 of the 64 microstates at resolution 6.
+    thm:window6-nontrivial-microstate-count -/
+theorem paper_nontrivial_microstate_count_six :
+    Fintype.card (Word 6) - cFiberHist 6 1 = 62 :=
+  nontrivial_microstate_count_six
+
 end Omega
