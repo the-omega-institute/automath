@@ -732,6 +732,12 @@ theorem scanError_le_setMass {α β : Type*} [Fintype α] [Fintype β]
       ≤ min (setMass μ P) (setMass μ Pᶜ) := scanError_le_min_setMass μ obs P
     _ ≤ setMass μ P := min_le_left _ _
 
+/-- Paper: scan error ≤ event mass (consequence of prop:spg-scan-error-cylinder) -/
+theorem paper_scanError_le_setMass {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P : Set α) :
+    scanError μ obs P ≤ setMass μ P :=
+  scanError_le_setMass μ obs P
+
 /-- Scan error is bounded by the complement mass alone (single-sided bound). -/
 theorem scanError_le_setMass_compl {α β : Type*} [Fintype α] [Fintype β]
     (μ : PMF α) (obs : α → β) (P : Set α) :

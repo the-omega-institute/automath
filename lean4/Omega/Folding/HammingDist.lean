@@ -298,4 +298,45 @@ theorem popcount_complement (w : Word m) :
   unfold complement
   exact popcount_not w
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R132: Hamming weight distribution of X_6
+-- ══════════════════════════════════════════════════════════════
+
+/-- Hamming weight layer count at resolution m.
+    cor:fold6-weyl-two-orbit-compression -/
+def cHammingWeightLayer (m k : Nat) : Nat :=
+  (@Finset.univ (X m) (fintypeX m)).filter (fun x => popcount x.1 = k) |>.card
+
+/-- cor:fold6-weyl-two-orbit-compression -/
+theorem cHammingWeightLayer_6_0 : cHammingWeightLayer 6 0 = 1 := by native_decide
+/-- cor:fold6-weyl-two-orbit-compression -/
+theorem cHammingWeightLayer_6_1 : cHammingWeightLayer 6 1 = 6 := by native_decide
+/-- cor:fold6-weyl-two-orbit-compression -/
+theorem cHammingWeightLayer_6_2 : cHammingWeightLayer 6 2 = 10 := by native_decide
+/-- cor:fold6-weyl-two-orbit-compression -/
+theorem cHammingWeightLayer_6_3 : cHammingWeightLayer 6 3 = 4 := by native_decide
+
+/-- X_6 Hamming weight distribution: layers of size 1,6,10,4 (popcount 0..3).
+    No11 constraint limits popcount to at most ⌊(m+1)/2⌋ = 3 for m=6.
+    cor:fold6-weyl-two-orbit-compression -/
+theorem X6_hammingWeight_distribution :
+    cHammingWeightLayer 6 0 = 1 ∧ cHammingWeightLayer 6 1 = 6 ∧
+    cHammingWeightLayer 6 2 = 10 ∧ cHammingWeightLayer 6 3 = 4 :=
+  ⟨cHammingWeightLayer_6_0, cHammingWeightLayer_6_1,
+   cHammingWeightLayer_6_2, cHammingWeightLayer_6_3⟩
+
+/-- Hamming weight layer sum = |X_6| = 21.
+    cor:fold6-weyl-two-orbit-compression -/
+theorem X6_hammingWeight_total :
+    cHammingWeightLayer 6 0 + cHammingWeightLayer 6 1 +
+    cHammingWeightLayer 6 2 + cHammingWeightLayer 6 3 = 21 := by
+  rw [cHammingWeightLayer_6_0, cHammingWeightLayer_6_1,
+    cHammingWeightLayer_6_2, cHammingWeightLayer_6_3]
+
+/-- Paper: cor:fold6-weyl-two-orbit-compression (Hamming distribution) -/
+theorem paper_X6_hammingWeight_distribution :
+    cHammingWeightLayer 6 0 = 1 ∧ cHammingWeightLayer 6 1 = 6 ∧
+    cHammingWeightLayer 6 2 = 10 ∧ cHammingWeightLayer 6 3 = 4 :=
+  X6_hammingWeight_distribution
+
 end Omega

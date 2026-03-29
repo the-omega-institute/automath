@@ -95,4 +95,40 @@ theorem paper_circleDim_ext1_vanishing (t : Nat) :
     circleDim 0 t = 0 :=
   circleDim_ext1_vanishing t
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R132: Axiomatic rigidity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Axiomatic rigidity: any function satisfying additivity, normalization f(Z)=1,
+    and f(finite)=0 must equal circleDim.
+    thm:cdim-axiomatic-rigidity -/
+theorem circleDim_axiomatic_rigidity (f : Nat → Nat → Nat)
+    (hAdd : ∀ a b c d, f (a + b) (c + d) = f a c + f b d)
+    (hNorm : f 1 0 = 1)
+    (hFin : ∀ t, f 0 t = 0) :
+    ∀ n t, f n t = circleDim n t := by
+  intro n t
+  -- Step 1: f n t = f n 0 (torsion invariance)
+  have htors : f n t = f n 0 := by
+    have := hAdd n 0 0 t
+    simp at this
+    linarith [hFin t]
+  -- Step 2: f n 0 = n (by induction)
+  suffices h : ∀ n, f n 0 = n from by rw [htors, h]; rfl
+  intro n
+  induction n with
+  | zero => exact hFin 0
+  | succ n ih =>
+    have := hAdd n 1 0 0
+    simp at this
+    linarith [hNorm]
+
+/-- Paper: thm:cdim-axiomatic-rigidity -/
+theorem paper_circleDim_axiomatic_rigidity (f : Nat → Nat → Nat)
+    (hAdd : ∀ a b c d, f (a + b) (c + d) = f a c + f b d)
+    (hNorm : f 1 0 = 1)
+    (hFin : ∀ t, f 0 t = 0) :
+    ∀ n t, f n t = circleDim n t :=
+  circleDim_axiomatic_rigidity f hAdd hNorm hFin
+
 end Omega.CircleDimension
