@@ -8,23 +8,23 @@
 |---|---|
 | 总行数 | ~32,000 |
 | 定理/定义数 | ~3,341 |
-| 论文接口包装 | 498+ |
+| 论文接口包装 | 503+ |
 | 文件数 | 72 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 487 |
+| \leanverified 标注数 | 492 |
 | \leanpartial 标注数 | 10 |
-| 总标注数 | 498 |
-| 轮次 | R119（round_count=120） |
+| 总标注数 | 503 |
+| 轮次 | R120（round_count=121） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
 | POM | 1,707 | 175 | 10.3% |
-| Emergent Arithmetic | 185 | 65 | 35.1% |
-| Folding | 337 | 64 | 19.0% |
+| Emergent Arithmetic | 185 | 69 | 37.3% |
+| Folding | 337 | 65 | 19.3% |
 | Conclusion | 2,550 | 60 | 2.4% |
 | Group Unification | 469 | 43 | 9.2% |
 | SPG | 129 | 12 | 9.3% |
@@ -32,7 +32,7 @@
 | Zeta Finite Part | 4,524 | 35 | 0.8% |
 | Discussion | 67 | 0 | 0.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **483** | **4.6%** |
+| **合计（body）** | **10,508** | **488** | **4.6%** |
 
 ### 1.2 已完成模块
 
@@ -381,6 +381,7 @@
 **圆维度 Fibonacci 时间平台有限证书（Round 123）**：fib_platform_certificate_of_eq_succ / fib_platform_certificate_of_eq_succ_succ（把相邻或隔一层 Fibonacci 时间标签相等时的平台刚性压缩为有限证据判别，支撑论文中的有限证书等价形式）
 **圆维度 RH 缺陷的 Fibonacci 半径离散承载（Round 124）**：tendsto_zero_of_nonneg_le_of_tendsto_zero / fibRadius_discretization_of_le_tendsto_zero（把连续趋零判据压缩为 Fibonacci 半径链上的非负上界收敛证书，支撑 RH 缺陷离散承载结论）
 **圆维度零点模长下界证书（Round 125）**：zero_modulus_lower_bound_of_log_defect_bound / fibRadius_zero_modulus_lower_bound_of_log_defect_bound（把对数缺陷上界转为零点模长的定量下界，并包装到 Fibonacci 半径离散链上）
+**★ 500 标注里程碑 — 论文接口包装（Phase R120）**：FiberRing.lean（3 定理）+ Fiber.lean（1 定理）+ MaxFiberTwoStep.lean（1 定理）；论文标注：paper\_finite\_resolution\_mod（thm:finite-resolution-mod，Emergent Arithmetic）; paper\_field\_phase\_fib\_prime（cor:field-phase-fib-prime，Emergent Arithmetic）; paper\_fold\_basic（prop:fold-basic，Folding）; paper\_mul\_definitional（thm:mul-definitional，Emergent Arithmetic）; paper\_monoid\_quotient\_is\_N（thm:monoid-quotient-is-N，Emergent Arithmetic）——总标注数 498 → 503，Emergent Arithmetic 覆盖率 35.1% → 37.3%，Folding 覆盖率 19.0% → 19.3%
 **Binet 最近整数（Round 40）**：goldenAngle 定义（θ=φ⁻¹，满足 θ²=1-θ）; |ψ^n/√5| < 1/2（abs_psi_pow_div_sqrt5_lt_half）; fib_nearest_integer（|F(n)-φ^n/√5| < 1/2，prop:cdim-fibonacci-nearest-integer，圆维度核心定理首个形式化）
 **拓扑**：cylinder clopen, 前缀确定性代数, fromWordSet 分配律
 
