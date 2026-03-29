@@ -1112,4 +1112,16 @@ theorem fib_product_sum : ∀ n : Nat,
       have := Nat.fib_add_two (n := n + 1); rwa [show n + 1 + 2 = n + 3 from by omega] at this
     nlinarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R62
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fibonacci numbers at distance 2 are coprime: gcd(F_n, F_{n+2}) = 1.
+    prop:pom-fib-coprime-triple -/
+theorem fib_coprime_triple (n : Nat) :
+    Nat.Coprime (Nat.fib n) (Nat.fib (n + 2)) := by
+  rw [Nat.fib_add_two, Nat.Coprime, Nat.add_comm]
+  rw [Nat.gcd_add_self_right]
+  exact fib_coprime_succ n
+
 end Omega
