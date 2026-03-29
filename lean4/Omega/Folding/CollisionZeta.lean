@@ -66,6 +66,47 @@ theorem collisionKernel3_trace_recurrence :
       2 * (collisionKernel3 ^ 2).trace = (collisionKernel3 ^ 5).trace) := by
   native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R129: Unbounded trace recurrence for A₂
+-- ══════════════════════════════════════════════════════════════
+
+/-- Trace recurrence for A₂ (all n): Tr(A₂^{n+3}) = 2·Tr(A₂^{n+2}) + 2·Tr(A₂^{n+1}) - 2·Tr(A₂^n).
+    Proved algebraically via Cayley-Hamilton: A₂³ = 2A₂² + 2A₂ - 2I.
+    rem:pom-a2-primitive-fast -/
+theorem collisionKernel2_trace_recurrence_unbounded (n : ℕ) :
+    (collisionKernel2 ^ (n + 3)).trace =
+      2 * (collisionKernel2 ^ (n + 2)).trace +
+      2 * (collisionKernel2 ^ (n + 1)).trace -
+      2 * (collisionKernel2 ^ n).trace := by
+  have hCH := collisionKernel2_cayley_hamilton
+  -- A^(n+3) = A^n * A^3 = A^n * (2·A^2 + 2·A - 2·I)
+  -- A³ = 2•A² + 2•A - 2•I, so A^(n+3) = A^n · A³ = 2•A^(n+2) + 2•A^(n+1) - 2•A^n
+  have hpow : collisionKernel2 ^ (n + 3) =
+      2 • collisionKernel2 ^ (n + 2) + 2 • collisionKernel2 ^ (n + 1) -
+      2 • collisionKernel2 ^ n := by
+    calc collisionKernel2 ^ (n + 3)
+        = collisionKernel2 ^ n * collisionKernel2 ^ 3 := by rw [← pow_add]
+      _ = collisionKernel2 ^ n * (2 • collisionKernel2 ^ 2 + 2 • collisionKernel2 - 2 • 1) := by
+          rw [hCH]
+      _ = 2 • (collisionKernel2 ^ n * collisionKernel2 ^ 2) +
+          2 • (collisionKernel2 ^ n * collisionKernel2) -
+          2 • (collisionKernel2 ^ n * 1) := by
+          simp only [mul_add, mul_sub, mul_smul_comm]
+      _ = 2 • collisionKernel2 ^ (n + 2) + 2 • collisionKernel2 ^ (n + 1) -
+          2 • collisionKernel2 ^ n := by
+          rw [← pow_add, ← pow_succ, mul_one]
+  rw [hpow, Matrix.trace_sub, Matrix.trace_add, Matrix.trace_smul, Matrix.trace_smul,
+    Matrix.trace_smul]
+  ring
+
+/-- Paper: rem:pom-a2-primitive-fast -/
+theorem paper_collisionKernel2_trace_recurrence_unbounded (n : ℕ) :
+    (collisionKernel2 ^ (n + 3)).trace =
+      2 * (collisionKernel2 ^ (n + 2)).trace +
+      2 * (collisionKernel2 ^ (n + 1)).trace -
+      2 * (collisionKernel2 ^ n).trace :=
+  collisionKernel2_trace_recurrence_unbounded n
+
 /-! ### Identity matrix trace -/
 
 /-- tr(I_3) = tr(A^0) = 3 for both collision kernels.
