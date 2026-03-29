@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 631 |
+| \leanverified 标注数 | 638 |
 | \leanpartial 标注数 | 11 |
-| 总标注数 | 644 |
-| 轮次 | R142（round_count=143） |
+| 总标注数 | 651 |
+| 轮次 | R143（round_count=144） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -25,14 +25,14 @@
 | POM | 1,707 | 197 | 11.5% |
 | Emergent Arithmetic | 185 | 73 | 39.5% |
 | Folding | 337 | 70 | 20.8% |
-| Conclusion | 2,550 | 111 | 4.4% |
-| Group Unification | 469 | 52 | 11.1% |
+| Conclusion | 2,550 | 113 | 4.4% |
+| Group Unification | 469 | 54 | 11.5% |
 | SPG | 129 | 17 | 13.2% |
 | Circle Dimension | 393 | 35 | 8.9% |
 | Zeta Finite Part | 4,524 | 65 | 1.4% |
-| Discussion | 67 | 5 | 7.5% |
+| Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **628** | **6.0%** |
+| **合计（body）** | **10,508** | **635** | **6.0%** |
 
 ### 1.2 已完成模块
 
