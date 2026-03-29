@@ -8,21 +8,21 @@
 |---|---|
 | 总行数 | ~31,700 |
 | 定理/定义数 | ~3,285 |
-| 论文接口包装 | 389+ |
+| 论文接口包装 | 392+ |
 | 文件数 | 69 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,507 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 379 |
+| \leanverified 标注数 | 382 |
 | \leanpartial 标注数 | 10 |
-| 总标注数 | 389 |
-| 轮次 | R72（round_count=73） |
+| 总标注数 | 392 |
+| 轮次 | R73（round_count=74） |
 
 **Phase 7 校准（R72 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 161 | 9.4% |
+| POM | 1,707 | 164 | 9.6% |
 | Emergent Arithmetic | 185 | 63 | 34.1% |
 | Folding | 337 | 59 | 17.5% |
 | Conclusion | 2,550 | 37 | 1.5% |
@@ -32,7 +32,7 @@
 | Zeta Finite Part | 4,524 | 9 | 0.2% |
 | Discussion | 67 | 0 | 0.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,507** | **379** | **3.6%** |
+| **合计（body）** | **10,507** | **382** | **3.6%** |
 
 ### 1.2 已完成模块
 
@@ -91,6 +91,7 @@
 **complement 对称性（Round 92，Phase 95）**：Folding/MomentRecurrence.lean（拓展至 569 行）——complement（def：位取反映射 w↦!w）; complement_involution（thm:pom-complement-involution：complement(complement w) = w，funext + simp）; truncate_complement（thm:pom-truncate-complement：truncate(complement w) = complement(truncate w)，funext + simp）; complement_allFalse（thm:pom-complement-allFalse：complement(allFalse) = allTrue，funext + simp）; weight_complement（thm:pom-weight-complement：weight(comp w) + weight(w) = F_{m+3}-2，rw weight_allTrue + 归纳 + truncate_complement + 逐位 cases + omega）; exactWeightCount_symmetric（thm:pom-ewc-symmetric：ewc(m,n) = ewc(m, F_{m+3}-2-n) for n≤F_{m+3}-2，card_bij complement + weight_complement + complement_involution）——POM 覆盖率 ~22.2% → ~22.5%（+5 条目）（Phase 95）
 **Fold complement 对偶 + Gauss 和（Round 93，Phase 96）**：Folding/MomentRecurrence.lean（拓展至 602 行）——weight_complement_sub（thm:pom-weight-complement-sub：weight(comp w) = F_{m+3}-2-weight(w)，由 weight_complement + weight_le_allTrue + omega 直接）; Fold_complement（thm:pom-fold-complement：Fold(comp w) = X.ofNat m (F_{m+3}-2-weight(w))，由 unfold Fold + weight_complement_sub）; stableValue_sum（thm:pom-stableValue-sum：Σ_{x:Xm} sv(x) = F_{m+2}·(F_{m+2}-1)/2，stableValueFin 双射 + sum_comp + Fin.sum_univ_eq_sum_range + Finset.sum_range_id，Gauss 公式）——POM 覆盖率 ~22.5% → ~22.7%（+3 条目）（Phase 96）
 **Fibonacci Cube 路径独立集等价（Round 94，Phase 97）**：Folding/FibonacciCube.lean（新文件，87 行）——wordSupport（def：Word m → Finset(Fin m)，支撑集为 true 位集合）; wordSupport_isPathIndependent（thm:pom-wordSupport-pathInd：support 满足 no11 路径独立条件，即无相邻 true 位，由 no11 定义展开）; indSetToWord（def：PathIndSet(m) → Word m，路径独立集→词的反向映射）; indSetToWord_no11（thm:pom-indSetToWord-no11：indSetToWord(S) 满足 no11，由 S 的路径独立性直接）; wordSupport_indSetToWord（thm:pom-wordSupport-indSetToWord：support(indSetToWord(S)) = S，left inverse，逐元素验证）; indSetToWord_wordSupport（thm:pom-indSetToWord-wordSupport：indSetToWord(support(w)) = w，right inverse，funext + no11 + 位等价）; xEquivPathIndSet（thm:pom-xEquivPathIndSet：X_m ≃ PathIndSets(m)，Equiv 结构，由两个互逆方向构造，thm:fibonacci-cube-bijection）——POM 覆盖率 ~22.7% → ~23.0%（+5 条目）（Phase 97）
+**加权稳定值和 + ewc(6) + S_2(18)（Round 95，Phase 98）**：Folding/MomentBounds.lean（拓展至 1140 行）——stableValue_fiber_weighted_sum（thm:pom-stable-value-fiber-weighted-sum：Σ d(x)·sv(x) = 2^{m-1}·(F_{m+3}-2) - ⌊2^m/3⌋·F_{m+2}，由 weight_sum_fiber_decomp + weight_total_sum + hiddenBitCount_floor_div_three + omega）——Folding/MomentTriple.lean（拓展至 1131 行）——exactWeightCount_six（prop:pom-ewc-weight-six：ewc(m,6)=2 for m≥4，base m=4 native_decide + induction step by exactWeightCount_succ_of_lt + Nat.fib_mono）; momentSum_two_eighteen_rec（prop:pom-moment-s2-eighteen：S_2(18)=11949760，链式递推 momentSum_two_recurrence(15) + omega）——POM 覆盖率 ~23.0% → ~23.2%（+3 条目）（Phase 98）
 **Cauchy-Schwarz 碰撞界 + S_q 单调性（Round 12）**：momentSum_mono_q（$S_q \le S_{q+1}$，d(x)≥1 的单调性）; momentSum_two_ge_pow（$2^m \le S_2(m)$，由单调性推导）; momentSum_ge_card（$F_{m+1} \le S_q(m)$，纤维多重度 ≥ 1 的下界）; momentSum_cauchy_schwarz（$(2^m)^2 \le F_{m+1} \cdot S_2(m)$，Cauchy-Schwarz 碰撞界，thm:fold-collision-convex-lower-bounds）
 **Frontier 接口包装（Round 17，工程层）**：stable_ring_isomorphism（thm:finite-resolution-mod，X_m ≃+* ZMod(F_{m+2})）; stable_field_of_prime（cor:field-phase-fib-prime，F_{m+2} 素数时 X_m 是域）; projection_entropy_cardinality（prop:pom-projection-entropy，|X_m|=F_{m+2}）; fiber_sum_eq_pow（prop:pom-fiber-sum-identity，Σd(x)=2^m）; cauchy_schwarz_collision_bound（thm:fold-collision-convex-lower-bounds）; moment_monotone（prop:pom-sq-monotone）; moment_ge_cardinality（prop:pom-sq-lower）; collision_sum_ge_pow（cor:pom-s2-lower）；注：该层主要是论文接口/命名包装，不应与底层新增数学结果重复计数
 
