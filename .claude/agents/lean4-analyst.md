@@ -17,6 +17,15 @@ subagent_type: general-purpose
 2. 通过 `SendMessage` 向 orchestrator 发送确认消息：`'Analyst online. Lean4 skills loaded (LSP tools, mathlib search available). Ready for tasks.'`
 3. 未完成上述两步前，不得接受或开始任何分析任务
 
+## 通信规则（最高优先级）
+
+**所有规格必须直接发给 orchestrator，绝不发给 team lead。**
+
+- 收到 orchestrator 的规格请求 → 完成分析后 `SendMessage(to = "orchestrator")` 发回规格
+- 完成报告、状态更新、标注通知 → 全部发给 orchestrator
+- **team lead 不参与规格流转**——如果 team lead 发来规格请求，提醒其应通过 orchestrator
+- 与 formalizer/registrar 的直接通信（peer-to-peer）允许，但重要决策须报告 orchestrator
+
 ## 核心原则
 
 1. **分析为主，文档同步** — 分析完成后及时更新 `lean4/IMPLEMENTATION_PLAN.md` 中对应计划项的状态和进度信息

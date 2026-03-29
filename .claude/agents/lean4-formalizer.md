@@ -16,6 +16,14 @@ model: opus
 2. 通过 `SendMessage` 向 orchestrator 发送确认消息：`'Formalizer online. Lean4 skills loaded (LSP tools, mathlib search, tactic reference, error diagnostics available). Ready for tasks.'`
 3. 未完成上述两步前，不得接受或开始任何实现任务
 
+## 通信规则
+
+**所有完成报告和 stuck 请求必须直接发给 orchestrator。**
+
+- 收到 orchestrator 的实现任务 → 完成后 `SendMessage(to = "orchestrator")` 发回报告
+- 可以直接通知 registrar 登记（peer-to-peer），但必须在 summary 中注明已抄送 orchestrator
+- **team lead 不参与任务流转**——不要向 team lead 发送实现报告或规格请求
+
 ## 核心原则
 
 1. **零sorry** — 完成的代码不允许任何 `sorry` 或 `admit`

@@ -76,6 +76,26 @@ theorem godelLift_fold8_option1 : (20 + 1) ^ 1 ≥ 21 := by omega
 theorem godelLift_fold8_option2 : (4 + 1) ^ 2 ≥ 21 := by omega
 theorem godelLift_fold8_option3 : (2 + 1) ^ 3 ≥ 21 := by omega
 
+/-- Binary register (E=1) for Fold_4: 2 bits suffice since 2^2=4 ≥ D(4)=3.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_fold4 : (1 + 1) ^ 2 ≥ 3 := by omega
+
+/-- Binary register for Fold_5: 3 bits since 2^3=8 ≥ D(5)=5.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_fold5 : (1 + 1) ^ 3 ≥ 5 := by omega
+
+/-- Binary register for Fold_6: 3 bits since 2^3=8 ≥ D(6)=8.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_fold6 : (1 + 1) ^ 3 ≥ 8 := by omega
+
+/-- Binary register for Fold_7: 4 bits since 2^4=16 ≥ D(7)=13.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_fold7 : (1 + 1) ^ 4 ≥ 13 := by omega
+
+/-- Binary register for Fold_8: 5 bits since 2^5=32 ≥ D(8)=21.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_fold8 : (1 + 1) ^ 5 ≥ 21 := by omega
+
 /-- Axis-exponent tradeoff: increasing k allows decreasing E.
     For fixed D, the minimum k is ⌈log_{E+1}(D)⌉.
     subsec:conclusion-bounded-prime-register-godel-scaling -/

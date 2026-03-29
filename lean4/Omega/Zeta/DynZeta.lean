@@ -178,6 +178,39 @@ theorem trace_eq_lucasNum (n : ℕ) :
       rw [goldenMean_trace_recurrence_unbounded n, ih (n + 1) (by omega),
         ih n (by omega), lucasNum_succ_succ]
 
+/-- Lucas-Fibonacci relation: L(n+2) = F(n+1) + F(n+3).
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_eq_fib_sum (n : ℕ) :
+    lucasNum (n + 2) = (Nat.fib (n + 1) : ℤ) + Nat.fib (n + 3) := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => norm_num [lucasNum, Nat.fib]
+    | 1 => norm_num [lucasNum, Nat.fib]
+    | n + 2 =>
+      rw [lucasNum_succ_succ (n + 2)]
+      rw [ih (n + 1) (by omega), ih n (by omega)]
+      rw [show n + 1 + 3 = n + 4 from by omega,
+          show n + 2 + 1 = n + 3 from by omega,
+          show n + 2 + 3 = n + 5 from by omega]
+      have hf3 : (Nat.fib (n + 3) : ℤ) = Nat.fib (n + 2) + Nat.fib (n + 1) := by
+        push_cast [Nat.fib_add_two]; ring
+      have hf5 : (Nat.fib (n + 5) : ℤ) = Nat.fib (n + 4) + Nat.fib (n + 3) := by
+        push_cast [Nat.fib_add_two]; ring
+      linarith
+
+/-- Lucas numbers are strictly positive.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_pos (n : ℕ) : 0 < lucasNum n := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => simp [lucasNum]
+    | 1 => simp [lucasNum]
+    | n + 2 =>
+      rw [lucasNum_succ_succ]
+      linarith [ih (n + 1) (by omega), ih n (by omega)]
+
 /-! ## Zeta rationality and pole structure
 
 For a d×d matrix, ζ_A(z) = det(I-zA)⁻¹ is a rational function with
