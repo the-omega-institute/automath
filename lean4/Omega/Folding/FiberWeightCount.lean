@@ -772,4 +772,16 @@ theorem fiberMultiplicity_eq_ewc_sum (x : X m) :
   rw [fiberMultiplicity_split_by_hiddenBit x,
     fiberHiddenBitCount_zero_eq_ewc x, fiberHiddenBitCount_one_eq_ewc x]
 
+/-- The sum of exactWeightCount over all possible weights equals 2^m (total word count).
+    def:pom-exactWeightCount -/
+theorem exactWeightCount_sum_eq_pow (m : Nat) :
+    ∑ n ∈ Finset.range (Nat.fib (m + 3)), exactWeightCount m n = 2 ^ m := by
+  simp only [exactWeightCount]
+  have hmap : Set.MapsTo (fun w : Word m => weight w)
+      (↑(Finset.univ : Finset (Word m)) : Set (Word m))
+      (↑(Finset.range (Nat.fib (m + 3))) : Set Nat) :=
+    fun w _ => Finset.mem_range.mpr (X.weight_lt_fib w)
+  rw [← Finset.card_eq_sum_card_fiberwise hmap, Finset.card_univ,
+    Fintype.card_fun, Fintype.card_bool, Fintype.card_fin]
+
 end Omega
