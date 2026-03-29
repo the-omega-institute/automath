@@ -906,4 +906,25 @@ theorem hiddenBit_boolean_recurrence_false (w : Word (m + 3))
   · exfalso; omega
   · rfl
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R68: Unified hiddenBit Boolean recurrence
+-- ══════════════════════════════════════════════════════════════
+
+/-- Unified Boolean recurrence for hiddenBit on Word(m+3).
+    If last=false: hiddenBit = 0.
+    If last=true, penult=true: hiddenBit = 1.
+    If last=true, penult=false: hiddenBit = hiddenBit(truncate²).
+    thm:pom-hidden-bit-unified-recurrence -/
+theorem hiddenBit_unified_recurrence (w : Word (m + 3))
+    (hLast : w ⟨m + 2, by omega⟩ = true) :
+    hiddenBit w = if w ⟨m + 1, by omega⟩ = true then 1
+      else hiddenBit (truncate (truncate w)) := by
+  cases hPenult : w ⟨m + 1, by omega⟩
+  · -- penultimate = false
+    simp only [Bool.false_eq_true, ite_false]
+    exact hiddenBit_boolean_recurrence_false w hLast hPenult
+  · -- penultimate = true
+    simp only [ite_true]
+    exact hiddenBit_boolean_recurrence w hLast hPenult
+
 end Omega

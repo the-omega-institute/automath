@@ -705,4 +705,62 @@ theorem fib_product_cassini (n : Nat) :
     rw [heven2.neg_one_pow]
     push_cast; linarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R68: pathIndSetPoly at t = -1 (J_l sequence)
+-- ══════════════════════════════════════════════════════════════
+
+/-- J_l = I_l(-1): path independence polynomial evaluated at t = -1.
+    Recurrence: J(l+2) = J(l+1) - J(l), seeds J(0)=1, J(1)=0.
+    def:pom-path-indset-poly-neg-one -/
+def pathIndSetPolyNegOne : Nat → Int
+  | 0 => 1
+  | 1 => 0
+  | n + 2 => pathIndSetPolyNegOne (n + 1) - pathIndSetPolyNegOne n
+
+@[simp] theorem pathIndSetPolyNegOne_zero : pathIndSetPolyNegOne 0 = 1 := rfl
+@[simp] theorem pathIndSetPolyNegOne_one : pathIndSetPolyNegOne 1 = 0 := rfl
+@[simp] theorem pathIndSetPolyNegOne_succ_succ (n : Nat) :
+    pathIndSetPolyNegOne (n + 2) = pathIndSetPolyNegOne (n + 1) - pathIndSetPolyNegOne n := rfl
+
+private theorem pathIndSetPolyNegOne_two : pathIndSetPolyNegOne 2 = -1 := rfl
+private theorem pathIndSetPolyNegOne_three : pathIndSetPolyNegOne 3 = -1 := rfl
+private theorem pathIndSetPolyNegOne_four : pathIndSetPolyNegOne 4 = 0 := rfl
+private theorem pathIndSetPolyNegOne_five : pathIndSetPolyNegOne 5 = 1 := rfl
+
+/-- J_l has period 6: J(l+6) = J(l).
+    prop:pom-Jl-period-six -/
+theorem pathIndSetPolyNegOne_periodic (l : Nat) :
+    pathIndSetPolyNegOne (l + 6) = pathIndSetPolyNegOne l := by
+  induction l using Nat.strongRecOn with
+  | _ l ih =>
+    match l with
+    | 0 => rfl
+    | 1 => rfl
+    | l + 2 =>
+      rw [pathIndSetPolyNegOne_succ_succ (l + 6)]
+      rw [pathIndSetPolyNegOne_succ_succ l]
+      rw [show l + 6 + 1 = (l + 1) + 6 from by omega]
+      rw [ih (l + 1) (by omega), ih l (by omega)]
+
+/-- Reduce J_l to J_{l % 6} using periodicity.
+    lem:pom-Jl-mod6-reduction -/
+private theorem pathIndSetPolyNegOne_mod6 (l : Nat) :
+    pathIndSetPolyNegOne l = pathIndSetPolyNegOne (l % 6) := by
+  conv_lhs => rw [← Nat.mod_add_div l 6]
+  induction (l / 6) with
+  | zero => simp
+  | succ k ih =>
+    rw [show l % 6 + 6 * (k + 1) = (l % 6 + 6 * k) + 6 from by ring]
+    rw [pathIndSetPolyNegOne_periodic]; exact ih
+
+/-- J_l = 0 iff l ≡ 1 (mod 3).
+    prop:pom-Jl-vanishing -/
+theorem pathIndSetPolyNegOne_eq_zero_iff (l : Nat) :
+    pathIndSetPolyNegOne l = 0 ↔ l % 3 = 1 := by
+  rw [pathIndSetPolyNegOne_mod6]
+  have hlt : l % 6 < 6 := Nat.mod_lt l (by omega)
+  -- Exhaustive case split on l % 6
+  have : l % 6 = 0 ∨ l % 6 = 1 ∨ l % 6 = 2 ∨ l % 6 = 3 ∨ l % 6 = 4 ∨ l % 6 = 5 := by omega
+  rcases this with h | h | h | h | h | h <;> simp [h] <;> omega
+
 end Omega
