@@ -272,6 +272,28 @@ theorem fib_even_sum (n : Nat) :
     have : 0 < Nat.fib (2 * n + 2) := fib_succ_pos (2 * n + 1)
     omega
 
+/-- Adding F_2=1 to the alternating pattern value gives F_{m+1}.
+    thm:zeckendorf-parallel-propagation-lower-bound -/
+theorem fib_even_sum_add_one (n : Nat) (hn : 1 ≤ n) :
+    ∑ k ∈ Finset.range n, Nat.fib (2 * (k + 1)) + 1 = Nat.fib (2 * n + 1) := by
+  rw [fib_even_sum]
+  have : 0 < Nat.fib (2 * n + 1) := fib_succ_pos (2 * n)
+  omega
+
+/-- The parallel propagation value pair certificate:
+    Val(x^(m)) = F_{m+1}-1 and Val(x^(m)) + F_2 = F_{m+1}.
+    thm:zeckendorf-parallel-propagation-lower-bound -/
+theorem parallel_propagation_value_pair (n : Nat) (hn : 1 ≤ n) :
+    (∑ k ∈ Finset.range n, Nat.fib (2 * (k + 1)) = Nat.fib (2 * n + 1) - 1) ∧
+    (∑ k ∈ Finset.range n, Nat.fib (2 * (k + 1)) + Nat.fib 2 = Nat.fib (2 * n + 1)) := by
+  exact ⟨fib_even_sum n, by simp [Nat.fib]; exact fib_even_sum_add_one n hn⟩
+
+/-- Paper: thm:zeckendorf-parallel-propagation-lower-bound -/
+theorem paper_parallel_propagation_value_pair (n : Nat) (hn : 1 ≤ n) :
+    (∑ k ∈ Finset.range n, Nat.fib (2 * (k + 1)) = Nat.fib (2 * n + 1) - 1) ∧
+    (∑ k ∈ Finset.range n, Nat.fib (2 * (k + 1)) + Nat.fib 2 = Nat.fib (2 * n + 1)) :=
+  parallel_propagation_value_pair n hn
+
 /-- Σ_{k<n} F_{2k+1} = F_{2n}.
     thm:fib-odd-sum -/
 theorem fib_odd_sum (n : Nat) :

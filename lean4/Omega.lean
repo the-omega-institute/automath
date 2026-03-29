@@ -71,4 +71,5 @@ import Omega.Zeta.DynZeta
 import Omega.Zeta.CyclicDet
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
+import Omega.Conclusion.Window6Collision
 import Omega.CircleDimension.CircleDim
