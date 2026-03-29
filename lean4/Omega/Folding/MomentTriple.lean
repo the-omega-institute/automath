@@ -979,4 +979,16 @@ theorem exactWeightCount_fib_sub_six (m : Nat) (hm : 3 ≤ m) :
   rw [exactWeightCount_symmetric m (Nat.fib (m + 3) - 6) (by omega), hsub]
   exact exactWeightCount_four m hm
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R70: S₂(16) chain value
+-- ══════════════════════════════════════════════════════════════
+
+/-- S₂(16) = 1941056, computed via three-step recurrence from S₂(13..15).
+    prop:pom-moment-s2-sixteen -/
+theorem momentSum_two_sixteen_rec : momentSum 2 16 = 1941056 := by
+  have h := momentSum_two_recurrence 13
+  rw [show (13 : Nat) + 1 = 14 from rfl, show (13 : Nat) + 2 = 15 from rfl,
+    show (13 : Nat) + 3 = 16 from rfl, momentSum_two_thirteen_rec,
+    momentSum_two_fourteen_rec, momentSum_two_fifteen_rec] at h; omega
+
 end Omega

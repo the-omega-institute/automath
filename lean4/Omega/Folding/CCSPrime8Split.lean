@@ -755,4 +755,36 @@ theorem momentSum_three_fourteen : momentSum 3 14 = 6699808 := by
     rw [momentSum_three_eleven, momentSum_three_twelve, momentSum_three_thirteen] at this; linarith
   omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R70: S_3 superadditivity + S_3(15)
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_3(m+1) + S_3(m) ≤ S_3(m+2) for m ≥ 1 (Fibonacci-type superadditivity).
+    From recurrence at (m-1): S_3(m+2) = 2S_3(m+1) + 4S_3(m) - 2S_3(m-1).
+    So S_3(m+2) - S_3(m+1) - S_3(m) = S_3(m+1) + 3S_3(m) - 2S_3(m-1) ≥ 0.
+    thm:pom-s3-fib-superadditive -/
+theorem momentSum_three_fib_superadditive (m : Nat) (hm : 1 ≤ m) :
+    momentSum 3 (m + 1) + momentSum 3 m ≤ momentSum 3 (m + 2) := by
+  obtain ⟨k, rfl⟩ : ∃ k, m = k + 1 := ⟨m - 1, by omega⟩
+  -- Recurrence at k: S3(k+3) + 2*S3(k) = 2*S3(k+2) + 4*S3(k+1)
+  have hrec := momentSum_three_recurrence k
+  -- Goal: S3(k+2) + S3(k+1) ≤ S3(k+3)
+  -- From hrec: S3(k+3) = 2*S3(k+2) + 4*S3(k+1) - 2*S3(k)
+  -- Need: S3(k+2) + 3*S3(k+1) ≥ 2*S3(k)
+  -- From S3(k+1) ≥ S3(k) (monotonicity): 3*S3(k+1) ≥ 3*S3(k) ≥ 2*S3(k)
+  have hmono : momentSum 3 k ≤ momentSum 3 (k + 1) := by
+    rcases k with _ | k
+    · simp [← cMomentSum_eq]
+    · exact Nat.le_of_lt (momentSum_three_strict_mono (k + 1) (by omega))
+  linarith
+
+/-- S_3(15) = 20675744.
+    prop:pom-s3-fifteen -/
+theorem momentSum_three_fifteen : momentSum 3 15 = 20675744 := by
+  have h := momentSum_three_recurrence 12
+  rw [show (12 : Nat) + 1 = 13 from rfl, show (12 : Nat) + 2 = 14 from rfl,
+    show (12 : Nat) + 3 = 15 from rfl,
+    momentSum_three_twelve, momentSum_three_thirteen, momentSum_three_fourteen] at h
+  omega
+
 end Omega
