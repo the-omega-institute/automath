@@ -580,6 +580,26 @@ theorem Fold_truncate_eq_restrict_iff (ω : Word (m + 1)) :
     Fold (truncate ω) = X.restrict (Fold ω) ↔ localDefect ω = zeroWord m :=
   (localDefect_eq_zero_iff_fold_commutes ω).symm
 
+/-- If all local defects along the chain vanish, the global defect vanishes.
+    prop:fold-defect-zero-of-local-zero -/
+theorem globalDefect_zero_of_all_local_zero (k : Nat) (ω : Word (m + k))
+    (h : ∀ j : Nat, (hj : j < k) →
+      localDefect (restrictWord (Nat.add_le_add_left (Nat.succ_le_of_lt hj) m) ω) = zeroWord (m + j)) :
+    globalDefect (Nat.le_add_right m k) ω = zeroWord m := by
+  rw [globalDefect_eq_defectChain]
+  induction k with
+  | zero => rfl
+  | succ k ih =>
+    rw [defectChain_succ]
+    have hlocal : localDefect ω = zeroWord (m + k) := h k (Nat.lt_succ_self k)
+    have hrestr : restrictWord (Nat.le_add_right m k) (zeroWord (m + k)) = zeroWord m := by
+      funext i; rfl
+    rw [hlocal, hrestr, xorWord_zero_left]
+    exact ih (truncate ω) (fun j hj => by
+      have := h j (Nat.lt_succ_of_lt hj)
+      simp only [restrictWord_trans_succ] at this
+      exact this)
+
 /-- The all-false word is the unique word of weight zero (theorem #200).
     prop:pom-weight-zero-unique -/
 theorem eq_allFalse_of_weight_eq_zero (w : Word m) (hw : weight w = 0) :

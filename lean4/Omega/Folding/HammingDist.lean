@@ -287,4 +287,15 @@ theorem globalDefect_triangle (hmk : m ≤ k) (hkn : k ≤ n) (ω : Word n) :
           apply Nat.add_le_add_left
           exact popcount_restrictWord_le hmk _
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R60
+-- ══════════════════════════════════════════════════════════════
+
+/-- Popcount of complement plus popcount equals word length.
+    prop:pom-popcount-complement -/
+theorem popcount_complement (w : Word m) :
+    popcount (complement w) + popcount w = m := by
+  unfold complement
+  exact popcount_not w
+
 end Omega
