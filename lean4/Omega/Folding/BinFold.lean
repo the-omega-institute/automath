@@ -79,6 +79,33 @@ theorem window7_collision_dimension :
     cBinFiberHist 7 3 * 3 ^ 2 + cBinFiberHist 7 4 * 4 ^ 2 + cBinFiberHist 7 5 * 5 ^ 2 = 498 := by
   rw [cBinFiberHist_7_3, cBinFiberHist_7_4, cBinFiberHist_7_5]; omega
 
+/-! ### m = 8 BinFold histogram -/
+
+set_option maxHeartbeats 800000 in
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_8_3 : cBinFiberHist 8 3 = 21 := by native_decide
+set_option maxHeartbeats 800000 in
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_8_5 : cBinFiberHist 8 5 = 11 := by native_decide
+set_option maxHeartbeats 800000 in
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_8_6 : cBinFiberHist 8 6 = 23 := by native_decide
+
+/-- thm:terminal-foldbin-hist -/
+theorem window8_histogram_count_sum :
+    cBinFiberHist 8 3 + cBinFiberHist 8 5 + cBinFiberHist 8 6 = 55 := by
+  rw [cBinFiberHist_8_3, cBinFiberHist_8_5, cBinFiberHist_8_6]
+
+/-- thm:terminal-foldbin-hist -/
+theorem window8_histogram_fiber_sum :
+    cBinFiberHist 8 3 * 3 + cBinFiberHist 8 5 * 5 + cBinFiberHist 8 6 * 6 = 256 := by
+  rw [cBinFiberHist_8_3, cBinFiberHist_8_5, cBinFiberHist_8_6]
+
+/-- thm:conclusion-window8-groupoid-collision-dimension-identity -/
+theorem window8_collision_dimension :
+    cBinFiberHist 8 3 * 3 ^ 2 + cBinFiberHist 8 5 * 5 ^ 2 + cBinFiberHist 8 6 * 6 ^ 2 = 1292 := by
+  rw [cBinFiberHist_8_3, cBinFiberHist_8_5, cBinFiberHist_8_6]; omega
+
 /-! ### Edge separation at m = 6 -/
 
 /-- BinFold separates hypercube edges at m = 6: flipping any single bit always

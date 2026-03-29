@@ -228,6 +228,10 @@ theorem X6_crt_split : Nonempty (X 6 ≃+* ZMod 3 × ZMod 7) := ⟨X6_decomposit
 noncomputable def X10_decomposition : X 10 ≃+* ZMod 16 × ZMod 9 :=
   crtDecomposition 10 16 9 (by native_decide) (by native_decide)
 
+-- X_8: F_10 = 55 = 5 × 11, gcd(5,11) = 1.
+/-- cor:crt-factorization -/
+noncomputable def X8_decomposition : X 8 ≃+* ZMod 5 × ZMod 11 :=
+  crtDecomposition 8 5 11 (by native_decide) (by native_decide)
 
 /-! ### Characteristic -/
 
