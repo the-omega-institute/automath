@@ -1121,4 +1121,20 @@ theorem upper_support_card (m : Nat) (hm : 2 ≤ m) :
       X.stableValue_ofNat_lt r hrlt⟩
     rw [X.stableValue_ofNat_lt r hrlt]; omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R73: weighted stable value sum closed form
+-- ══════════════════════════════════════════════════════════════
+
+/-- Σ d(x)·sv(x) = 2^{m-1}·(F_{m+3}-2) - ⌊2^m/3⌋·F_{m+2}.
+    From weight_total_sum and weight_sum_fiber_decomp.
+    thm:pom-stable-value-fiber-weighted-sum -/
+theorem stableValue_fiber_weighted_sum (m : Nat) (hm : 1 ≤ m) :
+    ∑ x : X m, X.fiberMultiplicity x * stableValue x =
+    2 ^ (m - 1) * (Nat.fib (m + 3) - 2) - (2 ^ m / 3) * Nat.fib (m + 2) := by
+  have hdecomp := weight_sum_fiber_decomp m
+  have htotal := weight_total_sum m hm
+  rw [htotal] at hdecomp
+  rw [hiddenBitCount_floor_div_three] at hdecomp
+  omega
+
 end Omega

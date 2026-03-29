@@ -1088,4 +1088,44 @@ theorem momentSum_two_seventeen_rec : momentSum 2 17 = 4816128 := by
     show (14 : Nat) + 3 = 17 from rfl, momentSum_two_fourteen_rec,
     momentSum_two_fifteen_rec, momentSum_two_sixteen_rec] at h; omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R73: ewc(6)=2 + S₂(18)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Weight 6 is achieved by exactly two words for m ≥ 4.
+    prop:pom-ewc-weight-six -/
+theorem exactWeightCount_six (m : Nat) (hm : 4 ≤ m) :
+    exactWeightCount m 6 = 2 := by
+  induction m with
+  | zero => omega
+  | succ n ih =>
+    cases n with
+    | zero => omega
+    | succ k =>
+      cases k with
+      | zero => omega
+      | succ j =>
+        cases j with
+        | zero => omega
+        | succ i =>
+          cases i with
+          | zero =>
+            -- base case: m = 4
+            native_decide
+          | succ p =>
+            -- inductive step: ewc(p+5, 6) = ewc(p+4, 6) since 6 < fib(p+6)
+            rw [exactWeightCount_succ_of_lt]
+            · exact ih (by omega)
+            · calc 6 < 8 := by omega
+                _ = Nat.fib 6 := by native_decide
+                _ ≤ Nat.fib (p + 6) := Nat.fib_mono (by omega)
+
+/-- S₂(18) = 11949760, computed via three-step recurrence from S₂(15..17).
+    prop:pom-moment-s2-eighteen -/
+theorem momentSum_two_eighteen_rec : momentSum 2 18 = 11949760 := by
+  have h := momentSum_two_recurrence 15
+  rw [show (15 : Nat) + 1 = 16 from rfl, show (15 : Nat) + 2 = 17 from rfl,
+    show (15 : Nat) + 3 = 18 from rfl, momentSum_two_fifteen_rec,
+    momentSum_two_sixteen_rec, momentSum_two_seventeen_rec] at h; omega
+
 end Omega
