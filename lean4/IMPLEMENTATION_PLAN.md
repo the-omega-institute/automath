@@ -8,38 +8,38 @@
 |---|---|
 | 总行数 | ~32,000 |
 | 定理/定义数 | ~3,341 |
-| 论文接口包装 | 609+ |
-| 文件数 | 74 |
+| 论文接口包装 | 612+ |
+| 文件数 | 75 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 607 |
+| \leanverified 标注数 | 610 |
 | \leanpartial 标注数 | 10 |
-| 总标注数 | 618 |
-| 轮次 | R135（round_count=136） |
+| 总标注数 | 621 |
+| 轮次 | R136（round_count=137） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 190 | 11.1% |
+| POM | 1,707 | 191 | 11.2% |
 | Emergent Arithmetic | 185 | 71 | 38.4% |
 | Folding | 337 | 70 | 20.8% |
-| Conclusion | 2,550 | 108 | 4.2% |
+| Conclusion | 2,550 | 109 | 4.3% |
 | Group Unification | 469 | 48 | 10.2% |
 | SPG | 129 | 15 | 11.6% |
 | Circle Dimension | 393 | 31 | 7.9% |
-| Zeta Finite Part | 4,524 | 63 | 1.4% |
+| Zeta Finite Part | 4,524 | 64 | 1.4% |
 | Discussion | 67 | 3 | 4.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **602** | **5.7%** |
+| **合计（body）** | **10,508** | **605** | **5.8%** |
 
 ### 1.2 已完成模块
 
 | 模块 | 文件 | 定理数 | 覆盖率 |
 |---|---|---|---|
 | Core (Fib, Word, No11) | 3 | ~25 | 100% |
-| Folding (StableSyntax, Weight, Value, Zeckendorf, Fold, Fiber, MaxFiber, FiberSpectrum, FibonacciField, FiberRing, MomentSum, CollisionKernel, CollisionZeta, CollisionZetaOperator, Rewrite, Defect, InverseLimit, InverseLimitTopology, CarryDefect, FiberFusion, ModularTower, ShiftDynamics, FibonacciPolynomial, HankelSpectrum, FiberArithmeticProperties, FiberSplit, BoundaryLayer, Window6, ZeckendorfSignature, BinFold, HammingDist, Entropy, MaxFiberTwoStep, FiberWeightCount, CollisionDecomp, MomentRecurrence, MomentBounds, MomentTriple) | 38 | ~604 | 100% |
+| Folding (StableSyntax, Weight, Value, Zeckendorf, Fold, Fiber, MaxFiber, FiberSpectrum, FibonacciField, FiberRing, MomentSum, CollisionKernel, CollisionZeta, CollisionZetaOperator, Rewrite, Defect, InverseLimit, InverseLimitTopology, CarryDefect, FiberFusion, ModularTower, ShiftDynamics, FibonacciPolynomial, HankelSpectrum, FiberArithmeticProperties, FiberSplit, BoundaryLayer, Window6, ZeckendorfSignature, BinFold, HammingDist, Entropy, MaxFiberTwoStep, FiberWeightCount, FiberWeightCountComplement, CollisionDecomp, MomentRecurrence, MomentBounds, MomentTriple) | 39 | ~609 | 100% |
 | SPG (Cylinder, PrefixMetric, Clopen, ScanErrorDiscrete, ScanErrorMeasure) | 5 | ~210 | 95% |
 | Graph (LabeledGraph, Sofic, TransferMatrix) | 3 | ~37 | 100% |
 | Frontier (Assumptions, Certificates, Conditional, Conjectures, ConditionalSummary) | 5 | ~347 | 99% |
