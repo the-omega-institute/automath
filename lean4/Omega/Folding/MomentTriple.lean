@@ -931,4 +931,52 @@ theorem exactWeightCount_fib_sub_five (m : Nat) (hm : 3 ≤ m) :
   rw [exactWeightCount_symmetric m (Nat.fib (m + 3) - 5) (by omega), hsub]
   exact exactWeightCount_three m hm
 
+-- ══════════════════════════════════════════════════════════════
+-- R67: S₂(15), ewc(4), ewc(F-6)
+-- ══════════════════════════════════════════════════════════════
+
+/-- S₂(15) = 782304, computed via the three-step recurrence from S₂(12..14).
+    prop:pom-moment-s2-fifteen -/
+theorem momentSum_two_fifteen_rec : momentSum 2 15 = 782304 := by
+  have h := momentSum_two_recurrence 12
+  rw [show (12 : Nat) + 1 = 13 from rfl, show (12 : Nat) + 2 = 14 from rfl,
+    show (12 : Nat) + 3 = 15 from rfl, momentSum_two_twelve_rec,
+    momentSum_two_thirteen_rec, momentSum_two_fourteen_rec] at h; omega
+
+/-- Weight 4 is achieved by exactly one word for m ≥ 3.
+    prop:pom-ewc-weight-four -/
+theorem exactWeightCount_four (m : Nat) (hm : 3 ≤ m) :
+    exactWeightCount m 4 = 1 := by
+  induction m with
+  | zero => omega
+  | succ n ih =>
+    cases n with
+    | zero => omega
+    | succ k =>
+      cases k with
+      | zero => omega
+      | succ j =>
+        cases j with
+        | zero =>
+          -- base case: m = 3
+          native_decide
+        | succ i =>
+          -- inductive step: ewc(i+4, 4) = ewc(i+3, 4) since 4 < fib(i+5)
+          rw [exactWeightCount_succ_of_lt]
+          · exact ih (by omega)
+          · calc 4 < 5 := by omega
+              _ = Nat.fib 5 := by native_decide
+              _ ≤ Nat.fib (i + 5) := Nat.fib_mono (by omega)
+
+/-- The weight F_{m+3}−6 has exactly one word, by symmetry with weight 4.
+    prop:pom-ewc-fib-sub-six -/
+theorem exactWeightCount_fib_sub_six (m : Nat) (hm : 3 ≤ m) :
+    exactWeightCount m (Nat.fib (m + 3) - 6) = 1 := by
+  have hfib : Nat.fib (m + 3) ≥ 8 := by
+    calc Nat.fib (m + 3) ≥ Nat.fib 6 := Nat.fib_mono (by omega)
+      _ = 8 := by native_decide
+  have hsub : Nat.fib (m + 3) - 2 - (Nat.fib (m + 3) - 6) = 4 := by omega
+  rw [exactWeightCount_symmetric m (Nat.fib (m + 3) - 6) (by omega), hsub]
+  exact exactWeightCount_four m hm
+
 end Omega
