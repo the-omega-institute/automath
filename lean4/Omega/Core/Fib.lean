@@ -108,6 +108,26 @@ theorem fib_dvd_fib_mul (m k : ℕ) : Nat.fib m ∣ Nat.fib (m * k) := by
 theorem fib_six_dvd_fib_twelve : Nat.fib 6 ∣ Nat.fib 12 :=
   fib_dvd_fib_mul 6 2
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R143: Fibonacci divisibility paper wrappers
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fibonacci divisibility: m | n → F(m) | F(n).
+    cor:discussion-horizon-boundarylayer-phi-scaling -/
+theorem paper_fib_dvd (m n : Nat) (h : m ∣ n) : Nat.fib m ∣ Nat.fib n :=
+  Nat.fib_dvd m n h
+
+/-- Fibonacci GCD = Fibonacci of GCD.
+    cor:discussion-horizon-boundarylayer-phi-scaling -/
+theorem paper_fib_gcd (m n : Nat) :
+    Nat.gcd (Nat.fib m) (Nat.fib n) = Nat.fib (Nat.gcd m n) :=
+  fib_gcd m n
+
+/-- Concrete: F(6)=8 divides F(12)=144.
+    cor:discussion-horizon-boundarylayer-phi-scaling -/
+theorem paper_fib_6_dvd_fib_12 : Nat.fib 6 ∣ Nat.fib 12 :=
+  fib_six_dvd_fib_twelve
+
 /-- F_{2n} = F_n · (2·F_{n+1} - F_n).
     prop:fib-double-formula -/
 theorem fib_double (n : Nat) :

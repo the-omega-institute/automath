@@ -505,4 +505,20 @@ theorem paper_collision_dimension_seven :
     momentSum 2 7 = 544 :=
   collision_dimension_seven
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R143: S₁(m) = 2^m identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- S₁(m) = 2^m: total fiber sizes = total microstates.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem paper_momentSum_one_eq_pow (m : Nat) :
+    momentSum 1 m = 2 ^ m :=
+  momentSum_one m
+
+/-- S₁ concrete instances at m=6,7,8.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem momentSum_one_instances :
+    momentSum 1 6 = 64 ∧ momentSum 1 7 = 128 ∧ momentSum 1 8 = 256 := by
+  simp [momentSum_one]
+
 end Omega

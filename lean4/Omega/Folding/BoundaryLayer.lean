@@ -272,4 +272,31 @@ theorem endpoint_fiber_sum (m : Nat) (hm : 2 ≤ m) :
   have h3 := Omega.fib_succ_succ' (k + 2)
   rw [h3, h2, h1]; ring
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R143: Cyclic sector cardinality at m=6
+-- ══════════════════════════════════════════════════════════════
+
+/-- Computable non-boundary count: stable words without both endpoints true. -/
+def cNonBoundaryCount (m : Nat) : Nat :=
+  match m with
+  | 0 => 0
+  | 1 => (@Finset.univ (X 1) (fintypeX 1)).filter
+      (fun x => ¬ (x.1 ⟨0, by omega⟩ = true)) |>.card
+  | m + 2 => (@Finset.univ (X (m + 2)) (fintypeX (m + 2))).filter
+      (fun x => ¬ (x.1 ⟨0, by omega⟩ = true ∧ x.1 ⟨m + 1, by omega⟩ = true)) |>.card
+
+/-- Cyclic sector at m=6 has 18 elements.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem cyclicSector_card_six : cNonBoundaryCount 6 = 18 := by native_decide
+
+/-- Cyclic + boundary = total at m=6: 18 + 3 = 21.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem cyclic_boundary_partition_six :
+    cNonBoundaryCount 6 + cBoundaryCount 6 = Nat.fib 8 := by
+  rw [cyclicSector_card_six, cBoundaryCount_six]; native_decide
+
+/-- Paper: subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_cyclicSector_card_six : cNonBoundaryCount 6 = 18 :=
+  cyclicSector_card_six
+
 end Omega
