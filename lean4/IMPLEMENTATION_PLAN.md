@@ -8,15 +8,15 @@
 |---|---|
 | 总行数 | ~32,000 |
 | 定理/定义数 | ~3,306 |
-| 论文接口包装 | 402+ |
+| 论文接口包装 | 404+ |
 | 文件数 | 72 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,507 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 392 |
+| \leanverified 标注数 | 394 |
 | \leanpartial 标注数 | 10 |
-| 总标注数 | 402 |
-| 轮次 | R75（round_count=76） |
+| 总标注数 | 404 |
+| 轮次 | R76（round_count=77） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -26,13 +26,13 @@
 | Emergent Arithmetic | 185 | 63 | 34.1% |
 | Folding | 337 | 59 | 17.5% |
 | Conclusion | 2,550 | 39 | 1.5% |
-| Group Unification | 469 | 22 | 4.7% |
+| Group Unification | 469 | 24 | 5.1% |
 | SPG | 129 | 9 | 7.0% |
 | Circle Dimension | 393 | 16 | 4.1% |
 | Zeta Finite Part | 4,524 | 17 | 0.4% |
 | Discussion | 67 | 0 | 0.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,507** | **392** | **3.7%** |
+| **合计（body）** | **10,507** | **394** | **3.7%** |
 
 ### 1.2 已完成模块
 
@@ -94,6 +94,8 @@
 **加权稳定值和 + ewc(6) + S_2(18)（Round 95，Phase 98）**：Folding/MomentBounds.lean（拓展至 1140 行）——stableValue_fiber_weighted_sum（thm:pom-stable-value-fiber-weighted-sum：Σ d(x)·sv(x) = 2^{m-1}·(F_{m+3}-2) - ⌊2^m/3⌋·F_{m+2}，由 weight_sum_fiber_decomp + weight_total_sum + hiddenBitCount_floor_div_three + omega）——Folding/MomentTriple.lean（拓展至 1131 行）——exactWeightCount_six（prop:pom-ewc-weight-six：ewc(m,6)=2 for m≥4，base m=4 native_decide + induction step by exactWeightCount_succ_of_lt + Nat.fib_mono）; momentSum_two_eighteen_rec（prop:pom-moment-s2-eighteen：S_2(18)=11949760，链式递推 momentSum_two_recurrence(15) + omega）——POM 覆盖率 ~23.0% → ~23.2%（+3 条目）（Phase 98）
 **Zeta Fredholm + Conclusion PrimeRegister 章节多样性突破（Round 96，Phase 99）**：Zeta/DynZeta.lean（新文件，131 行）——fredholmGoldenMean（def:fredholm-determinant：I-z·A 矩阵定义）; fredholmGoldenMean_det（def:fredholm-determinant：det(I-z·A)=1-z-z²，golden-mean Fredholm 行列式闭式）; fredholmGoldenMean_at_one（subsec:operator-zeta-interface：det(I-A)=-1 特殊值）; goldenMean_trace_values（thm:zeta-syntax-trace-linear-recurrence：A^n 迹序列 n=0..8，Lucas 数）; goldenMean_trace_recurrence（thm:zeta-syntax-trace-linear-recurrence：Tr(A^{n+2})=Tr(A^{n+1})+Tr(A^n) for n≤6）; goldenMean_primitive_orbit_numerators（prop:zetaK-mobius-primitive：Witt/Möbius 反演 n·p(n) 数值验证 n=1..6）; degeneracy_ghost_coefficients（rem:degeneracy-zeta-bridge：2^n-L(n) for n=1..8）; goldenMean_cayleyHamilton（thm:zeta-syntax-trace-linear-recurrence：A²-A-I=0 Cayley-Hamilton）; goldenMean_charPoly_discriminant（subsec:operator-zeta-interface：判别式=5）; goldenMean_zeta_roots_exist（subsec:operator-zeta-interface：5>0 实根存在性）——Conclusion/PrimeRegister.lean（新文件，102 行）——truncatedPrimeRegister_card（def:conclusion-truncated-prime-register：|P_{k,E}|=(E+1)^k）; godelLift_feasibility（thm:conclusion-bounded-prime-register-feasibility：Gödel lift 存在 ↔ D≤(E+1)^k，pigeonhole + Fin.castLE）; godelLift_fold4/fold6/fold8（subsec:conclusion-bounded-prime-register-godel-scaling：具体 Fold_m 纤维的可行判据实例）; axis_exponent_tradeoff（subsec:conclusion-bounded-prime-register-godel-scaling：轴-指数权衡）; register_capacity_scaling（subsec:conclusion-bounded-prime-register-godel-scaling：容量倍增律）; fib_fiber_godelLift_instances（subsec:conclusion-bounded-prime-register-godel-scaling：Fibonacci 纤维规模 + 寄存器可行实例）——**章节多样性突破：首次为 Zeta Finite Part 和 Conclusion 章节创建独立模块**——Zeta 覆盖率 0.2% → 0.3%（+4 标注），Conclusion 1.5% → 1.6%（+2 标注）（Phase 99）
 **循环置换行列式 + Euler 因子（Round 97，Phase 100）**：Zeta/CyclicDet.lean（新文件，155 行）——cyclicPerm2..cyclicPerm6（def:cycle-permutation-determinant：n×n 循环置换矩阵具体定义）; cyclicPerm2_fredholm_det（prop:cycle-permutation-determinant：det(I-t·Π_2)=1-t²，simp+ring）; cyclicPerm3_fredholm_det（prop:cycle-permutation-determinant：det(I-t·Π_3)=1-t³，simp+ring）; cyclicPerm2_sq..cyclicPerm6_sixth（Π_n^n=I 周期性，n=2..6，native_decide）; cyclicPerm2/3_trace_powers（subsec:operator-zeta-interface：Tr(Π_n^k) 周期模式）; euler_factor_n2/n3（cor:cyclic-euler-product：Euler 因子 det(I-r·α·Π_n)=1-(αr)^n）; cyclic_periodicity_orders（thm:operator-finite-state-zeta-2pii-periodic-separation：全部周期性汇总）——Zeta 覆盖率 0.3% → 0.4%（+4 标注）（Phase 100）
+
+**Zeckendorf 进位吸收 + Fibonacci 平方移位 + SM 平方余量刚性（Round 98，Phase 101）**：两文件 Omega/Core/Fib.lean + Omega/Folding/ZeckendorfSignature.lean（+62 行）——zeckendorf\_carry\_absorption\_m9（cor:zeckendorf-carry-absorption-m9：F_6+F_7=F_8，Zeckendorf 规范化将 m=8,9 并入 m=10，ZeckendorfSignature.lean:694，native_decide）; fib\_sq\_gt\_fib\_shift（infra：F_{n+4} < F_n^2 for n≥6，thm:sm-square-residual-rigidity-m6 证明的强归纳辅助引理，Fib.lean:1139）; sm\_square\_residual\_rigidity\_m6（thm:sm-square-residual-rigidity-m6：F_{m+2}-12=F_{m-2}^2 在 m≥6 上唯一解为 m=6，ZeckendorfSignature.lean:698，fib\_sq\_gt\_fib\_shift + interval\_cases）——**2 个新论文标签计入覆盖率**（cor:zeckendorf-carry-absorption-m9 + thm:sm-square-residual-rigidity-m6，tex 环境在 theory/.../group\_unification/subsubsec\_\_bdry-tower-zeck-gut-sm-zeckendorf-rigidity.tex，fib\_sq\_gt\_fib\_shift 为辅助引理标注于 thm:sm-square-residual-rigidity-m6 之内）——群统一 22→24（+2，4.7%→5.1%），全局标注 402→404（+2），commit 8bf77de
 **Cauchy-Schwarz 碰撞界 + S_q 单调性（Round 12）**：momentSum_mono_q（$S_q \le S_{q+1}$，d(x)≥1 的单调性）; momentSum_two_ge_pow（$2^m \le S_2(m)$，由单调性推导）; momentSum_ge_card（$F_{m+1} \le S_q(m)$，纤维多重度 ≥ 1 的下界）; momentSum_cauchy_schwarz（$(2^m)^2 \le F_{m+1} \cdot S_2(m)$，Cauchy-Schwarz 碰撞界，thm:fold-collision-convex-lower-bounds）
 **Frontier 接口包装（Round 17，工程层）**：stable_ring_isomorphism（thm:finite-resolution-mod，X_m ≃+* ZMod(F_{m+2})）; stable_field_of_prime（cor:field-phase-fib-prime，F_{m+2} 素数时 X_m 是域）; projection_entropy_cardinality（prop:pom-projection-entropy，|X_m|=F_{m+2}）; fiber_sum_eq_pow（prop:pom-fiber-sum-identity，Σd(x)=2^m）; cauchy_schwarz_collision_bound（thm:fold-collision-convex-lower-bounds）; moment_monotone（prop:pom-sq-monotone）; moment_ge_cardinality（prop:pom-sq-lower）; collision_sum_ge_pow（cor:pom-s2-lower）；注：该层主要是论文接口/命名包装，不应与底层新增数学结果重复计数
 
