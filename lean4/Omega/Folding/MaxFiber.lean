@@ -115,6 +115,29 @@ theorem cMaxFiberMult_eq (m : Nat) : cMaxFiberMult m = X.maxFiberMultiplicity m 
 @[simp] theorem cached_cMaxFiberMult_6 : cMaxFiberMult 6 = 5 := by native_decide
 @[simp] theorem cached_cMaxFiberMult_7 : cMaxFiberMult 7 = 6 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R142: Minimum fiber multiplicity + m=7 bounds
+-- ══════════════════════════════════════════════════════════════
+
+/-- Minimum fiber multiplicity at resolution m (computable). -/
+def cMinFiberMult (m : Nat) : Nat :=
+  (@Finset.univ (X m) (fintypeX m)).inf'
+    (@Finset.univ_nonempty _ (fintypeX m) (X.instNonempty m)) (fun x => cFiberMult x)
+
+/-- thm:terminal-foldbin7-128-to-34-hist -/
+theorem cMinFiberMult_seven : cMinFiberMult 7 = 1 := by native_decide
+
+/-- Fiber size bounds at m=7: min=1, max=6.
+    thm:terminal-foldbin7-128-to-34-hist -/
+theorem fiberSize_bounds_seven :
+    cMinFiberMult 7 = 1 ∧ cMaxFiberMult 7 = 6 :=
+  ⟨cMinFiberMult_seven, cached_cMaxFiberMult_7⟩
+
+/-- Paper: thm:terminal-foldbin7-128-to-34-hist -/
+theorem paper_fiberSize_bounds_seven :
+    cMinFiberMult 7 = 1 ∧ cMaxFiberMult 7 = 6 :=
+  fiberSize_bounds_seven
+
 end Computable
 
 namespace X

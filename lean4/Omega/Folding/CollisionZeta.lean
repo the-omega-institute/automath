@@ -792,4 +792,61 @@ theorem paper_collisionKernel5_trace_powers :
   ⟨collisionKernel5_trace_pow_0, collisionKernel5_trace_pow_1,
    collisionKernel5_trace_pow_2, collisionKernel5_trace_pow_3⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R142: A₅ unbounded trace recurrence
+-- ══════════════════════════════════════════════════════════════
+
+/-- Unbounded trace recurrence for A₅ from Cayley-Hamilton:
+    A₅^5 = -2A₅^4 - 11A₅^3 - 8A₅^2 - 20A₅ + 10I.
+    prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_recurrence_unbounded (n : ℕ) :
+    (collisionKernel5 ^ (n + 5)).trace =
+      -2 * (collisionKernel5 ^ (n + 4)).trace
+      - 11 * (collisionKernel5 ^ (n + 3)).trace
+      - 8 * (collisionKernel5 ^ (n + 2)).trace
+      - 20 * (collisionKernel5 ^ (n + 1)).trace
+      + 10 * (collisionKernel5 ^ n).trace := by
+  -- A₅^5 + 2A₅^4 + 11A₅^3 + 8A₅^2 + 20A₅ - 10I = 0
+  -- So A₅^5 = -2A₅^4 - 11A₅^3 - 8A₅^2 - 20A₅ + 10I
+  have hCH : collisionKernel5 ^ 5 =
+      (-2) • collisionKernel5 ^ 4 + (-11) • collisionKernel5 ^ 3 +
+      (-8) • collisionKernel5 ^ 2 + (-20) • collisionKernel5 ^ 1 +
+      (10 : ℤ) • (1 : Matrix (Fin 5) (Fin 5) ℤ) := by
+    ext i j; fin_cases i <;> fin_cases j <;> native_decide
+  have hpow : collisionKernel5 ^ (n + 5) =
+      (-2) • collisionKernel5 ^ (n + 4) + (-11) • collisionKernel5 ^ (n + 3) +
+      (-8) • collisionKernel5 ^ (n + 2) + (-20) • collisionKernel5 ^ (n + 1) +
+      10 • collisionKernel5 ^ n := by
+    calc collisionKernel5 ^ (n + 5)
+        = collisionKernel5 ^ n * collisionKernel5 ^ 5 := by rw [← pow_add]
+      _ = collisionKernel5 ^ n *
+          ((-2) • collisionKernel5 ^ 4 + (-11) • collisionKernel5 ^ 3 +
+           (-8) • collisionKernel5 ^ 2 + (-20) • collisionKernel5 ^ 1 +
+           (10 : ℤ) • 1) := by rw [hCH]
+      _ = (-2) • (collisionKernel5 ^ n * collisionKernel5 ^ 4) +
+          (-11) • (collisionKernel5 ^ n * collisionKernel5 ^ 3) +
+          (-8) • (collisionKernel5 ^ n * collisionKernel5 ^ 2) +
+          (-20) • (collisionKernel5 ^ n * collisionKernel5 ^ 1) +
+          (10 : ℤ) • (collisionKernel5 ^ n * 1) := by
+          simp only [mul_add, mul_smul_comm]
+      _ = (-2) • collisionKernel5 ^ (n + 4) +
+          (-11) • collisionKernel5 ^ (n + 3) +
+          (-8) • collisionKernel5 ^ (n + 2) +
+          (-20) • collisionKernel5 ^ (n + 1) +
+          10 • collisionKernel5 ^ n := by
+          simp only [← pow_add, mul_one]; norm_cast
+  rw [hpow]
+  simp only [Matrix.trace_add, Matrix.trace_smul, smul_eq_mul]
+  ring
+
+/-- Paper: prop:pom-s5-recurrence (unbounded) -/
+theorem paper_collisionKernel5_trace_recurrence_unbounded (n : ℕ) :
+    (collisionKernel5 ^ (n + 5)).trace =
+      -2 * (collisionKernel5 ^ (n + 4)).trace
+      - 11 * (collisionKernel5 ^ (n + 3)).trace
+      - 8 * (collisionKernel5 ^ (n + 2)).trace
+      - 20 * (collisionKernel5 ^ (n + 1)).trace
+      + 10 * (collisionKernel5 ^ n).trace :=
+  collisionKernel5_trace_recurrence_unbounded n
+
 end Omega

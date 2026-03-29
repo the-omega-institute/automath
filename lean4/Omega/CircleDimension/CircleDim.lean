@@ -172,4 +172,27 @@ theorem paper_circleDim_strictMono (a b t1 t2 : Nat) (h : a < b) :
     circleDim a t1 < circleDim b t2 :=
   circleDim_strictMono a b t1 t2 h
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R142: Triple direct sum
+-- ══════════════════════════════════════════════════════════════
+
+/-- Circle dimension of triple direct sum.
+    prop:circle-dimension-laws -/
+theorem circleDim_add_three (a b c t1 t2 t3 : Nat) :
+    circleDim (a + b + c) (t1 + t2 + t3) =
+      circleDim a t1 + circleDim b t2 + circleDim c t3 := rfl
+
+/-- Half circle dimension of triple direct sum.
+    prop:circle-dimension-laws -/
+theorem halfCircleDim_add_three (a b c t1 t2 t3 : Nat) :
+    halfCircleDim (a + b + c) (t1 + t2 + t3) =
+      halfCircleDim a t1 + halfCircleDim b t2 + halfCircleDim c t3 := by
+  simp [halfCircleDim, circleDim]; push_cast; ring
+
+/-- Paper: prop:circle-dimension-laws (triple sum) -/
+theorem paper_circleDim_add_three (a b c t1 t2 t3 : Nat) :
+    circleDim (a + b + c) (t1 + t2 + t3) =
+      circleDim a t1 + circleDim b t2 + circleDim c t3 :=
+  circleDim_add_three a b c t1 t2 t3
+
 end Omega.CircleDimension
