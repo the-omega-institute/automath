@@ -87,6 +87,8 @@ python3 automation/research_cycle.py seed-paper artifacts/export/research_cycles
 python3 automation/journal_recon.py run --journal "Journal of Pure and Applied Algebra" --journal-short JPA --max-papers 6 --years-back 3 --slug jpa
 python3 automation/research_cycle.py journal-pack artifacts/export/paper_seeds/folding_note_seed --journal "Journal of Pure and Applied Algebra" --journal-short JPA --batch-dashboard artifacts/export/research_cycles/_batch/body_batch_all --slug jpa_folding_note
 python3 automation/research_cycle.py validate-journal-pack artifacts/export/journal_packs/jpa_folding_note
+python3 automation/publication_sync.py sync --publication-root /path/to/the-omega/docs/papers/auric-golden-phi/publication --slug auric_publication_sync
+python3 automation/publication_sync.py validate artifacts/export/publication_sync/auric_publication_sync
 ```
 
 This generates a cycle directory under `artifacts/export/research_cycles/<slug>/` containing:
@@ -144,6 +146,28 @@ If recent-paper notes are missing, `journal-pack` first looks for an existing re
 - `recent_papers.json` — paper metadata plus computed style summary
 - `recent_paper_notes.md` — prompt-ready notes for recent papers
 - `style_summary.md` — compact style summary for the venue
+
+## Publication Workspace Sync
+
+If publication planning already lives in another repository, `automation/publication_sync.py`
+builds a program-level sync report instead of creating new paper skeletons locally:
+
+```bash
+python3 automation/publication_sync.py sync \
+  --publication-root /path/to/the-omega/docs/papers/auric-golden-phi/publication \
+  --slug auric_publication_sync
+python3 automation/publication_sync.py validate \
+  artifacts/export/publication_sync/auric_publication_sync
+```
+
+This writes `artifacts/export/publication_sync/<slug>/` with:
+
+- `sync_manifest.json` — workspace path, counts by publication phase, and unmapped sections
+- `publication_inventory.json` — one record per publication directory, including target journal and covered source sections
+- `section_status.json` — one record per `sections/body/<section>` directory with publication status and recommended program action
+- `publication_sync_report.md` — human-readable dashboard showing which sections are already submitted, planned, frozen, or still unmapped
+
+Use this when publication splitting is managed elsewhere and `automath` only needs to stay aligned with that external submission program.
 
 ## Writing Conventions
 
