@@ -819,4 +819,18 @@ theorem conclusion_window6_nonaffine_count :
     cAffineFlatCount 6 = 11 ∧ Nat.fib 8 - cAffineFlatCount 6 = 10 :=
   ⟨cAffineFlatCount_six, by rw [cAffineFlatCount_six]; native_decide⟩
 
+/-- The number of zero-divisors in ZMod 21 is 8.
+    thm:pom-zmod21-zerodiv-count -/
+theorem zmod21_zerodiv_count :
+    (Finset.univ.filter (fun x : ZMod 21 =>
+      x ≠ 0 ∧ ∃ y : ZMod 21, y ≠ 0 ∧ x * y = 0)).card = 8 := by native_decide
+
+/-- Every element of ZMod 21 is zero, a unit, or a zero-divisor.
+    thm:pom-zmod21-trichotomy -/
+theorem zmod21_trichotomy (x : ZMod 21) :
+    x = 0 ∨ IsUnit x ∨ (x ≠ 0 ∧ ∃ y : ZMod 21, y ≠ 0 ∧ x * y = 0) := by
+  have : ∀ x : ZMod 21,
+      x = 0 ∨ IsUnit x ∨ (x ≠ 0 ∧ ∃ y : ZMod 21, y ≠ 0 ∧ x * y = 0) := by native_decide
+  exact this x
+
 end Omega

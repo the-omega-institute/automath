@@ -349,4 +349,9 @@ theorem mixed_collision_kernel_computable (q m : Nat) :
     momentSum q m = cMomentSum q m :=
   (cMomentSum_eq q m).symm
 
+/-- The sum of squared fiber multiplicities equals the second moment S_2(m).
+    prop:pom-fiberMultiplicity-sum-sq-eq-momentSum-two -/
+theorem fiberMultiplicity_sum_sq_eq_momentSum_two (m : Nat) :
+    ∑ x : X m, X.fiberMultiplicity x ^ 2 = momentSum 2 m := rfl
+
 end Omega

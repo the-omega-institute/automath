@@ -699,4 +699,105 @@ theorem ccs_prime_recurrence (m : Nat) :
     have := crossCorrSq_recurrence (m + 1); linarith
   linarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R33: S_3 recurrence uniqueness
+-- ══════════════════════════════════════════════════════════════
+
+/-- A 3rd-order recurrence with S_3 coefficients is uniquely determined by initial values.
+    thm:pom-s3-recurrence-unique -/
+private theorem recurrence_unique_s3 {f g : Nat → Nat}
+    (hf : ∀ m, f (m + 3) + 2 * f m = 2 * f (m + 2) + 4 * f (m + 1))
+    (hg : ∀ m, g (m + 3) + 2 * g m = 2 * g (m + 2) + 4 * g (m + 1))
+    (h0 : f 0 = g 0) (h1 : f 1 = g 1) (h2 : f 2 = g 2) :
+    ∀ m, f m = g m := by
+  intro m; induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 => exact h0
+    | 1 => exact h1
+    | 2 => exact h2
+    | m + 3 =>
+      have := hf m; have := hg m
+      have := ih m (by omega); have := ih (m + 1) (by omega); have := ih (m + 2) (by omega)
+      omega
+
+/-- S_3 is the unique sequence satisfying f(m+3)+2f(m) = 2f(m+2)+4f(m+1) with
+    initial values f(0)=1, f(1)=2, f(2)=10.
+    thm:mul-from-successor -/
+theorem momentSum_three_determined {f : Nat → Nat}
+    (hrec : ∀ m, f (m + 3) + 2 * f m = 2 * f (m + 2) + 4 * f (m + 1))
+    (h0 : f 0 = 1) (h1 : f 1 = 2) (h2 : f 2 = 10) :
+    ∀ m, f m = momentSum 3 m :=
+  recurrence_unique_s3 hrec momentSum_three_recurrence
+    (by rw [h0, momentSum_three_zero])
+    (by rw [h1, momentSum_three_one])
+    (by rw [h2, momentSum_three_two])
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R34: S_3 high-order values by pure recurrence
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_3(13) = 2170784.
+    prop:pom-s3-recurrence -/
+theorem momentSum_three_thirteen : momentSum 3 13 = 2170784 := by
+  have h : momentSum 3 13 + 2 * 73888 = 2 * 703504 + 4 * 227888 := by
+    have := momentSum_three_recurrence 10
+    change momentSum 3 13 + 2 * momentSum 3 10 = 2 * momentSum 3 12 + 4 * momentSum 3 11 at this
+    rw [momentSum_three_ten, momentSum_three_eleven, momentSum_three_twelve] at this; linarith
+  omega
+
+/-- S_3(14) = 6699808.
+    prop:pom-s3-fourteen -/
+theorem momentSum_three_fourteen : momentSum 3 14 = 6699808 := by
+  have h : momentSum 3 14 + 2 * 227888 = 2 * 2170784 + 4 * 703504 := by
+    have := momentSum_three_recurrence 11
+    change momentSum 3 14 + 2 * momentSum 3 11 = 2 * momentSum 3 13 + 4 * momentSum 3 12 at this
+    rw [momentSum_three_eleven, momentSum_three_twelve, momentSum_three_thirteen] at this; linarith
+  omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R70: S_3 superadditivity + S_3(15)
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_3(m+1) + S_3(m) ≤ S_3(m+2) for m ≥ 1 (Fibonacci-type superadditivity).
+    From recurrence at (m-1): S_3(m+2) = 2S_3(m+1) + 4S_3(m) - 2S_3(m-1).
+    So S_3(m+2) - S_3(m+1) - S_3(m) = S_3(m+1) + 3S_3(m) - 2S_3(m-1) ≥ 0.
+    thm:pom-s3-fib-superadditive -/
+theorem momentSum_three_fib_superadditive (m : Nat) (hm : 1 ≤ m) :
+    momentSum 3 (m + 1) + momentSum 3 m ≤ momentSum 3 (m + 2) := by
+  obtain ⟨k, rfl⟩ : ∃ k, m = k + 1 := ⟨m - 1, by omega⟩
+  -- Recurrence at k: S3(k+3) + 2*S3(k) = 2*S3(k+2) + 4*S3(k+1)
+  have hrec := momentSum_three_recurrence k
+  -- Goal: S3(k+2) + S3(k+1) ≤ S3(k+3)
+  -- From hrec: S3(k+3) = 2*S3(k+2) + 4*S3(k+1) - 2*S3(k)
+  -- Need: S3(k+2) + 3*S3(k+1) ≥ 2*S3(k)
+  -- From S3(k+1) ≥ S3(k) (monotonicity): 3*S3(k+1) ≥ 3*S3(k) ≥ 2*S3(k)
+  have hmono : momentSum 3 k ≤ momentSum 3 (k + 1) := by
+    rcases k with _ | k
+    · simp [← cMomentSum_eq]
+    · exact Nat.le_of_lt (momentSum_three_strict_mono (k + 1) (by omega))
+  linarith
+
+/-- S_3(15) = 20675744.
+    prop:pom-s3-fifteen -/
+theorem momentSum_three_fifteen : momentSum 3 15 = 20675744 := by
+  have h := momentSum_three_recurrence 12
+  rw [show (12 : Nat) + 1 = 13 from rfl, show (12 : Nat) + 2 = 14 from rfl,
+    show (12 : Nat) + 3 = 15 from rfl,
+    momentSum_three_twelve, momentSum_three_thirteen, momentSum_three_fourteen] at h
+  omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R72: S_3(16) chain value
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_3(16) = 63809152.
+    prop:pom-s3-sixteen -/
+theorem momentSum_three_sixteen : momentSum 3 16 = 63809152 := by
+  have h := momentSum_three_recurrence 13
+  rw [show (13 : Nat) + 1 = 14 from rfl, show (13 : Nat) + 2 = 15 from rfl,
+    show (13 : Nat) + 3 = 16 from rfl,
+    momentSum_three_thirteen, momentSum_three_fourteen, momentSum_three_fifteen] at h
+  omega
+
 end Omega

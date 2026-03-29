@@ -192,6 +192,12 @@ theorem exactWeightCount_eq_zero_of_ge_fib (m n : Nat) (hn : Nat.fib (m + 3) ≤
   have := X.weight_lt_fib w
   omega
 
+/-- ewc(m, n) = 0 when n is at least F_{m+3} (named alias).
+    prop:pom-ewc-vanish-large -/
+theorem exactWeightCount_zero_of_large (m n : Nat) (hn : Nat.fib (m + 3) ≤ n) :
+    exactWeightCount m n = 0 :=
+  exactWeightCount_eq_zero_of_ge_fib m n hn
+
 -- ══════════════════════════════════════════════════════════════
 -- Fiber multiplicity = two exactWeightCount terms
 -- ══════════════════════════════════════════════════════════════
@@ -355,6 +361,15 @@ theorem fiberMultiplicity_allFalse_closed (m : Nat) :
       -- Goal: m / 2 + 1 + 1 = (m + 2) / 2 + 1
       -- (m + 2) / 2 = m / 2 + 1 for natural number division
       omega
+
+/-- Exact weight count at weight F_{m+2} equals ⌊m/2⌋.
+    prop:pom-ewc-fib-closed -/
+theorem exactWeightCount_fib_closed (m : Nat) :
+    exactWeightCount m (Nat.fib (m + 2)) = m / 2 := by
+  have h1 := fiberMultiplicity_allFalse m
+  have h2 := fiberMultiplicity_allFalse_closed m
+  unfold exactWeightCount
+  omega
 
 -- ══════════════════════════════════════════════════════════════
 -- Weight congruence class count
@@ -746,5 +761,15 @@ theorem momentSum_two_hiddenBit_expand (m : Nat) :
     rw [fiberMultiplicity_split_by_hiddenBit x]
     ring
   simp_rw [hsplit, Finset.sum_add_distrib, Finset.mul_sum]
+
+/-- Fiber multiplicity equals the sum of two exact weight counts.
+    d(x) = ewc(m, sv(x)) + ewc(m, sv(x) + F_{m+2}).
+    thm:pom-fiber-ewc-sum -/
+theorem fiberMultiplicity_eq_ewc_sum (x : X m) :
+    X.fiberMultiplicity x =
+    exactWeightCount m (stableValue x) +
+    exactWeightCount m (stableValue x + Nat.fib (m + 2)) := by
+  rw [fiberMultiplicity_split_by_hiddenBit x,
+    fiberHiddenBitCount_zero_eq_ewc x, fiberHiddenBitCount_one_eq_ewc x]
 
 end Omega

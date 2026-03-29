@@ -1066,4 +1066,102 @@ theorem fenceDet_succ_lt_triple (k : Nat) (hk : 1 ≤ k) :
   have hpos := fenceDet_pos (k - 1)
   omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R29: Fibonacci product convolution sum
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fibonacci convolution: 5·Σ_{i<n} F(i+1)·F(n-i) = n·F(n+1) + 2·(n+1)·F(n).
+    prop:pom-fib-product-convolution -/
+theorem fib_product_sum : ∀ n : Nat,
+    5 * (Finset.range n).sum (fun i => Nat.fib (i + 1) * Nat.fib (n - i)) =
+    n * Nat.fib (n + 1) + 2 * (n + 1) * Nat.fib n
+  | 0 => by simp
+  | 1 => by simp [Finset.sum_range_succ]
+  | n + 2 => by
+    -- Key decomposition: S(n+2) = F(n+2) + Sn1_shifted + Sn
+    -- where Sn1_shifted = Σ_{i<n+1} F(i+1)·F(n+1-i) = S(n+1)
+    -- and Sn = Σ_{i<n} F(i+1)·F(n-i) = part of S(n)
+    -- Step 1: peel off the last term i=n+1
+    have hpeel : (Finset.range (n + 2)).sum (fun i => Nat.fib (i + 1) * Nat.fib (n + 2 - i)) =
+        (Finset.range (n + 1)).sum (fun i => Nat.fib (i + 1) * Nat.fib (n + 2 - i)) +
+        Nat.fib (n + 2) := by
+      rw [Finset.sum_range_succ]; congr 1; simp [show n + 2 - (n + 1) = 1 from by omega]
+    -- Step 2: for i < n+1, F(n+2-i) = F(n+1-i) + F(n-i) when n+2-i ≥ 2, i.e. i ≤ n
+    -- But i < n+1 means i ≤ n, so n+2-i ≥ 2 always holds.
+    have hfib_split : ∀ i ∈ Finset.range (n + 1),
+        Nat.fib (i + 1) * Nat.fib (n + 2 - i) =
+        Nat.fib (i + 1) * Nat.fib (n + 1 - i) + Nat.fib (i + 1) * Nat.fib (n - i) := by
+      intro i hi
+      have hiLt : i ≤ n := by have := Finset.mem_range.mp hi; omega
+      rw [show n + 2 - i = (n - i) + 2 from by omega, Nat.fib_add_two,
+        show n + 1 - i = (n - i) + 1 from by omega]; ring
+    rw [hpeel, Finset.sum_congr rfl hfib_split, Finset.sum_add_distrib]
+    -- Now goal: 5*(S(n+1) + S'(n) + F(n+2)) = ...
+    -- S'(n) = Σ_{i<n+1} F(i+1)·F(n-i) = S(n) + F(n+1)·F(0) = S(n) + 0 = S(n)
+    have hSn_eq : (Finset.range (n + 1)).sum (fun i => Nat.fib (i + 1) * Nat.fib (n - i)) =
+        (Finset.range n).sum (fun i => Nat.fib (i + 1) * Nat.fib (n - i)) := by
+      rw [Finset.sum_range_succ]
+      simp [show n - n = 0 from by omega]
+    rw [hSn_eq]
+    -- IH
+    have ih1 := fib_product_sum (n + 1)
+    have ih0 := fib_product_sum n
+    -- Fibonacci recurrence
+    have hfib_n2 : Nat.fib (n + 2) = Nat.fib n + Nat.fib (n + 1) := Nat.fib_add_two
+    have hfib_n3 : Nat.fib (n + 3) = Nat.fib (n + 1) + Nat.fib (n + 2) := by
+      have := Nat.fib_add_two (n := n + 1); rwa [show n + 1 + 2 = n + 3 from by omega] at this
+    nlinarith
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R62
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fibonacci numbers at distance 2 are coprime: gcd(F_n, F_{n+2}) = 1.
+    prop:pom-fib-coprime-triple -/
+theorem fib_coprime_triple (n : Nat) :
+    Nat.Coprime (Nat.fib n) (Nat.fib (n + 2)) := by
+  rw [Nat.fib_add_two, Nat.Coprime, Nat.add_comm]
+  rw [Nat.gcd_add_self_right]
+  exact fib_coprime_succ n
+
+/-- F_n + F_{n+1} = F_{n+2}, the Fibonacci recurrence in additive form.
+    prop:pom-fib-add-fib-eq-fib-succ -/
+theorem fib_add_fib_eq_fib_succ (n : Nat) :
+    Nat.fib n + Nat.fib (n + 1) = Nat.fib (n + 2) :=
+  (Nat.fib_add_two (n := n)).symm
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R101
+-- ══════════════════════════════════════════════════════════════
+
+/-- F(n+4) < F(n)² for n ≥ 6. Used for square residual rigidity.
+    prop:pom-fib-sq-gt-fib-shift -/
+theorem fib_sq_gt_fib_shift (n : Nat) (hn : 6 ≤ n) :
+    Nat.fib (n + 4) < Nat.fib n ^ 2 := by
+  -- Write n = 6 + k and induct on k
+  obtain ⟨k, rfl⟩ : ∃ k, n = 6 + k := ⟨n - 6, by omega⟩
+  induction k using Nat.strongRecOn with
+  | _ k ih =>
+    match k with
+    | 0 => native_decide  -- F(10) = 55 < 64 = 8²
+    | 1 => native_decide  -- F(11) = 89 < 169 = 13²
+    | k + 2 =>
+      -- IH at k and k+1: F(k+10) < F(k+6)² and F(k+11) < F(k+7)²
+      have ih1 := ih k (by omega) (by omega)
+      have ih2 := ih (k + 1) (by omega) (by omega)
+      -- F(k+12) = F(k+11) + F(k+10)
+      have hrec : Nat.fib (6 + (k + 2) + 4) = Nat.fib (6 + (k + 1) + 4) + Nat.fib (6 + k + 4) := by
+        have := Nat.fib_add_two (n := 6 + k + 4)
+        rw [show 6 + k + 4 + 2 = 6 + (k + 2) + 4 from by omega,
+            show 6 + k + 4 + 1 = 6 + (k + 1) + 4 from by omega] at this
+        linarith
+      -- F(k+8) = F(k+7) + F(k+6)
+      have hrec_n : Nat.fib (6 + (k + 2)) = Nat.fib (6 + (k + 1)) + Nat.fib (6 + k) := by
+        have := Nat.fib_add_two (n := 6 + k)
+        rw [show 6 + k + 2 = 6 + (k + 2) from by omega,
+            show 6 + k + 1 = 6 + (k + 1) from by omega] at this
+        linarith
+      rw [hrec, hrec_n]
+      nlinarith
+
 end Omega

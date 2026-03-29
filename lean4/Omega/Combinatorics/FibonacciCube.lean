@@ -1469,4 +1469,374 @@ theorem fibcubeEdgeCount_ge_n_fib (n : Nat) (hn : 3 ≤ n) :
   have hfpos : 0 < Nat.fib n := Nat.fib_pos.mpr (by omega)
   nlinarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R29: Two-point correlation
+-- ══════════════════════════════════════════════════════════════
+
+/-- Count of stable words with bits i and j both true.
+    def:pom-fibcube-two-point-count -/
+noncomputable def twoPointCount (n : Nat) (i j : Fin n) : Nat :=
+  (Finset.univ.filter (fun x : X n => x.1 i = true ∧ x.1 j = true)).card
+
+/-- Computable version of twoPointCount. -/
+private def cTwoPointCount (n : Nat) (i j : Fin n) : Nat :=
+  (@Finset.univ (X n) (fintypeX n)).filter (fun x => x.1 i = true ∧ x.1 j = true) |>.card
+
+private theorem cTwoPointCount_eq (n : Nat) (i j : Fin n) :
+    cTwoPointCount n i j = twoPointCount n i j := by
+  classical
+  simp only [cTwoPointCount, twoPointCount]
+  have : ∀ x : X n, x ∈ (@Finset.univ (X n) (fintypeX n)).filter
+      (fun x => x.1 i = true ∧ x.1 j = true) ↔
+      x ∈ Finset.univ.filter (fun x : X n => x.1 i = true ∧ x.1 j = true) := by
+    intro x; simp [Finset.mem_filter]
+  exact Finset.card_bij (fun x _ => x)
+    (fun x hx => (this x).mp hx) (fun _ _ _ _ h => h) (fun y hy => ⟨y, (this y).mpr hy, rfl⟩)
+
+/-- Adjacent positions cannot both be true in a No11 word.
+    thm:pom-fibcube-two-point-adjacent -/
+theorem twoPointCount_adjacent (n : Nat) (i j : Fin n) (hadj : j.val = i.val + 1) :
+    twoPointCount n i j = 0 := by
+  simp only [twoPointCount, Finset.card_eq_zero]
+  apply Finset.filter_false_of_mem
+  intro x _
+  intro ⟨hi, hj⟩
+  have hget_i : get x.1 i.val = true := by
+    rw [get]; simp [i.isLt, hi]
+  have hget_j : get x.1 (i.val + 1) = true := by
+    rw [get]; simp [show i.val + 1 < n from hadj ▸ j.isLt]
+    rw [show (⟨i.val + 1, hadj ▸ j.isLt⟩ : Fin n) = j from Fin.ext hadj.symm]
+    exact hj
+  exact x.2 i.val hget_i hget_j
+
+/-- Recurrence: twoPointCount(n+2, i, j) = twoPointCount(n+1, i, j) + twoPointCount(n, i, j)
+    when j < n (so both i and j are within the first n positions). -/
+private theorem twoPointCount_succ_succ (n : Nat) (i j : Fin n) :
+    cTwoPointCount (n + 2) ⟨i.val, by omega⟩ ⟨j.val, by omega⟩ =
+    cTwoPointCount (n + 1) ⟨i.val, by omega⟩ ⟨j.val, by omega⟩ + cTwoPointCount n i j := by
+  let S2 := (@Finset.univ (X (n + 2)) (fintypeX (n + 2))).filter
+    (fun x => x.1 ⟨i.val, by omega⟩ = true ∧ x.1 ⟨j.val, by omega⟩ = true)
+  let S1 := (@Finset.univ (X (n + 1)) (fintypeX (n + 1))).filter
+    (fun x => x.1 ⟨i.val, by omega⟩ = true ∧ x.1 ⟨j.val, by omega⟩ = true)
+  let S0 := (@Finset.univ (X n) (fintypeX n)).filter (fun x => x.1 i = true ∧ x.1 j = true)
+  change S2.card = S1.card + S0.card
+  -- Split S2 by last bit (position n+1)
+  let S2f := S2.filter (fun x => x.1 ⟨n + 1, by omega⟩ = false)
+  let S2t := S2.filter (fun x => x.1 ⟨n + 1, by omega⟩ = true)
+  have hS2 : S2 = S2f ∪ S2t := by
+    ext x; simp only [S2f, S2t, Finset.mem_filter, Finset.mem_union]
+    constructor
+    · intro h; cases hb : x.1 ⟨n + 1, by omega⟩ <;> simp [h, hb]
+    · rintro (⟨h, _⟩ | ⟨h, _⟩) <;> exact h
+  rw [hS2, Finset.card_union_of_disjoint (by
+    apply Finset.disjoint_filter.mpr; intro x _ h1 h2; simp_all)]
+  congr 1
+  -- S2f ≃ S1 via restrict (drop last bit)
+  · apply Finset.card_bij (fun x _ => X.restrict x)
+    · intro x hx
+      simp only [S2f, S2, Finset.mem_filter, Finset.mem_univ, true_and] at hx
+      simp only [S1, Finset.mem_filter, Finset.mem_univ, true_and]
+      exact ⟨by simp [truncate, show i.val < n + 1 from by omega, hx.1.1],
+             by simp [truncate, show j.val < n + 1 from by omega, hx.1.2]⟩
+    · intro x₁ hx₁ x₂ hx₂ h
+      simp only [S2f, S2, Finset.mem_filter, Finset.mem_univ, true_and] at hx₁ hx₂
+      apply Subtype.ext; funext ⟨k, hk⟩
+      by_cases hkn : k < n + 1
+      · have := congr_arg (fun y => y.1 ⟨k, by omega⟩) h
+        simp [X.restrict, truncate, hkn] at this; exact this
+      · have hke : k = n + 1 := by omega
+        subst hke; simp [hx₁.2, hx₂.2]
+    · intro y hy
+      simp only [S1, Finset.mem_filter, Finset.mem_univ, true_and] at hy
+      exact ⟨X.appendFalse y,
+        by simp only [S2f, S2, Finset.mem_filter, Finset.mem_univ, true_and]
+           exact ⟨⟨by simp [snoc, show i.val < n + 1 from by omega, hy.1],
+                    by simp [snoc, show j.val < n + 1 from by omega, hy.2]⟩,
+                   by simp [snoc, show ¬(n + 1 < n + 1) from by omega]⟩,
+        X.restrict_appendFalse y⟩
+  -- S2t ≃ S0 via restrict ∘ restrict
+  · apply Finset.card_bij (fun x _ => X.restrict (X.restrict x))
+    · intro x hx
+      simp only [S2t, S2, Finset.mem_filter, Finset.mem_univ, true_and] at hx
+      simp only [S0, Finset.mem_filter, Finset.mem_univ, true_and]
+      exact ⟨by simp [truncate, show i.val < n from i.isLt,
+                  show i.val < n + 1 from by omega, hx.1.1],
+             by simp [truncate, show j.val < n from j.isLt,
+                  show j.val < n + 1 from by omega, hx.1.2]⟩
+    · intro x₁ hx₁ x₂ hx₂ h
+      simp only [S2t, S2, Finset.mem_filter, Finset.mem_univ, true_and] at hx₁ hx₂
+      apply Subtype.ext; funext ⟨k, hk⟩
+      have hval := congr_arg Subtype.val h
+      by_cases hk1 : k < n
+      · have := congr_arg (fun w => w ⟨k, by omega⟩) hval
+        simp [X.restrict, truncate, show k < n + 1 from by omega, hk1] at this; exact this
+      · by_cases hk2 : k < n + 1
+        · -- k = n, forced false by No11 + last bit = true
+          have hkn : k = n := by omega
+          have hfin : (⟨k, hk⟩ : Fin (n + 2)) = ⟨n, by omega⟩ := Fin.ext hkn
+          have : x₁.1 ⟨k, hk⟩ = false := by
+            rw [hfin]; by_contra hc
+            have ht := eq_true_of_ne_false hc
+            exact x₁.2 n (by rw [get]; simp [show n < n + 2 from by omega]; exact ht)
+              (by rw [get]; simp [show n + 1 < n + 2 from by omega]; exact hx₁.2)
+          have : x₂.1 ⟨k, hk⟩ = false := by
+            rw [hfin]; by_contra hc
+            have ht := eq_true_of_ne_false hc
+            exact x₂.2 n (by rw [get]; simp [show n < n + 2 from by omega]; exact ht)
+              (by rw [get]; simp [show n + 1 < n + 2 from by omega]; exact hx₂.2)
+          simp_all
+        · -- k = n+1
+          have hkn1 : k = n + 1 := by omega
+          have hfin : (⟨k, hk⟩ : Fin (n + 2)) = ⟨n + 1, by omega⟩ := Fin.ext hkn1
+          rw [show x₁.1 ⟨k, hk⟩ = x₁.1 ⟨n + 1, by omega⟩ from by rw [hfin],
+              show x₂.1 ⟨k, hk⟩ = x₂.1 ⟨n + 1, by omega⟩ from by rw [hfin],
+              hx₁.2, hx₂.2]
+    · intro y hy
+      simp only [S0, Finset.mem_filter, Finset.mem_univ, true_and] at hy
+      refine ⟨X.appendTrue (X.appendFalse y) (by simp [X.appendFalse, snoc, get]), ?_, ?_⟩
+      · simp only [S2t, S2, Finset.mem_filter, Finset.mem_univ, true_and]
+        exact ⟨⟨by simp [X.appendTrue, X.appendFalse, snoc,
+                    show i.val < n + 1 from by omega, show i.val < n from i.isLt, hy.1],
+                 by simp [X.appendTrue, X.appendFalse, snoc,
+                    show j.val < n + 1 from by omega, show j.val < n from j.isLt, hy.2]⟩,
+               by simp [X.appendTrue, snoc, show ¬(n + 1 < n + 1) from by omega]⟩
+      · apply Subtype.ext; funext ⟨k, hk⟩
+        simp [X.restrict, truncate, X.appendTrue, X.appendFalse, snoc,
+          show k < n + 1 from by omega, show k < n from hk]
+
+/-- twoPointCount(n, i, j) = F(i+1)·F(j-i-1)·F(n-j) when i < j and j ≥ i + 2.
+    thm:pom-fibcube-two-point-fib-prod -/
+theorem twoPointCount_eq_fib_prod (n : Nat) (i j : Fin n)
+    (hlt : i.val < j.val) (hgap : i.val + 2 ≤ j.val) :
+    twoPointCount n i j =
+    Nat.fib (i.val + 1) * Nat.fib (j.val - i.val - 1) * Nat.fib (n - j.val) := by
+  rw [← cTwoPointCount_eq]
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+  match n with
+  | 0 => exact absurd j.isLt (by omega)
+  | 1 => exact absurd j.isLt (by omega)
+  | 2 => exact absurd hgap (by omega)
+  | n' + 3 =>
+    by_cases hjn : j.val < n' + 1
+    · -- j < n'+1: Fibonacci recurrence on n
+      have hrec := twoPointCount_succ_succ (n' + 1) ⟨i.val, by omega⟩ ⟨j.val, by omega⟩
+      have hih1 := ih (n' + 2) (by omega) ⟨i.val, by omega⟩ ⟨j.val, by omega⟩ hlt hgap
+      have hih0 := ih (n' + 1) (by omega) ⟨i.val, by omega⟩ ⟨j.val, hjn⟩ hlt hgap
+      simp only at hrec hih1 hih0
+      -- Goal: cTwoPointCount (n'+3) i j = F(i+1)*F(j-i-1)*F(n'+3-j)
+      -- hrec: cTwoPointCount (n'+3) ⟨i,_⟩ ⟨j,_⟩ = cTwo(n'+2,...) + cTwo(n'+1,...)
+      -- The Fin indices differ. Convert goal to use the same indices.
+      change cTwoPointCount (n' + 1 + 2) ⟨i.val, by omega⟩ ⟨j.val, by omega⟩ =
+        Nat.fib (i.val + 1) * Nat.fib (j.val - i.val - 1) * Nat.fib (n' + 3 - j.val)
+      rw [hrec, hih1, hih0]
+      have hfib : Nat.fib (n' + 3 - j.val) =
+          Nat.fib (n' + 1 - j.val) + Nat.fib (n' + 2 - j.val) := by
+        rw [show n' + 3 - j.val = (n' + 1 - j.val) + 2 from by omega, Nat.fib_add_two,
+          show n' + 2 - j.val = (n' + 1 - j.val) + 1 from by omega]
+      rw [hfib]; ring
+    · -- j ≥ n'+1: split into j = n'+1 (second to last) and j = n'+2 (last)
+      rcases (show j.val = n' + 1 ∨ j.val = n' + 2 from by omega) with hjval | hjval
+      · -- j = n'+1 (second to last): x[n'+1]=true forces x[n'+2]=false
+        -- So restrict to X(n'+2) preserves the filter.
+        have hbij : cTwoPointCount (n' + 3) i j =
+            cTwoPointCount (n' + 2) ⟨i.val, by omega⟩ ⟨j.val, by omega⟩ := by
+          apply Finset.card_bij (fun x _ => X.restrict x)
+          · intro x hx
+            simp only [cTwoPointCount, Finset.mem_filter, Finset.mem_univ, true_and] at hx ⊢
+            exact ⟨by simp [truncate, show i.val < n' + 2 from by omega, hx.1],
+                   by simp [truncate, show j.val < n' + 2 from by omega, hx.2]⟩
+          · intro x₁ hx₁ x₂ hx₂ h
+            simp only [cTwoPointCount, Finset.mem_filter, Finset.mem_univ, true_and] at hx₁ hx₂
+            apply Subtype.ext; funext ⟨k, hk⟩
+            by_cases hkn : k < n' + 2
+            · have := congr_arg (fun y => y.1 ⟨k, by omega⟩) h
+              simp [X.restrict, truncate, hkn] at this; exact this
+            · have hke : k = n' + 2 := by omega
+              have hfin : (⟨k, hk⟩ : Fin (n' + 3)) = ⟨n' + 2, by omega⟩ := Fin.ext hke
+              have : x₁.1 ⟨k, hk⟩ = false := by
+                rw [hfin]; by_contra hc; have ht := eq_true_of_ne_false hc
+                have hjfin : (⟨j.val, by omega⟩ : Fin (n' + 3)) = ⟨n' + 1, by omega⟩ :=
+                  Fin.ext hjval
+                have hx_j : x₁.1 ⟨n' + 1, by omega⟩ = true := by
+                  rw [← hjfin]; exact hx₁.2
+                exact x₁.2 (n' + 1)
+                  (by rw [get]; simp [show n' + 1 < n' + 3 from by omega]; exact hx_j)
+                  (by rw [get]; simp [show n' + 2 < n' + 3 from by omega, ht])
+              have : x₂.1 ⟨k, hk⟩ = false := by
+                rw [hfin]; by_contra hc; have ht := eq_true_of_ne_false hc
+                have hjfin : (⟨j.val, by omega⟩ : Fin (n' + 3)) = ⟨n' + 1, by omega⟩ :=
+                  Fin.ext hjval
+                have hx_j : x₂.1 ⟨n' + 1, by omega⟩ = true := by
+                  rw [← hjfin]; exact hx₂.2
+                exact x₂.2 (n' + 1)
+                  (by rw [get]; simp [show n' + 1 < n' + 3 from by omega]; exact hx_j)
+                  (by rw [get]; simp [show n' + 2 < n' + 3 from by omega, ht])
+              simp_all
+          · intro y hy
+            simp only [cTwoPointCount, Finset.mem_filter, Finset.mem_univ, true_and] at hy ⊢
+            exact ⟨X.appendFalse y,
+              ⟨by simp [snoc, show i.val < n' + 2 from by omega, hy.1],
+               by simp [snoc, show j.val < n' + 2 from by omega, hy.2]⟩,
+              X.restrict_appendFalse y⟩
+        rw [hbij, ih (n' + 2) (by omega) ⟨i.val, by omega⟩ ⟨j.val, by omega⟩ hlt hgap]
+        simp only
+        show Nat.fib (i.val + 1) * Nat.fib (j.val - i.val - 1) * Nat.fib (n' + 2 - j.val) =
+          Nat.fib (i.val + 1) * Nat.fib (j.val - i.val - 1) * Nat.fib (n' + 3 - j.val)
+        congr 1
+        rw [hjval, show n' + 2 - (n' + 1) = 1 from by omega,
+          show n' + 3 - (n' + 1) = 2 from by omega]; rfl
+      · -- j = n'+2 (last): x[n'+2]=true, x[n'+1]=false (No11), restrict twice → X(n'+1)
+        -- This gives coordOneCount(n'+1, i) = F(i+1)*F(n'+1-i)
+        have hbij : cTwoPointCount (n' + 3) i j =
+            cCoordOneCount (n' + 1) ⟨i.val, by omega⟩ := by
+          apply Finset.card_bij (fun x _ => X.restrict (X.restrict x))
+          · intro x hx
+            simp only [cTwoPointCount, Finset.mem_filter, Finset.mem_univ, true_and] at hx
+            simp only [cCoordOneCount, Finset.mem_filter, Finset.mem_univ, true_and]
+            show truncate (truncate x.1) ⟨i.val, by omega⟩ = true
+            simp [truncate, show i.val < n' + 1 from by omega,
+              show i.val < n' + 2 from by omega, hx.1]
+          · intro x₁ hx₁ x₂ hx₂ h
+            simp only [cTwoPointCount, Finset.mem_filter, Finset.mem_univ, true_and] at hx₁ hx₂
+            apply Subtype.ext; funext ⟨k, hk⟩
+            by_cases hk1 : k < n' + 1
+            · have := congr_arg (fun y => y.1 ⟨k, by omega⟩) h
+              simp [X.restrict, truncate, show k < n' + 2 from by omega, hk1] at this
+              exact this
+            · by_cases hk2 : k < n' + 2
+              · -- k = n'+1, forced false by No11 + x[n'+2]=true
+                have hke : k = n' + 1 := by omega
+                have hfin : (⟨k, hk⟩ : Fin (n' + 3)) = ⟨n' + 1, by omega⟩ := Fin.ext hke
+                have hjfin : (⟨j.val, by omega⟩ : Fin (n' + 3)) = ⟨n' + 2, by omega⟩ :=
+                  Fin.ext hjval
+                have : x₁.1 ⟨k, hk⟩ = false := by
+                  rw [hfin]; by_contra hc; have ht := eq_true_of_ne_false hc
+                  have hx_j : x₁.1 ⟨n' + 2, by omega⟩ = true := by rw [← hjfin]; exact hx₁.2
+                  exact x₁.2 (n' + 1)
+                    (by rw [get]; simp [show n' + 1 < n' + 3 from by omega]; exact ht)
+                    (by rw [get]; simp [show n' + 2 < n' + 3 from by omega, hx_j])
+                have : x₂.1 ⟨k, hk⟩ = false := by
+                  rw [hfin]; by_contra hc; have ht := eq_true_of_ne_false hc
+                  have hx_j : x₂.1 ⟨n' + 2, by omega⟩ = true := by rw [← hjfin]; exact hx₂.2
+                  exact x₂.2 (n' + 1)
+                    (by rw [get]; simp [show n' + 1 < n' + 3 from by omega]; exact ht)
+                    (by rw [get]; simp [show n' + 2 < n' + 3 from by omega, hx_j])
+                simp_all
+              · -- k = n'+2, both equal (both are true since j = n'+2)
+                have hke : k = n' + 2 := by omega
+                have hfin : (⟨k, hk⟩ : Fin (n' + 3)) = ⟨n' + 2, by omega⟩ := Fin.ext hke
+                have hjfin : j = ⟨n' + 2, by omega⟩ := Fin.ext hjval
+                rw [show x₁.1 ⟨k, hk⟩ = x₁.1 j from by rw [hfin, hjfin],
+                    show x₂.1 ⟨k, hk⟩ = x₂.1 j from by rw [hfin, hjfin],
+                    hx₁.2, hx₂.2]
+          · intro y hy
+            simp only [cCoordOneCount, Finset.mem_filter, Finset.mem_univ, true_and] at hy
+            simp only [cTwoPointCount, Finset.mem_filter, Finset.mem_univ, true_and]
+            refine ⟨X.appendTrue (X.appendFalse y) (by simp [X.appendFalse, snoc, get]),
+                    ⟨?_, ?_⟩, ?_⟩
+            · show (X.appendTrue (X.appendFalse y) _).1 i = true
+              simp [X.appendTrue, X.appendFalse, snoc,
+                show i.val < n' + 2 from by omega, show i.val < n' + 1 from by omega, hy]
+            · show (X.appendTrue (X.appendFalse y) _).1 j = true
+              have hjfin : j = ⟨n' + 2, by omega⟩ := Fin.ext hjval
+              rw [hjfin]; simp [X.appendTrue, snoc, show ¬(n' + 2 < n' + 2) from by omega]
+            · apply Subtype.ext; funext ⟨k, hk⟩
+              simp [X.restrict, truncate, X.appendTrue, X.appendFalse, snoc,
+                show k < n' + 2 from by omega, show k < n' + 1 from hk]
+        rw [hbij, cCoordOneCount_eq_coordOneCount, coordOneCount_eq_fib_prod]
+        simp only
+        -- Goal: F(i+1)*F(n'+1-i) = F(i+1)*F(j-i-1)*F(n'+3-j)
+        -- Since j = n'+2: F(n'+3-j) = F(1) = 1, F(j-i-1) = F(n'+1-i)
+        -- After rewriting, need: F(i+1)*F(n'+1-i) = F(i+1)*F(j-i-1)*F(n'+3-j)
+        -- j = n'+2, so F(n'+3-j) = F(1) = 1, j-i-1 = n'+2-i-1 = n'+1-i
+        have hji : j.val - i.val - 1 = n' + 1 - i.val := by omega
+        have hnj : n' + 3 - j.val = 1 := by omega
+        rw [hnj, Nat.fib_one, Nat.mul_one, hji]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R30: Fibonacci cube Euler characteristic
+-- ══════════════════════════════════════════════════════════════
+
+/-- Euler characteristic of the Fibonacci cube equals 1: Σ_k (-1)^k · f(n,k) = 1.
+    thm:pom-fibcube-fvector-closed -/
+theorem fibcubeFVector_euler_char (n : Nat) :
+    (Finset.range (n + 1)).sum (fun k =>
+      ((-1 : ℤ) ^ k) * (fibcubeFVector n k : ℤ)) = 1 := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+  match n with
+  | 0 => simp
+  | 1 => simp [Finset.sum_range_succ]
+  | n + 2 =>
+    -- Expand using f(n+2,k) = f(n+1,k) + f(n,k) + [k≠0]f(n,k-1)
+    have hexpand : ∀ k, (fibcubeFVector (n + 2) k : ℤ) =
+        (fibcubeFVector (n + 1) k : ℤ) + (fibcubeFVector n k : ℤ) +
+        (if k = 0 then 0 else (fibcubeFVector n (k - 1) : ℤ)) := by
+      intro k; push_cast [fibcubeFVector_succ_succ]; split <;> ring
+    simp_rw [hexpand, mul_add, Finset.sum_add_distrib]
+    -- Now have three sums:
+    -- S1 = Σ (-1)^k f(n+1,k)
+    -- S2 = Σ (-1)^k f(n,k)
+    -- S3 = Σ (-1)^k [k≠0] f(n,k-1)
+    -- Extend S1 to range(n+2) by adding zero terms
+    have hS1 : (Finset.range (n + 3)).sum (fun k => (-1 : ℤ) ^ k * (fibcubeFVector (n + 1) k : ℤ)) =
+        (Finset.range (n + 2)).sum (fun k => (-1 : ℤ) ^ k * (fibcubeFVector (n + 1) k : ℤ)) := by
+      rw [Finset.sum_range_succ]
+      simp [fibcubeFVector_eq_zero_of_gt (n + 1) (n + 2) (by omega)]
+    rw [hS1, ih (n + 1) (by omega)]
+    -- Extend S2 to range(n+1) by adding zero terms
+    have hS2 : (Finset.range (n + 3)).sum (fun k => (-1 : ℤ) ^ k * (fibcubeFVector n k : ℤ)) =
+        (Finset.range (n + 1)).sum (fun k => (-1 : ℤ) ^ k * (fibcubeFVector n k : ℤ)) := by
+      rw [Finset.sum_range_succ, Finset.sum_range_succ]
+      simp [fibcubeFVector_eq_zero_of_gt n (n + 2) (by omega),
+            fibcubeFVector_eq_zero_of_gt n (n + 1) (by omega)]
+    rw [hS2, ih n (by omega)]
+    -- S3: shift index. Σ_{k<n+3} (-1)^k [k≠0] f(n,k-1) = Σ_{j<n+2} (-1)^{j+1} f(n,j) = -χ(n)
+    have hS3 : (Finset.range (n + 3)).sum (fun k =>
+        (-1 : ℤ) ^ k * if (k : Nat) = 0 then (0 : ℤ) else (fibcubeFVector n (k - 1) : ℤ)) =
+        -(Finset.range (n + 1)).sum (fun k => (-1 : ℤ) ^ k * (fibcubeFVector n k : ℤ)) := by
+      -- Peel off k=0 term (which is 0)
+      rw [Finset.sum_range_succ' (fun k =>
+        (-1 : ℤ) ^ k * if (k : Nat) = 0 then (0 : ℤ) else (fibcubeFVector n (k - 1) : ℤ))]
+      simp only [pow_zero, one_mul, ite_true, show (0 : Nat) = 0 from rfl, Nat.zero_add]
+      -- Remaining: Σ_{k<n+2} (-1)^{k+1} f(n,k)
+      have hshift : ∀ k ∈ Finset.range (n + 2),
+          (-1 : ℤ) ^ (k + 1) * (if (k + 1 : Nat) = 0 then (0 : ℤ)
+          else (fibcubeFVector n (k + 1 - 1) : ℤ)) =
+          -((-1 : ℤ) ^ k * (fibcubeFVector n k : ℤ)) := by
+        intro k _
+        simp [show ¬(k + 1 = 0) from by omega, show k + 1 - 1 = k from by omega,
+          pow_succ, neg_mul, mul_comm]
+      rw [Finset.sum_congr rfl hshift, Finset.sum_neg_distrib]
+      -- Extend from range(n+2) to range(n+1) by showing extra term is 0
+      rw [Finset.sum_range_succ]
+      simp [fibcubeFVector_eq_zero_of_gt n (n + 1) (by omega)]
+    rw [hS3, ih n (by omega)]
+    ring
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R31: max popcount = ⌊(m+1)/2⌋
+-- ══════════════════════════════════════════════════════════════
+
+/-- The maximum popcount over X_m equals ⌊(m+1)/2⌋.
+    cor:pom-fibcube-radius-center-classification -/
+theorem max_popcount_eq (m : Nat) (hm : 1 ≤ m) :
+    (Finset.univ.image (fun x : X m => popcount x.1)).max'
+      ⟨popcount (⟨fun _ => false, no11_allFalse⟩ : X m).1,
+       Finset.mem_image.mpr ⟨⟨fun _ => false, no11_allFalse⟩, Finset.mem_univ _, rfl⟩⟩ =
+    (m + 1) / 2 := by
+  apply le_antisymm
+  · -- max ≤ (m+1)/2: every popcount is bounded
+    apply Finset.max'_le
+    intro n hn
+    rw [Finset.mem_image] at hn
+    obtain ⟨x, _, rfl⟩ := hn
+    exact popcount_le_half x
+  · -- (m+1)/2 ≤ max: there exists x achieving the bound
+    obtain ⟨y, hy⟩ := ecc_allFalse_achieved m hm
+    have hmem : popcount y.1 ∈ Finset.univ.image (fun x : X m => popcount x.1) :=
+      Finset.mem_image.mpr ⟨y, Finset.mem_univ _, rfl⟩
+    linarith [Finset.le_max' _ _ hmem]
+
 end Omega

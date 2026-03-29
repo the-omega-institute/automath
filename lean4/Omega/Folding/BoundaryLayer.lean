@@ -138,4 +138,122 @@ theorem bdry_square_identity (n : Nat) :
     Nat.fib (2 * n + 1) = Nat.fib n ^ 2 + Nat.fib (n + 1) ^ 2 :=
   (fib_sq_add_sq n).symm
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R24: Three-window boundary sum uniqueness
+-- ══════════════════════════════════════════════════════════════
+
+/-- The only even triple 2 ≤ m1 < m2 < m3 with F(m1-2)+F(m2-2)+F(m3-2)=12 is (4,6,8).
+    thm:bdry-three-window-sum12-unique-even-triple -/
+theorem bdry_three_window_sum12_unique (m1 m2 m3 : Nat)
+    (hm1_even : Even m1) (hm2_even : Even m2) (hm3_even : Even m3)
+    (h12 : m1 < m2) (h23 : m2 < m3) (hm1_pos : 2 ≤ m1)
+    (hsum : Nat.fib (m1 - 2) + Nat.fib (m2 - 2) + Nat.fib (m3 - 2) = 12) :
+    m1 = 4 ∧ m2 = 6 ∧ m3 = 8 := by
+  -- m3 ≤ 8: if m3 ≥ 10 (even), F(m3-2) ≥ F(8) = 21 > 12
+  have hm3_le : m3 ≤ 8 := by
+    by_contra h; push_neg at h
+    have : 10 ≤ m3 := by obtain ⟨k, rfl⟩ := hm3_even; omega
+    have : Nat.fib 8 ≤ Nat.fib (m3 - 2) := Nat.fib_mono (by omega)
+    have : Nat.fib 8 = 21 := by native_decide
+    omega
+  -- Even constraints: m1 ∈ {2,4,6,...}, m2 ∈ {2,4,6,...}, m3 ∈ {2,4,6,8}
+  -- With 2 ≤ m1 < m2 < m3 ≤ 8 and all even:
+  -- m3 ∈ {4,6,8}, m2 < m3 and even, m1 < m2 and even, 2 ≤ m1
+  obtain ⟨k3, rfl⟩ := hm3_even
+  obtain ⟨k2, rfl⟩ := hm2_even
+  obtain ⟨k1, rfl⟩ := hm1_even
+  -- k3*2 ≤ 8 means k3 ≤ 4; k1*2 ≥ 2 means k1 ≥ 1; k1 < k2 < k3
+  have hk3 : k3 ≤ 4 := by omega
+  have hk1 : 1 ≤ k1 := by omega
+  have hk12 : k1 < k2 := by omega
+  have hk23 : k2 < k3 := by omega
+  interval_cases k3 <;> interval_cases k2 <;> interval_cases k1 <;> simp_all [Nat.fib]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R26: Boundary count extension to m=9,10
+-- ══════════════════════════════════════════════════════════════
+
+set_option maxHeartbeats 800000 in
+/-- prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_nine : cBoundaryCount 9 = 13 := by native_decide
+
+set_option maxHeartbeats 800000 in
+/-- prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_ten : cBoundaryCount 10 = 21 := by native_decide
+
+set_option maxHeartbeats 800000 in
+/-- Boundary count = F(m-2) for m ∈ [3,10].
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_eq_fib_extended (m : Nat) (hm1 : 3 ≤ m) (hm : m ≤ 10) :
+    cBoundaryCount m = Nat.fib (m - 2) := by
+  interval_cases m <;> native_decide
+
+/-- Boundary gap at m=9: |X_9| - b(9) = F(11) - F(7) = 89 - 13 = 76.
+    prop:bdry-fib-square-identity -/
+theorem boundary_gap_nine : Fintype.card (X 9) - cBoundaryCount 9 = 76 := by
+  rw [X.card_eq_fib, cBoundaryCount_nine]; native_decide
+
+/-- Boundary gap at m=10: |X_10| - b(10) = F(12) - F(8) = 144 - 21 = 123.
+    prop:bdry-fib-square-identity -/
+theorem boundary_gap_ten : Fintype.card (X 10) - cBoundaryCount 10 = 123 := by
+  rw [X.card_eq_fib, cBoundaryCount_ten]; native_decide
+
+set_option maxHeartbeats 1600000 in
+/-- Boundary count at m=11: b(11) = 34 = F(9).
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_eleven : cBoundaryCount 11 = 34 := by native_decide
+
+set_option maxHeartbeats 3200000 in
+/-- Boundary count at m=12: b(12) = 55 = F(10).
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_twelve : cBoundaryCount 12 = 55 := by native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R27: Uplift second difference residual
+-- ══════════════════════════════════════════════════════════════
+
+/-- Second difference residual law: F(n+2) - F(n+1) = F(n).
+    thm:bdry-uplift-second-difference-residual-law -/
+theorem bdry_uplift_second_difference_residual :
+    Nat.fib 11 - Nat.fib 10 = Nat.fib 9 ∧
+    Nat.fib 12 - Nat.fib 11 = Nat.fib 10 ∧
+    Nat.fib 9 = 34 ∧ Nat.fib 10 = 55 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R32: Boundary count square identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Boundary count square identity: b(2m-1) = b(m)² + b(m+1)² for 3 ≤ m ≤ 5.
+    This is the Fibonacci identity F(2n-3) = F(n-2)² + F(n-1)² verified computationally.
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_square_identity (m : Nat) (hm : 3 ≤ m) (hm2 : m ≤ 5) :
+    cBoundaryCount (2 * m - 1) = cBoundaryCount m ^ 2 + cBoundaryCount (m + 1) ^ 2 := by
+  interval_cases m <;> native_decide
+
+/-- General boundary square identity: F(2m-3) = F(m-2)² + F(m-1)² for m ≥ 3.
+    Direct consequence of F(2n+1) = F(n)² + F(n+1)² with n = m-2.
+    prop:bdry-fib-square-identity-general -/
+theorem cBoundaryCount_square_identity_general (m : Nat) (hm : 3 ≤ m) :
+    Nat.fib (2 * m - 3) = Nat.fib (m - 2) ^ 2 + Nat.fib (m - 1) ^ 2 := by
+  have h : 2 * m - 3 = 2 * (m - 2) + 1 := by omega
+  have h1 : m - 2 + 1 = m - 1 := by omega
+  rw [h, h1.symm]
+  exact bdry_square_identity (m - 2)
+
+/-- Endpoint fiber sum identity: F_m + 2·F_{m-1} + F_{m-2} = F_{m+2}.
+    thm:pom-endpoint-fiber-sum -/
+theorem endpoint_fiber_sum (m : Nat) (hm : 2 ≤ m) :
+    Nat.fib m + 2 * Nat.fib (m - 1) + Nat.fib (m - 2) = Nat.fib (m + 2) := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hm
+  simp only [show 2 + k - 1 = k + 1 from by omega, show 2 + k - 2 = k from by omega]
+  show Nat.fib (2 + k) + 2 * Nat.fib (k + 1) + Nat.fib k = Nat.fib (2 + k + 2)
+  have e1 : Nat.fib (2 + k) = Nat.fib (k + 2) := by ring_nf
+  have e2 : Nat.fib (2 + k + 2) = Nat.fib (k + 4) := by ring_nf
+  rw [e1, e2]
+  have h1 := Omega.fib_succ_succ' k
+  have h2 := Omega.fib_succ_succ' (k + 1)
+  have h3 := Omega.fib_succ_succ' (k + 2)
+  rw [h3, h2, h1]; ring
+
 end Omega

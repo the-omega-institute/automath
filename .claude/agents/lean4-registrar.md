@@ -10,7 +10,7 @@ model: sonnet
 
 ## 启动协议（必须首先执行）
 
-启动后通过 `SendMessage` 向 team lead 发送确认消息：`'Registrar online. Ready for registration tasks.'`。未发送确认前不得接受任务。
+启动后通过 `SendMessage` 向 orchestrator 发送确认消息：`'Registrar online. Ready for registration tasks.'`。未发送确认前不得接受任务。
 
 ## 核心原则
 

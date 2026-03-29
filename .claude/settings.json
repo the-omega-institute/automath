@@ -1,0 +1,31 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.command' | { read -r cmd; if echo \"$cmd\" | grep -q 'lake build' && ! echo \"$cmd\" | grep -q '^timeout'; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"BLOCKED: lake build must use timeout 300 prefix. Use: timeout 300 lake build\"}}'; else echo '{\"continue\":true}'; fi; }",
+            "timeout": 5,
+            "statusMessage": "Checking lake build timeout..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ps -eo pid,etimes,comm 2>/dev/null | awk '$3==\"lean\" && $2>300 {print $1}' | while read -r pid; do kill \"$pid\" 2>/dev/null; done; echo '{\"continue\":true}'",
+            "timeout": 5,
+            "async": true,
+            "statusMessage": "Checking for long-running lean processes..."
+          }
+        ]
+      }
+    ]
+  }
+}

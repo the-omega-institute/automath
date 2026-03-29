@@ -28,7 +28,7 @@ model: opus
 1. 从论文中提取目标定理的LaTeX原文（用 `grep` / `read` 定位 `\label{thm:...}` 等）
 2. 从Lean4中提取新增/修改的代码（**必须读工作树文件，不能依赖Codex读取git committed版本**）
 3. 从analyst规格中提取期望的类型签名和依赖链
-4. **提取设计决策上下文**：从team lead消息中提取analyst对实现策略的说明（如"具体实例验证 vs 全称归纳"、"当前基础设施限制"等），这些上下文必须传递给Codex
+4. **提取设计决策上下文**：从orchestrator消息中提取analyst对实现策略的说明（如"具体实例验证 vs 全称归纳"、"当前基础设施限制"等），这些上下文必须传递给Codex
 
 ### 步骤 2：调用Codex
 

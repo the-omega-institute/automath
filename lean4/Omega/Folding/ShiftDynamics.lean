@@ -273,6 +273,16 @@ theorem lucasNum_mul_fib (n : Nat) (hn : 1 ≤ n) :
     push_cast; exact_mod_cast Nat.fib_add_two
   nlinarith
 
+/-- F(2k) = F(k) · L(k): Fibonacci doubling via Lucas numbers.
+    prop:fib-double-lucas -/
+theorem fib_double_eq_mul_lucas (k : Nat) :
+    Nat.fib (2 * k) = Nat.fib k * lucasNum k := by
+  cases k with
+  | zero => simp
+  | succ n =>
+    have := lucasNum_mul_fib (n + 1) (by omega)
+    linarith [Nat.mul_comm (Nat.fib (n + 1)) (lucasNum (n + 1))]
+
 /-- Lucas Cassini: L(n)² - L(n-1)·L(n+1) = 5·(-1)^n for n ≥ 1.
     bridge:lucas-cassini -/
 theorem lucasNum_cassini (n : Nat) (hn : 1 ≤ n) :
@@ -319,6 +329,14 @@ theorem lucasNum_double (n : Nat) (hn : 1 ≤ n) :
     rw [show k + 1 + 1 = k + 2 from by omega] at *
     rw [hrec1, hpow]; nlinarith
 
+/-- Lucas doubling unconditional: L(2n) = L(n)² - 2·(-1)^n for all n.
+    prop:lucas-double-unconditional -/
+theorem lucasNum_double_uncond (n : Nat) :
+    (lucasNum (2 * n) : ℤ) = (lucasNum n : ℤ) ^ 2 - 2 * (-1 : ℤ) ^ n := by
+  cases n with
+  | zero => simp [lucasNum]
+  | succ m => exact lucasNum_double (m + 1) (by omega)
+
 /-- L(n)² = 5·F(n)² + 4·(-1)^n for n ≥ 1.
     bridge:lucas-fibonacci-square -/
 theorem lucasNum_sq (n : Nat) (hn : 1 ≤ n) :
@@ -357,6 +375,14 @@ theorem lucasNum_sq (n : Nat) (hn : 1 ≤ n) :
     have := @Nat.fib_add_two m; push_cast; linarith
   push_cast; nlinarith
 
+/-- L(n)² = 5·F(n)² + 4·(-1)^n, unconditional (handles n=0 separately).
+    prop:lucas-fibonacci-square-unconditional -/
+theorem lucas_sq_eq_five_fib_sq (n : Nat) :
+    (lucasNum n : ℤ) ^ 2 = 5 * (Nat.fib n : ℤ) ^ 2 + 4 * (-1 : ℤ) ^ n := by
+  cases n with
+  | zero => simp [lucasNum]
+  | succ m => exact lucasNum_sq (m + 1) (by omega)
+
 /-- L(n) + F(n) = 2·F(n+1) for n ≥ 1.
     bridge:lucas-add-fib -/
 theorem lucasNum_add_fib (n : Nat) (hn : 1 ≤ n) :
@@ -383,11 +409,6 @@ theorem lucasNum_sub_fib (n : Nat) (hn : 1 ≤ n) :
   have hrec : Nat.fib (m + 2) = Nat.fib m + Nat.fib (m + 1) := Nat.fib_add_two
   omega
 
-/-- F(2n) = F(n)·L(n) for n ≥ 1.
-    bridge:fib-double-lucas -/
-theorem fib_double_eq_mul_lucas (n : Nat) (hn : 1 ≤ n) :
-    Nat.fib (2 * n) = Nat.fib n * lucasNum n := by
-  have := lucasNum_mul_fib n hn; linarith [Nat.mul_comm (Nat.fib n) (lucasNum n)]
 
 /-- Lucas number parity: L(n) is even iff 3 ∣ n.
     bridge:lucas-parity -/

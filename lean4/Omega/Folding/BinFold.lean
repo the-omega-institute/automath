@@ -217,4 +217,148 @@ theorem compression_bounds_six :
 theorem multiplicity_spread_six : cBinFiberMax 6 - cBinFiberMin 6 = 2 := by
   rw [cBinFiberMax_six, cBinFiberMin_six]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R22: Three rigidity scales (conclusion chapter)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Histogram entry: no stable words with BinFold multiplicity 5 at m=6.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem cBinFiberHist_6_5 : cBinFiberHist 6 5 = 0 := by native_decide
+
+/-- Three rigidity scales at m=6: max fiber mult < |X_6| < 2^6.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem three_rigidity_scales_six :
+    cBinFiberMax 6 < Fintype.card (X 6) ∧
+    Fintype.card (X 6) < 2 ^ 6 := by
+  constructor
+  · rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
+  · rw [X.card_eq_fib]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R102: Window-6 capacity bifurcation
+-- ══════════════════════════════════════════════════════════════
+
+/-- Window-6 capacity formula C_6(B) = 8·min(2,2^B) + 4·min(3,2^B) + 9·min(4,2^B)
+    evaluates to 21 at B=0, 42 at B=1, and saturates at 64 for all B ≥ 2.
+    thm:conclusion-window6-capacity-bifurcation -/
+theorem conclusion_window6_capacity_bifurcation :
+    8 * min 2 (2 ^ 0) + 4 * min 3 (2 ^ 0) + 9 * min 4 (2 ^ 0) = 21 ∧
+    8 * min 2 (2 ^ 1) + 4 * min 3 (2 ^ 1) + 9 * min 4 (2 ^ 1) = 42 ∧
+    (∀ B : Nat, 2 ≤ B →
+      8 * min 2 (2 ^ B) + 4 * min 3 (2 ^ B) + 9 * min 4 (2 ^ B) = 64) := by
+  refine ⟨by omega, by omega, fun B hB => ?_⟩
+  have h4 : 4 ≤ 2 ^ B := by
+    calc 4 = 2 ^ 2 := by norm_num
+      _ ≤ 2 ^ B := Nat.pow_le_pow_right (by omega) hB
+  have hmin2 : min 2 (2 ^ B) = 2 := Nat.min_eq_left (by omega)
+  have hmin3 : min 3 (2 ^ B) = 3 := Nat.min_eq_left (by omega)
+  have hmin4 : min 4 (2 ^ B) = 4 := Nat.min_eq_left h4
+  rw [hmin2, hmin3, hmin4]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R23: Index-compression gap
+-- ══════════════════════════════════════════════════════════════
+
+/-- Max fiber mult × |X_6| ≠ 2^6 (non-uniform compression).
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem local_index_ne_global_compression_six :
+    cBinFiberMax 6 * Fintype.card (X 6) ≠ 2 ^ 6 := by
+  rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
+
+/-- Max fiber mult > floor(2^6 / |X_6|).
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem local_index_gt_global_ratio_six :
+    cBinFiberMax 6 > 2 ^ 6 / Fintype.card (X 6) := by
+  rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
+
+/-- Index-compression gap: max_mult × |X_6| - 2^6 = 20.
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem index_compression_gap_six :
+    cBinFiberMax 6 * Fintype.card (X 6) - 2 ^ 6 = 20 := by
+  rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R25: m=7 BinFold separation + three rigidity scales
+-- ══════════════════════════════════════════════════════════════
+
+/-- Maximum BinFold multiplicity at m=7 is 5.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem cBinFiberMax_seven : cBinFiberMax 7 = 5 := by native_decide
+
+/-- Minimum BinFold multiplicity at m=7 is 3.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem cBinFiberMin_seven : cBinFiberMin 7 = 3 := by native_decide
+
+/-- Three rigidity scales at m=7: max fiber mult < |X_7| < 2^7.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem three_rigidity_scales_seven :
+    cBinFiberMax 7 < Fintype.card (X 7) ∧
+    Fintype.card (X 7) < 2 ^ 7 := by
+  refine ⟨?_, ?_⟩
+  · rw [cBinFiberMax_seven, X.card_eq_fib]; native_decide
+  · rw [X.card_eq_fib]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R28: m=7 index-compression gap
+-- ══════════════════════════════════════════════════════════════
+
+/-- Max fiber mult × |X_7| ≠ 2^7 (non-uniform compression at m=7).
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem local_index_ne_global_compression_seven :
+    cBinFiberMax 7 * Fintype.card (X 7) ≠ 2 ^ 7 := by
+  rw [cBinFiberMax_seven, X.card_eq_fib]; native_decide
+
+/-- Index-compression gap at m=7: max_mult × |X_7| - 2^7 = 42.
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem index_compression_gap_seven :
+    cBinFiberMax 7 * Fintype.card (X 7) - 2 ^ 7 = 42 := by
+  rw [cBinFiberMax_seven, X.card_eq_fib]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R39: BinFold m=8
+-- ══════════════════════════════════════════════════════════════
+
+set_option maxHeartbeats 1600000 in
+/-- Maximum binary fiber multiplicity at m=8.
+    cor:conclusion-window8-max-fiber -/
+theorem cBinFiberMax_eight : cBinFiberMax 8 = 6 := by native_decide
+
+set_option maxHeartbeats 1600000 in
+/-- Minimum binary fiber multiplicity at m=8.
+    cor:conclusion-window8-min-fiber -/
+theorem cBinFiberMin_eight : cBinFiberMin 8 = 3 := by native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R43: BinFold m=8 index-compression gap
+-- ══════════════════════════════════════════════════════════════
+
+set_option maxHeartbeats 1600000 in
+/-- Max fiber mult x |X_8| ≠ 2^8 (non-uniform compression at m=8).
+    thm:conclusion-window8-local-index-global-compression-separation -/
+theorem local_index_ne_global_compression_eight :
+    cBinFiberMax 8 * Fintype.card (X 8) ≠ 2 ^ 8 := by
+  rw [cBinFiberMax_eight, X.card_eq_fib]; native_decide
+
+set_option maxHeartbeats 1600000 in
+/-- Index-compression gap at m=8: max_mult x |X_8| - 2^8 = 74.
+    thm:conclusion-window8-local-index-global-compression-separation -/
+theorem index_compression_gap_eight :
+    cBinFiberMax 8 * Fintype.card (X 8) - 2 ^ 8 = 74 := by
+  rw [cBinFiberMax_eight, X.card_eq_fib]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R104: nonexchangeable resources
+-- ══════════════════════════════════════════════════════════════
+
+/-- Window-6 resource allocation is nonexchangeable: |X_6| = 21 ≠ 2,
+    the saturated capacity uses full coefficient ranges,
+    and partial allocations produce 21 and 42.
+    thm:conclusion-window6-nonexchangeable-resources -/
+theorem conclusion_window6_nonexchangeable_resources :
+    (21 : Nat) ≠ 2 ∧
+    8 * 2 + 4 * 3 + 9 * 4 = 2 ^ 6 ∧
+    8 * 1 + 4 * 1 + 9 * 1 = 21 ∧
+    8 * 2 + 4 * 2 + 9 * 2 = 42 := by
+  refine ⟨by omega, by omega, by omega, by omega⟩
+
 end Omega

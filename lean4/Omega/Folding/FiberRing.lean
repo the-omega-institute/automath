@@ -213,6 +213,16 @@ noncomputable def crtDecomposition (m : Nat) (p q : Nat)
 noncomputable def X7_decomposition : X 7 ≃+* ZMod 2 × ZMod 17 :=
   crtDecomposition 7 2 17 (by native_decide) (by native_decide)
 
+-- X_6: F_8 = 21 = 3 × 7, gcd(3,7) = 1.
+/-- X_6 ≃+* ZMod 3 × ZMod 7 via CRT (since F_8 = 21 = 3 × 7).
+    cor:crt-X6-decomposition -/
+noncomputable def X6_decomposition : X 6 ≃+* ZMod 3 × ZMod 7 :=
+  crtDecomposition 6 3 7 (by native_decide) (by native_decide)
+
+/-- X_6 admits a CRT splitting into ZMod 3 × ZMod 7.
+    cor:crt-X6-split -/
+theorem X6_crt_split : Nonempty (X 6 ≃+* ZMod 3 × ZMod 7) := ⟨X6_decomposition⟩
+
 -- X_10: F_12 = 144 = 16 × 9, gcd(16,9) = 1.
 /-- crt-X10-decomposition -/
 noncomputable def X10_decomposition : X 10 ≃+* ZMod 16 × ZMod 9 :=
@@ -254,5 +264,26 @@ theorem stableAdd_nsmul_one_eq_zero (m : Nat) (hm : 1 ≤ m) :
   have : (Nat.fib (m + 2) : X m) = 0 :=
     (instCharP (m := m)).cast_eq_zero_iff _ |>.mpr (dvd_refl _)
   rw [this, zero_mul]
+
+/-- Every ring automorphism of X_m is the identity: the finite resolution ring is rigid.
+    cor:finite-resolution-automorphism-rigidity -/
+theorem ringEquiv_eq_id (m : Nat) (f : X m ≃+* X m) :
+    ∀ x : X m, f x = x := by
+  intro x
+  -- Conjugate through e : X m ≃+* ZMod (Nat.fib (m + 2))
+  let e := stableValueRingEquiv m
+  -- g = e⁻¹ ; f ; e : ZMod n ≃+* ZMod n
+  let g : ZMod (Nat.fib (m + 2)) ≃+* ZMod (Nat.fib (m + 2)) :=
+    (e.symm.trans f).trans e
+  -- By ZMod.subsingleton_ringEquiv, g = RingEquiv.refl
+  have hg : g = RingEquiv.refl _ := Subsingleton.elim _ _
+  -- So for all z, g z = z
+  have hgid : ∀ z, g z = z := fun z => by
+    have := RingEquiv.congr_fun hg z; simpa using this
+  -- Apply to z = e x: e (f (e.symm (e x))) = e x, i.e. e (f x) = e x
+  have h := hgid (e x)
+  change e (f (e.symm (e x))) = e x at h
+  rw [RingEquiv.symm_apply_apply] at h
+  exact e.injective h
 
 end Omega.X
