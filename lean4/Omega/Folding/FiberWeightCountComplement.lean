@@ -203,4 +203,14 @@ theorem fiberMultiplicity_complementAction (x : X m) (hm : 2 ≤ m) :
   rw [complementAction_eq_Fold_complement w hm]
   exact fiberMultiplicity_complement w
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R57: Fiber multiplicity complement parity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fiber multiplicity parity is preserved under the complement action.
+    cor:fold-fiber-parity-complement -/
+theorem fiberMultiplicity_complement_parity (x : X m) (hm : 2 ≤ m) :
+    X.fiberMultiplicity x % 2 = X.fiberMultiplicity (complementAction x) % 2 :=
+  congrArg (· % 2) (fiberMultiplicity_complementAction x hm).symm
+
 end Omega

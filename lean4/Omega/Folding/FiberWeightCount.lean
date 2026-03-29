@@ -192,6 +192,12 @@ theorem exactWeightCount_eq_zero_of_ge_fib (m n : Nat) (hn : Nat.fib (m + 3) ≤
   have := X.weight_lt_fib w
   omega
 
+/-- ewc(m, n) = 0 when n is at least F_{m+3} (named alias).
+    prop:pom-ewc-vanish-large -/
+theorem exactWeightCount_zero_of_large (m n : Nat) (hn : Nat.fib (m + 3) ≤ n) :
+    exactWeightCount m n = 0 :=
+  exactWeightCount_eq_zero_of_ge_fib m n hn
+
 -- ══════════════════════════════════════════════════════════════
 -- Fiber multiplicity = two exactWeightCount terms
 -- ══════════════════════════════════════════════════════════════
