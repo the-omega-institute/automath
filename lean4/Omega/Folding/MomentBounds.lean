@@ -1137,4 +1137,42 @@ theorem stableValue_fiber_weighted_sum (m : Nat) (hm : 1 ≤ m) :
   rw [hiddenBitCount_floor_div_three] at hdecomp
   omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R104: POM injectivization + fold-6 aux bits
+-- ══════════════════════════════════════════════════════════════
+
+/-- If (Fold, r) is injective for some side-information r : Word m → Fin(2^k),
+    then maxFiberMultiplicity m ≤ 2^k. Within each fiber all words fold to the
+    same x, so r must separate them, forcing fiber size ≤ 2^k.
+    thm:pom-injectivization-bound -/
+theorem maxFiberMult_le_two_pow_of_injective_sideinfo (m k : Nat)
+    (r : Word m → Fin (2 ^ k))
+    (hinj : Function.Injective (fun w => (Fold w, r w))) :
+    X.maxFiberMultiplicity m ≤ 2 ^ k := by
+  -- Get achiever x with fiberMultiplicity x = maxFiberMultiplicity m
+  obtain ⟨x, hx⟩ := X.maxFiberMultiplicity_achieved m
+  rw [← hx]
+  -- fiberMultiplicity x = (fiber x).card
+  unfold X.fiberMultiplicity
+  -- r is injective on fiber x (since all fiber elements fold to x)
+  have hr_inj : Set.InjOn r (↑(X.fiber x)) := by
+    intro w₁ hw₁ w₂ hw₂ heq
+    have hf₁ := X.mem_fiber.mp (Finset.mem_coe.mp hw₁)
+    have hf₂ := X.mem_fiber.mp (Finset.mem_coe.mp hw₂)
+    have : (Fold w₁, r w₁) = (Fold w₂, r w₂) := by rw [hf₁, hf₂, heq]
+    exact hinj this
+  -- fiber x injects into Fin(2^k) via r, so card ≤ 2^k
+  have hmaps : Set.MapsTo r (↑(X.fiber x)) (↑(Finset.univ : Finset (Fin (2 ^ k)))) :=
+    fun _ _ => Finset.mem_coe.mpr (Finset.mem_univ _)
+  calc (X.fiber x).card ≤ Finset.univ.card :=
+        Finset.card_le_card_of_injOn r hmaps hr_inj
+    _ = 2 ^ k := by simp [Finset.card_fin]
+
+/-- At m=6 the max fiber multiplicity is 5, requiring ⌈log₂ 5⌉ = 3 auxiliary bits.
+    cor:pom-fold6-binary-auxbits -/
+theorem fold6_binary_auxbits :
+    X.maxFiberMultiplicity 6 = 5 ∧ Nat.clog 2 5 = 3 := by
+  refine ⟨X.maxFiberMultiplicity_six, ?_⟩
+  native_decide
+
 end Omega

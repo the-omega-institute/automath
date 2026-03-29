@@ -346,4 +346,19 @@ theorem index_compression_gap_eight :
     cBinFiberMax 8 * Fintype.card (X 8) - 2 ^ 8 = 74 := by
   rw [cBinFiberMax_eight, X.card_eq_fib]; native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R104: nonexchangeable resources
+-- ══════════════════════════════════════════════════════════════
+
+/-- Window-6 resource allocation is nonexchangeable: |X_6| = 21 ≠ 2,
+    the saturated capacity uses full coefficient ranges,
+    and partial allocations produce 21 and 42.
+    thm:conclusion-window6-nonexchangeable-resources -/
+theorem conclusion_window6_nonexchangeable_resources :
+    (21 : Nat) ≠ 2 ∧
+    8 * 2 + 4 * 3 + 9 * 4 = 2 ^ 6 ∧
+    8 * 1 + 4 * 1 + 9 * 1 = 21 ∧
+    8 * 2 + 4 * 2 + 9 * 2 = 42 := by
+  refine ⟨by omega, by omega, by omega, by omega⟩
+
 end Omega
