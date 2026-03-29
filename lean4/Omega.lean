@@ -67,3 +67,5 @@ import Omega.Frontier.Certificates
 import Omega.Combinatorics.PathIndSet
 import Omega.Combinatorics.FibonacciCube
 import Omega.Combinatorics.GramDet
+import Omega.Zeta.DynZeta
+import Omega.Conclusion.PrimeRegister
