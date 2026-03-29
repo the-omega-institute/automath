@@ -51,6 +51,16 @@ theorem fredholmGoldenMean_det (z : ℤ) :
 theorem fredholmGoldenMean_at_one : (fredholmGoldenMean 1).det = -1 := by
   rw [fredholmGoldenMean_det]; ring
 
+/-- det(I - 2A) = -5. Discriminant value.
+    subsec:operator-zeta-interface -/
+theorem fredholmGoldenMean_at_two : (fredholmGoldenMean 2).det = -5 := by
+  rw [fredholmGoldenMean_det]; ring
+
+/-- det(I - (-1)A) = 1.
+    subsec:operator-zeta-interface -/
+theorem fredholmGoldenMean_at_neg_one : (fredholmGoldenMean (-1)).det = 1 := by
+  rw [fredholmGoldenMean_det]; ring
+
 /-! ## Trace sequence for golden-mean matrix
 
 The trace sequence Tr(A^n) satisfies the Fibonacci-like recurrence
@@ -210,6 +220,13 @@ theorem lucasNum_pos (n : ℕ) : 0 < lucasNum n := by
     | n + 2 =>
       rw [lucasNum_succ_succ]
       linarith [ih (n + 1) (by omega), ih n (by omega)]
+
+/-- Trace of A^(n+2) equals F(n+1) + F(n+3), combining trace=Lucas and Lucas=Fib sum.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem goldenMean_trace_eq_fib_sum (n : ℕ) :
+    (Graph.goldenMeanAdjacency ^ (n + 2)).trace =
+      (Nat.fib (n + 1) : ℤ) + Nat.fib (n + 3) := by
+  rw [trace_eq_lucasNum, lucasNum_eq_fib_sum]
 
 /-! ## Zeta rationality and pole structure
 

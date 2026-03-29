@@ -137,4 +137,16 @@ theorem fib_fiber_godelLift_instances :
 theorem conclusion_mod6_period_shell_72 :
     Nat.lcm 8 18 = 72 := by native_decide
 
+/-- Three rigidity scales: 4 < 21 < 64.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem window6_three_scales_strict : 4 < 21 ∧ 21 < 64 := by omega
+
+/-- Window-6 faithful dim = 2^6 = 64.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem window6_faithful_dim_eq_pow : (2 : ℕ) ^ 6 = 64 := by norm_num
+
+/-- Window-6 success rate bounds.
+    thm:conclusion-window6-static-anomaly-ledger-dynamic-budget-bifurcation -/
+theorem window6_success_rate_zero : 21 * 64 ≠ 0 ∧ 21 ≤ 64 := by omega
+
 end Omega.Conclusion

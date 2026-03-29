@@ -98,6 +98,16 @@ theorem fib_coprime_succ (m : Nat) : Nat.Coprime (Nat.fib m) (Nat.fib (m + 1)) :
 theorem fib_dvd_mul (m k : Nat) : Nat.fib m ∣ Nat.fib (k * m) :=
   Nat.fib_dvd m (k * m) ⟨k, (Nat.mul_comm m k).symm⟩
 
+/-- F_m divides F_{m*k} (argument-order convenience wrapper).
+    infra:fib-divisibility -/
+theorem fib_dvd_fib_mul (m k : ℕ) : Nat.fib m ∣ Nat.fib (m * k) := by
+  rw [Nat.mul_comm]; exact fib_dvd_mul m k
+
+/-- fib(6) | fib(12).
+    infra:fib-divisibility -/
+theorem fib_six_dvd_fib_twelve : Nat.fib 6 ∣ Nat.fib 12 :=
+  fib_dvd_fib_mul 6 2
+
 /-- F_{2n} = F_n · (2·F_{n+1} - F_n).
     prop:fib-double-formula -/
 theorem fib_double (n : Nat) :
