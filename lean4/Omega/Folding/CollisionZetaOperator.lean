@@ -490,4 +490,19 @@ theorem paper_momentSum_strict_mono_q_six :
     momentSum 5 6 < momentSum 6 6 :=
   momentSum_strict_mono_q_six
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R141: Collision dimension S₂(7)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Collision dimension S₂(7) = 544.
+    thm:conclusion-window8-groupoid-collision-dimension-identity -/
+theorem collision_dimension_seven :
+    momentSum 2 7 = 544 :=
+  momentSum_two_seven
+
+/-- Paper: thm:conclusion-window8-groupoid-collision-dimension-identity (m=7) -/
+theorem paper_collision_dimension_seven :
+    momentSum 2 7 = 544 :=
+  collision_dimension_seven
+
 end Omega

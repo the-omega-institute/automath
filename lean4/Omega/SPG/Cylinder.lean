@@ -306,4 +306,22 @@ theorem extendWord_get_ge (w : Word m) (i : Nat) (hi : ¬ i < m) :
     extendWord w i = false := by
   simp [extendWord, get, hi]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R141: fromWordSet preserves disjointness
+-- ══════════════════════════════════════════════════════════════
+
+/-- Disjoint word sets give disjoint fromWordSets.
+    prop:spg-decidable-clopen -/
+theorem fromWordSet_disjoint {A B : Set (Word m)} (h : Disjoint A B) :
+    Disjoint (fromWordSet A) (fromWordSet B) := by
+  rw [Set.disjoint_iff]
+  intro x ⟨hA, hB⟩
+  rw [mem_fromWordSet_iff] at hA hB
+  exact Set.disjoint_iff.mp h ⟨hA, hB⟩
+
+/-- Paper: prop:spg-decidable-clopen (fromWordSet disjointness) -/
+theorem paper_fromWordSet_disjoint {A B : Set (Word m)} (h : Disjoint A B) :
+    Disjoint (fromWordSet A) (fromWordSet B) :=
+  fromWordSet_disjoint h
+
 end Omega.SPG

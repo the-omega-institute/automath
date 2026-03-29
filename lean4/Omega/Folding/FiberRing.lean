@@ -341,4 +341,25 @@ theorem paper_stableValue_pow (x : X m) (n : Nat) :
     stableValue (x ^ n) = (stableValue x) ^ n % Nat.fib (m + 2) :=
   stableValue_pow x n
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R141: Element order in X_6 ring
+-- ══════════════════════════════════════════════════════════════
+
+/-- 7 times 3 equals zero in X_6 (since 7·3=21≡0 mod 21, and F(8)=21).
+    thm:mul-definitional -/
+theorem seven_mul_three_zero_X6 :
+    (7 : X 6) * (3 : X 6) = 0 := by
+  -- Reduce via ring iso to ZMod 21
+  have e := stableValueRingEquiv 6
+  rw [← e.injective.eq_iff, map_mul, map_zero]
+  -- Goal: e 7 * e 3 = 0 in ZMod (Nat.fib 8)
+  -- Goal: e 7 * e 3 = 0 in ZMod (Nat.fib 8)
+  rw [show (7 : X 6) = ((7 : ℕ) : X 6) from rfl, show (3 : X 6) = ((3 : ℕ) : X 6) from rfl,
+    map_natCast, map_natCast]
+  native_decide
+
+/-- Paper: thm:mul-definitional (element order) -/
+theorem paper_seven_mul_three_zero_X6 :
+    (7 : X 6) * (3 : X 6) = 0 := seven_mul_three_zero_X6
+
 end Omega.X
