@@ -7,22 +7,22 @@
 | 指标 | 数值 |
 |---|---|
 | 总行数 | ~31,700 |
-| 定理/定义数 | ~3,279 |
-| 论文接口包装 | 383+ |
+| 定理/定义数 | ~3,282 |
+| 论文接口包装 | 386+ |
 | 文件数 | 69 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,507 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 373 |
+| \leanverified 标注数 | 376 |
 | \leanpartial 标注数 | 10 |
-| 总标注数 | 383 |
-| 轮次 | R70（round_count=71） |
+| 总标注数 | 386 |
+| 轮次 | R71（round_count=72） |
 
-**Phase 7 校准（R70 轮，2026-03-29）**：按章节覆盖率分布：
+**Phase 7 校准（R71 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 155 | 9.1% |
+| POM | 1,707 | 158 | 9.3% |
 | Emergent Arithmetic | 185 | 63 | 34.1% |
 | Folding | 337 | 59 | 17.5% |
 | Conclusion | 2,550 | 37 | 1.5% |
@@ -32,7 +32,7 @@
 | Zeta Finite Part | 4,524 | 9 | 0.2% |
 | Discussion | 67 | 0 | 0.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,507** | **373** | **3.6%** |
+| **合计（body）** | **10,507** | **376** | **3.6%** |
 
 ### 1.2 已完成模块
 
@@ -134,6 +134,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R71: ewc(5)=2 + ewc(F-7)=2 + S₂(17)（Round R71）**：一文件 Folding/MomentTriple.lean（:988-1038，+51行）——exactWeightCount\_five（prop:pom-ewc-weight-five（新标签，tex 无独立环境）：ewc(m,5)=2 for m≥4，归纳 + exactWeightCount\_succ\_of\_lt + fib\_mono，:988）; exactWeightCount\_fib\_sub\_seven（prop:pom-ewc-fib-sub-seven（新标签，tex 无独立环境）：ewc(m, F_{m+3}-7)=2 for m≥4，与 ewc(m,5) 对称性，exactWeightCount\_symmetric，:1008）; momentSum\_two\_seventeen\_rec（prop:pom-moment-s2-seventeen（新标签，tex 无独立环境）：S_2(17)=4816128，通过 momentSum\_two\_recurrence(14) 链式推导，:1027）——**0 个新论文标签计入覆盖率**（三新标签均 tex 无独立环境，已添加 \\leanverified 至 subsubsec\_\_pom-moment-hankel-positivity-crossq.tex:33-34 + subsec\_\_pom-s2.tex:203）——POM 155→158（+3 annotations，9.3%），全局标注 373→376（+3），Lean 定理 ~3,279→~3,282（+3），commit 61531e2
+
 **Phase R70: S₃ 超可加性 + S₂(16) + S₃(15)（Round R70）**：两文件 Folding/CCSPrime8Split.lean（:768-800，+32行）+ Folding/MomentTriple.lean（:987-998，+12行）——momentSum\_three\_fib\_superadditive（thm:pom-s3-fib-superadditive（新标签，tex 无独立环境）：S_3(m+1)+S_3(m) ≤ S_3(m+2) for m≥1，由 momentSum\_three\_recurrence + momentSum\_three\_strict\_mono，:768）; momentSum\_three\_fifteen（prop:pom-s3-fifteen（新标签，tex 无独立环境）：S_3(15)=20675744，通过 momentSum\_three\_recurrence(12) 链式推导，:784）; momentSum\_two\_sixteen\_rec（prop:pom-moment-s2-sixteen（新标签，tex 无独立环境）：S_2(16)=1941056，通过 momentSum\_two\_recurrence(13) 链式推导，:987）——**0 个新论文标签计入覆盖率**（三新标签均 tex 无独立环境，已添加 \\leanverified 至 subsec\_\_pom-s3.tex:41-42 + subsec\_\_pom-s2.tex:202）——POM 152→155（+3 annotations，9.1%），全局标注 370→373（+3），Lean 定理 ~3,276→~3,279（+3），commit 3472395
 
 **Phase R69: J_l 绝对值界 + S₂ Fibonacci 超可加性 + hiddenBitCount 取整除3（Round R69）**：三文件 Folding/FibonacciPolynomial.lean（:772-783，+13行）+ Folding/MomentRecurrence.lean（:1047-1059，+21行）+ Folding/MaxFiberTwoStep.lean（:934-957，+27行）——pathIndSetPolyNegOne\_abs\_le\_one（prop:pom-Jl-abs-le-one（新标签，tex 无独立环境）：J_l ∈ {-1,0,1}，mod6 穷举，:772）; momentSum\_two\_fib\_superadditive（thm:pom-s2-fib-superadditive（新标签，tex 无独立环境）：S_2(m+1)+S_2(m) ≤ S_2(m+2) for m≥1，由递推 + momentSum\_two\_mono'，:1047）; hiddenBitCount\_floor\_div\_three（thm:pom-hidden-bit-count-floor-div（新标签，tex 无独立环境）：B_m = 2^m / 3，由 paper\_hiddenBitCount\_closed + two\_pow\_mod\_three，:951）; two\_pow\_mod\_three（private helper：2^m % 3 奇偶规律，:934）——**0 个新论文标签计入覆盖率**（三新标签均 tex 无独立环境，已添加 \\leanverified 至 def\_\_pom-ind-lyapunov-fingerprint.tex + subsec\_\_pom-s2.tex + subsec\_\_pom-overflow-global.tex）——POM 149→152（+3 annotations，8.9%），全局标注 367→370（+3），Lean 定理 ~3,272→~3,276（+4），commit 575ab85
