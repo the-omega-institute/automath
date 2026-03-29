@@ -56,6 +56,17 @@ thm:conclusion-bounded-prime-register-feasibility -/
 /-- For Fold_4 with max fiber D(f)=3: (k,E)=(1,2) suffices since (2+1)^1 = 3 ≥ 3. -/
 theorem godelLift_fold4 : (2 + 1) ^ 1 ≥ 3 := by omega
 
+/-- For Fold_5 with max fiber D(f)=5: (k,E)=(1,4) suffices since (4+1)^1 = 5 ≥ 5. -/
+theorem godelLift_fold5 : (4 + 1) ^ 1 ≥ 5 := by omega
+
+/-- For Fold_7 with max fiber D(f)=13: (k,E)=(1,12) or (2,3) suffices. -/
+theorem godelLift_fold7_option1 : (12 + 1) ^ 1 ≥ 13 := by omega
+theorem godelLift_fold7_option2 : (3 + 1) ^ 2 ≥ 13 := by omega
+
+/-- For Fold_5 with k=2 axes: (k,E)=(2,2) gives (2+1)^2=9 ≥ 5.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_fold5_k2 : (2 + 1) ^ 2 ≥ 5 := by omega
+
 /-- For Fold_6 with max fiber D(f)=8: (k,E)=(1,7) or (2,2) suffices. -/
 theorem godelLift_fold6_option1 : (7 + 1) ^ 1 ≥ 8 := by omega
 theorem godelLift_fold6_option2 : (2 + 1) ^ 2 ≥ 8 := by omega

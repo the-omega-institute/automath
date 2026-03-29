@@ -136,6 +136,23 @@ theorem goldenMean_cayleyHamilton :
     Graph.goldenMeanAdjacency ^ 2 - Graph.goldenMeanAdjacency - 1 = 0 := by
   native_decide
 
+/-- The trace recurrence Tr(A^{n+2}) = Tr(A^{n+1}) + Tr(A^n) holds for ALL n,
+    not just n ≤ 6. Proved algebraically via the Cayley-Hamilton theorem
+    for the 2×2 golden-mean adjacency matrix with char poly z² - z - 1.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem goldenMean_trace_recurrence_unbounded (n : ℕ) :
+    (Graph.goldenMeanAdjacency ^ (n + 2)).trace =
+      (Graph.goldenMeanAdjacency ^ (n + 1)).trace +
+      (Graph.goldenMeanAdjacency ^ n).trace := by
+  -- Cayley-Hamilton gives A² = A + 1
+  have hCH : Graph.goldenMeanAdjacency ^ 2 = Graph.goldenMeanAdjacency + 1 := by
+    native_decide
+  -- A^(n+2) = A^n * A² = A^n * (A + 1) = A^(n+1) + A^n
+  have hpow : Graph.goldenMeanAdjacency ^ (n + 2) =
+      Graph.goldenMeanAdjacency ^ (n + 1) + Graph.goldenMeanAdjacency ^ n := by
+    rw [pow_add, hCH, mul_add, mul_one, ← pow_succ]
+  rw [hpow, Matrix.trace_add]
+
 /-! ## Zeta rationality and pole structure
 
 For a d×d matrix, ζ_A(z) = det(I-zA)⁻¹ is a rational function with

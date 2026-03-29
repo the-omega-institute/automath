@@ -120,6 +120,24 @@ theorem cyclicPerm4_trace_powers :
   refine ⟨by native_decide, by native_decide, by native_decide,
     by native_decide, by native_decide⟩
 
+/-- Trace of Π_5^k for k=1..5: period-5 pattern.
+    subsec:operator-zeta-interface -/
+theorem cyclicPerm5_trace_powers :
+    (cyclicPerm5 ^ 1).trace = 0 ∧ (cyclicPerm5 ^ 2).trace = 0 ∧
+    (cyclicPerm5 ^ 3).trace = 0 ∧ (cyclicPerm5 ^ 4).trace = 0 ∧
+    (cyclicPerm5 ^ 5).trace = 5 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide⟩
+
+/-- Trace of Π_6^k for k=1..6: period-6 pattern.
+    subsec:operator-zeta-interface -/
+theorem cyclicPerm6_trace_powers :
+    (cyclicPerm6 ^ 1).trace = 0 ∧ (cyclicPerm6 ^ 2).trace = 0 ∧
+    (cyclicPerm6 ^ 3).trace = 0 ∧ (cyclicPerm6 ^ 4).trace = 0 ∧
+    (cyclicPerm6 ^ 5).trace = 0 ∧ (cyclicPerm6 ^ 6).trace = 6 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide, by native_decide⟩
+
 /-- Determinant formula for a specific 4×4 matrix.
     Helper for cyclicPerm4_fredholm_det. -/
 private theorem det_four_of (a b c d e f g h i j k l m n o p : ℤ) :
@@ -291,6 +309,18 @@ theorem euler_factor_n3 (α r : ℤ) :
 theorem euler_factor_n4 (α r : ℤ) :
     (1 - (α * r) • cyclicPerm4).det = 1 - (α * r) ^ 4 := by
   exact cyclicPerm4_fredholm_det (α * r)
+
+/-- Euler factor for n=5: det(I - r·(α·Π_5)) = 1 - (αr)⁵.
+    cor:cyclic-euler-product -/
+theorem euler_factor_n5 (α r : ℤ) :
+    (1 - (α * r) • cyclicPerm5).det = 1 - (α * r) ^ 5 :=
+  cyclicPerm5_fredholm_det (α * r)
+
+/-- Euler factor for n=6: det(I - r·(α·Π_6)) = 1 - (αr)⁶.
+    cor:cyclic-euler-product -/
+theorem euler_factor_n6 (α r : ℤ) :
+    (1 - (α * r) • cyclicPerm6).det = 1 - (α * r) ^ 6 :=
+  cyclicPerm6_fredholm_det (α * r)
 
 /-! ## Resolvent trace jump index
 
