@@ -108,6 +108,27 @@ theorem goldenMean_trace_values :
   refine ⟨by native_decide, by native_decide, by native_decide, by native_decide,
     by native_decide, by native_decide, by native_decide, by native_decide, by native_decide⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R136: Extended trace values L(9)..L(12)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Golden-mean trace values L(n) for n=9..12.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem goldenMean_trace_values_extended :
+    (Graph.goldenMeanAdjacency ^ 9).trace = 76 ∧
+    (Graph.goldenMeanAdjacency ^ 10).trace = 123 ∧
+    (Graph.goldenMeanAdjacency ^ 11).trace = 199 ∧
+    (Graph.goldenMeanAdjacency ^ 12).trace = 322 := by
+  refine ⟨by native_decide, by native_decide, by native_decide, by native_decide⟩
+
+/-- Paper: thm:zeta-syntax-trace-linear-recurrence (extended) -/
+theorem paper_goldenMean_trace_values_extended :
+    (Graph.goldenMeanAdjacency ^ 9).trace = 76 ∧
+    (Graph.goldenMeanAdjacency ^ 10).trace = 123 ∧
+    (Graph.goldenMeanAdjacency ^ 11).trace = 199 ∧
+    (Graph.goldenMeanAdjacency ^ 12).trace = 322 :=
+  goldenMean_trace_values_extended
+
 /-- The trace sequence Tr(A^n) = L(n) (Lucas numbers) satisfies the recurrence
     Tr(A^{n+2}) = Tr(A^{n+1}) + Tr(A^n), verified for n = 0..6.
     thm:zeta-syntax-trace-linear-recurrence -/

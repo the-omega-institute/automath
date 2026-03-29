@@ -213,4 +213,35 @@ theorem fiberMultiplicity_complement_parity (x : X m) (hm : 2 ≤ m) :
     X.fiberMultiplicity x % 2 = X.fiberMultiplicity (complementAction x) % 2 :=
   congrArg (· % 2) (fiberMultiplicity_complementAction x hm).symm
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R136: Weight count spectrum at m=5
+-- ══════════════════════════════════════════════════════════════
+
+/-- EWC spectrum at m=5: complete weight distribution [1,1,1,2,1,2,2,1,3,2,2,3,1].
+    bridge:ewc-complement-symmetry -/
+theorem ewc_spectrum_five :
+    exactWeightCount 5 0 = 1 ∧ exactWeightCount 5 1 = 1 ∧
+    exactWeightCount 5 2 = 1 ∧ exactWeightCount 5 3 = 2 ∧
+    exactWeightCount 5 4 = 1 ∧ exactWeightCount 5 5 = 2 ∧
+    exactWeightCount 5 6 = 2 ∧ exactWeightCount 5 7 = 1 ∧
+    exactWeightCount 5 8 = 3 ∧ exactWeightCount 5 9 = 2 ∧
+    exactWeightCount 5 10 = 2 ∧ exactWeightCount 5 11 = 3 ∧
+    exactWeightCount 5 12 = 1 := by native_decide
+
+/-- EWC total for m=5 over weight range 0..20: Σ ewc(5,n) = 2^5 = 32.
+    bridge:ewc-complement-symmetry -/
+theorem ewc_sum_five :
+    (Finset.range 21).sum (exactWeightCount 5) = 32 := by native_decide
+
+/-- Paper: bridge:ewc-complement-symmetry -/
+theorem paper_ewc_spectrum_five :
+    exactWeightCount 5 0 = 1 ∧ exactWeightCount 5 1 = 1 ∧
+    exactWeightCount 5 2 = 1 ∧ exactWeightCount 5 3 = 2 ∧
+    exactWeightCount 5 4 = 1 ∧ exactWeightCount 5 5 = 2 ∧
+    exactWeightCount 5 6 = 2 ∧ exactWeightCount 5 7 = 1 ∧
+    exactWeightCount 5 8 = 3 ∧ exactWeightCount 5 9 = 2 ∧
+    exactWeightCount 5 10 = 2 ∧ exactWeightCount 5 11 = 3 ∧
+    exactWeightCount 5 12 = 1 :=
+  ewc_spectrum_five
+
 end Omega

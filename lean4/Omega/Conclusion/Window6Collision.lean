@@ -65,4 +65,28 @@ theorem window6_collision_exceeds_linear : 212 > 3 * 64 := by omega
 theorem paper_window6_collision_prob :
     212 * 1024 = 53 * 4096 := window6_collision_prob_reduced
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R136: Quadratic residues mod 21
+-- ══════════════════════════════════════════════════════════════
+
+/-- Decidable predicate: is a a nonzero quadratic residue mod 21? -/
+def isNonzeroQR21 (a : Nat) : Bool :=
+  a != 0 && (List.range 21).any (fun x => x * x % 21 == a)
+
+/-- Number of nonzero quadratic residues in Z/21Z equals 7.
+    prop:conclusion-window6-crt-euler-phi -/
+theorem quadratic_residues_mod21 :
+    ((Finset.range 21).filter (fun a => isNonzeroQR21 a)).card = 7 := by native_decide
+
+/-- The nonzero QRs mod 21 are {1, 4, 7, 9, 15, 16, 18}.
+    prop:conclusion-window6-crt-euler-phi -/
+theorem quadratic_residues_mod21_explicit :
+    (Finset.range 21).filter (fun a => isNonzeroQR21 a) = {1, 4, 7, 9, 15, 16, 18} := by
+  native_decide
+
+/-- Paper: prop:conclusion-window6-crt-euler-phi -/
+theorem paper_quadratic_residues_mod21 :
+    ((Finset.range 21).filter (fun a => isNonzeroQR21 a)).card = 7 :=
+  quadratic_residues_mod21
+
 end Omega.Conclusion
