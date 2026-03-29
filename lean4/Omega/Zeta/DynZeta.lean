@@ -362,6 +362,32 @@ theorem goldenMean_charPoly_discriminant : 1 ^ 2 + 4 * 1 = (5 : ℤ) := by omega
 theorem goldenMean_zeta_roots_exist : (5 : ℤ) > 0 := by omega
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R144: Golden-mean matrix Fibonacci powers
+-- ══════════════════════════════════════════════════════════════
+
+/-- A² = A + I (Cayley-Hamilton direct form).
+    subsec:operator-zeta-interface -/
+theorem goldenMean_sq :
+    Graph.goldenMeanAdjacency ^ 2 = Graph.goldenMeanAdjacency + 1 := by native_decide
+
+/-- A³ = 2A + I.
+    subsec:operator-zeta-interface -/
+theorem goldenMean_cube :
+    Graph.goldenMeanAdjacency ^ 3 = 2 * Graph.goldenMeanAdjacency + 1 := by native_decide
+
+/-- A⁴ = 3A + 2I.
+    subsec:operator-zeta-interface -/
+theorem goldenMean_fourth :
+    Graph.goldenMeanAdjacency ^ 4 = 3 * Graph.goldenMeanAdjacency + 2 := by native_decide
+
+/-- Paper: subsec:operator-zeta-interface (Fibonacci powers) -/
+theorem paper_goldenMean_fibonacci_powers :
+    Graph.goldenMeanAdjacency ^ 2 = Graph.goldenMeanAdjacency + 1 ∧
+    Graph.goldenMeanAdjacency ^ 3 = 2 * Graph.goldenMeanAdjacency + 1 ∧
+    Graph.goldenMeanAdjacency ^ 4 = 3 * Graph.goldenMeanAdjacency + 2 :=
+  ⟨goldenMean_sq, goldenMean_cube, goldenMean_fourth⟩
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R128: Reduced determinant and matrix invariants
 -- ══════════════════════════════════════════════════════════════
 

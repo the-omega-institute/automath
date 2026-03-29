@@ -112,4 +112,26 @@ theorem paper_window8_higher_moments :
     21 * 3 ^ 5 + 11 * 5 ^ 5 + 23 * 6 ^ 5 = 218326 :=
   window8_higher_moments
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R144: CRT idempotents mod 21
+-- ══════════════════════════════════════════════════════════════
+
+/-- Decidable idempotent predicate mod 21. -/
+def isIdempotent21 (a : Nat) : Bool := a * a % 21 == a
+
+/-- Number of idempotents in Z/21Z is exactly 4.
+    prop:conclusion-window6-crt-euler-phi -/
+theorem idempotent_count_mod21 :
+    ((Finset.range 21).filter (fun a => isIdempotent21 a)).card = 4 := by native_decide
+
+/-- The idempotents in Z/21Z are {0, 1, 7, 15}.
+    prop:conclusion-window6-crt-euler-phi -/
+theorem idempotent_set_mod21 :
+    (Finset.range 21).filter (fun a => isIdempotent21 a) = {0, 1, 7, 15} := by native_decide
+
+/-- Paper: prop:conclusion-window6-crt-euler-phi -/
+theorem paper_idempotent_count_mod21 :
+    ((Finset.range 21).filter (fun a => isIdempotent21 a)).card = 4 :=
+  idempotent_count_mod21
+
 end Omega.Conclusion

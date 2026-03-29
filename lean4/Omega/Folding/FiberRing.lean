@@ -362,4 +362,33 @@ theorem seven_mul_three_zero_X6 :
 theorem paper_seven_mul_three_zero_X6 :
     (7 : X 6) * (3 : X 6) = 0 := seven_mul_three_zero_X6
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R144: Doubling + X_5 generator
+-- ══════════════════════════════════════════════════════════════
+
+/-- Doubling: Val(x+x) = 2·Val(x) mod F(m+2).
+    thm:mul-by-iterated-add -/
+theorem stableValue_double (x : X m) :
+    stableValue (stableAdd x x) = 2 * stableValue x % Nat.fib (m + 2) := by
+  rw [stableValue_stableAdd]; ring_nf
+
+/-- Element 2 generates X_5: 7·2 = 1 in X_5 (since 14 ≡ 1 mod 13).
+    thm:mul-definitional -/
+theorem X5_generator_two :
+    (7 : X 5) * (2 : X 5) = 1 := by
+  have e := stableValueRingEquiv 5
+  rw [← e.injective.eq_iff, map_mul, map_one]
+  rw [show (7 : X 5) = ((7 : ℕ) : X 5) from rfl, show (2 : X 5) = ((2 : ℕ) : X 5) from rfl,
+    map_natCast, map_natCast]
+  native_decide
+
+/-- Paper: thm:mul-definitional (doubling) -/
+theorem paper_stableValue_double (x : X m) :
+    stableValue (stableAdd x x) = 2 * stableValue x % Nat.fib (m + 2) :=
+  stableValue_double x
+
+/-- Paper: thm:mul-definitional (X_5 generator) -/
+theorem paper_X5_generator_two :
+    (7 : X 5) * (2 : X 5) = 1 := X5_generator_two
+
 end Omega.X
