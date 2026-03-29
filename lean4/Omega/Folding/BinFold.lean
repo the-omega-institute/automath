@@ -43,6 +43,24 @@ theorem binFold6_sum_check :
   rw [cBinFiberHist_6_0, cBinFiberHist_6_1, cBinFiberHist_6_2,
     cBinFiberHist_6_3, cBinFiberHist_6_4]
 
+/-! ### m = 7 BinFold histogram -/
+
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_0 : cBinFiberHist 7 0 = 0 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_1 : cBinFiberHist 7 1 = 0 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_2 : cBinFiberHist 7 2 = 0 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_3 : cBinFiberHist 7 3 = 13 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_4 : cBinFiberHist 7 4 = 16 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_5 : cBinFiberHist 7 5 = 5 := by native_decide
+
+/-- thm:terminal-foldbin-hist -/
+theorem binFold7_histogram_certificate : 13 * 3 + 16 * 4 + 5 * 5 = 128 := by omega
+
 /-! ### Edge separation at m = 6 -/
 
 /-- BinFold separates hypercube edges at m = 6: flipping any single bit always
