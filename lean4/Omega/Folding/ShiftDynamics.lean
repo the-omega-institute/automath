@@ -908,4 +908,34 @@ theorem lucasNum_fib_cross_diff (m n : Nat) :
   push_cast at hadd1 hadd2 hfn hfmn ⊢
   nlinarith [key, sq_nonneg ((Nat.fib (n + 1) : ℤ))]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R110: Lucas-Fibonacci gcd
+-- ══════════════════════════════════════════════════════════════
+
+/-- gcd(L(n), F(n)) | 2 for n ≥ 1.
+    bridge:lucas-fib-gcd -/
+theorem lucasNum_fib_gcd_dvd_two (n : Nat) (hn : 1 ≤ n) :
+    Nat.gcd (lucasNum n) (Nat.fib n) ∣ 2 := by
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+  -- L(m+1) = F(m+2) + F(m)
+  have hL : lucasNum (m + 1) = Nat.fib (m + 2) + Nat.fib m := lucasNum_eq_fib_aux m
+  -- F(m+2) = F(m) + F(m+1)
+  have hF : Nat.fib (m + 2) = Nat.fib m + Nat.fib (m + 1) := Nat.fib_add_two
+  -- So L(m+1) = F(m+1) + 2 * F(m)
+  have hL2 : lucasNum (m + 1) = Nat.fib (m + 1) + 2 * Nat.fib m := by omega
+  set d := Nat.gcd (lucasNum (m + 1)) (Nat.fib (m + 1))
+  -- d | L(m+1) and d | F(m+1)
+  have hd1 : d ∣ lucasNum (m + 1) := Nat.gcd_dvd_left _ _
+  have hd2 : d ∣ Nat.fib (m + 1) := Nat.gcd_dvd_right _ _
+  -- d | L(m+1) - F(m+1) = 2 * F(m)
+  have hd3 : d ∣ 2 * Nat.fib m := by
+    have hsub : d ∣ lucasNum (m + 1) - Nat.fib (m + 1) := Nat.dvd_sub hd1 hd2
+    rwa [hL2, Nat.add_sub_cancel_left] at hsub
+  -- Coprime (fib m) (fib (m+1)), so coprime d (fib m)
+  have hcop : Nat.Coprime (Nat.fib m) (Nat.fib (m + 1)) := Nat.fib_coprime_fib_succ m
+  have hcop_d : Nat.Coprime d (Nat.fib m) :=
+    Nat.Coprime.coprime_dvd_left hd2 hcop.symm
+  -- d | 2 * F(m) and coprime d (F(m)), so d | 2
+  exact hcop_d.dvd_of_dvd_mul_right hd3
+
 end Omega

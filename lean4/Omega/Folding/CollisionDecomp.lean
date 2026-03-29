@@ -965,8 +965,9 @@ theorem crossWeightCorrelation_eq_momentSum_two (m : Nat) :
   have h2 := momentSum_two_eq_E00_add_two_S m
   omega
 
-/-- 4·S_2(m) ≤ S_2(m+2). -/
-private theorem momentSum_two_quadruple_le (m : Nat) :
+/-- 4·S_2(m) ≤ S_2(m+2).
+    thm:pom-hiddenbit-bias-energy-identity -/
+theorem momentSum_two_quadruple_le (m : Nat) :
     4 * momentSum 2 m ≤ momentSum 2 (m + 2) := by
   induction m using Nat.strongRecOn with
   | _ m ih =>

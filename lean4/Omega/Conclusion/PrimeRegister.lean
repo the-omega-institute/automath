@@ -149,4 +149,10 @@ theorem window6_faithful_dim_eq_pow : (2 : ℕ) ^ 6 = 64 := by norm_num
     thm:conclusion-window6-static-anomaly-ledger-dynamic-budget-bifurcation -/
 theorem window6_success_rate_zero : 21 * 64 ≠ 0 ∧ 21 ≤ 64 := by omega
 
+/-- The Gödel lift feasibility via square root: F(m+2) ≤ (⌊√F(m+2)⌋ + 1)².
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_fold_sqrt_suffices (m : Nat) :
+    Nat.fib (m + 2) ≤ (Nat.sqrt (Nat.fib (m + 2)) + 1) ^ 2 :=
+  Nat.le_of_lt (Nat.lt_succ_sqrt' _)
+
 end Omega.Conclusion
