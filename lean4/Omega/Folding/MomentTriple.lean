@@ -980,6 +980,49 @@ theorem exactWeightCount_fib_sub_six (m : Nat) (hm : 3 ≤ m) :
   exact exactWeightCount_four m hm
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R71: ewc(5)=2 + ewc(F-7)=2 + S₂(17)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Weight 5 is achieved by exactly two words for m ≥ 4.
+    prop:pom-ewc-weight-five -/
+theorem exactWeightCount_five (m : Nat) (hm : 4 ≤ m) :
+    exactWeightCount m 5 = 2 := by
+  induction m with
+  | zero => omega
+  | succ n ih =>
+    cases n with
+    | zero => omega
+    | succ k =>
+      cases k with
+      | zero => omega
+      | succ j =>
+        cases j with
+        | zero => omega
+        | succ i =>
+          cases i with
+          | zero =>
+            -- base case: m = 4
+            native_decide
+          | succ p =>
+            -- inductive step: ewc(p+5, 5) = ewc(p+4, 5) since 5 < fib(p+6)
+            rw [exactWeightCount_succ_of_lt]
+            · exact ih (by omega)
+            · calc 5 < 8 := by omega
+                _ = Nat.fib 6 := by native_decide
+                _ ≤ Nat.fib (p + 6) := Nat.fib_mono (by omega)
+
+/-- The weight F_{m+3}−7 has exactly two words for m ≥ 4, by symmetry with weight 5.
+    prop:pom-ewc-fib-sub-seven -/
+theorem exactWeightCount_fib_sub_seven (m : Nat) (hm : 4 ≤ m) :
+    exactWeightCount m (Nat.fib (m + 3) - 7) = 2 := by
+  have hfib : Nat.fib (m + 3) ≥ 13 := by
+    calc Nat.fib (m + 3) ≥ Nat.fib 7 := Nat.fib_mono (by omega)
+      _ = 13 := by native_decide
+  have hsub : Nat.fib (m + 3) - 2 - (Nat.fib (m + 3) - 7) = 5 := by omega
+  rw [exactWeightCount_symmetric m (Nat.fib (m + 3) - 7) (by omega), hsub]
+  exact exactWeightCount_five m hm
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R70: S₂(16) chain value
 -- ══════════════════════════════════════════════════════════════
 
@@ -990,5 +1033,13 @@ theorem momentSum_two_sixteen_rec : momentSum 2 16 = 1941056 := by
   rw [show (13 : Nat) + 1 = 14 from rfl, show (13 : Nat) + 2 = 15 from rfl,
     show (13 : Nat) + 3 = 16 from rfl, momentSum_two_thirteen_rec,
     momentSum_two_fourteen_rec, momentSum_two_fifteen_rec] at h; omega
+
+/-- S₂(17) = 4816128, computed via three-step recurrence from S₂(14..16).
+    prop:pom-moment-s2-seventeen -/
+theorem momentSum_two_seventeen_rec : momentSum 2 17 = 4816128 := by
+  have h := momentSum_two_recurrence 14
+  rw [show (14 : Nat) + 1 = 15 from rfl, show (14 : Nat) + 2 = 16 from rfl,
+    show (14 : Nat) + 3 = 17 from rfl, momentSum_two_fourteen_rec,
+    momentSum_two_fifteen_rec, momentSum_two_sixteen_rec] at h; omega
 
 end Omega
