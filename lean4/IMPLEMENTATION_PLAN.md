@@ -8,15 +8,15 @@
 |---|---|
 | 总行数 | ~32,000 |
 | 定理/定义数 | ~3,306 |
-| 论文接口包装 | 410+ |
+| 论文接口包装 | 415+ |
 | 文件数 | 72 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,507 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 400 |
+| \leanverified 标注数 | 405 |
 | \leanpartial 标注数 | 10 |
-| 总标注数 | 410 |
-| 轮次 | R77（round_count=78） |
+| 总标注数 | 415 |
+| 轮次 | R78（round_count=79） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -96,6 +96,8 @@
 **循环置换行列式 + Euler 因子（Round 97，Phase 100）**：Zeta/CyclicDet.lean（新文件，155 行）——cyclicPerm2..cyclicPerm6（def:cycle-permutation-determinant：n×n 循环置换矩阵具体定义）; cyclicPerm2_fredholm_det（prop:cycle-permutation-determinant：det(I-t·Π_2)=1-t²，simp+ring）; cyclicPerm3_fredholm_det（prop:cycle-permutation-determinant：det(I-t·Π_3)=1-t³，simp+ring）; cyclicPerm2_sq..cyclicPerm6_sixth（Π_n^n=I 周期性，n=2..6，native_decide）; cyclicPerm2/3_trace_powers（subsec:operator-zeta-interface：Tr(Π_n^k) 周期模式）; euler_factor_n2/n3（cor:cyclic-euler-product：Euler 因子 det(I-r·α·Π_n)=1-(αr)^n）; cyclic_periodicity_orders（thm:operator-finite-state-zeta-2pii-periodic-separation：全部周期性汇总）——Zeta 覆盖率 0.3% → 0.4%（+4 标注）（Phase 100）
 
 **Zeckendorf 进位吸收 + Fibonacci 平方移位 + SM 平方余量刚性（Round 98，Phase 101）**：两文件 Omega/Core/Fib.lean + Omega/Folding/ZeckendorfSignature.lean（+62 行）——zeckendorf\_carry\_absorption\_m9（cor:zeckendorf-carry-absorption-m9：F_6+F_7=F_8，Zeckendorf 规范化将 m=8,9 并入 m=10，ZeckendorfSignature.lean:694，native_decide）; fib\_sq\_gt\_fib\_shift（infra：F_{n+4} < F_n^2 for n≥6，thm:sm-square-residual-rigidity-m6 证明的强归纳辅助引理，Fib.lean:1139）; sm\_square\_residual\_rigidity\_m6（thm:sm-square-residual-rigidity-m6：F_{m+2}-12=F_{m-2}^2 在 m≥6 上唯一解为 m=6，ZeckendorfSignature.lean:698，fib\_sq\_gt\_fib\_shift + interval\_cases）——**2 个新论文标签计入覆盖率**（cor:zeckendorf-carry-absorption-m9 + thm:sm-square-residual-rigidity-m6，tex 环境在 theory/.../group\_unification/subsubsec\_\_bdry-tower-zeck-gut-sm-zeckendorf-rigidity.tex，fib\_sq\_gt\_fib\_shift 为辅助引理标注于 thm:sm-square-residual-rigidity-m6 之内）——群统一 22→24（+2，4.7%→5.1%），全局标注 402→404（+2），commit 8bf77de
+
+**循环置换迹幂 + Fredholm 行列式 n=4,5,6 + Euler 因子 n=4（Round 100，Phase 103）**：commit 8631df2——cyclicPerm4\_trace\_powers（subsec:operator-zeta-interface：Tr(Π_4^k) 周期模式 k=0..4，native_decide）; cyclicPerm4\_fredholm\_det（prop:cycle-permutation-determinant：det(I-t·Π_4)=1-t^4）; cyclicPerm5\_fredholm\_det（prop:cycle-permutation-determinant：det(I-t·Π_5)=1-t^5）; cyclicPerm6\_fredholm\_det（prop:cycle-permutation-determinant：det(I-t·Π_6)=1-t^6）; euler\_factor\_n4（cor:cyclic-euler-product：Euler 因子 det(I-r·α·Π_4)=1-(αr)^4）——**全部进入已有标注的论文环境，不增加新覆盖环境数**——全局标注 410→415（+5），Zeta 覆盖率维持 0.4%，commit 8631df2
 
 **Window-6 容量二分 + mod-6 周期贝壳 lcm=72 + 圆维基础（Round 99，Phase 102）**：commit 58b5677——conclusion\_window6\_capacity\_bifurcation（thm:conclusion-window6-static-anomaly-ledger-dynamic-budget-bifurcation：C_6(0/1/≥2)=21/42/64 严格二分，静态异常账本与动态反演预算不可混同）; conclusion\_mod6\_period\_shell\_72（cor:pom-mod6-period-collapse-72-q13-15：q∈{13,15} 的 S_q(m) mod 6 最终周期整除 lcm(8,18)=72，中国剩余定理组合 mod 2/mod 3 周期上界）; circleDim（def:circle-dimension：圆维 cdim(G) = dim(Ĝ⁰)，Pontryagin 对偶连通分量维数）; circleDim\_add（prop:circle-dimension-laws 直和可加律：cdim(G⊕H)=cdim(G)+cdim(H)）; circleDim\_Zk（ex:circle-dimension-examples：cdim(ℤ^k)=k）; circleDim\_finite（ex:circle-dimension-examples：cdim(F)=0 对有限交换群 F）——**6 个新论文标签计入覆盖率**——圆维 16→19（+3，4.1%→4.8%），结论 39→40（+1，1.5%→1.6%），POM 164→165（+1，9.6%→9.7%），全局标注 404→410（+6），commit 58b5677
 **Cauchy-Schwarz 碰撞界 + S_q 单调性（Round 12）**：momentSum_mono_q（$S_q \le S_{q+1}$，d(x)≥1 的单调性）; momentSum_two_ge_pow（$2^m \le S_2(m)$，由单调性推导）; momentSum_ge_card（$F_{m+1} \le S_q(m)$，纤维多重度 ≥ 1 的下界）; momentSum_cauchy_schwarz（$(2^m)^2 \le F_{m+1} \cdot S_2(m)$，Cauchy-Schwarz 碰撞界，thm:fold-collision-convex-lower-bounds）
