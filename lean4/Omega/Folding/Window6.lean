@@ -833,4 +833,17 @@ theorem zmod21_trichotomy (x : ZMod 21) :
       x = 0 ∨ IsUnit x ∨ (x ≠ 0 ∧ ∃ y : ZMod 21, y ≠ 0 ∧ x * y = 0) := by native_decide
   exact this x
 
+/-- Window-6 anomaly-collision splitting: 21+53=74, 212=4*53, 8*1+4*3+9*6=74.
+    prop:conclusion-window6-quadratic-collision-mass-anomaly-discriminant-closure -/
+theorem conclusion_window6_anomaly_collision_splitting :
+    21 + 53 = 74 ∧ 212 = 4 * 53 ∧
+    (8 * 1 + 4 * 3 + 9 * 6 : Nat) = 74 := by omega
+
+/-- Window-6 collision mass: (9·16 + 4·9 + 8·4)/4 = 53.
+    prop:conclusion-window6-quadratic-collision-mass-anomaly-discriminant-closure -/
+theorem conclusion_window6_collision_mass :
+    (cBinFiberHist 6 4 * 4 ^ 2 + cBinFiberHist 6 3 * 3 ^ 2 +
+     cBinFiberHist 6 2 * 2 ^ 2) / 4 = 53 := by
+  rw [cBinFiberHist_6_2, cBinFiberHist_6_3, cBinFiberHist_6_4]; omega
+
 end Omega

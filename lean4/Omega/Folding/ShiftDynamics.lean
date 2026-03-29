@@ -639,6 +639,43 @@ theorem lucasNum_add_formula : ∀ (m n : Nat),
       push_cast [this]; ring
     rw [hf1, hf2]; ring
 
+/-- Lucas multiplication formula: L(m)·L(n) = L(m+n) + (-1)^n · L(m-n) for n ≤ m.
+    bridge:lucas-multiplication-formula -/
+theorem lucasNum_mul_formula : ∀ (m n : Nat), n ≤ m →
+    (lucasNum m : ℤ) * lucasNum n =
+    lucasNum (m + n) + (-1) ^ n * lucasNum (m - n)
+  | m, 0, _ => by simp [lucasNum_zero]; ring
+  | m, 1, hm => by
+    simp only [lucasNum_one, mul_one, pow_one]
+    obtain ⟨k, rfl⟩ : ∃ k, m = k + 1 := ⟨m - 1, by omega⟩
+    push_cast [lucasNum_succ_succ k]; ring
+  | m, n + 2, hmn => by
+    -- L(m) * L(n+2) = L(m) * (L(n+1) + L(n))
+    have ih1 := lucasNum_mul_formula m (n + 1) (by omega)
+    have ih0 := lucasNum_mul_formula m n (by omega)
+    push_cast [lucasNum_succ_succ n] at *
+    rw [mul_add, ih1, ih0]
+    -- Need: L(m+n+2) = L(m+n+1) + L(m+n)
+    have hL_add : (lucasNum (m + (n + 2)) : ℤ) =
+        lucasNum (m + (n + 1)) + lucasNum (m + n) := by
+      have := lucasNum_succ_succ (m + n)
+      rw [show m + (n + 2) = m + n + 2 from by omega,
+          show m + (n + 1) = m + n + 1 from by omega]
+      push_cast [this]; ring
+    -- Need: L(m-n) = L(m-n-1) + L(m-n-2), i.e., L(m-(n+2)) is defined via recurrence
+    have hL_sub : (lucasNum (m - n) : ℤ) =
+        lucasNum (m - (n + 1)) + lucasNum (m - (n + 2)) := by
+      have h1 := lucasNum_succ_succ (m - (n + 2))
+      rw [show m - (n + 2) + 2 = m - n from by omega,
+          show m - (n + 2) + 1 = m - (n + 1) from by omega] at h1
+      push_cast [h1]; ring
+    rw [hL_add, hL_sub]
+    have : (-1 : ℤ) ^ (n + 2) = (-1) ^ n := by ring
+    rw [this]
+    have : (-1 : ℤ) ^ (n + 1) = -((-1) ^ n) := by ring
+    rw [this]
+    ring
+
 /-- Lucas partial sum: Σ_{k=0}^n L(k) = L(n+2) - 1.
     bridge:lucas-partial-sum -/
 theorem lucasNum_partial_sum (n : Nat) :
@@ -937,5 +974,55 @@ theorem lucasNum_fib_gcd_dvd_two (n : Nat) (hn : 1 ≤ n) :
     Nat.Coprime.coprime_dvd_left hd2 hcop.symm
   -- d | 2 * F(m) and coprime d (F(m)), so d | 2
   exact hcop_d.dvd_of_dvd_mul_right hd3
+
+/-- 4 ∣ L(n) iff n ≡ 3 (mod 6).
+    bridge:lucas-four-divisibility -/
+theorem lucasNum_four_dvd (n : Nat) : 4 ∣ lucasNum n ↔ n % 6 = 3 := by
+  -- L(n) mod 4 has period 6: 2,1,3,0,3,3,2,1,3,0,3,3,...
+  -- Key: L(k+6) ≡ L(k) mod 4
+  have hperiod : ∀ k, 4 ∣ lucasNum (k + 6) ↔ 4 ∣ lucasNum k := by
+    intro k
+    -- L(k+6) = 18*L(k+1) + 7*L(k) (by expanding recurrence 6 times)
+    -- Actually: L(k+6) = L(k+5)+L(k+4) = ... = 18L(k+1)+7L(k) (not needed)
+    -- Simpler: show L(k+6) - L(k) ≡ 0 mod 4
+    -- L(k+2)=L(k+1)+L(k), L(k+3)=2L(k+1)+L(k), L(k+4)=3L(k+1)+2L(k),
+    -- L(k+5)=5L(k+1)+3L(k), L(k+6)=8L(k+1)+5L(k)
+    -- L(k+6)-L(k) = 8L(k+1)+4L(k) = 4(2L(k+1)+L(k))
+    have h2 : lucasNum (k + 2) = lucasNum (k + 1) + lucasNum k := lucasNum_succ_succ k
+    have h3 : lucasNum (k + 3) = lucasNum (k + 2) + lucasNum (k + 1) := lucasNum_succ_succ (k + 1)
+    have h4 : lucasNum (k + 4) = lucasNum (k + 3) + lucasNum (k + 2) := lucasNum_succ_succ (k + 2)
+    have h5 : lucasNum (k + 5) = lucasNum (k + 4) + lucasNum (k + 3) := lucasNum_succ_succ (k + 3)
+    have h6 : lucasNum (k + 6) = lucasNum (k + 5) + lucasNum (k + 4) := lucasNum_succ_succ (k + 4)
+    -- L(k+6) = 8*L(k+1) + 5*L(k), so L(k+6) - L(k) = 8*L(k+1) + 4*L(k)
+    -- L(k+6) = L(k) + 4*(2*L(k+1)+L(k))
+    have hexp : lucasNum (k + 6) = lucasNum k + 4 * (2 * lucasNum (k + 1) + lucasNum k) := by omega
+    constructor
+    · intro hd; rw [hexp] at hd; omega
+    · intro hd; rw [hexp]; omega
+  constructor
+  · -- Forward: 4|L(n) → n%6=3
+    induction n using Nat.strongRecOn with
+    | _ n ih =>
+      intro h
+      match n with
+      | 0 => exfalso; rw [lucasNum_zero] at h; omega
+      | 1 => exfalso; rw [lucasNum_one] at h; omega
+      | 2 => exfalso; rw [lucasNum_two] at h; omega
+      | 3 => rfl
+      | 4 => exfalso; rw [show lucasNum 4 = 7 from rfl] at h; omega
+      | 5 => exfalso; rw [show lucasNum 5 = 11 from rfl] at h; omega
+      | n + 6 =>
+        have := ih n (by omega) ((hperiod n).mp h)
+        omega
+  · -- Backward: n%6=3 → 4|L(n)
+    intro h
+    -- Write n = 6*q + 3
+    have ⟨q, hq⟩ : ∃ q, n = 6 * q + 3 := ⟨n / 6, by omega⟩
+    subst hq
+    induction q with
+    | zero => rw [show lucasNum 3 = 4 from rfl]
+    | succ j ih =>
+      rw [show 6 * (j + 1) + 3 = (6 * j + 3) + 6 from by ring]
+      exact (hperiod (6 * j + 3)).mpr (ih (by omega))
 
 end Omega
