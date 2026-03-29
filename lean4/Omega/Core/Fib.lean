@@ -1235,4 +1235,15 @@ theorem fib_vajda (n i j : Nat) :
     -- Step 2: substitute Cassini
     rw [this, halg, hcassini]
 
+/-- F(n+5) = 5*F(n+1) + 3*F(n).
+    bridge:fib-shift-5 -/
+theorem fib_shift5 (n : Nat) : Nat.fib (n + 5) = 5 * Nat.fib (n + 1) + 3 * Nat.fib n := by
+  -- F(n+2) = F(n)+F(n+1), F(n+3) = F(n+1)+F(n+2) = 2F(n+1)+F(n),
+  -- F(n+4) = 3F(n+1)+2F(n), F(n+5) = 5F(n+1)+3F(n)
+  have h2 : Nat.fib (n + 2) = Nat.fib n + Nat.fib (n + 1) := Nat.fib_add_two
+  have h3 : Nat.fib (n + 3) = Nat.fib (n + 1) + Nat.fib (n + 2) := Nat.fib_add_two
+  have h4 : Nat.fib (n + 4) = Nat.fib (n + 2) + Nat.fib (n + 3) := Nat.fib_add_two
+  have h5 : Nat.fib (n + 5) = Nat.fib (n + 3) + Nat.fib (n + 4) := Nat.fib_add_two
+  linarith
+
 end Omega

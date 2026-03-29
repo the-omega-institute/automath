@@ -694,6 +694,15 @@ theorem lucasNum_mul_formula : ∀ (m n : Nat), n ≤ m →
     rw [this]
     ring
 
+/-- Lucas odd-double: L(2n+1) = L(n)*L(n+1) - (-1)^n.
+    bridge:lucas-odd-double -/
+theorem lucasNum_double_odd (n : Nat) :
+    (lucasNum (2 * n + 1) : ℤ) = (lucasNum n : ℤ) * lucasNum (n + 1) - (-1) ^ n := by
+  have h := lucasNum_mul_formula (n + 1) n (by omega)
+  simp only [lucasNum_one, show n + 1 + n = 2 * n + 1 from by omega,
+    show n + 1 - n = 1 from by omega, Nat.cast_one, mul_one] at h
+  linarith [mul_comm (lucasNum (n + 1) : ℤ) (lucasNum n : ℤ)]
+
 /-- Lucas partial sum: Σ_{k=0}^n L(k) = L(n+2) - 1.
     bridge:lucas-partial-sum -/
 theorem lucasNum_partial_sum (n : Nat) :

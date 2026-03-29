@@ -52,4 +52,10 @@ def halfCircleDim (n_free : Nat) (n_torsion : Nat) : ℚ :=
 theorem halfCircleDim_nat : halfCircleDim 1 0 = 1 / 2 := by
   simp [halfCircleDim, circleDim]
 
+/-- Circle dimension is monotone in free rank.
+    prop:circle-dimension-laws -/
+theorem circleDim_mono {n₁ n₂ t : Nat} (h : n₁ ≤ n₂) :
+    circleDim n₁ t ≤ circleDim n₂ t := by
+  simp [circleDim]; exact h
+
 end Omega.CircleDimension

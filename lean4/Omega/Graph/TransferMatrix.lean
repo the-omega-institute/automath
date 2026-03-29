@@ -391,4 +391,22 @@ theorem goldenMeanAdjacency_irreducible :
     ∀ i j : Fin 2, 0 < (goldenMeanAdjacency + goldenMeanAdjacency ^ 2) i j := by
   native_decide
 
+/-- All entries of A^n are nonneg (they are Fibonacci numbers).
+    thm:folding-stable-syntax-fib-fusion-ring -/
+theorem goldenMeanAdjacency_pow_nonneg (n : Nat) (i j : Fin 2) :
+    0 ≤ (goldenMeanAdjacency ^ n) i j := by
+  -- All entries are Nat.fib values cast to ℤ, hence ≥ 0
+  have h00 : (goldenMeanAdjacency ^ n) 0 0 = (Nat.fib (n + 1) : ℤ) := goldenMeanAdjacency_pow_00 n
+  have h01 : (goldenMeanAdjacency ^ n) 0 1 = (Nat.fib n : ℤ) := goldenMeanAdjacency_pow_01 n
+  have h10 : (goldenMeanAdjacency ^ n) 1 0 = (Nat.fib n : ℤ) := goldenMeanAdjacency_pow_10 n
+  have h11 : ∀ m, (goldenMeanAdjacency ^ (m + 1)) 1 1 = (Nat.fib m : ℤ) := goldenMeanAdjacency_pow_11
+  fin_cases i <;> fin_cases j <;> simp only [show (0 : Fin 2) = ⟨0, by omega⟩ from rfl,
+    show (1 : Fin 2) = ⟨1, by omega⟩ from rfl] at *
+  · linarith
+  · linarith
+  · linarith
+  · cases n with
+    | zero => native_decide
+    | succ m => linarith [h11 m]
+
 end Omega.Graph
