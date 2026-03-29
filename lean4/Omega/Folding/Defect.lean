@@ -565,4 +565,19 @@ theorem weight_periodicWord110_three : weight (periodicWord110 3) = 3 := by nati
     thm:fold-periodic-word-110-instance -/
 theorem weight_periodicWord110_four : weight (periodicWord110 4) = 8 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R59: Sprint to 200 theorems
+-- ══════════════════════════════════════════════════════════════
+
+/-- Global defect unfolds to the xor of two restricted Fold results (definitional).
+    prop:fold-defect-antisymmetric -/
+theorem globalDefect_antisymmetric (h : m ≤ n) (ω : Word n) :
+    globalDefect h ω = xorWord (Fold (restrictWord h ω)).1 (X.restrictLE h (Fold ω)).1 := rfl
+
+/-- Fold commutes with truncation/restriction iff local defect vanishes (reversed direction).
+    prop:fold-truncate-restrict-iff -/
+theorem Fold_truncate_eq_restrict_iff (ω : Word (m + 1)) :
+    Fold (truncate ω) = X.restrict (Fold ω) ↔ localDefect ω = zeroWord m :=
+  (localDefect_eq_zero_iff_fold_commutes ω).symm
+
 end Omega

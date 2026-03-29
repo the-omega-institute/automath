@@ -1012,4 +1012,28 @@ theorem exactWeightCount_total_sum (m : Nat) :
   rw [exactWeightCount_fib_sub_one] at hkey
   linarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R59: Sprint to 200 theorems
+-- ══════════════════════════════════════════════════════════════
+
+/-- F(m+2)^2 ≤ S_2(m) · F(m+2), i.e. the second moment times cardinality dominates the
+    square of cardinality (Cauchy-Schwarz consequence).
+    prop:pom-moment-cauchy-schwarz-card -/
+theorem momentSum_ge_card_sq (m : Nat) :
+    Nat.fib (m + 2) ^ 2 ≤ momentSum 2 m * Nat.fib (m + 2) := by
+  have h := momentSum_ge_card' 2 m
+  nlinarith
+
+/-- Weight of any m-bit word is at most F(m+3) - 2 (named alias).
+    prop:pom-weight-upper-bound -/
+theorem weight_le_fib_sub_two (w : Word m) :
+    weight w ≤ Nat.fib (m + 3) - 2 :=
+  weight_le_allTrue w
+
+/-- exactWeightCount at weight 0 is positive.
+    prop:pom-ewc-pos-zero -/
+theorem exactWeightCount_pos_zero (m : Nat) :
+    0 < exactWeightCount m 0 := by
+  rw [exactWeightCount_zero_eq_one']; exact Nat.one_pos
+
 end Omega
