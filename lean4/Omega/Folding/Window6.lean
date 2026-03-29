@@ -881,4 +881,35 @@ theorem paper_nontrivial_microstate_count_six :
     Fintype.card (Word 6) - cFiberHist 6 1 = 62 :=
   nontrivial_microstate_count_six
 
+/-- Sector sum at m = 6, q = 3: S_3(6) = 820.
+    cor:conclusion-sector-resolved-collision-moments-by-genus-q3 -/
+theorem paper_sector_sum_six_q3 :
+    2 * 1 ^ 3 + 4 * 2 ^ 3 + 8 * 3 ^ 3 + 5 * 4 ^ 3 + 2 * 5 ^ 3 = 820 :=
+  sector_sum_six_q3
+
+/-- Cauchy-Schwarz gap at m = 6: |X_6| * S_2(6) - (2^6)^2 = 524.
+    cor:conclusion-sector-resolved-collision-moments-by-genus-cs-gap -/
+theorem paper_cauchy_schwarz_gap_six :
+    Fintype.card (X 6) * momentSum 2 6 - (2 ^ 6) ^ 2 = 524 :=
+  cauchy_schwarz_gap_six
+
+/-- TQFT genus values at m = 6: S_2(6) = 220 and |X_6| = 21.
+    cor:conclusion-sector-resolved-collision-moments-by-genus-values -/
+theorem paper_tqft_genus_values_six :
+    momentSum 2 6 = 220 ∧ Fintype.card (X 6) = 21 :=
+  tqft_genus_values_six
+
+/-- Weyl group orders: 2! = 2, 3! = 6, 4! = 24.
+    thm:conclusion-window6-hidden-reflection-invariant-polynomial-ring-weyl -/
+theorem paper_weyl_orders :
+    Nat.factorial 2 = 2 ∧ Nat.factorial 3 = 6 ∧ Nat.factorial 4 = 24 :=
+  weyl_orders
+
+/-- Gauge group order factored: (2!)^8 * (3!)^4 * (4!)^9 = 2^8 * 6^4 * 24^9.
+    thm:conclusion-window6-hidden-reflection-invariant-polynomial-ring-gauge -/
+theorem paper_gauge_group_order_factored :
+    (Nat.factorial 2) ^ 8 * (Nat.factorial 3) ^ 4 * (Nat.factorial 4) ^ 9 =
+      2 ^ 8 * 6 ^ 4 * 24 ^ 9 :=
+  gauge_group_order_factored
+
 end Omega
