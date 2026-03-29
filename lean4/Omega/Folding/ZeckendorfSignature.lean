@@ -372,6 +372,21 @@ theorem bdry_delta34_identity : Nat.fib 9 = Nat.fib 10 - Nat.fib 8 := by native_
     thm:congruence-unitgroup-order12-m56 (seed value) -/
 @[simp] theorem totient_fib_8 : Nat.totient (Nat.fib 8) = 12 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R137: Totient of F(9) and F(10)
+-- ══════════════════════════════════════════════════════════════
+
+/-- φ(F(9)) = φ(34) = 16. thm:mul-definitional -/
+@[simp] theorem totient_fib_9 : Nat.totient (Nat.fib 9) = 16 := by native_decide
+
+/-- φ(F(10)) = φ(55) = 40. thm:mul-definitional -/
+@[simp] theorem totient_fib_10 : Nat.totient (Nat.fib 10) = 40 := by native_decide
+
+/-- Paper: thm:mul-definitional (unit group orders) -/
+theorem paper_totient_fib_9_10 :
+    Nat.totient (Nat.fib 9) = 16 ∧ Nat.totient (Nat.fib 10) = 40 :=
+  ⟨totient_fib_9, totient_fib_10⟩
+
 /-- If φ(F(m+2)) = 12 and 1 ≤ m ≤ 10, then m ∈ {5, 6}.
     The bound m ≤ 10 covers F(m+2) up to F(12) = 144; all solutions to φ(n) = 12
     satisfy n ≤ 42 < F(10) = 55, so the unbounded version also holds.

@@ -469,4 +469,25 @@ theorem paper_dfa_density_dichotomy :
     (1 < Nat.fib 4 ∧ Nat.fib 4 < 2 ^ 2) :=
   dfa_density_dichotomy_golden_mean
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R137: Moment sum strict monotonicity in q at m=6
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_q(6) is strictly increasing in q for q=2..6.
+    prop:pom-coarsegraining-collision-moment-strict-monotonicity -/
+theorem momentSum_strict_mono_q_six :
+    momentSum 2 6 < momentSum 3 6 ∧
+    momentSum 3 6 < momentSum 4 6 ∧
+    momentSum 4 6 < momentSum 5 6 ∧
+    momentSum 5 6 < momentSum 6 6 := by
+  simp only [← cMomentSum_eq]; native_decide
+
+/-- Paper: prop:pom-coarsegraining-collision-moment-strict-monotonicity -/
+theorem paper_momentSum_strict_mono_q_six :
+    momentSum 2 6 < momentSum 3 6 ∧
+    momentSum 3 6 < momentSum 4 6 ∧
+    momentSum 4 6 < momentSum 5 6 ∧
+    momentSum 5 6 < momentSum 6 6 :=
+  momentSum_strict_mono_q_six
+
 end Omega

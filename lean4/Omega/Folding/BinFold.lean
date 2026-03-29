@@ -478,4 +478,27 @@ theorem paper_typeAdj_total_edges_six :
         cTypeAdjCount 6 (X.ofNat 6 i) (X.ofNat 6 j))) = 384 :=
   typeAdj_total_edges_six
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R137: Cyclic orbit period-3 word
+-- ══════════════════════════════════════════════════════════════
+
+/-- Cyclic rotation of a 6-bit word: shift left by one position mod 6. -/
+def cyclicRotate6 (w : Word 6) : Word 6 := fun i => w ⟨(i.val + 1) % 6, by omega⟩
+
+/-- The word 001001 (positions 2,5 true) has cyclic period exactly 3.
+    par:bdry-tower-global-sheet-z6 -/
+theorem word_001001_period_three :
+    let w : Word 6 := fun i => i.val = 2 ∨ i.val = 5
+    cyclicRotate6 (cyclicRotate6 (cyclicRotate6 w)) = w ∧
+    cyclicRotate6 w ≠ w ∧
+    cyclicRotate6 (cyclicRotate6 w) ≠ w := by native_decide
+
+/-- Paper: par:bdry-tower-global-sheet-z6 -/
+theorem paper_word_001001_period_three :
+    let w : Word 6 := fun i => i.val = 2 ∨ i.val = 5
+    cyclicRotate6 (cyclicRotate6 (cyclicRotate6 w)) = w ∧
+    cyclicRotate6 w ≠ w ∧
+    cyclicRotate6 (cyclicRotate6 w) ≠ w :=
+  word_001001_period_three
+
 end Omega
