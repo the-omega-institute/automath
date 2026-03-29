@@ -459,4 +459,23 @@ theorem paper_geoStabilizer_mask_34 (ω : Fin 6 → Bool) :
     = 34 * (1 - (if ω ⟨0, by omega⟩ then 1 else 0) - (if ω ⟨4, by omega⟩ then 1 else 0)) :=
   geoStabilizer_mask_34 ω
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R134: Type adjacency total edge count
+-- ══════════════════════════════════════════════════════════════
+
+/-- Total directed edges in type adjacency graph at m=6: Σ row_sums = 6 · 2^6 = 384.
+    Each row sum = 6 · d(x), and Σ d(x) = 2^6 = 64.
+    thm:terminal-window6-edge-flux-skeleton -/
+theorem typeAdj_total_edges_six :
+    (Finset.univ : Finset (Fin 21)).sum (fun i =>
+      (Finset.univ : Finset (Fin 21)).sum (fun j =>
+        cTypeAdjCount 6 (X.ofNat 6 i) (X.ofNat 6 j))) = 384 := by native_decide
+
+/-- Paper: thm:terminal-window6-edge-flux-skeleton -/
+theorem paper_typeAdj_total_edges_six :
+    (Finset.univ : Finset (Fin 21)).sum (fun i =>
+      (Finset.univ : Finset (Fin 21)).sum (fun j =>
+        cTypeAdjCount 6 (X.ofNat 6 i) (X.ofNat 6 j))) = 384 :=
+  typeAdj_total_edges_six
+
 end Omega

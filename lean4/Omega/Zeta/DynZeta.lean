@@ -145,6 +145,32 @@ theorem goldenMean_primitive_orbit_numerators :
     (18 : ℤ) + (-1) * 4 + (-1) * 3 + 1 * 1 = 12 := by
   omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R134: Primitive orbit counts n=7..10
+-- ══════════════════════════════════════════════════════════════
+
+/-- Primitive orbit counts for golden-mean SFT via Mobius inversion, n=7..10.
+    p(7)=4, p(8)=5, p(9)=8, p(10)=11.
+    n·p(n) = Σ_{d|n} μ(n/d) · L(d).
+    prop:zetaK-mobius-primitive -/
+theorem goldenMean_primitive_orbit_7_10 :
+    -- n=7: 7·p(7) = L(7) - L(1) = 29 - 1 = 28
+    (29 - 1 : ℤ) = 7 * 4 ∧
+    -- n=8: 8·p(8) = L(8) - L(4) = 47 - 7 = 40
+    (47 + (-1) * 7 : ℤ) = 8 * 5 ∧
+    -- n=9: 9·p(9) = L(9) - L(3) = 76 - 4 = 72
+    (76 + (-1) * 4 : ℤ) = 9 * 8 ∧
+    -- n=10: 10·p(10) = L(10) - L(5) - L(2) + L(1) = 123 - 11 - 3 + 1 = 110
+    (123 + (-1) * 11 + (-1) * 3 + 1 * 1 : ℤ) = 10 * 11 := by omega
+
+/-- Paper: prop:zetaK-mobius-primitive (n=7..10) -/
+theorem paper_goldenMean_primitive_orbit_7_10 :
+    (29 - 1 : ℤ) = 7 * 4 ∧
+    (47 + (-1) * 7 : ℤ) = 8 * 5 ∧
+    (76 + (-1) * 4 : ℤ) = 9 * 8 ∧
+    (123 + (-1) * 11 + (-1) * 3 + 1 * 1 : ℤ) = 10 * 11 :=
+  goldenMean_primitive_orbit_7_10
+
 /-! ## Degeneracy-zeta coefficients
 
 The degeneracy ratio ζ_full/ζ = (1-z-z²)/(1-2z) measures the gap

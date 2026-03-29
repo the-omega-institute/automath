@@ -1,4 +1,5 @@
 import Omega.Folding.Fiber
+import Omega.Folding.MaxFiber
 
 namespace Omega
 
@@ -504,3 +505,26 @@ theorem carryIndicator_stableZero_left (x : X (m + 1)) :
 theorem stableValue_stableAdd_eq (x y : X m) :
     stableValue (stableAdd x y) = (stableValue x + stableValue y) % Nat.fib (m + 2) :=
   stableValue_stableAdd x y
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R134: Stable value Gauss sum instances
+-- ══════════════════════════════════════════════════════════════
+
+/-- Computable sum of stable values at resolution m. -/
+def cStableValueSum (m : Nat) : Nat :=
+  (@Finset.univ (X m) (Omega.fintypeX m)).sum (fun x => stableValue x)
+
+/-- Gauss sum instances: sum of stable values = F(m+2)·(F(m+2)-1)/2.
+    thm:pom-stableValue-gauss-sum -/
+theorem stableValue_sum_gauss_instances :
+    cStableValueSum 4 = Nat.fib 6 * (Nat.fib 6 - 1) / 2 ∧
+    cStableValueSum 5 = Nat.fib 7 * (Nat.fib 7 - 1) / 2 ∧
+    cStableValueSum 6 = Nat.fib 8 * (Nat.fib 8 - 1) / 2 := by
+  native_decide
+
+/-- Paper: stableValue Gauss sum instances -/
+theorem paper_stableValue_sum_gauss_instances :
+    cStableValueSum 4 = Nat.fib 6 * (Nat.fib 6 - 1) / 2 ∧
+    cStableValueSum 5 = Nat.fib 7 * (Nat.fib 7 - 1) / 2 ∧
+    cStableValueSum 6 = Nat.fib 8 * (Nat.fib 8 - 1) / 2 :=
+  stableValue_sum_gauss_instances
