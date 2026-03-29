@@ -203,6 +203,7 @@ def lucasNum : Nat → Nat
 @[simp] theorem lucasNum_one : lucasNum 1 = 1 := rfl
 theorem lucasNum_two : lucasNum 2 = 3 := rfl
 theorem lucasNum_three : lucasNum 3 = 4 := rfl
+theorem lucasNum_nine : lucasNum 9 = 76 := by native_decide
 @[simp] theorem lucasNum_succ_succ (n : Nat) :
     lucasNum (n + 2) = lucasNum (n + 1) + lucasNum n := rfl
 
@@ -1054,6 +1055,57 @@ theorem lucasNum_four_dvd (n : Nat) : 4 ∣ lucasNum n ↔ n % 6 = 3 := by
 
 -- lucasNum_coprime_five deferred: needs pair-state tracking for L mod 5 period proof
 -- bridge:lucas-five-coprimality
+
+/-- gcd(L(n), F(n)) = 2 if 3|n, else 1.
+    bridge:lucas-fib-gcd-exact -/
+theorem lucasNum_fib_gcd_eq (n : Nat) :
+    Nat.gcd (lucasNum n) (Nat.fib n) = if 3 ∣ n then 2 else 1 := by
+  split
+  · -- Case 3|n: both even, gcd ≥ 2, and gcd|2 so gcd = 2
+    rename_i h3
+    have hLeven : 2 ∣ lucasNum n := (lucasNum_even_iff n).mpr h3
+    have hFeven : 2 ∣ Nat.fib n := (fib_even_iff_three_dvd n).mpr h3
+    have hgcd_ge : 2 ∣ Nat.gcd (lucasNum n) (Nat.fib n) :=
+      Nat.dvd_gcd hLeven hFeven
+    cases n with
+    | zero => simp [lucasNum_zero]
+    | succ m =>
+      have hgcd_le := lucasNum_fib_gcd_dvd_two (m + 1) (by omega)
+      -- gcd ≥ 2 and gcd | 2, so gcd = 2
+      exact Nat.dvd_antisymm hgcd_le hgcd_ge
+  · -- Case ¬3|n: F(n) is odd, so gcd is odd, and gcd|2 forces gcd=1
+    rename_i h3
+    have hFodd : ¬ (2 ∣ Nat.fib n) := (fib_even_iff_three_dvd n).not.mpr h3
+    -- gcd | F(n), so if gcd were even, F(n) would be even
+    have hgcd_odd : ¬ (2 ∣ Nat.gcd (lucasNum n) (Nat.fib n)) := by
+      intro h; exact hFodd (dvd_trans h (Nat.gcd_dvd_right _ _))
+    cases n with
+    | zero => exact absurd ⟨0, rfl⟩ h3
+    | succ m =>
+      have hgcd_le := lucasNum_fib_gcd_dvd_two (m + 1) (by omega)
+      -- gcd | 2 and gcd is odd, so gcd ∈ {1, 2} and gcd ≠ 2, hence gcd = 1
+      have : Nat.gcd (lucasNum (m + 1)) (Nat.fib (m + 1)) ∣ 2 := hgcd_le
+      -- gcd | 2 means gcd ∈ {1, 2}. Since gcd is odd, gcd = 1.
+      have hle : Nat.gcd (lucasNum (m + 1)) (Nat.fib (m + 1)) ≤ 2 := Nat.le_of_dvd (by omega) this
+      have hpos : 0 < Nat.gcd (lucasNum (m + 1)) (Nat.fib (m + 1)) := Nat.pos_of_ne_zero (by
+        intro h; rw [Nat.gcd_eq_zero_iff] at h; linarith [lucasNum_pos (m + 1)])
+      omega
+
+/-- Fibonacci-Lucas Wronskian: F(n)*L(n+1) - F(n+1)*L(n) = 2*(-1)^(n+1).
+    bridge:fib-lucas-wronskian -/
+theorem fib_lucas_wronskian (n : Nat) :
+    (Nat.fib n : ℤ) * lucasNum (n + 1) - (Nat.fib (n + 1) : ℤ) * lucasNum n =
+    2 * (-1) ^ (n + 1) := by
+  induction n with
+  | zero => simp [lucasNum_zero, lucasNum_one]
+  | succ k ih =>
+    -- F(k+1)*L(k+2) - F(k+2)*L(k+1)
+    -- = F(k+1)*(L(k+1)+L(k)) - (F(k+1)+F(k))*L(k+1)
+    -- = F(k+1)*L(k) - F(k)*L(k+1) = -(F(k)*L(k+1)-F(k+1)*L(k)) = -IH = 2*(-1)^(k+2)
+    have hfib := Nat.fib_add_two (n := k)
+    push_cast [lucasNum_succ_succ (k), hfib]
+    have hpow : (2 : ℤ) * (-1) ^ (k + 1 + 1) = -(2 * (-1) ^ (k + 1)) := by ring
+    rw [hpow]; linarith
 
 /-- Fibonacci tripling: F(3n) = F(n) * (5*F(n)^2 + 3*(-1)^n).
     bridge:fibonacci-tripling -/

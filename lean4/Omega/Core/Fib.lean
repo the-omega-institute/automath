@@ -1246,4 +1246,6 @@ theorem fib_shift5 (n : Nat) : Nat.fib (n + 5) = 5 * Nat.fib (n + 1) + 3 * Nat.f
   have h5 : Nat.fib (n + 5) = Nat.fib (n + 3) + Nat.fib (n + 4) := Nat.fib_add_two
   linarith
 
+theorem fib_fourteen_eq : Nat.fib 14 = 377 := by native_decide
+
 end Omega
