@@ -1124,4 +1124,10 @@ theorem fib_coprime_triple (n : Nat) :
   rw [Nat.gcd_add_self_right]
   exact fib_coprime_succ n
 
+/-- F_n + F_{n+1} = F_{n+2}, the Fibonacci recurrence in additive form.
+    prop:pom-fib-add-fib-eq-fib-succ -/
+theorem fib_add_fib_eq_fib_succ (n : Nat) :
+    Nat.fib n + Nat.fib (n + 1) = Nat.fib (n + 2) :=
+  (Nat.fib_add_two (n := n)).symm
+
 end Omega
