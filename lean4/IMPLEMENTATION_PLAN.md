@@ -8,15 +8,15 @@
 |---|---|
 | 总行数 | ~32,000 |
 | 定理/定义数 | ~3,341 |
-| 论文接口包装 | 579+ |
-| 文件数 | 72 |
+| 论文接口包装 | 582+ |
+| 文件数 | 73 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 577 |
+| \leanverified 标注数 | 580 |
 | \leanpartial 标注数 | 10 |
-| 总标注数 | 588 |
-| 轮次 | R126 T2（round_count=127） |
+| 总标注数 | 591 |
+| 轮次 | R127（round_count=128） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -26,13 +26,13 @@
 | Emergent Arithmetic | 185 | 69 | 37.3% |
 | Folding | 337 | 69 | 20.5% |
 | Conclusion | 2,550 | 105 | 4.1% |
-| Group Unification | 469 | 44 | 9.4% |
+| Group Unification | 469 | 46 | 9.8% |
 | SPG | 129 | 12 | 9.3% |
 | Circle Dimension | 393 | 27 | 6.9% |
 | Zeta Finite Part | 4,524 | 57 | 1.3% |
-| Discussion | 67 | 0 | 0.0% |
+| Discussion | 67 | 1 | 1.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **572** | **5.4%** |
+| **合计（body）** | **10,508** | **575** | **5.5%** |
 
 ### 1.2 已完成模块
 
@@ -45,6 +45,7 @@
 | Frontier (Assumptions, Certificates, Conditional, Conjectures, ConditionalSummary) | 5 | ~347 | 99% |
 | Combinatorics (PathIndSet, FibonacciCube) | 2 | ~510 | 100% |
 | Audit (SourceMap, Inventory, NoAxiom) | 3 | ~5 | 同步 |
+| Conclusion (RamanujanCollapse) | 1 | ~2 | 100% |
 
 ### 1.3 已完成的核心数学结果
 
