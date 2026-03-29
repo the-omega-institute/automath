@@ -7,32 +7,32 @@
 | 指标 | 数值 |
 |---|---|
 | 总行数 | ~30,200 |
-| 定理/定义数 | ~3,251 |
+| 定理/定义数 | ~3,252 |
 | 论文接口包装 | 370+ |
 | 文件数 | 69 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,507 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 326 |
+| \leanverified 标注数 | 331 |
 | \leanpartial 标注数 | 10 |
-| 总标注数 | 336 |
-| 轮次 | R61（round_count=62） |
+| 总标注数 | 341 |
+| 轮次 | R62（round_count=63） |
 
-**Phase 7 校准（R61 轮，2026-03-29）**：按章节覆盖率分布：
+**Phase 7 校准（R62 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 131 | 7.7% |
+| POM | 1,707 | 132 | 7.7% |
 | Emergent Arithmetic | 185 | 58 | 31.4% |
 | Folding | 337 | 58 | 17.2% |
-| Conclusion | 2,550 | 35 | 1.4% |
+| Conclusion | 2,550 | 37 | 1.5% |
 | Group Unification | 469 | 22 | 4.7% |
 | SPG | 129 | 9 | 7.0% |
 | Circle Dimension | 393 | 16 | 4.1% |
-| Zeta Finite Part | 4,524 | 7 | 0.2% |
+| Zeta Finite Part | 4,524 | 9 | 0.2% |
 | Discussion | 67 | 0 | 0.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,507** | **336** | **3.2%** |
+| **合计（body）** | **10,507** | **341** | **3.2%** |
 
 ### 1.2 已完成模块
 
@@ -134,6 +134,8 @@
 **Fibonacci 多项式深化（Round 16，计划11前置）**：$F_n(0)$ 评估（fibPoly_eval_zero：$F_0(0)=0$，$F_n(0)=1$ for $n \ge 1$）; $I_\ell(0)=1$（pathIndSetPoly_eval_zero）; 路径独立集多项式递推（pathIndSetPoly_recurrence：$I_{\ell+2}=I_{\ell+1}+X \cdot I_\ell$）
 **圆维度半径–Poisson 时间共轭（Round 116）**：fibRadius（Fibonacci 半径参数）; poissonTimeOfRadius（Poisson 时间参数）; poissonTimeOf_fibRadius（$t(\varrho_m)=F_m$）; one_sub_sq_of_poissonTime_param（一般恒等式 $1-(t/(t+2))^2=4(t+1)/(t+2)^2$）; one_sub_fibRadius_sq（$1-\varrho_m^2=4(F_m+1)/(F_m+2)^2$）; one_sub_sq_of_poissonTime_param_nat（自然数特化）
 **圆维度半径–Poisson 时间共轭渐近式（Round 117）**：phi_rpow_neg_nat_tendsto_zero（$\varphi^{-m}\to0$）; fib_mul_phi_neg_tendsto_inv_sqrt5（$F_m\varphi^{-m}\to1/\sqrt5$）; fib_add_two_mul_phi_neg_tendsto_inv_sqrt5（$(F_m+2)\varphi^{-m}\to1/\sqrt5$）; one_sub_fibRadius_sq_tendsto（归一化极限趋于 $1$）; one_sub_fibRadius_sq_isEquivalent（$1-\varrho_m^2\sim 4\sqrt5\,\varphi^{-m}$）
+**Phase R62: Fibonacci 距离2互素 + analyst 标注5条（Round R62）**：一文件 Core/Fib.lean（:1119-1127）——fib\_coprime\_triple（prop:pom-fib-coprime-triple（新标签，tex 无对应环境，标签由 formalizer 在 docstring 定义）：gcd(F_n, F_{n+2})=1，距离2 Fibonacci 互素，通过 fib\_add\_two + gcd\_add\_self\_right + fib\_coprime\_succ 推导，Core/Fib.lean:1121）——**0 个新论文标签计入覆盖率**（prop:pom-fib-coprime-triple tex 无对应环境）——analyst（b1912ea）标注5条：prop:finite-part-reduced-determinant-sq-channel-factorization（Zeta）、thm:operator-fredholm-zeta-equality-undecidable（Zeta）、thm:conclusion-window6-groupoid-rather-than-free-quotient（Conclusion）、prop:conclusion-index-torsion-time-lower-bound（Conclusion）、prop:pom-coarsegraining-collision-moment-strict-monotonicity（POM）——POM 132（+1），Conclusion 37（+2），Zeta 9（+2），全局标注 336→341（+5），Lean 定理 ~3,251→~3,252（+1），commit b353da8+b1912ea
+
 **Phase R46: 纤维隐藏位正性条件 + 边界平方恒等式一般化（Round R46）**：两文件 MomentBounds.lean（:1053）+ BoundaryLayer.lean（:236）——fiberHiddenBitCount\_one\_pos\_iff（thm:pom-hidden-bit-one-pos-iff（新标签，tex 无环境，标注于 cor:pom-branch-mass-law 深化位置）：d_{m,1}(x)>0 的充要条件，:1053）; cBoundaryCount\_square\_identity\_general（prop:bdry-fib-square-identity（**从弱→强覆盖升级，一般形式**）：b(2m-1)=b(m)²+b(m+1)² 无条件一般归纳证明，:236）——注：S2 三项递推数学不成立（formalizer 反例验证，丢弃）；upper_support_count 推迟——**0 个新论文标签计入覆盖率**（thm:pom-hidden-bit-one-pos-iff tex 无环境；prop:bdry-fib-square-identity 已注册，升级为强覆盖）——POM 标注 +1（cor:pom-branch-mass-law 深化），Group Unification 标注 +1（prop:bdry-fib-square-identity 升级），标注 236→238（+2），commit 408e04c
 
 **Phase R45: 纤维 ewc 分解和 + X6 CRT 分裂 + 隐藏位密度极限（Round R45）**：三文件 FiberWeightCount.lean（:752）+ FiberRing.lean（:219-224）+ Entropy.lean（:757）——fiberMultiplicity\_eq\_ewc\_sum（thm:pom-fiber-ewc-sum（新标签，tex 无环境，标注于 prop:pom-power-sum-hankel-psd 深化位置）：d(x) = ewc(sv(x)) + ewc(sv(x)+F_{m+2})，:752）; X6\_decomposition（cor:crt-factorization（深化，m=6 实例）：X 6 ≃+* ZMod 3 × ZMod 7，FiberRing.lean:219）; X6\_crt\_split（cor:crt-factorization + thm:conclusion-window6-visible-crt-arithmetic-phase-space（已由 formalizer 541b890 标注）：nonemptiness witness，:224）; hiddenBitDensity\_tendsto\_third（cor:pom-hidden-bit-entropy（**新标签**，tex 有环境，双重复出现标注：subsec__pom-entropy-maxent.tex + subsec__pom-overflow-global.tex）：B(m)/2^m → 1/3，Entropy.lean:757）——注：formalizer 541b890 另行标注 5 个（X6\_crt\_split@conclusion, crt\_idempotent\_7/15/product/sum）——**1 个新论文标签计入覆盖率**（cor:pom-hidden-bit-entropy；thm:pom-fiber-ewc-sum tex 无环境，cor:crt-factorization 已注册新深化）——POM 覆盖率：~1,447（不变），标注 232→236（+4 registrar，总含 formalizer 232→232+4=236），commit f557436
