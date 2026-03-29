@@ -927,4 +927,31 @@ theorem hiddenBit_unified_recurrence (w : Word (m + 3))
     simp only [ite_true]
     exact hiddenBit_boolean_recurrence w hLast hPenult
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R69: hiddenBitCount = 2^m / 3 (Nat floor division)
+-- ══════════════════════════════════════════════════════════════
+
+private theorem two_pow_mod_three : ∀ m : Nat,
+    2 ^ m % 3 = if m % 2 = 0 then 1 else 2
+  | 0 => by simp
+  | 1 => by simp
+  | m + 2 => by
+    have ih := two_pow_mod_three m
+    have h4 : 2 ^ (m + 2) = 4 * 2 ^ m := by ring
+    have hmod : (m + 2) % 2 = m % 2 := by omega
+    rw [h4, hmod]
+    -- 4 * 2^m mod 3 = (4 mod 3) * (2^m mod 3) mod 3 = 1 * (2^m mod 3) mod 3 = 2^m mod 3
+    have : (4 * 2 ^ m) % 3 = (4 % 3 * (2 ^ m % 3)) % 3 := Nat.mul_mod 4 (2 ^ m) 3
+    rw [this, show 4 % 3 = 1 from rfl, one_mul, Nat.mod_mod_of_dvd]
+    · exact ih
+    · decide
+
+/-- hiddenBitCount m = ⌊2^m / 3⌋.
+    thm:pom-hidden-bit-count-floor-div -/
+theorem hiddenBitCount_floor_div_three (m : Nat) :
+    hiddenBitCount m = 2 ^ m / 3 := by
+  have hclosed := paper_hiddenBitCount_closed m
+  have hmod := two_pow_mod_three m
+  split_ifs at hclosed hmod with heven <;> omega
+
 end Omega

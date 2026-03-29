@@ -1036,4 +1036,25 @@ theorem exactWeightCount_pos_zero (m : Nat) :
     0 < exactWeightCount m 0 := by
   rw [exactWeightCount_zero_eq_one']; exact Nat.one_pos
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R69: S_2 Fibonacci-type superadditivity
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_2(m+1) + S_2(m) ≤ S_2(m+2) for m ≥ 1 (Fibonacci-type superadditivity).
+    From recurrence: S_2(m+2) = 2S_2(m+1) + 2S_2(m) - 2S_2(m-1),
+    so S_2(m+2) - S_2(m+1) - S_2(m) = S_2(m+1) - S_2(m-1) + S_2(m) - S_2(m-1) ≥ 0.
+    thm:pom-s2-fib-superadditive -/
+theorem momentSum_two_fib_superadditive (m : Nat) (hm : 1 ≤ m) :
+    momentSum 2 (m + 1) + momentSum 2 m ≤ momentSum 2 (m + 2) := by
+  obtain ⟨k, rfl⟩ : ∃ k, m = k + 1 := ⟨m - 1, by omega⟩
+  -- Recurrence at k: S(k+3) + 2S(k) = 2S(k+2) + 2S(k+1)
+  have hrec := momentSum_two_recurrence k
+  -- Goal: S(k+2) + S(k+1) ≤ S(k+3)
+  -- From hrec: S(k+3) = 2S(k+2) + 2S(k+1) - 2S(k)
+  -- S(k+3) - S(k+2) - S(k+1) = S(k+2) + S(k+1) - 2S(k)
+  --                             = (S(k+2) - S(k)) + (S(k+1) - S(k)) ≥ 0
+  have hm1 := momentSum_two_mono' k
+  have hm2 := momentSum_two_mono' (k + 1)
+  linarith
+
 end Omega

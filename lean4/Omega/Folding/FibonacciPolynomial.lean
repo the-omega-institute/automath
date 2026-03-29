@@ -763,4 +763,17 @@ theorem pathIndSetPolyNegOne_eq_zero_iff (l : Nat) :
   have : l % 6 = 0 ∨ l % 6 = 1 ∨ l % 6 = 2 ∨ l % 6 = 3 ∨ l % 6 = 4 ∨ l % 6 = 5 := by omega
   rcases this with h | h | h | h | h | h <;> simp [h] <;> omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R69: J_l absolute value bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- J_l takes values in {-1, 0, 1}.
+    prop:pom-Jl-abs-le-one -/
+theorem pathIndSetPolyNegOne_abs_le_one (l : Nat) :
+    pathIndSetPolyNegOne l ∈ ({-1, 0, 1} : Set Int) := by
+  rw [pathIndSetPolyNegOne_mod6]
+  have hlt : l % 6 < 6 := Nat.mod_lt l (by omega)
+  have : l % 6 = 0 ∨ l % 6 = 1 ∨ l % 6 = 2 ∨ l % 6 = 3 ∨ l % 6 = 4 ∨ l % 6 = 5 := by omega
+  rcases this with h | h | h | h | h | h <;> simp [h]
+
 end Omega
