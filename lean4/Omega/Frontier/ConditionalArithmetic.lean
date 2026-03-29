@@ -652,6 +652,12 @@ theorem stable_field_of_prime (hp : Nat.Prime (Nat.fib (m + 2))) :
 theorem ringChar_X_eq_fib (m : Nat) : ringChar (X m) = Nat.fib (m + 2) :=
   ringChar.eq_iff.mpr X.instCharP
 
+/-- The stable value of Fold(w) is less than F_{m+4} (= |X_{m+2}|).
+    prop:fold-basic -/
+theorem stableValue_Fold_lt (w : Word (m + 2)) :
+    stableValue (Fold w) < Nat.fib (m + 4) :=
+  stableValue_lt_fib (Fold w)
+
 end
 
 end Omega.Frontier

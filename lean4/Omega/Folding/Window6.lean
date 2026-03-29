@@ -846,4 +846,10 @@ theorem conclusion_window6_collision_mass :
      cBinFiberHist 6 2 * 2 ^ 2) / 4 = 53 := by
   rw [cBinFiberHist_6_2, cBinFiberHist_6_3, cBinFiberHist_6_4]; omega
 
+/-- Window-6 excess capacity: |X_6| * (D_max - 1) = 2^6 - 1.
+    thm:conclusion-window6-groupoid-collision-dimension-identity -/
+theorem window6_excess_capacity :
+    Nat.fib 8 * (cBinFiberMax 6 - 1) = 2 ^ 6 - 1 := by
+  rw [cBinFiberMax_six]; native_decide
+
 end Omega

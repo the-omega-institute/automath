@@ -1055,4 +1055,60 @@ theorem lucasNum_four_dvd (n : Nat) : 4 ∣ lucasNum n ↔ n % 6 = 3 := by
 -- lucasNum_coprime_five deferred: needs pair-state tracking for L mod 5 period proof
 -- bridge:lucas-five-coprimality
 
+/-- Fibonacci tripling: F(3n) = F(n) * (5*F(n)^2 + 3*(-1)^n).
+    bridge:fibonacci-tripling -/
+theorem fib_tripling (n : Nat) :
+    (Nat.fib (3 * n) : ℤ) = Nat.fib n * (5 * (Nat.fib n : ℤ) ^ 2 + 3 * (-1) ^ n) := by
+  cases n with
+  | zero => simp
+  | succ m =>
+    have hv := fib_vajda (m + 1) (m + 1) (m + 1)
+    rw [show m + 1 + (m + 1) = 2 * (m + 1) from by omega] at hv
+    rw [show 2 * (m + 1) + (m + 1) = 3 * (m + 1) from by omega] at hv
+    have hlf := lucasNum_mul_fib (m + 1) (by omega)
+    have hleq := lucasNum_eq_fib_aux m
+    have hfib2 : Nat.fib (m + 2) = Nat.fib m + Nat.fib (m + 1) := Nat.fib_add_two
+    have hLsq : (lucasNum (m + 1) : ℤ) ^ 2 =
+        5 * (Nat.fib (m + 1) : ℤ) ^ 2 + 4 * (-1) ^ (m + 1) := by
+      have hL : (lucasNum (m + 1) : ℤ) = Nat.fib (m + 2) + Nat.fib m := by push_cast; linarith [hleq]
+      have hF : (Nat.fib (m + 2) : ℤ) = Nat.fib m + Nat.fib (m + 1) := by push_cast; linarith [hfib2]
+      by_cases heven : Even m
+      · have hcas := fib_cassini_even m heven
+        have hpow : (-1 : ℤ) ^ (m + 1) = -1 := by
+          have : Odd (m + 1) := Even.add_one heven
+          exact Odd.neg_one_pow this
+        rw [hpow]; push_cast at hcas; nlinarith [hL, hF]
+      · have hcas := fib_cassini_odd m heven
+        have hpow : (-1 : ℤ) ^ (m + 1) = 1 := by
+          have hodd : Odd m := Nat.not_even_iff_odd.mp heven
+          exact Even.neg_one_pow (Odd.add_one hodd)
+        rw [hpow]; push_cast at hcas; nlinarith [hL, hF]
+    -- Cast hlf to ℤ: L(k)*F(k) = F(2k)
+    have hlfZ : (lucasNum (m + 1) : ℤ) * Nat.fib (m + 1) = Nat.fib (2 * (m + 1)) := by
+      push_cast; linarith [hlf]
+    -- hv: F(2k)^2 - F(k)*F(3k) = (-1)^k * F(k)^2
+    -- Substitute F(2k) = L(k)*F(k):
+    -- (L(k)*F(k))^2 - F(k)*F(3k) = (-1)^k*F(k)^2
+    -- L(k)^2*F(k)^2 - F(k)*F(3k) = (-1)^k*F(k)^2
+    -- F(k)*(L(k)^2*F(k) - F(3k)) = (-1)^k*F(k)^2
+    -- F(3k) = L(k)^2*F(k) - (-1)^k*F(k) = F(k)*(L(k)^2 - (-1)^k)
+    -- = F(k)*(5F(k)^2 + 4(-1)^k - (-1)^k) = F(k)*(5F(k)^2 + 3(-1)^k)
+    -- F(2k) = L(k)*F(k), so F(2k)^2 = L(k)^2*F(k)^2
+    have hF2sq : (Nat.fib (2 * (m + 1)) : ℤ) ^ 2 =
+        (lucasNum (m + 1) : ℤ) ^ 2 * (Nat.fib (m + 1) : ℤ) ^ 2 := by
+      nlinarith [hlfZ]
+    -- From hv: F(k)*F(3k) = F(2k)^2 - (-1)^k*F(k)^2
+    have hprod : (Nat.fib (m + 1) : ℤ) * Nat.fib (3 * (m + 1)) =
+        (Nat.fib (2 * (m + 1)) : ℤ) ^ 2 - (-1) ^ (m + 1) * (Nat.fib (m + 1) : ℤ) ^ 2 := by
+      nlinarith [hv]
+    -- Substitute F(2k)^2 = L(k)^2*F(k)^2 and L(k)^2 = 5F(k)^2+4(-1)^k:
+    -- F(k)*F(3k) = (5F(k)^2+4(-1)^k)*F(k)^2 - (-1)^k*F(k)^2 = F(k)^2*(5F(k)^2+3(-1)^k)
+    -- Divide by F(k) > 0:
+    have hfpos : (Nat.fib (m + 1) : ℤ) ≠ 0 := by
+      have := Nat.fib_pos.mpr (show 0 < m + 1 from by omega); omega
+    have hmul : (Nat.fib (m + 1) : ℤ) * Nat.fib (3 * (m + 1)) =
+        Nat.fib (m + 1) * (Nat.fib (m + 1) * (5 * (Nat.fib (m + 1) : ℤ) ^ 2 + 3 * (-1) ^ (m + 1))) := by
+      rw [hprod, hF2sq, hLsq]; ring
+    exact mul_left_cancel₀ hfpos hmul
+
 end Omega
