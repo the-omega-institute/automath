@@ -80,5 +80,6 @@ import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.Window6Collision
 import Omega.Conclusion.ResonanceWindow
+import Omega.GU.Window6RankGap
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
