@@ -30,6 +30,7 @@ CITE_RE = re.compile(r"\\cite[a-zA-Z*]*\s*(?:\[[^\]]*\]){0,2}\{([^}]+)\}")
 INPUT_RE = re.compile(r"\\(?:input|include)\{([^}]+)\}")
 BIBLIOGRAPHY_RE = re.compile(r"\\bibliography\{([^}]+)\}")
 BIBSTYLE_RE = re.compile(r"\\bibliographystyle\{([^}]+)\}")
+BIBITEM_RE = re.compile(r"\\bibitem(?:\[[^\]]*\])?\{([^}]+)\}")
 ENTRY_START_RE = re.compile(r"@([A-Za-z]+)\s*\{\s*([^,]+),", re.MULTILINE)
 FIELD_VALUE_RE = r'(?is)\b{field}\s*=\s*(".*?"|\{{.*?\}}|[^,\n]+)'
 NORMALIZE_RE = re.compile(r"[^A-Za-z0-9]+")
@@ -157,7 +158,9 @@ class JournalFitRecord:
     guide: str | None
     source_sections: list[str]
     has_main_tex: bool
+    has_bibliography_source: bool
     has_references_bib: bool
+    bibliography_source_kind: str | None
     bibliography_style: str | None
     section_total: int
     subsection_total: int
@@ -288,8 +291,7 @@ def extract_abstract(text: str) -> str:
 def bibliography_paths(publication_dir: Path, tex_text: str) -> list[Path]:
     match = BIBLIOGRAPHY_RE.search(tex_text)
     if not match:
-        candidate = publication_dir / "references.bib"
-        return [candidate] if candidate.is_file() else []
+        return []
     names = [token.strip() for token in match.group(1).split(",") if token.strip()]
     candidates: list[Path] = []
     for name in names:
@@ -297,6 +299,11 @@ def bibliography_paths(publication_dir: Path, tex_text: str) -> list[Path]:
         if candidate.is_file():
             candidates.append(candidate)
     return candidates
+
+
+def extract_manual_bib_keys(tex_text: str) -> list[str]:
+    keys = [match.strip() for match in BIBITEM_RE.findall(tex_text) if match.strip()]
+    return sorted(dict.fromkeys(keys))
 
 
 def extract_citation_keys(tex_text: str) -> list[str]:
@@ -394,7 +401,9 @@ def analyze_manuscript(entry: publication_sync.PublicationEntry) -> dict[str, An
     main_tex = publication_dir / "main.tex"
     if not main_tex.is_file():
         return {
+            "has_bibliography_source": False,
             "has_references_bib": False,
+            "bibliography_source_kind": None,
             "bibliography_style": None,
             "section_total": 0,
             "subsection_total": 0,
@@ -418,8 +427,39 @@ def analyze_manuscript(entry: publication_sync.PublicationEntry) -> dict[str, An
         appendix_text = ""
 
     citation_keys = extract_citation_keys(tex_text)
+    manual_bib_keys = extract_manual_bib_keys(tex_text)
     bib_paths = bibliography_paths(publication_dir, main_text)
-    bib_entries = load_bib_entries(bib_paths)
+    fallback_path = publication_dir / "references.bib"
+    bibliography_source_kind = "none"
+    bib_entries: list[BibEntry] = []
+    has_references_bib = False
+    has_bibliography_source = False
+
+    if bib_paths:
+        bib_entries = load_bib_entries(bib_paths)
+        bibliography_source_kind = "bibtex"
+        has_references_bib = True
+        has_bibliography_source = True
+    elif manual_bib_keys:
+        bib_entries = [
+            BibEntry(
+                key=key,
+                entry_type="manual",
+                title="",
+                journal="",
+                doi="",
+                year="",
+            )
+            for key in manual_bib_keys
+        ]
+        bibliography_source_kind = "manual"
+        has_bibliography_source = True
+    elif fallback_path.is_file():
+        bib_entries = load_bib_entries([fallback_path])
+        bibliography_source_kind = "fallback_bib"
+        has_references_bib = True
+        has_bibliography_source = True
+
     main_body_words = count_words(clean_tex_text(body_text))
     appendix_words = count_words(clean_tex_text(appendix_text))
     bibliography_style = None
@@ -433,7 +473,9 @@ def analyze_manuscript(entry: publication_sync.PublicationEntry) -> dict[str, An
         appendix_ratio = appendix_words / total_words
 
     return {
-        "has_references_bib": any(path.is_file() for path in bib_paths),
+        "has_bibliography_source": has_bibliography_source,
+        "has_references_bib": has_references_bib,
+        "bibliography_source_kind": bibliography_source_kind,
         "bibliography_style": bibliography_style,
         "section_total": len(SECTION_RE.findall(tex_text)),
         "subsection_total": len(SUBSECTION_RE.findall(tex_text)),
@@ -490,8 +532,8 @@ def build_recommendations(
 
     if not entry.has_main_tex:
         issues.append("missing main.tex")
-    if not metrics["has_references_bib"]:
-        issues.append("missing references.bib or bibliography source")
+    if not metrics["has_bibliography_source"]:
+        issues.append("missing bibliography source")
     if missing_bib_keys_total > 0:
         issues.append(f"{missing_bib_keys_total} citation keys missing from bibliography")
     if recent_overlap_total == 0:
@@ -738,7 +780,9 @@ def render_track_report(record: JournalFitRecord) -> str:
         "## Local Manuscript Metrics",
         "",
         f"- `main.tex` present: `{record.has_main_tex}`",
-        f"- `references.bib` present: `{record.has_references_bib}`",
+        f"- Bibliography source detected: `{record.has_bibliography_source}`",
+        f"- Bibliography source kind: `{record.bibliography_source_kind or 'n/a'}`",
+        f"- `.bib` source in use: `{record.has_references_bib}`",
         f"- Bibliography style: `{record.bibliography_style or 'n/a'}`",
         f"- Sections: `{record.section_total}`",
         f"- Subsections: `{record.subsection_total}`",
@@ -895,7 +939,9 @@ def run_fit(
             guide=hint.get("guide"),
             source_sections=entry.source_sections,
             has_main_tex=entry.has_main_tex,
+            has_bibliography_source=bool(metrics["has_bibliography_source"]),
             has_references_bib=bool(metrics["has_references_bib"]),
+            bibliography_source_kind=metrics["bibliography_source_kind"],
             bibliography_style=metrics["bibliography_style"],
             section_total=metrics["section_total"],
             subsection_total=metrics["subsection_total"],
