@@ -1,0 +1,617 @@
+% ------------------------------------------------------------------
+%  Section 6: Survivor Renyi spectra, collision thresholds, and hidden information
+% ------------------------------------------------------------------
+\section{Survivor R\'enyi spectra, collision thresholds, and hidden information}\label{sec:double-budget}
+
+This section turns the open-system analysis into a pressure spectrum.
+The central object is the survivor R\'enyi family
+\(s\mapsto sP_{Y_H}(\varphi)-P_{Y_H}(s\varphi)\).  The collision
+threshold theorem is then a probabilistic consequence at \(s=2\), while
+the hidden-entropy ledger is retained only as a supplementary statement
+about what it costs to restore a collapsed collision spectrum
+injectively.
+
+\subsection{Survivor R\'enyi pressure spectra}
+
+Under the hypotheses of Theorem~\ref{thm:first-entry-escape-rate}, let
+\(\mathcal L_m^H\) denote the set of admissible words
+\(a=a_0\cdots a_{m-1}\in A^m\) such that \(a_t\in\mathcal S\) for every
+\(0\leq t<m\), equivalently the set of length-\(m\) words whose cylinder
+is contained in \(\{\tau_H\ge m\}\).
+
+\begin{theorem}[Survivor R\'enyi pressure spectrum]
+\label{thm:survivor-renyi-pressure}
+Assume the hypotheses of
+Theorem~\ref{thm:first-entry-escape-rate}.  For \(s>0\) and \(m\geq 1\),
+define
+\[
+  \mathcal Z_{H,m}(s)
+  := \sum_{a\in\mathcal L_m^H}\nu_\varphi([a])^s.
+\]
+Let
+\[
+  u_s(i):=\pi_i^s,
+  \qquad
+  B_{H,s}(i,j):=K_{ij}^s\mathbf 1_{\{j\in\mathcal S\}}
+  \qquad (i,j\in\mathcal S).
+\]
+Then
+\[
+  \mathcal Z_{H,m}(s)=u_s^{\mathsf T}B_{H,s}^{m-1}\mathbf 1
+  \qquad (m\geq 1).
+\]
+Moreover,
+\[
+  \lim_{m\to\infty}
+  -\frac1m\log \mathcal Z_{H,m}(s)
+  = sP_Y(\varphi)-P_{Y_H}(s\varphi).
+\]
+
+If
+\[
+  \lambda_m^H(a)
+  := \frac{\nu_\varphi([a])}{\nu_\varphi(\tau_H\ge m)},
+  \qquad a\in\mathcal L_m^H,
+\]
+denotes the survivor-prefix law conditioned on survival to depth \(m\),
+then
+\[
+  \lim_{m\to\infty}
+  -\frac1m\log
+  \sum_{a\in\mathcal L_m^H}\lambda_m^H(a)^s
+  = sP_{Y_H}(\varphi)-P_{Y_H}(s\varphi).
+\]
+In particular,
+\[
+  h_{2,H}:=2P_{Y_H}(\varphi)-P_{Y_H}(2\varphi)
+\]
+is the R\'enyi-\(2\) entropy rate of the conditioned survivor law, while
+the ambient two-sample exponent for simultaneous survival and visible
+collision is
+\[
+  \chi_H:=2P_Y(\varphi)-P_{Y_H}(2\varphi)
+        = 2\gamma_H(\varphi)+h_{2,H}.
+\]
+\end{theorem}
+
+\begin{proof}
+For \(a=a_0\cdots a_{m-1}\in\mathcal L_m^H\), the Markov property gives
+\[
+  \nu_\varphi([a])
+  = \pi_{a_0}K_{a_0a_1}\cdots K_{a_{m-2}a_{m-1}}.
+\]
+Therefore
+\[
+  \nu_\varphi([a])^s
+  = u_s(a_0)\,
+    B_{H,s}(a_0,a_1)\cdots B_{H,s}(a_{m-2},a_{m-1}),
+\]
+and summing over all safe words of length \(m\) yields
+\[
+  \mathcal Z_{H,m}(s)=u_s^{\mathsf T}B_{H,s}^{m-1}\mathbf 1.
+\]
+
+Order \(\mathcal S\) so that \(\mathcal S_\infty\) comes first and
+\(\mathcal T\) comes last.  Because \(B_{H,s}\) has the same support as
+\(B_H\), it has block form
+\[
+  B_{H,s}=
+  \begin{pmatrix}
+    B_{\infty,s} & C_s\\
+    0 & Q_s
+  \end{pmatrix},
+\]
+where \(Q_s\) is nilpotent and \(B_{\infty,s}:=B_{H,s}|_{\mathcal S_\infty}\)
+is primitive.  Hence
+\[
+  \rho(B_{H,s})=\rho(B_{\infty,s}).
+\]
+
+Let \(h>0\) be a Perron right eigenvector of the ambient transfer matrix
+\[
+  L_\varphi(i,j):=M_{ij}e^{\varphi(i,j)}.
+\]
+For \(i,j\in\mathcal S_\infty\),
+\[
+  K_{ij}
+  = M_{ij}e^{\varphi(i,j)-P_Y(\varphi)}\frac{h_j}{h_i}.
+\]
+Define
+\[
+  D_s(i,i):=h_i^s,
+  \qquad
+  L_{s\varphi,H}(i,j)
+  := M_{ij}e^{s\varphi(i,j)}\mathbf 1_{\{j\in\mathcal S_\infty\}}.
+\]
+Then
+\[
+  B_{\infty,s}
+  = e^{-sP_Y(\varphi)}D_s^{-1}L_{s\varphi,H}D_s.
+\]
+Consequently
+\[
+  \rho(B_{H,s})
+  = e^{-sP_Y(\varphi)}\rho(L_{s\varphi,H})
+  = e^{P_{Y_H}(s\varphi)-sP_Y(\varphi)}.
+\]
+Since \(u_s\) and \(\mathbf 1\) are non-negative and non-zero on
+\(\mathcal S_\infty\), Perron--Frobenius yields
+\[
+  \mathcal Z_{H,m}(s)
+  = c_s\,\rho(B_{H,s})^{m-1}+O(\vartheta_s^m)
+\]
+for some \(c_s>0\) and \(0\leq \vartheta_s<\rho(B_{H,s})\).  This proves
+the first limit.
+
+For the conditioned law,
+\[
+  \sum_{a\in\mathcal L_m^H}\lambda_m^H(a)^s
+  = \frac{\mathcal Z_{H,m}(s)}
+         {\nu_\varphi(\tau_H\ge m)^s}.
+\]
+By Theorem~\ref{thm:first-entry-escape-rate},
+\[
+  -\frac1m\log \nu_\varphi(\tau_H\ge m)\longrightarrow \gamma_H(\varphi)
+  = P_Y(\varphi)-P_{Y_H}(\varphi).
+\]
+Subtracting \(s\gamma_H(\varphi)\) from the first limit gives
+\[
+  sP_{Y_H}(\varphi)-P_{Y_H}(s\varphi).
+\]
+The formulas for \(h_{2,H}\) and \(\chi_H\) are the special case
+\(s=2\).
+\end{proof}
+
+\begin{corollary}[Collision consequences of the survivor spectrum]
+\label{cor:survivor-spectrum-collision}
+Under the hypotheses of
+Theorem~\ref{thm:survivor-renyi-pressure}, let
+\((X_m^{H,(i)})_{1\leq i\leq N_m}\) be independent survivor prefixes of
+depth \(m\) with common law \(\lambda_m^H\).  Write
+\[
+  S_r^H(m):=\sum_{a\in\mathcal L_m^H}\lambda_m^H(a)^r.
+\]
+Then
+\[
+  S_2^H(m)=e^{-m h_{2,H}+o(m)},
+  \qquad
+  S_3^H(m)
+  = e^{-m(3P_{Y_H}(\varphi)-P_{Y_H}(3\varphi))+o(m)}.
+\]
+In particular, if
+\[
+  \binom{N_m}{2}S_2^H(m)\to\tau\in[0,\infty)
+  \qquad\text{and}\qquad
+  N_m^3S_3^H(m)\to 0,
+\]
+then the collision count of the labels \(X_m^{H,(i)}\) converges to
+\(\mathrm{Poisson}(\tau)\).  Thus the birthday threshold for surviving
+samples lies on the scale
+\[
+  \binom{N_m}{2}e^{-m h_{2,H}}\asymp 1.
+\]
+\end{corollary}
+
+\begin{proof}
+The asymptotics of \(S_2^H(m)\) and \(S_3^H(m)\) are the cases \(s=2\)
+and \(s=3\) of Theorem~\ref{thm:survivor-renyi-pressure}.  Apply
+Theorem~\ref{thm:double-budget-poisson} with deterministic synchronization
+time \(T_m\equiv 0\), so that \(q_m=0\) and
+\(\Lambda_m=\binom{N_m}{2}S_2^H(m)\).
+\end{proof}
+
+\subsection{Poisson thresholds for collision failure}
+
+Fix a resolution \(m\geq 1\).  Let \((T_m,X_m)\) be a random pair,
+where \(T_m\) is the synchronization time and \(X_m\in A_m\) is the
+visible address available at resolution \(m\).  Let \(\lambda_m\) be the
+law of \(X_m\), and for \(r\geq 2\) define
+\[
+  S_r(m):=\sum_{a\in A_m}\lambda_m(a)^r.
+\]
+
+\begin{theorem}[Poisson threshold for collision failure]
+\label{thm:double-budget-poisson}
+Let \(n_m\in\NN\) and \(N_m\in\NN\).  Let
+\((T_m^{(i)},X_m^{(i)})_{1\leq i\leq N_m}\) be independent copies of
+\((T_m,X_m)\), and let \(\mathsf{Fail}_{m,n_m,N_m}\) be the event that
+some object has not synchronized by time \(n_m\) or that two objects
+with synchronization times at most \(n_m\) receive the same visible
+\(m\)-address.  Set
+\[
+  q_m:=\PP(T_m>n_m),
+  \qquad
+  \Lambda_m:=\binom{N_m}{2}S_2(m),
+\]
+and define the collision count
+\[
+  W_m:=\sum_{1\leq i<j\leq N_m}
+       \mathbf{1}_{\{X_m^{(i)}=X_m^{(j)}\}}.
+\]
+Then the following hold.
+\begin{enumerate}[label=(\roman*)]
+  \item If \(N_m q_m\to 0\) and \(\Lambda_m\to 0\), then
+    \[
+      \PP(\mathsf{Fail}_{m,n_m,N_m})\longrightarrow 0.
+    \]
+  \item If \(N_m q_m\to 0\), \(\Lambda_m\to\tau\in(0,\infty)\), and
+    \(N_m^3S_3(m)\to 0\), then
+    \[
+      W_m \Rightarrow \mathrm{Poisson}(\tau),
+      \qquad
+      \PP(\mathsf{Fail}_{m,n_m,N_m})\longrightarrow 1-e^{-\tau}.
+    \]
+  \item If \(N_m q_m\to 0\), \(\Lambda_m\to\infty\), and
+    \(N_m^3S_3(m)=o(\Lambda_m^2)\), then
+    \[
+      \PP(\mathsf{Fail}_{m,n_m,N_m})\longrightarrow 1.
+    \]
+\end{enumerate}
+In particular, the collision threshold lies on the scale
+\[
+  \binom{N_m}{2}S_2(m)\asymp 1,
+  \qquad\text{equivalently}\qquad
+  2\log N_m \asymp -\log S_2(m).
+\]
+\end{theorem}
+
+\begin{proof}
+Let
+\[
+  U_m:=\bigcup_{i=1}^{N_m}\{T_m^{(i)}>n_m\}
+\]
+be the event that some object has not synchronized by time \(n_m\).
+On \(U_m^c\), every object has synchronized, so
+\[
+  \mathsf{Fail}_{m,n_m,N_m}\cap U_m^c
+  = \{W_m\geq 1\}\cap U_m^c.
+\]
+Therefore
+\[
+  \bigl|
+    \PP(\mathsf{Fail}_{m,n_m,N_m})
+    - \PP(W_m\geq 1)
+  \bigr|
+  \leq \PP(U_m)
+  \leq N_m q_m.
+\]
+
+For part~(i), Markov's inequality gives
+\[
+  \PP(W_m\geq 1)\leq \EE[W_m]=\Lambda_m,
+\]
+so \(\PP(\mathsf{Fail}_{m,n_m,N_m})\to 0\).
+
+For part~(ii), index unordered pairs by
+\[
+  \mathcal{I}_m:=\set{\{i,j\}:1\leq i<j\leq N_m},
+  \qquad
+  I_\alpha:=\mathbf{1}_{\{X_m^{(i)}=X_m^{(j)}\}}
+  \quad (\alpha=\{i,j\}),
+\]
+so \(W_m=\sum_{\alpha\in\mathcal{I}_m}I_\alpha\).  Then
+\[
+  \EE[I_\alpha]=S_2(m),
+  \qquad
+  \EE[W_m]=\Lambda_m.
+\]
+If \(\alpha,\beta\in\mathcal{I}_m\) are disjoint, the corresponding
+indicators are independent.  If they share one index, then
+\[
+  \EE[I_\alpha I_\beta]=S_3(m).
+\]
+Using the usual dependency graph on pair-indicators, the Chen--Stein
+bound of \citet[Theorem~1]{ArratiaGoldsteinGordon1989} gives
+\[
+  d_{\mathrm{TV}}
+   \bigl(W_m,\mathrm{Poisson}(\Lambda_m)\bigr)
+  \leq \min\{1,\Lambda_m^{-1}\}(b_1+b_2),
+\]
+where
+\[
+  b_1=O\bigl(N_m^3S_2(m)^2\bigr),
+  \qquad
+  b_2=O\bigl(N_m^3S_3(m)\bigr).
+\]
+Since \(S_2(m)^2\leq S_3(m)\), the hypothesis
+\(N_m^3S_3(m)\to 0\) forces \(b_1+b_2\to 0\), and therefore
+\[
+  W_m \Rightarrow \mathrm{Poisson}(\tau).
+\]
+Hence
+\[
+  \PP(W_m\geq 1)\longrightarrow 1-e^{-\tau},
+\]
+and the same limit holds for \(\PP(\mathsf{Fail}_{m,n_m,N_m})\).
+
+For part~(iii), the same pair decomposition gives
+\[
+  \Var(W_m)
+  \leq \EE[W_m] + O\bigl(N_m^3S_3(m)\bigr)
+  = \Lambda_m + O\bigl(N_m^3S_3(m)\bigr).
+\]
+Thus
+\[
+  \frac{\Var(W_m)}{\Lambda_m^2}\longrightarrow 0.
+\]
+Chebyshev's inequality implies \(W_m/\Lambda_m\to 1\) in probability, so
+\[
+  \PP(W_m=0)\leq
+  \PP\!\left(\abs{W_m-\Lambda_m}\geq \frac{\Lambda_m}{2}\right)
+  \longrightarrow 0.
+\]
+Therefore \(\PP(W_m\geq 1)\to 1\), and the same is true for
+\(\PP(\mathsf{Fail}_{m,n_m,N_m})\).
+\end{proof}
+
+\begin{corollary}[Subcritical capacity region]
+\label{cor:capacity-region}
+Suppose that
+\[
+  q_m\leq C_m e^{-\gamma_m n_m}
+  \qquad\text{and}\qquad
+  S_2(m)=e^{-h_2m+o(m)}
+\]
+for some sequences \(C_m>0\), \(\gamma_m>0\), and some \(h_2>0\).
+Assume also that
+\[
+  \log C_m=o\bigl(\min\{\gamma_m n_m,m\}\bigr).
+\]
+Fix \(\eta\in(0,1)\).  If
+\[
+  \log N_m
+  \leq (1-\eta)\min\bigl\{\gamma_m n_m,\tfrac12 h_2m\bigr\}
+\]
+for all sufficiently large \(m\), then
+\[
+  \PP(\mathsf{Fail}_{m,n_m,N_m})\longrightarrow 0.
+\]
+\end{corollary}
+
+\begin{proof}
+The synchronization term satisfies
+\[
+  N_m q_m
+  \leq \exp\bigl(\log C_m+\log N_m-\gamma_m n_m\bigr)
+  \longrightarrow 0,
+\]
+and the collision term satisfies
+\[
+  \Lambda_m
+  = \exp\bigl(2\log N_m-h_2m+o(m)\bigr)
+  \longrightarrow 0.
+\]
+Apply part~(i) of Theorem~\ref{thm:double-budget-poisson}.
+\end{proof}
+
+\subsection{Restoring collapsed R\'enyi spectra by injective refinement}
+
+We close with a supplementary information-theoretic statement.  If a
+visible quotient collapses the survivor collision spectrum, then any
+injective refinement that restores the microscopic R\'enyi profile must
+pay exactly the hidden conditional entropy.  All entropies and
+divergences in this subsection are taken with natural logarithms.
+
+\begin{theorem}[Entropy ledger for finite refinements]
+\label{thm:entropy-ledger}
+Let \(f_m:\Sigma^m\to \mathcal{Y}_m\) be a map into a finite set.  Let \(U_m\) be
+any \(\Sigma^m\)-valued random variable with law \(u_m\), and define
+\[
+  Y_m:=f_m(U_m).
+\]
+For \(y\in \mathcal{Y}_m\), write
+\[
+  d_m(y):=\card{f_m^{-1}(y)},
+\]
+and define the fibre-uniform lift
+\[
+  \widetilde u_m(\omega)
+  := \frac{\PP(Y_m=f_m(\omega))}
+           {d_m(f_m(\omega))}.
+\]
+Then
+\[
+  H(U_m)
+  = H(Y_m)+\EE[\log d_m(Y_m)]-D(u_m\Vert \widetilde u_m),
+\]
+equivalently,
+\[
+  H(U_m\mid Y_m)
+  = \EE[\log d_m(Y_m)]-D(u_m\Vert \widetilde u_m)
+  \leq \EE[\log d_m(Y_m)].
+\]
+If \(r_m:\Sigma^m\to R_m\) is any map such that
+\[
+  \omega\longmapsto \bigl(f_m(\omega),r_m(\omega)\bigr)
+\]
+is injective, then
+\[
+  H(r_m(U_m)\mid Y_m)=H(U_m\mid Y_m).
+\]
+In particular,
+\[
+  H(U_m\mid Y_m)\leq \log\card{R_m}.
+\]
+\end{theorem}
+
+\begin{proof}
+Since \(Y_m=f_m(U_m)\), the fibre-uniform lift is a probability
+distribution on \(\Sigma^m\).  By definition,
+\begin{align*}
+  D(u_m\Vert \widetilde u_m)
+  &= \sum_{\omega\in\Sigma^m}
+      u_m(\omega)\log\frac{u_m(\omega)}{\widetilde u_m(\omega)} \\
+  &= -H(U_m)
+     - \sum_{\omega\in\Sigma^m}
+        u_m(\omega)\log \PP(Y_m=f_m(\omega)) \\
+  &\quad
+     + \sum_{\omega\in\Sigma^m}
+        u_m(\omega)\log d_m(f_m(\omega)).
+\end{align*}
+The second term is \(H(Y_m)\), and the third is
+\(\EE[\log d_m(Y_m)]\).  Rearranging gives the first identity, and the
+second follows after subtracting \(H(Y_m)\) from both sides.  The
+inequality comes from non-negativity of relative entropy.
+
+Assume now that \(\omega\mapsto(f_m(\omega),r_m(\omega))\) is injective.
+Then \(U_m\) is a measurable function of \((Y_m,r_m(U_m))\), so
+\[
+  H(U_m\mid Y_m,r_m(U_m))=0.
+\]
+Since \((Y_m,r_m(U_m))\) is also a measurable function of \(U_m\), we
+have
+\[
+  H(Y_m,r_m(U_m))=H(U_m).
+\]
+Therefore
+\[
+  H(r_m(U_m)\mid Y_m)
+  = H(Y_m,r_m(U_m))-H(Y_m)
+  = H(U_m)-H(Y_m)
+  = H(U_m\mid Y_m).
+\]
+Finally,
+\[
+  H(r_m(U_m)\mid Y_m)\leq H(r_m(U_m))\leq \log\card{R_m},
+\]
+which proves the last claim.
+\end{proof}
+
+\begin{corollary}[Register lower bound]
+\label{thm:register-lower-bound}
+Let \(f_m:\Sigma^m\to \mathcal{Y}_m\) be a map into a finite set, and set
+\[
+  D_m:=\max_{y\in \mathcal{Y}_m}\card{f_m^{-1}(y)}.
+\]
+If \(r_m:\Sigma^m\to R_m\) is any map such that
+\(\omega\mapsto(f_m(\omega),r_m(\omega))\) is injective, then
+\[
+  \card{R_m}\geq D_m.
+\]
+If, in addition, \(U_m\) is uniform on \(\Sigma^m\), then
+\[
+  \log_2\card{R_m}
+  \geq m-H_2(Y_m)\geq m-\log_2\card{\mathcal{Y}_m},
+\]
+where \(H_2(Y_m):=H(Y_m)/\log 2\).  In particular, if
+\(\card{\mathcal{Y}_m}\leq C\kappa^m\) for some \(C>0\) and \(\kappa<2\), then
+\[
+  \log_2\card{R_m}
+  \geq \left(\log_2\frac{2}{\kappa}\right)m-\log_2 C.
+\]
+\end{corollary}
+
+\begin{proof}
+Choose \(y_\ast\in \mathcal{Y}_m\) such that
+\(\card{f_m^{-1}(y_\ast)}=D_m\).  Injectivity of
+\(\omega\mapsto(f_m(\omega),r_m(\omega))\) forces \(r_m\) to be
+injective on \(f_m^{-1}(y_\ast)\), hence \(\card{R_m}\geq D_m\).
+
+If \(U_m\) is uniform on \(\Sigma^m\), then \(H(U_m)=m\log 2\).  Apply
+Theorem~\ref{thm:entropy-ledger} to obtain
+\[
+  \log\card{R_m}\geq H(U_m\mid Y_m)=m\log 2-H(Y_m).
+\]
+Divide by \(\log 2\) to get
+\[
+  \log_2\card{R_m}\geq m-H_2(Y_m).
+\]
+Since \(H_2(Y_m)\leq \log_2\card{Y_m}\), the remaining estimates follow.
+\end{proof}
+
+\begin{theorem}[Injective refinements restore the microscopic collision profile]
+\label{thm:collision-profile-restoration}
+Let \(f_m:\Sigma^m\to \mathcal{Y}_m\) be a map into a finite set, let
+\(U_m\) be any \(\Sigma^m\)-valued random variable with law \(u_m\), and
+set \(Y_m:=f_m(U_m)\).  For \(r\geq 1\), define
+\[
+  S_r(U_m):=\sum_{\omega\in\Sigma^m}u_m(\omega)^r,
+  \qquad
+  S_r(Y_m):=\sum_{y\in\mathcal{Y}_m}\PP(Y_m=y)^r.
+\]
+Then
+\[
+  S_r(Y_m)\geq S_r(U_m)
+  \qquad (r\geq 1),
+\]
+with equality for some \(r>1\) if and only if \(f_m\) is injective on
+\(\supp u_m\).
+
+Now let \(r_m:\Sigma^m\to R_m\) be any auxiliary register such that
+\[
+  \omega\longmapsto \bigl(f_m(\omega),r_m(\omega)\bigr)
+\]
+is injective, and define the refined address
+\[
+  Z_m:=\bigl(Y_m,r_m(U_m)\bigr).
+\]
+Then for every \(r\geq 1\),
+\[
+  S_r(Z_m)=S_r(U_m).
+\]
+In particular, the refined address restores the full collision entropy
+profile of the microscopic source:
+\[
+  -\log S_2(Z_m)=-\log S_2(U_m).
+\]
+Hence the collision term in
+Theorem~\ref{thm:double-budget-poisson}, applied to the refined labels,
+is governed by \(S_2(U_m)\) rather than \(S_2(Y_m)\).  At the same
+time, Theorem~\ref{thm:entropy-ledger} yields
+\[
+  H(r_m(U_m)\mid Y_m)=H(U_m\mid Y_m).
+\]
+Thus every injective refinement simultaneously restores the microscopic
+birthday scale and pays exactly the full hidden conditional entropy.
+
+If \(U_m\) is uniform on \(\Sigma^m\), then
+\[
+  S_2(Z_m)=2^{-m},
+\]
+so the refined labels recover the full birthday threshold
+\[
+  N_m\asymp 2^{m/2}.
+\]
+\end{theorem}
+
+\begin{proof}
+Write
+\[
+  p_y:=\PP(Y_m=y)=\sum_{\omega\in f_m^{-1}(y)}u_m(\omega).
+\]
+For \(r\geq 1\), convexity of \(x\mapsto x^r\) on \([0,\infty)\) gives
+\[
+  p_y^r
+  = \left(\sum_{\omega\in f_m^{-1}(y)}u_m(\omega)\right)^r
+  \geq \sum_{\omega\in f_m^{-1}(y)}u_m(\omega)^r.
+\]
+Summing over \(y\in\mathcal Y_m\) yields \(S_r(Y_m)\geq S_r(U_m)\).  If
+\(r>1\), the inequality is strict on every fibre containing at least two
+points of positive \(u_m\)-mass, so equality holds exactly when \(f_m\)
+is injective on \(\supp u_m\).
+
+If \(\omega\mapsto(f_m(\omega),r_m(\omega))\) is injective, then every
+atom \(z\) of \(Z_m\) has a unique preimage \(\omega_z\in\Sigma^m\), and
+\[
+  \PP(Z_m=z)=u_m(\omega_z).
+\]
+Therefore the multisets of atomic probabilities of \(U_m\) and \(Z_m\)
+coincide, which implies
+\[
+  S_r(Z_m)=S_r(U_m)
+  \qquad (r\geq 1).
+\]
+The statement about the collision term is then immediate from
+Theorem~\ref{thm:double-budget-poisson}, and the entropy identity is
+exactly the second conclusion of Theorem~\ref{thm:entropy-ledger}.  If
+\(U_m\) is uniform on \(\Sigma^m\), then
+\[
+  S_2(U_m)=2^m(2^{-m})^2=2^{-m},
+\]
+hence \(S_2(Z_m)=2^{-m}\), and the birthday scale is
+\(N_m\asymp S_2(Z_m)^{-1/2}=2^{m/2}\).
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main-renyi}]
+This is Theorem~\ref{thm:survivor-renyi-pressure}.
+\end{proof}

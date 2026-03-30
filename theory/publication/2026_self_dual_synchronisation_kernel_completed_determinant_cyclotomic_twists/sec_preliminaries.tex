@@ -1,0 +1,126 @@
+\section{Preliminaries and the Kernel}\label{sec:preliminaries}
+
+\subsection{Primitive orbit counts}
+
+Let \(M\) be a primitive non-negative matrix with Perron root
+\(\lambda=\rho(M)\). The associated dynamical \(\zeta\)-function is
+\[
+  \zeta_M(z)
+  =\exp\!\left(\sum_{n\ge 1}\frac{\Tr(M^n)}{n}z^n\right)
+  =\det(I-zM)^{-1}.
+\]
+The number of primitive orbits of least period \(n\) is
+\begin{equation}\label{eq:primitive-mobius}
+  p_n(M)=\frac{1}{n}\sum_{d\mid n}\mu(d)\Tr(M^{n/d}).
+\end{equation}
+
+\begin{lemma}\label{lem:primitive-orbit-asymptotic}\label{prop:prelim-prime-orbit}
+If
+\[
+  \Lambda(M):=\max\{|\mu|:\mu\in\spec(M),\ \mu\neq\lambda\},
+\]
+then
+\[
+  p_n(M)=\frac{\lambda^n}{n}
+  +O\!\left(\frac{\max\{\Lambda(M)^n,\lambda^{n/2}\}}{n}\right).
+\]
+\end{lemma}
+
+\begin{proof}
+By Perron--Frobenius theory,
+\(
+  \Tr(M^n)=\lambda^n+O(\Lambda(M)^n)
+\).
+Substituting this into \eqref{eq:primitive-mobius}, the divisor \(d=1\)
+gives the main term and every divisor \(d\ge 2\) contributes at most
+\[
+  O\!\left(\frac{\lambda^{n/2}}{n}\right).
+\]
+\end{proof}
+
+\subsection{The ten-state weighted kernel}
+
+\begin{definition}\label{def:sync-kernel}
+Let
+\[
+  \mathcal S=
+  \{\st{000},\st{001},\st{002},\st{010},\st{100},\st{101},
+    \st{0-12},\st{1-12},\st{01-1},\st{11-1}\}
+\]
+be the state set. The weighted synchronisation kernel is the
+\(10\times 10\) matrix \(B(u)=B_0+uB_1\) obtained from the following
+directed transitions:
+\begin{align*}
+  \st{000}&\to \st{000},\st{001},\st{002}
+    &&\text{with output }0,\\
+  \st{100}&\to \st{000},\st{001},\st{002}
+    &&\text{with output }1,\\
+  \st{001}&\to \st{010},\st{100},\st{101}
+    &&\text{with output }0,\\
+  \st{002}&\to \st{11-1},\st{000},\st{001}
+    &&\text{with outputs }0,1,1,\\
+  \st{010}&\to \st{100},\st{101},\st{0-12}
+    &&\text{with outputs }0,0,1,\\
+  \st{101}&\to \st{010},\st{100},\st{101}
+    &&\text{with output }1,\\
+  \st{0-12}&\to \st{01-1},\st{010},\st{100}
+    &&\text{with output }0,\\
+  \st{1-12}&\to \st{01-1},\st{010},\st{100}
+    &&\text{with output }1,\\
+  \st{01-1}&\to \st{001},\st{002},\st{1-12}
+    &&\text{with output }0,\\
+  \st{11-1}&\to \st{001},\st{002},\st{1-12}
+    &&\text{with output }1.
+\end{align*}
+Each output-\(0\) edge contributes \(1\) to the corresponding matrix
+entry, and each output-\(1\) edge contributes \(u\).
+\end{definition}
+
+\begin{proposition}[Self-duality]\label{prop:sync-self-duality}
+Let \(\iota\) be the involution of \(\mathcal S\) defined by
+\[
+  \st{000}\leftrightarrow\st{101},\qquad
+  \st{001}\leftrightarrow\st{100},\qquad
+  \st{002}\leftrightarrow\st{010},
+\]
+\[
+  \st{0-12}\leftrightarrow\st{11-1},\qquad
+  \st{1-12}\leftrightarrow\st{01-1},
+\]
+and let \(\Pi\) be the associated permutation matrix. Then
+\[
+  \Pi^{-1}B_0\Pi=B_1,
+  \qquad
+  \Pi^{-1}B_1\Pi=B_0.
+\]
+Consequently,
+\[
+  \Pi^{-1}B(u)\Pi=u\,B(1/u),
+  \qquad
+  \Delta(z,u):=\det(I-zB(u))=\Delta(uz,u^{-1}).
+\]
+\end{proposition}
+
+\begin{proof}
+Inspection of the transition list shows that, whenever
+\(x\to y\) is an edge with output \(e\), the transition
+\(\iota(x)\to\iota(y)\) is an edge with output \(1-e\). This gives the
+matrix identities for \(B_0\) and \(B_1\). The identity for \(B(u)\)
+follows immediately:
+\[
+  \Pi^{-1}B(u)\Pi
+  =\Pi^{-1}(B_0+uB_1)\Pi
+  =B_1+uB_0
+  =u\,B(1/u).
+\]
+Taking determinants of \(I-zB(u)\) and \(I-zu\,B(1/u)\) yields the
+functional equation for \(\Delta(z,u)\).
+\end{proof}
+
+\begin{definition}
+We write \(B:=B(1)\) for the unweighted kernel and
+\[
+  C_B:=\lim_{z\to 1/\rho(B)}(1-\rho(B)z)\det(I-zB)^{-1}
+\]
+for its Perron residue constant.
+\end{definition}
