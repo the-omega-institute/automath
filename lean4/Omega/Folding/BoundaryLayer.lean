@@ -464,4 +464,114 @@ theorem cyclic_boundary_partition_six :
 theorem paper_cyclicSector_card_six : cNonBoundaryCount 6 = 18 :=
   cyclicSector_card_six
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R148: Both-ends-false count + cross endpoint count
+-- ══════════════════════════════════════════════════════════════
+
+/-- Count of stable words with both endpoints false. -/
+def cBothEndsFalseCount : (m : Nat) → Nat
+  | 0 => 0
+  | 1 => (@Finset.univ (X 1) (fintypeX 1)).filter
+      (fun x => x.1 ⟨0, by omega⟩ = false) |>.card
+  | m + 2 => (@Finset.univ (X (m + 2)) (fintypeX (m + 2))).filter
+      (fun x => x.1 ⟨0, by omega⟩ = false ∧ x.1 ⟨m + 1, by omega⟩ = false) |>.card
+
+/-- Both-ends-false embedding: v ∈ X_n maps to (false, v, false) ∈ X_{n+2}. -/
+private def befWord (n : Nat) (v : X n) : Word (n + 2) := fun i =>
+  if i.val = 0 then false
+  else if h : i.val - 1 < n then v.1 ⟨i.val - 1, h⟩
+  else false
+
+private theorem befWord_no11 (n : Nat) (v : X n) : No11 (befWord n v) := by
+  intro k hk hk1
+  have hkLt : k < n + 2 := lt_of_get_eq_true hk
+  have hk1Lt : k + 1 < n + 2 := lt_of_get_eq_true hk1
+  rw [get_of_lt _ hkLt] at hk; rw [get_of_lt _ hk1Lt] at hk1
+  simp only [befWord] at hk hk1
+  by_cases h0 : k = 0
+  · subst h0; simp at hk
+  · simp only [h0, ↓reduceIte] at hk
+    simp only [show ¬(k + 1 = 0) from by omega, ↓reduceIte] at hk1
+    by_cases hk_int : k - 1 < n
+    · simp only [hk_int, ↓dite_true] at hk
+      by_cases hk1_int : k + 1 - 1 < n
+      · simp only [hk1_int, ↓dite_true] at hk1
+        exact v.2 (k - 1)
+          (by rw [get_of_lt v.1 hk_int]; exact hk)
+          (by rw [get_of_lt v.1 (by omega)]
+              have : (⟨k - 1 + 1, by omega⟩ : Fin n) = ⟨k + 1 - 1, hk1_int⟩ :=
+                Fin.ext (by simp; omega)
+              rw [this]; exact hk1)
+      · simp only [hk1_int, ↓dite_false] at hk1; exact absurd hk1 Bool.false_ne_true
+    · simp only [hk_int, ↓dite_false] at hk; exact absurd hk Bool.false_ne_true
+
+private theorem befWord_at_shift (n : Nat) (v : X n) (j : Fin n) :
+    befWord n v ⟨j.val + 1, by omega⟩ = v.1 j := by
+  unfold befWord
+  simp only [show j.val + 1 ≠ 0 from by omega, ↓reduceIte,
+    show j.val + 1 - 1 < n from j.isLt, ↓dite_true]
+  have : j.val + 1 - 1 = j.val := by omega
+  simp [this]
+
+/-- Both-ends-false count equals card of X(m-2) for m ≥ 2.
+    cor:parry-golden-three-levels -/
+private theorem cBothEndsFalseCount_eq_card_shift (n : Nat) :
+    cBothEndsFalseCount (n + 2) = Fintype.card (X n) := by
+  rw [X.card_eq_fib]
+  show ((@Finset.univ (X (n + 2)) (fintypeX (n + 2))).filter
+      (fun x => x.1 ⟨0, by omega⟩ = false ∧ x.1 ⟨n + 1, by omega⟩ = false)).card =
+      Nat.fib (n + 2)
+  -- Bijection X_n ↔ both-ends-false in X_{n+2}
+  have hfib : (@Finset.univ (X n) (fintypeX n)).card = Nat.fib (n + 2) := by
+    rw [@Finset.card_univ _ (fintypeX n)]
+    have h4 : @Finset.univ _ (fintypeX n) = @Finset.univ _ (X.instFintype n) := by
+      ext x; simp [Finset.mem_univ]
+    have h5 := @Finset.card_univ _ (X.instFintype n)
+    rw [show @Fintype.card _ (fintypeX n) = (@Finset.univ _ (fintypeX n)).card
+      from (@Finset.card_univ _ (fintypeX n)).symm, h4, h5]
+    exact X.card_eq_fib n
+  rw [← hfib]
+  symm
+  apply @Finset.card_bij (X n) (X (n + 2))
+    (@Finset.univ _ (fintypeX n))
+    ((@Finset.univ _ (fintypeX (n + 2))).filter
+      (fun x => x.1 ⟨0, by omega⟩ = false ∧ x.1 ⟨n + 1, by omega⟩ = false))
+    (fun v _ => ⟨befWord n v, befWord_no11 n v⟩)
+  · intro v _
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, befWord]
+    exact ⟨by simp, by simp [show ¬(n + 1 = 0) from by omega, show ¬(n + 1 - 1 < n) from by omega]⟩
+  · intro v1 _ v2 _ heq
+    have heqw : befWord n v1 = befWord n v2 := congrArg Subtype.val heq
+    apply Subtype.ext; funext i
+    have := congrFun heqw ⟨i.val + 1, by omega⟩
+    simp only [befWord_at_shift] at this
+    exact this
+  · intro ⟨w, hw⟩ hmem
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hmem
+    obtain ⟨h0, hlast⟩ := hmem
+    have hinterior : No11 (fun i : Fin n => w ⟨i.val + 1, by omega⟩) := by
+      intro k hk hk1
+      have hkLt := lt_of_get_eq_true hk; have hk1Lt := lt_of_get_eq_true hk1
+      rw [get_of_lt _ hkLt] at hk; rw [get_of_lt _ hk1Lt] at hk1
+      exact hw (k + 1)
+        (by rw [get_of_lt w (by omega)]; exact hk)
+        (by rw [get_of_lt w (by omega)]; exact hk1)
+    refine ⟨⟨fun i => w ⟨i.val + 1, by omega⟩, hinterior⟩,
+      @Finset.mem_univ _ (fintypeX n) _, ?_⟩
+    apply Subtype.ext; funext i
+    simp only [befWord]
+    split_ifs with h0' h1'
+    · have : i = ⟨0, by omega⟩ := Fin.ext (by omega); rw [this]; exact h0.symm
+    · congr 1; exact Fin.ext (by simp; omega)
+    · have hiLast : i.val = n + 1 := by have := i.isLt; omega
+      have : i = ⟨n + 1, by omega⟩ := Fin.ext hiLast
+      rw [this]; exact hlast.symm
+
+/-- #{u ∈ X_m : u₁=0, u_m=0} = F_m for m ≥ 2.
+    cor:parry-golden-three-levels -/
+theorem cBothEndsFalseCount_eq_fib (m : Nat) (hm : 2 ≤ m) :
+    cBothEndsFalseCount m = Nat.fib m := by
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_add_of_le hm
+  rw [show 2 + n = n + 2 from by omega, cBothEndsFalseCount_eq_card_shift n, X.card_eq_fib]
+
 end Omega

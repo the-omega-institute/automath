@@ -1371,6 +1371,30 @@ theorem paper_floor_pow_div3_parity_bounded (m : Nat) (hm1 : 2 ≤ m) (hm2 : m �
   floor_pow_div3_parity_bounded m hm1 hm2
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R148: Fibonacci mod 3 period
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fibonacci numbers mod 3 have Pisano period 8: F(n+8) % 3 = F(n) % 3.
+    def:pom-pisano-period-3 -/
+theorem fib_mod3_period_eight (n : Nat) :
+    Nat.fib (n + 8) % 3 = Nat.fib n % 3 := by
+  -- F(n+8) = 21·F(n+1) + 13·F(n), so F(n+8) ≡ F(n) (mod 3)
+  have h1 := Nat.fib_add_two (n := n)
+  have h2 := Nat.fib_add_two (n := n + 1)
+  have h3 := Nat.fib_add_two (n := n + 2)
+  have h4 := Nat.fib_add_two (n := n + 3)
+  have h5 := Nat.fib_add_two (n := n + 4)
+  have h6 := Nat.fib_add_two (n := n + 5)
+  have h7 := Nat.fib_add_two (n := n + 6)
+  -- F(n+8) = 21·F(n+1) + 13·F(n)
+  have hexp : Nat.fib (n + 8) = 21 * Nat.fib (n + 1) + 13 * Nat.fib n := by linarith
+  rw [hexp]
+  -- 21 = 7*3, 13 = 4*3 + 1
+  have : 21 * Nat.fib (n + 1) + 13 * Nat.fib n =
+    3 * (7 * Nat.fib (n + 1) + 4 * Nat.fib n) + Nat.fib n := by ring
+  rw [this, Nat.mul_add_mod]
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R147: Fibonacci prime entry point
 -- ══════════════════════════════════════════════════════════════
 
