@@ -2,7 +2,7 @@
 
 - Paper: `2026_scan_projection_address_semantics_sigma_nonexpansion_etds`
 - Target journal: `Ergodic Theory and Dynamical Systems (ETDS)`
-- Current status: `P5_completed`
+- Current status: `submission-ready`
 - Orchestrator: `unassigned`
 
 ## Stage Status

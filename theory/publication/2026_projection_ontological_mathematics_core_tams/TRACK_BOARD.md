@@ -2,7 +2,7 @@
 
 - Paper: `2026_projection_ontological_mathematics_core_tams`
 - Target journal: `Transactions of the American Mathematical Society`
-- Current status: `planned_batch_1`
+- Current status: `p4_minor_revision`
 - Orchestrator: `unassigned`
 
 ## Stage Status
@@ -11,20 +11,24 @@
 - P1 Traceability: `completed`
 - P2 Research Extension: `completed` -- artifact: `P2_EXTENSION_NOTE_2026-03-30.md`
 - P3 Journal-Fit Rewrite: `completed` -- artifact: `P3_REWRITE_NOTE_2026-03-30.md`
-- P4 Editorial Review: `pending` (next stage)
+- P4 Editorial Review: `completed` -- decision: MINOR_REVISION -- artifact: `P4_EDITORIAL_REVIEW_2026-03-30.md`
 - P5 Integration: `pending`
 - P6 Lean / Formalization Sync: `completed` -- 25% verified, 31% partial (4/16 VERIFIED + 5/16 PARTIAL); see `LEAN_SYNC_NOTE_2026-03-30.md`
 - P7 Submission Pack: `pending`
 
 ## Active claims
 
-- `P4 / editorial review`: verify claims stay inside certified arithmetic window, audit theorem--proof consistency
+- ~~`P4 / editorial review`: verify claims stay inside certified arithmetic window, audit theorem--proof consistency~~ completed: all claims within certified window; 11 specific issues identified (3 must-fix, 5 should-fix, 3 optional)
+- `P5 / integration`: apply P4 fixes (rename $\Delta_q$ overload, fix remark style, resolve $m_0(q)$ discrepancy, etc.)
 
 ## Blocking issues
 
 - ~~`5` bibliography keys are missing~~ resolved in P2 (see below)
 - ~~certified arithmetic window must be stated with exact boundaries~~ resolved in P2 (see below)
 - ~~theorem chain narrative needs expansion for TAMS (P3 scope)~~ resolved in P3
+- `$\Delta_q$ notation overloaded` (P4 Issue 3): pressure slope vs. Hankel codimension -- must rename one before submission
+- `remark theorem style` (P4 Issue 1): currently under `\theoremstyle{plain}`, must change to `\theoremstyle{remark}`
+- `author affiliation` (P4 Issue 11): TAMS requires institutional affiliation and funding acknowledgment
 
 ## P2 decisions -- main theorem sequence
 
@@ -77,9 +81,43 @@ Unused entries to remove: AhlbachUsatineFrougnyPippenger2013, Kempton2023, Shall
 
 **P3 Journal-Fit Rewrite agent**: update `main.tex` to include Chebotarev section and certification appendix, add/remove bibliography entries as specified, expand introduction to preview the full arc including the arithmetic payoff, and confirm the abstract reflects the final theorem package.
 
-## Next parallel batch
+## P3 decisions -- rewrite summary
 
-- rewrite agent (P3):
-  include Chebotarev + certification appendix, expand front matter, fix bibliography
-- editorial agent (P4):
-  verify that no claim exceeds the certified arithmetic window, audit all theorem statements against proofs
+- Abstract rewritten (~170 words), now mentions Galois/Chebotarev arc
+- Introduction rewritten: Theorems A--F previewed, escalation ladder, related work, roadmap
+- sec_chebotarev.tex included before conclusion; sec_appendix.tex as Appendix B
+- Bibliography: 4 entries added (Neukirch, LindMarcus, CoverThomas, DemboZeitouni), 4 removed (Ahlbach, Kempton, Shallit, BaaderNipkow); final count: 13
+- Conclusion shortened, now covers arithmetic window
+- Style pass: no revision-trace language, no manifesto prose
+
+## P4 decisions -- editorial review summary
+
+- **Decision**: MINOR_REVISION
+- **All 10 main theorems correctly stated**: verified
+- **Proofs complete**: verified; no hidden assumptions beyond Sanna's external theorem
+- **Arithmetic window ($q = 9, \ldots, 17$) accurately bounded**: verified
+- **Scope exclusions ($q \ge 18$, secondary spectral) properly flagged**: verified
+- **AI-voice check**: clean; one minor subjective phrase ("unexpectedly rigid")
+- **P2/P3 execution**: all P2 decisions properly executed; P3 rewrite introduced no new problems
+- **11 specific issues**: 3 must-fix, 5 should-fix, 3 optional (see `P4_EDITORIAL_REVIEW_2026-03-30.md`)
+
+### Must-fix (blocking)
+1. Rename $\Delta_q$ in `def:resonance-polynomials` to avoid overload with pressure slope
+2. Fix `remark` theorem style from `plain` to `remark`
+3. Add author affiliation and funding acknowledgment
+
+### Should-fix
+4. Resolve $m_0(q)$ offset discrepancy in `thm:collision-kernel`
+5. Rename quotient variable $q$ in `prop:single-overflow`
+6. Fix dangling display in `cor:visible-band`
+7. Explicitly state $\lambda_1 = 2$ after `thm:all-q-transfer`
+8. Demote `cor:log-density-additivity` to remark
+
+## Recommended next owner
+
+**P5 Integration agent**: apply the 3 must-fix and 5 should-fix changes from the P4 review, then advance to P7 Submission Pack.
+
+## Next stage
+
+- P5 Integration:
+  apply P4 editorial fixes and verify compilation
