@@ -2,7 +2,7 @@
 
 - Paper: `2026_conservative_extension_chain_state_forcing_apal`
 - Target journal: `Annals of Pure and Applied Logic (APAL)`
-- Current status: `p3_completed`
+- Current status: `p4_completed_major_revision`
 - Orchestrator: `unassigned`
 
 ## Stage Status
@@ -15,7 +15,9 @@
 - P3 Journal-Fit Rewrite: `completed`
   - Artifact: `P3_REWRITE_NOTE_2026-03-30.md`
   - Date: 2026-03-30
-- P4 Editorial Review: `pending` -- recommended next
+- P4 Editorial Review: `completed` -- decision: MAJOR_REVISION
+  - Artifact: `P4_EDITORIAL_REVIEW_2026-03-30.md`
+  - Date: 2026-03-30
 - P5 Integration: `pending`
 - P6 Lean / Formalization Sync: `completed` -- 0% verified (0/13 claims have Lean counterparts); see `LEAN_SYNC_NOTE_2026-03-30.md`
 - P7 Submission Pack: `pending`

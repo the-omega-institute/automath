@@ -62,18 +62,29 @@ Complete rewrite. Structured into three subsections:
 - No other programmatic language found in any .tex file.
 - All files checked for manifesto language, "novel framework" claims, etc. None found.
 
-## 6. Files modified
+## 6. File split: sec_homological_visibility.tex
 
-- `main.tex` -- abstract rewrite
+The original `sec_homological_visibility.tex` was 1144 lines, exceeding the 800-line limit. It was split at the `\subsection{Aggregating visibility across branches}` boundary:
+
+- `sec_homological_visibility.tex` (571 lines): homological evaluation, intrinsic visible quotient, character-blind obstructions, RP2 and S2 examples, intrinsic strictification codes, prime decomposition, budget comparisons.
+- `sec_branch_aggregation.tex` (572 lines, new file): branch-sensitive and branch-uniform aggregation, exact comparison sequence, branch-resolution budget, two-branch sphere example, contextuality comparison.
+
+The new file is included in `main.tex` via `\input{sec_branch_aggregation}` between `sec_homological_visibility` and `sec_multiaxis_refinement`.
+
+## 7. Files modified
+
+- `main.tex` -- abstract rewrite, added `\input{sec_branch_aggregation}`
 - `sec_introduction.tex` -- complete rewrite
 - `sec_gerbe_obstruction.tex` -- standing hypotheses (Gap 2), bridge paragraph (Gap 1)
-- `sec_homological_visibility.tex` -- S2 micro-example (Gap 4)
+- `sec_homological_visibility.tex` -- S2 micro-example (Gap 4), truncated to 571 lines
+- `sec_branch_aggregation.tex` -- new file (split from sec_homological_visibility.tex)
 - `sec_conclusion.tex` -- complete rewrite
 - `sec_multiaxis_refinement.tex` -- opening paragraph tightened
 
-## 7. Files not modified
+## 8. Files not modified
 
 - `sec_preliminaries.tex` -- already clean APAL register
 - `sec_information_states.tex` -- already clean
+- `sec_null_decomposition.tex` -- already clean
 - `sec_appendix.tex` -- already clean
 - `references.bib` -- bibliography pass deferred to P4
