@@ -194,4 +194,18 @@ theorem paper_godelLift_binFiber_instances :
   ⟨godelLift_binFiber_fold7_single, godelLift_binFiber_fold7_binary_fails,
    godelLift_binFiber_fold8_ternary⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R154: binary Gödel lift minimum bits
+-- ══════════════════════════════════════════════════════════════
+
+open Omega in
+/-- Binary Gödel lift requires at least ⌈log_2 D_m⌉ bits.
+    thm:conclusion-bounded-prime-register-feasibility (binary case) -/
+theorem godelLift_binary_min_bits (m k : Nat)
+    (hfeas : X.maxFiberMultiplicity m ≤ 2 ^ k) :
+    Nat.log 2 (X.maxFiberMultiplicity m) ≤ k :=
+  calc Nat.log 2 (X.maxFiberMultiplicity m)
+      ≤ Nat.log 2 (2 ^ k) := Nat.log_mono_right hfeas
+    _ = k := Nat.log_pow (by norm_num) k
+
 end Omega.Conclusion

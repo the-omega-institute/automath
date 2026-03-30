@@ -1190,4 +1190,70 @@ theorem momentSum_two_double_lower (m : Nat) (hm : 3 ≤ m) :
   rw [hsub] at hshift
   exact hshift
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R154: S_3 exponential lower bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_3(m+1) ≥ 3·S_3(m) for m ≥ 5. Helper for the exponential lower bound.
+    lem:pom-s3-triple-growth -/
+theorem momentSum_three_succ_ge_triple (m : Nat) (hm : 5 ≤ m) :
+    3 * momentSum 3 m ≤ momentSum 3 (m + 1) := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 | 1 | 2 | 3 | 4 => omega
+    | 5 => rw [momentSum_three_five, momentSum_three_six]; omega
+    | 6 => rw [momentSum_three_six, momentSum_three_seven]; omega
+    | 7 => rw [momentSum_three_seven, momentSum_three_eight]; omega
+    | m + 8 =>
+      -- From recurrence at index m+5:
+      -- S(m+8) + 2*S(m+5) = 2*S(m+7) + 4*S(m+6)
+      -- So S(m+8) = 2*S(m+7) + 4*S(m+6) - 2*S(m+5) [in ℤ sense]
+      -- Want: S(m+8+1) = S(m+9) ≥ 3*S(m+8)
+      -- From recurrence at index m+6:
+      -- S(m+9) + 2*S(m+6) = 2*S(m+8) + 4*S(m+7)
+      have hrec := momentSum_three_recurrence (m + 6)
+      -- hrec: S(m+9) + 2*S(m+6) = 2*S(m+8) + 4*S(m+7)
+      -- Want: S(m+9) ≥ 3*S(m+8)
+      -- i.e. 2*S(m+8) + 4*S(m+7) - 2*S(m+6) ≥ 3*S(m+8)
+      -- i.e. 4*S(m+7) ≥ S(m+8) + 2*S(m+6)
+      -- From recurrence at index m+5:
+      -- S(m+8) + 2*S(m+5) = 2*S(m+7) + 4*S(m+6)
+      -- So S(m+8) = 2*S(m+7) + 4*S(m+6) - 2*S(m+5)
+      -- Substituting: 4*S(m+7) ≥ 2*S(m+7) + 4*S(m+6) - 2*S(m+5) + 2*S(m+6)
+      -- i.e. 2*S(m+7) ≥ 6*S(m+6) - 2*S(m+5)
+      -- i.e. S(m+7) ≥ 3*S(m+6) - S(m+5)
+      -- By IH: S(m+7) ≥ 3*S(m+6), so this holds (since S(m+5) ≥ 0).
+      have hrec2 := momentSum_three_recurrence (m + 5)
+      have ihm7 := ih (m + 6) (by omega) (by omega)
+      -- ihm7: 3*S(m+6) ≤ S(m+7)
+      -- hrec: S(m+9) + 2*S(m+6) = 2*S(m+8) + 4*S(m+7)
+      -- hrec2: S(m+8) + 2*S(m+5) = 2*S(m+7) + 4*S(m+6)
+      -- From hrec2: S(m+8) = 2*S(m+7) + 4*S(m+6) - 2*S(m+5)
+      -- Need: S(m+9) ≥ 3*S(m+8), i.e. S(m+9) + 2*S(m+6) ≥ 3*S(m+8) + 2*S(m+6)
+      -- LHS = 2*S(m+8) + 4*S(m+7) by hrec
+      -- Need: 2*S(m+8) + 4*S(m+7) ≥ 3*S(m+8) + 2*S(m+6)
+      -- i.e. 4*S(m+7) ≥ S(m+8) + 2*S(m+6)
+      -- Sub hrec2: 4*S(m+7) ≥ 2*S(m+7) + 4*S(m+6) - 2*S(m+5) + 2*S(m+6)
+      -- i.e. 2*S(m+7) + 2*S(m+5) ≥ 6*S(m+6)
+      -- By ihm7: S(m+7) ≥ 3*S(m+6), so 2*S(m+7) ≥ 6*S(m+6)
+      -- Therefore 2*S(m+7) + 2*S(m+5) ≥ 6*S(m+6). QED.
+      linarith
+
+/-- S_3(m) ≥ 3^m for m ≥ 6, witnessing r_3 > 3.
+    cor:pom-s3-asymptotic -/
+theorem momentSum_three_ge_three_pow (m : Nat) (hm : 6 ≤ m) :
+    3 ^ m ≤ momentSum 3 m := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 | 1 | 2 | 3 | 4 | 5 => omega
+    | 6 => rw [momentSum_three_six]; omega
+    | m + 7 =>
+      have ihm := ih (m + 6) (by omega) (by omega)
+      have htriple := momentSum_three_succ_ge_triple (m + 6) (by omega)
+      calc 3 ^ (m + 7) = 3 * 3 ^ (m + 6) := by ring
+        _ ≤ 3 * momentSum 3 (m + 6) := by omega
+        _ ≤ momentSum 3 (m + 7) := htriple
+
 end Omega
