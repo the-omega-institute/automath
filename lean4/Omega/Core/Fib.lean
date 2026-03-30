@@ -1449,6 +1449,21 @@ theorem fib_mod7_period_sixteen (n : Nat) :
     7 * (141 * Nat.fib (n + 1) + 87 * Nat.fib n) + Nat.fib n := by ring
   rw [this, Nat.mul_add_mod]
 
+/-- Fibonacci mod 4 has period 6: F(n+6) % 4 = F(n) % 4.
+    def:pom-pisano-period-2 -/
+theorem fib_mod4_period_six (n : Nat) :
+    Nat.fib (n + 6) % 4 = Nat.fib n % 4 := by
+  have h1 := Nat.fib_add_two (n := n)
+  have h2 := Nat.fib_add_two (n := n + 1)
+  have h3 := Nat.fib_add_two (n := n + 2)
+  have h4 := Nat.fib_add_two (n := n + 3)
+  have h5 := Nat.fib_add_two (n := n + 4)
+  have hexp : Nat.fib (n + 6) = 8 * Nat.fib (n + 1) + 5 * Nat.fib n := by linarith
+  rw [hexp]
+  have : 8 * Nat.fib (n + 1) + 5 * Nat.fib n =
+    4 * (2 * Nat.fib (n + 1) + Nat.fib n) + Nat.fib n := by ring
+  rw [this, Nat.mul_add_mod]
+
 /-- Fibonacci mod 11 has period 10: F(n+10) % 11 = F(n) % 11.
     def:pom-pisano-period-2 -/
 theorem fib_mod11_period_ten (n : Nat) :

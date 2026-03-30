@@ -64,6 +64,113 @@ theorem cFirstBitTrueCount_eq_fib (m : Nat) (hm1 : 3 ≤ m) (hm : m ≤ 7) :
   interval_cases m <;> native_decide
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R151: First-bit-true general Fibonacci count
+-- ══════════════════════════════════════════════════════════════
+
+/-- Embedding X_n into first-bit-true words of X_{n+2}: v ↦ (true, false, v). -/
+private def fbtWord (n : Nat) (v : X n) : Word (n + 2) := fun i =>
+  if i.val = 0 then true
+  else if i.val = 1 then false
+  else if h : i.val - 2 < n then v.1 ⟨i.val - 2, h⟩
+  else false
+
+private theorem fbtWord_no11 (n : Nat) (v : X n) : No11 (fbtWord n v) := by
+  intro k hk hk1
+  have hkLt : k < n + 2 := lt_of_get_eq_true hk
+  have hk1Lt : k + 1 < n + 2 := lt_of_get_eq_true hk1
+  rw [get_of_lt _ hkLt] at hk; rw [get_of_lt _ hk1Lt] at hk1
+  simp only [fbtWord] at hk hk1
+  by_cases h0 : k = 0
+  · subst h0; simp at hk1
+  · by_cases h1 : k = 1
+    · subst h1; simp [show ¬((1 : Nat) = 0) from by omega] at hk
+    · simp only [h0, ↓reduceIte, h1] at hk
+      simp only [show ¬(k + 1 = 0) from by omega, ↓reduceIte, show ¬(k + 1 = 1) from by omega] at hk1
+      by_cases hk_int : k - 2 < n
+      · simp only [hk_int, ↓dite_true] at hk
+        by_cases hk1_int : k + 1 - 2 < n
+        · simp only [hk1_int, ↓dite_true] at hk1
+          exact v.2 (k - 2)
+            (by rw [get_of_lt v.1 hk_int]; exact hk)
+            (by rw [get_of_lt v.1 (by omega)]
+                have : (⟨k - 2 + 1, by omega⟩ : Fin n) = ⟨k + 1 - 2, hk1_int⟩ :=
+                  Fin.ext (by simp; omega)
+                rw [this]; exact hk1)
+        · simp only [hk1_int, ↓dite_false] at hk1; exact absurd hk1 Bool.false_ne_true
+      · simp only [hk_int, ↓dite_false] at hk; exact absurd hk Bool.false_ne_true
+
+private theorem fbtWord_first (n : Nat) (v : X n) :
+    fbtWord n v ⟨0, by omega⟩ = true := by simp [fbtWord]
+
+private theorem fbtWord_at_shift (n : Nat) (v : X n) (j : Fin n) :
+    fbtWord n v ⟨j.val + 2, by omega⟩ = v.1 j := by
+  unfold fbtWord
+  simp only [show j.val + 2 ≠ 0 from by omega, ↓reduceIte,
+    show j.val + 2 ≠ 1 from by omega, show j.val + 2 - 2 < n from j.isLt, ↓dite_true]
+  have : j.val + 2 - 2 = j.val := by omega
+  simp [this]
+
+/-- First-bit-true count equals card of X(m-2) for m ≥ 2.
+    cor:parry-golden-three-levels -/
+private theorem cFirstBitTrueCount_eq_card_shift (n : Nat) :
+    cFirstBitTrueCount (n + 2) = Fintype.card (X n) := by
+  rw [X.card_eq_fib]
+  show ((@Finset.univ (X (n + 2)) (fintypeX (n + 2))).filter
+      (fun x => x.1 ⟨0, by omega⟩ = true)).card = Nat.fib (n + 2)
+  have hfib : (@Finset.univ (X n) (fintypeX n)).card = Nat.fib (n + 2) := by
+    rw [@Finset.card_univ _ (fintypeX n)]
+    rw [show @Fintype.card _ (fintypeX n) = (@Finset.univ _ (fintypeX n)).card from
+      (@Finset.card_univ _ (fintypeX n)).symm]
+    rw [show @Finset.univ _ (fintypeX n) = @Finset.univ _ (X.instFintype n) from by
+      ext x; simp [Finset.mem_univ]]
+    rw [@Finset.card_univ _ (X.instFintype n)]; exact X.card_eq_fib n
+  rw [← hfib]; symm
+  apply @Finset.card_bij (X n) (X (n + 2))
+    (@Finset.univ _ (fintypeX n))
+    ((@Finset.univ _ (fintypeX (n + 2))).filter (fun x => x.1 ⟨0, by omega⟩ = true))
+    (fun v _ => ⟨fbtWord n v, fbtWord_no11 n v⟩)
+  · intro v _
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    exact fbtWord_first n v
+  · intro v1 _ v2 _ heq
+    have heqw : fbtWord n v1 = fbtWord n v2 := congrArg Subtype.val heq
+    apply Subtype.ext; funext i
+    have := congrFun heqw ⟨i.val + 2, by omega⟩
+    simp only [fbtWord_at_shift] at this; exact this
+  · intro ⟨w, hw⟩ hmem
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hmem
+    -- w[0] = true, so w[1] = false (No11). Interior: w[2..m-1] is No11
+    have hinterior : No11 (fun i : Fin n => w ⟨i.val + 2, by omega⟩) := by
+      intro k hk hk1
+      have hkLt := lt_of_get_eq_true hk; have hk1Lt := lt_of_get_eq_true hk1
+      rw [get_of_lt _ hkLt] at hk; rw [get_of_lt _ hk1Lt] at hk1
+      exact hw (k + 2)
+        (by rw [get_of_lt w (by omega)]; exact hk)
+        (by rw [get_of_lt w (by omega)]; exact hk1)
+    refine ⟨⟨fun i => w ⟨i.val + 2, by omega⟩, hinterior⟩,
+      @Finset.mem_univ _ (fintypeX n) _, ?_⟩
+    apply Subtype.ext; funext i
+    simp only [fbtWord]
+    split_ifs with h0' h1' h2'
+    · have : i = ⟨0, by omega⟩ := Fin.ext (by omega); rw [this]; exact hmem.symm
+    · have : i = ⟨1, by omega⟩ := Fin.ext (by omega); rw [this]
+      -- w[1] = false since w[0] = true and No11
+      symm; by_contra h1t
+      have : w ⟨1, by omega⟩ = true := by cases hw1 : w ⟨1, by omega⟩ <;> simp_all
+      exact hw 0 (by rw [get_of_lt w (by omega)]; exact hmem)
+        (by rw [get_of_lt w (by omega)]; exact this)
+    · congr 1; exact Fin.ext (by simp; omega)
+    · -- i.val ≥ n+2, impossible for Fin (n+2)
+      exact absurd (show i.val < n + 2 from i.isLt) (by omega)
+
+/-- #{x ∈ X_m : x[0] = true} = F(m) for all m ≥ 2.
+    cor:parry-golden-three-levels -/
+theorem cFirstBitTrueCount_eq_fib_general (m : Nat) (hm : 2 ≤ m) :
+    cFirstBitTrueCount m = Nat.fib m := by
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_add_of_le hm
+  rw [show 2 + n = n + 2 from by omega, cFirstBitTrueCount_eq_card_shift n, X.card_eq_fib]
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R127: Boundary shift-4 uplift
 -- ══════════════════════════════════════════════════════════════
 

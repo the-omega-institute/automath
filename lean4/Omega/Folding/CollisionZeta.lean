@@ -217,9 +217,21 @@ theorem collisionKernel3_det_pow_2 : (collisionKernel3 ^ 2).det = 4 := by native
 /-- def:pom-collision-kernel-det-pow-a3-3 -/
 theorem collisionKernel3_det_pow_3 : (collisionKernel3 ^ 3).det = -8 := by native_decide
 
+/-- det(M₃^n) = (-2)^n for the S_3 collision kernel.
+    prop:collision-kernel-det-pow -/
+theorem collisionKernel3_det_pow_general (n : ℕ) :
+    (collisionKernel3 ^ n).det = (-2 : ℤ) ^ n := by
+  rw [Matrix.det_pow, collisionKernel3_det]
+
 /-- det(A_4^n) = det(A_4)^n = (-2)^n for n = 2.
     def:pom-collision-kernel-det-pow-a4-2 -/
 theorem collisionKernel4_det_pow_2 : (collisionKernel4 ^ 2).det = 4 := by native_decide
+
+/-- det(M₄^n) = (-2)^n for the S_4 collision kernel.
+    prop:collision-kernel-det-pow -/
+theorem collisionKernel4_det_pow_general (n : ℕ) :
+    (collisionKernel4 ^ n).det = (-2 : ℤ) ^ n := by
+  rw [Matrix.det_pow, collisionKernel4_det]
 
 /-! ### Unified trace/det certificate -/
 
