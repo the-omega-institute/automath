@@ -31,10 +31,62 @@ theorem window6_S2_wedderburn :
 theorem window6_likelihood_shift :
     9 * 16 * 21 > 9 * 4 * 64 ∧ 9 * 4 * 21 > 9 * 1 * 64 := by omega
 
-/-- Paper: thm:conclusion-window6-qmoment-triple-geometry -/
-theorem paper_window6_qmoment_triple :
-    8 + 4 + 9 = 21 ∧ 8 * 2 + 4 * 3 + 9 * 4 = 64 ∧ 8 * 4 + 4 * 9 + 9 * 16 = 212 :=
-  window6_qmoment_triple
+/-- The 4-fiber vs 2-fiber likelihood ratio grows strictly with q.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_lr_four_vs_two_strictMono :
+    StrictMono (fun q : Nat => ((9 : ℚ) * (4 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q)) := by
+  have hfun :
+      (fun q : Nat => ((9 : ℚ) * (4 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q)) =
+      fun q : Nat => ((9 : ℚ) / 8) * (2 : ℚ)^q := by
+    funext q
+    have hq : ((9 : ℚ) * (4 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q) =
+        ((9 : ℚ) / 8) * (((4 : ℚ)^q) / ((2 : ℚ)^q)) := by
+      field_simp [pow_ne_zero q (by norm_num : (2 : ℚ) ≠ 0)]
+    rw [hq]
+    congr 1
+    calc
+      ((4 : ℚ)^q) / ((2 : ℚ)^q) = ((4 : ℚ) / 2) ^ q := by rw [← div_pow]
+      _ = (2 : ℚ)^q := by norm_num
+  rw [hfun]
+  intro a b hab
+  have hpow : (2 : ℚ) ^ a < (2 : ℚ) ^ b := by
+    exact pow_lt_pow_right₀ (by norm_num) hab
+  have hconst : 0 < (9 : ℚ) / 8 := by norm_num
+  exact mul_lt_mul_of_pos_left hpow hconst
+
+/-- The 3-fiber vs 2-fiber likelihood ratio grows strictly with q.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_lr_three_vs_two_strictMono :
+    StrictMono (fun q : Nat => ((4 : ℚ) * (3 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q)) := by
+  have hfun :
+      (fun q : Nat => ((4 : ℚ) * (3 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q)) =
+      fun q : Nat => ((1 : ℚ) / 2) * ((3 : ℚ) / 2)^q := by
+    funext q
+    have hq : ((4 : ℚ) * (3 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q) =
+        ((1 : ℚ) / 2) * (((3 : ℚ)^q) / ((2 : ℚ)^q)) := by
+      field_simp [pow_ne_zero q (by norm_num : (2 : ℚ) ≠ 0)]
+      ring
+    rw [hq]
+    congr 1
+    rw [← div_pow]
+  rw [hfun]
+  intro a b hab
+  have hpow : ((3 : ℚ) / 2) ^ a < ((3 : ℚ) / 2) ^ b := by
+    exact pow_lt_pow_right₀ (by norm_num : (1 : ℚ) < (3 : ℚ) / 2) hab
+  have hconst : 0 < (1 : ℚ) / 2 := by norm_num
+  exact mul_lt_mul_of_pos_left hpow hconst
+
+/-- The 4-fiber vs 2-fiber likelihood ratio grows strictly with q.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_likelihood_ratio_42_strictMono :
+    StrictMono (fun q : Nat => ((9 : ℚ) * (4 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q)) := by
+  exact window6_lr_four_vs_two_strictMono
+
+/-- The 3-fiber vs 2-fiber likelihood ratio grows strictly with q.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_likelihood_ratio_32_strictMono :
+    StrictMono (fun q : Nat => ((4 : ℚ) * (3 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q)) := by
+  exact window6_lr_three_vs_two_strictMono
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase R130: Window-6 collision probability rational form
