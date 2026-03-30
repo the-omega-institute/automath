@@ -14,7 +14,7 @@
 - P4 Editorial Review: `completed` -- artifact: `P4_EDITORIAL_REVIEW_2026-03-30.md`
 - P5 Integration: `completed` -- triage and edits below
 - P6 Lean / Formalization Sync: `completed` -- 0% verified, 27% partial (4/15 active claims have partial Lean support); see `LEAN_SYNC_NOTE_2026-03-30.md`
-- P7 Submission Pack: `pending` -- recommended next action
+- P7 Submission Pack: `completed` -- 2026-03-30; artifacts: `cover_letter_etds.txt`, `submission_checklist.md`
 
 ## P5 Triage Decision Log
 
@@ -57,6 +57,8 @@
 - `sec_introduction.tex`: Renamed subsection "Why the open-system lane belongs in this paper" to "Role of the open-system sections"; rewrote text to remove defensive phrasing and position open-system results as direct consequences
 - `sec_introduction.tex`: Adjusted Organization paragraph for sec_double_budget to match shortened title
 - `sec_double_budget.tex`: Shortened section title from "Survivor Renyi spectra, collision thresholds, and hidden information" to "Survivor Renyi spectra and collision thresholds"
+- `sec_open_system.tex`: Split into two files to meet the 800-line limit. `sec_open_system.tex` (433 lines) contains escape rates and quasistationary amplitudes. `sec_open_system_resonance.tex` (517 lines) contains error resolvents, cyclotomic lifts, and the doubling-map example. Added subsection headers for clearer internal navigation.
+- `main.tex`: Added `\input{sec_open_system_resonance}` between `sec_open_system` and `sec_double_budget`
 
 ### Verification
 
@@ -77,12 +79,44 @@
 - `orchestrator / P4 / P4_EDITORIAL_REVIEW_2026-03-30.md`
 - `rewrite agent / P3 / P3_REWRITE_NOTE_2026-03-30.md`
 - `integration agent / P5 / TRACK_BOARD.md (this log)`
+- `submission agent / P7 / cover_letter_etds.txt, submission_checklist.md, TRACK_BOARD.md`
 
 ## Blocking issues
 
 - recent-paper recon not yet attached (non-blocking for submission)
 - Lean formalization coverage remains low (0% verified, 27% partial) -- non-blocking for ETDS submission but noted for future work
 
+## P7 Submission Pack
+
+Date: 2026-03-30
+
+### Artifacts produced
+
+- `cover_letter_etds.txt` -- English cover letter addressed to the Editors of ETDS
+- `submission_checklist.md` -- 12-item checklist; 11 pass, 1 fail (author field empty)
+
+### Checklist summary
+
+- Manuscript text complete: no TODO/FIXME markers
+- Bibliography: 17 entries, all cited, no missing keys
+- Abstract: ~141 words (ETDS limit ~200)
+- Page estimate: ~35 pages
+- No appendices, no figures, no tables
+- MSC codes and keywords present
+- All cross-references resolve (29 unique refs, 54 labels)
+- No revision metadata in manuscript
+- Lean formalization: 0% verified, 27% partial (documented in LEAN_SYNC_NOTE)
+
+### Blocker requiring human action
+
+- `\author{}` in main.tex is empty. Author names, affiliations, and corresponding-author email must be inserted before submission.
+
+### Deferred editorial items (for referee feedback)
+
+- Title length (currently 11 words + subtitle)
+- Sturmian illustration placement (currently Section 3)
+- Hidden-entropy subsection in Section 7
+
 ## Recommended next action
 
-P7 Submission Pack: compile final PDF, verify clean build with no undefined references, prepare cover letter and submission metadata.
+Insert author information into main.tex, compile final PDF, and submit to ETDS.

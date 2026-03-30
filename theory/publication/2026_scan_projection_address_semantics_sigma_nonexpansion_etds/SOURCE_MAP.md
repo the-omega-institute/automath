@@ -17,7 +17,9 @@
 - `sec_double_budget.tex`
   survivor Renyi pressure, Poisson threshold, entropy ledger, register lower bound
 - `sec_open_system.tex`
-  first-entry escape rate and open-system specializations
+  first-entry escape rate, quasistationary amplitudes
+- `sec_open_system_resonance.tex`
+  error resolvents, cyclotomic resonance lifts, doubling-map example
 - `sec_spg.tex`
   visible-word preliminaries and the Sturmian illustration
 
