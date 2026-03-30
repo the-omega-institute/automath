@@ -1,325 +1,138 @@
 \section{Introduction}\label{sec:introduction}
 
-Zeckendorf's theorem identifies every positive integer with a unique Fibonacci
-expansion having no adjacent \(1\)'s \cite{Lekkerkerker1952,Zeckendorf1972}.
-The normalization of arbitrary Fibonacci representations is likewise classical.
-We therefore take normalization as input data and focus on a different object:
-the exact fiber spectrum of finite-window Zeckendorf stabilization.
-
-Fix \(m\ge 1\).  Let
-\[
-  \Omega_m=\{0,1\}^m,
-  \qquad
-  X_m=\{x\in\Omega_m:\ x_ix_{i+1}=0\text{ for }1\le i<m\},
-\]
-and define
-\[
-  V_m(x)=\sum_{j=1}^m x_jF_{j+1},
-  \qquad
-  N_m(\omega)=\sum_{j=1}^m \omega_jF_{j+1}.
-\]
-Since \(V_m\) is a bijection from \(X_m\) onto \(\{0,\dots,F_{m+2}-1\}\), the
-finite-window fold map is
+Every positive integer has a unique representation as a sum of
+non-consecutive Fibonacci numbers \cite{Lekkerkerker1952,Zeckendorf1972}.
+An arbitrary binary word $\omega\in\{0,1\}^m$ determines a Fibonacci-weighted
+integer $N_m(\omega)=\sum_{j=1}^m\omega_jF_{j+1}$ that generally violates the
+adjacency constraint; reducing modulo $F_{m+2}$ and inverting the standard
+bijection $V_m\colon X_m\to\{0,\dots,F_{m+2}-1\}$ yields the finite-window
+fold
 \[
   \Fold_m(\omega):=V_m^{-1}\bigl(N_m(\omega)\bmod F_{m+2}\bigr).
 \]
-Equivalently, \(\Fold_m(\omega)\) is obtained by taking the full Zeckendorf
-expansion of \(N_m(\omega)\) and retaining the first \(m\) visible digits.
-Write
-\[
-  d_m(x):=\card{\Fold_m^{-1}(x)},
-  \qquad
-  d_m^\#(r):=d_m(V_m^{-1}(r)).
-\]
+The fiber multiplicity $d_m(x):=|\Fold_m^{-1}(x)|$ records how many raw words
+stabilize to a given visible word~$x$.
 
-Two structural facts, proved in Sections~\ref{sec:preliminaries} and
-\ref{sec:residue-affine}, drive the whole paper.  First, the fibers of
-\(\Fold_m\) are exact residue classes modulo \(F_{m+2}\).  Second, there is an
-explicit affine permutation
-\[
-  \pi_m(r)\equiv F_{m+1}r+F_{m+1}-1 \pmod{F_{m+2}}
-\]
-such that \(d_m^\#(\pi_m(r))\) is the coefficient of \(z^r\) in
-\(\prod_{j=1}^m(1+z^{F_j})\).  The decisive point is that this coefficient
-spectrum is not merely analogous to the classical Fibonacci partition function:
-it is exactly a Fibonacci-lag discrete derivative of it.  Once that
-single-fiber identity is combined with the power-sum theory of Fibonacci
-partitions, finite-window Zeckendorf fibers close to a genuinely discrete
-thermodynamic system.
+A natural question arises: what structure does this fiber spectrum carry, and
+how does it connect to the classical theory of Fibonacci partitions?  We show
+that the answer is unexpectedly rigid.  After an explicit affine permutation
+of residues, each fiber multiplicity equals a Fibonacci-lag discrete
+derivative of the classical partition function.  This single identity converts
+the fiber spectrum into a discrete thermodynamic system whose pressures are the
+Fibonacci partition constants of Sanna~\cite{Sanna2025}, and whose recurrence
+polynomials carry certified arithmetic content in a computable window.
 
 \subsection{Main results}
 
-Following Chow and Slattery \cite{ChowSlattery2021}, let \(R(n)\) denote the
-number of partitions of \(n\) into distinct Fibonacci numbers, where the two
-unit weights \(F_1=F_2=1\) are not distinguished.  Set \(R(n)=0\) for \(n<0\),
-define
-\[
-  R^\dagger(n):=R(n)+R(n-1),
-\]
-and write
-\[
-  T_q^\dagger(N):=\sum_{n=0}^{N-1} R^\dagger(n)^q.
-\]
-Sanna \cite{Sanna2025} proved that for every integer \(q\ge 1\) there exists a
-constant \(\lambda_q>1\) such that
-\[
-  \sum_{n=0}^{N-1} R(n)^q \asymp_q N^{(\log \lambda_q)/\log\varphi},
-  \qquad
-  \lim_{q\to\infty}\lambda_q^{1/q}=\varphi^{1/2}.
-\]
-We show that the same constants govern the finite-window collision moments and
-that, after adjoining \(P_0:=\log\varphi\), they form the pressure sequence of a
-discrete canonical/microcanonical formalism.
+Let $R(n)$ be the number of partitions of~$n$ into distinct Fibonacci numbers
+(with $F_1=F_2=1$ not distinguished), set $R^\dagger(n):=R(n)+R(n-1)$, and
+write $T_q^\dagger(N):=\sum_{n=0}^{N-1}R^\dagger(n)^q$.  For integers
+$q\ge 1$, set $S_q(m):=\sum_{x\in X_m}d_m(x)^q$.
 
 \begin{theoremA}
-For every integer \(n\) with \(0\le n<F_{m+2}\),
+For every integer $n$ with $0\le n<F_{m+2}$,
 \[
   d_m^\#(\pi_m(n))
   =
   R^\dagger(n)-R^\dagger(n-F_{m+1}).
 \]
-Equivalently,
-\[
-  d_m^\#(\pi_m(n))
-  =
-  R(n)+R(n-1)-R(n-F_{m+1})-R(n-F_{m+1}-1).
-\]
 \end{theoremA}
 
 \noindent
-Thus the finite-window fiber spectrum is exactly the Fibonacci-lag discrete
-derivative of the classical Fibonacci partition function.
+The fiber spectrum is the Fibonacci-lag discrete derivative of the indexed
+partition function.  Exact Zeckendorf formulas of Chow and
+Slattery~\cite{ChowSlattery2021} therefore apply directly to individual fibers.
 
 \begin{theoremB}
-For every integer \(q\ge 1\), the collision moment
+For every integer $q\ge 1$,
 \[
-  S_q(m):=\sum_{x\in X_m} d_m(x)^q
+  T_q^\dagger(F_{m+1})\le S_q(m)\le T_q^\dagger(F_{m+2}),
 \]
-satisfies the exact Fibonacci-window bounds
-\[
-  T_q^\dagger(F_{m+1})\le S_q(m)\le T_q^\dagger(F_{m+2}).
-\]
-Consequently
-\[
-  S_q(m)\asymp_q \lambda_q^m.
-\]
-If \(q\ge 2\), then the Perron root \(r_q\) of the finite-state collision
-kernel of Section~\ref{sec:moment-kernel} satisfies
-\[
-  r_q=\lambda_q.
-\]
+and consequently $S_q(m)\asymp_q \lambda_q^m$, where $\lambda_q$ is the
+partition constant of Sanna~\cite{Sanna2025}.  For $q\ge 2$ the Perron root of
+the finite-state collision kernel equals $\lambda_q$.
 \end{theoremB}
 
 \begin{theoremC}
-Set
-\[
-  P_0:=\log\varphi,
-  \qquad
-  P_q:=\log\lambda_q
-  \qquad (q\ge 1).
-\]
-For every integer \(q\ge 2\), the constant \(\lambda_q\) is the spectral
-radius of a nonnegative integer matrix of dimension polynomial in \(q\).  In
-particular, \(\lambda_q\) is an algebraic integer.  The pressure sequence
-\((P_q)_{q\ge 0}\) is convex on the nonnegative integers.  Hence the discrete
-slopes
-\[
-  \Delta_q:=P_q-P_{q-1}
-  \qquad (q\ge 1)
-\]
-form an increasing sequence, and
-\[
-  \lim_{q\to\infty}\Delta_q=\frac12\log\varphi.
-\]
+For $q\ge 2$, the constant $\lambda_q$ is the spectral radius of a nonnegative
+integer matrix of dimension polynomial in~$q$; in particular, $\lambda_q$ is
+an algebraic integer.  The pressure sequence $P_0:=\log\varphi$,
+$P_q:=\log\lambda_q$ is convex, and its discrete slopes
+$\Delta_q:=P_q-P_{q-1}$ satisfy $\Delta_q\nearrow\frac12\log\varphi$.
 \end{theoremC}
 
-For each integer \(q\ge 1\), define the \(q\)-canonical law on \(X_m\) by
-\[
-  \mu_{m,q}(x):=\frac{d_m(x)^q}{S_q(m)}.
-\]
-
 \begin{theoremD}
-Fix an integer \(q\ge 1\).  For every \(\varepsilon>0\),
+For each fixed $q\ge 1$ and every $\varepsilon>0$, the $q$-canonical law
+$\mu_{m,q}\propto d_m(x)^q$ is exponentially concentrated on the adjacent
+pressure-slope band $[\Delta_q,\Delta_{q+1}]$:
 \[
-  \mu_{m,q}\!\left\{
-    x:\frac1m\log d_m(x)\le \Delta_q-\varepsilon
-  \right\}
-  \le
-  \exp\bigl(-(\varepsilon+o(1))m\bigr),
+  \mu_{m,q}\bigl\{x:m^{-1}\log d_m(x)\notin
+  [\Delta_q-\varepsilon,\,\Delta_{q+1}+\varepsilon]\bigr\}
+  \le \exp\bigl(-(\varepsilon+o(1))m\bigr).
 \]
-and
-\[
-  \mu_{m,q}\!\left\{
-    x:\frac1m\log d_m(x)\ge \Delta_{q+1}+\varepsilon
-  \right\}
-  \le
-  \exp\bigl(-(\varepsilon+o(1))m\bigr).
-\]
-Equivalently, the \(q\)-canonical ensemble is exponentially concentrated on the
-adjacent pressure-slope band \([\Delta_q,\Delta_{q+1}]\).
 \end{theoremD}
 
 \begin{theoremE}
-For a fixed integer \(q\ge 1\) and \(\varepsilon>0\), let
-\[
-  B_{m,q}(\varepsilon)
-  :=
-  \left\{
-    x\in X_m:
-    \Delta_q-\varepsilon\le \frac1m\log d_m(x)\le \Delta_{q+1}+\varepsilon
-  \right\}.
-\]
-Then
-\[
-  \mu_{m,q}\bigl(B_{m,q}(\varepsilon)\bigr)
-  =
-  1-\exp\bigl(-(\varepsilon+o(1))m\bigr).
-\]
-Moreover the cardinality and visible mass of this band satisfy the two-sided
-exponential estimates
-\[
-  P_q-q(\Delta_{q+1}+\varepsilon)
-  \le
-  \liminf_{m\to\infty}\frac1m\log |B_{m,q}(\varepsilon)|,
-\]
-\[
-  \limsup_{m\to\infty}\frac1m\log |B_{m,q}(\varepsilon)|
-  \le
-  P_q-q(\Delta_q-\varepsilon),
-\]
-and
-\[
-  P_q-\log 2-(q-1)(\Delta_{q+1}+\varepsilon)
-  \le
-  \liminf_{m\to\infty}\frac1m\log p_m\bigl(B_{m,q}(\varepsilon)\bigr),
-\]
-\[
-  \limsup_{m\to\infty}\frac1m\log p_m\bigl(B_{m,q}(\varepsilon)\bigr)
-  \le
-  P_q-\log 2-(q-1)(\Delta_q-\varepsilon),
-\]
-where \(p_m(x):=d_m(x)/2^m\) is the visible law under uniform input.
+The canonical band $B_{m,q}(\varepsilon)$ of Theorem~D satisfies two-sided
+exponential estimates for both its cardinality $|B_{m,q}(\varepsilon)|$ and its
+visible mass $p_m(B_{m,q}(\varepsilon))$, with exponents determined by
+$P_q,\Delta_q,\Delta_{q+1}$.
 \end{theoremE}
 
 \begin{theoremF}
-Let \(q=q(m)\) be any integer sequence with \(q(m)\to\infty\), and set
-\[
-  \nu_m(x):=\frac{d_m(x)^{q(m)}}{S_{q(m)}(m)}.
-\]
-Then for every \(\varepsilon>0\),
-\[
-  \nu_m\!\left\{
-    x:
-    \left|\frac1m\log d_m(x)-\frac12\log\varphi\right|>\varepsilon
-  \right\}\to 0.
-\]
-In particular,
-\[
-  D_m:=\max_{x\in X_m}d_m(x)
-  \qquad\text{satisfies}\qquad
-  D_m^{1/m}\to\varphi^{1/2},
-\]
-and
-\[
-  \log S_{q(m)}(m)
-  =
-  \Bigl(\frac12\log\varphi+o(1)\Bigr)m\,q(m).
-\]
+Diverging tilts $q(m)\to\infty$ select the zero-temperature thickness
+$\frac12\log\varphi$: $D_m^{1/m}\to\sqrt{\varphi}$, and
+$\log S_{q(m)}(m)=(\frac12\log\varphi+o(1))\,m\,q(m)$.
 \end{theoremF}
 
-At the visible endpoint \(q=1\), one has \(\mu_{m,1}=p_m\).  Therefore
-Theorem~D yields a deterministic typical-thickness band for the visible law:
-for every \(\varepsilon>0\),
-\[
-  \begin{aligned}
-    p_m\!\left\{
-      x:
-      \begin{array}{c}
-        \log 2-\log\varphi-\varepsilon
-        \le
-        \frac1m\log d_m(x) \\[2pt]
-        \le
-        \log\lambda_2-\log 2+\varepsilon
-      \end{array}
-    \right\}
-    =
-    1-\exp\bigl(-(\varepsilon+o(1))m\bigr).
-  \end{aligned}
-\]
-Section~\ref{sec:ledger} shows moreover that the same pressure sequence governs
-the full R\'enyi entropy-rate spectrum of the visible law:
-for every fixed integer \(q>1\),
-\[
-  \lim_{m\to\infty}\frac1m H_q(p_m)
-  =
-  \frac{q\log 2-P_q}{q-1},
-\]
-and the min-entropy endpoint equals
-\[
-  \log 2-\frac12\log\varphi.
-\]
+\medskip\noindent
+The escalation summarized by Theorems~A--F proceeds as follows.
+Theorem~A identifies single fibers with partition differences.
+Theorem~B transfers the moment growth to Fibonacci windows of Sanna's
+power sums.  Theorem~C realizes the partition constants as finite-state
+Perron roots and extracts a convex pressure function.  Theorems~D and~E
+use the pressure geometry for canonical concentration and microcanonical
+band bounds.  Theorem~F passes to the zero-temperature limit.
 
-\medskip
-\noindent
-The quadratic case remains completely explicit.  Section~\ref{sec:second-collision}
-proves that
-\[
-  S_2(m)=2S_2(m-1)+2S_2(m-2)-2S_2(m-3)
-  \qquad (m\ge 4),
-\]
-so the dominant root \(\lambda_2\) is the largest real zero of
-\(\lambda^3-2\lambda^2-2\lambda+2\), in agreement with Chow and Jones
-\cite{ChowJones2024}.  In the present version we treat this cubic law as a
-fully explicit sample of the general pressure formalism, not as a competing
-narrative.
+Beyond the thermodynamic formalism, the same partition constants carry
+arithmetic content.  The quadratic case $q=2$ yields the cubic
+$\lambda^3-2\lambda^2-2\lambda+2$, in agreement with Chow and
+Jones~\cite{ChowJones2024}.  In the arithmetic window $q=9,\dots,17$, the
+minimal recurrence polynomials of $S_q(m)$ are irreducible over~$\QQ$ with
+full symmetric Galois groups $S_{d_q}$ (Section~\ref{sec:chebotarev}); for
+$q\in\{12,13,14,15\}$ the splitting fields are linearly disjoint, yielding
+product Chebotarev densities.
 
-\subsection{Relation to previous work}
+\subsection{Related work}
 
-Theorem~A gives the paper its decisive bridge to the existing literature.
-Chow and Slattery proved exact formulas for the Fibonacci partition function in
-terms of the Zeckendorf expansion of \(n\) \cite{ChowSlattery2021}.  Our
-Theorem~A shows that finite-window Zeckendorf fibers are not merely related to
-that partition theory: after an explicit affine permutation, they are exactly
-the Fibonacci-lag discrete derivative of the indexed partition function
-\(R^\dagger\).  Consequently their individual values inherit explicit closed
-formulas from Chow and Slattery without any partition-theoretic reproof.
-
-Theorem~B is the basic global transfer principle.  The collision moments are
-not merely comparable with the Fibonacci partition power sums studied by Sanna
-\cite{Sanna2025}; they are squeezed between two adjacent Fibonacci windows of
-those sums.  This transfers Sanna's growth constants to the finite-window fold
-model and identifies the Perron roots of our finite-state collision kernels
-with the same constants \(\lambda_q\).
-
-The new contribution of the present revision is that these constants are no
-longer used only as moment-growth exponents.  Once \(P_0=\log\varphi\) is
-adjoined, the sequence \((P_q)\) becomes a discrete pressure function, and the
-adjacent slope differences \(\Delta_q\) select the canonical thickness bands of
-the model.  Theorems~D--F therefore convert the previous collection of upper
-envelopes and zero-temperature consequences into a closed canonical and
-microcanonical formalism.  In particular, the visible law \(p_m=\mu_{m,1}\) is
-not governed by a vague average-fiber heuristic: it occupies a deterministic
-band bounded by the first two pressure slopes.
-
-This point of view also clarifies the role of the R\'enyi entropy spectrum.
-Section~\ref{sec:ledger} does not supply an unrelated information-theoretic
-appendix to the moment theory.  Rather, the R\'enyi rates and visible-tail
-bounds are the \(q=1\) endpoint and weighted projections of the same pressure
-geometry that governs the canonical ensembles \(\mu_{m,q}\).
+Zeckendorf~\cite{Zeckendorf1972} and Lekkerkerker~\cite{Lekkerkerker1952}
+established the uniqueness of Fibonacci representations.  Chow and
+Slattery~\cite{ChowSlattery2021} gave exact formulas for $R(n)$ via the
+Zeckendorf expansion; our Theorem~A shows that finite-window fiber
+multiplicities are, after an explicit affine permutation, the Fibonacci-lag
+discrete derivatives of these same partition counts.  Chow and
+Jones~\cite{ChowJones2024} identified the cubic governing the variance of
+$R(n)$; our cubic recurrence for $S_2(m)$ gives a finite-window explanation.
+Sanna~\cite{Sanna2025} proved that $\sum_{n<N}R(n)^q\asymp_q
+N^{(\log\lambda_q)/\log\varphi}$; Theorem~B transfers these constants to the
+collision moments.  The finite-state realization of
+Section~\ref{sec:moment-kernel} draws on classical Perron--Frobenius theory
+\cite{Seneta2006,LindMarcus1995} and a bounded-delay transducer model for
+Fibonacci normalization \cite{Frougny1992NumbersAutomata,Frougny1999OnlineAddition}.
 
 \subsection{Organization}
 
-Section~\ref{sec:preliminaries} fixes the finite-window fold map and its basic
-overflow structure.  Section~\ref{sec:residue-affine} proves the residue
-description, the affine transfer principle, and the partition-difference
-formula for individual fibers.  Section~\ref{sec:second-collision} proves the
-Fibonacci-window transfer of collision moments and records the explicit
-quadratic recurrence.  Section~\ref{sec:moment-kernel} turns the transferred
-partition constants into finite-state Perron roots, develops the convex
-pressure geometry, proves the canonical selection theorem and the
-microcanonical band bounds, and derives the zero-temperature concentration
-results.  Section~\ref{sec:ledger} treats the visible law as the \(q=1\)
-canonical ensemble and deduces its typical-thickness band, R\'enyi entropy
-rates, and visible-tail estimates.  Appendix~\ref{app:transducer} gives a
-self-contained bounded-delay transducer model for the finite-state collision
-kernels.
+Section~\ref{sec:preliminaries} defines the finite-window fold and records
+its basic properties.  Section~\ref{sec:residue-affine} proves the affine
+transfer principle and the partition-difference formula.
+Section~\ref{sec:second-collision} establishes the Fibonacci-window moment
+transfer and treats the explicit quadratic case.
+Section~\ref{sec:moment-kernel} develops the finite-state realization, convex
+pressure geometry, canonical selection, and zero-temperature concentration.
+Section~\ref{sec:ledger} deduces the R\'enyi entropy-rate spectrum of the
+visible law.  Section~\ref{sec:chebotarev} proves irreducibility, full
+symmetric Galois groups, and Chebotarev density results for the recurrence
+polynomials in the arithmetic window $q=9,\dots,17$.
+Section~\ref{sec:conclusion} summarizes.  Appendix~\ref{app:transducer}
+gives the transducer construction for the collision kernels, and
+Appendix~\ref{app:certification} records the computational certificates.

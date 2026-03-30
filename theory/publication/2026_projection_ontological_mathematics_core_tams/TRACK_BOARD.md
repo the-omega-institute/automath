@@ -10,21 +10,21 @@
 - P0 Intake and Contract: `completed`
 - P1 Traceability: `completed`
 - P2 Research Extension: `completed` -- artifact: `P2_EXTENSION_NOTE_2026-03-30.md`
-- P3 Journal-Fit Rewrite: `pending`
-- P4 Editorial Review: `pending`
+- P3 Journal-Fit Rewrite: `completed` -- artifact: `P3_REWRITE_NOTE_2026-03-30.md`
+- P4 Editorial Review: `pending` (next stage)
 - P5 Integration: `pending`
 - P6 Lean / Formalization Sync: `completed` -- 25% verified, 31% partial (4/16 VERIFIED + 5/16 PARTIAL); see `LEAN_SYNC_NOTE_2026-03-30.md`
 - P7 Submission Pack: `pending`
 
 ## Active claims
 
-- `unassigned / P3 / TASK_CARD_P3_JOURNAL_REWRITE.md`
+- `P4 / editorial review`: verify claims stay inside certified arithmetic window, audit theorem--proof consistency
 
 ## Blocking issues
 
 - ~~`5` bibliography keys are missing~~ resolved in P2 (see below)
 - ~~certified arithmetic window must be stated with exact boundaries~~ resolved in P2 (see below)
-- theorem chain narrative needs expansion for TAMS (P3 scope)
+- ~~theorem chain narrative needs expansion for TAMS (P3 scope)~~ resolved in P3
 
 ## P2 decisions -- main theorem sequence
 
