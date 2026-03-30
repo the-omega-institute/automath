@@ -800,4 +800,26 @@ theorem momentSum_three_sixteen : momentSum 3 16 = 63809152 := by
     momentSum_three_thirteen, momentSum_three_fourteen, momentSum_three_fifteen] at h
   omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R156: S_3(17) and S_3(18) chain values
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_3(17) = 196921664.
+    prop:pom-s3-seventeen -/
+theorem momentSum_three_seventeen : momentSum 3 17 = 196921664 := by
+  have h := momentSum_three_recurrence 14
+  rw [show (14 : Nat) + 1 = 15 from rfl, show (14 : Nat) + 2 = 16 from rfl,
+    show (14 : Nat) + 3 = 17 from rfl,
+    momentSum_three_fourteen, momentSum_three_fifteen, momentSum_three_sixteen] at h
+  omega
+
+/-- S_3(18) = 607728448.
+    prop:pom-s3-eighteen -/
+theorem momentSum_three_eighteen : momentSum 3 18 = 607728448 := by
+  have h := momentSum_three_recurrence 15
+  rw [show (15 : Nat) + 1 = 16 from rfl, show (15 : Nat) + 2 = 17 from rfl,
+    show (15 : Nat) + 3 = 18 from rfl,
+    momentSum_three_fifteen, momentSum_three_sixteen, momentSum_three_seventeen] at h
+  omega
+
 end Omega

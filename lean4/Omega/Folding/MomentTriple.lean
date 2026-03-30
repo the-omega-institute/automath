@@ -1128,4 +1128,47 @@ theorem momentSum_two_eighteen_rec : momentSum 2 18 = 11949760 := by
     show (15 : Nat) + 3 = 18 from rfl, momentSum_two_fifteen_rec,
     momentSum_two_sixteen_rec, momentSum_two_seventeen_rec] at h; omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R156: ewc(7)=1 + ewc(F-9)=1
+-- ══════════════════════════════════════════════════════════════
+
+/-- Weight 7 is achieved by exactly one word for m ≥ 4.
+    prop:pom-ewc-weight-seven -/
+theorem exactWeightCount_seven (m : Nat) (hm : 4 ≤ m) :
+    exactWeightCount m 7 = 1 := by
+  induction m with
+  | zero => omega
+  | succ n ih =>
+    cases n with
+    | zero => omega
+    | succ k =>
+      cases k with
+      | zero => omega
+      | succ j =>
+        cases j with
+        | zero => omega
+        | succ i =>
+          cases i with
+          | zero =>
+            -- base case: m = 4
+            native_decide
+          | succ p =>
+            -- inductive step: ewc(p+5, 7) = ewc(p+4, 7) since 7 < fib(p+6)
+            rw [exactWeightCount_succ_of_lt]
+            · exact ih (by omega)
+            · calc 7 < 8 := by omega
+                _ = Nat.fib 6 := by native_decide
+                _ ≤ Nat.fib (p + 6) := Nat.fib_mono (by omega)
+
+/-- The weight F_{m+3}−9 has exactly one word, by symmetry with weight 7.
+    prop:pom-ewc-fib-sub-nine -/
+theorem exactWeightCount_fib_sub_nine (m : Nat) (hm : 4 ≤ m) :
+    exactWeightCount m (Nat.fib (m + 3) - 9) = 1 := by
+  have hfib : Nat.fib (m + 3) ≥ 13 := by
+    calc Nat.fib (m + 3) ≥ Nat.fib 7 := Nat.fib_mono (by omega)
+      _ = 13 := by native_decide
+  have hsub : Nat.fib (m + 3) - 2 - (Nat.fib (m + 3) - 9) = 7 := by omega
+  rw [exactWeightCount_symmetric m (Nat.fib (m + 3) - 9) (by omega), hsub]
+  exact exactWeightCount_seven m hm
+
 end Omega
