@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 747 |
+| \leanverified 标注数 | 760 |
 | \leanpartial 标注数 | 11 |
-| 总标注数 | 758 |
-| 轮次 | R171（round_count=172） |
+| 总标注数 | 771 |
+| 轮次 | R172（round_count=173） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -25,14 +25,14 @@
 | POM | 1,707 | 223 | 13.1% |
 | Emergent Arithmetic | 185 | 80 | 43.2% |
 | Folding | 337 | 73 | 21.7% |
-| Conclusion | 2,550 | 128 | 5.0% |
+| Conclusion | 2,550 | 131 | 5.1% |
 | Group Unification | 469 | 68 | 14.5% |
 | SPG | 129 | 25 | 19.4% |
-| Circle Dimension | 393 | 52 | 13.2% |
-| Zeta Finite Part | 4,524 | 83 | 1.8% |
+| Circle Dimension | 393 | 58 | 14.8% |
+| Zeta Finite Part | 4,524 | 87 | 1.9% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **743** | **7.1%** |
+| **合计（body）** | **10,508** | **756** | **7.2%** |
 
 ### 1.2 已完成模块
 
@@ -154,6 +154,7 @@
 **GM 轨道统一 + 三核不变量 + S_q 通用基值 + 跨 q 单调性 + S_5 Hankel 非退化（Round 35 / Phase 40）**：CollisionZeta.lean（257→318行）——GM primitive 轨道：goldenMean_primitive_orbits（π_GM(1..6)=(1,1,1,1,2,2)，Lucas 数 tr(A^n) 验证，def:pom-gm-primitive-orbits）——三核统一不变量：collision_kernel_universal_invariants（tr(A_2)=tr(A_3)=tr(A_4)=2 ∧ det(A_2)=det(A_3)=det(A_4)=-2，def:pom-collision-kernel-universal-invariants）——S_q 通用基值：moment_universal_base（S_q(0)=1 ∧ S_q(1)=2 for q=2..8，14 合取，def:pom-moment-universal-base）——跨 q 单调性：momentSum_cross_q_mono_six（S_2(6)≤S_3(6)≤S_4(6)，prop:pom-sq-cross-q-mono-six）; momentSum_cross_q_ratios_six（S_3(6)>3·S_2(6) ∧ S_4(6)>3·S_3(6)，prop:pom-sq-cross-q-ratios-six）——S_5 Hankel 行列式：hankelS5_3x3 定义（3×3 Hankel [1,2,34;2,34,98;34,98,616]）; hankelS5_3x3_det（det=-17100，lem:pom-hankel-s5-3x3-det）; hankelS5_3x3_det_ne_zero（非退化，cor:pom-hankel-s5-3x3-det-ne-zero）——Zeta 有限部分覆盖率 ~30% → ~36%（42→50 定理），总覆盖率 ~63% → ~65%
 **Phase R170: EA Wedderburn + Zeta Fredholm blocks（部分完成）**：EA/Wedderburn.lean + Zeta/CyclicDet.lean——EA：wedderburn_total_dim_eq_S2（prop:fold-groupoid-wedderburn）；wedderburn_dim_m6（momentSum 2 6 = 220，thm:fold-groupoid-z2x2-central-idempotents）；fiber_histogram_m6（cFiberHist 6 1 = 2 ∧ cFiberHist 6 2 = 4 ∧ cFiberHist 6 3 = 8 ∧ cFiberHist 6 4 = 5 ∧ cFiberHist 6 5 = 2，同标签）；Zeta：fredholm_block_diag_2_3 / fredholm_block_diag_2_4（cor:cyclic-euler-product）——**5 个论文标签条目计入覆盖率**（EA +3，Zeta +2；Discussion Walsh-Stokes deferred，不计入）——Emergent Arithmetic 77→80（43.2%），Zeta 81→83（1.8%），全局标注 748→753（+5），body 覆盖 733→738（7.0%），commit 8b0a796
 **Phase R171: GU translation quotient + PhiGraph cardinalities（部分完成）**：Graph/Window6TranslationQuotient.lean + Graph/PhiGraph.lean——GU：window6_fiber_sizes_not_constant / window6_no_translation_quotient_fiber（prop:window6-no-translation-quotient-fiber）；Folding/PhiGraph：phiState_card（def:G_m）；phiEdge_card（需 side condition `1 ≤ m`，原无条件 spec 在 m=0 为假）; phiGraph_outdegree_two（thm:Phi_m-sofic-graph）——**5 个论文标签条目计入覆盖率**（GU +2，Folding +3；SPG Walsh spectral stability deferred，不计入）——Folding 70→73（21.7%），Group Unification 66→68（14.5%），全局标注 753→758（+5），body 覆盖 738→743（7.1%），commit f15199a
+**Phase R172: CD multiprime spectrum + Zeta even-length correction + Conclusion register budget**：CircleDimension/MultiPrimeSpectrum.lean + Zeta/EvenLengthCorrection.lean + Conclusion/AffineRegisterBudget.lean——CD：PrimeSupport / multiPrimeSpectrum / multiPrimeSpectrum_eq_count / multiPrimeSpectrum_anti_mono / multiPrimeSpectrum_empty / multiPrimeSpectrum_pos_of_mem（prop:cdim-multiprime-divisible-spectrum-explicit）；Zeta：evenLengthCorrection / evenLengthCorrection_odd / evenLengthCorrection_even / evenLengthCorrection_cases（thm:xi-time-part73c-periodic-evenlength-atomic-correction）；Conclusion：registerBudget_lower_bound / registerBudget_sharp / registerBudget_min_card（cor:conclusion-boundary-cycle-rank-external-info-lower-bound）——**13 个论文标签条目计入覆盖率**（CD +6，Zeta +4，Conclusion +3）——Circle Dimension 52→58（14.8%），Zeta 83→87（1.9%），Conclusion 128→131（5.1%），全局标注 758→771（+13），body 覆盖 743→756（7.2%），commit 188c684
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续
 **Fibonacci 素数域（完整）**：stableMul_inv_of_prime（素数时乘法逆存在，域结构核心）; fib_four/five/seven/thirteen_prime（native_decide 验证）; fib_nine_not_prime（反例验证）; instFieldOfPrime（通用域实例：F_{m+2} 素数时 X m 为域，经由 stableValueRingEquiv 转移）; instField_X1（GF(2)）、instField_X2（GF(3)）、instField_X3（GF(5)）、instField_X5（GF(13)）、instField_X9（GF(89)）、instField_X11（GF(233)）（cor:field-phase-fib-prime 完整形式化）
