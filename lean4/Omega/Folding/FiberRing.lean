@@ -402,4 +402,34 @@ theorem stableAdd_order_one (m : Nat) (hm : 2 ≤ m) :
   haveI := @instCharP m
   exact CharP.eq (X m) (CharP.addOrderOf_one (X m)) instCharP ▸ rfl
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R164: nsmul = stableMul
+-- ══════════════════════════════════════════════════════════════
+
+/-- stableValue of n • x = (n * stableValue x) % F_{m+2}. -/
+private theorem stableValue_nsmul (x : X m) (n : Nat) :
+    stableValue (n • x) = (n * stableValue x) % Nat.fib (m + 2) := by
+  induction n with
+  | zero =>
+    simp only [zero_smul, Nat.zero_mul, Nat.zero_mod]
+    exact stableValue_stableZero
+  | succ k ih =>
+    simp only [succ_nsmul]
+    rw [show (k • x + x : X m) = stableAdd (k • x) x from rfl,
+      stableValue_stableAdd, ih]
+    rw [show (k + 1) * stableValue x = k * stableValue x + stableValue x from by ring]
+    rw [Nat.add_mod]
+    simp [Nat.mod_mod_of_dvd]
+
+/-- n-fold addition of x equals multiplication by ofNat(n % F_{m+2}).
+    thm:mul-by-iterated-add -/
+theorem stableAdd_nsmul_eq_stableMul (x : X m) (n : Nat) (hm : 1 ≤ m) :
+    n • x = stableMul x (ofNat m (n % Nat.fib (m + 2))) := by
+  have hinj := stableValue_injective m
+  apply hinj
+  show stableValue (n • x) = stableValue (stableMul x (ofNat m (n % Nat.fib (m + 2))))
+  rw [stableValue_nsmul, stableValue_stableMul, stableValue_ofNat_mod]
+  rw [Nat.mul_mod (stableValue x), Nat.mod_mod_of_dvd _ (dvd_refl _), ← Nat.mul_mod,
+    Nat.mul_comm]
+
 end Omega.X
