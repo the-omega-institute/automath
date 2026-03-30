@@ -167,4 +167,69 @@ theorem section_count_eq_prod_fiber {α β : Type*} [Fintype α] [Fintype β]
   ext b
   exact Fintype.card_subtype (fun a => F a = b)
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R169: Log-sum inequality
+-- ══════════════════════════════════════════════════════════════
+
+/-- Log of product equals sum of logs for positive naturals.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem log_prod_eq_sum_log {n : ℕ} (d : Fin n → ℕ) (hd : ∀ i, 0 < d i) :
+    Real.log (∏ i, (d i : ℝ)) = ∑ i, Real.log (d i) := by
+  apply Real.log_prod
+  intro x _
+  exact Nat.cast_pos.mpr (hd x) |>.ne'
+
+/-- Log-sum inequality (AM-GM in log form): for positive reals summing to N,
+    Σ log(a_i) ≤ n · log(N/n).
+    thm:conclusion-section-ledger-kl-identity -/
+theorem log_sum_le_of_sum_eq {n : ℕ} {N : ℝ} (a : Fin n → ℝ) (ha : ∀ i, 0 < a i)
+    (hn : 0 < n) (hsum : ∑ i, a i = N) (hN_pos : 0 < N) :
+    ∑ i, Real.log (a i) ≤ n * Real.log (N / n) := by
+  rw [← Real.log_prod (fun x _ => ne_of_gt (ha x))]
+  have hnR : (0 : ℝ) < n := Nat.cast_pos.mpr hn
+  have hprod_pos : 0 < ∏ i, a i := Finset.prod_pos (fun i _ => ha i)
+  have hgm0 := Real.geom_mean_le_arith_mean (Finset.univ : Finset (Fin n))
+    (fun _ => (1 : ℝ)) a
+    (fun _ _ => by positivity)
+    (by simp [hn])
+    (fun i _ => le_of_lt (ha i))
+  have hgm : (∏ i, a i) ^ ((n : ℝ)⁻¹) ≤ N / n := by
+    simpa [hsum, div_eq_mul_inv] using hgm0
+  have hpow := Real.rpow_le_rpow
+    (Real.rpow_nonneg hprod_pos.le _)
+    hgm
+    (show 0 ≤ (n : ℝ) from by positivity)
+  have hprod : ∏ i, a i ≤ (N / n) ^ n := by
+    have hleft0 : ((∏ i, a i) ^ ((n : ℝ)⁻¹)) ^ (n : ℝ) = (∏ i, a i) ^ (((n : ℝ)⁻¹) * n) := by
+      rw [← Real.rpow_mul hprod_pos.le]
+    have hleft : ((∏ i, a i) ^ ((n : ℝ)⁻¹)) ^ (n : ℝ) = ∏ i, a i := by
+      rw [hleft0, inv_mul_cancel₀ (show (n : ℝ) ≠ 0 from by positivity), Real.rpow_one]
+    have hright : (N / n) ^ (n : ℝ) = (N / n) ^ n := by rw [Real.rpow_natCast]
+    rw [hleft, hright] at hpow
+    exact hpow
+  have hlog := Real.log_le_log hprod_pos hprod
+  have hdiv_pos : 0 < N / n := by exact div_pos hN_pos hnR
+  have hrw : Real.log ((N / n) ^ n) = n * Real.log (N / n) := by
+    rw [← Real.rpow_natCast, Real.log_rpow hdiv_pos]
+  simpa [hrw] using hlog
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R169: Window-10 histogram consistency
+-- ══════════════════════════════════════════════════════════════
+
+/-- Window-10 basic: |X_10|=144, 2^10=1024, S_1(10)=1024.
+    thm:conclusion-window10-groupoid-collision-dimension-identity -/
+theorem window10_basic_consistency :
+    Fintype.card (X 10) = 144 ∧
+    (2 : ℕ) ^ 10 = 1024 ∧
+    momentSum 1 10 = 1024 := by
+  refine ⟨?_, by norm_num, ?_⟩
+  · rw [X.card_eq_fib]; native_decide
+  · rw [momentSum_one]; norm_num
+
+/-- Window-10 S_2 value: S_2(10) = 8320.
+    thm:conclusion-window10-groupoid-collision-dimension-identity -/
+theorem window10_S2 : momentSum 2 10 = 8320 := by
+  rw [← cMomentSum_eq]; native_decide
+
 end Omega.Conclusion

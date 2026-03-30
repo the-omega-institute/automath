@@ -355,4 +355,26 @@ theorem separationDepth_comm {α : Type*} (distinguish : Nat → α → α → B
     separationDepth distinguish x y = separationDepth distinguish y x := by
   simp only [separationDepth, hsymm]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R169: Phase spectrum rank growth and upper bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- Phase spectrum is monotone in rank (additive form).
+    thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_add_rank_le (r₁ r₂ t N : Nat) (hN : 1 ≤ N) :
+    phaseSpectrumCount r₁ t N ≤ phaseSpectrumCount (r₁ + r₂) t N := by
+  simp only [phaseSpectrumCount]
+  calc N ^ r₁ * Nat.gcd t N
+      = N ^ r₁ * 1 * Nat.gcd t N := by ring
+    _ ≤ N ^ r₁ * N ^ r₂ * Nat.gcd t N := by
+        gcongr; exact Nat.one_le_pow _ _ hN
+    _ = N ^ (r₁ + r₂) * Nat.gcd t N := by rw [← pow_add]
+
+/-- Phase spectrum upper bound: phaseSpectrumCount r t N ≤ N^(r+1).
+    thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_le_pow (r t N : Nat) (hN : 0 < N) :
+    phaseSpectrumCount r t N ≤ N ^ (r + 1) := by
+  simp only [phaseSpectrumCount, pow_succ]
+  exact Nat.mul_le_mul_left _ (Nat.gcd_le_right t hN)
+
 end Omega.CircleDimension
