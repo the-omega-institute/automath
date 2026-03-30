@@ -192,5 +192,131 @@ r_n\ge A(f_n)-|X_n|
 故夹逼得结论。证毕。
 \end{proof}
 
-\endinput
+\begin{theorem}[精确混合审计的秩守恒律]\label{thm:conclusion-boundary-mixed-audit-rank-conservation}
+沿用推论 \ref{cor:conclusion-boundary-cycle-rank-external-info-lower-bound} 的记号，并固定素数 \(\wp\)。
+考虑任意确定性混合审计协议：输入
+\[
+\omega\in C^1(\mathsf B_f;\FF_\wp)
+\]
+后，协议至多进行 \(q\) 次自适应回路查询，并输出一个外置寄存值
+\[
+R(\omega)\in \mathcal R.
+\]
+记该协议的完整查询转录为 \(\operatorname{Transcript}_q(\omega)\)。若二元数据
+\[
+\bigl(\operatorname{Transcript}_q(\omega),R(\omega)\bigr)
+\]
+能够唯一确定上同调类
+\[
+[\omega]\in H^1(\mathsf B_f;\FF_\wp),
+\]
+则必有
+\[
+q+\left\lceil \log_\wp |\mathcal R| \right\rceil \ge r,
+\qquad
+r=\dim_{\FF_\wp}H^1(\mathsf B_f;\FF_\wp).
+\]
+换言之，回路查询深度与外置寄存容量之间满足严格的加性秩守恒律。
+\end{theorem}
+\begin{proof}
+把协议施用于零 \(1\)-上链 \(\omega=0\)。由于全部查询答案都为 \(0\)，协议沿一条确定的“全零转录”分支依次选出若干回路
+\[
+z_1,\dots,z_s\in Z_1(\mathsf B_f;\FF_\wp),
+\qquad
+s\le q.
+\]
+令 \(W\subset H_1(\mathsf B_f;\FF_\wp)\) 为这些回路类所张成的子空间，则
+\[
+\dim_{\FF_\wp}W\le q.
+\]
+考虑其消去子
+\[
+W^\perp
+:=
+\left\{
+[\eta]\in H^1(\mathsf B_f;\FF_\wp):
+\langle[\eta],z\rangle=0\ \ \forall z\in W
+\right\}.
+\]
+由有限维线性代数，
+\[
+\dim_{\FF_\wp}W^\perp=r-\dim_{\FF_\wp}W\ge r-q.
+\]
 
+对任意 \([\eta]\in W^\perp\)，取其任一代表 \(\eta\in C^1(\mathsf B_f;\FF_\wp)\)。由于
+\[
+\langle[\eta],z_j\rangle=0
+\qquad(1\le j\le s),
+\]
+协议在输入 \(\eta\) 时会沿与输入 \(0\) 完全相同的查询分支运行，因此
+\[
+\operatorname{Transcript}_q(\eta)=\operatorname{Transcript}_q(0).
+\]
+若
+\[
+\bigl(\operatorname{Transcript}_q(\omega),R(\omega)\bigr)
+\]
+要唯一确定上同调类，则映射
+\[
+[\eta]\longmapsto R(\eta)
+\]
+在 \(W^\perp\) 上必须为单射。于是
+\[
+|\mathcal R|\ge |W^\perp|=\wp^{\dim_{\FF_\wp}W^\perp}\ge \wp^{r-q}.
+\]
+取 \(\log_\wp\) 并上取整即得
+\[
+q+\left\lceil \log_\wp |\mathcal R| \right\rceil \ge r.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[查询—寄存预算的指数守恒律]\label{cor:conclusion-boundary-query-register-budget-exponential-law}
+在定理 \ref{thm:conclusion-boundary-mixed-audit-rank-conservation} 的设定下，若外置寄存器取值于任一满足
+\[
+|\mathcal R|=(E+1)^k
+\]
+的离散状态空间；特别地，可取正文中的截断 prime-register 空间 \(\mathcal P_{k,E}\)；则任意精确混合审计协议都满足
+\[
+q+k\log_\wp(E+1)\ge r.
+\]
+进一步，若存在一列满射粗粒化
+\[
+f_n:\Omega_n\twoheadrightarrow X_n
+\]
+满足推前熵非退化
+\[
+H(p_n)\ge h_0>0,
+\qquad
+|X_n|=o(2^n),
+\]
+则任意对应的精确混合审计族都满足
+\[
+q_n+k_n\log_\wp(E_n+1)=\Omega(2^n).
+\]
+\end{corollary}
+\begin{proof}
+第一式由定理 \ref{thm:conclusion-boundary-mixed-audit-rank-conservation} 与
+\[
+\log_\wp |\mathcal R|=\log_\wp (E+1)^k=k\log_\wp(E+1)
+\]
+直接得到。
+
+对第二式，由推论 \ref{cor:spg-boundary-cycle-rank-from-entropy}，
+\[
+r(f_n)\ge \frac{2^n}{2\log 2}\,H(p_n)-|X_n|+1.
+\]
+在
+\[
+H(p_n)\ge h_0>0,
+\qquad
+|X_n|=o(2^n)
+\]
+下，右端为 \(\Omega(2^n)\)。再把
+\[
+q_n+k_n\log_\wp(E_n+1)\ge r(f_n)
+\]
+代入，即得所示指数下界。证毕。
+\end{proof}
+
+\endinput
