@@ -73,10 +73,12 @@ import Omega.Combinatorics.GramDet
 import Omega.Zeta.DynZeta
 import Omega.Zeta.CyclicDet
 import Omega.Zeta.EvenLengthCorrection
+import Omega.Zeta.NecklaceCorrection
 import Omega.EA.Wedderburn
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.Window6Collision
+import Omega.Conclusion.ResonanceWindow
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
