@@ -5,6 +5,7 @@ import Mathlib.Data.ZMod.Basic
 import Mathlib.Tactic
 import Omega.Graph.TransferMatrix
 import Omega.Core.Fib
+import Omega.Folding.ShiftDynamics
 
 /-!
 # Dynamical Zeta Functions
@@ -670,5 +671,66 @@ theorem paper_lucasNum_cassini (n : Nat) (hn : 1 ≤ n) :
   lucasNum_cassini n hn
 
 end
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R167: Lucas-Fibonacci GCD divides 2
+-- ══════════════════════════════════════════════════════════════
+
+/-- GCD of Lucas and Fibonacci numbers divides 2.
+    bridge:lucas-fibonacci-identity -/
+theorem lucasNum_fib_gcd_dvd_two (n : Nat) :
+    Int.gcd (lucasNum n) (Nat.fib n) ∣ 2 := by
+  -- From L(n)^2 = 5*F(n)^2 + 4*(-1)^n, if d = gcd(L,F) then d^2 | 4, so d | 2
+  -- Bridge: Omega.Zeta.lucasNum n = (Omega.lucasNum n : ℤ)
+  have hbridge : lucasNum n = (Omega.lucasNum n : ℤ) := by
+    induction n using Nat.strongRecOn with
+    | _ n ih =>
+      match n with
+      | 0 => rfl
+      | 1 => rfl
+      | n + 2 =>
+        simp only [lucasNum_succ_succ, Omega.lucasNum_succ_succ,
+          ih (n + 1) (by omega), ih n (by omega), Nat.cast_add]
+  set L := lucasNum n with hL_def
+  set F := (Nat.fib n : ℤ) with hF_def
+  set d := Int.gcd L F
+  have hid : L ^ 2 = 5 * F ^ 2 + 4 * (-1) ^ n := by
+    have := Omega.lucasNum_sq_eq_int n
+    rw [← hbridge] at this; exact this
+  -- d | L and d | F
+  have hdL : (d : ℤ) ∣ L := Int.gcd_dvd_left L F
+  have hdF : (d : ℤ) ∣ F := Int.gcd_dvd_right L F
+  -- d^2 | L^2 and d^2 | 5*F^2
+  have hd2L : (d : ℤ) ^ 2 ∣ L ^ 2 := pow_dvd_pow_of_dvd hdL 2
+  have hd2F : (d : ℤ) ^ 2 ∣ 5 * F ^ 2 :=
+    dvd_mul_of_dvd_right (pow_dvd_pow_of_dvd hdF 2) 5
+  -- d^2 | L^2 - 5*F^2 = 4*(-1)^n
+  have hd24 : (d : ℤ) ^ 2 ∣ 4 * (-1) ^ n := by
+    have hsub : (d : ℤ) ^ 2 ∣ L ^ 2 - 5 * F ^ 2 := dvd_sub hd2L hd2F
+    have : L ^ 2 - 5 * F ^ 2 = 4 * (-1) ^ n := by linarith [hid]
+    rwa [this] at hsub
+  -- d^2 | 4 (since |(-1)^n| = 1)
+  have hd24' : (d : ℤ) ^ 2 ∣ 4 := by
+    rcases neg_one_pow_eq_or ℤ n with h | h <;>
+      simp [h] at hd24 ⊢ <;> exact hd24
+  -- d ≤ 2 from d^2 ≤ 4
+  have hd_le : d ≤ 2 := by
+    by_contra hgt
+    push_neg at hgt
+    have : (d : ℤ) ^ 2 ≥ 9 := by
+      have : (d : ℤ) ≥ 3 := by omega
+      nlinarith
+    have := Int.le_of_dvd (by norm_num : (0 : ℤ) < 4) hd24'
+    linarith
+  interval_cases d <;> omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R167: Primitive orbit count
+-- ══════════════════════════════════════════════════════════════
+
+/-- Necklace counting numerator: n * p(n) = sum_{d|n} mu(n/d) * L(d).
+    prop:zetaK-mobius-primitive -/
+def primitiveOrbitNumerator (n : Nat) : ℤ :=
+  ∑ d ∈ Nat.divisors n, ArithmeticFunction.moebius (n / d) * lucasNum d
 
 end Omega.Zeta

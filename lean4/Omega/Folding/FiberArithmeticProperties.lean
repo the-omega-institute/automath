@@ -829,4 +829,65 @@ theorem stableAdd_value_mod (x y : X m) :
   show stableValue (X.stableAdd x y) = _
   exact X.stableValue_stableAdd x y
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R167: Fiber parity split identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Parity split: 2 * #{x in S | f(x)=1} = |S| + sum f.
+    thm:pom-fiber-rewrite-parity-exact-split-mod3-obstruction -/
+theorem parity_split_identity {α : Type*} [DecidableEq α] {S : Finset α} {f : α → ℤ}
+    (hf : ∀ x ∈ S, f x = 1 ∨ f x = -1) :
+    2 * ((S.filter (fun x => f x = 1)).card : ℤ) =
+      S.card + ∑ x ∈ S, f x := by
+  have hpart : S = S.filter (fun x => f x = 1) ∪ S.filter (fun x => ¬(f x = 1)) :=
+    (Finset.filter_union_filter_neg_eq _ S).symm
+  have hdisj : Disjoint (S.filter (fun x => f x = 1)) (S.filter (fun x => ¬(f x = 1))) :=
+    Finset.disjoint_filter_filter_neg S S (fun x => f x = 1)
+  -- Every element with f x ≠ 1 has f x = -1
+  have hm1 : ∀ x ∈ S.filter (fun x => ¬(f x = 1)), f x = -1 := by
+    intro x hx
+    simp only [Finset.mem_filter] at hx
+    exact (hf x hx.1).resolve_left hx.2
+  -- |S| = |S+| + |S-|
+  have hcard : S.card = (S.filter (fun x => f x = 1)).card +
+      (S.filter (fun x => ¬(f x = 1))).card := by
+    rw [← Finset.card_union_of_disjoint hdisj, ← hpart]
+  -- sum f = |S+| - |S-|
+  have hsum : ∑ x ∈ S, f x =
+      (S.filter (fun x => f x = 1)).card - (S.filter (fun x => ¬(f x = 1))).card := by
+    rw [← Finset.sum_filter_add_sum_filter_not S (fun x => f x = 1)]
+    have h1 : ∑ x ∈ S.filter (fun x => f x = 1), f x =
+        (S.filter (fun x => f x = 1)).card := by
+      rw [Finset.sum_eq_card_nsmul (b := (1 : ℤ))]
+      · simp
+      · intro x hx; exact (Finset.mem_filter.mp hx).2
+    have h2 : ∑ x ∈ S.filter (fun x => ¬(f x = 1)), f x =
+        -((S.filter (fun x => ¬(f x = 1))).card : ℤ) := by
+      rw [Finset.sum_eq_card_nsmul (b := (-1 : ℤ))]
+      · simp
+      · intro x hx; exact hm1 x hx
+    rw [h1, h2]; push_cast; ring
+  push_cast [hcard, hsum]; ring
+
+/-- Complementary parity split for the odd part.
+    thm:pom-fiber-rewrite-parity-exact-split-mod3-obstruction -/
+theorem parity_split_identity_odd {α : Type*} [DecidableEq α] {S : Finset α} {f : α → ℤ}
+    (hf : ∀ x ∈ S, f x = 1 ∨ f x = -1) :
+    2 * ((S.filter (fun x => f x = -1)).card : ℤ) =
+      S.card - ∑ x ∈ S, f x := by
+  have h1 := parity_split_identity hf
+  have hpart : S = S.filter (fun x => f x = 1) ∪ S.filter (fun x => f x = -1) := by
+    ext x
+    simp only [Finset.mem_union, Finset.mem_filter]
+    constructor
+    · intro hx; exact (hf x hx).imp (fun h => ⟨hx, h⟩) (fun h => ⟨hx, h⟩)
+    · intro h; rcases h with ⟨hx, _⟩ | ⟨hx, _⟩ <;> exact hx
+  have hdisj : Disjoint (S.filter (fun x => f x = 1)) (S.filter (fun x => f x = -1)) := by
+    apply Finset.disjoint_filter.mpr
+    intro x _ h1 h2; linarith
+  have hcard : S.card = (S.filter (fun x => f x = 1)).card +
+      (S.filter (fun x => f x = -1)).card := by
+    rw [← Finset.card_union_of_disjoint hdisj, ← hpart]
+  push_cast [hcard] at h1 ⊢; linarith
+
 end Omega
