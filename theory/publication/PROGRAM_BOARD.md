@@ -10,22 +10,22 @@ Root dispatch table for the publication workspace. Each paper has one `PIPELINE.
 |---|---|---|---|
 | ETDS (scan projection) | Ergodic Th. Dyn. Sys. | P7 | **SUBMISSION-READY** |
 | APAL (conservative extension) | Ann. Pure Appl. Logic | P7 | **SUBMISSION-READY** |
-| TAMS (Fibonacci partition) | Trans. AMS | P5 | P5 complete, needs P7 |
+| TAMS (Fibonacci partition) | Trans. AMS | P7 | **SUBMISSION-READY** |
 
 ### Wave 2 (Journal rewrite stage)
 
 | Paper | Target | Stage | Status |
 |---|---|---|---|
-| JFA (circle dimension) | J. Funct. Anal. | P3 | File split done, abstract rewritten |
-| ETDS-zeta (dynamical zeta) | Ergodic Th. Dyn. Sys. | P3 | P3 complete, needs P4 |
+| JFA (circle dimension) | J. Funct. Anal. | P4 | P3 complete, P4 complete; needs P5 |
+| ETDS-zeta (dynamical zeta) | Ergodic Th. Dyn. Sys. | P5 | P5 complete; needs P6-P7 |
 
 ### Wave 3 (Research extension stage)
 
 | Paper | Target | Stage | Status |
 |---|---|---|---|
-| Fredholm-Witt (spectral rigidity) | TBD | P2 | P1+P2 done |
-| Self-Dual Sync (cyclotomic twists) | TBD | P2 | P1+P2 done |
-| Prime Languages (sofic obstructions) | TBD | P2 | P0-P2 complete |
+| Fredholm-Witt (spectral rigidity) | J. Spectral Theory | P2 | P0-P2 complete, 16 uncited bib entries |
+| Self-Dual Sync (cyclotomic twists) | IMRN | P2 | P0-P2 complete, verification scripts needed |
+| Prime Languages (sofic obstructions) | Monatshefte Math. | P2 | P0-P2 complete, 12+ uncited bib entries |
 
 ## Pipeline Stages
 
