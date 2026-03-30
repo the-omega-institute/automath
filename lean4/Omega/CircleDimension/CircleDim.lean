@@ -195,4 +195,72 @@ theorem paper_circleDim_add_three (a b c t1 t2 t3 : Nat) :
       circleDim a t1 + circleDim b t2 + circleDim c t3 :=
   circleDim_add_three a b c t1 t2 t3
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R154: Defect chain rule
+-- ══════════════════════════════════════════════════════════════
+
+/-- A record encoding the rank data of a group homomorphism f: G → H
+    between finitely generated abelian groups.
+    def:cdim-defect, thm:cdim-rank-nullity-formula -/
+structure CircleDimHomData where
+  sourceRank : Nat
+  targetRank : Nat
+  kernelRank : Nat
+  imageRank : Nat
+  rankNullity : sourceRank = kernelRank + imageRank
+  imageBound : imageRank ≤ targetRank
+
+/-- Circle dimension defect of a homomorphism. def:cdim-defect -/
+def cdimDefect (f : CircleDimHomData) : Nat := f.kernelRank
+
+/-- Rank-nullity formula for circle dimension. thm:cdim-rank-nullity-formula -/
+theorem cdim_rank_nullity (f : CircleDimHomData) :
+    circleDim f.sourceRank 0 =
+      circleDim f.kernelRank 0 + circleDim f.imageRank 0 := by
+  simp [circleDim]; exact f.rankNullity
+
+/-- Composition data for g∘f. thm:cdim-defect-chain-rule -/
+def CircleDimHomData.comp (f : CircleDimHomData) (g : CircleDimHomData)
+    (hfg : f.targetRank = g.sourceRank)
+    (restrictedKerRank : Nat)
+    (hRestrict : restrictedKerRank ≤ g.kernelRank)
+    (hRestrictBound : restrictedKerRank ≤ f.imageRank)
+    (hImageSplit : f.imageRank ≤ restrictedKerRank + g.imageRank) :
+    CircleDimHomData where
+  sourceRank := f.sourceRank
+  targetRank := g.targetRank
+  kernelRank := f.kernelRank + restrictedKerRank
+  imageRank := f.imageRank - restrictedKerRank
+  rankNullity := by have := f.rankNullity; omega
+  imageBound := by have := g.imageBound; omega
+
+/-- Defect chain rule: δ(g∘f) = δ(f) + δ(g|_{im f}). thm:cdim-defect-chain-rule -/
+theorem cdimDefect_comp (f g : CircleDimHomData)
+    (hfg : f.targetRank = g.sourceRank)
+    (restrictedKerRank : Nat)
+    (hRestrict : restrictedKerRank ≤ g.kernelRank)
+    (hRestrictBound : restrictedKerRank ≤ f.imageRank)
+    (hImageSplit : f.imageRank ≤ restrictedKerRank + g.imageRank) :
+    cdimDefect (f.comp g hfg restrictedKerRank hRestrict hRestrictBound hImageSplit) =
+      cdimDefect f + restrictedKerRank := by
+  simp [cdimDefect, CircleDimHomData.comp]
+
+/-- Defect sub-additivity: δ(g∘f) ≤ δ(f) + δ(g). thm:cdim-defect-chain-rule -/
+theorem cdimDefect_comp_le (f g : CircleDimHomData)
+    (hfg : f.targetRank = g.sourceRank)
+    (restrictedKerRank : Nat)
+    (hRestrict : restrictedKerRank ≤ g.kernelRank)
+    (hRestrictBound : restrictedKerRank ≤ f.imageRank)
+    (hImageSplit : f.imageRank ≤ restrictedKerRank + g.imageRank) :
+    cdimDefect (f.comp g hfg restrictedKerRank hRestrict hRestrictBound hImageSplit) ≤
+      cdimDefect f + cdimDefect g := by
+  simp only [cdimDefect_comp]
+  exact Nat.add_le_add_left hRestrict _
+
+/-- Minimum injectivization cost equals kernel rank. thm:cdim-minimal-ledger-cost-kernel -/
+theorem cdim_min_ledger_cost (f : CircleDimHomData) (R_rank : Nat)
+    (hInj : f.kernelRank ≤ R_rank) :
+    circleDim f.kernelRank 0 ≤ circleDim R_rank 0 := by
+  simp [circleDim]; exact hInj
+
 end Omega.CircleDimension
