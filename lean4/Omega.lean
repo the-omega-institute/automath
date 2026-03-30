@@ -52,6 +52,8 @@ import Omega.Folding.ZeckendorfSignature
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
+import Omega.Graph.PhiGraph
+import Omega.Graph.Window6TranslationQuotient
 import Omega.SPG.Cylinder
 import Omega.SPG.PrefixMetric
 import Omega.SPG.Clopen
