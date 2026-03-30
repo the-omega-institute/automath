@@ -13,26 +13,26 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 782 |
+| \leanverified 标注数 | 787 |
 | \leanpartial 标注数 | 11 |
-| 总标注数 | 793 |
-| 轮次 | R177（round_count=178） |
+| 总标注数 | 798 |
+| 轮次 | R178（round_count=179） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
 | POM | 1,707 | 223 | 13.1% |
-| Emergent Arithmetic | 185 | 80 | 43.2% |
+| Emergent Arithmetic | 185 | 83 | 44.9% |
 | Folding | 337 | 76 | 22.6% |
 | Conclusion | 2,550 | 134 | 5.3% |
 | Group Unification | 469 | 72 | 15.4% |
-| SPG | 129 | 27 | 20.9% |
+| SPG | 129 | 29 | 22.5% |
 | Circle Dimension | 393 | 61 | 15.5% |
 | Zeta Finite Part | 4,524 | 94 | 2.1% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **778** | **7.4%** |
+| **合计（body）** | **10,508** | **783** | **7.5%** |
 
 ### 1.2 已完成模块
 
@@ -160,6 +160,7 @@
 **Phase R175: deterministic lift-count bound by state count（部分完成）**：Graph/LiftBound.lean——LabeledPath / labeledPath_initial_injective / labeledPath_card_le_state_card（cor:Phi_m-entropy-no-drop）——**3 个论文标签条目计入覆盖率**（Folding +3）——Folding 73→76（22.6%），全局标注 782→785（+3），body 覆盖 767→770（7.3%），commit 989e691
 **Phase R176: Hankel-Vandermonde square law + SPG symmetric-diff recovery（部分完成）**：Zeta/HankelVandermonde2.lean + SPG/ScanErrorDiscrete.lean——Zeta：hankel2 / hankel2_vandermonde_square / hankel2_vandermonde_square_symm（cor:xi-hankel-vs-prony-square-gap）；SPG：symmetricDiffMass_eq_scanError_of_optimal / symmetricDiffMass_eq_zero_of_eq（cor:spg-clarity-walsh-spectral-stability，对应正文中的显式 symmetric-difference 语义 `((P \ Pstar) ∪ (Pstar \ P))`）——**5 个论文标签条目计入覆盖率**（Zeta +3，SPG +2）——Zeta 91→94（2.1%），SPG 25→27（20.9%），全局标注 785→790（+5），body 覆盖 770→775（7.4%），commit ffffc86
 **Phase R177: finite-support Möbius inversion count identities（部分完成）**：CircleDimension/MultiPrimeSpectrum.lean——typeCount / multiPrimeSpectrum_eq_sum_typeCount / sum_typeCount_eq_card（thm:cdim-mobius-inversion-localization-multiset-classification）——**3 个论文标签条目计入覆盖率**（Circle Dimension +3；R172 已登记的 multiPrimeSpectrum_eq_count / multiPrimeSpectrum_anti_mono / multiPrimeSpectrum_empty / multiPrimeSpectrum_pos_of_mem 不重复登记）——Circle Dimension 58→61（15.5%），全局标注 790→793（+3），body 覆盖 775→778（7.4%），commit ca343e5
+**Phase R178: EA/SPG recovery lemmas（部分完成）**：EA/CentralIdempotentsRecovery.lean + SPG/NoiseBudgetRecovery.lean——EA：projectorVal / projectorVal_partition_of_signs / projectorVal_case_split（thm:fold-groupoid-z2x2-central-idempotents）；SPG：le_div_of_pos_mul_le / pos_mul_le_iff_le_div（cor:spg-dyadic-holographic-reconstruction-noise-budget）——**5 个论文标签条目计入覆盖率**（Emergent Arithmetic +3，SPG +2）——Emergent Arithmetic 80→83（44.9%），SPG 27→29（22.5%），全局标注 793→798（+5），body 覆盖 778→783（7.5%），commit 3f022c1
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续
 **Fibonacci 素数域（完整）**：stableMul_inv_of_prime（素数时乘法逆存在，域结构核心）; fib_four/five/seven/thirteen_prime（native_decide 验证）; fib_nine_not_prime（反例验证）; instFieldOfPrime（通用域实例：F_{m+2} 素数时 X m 为域，经由 stableValueRingEquiv 转移）; instField_X1（GF(2)）、instField_X2（GF(3)）、instField_X3（GF(5)）、instField_X5（GF(13)）、instField_X9（GF(89)）、instField_X11（GF(233)）（cor:field-phase-fib-prime 完整形式化）
@@ -564,6 +565,7 @@
 37. **[Deferred R176] two-atom scalar recovery of golden parameter**：`twoAtomScalar_deriv_bracket_pos`、`twoAtomScalar_strictMono_phi`、`twoAtomScalar_goldenRatio_defined` 对应 `cor:conclusion-binfold-single-scalar-recovers-golden-parameter`；当前需要更细的实分析 / 导数正性证明，未提交、不登记覆盖率
 38. **[Deferred R177] Walsh/Stokes singleton recovery**：`bit_layer_card_eq`、`walshStokes_singleton_const_recovery` 对应 `thm:discussion-walsh-stokes-higher-flux` 的 recovery；当前仍需一个 clean 的 bit-flip layer pairing proof，未提交、不登记覆盖率
 39. **[Deferred R177] symmetric remainder recovery**：`symmetric_remainder_unique_mod` 对应 `cor:pom-symmetric-remainder` 的 recovery；当前需要从半开对称区间推出 `-b < r₁-r₂ < b` 的整数界并合并整除性，未提交、不登记覆盖率
+40. **[Deferred R178] HankelVandermonde3 mainline**：`hankel3`、`hankel3_vandermonde_square` 对应 `cor:xi-hankel-vs-prony-square-gap`；当前 `Matrix.det_fin_three` + matrix notation reduction 触发 heartbeat exhaustion，建议后续改走预展开标量行列式 / 多项式恒等式路线，未提交、不登记覆盖率
 
 ## 4. 已知问题与表述修正
 
