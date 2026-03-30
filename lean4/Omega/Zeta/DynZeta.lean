@@ -409,6 +409,60 @@ theorem lucasNum_mod3_period_eight (n : ℕ) :
     lucasNum_succ_succ n]
   omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R158: Lucas mod 4 period 6 + mod 7 period 16
+-- ══════════════════════════════════════════════════════════════
+
+/-- Lucas numbers mod 4 have period 6: L(n+6) % 4 = L(n) % 4.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_mod4_period_six (n : Nat) :
+    lucasNum (n + 6) % 4 = lucasNum n % 4 := by
+  -- L(n+6) = 8*L(n+1) + 5*L(n); 8 mod 4 = 0, 5 mod 4 = 1
+  simp only [show n + 6 = (n + 4) + 2 from by omega, lucasNum_succ_succ (n + 4),
+    show n + 4 = (n + 2) + 2 from by omega, lucasNum_succ_succ (n + 2),
+    show (n + 4) + 1 = (n + 3) + 2 from by omega, lucasNum_succ_succ (n + 3),
+    show n + 3 = (n + 1) + 2 from by omega, lucasNum_succ_succ (n + 1),
+    show (n + 3) + 1 = (n + 2) + 2 from by omega,
+    show (n + 2) + 1 = (n + 1) + 2 from by omega,
+    show (n + 1) + 1 = n + 2 from by omega,
+    lucasNum_succ_succ n]
+  omega
+
+/-- Lucas numbers mod 7 have period 16: L(n+16) % 7 = L(n) % 7.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_mod7_period_sixteen (n : Nat) :
+    lucasNum (n + 16) % 7 = lucasNum n % 7 := by
+  -- L(n+16) = 987*L(n+1) + 610*L(n); 987 = 141*7, 610 mod 7 = 1
+  simp only [show n + 16 = (n + 14) + 2 from by omega, lucasNum_succ_succ (n + 14),
+    show n + 14 = (n + 12) + 2 from by omega, lucasNum_succ_succ (n + 12),
+    show n + 12 = (n + 10) + 2 from by omega, lucasNum_succ_succ (n + 10),
+    show n + 10 = (n + 8) + 2 from by omega, lucasNum_succ_succ (n + 8),
+    show n + 8 = (n + 6) + 2 from by omega, lucasNum_succ_succ (n + 6),
+    show n + 6 = (n + 4) + 2 from by omega, lucasNum_succ_succ (n + 4),
+    show n + 4 = (n + 2) + 2 from by omega, lucasNum_succ_succ (n + 2),
+    show (n + 14) + 1 = (n + 13) + 2 from by omega, lucasNum_succ_succ (n + 13),
+    show n + 13 = (n + 11) + 2 from by omega, lucasNum_succ_succ (n + 11),
+    show n + 11 = (n + 9) + 2 from by omega, lucasNum_succ_succ (n + 9),
+    show n + 9 = (n + 7) + 2 from by omega, lucasNum_succ_succ (n + 7),
+    show n + 7 = (n + 5) + 2 from by omega, lucasNum_succ_succ (n + 5),
+    show n + 5 = (n + 3) + 2 from by omega, lucasNum_succ_succ (n + 3),
+    show n + 3 = (n + 1) + 2 from by omega, lucasNum_succ_succ (n + 1),
+    show (n + 13) + 1 = (n + 12) + 2 from by omega,
+    show (n + 12) + 1 = (n + 11) + 2 from by omega,
+    show (n + 11) + 1 = (n + 10) + 2 from by omega,
+    show (n + 10) + 1 = (n + 9) + 2 from by omega,
+    show (n + 9) + 1 = (n + 8) + 2 from by omega,
+    show (n + 8) + 1 = (n + 7) + 2 from by omega,
+    show (n + 7) + 1 = (n + 6) + 2 from by omega,
+    show (n + 6) + 1 = (n + 5) + 2 from by omega,
+    show (n + 5) + 1 = (n + 4) + 2 from by omega,
+    show (n + 4) + 1 = (n + 3) + 2 from by omega,
+    show (n + 3) + 1 = (n + 2) + 2 from by omega,
+    show (n + 2) + 1 = (n + 1) + 2 from by omega,
+    show (n + 1) + 1 = n + 2 from by omega,
+    lucasNum_succ_succ n]
+  omega
+
 /-! ## Zeta rationality and pole structure
 
 For a d×d matrix, ζ_A(z) = det(I-zA)⁻¹ is a rational function with
