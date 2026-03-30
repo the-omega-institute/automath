@@ -25,6 +25,7 @@ from typing import Iterable
 SCRIPT_DIR = Path(__file__).resolve().parent
 LEAN_ROOT = SCRIPT_DIR.parent
 OMEGA_ROOT = LEAN_ROOT / "Omega"
+REPO_ROOT = LEAN_ROOT.parent
 THEORY_ROOT = (
     LEAN_ROOT.parent
     / "theory"
@@ -165,6 +166,17 @@ def write_text_file(path: Path, text: str, *, encoding: str = "utf-8") -> None:
 def module_name(path: Path) -> str:
     rel = path.relative_to(LEAN_ROOT).with_suffix("")
     return ".".join(rel.parts)
+
+
+def display_path(path: Path, *, root_hint: Path | None = None) -> str:
+    for base in (root_hint, THEORY_ROOT, REPO_ROOT):
+        if base is None:
+            continue
+        try:
+            return str(path.relative_to(base))
+        except ValueError:
+            continue
+    return str(path)
 
 
 def strip_comments_and_strings(text: str) -> str:
@@ -456,7 +468,11 @@ def search_declarations(
     return scored[:top_k]
 
 
-def theory_files(section: str) -> list[Path]:
+def theory_files(section: str, tex_root: Path | None = None) -> list[Path]:
+    if tex_root is not None:
+        if not tex_root.exists():
+            return []
+        return sorted(tex_root.rglob("*.tex"))
     if section == "all":
         roots = THEORY_SECTION_ROOTS.values()
     else:
@@ -470,10 +486,13 @@ def theory_files(section: str) -> list[Path]:
 
 def collect_paper_claims(
     section: str,
+    tex_root: Path | None = None,
 ) -> tuple[list[PaperClaimRecord], list[dict[str, object]]]:
     claims: list[PaperClaimRecord] = []
     unlabeled: list[dict[str, object]] = []
-    for path in theory_files(section):
+    scan_files = theory_files(section, tex_root)
+    root_hint = tex_root if tex_root is not None else THEORY_ROOT
+    for path in scan_files:
         text = read_text_file(path, encoding="utf-8")
         for match in CLAIM_ENV_RE.finditer(text):
             env = match.group(1)
@@ -484,7 +503,7 @@ def collect_paper_claims(
             body = text[match.end() : end_idx]
             line = text.count("\n", 0, match.start()) + 1
             label_match = CLAIM_LABEL_RE.search(body)
-            rel = str(path.relative_to(THEORY_ROOT))
+            rel = display_path(path, root_hint=root_hint)
             if label_match is None:
                 unlabeled.append(
                     {
@@ -512,6 +531,7 @@ def coverage_payload(
     unlabeled_claims: Iterable[dict[str, object]],
     *,
     section: str,
+    tex_root: Path | None = None,
 ) -> dict[str, object]:
     decls = list(declarations)
     claim_list = list(claims)
@@ -543,10 +563,12 @@ def coverage_payload(
         for label in lean_registry_labels
         if label.split(":", 1)[0] in CLAIM_ENV_TO_PREFIX.values() and label not in claim_label_set
     )
+    scan_root = str(tex_root.resolve()) if tex_root is not None else str(THEORY_ROOT.resolve())
 
     return {
         "section": section,
-        "files_scanned": len(theory_files(section)),
+        "scan_root": scan_root,
+        "files_scanned": len(theory_files(section, tex_root)),
         "claim_environments_total": len(claim_list),
         "claim_labels_total": len(claim_labels),
         "claim_labels_unique": len(claim_label_set),
@@ -724,19 +746,58 @@ def cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+def resolve_tex_root(raw_path: str | None) -> Path | None:
+    if not raw_path:
+        return None
+    path = Path(raw_path)
+    if not path.is_absolute():
+        path = (REPO_ROOT / path).resolve()
+    if not path.exists():
+        raise FileNotFoundError(f"TeX root not found: {raw_path}")
+    if not path.is_dir():
+        raise ValueError(f"Expected a directory for --tex-root: {raw_path}")
+    return path
+
+
+def p6_gate_payload(
+    coverage: dict[str, object],
+    *,
+    paper_id: str,
+) -> dict[str, object]:
+    blocking_labels = list(coverage["missing_in_lean"])
+    unlabeled_claims = list(coverage["unlabeled_claims"])
+    return {
+        "paper_id": paper_id,
+        "scan_root": coverage["scan_root"],
+        "claim_labels_unique": coverage["claim_labels_unique"],
+        "matched_registry_labels_total": coverage["matched_registry_labels_total"],
+        "missing_in_lean_total": coverage["missing_in_lean_total"],
+        "unlabeled_claims_total": coverage["unlabeled_claims_total"],
+        "blocking_labels": blocking_labels,
+        "blocking_unlabeled_claims": unlabeled_claims,
+        "coverage_rate_registry": coverage["coverage_rate_registry"],
+        "pass": not blocking_labels and not unlabeled_claims,
+    }
+
+
 def cmd_paper_coverage(args: argparse.Namespace) -> int:
     declarations, _ = build_inventory()
-    claims, unlabeled_claims = collect_paper_claims(args.sections)
+    tex_root = resolve_tex_root(args.tex_root)
+    scan_label = args.sections if tex_root is None else "custom"
+    claims, unlabeled_claims = collect_paper_claims(args.sections, tex_root)
     payload = coverage_payload(
         declarations,
         claims,
         unlabeled_claims,
-        section=args.sections,
+        section=scan_label,
+        tex_root=tex_root,
     )
+    paper_id = args.paper_id or (tex_root.name if tex_root is not None else args.sections)
 
     print(
         "[omega-ci] paper-coverage:"
-        f" section={args.sections}"
+        f" section={scan_label}"
+        f" paper_id={paper_id}"
         f" files={payload['files_scanned']}"
         f" claim_labels={payload['claim_labels_unique']}"
         f" matched={payload['matched_registry_labels_total']}"
@@ -761,6 +822,12 @@ def cmd_paper_coverage(args: argparse.Namespace) -> int:
         out_path = Path(args.json).resolve()
         write_text_file(out_path, json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         print(f"[omega-ci] wrote paper coverage JSON: {out_path}")
+
+    if args.gate_json:
+        gate = p6_gate_payload(payload, paper_id=paper_id)
+        out_path = Path(args.gate_json).resolve()
+        write_text_file(out_path, json.dumps(gate, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        print(f"[omega-ci] wrote P6 gate JSON: {out_path}")
 
     if args.fail_on_missing and (missing or unlabeled):
         print("[omega-ci] fail-on-missing triggered", file=sys.stderr)
@@ -833,7 +900,19 @@ def parser() -> argparse.ArgumentParser:
         default="body",
         help="Which paper sections to scan",
     )
+    coverage_p.add_argument(
+        "--tex-root",
+        help="Scan a specific TeX directory (for example theory/publication/<paper>) instead of the parent monograph",
+    )
+    coverage_p.add_argument(
+        "--paper-id",
+        help="Override the paper identifier used in summaries and gate JSON output",
+    )
     coverage_p.add_argument("--json", help="Write coverage report to this path")
+    coverage_p.add_argument(
+        "--gate-json",
+        help="Write a compact machine-readable P6 gate artifact to this path",
+    )
     coverage_p.add_argument(
         "--top-missing",
         type=int,
