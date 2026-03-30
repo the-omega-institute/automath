@@ -1,3 +1,99 @@
+# THEOREM_LIST
+
+Catalogue of every theorem-level claim.
+
+| # | Label | Location | Statement | Status |
+|---|-------|----------|-----------|--------|
+| 1 | `lem:primitive-orbit-asymptotic` | sec_preliminaries.tex:17 | Primitive orbit count satisfies $p_n(M) = \lambda^n/n + O(\max\{\Lambda(M)^n, \lambda^{n/2}\}/n)$. | Proved |
+| 2 | `prop:sync-self-duality` | sec_preliminaries.tex:79 | The involution $\iota$ on the state set exchanges $B_0$ and $B_1$, giving $\Delta(z,u)=\Delta(uz,u^{-1})$. | Proved |
+| 3 | `prop:kernel-delta-explicit` | sec_kernel.tex:6 | Explicit closed form of $\Delta(z,u)$ as a degree-6 polynomial in $z$ with coefficients in $\mathbb{Z}[u]$. | Proved (by direct computation; proof references elimination from the 10x10 matrix) |
+| 4 | `prop:sync-kernel-spectrum` | sec_kernel.tex:27 | $\det(I-zB) = (z-1)(z+1)(3z-1)(z^3-z^2+z+1)$, $\rho(B)=3$, $C_B = 243/272$. | Proved |
+| 5 | `prop:sync-hatdelta-completion` | sec_kernel.tex:61 | Completed determinant $\widehat\Delta(w,s) = 1 - sw - 5w^2 + 3sw^3 + (5-s^2)w^4 + (s^3-6s)w^5 + (s^2-1)w^6$; parity relation $\widehat\Delta(w,-s) = \widehat\Delta(-w,s)$. | Proved |
+| 6 | `prop:sync-hatdelta-quotient` | sec_kernel.tex:88 | Quotient of the curve by involution $(w,s)\mapsto(-w,-s)$ is a smooth plane quartic of genus 3. | Proved |
+| 7 | `prop:sync-hatdelta-double-cover` | sec_kernel.tex:116 | Two-sheeted cover branched at exactly two points; normalisation has genus 6 by Hurwitz. | Proved |
+| 8 | `prop:sync-hatdelta-galois-s6-generic` | sec_kernel.tex:136 | Generic Galois group of $\widehat\Delta(w,s)$ over $\mathbb{Q}(s)$ is $S_6$. | Proved (sketch: discriminant not a square + specialisation producing transposition and 5-cycle) |
+| 9 | `thm:sync-cyclotomic-degree-law` | sec_kernel.tex:166 | $\deg_w R_m = 3\varphi(2m)$ for $m \ge 4$; $R_m$ is even when $m$ is even. | Proved |
+| 10 | `cor:rho-m2-closed-form` | sec_kernel.tex:185 | $R_2(w) = (1-w^2)(w^4-4w^2+1)$, $\rho_2 = \sqrt{2+\sqrt{3}}$. | Proved |
+| 11 | `prop:sync-endpoint-jet` | sec_kernel.tex:213 | Endpoint jet of the analytic branch $\rho(s)$ near $s=2$: leading coefficients $w'(2)=-11/153$, $\rho'(2)=11/17$, etc. | Proved |
+| 12 | `thm:rho-gap-m12` | sec_kernel.tex:242 | Asymptotic expansion of $\rho_m$ to order $O(m^{-14})$; leading gap $3 - \rho_m \sim 11\pi^2/(17m^2)$. | Proved |
+| 13 | `prop:cyclic-lift-primitive-asymptotics` | sec_kernel.tex:279 | Primitive orbit count for cyclic lift $M^{\langle q\rangle} = M \otimes P_q$: vanishes for $q \nmid n$, standard asymptotics for $n = qm$. | Proved |
+
+**Summary**: 13 theorem-level claims, all marked as proved. No claims are merely cited or assumed. External dependencies are limited to Perron--Frobenius theory, the implicit function theorem, and Hurwitz's formula, all standard.
+
+---
+
+# SOURCE_MAP
+
+Cross-reference of all labelled theorem-level environments and their internal dependencies.
+
+## sec_introduction.tex
+
+| Label | Type | Line | Dependencies |
+|-------|------|------|--------------|
+| `sec:introduction` | Section | 1 | -- |
+| `thm:intro-kernel-geometry` | Theorem | 37 | `def:sync-kernel`, `prop:kernel-delta-explicit`, `prop:sync-hatdelta-completion`, `prop:sync-hatdelta-quotient`, `prop:sync-hatdelta-double-cover`, `prop:sync-hatdelta-galois-s6-generic` |
+| `thm:intro-kernel-cyclotomic` | Theorem | 81 | `prop:sync-hatdelta-completion`, `thm:sync-cyclotomic-degree-law`, `cor:rho-m2-closed-form`, `thm:rho-gap-m12` |
+
+These are umbrella statements collecting results proved in `sec_kernel.tex`.
+
+## sec_preliminaries.tex
+
+| Label | Type | Line | Dependencies |
+|-------|------|------|--------------|
+| `sec:preliminaries` | Section | 1 | -- |
+| `eq:primitive-mobius` | Equation | 13 | -- |
+| `lem:primitive-orbit-asymptotic` / `prop:prelim-prime-orbit` | Lemma | 17 | `eq:primitive-mobius`, Perron--Frobenius theory (external) |
+| `def:sync-kernel` | Definition | 43 | -- |
+| `prop:sync-self-duality` | Proposition | 79 | `def:sync-kernel` |
+
+Note: `lem:primitive-orbit-asymptotic` and `prop:prelim-prime-orbit` are declared as two labels on the same `\begin{lemma}`.
+
+## sec_kernel.tex
+
+| Label | Type | Line | Dependencies |
+|-------|------|------|--------------|
+| `sec:kernel` | Section | 2 | -- |
+| `prop:kernel-delta-explicit` | Proposition | 6 | `def:sync-kernel`, `prop:sync-self-duality` |
+| `prop:sync-kernel-spectrum` | Proposition | 27 | `prop:kernel-delta-explicit` |
+| `prop:sync-hatdelta-completion` | Proposition | 61 | `prop:kernel-delta-explicit` |
+| `prop:sync-hatdelta-quotient` | Proposition | 88 | `prop:sync-hatdelta-completion` |
+| `prop:sync-hatdelta-double-cover` | Proposition | 116 | `prop:sync-hatdelta-quotient` |
+| `prop:sync-hatdelta-galois-s6-generic` | Proposition | 136 | `prop:sync-hatdelta-completion` |
+| `thm:sync-cyclotomic-degree-law` | Theorem | 166 | `prop:sync-hatdelta-completion` |
+| `cor:rho-m2-closed-form` | Corollary | 185 | `thm:sync-cyclotomic-degree-law`, `prop:sync-hatdelta-completion` |
+| `prop:sync-endpoint-jet` | Proposition | 213 | `prop:sync-hatdelta-completion`, Implicit Function Theorem (standard) |
+| `thm:rho-gap-m12` | Theorem | 242 | `prop:sync-endpoint-jet`, `thm:sync-cyclotomic-degree-law` |
+| `prop:cyclic-lift-primitive-asymptotics` | Proposition | 279 | `lem:primitive-orbit-asymptotic` |
+
+## sec_conclusion.tex
+
+No labelled environments. Label: `sec:conclusion` (line 1).
+
+## Dependency graph (topological order)
+
+```
+def:sync-kernel
+  -> prop:sync-self-duality
+      -> prop:kernel-delta-explicit
+          -> prop:sync-kernel-spectrum
+          -> prop:sync-hatdelta-completion
+              -> prop:sync-hatdelta-quotient
+                  -> prop:sync-hatdelta-double-cover
+              -> prop:sync-hatdelta-galois-s6-generic
+              -> thm:sync-cyclotomic-degree-law
+                  -> cor:rho-m2-closed-form
+                  -> thm:rho-gap-m12  (also depends on prop:sync-endpoint-jet)
+              -> prop:sync-endpoint-jet
+
+eq:primitive-mobius
+  -> lem:primitive-orbit-asymptotic
+      -> prop:cyclic-lift-primitive-asymptotics
+```
+
+---
+
+
+
 # P2 Extension Note -- 2026-03-30
 
 ## 1. Main Theorem Package (Flagship Results)
@@ -200,3 +296,6 @@ The paper is a detailed explicit computation in symbolic dynamics / algebraic co
 - **ETDS (Ergodic Theory and Dynamical Systems)**: The README notes the parent manuscript targets ETDS. This split-out paper has enough algebraic geometry to stand alone, but ETDS readers would appreciate the dynamical context.
 
 See TRACK_BOARD.md for the P0 recommendation.
+
+---
+

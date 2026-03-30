@@ -1,3 +1,171 @@
+# TRACK_BOARD
+
+Paper: *Prime languages, finite-state obstructions, and dynamical zeta-functions*
+Directory: `theory/publication/2026_prime_languages_sofic_obstructions_dynamical_zeta/`
+
+---
+
+## Pipeline Status
+
+| Stage | Description | Status | Date |
+|---|---|---|---|
+| **P0** | Intake and Contract | DONE | 2026-03-30 |
+| **P1** | Traceability (SOURCE_MAP, THEOREM_LIST) | DONE | 2026-03-30 |
+| **P2** | Research Extension | DONE | 2026-03-30 |
+| **P3** | Proof Audit | PENDING | -- |
+| **P4** | Exposition Polish | PENDING | -- |
+| **P5** | Bibliography and Formatting | PENDING | -- |
+| **P6** | Journal Submission Package | PENDING | -- |
+
+---
+
+## P0 Summary
+
+**Title:** Prime languages, finite-state obstructions, and dynamical zeta-functions
+
+**Subject area:** Intersection of symbolic dynamics, automata theory, combinatorics on words, and analytic number theory.
+
+**Target journal:** *Monatshefte fur Mathematik*
+
+**Rationale:** Short, self-contained note (8--10 pages) collecting elementary obstructions from three distinct mathematical perspectives. Monatshefte publishes clean cross-area notes at the intersection of number theory, combinatorics, and dynamics. The scope is too modest for JNT or Advances; the automata content is too light for TCS. Alternative: Proceedings of the AMS.
+
+**MSC 2020:** 37B10, 68Q45, 11A41, 05A15
+
+---
+
+## P1 Summary
+
+Artifacts produced:
+- `SOURCE_MAP.md`: Enumerates all theorem-level environments across 6 .tex files.
+- `THEOREM_LIST.md`: Catalogues 9 body-level claims with labels, locations, one-line statements, proof status, and dependency chain.
+
+---
+
+## P2 Summary
+
+Artifact produced:
+- `P2_EXTENSION_NOTE_2026-03-30.md`
+
+Key findings:
+- Results range from folklore to mild extensions of standard material. The value is in the systematic assembly.
+- The density dichotomy (Block A) is standard finite Markov chain theory; the DFA application to primes is a clean new formulation.
+- The Zeckendorf argument (Block B) generalizes to all Parry numeration systems; this generality should be stated.
+- The natural boundary proof (Block C, Thm 8) is too terse and needs a non-cancellation clarification.
+- Proposition 9 implicitly uses irrationality of $\log 2$ without stating it.
+- The bibliography contains 12+ uncited entries from the parent manuscript and is missing key references (Allouche--Shallit, Cobham, Hardy--Wright, Bruyere--Hansel, Flajolet--Sedgewick).
+- No computational/reproducibility component; the paper is purely theoretical.
+
+---
+
+## Pending stages
+
+**P3 (Proof Audit):** Line-by-line verification of all 9 claims. Priority items: natural boundary non-cancellation argument, $\lambda = 0$ edge case in Zeckendorf theorem, leading-zeros convention in DFA corollaries.
+
+**P4 (Exposition Polish):** Label the unlabelled DFA definition; define $\mathrm{val}(w)$ before first use in introduction; state Parry-numeration generality; make the $\log 2$ irrationality explicit.
+
+**P5 (Bibliography and Formatting):** Remove uncited entries; add Allouche--Shallit, Hardy--Wright, Bruyere--Hansel, Cobham, Mauduit--Rivat, Estermann, Flajolet--Sedgewick, Frougny. Verify amsart formatting for Monatshefte submission.
+
+**P6 (Journal Submission Package):** Prepare cover letter, compile PDF, verify MSC codes, finalize author metadata.
+
+---
+
+# THEOREM_LIST
+
+Paper: *Prime languages, finite-state obstructions, and dynamical zeta-functions*
+
+## Introduction (restatements)
+
+The introduction restates the three main theorems for the reader's convenience. The authoritative versions with proofs appear in the body sections. The introduction restatements are:
+
+- `thm:intro-density` (sec_introduction.tex:23) -- restatement of `thm:dfa-density-dichotomy`
+- `cor:intro-binary-primes` (sec_introduction.tex:54) -- restatement of `cor:dfa-prime-symmetric-diff` + `cor:dfa-prime-recall-precision`
+- `thm:intro-zeckendorf` (sec_introduction.tex:74) -- restatement of `thm:zeckendorf-regular-powerlaw` + corollaries
+- `thm:intro-analytic` (sec_introduction.tex:96) -- restatement of `thm:euler-product-natural-boundary` + `prop:finite-zeta-imaginary-periodicity`
+
+## Body theorems
+
+| # | Label | File:Line | Statement (one line) | Status |
+|---|---|---|---|---|
+| 1 | `thm:dfa-density-dichotomy` | sec_automata.tex:22 | For a complete DFA over {0,1}, the accepted-word density $a_m/2^m$ is eventually periodic mod $p$ up to $O(\theta^m)$; hence either exponentially sparse or positive-density along a residue class. | **Proved** |
+| 2 | `cor:dfa-prime-symmetric-diff` | sec_automata.tex:85 | Every DFA language has symmetric difference $\ge c\,2^m/m$ with the binary prime language for large $m$. | **Proved** (from Thm 1 + PNT) |
+| 3 | `cor:dfa-prime-recall-precision` | sec_automata.tex:126 | No fixed DFA achieves both recall and precision bounded away from 0 on binary primes for infinitely many lengths. | **Proved** (from Cor 2) |
+| 4 | `thm:zeckendorf-regular-powerlaw` | sec_zeckendorf.tex:19 | Every regular sublanguage $L \subseteq \mathcal{Z}$ has counting function $N_L(T) = T^{\alpha+o(1)}$ for some $\alpha \in [0,1]$. | **Proved** |
+| 5 | `cor:zeckendorf-prime-language-not-regular` | sec_zeckendorf.tex:60 | The language of Zeckendorf representations of primes is not regular. | **Proved** (from Thm 4 + PNT) |
+| 6 | `prop:sofic-counts-exponential-polynomial` | sec_zeckendorf.tex:83 | Sofic shift word counts are exponential polynomials in $m$. | **Cited** (standard; proof sketch via Jordan form, references Lind--Marcus and Kitchens) |
+| 7 | `thm:zeckendorf-primes-not-sofic` | sec_zeckendorf.tex:102 | The length slices of the prime Zeckendorf language cannot be the admissible words of any sofic shift. | **Proved** (from Prop 6 + PNT asymptotics) |
+| 8 | `thm:euler-product-natural-boundary` | sec_analytic.tex:4 | If $b_p > 0$ for infinitely many primes $p$, the Euler product $\prod(1-z^n)^{-b_n}$ has $|z|=1$ as natural boundary. | **Proved** |
+| 9 | `prop:finite-zeta-imaginary-periodicity` | sec_analytic.tex:26 | $\det(I - e^{-s}M)^{-1}$ is $2\pi i$-periodic; the Riemann $\zeta$-function is not. | **Proved** |
+
+## Dependency chain
+
+```
+PNT (external) ──┬──> Cor 2 ──> Cor 3
+Thm 1 ───────────┘
+PNT (external) ──┬──> Cor 5
+Thm 4 ───────────┘
+PNT (external) ──┬──> Thm 7
+Prop 6 (cited) ───┘
+Thm 8: self-contained (density of roots of unity)
+Prop 9: self-contained (periodicity of exponential)
+```
+
+---
+
+# SOURCE_MAP
+
+Paper: *Prime languages, finite-state obstructions, and dynamical zeta-functions*
+
+## main.tex
+
+No theorem-level environments. Document shell: preamble, abstract, `\input` calls, bibliography.
+
+## sec_introduction.tex
+
+| Environment | Label | Line |
+|---|---|---|
+| Theorem | `thm:intro-density` | 23 |
+| Corollary | `cor:intro-binary-primes` | 54 |
+| Theorem | `thm:intro-zeckendorf` | 74 |
+| Theorem | `thm:intro-analytic` | 96 |
+
+## sec_automata.tex
+
+| Environment | Label | Line |
+|---|---|---|
+| Definition | *(unlabelled)* | 4 |
+| Theorem | `thm:dfa-density-dichotomy` | 22 |
+| Corollary | `cor:dfa-prime-symmetric-diff` | 85 |
+| Corollary | `cor:dfa-prime-recall-precision` | 126 |
+
+## sec_zeckendorf.tex
+
+| Environment | Label | Line |
+|---|---|---|
+| Theorem | `thm:zeckendorf-regular-powerlaw` | 19 |
+| Corollary | `cor:zeckendorf-prime-language-not-regular` | 60 |
+| Proposition | `prop:sofic-counts-exponential-polynomial` | 83 |
+| Theorem | `thm:zeckendorf-primes-not-sofic` | 102 |
+
+## sec_analytic.tex
+
+| Environment | Label | Line |
+|---|---|---|
+| Theorem | `thm:euler-product-natural-boundary` | 4 |
+| Proposition | `prop:finite-zeta-imaginary-periodicity` | 26 |
+| Remark | *(unlabelled)* | 51 |
+
+## sec_conclusion.tex
+
+No theorem-level environments. Expository discussion only.
+
+## references.bib
+
+23 entries. Key references: LindMarcus1995, Kitchens1998, Zeckendorf1972, LevinPeresWilmer2009MarkovMixing, BowenLanford1970Zeta, Ruelle1976ZetaExpanding, ParryPollicott1990Zeta, Manning1971Axiom.
+
+---
+
+
+
 # P2 Extension Note
 
 Paper: *Prime languages, finite-state obstructions, and dynamical zeta-functions*
@@ -126,3 +294,6 @@ Rationale:
 - The MSC codes (37B10, 68Q45, 11A41, 05A15) span symbolic dynamics, automata theory, and prime number theory, which is well within Monatshefte's scope.
 - JNT would expect deeper number-theoretic content. Advances in Applied Mathematics would want applications. Theoretical Computer Science would want more automata-theoretic depth.
 - Alternatively, *Proceedings of the AMS* is suitable for short notes of this type, if the authors prefer a broader-audience venue.
+
+---
+

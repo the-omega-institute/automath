@@ -1,3 +1,162 @@
+# THEOREM_LIST
+
+Paper: *Fredholm determinants, cyclic-block realisations, and spectral rigidity for symbolic zeta-functions*
+
+---
+
+## Introduction (collected statements)
+
+| # | Label | File:Line | Statement | Status |
+|---|-------|-----------|-----------|--------|
+| T0a | `thm:intro-fredholm-rigidity` (i) | sec_introduction.tex:32 | Fredholm--Witt Euler-product identity for trace-class operators | Proved (sec_fredholm) |
+| T0b | `thm:intro-fredholm-rigidity` (ii) | sec_introduction.tex:32 | Cyclic-block Fredholm realisation of Euler products under trace-class summability | Proved (sec_fredholm) |
+| T0c | `thm:intro-fredholm-rigidity` (iii) | sec_introduction.tex:32 | Spectral rigidity: equal Fredholm determinants imply equal non-zero spectra | Proved (sec_fredholm) |
+| T0d | `thm:intro-perturbative-applications` (i) | sec_introduction.tex:79 | Holomorphic variation of finite-part constants with group-inverse gradient | Proved (sec_perturbation) |
+| T0e | `thm:intro-perturbative-applications` (ii) | sec_introduction.tex:79 | Spectral-gap CLT for locally constant observables on mixing SFTs | Proved (sec_perturbation) |
+
+## Preliminaries
+
+| # | Label | File:Line | Statement | Status |
+|---|-------|-----------|-----------|--------|
+| P1 | `prop:prelim-trace-primitive` | sec_preliminaries.tex:28 | For primitive A: exp-trace = det-inverse = Euler product of primitive orbits | Proved |
+| L1 | `lem:primitive-orbit-asymptotic` | sec_preliminaries.tex:57 | Primitive orbit count: p_n(A) = lambda^n/n + O(max{Lambda^n, lambda^{n/2}}/n) | Proved |
+| D1 | `def:abel-finite-part` | sec_preliminaries.tex:111 | Definition of log M(A) as Abel-regularised finite-part constant | Definition |
+| T1 | `thm:finite-part-primitive-closed-form` | sec_preliminaries.tex:119 | Closed form for log M(A) via Mobius series over higher-order determinants | Proved |
+
+## Fredholm determinants and cyclic-block realisations
+
+| # | Label | File:Line | Statement | Status |
+|---|-------|-----------|-----------|--------|
+| T2 | `thm:fredholm-witt-bridge` | sec_fredholm.tex:15 | Trace-class Fredholm determinant = exp(trace series) = Euler product in Witt coordinates | Proved |
+| T3 | `thm:cyclic-fredholm-realisation` | sec_fredholm.tex:68 | Countable Euler product with trace-class summability admits explicit cyclic-block realisation | Proved |
+| C1 | `cor:finite-rank-realisation` | sec_fredholm.tex:115 | Finite Euler products give finite-rank Fredholm models | Proved (immediate) |
+| T4 | `thm:fredholm-spectral-rigidity` | sec_fredholm.tex:128 | Equal Fredholm determinants => equal non-zero spectra with algebraic multiplicity | Proved |
+| C2 | `cor:realisability-vs-rigidity` | sec_fredholm.tex:164 | Cyclic-block constructions enlarge the operator category but not the spectral freedom | Proved (immediate) |
+
+## Perturbative applications
+
+| # | Label | File:Line | Statement | Status |
+|---|-------|-----------|-----------|--------|
+| T5 | `thm:finite-part-reduced-determinant-group-inverse-gradient` | sec_perturbation.tex:6 | Gradient of log C(A_theta) via group inverse of reduced spectral complement | Proved |
+| T6 | `thm:logM-holomorphic-variation` | sec_perturbation.tex:68 | Holomorphic variation of log M(A_theta) with explicit resolvent differentiation | Proved |
+| T7 | `thm:clt-spectral` | sec_perturbation.tex:115 | CLT for locally constant observables + exponential decay of characteristic functions | Proved |
+
+---
+
+## Summary counts
+
+- Theorems (body): 6 (T1--T4, T5--T7, excl. introduction duplicates)
+- Propositions: 1
+- Lemmas: 1
+- Corollaries: 2
+- Definitions: 1
+- All claims: **Proved** (no items cited-without-proof or assumed)
+
+---
+
+# SOURCE_MAP
+
+Paper: *Fredholm determinants, cyclic-block realisations, and spectral rigidity for symbolic zeta-functions*
+
+## File inventory
+
+| File | Lines | Role |
+|------|-------|------|
+| `main.tex` | 88 | Master document, preamble, macros |
+| `sec_introduction.tex` | 140 | Introduction, main-result statements, prior work |
+| `sec_preliminaries.tex` | 179 | Finite-state zeta, primitive orbits, finite-part constants |
+| `sec_fredholm.tex` | 175 | Fredholm--Witt bridge, cyclic-block realisation, spectral rigidity |
+| `sec_perturbation.tex` | 163 | Perturbative applications (gradient formula, CLT) |
+| `sec_conclusion.tex` | 16 | Concluding remarks |
+| `references.bib` | 250 | Bibliography (25 entries) |
+
+---
+
+## sec_introduction.tex
+
+| Label | Type | Deps |
+|-------|------|------|
+| `sec:introduction` | section | -- |
+| `thm:intro-fredholm-rigidity` | theorem | Collects (i)--(iii); forward-references `thm:fredholm-witt-bridge`, `thm:cyclic-fredholm-realisation`, `thm:fredholm-spectral-rigidity` |
+| `thm:intro-perturbative-applications` | theorem | Collects (i)--(ii); forward-references `thm:finite-part-reduced-determinant-group-inverse-gradient`, `thm:logM-holomorphic-variation`, `thm:clt-spectral` |
+
+## sec_preliminaries.tex
+
+| Label | Type | Deps |
+|-------|------|------|
+| `sec:preliminaries` | section | -- |
+| `eq:primitive-mobius` | equation | Mobius function, `a_n(A)` definition |
+| `eq:trace-primitive-identity` | equation | Inverse of `eq:primitive-mobius` |
+| `prop:prelim-trace-primitive` | proposition | `eq:trace-primitive-identity` |
+| `lem:primitive-orbit-asymptotic` | lemma | Perron--Frobenius theory (external) |
+| `eq:residue-constant-def` | equation | Definition of `C(A)` |
+| `eq:reduced-det-poly` | equation | Reduced determinant polynomial `F_A(t)` |
+| `eq:reduced-det-constant` | equation | `C(A) = F_A(1)^{-1}` |
+| `def:abel-finite-part` | definition | Abel finite-part constant `log M(A)` |
+| `thm:finite-part-primitive-closed-form` | theorem | `prop:prelim-trace-primitive`, `eq:reduced-det-constant` |
+| `rem:finite-state-arithmetic` | remark | -- |
+
+## sec_fredholm.tex
+
+| Label | Type | Deps |
+|-------|------|------|
+| `sec:fredholm` | section | -- |
+| `thm:fredholm-witt-bridge` | theorem | Standard Fredholm determinant identity (Simon), Mobius inversion |
+| `rem:witt-audit-constraints` | remark | `thm:fredholm-witt-bridge`, `rem:finite-state-arithmetic` |
+| `eq:cycle-block-det` | equation | Eigenvalue computation for cyclic permutation |
+| `thm:cyclic-fredholm-realisation` | theorem | `eq:cycle-block-det`, trace-class norm estimate |
+| `cor:finite-rank-realisation` | corollary | `thm:cyclic-fredholm-realisation` (finite J case) |
+| `thm:fredholm-spectral-rigidity` | theorem | Simon product representation [Chapter 3], Mobius inversion |
+| `cor:realisability-vs-rigidity` | corollary | `thm:fredholm-spectral-rigidity` |
+
+## sec_perturbation.tex
+
+| Label | Type | Deps |
+|-------|------|------|
+| `sec:perturbation` | section | -- |
+| `thm:finite-part-reduced-determinant-group-inverse-gradient` | theorem | Group inverse, `eq:reduced-det-constant`, standard Perron perturbation |
+| `thm:logM-holomorphic-variation` | theorem | `thm:finite-part-primitive-closed-form`, `thm:finite-part-reduced-determinant-group-inverse-gradient` |
+| `thm:clt-spectral` | theorem | Baladi, Parry--Pollicott (external), Nagaev--Guivarc'h method (external) |
+
+## sec_conclusion.tex
+
+| Label | Type | Deps |
+|-------|------|------|
+| `sec:conclusion` | section | -- |
+| (no labelled environments) | -- | -- |
+
+---
+
+## Cross-file dependency graph (theorems only)
+
+```
+prop:prelim-trace-primitive
+  |
+  v
+thm:finite-part-primitive-closed-form ---> thm:logM-holomorphic-variation
+                                               ^
+thm:fredholm-witt-bridge                       |
+                                               |
+thm:cyclic-fredholm-realisation                |
+  |                                            |
+  +---> cor:finite-rank-realisation            |
+                                               |
+thm:fredholm-spectral-rigidity                 |
+  |                                            |
+  +---> cor:realisability-vs-rigidity          |
+                                               |
+thm:finite-part-reduced-determinant-group-inverse-gradient
+                                               |
+                                               v
+                                    thm:logM-holomorphic-variation
+
+thm:clt-spectral  (independent; uses external spectral-gap theory)
+```
+
+---
+
+
+
 # P2 Extension Note -- 2026-03-30
 
 Paper: *Fredholm determinants, cyclic-block realisations, and spectral rigidity for symbolic zeta-functions*
@@ -176,3 +335,6 @@ The paper sits at the intersection of operator theory, symbolic dynamics, and er
 The paper is mathematically correct and well-organised. The central insight -- that the three logically distinct statements (bridge, realisation, rigidity) should be separated and proved at the operator-theoretic level -- is a genuine clarification. The cyclic-block realisation theorem is the only result that does not follow immediately from standard theory; it is elementary but useful. The perturbative section is competent but routine.
 
 The main risk at a strong journal is the perception that the novelty is "merely" reorganisational. To counter this: (a) emphasise the cyclic-block construction as a new tool, (b) add the sharpness remark for spectral rigidity, (c) either strengthen the CLT to include Berry--Esseen or trim Section 4 to focus on the gradient formula, and (d) clean the bibliography thoroughly.
+
+---
+
