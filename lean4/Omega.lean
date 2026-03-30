@@ -61,6 +61,8 @@ import Omega.SPG.Clopen
 import Omega.SPG.ScanErrorDiscrete
 import Omega.SPG.ScanErrorMeasure
 import Omega.SPG.ErrorThreshold
+import Omega.SPG.NoiseBudgetRecovery
+import Omega.SPG.NoiseBudgetRecovery
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
@@ -77,6 +79,8 @@ import Omega.Zeta.EvenLengthCorrection
 import Omega.Zeta.NecklaceCorrection
 import Omega.Zeta.HankelVandermonde2
 import Omega.EA.Wedderburn
+import Omega.EA.CentralIdempotentsRecovery
+import Omega.EA.CentralIdempotentsRecovery
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
