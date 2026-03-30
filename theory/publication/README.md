@@ -22,13 +22,9 @@
 
 当前持续演化规则见：
 
-- `OPS/AGENT_PIPELINE.md`
-- `OPS/EVOLUTION_LOOP.md`
-- `OPS/UPSTREAM_BOARD.md`
-- `OPS/MAIN_PAPER_BACKPORT.template.md`
-- `OPS/FORMALIZATION_BOARD.md`
-- `OPS/PROGRAM_BOARD.md`
-- `OPS/ACTIVE_WAVE.md`
+- `OPS/WORKFLOW.md`
+- `OPS/BOARD.md`
+- `OPS/SYNC_NOTE.template.md`
 
 要求不是“拆出一篇就结束”，而是每个活跃稿件都要继续经历：
 

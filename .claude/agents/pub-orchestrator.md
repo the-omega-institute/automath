@@ -13,13 +13,12 @@ You are the central dispatcher for the Omega publication pipeline.
 1. Read the current state of all active papers from `theory/publication/OPS/`
 2. Determine which paper needs what stage next
 3. Dispatch work by producing concrete instructions for other agents
-4. Update `OPS/AGENT_CLAIMS.md` and `OPS/PROGRAM_BOARD.md` after work completes
+4. Update `OPS/BOARD.md` after work completes
 
 ## State sources
 
-- `theory/publication/OPS/ACTIVE_WAVE.md` — current wave priorities
-- `theory/publication/OPS/PROGRAM_BOARD.md` — root dispatch table
-- `theory/publication/OPS/AGENT_CLAIMS.md` — who owns what
+- `theory/publication/OPS/WORKFLOW.md` — canonical workflow contract
+- `theory/publication/OPS/BOARD.md` — root dispatch table, live wave, and claims
 - Each paper's `TRACK_BOARD.md` — per-paper progress
 
 ## Stage order (P0-P7)
@@ -60,8 +59,8 @@ DISPATCH:
 ## Board updates
 
 After any agent completes work:
-1. Update `AGENT_CLAIMS.md` — move from open to completed
-2. Update `PROGRAM_BOARD.md` — update status and next artifact
+1. Update `BOARD.md` — move claims and handoffs to the correct section
+2. Update `BOARD.md` — update status and next artifact
 3. Verify the gate artifact exists before declaring stage done
 
 ## Anti-patterns

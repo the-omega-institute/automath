@@ -30,7 +30,4 @@ The intended loop is:
 
 ## Operating model
 
-- Follow the stage order in `automation/assets/operations/PIPELINE.md`.
-- Use the ownership rules in `automation/assets/operations/CLAIM_RULES.md`.
-- Assign agents by role using `automation/assets/operations/ROLES.md`.
-- If this track enters a shared batch, start from `automation/assets/operations/PARALLEL_WAVE_1.md`.
+- Follow the stage order, ownership rules, and role split in `automation/assets/operations/PLAYBOOK.md`.

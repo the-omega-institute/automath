@@ -219,10 +219,9 @@ When the publication workspace lives inside this repository under `theory/public
 the durable operational layer is the `theory/publication/OPS/` directory rather than the
 exported `artifacts/` directories. In that in-tree mode:
 
-- `OPS/EVOLUTION_LOOP.md` defines the outer source -> track -> feedback loop
-- `OPS/UPSTREAM_BOARD.md` records what publication tracks must feed back into the parent theory
-- `OPS/MAIN_PAPER_BACKPORT.template.md` defines how mature paper-side improvements get written back into the main paper
-- `OPS/FORMALIZATION_BOARD.md` records what each paper contributes to the Lean/formalization wave
+- `OPS/WORKFLOW.md` defines the publication execution contract, shared Lean policy, and main-paper backflow
+- `OPS/BOARD.md` records the live publication state, wave queue, upstream feedback, and shared Lean status
+- `OPS/SYNC_NOTE.template.md` defines the durable note schema used for Lean sync, upstream sync, and main-paper backport
 
 This keeps the publication program as a continuously evolving execution layer, not as a
 one-shot export bundle.
