@@ -681,4 +681,93 @@ theorem cBothEndsFalseCount_eq_fib (m : Nat) (hm : 2 ≤ m) :
   obtain ⟨n, rfl⟩ := Nat.exists_eq_add_of_le hm
   rw [show 2 + n = n + 2 from by omega, cBothEndsFalseCount_eq_card_shift n, X.card_eq_fib]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R155: Boundary shift-4 uplift bijection
+-- ══════════════════════════════════════════════════════════════
+
+/-- Boundary words: first and last bit are true (requires m ≥ 2).
+    thm:boundary-shift4-uplift-isomorphism -/
+def isBoundaryWord {m : Nat} (hm : 2 ≤ m) (w : Word m) : Prop :=
+  w ⟨0, by omega⟩ = true ∧ w ⟨m - 1, by omega⟩ = true
+
+/-- Shift-4 uplift: prepend [true, false], append [false, true].
+    thm:boundary-shift4-uplift-isomorphism -/
+def boundaryUpliftMap {n : Nat} (v : X n) : Word (n + 4) :=
+  fun i =>
+    if h0 : i.val = 0 then true
+    else if h1 : i.val = 1 then false
+    else if h2 : i.val = n + 2 then false
+    else if h3 : i.val = n + 3 then true
+    else v.1 ⟨i.val - 2, by have := i.isLt; omega⟩
+
+/-- Strip: remove first two and last two bits.
+    thm:boundary-shift4-uplift-isomorphism -/
+def boundaryStripMap {n : Nat} (w : Word (n + 4)) : Word n :=
+  fun i => w ⟨i.val + 2, by omega⟩
+
+/-- The uplift map preserves the No11 property.
+    thm:boundary-shift4-uplift-isomorphism -/
+theorem boundaryUpliftMap_no11 {n : Nat} (v : X n) : No11 (boundaryUpliftMap v) := by
+  intro i hi hi1
+  simp only [get] at hi hi1
+  split at hi <;> [skip; simp_all]
+  split at hi1 <;> [skip; simp_all]
+  rename_i hlt hlt1
+  simp only [boundaryUpliftMap] at hi hi1
+  -- Case split: i ∈ {0,1,n+2,n+3} or middle
+  by_cases h0 : i = 0
+  · subst h0; simp at hi hi1
+  by_cases h1 : i = 1
+  · subst h1; simp at hi
+  by_cases h2 : i = n + 2
+  · subst h2; simp at hi
+  by_cases h3 : i = n + 3
+  · subst h3; omega
+  -- i ∉ {0,1,n+2,n+3}, so i ∈ [2..n+1]
+  -- Also i+1 ∉ {0,1}, and we need i+1 ∉ {n+2,n+3} or handle those
+  -- i ∈ [2..n+1], so i ≥ 2 and i ≤ n+1
+  have hi_ge : 2 ≤ i := by omega
+  have hi_le : i ≤ n + 1 := by omega
+  -- Simplify hi: the ite chain leaves v.1 ⟨i - 2, _⟩
+  simp only [show ¬(i = 0) from h0, show ¬(i = 1) from h1,
+    show ¬(i = n + 2) from h2, show ¬(i = n + 3) from h3, ↓reduceIte] at hi
+  -- For i+1: it's in [3..n+2]. Check if i+1 = n+2 (→ false) or in middle
+  simp only [show ¬(i + 1 = 0) from by omega, show ¬(i + 1 = 1) from by omega,
+    show ¬(i + 1 = n + 3) from by omega, ↓reduceIte] at hi1
+  by_cases h4 : i + 1 = n + 2
+  · -- i+1 = n+2 → boundaryUpliftMap returns false → hi1 : false = true
+    simp [h4] at hi1
+  · simp only [h4, ↓reduceIte] at hi1
+    -- Both in middle: hi : v.1 ⟨i - 2, _⟩ = true, hi1 : v.1 ⟨i + 1 - 2, _⟩ = true
+    have hlt_a : i - 2 < n := by omega
+    have hlt_b : i - 2 + 1 < n := by omega
+    have hget1 : get v.1 (i - 2) = true := by
+      simp [get, hlt_a]; exact hi
+    have hieq : i - 2 + 1 = i + 1 - 2 := by omega
+    have hget2 : get v.1 (i - 2 + 1) = true := by
+      unfold get; simp only [hlt_b, ↓reduceDIte]
+      rw [show (⟨i - 2 + 1, hlt_b⟩ : Fin n) = ⟨i + 1 - 2, by omega⟩ from Fin.ext hieq]
+      exact hi1
+    exact v.2 (i - 2) hget1 hget2
+
+/-- The uplift produces a boundary word.
+    thm:boundary-shift4-uplift-isomorphism -/
+theorem boundaryUpliftMap_isBoundary {n : Nat} (v : X n) :
+    isBoundaryWord (by omega : 2 ≤ n + 4) (boundaryUpliftMap v) := by
+  refine ⟨?_, ?_⟩
+  · simp [boundaryUpliftMap]
+  · simp [boundaryUpliftMap, show n + 4 - 1 = n + 3 from by omega]
+
+/-- Strip after uplift is the identity.
+    thm:boundary-shift4-uplift-isomorphism -/
+theorem boundaryStrip_uplift {n : Nat} (v : X n) :
+    boundaryStripMap (boundaryUpliftMap v) = v.1 := by
+  funext ⟨j, hj⟩
+  show boundaryUpliftMap v ⟨j + 2, by omega⟩ = v.1 ⟨j, hj⟩
+  simp only [boundaryUpliftMap, show ¬(j + 2 = 0) from by omega,
+    show ¬(j + 2 = 1) from by omega, show ¬(j + 2 = n + 2) from by omega,
+    show ¬(j + 2 = n + 3) from by omega, dite_false]
+  show v.1 ⟨j + 2 - 2, _⟩ = v.1 ⟨j, hj⟩
+  congr 1
+
 end Omega

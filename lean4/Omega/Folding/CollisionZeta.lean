@@ -67,6 +67,36 @@ theorem collisionKernel3_trace_recurrence :
   native_decide
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R155: Unbounded trace recurrence for A₃
+-- ══════════════════════════════════════════════════════════════
+
+/-- Trace recurrence for A₃ (all n): Tr(A₃^{n+3}) = 2·Tr(A₃^{n+2}) + 4·Tr(A₃^{n+1}) - 2·Tr(A₃^n).
+    thm:zeta-syntax-trace-linear-recurrence (A₃) -/
+theorem collisionKernel3_trace_recurrence_unbounded (n : ℕ) :
+    (collisionKernel3 ^ (n + 3)).trace =
+      2 * (collisionKernel3 ^ (n + 2)).trace +
+      4 * (collisionKernel3 ^ (n + 1)).trace -
+      2 * (collisionKernel3 ^ n).trace := by
+  have hCH := collisionKernel3_cayley_hamilton
+  have hpow : collisionKernel3 ^ (n + 3) =
+      2 • collisionKernel3 ^ (n + 2) + 4 • collisionKernel3 ^ (n + 1) -
+      2 • collisionKernel3 ^ n := by
+    calc collisionKernel3 ^ (n + 3)
+        = collisionKernel3 ^ n * collisionKernel3 ^ 3 := by rw [← pow_add]
+      _ = collisionKernel3 ^ n * (2 • collisionKernel3 ^ 2 + 4 • collisionKernel3 - 2 • 1) := by
+          rw [hCH]
+      _ = 2 • (collisionKernel3 ^ n * collisionKernel3 ^ 2) +
+          4 • (collisionKernel3 ^ n * collisionKernel3) -
+          2 • (collisionKernel3 ^ n * 1) := by
+          simp only [mul_add, mul_sub, mul_smul_comm]
+      _ = 2 • collisionKernel3 ^ (n + 2) + 4 • collisionKernel3 ^ (n + 1) -
+          2 • collisionKernel3 ^ n := by
+          rw [← pow_add, ← pow_succ, mul_one]
+  rw [hpow, Matrix.trace_sub, Matrix.trace_add, Matrix.trace_smul, Matrix.trace_smul,
+    Matrix.trace_smul]
+  ring
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R129: Unbounded trace recurrence for A₂
 -- ══════════════════════════════════════════════════════════════
 
