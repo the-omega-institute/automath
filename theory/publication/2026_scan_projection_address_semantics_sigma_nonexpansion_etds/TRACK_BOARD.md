@@ -20,6 +20,11 @@
 
 - `unassigned / P3 / TASK_CARD_P3_JOURNAL_REWRITE.md`
 
+## Completed handoffs
+
+- `orchestrator / P2 / P2_EXTENSION_NOTE_2026-03-30.md`
+- `orchestrator / P4 / P4_EDITORIAL_REVIEW_2026-03-30.md`
+
 ## Blocking issues
 
 - main line may still be too broad for one ETDS paper
