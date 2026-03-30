@@ -368,4 +368,14 @@ theorem cyclic_periodicity_orders :
   ⟨cyclicPerm2_sq, cyclicPerm3_cube, cyclicPerm4_fourth,
    cyclicPerm5_fifth, cyclicPerm6_sixth⟩
 
+/-- Block 2+3 Fredholm product.
+    cor:cyclic-euler-product -/
+theorem fredholm_block_diag_2_3 (t : ℤ) :
+    (1 - t ^ 2) * (1 - t ^ 3) = 1 - t ^ 2 - t ^ 3 + t ^ 5 := by ring
+
+/-- Block 2+4 Fredholm product.
+    cor:cyclic-euler-product -/
+theorem fredholm_block_diag_2_4 (t : ℤ) :
+    (1 - t ^ 2) * (1 - t ^ 4) = 1 - t ^ 2 - t ^ 4 + t ^ 6 := by ring
+
 end Omega.Zeta
