@@ -1256,4 +1256,18 @@ theorem momentSum_three_ge_three_pow (m : Nat) (hm : 6 ≤ m) :
         _ ≤ 3 * momentSum 3 (m + 6) := by omega
         _ ≤ momentSum 3 (m + 7) := htriple
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R168: Cauchy-Schwarz lower bound for S_2
+-- ══════════════════════════════════════════════════════════════
+
+/-- Cauchy-Schwarz lower bound: S_2(m) ≥ 4^m / F(m+2).
+    prop:pom-sq-cauchy-schwarz-lower -/
+theorem momentSum_two_ge_pow_sq_div (m : Nat) :
+    4 ^ m / Nat.fib (m + 2) ≤ momentSum 2 m := by
+  have hcs := momentSum_cauchy_schwarz m
+  have h4 : (2 ^ m) ^ 2 = 4 ^ m := by
+    rw [← pow_mul, show m * 2 = 2 * m from by ring, pow_mul, show (2 : ℕ) ^ 2 = 4 from by norm_num]
+  rw [h4] at hcs
+  exact Nat.div_le_of_le_mul hcs
+
 end Omega

@@ -57,6 +57,7 @@ import Omega.SPG.PrefixMetric
 import Omega.SPG.Clopen
 import Omega.SPG.ScanErrorDiscrete
 import Omega.SPG.ScanErrorMeasure
+import Omega.SPG.ErrorThreshold
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG

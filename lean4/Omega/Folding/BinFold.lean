@@ -528,4 +528,24 @@ theorem paper_boundary_fiber_sizes_six :
     cBinFiberMult 6 (cBinFold 6 41) = 4 :=
   boundary_fiber_sizes_six
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R168: Boundary fiber counts
+-- ══════════════════════════════════════════════════════════════
+
+/-- Number of minimal-multiplicity fibers (mult = 2) at m=6 is exactly 8.
+    prop:window6-foldbin-gauge-center-and-charge-separation -/
+theorem binFold_boundary_count_m6 :
+    cBinFiberHist 6 2 = 8 := cBinFiberHist_6_2
+
+/-- Number of minimal-multiplicity fibers (mult = 3) at m=7 is exactly 13.
+    prop:window6-foldbin-gauge-center-and-charge-separation -/
+theorem binFold_boundary_count_m7 :
+    cBinFiberHist 7 3 = 13 := by native_decide
+
+/-- The minimum nonzero bin-fold multiplicity is 2 at m=6 (hist at 0 and 1 are both zero).
+    prop:window6-foldbin-gauge-center-and-charge-separation -/
+theorem binFold_min_mult_m6 :
+    cBinFiberHist 6 0 = 0 ∧ cBinFiberHist 6 1 = 0 ∧ cBinFiberHist 6 2 = 8 :=
+  ⟨cBinFiberHist_6_0, cBinFiberHist_6_1, cBinFiberHist_6_2⟩
+
 end Omega
