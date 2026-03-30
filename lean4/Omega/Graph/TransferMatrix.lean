@@ -139,6 +139,22 @@ theorem goldenMean_det_pow_general (n : ℕ) :
     (goldenMeanAdjacency ^ n).det = (-1 : ℤ) ^ n :=
   goldenMeanAdjacency_pow_det n
 
+/-- A^m as a Fibonacci matrix: all four entries in one statement.
+    thm:golden-mean-pow-fibonacci-matrix -/
+theorem goldenMeanAdjacency_pow_eq_fib_matrix (m : Nat) (hm : 1 ≤ m) :
+    (goldenMeanAdjacency ^ m) 0 0 = (Nat.fib (m + 1) : ℤ) ∧
+    (goldenMeanAdjacency ^ m) 0 1 = (Nat.fib m : ℤ) ∧
+    (goldenMeanAdjacency ^ m) 1 0 = (Nat.fib m : ℤ) ∧
+    (goldenMeanAdjacency ^ m) 1 1 = (Nat.fib (m - 1) : ℤ) := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hm
+  refine ⟨goldenMeanAdjacency_pow_00 (1 + k),
+    goldenMeanAdjacency_pow_01 (1 + k),
+    goldenMeanAdjacency_pow_10 (1 + k),
+    ?_⟩
+  rw [show 1 + k = k + 1 from by omega]
+  simp only [show k + 1 - 1 = k from by omega]
+  exact goldenMeanAdjacency_pow_11 k
+
 /-- Cassini's identity: F_{n+1}·F_{n-1} - F_n² = (-1)^n for n ≥ 1.
     thm:fib-cassini-identity -/
 theorem fib_cassini (n : Nat) (hn : 1 ≤ n) :

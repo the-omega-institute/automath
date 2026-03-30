@@ -391,4 +391,15 @@ theorem paper_stableValue_double (x : X m) :
 theorem paper_X5_generator_two :
     (7 : X 5) * (2 : X 5) = 1 := X5_generator_two
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R153: Additive order of 1
+-- ══════════════════════════════════════════════════════════════
+
+/-- The additive order of 1 in X_m equals F(m+2).
+    thm:mul-definitional -/
+theorem stableAdd_order_one (m : Nat) (hm : 2 ≤ m) :
+    addOrderOf (1 : X m) = Nat.fib (m + 2) := by
+  haveI := @instCharP m
+  exact CharP.eq (X m) (CharP.addOrderOf_one (X m)) instCharP ▸ rfl
+
 end Omega.X

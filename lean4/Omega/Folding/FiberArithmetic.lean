@@ -557,3 +557,37 @@ theorem stableValue_sum_closed (m : Nat) :
     · have : F - 1 = 2 * k := by omega
       exact ⟨F * k, by rw [this]; ring⟩
   omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R153: Nicomachus's theorem + cube Gauss sum
+-- ══════════════════════════════════════════════════════════════
+
+/-- Nicomachus's theorem: 4·∑_{i<n} i³ = (n·(n-1))². -/
+theorem four_mul_sum_cube (n : Nat) :
+    4 * ∑ i ∈ Finset.range n, i ^ 3 = (n * (n - 1)) ^ 2 := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    rw [Finset.sum_range_succ, Nat.mul_add, ih]
+    cases n with
+    | zero => simp
+    | succ n =>
+      simp only [Nat.succ_sub_one]
+      ring
+
+/-- 4·∑ sv(x)³ = (F(m+2)·(F(m+2)-1))².
+    thm:pom-stableValue-gauss-sum -/
+theorem stableValue_cube_sum_closed (m : Nat) :
+    4 * ∑ x : X m, stableValue x ^ 3 = (Nat.fib (m + 2) * (Nat.fib (m + 2) - 1)) ^ 2 := by
+  have hbij := stableValueFin_bijective m
+  have hsum : ∑ x : X m, stableValue x ^ 3 =
+      ∑ i : Fin (Nat.fib (m + 2)), i.val ^ 3 := by
+    rw [show (fun x : X m => stableValue x ^ 3) =
+      ((fun i : Fin (Nat.fib (m + 2)) => i.val ^ 3) ∘ stableValueFin) from by
+        ext x; simp [stableValueFin]]
+    exact hbij.sum_comp (fun i : Fin (Nat.fib (m + 2)) => i.val ^ 3)
+  rw [hsum]
+  have : ∑ i : Fin (Nat.fib (m + 2)), (i : Nat) ^ 3 =
+      ∑ i ∈ Finset.range (Nat.fib (m + 2)), i ^ 3 := by
+    rw [← Fin.sum_univ_eq_sum_range]
+  rw [this, four_mul_sum_cube]
