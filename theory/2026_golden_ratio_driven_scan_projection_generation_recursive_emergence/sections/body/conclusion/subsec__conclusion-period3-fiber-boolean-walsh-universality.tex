@@ -1,0 +1,447 @@
+\subsection{周期三纤维的布尔中间系统、Walsh 原子化与复杂度普适承载}\label{subsec:conclusion-period3-fiber-boolean-walsh-universality}
+沿用固定周期稳定类型
+\[
+x^{(n)}:=(001)^n\in X_{3n},
+\qquad
+F_n:=\Fold_{3n}^{-1}(x^{(n)}),
+\]
+以及定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity} 中的规范双射
+\[
+\beta:F_n\stackrel{\sim}{\longrightarrow}\{0,1\}^n.
+\]
+前述结论已经给出：\(F_n\) 的每个三元块恰可在 \(001\) 与 \(110\) 之间独立选择，因此 \(|F_n|=2^n\)；同时，固定周期稳定类型上的 fiber-CNF 判定与计数分别保持 \(\NP\)-完备与 \(\#\mathrm P\)-完备。下面把这一固定纤维的中间系统几何进一步压缩为一个严格布尔化的 Möbius--Walsh 结构，并把它与既有复杂度接口拼接为同一条终端链。
+
+\begin{theorem}[周期三纤维的坐标中间系统格布尔化]\label{thm:conclusion-period3-fiber-coordinate-lattice-booleanization}
+对任意 \(S\subseteq[n]\)，在 \(F_n\) 上定义等价关系
+\[
+\omega\sim_S\omega'
+\iff
+\beta_j(\omega)=\beta_j(\omega')\quad(\forall j\in S).
+\]
+令 \(\mathcal Q_{\mathrm{blk}}(F_n)\) 为全部此类坐标型中间商所成偏序集，偏序按核等价关系细化给出。则存在规范格同构
+\[
+\mathcal Q_{\mathrm{blk}}(F_n)\cong \mathcal B_n\cong \prod_{j=1}^{n}\Pi_2,
+\]
+其中 \(\mathcal B_n\) 为 \(n\)-元布尔格。其 Möbius 函数满足
+\[
+\mu_{\mathcal Q_{\mathrm{blk}}}(S,T)=(-1)^{|T\setminus S|}
+\qquad(S\subseteq T\subseteq[n]),
+\]
+并且顶端 Möbius 数为
+\[
+\mu_{\mathcal Q_{\mathrm{blk}}}(\varnothing,[n])=(-1)^n.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity}，\(\beta:F_n\to\{0,1\}^n\) 为双射，因此“只记住坐标集 \(S\)”的中间商恰对应于 \(\{0,1\}^n\) 上的商
+\[
+\beta|_S=\beta'|_S.
+\]
+若 \(S\subseteq T\)，则记住 \(T\) 的商比记住 \(S\) 的商更细，故偏序恰与包含序一致，从而
+\[
+\mathcal Q_{\mathrm{blk}}(F_n)\cong \mathcal B_n.
+\]
+另一方面，\(\mathcal B_n\) 也可写成 \(n\) 个二元分割格 \(\Pi_2\) 的直积。对 \(\Pi_2\)，唯一非平凡 Möbius 值为 \(-1\)；有限格直积上的 Möbius 函数乘法遂给出
+\[
+\mu_{\mathcal Q_{\mathrm{blk}}}(S,T)
+=
+\prod_{j\in T\setminus S}(-1)
+=
+(-1)^{|T\setminus S|}.
+\]
+取 \(S=\varnothing\)、\(T=[n]\) 即得顶端值。证毕。
+\end{proof}
+
+\begin{theorem}[Möbius 纠正条件期望的 Walsh--Hoeffding 张量分解]\label{thm:conclusion-period3-fiber-mobius-walsh-tensorization}
+在 \(\ell^2(F_n)\) 上取均匀计数内积，并通过 \(\beta\) 识别
+\[
+\ell^2(F_n)\cong \bigotimes_{j=1}^{n}\ell^2(\{0,1\}).
+\]
+对每个 \(j\in[n]\)，令
+\[
+A_j:\ell^2(\{0,1\})\to \ell^2(\{0,1\})
+\]
+为第 \(j\) 个块坐标上的二点平均算子。对任意 \(S\subseteq[n]\)，定义坐标条件期望
+\[
+E_S:=\bigotimes_{j\in S}I_j\ \otimes \!\!\bigotimes_{j\notin S}A_j,
+\]
+即保留 \(S\) 上坐标并平均掉其余坐标。则：
+\begin{enumerate}
+  \item 族 \(\{E_S\}_{S\subseteq[n]}\) 正是定理 \ref{thm:conclusion-fiber-intermediate-system-operator-mobius-correction} 在子格 \(\mathcal Q_{\mathrm{blk}}(F_n)\cong\mathcal B_n\) 上的条件期望族；
+  \item 相应的 Möbius primitive 算子为
+  \[
+  P_S:=\sum_{T\subseteq S}(-1)^{|S|-|T|}E_T
+  =
+  \bigotimes_{j\in S}(I_j-A_j)\ \otimes \!\!\bigotimes_{j\notin S}A_j;
+  \]
+  \item 对任意 \(S\subseteq[n]\)，有
+  \[
+  E_S=\sum_{T\subseteq S}P_T,
+  \qquad
+  I=\sum_{T\subseteq[n]}P_T.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:conclusion-fiber-intermediate-system-operator-mobius-correction} 说明：任意有限中间系统格上的条件期望族都由 Möbius 反演给出唯一 primitive 族。对定理 \ref{thm:conclusion-period3-fiber-coordinate-lattice-booleanization} 给出的布尔格 \(\mathcal B_n\)，Möbius 函数为
+\[
+\mu(T,S)=(-1)^{|S|-|T|}
+\qquad(T\subseteq S),
+\]
+故其 primitive 算子必须满足
+\[
+P_S=\sum_{T\subseteq S}(-1)^{|S|-|T|}E_T.
+\]
+又由于单坐标上只有“保留”与“平均”两种选择，布尔反演逐坐标分离；对每个 \(j\in S\) 贡献 \(I_j-A_j\)，对每个 \(j\notin S\) 贡献 \(A_j\)，遂得
+\[
+P_S=
+\bigotimes_{j\in S}(I_j-A_j)\ \otimes \!\!\bigotimes_{j\notin S}A_j.
+\]
+最后由 Möbius 反演的逆式立即得到
+\[
+E_S=\sum_{T\subseteq S}P_T.
+\]
+取 \(S=[n]\) 即得
+\(
+I=\sum_{T\subseteq[n]}P_T
+\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[周期三纤维的 Walsh 原子化与一维 primitive 扇区]\label{thm:conclusion-period3-fiber-walsh-rankone-primitives}
+对任意 \(S\subseteq[n]\)，定义 Walsh 字符
+\[
+\chi_S(\omega):=(-1)^{\sum_{j\in S}\beta_j(\omega)}.
+\]
+则定理 \ref{thm:conclusion-period3-fiber-mobius-walsh-tensorization} 中的每个 primitive 算子 \(P_S\) 都是秩 \(1\) 的正交投影，且
+\[
+P_S\ell^2(F_n)=\CC\,\chi_S.
+\]
+于是
+\[
+\ell^2(F_n)=\bigoplus_{S\subseteq[n]}\CC\,\chi_S,
+\]
+并且 \(\mathcal Q_{\mathrm{blk}}(F_n)\) 的全部 Möbius primitive 扇区都恰是一维。
+\end{theorem}
+\begin{proof}
+在单坐标空间 \(\ell^2(\{0,1\})\) 上，平均算子 \(A_j\) 的像是常值线 \(\CC\cdot 1\)，而
+\[
+I_j-A_j
+\]
+的像是均值零线 \(\CC\cdot(-1)^{\beta_j}\)。因此
+\[
+P_S=
+\bigotimes_{j\in S}(I_j-A_j)\otimes \bigotimes_{j\notin S}A_j
+\]
+的像正是
+\[
+\bigotimes_{j\in S}\CC\cdot(-1)^{\beta_j}\ \otimes \!\!\bigotimes_{j\notin S}\CC\cdot1
+=
+\CC\cdot\chi_S.
+\]
+由此可见 \(P_S\) 是秩 \(1\) 的正交投影。再由定理 \ref{thm:conclusion-period3-fiber-mobius-walsh-tensorization} 中
+\[
+I=\sum_{S\subseteq[n]}P_S
+\]
+且这些投影两两正交，得到
+\[
+\ell^2(F_n)=\bigoplus_{S\subseteq[n]}\CC\,\chi_S.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[单一稳定类型上的完备布尔承载]\label{thm:conclusion-period3-fiber-single-stability-complete-boolean-carrier}
+对任意布尔函数
+\[
+F:\{0,1\}^n\to\{0,1\},
+\]
+存在一个定义在 \(\Omega_{3n}\) 上的 CNF 公式 \(\Psi_F\)，使得
+\[
+\Psi_F(\beta(y))=F(y)\qquad(\forall y\in\{0,1\}^n),
+\]
+并且 \(\Psi_F\) 的全部满足赋值都自动落在同一固定稳定类型
+\[
+x^{(n)}=(001)^n
+\]
+的纤维 \(F_n\) 内。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity}，对每个 \(j\in[n]\) 的三元块
+\[
+(\omega_{3j-2},\omega_{3j-1},\omega_{3j})
+\]
+落在 \(\{001,110\}\) 当且仅当 \(\omega\in F_n\)。主稿在该固定周期类型上已经给出块约束
+\[
+B_n:=\bigwedge_{j=1}^{n}\Bigl[(t_j\vee s_j)\wedge(\neg t_j\vee\neg s_j)\wedge(\neg s_j\vee r_j)\wedge(s_j\vee\neg r_j)\Bigr],
+\]
+其中
+\[
+r_j:=\omega_{3j-2},\qquad s_j:=\omega_{3j-1},\qquad t_j:=\omega_{3j}.
+\]
+该约束恰刻画
+\[
+(r_j,s_j,t_j)\in\{001,110\}\qquad(1\le j\le n).
+\]
+
+任取有限布尔函数 \(F\)，由于定义域 \(\{0,1\}^n\) 有限，存在某个关于变量 \((u_1,\dots,u_n)\) 的 CNF 公式 \(\Phi_F\) 满足
+\[
+\Phi_F(y)=F(y)\qquad(\forall y\in\{0,1\}^n).
+\]
+现在定义
+\[
+\Psi_F(\omega):=B_n(\omega)\wedge \Phi_F(s_1,\dots,s_n).
+\]
+若 \(\omega=\beta(y)\in F_n\)，则由 \(\beta\) 的定义有 \(s_j=y_j\)，故
+\[
+\Psi_F(\beta(y))=\Phi_F(y)=F(y).
+\]
+而若 \(\Psi_F(\omega)=1\)，则必有 \(B_n(\omega)=1\)，于是 \(\omega\in F_n\)。证毕。
+\end{proof}
+
+\begin{theorem}[周期三纤维的精确回放最小外置预算]\label{thm:conclusion-period3-fiber-minimal-external-budget}
+设
+\[
+R:F_n\to\{0,1\}^B
+\]
+为任意二进制外置残差，并要求扩展读出
+\[
+\omega\longmapsto \bigl(x^{(n)},R(\omega)\bigr)
+\]
+在 \(F_n\) 上单射。则必有
+\[
+B\ge n.
+\]
+反之，该下界可达；更确切地，
+\[
+R_{\min}(\omega):=\bigl(\beta_1(\omega),\dots,\beta_n(\omega)\bigr)\in\{0,1\}^n
+\]
+给出一个最小完备外置。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity}，\(|F_n|=2^n\)。若
+\(
+\omega\mapsto (x^{(n)},R(\omega))
+\)
+在 \(F_n\) 上单射，则 \(R\) 在 \(F_n\) 上也必须单射，从而
+\[
+2^B\ge |R(F_n)|=|F_n|=2^n.
+\]
+故 \(B\ge n\)。
+
+另一方面，\(\beta:F_n\to\{0,1\}^n\) 本身就是双射，所以取 \(R_{\min}=\beta\) 即可得到精确回放，且预算恰为 \(n\) 比特。证毕。
+\end{proof}
+
+\begin{theorem}[布尔半单纤维上的 \texorpdfstring{\(\NP/\#\mathrm P\)}{NP/#P} 普适承载]\label{thm:conclusion-period3-fiber-boolean-semisimple-npsharp-universality}
+对固定周期稳定类型
+\[
+x^{(n)}=(001)^n\in X_{3n},
+\qquad
+F_n=\Fold_{3n}^{-1}(x^{(n)}),
+\]
+存在定义在同一纤维 \(F_n\) 上的局部 CNF 约束族 \(\Psi_n\)，使得：
+\begin{enumerate}
+  \item 判定问题
+  \[
+  \exists\,\omega\in F_n:\ \Psi_n(\omega)=1
+  \]
+  在受限族 \((m=3n,\ x=x^{(n)})\) 上为 \(\NP\)-完备；
+  \item 计数问题
+  \[
+  \#\{\omega\in F_n:\ \Psi_n(\omega)=1\}
+  \]
+  在同一受限族上为 \(\#\mathrm P\)-完备，且存在从 \(\#3\mathrm{SAT}\) 到该族的保解数归约。
+\end{enumerate}
+因此，定理 \ref{thm:conclusion-period3-fiber-coordinate-lattice-booleanization}--\ref{thm:conclusion-period3-fiber-walsh-rankone-primitives} 所给出的布尔格化、Möbius 张量化与 Walsh 一维 primitive 原子，并不会带来算法复杂度塌缩；相反，它们与 full classical \(\NP/\#\mathrm P\) 普适性可以在同一固定稳定类型上共存。
+\end{theorem}
+\begin{proof}
+前两条分别正是定理 \ref{thm:conclusion-fiber-cnf-npcomplete-periodic} 与定理 \ref{thm:conclusion-sharp-fiber-cnf-sharpPcomplete-parsimonious} 的内容。与此同时，定理 \ref{thm:conclusion-period3-fiber-coordinate-lattice-booleanization}--\ref{thm:conclusion-period3-fiber-walsh-rankone-primitives} 已经说明：同一纤维 \(F_n\) 的坐标型中间系统格只是布尔格 \(\mathcal B_n\)，其全部 primitive 扇区均是一维 Walsh 原子。故这里的 \(\NP/\#\mathrm P\) 难度并不是由“复杂的中间系统格”或“高多重度 primitive 扇区”产生，而是在最强的布尔半单背景下依然成立。证毕。
+\end{proof}
+
+\begin{corollary}[所有只依赖满足解个数的判定类都可塌缩到同一固定纤维]\label{cor:conclusion-period3-fiber-all-count-predicates-collapse}
+设 \(\{\mathcal W_n\}_{n\ge 1}\) 为任意一族计数谓词，\(\mathcal W_n\subseteq\{0,1,\dots,2^n\}\)。定义固定纤维问题
+\[
+\mathrm{FIBER}_{\mathcal W}
+:=
+\left\{
+(n,\Psi):\ N_n(\Psi)\in \mathcal W_n
+\right\},
+\qquad
+N_n(\Psi):=\#\{\omega\in F_n:\ \Psi(\omega)=1\}.
+\]
+则存在多项式时间保解数归约
+\[
+\#\mathrm{SAT}(\varphi)\longmapsto N_n(\Psi_\varphi),
+\qquad
+N_n(\Psi_\varphi)=\#\mathrm{SAT}(\varphi),
+\]
+从而任意仅依赖于 \(\#\mathrm{SAT}\) 数值的判定谓词，都可无损搬运到这一固定稳定类型纤维上。特别地，\(\PP\)、\(\oplus\P\) 与 \(\mathrm{Mod}_p\P\) 三类判定在此同一纤维上同时出现，而不需要改变稳定类型。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-sharp-fiber-cnf-sharpPcomplete-parsimonious}，对任意布尔公式 \(\varphi\) 都可在多项式时间内构造
+\[
+\Psi_\varphi:=B_n\wedge \varphi^\sharp
+\]
+使得
+\[
+N_n(\Psi_\varphi)=\#\mathrm{SAT}(\varphi).
+\]
+因此对任意计数谓词族 \(\mathcal W_n\) 都有
+\[
+\#\mathrm{SAT}(\varphi)\in \mathcal W_n
+\iff
+N_n(\Psi_\varphi)\in \mathcal W_n.
+\]
+这就给出了所需的保解数搬运。最后，多数阈值、奇偶性与模 \(p\) 非零分别给出 \(\PP\)、\(\oplus\P\) 与 \(\mathrm{Mod}_p\P\) 的标准判定截面；这些在固定纤维上的完备性也已在定理 \ref{thm:conclusion-periodic-fiber-majority-pp-complete}、定理 \ref{thm:conclusion-periodic-fiber-parity-oplusP-complete} 与定理 \ref{thm:conclusion-periodic-fiber-modp-modpP-complete} 中显式实现。证毕。
+\end{proof}
+
+\begin{proposition}[少于 \texorpdfstring{\(n\)}{n} 轴的统计必然产生指数碰撞]\label{prop:conclusion-period3-fiber-subaxis-exponential-collision}
+设 \(S\subsetneq[n]\) 且 \(|S|=s<n\)。定义投影
+\[
+\pi_S:F_n\to\{0,1\}^S,
+\qquad
+\pi_S(\omega):=(\beta_j(\omega))_{j\in S}.
+\]
+则每个非空纤维都恰有基数
+\[
+|\pi_S^{-1}(u)|=2^{n-s}
+\qquad(u\in\{0,1\}^S).
+\]
+特别地，任何仅依赖于 \(S\) 上块坐标的统计量
+\[
+T=F\circ\pi_S
+\]
+都不可能在 \(F_n\) 上单射；更强地，其每个非空 level set 至少含有 \(2^{n-s}\) 个点。
+\end{proposition}
+\begin{proof}
+由 \(\beta:F_n\to\{0,1\}^n\) 为双射，固定 \(\pi_S(\omega)\) 后，其余 \(n-s\) 个坐标仍可独立取值，故每个非空纤维与 \(\{0,1\}^{n-s}\) 双射，其基数恰为 \(2^{n-s}\)。于是任何仅依赖于 \(\pi_S\) 的统计量都至少在每条此类纤维上发生 \(2^{n-s}\)-重碰撞，因此不可能单射。证毕。
+\end{proof}
+
+\begin{theorem}[所有 proper-coordinate 因子对顶阶 parity 模绝对失明]\label{thm:conclusion-period3-fiber-proper-coordinate-top-parity-blindness}
+定义顶阶 Walsh 模
+\[
+\chi_{\mathrm{top}}:=\chi_{[n]}(\omega)=(-1)^{\beta_1(\omega)+\cdots+\beta_n(\omega)}.
+\]
+对任意真子集 \(S\subsetneq[n]\)，令 \(E_S\) 为定理 \ref{thm:conclusion-period3-fiber-mobius-walsh-tensorization} 中对应的坐标条件期望。则
+\[
+E_S(\chi_{\mathrm{top}})=0.
+\]
+等价地，偶 parity 半纤维与奇 parity 半纤维在任意 proper-coordinate 因子上的推前分布完全相同；因此，凡只读取真子集坐标的中间系统，都不可能分辨这两半纤维。
+\end{theorem}
+\begin{proof}
+对任意 \(S\subsetneq[n]\)，记 \(S^c=[n]\setminus S\neq\varnothing\)。则
+\[
+\chi_{\mathrm{top}}=\chi_S\chi_{S^c}.
+\]
+由定理 \ref{thm:conclusion-period3-fiber-mobius-walsh-tensorization}，\(E_S\) 保留 \(S\) 上坐标并在 \(S^c\) 上取条件平均。由于缺失坐标在均匀纤维测度下独立均匀，且 \(\chi_{S^c}\) 在任一非空坐标方向上的平均为零，故
+\[
+E_S(\chi_{S^c})=0.
+\]
+于是
+\[
+E_S(\chi_{\mathrm{top}})
+=
+\chi_S\,E_S(\chi_{S^c})
+=0.
+\]
+这说明奇偶两半纤维在任何 proper-coordinate 因子上的全部统计都一致。证毕。
+\end{proof}
+
+\begin{theorem}[固定周期三纤维内部存在一个 Boolean 中间系统区间，其顶 Möbius 原子恰是顶阶 parity 模]\label{thm:conclusion-period3-fiber-boolean-interval-top-mobius-parity}
+对每个 \(S\subseteq[n]\)，令 \(g_S\) 表示如下中间系统：在 distinguished 纤维 \(F_n\) 上只保留坐标投影 \(\pi_S\)，而在其余纤维上保持最粗分割。则：
+\begin{enumerate}
+  \item 映射
+  \[
+  S\longmapsto g_S
+  \]
+  把布尔格 \(2^{[n]}\) 嵌入到全局中间系统格 \(Q(\Fold_{3n})\) 的一个区间中；
+  \item 对该区间上的条件期望 \(E_S\)，其 Möbius primitive 算子
+  \[
+  P_S=\sum_{T\subseteq S}(-1)^{|S|-|T|}E_T
+  \]
+  满足
+  \[
+  P_S(\chi_R)=
+  \begin{cases}
+  \chi_S,& R=S,\\
+  0,& R\neq S;
+  \end{cases}
+  \]
+  特别地，
+  \[
+  P_{[n]}
+  \]
+  是一个秩 \(1\) 的投影，其像空间恰为
+  \[
+  \CC\,\chi_{\mathrm{top}}.
+  \]
+\end{enumerate}
+因此，所有 proper-coordinate 中间系统共同遗失的并不是一个高维残差，而是唯一的一维顶阶 Möbius 原子；这条原子方向正是 parity 方向。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-fiber-intermediate-system-operator-mobius-correction}，全局中间系统格按纤维分解为分割格的直积。对 distinguished 纤维 \(F_n\cong\{0,1\}^n\)，坐标投影 \(\pi_S\) 所对应的等价关系正是“在坐标 \(S\) 上取值相同”。其余纤维取最粗分割时，\(S\subseteq T\) 当且仅当 \(g_S\le g_T\)，故得到一个与 \(2^{[n]}\) 同构的布尔区间。
+
+另一方面，对 Walsh 基 \(\{\chi_R\}_{R\subseteq[n]}\)，直接有
+\[
+E_T(\chi_R)=
+\begin{cases}
+\chi_R,& R\subseteq T,\\
+0,& R\not\subseteq T.
+\end{cases}
+\]
+因此
+\[
+P_S(\chi_R)
+=
+\sum_{T\subseteq S}(-1)^{|S|-|T|}E_T(\chi_R)
+=
+\sum_{R\subseteq T\subseteq S}(-1)^{|S|-|T|}\chi_R.
+\]
+若 \(R\neq S\)，则上式是一个非空布尔区间上的交替和，故为 \(0\)；若 \(R=S\)，则唯一贡献项为 \(T=S\)，于是
+\[
+P_S(\chi_S)=\chi_S.
+\]
+特别地，取 \(S=[n]\) 即得
+\[
+\mathrm{im}(P_{[n]})=\CC\,\chi_{\mathrm{top}},
+\qquad
+\mathrm{rank}(P_{[n]})=1.
+\]
+证毕。
+\end{proof}
+
+\begin{conjecture}[布尔刚性纤维的普适复杂度承载]\label{conj:conclusion-boolean-rigid-fiber-universal-complexity}
+设某一稳定类型 \(x\) 的纤维 \(F_x\) 满足：
+\begin{enumerate}
+  \item 存在规范双射
+  \[
+  F_x\cong \{0,1\}^r;
+  \]
+  \item 由坐标遗忘生成的中间系统子格在 \(F_x\) 上同构于 \(\mathcal B_r\)，且其 Möbius primitive 扇区全为一维。
+\end{enumerate}
+则在适当的局部块约束可用前提下，\(F_x\) 应当已经足以普适承载 \(\mathrm{SAT}/\#\mathrm{SAT}\)：即存在只依赖该固定纤维的约束族，使相应的 fiber-CNF 判定与计数分别成为 \(\NP/\#\mathrm P\)-完备问题，且计数归约可取为保解数。
+
+定理 \ref{thm:conclusion-period3-fiber-boolean-semisimple-npsharp-universality} 说明，周期三稳定类型
+\[
+x^{(n)}=(001)^n
+\]
+正是这一原则的首个完整样本。
+\end{conjecture}
+
+\begin{conjecture}[proper down-set 上的任何有限证书演算都不可能在该纤维上达到语义完备]\label{conj:conclusion-period3-fiber-proper-downset-not-semantically-complete}
+设 \(\mathcal D\subsetneq 2^{[n]}\) 为一个真下闭集，且 \([n]\notin\mathcal D\)。考虑仅通过
+\[
+\{E_S:S\in\mathcal D\}
+\]
+及其有限线性组合、有限张量积与可计算后处理所生成的证书演算。则该演算不应能够对 distinguished 纤维 \(F_n\) 上的全部布尔谓词达到语义完备；更强地说，其盲向应始终包含
+\[
+\CC\,\chi_{\mathrm{top}}
+\]
+所张成的一维方向。
+
+定理 \ref{thm:conclusion-period3-fiber-proper-coordinate-top-parity-blindness} 已证明所有 proper-coordinate 条件期望都湮灭 \(\chi_{\mathrm{top}}\)，而定理 \ref{thm:conclusion-period3-fiber-boolean-interval-top-mobius-parity} 则表明这条方向正是 Boolean 区间中的顶 Möbius 原子。因此，只要不显式引入顶元 \([n]\) 或其等价证书，任何有限后处理闭包都应无法抹去这条一维缺口。
+\end{conjecture}
+
+\paragraph{统一读法}
+这条链说明：固定周期三纤维 \(F_n\cong\{0,1\}^n\) 的中间系统几何已经被压缩到最刚性的布尔层面，条件期望可完全张量化，primitive 扇区也全部退化为一维 Walsh 原子；然而这并不会把算法复杂度同步压平。相反，在同一固定稳定类型上，精确回放仍需要整整 \(n\) 比特的外置预算，而约束满足与计数又继续保持 \(\NP/\#\mathrm P\) 的满复杂度。故在本文框架中，复杂度的真正来源并不是纤维中间系统格的几何粗糙，而是约束如何嵌入一个已经被 Möbius--Walsh 完全解剖过的固定布尔纤维。
+
+\endinput

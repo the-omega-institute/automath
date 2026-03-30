@@ -23,50 +23,161 @@ E_{a_{J^c}}:=\partial_{\mathrm{out}}\Sigma_{a_{J^c}}.
 \]
 前一小节已经表明：内部坐标束屏幕的极小精确化在组合意义上恰等于“每条板层命中一次”的独立选择问题，而一般部分屏幕的极小精确化 Gibbs 系综则由 Kirchhoff 多项式与有效电阻控制。把这两组结构合并之后，还可进一步把内部坐标束屏幕压缩为一条完全可积的层分离链。
 
-\begin{theorem}[内部坐标束屏幕极小精确化的 Kirchhoff 完全因子化]\label{thm:conclusion-coordinate-bundle-kirchhoff-complete-factorization}
-记 \(\mathfrak E_J^{\min}\) 为全部按包含极小且使
+\begin{theorem}[内部坐标束屏幕的外边界精确化即分区拟阵基]\label{thm:conclusion-coordinate-bundle-exactification-partition-matroid}
+定义外边界精确化族
 \[
-f_{S_J^{\mathrm{int}}\cup B}
-\]
-成为单射的外边界补全面集所成之族。定义其加权生成多项式
-\[
-\mathcal K_J(\mathbf x)
+\mathfrak E_J
 :=
-\sum_{B\in \mathfrak E_J^{\min}}
-\prod_{e\in B}x_e.
+\left\{
+B\subseteq \bigsqcup_{a_{J^c}}E_{a_{J^c}}:\ 
+f_{S_J^{\mathrm{int}}\cup B}\ \text{单射}
+\right\}.
 \]
-则有严格因子化
+则有严格等价
 \[
-\mathcal K_J(\mathbf x)
-=
-\prod_{a_{J^c}\in\{0,\dots,2^m-1\}^{J^c}}
-\left(
-\sum_{e\in E_{a_{J^c}}}x_e
-\right).
+B\in \mathfrak E_J
+\iff
+\forall a_{J^c},\quad B\cap E_{a_{J^c}}\neq \varnothing.
 \]
+因此，\(\mathfrak E_J\) 不是一般图形拟阵的基族，而是分区块
+\[
+\bigl(E_{a_{J^c}}\bigr)_{a_{J^c}\in\{0,\dots,2^m-1\}^{J^c}}
+\]
+上的逐块 hitting-base 族：每一条板层恰提供一个独立命中约束，且不同板层之间完全解耦。
 \end{theorem}
 \begin{proof}
-由推论 \ref{cor:conclusion-coordinate-bundle-minimal-outer-boundary-threshold}，
+由定理 \ref{thm:conclusion-coordinate-bundle-outer-boundary-residual-rank}，
+\[
+\rank_{\ZZ}\ker f_{S_J^{\mathrm{int}}\cup B}
+=
+L_J-|\mathcal T_J(B)|.
+\]
+而
 \[
 f_{S_J^{\mathrm{int}}\cup B}\ \text{单射}
 \iff
+\rank_{\ZZ}\ker f_{S_J^{\mathrm{int}}\cup B}=0.
+\]
+故
+\[
+B\in \mathfrak E_J
+\iff
+|\mathcal T_J(B)|=L_J
+\iff
 \forall a_{J^c},\quad B\cap E_{a_{J^c}}\neq\varnothing.
 \]
-再由同一推论的证明，一张外边界面只会命中唯一一条板层。故 \(B\) 按包含极小时，必且只必从每个 \(E_{a_{J^c}}\) 中各选取一张面。于是任一
+这说明外边界精确化确实退化为逐板层 hitting。证毕。
+\end{proof}
+
+\begin{theorem}[精确化配分函数的完全乘积化与零温层熵]\label{thm:conclusion-coordinate-bundle-kirchhoff-complete-factorization}
+对每个外边界面 \(e\) 赋形式变量 \(z_e\)，定义 exactification partition function
 \[
-B\in \mathfrak E_J^{\min}
+\mathcal Z_J(\mathbf z)
+:=
+\sum_{B\in \mathfrak E_J}\prod_{e\in B}z_e.
 \]
-都与一族独立选择
+则有严格乘积公式
 \[
-e_{a_{J^c}}\in E_{a_{J^c}}
+\mathcal Z_J(\mathbf z)
+=
+\prod_{a_{J^c}}
+\left(
+\prod_{e\in E_{a_{J^c}}}(1+z_e)-1
+\right).
+\]
+
+再记极小精确化族
+\[
+\mathfrak E_J^{\min}
+:=
+\{B\in \mathfrak E_J:\ |B|=L_J\},
+\]
+则其加权生成多项式
+\[
+\mathcal K_J(\mathbf z)
+:=
+\sum_{B\in \mathfrak E_J^{\min}}
+\prod_{e\in B}z_e
+\]
+满足
+\[
+\mathcal K_J(\mathbf z)
+=
+\prod_{a_{J^c}}
+\left(
+\sum_{e\in E_{a_{J^c}}}z_e
+\right).
+\]
+特别地，
+\[
+|\mathfrak E_J|
+=
+\prod_{a_{J^c}}(2^{|E_{a_{J^c}}|}-1),
 \qquad
-\bigl(a_{J^c}\in\{0,\dots,2^m-1\}^{J^c}\bigr)
+|\mathfrak E_J^{\min}|
+=
+\prod_{a_{J^c}}|E_{a_{J^c}}|.
 \]
-一一对应，而对应单项式恰为
+
+若进一步赋非负权重 \(\omega(e)\) 并令
 \[
-\prod_{a_{J^c}}x_{e_{a_{J^c}}}.
+z_e=e^{-\beta\omega(e)},
+\qquad
+W_J^{\min}
+:=
+\sum_{a_{J^c}}\min_{e\in E_{a_{J^c}}}\omega(e),
 \]
-对全部独立选择求和便得到所示乘积公式。证毕。
+则零温极限满足
+\[
+e^{\beta W_J^{\min}}\mathcal Z_J(e^{-\beta\omega})
+\longrightarrow
+\prod_{a_{J^c}}
+\#\Argmin_{e\in E_{a_{J^c}}}\omega(e)
+\qquad
+(\beta\to+\infty).
+\]
+故 ground-state entropy 完全逐层分裂，不存在任何跨板层的零温纠缠。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-coordinate-bundle-exactification-partition-matroid}，
+\[
+B\in \mathfrak E_J
+\iff
+\forall a_{J^c},\quad
+B_{a_{J^c}}:=B\cap E_{a_{J^c}}\neq \varnothing.
+\]
+故
+\[
+\mathfrak E_J
+\cong
+\prod_{a_{J^c}}
+\bigl(2^{E_{a_{J^c}}}\setminus\{\varnothing\}\bigr),
+\]
+并且
+\[
+\mathcal Z_J(\mathbf z)
+=
+\prod_{a_{J^c}}
+\left(
+\sum_{\varnothing\neq B_{a_{J^c}}\subseteq E_{a_{J^c}}}
+\prod_{e\in B_{a_{J^c}}}z_e
+\right)
+=
+\prod_{a_{J^c}}
+\left(
+\prod_{e\in E_{a_{J^c}}}(1+z_e)-1
+\right).
+\]
+极小基数情形恰对应于每层各取一面，从而得到 \(\mathcal K_J(\mathbf z)\) 的乘积公式；把 \(z_e\equiv 1\) 代入便得到两条计数公式。
+
+最后令 \(z_e=e^{-\beta\omega(e)}\)。对每个固定板层，
+\[
+\prod_{e\in E_{a_{J^c}}}(1+e^{-\beta\omega(e)})-1
+=
+e^{-\beta \min_{e\in E_{a_{J^c}}}\omega(e)}
+\#\Argmin_{e\in E_{a_{J^c}}}\omega(e)\,(1+o(1)).
+\]
+对各层相乘即可得到所示零温极限。证毕。
 \end{proof}
 
 \begin{corollary}[极小精确化 Gibbs 系综的板层独立与有效电阻闭式]\label{cor:conclusion-coordinate-bundle-gibbs-resistance-closed-form}
@@ -127,18 +238,18 @@ e_{a_{J^c}}\in E_{a_{J^c}}
 得到第四条。证毕。
 \end{proof}
 
-\begin{theorem}[随机延迟审计的独立 Poisson--binomial 残余律]\label{thm:conclusion-coordinate-bundle-random-audit-poisson-binomial}
-设每张外边界面独立地以概率 \(p\in(0,1)\) 被后续审计揭示，并记随机补全面集为 \(B_p\)。定义随机残余歧义秩
+\begin{theorem}[随机外边界审计的独立 Poisson--binomial 残余律]\label{thm:conclusion-coordinate-bundle-random-audit-poisson-binomial}
+设每张外边界面 \(e\) 独立地以概率 \(p_e\in[0,1]\) 被纳入审计集 \(B\)。定义每条板层的漏检概率
 \[
-\Lambda_{J,p}
+q_{a_{J^c}}
 :=
-\rank_{\ZZ}\ker f_{S_J^{\mathrm{int}}\cup B_p}.
+\prod_{e\in E_{a_{J^c}}}(1-p_e),
 \]
-对每条板层记
+并记随机残余歧义秩
 \[
-m_{a_{J^c}}:=|E_{a_{J^c}}|,
-\qquad
-\theta_{a_{J^c}}:=(1-p)^{m_{a_{J^c}}}.
+\Lambda_J(B)
+:=
+\rank_{\ZZ}\ker f_{S_J^{\mathrm{int}}\cup B}.
 \]
 则存在相互独立的 Bernoulli 变量族
 \[
@@ -146,48 +257,175 @@ m_{a_{J^c}}:=|E_{a_{J^c}}|,
 \]
 满足
 \[
-\mathbb P\bigl(\xi_{a_{J^c}}=1\bigr)=\theta_{a_{J^c}},
+\mathbb P\bigl(\xi_{a_{J^c}}=1\bigr)=q_{a_{J^c}},
 \qquad
-\Lambda_{J,p}=\sum_{a_{J^c}}\xi_{a_{J^c}}.
+\Lambda_J(B)=\sum_{a_{J^c}}\xi_{a_{J^c}}.
 \]
 从而
 \[
-\mathbb E[\Lambda_{J,p}]
+\mathbb E[\Lambda_J(B)]
 =
-\sum_{a_{J^c}}(1-p)^{m_{a_{J^c}}},
+\sum_{a_{J^c}}q_{a_{J^c}},
 \]
 \[
-\operatorname{Var}(\Lambda_{J,p})
+\operatorname{Var}(\Lambda_J(B))
 =
-\sum_{a_{J^c}}(1-p)^{m_{a_{J^c}}}\Bigl(1-(1-p)^{m_{a_{J^c}}}\Bigr),
+\sum_{a_{J^c}}q_{a_{J^c}}(1-q_{a_{J^c}}),
 \]
 并且其 ordinary generating function 为
 \[
-F_{J,p}(s)
-:=
-\mathbb E[s^{\Lambda_{J,p}}]
+\mathbb E[s^{\Lambda_J(B)}]
 =
 \prod_{a_{J^c}}
-\Bigl((1-\theta_{a_{J^c}})+s\,\theta_{a_{J^c}}\Bigr).
+\bigl((1-q_{a_{J^c}})+s\,q_{a_{J^c}}\bigr).
+\]
+若再记
+\[
+Y_{J,B}:=f_{S_J^{\mathrm{int}}\cup B}(X),
+\]
+则
+\[
+\mathbb E\,H(X\mid Y_{J,B})
+=
+\sum_{a_{J^c}}q_{a_{J^c}}.
 \]
 \end{theorem}
 \begin{proof}
 由定理 \ref{thm:conclusion-coordinate-bundle-outer-boundary-residual-rank}，
 \[
-\Lambda_{J,p}
+\Lambda_J(B)
 =
-L_J-|\mathcal T_J(B_p)|,
+L_J-|\mathcal T_J(B)|,
 \]
-故 \(\Lambda_{J,p}\) 正是未被 \(B_p\) 命中的板层数。对固定 \(a_{J^c}\)，其未命中事件等价于
+故 \(\Lambda_J(B)\) 正是未被 \(B\) 命中的板层数。对固定 \(a_{J^c}\)，其未命中事件等价于
 \[
-B_p\cap E_{a_{J^c}}=\varnothing,
+B\cap E_{a_{J^c}}=\varnothing,
 \]
-而这要求该层全部 \(m_{a_{J^c}}\) 张外边界面都未被揭示，因此概率恰为
+故其概率恰为
 \[
-(1-p)^{m_{a_{J^c}}}=\theta_{a_{J^c}}.
+q_{a_{J^c}}
+=
+\prod_{e\in E_{a_{J^c}}}(1-p_e).
 \]
-由于不同板层对应的外边界面集彼此不交，这些未命中事件相互独立。于是 \(\Lambda_{J,p}\) 正是上述独立 Bernoulli 变量之和，故均值、方差与 ordinary generating function 公式同时成立。证毕。
+由于不同板层对应的外边界面集彼此不交，这些未命中事件相互独立。于是 \(\Lambda_J(B)\) 正是上述独立 Bernoulli 变量之和，均值、方差与 ordinary generating function 公式随即成立。
+
+最后，由定理 \ref{thm:conclusion-coordinate-bundle-posterior-hypercube-clipping}，对任意给定的 \(B\) 与综合征 \(y\)，都有
+\[
+H(X\mid Y_{J,B}=y)=L_J-|\mathcal T_J(B)|=\Lambda_J(B).
+\]
+对随机 \(B\) 取期望即得
+\[
+\mathbb E\,H(X\mid Y_{J,B})=\mathbb E[\Lambda_J(B)]=\sum_{a_{J^c}}q_{a_{J^c}}.
+\]
+证毕。
 \end{proof}
+
+\begin{theorem}[外边界价值函数的 Möbius 单层支撑]\label{thm:conclusion-coordinate-bundle-outer-boundary-mobius-support}
+记全部外边界面之并为
+\[
+\mathcal E_J:=\bigsqcup_{a_{J^c}}E_{a_{J^c}},
+\]
+并定义收益函数
+\[
+g_J(B):=|\mathcal T_J(B)|
+\qquad
+(B\subseteq \mathcal E_J).
+\]
+记其在 Boolean 格 \(2^{\mathcal E_J}\) 上的 Möbius 反演为
+\[
+\widehat g_J(S)
+:=
+\sum_{U\subseteq S}(-1)^{|S|-|U|}g_J(U).
+\]
+则有精确支撑公式
+\[
+\widehat g_J(S)=
+\begin{cases}
+(-1)^{|S|+1},& \emptyset\neq S\subseteq E_{a_{J^c}}\ \text{对某个 }a_{J^c},\\[0.6ex]
+0,& \text{若 }S\ \text{同时触及至少两条不同板层}.
+\end{cases}
+\]
+因此，全部高阶交互都严格局限于单板层内部；任何跨板层的 Möbius 系数都精确为零。
+\end{theorem}
+\begin{proof}
+由定义，
+\[
+g_J(B)=\sum_{a_{J^c}}\mathbf 1_{\{B\cap E_{a_{J^c}}\neq \varnothing\}}.
+\]
+故 \(g_J\) 是各板层 OR-game 的直和。若 \(S\) 同时触及至少两条不同板层，则对每个固定 \(a_{J^c}\)，函数
+\[
+h_{a_{J^c}}(B):=\mathbf 1_{\{B\cap E_{a_{J^c}}\neq \varnothing\}}
+\]
+在 \(S\) 的至少一个方向上恒定，故其 Möbius 系数在 \(S\) 处为零；于是 \(\widehat g_J(S)=0\)。
+
+若 \(\emptyset\neq S\subseteq E_{a_{J^c}}\) 落在单一板层内，则
+\[
+h_{a_{J^c}}(U)=
+\begin{cases}
+0,& U=\varnothing,\\
+1,& U\neq \varnothing.
+\end{cases}
+\]
+于是
+\[
+\widehat g_J(S)
+=
+\sum_{\varnothing\neq U\subseteq S}(-1)^{|S|-|U|}
+=
+(-1)^{|S|+1}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[面级 Shapley--Banzhaf 原子律]\label{cor:conclusion-coordinate-bundle-face-shapley-banzhaf}
+取任意外边界面 \(e\in E_{a_{J^c}}\)。则其对收益函数 \(g_J\) 的 Shapley 值恰为
+\[
+\operatorname{Sh}_e(g_J)=\frac{1}{|E_{a_{J^c}}|}.
+\]
+若取未归一化 Banzhaf 值
+\[
+\beta_e(g_J):=
+2^{-|\mathcal E_J|+1}
+\sum_{B\subseteq \mathcal E_J\setminus\{e\}}
+\bigl(g_J(B\cup\{e\})-g_J(B)\bigr),
+\]
+则有
+\[
+\beta_e(g_J)=2^{1-|E_{a_{J^c}}|}.
+\]
+因此，每一条板层的总价值严格等于 \(1\)，并且只在本层内部平均分配；不同板层之间既不共享价值，也不引入协同修正。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-coordinate-bundle-outer-boundary-mobius-support}，
+\[
+g_J(B)=\sum_{a_{J^c}}h_{a_{J^c}}(B),
+\qquad
+h_{a_{J^c}}(B):=\mathbf 1_{\{B\cap E_{a_{J^c}}\neq\varnothing\}}.
+\]
+Shapley 值与 Banzhaf 值都对直和可加，故只需讨论单一板层上的 OR-game。由于同一板层内所有面完全对称，且总收益
+\[
+h_{a_{J^c}}(E_{a_{J^c}})-h_{a_{J^c}}(\varnothing)=1,
+\]
+故每一面的 Shapley 值都等于 \(1/|E_{a_{J^c}}|\)。
+
+对未归一化 Banzhaf 值，面 \(e\) 只有在其余 \(|E_{a_{J^c}}|-1\) 张同层面均未被选中时才产生边际贡献 \(1\)，该事件在均匀平均中的概率正是
+\[
+2^{-(|E_{a_{J^c}}|-1)}=2^{1-|E_{a_{J^c}}|}.
+\]
+故得到所示公式。证毕。
+\end{proof}
+
+\begin{conjecture}[完全因子化屏幕的刚性]\label{conj:conclusion-coordinate-bundle-complete-factorization-rigidity}
+设 \(S\) 是某一固定 dyadic 复形上的部分屏幕，并同时满足：
+\begin{enumerate}
+  \item 对每个综合征 \(y\)，后验纤维 \(X\mid (Y_S=y)\) 都是一个仿射超立方体，且自由坐标相互独立；
+  \item 任意外边界 exactification family 的多变量 partition function 都可分解为若干互不相交块上的乘积；
+  \item 其外边界收益函数的 Boolean Möbius 支撑只落在单块内部，不出现任何跨块系数。
+\end{enumerate}
+则在坐标重标与显然的可见等价之下，\(S\) 必为某个内部坐标束屏幕 \(S_J^{\mathrm{int}}\)。
+
+换言之，后验独立性、exactification 可乘性与 Möbius 单块支撑三者同时成立，足以刻画内部坐标束屏幕本身；不存在第二类 genuinely different 的屏幕能在统计、组合与布尔三层同时表现为完全无交叉相互作用。
+\end{conjecture}
 
 \begin{theorem}[对数标度的唯一无交互性]\label{thm:conclusion-coordinate-bundle-logscale-unique-nointeraction}
 记 dyadic 网格
@@ -255,6 +493,6 @@ s=n-\frac{1}{m}\log_2 t,
 \end{proof}
 
 \noindent
-因此，内部坐标束屏幕在一般 Kirchhoff 审计几何之内还保留着一条更强的可积子链：极小精确化多项式完全分裂为逐板层的一次因子；相应 Gibbs 系综退化为各层独立的单次抽样，并把有效电阻、边占用与无权关键度全部压成单层并联和的闭式；若外边界只以独立随机延迟方式被揭示，则残余歧义秩不再需要 Tutte/FK 型全局配分函数，而直接成为一条 Poisson--binomial 和；最后，隐藏体积的全部高阶协同只有在对数标度下才会同时消失。换言之，内部坐标束屏幕并不是一般部分屏幕理论中的一个普通特例，而是其中唯一把 Kirchhoff、概率、信息与 Möbius 结构同时压到逐层独立形态的完全可积分支。
+因此，内部坐标束屏幕在一般 Kirchhoff 审计几何之内还保留着一条更强的可积子链：一般 exactification family 先退化为逐板层 hitting-base，继而其多变量配分函数与零温层熵完全分裂为单层因子；极小 Gibbs 系综则退化为各层独立的单次抽样，并把有效电阻、边占用与无权关键度全部压成单层并联和的闭式；若外边界只以独立随机方式被揭示，则残余歧义秩与平均后验熵不再需要 Tutte/FK 型全局配分函数，而直接成为一条 Poisson--binomial 和；再往布尔价值层，外边界收益函数的 Möbius 支撑严格局限于单板层内部，且每张面只按本层大小均分其 Shapley--Banzhaf 原子；最后，隐藏体积的全部高阶协同只有在对数标度下才会同时消失。换言之，内部坐标束屏幕并不是一般部分屏幕理论中的一个普通特例，而是其中唯一把 Kirchhoff、后验统计、布尔价值与 Möbius 结构同时压到逐层独立形态的完全可积分支。
 
 \endinput

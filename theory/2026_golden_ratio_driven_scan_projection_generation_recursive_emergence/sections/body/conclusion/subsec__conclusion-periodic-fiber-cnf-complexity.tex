@@ -220,6 +220,33 @@ p_\Psi:=\frac{1}{d_m(x)}\Tr(\Pi_xD_\Psi)\in[0,1].
 \]
 \end{definition}
 
+\begin{theorem}[固定周期纤维上的条件接受率等于归一化 \texorpdfstring{\(\#\mathrm{SAT}\)}{\#SAT}]\label{thm:conclusion-periodic-fiber-acceptance-rate-normalized-sharpsat}
+取 \(x^\star=(001)^\infty\)、\(m=3n\) 与 \(x=x^\star\!\upharpoonright_{3n}\)。
+对任意布尔公式 \(\varphi\)，令
+\[
+\Psi:=B_n\wedge \varphi^\sharp
+\]
+为定理 \ref{thm:conclusion-fiber-cnf-npcomplete-periodic}--\ref{thm:conclusion-sharp-fiber-cnf-sharpPcomplete-parsimonious} 中的受限纤维公式。
+则定义 \ref{def:conclusion-periodic-fiber-verifier} 的条件接受率满足
+\[
+p_\Psi=\frac{\#\mathrm{SAT}(\varphi)}{2^n}.
+\]
+\end{theorem}
+\begin{proof}
+由保解数归约
+\(
+\Tr(\Pi_xD_\Psi)=\#\mathrm{SAT}(\varphi)
+\)
+以及定理 \ref{thm:conclusion-period3-fiber-exact-multiplicity} 的
+\(
+d_m(x)=2^n
+\)，代入
+\(
+p_\Psi=\Tr(\Pi_xD_\Psi)/d_m(x)
+\)
+即得。证毕。
+\end{proof}
+
 \begin{theorem}[固定周期稳定类型上的常数阈值可满足性判别]\label{thm:conclusion-periodic-fiber-constant-threshold-np-hard}
 在定义 \ref{def:conclusion-periodic-fiber-verifier} 的设定下，定义“测量--制备”条件期望
 \[
@@ -258,6 +285,42 @@ E_m(W_\Psi)=I+(2^m-1)p_\Psi\,\Pi_x
 \|E_m(W_\Psi)\|_\infty\ge 2-2^{-m}>\tfrac32
 \)。
 阈值等价性与加性误差推论随之成立。证毕。
+\end{proof}
+
+\begin{theorem}[单标量算子范数的精确 \texorpdfstring{\(\#\mathrm{SAT}\)}{\#SAT} 读出与常精度判别]\label{thm:conclusion-periodic-fiber-single-norm-exact-sharpsat}
+沿用定理 \ref{thm:conclusion-periodic-fiber-constant-threshold-np-hard} 的设定，并对受限归约实例
+\[
+\Psi=B_n\wedge \varphi^\sharp
+\]
+定义归一化单标量
+\[
+\mathcal N_\Psi
+:=
+\frac{2^n}{2^m-1}\Bigl(\|E_m(W_\Psi)\|_\infty-1\Bigr).
+\]
+则有精确恒等式
+\[
+\mathcal N_\Psi=\#\mathrm{SAT}(\varphi).
+\]
+因此：
+\begin{enumerate}
+  \item 精确计算单个算子范数标量 \(\|E_m(W_\Psi)\|_\infty\) 已为 \(\#\mathrm P\)-困难；
+  \item 任意满足 \(|\widetilde{\mathcal N}_\Psi-\mathcal N_\Psi|<\frac12\) 的近似都可由四舍五入唯一恢复 \(\#\mathrm{SAT}(\varphi)\)；
+  \item \(\mathcal N_\Psi\ge \frac12\iff \varphi\) 可满足，故该阈值判定在此固定周期受限族上为 \(\mathrm{NP}\)-完全。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-periodic-fiber-constant-threshold-np-hard} 与定理 \ref{thm:conclusion-periodic-fiber-acceptance-rate-normalized-sharpsat},
+\[
+\|E_m(W_\Psi)\|_\infty=1+(2^m-1)p_\Psi
+=1+(2^m-1)\frac{\#\mathrm{SAT}(\varphi)}{2^n},
+\]
+故 \(\mathcal N_\Psi=\#\mathrm{SAT}(\varphi)\)。
+于是精确计算 \(\|E_m(W_\Psi)\|_\infty\) 至少与精确计算 \(\#\mathrm{SAT}\) 同难，故为 \(\#\mathrm P\)-困难；又因 \(\mathcal N_\Psi\in\ZZ\)，误差 \(<\frac12\) 的近似可唯一恢复该整数。
+最后
+\(
+\varphi\ \text{可满足}\iff \#\mathrm{SAT}(\varphi)\ge1\iff \mathcal N_\Psi\ge \frac12
+\)，故相应阈值判定为 \(\mathrm{NP}\)-完全。证毕。
 \end{proof}
 
 \begin{proposition}[固定周期纤维上的单角色矩给出 \texorpdfstring{\(\#\mathrm{SAT}\)}{\#SAT} 的精确线性读出]\label{prop:conclusion-periodic-fiber-single-character-moment}
