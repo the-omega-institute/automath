@@ -302,4 +302,57 @@ theorem phaseSpectrumCount_coprime (r t N : Nat) (hcop : Nat.Coprime t N) :
     phaseSpectrumCount r t N = N ^ r := by
   simp [phaseSpectrumCount, Nat.Coprime.gcd_eq_one hcop]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R166: Phase spectrum coprime multiplicativity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Phase spectrum split: free part x torsion part.
+    prop:cdim-phase-spectrum-quotient -/
+theorem phaseSpectrumCount_split (r t N : Nat) :
+    phaseSpectrumCount r t N = N ^ r * Nat.gcd t N := rfl
+
+/-- Phase spectrum count is multiplicative for coprime torsion factors.
+    prop:cdim-phase-spectrum-quotient -/
+theorem phaseSpectrumCount_mul_coprime (r1 r2 t1 t2 N : Nat)
+    (hcop : Nat.Coprime t1 t2) :
+    phaseSpectrumCount (r1 + r2) (t1 * t2) N =
+      phaseSpectrumCount r1 t1 N * phaseSpectrumCount r2 t2 N := by
+  simp only [phaseSpectrumCount, pow_add]
+  rw [Nat.gcd_comm, Nat.Coprime.gcd_mul N hcop, Nat.gcd_comm t1, Nat.gcd_comm t2]
+  ring
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R166: Gap ledger definitions and properties
+-- ══════════════════════════════════════════════════════════════
+
+/-- First hitting time: minimum n such that error drops below threshold.
+    def:cdim-gap-ledger -/
+noncomputable def firstHittingTime (e : Nat → ℝ) (ε : ℝ) : ℕ∞ :=
+  ⨅ (n : Nat) (_ : e n < ε), (n : ℕ∞)
+
+/-- First hitting time is antitone in the threshold.
+    def:cdim-gap-ledger -/
+theorem firstHittingTime_antitone (e : Nat → ℝ) :
+    Antitone (fun ε => firstHittingTime e ε) := by
+  intro ε₁ ε₂ h
+  simp only [firstHittingTime]
+  apply iInf_mono
+  intro n
+  apply iInf_mono'
+  intro h₂
+  exact ⟨lt_of_lt_of_le h₂ h, le_refl _⟩
+
+/-- Separation depth: minimum depth distinguishing two objects.
+    def:cdim-gap-ledger -/
+noncomputable def separationDepth {α : Type*} (distinguish : Nat → α → α → Bool) (x y : α) : ℕ∞ :=
+  ⨅ (n : Nat) (_ : distinguish n x y = true), (n : ℕ∞)
+
+/-- Separation depth is symmetric when the distinguisher is symmetric.
+    def:cdim-gap-ledger -/
+theorem separationDepth_comm {α : Type*} (distinguish : Nat → α → α → Bool)
+    (hsymm : ∀ n x y, distinguish n x y = distinguish n y x)
+    (x y : α) :
+    separationDepth distinguish x y = separationDepth distinguish y x := by
+  simp only [separationDepth, hsymm]
+
 end Omega.CircleDimension

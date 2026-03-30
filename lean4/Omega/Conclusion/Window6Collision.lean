@@ -151,4 +151,20 @@ theorem paper_fold_chi2_certificates :
   · rw [X.card_eq_fib, momentSum_two_seven]; native_decide
   · rw [X.card_eq_fib, momentSum_two_eight_rec]; native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R166: Section ledger product formula
+-- ══════════════════════════════════════════════════════════════
+
+/-- The number of choice functions on fibers equals the product of fiber sizes.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem section_count_eq_prod_fiber {α β : Type*} [Fintype α] [Fintype β]
+    [DecidableEq α] [DecidableEq β]
+    (F : α → β) :
+    Fintype.card ((b : β) → {a : α // F a = b}) =
+      ∏ b : β, (Finset.univ.filter (fun a => F a = b)).card := by
+  rw [Fintype.card_pi]
+  congr 1
+  ext b
+  exact Fintype.card_subtype (fun a => F a = b)
+
 end Omega.Conclusion
