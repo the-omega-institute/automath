@@ -1449,6 +1449,25 @@ theorem fib_mod7_period_sixteen (n : Nat) :
     7 * (141 * Nat.fib (n + 1) + 87 * Nat.fib n) + Nat.fib n := by ring
   rw [this, Nat.mul_add_mod]
 
+/-- Fibonacci mod 11 has period 10: F(n+10) % 11 = F(n) % 11.
+    def:pom-pisano-period-2 -/
+theorem fib_mod11_period_ten (n : Nat) :
+    Nat.fib (n + 10) % 11 = Nat.fib n % 11 := by
+  have h1 := Nat.fib_add_two (n := n)
+  have h2 := Nat.fib_add_two (n := n + 1)
+  have h3 := Nat.fib_add_two (n := n + 2)
+  have h4 := Nat.fib_add_two (n := n + 3)
+  have h5 := Nat.fib_add_two (n := n + 4)
+  have h6 := Nat.fib_add_two (n := n + 5)
+  have h7 := Nat.fib_add_two (n := n + 6)
+  have h8 := Nat.fib_add_two (n := n + 7)
+  have h9 := Nat.fib_add_two (n := n + 8)
+  have hexp : Nat.fib (n + 10) = 55 * Nat.fib (n + 1) + 34 * Nat.fib n := by linarith
+  rw [hexp]
+  have : 55 * Nat.fib (n + 1) + 34 * Nat.fib n =
+    11 * (5 * Nat.fib (n + 1) + 3 * Nat.fib n) + Nat.fib n := by ring
+  rw [this, Nat.mul_add_mod]
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R147: Fibonacci prime entry point
 -- ══════════════════════════════════════════════════════════════

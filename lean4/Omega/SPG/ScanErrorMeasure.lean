@@ -1062,6 +1062,63 @@ theorem purity_pmf_bridge {α β : Type*} [Fintype α] [Fintype β]
     ObservablePureMeasure μ.toMeasure obs P ↔ ObservablePure μ obs P :=
   observablePureMeasure_toMeasure_iff_observablePure μ obs P
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R150: Measure-theoretic scan error intersection bound
+-- ══════════════════════════════════════════════════════════════
+
+private theorem scanErrorMeasure_union_le {α β : Type*} [MeasurableSpace α] [Fintype β]
+    (μ : MeasureTheory.Measure α) (obs : α → β) (P Q : Set α) :
+    scanErrorMeasure μ obs (P ∪ Q) ≤ scanErrorMeasure μ obs P + scanErrorMeasure μ obs Q := by
+  unfold scanErrorMeasure
+  rw [← Finset.sum_add_distrib]
+  refine Finset.sum_le_sum (fun b _ => ?_)
+  -- min(μ((P∪Q)∩C), μ(C\(P∪Q))) ≤ min(μ(P∩C), μ(C\P)) + min(μ(Q∩C), μ(C\Q))
+  have hev : cellEventMeasure μ obs (P ∪ Q) b ≤
+      cellEventMeasure μ obs P b + cellEventMeasure μ obs Q b := by
+    simp only [cellEventMeasure]
+    calc μ ((P ∪ Q) ∩ observableCell obs b)
+        ≤ μ (P ∩ observableCell obs b ∪ Q ∩ observableCell obs b) := by
+          apply MeasureTheory.measure_mono; intro x ⟨hpq, hc⟩
+          rcases hpq with hp | hq
+          · exact Or.inl ⟨hp, hc⟩
+          · exact Or.inr ⟨hq, hc⟩
+      _ ≤ μ (P ∩ observableCell obs b) + μ (Q ∩ observableCell obs b) :=
+          MeasureTheory.measure_union_le _ _
+  have hcl : cellComplMeasure μ obs (P ∪ Q) b ≤ cellComplMeasure μ obs P b := by
+    apply MeasureTheory.measure_mono
+    intro x hx; exact ⟨hx.1, fun hp => hx.2 (Or.inl hp)⟩
+  have hcr : cellComplMeasure μ obs (P ∪ Q) b ≤ cellComplMeasure μ obs Q b := by
+    apply MeasureTheory.measure_mono
+    intro x hx; exact ⟨hx.1, fun hq => hx.2 (Or.inr hq)⟩
+  -- min(a,b) ≤ min(a₁,b₁) + min(a₂,b₂) from a ≤ a₁+a₂, b ≤ b₁, b ≤ b₂
+  rcases le_total (cellEventMeasure μ obs P b) (cellComplMeasure μ obs P b) with h₁ | h₁
+  · rcases le_total (cellEventMeasure μ obs Q b) (cellComplMeasure μ obs Q b) with h₂ | h₂
+    · calc min (cellEventMeasure μ obs (P ∪ Q) b) (cellComplMeasure μ obs (P ∪ Q) b)
+          ≤ cellEventMeasure μ obs (P ∪ Q) b := min_le_left _ _
+        _ ≤ cellEventMeasure μ obs P b + cellEventMeasure μ obs Q b := hev
+        _ = min _ _ + min _ _ := by rw [min_eq_left h₁, min_eq_left h₂]
+    · calc min _ _ ≤ cellComplMeasure μ obs (P ∪ Q) b := min_le_right _ _
+        _ ≤ cellComplMeasure μ obs Q b := hcr
+        _ ≤ _ + _ := le_add_left (le_refl _)
+        _ = min _ _ + min _ _ := by rw [min_eq_left h₁, min_eq_right h₂]
+  · calc min _ _ ≤ cellComplMeasure μ obs (P ∪ Q) b := min_le_right _ _
+      _ ≤ cellComplMeasure μ obs P b := hcl
+      _ ≤ _ + _ := le_add_right (le_refl _)
+      _ = min _ _ + min _ _ := by rw [min_eq_right h₁]
+
+/-- Measure-theoretic scan error subadditivity for intersections.
+    prop:spg-scan-error-cylinder -/
+theorem scanErrorMeasure_inter_le {α β : Type*} [MeasurableSpace α] [Fintype β]
+    (μ : MeasureTheory.Measure α) (obs : α → β) (P Q : Set α) :
+    scanErrorMeasure μ obs (P ∩ Q) ≤ scanErrorMeasure μ obs P + scanErrorMeasure μ obs Q := by
+  rw [show P ∩ Q = (Pᶜ ∪ Qᶜ)ᶜ from by ext x; simp [not_or]]
+  rw [scanErrorMeasure_compl]
+  calc scanErrorMeasure μ obs (Pᶜ ∪ Qᶜ)
+      ≤ scanErrorMeasure μ obs Pᶜ + scanErrorMeasure μ obs Qᶜ :=
+        scanErrorMeasure_union_le μ obs Pᶜ Qᶜ
+    _ = scanErrorMeasure μ obs P + scanErrorMeasure μ obs Q := by
+        rw [scanErrorMeasure_compl μ obs P, scanErrorMeasure_compl μ obs Q]
+
 end
 
 end Omega.SPG

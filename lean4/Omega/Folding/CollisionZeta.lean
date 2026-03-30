@@ -205,6 +205,12 @@ theorem collisionKernel2_det_pow_2 : (collisionKernel2 ^ 2).det = 4 := by native
 /-- def:pom-collision-kernel-det-pow-a2-3 -/
 theorem collisionKernel2_det_pow_3 : (collisionKernel2 ^ 3).det = -8 := by native_decide
 
+/-- det(M₂^n) = (-2)^n for the S_2 collision kernel.
+    prop:collision-kernel-det-pow -/
+theorem collisionKernel2_det_pow_general (n : ℕ) :
+    (collisionKernel2 ^ n).det = (-2 : ℤ) ^ n := by
+  rw [Matrix.det_pow, collisionKernel2_det]
+
 /-- det(A_3^n) = det(A_3)^n = (-2)^n for n = 2, 3.
     def:pom-collision-kernel-det-pow-a3-2 -/
 theorem collisionKernel3_det_pow_2 : (collisionKernel3 ^ 2).det = 4 := by native_decide
