@@ -213,6 +213,7 @@ This writes `artifacts/export/publication_journal_fit/<slug>/` with:
 The command uses the target journal declared in each publication `README.md`, pulls recent-paper style signals through `automation/journal_recon.py`, audits `main.tex` and `references.bib`, and compares local references against recent target-journal papers when possible. Use it when the next bottleneck is no longer section splitting, but turning an existing draft into a venue-fit submission package.
 
 The prompt and journal-profile text now live under `automation/assets/` so the repeated editorial loop can evolve mostly through Markdown/template changes rather than through more orchestration code.
+The multi-agent execution model is documented under `automation/assets/operations/`; use those assets to assign paper stages across many agents instead of improvising new prompt flows each time.
 
 ## Writing Conventions
 

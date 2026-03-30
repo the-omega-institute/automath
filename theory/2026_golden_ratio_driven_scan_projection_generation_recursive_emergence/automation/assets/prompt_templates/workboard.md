@@ -27,3 +27,10 @@ The intended loop is:
 2. rewrite the manuscript in the target journal's register;
 3. review it as an editor or referee;
 4. perform one more full improvement pass after review findings.
+
+## Operating model
+
+- Follow the stage order in `automation/assets/operations/PIPELINE.md`.
+- Use the ownership rules in `automation/assets/operations/CLAIM_RULES.md`.
+- Assign agents by role using `automation/assets/operations/ROLES.md`.
+- If this track enters a shared batch, start from `automation/assets/operations/PARALLEL_WAVE_1.md`.
