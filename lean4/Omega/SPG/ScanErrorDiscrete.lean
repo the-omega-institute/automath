@@ -1192,4 +1192,24 @@ theorem paper_boundary_vs_adjacency (totalFaces externalFaces internalPairs cube
     externalFaces = 2 * dim * cubeCount - 2 * internalPairs := by
   omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R163: Scan error Finset subadditivity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Scan error is subadditive over Finset unions.
+    prop:spg-scan-error-cylinder -/
+theorem scanError_iUnion_finset_le {α β : Type*} [Fintype α] [Fintype β]
+    {ι : Type*} [DecidableEq ι]
+    (μ : PMF α) (obs : α → β) (S : Finset ι) (P : ι → Set α) :
+    scanError μ obs (⋃ i ∈ S, P i) ≤ S.sum (fun i => scanError μ obs (P i)) := by
+  induction S using Finset.induction_on with
+  | empty => simp [scanError_empty]
+  | @insert j T hna ih =>
+    rw [Finset.sum_insert hna]
+    have hunion : (⋃ i ∈ insert j T, P i) = P j ∪ ⋃ i ∈ T, P i := by
+      simp [Set.biUnion_insert]
+    rw [hunion]
+    exact le_trans (scanError_union_le μ obs (P j) (⋃ i ∈ T, P i))
+      (add_le_add_right ih _)
+
 end Omega.SPG

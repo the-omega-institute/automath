@@ -257,4 +257,33 @@ theorem godelLift_binary_optimal_m10 :
     X.maxFiberMultiplicity 10 ≤ 2 ^ 4 := by
   rw [X.maxFiberMultiplicity_ten]; omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R163: Gödel lift axis lower bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- Minimum axis count for Gödel lift: k ≥ log_{E+1}(D).
+    cor:conclusion-fixed-axis-exponential-amplitude -/
+theorem godelLift_axis_lower_bound (k E D : Nat) (hE : 2 ≤ E + 1)
+    (hfeas : D ≤ (E + 1) ^ k) :
+    Nat.log (E + 1) D ≤ k :=
+  calc Nat.log (E + 1) D
+      ≤ Nat.log (E + 1) ((E + 1) ^ k) := Nat.log_mono_right hfeas
+    _ = k := Nat.log_pow (by omega) k
+
+open Omega in
+/-- Binary specialization: axes grow as log_2(D_m).
+    cor:conclusion-fixed-axis-exponential-amplitude -/
+theorem godelLift_binary_axis_lower (m k : Nat)
+    (hfeas : X.maxFiberMultiplicity m ≤ 2 ^ k) :
+    Nat.log 2 (X.maxFiberMultiplicity m) ≤ k :=
+  godelLift_axis_lower_bound k 1 (X.maxFiberMultiplicity m) (by omega) hfeas
+
+open Omega in
+/-- Ternary specialization: fewer axes with E=2.
+    cor:conclusion-fixed-axis-exponential-amplitude -/
+theorem godelLift_ternary_axis_lower (m k : Nat)
+    (hfeas : X.maxFiberMultiplicity m ≤ 3 ^ k) :
+    Nat.log 3 (X.maxFiberMultiplicity m) ≤ k :=
+  godelLift_axis_lower_bound k 2 (X.maxFiberMultiplicity m) (by omega) hfeas
+
 end Omega.Conclusion
