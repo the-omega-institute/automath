@@ -134,5 +134,59 @@ F_{n+5}\le 15F_n< F_{n+6}
 于是 \(T(m)=\delta=F_9\) 等价于 \(m+3=9\)，即 \(m=6\)。最后由 \(|X_m^{\mathrm{bdry}}|=F_{m-2}\) 得 \(m=6\iff |X_m^{\mathrm{bdry}}|=F_4=3\)。证毕。
 \end{proof}
 
-\endinput
+\begin{theorem}[Zeckendorf 复位分支的精确观测阈值]\label{thm:conclusion-zeckendorf-reset-observation-threshold}
+令 \(\mathcal R_m\) 为正文定义的 Zeckendorf-prefix successor 在分辨率 \(m\) 上触发复位/分支的事件集合。则：
+\begin{enumerate}
+  \item \(\mathcal R_m\) 的 gap set 恰为
+  \[
+  \{F_{m+3},F_{m+4}\};
+  \]
+  \item 因而保证“任意长度为 \(L\) 的扫描窗都至少观测到一次 reset”的最小确定性阈值正好为
+  \[
+  L_{\mathrm{det}}(m)=F_{m+4};
+  \]
+  更精确地，存在长度 \(F_{m+4}-1\) 的扫描窗完全避开 \(\mathcal R_m\)，而任意长度 \(F_{m+4}\) 的扫描窗必与 \(\mathcal R_m\) 相交；
+  \item 同时 \(\mathcal R_m\) 具有精确密度
+  \[
+  \mathrm{dens}(\mathcal R_m)=\varphi^{-(m+2)},
+  \]
+  并满足一致偏差
+  \[
+  \Bigl|\#(\mathcal R_m\cap[0,N))-\varphi^{-(m+2)}N\Bigr|\le 1
+  \qquad(\forall N\in\NN).
+  \]
+\end{enumerate}
+因此，统计观测尺度与确定性观测阈值同阶：
+\[
+L_{\mathrm{det}}(m)\asymp \varphi^{m+2}.
+\]
+\end{theorem}
 
+\begin{proof}
+由正文定理 \ref{thm:terminal-reset-events-sturmian}，复位事件集合 \(\mathcal R_m\) 的相邻返回长度只取
+\[
+F_{m+3},\qquad F_{m+4}.
+\]
+故 gap set 正是 \(\{F_{m+3},F_{m+4}\}\)，从而最大空隙长度为 \(F_{m+4}\)。
+
+于是存在两个相邻 reset 事件，其间空隙长度恰为 \(F_{m+4}\)。取该空隙内部任一长度 \(F_{m+4}-1\) 的扫描窗，便完全不与 \(\mathcal R_m\) 相交，故
+\[
+L_{\mathrm{det}}(m)\ge F_{m+4}.
+\]
+反过来，任意长度 \(F_{m+4}\) 的扫描窗都不可能严格嵌入某个空隙内部，否则将产生长于最大 gap 的无 reset 区间，这与最大 gap 为 \(F_{m+4}\) 矛盾。故任意长度 \(F_{m+4}\) 的扫描窗都必与 \(\mathcal R_m\) 相交，从而
+\[
+L_{\mathrm{det}}(m)\le F_{m+4}.
+\]
+两边合并即得
+\[
+L_{\mathrm{det}}(m)=F_{m+4}.
+\]
+
+密度与有界余项同样是定理 \ref{thm:terminal-reset-events-sturmian} 的直接结论。最后由 Fibonacci 渐近
+\[
+F_{m+4}\asymp \varphi^{m+4}\asymp \varphi^{m+2}
+\]
+即得最终同阶关系。证毕。
+\end{proof}
+
+\endinput
