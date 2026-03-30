@@ -1868,4 +1868,36 @@ theorem fibcubeFVector_four_recurrence (n : Nat) :
   simp only [fibcubeFVector_succ_succ, show (4 : Nat) ≠ 0 from by omega, ite_false,
     show 4 - 1 = 3 from rfl]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R162: Total f-vector strict monotonicity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Total f-vector of Fibonacci cube is strictly increasing for n ≥ 1.
+    cor:pom-fibcube-fpoly-growth-constant -/
+theorem totalFibcubeFVector_strict_mono (n : Nat) (hn : 1 ≤ n) :
+    totalFibcubeFVector n < totalFibcubeFVector (n + 1) := by
+  -- Use closed forms: even → 3T+1=2^{n+2}; odd → 3T=2^{n+2}+1
+  -- Case split on parity of n
+  by_cases heven : n % 2 = 0
+  · -- n even, n+1 odd
+    have hc_n := totalFibcubeFVector_closed_even n heven
+    have hc_n1 := totalFibcubeFVector_closed_odd (n + 1) (by omega)
+    -- 3*T(n) = 2^(n+2)-1, 3*T(n+1) = 2^(n+3)+1
+    -- Need T(n) < T(n+1), i.e. 3*T(n) < 3*T(n+1)
+    -- 2^(n+2)-1 < 2^(n+3)+1 since 2^(n+3) = 2*2^(n+2) > 2^(n+2)
+    have hpow : 2 ^ (n + 3) = 2 * 2 ^ (n + 2) := by ring
+    nlinarith
+  · -- n odd, n+1 even
+    have hodd : n % 2 = 1 := by omega
+    have hc_n := totalFibcubeFVector_closed_odd n hodd
+    have hc_n1 := totalFibcubeFVector_closed_even (n + 1) (by omega)
+    -- 3*T(n) = 2^(n+2)+1, 3*T(n+1)+1 = 2^(n+3)
+    -- Need T(n) < T(n+1), i.e. 3*T(n) < 3*T(n+1)
+    -- 2^(n+2)+1 < 2^(n+3)-1 = 2*2^(n+2)-1, needs 2 < 2^(n+2)
+    have hpow : 2 ^ (n + 3) = 2 * 2 ^ (n + 2) := by ring
+    have hpow_ge : 4 ≤ 2 ^ (n + 2) := by
+      calc 4 = 2 ^ 2 := by norm_num
+        _ ≤ 2 ^ (n + 2) := Nat.pow_le_pow_right (by omega) (by omega)
+    nlinarith
+
 end Omega

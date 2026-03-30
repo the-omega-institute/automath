@@ -390,6 +390,28 @@ theorem degeneracy_ghost_strict_mono (n : ℕ) (hn : 3 ≤ n) :
     have hpow_pos : (0 : ℤ) < 2 ^ (n + 3) := by positivity
     linarith
 
+/-- Degeneracy ghost doubling: d_{n+1} ≥ 2·d_n for n ≥ 4.
+    rem:degeneracy-zeta-bridge -/
+theorem degeneracy_ghost_doubling (n : Nat) (hn : 4 ≤ n) :
+    2 * ((2 : ℤ) ^ n - lucasNum n) ≤ (2 : ℤ) ^ (n + 1) - lucasNum (n + 1) := by
+  -- 2*d_n ≤ d_{n+1} iff L(n+1) ≤ 2*L(n) iff L(n-1) ≤ L(n)
+  -- Expand L(n+1) = L(n) + L(n-1), then 2^{n+1} = 2*2^n reduces goal to L(n-1) ≤ L(n)
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
+  -- n = k + 4. Goal: 2*(2^(k+4) - L(k+4)) ≤ 2^(k+5) - L(k+5)
+  have hL : lucasNum (k + 5) = lucasNum (k + 4) + lucasNum (k + 3) := by
+    have := lucasNum_succ_succ (k + 3)
+    simp only [show k + 3 + 2 = k + 5 from by omega, show k + 3 + 1 = k + 4 from by omega] at this
+    exact this
+  have hpow : (2 : ℤ) ^ (k + 5) = 2 * (2 : ℤ) ^ (k + 4) := by
+    rw [show k + 5 = (k + 4) + 1 from by omega, pow_succ]; ring
+  have hLmono : lucasNum (k + 3) ≤ lucasNum (k + 4) := by
+    have := lucasNum_succ_succ (k + 2)
+    simp only [show k + 2 + 2 = k + 4 from by omega, show k + 2 + 1 = k + 3 from by omega] at this
+    linarith [lucasNum_pos (k + 2)]
+  rw [show (4 : ℕ) + k = k + 4 from by omega, show k + 4 + 1 = k + 5 from by omega,
+    hL, hpow]
+  linarith
+
 /-- Lucas numbers mod 3 have period 8: L(n+8) % 3 = L(n) % 3 for all n.
     rem:degeneracy-zeta-bridge -/
 theorem lucasNum_mod3_period_eight (n : ℕ) :
