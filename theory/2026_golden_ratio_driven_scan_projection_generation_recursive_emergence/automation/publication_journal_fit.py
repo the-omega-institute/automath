@@ -47,6 +47,12 @@ REQUIRED_TRACK_FILES = (
     "BIB_SCOPE.template.md",
     "SOURCE_MAP.template.md",
     "THEOREM_LIST.template.md",
+    "WORKBOARD.md",
+    "01_research_extension.md",
+    "02_journal_style_rewrite.md",
+    "03_editorial_review.md",
+    "04_full_improvement.md",
+    "JOURNAL_PROFILE.md",
 )
 ACTIVE_STATUSES = {"submitted", "planned_batch_1", "planned_batch_2", "planned_batch_3"}
 JOURNAL_HINTS: tuple[dict[str, Any], ...] = (
@@ -209,6 +215,15 @@ def ensure_dir(path: Path) -> None:
     os.makedirs(io_path(path), exist_ok=True)
 
 
+def assets_root() -> Path:
+    return Path(__file__).resolve().parent / "assets"
+
+
+def load_asset(relative_path: str) -> str:
+    target = assets_root() / relative_path
+    return target.read_text(encoding="utf-8")
+
+
 def count_words(text: str) -> int:
     return len(WORD_RE.findall(text))
 
@@ -240,6 +255,20 @@ def journal_hint(journal_name: str | None) -> dict[str, Any]:
         "guide": None,
         "guidance": [],
     }
+
+
+def journal_profile_key(hint: dict[str, Any]) -> str:
+    short = str(hint.get("short") or "").strip().lower()
+    if short == "etds":
+        return "etds"
+    if short == "apal":
+        return "apal"
+    return "default"
+
+
+def journal_profile_text(hint: dict[str, Any]) -> str:
+    key = journal_profile_key(hint)
+    return load_asset(f"journal_profiles/{key}.md")
 
 
 def primary_target_journal(text: str | None) -> str | None:
@@ -502,6 +531,20 @@ def build_recommendations(
     return issues, list(dict.fromkeys(recommendations))
 
 
+def bullet_block(items: list[str], fallback: str) -> str:
+    if not items:
+        return f"- {fallback}"
+    return "\n".join(f"- {item}" for item in items)
+
+
+def render_template(template_name: str, mapping: dict[str, str]) -> str:
+    template = load_asset(f"prompt_templates/{template_name}")
+    rendered = template
+    for key, value in mapping.items():
+        rendered = rendered.replace(f"{{{{{key}}}}}", value)
+    return rendered
+
+
 def build_contract_templates(
     *,
     entry: publication_sync.PublicationEntry,
@@ -606,6 +649,39 @@ def build_contract_templates(
         "BIB_SCOPE.template.md": bib_scope_template,
         "SOURCE_MAP.template.md": source_map_template,
         "THEOREM_LIST.template.md": theorem_list_template,
+    }
+
+
+def build_workboard_files(
+    *,
+    entry: publication_sync.PublicationEntry,
+    record: JournalFitRecord,
+    hint: dict[str, Any],
+    recent_papers: list[dict[str, Any]],
+) -> dict[str, str]:
+    profile_text = journal_profile_text(hint)
+    mapping = {
+        "DIRECTORY": record.directory,
+        "JOURNAL": record.canonical_journal or record.target_journal or "unknown",
+        "STATUS": record.status,
+        "SOURCE_SECTIONS": ", ".join(f"`{section}`" for section in record.source_sections) or "`n/a`",
+        "RECON_TOTAL": str(record.recent_recon_record_total),
+        "APPENDIX_RATIO": f"{record.appendix_ratio:.1%}" if record.appendix_ratio is not None else "n/a",
+        "ISSUES": bullet_block(record.issues, "No blocking issues recorded by the current audit."),
+        "RECOMMENDATIONS": bullet_block(record.recommendations, "No extra recommendations recorded."),
+        "JOURNAL_PROFILE": profile_text.strip(),
+        "RECENT_PAPERS": bullet_block(
+            [str(paper.get("title") or "") for paper in recent_papers if paper.get("title")],
+            "No recent-paper titles were captured in the current reconnaissance sample.",
+        ),
+    }
+    return {
+        "JOURNAL_PROFILE.md": profile_text,
+        "WORKBOARD.md": render_template("workboard.md", mapping),
+        "01_research_extension.md": render_template("research_extension.md", mapping),
+        "02_journal_style_rewrite.md": render_template("journal_style_rewrite.md", mapping),
+        "03_editorial_review.md": render_template("editorial_review.md", mapping),
+        "04_full_improvement.md": render_template("full_improvement.md", mapping),
     }
 
 
@@ -855,7 +931,15 @@ def run_fit(
             record=record,
             recent_papers=recent_papers,
         )
+        workboard_files = build_workboard_files(
+            entry=entry,
+            record=record,
+            hint=hint,
+            recent_papers=recent_papers,
+        )
         for name, content in templates.items():
+            write_markdown(track_dir / name, content)
+        for name, content in workboard_files.items():
             write_markdown(track_dir / name, content)
         record.contract_templates_generated = sorted(templates)
         write_json(track_dir / "journal_fit_profile.json", asdict(record))

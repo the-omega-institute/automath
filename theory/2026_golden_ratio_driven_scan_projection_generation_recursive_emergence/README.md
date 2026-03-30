@@ -199,12 +199,20 @@ This writes `artifacts/export/publication_journal_fit/<slug>/` with:
 - `tracks/<directory>/journal_fit_profile.json` - target-journal profile, local manuscript metrics, recon counts, and issues
 - `tracks/<directory>/journal_fit_report.md` - human-readable audit of structure, appendix pressure, and bibliography fit
 - `tracks/<directory>/revision_prompt.md` - journal-specific revision prompt keyed to recent-paper style signals
+- `tracks/<directory>/WORKBOARD.md` - publication-cycle workboard for the repeated Codex/editorial loop
+- `tracks/<directory>/01_research_extension.md` - prompt for theorem-level deepening
+- `tracks/<directory>/02_journal_style_rewrite.md` - prompt for venue-style full rewrite
+- `tracks/<directory>/03_editorial_review.md` - prompt for editor/referee-style review
+- `tracks/<directory>/04_full_improvement.md` - prompt for the final full-improvement pass
+- `tracks/<directory>/JOURNAL_PROFILE.md` - editable venue profile copied from `automation/assets/journal_profiles/`
 - `tracks/<directory>/JOURNAL_FIT.template.md` - scaffold for venue alignment notes inside the publication workspace
 - `tracks/<directory>/BIB_SCOPE.template.md` - scaffold for bibliography scope and target-journal citation review
 - `tracks/<directory>/SOURCE_MAP.template.md` - scaffold for source-to-draft traceability when `SOURCE_MAP.md` is still missing
 - `tracks/<directory>/THEOREM_LIST.template.md` - scaffold for theorem inventory and Lean anchors
 
 The command uses the target journal declared in each publication `README.md`, pulls recent-paper style signals through `automation/journal_recon.py`, audits `main.tex` and `references.bib`, and compares local references against recent target-journal papers when possible. Use it when the next bottleneck is no longer section splitting, but turning an existing draft into a venue-fit submission package.
+
+The prompt and journal-profile text now live under `automation/assets/` so the repeated editorial loop can evolve mostly through Markdown/template changes rather than through more orchestration code.
 
 ## Writing Conventions
 
