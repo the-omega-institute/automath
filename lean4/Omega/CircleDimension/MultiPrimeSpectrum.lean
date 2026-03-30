@@ -8,6 +8,11 @@ abbrev PrimeSupport := Finset Nat
 def multiPrimeSpectrum (supports : Finset PrimeSupport) (J : PrimeSupport) : Nat :=
   (supports.filter fun S => J ⊆ S).card
 
+/-- Type count n_A(J): exact-support multiplicity.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+def typeCount (supports : Finset PrimeSupport) (J : PrimeSupport) : Nat :=
+  (supports.filter fun S => S = J).card
+
 /-- Explicit count formula for the divisible multiprime spectrum.
     prop:cdim-multiprime-divisible-spectrum-explicit -/
 theorem multiPrimeSpectrum_eq_count (supports : Finset PrimeSupport) (J : PrimeSupport) :
@@ -40,5 +45,58 @@ theorem multiPrimeSpectrum_pos_of_mem {supports : Finset PrimeSupport} {J : Prim
   apply Finset.card_pos.mpr
   refine ⟨J, ?_⟩
   simp [hJ]
+
+/-- Zeta-transform identity: the spectrum is the finite sum of exact-support counts.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem multiPrimeSpectrum_eq_sum_typeCount
+    (supports : Finset PrimeSupport) (J : PrimeSupport) :
+    multiPrimeSpectrum supports J =
+      Finset.sum supports (fun K => if J ⊆ K then typeCount supports K else 0) := by
+  have htc : ∀ {K : PrimeSupport}, K ∈ supports → typeCount supports K = 1 := by
+    intro K hK
+    unfold typeCount
+    have hEq : supports.filter (fun S => S = K) = {K} := by
+      ext x
+      constructor
+      · intro hx
+        simp only [Finset.mem_filter, Finset.mem_singleton] at hx ⊢
+        exact hx.2
+      · intro hx
+        simp only [Finset.mem_filter, Finset.mem_singleton] at hx ⊢
+        subst hx
+        exact ⟨hK, rfl⟩
+    rw [hEq]
+    simp
+  unfold multiPrimeSpectrum
+  rw [Finset.card_eq_sum_ones, Finset.sum_filter]
+  refine Finset.sum_congr rfl ?_
+  intro K hK
+  by_cases hJK : J ⊆ K
+  · simp [hJK, htc hK]
+  · simp [hJK]
+
+/-- Total type count equals the total number of supports.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem sum_typeCount_eq_card (supports : Finset PrimeSupport) :
+    Finset.sum supports (typeCount supports) = supports.card := by
+  have htc : ∀ {K : PrimeSupport}, K ∈ supports → typeCount supports K = 1 := by
+    intro K hK
+    unfold typeCount
+    have hEq : supports.filter (fun S => S = K) = {K} := by
+      ext x
+      constructor
+      · intro hx
+        simp only [Finset.mem_filter, Finset.mem_singleton] at hx ⊢
+        exact hx.2
+      · intro hx
+        simp only [Finset.mem_filter, Finset.mem_singleton] at hx ⊢
+        subst hx
+        exact ⟨hK, rfl⟩
+    rw [hEq]
+    simp
+  rw [Finset.card_eq_sum_ones]
+  refine Finset.sum_congr rfl ?_
+  intro K hK
+  simp [htc hK]
 
 end Omega.CircleDimension
