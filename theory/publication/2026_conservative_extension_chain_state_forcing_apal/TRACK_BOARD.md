@@ -8,8 +8,8 @@
 ## Stage Status
 
 - P0 Intake and Contract: `completed`
-- P1 Traceability: `in progress`
-- P2 Research Extension: `pending`
+- P1 Traceability: `completed`
+- P2 Research Extension: `in progress`
 - P3 Journal-Fit Rewrite: `pending`
 - P4 Editorial Review: `pending`
 - P5 Integration: `pending`
@@ -18,7 +18,7 @@
 
 ## Active claims
 
-- `unassigned / P1 / SOURCE_MAP.md + THEOREM_LIST.md`
+- `unassigned / P2 / TASK_CARD_P2_RESEARCH_EXTENSION.md`
 
 ## Blocking issues
 
@@ -29,7 +29,7 @@
 ## Next parallel batch
 
 - traceability agent:
-  map retained theorem labels to `logic_expansion_chain` source pieces
+  attach exact source anchors and any Lean-alignment notes
 - research agent:
   cut or re-home material that does not serve the visible-obstruction question
 - rewrite agent:

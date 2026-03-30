@@ -8,9 +8,9 @@
 ## Stage Status
 
 - P0 Intake and Contract: `completed`
-- P1 Traceability: `in progress`
+- P1 Traceability: `completed`
 - P2 Research Extension: `pending`
-- P3 Journal-Fit Rewrite: `pending`
+- P3 Journal-Fit Rewrite: `in progress`
 - P4 Editorial Review: `pending`
 - P5 Integration: `pending`
 - P6 Lean / Formalization Sync: `pending`
@@ -18,7 +18,7 @@
 
 ## Active claims
 
-- `unassigned / P1 / SOURCE_MAP.md + THEOREM_LIST.md`
+- `unassigned / P3 / TASK_CARD_P3_JOURNAL_REWRITE.md`
 
 ## Blocking issues
 
@@ -29,7 +29,7 @@
 ## Next parallel batch
 
 - traceability agent:
-  map theorem flow from `sec_recursive_addressing.tex`, `sec_clarity.tex`, `sec_double_budget.tex`, and `sec_open_system.tex`
+  attach exact source anchors and any Lean-alignment notes
 - research agent:
   choose whether the open-system specialization stays in the same paper
 - rewrite agent:

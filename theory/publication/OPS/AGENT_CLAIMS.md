@@ -27,4 +27,6 @@ When releasing a claim:
 
 ## Completed handoffs
 
-- none yet
+- `orchestrator` -> `2026_conservative_extension_chain_state_forcing_apal / P1 / SOURCE_MAP.md + THEOREM_LIST.md / next owner: research or rewrite`
+- `orchestrator` -> `2026_scan_projection_address_semantics_sigma_nonexpansion_etds / P1 / SOURCE_MAP.md + THEOREM_LIST.md / next owner: research or rewrite`
+- `orchestrator` -> `2026_projection_ontological_mathematics_core_tams / P1 / SOURCE_MAP.md + THEOREM_LIST.md / next owner: research or rewrite`
