@@ -4,58 +4,51 @@ Root dispatch table for the publication workspace.
 
 ## Pipeline Progress (2026-03-30)
 
-### Wave 1
-
-| Paper | Target | P0 | P1 | P2 | P3 | P4 | P5 | P6 | P7 | Status |
+| Paper | Target | P0 | P1 | P2 | P3 | P4 | P5 | P6 | P7 | Live status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| APAL | Ann. Pure Appl. Logic | done | done | done | done | MAJOR_REV | done | done | pending | **P5 complete, ready for P7** |
-| ETDS | Ergodic Th. Dyn. Sys. | done | done | done | done | done | done | done | done | **SUBMISSION-READY** |
-| TAMS | Trans. AMS | done | done | done | done | MINOR_REV | pending | done | pending | **P4 complete, needs P5** |
+| APAL | Ann. Pure Appl. Logic | done | done | done | done | done | done | done | blocked | **Technical pack verified; waiting only on author metadata** |
+| ETDS | Ergodic Th. Dyn. Sys. | done | done | done | done | done | done | done | done | **Submission-ready once author metadata is inserted** |
+| TAMS | Trans. AMS | done | done | done | done | done | done | done | pending | **P7 is the next real task** |
+| JFA | J. Funct. Anal. | done | done | done | pending | pending | pending | pending | pending | **Needs P5 proof polish and first live build** |
+| ETDS-zeta | Ergodic Th. Dyn. Sys. | done | done | done | done | done | pending | pending | pending | **P4 accepted; move to P5** |
 
-### Wave 2
+## Operational reading
 
-| Paper | Target | P0 | P1 | P2 | Status |
-|---|---|---|---|---|---|
-| JFA (circle dimension) | J. Funct. Anal. | done | done | done | **P1+P2 complete** |
-| ETDS-zeta (dynamical zeta) | Ergodic Th. Dyn. Sys. | done | done | done | **P1+P2 complete** |
+- APAL and ETDS are no longer research-blocked. They are human-metadata blocked.
+- TAMS is the strongest paper that can still gain a concrete submission upgrade
+  without new mathematics.
+- JFA is the clearest proof-polish candidate.
+- ETDS-zeta is the best current testbed for multi-agent editorial plus
+  integration workflow.
 
 ## Quantitative Summary
 
 | Metric | Value |
 |---|---|
-| Total papers in pipeline | 5 (3 Wave 1 + 2 Wave 2) |
-| Papers submission-ready | 1 (ETDS) |
-| Papers past P4 editorial | 3 (APAL, ETDS, TAMS) |
-| Total commits this session | 14 |
-| Total .tex files edited | 25+ |
-| Net line change | ~1500+ insertions, ~1800+ deletions |
-| Lean Sync coverage reports | 3 (all Wave 1) |
-| Editorial reviews produced | 2 (APAL: MAJOR_REV, TAMS: MINOR_REV) |
-| Submission packs produced | 1 (ETDS: cover letter + checklist) |
+| Total active papers on board | 5 |
+| Papers past P4 editorial gate | 4 |
+| Papers with a completed Lean sync note | 3 |
+| Papers with a real local PDF build rechecked in this round | 4 |
+| Papers blocked only on human metadata | 2 |
+| Papers needing new mathematical work before submission | 0 among APAL/ETDS/TAMS; JFA and ETDS-zeta still need manuscript-stage work |
 
 ## Lane legend
 
 - `compile`: manuscript compiles and basic document integrity
-- `repro`: supplied scripts and tables can be regenerated or audited
+- `repro`: supplied scripts, constants, or tables can be regenerated or audited
 - `editorial`: theorem chain, scope, target-journal fit, and manuscript polish
 - `formal`: paper-to-Lean alignment and backlog extraction
 - `submission-pack`: cover letter, checklist, and final status pack
 
-## Repro pilot lanes
+## Current next actions
 
-| Paper | Lane | Status |
-|---|---|---|
-| `submitted_2026_branch_cubic_regular_s4_closure_prym_ray_class_jnt` | repro | ready |
-| `submitted_2026_folded_rotation_histogram_certificates_siads` | repro | ready-with-risk |
-| `2026_fibonacci_folding_zeckendorf_normalization_gauge_anomaly_spectral_fingerprints` | repro | ready-for-test |
-
-## Deferred / backlog
-
-- `2026_circle_dimension_haar_pullback_cauchy_weight_jfa` — now Wave 2, P2 complete
-- `2026_dynamical_zeta_finite_part_spectral_fingerprint_etds` — now Wave 2, P2 complete
-- `2026_group_unification_fibonacci_prime_window_entropy_time` — README-only stub
-- `2026_zeta_completion_xi_zero_audit` — README-only stub
-- `2026_yang_lee_quartic_spectral_curve_discriminant_factorization_lee_yang_edge_singularity` — needs review
+1. `ETDS-zeta`: integrate the accepted P4 pass and decide whether to add a
+   paper-local reproducibility artifact for the `S_3` constants.
+2. `TAMS`: assemble the true P7 submission pack and freeze the final archive.
+3. `JFA`: split or compress the oversized precision-potential section, then run
+   the first clean live build.
+4. `APAL` and `ETDS`: hold technical state; close P7 immediately once author
+   metadata is supplied.
 
 ## Dispatch rule
 

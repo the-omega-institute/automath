@@ -4,9 +4,13 @@ Update this file when agents take ownership of a task.
 
 ## Open claims
 
-- `pub-journal-rewrite` -> `2026_conservative_extension_chain_state_forcing_apal / P3 / sec_*.tex / started 2026-03-30`
-- `pub-journal-rewrite` -> `2026_projection_ontological_mathematics_core_tams / P3 / sec_*.tex / started 2026-03-30`
-- `pub-integrator` -> `2026_scan_projection_address_semantics_sigma_nonexpansion_etds / P5 / all tex / started 2026-03-30`
+- none at the moment; start the next wave from `OPS/ACTIVE_WAVE.md`
+
+## Next recommended claims
+
+- `pub-integrator` -> `2026_dynamical_zeta_finite_part_spectral_fingerprint_etds / P5 / main tex + TRACK_BOARD / next run`
+- `pub-submission-pack` -> `2026_projection_ontological_mathematics_core_tams / P7 / submission materials + final build / next run`
+- `pub-proof-polish` -> `2026_circle_dimension_haar_pullback_cauchy_weight_jfa / P5 / sec_precision_potential.tex + main.tex / next run`
 
 ## Claim protocol
 
@@ -19,6 +23,7 @@ When releasing a claim:
 - add one line under `Completed handoffs`
 - state which artifact was produced
 - state the next recommended owner
+- if manuscript files changed, state the local build result in one short clause
 
 ## Completed handoffs
 
@@ -33,3 +38,5 @@ When releasing a claim:
 - `pub-lean-sync` -> `APAL / P6 / LEAN_SYNC_NOTE_2026-03-30.md / 0% verified` (2026-03-30)
 - `pub-lean-sync` -> `ETDS / P6 / LEAN_SYNC_NOTE_2026-03-30.md / 0% verified, 27% partial` (2026-03-30)
 - `pub-lean-sync` -> `TAMS / P6 / LEAN_SYNC_NOTE_2026-03-30.md / 25% verified, 31% partial` (2026-03-30)
+- `Confucius` -> `APAL / P7 / P7_SUBMISSION_NOTE_2026-03-30.md + checklist and cover-letter hardening / next: human metadata or submission closer / local build: 37pp clean bib cycle` (2026-03-30)
+- `Euler` -> `ETDS-zeta / P4 / P4_EDITORIAL_REVIEW_2026-03-30.md + sec_chebotarev.tex + sec_shadows.tex / next: integrator / local build: 36pp` (2026-03-30)
