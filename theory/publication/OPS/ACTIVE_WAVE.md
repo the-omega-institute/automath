@@ -80,8 +80,9 @@ This board is the live dispatch queue for parallel publication agents.
 - Agent 7: ETDS metadata closer once author metadata exists
 - Agent 8: Lean sync / backlog extraction on the most advanced open track
 - Agent 9: upstream sync agent for any track that completes a stable P5/P7 state
-- Agent 10: bibliography / recent-paper recon only when a live target changes
-- Agent 11: editorial review reserve for any track that finishes a rewrite pass
+- Agent 10: main-paper backport agent for any track with a stable canonical rewrite
+- Agent 11: bibliography / recent-paper recon only when a live target changes
+- Agent 12: editorial review reserve for any track that finishes a rewrite pass
 
 ## Wave completion criterion
 
@@ -90,5 +91,6 @@ Wave 3 is done when:
 - ETDS-zeta is through P5 with its remaining risks explicitly classified
 - TAMS has a real P7 pack
 - at least one new paper-local upstream sync note exists
+- at least one new main-paper backport note exists
 - JFA has completed both P5 and its first live build
 - APAL and ETDS remain clearly marked as waiting only on human metadata

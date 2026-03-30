@@ -9,7 +9,7 @@ It is the execution layer for a continuously evolving research program.
 
 Every result should be able to move through this loop:
 
-`source -> track -> paper wave -> formalization feedback -> upstream backport -> sequel or revision wave`
+`source -> track -> paper wave -> unified formalization feedback -> main-paper backport -> sequel or revision wave`
 
 No track ends simply because a submission pack exists.
 
@@ -19,7 +19,7 @@ Any new track may start from one or more of the following:
 
 - a main-theory section or subsection
 - a theorem cluster already isolated in `SOURCE_MAP.md`
-- a Lean gap or formalization cluster
+- a kernel theorem gap in the shared Lean library
 - a reproducible experiment or generated table family
 - referee or editorial feedback on an existing paper
 - a stable side branch that should become its own sequel track
@@ -49,7 +49,9 @@ Every accepted wave must do at least one of the following:
 
 - improve the manuscript itself
 - improve the formalization target list
+- strengthen the shared formalization kernel
 - improve the upstream main-theory source
+- improve the main paper itself
 - create or sharpen a sequel / split decision
 
 If a wave only creates diagnostics and none of the above happens, the wave
@@ -65,8 +67,14 @@ These records make the loop durable:
 - paper-local `LEAN_SYNC_NOTE_YYYY-MM-DD.md` once `P6` is touched
 - paper-local `UPSTREAM_SYNC_NOTE_YYYY-MM-DD.md` once `P5` changes theorem
   packaging, scope, or source interpretation
+- paper-local `MAIN_PAPER_BACKPORT_YYYY-MM-DD.md` once a stable paper state has
+  source-level improvements that should be folded back into the main paper
 - global `OPS/UPSTREAM_BOARD.md`
 - global `OPS/FORMALIZATION_BOARD.md`
+
+The paper-local `LEAN_SYNC_NOTE` does **not** define a separate paper
+formalization project. It only records how the paper's active theorem package
+maps into the single shared Lean library under `lean4/Omega/...`.
 
 ## Transition rules
 
@@ -85,8 +93,11 @@ After any `P5` integration that changes theorem order, scope, cuts, or
 motivation:
 
 - create/update a paper-local `UPSTREAM_SYNC_NOTE_YYYY-MM-DD.md`
+- create/update a paper-local `MAIN_PAPER_BACKPORT_YYYY-MM-DD.md` if the
+  accepted paper state improves the canonical exposition of the main paper
 - update `OPS/UPSTREAM_BOARD.md`
 - state exactly what should be backported to the main theory source
+- state exactly which main-paper files or sections should be rewritten
 
 ### From paper wave to Lean
 
@@ -96,6 +107,8 @@ After any `P6` pass:
 - update `OPS/FORMALIZATION_BOARD.md`
 - classify each active claim set as `verified`, `partial`, `backlog`, or
   `paper-external`
+- point every non-external claim at a target in the shared Lean core or its
+  exact backlog entry
 
 ### From paper to sequel
 

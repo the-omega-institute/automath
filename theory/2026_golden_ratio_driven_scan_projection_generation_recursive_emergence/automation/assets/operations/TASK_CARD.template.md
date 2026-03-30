@@ -10,6 +10,7 @@
 - Output artifact:
 - Upstream dependency:
 - Backport target:
+- Main-paper target files:
 - Build check required:
 
 ## Goal

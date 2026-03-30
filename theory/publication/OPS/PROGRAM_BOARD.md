@@ -54,6 +54,7 @@ Root dispatch table for the publication workspace.
 
 - `OPS/EVOLUTION_LOOP.md` defines the outer source -> track -> feedback loop.
 - `OPS/UPSTREAM_BOARD.md` records what each paper must feed back to the parent theory.
+- `OPS/MAIN_PAPER_BACKPORT.template.md` records how mature paper-side improvements get written back into the main paper.
 - `OPS/FORMALIZATION_BOARD.md` records what each paper contributes to the Lean wave.
 
 ## Dispatch rule

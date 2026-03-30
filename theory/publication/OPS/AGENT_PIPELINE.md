@@ -29,7 +29,8 @@ bounded tasks inside real paper directories.
 6. `P5 Integration`
    Required file: `TRACK_BOARD.md` updated with decisions and remaining blockers.
 7. `P6 Lean Sync`
-   Required output: mismatch notes or formalization backlog update.
+   Required output: alignment note from the paper's active theorem package into
+   the single shared Lean formalization library.
 8. `P7 Submission Pack`
    Required output: final checklist and status promotion in the program board.
 
@@ -40,10 +41,11 @@ durable instead of one-shot.
 
 - `U-lane` upstream feedback:
   whenever a paper sharpens theorem packaging, cuts weak claims, or rewrites a
-  foundational argument, record what must flow back to the upstream source.
+  foundational argument, record what must flow back to the upstream source and
+  what must be written back into the main paper.
 - `F-lane` formalization feedback:
-  whenever a paper settles its active theorem package, update the Lean-facing
-  status so the next formalization wave has an exact target.
+  whenever a paper settles its active theorem package, update the mapping into
+  the shared Lean library so the next formalization wave has an exact target.
 - `S-lane` sequel / split management:
   when a paper becomes too broad or creates a stable side branch, record the
   downstream child track instead of letting the material drift in notes.
@@ -66,7 +68,11 @@ Required side-lane verification:
 
 - if `P5` changes the theorem package or section structure, update the upstream
   feedback record before handoff
+- if a stable paper state changes the canonical exposition, create or update a
+  main-paper backport note before handoff
 - if `P6` changes claim status, update the formalization board before handoff
+- if `P6` identifies a new kernel theorem package, point it at the shared
+  `lean4/Omega/...` library rather than inventing a paper-local Lean track
 - if a split or sequel is proposed, register it in the upstream board instead
   of burying it in a review note
 
@@ -78,7 +84,7 @@ Agents must separate blockers into these classes:
 - `editorial`: scope, structure, style, or target-journal fit not ready
 - `reproducibility`: calculations or references need a local audit trail
 - `metadata`: author info, funding, declarations, or submission-system inputs
-- `formalization`: Lean/source-map mismatch that matters for the paper
+- `formalization`: mismatch between the paper kernel and the shared Lean core
 
 Only mark a blocker as stage-blocking if it actually prevents the next stage.
 Do not promote a deferred or paper-external issue into a fake blocker.
@@ -91,7 +97,8 @@ Do not promote a deferred or paper-external issue into a fake blocker.
 - Journal rewrite agent: rewrites title, abstract, introduction, roadmap, and section flow for the target journal.
 - Editorial review agent: writes a decision-grade review with blockers.
 - Integrator: merges accepted changes into the manuscript and updates the track board.
-- Lean sync agent: checks paper statements against Lean labels or backlog where applicable.
+- Lean sync agent: checks paper statements against the shared Lean library and
+  extracts the next kernel package for that library.
 - Upstream sync agent: converts accepted paper-local improvements into source
   feedback, sequel proposals, and main-paper backport requirements.
 
@@ -103,6 +110,12 @@ remains open, and what the next agent should do.
 
 Use `OPS/UPSTREAM_SYNC_NOTE.template.md` and `OPS/LEAN_SYNC_NOTE.template.md`
 when creating new durable side-lane artifacts.
+Use `OPS/MAIN_PAPER_BACKPORT.template.md` when a stable paper state needs to
+write improvements back into the main paper.
+
+There is only one formalization library. Publication tracks never own their
+own Lean trees. `P6` exists to keep each paper aligned with the shared
+`lean4/Omega/...` kernel and its backlog.
 
 ## Current operational pattern
 

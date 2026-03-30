@@ -23,6 +23,7 @@ And record alongside the claim:
 
 - upstream dependency
 - backport target
+- main-paper target files
 - expected output artifact
 - build-check expectation if manuscript files will change
 

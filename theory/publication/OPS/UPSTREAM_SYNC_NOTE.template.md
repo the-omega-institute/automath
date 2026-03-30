@@ -16,6 +16,13 @@ Source roots: `<main theory sections or files>`
 - source-level wording or theorem-order fixes:
 - source-level appendix or side-branch separation:
 
+## Main-paper write-back
+
+- main-paper files or sections to rewrite:
+- canonical exposition that should replace the old version:
+- what should *not* be copied back from the paper:
+- write-back status:
+
 ## What should remain paper-local
 
 - venue-specific framing:

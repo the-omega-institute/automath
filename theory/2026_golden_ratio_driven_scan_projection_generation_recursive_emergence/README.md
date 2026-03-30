@@ -221,6 +221,7 @@ exported `artifacts/` directories. In that in-tree mode:
 
 - `OPS/EVOLUTION_LOOP.md` defines the outer source -> track -> feedback loop
 - `OPS/UPSTREAM_BOARD.md` records what publication tracks must feed back into the parent theory
+- `OPS/MAIN_PAPER_BACKPORT.template.md` defines how mature paper-side improvements get written back into the main paper
 - `OPS/FORMALIZATION_BOARD.md` records what each paper contributes to the Lean/formalization wave
 
 This keeps the publication program as a continuously evolving execution layer, not as a

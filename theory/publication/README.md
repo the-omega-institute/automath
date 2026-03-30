@@ -14,11 +14,18 @@
 - `publication/<paper>/` 是长期存活的 track
 - `publication/OPS/` 是多 agent 的调度与回流层
 
+其中“回流”不是可选项：
+
+- 稳定下来的 paper theorem package 要写回主论文
+- 对应的核心 theorem package 要对齐到唯一的 Lean 核库
+- publication 只是执行面，不是知识终点
+
 当前持续演化规则见：
 
 - `OPS/AGENT_PIPELINE.md`
 - `OPS/EVOLUTION_LOOP.md`
 - `OPS/UPSTREAM_BOARD.md`
+- `OPS/MAIN_PAPER_BACKPORT.template.md`
 - `OPS/FORMALIZATION_BOARD.md`
 - `OPS/PROGRAM_BOARD.md`
 - `OPS/ACTIVE_WAVE.md`

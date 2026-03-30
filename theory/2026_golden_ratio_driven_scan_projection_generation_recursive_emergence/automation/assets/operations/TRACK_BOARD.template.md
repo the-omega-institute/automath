@@ -20,6 +20,7 @@
 ## Continuous Evolution Lanes
 
 - Upstream sync status:
+- Main-paper backport status:
 - Formalization status:
 - Sequel / split status:
 - Referee / revision queue:
@@ -35,6 +36,7 @@
 ## Upstream Feedback
 
 - what should flow back to the main theory:
+- what should be written back into the main paper:
 - what should remain paper-local:
 - child track to register, if any:
 
