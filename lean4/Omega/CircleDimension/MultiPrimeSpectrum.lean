@@ -13,6 +13,11 @@ def multiPrimeSpectrum (supports : Finset PrimeSupport) (J : PrimeSupport) : Nat
 def typeCount (supports : Finset PrimeSupport) (J : PrimeSupport) : Nat :=
   (supports.filter fun S => S = J).card
 
+/-- Induced spectrum from finitely many support types with multiplicity function `n`.
+    thm:cdim-multiprime-spectrum-realizability -/
+def inducedSpectrum (supports : Finset PrimeSupport) (n : PrimeSupport → Nat) (J : PrimeSupport) : Nat :=
+  Finset.sum supports (fun K => if J ⊆ K then n K else 0)
+
 /-- Explicit count formula for the divisible multiprime spectrum.
     prop:cdim-multiprime-divisible-spectrum-explicit -/
 theorem multiPrimeSpectrum_eq_count (supports : Finset PrimeSupport) (J : PrimeSupport) :
@@ -98,5 +103,43 @@ theorem sum_typeCount_eq_card (supports : Finset PrimeSupport) :
   refine Finset.sum_congr rfl ?_
   intro K hK
   simp [htc hK]
+
+/-- A singleton type count is bounded by any spectrum indexed by a subset.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem typeCount_le_multiPrimeSpectrum_of_subset
+    {supports : Finset PrimeSupport} {J K : PrimeSupport}
+    (hJK : J ⊆ K) :
+    typeCount supports K ≤ multiPrimeSpectrum supports J := by
+  unfold typeCount multiPrimeSpectrum
+  apply Finset.card_le_card
+  intro S hS
+  simp only [Finset.mem_filter] at hS ⊢
+  constructor
+  · exact hS.1
+  · simpa [hS.2] using hJK
+
+/-- Every type count is bounded by the empty-support spectrum.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem typeCount_le_multiPrimeSpectrum_empty
+    (supports : Finset PrimeSupport) (K : PrimeSupport) :
+    typeCount supports K ≤ multiPrimeSpectrum supports ∅ := by
+  exact typeCount_le_multiPrimeSpectrum_of_subset (J := ∅) (K := K) (by simp)
+
+/-- Singleton-support realizability shadow.
+    thm:cdim-multiprime-spectrum-realizability -/
+theorem inducedSpectrum_singleton
+    (K J : PrimeSupport) (n : Nat) :
+    inducedSpectrum ({K} : Finset PrimeSupport) (fun S => if S = K then n else 0) J
+      = if J ⊆ K then n else 0 := by
+  unfold inducedSpectrum
+  by_cases hJK : J ⊆ K
+  · simp [hJK]
+  · simp [hJK]
+
+/-- Empty-support specialization of the singleton-shadow formula.
+    thm:cdim-multiprime-spectrum-realizability -/
+theorem inducedSpectrum_singleton_empty (K : PrimeSupport) (n : Nat) :
+    inducedSpectrum ({K} : Finset PrimeSupport) (fun S => if S = K then n else 0) ∅ = n := by
+  simpa using inducedSpectrum_singleton K ∅ n
 
 end Omega.CircleDimension

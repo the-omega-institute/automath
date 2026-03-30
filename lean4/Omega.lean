@@ -79,6 +79,7 @@ import Omega.Zeta.CyclicDet
 import Omega.Zeta.EvenLengthCorrection
 import Omega.Zeta.NecklaceCorrection
 import Omega.Zeta.HankelVandermonde2
+import Omega.Zeta.HankelVandermonde3Recovery
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
 import Omega.EA.ChiRigidityShadow
