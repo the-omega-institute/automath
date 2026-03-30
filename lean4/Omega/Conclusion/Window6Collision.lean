@@ -1,4 +1,5 @@
 import Mathlib.Tactic
+import Omega.Folding.MomentRecurrence
 
 /-! ### Window-6 q-moment spectrum and collision probability
 
@@ -133,5 +134,21 @@ theorem idempotent_set_mod21 :
 theorem paper_idempotent_count_mod21 :
     ((Finset.range 21).filter (fun a => isIdempotent21 a)).card = 4 :=
   idempotent_count_mod21
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R160: Chi^2 numerator certificates
+-- ══════════════════════════════════════════════════════════════
+
+open Omega in
+/-- Chi^2 numerator for Fold m=6,7,8: |X_m|·S_2(m) - 4^m.
+    thm:conclusion-foldbin-groupoid-dimension-collision-chi2 -/
+theorem paper_fold_chi2_certificates :
+    (Fintype.card (X 6) * momentSum 2 6 - 4 ^ 6 = 524) ∧
+    (Fintype.card (X 7) * momentSum 2 7 - 4 ^ 7 = 2112) ∧
+    (Fintype.card (X 8) * momentSum 2 8 - 4 ^ 8 = 8824) := by
+  refine ⟨?_, ?_, ?_⟩
+  · rw [X.card_eq_fib, momentSum_two_six]; native_decide
+  · rw [X.card_eq_fib, momentSum_two_seven]; native_decide
+  · rw [X.card_eq_fib, momentSum_two_eight_rec]; native_decide
 
 end Omega.Conclusion

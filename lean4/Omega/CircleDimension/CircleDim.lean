@@ -263,4 +263,43 @@ theorem cdim_min_ledger_cost (f : CircleDimHomData) (R_rank : Nat)
     circleDim f.kernelRank 0 ≤ circleDim R_rank 0 := by
   simp [circleDim]; exact hInj
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R160: Phase spectrum count
+-- ══════════════════════════════════════════════════════════════
+
+/-- Phase spectrum count for Z^r × Z/tZ: |Hom(G, Z/NZ)| = N^r · gcd(t, N).
+    def:cdim-phase-spectrum -/
+def phaseSpectrumCount (r t N : Nat) : Nat := N ^ r * Nat.gcd t N
+
+/-- Free part: phaseSpectrumCount r 0 N = N^{r+1} (gcd(0,N) = N).
+    prop:cdim-phase-spectrum-quotient -/
+theorem phaseSpectrumCount_free (r N : Nat) :
+    phaseSpectrumCount r 0 N = N ^ (r + 1) := by
+  simp [phaseSpectrumCount, Nat.gcd_zero_left, pow_succ, Nat.mul_comm]
+
+/-- Torsion part: phaseSpectrumCount for pure torsion.
+    prop:cdim-phase-spectrum-quotient -/
+theorem phaseSpectrumCount_torsion (t N : Nat) :
+    phaseSpectrumCount 0 t N = Nat.gcd t N := by
+  simp [phaseSpectrumCount]
+
+/-- Phase spectrum count is monotone in free rank.
+    thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_mono_rank {r₁ r₂ : Nat} (h : r₁ ≤ r₂) (t N : Nat) (hN : 1 ≤ N) :
+    phaseSpectrumCount r₁ t N ≤ phaseSpectrumCount r₂ t N := by
+  simp only [phaseSpectrumCount]
+  exact Nat.mul_le_mul_right _ (Nat.pow_le_pow_right (by omega) h)
+
+/-- Phase spectrum count at N=1 is always 1.
+    thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_at_one (r t : Nat) :
+    phaseSpectrumCount r t 1 = 1 := by
+  simp [phaseSpectrumCount]
+
+/-- Coprime torsion becomes invisible: phaseSpectrumCount = N^r when gcd(t,N)=1.
+    thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_coprime (r t N : Nat) (hcop : Nat.Coprime t N) :
+    phaseSpectrumCount r t N = N ^ r := by
+  simp [phaseSpectrumCount, Nat.Coprime.gcd_eq_one hcop]
+
 end Omega.CircleDimension
