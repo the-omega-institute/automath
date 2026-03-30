@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 760 |
+| \leanverified 标注数 | 767 |
 | \leanpartial 标注数 | 11 |
-| 总标注数 | 771 |
-| 轮次 | R172（round_count=173） |
+| 总标注数 | 778 |
+| 轮次 | R173（round_count=174） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -25,14 +25,14 @@
 | POM | 1,707 | 223 | 13.1% |
 | Emergent Arithmetic | 185 | 80 | 43.2% |
 | Folding | 337 | 73 | 21.7% |
-| Conclusion | 2,550 | 131 | 5.1% |
+| Conclusion | 2,550 | 134 | 5.3% |
 | Group Unification | 469 | 68 | 14.5% |
 | SPG | 129 | 25 | 19.4% |
 | Circle Dimension | 393 | 58 | 14.8% |
-| Zeta Finite Part | 4,524 | 87 | 1.9% |
+| Zeta Finite Part | 4,524 | 91 | 2.0% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **756** | **7.2%** |
+| **合计（body）** | **10,508** | **763** | **7.3%** |
 
 ### 1.2 已完成模块
 
@@ -155,6 +155,7 @@
 **Phase R170: EA Wedderburn + Zeta Fredholm blocks（部分完成）**：EA/Wedderburn.lean + Zeta/CyclicDet.lean——EA：wedderburn_total_dim_eq_S2（prop:fold-groupoid-wedderburn）；wedderburn_dim_m6（momentSum 2 6 = 220，thm:fold-groupoid-z2x2-central-idempotents）；fiber_histogram_m6（cFiberHist 6 1 = 2 ∧ cFiberHist 6 2 = 4 ∧ cFiberHist 6 3 = 8 ∧ cFiberHist 6 4 = 5 ∧ cFiberHist 6 5 = 2，同标签）；Zeta：fredholm_block_diag_2_3 / fredholm_block_diag_2_4（cor:cyclic-euler-product）——**5 个论文标签条目计入覆盖率**（EA +3，Zeta +2；Discussion Walsh-Stokes deferred，不计入）——Emergent Arithmetic 77→80（43.2%），Zeta 81→83（1.8%），全局标注 748→753（+5），body 覆盖 733→738（7.0%），commit 8b0a796
 **Phase R171: GU translation quotient + PhiGraph cardinalities（部分完成）**：Graph/Window6TranslationQuotient.lean + Graph/PhiGraph.lean——GU：window6_fiber_sizes_not_constant / window6_no_translation_quotient_fiber（prop:window6-no-translation-quotient-fiber）；Folding/PhiGraph：phiState_card（def:G_m）；phiEdge_card（需 side condition `1 ≤ m`，原无条件 spec 在 m=0 为假）; phiGraph_outdegree_two（thm:Phi_m-sofic-graph）——**5 个论文标签条目计入覆盖率**（GU +2，Folding +3；SPG Walsh spectral stability deferred，不计入）——Folding 70→73（21.7%），Group Unification 66→68（14.5%），全局标注 753→758（+5），body 覆盖 738→743（7.1%），commit f15199a
 **Phase R172: CD multiprime spectrum + Zeta even-length correction + Conclusion register budget**：CircleDimension/MultiPrimeSpectrum.lean + Zeta/EvenLengthCorrection.lean + Conclusion/AffineRegisterBudget.lean——CD：PrimeSupport / multiPrimeSpectrum / multiPrimeSpectrum_eq_count / multiPrimeSpectrum_anti_mono / multiPrimeSpectrum_empty / multiPrimeSpectrum_pos_of_mem（prop:cdim-multiprime-divisible-spectrum-explicit）；Zeta：evenLengthCorrection / evenLengthCorrection_odd / evenLengthCorrection_even / evenLengthCorrection_cases（thm:xi-time-part73c-periodic-evenlength-atomic-correction）；Conclusion：registerBudget_lower_bound / registerBudget_sharp / registerBudget_min_card（cor:conclusion-boundary-cycle-rank-external-info-lower-bound）——**13 个论文标签条目计入覆盖率**（CD +6，Zeta +4，Conclusion +3）——Circle Dimension 52→58（14.8%），Zeta 83→87（1.9%），Conclusion 128→131（5.1%），全局标注 758→771（+13），body 覆盖 743→756（7.2%），commit 188c684
+**Phase R173: Zeta necklace correction kernel + Conclusion resonance window witnesses**：Zeta/NecklaceCorrection.lean + Conclusion/ResonanceWindow.lean——Zeta：necklaceCorrectionKernel / necklaceCorrectionKernel_odd / necklaceCorrectionKernel_even / necklaceCorrectionKernel_odd_eq_zero（cor:xi-time-part73c-fixed-parameter-necklace-correction）；Conclusion：resonance_window_gap_not_terminal_type_function / resonance_window_delta2_witnesses / resonance_window_five_terminal_types_distinct（thm:conclusion-resonance-window-gap-vs-mod2-terminal-memory-independent）——**7 个论文标签条目计入覆盖率**（Zeta +4，Conclusion +3）——Zeta 87→91（2.0%），Conclusion 131→134（5.3%），全局标注 771→778（+7），body 覆盖 756→763（7.3%），commit 6076a7e
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续
 **Fibonacci 素数域（完整）**：stableMul_inv_of_prime（素数时乘法逆存在，域结构核心）; fib_four/five/seven/thirteen_prime（native_decide 验证）; fib_nine_not_prime（反例验证）; instFieldOfPrime（通用域实例：F_{m+2} 素数时 X m 为域，经由 stableValueRingEquiv 转移）; instField_X1（GF(2)）、instField_X2（GF(3)）、instField_X3（GF(5)）、instField_X5（GF(13)）、instField_X9（GF(89)）、instField_X11（GF(233)）（cor:field-phase-fib-prime 完整形式化）
@@ -587,7 +588,7 @@
 ### 短期可执行（3-5 轮内完成）
 
 5. ✅ 计划 5（Fibonacci 整除性：fib_gcd, fib_coprime_succ, fib_dvd_mul 已完成）
-6. **[深化 Round 33 + 计划21阶段性] Zeta 有限部分深化**（CollisionKernel+CollisionZeta+TransferMatrix 已建立 ~60 定理：A_2/A_3/A_4 全系迹幂+递推+primitive 轨道+Hankel+det 幂+ζ 分母系数+golden-mean ζ 分母+迹递推+统一迹/det 证书+Perron 区间定位+S_5..S_8 基值 22 个；本轮新增 golden-mean concrete PF 数学层：正特征向量、实特征值二次约束、两根分类、次根模界、实特征值支配界、`goldenMeanAdjacency_pf_root_eq_goldenRatio`；下一步：`spectralRadius = φ`、Weyl-Selberg 有理性、L-函数极点解析延拓骨架，thm:pom-zeta-finite-part-rationality）
+6. **[深化 Round 33 + 计划21阶段性] Zeta 有限部分深化**（CollisionKernel+CollisionZeta+TransferMatrix 已建立 ~60 定理：A_2/A_3/A_4 全系迹幂+递推+primitive 轨道+Hankel+det 幂+ζ 分母系数+golden-mean ζ 分母+迹递推+统一迹/det 证书+Perron 区间定位+S_5..S_8 基值 22 个；本轮新增 golden-mean concrete PF 数学层：正特征向量、实特征值二次约束、两根分类、次根模界、实特征值支配界、`goldenMeanAdjacency_pf_root_eq_goldenRatio`；R172-R173 已补 even-length correction 与 fixed-parameter necklace correction kernel；下一步：`spectralRadius = φ`、Weyl-Selberg 有理性、L-函数极点解析延拓骨架，thm:pom-zeta-finite-part-rationality）
 7. 计划 13（条件期望型表达）
 8. 计划 20（拓扑熵 = log φ；shift 前置 + 离散骨架 + 周期轨道 + Real.log 极限已完成）
 9. **[阶段性通过] 计划 21**（concrete PF 数学层已闭合；待补 `spectralRadius = φ`、PF dimension API、论文接口包装）
