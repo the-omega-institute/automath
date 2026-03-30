@@ -237,4 +237,24 @@ theorem godelLift_binary_optimal_m8 :
     X.maxFiberMultiplicity 8 ≤ 2 ^ 3 := by
   rw [X.maxFiberMultiplicity_eight]; omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R159: Gödel lift optimality m=9,10
+-- ══════════════════════════════════════════════════════════════
+
+open Omega in
+/-- For m=9, exactly 4 binary bits needed (2^3=8 < D_9=10 ≤ 2^4=16).
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_binary_optimal_m9 :
+    ¬ (X.maxFiberMultiplicity 9 ≤ 2 ^ 3) ∧
+    X.maxFiberMultiplicity 9 ≤ 2 ^ 4 := by
+  rw [X.maxFiberMultiplicity_nine]; omega
+
+open Omega in
+/-- For m=10, exactly 4 binary bits needed (2^3=8 < D_10=13 ≤ 2^4=16).
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_binary_optimal_m10 :
+    ¬ (X.maxFiberMultiplicity 10 ≤ 2 ^ 3) ∧
+    X.maxFiberMultiplicity 10 ≤ 2 ^ 4 := by
+  rw [X.maxFiberMultiplicity_ten]; omega
+
 end Omega.Conclusion

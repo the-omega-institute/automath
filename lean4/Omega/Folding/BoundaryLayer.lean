@@ -770,4 +770,26 @@ theorem boundaryStrip_uplift {n : Nat} (v : X n) :
   show v.1 ⟨j + 2 - 2, _⟩ = v.1 ⟨j, hj⟩
   congr 1
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R159: Mixed endpoint count
+-- ══════════════════════════════════════════════════════════════
+
+/-- Count of words with first bit ≠ last bit.
+    cor:parry-golden-three-levels -/
+def cMixedEndCount (m : Nat) : Nat :=
+  if h : m ≥ 2 then
+    (@Finset.univ (X m) (fintypeX m)).filter
+      (fun x => x.1 ⟨0, by omega⟩ ≠ x.1 ⟨m - 1, by omega⟩) |>.card
+  else 0
+
+/-- Mixed-endpoint base values. -/
+@[simp] theorem cMixedEndCount_two : cMixedEndCount 2 = 2 := by native_decide
+@[simp] theorem cMixedEndCount_three : cMixedEndCount 3 = 2 := by native_decide
+
+/-- Mixed-endpoint count = 2·F_{m-1} for m = 2..8 (computational verification).
+    cor:parry-golden-three-levels -/
+theorem cMixedEndCount_eq_two_fib_bounded (m : Nat) (hm1 : 2 ≤ m) (hm2 : m ≤ 8) :
+    cMixedEndCount m = 2 * Nat.fib (m - 1) := by
+  interval_cases m <;> native_decide
+
 end Omega
