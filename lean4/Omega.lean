@@ -75,6 +75,7 @@ import Omega.Zeta.DynZeta
 import Omega.Zeta.CyclicDet
 import Omega.Zeta.EvenLengthCorrection
 import Omega.Zeta.NecklaceCorrection
+import Omega.Zeta.HankelVandermonde2
 import Omega.EA.Wedderburn
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister

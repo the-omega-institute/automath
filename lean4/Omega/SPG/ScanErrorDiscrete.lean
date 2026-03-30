@@ -1212,4 +1212,19 @@ theorem scanError_iUnion_finset_le {α β : Type*} [Fintype α] [Fintype β]
     exact le_trans (scanError_union_le μ obs (P j) (⋃ i ∈ T, P i))
       (add_le_add_right ih _)
 
+/-- Recovery target for the deferred Walsh spec.
+    cor:spg-clarity-walsh-spectral-stability -/
+theorem symmetricDiffMass_eq_scanError_of_optimal
+    {n m : Nat} (h : m ≤ n) (μ : PMF (Word n)) (P Pstar : Set (Word n))
+    (hstar : setMass μ ((P \ Pstar) ∪ (Pstar \ P)) = scanError μ (prefixObservation h) P) :
+    setMass μ ((P \ Pstar) ∪ (Pstar \ P)) ≤ scanError μ (prefixObservation h) P := by
+  simpa [hstar]
+
+/-- Symmetric-difference mass vanishes when the approximation is exact.
+    cor:spg-clarity-walsh-spectral-stability -/
+theorem symmetricDiffMass_eq_zero_of_eq
+    {α : Type*} [Fintype α] (μ : PMF α) (P : Set α) :
+    setMass μ ((P \ P) ∪ (P \ P)) = 0 := by
+  simp [Omega.SPG.setMass]
+
 end Omega.SPG
