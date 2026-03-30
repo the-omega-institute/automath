@@ -4,7 +4,7 @@ Advance the publication pipeline for all active Wave papers.
 
 ## Workflow
 
-1. Read `theory/publication/OPS/ACTIVE_WAVE.md` to identify active papers
+1. Read `theory/publication/OPS/BOARD.md` to identify active papers and wave priorities
 2. For each paper, read its `TRACK_BOARD.md` to determine current stage
 3. Determine the next stage based on which gate artifacts exist:
    - P1 done if `SOURCE_MAP.md` + `THEOREM_LIST.md` exist
@@ -21,7 +21,7 @@ Advance the publication pipeline for all active Wave papers.
    - P5: pub-integrator agent
    - P6: pub-lean-sync agent
    - P7: pub-submission agent
-5. After agents complete, update `OPS/AGENT_CLAIMS.md`
+5. After agents complete, update `OPS/BOARD.md`
 6. Commit and push results
 
 ## Parallel dispatch rules

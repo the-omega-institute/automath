@@ -6,6 +6,30 @@
 
 对应总稿：`docs/papers/auric-golden-phi/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence`
 
+## 持续演化工作面
+
+`publication/` 不再只是“拆出来的稿件目录”，而是主论文与 Lean/formalization 之间的执行层。
+
+- 主论文 / theory 是上游结果池
+- `publication/<paper>/` 是长期存活的 track
+- `publication/OPS/` 是多 agent 的调度与回流层
+
+其中“回流”不是可选项：
+
+- 稳定下来的 paper theorem package 要写回主论文
+- 对应的核心 theorem package 要对齐到唯一的 Lean 核库
+- publication 只是执行面，不是知识终点
+
+当前持续演化规则见：
+
+- `OPS/WORKFLOW.md`
+- `OPS/BOARD.md`
+- `OPS/SYNC_NOTE.template.md`
+
+要求不是“拆出一篇就结束”，而是每个活跃稿件都要继续经历：
+
+`source -> track -> manuscript wave -> formalization feedback -> upstream backport -> sequel/revision`
+
 每个目录至少包含 `README.md`（目标期刊、边界、定位）。已完成的目录还包含 `OUTLINE.md`、`SOURCE_MAP.md`、`MIN_SKELETON.md`、`MAIN_PAPER_POSITION.md`、`THEOREM_LIST.md`、`CONTENT_NOTES.md`、`BIB_SCOPE.md`、`main.tex`。
 
 ---

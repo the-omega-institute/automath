@@ -10,6 +10,7 @@ Date: 2026-03-30
 
 - [x] **Manuscript compiles (main.tex structure):** PASS
   - `main.tex` uses `amsart` document class, inputs 9 section files plus appendix, bibliography via `plainnat`/`natbib`. All `\input{}` targets exist in the submission directory. No circular or missing includes.
+  - Local verification on 2026-03-30: `pdflatex -> bibtex -> pdflatex -> pdflatex` completed successfully. Current output: `main.pdf` (37 pages).
 
 - [x] **All `\cite{}` keys match `references.bib` entries:** PASS
   - 15 unique cite keys used across all `.tex` files. All 15 have corresponding entries in `references.bib`. No missing keys.
@@ -41,8 +42,10 @@ Date: 2026-03-30
 
 ## Metadata checks
 
-- [ ] **`\author{}` field status:** EMPTY (intentional for anonymous review)
-  - `main.tex` line 59: `\author{}`. If APAL requires author identification at initial submission, this must be filled before upload. Verify journal policy.
+- [ ] **Title-page author metadata present:** BLOCKER
+  - `main.tex` line 59 still has `\author{}` with no names, affiliations, or corresponding-author details.
+  - APAL Guide for Authors checked on 2026-03-30 states that the journal uses single anonymized review and requires all authors to be listed in the manuscript and entered in the submission system.
+  - Before upload, insert the definitive author list and corresponding-author metadata on the title page.
 
 - [x] **Section numbering consistent:** PASS
   - Sections 1--6 plus Appendix. Section 1 (Introduction), Section 2 (Preliminaries), Section 3 (Information States), Section 4 (Local Objects -- spans `sec_null_decomposition.tex`, `sec_gerbe_obstruction.tex`, `sec_homological_visibility.tex`, `sec_branch_aggregation.tex` via subsections), Section 5 (Refinement Dynamics), Section 6 (Conclusion), Appendix (Complexity). Introduction roadmap matches actual structure.
@@ -69,12 +72,12 @@ Date: 2026-03-30
 | Abstract length | PASS (~161 words) |
 | Sequel separation | PASS |
 | Revision-trace language | PASS |
-| Author field | EMPTY (verify journal policy) |
+| Author field | BLOCKER (missing title-page author metadata) |
 | Section numbering | PASS |
 | Cross-references | PASS |
 | MSC classification | PASS |
 | Keywords | PASS |
 
-**Result: 11/12 PASS, 1 advisory (author field empty -- expected for anonymous review).**
+**Result: 11/12 PASS, 1 blocker (title-page author metadata missing).**
 
-The submission pack is ready for upload.
+The submission pack is internally verified, but not ready for upload until manuscript author metadata is supplied.

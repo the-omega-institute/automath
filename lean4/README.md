@@ -19,6 +19,7 @@ python scripts/omega_ci.py audit
 python scripts/omega_ci.py inventory --strict
 python scripts/omega_ci.py search "entropy log phi"
 python scripts/omega_ci.py paper-coverage --sections body
+python scripts/omega_ci.py paper-coverage --tex-root ../theory/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds --paper-id E2
 python scripts/omega_ci.py verify-files Omega/Core/Fib.lean
 ```
 
@@ -26,6 +27,7 @@ python scripts/omega_ci.py verify-files Omega/Core/Fib.lean
 - `inventory` extracts Lean declarations plus attached paper labels into a machine-readable summary. Pass `--json <path>` to persist the report.
 - `search` provides local declaration retrieval over the Lean inventory, useful for finding candidate lemmas or exact paper labels before writing a proof.
 - `paper-coverage` scans theorem-like LaTeX environments in the paper and reconciles their `\label{...}` values against Lean registry labels, producing a coverage gap report.
+  Pass `--tex-root <dir>` to scan an individual publication draft instead of the parent monograph, and `--gate-json <path>` to emit a compact machine-readable P6 gate artifact for that draft.
 - `verify-files` gives a faster local loop than full `lake build` when you only need to check one or a few modules.
 
 ## Module Map

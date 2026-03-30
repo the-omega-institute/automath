@@ -2,7 +2,7 @@
 
 - Paper: `2026_conservative_extension_chain_state_forcing_apal`
 - Target journal: `Annals of Pure and Applied Logic (APAL)`
-- Current status: `submission_ready`
+- Current status: `blocked_pending_author_metadata`
 - Orchestrator: `unassigned`
 
 ## Stage Status
@@ -21,8 +21,8 @@
 - P5 Integration: `completed`
   - Date: 2026-03-30
 - P6 Lean / Formalization Sync: `completed` -- 0% verified (0/13 claims have Lean counterparts); see `LEAN_SYNC_NOTE_2026-03-30.md`
-- P7 Submission Pack: `completed`
-  - Artifacts: `cover_letter_apal.txt`, `submission_checklist.md`
+- P7 Submission Pack: `blocked` -- pack internally verified, but manuscript title-page author metadata is still missing
+  - Artifacts: `cover_letter_apal.txt`, `submission_checklist.md`, `P7_SUBMISSION_NOTE_2026-03-30.md`
   - Date: 2026-03-30
 
 ## P2 Decisions
@@ -66,9 +66,7 @@
 
 ## Blocking issues
 
-- ~~main theorem chain is not yet explicitly bounded as a four-layer APAL paper~~ resolved by P2
-- ~~`sec_observer_spacetime.tex` may still belong to a sequel rather than this submission~~ resolved: sequel
-- ~~target-journal related-work pass not yet recorded (deferred to P3)~~ bibliography pass deferred to P4
+- `main.tex` title-page author metadata is still missing (`\author{}` is empty). APAL uses single anonymized review and requires all authors to be listed in the manuscript and entered in the submission system before submission.
 
 ## Gap items from P2 (all closed by P3)
 
@@ -138,12 +136,14 @@ All three P4 hard blockers and all medium-priority issues resolved. Fixes applie
 
 ## P7 Submission Pack Summary
 
-Two artifacts produced:
+Three artifacts now define the P7 state:
 
-1. **Cover letter** (`cover_letter_apal.txt`): addressed to the APAL editors; describes the four-layer conservative extension chain, the three main theorem groups (forcing necessity, branched gerbe semantics, homological visibility), and positions the paper relative to APAL-relevant traditions (Kripke semantics, Beth tableaux, Fitting forcing, topos-theoretic forcing of Tierney and Johnstone, Lawvere--Tierney topologies). States paper length (~45 pages), 15 references, self-contained. Signed as "The Authors."
+1. **Cover letter** (`cover_letter_apal.txt`): addressed to the APAL editors; describes the four-layer conservative extension chain, the three main theorem groups (forcing necessity, branched gerbe semantics, homological visibility), and positions the paper relative to APAL-relevant traditions (Kripke semantics, Beth tableaux, Fitting forcing, topos-theoretic forcing of Tierney and Johnstone, Lawvere--Tierney topologies). States the current local manuscript length correctly as 37 pages, with 15 references, and remains signed as "The Authors."
 
-2. **Submission checklist** (`submission_checklist.md`): 12-item structured checklist. Results: 11 PASS, 1 advisory (`\author{}` empty -- expected for anonymous review). Key verifications: all 15 cite keys match bib entries bidirectionally, all files under 800-line limit (max 580), abstract ~161 words, sequel files properly isolated in `sequel/`, no revision-trace language, MSC 2020 classification and keywords present, no unresolved cross-references.
+2. **Submission checklist** (`submission_checklist.md`): 12-item structured checklist. Results: 11 PASS, 1 blocker. Key verifications: local `pdflatex -> bibtex -> pdflatex -> pdflatex` build succeeds, all 15 bibliography entries resolve into the built manuscript, all files are under the 800-line limit (max 580), sequel files remain isolated in `sequel/`, no revision-trace language appears in submission `.tex` files, MSC 2020 classification and keywords are present, and no unresolved cross-references were observed in the local build. The remaining blocker is missing title-page author metadata.
 
-### Advisory note
+3. **P7 submission note** (`P7_SUBMISSION_NOTE_2026-03-30.md`): records the true submission status, the remaining blocker, the local verification run, and paper-local residual risks.
 
-`\author{}` is empty in `main.tex` line 59. If APAL requires author identification at initial submission (not anonymous review), this must be filled before upload.
+### Remaining blocker
+
+`\author{}` is empty in `main.tex` line 59. This is not an anonymous-review advisory: APAL's current guide requires all authors to be listed in the manuscript and entered into the submission system. P7 is therefore blocked pending final author metadata.
