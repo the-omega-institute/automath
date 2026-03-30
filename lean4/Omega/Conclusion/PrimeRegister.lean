@@ -3,6 +3,7 @@ import Mathlib.Data.Finset.Card
 import Mathlib.Tactic
 import Omega.Core.Fib
 import Omega.Folding.BinFold
+import Omega.Folding.MaxFiberHigh
 
 /-!
 # Bounded Prime-Register Gödel Lift
@@ -207,5 +208,33 @@ theorem godelLift_binary_min_bits (m k : Nat)
   calc Nat.log 2 (X.maxFiberMultiplicity m)
       ≤ Nat.log 2 (2 ^ k) := Nat.log_mono_right hfeas
     _ = k := Nat.log_pow (by norm_num) k
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R157: Gödel lift binary optimality certificates
+-- ══════════════════════════════════════════════════════════════
+
+open Omega in
+/-- For m=6, exactly 3 binary bits needed (2^2=4 < D_6=5 ≤ 2^3=8).
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_binary_optimal_m6 :
+    ¬ (X.maxFiberMultiplicity 6 ≤ 2 ^ 2) ∧
+    X.maxFiberMultiplicity 6 ≤ 2 ^ 3 := by
+  rw [X.maxFiberMultiplicity_six]; omega
+
+open Omega in
+/-- For m=7, exactly 3 binary bits needed (2^2=4 < D_7=6 ≤ 2^3=8).
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_binary_optimal_m7 :
+    ¬ (X.maxFiberMultiplicity 7 ≤ 2 ^ 2) ∧
+    X.maxFiberMultiplicity 7 ≤ 2 ^ 3 := by
+  rw [X.maxFiberMultiplicity_seven]; omega
+
+open Omega in
+/-- For m=8, exactly 3 binary bits needed (2^2=4 < D_8=8 ≤ 2^3=8).
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_binary_optimal_m8 :
+    ¬ (X.maxFiberMultiplicity 8 ≤ 2 ^ 2) ∧
+    X.maxFiberMultiplicity 8 ≤ 2 ^ 3 := by
+  rw [X.maxFiberMultiplicity_eight]; omega
 
 end Omega.Conclusion

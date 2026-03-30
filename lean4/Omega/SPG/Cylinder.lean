@@ -324,4 +324,45 @@ theorem paper_fromWordSet_disjoint {A B : Set (Word m)} (h : Disjoint A B) :
     Disjoint (fromWordSet A) (fromWordSet B) :=
   fromWordSet_disjoint h
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R157: Finset prefix-determined closure
+-- ══════════════════════════════════════════════════════════════
+
+/-- If prefixes agree at length n, they agree at any shorter length m ≤ n. -/
+theorem prefixWord_eq_of_le {x y : OmegaInfinity} {m n : Nat}
+    (hmn : m ≤ n) (h : prefixWord x n = prefixWord y n) :
+    prefixWord x m = prefixWord y m := by
+  funext ⟨i, hi⟩
+  have := congr_fun h ⟨i, Nat.lt_of_lt_of_le hi hmn⟩
+  exact this
+
+/-- Finset intersection preserves prefix-determinedness at the max resolution.
+    prop:spg-decidable-clopen (finite Boolean closure) -/
+theorem prefixDetermined_iInter_finset {ι : Type*} [DecidableEq ι]
+    (S : Finset ι) (s : ι → Set OmegaInfinity) (m : ι → Nat)
+    (hpd : ∀ i ∈ S, PrefixDetermined (s i) (m i)) (hne : S.Nonempty) :
+    PrefixDetermined (⋂ i ∈ S, s i) (S.sup m) := by
+  intro x y hxy
+  constructor <;> intro hx
+  all_goals (simp only [Set.mem_iInter] at hx ⊢; intro i hi)
+  · exact (hpd i hi (prefixWord_eq_of_le (Finset.le_sup hi) hxy)).1 (hx i hi)
+  · exact (hpd i hi (prefixWord_eq_of_le (Finset.le_sup hi) hxy)).2 (hx i hi)
+
+/-- Finset union preserves prefix-determinedness at the max resolution.
+    prop:spg-decidable-clopen (finite Boolean closure) -/
+theorem prefixDetermined_iUnion_finset {ι : Type*} [DecidableEq ι]
+    (S : Finset ι) (s : ι → Set OmegaInfinity) (m : ι → Nat)
+    (hpd : ∀ i ∈ S, PrefixDetermined (s i) (m i)) :
+    PrefixDetermined (⋃ i ∈ S, s i) (S.sup m) := by
+  intro x y hxy
+  constructor <;> intro hx
+  · simp only [Set.mem_iUnion] at hx ⊢
+    obtain ⟨i, hiS, his⟩ := hx
+    have hiS' : i ∈ S := by exact_mod_cast hiS
+    exact ⟨i, hiS, (hpd i hiS' (prefixWord_eq_of_le (Finset.le_sup hiS') hxy)).1 his⟩
+  · simp only [Set.mem_iUnion] at hx ⊢
+    obtain ⟨i, hiS, his⟩ := hx
+    have hiS' : i ∈ S := by exact_mod_cast hiS
+    exact ⟨i, hiS, (hpd i hiS' (prefixWord_eq_of_le (Finset.le_sup hiS') hxy)).2 his⟩
+
 end Omega.SPG
