@@ -133,6 +133,12 @@ theorem goldenMeanAdjacency_pow_det (m : Nat) :
     (goldenMeanAdjacency ^ m).det = (-1 : ℤ) ^ m := by
   rw [Matrix.det_pow]; simp [goldenMeanAdjacency_det]
 
+/-- det(A^n) = (-1)^n for the golden-mean adjacency matrix (alias).
+    thm:zeta-syntax-det-pow -/
+theorem goldenMean_det_pow_general (n : ℕ) :
+    (goldenMeanAdjacency ^ n).det = (-1 : ℤ) ^ n :=
+  goldenMeanAdjacency_pow_det n
+
 /-- Cassini's identity: F_{n+1}·F_{n-1} - F_n² = (-1)^n for n ≥ 1.
     thm:fib-cassini-identity -/
 theorem fib_cassini (n : Nat) (hn : 1 ≤ n) :

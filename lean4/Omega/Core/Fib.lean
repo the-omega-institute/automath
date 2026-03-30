@@ -1464,6 +1464,60 @@ theorem fib_mod4_period_six (n : Nat) :
     4 * (2 * Nat.fib (n + 1) + Nat.fib n) + Nat.fib n := by ring
   rw [this, Nat.mul_add_mod]
 
+/-- Fibonacci mod 8 has period 12: F(n+12) % 8 = F(n) % 8.
+    def:pom-pisano-period-2 -/
+theorem fib_mod8_period_twelve (n : Nat) :
+    Nat.fib (n + 12) % 8 = Nat.fib n % 8 := by
+  have h1 := Nat.fib_add_two (n := n)
+  have h2 := Nat.fib_add_two (n := n + 1)
+  have h3 := Nat.fib_add_two (n := n + 2)
+  have h4 := Nat.fib_add_two (n := n + 3)
+  have h5 := Nat.fib_add_two (n := n + 4)
+  have h6 := Nat.fib_add_two (n := n + 5)
+  have h7 := Nat.fib_add_two (n := n + 6)
+  have h8 := Nat.fib_add_two (n := n + 7)
+  have h9 := Nat.fib_add_two (n := n + 8)
+  have h10 := Nat.fib_add_two (n := n + 9)
+  have h11 := Nat.fib_add_two (n := n + 10)
+  have hexp : Nat.fib (n + 12) = 144 * Nat.fib (n + 1) + 89 * Nat.fib n := by linarith
+  rw [hexp]
+  have : 144 * Nat.fib (n + 1) + 89 * Nat.fib n =
+    8 * (18 * Nat.fib (n + 1) + 11 * Nat.fib n) + Nat.fib n := by ring
+  rw [this, Nat.mul_add_mod]
+
+/-- Fibonacci mod 9 has period 24: F(n+24) % 9 = F(n) % 9.
+    def:pom-pisano-period-2 -/
+theorem fib_mod9_period_twentyfour (n : Nat) :
+    Nat.fib (n + 24) % 9 = Nat.fib n % 9 := by
+  have h1 := Nat.fib_add_two (n := n)
+  have h2 := Nat.fib_add_two (n := n + 1)
+  have h3 := Nat.fib_add_two (n := n + 2)
+  have h4 := Nat.fib_add_two (n := n + 3)
+  have h5 := Nat.fib_add_two (n := n + 4)
+  have h6 := Nat.fib_add_two (n := n + 5)
+  have h7 := Nat.fib_add_two (n := n + 6)
+  have h8 := Nat.fib_add_two (n := n + 7)
+  have h9 := Nat.fib_add_two (n := n + 8)
+  have h10 := Nat.fib_add_two (n := n + 9)
+  have h11 := Nat.fib_add_two (n := n + 10)
+  have h12 := Nat.fib_add_two (n := n + 11)
+  have h13 := Nat.fib_add_two (n := n + 12)
+  have h14 := Nat.fib_add_two (n := n + 13)
+  have h15 := Nat.fib_add_two (n := n + 14)
+  have h16 := Nat.fib_add_two (n := n + 15)
+  have h17 := Nat.fib_add_two (n := n + 16)
+  have h18 := Nat.fib_add_two (n := n + 17)
+  have h19 := Nat.fib_add_two (n := n + 18)
+  have h20 := Nat.fib_add_two (n := n + 19)
+  have h21 := Nat.fib_add_two (n := n + 20)
+  have h22 := Nat.fib_add_two (n := n + 21)
+  have h23 := Nat.fib_add_two (n := n + 22)
+  have hexp : Nat.fib (n + 24) = 46368 * Nat.fib (n + 1) + 28657 * Nat.fib n := by linarith
+  rw [hexp]
+  have : 46368 * Nat.fib (n + 1) + 28657 * Nat.fib n =
+    9 * (5152 * Nat.fib (n + 1) + 3184 * Nat.fib n) + Nat.fib n := by ring
+  rw [this, Nat.mul_add_mod]
+
 /-- Fibonacci mod 11 has period 10: F(n+10) % 11 = F(n) % 11.
     def:pom-pisano-period-2 -/
 theorem fib_mod11_period_ten (n : Nat) :
