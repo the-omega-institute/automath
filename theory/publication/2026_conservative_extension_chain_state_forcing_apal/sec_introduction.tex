@@ -1,44 +1,41 @@
 \section{Introduction}\label{sec:introduction}
 
-Formal semantics is usually presented as truth at a fully specified point of evaluation. That picture is exact when the relevant assignment or world has already been fixed. It is too coarse, however, when information is only partial. One may have ruled out some realizations without having selected a unique one; one may have an admissible reference before a global object has formed; or one may have compatible local data that fail to glue. In such situations the natural semantic notion is not pointwise truth but forcing at an information state.
+Standard sheaf-theoretic semantics captures local-to-global passage: compatible local sections glue when the underlying presheaf is a sheaf, and fail to glue when it is not. The obstruction to gluing is recorded by cohomology classes, and the sheaf-theoretic analysis of contextuality \cite{AbramskyBrandenburger2011} treats the absence of a global section as the central semantic defect. Yet pointwise semantics---truth at a fully specified assignment or world---cannot express the distinction between compatible local sectionability and global sectionability at all. A formula evaluated at a single point sees either the presence or the absence of a value; it cannot see that compatible local data exist but fail to glue.
 
-Several familiar traditions isolate parts of this picture. Kripke and Beth semantics replace absolute truth by forcing at stages of information and impose persistence under refinement \cite{Beth1956,Kripke1965,TroelstraVanDalen1988}. Sheaf-theoretic semantics separates local from global existence and treats gluing failure as a structural defect rather than as a mere lack of value \cite{MacLaneMoerdijk1994}. Related local-to-global obstruction viewpoints also appear in the sheaf-theoretic analysis of contextuality and its cohomological refinements \cite{AbramskyBrandenburger2011,Caru2017}. Dynamic semantics explains later decision by elimination of possibilities rather than by revision of truth conditions. The present paper combines these themes in order to address a more specific question: once an admitted reference carries a finite abelian gluing obstruction, what part of that obstruction remains semantically visible without enlarging the state space, and how much additional information is required to recover the hidden part?
-
-The scope of the paper is deliberately narrow. We study a self-contained four-layer fragment of state-forcing semantics, isolating the components needed for the cohomological visibility problem: pointwise semantics, information-state forcing, local-object semantics with structural absence and gluing obstructions, and the refinement dynamics required to state the monotonicity results.
-
-The logical point of the paper is twofold. First, the passage from pointwise semantics to information states and local objects is not cosmetic: the gluing predicates that drive the obstruction theory are provably invisible at the lower forcing language. Second, once those predicates are available, one can ask a semantic question that does not arise at the lower layers at all, namely which part of a gluing obstruction is visible without enlarging the state space and which part remains hidden.
-
-\medskip
-\noindent\textbf{Three Main Results.}
-
-\medskip
-\noindent\textbf{Theorem A: forcing necessity.}
-After separating admissible reference, local sectionability, compatible local sectionability, and global sectionability, we show that compatible local existence is characterized by sheafification (\Cref{thm:sheafification-characterization}) and that typed readouts obey an address-before-value constraint (\Cref{prop:address-before-value}). The key logical separation result is that compatible local sectionability and gluing-level absence cannot be defined by any formula in the information-state forcing language without the local-object layer (\Cref{thm:pointwise-irreducibility}). This is the theorem that justifies the enrichment on logical grounds rather than on expository convenience.
-
-\medskip
-\noindent\textbf{Theorem B: branched gerbe semantics.}
-Once an abelian band $\Band$ has been fixed on the slice site, every local object functor admits a canonical split realization prestack (\Cref{prop:split-realization-prestack}), so the existence of a groupoid-valued lift is not itself the issue. The substantive hypotheses are semantic: we work with gluing-sensitive lifts whose stackifications recover the sheafification of isomorphism classes (\Cref{prop:stackification-components}), identify visible value classes with the global connected components of the realization stack (\Cref{thm:visible-value-components}), and are globally conservative at the terminal fibre when global existence is compared back to the original local object functor. In that setting, each visible branch $v$ determines a banded component gerbe $\mathfrak G_v$ (\Cref{thm:component-gerbe-decomposition}), and gluing-level absence occurs exactly when visible branches exist but all of their component gerbes are non-neutral (\Cref{thm:gerbe-null-semantics}). Under the additional branch-constancy hypothesis, the realization stack decomposes as
+This gap motivates the present paper. We construct a four-layer conservative extension chain
 \[
-\mathfrak L_r\simeq \coprod_{v\in \Vis_{p,s}(r)} \mathfrak G_v
+\mathbb{L}_0 \preceq \mathbb{L}_1 \preceq \mathbb{L}_2 \preceq \mathbb{L}_3 \preceq \mathbb{L}_4,
 \]
-(\Cref{cor:branch-decomposition}). Only when $|\Vis_{p,s}(r)|=1$ does one recover a single obstruction class attached to the reference.
+where $\mathbb{L}_0$ is pointwise semantics, $\mathbb{L}_1$ adds information-state forcing, $\mathbb{L}_2$ adds local references and local objects, $\mathbb{L}_3$ adds structural absence and gluing-obstruction data, and $\mathbb{L}_4$ adds refinement dynamics. Each layer preserves the forcing behavior of formulas already present below (\Cref{cor:whole-chain-invariance}). The chain is the minimal framework in which gluing predicates, branch gerbes, and homological visibility can all be stated.
 
 \medskip
-\noindent\textbf{Theorem C: visible quotients and the standard contextuality anchor.}
-Fixing one visible branch $v$, a finite abelian obstruction presentation yields the strict visible quotient $A/H_\alpha$, initial among coefficient reductions trivializing that chosen branch presentation (\Cref{thm:initial-visible-quotient}) and detected exactly by the presentation-admissible character channels (\Cref{thm:character-definability-barrier,cor:visible-quotient-character-separation}). At the class level, a finite Cech nerve for $\omega_v$ yields a homological evaluation map
-\[
-\mathrm{ev}_{\omega_v}:H_2(N(\mathcal U),\mathbb Z)\to A,
-\]
-whose cokernel is the intrinsic visible quotient (\Cref{thm:intrinsic-visible-quotient}). This quotient captures precisely the $H_2$-visible part of the obstruction, while the blind remainder is exactly the pure $\operatorname{Ext}$-residual (\Cref{thm:character-blind-obstructions}). In the unique-branch support-presheaf setting, the theory recovers the Abramsky--Brandenburger no-global-section picture and refines it by identifying the precise blind residual (\Cref{thm:unique-branch-contextuality-comparison}). This is the paper's main external anchor to an established line of work.
+\noindent\textbf{Research question.}
+Once an admitted reference carries a finite abelian gluing obstruction, what part of that obstruction is semantically visible without enlarging the state space, and how much additional information is required to recover the hidden part?
+
+\medskip
+\noindent\textbf{Main results.}
+The answer is delivered by three groups of results, each located at a specific boundary of the extension chain.
+
+\medskip
+\noindent\textbf{Theorem~A} (forcing necessity; $\mathbb{L}_1$--$\mathbb{L}_2$ boundary).
+Compatible local sectionability is characterized by sheafification (\Cref{thm:sheafification-characterization}), and the predicates $\CompSec_s$, $\Sec_s$, and $\Null^{\mathrm{glue}}_s$ are not definable in the information-state forcing language without the local-object enrichment (\Cref{thm:pointwise-irreducibility}). This separation result justifies the enrichment on logical grounds: the gluing predicates that drive the obstruction theory are provably invisible at $\mathbb{L}_1$.
+
+\medskip
+\noindent\textbf{Theorem~B} (branched gerbe semantics; $\mathbb{L}_2$--$\mathbb{L}_3$ boundary).
+For a realization prestack whose stackification recovers the sheafification of isomorphism classes and is globally conservative at the terminal fibre, visible value classes are the global connected components of the realization stack (\Cref{thm:visible-value-components}). Each visible branch $v$ determines a banded component gerbe $\mathfrak{G}_v$ (\Cref{thm:component-gerbe-decomposition}), and gluing-level absence holds exactly when visible branches exist but every component gerbe is non-neutral (\Cref{thm:gerbe-null-semantics}).
+
+\medskip
+\noindent\textbf{Theorem~C} (homological visibility; at $\mathbb{L}_3$).
+For a finite abelian branch obstruction on a finite \v{C}ech nerve, the universal coefficient theorem yields a homological evaluation map $\mathrm{ev}_\omega : H_2(N(\mathcal{U}),\mathbb{Z}) \to A$ whose cokernel is the intrinsic visible quotient $A_{\mathrm{vis}}^\omega$ (\Cref{thm:intrinsic-visible-quotient}). The class-admissible characters are exactly the annihilator of the image of this map, and the blind residual---the part of the obstruction invisible to every admissible character---is a pure $\operatorname{Ext}$-type class (\Cref{thm:character-blind-obstructions}). In the unique-branch support-presheaf setting, the theory recovers the Abramsky--Brandenburger no-global-section picture and refines it by identifying the precise blind mechanism (\Cref{thm:unique-branch-contextuality-comparison}).
 
 \medskip
 \noindent\textbf{Secondary consequences.}
-The multi-branch theory shows that visibility depends essentially on whether branch information is available. If the branch label is known, visibility is controlled by $\bigcap_v K_v$; if the same channel must remain admissible on every branch, it is controlled by $\sum_v K_v$; and the exact branch-preserving strictification budget is $\max_v |K_v|$ (\Cref{thm:branch-sensitive-visible-quotient,thm:branch-uniform-visible-quotient,thm:multi-branch-strictification-budget}). More sharply, the canonical comparison map
-\[
-A_{\mathrm{vis}}^{\mathrm{br}}(r)\twoheadrightarrow A_{\mathrm{vis}}^{\mathrm{unif}}(r)
-\]
-has kernel $(\sum_v K_v)/(\bigcap_v K_v)$, so the hidden budget behind uniform visibility factors exactly into a branch-resolution term and a residual within-branch term (\Cref{thm:branch-comparison-exact-sequence,thm:branch-resolution-budget,cor:uniform-hidden-budget-factorization}). Together with \Cref{ex:one-bit-hidden-obstruction,ex:rp2-character-blind,ex:two-branch-sphere-separation}, this gives concrete visible, blind, and multi-branch test cases.
+The multi-branch theory yields an exact comparison between branch-sensitive and branch-uniform visibility: the canonical surjection $A_{\mathrm{vis}}^{\mathrm{br}}(r) \twoheadrightarrow A_{\mathrm{vis}}^{\mathrm{unif}}(r)$ has kernel $(\sum_v K_v)/(\bigcap_v K_v)$, so the hidden budget behind uniform visibility factors into a branch-resolution term and a within-branch residual (\Cref{thm:branch-comparison-exact-sequence,thm:branch-resolution-budget,cor:uniform-hidden-budget-factorization}). Worked finite examples (\Cref{ex:one-bit-hidden-obstruction,ex:rp2-character-blind,ex:s2-single-branch-maximal-collapse,ex:two-branch-sphere-separation}) separate the visible, blind, and multi-branch regimes.
 
-The hypotheses used in these results are stratified rather than cumulative. Branch constancy is used only for the decomposition corollary, not for the branch-gerbe theorem itself. Global conservativity enters only when stack-global objects are compared back to the original local object functor. Finite nerve presentations appear only in the finite abelian visibility theorems. The logical separation result and the basic gluing semantics therefore do not depend on the full finite obstruction package.
+\medskip
+\noindent\textbf{Hypothesis stratification.}
+The hypotheses used in these results are stratified rather than cumulative. Branch constancy enters only for the decomposition corollary (\Cref{cor:branch-decomposition}), not for the component-gerbe theorem itself. Global conservativity is used only when stack-global objects are compared back to the original local object functor. Finite nerve presentations appear only in the finite abelian visibility theorems. The logical separation result and the basic gluing semantics do not depend on the full finite obstruction package.
 
-These results are organized as follows. \Cref{sec:preliminaries} isolates the conservative-extension framework, and \Cref{sec:information-states} introduces information states, persistence, singleton conservativity, and lifted pointwise soundness. \Cref{sec:null-decomposition} develops the local-object layer, proves the forcing-necessity theorem, and sets up the realization-prestack semantics. The subsequent obstruction-theoretic and homological subsections establish the branch-gerbe semantics, the visible quotients, the exact multi-branch comparison sequence, and the Abramsky--Brandenburger comparison. \Cref{sec:multiaxis-refinement} then records the monotonicity results under refinement, while the appendix contains only the finite-state complexity upper bounds.
+\medskip
+\noindent\textbf{Plan of the paper.}
+\Cref{sec:preliminaries} defines logic layers and conservative extensions and introduces the four-layer chain. \Cref{sec:information-states} defines information states, forcing, and lifted pointwise soundness. \Cref{sec:null-decomposition} develops local objects, proves the sheafification characterization and the forcing-necessity theorem (Theorem~A), and introduces realization prestacks and visible value classes. The gerbe-obstruction subsection establishes the branched gerbe semantics (Theorem~B), while the homological-visibility subsection establishes the intrinsic visible quotient and the character-blind obstruction theorem (Theorem~C), together with the multi-branch comparison sequence and the contextuality anchor. \Cref{sec:multiaxis-refinement} records refinement monotonicity results at $\mathbb{L}_4$, and the appendix contains finite-state complexity upper bounds.

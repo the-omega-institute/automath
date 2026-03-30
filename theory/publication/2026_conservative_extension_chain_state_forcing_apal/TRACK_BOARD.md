@@ -2,7 +2,7 @@
 
 - Paper: `2026_conservative_extension_chain_state_forcing_apal`
 - Target journal: `Annals of Pure and Applied Logic (APAL)`
-- Current status: `planned_batch_1`
+- Current status: `p3_completed`
 - Orchestrator: `unassigned`
 
 ## Stage Status
@@ -12,10 +12,12 @@
 - P2 Research Extension: `completed`
   - Artifact: `P2_EXTENSION_NOTE_2026-03-30.md`
   - Date: 2026-03-30
-- P3 Journal-Fit Rewrite: `pending` -- recommended next
-- P4 Editorial Review: `pending`
+- P3 Journal-Fit Rewrite: `completed`
+  - Artifact: `P3_REWRITE_NOTE_2026-03-30.md`
+  - Date: 2026-03-30
+- P4 Editorial Review: `pending` -- recommended next
 - P5 Integration: `pending`
-- P6 Lean / Formalization Sync: `pending`
+- P6 Lean / Formalization Sync: `completed` -- 0% verified (0/13 claims have Lean counterparts); see `LEAN_SYNC_NOTE_2026-03-30.md`
 - P7 Submission Pack: `pending`
 
 ## P2 Decisions
@@ -61,19 +63,23 @@
 
 - ~~main theorem chain is not yet explicitly bounded as a four-layer APAL paper~~ resolved by P2
 - ~~`sec_observer_spacetime.tex` may still belong to a sequel rather than this submission~~ resolved: sequel
-- target-journal related-work pass not yet recorded (deferred to P3)
+- ~~target-journal related-work pass not yet recorded (deferred to P3)~~ bibliography pass deferred to P4
 
-## Gap items for P3
+## Gap items from P2 (all closed by P3)
 
-1. Add one-paragraph bridge between strict and intrinsic visible quotients
-2. Add standing-hypotheses environment at start of gerbe-obstruction subsection
-3. Add explicit mapping of Theorems A/B/C to the four-layer chain in the introduction
-4. Consider adding a single-branch S2 micro-example to complement the RP2 blind example
+1. ~~Add one-paragraph bridge between strict and intrinsic visible quotients~~ done: bridge paragraph added in sec_gerbe_obstruction.tex
+2. ~~Add standing-hypotheses environment at start of gerbe-obstruction subsection~~ done: (H1)--(H4) list added
+3. ~~Add explicit mapping of Theorems A/B/C to the four-layer chain in the introduction~~ done: layer-boundary annotations in introduction
+4. ~~Consider adding a single-branch S2 micro-example to complement the RP2 blind example~~ done: `ex:s2-single-branch-maximal-collapse` added
+
+## P3 Summary
+
+Rewrote abstract (~150 words), introduction (one research question, A-B-C preview with layer mapping), and conclusion (summary, external significance, open problems). Closed all four P2 gaps. Style pass enforced APAL register throughout. See `P3_REWRITE_NOTE_2026-03-30.md` for details.
 
 ## Recommended next owner
 
-P3 Journal-Fit Rewrite agent. Tasks:
-- Rewrite abstract, introduction, and conclusion to foreground the 7-theorem A-B-C package
-- Close the four presentation gaps identified in P2_EXTENSION_NOTE
-- Enforce APAL register: theorem-first prose, no programmatic language, one research question
-- Perform the target-journal related-work bibliography pass (see BIB_SCOPE.md)
+P4 Editorial Review agent. Tasks:
+- Fine-grained prose and notation consistency pass
+- Target-journal related-work bibliography pass (see BIB_SCOPE.md)
+- Check cross-references from the rewritten introduction to actual theorem labels
+- Verify line counts remain under 800 per file
