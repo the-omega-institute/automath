@@ -50,6 +50,12 @@ Root dispatch table for the publication workspace.
 4. `APAL` and `ETDS`: hold technical state; close P7 immediately once author
    metadata is supplied.
 
+## Continuous evolution boards
+
+- `OPS/EVOLUTION_LOOP.md` defines the outer source -> track -> feedback loop.
+- `OPS/UPSTREAM_BOARD.md` records what each paper must feed back to the parent theory.
+- `OPS/FORMALIZATION_BOARD.md` records what each paper contributes to the Lean wave.
+
 ## Dispatch rule
 
 When an agent starts work, update `OPS/AGENT_CLAIMS.md` first.

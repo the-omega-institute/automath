@@ -33,6 +33,21 @@ bounded tasks inside real paper directories.
 8. `P7 Submission Pack`
    Required output: final checklist and status promotion in the program board.
 
+## Cross-cutting lanes
+
+These lanes do not replace `P0`--`P7`. They make the publication workspace
+durable instead of one-shot.
+
+- `U-lane` upstream feedback:
+  whenever a paper sharpens theorem packaging, cuts weak claims, or rewrites a
+  foundational argument, record what must flow back to the upstream source.
+- `F-lane` formalization feedback:
+  whenever a paper settles its active theorem package, update the Lean-facing
+  status so the next formalization wave has an exact target.
+- `S-lane` sequel / split management:
+  when a paper becomes too broad or creates a stable side branch, record the
+  downstream child track instead of letting the material drift in notes.
+
 ## Acceptance gate
 
 - A stage is not accepted because an agent says it is done.
@@ -46,6 +61,14 @@ Recommended local verification:
 - `pdflatex -> bibtex -> pdflatex -> pdflatex` for BibTeX papers
 - `pdflatex -> pdflatex` for manual-bibliography papers
 - note page count and residual warnings when relevant
+
+Required side-lane verification:
+
+- if `P5` changes the theorem package or section structure, update the upstream
+  feedback record before handoff
+- if `P6` changes claim status, update the formalization board before handoff
+- if a split or sequel is proposed, register it in the upstream board instead
+  of burying it in a review note
 
 ## Blocker classes
 
@@ -69,12 +92,17 @@ Do not promote a deferred or paper-external issue into a fake blocker.
 - Editorial review agent: writes a decision-grade review with blockers.
 - Integrator: merges accepted changes into the manuscript and updates the track board.
 - Lean sync agent: checks paper statements against Lean labels or backlog where applicable.
+- Upstream sync agent: converts accepted paper-local improvements into source
+  feedback, sequel proposals, and main-paper backport requirements.
 
 ## Handoff rule
 
 No agent finishes a stage by chat message alone. A stage is done only when
 the paper directory contains the artifact that records what changed, what
 remains open, and what the next agent should do.
+
+Use `OPS/UPSTREAM_SYNC_NOTE.template.md` and `OPS/LEAN_SYNC_NOTE.template.md`
+when creating new durable side-lane artifacts.
 
 ## Current operational pattern
 
@@ -84,6 +112,8 @@ remains open, and what the next agent should do.
 - Integrators accept or reject agent output by diff review plus local build.
 - Human-only blockers such as final author metadata stay visible in the
   paper-local board, but do not stop other paper tracks from moving.
+- Durable evolution is tracked in `OPS/EVOLUTION_LOOP.md`,
+  `OPS/UPSTREAM_BOARD.md`, and `OPS/FORMALIZATION_BOARD.md`.
 
 ## Default wave
 

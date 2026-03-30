@@ -215,6 +215,17 @@ The command uses the target journal declared in each publication `README.md`, pu
 The prompt and journal-profile text now live under `automation/assets/` so the repeated editorial loop can evolve mostly through Markdown/template changes rather than through more orchestration code.
 The multi-agent execution model is documented under `automation/assets/operations/`; use those assets to assign paper stages across many agents instead of improvising new prompt flows each time.
 
+When the publication workspace lives inside this repository under `theory/publication/`,
+the durable operational layer is the `theory/publication/OPS/` directory rather than the
+exported `artifacts/` directories. In that in-tree mode:
+
+- `OPS/EVOLUTION_LOOP.md` defines the outer source -> track -> feedback loop
+- `OPS/UPSTREAM_BOARD.md` records what publication tracks must feed back into the parent theory
+- `OPS/FORMALIZATION_BOARD.md` records what each paper contributes to the Lean/formalization wave
+
+This keeps the publication program as a continuously evolving execution layer, not as a
+one-shot export bundle.
+
 ## Writing Conventions
 
 ### Authorship Maintenance

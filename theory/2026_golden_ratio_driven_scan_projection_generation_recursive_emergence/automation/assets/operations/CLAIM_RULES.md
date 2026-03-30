@@ -17,7 +17,9 @@ Each claimed task should record:
 - owner
 - write scope
 - upstream dependency
+- backport target
 - expected output artifact
+- build check requirement when manuscript files change
 
 ## Conflict policy
 
@@ -31,5 +33,7 @@ Each claimed task should record:
 - Missing `main.tex`
 - No source mapping for theorem-heavy work
 - No bibliography source for rewrite / review stages
+- No upstream return path for a stage that changes theorem packaging
+- No formalization classification for a claimed P6 task
 
 In those cases, revert to P0 or P1 instead of pretending the later stage can proceed.

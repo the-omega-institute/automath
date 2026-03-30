@@ -11,12 +11,20 @@ Update this file when agents take ownership of a task.
 - `pub-integrator` -> `2026_dynamical_zeta_finite_part_spectral_fingerprint_etds / P5 / main tex + TRACK_BOARD / next run`
 - `pub-submission-pack` -> `2026_projection_ontological_mathematics_core_tams / P7 / submission materials + final build / next run`
 - `pub-proof-polish` -> `2026_circle_dimension_haar_pullback_cauchy_weight_jfa / P5 / sec_precision_potential.tex + main.tex / next run`
+- `pub-upstream-sync` -> `first stable P5/P7 track / UPSTREAM_SYNC_NOTE + OPS/UPSTREAM_BOARD / next run`
 
 ## Claim protocol
 
 Use this format:
 
 - `agent-name` -> `paper / stage / owned files / started YYYY-MM-DD`
+
+And record alongside the claim:
+
+- upstream dependency
+- backport target
+- expected output artifact
+- build-check expectation if manuscript files will change
 
 When releasing a claim:
 

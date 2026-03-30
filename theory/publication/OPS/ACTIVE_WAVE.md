@@ -27,6 +27,7 @@ This board is the live dispatch queue for parallel publication agents.
   - compile a clean final PDF
   - produce the TAMS submission checklist and cover-letter set
   - confirm theorem-chain and appendix package are frozen
+  - write the first paper-local upstream sync note once the package is frozen
 - Current blocker class:
   none inside the math package; remaining work is submission-pack assembly
 
@@ -40,6 +41,7 @@ This board is the live dispatch queue for parallel publication agents.
   - split or compress `sec_precision_potential.tex`
   - add the targeted bridging and optimality paragraphs from P2
   - run the first clean live build
+  - extract the theorem package that will eventually drive P6
 - Current blocker class:
   `editorial` and `compile`
 
@@ -77,8 +79,9 @@ This board is the live dispatch queue for parallel publication agents.
 - Agent 6: APAL submission closer once author metadata exists
 - Agent 7: ETDS metadata closer once author metadata exists
 - Agent 8: Lean sync / backlog extraction on the most advanced open track
-- Agent 9: bibliography / recent-paper recon only when a live target changes
-- Agent 10: editorial review reserve for any track that finishes a rewrite pass
+- Agent 9: upstream sync agent for any track that completes a stable P5/P7 state
+- Agent 10: bibliography / recent-paper recon only when a live target changes
+- Agent 11: editorial review reserve for any track that finishes a rewrite pass
 
 ## Wave completion criterion
 
@@ -86,5 +89,6 @@ Wave 3 is done when:
 
 - ETDS-zeta is through P5 with its remaining risks explicitly classified
 - TAMS has a real P7 pack
+- at least one new paper-local upstream sync note exists
 - JFA has completed both P5 and its first live build
 - APAL and ETDS remain clearly marked as waiting only on human metadata
