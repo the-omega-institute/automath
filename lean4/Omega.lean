@@ -80,11 +80,11 @@ import Omega.Zeta.NecklaceCorrection
 import Omega.Zeta.HankelVandermonde2
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
-import Omega.EA.CentralIdempotentsRecovery
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.Window6Collision
+import Omega.Conclusion.TwoAtomScalarRecoveryAlpha2
 import Omega.Conclusion.ResonanceWindow
 import Omega.GU.Window6RankGap
 import Omega.CircleDimension.MultiPrimeSpectrum
