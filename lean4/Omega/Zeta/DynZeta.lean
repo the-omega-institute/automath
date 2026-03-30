@@ -412,6 +412,27 @@ theorem degeneracy_ghost_doubling (n : Nat) (hn : 4 ≤ n) :
     hL, hpow]
   linarith
 
+/-- Degeneracy ghost exponential lower bound: d_n ≥ 9 · 2^{n-4} for n ≥ 4.
+    rem:degeneracy-zeta-bridge -/
+theorem degeneracy_ghost_exponential_lower (n : Nat) (hn : 4 ≤ n) :
+    9 * 2 ^ (n - 4) ≤ (2 : ℤ) ^ n - lucasNum n := by
+  -- Suffices to prove for n = 4 + k
+  suffices h : ∀ k : ℕ, (9 : ℤ) * 2 ^ k ≤ (2 : ℤ) ^ (4 + k) - lucasNum (4 + k) by
+    obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
+    rw [show 4 + k - 4 = k from by omega]
+    exact h k
+  intro k
+  induction k with
+  | zero =>
+    norm_num [lucasNum, lucasNum_succ_succ]
+  | succ j ih =>
+    have hdbl := degeneracy_ghost_doubling (4 + j) (by omega)
+    -- 9 * 2^{j+1} = 2 * (9 * 2^j) ≤ 2 * d_{4+j} ≤ d_{4+j+1}
+    calc (9 : ℤ) * 2 ^ (j + 1) = 2 * (9 * 2 ^ j) := by ring
+      _ ≤ 2 * ((2 : ℤ) ^ (4 + j) - lucasNum (4 + j)) := by linarith
+      _ ≤ (2 : ℤ) ^ ((4 + j) + 1) - lucasNum ((4 + j) + 1) := hdbl
+      _ = (2 : ℤ) ^ (4 + (j + 1)) - lucasNum (4 + (j + 1)) := by ring_nf
+
 /-- Lucas numbers mod 3 have period 8: L(n+8) % 3 = L(n) % 3 for all n.
     rem:degeneracy-zeta-bridge -/
 theorem lucasNum_mod3_period_eight (n : ℕ) :

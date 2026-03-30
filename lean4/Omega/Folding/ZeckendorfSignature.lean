@@ -396,6 +396,13 @@ theorem congruence_unitgroup_order12_bounded (m : Nat) (hm : 1 ≤ m) (hm_le : m
     m = 5 ∨ m = 6 := by
   interval_cases m <;> revert h <;> native_decide
 
+/-- φ(F_{m+2}) = 12 iff m ∈ {5,6}, extended to m ≤ 20.
+    thm:congruence-unitgroup-order12-m56 -/
+theorem congruence_unitgroup_order12_extended (m : Nat) (hm : 1 ≤ m) (hm_le : m ≤ 20)
+    (h : Nat.totient (Nat.fib (m + 2)) = 12) :
+    m = 5 ∨ m = 6 := by
+  interval_cases m <;> revert h <;> native_decide
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase 199: Idempotents and Z/2-characters in ZMod
 -- ══════════════════════════════════════════════════════════════
