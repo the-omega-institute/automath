@@ -2,7 +2,7 @@
 
 - Paper: `2026_projection_ontological_mathematics_core_tams`
 - Target journal: `Transactions of the American Mathematical Society`
-- Current status: `p4_minor_revision`
+- Current status: `p5_integration_complete`
 - Orchestrator: `unassigned`
 
 ## Stage Status
@@ -12,23 +12,23 @@
 - P2 Research Extension: `completed` -- artifact: `P2_EXTENSION_NOTE_2026-03-30.md`
 - P3 Journal-Fit Rewrite: `completed` -- artifact: `P3_REWRITE_NOTE_2026-03-30.md`
 - P4 Editorial Review: `completed` -- decision: MINOR_REVISION -- artifact: `P4_EDITORIAL_REVIEW_2026-03-30.md`
-- P5 Integration: `pending`
+- P5 Integration: `completed` -- artifact: `P5_INTEGRATION_NOTE_2026-03-30.md`
 - P6 Lean / Formalization Sync: `completed` -- 25% verified, 31% partial (4/16 VERIFIED + 5/16 PARTIAL); see `LEAN_SYNC_NOTE_2026-03-30.md`
 - P7 Submission Pack: `pending`
 
 ## Active claims
 
 - ~~`P4 / editorial review`: verify claims stay inside certified arithmetic window, audit theorem--proof consistency~~ completed: all claims within certified window; 11 specific issues identified (3 must-fix, 5 should-fix, 3 optional)
-- `P5 / integration`: apply P4 fixes (rename $\Delta_q$ overload, fix remark style, resolve $m_0(q)$ discrepancy, etc.)
+- ~~`P5 / integration`: apply P4 fixes (rename $\Delta_q$ overload, fix remark style, resolve $m_0(q)$ discrepancy, etc.)~~ completed: all 3 must-fix and 5 should-fix applied; see `P5_INTEGRATION_NOTE_2026-03-30.md`
 
 ## Blocking issues
 
 - ~~`5` bibliography keys are missing~~ resolved in P2 (see below)
 - ~~certified arithmetic window must be stated with exact boundaries~~ resolved in P2 (see below)
 - ~~theorem chain narrative needs expansion for TAMS (P3 scope)~~ resolved in P3
-- `$\Delta_q$ notation overloaded` (P4 Issue 3): pressure slope vs. Hankel codimension -- must rename one before submission
-- `remark theorem style` (P4 Issue 1): currently under `\theoremstyle{plain}`, must change to `\theoremstyle{remark}`
-- `author affiliation` (P4 Issue 11): TAMS requires institutional affiliation and funding acknowledgment
+- ~~`$\Delta_q$ notation overloaded` (P4 Issue 3): pressure slope vs. Hankel codimension -- must rename one before submission~~ resolved in P5: renamed to $\kappa_q$
+- ~~`remark theorem style` (P4 Issue 1): currently under `\theoremstyle{plain}`, must change to `\theoremstyle{remark}`~~ resolved in P5
+- ~~`author affiliation` (P4 Issue 11): TAMS requires institutional affiliation and funding acknowledgment~~ resolved in P5
 
 ## P2 decisions -- main theorem sequence
 
@@ -113,11 +113,22 @@ Unused entries to remove: AhlbachUsatineFrougnyPippenger2013, Kempton2023, Shall
 7. Explicitly state $\lambda_1 = 2$ after `thm:all-q-transfer`
 8. Demote `cor:log-density-additivity` to remark
 
+## P5 decisions -- integration summary
+
+- $\Delta_q \to \kappa_q$ in `sec_chebotarev.tex` (Hankel codimension, 11 occurrences)
+- `\theoremstyle{remark}` for remark environments in `main.tex`
+- Author affiliation and `\thanks{}` in `main.tex`
+- $m \ge m_0(q) \to m \ge 0$ in `thm:collision-kernel`
+- Quotient variable $q \to b$ in `prop:single-overflow`
+- "Then" connector in `cor:visible-band`
+- New `rem:lambda-one` ($\lambda_1 = 2$) after `thm:all-q-transfer`
+- `cor:log-density-additivity` demoted to `rem:log-density-additivity`
+
 ## Recommended next owner
 
-**P5 Integration agent**: apply the 3 must-fix and 5 should-fix changes from the P4 review, then advance to P7 Submission Pack.
+**P7 Submission Pack agent**: compile PDF, verify cross-references, assemble submission archive.
 
 ## Next stage
 
-- P5 Integration:
-  apply P4 editorial fixes and verify compilation
+- P7 Submission Pack:
+  compile final PDF, verify all cross-references resolve, package for TAMS submission

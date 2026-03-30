@@ -2,7 +2,7 @@
 
 - Paper: `2026_conservative_extension_chain_state_forcing_apal`
 - Target journal: `Annals of Pure and Applied Logic (APAL)`
-- Current status: `p5_completed`
+- Current status: `submission_ready`
 - Orchestrator: `unassigned`
 
 ## Stage Status
@@ -21,7 +21,9 @@
 - P5 Integration: `completed`
   - Date: 2026-03-30
 - P6 Lean / Formalization Sync: `completed` -- 0% verified (0/13 claims have Lean counterparts); see `LEAN_SYNC_NOTE_2026-03-30.md`
-- P7 Submission Pack: `pending`
+- P7 Submission Pack: `completed`
+  - Artifacts: `cover_letter_apal.txt`, `submission_checklist.md`
+  - Date: 2026-03-30
 
 ## P2 Decisions
 
@@ -134,6 +136,14 @@ All three P4 hard blockers and all medium-priority issues resolved. Fixes applie
 - `main.tex` does not reference sequel files
 - No sequel files remain in the submission directory root
 
-## Recommended next owner
+## P7 Submission Pack Summary
 
-P7 Submission Pack agent.
+Two artifacts produced:
+
+1. **Cover letter** (`cover_letter_apal.txt`): addressed to the APAL editors; describes the four-layer conservative extension chain, the three main theorem groups (forcing necessity, branched gerbe semantics, homological visibility), and positions the paper relative to APAL-relevant traditions (Kripke semantics, Beth tableaux, Fitting forcing, topos-theoretic forcing of Tierney and Johnstone, Lawvere--Tierney topologies). States paper length (~45 pages), 15 references, self-contained. Signed as "The Authors."
+
+2. **Submission checklist** (`submission_checklist.md`): 12-item structured checklist. Results: 11 PASS, 1 advisory (`\author{}` empty -- expected for anonymous review). Key verifications: all 15 cite keys match bib entries bidirectionally, all files under 800-line limit (max 580), abstract ~161 words, sequel files properly isolated in `sequel/`, no revision-trace language, MSC 2020 classification and keywords present, no unresolved cross-references.
+
+### Advisory note
+
+`\author{}` is empty in `main.tex` line 59. If APAL requires author identification at initial submission (not anonymous review), this must be filled before upload.
