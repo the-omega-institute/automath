@@ -1394,6 +1394,61 @@ theorem fib_mod3_period_eight (n : Nat) :
     3 * (7 * Nat.fib (n + 1) + 4 * Nat.fib n) + Nat.fib n := by ring
   rw [this, Nat.mul_add_mod]
 
+/-- Fibonacci mod 5 has Pisano period 20: F(n+20) % 5 = F(n) % 5.
+    def:pom-pisano-period-5 -/
+theorem fib_mod5_period_twenty (n : Nat) :
+    Nat.fib (n + 20) % 5 = Nat.fib n % 5 := by
+  have h1 := Nat.fib_add_two (n := n)
+  have h2 := Nat.fib_add_two (n := n + 1)
+  have h3 := Nat.fib_add_two (n := n + 2)
+  have h4 := Nat.fib_add_two (n := n + 3)
+  have h5 := Nat.fib_add_two (n := n + 4)
+  have h6 := Nat.fib_add_two (n := n + 5)
+  have h7 := Nat.fib_add_two (n := n + 6)
+  have h8 := Nat.fib_add_two (n := n + 7)
+  have h9 := Nat.fib_add_two (n := n + 8)
+  have h10 := Nat.fib_add_two (n := n + 9)
+  have h11 := Nat.fib_add_two (n := n + 10)
+  have h12 := Nat.fib_add_two (n := n + 11)
+  have h13 := Nat.fib_add_two (n := n + 12)
+  have h14 := Nat.fib_add_two (n := n + 13)
+  have h15 := Nat.fib_add_two (n := n + 14)
+  have h16 := Nat.fib_add_two (n := n + 15)
+  have h17 := Nat.fib_add_two (n := n + 16)
+  have h18 := Nat.fib_add_two (n := n + 17)
+  have h19 := Nat.fib_add_two (n := n + 18)
+  have hexp : Nat.fib (n + 20) = 6765 * Nat.fib (n + 1) + 4181 * Nat.fib n := by linarith
+  rw [hexp]
+  have : 6765 * Nat.fib (n + 1) + 4181 * Nat.fib n =
+    5 * (1353 * Nat.fib (n + 1) + 836 * Nat.fib n) + Nat.fib n := by ring
+  rw [this, Nat.mul_add_mod]
+
+/-- Fibonacci mod 7 has Pisano period 16: F(n+16) % 7 = F(n) % 7.
+    def:pom-pisano-period-7 -/
+theorem fib_mod7_period_sixteen (n : Nat) :
+    Nat.fib (n + 16) % 7 = Nat.fib n % 7 := by
+  have h1 := Nat.fib_add_two (n := n)
+  have h2 := Nat.fib_add_two (n := n + 1)
+  have h3 := Nat.fib_add_two (n := n + 2)
+  have h4 := Nat.fib_add_two (n := n + 3)
+  have h5 := Nat.fib_add_two (n := n + 4)
+  have h6 := Nat.fib_add_two (n := n + 5)
+  have h7 := Nat.fib_add_two (n := n + 6)
+  have h8 := Nat.fib_add_two (n := n + 7)
+  have h9 := Nat.fib_add_two (n := n + 8)
+  have h10 := Nat.fib_add_two (n := n + 9)
+  have h11 := Nat.fib_add_two (n := n + 10)
+  have h12 := Nat.fib_add_two (n := n + 11)
+  have h13 := Nat.fib_add_two (n := n + 12)
+  have h14 := Nat.fib_add_two (n := n + 13)
+  have h15 := Nat.fib_add_two (n := n + 14)
+  -- F(n+16) = 987*F(n+1) + 610*F(n). 987 = 141*7, 610 = 87*7 + 1
+  have hexp : Nat.fib (n + 16) = 987 * Nat.fib (n + 1) + 610 * Nat.fib n := by linarith
+  rw [hexp]
+  have : 987 * Nat.fib (n + 1) + 610 * Nat.fib n =
+    7 * (141 * Nat.fib (n + 1) + 87 * Nat.fib n) + Nat.fib n := by ring
+  rw [this, Nat.mul_add_mod]
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R147: Fibonacci prime entry point
 -- ══════════════════════════════════════════════════════════════

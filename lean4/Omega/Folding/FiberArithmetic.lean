@@ -528,3 +528,32 @@ theorem paper_stableValue_sum_gauss_instances :
     cStableValueSum 5 = Nat.fib 7 * (Nat.fib 7 - 1) / 2 ∧
     cStableValueSum 6 = Nat.fib 8 * (Nat.fib 8 - 1) / 2 :=
   stableValue_sum_gauss_instances
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R149: Stable value Gauss sum (closed form)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Sum of stable values = F(m+2)·(F(m+2)-1)/2.
+    thm:pom-stableValue-gauss-sum -/
+theorem stableValue_sum_closed (m : Nat) :
+    2 * ∑ x : X m, stableValue x = Nat.fib (m + 2) * (Nat.fib (m + 2) - 1) := by
+  -- Reindex sum via stableValueFin bijection: Σ sv(x) = Σ_{i < F} i = F*(F-1)/2
+  have hbij := X.stableValueFin_bijective m
+  have hsum : ∑ x : X m, stableValue x = ∑ i : Fin (Nat.fib (m + 2)), i.val := by
+    rw [show (fun x : X m => stableValue x) =
+      (fun i : Fin (Nat.fib (m + 2)) => i.val) ∘ X.stableValueFin from by
+        ext x; simp [X.stableValueFin]]
+    exact hbij.sum_comp _
+  rw [hsum]
+  have : ∑ i : Fin (Nat.fib (m + 2)), (i : Nat) =
+      ∑ i ∈ Finset.range (Nat.fib (m + 2)), i := by
+    rw [← Fin.sum_univ_eq_sum_range]
+  rw [this, Finset.sum_range_id]
+  -- 2 * (n*(n-1)/2) = n*(n-1) because n*(n-1) is always even
+  set F := Nat.fib (m + 2)
+  have hdvd : 2 ∣ F * (F - 1) := by
+    rcases Nat.even_or_odd F with ⟨k, hk⟩ | ⟨k, hk⟩
+    · exact ⟨k * (F - 1), by rw [hk]; ring⟩
+    · have : F - 1 = 2 * k := by omega
+      exact ⟨F * k, by rw [this]; ring⟩
+  omega
