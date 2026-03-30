@@ -48,6 +48,7 @@ import Omega.Folding.HammingDist
 import Omega.Folding.HankelSpectrum
 import Omega.Folding.ModularTower
 import Omega.Folding.Window6
+import Omega.Folding.LocalWeightRigidity
 import Omega.Folding.ZeckendorfSignature
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
@@ -80,6 +81,7 @@ import Omega.Zeta.NecklaceCorrection
 import Omega.Zeta.HankelVandermonde2
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
+import Omega.EA.ChiRigidityShadow
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
