@@ -786,6 +786,98 @@ def cMixedEndCount (m : Nat) : Nat :=
 @[simp] theorem cMixedEndCount_two : cMixedEndCount 2 = 2 := by native_decide
 @[simp] theorem cMixedEndCount_three : cMixedEndCount 3 = 2 := by native_decide
 
+/-- Mixed-endpoint count equals `2·F_{m-1}` for all `m ≥ 2`.
+    cor:parry-golden-three-levels -/
+theorem cMixedEndCount_eq_two_fib (m : Nat) (hm : 2 ≤ m) :
+    cMixedEndCount m = 2 * Nat.fib (m - 1) := by
+  classical
+  match m, hm with
+  | 2, _ => simp
+  | n + 3, _ =>
+      let s : Finset (X (n + 3)) := @Finset.univ (X (n + 3)) (fintypeX (n + 3))
+      let eqs : Finset (X (n + 3)) :=
+        s.filter (fun x => x.1 ⟨0, by omega⟩ = x.1 ⟨n + 2, by omega⟩)
+      have hsplit_total :
+          eqs.card +
+              (s.filter (fun x : X (n + 3) =>
+                ¬ x.1 ⟨0, by omega⟩ = x.1 ⟨n + 2, by omega⟩)).card =
+            s.card := by
+        simpa [s, eqs] using
+          (Finset.filter_card_add_filter_neg_card_eq_card
+            (s := s) (p := fun x : X (n + 3) => x.1 ⟨0, by omega⟩ = x.1 ⟨n + 2, by omega⟩))
+      have hsplit_eq :
+          (eqs.filter (fun x : X (n + 3) => x.1 ⟨0, by omega⟩ = true)).card +
+              (eqs.filter (fun x : X (n + 3) => ¬ x.1 ⟨0, by omega⟩ = true)).card =
+            eqs.card := by
+        simpa [eqs] using
+          (Finset.filter_card_add_filter_neg_card_eq_card
+            (s := eqs) (p := fun x : X (n + 3) => x.1 ⟨0, by omega⟩ = true))
+      have hboundarySet :
+          eqs.filter (fun x : X (n + 3) => x.1 ⟨0, by omega⟩ = true) =
+            (@Finset.univ (X (n + 3)) (fintypeX (n + 3))).filter
+              (fun x => x.1 ⟨0, by omega⟩ = true ∧ x.1 ⟨n + 2, by omega⟩ = true) := by
+        ext x
+        simp only [eqs, s, Finset.mem_filter, Finset.mem_univ, true_and]
+        constructor
+        · rintro ⟨hEq, h0⟩
+          exact ⟨h0, hEq.symm.trans h0⟩
+        · rintro ⟨h0, hlast⟩
+          exact ⟨by simpa [h0, hlast], h0⟩
+      have hboundary :
+          (eqs.filter (fun x : X (n + 3) => x.1 ⟨0, by omega⟩ = true)).card =
+            cBoundaryCount (n + 3) := by
+        simpa [cBoundaryCount] using congrArg Finset.card hboundarySet
+      have hfalseSet :
+          eqs.filter (fun x : X (n + 3) => ¬ x.1 ⟨0, by omega⟩ = true) =
+            (@Finset.univ (X (n + 3)) (fintypeX (n + 3))).filter
+              (fun x => x.1 ⟨0, by omega⟩ = false ∧ x.1 ⟨n + 2, by omega⟩ = false) := by
+        ext x
+        simp only [eqs, s, Finset.mem_filter, Finset.mem_univ, true_and]
+        constructor
+        · rintro ⟨hEq, h0⟩
+          have h0' : x.1 ⟨0, by omega⟩ = false := by
+            simpa using h0
+          exact ⟨h0', hEq.symm.trans h0'⟩
+        · rintro ⟨h0, hlast⟩
+          exact ⟨by simpa [h0, hlast], by simpa using h0⟩
+      have hfalse :
+          (eqs.filter (fun x : X (n + 3) => ¬ x.1 ⟨0, by omega⟩ = true)).card =
+            cBothEndsFalseCount (n + 3) := by
+        simpa [cBothEndsFalseCount] using congrArg Finset.card hfalseSet
+      have hmixed :
+          (s.filter (fun x : X (n + 3) => ¬ x.1 ⟨0, by omega⟩ = x.1 ⟨n + 2, by omega⟩)).card =
+            cMixedEndCount (n + 3) := by
+        simp [cMixedEndCount, s, show 2 ≤ n + 3 by omega]
+      have hs : s.card = Nat.fib (n + 5) := by
+        rw [show s.card = @Fintype.card (X (n + 3)) (fintypeX (n + 3)) from by
+          simpa [s] using (@Finset.card_univ (X (n + 3)) (fintypeX (n + 3)))]
+        have h4 : @Finset.univ _ (fintypeX (n + 3)) = @Finset.univ _ (X.instFintype (n + 3)) := by
+          ext x
+          simp [Finset.mem_univ]
+        have h5 := @Finset.card_univ _ (X.instFintype (n + 3))
+        rw [show @Fintype.card _ (fintypeX (n + 3)) = (@Finset.univ _ (fintypeX (n + 3))).card from
+          (@Finset.card_univ _ (fintypeX (n + 3))).symm, h4, h5]
+        exact X.card_eq_fib (n + 3)
+      have heqcount : cBoundaryCount (n + 3) + cBothEndsFalseCount (n + 3) = eqs.card := by
+        rw [← hboundary, ← hfalse]
+        exact hsplit_eq
+      have hsum :
+          cBoundaryCount (n + 3) + cBothEndsFalseCount (n + 3) + cMixedEndCount (n + 3) =
+            Nat.fib (n + 5) := by
+        rw [← heqcount, hmixed, hs] at hsplit_total
+        exact hsplit_total
+      have hfalseFib : cBothEndsFalseCount (n + 3) = Nat.fib (n + 3) := by
+        exact cBothEndsFalseCount_eq_fib (n + 3) (by omega)
+      have hboundaryFib : cBoundaryCount (n + 3) = Nat.fib (n + 1) := by
+        simpa using cBoundaryCount_eq_fib_general (n + 3) (by omega)
+      have hendpoint := endpoint_fiber_sum (n + 3) (by omega)
+      simp only [show n + 3 - 1 = n + 2 from by omega, show n + 3 - 2 = n + 1 from by omega,
+        show n + 3 + 2 = n + 5 from by omega] at hendpoint
+      rw [hfalseFib, hboundaryFib] at hsum
+      have hmixedFib : cMixedEndCount (n + 3) = 2 * Nat.fib (n + 2) := by
+        omega
+      simpa [show n + 3 - 1 = n + 2 by omega] using hmixedFib
+
 /-- Mixed-endpoint count = 2·F_{m-1} for m = 2..8 (computational verification).
     cor:parry-golden-three-levels -/
 theorem cMixedEndCount_eq_two_fib_bounded (m : Nat) (hm1 : 2 ≤ m) (hm2 : m ≤ 8) :

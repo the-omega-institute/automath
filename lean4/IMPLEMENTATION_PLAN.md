@@ -13,9 +13,9 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 796 |
+| \leanverified 标注数 | 800 |
 | \leanpartial 标注数 | 11 |
-| 总标注数 | 807 |
+| 总标注数 | 811 |
 | 轮次 | R181（round_count=182） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
@@ -26,13 +26,13 @@
 | Emergent Arithmetic | 185 | 85 | 45.9% |
 | Folding | 337 | 79 | 23.4% |
 | Conclusion | 2,550 | 138 | 5.4% |
-| Group Unification | 469 | 72 | 15.4% |
+| Group Unification | 469 | 73 | 15.6% |
 | SPG | 129 | 29 | 22.5% |
 | Circle Dimension | 393 | 61 | 15.5% |
 | Zeta Finite Part | 4,524 | 94 | 2.1% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **792** | **7.5%** |
+| **合计（body）** | **10,508** | **793** | **7.5%** |
 
 ### 1.2 已完成模块
 
@@ -163,6 +163,9 @@
 **Phase R178: EA/SPG recovery lemmas（部分完成）**：EA/CentralIdempotentsRecovery.lean + SPG/NoiseBudgetRecovery.lean——EA：projectorVal / projectorVal_partition_of_signs / projectorVal_case_split（thm:fold-groupoid-z2x2-central-idempotents）；SPG：le_div_of_pos_mul_le / pos_mul_le_iff_le_div（cor:spg-dyadic-holographic-reconstruction-noise-budget）——**5 个论文标签条目计入覆盖率**（Emergent Arithmetic +3，SPG +2）——Emergent Arithmetic 80→83（44.9%），SPG 27→29（22.5%），全局标注 793→798（+5），body 覆盖 778→783（7.5%），commit 3f022c1
 **Phase R179: alpha=2 single-scalar recovery（部分完成）**：Conclusion/TwoAtomScalarRecoveryAlpha2.lean——twoAtomScalar2 / twoAtomScalar2_goldenRatio / twoAtomScalar2_strictMono / twoAtomScalar2_injective_on_pos（cor:conclusion-binfold-single-scalar-recovers-golden-parameter）——**4 个论文标签条目计入覆盖率**（Conclusion +4）——Conclusion 134→138（5.4%），全局标注 798→802（+4），body 覆盖 783→787（7.5%），commit f4f416c
 **Phase R181: local weight rigidity + chi-rigidity shadow（部分完成）**：Folding/LocalWeightRigidity.lean + EA/ChiRigidityShadow.lean——Folding：local_weight_rigidity_step / local_weight_rigidity_normalized / local_weight_rigidity_first_four（lem:fold-local-weight-rigidity-fibonacci）；EA：sign_conj_eq_sign / sign_eq_of_conj（thm:fold-groupoid-chi-rigidity）——**5 个论文标签条目计入覆盖率**（Folding +3，Emergent Arithmetic +2）——Folding 76→79（23.4%），Emergent Arithmetic 83→85（45.9%），全局标注 802→807（+5），body 覆盖 787→792（7.5%），commit 07aa5dc
+**Phase R183（已派发）**：Conclusion + Zeta 混合派发——`twoAtomScalar_strictMono` / `twoAtomScalar_injective_on_Ioi`（把 cor:conclusion-binfold-single-scalar-recovers-golden-parameter 从 α=2 特化升级到一般 α>1，至少一项中难度）；`singleDefectEnergy_zero` / `singleDefectEnergy_cubic_limit`（补足 cor:xi-finite-defect-poisson-l2-energy-single-defect 的 t=0 与 $(t+1)^{-3}$ 渐近部分）
+**Phase R184（已派发）**：Graph/PF spectral radius 主攻 + Zeta 单缺陷 specialization——主目标：`goldenMeanAdjacency_spectralRadius_eq_goldenRatio`（对应 `/theory/.../group_unification/sec__group-unification.tex` 中 “稳定状态作为黄金本征态” 段落的 `ρ(A)=φ` 结论；已确认可走 `spectralRadius` + `Real.spectralRadius_mem_spectrum_or` + `Matrix.spectrum_toLin'` + `HasEigenvalue.of_mem_spectrum` + 已有 `goldenMeanAdjacency_pf_root_eq_goldenRatio` / `goldenMeanAdjacency_dominates_all_real_eigenvalues` 闭合）；配套低难度目标：`singleDefectEnergy_zero`（对应 cor:xi-finite-defect-poisson-l2-energy-single-defect 的 `\mathcal E_\nu(0)=\pi m^2 \delta^2/(1-\delta^2)` 特例）
+**Phase R185（重排）**：GU/BoundaryLayer + Conclusion——放弃与 R184 重复的谱半径目标及当前 blocked 的单缺陷 Zeta 家族；中难度主目标改为补全 `thm:boundary-shift4-uplift-isomorphism` 的真正双射部分：先做 `boundaryStripMap_no11_of_boundary` 与 `boundaryUplift_strip_boundary`，再封装 `boundaryUplift_bijective`（把现有 `paper_boundaryUplift_card` / `boundaryUpliftMap_no11` / `boundaryStrip_uplift` 升级为论文所述“规范双射”）；低难度收口项保留 `epsilonCritical_mem_Ioo`，并在完成后把 `epsilonCritical_pos` / `epsilonCritical_lt_one` / `epsilonCritical_sq` 作为 `thm:conclusion-binfold-tail-order-statistics-single-jump-collapse` 的安全正文标注候选
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续
 **Fibonacci 素数域（完整）**：stableMul_inv_of_prime（素数时乘法逆存在，域结构核心）; fib_four/five/seven/thirteen_prime（native_decide 验证）; fib_nine_not_prime（反例验证）; instFieldOfPrime（通用域实例：F_{m+2} 素数时 X m 为域，经由 stableValueRingEquiv 转移）; instField_X1（GF(2)）、instField_X2（GF(3)）、instField_X3（GF(5)）、instField_X5（GF(13)）、instField_X9（GF(89)）、instField_X11（GF(233)）（cor:field-phase-fib-prime 完整形式化）

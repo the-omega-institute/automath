@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 import Omega.Folding.MomentRecurrence
+import Omega.Folding.Window6
 
 /-! ### Window-6 q-moment spectrum and collision probability
 
@@ -283,5 +284,20 @@ theorem window10_basic_consistency :
     thm:conclusion-window10-groupoid-collision-dimension-identity -/
 theorem window10_S2 : momentSum 2 10 = 8320 := by
   rw [← cMomentSum_eq]; native_decide
+
+/-- Window-6 visible CRT arithmetic phase space certificate.
+    thm:conclusion-window6-visible-crt-arithmetic-phase-space -/
+theorem conclusion_window6_visible_crt_arithmetic_phase_space :
+    Fintype.card (X 6) = 21 ∧ 21 = 3 * 7 := by
+  exact ⟨X.card_X_six, card_X6_factorization⟩
+
+/-- Window-6 CRT idempotent sector splitting certificate.
+    prop:conclusion-window6-crt-idempotent-sector-splitting -/
+theorem conclusion_window6_crt_idempotent_sector_splitting :
+    ((7 : ZMod 21) ^ 2 = 7) ∧
+    ((15 : ZMod 21) ^ 2 = 15) ∧
+    ((7 : ZMod 21) * 15 = 0) ∧
+    ((7 : ZMod 21) + 15 = 1) := by
+  exact ⟨crt_idempotent_7, crt_idempotent_15, crt_idempotent_product, crt_idempotent_sum⟩
 
 end Omega.Conclusion
