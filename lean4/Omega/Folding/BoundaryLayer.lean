@@ -355,10 +355,18 @@ private theorem bdryToWord_no11 (n : Nat) (v : X n) : No11 (bdryToWord n v) := b
                 rw [this]; exact hk1)
         · -- k+1 at penultimate (false)
           simp only [hk1_int, ↓dite_false] at hk1
-          split at hk1 <;> simp_all <;> omega
+          by_cases hlast : k + 1 = n + 2
+          · have hkEq : k = n + 1 := by omega
+            subst k
+            simp at hk1
+          · simp at hk1
+            omega
       · -- k ≥ n+2
         simp only [hk_int, ↓dite_false] at hk
-        split at hk <;> simp_all <;> omega
+        by_cases hlast : k = n + 2
+        · simp [hlast] at hk
+        · simp [hlast] at hk
+          omega
 
 private theorem bdryToWord_first (n : Nat) (v : X n) :
     bdryToWord n v ⟨0, by omega⟩ = true := by simp [bdryToWord]
@@ -646,7 +654,7 @@ private theorem cBothEndsFalseCount_eq_card_shift (n : Nat) :
     (fun v _ => ⟨befWord n v, befWord_no11 n v⟩)
   · intro v _
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, befWord]
-    exact ⟨by simp, by simp [show ¬(n + 1 = 0) from by omega, show ¬(n + 1 - 1 < n) from by omega]⟩
+    exact ⟨by simp, by simp []⟩
   · intro v1 _ v2 _ heq
     have heqw : befWord n v1 = befWord n v2 := congrArg Subtype.val heq
     apply Subtype.ext; funext i
@@ -730,14 +738,14 @@ theorem boundaryUpliftMap_no11 {n : Nat} (v : X n) : No11 (boundaryUpliftMap v) 
   have hi_le : i ≤ n + 1 := by omega
   -- Simplify hi: the ite chain leaves v.1 ⟨i - 2, _⟩
   simp only [show ¬(i = 0) from h0, show ¬(i = 1) from h1,
-    show ¬(i = n + 2) from h2, show ¬(i = n + 3) from h3, ↓reduceIte] at hi
+    show ¬(i = n + 2) from h2, show ¬(i = n + 3) from h3] at hi
   -- For i+1: it's in [3..n+2]. Check if i+1 = n+2 (→ false) or in middle
   simp only [show ¬(i + 1 = 0) from by omega, show ¬(i + 1 = 1) from by omega,
-    show ¬(i + 1 = n + 3) from by omega, ↓reduceIte] at hi1
+    show ¬(i + 1 = n + 3) from by omega] at hi1
   by_cases h4 : i + 1 = n + 2
   · -- i+1 = n+2 → boundaryUpliftMap returns false → hi1 : false = true
     simp [h4] at hi1
-  · simp only [h4, ↓reduceIte] at hi1
+  · simp only [h4] at hi1
     -- Both in middle: hi : v.1 ⟨i - 2, _⟩ = true, hi1 : v.1 ⟨i + 1 - 2, _⟩ = true
     have hlt_a : i - 2 < n := by omega
     have hlt_b : i - 2 + 1 < n := by omega
@@ -803,14 +811,14 @@ theorem cMixedEndCount_eq_two_fib (m : Nat) (hm : 2 ≤ m) :
                 ¬ x.1 ⟨0, by omega⟩ = x.1 ⟨n + 2, by omega⟩)).card =
             s.card := by
         simpa [s, eqs] using
-          (Finset.filter_card_add_filter_neg_card_eq_card
+          (Finset.card_filter_add_card_filter_not
             (s := s) (p := fun x : X (n + 3) => x.1 ⟨0, by omega⟩ = x.1 ⟨n + 2, by omega⟩))
       have hsplit_eq :
           (eqs.filter (fun x : X (n + 3) => x.1 ⟨0, by omega⟩ = true)).card +
               (eqs.filter (fun x : X (n + 3) => ¬ x.1 ⟨0, by omega⟩ = true)).card =
             eqs.card := by
         simpa [eqs] using
-          (Finset.filter_card_add_filter_neg_card_eq_card
+          (Finset.card_filter_add_card_filter_not
             (s := eqs) (p := fun x : X (n + 3) => x.1 ⟨0, by omega⟩ = true))
       have hboundarySet :
           eqs.filter (fun x : X (n + 3) => x.1 ⟨0, by omega⟩ = true) =
@@ -849,8 +857,9 @@ theorem cMixedEndCount_eq_two_fib (m : Nat) (hm : 2 ≤ m) :
             cMixedEndCount (n + 3) := by
         simp [cMixedEndCount, s, show 2 ≤ n + 3 by omega]
       have hs : s.card = Nat.fib (n + 5) := by
-        rw [show s.card = @Fintype.card (X (n + 3)) (fintypeX (n + 3)) from by
-          simpa [s] using (@Finset.card_univ (X (n + 3)) (fintypeX (n + 3)))]
+        have hsCard : s.card = @Fintype.card (X (n + 3)) (fintypeX (n + 3)) := by
+          simp [s]
+        rw [hsCard]
         have h4 : @Finset.univ _ (fintypeX (n + 3)) = @Finset.univ _ (X.instFintype (n + 3)) := by
           ext x
           simp [Finset.mem_univ]

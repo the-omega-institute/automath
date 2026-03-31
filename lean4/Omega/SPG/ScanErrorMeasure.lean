@@ -434,8 +434,8 @@ theorem prefixScanErrorMeasure_compl [MeasurableSpace (Word n)]
     ineq:sum-min-le-min-sum -/
 theorem sum_min_le_min_sum {ι : Type*} [Fintype ι] (a b : ι → ENNReal) :
     ∑ i, min (a i) (b i) ≤ min (∑ i, a i) (∑ i, b i) :=
-  le_min (Finset.sum_le_sum (fun i _ => min_le_left _ _))
-    (Finset.sum_le_sum (fun i _ => min_le_right _ _))
+  le_min (Finset.sum_le_sum (fun _i _ => min_le_left _ _))
+    (Finset.sum_le_sum (fun _i _ => min_le_right _ _))
 
 /-- Scan error under a general measure is bounded by the minimum of event and complement mass.
     thm:spg-measure-scan-error-bayes-bound -/
@@ -830,7 +830,7 @@ theorem boundaryCylinderCount_antitone_via_bridge
     {α β γ : Type*} [Fintype α] [Fintype β] [Fintype γ]
     [MeasurableSpace α] [MeasurableSingletonClass α]
     (μ : PMF α) (obs₁ : α → β) (obs₂ : α → γ) (f : γ → β)
-    (hRef : ∀ x, obs₁ x = f (obs₂ x)) (P : Set α) :
+    (_hRef : ∀ x, obs₁ x = f (obs₂ x)) (P : Set α) :
     boundaryCylinderCount μ.toMeasure obs₂ P ≤ Fintype.card γ := by
   simp [boundaryCylinderCount]
   exact Finset.card_le_card (Finset.filter_subset _ _)
@@ -1111,7 +1111,7 @@ private theorem scanErrorMeasure_union_le {α β : Type*} [MeasurableSpace α] [
 theorem scanErrorMeasure_inter_le {α β : Type*} [MeasurableSpace α] [Fintype β]
     (μ : MeasureTheory.Measure α) (obs : α → β) (P Q : Set α) :
     scanErrorMeasure μ obs (P ∩ Q) ≤ scanErrorMeasure μ obs P + scanErrorMeasure μ obs Q := by
-  rw [show P ∩ Q = (Pᶜ ∪ Qᶜ)ᶜ from by ext x; simp [not_or]]
+  rw [show P ∩ Q = (Pᶜ ∪ Qᶜ)ᶜ from by ext x; simp []]
   rw [scanErrorMeasure_compl]
   calc scanErrorMeasure μ obs (Pᶜ ∪ Qᶜ)
       ≤ scanErrorMeasure μ obs Pᶜ + scanErrorMeasure μ obs Qᶜ :=

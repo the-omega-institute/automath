@@ -406,7 +406,7 @@ theorem Fold_biresolving (v : Word m) :
 
 /-- Strict q-monotonicity: S_q(m) < S_{q+1}(m) for m ≥ 2 and q ≥ 1.
     prop:pom-moment-congruence-q -/
-theorem momentSum_strict_mono_q (q m : Nat) (hq : 1 ≤ q) (hm : 2 ≤ m) :
+theorem momentSum_strict_mono_q (q m : Nat) (_hq : 1 ≤ q) (hm : 2 ≤ m) :
     momentSum q m < momentSum (q + 1) m := by
   simp only [momentSum]
   -- Use Finset.sum_lt_sum: ∀ x, d^q ≤ d^{q+1}, and ∃ x₀, d^q < d^{q+1}
@@ -617,7 +617,7 @@ theorem exactWeightCollision_ge_succ (m : Nat) :
 
 /-- E00(m) ≥ 2 · hiddenBitCount(m) for m ≥ 2.
     thm:pom-hidden-bit-count -/
-theorem exactWeightCollision_ge_double_hiddenBitCount (m : Nat) (hm : 2 ≤ m) :
+theorem exactWeightCollision_ge_double_hiddenBitCount (m : Nat) (_hm : 2 ≤ m) :
     2 * hiddenBitCount m ≤ exactWeightCollision m := by
   rw [hiddenBitCount_eq_div]
   -- E00(m) = 1 + Σ S_2(k) ≥ 1 + Σ 2^k. Use: each S_2(k) ≥ 2^k.
@@ -822,7 +822,7 @@ theorem momentSum_two_succ_gt_double (m : Nat) (hm : 2 ≤ m) :
 
 /-- D^q * |{x : d(x) ≥ D}| ≤ S_q(m) — Markov bound for large fibers.
     prop:fold-large-fiber-moment-upperbounds -/
-theorem paper_large_fiber_moment_bound (q m D : Nat) (hD : 1 ≤ D) (hq : 1 ≤ q) :
+theorem paper_large_fiber_moment_bound (q m D : Nat) (_hD : 1 ≤ D) (_hq : 1 ≤ q) :
     D ^ q * (Finset.univ.filter (fun x : X m => D ≤ X.fiberMultiplicity x)).card
     ≤ momentSum q m := by
   unfold momentSum
@@ -993,7 +993,7 @@ theorem collisionFreeCount_add_collision_eq_fib (m : Nat) :
     ((Finset.univ : Finset (X m)).filter (fun x => X.fiberMultiplicity x = 1)).card +
     ((Finset.univ : Finset (X m)).filter (fun x => ¬ X.fiberMultiplicity x = 1)).card =
     (Finset.univ : Finset (X m)).card :=
-    Finset.filter_card_add_filter_neg_card_eq_card _
+    Finset.card_filter_add_card_filter_not _
   have heq : ((Finset.univ : Finset (X m)).filter (fun x => ¬ X.fiberMultiplicity x = 1)) =
     ((Finset.univ : Finset (X m)).filter (fun x => 2 ≤ X.fiberMultiplicity x)) := by
     ext x; simp only [Finset.mem_filter, Finset.mem_univ, true_and]
@@ -1041,7 +1041,7 @@ theorem momentSum_three_super_quadratic (m : Nat) (hm : 4 ≤ m) :
 
 /-- S_q(m) ≥ |X_m| for q ≥ 1: each fiber contributes d(x)^q ≥ 1.
     prop:pom-moment-ge-card -/
-theorem momentSum_ge_card_fintype (q m : Nat) (hq : 1 ≤ q) :
+theorem momentSum_ge_card_fintype (q m : Nat) (_hq : 1 ≤ q) :
     Fintype.card (X m) ≤ momentSum q m := by
   rw [X.card_eq_fib]; exact momentSum_ge_card q m
 
@@ -1065,7 +1065,7 @@ theorem exactWeightCount_pos_iff (m n : Nat) :
 
 /-- d_{m,1}(x) > 0 iff sv(x) + F_{m+2} is an achievable weight.
     thm:pom-hidden-bit-one-pos-iff -/
-theorem fiberHiddenBitCount_one_pos_iff (x : X m) (hm : 2 ≤ m) :
+theorem fiberHiddenBitCount_one_pos_iff (x : X m) (_hm : 2 ≤ m) :
     0 < fiberHiddenBitCount 1 x ↔
     stableValue x + Nat.fib (m + 2) ≤ Nat.fib (m + 3) - 2 := by
   rw [fiberHiddenBitCount_one_eq_ewc, exactWeightCount_pos_iff]
@@ -1166,7 +1166,7 @@ theorem maxFiberMult_le_two_pow_of_injective_sideinfo (m k : Nat)
     fun _ _ => Finset.mem_coe.mpr (Finset.mem_univ _)
   calc (X.fiber x).card ≤ Finset.univ.card :=
         Finset.card_le_card_of_injOn r hmaps hr_inj
-    _ = 2 ^ k := by simp [Finset.card_fin]
+    _ = 2 ^ k := by simp
 
 /-- At m=6 the max fiber multiplicity is 5, requiring ⌈log₂ 5⌉ = 3 auxiliary bits.
     cor:pom-fold6-binary-auxbits -/

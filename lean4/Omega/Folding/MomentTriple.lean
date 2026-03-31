@@ -110,7 +110,7 @@ theorem momentSum_three_lastBit_split (m : Nat) :
 theorem tripleCollisionClass_cancel_111 (m : Nat) :
     tripleCollisionClass m true true true = tripleCollisionClass m false false false := by
   unfold tripleCollisionClass; ext ⟨v1, v2, v3⟩
-  simp only [Finset.mem_filter, Finset.mem_univ, true_and, ↓reduceIte, Nat.add_zero]
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and, ↓reduceIte]
   exact ⟨fun ⟨h1, h2⟩ => ⟨Nat.ModEq.add_right_cancel' _ h1, Nat.ModEq.add_right_cancel' _ h2⟩,
          fun ⟨h1, h2⟩ => ⟨Nat.ModEq.add_right _ h1, Nat.ModEq.add_right _ h2⟩⟩
 
@@ -485,7 +485,7 @@ theorem exactWeightCount_one (m : Nat) (hm : 1 ≤ m) : exactWeightCount m 1 = 1
 
 /-- The maximum stableValue F_{m+2}-1 is achieved by some stable word.
     thm:finite-resolution-mod -/
-theorem stableValue_max_achieved (m : Nat) (hm : 1 ≤ m) :
+theorem stableValue_max_achieved (m : Nat) (_hm : 1 ≤ m) :
     ∃ x : X m, stableValue x = Nat.fib (m + 2) - 1 := by
   have hF : 0 < Nat.fib (m + 2) := fib_succ_pos (m + 1)
   obtain ⟨x, hx⟩ := X.stableValueFin_surjective m ⟨Nat.fib (m + 2) - 1, by omega⟩

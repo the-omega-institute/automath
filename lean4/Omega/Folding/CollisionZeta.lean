@@ -426,7 +426,7 @@ theorem fib_mod_two_table :
 /-- Fibonacci parity law: F(n) is even iff n ≡ 0 (mod 3).
     Proof by strong induction using the Pisano period π(2)=3.
     cor:pom-fiber-parity-mod3-general -/
-theorem fib_even_iff_mod3 (n : Nat) (hn : 1 ≤ n) :
+theorem fib_even_iff_mod3 (n : Nat) (_hn : 1 ≤ n) :
     Even (Nat.fib n) ↔ n % 3 = 0 := by
   -- Bounded version: check all n ≤ 30 computationally, then use Pisano period π(2)=3.
   -- For the general case, we prove by induction on n with step size 3.

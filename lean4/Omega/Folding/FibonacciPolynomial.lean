@@ -64,7 +64,7 @@ theorem fibPoly_eval_zero : ∀ n : Nat, (fibPoly n).eval 0 = if n = 0 then 0 el
 /-- pathIndSetPoly evaluated at t=0 is always 1.
     thm:pom-path-indset-poly-eval-zero -/
 theorem pathIndSetPoly_eval_zero (ℓ : Nat) : (pathIndSetPoly ℓ).eval 0 = 1 := by
-  simp [pathIndSetPoly, fibPoly_eval_zero, show ℓ + 2 ≠ 0 from by omega]
+  simp [pathIndSetPoly, fibPoly_eval_zero]
 
 /-- pathIndSetPoly recurrence: I_{ℓ+2}(x) = I_{ℓ+1}(x) + x · I_ℓ(x).
     thm:pom-path-indset-poly-recurrence -/
@@ -519,7 +519,6 @@ theorem detPoly_coeff_binomial : ∀ (k j : Nat), j ≤ k →
         rw [show 2 * ((j + 1) - 1) = 2 * j from by omega] at hrec
         -- Normalize index: k + 1 + j = k + (j + 1) for alignment
         conv_lhs => rw [show k + 1 + j = k + (j + 1) from by omega]
-        push_cast at hrec ⊢
         linarith
       · -- j + 1 = k + 1, so coeff_{j+1} D_k = 0, and j = k
         have hcoeff0 : (detPoly k).coeff (j + 1) = 0 :=
@@ -571,7 +570,7 @@ theorem detPoly_deriv_eval_zero_double :
     ∀ k : Nat,
     2 * (Polynomial.derivative (detPoly k)).eval (0 : ℤ) = (k : ℤ) * ((k : ℤ) + 1)
   | 0 => by simp [detPoly]
-  | 1 => by simp [detPoly, derivative_add, derivative_X, derivative_C]
+  | 1 => by simp [detPoly, derivative_add, derivative_X]
   | k + 2 => by
     -- D_{k+2} = (X+C 2)*D_{k+1} - D_k
     -- D'_{k+2} = (1+0)*D_{k+1} + (X+C 2)*D'_{k+1} - D'_k
@@ -580,7 +579,7 @@ theorem detPoly_deriv_eval_zero_double :
     -- D'_{k+2}(0) = D_{k+1}(0) + 2*D'_{k+1}(0) - D'_k(0) = 1 + 2*D'_{k+1}(0) - D'_k(0)
     simp only [detPoly_succ_succ, map_sub, derivative_mul, eval_sub, eval_add, eval_mul]
     simp only [derivative_add, derivative_X, derivative_ofNat, add_zero]
-    simp only [eval_one, one_mul, eval_add, eval_X, eval_ofNat, zero_add]
+    simp only [eval_one, one_mul, eval_X, eval_ofNat, zero_add]
     have ih1 := detPoly_deriv_eval_zero_double (k + 1)
     have ih0 := detPoly_deriv_eval_zero_double k
     have heval := detPoly_eval_zero (k + 1)
@@ -696,14 +695,14 @@ theorem fib_product_cassini (n : Nat) :
     have hcas := fib_cassini_even n heven
     have hodd : Odd (n + 1) := Even.add_one heven
     rw [hodd.neg_one_pow]
-    push_cast; linarith
+    linarith
   · -- Odd case: F(n)*F(n+2) = F(n+1)^2 + 1
     -- (-1)^{n+1} = 1 since n+1 is even
     have hcas := fib_cassini_odd n heven
     rw [Nat.not_even_iff_odd] at heven
     have heven2 : Even (n + 1) := Odd.add_one heven
     rw [heven2.neg_one_pow]
-    push_cast; linarith
+    linarith
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase R68: pathIndSetPoly at t = -1 (J_l sequence)

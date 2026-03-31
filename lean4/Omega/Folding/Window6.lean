@@ -70,7 +70,7 @@ lemma abs_le_supNormIntVec {r : ℕ} (k : Fin r → ℤ) (i : Fin r) : Int.natAb
       (Int.natAbs (k i))
       (Finset.mem_image.mpr ⟨i, Finset.mem_univ i, rfl⟩))
 
-lemma supNormIntVec_pos_of_ne_zero {r : ℕ} (hr : 0 < r) {k : Fin r → ℤ} (hk : k ≠ 0) :
+lemma supNormIntVec_pos_of_ne_zero {r : ℕ} (_hr : 0 < r) {k : Fin r → ℤ} (hk : k ≠ 0) :
     1 ≤ supNormIntVec k := by
   classical
   by_contra hlt
@@ -497,7 +497,7 @@ theorem readout_needs_at_least_one_query (m : Nat) (hm : 2 ≤ m) :
 /-- Pointwise box lower bound form aligned with the paper proof route, specialized to the
 critical radius `Q = |k|_∞`.
     def:cdim-audit-stability-boxwise -/
-def AuditStableBoxwise {d r : ℕ} (hd : 0 < d) (hr : 0 < r)
+def AuditStableBoxwise {d r : ℕ} (hd : 0 < d) (_hr : 0 < r)
     (Θ : Matrix (Fin d) (Fin r) ℝ) : Prop :=
   ∃ c : ℝ, 0 < c ∧ ∀ k : Fin r → ℤ,
     k ≠ 0 →

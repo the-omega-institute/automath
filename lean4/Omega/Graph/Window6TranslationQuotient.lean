@@ -24,7 +24,8 @@ theorem window6_no_translation_quotient_fiber :
   have hsub := Finset.filter_subset (fun x => cBinFiberMult 6 x = hSize) (Finset.univ : Finset (X 6))
   have hEq : ((Finset.univ : Finset (X 6)).filter (fun x => cBinFiberMult 6 x = hSize)) = Finset.univ := by
     apply Finset.eq_of_subset_of_card_le hsub
-    simpa [hcard] using le_rfl
+    rw [hcard]
+    simp
   have hxmem : cBinFiberMult 6 x = hSize := by
     have : x ∈ ((Finset.univ : Finset (X 6)).filter (fun x => cBinFiberMult 6 x = hSize)) := by
       rw [hEq]

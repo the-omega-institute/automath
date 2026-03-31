@@ -67,7 +67,7 @@ private theorem minMatrix_eq_mul_transpose (k : Nat) :
 
 /-- det(K_k) = 1 where K_k(i,j) = min(i+1,j+1).
     lem:pom-Kk-gram-det -/
-theorem minMatrix_det_eq_one (k : Nat) (hk : 1 ≤ k) :
+theorem minMatrix_det_eq_one (k : Nat) (_hk : 1 ≤ k) :
     (Matrix.of (fun (i j : Fin k) => (min (i.val + 1) (j.val + 1) : ℤ))).det = 1 := by
   rw [minMatrix_eq_mul_transpose, Matrix.det_mul, Matrix.det_transpose, lowerOnes_det]
   ring

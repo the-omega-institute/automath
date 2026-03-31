@@ -125,7 +125,7 @@ theorem exactWeightCount_zero_zero : exactWeightCount 0 0 = 1 := by decide
 theorem exactWeightCount_zero_succ (n : Nat) : exactWeightCount 0 (n + 1) = 0 := by
   unfold exactWeightCount
   simp only [Finset.card_eq_zero, Finset.filter_eq_empty_iff, Finset.mem_univ, true_implies,
-    weight, not_true_eq_false]; omega
+    weight]; omega
 
 /-- Last-bit split: ewc(m+1, n) = ewc(m, n) + ewc(m, n - F_{m+2}).
     thm:pom-ewc-succ -/
@@ -140,7 +140,7 @@ theorem exactWeightCount_succ (m n : Nat) :
       (Finset.univ.filter (fun w : Word (m + 1) => weight w = n ∧ w ⟨m, by omega⟩ = true)) := by
     ext w; simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_union]
     constructor
-    · intro hw; cases hb : w ⟨m, by omega⟩ <;> simp [hw, hb]
+    · intro hw; cases hb : w ⟨m, by omega⟩ <;> simp [hw]
     · rintro (⟨hw, _⟩ | ⟨hw, _⟩) <;> exact hw
   have hdisjoint : Disjoint
       (Finset.univ.filter (fun w : Word (m + 1) => weight w = n ∧ w ⟨m, by omega⟩ = false))
@@ -268,7 +268,7 @@ theorem exactWeightCount_succ_succ (m n : Nat) :
     rw [step3]
     by_cases h4 : Nat.fib (m + 4) ≤ n
     · have h23 : Nat.fib (m + 2) ≤ n - Nat.fib (m + 3) := by omega
-      simp only [if_pos h3, if_pos h4, if_pos h23]
+      simp only [ if_pos h4, if_pos h23]
       rw [show n - Nat.fib (m + 3) - Nat.fib (m + 2) = n - Nat.fib (m + 4) from by omega]
       ring
     · have h23 : ¬ (Nat.fib (m + 2) ≤ n - Nat.fib (m + 3)) := by omega
@@ -448,7 +448,7 @@ theorem momentSum_two_eq_congr_sq_sum (m : Nat) :
 -- ══════════════════════════════════════════════════════════════
 
 /-- snoc false embeds the exact-weight-n subfiber: d_{m+1}(ofNat(m+1,n)) ≥ ewc(m,n). -/
-theorem fiberMultiplicity_ge_ewc_via_snoc (m n : Nat) (hn : n < Nat.fib (m + 3)) :
+theorem fiberMultiplicity_ge_ewc_via_snoc (m n : Nat) (_hn : n < Nat.fib (m + 3)) :
     X.fiberMultiplicity (X.ofNat (m + 1) n) ≥ exactWeightCount m n := by
   classical
   let y := X.ofNat (m + 1) n

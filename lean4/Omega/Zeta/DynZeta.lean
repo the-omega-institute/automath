@@ -445,10 +445,6 @@ theorem lucasNum_mod3_period_eight (n : ℕ) :
     show (n + 6) + 1 = (n + 5) + 2 from by omega, lucasNum_succ_succ (n + 5),
     show n + 5 = (n + 3) + 2 from by omega, lucasNum_succ_succ (n + 3),
     show n + 3 = (n + 1) + 2 from by omega, lucasNum_succ_succ (n + 1),
-    show (n + 5) + 1 = (n + 4) + 2 from by omega,
-    show (n + 3) + 1 = (n + 2) + 2 from by omega,
-    show (n + 4) + 1 = (n + 3) + 2 from by omega,
-    show (n + 2) + 1 = (n + 1) + 2 from by omega,
     show (n + 1) + 1 = n + 2 from by omega,
     lucasNum_succ_succ n]
   omega
@@ -466,8 +462,6 @@ theorem lucasNum_mod4_period_six (n : Nat) :
     show n + 4 = (n + 2) + 2 from by omega, lucasNum_succ_succ (n + 2),
     show (n + 4) + 1 = (n + 3) + 2 from by omega, lucasNum_succ_succ (n + 3),
     show n + 3 = (n + 1) + 2 from by omega, lucasNum_succ_succ (n + 1),
-    show (n + 3) + 1 = (n + 2) + 2 from by omega,
-    show (n + 2) + 1 = (n + 1) + 2 from by omega,
     show (n + 1) + 1 = n + 2 from by omega,
     lucasNum_succ_succ n]
   omega
@@ -491,18 +485,6 @@ theorem lucasNum_mod7_period_sixteen (n : Nat) :
     show n + 7 = (n + 5) + 2 from by omega, lucasNum_succ_succ (n + 5),
     show n + 5 = (n + 3) + 2 from by omega, lucasNum_succ_succ (n + 3),
     show n + 3 = (n + 1) + 2 from by omega, lucasNum_succ_succ (n + 1),
-    show (n + 13) + 1 = (n + 12) + 2 from by omega,
-    show (n + 12) + 1 = (n + 11) + 2 from by omega,
-    show (n + 11) + 1 = (n + 10) + 2 from by omega,
-    show (n + 10) + 1 = (n + 9) + 2 from by omega,
-    show (n + 9) + 1 = (n + 8) + 2 from by omega,
-    show (n + 8) + 1 = (n + 7) + 2 from by omega,
-    show (n + 7) + 1 = (n + 6) + 2 from by omega,
-    show (n + 6) + 1 = (n + 5) + 2 from by omega,
-    show (n + 5) + 1 = (n + 4) + 2 from by omega,
-    show (n + 4) + 1 = (n + 3) + 2 from by omega,
-    show (n + 3) + 1 = (n + 2) + 2 from by omega,
-    show (n + 2) + 1 = (n + 1) + 2 from by omega,
     show (n + 1) + 1 = n + 2 from by omega,
     lucasNum_succ_succ n]
   omega

@@ -62,7 +62,7 @@ theorem circleDim_mono {n₁ n₂ t : Nat} (h : n₁ ≤ n₂) :
     prop:circle-dimension-laws -/
 theorem halfCircleDim_add (a b c d : Nat) :
     halfCircleDim (a + b) (c + d) = halfCircleDim a c + halfCircleDim b d := by
-  simp [halfCircleDim, circleDim]; push_cast; ring
+  simp [halfCircleDim, circleDim]; ring
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase R128: Tensor-Hom-Ext laws
@@ -187,7 +187,7 @@ theorem circleDim_add_three (a b c t1 t2 t3 : Nat) :
 theorem halfCircleDim_add_three (a b c t1 t2 t3 : Nat) :
     halfCircleDim (a + b + c) (t1 + t2 + t3) =
       halfCircleDim a t1 + halfCircleDim b t2 + halfCircleDim c t3 := by
-  simp [halfCircleDim, circleDim]; push_cast; ring
+  simp [halfCircleDim, circleDim]; ring
 
 /-- Paper: prop:circle-dimension-laws (triple sum) -/
 theorem paper_circleDim_add_three (a b c t1 t2 t3 : Nat) :
@@ -221,9 +221,9 @@ theorem cdim_rank_nullity (f : CircleDimHomData) :
 
 /-- Composition data for g∘f. thm:cdim-defect-chain-rule -/
 def CircleDimHomData.comp (f : CircleDimHomData) (g : CircleDimHomData)
-    (hfg : f.targetRank = g.sourceRank)
+    (_hfg : f.targetRank = g.sourceRank)
     (restrictedKerRank : Nat)
-    (hRestrict : restrictedKerRank ≤ g.kernelRank)
+    (_hRestrict : restrictedKerRank ≤ g.kernelRank)
     (hRestrictBound : restrictedKerRank ≤ f.imageRank)
     (hImageSplit : f.imageRank ≤ restrictedKerRank + g.imageRank) :
     CircleDimHomData where

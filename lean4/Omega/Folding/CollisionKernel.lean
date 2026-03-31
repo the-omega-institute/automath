@@ -193,8 +193,7 @@ theorem bowenFranksMatrix3_det : bowenFranksMatrix3.det = -3 := by native_decide
 theorem collisionKernel2_fredholm_det (z : ℤ) :
     (1 - z • collisionKernel2).det = 1 - 2 * z - 2 * z ^ 2 + 2 * z ^ 3 := by
   simp only [collisionKernel2, Matrix.det_fin_three]
-  simp [Matrix.smul_of, Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one,
-    Matrix.head_cons, Matrix.head_fin_const]
+  simp [Matrix.smul_of, Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one]
   ring
 
 /-- Paper: prop:pom-collision-det (A₂) -/
@@ -208,8 +207,7 @@ theorem paper_collisionKernel2_fredholm_det (z : ℤ) :
 theorem collisionKernel3_fredholm_det (z : ℤ) :
     (1 - z • collisionKernel3).det = 1 - 2 * z - 4 * z ^ 2 + 2 * z ^ 3 := by
   simp only [collisionKernel3, Matrix.det_fin_three]
-  simp [Matrix.smul_of, Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one,
-    Matrix.head_cons, Matrix.head_fin_const]
+  simp [Matrix.smul_of, Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one]
   ring
 
 /-- Paper: prop:pom-collision-det (A₃) -/

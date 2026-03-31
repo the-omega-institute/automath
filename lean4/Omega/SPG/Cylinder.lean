@@ -133,7 +133,7 @@ theorem cylinderWord_subset_of_prefix {w₁ : Word m₁} {w₂ : Word m₂}
     (h : m₁ ≤ m₂) (hPrefix : ∀ i : Fin m₁, w₁ i = w₂ ⟨i.1, Nat.lt_of_lt_of_le i.2 h⟩) :
     cylinderWord w₂ ⊆ cylinderWord w₁ := by
   intro x hx
-  simp only [cylinderWord, Set.mem_setOf_eq, prefixWord] at hx ⊢
+  simp only [cylinderWord, Set.mem_setOf_eq] at hx ⊢
   funext i
   have := congr_fun hx ⟨i.1, Nat.lt_of_lt_of_le i.2 h⟩
   rw [hPrefix i]
@@ -340,7 +340,7 @@ theorem prefixWord_eq_of_le {x y : OmegaInfinity} {m n : Nat}
     prop:spg-decidable-clopen (finite Boolean closure) -/
 theorem prefixDetermined_iInter_finset {ι : Type*} [DecidableEq ι]
     (S : Finset ι) (s : ι → Set OmegaInfinity) (m : ι → Nat)
-    (hpd : ∀ i ∈ S, PrefixDetermined (s i) (m i)) (hne : S.Nonempty) :
+    (hpd : ∀ i ∈ S, PrefixDetermined (s i) (m i)) (_hne : S.Nonempty) :
     PrefixDetermined (⋂ i ∈ S, s i) (S.sup m) := by
   intro x y hxy
   constructor <;> intro hx

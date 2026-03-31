@@ -277,7 +277,9 @@ theorem topological_entropy_eq_log_phi :
             (Real.log (Nat.fib (i + 3) : ℝ) - Real.log (Nat.fib (i + 2) : ℝ))) := by
               congr 2; ext i; dsimp [u]
               have hnum : (Nat.fib (i + 3) : ℝ) ≠ 0 := by
-                exact ne_of_gt (by simpa [add_assoc] using stableSyntaxCount_pos (i + 1))
+                apply ne_of_gt
+                rw [show i + 3 = (i + 1) + 2 by omega]
+                exact stableSyntaxCount_pos (i + 1)
               have hden : (Nat.fib (i + 2) : ℝ) ≠ 0 := by
                 exact ne_of_gt (stableSyntaxCount_pos i)
               rw [Real.log_div hnum hden]
@@ -449,7 +451,7 @@ theorem fib_nearest_integer (n : Nat) :
 
 /-- Named alias with positivity hypothesis: |F(n) - φ^n/√5| < 1/2 for n ≥ 1.
     prop:cdim-fibonacci-nearest-integer -/
-theorem fib_nearest_integer_of_pos (n : Nat) (hn : 1 ≤ n) :
+theorem fib_nearest_integer_of_pos (n : Nat) (_hn : 1 ≤ n) :
     |(Nat.fib n : ℝ) - φ ^ n / Real.sqrt 5| < 1 / 2 :=
   fib_nearest_integer n
 

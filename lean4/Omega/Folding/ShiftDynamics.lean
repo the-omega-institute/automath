@@ -216,7 +216,7 @@ private theorem lucasNum_eq_fib_aux :
     rw [lucasNum_succ_succ, lucasNum_eq_fib_aux (m + 1), lucasNum_eq_fib_aux m]
     -- Use native_decide for m=0,1 then the recurrence handles the rest uniformly
     -- Actually the omega issue is Nat.fib normalization. Just native_decide small + fallback.
-    simp only [lucasNum_succ_succ, lucasNum_eq_fib_aux, fib_succ_succ']
+    simp only [ fib_succ_succ']
     omega
 
 /-- L_n = F_{n+1} + F_{n-1} for n ≥ 1.
@@ -254,7 +254,6 @@ theorem lucasNum_mul_fib (n : Nat) (hn : 1 ≤ n) :
     lucasNum n * Nat.fib n = Nat.fib (2 * n) := by
   -- Cast to ℤ where subtraction works, use fib_double identity
   suffices h : (lucasNum n * Nat.fib n : ℤ) = (Nat.fib (2 * n) : ℤ) from Nat.cast_injective h
-  push_cast
   obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
   rw [lucasNum_eq_fib (m + 1) (by omega)]
   simp only [show m + 1 - 1 = m from by omega, show m + 1 + 1 = m + 2 from by omega]
@@ -271,7 +270,7 @@ theorem lucasNum_mul_fib (n : Nat) (hn : 1 ≤ n) :
     zify [hge] at this ⊢; linarith]
   -- Now: (↑F(m+2) + ↑F(m)) * ↑F(m+1) = ↑F(m+1) * (2*↑F(m+2) - ↑F(m+1))
   have hrec : (Nat.fib (m + 2) : ℤ) = Nat.fib m + Nat.fib (m + 1) := by
-    push_cast; exact_mod_cast Nat.fib_add_two
+    exact_mod_cast Nat.fib_add_two
   nlinarith
 
 /-- F(2k) = F(k) · L(k): Fibonacci doubling via Lucas numbers.
@@ -297,12 +296,12 @@ theorem lucasNum_cassini (n : Nat) (hn : 1 ≤ n) :
     -- L(k+2)² - L(k+1)*L(k+3) = 5*(-1)^(k+2)
     rw [show k + 1 + 1 = k + 2 from by omega, show k + 1 + 1 + 1 = k + 3 from by omega]
     rw [show (lucasNum (k + 3) : ℤ) = lucasNum (k + 2) + lucasNum (k + 1) from by
-      push_cast; exact_mod_cast lucasNum_succ_succ (k + 1)]
+      exact_mod_cast lucasNum_succ_succ (k + 1)]
     rw [show k + 1 + 1 = k + 2 from by omega] at ih
     have ih' := ih (by omega)
     have hpow : ((-1 : ℤ) ^ (k + 2) : ℤ) = -((-1) ^ (k + 1)) := by ring
     have hrec : (lucasNum (k + 2) : ℤ) = lucasNum (k + 1) + lucasNum k := by
-      push_cast; exact_mod_cast lucasNum_succ_succ k
+      exact_mod_cast lucasNum_succ_succ k
     rw [hpow]; nlinarith
 
 /-- Lucas doubling: L(2n) = L(n)² - 2·(-1)^n for n ≥ 1.
@@ -322,9 +321,9 @@ theorem lucasNum_double (n : Nat) (hn : 1 ≤ n) :
   | zero => native_decide
   | succ k ih =>
     have hrec1 : (Nat.fib (k + 3) : ℤ) = Nat.fib (k + 2) + Nat.fib (k + 1) := by
-      have := @Nat.fib_add_two (k + 1); push_cast; linarith
+      have := @Nat.fib_add_two (k + 1); linarith
     have hrec2 : (Nat.fib (k + 2) : ℤ) = Nat.fib (k + 1) + Nat.fib k := by
-      have := @Nat.fib_add_two k; push_cast; linarith
+      have := @Nat.fib_add_two k; linarith
     have hpow : ((-1 : ℤ) ^ (k + 2) : ℤ) = -((-1) ^ (k + 1)) := by ring
     have ih' := ih (by omega)
     rw [show k + 1 + 1 = k + 2 from by omega] at *
@@ -365,15 +364,15 @@ theorem lucasNum_sq (n : Nat) (hn : 1 ≤ n) :
     | zero => native_decide
     | succ k ih =>
       have hr1 : (Nat.fib (k + 3) : ℤ) = Nat.fib (k + 2) + Nat.fib (k + 1) := by
-        have := @Nat.fib_add_two (k + 1); push_cast; linarith
+        have := @Nat.fib_add_two (k + 1); linarith
       have hr2 : (Nat.fib (k + 2) : ℤ) = Nat.fib (k + 1) + Nat.fib k := by
-        have := @Nat.fib_add_two k; push_cast; linarith
+        have := @Nat.fib_add_two k; linarith
       have hp : ((-1 : ℤ) ^ (k + 2) : ℤ) = -((-1) ^ (k + 1)) := by ring
       have ih' := ih (by omega)
       rw [show k + 1 + 1 = k + 2 from by omega] at *
       rw [hr1, hp]; nlinarith
   have hrec : (Nat.fib (m + 2) : ℤ) = Nat.fib (m + 1) + Nat.fib m := by
-    have := @Nat.fib_add_two m; push_cast; linarith
+    have := @Nat.fib_add_two m; linarith
   push_cast; nlinarith
 
 /-- L(n)² = 5·F(n)² + 4·(-1)^n, unconditional (handles n=0 separately).
@@ -528,7 +527,7 @@ theorem fib_succ_sq_sub_prod (n : Nat) (hn : 1 ≤ n) :
     (Nat.fib (n + 1) : ℤ) ^ 2 - (Nat.fib n : ℤ) * (Nat.fib (n + 2) : ℤ) = (-1) ^ n := by
   have hcas := Graph.fib_cassini n hn
   have hfib : (Nat.fib (n + 2) : ℤ) = Nat.fib n + Nat.fib (n + 1) := by
-    have := Nat.fib_add_two (n := n); push_cast; linarith
+    have := Nat.fib_add_two (n := n); linarith
   -- F(n+1)² - F(n)*F(n+2) = F(n+1)² - F(n)*(F(n)+F(n+1))
   -- = F(n+1)² - F(n)² - F(n)*F(n+1) = F(n+1)*(F(n+1)-F(n)) - F(n)²
   -- Need F(n-1) = F(n+1) - F(n), i.e., F(n+1) = F(n) + F(n-1)
@@ -536,7 +535,7 @@ theorem fib_succ_sq_sub_prod (n : Nat) (hn : 1 ≤ n) :
   simp only [show m + 1 - 1 = m from by omega, show m + 1 + 1 = m + 2 from by omega,
     show m + 1 + 2 = m + 3 from by omega] at *
   have hfib2 : (Nat.fib (m + 2) : ℤ) = Nat.fib m + Nat.fib (m + 1) := by
-    have := Nat.fib_add_two (n := m); push_cast; linarith
+    have := Nat.fib_add_two (n := m); linarith
   nlinarith
 
 /-- F(n)·F(n+2) = F(n+1)² + (-1)^(n+1).
@@ -665,7 +664,7 @@ theorem lucasNum_mul_formula : ∀ (m n : Nat), n ≤ m →
     lucasNum (m + n) + (-1) ^ n * lucasNum (m - n)
   | m, 0, _ => by simp [lucasNum_zero]; ring
   | m, 1, hm => by
-    simp only [lucasNum_one, mul_one, pow_one]
+    simp only [lucasNum_one, pow_one]
     obtain ⟨k, rfl⟩ : ∃ k, m = k + 1 := ⟨m - 1, by omega⟩
     push_cast [lucasNum_succ_succ k]; ring
   | m, n + 2, hmn => by
@@ -844,7 +843,7 @@ theorem fib_shifted_fusion_defect (a b : Nat) :
 theorem fib_determinant_volume_law (a b : Nat) :
     (Nat.fib (a + 2) : ℤ) * Nat.fib (b + 2) - (Nat.fib a : ℤ) * Nat.fib b =
     Nat.fib (a + b + 2) := by
-  have := fib_shifted_fusion_defect a b; push_cast; omega
+  have := fib_shifted_fusion_defect a b; omega
 
 /-- Fusion defect 2-cocycle: associativity consistency of ω(a,b)=F(a)*F(b).
     prop:pom-fusion-defect-2cocycle-identity -/
@@ -883,10 +882,10 @@ theorem fib_fusion_defect_cocycle (a b c : Nat) :
   have haux : Fa1 * Fb * Fc + Fa * Fbc = Fa * Fb * Fc1 + Fab * Fc := by
     have eq1 : (Nat.fib (a + b + c + 1) : ℤ) =
         Fa1 * Fb1 * Fc1 + Fa1 * Fb * Fc + Fa * Fbc := by
-      have := h1; have := h4; push_cast at h1 h4 ⊢; nlinarith
+      have := h1; have := h4; nlinarith
     have eq2 : (Nat.fib (a + b + c + 1) : ℤ) =
         Fa1 * Fb1 * Fc1 + Fa * Fb * Fc1 + Fab * Fc := by
-      have := h2; have := h3; push_cast at h2 h3 ⊢; nlinarith
+      have := h2; have := h3; nlinarith
     linarith
   -- Target: Fa*Fb*F(c+2) + Fab*Fc = Fb*Fc*F(a+2) + Fbc*Fa
   -- Expand F(c+2) = Fc1+Fc, F(a+2) = Fa1+Fa
@@ -894,7 +893,7 @@ theorem fib_fusion_defect_cocycle (a b c : Nat) :
     push_cast [Nat.fib_add_two]; ring
   have ha : (Nat.fib (a + 2) : ℤ) = Fa1 + Fa := by
     push_cast [Nat.fib_add_two]; ring
-  push_cast; rw [hc, ha]; nlinarith
+  rw [hc, ha]; nlinarith
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase 234: Fib strict supermultiplicativity
@@ -1122,8 +1121,8 @@ theorem fib_tripling (n : Nat) :
     have hfib2 : Nat.fib (m + 2) = Nat.fib m + Nat.fib (m + 1) := Nat.fib_add_two
     have hLsq : (lucasNum (m + 1) : ℤ) ^ 2 =
         5 * (Nat.fib (m + 1) : ℤ) ^ 2 + 4 * (-1) ^ (m + 1) := by
-      have hL : (lucasNum (m + 1) : ℤ) = Nat.fib (m + 2) + Nat.fib m := by push_cast; linarith [hleq]
-      have hF : (Nat.fib (m + 2) : ℤ) = Nat.fib m + Nat.fib (m + 1) := by push_cast; linarith [hfib2]
+      have hL : (lucasNum (m + 1) : ℤ) = Nat.fib (m + 2) + Nat.fib m := by linarith [hleq]
+      have hF : (Nat.fib (m + 2) : ℤ) = Nat.fib m + Nat.fib (m + 1) := by linarith [hfib2]
       by_cases heven : Even m
       · have hcas := fib_cassini_even m heven
         have hpow : (-1 : ℤ) ^ (m + 1) = -1 := by
@@ -1137,7 +1136,7 @@ theorem fib_tripling (n : Nat) :
         rw [hpow]; push_cast at hcas; nlinarith [hL, hF]
     -- Cast hlf to ℤ: L(k)*F(k) = F(2k)
     have hlfZ : (lucasNum (m + 1) : ℤ) * Nat.fib (m + 1) = Nat.fib (2 * (m + 1)) := by
-      push_cast; linarith [hlf]
+      linarith [hlf]
     -- hv: F(2k)^2 - F(k)*F(3k) = (-1)^k * F(k)^2
     -- Substitute F(2k) = L(k)*F(k):
     -- (L(k)*F(k))^2 - F(k)*F(3k) = (-1)^k*F(k)^2
@@ -1181,7 +1180,7 @@ theorem lucasNum_sq_pair_sum (n : Nat) :
   -- In Nat, L(n)^2+L(n+1)^2 ≥ 0 and equals a Nat, so we can work in ℤ
   suffices hsuff : (lucasNum n ^ 2 + lucasNum (n + 1) ^ 2 : ℤ) =
       5 * Nat.fib (2 * n + 1) from Nat.cast_injective hsuff
-  push_cast; linarith [h1, h2, h3Z, hcancel]
+  linarith [h1, h2, h3Z, hcancel]
 
 /-- Lucas tripling: L(3n) = L(n) * (L(n)^2 - 3*(-1)^n).
     bridge:lucas-tripling -/

@@ -284,7 +284,7 @@ theorem snoc_truncate_last {m : Nat} (w : Word (m + 1)) :
   funext i; by_cases h : i.1 < m
   · simp [snoc, truncate, h]
   · have : i = ⟨m, Nat.lt_succ_self m⟩ := Fin.ext (Nat.eq_of_lt_succ_of_not_lt i.isLt h)
-    subst this; simp [snoc, h]
+    subst this; simp [snoc]
 
 theorem weight_lt_fib {m : Nat} (w : Word m) : weight w < Nat.fib (m + 3) := by
   induction m with
@@ -294,9 +294,9 @@ theorem weight_lt_fib {m : Nat} (w : Word m) : weight w < Nat.fib (m + 3) := by
     have htr := ih (truncate w)
     have hRec : Nat.fib (m + 3) + Nat.fib (m + 2) = Nat.fib (m + 4) := fib_add_succ (m + 1)
     cases h : w ⟨m, Nat.lt_succ_self m⟩
-    · simp only [h, Bool.false_eq_true, ↓reduceIte, Nat.add_zero]
+    · simp only [ Bool.false_eq_true, ↓reduceIte, Nat.add_zero]
       show weight (truncate w) < Nat.fib (m + 4); omega
-    · simp only [h, ↓reduceIte]
+    · simp only [ ↓reduceIte]
       show weight (truncate w) + Nat.fib (m + 2) < Nat.fib (m + 4); omega
 
 private theorem weight_expand {m : Nat} (w : Word (m + 2)) (hLast : w ⟨m + 1, by omega⟩ = true) :

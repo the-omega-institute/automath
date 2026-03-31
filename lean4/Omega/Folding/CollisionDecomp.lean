@@ -650,7 +650,7 @@ theorem crossCorr_fib_succ (m : Nat) :
       weight p.1 + Nat.fib (m + 2) + Nat.fib (m + 2) = weight p.2)).card = 0 := by
     apply Finset.card_eq_zero.mpr; rw [Finset.filter_eq_empty_iff]
     intro ⟨v1, v2⟩
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and, not_and]
+    simp only [ Finset.mem_univ]
     intro h
     have : weight v2 < Nat.fib (m + 3) := X.weight_lt_fib v2
     have : Nat.fib (m + 3) = Nat.fib (m + 1) + Nat.fib (m + 2) := Nat.fib_add_two

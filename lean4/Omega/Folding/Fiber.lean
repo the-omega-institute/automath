@@ -158,7 +158,7 @@ theorem stableValueFin_injective (m : Nat) :
     Function.Injective (stableValueFin (m := m)) := by
   intro x y h
   have := congr_arg Fin.val h
-  simp only [stableValueFin, Fin.mk.injEq] at this
+  simp only [stableValueFin] at this
   exact (Function.HasLeftInverse.injective ⟨X.ofNat m, X.ofNat_stableValue⟩) this
 
 /-- The stable syntax space is equivalent to Fin(F(m+2)).

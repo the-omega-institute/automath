@@ -35,7 +35,7 @@ theorem stableAdd_zero_right (x : X m) : stableAdd x stableZero = x := by
   rw [stableAdd_comm]; exact stableAdd_zero_left x
 
 /-- Helper: (a % n + b) % n = (a + b) % n for 0 < n. -/
-private theorem Nat.mod_add_mod_right (a b n : Nat) (hn : 0 < n) :
+private theorem Nat.mod_add_mod_right (a b n : Nat) (_hn : 0 < n) :
     (a % n + b) % n = (a + b) % n := by
   conv_rhs => rw [← Nat.mod_add_div a n]
   rw [Nat.add_assoc, Nat.add_comm (n * (a / n)), ← Nat.add_assoc,
@@ -132,7 +132,7 @@ theorem stableMul_one_right (hm : 1 < Nat.fib (m + 2)) (x : X m) :
 
 /-- Fiber multiplicity as a function of value index. -/
 noncomputable def fiberMultiplicityByValue (m : Nat) (n : Nat) : Nat :=
-  if hn : n < Nat.fib (m + 2) then fiberMultiplicity (X.ofNat m n) else 0
+  if _hn : n < Nat.fib (m + 2) then fiberMultiplicity (X.ofNat m n) else 0
 
 /-- Fiber multiplicity of x equals fiberMultiplicityByValue at stableValue(x). -/
 theorem fiberMultiplicity_eq_byValue (x : X m) :

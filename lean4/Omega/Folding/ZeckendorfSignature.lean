@@ -339,7 +339,7 @@ theorem bdry_three_window_sum12_unique_even_triple
   have hk₁_le : k₁ ≤ 4 := by omega
   have hk₁_ge : 1 ≤ k₁ := by omega
   interval_cases k₃ <;> interval_cases k₂ <;> interval_cases k₁ <;>
-    simp_all (config := { decide := true }) [Nat.fib]
+    simp_all (config := { decide := true }) []
 
 /-- F(m-2) = 34 has the unique solution m = 11 among m ≥ 3.
     thm:bdry-delta34-m11-uniqueness -/
@@ -869,7 +869,7 @@ theorem sm_zeckendorf_no_adjacent :
 theorem zeckendorf_no_adjacent_strict_inclusion
     (S : Finset ℕ)
     (h_gap : ∀ a ∈ S, ∀ b ∈ S, a ≠ b → (a : ℤ) - b ≠ 1 ∧ (a : ℤ) - b ≠ -1)
-    (h4 : 4 ∈ S) (h6 : 6 ∈ S) (h8 : 8 ∈ S) :
+    (h4 : 4 ∈ S) (h6 : 6 ∈ S) (_h8 : 8 ∈ S) :
     5 ∉ S ∧ 7 ∉ S := by
   constructor
   · intro h5

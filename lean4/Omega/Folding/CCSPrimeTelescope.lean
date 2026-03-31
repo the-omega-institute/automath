@@ -7,7 +7,7 @@ namespace Omega
 -- ══════════════════════════════════════════════════════════════
 
 /-- ewc at level m+1 with shifted argument equals ewc at level m. -/
-private theorem ewc_succ_shift (m n : Nat) (hn : n < Nat.fib (m + 2)) :
+private theorem ewc_succ_shift (m n : Nat) (_hn : n < Nat.fib (m + 2)) :
     exactWeightCount (m + 1) (n + Nat.fib (m + 3)) =
     exactWeightCount m (n + Nat.fib (m + 1)) := by
   rw [exactWeightCount_succ]

@@ -295,7 +295,7 @@ theorem fib_even_sum (n : Nat) :
 
 /-- Adding F_2=1 to the alternating pattern value gives F_{m+1}.
     thm:zeckendorf-parallel-propagation-lower-bound -/
-theorem fib_even_sum_add_one (n : Nat) (hn : 1 ≤ n) :
+theorem fib_even_sum_add_one (n : Nat) (_hn : 1 ≤ n) :
     ∑ k ∈ Finset.range n, Nat.fib (2 * (k + 1)) + 1 = Nat.fib (2 * n + 1) := by
   rw [fib_even_sum]
   have : 0 < Nat.fib (2 * n + 1) := fib_succ_pos (2 * n)
@@ -1063,7 +1063,7 @@ theorem fib_alternating_skip_sum (n : Nat) :
   | _ n ih =>
   match n with
   | 0 => simp
-  | 1 => simp [Finset.sum_range_succ]; rfl
+  | 1 => simp []; rfl
   | n + 2 =>
     -- (n+3)/2 = (n+1)/2 + 1
     rw [show (n + 2 + 1) / 2 = (n + 1) / 2 + 1 from by omega, Finset.sum_range_succ]
@@ -1157,7 +1157,7 @@ theorem fib_product_sum : ∀ n : Nat,
     5 * (Finset.range n).sum (fun i => Nat.fib (i + 1) * Nat.fib (n - i)) =
     n * Nat.fib (n + 1) + 2 * (n + 1) * Nat.fib n
   | 0 => by simp
-  | 1 => by simp [Finset.sum_range_succ]
+  | 1 => by simp
   | n + 2 => by
     -- Key decomposition: S(n+2) = F(n+2) + Sn1_shifted + Sn
     -- where Sn1_shifted = Σ_{i<n+1} F(i+1)·F(n+1-i) = S(n+1)
@@ -1182,7 +1182,7 @@ theorem fib_product_sum : ∀ n : Nat,
     have hSn_eq : (Finset.range (n + 1)).sum (fun i => Nat.fib (i + 1) * Nat.fib (n - i)) =
         (Finset.range n).sum (fun i => Nat.fib (i + 1) * Nat.fib (n - i)) := by
       rw [Finset.sum_range_succ]
-      simp [show n - n = 0 from by omega]
+      simp
     rw [hSn_eq]
     -- IH
     have ih1 := fib_product_sum (n + 1)
@@ -1267,7 +1267,7 @@ theorem fib_vajda (n i j : Nat) :
       -- h1+h2: F(i+j+2) = F(i+j) + F(i)*F(j) + F(i+1)*F(j+1)
       -- Equating: F(i+j) + F(i)*F(j) + F(i+1)*F(j+1) = F(i)*F(j+1) + F(i+1)*F(j) + F(i+1)*F(j+1)
       -- F(i+j) = F(i)*F(j+1) + F(i+1)*F(j) - F(i)*F(j)
-      push_cast; nlinarith [h1, h2, h3, h4]
+      nlinarith [h1, h2, h3, h4]
     -- Cassini at n
     have hcassini : (Nat.fib (n + 1) : ℤ) ^ 2 - Nat.fib n * Nat.fib (n + 1) -
         (Nat.fib n : ℤ) ^ 2 = (-1) ^ n := by
@@ -1275,10 +1275,10 @@ theorem fib_vajda (n i j : Nat) :
       by_cases heven : Even n
       · have hcas := fib_cassini_even n heven
         have : (-1 : ℤ) ^ n = 1 := Even.neg_one_pow heven
-        push_cast; nlinarith [hcas, hfn2]
+        nlinarith [hcas, hfn2]
       · have hcas := fib_cassini_odd n heven
         have : (-1 : ℤ) ^ n = -1 := Odd.neg_one_pow (Nat.not_even_iff_odd.mp heven)
-        push_cast; nlinarith [hcas, hfn2]
+        nlinarith [hcas, hfn2]
     -- Rewrite indices
     rw [show n + 1 + i = n + i + 1 from by omega,
         show n + 1 + j = n + j + 1 from by omega,
@@ -1290,13 +1290,13 @@ theorem fib_vajda (n i j : Nat) :
     have : (-1 : ℤ) ^ (n + 1) = -((-1) ^ n) := by ring
     -- Cast fib_add identities to ℤ
     have haZ : (Nat.fib (n + i + 1) : ℤ) = Nat.fib n * Nat.fib i +
-        Nat.fib (n + 1) * Nat.fib (i + 1) := by push_cast; linarith [ha]
+        Nat.fib (n + 1) * Nat.fib (i + 1) := by linarith [ha]
     have hbZ : (Nat.fib (n + j + 1) : ℤ) = Nat.fib n * Nat.fib j +
-        Nat.fib (n + 1) * Nat.fib (j + 1) := by push_cast; linarith [hb]
+        Nat.fib (n + 1) * Nat.fib (j + 1) := by linarith [hb]
     have hcZ : (Nat.fib (n + (i + j) + 1) : ℤ) = Nat.fib n * Nat.fib (i + j) +
-        Nat.fib (n + 1) * Nat.fib (i + j + 1) := by push_cast; linarith [hc']
+        Nat.fib (n + 1) * Nat.fib (i + j + 1) := by linarith [hc']
     have hijZ : (Nat.fib (i + j + 1) : ℤ) = Nat.fib i * Nat.fib j +
-        Nat.fib (i + 1) * Nat.fib (j + 1) := by push_cast; linarith [Nat.fib_add i j]
+        Nat.fib (i + 1) * Nat.fib (j + 1) := by linarith [Nat.fib_add i j]
     -- Step 1: algebraic identity (ring)
     have halg : (Nat.fib (n + i + 1) : ℤ) * Nat.fib (n + j + 1) -
         Nat.fib (n + 1) * Nat.fib (n + (i + j) + 1) =
@@ -1543,7 +1543,7 @@ theorem fib_mod11_period_ten (n : Nat) :
 
 /-- For prime p dividing F(k), p divides F(n) iff k divides n.
     thm:conclusion-valuation-fib-gcd-instances -/
-theorem fib_prime_entry_point (p k n : Nat) (hp : Nat.Prime p) (hk : 1 ≤ k)
+theorem fib_prime_entry_point (p k n : Nat) (_hp : Nat.Prime p) (hk : 1 ≤ k)
     (hentry : p ∣ Nat.fib k) (hmin : ∀ j, 1 ≤ j → j < k → ¬ (p ∣ Nat.fib j)) :
     p ∣ Nat.fib n ↔ k ∣ n := by
   constructor

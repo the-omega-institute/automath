@@ -15,7 +15,7 @@ theorem stableMul_one_left_univ (x : X m) : stableMul stableOne x = x := by
   cases m with
   | zero =>
     have : Subsingleton (X 0) := by
-      rw [← Fintype.card_le_one_iff_subsingleton]; simp [X.card_eq_fib]
+      rw [← Fintype.card_le_one_iff_subsingleton]; simp
     exact Subsingleton.elim _ _
   | succ n => exact stableMul_one_left (fib_gt_one_of_ge_two (by omega)) x
 
@@ -115,7 +115,7 @@ theorem toZMod_one : toZMod (1 : X m) = 1 := by
   | zero =>
     -- stableValue stableOne = 0 in X 0 (since X 0 is trivial, stableOne = stableZero)
     have : Subsingleton (X 0) := by
-      rw [← Fintype.card_le_one_iff_subsingleton]; simp [X.card_eq_fib]
+      rw [← Fintype.card_le_one_iff_subsingleton]; simp
     rw [show (stableOne : X 0) = stableZero from Subsingleton.elim _ _, stableValue_stableZero]
     -- Goal: (0 : ZMod (Nat.fib 2)) = 1. Nat.fib 2 = 1, so ZMod 1 is trivial.
     -- ZMod (Nat.fib 2) = ZMod 1, in which 0 = 1
@@ -279,7 +279,7 @@ theorem paper_mul_definitional (m : Nat) :
 
 /-- The additive order of stableOne equals F(m+2): F(m+2) • stableOne = stableZero.
     thm:stable-add-commutative-monoid -/
-theorem stableAdd_nsmul_one_eq_zero (m : Nat) (hm : 1 ≤ m) :
+theorem stableAdd_nsmul_one_eq_zero (m : Nat) (_hm : 1 ≤ m) :
     Nat.fib (m + 2) • (X.stableOne (m := m)) = (X.stableZero : X m) := by
   rw [ring_one_eq.symm, ring_zero_eq.symm]
   rw [nsmul_eq_mul]
@@ -318,13 +318,13 @@ theorem stableValue_pow (x : X m) (n : Nat) :
     stableValue (x ^ n) = (stableValue x) ^ n % Nat.fib (m + 2) := by
   induction n with
   | zero =>
-    simp only [pow_zero, Nat.pow_zero]
+    simp only [pow_zero]
     rw [ring_one_eq]
     have hF : 0 < Nat.fib (m + 2) := Nat.fib_pos.mpr (by omega)
     cases m with
     | zero =>
       have : Subsingleton (X 0) := by
-        rw [← Fintype.card_le_one_iff_subsingleton]; simp [X.card_eq_fib]
+        rw [← Fintype.card_le_one_iff_subsingleton]; simp
       rw [show (stableOne : X 0) = stableZero from Subsingleton.elim _ _, stableValue_stableZero]
       simp [Nat.fib]
     | succ n =>
@@ -397,7 +397,7 @@ theorem paper_X5_generator_two :
 
 /-- The additive order of 1 in X_m equals F(m+2).
     thm:mul-definitional -/
-theorem stableAdd_order_one (m : Nat) (hm : 2 ≤ m) :
+theorem stableAdd_order_one (m : Nat) (_hm : 2 ≤ m) :
     addOrderOf (1 : X m) = Nat.fib (m + 2) := by
   haveI := @instCharP m
   exact CharP.eq (X m) (CharP.addOrderOf_one (X m)) instCharP ▸ rfl
@@ -423,7 +423,7 @@ private theorem stableValue_nsmul (x : X m) (n : Nat) :
 
 /-- n-fold addition of x equals multiplication by ofNat(n % F_{m+2}).
     thm:mul-by-iterated-add -/
-theorem stableAdd_nsmul_eq_stableMul (x : X m) (n : Nat) (hm : 1 ≤ m) :
+theorem stableAdd_nsmul_eq_stableMul (x : X m) (n : Nat) (_hm : 1 ≤ m) :
     n • x = stableMul x (ofNat m (n % Nat.fib (m + 2))) := by
   have hinj := stableValue_injective m
   apply hinj

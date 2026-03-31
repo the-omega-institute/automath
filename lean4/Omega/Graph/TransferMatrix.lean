@@ -382,7 +382,7 @@ theorem goldenMeanAdjacency_cayley_hamilton :
 
 /-- Row 0 sum of A^m = F(m+2). Counts all length-m paths from state 0.
     thm:folding-stable-syntax-fib-fusion-ring -/
-theorem goldenMeanAdjacency_pow_row0_sum (m : Nat) (hm : 1 ≤ m) :
+theorem goldenMeanAdjacency_pow_row0_sum (m : Nat) (_hm : 1 ≤ m) :
     (goldenMeanAdjacency ^ m) 0 0 + (goldenMeanAdjacency ^ m) 0 1 = (Nat.fib (m + 2) : ℤ) :=
   goldenMeanAdjacency_row_sum m
 

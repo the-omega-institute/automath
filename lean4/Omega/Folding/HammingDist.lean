@@ -181,7 +181,7 @@ theorem hammingDist_alternating (m : Nat) :
 
 /-- The Fibonacci cube Γ_m has diameter m (achieved by alternating words).
     thm:pom-fibcube-eccentricity-closed-form -/
-theorem fibcubeDiam_eq (m : Nat) (hm : 1 ≤ m) :
+theorem fibcubeDiam_eq (m : Nat) (_hm : 1 ≤ m) :
     ∃ (a b : X m), hammingDist a.1 b.1 = m :=
   ⟨⟨alternatingEven m, no11_alternatingEven m⟩,
    ⟨alternatingOdd m, no11_alternatingOdd m⟩,
@@ -227,7 +227,7 @@ theorem hammingDist_snoc (a c : Word m) (b1 b2 : Bool) :
       apply Finset.card_eq_zero.mpr
       simp only [Finset.filter_eq_empty_iff]
       intro i _; simp only [not_and]; intro him
-      simp [snoc, show ¬i.val < m from by omega, hb]
+      simp [snoc, show ¬i.val < m from by omega]
     · simp only [hb, ite_false]
       have : (Finset.univ.filter (fun i : Fin (m + 1) =>
           i.val = m ∧ snoc a b1 i ≠ snoc c b2 i)) = {⟨m, by omega⟩} := by

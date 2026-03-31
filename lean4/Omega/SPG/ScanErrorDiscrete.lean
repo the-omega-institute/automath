@@ -73,7 +73,7 @@ theorem cellEventMass_add_cellComplMass_eq_cellMass {α β : Type*} [Fintype α]
   simp only [cellEventMass, cellComplMass, cellMass, setMass]
   rw [← Finset.sum_add_distrib]
   refine Finset.sum_congr rfl (fun x _ => ?_)
-  simp only [Set.indicator_apply, Set.mem_inter_iff, observableCell, Set.mem_setOf_eq]
+  simp only [ observableCell]
   by_cases hx_C : obs x = b <;> by_cases hx_P : x ∈ P <;> simp [hx_C, hx_P]
 
 theorem observableEvent_inter_cell {α β : Type*} (obs : α → β) (A : Set β) (b : β)
@@ -400,7 +400,7 @@ theorem scanError_inter_le {α β : Type*} [Fintype α] [Fintype β]
     (μ : PMF α) (obs : α → β) (P Q : Set α) :
     scanError μ obs (P ∩ Q) ≤ scanError μ obs P + scanError μ obs Q := by
   -- P ∩ Q = (Pᶜ ∪ Qᶜ)ᶜ by De Morgan
-  rw [show P ∩ Q = (Pᶜ ∪ Qᶜ)ᶜ from by ext x; simp [not_or]]
+  rw [show P ∩ Q = (Pᶜ ∪ Qᶜ)ᶜ from by ext x; simp []]
   -- scanError((Pᶜ ∪ Qᶜ)ᶜ) = scanError(Pᶜ ∪ Qᶜ) by complement symmetry
   rw [scanError_compl]
   -- ≤ scanError(Pᶜ) + scanError(Qᶜ) by union sub-additivity
@@ -1091,7 +1091,7 @@ theorem scanError_le_one {α β : Type*} [Fintype α] [Fintype β]
       ≤ min (setMass μ P) (setMass μ Pᶜ) := scanError_le_min_setMass μ obs P
     _ ≤ setMass μ P := min_le_left _ _
     _ ≤ setMass μ Set.univ := setMass_mono μ (Set.subset_univ _)
-    _ ≤ ∑ x, (μ x : ENNReal) := by simp [setMass, Set.indicator_univ]
+    _ ≤ ∑ x, (μ x : ENNReal) := by simp [setMass]
     _ = 1 := PMF_sum_coe_eq_one μ
 
 /-- Prefix scan error is bounded by 1 (global bound). -/
@@ -1207,7 +1207,7 @@ theorem scanError_iUnion_finset_le {α β : Type*} [Fintype α] [Fintype β]
   | @insert j T hna ih =>
     rw [Finset.sum_insert hna]
     have hunion : (⋃ i ∈ insert j T, P i) = P j ∪ ⋃ i ∈ T, P i := by
-      simp [Set.biUnion_insert]
+      simp
     rw [hunion]
     exact le_trans (scanError_union_le μ obs (P j) (⋃ i ∈ T, P i))
       (add_le_add_right ih _)
@@ -1218,7 +1218,7 @@ theorem symmetricDiffMass_eq_scanError_of_optimal
     {n m : Nat} (h : m ≤ n) (μ : PMF (Word n)) (P Pstar : Set (Word n))
     (hstar : setMass μ ((P \ Pstar) ∪ (Pstar \ P)) = scanError μ (prefixObservation h) P) :
     setMass μ ((P \ Pstar) ∪ (Pstar \ P)) ≤ scanError μ (prefixObservation h) P := by
-  simpa [hstar]
+  simp [hstar]
 
 /-- Symmetric-difference mass vanishes when the approximation is exact.
     cor:spg-clarity-walsh-spectral-stability -/

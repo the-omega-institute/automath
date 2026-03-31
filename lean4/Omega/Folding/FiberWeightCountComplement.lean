@@ -125,7 +125,7 @@ noncomputable def complementAction (x : X m) : X m :=
 
 /-- The complement action is involutive: comp(comp(x)) = x.
     prop:fold-fiber-count-reciprocity -/
-theorem complementAction_involutive (m : Nat) (hm : 2 ≤ m) :
+theorem complementAction_involutive (m : Nat) (_hm : 2 ≤ m) :
     Function.Involutive (complementAction (m := m)) := by
   intro x
   unfold complementAction

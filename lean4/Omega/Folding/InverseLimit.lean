@@ -221,7 +221,7 @@ theorem prefixWord_surjective (m : Nat) :
     simp only [a] at hi hi1
     by_cases h : i < m <;> by_cases h1 : i + 1 < m <;> simp_all
     · exact x.2 i (by simp [Omega.get, h]; exact hi) (by simp [Omega.get, h1]; exact hi1)
-  exact ⟨⟨a, hno11⟩, Subtype.ext (funext fun i => by simp [prefixWord, a, i.isLt])⟩
+  exact ⟨⟨a, hno11⟩, Subtype.ext (funext fun i => by simp [prefixWord, a])⟩
 
 end X
 

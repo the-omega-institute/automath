@@ -146,7 +146,7 @@ private theorem det_four_of (a b c d e f g h i j k l m n o p : ℤ) :
     b * (e * (k * p - l * o) - g * (i * p - l * m) + h * (i * o - k * m)) +
     c * (e * (j * p - l * n) - f * (i * p - l * m) + h * (i * n - j * m)) -
     d * (e * (j * o - k * n) - f * (i * o - k * m) + g * (i * n - j * m)) := by
-  simp [det_succ_row_zero, Fin.sum_univ_four, Fin.sum_univ_three, det_fin_two,
+  simp [det_succ_row_zero, Fin.sum_univ_four, Fin.sum_univ_three,
     Fin.succAbove, Matrix.submatrix]
   ring
 
@@ -211,8 +211,7 @@ private theorem det_five_of (
            c₄ * (d₁ * e₂ - d₂ * e₁)) -
           b₄ * (c₁ * (d₂ * e₃ - d₃ * e₂) - c₂ * (d₁ * e₃ - d₃ * e₁) +
            c₃ * (d₁ * e₂ - d₂ * e₁))) := by
-  simp [det_succ_row_zero, Fin.sum_univ_succ, Fin.sum_univ_four, Fin.sum_univ_three,
-    det_fin_two, Fin.succAbove, Matrix.submatrix]
+  simp [det_succ_row_zero, Fin.sum_univ_succ, Fin.succAbove, Matrix.submatrix]
   ring
 
 /-- det(I - t·Π_5) = 1 - t⁵ for the 5×5 cyclic permutation matrix.
@@ -269,8 +268,7 @@ private theorem det_six_of (
                         d₁, d₂, d₃, d₄, d₅;
                         e₁, e₂, e₃, e₄, e₅;
                         f₁, f₂, f₃, f₄, f₅] := by
-  simp [det_succ_row_zero, Fin.sum_univ_succ, Fin.sum_univ_five, Fin.sum_univ_four,
-    Fin.sum_univ_three, det_fin_two, Fin.succAbove, Matrix.submatrix]
+  simp [det_succ_row_zero, Fin.sum_univ_succ, Fin.succAbove, Matrix.submatrix]
   ring
 
 /-- det(I - t·Π_6) = 1 - t⁶ for the 6×6 cyclic permutation matrix.

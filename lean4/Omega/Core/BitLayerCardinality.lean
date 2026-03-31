@@ -10,7 +10,7 @@ theorem bit_layer_card_false (n : Nat) (hn : 1 ≤ n) (i : Fin n) :
   have hsplit :
       ((Finset.univ : Finset (Word n)).filter fun w => w i = true).card +
       {w ∈ (Finset.univ : Finset (Word n)) | ¬ w i = true}.card = Fintype.card (Word n) := by
-    simpa using Finset.filter_card_add_filter_neg_card_eq_card (fun w : Word n => w i = true)
+    simpa using Finset.card_filter_add_card_filter_not (fun w : Word n => w i = true)
   have htrue := Omega.card_true_at_bit n hn i
   simp only [Bool.eq_true_eq_not_eq_false] at hsplit
   have hcard : Fintype.card (Word n) = 2 ^ n := by simp [Word]
