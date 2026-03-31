@@ -42,7 +42,7 @@ Assemble everything needed to submit the paper. This is the last gate before the
 - [ ] No revision metadata in manuscript
 
 ### 3. Status promotion
-Update `theory/publication/OPS/BOARD.md`:
+Update `papers/publication/OPS/BOARD.md`:
 - Change paper status to `submission-ready`
 - Record the date
 

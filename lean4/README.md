@@ -19,7 +19,7 @@ python scripts/omega_ci.py audit
 python scripts/omega_ci.py inventory --strict
 python scripts/omega_ci.py search "entropy log phi"
 python scripts/omega_ci.py paper-coverage --sections body
-python scripts/omega_ci.py paper-coverage --tex-root ../theory/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds --paper-id E2
+python scripts/omega_ci.py paper-coverage --tex-root ../papers/publication/2026_scan_projection_address_semantics_sigma_nonexpansion_etds --paper-id E2
 python scripts/omega_ci.py verify-files Omega/Core/Fib.lean
 ```
 

@@ -33,7 +33,7 @@ Cross-check every theorem, proposition, lemma, and definition in the paper again
 
 ## What you produce
 
-A file `LEAN_SYNC_NOTE_{date}.md` using `theory/publication/OPS/SYNC_NOTE.template.md`
+A file `LEAN_SYNC_NOTE_{date}.md` using `papers/publication/OPS/SYNC_NOTE.template.md`
 as the schema, containing:
 
 ### Coverage summary
@@ -62,5 +62,5 @@ Any case where the Lean statement is strictly different from the paper statement
 
 1. Write the LEAN_SYNC_NOTE file
 2. Update TRACK_BOARD.md with coverage summary
-3. Update the shared formalization section in `theory/publication/OPS/BOARD.md`
+3. Update the shared formalization section in `papers/publication/OPS/BOARD.md`
 4. If mismatches found, flag them as P5 rework items

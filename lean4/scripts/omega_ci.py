@@ -902,7 +902,7 @@ def parser() -> argparse.ArgumentParser:
     )
     coverage_p.add_argument(
         "--tex-root",
-        help="Scan a specific TeX directory (for example theory/publication/<paper>) instead of the parent monograph",
+        help="Scan a specific TeX directory (for example papers/publication/<paper>) instead of the parent monograph",
     )
     coverage_p.add_argument(
         "--paper-id",

@@ -4,7 +4,7 @@ Advance the publication pipeline for all active Wave papers.
 
 ## Workflow
 
-1. Read `theory/publication/OPS/BOARD.md` to identify active papers and wave priorities
+1. Read `papers/publication/OPS/BOARD.md` to identify active papers and wave priorities
 2. For each paper, read its `TRACK_BOARD.md` to determine current stage
 3. Determine the next stage based on which gate artifacts exist:
    - P1 done if `SOURCE_MAP.md` + `THEOREM_LIST.md` exist
@@ -32,7 +32,7 @@ Advance the publication pipeline for all active Wave papers.
 
 ## Paper directories
 
-All papers are under `theory/publication/`. The three Wave 1 papers are:
+All papers are under `papers/publication/`. The three Wave 1 papers are:
 - `2026_conservative_extension_chain_state_forcing_apal` (APAL)
 - `2026_scan_projection_address_semantics_sigma_nonexpansion_etds` (ETDS)
 - `2026_projection_ontological_mathematics_core_tams` (TAMS)

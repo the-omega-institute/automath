@@ -215,8 +215,8 @@ The command uses the target journal declared in each publication `README.md`, pu
 The prompt and journal-profile text now live under `automation/assets/` so the repeated editorial loop can evolve mostly through Markdown/template changes rather than through more orchestration code.
 The multi-agent execution model is documented under `automation/assets/operations/`; use those assets to assign paper stages across many agents instead of improvising new prompt flows each time.
 
-When the publication workspace lives inside this repository under `theory/publication/`,
-the durable operational layer is the `theory/publication/OPS/` directory rather than the
+When the publication workspace lives inside this repository under `papers/publication/`,
+the durable operational layer is the `papers/publication/OPS/` directory rather than the
 exported `artifacts/` directories. In that in-tree mode:
 
 - `OPS/WORKFLOW.md` defines the publication execution contract, shared Lean policy, and main-paper backflow

@@ -15,7 +15,7 @@ Single source of truth for the end-to-end automation system. Any agent (Claude, 
       [Layer 1: Decompose]  extract coherent subsets for journals
              |
     +--------v---------+
-    | Publication Papers|  theory/publication/  (19 dirs, 8 active)
+    | Publication Papers|  papers/publication/  (19 dirs, 8 active)
     | P0 -> P7 pipeline |
     +--------+---------+
              |
@@ -110,7 +110,7 @@ Agent reads the oracle output and:
 
 3. **Scaffold** — Create paper directory:
    ```
-   theory/publication/2026_<descriptive_name>_<journal>/
+   papers/publication/2026_<descriptive_name>_<journal>/
    ├── main.tex          (extracted from core, reformatted)
    ├── sec_*.tex          (split by topic, each <800 lines)
    ├── references.bib     (subset from core bib)
@@ -354,7 +354,7 @@ Phase 4: Scale to all papers
 ## File Map
 
 ```
-theory/publication/
+papers/publication/
 ├── PROGRAM_BOARD.md          — Status dashboard (all papers)
 ├── AUTOMATION.md             — This file (pipeline design)
 ├── prompts/                  — Oracle prompt templates

@@ -83,6 +83,6 @@ Each paper directory contains:
 ## Architecture
 
 - **theory/** = expanding knowledge core (all results accumulate here)
-- **theory/publication/** = specialized extractions for specific journals
-- **theory/publication/AUTOMATION.md** = pipeline design and tooling
+- **papers/publication/** = specialized extractions for specific journals
+- **papers/publication/AUTOMATION.md** = pipeline design and tooling
 - **lean4/Omega/** = unified formalization library (not per-paper)
