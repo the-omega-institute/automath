@@ -1,0 +1,298 @@
+\begin{theorem}[非平凡 Walsh 谱的精确 Gram 律]\label{thm:conclusion-fold-nontrivial-walsh-exact-gram-law}
+固定分辨率 \(m\ge 1\)。对每个 \(x\in X_m\)，记
+\[
+d_x:=|\Fold_m^{-1}(x)|,
+\qquad
+\mathbf W_x:=\bigl(W_x(I)\bigr)_{\varnothing\neq I\subseteq[m]}\in\RR^{2^m-1}.
+\]
+则对任意 \(x,y\in X_m\)，成立
+\[
+\langle \mathbf W_x,\mathbf W_y\rangle
+=
+2^m d_x\,\delta_{x,y}-d_xd_y.
+\]
+并且
+\[
+\sum_{x\in X_m}\mathbf W_x=0.
+\]
+\end{theorem}
+
+\begin{proof}
+由推论 \ref{cor:pom-fiber-walsh-stokes-boundary-tomography-reconstruction} 的逆 Walsh 公式，
+\[
+\ind_{\Fold_m^{-1}(x)}(\omega)
+=
+2^{-m}\sum_{I\subseteq[m]}W_x(I)\chi_I(\omega).
+\]
+将其与 \(\ind_{\Fold_m^{-1}(y)}\) 在 \(L^2(\Omega_m)\) 中作内积，并用 Walsh 正交关系
+\[
+\sum_{\omega\in\Omega_m}\chi_I(\omega)\chi_J(\omega)=2^m\delta_{IJ},
+\]
+得到
+\[
+d_x\delta_{x,y}
+=
+2^{-m}\sum_{I\subseteq[m]}W_x(I)W_y(I).
+\]
+又 \(W_x(\varnothing)=d_x\)，移去平凡模即得
+\[
+\sum_{\varnothing\neq I\subseteq[m]}W_x(I)W_y(I)
+=
+2^m d_x\,\delta_{x,y}-d_xd_y.
+\]
+第二式则是定理 \ref{thm:conclusion-fold-walsh-total-charge-parseval-degeneracy} 中非平凡总荷守恒律的向量化写法。证毕。
+\end{proof}
+
+\begin{corollary}[边界可见能量的精确守恒与不可消去模]\label{cor:conclusion-fold-boundary-visible-energy-nonremovable-mode}
+对任意 \(x\in X_m\)，有
+\[
+\|\mathbf W_x\|_2^2=d_x(2^m-d_x).
+\]
+因此必存在某个非空 \(I_x\subseteq[m]\) 使
+\[
+|W_x(I_x)|
+\ge
+\sqrt{\frac{d_x(2^m-d_x)}{2^m-1}}.
+\]
+特别地，当 \(|X_m|\ge 2\) 时，每条纤维都携带至少一个不可消去的非平凡 Walsh 模。
+\end{corollary}
+
+\begin{proof}
+在定理 \ref{thm:conclusion-fold-nontrivial-walsh-exact-gram-law} 中取 \(x=y\) 即得
+\[
+\|\mathbf W_x\|_2^2=2^m d_x-d_x^2=d_x(2^m-d_x).
+\]
+再由平均值不超过最大值，
+\[
+\max_{\varnothing\neq I\subseteq[m]}|W_x(I)|^2
+\ge
+\frac{1}{2^m-1}\sum_{\varnothing\neq I\subseteq[m]}W_x(I)^2,
+\]
+即得所示下界。若 \(|X_m|\ge 2\)，则 \(0<d_x<2^m\)，故右端严格为正。证毕。
+\end{proof}
+
+\begin{proposition}[主子式闭式与唯一线性关系]\label{prop:conclusion-fold-walsh-principal-minors-unique-relation}
+对任意非空子集 \(S\subseteq X_m\)，令
+\[
+G_S:=\bigl(\langle \mathbf W_x,\mathbf W_y\rangle\bigr)_{x,y\in S}.
+\]
+则成立显式行列式公式
+\[
+\det G_S
+=
+(2^m)^{|S|-1}\Bigl(\prod_{x\in S}d_x\Bigr)\Bigl(2^m-\sum_{x\in S}d_x\Bigr).
+\]
+因此：
+\begin{enumerate}
+  \item 若 \(S\subsetneq X_m\)，则 \(\det G_S>0\)，因而 \(\{\mathbf W_x\}_{x\in S}\) 线性无关；
+  \item 对全体纤维，存在且仅存在一条线性关系
+  \[
+  \sum_{x\in X_m}\mathbf W_x=0.
+  \]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-fold-nontrivial-walsh-exact-gram-law}，
+\[
+G_S=2^mD_S-d_Sd_S^\top,
+\]
+其中
+\[
+D_S:=\operatorname{diag}(d_x)_{x\in S},
+\qquad
+d_S:=(d_x)_{x\in S}^\top.
+\]
+由矩阵行列式引理，
+\[
+\det G_S
+=
+\det(2^mD_S)\Bigl(1-d_S^\top(2^mD_S)^{-1}d_S\Bigr).
+\]
+而
+\[
+d_S^\top(2^mD_S)^{-1}d_S
+=
+\frac{1}{2^m}\sum_{x\in S}d_x.
+\]
+故
+\[
+\det G_S
+=
+(2^m)^{|S|}\Bigl(\prod_{x\in S}d_x\Bigr)
+\left(1-\frac{1}{2^m}\sum_{x\in S}d_x\right),
+\]
+即所示闭式。
+
+若 \(S\subsetneq X_m\)，则
+\[
+\sum_{x\in S}d_x
+<
+\sum_{x\in X_m}d_x
+=
+|\Omega_m|
+=
+2^m,
+\]
+故 \(\det G_S>0\)，从而任意真子族线性无关。
+
+对全体 \(X_m\)，定理 \ref{thm:conclusion-fold-nontrivial-walsh-exact-gram-law} 已给出一条关系
+\[
+\sum_{x\in X_m}\mathbf W_x=0.
+\]
+若另有
+\[
+\sum_{x\in X_m}c_x\mathbf W_x=0,
+\]
+则对任意固定 \(x_0\in X_m\)，两式相减得
+\[
+\sum_{x\neq x_0}(c_x-c_{x_0})\mathbf W_x=0.
+\]
+由于去掉 \(x_0\) 后的真子族线性无关，必有 \(c_x=c_{x_0}\) 对所有 \(x\) 成立。故关系空间仅一维，上式即为唯一关系。证毕。
+\end{proof}
+
+\begin{theorem}[非平凡 Walsh 轮廓的加权单纯形几何]\label{thm:conclusion-fold-normalized-walsh-weighted-simplex-geometry}
+对每个 \(x\in X_m\)，定义归一化边界轮廓
+\[
+\mathbf V_x:=\frac{\mathbf W_x}{d_x}\in\RR^{2^m-1}.
+\]
+则对任意 \(x\neq y\) 有
+\[
+\langle \mathbf V_x,\mathbf V_y\rangle=-1,
+\]
+并且
+\[
+\|\mathbf V_x\|_2^2=\frac{2^m}{d_x}-1.
+\]
+从而
+\[
+\|\mathbf V_x-\mathbf V_y\|_2^2
+=
+2^m\left(\frac{1}{d_x}+\frac{1}{d_y}\right).
+\]
+此外，令
+\[
+\lambda_x:=\frac{d_x}{2^m},
+\]
+则 \(\lambda_x>0\)、\(\sum_x\lambda_x=1\)，且
+\[
+\sum_{x\in X_m}\lambda_x\mathbf V_x=0.
+\]
+因此 \(\{\mathbf V_x\}_{x\in X_m}\) 构成一个以原点为严格内部重心的加权单纯形；其全部边长仅由对应两条纤维的多重度 \((d_x,d_y)\) 决定。
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-fold-nontrivial-walsh-exact-gram-law}，
+\[
+\langle \mathbf V_x,\mathbf V_y\rangle
+=
+\frac{\langle \mathbf W_x,\mathbf W_y\rangle}{d_xd_y}
+=
+-1
+\qquad(x\neq y),
+\]
+并且
+\[
+\|\mathbf V_x\|_2^2
+=
+\frac{\|\mathbf W_x\|_2^2}{d_x^2}
+=
+\frac{d_x(2^m-d_x)}{d_x^2}
+=
+\frac{2^m}{d_x}-1.
+\]
+于是
+\[
+\|\mathbf V_x-\mathbf V_y\|_2^2
+=
+\|\mathbf V_x\|_2^2+\|\mathbf V_y\|_2^2-2\langle \mathbf V_x,\mathbf V_y\rangle
+=
+2^m\left(\frac{1}{d_x}+\frac{1}{d_y}\right).
+\]
+
+再由命题 \ref{prop:conclusion-fold-walsh-principal-minors-unique-relation} 的唯一关系，
+\[
+\sum_{x\in X_m}\mathbf W_x=0.
+\]
+将 \(\mathbf W_x=d_x\mathbf V_x\) 代入并除以 \(2^m\)，得到
+\[
+\sum_{x\in X_m}\lambda_x\mathbf V_x=0.
+\]
+若
+\[
+\sum_{x\in X_m}a_x\mathbf V_x=0
+\qquad\text{且}\qquad
+\sum_{x\in X_m}a_x=0,
+\]
+则
+\[
+\sum_{x\in X_m}\frac{a_x}{d_x}\mathbf W_x=0.
+\]
+由命题 \ref{prop:conclusion-fold-walsh-principal-minors-unique-relation} 的唯一性，\(\frac{a_x}{d_x}\) 必为常数，故
+\[
+a_x=c\,d_x.
+\]
+再由 \(\sum_x a_x=0\) 与 \(\sum_x d_x=2^m\)，得 \(c=0\)，从而全部 \(a_x=0\)。故 \(\{\mathbf V_x\}\) 仿射无关，并以正权重 \(\lambda_x\) 在原点取严格内部重心。证毕。
+\end{proof}
+
+\begin{corollary}[可缩性仅湮灭全奇偶模而不湮灭整个边界谱]\label{cor:conclusion-fold-contractibility-kills-only-total-parity-mode}
+设 \(m\ge 2\) 且 \(|K_x|\simeq *\)。则
+\[
+W_x([m])=0.
+\]
+然而仍必存在某个
+\[
+I\subseteq[m],
+\qquad
+I\notin\{\varnothing,[m]\},
+\]
+使
+\[
+W_x(I)\neq 0.
+\]
+\end{corollary}
+
+\begin{proof}
+由定理 \ref{thm:conclusion-fold-boundary-topology-readout-completeness}，
+\[
+|K_x|\simeq *
+\iff
+W_x([m])=0.
+\]
+另一方面，由推论 \ref{cor:conclusion-fold-boundary-visible-energy-nonremovable-mode}，
+\[
+\sum_{\varnothing\neq I\subseteq[m]}W_x(I)^2=d_x(2^m-d_x)>0,
+\]
+其中严格不等式来自 \(|X_m|=F_{m+2}\ge 2\)，故 \(0<d_x<2^m\)。既然全坐标模已经为零，则必有某个非空真子集 \(I\subsetneq[m]\) 使 \(W_x(I)\neq 0\)。证毕。
+\end{proof}
+
+\begin{conjecture}[signature-compressed Walsh 数据的截面充分性]\label{conj:conclusion-fold-signature-section-sufficiency}
+固定 \(x\in X_m\)。令
+\[
+q_x:\mathcal P([m])\to\{\pm 1\}^{V(\Gamma_x)},
+\qquad
+I\mapsto \sigma_x(I),
+\]
+为定理 \ref{thm:pom-fiber-walsh-signature-rademacher} 中的线性满射。若
+\[
+s_x:\{\pm 1\}^{V(\Gamma_x)}\to\mathcal P([m])
+\]
+是任意一个满足 \(q_x\circ s_x=\id\) 的截面，则受限族
+\[
+\bigl\{W_x(s_x(\sigma)):\sigma\in\{\pm 1\}^{V(\Gamma_x)}\bigr\}
+\]
+已足以唯一决定纤维 \(\Fold_m^{-1}(x)\)。等价地，完整 Walsh--Stokes 数据的重构内容可在 signature quotient 上通过任意截面无损压缩到
+\[
+2^{|V(\Gamma_x)|}
+\]
+个取值。
+\end{conjecture}
+
+\begin{proof}[说明]
+定理 \ref{thm:conclusion-fold-boundary-walsh-stokes-complete-tomography} 已证明完整 Walsh 系数族 \(\{W_x(I)\}_{I\subseteq[m]}\) 唯一决定 \(\Fold_m^{-1}(x)\)。另一方面，由定理 \ref{thm:pom-fiber-walsh-signature-rademacher}，
+\[
+W_x(I)=(-1)^{|x\cap I|}
+\sum_{S\in\mathsf{Ind}(\Gamma_x)}\prod_{v\in S}\sigma_x(I)_v,
+\]
+故非平凡 Walsh 数据在结构上只通过签名 \(\sigma_x(I)\) 与一个显式奇偶相位进入。该猜想断言：一旦固定任意截面 \(s_x\)，这些 signature-compressed 取值已经保留全部重构信息，而不再需要整块 \(2^m\) 维 Walsh 立方。证毕。
+\end{proof}

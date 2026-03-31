@@ -1,0 +1,91 @@
+\begin{proposition}[类型化证书语义的逆极限刚性]\label{prop:conclusion-typed-certificate-inverse-limit-rigidity}
+设 \(\bigl(\mathrm{Cert}_b(F),\rho_{b'\to b}\bigr)_{b\in\NN}\) 为主稿中的类型化证书对象族与细化映射，并记各层的可核验等价为 \(\sim_b\)。则：
+\begin{enumerate}
+  \item \(\bigl(\mathrm{Cert}_b(F),\rho_{b'\to b}\bigr)\) 构成一个逆系统；
+  \item 其逆极限点对象 \(\varprojlim_b \mathrm{Cert}_b(F)\) 在可核验等价下唯一；
+  \item 任意与细化相容且只依赖可核验等价类的确定性语义，都唯一因子化经过该逆极限对象。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+主稿已将类型化证书对象、细化关系与可核验等价组织成分辨率递增下的相容系统；特别地，\(\rho_{b''\to b}=\rho_{b'\to b}\circ\rho_{b''\to b'}\) 与 \(\rho_{b\to b}=\mathrm{id}\) 的逆系统公理已经在原始构造中成立，故第一条直接成立。
+
+第二条只是该逆系统在实现中立语义下的标准唯一性：一旦把逐层对象都按 \(\sim_b\) 压缩，则逆极限中相容坐标族所代表的点对象只剩下唯一的可核验同一性。
+
+对第三条，设 \((\Phi_b)_b\) 为一族确定性语义，满足
+\[
+\Phi_b\circ \rho_{b'\to b}=\Phi_{b'}
+\qquad (b'\ge b),
+\]
+且
+\[
+c\sim_b c'
+\Longrightarrow
+\Phi_b(c)=\Phi_b(c').
+\]
+则 \((\Phi_b)_b\) 构成定义在该逆系统上的兼容锥。由逆极限的泛性质，存在唯一映射
+\[
+\Phi_\infty:\varprojlim_b \mathrm{Cert}_b(F)\to Y
+\]
+使所有层语义同时分解经过 \(\Phi_\infty\)。故类型化证书语义在逆极限上刚性闭合。证毕。
+\end{proof}
+
+\begin{theorem}[共终端稀疏化的语义完备性]\label{thm:conclusion-cofinal-sparsification-semantic-completeness}
+设 \(\mathcal P\) 是定义在完整证书塔 \(\bigl(\mathrm{Cert}_b(F)\bigr)_{b\in\NN}\) 上的确定性性质，并满足：
+\begin{enumerate}
+  \item 对可核验等价不变；
+  \item 对细化单调；
+  \item 在最小实现维数一致有界时，其验证程序只通过主稿允许的有限审计接口访问证书。
+\end{enumerate}
+则：
+\begin{enumerate}
+  \item \(\mathcal P\) 可在任意共终端子序列 \(b_1<b_2<\cdots\) 上无损重构；
+  \item 若最小实现维数在全塔上一致有界，则存在某个有限层 \(b_\ast\)，使 \(\mathcal P\) 已由 \(b_\ast\) 层完全决定。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:conclusion-typed-certificate-inverse-limit-rigidity}，\(\mathcal P\) 只经过逆极限点对象起作用。另一方面，命题 \ref{prop:cdim-dyadic-cofinal-sparsification} 已表明：任意共终端深度子链都给出同一逆极限对象。故把完整塔替换成任意共终端子序列，并不会改变 \(\mathcal P\) 所见到的极限对象，第一条成立。
+
+第二条则是主稿中“共终端稀疏化与预言机坍缩”原则在结论层的直接后果：一旦最小实现维数一致有界，原本定义在无穷层级上的核验会坍缩到某个有限截断层。就本文当前接口而言，这一点与 Toeplitz--PSD 链上的共终端稀疏核验及其有限截断化完全同型（参见定理 \ref{thm:xi-toeplitz-psd-cofinal-sparsification} 与定理 \ref{thm:xi-oracle-collapse-toeplitz-psd-finite-truncation}）。故存在某个 \(b_\ast\) 使 \(\mathcal P\) 已由该层完全决定。证毕。
+\end{proof}
+
+\begin{theorem}[确定性离线验证的最小闭包]\label{thm:conclusion-deterministic-offline-verification-minimal-closure}
+存在一个规范的三值验证函子
+\[
+\mathbb V_{\min}:
+\varprojlim_b \mathrm{Cert}_b(F)\times \mathfrak C_{\mathrm{def}}\times \mathfrak C_{\mathrm{lin}}
+\longrightarrow
+\{\mathrm{pass},\mathrm{reject},\mathsf{NULL}\},
+\]
+满足：
+\begin{enumerate}
+  \item \textbf{完备性}：主稿允许的每一条可审计断言都可由 \(\mathbb V_{\min}\) 正确判定；
+  \item \textbf{实现中立性}：\(\mathbb V_{\min}\) 只依赖逆极限证书对象与可核验等价类，不依赖实现细节；
+  \item \textbf{共终端有限性}：在一致有界最小实现维数条件下，\(\mathbb V_{\min}\) 已由某个有限层截断决定；
+  \item \textbf{真最小性}：任意另一确定性验证器，只要同时满足类型纪律、可核验等价不变性、共终端稀疏化相容性以及预算正交不可补偿性，就必唯一因子化经过 \(\mathbb V_{\min}\)。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+完备性来自定理 \ref{thm:conclusion-three-end-certificate-joint-sufficiency-minimality} 的联合充分性。实现中立性来自命题 \ref{prop:conclusion-typed-certificate-inverse-limit-rigidity}：任何满足细化相容与可核验等价不变性的语义都只能经过逆极限点对象。
+
+共终端有限性由定理 \ref{thm:conclusion-cofinal-sparsification-semantic-completeness} 直接给出：在一致有界的最小实现维数制度下，验证过程可坍缩到某个有限截断层。
+
+最后证明最小性。设 \(\mathbb V\) 是另一满足上述四项纪律的确定性验证器。由逆极限刚性，\(\mathbb V\) 首先必须经过 \(\varprojlim_b \mathrm{Cert}_b(F)\)。再由定理 \ref{thm:conclusion-three-end-certificate-joint-sufficiency-minimality}，若 \(\mathbb V\) 试图绕过缺陷端或线性代数端中的任一轴，就会留下不可消去的盲核；而由推论 \ref{cor:conclusion-reject-null-finite-normal-form}，其全部非通过输出又只能落入同一组有限正规形标签。故 \(\mathbb V\) 不可能比
+\[
+\varprojlim_b \mathrm{Cert}_b(F)\times \mathfrak C_{\mathrm{def}}\times \mathfrak C_{\mathrm{lin}}
+\]
+更小，且其输出语义必经由 \(\mathbb V_{\min}\) 唯一因子化。证毕。
+\end{proof}
+
+\begin{conjecture}[二端压缩的指数罚则]\label{conj:conclusion-two-end-compression-exponential-penalty}
+不存在一个只使用
+\[
+(\mathfrak C_{\mathrm{addr}},\mathfrak C_{\mathrm{def}}),
+\qquad
+(\mathfrak C_{\mathrm{addr}},\mathfrak C_{\mathrm{lin}}),
+\qquad
+\text{或}
+\qquad
+(\mathfrak C_{\mathrm{def}},\mathfrak C_{\mathrm{lin}})
+\]
+任一二端子族的确定性验证器，能够在保持定理 \ref{thm:conclusion-deterministic-offline-verification-minimal-closure} 四项性质的同时避免指数级代价爆炸。更具体地，任一二端压缩若仍要求完备性与实现中立性，则至少有一项预算——dyadic 深度、端点热核精度或盲区半径——必须随分辨率作指数增长。
+\end{conjecture}

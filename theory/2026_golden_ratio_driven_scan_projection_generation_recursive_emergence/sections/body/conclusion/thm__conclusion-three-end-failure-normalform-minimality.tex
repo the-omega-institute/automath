@@ -1,0 +1,84 @@
+\begin{theorem}[\texorpdfstring{\(\mathrm{Read}_{\mathrm{US}}\)}{ReadUS} 的三歧失败正规形]\label{thm:conclusion-readus-null-trichotomy-normal-form}
+在 unitary-slice 的可见域约束下，类型化偏读出
+\[
+\mathrm{Read}_{\mathrm{US}}:\mathrm{Addr}_{\mathrm{US}}\dashrightarrow
+\{\mathrm{NonZero},\mathrm{RootInterval},\mathsf{NULL}\}
+\]
+的不可读出部分精确分解为
+\[
+\mathsf{NULL}
+=
+\mathsf{NULL}_{\mathrm{sem}}
+\;\dot\cup\;
+\mathsf{NULL}_{\mathrm{prot}}
+\;\dot\cup\;
+\mathsf{NULL}_{\mathrm{coll}},
+\]
+分别对应语义空值、协议空值与碰撞空值。并且在显式精度索引与禁止隐式侧信息泄漏的制度下，这三类失败在类型层互斥且完备，不存在第四种由隐式混合精度诱发的隐藏失败类。
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:recursive-addressing-readout-separatedness-null} 已将 unitary-slice 读出的不可定义部分分解为语义空值、协议空值与碰撞空值三类；其中对象不存在、可见综合征不可实现以及像内纤维非单点，分别对应三种彼此不同的失败来源。在线性屏幕口径下，定理 \ref{thm:conclusion-screen-linear-readout-null-trichotomy-collapse} 又把
+\[
+\mathrm{ProtNULL}
+\qquad\text{与}\qquad
+\mathrm{CollNULL}
+\]
+具体识别为“离开像空间”与“像内但纤维非单点”。
+
+另一方面，命题 \ref{prop:null-as-local-section-obstruction}、命题 \ref{prop:recursive-addressing-refinement} 与推论 \ref{cor:recursive-addressing-visible-sigma-nonexpansion} 已经把“地址先于取值”的 typed 制度固定为显式前缀、显式精度索引且禁止隐式侧信息泄漏的语义纪律。于是任何额外的“第四类失败”若存在，就只能通过某种未记录的精度混合或隐藏通道出现；但这正被上述类型纪律排除。故三类失败互斥且完备。证毕。
+\end{proof}
+
+\begin{theorem}[三端证书的联合充分性与真最小性]\label{thm:conclusion-three-end-certificate-joint-sufficiency-minimality}
+记
+\[
+\mathfrak C_{\mathrm{addr}},
+\qquad
+\mathfrak C_{\mathrm{def}},
+\qquad
+\mathfrak C_{\mathrm{lin}}
+\]
+分别表示地址端、缺陷端与线性代数端证书对象类。则对本文的确定性离线验证任务而言：
+\begin{enumerate}
+  \item 三元组 \((\mathfrak C_{\mathrm{addr}},\mathfrak C_{\mathrm{def}},\mathfrak C_{\mathrm{lin}})\) 是联合充分的；
+  \item 任一真子族都不是充分的；
+  \item 这一本质最小性不是编码偶然，而是由三条彼此正交、不可互偿的预算方向所强制。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:conclusion-three-end-certificate-orthogonality} 已经给出：任何与 \(\mathrm{Read}_{\mathrm{US}}\) 的 typed semantics、\(\mathsf{NULL}\) 三分律及盲区预算协议相容的 sound offline verifier，都必经由
+\[
+\mathfrak C_{\mathrm{addr}}\times\mathfrak C_{\mathrm{def}}\times\mathfrak C_{\mathrm{lin}}
+\]
+因子化。这正给出联合充分性。
+
+现证真最小性。若去掉地址端，则对象级读出、前缀可寻址性以及语义空值/协议空值/碰撞空值的对象层区分立即丢失；这是定理 \ref{thm:conclusion-readus-null-trichotomy-normal-form} 所固定的第一类盲核。若去掉缺陷端，则半径盲区、协议禁入与相应 \(\mathsf{NULL}\) 见证失去承载；这与定理 \ref{thm:conclusion-three-end-certificate-orthotope-rigidity} 的正交预算律相矛盾。若去掉线性代数端，则 Toeplitz--PSD 与端点热核所控制的正性层级与边界承载完全不可见，因而无法闭合离线核验。
+
+因此任一真子族都会留下不可消去的失败核。又由于三类失败分别支撑在地址、缺陷与线性代数三条彼此正交的证书轴上，而定理 \ref{thm:conclusion-three-end-certificate-orthotope-rigidity} 已经排除预算跨轴补偿，故这一最小性是结构强制而非表示偶然。证毕。
+\end{proof}
+
+\begin{corollary}[拒绝与 \texorpdfstring{\(\mathsf{NULL}\)}{NULL} 输出的有限正规形]\label{cor:conclusion-reject-null-finite-normal-form}
+每一个非通过输出都 admit 一个有限正规形见证。更准确地，任意
+\[
+\mathsf{out}\in\{\mathrm{reject},\mathsf{NULL}\}
+\]
+都可唯一归约到下列有限标签之一：
+\[
+\mathsf{NULL}_{\mathrm{sem}},
+\quad
+\mathsf{NULL}_{\mathrm{prot}},
+\quad
+\mathsf{NULL}_{\mathrm{coll}},
+\quad
+\mathrm{Def}_{\mathrm{rad}},
+\quad
+\mathrm{Def}_{\mathrm{depth}},
+\quad
+\mathrm{Def}_{\mathrm{endpoint}}.
+\]
+其中后三项分别表示半径盲区预算不足、dyadic 深度预算不足与端点热核预算不足。
+\end{corollary}
+\begin{proof}
+前三类由定理 \ref{thm:conclusion-readus-null-trichotomy-normal-form} 给出。后三类则由定理 \ref{thm:conclusion-three-end-certificate-orthotope-rigidity} 的三条正交预算轴直接给出：若离切片显影、地址单射分离或端点原子控制中的任一项失败，则对应地触发 \(\mathrm{Def}_{\mathrm{rad}}\)、\(\mathrm{Def}_{\mathrm{depth}}\) 或 \(\mathrm{Def}_{\mathrm{endpoint}}\)。
+
+唯一性来自两层互斥性：第一，三类 \(\mathsf{NULL}\) 在对象层互斥；第二，三类预算失败在资源层正交且不可补偿。故任一非通过输出都且仅能落入上述六类中的一类。证毕。
+\end{proof}
