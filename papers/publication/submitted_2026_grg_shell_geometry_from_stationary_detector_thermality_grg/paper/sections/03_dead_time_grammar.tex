@@ -1,0 +1,985 @@
+\section{Dead time and symbolic grammar}\label{sec:bridge:deadtime}
+
+\subsection{Ideal dead-time model}
+
+The simplest dead-time model is the non-paralyzable detector familiar from counting theory \cite{Muller1973,CantorTeich1975}. A click during one sampling interval suppresses any further click in the next interval, and this single recovery rule already imposes a nontrivial symbolic constraint.
+
+\begin{definition}[Ideal one-step dead-time detector]\label{def:ideal-dead-time}
+Let $(R_n)_{n\ge 0}$ be the internal detector state, where $R_n=0$ means ready and $R_n=1$ means refractory. Fix a click probability
+\[
+q_\beta:=1-e^{-\Gamma_+(\beta_{\mathrm{loc}},\Omega)\Delta\tau},
+\qquad
+p_\beta:=1-q_\beta=e^{-\Gamma_+(\beta_{\mathrm{loc}},\Omega)\Delta\tau}.
+\]
+The output process $(A_n)_{n\ge 0}\in\{0,1\}^{\NN}$ evolves as follows.
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item If $R_n=0$, then $A_n=1$ with probability $q_\beta$ and $A_n=0$ with probability $p_\beta$. A click sets $R_{n+1}=1$, while no click sets $R_{n+1}=0$.
+  \item If $R_n=1$, then $A_n=0$ deterministically and $R_{n+1}=0$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Ideal dead time yields the golden-mean grammar]\label{thm:dead-time-golden}
+For the detector model of Definition~\ref{def:ideal-dead-time}, the observed output process $(A_n)$ is a stationary Markov chain on the golden-mean shift with transition matrix
+\begin{equation}\label{eq:bridge-markov-matrix}
+P_\beta=
+\begin{pmatrix}
+p_\beta & 1-p_\beta\\
+1 & 0
+\end{pmatrix}.
+\end{equation}
+In particular,
+\[
+\operatorname{supp}(\mu_\Theta)\subset X_\varphi
+:=
+\{a\in\{0,1\}^{\NN}:a_na_{n+1}\neq 11\ \text{for all }n\}.
+\]
+\end{theorem}
+
+\begin{proof}
+If $A_n=1$, then by construction the detector enters the refractory state during the next step, so $A_{n+1}=0$ with probability one. Hence the block $11$ is forbidden.
+
+If $A_n=0$, then regardless of whether this zero arose from a ready step with no click or from refractory recovery, the detector is in the ready state at time $n+1$. Therefore
+\[
+\PP(A_{n+1}=1\mid A_n=0)=q_\beta,
+\qquad
+\PP(A_{n+1}=0\mid A_n=0)=p_\beta.
+\]
+Combining this with the deterministic rule after $A_n=1$ yields the transition matrix \eqref{eq:bridge-markov-matrix}. The support condition follows immediately.
+\end{proof}
+
+\begin{remark}[Physical meaning of the golden-mean grammar]\label{rem:golden-mean-primer}
+The term ``golden-mean shift'' is the symbolic-dynamics name for the constraint
+\[
+11\notin\operatorname{supp}(\mu_\Theta),
+\]
+that is, for binary click records in which two consecutive clicks are impossible. In the present detector model this is not an abstract coding choice: it is exactly the operational consequence of a one-step refractory period. The parameter $p_\beta$ therefore controls the distribution of zero runs between clicks inside the physically allowed grammar.
+\end{remark}
+
+\subsection{Finite recovery and renewal structure}
+
+In a more realistic detector, recovery from the refractory state takes a finite time, so excitation and recovery may compete within the same sampling interval. This changes the symbolic process qualitatively: the hidden dynamics remain elementary, but the observed record is no longer described by a finite-step Markov law.
+
+\begin{definition}[Finite-recovery detector channel]\label{def:finite-recovery}
+Fix a sampling step $\Delta\tau>0$, a ready-state click rate $\Gamma>0$, and a refractory recovery rate $\kappa>0$. Let $S_n\in\{R,D\}$ denote the hidden detector state at the start of the $n$-th sampling interval.
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item If $S_n=R$, then a click occurs during the interval with probability $1-e^{-\Gamma\Delta\tau}$. In that case $A_n=1$ and $S_{n+1}=D$. Otherwise $A_n=0$ and $S_{n+1}=R$.
+  \item If $S_n=D$, the detector recovers at an exponential time with rate $\kappa$. If no recovery occurs before the end of the interval, then $A_n=0$ and $S_{n+1}=D$. If recovery occurs at time $s\in[0,\Delta\tau]$, then during the remaining subinterval of length $\Delta\tau-s$ the detector behaves as a ready detector with click rate $\Gamma$: a click yields $A_n=1$ and $S_{n+1}=D$, while no click yields $A_n=0$ and $S_{n+1}=R$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Finite recovery yields an explicit renewal process]\label{thm:finite-recovery-renewal}
+Consider the detector model of Definition~\ref{def:finite-recovery}, and write
+\[
+p:=e^{-\Gamma\Delta\tau},
+\qquad
+q:=1-p,
+\qquad
+c:=e^{-\kappa\Delta\tau}.
+\]
+Define
+\[
+b:=\int_0^{\Delta\tau}\kappa e^{-\kappa s}e^{-\Gamma(\Delta\tau-s)}\,ds,
+\qquad
+a:=\int_0^{\Delta\tau}\kappa e^{-\kappa s}\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds.
+\]
+Let
+\begin{equation}\label{eq:finite-recovery-T0T1}
+T_0=
+\begin{pmatrix}
+p&0\\
+b&c
+\end{pmatrix},
+\qquad
+T_1=
+\begin{pmatrix}
+0&q\\
+0&a
+\end{pmatrix},
+\end{equation}
+where rows index the current hidden state $(R,D)$ and columns index the next hidden state. Let $G$ denote the number of consecutive zeros between two successive output $1$'s. Then:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item every output $1$ resets the next sampling interval to the hidden state $D$, so successive click times are renewal points;
+  \item the gap variables are i.i.d., with law
+  \begin{equation}\label{eq:finite-recovery-gap-law}
+  \PP(G=k)=g_k:=e_D^\top T_0^kT_1\mathbf 1,
+  \qquad k\ge 0,
+  \end{equation}
+  where $e_D:=(0,1)^\top$ and $\mathbf 1:=(1,1)^\top$;
+  \item if $\kappa\neq\Gamma$, then
+  \begin{equation}\label{eq:finite-recovery-ab-closed}
+  b=\frac{\kappa(p-c)}{\kappa-\Gamma},
+  \qquad
+  a=\frac{\kappa(1-p)-\Gamma(1-c)}{\kappa-\Gamma},
+  \end{equation}
+  and the gap law has the closed form
+  \begin{equation}\label{eq:finite-recovery-gap-closed}
+  g_k
+  =
+  \frac{\kappa(1-p)p^k-\Gamma(1-c)c^k}{\kappa-\Gamma},
+  \qquad k\ge 0.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Every output $1$ can only occur through a click, and any click places the detector in the refractory state for the next sampling interval. Thus after each output $1$ the hidden state is reset to the same deterministic state $D$. The event $\{A_n=1\}$ is measurable with respect to the output filtration, so each click time is a stopping time. Since the hidden state at the post-click step is deterministic and independent of all prior randomness, the strong Markov property of the hidden chain guarantees that the process regenerates at click times. The successive inter-click zero-run lengths are therefore independent and identically distributed.
+
+To obtain their law, note that a gap of length $k$ means: starting from $D$, the next $k$ intervals produce output $0$, and the following interval produces output $1$. The output-labeled hidden-state kernels are exactly the matrices in \eqref{eq:finite-recovery-T0T1}, so
+\[
+\PP(G=k)=e_D^\top T_0^kT_1\mathbf 1.
+\]
+This proves \eqref{eq:finite-recovery-gap-law}.
+
+Assume now that $\kappa\neq\Gamma$. Direct integration gives
+\[
+b
+=
+\int_0^{\Delta\tau}\kappa e^{-\kappa s}e^{-\Gamma(\Delta\tau-s)}\,ds
+=
+\kappa e^{-\Gamma\Delta\tau}\int_0^{\Delta\tau}e^{(\Gamma-\kappa)s}\,ds
+=
+\frac{\kappa(p-c)}{\kappa-\Gamma},
+\]
+and then
+\[
+a=(1-c)-b
+=
+\frac{\kappa(1-p)-\Gamma(1-c)}{\kappa-\Gamma}.
+\]
+Because $T_0$ is lower triangular, its powers are
+\[
+T_0^k=
+\begin{pmatrix}
+p^k&0\\[1mm]
+b\,\dfrac{p^k-c^k}{p-c}&c^k
+\end{pmatrix}.
+\]
+Therefore
+\begin{align*}
+g_k
+&=
+e_D^\top T_0^kT_1\mathbf 1\\
+&=
+\left(
+b\,\frac{p^k-c^k}{p-c},
+\ c^k
+\right)
+\binom{q}{a}\\
+&=
+qb\,\frac{p^k-c^k}{p-c}+ac^k.
+\end{align*}
+Substituting the formulas for $a$ and $b$ yields
+\[
+g_k
+=
+\frac{\kappa(1-p)p^k-\Gamma(1-c)c^k}{\kappa-\Gamma},
+\]
+which is \eqref{eq:finite-recovery-gap-closed}.
+\end{proof}
+
+\begin{remark}[Renewal language and operational observables]\label{rem:renewal-primer}
+For the finite-recovery model, ``renewal'' means that every observed click resets the hidden detector to the same post-click state, so the successive zero-run lengths are i.i.d. Random variables. The hazard rate $h_k$ is the conditional probability of a click after $k$ consecutive zeros. The covariance sequence and the spectral density computed below are therefore directly tied to finite-record observables: low-lag autocovariances, zero-run histograms, and low-frequency spectral weight.
+\end{remark}
+
+\begin{remark}[The degenerate case $\kappa=\Gamma$]\label{rem:kappa-equals-gamma}
+When $\kappa=\Gamma$, the matrix $T_0$ has a repeated eigenvalue $p=c=e^{-\Gamma\Delta\tau}$ and becomes a Jordan block:
+\[
+T_0^k=
+\begin{pmatrix}
+p^k&0\\[1mm]
+k\,\Gamma\Delta\tau\, p^k&p^k
+\end{pmatrix}.
+\]
+The gap law, obtained by continuity from \eqref{eq:finite-recovery-gap-closed} or directly from \eqref{eq:finite-recovery-gap-law}, takes the form
+\begin{equation}\label{eq:gap-law-degenerate}
+g_k\big|_{\kappa=\Gamma}
+=
+p^k\bigl[q(1+k\,\Gamma\Delta\tau)-\Gamma\Delta\tau\bigr],
+\qquad k\ge 0,
+\end{equation}
+where $q=1-p$. This is a geometric tail modulated by a linear correction in $k$. The hazard rate becomes
+\[
+h_k\big|_{\kappa=\Gamma}
+=
+q-\frac{\Gamma\Delta\tau\, p}{1+k\,\Gamma\Delta\tau},
+\]
+which is still strictly increasing, with increment $h_{k+1}-h_k=(\Gamma\Delta\tau)^2 p/[(1+k\Gamma\Delta\tau)(1+(k+1)\Gamma\Delta\tau)]>0$, so the infinite-memory conclusion of Corollary~\ref{cor:finite-recovery-hazard} extends to $\kappa=\Gamma$. The critical sampling threshold degenerates to $\Delta_c(\Gamma,\Gamma)=1/\Gamma$ by L'H\^opital's rule.
+\end{remark}
+
+\begin{corollary}[Strictly increasing hazard rate and infinite memory]\label{cor:finite-recovery-hazard}
+Assume $\kappa\neq\Gamma$. Define the click hazard after $k$ consecutive zeros by
+\[
+h_k:=\PP(\text{next symbol is }1\mid \text{$k$ consecutive zeros since the last }1).
+\]
+Then
+\begin{equation}\label{eq:finite-recovery-hazard}
+h_k=
+\frac{g_k}{\sum_{j\ge k}g_j}
+=
+\frac{\kappa(1-p)p^k-\Gamma(1-c)c^k}{\kappa p^k-\Gamma c^k},
+\qquad k\ge 0,
+\end{equation}
+and
+\begin{equation}\label{eq:finite-recovery-hazard-difference}
+h_{k+1}-h_k
+=
+\frac{\kappa\Gamma(p-c)^2p^kc^k}
+{(\kappa p^k-\Gamma c^k)(\kappa p^{k+1}-\Gamma c^{k+1})}
+>0.
+\end{equation}
+In particular, the finite-recovery output process is not an $r$-step Markov chain for any finite $r$.
+\end{corollary}
+
+\begin{proof}
+By renewal theory,
+\[
+h_k=\frac{\PP(G=k)}{\PP(G\ge k)}=\frac{g_k}{\sum_{j\ge k}g_j}.
+\]
+Using \eqref{eq:finite-recovery-gap-closed},
+\[
+\sum_{j\ge k}g_j
+=
+\frac{\kappa(1-p)}{\kappa-\Gamma}\sum_{j\ge k}p^j
+-
+\frac{\Gamma(1-c)}{\kappa-\Gamma}\sum_{j\ge k}c^j
+=
+\frac{\kappa p^k-\Gamma c^k}{\kappa-\Gamma},
+\]
+which gives \eqref{eq:finite-recovery-hazard}. Direct subtraction yields \eqref{eq:finite-recovery-hazard-difference}.
+
+Now fix $r\ge 1$. For every sufficiently large $k\ge r$, the two histories
+\[
+10^k,
+\qquad
+10^{k+1}
+\]
+have the same last $r$ symbols, namely $0^r$, but their next-step click probabilities are $h_k$ and $h_{k+1}$ respectively. By \eqref{eq:finite-recovery-hazard-difference}, these probabilities differ. Hence the conditional law of the next symbol cannot be determined by any fixed finite suffix, so the process is not finite-order Markov.
+\end{proof}
+
+\begin{corollary}[Entropy rate of the finite-recovery renewal channel]\label{cor:finite-recovery-entropy}
+Assume $\kappa\neq\Gamma$, and let $h_{\mathrm{fr}}$ denote the entropy rate of any stationary version of the finite-recovery output process. Then
+\begin{equation}\label{eq:finite-recovery-entropy-rate}
+h_{\mathrm{fr}}
+=
+\frac{H(g)}{1+\EE G},
+\qquad
+H(g):=-\sum_{k\ge 0} g_k\log g_k,
+\end{equation}
+with
+\begin{equation}\label{eq:finite-recovery-gap-mean}
+\EE G
+=
+\frac{\kappa p}{(\kappa-\Gamma)(1-p)}
+-
+\frac{\Gamma c}{(\kappa-\Gamma)(1-c)}.
+\end{equation}
+Consequently, the click density is
+\begin{equation}\label{eq:finite-recovery-click-density}
+\rho_{\mathrm{fr}}
+:=
+\frac{1}{1+\EE G}
+=
+\frac{(\kappa-\Gamma)(1-p)(1-c)}{\kappa(1-c)-\Gamma(1-p)}.
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:finite-recovery-renewal}, the output decomposes into i.i.d.\ renewal cycles of the form $10^{G_i}$ with common law $g$ \cite{DaleyVereJones2008}. The information content of $N$ complete cycles is therefore the information content of $(G_1,\dots,G_N)$, namely $N H(g)$, while their total emitted length is $\sum_{i=1}^N (1+G_i)$. By the law of large numbers,
+\[
+\frac{1}{N}\sum_{i=1}^N (1+G_i)\to 1+\EE G.
+\]
+Hence the asymptotic information per emitted symbol is $H(g)/(1+\EE G)$, which is \eqref{eq:finite-recovery-entropy-rate}. Changing the initial distribution only affects $O(1)$ symbols, so the same entropy rate holds for any stationary version.
+
+For the mean gap length, use the tail-sum formula and the closed form above:
+\[
+\EE G
+=
+\sum_{k\ge 1}\PP(G\ge k)
+=
+\sum_{k\ge 1}\frac{\kappa p^k-\Gamma c^k}{\kappa-\Gamma}
+=
+\frac{\kappa p}{(\kappa-\Gamma)(1-p)}
+-
+\frac{\Gamma c}{(\kappa-\Gamma)(1-c)}.
+\]
+Equation \eqref{eq:finite-recovery-click-density} is then immediate.
+\end{proof}
+
+\begin{definition}[Renewal clock along click cycles]\label{def:finite-recovery-renewal-clock}
+Let $(G_i)_{i\ge 1}$ be i.i.d.\ $\NN$-valued gap variables with law $g=(g_k)_{k\ge 0}$. The associated click-anchored binary renewal process is written as the concatenation of cycles
+\[
+10^{G_1}\,10^{G_2}\cdots.
+\]
+Define the cumulative emitted length after $n$ complete cycles by
+\[
+T_n:=\sum_{i=1}^n(1+G_i),
+\]
+and define the renewal information clock by
+\[
+\Theta_n
+:=
+-\log \PP(G_1,\dots,G_n)
+=
+-\sum_{i=1}^n\log g_{G_i}.
+\]
+\end{definition}
+
+\begin{theorem}[Rigidity of renewal clocks on the full shift]\label{thm:finite-recovery-renewal-clock}
+Let $(G_i)_{i\ge 1}$ be i.i.d.\ with law $g=(g_k)_{k\ge 0}$ satisfying
+\[
+g_k>0\quad(k\ge 0),
+\qquad
+H(g)<\infty,
+\qquad
+\EE G<\infty.
+\]
+Let $u=(u_k)_{k\ge 0}$ denote the dyadic geometric law
+\[
+u_k:=2^{-k-1}.
+\]
+Then the renewal clock of Definition~\ref{def:finite-recovery-renewal-clock} satisfies:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*,itemsep=4pt]
+\item \textup{(Exact clock rate.)} Writing
+\begin{equation}\label{eq:general-renewal-clock-rate}
+h_{\mathrm{ren}}
+:=
+\frac{H(g)}{1+\EE G},
+\end{equation}
+one has
+\[
+\frac{\Theta_n}{T_n}\xrightarrow{\textup{a.s.}} h_{\mathrm{ren}}.
+\]
+\item \textup{(Exact cycle-normalized jitter.)} For every $n\ge 1$,
+\begin{equation}\label{eq:finite-recovery-renewal-clock-variance}
+\frac{1}{n}\Var\bigl(\Theta_n-h_{\mathrm{ren}}T_n\bigr)
+=
+\sum_{k\ge 0}g_k\bigl(-\log g_k-h_{\mathrm{ren}}(k+1)\bigr)^2.
+\end{equation}
+Consequently, the corresponding emitted-symbol jitter density is
+\begin{equation}\label{eq:finite-recovery-renewal-clock-density}
+\Sigma_{\mathrm{ren}}^2
+:=
+\frac{1}{1+\EE G}
+\sum_{k\ge 0}g_k\bigl(-\log g_k-h_{\mathrm{ren}}(k+1)\bigr)^2.
+\end{equation}
+\item \textup{(Variational identity against the full binary shift.)}
+\begin{equation}\label{eq:finite-recovery-dyadic-kl}
+\log 2-h_{\mathrm{ren}}
+=
+\frac{1}{1+\EE G}\,
+D_{\mathrm{KL}}(g\Vert u).
+\end{equation}
+\item \textup{(Bernoulli rigidity.)} $\Sigma_{\mathrm{ren}}^2=0$ if and only if $g=u$. Equivalently, among full-support binary renewal laws on $\{0,1\}^{\NN}$, the fair Bernoulli process is the unique zero-jitter renewal clock.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Set
+\[
+Y_i:=-\log g_{G_i},
+\qquad
+L_i:=1+G_i,
+\qquad
+Z_i:=Y_i-h_{\mathrm{ren}}L_i.
+\]
+Because the $G_i$ are i.i.d.\ with law $g$, so are the triples $(Y_i,L_i,Z_i)$.
+
+\emph{(i)} By the strong law of large numbers,
+\[
+\frac{1}{n}\Theta_n
+=
+\frac{1}{n}\sum_{i=1}^n Y_i
+\xrightarrow{\textup{a.s.}}
+\EE Y_1
+=
+H(g),
+\]
+and
+\[
+\frac{1}{n}T_n
+=
+\frac{1}{n}\sum_{i=1}^n L_i
+\xrightarrow{\textup{a.s.}}
+\EE L_1
+=
+1+\EE G.
+\]
+Taking the ratio gives $\Theta_n/T_n\to H(g)/(1+\EE G)=h_{\mathrm{ren}}$.
+
+\emph{(ii)} Since
+\[
+\EE Z_1
+=
+\EE Y_1-h_{\mathrm{ren}}\EE L_1
+=
+H(g)-h_{\mathrm{ren}}(1+\EE G)
+=
+0,
+\]
+independence yields
+\[
+\Var\bigl(\Theta_n-h_{\mathrm{ren}}T_n\bigr)
+=
+\Var\Bigl(\sum_{i=1}^n Z_i\Bigr)
+=
+n\,\Var(Z_1).
+\]
+This proves \eqref{eq:finite-recovery-renewal-clock-variance}. Dividing by $1+\EE G$ gives \eqref{eq:finite-recovery-renewal-clock-density}.
+
+\emph{(iii)} A direct computation gives
+\begin{align*}
+D_{\mathrm{KL}}(g\Vert u)
+&=
+\sum_{k\ge 0}g_k\log\frac{g_k}{2^{-k-1}}\\
+&=
+\sum_{k\ge 0}g_k\log g_k
++
+(\log 2)\sum_{k\ge 0}g_k(k+1)\\
+&=
+-H(g)+(1+\EE G)\log 2\\
+&=
+(1+\EE G)\bigl(\log 2-h_{\mathrm{ren}}\bigr),
+\end{align*}
+which is exactly \eqref{eq:finite-recovery-dyadic-kl}.
+
+\emph{(iv)} If $\Sigma_{\mathrm{ren}}^2=0$, then the non-negative sum in \eqref{eq:finite-recovery-renewal-clock-density} vanishes termwise because $g_k>0$ for every $k\ge 0$. Hence
+\[
+-\log g_k=h_{\mathrm{ren}}(k+1)
+\qquad(k\ge 0),
+\]
+so
+\[
+g_k=e^{-h_{\mathrm{ren}}(k+1)}.
+\]
+Summing over $k\ge 0$ gives
+\[
+1=\sum_{k\ge 0}e^{-h_{\mathrm{ren}}(k+1)}
+=
+\frac{e^{-h_{\mathrm{ren}}}}{1-e^{-h_{\mathrm{ren}}}},
+\]
+whence $e^{-h_{\mathrm{ren}}}=1/2$, $h_{\mathrm{ren}}=\log 2$, and therefore $g_k=2^{-k-1}=u_k$ for all $k$. Conversely, if $g=u$, then $h_{\mathrm{ren}}=\log 2$ by \eqref{eq:finite-recovery-dyadic-kl}, and each summand in \eqref{eq:finite-recovery-renewal-clock-density} vanishes, so $\Sigma_{\mathrm{ren}}^2=0$. The law $u$ is exactly the gap law induced by the fair Bernoulli process on the full binary shift.
+\end{proof}
+
+\begin{theorem}[Exact entropy decomposition at fixed click density]\label{thm:renewal-density-decomposition}
+Under the hypotheses of Theorem~\ref{thm:finite-recovery-renewal-clock}, define the click density
+\[
+\rho_{\mathrm{ren}}
+:=
+\frac{1}{1+\EE G},
+\]
+the same-density geometric law
+\[
+u^{(\rho_{\mathrm{ren}})}_k
+:=
+\rho_{\mathrm{ren}}(1-\rho_{\mathrm{ren}})^k,
+\qquad k\ge 0,
+\]
+and the binary entropy
+\[
+H_2(\rho):=-\rho\log\rho-(1-\rho)\log(1-\rho).
+\]
+Then:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*,itemsep=4pt]
+\item \textup{(Exact same-density variational identity.)}
+\begin{equation}\label{eq:renewal-density-kl}
+H_2(\rho_{\mathrm{ren}})-h_{\mathrm{ren}}
+=
+\rho_{\mathrm{ren}}\,
+D_{\mathrm{KL}}\!\bigl(g\Vert u^{(\rho_{\mathrm{ren}})}\bigr).
+\end{equation}
+\item \textup{(Geometric entropy maximizer at fixed density.)}
+\begin{equation}\label{eq:renewal-density-maxentropy}
+h_{\mathrm{ren}}\le H_2(\rho_{\mathrm{ren}}),
+\end{equation}
+with equality if and only if $g=u^{(\rho_{\mathrm{ren}})}$. Equivalently, among full-support binary renewal laws with fixed click density $\rho_{\mathrm{ren}}$, the Bernoulli process with click probability $\rho_{\mathrm{ren}}$ is the unique entropy maximizer.
+\item \textup{(Bias-memory decomposition of the full-shift entropy deficit.)} Writing
+\[
+d_{\mathrm{bin}}\!\left(\rho\middle\Vert \tfrac12\right)
+:=
+\rho\log(2\rho)+(1-\rho)\log\bigl(2(1-\rho)\bigr),
+\]
+one has
+\begin{equation}\label{eq:renewal-density-deficit-split}
+\log 2-h_{\mathrm{ren}}
+=
+\rho_{\mathrm{ren}}\,
+D_{\mathrm{KL}}\!\bigl(g\Vert u^{(\rho_{\mathrm{ren}})}\bigr)
++
+d_{\mathrm{bin}}\!\left(\rho_{\mathrm{ren}}\middle\Vert \tfrac12\right).
+\end{equation}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+By definition of $u^{(\rho_{\mathrm{ren}})}$,
+\begin{align*}
+D_{\mathrm{KL}}\!\bigl(g\Vert u^{(\rho_{\mathrm{ren}})}\bigr)
+&=
+\sum_{k\ge 0}g_k\log\frac{g_k}{\rho_{\mathrm{ren}}(1-\rho_{\mathrm{ren}})^k}\\
+&=
+\sum_{k\ge 0}g_k\log g_k
+-\log\rho_{\mathrm{ren}}
+-\EE G\,\log(1-\rho_{\mathrm{ren}})\\
+&=
+-H(g)-\log\rho_{\mathrm{ren}}
+-\EE G\,\log(1-\rho_{\mathrm{ren}}).
+\end{align*}
+Multiplying by $\rho_{\mathrm{ren}}=(1+\EE G)^{-1}$ gives
+\begin{align*}
+\rho_{\mathrm{ren}}\,
+D_{\mathrm{KL}}\!\bigl(g\Vert u^{(\rho_{\mathrm{ren}})}\bigr)
+&=
+-\frac{H(g)}{1+\EE G}
+-\rho_{\mathrm{ren}}\log\rho_{\mathrm{ren}}
+-\rho_{\mathrm{ren}}\EE G\,\log(1-\rho_{\mathrm{ren}})\\
+&=
+-h_{\mathrm{ren}}
+-\rho_{\mathrm{ren}}\log\rho_{\mathrm{ren}}
+-(1-\rho_{\mathrm{ren}})\log(1-\rho_{\mathrm{ren}})\\
+&=
+H_2(\rho_{\mathrm{ren}})-h_{\mathrm{ren}},
+\end{align*}
+which proves \eqref{eq:renewal-density-kl}.
+
+Since the Kullback--Leibler divergence is non-negative, \eqref{eq:renewal-density-maxentropy} follows immediately. Equality holds if and only if
+\[
+D_{\mathrm{KL}}\!\bigl(g\Vert u^{(\rho_{\mathrm{ren}})}\bigr)=0,
+\]
+that is, if and only if $g=u^{(\rho_{\mathrm{ren}})}$. The law $u^{(\rho_{\mathrm{ren}})}$ is precisely the gap law of the Bernoulli process with click probability $\rho_{\mathrm{ren}}$.
+
+Finally,
+\[
+\log 2-h_{\mathrm{ren}}
+=
+\bigl(H_2(\rho_{\mathrm{ren}})-h_{\mathrm{ren}}\bigr)
++
+\bigl(\log 2-H_2(\rho_{\mathrm{ren}})\bigr).
+\]
+The first term is \eqref{eq:renewal-density-kl}, while the second equals
+\[
+\log 2+\rho_{\mathrm{ren}}\log\rho_{\mathrm{ren}}
++(1-\rho_{\mathrm{ren}})\log(1-\rho_{\mathrm{ren}})
+=
+d_{\mathrm{bin}}\!\left(\rho_{\mathrm{ren}}\middle\Vert \tfrac12\right),
+\]
+which proves \eqref{eq:renewal-density-deficit-split}.
+\end{proof}
+
+\begin{corollary}[Finite recovery cannot realize the Bernoulli benchmarks]\label{cor:finite-recovery-jitter-barrier}
+Let $g$ be the finite-recovery gap law of Theorem~\ref{thm:finite-recovery-renewal}. Then
+\begin{equation}\label{eq:finite-recovery-jitter-barrier}
+h_{\mathrm{fr}}<\log 2,
+\qquad
+\Sigma_{\mathrm{fr}}^2>0,
+\end{equation}
+where $\Sigma_{\mathrm{fr}}^2$ is the specialization of \eqref{eq:finite-recovery-renewal-clock-density} to the finite-recovery law.
+Moreover, if
+\[
+\rho_{\mathrm{fr}}
+:=
+\frac{1}{1+\EE G},
+\qquad
+u^{(\rho_{\mathrm{fr}})}_k:=\rho_{\mathrm{fr}}(1-\rho_{\mathrm{fr}})^k,
+\]
+then
+\begin{equation}\label{eq:finite-recovery-memory-penalty}
+H_2(\rho_{\mathrm{fr}})-h_{\mathrm{fr}}
+=
+\rho_{\mathrm{fr}}\,D_{\mathrm{KL}}\!\bigl(g\Vert u^{(\rho_{\mathrm{fr}})}\bigr)
+>0.
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+The dyadic geometric law has constant hazard
+\[
+\frac{u_k}{\sum_{j\ge k}u_j}
+=
+\frac{2^{-k-1}}{2^{-k}}
+=
+\frac12.
+\]
+By Corollary~\ref{cor:finite-recovery-hazard}, the finite-recovery hazard is strictly increasing, so its gap law cannot equal $u$. The strict inequalities in \eqref{eq:finite-recovery-jitter-barrier} therefore follow from Theorem~\ref{thm:finite-recovery-renewal-clock}, items~(iii) and~(iv).
+
+The geometric law $u^{(\rho_{\mathrm{fr}})}$ has constant hazard $\rho_{\mathrm{fr}}$, whereas the finite-recovery hazard is strictly increasing. Hence $g\neq u^{(\rho_{\mathrm{fr}})}$. Applying Theorem~\ref{thm:renewal-density-decomposition}, item~(i), yields \eqref{eq:finite-recovery-memory-penalty}; the inequality is strict because the Kullback--Leibler divergence vanishes only when the two laws coincide.
+\end{proof}
+
+\begin{theorem}[Two-point function and correlation phase transition]\label{thm:finite-recovery-correlation}
+Assume $\kappa\neq\Gamma$, and let $(A_n)_{n\in\mathbb Z}$ be any stationary version of the finite-recovery output process. Write
+\[
+\rho:=\PP(A_0=1)=\rho_{\mathrm{fr}},
+\qquad
+P:=T_0+T_1=
+\begin{pmatrix}
+p&q\\
+b&1-b
+\end{pmatrix},
+\qquad
+u:=T_1\mathbf 1=
+\binom{q}{a}.
+\]
+Define
+\begin{equation}\label{eq:finite-recovery-lambda}
+\lambda:=p-b
+=
+\frac{\kappa e^{-\kappa\Delta\tau}-\Gamma e^{-\Gamma\Delta\tau}}{\kappa-\Gamma}.
+\end{equation}
+Then for every $n\ge 1$,
+\begin{equation}\label{eq:finite-recovery-twopoint}
+\PP(A_0=1,A_n=1)
+=
+\rho^2+\rho(a-\rho)\lambda^{n-1},
+\end{equation}
+and hence
+\begin{equation}\label{eq:finite-recovery-covariance}
+\operatorname{Cov}(A_0,A_n)
+=
+\rho(a-\rho)\lambda^{n-1}.
+\end{equation}
+Moreover,
+\begin{equation}\label{eq:finite-recovery-rho-sandwich}
+a<\rho<q,
+\end{equation}
+so in particular $\operatorname{Cov}(A_0,A_1)<0$.
+
+Finally, define the critical sampling threshold
+\[
+\Delta_c(\Gamma,\kappa):=\frac{\log\kappa-\log\Gamma}{\kappa-\Gamma}.
+\]
+Then:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+  \item if $\Delta\tau<\Delta_c(\Gamma,\kappa)$, then $\lambda>0$ and $\operatorname{Cov}(A_0,A_n)<0$ for all $n\ge 1$;
+  \item if $\Delta\tau=\Delta_c(\Gamma,\kappa)$, then $\lambda=0$ and $\operatorname{Cov}(A_0,A_n)=0$ for all $n\ge 2$;
+  \item if $\Delta\tau>\Delta_c(\Gamma,\kappa)$, then $\lambda<0$ and
+  \[
+  (-1)^{n-1}\operatorname{Cov}(A_0,A_n)<0
+  \qquad\text{for all }n\ge 1.
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Let $\pi=(\pi_R,\pi_D)$ denote the stationary distribution of the hidden-state chain with transition matrix $P$. Since
+\[
+\pi=\pi P,
+\qquad
+\pi_R+\pi_D=1,
+\]
+one obtains
+\[
+\pi_R=\frac{b}{b+q},
+\qquad
+\pi_D=\frac{q}{b+q}.
+\]
+The click density is therefore
+\[
+\rho=\pi u=\pi_R q+\pi_D a.
+\]
+
+Whenever $A_0=1$, the detector resets the next sampling interval to the hidden state $D$. Therefore, for $n\ge 1$,
+\begin{equation}\label{eq:finite-recovery-click-conditioning}
+\PP(A_0=1,A_n=1)
+=
+\rho\, e_D^\top P^{n-1}u.
+\end{equation}
+The two-state stochastic matrix $P$ has eigenvalues $1$ and $\lambda=p-b$. Since $q,b>0$, the chain is irreducible and aperiodic, so $|\lambda|<1$. Decomposing along the eigenspaces gives
+\[
+P^{n-1}v
+=
+(\pi v)\mathbf 1+\lambda^{n-1}\bigl(v-(\pi v)\mathbf 1\bigr)
+\qquad\text{for every }v\in\mathbb R^2.
+\]
+Applying this with $v=u$ and using $\pi u=\rho$ and $e_D^\top u=a$ yields
+\[
+e_D^\top P^{n-1}u
+=
+\rho+\lambda^{n-1}(a-\rho).
+\]
+Substituting into \eqref{eq:finite-recovery-click-conditioning} proves \eqref{eq:finite-recovery-twopoint}, and \eqref{eq:finite-recovery-covariance} follows immediately.
+
+Next,
+\[
+a
+=
+\int_0^{\Delta\tau}\kappa e^{-\kappa s}\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds
+<
+\int_0^{\Delta\tau}\kappa e^{-\kappa s}q\,ds
+=
+q(1-c)
+<
+q.
+\]
+Since $\rho=\pi_R q+\pi_D a$ is a strict convex combination of $a$ and $q$, this proves \eqref{eq:finite-recovery-rho-sandwich}. In particular, $\rho(a-\rho)<0$, so $\operatorname{Cov}(A_0,A_1)<0$.
+
+Finally, \eqref{eq:finite-recovery-lambda} shows that $\lambda$ changes sign exactly when
+\[
+\kappa e^{-\kappa\Delta\tau}=\Gamma e^{-\Gamma\Delta\tau},
+\]
+that is, when
+\[
+\Delta\tau=\frac{\log\kappa-\log\Gamma}{\kappa-\Gamma}.
+\]
+The sign claims then follow directly from \eqref{eq:finite-recovery-covariance} together with \eqref{eq:finite-recovery-rho-sandwich}.
+\end{proof}
+
+\begin{corollary}[Critical sampling line and exact $1$-dependence]\label{cor:finite-recovery-1dependent}
+If $\Delta\tau=\Delta_c(\Gamma,\kappa)$, then the stationary finite-recovery output process is $1$-dependent:
+\[
+\sigma(A_i:i\le 0)\ \perp\ \sigma(A_j:j\ge 2).
+\]
+\end{corollary}
+
+\begin{proof}
+At the critical line one has $\lambda=0$, so the two-state transition matrix $P$ has rank one and equals $\mathbf 1\,\pi$. We first prove the factorization on cylinder events, then extend to the generated sigma-algebras.
+
+Let $E=[a_{-k}\cdots a_0]$ and $F=[b_2\cdots b_m]$ be cylinder events in $\sigma(A_i:i\le 0)$ and $\sigma(A_j:j\ge 2)$ respectively. In the hidden-Markov representation, the joint probability is obtained by composing the output-labeled transition matrices for each position and summing over the intermediate symbol $A_1$:
+\[
+\PP(E\cap F)
+=
+\pi^\top T_{a_{-k}}\cdots T_{a_0}
+\underbrace{\bigl(T_0+T_1\bigr)}_{=\,P}
+T_{b_2}\cdots T_{b_m}\mathbf 1.
+\]
+Since $P=\mathbf 1\,\pi$ is rank one, this factorizes as
+\[
+\bigl(\pi^\top T_{a_{-k}}\cdots T_{a_0}\mathbf 1\bigr)
+\bigl(\pi^\top T_{b_2}\cdots T_{b_m}\mathbf 1\bigr)
+=
+\PP(E)\,\PP(F).
+\]
+For general cylinder events $E\in\sigma(A_i:i\le 0)$ and $F\in\sigma(A_j:j\ge 2)$, the same argument applies with appropriately extended product matrices: regardless of how far $E$ reaches into the past, the factor $P=\mathbf 1\,\pi$ at position~$1$ resets the hidden state to $\pi$, so the past and future blocks decouple. The collection of sets $F$ for which $\PP(E\cap F)=\PP(E)\PP(F)$ is a $\lambda$-system containing the $\pi$-system of cylinders, so by the $\pi$--$\lambda$ theorem \cite{Billingsley1995} it equals $\sigma(A_j:j\ge 2)$. Repeating the argument for $E$ yields the full independence.
+\end{proof}
+
+\begin{theorem}[Spectral density and universal low-frequency suppression]\label{thm:finite-recovery-spectrum}
+Assume $\kappa\neq\Gamma$, and let
+\[
+\rho:=\PP(A_0=1),
+\qquad
+\widetilde A_n:=A_n-\rho.
+\]
+The spectral density of the stationary finite-recovery output process,
+\[
+f(\theta)
+:=
+\operatorname{Cov}(A_0,A_0)
++
+2\sum_{n\ge 1}\operatorname{Cov}(A_0,A_n)\cos(n\theta),
+\qquad
+\theta\in[-\pi,\pi],
+\]
+has the closed form
+\begin{equation}\label{eq:finite-recovery-spectrum}
+f(\theta)
+=
+\rho(1-\rho)
++
+2\rho(a-\rho)\,
+\frac{\cos\theta-\lambda}{1-2\lambda\cos\theta+\lambda^2}.
+\end{equation}
+Moreover, $f$ is strictly increasing on $[0,\pi]$. In particular,
+\[
+f(0)<f(\theta)<f(\pi)
+\qquad\text{for }0<\theta<\pi.
+\]
+\end{theorem}
+
+\begin{proof}
+By Theorem~\ref{thm:finite-recovery-correlation},
+\[
+\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda^{n-1}
+\qquad(n\ge 1).
+\]
+Therefore
+\[
+f(\theta)
+=
+\rho(1-\rho)
++
+2\rho(a-\rho)\sum_{n\ge 1}\lambda^{n-1}\cos(n\theta).
+\]
+Since $|\lambda|<1$,
+\[
+\sum_{n\ge 1}\lambda^{n-1}e^{in\theta}
+=
+\frac{e^{i\theta}}{1-\lambda e^{i\theta}},
+\]
+and taking real parts gives
+\[
+\sum_{n\ge 1}\lambda^{n-1}\cos(n\theta)
+=
+\frac{\cos\theta-\lambda}{1-2\lambda\cos\theta+\lambda^2}.
+\]
+This proves \eqref{eq:finite-recovery-spectrum}.
+
+Now write $x=\cos\theta\in[-1,1]$ and define
+\[
+R_\lambda(x):=\frac{x-\lambda}{1-2\lambda x+\lambda^2}.
+\]
+A direct derivative computation yields
+\[
+R_\lambda'(x)=\frac{1-\lambda^2}{(1-2\lambda x+\lambda^2)^2}>0.
+\]
+Thus $R_\lambda$ is strictly increasing in $x$. Because $a-\rho<0$ by \eqref{eq:finite-recovery-rho-sandwich}, the affine function
+\[
+\rho(1-\rho)+2\rho(a-\rho)R_\lambda(x)
+\]
+is strictly decreasing in $x$. Since $\cos\theta$ is strictly decreasing on $[0,\pi]$, the spectral density $f(\theta)$ is strictly increasing on $[0,\pi]$.
+\end{proof}
+
+\begin{corollary}[Counting fluctuations and strict sub-Poissonity]\label{cor:finite-recovery-counting}
+Let
+\[
+N_N:=\sum_{t=0}^{N-1}A_t.
+\]
+Then for every $N\ge 1$,
+\begin{equation}\label{eq:finite-recovery-count-variance}
+\operatorname{Var}(N_N)
+=
+N\rho(1-\rho)
++
+\frac{2\rho(a-\rho)}{(1-\lambda)^2}
+\Bigl(N(1-\lambda)-1+\lambda^N\Bigr).
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:finite-recovery-count-variance-density}
+\lim_{N\to\infty}\frac{1}{N}\operatorname{Var}(N_N)
+=
+\rho(1-\rho)+\frac{2\rho(a-\rho)}{1-\lambda}
+=
+f(0),
+\end{equation}
+and the asymptotic Fano factor satisfies
+\begin{equation}\label{eq:finite-recovery-fano}
+\lim_{N\to\infty}\frac{\operatorname{Var}(N_N)}{\EE N_N}
+=
+1-\rho+\frac{2(a-\rho)}{1-\lambda}
+<1.
+\end{equation}
+Thus the stationary finite-recovery output process is strictly sub-Poissonian throughout the whole parameter range.
+\end{corollary}
+
+\begin{proof}
+For any stationary binary process,
+\[
+\operatorname{Var}(N_N)
+=
+N\gamma_0+2\sum_{n=1}^{N-1}(N-n)\gamma_n,
+\qquad
+\gamma_n:=\operatorname{Cov}(A_0,A_n).
+\]
+Here
+\[
+\gamma_0=\rho(1-\rho),
+\qquad
+\gamma_n=\rho(a-\rho)\lambda^{n-1}\quad (n\ge 1),
+\]
+so
+\[
+\operatorname{Var}(N_N)
+=
+N\rho(1-\rho)
++
+2\rho(a-\rho)\sum_{n=1}^{N-1}(N-n)\lambda^{n-1}.
+\]
+The geometric sum evaluates to
+\[
+\sum_{n=1}^{N-1}(N-n)\lambda^{n-1}
+=
+\frac{N(1-\lambda)-1+\lambda^N}{(1-\lambda)^2},
+\]
+which proves \eqref{eq:finite-recovery-count-variance}. Dividing by $N$ and letting $N\to\infty$ gives \eqref{eq:finite-recovery-count-variance-density}. Since $\EE N_N=N\rho$, equation \eqref{eq:finite-recovery-fano} follows. The strict inequality comes from $a-\rho<0$ and $1-\lambda>0$.
+\end{proof}
+
+\begin{proposition}[Quadratic suppression of consecutive clicks]\label{prop:soft-dead-time}
+In the finite-recovery model,
+\begin{equation}\label{eq:soft-violation-integral}
+\PP(A_{n+1}=1\mid A_n=1)
+=
+\int_0^{\Delta\tau}
+\kappa e^{-\kappa s}
+\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds
+=
+a.
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:soft-violation-asymptotic}
+\PP(A_{n+1}=1\mid A_n=1)
+=
+\frac12\,\kappa\Gamma(\Delta\tau)^2
++
+O((\Delta\tau)^3)
+\qquad
+(\Delta\tau\downarrow 0).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The integral identity is exactly the definition of $a$ in Theorem~\ref{thm:finite-recovery-renewal}. For the small-$\Delta\tau$ expansion, use
+\[
+e^{-\kappa s}=1+O(\Delta\tau),
+\qquad
+1-e^{-\Gamma(\Delta\tau-s)}=\Gamma(\Delta\tau-s)+O((\Delta\tau)^2),
+\]
+uniformly for $0\le s\le \Delta\tau$. Substituting into \eqref{eq:soft-violation-integral},
+\[
+\PP(A_{n+1}=1\mid A_n=1)
+=
+\kappa\Gamma
+\int_0^{\Delta\tau}(\Delta\tau-s)\,ds
++
+O((\Delta\tau)^3)
+=
+\frac12\,\kappa\Gamma(\Delta\tau)^2+O((\Delta\tau)^3).
+\]
+\end{proof}
+
+\begin{proposition}[Quadratic suppression of grammar violations in finite windows]\label{prop:tv-proximity}
+Let $(A_n)$ be the stationary output of the finite-recovery model with parameters $(\Gamma,\kappa,\Delta\tau)$. For $n\ge 2$, let
+\[
+V_n:=\bigl\{(a_0,\dots,a_{n-1})\in\{0,1\}^n:\exists\,k\in\{0,\dots,n-2\},\;a_ka_{k+1}=11\bigr\}
+\]
+denote the set of golden-mean inadmissible words of length $n$. Then
+\begin{equation}\label{eq:tv-proximity}
+\PP\!\bigl((A_0,\dots,A_{n-1})\in V_n\bigr)
+\le
+\frac12\,\kappa\Gamma(\Delta\tau)^2\,(n-1)
++
+O\bigl((\Delta\tau)^3\,n\bigr)
+\qquad(\Delta\tau\downarrow 0).
+\end{equation}
+Consequently, if $\mu_{\mathrm{fr}}^{(n)}$ denotes the $n$-marginal of the finite-recovery output and $\nu_{\mathrm{adm}}^{(n)}:=\mu_{\mathrm{fr}}^{(n)}(\,\cdot\mid V_n^c)$ its conditional law given admissibility, then
+\begin{equation}\label{eq:tv-admissible}
+d_{\mathrm{TV}}\!\bigl(\mu_{\mathrm{fr}}^{(n)},\,\nu_{\mathrm{adm}}^{(n)}\bigr)
+=
+\PP(V_n)
+\le
+\frac12\,\kappa\Gamma(\Delta\tau)^2\,(n-1)
++
+O\bigl((\Delta\tau)^3\,n\bigr).
+\end{equation}
+In particular, for any fixed $n$, the finite-recovery output becomes concentrated on the golden-mean admissible set $X_\varphi^{(n)}=V_n^c$ as $\Delta\tau\to 0$.
+\end{proposition}
+
+\begin{proof}
+By the union bound,
+\[
+\PP(V_n)
+\le
+\sum_{k=0}^{n-2}\PP(A_k=1,\,A_{k+1}=1).
+\]
+By stationarity, each summand equals $\PP(A_0=1,\,A_1=1)=\PP(A_0=1)\cdot\PP(A_1=1\mid A_0=1)$. Since $\PP(A_0=1)\le 1$ and $\PP(A_1=1\mid A_0=1)=a$ by Proposition~\ref{prop:soft-dead-time}, each summand is bounded by $a=\tfrac12\kappa\Gamma(\Delta\tau)^2+O((\Delta\tau)^3)$, yielding \eqref{eq:tv-proximity}.
+
+For \eqref{eq:tv-admissible}, set $\varepsilon:=\PP(V_n)$. The decomposition $\mu_{\mathrm{fr}}^{(n)}=(1-\varepsilon)\,\nu_{\mathrm{adm}}^{(n)}+\varepsilon\,\rho_n$, where $\rho_n:=\mu_{\mathrm{fr}}^{(n)}(\,\cdot\mid V_n)$ is supported on $V_n$ and $\nu_{\mathrm{adm}}^{(n)}$ on $V_n^c$, gives
+\[
+d_{\mathrm{TV}}\!\bigl(\mu_{\mathrm{fr}}^{(n)},\,\nu_{\mathrm{adm}}^{(n)}\bigr)
+=
+\tfrac12\sum_{w\in\{0,1\}^n}\bigl|\mu_{\mathrm{fr}}^{(n)}(w)-\nu_{\mathrm{adm}}^{(n)}(w)\bigr|
+=
+\varepsilon.
+\]
+The last equality holds because $\nu_{\mathrm{adm}}^{(n)}(w)=\mu_{\mathrm{fr}}^{(n)}(w)/(1-\varepsilon)$ for $w\in V_n^c$ and $\nu_{\mathrm{adm}}^{(n)}(w)=0$ for $w\in V_n$; summing the absolute differences over $V_n^c$ yields $(1-\varepsilon)\cdot\varepsilon/(1-\varepsilon)=\varepsilon$ and over $V_n$ yields $\varepsilon$, so the half-sum is $\varepsilon$.
+\end{proof}
+
+\begin{remark}\label{rem:grammar-summary}
+The ideal and finite-recovery models should therefore be viewed as two different symbolic regimes rather than as small perturbations of one another. The former is a first-order Markov chain on the golden-mean shift, whereas the latter is a renewal process with infinite memory. What remains perturbatively small is not the full law but the rate of explicit grammar violations: the appearance of the forbidden block $11$ is suppressed at order $O((\Delta\tau)^2)$ per site. This is the scale relevant for the KMS analysis of Section~\ref{sec:bridge:kms} and for the stabilization-based entropy decomposition recorded in Appendix~\ref{app:bridge:microhistory}.
+\end{remark}

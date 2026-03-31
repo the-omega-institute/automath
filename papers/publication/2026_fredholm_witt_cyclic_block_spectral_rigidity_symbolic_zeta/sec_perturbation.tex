@@ -1,0 +1,162 @@
+\section{Perturbative Applications}
+\label{sec:perturbation}
+
+\subsection{Holomorphic variation of finite-part constants}
+
+\begin{theorem}[Reduced-determinant gradient formula]
+  \label{thm:finite-part-reduced-determinant-group-inverse-gradient}
+  Let \(\theta\mapsto A_\theta\) be a holomorphic family of primitive
+  matrices near \(\theta_0\), and assume that
+  \(\lambda(\theta):=\rho(A_\theta)\) stays simple. Choose left and
+  right Perron vectors \(\ell_\theta,r_\theta\) normalised by
+  \(\ell_\theta^{\mathsf T}r_\theta=1\), let
+  \(P_\theta:=r_\theta\ell_\theta^{\mathsf T}\), and set
+  \[
+    B_\theta:=I-\frac{A_\theta}{\lambda(\theta)},
+    \qquad
+    R_\theta:=B_\theta^{\#},
+  \]
+  where \(B_\theta^{\#}\) is the group inverse, characterised by
+  \[
+    B_\theta R_\theta=R_\theta B_\theta=I-P_\theta,
+    \qquad
+    R_\theta P_\theta=P_\theta R_\theta=0.
+  \]
+  Then
+  \[
+    \partial_\theta\log C(A_\theta)
+    =\Tr\!\left(
+      R_\theta\left(
+        \frac{\partial_\theta A_\theta}{\lambda(\theta)}
+        -\frac{\partial_\theta\lambda(\theta)}{\lambda(\theta)^2}
+         A_\theta\right)\right),
+  \]
+  with
+  \[
+    \partial_\theta\lambda(\theta)
+    =\ell_\theta^{\mathsf T}(\partial_\theta A_\theta)r_\theta.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Since the Perron eigenvalue is simple, \(B_\theta\) has a simple zero
+  eigenvalue and all other eigenvalues are non-zero; hence the group
+  inverse \(R_\theta\) exists. On the invariant complement
+  \((I-P_\theta)\CC^d\), the reduced determinant is the ordinary
+  determinant of \(B_\theta\), so the usual logarithmic derivative
+  gives
+  \[
+    \partial_\theta\log\det\nolimits'(B_\theta)
+    =\Tr(R_\theta\,\partial_\theta B_\theta).
+  \]
+  Using \(C(A_\theta)=\det{}'(B_\theta)^{-1}\) from
+  \eqref{eq:reduced-det-constant} and
+  \[
+    \partial_\theta B_\theta
+    =-\frac{\partial_\theta A_\theta}{\lambda(\theta)}
+      +\frac{\partial_\theta\lambda(\theta)}{\lambda(\theta)^2}
+       A_\theta
+  \]
+  gives the first formula. The derivative of the Perron root is the
+  standard perturbation identity
+  \[
+    \partial_\theta\lambda(\theta)
+    =\ell_\theta^{\mathsf T}(\partial_\theta A_\theta)r_\theta.
+  \]
+\end{proof}
+
+\begin{theorem}[Holomorphic variation of the Abel finite part]
+  \label{thm:logM-holomorphic-variation}
+  Let \(\theta\mapsto A_\theta\) be a holomorphic family of primitive
+  matrices near \(\theta_0\), and assume that
+  \(\lambda(\theta):=\rho(A_\theta)\) stays simple. Then
+  \(\theta\mapsto\log\MM(A_\theta)\) is holomorphic near \(\theta_0\)
+  and
+  \[
+    \frac{\dd}{\dd\theta}\log\MM(A_\theta)
+    =\frac{\dd}{\dd\theta}\log C(A_\theta)
+     +\sum_{k\ge 2}\frac{\mu(k)}{k}
+      \frac{\dd}{\dd\theta}
+      \log\det(I-\lambda(\theta)^{-k}A_\theta)^{-1}.
+  \]
+  Moreover, for every fixed \(z\) with \(|z|<\lambda(\theta)^{-1}\),
+  \[
+    \partial_\theta\log\det(I-zA_\theta)^{-1}
+    =\Tr\!\bigl((I-zA_\theta)^{-1}z\,\partial_\theta A_\theta\bigr).
+  \]
+\end{theorem}
+
+\begin{proof}
+  Apply \Cref{thm:finite-part-primitive-closed-form} to each
+  \(A_\theta\). Because \(|\lambda(\theta)^{-k}|<\lambda(\theta)^{-1}\)
+  uniformly for \(k\ge 2\) near \(\theta_0\), the higher-order series
+  is locally uniformly convergent and may be differentiated term by
+  term. The derivative of \(\log C(A_\theta)\) is given by
+  \Cref{thm:finite-part-reduced-determinant-group-inverse-gradient}.
+
+  For the resolvent identity, write
+  \[
+    \log\det(I-zA_\theta)^{-1}=-\Tr\log(I-zA_\theta)
+  \]
+  and differentiate inside the trace.
+\end{proof}
+
+\subsection{Spectral-gap limit laws}
+
+Let \((X_A^+,\sigma)\) be the mixing subshift determined by a primitive
+matrix \(A\), let \(\mu\) be its Parry measure, and let
+\(f:X_A^+\to\RR\) be a locally constant observable. For \(\theta\in\CC\)
+near \(0\), define the twisted transfer operator
+\[
+  (\mathcal L_\theta g)(x)
+  :=\sum_{\sigma y=x} e^{\theta f(y)}g(y).
+\]
+
+\begin{theorem}[Spectral-gap central limit theorem]
+  \label{thm:clt-spectral}
+  Assume that \(f\) is not a coboundary modulo constants. Then there
+  exists \(\sigma_f^2>0\) such that
+  \[
+    \frac{\sum_{k=0}^{n-1}f\circ\sigma^k
+      -n\int f\,\dd\mu}{\sqrt n}
+    \Longrightarrow \mathcal N(0,\sigma_f^2).
+  \]
+  Moreover, for every compact set \(K\Subset\RR\setminus\{0\}\) there
+  exist constants \(C_K>0\) and \(\vartheta_K\in(0,1)\) such that
+  \[
+    \sup_{t\in K}
+    \abs{\int e^{it\sum_{k=0}^{n-1}f\circ\sigma^k}\,\dd\mu}
+    \le C_K\vartheta_K^n
+  \]
+  for all \(n\ge 1\).
+\end{theorem}
+
+\begin{proof}
+  Because \(f\) is locally constant, one may work on a
+  finite-dimensional space of cylinder functions of sufficiently large
+  range on which the operators \(\mathcal L_\theta\) act analytically.
+  Standard perturbation theory therefore yields a simple dominant
+  eigenvalue \(\lambda(\theta)\) and a spectral gap uniform for
+  \(\theta\) near \(0\); see
+  \cite[Chapters~1 and~3]{Baladi2000PositiveTransfer} and
+  \cite[Chapter~2]{ParryPollicott1990Zeta}. The logarithm
+  \(\log\lambda(\theta)\) is the cumulant generating function of the
+  Birkhoff sums. Since \(f\) is not a coboundary modulo constants, the
+  asymptotic variance
+  \[
+    \sigma_f^2=\lambda''(0)/\lambda(0)
+  \]
+  is strictly positive. The Nagaev--Guivarc'h argument then gives the
+  central limit theorem, while the uniform spectral gap for
+  \(\theta=it\) with \(t\in K\) gives the stated exponential bound for
+  the characteristic functions.
+\end{proof}
+
+\begin{remark}
+  The arguments in
+  \Cref{thm:finite-part-reduced-determinant-group-inverse-gradient,thm:logM-holomorphic-variation,thm:clt-spectral}
+  rely on the same structural input: a simple dominant eigenvalue, a
+  reduced resolvent on its complement, and analytic control of the
+  corresponding perturbation. The operator-theoretic viewpoint of
+  \Cref{sec:fredholm} isolates exactly this common core.
+\end{remark}

@@ -15,6 +15,11 @@ from pathlib import Path
 from typing import Dict, List, Sequence, Tuple
 
 from common_paths import paper_root, scripts_dir
+from pipeline_contract import (
+    build_contract_report,
+    build_run_manifest,
+    write_contract_outputs,
+)
 
 
 @dataclass(frozen=True)
@@ -4343,7 +4348,9 @@ def main() -> None:
     steps_cache: Dict[str, object] = dict(cache.get("steps", {}))  # type: ignore[assignment]
 
     t0_all = time.time()
+    run_id = f"omega-run-all-{int(t0_all)}"
     step_times: Dict[str, float] = {}
+    step_records: List[Dict[str, object]] = []
 
     for st in steps:
         script_path = scripts_dir() / st.script
@@ -4355,6 +4362,16 @@ def main() -> None:
         cached = steps_cache.get(st.name)
         if ok and (not args.force) and (not args.no_cache) and cached == sig:
             print(f"[run_all] SKIP {st.name} (cache hit)", flush=True)
+            step_records.append(
+                {
+                    "name": st.name,
+                    "script": st.script,
+                    "args": list(st.args),
+                    "expected_outputs": list(st.expected_outputs),
+                    "status": "skipped_cache_hit",
+                    "elapsed_s": 0.0,
+                }
+            )
             continue
 
         # Cache warm-up: if outputs already exist but cache has no entry,
@@ -4366,6 +4383,16 @@ def main() -> None:
             print(
                 f"[run_all] SKIP {st.name} (cache warm-up: outputs already present)",
                 flush=True,
+            )
+            step_records.append(
+                {
+                    "name": st.name,
+                    "script": st.script,
+                    "args": list(st.args),
+                    "expected_outputs": list(st.expected_outputs),
+                    "status": "skipped_cache_warmup",
+                    "elapsed_s": 0.0,
+                }
             )
             continue
 
@@ -4389,6 +4416,16 @@ def main() -> None:
             if not _nonempty(p):
                 raise SystemExit(f"[run_all] expected output missing/empty: {p}")
         step_times[st.name] = float(dt)
+        step_records.append(
+            {
+                "name": st.name,
+                "script": st.script,
+                "args": list(st.args),
+                "expected_outputs": list(st.expected_outputs),
+                "status": "ran",
+                "elapsed_s": float(dt),
+            }
+        )
         print(f"[run_all] OK {st.name} elapsed_s={dt:.3f}", flush=True)
 
         # Update cache after a successful step.
@@ -4419,6 +4456,17 @@ def main() -> None:
         + "\n",
         encoding="utf-8",
     )
+
+    manifest = build_run_manifest(
+        run_id=run_id,
+        force=args.force,
+        no_cache=args.no_cache,
+        total_elapsed_s=float(dt_all),
+        step_records=step_records,
+        timing_relpath="artifacts/export/run_all_timing.json",
+    )
+    report = build_contract_report(manifest=manifest)
+    write_contract_outputs(manifest=manifest, report=report)
 
 
 if __name__ == "__main__":

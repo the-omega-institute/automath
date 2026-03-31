@@ -1,0 +1,490 @@
+\ifdefined\pdfoutput\pdfoutput=1\fi
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage{geometry}
+\geometry{letterpaper, margin=1in}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage[hypertexnames=false]{hyperref}
+\usepackage{cite}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\Jac}{\operatorname{Jac}}
+\newcommand{\Prym}{\operatorname{Prym}}
+\newcommand{\Disc}{\operatorname{Disc}}
+\newcommand{\Res}{\operatorname{Res}}
+\newcommand{\Gal}{\operatorname{Gal}}
+\newcommand{\End}{\operatorname{End}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Cl}{\operatorname{Cl}}
+\newcommand{\F}{\mathbb{F}}
+\DeclareMathOperator{\Sha}{\text{III}}
+
+\title{A quartic cover of \texorpdfstring{$37\mathrm{a}1$}{37a1} and its regular \texorpdfstring{$S_4$}{S4}-closure}
+\author{%
+Haobo Ma\(^{1}\) \and Wenlin Zhang\(^{2,*}\)\\[0.5em]
+\small \(^{1}\)AELF PTE LTD.\\
+\small \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981, Singapore\\
+\small \texttt{auric@aelf.io}\\
+\small \(^{2}\)National University of Singapore\\
+\small 21 Lower Kent Ridge Road, Singapore 119077, Singapore\\
+\small \texttt{e1327962@u.nus.edu}\\
+\small \(^{*}\)Corresponding author
+}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The conductor-\(37\) elliptic curve \(E\colon\xi^2+\xi=\lambda^3-\lambda\) admits a degree-\(4\) map \(E\to\PP^1_y\) whose branch locus is governed by the irreducible cubic \(c(y)=256y^3+411y^2+165y+32\). We construct the regular \(S_4\)-closure~\(X\) of this cover and establish the isogeny
+\[
+\Jac(X)\sim_{\QQ}\Jac(X_A)\times E_{\mathrm{res}}^2\times E^3\times Q^3,
+\]
+where \(X_A\colon w^2=-y(y-1)c(y)\) is a genus-\(2\) curve, \(E_{\mathrm{res}}\) is the resolvent elliptic quotient of conductor~\(1147\), and \(Q=\Prym(Y/E_{\mathrm{res}})\) is an abelian threefold. The splitting field of \(c(y)\) is the unique cubic subextension of the ray class field of \(\QQ(\sqrt{-111})\) of modulus \(\mathfrak p_3^2\); equivalently, it is both the source of a weight-\(1\) cusp form of level~\(999\) and the \(2\)-torsion field of \(\Jac(X_A)\). We determine the bad reduction of \(X_A\) at \(31\) and \(37\), describe the \(2\)-adic and \(3\)-adic cluster pictures of the branch roots, and prove that the wild part of the conductor at \(3\) is exactly \(\delta_3=1\). Thus a single branch cubic links an explicit quartic cover, a cubic ray class field, and the local arithmetic of a genus-\(2\) Jacobian.
+\end{abstract}
+
+\noindent\textbf{2020 Mathematics Subject Classification.}
+11G10, 11G15, 11R37, 14H30, 14H40.
+
+\noindent\textbf{Keywords.}
+Elliptic curves, Galois covers, Prym varieties, Jacobian decompositions, ray class fields, genus-two Jacobians.
+
+\section{Introduction}
+
+When an elliptic curve \(E\) over~\(\QQ\) admits a morphism to~\(\PP^1\) of small degree, the Galois closure of the corresponding function field extension carries a rich arithmetic structure. The quotient curves of this closure, together with the Kani--Rosen idempotent decomposition of its Jacobian \cite{KaniRosen1989}, yield a family of abelian varieties whose conductors, endomorphism algebras, and \(L\)-functions are controlled by the branch data. In practice, however, making every piece of this picture explicit requires computing the regular closure, identifying each quotient, and matching each isotypic factor to a concrete abelian variety --- a programme that quickly becomes unwieldy as the degree grows.
+
+In this paper we carry out this programme for the degree-\(4\) map defined by
+\begin{equation}\label{eq:quartic}
+\Pi(\lambda,y)=\lambda^4-\lambda^3-(2y+1)\lambda^2+\lambda+y(y+1)
+\end{equation}
+and the cubic
+\begin{equation}\label{eq:branch-cubic}
+c(y)=256y^3+411y^2+165y+32.
+\end{equation}
+After the substitution \(y=\lambda^2+\xi\), the equation \(\Pi(\lambda,y)=0\) becomes the Weierstrass model \(\xi^2+\xi=\lambda^3-\lambda\) of the conductor-\(37\) elliptic curve (Cremona label \(37\mathrm{a}1\)), and the function \(y=\lambda^2+\xi\) gives a degree-\(4\) cover \(E\to\PP^1_y\) whose finite branch locus is \(\{0,1\}\cup\{c(y)=0\}\).
+
+What makes this example particularly interesting is that the single cubic \(c(y)\) simultaneously governs several apparently unrelated arithmetic objects: its splitting field yields a weight-\(1\) modular form via class field theory, the hyperelliptic curve \(w^2=-y(y-1)c(y)\) contributes a genus-\(2\) Jacobian to the regular closure, and the cubic resolvent of the quartic produces a second elliptic curve. The constructions involved --- quartic resolvents, Jacobian decompositions, Prym varieties, ray class fields --- are all standard (see \cite{Cox2012,KaniRosen1989,Mumford1974,BirkenhakeLange2004,Neukirch1999,CaroccaRodriguez2006,Paulhus2008} for general background), but this cover has the unusual feature that the quotient geometry, the class-field-theoretic cubic, the weight-\(1\) Artin form, and the local branch-root data can all be tracked explicitly from the same branch polynomial.
+
+The contribution of the paper is therefore explicit rather than abstract. The works of Kani--Rosen \cite{KaniRosen1989} and Carocca--Rodr{\'i}guez \cite{CaroccaRodriguez2006} provide the rational-idempotent formalism for Jacobians with group actions, Paulhus \cite{Paulhus2008} studies decomposition patterns for curves with extra automorphisms, and Mumford's and Lange--Ortega's work \cite{Mumford1974,LangeOrtega2011} develops the geometric theory of Prym varieties. What is new here is that one regular \(S_4\)-quartic cover can be carried through all of these frameworks in closed form, and that the resulting package is large enough to exhibit several phenomena simultaneously: a nontrivial genus-\(2\) factor, a split Prym surface, a cubic ray class field and weight-\(1\) form, and a wild prime whose contribution can still be isolated exactly. In that sense the example is meant to be informative rather than anecdotal.
+
+The paper should therefore be read as a fully worked arithmetic example with a transferable method. Starting from one explicit quartic cover, we recover the regular \(S_4\)-closure and its quotients, apply the rational-idempotent method to decompose the Jacobian, identify the cubic splitting field by class-field-theoretic means, and then feed the \(p\)-adic root data into the conductor formulas for the genus-\(2\) quotient. The point is not a new abstract decomposition theorem, but a complete template for the class of regular \(S_4\)-quartic covers whose branch cubic and resolvent geometry remain explicit.
+
+The logical status of the results is as follows. The structural assertions of the paper --- the \(S_4\)-closure, the quotient curves, the Jacobian decomposition, the class-field-theoretic description of the splitting field, and the exact wild contribution \(\delta_3=1\) at the prime \(3\) --- are proved in the text from standard geometric, representation-theoretic, and local-arithmetic input. The companion scripts are used only for finite-field point counts, Frobenius tables, and independent audit files for the explicit calculations recorded in Sections~5 and~6.
+
+\subsection{Summary of results}
+We show that \(\Pi(\lambda,y)\) has Galois group \(S_4\) over \(\QQ(y)\), and that the regular closure \(X\) has genus \(16\) (Theorem~\ref{thm:closure}). The relevant quotients are the genus-\(2\) curve \(X_A=X/A_4\) given by \(w^2=-y(y-1)c(y)\), the genus-\(4\) curve \(X_V=X/V_4\), and the resolvent elliptic curve \(E_{\mathrm{res}}=X/D_4\), which turns out to be birational to the curve \(w_{\mathrm{res}}^2=x_{\mathrm{res}}^3-16x_{\mathrm{res}}^2-64x_{\mathrm{res}}+1040\) of conductor \(1147=31\cdot 37\) (Proposition~\ref{prop:eres}). The map \(X_V\to X_A\) is an \'etale cyclic triple cover (Theorem~\ref{thm:quotients}).
+
+Using the \(S_4\)-representation structure on \(H^0(X,\Omega_X^1)\), we establish the isogeny
+\[
+\Jac(X)\sim_{\QQ}\Jac(X_A)\times E_{\mathrm{res}}^2\times E^3\times Q^3,
+\]
+where \(Q=\Prym(Y/E_{\mathrm{res}})\) is an abelian threefold with \(Y=X/C_4\) (Theorem~\ref{thm:full-factor}). The Prym surface \(P=\Prym(X_V/X_A)\) satisfies \(P\sim_{\QQ}E_{\mathrm{res}}^2\) and has endomorphism algebra \(M_2(\QQ)\) (Proposition~\ref{prop:prym-end}).
+
+The genus-\(2\) factor turns out to be the most delicate part of the decomposition. We record the Frobenius characteristic polynomials of \(\Jac(X_A)\) at the good primes \(5\), \(13\), and \(17\), and use additional good primes up to \(53\) as irreducibility witnesses for the local quartic factors (Proposition~\ref{thm:simple}). These data provide a concrete arithmetic profile for the genus-\(2\) factor and contrast sharply with the explicitly split Prym surface \(E_{\mathrm{res}}^2\).
+
+On the arithmetic side, we show that the splitting field \(L\) of \(c(y)\) sits inside the ray class field of \(K=\QQ(\sqrt{-111})\) of modulus \(\mathfrak{p}_3^2\), where \(\mathfrak{p}_3\) is the unique prime above~\(3\) (Theorem~\ref{thm:ray-class}). The ray class group \(\Cl_{\mathfrak{p}_3^2}(K)\) is cyclic of order~\(24\), and \(L\) is its unique cubic subextension. The Artin representation of \(L/\QQ\) gives a weight-\(1\) cuspidal newform of level \(999=3^3\cdot 37\), whose Hecke eigenvalues at unramified primes are \(a_p=\#\{y\in\F_p:c(y)=0\}-1\) (Theorem~\ref{thm:hecke-traces}).
+
+We further show that the elliptic quotients \(E\) and \(E_{\mathrm{res}}\) are not \(\QQ\)-isogenous and that the product decomposition forces \(\rho(\Jac(X)_{\overline{\QQ}})\geq 16\) (Proposition~\ref{thm:non-isogeny} and Corollary~\ref{cor:picard}). At the two tame primes of bad reduction for~\(X_A\), the nodal singularities have opposite splitting types: the node at~\(31\) is split while the node at~\(37\) is non-split (Proposition~\ref{prop:node-type}). The \(2\)-torsion field \(\QQ(\Jac(X_A)[2])\) coincides with~\(L\), and the mod-\(2\) Galois image is the small group \(S_3\subset\mathrm{Sp}(4,\F_2)\cong S_6\) of order~\(6\) (Theorem~\ref{thm:two-torsion}).
+
+We also determine the \(\F_2[S_3]\)-module structure of the \(2\)-torsion: the Weil pairing admits a Galois-invariant orthogonal splitting into two hyperbolic planes, one fixed and one carrying the standard representation of~\(S_3\cong\mathrm{GL}(2,\F_2)\) (Theorem~\ref{thm:mod2-structure}). At the semistable primes, the component groups and Tamagawa numbers of \(\Jac(X_A)\) match those of \(E_{\mathrm{res}}\) exactly (Proposition~\ref{prop:tamagawa}).
+
+At the two wild primes, the \(p\)-adic cluster pictures of the branch roots are determined explicitly (Proposition~\ref{prop:cluster-pictures}). At \(p=3\), the three roots of \(c(y)\) coalesce to a single cluster at fractional depth~\(3/2\), requiring a totally ramified cubic extension of~\(\QQ_3\) to resolve; the hyperelliptic conductor formula then gives the exact wild contribution \(\delta_3=1\) to the conductor at~\(3\) (Theorem~\ref{thm:conductor-exact}). At \(p=2\), two of the three roots pair with the rational roots \(0\) and~\(1\) in balanced clusters of depth~\(5\), while the third root is isolated at valuation~\(-8\).
+
+\subsection{Organization}
+In Section~2 we recover the elliptic model of the quartic and study the attached cubic field. Section~3 constructs the regular \(S_4\)-closure and its quotient curves. In Section~4 we establish the Jacobian decomposition via representation-theoretic methods and determine the endomorphism algebra of the Prym surface. Section~5 is devoted to the ray class field and the associated weight-\(1\) modular form. In Section~6 we study the arithmetic of the genus-\(2\) factor: Frobenius data, automorphic structure, Picard-number bounds, local conductor calculations, the \(\F_2\)-module structure of the \(2\)-torsion, and numerical verification. Section~7 records several further directions suggested by the computation.
+
+\section{The quartic cover}
+
+In this section we recover the elliptic model of the quartic and extract the cubic field attached to the finite branch locus.
+
+\subsection{The elliptic model}
+
+\begin{theorem}\label{thm:elliptic}
+Under the change of variables
+\[
+\xi=y-\lambda^2,
+\]
+the affine curve \(\Pi(\lambda,y)=0\) becomes
+\begin{equation}\label{eq:elliptic}
+E:\quad \xi^2+\xi=\lambda^3-\lambda.
+\end{equation}
+Its smooth projective model is an elliptic curve over \(\QQ\) with minimal discriminant \(37\), \(j\)-invariant \(110592/37\), and Cremona label \(37\mathrm{a}1\).
+\end{theorem}
+
+\begin{proof}
+Treating \(\Pi\) as a quadratic in \(y\) gives
+\[
+y^2+(1-2\lambda^2)y+\lambda^4-\lambda^3-\lambda^2+\lambda=0.
+\]
+Substituting \(y=\lambda^2+\xi\) gives
+\[
+\xi^2+\xi=\lambda^3-\lambda.
+\]
+This is a minimal Weierstrass model with the stated invariants \cite{Silverman2009,LMFDBEllipticCurve37a1}.
+\end{proof}
+
+The rational function
+\begin{equation}\label{eq:y-function}
+y=\lambda^2+\xi\in \QQ(E)
+\end{equation}
+defines a morphism
+\[
+\varphi:E\longrightarrow \PP^1_y.
+\]
+
+\begin{proposition}\label{prop:ramification}
+The map \(\varphi\) has degree \(4\). It is totally ramified of index \(4\) above \(y=\infty\), and has exactly five finite simple ramification points. The finite branch locus is
+\[
+\{0,1\}\cup\{c(y)=0\},
+\]
+where \(c(y)\) is given by \eqref{eq:branch-cubic}. Equivalently,
+\[
+\Disc_\lambda \Pi(\lambda,y)=-y(y-1)c(y).
+\]
+\end{proposition}
+
+\begin{proof}
+At infinity, \(\operatorname{ord}_O(\lambda)=-2\) and \(\operatorname{ord}_O(\xi)=-3\), so \(\operatorname{ord}_O(y)=-4\); hence \(\deg\varphi=4\) and \(y=\infty\) is totally ramified.
+
+Differentiating \eqref{eq:elliptic} gives \((2\xi+1)\,d\xi=(3\lambda^2-1)\,d\lambda\), whence
+\[
+dy=\frac{2\lambda(2\xi+1)+3\lambda^2-1}{2\xi+1}\,d\lambda.
+\]
+The ramification condition \(dy=0\) requires \(2\lambda(2\xi+1)+3\lambda^2-1=0\), that is, \(\xi=-(3\lambda^2+2\lambda-1)/(4\lambda)\). Substituting into \(\xi^2+\xi=\lambda^3-\lambda\) and clearing denominators gives a degree-\(5\) polynomial in \(\lambda\) that factors as
+\[
+(\lambda-1)(\lambda+1)(16\lambda^3-9\lambda^2+1)=0.
+\]
+The roots \(\lambda=\pm 1\) give \(y=0,1\). Eliminating \(\lambda\) between \(16\lambda^3-9\lambda^2+1=0\) and
+\[
+4\lambda y-(4\lambda^3-3\lambda^2-2\lambda+1)=0
+\]
+gives
+\[
+\Res_\lambda\!\bigl(16\lambda^3-9\lambda^2+1,\;4\lambda y-(4\lambda^3-3\lambda^2-2\lambda+1)\bigr)=-64\,c(y).
+\]
+The discriminant identity is the quartic reformulation.
+\end{proof}
+
+\subsection{The cubic field}
+
+\begin{proposition}\label{prop:number-field}
+Let \(\beta\) be a root of \(c(y)\), and let \(F=\QQ(\beta)\).
+Then:
+\begin{enumerate}
+\item[(i)] \(\Disc(c)=-3^9\cdot 31^2\cdot 37\).
+\item[(ii)] Let \(\alpha\) be a root of
+\[
+16x^3-9x^2+1,
+\]
+chosen so that
+\[
+\beta=\frac{4\alpha^3-3\alpha^2-2\alpha+1}{4\alpha}.
+\]
+If \(u:=16\alpha\), then \(F=\QQ(u)\), the element \(u\) satisfies
+\[
+f_u(u)=0,\qquad f_u(t)=t^3-9t^2+256,
+\]
+and
+\[
+\theta:=256\beta=-3u^2+24u-128.
+\]
+\item[(iii)] The field discriminant of \(F\) is
+\[
+\Disc(F/\QQ)=-999=-3^3\cdot 37.
+\]
+\item[(iv)] The element
+\[
+\omega:=\frac{u^2+7u+16}{32}
+\]
+is integral, and
+\[
+\mathcal O_F=\ZZ\cdot 1\oplus \ZZ u\oplus \ZZ\omega.
+\]
+\item[(v)] The integral model \(\theta=256\beta\) satisfies the monic polynomial
+\[
+g(\theta)=\theta^3+411\theta^2+42240\theta+2097152,
+\]
+and the index of the monogenic order in \(\mathcal O_F\) is
+\[
+[\mathcal O_F:\ZZ[\theta]]=2^8\cdot 3^3\cdot 31=214272.
+\]
+\item[(vi)] The quadratic resolvent field of the splitting field of \(c(y)\) is
+\[
+K_\Delta=\QQ(\sqrt{-111}).
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Part~(i) is a direct computation from \eqref{eq:branch-cubic}.
+
+For~(ii), the nontrivial ramification points satisfy
+\[
+16\lambda^3-9\lambda^2+1=0,
+\qquad
+y=\frac{4\lambda^3-3\lambda^2-2\lambda+1}{4\lambda}.
+\]
+Choosing a compatible pair \((\alpha,\beta)\) gives \(F=\QQ(\beta)=\QQ(\alpha)\). The scaling \(u=16\alpha\) yields \(f_u(u)=0\), and substituting back gives
+\[
+\theta=256\beta=u^2-12u-128+\frac{1024}{u}.
+\]
+Using \(u^3=9u^2-256\), hence \(1024/u=-4u^2+36u\), this simplifies to
+\[
+\theta=-3u^2+24u-128.
+\]
+
+For~(iii)--(iv), one checks that \(\omega=(u^2+7u+16)/32\) satisfies
+\[
+\omega^3-6\omega^2+15\omega-2=0,
+\]
+so \(\omega\) is integral. Set
+\[
+A:=\ZZ\oplus \ZZ u\oplus \ZZ\omega.
+\]
+The change-of-basis matrix from \((1,u,u^2)\) to \((1,u,\omega)\) has determinant \(1/32\), hence
+\[
+\Disc(A)=\frac{\Disc(f_u)}{32^2}.
+\]
+Since \(\Disc(f_u)=-2^{10}\cdot 3^3\cdot 37\), this gives
+\[
+\Disc(A)=-3^3\cdot 37=-999.
+\]
+
+To verify maximality of \(A\), we check locally at \(3\) and~\(37\). Since \(v_{37}(\Disc(A))=1\), we have \(37\nmid [\mathcal O_F:A]\) from
+\[
+\Disc(A)=\Disc(F/\QQ)\,[\mathcal O_F:A]^2.
+\]
+At \(3\), set
+\[
+\alpha:=u-2\omega-1.
+\]
+From \(u^2+7u+16=32\omega\) and \(u^3-9u^2+256=0\),
+\[
+\alpha^3+6\alpha^2+3\alpha+6=0,
+\]
+and
+\[
+u=-\alpha^2-4\alpha+5,
+\qquad
+\omega=2-\frac{\alpha^2+5\alpha}{2}.
+\]
+Since \(2\in\ZZ_3^\times\), it follows that
+\[
+A\otimes \ZZ_3=\ZZ_3[\alpha].
+\]
+The polynomial \(x^3+6x^2+3x+6\) is \(3\)-Eisenstein, so \(\ZZ_3[\alpha]\) is the maximal order at~\(3\). Therefore
+\[
+\mathcal O_F=A=\ZZ\oplus \ZZ u\oplus \ZZ\omega.
+\]
+Consequently,
+\[
+\Disc(F/\QQ)=\Disc(A)=-999.
+\]
+
+Note for later use that \(3\) is totally ramified in \(F\) (by the Eisenstein property) and \(37\) is tamely ramified (\(v_{37}(\Disc(F))=1\)).
+
+For~(v), \(\theta=256\beta\) satisfies \(g(\theta)=0\), and
+\[
+\Disc(g)=256^2\,\Disc(c)=-2^{16}\cdot 3^9\cdot 31^2\cdot 37.
+\]
+Since \(\theta\in \ZZ[u]\), comparing discriminants of the monogenic orders gives
+\[
+\Disc(\ZZ[u])=\Disc(f_u)=-2^{10}\cdot 3^3\cdot 37
+\]
+and therefore
+\[
+[\ZZ[u]:\ZZ[\theta]]
+=\sqrt{\frac{\Disc(g)}{\Disc(f_u)}}
+=2^3\cdot 3^3\cdot 31
+=6696.
+\]
+Since \(\omega=(u^2+7u+16)/32\), expressing \((1,u,\omega)\) in the basis \((1,u,u^2)\) gives a lower-triangular matrix with diagonal entries \((1,1,1/32)\); its determinant is \(1/32\), whence \([\mathcal O_F:\ZZ[u]]=32\). Therefore
+\[
+[\mathcal O_F:\ZZ[\theta]]
+=[\mathcal O_F:\ZZ[u]]\,[\ZZ[u]:\ZZ[\theta]]
+=32\cdot 6696
+=2^8\cdot 3^3\cdot 31.
+\]
+
+Finally, \(c(y)\) is irreducible with nonsquare discriminant, so its splitting field has Galois group \(S_3\), and its unique quadratic subfield is \(\QQ(\sqrt{\Disc(F)})=\QQ(\sqrt{-999})=\QQ(\sqrt{-111})\).
+\end{proof}
+
+\begin{remark}\label{rem:cubic-field}
+The field \(F\) is recorded in the LMFDB \cite{LMFDB} as \texttt{3.1.999.1}. Its class number is~\(1\), so the ring of integers \(\mathcal O_F\) is a principal ideal domain. The index
+\[
+[\mathcal O_F:\ZZ[\theta]]=2^8\cdot 3^3\cdot 31
+\]
+shows that the natural generator \(\theta=256\beta\) is far from integral; the discrepancy comes from the leading coefficient \(256=2^8\), the ramified prime~\(3\), and the additional prime~\(31\).
+\end{remark}
+
+\section{The regular \texorpdfstring{$S_4$}{S4}-closure}
+
+We now determine the Galois closure of the quartic cover and identify the quotient curves that will enter the Jacobian decomposition.
+
+\subsection{Monodromy and genus}
+
+\begin{proposition}\label{prop:s4}
+The quartic \(\Pi(\lambda,y)\) has Galois group
+\[
+\Gal(\Pi/\QQ(y))\cong S_4.
+\]
+\end{proposition}
+
+\begin{proof}
+Since the discriminant \(-y(y-1)c(y)\) is not a square in \(\QQ(y)\), the Galois group is not contained in \(A_4\). Specializing at \(y=2\) gives
+\[
+\Pi(\lambda,2)=\lambda^4-\lambda^3-5\lambda^2+\lambda+6.
+\]
+Modulo \(5\) this is irreducible (a \(4\)-cycle), and modulo \(3\) it factors as a linear times an irreducible cubic (a \(3\)-cycle). A transitive subgroup of \(S_4\) containing both cycle types is all of~\(S_4\).
+\end{proof}
+
+\begin{theorem}\label{thm:closure}
+Let \(X\) be the smooth projective curve with function field equal to the Galois closure of \(\QQ(E)/\QQ(y)\).
+Then \(X\to\PP^1_y\) is a regular \(S_4\)-cover of degree \(24\), branched with inertia orders
+\[
+4,2,2,2,2,2.
+\]
+In particular,
+\[
+g(X)=16.
+\]
+\end{theorem}
+
+\begin{proof}
+The cover \(E\to\PP^1_y\) has local monodromy of order~\(4\) at infinity and five transpositions at finite branch points (Proposition~\ref{prop:ramification}). Since the Galois group is \(S_4\) (Proposition~\ref{prop:s4}), the regular closure has degree~\(24\). The inertia groups in the regular cover are generated by the corresponding monodromy elements.
+
+The Hurwitz formula gives
+\[
+2g(X)-2
+=24\left(-2+\left(1-\frac14\right)+5\left(1-\frac12\right)\right)
+=30,
+\]
+hence \(g(X)=16\).
+\end{proof}
+
+\subsection{Resolvent quotients}
+
+The cubic resolvent of \eqref{eq:quartic}, built from the three pairings \(z_{ij}=\lambda_i\lambda_j+\lambda_k\lambda_l\) of the four roots \cite{Cox2012}, is
+\begin{equation}\label{eq:resolvent}
+R(z,y)=z^3+(2y+1)z^2-(4y^2+4y+1)z-(8y^3+13y^2+5y+1).
+\end{equation}
+
+\begin{proposition}\label{prop:resolvent}
+The discriminant of \(R(z,y)\) with respect to \(z\) equals
+\[
+\Disc_z R(z,y)=-y(y-1)c(y).
+\]
+The splitting field of \(R\) over \(\QQ(y)\) is the fixed field of the Klein four subgroup \(V_4\subset S_4\).
+\end{proposition}
+
+\begin{proof}
+A direct computation gives
+\[
+\Disc_z R(z,y)=-y(y-1)\bigl(256y^3+411y^2+165y+32\bigr).
+\]
+The fixed field statement is classical \cite{Cox2012}.
+\end{proof}
+
+\begin{theorem}\label{thm:quotients}
+Let
+\[
+X_A:=X/A_4,\qquad X_V:=X/V_4.
+\]
+Then:
+\begin{enumerate}
+\item[(i)] \(X_A\) is the genus-\(2\) curve
+\[
+X_A:\quad w^2=-y(y-1)c(y).
+\]
+\item[(ii)] \(X_V\) is the genus-\(4\) curve with function field
+\[
+\QQ(X_V)=\QQ(y,z,\sqrt{-y(y-1)c(y)}),\qquad R(z,y)=0.
+\]
+\item[(iii)] The natural map \(X_V\to X_A\) is an \'etale cyclic cubic cover.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+The \(A_4\)-quotient is the unique quadratic subextension, generated by the square root of the discriminant:
+\[
+\QQ(X_A)=\QQ\bigl(y,\sqrt{-y(y-1)c(y)}\bigr).
+\]
+The right-hand side is squarefree of degree~\(5\), giving genus~\(2\). The \(V_4\)-quotient is the resolvent splitting field (Proposition~\ref{prop:resolvent}).
+
+At each finite branch point the inertia is a transposition, meeting both \(A_4\) and \(V_4\) trivially. At infinity the inertia is generated by a \(4\)-cycle \(\sigma\), and
+\[
+\langle \sigma\rangle\cap A_4=\langle \sigma^2\rangle=\langle \sigma\rangle\cap V_4.
+\]
+The relative inertia in \(A_4/V_4\cong C_3\) is therefore trivial everywhere, so \(X_V\to X_A\) is \'etale. Hurwitz gives
+\[
+2g(X_V)-2=3(2g(X_A)-2)=6,
+\]
+hence \(g(X_V)=4\).
+\end{proof}
+
+\begin{corollary}\label{cor:prym}
+The connected norm kernel
+\[
+P:=\Prym(X_V/X_A)
+\]
+is an abelian surface. Moreover,
+\[
+\QQ(\zeta_3)\hookrightarrow \End^0(P),
+\qquad
+\Jac(X_V)\sim_{\QQ}\Jac(X_A)\times P.
+\]
+\end{corollary}
+
+\begin{proof}
+The cover \(X_V\to X_A\) is \'etale of degree~\(3\) with \(g(X_V)=4\), so \(\dim P=4-2=2\). The standard Prym decomposition for a cyclic triple cover gives
+\[
+\Jac(X_V)\sim_{\QQ}\Jac(X_A)\times P
+\]
+and the deck action furnishes \(\QQ(\zeta_3)\hookrightarrow \End^0(P)\) \cite[Section~12.9]{BirkenhakeLange2004}.
+\end{proof}
+
+\input{sections_factorization_classfield}
+
+\input{sections_simplicity_automorphic}
+
+\section{Further directions}
+
+\begin{enumerate}
+\item[(1)] Determine \(\End^0(\Jac(X_A)_{\overline{\QQ}})\) and the odd \(\ell\)-adic monodromy of \(\Jac(X_A)\).
+
+\item[(2)] Construct an explicit model for \(Y=X/C_4\) and determine the resulting geometry and \(L\)-function of the Prym threefold \(Q=\Prym(Y/E_{\mathrm{res}})\).
+
+\item[(3)] Proposition~\ref{prop:cluster-pictures} determines the \(2\)-adic and \(3\)-adic cluster pictures, and Theorem~\ref{thm:conductor-exact} identifies the exact wild contribution \(\delta_3=1\) at~\(3\). Determining the full conductor at~\(3\) and the exponent \(f_2\) still requires a full stable-model computation or an independent automorphic input.
+\end{enumerate}
+
+\subsection*{Reproducibility}
+The computational claims used in Sections~5 and~6 are accompanied by scripts in the source tree of the manuscript. The main files are:
+\begin{itemize}
+\item \texttt{point\_count.py} in \texttt{artifacts/}, which reproduces the point counts of \(X_A\) over \(\F_p\) and \(\F_{p^2}\);
+\item \texttt{conductor\_exact.py} in \texttt{artifacts/}, which checks the local conductor calculation at \(p=3\);
+\item \texttt{exp\_branch\_cubic\_rayclass\_modform\_audit.py} in \texttt{scripts/}, which reproduces the class-group, ray-class, and Hecke-trace checks of Section~5;
+\item \texttt{exp\_genus2\_jacobian\_audit.py} in \texttt{scripts/}, which audits the Frobenius polynomials of \(\Jac(X_A)\);
+\item \texttt{generate\_Q\_traces\_table.py} in \texttt{scripts/}, which generates the table for~\(Q\).
+\end{itemize}
+The companion note \texttt{REPRODUCIBILITY.md} records the role of each script and the generated outputs used in the manuscript. Database information from the LMFDB is used only as a consistency check and not as an input to any proof.
+
+\subsection*{Acknowledgements}
+Computations were performed with SageMath and Python. The LMFDB~\cite{LMFDB} was used as a consistency check for elliptic-curve metadata.
+
+\subsection*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
+During the preparation of this work the authors used OpenAI ChatGPT in order to improve the language, readability, and presentation of the manuscript, without generating the underlying mathematical ideas, arguments, or results. After using this tool, the authors reviewed and edited the content as needed and take full responsibility for the content of the published article.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}

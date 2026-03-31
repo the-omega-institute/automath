@@ -1,0 +1,159 @@
+\section{Gauge anomaly: worst cases, limit laws, and spectral formulas}
+\label{sec:gauge}
+
+\subsection{Definition}
+Consider the scale change \(m+1\to m\). For \(\omega\in \Om_{m+1}\), define the \emph{gauge anomaly} as the Hamming distance between naive truncation and fold-aware restriction:
+\begin{equation}\label{eq:gauge-anomaly}
+G_m(\omega)
+:=
+\Hamming{\naive_{m+1\to m}(\omega)\oplus \aware_{m+1\to m}(\omega)}.
+\end{equation}
+Equivalently, if we define the pointwise discrepancy vector
+\[
+\Delta^{(m)}(\omega)
+:=
+\naive_{m+1\to m}(\omega)\oplus \aware_{m+1\to m}(\omega)\in \set{0,1}^m,
+\]
+then \(G_m(\omega)=\sum_{k=1}^m \Delta^{(m)}_k(\omega)\).
+
+\subsection{Worst-case extensive deviation and non-patchability}
+\begin{proposition}[Extensive worst case]\label{prop:worst}
+For every \(m\ge 1\) there exists an explicit microstate \(\omega^\star\in \Om_{m+1}\) such that
+\[
+G_m(\omega^\star)=m.
+\]
+\end{proposition}
+
+\begin{remark}[An explicit worst-case family]\label{rem:explicit-worst}
+Let \(L=m+1\) and write \(L=3n+r\) with \(r\in\{0,1,2\}\). Define a length-\(L\) word \(\omega^\star\) by
+\[
+\omega^\star=
+\begin{cases}
+(110)^n, & r=0,\\
+(110)^n0, & r=1,\\
+(110)^n11, & r=2,
+\end{cases}
+\]
+where concatenation is in the window order \((\omega_1,\dots,\omega_{m+1})\). This family satisfies \(G_m(\omega^\star)=m\) for all \(m\), and corresponds to a length-\(m\) path in the sofic graph of Remark~\ref{rem:sofic-joint} that traverses only discrepancy edges.
+\end{remark}
+
+\begin{proposition}[No bounded tail patch]\label{prop:tail-patch}
+Fix \(\ell\ge 1\). There does not exist a correction rule \(C:\set{0,1}^{m+1}\to \set{0,1}^m\) that depends only on the last \(\ell\) bits of the input (i.e., on \(\omega_{m-\ell+2}\cdots \omega_{m+1}\)) such that
+\[
+C(\omega) = \aware_{m+1\to m}(\omega)\quad\text{for all }\omega\in \Om_{m+1}
+\]
+for all \(m\) large. In particular, the anomaly cannot be uniformly removed using bounded tail information.
+\end{proposition}
+
+\subsection{Uniform microstate baseline: an exact bulk joint law}
+\label{subsec:joint-law}
+Let \(\omega\) be uniformly distributed on \(\Om_{m+1}\). For a coordinate \(k\) in the \emph{bulk} (i.e., \(k\to\infty\) and \(m-k\to\infty\)), define
+\[
+X:=\omega_k,\qquad Y:=(\aware_{m+1\to m}(\omega))_k,
+\qquad \Delta := X\oplus Y\in\set{0,1}.
+\]
+Then the joint law of \((X,Y)\) converges to a stationary limit which can be described by a four-state labeled graph (a sofic presentation).
+
+\begin{theorem}[Exact bulk joint law]\label{thm:joint}
+In the uniform microstate baseline, the bulk joint distribution of \((X,Y)\) is
+\[
+\begin{array}{c|cc}
+& Y=0 & Y=1\\\hline
+X=0 & \frac{7}{18} & \frac{1}{9}\\
+X=1 & \frac{1}{3} & \frac{1}{6}
+\end{array}
+\]
+Consequently,
+\[
+\PP(X\neq Y)=\frac{4}{9},
+\qquad
+\PP(Y=1)=\frac{5}{18}.
+\]
+\end{theorem}
+
+\begin{remark}[Sofic derivation]\label{rem:sofic-joint}
+The bulk pair process \((X_t,Y_t)_{t\in \ZZ}\in \set{0,1}^{\ZZ}\times \set{0,1}^{\ZZ}\) is the label process of the four-state edge shift with adjacency
+\[
+A=\begin{pmatrix}
+1&1&0&1\\
+0&0&1&0\\
+1&2&0&0\\
+1&0&0&0
+\end{pmatrix},
+\]
+where edges are labeled by \((X,Y)\in\set{0,1}^2\) as follows:
+\[
+0 \xrightarrow{00} 0,\quad
+0 \xrightarrow{01} 1,\quad
+0 \xrightarrow{11} 3,\quad
+1 \xrightarrow{10} 2,\quad
+2 \xrightarrow{10} 0,\quad
+2 \xrightarrow{00} 1,\quad
+2 \xrightarrow{11} 1,\quad
+3 \xrightarrow{00} 0.
+\]
+Under uniform microstates, the induced bulk measure is the Parry (maximal-entropy) measure on this edge shift. Perron--Frobenius theory yields the state stationary distribution \(\pi=(4,2,2,1)/9\) and the symbol law in Theorem~\ref{thm:joint}.
+\end{remark}
+
+\subsection{Law of large numbers and central limit theorem}
+\label{subsec:lln-clt}
+Let \(\Delta_t:=X_t\oplus Y_t\) be the stationary discrepancy indicator process in the bulk (so \(\EE[\Delta_t]=4/9\)). For a window of length \(m\), define the bulk discrepancy count
+\[
+G_m := \sum_{t=1}^m \Delta_t.
+\]
+
+\begin{theorem}[LLN and CLT for anomaly density]\label{thm:llnclt}
+Under the uniform microstate baseline,
+\[
+\frac{G_m}{m}\xrightarrow{\ \text{a.s.}\ }\frac{4}{9},
+\]
+and the centered fluctuations satisfy a central limit theorem:
+\[
+\frac{G_m-\frac{4}{9}m}{\sqrt m}\ \Rightarrow\ \mathcal{N}\!\left(0,\frac{118}{243}\right).
+\]
+\end{theorem}
+
+\begin{remark}[Tilted transfer matrix]\label{rem:tilted}
+Let \(g\) be the edge observable \(g=1\) on labels \(01\) and \(10\) (and \(g=0\) otherwise). The moment-generating function of \(\sum_{t=1}^m \Delta_t\) is governed by the \(4\times 4\) tilted adjacency matrix
+\[
+A_\theta=
+\begin{pmatrix}
+1& e^\theta &0&1\\
+0&0& e^\theta &0\\
+e^\theta &2&0&0\\
+1&0&0&0
+\end{pmatrix},
+\]
+obtained by weighting each edge by \(e^{\theta g}\). Writing \(\rho(\theta)=\rho(A_\theta)\) for its Perron root, the scaled cumulant generating function is
+\(\Lambda(\theta)=\log \rho(\theta)-\log\rho(0)\) with \(\rho(0)=2\). Then \(\Lambda'(0)=4/9\) and \(\Lambda''(0)=118/243\), yielding Theorem~\ref{thm:llnclt}.
+\end{remark}
+
+\subsection{Closed-form autocovariance and rational power spectrum}
+\label{subsec:spectrum}
+Let \((\Delta_t)_{t\in\ZZ}\) be the stationary bulk discrepancy process.
+
+\begin{theorem}[Autocovariance and power spectral density]\label{thm:spectrum}
+The autocovariances \(c_j:=\Cov(\Delta_0,\Delta_j)\) satisfy
+\[
+c_0=\frac{20}{81},
+\qquad
+c_j = 2^{-j}\!\left(\frac{1}{8}+(-1)^j\!\left(\frac{7}{648}+\frac{j}{108}\right)\right)\quad (j\ge 1).
+\]
+The (two-sided) power spectral density
+\[
+S(\omega):=\sum_{j\in \ZZ} c_j\,e^{-i\omega j}
+\]
+is the rational function
+\[
+S(\omega)
+=
+\frac{2\bigl(32\cos^3\omega+12\cos^2\omega-116\cos\omega-105\bigr)}
+{9\,(4\cos\omega-5)\,(4\cos\omega+5)^2}.
+\]
+In particular \(S(0)=\sum_{j\in\ZZ}c_j=118/243\), consistent with the CLT variance in Theorem~\ref{thm:llnclt}.
+\end{theorem}
+
+\begin{remark}[Draft consistency check]
+The identity \(S(0)=c_0+2\sum_{j\ge 1}c_j\) is the Green--Kubo/Wiener--Khinchin consistency requirement linking CLT variance, autocovariance sum, and spectral density. The closed forms in Theorem~\ref{thm:spectrum} were derived from the sofic presentation in Remark~\ref{rem:sofic-joint} and are mutually consistent.
+\end{remark}
+

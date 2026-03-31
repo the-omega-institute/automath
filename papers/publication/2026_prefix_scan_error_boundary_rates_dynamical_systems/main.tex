@@ -1,0 +1,673 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{enumitem}
+
+\numberwithin{equation}{section}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ind}{\mathbf{1}}
+\DeclareMathOperator{\sgn}{sgn}
+
+\title{Scan Error Profiles on Prefix Partitions and Boundary-Controlled Convergence Rates}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study a basic observable question for binary readout systems: how much can
+the decision error for an event be reduced by refining the available prefix
+information?  Given a measurable dynamical system with a binary observable, the
+first $m$ symbols define a finite prefix partition and a coarse sigma-algebra
+$\mathcal{F}_m$.  For an event $\mathsf P$, we define the scan error profile
+$\varepsilon_m(\mathsf P;\mu)$ as the optimal $\mathcal{F}_m$-measurable
+classification error.  We prove an exact cylinder decomposition of this
+profile, identify it with the Bayes-optimal threshold rule on the conditional
+probability martingale $p_m=\mu(\mathsf P\mid\mathcal F_m)$, and derive a
+Tanaka--Stokes representation
+\[
+\varepsilon_m(\mathsf P;\mu)=\varepsilon_0(\mathsf P;\mu)-\EE[L_m^{1/2}]
+\]
+in terms of a nonnegative discrete local-time functional at the threshold
+$1/2$.  We then show that convergence rates are controlled by the growth of
+boundary cylinders: an upper rate follows from a cylinder-mass bound and a
+boundary-dimension estimate, while a matching two-sided law follows from a
+uniform thickness hypothesis on ambiguous cylinders.  A short symbolic example
+for the golden-mean shift illustrates the regime $\varepsilon_m\asymp
+\lambda_{\mathrm{cyl}}^{-(1-d)m}$.
+\end{abstract}
+
+\tableofcontents
+
+\section{Introduction}
+
+The purpose of this paper is narrow.  We fix a binary readout process and ask
+how refinement of prefix information improves the best possible decision error
+for a target event.  The setup is standard in measurable and symbolic dynamics:
+a point $x$ generates a binary sequence, the first $m$ symbols define a finite
+prefix partition, and the corresponding sigma-algebra $\mathcal F_m$ contains
+exactly the information observable at resolution $m$.  What we study is the
+profile
+\[
+m\longmapsto \varepsilon_m(\mathsf P;\mu),
+\]
+where $\varepsilon_m(\mathsf P;\mu)$ is the smallest error of any
+$\mathcal F_m$-measurable decision rule for the event $\mathsf P$.
+
+Four deliverables organize the paper.  First, we express the scan error profile
+exactly as a sum over prefix cylinders.  Second, we identify the minimizing
+classifier with the Bayes threshold rule $p_m\ge 1/2$, where
+$p_m=\mu(\mathsf P\mid\mathcal F_m)$.  Third, we prove a discrete
+Tanaka--Stokes representation of the error profile in terms of a nonnegative
+local-time functional built from the martingale $(p_m)_{m\ge 0}$.  Fourth, we
+derive convergence rates controlled by boundary-cylinder growth.  The resulting
+theory is a measure-theoretic error-decay paper rather than a geometric SPG
+paper.  We do not use cubical inverses, dyadic flux readouts, or complexity
+barriers.
+
+The main theorem chain reads
+\[
+\begin{aligned}
+\text{prefix filtration}
+&\longrightarrow
+\text{exact cylinder decomposition} \\
+&\longrightarrow
+\text{Bayes-optimal threshold rule} \\
+&\longrightarrow
+\text{Tanaka--Stokes representation} \\
+&\longrightarrow
+\text{boundary-controlled rate laws}.
+\end{aligned}
+\]
+Standard background on measurable dynamics, symbolic cylinder partitions, and
+Bayes decision rules may be found in
+\cite{WaltersErgodicTheory,LindMarcus1995,CoverThomas2006,
+Tsybakov2009Nonparametric}.  For a classical symbolic coding example related to
+binary readouts, see \cite{MorseHedlund1940}.
+
+\section{Prefix Partitions and Observable Information}
+
+\subsection{Binary Readout and Prefix Sigma-Algebras}
+
+Let $(X,\mathcal B,\mu,T)$ be a measurable dynamical system, where $\mu$ is a
+$T$-invariant probability measure.  Fix a measurable set $W\subseteq X$ and
+define the binary readout
+\[
+s_t(x):=\ind_W(T^t x)\in\{0,1\},
+\qquad t\in\NN.
+\]
+The infinite readout map is
+\[
+\omega_\infty(x):=s_0(x)s_1(x)s_2(x)\cdots \in \Omega_\infty:=\{0,1\}^{\NN}.
+\]
+
+For a finite word $a=a_0a_1\cdots a_{m-1}\in\{0,1\}^m$, define the cylinder
+\[
+[a]:=\{\xi\in\Omega_\infty:\ \xi_0\xi_1\cdots\xi_{m-1}=a\}.
+\]
+Let
+\[
+\mathcal A_m:=\sigma([a]:a\in\{0,1\}^m),
+\qquad
+\mathcal A_\infty:=\sigma\!\Bigl(\bigcup_{m\ge 1}\mathcal A_m\Bigr),
+\]
+and pull these sigma-algebras back to $X$ by
+\[
+\mathcal F_m:=\omega_\infty^{-1}(\mathcal A_m),
+\qquad
+\mathcal F_\infty:=\omega_\infty^{-1}(\mathcal A_\infty).
+\]
+Thus $\mathcal F_m$ is the observable sigma-algebra generated by the first $m$
+symbols of the readout.
+
+\begin{proposition}[Prefix-decidable events are clopen cylinder unions]
+\label{prop:spg-decidable-clopen}
+Let $P\subseteq\Omega_\infty$ be Borel.  The following are equivalent.
+\begin{enumerate}[label=(\arabic*)]
+\item $P\in\mathcal A_m$;
+\item there exists a set $A\subseteq\{0,1\}^m$ such that
+\[
+P=\bigcup_{a\in A}[a];
+\]
+\item $P$ is clopen in the prefix topology and is a union of balls of radius
+$2^{-m}$ in the standard prefix ultrametric.
+\end{enumerate}
+Consequently, if $\mathsf P\in\mathcal F_m$, then the truth of $\mathsf P$ is
+completely determined by the first $m$ symbols of the observable readout.
+\end{proposition}
+
+\begin{proof}
+The atoms of $\mathcal A_m$ are exactly the length-$m$ cylinders $[a]$.
+Therefore a set belongs to $\mathcal A_m$ if and only if it is a union of such
+atoms, proving the equivalence of (1) and (2).
+
+In the prefix ultrametric on $\Omega_\infty$, each cylinder $[a]$ is a clopen
+ball of radius $2^{-m}$, and every ball of radius $2^{-m}$ is of this form.
+Hence (2) and (3) are equivalent.  Pulling back along $\omega_\infty$ gives the
+final statement on $X$.
+\end{proof}
+
+\subsection{Observable Filtration}
+
+The family $(\mathcal F_m)_{m\ge 1}$ is increasing, because longer prefixes
+contain shorter ones.  It is convenient to regard it as an observable
+filtration.  The event $\mathsf P\in\mathcal F_\infty$ may not be decidable at
+finite resolution, but every $\mathcal F_m$ yields a finite partition on which
+the best classification rule can be computed exactly.
+
+\section{The Scan Error Profile}
+
+\subsection{Definition and Exact Cylinder Decomposition}
+
+\begin{definition}[Scan error profile]
+\label{def:spg-scan-error-profile}
+Let $\mathsf P\in\mathcal F_\infty$.  The scan error profile of $\mathsf P$
+with respect to $\mu$ is
+\[
+\varepsilon_m(\mathsf P;\mu)
+:=
+\inf\{\mu(\mathsf P\triangle \mathsf Q):\ \mathsf Q\in\mathcal F_m\},
+\qquad m\ge 1.
+\]
+Equivalently, it is the smallest classification error achievable using only the
+first $m$ symbols of the readout.
+\end{definition}
+
+For each $m$, let $\mathcal C_m$ be the collection of atoms of $\mathcal F_m$.
+Explicitly, $\mathcal C_m$ is the family of pullbacks of nonempty length-$m$
+cylinders under $\omega_\infty$.
+
+\begin{proposition}[Exact cylinder decomposition]
+\label{prop:spg-scan-error-cylinder}
+For every $\mathsf P\in\mathcal F_\infty$ and every $m\ge 1$,
+\[
+\varepsilon_m(\mathsf P;\mu)
+=
+\sum_{C\in\mathcal C_m}
+\min\{\mu(\mathsf P\cap C),\mu(C\setminus \mathsf P)\}.
+\]
+If
+\[
+p_C:=\mu(\mathsf P\mid C)
+\quad\text{for }\mu(C)>0,
+\]
+and $p_C:=0$ when $\mu(C)=0$, then
+\[
+\varepsilon_m(\mathsf P;\mu)
+=
+\sum_{C\in\mathcal C_m}\mu(C)\min\{p_C,1-p_C\}
+=
+\EE_\mu[\min\{p_m,1-p_m\}],
+\]
+where
+\[
+p_m:=\mu(\mathsf P\mid \mathcal F_m).
+\]
+\end{proposition}
+
+\begin{proof}
+Any $\mathcal F_m$-measurable event $\mathsf Q$ must be a union of atoms
+$C\in\mathcal C_m$.  On a fixed atom $C$, there are only two choices: either
+$C\subseteq \mathsf Q$ or $C\cap\mathsf Q=\varnothing$.  In the first case the
+local contribution to $\mu(\mathsf P\triangle \mathsf Q)$ is
+$\mu(C\setminus \mathsf P)$; in the second it is $\mu(\mathsf P\cap C)$.  The
+minimum over these two possibilities is therefore
+\[
+\min\{\mu(\mathsf P\cap C),\mu(C\setminus \mathsf P)\}.
+\]
+Summing over all atoms gives the first formula.
+
+For the second formula, note that on each atom $C$ one has
+\[
+\mu(\mathsf P\cap C)=\mu(C)p_C
+\qquad\text{and}\qquad
+\mu(C\setminus \mathsf P)=\mu(C)(1-p_C).
+\]
+Hence
+\[
+\min\{\mu(\mathsf P\cap C),\mu(C\setminus \mathsf P)\}
+=
+\mu(C)\min\{p_C,1-p_C\}.
+\]
+Since $p_m$ is constant on each atom $C$ with value $p_C$, the final
+expectation formula follows.
+\end{proof}
+
+\subsection{Bayes-Optimal Interpretation}
+
+\begin{proposition}[Bayes-optimality on the prefix filtration]
+\label{prop:spg-clarity-bayes-optimality}
+Let
+\[
+p_m:=\mu(\mathsf P\mid\mathcal F_m),
+\]
+and define the threshold classifier
+\[
+\mathsf P_m^\star:=\{x\in X:\ p_m(x)\ge 1/2\}\in\mathcal F_m.
+\]
+Then:
+\begin{enumerate}[label=(\arabic*)]
+\item for every $\mathsf Q\in\mathcal F_m$,
+\[
+\mu(\mathsf P\triangle \mathsf Q)\ge \varepsilon_m(\mathsf P;\mu),
+\qquad
+\mu(\mathsf P\triangle \mathsf P_m^\star)=\varepsilon_m(\mathsf P;\mu);
+\]
+\item for every bounded $\mathcal F_\infty$-measurable function $\varphi$,
+\[
+\left|
+\int \varphi\,\ind_{\mathsf P}\,d\mu
+-
+\int \varphi\,\ind_{\mathsf P_m^\star}\,d\mu
+\right|
+\le
+\lVert\varphi\rVert_\infty\,\varepsilon_m(\mathsf P;\mu).
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+On each atom $C\in\mathcal C_m$, the quantity $p_m$ is constant and equal to
+$p_C:=\mu(\mathsf P\mid C)$.  If one includes $C$ in the classifier, the local
+error is $\mu(C)(1-p_C)$; if one excludes it, the local error is
+$\mu(C)p_C$.  The smaller of these two numbers is achieved exactly by the
+threshold rule $p_C\ge 1/2$.  Summing over all atoms and using
+Proposition~\ref{prop:spg-scan-error-cylinder} gives (1).
+
+For (2), the difference
+$\ind_{\mathsf P}-\ind_{\mathsf P_m^\star}$ is supported on
+$\mathsf P\triangle \mathsf P_m^\star$.  Therefore
+\[
+\left|
+\int \varphi(\ind_{\mathsf P}-\ind_{\mathsf P_m^\star})\,d\mu
+\right|
+\le
+\lVert\varphi\rVert_\infty\,\mu(\mathsf P\triangle \mathsf P_m^\star)
+=
+\lVert\varphi\rVert_\infty\,\varepsilon_m(\mathsf P;\mu).
+\qedhere
+\]
+\end{proof}
+
+\begin{corollary}[Basic properties of the scan error profile]
+\label{cor:spg-clarity-basic}
+The map $m\mapsto\varepsilon_m(\mathsf P;\mu)$ is nonincreasing.  Moreover,
+\[
+\varepsilon_m(\mathsf P;\mu)=0
+\]
+if and only if $\mathsf P$ coincides $\mu$-almost surely with an event in
+$\mathcal F_m$.
+\end{corollary}
+
+\begin{proof}
+Since $\mathcal F_m\subseteq \mathcal F_{m+1}$, the infimum defining
+$\varepsilon_{m+1}$ is taken over a larger class than the infimum defining
+$\varepsilon_m$, so the profile is nonincreasing.
+
+If $\mathsf P$ agrees almost surely with some $\mathsf Q\in\mathcal F_m$, then
+$\mu(\mathsf P\triangle \mathsf Q)=0$, so $\varepsilon_m(\mathsf P;\mu)=0$.
+Conversely, if $\varepsilon_m(\mathsf P;\mu)=0$, choose a minimizing sequence
+$\mathsf Q_j\in\mathcal F_m$ with $\mu(\mathsf P\triangle \mathsf Q_j)\to 0$.
+Since $\mathcal F_m$ has only finitely many atoms, an exact minimizer exists by
+Proposition~\ref{prop:spg-clarity-bayes-optimality}, and it agrees with
+$\mathsf P$ almost surely.
+\end{proof}
+
+\section{Tanaka--Stokes Representation}
+
+Let
+\[
+p_m:=\mu(\mathsf P\mid \mathcal F_m)
+\qquad\text{and}\qquad
+p_0:=\mu(\mathsf P).
+\]
+Then $(p_m)_{m\ge 0}$ is a bounded martingale taking values in $[0,1]$.
+
+\begin{theorem}[Tanaka--Stokes representation of the scan error]
+\label{thm:spg-scan-tanaka-stokes}
+For $m\ge 1$, define
+\[
+L_m^{1/2}
+:=
+\sum_{k=0}^{m-1}
+\left(
+\left|p_{k+1}-\frac12\right|
+-
+\left|p_k-\frac12\right|
+-
+\sgn\!\left(p_k-\frac12\right)(p_{k+1}-p_k)
+\right),
+\]
+with $\sgn(0):=0$.  Then $L_m^{1/2}\ge 0$ and $m\mapsto L_m^{1/2}$ is
+nondecreasing.  Moreover,
+\[
+\boxed{
+\varepsilon_m(\mathsf P;\mu)
+=
+\varepsilon_0(\mathsf P;\mu)-\EE[L_m^{1/2}],
+}
+\]
+where
+\[
+\varepsilon_0(\mathsf P;\mu)=\min\{\mu(\mathsf P),1-\mu(\mathsf P)\}.
+\]
+If $\ind_{\mathsf P}$ is measurable with respect to
+$\bigvee_{m\ge 1}\mathcal F_m$, then
+\[
+\varepsilon_m(\mathsf P;\mu)\to 0
+\qquad\text{and}\qquad
+\EE[L_\infty^{1/2}]=\varepsilon_0(\mathsf P;\mu),
+\]
+where $L_\infty^{1/2}:=\lim_{m\to\infty}L_m^{1/2}$ exists almost surely.
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:spg-scan-error-cylinder},
+\[
+\varepsilon_m(\mathsf P;\mu)=\EE[\min\{p_m,1-p_m\}].
+\]
+Since $\min\{p,1-p\}=\frac12-\lvert p-\frac12\rvert$ for $p\in[0,1]$, this
+becomes
+\[
+\varepsilon_m(\mathsf P;\mu)=\frac12-\EE\left|p_m-\frac12\right|.
+\]
+
+For any real sequence $(x_k)$ and any threshold $a$, one has the discrete
+Tanaka identity
+\[
+\begin{aligned}
+\lvert x_m-a\rvert
+&=
+\lvert x_0-a\rvert
++
+\sum_{k=0}^{m-1}\sgn(x_k-a)(x_{k+1}-x_k) \\
+&\quad+
+\sum_{k=0}^{m-1}
+\left(
+\lvert x_{k+1}-a\rvert
+-\lvert x_k-a\rvert
+-\sgn(x_k-a)(x_{k+1}-x_k)
+\right).
+\end{aligned}
+\]
+Apply this with $x_k=p_k$ and $a=\frac12$.  The last sum is exactly
+$L_m^{1/2}$.  Taking expectation and using the martingale property,
+\[
+\EE\!\left[\sgn\!\left(p_k-\frac12\right)(p_{k+1}-p_k)\right]=0
+\]
+because $\sgn(p_k-\frac12)$ is $\mathcal F_k$-measurable.  Hence
+\[
+\EE\left|p_m-\frac12\right|
+=
+\left|p_0-\frac12\right|+\EE[L_m^{1/2}].
+\]
+Substituting into the formula for $\varepsilon_m$ gives
+\[
+\varepsilon_m
+=
+\frac12-\left|p_0-\frac12\right|-\EE[L_m^{1/2}]
+=
+\varepsilon_0-\EE[L_m^{1/2}],
+\]
+which is the claimed identity.
+
+Each summand in $L_m^{1/2}$ is nonnegative by convexity of the absolute-value
+function, so $L_m^{1/2}\ge 0$ and is nondecreasing in $m$.
+
+If $\ind_{\mathsf P}$ is measurable with respect to $\bigvee_m \mathcal F_m$,
+then the martingale convergence theorem gives
+$p_m\to \ind_{\mathsf P}$ almost surely and in $L^1$; see
+\cite[Chapter~5]{WaltersErgodicTheory}.  Therefore
+\[
+\varepsilon_m=\EE[\min\{p_m,1-p_m\}]\to 0.
+\]
+By monotone convergence, $\EE[L_\infty^{1/2}]=\lim_m \EE[L_m^{1/2}]$, and the
+identity above yields $\EE[L_\infty^{1/2}]=\varepsilon_0$.
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:spg-scan-tanaka-stokes} is the correct analogue of a Stokes
+formula in this filtration setting: the reduction in scan error between scales
+$0$ and $m$ is the accumulated local-time mass at the decision threshold
+$1/2$.
+\end{remark}
+
+\section{Boundary-Controlled Rates}
+
+\begin{definition}[Boundary cylinders]
+\label{def:spg-boundary-cylinder-dimension}
+For $\mathsf P\in\mathcal F_\infty$, define the boundary-cylinder family at
+resolution $m$ by
+\[
+\partial_m \mathsf P
+:=
+\{C\in\mathcal C_m:\ \mu(\mathsf P\cap C)>0\text{ and }\mu(C\setminus \mathsf P)>0\}.
+\]
+Its cardinality is
+\[
+N_m(\partial\mathsf P):=\#(\partial_m \mathsf P).
+\]
+If there exists $\lambda_{\mathrm{cyl}}>1$ such that the relevant cylinder
+complexity grows like $\lambda_{\mathrm{cyl}}^m$, define the upper boundary
+dimension by
+\[
+\overline{\dim}_B(\partial\mathsf P)
+:=
+\limsup_{m\to\infty}
+\frac{\log N_m(\partial\mathsf P)}{m\log \lambda_{\mathrm{cyl}}}.
+\]
+\end{definition}
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{p{2.9in} p{3.0in}}
+\toprule
+assumption & conclusion for $\varepsilon_m(\mathsf P;\mu)$ \\
+\midrule
+$\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}$ on all $m$-cylinders &
+$\varepsilon_m\le K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf P)$ \\
+uniform lower and upper cylinder masses, plus
+$\min\{\mu(\mathsf P\mid C),1-\mu(\mathsf P\mid C)\}\ge\theta$ on boundary cylinders &
+$\varepsilon_m\asymp \lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf P)$ \\
+\bottomrule
+\end{tabular}
+\caption{The two rate regimes proved in this section.}
+\label{tab:rate-laws}
+\end{table}
+
+\begin{theorem}[Boundary-dimension upper bound]
+\label{thm:spg-clarity-boundary-dimension}
+Assume there exist constants $K<\infty$ and $\lambda_{\mathrm{cyl}}>1$ such
+that for every $m\ge 1$ and every $C\in\mathcal C_m$,
+\[
+\mu(C)\le K\lambda_{\mathrm{cyl}}^{-m}.
+\]
+Then for every $\mathsf P\in\mathcal F_\infty$ and every $m\ge 1$,
+\[
+\varepsilon_m(\mathsf P;\mu)
+\le
+K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf P).
+\]
+In particular, if $\overline{\dim}_B(\partial\mathsf P)=d<1$, then
+\[
+\varepsilon_m(\mathsf P;\mu)
+\le
+\lambda_{\mathrm{cyl}}^{-(1-d)m+o(m)}.
+\]
+\end{theorem}
+
+\begin{proof}
+In the cylinder decomposition of Proposition
+~\ref{prop:spg-scan-error-cylinder}, only boundary cylinders contribute, because
+the term vanishes whenever either $\mu(\mathsf P\cap C)=0$ or
+$\mu(C\setminus \mathsf P)=0$.  Moreover,
+\[
+\min\{\mu(\mathsf P\cap C),\mu(C\setminus \mathsf P)\}\le \mu(C).
+\]
+Hence
+\[
+\varepsilon_m(\mathsf P;\mu)
+\le
+\sum_{C\in\partial_m \mathsf P}\mu(C)
+\le
+K\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf P).
+\]
+If $N_m(\partial\mathsf P)=\lambda_{\mathrm{cyl}}^{dm+o(m)}$ along the limsup
+scale, the second claim follows immediately.
+\end{proof}
+
+\begin{theorem}[Exact rate law from boundary thickness]
+\label{thm:spg-clarity-volume-boundary-scaling}
+Assume there exist constants
+\[
+0<c_-\le c_+<\infty
+\qquad\text{and}\qquad
+\lambda_{\mathrm{cyl}}>1
+\]
+such that for every $m\ge 1$ and every $C\in\mathcal C_m$,
+\[
+c_-\,\lambda_{\mathrm{cyl}}^{-m}\le \mu(C)\le c_+\,\lambda_{\mathrm{cyl}}^{-m}.
+\]
+Assume further that there exist $\theta\in(0,\frac12]$ and $m_0$ such that for
+every $m\ge m_0$ and every boundary cylinder $C\in\partial_m\mathsf P$,
+\[
+\min\{\mu(\mathsf P\mid C),1-\mu(\mathsf P\mid C)\}\ge \theta.
+\]
+Then for every $m\ge m_0$,
+\[
+\boxed{
+\theta c_-\,\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf P)
+\le
+\varepsilon_m(\mathsf P;\mu)
+\le
+\frac{c_+}{2}\,\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf P).
+}
+\]
+If in addition
+\[
+N_m(\partial\mathsf P)=\lambda_{\mathrm{cyl}}^{dm+o(m)}
+\]
+for some exponent $d$, then
+\[
+\lim_{m\to\infty}
+\left(
+-\frac1m\log_{\lambda_{\mathrm{cyl}}}\varepsilon_m(\mathsf P;\mu)
+\right)
+=
+1-d.
+\]
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:spg-scan-error-cylinder},
+\[
+\varepsilon_m(\mathsf P;\mu)
+=
+\sum_{C\in\partial_m\mathsf P}
+\mu(C)\min\{\mu(\mathsf P\mid C),1-\mu(\mathsf P\mid C)\}.
+\]
+The thickness assumption yields
+\[
+\varepsilon_m(\mathsf P;\mu)
+\ge
+\sum_{C\in\partial_m\mathsf P}\mu(C)\theta
+\ge
+\theta c_-\,\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf P).
+\]
+The upper bound follows from $\min\{p,1-p\}\le \frac12$:
+\[
+\varepsilon_m(\mathsf P;\mu)
+\le
+\frac12\sum_{C\in\partial_m\mathsf P}\mu(C)
+\le
+\frac{c_+}{2}\,\lambda_{\mathrm{cyl}}^{-m}N_m(\partial\mathsf P).
+\]
+The asymptotic exponent is immediate from the two-sided estimate.
+\end{proof}
+
+\section{Examples and Specializations}
+
+\begin{example}[Finite-horizon events]
+\label{ex:finite-horizon-event}
+If $\mathsf P\in\mathcal F_r$ for some $r$, then
+\[
+\varepsilon_m(\mathsf P;\mu)=0
+\qquad\text{for all }m\ge r.
+\]
+Thus finite-horizon events have exact finite scan depth.
+\end{example}
+
+\begin{proof}
+For $m\ge r$ one has $\mathsf P\in\mathcal F_m$, so the zero classifier error
+is admissible in Definition~\ref{def:spg-scan-error-profile}.
+\end{proof}
+
+\begin{example}[Golden-mean specialization]
+\label{ex:golden-mean-specialization}
+Let $X$ be the one-sided golden-mean shift with Parry measure, and let
+$\omega_\infty$ be the identity readout.  Then the number of admissible
+length-$m$ cylinders grows like $\varphi^m$, where
+$\varphi=(1+\sqrt5)/2$, and cylinder measures are comparable to $\varphi^{-m}$;
+see \cite[Chapters~3--4]{LindMarcus1995}.  Hence
+$\lambda_{\mathrm{cyl}}=\varphi$ in the preceding theorems.
+
+Consequently, if an event $\mathsf P$ has boundary-cylinder growth
+\[
+N_m(\partial\mathsf P)=\varphi^{dm+o(m)}
+\]
+with a uniform thickness parameter $\theta>0$ on its boundary cylinders, then
+\[
+\varepsilon_m(\mathsf P;\mu)=\varphi^{-(1-d)m+o(m)}.
+\]
+\end{example}
+
+\begin{remark}
+The golden-mean example is meant only as an illustration of the general rate
+law.  More arithmetic symbolic systems, such as Sturmian codings, often fall
+outside the exponential cylinder-complexity regime assumed in
+Theorems~\ref{thm:spg-clarity-boundary-dimension} and
+\ref{thm:spg-clarity-volume-boundary-scaling}.  Their scan-error rates require
+separate low-complexity analysis and are not part of the present paper.
+\end{remark}
+
+\section{Discussion}
+
+The paper isolates a clean filtration-and-error story.  Prefix partitions give
+a finite observable sigma-algebra, the scan error profile measures the optimal
+decision loss at that level, and the Bayes rule is explicit on each cylinder
+atom.  The Tanaka--Stokes representation then turns error decay into an exact
+accumulation law for threshold local time along the conditional-probability
+martingale.
+
+The boundary theorems show that error decay is controlled by one concrete
+combinatorial object: the growth of ambiguous cylinders.  This is the right
+stopping point for the present manuscript.  We do not expand into cubical
+inverses, boundary flux geometry, or coding-theoretic complexity barriers.  The
+contribution here is the standard measurable-dynamics core that can plausibly be
+read as an independent paper.
+
+\bibliographystyle{alpha}
+\bibliography{../../2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/references}
+
+\end{document}

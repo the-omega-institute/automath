@@ -1,0 +1,70 @@
+\section{Folding projections and multiscale commuting structure}
+\label{sec:multiscale}
+
+\subsection{A rewriting realization and categorical properties}
+The map \(\Fold_m\) can be computed by a finite-time local rewriting system realizing Zeckendorf normalization. One convenient formulation uses a most-significant-digit (MSD-first) Fibonacci digit string and repeatedly applies the local rule
+\[
+011 \;\to\; 100,
+\]
+scanning left-to-right after prefixing a leading zero; see, e.g., \cite{ShallitShan2023} for a concise proof of correctness. Termination is immediate since each rewrite strictly decreases the total number of \(1\)s. Confluence holds and yields a unique normal form, which is precisely the Zeckendorf representation.
+
+In our window model, this implies:
+\begin{proposition}[Well-definedness, idempotence, surjectivity]\label{prop:idempotent}
+For each \(m\ge 1\), the fold \(\Fold_m:\Om_m\to X_m\) is well-defined, idempotent, and surjective:
+\[
+\Fold_m\circ \Fold_m=\Fold_m,
+\qquad
+\Fold_m(\Om_m)=X_m.
+\]
+\end{proposition}
+
+\subsection{Stable restriction and the inverse limit}
+For \(m_2\ge m_1\), define the stable truncation
+\[
+\proj_{m_2\to m_1}: X_{m_2}\to X_{m_1},
+\qquad
+\proj_{m_2\to m_1}(x_1\cdots x_{m_2}) := x_1\cdots x_{m_1}.
+\]
+Then \(\bigl(X_m,\proj_{m_2\to m_1}\bigr)\) is an inverse system, and the inverse limit
+\[
+X_\infty := \varprojlim_m X_m
+\]
+is naturally identified with the two-sided golden-mean shift (equivalently, the subshift forbidding \(11\)).
+
+\subsection{The fold-aware restriction operator}
+Let \(\naive_{m+1\to m}:\Om_{m+1}\to \Om_m\) be the naive truncation (drop the last coordinate),
+\[
+\naive_{m+1\to m}(\omega_1\cdots \omega_{m+1}) := \omega_1\cdots \omega_m.
+\]
+Multiscale consistency suggests enforcing the commuting relation
+\begin{equation}\label{eq:commuting}
+\Fold_m\circ \aware_{m+1\to m}
+\;=\;
+\proj_{m+1\to m}\circ \Fold_{m+1},
+\end{equation}
+so that ``restrict-then-fold'' agrees with ``fold-then-restrict'' at the stable level.
+
+\begin{definition}[Fold-aware restriction]\label{def:fold-aware}
+Define the fold-aware restriction \(\aware_{m+1\to m}:\Om_{m+1}\to \Om_m\) by the explicit formula
+\begin{equation}\label{eq:re-def}
+\aware_{m+1\to m}(\omega)
+:= \proj_{m+1\to m}\!\bigl(\Fold_{m+1}(\omega)\bigr)\in X_m\subset \Om_m.
+\end{equation}
+\end{definition}
+
+\begin{lemma}[Strict commutation]\label{lem:strict-commute}
+The operator \(\aware_{m+1\to m}\) satisfies \eqref{eq:commuting}. Moreover, it is the unique map \(\Om_{m+1}\to X_m\) satisfying \eqref{eq:commuting}.
+\end{lemma}
+
+\begin{proof}
+Since \(\Fold_{m+1}(\omega)\in X_{m+1}\), its truncation \(\proj_{m+1\to m}(\Fold_{m+1}(\omega))\) lies in \(X_m\), hence is fixed by \(\Fold_m\). Therefore
+\[
+\Fold_m(\aware_{m+1\to m}(\omega))
+=
+\Fold_m\!\left(\proj_{m+1\to m}(\Fold_{m+1}(\omega))\right)
+=
+\proj_{m+1\to m}(\Fold_{m+1}(\omega)),
+\]
+which is \eqref{eq:commuting}. For uniqueness among maps into \(X_m\), note that \(\Fold_m\) restricts to the identity on \(X_m\), so \eqref{eq:commuting} forces \(\aware_{m+1\to m}(\omega)=\proj_{m+1\to m}(\Fold_{m+1}(\omega))\).
+\end{proof}
+

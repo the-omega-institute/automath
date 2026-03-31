@@ -1,0 +1,169 @@
+\section{Auxiliary finite-window coarse graining}%
+\makeatletter\edef\@currentlabel{\Alph{section}}\makeatother\label{app:bridge:microhistory}
+
+Sections~\ref{sec:bridge:deadtime} and \ref{sec:bridge:kms} contain the main detector-thermality results. This appendix records only an auxiliary finite-window information identity compatible with those results.
+
+\begin{assumption}[Applicability of the stabilization map]\label{ass:stabilization-applicability}
+The canonical stabilization map $\Fold_m:\{0,1\}^m\to X_m$ of Appendix~\ref{app:bridge:companion} is defined on the full binary cube and maps onto the golden-mean admissible set $X_m$. For the ideal dead-time model, $\mu_{\beta,m}$ is already supported on $X_m$, so $\Fold_m$ acts as the identity on the support and the relevant fibers are singletons. For the finite-recovery model, $\mu_{\beta,m}$ has full support on $\{0,1\}^m$, so $\Fold_m$ induces genuine many-to-one reduction with fiber sizes $d_m(x)$ computed by \eqref{eq:fiber-dft}.
+\end{assumption}
+
+\begin{definition}[Raw detector history and stabilized visible record]\label{def:bridge-visible-record}
+Fix a window length $m\ge 1$. Let
+\[
+\mu_{\beta,m}\in\Delta(\{0,1\}^m)
+\]
+denote the law of the raw detector history
+\[
+(A_0,\dots,A_{m-1})
+\]
+under the stationary detector model. Define the stabilized visible record by
+\[
+X:=\Fold_m(A_0,\dots,A_{m-1})\in X_m,
+\]
+and let
+\[
+\pi_{\beta,m}:=(\Fold_m)_*\mu_{\beta,m}
+\]
+be the induced law on visible stabilized records.
+\end{definition}
+
+\begin{definition}[Fiber-uniform lift]\label{def:bridge-fiber-lift}
+For $\omega\in\{0,1\}^m$, define
+\begin{equation}\label{eq:bridge-fiber-lift}
+\widetilde\mu_{\beta,m}(\omega)
+:=
+\frac{\pi_{\beta,m}(\Fold_m(\omega))}{d_m(\Fold_m(\omega))}.
+\end{equation}
+\end{definition}
+
+\begin{theorem}[Entropy decomposition of finite detector histories]\label{thm:bridge-ledger}
+With the notation above,
+\begin{equation}\label{eq:bridge-ledger}
+H(\mu_{\beta,m})
+=
+H(\pi_{\beta,m})
++
+\EE_{\pi_{\beta,m}}[\log d_m(X)]
+-
+D_{\mathrm{KL}}(\mu_{\beta,m}\Vert \widetilde\mu_{\beta,m}).
+\end{equation}
+Equivalently,
+\begin{equation}\label{eq:bridge-conditional-ledger}
+H\bigl((A_0,\dots,A_{m-1})\mid X\bigr)
+=
+\EE_{\pi_{\beta,m}}[\log d_m(X)]
+-
+\EE_X\!\left[
+D_{\mathrm{KL}}\bigl(
+\mu_{\beta,m}(\cdot\mid X)\,\Vert\,\mathrm{Unif}(\mathcal F_m(X))
+\bigr)
+\right].
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+By definition,
+\[
+D_{\mathrm{KL}}(\mu_{\beta,m}\Vert \widetilde\mu_{\beta,m})
+=
+\sum_{\omega\in\{0,1\}^m}
+\mu_{\beta,m}(\omega)\log\frac{\mu_{\beta,m}(\omega)}{\widetilde\mu_{\beta,m}(\omega)}.
+\]
+Hence
+\[
+D_{\mathrm{KL}}(\mu_{\beta,m}\Vert \widetilde\mu_{\beta,m})
+=
+-H(\mu_{\beta,m})
+-
+\sum_{\omega\in\{0,1\}^m}
+\mu_{\beta,m}(\omega)\log \widetilde\mu_{\beta,m}(\omega).
+\]
+For $\omega\in\mathcal F_m(x)$ one has
+\[
+\log \widetilde\mu_{\beta,m}(\omega)=\log \pi_{\beta,m}(x)-\log d_m(x).
+\]
+Grouping the sum fiberwise gives
+\[
+\sum_{\omega}
+\mu_{\beta,m}(\omega)\log \widetilde\mu_{\beta,m}(\omega)
+=
+\sum_{x\in X_m}\pi_{\beta,m}(x)\log \pi_{\beta,m}(x)
+-
+\sum_{x\in X_m}\pi_{\beta,m}(x)\log d_m(x).
+\]
+Therefore
+\[
+D_{\mathrm{KL}}(\mu_{\beta,m}\Vert \widetilde\mu_{\beta,m})
+=
+-H(\mu_{\beta,m})
++
+H(\pi_{\beta,m})
++
+\EE_{\pi_{\beta,m}}[\log d_m(X)].
+\]
+Rearranging proves \eqref{eq:bridge-ledger}.
+
+For \eqref{eq:bridge-conditional-ledger}, use the chain rule
+\[
+H(\mu_{\beta,m})=H(\pi_{\beta,m})+H\bigl((A_0,\dots,A_{m-1})\mid X\bigr),
+\]
+and substitute into \eqref{eq:bridge-ledger}. The KL term decomposes fiberwise:
+\[
+D_{\mathrm{KL}}(\mu_{\beta,m}\Vert\widetilde\mu_{\beta,m})
+=
+\sum_{x\in X_m}\pi_{\beta,m}(x)\,
+D_{\mathrm{KL}}\bigl(\mu_{\beta,m}(\cdot\mid X=x)\,\Vert\,\mathrm{Unif}(\mathcal F_m(x))\bigr),
+\]
+because within each fiber $\mathcal F_m(x)$, $\widetilde\mu_{\beta,m}$ is uniform with mass $\pi_{\beta,m}(x)/d_m(x)$ per element, while $\mu_{\beta,m}$ restricted to $\mathcal F_m(x)$ sums to $\pi_{\beta,m}(x)$, so the conditional $\mu_{\beta,m}(\cdot\mid X=x)$ is a probability on $\mathcal F_m(x)$.
+\end{proof}
+
+\begin{theorem}[Asymptotic decomposition]\label{thm:asymptotic-ledger}
+For any stationary detector model, the entropy rate
+\[
+h_\beta:=\lim_{m\to\infty}\frac{1}{m}H(\mu_{\beta,m})
+\]
+exists. Dividing the finite-window decomposition \eqref{eq:bridge-ledger} by $m$ gives, for each $m\ge 1$,
+\begin{equation}\label{eq:per-symbol-identity}
+\frac{H(\mu_{\beta,m})}{m}
+=
+\frac{H(\pi_{\beta,m})}{m}
++
+\frac{\EE_{\pi_{\beta,m}}[\log d_m(X)]}{m}
+-
+\frac{D_{\mathrm{KL}}(\mu_{\beta,m}\Vert\widetilde\mu_{\beta,m})}{m}.
+\end{equation}
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=*,itemsep=4pt]
+\item \textup{(Ideal model.)} For the ideal dead-time model, $\Fold_m$ acts as the identity on $\operatorname{supp}(\mu_{\beta,m})\subset X_m$. All three per-symbol rates converge:
+\begin{equation}\label{eq:ideal-asymptotics}
+h_{\mathrm{vis}}=h_\beta,\qquad\delta_{\mathrm{deg}}=0,\qquad\delta_{\mathrm{KL}}=0,
+\end{equation}
+where $h_{\mathrm{vis}}$, $\delta_{\mathrm{deg}}$, $\delta_{\mathrm{KL}}$ are defined by
+\begin{align}
+h_{\mathrm{vis}}&:=\lim_{m\to\infty}\frac{1}{m}\,H(\pi_{\beta,m}),\label{eq:visible-rate}\\[2pt]
+\delta_{\mathrm{deg}}&:=\lim_{m\to\infty}\frac{1}{m}\,\EE_{\pi_{\beta,m}}[\log d_m(X)],\label{eq:degeneracy-rate}\\[2pt]
+\delta_{\mathrm{KL}}&:=\lim_{m\to\infty}\frac{1}{m}\,D_{\mathrm{KL}}(\mu_{\beta,m}\Vert\widetilde\mu_{\beta,m}).\label{eq:kl-rate}
+\end{align}
+\item \textup{(Finite-recovery model.)} For the finite-recovery model with $\kappa\neq\Gamma$, the three sequences on the right of \eqref{eq:per-symbol-identity} are each bounded in $[0,\log 2]$, and any accumulation point $(h_{\mathrm{vis}},\delta_{\mathrm{deg}},\delta_{\mathrm{KL}})$ satisfies the asymptotic decomposition
+\begin{equation}\label{eq:asymptotic-ledger}
+h_\beta=h_{\mathrm{vis}}+\delta_{\mathrm{deg}}-\delta_{\mathrm{KL}}.
+\end{equation}
+Moreover, $\EE[\log d_m(X)]>0$ for every $m\ge 2$, and $D_{\mathrm{KL}}(\mu_{\beta,m}\Vert\widetilde\mu_{\beta,m})\ge 0$ for every $m$ with equality if and only if $\mu_{\beta,m}(\cdot\mid X=x)$ is uniform on each fiber $\mathcal F_m(x)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\emph{Entropy rate.}\enspace
+The block entropy $H(\mu_{\beta,m})$ is subadditive for any stationary process: the chain rule and stationarity give $H(\mu_{\beta,m+n})\le H(\mu_{\beta,m})+H(\mu_{\beta,n})$. By Fekete's lemma, $h_\beta=\inf_{m\ge 1}H(\mu_{\beta,m})/m=\lim_{m\to\infty}H(\mu_{\beta,m})/m$ exists.
+
+\emph{Ideal model.}\enspace
+The output $\mu_{\beta,m}$ is supported on $X_m$. Since $\Fold_m$ acts as the identity on $X_m$, we have $\pi_{\beta,m}=\mu_{\beta,m}$, every fiber on the support is a singleton with $d_m(x)=1$, and $\widetilde\mu_{\beta,m}=\mu_{\beta,m}$. Therefore $H(\pi_{\beta,m})=H(\mu_{\beta,m})$, $\EE[\log d_m(X)]=0$, and $D_{\mathrm{KL}}=0$ for every $m$. Dividing by $m$ and passing to the limit yields \eqref{eq:ideal-asymptotics}.
+
+\emph{Finite-recovery model: boundedness and constraint.}\enspace
+Each sequence is bounded below by $0$ and above by $\log 2$. By data processing, $H(\pi_{\beta,m})\le H(\mu_{\beta,m})$. The conditional entropy $H(A_0^{m-1}\mid X)=\EE[\log d_m(X)]-D_{\mathrm{KL}}\ge 0$ (since conditional entropy is non-negative), so $\EE[\log d_m(X)]\ge D_{\mathrm{KL}}\ge 0$. Since $H(\mu_{\beta,m})/m\to h_\beta$ and the identity \eqref{eq:per-symbol-identity} holds at each $m$, every accumulation point of the bounded triple satisfies \eqref{eq:asymptotic-ledger} by continuity of addition.
+
+\emph{Finite-recovery model: positive degeneracy.}\enspace
+For $m\ge 2$, the finite-recovery output has full support on $\{0,1\}^m$. In particular, the word $\omega^*=(1,1,0,\dots,0)$ satisfies $\mu_{\beta,m}(\omega^*)>0$. Since $\omega^*\notin X_m$ (it violates the golden-mean constraint at position $0$), its image $x^*:=\Fold_m(\omega^*)$ satisfies $d_m(x^*)\ge 2$ (the fiber contains at least $\omega^*$ and $x^*\neq\omega^*$). Hence $\EE_{\pi_{\beta,m}}[\log d_m(X)]\ge\pi_{\beta,m}(x^*)\log 2>0$.
+
+\emph{KL non-negativity and equality condition.}\enspace
+$D_{\mathrm{KL}}(\mu_{\beta,m}\Vert\widetilde\mu_{\beta,m})\ge 0$ holds by the Gibbs inequality. The KL divergence decomposes fiberwise as $\sum_{x}\pi_{\beta,m}(x)\,D_{\mathrm{KL}}(\mu_{\beta,m}(\cdot\mid X\!=\!x)\Vert\mathrm{Unif}(\mathcal F_m(x)))$ by the proof of Theorem~\ref{thm:bridge-ledger}. Each summand is non-negative and vanishes if and only if $\mu_{\beta,m}(\cdot\mid X\!=\!x)$ is uniform on $\mathcal F_m(x)$.
+\end{proof}
