@@ -2,29 +2,23 @@
 # -*- coding: utf-8 -*-
 """Oracle dispatch — agent-side interface for ChatGPT Pro oracle.
 
-This script is called by agents to submit work to the ChatGPT oracle
-and wait for results. The human operator runs chatgpt_oracle.py --watch
-in a separate terminal.
+Two modes:
+  A) Direct API (preferred): calls chatgpt_api.py, fully automated, no human
+  B) Clipboard fallback: writes to oracle/pending/, human runs --watch
 
 Usage:
-    # Submit a paper for editorial review:
+    # Fully automated (direct API):
     python oracle_dispatch.py --paper paper_dir/ --task editorial_review --wait
 
-    # Submit with custom prompt:
-    python oracle_dispatch.py --paper paper_dir/ --prompt custom.md --wait
+    # Fallback (clipboard mode, needs human):
+    python oracle_dispatch.py --paper paper_dir/ --task editorial_review --wait --clipboard
 
-    # Submit text-only (no PDF):
-    python oracle_dispatch.py --prompt-text "Prove that ..." --task reasoning --wait
-
-    # Just dispatch (don't wait):
-    python oracle_dispatch.py --paper paper_dir/ --task editorial_review
-
-Workflow:
+Workflow (direct API):
     1. Compiles paper to PDF (if --paper given)
-    2. Generates instruction prompt from template (if --task given)
-    3. Writes .md + .pdf to oracle/pending/
-    4. If --wait: polls oracle/done/ until result appears
-    5. Returns result path (or prints to stdout)
+    2. Generates instruction prompt from template
+    3. Calls chatgpt_api.py to upload PDF + send prompt
+    4. Saves response to oracle/done/
+    5. Returns result
 """
 
 from __future__ import annotations
@@ -135,8 +129,88 @@ def compile_paper(paper_dir: Path) -> Path | None:
         return None
 
 
-def dispatch(task_name: str, prompt_text: str, pdf_path: Path | None = None) -> Path:
-    """Write task to oracle/pending/ for the watch process to pick up.
+def dispatch_direct(task_name: str, prompt_text: str, pdf_path: Path | None = None,
+                    model: str = "o3-mini-high") -> str:
+    """Submit via oracle_server.py + Tampermonkey bridge. Returns response text."""
+    import json as _json
+    import base64
+    import urllib.request
+
+    SERVER = "http://localhost:8765"
+    done = ORACLE_DIR / "done"
+    done.mkdir(parents=True, exist_ok=True)
+
+    # Build submission payload
+    payload = {
+        "task_id": task_name,
+        "prompt": prompt_text,
+        "model": model,
+    }
+
+    # Encode PDF as base64 for transfer to browser via server
+    if pdf_path and pdf_path.exists():
+        with open(pdf_path, "rb") as f:
+            payload["pdf_base64"] = base64.b64encode(f.read()).decode("ascii")
+        payload["pdf_name"] = pdf_path.name
+        print(f"[dispatch] PDF encoded: {pdf_path.name} ({pdf_path.stat().st_size // 1024} KB)")
+
+    # Submit to oracle server
+    print(f"[dispatch] Submitting task to {SERVER}/submit ...")
+    req = urllib.request.Request(
+        f"{SERVER}/submit",
+        data=_json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+    )
+    try:
+        resp = urllib.request.urlopen(req, timeout=15)
+        result = _json.loads(resp.read().decode("utf-8"))
+        print(f"[dispatch] Queued: {result}")
+    except Exception as e:
+        print(f"[dispatch] ERROR: Cannot reach oracle server at {SERVER}", file=sys.stderr)
+        print(f"[dispatch] Start it with: python oracle_server.py", file=sys.stderr)
+        print(f"[dispatch] Error: {e}", file=sys.stderr)
+        return ""
+
+    # Poll for result
+    print(f"[dispatch] Waiting for Tampermonkey to process task (up to 15 min)...")
+    start = time.time()
+    timeout = 900
+    while time.time() - start < timeout:
+        try:
+            resp = urllib.request.urlopen(f"{SERVER}/result/{task_name}", timeout=5)
+            data = _json.loads(resp.read().decode("utf-8"))
+            if data.get("status") == "completed":
+                response = data["response"]
+                # Save locally
+                out_file = done / f"{task_name}.md"
+                metadata = {
+                    "timestamp": datetime.now().isoformat(),
+                    "model": model,
+                    "prompt_length": len(prompt_text),
+                    "response_length": len(response),
+                }
+                if pdf_path:
+                    metadata["pdf"] = str(pdf_path)
+                out_file.write_text(
+                    f"<!-- oracle metadata: {_json.dumps(metadata)} -->\n\n{response}",
+                    encoding="utf-8",
+                )
+                print(f"[dispatch] Response saved: {out_file} ({len(response)} chars)")
+                return response
+        except Exception:
+            pass
+
+        elapsed = int(time.time() - start)
+        if elapsed % 30 == 0 and elapsed > 0:
+            print(f"[dispatch] Waiting... ({elapsed}s)")
+        time.sleep(3)
+
+    print(f"[dispatch] Timeout after {timeout}s", file=sys.stderr)
+    return ""
+
+
+def dispatch_clipboard(task_name: str, prompt_text: str, pdf_path: Path | None = None) -> Path:
+    """Fallback: write task to oracle/pending/ for clipboard watch process.
 
     Returns the expected result path in oracle/done/.
     """
@@ -145,12 +219,10 @@ def dispatch(task_name: str, prompt_text: str, pdf_path: Path | None = None) -> 
     pending.mkdir(parents=True, exist_ok=True)
     done.mkdir(parents=True, exist_ok=True)
 
-    # Write instruction prompt
     prompt_file = pending / f"{task_name}.md"
     prompt_file.write_text(prompt_text, encoding="utf-8")
     print(f"[dispatch] Prompt written: {prompt_file} ({len(prompt_text)} chars)")
 
-    # Copy PDF if provided
     if pdf_path and pdf_path.exists():
         pdf_dest = pending / f"{task_name}.pdf"
         shutil.copy2(pdf_path, pdf_dest)
@@ -189,7 +261,7 @@ def wait_for_result(result_path: Path, timeout: int = 900, poll: int = 5) -> str
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Oracle dispatch — submit tasks to ChatGPT Pro oracle",
+        description="Oracle dispatch — submit tasks to ChatGPT Pro",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("--paper", type=Path,
@@ -208,6 +280,10 @@ def main():
                         help="Max seconds to wait for result (default: 900)")
     parser.add_argument("--no-compile", action="store_true",
                         help="Skip PDF compilation (use existing main.pdf)")
+    parser.add_argument("--clipboard", action="store_true",
+                        help="Use clipboard fallback instead of direct API")
+    parser.add_argument("--model", type=str, default="o3-mini-high",
+                        help="ChatGPT model (default: o3-mini-high)")
     args = parser.parse_args()
 
     # Determine prompt text
@@ -244,19 +320,28 @@ def main():
         parts.append(datetime.now().strftime("%H%M%S"))
         task_name = "_".join(parts)
 
-    # Dispatch
-    result_path = dispatch(task_name, prompt_text, pdf_path)
-
-    if args.wait:
-        result = wait_for_result(result_path, timeout=args.timeout)
-        if result:
-            print(f"\n{'='*60}")
-            print(result)
+    # Dispatch via direct API or clipboard fallback
+    if args.clipboard:
+        result_path = dispatch_clipboard(task_name, prompt_text, pdf_path)
+        if args.wait:
+            result = wait_for_result(result_path, timeout=args.timeout)
+            if result:
+                print(f"\n{'='*60}")
+                print(result)
+            else:
+                sys.exit(1)
         else:
-            sys.exit(1)
+            print(f"[dispatch] Task dispatched. Run: chatgpt_oracle.py --watch oracle/")
     else:
-        print(f"[dispatch] Task dispatched. Result will appear at: {result_path}")
-        print(f"[dispatch] Make sure chatgpt_oracle.py --watch is running!")
+        # Direct API (fully automated)
+        response = dispatch_direct(task_name, prompt_text, pdf_path, model=args.model)
+        if response:
+            if args.wait:
+                print(f"\n{'='*60}")
+                print(response)
+        else:
+            print("[dispatch] ERROR: No response received", file=sys.stderr)
+            sys.exit(1)
 
 
 if __name__ == "__main__":

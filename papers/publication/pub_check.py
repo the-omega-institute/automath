@@ -23,7 +23,7 @@ from typing import Optional
 
 # ---------- Regexes ----------
 
-CITE_RE = re.compile(r"\\cite[a-zA-Z*]*\{([^}]+)\}")
+CITE_RE = re.compile(r"\\cite[a-zA-Z*]*(?:\[[^\]]*\])?\{([^}]+)\}")
 LABEL_RE = re.compile(r"\\label\{([^}]+)\}")
 REF_RE = re.compile(r"\\(?:ref|cref|Cref|eqref|autoref)\{([^}]+)\}")
 BIB_KEY_RE = re.compile(r"@\w+\{([^,\s]+)")
