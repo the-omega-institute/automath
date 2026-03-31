@@ -1,38 +1,56 @@
 # Publication Pipeline Advance
 
-Advance the publication pipeline for all active Wave papers.
+Fully automated publication pipeline. Advances all active papers through P0->P7 without human intervention.
 
-## Workflow
+## How to run
 
-1. Read `papers/publication/OPS/BOARD.md` to identify active papers and wave priorities
-2. For each paper, read its `TRACK_BOARD.md` to determine current stage
-3. Determine the next stage based on which gate artifacts exist:
-   - P1 done if `SOURCE_MAP.md` + `THEOREM_LIST.md` exist
-   - P2 done if `P2_EXTENSION_NOTE_*.md` exists
-   - P3 done if `P3_REWRITE_NOTE_*.md` exists
-   - P4 done if `P4_EDITORIAL_REVIEW_*.md` exists
-   - P5 done if TRACK_BOARD.md shows integration complete
-   - P6 done if `LEAN_SYNC_NOTE_*.md` exists
-   - P7 done if submission checklist + cover letter exist
-4. For each paper that has an unblocked next stage, launch the appropriate agent:
-   - P2: pub-research agent
-   - P3: pub-journal-rewrite agent
-   - P4: pub-editorial agent
-   - P5: pub-integrator agent
-   - P6: pub-lean-sync agent
-   - P7: pub-submission agent
-5. After agents complete, update `OPS/BOARD.md`
-6. Commit and push results
+1. Run `python papers/publication/pipeline_auto.py status` to see current state
+2. Run `python papers/publication/pipeline_auto.py advance-all` to see what needs work
+3. For each paper needing advancement, run `python papers/publication/pipeline_auto.py prompt <paper_dir>` to get the agent prompt
+4. Launch agents in parallel for independent papers (different papers can run simultaneously)
+5. After agents complete, run `python papers/publication/pub_check.py <paper_dir>` for quality gates
+
+## Pipeline stages
+
+| Stage | Agent action | Key deliverable |
+|-------|-------------|-----------------|
+| P0 | Read paper, create PIPELINE.md | Scope statement, target journal, MSC codes |
+| P1 | Extract theorem inventory | Label-statement table in PIPELINE.md |
+| P2 | **Deep research**: strengthen theorems, fill gaps, add new results | Improved .tex files with genuine new content |
+| P3 | Journal-fit rewrite: abstract, intro, style | .tex files matching target journal conventions |
+| P4 | Referee-grade review + pub_check.py | Issue table with severity in PIPELINE.md |
+| P5 | Fix all P4 issues | Updated .tex, re-pass pub_check.py |
+| P6 | Lean sync: check against lean4/Omega/ | Coverage report in PIPELINE.md |
+| P7 | Cover letter + submission checklist | SUBMISSION-READY status |
 
 ## Parallel dispatch rules
 
-- Different papers can run in parallel (APAL + ETDS + TAMS simultaneously)
-- Same paper: P2→P3→P4→P5 must be sequential; P6 can run in parallel with P2-P5
-- Bibliography recon (pub-biblio) can run in parallel with anything
+- Different papers: run in parallel (launch multiple agents)
+- Same paper: P0->P1->P2->P3->P4->P5->P6->P7 sequential
+- P6 (Lean sync) can run in parallel with P2-P5
+
+## Priority order
+
+1. **Wave 2 close-to-done**: JFA (P5), ETDS-zeta (P6), APAL (P7)
+2. **Wave 3 research**: Fredholm-Witt (P3), Self-Dual (P3), Prime Languages (P3)
+3. **Wave 4 triage**: Papers at P0_NEEDED — quick assessment, archive skeletons
+
+## Agent prompts
+
+Each stage has a self-contained prompt in `pipeline_auto.py`. The prompt includes:
+- Exact file list
+- Specific instructions for that stage
+- Quality criteria
+- What to write/update
+
+Generate with: `python papers/publication/pipeline_auto.py prompt <paper_dir> [--stage P2]`
+
+## ChatGPT Pro enhancement (optional, non-blocking)
+
+After P5, optionally upload the compiled PDF to ChatGPT Pro for an independent review.
+This adds credibility but is NOT required for pipeline progression.
+Use `oracle_dispatch.py --paper <dir> --task editorial_review` to queue.
 
 ## Paper directories
 
-All papers are under `papers/publication/`. The three Wave 1 papers are:
-- `2026_conservative_extension_chain_state_forcing_apal` (APAL)
-- `2026_scan_projection_address_semantics_sigma_nonexpansion_etds` (ETDS)
-- `2026_projection_ontological_mathematics_core_tams` (TAMS)
+All papers under `papers/publication/`. Run `pipeline_auto.py status` for full listing.

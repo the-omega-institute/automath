@@ -15,8 +15,16 @@ Single source of truth for the end-to-end automation system. Any agent (Claude, 
       [Layer 1: Decompose]  extract coherent subsets for journals
              |
     +--------v---------+
-    | Publication Papers|  papers/publication/  (19 dirs, 8 active)
-    | P0 -> P7 pipeline |
+    | Publication Papers|  papers/publication/  (19 dirs)
+    | P0->P4 (Claude)  |  Claude agents do all reasoning + editing
+    +--------+---------+
+             |
+      [P4G: ChatGPT Pro Acceptance Gate]  <-- HARD GATE
+      |  Upload PDF, must return ACCEPT   |
+      |  If REJECT/MAJOR: iterate P5->P4G |
+             |
+    +--------v---------+
+    | P5->P7 (Claude)  |  Fix issues, Lean sync, submission pack
     +--------+---------+
              |
       [Layer 3: Backflow]  new results -> core
@@ -25,6 +33,9 @@ Single source of truth for the end-to-end automation system. Any agent (Claude, 
     |  Core Knowledge  |  (enriched, cycle repeats)
     |     Base         |
     +------------------+
+
+Quality standard: Paper is DONE only when ChatGPT Pro says ACCEPT.
+Claude does the work. ChatGPT validates. Iterate until acceptance.
 ```
 
 ## Layer 0: Existing Tools
@@ -259,38 +270,68 @@ python3 pub_check.py <paper_dir> [--stage P0|P1|...|P7]
 
 **Output:** JSON report + exit code (0 = all pass)
 
-**Status:** NOT YET IMPLEMENTED — this is the first gap to fill.
+**Status:** Implemented and validated across all 19 papers. See PROGRAM_BOARD.md for results.
 
 ## Layer 5: External Oracle Integration
 
-### ChatGPT Pro (Web Interface — Automated)
+### ChatGPT Pro (Web Interface — Clipboard Bridge + PDF Upload)
 
 **Use case:** Reasoning-heavy tasks (P2, P4, Emergence) where deep mathematical analysis is needed.
 **Cost:** Free (uses ChatGPT Pro web subscription, no API cost).
-**Integration:** `chatgpt_oracle.py` — Playwright browser automation.
+**Integration:** `chatgpt_oracle.py` (clipboard bridge) + `oracle_dispatch.py` (agent dispatcher).
 
-#### Setup (one-time)
+Cloudflare blocks browser automation, so we use a clipboard-based bridge:
+- Agent writes prompt (+ optional PDF) to `oracle/pending/`
+- Human operator runs `chatgpt_oracle.py --watch` which auto-detects clipboard changes
+- Results saved to `oracle/done/` and agent reads them
 
-```bash
-# First run opens browser for manual login (login persists in ~/.chatgpt_oracle/)
-python chatgpt_oracle.py --interactive
-# Log in manually, then Ctrl+C. Subsequent runs are automatic.
-```
-
-#### Automated Workflow
+#### Setup
 
 ```bash
-# 1. Agent fills prompt template with paper-specific data
-#    (substitute {TITLE}, {JOURNAL}, {THEOREM_TABLE} etc.)
+# Terminal 1 (human operator — keep running):
+cd papers/publication
+python chatgpt_oracle.py --watch oracle/ --timeout 900
 
-# 2. Submit to ChatGPT Pro and collect response
-python chatgpt_oracle.py \
-  --prompt-file <paper_dir>/oracle/p2_prompt.md \
-  --output <paper_dir>/oracle/p2_result.md \
-  --model o3-mini-high
-
-# 3. Agent reads oracle output and integrates into PIPELINE.md
+# Terminal 2 (agents submit tasks):
+python oracle_dispatch.py --paper <paper_dir>/ --task editorial_review --wait
 ```
+
+#### Agent Workflow (oracle_dispatch.py)
+
+```bash
+# 1. Submit paper for editorial review (compiles PDF + dispatches):
+python oracle_dispatch.py --paper <paper_dir>/ --task editorial_review --wait
+
+# 2. Submit for deep research extension:
+python oracle_dispatch.py --paper <paper_dir>/ --task deep_research --wait
+
+# 3. Submit with custom prompt:
+python oracle_dispatch.py --paper <paper_dir>/ --prompt prompts/custom.md --wait
+
+# 4. Text-only (no PDF):
+python oracle_dispatch.py --prompt-text "Prove that ..." --task reasoning --wait
+```
+
+#### Direct Usage (chatgpt_oracle.py)
+
+```bash
+# Text-only:
+python chatgpt_oracle.py --send prompt.md --recv result.md
+
+# PDF + instruction:
+python chatgpt_oracle.py --send prompt.md --pdf paper.pdf --recv result.md
+
+# Compile + send:
+python chatgpt_oracle.py --compile paper_dir/ --send prompt.md --recv result.md
+```
+
+#### Human Operator Steps (per task in watch mode)
+
+1. Script copies instruction prompt to clipboard, opens ChatGPT + file explorer
+2. **If PDF attached:** drag-drop PDF into ChatGPT input box
+3. Paste instruction (Ctrl+V), send
+4. Wait for ChatGPT response (extended thinking may take minutes)
+5. Copy the full response (Ctrl+C) — script auto-detects and saves
 
 #### Models
 
@@ -300,7 +341,17 @@ python chatgpt_oracle.py \
 | `gpt-4o` | Literature search, style review | Fast |
 | `o1` | Balanced reasoning tasks | Medium |
 
-#### Prompt Templates
+#### Task Templates (built into oracle_dispatch.py)
+
+| Task name | Used at | Purpose |
+|---|---|---|
+| `editorial_review` | P4 | Referee-grade review, issue table, missing refs |
+| `deep_research` | P2 | Novel theorems, gap analysis, scope decisions |
+| `literature_search` | P2/P3 | Competing work, missing citations |
+| `proof_verification` | P2/P5 | Verify every proof, flag gaps |
+| `journal_fit` | P3 | Scope match, length, impact assessment |
+
+#### Prompt Templates (in prompts/ — for custom use)
 
 | Template | Used at | Purpose |
 |---|---|---|
@@ -310,7 +361,8 @@ python chatgpt_oracle.py \
 | `proof_strategy.md` | P2/Emergence | Proof approaches for gaps |
 | `emergence_scan.md` | Layer E | Cross-section bridges, new results |
 
-Each template has `{PLACEHOLDER}` fields filled by the orchestrating agent before submission.
+Templates have `{PLACEHOLDER}` fields filled by the orchestrating agent before submission.
+Task templates (in oracle_dispatch.py) work directly with PDF upload — no placeholder filling needed.
 
 ### Claude (API)
 
@@ -357,14 +409,19 @@ Phase 4: Scale to all papers
 papers/publication/
 ├── PROGRAM_BOARD.md          — Status dashboard (all papers)
 ├── AUTOMATION.md             — This file (pipeline design)
-├── prompts/                  — Oracle prompt templates
+├── chatgpt_oracle.py         — Clipboard bridge (human operator runs --watch)
+├── oracle_dispatch.py        — Agent-side dispatcher (compile PDF + queue tasks)
+├── pub_check.py              — Automated quality gates (9 checks)
+├── prompts/                  — Oracle prompt templates (for custom use)
 │   ├── p2_research_extension.md
 │   ├── p4_editorial_review.md
 │   ├── literature_search.md
-│   └── proof_strategy.md
-├── pub_check.py              — Automated quality gates
+│   ├── proof_strategy.md
+│   └── emergence_scan.md
+├── oracle/                   — Oracle exchange directory
+│   ├── pending/              — Agent writes here (picked up by --watch)
+│   └── done/                 — Results land here (agent reads)
 └── <paper_dirs>/             — Individual papers
-    ├── PIPELINE.md           — Per-paper tracking
-    ├── oracle/               — ChatGPT Pro outputs (when used)
+    ├── PIPELINE.md           — Per-paper tracking (single file)
     └── *.tex + references.bib
 ```

@@ -1,336 +1,257 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""ChatGPT Pro web oracle — submit prompts and collect responses via browser automation.
+"""ChatGPT Pro oracle — automated clipboard bridge for agent integration.
+
+Supports two modes:
+  A) Text-only: prompt copied to clipboard, paste into ChatGPT
+  B) PDF+prompt: PDF opened for drag-drop upload, short instruction prompt on clipboard
+
+The script auto-detects when you copy the response — no manual Enter needed.
 
 Usage:
-    # First run: will open browser for manual login, then stays logged in
-    python chatgpt_oracle.py --prompt-file prompts/p2_filled.md --output oracle/p2_result.md
+    # Text-only mode:
+    python chatgpt_oracle.py --send prompt.md --recv result.md
 
-    # With model selection (default: o3-mini-high for reasoning)
-    python chatgpt_oracle.py --prompt-file input.md --output output.md --model o3-mini-high
+    # PDF mode (upload PDF + paste instruction):
+    python chatgpt_oracle.py --send prompt.md --pdf paper.pdf --recv result.md
 
-    # Quick one-liner prompt
-    python chatgpt_oracle.py --prompt "Prove that sqrt(2) is irrational" --output proof.md
+    # Watch mode for agents (fully automated queue):
+    python chatgpt_oracle.py --watch oracle/
+    # Agents write to oracle/pending/:
+    #   task_name.md          — instruction prompt (required)
+    #   task_name.pdf         — PDF attachment (optional)
+    # Results saved to oracle/done/task_name.md
 
-    # Interactive mode: just open ChatGPT logged in
-    python chatgpt_oracle.py --interactive
-
-Architecture:
-    Uses Playwright with persistent browser profile so login persists across runs.
-    Browser data stored in ~/.chatgpt_oracle/ (cookies, localStorage).
-    No API key needed — uses the free web interface.
+    # Compile LaTeX to PDF before sending:
+    python chatgpt_oracle.py --compile paper_dir/ --send prompt.md --recv result.md
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
+import subprocess
 import sys
 import time
+import webbrowser
 from pathlib import Path
 from datetime import datetime
 
-# Browser profile directory
-PROFILE_DIR = Path.home() / ".chatgpt_oracle"
 CHATGPT_URL = "https://chatgpt.com"
 DEFAULT_MODEL = "o3-mini-high"
-
-# Timeouts
-LOGIN_TIMEOUT_MS = 300_000   # 5 min for manual login
-RESPONSE_TIMEOUT_MS = 600_000  # 10 min for long reasoning responses
-POLL_INTERVAL_MS = 2_000     # Check every 2s if response is done
+POLL_INTERVAL = 2        # seconds between clipboard checks
+STABILITY_WAIT = 3       # seconds to confirm clipboard is stable
+MIN_RESPONSE_LEN = 20    # minimum chars to accept as valid response
 
 
-def ensure_profile_dir():
-    PROFILE_DIR.mkdir(parents=True, exist_ok=True)
-    return str(PROFILE_DIR)
+# ---------------------------------------------------------------------------
+# Clipboard helpers (Windows)
+# ---------------------------------------------------------------------------
+
+def copy_to_clipboard(text: str):
+    """Copy text to system clipboard."""
+    proc = subprocess.Popen(["clip"], stdin=subprocess.PIPE)
+    proc.communicate(text.encode("utf-16-le"))
 
 
-def launch_browser(headless: bool = False):
-    """Launch persistent browser context."""
-    from playwright.sync_api import sync_playwright
-
-    pw = sync_playwright().start()
-    browser = pw.chromium.launch_persistent_context(
-        user_data_dir=ensure_profile_dir(),
-        headless=headless,
-        viewport={"width": 1280, "height": 900},
-        args=["--disable-blink-features=AutomationControlled"],
+def read_from_clipboard() -> str:
+    """Read text from system clipboard."""
+    result = subprocess.run(
+        ["powershell", "-Command", "Get-Clipboard"],
+        capture_output=True, text=True, encoding="utf-8"
     )
-    return pw, browser
+    return result.stdout.strip()
 
 
-def wait_for_login(page, timeout_ms: int = LOGIN_TIMEOUT_MS):
-    """Wait until user is logged into ChatGPT."""
-    print("[oracle] Checking login status...")
+# ---------------------------------------------------------------------------
+# Browser / file helpers
+# ---------------------------------------------------------------------------
 
-    # Navigate to ChatGPT
-    page.goto(CHATGPT_URL, wait_until="domcontentloaded", timeout=30_000)
-    time.sleep(3)
+def open_chatgpt():
+    """Open ChatGPT in default browser."""
+    webbrowser.open(CHATGPT_URL)
 
-    # Check if we're on the chat page (logged in) or login page
-    # The chat input area indicates we're logged in
-    try:
-        page.wait_for_selector(
-            "#prompt-textarea, div[contenteditable='true'][id='prompt-textarea']",
-            timeout=10_000,
+
+def open_file_location(file_path: Path):
+    """Open file explorer with the file selected (Windows)."""
+    subprocess.Popen(["explorer", "/select,", str(file_path.resolve())])
+
+
+# ---------------------------------------------------------------------------
+# LaTeX compilation
+# ---------------------------------------------------------------------------
+
+def compile_latex(paper_dir: Path) -> Path:
+    """Compile main.tex in paper_dir to PDF using pdflatex.
+
+    Returns path to the compiled PDF.
+    """
+    main_tex = paper_dir / "main.tex"
+    if not main_tex.exists():
+        print(f"[oracle] ERROR: {main_tex} not found", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"[oracle] Compiling {main_tex}...")
+    for i in range(2):  # two passes for references
+        result = subprocess.run(
+            ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", "main.tex"],
+            cwd=str(paper_dir), capture_output=True, text=True, timeout=120
         )
-        print("[oracle] Already logged in.")
-        return True
-    except Exception:
-        pass
+        if result.returncode != 0 and i == 1:
+            print(f"[oracle] LaTeX compilation failed:\n{result.stdout[-500:]}", file=sys.stderr)
+            sys.exit(1)
 
-    # Not logged in — ask user to log in manually
-    print("[oracle] Not logged in. Please log in manually in the browser window.")
-    print(f"[oracle] Waiting up to {timeout_ms // 1000}s for login...")
-
-    try:
-        page.wait_for_selector(
-            "#prompt-textarea, div[contenteditable='true'][id='prompt-textarea']",
-            timeout=timeout_ms,
+    # Run bibtex if .bib exists
+    if (paper_dir / "references.bib").exists():
+        subprocess.run(
+            ["bibtex", "main"], cwd=str(paper_dir),
+            capture_output=True, text=True, timeout=60
         )
-        print("[oracle] Login successful!")
-        return True
-    except Exception:
-        print("[oracle] ERROR: Login timed out.", file=sys.stderr)
-        return False
-
-
-def select_model(page, model: str):
-    """Attempt to select a specific model from the model picker."""
-    # This is best-effort — the UI changes frequently
-    try:
-        # Look for model selector button
-        selector_btn = page.query_selector(
-            "button[data-testid='model-switcher-dropdown-button'], "
-            "button[aria-haspopup='menu'][class*='model']"
-        )
-        if selector_btn:
-            selector_btn.click()
-            time.sleep(1)
-            # Look for the model option
-            model_option = page.query_selector(f"[data-testid*='{model}'], [class*='model-option']:has-text('{model}')")
-            if model_option:
-                model_option.click()
-                time.sleep(0.5)
-                print(f"[oracle] Selected model: {model}")
-                return True
-            else:
-                # Close dropdown
-                page.keyboard.press("Escape")
-                print(f"[oracle] Model '{model}' not found in picker, using default.")
-                return False
-        else:
-            print(f"[oracle] No model selector found, using default.")
-            return False
-    except Exception as e:
-        print(f"[oracle] Model selection failed: {e}")
-        return False
-
-
-def start_new_chat(page):
-    """Navigate to a new chat."""
-    page.goto(CHATGPT_URL, wait_until="domcontentloaded", timeout=30_000)
-    time.sleep(2)
-    print("[oracle] New chat ready.")
-
-
-def submit_prompt(page, prompt: str):
-    """Type prompt and send."""
-    # Find the textarea
-    textarea = page.wait_for_selector(
-        "#prompt-textarea",
-        timeout=10_000,
-    )
-
-    # For long prompts, use clipboard paste (faster and more reliable)
-    page.evaluate("""(text) => {
-        const el = document.querySelector('#prompt-textarea');
-        if (el) {
-            // Use the ProseMirror/contenteditable approach
-            el.focus();
-            // Try setting innerHTML for contenteditable
-            if (el.contentEditable === 'true') {
-                el.innerHTML = '<p>' + text.replace(/\\n/g, '</p><p>') + '</p>';
-                el.dispatchEvent(new Event('input', { bubbles: true }));
-            } else {
-                // Regular textarea
-                el.value = text;
-                el.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-        }
-    }""", prompt)
-
-    time.sleep(1)
-
-    # Click send button
-    send_btn = page.query_selector(
-        "button[data-testid='send-button'], "
-        "button[aria-label='Send prompt'], "
-        "button[class*='send']"
-    )
-    if send_btn and send_btn.is_enabled():
-        send_btn.click()
-        print("[oracle] Prompt submitted.")
-    else:
-        # Try pressing Enter as fallback
-        textarea.press("Enter")
-        print("[oracle] Prompt submitted (Enter key).")
-
-    time.sleep(2)
-
-
-def wait_for_response(page, timeout_ms: int = RESPONSE_TIMEOUT_MS) -> str:
-    """Wait for ChatGPT to finish responding, then extract the response text."""
-    print("[oracle] Waiting for response...")
-
-    start = time.time()
-    max_wait = timeout_ms / 1000
-
-    last_text = ""
-    stable_count = 0
-    required_stable = 3  # Need 3 consecutive checks with same text
-
-    while time.time() - start < max_wait:
-        time.sleep(POLL_INTERVAL_MS / 1000)
-
-        # Check if still generating (look for stop button or streaming indicator)
-        is_generating = page.query_selector(
-            "button[data-testid='stop-button'], "
-            "button[aria-label='Stop generating'], "
-            "[class*='result-streaming']"
-        )
-
-        if is_generating:
-            elapsed = int(time.time() - start)
-            if elapsed % 20 == 0 and elapsed > 0:
-                print(f"[oracle] Still generating... ({elapsed}s)")
-            stable_count = 0
-            continue
-
-        # No streaming indicator — check if text is stable
-        current_text = extract_response_text(page)
-        if current_text and current_text == last_text:
-            stable_count += 1
-            if stable_count >= required_stable:
-                elapsed = int(time.time() - start)
-                print(f"[oracle] Response complete ({elapsed}s, {len(current_text)} chars)")
-                return current_text
-        else:
-            stable_count = 0
-            last_text = current_text
-
-    print("[oracle] WARNING: Response timeout reached.", file=sys.stderr)
-    return extract_response_text(page)
-
-
-def extract_response_text(page) -> str:
-    """Extract the last assistant response from the page."""
-    # ChatGPT renders responses in markdown containers
-    # Get all assistant message containers
-    text = page.evaluate("""() => {
-        // Try multiple selectors for response content
-        const selectors = [
-            '[data-message-author-role="assistant"] .markdown',
-            '[data-message-author-role="assistant"]',
-            '.agent-turn .markdown',
-            '.group\\/conversation-turn .markdown',
-        ];
-
-        let elements = [];
-        for (const sel of selectors) {
-            elements = document.querySelectorAll(sel);
-            if (elements.length > 0) break;
-        }
-
-        if (elements.length === 0) return '';
-
-        // Get the LAST response (most recent)
-        const last = elements[elements.length - 1];
-        return last.innerText || last.textContent || '';
-    }""")
-
-    return text.strip()
-
-
-def run_oracle(prompt: str, output_path: str | None, model: str, headless: bool = False) -> str:
-    """Full oracle cycle: login -> new chat -> submit -> wait -> extract -> save."""
-    pw, browser = launch_browser(headless=headless)
-
-    try:
-        page = browser.pages[0] if browser.pages else browser.new_page()
-
-        # Step 1: Ensure logged in
-        if not wait_for_login(page):
-            return ""
-
-        # Step 2: New chat
-        start_new_chat(page)
-
-        # Step 3: Select model (best effort)
-        if model:
-            select_model(page, model)
-
-        # Step 4: Submit prompt
-        submit_prompt(page, prompt)
-
-        # Step 5: Wait for response
-        response = wait_for_response(page)
-
-        # Step 6: Save
-        if output_path and response:
-            out = Path(output_path)
-            out.parent.mkdir(parents=True, exist_ok=True)
-            metadata = {
-                "timestamp": datetime.now().isoformat(),
-                "model": model,
-                "prompt_length": len(prompt),
-                "response_length": len(response),
-            }
-            out.write_text(
-                f"<!-- oracle metadata: {json.dumps(metadata)} -->\n\n{response}",
-                encoding="utf-8",
+        # Two more passes after bibtex
+        for _ in range(2):
+            subprocess.run(
+                ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", "main.tex"],
+                cwd=str(paper_dir), capture_output=True, text=True, timeout=120
             )
-            print(f"[oracle] Saved to {out}")
 
-        return response
+    pdf_path = paper_dir / "main.pdf"
+    if not pdf_path.exists():
+        print(f"[oracle] ERROR: PDF not generated at {pdf_path}", file=sys.stderr)
+        sys.exit(1)
 
-    finally:
-        browser.close()
-        pw.stop()
-
-
-def interactive_mode():
-    """Just open ChatGPT logged in for manual use."""
-    pw, browser = launch_browser(headless=False)
-    page = browser.pages[0] if browser.pages else browser.new_page()
-
-    if not wait_for_login(page):
-        browser.close()
-        pw.stop()
-        return
-
-    print("[oracle] Interactive mode. Browser is open. Press Ctrl+C to close.")
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        browser.close()
-        pw.stop()
+    print(f"[oracle] PDF compiled: {pdf_path} ({pdf_path.stat().st_size // 1024} KB)")
+    return pdf_path
 
 
-def watch_mode(watch_dir: str, model: str):
-    """Watch directory for incoming prompts, process them automatically.
+# ---------------------------------------------------------------------------
+# Content matching
+# ---------------------------------------------------------------------------
 
-    Agent workflow:
-      1. Agent writes prompt to <watch_dir>/pending/<id>.md
-      2. This service picks it up, submits to ChatGPT, saves to <watch_dir>/done/<id>.md
-      3. Agent polls <watch_dir>/done/ for results
+def _is_same_content(a: str, b: str) -> bool:
+    """Fuzzy match: ignore whitespace differences."""
+    return a.strip().replace("\r\n", "\n") == b.strip().replace("\r\n", "\n")
 
-    Run from desktop terminal:
-      python chatgpt_oracle.py --watch oracle/ --model o3-mini-high
+
+# ---------------------------------------------------------------------------
+# Clipboard change detection
+# ---------------------------------------------------------------------------
+
+def wait_for_clipboard_change(original: str, timeout: int = 600) -> str:
+    """Poll clipboard until content changes from original.
+
+    Returns the new clipboard content, or empty string on timeout.
+    Uses a stability check to ensure the full response has been copied.
+    """
+    start = time.time()
+    elapsed_msg_interval = 30
+    last_msg = start
+
+    while time.time() - start < timeout:
+        current = read_from_clipboard()
+
+        if (not _is_same_content(current, original)
+                and len(current) >= MIN_RESPONSE_LEN):
+            print(f"[oracle] Clipboard change detected ({len(current)} chars), verifying...")
+            time.sleep(STABILITY_WAIT)
+            stable = read_from_clipboard()
+            if _is_same_content(stable, current):
+                return stable
+            print(f"[oracle] Content still changing, waiting...")
+
+        now = time.time()
+        if now - last_msg >= elapsed_msg_interval:
+            elapsed = int(now - start)
+            print(f"[oracle] Waiting for response... ({elapsed}s elapsed)")
+            last_msg = now
+
+        time.sleep(POLL_INTERVAL)
+
+    print(f"[oracle] Timeout after {timeout}s", file=sys.stderr)
+    return ""
+
+
+# ---------------------------------------------------------------------------
+# Response persistence
+# ---------------------------------------------------------------------------
+
+def save_response(output_path: Path, response: str, model: str,
+                  prompt_len: int = 0, source: str = "", pdf: str = ""):
+    """Save response with metadata to file."""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    metadata = {
+        "timestamp": datetime.now().isoformat(),
+        "model": model,
+        "prompt_length": prompt_len,
+        "response_length": len(response),
+    }
+    if source:
+        metadata["source"] = source
+    if pdf:
+        metadata["pdf"] = pdf
+    output_path.write_text(
+        f"<!-- oracle metadata: {json.dumps(metadata)} -->\n\n{response}",
+        encoding="utf-8",
+    )
+    print(f"[oracle] Response saved to {output_path} ({len(response)} chars)")
+
+
+# ---------------------------------------------------------------------------
+# Send prompt (with optional PDF)
+# ---------------------------------------------------------------------------
+
+def send_prompt(prompt_path: Path, pdf_path: Path | None = None) -> str:
+    """Copy prompt to clipboard, open ChatGPT, optionally show PDF for upload."""
+    prompt = prompt_path.read_text(encoding="utf-8")
+    copy_to_clipboard(prompt)
+    open_chatgpt()
+
+    print(f"[oracle] Prompt copied to clipboard ({len(prompt)} chars)")
+
+    if pdf_path and pdf_path.exists():
+        open_file_location(pdf_path)
+        print(f"[oracle] PDF: {pdf_path.name} ({pdf_path.stat().st_size // 1024} KB)")
+        print(f"[oracle] Steps:")
+        print(f"  1. Drag-drop the PDF into the ChatGPT input box")
+        print(f"  2. Paste the instruction prompt (Ctrl+V)")
+        print(f"  3. Send, wait for response, copy the response (Ctrl+C)")
+    else:
+        print(f"[oracle] Paste with Ctrl+V, wait for response, copy the response.")
+
+    return prompt
+
+
+# ---------------------------------------------------------------------------
+# Full auto: send + wait + save
+# ---------------------------------------------------------------------------
+
+def send_and_recv(prompt_path: Path, output_path: Path, model: str,
+                  timeout: int, pdf_path: Path | None = None):
+    """Full auto: send prompt (+ PDF), wait for clipboard change, save response."""
+    prompt = send_prompt(prompt_path, pdf_path)
+    print(f"[oracle] Auto-detecting response (polling every {POLL_INTERVAL}s)...")
+    print(f"[oracle] Just copy the ChatGPT response when ready.\n")
+
+    response = wait_for_clipboard_change(prompt, timeout=timeout)
+    if response:
+        save_response(output_path, response, model, len(prompt),
+                      pdf=str(pdf_path) if pdf_path else "")
+    else:
+        print("[oracle] ERROR: No response detected.", file=sys.stderr)
+        sys.exit(1)
+
+
+# ---------------------------------------------------------------------------
+# Watch mode (agent queue)
+# ---------------------------------------------------------------------------
+
+def watch_mode(watch_dir: str, model: str, timeout: int):
+    """Watch for pending prompts with auto clipboard detection.
+
+    Agent writes to pending/:
+      task_name.md   — instruction prompt (required)
+      task_name.pdf  — PDF attachment (optional, e.g. compiled paper)
+    Results auto-saved to done/task_name.md when clipboard changes.
     """
     watch = Path(watch_dir)
     pending = watch / "pending"
@@ -338,131 +259,141 @@ def watch_mode(watch_dir: str, model: str):
     pending.mkdir(parents=True, exist_ok=True)
     done.mkdir(parents=True, exist_ok=True)
 
-    print(f"[oracle] Watch mode: monitoring {pending}/")
-    print(f"[oracle] Results will be saved to {done}/")
-    print(f"[oracle] Agents should write prompts to {pending}/<name>.md")
+    print(f"[oracle] Watch mode active (auto-detect)")
+    print(f"[oracle] Agents write prompts to: {pending}/")
+    print(f"[oracle]   .md = instruction prompt (required)")
+    print(f"[oracle]   .pdf = paper attachment (optional)")
+    print(f"[oracle] Results saved to: {done}/")
     print(f"[oracle] Press Ctrl+C to stop.\n")
-
-    pw, browser = launch_browser(headless=False)
-    page = browser.pages[0] if browser.pages else browser.new_page()
-
-    if not wait_for_login(page):
-        browser.close()
-        pw.stop()
-        return
 
     try:
         while True:
-            # Scan for pending prompts
             for prompt_file in sorted(pending.glob("*.md")):
                 name = prompt_file.stem
                 out_file = done / f"{name}.md"
 
                 if out_file.exists():
-                    # Already processed — move pending file
                     prompt_file.unlink()
                     continue
 
-                print(f"\n[oracle] Processing: {prompt_file.name}")
                 prompt = prompt_file.read_text(encoding="utf-8")
+                prompt_len = len(prompt)
 
-                # New chat for each prompt
-                start_new_chat(page)
-                if model:
-                    select_model(page, model)
-                submit_prompt(page, prompt)
-                response = wait_for_response(page)
+                # Check for companion PDF
+                pdf_file = pending / f"{name}.pdf"
+                has_pdf = pdf_file.exists()
 
+                print(f"\n{'='*60}")
+                print(f"  NEW PROMPT: {prompt_file.name} ({prompt_len} chars)")
+                if has_pdf:
+                    print(f"  ATTACHMENT: {pdf_file.name} ({pdf_file.stat().st_size // 1024} KB)")
+                print(f"{'='*60}")
+
+                # Copy prompt to clipboard and open ChatGPT
+                copy_to_clipboard(prompt)
+                open_chatgpt()
+
+                if has_pdf:
+                    open_file_location(pdf_file)
+                    print(f"  1. Drag-drop {pdf_file.name} into ChatGPT")
+                    print(f"  2. Paste instruction (Ctrl+V)")
+                    print(f"  3. Send, wait for response, copy it (Ctrl+C)")
+                else:
+                    print(f"  1. Paste into ChatGPT (Ctrl+V)")
+                    print(f"  2. Wait for response, copy it (Ctrl+C)")
+                print(f"  >> Auto-detecting clipboard change...\n")
+
+                response = wait_for_clipboard_change(prompt, timeout=timeout)
                 if response:
-                    metadata = {
-                        "timestamp": datetime.now().isoformat(),
-                        "model": model,
-                        "source": str(prompt_file),
-                        "prompt_length": len(prompt),
-                        "response_length": len(response),
-                    }
+                    save_response(out_file, response, model, prompt_len,
+                                  source=str(prompt_file),
+                                  pdf=str(pdf_file) if has_pdf else "")
+                else:
                     out_file.write_text(
-                        f"<!-- oracle metadata: {json.dumps(metadata)} -->\n\n{response}",
+                        "<!-- oracle: ERROR - timeout waiting for response -->\n",
                         encoding="utf-8",
                     )
-                    print(f"[oracle] Saved: {out_file}")
-                else:
-                    # Write error marker
-                    out_file.write_text("<!-- oracle: ERROR - no response -->\n", encoding="utf-8")
-                    print(f"[oracle] ERROR: no response for {prompt_file.name}")
+                    print(f"  WARNING: Timeout, saved error marker.")
 
-                # Remove from pending
+                # Cleanup pending files
                 prompt_file.unlink()
+                if has_pdf:
+                    pdf_file.unlink()
 
-            time.sleep(3)
+            time.sleep(2)
 
     except KeyboardInterrupt:
-        print("\n[oracle] Shutting down.")
-    finally:
-        browser.close()
-        pw.stop()
+        print("\n[oracle] Stopped.")
 
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser(
-        description="ChatGPT Pro web oracle",
-        epilog="""
-Modes:
-  --prompt/--prompt-file  One-shot: submit prompt, get response, exit
-  --watch <dir>           Service: watch dir/pending/ for prompts, auto-process
-  --interactive           Manual: just open logged-in ChatGPT browser
-
-Agent integration (watch mode):
-  1. Start service:  python chatgpt_oracle.py --watch oracle/
-  2. Agent writes:   oracle/pending/p2_fredholm.md
-  3. Service processes and saves: oracle/done/p2_fredholm.md
-  4. Agent reads result from oracle/done/
-        """,
+        description="ChatGPT Pro oracle (auto clipboard + PDF upload)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Text-only:
+  python chatgpt_oracle.py --send prompt.md --recv result.md
+
+  # PDF + instruction:
+  python chatgpt_oracle.py --send prompt.md --pdf paper.pdf --recv result.md
+
+  # Compile + send:
+  python chatgpt_oracle.py --compile paper_dir/ --send prompt.md --recv result.md
+
+  # Agent queue:
+  python chatgpt_oracle.py --watch oracle/
+""",
     )
-    parser.add_argument("--prompt-file", type=Path, help="Read prompt from file")
-    parser.add_argument("--prompt", type=str, help="Inline prompt string")
-    parser.add_argument("--output", type=str, help="Save response to file")
+    parser.add_argument("--send", type=Path,
+                        help="Instruction prompt file (copied to clipboard)")
+    parser.add_argument("--recv", type=Path,
+                        help="Output file for the response")
+    parser.add_argument("--pdf", type=Path,
+                        help="PDF file to upload (opens file explorer for drag-drop)")
+    parser.add_argument("--compile", type=Path,
+                        help="Compile main.tex in this directory to PDF before sending")
+    parser.add_argument("--watch", type=str,
+                        help="Watch mode: monitor dir/pending/ for prompts")
     parser.add_argument("--model", type=str, default=DEFAULT_MODEL,
-                        help=f"Model to select (default: {DEFAULT_MODEL})")
-    parser.add_argument("--interactive", action="store_true",
-                        help="Open ChatGPT for manual use")
-    parser.add_argument("--watch", type=str, metavar="DIR",
-                        help="Watch mode: monitor DIR/pending/ for prompts")
-    parser.add_argument("--headless", action="store_true",
-                        help="Run without visible browser (experimental)")
+                        help=f"Model tag for metadata (default: {DEFAULT_MODEL})")
+    parser.add_argument("--timeout", type=int, default=600,
+                        help="Max seconds to wait for response (default: 600)")
     args = parser.parse_args()
 
-    if args.interactive:
-        interactive_mode()
-        return
+    # Compile PDF if requested
+    pdf_path = args.pdf
+    if args.compile:
+        pdf_path = compile_latex(args.compile)
 
     if args.watch:
-        watch_mode(args.watch, args.model)
+        watch_mode(args.watch, args.model, args.timeout)
         return
 
-    # One-shot mode
-    if args.prompt_file:
-        if not args.prompt_file.exists():
-            print(f"Error: {args.prompt_file} not found", file=sys.stderr)
+    if args.send and args.recv:
+        send_and_recv(args.send, args.recv, args.model, args.timeout, pdf_path)
+        return
+
+    if args.send:
+        if not args.send.exists():
+            print(f"Error: {args.send} not found", file=sys.stderr)
             sys.exit(1)
-        prompt = args.prompt_file.read_text(encoding="utf-8")
-    elif args.prompt:
-        prompt = args.prompt
-    else:
-        print("Error: provide --prompt-file, --prompt, --watch, or --interactive",
-              file=sys.stderr)
-        sys.exit(1)
+        send_prompt(args.send, pdf_path)
+        return
 
-    response = run_oracle(prompt, args.output, args.model, args.headless)
+    if args.recv:
+        response = read_from_clipboard()
+        if not response:
+            print("[oracle] ERROR: Clipboard is empty.", file=sys.stderr)
+            sys.exit(1)
+        save_response(args.recv, response, args.model)
+        return
 
-    if not args.output and response:
-        print("\n" + "=" * 60)
-        print("RESPONSE:")
-        print("=" * 60)
-        print(response)
-
-    sys.exit(0 if response else 1)
+    parser.print_help()
 
 
 if __name__ == "__main__":
