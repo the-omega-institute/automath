@@ -174,7 +174,7 @@ def dispatch_direct(task_name: str, prompt_text: str, pdf_path: Path | None = No
     # Poll for result
     print(f"[dispatch] Waiting for Tampermonkey to process task (up to 15 min)...")
     start = time.time()
-    timeout = 900
+    timeout = 1800
     while time.time() - start < timeout:
         try:
             resp = urllib.request.urlopen(f"{SERVER}/result/{task_name}", timeout=5)
@@ -276,8 +276,8 @@ def main():
                         help="Task name (default: auto-generated from paper + task)")
     parser.add_argument("--wait", action="store_true",
                         help="Wait for result and print it")
-    parser.add_argument("--timeout", type=int, default=900,
-                        help="Max seconds to wait for result (default: 900)")
+    parser.add_argument("--timeout", type=int, default=1800,
+                        help="Max seconds to wait for result (default: 1800)")
     parser.add_argument("--no-compile", action="store_true",
                         help="Skip PDF compilation (use existing main.pdf)")
     parser.add_argument("--clipboard", action="store_true",
@@ -337,6 +337,8 @@ def main():
         response = dispatch_direct(task_name, prompt_text, pdf_path, model=args.model)
         if response:
             if args.wait:
+                import io, sys as _sys
+                _sys.stdout = io.TextIOWrapper(_sys.stdout.buffer, encoding="utf-8", errors="replace")
                 print(f"\n{'='*60}")
                 print(response)
         else:
