@@ -1,0 +1,559 @@
+\subsection{从射影态类到 Hilbert 型量子结构的闭包}\label{subsec:cdim-hilbert-quantum-closure}
+上一小节只固定了可见相位、射影态类与干涉修正的最小局部--全局来源。
+若停在这一步，量子侧仍只是一组表示约束，而尚未闭合成可直接计算的态空间、事件算子与时间演化。
+本小节把该缺口压回到项目 PDF 已有的两类内部接口：其一是扫描--投影读出在稳定类型空间上的可见分布与 mixed-collision 正定核（推论 \ref{cor:pom-mixed-collision-pd-kernel}、定理 \ref{thm:conclusion-mixed-collision-characteristic-hilbert-geometry}）；其二是附录 \ref{app:op-algebra} 与 \S\ref{subsec:op-algebra-fold-quantum-channel} 已给出的投影、态与完全正可见实现。
+相应的量子闭包宜分成两层理解：第一层止于抽象的、离散时间的、Hilbert 型量子力学；第二层则在此基础上，经连续时间生成元、交换可见代数的谱表示与审计局域 Euclidean 正常形，止于连续时间的局域 Euclidean 标量 Schr\"odinger 扇区。
+
+\subsubsection{可读时间字、稳定可见分布与正定重叠核}
+以下固定一个稳定可读分辨率 \(m\ge 1\)，并记相应稳定类型空间为 \(X_m\)。
+
+\begin{definition}[可读时间字]\label{def:cdim-readable-time-word}
+称有限有序列
+\[
+w=((a_0,t_0),\dots,(a_{r-1},t_{r-1})),
+\qquad
+a_j\in\mathcal A,\quad t_0<\cdots<t_{r-1}\in\mathbb Z,
+\]
+为一个\textbf{可读时间字}，若它满足扫描--投影生成器、稳定语法与折叠规范形的可读性要求，从而能够通过有限窗口扫描被送入稳定类型空间 \(X_m\) 并给出稳定读出。
+记所有此类时间字的集合为 \(\mathcal W_m\)。
+\end{definition}
+
+\begin{proposition}[可读时间字导出稳定可见分布]\label{prop:cdim-readable-time-word-visible-distribution}
+每个可读时间字 \(w\in\mathcal W_m\) 都导出一个稳定可见分布
+\[
+\mu_w\in\Delta(X_m).
+\]
+\end{proposition}
+\begin{proof}
+扫描--投影读出模型在有限窗口上把可读字送入稳定类型空间，并以折叠规范形给出统计对象。
+因此每个 \(w\) 都对应于 \(X_m\) 上的一个稳定可见分布 \(\mu_w\)。
+证毕。
+\end{proof}
+
+\begin{definition}[重叠核]\label{def:cdim-readable-time-word-overlap-kernel}
+对任意 \(u,v\in\mathcal W_m\)，定义其重叠核为
+\[
+K_m(u,v):=\sum_{x\in X_m}\mu_u(x)\mu_v(x).
+\]
+\end{definition}
+
+\begin{theorem}[稳定可见分布上的正定重叠核]\label{thm:cdim-readable-time-word-overlap-pd}
+定义 \ref{def:cdim-readable-time-word-overlap-kernel} 给出的 \(K_m\) 是稳定可见分布的 pullback 正定核。
+更精确地，存在特征映射
+\[
+\Phi_m:\Delta(X_m)\longrightarrow \ell^2(X_m),
+\qquad
+\Phi_m(\mu):=\bigl(\mu(x)\bigr)_{x\in X_m},
+\]
+使得
+\[
+K_m(u,v)=\langle \Phi_m(\mu_u),\Phi_m(\mu_v)\rangle_{\ell^2(X_m)}.
+\]
+因此，若两条可读时间字在所有重叠核配对下不可区分，则它们诱导同一稳定可见分布。
+\end{theorem}
+\begin{proof}
+这正是推论 \ref{cor:pom-mixed-collision-pd-kernel} 在 \(q=1\) 情形下的直接应用；定理 \ref{thm:conclusion-mixed-collision-characteristic-hilbert-geometry} 进一步说明该核在稳定可见分布上是 characteristic 的。
+证毕。
+\end{proof}
+
+\begin{definition}[Hilbert 预载体]\label{def:cdim-hilbert-precarrier}
+在复线性包 \(\mathbb C[\mathcal W_m]\) 上定义 sesquilinear 形式
+\[
+\Bigl\langle \sum_i c_i u_i,\ \sum_j d_j v_j\Bigr\rangle_m
+:=
+\sum_{i,j}\overline{c_i}d_j\,K_m(u_i,v_j).
+\]
+记其零范数子空间为
+\[
+\mathcal N_m:=\{X\in\mathbb C[\mathcal W_m]:\langle X,X\rangle_m=0\},
+\]
+并定义商空间
+\[
+\mathcal H_{0,m}:=\mathbb C[\mathcal W_m]/\mathcal N_m.
+\]
+\end{definition}
+
+\begin{theorem}[Hilbert 载体]\label{thm:cdim-hilbert-carrier}
+商空间 \(\mathcal H_{0,m}\) 带有由 \(\langle\cdot,\cdot\rangle_m\) 诱导的真内积，其完备化
+\[
+\mathcal H_Q:=\overline{\mathcal H_{0,m}}
+\]
+是一个 Hilbert 空间。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:cdim-readable-time-word-overlap-pd}，\(\langle\cdot,\cdot\rangle_m\) 半正定。
+商去零范数方向后得到真内积，而任何内积空间都有唯一 Hilbert 完备化，故 \(\mathcal H_Q\) 存在且由该内积唯一决定。
+证毕。
+\end{proof}
+
+\subsubsection{离散幺正演化与量子事件}
+\begin{definition}[一步时间移位]\label{def:cdim-one-step-time-shift}
+对任意可读时间字
+\[
+w=((a_0,t_0),\dots,(a_{r-1},t_{r-1}))\in\mathcal W_m,
+\]
+定义其一步时间移位为
+\[
+\sigma w:=((a_0,t_0+1),\dots,(a_{r-1},t_{r-1}+1)).
+\]
+\end{definition}
+
+\begin{proposition}[同步时间移位保持重叠核]\label{prop:cdim-time-shift-preserves-overlap}
+对任意 \(u,v\in\mathcal W_m\)，有
+\[
+K_m(\sigma u,\sigma v)=K_m(u,v).
+\]
+\end{proposition}
+\begin{proof}
+附录 \ref{app:op-algebra} 已把时间平移写成
+\(
+P_t=U^{-t}PU^t
+\)。
+因此，对所有局部读出同时作同一步时间平移，只是对同一读出协议做共同共轭，不改变稳定可见分布及其 \(\ell^2\) 重叠。
+故 \(K_m(\sigma u,\sigma v)=K_m(u,v)\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[离散幺正演化]\label{thm:cdim-discrete-unitary-evolution}
+映射
+\[
+U_0:\mathcal H_{0,m}\longrightarrow \mathcal H_{0,m},
+\qquad
+U_0[w]:=[\sigma w],
+\]
+是等距双射，因而唯一延拓为 \(\mathcal H_Q\) 上的幺正算子
+\[
+U:\mathcal H_Q\to\mathcal H_Q.
+\]
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:cdim-time-shift-preserves-overlap} 表明
+\[
+\langle U_0[w],U_0[v]\rangle_m
+=
+K_m(\sigma u,\sigma v)
+=
+K_m(u,v)
+=
+\langle [w],[v]\rangle_m.
+\]
+故 \(U_0\) 保持内积并下降到商空间。
+由 \(\sigma^{-1}\) 的存在，\(U_0\) 还是双射，故在完备化上唯一延拓为幺正算子 \(U\)。
+证毕。
+\end{proof}
+
+\begin{definition}[事件子空间]\label{def:cdim-quantum-event-subspace}
+对任意地址 \(a\) 与时刻 \(t\in\mathbb Z\)，定义闭子空间
+\[
+\mathcal H_{a,t}
+:=
+\overline{\operatorname{span}}\{[w]\in\mathcal H_Q:\ w\text{ 在时刻 }t\text{ 含有地址 }a\}.
+\]
+\end{definition}
+
+\begin{theorem}[量子事件]\label{thm:cdim-quantum-event-projections}
+对每个地址--时间对 \((a,t)\)，存在唯一正交投影
+\[
+P_{a,t}:\mathcal H_Q\to\mathcal H_{a,t},
+\]
+并满足协变关系
+\[
+P_{a,t}=U^{-t}P_{a,0}U^t.
+\]
+\end{theorem}
+\begin{proof}
+定义 \ref{def:cdim-quantum-event-subspace} 中的 \(\mathcal H_{a,t}\) 是 Hilbert 空间 \(\mathcal H_Q\) 的闭子空间，因此存在唯一正交投影 \(P_{a,t}\)。
+又由一步时间移位的定义，\(\mathcal H_{a,t}=U^{-t}\mathcal H_{a,0}\)，从而正交投影满足
+\(
+P_{a,t}=U^{-t}P_{a,0}U^t
+\)。
+这与附录 \ref{app:op-algebra} 的时间协变公式一致。
+证毕。
+\end{proof}
+
+\subsubsection{正常态、Born 配对与态空间几何}
+\begin{definition}[正常态]\label{def:cdim-normal-states}
+定义
+\[
+D(\mathcal H_Q):=
+\{\rho\in\mathcal B_1(\mathcal H_Q):\ \rho\ge 0,\ \Tr\rho=1\},
+\]
+其中 \(\mathcal B_1(\mathcal H_Q)\) 表示迹类算子。
+称 \(D(\mathcal H_Q)\) 的元素为 \(\mathcal H_Q\) 上的\textbf{正常态}。
+\end{definition}
+
+\begin{theorem}[Born 配对]\label{thm:cdim-born-pairing}
+对任意 \(\rho\in D(\mathcal H_Q)\) 与任意量子事件 \(P_{a,t}\)，定义
+\[
+\Pr_\rho(a,t):=\Tr(\rho P_{a,t}).
+\]
+则 \(\Pr_\rho(a,t)\in[0,1]\)，并且对任何互斥完备事件族给出概率分布。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:cdim-quantum-event-projections}，\(P_{a,t}\) 是正交投影，因此 \(0\le P_{a,t}\le I\)。
+故
+\[
+0\le \Tr(\rho P_{a,t})\le \Tr(\rho)=1.
+\]
+若 \(\{P_i\}\) 两两正交且 \(\sum_i P_i=I\)，则
+\[
+\sum_i\Pr_\rho(i)
+=
+\sum_i\Tr(\rho P_i)
+=
+\Tr\Bigl(\rho\sum_iP_i\Bigr)
+=
+\Tr(\rho)=1.
+\]
+故得到概率分布。
+这正把附录 \ref{app:op-algebra} 中的 \(\Tr(\rho P_a)\) 读出压成 \(\mathcal H_Q\) 上的 Born 配对。
+证毕。
+\end{proof}
+
+\begin{definition}[纯态与混态]\label{def:cdim-pure-mixed-states}
+称 \(\rho\in D(\mathcal H_Q)\) 为\textbf{纯态}，若它不能写成两个不同正常态的非平凡凸组合；否则称其为\textbf{混态}。
+\end{definition}
+
+\begin{proposition}[纯态的秩一刻画]\label{prop:cdim-pure-states-rank-one}
+\(\rho\in D(\mathcal H_Q)\) 是纯态，当且仅当存在单位向量 \(\psi\in\mathcal H_Q\) 使
+\[
+\rho=\lvert\psi\rangle\langle\psi\rvert.
+\]
+并且 \(\psi\) 与 \(e^{\mathrm i\theta}\psi\) 给出同一纯态。
+\end{proposition}
+\begin{proof}
+这是密度算子凸几何的标准结论。
+若 \(\rho=\lvert\psi\rangle\langle\psi\rvert\)，则
+\[
+\lvert e^{\mathrm i\theta}\psi\rangle\langle e^{\mathrm i\theta}\psi\rvert
+=
+\lvert\psi\rangle\langle\psi\rvert,
+\]
+故物理不变量是射线而非单位向量本身。
+证毕。
+\end{proof}
+
+\begin{corollary}[波函数只是坐标表示]\label{cor:cdim-wavefunction-as-coordinate}
+一旦在某个表示扇区上选定一组正交基 \(\{\lvert x\rangle\}\)，纯态射线 \([\psi]\) 的坐标函数
+\[
+\psi(x):=\langle x\mid\psi\rangle
+\]
+便给出波函数表示。
+因此，波函数只是纯态射线在所选基底下的坐标，而不是先验对象。
+\end{corollary}
+\begin{proof}
+命题 \ref{prop:cdim-pure-states-rank-one} 已说明纯态由射线决定。
+对任意正交基展开该射线即可得到坐标函数 \(\psi(x)\)。
+证毕。
+\end{proof}
+
+\subsubsection{复合体系、纠缠与可见实现}
+\begin{definition}[独立机制]\label{def:cdim-independent-mechanisms}
+称两套可读机制独立，若其复合重叠核满足乘法分解
+\[
+K_{12}\bigl((u_1,u_2),(v_1,v_2)\bigr)
+=
+K_1(u_1,v_1)\,K_2(u_2,v_2).
+\]
+\end{definition}
+
+\begin{theorem}[复合 Hilbert 载体]\label{thm:cdim-composite-hilbert-carrier}
+若两套机制在定义 \ref{def:cdim-independent-mechanisms} 的意义下独立，则其复合 Hilbert 载体满足
+\[
+\mathcal H_{Q,12}\cong \mathcal H_{Q,1}\otimes\mathcal H_{Q,2}.
+\]
+\end{theorem}
+\begin{proof}
+在独立条件下，Gram 核满足乘法分解；因此其预 Hilbert 内积在简单张量上满足
+\[
+\langle [u_1]\otimes [u_2], [v_1]\otimes [v_2]\rangle
+=
+\langle [u_1],[v_1]\rangle\,\langle [u_2],[v_2]\rangle.
+\]
+由张量积 Hilbert 空间的泛性质，复合预载体的完备化唯一同构于
+\(
+\mathcal H_{Q,1}\otimes\mathcal H_{Q,2}
+\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[纠缠]\label{cor:cdim-entanglement}
+若 \(\mathcal H_{Q,12}\) 上某纯态射线不能写成
+\[
+[\psi_1]\otimes[\psi_2],
+\]
+则它不是两个局域纯态的简单并置，因而给出纠缠态。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:cdim-composite-hilbert-carrier}，复合体系的纯态射线以张量积表示。
+不能分解为简单张量的纯态射线，正是纠缠态的定义。
+证毕。
+\end{proof}
+
+\begin{definition}[可见实现]\label{def:cdim-visible-realization}
+称线性映射
+\[
+\mathcal E:\mathcal B_1(\mathcal H_Q)\to\mathcal B_1(\mathcal H_Q)
+\]
+为一个\textbf{可见实现}，若它保持正常态集合 \(D(\mathcal H_Q)\)。
+\end{definition}
+
+\begin{theorem}[量子信道]\label{thm:cdim-quantum-channels}
+附录 \ref{app:op-algebra} 与 \S\ref{subsec:op-algebra-fold-quantum-channel} 已给出的可见实现，都可提升为完全正且迹保持的量子信道。
+特别地，
+\[
+\mathcal E_U(\rho):=U\rho U^\ast
+\]
+是可见实现，而折叠量子信道提供了非幺正的可见实现族。
+\end{theorem}
+\begin{proof}
+幺正共轭显然保持正性与迹一，因此给出可见实现。
+\S\ref{subsec:op-algebra-fold-quantum-channel} 进一步在固定分辨率的可见事件扇区上显式构造了折叠量子信道、其 Kraus 表示、Choi 秩、最小环境维数与完全正性。
+把该构造经由本小节的 Hilbert 表示读取到 \(\mathcal H_Q\) 上，便得到完全正且迹保持的可见实现。
+证毕。
+\end{proof}
+
+\begin{corollary}[条件化更新]\label{cor:cdim-luders-update}
+对投影测量 \(P_{a,t}\)，其后验更新写成
+\[
+\rho\longmapsto
+\frac{P_{a,t}\rho P_{a,t}}{\Tr(\rho P_{a,t})},
+\]
+从而形成“先事件条件化、后经量子信道传播”的一般可见演化接口。
+\end{corollary}
+\begin{proof}
+这正是量子信道语义中的投影测量特例。
+分母由定理 \ref{thm:cdim-born-pairing} 给出，并在事件发生条件下严格为正。
+证毕。
+\end{proof}
+
+\subsubsection{连续时间、连续谱表示与局域 Euclidean 扇区}
+\begin{definition}[主相位生成元]\label{def:cdim-principal-phase-generator}
+设 \(U\) 为定理 \ref{thm:cdim-discrete-unitary-evolution} 给出的离散幺正演化。
+由谱定理，存在唯一投影值测度 \(E_U\) 使
+\[
+U=\int_{\TT} z\,dE_U(z).
+\]
+对任意 Borel 集 \(B\subseteq(-\pi,\pi]\)，定义
+\[
+\Pi(B):=E_U\bigl(\{e^{-\mathrm i\theta}:\theta\in B\}\bigr).
+\]
+定义主相位生成元
+\[
+H:=\int_{(-\pi,\pi]}\theta\,d\Pi(\theta).
+\]
+\end{definition}
+
+\begin{proposition}[幺正的自伴对数]\label{prop:cdim-unitary-selfadjoint-log}
+定义 \ref{def:cdim-principal-phase-generator} 给出的 \(H\) 是有界自伴算子，满足
+\[
+\|H\|\le \pi,
+\qquad
+U=e^{-\mathrm iH}.
+\]
+\end{proposition}
+\begin{proof}
+主支相位函数 \(\theta\mapsto\theta\) 在 \((-\pi,\pi]\) 上有界且实值，因此函数演算给出 \(H\) 为有界自伴算子。
+再由谱积分的定义立即得到 \(e^{-\mathrm iH}=U\)。
+证毕。
+\end{proof}
+
+\begin{theorem}[连续时间幺正群]\label{thm:cdim-continuous-unitary-group}
+对每个 \(s\in\mathbb R\)，定义
+\[
+U_s:=e^{-\mathrm isH}.
+\]
+则 \(\{U_s\}_{s\in\mathbb R}\) 构成唯一的强连续幺正群，满足
+\[
+U_0=I,\qquad U_{s+t}=U_sU_t,\qquad U_1=U.
+\]
+\end{theorem}
+\begin{proof}
+由命题 \ref{prop:cdim-unitary-selfadjoint-log}，\(H\) 为有界自伴算子，故函数演算给出幺正群 \(U_s=e^{-\mathrm isH}\)。
+群性质由指数律直接成立，而有界性保证 \(s\mapsto U_s\) 在算子范数下连续，故强连续。
+主相位分支一旦固定，满足 \(U_1=U\) 的连续幺正分支便唯一。
+证毕。
+\end{proof}
+
+\begin{definition}[同刻可交换可见代数]\label{def:cdim-commutative-visible-algebra}
+在附录 \ref{app:op-algebra} 的可交换读出口径中，定义同刻可见代数
+\[
+\mathfrak M_0:=W^\ast\bigl(\{P_{a,0}\}_{a\in\mathcal A}\bigr)\subseteq \mathcal B(\mathcal H_Q).
+\]
+\end{definition}
+
+\begin{proposition}[同刻可见代数的交换性]\label{prop:cdim-commutative-visible-algebra}
+\(\mathfrak M_0\) 是交换 von Neumann 代数。
+\end{proposition}
+\begin{proof}
+附录 \ref{app:op-algebra} 在可交换读出口径下把地址事件写成
+\[
+P_a=\prod_j Q_j(a_j),
+\]
+因此同刻地址事件投影两两可交换。
+取其生成的 von Neumann 代数即得交换性。
+证毕。
+\end{proof}
+
+\begin{theorem}[连续谱表示]\label{thm:cdim-continuous-spectrum-representation}
+存在测度空间 \((X,\nu)\)、可测多重度函数 \(m(x)\) 与酉同构
+\[
+W:\mathcal H_Q\longrightarrow L^2(X,\nu;\mathbb C^{m(x)}),
+\]
+使得对任意 \(M\in\mathfrak M_0\)，存在有界可测函数 \(f_M\) 满足
+\[
+WMW^{-1}=M_{f_M}.
+\]
+特别地，对每个同刻地址事件投影 \(P_{a,0}\)，存在可测集合 \(X_a\subseteq X\) 使
+\[
+WP_{a,0}W^{-1}=M_{\mathbf 1_{X_a}}.
+\]
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:cdim-commutative-visible-algebra} 已说明 \(\mathfrak M_0\) 为交换 von Neumann 代数。
+由交换 von Neumann 代数的谱表示定理，\(\mathfrak M_0\) 在某个直接积分空间上按乘法算子表示。
+对投影元而言，对应函数必为特征函数，故得到所示集合 \(X_a\)。
+证毕。
+\end{proof}
+
+\begin{corollary}[坐标表示]\label{cor:cdim-coordinate-representation}
+若在某个不变扇区上 \(m(x)=1\) 几乎处处成立，则该扇区上的 Hilbert 载体同构于
+\[
+L^2(X,\nu),
+\]
+并且所有同刻地址事件都按特征函数乘法作用。
+\end{corollary}
+\begin{proof}
+这是定理 \ref{thm:cdim-continuous-spectrum-representation} 在 multiplicity-one 情形下的直接退化。
+证毕。
+\end{proof}
+
+\begin{definition}[审计局域 Euclidean 扇区]\label{def:cdim-local-euclidean-sector}
+沿用命题 \ref{prop:real-input-40-logM-curvature-mismatch-spectrum}、命题 \ref{prop:real-input-40-unified-generator-alignment}、表 \ref{tab:real-input-40-local-bigeometry-invariants} 与表 \ref{tab:real_input_40_output_potential_cumulants_closed} 的记号，在 real-input \(40\)-state kernel 的 \(\theta=0\) 审计点定义
+\[
+A_\ast:=\Sigma^{-1}\nabla^2\log\mathfrak M(0),
+\qquad
+h_\ast:=A_\ast^{\mathsf T}A_\ast.
+\]
+称由 \((\mathbb R^3,h_\ast)\) 所张成的局域扇区为\textbf{审计局域 Euclidean 扇区}。
+\end{definition}
+
+\begin{proposition}[审计局域 Euclidean 扇区的正定性]\label{prop:cdim-local-euclidean-sector-positive}
+审计局域 Euclidean 扇区是三维实内积空间；固定正交归一基后，可识别为
+\[
+(\mathbb R^3,h_\ast)\cong \mathbb R^3_{\mathrm{Euc}}.
+\]
+\end{proposition}
+\begin{proof}
+命题 \ref{prop:real-input-40-logM-curvature-mismatch-spectrum} 与表 \ref{tab:real-input-40-local-bigeometry-invariants} 已给出
+\[
+\mathrm{spec}(A_\ast)=(5.319833,\,-0.534795,\,-2.572421),
+\]
+三条特征值均非零，故 \(A_\ast\) 非退化。
+因此对任意 \(v\neq 0\)，
+\[
+v^{\mathsf T}h_\ast v
+=
+\lVert A_\ast v\rVert^2
+>
+0,
+\]
+即 \(h_\ast\) 为正定二次型。
+有限维实内积空间与 Euclidean 空间的标准线性代数同构遂得结论。
+证毕。
+\end{proof}
+
+\begin{definition}[局域势能 germ]\label{def:cdim-local-potential-germ}
+定义局域标量函数 \(V_\ast\) 的 germ，使其在原点满足
+\[
+V_\ast(0)=\log\mathfrak M(0),\qquad
+\nabla V_\ast(0)=\nabla\log\mathfrak M(0),\qquad
+\nabla^2V_\ast(0)=\nabla^2\log\mathfrak M(0).
+\]
+\end{definition}
+
+\begin{proposition}[连续极限的二阶主符号]\label{prop:cdim-second-order-principal-symbol}
+在定理 \ref{thm:cdim-continuous-unitary-group} 的连续时间分支上，若取表 \ref{tab:real_input_40_output_potential_cumulants_closed} 所审计的长时小参数极限，则生成元的主符号由压力 Hessian \(\Sigma=\nabla^2P(0)\) 的二次型给出；特别地，\(P''(0)>0\) 保证该主符号非退化。
+\end{proposition}
+\begin{proof}
+表 \ref{tab:real_input_40_output_potential_cumulants_closed} 给出 \(P''(0)>0\) 及更高阶累积量的闭式审计值，因此压力函数在原点的展开首个非平凡偶次项为
+\[
+P(\theta)=P(0)+\langle\nabla P(0),\theta\rangle+\frac12\,\theta^{\mathsf T}\Sigma\theta+O(|\theta|^3).
+\]
+在连续时间的长时小参数缩放下，三阶及以上项进入更高阶修正，而主导项由该二次型控制；因此相应生成元在局域 scalar 扇区上的主符号正是 \(\frac12\,\xi^{\mathsf T}\Sigma\xi\)。
+非退化性由 \(P''(0)>0\) 与局域 Fisher Hessian 的正定性保证。
+证毕。
+\end{proof}
+
+\begin{theorem}[局域 Euclidean 标量 Schr\"odinger 扇区]\label{thm:cdim-local-schrodinger-sector}
+在审计局域 Euclidean 扇区上，把定理 \ref{thm:cdim-continuous-unitary-group} 的连续时间生成元限制到 multiplicity-one 的局域 scalar 扇区，并去除已由平移群吸收的一阶漂移后，可得局域正常形
+\[
+H_{\mathrm{loc}}
+=
+-\frac12\Delta_{h_\ast}+V_\ast(x).
+\]
+在命题 \ref{prop:cdim-local-euclidean-sector-positive} 的 Euclidean 正交坐标下，上式化为
+\[
+H_{\mathrm{loc}}
+=
+-\frac12\Delta+V_\ast(x),
+\]
+从而纯态波函数满足局域 Schr\"odinger 方程
+\[
+\mathrm i\,\partial_t\psi(t,x)
+=
+\Bigl(-\frac12\Delta+V_\ast(x)\Bigr)\psi(t,x).
+\]
+\end{theorem}
+\begin{proof}
+命题 \ref{prop:cdim-second-order-principal-symbol} 已把局域主部固定为由 \(\Sigma\) 决定的非退化二阶符号；命题 \ref{prop:cdim-local-euclidean-sector-positive} 把该符号对应的局域几何识别为 Euclidean 内积；定义 \ref{def:cdim-local-potential-germ} 则固定了零阶局域标量项。
+在 scalar 扇区中，自伴的局域二阶算子因此被压成
+\(
+-\frac12\Delta_{h_\ast}+V_\ast
+\)
+这一标准正常形。
+再由定理 \ref{thm:cdim-continuous-unitary-group} 的 \(U_t=e^{-\mathrm itH}\) 对时间求导，即得局域 Schr\"odinger 方程。
+证毕。
+\end{proof}
+
+\subsubsection{主定理与边界}
+\begin{theorem}[从项目 PDF 到 Hilbert 型量子结构的闭包]\label{thm:cdim-hilbert-quantum-main-closure}
+在不引入任何外部物理公理的前提下，项目 PDF 的下列内部接口
+\[
+\text{可读时间字}
+\Longrightarrow
+\text{稳定可见分布}
+\Longrightarrow
+\text{mixed-collision 正定核}
+\Longrightarrow
+\text{附录算子代数与完全正可见实现}
+\]
+共同推出如下两层量子闭包：
+\begin{enumerate}
+  \item 由 Hilbert 载体 \(\mathcal H_Q\)、量子事件投影 \(P_{a,t}\)、Born 配对 \(\Tr(\rho P_{a,t})\)、纯态与混态、波函数坐标、复合体系张量积与纠缠、离散幺正演化 \(U\) 以及一般量子信道所构成的抽象离散时间 Hilbert 型量子力学；
+  \item 在第一层之上，由连续时间幺正群 \(U_t=e^{-\mathrm itH}\)、一般连续谱表示
+  \[
+  \mathcal H_Q\cong L^2(X,\nu;\mathbb C^{m(x)}),
+  \]
+  multiplicity-one 扇区上的坐标表示 \(L^2(X,\nu)\)，以及由内部审计种子控制的局域 Euclidean 标量 Schr\"odinger 扇区
+\[
+\mathrm i\,\partial_t\psi
+=
+\Bigl(-\frac12\Delta+V_\ast\Bigr)\psi
+\]
+  所构成的连续时间分支。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一层由定理 \ref{thm:cdim-hilbert-carrier}、定理 \ref{thm:cdim-quantum-event-projections}、定理 \ref{thm:cdim-born-pairing}、命题 \ref{prop:cdim-pure-states-rank-one}、推论 \ref{cor:cdim-wavefunction-as-coordinate}、定理 \ref{thm:cdim-composite-hilbert-carrier}、推论 \ref{cor:cdim-entanglement}、定理 \ref{thm:cdim-discrete-unitary-evolution} 与定理 \ref{thm:cdim-quantum-channels} 共同给出。
+第二层由定理 \ref{thm:cdim-continuous-unitary-group}、定理 \ref{thm:cdim-continuous-spectrum-representation}、推论 \ref{cor:cdim-coordinate-representation}、命题 \ref{prop:cdim-local-euclidean-sector-positive}、命题 \ref{prop:cdim-second-order-principal-symbol} 与定理 \ref{thm:cdim-local-schrodinger-sector} 给出。
+证毕。
+\end{proof}
+
+\begin{remark}[该闭包的精确边界]\label{rem:cdim-hilbert-quantum-boundary}
+若以定理 \ref{thm:cdim-hilbert-quantum-main-closure} 的第一层终点为目标，则从可读时间字到量子信道的整条链已经不再含有未对象化的内部结构缺口；就此意义而言，本文量子侧已经闭合出抽象的、离散时间的、Hilbert 型量子力学。
+
+第二层把这一离散结构继续延伸到连续时间幺正群、一般 \(L^2(X,\nu)\) 连续谱表示与审计局域 Euclidean 标量 Schr\"odinger 扇区。若进一步要求无条件的全局 Hamiltonian 标准形式、全局唯一的标准 \(L^2(\mathbb R^d)\) 粒子表象，或其具体质量、单位与实验参数的物理校准，则仍需另行补入更强的表示与校准分支；这些问题属于比本文更强的全局化目标，而不构成上述两层内部结构链本身的缺口。
+\end{remark}
+
+\endinput

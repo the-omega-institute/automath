@@ -1,0 +1,503 @@
+\subsection{\texorpdfstring{$p$}{p}-进 Prony--Hankel 精度塔的格子扩张、条件数账本与 simultaneous de-resonance}\label{subsec:conclusion-padic-prony-lattice-deresonance-precisiontower}
+本小节把非阿基米德 Hankel 理论中的四个此前分散的接口压成同一条精度塔主线：
+主导链将主子式赋值写成成对碰撞能量，
+伴随矩阵给出 sharp 的解坐标估值轮廓，
+偏移 Hankel 塔把这一精度税升级为格子扩张指数，
+而有限剩余域上的单一单位扰动又能以正概率同时 rigidify 整条主子式塔。
+
+\begin{theorem}[主导链下的 Hankel 精度税等于成对 \texorpdfstring{$p$}{p}-进能量]\label{thm:conclusion-padic-hankel-pairwise-collision-energy-precision-tax}
+在定理 \ref{thm:conclusion-nonarch-hankel-tropical-chain-increment} 的设定下，
+对每个 \(0\le r\le \kappa-1\) 记
+\[
+s_r:=v(\det H_r).
+\]
+则有精确公式
+\[
+s_r
+=
+2\sum_{1\le i<j\le r+1}v(a_j-a_i).
+\]
+特别地，对任意
+\[
+b\in \mathcal O_K^{r+1}
+\]
+与线性系统
+\[
+H_r x=b,
+\]
+其所有解都满足
+\[
+x\in \pi^{-s_r}\mathcal O_K^{r+1}.
+\]
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-nonarch-hankel-tropical-chain-increment}，
+\[
+v(\det H_r)
+=
+2\sum_{j=2}^{r+1}v\!\left(\prod_{i=1}^{j-1}(a_j-a_i)\right).
+\]
+把乘积赋值展开，即得
+\[
+s_r
+=
+2\sum_{j=2}^{r+1}\sum_{i=1}^{j-1}v(a_j-a_i)
+=
+2\sum_{1\le i<j\le r+1}v(a_j-a_i).
+\]
+另一方面，对 \(H_r\in M_{r+1}(\mathcal O_K)\) 有
+\[
+H_r^{-1}=\frac{\operatorname{adj}(H_r)}{\det(H_r)}.
+\]
+由于 \(\operatorname{adj}(H_r)\) 的条目都在 \(\mathcal O_K\) 中，故任意 \(b\in\mathcal O_K^{r+1}\) 的解都满足
+\[
+x\in \pi^{-v(\det H_r)}\mathcal O_K^{r+1}
+=
+\pi^{-s_r}\mathcal O_K^{r+1}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[伴随矩阵的列估值轮廓与可达最优解]\label{thm:conclusion-padic-hankel-adjugate-column-valuation-profile}
+设
+\[
+H\in M_d(\mathcal O_K)
+\]
+可逆，记
+\[
+s:=v(\det H),\qquad
+A=(A_{ij}):=\operatorname{adj}(H),
+\qquad
+c_j:=\min_{1\le i\le d}v(A_{ij}).
+\]
+则对任意右端项
+\[
+b=(b_1,\dots,b_d)^{\mathsf T}\in K^d,
+\qquad
+x=H^{-1}b,
+\]
+都有 sharp 下界
+\[
+\min_{1\le i\le d}v(x_i)\ \ge\ \min_{1\le j\le d}\bigl(v(b_j)+c_j\bigr)-s.
+\]
+并且该下界对每一列都是可达的：取标准基向量 \(e_j\) 为右端项，则对应解满足
+\[
+\min_{1\le i\le d}v\bigl((H^{-1}e_j)_i\bigr)=c_j-s.
+\]
+\end{theorem}
+\begin{proof}
+由伴随公式
+\[
+H^{-1}=\frac{\operatorname{adj}(H)}{\det H}
+\]
+可得对每个 \(i\),
+\[
+x_i=\frac{1}{\det H}\sum_{j=1}^{d}A_{ij}b_j.
+\]
+由非阿基米德不等式，
+\[
+v(x_i)\ge \min_{1\le j\le d}\bigl(v(A_{ij})+v(b_j)\bigr)-s.
+\]
+由于 \(v(A_{ij})\ge c_j\) 对一切 \(i,j\) 成立，遂有
+\[
+v(x_i)\ge \min_{1\le j\le d}\bigl(v(b_j)+c_j\bigr)-s.
+\]
+再对 \(i\) 取最小值得
+\[
+\min_i v(x_i)\ge \min_j\bigl(v(b_j)+c_j\bigr)-s.
+\]
+
+若取 \(b=e_j\)，则
+\[
+H^{-1}e_j
+\]
+恰为 \(H^{-1}\) 的第 \(j\) 列，并且
+\[
+(H^{-1}e_j)_i=\frac{A_{ij}}{\det H}.
+\]
+故
+\[
+\min_i v\bigl((H^{-1}e_j)_i\bigr)
+=
+\min_i\bigl(v(A_{ij})-s\bigr)
+=
+c_j-s.
+\]
+从而下界逐列可达。证毕。
+\end{proof}
+
+\begin{theorem}[非阿基米德条件数的精确账本公式]\label{thm:conclusion-padic-hankel-exact-condition-ledger}
+在定理 \ref{thm:conclusion-padic-hankel-adjugate-column-valuation-profile} 的设定下，
+设剩余域基数为
+\[
+q:=\bigl|\mathcal O_K/\pi\mathcal O_K\bigr|<\infty,
+\]
+并取归一化绝对值
+\[
+|\pi|_\pi=q^{-1}.
+\]
+在 \(K^d\) 上赋予 sup-范数
+\[
+|x|_\infty:=\max_i |x_i|_\pi.
+\]
+则逆矩阵的算子范数满足精确闭式
+\[
+|H^{-1}|_{\infty\to\infty}
+=
+q^{\,s-c_{\min}},
+\qquad
+c_{\min}:=\min_{1\le i,j\le d}v(A_{ij}).
+\]
+因此，\(H\) 的全部 \(p\)-进不稳定性被单一标量
+\[
+\kappa_\pi(H):=q^{\,s-c_{\min}}
+\]
+完全承载；这不是上界，而是精确等号。
+\end{theorem}
+\begin{proof}
+对任意矩阵 \(M=(M_{ij})\in M_d(K)\)，非阿基米德 sup-范数下有
+\[
+|M|_{\infty\to\infty}=\max_{1\le i,j\le d}|M_{ij}|_\pi.
+\]
+事实上，对任意 \(x\in K^d\),
+\[
+|(Mx)_i|_\pi
+\le
+\max_j |M_{ij}|_\pi\,|x|_\infty,
+\]
+故
+\[
+|M|_{\infty\to\infty}\le \max_{i,j}|M_{ij}|_\pi.
+\]
+而对达到右端极大的某个条目 \(M_{i_0j_0}\)，取标准基向量 \(e_{j_0}\) 即有
+\[
+|Me_{j_0}|_\infty\ge |M_{i_0j_0}|_\pi,
+\]
+故等号成立。
+
+应用于
+\[
+(H^{-1})_{ij}=\frac{A_{ij}}{\det H},
+\]
+得到
+\[
+|H^{-1}|_{\infty\to\infty}
+=
+\max_{i,j} q^{-v(A_{ij})+s}
+=
+q^{\,s-\min_{i,j}v(A_{ij})}
+=
+q^{\,s-c_{\min}}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[偏移 Hankel 塔的格子扩张律]\label{thm:conclusion-shifted-hankel-lattice-expansion-law}
+沿用定理 \ref{thm:conclusion-hankel-shift-padic-precision-slope} 的设定，
+并写偏移传播矩阵为
+\[
+\mathcal A\in M_d(\mathcal O_K),\qquad
+H_{k_0+r}=H_{k_0}\mathcal A^r\qquad(r\ge 0),
+\]
+其中
+\[
+\det(H_{k_0})\neq 0,\qquad \det(\mathcal A)\neq 0.
+\]
+定义解格
+\[
+\Lambda_r:=H_{k_0+r}^{-1}\mathcal O_K^d\subset K^d.
+\]
+若剩余域基数为 \(q<\infty\)，并记
+\[
+\lambda:=v(\det \mathcal A)\in\mathbf Z_{\ge 0},
+\]
+则
+\[
+\Lambda_r\subseteq \Lambda_{r+1}\qquad(r\ge 0),
+\]
+并且每一步扩张指数精确为
+\[
+[\Lambda_{r+1}:\Lambda_r]=q^\lambda.
+\]
+特别地，
+\[
+\Lambda_r=\Lambda_0\qquad(\forall r\ge 0)
+\iff
+\lambda=0.
+\]
+\end{theorem}
+\begin{proof}
+由
+\[
+H_{k_0+r+1}=H_{k_0+r}\mathcal A
+\]
+可得
+\[
+H_{k_0+r+1}^{-1}=\mathcal A^{-1}H_{k_0+r}^{-1},
+\]
+从而
+\[
+\Lambda_{r+1}=\mathcal A^{-1}\Lambda_r.
+\]
+由于 \(\mathcal A\in M_d(\mathcal O_K)\)，有
+\[
+\mathcal A\mathcal O_K^d\subseteq \mathcal O_K^d,
+\]
+故
+\[
+\mathcal O_K^d\subseteq \mathcal A^{-1}\mathcal O_K^d,
+\]
+进而推出
+\[
+\Lambda_r\subseteq \Lambda_{r+1}.
+\]
+
+再以 \(H_{k_0+r}\) 的乘法同构把商群 \(\Lambda_{r+1}/\Lambda_r\) 识别为
+\[
+\mathcal A^{-1}\mathcal O_K^d/\mathcal O_K^d.
+\]
+对 \(\mathcal A\) 取 Smith 标准形
+\[
+U\mathcal A V=\operatorname{diag}(\pi^{\lambda_1},\dots,\pi^{\lambda_d}),
+\qquad \lambda_i\ge 0,\qquad \sum_i \lambda_i=\lambda.
+\]
+于是
+\[
+\mathcal A^{-1}\mathcal O_K^d/\mathcal O_K^d
+\cong
+\bigoplus_{i=1}^{d}\pi^{-\lambda_i}\mathcal O_K/\mathcal O_K,
+\]
+其基数为
+\[
+\prod_{i=1}^{d} q^{\lambda_i}=q^\lambda.
+\]
+故
+\[
+[\Lambda_{r+1}:\Lambda_r]=q^\lambda.
+\]
+最后，
+\[
+[\Lambda_{r+1}:\Lambda_r]=1
+\iff
+q^\lambda=1
+\iff
+\lambda=0,
+\]
+而这又等价于 \(\Lambda_{r+1}=\Lambda_r\) 对所有 \(r\) 成立。证毕。
+\end{proof}
+
+\begin{theorem}[统一积分性的四重等价]\label{thm:conclusion-shifted-hankel-uniform-integrality-fourfold-equivalence}
+在定理 \ref{thm:conclusion-shifted-hankel-lattice-expansion-law} 的设定下，以下四个命题彼此等价：
+\begin{enumerate}
+  \item 对一切 \(r\ge 0\) 与一切 \(b\in \mathcal O_K^d\)，线性系统
+  \[
+  H_{k_0+r}x=b
+  \]
+  都有解
+  \[
+  x\in \mathcal O_K^d;
+  \]
+  \item 对一切 \(r\ge 0\)，有
+  \[
+  \Lambda_r=\mathcal O_K^d;
+  \]
+  \item 有
+  \[
+  v(\det H_{k_0})=0,\qquad v(\det \mathcal A)=0;
+  \]
+  \item 有
+  \[
+  \pi\nmid \det(H_{k_0}),\det(H_{k_0+1}).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\((1)\Leftrightarrow(2)\) 由 \(\Lambda_r=H_{k_0+r}^{-1}\mathcal O_K^d\) 的定义立即得到。
+
+\((3)\Leftrightarrow(4)\) 由
+\[
+\det(H_{k_0+1})=\det(H_{k_0})\det(\mathcal A)
+\]
+可得
+\[
+v(\det H_{k_0+1})=v(\det H_{k_0})+v(\det \mathcal A).
+\]
+故 \(\det(H_{k_0})\) 与 \(\det(H_{k_0+1})\) 同时为单位，当且仅当
+\[
+v(\det H_{k_0})=0,\qquad v(\det \mathcal A)=0.
+\]
+
+现证 \((3)\Rightarrow(2)\)。由 \(v(\det H_{k_0})=0\) 且 \(H_{k_0}\in M_d(\mathcal O_K)\)，其伴随矩阵条目仍在 \(\mathcal O_K\) 中，故
+\[
+H_{k_0}^{-1}\in M_d(\mathcal O_K),
+\]
+从而
+\[
+\Lambda_0=\mathcal O_K^d.
+\]
+又由 \(v(\det \mathcal A)=0\) 与 \(\mathcal A\in M_d(\mathcal O_K)\)，知 \(\mathcal A\in GL_d(\mathcal O_K)\)，于是
+\[
+\mathcal A^{-1}\mathcal O_K^d=\mathcal O_K^d.
+\]
+再由定理 \ref{thm:conclusion-shifted-hankel-lattice-expansion-law} 的公式
+\[
+\Lambda_{r+1}=\mathcal A^{-1}\Lambda_r
+\]
+归纳得
+\[
+\Lambda_r=\mathcal O_K^d\qquad(\forall r\ge 0).
+\]
+
+最后证 \((2)\Rightarrow(3)\)。若 \(\Lambda_0=\mathcal O_K^d\)，则 \(H_{k_0}^{-1}\) 为整矩阵，故 \(\det(H_{k_0})\) 为单位，即
+\[
+v(\det H_{k_0})=0.
+\]
+若再对一切 \(r\) 有 \(\Lambda_r=\mathcal O_K^d\)，则由定理 \ref{thm:conclusion-shifted-hankel-lattice-expansion-law},
+\[
+[\Lambda_{r+1}:\Lambda_r]=q^{v(\det \mathcal A)}=1,
+\]
+故 \(v(\det \mathcal A)=0\)。证毕。
+\end{proof}
+
+\begin{corollary}[偏移精度债的二次累积律]\label{cor:conclusion-shifted-hankel-cumulative-precision-debt}
+沿用定理 \ref{thm:conclusion-shifted-hankel-lattice-expansion-law} 的记号，记
+\[
+s_r:=v(\det H_{k_0+r})=s_0+r\lambda,
+\qquad
+s_0:=v(\det H_{k_0}),
+\qquad
+\lambda:=v(\det \mathcal A).
+\]
+定义长度 \(R\) 的累计精度债
+\[
+\mathcal D_R:=\sum_{r=0}^{R}s_r.
+\]
+则有精确闭式
+\[
+\mathcal D_R=(R+1)s_0+\frac{R(R+1)}{2}\lambda.
+\]
+特别地，
+\begin{enumerate}
+  \item 若 \(\lambda=0\)，则累计精度债仅线性增长；
+  \item 若 \(\lambda>0\)，则累计精度债严格二次增长。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+由
+\[
+H_{k_0+r}=H_{k_0}\mathcal A^r
+\]
+取行列式得
+\[
+\det(H_{k_0+r})=\det(H_{k_0})\det(\mathcal A)^r,
+\]
+故
+\[
+s_r=s_0+r\lambda.
+\]
+逐项求和即得
+\[
+\mathcal D_R
+=
+\sum_{r=0}^{R}(s_0+r\lambda)
+=
+(R+1)s_0+\lambda\sum_{r=0}^{R}r
+=
+(R+1)s_0+\frac{R(R+1)}{2}\lambda.
+\]
+最后两条只是对该闭式的直接解释。证毕。
+\end{proof}
+
+\begin{theorem}[单一单位扰动对整条 Hankel 主子式塔的 simultaneous de-resonance]\label{thm:conclusion-padic-hankel-simultaneous-deresonance}
+沿用命题 \ref{prop:conclusion-nonarch-hankel-random-unit-perturbation} 的设定，
+设剩余域
+\[
+k=\mathcal O_K/(\pi)
+\]
+有限，\(\card(k)=q\)。
+固定某个指标 \(j_0\in\{1,\dots,\kappa\}\)，并作单位扰动
+\[
+w_{j_0}\longmapsto w_{j_0}(u):=\widehat u\,w_{j_0},
+\qquad u\in k^\times,
+\]
+其中 \(\widehat u\in\mathcal O_K^\times\) 为任一提升。
+对每个 \(r=0,\dots,\kappa-1\)，定义
+\[
+\mathfrak A_r:=
+\sum_{\substack{I\in\mathcal S_r\\ j_0\in I}}
+\overline{\left(\frac{t_I}{\pi^{\mu_r}}\right)}
+\ \in k.
+\]
+若对一切 \(r\) 都有
+\[
+\mathfrak A_r\neq 0,
+\]
+则
+\[
+\mathbb P_u\Bigl(v(\det H_r(u))=\mu_r\ \text{对所有 }0\le r\le \kappa-1\Bigr)\ge 1-\frac{\kappa}{q}.
+\]
+\end{theorem}
+\begin{proof}
+对每个固定的 \(r\)，命题 \ref{prop:conclusion-nonarch-hankel-random-unit-perturbation} 告诉我们：
+若 \(\mathfrak A_r\neq 0\)，则坏事件
+\[
+E_r:=\{u\in k^\times:S_r(u)\equiv 0\pmod{\pi}\}
+\]
+满足
+\[
+\mathbb P_u(E_r)\le \frac{1}{q},
+\]
+并且在补事件 \(E_r^c\) 上有
+\[
+v(\det H_r(u))=\mu_r.
+\]
+因此由并集估计，
+\[
+\mathbb P_u\Bigl(\bigcup_{r=0}^{\kappa-1}E_r\Bigr)
+\le
+\sum_{r=0}^{\kappa-1}\mathbb P_u(E_r)
+\le
+\frac{\kappa}{q}.
+\]
+取补事件即得
+\[
+\mathbb P_u\Bigl(v(\det H_r(u))=\mu_r\ \forall\,0\le r\le \kappa-1\Bigr)\ge 1-\frac{\kappa}{q}.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[有限剩余域上存在一个 global rigidifier]\label{cor:conclusion-padic-hankel-global-rigidifier}
+在定理 \ref{thm:conclusion-padic-hankel-simultaneous-deresonance} 的设定下，若
+\[
+q>\kappa,
+\]
+则存在某个单位
+\[
+u_\ast\in k^\times
+\]
+使得整条 Hankel 主子式塔同时达到热带极小值：
+\[
+v(\det H_r(u_\ast))=\mu_r
+\qquad(0\le r\le \kappa-1).
+\]
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-padic-hankel-simultaneous-deresonance},
+\[
+\mathbb P_u\Bigl(v(\det H_r(u))=\mu_r\ \forall\,0\le r\le \kappa-1\Bigr)\ge 1-\frac{\kappa}{q}.
+\]
+当 \(q>\kappa\) 时，右端严格为正，故该事件非空。于是存在至少一个
+\[
+u_\ast\in k^\times
+\]
+满足所述 simultaneous rigidification 条件。证毕。
+\end{proof}
+
+综上，\(p\)-进 Hankel 理论在结论层面不再只是若干零散的赋值下界，而形成了一条完整的精度塔链：
+主导链把主子式赋值写成成对碰撞能量，
+伴随矩阵把这一能量转写成 sharp 的解坐标估值轮廓与精确条件数，
+偏移 Hankel 塔则把单层精度税升级为指数为 \(q^{v(\det\mathcal A)}\) 的格子扩张，
+而有限剩余域上的单一单位扰动又能以正概率同时 rigidify 全部主子式。
+于是，热带主导、Prony 精度税、格子算术与随机去共振，已在同一条非阿基米德精度塔中闭合。
+
+\endinput

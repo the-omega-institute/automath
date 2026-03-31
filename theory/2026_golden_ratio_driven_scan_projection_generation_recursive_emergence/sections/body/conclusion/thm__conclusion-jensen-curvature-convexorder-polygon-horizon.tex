@@ -403,3 +403,102 @@ S(w)=e^{-i\phi}w^{N+1}=e^{-i\phi}w^M.
 \]
 证毕。
 \end{proof}
+
+\begin{theorem}[稀疏零点半径谱的一尺度精确反演]\label{thm:conclusion-jensen-defect-single-scale-sparse-radius-inversion}
+设圆盘解析函数 \(F\) 的零点对数半径测度为
+\[
+\mu_F=\sum_j m_j\delta_{t_j},
+\qquad
+t_j=\log|a_j|<0.
+\]
+定义 Jensen 缺陷的对数半径表示 \(J_F(x)\)，以及帽核二阶差分
+\[
+\Delta_h^2 J_F(x):=\int (h-|x-t|)_+\,\dd\mu_F(t).
+\]
+若支撑点满足严格分离
+\[
+|t_i-t_j|>2h
+\qquad(i\neq j),
+\]
+则对每个原子位置 \(t_j\) 都有精确恢复公式
+\[
+\Delta_h^2 J_F(t_j)=h\,m_j,
+\]
+而对所有满足
+\[
+\operatorname{dist}(x,\operatorname{supp}\mu_F)\ge h
+\]
+的点则有
+\[
+\Delta_h^2 J_F(x)=0.
+\]
+因此，在最小间距超过 \(2h\) 的稀疏制度下，一条单尺度帽核扫描即可无混叠地恢复全部重数。
+\end{theorem}
+\begin{proof}
+主稿已给出精确恒等式
+\[
+\Delta_h^2J_F(x)=\sum_j m_j(h-|x-t_j|)_+.
+\]
+若 \(x=t_j\)，则该式变为
+\[
+\Delta_h^2J_F(t_j)=hm_j+\sum_{i\neq j}m_i(h-|t_j-t_i|)_+.
+\]
+由支撑分离条件 \(|t_i-t_j|>2h>h\)，对所有 \(i\neq j\) 都有
+\[
+(h-|t_j-t_i|)_+=0,
+\]
+故仅剩 \(hm_j\)。
+
+若 \(\operatorname{dist}(x,\operatorname{supp}\mu_F)\ge h\)，则对每个 \(j\) 都有 \(|x-t_j|\ge h\)，于是
+\[
+(h-|x-t_j|)_+=0,
+\]
+从而 \(\Delta_h^2J_F(x)=0\)。证毕。
+\end{proof}
+
+\begin{theorem}[Jensen 缺陷核验的 sharp 边界层障碍]\label{thm:conclusion-jensen-defect-sharp-boundary-layer-obstruction}
+仍在结论 \ref{thm:conclusion-jensen-defect-single-scale-sparse-radius-inversion} 的框架下，设观测仅允许全半径加性误差不超过 \(\varepsilon>0\)。则有两条严格互补的事实：
+\begin{enumerate}
+  \item 若希望用三点触发量
+  \[
+  \widetilde\Delta_h^2J(x)
+  \]
+  稳定检测“窗口中心存在单重零点”，则必须满足 sharp 门槛
+  \[
+  \varepsilon<\frac h4.
+  \]
+  \item 反过来，对任意 \(\eta\in(0,\varepsilon]\)，都存在一对函数 \(F_0,F_1\)，其中 \(F_0\) 盘内无零点而 \(F_1\) 在深度 \(\eta\) 处具有单重零点，且满足
+  \[
+  \sup_{0<r<1}|D_{F_1}(r)-D_{F_0}(r)|\le \varepsilon.
+  \]
+\end{enumerate}
+故任何只依赖 Jensen 缺陷全域观测、且误差预算为 \(\varepsilon\) 的确定性核验器，都不可能排除全部满足
+\[
+0<-\log|a|\le \varepsilon
+\]
+的边界层内部零点；而局部三点触发若要稳定分辨深度 \(h\)，其噪声预算恰须收缩到 \(h/4\) 以下。该门槛既是充分的，也是尖锐的。
+\end{theorem}
+\begin{proof}
+主稿对三点触发机制已证明：理想单重零点的三点响应等于 \(h\)，而每个观测点的加性误差至多为 \(\varepsilon\) 时，二阶差分的最坏总误差恰为 \(4\varepsilon\)。因此，要在最坏情形下仍保证正响应，必须且只需
+\[
+h-4\varepsilon>0,
+\]
+即
+\[
+\varepsilon<\frac h4.
+\]
+
+另一方面，主稿还构造了全域不可判别样本：取
+\[
+F_0\equiv 1,
+\qquad
+F_1(w)=1-\frac{w}{a},
+\qquad
+|a|=e^{-\eta},
+\]
+则 \(F_0\) 在盘内无零点，而 \(F_1\) 在深度 \(\eta\) 处恰有一个单重零点，并且 Jensen 缺陷的全半径偏差满足
+\[
+\sup_{0<r<1}|D_{F_1}(r)-D_{F_0}(r)|=\eta\le \varepsilon.
+\]
+这说明只凭误差预算为 \(\varepsilon\) 的全域观测，不可能排除全部深度不超过 \(\varepsilon\) 的边界层零点。证毕。
+\end{proof}

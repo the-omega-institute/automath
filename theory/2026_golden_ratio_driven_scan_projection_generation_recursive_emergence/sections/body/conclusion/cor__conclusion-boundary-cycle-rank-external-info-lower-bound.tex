@@ -192,5 +192,294 @@ r_n\ge A(f_n)-|X_n|
 故夹逼得结论。证毕。
 \end{proof}
 
-\endinput
+\begin{theorem}[精确混合审计的秩守恒律]\label{thm:conclusion-boundary-mixed-audit-rank-conservation}
+沿用推论 \ref{cor:conclusion-boundary-cycle-rank-external-info-lower-bound} 的记号，并固定素数 \(\wp\)。
+考虑任意确定性混合审计协议：输入
+\[
+\omega\in C^1(\mathsf B_f;\FF_\wp)
+\]
+后，协议至多进行 \(q\) 次自适应回路查询，并输出一个外置寄存值
+\[
+R(\omega)\in \mathcal R.
+\]
+记该协议的完整查询转录为 \(\operatorname{Transcript}_q(\omega)\)。若二元数据
+\[
+\bigl(\operatorname{Transcript}_q(\omega),R(\omega)\bigr)
+\]
+能够唯一确定上同调类
+\[
+[\omega]\in H^1(\mathsf B_f;\FF_\wp),
+\]
+则必有
+\[
+q+\left\lceil \log_\wp |\mathcal R| \right\rceil \ge r,
+\qquad
+r=\dim_{\FF_\wp}H^1(\mathsf B_f;\FF_\wp).
+\]
+换言之，回路查询深度与外置寄存容量之间满足严格的加性秩守恒律。
+\end{theorem}
+\begin{proof}
+把协议施用于零 \(1\)-上链 \(\omega=0\)。由于全部查询答案都为 \(0\)，协议沿一条确定的“全零转录”分支依次选出若干回路
+\[
+z_1,\dots,z_s\in Z_1(\mathsf B_f;\FF_\wp),
+\qquad
+s\le q.
+\]
+令 \(W\subset H_1(\mathsf B_f;\FF_\wp)\) 为这些回路类所张成的子空间，则
+\[
+\dim_{\FF_\wp}W\le q.
+\]
+考虑其消去子
+\[
+W^\perp
+:=
+\left\{
+[\eta]\in H^1(\mathsf B_f;\FF_\wp):
+\langle[\eta],z\rangle=0\ \ \forall z\in W
+\right\}.
+\]
+由有限维线性代数，
+\[
+\dim_{\FF_\wp}W^\perp=r-\dim_{\FF_\wp}W\ge r-q.
+\]
 
+对任意 \([\eta]\in W^\perp\)，取其任一代表 \(\eta\in C^1(\mathsf B_f;\FF_\wp)\)。由于
+\[
+\langle[\eta],z_j\rangle=0
+\qquad(1\le j\le s),
+\]
+协议在输入 \(\eta\) 时会沿与输入 \(0\) 完全相同的查询分支运行，因此
+\[
+\operatorname{Transcript}_q(\eta)=\operatorname{Transcript}_q(0).
+\]
+若
+\[
+\bigl(\operatorname{Transcript}_q(\omega),R(\omega)\bigr)
+\]
+要唯一确定上同调类，则映射
+\[
+[\eta]\longmapsto R(\eta)
+\]
+在 \(W^\perp\) 上必须为单射。于是
+\[
+|\mathcal R|\ge |W^\perp|=\wp^{\dim_{\FF_\wp}W^\perp}\ge \wp^{r-q}.
+\]
+取 \(\log_\wp\) 并上取整即得
+\[
+q+\left\lceil \log_\wp |\mathcal R| \right\rceil \ge r.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[查询—寄存预算的指数守恒律]\label{cor:conclusion-boundary-query-register-budget-exponential-law}
+在定理 \ref{thm:conclusion-boundary-mixed-audit-rank-conservation} 的设定下，若外置寄存器取值于任一满足
+\[
+|\mathcal R|=(E+1)^k
+\]
+的离散状态空间；特别地，可取正文中的截断 prime-register 空间 \(\mathcal P_{k,E}\)；则任意精确混合审计协议都满足
+\[
+q+k\log_\wp(E+1)\ge r.
+\]
+进一步，若存在一列满射粗粒化
+\[
+f_n:\Omega_n\twoheadrightarrow X_n
+\]
+满足推前熵非退化
+\[
+H(p_n)\ge h_0>0,
+\qquad
+|X_n|=o(2^n),
+\]
+则任意对应的精确混合审计族都满足
+\[
+q_n+k_n\log_\wp(E_n+1)=\Omega(2^n).
+\]
+\end{corollary}
+\begin{proof}
+第一式由定理 \ref{thm:conclusion-boundary-mixed-audit-rank-conservation} 与
+\[
+\log_\wp |\mathcal R|=\log_\wp (E+1)^k=k\log_\wp(E+1)
+\]
+直接得到。
+
+对第二式，由推论 \ref{cor:spg-boundary-cycle-rank-from-entropy}，
+\[
+r(f_n)\ge \frac{2^n}{2\log 2}\,H(p_n)-|X_n|+1.
+\]
+在
+\[
+H(p_n)\ge h_0>0,
+\qquad
+|X_n|=o(2^n)
+\]
+下，右端为 \(\Omega(2^n)\)。再把
+\[
+q_n+k_n\log_\wp(E_n+1)\ge r(f_n)
+\]
+代入，即得所示指数下界。证毕。
+\end{proof}
+
+\begin{theorem}[回路秩的四重同一化定理]\label{thm:conclusion-boundary-cycle-rank-fourfold-identification}
+沿用推论 \ref{cor:conclusion-boundary-cycle-rank-external-info-lower-bound} 与定理 \ref{thm:conclusion-boundary-padic-tower-exact-rank} 的记号，记
+\[
+r:=\rank_{\ZZ}H_1(\mathsf B_f;\ZZ).
+\]
+固定素数 \(p\)、层级 \(\ell\ge 1\)，并取任一非空解纤维 \(\mathcal F_{p^\ell}(\delta_\ell)\)。
+再对有限素数集 \(S\subset\mathbb P\) 与正整数向量 \(\boldsymbol\ell=(\ell_q)_{q\in S}\)，记
+\[
+M_S:=\prod_{q\in S}q^{\ell_q},
+\]
+并取相应的联合纤维 \(\mathcal F_{S,\boldsymbol\ell}(\delta)\)。
+定义：
+\begin{enumerate}
+  \item \(\mathrm{Bits}_{\min}(p,\ell)\) 为精确区分 \(\mathcal F_{p^\ell}(\delta_\ell)\) 所需的最小纯比特预算；
+  \item \(d^{\mathrm{nat}}_{p^\ell}\) 为在原生相位分辨率 \(b=\ell\log_2 p+O(1)\) 下，精确内化 \(\mathcal F_{p^\ell}(\delta_\ell)\) 所需的最小相位圆数；
+  \item \(d^{\mathrm{nat}}_{S,\boldsymbol\ell}\) 为在原生相位分辨率 \(b=\log_2 M_S+O(1)\) 下，精确内化 \(\mathcal F_{S,\boldsymbol\ell}(\delta)\) 所需的最小相位圆数。
+\end{enumerate}
+则有严格同一化
+\[
+\boxed{\;
+r
+=
+\frac{1}{\ell}\log_p\card{\mathcal F_{p^\ell}(\delta_\ell)}
+=
+\frac{\mathrm{Bits}_{\min}(p,\ell)}{\ell\log_2 p}
+=
+d^{\mathrm{nat}}_{p^\ell}
+=
+d^{\mathrm{nat}}_{S,\boldsymbol\ell}.
+\;}
+\]
+因此，回路秩 \(r\) 同时是有限层解纤维的精确对数斜率、最小离散选择复杂度的单位精度系数，以及本地与有限联合本地分辨率下的最小相位维数。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:conclusion-boundary-padic-tower-exact-slope-rigidity}，
+\[
+\frac{1}{\ell}\log_p\card{\mathcal F_{p^\ell}(\delta_\ell)}=r.
+\]
+由定理 \ref{thm:conclusion-boundary-exact-selector-complexity}，
+\[
+\mathrm{Bits}_{\min}(p,\ell)=\ell r\log_2 p,
+\]
+从而
+\[
+\frac{\mathrm{Bits}_{\min}(p,\ell)}{\ell\log_2 p}=r.
+\]
+
+另一方面，定理 \ref{thm:conclusion-boundary-minimal-phase-circle-count} 已证明：在原生相位分辨率 \(b=\ell\log_2 p+O(1)\) 下，精确内化 \(\mathcal F_{p^\ell}(\delta_\ell)\) 的最小相位圆数恰为 \(r\)，即
+\[
+d^{\mathrm{nat}}_{p^\ell}=r.
+\]
+对有限素数联合读出，定理 \ref{thm:conclusion-boundary-finite-prime-pure-phase-packing} 与定理 \ref{thm:conclusion-boundary-finite-prime-mixed-pareto-frontier} 给出：在原生联合分辨率 \(b=\log_2 M_S+O(1)\) 下，纯相位内化的最小圆数同样恰为 \(r\)，即
+\[
+d^{\mathrm{nat}}_{S,\boldsymbol\ell}=r.
+\]
+合并即得所示四重同一化。证毕。
+\end{proof}
+
+\begin{theorem}[路径独立审计的精确查询复杂度等于第一 Betti 数]\label{thm:conclusion-boundary-path-independence-query-complexity-equals-betti}
+固定预算层 \(B\)，记
+\[
+G_{\le B}
+\]
+为相应无向底图，并设
+\[
+r_B:=|E_{\le B}|-|V|+\#\mathrm{comp}(G_{\le B})
+=
+\rank_{\ZZ}H_1(G_{\le B};\ZZ).
+\]
+令 \(Q_{\min}(B)\) 表示任何确定性审计协议在最坏情形下，为判定“预算 \(B\) 下路径残差是否端点独立”所必须查询的最少回路数。则有严格等式
+\[
+\boxed{\;Q_{\min}(B)=r_B.\;}
+\]
+\end{theorem}
+\begin{proof}
+上界来自结论 \ref{con:xi-global-audit-consistency-finite-test}：取 \(G_{\le B}\) 的任一生成森林 \(T\)，对每条非树边 \(f\) 形成基本回路，则只需检验全部
+\[
+|E_{\le B}|-|V|+\#\mathrm{comp}(G_{\le B})=r_B
+\]
+条基本回路残差是否同时为零，便可决定路径独立性。故
+\[
+Q_{\min}(B)\le r_B.
+\]
+
+为证下界，反设存在某协议在最坏情形下只查询 \(q<r_B\) 条回路即可判定路径独立。把该协议施加于零残差配置时，它沿一条确定分支至多查询回路
+\[
+z_1,\dots,z_q\in Z_1(G_{\le B};\ZZ).
+\]
+令 \(W\subset H_1(G_{\le B};\ZZ)\) 为这些回路类张成的子群，则 \(\rank W\le q<r_B\)。
+由于
+\[
+H^1(G_{\le B};\ZZ)\cong \Hom(H_1(G_{\le B};\ZZ),\ZZ)
+\]
+的秩同样为 \(r_B\)，存在非零上同调类
+\[
+[\eta]\in H^1(G_{\le B};\ZZ)
+\]
+满足它在 \(W\) 上恒为零，即
+\[
+\langle [\eta],z_j\rangle=0
+\qquad (1\le j\le q).
+\]
+取任一代表 \(1\)-余链 \(\eta\)。则协议对输入 \(\eta\) 与输入零余链时，会得到完全相同的全部查询答案，因此转录相同。
+但 \([\eta]\neq 0\) 意味着 \(\eta\) 不是恰当余链，故由结论 \ref{con:xi-global-audit-consistency-finite-test}，它对应的路径残差并非端点独立；而零余链显然路径独立。于是该协议无法区分这两种情形，矛盾。
+故必有
+\[
+Q_{\min}(B)\ge r_B.
+\]
+与上界合并，得到 \(Q_{\min}(B)=r_B\)。证毕。
+\end{proof}
+
+\begin{corollary}[审计复杂度与界面面积在极限中同一]\label{cor:conclusion-boundary-audit-complexity-area-equivalence}
+设一列粗粒化 \(f_n:\Omega_n\twoheadrightarrow X_n\) 满足面积密度非退化
+\[
+\liminf_{n\to\infty}a_n>0,
+\qquad
+a_n:=\frac{A_n}{n2^{n-1}},
+\]
+以及
+\[
+\frac{|X_n|}{2^n}\to 0.
+\]
+记 \(Q_{\min}(n)\) 为第 \(n\) 层路径独立审计的最少最坏查询复杂度，则
+\[
+\frac{Q_{\min}(n)}{A_n}\to 1.
+\]
+若只假设推前熵非退化
+\[
+H(p_n)\ge h_0>0,
+\]
+则仍有
+\[
+Q_{\min}(n)=\Omega(2^n).
+\]
+因此，在本文框架下，可审计性成本在极限中由界面几何而非体积直接主导。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-boundary-path-independence-query-complexity-equals-betti}，
+\[
+Q_{\min}(n)=r_n,
+\qquad
+r_n:=\rank_{\ZZ}H_1(\mathsf B_{f_n};\ZZ).
+\]
+在面积密度非退化假设下，推论 \ref{cor:conclusion-boundary-cycle-rank-saturation} 给出
+\[
+\frac{r_n}{A_n}\to 1,
+\]
+故
+\[
+\frac{Q_{\min}(n)}{A_n}\to 1.
+\]
+
+若只假设 \(H(p_n)\ge h_0>0\)，则由推论 \ref{cor:spg-boundary-cycle-rank-from-entropy} 或定理 \ref{thm:conclusion-positive-pushforward-entropy-three-scale-law}，
+\[
+r_n=\Omega(2^n).
+\]
+再代入 \(Q_{\min}(n)=r_n\) 即得
+\[
+Q_{\min}(n)=\Omega(2^n).
+\]
+证毕。
+\end{proof}
+
+\endinput

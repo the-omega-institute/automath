@@ -1,0 +1,506 @@
+\subsection{边界 Gödel 全息码、回路秩复杂度、含量刚性与 gauge 熵同源的统一框架}\label{subsec:conclusion-boundary-code-cycle-rank-gauge-content-unification}
+
+沿用正文第 \(5.1.2\) 节关于 dyadic 立方复形、边界 Gödel 编码、平方类综合征、有限域边界方程、cycle-query 下界、有限群 gauge 计数以及 Stokes--通量恢复的记号。前述结论已经分别给出：dyadic 边界码的双重实现、精确 bulk 填充与局部反演病态、回路秩控制的混合审计预算、亚临界边界噪声下的二阶 Gödel--Stokes 刚性，以及有限群边界 gauge 码本的群胚容量公式。把这些接口并置之后，可以把同一对象理解为一个统一的边界编码--复杂度--几何框架：边界 Gödel 码既是平方类综合征受限的精确全息码，又是正码率但零相对距离的边界像码族；其复杂度主导量不是 cut-size 或某个特定寄存器，而是回路秩本身；而在几何侧与群胚侧，Minkowski 含量刚性与 gauge 熵增长也都由同一个边界结构参数统摄。
+
+\begin{theorem}[边界 Gödel 码的综合征完备性与线性时间 bulk 译码]\label{thm:conclusion-boundary-godel-syndrome-completeness-linear-decode}
+固定 \(m,n\ge 1\)。记 \(Q_m\) 为 \(I^n=[0,1]^n\) 的 \(m\)-级 dyadic 立方剖分，\(\mathfrak Q_m^{\partial}\) 为全部取向 \((n-1)\)-面素数生成的平方自由边界整数空间，并令
+\[
+\mathcal G_{m,n}
+:=
+\{H_m(U):\ U\subset I^n\ \text{为分辨率 }m\text{ 的 dyadic polycube}\}.
+\]
+若 \(\delta_{n-1}\) 表示平方类边界综合征同态，则
+\[
+\mathcal G_{m,n}
+=
+\{\,N\in \mathfrak Q_m^{\partial}:\ \delta_{n-1}(N)=1\,\}.
+\]
+等价地，边界 Gödel 码恰好与全部可填充平方类综合征一一对应。并且对任意 \(N\in\mathcal G_{m,n}\)，其唯一 bulk 填充
+\[
+x_N\in C_n(Q_m;\FF_2),
+\qquad
+\partial_n x_N=\mathbf G_{n-1}^{-1}(N),
+\]
+可在
+\[
+O\bigl(|V(\Gamma_m)|+|E(\Gamma_m)|\bigr)
+\]
+时间内恢复，其中 \(\Gamma_m\) 为相应的 \(n\)-胞腔邻接图。
+\end{theorem}
+\begin{proof}
+定理 \ref{thm:conclusion-dyadic-boundary-squareclass-syndrome-unique-fill} 已经给出如下等价：
+\[
+N\in \mathcal G_{m,n}
+\iff
+\delta_{n-1}(N)=1
+\iff
+\partial_{n-1}\mathbf G_{n-1}^{-1}(N)=0.
+\]
+这说明 \(\mathcal G_{m,n}\) 正好是平方类综合征为 \(1\) 的全部边界整数。进一步，该定理同时给出：每个这样的 \(N\) 都有唯一顶维填充 \(x_N\)，且由生成树上的 parity 递推可在线性时间
+\[
+O\bigl(|V(\Gamma_m)|+|E(\Gamma_m)|\bigr)
+\]
+恢复。证毕。
+\end{proof}
+
+\input{sections/body/conclusion/thm__conclusion-dyadic-boundary-code-syndrome-coset-audit-split}
+
+\begin{theorem}[边界 Gödel 全息的精确可逆性与线性病态性严格分裂]\label{thm:conclusion-boundary-godel-exactness-instability-bifurcation}
+在定理 \ref{thm:conclusion-boundary-godel-syndrome-completeness-linear-decode} 的设定下，同一边界算子 \(\partial_n\) 呈现严格的二元律：
+\begin{enumerate}
+  \item 在离散算术范畴中，任意 admissible 边界整数 \(N\in\mathcal G_{m,n}\) 都可被精确且线性时间地恢复为唯一 bulk；
+  \item 在实线性范畴中，任意线性左逆
+  \[
+  L_m:C_{n-1}(Q_m;\RR)\to C_n(Q_m;\RR),
+  \qquad
+  L_m\partial_n=I,
+  \]
+  都满足
+  \[
+  \|L_m\|_{2\to2}\ge \frac{2^{m/2}}{\sqrt{2n}}.
+  \]
+\end{enumerate}
+因此，若要求对所有噪声 \(\eta\) 统一满足
+\[
+\|L_m(\partial_n x+\eta)-x\|_2\le \delta,
+\]
+则必要条件为
+\[
+\|\eta\|_2\le \sqrt{2n}\,\delta\,2^{-m/2}.
+\]
+换言之，边界 Gödel 全息在算术语义下精确可逆，在连续线性语义下却必然指数病态。
+\end{theorem}
+\begin{proof}
+第一条就是定理 \ref{thm:conclusion-boundary-godel-syndrome-completeness-linear-decode}。第二条则由定理 \ref{thm:conclusion-dyadic-boundary-digital-exact-analog-illposed-split} 直接给出。
+若统一要求
+\[
+\|L_m(\partial_n x+\eta)-x\|_2=\|L_m\eta\|_2\le \delta,
+\]
+则必有
+\[
+\|\eta\|_2\le \delta\,\|L_m\|_{2\to2}^{-1}
+\le \sqrt{2n}\,\delta\,2^{-m/2}.
+\]
+故 exact invertibility 与 resolution-independent linear stability 不能共存。证毕。
+\end{proof}
+
+\begin{theorem}[边界方程的五重复杂度同阶律]\label{thm:conclusion-boundary-fivefold-complexity-coscaling}
+设 \(f_n:\Omega_n\twoheadrightarrow X_n\) 为一列粗粒化映射，\(\mathsf B_{f_n}\) 为其边界邻接多图，并记
+\[
+r_n:=\operatorname{rank}_{\ZZ}H_1(\mathsf B_{f_n};\ZZ).
+\]
+固定素数 \(p\)，并对任意 \(\delta_n\in\operatorname{im}(\partial_p)\) 记有限域边界方程解纤维为 \(\mathcal F_p(\delta_n)\)。若推前分布 \(p^{(n)}\) 满足
+\[
+H\bigl(p^{(n)}\bigr)\ge h_0>0,
+\qquad
+|X_n|=o(2^n),
+\]
+则下列五个量全部与 \(2^n\) 同阶，并且彼此只差显式常数因子：
+\begin{enumerate}
+  \item 回路秩 \(r_n\)；
+  \item 有限域边界方程的解熵 \(\log_p|\mathcal F_p(\delta_n)|\)；
+  \item 路径一致性混合审计的最坏回路查询复杂度；
+  \item 精确外置一个解所需的最小纯比特预算；
+  \item 精确外置整个解纤维所需的最小 prime-register 预算。
+\end{enumerate}
+更精确地，有
+\[
+\log_p|\mathcal F_p(\delta_n)|=r_n,
+\qquad
+q_n+\left\lceil \log_p |\mathcal R_n|\right\rceil \ge r_n
+\]
+对任意精确混合审计都成立；特别地，最坏查询复杂度至少为 \(r_n\)，而最小纯比特预算与最小 prime-register 预算都与 \(r_n\log_2 p\) 同阶。并且
+\[
+r_n\ge \frac{2^n}{2\log 2}H\bigl(p^{(n)}\bigr)-|X_n|+1=\Omega(2^n).
+\]
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:conclusion-boundary-cycle-rank-external-info-lower-bound}，
+\[
+|\mathcal F_p(\delta_n)|=p^{r_n},
+\]
+故
+\[
+\log_p|\mathcal F_p(\delta_n)|=r_n.
+\]
+再由定理 \ref{thm:conclusion-boundary-mixed-audit-rank-conservation}，
+\[
+q_n+\left\lceil \log_p |\mathcal R_n|\right\rceil \ge r_n
+\]
+对任意精确混合审计协议都成立，因此回路查询深度与外置寄存预算都以下界 \(r_n\) 为核心量。推论 \ref{cor:conclusion-boundary-query-register-budget-exponential-law} 进一步给出：若寄存器取值于 \(|\mathcal R_n|=(E_n+1)^{k_n}\) 的有限状态空间，则
+\[
+q_n+k_n\log_p(E_n+1)\ge r_n.
+\]
+故把寄存开销转成纯比特或 prime-register 预算时，主阶都等价于 \(r_n\log_2 p\)。
+
+最后，由同一推论调用正文推导的熵下界，
+\[
+r_n\ge \frac{2^n}{2\log 2}H\bigl(p^{(n)}\bigr)-|X_n|+1.
+\]
+在
+\[
+H\bigl(p^{(n)}\bigr)\ge h_0>0,
+\qquad
+|X_n|=o(2^n)
+\]
+下，右端为 \(\Omega(2^n)\)。故上述五类复杂度全部与 \(2^n\) 同阶。证毕。
+\end{proof}
+
+\begin{theorem}[亚临界平方自由噪声下的 Minkowski 含量刚性]\label{thm:conclusion-boundary-subcritical-noise-minkowski-content-rigidity}
+设 \(A\subset I^n\) 满足
+\[
+N_m(A)=M\,2^{md}+o(2^{md}),
+\qquad
+M\in(0,\infty),\ d\in(0,n].
+\]
+令 \(U_m(A)\) 为其 dyadic 外逼近。若另一列 dyadic polycube \(V_m\) 满足
+\[
+\operatorname{Dist}_m\bigl(U_m(A),V_m\bigr)=o\!\bigl(2^{m(d-1)}\bigr),
+\]
+则
+\[
+N_m(V_m)=M\,2^{md}+o(2^{md}).
+\]
+特别地，\(V_m\) 与 \(U_m(A)\) 具有相同的 dyadic Minkowski 维数 \(d\) 与相同的 dyadic Minkowski 含量 \(M\)；相应地，其归一化 primorial Gödel 码满足同一二阶展开
+\[
+\log\log G_m^*(V_m)
+=
+md\log 2+\log M+\log m+\log(d\log 2)+o(1).
+\]
+\end{theorem}
+\begin{proof}
+这正是定理 \ref{thm:conclusion-boundary-subcritical-perturbation-second-order-rigidity} 的内容。该定理首先由边界 Gödel 差分距离对体积差的 Lipschitz 控制推出
+\[
+|N_m(V_m)-N_m(A)|=o(2^{md}),
+\]
+从而得到
+\[
+N_m(V_m)=M\,2^{md}+o(2^{md}).
+\]
+再由正文关于 primorial 双对数二阶项恢复 Minkowski 含量的定理，即得所示归一化 primorial Gödel 二阶展开。证毕。
+\end{proof}
+
+\begin{theorem}[有限群 gauge 全息与有限域边界 lifting 的指数熵同源]\label{thm:conclusion-boundary-gauge-lifting-shared-cycle-rank-entropy}
+设 \(f_n:\Omega_n\twoheadrightarrow X_n\) 满足定理 \ref{thm:conclusion-boundary-fivefold-complexity-coscaling} 的熵非退化假设。固定有限群 \(G\) 与素数 \(p\)。记
+\[
+\mathsf{Code}_{f_n}(G):=X_n\times \mathsf{Rep}(\mathsf B_{f_n},G)
+\]
+为 gauge-约化边界码本，并记 \(\mathcal F_p(\delta_n)\) 为有限域边界方程解纤维。则有精确关系
+\[
+\log |\mathsf{Code}_{f_n}(G)|_{\mathrm{grpd}}
+=
+\log |X_n|+\bigl(r_n-b_0(\mathsf B_{f_n})\bigr)\log |G|,
+\]
+以及
+\[
+\log |\mathcal F_p(\delta_n)| = r_n\log p.
+\]
+因此，在 \(|X_n|=o(2^n)\) 时，
+\[
+\log |\mathsf{Code}_{f_n}(G)|_{\mathrm{grpd}}
+=
+\frac{\log |G|}{\log p}\,\log |\mathcal F_p(\delta_n)|+o(2^n).
+\]
+换言之，有限群 gauge 全息与有限域 lifting 的指数熵源本质上是同一个回路秩 \(r_n\)。
+\end{theorem}
+\begin{proof}
+由推论 \ref{cor:spg-boundary-gauge-groupoid-capacity}，
+\[
+|\mathsf{Code}_{f_n}(G)|_{\mathrm{grpd}}
+=
+|X_n|\cdot |G|^{\,b_1(\mathsf B_{f_n})-b_0(\mathsf B_{f_n})}.
+\]
+而
+\[
+b_1(\mathsf B_{f_n})=\operatorname{rank}_{\ZZ}H_1(\mathsf B_{f_n};\ZZ)=r_n,
+\]
+故
+\[
+\log |\mathsf{Code}_{f_n}(G)|_{\mathrm{grpd}}
+=
+\log |X_n|+\bigl(r_n-b_0(\mathsf B_{f_n})\bigr)\log |G|.
+\]
+另一方面，定理 \ref{thm:conclusion-boundary-fivefold-complexity-coscaling} 的证明中已经给出
+\[
+|\mathcal F_p(\delta_n)|=p^{r_n},
+\qquad
+\log |\mathcal F_p(\delta_n)|=r_n\log p.
+\]
+消去 \(r_n\) 即得
+\[
+\log |\mathsf{Code}_{f_n}(G)|_{\mathrm{grpd}}
+=
+\frac{\log |G|}{\log p}\,\log |\mathcal F_p(\delta_n)|
++\log |X_n|-b_0(\mathsf B_{f_n})\log |G|.
+\]
+又因
+\[
+b_0(\mathsf B_{f_n})\le |X_n|,
+\qquad
+|X_n|=o(2^n),
+\]
+故余项为 \(o(2^n)\)，从而得到所示渐近关系。证毕。
+\end{proof}
+
+\begin{theorem}[边界预算对 \texorpdfstring{$(r,c)$}{(r,c)} 的跨特征普适性]\label{thm:conclusion-boundary-budget-pair-cross-semantic-universality}
+设 \(f:\Omega_n\twoheadrightarrow X\) 为任意满射粗粒化，\(\mathsf B_f\) 为其边界邻接多图，并记
+\[
+r(f):=|E(\mathsf B_f)|-|X|+c(\mathsf B_f)=\rank_{\ZZ}H_1(\mathsf B_f;\ZZ),
+\qquad
+c(f):=c(\mathsf B_f).
+\]
+则同一对 \((r(f),c(f))\) 同时控制下列三类资源：
+\begin{enumerate}
+  \item 对任意素数 \(p\) 与任意 \(\delta\in\operatorname{im}(\partial_p)\)，有限域边界方程解纤维满足
+  \[
+  |\mathcal F_p(\delta)|=p^{\,r(f)};
+  \]
+  \item 对任意满足总守恒的 \(T\)-值边界数据 \(\delta_T\)，若 \(F_T(\delta_T)\neq\varnothing\)，则
+  \[
+  F_T(\delta_T)\ \text{是一个}\ T^{\,r(f)}\text{-torsor};
+  \]
+  \item 对任意有限群 \(G\)，其 boundary gauge 表示群胚满足
+  \[
+  |\operatorname{Rep}(\mathsf B_f,G)|_{\mathrm{grpd}}=|G|^{\,r(f)-c(f)}.
+  \]
+\end{enumerate}
+特别地，对码本
+\[
+\operatorname{Code}_f(G):=X\times \operatorname{Rep}(\mathsf B_f,G),
+\]
+有
+\[
+|\operatorname{Code}_f(G)|_{\mathrm{grpd}}=|X|\cdot |G|^{\,r(f)-c(f)}.
+\]
+因此，\((r(f),c(f))\) 不是边界图的附带计数，而是有限域 exactification、连续 torus 扭量与有限群 gauge 表示三种语义中的共同预算对。
+\end{theorem}
+\begin{proof}
+有限域边界方程的仿射纤维结构给出：若 \(\delta\in\operatorname{im}(\partial_p)\)，则解集是 \(\ker\partial_p\) 的平移，而
+\[
+\dim_{\FF_p}\ker\partial_p=r(f),
+\]
+故
+\[
+|\mathcal F_p(\delta)|=p^{r(f)}.
+\]
+
+另一方面，\(T\)-值散度方程一旦有解，其全体解组成
+\[
+\ker(\partial)\cong \operatorname{Hom}(H_1(\mathsf B_f;\ZZ),T)\cong T^{r(f)}
+\]
+的主齐次空间，因此是一个 \(T^{r(f)}\)-torsor。
+
+最后，由 boundary gauge 群胚容量公式，
+\[
+|\operatorname{Rep}(\mathsf B_f,G)|_{\mathrm{grpd}}
+=
+|G|^{\,b_1(\mathsf B_f)-b_0(\mathsf B_f)}
+=
+|G|^{\,r(f)-c(f)}.
+\]
+再乘上粗粒标签因子 \(|X|\) 即得码本公式。证毕。
+\end{proof}
+
+\begin{theorem}[正推前熵下的审计、寄存与 Gödel 三尺度律]\label{thm:conclusion-positive-pushforward-entropy-three-scale-law}
+设存在一列满射粗粒化
+\[
+f_n:\Omega_n\twoheadrightarrow X_n,
+\qquad
+p_x^{(n)}:=\frac{|f_n^{-1}(x)|}{2^n},
+\]
+满足
+\[
+H(p^{(n)})\ge h_0>0,
+\qquad
+|X_n|=o(2^n).
+\]
+记
+\[
+c_0:=\frac{h_0}{2\log 2},
+\qquad
+r_n:=\rank_{\ZZ}H_1(\mathsf B_{f_n};\ZZ).
+\]
+则
+\[
+r_n\ge (c_0+o(1))\,2^n.
+\]
+从而出现三种不可互相替代的资源下界：
+\begin{enumerate}
+  \item 任意确定性路径一致性审计协议的最坏情形回路查询数满足
+  \[
+  Q_n^{\mathrm{audit}}\ge (c_0+o(1))\,2^n;
+  \]
+  \item 任意固定维度的整数矩阵寄存器实现，若要注入承载某个有限域边界方程解纤维，则单个寄存预算满足
+  \[
+  B_n^{\mathrm{mat}}\ge (\log_2 p)\,(c_0+o(1))\,2^n;
+  \]
+  \item 若再要求通过互异素数指数 Gödel 化把 \(\{0,1\}^{r_n}\) 压成单个整数，则最坏情形 Gödel 长度满足
+  \[
+  \log L_{\max}^{(n)}\ge \left(\frac{h_0}{2}+o(1)\right)n2^n,
+  \]
+  从而对应的 Koenigs 位移满足
+  \[
+  \Delta_{\max}^{(n)}:=\frac12\log L_{\max}^{(n)}
+  \ge
+  \left(\frac{h_0}{4}+o(1)\right)n2^n.
+  \]
+\end{enumerate}
+因此，在正推前熵 regime 中，
+\[
+\text{路径一致性审计}\sim 2^n,
+\qquad
+\text{固定维寄存}\sim 2^n,
+\qquad
+\text{单标量 Gödel 外置}\sim n2^n.
+\]
+特别地，单整数外置相较于同质性审计多付出一个不可消去的 \(n\)-因子。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-boundary-fivefold-complexity-coscaling} 的回路秩下界，
+\[
+r_n\ge \frac{2^n}{2\log 2}H(p^{(n)})-|X_n|+1.
+\]
+在
+\[
+H(p^{(n)})\ge h_0>0,
+\qquad
+|X_n|=o(2^n)
+\]
+下，立得
+\[
+r_n\ge (c_0+o(1))2^n.
+\]
+
+同一定理已经说明：路径一致性审计的最坏查询复杂度以下界 \(r_n\) 为核心量，而固定维寄存若要承载一个大小为 \(p^{r_n}\) 的有限域解纤维，则至少需要
+\[
+r_n\log_2 p
+\]
+比特预算。于是得到前两条。
+
+最后，正文关于单标量 Gödel 外置的极大长度下界给出
+\[
+\log L_{\max}^{(n)}\ge r_n\log r_n-O(r_n).
+\]
+代入
+\[
+r_n\ge (c_0+o(1))2^n,
+\qquad
+\log r_n=n\log 2+O(1),
+\]
+便得到
+\[
+\log L_{\max}^{(n)}
+\ge
+\left(\frac{h_0}{2}+o(1)\right)n2^n.
+\]
+再除以 \(2\) 即得 Koenigs 位移下界。证毕。
+\end{proof}
+
+\begin{theorem}[有限核验闭包的复杂性三难]\label{thm:conclusion-finite-verification-closure-complexity-trilemma}
+设 \(\Pi\) 是定义在某类 succinct 投影、sofic 或权系统输入上的判定问题。若存在有限核验模式
+\[
+x\in \Pi
+\iff
+\forall \theta\in T(x)\ \forall m\in M(x):\ \operatorname{Bad}(x;\theta,m)=0,
+\]
+且 \(\operatorname{Bad}\) 可在多项式时间内判定，则有如下三难结论：
+\begin{enumerate}
+  \item 若 \(|T(x)|\cdot |M(x)|\) 与其证书描述长度都被 \(\mathrm{poly}(|x|)\) 上界，则
+  \[
+  \Pi\in \NP\cap \coNP;
+  \]
+  \item 若更强地 \(T(x)\) 与 \(M(x)\) 还能由确定性多项式时间算法综合生成，则
+  \[
+  \Pi\in \mathrm P;
+  \]
+  \item 因而若存在多项式 many-one 约化
+  \[
+  \mathrm{SAT}\le_m \Pi,
+  \]
+  则要么上述有限核验集不可能保持多项式规模，要么
+  \[
+  \NP=\coNP.
+  \]
+  若综合器亦为多项式时间，则进一步推出
+  \[
+  \mathrm P=\NP.
+  \]
+\end{enumerate}
+此外，若某等价关系 \(\sim\) 在该对象类上不可判定，则不存在任何有限值可计算完备不变量
+\[
+I:\mathcal O\to\{1,\dots,M\}
+\]
+使
+\[
+A\sim B\iff I(A)=I(B).
+\]
+因此，统一有限核验原理在 succinct 编码类上只能三择其二：有限、完备、可综合。
+\end{theorem}
+\begin{proof}
+若正反两侧都存在多项式规模的有限核验证书，则成员性与非成员性都可在非确定性多项式时间内验证，故
+\[
+\Pi\in \NP\cap \coNP.
+\]
+若 \(T(x)\) 与 \(M(x)\) 还能由确定性多项式时间综合，则可以显式遍历全部核验对并检查 \(\operatorname{Bad}\)，故
+\[
+\Pi\in \mathrm P.
+\]
+
+于是，若再有
+\[
+\mathrm{SAT}\le_m \Pi,
+\]
+且 \(\Pi\in \NP\cap \coNP\)，则 \(\mathrm{SAT}\in \coNP\)，从而得到
+\[
+\NP=\coNP.
+\]
+若更强地 \(\Pi\in \mathrm P\)，则 \(\mathrm{SAT}\in \mathrm P\)，即
+\[
+\mathrm P=\NP.
+\]
+
+最后，若存在有限值可计算完备不变量 \(I\)，则只需计算 \(I(A)\) 与 \(I(B)\) 并比较，便可判定 \(A\sim B\)，这与不可判定性矛盾。证毕。
+\end{proof}
+
+\begin{corollary}[普适有限审计层的复杂性坍缩障碍]\label{cor:conclusion-universal-finite-audit-layer-collapse-obstruction}
+不存在一个对所有紧凑输入族都同时满足下列三项的普适有限审计层：
+\begin{enumerate}
+  \item 边界级精确全息恢复；
+  \item 多项式时间证书综合；
+  \item 对 \(\coNP\)-型失败见证的完备判定。
+\end{enumerate}
+否则必有
+\[
+\mathrm P=\NP.
+\]
+\end{corollary}
+\begin{proof}
+若这样的普适有限审计层存在，则对每个输入都存在多项式可综合的有限正反证书闭包。由定理 \ref{thm:conclusion-finite-verification-closure-complexity-trilemma} 的第二条，相关判定问题将落入 \(\mathrm P\)。而同一定理的第三条又说明：一旦该类问题还能承载 \(\mathrm{SAT}\) 的多项式 many-one 约化，便强制推出
+\[
+\mathrm P=\NP.
+\]
+因此，边界级 exact holography 不可能被一个对全部紧凑输入族统一有效、且同时保持多项式综合与 \(\coNP\)-型失败完备性的有限审计层所普遍实现。证毕。
+\end{proof}
+
+\begin{corollary}[\texorpdfstring{\(\mathrm{NULL}/\mathrm{reject}/\mathrm{oracle}\)}{NULL/reject/oracle} 三歧是结构必需]\label{cor:conclusion-null-reject-oracle-trichotomy-structural}
+在统一审计语义中，三值输出
+\[
+\{\mathrm{pass},\ \mathrm{reject},\ \mathrm{NULL/oracle}\}
+\]
+并非实现层的工程性折衷，而是复杂性屏障所强迫出的结构三分：若试图在保持普适性的前提下消去 \(\mathrm{NULL/oracle}\) 分支，并仍要求有限完备证书与多项式时间综合，则将触发
+\[
+\mathrm P=\NP.
+\]
+\end{corollary}
+\begin{proof}
+若去除 \(\mathrm{NULL/oracle}\) 分支，则意味着每个实例都必须由统一的有限完备证书闭包在对象层内作出 \(\mathrm{pass}/\mathrm{reject}\) 二值裁决。若再要求这一证书闭包可多项式时间综合，则正落入推论 \ref{cor:conclusion-universal-finite-audit-layer-collapse-obstruction} 所排除的情形，从而推出
+\[
+\mathrm P=\NP.
+\]
+故 \(\mathrm{NULL/oracle}\) 不是实现习惯，而是为避免复杂性坍缩所必需保留的结构性第三值。证毕。
+\end{proof}
+
+\paragraph{统一读法}
+这一组结果把边界侧的五条原本分散的链压到了一起：平方类综合征给出 admissible 边界整数的精确判据，生成树递推给出唯一 bulk 的线性时间恢复；与此同时，线性或 \(C^1\) 反演仍不可避免地遭遇 \(2^{m/2}\) 级病态。对大尺度粗粒化而言，回路秩同时控制混合审计、外置寄存、有限域 lifting 与有限群 gauge 码本的指数熵；而当边界噪声低于 \(2^{m(d-1)}\) 阶时，Minkowski 含量与 primorial 双对数指纹又保持刚性。故在本文中，boundary holography 的真实主导对象并不是某个单一编码技巧，而是同一个回路--综合征--通量结构在码论、算术、几何与群胚语义下的四重投影。
+
+\endinput
