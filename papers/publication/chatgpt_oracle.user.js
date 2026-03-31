@@ -166,6 +166,53 @@
     return msgs.length === 0;
   }
 
+  // ── Wait for PDF upload to finish ─────────────────────────────────
+  async function waitForUploadComplete(timeoutMs = 60000) {
+    log("Waiting for PDF upload to complete...");
+    const start = Date.now();
+
+    while (Date.now() - start < timeoutMs) {
+      await sleep(2000);
+
+      // Check for upload progress indicators
+      const uploading =
+        document.querySelector("[class*='uploading']") ||
+        document.querySelector("[class*='progress']") ||
+        document.querySelector("[role='progressbar']") ||
+        document.querySelector("[class*='loading']");
+
+      // Check if an attachment chip/badge appeared (upload done)
+      const attached =
+        document.querySelector("[class*='attachment']") ||
+        document.querySelector("[class*='file-chip']") ||
+        document.querySelector("[data-testid*='attachment']") ||
+        document.querySelector("[class*='uploaded']") ||
+        document.querySelector("img[alt*='pdf']") ||
+        document.querySelector("[class*='file']");
+
+      const elapsed = Math.floor((Date.now() - start) / 1000);
+
+      if (!uploading && attached) {
+        log(`PDF upload complete (${elapsed}s), attachment visible`);
+        return true;
+      }
+
+      // Also check: send button becomes enabled = upload done
+      const sendBtn = findSendButton();
+      if (sendBtn && !sendBtn.disabled && elapsed > 5) {
+        log(`PDF upload likely complete (${elapsed}s), send button enabled`);
+        return true;
+      }
+
+      if (elapsed % 10 === 0 && elapsed > 0) {
+        log(`Upload waiting... ${elapsed}s (uploading=${!!uploading}, attached=${!!attached})`);
+      }
+    }
+
+    log("Upload wait timeout — proceeding anyway");
+    return false;
+  }
+
   // ── Upload PDF ───────────────────────────────────────────────────────
   async function uploadPDF(base64Data, fileName) {
     log(`PDF upload: ${fileName} (${(base64Data.length * 0.75 / 1024).toFixed(0)} KB)`);
@@ -178,6 +225,8 @@
     }
     const file = new File([byteArray], fileName, { type: "application/pdf" });
 
+    let injected = false;
+
     // Method 1: Find hidden file input and inject
     const fileInput = findFileInput();
     if (fileInput) {
@@ -187,63 +236,69 @@
         fileInput.files = dt.files;
         fileInput.dispatchEvent(new Event("change", { bubbles: true }));
         log("PDF: injected via file input");
-        await sleep(5000); // Wait for ChatGPT to process the upload
-        return true;
+        injected = true;
       } catch (e) {
         log(`PDF file input failed: ${e.message}`);
       }
     }
 
     // Method 2: Click the attachment button first, then use the file input
-    const attachBtn = document.querySelector(
-      "button[aria-label='Attach files'], button[aria-label='Upload file'], " +
-      "button[data-testid='composer-attach-button'], button[aria-haspopup='menu']"
-    );
-    if (attachBtn) {
-      log("PDF: clicking attachment button...");
-      attachBtn.click();
-      await sleep(1000);
+    if (!injected) {
+      const attachBtn = document.querySelector(
+        "button[aria-label='Attach files'], button[aria-label='Upload file'], " +
+        "button[data-testid='composer-attach-button'], button[aria-haspopup='menu']"
+      );
+      if (attachBtn) {
+        log("PDF: clicking attachment button...");
+        attachBtn.click();
+        await sleep(1000);
 
-      // Now look for file input again (it may appear after clicking)
-      const fi2 = document.querySelector("input[type='file']");
-      if (fi2) {
-        try {
-          const dt2 = new DataTransfer();
-          dt2.items.add(file);
-          fi2.files = dt2.files;
-          fi2.dispatchEvent(new Event("change", { bubbles: true }));
-          log("PDF: injected after clicking attach");
-          await sleep(5000);
-          return true;
-        } catch (e) {
-          log(`PDF inject after attach failed: ${e.message}`);
+        const fi2 = document.querySelector("input[type='file']");
+        if (fi2) {
+          try {
+            const dt2 = new DataTransfer();
+            dt2.items.add(file);
+            fi2.files = dt2.files;
+            fi2.dispatchEvent(new Event("change", { bubbles: true }));
+            log("PDF: injected after clicking attach");
+            injected = true;
+          } catch (e) {
+            log(`PDF inject after attach failed: ${e.message}`);
+          }
         }
       }
     }
 
     // Method 3: Drop event on the composer
-    log("PDF: trying drag-drop...");
-    const dropTarget =
-      document.querySelector("form") ||
-      findPromptInput()?.closest("div") ||
-      document.querySelector("[class*='composer']");
+    if (!injected) {
+      log("PDF: trying drag-drop...");
+      const dropTarget =
+        document.querySelector("form") ||
+        findPromptInput()?.closest("div") ||
+        document.querySelector("[class*='composer']");
 
-    if (dropTarget) {
-      const dt3 = new DataTransfer();
-      dt3.items.add(file);
-      for (const evtType of ["dragenter", "dragover", "drop"]) {
-        dropTarget.dispatchEvent(new DragEvent(evtType, {
-          bubbles: true, cancelable: true, dataTransfer: dt3,
-        }));
-        await sleep(300);
+      if (dropTarget) {
+        const dt3 = new DataTransfer();
+        dt3.items.add(file);
+        for (const evtType of ["dragenter", "dragover", "drop"]) {
+          dropTarget.dispatchEvent(new DragEvent(evtType, {
+            bubbles: true, cancelable: true, dataTransfer: dt3,
+          }));
+          await sleep(300);
+        }
+        log("PDF: drag-drop dispatched");
+        injected = true;
       }
-      log("PDF: drag-drop dispatched");
-      await sleep(5000);
-      return true;
     }
 
-    log("PDF: ALL METHODS FAILED — continuing without PDF");
-    return false;
+    if (!injected) {
+      log("PDF: ALL METHODS FAILED — continuing without PDF");
+      return false;
+    }
+
+    // Wait for the upload to actually finish before proceeding
+    await waitForUploadComplete(60000);
+    return true;
   }
 
   // ── Enter prompt text into ProseMirror ───────────────────────────────
@@ -332,13 +387,18 @@
   async function clickSend() {
     await sleep(1000); // Let UI catch up
 
-    // First check if send button is enabled
-    for (let i = 0; i < 10; i++) {
+    // Wait up to 30 seconds for send button to become enabled
+    // (it stays disabled while PDF is uploading)
+    log("Waiting for send button to be ready...");
+    for (let i = 0; i < 60; i++) {
       const btn = findSendButton();
       if (btn && !btn.disabled) {
         btn.click();
         log("Send button clicked");
         return true;
+      }
+      if (i > 0 && i % 10 === 0) {
+        log(`Send button not ready yet... ${i * 0.5}s`);
       }
       await sleep(500);
     }
@@ -359,7 +419,7 @@
       return true;
     }
 
-    log("ERROR: cannot send");
+    log("ERROR: cannot send after 30s wait");
     return false;
   }
 
