@@ -169,8 +169,7 @@ private theorem hfff (m : Nat) : (sClassH m false false false).card = crossCorrS
 
 private theorem httt (m : Nat) : (sClassH m true true true).card = crossCorrSqHigh m := by
   rw [← hfff]; congr 1; ext ⟨v1, v2, v3⟩
-  simp only [sClassH, Finset.mem_filter, Finset.mem_univ, true_and, ite_true, ite_false,
-    Nat.add_zero]; constructor <;> intro ⟨h1, h2⟩ <;> constructor <;> omega
+  simp only [sClassH, Finset.mem_filter, Finset.mem_univ, true_and, ite_true]; constructor <;> intro ⟨h1, h2⟩ <;> constructor <;> omega
 
 -- H(ftt) = CCSL: wt1=wt2+F, wt3+F=wt1+F → wt1=wt2+F, wt3=wt1.
 -- Group by n=wt2: ewc(n)·ewc(n+F)² = CCSL
@@ -210,8 +209,7 @@ private theorem htft (m : Nat) : (sClassH m true false true).card = crossCorrSqL
   rw [← Finset.card_biUnion]
   · congr 1; ext ⟨v1, v2, v3⟩
     simp only [sClassH, Finset.mem_biUnion, Finset.mem_range, Finset.mem_product,
-      Finset.mem_filter, Finset.mem_univ, true_and,
-      eq_self_iff_true, Bool.false_eq_true, ite_true, ite_false, Nat.add_zero]
+      Finset.mem_filter, Finset.mem_univ, true_and, Bool.false_eq_true, ite_true, ite_false, Nat.add_zero]
     exact ⟨fun ⟨h1, h2⟩ => ⟨weight v1, X.weight_lt_fib v1, rfl, by linarith, by linarith⟩,
       fun ⟨n, _, hw1, hw2, hw3⟩ => ⟨by linarith, by linarith⟩⟩
   · intro n _ n' _ hne
@@ -248,14 +246,14 @@ private theorem lfff (m : Nat) : (sClassL m false false false).card = crossCorrS
   apply Finset.card_bij (fun p _ => (p.2.1, p.2.2, p.1))
   · intro ⟨v1, v2, v3⟩ hv
     simp only [sClassL, exactTripleCollisionClass, Finset.mem_filter, Finset.mem_univ, true_and,
-      Bool.false_eq_true, eq_self_iff_true, ite_false, ite_true, Nat.add_zero] at hv ⊢
+      Bool.false_eq_true, ite_false, ite_true, Nat.add_zero] at hv ⊢
     constructor <;> linarith
   · intro ⟨a1, a2, a3⟩ _ ⟨c1, c2, c3⟩ _ h
     simp only [Prod.mk.injEq] at h
     exact Prod.ext h.2.2 (Prod.ext h.1 h.2.1)
   · intro ⟨v1, v2, v3⟩ hv
     simp only [sClassL, exactTripleCollisionClass, Finset.mem_filter, Finset.mem_univ, true_and,
-      Bool.false_eq_true, eq_self_iff_true, ite_false, ite_true, Nat.add_zero] at hv ⊢
+      Bool.false_eq_true, ite_false, ite_true, Nat.add_zero] at hv ⊢
     exact ⟨(v3, v1, v2), ⟨by linarith, by linarith⟩, rfl⟩
 
 private theorem lfft (m : Nat) : (sClassL m false false true).card = crossCorrSqHigh m := by
@@ -268,14 +266,14 @@ private theorem lfft (m : Nat) : (sClassL m false false true).card = crossCorrSq
   apply Finset.card_bij (fun p _ => (p.2.1, p.1, p.2.2))
   · intro ⟨v1, v2, v3⟩ hv
     simp only [sClassL, exactTripleCollisionClass, Finset.mem_filter, Finset.mem_univ, true_and,
-      Bool.false_eq_true, eq_self_iff_true, ite_false, ite_true, Nat.add_zero] at hv ⊢
+      Bool.false_eq_true, ite_false, ite_true, Nat.add_zero] at hv ⊢
     constructor <;> linarith
   · intro ⟨a1, a2, a3⟩ _ ⟨c1, c2, c3⟩ _ h
     simp only [Prod.mk.injEq] at h
     exact Prod.ext h.2.1 (Prod.ext h.1 h.2.2)
   · intro ⟨v1, v2, v3⟩ hv
     simp only [sClassL, exactTripleCollisionClass, Finset.mem_filter, Finset.mem_univ, true_and,
-      Bool.false_eq_true, eq_self_iff_true, ite_false, ite_true, Nat.add_zero] at hv ⊢
+      Bool.false_eq_true, ite_false, ite_true, Nat.add_zero] at hv ⊢
     exact ⟨(v2, v1, v3), ⟨by linarith, by linarith⟩, rfl⟩
 
 private theorem lftf (m : Nat) : (sClassL m false true false).card = crossCorrSqHigh m := by
@@ -292,14 +290,14 @@ private theorem lftf (m : Nat) : (sClassL m false true false).card = crossCorrSq
   apply Finset.card_bij (fun p _ => (p.2.2, p.2.1, p.1))
   · intro ⟨v1, v2, v3⟩ hv
     simp only [sClassL, exactTripleCollisionClass, Finset.mem_filter, Finset.mem_univ, true_and,
-      Bool.false_eq_true, eq_self_iff_true, ite_false, ite_true, Nat.add_zero] at hv ⊢
+      Bool.false_eq_true, ite_false, ite_true, Nat.add_zero] at hv ⊢
     constructor <;> linarith
   · intro ⟨a1, a2, a3⟩ _ ⟨c1, c2, c3⟩ _ h
     simp only [Prod.mk.injEq] at h
     exact Prod.ext h.2.2 (Prod.ext h.2.1 h.1)
   · intro ⟨v1, v2, v3⟩ hv
     simp only [sClassL, exactTripleCollisionClass, Finset.mem_filter, Finset.mem_univ, true_and,
-      Bool.false_eq_true, eq_self_iff_true, ite_false, ite_true, Nat.add_zero] at hv ⊢
+      Bool.false_eq_true, ite_false, ite_true, Nat.add_zero] at hv ⊢
     exact ⟨(v3, v2, v1), ⟨by linarith, by linarith⟩, rfl⟩
 
 private theorem lftt (m : Nat) : (sClassL m false true true).card = exactWeightTriple m := by
@@ -310,8 +308,7 @@ private theorem lftt (m : Nat) : (sClassL m false true true).card = exactWeightT
 
 private theorem lttt (m : Nat) : (sClassL m true true true).card = crossCorrSqLow m := by
   rw [← lfff]; congr 1; ext ⟨v1, v2, v3⟩
-  simp only [sClassL, Finset.mem_filter, Finset.mem_univ, true_and, ite_true, ite_false,
-    Nat.add_zero]; constructor <;> intro ⟨h1, h2⟩ <;> constructor <;> omega
+  simp only [sClassL, Finset.mem_filter, Finset.mem_univ, true_and, ite_true]; constructor <;> intro ⟨h1, h2⟩ <;> constructor <;> omega
 
 -- Empty L classes
 private theorem ltff (m : Nat) : (sClassL m true false false).card = 0 := by
@@ -555,7 +552,7 @@ theorem momentSum_three_recurrence (m : Nat) :
 
 /-- S_3 is strictly monotone for m ≥ 1.
     prop:pom-s3-recurrence -/
-theorem momentSum_three_strict_mono (m : Nat) (hm : 1 ≤ m) :
+theorem momentSum_three_strict_mono (m : Nat) (_hm : 1 ≤ m) :
     momentSum 3 m < momentSum 3 (m + 1) :=
   momentSum_three_strict_mono_of momentSum_three_recurrence m
 
@@ -637,7 +634,7 @@ private theorem exactWeightTriple_pos (m : Nat) : 0 < exactWeightTriple m := by
 
 /-- EWT is strictly monotone for m ≥ 1.
     bridge:ewt-strict-mono -/
-theorem exactWeightTriple_strict_mono (m : Nat) (hm : 1 ≤ m) :
+theorem exactWeightTriple_strict_mono (m : Nat) (_hm : 1 ≤ m) :
     exactWeightTriple m < exactWeightTriple (m + 1) := by
   have h := exactWeightTriple_succ m
   have hpos := exactWeightTriple_pos m
@@ -798,6 +795,28 @@ theorem momentSum_three_sixteen : momentSum 3 16 = 63809152 := by
   rw [show (13 : Nat) + 1 = 14 from rfl, show (13 : Nat) + 2 = 15 from rfl,
     show (13 : Nat) + 3 = 16 from rfl,
     momentSum_three_thirteen, momentSum_three_fourteen, momentSum_three_fifteen] at h
+  omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R156: S_3(17) and S_3(18) chain values
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_3(17) = 196921664.
+    prop:pom-s3-seventeen -/
+theorem momentSum_three_seventeen : momentSum 3 17 = 196921664 := by
+  have h := momentSum_three_recurrence 14
+  rw [show (14 : Nat) + 1 = 15 from rfl, show (14 : Nat) + 2 = 16 from rfl,
+    show (14 : Nat) + 3 = 17 from rfl,
+    momentSum_three_fourteen, momentSum_three_fifteen, momentSum_three_sixteen] at h
+  omega
+
+/-- S_3(18) = 607728448.
+    prop:pom-s3-eighteen -/
+theorem momentSum_three_eighteen : momentSum 3 18 = 607728448 := by
+  have h := momentSum_three_recurrence 15
+  rw [show (15 : Nat) + 1 = 16 from rfl, show (15 : Nat) + 2 = 17 from rfl,
+    show (15 : Nat) + 3 = 18 from rfl,
+    momentSum_three_fifteen, momentSum_three_sixteen, momentSum_three_seventeen] at h
   omega
 
 end Omega

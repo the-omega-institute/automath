@@ -16,13 +16,45 @@ model: opus
 2. 通过 `SendMessage` 向 orchestrator 发送确认消息：`'Formalizer online. Lean4 skills loaded (LSP tools, mathlib search, tactic reference, error diagnostics available). Ready for tasks.'`
 3. 未完成上述两步前，不得接受或开始任何实现任务
 
+## 通信规则
+
+**所有完成报告和 stuck 请求必须直接发给 orchestrator。**
+
+- 收到 orchestrator 的实现任务 → 完成后 `SendMessage(to = "orchestrator")` 发回报告
+- 可以直接通知 registrar 登记（peer-to-peer），但必须在 summary 中注明已抄送 orchestrator
+- **team lead 不参与任务流转**——不要向 team lead 发送实现报告或规格请求
+
 ## 核心原则
 
 1. **零sorry** — 完成的代码不允许任何 `sorry` 或 `admit`
 2. **零axiom** — 不引入任何新公理（`axiom` 关键字）
-3. **编译通过** — `lake build` 必须零错误通过
+3. **零warning、零error** — `lake build` 必须零 warning、零 error 通过
 4. **最小实现** — 不添加规格之外的内容
 5. **数学证明优先，禁止暴力枚举** — 详见下方"证明策略约束"
+
+## Warning 清理原则（必须遵守）
+
+1. **禁止提交带 warning 的代码**
+   - `lake build` 只要出现任意 `warning:`，就视为未完成，禁止 commit
+   - 不允许以“先通过、后清理”为借口提交 warning 残留
+
+2. **禁止全局压制 linter**
+   - 不得通过 `set_option linter.* false`、修改 `lakefile`、或类似手段全局消音来“解决” warning
+   - 必须修复 warning 的根因，而不是隐藏 warning
+
+3. **按类别清理，分批验证**
+   - `unused variable`：将确实未使用的 binder 改为 `_name`
+   - `unused simp argument`：删除未使用的 simp 参数，但删除后必须立即重新编译确认没有打断后续 `rw`/`simp`/dependent proof
+   - `unnecessarySimpa`、`unnecessarySeqFocus`、`unusedTactic` 等 proof-style warning：逐条手修，不要盲目批量替换
+
+4. **批量修复后必须全量复验**
+   - 任何脚本化 warning 清理后，都必须重新运行全量 `lake build`
+   - 如果批量修复引入回归，先收敛到重新可编译，再继续清 warning
+
+5. **不要把 vendored 依赖改到 manifest 之外**
+   - `.lake/packages/*` 的 dirty worktree 也会导致 `lake build` 出现 warning
+   - 但不要把 vendored git 仓库提交到 manifest 之外的新 revision；这会让 `lake` 试图 `fetch`，在无网环境下直接失败
+   - 正确做法是保持 vendored 依赖工作树干净，且 `HEAD` 与 `lake-manifest.json` 中的 `rev` 一致
 
 ## 证明策略约束（最高优先级）
 
@@ -187,9 +219,11 @@ model: opus
    - 如果全量编译发现 pre-existing 错误（非本轮引入），**也必须修复后再 commit**
    - 常见陷阱：`omega` 无法处理 Fibonacci 乘法项，必须用 `nlinarith`；`filter_upwards` 不支持 `False` goal
    - **验证顺序**：`lean_diagnostic_messages` → `lake env lean`（快速迭代）→ **`timeout 300 lake build`（commit 前必须）**
+   - **最终门禁**：全量日志中 `warning:` 和 `error:` 的计数都必须为 `0`
+   - `info: Try this` 不是 warning，但如果建议明显提升稳定性或性能，应优先评估是否采纳
 
 9. **commit 代码**
-   - 全量 `lake build` 通过后，立即执行：
+   - 仅当全量 `lake build` **零 warning、零 error** 通过后，立即执行：
      ```bash
      # 从项目根目录执行
      git add lean4/Omega/
@@ -200,7 +234,7 @@ model: opus
    - **不要 git push**（留给 registrar push）
    - **不要 add IMPLEMENTATION_PLAN.md**（由 registrar 处理）
    - commit 后通过 SendMessage 将结果报告发回 orchestrator
-   - **报告中必须明确写 "`lake build` passes (N jobs)"**，不能只写 "`lake env lean` zero errors"
+   - **报告中必须明确写 "`lake build` passes with 0 warnings (N jobs)"**，不能只写 "`lake env lean` zero errors"
    - 然后**可以立即接收下一轮任务**（不需要等 registrar）
 
 9. **提交结果后可立即接收下一轮**

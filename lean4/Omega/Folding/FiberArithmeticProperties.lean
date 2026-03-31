@@ -467,7 +467,7 @@ theorem Fold_add_weight (w1 w2 : Word m) :
   apply eq_of_stableValue_eq
   rw [stableValue_stableAdd, stableValue_ofNat_mod,
       stableValue_Fold_mod, stableValue_Fold_mod]
-  simp [Nat.mod_mod, Nat.add_mod]
+  simp [ Nat.add_mod]
 
 /-- Paper label: stableAdd definition.
     def:stable-add -/
@@ -522,14 +522,14 @@ theorem paper_division_section (a : ℤ) (b : ℤ) (hb : 0 < b) :
     ∃! p : ℤ × ℤ, a = p.1 * b + p.2 ∧ 0 ≤ p.2 ∧ p.2 < b := by
   refine ⟨(a / b, a % b), ⟨?_, ?_, ?_⟩, ?_⟩
   · -- a = (a / b) * b + a % b
-    have := Int.ediv_add_emod a b  -- a = b * (a / b) + a % b
+    have := Int.mul_ediv_add_emod a b  -- a = b * (a / b) + a % b
     linarith
   · exact Int.emod_nonneg a (by omega)
   · exact Int.emod_lt_of_pos a hb
   · rintro ⟨q', r'⟩ ⟨heq, hr0, hrb⟩
     simp only [Prod.mk.injEq]
     have hdiv : a = (a / b) * b + a % b := by
-      have := Int.ediv_add_emod a b; linarith
+      have := Int.mul_ediv_add_emod a b; linarith
     have hmod_nn : 0 ≤ a % b := Int.emod_nonneg a (by omega)
     have hmod_lt : a % b < b := Int.emod_lt_of_pos a hb
     -- From heq and hdiv: q' * b + r' = (a/b) * b + a%b
@@ -560,7 +560,7 @@ theorem paper_symmetric_remainder (a : ℤ) (b : ℤ) (hb : 0 < b) :
   set r₀ := a % b with hr₀_def
   set q₀ := a / b with hq₀_def
   have hdiv : a = q₀ * b + r₀ := by
-    have := Int.ediv_add_emod a b; linarith
+    have := Int.mul_ediv_add_emod a b; linarith
   have hr₀_nonneg : 0 ≤ r₀ := Int.emod_nonneg a (by omega)
   have hr₀_lt : r₀ < b := Int.emod_lt_of_pos a hb
   by_cases h : r₀ < (b + 1) / 2
@@ -591,7 +591,7 @@ theorem stableValue_stableSucc (x : X m) (hm : 1 ≤ m) :
 
 /-- succ(0) = 1.
     thm:successor-structure -/
-theorem stableSucc_zero (hm : 1 ≤ m) :
+theorem stableSucc_zero (_hm : 1 ≤ m) :
     stableSucc (stableZero (m := m)) = stableOne := by
   simp only [stableSucc, stableAdd_zero_left]
 
@@ -682,7 +682,7 @@ theorem stableValue_iteratedStableAdd (x : X m) (n : Nat) :
 
 /-- Iterated addition equals multiplication: n·x via iteration = stableMul.
     thm:mul-by-iterated-add -/
-theorem iteratedStableAdd_eq_stableMul (x y : X m) (hm : 1 ≤ m) :
+theorem iteratedStableAdd_eq_stableMul (x y : X m) (_hm : 1 ≤ m) :
     iteratedStableAdd x (stableValue y) = stableMul y x := by
   apply eq_of_stableValue_eq
   rw [stableValue_iteratedStableAdd, stableValue_stableMul]
@@ -749,7 +749,7 @@ theorem stableMul_from_successor {m : Nat} (x y : X m) (hm : 1 ≤ m) :
     (→) f exists ⟹ F_d ∣ F_e (since f maps n↦n mod F_d and F_e ≡ 0) ⟹ d ∣ e by fib_dvd_iff.
     (←) d ∣ e ⟹ F_d ∣ F_e ⟹ ZMod.castHom gives the canonical quotient map.
     cor:cross-resolution-morphism-existence -/
-theorem restrict_ringHom_exists_iff (d e : Nat) (hd : 3 ≤ d) (he : 3 ≤ e) :
+theorem restrict_ringHom_exists_iff (d e : Nat) (hd : 3 ≤ d) (_he : 3 ≤ e) :
     (∃ f : ZMod (Nat.fib e) →+* ZMod (Nat.fib d), f 1 = 1) ↔ d ∣ e := by
   constructor
   · -- (→) existence of ring hom implies d ∣ e
@@ -783,7 +783,7 @@ theorem stableAdd_carry_binary (x y : X m) :
 
 /-- X_m has exactly F_{m+2} elements and characteristic F_{m+2}.
     prop:pom-fold-as-section -/
-theorem X_card_eq_char (m : Nat) (hm : 1 ≤ m) :
+theorem X_card_eq_char (m : Nat) (_hm : 1 ≤ m) :
     Fintype.card (X m) = ringChar (X m) := by
   rw [X.card_eq_fib]
   exact (ringChar.eq_iff.mpr X.instCharP).symm
@@ -828,5 +828,66 @@ theorem stableAdd_value_mod (x y : X m) :
     stableValue (x + y) = (stableValue x + stableValue y) % Nat.fib (m + 2) := by
   show stableValue (X.stableAdd x y) = _
   exact X.stableValue_stableAdd x y
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R167: Fiber parity split identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Parity split: 2 * #{x in S | f(x)=1} = |S| + sum f.
+    thm:pom-fiber-rewrite-parity-exact-split-mod3-obstruction -/
+theorem parity_split_identity {α : Type*} [DecidableEq α] {S : Finset α} {f : α → ℤ}
+    (hf : ∀ x ∈ S, f x = 1 ∨ f x = -1) :
+    2 * ((S.filter (fun x => f x = 1)).card : ℤ) =
+      S.card + ∑ x ∈ S, f x := by
+  have hpart : S = S.filter (fun x => f x = 1) ∪ S.filter (fun x => ¬(f x = 1)) :=
+    (Finset.filter_union_filter_not_eq _ S).symm
+  have hdisj : Disjoint (S.filter (fun x => f x = 1)) (S.filter (fun x => ¬(f x = 1))) :=
+    Finset.disjoint_filter_filter_not S S (fun x => f x = 1)
+  -- Every element with f x ≠ 1 has f x = -1
+  have hm1 : ∀ x ∈ S.filter (fun x => ¬(f x = 1)), f x = -1 := by
+    intro x hx
+    simp only [Finset.mem_filter] at hx
+    exact (hf x hx.1).resolve_left hx.2
+  -- |S| = |S+| + |S-|
+  have hcard : S.card = (S.filter (fun x => f x = 1)).card +
+      (S.filter (fun x => ¬(f x = 1))).card := by
+    rw [← Finset.card_union_of_disjoint hdisj, ← hpart]
+  -- sum f = |S+| - |S-|
+  have hsum : ∑ x ∈ S, f x =
+      (S.filter (fun x => f x = 1)).card - (S.filter (fun x => ¬(f x = 1))).card := by
+    rw [← Finset.sum_filter_add_sum_filter_not S (fun x => f x = 1)]
+    have h1 : ∑ x ∈ S.filter (fun x => f x = 1), f x =
+        (S.filter (fun x => f x = 1)).card := by
+      rw [Finset.sum_eq_card_nsmul (b := (1 : ℤ))]
+      · simp
+      · intro x hx; exact (Finset.mem_filter.mp hx).2
+    have h2 : ∑ x ∈ S.filter (fun x => ¬(f x = 1)), f x =
+        -((S.filter (fun x => ¬(f x = 1))).card : ℤ) := by
+      rw [Finset.sum_eq_card_nsmul (b := (-1 : ℤ))]
+      · simp
+      · intro x hx; exact hm1 x hx
+    rw [h1, h2]; ring
+  push_cast [hcard, hsum]; ring
+
+/-- Complementary parity split for the odd part.
+    thm:pom-fiber-rewrite-parity-exact-split-mod3-obstruction -/
+theorem parity_split_identity_odd {α : Type*} [DecidableEq α] {S : Finset α} {f : α → ℤ}
+    (hf : ∀ x ∈ S, f x = 1 ∨ f x = -1) :
+    2 * ((S.filter (fun x => f x = -1)).card : ℤ) =
+      S.card - ∑ x ∈ S, f x := by
+  have h1 := parity_split_identity hf
+  have hpart : S = S.filter (fun x => f x = 1) ∪ S.filter (fun x => f x = -1) := by
+    ext x
+    simp only [Finset.mem_union, Finset.mem_filter]
+    constructor
+    · intro hx; exact (hf x hx).imp (fun h => ⟨hx, h⟩) (fun h => ⟨hx, h⟩)
+    · intro h; rcases h with ⟨hx, _⟩ | ⟨hx, _⟩ <;> exact hx
+  have hdisj : Disjoint (S.filter (fun x => f x = 1)) (S.filter (fun x => f x = -1)) := by
+    apply Finset.disjoint_filter.mpr
+    intro x _ h1 h2; linarith
+  have hcard : S.card = (S.filter (fun x => f x = 1)).card +
+      (S.filter (fun x => f x = -1)).card := by
+    rw [← Finset.card_union_of_disjoint hdisj, ← hpart]
+  push_cast [hcard] at h1 ⊢; linarith
 
 end Omega

@@ -486,7 +486,7 @@ theorem globalDefect_allFalse (h : m ≤ n) :
     funext i; rfl
   conv_lhs => rw [hrestr, hFoldM, hFoldN]
   -- Now xorWord ⟨allFalse,_⟩.1 (X.restrictLE h ⟨allFalse,_⟩).1
-  simp only [X.restrictLE, xorWord]
+  simp only [X.restrictLE]
   ext i; simp [zeroWord, restrictWord]
 
 -- ══════════════════════════════════════════════════════════════
@@ -597,7 +597,7 @@ theorem globalDefect_zero_of_all_local_zero (k : Nat) (ω : Word (m + k))
     rw [hlocal, hrestr, xorWord_zero_left]
     exact ih (truncate ω) (fun j hj => by
       have := h j (Nat.lt_succ_of_lt hj)
-      simp only [restrictWord_trans_succ] at this
+      simp at this
       exact this)
 
 /-- The all-false word is the unique word of weight zero (theorem #200).

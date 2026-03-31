@@ -465,7 +465,7 @@ theorem Fold_unique_of_weight_congr {m : Nat} (Φ : Word m → X m)
 /-- Fold uniqueness with explicit retraction hypothesis (corollary).
     thm:fold-unique-of-retraction -/
 theorem Fold_unique_of_retraction {m : Nat} (Φ : Word m → X m)
-    (hRetract : ∀ x : X m, Φ x.1 = x)
+    (_hRetract : ∀ x : X m, Φ x.1 = x)
     (hCongr : ∀ w, stableValue (Φ w) % Nat.fib (m + 2) = weight w % Nat.fib (m + 2)) :
     ∀ w, Φ w = Fold w :=
   Fold_unique_of_weight_congr Φ hCongr
@@ -547,7 +547,7 @@ private theorem two_pow_two_mul (k : Nat) : 2 ^ (2 * k) = 4 ^ k := by
 
 /-- 3·A(2k) = 4^k - 1 for k ≥ 1.
     thm:fold-top-two-zeckendorf-trisect -/
-theorem hiddenBitCount_even_closed (k : Nat) (hk : 1 ≤ k) :
+theorem hiddenBitCount_even_closed (k : Nat) (_hk : 1 ≤ k) :
     3 * hiddenBitCount (2 * k) = 4 ^ k - 1 := by
   have h := hiddenBitCount_closed (2 * k)
   have hmod : (2 * k) % 2 = 0 := by omega
@@ -716,9 +716,9 @@ theorem complement_hiddenBitCount (m : Nat) :
     unfold hiddenBitCount
     calc (Finset.univ.filter (fun w : Word m => Nat.fib (m + 2) ≤ weight w)).card
         ≤ (Finset.univ : Finset (Word m)).card := Finset.card_filter_le _ _
-      _ = 2 ^ m := by simp [Fintype.card_fun, Fintype.card_bool]
+      _ = 2 ^ m := by simp [ Fintype.card_bool]
   have htotal : (Finset.univ : Finset (Word m)).card = 2 ^ m := by
-    simp [Fintype.card_fun, Fintype.card_bool]
+    simp [ Fintype.card_bool]
   have hcompl : (Finset.univ.filter (fun w : Word m => weight w < Nat.fib (m + 2))).card +
       (Finset.univ.filter (fun w : Word m => Nat.fib (m + 2) ≤ weight w)).card =
       (Finset.univ : Finset (Word m)).card := by
@@ -729,7 +729,7 @@ theorem complement_hiddenBitCount (m : Nat) :
 
 /-- hiddenBitCount m < 2^m for m ≥ 2.
     thm:fold-top-two-zeckendorf-trisect -/
-theorem hiddenBitCount_lt_pow (m : Nat) (hm : 2 ≤ m) :
+theorem hiddenBitCount_lt_pow (m : Nat) (_hm : 2 ≤ m) :
     hiddenBitCount m < 2 ^ m := by
   have h := paper_hiddenBitCount_closed m
   -- 3 * A(m) + δ = 2^m where δ ≥ 1, so 3 * A(m) < 2^m, so A(m) < 2^m
@@ -878,8 +878,7 @@ theorem hiddenBit_boolean_recurrence (w : Word (m + 3))
   have hw2 := weight_of_lastTrue (m := m + 1) (by convert hPenult')
   have hfib := Omega.fib_succ_succ' (m + 3)
   simp only [show m + 2 + 2 = m + 4 from by omega, show m + 1 + 2 = m + 3 from by omega,
-    show m + 3 + 2 = m + 5 from by omega, show m + 3 + 1 = m + 4 from by omega
-    ] at hw hw2 hfib ⊢
+    show m + 3 + 2 = m + 5 from by omega] at hw hw2 hfib ⊢
   omega
 
 /-- Hidden bit recurrence when last is true and penultimate is false:
@@ -898,8 +897,7 @@ theorem hiddenBit_boolean_recurrence_false (w : Word (m + 3))
   have hw2 := weight_of_lastFalse (m := m + 1) (by convert hPenult')
   have hfib := Omega.fib_succ_succ' (m + 3)
   simp only [show m + 2 + 2 = m + 4 from by omega, show m + 1 + 2 = m + 3 from by omega,
-    show m + 3 + 2 = m + 5 from by omega, show m + 3 + 1 = m + 4 from by omega
-    ] at hw hw2 hfib ⊢
+    show m + 3 + 2 = m + 5 from by omega] at hw hw2 hfib ⊢
   split_ifs with h1 h2 h2
   · rfl
   · exfalso; omega
@@ -953,5 +951,13 @@ theorem hiddenBitCount_floor_div_three (m : Nat) :
   have hclosed := paper_hiddenBitCount_closed m
   have hmod := two_pow_mod_three m
   split_ifs at hclosed hmod with heven <;> omega
+
+/-- Fold is canonical (value-preserving), idempotent, and surjective.
+    prop:fold-basic-paper -/
+theorem paper_fold_basic (m : Nat) :
+    (∀ w : Word m, Fold (Fold w).1 = Fold w) ∧
+    (Function.Surjective (Fold (m := m))) ∧
+    (∀ w : Word m, stableValue (Fold w) = weight w % Nat.fib (m + 2)) :=
+  ⟨fun w => Fold_idempotent w, Fold_surjective m, fun w => stableValue_Fold_mod w⟩
 
 end Omega

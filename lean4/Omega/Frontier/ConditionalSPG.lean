@@ -9,7 +9,7 @@ noncomputable section
 /-! ### Paper Proposition 3.x: Bayes Half-Bound -/
 
 /-- Event mass + complement mass = total PMF mass (discrete partition). -/
-theorem setMass_partition_discrete {α β : Type*} [Fintype α]
+theorem setMass_partition_discrete {α _β : Type*} [Fintype α]
     (μ : PMF α) (P : Set α) :
     SPG.setMass μ P + SPG.setMass μ Pᶜ = ∑ x, (μ x : ENNReal) :=
   SPG.setMass_add_setMass_compl μ P

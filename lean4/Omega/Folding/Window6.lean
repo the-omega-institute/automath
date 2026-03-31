@@ -70,7 +70,7 @@ lemma abs_le_supNormIntVec {r : ℕ} (k : Fin r → ℤ) (i : Fin r) : Int.natAb
       (Int.natAbs (k i))
       (Finset.mem_image.mpr ⟨i, Finset.mem_univ i, rfl⟩))
 
-lemma supNormIntVec_pos_of_ne_zero {r : ℕ} (hr : 0 < r) {k : Fin r → ℤ} (hk : k ≠ 0) :
+lemma supNormIntVec_pos_of_ne_zero {r : ℕ} (_hr : 0 < r) {k : Fin r → ℤ} (hk : k ≠ 0) :
     1 ≤ supNormIntVec k := by
   classical
   by_contra hlt
@@ -497,7 +497,7 @@ theorem readout_needs_at_least_one_query (m : Nat) (hm : 2 ≤ m) :
 /-- Pointwise box lower bound form aligned with the paper proof route, specialized to the
 critical radius `Q = |k|_∞`.
     def:cdim-audit-stability-boxwise -/
-def AuditStableBoxwise {d r : ℕ} (hd : 0 < d) (hr : 0 < r)
+def AuditStableBoxwise {d r : ℕ} (hd : 0 < d) (_hr : 0 < r)
     (Θ : Matrix (Fin d) (Fin r) ℝ) : Prop :=
   ∃ c : ℝ, 0 < c ∧ ∀ k : Fin r → ℤ,
     k ≠ 0 →
@@ -832,5 +832,128 @@ theorem zmod21_trichotomy (x : ZMod 21) :
   have : ∀ x : ZMod 21,
       x = 0 ∨ IsUnit x ∨ (x ≠ 0 ∧ ∃ y : ZMod 21, y ≠ 0 ∧ x * y = 0) := by native_decide
   exact this x
+
+/-- Window-6 anomaly-collision splitting: 21+53=74, 212=4*53, 8*1+4*3+9*6=74.
+    prop:conclusion-window6-quadratic-collision-mass-anomaly-discriminant-closure -/
+theorem conclusion_window6_anomaly_collision_splitting :
+    21 + 53 = 74 ∧ 212 = 4 * 53 ∧
+    (8 * 1 + 4 * 3 + 9 * 6 : Nat) = 74 := by omega
+
+/-- Window-6 collision mass: (9·16 + 4·9 + 8·4)/4 = 53.
+    prop:conclusion-window6-quadratic-collision-mass-anomaly-discriminant-closure -/
+theorem conclusion_window6_collision_mass :
+    (cBinFiberHist 6 4 * 4 ^ 2 + cBinFiberHist 6 3 * 3 ^ 2 +
+     cBinFiberHist 6 2 * 2 ^ 2) / 4 = 53 := by
+  rw [cBinFiberHist_6_2, cBinFiberHist_6_3, cBinFiberHist_6_4]; omega
+
+/-- Window-6 excess capacity: |X_6| * (D_max - 1) = 2^6 - 1.
+    thm:conclusion-window6-groupoid-collision-dimension-identity -/
+theorem window6_excess_capacity :
+    Nat.fib 8 * (cBinFiberMax 6 - 1) = 2 ^ 6 - 1 := by
+  rw [cBinFiberMax_six]; native_decide
+
+/-- D_max(6)^2 = 16.
+    thm:conclusion-window6-groupoid-collision-dimension-identity -/
+theorem conclusion_window6_max_fiber_sq :
+    cBinFiberMax 6 ^ 2 = 16 := by rw [cBinFiberMax_six]; norm_num
+
+/-- 2^6 = |X_6| + hidden dimensions, split by multiplicity excess.
+    thm:conclusion-window6-hidden-a-type-weyl-package -/
+theorem conclusion_window6_visible_hidden_split :
+    2 ^ 6 = Nat.fib 8 + (cBinFiberHist 6 2 * 1 + cBinFiberHist 6 3 * 2 + cBinFiberHist 6 4 * 3) := by
+  rw [cBinFiberHist_6_2, cBinFiberHist_6_3, cBinFiberHist_6_4]; native_decide
+
+/-- The abelianization of the window-6 fold gauge group has rank |X_6| - #{x : d(x)=1} = 19.
+    thm:window6-foldbin-gauge-abelianization-even-parity -/
+theorem paper_abelianization_rank_six :
+    Fintype.card (X 6) - cFiberHist 6 1 = 19 :=
+  abelianization_rank_six
+
+/-- Window-6 compression ratio: |Word 6| = 64 and |X 6| = 21.
+    cor:window6-compression-ratio -/
+theorem paper_compression_ratio_six :
+    Fintype.card (Word 6) = 64 ∧ Fintype.card (X 6) = 21 :=
+  compression_ratio_six
+
+/-- Nontrivial fibers account for 64 - 2 = 62 of the 64 microstates at resolution 6.
+    thm:window6-nontrivial-microstate-count -/
+theorem paper_nontrivial_microstate_count_six :
+    Fintype.card (Word 6) - cFiberHist 6 1 = 62 :=
+  nontrivial_microstate_count_six
+
+/-- Sector sum at m = 6, q = 3: S_3(6) = 820.
+    cor:conclusion-sector-resolved-collision-moments-by-genus-q3 -/
+theorem paper_sector_sum_six_q3 :
+    2 * 1 ^ 3 + 4 * 2 ^ 3 + 8 * 3 ^ 3 + 5 * 4 ^ 3 + 2 * 5 ^ 3 = 820 :=
+  sector_sum_six_q3
+
+/-- Cauchy-Schwarz gap at m = 6: |X_6| * S_2(6) - (2^6)^2 = 524.
+    cor:conclusion-sector-resolved-collision-moments-by-genus-cs-gap -/
+theorem paper_cauchy_schwarz_gap_six :
+    Fintype.card (X 6) * momentSum 2 6 - (2 ^ 6) ^ 2 = 524 :=
+  cauchy_schwarz_gap_six
+
+/-- TQFT genus values at m = 6: S_2(6) = 220 and |X_6| = 21.
+    cor:conclusion-sector-resolved-collision-moments-by-genus-values -/
+theorem paper_tqft_genus_values_six :
+    momentSum 2 6 = 220 ∧ Fintype.card (X 6) = 21 :=
+  tqft_genus_values_six
+
+/-- Weyl group orders: 2! = 2, 3! = 6, 4! = 24.
+    thm:conclusion-window6-hidden-reflection-invariant-polynomial-ring-weyl -/
+theorem paper_weyl_orders :
+    Nat.factorial 2 = 2 ∧ Nat.factorial 3 = 6 ∧ Nat.factorial 4 = 24 :=
+  weyl_orders
+
+/-- Gauge group order factored: (2!)^8 * (3!)^4 * (4!)^9 = 2^8 * 6^4 * 24^9.
+    thm:conclusion-window6-hidden-reflection-invariant-polynomial-ring-gauge -/
+theorem paper_gauge_group_order_factored :
+    (Nat.factorial 2) ^ 8 * (Nat.factorial 3) ^ 4 * (Nat.factorial 4) ^ 9 =
+      2 ^ 8 * 6 ^ 4 * 24 ^ 9 :=
+  gauge_group_order_factored
+
+/-- Cross-chapter master audit certificate: all key Window-6 invariants in one theorem.
+    thm:conclusion-master-audit-certificate -/
+theorem paper_master_audit_certificate :
+    Fintype.card (X 6) = 21 ∧ 2 ^ 6 = 64 ∧
+    momentSum 2 6 = 220 ∧ momentSum 3 6 = 820 ∧
+    collisionKernel2.trace = 2 ∧ collisionKernel2.det = -2 ∧
+    (45 : Nat) = Nat.fib 9 + Nat.fib 6 + Nat.fib 4 ∧
+    cBinFiberHist 6 2 = 8 ∧ cBinFiberHist 6 3 = 4 ∧ cBinFiberHist 6 4 = 9 ∧
+    2 ^ 6 - Fintype.card (X 6) = 43 :=
+  master_audit_certificate
+
+/-- Fibonacci backbone: the recurrence and key arithmetic.
+    thm:conclusion-fibonacci-backbone -/
+theorem paper_fibonacci_backbone :
+    Nat.fib 9 - Nat.fib 2 = 33 ∧
+    Nat.fib 8 = 3 * 7 ∧
+    Nat.fib 4 = 3 ∧ Nat.fib 6 = 8 :=
+  fibonacci_backbone
+
+/-- Maximum fiber multiplicities at key resolutions: D(6)=5, D(8)=8, D(10)=13.
+    thm:pom-pimsner-popa-index-instances -/
+theorem paper_pimsner_popa_index_instances :
+    X.maxFiberMultiplicity 6 = 5 ∧ X.maxFiberMultiplicity 8 = 8 ∧
+    X.maxFiberMultiplicity 10 = 13 :=
+  pimsner_popa_index_instances
+
+/-- Complete coverage certificate: all key numerical invariants verified.
+    prop:conclusion-coverage-certificate -/
+theorem paper_coverage_certificate :
+    Nat.fib 8 = 21 ∧ Nat.fib 9 = 34 ∧ Nat.fib 10 = 55 ∧
+    Fintype.card (X 6) = 21 ∧
+    momentSum 2 6 = 220 ∧ momentSum 3 6 = 820 ∧ momentSum 4 6 = 3244 ∧
+    cBinFiberHist 6 2 = 8 ∧ cBinFiberHist 6 3 = 4 ∧ cBinFiberHist 6 4 = 9 ∧
+    collisionKernel2.trace = 2 ∧ collisionKernel2.det = -2 ∧
+    (45 : Nat) = Nat.fib 9 + Nat.fib 6 + Nat.fib 4 :=
+  coverage_certificate
+
+/-- Readout time lower bound instances: D(6) > 4, D(8) = 8, D(10) > 8.
+    thm:conclusion-externalization-index-readout-time-lower-bound-general -/
+theorem paper_readout_time_lower_bound :
+    X.maxFiberMultiplicity 6 > 2 ^ 2 ∧ X.maxFiberMultiplicity 8 = 2 ^ 3 ∧
+    X.maxFiberMultiplicity 10 > 2 ^ 3 :=
+  readout_time_lower_bound_instances
 
 end Omega

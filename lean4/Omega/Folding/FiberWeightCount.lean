@@ -125,7 +125,7 @@ theorem exactWeightCount_zero_zero : exactWeightCount 0 0 = 1 := by decide
 theorem exactWeightCount_zero_succ (n : Nat) : exactWeightCount 0 (n + 1) = 0 := by
   unfold exactWeightCount
   simp only [Finset.card_eq_zero, Finset.filter_eq_empty_iff, Finset.mem_univ, true_implies,
-    weight, not_true_eq_false]; omega
+    weight]; omega
 
 /-- Last-bit split: ewc(m+1, n) = ewc(m, n) + ewc(m, n - F_{m+2}).
     thm:pom-ewc-succ -/
@@ -140,7 +140,7 @@ theorem exactWeightCount_succ (m n : Nat) :
       (Finset.univ.filter (fun w : Word (m + 1) => weight w = n ∧ w ⟨m, by omega⟩ = true)) := by
     ext w; simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_union]
     constructor
-    · intro hw; cases hb : w ⟨m, by omega⟩ <;> simp [hw, hb]
+    · intro hw; cases hb : w ⟨m, by omega⟩ <;> simp [hw]
     · rintro (⟨hw, _⟩ | ⟨hw, _⟩) <;> exact hw
   have hdisjoint : Disjoint
       (Finset.univ.filter (fun w : Word (m + 1) => weight w = n ∧ w ⟨m, by omega⟩ = false))
@@ -268,7 +268,7 @@ theorem exactWeightCount_succ_succ (m n : Nat) :
     rw [step3]
     by_cases h4 : Nat.fib (m + 4) ≤ n
     · have h23 : Nat.fib (m + 2) ≤ n - Nat.fib (m + 3) := by omega
-      simp only [if_pos h3, if_pos h4, if_pos h23]
+      simp only [ if_pos h4, if_pos h23]
       rw [show n - Nat.fib (m + 3) - Nat.fib (m + 2) = n - Nat.fib (m + 4) from by omega]
       ring
     · have h23 : ¬ (Nat.fib (m + 2) ≤ n - Nat.fib (m + 3)) := by omega
@@ -448,7 +448,7 @@ theorem momentSum_two_eq_congr_sq_sum (m : Nat) :
 -- ══════════════════════════════════════════════════════════════
 
 /-- snoc false embeds the exact-weight-n subfiber: d_{m+1}(ofNat(m+1,n)) ≥ ewc(m,n). -/
-theorem fiberMultiplicity_ge_ewc_via_snoc (m n : Nat) (hn : n < Nat.fib (m + 3)) :
+theorem fiberMultiplicity_ge_ewc_via_snoc (m n : Nat) (_hn : n < Nat.fib (m + 3)) :
     X.fiberMultiplicity (X.ofNat (m + 1) n) ≥ exactWeightCount m n := by
   classical
   let y := X.ofNat (m + 1) n
@@ -771,5 +771,33 @@ theorem fiberMultiplicity_eq_ewc_sum (x : X m) :
     exactWeightCount m (stableValue x + Nat.fib (m + 2)) := by
   rw [fiberMultiplicity_split_by_hiddenBit x,
     fiberHiddenBitCount_zero_eq_ewc x, fiberHiddenBitCount_one_eq_ewc x]
+
+/-- The sum of exactWeightCount over all possible weights equals 2^m (total word count).
+    def:pom-exactWeightCount -/
+theorem exactWeightCount_sum_eq_pow (m : Nat) :
+    ∑ n ∈ Finset.range (Nat.fib (m + 3)), exactWeightCount m n = 2 ^ m := by
+  simp only [exactWeightCount]
+  have hmap : Set.MapsTo (fun w : Word m => weight w)
+      (↑(Finset.univ : Finset (Word m)) : Set (Word m))
+      (↑(Finset.range (Nat.fib (m + 3))) : Set Nat) :=
+    fun w _ => Finset.mem_range.mpr (X.weight_lt_fib w)
+  rw [← Finset.card_eq_sum_card_fiberwise hmap, Finset.card_univ,
+    Fintype.card_fun, Fintype.card_bool, Fintype.card_fin]
+
+/-- ewc(m, 1) = 1 for m ≥ 1: exactly one word of weight 1 at each resolution.
+    bridge:ewc-weight-one -/
+theorem exactWeightCount_one_eq (m : Nat) (hm : 1 ≤ m) :
+    exactWeightCount m 1 = 1 := by
+  induction m with
+  | zero => omega
+  | succ k ih =>
+    cases k with
+    | zero => native_decide
+    | succ j =>
+      rw [exactWeightCount_succ_of_lt (j + 1) 1 (by
+        calc 1 < 2 := by omega
+          _ = Nat.fib 3 := by native_decide
+          _ ≤ Nat.fib (j + 1 + 2) := Nat.fib_mono (by omega))]
+      exact ih (by omega)
 
 end Omega

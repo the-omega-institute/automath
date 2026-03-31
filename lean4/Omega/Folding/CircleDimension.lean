@@ -169,7 +169,7 @@ private theorem e_mul_e_of_ne (r : Nat) (i k : Fin r) (hik : i ≠ k) :
 
 /-- `∑ e_i = 1` in `Fin r → ℕ`. -/
 private theorem e_sum (r : Nat) : ∑ i : Fin r, e r i = 1 := by
-  ext j; simp [e, Finset.sum_apply, Pi.single_apply, Finset.sum_ite_eq', Finset.mem_univ]
+  ext j; simp [e, Finset.sum_apply, Pi.single_apply, Finset.mem_univ]
 
 /-- Any semiring hom `(Fin r → ℕ) →+* (Fin d → ℕ)` is a coordinate projection.
     thm:cdim-nr-nd-semiring-hom-rigidity -/
@@ -190,7 +190,7 @@ theorem semiring_hom_rigidity (r d : Nat) (f : (Fin r → ℕ) →+* (Fin d → 
     have hzero : f (e r i) * f (e r k) = 0 := by
       rw [← map_mul, e_mul_e_of_ne r i k hik, map_zero]
     have := congr_fun hzero j
-    simp [Pi.mul_apply, Pi.zero_apply] at this
+    simp [Pi.mul_apply] at this
     rcases this with h | h
     · omega
     · exact h
@@ -222,8 +222,7 @@ theorem semiring_hom_rigidity (r d : Nat) (f : (Fin r → ℕ) →+* (Fin d → 
   refine ⟨σ, fun x j => ?_⟩
   -- Step 5: decompose x = ∑ x_i · e_i
   have hdecomp : x = ∑ i : Fin r, x i • e r i := by
-    ext k; simp [e, Finset.sum_apply, Pi.smul_apply, Pi.single_apply, smul_eq_mul,
-      Finset.sum_ite_eq', Finset.mem_univ]
+    ext k; simp [e, Finset.sum_apply, Pi.single_apply, Finset.mem_univ]
   -- f(e_i) j = 1 iff i = σ j, else 0
   have heval : ∀ i : Fin r, f (e r i) j = if i = σ j then 1 else 0 := by
     intro i
@@ -239,8 +238,8 @@ theorem semiring_hom_rigidity (r d : Nat) (f : (Fin r → ℕ) →+* (Fin d → 
     -- f(n • a) = n • f(a) for ring homs (via additivity)
     have hmap : f (x i • e r i) = x i • f (e r i) := by
       induction x i with
-      | zero => simp [zero_smul, map_zero]
-      | succ n ih => simp [succ_nsmul, map_add, ih, add_smul]
+      | zero => simp [ map_zero]
+      | succ n ih => simp [ map_add, add_smul]
     rw [hmap, Pi.smul_apply, smul_eq_mul, heval]
   calc f x j = f (∑ i : Fin r, x i • e r i) j := by rw [← hdecomp]
     _ = (∑ i : Fin r, f (x i • e r i)) j := by rw [map_sum]
@@ -285,8 +284,8 @@ theorem semiring_aut_is_perm (r : Nat) (f : (Fin r → ℕ) ≃+* (Fin r → ℕ
     by_contra h
     -- f is surjective: take preimage of Pi.single j₁ 1
     obtain ⟨y, hy⟩ := f.surjective (Pi.single j₁ 1)
-    have h1 : (f y) j₁ = 1 := by rw [hy]; simp [Pi.single_apply]
-    have h2 : (f y) j₂ = 0 := by rw [hy]; simp [Pi.single_apply, h]
+    have h1 : (f y) j₁ = 1 := by rw [hy]; simp
+    have h2 : (f y) j₂ = 0 := by rw [hy]; simp [ h]
     -- But f y j₁ = y (σ j₁) and f y j₂ = y (σ j₂) = y (σ j₁)
     rw [show (f y) j₁ = f.toRingHom y j₁ from rfl, hσ y j₁] at h1
     rw [show (f y) j₂ = f.toRingHom y j₂ from rfl, hσ y j₂] at h2

@@ -120,6 +120,24 @@ theorem cyclicPerm4_trace_powers :
   refine ⟨by native_decide, by native_decide, by native_decide,
     by native_decide, by native_decide⟩
 
+/-- Trace of Π_5^k for k=1..5: period-5 pattern.
+    subsec:operator-zeta-interface -/
+theorem cyclicPerm5_trace_powers :
+    (cyclicPerm5 ^ 1).trace = 0 ∧ (cyclicPerm5 ^ 2).trace = 0 ∧
+    (cyclicPerm5 ^ 3).trace = 0 ∧ (cyclicPerm5 ^ 4).trace = 0 ∧
+    (cyclicPerm5 ^ 5).trace = 5 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide⟩
+
+/-- Trace of Π_6^k for k=1..6: period-6 pattern.
+    subsec:operator-zeta-interface -/
+theorem cyclicPerm6_trace_powers :
+    (cyclicPerm6 ^ 1).trace = 0 ∧ (cyclicPerm6 ^ 2).trace = 0 ∧
+    (cyclicPerm6 ^ 3).trace = 0 ∧ (cyclicPerm6 ^ 4).trace = 0 ∧
+    (cyclicPerm6 ^ 5).trace = 0 ∧ (cyclicPerm6 ^ 6).trace = 6 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide, by native_decide⟩
+
 /-- Determinant formula for a specific 4×4 matrix.
     Helper for cyclicPerm4_fredholm_det. -/
 private theorem det_four_of (a b c d e f g h i j k l m n o p : ℤ) :
@@ -128,7 +146,7 @@ private theorem det_four_of (a b c d e f g h i j k l m n o p : ℤ) :
     b * (e * (k * p - l * o) - g * (i * p - l * m) + h * (i * o - k * m)) +
     c * (e * (j * p - l * n) - f * (i * p - l * m) + h * (i * n - j * m)) -
     d * (e * (j * o - k * n) - f * (i * o - k * m) + g * (i * n - j * m)) := by
-  simp [det_succ_row_zero, Fin.sum_univ_four, Fin.sum_univ_three, det_fin_two,
+  simp [det_succ_row_zero, Fin.sum_univ_four, Fin.sum_univ_three,
     Fin.succAbove, Matrix.submatrix]
   ring
 
@@ -193,8 +211,7 @@ private theorem det_five_of (
            c₄ * (d₁ * e₂ - d₂ * e₁)) -
           b₄ * (c₁ * (d₂ * e₃ - d₃ * e₂) - c₂ * (d₁ * e₃ - d₃ * e₁) +
            c₃ * (d₁ * e₂ - d₂ * e₁))) := by
-  simp [det_succ_row_zero, Fin.sum_univ_succ, Fin.sum_univ_four, Fin.sum_univ_three,
-    det_fin_two, Fin.succAbove, Matrix.submatrix]
+  simp [det_succ_row_zero, Fin.sum_univ_succ, Fin.succAbove, Matrix.submatrix]
   ring
 
 /-- det(I - t·Π_5) = 1 - t⁵ for the 5×5 cyclic permutation matrix.
@@ -251,8 +268,7 @@ private theorem det_six_of (
                         d₁, d₂, d₃, d₄, d₅;
                         e₁, e₂, e₃, e₄, e₅;
                         f₁, f₂, f₃, f₄, f₅] := by
-  simp [det_succ_row_zero, Fin.sum_univ_succ, Fin.sum_univ_five, Fin.sum_univ_four,
-    Fin.sum_univ_three, det_fin_two, Fin.succAbove, Matrix.submatrix]
+  simp [det_succ_row_zero, Fin.sum_univ_succ, Fin.succAbove, Matrix.submatrix]
   ring
 
 /-- det(I - t·Π_6) = 1 - t⁶ for the 6×6 cyclic permutation matrix.
@@ -292,6 +308,18 @@ theorem euler_factor_n4 (α r : ℤ) :
     (1 - (α * r) • cyclicPerm4).det = 1 - (α * r) ^ 4 := by
   exact cyclicPerm4_fredholm_det (α * r)
 
+/-- Euler factor for n=5: det(I - r·(α·Π_5)) = 1 - (αr)⁵.
+    cor:cyclic-euler-product -/
+theorem euler_factor_n5 (α r : ℤ) :
+    (1 - (α * r) • cyclicPerm5).det = 1 - (α * r) ^ 5 :=
+  cyclicPerm5_fredholm_det (α * r)
+
+/-- Euler factor for n=6: det(I - r·(α·Π_6)) = 1 - (αr)⁶.
+    cor:cyclic-euler-product -/
+theorem euler_factor_n6 (α r : ℤ) :
+    (1 - (α * r) • cyclicPerm6).det = 1 - (α * r) ^ 6 :=
+  cyclicPerm6_fredholm_det (α * r)
+
 /-! ## Resolvent trace jump index
 
 The number of poles of det(I-zT)^{-1} inside the unit disk equals
@@ -307,6 +335,16 @@ theorem cyclicPerm2_rank : (cyclicPerm2 ^ 0).trace = 2 := by native_decide
 /-- For Π_3: exactly 3 eigenvalues on the unit circle.
     Trace(Π_3^0) = 3 = dim. -/
 theorem cyclicPerm3_rank : (cyclicPerm3 ^ 0).trace = 3 := by native_decide
+
+/-- For Π_4: exactly 4 eigenvalues on the unit circle.
+    Trace(Π_4^0) = 4 = dim.
+    thm:operator-resolvent-trace-jump-index -/
+theorem cyclicPerm4_rank : (cyclicPerm4 ^ 0).trace = 4 := by native_decide
+
+/-- For Π_5: exactly 5 eigenvalues on the unit circle.
+    Trace(Π_5^0) = 5 = dim.
+    thm:operator-resolvent-trace-jump-index -/
+theorem cyclicPerm5_rank : (cyclicPerm5 ^ 0).trace = 5 := by native_decide
 
 /-- For Π_6: exactly 6 eigenvalues on the unit circle.
     Trace(Π_6^0) = 6 = dim. -/
@@ -327,5 +365,15 @@ theorem cyclic_periodicity_orders :
     cyclicPerm4 ^ 4 = 1 ∧ cyclicPerm5 ^ 5 = 1 ∧ cyclicPerm6 ^ 6 = 1 :=
   ⟨cyclicPerm2_sq, cyclicPerm3_cube, cyclicPerm4_fourth,
    cyclicPerm5_fifth, cyclicPerm6_sixth⟩
+
+/-- Block 2+3 Fredholm product.
+    cor:cyclic-euler-product -/
+theorem fredholm_block_diag_2_3 (t : ℤ) :
+    (1 - t ^ 2) * (1 - t ^ 3) = 1 - t ^ 2 - t ^ 3 + t ^ 5 := by ring
+
+/-- Block 2+4 Fredholm product.
+    cor:cyclic-euler-product -/
+theorem fredholm_block_diag_2_4 (t : ℤ) :
+    (1 - t ^ 2) * (1 - t ^ 4) = 1 - t ^ 2 - t ^ 4 + t ^ 6 := by ring
 
 end Omega.Zeta

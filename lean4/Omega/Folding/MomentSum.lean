@@ -261,7 +261,7 @@ theorem momentSum_one_univ (q : Nat) : momentSum q 1 = 2 := by
 
 /-- S_q is monotone in q: S_q(m) ≤ S_{q+1}(m) since d(x) ≥ 1.
     pom-moment-mono-q -/
-theorem momentSum_mono_q (q m : Nat) (hq : 1 ≤ q) :
+theorem momentSum_mono_q (q m : Nat) (_hq : 1 ≤ q) :
     momentSum q m ≤ momentSum (q + 1) m := by
   simp only [momentSum]
   apply Finset.sum_le_sum; intro x _

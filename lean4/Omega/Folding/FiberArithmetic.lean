@@ -1,4 +1,5 @@
 import Omega.Folding.Fiber
+import Omega.Folding.MaxFiber
 
 namespace Omega
 
@@ -34,7 +35,7 @@ theorem stableAdd_zero_right (x : X m) : stableAdd x stableZero = x := by
   rw [stableAdd_comm]; exact stableAdd_zero_left x
 
 /-- Helper: (a % n + b) % n = (a + b) % n for 0 < n. -/
-private theorem Nat.mod_add_mod_right (a b n : Nat) (hn : 0 < n) :
+private theorem Nat.mod_add_mod_right (a b n : Nat) (_hn : 0 < n) :
     (a % n + b) % n = (a + b) % n := by
   conv_rhs => rw [← Nat.mod_add_div a n]
   rw [Nat.add_assoc, Nat.add_comm (n * (a / n)), ← Nat.add_assoc,
@@ -131,7 +132,7 @@ theorem stableMul_one_right (hm : 1 < Nat.fib (m + 2)) (x : X m) :
 
 /-- Fiber multiplicity as a function of value index. -/
 noncomputable def fiberMultiplicityByValue (m : Nat) (n : Nat) : Nat :=
-  if hn : n < Nat.fib (m + 2) then fiberMultiplicity (X.ofNat m n) else 0
+  if _hn : n < Nat.fib (m + 2) then fiberMultiplicity (X.ofNat m n) else 0
 
 /-- Fiber multiplicity of x equals fiberMultiplicityByValue at stableValue(x). -/
 theorem fiberMultiplicity_eq_byValue (x : X m) :
@@ -504,3 +505,89 @@ theorem carryIndicator_stableZero_left (x : X (m + 1)) :
 theorem stableValue_stableAdd_eq (x y : X m) :
     stableValue (stableAdd x y) = (stableValue x + stableValue y) % Nat.fib (m + 2) :=
   stableValue_stableAdd x y
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R134: Stable value Gauss sum instances
+-- ══════════════════════════════════════════════════════════════
+
+/-- Computable sum of stable values at resolution m. -/
+def cStableValueSum (m : Nat) : Nat :=
+  (@Finset.univ (X m) (Omega.fintypeX m)).sum (fun x => stableValue x)
+
+/-- Gauss sum instances: sum of stable values = F(m+2)·(F(m+2)-1)/2.
+    thm:pom-stableValue-gauss-sum -/
+theorem stableValue_sum_gauss_instances :
+    cStableValueSum 4 = Nat.fib 6 * (Nat.fib 6 - 1) / 2 ∧
+    cStableValueSum 5 = Nat.fib 7 * (Nat.fib 7 - 1) / 2 ∧
+    cStableValueSum 6 = Nat.fib 8 * (Nat.fib 8 - 1) / 2 := by
+  native_decide
+
+/-- Paper: stableValue Gauss sum instances -/
+theorem paper_stableValue_sum_gauss_instances :
+    cStableValueSum 4 = Nat.fib 6 * (Nat.fib 6 - 1) / 2 ∧
+    cStableValueSum 5 = Nat.fib 7 * (Nat.fib 7 - 1) / 2 ∧
+    cStableValueSum 6 = Nat.fib 8 * (Nat.fib 8 - 1) / 2 :=
+  stableValue_sum_gauss_instances
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R149: Stable value Gauss sum (closed form)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Sum of stable values = F(m+2)·(F(m+2)-1)/2.
+    thm:pom-stableValue-gauss-sum -/
+theorem stableValue_sum_closed (m : Nat) :
+    2 * ∑ x : X m, stableValue x = Nat.fib (m + 2) * (Nat.fib (m + 2) - 1) := by
+  -- Reindex sum via stableValueFin bijection: Σ sv(x) = Σ_{i < F} i = F*(F-1)/2
+  have hbij := X.stableValueFin_bijective m
+  have hsum : ∑ x : X m, stableValue x = ∑ i : Fin (Nat.fib (m + 2)), i.val := by
+    rw [show (fun x : X m => stableValue x) =
+      (fun i : Fin (Nat.fib (m + 2)) => i.val) ∘ X.stableValueFin from by
+        ext x; simp [X.stableValueFin]]
+    exact hbij.sum_comp _
+  rw [hsum]
+  have : ∑ i : Fin (Nat.fib (m + 2)), (i : Nat) =
+      ∑ i ∈ Finset.range (Nat.fib (m + 2)), i := by
+    rw [← Fin.sum_univ_eq_sum_range]
+  rw [this, Finset.sum_range_id]
+  -- 2 * (n*(n-1)/2) = n*(n-1) because n*(n-1) is always even
+  set F := Nat.fib (m + 2)
+  have hdvd : 2 ∣ F * (F - 1) := by
+    rcases Nat.even_or_odd F with ⟨k, hk⟩ | ⟨k, hk⟩
+    · exact ⟨k * (F - 1), by rw [hk]; ring⟩
+    · have : F - 1 = 2 * k := by omega
+      exact ⟨F * k, by rw [this]; ring⟩
+  omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R153: Nicomachus's theorem + cube Gauss sum
+-- ══════════════════════════════════════════════════════════════
+
+/-- Nicomachus's theorem: 4·∑_{i<n} i³ = (n·(n-1))². -/
+theorem four_mul_sum_cube (n : Nat) :
+    4 * ∑ i ∈ Finset.range n, i ^ 3 = (n * (n - 1)) ^ 2 := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    rw [Finset.sum_range_succ, Nat.mul_add, ih]
+    cases n with
+    | zero => simp
+    | succ n =>
+      simp only [Nat.succ_sub_one]
+      ring
+
+/-- 4·∑ sv(x)³ = (F(m+2)·(F(m+2)-1))².
+    thm:pom-stableValue-gauss-sum -/
+theorem stableValue_cube_sum_closed (m : Nat) :
+    4 * ∑ x : X m, stableValue x ^ 3 = (Nat.fib (m + 2) * (Nat.fib (m + 2) - 1)) ^ 2 := by
+  have hbij := stableValueFin_bijective m
+  have hsum : ∑ x : X m, stableValue x ^ 3 =
+      ∑ i : Fin (Nat.fib (m + 2)), i.val ^ 3 := by
+    rw [show (fun x : X m => stableValue x ^ 3) =
+      ((fun i : Fin (Nat.fib (m + 2)) => i.val ^ 3) ∘ stableValueFin) from by
+        ext x; simp [stableValueFin]]
+    exact hbij.sum_comp (fun i : Fin (Nat.fib (m + 2)) => i.val ^ 3)
+  rw [hsum]
+  have : ∑ i : Fin (Nat.fib (m + 2)), (i : Nat) ^ 3 =
+      ∑ i ∈ Finset.range (Nat.fib (m + 2)), i ^ 3 := by
+    rw [← Fin.sum_univ_eq_sum_range]
+  rw [this, four_mul_sum_cube]

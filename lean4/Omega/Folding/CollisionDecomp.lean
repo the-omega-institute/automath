@@ -650,7 +650,7 @@ theorem crossCorr_fib_succ (m : Nat) :
       weight p.1 + Nat.fib (m + 2) + Nat.fib (m + 2) = weight p.2)).card = 0 := by
     apply Finset.card_eq_zero.mpr; rw [Finset.filter_eq_empty_iff]
     intro ⟨v1, v2⟩
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and, not_and]
+    simp only [ Finset.mem_univ]
     intro h
     have : weight v2 < Nat.fib (m + 3) := X.weight_lt_fib v2
     have : Nat.fib (m + 3) = Nat.fib (m + 1) + Nat.fib (m + 2) := Nat.fib_add_two
@@ -965,8 +965,9 @@ theorem crossWeightCorrelation_eq_momentSum_two (m : Nat) :
   have h2 := momentSum_two_eq_E00_add_two_S m
   omega
 
-/-- 4·S_2(m) ≤ S_2(m+2). -/
-private theorem momentSum_two_quadruple_le (m : Nat) :
+/-- 4·S_2(m) ≤ S_2(m+2).
+    thm:pom-hiddenbit-bias-energy-identity -/
+theorem momentSum_two_quadruple_le (m : Nat) :
     4 * momentSum 2 m ≤ momentSum 2 (m + 2) := by
   induction m using Nat.strongRecOn with
   | _ m ih =>

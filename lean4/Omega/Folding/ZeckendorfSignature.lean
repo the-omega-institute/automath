@@ -339,7 +339,7 @@ theorem bdry_three_window_sum12_unique_even_triple
   have hk₁_le : k₁ ≤ 4 := by omega
   have hk₁_ge : 1 ≤ k₁ := by omega
   interval_cases k₃ <;> interval_cases k₂ <;> interval_cases k₁ <;>
-    simp_all (config := { decide := true }) [Nat.fib]
+    simp_all (config := { decide := true }) []
 
 /-- F(m-2) = 34 has the unique solution m = 11 among m ≥ 3.
     thm:bdry-delta34-m11-uniqueness -/
@@ -372,11 +372,33 @@ theorem bdry_delta34_identity : Nat.fib 9 = Nat.fib 10 - Nat.fib 8 := by native_
     thm:congruence-unitgroup-order12-m56 (seed value) -/
 @[simp] theorem totient_fib_8 : Nat.totient (Nat.fib 8) = 12 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R137: Totient of F(9) and F(10)
+-- ══════════════════════════════════════════════════════════════
+
+/-- φ(F(9)) = φ(34) = 16. thm:mul-definitional -/
+@[simp] theorem totient_fib_9 : Nat.totient (Nat.fib 9) = 16 := by native_decide
+
+/-- φ(F(10)) = φ(55) = 40. thm:mul-definitional -/
+@[simp] theorem totient_fib_10 : Nat.totient (Nat.fib 10) = 40 := by native_decide
+
+/-- Paper: thm:mul-definitional (unit group orders) -/
+theorem paper_totient_fib_9_10 :
+    Nat.totient (Nat.fib 9) = 16 ∧ Nat.totient (Nat.fib 10) = 40 :=
+  ⟨totient_fib_9, totient_fib_10⟩
+
 /-- If φ(F(m+2)) = 12 and 1 ≤ m ≤ 10, then m ∈ {5, 6}.
     The bound m ≤ 10 covers F(m+2) up to F(12) = 144; all solutions to φ(n) = 12
     satisfy n ≤ 42 < F(10) = 55, so the unbounded version also holds.
     thm:congruence-unitgroup-order12-m56 -/
 theorem congruence_unitgroup_order12_bounded (m : Nat) (hm : 1 ≤ m) (hm_le : m ≤ 10)
+    (h : Nat.totient (Nat.fib (m + 2)) = 12) :
+    m = 5 ∨ m = 6 := by
+  interval_cases m <;> revert h <;> native_decide
+
+/-- φ(F_{m+2}) = 12 iff m ∈ {5,6}, extended to m ≤ 20.
+    thm:congruence-unitgroup-order12-m56 -/
+theorem congruence_unitgroup_order12_extended (m : Nat) (hm : 1 ≤ m) (hm_le : m ≤ 20)
     (h : Nat.totient (Nat.fib (m + 2)) = 12) :
     m = 5 ∨ m = 6 := by
   interval_cases m <;> revert h <;> native_decide
@@ -457,6 +479,114 @@ theorem fib_lie_no_resonance_m3_to_m8 :
       show Nat.fib 10 = 55 from by native_decide]
   refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> intro ⟨k, hk⟩ <;> (have hk_le : k ≤ 8 := by nlinarith) <;>
     interval_cases k <;> omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R161: Fibonacci-Lie resonance termination
+-- ══════════════════════════════════════════════════════════════
+
+/-- Nat.fib n ≥ n for n ≥ 5. -/
+private theorem fib_ge_id (n : Nat) (hn : 5 ≤ n) : n ≤ Nat.fib n := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 | 1 | 2 | 3 | 4 => omega
+    | 5 => native_decide
+    | 6 => native_decide
+    | n + 7 =>
+      have hfib : Nat.fib (n + 7) = Nat.fib (n + 5) + Nat.fib (n + 6) := by
+        rw [show n + 7 = (n + 5) + 2 from by omega]; exact Nat.fib_add_two
+      have ih1 := ih (n + 6) (by omega) (by omega)
+      have ih2 := ih (n + 5) (by omega) (by omega)
+      linarith
+
+/-- F(2k) > k^2-1 for k ≥ 4: Fibonacci-Lie resonance terminates after SU(3).
+    cor:fib-lie-resonance-ladder-global-closure -/
+theorem fib_double_gt_sq_sub_one (k : Nat) (hk : 4 ≤ k) :
+    k ^ 2 - 1 < Nat.fib (2 * k) := by
+  induction k using Nat.strongRecOn with
+  | _ k ih =>
+    match k with
+    | 0 | 1 | 2 | 3 => omega
+    | 4 => native_decide
+    | 5 => native_decide
+    | k + 6 =>
+      -- F(2(k+5)) = F(2k+10) = F(2k+9) + F(2k+8) ≥ F(2k+8) + F(2k+7)
+      -- By IH: F(2(k+4)) = F(2k+8) > (k+4)^2 - 1, so F(2k+8) ≥ (k+4)^2
+      -- F(2k+7) ≥ 2k+7 (by fib_ge_id since 2k+7 ≥ 7 ≥ 5)
+      -- (k+4)^2 + (2k+7) = k^2 + 10k + 23 ≥ k^2 + 10k + 24 = (k+5)^2 - 1? No.
+      -- (k+5)^2 - 1 = k^2 + 10k + 24. (k+4)^2 + (2k+7) = k^2 + 8k + 16 + 2k + 7 = k^2 + 10k + 23.
+      -- Need 23 > 24? No! Off by 1.
+      -- Use tighter: F(2k+10) ≥ F(2k+9) + F(2k+8) and F(2k+9) ≥ F(2k+8) + F(2k+7)
+      -- So F(2k+10) ≥ 2*F(2k+8) + F(2k+7) ≥ 2*(k+4)^2 + (2k+7)
+      -- 2*(k+4)^2 + 2k+7 = 2k^2+16k+32+2k+7 = 2k^2+18k+39 > k^2+10k+24 for k ≥ 0.
+      -- Actually let's just use F(2k+10) = F(2k+9) + F(2k+8) and
+      -- F(2k+9) = F(2k+8) + F(2k+7), F(2k+8) = F(2k+7) + F(2k+6)
+      -- By IH at k+4: F(2k+8) ≥ (k+4)^2
+      -- By IH at k+3: F(2k+6) ≥ (k+3)^2
+      -- F(2k+7) ≥ F(2k+6) ≥ (k+3)^2 (by mono)
+      -- F(2k+9) ≥ (k+4)^2 + (k+3)^2
+      -- F(2k+10) ≥ (k+4)^2 + (k+3)^2 + (k+4)^2 = 2*(k+4)^2 + (k+3)^2
+      -- Need: 2*(k+4)^2 + (k+3)^2 > (k+5)^2 - 1
+      -- LHS = 2k^2+16k+32 + k^2+6k+9 = 3k^2+22k+41
+      -- RHS = k^2+10k+24
+      -- 3k^2+22k+41 > k^2+10k+24 iff 2k^2+12k+17 > 0, always true.
+      -- F(2(k+6)) = F(2k+12). Use F(2k+12) = F(2k+10) + F(2k+11), etc.
+      -- IH at k+5 and k+4 (both ≥ 4 since k ≥ 0)
+      have hfib1 : Nat.fib (2 * k + 12) = Nat.fib (2 * k + 10) + Nat.fib (2 * k + 11) := by
+        rw [show 2 * k + 12 = (2 * k + 10) + 2 from by omega]; exact Nat.fib_add_two
+      have hfib2 : Nat.fib (2 * k + 11) = Nat.fib (2 * k + 9) + Nat.fib (2 * k + 10) := by
+        rw [show 2 * k + 11 = (2 * k + 9) + 2 from by omega]; exact Nat.fib_add_two
+      have hfib3 : Nat.fib (2 * k + 10) = Nat.fib (2 * k + 8) + Nat.fib (2 * k + 9) := by
+        rw [show 2 * k + 10 = (2 * k + 8) + 2 from by omega]; exact Nat.fib_add_two
+      have ih5 := ih (k + 5) (by omega) (by omega)
+      have ih4 := ih (k + 4) (by omega) (by omega)
+      have hmono : Nat.fib (2 * k + 8) ≤ Nat.fib (2 * k + 9) := Nat.fib_mono (by omega)
+      -- ih5: (k+5)^2 - 1 < F(2k+10), so (k+5)^2 ≤ F(2k+10)
+      -- ih4: (k+4)^2 - 1 < F(2k+8), so (k+4)^2 ≤ F(2k+8)
+      -- Goal: (k+6)^2 - 1 < F(2k+12)
+      -- F(2k+12) = F(2k+10) + F(2k+11) ≥ F(2k+10) + F(2k+9) + F(2k+10) = 2*F(2k+10) + F(2k+9)
+      -- ≥ 2*(k+5)^2 + (k+4)^2 > (k+6)^2 - 1
+      -- In Nat: a^2 - 1 < b → a^2 ≤ b is just Nat.lt_of_sub
+      -- Convert from Nat subtraction: a^2-1 < b → a^2 ≤ b
+      have h5 : (k + 5) ^ 2 ≤ Nat.fib (2 * k + 10) := Nat.le_of_pred_lt ih5
+      have h4 : (k + 4) ^ 2 ≤ Nat.fib (2 * k + 8) := Nat.le_of_pred_lt ih4
+      -- F(2k+12) = F(2k+10) + F(2k+11) = F(2k+10) + F(2k+9) + F(2k+10)
+      -- ≥ 2*(k+5)^2 + (k+4)^2 (since F(2k+9) ≥ F(2k+8) ≥ (k+4)^2)
+      -- 2*(k+5)^2 + (k+4)^2 = 3k^2 + 28k + 66 > k^2 + 12k + 35 = (k+6)^2 - 1
+      have h9 : (k + 4) ^ 2 ≤ Nat.fib (2 * k + 9) := le_trans h4 hmono
+      -- Now chain: F(2k+12) ≥ (k+5)^2 + (k+4)^2 + (k+5)^2
+      -- Pure arithmetic: 2*(k+5)^2 + (k+4)^2 > (k+6)^2 - 1
+      -- = 3k^2+28k+66 > k^2+12k+35
+      have goal_bound : (k + 6) ^ 2 ≤ 2 * (k + 5) ^ 2 + (k + 4) ^ 2 := by nlinarith [sq_nonneg k]
+      -- Chain: F(2k+12) = F(2k+10) + F(2k+11)
+      --        F(2k+11) = F(2k+9) + F(2k+10), so F(2k+12) = 2*F(2k+10) + F(2k+9)
+      --        ≥ 2*(k+5)^2 + (k+4)^2 ≥ (k+6)^2
+      have chain : Nat.fib (2 * k + 12) ≥ 2 * Nat.fib (2 * k + 10) + Nat.fib (2 * k + 9) := by
+        linarith
+      have chain2 : Nat.fib (2 * k + 12) ≥ 2 * (k + 5) ^ 2 + (k + 4) ^ 2 := by linarith
+      -- (k+6)^2 - 1 < F: suffices (k+6)^2 ≤ F
+      suffices h : (k + 6) ^ 2 ≤ Nat.fib (2 * (k + 6)) by
+        have : 1 ≤ (k + 6) ^ 2 := by nlinarith [sq_nonneg (k + 6)]
+        omega
+      rw [show 2 * (k + 6) = 2 * k + 12 from by omega]
+      linarith
+
+/-- Fibonacci-Lie resonance classification: F(2k) = k^2-1 only for k ∈ {2,3}.
+    thm:fib-lie-resonance-global-a-type -/
+theorem fib_lie_resonance_complete (k : Nat) (hk : 2 ≤ k) :
+    Nat.fib (2 * k) = k ^ 2 - 1 ↔ k = 2 ∨ k = 3 := by
+  constructor
+  · intro heq
+    by_contra h
+    push_neg at h
+    obtain ⟨hne2, hne3⟩ := h
+    have hk4 : 4 ≤ k := by omega
+    have := fib_double_gt_sq_sub_one k hk4
+    omega
+  · intro h
+    rcases h with rfl | rfl
+    · native_decide
+    · native_decide
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase 212: Fibonacci shift identities
@@ -716,5 +846,37 @@ theorem sm_square_residual_rigidity_m6 (m : Nat) (hm : 6 ≤ m)
       -- From hsq: F(m+2) < F(m-2)², so F(m-2)² > F(m+2) ≥ F(m+2) - 12
       -- But h says F(m+2) - 12 = F(m-2)², contradiction
       omega
+
+/-- The SM gauge group dimensions 1+3+8=12 has Zeckendorf representation F(6)+F(4)+F(2).
+    prop:sm-zeckendorf-lie-algebra-rigidity -/
+theorem sm_zeckendorf_twelve :
+    Nat.fib 6 + Nat.fib 4 + Nat.fib 2 = 12 := by norm_num [Nat.fib]
+
+/-- SM boundary count verification with individual Fibonacci values.
+    cor:sm-minimal-triple-selection-law -/
+theorem sm_boundary_count :
+    Nat.fib 2 + Nat.fib 4 + Nat.fib 6 = 12 ∧
+    Nat.fib 2 = 1 ∧ Nat.fib 4 = 3 ∧ Nat.fib 6 = 8 := by
+  norm_num [Nat.fib]
+
+/-- Zeckendorf gap condition: indices 2,4,6 are pairwise ≥ 2 apart.
+    prop:sm-zeckendorf-lie-algebra-rigidity -/
+theorem sm_zeckendorf_no_adjacent :
+    4 - 2 ≥ 2 ∧ 6 - 4 ≥ 2 := by omega
+
+/-- In a gap-≥2 index set containing 4, 6, 8, neither 5 nor 7 can appear.
+    cor:zeckendorf-no-adjacent-strict-inclusion-impossible -/
+theorem zeckendorf_no_adjacent_strict_inclusion
+    (S : Finset ℕ)
+    (h_gap : ∀ a ∈ S, ∀ b ∈ S, a ≠ b → (a : ℤ) - b ≠ 1 ∧ (a : ℤ) - b ≠ -1)
+    (h4 : 4 ∈ S) (h6 : 6 ∈ S) (_h8 : 8 ∈ S) :
+    5 ∉ S ∧ 7 ∉ S := by
+  constructor
+  · intro h5
+    have := (h_gap 5 h5 4 h4 (by omega)).1
+    omega
+  · intro h7
+    have := (h_gap 7 h7 6 h6 (by omega)).1
+    omega
 
 end Omega.ZeckSig

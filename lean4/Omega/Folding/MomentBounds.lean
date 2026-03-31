@@ -406,7 +406,7 @@ theorem Fold_biresolving (v : Word m) :
 
 /-- Strict q-monotonicity: S_q(m) < S_{q+1}(m) for m ≥ 2 and q ≥ 1.
     prop:pom-moment-congruence-q -/
-theorem momentSum_strict_mono_q (q m : Nat) (hq : 1 ≤ q) (hm : 2 ≤ m) :
+theorem momentSum_strict_mono_q (q m : Nat) (_hq : 1 ≤ q) (hm : 2 ≤ m) :
     momentSum q m < momentSum (q + 1) m := by
   simp only [momentSum]
   -- Use Finset.sum_lt_sum: ∀ x, d^q ≤ d^{q+1}, and ∃ x₀, d^q < d^{q+1}
@@ -617,7 +617,7 @@ theorem exactWeightCollision_ge_succ (m : Nat) :
 
 /-- E00(m) ≥ 2 · hiddenBitCount(m) for m ≥ 2.
     thm:pom-hidden-bit-count -/
-theorem exactWeightCollision_ge_double_hiddenBitCount (m : Nat) (hm : 2 ≤ m) :
+theorem exactWeightCollision_ge_double_hiddenBitCount (m : Nat) (_hm : 2 ≤ m) :
     2 * hiddenBitCount m ≤ exactWeightCollision m := by
   rw [hiddenBitCount_eq_div]
   -- E00(m) = 1 + Σ S_2(k) ≥ 1 + Σ 2^k. Use: each S_2(k) ≥ 2^k.
@@ -822,7 +822,7 @@ theorem momentSum_two_succ_gt_double (m : Nat) (hm : 2 ≤ m) :
 
 /-- D^q * |{x : d(x) ≥ D}| ≤ S_q(m) — Markov bound for large fibers.
     prop:fold-large-fiber-moment-upperbounds -/
-theorem paper_large_fiber_moment_bound (q m D : Nat) (hD : 1 ≤ D) (hq : 1 ≤ q) :
+theorem paper_large_fiber_moment_bound (q m D : Nat) (_hD : 1 ≤ D) (_hq : 1 ≤ q) :
     D ^ q * (Finset.univ.filter (fun x : X m => D ≤ X.fiberMultiplicity x)).card
     ≤ momentSum q m := by
   unfold momentSum
@@ -993,7 +993,7 @@ theorem collisionFreeCount_add_collision_eq_fib (m : Nat) :
     ((Finset.univ : Finset (X m)).filter (fun x => X.fiberMultiplicity x = 1)).card +
     ((Finset.univ : Finset (X m)).filter (fun x => ¬ X.fiberMultiplicity x = 1)).card =
     (Finset.univ : Finset (X m)).card :=
-    Finset.filter_card_add_filter_neg_card_eq_card _
+    Finset.card_filter_add_card_filter_not _
   have heq : ((Finset.univ : Finset (X m)).filter (fun x => ¬ X.fiberMultiplicity x = 1)) =
     ((Finset.univ : Finset (X m)).filter (fun x => 2 ≤ X.fiberMultiplicity x)) := by
     ext x; simp only [Finset.mem_filter, Finset.mem_univ, true_and]
@@ -1041,7 +1041,7 @@ theorem momentSum_three_super_quadratic (m : Nat) (hm : 4 ≤ m) :
 
 /-- S_q(m) ≥ |X_m| for q ≥ 1: each fiber contributes d(x)^q ≥ 1.
     prop:pom-moment-ge-card -/
-theorem momentSum_ge_card_fintype (q m : Nat) (hq : 1 ≤ q) :
+theorem momentSum_ge_card_fintype (q m : Nat) (_hq : 1 ≤ q) :
     Fintype.card (X m) ≤ momentSum q m := by
   rw [X.card_eq_fib]; exact momentSum_ge_card q m
 
@@ -1065,7 +1065,7 @@ theorem exactWeightCount_pos_iff (m n : Nat) :
 
 /-- d_{m,1}(x) > 0 iff sv(x) + F_{m+2} is an achievable weight.
     thm:pom-hidden-bit-one-pos-iff -/
-theorem fiberHiddenBitCount_one_pos_iff (x : X m) (hm : 2 ≤ m) :
+theorem fiberHiddenBitCount_one_pos_iff (x : X m) (_hm : 2 ≤ m) :
     0 < fiberHiddenBitCount 1 x ↔
     stableValue x + Nat.fib (m + 2) ≤ Nat.fib (m + 3) - 2 := by
   rw [fiberHiddenBitCount_one_eq_ewc, exactWeightCount_pos_iff]
@@ -1166,7 +1166,7 @@ theorem maxFiberMult_le_two_pow_of_injective_sideinfo (m k : Nat)
     fun _ _ => Finset.mem_coe.mpr (Finset.mem_univ _)
   calc (X.fiber x).card ≤ Finset.univ.card :=
         Finset.card_le_card_of_injOn r hmaps hr_inj
-    _ = 2 ^ k := by simp [Finset.card_fin]
+    _ = 2 ^ k := by simp
 
 /-- At m=6 the max fiber multiplicity is 5, requiring ⌈log₂ 5⌉ = 3 auxiliary bits.
     cor:pom-fold6-binary-auxbits -/
@@ -1174,5 +1174,100 @@ theorem fold6_binary_auxbits :
     X.maxFiberMultiplicity 6 = 5 ∧ Nat.clog 2 5 = 3 := by
   refine ⟨X.maxFiberMultiplicity_six, ?_⟩
   native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R145: S_2 doubling lower bound (cMomentSum form)
+-- ══════════════════════════════════════════════════════════════
+
+/-- 2·S_2(m-1) ≤ S_2(m) for m ≥ 3, in cMomentSum form.
+    thm:pom-s2-succ-ge-double -/
+theorem momentSum_two_double_lower (m : Nat) (hm : 3 ≤ m) :
+    2 * cMomentSum 2 (m - 1) ≤ cMomentSum 2 m := by
+  rw [cMomentSum_eq, cMomentSum_eq]
+  have hm1 : 2 ≤ m - 1 := by omega
+  have hshift := momentSum_two_succ_ge_double (m - 1) hm1
+  have hsub : m - 1 + 1 = m := by omega
+  rw [hsub] at hshift
+  exact hshift
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R154: S_3 exponential lower bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_3(m+1) ≥ 3·S_3(m) for m ≥ 5. Helper for the exponential lower bound.
+    lem:pom-s3-triple-growth -/
+theorem momentSum_three_succ_ge_triple (m : Nat) (hm : 5 ≤ m) :
+    3 * momentSum 3 m ≤ momentSum 3 (m + 1) := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 | 1 | 2 | 3 | 4 => omega
+    | 5 => rw [momentSum_three_five, momentSum_three_six]; omega
+    | 6 => rw [momentSum_three_six, momentSum_three_seven]; omega
+    | 7 => rw [momentSum_three_seven, momentSum_three_eight]; omega
+    | m + 8 =>
+      -- From recurrence at index m+5:
+      -- S(m+8) + 2*S(m+5) = 2*S(m+7) + 4*S(m+6)
+      -- So S(m+8) = 2*S(m+7) + 4*S(m+6) - 2*S(m+5) [in ℤ sense]
+      -- Want: S(m+8+1) = S(m+9) ≥ 3*S(m+8)
+      -- From recurrence at index m+6:
+      -- S(m+9) + 2*S(m+6) = 2*S(m+8) + 4*S(m+7)
+      have hrec := momentSum_three_recurrence (m + 6)
+      -- hrec: S(m+9) + 2*S(m+6) = 2*S(m+8) + 4*S(m+7)
+      -- Want: S(m+9) ≥ 3*S(m+8)
+      -- i.e. 2*S(m+8) + 4*S(m+7) - 2*S(m+6) ≥ 3*S(m+8)
+      -- i.e. 4*S(m+7) ≥ S(m+8) + 2*S(m+6)
+      -- From recurrence at index m+5:
+      -- S(m+8) + 2*S(m+5) = 2*S(m+7) + 4*S(m+6)
+      -- So S(m+8) = 2*S(m+7) + 4*S(m+6) - 2*S(m+5)
+      -- Substituting: 4*S(m+7) ≥ 2*S(m+7) + 4*S(m+6) - 2*S(m+5) + 2*S(m+6)
+      -- i.e. 2*S(m+7) ≥ 6*S(m+6) - 2*S(m+5)
+      -- i.e. S(m+7) ≥ 3*S(m+6) - S(m+5)
+      -- By IH: S(m+7) ≥ 3*S(m+6), so this holds (since S(m+5) ≥ 0).
+      have hrec2 := momentSum_three_recurrence (m + 5)
+      have ihm7 := ih (m + 6) (by omega) (by omega)
+      -- ihm7: 3*S(m+6) ≤ S(m+7)
+      -- hrec: S(m+9) + 2*S(m+6) = 2*S(m+8) + 4*S(m+7)
+      -- hrec2: S(m+8) + 2*S(m+5) = 2*S(m+7) + 4*S(m+6)
+      -- From hrec2: S(m+8) = 2*S(m+7) + 4*S(m+6) - 2*S(m+5)
+      -- Need: S(m+9) ≥ 3*S(m+8), i.e. S(m+9) + 2*S(m+6) ≥ 3*S(m+8) + 2*S(m+6)
+      -- LHS = 2*S(m+8) + 4*S(m+7) by hrec
+      -- Need: 2*S(m+8) + 4*S(m+7) ≥ 3*S(m+8) + 2*S(m+6)
+      -- i.e. 4*S(m+7) ≥ S(m+8) + 2*S(m+6)
+      -- Sub hrec2: 4*S(m+7) ≥ 2*S(m+7) + 4*S(m+6) - 2*S(m+5) + 2*S(m+6)
+      -- i.e. 2*S(m+7) + 2*S(m+5) ≥ 6*S(m+6)
+      -- By ihm7: S(m+7) ≥ 3*S(m+6), so 2*S(m+7) ≥ 6*S(m+6)
+      -- Therefore 2*S(m+7) + 2*S(m+5) ≥ 6*S(m+6). QED.
+      linarith
+
+/-- S_3(m) ≥ 3^m for m ≥ 6, witnessing r_3 > 3.
+    cor:pom-s3-asymptotic -/
+theorem momentSum_three_ge_three_pow (m : Nat) (hm : 6 ≤ m) :
+    3 ^ m ≤ momentSum 3 m := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 | 1 | 2 | 3 | 4 | 5 => omega
+    | 6 => rw [momentSum_three_six]; omega
+    | m + 7 =>
+      have ihm := ih (m + 6) (by omega) (by omega)
+      have htriple := momentSum_three_succ_ge_triple (m + 6) (by omega)
+      calc 3 ^ (m + 7) = 3 * 3 ^ (m + 6) := by ring
+        _ ≤ 3 * momentSum 3 (m + 6) := by omega
+        _ ≤ momentSum 3 (m + 7) := htriple
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R168: Cauchy-Schwarz lower bound for S_2
+-- ══════════════════════════════════════════════════════════════
+
+/-- Cauchy-Schwarz lower bound: S_2(m) ≥ 4^m / F(m+2).
+    prop:pom-sq-cauchy-schwarz-lower -/
+theorem momentSum_two_ge_pow_sq_div (m : Nat) :
+    4 ^ m / Nat.fib (m + 2) ≤ momentSum 2 m := by
+  have hcs := momentSum_cauchy_schwarz m
+  have h4 : (2 ^ m) ^ 2 = 4 ^ m := by
+    rw [← pow_mul, show m * 2 = 2 * m from by ring, pow_mul, show (2 : ℕ) ^ 2 = 4 from by norm_num]
+  rw [h4] at hcs
+  exact Nat.div_le_of_le_mul hcs
 
 end Omega

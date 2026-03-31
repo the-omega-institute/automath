@@ -339,10 +339,10 @@ theorem momentSum_two_ge_exactWeightCollision (m : Nat) (hm : 1 ≤ m) :
     | 0 => omega
     | 1 =>
       rw [exactWeightCollision_eq_sum, momentSum_two_one]
-      simp [Finset.sum_range_succ, Finset.range_zero, Finset.sum_empty, momentSum_two_zero]
+      simp [ momentSum_two_zero]
     | 2 =>
       have he := exactWeightCollision_eq_sum 2
-      simp [Finset.sum_range_succ, Finset.range_zero, Finset.sum_empty,
+      simp [Finset.sum_range_succ,
         momentSum_two_zero, momentSum_two_one] at he
       rw [momentSum_two_two]; omega
     | m + 3 =>
@@ -518,8 +518,8 @@ theorem weight_le_allTrue (w : Word m) :
     rw [htr]
     have him := ih (truncate w)
     cases hb : w ⟨m, Nat.lt_succ_self m⟩
-    · simp only [hb, Bool.false_eq_true, ↓reduceIte, Nat.add_zero]; omega
-    · simp only [hb, ↓reduceIte]; omega
+    · simp only [ Bool.false_eq_true, ↓reduceIte, Nat.add_zero]; omega
+    · simp only [ ↓reduceIte]; omega
 
 /-- Fold of all-true word.
     thm:pom-fold-allTrue -/
@@ -591,9 +591,9 @@ theorem weight_complement (w : Word m) :
     rw [htr]
     have him := ih (truncate w)
     cases hb : w ⟨m, Nat.lt_succ_self m⟩
-    · simp only [complement, hb, Bool.not_false, Bool.false_eq_true, ↓reduceIte, Nat.add_zero, ite_true]
+    · simp only [complement, hb, Bool.not_false, Bool.false_eq_true, ↓reduceIte, Nat.add_zero]
       omega
-    · simp only [complement, hb, Bool.not_true, Bool.false_eq_true, ↓reduceIte, Nat.add_zero, ite_true]
+    · simp only [complement, hb, Bool.not_true, Bool.false_eq_true, ↓reduceIte, Nat.add_zero]
       omega
 
 /-- ewc is symmetric: ewc(m, n) = ewc(m, F_{m+3}-2-n).
@@ -925,7 +925,7 @@ theorem exactWeightCollision_eq_symmetric_sum (m : Nat) :
   have hF : 2 ≤ Nat.fib (m + 3) :=
     le_trans (show 2 ≤ Nat.fib 3 from by decide) (Nat.fib_mono (by omega))
   rw [show Nat.fib (m + 3) = Nat.fib (m + 3) - 1 + 1 from by omega,
-    Finset.range_succ, Finset.sum_insert (by simp [Finset.mem_range]),
+    Finset.range_add_one, Finset.sum_insert (by simp [Finset.mem_range]),
     Finset.sum_insert (by simp [Finset.mem_range])]
   -- At n = F-1: ewc(F-1) = 0 by exactWeightCount_eq_zero_of_ge_fib (F-1 ≥ F-1, but F ≤ F-1?)
   -- Actually weight(w) ≤ F-2 for No11 words, so ewc(F-1)=0. Use weight_complement:

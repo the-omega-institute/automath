@@ -66,6 +66,77 @@ theorem collisionKernel3_trace_recurrence :
       2 * (collisionKernel3 ^ 2).trace = (collisionKernel3 ^ 5).trace) := by
   native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R155: Unbounded trace recurrence for A₃
+-- ══════════════════════════════════════════════════════════════
+
+/-- Trace recurrence for A₃ (all n): Tr(A₃^{n+3}) = 2·Tr(A₃^{n+2}) + 4·Tr(A₃^{n+1}) - 2·Tr(A₃^n).
+    thm:zeta-syntax-trace-linear-recurrence (A₃) -/
+theorem collisionKernel3_trace_recurrence_unbounded (n : ℕ) :
+    (collisionKernel3 ^ (n + 3)).trace =
+      2 * (collisionKernel3 ^ (n + 2)).trace +
+      4 * (collisionKernel3 ^ (n + 1)).trace -
+      2 * (collisionKernel3 ^ n).trace := by
+  have hCH := collisionKernel3_cayley_hamilton
+  have hpow : collisionKernel3 ^ (n + 3) =
+      2 • collisionKernel3 ^ (n + 2) + 4 • collisionKernel3 ^ (n + 1) -
+      2 • collisionKernel3 ^ n := by
+    calc collisionKernel3 ^ (n + 3)
+        = collisionKernel3 ^ n * collisionKernel3 ^ 3 := by rw [← pow_add]
+      _ = collisionKernel3 ^ n * (2 • collisionKernel3 ^ 2 + 4 • collisionKernel3 - 2 • 1) := by
+          rw [hCH]
+      _ = 2 • (collisionKernel3 ^ n * collisionKernel3 ^ 2) +
+          4 • (collisionKernel3 ^ n * collisionKernel3) -
+          2 • (collisionKernel3 ^ n * 1) := by
+          simp only [mul_add, mul_sub, mul_smul_comm]
+      _ = 2 • collisionKernel3 ^ (n + 2) + 4 • collisionKernel3 ^ (n + 1) -
+          2 • collisionKernel3 ^ n := by
+          rw [← pow_add, ← pow_succ, mul_one]
+  rw [hpow, Matrix.trace_sub, Matrix.trace_add, Matrix.trace_smul, Matrix.trace_smul,
+    Matrix.trace_smul]
+  ring
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R129: Unbounded trace recurrence for A₂
+-- ══════════════════════════════════════════════════════════════
+
+/-- Trace recurrence for A₂ (all n): Tr(A₂^{n+3}) = 2·Tr(A₂^{n+2}) + 2·Tr(A₂^{n+1}) - 2·Tr(A₂^n).
+    Proved algebraically via Cayley-Hamilton: A₂³ = 2A₂² + 2A₂ - 2I.
+    rem:pom-a2-primitive-fast -/
+theorem collisionKernel2_trace_recurrence_unbounded (n : ℕ) :
+    (collisionKernel2 ^ (n + 3)).trace =
+      2 * (collisionKernel2 ^ (n + 2)).trace +
+      2 * (collisionKernel2 ^ (n + 1)).trace -
+      2 * (collisionKernel2 ^ n).trace := by
+  have hCH := collisionKernel2_cayley_hamilton
+  -- A^(n+3) = A^n * A^3 = A^n * (2·A^2 + 2·A - 2·I)
+  -- A³ = 2•A² + 2•A - 2•I, so A^(n+3) = A^n · A³ = 2•A^(n+2) + 2•A^(n+1) - 2•A^n
+  have hpow : collisionKernel2 ^ (n + 3) =
+      2 • collisionKernel2 ^ (n + 2) + 2 • collisionKernel2 ^ (n + 1) -
+      2 • collisionKernel2 ^ n := by
+    calc collisionKernel2 ^ (n + 3)
+        = collisionKernel2 ^ n * collisionKernel2 ^ 3 := by rw [← pow_add]
+      _ = collisionKernel2 ^ n * (2 • collisionKernel2 ^ 2 + 2 • collisionKernel2 - 2 • 1) := by
+          rw [hCH]
+      _ = 2 • (collisionKernel2 ^ n * collisionKernel2 ^ 2) +
+          2 • (collisionKernel2 ^ n * collisionKernel2) -
+          2 • (collisionKernel2 ^ n * 1) := by
+          simp only [mul_add, mul_sub, mul_smul_comm]
+      _ = 2 • collisionKernel2 ^ (n + 2) + 2 • collisionKernel2 ^ (n + 1) -
+          2 • collisionKernel2 ^ n := by
+          rw [← pow_add, ← pow_succ, mul_one]
+  rw [hpow, Matrix.trace_sub, Matrix.trace_add, Matrix.trace_smul, Matrix.trace_smul,
+    Matrix.trace_smul]
+  ring
+
+/-- Paper: rem:pom-a2-primitive-fast -/
+theorem paper_collisionKernel2_trace_recurrence_unbounded (n : ℕ) :
+    (collisionKernel2 ^ (n + 3)).trace =
+      2 * (collisionKernel2 ^ (n + 2)).trace +
+      2 * (collisionKernel2 ^ (n + 1)).trace -
+      2 * (collisionKernel2 ^ n).trace :=
+  collisionKernel2_trace_recurrence_unbounded n
+
 /-! ### Identity matrix trace -/
 
 /-- tr(I_3) = tr(A^0) = 3 for both collision kernels.
@@ -164,15 +235,33 @@ theorem collisionKernel2_det_pow_2 : (collisionKernel2 ^ 2).det = 4 := by native
 /-- def:pom-collision-kernel-det-pow-a2-3 -/
 theorem collisionKernel2_det_pow_3 : (collisionKernel2 ^ 3).det = -8 := by native_decide
 
+/-- det(M₂^n) = (-2)^n for the S_2 collision kernel.
+    prop:collision-kernel-det-pow -/
+theorem collisionKernel2_det_pow_general (n : ℕ) :
+    (collisionKernel2 ^ n).det = (-2 : ℤ) ^ n := by
+  rw [Matrix.det_pow, collisionKernel2_det]
+
 /-- det(A_3^n) = det(A_3)^n = (-2)^n for n = 2, 3.
     def:pom-collision-kernel-det-pow-a3-2 -/
 theorem collisionKernel3_det_pow_2 : (collisionKernel3 ^ 2).det = 4 := by native_decide
 /-- def:pom-collision-kernel-det-pow-a3-3 -/
 theorem collisionKernel3_det_pow_3 : (collisionKernel3 ^ 3).det = -8 := by native_decide
 
+/-- det(M₃^n) = (-2)^n for the S_3 collision kernel.
+    prop:collision-kernel-det-pow -/
+theorem collisionKernel3_det_pow_general (n : ℕ) :
+    (collisionKernel3 ^ n).det = (-2 : ℤ) ^ n := by
+  rw [Matrix.det_pow, collisionKernel3_det]
+
 /-- det(A_4^n) = det(A_4)^n = (-2)^n for n = 2.
     def:pom-collision-kernel-det-pow-a4-2 -/
 theorem collisionKernel4_det_pow_2 : (collisionKernel4 ^ 2).det = 4 := by native_decide
+
+/-- det(M₄^n) = (-2)^n for the S_4 collision kernel.
+    prop:collision-kernel-det-pow -/
+theorem collisionKernel4_det_pow_general (n : ℕ) :
+    (collisionKernel4 ^ n).det = (-2 : ℤ) ^ n := by
+  rw [Matrix.det_pow, collisionKernel4_det]
 
 /-! ### Unified trace/det certificate -/
 
@@ -298,6 +387,22 @@ theorem pisano_period_7 : Nat.fib 16 % 7 = 0 ∧ Nat.fib 17 % 7 = 1 := by native
     def:pom-pisano-period-6 -/
 theorem pisano_period_6 : Nat.fib 24 % 6 = 0 ∧ Nat.fib 25 % 6 = 1 := by native_decide
 
+/-- Pisano period π(8) = 12: F(12) ≡ 0 (mod 8) and F(13) ≡ 1 (mod 8).
+    def:pom-pisano-period-2 -/
+theorem pisano_period_8 : Nat.fib 12 % 8 = 0 ∧ Nat.fib 13 % 8 = 1 := by native_decide
+
+/-- Pisano period π(11) = 10: F(10) ≡ 0 (mod 11) and F(11) ≡ 1 (mod 11).
+    def:pom-pisano-period-2 -/
+theorem pisano_period_11 : Nat.fib 10 % 11 = 0 ∧ Nat.fib 11 % 11 = 1 := by native_decide
+
+/-- Pisano period π(9) = 24: F(24) ≡ 0 (mod 9) and F(25) ≡ 1 (mod 9).
+    def:pom-pisano-period-2 -/
+theorem pisano_period_9 : Nat.fib 24 % 9 = 0 ∧ Nat.fib 25 % 9 = 1 := by native_decide
+
+/-- Pisano period π(10) = 60: F(60) ≡ 0 (mod 10) and F(61) ≡ 1 (mod 10).
+    def:pom-pisano-period-2 -/
+theorem pisano_period_10 : Nat.fib 60 % 10 = 0 ∧ Nat.fib 61 % 10 = 1 := by native_decide
+
 /-- The Fibonacci entry point for 21: α(21) = 8.
     F(8) ≡ 0 (mod 21) and F(k) ≢ 0 (mod 21) for 1 ≤ k < 8.
     def:pom-fib-entry-point-21 -/
@@ -321,7 +426,7 @@ theorem fib_mod_two_table :
 /-- Fibonacci parity law: F(n) is even iff n ≡ 0 (mod 3).
     Proof by strong induction using the Pisano period π(2)=3.
     cor:pom-fiber-parity-mod3-general -/
-theorem fib_even_iff_mod3 (n : Nat) (hn : 1 ≤ n) :
+theorem fib_even_iff_mod3 (n : Nat) (_hn : 1 ≤ n) :
     Even (Nat.fib n) ↔ n % 3 = 0 := by
   -- Bounded version: check all n ≤ 30 computationally, then use Pisano period π(2)=3.
   -- For the general case, we prove by induction on n with step size 3.
@@ -708,5 +813,88 @@ theorem collisionKernel4_trace_pow_9 : (collisionKernel4 ^ 9).trace = 183704 := 
 set_option maxHeartbeats 12800000 in
 /-- def:pom-collision-zeta-a4-trace-pow-10 -/
 theorem collisionKernel4_trace_pow_10 : (collisionKernel4 ^ 10).trace = 709058 := by native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R140: A₅ collision kernel trace powers
+-- ══════════════════════════════════════════════════════════════
+
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_0 : (collisionKernel5 ^ 0).trace = 5 := by native_decide
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_1 : (collisionKernel5 ^ 1).trace = -2 := by native_decide
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_2 : (collisionKernel5 ^ 2).trace = -18 := by native_decide
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_3 : (collisionKernel5 ^ 3).trace = 34 := by native_decide
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_4 : (collisionKernel5 ^ 4).trace = 66 := by native_decide
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_5 : (collisionKernel5 ^ 5).trace = -272 := by native_decide
+/-- prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_pow_6 : (collisionKernel5 ^ 6).trace = -114 := by native_decide
+
+/-- Paper: prop:pom-s5-recurrence (trace powers) -/
+theorem paper_collisionKernel5_trace_powers :
+    (collisionKernel5 ^ 0).trace = 5 ∧ (collisionKernel5 ^ 1).trace = -2 ∧
+    (collisionKernel5 ^ 2).trace = -18 ∧ (collisionKernel5 ^ 3).trace = 34 :=
+  ⟨collisionKernel5_trace_pow_0, collisionKernel5_trace_pow_1,
+   collisionKernel5_trace_pow_2, collisionKernel5_trace_pow_3⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R142: A₅ unbounded trace recurrence
+-- ══════════════════════════════════════════════════════════════
+
+/-- Unbounded trace recurrence for A₅ from Cayley-Hamilton:
+    A₅^5 = -2A₅^4 - 11A₅^3 - 8A₅^2 - 20A₅ + 10I.
+    prop:pom-s5-recurrence -/
+theorem collisionKernel5_trace_recurrence_unbounded (n : ℕ) :
+    (collisionKernel5 ^ (n + 5)).trace =
+      -2 * (collisionKernel5 ^ (n + 4)).trace
+      - 11 * (collisionKernel5 ^ (n + 3)).trace
+      - 8 * (collisionKernel5 ^ (n + 2)).trace
+      - 20 * (collisionKernel5 ^ (n + 1)).trace
+      + 10 * (collisionKernel5 ^ n).trace := by
+  -- A₅^5 + 2A₅^4 + 11A₅^3 + 8A₅^2 + 20A₅ - 10I = 0
+  -- So A₅^5 = -2A₅^4 - 11A₅^3 - 8A₅^2 - 20A₅ + 10I
+  have hCH : collisionKernel5 ^ 5 =
+      (-2) • collisionKernel5 ^ 4 + (-11) • collisionKernel5 ^ 3 +
+      (-8) • collisionKernel5 ^ 2 + (-20) • collisionKernel5 ^ 1 +
+      (10 : ℤ) • (1 : Matrix (Fin 5) (Fin 5) ℤ) := by
+    ext i j; fin_cases i <;> fin_cases j <;> native_decide
+  have hpow : collisionKernel5 ^ (n + 5) =
+      (-2) • collisionKernel5 ^ (n + 4) + (-11) • collisionKernel5 ^ (n + 3) +
+      (-8) • collisionKernel5 ^ (n + 2) + (-20) • collisionKernel5 ^ (n + 1) +
+      10 • collisionKernel5 ^ n := by
+    calc collisionKernel5 ^ (n + 5)
+        = collisionKernel5 ^ n * collisionKernel5 ^ 5 := by rw [← pow_add]
+      _ = collisionKernel5 ^ n *
+          ((-2) • collisionKernel5 ^ 4 + (-11) • collisionKernel5 ^ 3 +
+           (-8) • collisionKernel5 ^ 2 + (-20) • collisionKernel5 ^ 1 +
+           (10 : ℤ) • 1) := by rw [hCH]
+      _ = (-2) • (collisionKernel5 ^ n * collisionKernel5 ^ 4) +
+          (-11) • (collisionKernel5 ^ n * collisionKernel5 ^ 3) +
+          (-8) • (collisionKernel5 ^ n * collisionKernel5 ^ 2) +
+          (-20) • (collisionKernel5 ^ n * collisionKernel5 ^ 1) +
+          (10 : ℤ) • (collisionKernel5 ^ n * 1) := by
+          simp only [mul_add, mul_smul_comm]
+      _ = (-2) • collisionKernel5 ^ (n + 4) +
+          (-11) • collisionKernel5 ^ (n + 3) +
+          (-8) • collisionKernel5 ^ (n + 2) +
+          (-20) • collisionKernel5 ^ (n + 1) +
+          10 • collisionKernel5 ^ n := by
+          simp only [← pow_add, mul_one]; norm_cast
+  rw [hpow]
+  simp only [Matrix.trace_add, Matrix.trace_smul, smul_eq_mul]
+  ring
+
+/-- Paper: prop:pom-s5-recurrence (unbounded) -/
+theorem paper_collisionKernel5_trace_recurrence_unbounded (n : ℕ) :
+    (collisionKernel5 ^ (n + 5)).trace =
+      -2 * (collisionKernel5 ^ (n + 4)).trace
+      - 11 * (collisionKernel5 ^ (n + 3)).trace
+      - 8 * (collisionKernel5 ^ (n + 2)).trace
+      - 20 * (collisionKernel5 ^ (n + 1)).trace
+      + 10 * (collisionKernel5 ^ n).trace :=
+  collisionKernel5_trace_recurrence_unbounded n
 
 end Omega

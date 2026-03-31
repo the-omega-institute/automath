@@ -208,7 +208,7 @@ private theorem snoc_truncate_last' {m : Nat} (w : Word (m + 1)) :
   funext i; by_cases h : i.1 < m
   · simp [snoc, truncate, h]
   · have : i = ⟨m, Nat.lt_succ_self m⟩ := Fin.ext (Nat.eq_of_lt_succ_of_not_lt i.isLt h)
-    subst this; simp [snoc, h]
+    subst this; simp [snoc]
 
 /-- Truncating a false-ending word preserves the fiber-restrict relationship. -/
 theorem truncate_Fold_eq_restrict_of_false {m : Nat} (w : Word (m + 1))
@@ -297,7 +297,7 @@ theorem maxFiberMultiplicity_four_step_verified (m : Nat) (hm1 : 6 ≤ m) (hm2 :
 /-- Four-step upper bound: D(m+4) ≤ 2·D(m+2) + D(m+1) + D(m).
     Follows from two applications of the splitting inequality D(n+2) ≤ D(n+1) + D(n).
     cor:pom-D-rec-four-step -/
-theorem maxFiberMultiplicity_four_step (m : Nat) (hm : 2 ≤ m) :
+theorem maxFiberMultiplicity_four_step (m : Nat) (_hm : 2 ≤ m) :
     X.maxFiberMultiplicity (m + 4) ≤
     2 * X.maxFiberMultiplicity (m + 2) + X.maxFiberMultiplicity (m + 1) +
     X.maxFiberMultiplicity m := by
