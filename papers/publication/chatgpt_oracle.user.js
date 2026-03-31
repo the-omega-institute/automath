@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      1.0
+// @version      2.0
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
 // @grant        GM_xmlhttpRequest
+// @grant        GM_setValue
+// @grant        GM_getValue
 // @connect      localhost
 // @connect      127.0.0.1
 // @run-at       document-idle
@@ -15,59 +17,47 @@
   "use strict";
 
   const SERVER = "http://localhost:8765";
-  const POLL_INTERVAL = 5000; // 5 seconds
-  const STABLE_CHECKS = 4; // response must be stable for 4 consecutive checks
-  const STABLE_INTERVAL = 3000; // check every 3 seconds
-  const MAX_WAIT = 900000; // 15 minutes max wait for response
+  const POLL_INTERVAL = 5000;
+  const STABLE_CHECKS = 5;       // response must be stable for 5 checks
+  const STABLE_INTERVAL = 4000;   // check every 4 seconds
+  const MAX_WAIT = 900000;        // 15 minutes
 
-  let currentTask = null;
   let busy = false;
 
   // ── Logging ──────────────────────────────────────────────────────────
+  const logHistory = [];
   function log(msg) {
-    console.log(`[oracle] ${msg}`);
-    updatePanel(msg);
+    const ts = new Date().toLocaleTimeString();
+    const entry = `${ts} ${msg}`;
+    console.log(`[oracle] ${entry}`);
+    logHistory.push(entry);
+    if (logHistory.length > 20) logHistory.shift();
+    updatePanel();
   }
 
-  // ── Status panel (floating overlay) ──────────────────────────────────
+  // ── Status panel ─────────────────────────────────────────────────────
   let panel = null;
-  function createPanel() {
+  function ensurePanel() {
+    if (panel && document.body.contains(panel)) return;
     panel = document.createElement("div");
     panel.id = "oracle-panel";
     panel.style.cssText = `
       position: fixed; bottom: 12px; right: 12px; z-index: 99999;
-      background: #1a1a2e; color: #0f0; font-family: monospace; font-size: 12px;
-      padding: 8px 12px; border-radius: 6px; max-width: 380px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.5); opacity: 0.92;
-      cursor: move; user-select: none;
+      background: #1a1a2e; color: #0f0; font-family: monospace; font-size: 11px;
+      padding: 8px 12px; border-radius: 6px; max-width: 420px; max-height: 300px;
+      overflow-y: auto; box-shadow: 0 2px 12px rgba(0,0,0,0.5); opacity: 0.92;
+      line-height: 1.4;
     `;
-    panel.innerHTML = `<b>[Oracle Bridge]</b> idle — polling ${SERVER}`;
     document.body.appendChild(panel);
-
-    // Make draggable
-    let dragging = false, dx = 0, dy = 0;
-    panel.addEventListener("mousedown", (e) => {
-      dragging = true;
-      dx = e.clientX - panel.getBoundingClientRect().left;
-      dy = e.clientY - panel.getBoundingClientRect().top;
-    });
-    document.addEventListener("mousemove", (e) => {
-      if (!dragging) return;
-      panel.style.left = (e.clientX - dx) + "px";
-      panel.style.top = (e.clientY - dy) + "px";
-      panel.style.right = "auto";
-      panel.style.bottom = "auto";
-    });
-    document.addEventListener("mouseup", () => { dragging = false; });
   }
 
-  function updatePanel(msg) {
-    if (!panel) createPanel();
-    const time = new Date().toLocaleTimeString();
-    panel.innerHTML = `<b>[Oracle Bridge]</b> ${time}<br>${msg}`;
+  function updatePanel() {
+    ensurePanel();
+    const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
+    panel.innerHTML = `<b>[Oracle Bridge v2]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
   }
 
-  // ── HTTP helpers using GM_xmlhttpRequest (bypasses CORS) ─────────────
+  // ── HTTP helpers ─────────────────────────────────────────────────────
   function serverGet(path) {
     return new Promise((resolve, reject) => {
       GM_xmlhttpRequest({
@@ -78,7 +68,7 @@
           try { resolve(JSON.parse(r.responseText)); }
           catch (e) { reject(e); }
         },
-        onerror: (e) => reject(e),
+        onerror: (e) => reject(new Error("network error")),
         ontimeout: () => reject(new Error("timeout")),
       });
     });
@@ -96,385 +86,438 @@
           try { resolve(JSON.parse(r.responseText)); }
           catch (e) { reject(e); }
         },
-        onerror: (e) => reject(e),
+        onerror: (e) => reject(new Error("network error")),
         ontimeout: () => reject(new Error("timeout")),
       });
     });
   }
 
-  // ── Wait helper ──────────────────────────────────────────────────────
   function sleep(ms) {
     return new Promise((r) => setTimeout(r, ms));
   }
 
-  // ── Find the prompt input area ───────────────────────────────────────
+  // ── Persistent task state (survives page navigation) ─────────────────
+  function saveTaskState(task) {
+    GM_setValue("current_task", JSON.stringify(task));
+    GM_setValue("task_phase", "pending");
+  }
+  function loadTaskState() {
+    try {
+      const s = GM_getValue("current_task", "");
+      return s ? JSON.parse(s) : null;
+    } catch { return null; }
+  }
+  function getTaskPhase() {
+    return GM_getValue("task_phase", "");
+  }
+  function setTaskPhase(phase) {
+    GM_setValue("task_phase", phase);
+  }
+  function clearTaskState() {
+    GM_setValue("current_task", "");
+    GM_setValue("task_phase", "");
+  }
+
+  // ── DOM helpers for ChatGPT UI ───────────────────────────────────────
+
   function findPromptInput() {
-    // ChatGPT uses a contenteditable div with id="prompt-textarea"
-    // or a ProseMirror editor
-    const selectors = [
+    // ChatGPT 2024-2025 uses ProseMirror contenteditable div
+    for (const sel of [
       "#prompt-textarea",
-      "div[contenteditable='true'][id='prompt-textarea']",
       "div.ProseMirror[contenteditable='true']",
-      "textarea[data-id]",
+      "[id='prompt-textarea']",
+      "div[contenteditable='true'][role='textbox']",
       "div[contenteditable='true']",
-    ];
-    for (const sel of selectors) {
+    ]) {
       const el = document.querySelector(sel);
       if (el) return el;
     }
     return null;
   }
 
-  // ── Find the send button ─────────────────────────────────────────────
   function findSendButton() {
-    const selectors = [
+    for (const sel of [
       "button[data-testid='send-button']",
-      "button[aria-label='Send prompt']",
       "button[data-testid='composer-send-button']",
-      // Fallback: find button near the textarea
-    ];
-    for (const sel of selectors) {
+      "button[aria-label='Send prompt']",
+      "button[aria-label='Send']",
+    ]) {
       const el = document.querySelector(sel);
       if (el && !el.disabled) return el;
     }
-    // Broader search: any enabled send-like button in the composer
-    const buttons = document.querySelectorAll("form button, [class*='composer'] button");
-    for (const btn of buttons) {
-      const svg = btn.querySelector("svg");
-      if (svg && !btn.disabled) {
-        // The send button typically has an arrow icon
-        const path = svg.querySelector("path");
-        if (path) return btn;
+    // Broader: any non-disabled button inside the composer form
+    const form = document.querySelector("form");
+    if (form) {
+      for (const btn of form.querySelectorAll("button")) {
+        if (!btn.disabled && btn.querySelector("svg")) return btn;
       }
     }
     return null;
   }
 
-  // ── Upload PDF from base64 ───────────────────────────────────────────
-  async function uploadPDF(base64Data, fileName) {
-    log(`Uploading PDF: ${fileName}`);
+  function findFileInput() {
+    // ChatGPT has a hidden file input
+    return document.querySelector("input[type='file']");
+  }
 
-    // Convert base64 to File object
+  function isOnNewChatPage() {
+    // New chat page has no conversation messages
+    const msgs = document.querySelectorAll("[data-message-author-role]");
+    return msgs.length === 0;
+  }
+
+  // ── Upload PDF ───────────────────────────────────────────────────────
+  async function uploadPDF(base64Data, fileName) {
+    log(`PDF upload: ${fileName} (${(base64Data.length * 0.75 / 1024).toFixed(0)} KB)`);
+
+    // Convert base64 to File
     const byteChars = atob(base64Data);
     const byteArray = new Uint8Array(byteChars.length);
     for (let i = 0; i < byteChars.length; i++) {
       byteArray[i] = byteChars.charCodeAt(i);
     }
-    const blob = new Blob([byteArray], { type: "application/pdf" });
-    const file = new File([blob], fileName, { type: "application/pdf" });
+    const file = new File([byteArray], fileName, { type: "application/pdf" });
 
-    // Find the file input element
-    const fileInput = document.querySelector("input[type='file']");
-    if (!fileInput) {
-      log("WARNING: No file input found, trying drag-drop...");
-      return await uploadViaDragDrop(file);
+    // Method 1: Find hidden file input and inject
+    const fileInput = findFileInput();
+    if (fileInput) {
+      try {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        fileInput.files = dt.files;
+        fileInput.dispatchEvent(new Event("change", { bubbles: true }));
+        log("PDF: injected via file input");
+        await sleep(5000); // Wait for ChatGPT to process the upload
+        return true;
+      } catch (e) {
+        log(`PDF file input failed: ${e.message}`);
+      }
     }
 
-    // Create a DataTransfer to set files on the input
-    const dt = new DataTransfer();
-    dt.items.add(file);
-    fileInput.files = dt.files;
+    // Method 2: Click the attachment button first, then use the file input
+    const attachBtn = document.querySelector(
+      "button[aria-label='Attach files'], button[aria-label='Upload file'], " +
+      "button[data-testid='composer-attach-button'], button[aria-haspopup='menu']"
+    );
+    if (attachBtn) {
+      log("PDF: clicking attachment button...");
+      attachBtn.click();
+      await sleep(1000);
 
-    // Dispatch change event
-    fileInput.dispatchEvent(new Event("change", { bubbles: true }));
-    log(`PDF injected into file input (${(byteArray.length / 1024).toFixed(0)} KB)`);
+      // Now look for file input again (it may appear after clicking)
+      const fi2 = document.querySelector("input[type='file']");
+      if (fi2) {
+        try {
+          const dt2 = new DataTransfer();
+          dt2.items.add(file);
+          fi2.files = dt2.files;
+          fi2.dispatchEvent(new Event("change", { bubbles: true }));
+          log("PDF: injected after clicking attach");
+          await sleep(5000);
+          return true;
+        } catch (e) {
+          log(`PDF inject after attach failed: ${e.message}`);
+        }
+      }
+    }
 
-    // Wait for upload to process
-    await sleep(4000);
-    return true;
-  }
-
-  // ── Fallback: upload via synthetic drag-drop ─────────────────────────
-  async function uploadViaDragDrop(file) {
-    // Find the drop target (usually the composer area)
+    // Method 3: Drop event on the composer
+    log("PDF: trying drag-drop...");
     const dropTarget =
-      document.querySelector("[class*='composer']") ||
       document.querySelector("form") ||
-      document.querySelector("#prompt-textarea")?.parentElement;
+      findPromptInput()?.closest("div") ||
+      document.querySelector("[class*='composer']");
 
-    if (!dropTarget) {
-      log("ERROR: Cannot find drop target for PDF");
-      return false;
+    if (dropTarget) {
+      const dt3 = new DataTransfer();
+      dt3.items.add(file);
+      for (const evtType of ["dragenter", "dragover", "drop"]) {
+        dropTarget.dispatchEvent(new DragEvent(evtType, {
+          bubbles: true, cancelable: true, dataTransfer: dt3,
+        }));
+        await sleep(300);
+      }
+      log("PDF: drag-drop dispatched");
+      await sleep(5000);
+      return true;
     }
 
-    const dt = new DataTransfer();
-    dt.items.add(file);
-
-    const events = ["dragenter", "dragover", "drop"];
-    for (const eventType of events) {
-      const event = new DragEvent(eventType, {
-        bubbles: true,
-        cancelable: true,
-        dataTransfer: dt,
-      });
-      dropTarget.dispatchEvent(event);
-      await sleep(200);
-    }
-
-    log("PDF dropped via drag-drop simulation");
-    await sleep(4000);
-    return true;
+    log("PDF: ALL METHODS FAILED — continuing without PDF");
+    return false;
   }
 
-  // ── Enter prompt text ────────────────────────────────────────────────
+  // ── Enter prompt text into ProseMirror ───────────────────────────────
   async function enterPrompt(text) {
     log(`Entering prompt (${text.length} chars)...`);
 
     const input = findPromptInput();
     if (!input) {
-      log("ERROR: Cannot find prompt input");
+      log("ERROR: prompt input not found");
       return false;
     }
 
-    // Focus the input
     input.focus();
-    await sleep(300);
+    await sleep(200);
 
-    // For contenteditable divs (ProseMirror), we need special handling
-    if (input.contentEditable === "true") {
-      // Clear existing content
-      input.innerHTML = "";
-      await sleep(100);
-
-      // Use clipboard API for reliable text insertion
-      // This handles ProseMirror's internal state correctly
-      const clipData = new DataTransfer();
-      clipData.setData("text/plain", text);
-      const pasteEvent = new ClipboardEvent("paste", {
-        bubbles: true,
-        cancelable: true,
-        clipboardData: clipData,
-      });
-      input.dispatchEvent(pasteEvent);
-      await sleep(300);
-
-      // Verify text was entered
-      if (input.textContent.length < 10 && text.length > 10) {
-        // Fallback: set innerHTML directly
-        log("Paste failed, trying innerHTML fallback...");
-        // Escape HTML entities
-        const escaped = text
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/\n/g, "<br>");
-        input.innerHTML = `<p>${escaped}</p>`;
-        input.dispatchEvent(new Event("input", { bubbles: true }));
-        await sleep(300);
+    // Strategy 1: Write to clipboard and paste (most reliable for ProseMirror)
+    let success = false;
+    try {
+      await navigator.clipboard.writeText(text);
+      document.execCommand("paste");
+      await sleep(500);
+      if ((input.textContent || "").length > 10) {
+        success = true;
+        log("Prompt: pasted via clipboard API");
       }
-
-      // Another fallback: use execCommand
-      if (input.textContent.length < 10 && text.length > 10) {
-        log("innerHTML failed, trying execCommand...");
-        input.focus();
-        document.execCommand("selectAll", false, null);
-        document.execCommand("insertText", false, text);
-        await sleep(300);
-      }
-    } else {
-      // Textarea
-      input.value = text;
-      input.dispatchEvent(new Event("input", { bubbles: true }));
+    } catch (e) {
+      log(`Clipboard paste failed: ${e.message}`);
     }
 
-    log(`Prompt entered (${input.textContent?.length || input.value?.length || 0} chars visible)`);
-    return true;
+    // Strategy 2: Synthetic ClipboardEvent paste
+    if (!success) {
+      try {
+        const clipData = new DataTransfer();
+        clipData.setData("text/plain", text);
+        input.dispatchEvent(new ClipboardEvent("paste", {
+          bubbles: true, cancelable: true, clipboardData: clipData,
+        }));
+        await sleep(500);
+        if ((input.textContent || "").length > 10) {
+          success = true;
+          log("Prompt: pasted via synthetic ClipboardEvent");
+        }
+      } catch (e) {
+        log(`Synthetic paste failed: ${e.message}`);
+      }
+    }
+
+    // Strategy 3: execCommand insertText
+    if (!success) {
+      try {
+        input.focus();
+        input.innerHTML = "";
+        document.execCommand("selectAll", false, null);
+        document.execCommand("insertText", false, text);
+        await sleep(500);
+        if ((input.textContent || "").length > 10) {
+          success = true;
+          log("Prompt: inserted via execCommand");
+        }
+      } catch (e) {
+        log(`execCommand failed: ${e.message}`);
+      }
+    }
+
+    // Strategy 4: Direct innerHTML (last resort — may not trigger React state)
+    if (!success) {
+      const escaped = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\n/g, "<br>");
+      input.innerHTML = `<p>${escaped}</p>`;
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      await sleep(500);
+      log("Prompt: set via innerHTML (last resort)");
+      success = (input.textContent || "").length > 0;
+    }
+
+    const visible = (input.textContent || "").length;
+    log(`Prompt visible: ${visible} chars, success=${success}`);
+    return success;
   }
 
   // ── Click send ───────────────────────────────────────────────────────
   async function clickSend() {
-    // Wait a moment for the UI to register the input
-    await sleep(500);
+    await sleep(1000); // Let UI catch up
 
-    const sendBtn = findSendButton();
-    if (sendBtn) {
-      sendBtn.click();
-      log("Send button clicked");
-      return true;
+    // First check if send button is enabled
+    for (let i = 0; i < 10; i++) {
+      const btn = findSendButton();
+      if (btn && !btn.disabled) {
+        btn.click();
+        log("Send button clicked");
+        return true;
+      }
+      await sleep(500);
     }
 
-    // Fallback: try pressing Enter in the input
+    // Fallback: Enter key
     const input = findPromptInput();
     if (input) {
+      log("Send: trying Enter key...");
       input.dispatchEvent(new KeyboardEvent("keydown", {
         key: "Enter", code: "Enter", keyCode: 13,
         bubbles: true, cancelable: true,
       }));
-      log("Enter key dispatched (fallback)");
+      await sleep(200);
+      input.dispatchEvent(new KeyboardEvent("keyup", {
+        key: "Enter", code: "Enter", keyCode: 13,
+        bubbles: true, cancelable: true,
+      }));
       return true;
     }
 
-    log("ERROR: Cannot find send button or input");
+    log("ERROR: cannot send");
     return false;
   }
 
-  // ── Wait for ChatGPT response to complete ────────────────────────────
+  // ── Wait for response to complete ────────────────────────────────────
   async function waitForResponse() {
-    log("Waiting for response...");
+    log("Waiting for ChatGPT response...");
 
     const startTime = Date.now();
     let lastText = "";
     let stableCount = 0;
+    let lastLogTime = 0;
 
     while (Date.now() - startTime < MAX_WAIT) {
       await sleep(STABLE_INTERVAL);
 
-      // Find response elements — try multiple selectors for different UI versions
-      let responseEls = document.querySelectorAll(
-        "[data-message-author-role='assistant'] .markdown"
-      );
-      if (!responseEls.length) {
-        responseEls = document.querySelectorAll(".agent-turn .markdown");
-      }
-      if (!responseEls.length) {
-        responseEls = document.querySelectorAll("[class*='response'] .markdown");
-      }
-      if (!responseEls.length) {
-        responseEls = document.querySelectorAll("[data-message-author-role='assistant']");
+      // Try many selectors for response content
+      let responseText = "";
+      const selectors = [
+        "[data-message-author-role='assistant'] .markdown",
+        "[data-message-author-role='assistant'] .whitespace-pre-wrap",
+        "[data-message-author-role='assistant']",
+        ".agent-turn .markdown",
+        "div[class*='markdown']",
+      ];
+
+      for (const sel of selectors) {
+        const els = document.querySelectorAll(sel);
+        if (els.length > 0) {
+          // Get the last (most recent) response
+          const text = els[els.length - 1].innerText?.trim() || "";
+          if (text.length > responseText.length) {
+            responseText = text;
+          }
+        }
       }
 
-      if (responseEls.length > 0) {
-        // Get the LAST response (most recent)
-        const lastEl = responseEls[responseEls.length - 1];
-        const currentText = lastEl.innerText?.trim() || "";
-
-        if (currentText.length > 0 && currentText === lastText) {
+      if (responseText.length > 0) {
+        if (responseText === lastText) {
           stableCount++;
 
           if (stableCount >= STABLE_CHECKS) {
-            // Also verify no "Stop generating" button exists
-            const stopBtn = document.querySelector(
-              "button[aria-label='Stop generating'], button[aria-label='Stop streaming']"
-            );
-            // Check for thinking indicator
-            const thinking = document.querySelector(
-              "[class*='thinking'], [class*='progress'], [data-testid='thinking']"
-            );
-            if (!stopBtn && !thinking) {
-              log(`Response complete: ${currentText.length} chars`);
-              return currentText;
-            } else {
-              stableCount = 0; // Reset — still generating
+            // Verify generation is done
+            const isGenerating =
+              document.querySelector("button[aria-label='Stop generating']") ||
+              document.querySelector("button[aria-label='Stop streaming']") ||
+              document.querySelector("[class*='result-streaming']") ||
+              document.querySelector("[class*='thinking']");
+
+            if (!isGenerating) {
+              log(`Response complete: ${responseText.length} chars`);
+              return responseText;
             }
+            // Still generating, reset
+            stableCount = 0;
           }
         } else {
           stableCount = 0;
-          lastText = currentText;
+          lastText = responseText;
         }
+      }
 
-        const elapsed = Math.floor((Date.now() - startTime) / 1000);
-        if (elapsed > 0 && elapsed % 30 === 0) {
-          log(`Still waiting... ${elapsed}s, ${currentText.length} chars`);
-        }
-      } else {
-        const elapsed = Math.floor((Date.now() - startTime) / 1000);
-        if (elapsed > 10 && elapsed % 15 === 0) {
-          log(`No response elements yet... ${elapsed}s`);
-        }
+      // Periodic status log
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      if (elapsed - lastLogTime >= 30) {
+        lastLogTime = elapsed;
+        log(`Waiting... ${elapsed}s, ${responseText.length} chars, stable=${stableCount}`);
       }
     }
 
-    log(`TIMEOUT after ${MAX_WAIT / 1000}s`);
-    return lastText || "";
+    log(`TIMEOUT (${MAX_WAIT/1000}s), returning partial: ${lastText.length} chars`);
+    return lastText;
   }
 
-  // ── Navigate to a new chat ───────────────────────────────────────────
-  async function startNewChat() {
-    // Click "New chat" button or navigate
-    const newChatBtn = document.querySelector(
-      "a[href='/'], nav a[class*='new'], button[class*='new-chat']"
-    );
-    if (newChatBtn) {
-      newChatBtn.click();
-      await sleep(2000);
-      return;
-    }
-    // Fallback: navigate directly
-    window.location.href = "https://chatgpt.com/";
-    await sleep(3000);
-  }
-
-  // ── Process a single task ────────────────────────────────────────────
+  // ── Process a task ───────────────────────────────────────────────────
   async function processTask(task) {
     const { task_id, prompt, pdf_base64, pdf_name } = task;
-    log(`Processing task: ${task_id}`);
+    log(`=== Task: ${task_id} ===`);
     busy = true;
-    currentTask = task;
+    updatePanel();
 
     try {
-      // Acknowledge task
-      await serverPost("/ack", { task_id });
+      // ACK the task
+      try { await serverPost("/ack", { task_id }); } catch {}
 
-      // Start a new chat to avoid context pollution
-      await startNewChat();
-      await sleep(2000);
+      // Phase 1: Navigate to new chat if needed
+      if (!isOnNewChatPage()) {
+        log("Navigating to new chat...");
+        saveTaskState(task);
+        setTaskPhase("navigating");
+        window.location.href = "https://chatgpt.com/";
+        // Script will re-initialize on new page; check savedTask
+        return;
+      }
 
-      // Wait for page to be ready
+      setTaskPhase("processing");
+
+      // Wait for prompt input to appear
       let retries = 0;
-      while (!findPromptInput() && retries < 20) {
+      while (!findPromptInput() && retries < 30) {
         await sleep(1000);
         retries++;
       }
       if (!findPromptInput()) {
-        throw new Error("Prompt input not found after waiting");
+        throw new Error("Prompt input not found after 30s wait");
       }
+      log("Page ready");
 
       // Upload PDF if present
       if (pdf_base64) {
-        const uploaded = await uploadPDF(pdf_base64, pdf_name || "paper.pdf");
-        if (!uploaded) {
-          log("WARNING: PDF upload may have failed");
-        }
-        await sleep(2000);
+        await uploadPDF(pdf_base64, pdf_name || "paper.pdf");
       }
 
       // Enter prompt
       const entered = await enterPrompt(prompt);
       if (!entered) {
-        throw new Error("Failed to enter prompt");
+        throw new Error("Failed to enter prompt text");
       }
 
-      // Click send
+      // Send
       const sent = await clickSend();
       if (!sent) {
-        throw new Error("Failed to send prompt");
+        throw new Error("Failed to click send");
       }
 
       // Wait for response
-      await sleep(3000); // Give ChatGPT a moment to start
+      await sleep(5000); // Initial delay for ChatGPT to start thinking
       const response = await waitForResponse();
 
-      if (!response) {
-        throw new Error("Empty response received");
+      if (!response || response.length < 20) {
+        throw new Error(`Response too short or empty (${response?.length || 0} chars)`);
       }
 
-      // Post result back to server
+      // Post result
       await serverPost("/result", {
         task_id,
         response,
         model: task.model || "unknown",
       });
 
-      log(`Task ${task_id} completed (${response.length} chars)`);
+      log(`DONE: ${task_id} (${response.length} chars)`);
+      clearTaskState();
     } catch (err) {
       log(`ERROR: ${err.message}`);
-      // Post error result
       try {
         await serverPost("/result", {
           task_id,
           response: `ERROR: ${err.message}`,
           model: task.model || "unknown",
         });
-      } catch (e) {
-        log(`Failed to report error: ${e.message}`);
-      }
+      } catch {}
+      clearTaskState();
     } finally {
       busy = false;
-      currentTask = null;
+      updatePanel();
     }
   }
 
-  // ── Main polling loop ────────────────────────────────────────────────
+  // ── Main loop ────────────────────────────────────────────────────────
   async function pollLoop() {
     while (true) {
       if (!busy) {
@@ -482,13 +525,12 @@
           const task = await serverGet("/task");
           if (task && task.task_id && task.status !== "idle") {
             await processTask(task);
-          } else {
-            // Idle — show status quietly
-            updatePanel(`idle — polling ${SERVER}`);
           }
         } catch (err) {
-          // Server not running or unreachable
-          updatePanel(`server unreachable (${err.message || "offline"})`);
+          // Server offline — silently continue
+          if (logHistory.length === 0 || !logHistory[logHistory.length-1].includes("unreachable")) {
+            log(`Server unreachable`);
+          }
         }
       }
       await sleep(POLL_INTERVAL);
@@ -496,17 +538,28 @@
   }
 
   // ── Bootstrap ────────────────────────────────────────────────────────
-  function init() {
-    console.log("[oracle] ChatGPT Oracle Bridge v1.0 loaded");
-    createPanel();
-    // Start polling after a short delay to let the page settle
-    setTimeout(pollLoop, 3000);
+  async function init() {
+    log("Oracle Bridge v2 loaded");
+
+    // Check if we have a saved task from a page navigation
+    const savedTask = loadTaskState();
+    const phase = getTaskPhase();
+
+    if (savedTask && phase === "navigating") {
+      log(`Resuming task after navigation: ${savedTask.task_id}`);
+      // We navigated to new chat page — now process the task
+      await sleep(3000); // Let page load
+      await processTask(savedTask);
+    }
+
+    // Start polling
+    pollLoop();
   }
 
-  // Wait for page to be ready
+  // Run after page is ready
   if (document.readyState === "complete") {
-    init();
+    setTimeout(init, 2000);
   } else {
-    window.addEventListener("load", init);
+    window.addEventListener("load", () => setTimeout(init, 2000));
   }
 })();
