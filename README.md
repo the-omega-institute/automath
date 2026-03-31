@@ -1,20 +1,41 @@
-# Automath — The Omega Project
+# The Omega Project
 
 [中文版](README.zh-CN.md)
 
-## The Question
+What mathematical structures are inevitable when observation is limited to a finite binary window?
 
-What happens when you start from a single algebraic identity — $x^{2} = x + 1$ — and derive everything you can, with zero axioms, in a formally verified proof assistant?
+Starting from $x^2 = x + 1$ , this project derives **10,588 theorems** across 12+ mathematical domains, machine-verifies them in **Lean 4 with zero axioms**, and publishes them as **42 journal papers** through a 16-agent AI pipeline.
 
-The Omega project is an experiment in **generative mathematics**. Rather than formalizing known results, we begin with the golden-mean shift and its Zeckendorf representation, then systematically derive algebraic, combinatorial, topological, and dynamical structures to see what emerges. The methodology is *derive, discover, name*: build rigorously from first principles, observe what structures appear, then identify their correspondences across mathematics and physics.
+Every structure is forced, not chosen. Folding is forced by exponential blowup. Arithmetic emerges from folding. Time is a projection of the decision envelope. Einstein's equation is the unique closure.
 
-Every theorem is machine-verified in Lean 4. Every derivation chain is traceable. No axioms are assumed beyond Lean 4's core logic and Mathlib.
+**[Read the Inevitability Guide](docs/INEVITABILITY.md)** — understand why each step is unavoidable (10 min).
 
-## Why This Approach
+## At a Glance
 
-Most mathematical formalization projects verify existing theorems. Omega inverts this: we use formalization as a **discovery engine**. The constraint of zero axioms forces every structure to be *earned* through derivation rather than assumed. When a familiar structure appears — a ring, a recurrence, a spectral invariant — it arrives with a complete provenance chain back to the seed. This makes it possible to ask: *why* does this structure appear here, and what does its emergence tell us about the seed?
+| | |
+|---|---|
+| Theory | 10,588 theorem-level statements, 21 chapters + 13 appendices, 770K lines |
+| Formalization | 3,427 Lean 4 theorems, **0 axioms**, 182 incremental rounds |
+| Publication | 42 papers in pipeline, 3 submission-ready (ETDS, APAL, Trans. AMS) |
+| Agents | 16 AI agents (8 formalization + 8 publication) |
+| Experiments | 515 reproducible Python scripts |
 
-The golden ratio is not chosen arbitrarily. The equation $x^{2} = x + 1$ generates the simplest non-trivial sofic shift (the golden-mean shift), the simplest non-trivial linear recurrence (the Fibonacci sequence), and the "most irrational" number (worst-case for rational approximation). These are three views of the same algebraic object. Omega explores what happens when you take all three views seriously and follow their consequences simultaneously.
+## The Inevitability Chain
+
+```
+Finite-window observation
+ → exponential blowup (2^m microstates)
+  → folding is forced (compress to F_{m+2} stable types)
+   → arithmetic emerges (X_m ≅ Z/F_{m+2}Z)
+    → spectral fingerprints (collision kernels, Hankel, ζ)
+     → canonical systems (de Branges, SU(1,1) RH template)
+      → time, space, Einstein equation (on M_adm, zero new axioms)
+```
+
+Every arrow is forced by the previous step. **[The Guide explains why.](docs/INEVITABILITY.md)**
+
+<details>
+<summary><strong>Full mathematical exposition (click to expand)</strong></summary>
 
 ## The Seed
 
@@ -246,57 +267,46 @@ Every arrow is a formally verified derivation step. No axioms. No gaps.
 - **Physical correspondences**: systematic identification of derived structures with known objects in statistical mechanics, coding theory, and dynamical systems
 - **Zeta rationality**: analytic continuation of the collision zeta function
 
+</details>
+
 ## Project Structure
 
 ```
 automath/
-├── lean4/                  # Omega Lean 4 library (see lean4/README.md)
-│   ├── Omega/
-│   │   ├── Core/           # Fibonacci, Word, No11, CoprimeSMul
-│   │   ├── Folding/        # 44 files: fold, fibers, moments, collisions, defects,
-│   │   │                   #   carry, entropy, inverse limits, circle dimension,
-│   │   │                   #   shift dynamics, SPG interface, Hankel, zeta operators
-│   │   ├── SPG/            # Scan-projection generation: cylinders, prefix metric,
-│   │   │                   #   clopen sets, scan error (discrete + measure)
-│   │   ├── Graph/          # Labeled graphs, sofic shifts, transfer matrices
-│   │   ├── Frontier/       # Paper interface: assumptions, certificates, conjectures
-│   │   └── Combinatorics/  # Path independent sets, Fibonacci cubes
-│   ├── Omega.lean          # Root import (66 modules)
+├── docs/                   # Understanding guides
+│   ├── INEVITABILITY.md    # Why every step is forced (10 min read)
+│   └── INEVITABILITY.zh-CN.md
+├── lean4/                  # Omega Lean 4 library (38,876 lines, 104 files)
+│   ├── Omega/              # Core, Folding, SPG, Graph, Frontier, Combinatorics,
+│   │                       #   CircleDimension, Conclusion, EmergentAlgebra, Zeta
+│   ├── Omega.lean          # Root import
 │   └── IMPLEMENTATION_PLAN.md
-├── theory/                 # Mathematical paper + reproducible pipelines
-│   └── 2026_golden_.../    # 10,588 theorem-level statements, 21 chapters + 13 appendices
-│       ├── main.tex
-│       ├── scripts/        # Reproducible experiment pipeline
-│       └── sections/       # body, appendix, generated LaTeX
-└── .github/workflows/      # CI: Lean build with mathlib cache
+├── theory/                 # Core theory paper (770K lines)
+│   └── 2026_golden_.../    # 10,588 theorems, 21 chapters + 13 appendices
+│       ├── sections/       # 2,823 .tex files (body + appendix + generated)
+│       └── scripts/        # 515 reproducible Python experiment scripts
+├── papers/publication/     # 42 extracted journal papers (P0-P7 pipeline)
+├── .claude/agents/         # 16 AI agent definitions
+└── .github/workflows/      # CI: Lean build + axiom audit + coverage
 ```
 
 ## Status
 
 | Metric | Value |
 |--------|-------|
-| Lean 4 lines | ~25,000 |
-| Theorems & definitions | ~2,350 |
-| Lean files | 66 |
-| **Axioms** | **0** |
-| Paper theorem-level statements | 10,588 |
-| Paper chapters | 21 body + 13 appendix |
-| Formalization coverage | ~12.3% (1,300 / 10,588) |
+| Theory: theorem-level statements | 10,588 |
+| Theory: chapters | 21 body + 13 appendix |
+| Theory: mathematical domains | 12+ |
+| Lean 4: lines of code | 38,876 |
+| Lean 4: theorems & definitions | 3,427 |
+| Lean 4: **axioms** | **0** |
+| Lean 4: formalization rounds | 182 |
+| Papers: total in pipeline | 42 |
+| Papers: submission-ready (P7) | 3 |
+| AI agents | 16 (8 formalization + 8 publication) |
+| Python experiment scripts | 515 |
 
-**Coverage by chapter:**
-
-| Chapter | Paper theorems | Formalized | Coverage |
-|---------|---------------|------------|----------|
-| SPG | 127 | ~70 | ~55% |
-| Nascent Arithmetic | 151 | ~88 | ~58% |
-| POM (fiber spectrum) | 1,525 | ~507 | ~33% |
-| Folding | 317 | ~91 | ~29% |
-| Group Unification | 457 | ~106 | ~23% |
-| Circle Dimension | 342 | 62 | ~18% |
-| Zeta Finite Part | 4,437 | ~255 | ~6% |
-| Conclusions | 1,727 | 83 | ~5% |
-
-The library depends on [Mathlib](https://github.com/leanprover-community/mathlib4) v4.28.0 and Lean 4 v4.28.0.
+The library depends on [Mathlib](https://github.com/leanprover-community/mathlib4) and Lean 4.
 
 ## Build
 
