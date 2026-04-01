@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      3.4
+// @version      3.5
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -54,7 +54,7 @@
   function updatePanel() {
     ensurePanel();
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
-    panel.innerHTML = `<b>[Oracle Bridge v3.4]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
+    panel.innerHTML = `<b>[Oracle Bridge v3.5]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
   }
 
   // ── HTTP helpers ─────────────────────────────────────────────────────
@@ -359,23 +359,56 @@
     }
 
     input.focus();
+    await sleep(300);
+
+    // Clear any existing content first
+    document.execCommand("selectAll", false, null);
+    document.execCommand("delete", false, null);
     await sleep(200);
 
-    // Strategy 1: Write to clipboard and paste (most reliable for ProseMirror)
     let success = false;
+
+    // Strategy 1: execCommand insertText — BEST for ProseMirror
+    // This goes through the browser's native editing API which ProseMirror hooks into,
+    // so React/ProseMirror internal state stays in sync → send button enables correctly.
     try {
-      await navigator.clipboard.writeText(text);
-      document.execCommand("paste");
+      input.focus();
+      // For long text, insert in chunks to avoid browser limits
+      const CHUNK = 4000;
+      if (text.length <= CHUNK) {
+        document.execCommand("insertText", false, text);
+      } else {
+        for (let i = 0; i < text.length; i += CHUNK) {
+          document.execCommand("insertText", false, text.slice(i, i + CHUNK));
+          await sleep(50);
+        }
+      }
       await sleep(500);
       if ((input.textContent || "").length > 10) {
         success = true;
-        log("Prompt: pasted via clipboard API");
+        log("Prompt: inserted via execCommand (ProseMirror-native)");
       }
     } catch (e) {
-      log(`Clipboard paste failed: ${e.message}`);
+      log(`execCommand failed: ${e.message}`);
     }
 
-    // Strategy 2: Synthetic ClipboardEvent paste
+    // Strategy 2: Clipboard API paste
+    if (!success) {
+      try {
+        await navigator.clipboard.writeText(text);
+        input.focus();
+        document.execCommand("paste");
+        await sleep(500);
+        if ((input.textContent || "").length > 10) {
+          success = true;
+          log("Prompt: pasted via clipboard API");
+        }
+      } catch (e) {
+        log(`Clipboard paste failed: ${e.message}`);
+      }
+    }
+
+    // Strategy 3: Synthetic ClipboardEvent paste
     if (!success) {
       try {
         const clipData = new DataTransfer();
@@ -393,24 +426,7 @@
       }
     }
 
-    // Strategy 3: execCommand insertText
-    if (!success) {
-      try {
-        input.focus();
-        input.innerHTML = "";
-        document.execCommand("selectAll", false, null);
-        document.execCommand("insertText", false, text);
-        await sleep(500);
-        if ((input.textContent || "").length > 10) {
-          success = true;
-          log("Prompt: inserted via execCommand");
-        }
-      } catch (e) {
-        log(`execCommand failed: ${e.message}`);
-      }
-    }
-
-    // Strategy 4: Direct innerHTML + InputEvent (last resort)
+    // Strategy 4: Direct innerHTML + InputEvent (last resort — may not enable send button)
     if (!success) {
       const escaped = text
         .replace(/&/g, "&amp;")
@@ -418,7 +434,6 @@
         .replace(/>/g, "&gt;")
         .replace(/\n/g, "<br>");
       input.innerHTML = `<p>${escaped}</p>`;
-      // Fire InputEvent which React/ProseMirror actually listens to
       input.dispatchEvent(new InputEvent("input", {
         bubbles: true, cancelable: true,
         inputType: "insertText", data: text,
@@ -427,6 +442,24 @@
       await sleep(500);
       log("Prompt: set via innerHTML (last resort)");
       success = (input.textContent || "").length > 0;
+    }
+
+    // Force React/ProseMirror state sync: type a space then delete it.
+    // This ensures ProseMirror processes at least one "real" input event,
+    // which updates React state and enables the send button.
+    if (success) {
+      input.focus();
+      // Move cursor to end
+      const sel = window.getSelection();
+      if (sel) {
+        sel.selectAllChildren(input);
+        sel.collapseToEnd();
+      }
+      document.execCommand("insertText", false, " ");
+      await sleep(300);
+      document.execCommand("delete", false, null);
+      await sleep(300);
+      log("Prompt: forced React sync (space+delete)");
     }
 
     const visible = (input.textContent || "").length;
@@ -726,33 +759,9 @@
       // ACK the task
       try { await serverPost("/ack", { task_id }); } catch {}
 
-      // Phase 1: Start a new chat if there's an existing conversation
-      if (!isOnNewChatPage()) {
-        log("Starting new chat...");
-        // Try clicking the "New chat" button instead of full page reload
-        // This avoids losing large task data (PDF) in GM_setValue
-        const newChatBtn =
-          document.querySelector("a[href='/']") ||
-          document.querySelector("nav a[class*='new']") ||
-          document.querySelector("button[aria-label*='New']") ||
-          document.querySelector("button[aria-label*='新']") ||
-          document.querySelector("a[data-testid='create-new-chat-button']");
-        if (newChatBtn) {
-          newChatBtn.click();
-          log("Clicked new chat button");
-          await sleep(3000);
-        } else {
-          // Fallback: navigate, but strip PDF to avoid GM_setValue size limit
-          log("No new-chat button found, navigating...");
-          const lightTask = { ...task };
-          delete lightTask.pdf_base64; // Too large for GM_setValue
-          saveTaskState(lightTask);
-          setTaskPhase("navigating");
-          window.location.href = "https://chatgpt.com/";
-          return;
-        }
-      }
-
+      // No navigation — work on whatever page we're on.
+      // Navigation destroys JS state (including PDF base64 data).
+      // If user is on an existing chat, the prompt still goes to the composer.
       setTaskPhase("processing");
 
       // Wait for prompt input to appear
@@ -780,21 +789,8 @@
       // Store prompt text for response extraction
       setSentPrompt(prompt);
 
-      // Trigger React state update — the send button stays disabled
-      // unless React knows the input has content
-      const inputEl = findPromptInput();
-      if (inputEl) {
-        inputEl.dispatchEvent(new InputEvent("input", { bubbles: true, inputType: "insertText" }));
-        await sleep(500);
-        // Also dispatch a keydown to wake up the composer
-        inputEl.dispatchEvent(new KeyboardEvent("keydown", {
-          key: "a", code: "KeyA", keyCode: 65, bubbles: true
-        }));
-        inputEl.dispatchEvent(new KeyboardEvent("keyup", {
-          key: "a", code: "KeyA", keyCode: 65, bubbles: true
-        }));
-        await sleep(500);
-      }
+      // Give ProseMirror a moment to process the input
+      await sleep(1000);
 
       // Send
       const sent = await clickSend();
