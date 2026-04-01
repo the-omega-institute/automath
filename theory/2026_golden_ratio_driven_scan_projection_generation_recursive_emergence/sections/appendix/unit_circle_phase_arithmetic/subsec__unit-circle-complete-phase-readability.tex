@@ -1,0 +1,112 @@
+\subsection{完备相位对象的可读性判据：\texorpdfstring{$\mathsf{NULL}$}{NULL} 三分解、记录轴规格与正交阈值}\label{subsec:unit-circle-complete-phase-readability}
+完备相位对象被记账，并不意味着它已经可读。对单位圆门及其 unitary-slice 接口而言，真正可判定的不是“圆上是否出现一个数值”，而是给定类型化地址之后，相应证书纤维是否非空；若为空，则其失败究竟属于语义、协议还是碰撞意义下的空值。
+
+\begin{definition}[三轴地址]\label{def:unit-circle-complete-phase-address}
+对完备相位对象 \(\Sigma\)，定义其类型化地址空间为
+\[
+\mathsf{Addr}^{\sharp}(\Sigma)
+:=
+A^{\mathrm{vis}}_\Sigma\times A^{\mathrm{res}}_\Sigma\times A^{\mathrm{mode}}_\Sigma.
+\]
+若 \(a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}})\in\mathsf{Addr}^{\sharp}(\Sigma)\)，则三分量分别负责可见相位前缀、residue/逆极限方向上的单射化外置以及模式轴规格。
+\end{definition}
+
+\begin{definition}[可读证书纤维]\label{def:unit-circle-complete-phase-certificate-fiber}
+在地址 \(a\in\mathsf{Addr}^{\sharp}(\Sigma)\) 上，定义证书纤维
+\[
+F_\Sigma(a)
+:=
+\{\text{在 }a\text{ 上协议允许且可离线核验的证书对象}\}.
+\]
+\end{definition}
+
+\begin{proposition}[可读性的对象论判据]\label{prop:unit-circle-complete-phase-readable-iff-fiber}
+对任意完备相位对象 \(\Sigma\) 与地址 \(a\in\mathsf{Addr}^{\sharp}(\Sigma)\)，
+\[
+\mathsf{Read}^{\sharp}_{\Sigma}(a)\neq \mathsf{NULL}
+\quad\Longleftrightarrow\quad
+F_\Sigma(a)\neq\varnothing.
+\]
+若存在局部证书族且其在重叠上相容，则该证书唯一粘接为一个全局对象。
+\end{proposition}
+\begin{proof}
+证书纤维的定义已把“可读”编码为“存在协议允许的全局证书对象”。若局部对象可构造且在重叠上满足一致性，则由标准粘接原理得到唯一全局截面；反之，若纤维为空，则读出在对象层按定义返回 \(\mathsf{NULL}\)。
+\end{proof}
+
+\begin{remark}[\texorpdfstring{$\mathsf{NULL}$}{NULL} 的三分解]\label{rem:unit-circle-complete-phase-null-trichotomy}
+命题 \ref{prop:xi-null-three-way} 与定理 \ref{thm:xi-null-complete-trichotomy-offline} 已将空值严格分成三类：其一是地址对象本身未被接纳的语义空值；其二是类型或粘合条件失败导致的协议空值；其三是残差轴预算不足而无法完成单射化的碰撞空值。三者穷尽全部失败来源，并且在类型层互不替代。
+\end{remark}
+
+\begin{definition}[失败见证包]\label{def:unit-circle-complete-phase-failure-witness}
+定义最小失败见证为
+\[
+W=(w_{\mathrm{tag}},w_{\mathrm{sub}},w_{\mathrm{loc}},w_{\mathrm{lb}},w_{\mathrm{aux}}),
+\]
+其中 \(w_{\mathrm{tag}}\in\{\mathrm{Sem},\mathrm{Prot},\mathrm{Coll}\}\) 指示三分主类，\(w_{\mathrm{sub}}\) 指示更细失败机制，\(w_{\mathrm{loc}}\) 记录失败位置，\(w_{\mathrm{lb}}\) 记录被强制的阈值或下界，\(w_{\mathrm{aux}}\) 给出第三方可复核的辅助数据。
+\end{definition}
+
+\begin{proposition}[见证必须落在记录轴支撑上]\label{prop:unit-circle-complete-phase-witness-support}
+若 \(\mathsf{Read}^{\sharp}_{\Sigma}(a)=\mathsf{NULL}\)，则其失败见证必定支撑在定义 \ref{def:unit-circle-complete-phase-minimal-recorder} 的最小记录包 \(r_0(\Sigma)\) 上；不存在一条与相位解耦且不等价于径向类的新连续轴可合法承载该见证。
+\end{proposition}
+\begin{proof}
+由定理 \ref{thm:cdim-minimal-record-axis}，连续补轴在纯相位制度下只剩唯一径向类；其余外置信息必须进入离散证书包。故任何合法失败见证都只能指向 \([\rho_\Sigma]\) 或 \(R^{\mathrm{disc}}_\Sigma\) 的某个具体分量。
+\end{proof}
+
+\begin{definition}[正交阈值向量]\label{def:unit-circle-complete-phase-threshold-vector}
+对地址 \(a\in\mathsf{Addr}^{\sharp}(\Sigma)\)，定义正交阈值向量
+\[
+\mathbf b^\sharp(\Sigma;a)
+:=
+(b_{\mathrm{vis}},b_{\mathrm{res}},b_{\mathrm{mode}}),
+\]
+分别表示可见相位前缀深度、residue/逆极限预算与模式轴合法性预算。
+\end{definition}
+
+\begin{proposition}[正交阈值的非替代性]\label{prop:unit-circle-complete-phase-threshold-orthogonality}
+若
+\[
+\mathsf{Read}^{\sharp}_{\Sigma}(a)\neq\mathsf{NULL},
+\]
+则至少同时满足以下三项：
+\begin{enumerate}
+  \item \(b_{\mathrm{vis}}\) 足以使可见相位前缀落入合法地址域；
+  \item \(b_{\mathrm{res}}\) 足以使 residue/逆极限方向完成单射化；
+  \item \(b_{\mathrm{mode}}\) 通过模式轴与一致维数的协议检查。
+\end{enumerate}
+若任一分量失败，则提升另外两项不能替代该失败。
+\end{proposition}
+\begin{proof}
+这是定理 \ref{thm:xi-us-deterministic-tristate}、推论 \ref{cor:xi-precision-type-no-leakage} 以及正文三轴地址协议的直接接口化表述：不同失败类由不同阈值触发，其见证在类型上正交。
+\end{proof}
+
+\begin{definition}[编译式读取器]\label{def:unit-circle-complete-phase-compiled-reader}
+定义编译式读取器
+\[
+\mathsf{Read}^{\sharp}_{\Sigma}:
+\mathsf{Addr}^{\sharp}(\Sigma)\rightharpoonup
+\mathsf{Cert}^{\sharp}(\Sigma)\sqcup\mathsf{Wit}^{\sharp}(\Sigma)
+\]
+如下运行：
+\begin{enumerate}
+  \item 检查地址接纳性；若失败，输出 \(\mathrm{Sem}\) 见证；
+  \item 检查类型与可见域；若失败，输出 \(\mathrm{Prot}\) 见证；
+  \item 检查 residue/逆极限预算、模式轴规格与粘合障碍；若失败，输出 \(\mathrm{Prot}\) 或 \(\mathrm{Coll}\) 见证；
+  \item 若以上全部通过，则构造局部证书并进行粘接，输出唯一全局证书对象。
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[编译式可读性判据]\label{prop:unit-circle-complete-phase-compiled-criterion}
+对任意 \(\Sigma\) 与 \(a\in\mathsf{Addr}^{\sharp}(\Sigma)\)，有
+\[
+\mathsf{Read}^{\sharp}_{\Sigma}(a)\neq\mathsf{NULL}
+\iff
+\bigl(
+a\in A^{\mathrm{adm}}_\Sigma,\ 
+\mathbf b^\sharp(\Sigma;a)\succeq \mathbf b^\sharp_{\min}(a),\ 
+F_\Sigma(a)\neq\varnothing
+\bigr),
+\]
+并且一旦失败，输出端返回的是有限且可离线复核的见证对象，而非无结构的“空结果”。
+\end{proposition}
+
+因此，完备相位对象的可读性应理解为一条并行闭包：地址必须被接纳，记录轴必须合法，阈值必须同时越界，证书纤维必须非空。相位可见只是这一闭包的一个分量，而不是其全部语义。
