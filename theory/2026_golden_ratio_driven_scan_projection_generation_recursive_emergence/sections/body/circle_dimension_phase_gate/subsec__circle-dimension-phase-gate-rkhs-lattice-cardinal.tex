@@ -1,0 +1,145 @@
+% Backflow from publication paper: 2026_circle_dimension_haar_pullback_cauchy_weight_jfa
+% RKHS density, observation channels, lattice sampling, cardinal reconstruction
+
+\subsection{模态空间的 RKHS 稠密性、观测通道函子与整数格点基重构}\label{subsec:cdim-rkhs-lattice-cardinal}
+
+本节将出版论文中关于模态 Gram 核 \(K(a,b)=\frac{2}{4+(a-b)^2}\) 的 RKHS 结构的四组新结果推回正文。
+\S\ref{subsec:cdim-poisson-cauchy} 与已有的 Gram 核常数小节给出了核的基本性质与谱表示；
+此处补充：(1) 割线族在 \(L^2_0(\omega)\) 中的稠密性与幺正等价，(2) 观测通道的函子化 RKHS 表征，(3) 整数格点的 Riesz 采样不等式与基重构，(4) 基函数的 Cardinal 核与精确范数公式。
+
+\subsubsection{模态空间的稠密性与 RKHS 幺正等价}
+
+定义零均值空间 \(L^2_0(\omega):=\{f\in L^2(\omega):\int f\dd\omega=0\}\) 及割线族生成的闭子空间
+\[
+\mathcal{S}:=\overline{\operatorname{span}}\{\Psi_\varepsilon:\varepsilon\in\RR\}\subset L^2_0(\omega),
+\]
+其中 \(\Psi_\varepsilon(y):=\frac{1}{\varepsilon}\left(\frac{P_1(y-\varepsilon)}{P_1(y)}-1\right)\) 为正则化割线。
+
+\begin{theorem}[模态空间的 \texorpdfstring{$L^2_0(\omega)$}{L²₀(ω)} 稠密性与 RKHS 幺正性]\label{thm:mode-space-rkhs-density}
+有
+\[
+\mathcal{S}=L^2_0(\omega).
+\]
+此外，线性赋值 \(\mathcal{U}_0(\Psi_\varepsilon):=K(\cdot,\varepsilon)\) 唯一延拓为幺正算子
+\[
+\mathcal{U}:L^2_0(\omega)\longrightarrow\mathcal{H}_K,
+\]
+其中 \(\mathcal{H}_K\) 为由 \(K(a,b)=\frac{2}{4+(a-b)^2}\) 生成的再生核 Hilbert 空间。
+\end{theorem}
+
+\begin{proof}
+设 \(f\in L^2_0(\omega)\) 正交于 \(\mathcal{S}\)，则对一切 \(\varepsilon\neq 0\) 有 \(\langle f,\Psi_\varepsilon\rangle=0\)。
+利用 \(R_\varepsilon(y)\omega(\dd y)=P_1(y-\varepsilon)\dd y\)，该正交条件等价于 Poisson 正则化 \(T_1 f:=P_1*f\equiv 0\)。
+取 Fourier 变换得 \(e^{-|\xi|}\widehat{f}(\xi)=0\)；由于 \(e^{-|\xi|}\neq 0\) 恒成立，故 \(\widehat{f}=0\) 即 \(f=0\)，从而 \(\mathcal{S}^\perp=\{0\}\)。
+幺正性由已有的 Gram 核内积恒等式 \(\langle\Psi_\varepsilon,\Psi_\eta\rangle_{L^2(\omega)}=K(\varepsilon,\eta)\) 给出；核截面在 \(\mathcal{H}_K\) 中稠密，故等距算子延拓为满等距，即幺正算子。
+\end{proof}
+
+\subsubsection{观测通道的 RKHS 求值函子表征}
+
+\begin{theorem}[观测通道作为 RKHS 求值泛函]\label{thm:poisson-channel-rkhs}
+对 \(t>0\) 定义中心化波动剖面
+\[
+\widetilde\delta_t(y):=\frac{h_t(\bar\gamma+ty)}{g_t(\bar\gamma+ty)}-1.
+\]
+则 \(\widetilde\delta_t\in L^2_0(\omega)\) 且
+\begin{equation}\label{eq:delta-t-secant}
+\widetilde\delta_t(y)
+=\frac{1}{t}\int_{\RR}\Delta\,\Psi_{\Delta/t}(y)\,\dd\nu(\gamma).
+\end{equation}
+因此，在幺正映射 \(\mathcal{U}\) 下，
+\begin{equation}\label{eq:delta-t-rkhs}
+(\mathcal{U}\widetilde\delta_t)(a)
+=\frac{1}{t}\int_{\RR}\Delta\,K(a,\Delta/t)\,\dd\nu(\gamma).
+\end{equation}
+其中原点求值给出
+\[
+\widetilde\delta_t(0)=tA(t)-1,
+\qquad
+(\mathcal{U}\widetilde\delta_t)(0)=2t\!\int_{2t}^{\infty}\!B(s)\,\dd s,
+\]
+此处 \(A(t):=\pi h_t(\bar\gamma)\) 与 \(B(t):=\pi\partial_x h_t(x)|_{x=\bar\gamma}\) 为中心观测函数。
+\end{theorem}
+
+\begin{proof}
+由定义 \(\widetilde\delta_t(y)=\int_{\RR}(R_{\Delta/t}(y)-1)\dd\nu(\gamma)=\frac{1}{t}\int\Delta\,\Psi_{\Delta/t}(y)\dd\nu\)，即 \eqref{eq:delta-t-secant}。
+零均值性由 \(\int\Psi_\varepsilon\dd\omega=0\) 和 Fubini 定理给出。
+应用 \(\mathcal{U}\) 并利用 \(\mathcal{U}(\Psi_\varepsilon)=K(\cdot,\varepsilon)\) 即得 \eqref{eq:delta-t-rkhs}。
+原点求值的公式由 Poisson 核的解析表达式直接计算。
+\end{proof}
+
+\subsubsection{整数格点的 Riesz 采样不等式}
+
+\begin{theorem}[整数割线轨道的 Riesz 基性质与格点采样]\label{thm:poisson-lattice-sampling}
+令 \(\mathcal{H}_K(\ZZ):=\overline{\operatorname{span}}\{K(\cdot,n):n\in\ZZ\}\subset\mathcal{H}_K\)。设
+\begin{equation}\label{eq:lattice-sampling-constants}
+A_{\ZZ}:=\frac{\pi}{\sinh(2\pi)},
+\qquad
+B_{\ZZ}:=\pi\coth(2\pi).
+\end{equation}
+则族 \(\{K(\cdot,n)\}_{n\in\ZZ}\) 和 \(\{\Psi_n\}_{n\in\ZZ}\) 均为 Riesz 序列：对有限支撑标量列 \((c_n)_{n\in\ZZ}\)，
+\[
+A_{\ZZ}\sum_{n}|c_n|^2
+\le
+\Bigl\|\sum_{n}c_nK(\cdot,n)\Bigr\|_{\mathcal{H}_K}^2
+\le
+B_{\ZZ}\sum_{n}|c_n|^2.
+\]
+对 \(F\in\mathcal{H}_K(\ZZ)\)，采样不等式
+\[
+A_{\ZZ}\|F\|_{\mathcal{H}_K}^2
+\le\sum_{n\in\ZZ}|F(n)|^2
+\le B_{\ZZ}\|F\|_{\mathcal{H}_K}^2
+\]
+成立。因此限制映射 \(R_{\ZZ}:\mathcal{H}_K(\ZZ)\to\ell^2(\ZZ)\)，\(R_{\ZZ}F:=(F(n))_{n\in\ZZ}\)，为 Hilbert 空间同构：一切 \(\alpha\in\ell^2(\ZZ)\) 存在唯一插值元 \(F_\alpha\in\mathcal{H}_K(\ZZ)\) 使 \(F_\alpha(n)=\alpha_n\)。
+\end{theorem}
+
+\begin{proof}
+令 \(k(x)=2/(4+x^2)\)，其 Fourier 变换 \(\widehat{k}(\xi)=\pi e^{-2|\xi|}\)。
+由 Poisson 求和公式得格点符号
+\[
+\sigma(\theta)
+=\sum_{n\in\ZZ}K(0,n)e^{-\mathrm{i}n\theta}
+=\frac{\pi\cosh(2(\pi-|\theta|))}{\sinh(2\pi)},
+\qquad \theta\in[-\pi,\pi].
+\]
+该符号满足 \(A_{\ZZ}\le\sigma(\theta)\le B_{\ZZ}\)。由 Parseval 恒等式
+\[
+\|F_c\|_{\mathcal{H}_K}^2
+=\frac{1}{2\pi}\int_{-\pi}^{\pi}\sigma(\theta)|\widehat{c}(\theta)|^2\dd\theta,
+\quad
+\sum_{n}|F_c(n)|^2
+=\frac{1}{2\pi}\int_{-\pi}^{\pi}\sigma(\theta)^2|\widehat{c}(\theta)|^2\dd\theta,
+\]
+Riesz 界与采样不等式即由符号的上下界给出。限制映射的同构性由 Gram 算子的有界可逆性推出。
+\end{proof}
+
+\subsubsection{Cardinal 核重构}
+
+\begin{theorem}[格点生成条状 RKHS 中的 Cardinal 重构]\label{thm:poisson-cardinal-reconstruction}
+在定理 \ref{thm:poisson-lattice-sampling} 的设定下，令 \(L:=R_{\ZZ}^{-1}\delta_0\in\mathcal{H}_K(\ZZ)\)。
+则 \(L(n)=\delta_{0n}\)（Kronecker delta），且对一切 \(\alpha=(\alpha_n)\in\ell^2(\ZZ)\)，
+\[
+F_\alpha(z):=\sum_{n\in\ZZ}\alpha_n L(z-n)
+\]
+在 \(\mathcal{H}_K(\ZZ)\) 中收敛并在条状域 \(\mathbb{S}:=\{z\in\CC:|\Im(z)|<2\}\) 的紧子集上一致收敛，且为满足 \(F_\alpha(n)=\alpha_n\) 的唯一 \(\mathcal{H}_K(\ZZ)\) 元素。
+
+此外，精确范数公式
+\begin{equation}\label{eq:cardinal-norm-formula}
+\|F_\alpha\|_{\mathcal{H}_K}^2
+=\frac{1}{2\pi}\int_{-\pi}^{\pi}
+\frac{|\widehat\alpha(\theta)|^2}{\sigma(\theta)}\dd\theta
+\end{equation}
+成立，其中 \(\sigma\) 为定理 \ref{thm:poisson-lattice-sampling} 的格点符号。Cardinal 核的 Fourier 表示为
+\begin{equation}\label{eq:cardinal-kernel-fourier}
+\widehat{L}(\theta+2\pi m)
+=\frac{\pi e^{-2|\theta+2\pi m|}}{\sigma(\theta)},
+\qquad m\in\ZZ,\quad \theta\in[-\pi,\pi].
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+整数平移保持 \(\mathcal{H}_K(\ZZ)\)，且 \(R_{\ZZ}\) 与 \(\ell^2(\ZZ)\) 上的移位算子交换，故 \(L(n)=\delta_{0n}\)。
+有限支撑 \(\alpha\) 的插值由 \(F_\alpha=\sum_n\alpha_n L(\cdot-n)\) 给出（由定理 \ref{thm:poisson-lattice-sampling} 的唯一性保证）；一般 \(\alpha\in\ell^2(\ZZ)\) 取截断逼近。
+范数公式 \eqref{eq:cardinal-norm-formula} 由 Gram 算子的 Fourier 乘子逆给出：\(G^{-1}\) 的符号为 \(\sigma(\theta)^{-1}\)，从而 \(\|F_\alpha\|^2=\langle G^{-1}\alpha,\alpha\rangle_{\ell^2}\)。
+Cardinal 核的 Fourier 展开 \eqref{eq:cardinal-kernel-fourier} 由 \(L=\sum_n d_n K(\cdot,n)\)（\(\widehat{d}=\sigma^{-1}\)）及 \(\widehat{K(\cdot,n)}(\xi)=\pi e^{-2|\xi|+\mathrm{i}n\xi}\) 给出。
+\end{proof}

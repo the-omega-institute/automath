@@ -50,7 +50,26 @@
 J(x):=\left|\frac{\dd\upsilon}{\dd x}\right|=\frac{1}{\pi(1+x^2)}.
 \]
 其在 \(x=0\) 处取最大值 \(J(0)=1/\pi\)，并随 \(|x|\) 严格衰减，且尾部满足 \(J(x)\sim (\pi x^2)^{-1}\)（注 \ref{rem:unit-circle-phase-haar-pullback-weight}）。
-因此，在以等相位预算（等面积/等角度）作为“等信息刻度”的制度下，原变量轴上的局部可分辨密度由 \(J(x)\) 唯一给出；“近零加权、远端抑制”并非外加偏好，而是 Haar 归一化与无参紧化共同强制的结构性结论。
+因此，在以等相位预算（等面积/等角度）作为”等信息刻度”的制度下，原变量轴上的局部可分辨密度由 \(J(x)\) 唯一给出；”近零加权、远端抑制”并非外加偏好，而是 Haar 归一化与无参紧化共同强制的结构性结论。
+
+以下定理把上述唯一性提升为更精确的三向等价刻画。
+
+\begin{theorem}[Haar 回拉唯一性的三向等价]\label{thm:haar-pullback-uniqueness}
+Cayley 嵌入满足 \(\iota^*m_{\TT}=\mu\)。
+更精确地，设 \(\varphi:\overline{\RR}\to\TT\) 为保向同胚，\(\varphi|_{\RR}\) 为 \(C^1\) 类，且 \(\varphi(0)=1\)、\(\varphi(\infty)=-1\)。则以下三条等价：
+\begin{enumerate}
+  \item \(\varphi^*m_{\TT}=\mu\) 在 \(\RR\) 上成立；
+  \item 若 \(\varphi(x)=e^{\mathrm{i}\alpha(x)}\)，\(\alpha:\RR\to(-\pi,\pi)\) 单增，则 \(\alpha'(x)=\frac{2}{1+x^2}\) 对一切 \(x\in\RR\) 成立；
+  \item \(\varphi=\iota\)。
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Cayley 嵌入 \(\iota\) 满足 \(\iota^*m_{\TT}=\frac{1}{2\pi}\vartheta'(x)\dd x=\frac{1}{\pi(1+x^2)}\dd x=\dd\mu(x)\)。
+对一般 \(\varphi\)，由保向性存在唯一 \(C^1\) 单增双射 \(\alpha:\RR\to(-\pi,\pi)\) 使 \(\varphi(x)=e^{\mathrm{i}\alpha(x)}\)、\(\alpha(0)=0\)。
+拉回弧长得 \(\varphi^*m_{\TT}=\frac{1}{2\pi}\alpha'(x)\dd x\)，故 (i) 等价于 \(\alpha'(x)=2/(1+x^2)\)，即 (ii)。
+积分并用 \(\alpha(0)=0\) 得 \(\alpha(x)=2\arctan x\)，从而 \(\varphi=\iota\)，即 (iii)。
+\end{proof}
 
 \subsection{结构搬运与可逆性纪律：边界元素内化与有界算术}\label{subsec:cdim-transport-and-reversibility}
 \paragraph{Möbius 群律与边界反演内化}
@@ -85,6 +104,7 @@ x\oplus\infty=-1/x
 \boxed{\;\cdim(G):=\dim\bigl((\widehat G)^0\bigr)\in\NN\cup\{0\}\;}
 \]
 其中 \(\dim\) 为紧李群（等价：环面）的流形维数。
+\leanverified{circleDim}
 \end{definition}
 
 \begin{definition}[半圆维]\label{def:half-circle-dimension}
@@ -104,6 +124,16 @@ x\oplus\infty=-1/x
   \item \textbf{直和可加：}\(\cdim(G\oplus H)=\cdim(G)+\cdim(H)\)。
   \item \textbf{有限扩张不变：}若存在短正合列 \(0\to F\to G\to H\to 0\) 且 \(F\) 有限，则 \(\cdim(G)=\cdim(H)\)。
 \end{enumerate}
+\leanverified{circleDim\_add}
+\leanverified{circleDim\_iso}
+\leanverified{circleDim\_finite\_extension}
+\leanverified{circleDim\_eq\_zero\_iff}
+\leanverified{halfCircleDim\_nat}
+\leanverified{circleDim\_mono}
+\leanverified{halfCircleDim\_add}
+\leanverified{paper\_halfCircleDim\_pos\_iff}
+\leanverified{paper\_circleDim\_add\_three}
+\leanverified{halfCircleDim\_add\_three}
 \end{proposition}
 \begin{proof}
 Pontryagin 对偶把直和送到直积：\(\widehat{G\oplus H}\simeq \widehat G\times\widehat H\)，从而连通分量满足 \((\widehat{G\oplus H})^0\simeq (\widehat G)^0\times(\widehat H)^0\)，维数遂相加。
@@ -114,6 +144,8 @@ Pontryagin 对偶把直和送到直积：\(\widehat{G\oplus H}\simeq \widehat G\
 \begin{example}[基本例子]\label{ex:circle-dimension-examples}
 有 \(\cdim(\ZZ)=1\)、\(\cdim(\ZZ^k)=k\)，且对任意有限交换群 \(F\) 有 \(\cdim(F)=0\)。
 对正锥 \(\NN\) 的群完成为 \(G(\NN)=\ZZ\)，故 \(\cdim_{+}(\NN)=\tfrac12\)。
+\leanverified{circleDim\_Zk}
+\leanverified{circleDim\_finite}
 \end{example}
 
 \begin{remark}[细分与纤维标签不增圆维]\label{rem:circle-dimension-refinement}
@@ -386,6 +418,8 @@ Poisson 半群粗粒化的“无毛发塌缩—二阶正规形—信息耗散”
 
 \input{subsubsec__circle-dimension-phase-gate-poisson-window-jensen-defect}
 \input{subsec__circle-dimension-phase-gate-poisson-cauchy-constants}
+\input{subsec__circle-dimension-phase-gate-poisson-kl-defect-rigidity}
+\input{subsec__circle-dimension-phase-gate-rkhs-lattice-cardinal}
 
 \subsection{相位 Fourier 的有限模态 Hardy 投影：显式有理核与截断证书}\label{subsec:cdim-hardy-finite-mode-projection}
 附录 \ref{subsec:unit-circle-phase-fourier} 将相位门与圆上的谐波分析接口固定为一组可直接调用的模板：自然权重下的相位 Fourier 展开、有限模态的 Hardy 正交投影、以及由显式有理核给出的截断算子。
@@ -585,6 +619,9 @@ f(s):=g(L_1^{-s})+h(L_2^{-s})
   \item \textbf{体积常数闭包：}\(\log(2/\pi)\) 与 \(SU(2)\) Weyl 推前归一化常数同一性（推论 \ref{cor:zigzag-entropy-su2-weyl-constant}，备注 \ref{rem:phase-gate-volume-constants-closure}）。
   \item \textbf{Hurwitz/Nielsen 离散证书：}\(S_4\) 护照 \((4)(2)^5\) 的 Hurwitz--共轭单轨道性、绝对 Nielsen 类覆盖度 \(160\)，以及双判别同步特例下相邻整点有理分歧与 Lee--Yang 三次核的平移闭包（\S\ref{subsec:cdim-s4-hurwitz-nielsen-double-discriminant}）。
   \item \textbf{三轴地址与编译协议：}多轴前缀地址（定义 \ref{def:multi_axis_address}）、\(\mathsf{NULL}\) 的站点判据 \(F(a)\neq\varnothing\)（命题 \ref{prop:cdim-nonnull-section-criterion}）与离线编译—核验流程（算法 \ref{alg:cdim-three-axis-address-compile}）。
+  \item \textbf{Haar 回拉唯一性：}Cayley 嵌入的三向等价刻画——保向 \(C^1\) 同胚、导数条件与 \(\iota\) 的严格唯一性（定理 \ref{thm:haar-pullback-uniqueness}）。
+  \item \textbf{Poisson KL 缺陷阶梯与刚性：}偶阶展开定理（定理 \ref{thm:poisson-kl-even-orders}）、八阶显式展开（定理 \ref{thm:poisson-kl-eighth}）、双层缺陷阶梯与对称二点法则的极值刻画（定理 \ref{thm:poisson-defect-ladder}）、缺陷放大不等式 \(\Delta_8\ge\frac{13\sigma^2}{8}\Delta_6\)（定理 \ref{thm:poisson-defect-amplification}）、以及 Wasserstein \(W_2\) 距离的 \(\Delta_6^{1/4}\) 型定量刚性（定理 \ref{thm:poisson-defect-stability}）。
+  \item \textbf{RKHS 稠密性与格点 Cardinal 重构：}割线族在 \(L^2_0(\omega)\) 中的稠密性与幺正等价（定理 \ref{thm:mode-space-rkhs-density}）、观测通道的 RKHS 求值函子表征（定理 \ref{thm:poisson-channel-rkhs}）、整数格点 Riesz 采样不等式与限制映射同构（定理 \ref{thm:poisson-lattice-sampling}）、以及 Cardinal 核的精确范数公式与 Fourier 表示（定理 \ref{thm:poisson-cardinal-reconstruction}）。
 \end{enumerate}
 上述接口层的共同作用是：在相位门的可逆压缩之上，把无限对象的关键可分辨结构制度性压缩为有限可审计数据（模态、核、谱范数与有限检查集），并与残差寄存器纪律共同形成后续审计链条的最小可复用闭包。
 

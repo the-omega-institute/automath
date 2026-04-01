@@ -115,6 +115,29 @@ theorem cMaxFiberMult_eq (m : Nat) : cMaxFiberMult m = X.maxFiberMultiplicity m 
 @[simp] theorem cached_cMaxFiberMult_6 : cMaxFiberMult 6 = 5 := by native_decide
 @[simp] theorem cached_cMaxFiberMult_7 : cMaxFiberMult 7 = 6 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R142: Minimum fiber multiplicity + m=7 bounds
+-- ══════════════════════════════════════════════════════════════
+
+/-- Minimum fiber multiplicity at resolution m (computable). -/
+def cMinFiberMult (m : Nat) : Nat :=
+  (@Finset.univ (X m) (fintypeX m)).inf'
+    (@Finset.univ_nonempty _ (fintypeX m) (X.instNonempty m)) (fun x => cFiberMult x)
+
+/-- thm:terminal-foldbin7-128-to-34-hist -/
+theorem cMinFiberMult_seven : cMinFiberMult 7 = 1 := by native_decide
+
+/-- Fiber size bounds at m=7: min=1, max=6.
+    thm:terminal-foldbin7-128-to-34-hist -/
+theorem fiberSize_bounds_seven :
+    cMinFiberMult 7 = 1 ∧ cMaxFiberMult 7 = 6 :=
+  ⟨cMinFiberMult_seven, cached_cMaxFiberMult_7⟩
+
+/-- Paper: thm:terminal-foldbin7-128-to-34-hist -/
+theorem paper_fiberSize_bounds_seven :
+    cMinFiberMult 7 = 1 ∧ cMaxFiberMult 7 = 6 :=
+  fiberSize_bounds_seven
+
 end Computable
 
 namespace X
@@ -261,7 +284,7 @@ theorem snoc_truncate_last {m : Nat} (w : Word (m + 1)) :
   funext i; by_cases h : i.1 < m
   · simp [snoc, truncate, h]
   · have : i = ⟨m, Nat.lt_succ_self m⟩ := Fin.ext (Nat.eq_of_lt_succ_of_not_lt i.isLt h)
-    subst this; simp [snoc, h]
+    subst this; simp [snoc]
 
 theorem weight_lt_fib {m : Nat} (w : Word m) : weight w < Nat.fib (m + 3) := by
   induction m with
@@ -271,9 +294,9 @@ theorem weight_lt_fib {m : Nat} (w : Word m) : weight w < Nat.fib (m + 3) := by
     have htr := ih (truncate w)
     have hRec : Nat.fib (m + 3) + Nat.fib (m + 2) = Nat.fib (m + 4) := fib_add_succ (m + 1)
     cases h : w ⟨m, Nat.lt_succ_self m⟩
-    · simp only [h, Bool.false_eq_true, ↓reduceIte, Nat.add_zero]
+    · simp only [ Bool.false_eq_true, ↓reduceIte, Nat.add_zero]
       show weight (truncate w) < Nat.fib (m + 4); omega
-    · simp only [h, ↓reduceIte]
+    · simp only [ ↓reduceIte]
       show weight (truncate w) + Nat.fib (m + 2) < Nat.fib (m + 4); omega
 
 private theorem weight_expand {m : Nat} (w : Word (m + 2)) (hLast : w ⟨m + 1, by omega⟩ = true) :

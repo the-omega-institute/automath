@@ -1,0 +1,25 @@
+\section{Algorithms and certified computation}\label{sec:algo}
+
+\subsection{Evaluating \texorpdfstring{\(Z_m(y)\)}{Z\_m(y)} via the order-\texorpdfstring{\(4\)}{4} recurrence}
+
+For any fixed \(y\in\CC\), the recurrence \eqref{eq:recurrence} evaluates \(Z_m(y)\) in \(O(m)\) arithmetic operations after initializing \(Z_0,\dots,Z_3\).
+When evaluating \(Z_m\) at many points (e.g.\ along a contour in the complex plane), the same linear-time computation can be performed independently at each sample point and trivially parallelized.
+
+\subsection{Certified localization of the branch set and the Lee--Yang edge point}
+
+The branch locus \(\Branch\) is explicitly determined by Theorem~\ref{thm:disc-factor}.
+The points \(y=0\) and \(y=1\) are rational and hence certified immediately.
+The nontrivial real-axis edge point \(\yLY\) is the unique real root of the cubic \(c(y)\) in \eqref{eq:cubic}.
+An interval isolation certificate is obtained by any rational interval \((\alpha,\beta)\) such that \(c(\alpha)c(\beta)<0\); the interval \((-1.13446,-1.13445)\) is one such certificate.
+Bisection then yields arbitrarily fine rational enclosures with a verifiable sign-change witness at each step.
+
+\subsection{Zero localization and boundary consistency checks}
+
+For each fixed \(m\), \(Z_m(y)\) is a polynomial in \(y\) with integer coefficients.
+Two standard zero-localization routes are available:
+\begin{enumerate}
+  \item \textbf{Coefficient route.} Propagate the recurrence in the polynomial ring \(\ZZ[y]\) to obtain explicit coefficients of \(Z_m(y)\), and apply a polynomial root solver to locate the zeros.
+  \item \textbf{Sampling route.} Sample \(Z_m(y)\) on a closed contour \(\Gamma\subset\CC\), estimate the number of enclosed zeros via the argument principle, and refine \(\Gamma\) (or subdivide the domain) to localize zero clusters.
+\end{enumerate}
+Both routes can be cross-checked against the certified algebraic boundary \(\Branch\), providing an auditable way to validate that the observed zero cloud geometry is consistent with the predicted branch-point and equimodular-competition structure.
+

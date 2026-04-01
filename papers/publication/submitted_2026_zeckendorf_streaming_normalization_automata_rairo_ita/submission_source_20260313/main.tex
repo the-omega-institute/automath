@@ -1,0 +1,1080 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{authblk}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{enumitem}
+
+\numberwithin{equation}{section}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\Xinf}{X_\infty}
+\newcommand{\supp}{\mathrm{supp}}
+\DeclareMathOperator{\Val}{Val}
+\DeclareMathOperator{\Fold}{Fold}
+\DeclareMathOperator{\lcp}{lcp}
+
+\renewcommand\Authfont{\normalsize}
+\renewcommand\Affilfont{\small}
+\setlength{\affilsep}{0.4em}
+
+\title{Canonical Zeckendorf Normalization and the Minimal Berstel Adder}
+\author[1]{Haobo Ma}
+\author[2]{Wenlin Zhang\thanks{Corresponding author.}}
+\affil[1]{AELF PTE LTD., \#14-02, Marina Bay Financial Centre Tower 1, 8 Marina Blvd, Singapore 018981, Singapore\\\texttt{auric@aelf.io}}
+\affil[2]{National University of Singapore, Singapore\\\texttt{e1327962@u.nus.edu}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study the canonical normalization map behind addition in Zeckendorf
+numeration.  Digitwise superposition of two admissible Zeckendorf words yields
+a finitely supported word over $\{0,1,2\}$, and addition is recovered by
+replacing this overlay with the unique admissible word of the same Fibonacci
+value.  We realize this normalization as the canonical section of a Fibonacci
+congruence and describe it by a terminating local rewrite system whose
+irreducible configurations are exactly the admissible Zeckendorf words.  We
+then separate this one-sided low-to-high canonical normalizer from the
+classical most-significant-digit-first adders of Frougny and Berstel.  In the
+one-sided model, the canonical map has coordinatewise unbounded anticipation,
+is not subsequential, and has exact prefix-destruction index $\Delta(n)=n$.
+By contrast, the classical Berstel transducer belongs to a different
+subsequential setting, and we prove that its state complexity is exactly $10$.
+Finally, we show that every fixed-radius synchronous local realization of
+canonical normalization requires a number of rounds growing linearly with the
+input scale.
+\end{abstract}
+
+\medskip
+\noindent\textbf{Keywords.}
+Zeckendorf numeration, canonical normalization, subsequential transducer,
+Berstel adder, online delay, Fibonacci addition.
+
+\medskip
+\noindent\textbf{Mathematics Subject Classification.}
+68Q45, 68Q70, 11B39.
+
+\section{Background and Main Results}
+
+Zeckendorf addition can be viewed as a normalization problem.  If
+$c,d\in\Xinf$ are admissible Zeckendorf words, then their digitwise overlay
+$c+d$ is a finitely supported word over $\{0,1,2\}$, and the arithmetic task
+is to replace this noncanonical word by the unique admissible word with the
+same Fibonacci value.  Thus the central object of the paper is the canonical
+normalization map
+\[
+\Fold_\infty:\{0,1,2\}^{(\NN)}\to \Xinf.
+\]
+Our purpose is to describe this map in structural terms and to compare two
+different finite-state viewpoints on Fibonacci addition.
+
+Finite-state arithmetic in nonstandard numeration systems is classical,
+especially in Pisot bases
+\cite{Frougny1991FibonacciFiniteAutomata,Frougny1992NumbersAutomata,Frougny1999OnlineAddition}.  Recent work
+continues to treat Fibonacci-based numeration from an automata-theoretic
+viewpoint; see, for instance,
+\cite{AhlbachUsatineFrougnyPippenger2013,LabbeLepsova2023FibonacciTwosComplement}.
+For broader finite-state normalization phenomena in linear and Ostrowski-type
+numeration systems, see also
+\cite{Frougny1992NumbersAutomata,HieronymiTerry2018OstrowskiAddition}.  The
+present note remains strictly Fibonacci-specific and does not attempt PLRS,
+$k$-bonacci, or multidimensional generalizations.
+The point of departure here is that the canonical map $\Fold_\infty$ on
+one-sided low-to-high streams should not be conflated with the classical
+most-significant-digit-first adders.  We therefore begin with the
+normalization mechanism itself.  First, we realize $\Fold_\infty$ as the
+canonical section of the Fibonacci congruence on the free commutative monoid
+of scale counts and give a terminating local rewrite system whose irreducible
+configurations are exactly the admissible Zeckendorf words.  This yields the
+factorization
+\[
+\text{superpose digits} \longrightarrow \Fold_\infty
+\]
+for Zeckendorf addition.
+
+The first complexity statement is negative, but its novelty is task-specific
+rather than historical.  Earlier work of Frougny already showed that
+finite-state behavior in Fibonacci numeration depends delicately on the
+direction of reading and on the chosen conversion problem
+\cite{Frougny1991FibonacciFiniteAutomata,Frougny1992NumbersAutomata,Frougny1999OnlineAddition}.
+In particular, finite-state normalization results in the literature often pass
+through compositions of one-sided subsequential transformations rather than a
+single canonical low-to-high map \cite{Frougny1992NumbersAutomata}.  Our
+negative result concerns exactly that single canonical map.
+What we add here is a sharp formulation for the canonical one-sided
+normalization map itself.  In the low-to-high model natural for
+$\Fold_\infty$, every fixed output coordinate has unbounded anticipation.
+Equivalently, the map admits no finite one-pass online delay.  More strongly,
+once finitely supported inputs are encoded as low-to-high finite words, the
+resulting normalization function is not subsequential.  The obstruction is not
+a minor technicality: for every fixed lookahead bound, there are two inputs
+agreeing on an arbitrarily long prefix whose selected normalized digits
+nevertheless differ, and one may even choose a prefix pair for which the first
+normalized digit flips.  In fact, for every prescribed output length $n$ there
+is a prefix-related input pair whose normalized outputs disagree from the very
+first symbol while the shorter output has length exactly $n$.  This sharply
+separates canonical one-sided
+normalization from the classical online-addition constructions of Frougny,
+where the input is read most significant digit first and the output is not the
+greedy expansion \cite[Prop.~13]{Frougny1999OnlineAddition}.  The witnesses
+may already be chosen inside the genuine addition image $\{c+d:c,d\in\Xinf\}$.
+
+We then revisit the classical $10$-state Berstel adder in its proper setting.
+The existence of this transducer, and a $10$-state presentation of it, are
+classical
+\cite{Frougny1999OnlineAddition,LabbeLepsova2023FibonacciTwosComplement}.  Our
+new point is an exact minimality statement.  Using deterministic
+subsequential Nerode equivalence, we show that this classical transducer is
+already minimal: every deterministic subsequential realization of the same
+recoding requires at least $10$ reachable states.
+
+This sequential distinction should be compared with the literature on parallel
+addition in nonstandard numeration systems
+\cite{FrougnyPelantovaSvobodova2013MinimalDigitSets}.  Our final result shows
+that the canonical map $\Fold_\infty$ remains intrinsically nonlocal in the
+synchronous setting as well: every fixed-radius local normalization scheme
+requires a number of rounds growing linearly with the input scale.
+
+The paper is organized as follows.  Section~\ref{sec:preliminaries} introduces
+the quotient description of Zeckendorf normalization.  Section~\ref{sec:overlay}
+gives the rewrite system and identifies addition with overlay plus
+normalization.  Section~\ref{sec:streaming} proves that the one-sided map
+$\Fold_\infty$ has coordinatewise unbounded anticipation, no bounded online
+delay, and no subsequential realization in the low-to-high finite-word model.
+Sections~\ref{sec:kernel} and \ref{sec:minimality} turn to the classical
+Berstel adder and prove that its deterministic subsequential state complexity
+is exactly $10$.  Section~\ref{sec:complexity} contains the local parallel
+lower bound.
+
+\section{Canonical Normalization in Zeckendorf Numeration}\label{sec:preliminaries}
+
+\subsection{Admissible Words and the Value Map}
+
+\paragraph{Fibonacci weights.}
+Throughout the paper we use the convention
+\[
+F_1=F_2=1,\qquad F_{n+2}=F_{n+1}+F_n\quad (n\ge 1).
+\]
+The weight at position $k$ is $F_{k+1}$.
+
+\paragraph{Admissible representatives.}
+Let
+\[
+\Xinf
+:=
+\left\{
+c=(c_1,c_2,\ldots)\in\{0,1\}^{\NN} :
+\supp(c)\text{ is finite and } c_kc_{k+1}=0\text{ for all }k
+\right\}.
+\]
+For $c\in \Xinf$ we define
+\[
+\Val(c):=\sum_{k\ge 1} c_k F_{k+1}\in \NN.
+\]
+By Zeckendorf's theorem, every $N\in\NN$ admits a unique representative
+$Z(N)\in \Xinf$ such that $\Val(Z(N))=N$ \cite{Zeckendorf1972}.
+
+\paragraph{Free scale counts.}
+Let
+\[
+\D
+:=
+\left\{
+a=(a_1,a_2,\ldots) : a_k\in\NN,\ \supp(a)\text{ finite}
+\right\},
+\]
+with pointwise addition.  We write $e_k$ for the $k$th standard basis vector.
+
+\begin{definition}[Fibonacci congruence]\label{def:fib-congruence}
+Let $\equiv$ be the least commutative-monoid congruence on $\D$ generated by
+\[
+e_2\equiv 2e_1
+\qquad\text{and}\qquad
+e_{k+2}\equiv e_{k+1}+e_k \quad (k\ge 1).
+\]
+\end{definition}
+
+\begin{definition}[Value map on scale counts]\label{def:val-on-D}
+For $a\in\D$ we define
+\[
+\Val(a):=\sum_{k\ge 1} a_k F_{k+1}.
+\]
+\end{definition}
+
+\begin{proposition}[Completeness of Fibonacci congruence]\label{prop:val-invariant}
+If $a\equiv b$ in $\D$, then $\Val(a)=\Val(b)$.  Consequently the value map
+descends to a well-defined monoid homomorphism
+\[
+\overline{\Val}:\D/\!\equiv \to \NN.
+\]
+\end{proposition}
+
+\begin{proof}
+It is enough to check the defining relations.  For the recurrence relation,
+\[
+\Val(e_{k+2})=F_{k+3}=F_{k+2}+F_{k+1}=\Val(e_{k+1}+e_k).
+\]
+For the base relation,
+\[
+\Val(e_2)=F_3=2=2F_2=\Val(2e_1).
+\]
+The claim follows because $\equiv$ is generated from these relations by
+additivity.
+\end{proof}
+
+\begin{theorem}[The quotient monoid is $\NN$]\label{thm:monoid-quotient-is-N}
+The homomorphism $\overline{\Val}:\D/\!\equiv \to \NN$ is an isomorphism of
+commutative monoids.  Moreover every congruence class contains a unique
+representative in $\Xinf$.
+\end{theorem}
+
+\begin{proof}
+Surjectivity is immediate from Zeckendorf's theorem: for every $N\in\NN$,
+$Z(N)\in \Xinf$ satisfies $\Val(Z(N))=N$.  For injectivity, write
+$\varepsilon=[e_1]\in\D/\!\equiv$.  By induction on the recurrence relation,
+\[
+[e_k]=F_{k+1}\varepsilon \qquad (k\ge 1).
+\]
+Hence every class $[a]\in\D/\!\equiv$ satisfies
+\[
+[a]
+=
+\sum_{k\ge 1} a_k[e_k]
+=
+\left(\sum_{k\ge 1} a_kF_{k+1}\right)\varepsilon
+=
+\Val(a)\varepsilon.
+\]
+So the congruence class is uniquely determined by its value.  The uniqueness
+of the representative in $\Xinf$ is then exactly the uniqueness of the
+Zeckendorf expansion.
+\end{proof}
+
+\subsection{Canonical Representatives and the Fold Section}
+
+\begin{corollary}[The fold map is a computable section]\label{cor:fold-as-section}
+The embedding $\Xinf\hookrightarrow \D$ is a computable section of the quotient
+map $\D\twoheadrightarrow \D/\!\equiv \cong \NN$.  Equivalently, the map
+\[
+\Fold_\infty:\D\to \Xinf,\qquad
+\Fold_\infty(a):=Z(\Val(a)),
+\]
+is a well-defined normalization map selecting the unique admissible
+representative in each congruence class.
+\end{corollary}
+
+\begin{proof}
+The statement is a restatement of Theorem~\ref{thm:monoid-quotient-is-N}.
+\end{proof}
+
+\section{Overlay and Normalization}\label{sec:overlay}
+
+\subsection{Local Value-Preserving Rewrites}
+
+Although $\Fold_\infty$ is defined quotient-theoretically, its action can be
+described directly by local digit rewrites on $\D$.  For
+$a=(a_1,a_2,\ldots)\in\D$, consider the following directed moves:
+\begin{align*}
+\text{(R1)}\qquad
+a&\to a-e_k-e_{k+1}+e_{k+2}
+&&\text{if } a_k\ge 1,\ a_{k+1}\ge 1,\\
+\text{(R2)}\qquad
+a&\to a-2e_1+e_2
+&&\text{if } a_1\ge 2,\\
+\text{(R3)}\qquad
+a&\to a-2e_2+e_1+e_3
+&&\text{if } a_2\ge 2,\\
+\text{(R4)}\qquad
+a&\to a-2e_k+e_{k-2}+e_{k+1}
+&&\text{if } k\ge 3,\ a_k\ge 2.
+\end{align*}
+Each rule preserves value, since it is a directed form of one of the
+identities
+\[
+F_{k+1}+F_{k+2}=F_{k+3},\qquad
+2F_2=F_3,\qquad
+2F_3=F_2+F_4,\qquad
+2F_{k+1}=F_{k-1}+F_{k+2}\ (k\ge 3).
+\]
+
+\begin{proposition}[Termination and unique normal form]\label{prop:rewrite-termination}
+Starting from any $a\in\D$, every rewrite sequence generated by
+\textup{(R1)}--\textup{(R4)} terminates.  The irreducible configurations are
+exactly the admissible words $\Xinf$, and the terminal irreducible word is
+$\Fold_\infty(a)$.
+\end{proposition}
+
+\begin{proof}
+Define
+\[
+A(a):=\sum_{k\ge 1} a_k,\qquad
+B(a):=\sum_{k\ge 1} k\,a_k,\qquad
+C(a):=a_2,
+\]
+and compare triples $\mu(a):=(A(a),B(a),C(a))$ lexicographically.
+Rule \textup{(R1)} and rule \textup{(R2)} decrease $A$ by $1$.
+Rule \textup{(R4)} preserves $A$ and decreases $B$ by $1$.
+Rule \textup{(R3)} preserves both $A$ and $B$, but decreases $C$ by $2$.
+Hence every rewrite step strictly decreases $\mu(a)$, so infinite rewrite
+sequences are impossible.
+
+If $a$ is irreducible, then no adjacent pair of positive digits can occur, or
+else \textup{(R1)} would apply; likewise no digit can be $\ge 2$, or else one of
+\textup{(R2)}--\textup{(R4)} would apply.  Thus every irreducible configuration is a
+finitely supported $\{0,1\}$-word with no adjacent $1$s, i.e. an element of
+$\Xinf$.  Conversely, no rule applies to an element of $\Xinf$, so the
+irreducibles are exactly $\Xinf$.
+
+Every rewrite step preserves $\Val$, hence the terminal irreducible word has
+the same value as $a$.  By Corollary~\ref{cor:fold-as-section}, there is a
+unique admissible word with this value, namely $\Fold_\infty(a)$.
+\end{proof}
+
+\begin{remark}
+Proposition~\ref{prop:rewrite-termination} does not assert confluence of the
+abstract rewrite system generated by \textup{(R1)}--\textup{(R4)}.  What is
+used here is weaker and sufficient for the paper: every rewrite sequence
+terminates, every terminal irreducible is admissible, every rewrite preserves
+value, and each value class contains a unique admissible representative.
+\end{remark}
+
+For overlays of two admissible inputs the initial alphabet is only
+$\{0,1,2\}$, but it is convenient to formulate the rewrite system on the whole
+monoid $\D$.  This avoids case distinctions and keeps the normalization target
+equal to the canonical section from Corollary~\ref{cor:fold-as-section}.
+
+\subsection{Stable Addition}
+
+For $c,d\in \Xinf$ we define the digitwise superposition
+\[
+(c+d)_k:=c_k+d_k \in \{0,1,2\}.
+\]
+Since $c$ and $d$ have finite support, $c+d$ can be viewed as an element of
+$\D$.
+
+\begin{definition}[Stable addition]\label{def:stable-add}
+For $c,d\in\Xinf$, define
+\[
+c\oplus d:=Z(\Val(c)+\Val(d)).
+\]
+\end{definition}
+
+The previous subsection shows that $\oplus$ can be computed without leaving
+the digit system.
+
+\begin{theorem}[Addition is superposition followed by normalization]\label{thm:zeckendorf-add-fst}
+For all $c,d\in \Xinf$ one has
+\[
+c\oplus d=\Fold_\infty(c+d).
+\]
+Equivalently, Zeckendorf addition is the normalization of the noncanonical
+digitwise overlay.  Thus the addition problem reduces to the study of the
+canonical map $\Fold_\infty$ on the input alphabet $\{0,1,2\}$; the remainder
+of the paper compares its one-sided sequential behavior with the classical
+most-significant-digit-first Berstel adder.
+\end{theorem}
+
+\begin{proof}
+By definition of $\Fold_\infty$,
+\[
+\Fold_\infty(c+d)=Z(\Val(c+d)).
+\]
+Since $\Val$ is additive on finitely supported digit strings,
+\[
+\Val(c+d)=\Val(c)+\Val(d).
+\]
+Therefore
+\[
+\Fold_\infty(c+d)=Z(\Val(c)+\Val(d))=c\oplus d.
+\]
+\end{proof}
+
+Once the canonical section has been fixed, the arithmetic problem reduces to
+realizing $\Fold_\infty$ by a finite streaming device with bounded delay
+\cite{Frougny1992NumbersAutomata,Frougny1999OnlineAddition,
+AhlbachUsatineFrougnyPippenger2013}.
+
+\begin{example}[A short normalization trace]\label{rem:worked-normalization-example}
+Using the low-to-high Fibonacci-scale convention, let
+\[
+c=(1,0,1,0,0),\qquad d=(1,0,0,1,0)\in \Xinf.
+\]
+Then
+\[
+c+d=(2,0,1,1,0),
+\]
+so the overlay contains both a digit $2$ and the forbidden pattern $11$.
+Its value is
+\[
+\Val(c+d)=2F_2+F_4+F_5=2+3+5=10=F_3+F_6.
+\]
+Therefore
+\[
+\Fold_\infty(c+d)=Z(10)=(0,1,0,0,1)=c\oplus d.
+\]
+This is the smallest type of example in which normalization must resolve the
+two standard obstructions simultaneously.
+\end{example}
+
+\section{Unbounded Anticipation and Non-Subsequentiality}\label{sec:streaming}
+
+\subsection{One-Sided Online Delay}
+
+\begin{definition}[One-pass online delay]\label{def:online-delay}
+Let $\A_{\mathrm{in}}$ and $\A_{\mathrm{out}}$ be finite alphabets.  A map
+\[
+T:\A_{\mathrm{in}}^{(\NN)}\to \A_{\mathrm{out}}^{(\NN)}
+\]
+has \emph{one-pass online delay} $\delta\in\NN$ if, for every $j\ge 1$, the
+output digit $(T(x))_j$ depends only on the input prefix
+$x_1,\dots,x_{j+\delta}$.  Equivalently, after reading the first $n$ input
+digits, a sequential device with delay $\delta$ has already determined the
+first $\max\{n-\delta,0\}$ output digits.
+\end{definition}
+
+\begin{remark}\label{rem:delay-convention}
+Definition~\ref{def:online-delay} is the one-sided low-to-high notion adapted
+to $\Fold_\infty$ on finitely supported streams.  It is not the
+most-significant-digit-first anticipation parameter used in the classical
+online-addition literature \cite{Frougny1999OnlineAddition}.  This distinction
+is essential.
+\end{remark}
+
+\begin{theorem}[Coordinatewise unbounded anticipation]\label{thm:coordinatewise-unbounded-anticipation}
+For every output coordinate $j\ge 1$ and every $\delta\ge 0$, there exist
+finitely supported inputs $x,y\in\{0,1,2\}^{(\NN)}$ such that
+\[
+x_i=y_i \qquad (1\le i\le j+\delta),
+\]
+but
+\[
+(\Fold_\infty(x))_j\neq (\Fold_\infty(y))_j.
+\]
+\end{theorem}
+
+\begin{proof}
+Fix $j\ge 1$ and $\delta\ge 0$.
+
+If $j=1$, choose $m\ge 1$ with $2m\ge \delta+1$ and define
+\[
+x:=\sum_{t=0}^{m-1} e_{2t+1},
+\qquad
+y:=x+2e_{2m+1}.
+\]
+The two inputs agree on the first $\delta+1$ positions.  Since $x$ is already
+admissible, $\Fold_\infty(x)=x$, so $(\Fold_\infty(x))_1=1$.  Moreover
+\[
+\Val(x)=\sum_{t=1}^{m}F_{2t}=F_{2m+1}-1,
+\]
+hence
+\[
+\Val(y)=F_{2m+1}-1+2F_{2m+2}=F_{2m+4}-1=\sum_{t=1}^{m+1}F_{2t+1}.
+\]
+Therefore
+\[
+\Fold_\infty(y)=\sum_{t=1}^{m+1} e_{2t},
+\]
+and so $(\Fold_\infty(y))_1=0$.
+
+Assume now that $j\ge 2$.  Choose $m\ge 1$ with $2m-1\ge \delta$ and set
+\[
+x:=\sum_{t=0}^{m-1} e_{j+2t},
+\qquad
+y:=x+2e_{j+2m}.
+\]
+The two inputs agree on the first $j+2m-1$ positions, hence on the first
+$j+\delta$ positions.  Again $x$ is admissible, so $\Fold_\infty(x)=x$ and
+$(\Fold_\infty(x))_j=1$.
+
+For the second input, one computes
+\[
+\Val(y)
+=
+\sum_{t=0}^{m-1}F_{j+2t+1}+2F_{j+2m+1}
+=
+F_{j-1}+\sum_{t=0}^{m}F_{j+2t+2}.
+\]
+The last identity may be checked directly by induction on $m$ from the
+Fibonacci recurrence.
+Hence the admissible word
+\[
+z:=Z(F_{j-1})+\sum_{t=0}^{m} e_{j+1+2t}
+\]
+has the same value as $y$.  By uniqueness of admissible representatives,
+$\Fold_\infty(y)=z$.  Since all nonzero digits of the second summand lie
+strictly to the right of position $j$, and $Z(F_{j-1})$ is supported in
+positions $<j$, one has $z_j=0$.  Thus $(\Fold_\infty(y))_j=0$.
+\end{proof}
+
+\begin{corollary}[No finite one-pass delay]\label{thm:no-bounded-delay}
+The canonical normalization map $\Fold_\infty$ admits no finite one-pass
+online delay.
+\end{corollary}
+
+\begin{proof}
+If $\Fold_\infty$ had one-pass online delay $\delta$, then the $j$th output
+digit would be determined by the first $j+\delta$ input digits for every
+$j\ge 1$.  This contradicts
+Theorem~\ref{thm:coordinatewise-unbounded-anticipation}.
+\end{proof}
+
+\begin{corollary}[The obstruction already occurs on genuine addition inputs]\label{cor:addition-image-unbounded-anticipation}
+For every output coordinate $j\ge 1$ and every $\delta\ge 0$, there exist
+admissible words $c,d,c',d'\in \Xinf$ such that the overlays $c+d$ and
+$c'+d'$ agree on the first $j+\delta$ coordinates, but
+\[
+\bigl(c\oplus d\bigr)_j \neq \bigl(c'\oplus d'\bigr)_j.
+\]
+\end{corollary}
+
+\begin{proof}
+In the proof of Theorem~\ref{thm:coordinatewise-unbounded-anticipation}, the
+word $x$ is always admissible, so it can be written as $x=x+0$ with
+$x,0\in\Xinf$.
+
+If $j=1$, the second witness is
+\[
+y=\sum_{t=0}^{m-1} e_{2t+1}+2e_{2m+1}
+=
+\left(\sum_{t=0}^{m} e_{2t+1}\right)+e_{2m+1},
+\]
+and both summands are admissible.
+
+If $j\ge 2$, the second witness is
+\[
+y=\sum_{t=0}^{m-1} e_{j+2t}+2e_{j+2m}
+=
+\left(\sum_{t=0}^{m} e_{j+2t}\right)+e_{j+2m},
+\]
+and again both summands are admissible.  Hence the witness family already lies
+in the image of genuine digitwise superposition of admissible inputs.  The
+conclusion then follows from
+Theorem~\ref{thm:zeckendorf-add-fst}.
+\end{proof}
+
+\subsection{A Finite-Word Consequence}
+
+To compare the one-sided canonical map with standard transducer models, we
+encode finitely supported inputs as low-to-high finite words.  For
+$u=u_1\cdots u_n\in\{0,1,2\}^\ast$, write
+\[
+\langle u\rangle:=\sum_{i=1}^n u_i e_i\in \D.
+\]
+If $a\in\{0,1\}^{(\NN)}$ is finitely supported, let $\operatorname{trim}(a)$
+denote the finite word obtained by deleting trailing zeros.  We then define
+\[
+\mathcal N(u):=\operatorname{trim}(\Fold_\infty(\langle u\rangle))
+\qquad (u\in\{0,1,2\}^\ast).
+\]
+
+\begin{lemma}[Bounded terminal discrepancy for subsequential transducers]\label{lem:subseq-terminal-bound}
+Let $T:\Sigma^\ast\to\Gamma^\ast$ be realized by a deterministic
+subsequential transducer with terminal output map $\omega$.  Set
+\[
+L:=\max_q |\omega(q)|.
+\]
+If $u$ is a prefix of $v$, then $T(u)$ and $T(v)$ have a common prefix of
+length at least $|T(u)|-L$.
+\end{lemma}
+
+\begin{proof}
+Write $v=uw$.  Let $\alpha$ be the output produced while reading $u$, and let
+$q$ be the state reached after $u$.  Then
+\[
+T(u)=\alpha\,\omega(q).
+\]
+If the run is continued along $w$, the output has the form
+\[
+T(v)=\alpha\,\beta\,\omega(q')
+\]
+for some word $\beta$ and some terminal state $q'$.  Thus $T(u)$ and $T(v)$
+share the prefix $\alpha$, whose length is
+\[
+|\alpha|=|T(u)|-|\omega(q)|\ge |T(u)|-L.
+\]
+\end{proof}
+
+\begin{theorem}[The one-sided canonical normalizer is not subsequential]\label{thm:canonical-not-subsequential}
+The finite-word normalization map
+\[
+\mathcal N:\{0,1,2\}^\ast\to\{0,1\}^\ast
+\]
+is not realizable by any deterministic subsequential transducer reading the
+input from low Fibonacci scales to high Fibonacci scales.
+\end{theorem}
+
+\begin{proof}
+Suppose, for contradiction, that a deterministic subsequential transducer
+realizes $\mathcal N$, and let $L$ be the constant from
+Lemma~\ref{lem:subseq-terminal-bound}.  For each $m\ge 1$, consider the prefix
+pair
+\[
+u_m:=(10)^{m-1}1,
+\qquad
+v_m:=u_m 02.
+\]
+Then
+\[
+\langle u_m\rangle=\sum_{t=0}^{m-1} e_{2t+1},
+\qquad
+\langle v_m\rangle=\sum_{t=0}^{m-1} e_{2t+1}+2e_{2m+1},
+\]
+so these are exactly the $j=1$ witnesses from the proof of
+Theorem~\ref{thm:coordinatewise-unbounded-anticipation}.  Hence
+\[
+\mathcal N(u_m)=u_m,
+\qquad
+\mathcal N(v_m)=0(10)^m1.
+\]
+In particular, $\mathcal N(u_m)$ and $\mathcal N(v_m)$ differ in their first
+symbol, so their common prefix has length $0$.  On the other hand, $u_m$ is a
+prefix of $v_m$, and
+\[
+|\mathcal N(u_m)|=|u_m|=2m-1.
+\]
+Lemma~\ref{lem:subseq-terminal-bound} therefore yields
+\[
+0\ge |\mathcal N(u_m)|-L = 2m-1-L
+\]
+for every $m$, which is impossible for $m>L$.  This contradiction shows that
+$\mathcal N$ is not subsequential.
+\end{proof}
+
+\begin{theorem}[Exact prefix-destruction index]\label{thm:exact-prefix-destruction}
+For $n\ge 1$, define
+\[
+\Delta(n):=
+\max\Bigl\{
+n-\lcp(\mathcal N(u),\mathcal N(v)):
+u\text{ is a proper prefix of }v,\ |\mathcal N(u)|=n
+\Bigr\}.
+\]
+Then
+\[
+\Delta(n)=n
+\qquad (n\ge 1).
+\]
+\end{theorem}
+
+\begin{proof}
+Since $\lcp(\mathcal N(u),\mathcal N(v))\ge 0$, one always has
+$\Delta(n)\le n$.
+
+If $n=2m-1$ is odd, use the prefix pair
+\[
+u_m=(10)^{m-1}1,
+\qquad
+v_m=u_m02
+\]
+from the proof of Theorem~\ref{thm:canonical-not-subsequential}.  There
+\[
+\mathcal N(u_m)=u_m,
+\qquad
+\mathcal N(v_m)=0(10)^m1,
+\]
+so $|\mathcal N(u_m)|=2m-1=n$ and
+$\lcp(\mathcal N(u_m),\mathcal N(v_m))=0$.  Hence $\Delta(2m-1)=2m-1$.
+
+If $n=2m$ is even, set
+\[
+a_m:=(10)^{m-1}2,
+\qquad
+b_m:=a_m1.
+\]
+Then $a_m$ is a proper prefix of $b_m$.  Moreover
+\[
+\Val(a_m)=\sum_{t=1}^{m-1}F_{2t}+2F_{2m}
+=(F_{2m-1}-1)+2F_{2m}=F_{2m+2}-1
+=\sum_{t=1}^{m}F_{2t+1},
+\]
+so
+\[
+\mathcal N(a_m)=(01)^m.
+\]
+Likewise,
+\[
+\Val(b_m)=\Val(a_m)+F_{2m+1}=F_{2m+3}-1
+=\sum_{t=1}^{m+1}F_{2t},
+\]
+and therefore
+\[
+\mathcal N(b_m)=1(01)^m.
+\]
+Thus $|\mathcal N(a_m)|=2m=n$ and
+$\lcp(\mathcal N(a_m),\mathcal N(b_m))=0$, so $\Delta(2m)=2m$.
+
+Both parity classes attain the trivial upper bound, hence $\Delta(n)=n$ for
+all $n\ge 1$.
+\end{proof}
+
+\begin{remark}\label{rem:frougny-separation}
+The point of Theorem~\ref{thm:canonical-not-subsequential} is not to claim a
+first non-sequentiality phenomenon in Fibonacci numeration.  Rather, it gives
+a sharpened statement for the specific canonical low-to-high normalization map:
+the obstruction is coordinatewise, it is witnessed by an explicit family of
+prefix pairs, and it already appears on genuine addition overlays.
+\par
+Theorem~\ref{thm:canonical-not-subsequential} shows that the one-sided map
+$\Fold_\infty$ is not the same object as the classical online adders of
+Frougny and Berstel.  In Frougny's most-significant-digit-first model,
+addition in base $\varphi$ is computable with delay $3$, and the associated
+finite-word recoding is subsequential, but the output is not the greedy
+expansion \cite[Prop.~13]{Frougny1999OnlineAddition}.  The next two sections
+revisit that classical transducer on its own terms.
+\end{remark}
+
+\section{The Classical Berstel Adder}\label{sec:kernel}
+
+\subsection{A Deterministic Subsequential Transducer}
+
+We now switch to the classical finite-word, most-significant-digit-first
+setting of \cite{Frougny1999OnlineAddition,LabbeLepsova2023FibonacciTwosComplement}.
+The relevant device is the $10$-state Berstel adder.  Because the final output
+depends on the last state, the natural model is a deterministic
+\emph{subsequential} transducer rather than a letter-to-letter Mealy machine.
+
+Its state set is
+\[
+Q=
+\{000,001,002,010,100,101,0\bar{1}2,1\bar{1}2,01\bar{1},11\bar{1}\}.
+\]
+The transitions are
+\[
+\begin{aligned}
+000&\xrightarrow{d/0}00d,\qquad 100\xrightarrow{d/1}00d\quad(d=0,1,2),\\
+001&\xrightarrow{0/0}010,\ \xrightarrow{1/0}100,\ \xrightarrow{2/0}101,\\
+002&\xrightarrow{0/0}11\bar{1},\ \xrightarrow{1/1}000,\ \xrightarrow{2/1}001,\\
+010&\xrightarrow{0/0}100,\ \xrightarrow{1/0}101,\ \xrightarrow{2/1}0\bar{1}2,\\
+101&\xrightarrow{0/1}010,\ \xrightarrow{1/1}100,\ \xrightarrow{2/1}101,\\
+0\bar{1}2&\xrightarrow{0/0}01\bar{1},\ \xrightarrow{1/0}010,\ \xrightarrow{2/0}100,\\
+1\bar{1}2&\xrightarrow{0/1}01\bar{1},\ \xrightarrow{1/1}010,\ \xrightarrow{2/1}100,\\
+01\bar{1}&\xrightarrow{0/0}001,\ \xrightarrow{1/0}002,\ \xrightarrow{2/0}1\bar{1}2,\\
+11\bar{1}&\xrightarrow{0/1}001,\ \xrightarrow{1/1}002,\ \xrightarrow{2/1}1\bar{1}2.
+\end{aligned}
+\]
+The terminal output map is
+\[
+\omega(000)=000,\ \omega(001)=001,\ \omega(002)=010,\ \omega(010)=010,
+\]
+\[
+\omega(100)=100,\ \omega(101)=101,\ \omega(0\bar{1}2)=000,\ \omega(1\bar{1}2)=100,
+\]
+\[
+\omega(01\bar{1})=001,\qquad \omega(11\bar{1})=101.
+\]
+
+Let
+\[
+\mathcal K=(Q,\delta,\eta,\omega)
+\]
+denote the deterministic subsequential transducer defined above, with initial
+state $000$.  For a state $q\in Q$, let
+\[
+F_q:\{0,1,2\}^\ast\to\{0,1\}^\ast
+\]
+be the function obtained by starting in $q$, following the transition labels,
+and appending the terminal word $\omega$ of the last state.
+For a finite word $w=d_1\cdots d_n$ read most significant digit first, we
+write
+\[
+\Val_{\mathrm{MSD}}(w):=\sum_{i=1}^{n} d_i F_{n-i+2}.
+\]
+When discussing residual functions and shortest separating words, we keep the
+complete output word, including leading zeros, because those zeros belong to
+the subsequential output.  They are immaterial only at the level of the
+represented Fibonacci value.
+
+All ten displayed states are reachable from the initial state.  One may use
+\[
+\varepsilon,\ 1,\ 2,\ 10,\ 11,\ 12,\ 20,\ 102,\ 202,\ 1020
+\]
+to reach respectively
+\[
+000,\ 001,\ 002,\ 010,\ 100,\ 101,\ 11\bar{1},\ 0\bar{1}2,\ 1\bar{1}2,\ 01\bar{1}.
+\]
+
+\begin{proposition}[Classical correctness]\label{prop:classical-berstel-correctness}
+The transducer $\mathcal K$ is the classical Berstel adder in the
+most-significant-digit-first Fibonacci setting.  It computes a value-preserving
+binary recoding of words over $\{0,1,2\}$: for every input word $w$, the
+complete output $\mathcal K(w)$ is binary and satisfies
+\[
+\Val_{\mathrm{MSD}}(\mathcal K(w))=\Val_{\mathrm{MSD}}(w).
+\]
+In general this output is not the greedy Zeckendorf expansion.
+\end{proposition}
+
+\begin{proof}
+This is the classical construction; see
+\cite[Prop.~13]{Frougny1999OnlineAddition} and
+\cite[Thm.~3.1]{LabbeLepsova2023FibonacciTwosComplement}.  Those references
+show that the machine realizes a value-preserving recoding from ternary
+Fibonacci input words to binary Fibonacci output words in the
+most-significant-digit-first convention.  The non-greedy statement is already
+part of Frougny's proposition.
+\end{proof}
+
+\begin{example}[A short non-greedy output witness]\label{ex:berstel-nongreedy}
+Starting from the initial state $000$, the input word $121$ produces the
+complete output word $001100$.  After suppressing the two leading zeros, the
+represented binary word is $1100$, which still contains the forbidden factor
+$11$.  Hence the classical Berstel output is not the greedy Zeckendorf
+expansion of the same value.
+\end{example}
+
+\begin{remark}
+Theorem~\ref{thm:no-bounded-delay} and
+Proposition~\ref{prop:classical-berstel-correctness} concern different
+sequential functions.  The former concerns the canonical one-sided map
+$\Fold_\infty$, whereas the latter concerns the classical Berstel recoding in
+the most-significant-digit-first model.  Example~\ref{ex:berstel-nongreedy}
+exhibits the difference
+explicitly: the Berstel machine returns a non-greedy value-preserving recoding,
+while the canonical map of Section~4 is defined to return the greedy
+representative.
+\end{remark}
+
+\section{Minimality of the Berstel Kernel}\label{sec:minimality}
+
+\subsection{Residual Functions}
+
+Define an equivalence relation on $Q$ by
+\[
+q\sim q' \iff F_q=F_{q'}.
+\]
+For deterministic subsequential transducers, this is the usual sequential
+Nerode equivalence.  Any deterministic subsequential transducer implementing
+the same function as $\mathcal K$ must have at least $|Q/\!\sim|$ reachable
+states.
+
+To avoid ambiguity, we distinguish the displayed realization $\mathcal K$ from
+the subsequential function that it induces.  The reachability statement above
+shows that $\mathcal K$ really has ten reachable states as a concrete machine.
+The minimality problem addressed below is a statement about the induced
+function: namely, whether any deterministic subsequential realization of that
+same function can use fewer than ten reachable states.
+
+\begin{lemma}[Separation by terminal output]\label{lem:terminal-separation}
+If $\omega(q)\neq \omega(q')$, then $q\not\sim q'$.  Consequently the only
+pairs not already separated by the empty input are
+\[
+(000,0\bar{1}2),\quad
+(001,01\bar{1}),\quad
+(002,010),\quad
+(100,1\bar{1}2),\quad
+(101,11\bar{1}).
+\]
+\end{lemma}
+
+\begin{proof}
+If $\omega(q)\neq \omega(q')$, then
+\[
+F_q(\varepsilon)=\omega(q)\neq \omega(q')=F_{q'}(\varepsilon),
+\]
+so $q\not\sim q'$.  Reading the terminal output list above, one sees that the
+only equal-terminal pairs are exactly the five pairs displayed.
+\end{proof}
+
+\begin{lemma}[The remaining pairs are separated by the input $0$]\label{lem:zero-separation}
+The five pairs listed in Lemma~\ref{lem:terminal-separation} are all
+inequivalent.  More precisely,
+\[
+F_{000}(0)=0000 \neq 0001 = F_{0\bar{1}2}(0),
+\]
+\[
+F_{001}(0)=0010 \neq 0001 = F_{01\bar{1}}(0),
+\]
+\[
+F_{002}(0)=0101 \neq 0100 = F_{010}(0),
+\]
+\[
+F_{100}(0)=1000 \neq 1001 = F_{1\bar{1}2}(0),
+\]
+\[
+F_{101}(0)=1010 \neq 1001 = F_{11\bar{1}}(0).
+\]
+\end{lemma}
+
+\begin{proof}
+Each identity is obtained by following one transition on the input $0$ and
+then appending the terminal output of the arrival state.
+\end{proof}
+
+\subsection{Minimality of the Classical Kernel}
+
+\begin{theorem}[Minimality of the Berstel kernel]\label{thm:berstel-kernel-minimality}
+All states in $Q$ are reachable and pairwise inequivalent under subsequential
+Nerode equivalence.  Consequently the function induced by $\mathcal K$ has
+deterministic subsequential state complexity $10$, and $\mathcal K$ is a
+minimal realization of that function.
+\end{theorem}
+
+\begin{proof}
+For deterministic subsequential transducers, two states are equivalent if and
+only if every input word produces the same complete output word from both
+states, including the terminal output.  Thus the theorem reduces to separating
+the residual functions $F_q$.
+
+By Lemma~\ref{lem:terminal-separation}, every pair with distinct terminal
+output is already separated by the empty input.  Lemma~\ref{lem:zero-separation}
+handles the only five remaining pairs.  Hence all ten states are pairwise
+inequivalent, and in fact every inequivalent pair is separated by an input
+word of length at most $1$.  Equivalently, the partition-refinement
+computation reaches the discrete partition
+\[
+\boxed{|Q/\!\sim|=10,\qquad
+\max_{q\neq q'}|w_{q,q'}|\le 1,}
+\]
+where $w_{q,q'}$ denotes a shortest separating word for the pair $(q,q')$.
+Hence every state defines a distinct residual sequential function, so no
+smaller deterministic subsequential transducer can realize the same map.  As
+all ten states are reachable, the displayed transducer $\mathcal K$ itself is
+therefore a minimal realization.
+\end{proof}
+
+\begin{corollary}[Exact state complexity]\label{cor:berstel-state-complexity}
+The classical Berstel adder has deterministic subsequential state complexity
+$10$.
+\end{corollary}
+
+\begin{proof}
+This is exactly Theorem~\ref{thm:berstel-kernel-minimality}.
+\end{proof}
+
+\begin{corollary}\label{cor:berstel-kernel-unique}
+The minimal deterministic subsequential realization of the function induced by
+$\mathcal K$ is unique up to labeled isomorphism.
+\end{corollary}
+
+\begin{proof}
+This is the standard uniqueness statement for minimal deterministic sequential
+machines; see \cite{BerstelReutenauer1988RationalSeries}.
+\end{proof}
+
+\section{A Local Parallel Lower Bound}\label{sec:complexity}
+
+The failure of bounded one-pass delay does not, by itself, rule out efficient
+synchronous local normalization.  The next theorem shows that locality also
+fails in that model: the number of rounds must grow linearly with the input
+scale.
+
+\begin{theorem}[Local parallel lower bound for Zeckendorf normalization]\label{thm:zeckendorf-parallel-propagation-lower-bound}
+Let $\A=\{0,1,2\}$ and define, for finitely supported one-sided configurations
+$x=(x_1,x_2,\ldots)\in\A^{(\NN)}$,
+\[
+\Val(x):=\sum_{k\ge 1} x_kF_{k+1}.
+\]
+Let $Z(\Val(x))\in\{0,1\}^{(\NN)}$ denote the unique admissible Zeckendorf
+representative with the same value.
+
+Suppose $\Phi:\A^{(\NN)}\to\{0,1\}^{(\NN)}$ is a synchronous local map of
+radius $r$, meaning that after extending every input by zeros outside $\NN$
+there exists a local rule $f:\A^{2r+1}\to\{0,1\}$ such that
+\[
+(\Phi(x))_j=f(x_{j-r},\dots,x_{j+r})
+\qquad (j\ge 1),
+\]
+and let $\Phi^t$ denote its $t$-fold iterate.  If for some $t\ge 1$ one has
+\[
+\Phi^t(x)=Z(\Val(x))
+\]
+for every finitely supported input $x$, then for every even integer $m\ge 2$,
+\[
+t\ge \left\lceil \frac{m-1}{r}\right\rceil.
+\]
+In particular, no fixed-radius synchronous local normalization scheme can run
+in a number of rounds independent of the input scale.
+\end{theorem}
+
+\begin{proof}
+After $t$ iterations, the output coordinate at position $j$ depends only on
+the input in the interval $[j-rt,j+rt]\cap\NN$.
+Fix an even integer $m\ge 2$ and define
+\[
+x^{(m)}_k=
+\begin{cases}
+1,&k\in\{1,3,5,\dots,m-1\},\\
+0,&\text{otherwise},
+\end{cases}
+\qquad
+y^{(m)}:=x^{(m)}+e_1.
+\]
+The configuration $x^{(m)}$ is already admissible, hence
+$Z(\Val(x^{(m)}))=x^{(m)}$ and its $m$th coordinate is $0$.
+
+On the other hand,
+\[
+\Val(x^{(m)})
+=
+\sum_{j=1}^{m/2}F_{2j}
+=
+F_{m+1}-1,
+\]
+so
+\[
+\Val(y^{(m)})=\Val(x^{(m)})+F_2=F_{m+1}.
+\]
+Therefore $Z(\Val(y^{(m)}))$ is the admissible word with a single $1$ at
+position $m$, and hence
+\[
+Z(\Val(x^{(m)}))_m=0,
+\qquad
+Z(\Val(y^{(m)}))_m=1.
+\]
+
+If $rt<m-1$, then the coordinate $(\Phi^t(\cdot))_m$ cannot depend on the input
+at position $1$, so it must take the same value on $x^{(m)}$ and $y^{(m)}$.
+This contradicts the required normalization outputs above.  Hence
+$rt\ge m-1$, which is equivalent to the stated bound.
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:zeckendorf-parallel-propagation-lower-bound} concerns the
+nonredundant input alphabet $\{0,1,2\}$ and the canonical Zeckendorf output
+map $x\mapsto Z(\Val(x))$.  It does not contradict constant-time parallel
+addition results for redundant digit sets, where carries can be absorbed by
+extra local freedom.  We also do not claim a matching upper bound here:
+the theorem only shows that every fixed-radius synchronous realization of the
+canonical map requires a number of rounds growing linearly with the input
+scale.
+\end{remark}
+
+\section{Conclusion}
+
+We have separated three layers of the Zeckendorf addition problem.  First, the
+canonical normalization map $\Fold_\infty$ is the section of the Fibonacci
+congruence selected by admissible representatives, and it admits a direct
+rewrite-theoretic description.  Second, in the one-sided low-to-high model,
+this canonical map has coordinatewise unbounded anticipation and therefore no
+bounded online delay; more strongly, its low-to-high finite-word incarnation
+is not subsequential.  Third, the classical $10$-state Berstel adder belongs
+to a different, most-significant-digit-first subsequential setting, and in
+that setting its state complexity is exactly $10$.  The local lower bound
+shows that canonical normalization also remains nonlocal in the synchronous
+setting.  Natural next questions concern analogous distinctions for other
+Pisot numeration systems and for redundant or signed digit alphabets.
+Machine-checked verification of the rewrite system and of the minimal
+subsequential quotient of the classical kernel would also be worthwhile.
+
+\bibliographystyle{abbrv}
+\bibliography{references_godel_zeckendorf,references_fibonacci,references}
+
+\end{document}

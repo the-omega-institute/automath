@@ -1,0 +1,178 @@
+\section{Observer Fibers and Spacetime Localization}\label{sec:observer-spacetime}
+
+The final enrichment adds observer and spacetime coordinates to states. The forcing relation itself is unchanged. What changes is the bookkeeping of localization: who carries a state, where it is supported, and how several localized states are compared.
+
+\begin{definition}[Observer-indexed state system]\label{def:observer-indexed-state-system}
+An \emph{observer-indexed state system} is a surjection
+\[
+\iota:P\to I
+\]
+from a state set $P$ onto an observer index set $I$. The fiber over $i\in I$ is
+\[
+P_i:=\iota^{-1}(i).
+\]
+\end{definition}
+
+\begin{definition}[Internal updates and communication]\label{def:internal-updates-and-communication}
+For each $i\in I$, an \emph{internal update relation} on the fiber $P_i$ is a relation
+\[
+\rightsquigarrow_i\ \subseteq\ P_i\times P_i
+\]
+such that $p\rightsquigarrow_i q$ implies $q\le p$. For each ordered pair $(i,j)\in I\times I$, a \emph{communication map} is a set-valued map
+\[
+\Com_{i\to j}:P_i\to\mathcal{P}(P_j).
+\]
+\end{definition}
+
+\begin{definition}[Event-region system]\label{def:event-region-system}
+An \emph{event-region system} is a triple
+\[
+(X,\preceq_X,\mathcal{U}),
+\]
+where $X$ is an event set, $\preceq_X$ is a causal preorder on $X$, and $\mathcal{U}\subseteq\mathcal{P}(X)$ is a family of regions closed under finite intersections.
+\end{definition}
+
+\begin{definition}[Observer-spacetime state model]\label{def:observer-spacetime-model}
+An \emph{observer-spacetime state model} is a tuple
+\[
+\bigl(P,\le,\Vdash,\iota,\{\rightsquigarrow_i\}_{i\in I},\{\Com_{i\to j}\}_{i,j\in I},X,\preceq_X,\mathcal{U},\lambda,\varrho\bigr)
+\]
+such that:
+\begin{enumerate}[label=(\roman*),nosep]
+\item $(P,\le,\Vdash)$ is an underlying state-forcing structure,
+\item $(P,\iota)$ is an observer-indexed state system,
+\item $(X,\preceq_X,\mathcal{U})$ is an event-region system,
+\item $\lambda:P\to X$ is an event map and $\varrho:P\to\mathcal{U}$ is a region-support map with $\lambda(p)\in\varrho(p)$ for every $p\in P$,
+\item if $q\le p$, then $\iota(q)=\iota(p)$, $\varrho(q)\subseteq\varrho(p)$, and $\lambda(p)\preceq_X\lambda(q)$,
+\item if $q\in \Com_{i\to j}(p)$, then $\lambda(p)\preceq_X\lambda(q)$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Observer-relative and regional forcing]\label{def:regional-forcing}
+If $p\in P_i$, define
+\[
+p\Vdash_i\varphi
+\quad:\Longleftrightarrow\quad
+p\Vdash\varphi.
+\]
+For $U\in\mathcal{U}$, define
+\[
+p\Vdash_i \mathsf{Loc}_U\,\varphi
+\quad:\Longleftrightarrow\quad
+\varrho(p)\subseteq U\ \text{and}\ p\Vdash_i\varphi.
+\]
+\end{definition}
+
+\begin{proposition}[Regional forcing persists under local refinement]\label{prop:regional-forcing-persistence}
+Let $p,q\in P_i$ with $q\le p$. If
+\[
+p\Vdash_i \mathsf{Loc}_U\,\varphi,
+\]
+then
+\[
+q\Vdash_i \mathsf{Loc}_U\,\varphi^\uparrow.
+\]
+\end{proposition}
+
+\begin{proof}
+From $p\Vdash_i \mathsf{Loc}_U\,\varphi$ we have $\varrho(p)\subseteq U$ and $p\Vdash\varphi$. Since $q\le p$, \Cref{def:observer-spacetime-model} gives $\varrho(q)\subseteq\varrho(p)\subseteq U$, and \Cref{prop:forcing-persistence} gives $q\Vdash\varphi^\uparrow$. Hence $q\Vdash_i \mathsf{Loc}_U\,\varphi^\uparrow$.
+\end{proof}
+
+\begin{definition}[Coupled states and shared forcing]\label{def:coupled-states}
+Let $K\subseteq I$ be finite and nonempty. A \emph{$K$-coupled state} is data
+\[
+c=\bigl((p_i)_{i\in K},U\bigr)
+\]
+with $p_i\in P_i$ for all $i\in K$, $U\in\mathcal{U}$, and $\lambda(p_i)\in U$ for every $i\in K$. We write
+\[
+\rho_i^K(c):=p_i
+\qquad\text{and}\qquad
+\mathrm{supp}_K(c):=U.
+\]
+We define
+\[
+c\Vdash^{\forall}_{K,U}\varphi
+\]
+to mean that $\mathrm{supp}_K(c)\subseteq U$ and $\rho_i^K(c)\Vdash_i\varphi$ for every $i\in K$.
+\end{definition}
+
+\begin{definition}[Coordinated refinement of coupled states]\label{def:coordinated-refinement}
+Let $c$ and $d$ be $K$-coupled states. We say that $d$ is a \emph{coordinated refinement} of $c$, written $d\le_K c$, if
+\[
+\rho_i^K(d)\le \rho_i^K(c)
+\qquad (\forall i\in K)
+\]
+and
+\[
+\mathrm{supp}_K(d)\subseteq \mathrm{supp}_K(c).
+\]
+\end{definition}
+
+\begin{proposition}[Persistence of shared forcing]\label{prop:shared-forcing-persistence}
+If $d\le_K c$ and
+\[
+c\Vdash^{\forall}_{K,U}\varphi,
+\]
+then
+\[
+d\Vdash^{\forall}_{K,U}\varphi^\uparrow.
+\]
+\end{proposition}
+
+\begin{proof}
+The assumption $c\Vdash^{\forall}_{K,U}\varphi$ means that $\mathrm{supp}_K(c)\subseteq U$ and each component $\rho_i^K(c)$ forces $\varphi$. Since $d\le_K c$, every component $\rho_i^K(d)$ refines $\rho_i^K(c)$, so \Cref{prop:forcing-persistence} yields $\rho_i^K(d)\Vdash_i\varphi^\uparrow$ for all $i\in K$. Also $\mathrm{supp}_K(d)\subseteq \mathrm{supp}_K(c)\subseteq U$. Hence $d\Vdash^{\forall}_{K,U}\varphi^\uparrow$.
+\end{proof}
+
+\begin{definition}[Observer symmetry]\label{def:observer-symmetry}
+An observer-spacetime state model is \emph{observer-symmetric} if every bijection $\sigma:I\to I$ lifts to a bijection
+\[
+\widehat{\sigma}:P\to P
+\]
+such that
+\[
+\iota(\widehat{\sigma}(p))=\sigma(\iota(p)),
+\]
+and $\widehat{\sigma}$ preserves refinement, forcing, internal update relations, communication maps, local reference structures, typed readouts, event locations, and region supports.
+\end{definition}
+
+\begin{proposition}[No privileged observer]\label{prop:no-privileged-observer}
+In an observer-symmetric model, any structural property of observer fibers that is invariant under isomorphism holds for one observer if and only if it holds for every observer.
+\end{proposition}
+
+\begin{proof}
+Let $i,j\in I$, and choose a bijection $\sigma:I\to I$ with $\sigma(i)=j$. By observer symmetry, the lift $\widehat{\sigma}$ maps $P_i$ bijectively onto $P_j$ while preserving all named structure. Any isomorphism-invariant property of the fiber therefore transfers from $P_i$ to $P_j$ and conversely.
+\end{proof}
+
+\begin{corollary}[Observer-neutral transport of readout status]\label{cor:observer-neutral-readout}
+Assume observer symmetry. If $p\in P_i$ and
+\[
+\Read_{p,s}(r)=v,
+\]
+then for every observer permutation $\sigma:I\to I$,
+\[
+\Read_{\widehat{\sigma}(p),s}\bigl(\widehat{\sigma}(r)\bigr)=\widehat{\sigma}(v).
+\]
+\end{corollary}
+
+\begin{proof}
+By \Cref{def:observer-symmetry}, the lift $\widehat{\sigma}$ preserves the local reference frames, compatible local families, and typed readouts. It therefore transports admissibility, visible value classes, and their unique readout representative exactly. Hence readout status is observer-neutral.
+\end{proof}
+
+\begin{definition}[Observer-spacetime logic system]\label{def:ost-system}
+The \emph{observer-spacetime logic system} is the layer obtained by adjoining to the state-forcing structure the observer indexing, internal updates, communication maps, event locations, region supports, and coupled-state semantics of \Cref{def:observer-spacetime-model,def:coupled-states}.
+\end{definition}
+
+\begin{proposition}[Conservativity of the observer-spacetime layer]\label{prop:ost-conservative}
+Let $\varphi$ be a formula containing no observer, communication, event, or region symbols. In every observer-spacetime state model and every state $p$,
+\[
+p\Vdash_{\OST}\varphi
+\quad\Longleftrightarrow\quad
+p\Vdash\varphi.
+\]
+\end{proposition}
+
+\begin{proof}
+The additional observer-spacetime coordinates affect where a state is located and how localized states are compared, but they do not alter the forcing clause for formulas that do not mention those new symbols. Hence such formulas are evaluated exactly as in the underlying state-forcing layer.
+\end{proof}
+
+This layer localizes the existing state semantics. It records where forcing occurs and how localized states fit together, but it does not introduce a second semantic relation.

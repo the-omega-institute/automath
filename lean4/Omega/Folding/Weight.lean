@@ -120,4 +120,9 @@ theorem weight_update_true_add (w : Word m) (i : Fin m) (hi : w i = false) :
     rw [Finset.sum_congr rfl hrest, hi]; simp; omega]
   omega
 
+/-- The all-false word has weight zero.
+    lem:weight-allFalse-eq-zero -/
+theorem weight_allFalse_eq_zero (m : Nat) : weight (fun _ : Fin m => false) = 0 := by
+  simp
+
 end Omega

@@ -107,6 +107,13 @@ theorem momentSum_eq_congr_pow_sum (q m : Nat) :
     exact hbij.sum_comp (fun r : Fin (Nat.fib (m + 2)) => weightCongruenceCount m r.val ^ q)
   rw [step, ← Fin.sum_univ_eq_sum_range]
 
+/-- Named alias: S_q(m) = Σ_{r<F} wcc(m,r)^q.
+    prop:pom-moment-congruence-q-general -/
+theorem momentSum_eq_weightCongruenceCount_pow (q m : Nat) :
+    momentSum q m =
+    (Finset.range (Nat.fib (m + 2))).sum (fun r => weightCongruenceCount m r ^ q) :=
+  momentSum_eq_congr_pow_sum q m
+
 -- ══════════════════════════════════════════════════════════════
 -- exactWeightTriple definition
 -- ══════════════════════════════════════════════════════════════
@@ -332,10 +339,10 @@ theorem momentSum_two_ge_exactWeightCollision (m : Nat) (hm : 1 ≤ m) :
     | 0 => omega
     | 1 =>
       rw [exactWeightCollision_eq_sum, momentSum_two_one]
-      simp [Finset.sum_range_succ, Finset.range_zero, Finset.sum_empty, momentSum_two_zero]
+      simp [ momentSum_two_zero]
     | 2 =>
       have he := exactWeightCollision_eq_sum 2
-      simp [Finset.sum_range_succ, Finset.range_zero, Finset.sum_empty,
+      simp [Finset.sum_range_succ,
         momentSum_two_zero, momentSum_two_one] at he
       rw [momentSum_two_two]; omega
     | m + 3 =>
@@ -511,8 +518,8 @@ theorem weight_le_allTrue (w : Word m) :
     rw [htr]
     have him := ih (truncate w)
     cases hb : w ⟨m, Nat.lt_succ_self m⟩
-    · simp only [hb, Bool.false_eq_true, ↓reduceIte, Nat.add_zero]; omega
-    · simp only [hb, ↓reduceIte]; omega
+    · simp only [ Bool.false_eq_true, ↓reduceIte, Nat.add_zero]; omega
+    · simp only [ ↓reduceIte]; omega
 
 /-- Fold of all-true word.
     thm:pom-fold-allTrue -/
@@ -584,9 +591,9 @@ theorem weight_complement (w : Word m) :
     rw [htr]
     have him := ih (truncate w)
     cases hb : w ⟨m, Nat.lt_succ_self m⟩
-    · simp only [complement, hb, Bool.not_false, Bool.false_eq_true, ↓reduceIte, Nat.add_zero, ite_true]
+    · simp only [complement, hb, Bool.not_false, Bool.false_eq_true, ↓reduceIte, Nat.add_zero]
       omega
-    · simp only [complement, hb, Bool.not_true, Bool.false_eq_true, ↓reduceIte, Nat.add_zero, ite_true]
+    · simp only [complement, hb, Bool.not_true, Bool.false_eq_true, ↓reduceIte, Nat.add_zero]
       omega
 
 /-- ewc is symmetric: ewc(m, n) = ewc(m, F_{m+3}-2-n).
@@ -918,7 +925,7 @@ theorem exactWeightCollision_eq_symmetric_sum (m : Nat) :
   have hF : 2 ≤ Nat.fib (m + 3) :=
     le_trans (show 2 ≤ Nat.fib 3 from by decide) (Nat.fib_mono (by omega))
   rw [show Nat.fib (m + 3) = Nat.fib (m + 3) - 1 + 1 from by omega,
-    Finset.range_succ, Finset.sum_insert (by simp [Finset.mem_range]),
+    Finset.range_add_one, Finset.sum_insert (by simp [Finset.mem_range]),
     Finset.sum_insert (by simp [Finset.mem_range])]
   -- At n = F-1: ewc(F-1) = 0 by exactWeightCount_eq_zero_of_ge_fib (F-1 ≥ F-1, but F ≤ F-1?)
   -- Actually weight(w) ≤ F-2 for No11 words, so ewc(F-1)=0. Use weight_complement:
@@ -971,5 +978,83 @@ theorem momentSum_two_strict_mono_all (m : Nat) :
   match m with
   | 0 => rw [momentSum_two_zero, momentSum_two_one]; omega
   | m + 1 => exact momentSum_two_strict_mono' (m + 1) (by omega)
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R27: ewc partition of unity
+-- ══════════════════════════════════════════════════════════════
+
+/-- ewc(m, F_{m+3}-1) = 0: no word has weight exactly F_{m+3}-1.
+    prop:pom-ewc-partition-of-unity -/
+private theorem exactWeightCount_fib_sub_one (m : Nat) :
+    exactWeightCount m (Nat.fib (m + 3) - 1) = 0 := by
+  unfold exactWeightCount
+  apply Finset.card_eq_zero.mpr
+  apply Finset.filter_false_of_mem
+  intro w _
+  have hcomp := weight_complement w
+  -- weight(complement w) + weight w = F_{m+3} - 2
+  -- weight w ≤ F_{m+3} - 2
+  have hle : weight w ≤ Nat.fib (m + 3) - 2 := by
+    have := @Nat.zero_le (weight (complement w)); omega
+  have hF : 2 ≤ Nat.fib (m + 3) := by
+    calc Nat.fib (m + 3) ≥ Nat.fib 3 := Nat.fib_mono (by omega)
+      _ = 2 := by native_decide
+  omega
+
+/-- The ewc sum over [0, F_{m+3}-2] equals 2^m.
+    prop:pom-ewc-partition-of-unity -/
+theorem exactWeightCount_total_sum (m : Nat) :
+    (Finset.range (Nat.fib (m + 3) - 1)).sum (exactWeightCount m) = 2 ^ m := by
+  have hF : 1 ≤ Nat.fib (m + 3) := Nat.fib_pos.mpr (by omega)
+  have hkey := exactWeightCount_sum m
+  rw [show Nat.fib (m + 3) = Nat.fib (m + 3) - 1 + 1 from by omega,
+    Finset.sum_range_succ] at hkey
+  rw [exactWeightCount_fib_sub_one] at hkey
+  linarith
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R59: Sprint to 200 theorems
+-- ══════════════════════════════════════════════════════════════
+
+/-- F(m+2)^2 ≤ S_2(m) · F(m+2), i.e. the second moment times cardinality dominates the
+    square of cardinality (Cauchy-Schwarz consequence).
+    prop:pom-moment-cauchy-schwarz-card -/
+theorem momentSum_ge_card_sq (m : Nat) :
+    Nat.fib (m + 2) ^ 2 ≤ momentSum 2 m * Nat.fib (m + 2) := by
+  have h := momentSum_ge_card' 2 m
+  nlinarith
+
+/-- Weight of any m-bit word is at most F(m+3) - 2 (named alias).
+    prop:pom-weight-upper-bound -/
+theorem weight_le_fib_sub_two (w : Word m) :
+    weight w ≤ Nat.fib (m + 3) - 2 :=
+  weight_le_allTrue w
+
+/-- exactWeightCount at weight 0 is positive.
+    prop:pom-ewc-pos-zero -/
+theorem exactWeightCount_pos_zero (m : Nat) :
+    0 < exactWeightCount m 0 := by
+  rw [exactWeightCount_zero_eq_one']; exact Nat.one_pos
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R69: S_2 Fibonacci-type superadditivity
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_2(m+1) + S_2(m) ≤ S_2(m+2) for m ≥ 1 (Fibonacci-type superadditivity).
+    From recurrence: S_2(m+2) = 2S_2(m+1) + 2S_2(m) - 2S_2(m-1),
+    so S_2(m+2) - S_2(m+1) - S_2(m) = S_2(m+1) - S_2(m-1) + S_2(m) - S_2(m-1) ≥ 0.
+    thm:pom-s2-fib-superadditive -/
+theorem momentSum_two_fib_superadditive (m : Nat) (hm : 1 ≤ m) :
+    momentSum 2 (m + 1) + momentSum 2 m ≤ momentSum 2 (m + 2) := by
+  obtain ⟨k, rfl⟩ : ∃ k, m = k + 1 := ⟨m - 1, by omega⟩
+  -- Recurrence at k: S(k+3) + 2S(k) = 2S(k+2) + 2S(k+1)
+  have hrec := momentSum_two_recurrence k
+  -- Goal: S(k+2) + S(k+1) ≤ S(k+3)
+  -- From hrec: S(k+3) = 2S(k+2) + 2S(k+1) - 2S(k)
+  -- S(k+3) - S(k+2) - S(k+1) = S(k+2) + S(k+1) - 2S(k)
+  --                             = (S(k+2) - S(k)) + (S(k+1) - S(k)) ≥ 0
+  have hm1 := momentSum_two_mono' k
+  have hm2 := momentSum_two_mono' (k + 1)
+  linarith
 
 end Omega

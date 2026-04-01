@@ -213,6 +213,32 @@ theorem globalDefect_eq_defectChain (m k : Nat) (ω : Word (m + k)) :
         _ = defectChain m (k + 1) ω := by
               rfl
 
+/-- Defect cocycle identity: global defect composes via xor across three resolutions.
+    prop:fold-defect-cocycle -/
+theorem globalDefect_compose (hmk : m ≤ k) (hkn : k ≤ n) (ω : Word n) :
+    globalDefect (Nat.le_trans hmk hkn) ω =
+    xorWord
+      (globalDefect hmk (restrictWord hkn ω))
+      (restrictWord hmk (globalDefect hkn ω)) := by
+  simp only [globalDefect, X.restrictLE_val, restrictWord_xor, restrictWord_comp]
+  funext i
+  simp only [xorWord]
+  cases (Fold (restrictWord (Nat.le_trans hmk hkn) ω)).1 i
+    <;> cases restrictWord hmk (Fold (restrictWord hkn ω)).1 i
+    <;> cases restrictWord hmk (restrictWord hkn (Fold ω).1) i
+    <;> simp_all [Bool.xor]
+
+/-- Poincaré band identity: the defect boundary relation at adjacent resolutions.
+    The global defect from m to n decomposes as the local defect at m+1 xor'd with the
+    restricted global defect from m+1 to n.
+    prop:fold-discrete-poincare-band -/
+theorem globalDefect_poincare_band (hmn : m + 1 ≤ n) (ω : Word n) :
+    globalDefect (Nat.le_trans (Nat.le_succ m) hmn) ω =
+    xorWord
+      (globalDefect (Nat.le_succ m) (restrictWord hmn ω))
+      (restrictWord (Nat.le_succ m) (globalDefect hmn ω)) :=
+  globalDefect_compose (Nat.le_succ m) hmn ω
+
 /-- Two words are equal iff their xor is the zero word. -/
 theorem xorWord_eq_zero_iff {a b : Word m} :
     xorWord a b = zeroWord m ↔ a = b := by
@@ -460,7 +486,7 @@ theorem globalDefect_allFalse (h : m ≤ n) :
     funext i; rfl
   conv_lhs => rw [hrestr, hFoldM, hFoldN]
   -- Now xorWord ⟨allFalse,_⟩.1 (X.restrictLE h ⟨allFalse,_⟩).1
-  simp only [X.restrictLE, xorWord]
+  simp only [X.restrictLE]
   ext i; simp [zeroWord, restrictWord]
 
 -- ══════════════════════════════════════════════════════════════
@@ -493,5 +519,100 @@ theorem localDefect_lastFalse (w : Word (m + 1)) (h : w ⟨m, Nat.lt_succ_self m
       rw [← h]; exact (X.snoc_truncate_last w).symm
     rw [hw, truncate_snoc]
     exact (restrict_Fold_snoc_false (truncate w)).symm
+
+/-- Gauge anomaly max instance: ∃ w : Word 2 with localDefect support size 1.
+    thm:fold-gauge-anomaly-max -/
+theorem gauge_anomaly_max_one :
+    ∃ w : Word 2, (Finset.univ.filter (fun i => localDefect w i = true)).card = 1 := by
+  exact ⟨![true, true], by native_decide⟩
+
+/-- Gauge anomaly max instance: ∃ w : Word 4 with localDefect support size 2.
+    thm:fold-gauge-anomaly-max -/
+theorem gauge_anomaly_max_two :
+    ∃ w : Word 4, (Finset.univ.filter (fun i => localDefect w i = true)).card = 2 := by
+  exact ⟨![true, true, true, true], by native_decide⟩
+
+/-- Gauge anomaly max instance: ∃ w : Word 5 with localDefect support size 3.
+    thm:fold-gauge-anomaly-max -/
+theorem gauge_anomaly_max_three :
+    ∃ w : Word 5, (Finset.univ.filter (fun i => localDefect w i = true)).card = 3 := by
+  exact ⟨![true, true, true, true, true], by native_decide⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R53: periodicWord110 and Fold instances
+-- ══════════════════════════════════════════════════════════════
+
+/-- The 110-periodic word of length m: positions i with i % 3 ≠ 2 are true.
+    def:fold-periodic-word-110 -/
+def periodicWord110 (m : Nat) : Word m := fun i => i.val % 3 ≠ 2
+
+/-- Fold(110) for m=3 produces the word 001.
+    thm:fold-periodic-word-110-instance -/
+theorem Fold_periodicWord110_three :
+    ∀ i : Fin 3, (Fold (periodicWord110 3)).1 i = (i.val % 3 == 2) := by native_decide
+
+/-- Fold(periodicWord110 4) is idempotent (it is already a stable word).
+    thm:fold-periodic-word-110-instance -/
+theorem Fold_periodicWord110_four_stable :
+    Fold (Fold (periodicWord110 4)).1 = Fold (periodicWord110 4) :=
+  Fold_idempotent (periodicWord110 4)
+
+/-- The weight of periodicWord110 3 equals 3.
+    thm:fold-periodic-word-110-instance -/
+theorem weight_periodicWord110_three : weight (periodicWord110 3) = 3 := by native_decide
+
+/-- The weight of periodicWord110 4 equals 8.
+    thm:fold-periodic-word-110-instance -/
+theorem weight_periodicWord110_four : weight (periodicWord110 4) = 8 := by native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R59: Sprint to 200 theorems
+-- ══════════════════════════════════════════════════════════════
+
+/-- Global defect unfolds to the xor of two restricted Fold results (definitional).
+    prop:fold-defect-antisymmetric -/
+theorem globalDefect_antisymmetric (h : m ≤ n) (ω : Word n) :
+    globalDefect h ω = xorWord (Fold (restrictWord h ω)).1 (X.restrictLE h (Fold ω)).1 := rfl
+
+/-- Fold commutes with truncation/restriction iff local defect vanishes (reversed direction).
+    prop:fold-truncate-restrict-iff -/
+theorem Fold_truncate_eq_restrict_iff (ω : Word (m + 1)) :
+    Fold (truncate ω) = X.restrict (Fold ω) ↔ localDefect ω = zeroWord m :=
+  (localDefect_eq_zero_iff_fold_commutes ω).symm
+
+/-- If all local defects along the chain vanish, the global defect vanishes.
+    prop:fold-defect-zero-of-local-zero -/
+theorem globalDefect_zero_of_all_local_zero (k : Nat) (ω : Word (m + k))
+    (h : ∀ j : Nat, (hj : j < k) →
+      localDefect (restrictWord (Nat.add_le_add_left (Nat.succ_le_of_lt hj) m) ω) = zeroWord (m + j)) :
+    globalDefect (Nat.le_add_right m k) ω = zeroWord m := by
+  rw [globalDefect_eq_defectChain]
+  induction k with
+  | zero => rfl
+  | succ k ih =>
+    rw [defectChain_succ]
+    have hlocal : localDefect ω = zeroWord (m + k) := h k (Nat.lt_succ_self k)
+    have hrestr : restrictWord (Nat.le_add_right m k) (zeroWord (m + k)) = zeroWord m := by
+      funext i; rfl
+    rw [hlocal, hrestr, xorWord_zero_left]
+    exact ih (truncate ω) (fun j hj => by
+      have := h j (Nat.lt_succ_of_lt hj)
+      simp at this
+      exact this)
+
+/-- The all-false word is the unique word of weight zero (theorem #200).
+    prop:pom-weight-zero-unique -/
+theorem eq_allFalse_of_weight_eq_zero (w : Word m) (hw : weight w = 0) :
+    w = fun _ => false :=
+  (weight_zero_iff_allFalse w).mp hw
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R61
+-- ══════════════════════════════════════════════════════════════
+
+/-- The finite folding map is surjective onto the stable syntax space (paper-facing wrapper).
+    prop:fold-surjective -/
+theorem paper_fold_surjective (m : Nat) : Function.Surjective (fun w : Word m => Fold w) :=
+  Fold_surjective m
 
 end Omega

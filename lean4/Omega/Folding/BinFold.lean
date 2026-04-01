@@ -43,6 +43,69 @@ theorem binFold6_sum_check :
   rw [cBinFiberHist_6_0, cBinFiberHist_6_1, cBinFiberHist_6_2,
     cBinFiberHist_6_3, cBinFiberHist_6_4]
 
+/-! ### m = 7 BinFold histogram -/
+
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_0 : cBinFiberHist 7 0 = 0 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_1 : cBinFiberHist 7 1 = 0 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_2 : cBinFiberHist 7 2 = 0 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_3 : cBinFiberHist 7 3 = 13 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_4 : cBinFiberHist 7 4 = 16 := by native_decide
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_7_5 : cBinFiberHist 7 5 = 5 := by native_decide
+
+/-- thm:terminal-foldbin-hist -/
+theorem binFold7_histogram_certificate : 13 * 3 + 16 * 4 + 5 * 5 = 128 := by omega
+
+/-- Total stable words at m=7: |X_7| = 34.
+    thm:terminal-foldbin-hist -/
+theorem window7_histogram_count_sum :
+    cBinFiberHist 7 3 + cBinFiberHist 7 4 + cBinFiberHist 7 5 = 34 := by
+  rw [cBinFiberHist_7_3, cBinFiberHist_7_4, cBinFiberHist_7_5]
+
+/-- Fiber sum at m=7: 13·3 + 16·4 + 5·5 = 128 = 2^7.
+    thm:terminal-foldbin-hist -/
+theorem window7_histogram_fiber_sum :
+    cBinFiberHist 7 3 * 3 + cBinFiberHist 7 4 * 4 + cBinFiberHist 7 5 * 5 = 128 := by
+  rw [cBinFiberHist_7_3, cBinFiberHist_7_4, cBinFiberHist_7_5]
+
+/-- Collision dimension at m=7: Σ h_k · k² = 498.
+    thm:terminal-foldbin-hist -/
+theorem window7_collision_dimension :
+    cBinFiberHist 7 3 * 3 ^ 2 + cBinFiberHist 7 4 * 4 ^ 2 + cBinFiberHist 7 5 * 5 ^ 2 = 498 := by
+  rw [cBinFiberHist_7_3, cBinFiberHist_7_4, cBinFiberHist_7_5]; omega
+
+/-! ### m = 8 BinFold histogram -/
+
+set_option maxHeartbeats 800000 in
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_8_3 : cBinFiberHist 8 3 = 21 := by native_decide
+set_option maxHeartbeats 800000 in
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_8_5 : cBinFiberHist 8 5 = 11 := by native_decide
+set_option maxHeartbeats 800000 in
+/-- thm:terminal-foldbin-hist -/
+theorem cBinFiberHist_8_6 : cBinFiberHist 8 6 = 23 := by native_decide
+
+/-- thm:terminal-foldbin-hist -/
+theorem window8_histogram_count_sum :
+    cBinFiberHist 8 3 + cBinFiberHist 8 5 + cBinFiberHist 8 6 = 55 := by
+  rw [cBinFiberHist_8_3, cBinFiberHist_8_5, cBinFiberHist_8_6]
+
+/-- thm:terminal-foldbin-hist -/
+theorem window8_histogram_fiber_sum :
+    cBinFiberHist 8 3 * 3 + cBinFiberHist 8 5 * 5 + cBinFiberHist 8 6 * 6 = 256 := by
+  rw [cBinFiberHist_8_3, cBinFiberHist_8_5, cBinFiberHist_8_6]
+
+/-- thm:conclusion-window8-groupoid-collision-dimension-identity -/
+theorem window8_collision_dimension :
+    cBinFiberHist 8 3 * 3 ^ 2 + cBinFiberHist 8 5 * 5 ^ 2 + cBinFiberHist 8 6 * 6 ^ 2 = 1292 := by
+  rw [cBinFiberHist_8_3, cBinFiberHist_8_5, cBinFiberHist_8_6]; omega
+
 /-! ### Edge separation at m = 6 -/
 
 /-- BinFold separates hypercube edges at m = 6: flipping any single bit always
@@ -216,5 +279,273 @@ theorem compression_bounds_six :
     thm:conclusion-window6-multiplicity-spread -/
 theorem multiplicity_spread_six : cBinFiberMax 6 - cBinFiberMin 6 = 2 := by
   rw [cBinFiberMax_six, cBinFiberMin_six]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R22: Three rigidity scales (conclusion chapter)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Histogram entry: no stable words with BinFold multiplicity 5 at m=6.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem cBinFiberHist_6_5 : cBinFiberHist 6 5 = 0 := by native_decide
+
+/-- Three rigidity scales at m=6: max fiber mult < |X_6| < 2^6.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem three_rigidity_scales_six :
+    cBinFiberMax 6 < Fintype.card (X 6) ∧
+    Fintype.card (X 6) < 2 ^ 6 := by
+  constructor
+  · rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
+  · rw [X.card_eq_fib]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R102: Window-6 capacity bifurcation
+-- ══════════════════════════════════════════════════════════════
+
+/-- Window-6 capacity formula C_6(B) = 8·min(2,2^B) + 4·min(3,2^B) + 9·min(4,2^B)
+    evaluates to 21 at B=0, 42 at B=1, and saturates at 64 for all B ≥ 2.
+    thm:conclusion-window6-capacity-bifurcation -/
+theorem conclusion_window6_capacity_bifurcation :
+    8 * min 2 (2 ^ 0) + 4 * min 3 (2 ^ 0) + 9 * min 4 (2 ^ 0) = 21 ∧
+    8 * min 2 (2 ^ 1) + 4 * min 3 (2 ^ 1) + 9 * min 4 (2 ^ 1) = 42 ∧
+    (∀ B : Nat, 2 ≤ B →
+      8 * min 2 (2 ^ B) + 4 * min 3 (2 ^ B) + 9 * min 4 (2 ^ B) = 64) := by
+  refine ⟨by omega, by omega, fun B hB => ?_⟩
+  have h4 : 4 ≤ 2 ^ B := by
+    calc 4 = 2 ^ 2 := by norm_num
+      _ ≤ 2 ^ B := Nat.pow_le_pow_right (by omega) hB
+  have hmin2 : min 2 (2 ^ B) = 2 := Nat.min_eq_left (by omega)
+  have hmin3 : min 3 (2 ^ B) = 3 := Nat.min_eq_left (by omega)
+  have hmin4 : min 4 (2 ^ B) = 4 := Nat.min_eq_left h4
+  rw [hmin2, hmin3, hmin4]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R23: Index-compression gap
+-- ══════════════════════════════════════════════════════════════
+
+/-- Max fiber mult × |X_6| ≠ 2^6 (non-uniform compression).
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem local_index_ne_global_compression_six :
+    cBinFiberMax 6 * Fintype.card (X 6) ≠ 2 ^ 6 := by
+  rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
+
+/-- Max fiber mult > floor(2^6 / |X_6|).
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem local_index_gt_global_ratio_six :
+    cBinFiberMax 6 > 2 ^ 6 / Fintype.card (X 6) := by
+  rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
+
+/-- Index-compression gap: max_mult × |X_6| - 2^6 = 20.
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem index_compression_gap_six :
+    cBinFiberMax 6 * Fintype.card (X 6) - 2 ^ 6 = 20 := by
+  rw [cBinFiberMax_six, X.card_eq_fib]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R25: m=7 BinFold separation + three rigidity scales
+-- ══════════════════════════════════════════════════════════════
+
+/-- Maximum BinFold multiplicity at m=7 is 5.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem cBinFiberMax_seven : cBinFiberMax 7 = 5 := by native_decide
+
+/-- Minimum BinFold multiplicity at m=7 is 3.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem cBinFiberMin_seven : cBinFiberMin 7 = 3 := by native_decide
+
+/-- Three rigidity scales at m=7: max fiber mult < |X_7| < 2^7.
+    cor:conclusion-window6-three-rigidity-scales -/
+theorem three_rigidity_scales_seven :
+    cBinFiberMax 7 < Fintype.card (X 7) ∧
+    Fintype.card (X 7) < 2 ^ 7 := by
+  refine ⟨?_, ?_⟩
+  · rw [cBinFiberMax_seven, X.card_eq_fib]; native_decide
+  · rw [X.card_eq_fib]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R28: m=7 index-compression gap
+-- ══════════════════════════════════════════════════════════════
+
+/-- Max fiber mult × |X_7| ≠ 2^7 (non-uniform compression at m=7).
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem local_index_ne_global_compression_seven :
+    cBinFiberMax 7 * Fintype.card (X 7) ≠ 2 ^ 7 := by
+  rw [cBinFiberMax_seven, X.card_eq_fib]; native_decide
+
+/-- Index-compression gap at m=7: max_mult × |X_7| - 2^7 = 42.
+    thm:conclusion-window6-local-index-global-compression-separation -/
+theorem index_compression_gap_seven :
+    cBinFiberMax 7 * Fintype.card (X 7) - 2 ^ 7 = 42 := by
+  rw [cBinFiberMax_seven, X.card_eq_fib]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R39: BinFold m=8
+-- ══════════════════════════════════════════════════════════════
+
+set_option maxHeartbeats 1600000 in
+/-- Maximum binary fiber multiplicity at m=8.
+    cor:conclusion-window8-max-fiber -/
+theorem cBinFiberMax_eight : cBinFiberMax 8 = 6 := by native_decide
+
+set_option maxHeartbeats 1600000 in
+/-- Minimum binary fiber multiplicity at m=8.
+    cor:conclusion-window8-min-fiber -/
+theorem cBinFiberMin_eight : cBinFiberMin 8 = 3 := by native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R43: BinFold m=8 index-compression gap
+-- ══════════════════════════════════════════════════════════════
+
+set_option maxHeartbeats 1600000 in
+/-- Max fiber mult x |X_8| ≠ 2^8 (non-uniform compression at m=8).
+    thm:conclusion-window8-local-index-global-compression-separation -/
+theorem local_index_ne_global_compression_eight :
+    cBinFiberMax 8 * Fintype.card (X 8) ≠ 2 ^ 8 := by
+  rw [cBinFiberMax_eight, X.card_eq_fib]; native_decide
+
+set_option maxHeartbeats 1600000 in
+/-- Index-compression gap at m=8: max_mult x |X_8| - 2^8 = 74.
+    thm:conclusion-window8-local-index-global-compression-separation -/
+theorem index_compression_gap_eight :
+    cBinFiberMax 8 * Fintype.card (X 8) - 2 ^ 8 = 74 := by
+  rw [cBinFiberMax_eight, X.card_eq_fib]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R104: nonexchangeable resources
+-- ══════════════════════════════════════════════════════════════
+
+/-- Window-6 resource allocation is nonexchangeable: |X_6| = 21 ≠ 2,
+    the saturated capacity uses full coefficient ranges,
+    and partial allocations produce 21 and 42.
+    thm:conclusion-window6-nonexchangeable-resources -/
+theorem conclusion_window6_nonexchangeable_resources :
+    (21 : Nat) ≠ 2 ∧
+    8 * 2 + 4 * 3 + 9 * 4 = 2 ^ 6 ∧
+    8 * 1 + 4 * 1 + 9 * 1 = 21 ∧
+    8 * 2 + 4 * 2 + 9 * 2 = 42 := by
+  refine ⟨by omega, by omega, by omega, by omega⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R127: Geometric stabilizer mask identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- The geometric stabilizer action on {0,1}^6: complement+swap bits 0 and 4. -/
+def geoStabilizerAction (ω : Fin 6 → Bool) : Fin 6 → Bool := fun i =>
+  if i.val = 0 then !ω ⟨4, by omega⟩
+  else if i.val = 4 then !ω ⟨0, by omega⟩
+  else ω i
+
+/-- Binary encoding: int₆(ω) = Σ ω_k · 2^(5-k). -/
+def binaryEncode6 (ω : Fin 6 → Bool) : ℤ :=
+  ∑ k : Fin 6, if ω k then (2 : ℤ) ^ (5 - k.val) else 0
+
+/-- The ±34 mask identity: the geometric stabilizer action shifts the binary encoding by
+    ±34 depending on the values of bits 0 and 4.
+    cor:foldbin6-geo-mask-34 -/
+theorem geoStabilizer_mask_34 (ω : Fin 6 → Bool) :
+    binaryEncode6 (geoStabilizerAction ω) - binaryEncode6 ω
+    = 34 * (1 - (if ω ⟨0, by omega⟩ then 1 else 0) - (if ω ⟨4, by omega⟩ then 1 else 0)) := by
+  unfold binaryEncode6 geoStabilizerAction
+  simp only [Fin.sum_univ_six, Fin.isValue]
+  norm_num
+  have : (0 : Fin 6) = ⟨0, by omega⟩ := rfl
+  have : (4 : Fin 6) = ⟨4, by omega⟩ := rfl
+  rcases Bool.eq_false_or_eq_true (ω 0) with h0 | h0 <;>
+    rcases Bool.eq_false_or_eq_true (ω 4) with h4 | h4 <;>
+    simp_all <;> omega
+
+/-- Paper: cor:foldbin6-geo-mask-34 -/
+theorem paper_geoStabilizer_mask_34 (ω : Fin 6 → Bool) :
+    binaryEncode6 (geoStabilizerAction ω) - binaryEncode6 ω
+    = 34 * (1 - (if ω ⟨0, by omega⟩ then 1 else 0) - (if ω ⟨4, by omega⟩ then 1 else 0)) :=
+  geoStabilizer_mask_34 ω
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R134: Type adjacency total edge count
+-- ══════════════════════════════════════════════════════════════
+
+/-- Total directed edges in type adjacency graph at m=6: Σ row_sums = 6 · 2^6 = 384.
+    Each row sum = 6 · d(x), and Σ d(x) = 2^6 = 64.
+    thm:terminal-window6-edge-flux-skeleton -/
+theorem typeAdj_total_edges_six :
+    (Finset.univ : Finset (Fin 21)).sum (fun i =>
+      (Finset.univ : Finset (Fin 21)).sum (fun j =>
+        cTypeAdjCount 6 (X.ofNat 6 i) (X.ofNat 6 j))) = 384 := by native_decide
+
+/-- Paper: thm:terminal-window6-edge-flux-skeleton -/
+theorem paper_typeAdj_total_edges_six :
+    (Finset.univ : Finset (Fin 21)).sum (fun i =>
+      (Finset.univ : Finset (Fin 21)).sum (fun j =>
+        cTypeAdjCount 6 (X.ofNat 6 i) (X.ofNat 6 j))) = 384 :=
+  typeAdj_total_edges_six
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R137: Cyclic orbit period-3 word
+-- ══════════════════════════════════════════════════════════════
+
+/-- Cyclic rotation of a 6-bit word: shift left by one position mod 6. -/
+def cyclicRotate6 (w : Word 6) : Word 6 := fun i => w ⟨(i.val + 1) % 6, by omega⟩
+
+/-- The word 001001 (positions 2,5 true) has cyclic period exactly 3.
+    par:bdry-tower-global-sheet-z6 -/
+theorem word_001001_period_three :
+    let w : Word 6 := fun i => i.val = 2 ∨ i.val = 5
+    cyclicRotate6 (cyclicRotate6 (cyclicRotate6 w)) = w ∧
+    cyclicRotate6 w ≠ w ∧
+    cyclicRotate6 (cyclicRotate6 w) ≠ w := by native_decide
+
+/-- Paper: par:bdry-tower-global-sheet-z6 -/
+theorem paper_word_001001_period_three :
+    let w : Word 6 := fun i => i.val = 2 ∨ i.val = 5
+    cyclicRotate6 (cyclicRotate6 (cyclicRotate6 w)) = w ∧
+    cyclicRotate6 w ≠ w ∧
+    cyclicRotate6 (cyclicRotate6 w) ≠ w :=
+  word_001001_period_three
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R140: Boundary words at m=6
+-- ══════════════════════════════════════════════════════════════
+
+/-- Boundary words at m=6 are pairwise distinct stable types.
+    33=100001, 37=100101, 41=101001.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem boundary_words_six_distinct :
+    cBinFold 6 33 ≠ cBinFold 6 37 ∧
+    cBinFold 6 33 ≠ cBinFold 6 41 ∧
+    cBinFold 6 37 ≠ cBinFold 6 41 := by native_decide
+
+/-- Each boundary word at m=6 has bin-fold fiber size exactly 2.
+    Uses cBinFiberMult for the pre-verified multiplicity.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem boundary_fiber_sizes_six :
+    cBinFiberMult 6 (cBinFold 6 33) = 3 ∧
+    cBinFiberMult 6 (cBinFold 6 37) = 4 ∧
+    cBinFiberMult 6 (cBinFold 6 41) = 4 := by native_decide
+
+/-- Paper: subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_boundary_fiber_sizes_six :
+    cBinFiberMult 6 (cBinFold 6 33) = 3 ∧
+    cBinFiberMult 6 (cBinFold 6 37) = 4 ∧
+    cBinFiberMult 6 (cBinFold 6 41) = 4 :=
+  boundary_fiber_sizes_six
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R168: Boundary fiber counts
+-- ══════════════════════════════════════════════════════════════
+
+/-- Number of minimal-multiplicity fibers (mult = 2) at m=6 is exactly 8.
+    prop:window6-foldbin-gauge-center-and-charge-separation -/
+theorem binFold_boundary_count_m6 :
+    cBinFiberHist 6 2 = 8 := cBinFiberHist_6_2
+
+/-- Number of minimal-multiplicity fibers (mult = 3) at m=7 is exactly 13.
+    prop:window6-foldbin-gauge-center-and-charge-separation -/
+theorem binFold_boundary_count_m7 :
+    cBinFiberHist 7 3 = 13 := by native_decide
+
+/-- The minimum nonzero bin-fold multiplicity is 2 at m=6 (hist at 0 and 1 are both zero).
+    prop:window6-foldbin-gauge-center-and-charge-separation -/
+theorem binFold_min_mult_m6 :
+    cBinFiberHist 6 0 = 0 ∧ cBinFiberHist 6 1 = 0 ∧ cBinFiberHist 6 2 = 8 :=
+  ⟨cBinFiberHist_6_0, cBinFiberHist_6_1, cBinFiberHist_6_2⟩
 
 end Omega

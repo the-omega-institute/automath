@@ -98,8 +98,7 @@ theorem collisionKernel2_charpoly :
     collisionKernel2.charpoly = Polynomial.X ^ 3 - 2 * Polynomial.X ^ 2 - 2 * Polynomial.X + Polynomial.C 2 := by
   unfold Matrix.charpoly Matrix.charmatrix
   rw [Matrix.det_fin_three]
-  simp only [collisionKernel2, Matrix.cons_val_zero, Matrix.cons_val_one,
-    Matrix.head_cons, Matrix.head_fin_const, Matrix.of_apply, Fin.isValue]
+  simp only [collisionKernel2, Fin.isValue]
   simp (config := { decide := true })
   ring
 
@@ -109,8 +108,7 @@ theorem collisionKernel3_charpoly :
     collisionKernel3.charpoly = Polynomial.X ^ 3 - 2 * Polynomial.X ^ 2 - 4 * Polynomial.X + Polynomial.C 2 := by
   unfold Matrix.charpoly Matrix.charmatrix
   rw [Matrix.det_fin_three]
-  simp only [collisionKernel3, Matrix.cons_val_zero, Matrix.cons_val_one,
-    Matrix.head_cons, Matrix.head_fin_const, Matrix.of_apply, Fin.isValue]
+  simp only [collisionKernel3, Fin.isValue]
   simp (config := { decide := true })
   ring
 

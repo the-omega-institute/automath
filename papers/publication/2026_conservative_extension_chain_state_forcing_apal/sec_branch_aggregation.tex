@@ -1,0 +1,572 @@
+\subsection{Aggregating visibility across branches}
+
+The preceding results analyze one visible branch at a time. When an admitted reference carries several visible branches, there are two distinct ways of aggregating the branchwise visible data: one may allow the observer to know which branch has been reached, or one may require the same observation channel to remain admissible on every branch simultaneously. These two requirements lead to different quotients.
+
+\begin{definition}[Branchwise intrinsic data]\label{def:branchwise-intrinsic-data}
+Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, and assume:
+\begin{enumerate}[label=(\roman*),nosep]
+\item the hypotheses of \Cref{def:cech-gluing-obstruction} hold;
+\item the set $\Vis_{p,s}(r)$ is finite and nonempty;
+\item every component gerbe $\mathfrak G_v$ is banded by the same finite abelian group $A$ and admits a finite nerve presentation of its branch obstruction class $\omega_v$.
+\end{enumerate}
+For each visible branch $v\in \Vis_{p,s}(r)$, write
+\[
+K_v:=K_{\omega_v},
+\qquad
+A_{\mathrm{vis}}^v:=A_{\mathrm{vis}}^{\omega_v}=A/K_v,
+\qquad
+\pi_v:A\twoheadrightarrow A_{\mathrm{vis}}^v.
+\]
+\end{definition}
+
+\begin{theorem}[Branch-sensitive visible quotient]\label{thm:branch-sensitive-visible-quotient}
+In the setting of \Cref{def:branchwise-intrinsic-data}, consider the diagonal map
+\[
+\Delta_{\mathrm{br}}:A\longrightarrow \prod_{v\in \Vis_{p,s}(r)} A_{\mathrm{vis}}^v,
+\qquad
+x\longmapsto (\pi_v(x))_v.
+\]
+Then
+\[
+\ker(\Delta_{\mathrm{br}})=\bigcap_{v\in \Vis_{p,s}(r)} K_v.
+\]
+Consequently, the quotient
+\[
+A_{\mathrm{vis}}^{\mathrm{br}}(r):=A\Big/\bigcap_{v\in \Vis_{p,s}(r)} K_v
+\]
+is canonically isomorphic to $\mathrm{Im}(\Delta_{\mathrm{br}})$. It is the maximal quotient of $A$ that remains visible once the branch label itself is allowed as part of the semantic context.
+\end{theorem}
+
+\begin{proof}
+For $x\in A$ one has $\Delta_{\mathrm{br}}(x)=0$ if and only if $\pi_v(x)=0$ for every visible branch $v$, which is equivalent to $x\in K_v$ for every $v$. Hence
+\[
+\ker(\Delta_{\mathrm{br}})=\bigcap_{v\in \Vis_{p,s}(r)} K_v.
+\]
+The first isomorphism theorem therefore yields
+\[
+\mathrm{Im}(\Delta_{\mathrm{br}})
+\cong
+A\Big/\bigcap_{v\in \Vis_{p,s}(r)} K_v.
+\]
+The final interpretation is immediate: once the visible branch is known, two elements of $A$ remain semantically indistinguishable exactly when they are indistinguishable on every individual branch quotient.
+\end{proof}
+
+\begin{theorem}[Branch-uniform visible quotient]\label{thm:branch-uniform-visible-quotient}
+In the setting of \Cref{def:branchwise-intrinsic-data}, let
+\[
+X_v:=\{\chi\in \widehat A\mid \chi_*(\omega_v)=0\}
+\]
+for each visible branch $v$, and define the uniformly admissible characters by
+\[
+X^{\mathrm{unif}}(r):=\bigcap_{v\in \Vis_{p,s}(r)} X_v.
+\]
+Then
+\[
+X^{\mathrm{unif}}(r)=\mathrm{Ann}\Bigl(\sum_{v\in \Vis_{p,s}(r)} K_v\Bigr).
+\]
+Consequently, the quotient
+\[
+A_{\mathrm{vis}}^{\mathrm{unif}}(r):=A\Big/\sum_{v\in \Vis_{p,s}(r)} K_v
+\]
+is exactly the quotient detected by the characters that are admissible on every visible branch simultaneously.
+\end{theorem}
+
+\begin{proof}
+By \Cref{thm:intrinsic-visible-quotient}, one has
+\[
+X_v=\mathrm{Ann}(K_v)
+\]
+for every $v$. Therefore
+\[
+X^{\mathrm{unif}}(r)
+=
+\bigcap_{v\in \Vis_{p,s}(r)} \mathrm{Ann}(K_v)
+=
+\mathrm{Ann}\Bigl(\sum_{v\in \Vis_{p,s}(r)} K_v\Bigr),
+\]
+where the last identity is the standard annihilator formula for finite abelian groups \cite[Chap.~5]{DummitFoote2004}. Finite abelian duality then gives
+\[
+\bigcap_{\chi\in X^{\mathrm{unif}}(r)} \ker\chi
+=
+\sum_{v\in \Vis_{p,s}(r)} K_v.
+\]
+Hence the quotient detected by all uniformly admissible characters is precisely
+\[
+A\Big/\sum_{v\in \Vis_{p,s}(r)} K_v.
+\qedhere
+\]
+\end{proof}
+
+\begin{definition}[Branch comparison map and resolution kernel]\label{def:branch-comparison-map}
+In the setting of \Cref{def:branchwise-intrinsic-data}, let
+\[
+\pi_{\mathrm{br}}:A\twoheadrightarrow A_{\mathrm{vis}}^{\mathrm{br}}(r)
+\qquad\text{and}\qquad
+\pi_{\mathrm{unif}}:A\twoheadrightarrow A_{\mathrm{vis}}^{\mathrm{unif}}(r)
+\]
+be the canonical quotient maps. Since
+\[
+\bigcap_{v\in \Vis_{p,s}(r)} K_v
+\subseteq
+\sum_{v\in \Vis_{p,s}(r)} K_v,
+\]
+there is a unique surjective homomorphism
+\[
+\beta_r:A_{\mathrm{vis}}^{\mathrm{br}}(r)\twoheadrightarrow A_{\mathrm{vis}}^{\mathrm{unif}}(r)
+\]
+such that
+\[
+\beta_r\circ \pi_{\mathrm{br}}=\pi_{\mathrm{unif}}.
+\]
+Its kernel is denoted
+\[
+B_{\mathrm{res}}(r):=
+\ker(\beta_r)
+\cong
+\Bigl(\sum_{v\in \Vis_{p,s}(r)} K_v\Bigr)\Big/\Bigl(\bigcap_{v\in \Vis_{p,s}(r)} K_v\Bigr)
+\]
+and called the \emph{branch-resolution kernel}.
+\end{definition}
+
+\begin{theorem}[Exact comparison of branch-sensitive and branch-uniform visibility]\label{thm:branch-comparison-exact-sequence}
+In the setting of \Cref{def:branch-comparison-map}, there is a short exact sequence
+\[
+0\longrightarrow B_{\mathrm{res}}(r)\longrightarrow A_{\mathrm{vis}}^{\mathrm{br}}(r)\xrightarrow{\ \beta_r\ } A_{\mathrm{vis}}^{\mathrm{unif}}(r)\longrightarrow 0.
+\]
+Equivalently,
+\[
+\ker(\beta_r)
+\cong
+\Bigl(\sum_{v\in \Vis_{p,s}(r)} K_v\Bigr)\Big/\Bigl(\bigcap_{v\in \Vis_{p,s}(r)} K_v\Bigr).
+\]
+Thus the precise gap between branch-sensitive and branch-uniform visibility is measured by the lattice interval from $\bigcap_v K_v$ to $\sum_v K_v$.
+\end{theorem}
+
+\begin{proof}
+Existence and uniqueness of $\beta_r$ follow from the universal property of the quotient because
+\[
+\bigcap_v K_v\subseteq \sum_v K_v.
+\]
+Surjectivity is immediate from surjectivity of $\pi_{\mathrm{unif}}$. By the third isomorphism theorem,
+\[
+\ker(\beta_r)
+\cong
+\Bigl(\sum_v K_v\Bigr)\Big/\Bigl(\bigcap_v K_v\Bigr),
+\]
+which gives the claimed exact sequence.
+\end{proof}
+
+\begin{corollary}[Criterion for the absence of branch gain]\label{cor:no-branch-gain-criterion}
+In the setting of \Cref{def:branch-comparison-map}, the following are equivalent:
+\begin{enumerate}[label=(\roman*),nosep]
+\item $\beta_r$ is an isomorphism;
+\item $B_{\mathrm{res}}(r)=0$;
+\item
+\[
+\bigcap_{v\in \Vis_{p,s}(r)} K_v
+=
+\sum_{v\in \Vis_{p,s}(r)} K_v;
+\]
+\item the hidden subgroups are branch-constant:
+\[
+K_v=K_w
+\qquad
+(\forall v,w\in \Vis_{p,s}(r)).
+\]
+\end{enumerate}
+Hence branch sensitivity yields no additional visible information exactly when all visible branches have the same intrinsic hidden subgroup.
+\end{corollary}
+
+\begin{proof}
+The equivalence of \textup{(i)} and \textup{(ii)} is exactness of the sequence in \Cref{thm:branch-comparison-exact-sequence}. Condition \textup{(ii)} is equivalent to \textup{(iii)} by the quotient description of $B_{\mathrm{res}}(r)$.
+
+If \textup{(iii)} holds, write the common subgroup as $H$. Then
+\[
+H=\bigcap_v K_v\subseteq K_v\subseteq \sum_v K_v=H
+\]
+for every visible branch $v$, so each $K_v=H$, proving \textup{(iv)}. Conversely, if all $K_v$ are equal to one subgroup $H$, then clearly
+\[
+\bigcap_v K_v=H=\sum_v K_v.
+\qedhere
+\]
+\end{proof}
+
+\begin{corollary}[Dual character description of the branch-resolution kernel]\label{cor:branch-resolution-dual}
+In the setting of \Cref{def:branch-comparison-map},
+\[
+\widehat{A_{\mathrm{vis}}^{\mathrm{br}}(r)}
+\cong
+\sum_{v\in \Vis_{p,s}(r)} X_v,
+\qquad
+\widehat{A_{\mathrm{vis}}^{\mathrm{unif}}(r)}
+\cong
+\bigcap_{v\in \Vis_{p,s}(r)} X_v.
+\]
+Moreover,
+\[
+\widehat{B_{\mathrm{res}}(r)}
+\cong
+\Bigl(\sum_{v\in \Vis_{p,s}(r)} X_v\Bigr)\Big/\Bigl(\bigcap_{v\in \Vis_{p,s}(r)} X_v\Bigr).
+\]
+Thus the character channels created by branch resolution are exactly the channels that belong to the subgroup generated by the branchwise admissible characters but fail to be uniformly admissible.
+\end{corollary}
+
+\begin{proof}
+By \Cref{thm:intrinsic-visible-quotient}, one has
+\[
+X_v=\mathrm{Ann}(K_v)
+\]
+for every visible branch $v$. Finite abelian duality then gives
+\[
+\widehat{A_{\mathrm{vis}}^{\mathrm{br}}(r)}
+\cong
+\mathrm{Ann}\Bigl(\bigcap_v K_v\Bigr)
+=
+\sum_v \mathrm{Ann}(K_v)
+=
+\sum_v X_v
+\]
+and, by \Cref{thm:branch-uniform-visible-quotient},
+\[
+\widehat{A_{\mathrm{vis}}^{\mathrm{unif}}(r)}
+\cong
+\bigcap_v X_v.
+\]
+Dualizing the short exact sequence of \Cref{thm:branch-comparison-exact-sequence} yields an exact sequence
+\[
+0\longrightarrow \widehat{A_{\mathrm{vis}}^{\mathrm{unif}}(r)}
+\longrightarrow \widehat{A_{\mathrm{vis}}^{\mathrm{br}}(r)}
+\longrightarrow \widehat{B_{\mathrm{res}}(r)}
+\longrightarrow 0,
+\]
+and substituting the two identifications above gives the claimed quotient description of $\widehat{B_{\mathrm{res}}(r)}$.
+\end{proof}
+
+\begin{definition}[Branch-resolution code]\label{def:branch-resolution-code}
+In the setting of \Cref{def:branch-comparison-map}, a \emph{branch-resolution code} consists of a finite set $R$ and an injective map
+\[
+\iota_{\mathrm{res}}:A_{\mathrm{vis}}^{\mathrm{br}}(r)\hookrightarrow A_{\mathrm{vis}}^{\mathrm{unif}}(r)\times R
+\]
+such that
+\[
+\mathrm{pr}_1\circ \iota_{\mathrm{res}}=\beta_r.
+\]
+\end{definition}
+
+\begin{theorem}[Exact branch-resolution budget]\label{thm:branch-resolution-budget}
+Every branch-resolution code satisfies
+\[
+|R|\ge |B_{\mathrm{res}}(r)|
+=
+\left|\Bigl(\sum_v K_v\Bigr)\Big/\Bigl(\bigcap_v K_v\Bigr)\right|.
+\]
+Equivalently,
+\[
+\log_2|R|
+\ge
+\log_2|B_{\mathrm{res}}(r)|.
+\]
+This bound is sharp.
+\end{theorem}
+
+\begin{proof}
+Since $\mathrm{pr}_1\circ \iota_{\mathrm{res}}=\beta_r$, every fiber of $\beta_r$ injects into $R$. By \Cref{thm:branch-comparison-exact-sequence}, each fiber of $\beta_r$ is a coset of $B_{\mathrm{res}}(r)$ and therefore has cardinality $|B_{\mathrm{res}}(r)|$. Hence
+\[
+|R|\ge |B_{\mathrm{res}}(r)|.
+\]
+
+For sharpness, choose a finite set $R$ with
+\[
+|R|=|B_{\mathrm{res}}(r)|.
+\]
+Choose a set-theoretic section
+\[
+s:A_{\mathrm{vis}}^{\mathrm{unif}}(r)\to A_{\mathrm{vis}}^{\mathrm{br}}(r)
+\]
+of $\beta_r$, and choose an injection
+\[
+j:B_{\mathrm{res}}(r)\hookrightarrow R.
+\]
+Define
+\[
+\iota_{\mathrm{res}}(x):=
+\bigl(\beta_r(x),j(x-s(\beta_r(x)))\bigr).
+\]
+Since $x-s(\beta_r(x))\in \ker(\beta_r)=B_{\mathrm{res}}(r)$, the map is well defined. If
+\[
+\iota_{\mathrm{res}}(x)=\iota_{\mathrm{res}}(y),
+\]
+then $\beta_r(x)=\beta_r(y)$ and
+\[
+j(x-s(\beta_r(x)))=j(y-s(\beta_r(y))).
+\]
+Injectivity of $j$ gives $x=y$, so $\iota_{\mathrm{res}}$ is injective and the bound is attained.
+\end{proof}
+
+\begin{corollary}[Factorization of uniform hidden information]\label{cor:uniform-hidden-budget-factorization}
+In the setting of \Cref{def:branch-comparison-map},
+\[
+\left|\sum_{v\in \Vis_{p,s}(r)} K_v\right|
+=
+|B_{\mathrm{res}}(r)|
+\cdot
+\left|\bigcap_{v\in \Vis_{p,s}(r)} K_v\right|.
+\]
+Equivalently,
+\[
+\log_2\left|\sum_v K_v\right|
+=
+\log_2|B_{\mathrm{res}}(r)|
++
+\log_2\left|\bigcap_v K_v\right|.
+\]
+Thus the hidden-state budget behind uniform visibility factors exactly into a branch-resolution term and a residual within-branch hidden term.
+\end{corollary}
+
+\begin{proof}
+By \Cref{def:branch-comparison-map},
+\[
+|B_{\mathrm{res}}(r)|
+=
+\left|\Bigl(\sum_v K_v\Bigr)\Big/\Bigl(\bigcap_v K_v\Bigr)\right|
+=
+\frac{|\sum_v K_v|}{|\bigcap_v K_v|}.
+\]
+Rearranging gives the first displayed identity, and the second follows after taking base-$2$ logarithms.
+\end{proof}
+
+\begin{definition}[Branch-preserving strictification code]\label{def:branch-preserving-strictification-code}
+In the setting of \Cref{def:branchwise-intrinsic-data}, a \emph{branch-preserving strictification code} consists of a finite set $R$ and, for each visible branch $v\in \Vis_{p,s}(r)$, an injective map
+\[
+\iota_v:A\hookrightarrow A_{\mathrm{vis}}^v\times R
+\]
+such that
+\[
+\mathrm{pr}_1\circ \iota_v=\pi_v.
+\]
+\end{definition}
+
+\begin{theorem}[Multi-branch strictification budget]\label{thm:multi-branch-strictification-budget}
+Every branch-preserving strictification code satisfies
+\[
+|R|\ge \max_{v\in \Vis_{p,s}(r)} |K_v|.
+\]
+Equivalently,
+\[
+\log_2|R|\ge \max_{v\in \Vis_{p,s}(r)} \log_2|K_v|.
+\]
+This bound is sharp.
+\end{theorem}
+
+\begin{proof}
+Fix a visible branch $v$. Since $\mathrm{pr}_1\circ \iota_v=\pi_v$, every fiber of $\pi_v$ injects into $R$. By \Cref{def:intrinsic-visible-quotient}, every fiber of $\pi_v$ is a coset of $K_v$ and hence has cardinality $|K_v|$. Therefore $|R|\ge |K_v|$ for every $v$, which proves the lower bound.
+
+For sharpness, choose a finite set $R$ with
+\[
+|R|=\max_{v\in \Vis_{p,s}(r)} |K_v|.
+\]
+For each $v$, choose an injection
+\[
+j_v:K_v\hookrightarrow R
+\]
+and a set-theoretic section
+\[
+s_v:A_{\mathrm{vis}}^v\to A
+\]
+of $\pi_v$. Define
+\[
+\iota_v(x):=\bigl(\pi_v(x),j_v(x-s_v(\pi_v(x)))\bigr).
+\]
+Since $x-s_v(\pi_v(x))\in K_v$, the formula is well defined. If $\iota_v(x)=\iota_v(y)$, then $\pi_v(x)=\pi_v(y)$ and
+\[
+j_v(x-s_v(\pi_v(x)))=j_v(y-s_v(\pi_v(y))).
+\]
+Injectivity of $j_v$ gives $x=y$. Thus each $\iota_v$ is injective, so the bound is attained.
+\end{proof}
+
+\begin{corollary}[Single-branch reduction]\label{cor:single-branch-reduction}
+If
+\[
+\Vis_{p,s}(r)=\{v\},
+\]
+then
+\[
+A_{\mathrm{vis}}^{\mathrm{br}}(r)\cong A_{\mathrm{vis}}^{\mathrm{unif}}(r)\cong A_{\mathrm{vis}}^v
+\]
+and the optimal branch-preserving strictification budget is exactly $|K_v|$.
+\end{corollary}
+
+\begin{proof}
+If there is only one visible branch, then
+\[
+\bigcap_{u\in \Vis_{p,s}(r)} K_u
+=
+\sum_{u\in \Vis_{p,s}(r)} K_u
+=
+K_v.
+\]
+The quotient statements follow from \Cref{thm:branch-sensitive-visible-quotient,thm:branch-uniform-visible-quotient}, and the budget statement is \Cref{thm:multi-branch-strictification-budget}.
+\end{proof}
+
+\begin{example}[A two-branch sphere example separating the aggregate invariants]\label{ex:two-branch-sphere-separation}
+Let $\mathcal U$ be a finite good cover of $S^2$ with nerve
+\[
+N:=N(\mathcal U),
+\]
+and take
+\[
+A=(\mathbb Z/2\mathbb Z)^2.
+\]
+Since
+\[
+H_1(N,\mathbb Z)=0,
+\qquad
+H_2(N,\mathbb Z)\cong \mathbb Z
+\]
+\cite[Secs.~2.1, 2.2]{Hatcher2002}, the universal coefficient theorem gives
+\[
+H^2(N,A)\cong \mathrm{Hom}(H_2(N,\mathbb Z),A)\cong A.
+\]
+Choose classes
+\[
+\omega_1,\omega_2\in H^2(N,A)
+\]
+corresponding to the two basis vectors $(1,0)$ and $(0,1)$, and let
+\[
+\mathfrak G_{v_1},
+\qquad
+\mathfrak G_{v_2}
+\]
+be banded $A$-gerbes representing those classes \cite[Chap.~IV]{Giraud1971}, \cite[Tag 06NY]{StacksProject}. Put
+\[
+\mathfrak L_r:=\mathfrak G_{v_1}\sqcup \mathfrak G_{v_2}
+\]
+and define the local object functor on $\mathcal C_a$ by
+\[
+F_{p,s}|_{\mathcal C_a}:=\pi_0(\mathfrak L_r).
+\]
+Since $\mathfrak L_r$ is already a stack, we may take
+\[
+\mathfrak P_r:=\mathfrak L_r
+\]
+as the realization prestack of an admitted reference $r$, with
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)=\pi_0(\mathfrak L_r)=F_{p,s}|_{\mathcal C_a}.
+\]
+Then
+\[
+\Vis_{p,s}(r)=\{v_1,v_2\},
+\]
+and
+\[
+M,p\Vdash \CompSec_s(r)\land \neg \Sec_s(r),
+\]
+because each gerbe is locally nonempty while both are non-neutral.
+
+If $[S^2]$ denotes the fundamental class in $H_2(N,\mathbb Z)$, then
+\[
+\mathrm{ev}_{\omega_1}([S^2])=(1,0),
+\qquad
+\mathrm{ev}_{\omega_2}([S^2])=(0,1).
+\]
+Hence
+\[
+K_{v_1}=\langle(1,0)\rangle,
+\qquad
+K_{v_2}=\langle(0,1)\rangle,
+\qquad
+A_{\mathrm{vis}}^{v_1}\cong A_{\mathrm{vis}}^{v_2}\cong \mathbb Z/2\mathbb Z.
+\]
+Therefore
+\[
+\bigcap_{v} K_v=0,
+\qquad
+\sum_{v} K_v=A,
+\qquad
+\max_v |K_v|=2.
+\]
+By \Cref{thm:branch-sensitive-visible-quotient,thm:branch-uniform-visible-quotient,thm:multi-branch-strictification-budget},
+\[
+A_{\mathrm{vis}}^{\mathrm{br}}(r)\cong A,
+\qquad
+A_{\mathrm{vis}}^{\mathrm{unif}}(r)=0,
+\qquad
+\log_2\!\bigl(\max_v |K_v|\bigr)=1.
+\]
+Moreover,
+\[
+B_{\mathrm{res}}(r)\cong A,
+\qquad
+\log_2|B_{\mathrm{res}}(r)|=2,
+\qquad
+\left|\bigcap_v K_v\right|=1.
+\]
+Thus each branch individually hides one coordinate of $A$, but the hidden coordinates are transverse: once the branch label is known, nothing remains hidden across all branches, whereas any single character channel admissible on both branches must be trivial. In this example the entire uniform hidden budget is exhausted by branch resolution itself.
+\end{example}
+
+\subsection{Connection to sheaf-theoretic contextuality}
+
+The unique-branch case $|\Vis_{p,s}(r)|=1$ deserves separate attention because it connects the present theory to the sheaf-theoretic analysis of contextuality. The comparison can be stated formally once the local object functor is specialized to the support presheaf of an Abramsky--Brandenburger measurement scenario.
+
+\begin{theorem}[Unique-branch comparison with the no-global-section picture]\label{thm:unique-branch-contextuality-comparison}
+Let $r:\mathsf{Ref}_s$ be admitted at $p$, write $a=[r]_p$, and assume:
+\begin{enumerate}[label=(\roman*),nosep]
+\item the slice site $\mathcal C_a$ is the measurement-cover site of a finite Abramsky--Brandenburger scenario, and the local object functor $F_{p,s}|_{\mathcal C_a}$ is identified with the support presheaf $S_e$ of an empirical model $e$ \cite{AbramskyBrandenburger2011};
+\item $r$ admits a realization prestack that is globally conservative at $a$;
+\item $|\Vis_{p,s}(r)|=1$, with unique visible branch $v$;
+\item the branch obstruction class
+\[
+\omega:=\omega_v
+\]
+admits a finite nerve presentation with band $A$.
+\end{enumerate}
+Then:
+\begin{enumerate}[label=(\roman*),nosep]
+\item
+\[
+M,p\Vdash \CompSec_s(r)
+\quad\Longleftrightarrow\quad
+S_e\ \text{has a compatible family};
+\]
+\item
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+S_e\ \text{has a global section};
+\]
+\item consequently,
+\[
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\quad\Longleftrightarrow\quad
+S_e\ \text{has a compatible family but no global section};
+\]
+\item
+\[
+A_{\mathrm{vis}}^{\omega}
+\cong
+A_{\mathrm{vis}}^{\mathrm{br}}(r)
+\cong
+A_{\mathrm{vis}}^{\mathrm{unif}}(r),
+\]
+and this quotient is exactly the quotient of $A$ detected by the class-admissible characters;
+\item if $\omega\neq 0$, then
+\[
+A_{\mathrm{vis}}^{\omega}=A
+\quad\Longleftrightarrow\quad
+K_{\omega}=0
+\quad\Longleftrightarrow\quad
+\omega\in \operatorname{Ext}^1(H_1(N(\mathcal U),\mathbb Z),A).
+\]
+Hence the no-global-section obstruction can remain nontrivial while being invisible to every admissible character channel precisely when the surviving class is pure $\operatorname{Ext}$-type.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Under the identification $F_{p,s}|_{\mathcal C_a}\cong S_e$, a compatible family in the support presheaf is exactly a compatible local family in the sense of \Cref{def:existence-levels}(ii), and a global section of $S_e$ is exactly an element of $F_{p,s}(a)$. This proves \textup{(i)} and \textup{(ii)}.
+
+Statement \textup{(iii)} is then just the definition of $\Null^{\mathrm{glue}}_s(r)$. Since there is only one visible branch, \Cref{cor:single-branch-reduction} gives the quotient identifications in \textup{(iv)}, and \Cref{cor:intrinsic-character-detection} identifies that quotient with the one detected by the class-admissible characters. Finally, \textup{(v)} is exactly \Cref{thm:character-blind-obstructions} rewritten for the unique branch $\omega$.
+\end{proof}
+
+\begin{remark}[Car\`u-type blind cases as pure $\operatorname{Ext}$-residuals]\label{rem:caru-ext-residual}
+\Cref{thm:unique-branch-contextuality-comparison}(v) turns the comparison with \cite{Caru2017} into a theorem: the failure of cohomological completeness in the unique-branch case is not an external phenomenon but exactly the case in which the surviving obstruction class lies entirely in the $\operatorname{Ext}$-summand of the universal coefficient sequence.
+\end{remark}
