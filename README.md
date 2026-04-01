@@ -80,7 +80,7 @@ The **shift map** $\sigma: X_m \to X_m$ carries topological entropy $h_{\text{to
 
 The restriction maps form a projective system of ring homomorphisms. The inverse limit $X_\infty = \varprojlim X_m$ is compact, totally disconnected, metrizable, and infinite (`inverseLimitEquiv`).
 
-**Bridge to known mathematics:** Structurally analogous to the p-adic integers $\mathbb{Z}_p = \varprojlim \mathbb{Z}/p^n\mathbb{Z}$ but with Fibonacci numbers replacing prime powers. $X_\infty$ is a profinite ring governed by the golden ratio.
+**Bridge to known mathematics:** Structurally analogous to the p-adic integers $`\mathbb{Z}_p = \varprojlim \mathbb{Z}/p^n\mathbb{Z}`$ but with Fibonacci numbers replacing prime powers. $`X_\infty`$ is a profinite ring governed by the golden ratio.
 
 ### VIII. Circle Dimension and Diophantine Structure
 
@@ -160,7 +160,7 @@ This is not a proof of the Riemann Hypothesis. It is a **sufficient-condition te
 The derivation chain does not stop at spectral theory. From the forcing framework already established, a minimal physical spacetime skeleton emerges — not by assuming physics, but by reading the existing structure as a spacetime:
 
 - **Observer** is not a privileged subject but a fiber index on the state space. "Who observes what" becomes "which state fiber admits which local comparisons."
-- **Time** is the projection of the **decision envelope** onto the refinement chain: $T^{i,U}_{\mathcal{O}}(H) := H/{\sim_{\mathcal{O}}}$ . Time advances only when $\text{Dec}_{\mathcal{O}}(p) \subsetneq \text{Dec}_{\mathcal{O}}(q)$ . The arrow of time is the monotonicity of forcing.
+- **Time** is the projection of the **decision envelope** onto the refinement chain: $`T^{i,U}_{\mathcal{O}}(H) := H/{\sim_{\mathcal{O}}}`$ . Time advances only when $`\text{Dec}_{\mathcal{O}}(p) \subsetneq \text{Dec}_{\mathcal{O}}(q)`$ . The arrow of time is the monotonicity of forcing.
 - **Space** comes from shared support, common forcing, and resource transport cost.
 - **Causality** comes from the partial order on admissible refinement chains.
 - **Clock transport** satisfies $\delta\Theta = \Omega$ (transport curvature). Local potentials yield lapse $N = e^{-\phi}$ and redshift $\nu_B/\nu_A = N(A)/N(B)$ .
