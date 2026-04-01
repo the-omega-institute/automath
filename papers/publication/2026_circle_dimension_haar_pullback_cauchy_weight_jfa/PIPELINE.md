@@ -66,3 +66,18 @@ E2. Highlight $K = \pi P_2$ in RKHS subsection
 **Competing literature:** Romero-Ulanovskii-Zlotnikov (JFA 2024, Gaussian shift-invariant spaces), Baranov-Belov-Grochenig (ACHA 2022, Gaussian lattice interpolation), Bobkov-Chistyakov-Gotze (entropic CLT -- fundamentally different setting).
 
 **Lean coverage:** 1 partial match (circleDim simplified model). All functional-analytic content outside current Lean scope.
+
+### Backflow to Core
+
+| Result | Core target section | Status |
+|---|---|---|
+| `thm:haar-pullback-uniqueness` | `sec__circle-dimension-phase-gate.tex` (inline) | integrated |
+| `thm:poisson-kl-even-orders` | `subsec__...-poisson-kl-defect-rigidity.tex` | integrated |
+| `thm:poisson-kl-eighth` | `subsec__...-poisson-kl-defect-rigidity.tex` | integrated |
+| `thm:poisson-defect-ladder` | `subsec__...-poisson-kl-defect-rigidity.tex` | integrated |
+| `thm:poisson-defect-amplification` | `subsec__...-poisson-kl-defect-rigidity.tex` | integrated |
+| `thm:poisson-defect-stability` | `subsec__...-poisson-kl-defect-rigidity.tex` | integrated |
+| `thm:mode-space-rkhs-density` | `subsec__...-rkhs-lattice-cardinal.tex` | integrated |
+| `thm:poisson-channel-rkhs` | `subsec__...-rkhs-lattice-cardinal.tex` | integrated |
+| `thm:poisson-lattice-sampling` | `subsec__...-rkhs-lattice-cardinal.tex` | integrated |
+| `thm:poisson-cardinal-reconstruction` | `subsec__...-rkhs-lattice-cardinal.tex` | integrated |
