@@ -292,6 +292,8 @@ One equation in. Verified, visualized, published mathematics out.
 
 Current status: 42 papers in the pipeline. 3 at P7 (submission-ready) targeting Ergodic Theory & Dynamical Systems, Annals of Pure and Applied Logic, and Transactions of the AMS.
 
+→ [How the system works end-to-end](docs/SYSTEM.md#layer-3-publication-pipeline)
+
 ## Project Structure
 
 ```

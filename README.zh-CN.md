@@ -292,6 +292,8 @@ Omega 项目是一个包含三层的统一系统：
 
 当前状态：42 篇论文在管线中。3 篇达到 P7（可投稿），目标期刊为 Ergodic Theory & Dynamical Systems、Annals of Pure and Applied Logic 和 Transactions of the AMS。
 
+→ [系统端到端工作原理](docs/SYSTEM.zh-CN.md#第三层出版管线)
+
 ## 项目结构
 
 ```
