@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      3.3
+// @version      3.4
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -17,10 +17,10 @@
   "use strict";
 
   const SERVER = "http://localhost:8765";
-  const POLL_INTERVAL = 5000;
+  const POLL_INTERVAL = 30000;    // poll server every 30 seconds
   const STABLE_CHECKS = 3;        // response must be stable for 3 checks
-  const STABLE_INTERVAL = 10000;  // check every 10 seconds
-  const MAX_WAIT = 5400000;       // 90 minutes
+  const STABLE_INTERVAL = 60000;  // check every 60 seconds
+  const MAX_WAIT = 7200000;       // 120 minutes
 
   let busy = false;
 
@@ -54,7 +54,7 @@
   function updatePanel() {
     ensurePanel();
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
-    panel.innerHTML = `<b>[Oracle Bridge v3.3]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
+    panel.innerHTML = `<b>[Oracle Bridge v3.4]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
   }
 
   // ── HTTP helpers ─────────────────────────────────────────────────────
@@ -687,8 +687,8 @@
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const mainLen = (document.querySelector("main")?.innerText || "").length;
 
-      // Periodic status log (every 60s)
-      if (elapsed - lastLogTime >= 60) {
+      // Periodic status log (every 5 min)
+      if (elapsed - lastLogTime >= 300) {
         lastLogTime = elapsed;
         log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}`);
       }
@@ -861,7 +861,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log("Oracle Bridge v3.3 loaded");
+    log("Oracle Bridge v3.4 loaded");
 
     // Check if we have a saved task from a page navigation
     const savedTask = loadTaskState();
