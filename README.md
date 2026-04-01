@@ -1,5 +1,7 @@
 # The Omega Project
 
+> An auditable theory compiler that derives, verifies, visualizes, and publishes mathematics from a single equation.
+
 [中文版](README.zh-CN.md)
 
 ## The Question
@@ -246,6 +248,40 @@ x² = x + 1
 ```
 
 Every arrow is a formally verified derivation step or a traced derivation in the theory paper. No axioms. No gaps.
+
+## The System
+
+The Omega Project is one system with three layers:
+
+```
+SEED: x² = x + 1
+    │
+    ▼
+┌─────────────────────────────────┐
+│  LAYER 1: DERIVATION ENGINE     │
+│  Lean 4 — 10,588+ theorems      │
+│  Zero axioms, machine-verified  │
+└───────────────┬─────────────────┘
+                │
+                ▼
+┌─────────────────────────────────┐
+│  LAYER 2: KNOWLEDGE GRAPH       │
+│  Sisyphus — ~20,998 nodes       │
+│  Theorem dependencies & depth   │
+└───────────────┬─────────────────┘
+                │
+                ▼
+┌─────────────────────────────────┐
+│  LAYER 3: PUBLICATION PIPELINE  │
+│  16 AI agents → journal papers  │
+└─────────────────────────────────┘
+```
+
+One equation in. Verified, visualized, published mathematics out.
+
+![Sisyphus Knowledge Graph](docs/dossier/assets/sisyphus.png)
+
+→ [Full system architecture](docs/SYSTEM.md) · [Explore the knowledge graph](https://sisyphus-test.aevatar.ai/graph) · [Browse the papers](papers/publication/)
 
 ## The Publication Pipeline
 
