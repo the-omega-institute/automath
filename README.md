@@ -1,5 +1,7 @@
 # The Omega Project
 
+> An auditable theory compiler that derives, verifies, visualizes, and publishes mathematics from a single equation.
+
 [中文版](README.zh-CN.md)
 
 ## The Question
@@ -247,6 +249,40 @@ x² = x + 1
 
 Every arrow is a formally verified derivation step or a traced derivation in the theory paper. No axioms. No gaps.
 
+## The System
+
+The Omega Project is one system with three layers:
+
+```
+SEED: x² = x + 1
+    │
+    ▼
+┌─────────────────────────────────┐
+│  LAYER 1: DERIVATION ENGINE     │
+│  Lean 4 — 10,588+ theorems      │
+│  Zero axioms, machine-verified  │
+└───────────────┬─────────────────┘
+                │
+                ▼
+┌─────────────────────────────────┐
+│  LAYER 2: KNOWLEDGE GRAPH       │
+│  Sisyphus — ~20,998 nodes       │
+│  Theorem dependencies & depth   │
+└───────────────┬─────────────────┘
+                │
+                ▼
+┌─────────────────────────────────┐
+│  LAYER 3: PUBLICATION PIPELINE  │
+│  16 AI agents → journal papers  │
+└─────────────────────────────────┘
+```
+
+One equation in. Verified, visualized, published mathematics out.
+
+![Sisyphus Knowledge Graph](docs/dossier/assets/sisyphus.png)
+
+→ [Full system architecture](docs/dossier/) · [Explore the knowledge graph](https://sisyphus-test.aevatar.ai/graph) · [Browse the papers](papers/publication/)
+
 ## The Publication Pipeline
 
 16 AI agents collaborate to automatically extract, formalize, review, and publish journal papers from the core theory:
@@ -255,6 +291,8 @@ Every arrow is a formally verified derivation step or a traced derivation in the
 - **8 publication agents** (orchestrator, researcher, journal-rewriter, editorial reviewer, integrator, biblio manager, lean-sync checker, submission preparer) operate a 7-stage pipeline from intake (P0) through submission-ready (P7)
 
 Current status: 42 papers in the pipeline. 3 at P7 (submission-ready) targeting Ergodic Theory & Dynamical Systems, Annals of Pure and Applied Logic, and Transactions of the AMS.
+
+→ [How the system works end-to-end](docs/dossier/#the-system)
 
 ## Project Structure
 
