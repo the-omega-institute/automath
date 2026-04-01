@@ -281,7 +281,7 @@ Omega 项目是一个包含三层的统一系统：
 
 ![Sisyphus 知识图谱](docs/dossier/assets/sisyphus.png)
 
-→ [完整系统架构](docs/dossier/) · [探索知识图谱](https://sisyphus-test.aevatar.ai/graph) · [浏览论文](papers/publication/)
+→ [完整系统架构](docs/dossier/) · [浏览论文](papers/publication/)
 
 ## 出版管线
 

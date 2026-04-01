@@ -281,7 +281,7 @@ One equation in. Verified, visualized, published mathematics out.
 
 ![Sisyphus Knowledge Graph](docs/dossier/assets/sisyphus.png)
 
-→ [Full system architecture](docs/dossier/) · [Explore the knowledge graph](https://sisyphus-test.aevatar.ai/graph) · [Browse the papers](papers/publication/)
+→ [Full system architecture](docs/dossier/) · [Browse the papers](papers/publication/)
 
 ## The Publication Pipeline
 
