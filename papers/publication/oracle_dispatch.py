@@ -44,6 +44,7 @@ Provide:
 3. **Issue table**: ID | Section | Severity (BLOCKER/MEDIUM/LOW) | Description | Suggested fix
 4. **Missing references**: List any important related work not cited
 5. **Specific improvements** needed to reach acceptance
+6. **Concrete fixes**: For each BLOCKER and MEDIUM issue, provide an actionable solution — e.g. corrected proof sketch, precise statement fix, explicit inequality or bound, specific reference to cite. Do not just say "fix this"; show HOW to fix it with mathematical content.
 
 Be rigorous. Identify every mathematical gap, unclear argument, and expository weakness.
 Use academic language. Do not summarize what the paper already says — focus on what needs to change.""",
