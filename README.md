@@ -281,7 +281,7 @@ One equation in. Verified, visualized, published mathematics out.
 
 ![Sisyphus Knowledge Graph](docs/dossier/assets/sisyphus.png)
 
-→ [Full system architecture](docs/SYSTEM.md) · [Explore the knowledge graph](https://sisyphus-test.aevatar.ai/graph) · [Browse the papers](papers/publication/)
+→ [Full system architecture](docs/dossier/) · [Explore the knowledge graph](https://sisyphus-test.aevatar.ai/graph) · [Browse the papers](papers/publication/)
 
 ## The Publication Pipeline
 
@@ -292,7 +292,7 @@ One equation in. Verified, visualized, published mathematics out.
 
 Current status: 42 papers in the pipeline. 3 at P7 (submission-ready) targeting Ergodic Theory & Dynamical Systems, Annals of Pure and Applied Logic, and Transactions of the AMS.
 
-→ [How the system works end-to-end](docs/SYSTEM.md#layer-3-publication-pipeline)
+→ [How the system works end-to-end](docs/dossier/#the-system)
 
 ## Project Structure
 

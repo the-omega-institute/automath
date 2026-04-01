@@ -281,7 +281,7 @@ Omega 项目是一个包含三层的统一系统：
 
 ![Sisyphus 知识图谱](docs/dossier/assets/sisyphus.png)
 
-→ [完整系统架构](docs/SYSTEM.zh-CN.md) · [探索知识图谱](https://sisyphus-test.aevatar.ai/graph) · [浏览论文](papers/publication/)
+→ [完整系统架构](docs/dossier/) · [探索知识图谱](https://sisyphus-test.aevatar.ai/graph) · [浏览论文](papers/publication/)
 
 ## 出版管线
 
@@ -292,7 +292,7 @@ Omega 项目是一个包含三层的统一系统：
 
 当前状态：42 篇论文在管线中。3 篇达到 P7（可投稿），目标期刊为 Ergodic Theory & Dynamical Systems、Annals of Pure and Applied Logic 和 Transactions of the AMS。
 
-→ [系统端到端工作原理](docs/SYSTEM.zh-CN.md#第三层出版管线)
+→ [系统端到端工作原理](docs/dossier/#the-system)
 
 ## 项目结构
 
