@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      2.6
+// @version      3.3
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -18,9 +18,9 @@
 
   const SERVER = "http://localhost:8765";
   const POLL_INTERVAL = 5000;
-  const STABLE_CHECKS = 5;       // response must be stable for 5 checks
-  const STABLE_INTERVAL = 4000;   // check every 4 seconds
-  const MAX_WAIT = 1800000;       // 30 minutes
+  const STABLE_CHECKS = 3;        // response must be stable for 3 checks
+  const STABLE_INTERVAL = 10000;  // check every 10 seconds
+  const MAX_WAIT = 5400000;       // 90 minutes
 
   let busy = false;
 
@@ -54,7 +54,7 @@
   function updatePanel() {
     ensurePanel();
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
-    panel.innerHTML = `<b>[Oracle Bridge v2.6]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
+    panel.innerHTML = `<b>[Oracle Bridge v3.3]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
   }
 
   // ── HTTP helpers ─────────────────────────────────────────────────────
@@ -135,25 +135,25 @@
     return null;
   }
 
-  function findSendButton() {
+  function findSendButton(allowDisabled = false) {
     // Layer 1: Exact data-testid / aria-label selectors (updated 2025-2026)
     for (const sel of [
       "button[data-testid='send-button']",
       "button[data-testid='composer-send-button']",
-      "button[data-testid='send-button']:not([disabled])",
       "button[aria-label='Send prompt']",
+      "button[aria-label='发送提示']",
       "button[aria-label='Send']",
       "button[aria-label='Send message']",
       "button[aria-label='Submit']",
     ]) {
       const el = document.querySelector(sel);
-      if (el && !el.disabled) return el;
+      if (el && (allowDisabled || !el.disabled)) return el;
     }
 
     // Layer 2: Find by partial data-testid containing "send"
     for (const btn of document.querySelectorAll("button[data-testid]")) {
       const tid = btn.getAttribute("data-testid") || "";
-      if (tid.toLowerCase().includes("send") && !btn.disabled) return btn;
+      if (tid.toLowerCase().includes("send") && (allowDisabled || !btn.disabled)) return btn;
     }
 
     // Layer 3: Find SVG arrow icon inside form buttons (the send icon is typically an up-arrow)
@@ -454,30 +454,54 @@
     }
     log(`Send debug: ${debugBtns.length} buttons: ${JSON.stringify(debugBtns.slice(0, 5))}`);
 
-    // Wait up to 30 seconds for send button to become enabled
+    // Wait up to 15 seconds for send button to become enabled
     log("Waiting for send button to be ready...");
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 30; i++) {
       const btn = findSendButton();
       if (btn && !btn.disabled) {
-        // Try multiple click strategies
         btn.click();
         await sleep(200);
-
-        // Also try MouseEvent dispatch (some React UIs need this)
         btn.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
         await sleep(200);
-
-        // Also try pointerdown/pointerup (modern event chain)
         btn.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
         btn.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
-
         log(`Send button clicked (testid=${btn.getAttribute("data-testid")}, label=${btn.getAttribute("aria-label")})`);
         return true;
       }
-      if (i > 0 && i % 10 === 0) {
-        log(`Send button not ready yet... ${i * 0.5}s`);
+
+      // Every 5 iterations, try to wake up React by re-dispatching input events
+      if (i > 0 && i % 5 === 0) {
+        const inp = findPromptInput();
+        if (inp) {
+          inp.dispatchEvent(new InputEvent("input", { bubbles: true, inputType: "insertText" }));
+          inp.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+        log(`Send button still disabled... ${i * 0.5}s, retrying input event`);
       }
       await sleep(500);
+    }
+
+    // Force-click: if send button exists but is disabled, force-enable and click
+    const disabledSend = findSendButton(true); // allowDisabled=true
+    if (disabledSend) {
+      log(`Force-clicking disabled send button (testid=${disabledSend.getAttribute("data-testid")})`);
+      disabledSend.disabled = false;
+      disabledSend.removeAttribute("disabled");
+      await sleep(100);
+      disabledSend.click();
+      disabledSend.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+      disabledSend.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+      disabledSend.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
+      await sleep(500);
+      // Check if it worked (prompt cleared or stop button appeared)
+      const inp = findPromptInput();
+      const promptCleared = !inp || (inp.textContent || "").trim().length < 10;
+      const stopBtn = document.querySelector("button[data-testid='stop-button']");
+      if (promptCleared || stopBtn) {
+        log("Force-click appears to have worked");
+        return true;
+      }
+      log("Force-click may not have worked, trying Enter key...");
     }
 
     // Fallback 1: Enter key on prompt input
@@ -522,149 +546,115 @@
 
   // ── Wait for response to complete ────────────────────────────────────
 
-  // The prompt text we sent — used as anchor to find the response
+  // The prompt text we sent — used to separate prompt from response
   let sentPromptText = "";
-  // Page text captured right AFTER clicking send (before response appears)
-  let postSendSnapshot = "";
+  // Set of text lines present AFTER clicking send (before response appears)
+  // Any new lines that appear later = the response
+  let postSendLines = new Set();
 
   function setSentPrompt(text) {
     sentPromptText = text;
   }
 
-  async function takePostSendSnapshot() {
-    // Wait a moment for the UI to update with the sent message
-    await sleep(3000);
+  function capturePostSendState() {
     const main = document.querySelector("main");
-    postSendSnapshot = main ? (main.innerText || "").trim() : "";
-    log(`Post-send snapshot: ${postSendSnapshot.length} chars`);
-  }
-
-  // Known UI chrome strings to strip from extracted text
-  const CHROME_STRINGS = [
-    "进阶专业", "ChatGPT 也可能会犯错", "请核查重要信息", "查看 Cookie 首选项",
-    "ChatGPT can make mistakes", "Check important info", "Cookie preferences",
-    "Thought for", "正在思考", "正在搜索",
-  ];
-
-  function cleanChrome(text) {
-    let cleaned = text;
-    // Remove lines that are pure chrome
-    const lines = cleaned.split("\n");
-    const filtered = lines.filter(line => {
-      const trimmed = line.trim();
-      if (!trimmed) return true; // keep empty lines
-      for (const chrome of CHROME_STRINGS) {
-        if (trimmed.includes(chrome) && trimmed.length < chrome.length + 30) return false;
-      }
-      // Remove "Thought for Ns" lines
-      if (/^Thought for \d+s?$/.test(trimmed)) return false;
-      // Remove "你说：" / "ChatGPT 说：" headers
-      if (/^(你说|You said|ChatGPT\s*说|ChatGPT\s*said)[：:]?\s*$/.test(trimmed)) return false;
-      return true;
-    });
-    return filtered.join("\n").trim();
+    const text = main ? (main.innerText || "").trim() : "";
+    postSendLines = new Set(text.split("\n").map(l => l.trim()).filter(l => l.length > 0));
+    log(`Post-send captured: ${postSendLines.size} lines`);
   }
 
   function extractResponseText() {
+    // ═══ SIMPLE & PROVEN: grab all text from main, then post-process ═══
+    // This is what worked in v2.3. We just add prompt separation.
     const main = document.querySelector("main");
     if (!main) return "";
-    const currentText = (main.innerText || "").trim();
+    const fullText = (main.innerText || "").trim();
+    if (fullText.length < 10) return "";
 
-    // ═══ STRATEGY 1: Prompt-anchor method ═══
-    // Find our prompt text in the page, take everything AFTER it as the response
+    // Step 1: Try to find our prompt in the page and take text AFTER it
+    let responseText = "";
     if (sentPromptText.length > 20) {
-      // Use a distinctive chunk of the prompt (first 80 chars) as anchor
-      const anchor = sentPromptText.slice(0, 80).trim();
-      const anchorIdx = currentText.indexOf(anchor);
+      // Try multiple anchor lengths (ChatGPT may reformat the prompt)
+      for (const anchorLen of [80, 50, 30]) {
+        const anchor = sentPromptText.slice(0, anchorLen).trim();
+        const idx = fullText.indexOf(anchor);
+        if (idx >= 0) {
+          // Find where the prompt ends — try exact match from the end too
+          let endIdx = idx + sentPromptText.length;
 
-      if (anchorIdx >= 0) {
-        // Find the end of the full prompt in the page text
-        // The prompt might be displayed with minor formatting changes,
-        // so search for the end of the prompt block
-        const promptEnd = anchorIdx + sentPromptText.length;
-
-        // Try exact end first
-        let afterPrompt = currentText.slice(promptEnd).trim();
-
-        // If exact end didn't work well, try finding a longer anchor
-        if (afterPrompt.length < 10 && sentPromptText.length > 100) {
-          const longerAnchor = sentPromptText.slice(-60).trim();
-          const longerIdx = currentText.indexOf(longerAnchor, anchorIdx);
-          if (longerIdx >= 0) {
-            afterPrompt = currentText.slice(longerIdx + longerAnchor.length).trim();
+          // Also try matching the last part of the prompt
+          if (sentPromptText.length > 60) {
+            const tailAnchor = sentPromptText.slice(-40).trim();
+            const tailIdx = fullText.indexOf(tailAnchor, idx);
+            if (tailIdx >= 0) {
+              endIdx = Math.max(endIdx, tailIdx + tailAnchor.length);
+            }
           }
-        }
 
-        if (afterPrompt.length > 0) {
-          const cleaned = cleanChrome(afterPrompt);
-          if (cleaned.length > 5) {
-            return cleaned;
+          const after = fullText.slice(endIdx).trim();
+          if (after.length > 5) {
+            responseText = after;
+            break;
           }
         }
       }
     }
 
-    // ═══ STRATEGY 2: Post-send diff ═══
-    // Compare current text against snapshot taken right after send (before response)
-    if (postSendSnapshot.length > 0 && currentText.length > postSendSnapshot.length + 10) {
-      // The new text is the difference
-      // Try to find where the old snapshot ends in the current text
-      const snipLen = Math.min(postSendSnapshot.length, 300);
-      const snip = postSendSnapshot.slice(0, snipLen);
-      const idx = currentText.indexOf(snip);
-      if (idx >= 0) {
-        const afterOld = currentText.slice(idx + postSendSnapshot.length).trim();
-        const cleaned = cleanChrome(afterOld);
-        if (cleaned.length > 5) {
-          return cleaned;
+    // Step 2: Line-diff against post-send snapshot
+    // Only return lines that are NEW (not present when we clicked send)
+    if (responseText.length < 5 && postSendLines.size > 0) {
+      const currentLines = fullText.split("\n");
+      const newLines = currentLines.filter(l => {
+        const t = l.trim();
+        return t.length > 0 && !postSendLines.has(t);
+      });
+      if (newLines.length > 0) {
+        responseText = newLines.join("\n").trim();
+      }
+    }
+
+    // Step 2b: If still nothing, try removing prompt from full text
+    if (responseText.length < 5) {
+      responseText = fullText;
+      if (sentPromptText.length > 20) {
+        const idx = responseText.indexOf(sentPromptText.slice(0, 50).trim());
+        if (idx >= 0) {
+          const after = responseText.slice(idx + sentPromptText.length).trim();
+          if (after.length > 5) {
+            responseText = after;
+          }
         }
       }
+    }
 
-      // Alternative: just take the text growth
-      const growth = currentText.slice(postSendSnapshot.length).trim();
-      const cleanedGrowth = cleanChrome(growth);
-      if (cleanedGrowth.length > 20) {
-        return cleanedGrowth;
+    // Step 3: Clean UI chrome lines
+    const lines = responseText.split("\n");
+    const cleaned = lines.filter(line => {
+      const t = line.trim();
+      if (!t) return true;
+      // Remove known chrome
+      if (/^(进阶专业|ChatGPT\s*也可能会犯错|请核查重要信息|查看\s*Cookie|Cookie\s*首选项)/.test(t)) return false;
+      if (/^(ChatGPT can make mistakes|Check important info)/.test(t)) return false;
+      if (/^Thought for \d+/.test(t)) return false;
+      if (/^(你说|You said|ChatGPT\s*说|ChatGPT\s*said)[：:]?\s*$/.test(t)) return false;
+      if (/^(正在思考|正在搜索|Searching)/.test(t)) return false;
+      // Remove PDF filename line
+      if (/^main\.pdf\s*$/.test(t)) return false;
+      if (/^PDF\s*$/.test(t)) return false;
+      return true;
+    }).join("\n").trim();
+
+    // Step 4: Final check — don't return text that IS the prompt
+    if (cleaned.length > 5) {
+      // Make sure we're not just returning the prompt itself
+      const promptStart = sentPromptText.slice(0, 40).trim();
+      if (promptStart && cleaned.startsWith(promptStart) && cleaned.length < sentPromptText.length * 1.2) {
+        return ""; // This is just the prompt, not a response
       }
+      return cleaned;
     }
 
-    // ═══ STRATEGY 3: Selector-based (classic & modern ChatGPT) ═══
-    function lastText(sel) {
-      try {
-        const els = document.querySelectorAll(sel);
-        if (els.length > 0) {
-          return (els[els.length - 1].innerText || els[els.length - 1].textContent || "").trim();
-        }
-      } catch (e) {}
-      return "";
-    }
-
-    function isNoise(text) {
-      if (!text || text.length < 10) return true;
-      for (const chrome of CHROME_STRINGS) {
-        if (text.includes(chrome) && text.length < 200) return true;
-      }
-      if (text.includes(sentPromptText.slice(0, 40))) return true;
-      return false;
-    }
-
-    let best = "";
-    for (const sel of [
-      "[data-message-author-role='assistant'] .markdown",
-      "[data-message-author-role='assistant']",
-      "article[data-testid*='assistant'] .markdown",
-      "article[data-testid*='assistant']",
-      "[data-testid*='conversation-turn']:last-child .markdown",
-      ".agent-turn .markdown",
-      "div[class*='markdown'][class*='prose']",
-      "div[class*='markdown']",
-      "div.prose",
-    ]) {
-      const t = lastText(sel);
-      if (t.length > best.length && !isNoise(t)) best = t;
-    }
-
-    return best;
+    return "";
   }
 
   function isStillGenerating() {
@@ -688,100 +678,36 @@
     let lastText = "";
     let stableCount = 0;
     let lastLogTime = 0;
-    let debugCount = 0;
 
     while (Date.now() - startTime < MAX_WAIT) {
       await sleep(STABLE_INTERVAL);
 
       const responseText = extractResponseText();
+      const generating = isStillGenerating();
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const mainLen = (document.querySelector("main")?.innerText || "").length;
 
-      // Debug: log DOM state periodically (first 3 times)
-      if (debugCount < 3 && elapsed > 8 * (debugCount + 1)) {
-        debugCount++;
-        const counts = {};
-        for (const sel of [
-          "[data-message-author-role='assistant']",
-          "[data-message-author-role='user']",
-          "article[data-testid*='assistant']",
-          "div[class*='markdown']",
-          "div.prose",
-          "[class*='streaming']",
-          "[class*='result-streaming']",
-          "[data-testid*='conversation-turn']",
-        ]) {
-          try { counts[sel] = document.querySelectorAll(sel).length; } catch { counts[sel] = -1; }
-        }
-        log(`DOM debug #${debugCount}: ${JSON.stringify(counts)}, text=${responseText.length}`);
-
-        // Deep probe: find all elements with data-testid in main area
-        if (debugCount === 1) {
-          try {
-            const testids = new Set();
-            document.querySelectorAll("main [data-testid]").forEach(el => {
-              testids.add(el.getAttribute("data-testid"));
-            });
-            log(`DOM testids in main: ${JSON.stringify([...testids].slice(0, 15))}`);
-          } catch (e) {}
-
-          // Find elements with data-message-* attributes
-          try {
-            const msgAttrs = new Set();
-            document.querySelectorAll("main [data-message-id], main [data-message-author-role]").forEach(el => {
-              const role = el.getAttribute("data-message-author-role") || "";
-              const tag = el.tagName;
-              msgAttrs.add(`${tag}[role=${role}]`);
-            });
-            log(`DOM msg elements: ${JSON.stringify([...msgAttrs])}`);
-          } catch (e) {}
-
-          // Find the largest text blocks in main (top 3) with their tag info
-          try {
-            const blocks = [];
-            document.querySelectorAll("main div, main article, main section").forEach(div => {
-              const text = (div.innerText || "").trim();
-              if (text.length > 30) {
-                blocks.push({
-                  len: text.length,
-                  tag: div.tagName,
-                  cls: (div.className || "").toString().slice(0, 50),
-                  testid: div.getAttribute("data-testid") || "",
-                  role: div.getAttribute("data-message-author-role") || "",
-                  preview: text.slice(0, 40),
-                });
-              }
-            });
-            blocks.sort((a, b) => b.len - a.len);
-            for (const b of blocks.slice(0, 3)) {
-              log(`DOM block: len=${b.len} tag=${b.tag} cls="${b.cls}" testid="${b.testid}" role="${b.role}" "${b.preview}..."`);
-            }
-          } catch (e) {}
-        }
+      // Periodic status log (every 60s)
+      if (elapsed - lastLogTime >= 60) {
+        lastLogTime = elapsed;
+        log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}`);
       }
 
-      // Only count text that's meaningful (not empty or too short)
+      // Only count extracted text that's meaningful
       if (responseText.length >= 5) {
         if (responseText === lastText) {
           stableCount++;
-
-          if (stableCount >= STABLE_CHECKS) {
-            if (!isStillGenerating()) {
-              log(`Response complete: ${responseText.length} chars, stable for ${stableCount * STABLE_INTERVAL / 1000}s`);
-              return responseText;
-            }
-            // Still generating — reset but keep lastText
-            stableCount = 0;
+          if (stableCount >= STABLE_CHECKS && !generating) {
+            log(`Response complete: ${responseText.length} chars (stable ${stableCount * STABLE_INTERVAL / 1000}s)`);
+            return responseText;
           }
         } else {
           stableCount = 0;
           lastText = responseText;
         }
-      }
-
-      // Periodic status log
-      if (elapsed - lastLogTime >= 15) {
-        lastLogTime = elapsed;
-        log(`Waiting... ${elapsed}s, ${responseText.length} chars, stable=${stableCount}, generating=${isStillGenerating()}`);
+      } else if (generating) {
+        // Still generating but no extracted text yet — keep waiting
+        stableCount = 0;
       }
     }
 
@@ -800,14 +726,31 @@
       // ACK the task
       try { await serverPost("/ack", { task_id }); } catch {}
 
-      // Phase 1: Navigate to new chat if needed
+      // Phase 1: Start a new chat if there's an existing conversation
       if (!isOnNewChatPage()) {
-        log("Navigating to new chat...");
-        saveTaskState(task);
-        setTaskPhase("navigating");
-        window.location.href = "https://chatgpt.com/";
-        // Script will re-initialize on new page; check savedTask
-        return;
+        log("Starting new chat...");
+        // Try clicking the "New chat" button instead of full page reload
+        // This avoids losing large task data (PDF) in GM_setValue
+        const newChatBtn =
+          document.querySelector("a[href='/']") ||
+          document.querySelector("nav a[class*='new']") ||
+          document.querySelector("button[aria-label*='New']") ||
+          document.querySelector("button[aria-label*='新']") ||
+          document.querySelector("a[data-testid='create-new-chat-button']");
+        if (newChatBtn) {
+          newChatBtn.click();
+          log("Clicked new chat button");
+          await sleep(3000);
+        } else {
+          // Fallback: navigate, but strip PDF to avoid GM_setValue size limit
+          log("No new-chat button found, navigating...");
+          const lightTask = { ...task };
+          delete lightTask.pdf_base64; // Too large for GM_setValue
+          saveTaskState(lightTask);
+          setTaskPhase("navigating");
+          window.location.href = "https://chatgpt.com/";
+          return;
+        }
       }
 
       setTaskPhase("processing");
@@ -834,8 +777,24 @@
         throw new Error("Failed to enter prompt text");
       }
 
-      // Store prompt text for anchor-based response detection
+      // Store prompt text for response extraction
       setSentPrompt(prompt);
+
+      // Trigger React state update — the send button stays disabled
+      // unless React knows the input has content
+      const inputEl = findPromptInput();
+      if (inputEl) {
+        inputEl.dispatchEvent(new InputEvent("input", { bubbles: true, inputType: "insertText" }));
+        await sleep(500);
+        // Also dispatch a keydown to wake up the composer
+        inputEl.dispatchEvent(new KeyboardEvent("keydown", {
+          key: "a", code: "KeyA", keyCode: 65, bubbles: true
+        }));
+        inputEl.dispatchEvent(new KeyboardEvent("keyup", {
+          key: "a", code: "KeyA", keyCode: 65, bubbles: true
+        }));
+        await sleep(500);
+      }
 
       // Send
       const sent = await clickSend();
@@ -843,11 +802,12 @@
         throw new Error("Failed to click send");
       }
 
-      // Take post-send snapshot (captures page state before response appears)
-      await takePostSendSnapshot();
+      // Capture page state right after send (before response appears)
+      await sleep(3000);
+      capturePostSendState();
 
-      // Wait for response
-      await sleep(5000); // Additional delay for ChatGPT to start generating
+      // Wait for ChatGPT to start processing
+      await sleep(5000);
       const response = await waitForResponse();
 
       if (!response || response.length < 5) {
@@ -901,7 +861,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log("Oracle Bridge v2.6 loaded");
+    log("Oracle Bridge v3.3 loaded");
 
     // Check if we have a saved task from a page navigation
     const savedTask = loadTaskState();
