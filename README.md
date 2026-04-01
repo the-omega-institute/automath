@@ -2,7 +2,7 @@
 
 > An auditable theory compiler that derives, verifies, visualizes, and publishes mathematics from a single equation.
 
-[中文版](README.zh-CN.md)
+[中文版](README.zh-CN.md) · **[Why Everything Is Inevitable](docs/INEVITABILITY.md)** — understand the forcing chain in 10 minutes
 
 ## The Question
 

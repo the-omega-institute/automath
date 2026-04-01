@@ -2,7 +2,7 @@
 
 > 一个可审计的理论编译器，从单一方程出发，推导、验证、可视化并发表数学。
 
-[English](README.md)
+[English](README.md) · **[为什么一切都是不可避免的](docs/INEVITABILITY.zh-CN.md)** — 10 分钟理解迫使链
 
 ## 核心问题
 
