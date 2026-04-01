@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      3.5
+// @version      3.7
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -54,7 +54,7 @@
   function updatePanel() {
     ensurePanel();
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
-    panel.innerHTML = `<b>[Oracle Bridge v3.5]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
+    panel.innerHTML = `<b>[Oracle Bridge v3.7]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
   }
 
   // ── HTTP helpers ─────────────────────────────────────────────────────
@@ -156,6 +156,16 @@
       if (tid.toLowerCase().includes("send") && (allowDisabled || !btn.disabled)) return btn;
     }
 
+    // Helper: is this button definitely NOT a send button?
+    function isNonSendButton(btn) {
+      const tid = (btn.getAttribute("data-testid") || "").toLowerCase();
+      const label = (btn.getAttribute("aria-label") || "").toLowerCase();
+      const text = (btn.textContent || "").toLowerCase();
+      const all = tid + " " + label + " " + text;
+      // Known non-send buttons in ChatGPT composer
+      return /plus|attach|file|添加|文件|mic|voice|听写|dictation|new|model|专业|search|搜索/.test(all);
+    }
+
     // Layer 3: Find SVG arrow icon inside form buttons (the send icon is typically an up-arrow)
     const formAreas = [
       document.querySelector("form"),
@@ -166,13 +176,11 @@
 
     for (const area of formAreas) {
       for (const btn of area.querySelectorAll("button:not([disabled])")) {
+        if (isNonSendButton(btn)) continue;
         const svg = btn.querySelector("svg");
         if (svg) {
-          // Send buttons typically have a polyline/path pointing upward or an arrow
           const paths = svg.querySelectorAll("path, polyline, line");
           if (paths.length > 0 && paths.length < 5) {
-            // Likely a simple icon button (not a complex menu icon)
-            // Check it's near the input area (bottom of composer)
             const rect = btn.getBoundingClientRect();
             if (rect.width > 0 && rect.height > 0) {
               return btn;
@@ -189,10 +197,7 @@
       for (let depth = 0; depth < 6 && container; depth++) {
         const btns = container.querySelectorAll("button:not([disabled])");
         for (const btn of btns) {
-          // Skip buttons that look like they're for other purposes
-          const label = (btn.getAttribute("aria-label") || btn.textContent || "").toLowerCase();
-          if (label.includes("attach") || label.includes("file") || label.includes("mic") ||
-              label.includes("voice") || label.includes("new") || label.includes("model")) continue;
+          if (isNonSendButton(btn)) continue;
           if (btn.querySelector("svg")) return btn;
         }
         container = container.parentElement;
@@ -487,9 +492,9 @@
     }
     log(`Send debug: ${debugBtns.length} buttons: ${JSON.stringify(debugBtns.slice(0, 5))}`);
 
-    // Wait up to 15 seconds for send button to become enabled
+    // Wait up to 60 seconds for send button to become enabled
     log("Waiting for send button to be ready...");
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 60; i++) {
       const btn = findSendButton();
       if (btn && !btn.disabled) {
         btn.click();
@@ -597,8 +602,42 @@
   }
 
   function extractResponseText() {
-    // ═══ SIMPLE & PROVEN: grab all text from main, then post-process ═══
-    // This is what worked in v2.3. We just add prompt separation.
+    // ═══ Strategy 0: Try to find the LAST assistant message directly ═══
+    // On the conversation page (chatgpt.com/c/xxx), messages are in article
+    // elements or divs with data-message-author-role or similar structure.
+    // The last assistant turn is what we want.
+    try {
+      // 2025-2026 ChatGPT: look for turn containers
+      const turns = document.querySelectorAll("[data-message-author-role='assistant']");
+      if (turns.length > 0) {
+        const lastTurn = turns[turns.length - 1];
+        const text = (lastTurn.innerText || "").trim();
+        if (text.length > 20) {
+          return text;
+        }
+      }
+      // Alternative: article elements containing assistant responses
+      const articles = document.querySelectorAll("article");
+      if (articles.length >= 2) {
+        // Last article is typically the assistant response
+        const lastArticle = articles[articles.length - 1];
+        const text = (lastArticle.innerText || "").trim();
+        if (text.length > 20) {
+          return text;
+        }
+      }
+      // Alternative: div[data-testid*='conversation-turn'] — last even turn
+      const convTurns = document.querySelectorAll("[data-testid*='conversation-turn']");
+      if (convTurns.length >= 2) {
+        const lastTurn = convTurns[convTurns.length - 1];
+        const text = (lastTurn.innerText || "").trim();
+        if (text.length > 20) {
+          return text;
+        }
+      }
+    } catch {}
+
+    // ═══ Fallback: grab all text from main, then post-process ═══
     const main = document.querySelector("main");
     if (!main) return "";
     const fullText = (main.innerText || "").trim();
@@ -778,6 +817,9 @@
       // Upload PDF if present
       if (pdf_base64) {
         await uploadPDF(pdf_base64, pdf_name || "paper.pdf");
+        // Extra wait after upload — ensure ChatGPT fully processes the file
+        log("Waiting 15s for PDF to be fully processed...");
+        await sleep(15000);
       }
 
       // Enter prompt
@@ -789,21 +831,56 @@
       // Store prompt text for response extraction
       setSentPrompt(prompt);
 
-      // Give ProseMirror a moment to process the input
-      await sleep(1000);
+      // Wait for send button to become enabled (upload + text both ready)
+      log("Waiting for send button to enable...");
+      let sendReady = false;
+      for (let i = 0; i < 30; i++) {  // up to 30s
+        const btn = findSendButton();
+        if (btn && !btn.disabled) {
+          sendReady = true;
+          log(`Send button enabled after ${i}s`);
+          break;
+        }
+        await sleep(1000);
+      }
+      if (!sendReady) {
+        log("WARNING: send button still disabled after 30s, will try force-click");
+      }
 
       // Send
+      const urlBefore = window.location.href;
       const sent = await clickSend();
       if (!sent) {
         throw new Error("Failed to click send");
       }
 
-      // Capture page state right after send (before response appears)
-      await sleep(3000);
-      capturePostSendState();
+      // Wait for URL change — ChatGPT redirects from chatgpt.com to
+      // chatgpt.com/c/{id} after accepting a message. This is critical:
+      // the entire DOM changes during this SPA navigation.
+      log(`Sent. Waiting for URL change (was: ${urlBefore.slice(-30)})...`);
+      let urlChanged = false;
+      for (let i = 0; i < 60; i++) {  // up to 60s
+        await sleep(1000);
+        if (window.location.href !== urlBefore) {
+          urlChanged = true;
+          log(`URL changed to: ${window.location.href.slice(-40)}`);
+          break;
+        }
+        // Also check if response already started (same-page conversation)
+        if (isStillGenerating()) {
+          log("Response generation detected (same page)");
+          break;
+        }
+      }
+      if (!urlChanged && !isStillGenerating()) {
+        log("WARNING: URL did not change and no generation detected after 60s");
+      }
 
-      // Wait for ChatGPT to start processing
+      // Wait for new page DOM to settle after SPA navigation
       await sleep(5000);
+
+      // Capture page state NOW (on the conversation page, not homepage)
+      capturePostSendState();
       const response = await waitForResponse();
 
       if (!response || response.length < 5) {
