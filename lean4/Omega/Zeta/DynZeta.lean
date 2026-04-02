@@ -556,41 +556,80 @@ theorem reduced_det_golden_mean_squeeze :
     (1 + 1 / Real.sqrt Real.goldenRatio)⁻¹ ≤ Real.sqrt 5 / Real.goldenRatio ∧
     Real.sqrt 5 / Real.goldenRatio ≤ (1 - 1 / Real.sqrt Real.goldenRatio)⁻¹ := by
   have hφ_pos : 0 < Real.goldenRatio := Real.goldenRatio_pos
-  have hφ_ne : Real.goldenRatio ≠ 0 := ne_of_gt hφ_pos
-  have hsqrtφ_ne : Real.sqrt Real.goldenRatio ≠ 0 := by positivity
-  have hphi_two : 1 + Real.sqrt 5 = Real.goldenRatio * 2 := by
-    rw [Real.goldenRatio]
-    ring_nf
-  have hmain : Real.sqrt 5 / Real.goldenRatio = 2 / (1 + Real.sqrt 5) := by
-    rw [← hphi_two]
-    field_simp [hφ_ne]
-    ring
+  have hs_pos : 0 < Real.sqrt Real.goldenRatio := by
+    exact Real.sqrt_pos.2 hφ_pos
+  have hs_gt_one : 1 < Real.sqrt Real.goldenRatio := by
+    simpa [Real.sqrt_one] using Real.sqrt_lt_sqrt (show (0 : ℝ) ≤ 1 by positivity)
+      Real.one_lt_goldenRatio
+  have hy_pos : 0 < 1 / Real.sqrt Real.goldenRatio := by
+    positivity
+  have hy_lt_one : 1 / Real.sqrt Real.goldenRatio < 1 := by
+    simpa using one_div_lt_one_div_of_lt zero_lt_one hs_gt_one
+  have hsq_sqrt : (Real.sqrt Real.goldenRatio) ^ 2 = Real.goldenRatio := by
+    rw [Real.sq_sqrt (le_of_lt hφ_pos)]
+  have hsq : (1 / Real.sqrt Real.goldenRatio) ^ 2 = Real.goldenRatio⁻¹ := by
+    calc
+      (1 / Real.sqrt Real.goldenRatio) ^ 2 = 1 / ((Real.sqrt Real.goldenRatio) ^ 2) := by
+        field_simp [pow_two, hs_pos.ne']
+      _ = 1 / Real.goldenRatio := by rw [hsq_sqrt]
+      _ = Real.goldenRatio⁻¹ := by rw [one_div]
   let t : ℝ := 1 / Real.sqrt Real.goldenRatio
   have ht_pos : 0 < t := by
     dsimp [t]
     positivity
   have ht_lt_one : t < 1 := by
-    dsimp [t]
-    have hsqrtφ_gt_one : 1 < Real.sqrt Real.goldenRatio := by
-      simpa [Real.sqrt_one] using Real.sqrt_lt_sqrt (show (0 : ℝ) ≤ 1 by positivity)
-        Real.one_lt_goldenRatio
-    simpa [t] using one_div_lt_one_div_of_lt zero_lt_one hsqrtφ_gt_one
+    simpa [t] using hy_lt_one
   have ht_sq : t ^ 2 = 2 / (1 + Real.sqrt 5) := by
     dsimp [t]
-    field_simp [hsqrtφ_ne]
+    field_simp [hs_pos.ne']
     rw [Real.sq_sqrt (le_of_lt hφ_pos), Real.goldenRatio]
     ring
+  have ht_quartic : t ^ 4 + t ^ 2 = 1 := by
+    have hsqrt5_pos : 0 < Real.sqrt 5 := by positivity
+    calc
+      t ^ 4 + t ^ 2 = (2 / (1 + Real.sqrt 5)) ^ 2 + 2 / (1 + Real.sqrt 5) := by
+        rw [← ht_sq]
+        ring_nf
+      _ = 1 := by
+        field_simp [hsqrt5_pos.ne']
+        ring
+        rw [Real.sq_sqrt (by positivity)]
+        norm_num
+  have hgoldconj : Real.goldenConj = -Real.goldenRatio⁻¹ := by
+    linarith [Real.inv_goldenRatio]
+  have hsqrt5 : Real.sqrt 5 / Real.goldenRatio = 1 + t ^ 4 := by
+    calc
+      Real.sqrt 5 / Real.goldenRatio = 1 - Real.goldenConj / Real.goldenRatio := by
+        rw [← reduced_det_golden_mean]
+      _ = 1 + (Real.goldenRatio⁻¹) ^ 2 := by
+        rw [hgoldconj, div_eq_mul_inv]
+        ring
+      _ = 1 + (t ^ 2) ^ 2 := by rw [← hsq, ht_sq]
+      _ = 1 + t ^ 4 := by ring
   constructor
-  · change 1 / (1 + 1 / Real.sqrt Real.goldenRatio) ≤ Real.sqrt 5 / Real.goldenRatio
-    rw [show 1 / (1 + 1 / Real.sqrt Real.goldenRatio) = 1 / (1 + t) by simp [t]]
-    rw [hmain, ← ht_sq]
-    field_simp [ht_pos.ne']
-    nlinarith [ht_pos]
-  · change Real.sqrt 5 / Real.goldenRatio ≤ 1 / (1 - 1 / Real.sqrt Real.goldenRatio)
-    rw [show 1 / (1 - 1 / Real.sqrt Real.goldenRatio) = 1 / (1 - t) by simp [t]]
-    rw [hmain, ← ht_sq]
-    field_simp [ht_pos.ne', sub_ne_zero.mpr ht_lt_one.ne]
-    nlinarith [ht_pos, ht_lt_one]
+  · rw [hsqrt5]
+    have h1pt_pos : 0 < 1 + t := by linarith
+    have ht4_le_t3 : t ^ 4 ≤ t ^ 3 := by
+      nlinarith [ht_pos, ht_lt_one]
+    have hpoly : 1 ≤ t ^ 2 * (1 + t) := by
+      calc
+        1 = t ^ 4 + t ^ 2 := by nlinarith [ht_quartic]
+        _ ≤ t ^ 3 + t ^ 2 := by gcongr
+        _ = t ^ 2 * (1 + t) := by ring
+    have hleft : 1 / (1 + t) ≤ t ^ 2 := by
+      exact (le_div_iff₀ h1pt_pos).2 hpoly
+    have ht2_le_center : t ^ 2 ≤ 1 + t ^ 4 := by
+      nlinarith [ht_quartic]
+    exact hleft.trans ht2_le_center
+  · rw [hsqrt5]
+    have h1mt_pos : 0 < 1 - t := by linarith
+    have hmul : t ^ 2 * (1 - t) ≤ 1 := by
+      have hle1 : t ^ 2 ≤ 1 := by
+        nlinarith [ht_pos, ht_lt_one]
+      calc
+        t ^ 2 * (1 - t) ≤ t ^ 2 * 1 := by gcongr
+        _ ≤ 1 := by simpa using hle1
+    exact (le_div_iff₀ h1mt_pos).2 hmul
 
 end
 

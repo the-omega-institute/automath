@@ -263,6 +263,20 @@ theorem cdim_min_ledger_cost (f : CircleDimHomData) (R_rank : Nat)
     circleDim f.kernelRank 0 ≤ circleDim R_rank 0 := by
   simp [circleDim]; exact hInj
 
+/-- The minimal ledger-cost inequality is exact: it reduces to a rank comparison.
+    thm:cdim-minimal-ledger-cost-kernel -/
+theorem cdim_min_ledger_cost_iff (f : CircleDimHomData) (R_rank : Nat) :
+    circleDim f.kernelRank 0 ≤ circleDim R_rank 0 ↔ f.kernelRank ≤ R_rank := by
+  simp [circleDim]
+
+/-- The lower bound in the minimal ledger-cost theorem is attained by choosing the
+    ledger rank to be the kernel rank itself.
+    thm:cdim-minimal-ledger-cost-kernel -/
+theorem cdim_min_ledger_cost_attained (f : CircleDimHomData) :
+    ∃ R_rank : Nat, circleDim f.kernelRank 0 = circleDim R_rank 0 := by
+  refine ⟨f.kernelRank, ?_⟩
+  rfl
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R160: Phase spectrum count
 -- ══════════════════════════════════════════════════════════════
