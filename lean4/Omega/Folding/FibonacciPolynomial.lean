@@ -647,6 +647,16 @@ theorem detPoly_eval_strict_log_convex (k : Nat) (hk : 1 ≤ k) (t : ℤ) (ht : 
   -- heval: D_{k+1}(t) * D_{k-1}(t) - D_k(t)^2 = t
   linarith
 
+/-- Evaluated Cassini-Pell gap identity for detPoly.
+    cor:pom-Lk-det-logconvex-ratio -/
+theorem detPoly_eval_cassini_gap (k : Nat) (hk : 1 ≤ k) (t : ℤ) :
+    (detPoly (k - 1)).eval t * (detPoly (k + 1)).eval t -
+        ((detPoly k).eval t) ^ 2 = t := by
+  have hcassini := detPoly_cassini_pell k hk
+  have heval := congr_arg (fun p => p.eval t) hcassini
+  simp only [eval_sub, eval_mul, eval_pow, eval_X] at heval
+  linarith
+
 /-- Strict monotonicity in k: D_k(t) < D_{k+1}(t) for t > 0.
     cor:pom-Lk-det-logconvex-ratio -/
 theorem detPoly_eval_strict_mono (t : ℤ) (ht : 0 < t) :
