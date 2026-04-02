@@ -333,6 +333,16 @@ automath/
 
 该库依赖 [Mathlib](https://github.com/leanprover-community/mathlib4) 和 Lean 4。
 
+## 安装 Omega 思维框架
+
+让你的 AI 编程助手用 forcing、最小化和可审计推导链来思考：
+
+```
+https://raw.githubusercontent.com/the-omega-institute/automath/dev/prompts/omega-skill/SKILL.md
+```
+
+把这个 URL 丢进 Claude Code，让它安装这个 skill。然后输入 `/omega` 即可。
+
 ## 构建
 
 ```bash

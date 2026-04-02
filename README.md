@@ -333,6 +333,16 @@ automath/
 
 The library depends on [Mathlib](https://github.com/leanprover-community/mathlib4) and Lean 4.
 
+## Install Omega Thinking
+
+Make your AI coding assistant think with forcing, minimization, and auditable derivation chains:
+
+```
+https://raw.githubusercontent.com/the-omega-institute/automath/dev/prompts/omega-skill/SKILL.md
+```
+
+Paste this URL into Claude Code and ask it to install the skill. Then type `/omega` .
+
 ## Build
 
 ```bash
