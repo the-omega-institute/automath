@@ -261,6 +261,12 @@ theorem tqft_triple_six :
     Fintype.card (X 6) = 21 ∧ 2 ^ 6 = 64 ∧ momentSum 2 6 = 220 :=
   ⟨X.card_X_six, by norm_num, momentSum_two_six⟩
 
+/-- The collision-to-type ratio at window 6 has floor value 10.
+    cor:conclusion-window6-collision-ratio-bounds -/
+theorem collision_ratio_floor_window_six :
+    momentSum 2 6 / Fintype.card (X 6) = 10 := by
+  rw [momentSum_two_six, X.card_X_six]
+
 /-- The collision-to-type ratio: S_2(6) / |X_6| ≈ 10.47.
     Verified: S_2(6) = 220 > 10 · 21 = 210 and 220 < 11 · 21 = 231.
     cor:conclusion-window6-collision-ratio-bounds -/
