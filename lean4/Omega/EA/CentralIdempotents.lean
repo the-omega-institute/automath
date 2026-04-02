@@ -54,4 +54,15 @@ theorem central_idempotents_pairwise_orthogonal {a b : ℚ} (ha : a ^ 2 = 1) (hb
     rcases rat_sq_eq_one_cases hb with rfl | rfl <;>
     norm_num [epp, epn, enp, enn]
 
+/-- All four central idempotents are idempotent under involutive hypotheses.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem central_idempotents_all_idempotent {a b : ℚ} (ha : a ^ 2 = 1) (hb : b ^ 2 = 1) :
+    epp a b ^ 2 = epp a b ∧
+    epn a b ^ 2 = epn a b ∧
+    enp a b ^ 2 = enp a b ∧
+    enn a b ^ 2 = enn a b := by
+  rcases rat_sq_eq_one_cases ha with rfl | rfl <;>
+    rcases rat_sq_eq_one_cases hb with rfl | rfl <;>
+    norm_num [epp, epn, enp, enn]
+
 end Omega.EA
