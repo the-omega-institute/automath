@@ -13,6 +13,22 @@ theorem projectorVal_partition_of_signs
     projectorVal (-1) 1 a b + projectorVal (-1) (-1) a b = 1 := by
   rcases ha with rfl | rfl <;> rcases hb with rfl | rfl <;> norm_num [projectorVal]
 
+/-- Reindexing the four sign projectors still gives a partition of unity on ±1 inputs.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem projectorVal_sum_eq_one_of_cases
+    {α β a b : Int}
+    (hα : α = 1 ∨ α = -1) (hβ : β = 1 ∨ β = -1)
+    (ha : a = 1 ∨ a = -1) (hb : b = 1 ∨ b = -1) :
+    projectorVal α β a b +
+        projectorVal α (-β) a b +
+        projectorVal (-α) β a b +
+        projectorVal (-α) (-β) a b = 1 := by
+  rcases hα with rfl | rfl <;>
+    rcases hβ with rfl | rfl <;>
+    rcases ha with rfl | rfl <;>
+    rcases hb with rfl | rfl <;>
+    norm_num [projectorVal]
+
 /-- Exactly one projector takes value 1 on any ±1 sign pattern.
     thm:fold-groupoid-z2x2-central-idempotents -/
 theorem projectorVal_case_split
