@@ -1,0 +1,66 @@
+\subsection{Uniform raw-word benchmark}\label{app:uniform-collision}
+
+Under the uniform law on $\{0,1\}^m$ the occupancy formulas reduce to fiber counts.
+
+\begin{proposition}[Exact collision formula under uniform $m$-bit input]\label{prop:uniform-collision}
+Let $\mu_m^{\mathrm{unif}}$ be the uniform distribution on $\{0,1\}^m$, and let $\pi_m^{\mathrm{unif}}:=(\Fold_m)_*\mu_m^{\mathrm{unif}}$ be the induced distribution on $X_m$. Then for every $x\in X_m$,
+\[
+\pi_m^{\mathrm{unif}}(x)=\frac{d_m(x)}{2^m},
+\]
+and the collision probability satisfies
+\begin{equation}\label{eq:col-unif-second-moment}
+\Col_{\mathrm{unif}}(m):=\sum_{x\in X_m}\pi_m^{\mathrm{unif}}(x)^2
+=\frac{1}{2^{2m}}\sum_{x\in X_m} d_m(x)^2.
+\end{equation}
+In particular, by the second-moment identity \eqref{eq:fiber-second-moment} of Theorem~\ref{thm:fiber-dft},
+\begin{equation}\label{eq:col-unif-fourier}
+\Col_{\mathrm{unif}}(m)
+=
+\frac{1}{2^{2m}F_{m+2}}
+\sum_{j=0}^{F_{m+2}-1}
+\Bigl|
+\prod_{k=1}^m \bigl(1+\zeta^{jF_{k+1}}\bigr)
+\Bigr|^2,
+\qquad
+\zeta=e^{2\pi i/F_{m+2}}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+For $x\in X_m$, the fiber $\mathcal{F}_m(x)$ has cardinality $d_m(x)$ by definition. Since $\mu_m^{\mathrm{unif}}$ assigns mass $2^{-m}$ to each raw word, one has
+\[
+\pi_m^{\mathrm{unif}}(x)=\mu_m^{\mathrm{unif}}(\mathcal{F}_m(x))=\frac{d_m(x)}{2^m}.
+\]
+Substituting into $\Col_{\mathrm{unif}}(m)=\sum_x \pi_m^{\mathrm{unif}}(x)^2$ yields \eqref{eq:col-unif-second-moment}. Equation \eqref{eq:col-unif-fourier} follows by plugging \eqref{eq:fiber-second-moment} into \eqref{eq:col-unif-second-moment}.
+\end{proof}
+
+\begin{corollary}[Exact occupancy formula under uniform raw input]\label{cor:uniform-occupancy}
+Under the uniform $m$-bit microstate law and for any burn-in budget $n\ge m-1$,
+\begin{equation}\label{eq:uniform-occupancy}
+\PP\bigl(X^{(1)}_{m,n},\dots,X^{(N)}_{m,n}\text{ all distinct}\bigr)
+=
+\frac{N!}{2^{mN}}
+\sum_{\substack{S\subset X_m\\|S|=N}}
+\prod_{x\in S} d_m(x).
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Apply Theorem~\ref{thm:exact-occupancy} with $\nu_u^{(m)}=\mu_m^{\mathrm{unif}}$ and use Proposition~\ref{prop:uniform-collision} to substitute $\nu_{u,m}(x)=d_m(x)/2^m$.
+\end{proof}
+
+\begin{corollary}[Explicit finite-$m$ collision certificate]\label{cor:explicit-finite-m-capacity}
+Under the uniform $m$-bit input benchmark and for any burn-in budget $n\ge m-1$, the simultaneous-addressing failure probability satisfies
+\[
+\PP(\mathsf{Fail}_{m,n,N})\le \binom{N}{2}\,\Col_{\mathrm{unif}}(m),
+\]
+where $\Col_{\mathrm{unif}}(m)$ is given explicitly by \eqref{eq:col-unif-fourier}.
+\end{corollary}
+
+\begin{proof}
+Apply Corollary~\ref{cor:collision-budget} with $\nu_u^{(m)}=\mu_m^{\mathrm{unif}}$ and then use Proposition~\ref{prop:uniform-collision}.
+\end{proof}
+
+\begin{remark}
+Table~\ref{tab:uniform-benchmarks} lists exact finite-range values of the collision profile as a benchmark for \eqref{eq:col-unif-fourier}.
+\end{remark}

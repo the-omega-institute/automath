@@ -1,0 +1,262 @@
+\section{Introduction}
+
+Zeckendorf expansion singles out a canonical Fibonacci representation of every
+positive integer.  The problem considered here is a finite-window version of
+that principle.  For each $m\ge 1$ we consider the binary window space
+\[
+\Omega_m:=\{0,1\}^m.
+\]
+Let
+\[
+X_m:=\{w\in\{0,1\}^m:\text{$w$ contains no subword }11\},
+\]
+and define
+\[
+\Fold_m(\omega):=\pi_m(Z(N(\omega))),
+\]
+where $N(\omega)$ is the Fibonacci value of $\omega$, $Z(N(\omega))$ is its
+Zeckendorf expansion, and $\pi_m$ records the first $m$ digits.  Thus
+$\Fold_m$ replaces an arbitrary binary window by its canonical admissible
+representative in Fibonacci numeration.
+
+Two questions motivate the paper.  The first is local: can $\Fold_m$ be
+described by a finite normalization procedure, and how does it behave when the
+window length changes?  The second is reconstructive: if one slides this
+normalization along a bi-infinite binary sequence, how much of the original
+sequence can be recovered from the resulting list of overlapping folded
+windows?  In number-theoretic terms, the second question asks whether the
+vector of overlapping local Fibonacci weighted sums modulo $F_{m+2}$
+determines an arbitrary binary block uniquely, and if so, what the sharp
+observation length is.
+
+We answer the first question by showing that $\Fold_m$ is the normal-form map
+of a finite terminating confluent rewrite system; see
+Proposition~\ref{prop:rewrite-newman} and
+Corollary~\ref{cor:fold-order-independent}.  We also prove that the maps
+$\Fold_m$ are compatible with restriction in the window length.  In particular,
+the finite admissible languages form an inverse system whose limit is the
+one-sided golden-mean shift; see Theorem~\ref{thm:inverse-limit-golden}.
+
+To study the second question, for each $m$ we consider the sliding block code
+\[
+\Phi_m:\{0,1\}^{\ZZ}\to X_m^{\ZZ}
+\]
+with image $Y_m$, the language of overlapping normalized windows.  The main
+result is that for every $m\ge 3$ and every $n\ge m$, each admissible block of
+$n$ consecutive folded symbols has a unique raw lift of length $n+m-1$.  Thus
+the threshold $m$ is exactly the point at which local normalization becomes
+lossless on finite blocks.  This yields the block count
+\[
+\lvert\mathcal L_n(Y_m)\rvert=2^{n+m-1}
+\qquad (n\ge m),
+\]
+and gives a family of local inverse rules obtained by reading any prescribed
+coordinate of the unique length-$m$ lift.  The same block bijection also
+describes the Bernoulli measures pushed forward from the full two-shift; see
+Theorem~\ref{thm:block-bijection-threshold},
+Corollary~\ref{cor:block-counts-threshold},
+Corollary~\ref{cor:higher-block-identification}, and
+Theorems~\ref{thm:Phi-m-conjugacy-threshold},
+\ref{thm:bernoulli-transport-cylinder-law}, and
+\ref{thm:exact-markov-order-bernoulli}.  At the one-sided endpoint this
+recovers an inverse with memory $m-1$, and no smaller one-sided memory
+suffices; see Corollary~\ref{cor:Phi-m-memory-threshold-exact}.
+
+Thus the same integer $m$ governs several different aspects of the problem.  It
+is the first scale at which overlapping folded windows determine the
+underlying raw block, the Markov memory of the push-forward of Bernoulli
+measures, the minimal synchronizing length of the natural presentation, and
+the size parameter of the right Fischer cover.  The symbolic-dynamical
+language serves mainly to record these consequences efficiently.
+
+\subsection*{Related work}
+
+The arithmetic background begins with Zeckendorf's theorem
+\cite{Zeckendorf1972}.  Finite-state aspects of numeration systems were
+developed systematically by Frougny and collaborators
+\cite{Frougny1991FibonacciFiniteAutomata,Frougny1992NumbersAutomata,
+Frougny1999OnlineAddition,FrougnySolomyak1992}, while algorithmic forms of
+Zeckendorf arithmetic, including carry propagation and parallel normalization,
+were studied in \cite{AhlbachUsatineFrougnyPippenger2013}.  For broader
+numeration settings one may compare Ostrowski systems and their
+automata-theoretic realizations
+\cite{Berthe2001Ostrowski,HieronymiTerry2018OstrowskiAddition,
+BaranwalaSchaefferShallit2021OstrowskiAutomatic}, as well as more general work
+on non-standard and linear-recurrence numeration systems with finite-memory
+automaton structure and normalization algorithms
+\cite{AlloucheShallit2003AutomaticSequences,
+FrougnyPelantovaSvobodova2013MinimalDigitSets,
+Frougny2012NumbersAsStreamsLeiden,LegerskySvobodova2018EWM}.  Recent work has
+also connected Zeckendorf representations with sequence-level statistical and
+dynamical phenomena; see \cite{ManiboMiroRustTadeo2020ZeckendorfMixing}.
+
+The distributional and combinatorial structure of Zeckendorf decompositions has
+been investigated by Grabner, Tichy, and collaborators from the viewpoint of
+digital problems and asymptotic distribution of digit sums in non-standard
+numeration systems \cite{GrabnerTichy1995FibonacciDigitalSums}; by Miller and
+collaborators, who established Gaussian behavior for the number of summands in
+Zeckendorf representations \cite{MillerWang2012GaussianZeckendorf}; and from the
+ergodic-theoretic perspective connecting beta-expansions and Parry conditions to
+symbolic dynamics of numeration \cite{Parry1960BetaExpansions,
+Renyi1957Representations}.
+
+These strands of literature address different questions: recognition of legal
+expansions, arithmetic operations in non-standard numeration systems,
+automaticity, distributional behavior, or digit-sum statistics.  The present
+paper does not study addition, parallel arithmetic, or asymptotic digit
+statistics.  Instead it fixes a window length $m$, normalizes every window
+locally in Fibonacci numeration, and asks when the original binary block can be
+reconstructed exactly from the resulting local Zeckendorf data.  Equivalently,
+the maps $\Phi_m$ form a family of finite-window factor maps attached to
+Fibonacci numeration, and the later finite-state constructions record the
+corresponding determinization data.
+
+More concretely, the work of Frougny and collaborators shows how finite automata
+recognize admissible expansions and implement normalization or arithmetic in
+Fibonacci and related numeration systems.  Our question is different.  We begin
+with an arbitrary binary block, apply truncated Zeckendorf normalization on
+every overlapping window of length $m$, and ask when those local normal forms
+still determine the original block exactly.  Unlike the above literature, the
+present paper proves a sharp local congruence rigidity threshold and derives its
+exact consequences for representation counting and random local residue
+distributions.  We are not aware of an earlier result, even in the Fibonacci
+setting, that identifies this sharp observation length for the recoverability
+problem or the corresponding threshold in the natural deterministic
+presentation.
+
+This threshold is of arithmetic interest because it measures how much
+information survives finite truncation of Zeckendorf normalization.  The answer
+is not merely qualitative.  Once the window length reaches $m$, every
+admissible folded block of length $n\ge m$ corresponds to exactly one binary
+block of length $n+m-1$, so
+$\lvert\mathcal L_n(Y_m)\rvert=2^{n+m-1}$.  The same bijection gives explicit
+push-forward formulas for Bernoulli measures and an exact $m$-step Markov law
+on the folded alphabet.
+
+In purely number-theoretic terms, the main results can be stated as follows.
+For each binary block $\omega=\omega_1\cdots\omega_L\in\{0,1\}^L$ with
+$L=n+m-1$, the $t$-th local Fibonacci sum is
+$S_t^{(m)}(\omega):=\sum_{j=0}^{m-1}\omega_{t+j}F_{j+2}$, and its residue
+modulo $F_{m+2}$ is
+$R_t^{(m)}(\omega):=S_t^{(m)}(\omega)\bmod F_{m+2}$.  The residue vector
+$\mathcal R_{m,n}(\omega):=(R_1^{(m)}(\omega),\ldots,R_n^{(m)}(\omega))$
+determines $\omega$ uniquely.  The symbolic-dynamical language provides a
+convenient framework for organizing the proofs of this and the following
+consequences.
+
+\begin{theorem}[Main results]
+\label{thm:intro-main}
+For every $m\ge 3$, the following statements hold.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item\label{item:main-congruence-rigidity}
+\textup{(Local Fibonacci congruence rigidity.)}
+For every $n\ge m$ and $L=n+m-1$, the map
+$\mathcal R_{m,n}:\{0,1\}^L\to\{0,1,\ldots,F_{m+2}-1\}^n$ that sends a binary
+block to its vector of overlapping local Fibonacci sums modulo $F_{m+2}$ is
+injective.  Equivalently, the congruence system
+\[
+\sum_{j=0}^{m-1}\omega_{t+j}F_{j+2}\equiv r_t\pmod{F_{m+2}}
+\qquad (1\le t\le n)
+\]
+has at most one solution $\omega\in\{0,1\}^L$ for each
+$(r_1,\ldots,r_n)\in\{0,1,\ldots,F_{m+2}-1\}^n$.
+\item\label{item:main-block-bijection}
+\textup{(Exact block reconstruction.)}
+For every $n\ge m$, every admissible block of $n$ consecutive folded
+symbols has a unique raw lift of length $n+m-1$.  Equivalently, the block map
+$B_{m,n}:\{0,1\}^{n+m-1}\to\mathcal L_n(Y_m)$ is a bijection.
+Consequently
+$\lvert\mathcal L_n(Y_m)\rvert=2^{n+m-1}$ for every $n\ge m$, and the
+$n$-block presentation of the normalized language is canonically the
+$(n+m-1)$-block presentation of the full binary shift.
+\item\label{item:main-bit-recovery}
+\textup{(Exact bit recovery from residue windows.)}
+Write $\mathfrak{R}_{m,m}$ for the set of realizable length-$m$ residue
+vectors.  For each $0\le s\le m-1$, there exists a function
+$\rho_{m,s}:\mathfrak{R}_{m,m}\to\{0,1\}$ such that
+\[
+\omega_{t+s}=\rho_{m,s}\bigl(R_t^{(m)}(\omega),\ldots,R_{t+m-1}^{(m)}(\omega)\bigr)
+\]
+for every $\omega\in\{0,1\}^{n+m-1}$ and every valid index $t$.  The minimum
+number of consecutive residues required for any one-sided recovery rule is
+exactly $m$.
+\item\label{item:main-bernoulli}
+\textup{(Explicit law and exact Markov order.)}
+For every $p\in(0,1)$, if $\nu_p$ denotes the Bernoulli product law on
+$\{0,1\}^{\ZZ}$ and $\mu_{m,p}:=(\Phi_m)_*\nu_p$, then every cylinder
+$[a]_0\subset Y_m$ with $a\in\mathcal L_n(Y_m)$ and $n\ge m$ satisfies the
+explicit formula
+\[
+\mu_{m,p}([a]_0)=p^{|\omega(a)|_1}(1-p)^{n+m-1-|\omega(a)|_1},
+\qquad
+\omega(a):=B_{m,n}^{-1}(a).
+\]
+Hence
+$H_{\mu_{m,p}}(Y_0^{n-1})=(n+m-1)h_2(p)$, the excess entropy equals
+$(m-1)h_2(p)$, and the coordinate process under $\mu_{m,p}$ is exact
+$m$-step Markov.  The random local Fibonacci residue process
+$R_t:=(\sum_{j=0}^{m-1}X_{t+j}F_{j+2})\bmod F_{m+2}$ under i.i.d.\
+Bernoulli$(p)$ input is itself an exact $m$-step Markov process.
+\item\label{item:main-inverse}
+\textup{(Sliding block inverses.)}
+Exact recovery from overlapping normalized windows is possible from any
+length-$m$ observation window: for each $0\le r\le m-1$ there is a sliding
+block inverse with memory $r$ and anticipation $m-1-r$.  At the one-sided
+endpoint $r=m-1$, no smaller memory suffices.
+\item\label{item:main-fischer}
+\textup{(Fischer cover and presentation complexity.)}
+Over the natural alphabet $X_m$, the canonical minimal right-resolving
+presentation of $Y_m$ is the explicit suffix graph $G_m$, so it has exactly
+$2^{m-1}$ states and $2^m$ edges.  Since $\lvert X_m\rvert=F_{m+2}$, the
+natural deterministic presentation size grows exponentially relative to the
+alphabet size.
+\end{enumerate}
+\end{theorem}
+
+Taken together, these results show that a single integer controls the
+finite-window arithmetic of the problem: it is the point at which local
+Zeckendorf normalization becomes lossless on blocks, the sharp threshold for
+local Fibonacci congruence rigidity, the exact Markov memory of the random
+residue process, and the scale parameter of the natural deterministic
+presentation; see again
+Corollary~\ref{cor:local-complexity-scale-coincidence} and
+Theorem~\ref{thm:natural-state-complexity-gap}.
+
+These statements are proved in
+Theorem~\ref{thm:block-bijection-threshold},
+Corollary~\ref{cor:block-counts-threshold},
+Corollary~\ref{cor:higher-block-identification},
+Theorem~\ref{thm:Phi-m-conjugacy-threshold},
+Theorem~\ref{thm:bernoulli-transport-cylinder-law},
+Corollary~\ref{cor:exact-entropy-profile},
+Theorem~\ref{thm:exact-markov-order-bernoulli},
+Corollary~\ref{cor:Phi-m-memory-threshold-exact},
+Theorem~\ref{thm:Y-m-exact-SFT-order},
+Corollary~\ref{cor:uniform-synchronizing-length},
+Proposition~\ref{prop:ambiguity-shell-nilpotency}, and
+Corollary~\ref{cor:G-m-fischer-cover}, together with
+Theorem~\ref{thm:natural-state-complexity-gap}.
+
+\paragraph{Sketch of the reconstruction mechanism.}
+The inverse is built in two steps.  First, the pairwise overlap maps
+$\Theta_m$ compress adjacent folded symbols to the fold of their common raw
+overlap; iterating this reduction through a block
+$a_1\cdots a_m\in\mathcal L_m(Y_m)$ yields the central bit
+$\Theta_{m,m}(a_1\cdots a_m)$.  Second, once this central bit and the folded
+inner overlaps are known, the one-step left- and right-resolving properties of
+$G_m$ force the neighboring bits uniquely, so an outward induction recovers the
+entire raw lift of length $2m-1$.  The inverse family in Section~7 simply
+records the same reconstruction after choosing which coordinate of the
+recovered length-$m$ raw window is read as the output bit.
+
+The paper is organized as follows.  Sections~2 and~3 develop finite-window
+normalization and its rewrite description.  Section~4 proves compatibility in
+the window length, Section~5 formulates the overlap-decoding problem,
+Section~6 records the explicit finite-state presentation used later, and
+Section~7 proves the block reconstruction theorem, derives the measure-theoretic
+consequences, and then studies the natural right-resolving presentation of the
+folded language.  Section~8 reformulates the main results in purely
+number-theoretic terms: local Fibonacci congruence rigidity, representation
+fingerprint separation, exact bit recovery from residue windows, and the
+precise distribution and Markov order of random local residue vectors.
+

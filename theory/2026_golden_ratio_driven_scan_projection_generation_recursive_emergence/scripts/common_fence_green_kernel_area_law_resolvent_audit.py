@@ -72,7 +72,8 @@ def bulk_integral_numeric(t: float, n: int = 200_000) -> float:
     theta = np.linspace(eps, math.pi, num=n, dtype=float)
     a = 1.0 + t / (4.0 * (np.sin(theta / 2.0) ** 2))
     y = np.log(a)
-    return float((1.0 / math.pi) * np.trapezoid(y, theta))
+    trapezoid = getattr(np, "trapezoid", np.trapz)
+    return float((1.0 / math.pi) * trapezoid(y, theta))
 
 
 def tr_resolvent_sum(k: int, t: float) -> float:

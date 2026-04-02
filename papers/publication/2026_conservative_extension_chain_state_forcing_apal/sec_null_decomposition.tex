@@ -1,0 +1,580 @@
+\section{Local Objects, Structural Absence, and Gluing Obstructions}\label{sec:null-decomposition}
+
+We next distinguish admissible reference from objecthood. An admitted reference need not yet determine a global object, but it may still support local witnesses and compatible local families. This local-to-global gap is the source of the structural phenomena studied in the present section.
+
+The following standing hypothesis is assumed throughout the section and is cited explicitly in all results that depend on it.
+
+\begin{enumerate}[label=\textup{(RC)},nosep,leftmargin=3em]
+\item\label{hyp:refinement-conservation} \emph{Refinement conservation.} If $q\le p$, then admitted references, covers, and compatible local families at $q$ restrict functorially to those at $p$, and a visible value class already uniquely determined at $p$ is not split by further refinement.
+\end{enumerate}
+
+\subsection{References and local objects}
+
+Fix a family of referenceable sorts
+\[
+S_{\mathrm{ref}}\subseteq S.
+\]
+For each $s\in S_{\mathrm{ref}}$, the language contains a reference sort $\mathsf{Ref}_s$ and an admissibility predicate $\Adm_s(\cdot)$.
+
+\begin{definition}[Reference classes]\label{def:reference-classes}
+Let $p$ be a state and let $r,r'$ be reference terms of sort $\mathsf{Ref}_s$. Define
+\[
+r\equiv_p r'
+\quad:\Longleftrightarrow\quad
+M,p\Vdash (r=r').
+\]
+The set of admitted reference classes at $p$ is
+\[
+\mathcal{R}_s(p):=\{[r]_p\mid M,p\Vdash \Adm_s(r)\}.
+\]
+\end{definition}
+
+\begin{definition}[Local reference frame]\label{def:local-reference-frame}
+For a state $p$ and a referenceable sort $s$, a \emph{local reference frame} is a triple
+\[
+\mathcal{B}_{p,s}=\bigl(\mathcal{R}_s(p),\sqsubseteq_{p,s},\Cov_{p,s}\bigr),
+\]
+where $\sqsubseteq_{p,s}$ is a refinement relation on $\mathcal{R}_s(p)$ and $\Cov_{p,s}$ assigns to each $a\in\mathcal{R}_s(p)$ a collection of covering families
+\[
+\{a_i\to a\}_{i\in I},
+\qquad
+a_i\sqsubseteq_{p,s} a.
+\]
+We assume that every $a$ carries the trivial cover $\{a\to a\}$.
+\end{definition}
+
+\begin{definition}[Local object functor]\label{def:local-object-functor}
+A \emph{local object functor} on $(p,s)$ is a contravariant functor
+\[
+F_{p,s}:\mathcal{B}_{p,s}^{op}\to\mathsf{Set}.
+\]
+If $b\sqsubseteq_{p,s} a$, the induced restriction map is denoted by
+\[
+\res_b^a:F_{p,s}(a)\to F_{p,s}(b).
+\]
+\end{definition}
+
+\begin{definition}[Three existence levels]\label{def:existence-levels}
+Let $r:\mathsf{Ref}_s$ and assume $M,p\Vdash \Adm_s(r)$. Write $a=[r]_p$.
+\begin{enumerate}[label=(\roman*),nosep]
+\item $M,p\Vdash \LocSec_s(r)$ if there exists a cover $\{a_i\to a\}_{i\in I}\in\Cov_{p,s}(a)$ such that $F_{p,s}(a_i)\neq\varnothing$ for every $i\in I$.
+\item $M,p\Vdash \CompSec_s(r)$ if there exist a cover $\{a_i\to a\}_{i\in I}$ and sections $\sigma_i\in F_{p,s}(a_i)$ such that for every common refinement $c\sqsubseteq_{p,s} a_i,a_j$,
+\[
+\res_c^{a_i}(\sigma_i)=\res_c^{a_j}(\sigma_j).
+\]
+\item $M,p\Vdash \Sec_s(r)$ if $F_{p,s}(a)\neq\varnothing$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[Global sections yield compatible local sections]\label{prop:global-implies-compatible-local}
+If $M,p\Vdash \Sec_s(r)$, then
+\[
+M,p\Vdash \CompSec_s(r)
+\qquad\text{and}\qquad
+M,p\Vdash \LocSec_s(r).
+\]
+\end{proposition}
+
+\begin{proof}
+Let $a=[r]_p$ and choose $\sigma\in F_{p,s}(a)$. The trivial cover $\{a\to a\}$ is available by \Cref{def:local-reference-frame}. The singleton family $(\sigma)$ is therefore a compatible local family, so both compatible local sectionability and local sectionability follow immediately.
+\end{proof}
+
+\subsection{Sheafification and gluing failure}
+
+For fixed $(p,s)$, the local reference frame of \Cref{def:local-reference-frame} determines a site
+\[
+\mathcal{C}_{p,s}:=(\mathcal{B}_{p,s},\Cov_{p,s}),
+\]
+and the local object functor of \Cref{def:local-object-functor} determines a presheaf
+\[
+F_{p,s}\in\mathbf{PSh}(\mathcal{B}_{p,s}).
+\]
+Write
+\[
+a_{p,s}:\mathbf{PSh}(\mathcal{B}_{p,s})\to\mathbf{Sh}(\mathcal{C}_{p,s})
+\]
+for the associated sheafification functor.
+
+\begin{theorem}[Sheafification characterizes compatible local sectionability]\label{thm:sheafification-characterization}
+Let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$. Then
+\[
+M,p\Vdash \CompSec_s(r)
+\quad\Longleftrightarrow\quad
+\bigl(a_{p,s}F_{p,s}\bigr)(a)\neq\varnothing.
+\]
+\end{theorem}
+
+\begin{proof}
+By the standard site-theoretic description of sheafification, a section of $a_{p,s}F_{p,s}$ at $a$ is represented by a matching family over some covering sieve of $a$, equivalently over some covering family of $a$ \cite[Chap.~III, \S2]{MacLaneMoerdijk1994}, \cite[Part~B2.2]{Johnstone2002}. In the present setting, such a matching family is exactly a compatible local family as in \Cref{def:existence-levels}(ii). Hence the sheafified fiber is nonempty exactly when $r$ is compatibly locally sectionable at $p$.
+\end{proof}
+
+\begin{corollary}[Sheaf condition at a reference]\label{cor:sheaf-local-to-global}
+If $F_{p,s}$ is already a sheaf at $a=[r]_p$, then
+\[
+M,p\Vdash \CompSec_s(r)
+\quad\Longleftrightarrow\quad
+M,p\Vdash \Sec_s(r).
+\]
+\end{corollary}
+
+\begin{proof}
+If $F_{p,s}$ is already a sheaf at $a$, then the unit $F_{p,s}\to a_{p,s}F_{p,s}$ is an isomorphism at $a$. The claim therefore follows from \Cref{thm:sheafification-characterization}.
+\end{proof}
+
+\begin{corollary}[Sheafification removes gluing failure]\label{cor:sheafification-removes-glue}
+Let $\Sec_s^{\sharp}(r)$ denote global sectionability computed with the sheafified local object functor $a_{p,s}F_{p,s}$. Then
+\[
+M,p\Vdash \CompSec_s(r)
+\quad\Longleftrightarrow\quad
+M,p\Vdash \Sec_s^{\sharp}(r).
+\]
+In particular, no admitted reference remains in gluing failure after sheafification.
+\end{corollary}
+
+\begin{proof}
+This is \Cref{thm:sheafification-characterization} rewritten for the sheaf $a_{p,s}F_{p,s}$. Once the presheaf has been replaced by a sheaf, compatible local existence and global existence coincide.
+\end{proof}
+
+\subsection{Realization prestacks and connected components}
+
+The presheaf $F_{p,s}$ records only the isomorphism classes of local realizations. To pass from compatible local families to gerbes and cohomology, one needs a groupoid-valued lift whose connected components recover $F_{p,s}$ after sheafification. The first point is purely categorical: once an abelian band has been fixed on the slice site, such lifts always exist. The substantive issue is therefore not bare existence, but whether one has chosen a lift whose stackification still reflects the intended gluing semantics at the terminal fibre.
+
+\begin{definition}[Realization prestack and stackification]\label{def:realization-prestack}
+Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, and write
+\[
+a=[r]_p,
+\qquad
+\mathcal C_a:=\mathcal C_{p,s}/a.
+\]
+A \emph{realization prestack} for $r$ at $p$ is a category fibred in groupoids
+\[
+\mathfrak P_r\to \mathcal C_a
+\]
+such that:
+\begin{enumerate}[label=(\roman*),nosep]
+\item the presheaf of isomorphism classes
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r):U\longmapsto \Ob(\mathfrak P_r(U))/\!\cong
+\]
+is identified with the restriction of the local object functor,
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)\cong F_{p,s}|_{\mathcal C_a};
+\]
+\item for every object $U$ of $\mathcal C_a$ and every $x\in \mathfrak P_r(U)$, the automorphism sheaf
+\[
+\underline{\mathrm{Aut}}(x)
+\]
+on $\mathcal C_a/U$ is functorially identified with the restriction of a fixed abelian sheaf $\Band$ on $\mathcal C_a$.
+\end{enumerate}
+Write
+\[
+\mathfrak L_r:=a(\mathfrak P_r)
+\]
+for the stackification of $\mathfrak P_r$ in groupoids \cite[Tag 02ZP]{StacksProject}.
+\end{definition}
+
+\begin{proposition}[Canonical split realization prestack]\label{prop:split-realization-prestack}
+Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, write
+\[
+a=[r]_p,
+\qquad
+\mathcal C_a:=\mathcal C_{p,s}/a,
+\]
+and let $\Band$ be any abelian sheaf on $\mathcal C_a$. Then there exists a realization prestack
+\[
+\mathfrak P_r^{\mathrm{split}}\to \mathcal C_a
+\]
+with band $\Band$ such that
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r^{\mathrm{split}})
+\cong
+F_{p,s}|_{\mathcal C_a}.
+\]
+Explicitly, for each object $U$ of $\mathcal C_a$, the fibre
+\[
+\mathfrak P_r^{\mathrm{split}}(U)
+\]
+has object set $F_{p,s}(U)$ and morphism sets
+\[
+\mathrm{Hom}_{\mathfrak P_r^{\mathrm{split}}(U)}(\sigma,\tau)
+:=
+\begin{cases}
+\Band(U), & \sigma=\tau,\\
+\varnothing, & \sigma\neq\tau,
+\end{cases}
+\]
+with composition given by the group law on $\Band(U)$.
+\end{proposition}
+
+\begin{proof}
+For a morphism $f:V\to U$ in $\mathcal C_a$, define pullback on objects by
+\[
+f^*(\sigma):=\res_V^U(\sigma)\in F_{p,s}(V)
+\]
+and on automorphisms by the sheaf restriction
+\[
+f^*:\Band(U)\to \Band(V).
+\]
+This gives a pseudofunctor $\mathcal C_a^{op}\to \mathbf{Grpd}$ and hence a category fibred in groupoids over $\mathcal C_a$. For any two objects $\sigma,\tau\in \mathfrak P_r^{\mathrm{split}}(U)$, the isomorphism presheaf on $\mathcal C_a/U$ is either $\Band|_U$ or the empty presheaf. Since $\Band$ is a sheaf and the empty presheaf is also a sheaf, $\mathfrak P_r^{\mathrm{split}}$ is a prestack.
+
+By construction, two objects of $\mathfrak P_r^{\mathrm{split}}(U)$ are isomorphic if and only if they are equal as elements of $F_{p,s}(U)$. Therefore
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r^{\mathrm{split}})(U)\cong F_{p,s}(U)
+\]
+for every $U$, giving condition \textup{(i)} of \Cref{def:realization-prestack}. Condition \textup{(ii)} holds because the automorphism sheaf of every object $\sigma$ is exactly $\Band|_U$.
+\end{proof}
+
+\begin{proposition}[Components of the stackification]\label{prop:stackification-components}
+In the setting of \Cref{def:realization-prestack}, there is a canonical isomorphism of sheaves on $\mathcal C_a$:
+\[
+\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_a}.
+\]
+\end{proposition}
+
+\begin{proof}
+By stackification, the morphism presheaves of $\mathfrak P_r$ are sheafified and every object of $\mathfrak L_r$ is locally in the essential image of $\mathfrak P_r\to \mathfrak L_r$ \cite[Tag 02ZP]{StacksProject}. Passing to isomorphism classes therefore shows that $\pi_0(\mathfrak L_r)$ is the sheafification of $\pi_0^{\mathrm{pre}}(\mathfrak P_r)$. Since stacks in setoids are precisely sheaves of sets \cite[Tag 042Y]{StacksProject}, we obtain
+\[
+\pi_0(\mathfrak L_r)\cong a\bigl(\pi_0^{\mathrm{pre}}(\mathfrak P_r)\bigr).
+\]
+Using \Cref{def:realization-prestack}(i), this becomes
+\[
+\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_a}.
+\qedhere
+\]
+\end{proof}
+
+\begin{definition}[Global conservativity at the terminal fibre]\label{def:global-conservativity}
+In the setting of \Cref{def:realization-prestack}, let
+\[
+\iota_r:\mathfrak P_r\to \mathfrak L_r:=a(\mathfrak P_r)
+\]
+be the stackification morphism. We say that $\mathfrak P_r$ is \emph{globally conservative at $a$} if the induced functor on the terminal fibre
+\[
+(\iota_r)_a:(\mathfrak P_r)_a\to (\mathfrak L_r)_a
+\]
+is essentially surjective.
+\end{definition}
+
+\begin{proposition}[No new global objects at $a$]\label{prop:no-new-global-objects}
+Assume global conservativity at $a$ in the sense of \Cref{def:global-conservativity}. Then
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+\mathfrak L_r(a)\neq\varnothing.
+\]
+\end{proposition}
+
+\begin{proof}
+By \Cref{def:existence-levels} and \Cref{def:realization-prestack}(i),
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+F_{p,s}(a)\neq\varnothing
+\quad\Longleftrightarrow\quad
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)(a)\neq\varnothing
+\quad\Longleftrightarrow\quad
+(\mathfrak P_r)_a\neq\varnothing.
+\]
+If $(\mathfrak P_r)_a\neq\varnothing$, choose $y\in (\mathfrak P_r)_a$. Then $\iota_r(y)\in \mathfrak L_r(a)$, so $\mathfrak L_r(a)\neq\varnothing$. Conversely, if $x\in \mathfrak L_r(a)$, essential surjectivity of $(\iota_r)_a$ yields $y\in (\mathfrak P_r)_a$ with $\iota_r(y)\cong x$, so $(\mathfrak P_r)_a\neq\varnothing$.
+\end{proof}
+
+\begin{remark}[What remains conditional]\label{rem:gluing-sensitive-lifts}
+\Cref{prop:split-realization-prestack} shows that admitting some banded realization prestack is not an additional existence burden: once a band has been fixed, a canonical split lift is always available. What remains conditional in the later branch-obstruction theory is the choice of a \emph{gluing-sensitive} lift, namely a realization prestack whose stackification is globally conservative at $a$ and whose component gerbes satisfy the vanishing hypotheses needed to produce branch obstruction classes. The substantive semantic claims therefore concern which lifts preserve the intended local-to-global content, not whether a formal groupoid-valued lift exists at all.
+\end{remark}
+
+\subsection{Visible value classes and typed readouts}
+
+\begin{definition}[Visible value classes]\label{def:visible-value-classes}
+Let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$. A \emph{visible presentation} of a value at $r$ is a compatible local family
+\[
+\bigl(\{a_i\to a\}_{i\in I},(\sigma_i)_{i\in I}\bigr)
+\]
+as in \Cref{def:existence-levels}(ii). Two visible presentations are called \emph{value-equivalent} if after passage to a common refinement of their covers, the restricted local sections agree pointwise. A \emph{visible value class} is an equivalence class of visible presentations. The set of visible value classes of $r$ at $p$ is denoted by $\Vis_{p,s}(r)$.
+\end{definition}
+
+\begin{theorem}[Visible value classes as global connected components]\label{thm:visible-value-components}
+Assume that $r$ admits a realization prestack in the sense of \Cref{def:realization-prestack}. Then
+\[
+\Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a)\cong \pi_0(\mathfrak L_r)(a).
+\]
+\end{theorem}
+
+\begin{proof}
+By the standard description of sheafification on a site, a section of $a_{p,s}F_{p,s}$ at $a$ is represented by a matching family over a cover of $a$, modulo passage to common refinements. This is exactly the equivalence relation imposed in \Cref{def:visible-value-classes}. Hence
+\[
+\Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a).
+\]
+The second identification is \Cref{prop:stackification-components} evaluated at $a$.
+\end{proof}
+
+\begin{definition}[Typed readout]\label{def:typed-readout}
+For a reference $r:\mathsf{Ref}_s$ at a state $p$, define the typed readout
+\[
+\Read_{p,s}(r)
+\]
+by the following cases:
+\[
+\Read_{p,s}(r)=
+\begin{cases}
+\text{undefined}, & M,p\nVdash \Adm_s(r),\\[0.5ex]
+\Null, & M,p\Vdash \Adm_s(r)\ \text{and}\ \Vis_{p,s}(r)=\varnothing,\\[0.5ex]
+v, & \Vis_{p,s}(r)=\{v\},\\[0.5ex]
+\text{undefined}, & |\Vis_{p,s}(r)|>1.
+\end{cases}
+\]
+\end{definition}
+
+\begin{proposition}[Address before value]\label{prop:address-before-value}
+If
+\[
+\Read_{p,s}(r)=v
+\qquad\text{with}\qquad
+v\neq \Null,
+\]
+then
+\[
+M,p\Vdash \Adm_s(r)
+\qquad\text{and}\qquad
+M,p\Vdash \CompSec_s(r).
+\]
+\end{proposition}
+
+\begin{proof}
+By \Cref{def:typed-readout}, a non-null readout can occur only in the singleton case $\Vis_{p,s}(r)=\{v\}$. By \Cref{def:visible-value-classes}, every element of $\Vis_{p,s}(r)$ is represented by a compatible local family, so $M,p\Vdash \CompSec_s(r)$. Admissibility is built into the definition of $\Vis_{p,s}(r)$, since visible value classes are defined only for admitted references.
+\end{proof}
+
+\begin{corollary}[Non-null readout criterion]\label{cor:nonnull-readout-criterion}
+If
+\[
+M,p\Vdash \Adm_s(r)
+\qquad\text{and}\qquad
+\Vis_{p,s}(r)=\{v\},
+\]
+then
+\[
+\Read_{p,s}(r)=v.
+\]
+\end{corollary}
+
+\begin{proof}
+Immediate from \Cref{def:typed-readout}.
+\end{proof}
+
+\begin{proposition}[Refinement stability of defined readouts]\label{prop:typed-readout-persistence}
+Let $q\le p$, and suppose
+\[
+\Read_{p,s}(r)=v
+\qquad\text{with}\qquad
+v\neq \Null.
+\]
+Then
+\[
+\Read_{q,s}(r)=v.
+\]
+\end{proposition}
+
+\begin{proof}
+Since $v\neq\Null$, the readout at $p$ is represented by a unique visible value class. By the refinement-conservation hypothesis~\ref{hyp:refinement-conservation}, compatible local families restrict functorially from $q$ to $p$, and a uniquely determined visible class at $p$ cannot split under further refinement. Hence the same class $v$ remains the unique visible class at $q$, so \Cref{def:typed-readout} gives $\Read_{q,s}(r)=v$.
+\end{proof}
+
+\subsection{Structural absence}
+
+\begin{definition}[Undefined, total, and null]\label{def:undef-total-null}
+For $r:\mathsf{Ref}_s$, define
+\[
+\Undef_s(r):=\neg\Adm_s(r),\qquad
+\Tot_s(r):=\Adm_s(r)\land \Sec_s(r),\qquad
+\Null_s(r):=\Adm_s(r)\land \neg\Sec_s(r).
+\]
+\end{definition}
+
+\begin{definition}[The three null modes]\label{def:null-failure-modes}
+For $r:\mathsf{Ref}_s$, define
+\[
+\Null^{\mathrm{loc}}_s(r):=\Adm_s(r)\land \neg\LocSec_s(r),
+\]
+\[
+\Null^{\mathrm{cmp}}_s(r):=\Adm_s(r)\land \LocSec_s(r)\land \neg\CompSec_s(r),
+\]
+\[
+\Null^{\mathrm{glue}}_s(r):=\Adm_s(r)\land \CompSec_s(r)\land \neg\Sec_s(r).
+\]
+\end{definition}
+
+\begin{proposition}[The three modes lie inside null]\label{prop:null-modes-imply-null}
+Each of $\Null^{\mathrm{loc}}_s(r)$, $\Null^{\mathrm{cmp}}_s(r)$, and $\Null^{\mathrm{glue}}_s(r)$ implies $\Null_s(r)$.
+\end{proposition}
+
+\begin{proof}
+The gluing case is immediate from \Cref{def:null-failure-modes}. In the local and compatibility cases, a global section would imply compatible local sectionability and local sectionability by \Cref{prop:global-implies-compatible-local}, contradicting the defining negations.
+\end{proof}
+
+\begin{proposition}[Mutual exclusivity of the null modes]\label{prop:null-modes-exclusive}
+No two distinct null modes can hold simultaneously for the same reference at the same state.
+\end{proposition}
+
+\begin{proof}
+The mode $\Null^{\mathrm{loc}}_s(r)$ contains $\neg\LocSec_s(r)$, while the other two contain $\LocSec_s(r)$. The mode $\Null^{\mathrm{cmp}}_s(r)$ contains $\neg\CompSec_s(r)$, while $\Null^{\mathrm{glue}}_s(r)$ contains $\CompSec_s(r)$.
+\end{proof}
+
+\begin{definition}[Decomposition decidability]\label{def:decomposition-decidability}
+We say that $p$ has \emph{decomposition decidability} for $r:\mathsf{Ref}_s$ if both $\LocSec_s(r)$ and $\CompSec_s(r)$ are decided at $p$.
+\end{definition}
+
+\begin{proposition}[Null trichotomy]\label{prop:null-trichotomy}
+If $p$ has decomposition decidability for $r:\mathsf{Ref}_s$, then
+\[
+M,p\Vdash \Null_s(r)
+\]
+if and only if exactly one of
+\[
+M,p\Vdash \Null^{\mathrm{loc}}_s(r),\qquad
+M,p\Vdash \Null^{\mathrm{cmp}}_s(r),\qquad
+M,p\Vdash \Null^{\mathrm{glue}}_s(r)
+\]
+holds.
+\end{proposition}
+
+\begin{proof}
+Assume $M,p\Vdash \Null_s(r)$. Then $r$ is admitted but not globally sectionable. Since $\LocSec_s(r)$ and $\CompSec_s(r)$ are decided at $p$, there are three cases: either local sectionability already fails, local sectionability holds but compatibility fails, or compatibility holds while global sectionability fails. These are exactly the three null modes. The converse follows from \Cref{prop:null-modes-imply-null}, and uniqueness is \Cref{prop:null-modes-exclusive}.
+\end{proof}
+
+\begin{theorem}[Classification after refinement]\label{thm:null-classification-under-refinement}
+Let $q\le p$ and suppose
+\[
+M,p\Vdash \Null_s(r).
+\]
+If $q$ has decomposition decidability for $r$, then exactly one null mode holds at $q$.
+\end{theorem}
+
+\begin{proof}
+By persistence of forcing, $M,q\Vdash \Null_s(r)$. The hypothesis gives decomposition decidability at $q$, so \Cref{prop:null-trichotomy} applies at the refined state $q$.
+\end{proof}
+
+\begin{proposition}[A finite model for the three absence modes]\label{prop:finite-three-mode-model}
+There exist a finite state $p$ and admitted references
+\[
+r_{\mathrm{loc}},\qquad r_{\mathrm{cmp}},\qquad r_{\mathrm{glue}}
+\]
+of one referenceable sort such that
+\[
+M,p\Vdash \Null^{\mathrm{loc}}_s(r_{\mathrm{loc}}),\qquad
+M,p\Vdash \Null^{\mathrm{cmp}}_s(r_{\mathrm{cmp}}),\qquad
+M,p\Vdash \Null^{\mathrm{glue}}_s(r_{\mathrm{glue}}).
+\]
+\end{proposition}
+
+\begin{proof}
+Take a single state $p$ and one referenceable sort $s$. Let the local reference frame be the disjoint union of three rooted components.
+
+For $r_{\mathrm{loc}}$, use one object $a_{\mathrm{loc}}$ with only the trivial cover and define
+\[
+F(a_{\mathrm{loc}})=\varnothing.
+\]
+Then local sectionability already fails, so $M,p\Vdash \Null^{\mathrm{loc}}_s(r_{\mathrm{loc}})$.
+
+For $r_{\mathrm{cmp}}$, use objects
+\[
+c_{\mathrm{cmp}}\sqsubseteq u_{\mathrm{cmp}}\sqsubseteq a_{\mathrm{cmp}},
+\qquad
+c_{\mathrm{cmp}}\sqsubseteq v_{\mathrm{cmp}}\sqsubseteq a_{\mathrm{cmp}},
+\]
+with nontrivial cover $\{u_{\mathrm{cmp}}\to a_{\mathrm{cmp}},v_{\mathrm{cmp}}\to a_{\mathrm{cmp}}\}$. Define
+\[
+F(u_{\mathrm{cmp}})=\{\sigma_u\},\quad
+F(v_{\mathrm{cmp}})=\{\sigma_v\},\quad
+F(c_{\mathrm{cmp}})=\{0,1\},\quad
+F(a_{\mathrm{cmp}})=\varnothing,
+\]
+and restrictions
+\[
+\res_{c_{\mathrm{cmp}}}^{u_{\mathrm{cmp}}}(\sigma_u)=0,
+\qquad
+\res_{c_{\mathrm{cmp}}}^{v_{\mathrm{cmp}}}(\sigma_v)=1.
+\]
+Local sections exist on the chosen cover, but the only available family is incompatible on the overlap. Hence $M,p\Vdash \Null^{\mathrm{cmp}}_s(r_{\mathrm{cmp}})$.
+
+For $r_{\mathrm{glue}}$, use objects
+\[
+c_{\mathrm{glue}}\sqsubseteq u_{\mathrm{glue}}\sqsubseteq a_{\mathrm{glue}},
+\qquad
+c_{\mathrm{glue}}\sqsubseteq v_{\mathrm{glue}}\sqsubseteq a_{\mathrm{glue}},
+\]
+with cover $\{u_{\mathrm{glue}}\to a_{\mathrm{glue}},v_{\mathrm{glue}}\to a_{\mathrm{glue}}\}$. Define
+\[
+F(u_{\mathrm{glue}})=F(v_{\mathrm{glue}})=F(c_{\mathrm{glue}})=\{*\},
+\qquad
+F(a_{\mathrm{glue}})=\varnothing,
+\]
+and let every restriction map be the identity on $\{*\}$. Then the chosen cover supports a compatible family, but there is no global section at $a_{\mathrm{glue}}$. Thus $M,p\Vdash \Null^{\mathrm{glue}}_s(r_{\mathrm{glue}})$.
+
+Finally, stipulate
+\[
+M,p\Vdash \Adm_s(r_{\mathrm{loc}})\land \Adm_s(r_{\mathrm{cmp}})\land \Adm_s(r_{\mathrm{glue}})
+\]
+and identify the three reference classes with $a_{\mathrm{loc}},a_{\mathrm{cmp}},a_{\mathrm{glue}}$ respectively.
+\end{proof}
+
+\subsection{Forcing necessity of the enrichment}
+
+The three null modes show that information-state forcing distinguishes situations invisible to pointwise semantics. The following result makes this precise: the gluing predicates introduced at the local-object layer cannot be reduced to the lower layers.
+
+\begin{theorem}[Pointwise irreducibility of gluing predicates]\label{thm:pointwise-irreducibility}
+There exist a model $M$, a state $p=(\Gamma_p,R_p)$, and admitted references $r_1,r_2:\mathsf{Ref}_s$ of the same sort such that:
+\begin{enumerate}[label=(\roman*),nosep]
+\item for every $\rho\in R_p$ and every $\mathrm{Form}_1$-formula $\varphi(x)$ with one free variable $x$, containing none of the local-object predicates $\LocSec_s$, $\CompSec_s$, $\Sec_s$, and containing no occurrence of the distinguished constants $r_1,r_2$ other than the substituted variable,
+\[
+M,\rho\models\varphi(r_1)
+\quad\Longleftrightarrow\quad
+M,\rho\models\varphi(r_2);
+\]
+\item $M,p\Vdash \CompSec_s(r_1)\land \Sec_s(r_1)$;
+\item $M,p\Vdash \CompSec_s(r_2)\land \neg\Sec_s(r_2)$.
+\end{enumerate}
+In particular, the predicates
+\[
+\CompSec_s,
+\qquad
+\Sec_s,
+\qquad
+\Null^{\mathrm{glue}}_s
+\]
+are not definable in the information-state forcing language without the local-object enrichment.
+\end{theorem}
+
+\begin{proof}
+Take a single state $p$ and one referenceable sort $s$. Introduce two reference terms $r_1,r_2:\mathsf{Ref}_s$ with $[r_1]_p\neq [r_2]_p$. Choose the $\mathrm{Form}_1$-reduct of $M$ so that there is an automorphism
+\[
+\alpha:M|_{\mathrm{Form}_1}\xrightarrow{\sim} M|_{\mathrm{Form}_1}
+\]
+with
+\[
+\alpha(r_1^M)=r_2^M,
+\qquad
+\alpha(r_2^M)=r_1^M,
+\]
+which preserves each realization $\rho\in R_p$. By invariance of first-order truth under automorphisms, every $\mathrm{Form}_1$-formula $\varphi(x)$ satisfying the restriction in~\textup{(i)} therefore obeys
+\[
+M,\rho\models\varphi(r_1)
+\quad\Longleftrightarrow\quad
+M,\rho\models\varphi(r_2)
+\]
+for every $\rho\in R_p$, proving~\textup{(i)}.
+
+Write $a_k=[r_k]_p$ ($k=1,2$) and equip both reference classes with identical local reference frames: a cover $\{u_k\to a_k,v_k\to a_k\}$ with common refinement $c_k$.
+
+For $r_1$, define
+\[
+F_1(u_1)=F_1(v_1)=F_1(c_1)=F_1(a_1)=\{*\},
+\]
+with all restrictions equal to the identity on $\{*\}$. The unique local family $(*,*)$ is compatible, and $*\in F_1(a_1)$ is a global section. Hence~\textup{(ii)}.
+
+For $r_2$, define
+\[
+F_2(u_2)=F_2(v_2)=F_2(c_2)=\{*\},\qquad F_2(a_2)=\varnothing,
+\]
+with all restrictions to $c_2$ equal to the identity on $\{*\}$. The local family $(*,*)$ is compatible on the overlap, but $F_2(a_2)=\varnothing$. Hence~\textup{(iii)}.
+
+Since the local object functors $F_1,F_2$ belong to the enrichment $\mathbb{L}_2$ and are not accessible in $\mathrm{Form}_1$, the distinction between \textup{(ii)} and \textup{(iii)} is invisible at $\mathbb{L}_1$.
+\end{proof}
+

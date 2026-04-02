@@ -42,9 +42,9 @@ theorem stableValue_lt_fib : ∀ {m : Nat}, (x : X m) → stableValue x < Nat.fi
       | succ k =>
         have hRestrLast : Omega.last (X.restrict x).1 = false := by
           simp only [Omega.last, X.restrict_val, Omega.truncate]
-          simp only [X.EndsInZero, Omega.get] at hRestr
+          simp only [ Omega.get] at hRestr
           convert hRestr using 1
-          simp [Nat.succ_sub_one]
+          simp
         have hRec2 := X.appendFalse_reconstruct (X.restrict x) hRestrLast
         rw [← hRec2, stableValue_restrict_appendFalse]
         exact stableValue_lt_fib (X.restrict (X.restrict x))

@@ -153,7 +153,7 @@ theorem zeckIndices_length_le (x : X m) :
     · simp [zeckIndices, hLast, ih (restrict x)]
     · have hFalse : Omega.last x.1 = false := by
         cases h : Omega.last x.1 <;> simp_all
-      simp only [zeckIndices, hFalse, ite_false]
+      simp only [zeckIndices, hFalse]
       exact Nat.le_succ_of_le (ih (restrict x))
 
 /-- The Zeckendorf representation determines the stable value. -/

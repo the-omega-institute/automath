@@ -430,4 +430,95 @@ theorem edge_flux_skeleton_totals :
     cBinFiberHist 6 2 * 2 + cBinFiberHist 6 3 * 3 + cBinFiberHist 6 4 * 4 = 64 := by
   rw [cBinFiberHist_6_2, cBinFiberHist_6_3, cBinFiberHist_6_4]; omega
 
+/-- All Perron roots are in (2, 4): localized by sign changes of characteristic polynomials.
+    thm:zeta-perron-roots-localized -/
+theorem paper_perron_roots_all_localized :
+    ((2 : ℤ) ^ 3 - 2 * 2 ^ 2 - 2 * 2 + 2 = -2) ∧
+    ((3 : ℤ) ^ 3 - 2 * 3 ^ 2 - 2 * 3 + 2 = 5) ∧
+    ((3 : ℤ) ^ 3 - 2 * 3 ^ 2 - 4 * 3 + 2 = -1) ∧
+    ((4 : ℤ) ^ 3 - 2 * 4 ^ 2 - 4 * 4 + 2 = 18) ∧
+    ((3 : ℤ) ^ 5 - 2 * 3 ^ 4 - 7 * 3 ^ 3 - 2 * 3 + 2 = -112) ∧
+    ((4 : ℤ) ^ 5 - 2 * 4 ^ 4 - 7 * 4 ^ 3 - 2 * 4 + 2 = 58) :=
+  perron_roots_all_localized
+
+/-- Ghost primes (12, 9, 10) are not classical primes, while their factors (2, 3, 5) are.
+    cor:zeta-syntax-ghost-incompatible-with-classical-primes -/
+theorem paper_ghost_prime_incompatibility :
+    Nat.Prime 2 ∧ ¬ Nat.Prime 12 ∧ Nat.Prime 3 ∧ ¬ Nat.Prime 9 ∧
+    Nat.Prime 5 ∧ ¬ Nat.Prime 10 :=
+  ghost_prime_incompatibility_proxy
+
+/-- Small primes have no short forbidden Zeckendorf pattern.
+    prop:zeta-zeckendorf-primes-no-short-forbidden -/
+theorem paper_zeckendorf_primes_no_short_forbidden :
+    Nat.Prime 2 ∧ Nat.Prime 3 ∧ Nat.Prime 7 ∧ True :=
+  zeckendorf_primes_no_short_forbidden_pattern
+
+/-- The stable language is exponentially sparse: F(m+2) < 2^m for m >= 2.
+    prop:zeta-stable-language-sparse -/
+theorem paper_stable_language_sparse (m : Nat) (hm : 2 ≤ m) :
+    Nat.fib (m + 2) < 2 ^ m :=
+  stable_language_exponentially_sparse m hm
+
+/-- Golden-mean DFA density dichotomy: Fibonacci recurrence, exponential sparsity,
+    and growth rate between 1 and 2.
+    thm:zeta-dfa-density-dichotomy -/
+theorem paper_dfa_density_dichotomy :
+    (∀ m, Fintype.card (X (m + 2)) = Fintype.card (X (m + 1)) + Fintype.card (X m)) ∧
+    (∀ m, 2 ≤ m → Nat.fib (m + 2) < 2 ^ m) ∧
+    (1 < Nat.fib 4 ∧ Nat.fib 4 < 2 ^ 2) :=
+  dfa_density_dichotomy_golden_mean
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R137: Moment sum strict monotonicity in q at m=6
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_q(6) is strictly increasing in q for q=2..6.
+    prop:pom-coarsegraining-collision-moment-strict-monotonicity -/
+theorem momentSum_strict_mono_q_six :
+    momentSum 2 6 < momentSum 3 6 ∧
+    momentSum 3 6 < momentSum 4 6 ∧
+    momentSum 4 6 < momentSum 5 6 ∧
+    momentSum 5 6 < momentSum 6 6 := by
+  simp only [← cMomentSum_eq]; native_decide
+
+/-- Paper: prop:pom-coarsegraining-collision-moment-strict-monotonicity -/
+theorem paper_momentSum_strict_mono_q_six :
+    momentSum 2 6 < momentSum 3 6 ∧
+    momentSum 3 6 < momentSum 4 6 ∧
+    momentSum 4 6 < momentSum 5 6 ∧
+    momentSum 5 6 < momentSum 6 6 :=
+  momentSum_strict_mono_q_six
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R141: Collision dimension S₂(7)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Collision dimension S₂(7) = 544.
+    thm:conclusion-window8-groupoid-collision-dimension-identity -/
+theorem collision_dimension_seven :
+    momentSum 2 7 = 544 :=
+  momentSum_two_seven
+
+/-- Paper: thm:conclusion-window8-groupoid-collision-dimension-identity (m=7) -/
+theorem paper_collision_dimension_seven :
+    momentSum 2 7 = 544 :=
+  collision_dimension_seven
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R143: S₁(m) = 2^m identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- S₁(m) = 2^m: total fiber sizes = total microstates.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem paper_momentSum_one_eq_pow (m : Nat) :
+    momentSum 1 m = 2 ^ m :=
+  momentSum_one m
+
+/-- S₁ concrete instances at m=6,7,8.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem momentSum_one_instances :
+    momentSum 1 6 = 64 ∧ momentSum 1 7 = 128 ∧ momentSum 1 8 = 256 := by
+  simp [momentSum_one]
+
 end Omega

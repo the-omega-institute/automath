@@ -465,7 +465,7 @@ theorem Fold_unique_of_weight_congr {m : Nat} (Φ : Word m → X m)
 /-- Fold uniqueness with explicit retraction hypothesis (corollary).
     thm:fold-unique-of-retraction -/
 theorem Fold_unique_of_retraction {m : Nat} (Φ : Word m → X m)
-    (hRetract : ∀ x : X m, Φ x.1 = x)
+    (_hRetract : ∀ x : X m, Φ x.1 = x)
     (hCongr : ∀ w, stableValue (Φ w) % Nat.fib (m + 2) = weight w % Nat.fib (m + 2)) :
     ∀ w, Φ w = Fold w :=
   Fold_unique_of_weight_congr Φ hCongr
@@ -534,6 +534,40 @@ theorem paper_hiddenBitCount_recurrence :
 theorem paper_hiddenBitCount_closed (m : Nat) :
     3 * hiddenBitCount m + (if m % 2 = 0 then 1 else 2) = 2 ^ m := by
   have := hiddenBitCount_closed m; omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R13: hiddenBitCount even/odd closed forms
+-- ══════════════════════════════════════════════════════════════
+
+/-- 2^(2k) = 4^k. -/
+private theorem two_pow_two_mul (k : Nat) : 2 ^ (2 * k) = 4 ^ k := by
+  induction k with
+  | zero => simp
+  | succ k ih => rw [show 2 * (k + 1) = 2 * k + 2 from by omega, pow_add]; simp [ih]; ring
+
+/-- 3·A(2k) = 4^k - 1 for k ≥ 1.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem hiddenBitCount_even_closed (k : Nat) (_hk : 1 ≤ k) :
+    3 * hiddenBitCount (2 * k) = 4 ^ k - 1 := by
+  have h := hiddenBitCount_closed (2 * k)
+  have hmod : (2 * k) % 2 = 0 := by omega
+  simp only [hmod, ite_true] at h
+  rw [two_pow_two_mul] at h
+  omega
+
+/-- 3·A(2k+1) = 2·4^k - 2 for all k.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem hiddenBitCount_odd_closed (k : Nat) :
+    3 * hiddenBitCount (2 * k + 1) = 2 * 4 ^ k - 2 := by
+  have h := paper_hiddenBitCount_closed (2 * k + 1)
+  have hmod : (2 * k + 1) % 2 = 1 := by omega
+  rw [hmod] at h; simp at h
+  -- h : 3 * hiddenBitCount (2 * k + 1) + 2 = 2 ^ (2 * k + 1)
+  have h4 : 2 ^ (2 * k + 1) = 2 * 4 ^ k := by
+    have : 2 ^ (2 * k + 1) = 2 ^ (2 * k) * 2 := pow_succ 2 (2 * k)
+    rw [two_pow_two_mul] at this; linarith
+  have hge : 1 ≤ 4 ^ k := Nat.one_le_pow k 4 (by omega)
+  omega
 
 /-- Fold + hiddenBit jointly determine weight.
     prop:pom-fold-prime-lift-injective -/
@@ -668,5 +702,262 @@ theorem truncation_curvature_eq_hiddenBit (w : Word (m + 1)) :
       rw [fold_eq_iff_sv, Nat.mod_eq_of_lt (by omega : weight w < Nat.fib (m + 3))]
       exact weight_truncate_mod w
     simp only [heq, ite_true]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R14: hiddenBitCount bounds
+-- ══════════════════════════════════════════════════════════════
+
+/-- #{weight < F} = 2^m - hiddenBitCount.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem complement_hiddenBitCount (m : Nat) :
+    (Finset.univ.filter (fun w : Word m => weight w < Nat.fib (m + 2))).card =
+    2 ^ m - hiddenBitCount m := by
+  have hle : hiddenBitCount m ≤ 2 ^ m := by
+    unfold hiddenBitCount
+    calc (Finset.univ.filter (fun w : Word m => Nat.fib (m + 2) ≤ weight w)).card
+        ≤ (Finset.univ : Finset (Word m)).card := Finset.card_filter_le _ _
+      _ = 2 ^ m := by simp [ Fintype.card_bool]
+  have htotal : (Finset.univ : Finset (Word m)).card = 2 ^ m := by
+    simp [ Fintype.card_bool]
+  have hcompl : (Finset.univ.filter (fun w : Word m => weight w < Nat.fib (m + 2))).card +
+      (Finset.univ.filter (fun w : Word m => Nat.fib (m + 2) ≤ weight w)).card =
+      (Finset.univ : Finset (Word m)).card := by
+    rw [← Finset.card_union_of_disjoint (by
+      apply Finset.disjoint_filter.mpr; intro w _ h1 h2; omega)]
+    congr 1; ext w; simp; omega
+  rw [htotal] at hcompl; unfold hiddenBitCount; omega
+
+/-- hiddenBitCount m < 2^m for m ≥ 2.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem hiddenBitCount_lt_pow (m : Nat) (_hm : 2 ≤ m) :
+    hiddenBitCount m < 2 ^ m := by
+  have h := paper_hiddenBitCount_closed m
+  -- 3 * A(m) + δ = 2^m where δ ≥ 1, so 3 * A(m) < 2^m, so A(m) < 2^m
+  split_ifs at h with heven <;> omega
+
+/-- hiddenBitCount m > 0 for m ≥ 2.
+    thm:fold-top-two-zeckendorf-trisect -/
+theorem hiddenBitCount_pos (m : Nat) (hm : 2 ≤ m) :
+    0 < hiddenBitCount m := by
+  obtain ⟨k, rfl⟩ : ∃ k, m = k + 2 := ⟨m - 2, by omega⟩
+  rw [hiddenBitCount_recurrence]; positivity
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R20: Right-resolving property
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fold is right-resolving: appending different bits always yields different stable words.
+    thm:pom-right-resolving -/
+theorem Fold_snoc_false_ne_snoc_true (w : Word m) :
+    Fold (snoc w false) ≠ Fold (snoc w true) := by
+  intro heq
+  -- Use stableValue injectivity: if Fold equal, stableValues equal
+  have hsv_eq : stableValue (Fold (snoc w false)) = stableValue (Fold (snoc w true)) := by
+    rw [heq]
+  rw [stableValue_Fold_snoc_false, stableValue_Fold_snoc_true] at hsv_eq
+  -- hsv_eq: weight w % F_{m+3} = (weight w + F_{m+2}) % F_{m+3}
+  have hF2_lt : Nat.fib (m + 2) < Nat.fib (m + 3) := fib_lt_fib_succ m
+  have hF2_pos : 0 < Nat.fib (m + 2) := fib_succ_pos (m + 1)
+  have hF3_pos : 0 < Nat.fib (m + 3) := fib_succ_pos (m + 2)
+  -- Reduce (weight w + F_{m+2}) % F to (a + F_{m+2}) % F using Nat.add_mod
+  have hred : (weight w + Nat.fib (m + 2)) % Nat.fib (m + 3) =
+      (weight w % Nat.fib (m + 3) + Nat.fib (m + 2) % Nat.fib (m + 3)) % Nat.fib (m + 3) :=
+    Nat.add_mod _ _ _
+  rw [Nat.mod_eq_of_lt hF2_lt] at hred
+  -- hred: (weight w + F_{m+2}) % F = (a + F_{m+2}) % F where a = weight w % F
+  set a := weight w % Nat.fib (m + 3) with ha_def
+  rw [hred] at hsv_eq
+  -- hsv_eq: a = (a + F_{m+2}) % F_{m+3}
+  have ha_lt : a < Nat.fib (m + 3) := Nat.mod_lt _ hF3_pos
+  by_cases hle : a + Nat.fib (m + 2) < Nat.fib (m + 3)
+  · rw [Nat.mod_eq_of_lt hle] at hsv_eq; omega
+  · push_neg at hle
+    have : (a + Nat.fib (m + 2)) % Nat.fib (m + 3) =
+        a + Nat.fib (m + 2) - Nat.fib (m + 3) := by
+      conv_lhs => rw [show a + Nat.fib (m + 2) =
+        (a + Nat.fib (m + 2) - Nat.fib (m + 3)) + Nat.fib (m + 3) from by omega]
+      rw [Nat.add_mod_right]
+      exact Nat.mod_eq_of_lt (by omega)
+    rw [this] at hsv_eq; omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R21: Bit-resolving and left-resolving
+-- ══════════════════════════════════════════════════════════════
+
+/-- Flipping any single bit changes the Fold image: right-resolving at arbitrary position.
+    thm:pom-right-resolving -/
+theorem Fold_ne_of_bit_flip {m : Nat} (w : Word m) (i : Fin m) :
+    Fold (Function.update w i false) ≠ Fold (Function.update w i true) := by
+  intro heq
+  -- Key: weight(update w i true) = weight(update w i false) + F_{i+2}
+  -- because update (update w i false) i true = update w i true, and bit i is false in update w i false
+  have hi_false : Function.update w i false i = false := Function.update_self i false w
+  have hweight : weight (Function.update w i true) =
+      weight (Function.update w i false) + Nat.fib (i.val + 2) := by
+    have : Function.update (Function.update w i false) i true = Function.update w i true := by
+      ext j; by_cases hj : j = i
+      · subst hj; simp [Function.update_self]
+      · simp [Function.update_of_ne hj]
+    rw [← this]
+    exact weight_update_true_add (Function.update w i false) i hi_false
+  -- From Fold_eq_iff_weight_mod: weights are congruent mod F_{m+2}
+  rw [Fold_eq_iff_weight_mod] at heq
+  -- heq: weight(update w i false) % F_{m+2} = weight(update w i true) % F_{m+2}
+  -- So F_{i+2} ≡ 0 (mod F_{m+2}), but 0 < F_{i+2} ≤ F_{m+1} < F_{m+2}
+  have hFi_pos : 0 < Nat.fib (i.val + 2) := fib_succ_pos (i.val + 1)
+  have hFi_lt : Nat.fib (i.val + 2) < Nat.fib (m + 2) := by
+    apply Nat.fib_lt_fib_succ (by omega : 2 ≤ i.val + 2) |>.trans_le
+    exact Nat.fib_mono (by omega : i.val + 2 + 1 ≤ m + 2)
+  have hFm_pos : 0 < Nat.fib (m + 2) := fib_succ_pos (m + 1)
+  -- From heq and hweight: a % F = (a + F_{i+2}) % F where a = weight(update w i false), F = F_{m+2}
+  set a := weight (Function.update w i false)
+  rw [hweight] at heq
+  -- heq: a % F_{m+2} = (a + F_{i+2}) % F_{m+2}
+  -- Same modular arithmetic as Fold_snoc_false_ne_snoc_true
+  have hred : (a + Nat.fib (i.val + 2)) % Nat.fib (m + 2) =
+      (a % Nat.fib (m + 2) + Nat.fib (i.val + 2) % Nat.fib (m + 2)) % Nat.fib (m + 2) :=
+    Nat.add_mod _ _ _
+  rw [Nat.mod_eq_of_lt hFi_lt] at hred
+  set b := a % Nat.fib (m + 2) with hb_def
+  rw [hred] at heq
+  have hb_lt : b < Nat.fib (m + 2) := Nat.mod_lt _ hFm_pos
+  by_cases hle : b + Nat.fib (i.val + 2) < Nat.fib (m + 2)
+  · rw [Nat.mod_eq_of_lt hle] at heq; omega
+  · push_neg at hle
+    have : (b + Nat.fib (i.val + 2)) % Nat.fib (m + 2) =
+        b + Nat.fib (i.val + 2) - Nat.fib (m + 2) := by
+      conv_lhs => rw [show b + Nat.fib (i.val + 2) =
+        (b + Nat.fib (i.val + 2) - Nat.fib (m + 2)) + Nat.fib (m + 2) from by omega]
+      rw [Nat.add_mod_right]
+      exact Nat.mod_eq_of_lt (by omega)
+    rw [this] at heq; omega
+
+/-- Left-resolving: flipping the first bit changes Fold. Specialization of Fold_ne_of_bit_flip.
+    thm:pom-left-resolving -/
+theorem Fold_ne_of_first_bit_flip {m : Nat} (w : Word m) (hm : 2 ≤ m) :
+    Fold (Function.update w ⟨0, by omega⟩ false) ≠
+    Fold (Function.update w ⟨0, by omega⟩ true) :=
+  Fold_ne_of_bit_flip w ⟨0, by omega⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R29: hiddenBitCount density bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- hiddenBitCount is approximately 2^m / 3: 3B ≤ 2^m ≤ 3B + 2.
+    thm:pom-hidden-bit-density -/
+theorem hiddenBitCount_near_third (m : Nat) :
+    3 * hiddenBitCount m ≤ 2 ^ m ∧ 2 ^ m ≤ 3 * hiddenBitCount m + 2 := by
+  have h := paper_hiddenBitCount_closed m
+  split_ifs at h with heven <;> omega
+
+/-- Hidden bit is 0 when the last position is false: weight < threshold.
+    lem:pom-hidden-bit-last-false -/
+theorem hiddenBit_last_false (w : Word (m + 1))
+    (hLast : w ⟨m, Nat.lt_succ_self m⟩ = false) :
+    hiddenBit w = 0 := by
+  unfold hiddenBit
+  simp only [show m + 1 + 2 = m + 3 from by omega]
+  rw [if_neg]
+  intro h
+  have hwt := weight_of_lastFalse hLast
+  have hlt := X.weight_lt_fib (truncate w)
+  omega
+
+/-- Hidden bit is 1 when both last and penultimate are true.
+    lem:pom-hidden-bit-boolean-recurrence-true -/
+theorem hiddenBit_boolean_recurrence (w : Word (m + 3))
+    (hLast : w ⟨m + 2, by omega⟩ = true)
+    (hPenult : w ⟨m + 1, by omega⟩ = true) :
+    hiddenBit w = 1 := by
+  unfold hiddenBit
+  rw [if_pos]
+  -- weight w = weight(truncate w) + F(m+4)
+  have hw := weight_of_lastTrue (m := m + 2) hLast
+  have hPenult' : (truncate w) ⟨m + 1, by omega⟩ = true := by
+    show w ⟨m + 1, by omega⟩ = true; exact hPenult
+  have hw2 := weight_of_lastTrue (m := m + 1) (by convert hPenult')
+  have hfib := Omega.fib_succ_succ' (m + 3)
+  simp only [show m + 2 + 2 = m + 4 from by omega, show m + 1 + 2 = m + 3 from by omega,
+    show m + 3 + 2 = m + 5 from by omega] at hw hw2 hfib ⊢
+  omega
+
+/-- Hidden bit recurrence when last is true and penultimate is false:
+    hiddenBit w = hiddenBit (truncate (truncate w)).
+    lem:pom-hidden-bit-boolean-recurrence-false -/
+theorem hiddenBit_boolean_recurrence_false (w : Word (m + 3))
+    (hLast : w ⟨m + 2, by omega⟩ = true)
+    (hPenult : w ⟨m + 1, by omega⟩ = false) :
+    hiddenBit w = hiddenBit (truncate (truncate w)) := by
+  unfold hiddenBit
+  -- weight w = weight(truncate w) + F(m+4)
+  have hw := weight_of_lastTrue (m := m + 2) hLast
+  -- weight(truncate w) = weight(truncate² w) since penultimate is false
+  have hPenult' : (truncate w) ⟨m + 1, by omega⟩ = false := by
+    show w ⟨m + 1, by omega⟩ = false; exact hPenult
+  have hw2 := weight_of_lastFalse (m := m + 1) (by convert hPenult')
+  have hfib := Omega.fib_succ_succ' (m + 3)
+  simp only [show m + 2 + 2 = m + 4 from by omega, show m + 1 + 2 = m + 3 from by omega,
+    show m + 3 + 2 = m + 5 from by omega] at hw hw2 hfib ⊢
+  split_ifs with h1 h2 h2
+  · rfl
+  · exfalso; omega
+  · exfalso; omega
+  · rfl
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R68: Unified hiddenBit Boolean recurrence
+-- ══════════════════════════════════════════════════════════════
+
+/-- Unified Boolean recurrence for hiddenBit on Word(m+3).
+    If last=false: hiddenBit = 0.
+    If last=true, penult=true: hiddenBit = 1.
+    If last=true, penult=false: hiddenBit = hiddenBit(truncate²).
+    thm:pom-hidden-bit-unified-recurrence -/
+theorem hiddenBit_unified_recurrence (w : Word (m + 3))
+    (hLast : w ⟨m + 2, by omega⟩ = true) :
+    hiddenBit w = if w ⟨m + 1, by omega⟩ = true then 1
+      else hiddenBit (truncate (truncate w)) := by
+  cases hPenult : w ⟨m + 1, by omega⟩
+  · -- penultimate = false
+    simp only [Bool.false_eq_true, ite_false]
+    exact hiddenBit_boolean_recurrence_false w hLast hPenult
+  · -- penultimate = true
+    simp only [ite_true]
+    exact hiddenBit_boolean_recurrence w hLast hPenult
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R69: hiddenBitCount = 2^m / 3 (Nat floor division)
+-- ══════════════════════════════════════════════════════════════
+
+private theorem two_pow_mod_three : ∀ m : Nat,
+    2 ^ m % 3 = if m % 2 = 0 then 1 else 2
+  | 0 => by simp
+  | 1 => by simp
+  | m + 2 => by
+    have ih := two_pow_mod_three m
+    have h4 : 2 ^ (m + 2) = 4 * 2 ^ m := by ring
+    have hmod : (m + 2) % 2 = m % 2 := by omega
+    rw [h4, hmod]
+    -- 4 * 2^m mod 3 = (4 mod 3) * (2^m mod 3) mod 3 = 1 * (2^m mod 3) mod 3 = 2^m mod 3
+    have : (4 * 2 ^ m) % 3 = (4 % 3 * (2 ^ m % 3)) % 3 := Nat.mul_mod 4 (2 ^ m) 3
+    rw [this, show 4 % 3 = 1 from rfl, one_mul, Nat.mod_mod_of_dvd]
+    · exact ih
+    · decide
+
+/-- hiddenBitCount m = ⌊2^m / 3⌋.
+    thm:pom-hidden-bit-count-floor-div -/
+theorem hiddenBitCount_floor_div_three (m : Nat) :
+    hiddenBitCount m = 2 ^ m / 3 := by
+  have hclosed := paper_hiddenBitCount_closed m
+  have hmod := two_pow_mod_three m
+  split_ifs at hclosed hmod with heven <;> omega
+
+/-- Fold is canonical (value-preserving), idempotent, and surjective.
+    prop:fold-basic-paper -/
+theorem paper_fold_basic (m : Nat) :
+    (∀ w : Word m, Fold (Fold w).1 = Fold w) ∧
+    (Function.Surjective (Fold (m := m))) ∧
+    (∀ w : Word m, stableValue (Fold w) = weight w % Nat.fib (m + 2)) :=
+  ⟨fun w => Fold_idempotent w, Fold_surjective m, fun w => stableValue_Fold_mod w⟩
 
 end Omega

@@ -1,0 +1,79 @@
+\section{Finite-window stabilization via Fibonacci numeration}%
+\makeatletter\edef\@currentlabel{\Alph{section}}\makeatother\label{app:bridge:companion}
+
+This appendix constructs the canonical stabilization map $\Fold_m$ used in Appendix~\ref{app:bridge:microhistory} and establishes its basic properties. The construction relies only on the Zeckendorf representation theorem for Fibonacci numeration; no external results are imported.
+
+\begin{definition}[Golden-mean admissible set]\label{def:admissible-set}
+For $m\ge 1$, let
+\[
+X_m:=\bigl\{x=(x_1,\dots,x_m)\in\{0,1\}^m: x_ix_{i+1}\neq 11\text{ for all }1\le i<m\bigr\}.
+\]
+\end{definition}
+
+\begin{definition}[Fibonacci valuation]\label{def:fibonacci-valuation}
+Let $(F_n)_{n\ge 1}$ be the Fibonacci sequence with $F_1=F_2=1$. For $\omega=(\omega_1,\dots,\omega_m)\in\{0,1\}^m$, define
+\[
+\mathrm{Val}_m(\omega):=\sum_{k=1}^m \omega_k F_{k+1}.
+\]
+\end{definition}
+
+\begin{proposition}[Zeckendorf bijection]\label{prop:zeckendorf-bijection}
+For every $m\ge 1$, the restriction
+\[
+\mathrm{Val}_m\big|_{X_m}:X_m\xrightarrow{\;\sim\;}\{0,1,\dots,F_{m+2}-1\}
+\]
+is a bijection. In particular, $|X_m|=F_{m+2}$.
+\end{proposition}
+
+\begin{proof}
+By the Zeckendorf representation theorem \cite{LindMarcus1995}, every non-negative integer $N$ admits a unique representation as a sum of non-consecutive Fibonacci numbers. If $0\le N<F_{m+2}$, then the largest Fibonacci weight that can appear is at most $F_{m+1}$, so the representation has length at most $m$ and defines a unique element of $X_m$. Conversely, every $x\in X_m$ satisfies $\mathrm{Val}_m(x)\le F_{m+1}+F_{m-1}+\cdots<F_{m+2}$ by the standard Fibonacci summation identity. Uniqueness of the Zeckendorf representation implies injectivity; surjectivity follows because every integer in $\{0,\dots,F_{m+2}-1\}$ has a Zeckendorf expansion of length at most $m$.
+\end{proof}
+
+\begin{definition}[Canonical stabilization map]\label{def:fold-map}
+For $m\ge 1$, define
+\[
+\Fold_m:\{0,1\}^m\longrightarrow X_m
+\]
+by the rule
+\[
+\Fold_m(\omega):=\bigl(\mathrm{Val}_m\big|_{X_m}\bigr)^{-1}\!\bigl(\mathrm{Val}_m(\omega)\bmod F_{m+2}\bigr),
+\]
+where the residue is taken in $\{0,1,\dots,F_{m+2}-1\}$.
+\end{definition}
+
+In words: compute the Fibonacci-weighted value of the raw binary word $\omega$, reduce modulo $F_{m+2}$, and return the unique golden-mean admissible word with that residue class.
+
+\begin{theorem}[Properties of the stabilization map]\label{thm:fold-properties}
+For every $m\ge 1$, the map $\Fold_m:\{0,1\}^m\to X_m$ satisfies:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+\item \textup{(Well-definedness.)} $\Fold_m$ is well-defined.
+\item \textup{(Idempotence on admissible words.)} If $x\in X_m$, then $\Fold_m(x)=x$.
+\item \textup{(Surjectivity.)} $\Fold_m$ is onto $X_m$.
+\item \textup{(Fiber partition.)} The fibers
+\[
+\mathcal F_m(x):=\Fold_m^{-1}(\{x\}),\qquad x\in X_m,
+\]
+form a partition of $\{0,1\}^m$. Writing $d_m(x):=|\mathcal F_m(x)|$,
+\[
+\sum_{x\in X_m}d_m(x)=2^m.
+\]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i)\enspace By Proposition~\ref{prop:zeckendorf-bijection}, every residue class in $\{0,\dots,F_{m+2}-1\}$ has a unique admissible representative.
+
+(ii)\enspace If $x\in X_m$, then $\mathrm{Val}_m(x)\in\{0,\dots,F_{m+2}-1\}$ by the Zeckendorf bijection, so $\mathrm{Val}_m(x)\bmod F_{m+2}=\mathrm{Val}_m(x)$, and the inverse Zeckendorf map returns $x$.
+
+(iii)\enspace Every $x\in X_m$ is a fixed point of $\Fold_m$ by~(ii), so $x$ lies in the image.
+
+(iv)\enspace Since $\Fold_m$ is a function on the finite set $\{0,1\}^m$, its fibers partition the domain. Summing cardinalities gives $|\{0,1\}^m|=2^m$.
+\end{proof}
+
+\begin{remark}\label{rem:fiber-residue}
+By construction, $\omega\in\mathcal F_m(x)$ if and only if $\mathrm{Val}_m(\omega)\equiv\mathrm{Val}_m(x)\pmod{F_{m+2}}$. The fiber cardinalities $d_m(x)$ therefore count the number of binary words of length $m$ whose Fibonacci valuation falls in a given residue class modulo $F_{m+2}$. These cardinalities admit an exact discrete-Fourier formula: writing $\zeta:=e^{2\pi i/F_{m+2}}$ and $r_x:=\mathrm{Val}_m(x)$,
+\begin{equation}\label{eq:fiber-dft}
+d_m(x)=\frac{1}{F_{m+2}}\sum_{j=0}^{F_{m+2}-1}\zeta^{-jr_x}\prod_{k=1}^m\bigl(1+\zeta^{jF_{k+1}}\bigr).
+\end{equation}
+The product factorizes because the Fibonacci valuation is a sum of independent binary contributions; the formula is the standard finite Fourier inversion for counting lattice points in a residue class.
+\end{remark}

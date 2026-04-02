@@ -261,7 +261,7 @@ theorem momentSum_one_univ (q : Nat) : momentSum q 1 = 2 := by
 
 /-- S_q is monotone in q: S_q(m) ≤ S_{q+1}(m) since d(x) ≥ 1.
     pom-moment-mono-q -/
-theorem momentSum_mono_q (q m : Nat) (hq : 1 ≤ q) :
+theorem momentSum_mono_q (q m : Nat) (_hq : 1 ≤ q) :
     momentSum q m ≤ momentSum (q + 1) m := by
   simp only [momentSum]
   apply Finset.sum_le_sum; intro x _
@@ -348,5 +348,10 @@ theorem exists_fiber_ge_two (m : Nat) (hm : 2 ≤ m) : ∃ x : X m, 2 ≤ X.fibe
 theorem mixed_collision_kernel_computable (q m : Nat) :
     momentSum q m = cMomentSum q m :=
   (cMomentSum_eq q m).symm
+
+/-- The sum of squared fiber multiplicities equals the second moment S_2(m).
+    prop:pom-fiberMultiplicity-sum-sq-eq-momentSum-two -/
+theorem fiberMultiplicity_sum_sq_eq_momentSum_two (m : Nat) :
+    ∑ x : X m, X.fiberMultiplicity x ^ 2 = momentSum 2 m := rfl
 
 end Omega

@@ -2,6 +2,12 @@ name: Reusable Lean4 Build
 
 on:
   workflow_call:
+    inputs:
+      checkout_ref:
+        description: Branch, tag, or SHA to check out before building.
+        required: false
+        type: string
+        default: ""
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -14,6 +20,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          ref: ${{ inputs.checkout_ref != '' && inputs.checkout_ref || github.sha }}
+          fetch-depth: 0
 
       - name: Build Lean4 project
         uses: leanprover/lean-action@c544e89643240c6b398f14a431bcdc6309e36b3e # v1
@@ -21,3 +30,12 @@ jobs:
           lake-package-directory: lean4
           build: true
           use-mathlib-cache: true
+
+      - name: Audit Lean sources
+        run: python3 lean4/scripts/omega_ci.py audit
+
+      - name: Build Lean inventory
+        run: python3 lean4/scripts/omega_ci.py inventory --strict --json "${RUNNER_TEMP}/omega-lean-inventory.json"
+
+      - name: Build paper coverage report
+        run: python3 lean4/scripts/omega_ci.py paper-coverage --sections body --json "${RUNNER_TEMP}/omega-paper-coverage.json"

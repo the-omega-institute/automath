@@ -1,28 +1,26 @@
-# Automath — The Omega Project
+# The Omega Project
 
-[中文版](README.zh-CN.md)
+> An auditable theory compiler that derives, verifies, visualizes, and publishes mathematics from a single equation.
+
+[中文版](README.zh-CN.md) · **[Why Everything Is Inevitable](docs/INEVITABILITY.md)** — understand the forcing chain in 10 minutes
 
 ## The Question
 
-What happens when you start from a single algebraic identity — $x^{2} = x + 1$ — and derive everything you can, with zero axioms, in a formally verified proof assistant?
+What mathematical structures are inevitable when you can only observe a dynamical system through a finite binary window?
 
-The Omega project is an experiment in **generative mathematics**. Rather than formalizing known results, we begin with the golden-mean shift and its Zeckendorf representation, then systematically derive algebraic, combinatorial, topological, and dynamical structures to see what emerges. The methodology is *derive, discover, name*: build rigorously from first principles, observe what structures appear, then identify their correspondences across mathematics and physics.
+Consider the simplest setup: a system, a window, one bit per time step. Record the output for $m$ steps. The full microstate space $\{0,1\}^m$ has $2^m$ elements, but only those stable across resolutions — binary words with no consecutive 1s — survive. There are $F_{m+2}$ of them (Fibonacci numbers). This constraint is not chosen. It is forced by cross-resolution consistency. Its characteristic equation is $x^2 = x + 1$ .
 
-Every theorem is machine-verified in Lean 4. Every derivation chain is traceable. No axioms are assumed beyond Lean 4's core logic and Mathlib.
+The Omega project takes this single forced constraint and follows every consequence. In Lean 4. With zero axioms. The methodology is *derive, discover, name*: build rigorously from first principles, observe what structures appear, then identify their correspondences across mathematics and physics.
 
-## Why This Approach
-
-Most mathematical formalization projects verify existing theorems. Omega inverts this: we use formalization as a **discovery engine**. The constraint of zero axioms forces every structure to be *earned* through derivation rather than assumed. When a familiar structure appears — a ring, a recurrence, a spectral invariant — it arrives with a complete provenance chain back to the seed. This makes it possible to ask: *why* does this structure appear here, and what does its emergence tell us about the seed?
-
-The golden ratio is not chosen arbitrarily. The equation $x^{2} = x + 1$ generates the simplest non-trivial sofic shift (the golden-mean shift), the simplest non-trivial linear recurrence (the Fibonacci sequence), and the "most irrational" number (worst-case for rational approximation). These are three views of the same algebraic object. Omega explores what happens when you take all three views seriously and follow their consequences simultaneously.
+Every theorem is machine-verified. Every derivation chain is traceable. No axioms are assumed beyond Lean 4's core logic and Mathlib.
 
 ## The Seed
 
-Consider the set $X_{m}$ of binary words of length $m$ with no two consecutive 1s. This is the **golden-mean shift** — the simplest non-trivial subshift of finite type in symbolic dynamics.
+The set $X_m$ of binary words of length $m$ with no two consecutive 1s is the **golden-mean shift** — the simplest non-trivial subshift of finite type in symbolic dynamics.
 
-- $|X_{m}| = F_{m+2}$ (the Fibonacci numbers)
-- Every $n < F_{m+2}$ has a unique **Zeckendorf representation** as a sum of non-consecutive Fibonacci numbers, giving a canonical bijection $X_{m} \leftrightarrow \{0, \ldots, F_{m+2}-1\}$
-- The **fold operator** $\Phi: X_{m+1} \to X_{m}$ (truncate the last bit) partitions words into **fibers** whose multiplicity structure encodes deep arithmetic
+- $|X_m| = F_{m+2}$ (the Fibonacci numbers)
+- Every $n < F_{m+2}$ has a unique **Zeckendorf representation** as a sum of non-consecutive Fibonacci numbers, giving a canonical bijection $X_m \leftrightarrow \{0, \ldots, F_{m+2}-1\}$
+- The **fold operator** $\Phi: X_{m+1} \to X_m$ (truncate the last bit) partitions words into **fibers** whose multiplicity structure encodes deep arithmetic
 
 From these three ingredients, everything below is *derived*.
 
@@ -30,11 +28,11 @@ From these three ingredients, everything below is *derived*.
 
 ### I. Nascent Arithmetic
 
-The Zeckendorf bijection induces addition $\oplus$ and multiplication $\otimes$ directly on binary words. No integers are needed — the arithmetic is *native* to $X_{m}$.
+The Zeckendorf bijection induces addition $\oplus$ and multiplication $\otimes$ directly on binary words. No integers are needed — the arithmetic is *native* to $X_m$ .
 
-$$X_{m} \;\cong\; \mathbb{Z}/F_{m+2}\mathbb{Z}$$
+$$X_m \;\cong\; \mathbb{Z}/F_{m+2}\mathbb{Z}$$
 
-This isomorphism (`stableValueRingEquiv`) shows that the combinatorial space $X_{m}$ *is* a cyclic ring, with the Fibonacci number as modulus. When $F_{m+2}$ is prime (e.g., $F_{3} = 2$, $F_{5} = 5$, $F_{7} = 13$, $F_{13} = 233$), $X_{m}$ becomes a finite field (`instFieldOfPrime`). When $F_{m+2}$ factors, the Chinese Remainder Theorem decomposes $X_{m}$ into a product ring (`crtDecomposition`): for instance, $X_{7} \cong \mathbb{Z}/2 \times \mathbb{Z}/17$.
+This isomorphism (`stableValueRingEquiv`) shows that the combinatorial space $X_m$ *is* a cyclic ring, with the Fibonacci number as modulus. When $F_{m+2}$ is prime (e.g., $F_3 = 2$ , $F_5 = 5$ , $F_7 = 13$ , $F_{13} = 233$ ), $X_m$ becomes a finite field (`instFieldOfPrime`). When $F_{m+2}$ factors, the Chinese Remainder Theorem decomposes $X_m$ into a product ring (`crtDecomposition`): for instance, $X_7 \cong \mathbb{Z}/2 \times \mathbb{Z}/17$ .
 
 What's surprising: the ring structure is *intrinsic* to the no-consecutive-1s constraint. It doesn't require importing integer arithmetic — it emerges from the Zeckendorf structure alone.
 
@@ -42,144 +40,154 @@ What's surprising: the ring structure is *intrinsic* to the no-consecutive-1s co
 
 ### II. Fiber Spectrum and Moment Theory
 
-The fold operator $\Phi: X_{m+1} \to X_{m}$ creates fibers $\Phi^{-1}(x)$ whose cardinalities $d(x)$ vary across $X_{m}$. The **moment sums** quantify this variation:
+The fold operator $\Phi: X_{m+1} \to X_m$ creates fibers $\Phi^{-1}(x)$ whose cardinalities $d(x)$ vary across $X_m$ . The **moment sums** quantify this variation:
 
-$$S_{q}(m) = \sum_{x \in X_{m}} d(x)^{q}$$
+$$S_q(m) = \sum_{x \in X_m} d(x)^q$$
 
-Basic identities: $S_{0}(m) = F_{m+1}$ (count of stable points), $S_{1}(m) = 2^{m}$ (total words split across fibers). The higher moments encode progressively finer information about the fiber distribution.
+Basic identities: $S_0(m) = F_{m+1}$ (count of stable points), $S_1(m) = 2^m$ (total words split across fibers). The higher moments encode progressively finer information about the fiber distribution.
 
-**The S₂ recurrence** — the project's first unconditional infinite-family theorem. The proof chain illustrates the derivation methodology:
+**The S₂ recurrence** — the project's first unconditional infinite-family theorem:
 
-1. **Hidden bit decomposition**: $\text{weight}(w) = \text{stableValue}(\Phi(w)) + \text{hiddenBit}(w) \cdot F_{m+2}$
-2. **Fold congruence**: $\Phi(w) = \Phi(w')$ iff $\text{weight}(w) \equiv \text{weight}(w') \pmod{F_{m+2}}$
-3. **Collision decomposition**: $S_{2}$ splits into exact-weight collisions $E_{00}$ and cross-correlations $C(m,d)$
-4. **Telescoping**: $E_{00}(m) = 1 + \sum_{k<m} S_{2}(k)$
-5. **Cross-correlation shift**: $C(m+1, F_{m+2}) = S_{2}(m)$, linking adjacent levels
-6. **The recurrence**:
+$$S_2(m+3) + 2\,S_2(m) = 2\,S_2(m+2) + 2\,S_2(m+1)$$
 
-$$S_{2}(m+3) + 2\,S_{2}(m) = 2\,S_{2}(m+2) + 2\,S_{2}(m+1)$$
+Proved in 4 lines of Lean from a 6-step chain (hidden bit decomposition → fold congruence → collision decomposition → telescoping → cross-correlation shift → recurrence), with zero `native_decide`. A purely combinatorial quantity satisfying a linear recurrence with small integer coefficients — hidden linearity in the fiber dynamics.
 
-Proved in 4 lines of Lean from the preceding chain, with zero `native_decide`. This was unexpected: a purely combinatorial quantity (fiber collision count) satisfies a linear recurrence with small integer coefficients, suggesting hidden linearity in the fiber dynamics.
-
-**Consequences**:
-- strict monotonicity: $S_{2}(m) < S_{2}(m+1)$ for $m \geq 1$
-- positivity
-- Cauchy-Schwarz bound: $S_{2}(m) \cdot F_{m+2} \geq 4^{m}$
-- general moment hierarchy: $S_{q}(m) \leq S_{q+1}(m)$
-
-**S₃ and beyond**: The collision triple framework extends to $S_{3}$, with its own companion matrix and Cayley-Hamilton relation. The S₃ recurrence $S_{3}(m+3) = 2S_{3}(m+2) + 4S_{3}(m+1) - 2S_{3}(m)$ is verified for bounded $m$; the unconditional proof is a current frontier.
-
-**Bridge to known mathematics:** The companion matrices governing $S_{q}$ recurrences are related to transfer operators in statistical mechanics. The moment hierarchy $S_{0}, S_{1}, S_{2}, \ldots$ parallels the moment problem in probability theory and the partition function approach in thermodynamic formalism.
+**Bridge to known mathematics:** The companion matrices governing $S_q$ recurrences are related to transfer operators in statistical mechanics. The moment hierarchy parallels the moment problem in probability theory and the partition function approach in thermodynamic formalism.
 
 ### III. Collision Kernel and Spectral Theory
 
-The $S_{q}$ recurrences are governed by **collision kernel matrices** — companion matrices whose spectral properties determine the asymptotic growth of moments.
+The $S_q$ recurrences are governed by **collision kernel matrices** whose spectral properties determine asymptotic growth. For $S_2$ : a $3 \times 3$ matrix with $\text{tr} = 2$ , $\det = -2$ , satisfying Cayley-Hamilton $M^3 = 2M^2 + 2M - 2I$ . Hankel determinant analysis confirms the recurrence order is exactly 3.
 
-For $S_{2}$: a $3 \times 3$ matrix with $\text{tr} = 2$, $\det = -2$, satisfying Cayley-Hamilton $M^{3} = 2M^{2} + 2M - 2I$. Its characteristic polynomial's roots control the exponential growth rate of $S_{2}(m)$.
-
-The **Hankel determinant** analysis confirms that the recurrence order is exactly 3 (not reducible to order 2), and the spectrum is computed via the **collision zeta operator** framework — a formal power series whose rationality encodes all moment asymptotics.
-
-**Bridge to known mathematics:** This is structurally analogous to the Ruelle zeta function in dynamical systems and the Ihara zeta function in graph theory. The rationality of the collision zeta is a finite-type version of the rationality theorems for zeta functions of sofic shifts.
+**Bridge to known mathematics:** Structurally analogous to the Ruelle zeta function in dynamical systems and the Ihara zeta function in graph theory.
 
 ### IV. Defect Algebra and Discrete Calculus
 
-The fold operator does not commute with arithmetic in general. The **defect** measures this failure:
+The fold operator does not commute with arithmetic in general. The **defect** $\delta(x, y) = \Phi(x \oplus y) - \Phi(x) \oplus \Phi(y)$ measures this failure. It satisfies a chain algebra, a carry structure, and a **discrete Stokes identity** relating boundary defects to interior structure.
 
-$$\delta(x, y) = \Phi(x \oplus y) - \Phi(x) \oplus \Phi(y)$$
-
-The defect vanishes exactly when fold commutes with addition — a condition that characterizes a distinguished subset of $X_{m}$. The defect satisfies:
-
-- **Chain algebra**: defects compose along the modular tower
-- **Carry structure**: $\text{restrict}(x \oplus_{m+1} y) = \text{restrict}(x) \oplus_{m} \text{restrict}(y) + \kappa \cdot \chi^{\text{carry}}$
-- **Discrete Stokes identity**: a summation-by-parts formula relating boundary defects to interior structure
-
-**Bridge to known mathematics:** The defect algebra is a discrete analogue of curvature in differential geometry. The discrete Stokes identity connects to non-commutative differential calculus and the theory of lattice gauge fields.
+**Bridge to known mathematics:** The defect algebra is a discrete analogue of curvature in differential geometry. The discrete Stokes identity connects to non-commutative differential calculus and lattice gauge fields.
 
 ### V. Scan-Projection Generation (SPG)
 
-The **scan error** $\varepsilon_{m}$ measures information loss when projecting the full word space onto the stable subspace through the fold operator:
+The **scan error** $\varepsilon_m$ measures information loss when projecting the full word space onto the stable subspace. Discrete and measure-theoretic versions are both formalized, with Bayesian half-bound $2\varepsilon \leq 1$ , observation refinement monotonicity, and complement symmetry.
 
-- Discrete and measure-theoretic versions, both formalized
-- **Bayesian half-bound**: $2\varepsilon \leq 1$
-- **Observation refinement monotonicity**: finer observations never increase scan error
-- **Complement symmetry**: scan error of an event and its complement are related
-
-The SPG framework is the paper's central construction — a recursive process generating projections at each scale, with the golden ratio controlling the geometry of information loss at every level.
-
-**Bridge to known mathematics:** SPG connects to rate-distortion theory in information theory, to wavelet multiresolution analysis (successive approximation at different scales), and to the renormalization group in statistical physics (coarse-graining with controlled error).
+**Bridge to known mathematics:** SPG connects to rate-distortion theory, wavelet multiresolution analysis, and the renormalization group in statistical physics.
 
 ### VI. Dynamics and Topology
 
-The **shift map** $\sigma: X_{m} \to X_{m}$ gives the golden-mean shift its dynamics:
+The **shift map** $\sigma: X_m \to X_m$ carries topological entropy $h_{\text{top}} = \log \varphi$ (`topological_entropy_eq_log_phi`), Perron-Frobenius spectral theory on the transfer matrix $A^2 = A + I$ , unique fixed point, and periodic orbits with minimality proofs.
 
-- **Topological entropy**: $h_{\text{top}} = \log \varphi$, proved via Fibonacci ratio convergence → logarithm continuity → Cesaro averaging → telescoping (`topological_entropy_eq_log_phi`)
-- **Transfer matrix**: the golden-mean adjacency matrix and its Fibonacci identities:
-
-$$
-A = \begin{pmatrix}
-1 & 1 \\
-1 & 0
-\end{pmatrix},
-\qquad
-A^{2} = A + I
-$$
-
-  together with Cassini's identity $F_{n+1}F_{n-1} - F_{n}^{2} = (-1)^{n}$ and Lucas trace $\text{tr}(A^{n}) = L_{n}$
-- **Perron-Frobenius**: positive eigenvector, real eigenvalue constraint to $x^{2} - x - 1 = 0$, dominant root $\varphi$
-- **Unique fixed point**: $\sigma$ has exactly one fixed point (the all-false word)
-- **Periodic orbits**: period-2, period-3, period-4 orbits with minimality proofs
-
-**Bridge to known mathematics:** The golden-mean shift is the canonical example in symbolic dynamics (Lind-Marcus). The Perron-Frobenius analysis connects to the thermodynamic formalism (Ruelle, Bowen) and to the theory of Markov chains. The entropy $\log \varphi$ appears as the capacity of the $(1,\infty)$ RLL constrained channel in coding theory.
+**Bridge to known mathematics:** The golden-mean shift is the canonical example in symbolic dynamics (Lind-Marcus). The entropy $\log \varphi$ is the capacity of the $(1,\infty)$ RLL constrained channel in coding theory.
 
 ### VII. Modular Tower and Inverse Limit
 
-The restriction maps $\text{restrict}: X_{m+1} \to X_{m}$ form a **projective system** of ring homomorphisms:
+The restriction maps form a projective system of ring homomorphisms. The inverse limit $X_\infty = \varprojlim X_m$ is compact, totally disconnected, metrizable, and infinite (`inverseLimitEquiv`).
 
-- Surjective, transitive, zero-preserving at every level
-- Fiber-nonempty: every stable word has preimages
-- Carry defect: addition interacts with restriction via a controlled error term
-
-The inverse limit
-
-$$
-X_{\infty} = \varprojlim X_{m}
-$$
-
-is:
-- **Compact** (Tychonoff)
-- **Totally disconnected** (clopen basis)
-- **Metrizable** (prefix ultrametric from PiNat)
-- **Infinite** (injection $n \mapsto$ the bit at position $2n$)
-
-**Bridge to known mathematics:** This tower is structurally analogous to the p-adic integers
-
-$$
-\mathbb{Z}_{p} = \varprojlim \mathbb{Z}/p^{n}\mathbb{Z}
-$$
-
-but with Fibonacci numbers replacing prime powers. The carry defect is the analogue of carrying in p-adic addition. The inverse limit $X_{\infty}$ is a profinite ring governed by the golden ratio rather than a prime.
+**Bridge to known mathematics:** Structurally analogous to the p-adic integers $`\mathbb{Z}_p = \varprojlim \mathbb{Z}/p^n\mathbb{Z}`$ but with Fibonacci numbers replacing prime powers. $`X_\infty`$ is a profinite ring governed by the golden ratio.
 
 ### VIII. Circle Dimension and Diophantine Structure
 
-The **audit stability** framework measures how stable the fiber structure is under perturbation:
+The **circle dimension** $\text{cdim}(G) = \dim((\widehat{G})^0)$ counts independent phase circle factors via the Pontryagin dual. It is isomorphism-invariant, direct-sum additive, and finite-extension invariant (`circleDim`, `circleDim_add`, `circleDim_finite_extension`). The **audit stability** framework connects to badly approximable matrices, and higher-order fiber spectra are shown to not be determined by marginals.
 
-- Boxwise audit stability ↔ badly approximable matrices (`audit_stability_iff_badly_approximable`)
-- Higher-order fiber spectra not determined by marginals (`higher_spectrum_not_determined_by_marginals`)
-- Prime support objects and spectral counting
-
-**Bridge to known mathematics:** This connects to the metrical theory of Diophantine approximation (Khintchine, Schmidt) and to the geometry of numbers. The "badly approximable" condition is the golden-ratio analogue of the classical notion for real numbers.
+**Bridge to known mathematics:** Connects to the metrical theory of Diophantine approximation (Khintchine, Schmidt), the geometry of numbers, and Haar measure theory on compact groups.
 
 ### IX. Combinatorial Structures
 
-- **Path independent sets**: the number of independent sets in the path graph $P_{n}$ equals $F_{n+2}$ (`path_independent_set_count`), proved by partition + bijection + strong induction
-- **Fibonacci cubes**: ~510 theorems on the hypercube subgraph induced by Zeckendorf representations
-- **Fibonacci polynomials**: $F_{n}(x)$ satisfying $F_{n+2}(x) = F_{n+1}(x) + x \cdot F_{n}(x)$, with $F_{n}(1) = \text{fib}(n)$
+Path independent sets in $P_n$ count to $F_{n+2}$ (`path_independent_set_count`). ~510 theorems on Fibonacci cubes. Fibonacci polynomials $F_n(x)$ satisfying $F_{n+2}(x) = F_{n+1}(x) + x \cdot F_n(x)$ .
 
-**Bridge to known mathematics:** Fibonacci cubes are studied in distributed computing (interconnection networks), coding theory (error-correcting codes with Fibonacci structure), and combinatorial optimization.
+**Bridge to known mathematics:** Fibonacci cubes are studied in distributed computing, coding theory, and combinatorial optimization.
+
+### X. Recursive Addressing and NULL Semantics
+
+New concepts are generated from old readout sequences. The core theorem: the derived $\sigma$ -algebra **never expands**:
+
+$$\mathcal{G}^{(L+1)} \subseteq \mathcal{G}^{(L)}$$
+
+Recursive addressing only reorganizes visible events within the existing measurable structure. Nothing external is injected. The entire construction is endogenous.
+
+**Address precedes value.** Before an address $a$ is given, the evaluation function $\mathbf{1}_{C_a}$ is undefined at the type level — not zero, but structurally absent. The paper defines this as NULL: "the question cannot be asked because the address does not exist." Three structurally distinct kinds:
+
+- **Semantic NULL**: address not in the protocol
+- **Protocol NULL**: visible domain rejects it
+- **Collision NULL**: insufficient side-information to reconstruct uniquely
+
+When local certificates exist but fail to glue globally, the obstruction is a **Cech $H^2$ cohomology class** — a precise topological witness. The gerbe structure (Theorem `prefix-site-cech-null-gerbe`) elevates this to a full 2-categorical framework.
+
+**Bridge to known mathematics:** The $\sigma$ -algebra non-expansion connects to the theory of sufficient statistics and information-theoretic data processing inequalities. The $H^2$ obstruction framework connects to sheaf cohomology, gerbes, and the classification of fiber bundles.
+
+### XI. The Forcing Framework
+
+Above all concrete results sits a logical spine: a chain of 11 conservative extensions
+
+$$\mathbb{L}_0 \preceq \mathbb{L}_1 \preceq \cdots \preceq \mathbb{L}_{10}^{\text{OST}}$$
+
+Each layer adds structure (types, contexts, references, NULL semantics, dynamics, multi-axis refinement, observer indexing) without rewriting the meaning of lower layers. A formula forced at layer $n$ remains forced at layer $n+k$ . This is not a collection of parallel theories but a single generating chain where each extension is conservative.
+
+The forcing relation $M, p \Vdash \varphi$ means: formula $\varphi$ holds for **all** realizations still compatible with information state $p$ . Refinement only shrinks the undetermined part; it never overturns what is already established.
+
+**Bridge to known mathematics:** The forcing framework generalizes Kripke semantics and Cohen forcing from set theory to a typed, multi-layer, observer-indexed setting. The conservative extension chain is analogous to towers of field extensions in algebra.
+
+### XII. Projection Ontology Mathematics (POM)
+
+POM is not a new theory. It is a **unified syntax lift** of everything above.
+
+All prior constructions — folding, addressing, arithmetic, rewriting — compress into a single micro-syntax: LIFT $\circ$ $U^t$ $\circ$ PROJECT. Objects are stable readouts under projection gates. Operations are composable projection words. Theorems are equivalences of projection words. Proofs are auditable rewrite certificates (terminating, confluent, decidable on local fragments).
+
+Four irreducible projection gates stratify all visible mathematics:
+
+1. $P_Z$ alone → normalized arithmetic (add/multiply as value-preserving rewrite)
+2. $P_Z + P_\leq$ → order and quotient-remainder (the irreducible sequential bottleneck)
+3. $+ P_{\text{prim}}$ → primitive atomic layer (prime-like orbit decomposition from time traces)
+4. $+ P_\chi$ → character/role slices and Fourier layer
+
+The collision moments (Section II) become power sums over congruence classes: $S_q(m) = \sum_{r} c_m(r)^q$ — the spectral shadow of modular arithmetic. As collision order $q \to \infty$ , the Perron eigenvalues satisfy $r_q^{1/q} \to \sqrt{\varphi}$ . The golden ratio is **recovered as a spectral invariant**, not assumed as an input.
+
+**Bridge to known mathematics:** The projection-word 2-category connects to rewriting systems and term algebras. The four-gate stratification parallels the hierarchy from arithmetic to analytic number theory. The spectral endpoint recovery connects to large-deviation theory and thermodynamic formalism.
+
+### XIII. Zeta Functions, Canonical Systems, and the RH Template
+
+The golden-mean SFT has dynamical zeta function $\zeta(z) = 1/(1 - z - z^2)$ with principal pole at $z = \varphi^{-1}$ . Following the completion to $\Xi$ and assuming the completion determinant $D(s)$ has pure phase on the critical line (horizon zero-knowledge unitarity), de Branges theory provides:
+
+- **Canonical system**: $D$ lifts uniquely to a rank-1 Hamiltonian ODE; "extreme zero-knowledge" $\iff$ $\text{rank}\,H(x) = 1$ a.e.
+- **Spectral shift = information leakage**: Krein's formula equates KL divergence of transcripts with spectral shift density
+- **SU(1,1) Riemann-Hilbert equivalence**: all zeros on critical line $\iff$ positive-definite solvability (no off-critical resonance poles)
+- **Adelic gluing**: local Weil purity + uniform simulator across primes $\Rightarrow$ inner function with vanishing outer factor $\Rightarrow$ critical-line concentration
+- **Non-normality obstruction**: off-critical zeros $\iff$ the horizon update operator is not similar to a normal operator
+
+This is not a proof of the Riemann Hypothesis. It is a **sufficient-condition template** that translates RH into an auditable positive-definiteness condition within the zero-knowledge framework.
+
+**Bridge to known mathematics:** The canonical system framework connects to de Branges spaces, inverse spectral theory, and the Hilbert-Polya program. The SU(1,1) RH equivalence connects to Riemann-Hilbert problems in integrable systems. The adelic gluing connects to the Langlands program and automorphic forms.
+
+### XIV. Physical Spacetime Skeleton
+
+The derivation chain does not stop at spectral theory. From the forcing framework already established, a minimal physical spacetime skeleton emerges — not by assuming physics, but by reading the existing structure as a spacetime:
+
+- **Observer** is not a privileged subject but a fiber index on the state space. "Who observes what" becomes "which state fiber admits which local comparisons."
+- **Time** is the projection of the **decision envelope** onto the refinement chain: $`T^{i,U}_{\mathcal{O}}(H) := H/{\sim_{\mathcal{O}}}`$ . Time advances only when $`\text{Dec}_{\mathcal{O}}(p) \subsetneq \text{Dec}_{\mathcal{O}}(q)`$ . The arrow of time is the monotonicity of forcing.
+- **Space** comes from shared support, common forcing, and resource transport cost.
+- **Causality** comes from the partial order on admissible refinement chains.
+- **Clock transport** satisfies $\delta\Theta = \Omega$ (transport curvature). Local potentials yield lapse $N = e^{-\phi}$ and redshift $\nu_B/\nu_A = N(A)/N(B)$ .
+- The **audit seed** (real-input 40-state kernel at $\theta = 0$ ) provides a rank-3 local space. Gluing compatible charts produces a 4D Lorentz manifold $M_{\text{adm}}$ .
+- The **minimal second-order covariant closure** is unique: $R_g - 2\Lambda$ . Variation gives Einstein's equation:
+
+$$G_{\mu\nu} + \Lambda\,g_{\mu\nu} = \kappa\,T^{(\text{res})}_{\mu\nu}$$
+
+No physics axioms were added. The equation is the unique closure of the forcing structure on $M_{\text{adm}}$ .
+
+**What is NOT claimed:** The project does not claim to have recovered standard quantum mechanics or general relativity in their full form. It claims a pure derivation chain to Hilbert-type quantum structure and Einstein closure on $M_{\text{adm}}$ . Full recovery under stronger globalization, complete covariance, and rigidity in continuous limits requires representation theorems, limit theorems, and rigidity theorems that are explicitly deferred.
+
+**Bridge to known mathematics:** The decision-envelope time connects to the internal time problem in quantum gravity. The clock transport equation connects to the Unruh effect and gravitational redshift. The uniqueness of $R_g - 2\Lambda$ is Lovelock's theorem in 4 dimensions.
+
+### XV. Three Structural Interfaces
+
+These results are not independent. Three structural interfaces recur across all sections:
+
+1. **Resolution coarsening is nonlocal.** Folding is not naive truncation. A local window's influence propagates through fiber structure when projected to lower resolution. The gauge anomaly $G_m$ quantifies this precisely.
+
+2. **The sequence layer compensates for local loss.** Window-level folding is many-to-one (local information loss). At the sequence level, finite-memory inverse codes recover what was lost. Entropy rate does not drop. "Locally lost, globally recovered" is structural, not accidental.
+
+3. **Value-preserving groupoid + unique section = arithmetic.** Local invertible rewrites organize states with different representations but equal values into groupoid orbits. The Zeckendorf cross-section is the unique normal form. Stable arithmetic emerges on this cross-section.
 
 ## The Derivation Chain
-
-What makes this project unusual is not any single result, but the **unbroken derivation chain** from the seed:
 
 ```
 x² = x + 1
@@ -191,42 +199,47 @@ x² = x + 1
 │   │   ├─► fold operator Φ: X_{m+1} → X_m
 │   │   │   ├─► fiber structure, multiplicity d(x)
 │   │   │   │   ├─► moment sums S_q(m) = Σ d(x)^q
-│   │   │   │   │   ├─► collision decomposition E₀₀, C(m,d)
-│   │   │   │   │   │   └─► S₂ recurrence (unconditional, ∀m)
-│   │   │   │   │   │       ├─► strict monotonicity, positivity
-│   │   │   │   │   │       └─► collision kernel matrices
-│   │   │   │   │   │           ├─► Cayley-Hamilton, characteristic polynomials
-│   │   │   │   │   │           ├─► Hankel determinants, minimal order
-│   │   │   │   │   │           └─► collision zeta rationality
+│   │   │   │   │   ├─► collision decomposition → S₂ recurrence (∀m)
+│   │   │   │   │   │   └─► collision kernel matrices → Cayley-Hamilton
+│   │   │   │   │   │       └─► Hankel rank → collision zeta rationality
 │   │   │   │   │   └─► S₃ recurrence (bounded verification)
-│   │   │   │   ├─► fiber spectrum D_m^(k), closed forms
+│   │   │   │   ├─► fiber independence complex → sphere/contractible dichotomy
 │   │   │   │   └─► fiber fusion inequalities
-│   │   │   ├─► defect algebra
-│   │   │   │   ├─► zero condition ↔ fold commutativity
-│   │   │   │   ├─► discrete Stokes identity
-│   │   │   │   └─► carry defect chain
-│   │   │   └─► scan error (SPG)
-│   │   │       ├─► Bayesian half-bound
-│   │   │       ├─► observation refinement monotonicity
-│   │   │       └─► complement symmetry
+│   │   │   ├─► defect algebra → discrete Stokes → carry chain
+│   │   │   └─► scan error (SPG) → Bayesian bound, monotonicity
 │   │   │
 │   │   ├─► stable arithmetic ⊕, ⊗ on X_m
 │   │   │   ├─► ring isomorphism X_m ≃ ℤ/F_{m+2}ℤ
 │   │   │   │   ├─► Fibonacci prime fields
-│   │   │   │   └─► CRT decomposition (composite F_{m+2})
-│   │   │   └─► modular tower with carry defects
-│   │   │       └─► inverse limit X_∞ (compact, totally disconnected)
+│   │   │   │   └─► CRT decomposition
+│   │   │   └─► modular tower → inverse limit X_∞ (profinite ring)
 │   │   │
-│   │   └─► circle dimension
-│   │       ├─► audit stability ↔ badly approximable
-│   │       └─► higher spectra ≠ marginals
+│   │   ├─► circle dimension (Pontryagin dual) → phase channel counting
+│   │   │
+│   │   └─► recursive addressing
+│   │       ├─► σ-algebra non-expansion: G^{L+1} ⊆ G^{L}
+│   │       ├─► NULL trichotomy (semantic / protocol / collision)
+│   │       └─► Čech H² gluing obstruction → gerbe semantics
 │   │
-│   └─► shift dynamics σ: X_m → X_m
-│       ├─► topological entropy = log φ
-│       ├─► Perron-Frobenius spectral theory
-│       │   └─► transfer matrix eigenvalues
-│       ├─► periodic orbits (period 2, 3, 4)
-│       └─► unique fixed point
+│   ├─► forcing framework L₀ ⪯ L₁ ⪯ ··· ⪯ L₁₀ᴼˢᵀ
+│   │
+│   ├─► POM: unified projection syntax (LIFT ∘ Uᵗ ∘ PROJECT)
+│   │   ├─► four irreducible gates: P_Z, P_≤, P_prim, P_χ
+│   │   ├─► projection word 2-category, rewrite certificates
+│   │   └─► collision spectral endpoint: r_q^{1/q} → √φ
+│   │
+│   ├─► ζ / Ξ / canonical systems
+│   │   ├─► de Branges rank-1 Hamiltonian
+│   │   ├─► Krein spectral shift = KL divergence
+│   │   ├─► SU(1,1) RH equivalence
+│   │   └─► adelic gluing → critical-line template
+│   │
+│   └─► physical spacetime skeleton
+│       ├─► observer = state fiber
+│       ├─► time = decision envelope projection
+│       ├─► clock transport: δΘ = Ω → lapse, redshift
+│       ├─► audit seed → rank-3 space → 4D Lorentz M_adm
+│       └─► minimal closure uniqueness → Einstein equation
 │
 └─► combinatorics
     ├─► path independent set count = F_{n+2}
@@ -234,69 +247,91 @@ x² = x + 1
     └─► Fibonacci polynomials F_n(x)
 ```
 
-Every arrow is a formally verified derivation step. No axioms. No gaps.
+Every arrow is a formally verified derivation step or a traced derivation in the theory paper. No axioms. No gaps.
 
-## Open Frontiers
+## The System
 
-- **Fiber multiplicity closed form**: the conjectured formula $D_{2k} = F_{k+2}$, $D_{2k+1} = 2F_{k}$ is proved conditionally on a two-step recurrence; removing the condition is in progress
-- **S₃ unconditional recurrence**: $S_{3}(m+3) = 2S_{3}(m+2) + 4S_{3}(m+1) - 2S_{3}(m)$, verified for bounded $m$, unconditional proof is the next major milestone
-- **Spectral radius**: $\rho(A) = \varphi$ for the golden-mean adjacency; the concrete Perron root is proved, spectral radius API in Mathlib is pending
-- **SPG martingale convergence**: proving the prefix scan error sequence is a supermartingale
-- **Cantor set homeomorphism**: $X_{\infty}$ is homeomorphic to the Cantor set (topological classification of the inverse limit)
-- **Physical correspondences**: systematic identification of derived structures with known objects in statistical mechanics, coding theory, and dynamical systems
-- **Zeta rationality**: analytic continuation of the collision zeta function
+The Omega Project is one system with three layers:
+
+```
+SEED: x² = x + 1
+    │
+    ▼
+┌─────────────────────────────────┐
+│  LAYER 1: DERIVATION ENGINE     │
+│  Lean 4 — 10,588+ theorems      │
+│  Zero axioms, machine-verified  │
+└───────────────┬─────────────────┘
+                │
+                ▼
+┌─────────────────────────────────┐
+│  LAYER 2: KNOWLEDGE GRAPH       │
+│  Sisyphus — ~20,998 nodes       │
+│  Theorem dependencies & depth   │
+└───────────────┬─────────────────┘
+                │
+                ▼
+┌─────────────────────────────────┐
+│  LAYER 3: PUBLICATION PIPELINE  │
+│  16 AI agents → journal papers  │
+└─────────────────────────────────┘
+```
+
+One equation in. Verified, visualized, published mathematics out.
+
+![Sisyphus Knowledge Graph](docs/dossier/assets/sisyphus.png)
+
+→ [Full system architecture](docs/dossier/) · [Browse the papers](papers/publication/)
+
+## The Publication Pipeline
+
+16 AI agents collaborate to automatically extract, formalize, review, and publish journal papers from the core theory:
+
+- **8 formalization agents** (analyst, formalizer, reviewer, registrar, optimizer, orchestrator, + 2 Codex consultants) work in parallel to machine-verify theorems in Lean 4
+- **8 publication agents** (orchestrator, researcher, journal-rewriter, editorial reviewer, integrator, biblio manager, lean-sync checker, submission preparer) operate a 7-stage pipeline from intake (P0) through submission-ready (P7)
+
+Current status: 42 papers in the pipeline. 3 at P7 (submission-ready) targeting Ergodic Theory & Dynamical Systems, Annals of Pure and Applied Logic, and Transactions of the AMS.
+
+→ [How the system works end-to-end](docs/dossier/#the-system)
 
 ## Project Structure
 
 ```
 automath/
-├── lean4/                  # Omega Lean 4 library (see lean4/README.md)
-│   ├── Omega/
-│   │   ├── Core/           # Fibonacci, Word, No11, CoprimeSMul
-│   │   ├── Folding/        # 44 files: fold, fibers, moments, collisions, defects,
-│   │   │                   #   carry, entropy, inverse limits, circle dimension,
-│   │   │                   #   shift dynamics, SPG interface, Hankel, zeta operators
-│   │   ├── SPG/            # Scan-projection generation: cylinders, prefix metric,
-│   │   │                   #   clopen sets, scan error (discrete + measure)
-│   │   ├── Graph/          # Labeled graphs, sofic shifts, transfer matrices
-│   │   ├── Frontier/       # Paper interface: assumptions, certificates, conjectures
-│   │   └── Combinatorics/  # Path independent sets, Fibonacci cubes
-│   ├── Omega.lean          # Root import (66 modules)
+├── docs/                   # Supplementary documentation
+│   └── dossier/            # Narrative introduction for general audiences
+├── lean4/                  # Omega Lean 4 library (38,876 lines, 104 files)
+│   ├── Omega/              # Core, Folding, SPG, Graph, Frontier, Combinatorics,
+│   │                       #   CircleDimension, Conclusion, EmergentAlgebra, Zeta
+│   ├── Omega.lean          # Root import
 │   └── IMPLEMENTATION_PLAN.md
-├── theory/                 # Mathematical paper + reproducible pipelines
-│   └── 2026_golden_.../    # 10,588 theorem-level statements, 21 chapters + 13 appendices
-│       ├── main.tex
-│       ├── scripts/        # Reproducible experiment pipeline
-│       └── sections/       # body, appendix, generated LaTeX
-└── .github/workflows/      # CI: Lean build with mathlib cache
+├── theory/                 # Core theory paper (770K lines)
+│   └── 2026_golden_.../    # 10,588 theorems, 21 chapters + 13 appendices
+│       ├── sections/       # 2,823 .tex files (body + appendix + generated)
+│       └── scripts/        # 515 reproducible Python experiment scripts
+├── papers/publication/     # 42 extracted journal papers (P0-P7 pipeline)
+├── .claude/agents/         # 16 AI agent definitions
+└── .github/workflows/      # CI: Lean build + axiom audit + coverage
 ```
 
 ## Status
 
 | Metric | Value |
 |--------|-------|
-| Lean 4 lines | ~25,000 |
-| Theorems & definitions | ~2,350 |
-| Lean files | 66 |
-| **Axioms** | **0** |
-| Paper theorem-level statements | 10,588 |
-| Paper chapters | 21 body + 13 appendix |
-| Formalization coverage | ~12.3% (1,300 / 10,588) |
+| Theory: theorem-level statements | 10,588 |
+| Theory: chapters | 21 body + 13 appendix |
+| Theory: mathematical domains | 12+ |
+| Theory: lines | ~770,000 |
+| Lean 4: lines of code | 38,876 |
+| Lean 4: theorems & definitions | 3,427 |
+| Lean 4: **axioms** | **0** |
+| Lean 4: formalization rounds | 182 |
+| Papers: total in pipeline | 42 |
+| Papers: submission-ready (P7) | 3 |
+| AI agents | 16 (8 formalization + 8 publication) |
+| Python experiment scripts | 515 |
 
-**Coverage by chapter:**
-
-| Chapter | Paper theorems | Formalized | Coverage |
-|---------|---------------|------------|----------|
-| SPG | 127 | ~70 | ~55% |
-| Nascent Arithmetic | 151 | ~88 | ~58% |
-| POM (fiber spectrum) | 1,525 | ~507 | ~33% |
-| Folding | 317 | ~91 | ~29% |
-| Group Unification | 457 | ~106 | ~23% |
-| Circle Dimension | 342 | 62 | ~18% |
-| Zeta Finite Part | 4,437 | ~255 | ~6% |
-| Conclusions | 1,727 | 83 | ~5% |
-
-The library depends on [Mathlib](https://github.com/leanprover-community/mathlib4) v4.28.0 and Lean 4 v4.28.0.
+The library depends on [Mathlib](https://github.com/leanprover-community/mathlib4) and Lean 4.
 
 ## Build
 
@@ -314,6 +349,13 @@ pip install -r requirements.txt
 python3 scripts/run_all.py    # generates all figures/tables
 latexmk -pdfxe main.tex       # compiles the paper
 ```
+
+## Open Frontiers
+
+- **S₃ unconditional recurrence**: $S_3(m+3) = 2S_3(m+2) + 4S_3(m+1) - 2S_3(m)$ , verified for bounded $m$
+- **Fiber multiplicity closed form**: $D_{2k} = F_{k+2}$ , $D_{2k+1} = 2F_k$ , conditional on two-step recurrence
+- **Cantor set homeomorphism** for $X_\infty$
+- **Full globalization** beyond $M_{\text{adm}}$ : representation, limit, and rigidity theorems
 
 ## License
 

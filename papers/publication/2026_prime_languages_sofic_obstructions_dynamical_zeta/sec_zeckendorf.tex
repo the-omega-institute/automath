@@ -1,0 +1,126 @@
+\section{Zeckendorf Syntax and Sofic Obstructions}
+\label{sec:zeckendorf}
+
+Let
+\[
+  \mathcal Z
+  :=\{x_1\cdots x_m\in\{0,1\}^\ast:
+      x_ix_{i+1}\neq 11,\ x_m=1\}
+\]
+be the language of canonical Zeckendorf words. For
+\(w=x_1\cdots x_m\in\mathcal Z\), define
+\[
+  \val(w):=\sum_{k=1}^m x_kF_{k+1},
+\]
+where \(F_n\) is the Fibonacci sequence. The map \(w\mapsto\val(w)\)
+is a bijection from \(\mathcal Z\) onto \(\NN_{\ge 1}\)
+\cite{Zeckendorf1972}.
+
+\begin{theorem}[Regular Zeckendorf languages have power-law growth]
+  \label{thm:zeckendorf-regular-powerlaw}
+  Let \(L\subseteq\mathcal Z\) be regular and define
+  \[
+    N_L(T):=\#\{w\in L:\val(w)\le T\}.
+  \]
+  Then there exists \(\alpha\in[0,1]\) such that
+  \[
+    N_L(T)=T^{\alpha+o(1)}
+    \qquad (T\to\infty).
+  \]
+\end{theorem}
+
+\begin{proof}
+  Let \(a_m:=\#\{w\in L:\abs{w}=m\}\). Since \(L\) is regular,
+  \(a_m=u^{\mathsf T}B^m v\) for some non-negative integer matrix \(B\).
+  Hence \(a_m=\lambda^{m+o(m)}\) for a well-defined exponential growth
+  rate \(\lambda\in[0,\varphi]\). The upper bound \(\lambda\le\varphi\)
+  follows from
+  \[
+    \abs{\mathcal Z\cap\{0,1\}^m}=F_{m+1}=\varphi^{m+o(m)}.
+  \]
+
+  If \(F_{n+1}\le T<F_{n+2}\), then every Zeckendorf word of value at
+  most \(T\) has length at most \(n\), while every word of length at
+  most \(n-1\) has value at most \(T\). Therefore
+  \[
+    \sum_{m\le n-1}a_m\le N_L(T)\le \sum_{m\le n}a_m.
+  \]
+  Since \(n=(\log T)/(\log\varphi)+O(1)\) and
+  \(\sum_{m\le n}a_m=\lambda^{n+o(n)}\), we obtain
+  \[
+    N_L(T)
+    =\exp\!\left(
+      \frac{\log\lambda}{\log\varphi}\log T+o(\log T)
+    \right)
+    =T^{\alpha+o(1)}
+  \]
+  with \(\alpha:=\log\lambda/\log\varphi\in[0,1]\).
+\end{proof}
+
+\begin{corollary}[Prime Zeckendorf language is not regular]
+  \label{cor:zeckendorf-prime-language-not-regular}
+  Let
+  \[
+    \mathcal P_{\mathcal Z}
+    :=\{\mathrm{Zeck}(p)\in\mathcal Z:p\text{ prime}\},
+  \]
+  where \(\mathrm{Zeck}(n)\) denotes the canonical Zeckendorf
+  representation of \(n\). Then \(\mathcal P_{\mathcal Z}\) is not a
+  regular language.
+\end{corollary}
+
+\begin{proof}
+  If \(\mathcal P_{\mathcal Z}\) were regular, then
+  \Cref{thm:zeckendorf-regular-powerlaw} would give
+  \[
+    \pi(T)=N_{\mathcal P_{\mathcal Z}}(T)=T^{\alpha+o(1)}
+  \]
+  for some \(\alpha\in[0,1]\). This is impossible because
+  \(\pi(T)\sim T/\log T\): for every \(\alpha<1\) one has
+  \(\pi(T)/T^\alpha\to\infty\), while \(\pi(T)/T\to 0\).
+\end{proof}
+
+\begin{proposition}[Sofic word counts are exponential polynomials]
+  \label{prop:sofic-counts-exponential-polynomial}
+  Let \(X\) be a sofic shift, and let \(a_m(X)\) denote the number of
+  admissible words of length \(m\). Then
+  \[
+    a_m(X)=\sum_{j=1}^J Q_j(m)\lambda_j^m
+  \]
+  for some complex numbers \(\lambda_j\) and some polynomials \(Q_j\).
+  Equivalently, the sequence \(a_m(X)\) satisfies a linear recurrence.
+\end{proposition}
+
+\begin{proof}
+  A sofic shift admits a finite labelled graph presentation, and the
+  number of admissible words of length \(m\) is obtained from powers of
+  the associated finite adjacency matrix; see
+  \cite{LindMarcus1995,Kitchens1998}. The Jordan normal form of a
+  finite matrix yields the displayed exponential-polynomial expansion.
+\end{proof}
+
+\begin{theorem}[Prime Zeckendorf slices are not sofic]
+  \label{thm:zeckendorf-primes-not-sofic}
+  Let
+  \[
+    \mathcal P_m^{(\mathrm Z)}
+    :=\{w\in\mathcal Z:\abs{w}=m,\ \val(w)\text{ prime}\}.
+  \]
+  Then the length slices \(\mathcal P_m^{(\mathrm Z)}\) cannot be the
+  admissible words of any sofic shift.
+\end{theorem}
+
+\begin{proof}
+  Since \(\mathcal Z\cap\{0,1\}^m\) parametrises the integers in
+  \([1,F_{m+2})\), one has
+  \[
+    \abs{\mathcal P_m^{(\mathrm Z)}}
+    =\pi(F_{m+2})+O(1)
+    \asymp \frac{\varphi^m}{m}.
+  \]
+  By \Cref{prop:sofic-counts-exponential-polynomial}, the word-count
+  sequence of a sofic shift is an exponential polynomial
+  \(\sum_jQ_j(m)\lambda_j^m\). Such a sequence has dominant asymptotic
+  \(m^k\Lambda^m\) for some integer \(k\ge 0\), never \(\Lambda^m/m\).
+  This contradicts the displayed estimate.
+\end{proof}

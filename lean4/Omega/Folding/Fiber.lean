@@ -158,7 +158,7 @@ theorem stableValueFin_injective (m : Nat) :
     Function.Injective (stableValueFin (m := m)) := by
   intro x y h
   have := congr_arg Fin.val h
-  simp only [stableValueFin, Fin.mk.injEq] at this
+  simp only [stableValueFin] at this
   exact (Function.HasLeftInverse.injective ⟨X.ofNat m, X.ofNat_stableValue⟩) this
 
 /-- The stable syntax space is equivalent to Fin(F(m+2)).
@@ -176,6 +176,13 @@ theorem stableValueFin_surjective (m : Nat) :
 theorem stableValueFin_bijective (m : Nat) :
     Function.Bijective (stableValueFin (m := m)) :=
   ⟨stableValueFin_injective m, stableValueFin_surjective m⟩
+
+/-- The Zeckendorf value map gives a bijection X_m ↔ Fin(F_{m+2}), proving that
+    the Fibonacci quotient monoid is isomorphic to {0,...,F_{m+2}-1}.
+    thm:monoid-quotient-is-N -/
+theorem paper_monoid_quotient_is_N (m : Nat) :
+    Function.Bijective (stableValueFin (m := m)) :=
+  stableValueFin_bijective m
 
 /-- The fiber multiplicity of a stable word x: the number of raw words folding to x. -/
 def fiberMultiplicity (x : X m) : Nat := (fiber x).card

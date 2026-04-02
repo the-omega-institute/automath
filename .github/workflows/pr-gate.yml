@@ -1,0 +1,111 @@
+name: PR Gate
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-gate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  detect_changes:
+    name: Detect relevant changes
+    runs-on: ubuntu-latest
+    outputs:
+      tex: ${{ steps.detect.outputs.tex }}
+      lean4: ${{ steps.detect.outputs.lean4 }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed files
+        id: detect
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tex=true" >> "$GITHUB_OUTPUT"
+            echo "lean4=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          changed_files="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")"
+
+          tex=false
+          lean4=false
+
+          if printf '%s\n' "$changed_files" | grep -Eq '^theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence/.*\.tex$'; then
+            tex=true
+          fi
+
+          if printf '%s\n' "$changed_files" | grep -Eq '^lean4/'; then
+            lean4=true
+          fi
+
+          echo "tex=$tex" >> "$GITHUB_OUTPUT"
+          echo "lean4=$lean4" >> "$GITHUB_OUTPUT"
+
+      - name: Write summary
+        run: |
+          {
+            echo "PR gate path detection"
+            echo
+            echo "- tex changed: \`${{ steps.detect.outputs.tex }}\`"
+            echo "- lean4 changed: \`${{ steps.detect.outputs.lean4 }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  pdf:
+    name: PDF
+    needs: detect_changes
+    if: ${{ needs.detect_changes.outputs.tex == 'true' }}
+    uses: ./.github/workflows/reusable-pdf.yml
+    secrets: inherit
+
+  lean4:
+    name: Lean4
+    needs: detect_changes
+    if: ${{ needs.detect_changes.outputs.lean4 == 'true' }}
+    uses: ./.github/workflows/reusable-lean4.yml
+    secrets: inherit
+
+  gate:
+    name: Gate
+    needs: [detect_changes, pdf, lean4]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check results
+        run: |
+          detect_result="${{ needs.detect_changes.result }}"
+          pdf_result="${{ needs.pdf.result }}"
+          lean4_result="${{ needs.lean4.result }}"
+
+          {
+            echo "PR gate results"
+            echo
+            echo "- detect_changes: \`$detect_result\`"
+            echo "- pdf: \`$pdf_result\`"
+            echo "- lean4: \`$lean4_result\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$detect_result" = "failure" ] || [ "$detect_result" = "cancelled" ]; then
+            exit 1
+          fi
+
+          if [ "$pdf_result" = "failure" ] || [ "$pdf_result" = "cancelled" ]; then
+            exit 1
+          fi
+
+          if [ "$lean4_result" = "failure" ] || [ "$lean4_result" = "cancelled" ]; then
+            exit 1
+          fi

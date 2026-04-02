@@ -1,0 +1,138 @@
+\section{Information States and Flat Team-Style Forcing}\label{sec:information-states}
+
+This section defines the basic semantics used throughout. A state records a context together with the realizations still compatible with the information available.
+
+\subsection{States, refinement, and forcing}
+
+Fix a many-sorted first-order signature
+\[
+\Sigma=(S,F,R).
+\]
+For a model $M$, write $D_s^M$ for the interpretation of a sort $s\in S$. A \emph{context} is a finite typed list
+\[
+\Gamma=(x_1:s_1,\dots,x_n:s_n),
+\]
+and its realization set in $M$ is
+\[
+\Val_M(\Gamma):=\{\rho\mid \rho(x_i)\in D_{s_i}^M\text{ for }1\le i\le n\}.
+\]
+If $\Gamma\preceq\Delta$, every $\sigma\in\Val_M(\Delta)$ restricts to an element $\sigma|_{\Gamma}\in\Val_M(\Gamma)$.
+
+\begin{definition}[Information state]\label{def:information-state}
+An \emph{information state} in $M$ is a pair
+\[
+p=(\Gamma_p,R_p)
+\]
+such that $\Gamma_p$ is a context and $\varnothing\neq R_p\subseteq \Val_M(\Gamma_p)$. The set of information states in $M$ is denoted by $\St(M)$.
+\end{definition}
+
+\begin{definition}[Refinement]\label{def:refinement}
+For states $p=(\Gamma_p,R_p)$ and $q=(\Gamma_q,R_q)$ in the same model, write $q\le p$ if
+\begin{enumerate}[label=(\roman*),nosep]
+\item $\Gamma_p\preceq\Gamma_q$,
+\item every $\sigma\in R_q$ satisfies $\sigma|_{\Gamma_p}\in R_p$.
+\end{enumerate}
+\end{definition}
+
+Refinement therefore combines two monotonicities: the context may become richer, and the set of still-admissible realizations may become smaller.
+
+\begin{definition}[State forcing]\label{def:state-forcing}
+Let $p=(\Gamma_p,R_p)\in\St(M)$ and let $\varphi$ be a formula well formed in context $\Gamma_p$. We define
+\[
+M,p\Vdash\varphi
+\quad:\Longleftrightarrow\quad
+\forall \rho\in R_p\;(M,\rho\models\varphi).
+\]
+\end{definition}
+
+\begin{proposition}[Flat team-style reading of lower-layer forcing]\label{prop:flat-team-reading}
+Let $p=(\Gamma_p,R_p)$ be an information state. If one reads $R_p$ as a nonempty team of $\Gamma_p$-valuations, then for every lower-layer formula $\varphi$ well formed in context $\Gamma_p$,
+\[
+M,p\Vdash\varphi
+\quad\Longleftrightarrow\quad
+\forall \rho\in R_p\;(M,\rho\models\varphi).
+\]
+\end{proposition}
+
+\begin{proof}
+This is exactly \Cref{def:state-forcing}.
+\end{proof}
+
+\begin{definition}[State theory]\label{def:state-theory}
+For $p\in\St(M)$, define
+\[
+\Th_M(p):=\{\varphi\mid M,p\Vdash\varphi\}.
+\]
+\end{definition}
+
+\begin{definition}[Decidedness]\label{def:decidedness}
+A formula $\varphi$ is \emph{decided} at $p$, written $M,p\Downarrow\varphi$, if
+\[
+M,p\Vdash\varphi
+\qquad\text{or}\qquad
+M,p\Vdash\neg\varphi.
+\]
+\end{definition}
+
+\begin{proposition}[Persistence of forcing]\label{prop:forcing-persistence}
+If $q\le p$ and $M,p\Vdash\varphi$, then $M,q\Vdash\varphi^\uparrow$, where $\varphi^\uparrow$ is the same formula viewed in the larger context $\Gamma_q$.
+\end{proposition}
+
+\begin{proof}
+Let $\sigma\in R_q$. By \Cref{def:refinement}, its restriction $\sigma|_{\Gamma_p}$ lies in $R_p$. Since $M,p\Vdash\varphi$, we have $M,\sigma|_{\Gamma_p}\models\varphi$. The formula $\varphi$ mentions only variables from $\Gamma_p$, so the same assignment viewed in the larger context yields $M,\sigma\models\varphi^\uparrow$. As $\sigma$ was arbitrary, $M,q\Vdash\varphi^\uparrow$.
+\end{proof}
+
+\begin{corollary}[Monotone growth of state theories]\label{cor:state-theory-monotonicity}
+If $q\le p$, then $\Th_M(p)\subseteq \Th_M(q)$.
+\end{corollary}
+
+\begin{proof}
+Immediate from \Cref{prop:forcing-persistence}.
+\end{proof}
+
+\begin{proposition}[Singleton conservativity]\label{prop:singleton-conservativity}
+Let $\rho\in\Val_M(\Gamma)$ and put $p_\rho=(\Gamma,\{\rho\})$. Then for every $\Gamma$-formula $\varphi$,
+\[
+M,p_\rho\Vdash\varphi
+\quad\Longleftrightarrow\quad
+M,\rho\models\varphi.
+\]
+\end{proposition}
+
+\begin{proof}
+Since $R_{p_\rho}=\{\rho\}$, the forcing clause in \Cref{def:state-forcing} reduces immediately to ordinary satisfaction at $\rho$.
+\end{proof}
+
+\subsection{Lifted consequence}
+
+\begin{definition}[State semantic consequence]\label{def:state-semantic-consequence}
+For formulas $\Phi\cup\{\varphi\}$, define
+\[
+\Phi\models_{\mathrm{S}}\varphi
+\]
+to mean that for every model $M$ and every state $p\in\St(M)$,
+\[
+M,p\Vdash\Phi
+\quad\Longrightarrow\quad
+M,p\Vdash\varphi.
+\]
+\end{definition}
+
+\begin{proposition}[Lifted soundness of pointwise reasoning]\label{prop:lifted-pointwise-soundness}
+Let $\vdash_*$ be any derivability relation on formulas that is sound for ordinary many-sorted satisfaction. Then
+\[
+\Gamma\vdash_*\varphi
+\quad\Longrightarrow\quad
+\Gamma\models_{\mathrm{S}}\varphi.
+\]
+\end{proposition}
+
+\begin{proof}
+Assume $\Gamma\vdash_*\varphi$, and let $M$ and $p=(\Gamma_p,R_p)$ be such that $M,p\Vdash\Gamma$. By definition, every realization $\rho\in R_p$ satisfies every formula in $\Gamma$ pointwise. Since $\vdash_*$ is sound for ordinary satisfaction, each such $\rho$ also satisfies $\varphi$. Therefore $M,p\Vdash\varphi$. As $M$ and $p$ were arbitrary, $\Gamma\models_{\mathrm{S}}\varphi$.
+\end{proof}
+
+\Cref{prop:lifted-pointwise-soundness} is the bridge from ordinary satisfaction to state forcing. It shows that familiar sound rules continue to apply once formulas are evaluated against all realizations compatible with a state.
+
+\begin{remark}[Where the new semantics begins]
+\Cref{prop:flat-team-reading} explains the connection with flat team-style and inquisitive support semantics: lower-layer formulas are evaluated pointwise across a nonempty information state. The genuinely new phenomena studied in this paper begin only after the local-object predicates are added, because gluing failure and its visible/blind decomposition are not properties of the flat lower layer alone.
+\end{remark}

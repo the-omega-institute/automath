@@ -13,7 +13,7 @@ model: opus
 启动后立即执行以下步骤，**在接受任何任务之前**：
 
 1. 执行 `Skill(skill = 'lean4:lean4')` 加载 Lean4 skills（LSP 工具、mathlib 搜索、错误诊断、axiom 检查脚本）
-2. 通过 `SendMessage` 向 team lead 发送确认消息：`'Reviewer online. Lean4 skills loaded (LSP tools, axiom checker, sorry analyzer available). Ready for review tasks.'`
+2. 通过 `SendMessage` 向 orchestrator 发送确认消息：`'Reviewer online. Lean4 skills loaded (LSP tools, axiom checker, sorry analyzer available). Ready for review tasks.'`
 3. 未完成上述两步前，不得接受或开始任何审核任务
 
 ## 核心原则

@@ -125,7 +125,7 @@ theorem exactWeightCount_zero_zero : exactWeightCount 0 0 = 1 := by decide
 theorem exactWeightCount_zero_succ (n : Nat) : exactWeightCount 0 (n + 1) = 0 := by
   unfold exactWeightCount
   simp only [Finset.card_eq_zero, Finset.filter_eq_empty_iff, Finset.mem_univ, true_implies,
-    weight, not_true_eq_false]; omega
+    weight]; omega
 
 /-- Last-bit split: ewc(m+1, n) = ewc(m, n) + ewc(m, n - F_{m+2}).
     thm:pom-ewc-succ -/
@@ -140,7 +140,7 @@ theorem exactWeightCount_succ (m n : Nat) :
       (Finset.univ.filter (fun w : Word (m + 1) => weight w = n ∧ w ⟨m, by omega⟩ = true)) := by
     ext w; simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_union]
     constructor
-    · intro hw; cases hb : w ⟨m, by omega⟩ <;> simp [hw, hb]
+    · intro hw; cases hb : w ⟨m, by omega⟩ <;> simp [hw]
     · rintro (⟨hw, _⟩ | ⟨hw, _⟩) <;> exact hw
   have hdisjoint : Disjoint
       (Finset.univ.filter (fun w : Word (m + 1) => weight w = n ∧ w ⟨m, by omega⟩ = false))
@@ -191,6 +191,12 @@ theorem exactWeightCount_eq_zero_of_ge_fib (m n : Nat) (hn : Nat.fib (m + 3) ≤
   intro w _
   have := X.weight_lt_fib w
   omega
+
+/-- ewc(m, n) = 0 when n is at least F_{m+3} (named alias).
+    prop:pom-ewc-vanish-large -/
+theorem exactWeightCount_zero_of_large (m n : Nat) (hn : Nat.fib (m + 3) ≤ n) :
+    exactWeightCount m n = 0 :=
+  exactWeightCount_eq_zero_of_ge_fib m n hn
 
 -- ══════════════════════════════════════════════════════════════
 -- Fiber multiplicity = two exactWeightCount terms
@@ -262,7 +268,7 @@ theorem exactWeightCount_succ_succ (m n : Nat) :
     rw [step3]
     by_cases h4 : Nat.fib (m + 4) ≤ n
     · have h23 : Nat.fib (m + 2) ≤ n - Nat.fib (m + 3) := by omega
-      simp only [if_pos h3, if_pos h4, if_pos h23]
+      simp only [ if_pos h4, if_pos h23]
       rw [show n - Nat.fib (m + 3) - Nat.fib (m + 2) = n - Nat.fib (m + 4) from by omega]
       ring
     · have h23 : ¬ (Nat.fib (m + 2) ≤ n - Nat.fib (m + 3)) := by omega
@@ -356,6 +362,15 @@ theorem fiberMultiplicity_allFalse_closed (m : Nat) :
       -- (m + 2) / 2 = m / 2 + 1 for natural number division
       omega
 
+/-- Exact weight count at weight F_{m+2} equals ⌊m/2⌋.
+    prop:pom-ewc-fib-closed -/
+theorem exactWeightCount_fib_closed (m : Nat) :
+    exactWeightCount m (Nat.fib (m + 2)) = m / 2 := by
+  have h1 := fiberMultiplicity_allFalse m
+  have h2 := fiberMultiplicity_allFalse_closed m
+  unfold exactWeightCount
+  omega
+
 -- ══════════════════════════════════════════════════════════════
 -- Weight congruence class count
 -- ══════════════════════════════════════════════════════════════
@@ -433,7 +448,7 @@ theorem momentSum_two_eq_congr_sq_sum (m : Nat) :
 -- ══════════════════════════════════════════════════════════════
 
 /-- snoc false embeds the exact-weight-n subfiber: d_{m+1}(ofNat(m+1,n)) ≥ ewc(m,n). -/
-theorem fiberMultiplicity_ge_ewc_via_snoc (m n : Nat) (hn : n < Nat.fib (m + 3)) :
+theorem fiberMultiplicity_ge_ewc_via_snoc (m n : Nat) (_hn : n < Nat.fib (m + 3)) :
     X.fiberMultiplicity (X.ofNat (m + 1) n) ≥ exactWeightCount m n := by
   classical
   let y := X.ofNat (m + 1) n
@@ -564,5 +579,225 @@ theorem weightCongruenceCount_pos (m : Nat) (r : Nat) (hr : r < Nat.fib (m + 2))
   rw [show r = stableValue (X.ofNat m r) from (X.stableValue_ofNat_lt r hr).symm,
     ← fiberMultiplicity_eq_wcc]
   exact X.fiberMultiplicity_pos _
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R3: fiberHiddenBitCount and branch mass law
+-- ══════════════════════════════════════════════════════════════
+
+/-- Count of words in fiber(x) with hiddenBit = b.
+    cor:pom-branch-mass-law -/
+noncomputable def fiberHiddenBitCount (b : Nat) (x : X m) : Nat :=
+  (X.fiber x).filter (fun w => hiddenBit w = b) |>.card
+
+/-- Fiber multiplicity splits by hidden bit: d(x) = d_0(x) + d_1(x).
+    cor:pom-branch-mass-law -/
+theorem fiberMultiplicity_split_by_hiddenBit (x : X m) :
+    X.fiberMultiplicity x = fiberHiddenBitCount 0 x + fiberHiddenBitCount 1 x := by
+  classical
+  simp only [X.fiberMultiplicity, fiberHiddenBitCount]
+  -- Split fiber(x) by hiddenBit = 0 vs hiddenBit = 1
+  -- fiber(x) = {b=0} ∪ {b=1}, disjoint
+  have h0 : ((X.fiber x).filter (fun w => hiddenBit w = 0)).card +
+      ((X.fiber x).filter (fun w => ¬hiddenBit w = 0)).card = (X.fiber x).card :=
+    Finset.card_filter_add_card_filter_not (s := X.fiber x) (fun w => hiddenBit w = 0)
+  have hconv : (X.fiber x).filter (fun w => ¬hiddenBit w = 0) =
+      (X.fiber x).filter (fun w => hiddenBit w = 1) := by
+    congr 1; ext w; have := hiddenBit_le_one w; omega
+  rw [hconv] at h0; omega
+
+/-- Sum of d_{m,1}(x) over all x = hiddenBitCount m.
+    cor:pom-branch-mass-law -/
+theorem fiberHiddenBitCount_one_sum (m : Nat) :
+    ∑ x : X m, fiberHiddenBitCount 1 x = hiddenBitCount m := by
+  classical
+  simp only [fiberHiddenBitCount, hiddenBitCount]
+  -- ∑_x |fiber(x) ∩ {b=1}| = |{w | b(w)=1}| via fiber partition
+  -- LHS = ∑_x |fiber(x).filter (hiddenBit = 1)|
+  -- RHS = |univ.filter (weight ≥ F_{m+2})|
+  -- First, rewrite hiddenBit = 1 as weight ≥ F_{m+2}
+  have hpred : ∀ w : Word m, hiddenBit w = 1 ↔ Nat.fib (m + 2) ≤ weight w := by
+    intro w; unfold hiddenBit; split <;> omega
+  -- Now exchange sum of card-filters over fibers with a single filter
+  have hDisjoint : (↑(Finset.univ : Finset (X m)) : Set (X m)).PairwiseDisjoint X.fiber := by
+    intro x _ y _ hxy
+    rw [Function.onFun, Finset.disjoint_left]
+    intro w hwx hwy
+    exact hxy ((X.mem_fiber.1 hwx).symm.trans (X.mem_fiber.1 hwy))
+  have hUnion : (Finset.univ : Finset (Word m)) = Finset.univ.biUnion X.fiber := by
+    ext w; simp only [Finset.mem_univ, Finset.mem_biUnion, true_iff]
+    exact ⟨Fold w, trivial, X.mem_fiber_Fold w⟩
+  -- ∑_x |fiber(x).filter p| = |univ.filter p| for any predicate p
+  conv_rhs => rw [hUnion]
+  rw [Finset.filter_biUnion]
+  rw [Finset.card_biUnion (by
+    intro x _ y _ hxy
+    apply Finset.disjoint_filter_filter
+    rw [Finset.disjoint_left]
+    intro w hwx hwy
+    exact hxy ((X.mem_fiber.1 hwx).symm.trans (X.mem_fiber.1 hwy)))]
+  congr 1; ext x
+  congr 1; ext w
+  simp only [Finset.mem_filter, hpred]
+
+/-- Sum of d_{m,0}(x) over all x = 2^m - hiddenBitCount m.
+    cor:pom-branch-mass-law -/
+theorem fiberHiddenBitCount_zero_sum (m : Nat) :
+    ∑ x : X m, fiberHiddenBitCount 0 x = 2 ^ m - hiddenBitCount m := by
+  have hsplit : ∀ x : X m, X.fiberMultiplicity x =
+      fiberHiddenBitCount 0 x + fiberHiddenBitCount 1 x :=
+    fiberMultiplicity_split_by_hiddenBit
+  have hsum : ∑ x : X m, X.fiberMultiplicity x = 2 ^ m := X.fiberMultiplicity_sum_eq_pow m
+  have h1 : ∑ x : X m, fiberHiddenBitCount 1 x = hiddenBitCount m :=
+    fiberHiddenBitCount_one_sum m
+  have h01 : ∑ x : X m, X.fiberMultiplicity x =
+      ∑ x : X m, fiberHiddenBitCount 0 x + ∑ x : X m, fiberHiddenBitCount 1 x := by
+    rw [← Finset.sum_add_distrib]; exact Finset.sum_congr rfl (fun x _ => hsplit x)
+  -- hiddenBitCount m ≤ 2^m (since it counts a subset of 2^m words)
+  have hle : hiddenBitCount m ≤ 2 ^ m := by
+    rw [← hsum, ← h1]; exact Finset.sum_le_sum (fun x _ => by
+      rw [hsplit x]; omega)
+  omega
+
+-- ══════════════════════════════════════════════════════════════
+-- ══════════════════════════════════════════════════════════════
+-- Phase R6: hidden-bit ↔ ewc bridges
+-- ══════════════════════════════════════════════════════════════
+
+/-- d_{m,0}(x) = ewc(m, stableValue(x)).
+    cor:pom-branch-mass-law (hidden-bit ↔ ewc bridge) -/
+theorem fiberHiddenBitCount_zero_eq_ewc (x : X m) :
+    fiberHiddenBitCount 0 x = exactWeightCount m (stableValue x) := by
+  simp only [fiberHiddenBitCount, exactWeightCount]
+  congr 1
+  ext w
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and, X.mem_fiber]
+  constructor
+  · -- Fold w = x ∧ hiddenBit w = 0 → weight w = stableValue x
+    rintro ⟨hfold, hhid⟩
+    have heq := weight_eq_stableValue_add_hiddenBit w
+    rw [hfold, hhid] at heq; omega
+  · -- weight w = stableValue x → Fold w = x ∧ hiddenBit w = 0
+    intro hw
+    have hsv_lt := stableValue_lt_fib x
+    constructor
+    · have hmod : weight w % Nat.fib (m + 2) = stableValue x := by
+        rw [hw, Nat.mod_eq_of_lt hsv_lt]
+      exact X.mem_fiber.mp ((mem_fiber_iff_weight_mod x w).mpr hmod)
+    · unfold hiddenBit; simp only [show ¬(Nat.fib (m + 2) ≤ weight w) from by omega, ite_false]
+
+/-- d_{m,1}(x) = ewc(m, stableValue(x) + F_{m+2}).
+    cor:pom-branch-mass-law (hidden-bit ↔ ewc bridge) -/
+theorem fiberHiddenBitCount_one_eq_ewc (x : X m) :
+    fiberHiddenBitCount 1 x = exactWeightCount m (stableValue x + Nat.fib (m + 2)) := by
+  simp only [fiberHiddenBitCount, exactWeightCount]
+  congr 1
+  ext w
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and, X.mem_fiber]
+  constructor
+  · -- Fold w = x ∧ hiddenBit w = 1 → weight w = stableValue x + F_{m+2}
+    rintro ⟨hfold, hhid⟩
+    have heq := weight_eq_stableValue_add_hiddenBit w
+    rw [hfold, hhid] at heq; omega
+  · -- weight w = stableValue x + F_{m+2} → Fold w = x ∧ hiddenBit w = 1
+    intro hw
+    have hsv_lt := stableValue_lt_fib x
+    constructor
+    · have hmod : weight w % Nat.fib (m + 2) = stableValue x := by
+        rw [hw, Nat.add_mod_right, Nat.mod_eq_of_lt hsv_lt]
+      exact X.mem_fiber.mp ((mem_fiber_iff_weight_mod x w).mpr hmod)
+    · unfold hiddenBit; simp only [show Nat.fib (m + 2) ≤ weight w from by omega, ite_true]
+
+-- Phase R10 theorem 2: d_0 ≥ d_1 via ewc shift monotonicity — deferred (complex recursion)
+-- Phase R5: hiddenBit sum, weight decomp, S2 expand
+-- ══════════════════════════════════════════════════════════════
+
+/-- Sum of hiddenBit indicator equals hiddenBitCount.
+    cor:pom-branch-mass-law -/
+theorem hiddenBit_sum_eq_hiddenBitCount (m : Nat) :
+    ∑ w : Word m, hiddenBit w = hiddenBitCount m := by
+  simp only [hiddenBit, hiddenBitCount, Finset.card_eq_sum_ones, Finset.sum_filter]
+
+/-- Weight total sum = Σ d(x)·sv(x) + hiddenBitCount(m)·F_{m+2}.
+    lem:pom-one-bit -/
+theorem weight_sum_fiber_decomp (m : Nat) :
+    ∑ w : Word m, weight w =
+    ∑ x : X m, X.fiberMultiplicity x * stableValue x +
+    hiddenBitCount m * Nat.fib (m + 2) := by
+  -- Step 1: weight = stableValue(Fold w) + hiddenBit(w) * F
+  conv_lhs => arg 2; ext w; rw [weight_eq_stableValue_add_hiddenBit w]
+  rw [Finset.sum_add_distrib]
+  congr 1
+  · -- ∑ stableValue(Fold w) = ∑ d(x) * sv(x) via fiber partition
+    classical
+    have hDisjoint : (↑(Finset.univ : Finset (X m)) : Set (X m)).PairwiseDisjoint X.fiber := by
+      intro x _ y _ hxy; rw [Function.onFun, Finset.disjoint_left]
+      intro w hwx hwy; exact hxy ((X.mem_fiber.1 hwx).symm.trans (X.mem_fiber.1 hwy))
+    have hUnion : (Finset.univ : Finset (Word m)) = Finset.univ.biUnion X.fiber := by
+      ext w; simp only [Finset.mem_univ, Finset.mem_biUnion, true_iff]
+      exact ⟨Fold w, trivial, X.mem_fiber_Fold w⟩
+    change Finset.univ.sum (fun w => stableValue (Fold w)) = _
+    rw [hUnion, Finset.sum_biUnion hDisjoint]
+    apply Finset.sum_congr rfl; intro x _
+    have : ∀ w ∈ X.fiber x, stableValue (Fold w) = stableValue x :=
+      fun w hw => by rw [X.mem_fiber.1 hw]
+    rw [Finset.sum_congr rfl this, Finset.sum_const, smul_eq_mul, X.fiberMultiplicity]
+  · -- ∑ hiddenBit(w) * F = hiddenBitCount(m) * F
+    rw [← Finset.sum_mul, hiddenBit_sum_eq_hiddenBitCount]
+
+/-- S_2(m) = Σ d_0² + 2·Σ d_0·d_1 + Σ d_1² (hidden-bit expansion).
+    prop:pom-hiddenbit-mixed-moment-cluster -/
+theorem momentSum_two_hiddenBit_expand (m : Nat) :
+    momentSum 2 m =
+    ∑ x : X m, fiberHiddenBitCount 0 x ^ 2 +
+    2 * ∑ x : X m, fiberHiddenBitCount 0 x * fiberHiddenBitCount 1 x +
+    ∑ x : X m, fiberHiddenBitCount 1 x ^ 2 := by
+  simp only [momentSum]
+  -- d(x)^2 = (d_0(x) + d_1(x))^2 = d_0^2 + 2*d_0*d_1 + d_1^2
+  have hsplit : ∀ x : X m, X.fiberMultiplicity x ^ 2 =
+      fiberHiddenBitCount 0 x ^ 2 +
+      2 * (fiberHiddenBitCount 0 x * fiberHiddenBitCount 1 x) +
+      fiberHiddenBitCount 1 x ^ 2 := by
+    intro x
+    rw [fiberMultiplicity_split_by_hiddenBit x]
+    ring
+  simp_rw [hsplit, Finset.sum_add_distrib, Finset.mul_sum]
+
+/-- Fiber multiplicity equals the sum of two exact weight counts.
+    d(x) = ewc(m, sv(x)) + ewc(m, sv(x) + F_{m+2}).
+    thm:pom-fiber-ewc-sum -/
+theorem fiberMultiplicity_eq_ewc_sum (x : X m) :
+    X.fiberMultiplicity x =
+    exactWeightCount m (stableValue x) +
+    exactWeightCount m (stableValue x + Nat.fib (m + 2)) := by
+  rw [fiberMultiplicity_split_by_hiddenBit x,
+    fiberHiddenBitCount_zero_eq_ewc x, fiberHiddenBitCount_one_eq_ewc x]
+
+/-- The sum of exactWeightCount over all possible weights equals 2^m (total word count).
+    def:pom-exactWeightCount -/
+theorem exactWeightCount_sum_eq_pow (m : Nat) :
+    ∑ n ∈ Finset.range (Nat.fib (m + 3)), exactWeightCount m n = 2 ^ m := by
+  simp only [exactWeightCount]
+  have hmap : Set.MapsTo (fun w : Word m => weight w)
+      (↑(Finset.univ : Finset (Word m)) : Set (Word m))
+      (↑(Finset.range (Nat.fib (m + 3))) : Set Nat) :=
+    fun w _ => Finset.mem_range.mpr (X.weight_lt_fib w)
+  rw [← Finset.card_eq_sum_card_fiberwise hmap, Finset.card_univ,
+    Fintype.card_fun, Fintype.card_bool, Fintype.card_fin]
+
+/-- ewc(m, 1) = 1 for m ≥ 1: exactly one word of weight 1 at each resolution.
+    bridge:ewc-weight-one -/
+theorem exactWeightCount_one_eq (m : Nat) (hm : 1 ≤ m) :
+    exactWeightCount m 1 = 1 := by
+  induction m with
+  | zero => omega
+  | succ k ih =>
+    cases k with
+    | zero => native_decide
+    | succ j =>
+      rw [exactWeightCount_succ_of_lt (j + 1) 1 (by
+        calc 1 < 2 := by omega
+          _ = Nat.fib 3 := by native_decide
+          _ ≤ Nat.fib (j + 1 + 2) := Nat.fib_mono (by omega))]
+      exact ih (by omega)
 
 end Omega

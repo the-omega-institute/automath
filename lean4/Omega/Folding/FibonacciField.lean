@@ -40,7 +40,7 @@ theorem stableMul_inv_of_prime (hp : Nat.Prime (Nat.fib (m + 2))) (x : X m)
   use X.ofNat m k
   -- Prove via stableValue injectivity
   apply (Function.HasLeftInverse.injective ⟨X.ofNat m, X.ofNat_stableValue⟩)
-  simp only [X.ofNat_stableValue, stableValue_stableMul, stableValue_stableOne hP,
+  simp only [ stableValue_stableMul, stableValue_stableOne hP,
     stableValue_ofNat_lt k (ZMod.val_lt _)]
   -- Goal: (stableValue x * k) % p = 1
   -- From ZMod: sv_zmod * sv_zmod⁻¹ = 1, taking .val gives the mod equation

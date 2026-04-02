@@ -133,6 +133,28 @@ theorem goldenMeanAdjacency_pow_det (m : Nat) :
     (goldenMeanAdjacency ^ m).det = (-1 : ℤ) ^ m := by
   rw [Matrix.det_pow]; simp [goldenMeanAdjacency_det]
 
+/-- det(A^n) = (-1)^n for the golden-mean adjacency matrix (alias).
+    thm:zeta-syntax-det-pow -/
+theorem goldenMean_det_pow_general (n : ℕ) :
+    (goldenMeanAdjacency ^ n).det = (-1 : ℤ) ^ n :=
+  goldenMeanAdjacency_pow_det n
+
+/-- A^m as a Fibonacci matrix: all four entries in one statement.
+    thm:golden-mean-pow-fibonacci-matrix -/
+theorem goldenMeanAdjacency_pow_eq_fib_matrix (m : Nat) (hm : 1 ≤ m) :
+    (goldenMeanAdjacency ^ m) 0 0 = (Nat.fib (m + 1) : ℤ) ∧
+    (goldenMeanAdjacency ^ m) 0 1 = (Nat.fib m : ℤ) ∧
+    (goldenMeanAdjacency ^ m) 1 0 = (Nat.fib m : ℤ) ∧
+    (goldenMeanAdjacency ^ m) 1 1 = (Nat.fib (m - 1) : ℤ) := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hm
+  refine ⟨goldenMeanAdjacency_pow_00 (1 + k),
+    goldenMeanAdjacency_pow_01 (1 + k),
+    goldenMeanAdjacency_pow_10 (1 + k),
+    ?_⟩
+  rw [show 1 + k = k + 1 from by omega]
+  simp only [show k + 1 - 1 = k from by omega]
+  exact goldenMeanAdjacency_pow_11 k
+
 /-- Cassini's identity: F_{n+1}·F_{n-1} - F_n² = (-1)^n for n ≥ 1.
     thm:fib-cassini-identity -/
 theorem fib_cassini (n : Nat) (hn : 1 ≤ n) :
@@ -360,7 +382,7 @@ theorem goldenMeanAdjacency_cayley_hamilton :
 
 /-- Row 0 sum of A^m = F(m+2). Counts all length-m paths from state 0.
     thm:folding-stable-syntax-fib-fusion-ring -/
-theorem goldenMeanAdjacency_pow_row0_sum (m : Nat) (hm : 1 ≤ m) :
+theorem goldenMeanAdjacency_pow_row0_sum (m : Nat) (_hm : 1 ≤ m) :
     (goldenMeanAdjacency ^ m) 0 0 + (goldenMeanAdjacency ^ m) 0 1 = (Nat.fib (m + 2) : ℤ) :=
   goldenMeanAdjacency_row_sum m
 
@@ -384,5 +406,46 @@ theorem goldenMeanAdjacency_symmetric :
 theorem goldenMeanAdjacency_pow_symmetric (m : Nat) :
     (goldenMeanAdjacency ^ m).transpose = goldenMeanAdjacency ^ m := by
   rw [Matrix.transpose_pow, goldenMeanAdjacency_symmetric]
+
+/-- The adjacency matrix A + A² has all positive entries (irreducibility/primitivity).
+    thm:folding-stable-syntax-fib-fusion-ring -/
+theorem goldenMeanAdjacency_irreducible :
+    ∀ i j : Fin 2, 0 < (goldenMeanAdjacency + goldenMeanAdjacency ^ 2) i j := by
+  native_decide
+
+/-- All entries of A^n are nonneg (they are Fibonacci numbers).
+    thm:folding-stable-syntax-fib-fusion-ring -/
+theorem goldenMeanAdjacency_pow_nonneg (n : Nat) (i j : Fin 2) :
+    0 ≤ (goldenMeanAdjacency ^ n) i j := by
+  -- All entries are Nat.fib values cast to ℤ, hence ≥ 0
+  have h00 : (goldenMeanAdjacency ^ n) 0 0 = (Nat.fib (n + 1) : ℤ) := goldenMeanAdjacency_pow_00 n
+  have h01 : (goldenMeanAdjacency ^ n) 0 1 = (Nat.fib n : ℤ) := goldenMeanAdjacency_pow_01 n
+  have h10 : (goldenMeanAdjacency ^ n) 1 0 = (Nat.fib n : ℤ) := goldenMeanAdjacency_pow_10 n
+  have h11 : ∀ m, (goldenMeanAdjacency ^ (m + 1)) 1 1 = (Nat.fib m : ℤ) := goldenMeanAdjacency_pow_11
+  fin_cases i <;> fin_cases j <;> simp only [show (0 : Fin 2) = ⟨0, by omega⟩ from rfl,
+    show (1 : Fin 2) = ⟨1, by omega⟩ from rfl] at *
+  · linarith
+  · linarith
+  · linarith
+  · cases n with
+    | zero => native_decide
+    | succ m => linarith [h11 m]
+
+/-- All entries of A^n are strictly positive for n ≥ 2 (primitive matrix).
+    thm:folding-stable-syntax-fib-fusion-ring -/
+theorem goldenMeanAdjacency_pow_positive (n : Nat) (hn : 2 ≤ n) (i j : Fin 2) :
+    0 < (goldenMeanAdjacency ^ n) i j := by
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 2 := ⟨n - 2, by omega⟩
+  have h00 := goldenMeanAdjacency_pow_00 (m + 2)
+  have h01 := goldenMeanAdjacency_pow_01 (m + 2)
+  have h10 := goldenMeanAdjacency_pow_10 (m + 2)
+  have h11 := goldenMeanAdjacency_pow_11 (m + 1)
+  rw [show m + 1 + 1 = m + 2 from by omega] at h11
+  fin_cases i <;> fin_cases j <;> simp only [show (0 : Fin 2) = ⟨0, by omega⟩ from rfl,
+    show (1 : Fin 2) = ⟨1, by omega⟩ from rfl] at *
+  · linarith [Nat.fib_pos.mpr (show 0 < m + 3 from by omega)]
+  · linarith [Nat.fib_pos.mpr (show 0 < m + 2 from by omega)]
+  · linarith [Nat.fib_pos.mpr (show 0 < m + 2 from by omega)]
+  · linarith [Nat.fib_pos.mpr (show 0 < m + 1 from by omega)]
 
 end Omega.Graph

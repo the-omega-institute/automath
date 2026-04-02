@@ -1,0 +1,93 @@
+\section{Concrete Realizations and Semantic Fidelity}\label{sec:conservativity}
+
+This section isolates the preservation conditions required of a concrete realization. The point is not to add new semantics, but to specify what an implementation must respect if it is to inherit the abstract results proved earlier.
+
+\begin{definition}[Concrete implementation system]\label{def:concrete-implementation-system}
+A \emph{concrete implementation system} for the final layer consists of:
+\begin{enumerate}[label=(\roman*),nosep]
+\item concrete carriers for the abstract sorts and reference sorts,
+\item a concrete state space with a refinement relation,
+\item concrete local reference frames and local object functors,
+\item a concrete typed readout operation $\Read^{\mathcal C}$,
+\item concrete update, axis, observer, event, and region structures,
+\item a concrete rewrite or normalization mechanism on readout expressions.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Instantiation map]\label{def:instantiation-map}
+Let $\mathbb{L}_{10}^{\OST}$ be the final abstract layer and let $\mathcal C$ be a concrete implementation system. An \emph{instantiation map}
+\[
+\mathcal I:\mathbb{L}_{10}^{\OST}\leadsto \mathcal C
+\]
+assigns concrete interpretations to abstract sorts, references, states, formulas, observer data, event-region data, and readout expressions.
+\end{definition}
+
+\begin{definition}[Realization]\label{def:realization}
+We say that $\mathcal C$ \emph{realizes} the abstract system under $\mathcal I$ if the following preservation clauses hold:
+\begin{enumerate}[label=(R\arabic*),nosep]
+\item \emph{Sort and context preservation:} well-typed abstract terms and formulas are sent to well-typed concrete ones.
+\item \emph{State preservation:} if $q\le p$ abstractly, then $\mathcal I(q)\le_{\mathcal C}\mathcal I(p)$ concretely.
+\item \emph{Forcing preservation:} for every abstract formula $\varphi$ and abstract state $p$,
+\[
+p\Vdash\varphi
+\quad\Longleftrightarrow\quad
+\mathcal I(p)\Vdash_{\mathcal C}\mathcal I(\varphi).
+\]
+\item \emph{Locality and readout preservation:} admissibility, local sections, compatible local sections, global sections, visible value classes, and typed readouts are interpreted by the corresponding concrete local structures.
+\item \emph{Observer-spacetime preservation:} observer indices, event positions, region supports, coupled states, and their refinement behavior are preserved by $\mathcal I$.
+\item \emph{Rewrite preservation:} abstract value-preserving rewrites are sent to concrete rewrites with the same preservation property for concrete readouts.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[Lower-layer projection]\label{prop:lower-layer-projection}
+If a concrete system realizes the final observer-spacetime layer, then forgetting all structure above any lower layer $\mathbb{L}_n$ yields a realization of $\mathbb{L}_n$.
+\end{proposition}
+
+\begin{proof}
+Every later layer adds coordinates or relations to the same underlying forcing structure. Forgetting those added coordinates preserves the clauses in \Cref{def:realization} that belong to the lower layer, and the agreement of lower-layer forcing is part of forcing preservation itself.
+\end{proof}
+
+\begin{proposition}[Semantic fidelity]\label{prop:semantic-fidelity}
+Let $\Gamma\cup\{\varphi\}$ be abstract formulas. If
+\[
+\Gamma\models_{\OST}\varphi
+\]
+and $\mathcal C$ realizes the final layer under $\mathcal I$, then
+\[
+\mathcal I(\Gamma)\models_{\mathcal C}\mathcal I(\varphi).
+\]
+\end{proposition}
+
+\begin{proof}
+Take any concrete state $c$ such that $c\Vdash_{\mathcal C}\mathcal I(\Gamma)$. By realization, $c=\mathcal I(p)$ for some abstract state $p$, and forcing preservation gives $p\Vdash\Gamma$. Since $\Gamma\models_{\OST}\varphi$, the state $p$ also forces $\varphi$. Applying forcing preservation again yields $c\Vdash_{\mathcal C}\mathcal I(\varphi)$. Therefore every concrete state forcing $\mathcal I(\Gamma)$ also forces $\mathcal I(\varphi)$.
+\end{proof}
+
+\begin{proposition}[Transport of typed readouts]\label{prop:readout-transport}
+Assume $\mathcal C$ realizes the abstract system under $\mathcal I$. If
+\[
+\Read_{p,s}(r)=v
+\]
+abstractly, then
+\[
+\Read^{\mathcal C}_{\mathcal I(p),s}\bigl(\mathcal I(r)\bigr)=\mathcal I(v)
+\]
+concretely.
+\end{proposition}
+
+\begin{proof}
+By \Cref{def:realization}, admissibility, compatible local families, visible value classes, and typed readouts are all preserved by the instantiation map. Therefore the unique abstract visible value class $v$ is sent to the corresponding unique concrete visible value class, which is exactly the concrete typed readout of $\mathcal I(r)$ at $\mathcal I(p)$.
+\end{proof}
+
+\begin{corollary}[Concrete normalization does not create facts]\label{cor:concrete-normalization-no-fact-creation}
+Let
+\[
+E=E_0\leadsto E_1\leadsto\cdots\leadsto E_n=E'
+\]
+be an abstract normalization sequence of value-preserving rewrites. In any realization $\mathcal C$ preserving that sequence, if the concrete normal form $\mathcal I(E')$ has a non-null readout at $\mathcal I(p)$, then the original concrete expression $\mathcal I(E)$ already had the same readout at $\mathcal I(p)$.
+\end{corollary}
+
+\begin{proof}
+If the concrete normal form has a non-null readout, then \Cref{prop:readout-transport} lifts that readout back to the abstract normal form $E'$ at $p$. By \Cref{cor:normalization-no-fact-creation}, the original abstract expression $E$ already had the same readout. Transporting that result down again by \Cref{prop:readout-transport} yields the corresponding concrete readout for $\mathcal I(E)$. Thus normalization changes representation only; it does not create a new concrete fact.
+\end{proof}
+
+\Cref{prop:lower-layer-projection,prop:semantic-fidelity,prop:readout-transport,cor:concrete-normalization-no-fact-creation} show that the abstract theory survives realization. A faithful implementation inherits the same constraints on consequence, readouts, and normalization.

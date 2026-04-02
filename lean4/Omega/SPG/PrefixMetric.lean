@@ -59,4 +59,27 @@ theorem mem_prefixBall_self (x : OmegaInfinity) (m : Nat) :
   simp [prefixBall, PiNat.mem_cylinder_iff]
 
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R138: Prefix ball eq-or-disjoint
+-- ══════════════════════════════════════════════════════════════
+
+/-- Prefix balls at the same resolution are either identical or disjoint.
+    prop:spg-decidable-clopen consequence -/
+theorem prefixBall_eq_or_disjoint (x y : OmegaInfinity) (m : Nat) :
+    prefixBall x m = prefixBall y m ∨ Disjoint (prefixBall x m) (prefixBall y m) := by
+  by_cases h : prefixWord x m = prefixWord y m
+  · left
+    ext z
+    simp [mem_prefixBall_iff, h]
+  · right
+    rw [Set.disjoint_iff]
+    intro z ⟨hzx, hzy⟩
+    rw [mem_prefixBall_iff] at hzx hzy
+    exact h (hzx.symm.trans hzy)
+
+/-- Paper: prop:spg-decidable-clopen (prefix ball partition) -/
+theorem paper_prefixBall_eq_or_disjoint (x y : OmegaInfinity) (m : Nat) :
+    prefixBall x m = prefixBall y m ∨ Disjoint (prefixBall x m) (prefixBall y m) :=
+  prefixBall_eq_or_disjoint x y m
+
 end Omega.SPG

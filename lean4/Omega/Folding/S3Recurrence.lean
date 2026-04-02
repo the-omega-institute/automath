@@ -55,7 +55,7 @@ theorem tripleCollisionClass_ttt_eq_exact (m : Nat) :
     exact ⟨by omega, by omega⟩
   · intro ⟨h1, h2⟩
     -- exact → mod: wt(v1)+F = wt(v2)+F → (wt(v1)+F)%F' = (wt(v2)+F)%F'
-    refine ⟨?_, ?_⟩ <;> show _ % _ = _ % _ <;> congr 1 <;> omega
+    refine ⟨?_, ?_⟩ <;> show _ % _ = _ % _ <;> congr 1
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase 155: T_fft mod split via weight-class summation

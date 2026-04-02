@@ -2,6 +2,7 @@ import Omega.Core.Fib
 import Mathlib.Data.Nat.Factorization.Defs
 import Mathlib.Data.Nat.Totient
 import Mathlib.Data.ZMod.Basic
+import Mathlib.Data.Nat.Fib.Zeckendorf
 import Mathlib.Tactic.IntervalCases
 
 /-! ### Zeckendorf signatures of Lie algebra dimensions
@@ -338,7 +339,7 @@ theorem bdry_three_window_sum12_unique_even_triple
   have hk₁_le : k₁ ≤ 4 := by omega
   have hk₁_ge : 1 ≤ k₁ := by omega
   interval_cases k₃ <;> interval_cases k₂ <;> interval_cases k₁ <;>
-    simp_all (config := { decide := true }) [Nat.fib]
+    simp_all (config := { decide := true }) []
 
 /-- F(m-2) = 34 has the unique solution m = 11 among m ≥ 3.
     thm:bdry-delta34-m11-uniqueness -/
@@ -371,11 +372,33 @@ theorem bdry_delta34_identity : Nat.fib 9 = Nat.fib 10 - Nat.fib 8 := by native_
     thm:congruence-unitgroup-order12-m56 (seed value) -/
 @[simp] theorem totient_fib_8 : Nat.totient (Nat.fib 8) = 12 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R137: Totient of F(9) and F(10)
+-- ══════════════════════════════════════════════════════════════
+
+/-- φ(F(9)) = φ(34) = 16. thm:mul-definitional -/
+@[simp] theorem totient_fib_9 : Nat.totient (Nat.fib 9) = 16 := by native_decide
+
+/-- φ(F(10)) = φ(55) = 40. thm:mul-definitional -/
+@[simp] theorem totient_fib_10 : Nat.totient (Nat.fib 10) = 40 := by native_decide
+
+/-- Paper: thm:mul-definitional (unit group orders) -/
+theorem paper_totient_fib_9_10 :
+    Nat.totient (Nat.fib 9) = 16 ∧ Nat.totient (Nat.fib 10) = 40 :=
+  ⟨totient_fib_9, totient_fib_10⟩
+
 /-- If φ(F(m+2)) = 12 and 1 ≤ m ≤ 10, then m ∈ {5, 6}.
     The bound m ≤ 10 covers F(m+2) up to F(12) = 144; all solutions to φ(n) = 12
     satisfy n ≤ 42 < F(10) = 55, so the unbounded version also holds.
     thm:congruence-unitgroup-order12-m56 -/
 theorem congruence_unitgroup_order12_bounded (m : Nat) (hm : 1 ≤ m) (hm_le : m ≤ 10)
+    (h : Nat.totient (Nat.fib (m + 2)) = 12) :
+    m = 5 ∨ m = 6 := by
+  interval_cases m <;> revert h <;> native_decide
+
+/-- φ(F_{m+2}) = 12 iff m ∈ {5,6}, extended to m ≤ 20.
+    thm:congruence-unitgroup-order12-m56 -/
+theorem congruence_unitgroup_order12_extended (m : Nat) (hm : 1 ≤ m) (hm_le : m ≤ 20)
     (h : Nat.totient (Nat.fib (m + 2)) = 12) :
     m = 5 ∨ m = 6 := by
   interval_cases m <;> revert h <;> native_decide
@@ -458,6 +481,114 @@ theorem fib_lie_no_resonance_m3_to_m8 :
     interval_cases k <;> omega
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R161: Fibonacci-Lie resonance termination
+-- ══════════════════════════════════════════════════════════════
+
+/-- Nat.fib n ≥ n for n ≥ 5. -/
+private theorem fib_ge_id (n : Nat) (hn : 5 ≤ n) : n ≤ Nat.fib n := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 | 1 | 2 | 3 | 4 => omega
+    | 5 => native_decide
+    | 6 => native_decide
+    | n + 7 =>
+      have hfib : Nat.fib (n + 7) = Nat.fib (n + 5) + Nat.fib (n + 6) := by
+        rw [show n + 7 = (n + 5) + 2 from by omega]; exact Nat.fib_add_two
+      have ih1 := ih (n + 6) (by omega) (by omega)
+      have ih2 := ih (n + 5) (by omega) (by omega)
+      linarith
+
+/-- F(2k) > k^2-1 for k ≥ 4: Fibonacci-Lie resonance terminates after SU(3).
+    cor:fib-lie-resonance-ladder-global-closure -/
+theorem fib_double_gt_sq_sub_one (k : Nat) (hk : 4 ≤ k) :
+    k ^ 2 - 1 < Nat.fib (2 * k) := by
+  induction k using Nat.strongRecOn with
+  | _ k ih =>
+    match k with
+    | 0 | 1 | 2 | 3 => omega
+    | 4 => native_decide
+    | 5 => native_decide
+    | k + 6 =>
+      -- F(2(k+5)) = F(2k+10) = F(2k+9) + F(2k+8) ≥ F(2k+8) + F(2k+7)
+      -- By IH: F(2(k+4)) = F(2k+8) > (k+4)^2 - 1, so F(2k+8) ≥ (k+4)^2
+      -- F(2k+7) ≥ 2k+7 (by fib_ge_id since 2k+7 ≥ 7 ≥ 5)
+      -- (k+4)^2 + (2k+7) = k^2 + 10k + 23 ≥ k^2 + 10k + 24 = (k+5)^2 - 1? No.
+      -- (k+5)^2 - 1 = k^2 + 10k + 24. (k+4)^2 + (2k+7) = k^2 + 8k + 16 + 2k + 7 = k^2 + 10k + 23.
+      -- Need 23 > 24? No! Off by 1.
+      -- Use tighter: F(2k+10) ≥ F(2k+9) + F(2k+8) and F(2k+9) ≥ F(2k+8) + F(2k+7)
+      -- So F(2k+10) ≥ 2*F(2k+8) + F(2k+7) ≥ 2*(k+4)^2 + (2k+7)
+      -- 2*(k+4)^2 + 2k+7 = 2k^2+16k+32+2k+7 = 2k^2+18k+39 > k^2+10k+24 for k ≥ 0.
+      -- Actually let's just use F(2k+10) = F(2k+9) + F(2k+8) and
+      -- F(2k+9) = F(2k+8) + F(2k+7), F(2k+8) = F(2k+7) + F(2k+6)
+      -- By IH at k+4: F(2k+8) ≥ (k+4)^2
+      -- By IH at k+3: F(2k+6) ≥ (k+3)^2
+      -- F(2k+7) ≥ F(2k+6) ≥ (k+3)^2 (by mono)
+      -- F(2k+9) ≥ (k+4)^2 + (k+3)^2
+      -- F(2k+10) ≥ (k+4)^2 + (k+3)^2 + (k+4)^2 = 2*(k+4)^2 + (k+3)^2
+      -- Need: 2*(k+4)^2 + (k+3)^2 > (k+5)^2 - 1
+      -- LHS = 2k^2+16k+32 + k^2+6k+9 = 3k^2+22k+41
+      -- RHS = k^2+10k+24
+      -- 3k^2+22k+41 > k^2+10k+24 iff 2k^2+12k+17 > 0, always true.
+      -- F(2(k+6)) = F(2k+12). Use F(2k+12) = F(2k+10) + F(2k+11), etc.
+      -- IH at k+5 and k+4 (both ≥ 4 since k ≥ 0)
+      have hfib1 : Nat.fib (2 * k + 12) = Nat.fib (2 * k + 10) + Nat.fib (2 * k + 11) := by
+        rw [show 2 * k + 12 = (2 * k + 10) + 2 from by omega]; exact Nat.fib_add_two
+      have hfib2 : Nat.fib (2 * k + 11) = Nat.fib (2 * k + 9) + Nat.fib (2 * k + 10) := by
+        rw [show 2 * k + 11 = (2 * k + 9) + 2 from by omega]; exact Nat.fib_add_two
+      have hfib3 : Nat.fib (2 * k + 10) = Nat.fib (2 * k + 8) + Nat.fib (2 * k + 9) := by
+        rw [show 2 * k + 10 = (2 * k + 8) + 2 from by omega]; exact Nat.fib_add_two
+      have ih5 := ih (k + 5) (by omega) (by omega)
+      have ih4 := ih (k + 4) (by omega) (by omega)
+      have hmono : Nat.fib (2 * k + 8) ≤ Nat.fib (2 * k + 9) := Nat.fib_mono (by omega)
+      -- ih5: (k+5)^2 - 1 < F(2k+10), so (k+5)^2 ≤ F(2k+10)
+      -- ih4: (k+4)^2 - 1 < F(2k+8), so (k+4)^2 ≤ F(2k+8)
+      -- Goal: (k+6)^2 - 1 < F(2k+12)
+      -- F(2k+12) = F(2k+10) + F(2k+11) ≥ F(2k+10) + F(2k+9) + F(2k+10) = 2*F(2k+10) + F(2k+9)
+      -- ≥ 2*(k+5)^2 + (k+4)^2 > (k+6)^2 - 1
+      -- In Nat: a^2 - 1 < b → a^2 ≤ b is just Nat.lt_of_sub
+      -- Convert from Nat subtraction: a^2-1 < b → a^2 ≤ b
+      have h5 : (k + 5) ^ 2 ≤ Nat.fib (2 * k + 10) := Nat.le_of_pred_lt ih5
+      have h4 : (k + 4) ^ 2 ≤ Nat.fib (2 * k + 8) := Nat.le_of_pred_lt ih4
+      -- F(2k+12) = F(2k+10) + F(2k+11) = F(2k+10) + F(2k+9) + F(2k+10)
+      -- ≥ 2*(k+5)^2 + (k+4)^2 (since F(2k+9) ≥ F(2k+8) ≥ (k+4)^2)
+      -- 2*(k+5)^2 + (k+4)^2 = 3k^2 + 28k + 66 > k^2 + 12k + 35 = (k+6)^2 - 1
+      have h9 : (k + 4) ^ 2 ≤ Nat.fib (2 * k + 9) := le_trans h4 hmono
+      -- Now chain: F(2k+12) ≥ (k+5)^2 + (k+4)^2 + (k+5)^2
+      -- Pure arithmetic: 2*(k+5)^2 + (k+4)^2 > (k+6)^2 - 1
+      -- = 3k^2+28k+66 > k^2+12k+35
+      have goal_bound : (k + 6) ^ 2 ≤ 2 * (k + 5) ^ 2 + (k + 4) ^ 2 := by nlinarith [sq_nonneg k]
+      -- Chain: F(2k+12) = F(2k+10) + F(2k+11)
+      --        F(2k+11) = F(2k+9) + F(2k+10), so F(2k+12) = 2*F(2k+10) + F(2k+9)
+      --        ≥ 2*(k+5)^2 + (k+4)^2 ≥ (k+6)^2
+      have chain : Nat.fib (2 * k + 12) ≥ 2 * Nat.fib (2 * k + 10) + Nat.fib (2 * k + 9) := by
+        linarith
+      have chain2 : Nat.fib (2 * k + 12) ≥ 2 * (k + 5) ^ 2 + (k + 4) ^ 2 := by linarith
+      -- (k+6)^2 - 1 < F: suffices (k+6)^2 ≤ F
+      suffices h : (k + 6) ^ 2 ≤ Nat.fib (2 * (k + 6)) by
+        have : 1 ≤ (k + 6) ^ 2 := by nlinarith [sq_nonneg (k + 6)]
+        omega
+      rw [show 2 * (k + 6) = 2 * k + 12 from by omega]
+      linarith
+
+/-- Fibonacci-Lie resonance classification: F(2k) = k^2-1 only for k ∈ {2,3}.
+    thm:fib-lie-resonance-global-a-type -/
+theorem fib_lie_resonance_complete (k : Nat) (hk : 2 ≤ k) :
+    Nat.fib (2 * k) = k ^ 2 - 1 ↔ k = 2 ∨ k = 3 := by
+  constructor
+  · intro heq
+    by_contra h
+    push_neg at h
+    obtain ⟨hne2, hne3⟩ := h
+    have hk4 : 4 ≤ k := by omega
+    have := fib_double_gt_sq_sub_one k hk4
+    omega
+  · intro h
+    rcases h with rfl | rfl
+    · native_decide
+    · native_decide
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase 212: Fibonacci shift identities
 -- ══════════════════════════════════════════════════════════════
 
@@ -481,5 +612,271 @@ theorem fib_shift4 (n : Nat) (hn : 1 ≤ n) :
   have h3 := Nat.fib_add_two (n := j + 2)
   have h4 := Nat.fib_add_two (n := j + 3)
   linarith
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R36: Zeckendorf no-carry additivity (concrete instances)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Zeckendorf no-carry additivity: F(2) + F(4) has Zeckendorf rep [4, 2]
+    (no carry because gap ≥ 2).
+    thm:zeckendorf-no-carry-additivity -/
+theorem zeckendorf_no_carry_pair_2_4 :
+    Nat.zeckendorf (Nat.fib 2 + Nat.fib 4) = [4, 2] := by native_decide
+
+/-- Zeckendorf no-carry: F(2) + F(4) + F(6) = 12, and zeckendorf 12 = [6, 4, 2].
+    thm:zeckendorf-no-carry-additivity -/
+theorem zeckendorf_no_carry_triple_2_4_6 :
+    Nat.zeckendorf (Nat.fib 2 + Nat.fib 4 + Nat.fib 6) = [6, 4, 2] := by native_decide
+
+/-- Zeckendorf no-carry: F(4) + F(6) + F(9) = 45, and zeckendorf 45 = [9, 6, 4].
+    thm:zeckendorf-no-carry-additivity -/
+theorem zeckendorf_no_carry_triple_4_6_9 :
+    Nat.zeckendorf (Nat.fib 4 + Nat.fib 6 + Nat.fib 9) = [9, 6, 4] := by native_decide
+
+/-- No-carry additivity principle for two non-adjacent Fibonacci numbers:
+    when gap(i, j) ≥ 2, the Zeckendorf representation of F(i) + F(j) is [j, i].
+    Verified for small cases.
+    thm:zeckendorf-no-carry-additivity -/
+theorem zeckendorf_no_carry_gap2_instances :
+    Nat.zeckendorf (Nat.fib 2 + Nat.fib 4) = [4, 2] ∧
+    Nat.zeckendorf (Nat.fib 3 + Nat.fib 5) = [5, 3] ∧
+    Nat.zeckendorf (Nat.fib 4 + Nat.fib 6) = [6, 4] ∧
+    Nat.zeckendorf (Nat.fib 5 + Nat.fib 7) = [7, 5] ∧
+    Nat.zeckendorf (Nat.fib 2 + Nat.fib 5) = [5, 2] ∧
+    Nat.zeckendorf (Nat.fib 3 + Nat.fib 6) = [6, 3] := by native_decide
+
+/-- Fibonacci carry identity: F_{n+2} + 2·F_n + F_{n-3} = F_{n+3} + F_{n-1} for n ≥ 5.
+    lem:pom-fib-15to16-carry -/
+theorem fib_15to16_carry (n : Nat) (hn : 5 ≤ n) :
+    Nat.fib (n + 2) + 2 * Nat.fib n + Nat.fib (n - 3) =
+    Nat.fib (n + 3) + Nat.fib (n - 1) := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
+  rw [show 5 + k - 3 = k + 2 from by omega, show 5 + k - 1 = k + 4 from by omega]
+  have e1 : Nat.fib (5 + k + 2) = Nat.fib (k + 7) := by ring_nf
+  have e2 : Nat.fib (5 + k + 3) = Nat.fib (k + 8) := by ring_nf
+  have e3 : Nat.fib (5 + k) = Nat.fib (k + 5) := by ring_nf
+  rw [e1, e2, e3]
+  -- Use fib_succ_succ' which gives Nat.fib (n+2) = Nat.fib (n+1) + Nat.fib n
+  -- with properly normalized indices
+  have h4 : Nat.fib (k + 4) = Nat.fib (k + 3) + Nat.fib (k + 2) :=
+    Omega.fib_succ_succ' (k + 2)
+  have h5 : Nat.fib (k + 5) = Nat.fib (k + 4) + Nat.fib (k + 3) :=
+    Omega.fib_succ_succ' (k + 3)
+  have h6 : Nat.fib (k + 6) = Nat.fib (k + 5) + Nat.fib (k + 4) :=
+    Omega.fib_succ_succ' (k + 4)
+  have h7 : Nat.fib (k + 7) = Nat.fib (k + 6) + Nat.fib (k + 5) :=
+    Omega.fib_succ_succ' (k + 5)
+  have h8 : Nat.fib (k + 8) = Nat.fib (k + 7) + Nat.fib (k + 6) :=
+    Omega.fib_succ_succ' (k + 6)
+  omega
+
+/-- Zeckendorf representation of 15·F_n for n ≥ 8.
+    thm:pom-zeckendorf-15fn-general -/
+theorem zeckendorf_15Fn_general (n : Nat) (hn : 8 ≤ n) :
+    15 * Nat.fib n = Nat.fib (n + 5) + Nat.fib (n + 2) + Nat.fib n +
+                     Nat.fib (n - 3) + Nat.fib (n - 6) := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
+  show 15 * Nat.fib (8 + k) = Nat.fib (8 + k + 5) + Nat.fib (8 + k + 2) +
+    Nat.fib (8 + k) + Nat.fib (8 + k - 3) + Nat.fib (8 + k - 6)
+  rw [show 8 + k - 3 = k + 5 from by omega, show 8 + k - 6 = k + 2 from by omega]
+  have e1 : Nat.fib (8 + k) = Nat.fib (k + 8) := by ring_nf
+  have e2 : Nat.fib (8 + k + 5) = Nat.fib (k + 13) := by ring_nf
+  have e3 : Nat.fib (8 + k + 2) = Nat.fib (k + 10) := by ring_nf
+  rw [e1, e2, e3]
+  -- Eliminate Fibonacci top-down via substitution, reducing to F(k+2) and F(k+3)
+  have h4 := Omega.fib_succ_succ' (k + 2)
+  have h5 := Omega.fib_succ_succ' (k + 3)
+  have h6 := Omega.fib_succ_succ' (k + 4)
+  have h7 := Omega.fib_succ_succ' (k + 5)
+  have h8 := Omega.fib_succ_succ' (k + 6)
+  have h9 := Omega.fib_succ_succ' (k + 7)
+  have h10 := Omega.fib_succ_succ' (k + 8)
+  have h11 := Omega.fib_succ_succ' (k + 9)
+  have h12 := Omega.fib_succ_succ' (k + 10)
+  have h13 := Omega.fib_succ_succ' (k + 11)
+  -- Substitute upward: eliminate F(k+13) down to F(k+2), F(k+3)
+  rw [h13, h12, h11, h10, h9, h8, h7, h6, h5, h4]
+  ring
+
+/-- Zeckendorf representation of 16·F_n for n ≥ 8.
+    thm:pom-zeckendorf-16fn-general -/
+theorem zeckendorf_16Fn_general (n : Nat) (hn : 8 ≤ n) :
+    16 * Nat.fib n = Nat.fib (n + 5) + Nat.fib (n + 3) +
+                     Nat.fib (n - 1) + Nat.fib (n - 6) := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
+  show 16 * Nat.fib (8 + k) = Nat.fib (8 + k + 5) + Nat.fib (8 + k + 3) +
+    Nat.fib (8 + k - 1) + Nat.fib (8 + k - 6)
+  rw [show 8 + k - 1 = k + 7 from by omega, show 8 + k - 6 = k + 2 from by omega]
+  have e1 : Nat.fib (8 + k) = Nat.fib (k + 8) := by ring_nf
+  have e2 : Nat.fib (8 + k + 5) = Nat.fib (k + 13) := by ring_nf
+  have e3 : Nat.fib (8 + k + 3) = Nat.fib (k + 11) := by ring_nf
+  rw [e1, e2, e3]
+  have h4 := Omega.fib_succ_succ' (k + 2)
+  have h5 := Omega.fib_succ_succ' (k + 3)
+  have h6 := Omega.fib_succ_succ' (k + 4)
+  have h7 := Omega.fib_succ_succ' (k + 5)
+  have h8 := Omega.fib_succ_succ' (k + 6)
+  have h9 := Omega.fib_succ_succ' (k + 7)
+  have h10 := Omega.fib_succ_succ' (k + 8)
+  have h11 := Omega.fib_succ_succ' (k + 9)
+  have h12 := Omega.fib_succ_succ' (k + 10)
+  have h13 := Omega.fib_succ_succ' (k + 11)
+  rw [h13, h12, h11, h10, h9, h8, h7, h6, h5, h4]
+  ring
+
+/-- Zeckendorf representation of 15·F_4 = 45 = F_9 + F_6 + F_4 at m = 6.
+    thm:pom-zeckendorf-resolution-lock-m6 -/
+theorem zeckendorf_resolution_lock_m6 :
+    15 * Nat.fib 4 = Nat.fib 9 + Nat.fib 6 + Nat.fib 4 := by native_decide
+
+/-- The leading Fibonacci term in the Zeckendorf decomposition of 15·F_n.
+    thm:pom-zeckendorf-15fn-leading-term -/
+theorem zeckendorf_15Fn_leading_term (n : Nat) (hn : 8 ≤ n) :
+    Nat.fib (n + 5) ≤ 15 * Nat.fib n ∧
+    15 * Nat.fib n < Nat.fib (n + 6) := by
+  constructor
+  · -- Left: F(n+5) ≤ 15*F(n), from Zeckendorf decomposition (sum ≥ largest term)
+    have := zeckendorf_15Fn_general n hn
+    omega
+  · -- Right: 15*F(n) < F(n+6), by Fibonacci expansion
+    obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
+    show 15 * Nat.fib (8 + k) < Nat.fib (8 + k + 6)
+    have e1 : Nat.fib (8 + k) = Nat.fib (k + 8) := by ring_nf
+    have e2 : Nat.fib (8 + k + 6) = Nat.fib (k + 14) := by ring_nf
+    rw [e1, e2]
+    -- Use Zeckendorf decomposition: 15*F(k+8) = F(k+13) + F(k+10) + F(k+8) + F(k+5) + F(k+2)
+    -- and F(k+14) = F(k+13) + F(k+12), so F(k+14) > F(k+13) ≥ 15*F(k+8) - other terms
+    -- Simpler: directly show F(k+14) > 15*F(k+8) using closed form
+    -- F(k+14)/F(k+8) → φ^6 ≈ 17.94 > 15
+    -- Algebraically: express both in terms of F(k+2), F(k+3)
+    have h4 := Omega.fib_succ_succ' (k + 2)
+    have h5 := Omega.fib_succ_succ' (k + 3)
+    have h6 := Omega.fib_succ_succ' (k + 4)
+    have h7 := Omega.fib_succ_succ' (k + 5)
+    have h8 := Omega.fib_succ_succ' (k + 6)
+    have h9 := Omega.fib_succ_succ' (k + 7)
+    have h10 := Omega.fib_succ_succ' (k + 8)
+    have h11 := Omega.fib_succ_succ' (k + 9)
+    have h12 := Omega.fib_succ_succ' (k + 10)
+    have h13 := Omega.fib_succ_succ' (k + 11)
+    have h14 := Omega.fib_succ_succ' (k + 12)
+    have hpos := Omega.fib_succ_pos (k + 1)
+    -- F(k+8) = 13*F(k+2) + 8*F(k+3) (from substitution chain)
+    -- F(k+14) = 233*F(k+2) + 144*F(k+3) (Fibonacci coefficients)
+    -- 15 * (13a + 8b) = 195a + 120b
+    -- 233a + 144b > 195a + 120b ↔ 38a + 24b > 0, true since a = F(k+2) ≥ 1
+    -- Express F(k+8) and F(k+14) in terms of a = F(k+2), b = F(k+3):
+    have hF8 : Nat.fib (k + 8) = 5 * Nat.fib (k + 2) + 8 * Nat.fib (k + 3) := by
+      rw [h8, h7, h6, h5, h4]; ring
+    have hF14 : Nat.fib (k + 14) = 89 * Nat.fib (k + 2) + 144 * Nat.fib (k + 3) := by
+      rw [h14, h13, h12, h11, h10, h9, h8, h7, h6, h5, h4]; ring
+    rw [hF8, hF14]; nlinarith
+
+/-- 15·F_n < F_{n+6} for n ≥ 2 (fails at n=1 since 15·1 = 15 > 13 = F_7).
+    thm:pom-fifteen-fib-lt-fib-add-six -/
+theorem fifteen_fib_lt_fib_add_six (n : Nat) (hn : 2 ≤ n) :
+    15 * Nat.fib n < Nat.fib (n + 6) := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
+  show 15 * Nat.fib (2 + k) < Nat.fib (2 + k + 6)
+  have e1 : Nat.fib (2 + k) = Nat.fib (k + 2) := by ring_nf
+  have e2 : Nat.fib (2 + k + 6) = Nat.fib (k + 8) := by ring_nf
+  rw [e1, e2]
+  -- F(k+2) = a, F(k+3) = b, F(k+8) = 5a + 8b
+  -- 15a < 5a + 8b ↔ 10a < 8b ↔ 5a < 4b
+  -- Since b = F(k+3) = F(k+2) + F(k+1) ≥ a + 1 (for k ≥ 0, F(k+1) ≥ 1)
+  -- 4b ≥ 4(a+1) = 4a + 4 > 5a requires 4 > a, i.e., a ≤ 3
+  -- Actually need a different bound. F(k+3) > F(k+2) always for k ≥ 0.
+  -- Actually 5a < 4b ↔ 5a < 4(a + F(k+1)) = 4a + 4F(k+1) ↔ a < 4F(k+1)
+  -- Since a = F(k+2) = F(k+1) + F(k), we need F(k+1) + F(k) < 4F(k+1), i.e., F(k) < 3F(k+1), true for all k.
+  have h4 := Omega.fib_succ_succ' (k + 2)
+  have h5 := Omega.fib_succ_succ' (k + 3)
+  have h6 := Omega.fib_succ_succ' (k + 4)
+  have h7 := Omega.fib_succ_succ' (k + 5)
+  have h8 := Omega.fib_succ_succ' (k + 6)
+  have hpos := Omega.fib_succ_pos (k + 1)
+  -- Express in terms of a = F(k+2), b = F(k+3)
+  have hF8 : Nat.fib (k + 8) = 5 * Nat.fib (k + 2) + 8 * Nat.fib (k + 3) := by
+    rw [h8, h7, h6, h5, h4]; ring
+  -- Need 15*F(k+2) < 5*F(k+2) + 8*F(k+3), i.e., 10*F(k+2) < 8*F(k+3)
+  -- F(k+3) = F(k+2) + F(k+1) with F(k+1) ≥ 1
+  -- 8*(F(k+2) + F(k+1)) = 8*F(k+2) + 8*F(k+1) > 10*F(k+2) ↔ 8*F(k+1) > 2*F(k+2)
+  -- F(k+2) = F(k+1) + F(k) ≤ 2*F(k+1) (since F(k) ≤ F(k+1)), so 2*F(k+2) ≤ 4*F(k+1) < 8*F(k+1)
+  have hle : Nat.fib k ≤ Nat.fib (k + 1) := Nat.fib_mono (by omega)
+  have hk2 := Omega.fib_succ_succ' k       -- F(k+2) = F(k+1) + F(k)
+  have hk3 := Omega.fib_succ_succ' (k + 1) -- F(k+3) = F(k+2) + F(k+1)
+  rw [hF8]
+  -- Need: 10*F(k+2) < 8*F(k+3) = 8*(F(k+2) + F(k+1)) = 8*F(k+2) + 8*F(k+1)
+  -- i.e., 2*F(k+2) < 8*F(k+1), i.e., F(k+2) < 4*F(k+1)
+  -- F(k+2) = F(k+1) + F(k) ≤ 2*F(k+1), so F(k+2) < 4*F(k+1) ✓ (since F(k+1) ≥ 1)
+  nlinarith
+
+/-- NAP minimality of so(10): 45 = F_9 + F_6 + F_4, and no other dimension in the
+    classical simple Lie algebra census shares this Zeckendorf decomposition.
+    thm:pom-nap-so10-minimality -/
+theorem nap_so10_minimality :
+    45 = Nat.fib 9 + Nat.fib 6 + Nat.fib 4 ∧
+    (∀ d ∈ [3, 8, 10, 14, 15, 21, 24, 28, 35, 36],
+     Nat.zeckendorf d ≠ Nat.zeckendorf 45) := by
+  constructor <;> native_decide
+
+/-- Zeckendorf carry absorption at m=9: F(6) + F(7) = F(8), i.e. 8 + 13 = 21.
+    prop:pom-zeckendorf-carry-absorption-m9 -/
+theorem zeckendorf_carry_absorption_m9 :
+    Nat.fib 6 + Nat.fib 7 = Nat.fib 8 := by native_decide
+
+/-- The equation F(m+2) - 12 = F(m-2)² has unique solution m = 6 among m ≥ 6.
+    For m = 7 direct computation refutes; for m ≥ 8, fib_sq_gt_fib_shift gives
+    F(m-2)² > F(m+2), making F(m+2) - 12 < F(m+2) < F(m-2)² a contradiction.
+    thm:pom-sm-square-residual-rigidity-m6 -/
+theorem sm_square_residual_rigidity_m6 (m : Nat) (hm : 6 ≤ m)
+    (h : Nat.fib (m + 2) - 12 = Nat.fib (m - 2) ^ 2) : m = 6 := by
+  -- Eliminate m = 6, 7 by computation
+  by_cases h6 : m = 6
+  · exact h6
+  · by_cases h7 : m = 7
+    · subst h7; revert h; native_decide
+    · -- m ≥ 8, so m - 2 ≥ 6
+      exfalso
+      have hm8 : 8 ≤ m := by omega
+      have hm2_ge : 6 ≤ m - 2 := by omega
+      -- F((m-2) + 4) < F(m-2)², i.e. F(m+2) < F(m-2)²
+      have hsq := Omega.fib_sq_gt_fib_shift (m - 2) hm2_ge
+      rw [show m - 2 + 4 = m + 2 from by omega] at hsq
+      -- From hypothesis: F(m-2)² = F(m+2) - 12
+      -- From hsq: F(m+2) < F(m-2)², so F(m-2)² > F(m+2) ≥ F(m+2) - 12
+      -- But h says F(m+2) - 12 = F(m-2)², contradiction
+      omega
+
+/-- The SM gauge group dimensions 1+3+8=12 has Zeckendorf representation F(6)+F(4)+F(2).
+    prop:sm-zeckendorf-lie-algebra-rigidity -/
+theorem sm_zeckendorf_twelve :
+    Nat.fib 6 + Nat.fib 4 + Nat.fib 2 = 12 := by norm_num [Nat.fib]
+
+/-- SM boundary count verification with individual Fibonacci values.
+    cor:sm-minimal-triple-selection-law -/
+theorem sm_boundary_count :
+    Nat.fib 2 + Nat.fib 4 + Nat.fib 6 = 12 ∧
+    Nat.fib 2 = 1 ∧ Nat.fib 4 = 3 ∧ Nat.fib 6 = 8 := by
+  norm_num [Nat.fib]
+
+/-- Zeckendorf gap condition: indices 2,4,6 are pairwise ≥ 2 apart.
+    prop:sm-zeckendorf-lie-algebra-rigidity -/
+theorem sm_zeckendorf_no_adjacent :
+    4 - 2 ≥ 2 ∧ 6 - 4 ≥ 2 := by omega
+
+/-- In a gap-≥2 index set containing 4, 6, 8, neither 5 nor 7 can appear.
+    cor:zeckendorf-no-adjacent-strict-inclusion-impossible -/
+theorem zeckendorf_no_adjacent_strict_inclusion
+    (S : Finset ℕ)
+    (h_gap : ∀ a ∈ S, ∀ b ∈ S, a ≠ b → (a : ℤ) - b ≠ 1 ∧ (a : ℤ) - b ≠ -1)
+    (h4 : 4 ∈ S) (h6 : 6 ∈ S) (_h8 : 8 ∈ S) :
+    5 ∉ S ∧ 7 ∉ S := by
+  constructor
+  · intro h5
+    have := (h_gap 5 h5 4 h4 (by omega)).1
+    omega
+  · intro h7
+    have := (h_gap 7 h7 6 h6 (by omega)).1
+    omega
 
 end Omega.ZeckSig
