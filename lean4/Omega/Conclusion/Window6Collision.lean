@@ -266,6 +266,164 @@ theorem log_sum_le_of_sum_eq {n : ℕ} {N : ℝ} (a : Fin n → ℝ) (ha : ∀ i
     rw [← Real.rpow_natCast, Real.log_rpow hdiv_pos]
   simpa [hrw] using hlog
 
+/-- Natural-number section sizes satisfy the uniform-average log upper bound.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem sectionLog_le_uniformAverage_nat {n : ℕ} (hn : 0 < n)
+    (d : Fin n → ℕ) (hd : ∀ i, 0 < d i) :
+    ∑ i, Real.log (d i) ≤ n * Real.log ((∑ i, (d i : ℝ)) / n) := by
+  let N : ℝ := ∑ i, (d i : ℝ)
+  have hsum : ∑ i, (d i : ℝ) = N := by rfl
+  have hpos : ∀ i, 0 < (d i : ℝ) := fun i => Nat.cast_pos.mpr (hd i)
+  have hN_pos : 0 < N := by
+    have hle : (d ⟨0, hn⟩ : ℝ) ≤ ∑ i, (d i : ℝ) := by
+      simpa using
+        (Finset.single_le_sum (f := fun i : Fin n => (d i : ℝ)) (by intro i _; positivity) (by simp : ⟨0, hn⟩ ∈ Finset.univ))
+    exact lt_of_lt_of_le (Nat.cast_pos.mpr (hd ⟨0, hn⟩)) (by simpa [N] using hle)
+  simpa [N] using log_sum_le_of_sum_eq (fun i => (d i : ℝ)) hpos hn hsum hN_pos
+
+/-- Uniform section ledger identity as a KL-divergence decomposition.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem sectionLedger_kl_identity {n : ℕ} (hn : 0 < n)
+    (d : Fin n → ℕ) (hd : ∀ i, 0 < d i) :
+    let N : ℝ := ∑ i, (d i : ℝ)
+    let π : Fin n → ℝ := fun i => (d i : ℝ) / N
+    let ν : ℝ := 1 / n
+    (1 / n : ℝ) * ∑ i, Real.log (d i)
+      = Real.log (N / n) - ∑ i, ν * Real.log (ν / π i) := by
+  dsimp
+  let N : ℝ := ∑ i, (d i : ℝ)
+  let π : Fin n → ℝ := fun i => (d i : ℝ) / N
+  let ν : ℝ := 1 / n
+  have hnR_pos : (0 : ℝ) < n := Nat.cast_pos.mpr hn
+  have hnR_ne : (n : ℝ) ≠ 0 := ne_of_gt hnR_pos
+  have hdR_pos : ∀ i, 0 < (d i : ℝ) := fun i => Nat.cast_pos.mpr (hd i)
+  have hN_pos : 0 < N := by
+    have hle : (d ⟨0, hn⟩ : ℝ) ≤ ∑ i, (d i : ℝ) := by
+      simpa using
+        (Finset.single_le_sum (f := fun i : Fin n => (d i : ℝ)) (by intro i _; positivity)
+          (by simp : ⟨0, hn⟩ ∈ Finset.univ))
+    exact lt_of_lt_of_le (Nat.cast_pos.mpr (hd ⟨0, hn⟩)) (by simpa [N] using hle)
+  have hN_ne : N ≠ 0 := ne_of_gt hN_pos
+  have hπpos : ∀ i, 0 < π i := by
+    intro i
+    dsimp [π]
+    exact div_pos (hdR_pos i) hN_pos
+  have hπne : ∀ i, π i ≠ 0 := fun i => ne_of_gt (hπpos i)
+  have hνpos : 0 < ν := by
+    dsimp [ν]
+    exact one_div_pos.mpr hnR_pos
+  have hνne : ν ≠ 0 := ne_of_gt hνpos
+  have hNdivn_pos : 0 < N / n := div_pos hN_pos hnR_pos
+  have hNdivn_ne : N / n ≠ 0 := ne_of_gt hNdivn_pos
+  have hνn : ν * n = 1 := by
+    dsimp [ν]
+    field_simp [hnR_ne]
+  have hlogratio : ∀ i, Real.log (ν / π i) = Real.log (N / n) - Real.log (d i) := by
+    intro i
+    have hdi_ne : (d i : ℝ) ≠ 0 := ne_of_gt (hdR_pos i)
+    have hratio : ν / π i = (N / n) / (d i : ℝ) := by
+      dsimp [ν, π]
+      field_simp [hnR_ne, hN_ne, hdi_ne]
+    rw [hratio]
+    rw [Real.log_div hNdivn_ne hdi_ne]
+  have hsumKL :
+      ∑ i, ν * Real.log (ν / π i) = ν * (n * Real.log (N / n) - ∑ i, Real.log (d i)) := by
+    calc
+      ∑ i, ν * Real.log (ν / π i)
+          = ∑ i, ν * (Real.log (N / n) - Real.log (d i)) := by
+              refine Finset.sum_congr rfl ?_
+              intro i _
+              rw [hlogratio i]
+      _ = ∑ i, (ν * Real.log (N / n) - ν * Real.log (d i)) := by
+            refine Finset.sum_congr rfl ?_
+            intro i _
+            ring
+      _ = (∑ i, ν * Real.log (N / n)) - ∑ i, ν * Real.log (d i) := by
+            rw [Finset.sum_sub_distrib]
+      _ = ν * (n * Real.log (N / n)) - ν * ∑ i, Real.log (d i) := by
+            rw [Finset.mul_sum]
+            norm_num [Finset.card_univ]
+            ring
+      _ = ν * (n * Real.log (N / n) - ∑ i, Real.log (d i)) := by ring
+  have hsumKL' : ∑ i, ν * Real.log (ν / π i) = Real.log (N / n) - ν * ∑ i, Real.log (d i) := by
+    rw [hsumKL]
+    calc
+      ν * (n * Real.log (N / n) - ∑ i, Real.log (d i))
+          = ν * (n * Real.log (N / n)) - ν * ∑ i, Real.log (d i) := by ring
+      _ = Real.log (N / n) - ν * ∑ i, Real.log (d i) := by
+            have hmain : ν * (n * Real.log (N / n)) = Real.log (N / n) := by
+              calc
+                ν * (n * Real.log (N / n)) = (ν * n) * Real.log (N / n) := by ring
+                _ = Real.log (N / n) := by rw [hνn, one_mul]
+            rw [hmain]
+  rw [hsumKL']
+  ring
+
+/-- Two-level collision moment realizes the explicit extremal pair.
+    thm:conclusion-window10-groupoid-collision-dimension-identity -/
+theorem collisionMoment_q2_explicit {n : ℕ} (hn : 1 < n)
+    {c : ℝ} (hc1 : 1 / n ≤ c) (_hc2 : c ≤ 1) :
+    let a : ℝ := (1 + Real.sqrt ((n - 1 : ℝ) * ((n : ℝ) * c - 1))) / n
+    let b : ℝ := (1 - Real.sqrt (((n : ℝ) * c - 1) / (n - 1 : ℝ))) / n
+    a + (n - 1 : ℝ) * b = 1 ∧ a^2 + (n - 1 : ℝ) * b^2 = c := by
+  dsimp
+  let t : ℝ := Real.sqrt (((n : ℝ) * c - 1) / ((n : ℝ) - 1))
+  have hn_pos : 0 < n := lt_trans Nat.zero_lt_one hn
+  have hnR_pos : (0 : ℝ) < n := Nat.cast_pos.mpr hn_pos
+  have hnR_ne : (n : ℝ) ≠ 0 := ne_of_gt hnR_pos
+  have hm_pos : (0 : ℝ) < (n : ℝ) - 1 := by
+    have hnR_gt_one : (1 : ℝ) < n := by
+      exact_mod_cast hn
+    linarith
+  have hm_ne : (n : ℝ) - 1 ≠ 0 := ne_of_gt hm_pos
+  have hnc_nonneg : 0 ≤ (n : ℝ) * c - 1 := by
+    have hmul : (n : ℝ) * (1 / n : ℝ) ≤ (n : ℝ) * c :=
+      mul_le_mul_of_nonneg_left hc1 hnR_pos.le
+    have hone : (n : ℝ) * (1 / n : ℝ) = 1 := by
+      field_simp [hnR_ne]
+    linarith
+  have hratio_nonneg : 0 ≤ (((n : ℝ) * c - 1) / ((n : ℝ) - 1)) := by
+    exact div_nonneg hnc_nonneg hm_pos.le
+  have ht_nonneg : 0 ≤ t := by
+    dsimp [t]
+    positivity
+  have ht_sq : t ^ 2 = (((n : ℝ) * c - 1) / ((n : ℝ) - 1)) := by
+    dsimp [t]
+    rw [Real.sq_sqrt hratio_nonneg]
+  have hsqrt_mul :
+      Real.sqrt (((n : ℝ) - 1) * ((n : ℝ) * c - 1)) = ((n : ℝ) - 1) * t := by
+    have hsq_left : (Real.sqrt (((n : ℝ) - 1) * ((n : ℝ) * c - 1))) ^ 2 =
+        ((n : ℝ) - 1) * ((n : ℝ) * c - 1) := by
+      rw [Real.sq_sqrt]
+      positivity
+    have hsq_right : (((n : ℝ) - 1) * t) ^ 2 = ((n : ℝ) - 1) * ((n : ℝ) * c - 1) := by
+      rw [mul_pow, ht_sq]
+      field_simp [hm_ne]
+    have hleft_nonneg : 0 ≤ Real.sqrt (((n : ℝ) - 1) * ((n : ℝ) * c - 1)) := by
+      positivity
+    have hright_nonneg : 0 ≤ ((n : ℝ) - 1) * t := by
+      exact mul_nonneg hm_pos.le ht_nonneg
+    nlinarith
+  constructor
+  · rw [hsqrt_mul]
+    change (1 + ((n : ℝ) - 1) * t) / n + ((n : ℝ) - 1) * ((1 - t) / n) = 1
+    field_simp [hnR_ne]
+    ring
+  · rw [hsqrt_mul]
+    change ((1 + ((n : ℝ) - 1) * t) / n) ^ 2 + ((n : ℝ) - 1) * ((1 - t) / n) ^ 2 = c
+    have hquad :
+        ((1 + ((n : ℝ) - 1) * t) / n) ^ 2 + ((n : ℝ) - 1) * ((1 - t) / n) ^ 2 =
+          (1 + ((n : ℝ) - 1) * t ^ 2) / n := by
+      field_simp [hnR_ne]
+      ring
+    calc
+      ((1 + ((n : ℝ) - 1) * t) / n) ^ 2 + ((n : ℝ) - 1) * ((1 - t) / n) ^ 2 =
+          (1 + ((n : ℝ) - 1) * t ^ 2) / n := hquad
+      _ = (1 + ((n : ℝ) - 1) * (((n : ℝ) * c - 1) / ((n : ℝ) - 1))) / n := by rw [ht_sq]
+      _ = c := by
+        field_simp [hnR_ne, hm_ne]
+        ring
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R169: Window-10 histogram consistency
 -- ══════════════════════════════════════════════════════════════

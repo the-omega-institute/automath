@@ -841,7 +841,7 @@ theorem boundaryUplift_strip_boundary {n : Nat} (w : X (n + 4))
     have hidx : (⟨iv - 2 + 2, by omega⟩ : Fin (n + 4)) = ⟨iv, hiv⟩ := by
       apply Fin.ext
       exact Nat.sub_add_cancel hiv_ge
-    change w.1 ⟨iv - 2 + 2, by simpa [Nat.sub_add_cancel hiv_ge] using hiv⟩ = w.1 ⟨iv, hiv⟩
+    simp [boundaryUpliftMap, h0', h1', h2', h3']
     simpa [boundaryStripMap] using congrArg w.1 hidx
 
 /-- Boundary words in `X (n+4)` form the image of shift-4 uplift.
