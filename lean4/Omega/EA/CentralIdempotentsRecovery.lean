@@ -84,4 +84,20 @@ theorem projectorVal_zero_iff_ne
     rcases hb with rfl | rfl <;>
     norm_num [projectorVal]
 
+/-- On ±1 inputs, one projector equals `1` exactly when the other three vanish.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem projectorVal_eq_one_iff_other_three_zero
+    {α β a b : Int}
+    (hα : α = 1 ∨ α = -1) (hβ : β = 1 ∨ β = -1)
+    (ha : a = 1 ∨ a = -1) (hb : b = 1 ∨ b = -1) :
+    projectorVal α β a b = 1 ↔
+      projectorVal α (-β) a b = 0 ∧
+      projectorVal (-α) β a b = 0 ∧
+      projectorVal (-α) (-β) a b = 0 := by
+  rcases hα with rfl | rfl <;>
+    rcases hβ with rfl | rfl <;>
+    rcases ha with rfl | rfl <;>
+    rcases hb with rfl | rfl <;>
+    norm_num [projectorVal]
+
 end Omega.EA
