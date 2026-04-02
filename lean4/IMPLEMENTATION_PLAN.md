@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 832 |
+| \leanverified 标注数 | 833 |
 | \leanpartial 标注数 | 16 |
-| 总标注数 | 848 |
-| 轮次 | R204（round_count=205） |
+| 总标注数 | 849 |
+| 轮次 | R205（round_count=206） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -24,7 +24,7 @@
 |---|---|---|---|
 | POM | 1,707 | 223 | 13.1% |
 | Emergent Arithmetic | 185 | 92 | 49.7% |
-| Folding | 337 | 80 | 23.7% |
+| Folding | 337 | 81 | 24.0% |
 | Conclusion | 2,550 | 140 | 5.5% |
 | Group Unification | 469 | 78 | 16.6% |
 | SPG | 129 | 32 | 24.8% |
@@ -32,7 +32,7 @@
 | Zeta Finite Part | 4,524 | 98 | 2.2% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **818** | **7.8%** |
+| **合计（body）** | **10,508** | **819** | **7.8%** |
 
 ### 1.2 已完成模块
 
@@ -184,6 +184,7 @@
 **Phase R202: central idempotents pairwise orthogonality（部分完成）**：EA/CentralIdempotents.lean——central_idempotents_pairwise_orthogonal（thm:fold-groupoid-z2x2-central-idempotents，补齐四个中心幂等元两两正交的成组判定）——**1 个论文标签条目计入覆盖率**（Emergent Arithmetic +1）——Emergent Arithmetic 90→91（49.2%），全局标注 829→830（+1），body 覆盖 815→816（7.8%），commit 0de95da
 **Phase R203: higher spectrum singleton marginal formula（部分完成）**：CircleDimension/MultiPrimeSpectrum.lean——higher_spectrum_counterexample_singleton_formula（prop:cdim-higher-spectrum-not-determined-by-marginals，补齐反例中单元素谱在两组对象上的统一 if-公式）——**1 个论文标签条目计入覆盖率**（Circle Dimension +1）——Circle Dimension 63→64（16.3%），全局标注 830→831（+1），body 覆盖 816→817（7.8%），commit a0dec62
 **Phase R204: all central idempotents idempotent（部分完成）**：EA/CentralIdempotents.lean——central_idempotents_all_idempotent（thm:fold-groupoid-z2x2-central-idempotents，补齐四个中心幂等元同时满足幂等性的成组判定）——**1 个论文标签条目计入覆盖率**（Emergent Arithmetic +1）——Emergent Arithmetic 91→92（49.7%），全局标注 831→832（+1），body 覆盖 817→818（7.8%），commit a7fdced
+**Phase R205: determinant ratio gap positivity（部分完成）**：Folding/FibonacciPolynomial.lean——detPoly_eval_ratio_gap_pos（cor:pom-Lk-det-logconvex-ratio，补齐 Cassini–Pell 求值差在正参数下严格为正的直接不等式）——**1 个论文标签条目计入覆盖率**（Folding +1）——Folding 80→81（24.0%），全局标注 832→833（+1），body 覆盖 818→819（7.8%），commit <pending>
 **Phase R192（分析完成，单槽候选）**：CircleDimension / phase-spectrum reconstruction——避开已在跑的 Zeta 线，转向未饱和的 Circle Dimension；单个中难度目标锁定 `phaseSpectrumCount_reconstruction`（对应 `thm:cdim-phase-spectrum-reconstruction`，把论文中的“全部循环相位采样计数唯一决定有限生成离散交换群同构类型”压缩为当前 Nat-编码下的显式恢复链：从 `phaseSpectrumCount r t N = phaseSpectrumCount r' t' N` 对所有 `N` 推出 `r = r'` 且 `Nat.gcd t N = Nat.gcd t' N` 对所有 `N`，再取 `N = t` 与 `N = t'` 得 `t = t'`；直接承接现有 `phaseSpectrumCount_split` / `phaseSpectrumCount_coprime` / `phaseSpectrumCount_add_rank_le` / `phaseSpectrumCount_le_pow`，不引入新公理，满足单目标中难度门槛）。
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续

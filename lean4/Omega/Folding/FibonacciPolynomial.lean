@@ -657,6 +657,13 @@ theorem detPoly_eval_cassini_gap (k : Nat) (hk : 1 ≤ k) (t : ℤ) :
   simp only [eval_sub, eval_mul, eval_pow, eval_X] at heval
   linarith
 
+/-- The evaluated Cassini-Pell gap is positive for positive parameter `t`.
+    cor:pom-Lk-det-logconvex-ratio -/
+theorem detPoly_eval_ratio_gap_pos (k : Nat) (hk : 1 ≤ k) (t : ℤ) (ht : 0 < t) :
+    0 < (detPoly (k - 1)).eval t * (detPoly (k + 1)).eval t - ((detPoly k).eval t) ^ 2 := by
+  rw [detPoly_eval_cassini_gap k hk t]
+  exact ht
+
 /-- Strict monotonicity in k: D_k(t) < D_{k+1}(t) for t > 0.
     cor:pom-Lk-det-logconvex-ratio -/
 theorem detPoly_eval_strict_mono (t : ℤ) (ht : 0 < t) :
