@@ -450,5 +450,51 @@ theorem higher_spectrum_counterexample_singleton_formula
       · rw [hRight]
         simp [hℓp, hℓq]
 
+/-- The pair support separates the higher-spectrum counterexample.
+    prop:cdim-higher-spectrum-not-determined-by-marginals -/
+theorem higher_spectrum_counterexample_pair_values
+    {p q : Nat} (hpq : p ≠ q) :
+    let A : Finset PrimeSupport := {({p} : PrimeSupport), {q}}
+    let A' : Finset PrimeSupport := {({p, q} : PrimeSupport), (∅ : PrimeSupport)}
+    (multiPrimeSpectrum A ({p, q} : PrimeSupport) = 0) ∧
+      (multiPrimeSpectrum A' ({p, q} : PrimeSupport) = 1) := by
+  unfold multiPrimeSpectrum
+  constructor
+  · have hLeft :
+        {S ∈ ({({p} : PrimeSupport), ({q} : PrimeSupport)} : Finset PrimeSupport) |
+            ({p, q} : PrimeSupport) ⊆ S} = ∅ := by
+      ext S
+      constructor
+      · intro h
+        simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton] at h
+        rcases h with ⟨hS, hsub⟩
+        rcases hS with rfl | rfl
+        · have hqS : q ∈ ({p} : PrimeSupport) := hsub (by simp)
+          have : q = p := by simpa using hqS
+          exact (hpq this.symm).elim
+        · have hpS : p ∈ ({q} : PrimeSupport) := hsub (by simp)
+          have : p = q := by simpa using hpS
+          exact (hpq this).elim
+      · intro h
+        simp at h
+    rw [hLeft]
+    simp
+  · have hRight :
+        {S ∈ ({({p, q} : PrimeSupport), (∅ : PrimeSupport)} : Finset PrimeSupport) |
+            ({p, q} : PrimeSupport) ⊆ S} = {({p, q} : PrimeSupport)} := by
+      ext S
+      constructor
+      · intro h
+        simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton] at h
+        rcases h with ⟨hS, hsub⟩
+        rcases hS with rfl | rfl
+        · simp
+        · simp at hsub
+      · intro h
+        simp only [Finset.mem_singleton] at h
+        subst h
+        simp
+    rw [hRight]
+    simp
 
 end Omega.CircleDimension
