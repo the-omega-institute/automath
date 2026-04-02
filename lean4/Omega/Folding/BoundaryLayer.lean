@@ -778,6 +778,98 @@ theorem boundaryStrip_uplift {n : Nat} (v : X n) :
   show v.1 ⟨j + 2 - 2, _⟩ = v.1 ⟨j, hj⟩
   congr 1
 
+/-- Stripping a boundary word preserves the No11 property.
+    thm:boundary-shift4-uplift-isomorphism -/
+theorem boundaryStripMap_no11_of_boundary {n : Nat} (w : X (n + 4))
+    (_hwbd : isBoundaryWord (by omega : 2 ≤ n + 4) w.1) :
+    No11 (boundaryStripMap w.1) := by
+  intro i hi hi1
+  have hi_lt : i < n := lt_of_get_eq_true hi
+  have hi1_lt : i + 1 < n := lt_of_get_eq_true hi1
+  rw [get_of_lt _ hi_lt] at hi
+  rw [get_of_lt _ hi1_lt] at hi1
+  have hi' : get w.1 (i + 2) = true := by
+    rw [get_of_lt _ (by omega)]
+    simpa [boundaryStripMap] using hi
+  have hi1' : get w.1 (i + 3) = true := by
+    rw [get_of_lt _ (by omega)]
+    simpa [boundaryStripMap] using hi1
+  exact w.2 (i + 2) hi' hi1'
+
+/-- Stripping and uplifting recovers a boundary word.
+    thm:boundary-shift4-uplift-isomorphism -/
+theorem boundaryUplift_strip_boundary {n : Nat} (w : X (n + 4))
+    (hwbd : isBoundaryWord (by omega : 2 ≤ n + 4) w.1) :
+    boundaryUpliftMap ⟨boundaryStripMap w.1, boundaryStripMap_no11_of_boundary w hwbd⟩ = w.1 := by
+  have hw1zero : w.1 ⟨1, by omega⟩ = false := by
+    by_contra h1
+    have hfirst : get w.1 0 = true := by
+      simpa [get] using hwbd.1
+    have hnext : get w.1 1 = true := by
+      simpa [get] using h1
+    exact (w.2 0 hfirst hnext).elim
+  have hwn2zero : w.1 ⟨n + 2, by omega⟩ = false := by
+    by_contra h1
+    have hprev : get w.1 (n + 2) = true := by
+      simpa [get] using h1
+    have hlast : get w.1 (n + 3) = true := by
+      simpa [get, show n + 4 - 1 = n + 3 from by omega] using hwbd.2
+    exact (w.2 (n + 2) hprev hlast).elim
+  funext i
+  rcases i with ⟨iv, hiv⟩
+  by_cases h0 : iv = 0
+  · subst h0
+    change true = w.1 ⟨0, by omega⟩
+    simpa using hwbd.1.symm
+  by_cases h1 : iv = 1
+  · subst h1
+    change false = w.1 ⟨1, by omega⟩
+    simpa using hw1zero.symm
+  by_cases h2 : iv = n + 2
+  · subst h2
+    simp [boundaryUpliftMap, hwn2zero]
+  by_cases h3 : iv = n + 3
+  · subst h3
+    have hlast : w.1 ⟨n + 3, by omega⟩ = true := by
+      simpa [show n + 4 - 1 = n + 3 from by omega] using hwbd.2
+    simp [boundaryUpliftMap, hlast]
+  · have h0' : iv ≠ 0 := h0
+    have h1' : iv ≠ 1 := h1
+    have h2' : iv ≠ n + 2 := h2
+    have h3' : iv ≠ n + 3 := h3
+    have hiv_ge : 2 ≤ iv := by omega
+    have hidx : (⟨iv - 2 + 2, by omega⟩ : Fin (n + 4)) = ⟨iv, hiv⟩ := by
+      apply Fin.ext
+      exact Nat.sub_add_cancel hiv_ge
+    change w.1 ⟨iv - 2 + 2, by simpa [Nat.sub_add_cancel hiv_ge] using hiv⟩ = w.1 ⟨iv, hiv⟩
+    simpa [boundaryStripMap] using congrArg w.1 hidx
+
+/-- Boundary words in `X (n+4)` form the image of shift-4 uplift.
+    thm:boundary-shift4-uplift-isomorphism -/
+def BoundaryWordSubtype (n : Nat) :=
+  {w : X (n + 4) // isBoundaryWord (by omega : 2 ≤ n + 4) w.1}
+
+/-- The shift-4 uplift gives a bijection onto the boundary-word subtype.
+    thm:boundary-shift4-uplift-isomorphism -/
+theorem boundaryUplift_bijective (n : Nat) :
+    Function.Bijective (fun v : X n =>
+      (⟨⟨boundaryUpliftMap v, boundaryUpliftMap_no11 v⟩,
+        boundaryUpliftMap_isBoundary v⟩ : BoundaryWordSubtype n)) := by
+  let f : X n → BoundaryWordSubtype n := fun v =>
+    ⟨⟨boundaryUpliftMap v, boundaryUpliftMap_no11 v⟩, boundaryUpliftMap_isBoundary v⟩
+  let g : BoundaryWordSubtype n → X n := fun w =>
+    ⟨boundaryStripMap w.1.1, boundaryStripMap_no11_of_boundary w.1 w.2⟩
+  have hleft : Function.LeftInverse g f := by
+    intro v
+    apply Subtype.ext
+    exact boundaryStrip_uplift v
+  have hright : Function.RightInverse g f := by
+    intro w
+    apply Subtype.ext
+    apply Subtype.ext
+    exact boundaryUplift_strip_boundary w.1 w.2
+  exact ⟨Function.LeftInverse.injective hleft, Function.RightInverse.surjective hright⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R159: Mixed endpoint count
 -- ══════════════════════════════════════════════════════════════

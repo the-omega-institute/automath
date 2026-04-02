@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 814 |
+| \leanverified 标注数 | 817 |
 | \leanpartial 标注数 | 16 |
-| 总标注数 | 830 |
-| 轮次 | R188（round_count=189） |
+| 总标注数 | 833 |
+| 轮次 | R190（round_count=191） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -26,13 +26,13 @@
 | Emergent Arithmetic | 185 | 88 | 47.6% |
 | Folding | 337 | 79 | 23.4% |
 | Conclusion | 2,550 | 138 | 5.4% |
-| Group Unification | 469 | 75 | 16.0% |
+| Group Unification | 469 | 78 | 16.6% |
 | SPG | 129 | 30 | 23.3% |
 | Circle Dimension | 393 | 61 | 15.5% |
 | Zeta Finite Part | 4,524 | 95 | 2.1% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **800** | **7.6%** |
+| **合计（body）** | **10,508** | **803** | **7.6%** |
 
 ### 1.2 已完成模块
 
@@ -169,7 +169,8 @@
 **Phase R187: free involution count + reduced determinant squeeze（部分完成）**：GU/FreeInvolutionCount.lean + Zeta/DynZeta.lean——GU：freeInvolutionCount_succ / freeInvolutionCount_eq_prod_odds（thm:fiberwise-free-involution-matching-entropy，对应单纤维完美匹配计数链）；Zeta：reduced_det_golden_mean_squeeze（prop:finite-part-residue-constant-rh-squeeze，golden-mean 二维留数常数压扁界）——**3 个论文标签条目计入覆盖率**（Group Unification +2，Zeta +1）——Group Unification 73→75（16.0%），Zeta 94→95（2.1%），全局标注 807→810（+3），body 覆盖 793→796（7.6%），commit 3a35afd
 **Phase R188: EA idempotent sectors + SPG observable-event symmDiff bound（部分完成）**：EA/CentralIdempotentsRecovery.lean + SPG/ScanErrorDiscrete.lean——EA：epn_idempotent / enp_idempotent / enn_idempotent（thm:fold-groupoid-z2x2-central-idempotents，补齐四投影幂等链）；SPG：scanError_le_setMass_symmDiff_observableEvent（prop:spg-clarity-bayes-optimality，把对称差质量下界落到 observableEvent 框架；内部 helper `scanError_symmDiff_observableEvent_eq` 不计入覆盖率）——**4 个论文标签条目计入覆盖率**（Emergent Arithmetic +3，SPG +1）——Emergent Arithmetic 85→88（47.6%），SPG 29→30（23.3%），全局标注 810→814（+4），body 覆盖 796→800（7.6%），commit e96587c
 **Phase R189（进行中）**：Conclusion / section-ledger 新包——避开已排 GU / Circle / EA / SPG 方向，切到未饱和的 Conclusion 账本线；锁定 `sectionLedger_kl_identity`（把 `thm:conclusion-section-ledger-kl-identity` 从当前乘法公式+AM-GM helper 升级为真正 KL 恒等式，中）、`collisionMoment_q2_explicit`（对应 `cor:conclusion-section-ledger-collision-moment-q2-explicit` 的两层分布闭式，中）与可选低难度前置 `sectionLog_le_uniformAverage_nat`（把现有 `log_sum_le_of_sum_eq` 专门化到自然数纤维计数）
-**Phase R190（刷新完成，待派发）**：GU / BoundaryLayer——承接论文 `thm:boundary-shift4-uplift-isomorphism` 的“规范双射”缺口，避开已锁定的 Conclusion/section-ledger 线；中难度主目标：`boundaryUplift_bijective`（把现有 `paper_boundaryUplift_card` / `boundaryUpliftMap_no11` / `boundaryStrip_uplift` 升级为真正双射封装）；低难度配套：`boundaryStripMap_no11_of_boundary`（边界词去首尾后仍满足 `No11`）与 `boundaryUplift_strip_boundary`（边界词唯一分解为 `10 v 01`，即 uplift ∘ strip = id）。三者同文件、无跨轮依赖、章节多样性满足，且与现有定理无重名/同概念重复；已复核论文原文、现有 `BoundaryLayer.lean` 基础设施与 landable theorem headers，可直接派发。
+**Phase R190: boundary uplift canonical bijection（部分完成）**：Folding/BoundaryLayer.lean——boundaryStripMap_no11_of_boundary / boundaryUplift_strip_boundary / boundaryUplift_bijective（thm:boundary-shift4-uplift-isomorphism，补齐 uplift 规范双射链）——**3 个论文标签条目计入覆盖率**（Group Unification +3）——Group Unification 75→78（16.6%），全局标注 814→817（+3），body 覆盖 800→803（7.6%），commit <pending>
+**Phase R191（分析完成，待派发）**：Zeta / PoissonEnergySingle——避开 R189（Conclusion）与 R190（GU / BoundaryLayer）形成第三轮同章节，回到未饱和的 Zeta 单缺陷能量线；中难度主目标：`singleDefectEnergy_zero_rigidity_single`（把 `prop:xi-finite-defect-poisson-l2-energy-zero-rigidity` 在单缺陷闭式下特化为纯代数零刚性：`singleDefectEnergy(0)=0 ↔ m = 0 ∨ δ = 0`，直接承接现有 `singleDefectEnergy_rational_identity` / `singleDefectEnergy_nonneg_num` / `singleDefectEnergy_cubic_limit`，非 wrapper）；低难度配套：`singleDefectEnergy_zero`（对应 `cor:xi-finite-defect-poisson-l2-energy-single-defect` 的 `t=0` 特值 `π m^2 δ^2 / (1 - δ^2)`）。两者同文件、无跨轮依赖、header 可直接落地，满足至少 1 个中等难度且非纯 wrapper。
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续
 **Fibonacci 素数域（完整）**：stableMul_inv_of_prime（素数时乘法逆存在，域结构核心）; fib_four/five/seven/thirteen_prime（native_decide 验证）; fib_nine_not_prime（反例验证）; instFieldOfPrime（通用域实例：F_{m+2} 素数时 X m 为域，经由 stableValueRingEquiv 转移）; instField_X1（GF(2)）、instField_X2（GF(3)）、instField_X3（GF(5)）、instField_X5（GF(13)）、instField_X9（GF(89)）、instField_X11（GF(233)）（cor:field-phase-fib-prime 完整形式化）
@@ -508,14 +509,14 @@
 | SPG | 127 | ~71 | ~55.9% |
 | 新生算术 | 151 | ~116 | ~76.8% |
 | Folding | 317 | ~120 | ~37.9% |
-| 群统一 | 457 | ~115 | ~25.2% |
+| 群统一 | 457 | ~78 | ~17.1% |
 | POM | 1,526 | ~591 | ~38.7% |
 | 圆维度 | 342 | ~65 | ~19.0% |
 | Zeta 有限部分 | 4,437 | ~256 | ~5.8% |
 | 结论 | 2,458 | ~85 | ~3.5% |
 | 其他 body | ~143 | ~2 | ~1% |
 | 附录 | 1,320 | 0 | 0% |
-| **body 总计** | **9,958** | **~1,450** | **~14.6%** |
+| **body 总计** | **9,958** | **~1,460** | **~14.7%** |
 
 ## 3. 未来工作：30 条具体计划
 
