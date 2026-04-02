@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.0.1] - 2026-04-02
+## [0.1.1] - 2026-04-02
 
 ### Added
 - Chinese version of the dossier article (index.zh-CN.qmd)
