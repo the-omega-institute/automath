@@ -13,26 +13,26 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 810 |
+| \leanverified 标注数 | 814 |
 | \leanpartial 标注数 | 16 |
-| 总标注数 | 826 |
-| 轮次 | R187（round_count=188） |
+| 总标注数 | 830 |
+| 轮次 | R188（round_count=189） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
 | POM | 1,707 | 223 | 13.1% |
-| Emergent Arithmetic | 185 | 85 | 45.9% |
+| Emergent Arithmetic | 185 | 88 | 47.6% |
 | Folding | 337 | 79 | 23.4% |
 | Conclusion | 2,550 | 138 | 5.4% |
 | Group Unification | 469 | 75 | 16.0% |
-| SPG | 129 | 29 | 22.5% |
+| SPG | 129 | 30 | 23.3% |
 | Circle Dimension | 393 | 61 | 15.5% |
 | Zeta Finite Part | 4,524 | 95 | 2.1% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **796** | **7.6%** |
+| **合计（body）** | **10,508** | **800** | **7.6%** |
 
 ### 1.2 已完成模块
 
@@ -51,7 +51,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
-**SPG 扫描误差**：离散 + 测度双版本, Bayes 半界, 观测细化单调性, 补对称性
+**SPG 扫描误差**：离散 + 测度双版本, Bayes 半界, 观测细化单调性, 补对称性；scanError_le_setMass_symmDiff_observableEvent（把 prop:spg-clarity-bayes-optimality 的对称差质量下界落到离散 observableEvent 框架）
 **fiber 结构**：分割和 = 2^m, multiplicity, 不相交性；逐纤维自由对合计数递推 freeInvolutionCount_succ 与奇数连乘闭式 freeInvolutionCount_eq_prod_odds（对应 thm:fiberwise-free-involution-matching-entropy 的单纤维完美匹配计数链）
 **defect 结构**：零条件 ↔ Fold 可交换, 链代数, 离散 Stokes
 **圆维度审计稳定性（Round 102）**：supNormIntVec（整数向量 sup 范数）; torusSupDistZero（零点环面 sup 距离）; auditSeparation（审计分离函数）; AuditStable / AuditStableBoxwise（统一与 boxwise 审计稳定性）; BadlyApproximable（坏逼近矩阵定义）; audit_stability_iff_badly_approximable（boxwise 审计稳定性与坏逼近等价）
@@ -167,7 +167,7 @@
 **Phase R184（已派发）**：Graph/PF spectral radius 主攻 + Zeta 单缺陷 specialization——主目标：`goldenMeanAdjacency_spectralRadius_eq_goldenRatio`（对应 `/theory/.../group_unification/sec__group-unification.tex` 中 “稳定状态作为黄金本征态” 段落的 `ρ(A)=φ` 结论；已确认可走 `spectralRadius` + `Real.spectralRadius_mem_spectrum_or` + `Matrix.spectrum_toLin'` + `HasEigenvalue.of_mem_spectrum` + 已有 `goldenMeanAdjacency_pf_root_eq_goldenRatio` / `goldenMeanAdjacency_dominates_all_real_eigenvalues` 闭合）；配套低难度目标：`singleDefectEnergy_zero`（对应 cor:xi-finite-defect-poisson-l2-energy-single-defect 的 `\mathcal E_\nu(0)=\pi m^2 \delta^2/(1-\delta^2)` 特例）
 **Phase R185（重排）**：GU/BoundaryLayer + Conclusion——放弃与 R184 重复的谱半径目标及当前 blocked 的单缺陷 Zeta 家族；中难度主目标改为补全 `thm:boundary-shift4-uplift-isomorphism` 的真正双射部分：先做 `boundaryStripMap_no11_of_boundary` 与 `boundaryUplift_strip_boundary`，再封装 `boundaryUplift_bijective`（把现有 `paper_boundaryUplift_card` / `boundaryUpliftMap_no11` / `boundaryStrip_uplift` 升级为论文所述“规范双射”）；低难度收口项保留 `epsilonCritical_mem_Ioo`，并在完成后把 `epsilonCritical_pos` / `epsilonCritical_lt_one` / `epsilonCritical_sq` 作为 `thm:conclusion-binfold-tail-order-statistics-single-jump-collapse` 的安全正文标注候选
 **Phase R187: free involution count + reduced determinant squeeze（部分完成）**：GU/FreeInvolutionCount.lean + Zeta/DynZeta.lean——GU：freeInvolutionCount_succ / freeInvolutionCount_eq_prod_odds（thm:fiberwise-free-involution-matching-entropy，对应单纤维完美匹配计数链）；Zeta：reduced_det_golden_mean_squeeze（prop:finite-part-residue-constant-rh-squeeze，golden-mean 二维留数常数压扁界）——**3 个论文标签条目计入覆盖率**（Group Unification +2，Zeta +1）——Group Unification 73→75（16.0%），Zeta 94→95（2.1%），全局标注 807→810（+3），body 覆盖 793→796（7.6%），commit <pending>
-**Phase R188（进行中）**：EA + SPG 多样化混合包——按门禁避开已完成的 GU / Zeta R187；EA 侧补 `epn_idempotent` / `enp_idempotent` / `enn_idempotent` 以闭合 `thm:fold-groupoid-z2x2-central-idempotents` 的四投影幂等链；SPG 侧主攻 `scanError_le_setMass_symmDiff_observableEvent`（或等价命名）以把 `prop:spg-clarity-bayes-optimality` 中“任意 `\mathcal F_m`-可测近似的对称差质量下界”落到离散 prefix/observableEvent 框架，作为 `cor:spg-clarity-walsh-spectral-stability` 后续去占位化的中难度非 wrapper 主目标
+**Phase R188: EA idempotent sectors + SPG observable-event symmDiff bound（部分完成）**：EA/CentralIdempotentsRecovery.lean + SPG/ScanErrorDiscrete.lean——EA：epn_idempotent / enp_idempotent / enn_idempotent（thm:fold-groupoid-z2x2-central-idempotents，补齐四投影幂等链）；SPG：scanError_le_setMass_symmDiff_observableEvent（prop:spg-clarity-bayes-optimality，把对称差质量下界落到 observableEvent 框架；内部 helper `scanError_symmDiff_observableEvent_eq` 不计入覆盖率）——**4 个论文标签条目计入覆盖率**（Emergent Arithmetic +3，SPG +1）——Emergent Arithmetic 85→88（47.6%），SPG 29→30（23.3%），全局标注 810→814（+4），body 覆盖 796→800（7.6%），commit <pending>
 **Phase R189（进行中）**：Conclusion / section-ledger 新包——避开已排 GU / Circle / EA / SPG 方向，切到未饱和的 Conclusion 账本线；锁定 `sectionLedger_kl_identity`（把 `thm:conclusion-section-ledger-kl-identity` 从当前乘法公式+AM-GM helper 升级为真正 KL 恒等式，中）、`collisionMoment_q2_explicit`（对应 `cor:conclusion-section-ledger-collision-moment-q2-explicit` 的两层分布闭式，中）与可选低难度前置 `sectionLog_le_uniformAverage_nat`（把现有 `log_sum_le_of_sum_eq` 专门化到自然数纤维计数）
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续
@@ -177,6 +177,7 @@
 **Fibonacci 双倍公式与平方和（Phase 21）**：fib_double（F_{2n}=F_n·(2F_{n+1}-F_n)）; fib_double_plus_one（F_{2n+1}=F_{n+1}²+F_n²）; fib_sq_add_sq（F_n²+F_{n+1}²=F_{2n+1}）
 **转移矩阵幂次行列式与 Cassini 恒等式（Phase 21）**：goldenMeanAdjacency_pow_det（det(A^m)=(-1)^m）; fib_cassini（Cassini：F_{n+1}·F_{n-1}-F_n²=(-1)^n，由行列式公式推导）
 **Lucas 数与迹公式（Phase 21）**：lucasNum 定义（L_0=2, L_1=1, L_{n+2}=L_{n+1}+L_n）; lucasNum_zero/one/two/three/succ_succ（simp 引理）; lucasNum_eq_fib（L_n=F_{n+1}+F_{n-1} for n≥1）; goldenMeanAdjacency_pow_trace（tr(A^n)=F_{n+1}+F_{n-1} for n≥1）
+**Emergent Arithmetic / 群胚幂等元**：Wedderburn 分解维数、中心块直方图、projectorVal 系列，以及四个 $\mathbb Z_2^2$ 扇区中心幂等元中的 `epn_idempotent` / `enp_idempotent` / `enn_idempotent`，补齐 `thm:fold-groupoid-z2x2-central-idempotents` 的四投影幂等链
 **Perron-Frobenius 维度数学层（计划21，阶段性通过）**：goldenMeanAdjacency_has_goldenRatio_eigenvector（存在正特征向量候选 $(\varphi,1)$）; eigenvalue_satisfies_quadratic / eigenvalue_eq_goldenRatio_or_goldenConj（任意实特征值满足 $\mu^2=\mu+1$ 并分类为 $\varphi$ 或 $\psi$）; goldenConj_abs_lt_goldenRatio（$|\psi|<\varphi$）; goldenMeanAdjacency_dominates_all_real_eigenvalues（全部实特征值模长被 $\varphi$ 控制）; goldenMeanAdjacency_pf_root_eq_goldenRatio（具体 PF 根封装）; reduced_det_golden_mean（golden-mean 约化行列式恒等式）; reduced_det_golden_mean_squeeze（golden-mean 二维留数常数压扁界）；`spectralRadius = φ` 与 PF dimension API 封装仍待补
 **纤维直方图基值（Phase 22）**：cFiberHist 定义（稳定词 x 纤维多重度恰好为 k 的计数）; m=4 直方图基值（hist[1]=2, hist[2]=4, hist[3]=2）; m=6 直方图基值（hist[1]=2, hist[2]=4, hist[3]=8, hist[4]=5, hist[5]=2）
 **路径计数 Fibonacci 等式（Phase 22）**：goldenMean_path_count_from_true（row 1 sum = F_{m+1}，从状态 true 出发的路径数）; goldenMean_total_paths（total = F_{m+2}+F_{m+1}，所有路径总数）
