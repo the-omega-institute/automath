@@ -7,23 +7,6 @@ description: "A case study in AI-assisted mathematical discovery. One equation, 
 image: og-image.png
 ---
 
-```{=html}
-<style>
-.evidence-panel { margin: 1em 0; border-left: 3px solid #6c757d; padding-left: 1em; }
-.evidence-panel summary { cursor: pointer; color: #6c757d; font-size: 0.9em; font-weight: 600; }
-.evidence-panel summary:hover { color: #495057; }
-.timeline { position: relative; padding: 1em 0; margin: 2em 0; }
-.timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: #dee2e6; }
-.timeline-item { position: relative; padding-left: 50px; margin-bottom: 1.5em; }
-.timeline-item::before { content: ''; position: absolute; left: 14px; top: 6px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #6c757d; background: white; }
-.timeline-item.human::before { background: #4a90d9; border-color: #4a90d9; }
-.timeline-item.ai::before { background: #e9ecef; border-color: #6c757d; }
-.timeline-item.discovery::before { background: #f0ad4e; border-color: #f0ad4e; }
-.timeline-label { font-size: 0.75em; color: #6c757d; text-transform: uppercase; letter-spacing: 0.05em; }
-.timeline-content { font-size: 0.95em; }
-</style>
-```
-
 ## The Two Stories Everyone Tells
 
 In July 2025, an AI system solved five of six problems on the International Mathematical Olympiad, earning a gold medal. A few months earlier, a startup called Math, Inc. had formalized a sphere-packing proof into 120,000 lines of Lean code. The headlines wrote themselves: *AI solves math problems. AI checks math proofs.*
@@ -58,6 +41,12 @@ How many such words are there? Count them:
 
 This is the simplest non-trivial subshift of finite type in symbolic dynamics --- the **golden-mean shift**. It generates the simplest non-trivial linear recurrence (Fibonacci) and the "most irrational" number (worst-case for rational approximation). Three views of one algebraic object.
 
+```{=html}
+<span class="elim-mark">✗ "Just the golden ratio"</span>
+```
+
+Not sunflowers. Not spirals. A combinatorial constraint that generates number theory, dynamics, and algebra simultaneously. ([Why this is forced](https://github.com/the-omega-institute/automath/blob/dev/docs/INEVITABILITY.md#step-1-observation-forces-microstates))
+
 The Omega Project takes all three views seriously and follows their consequences simultaneously. In Lean 4. With zero axioms beyond the proof assistant's core logic.
 
 ## The First Surprise
@@ -75,6 +64,16 @@ $$
 The combinatorial space of no-consecutive-1s words *is* a cyclic ring, with the Fibonacci number as modulus. When $F_{m+2}$ happens to be prime --- $F_3 = 2$, $F_5 = 5$, $F_7 = 13$, $F_{13} = 233$ --- the space becomes a *finite field*. When $F_{m+2}$ factors, the Chinese Remainder Theorem decomposes it: $X_7 \cong \mathbb{Z}/2 \times \mathbb{Z}/17$.
 
 What's striking: the ring structure is *intrinsic* to the no-consecutive-1s constraint. Nobody designed it. Nobody imported integer arithmetic. It was derived from the combinatorial structure, step by step, and verified by machine.
+
+```{=html}
+<span class="elim-mark">✗ "Just combinatorics"</span>
+```
+
+Binary words are not a counting trick. They carry intrinsic algebra. ([Why arithmetic is forced](https://github.com/the-omega-institute/automath/blob/dev/docs/INEVITABILITY.md#step-3-folding-forces-arithmetic))
+
+```{=html}
+<span class="role-tag human">🧑 Human direction</span> <span class="role-tag ai">🤖 AI derivation</span> <span class="role-tag discovery">💡 Discovery</span>
+```
 
 ::: {.evidence}
 **Lean:** [`stableValueRingEquiv`](https://github.com/the-omega-institute/automath/blob/dev/lean4/Omega/Folding/FiberRing.lean#L157) --- the ring isomorphism $X_m \cong \mathbb{Z}/F_{m+2}\mathbb{Z}$
@@ -115,6 +114,16 @@ The Hankel determinant analysis confirmed that the recurrence order is exactly 3
 
 Why is this surprising? A linear recurrence with small integer coefficients governing a combinatorial collision count suggests hidden linearity in the fiber dynamics. The structure wasn't assumed --- it was discovered by systematic derivation.
 
+```{=html}
+<span class="elim-mark">✗ "Random fibers"</span>
+```
+
+Fiber sizes are not noise. They obey exact linear algebra. ([Why collisions reveal structure](https://github.com/the-omega-institute/automath/blob/dev/docs/INEVITABILITY.md#step-6-collisions-reveal-spectral-structure))
+
+```{=html}
+<span class="role-tag human">🧑 Human direction</span> <span class="role-tag ai">🤖 AI derivation</span> <span class="role-tag discovery">💡 Discovery</span>
+```
+
 ::: {.evidence}
 **Lean:** [`momentSum_two_recurrence_of`](https://github.com/the-omega-institute/automath/blob/dev/lean4/Omega/Folding/CollisionKernel.lean#L87) --- the unconditional $S_2$ recurrence
 
@@ -147,8 +156,18 @@ $X_\infty$ is a profinite ring governed by the golden ratio rather than a prime.
 
 And its dynamics carry a topological entropy of exactly $\log \varphi$ --- the golden ratio appearing one more time, now as the information-theoretic capacity of the system.
 
+```{=html}
+<span class="elim-mark">✗ "Just bookkeeping"</span>
+```
+
+The tower is not organizational overhead. It is a profinite ring with computable entropy. ([Why folding forces structure](https://github.com/the-omega-institute/automath/blob/dev/docs/INEVITABILITY.md#step-2-exponential-blowup-forces-folding))
+
+```{=html}
+<span class="role-tag human">🧑 Human direction</span> <span class="role-tag ai">🤖 AI derivation</span> <span class="role-tag discovery">💡 Discovery</span>
+```
+
 ::: {.evidence}
-**Lean:** [`topological_entropy_eq_log_phi`](https://github.com/the-omega-institute/automath/blob/dev/lean4/Omega/Folding/Entropy.lean#L238) --- the entropy result, proved via Fibonacci ratio convergence, logarithm continuity, and Cesaro averaging
+**Lean:** [`topological_entropy_eq_log_phi`](https://github.com/the-omega-institute/automath/blob/dev/lean4/Omega/Folding/Entropy.lean#L265) --- the entropy result, proved via Fibonacci ratio convergence, logarithm continuity, and Cesaro averaging
 
 **Reproduce:** `cd lean4 && lake build Omega.Folding.Entropy`
 
@@ -157,27 +176,17 @@ And its dynamics carry a topological entropy of exactly $\log \varphi$ --- the g
 
 ## The Method
 
-What you've just read is not a summary of known mathematics. Every result above was derived --- systematically, from one equation, with zero axioms --- and verified by a machine proof assistant. 3,427 theorems in 38,876 lines of Lean 4 code, with 10,588 theorem-level statements in the underlying theory.
-
-But the results are not the point. The *method* is the point.
+Every result above was derived from one equation, with zero axioms, and verified by machine. 3,427 theorems in 38,876 lines of Lean 4 code. But the results are not the point. The *method* is the point.
 
 ![The cognitive division of labor: derive, discover, name](figures/cognitive-division.svg){fig-alt="A diagram showing the human-AI collaboration cycle: Human provides direction and taste, AI performs systematic derivation, Human recognizes and names the discovered structures."}
 
-### The cognitive division of labor
+### Derive, discover, name
 
-The Omega Project was built through a specific collaboration pattern between human and AI. It works like this:
-
-The **human** provides direction. "Check if this space has ring structure." "Compute the fiber collision counts --- do they satisfy a recurrence?" "What's the topological entropy?" These are taste calls. They require knowing what's worth looking at, which questions have a chance of yielding something interesting, which structures in existing mathematics might correspond to what we're seeing.
-
-The **AI** provides thoroughness. Once a direction is set, it systematically explores every consequence. It builds 6-step proof chains. It verifies every axiom of a ring. It checks recurrence relations against all computed values and then formalizes the unconditional proof. It does this with zero fatigue, at a depth that would take a human mathematician months.
-
-The **human** then recognizes what emerged. "This is a cyclic ring." "This recurrence suggests hidden linearity." "This tower is the golden-ratio analogue of the p-adics." Recognition --- connecting a formally verified result to a known mathematical concept --- is something AI cannot do reliably. It requires the accumulated intuition of a working mathematician.
-
-We call this **derive, discover, name**:
+The human provides direction and taste: which questions are worth asking. The AI provides thoroughness: systematic exploration at a depth no human could sustain. The human then recognizes what emerged: connecting a verified result to the body of known mathematics.
 
 - **Derive** is AI's work. Systematic, exhaustive, rigorous.
-- **Discover** is shared. AI finds the pattern; the human recognizes it as a pattern worth investigating.
-- **Name** is human's work. Connecting the derived structure to the body of known mathematics.
+- **Discover** is shared. AI finds the pattern; the human recognizes it as worth investigating.
+- **Name** is human's work. Connecting the derived structure to known mathematics.
 
 ### A discovery timeline
 
@@ -232,90 +241,88 @@ The collision counts that satisfied that surprising linear recurrence? They turn
 
 Above all the concrete results, the project built a logical spine: a chain of conservative extensions where each layer adds structure (types, contexts, dynamics, observer indexing) without ever rewriting the meaning of lower layers. New concepts are generated from old readout sequences, and the visible measurable structure never grows. The entire construction is endogenous --- nothing external is injected at any point.
 
-Then came the part that surprised even the builder. The derivation chain kept going --- through spectral theory, through canonical systems from the de Branges school, through a translation of the Riemann Hypothesis into an auditable positive-definiteness condition --- and arrived at physics. Not by assuming physics. By deriving it.
+Then came the part that surprised even the builder. The derivation chain kept going --- through spectral theory, through canonical systems from the de Branges school, through a translation of the Riemann Hypothesis into an auditable positive-definiteness condition --- and arrived at structures that *resemble* physics. Not by assuming physics. By following the derivation chain to its natural endpoint.
 
-Time is not a pre-given coordinate. It is the projection of which propositions have been decided onto the refinement chain. Space comes from shared support and resource cost. Einstein's equation appears as the unique minimal second-order covariant closure --- the only possible gravitational Lagrangian satisfying locality, covariance, and second-order equations. No physics axioms were added. The equation was forced.
+Time, in this framework, is the projection of which propositions have been decided onto the refinement chain. Space comes from shared support and resource cost. Einstein's equation appears as the unique minimal second-order covariant closure --- the only possible gravitational Lagrangian satisfying locality, covariance, and second-order equations.
 
-The project is careful about what it claims: not "standard quantum mechanics and general relativity are recovered," but a pure derivation chain from finite-window observation to quantum structure and Einstein closure, with zero axioms. What remains --- full recovery under stronger globalization and rigidity in continuous limits --- is explicitly deferred.
+**What is claimed:** a pure derivation chain from finite-window observation to quantum structure and Einstein closure, with zero axioms. **What is not claimed:** full recovery of standard quantum mechanics and general relativity. What remains --- full recovery under stronger globalization and rigidity in continuous limits --- is explicitly deferred. These are open mathematical problems, not settled results.
 
 For the full technical explanation of why each step is forced, see the [Inevitability Guide](https://github.com/the-omega-institute/automath/blob/dev/docs/INEVITABILITY.md).
 
 ## The System
 
-The Omega Project is not three separate tools. It is one system with three layers, each feeding the next:
-
 ![The three-layer system: derive, visualize, publish](figures/system.svg){fig-alt="A diagram showing three layers: Derivation Engine (Lean 4), Knowledge Graph (Sisyphus), and Publication Pipeline (16 AI agents), flowing from the seed equation x² = x + 1."}
 
-**Layer 1: Derivation Engine.** The Lean 4 library formalizes everything forced by the constraint. 38,876 lines of code. 3,427 verified theorems and definitions --- a growing subset of the 10,588+ theorem-level statements in the full theory. Zero axioms beyond the foundations. The methodology is *derive, discover, name*: systematic exploration first, recognition second.
+Three layers, each feeding the next:
 
-**Layer 2: Knowledge Graph.** Sisyphus maps the entire derivation structure as a navigable network of ~20,998 typed nodes --- axioms, definitions, conjectures, propositions, proofs. Instead of reading 770,000 lines of LaTeX sequentially, you can explore the dependency structure, trace any theorem back to the seed, and see where the frontier is.
+**Layer 1: Derivation Engine.** 38,876 lines of Lean 4 code. 3,427 verified theorems. Zero axioms. The methodology is *derive, discover, name*.
+
+**Layer 2: Knowledge Graph.** Sisyphus maps the derivation structure as ~20,998 typed nodes. Trace any theorem back to the seed.
 
 ![The Sisyphus knowledge graph: ~20,998 nodes of mathematical structure](assets/sisyphus.png){fig-alt="Screenshot of the Sisyphus knowledge graph showing a force-directed visualization of approximately 20,000 mathematical nodes color-coded by type."}
 
-**Layer 3: Publication Pipeline.** 16 AI agents extract publishable result clusters from the theory and carry them through a 7-stage pipeline (P0 intake through P7 submission-ready). The human reviews the output but does not write the papers. Details below.
-
-This is not a collection of tools. It is an auditable theory compiler: one equation in, verified and published mathematics out.
-
-## The Publication Pipeline
-
-The project does not stop at theorems. 16 AI agents collaborate to automatically extract, rewrite, review, and prepare journal papers from the core theory:
-
-- **8 formalization agents** (analyst, formalizer, reviewer, registrar, optimizer, orchestrator, + 2 Codex consultants) work in parallel to formalize theorems in Lean 4
-- **8 publication agents** (orchestrator, researcher, journal-rewriter, editorial reviewer, integrator, biblio manager, lean-sync checker, submission preparer) operate a 7-stage pipeline from intake (P0) through submission-ready (P7)
-
-Current status: 42 papers in the pipeline. 3 at P7 (submission-ready) targeting Ergodic Theory & Dynamical Systems, Annals of Pure and Applied Logic, and Transactions of the AMS. 515 Python scripts generate all figures, tables, and numerical validations reproducibly.
+**Layer 3: Publication Pipeline.** 16 AI agents carry result clusters through a 7-stage pipeline (P0 intake through P7 submission-ready). 42 papers in the pipeline, 3 submission-ready.
 
 ## What This Means
 
-A year ago, systematically exploring the mathematical consequences of one equation to this depth would have required a research group working for years. The Omega Project was built by one person with AI, in months. Not just the theorems --- the formalization, the experiments, and 42 journal papers.
-
-This is not because AI is smarter than mathematicians. It is because the bottleneck in mathematical discovery was never intelligence --- it was throughput. The number of derivation steps a human can rigorously verify in a day is small. A proof assistant with AI guidance can do thousands, with zero errors and complete traceability. And now, the same AI systems can extract, format, review, and prepare the publications.
-
-The barrier to mathematical exploration is dropping. Not vanishing --- human taste, direction, and recognition remain irreplaceable. But the cost of thoroughness is approaching zero. One person can now survey a mathematical structure to a depth that was previously reserved for large, well-funded research programs, and publish the results at a pace that would have been physically impossible for any individual.
-
-What structures are hiding in plain sight, waiting for someone to systematically derive their consequences?
-
-## The Scale
+The bottleneck in mathematical discovery was never intelligence --- it was throughput. A proof assistant with AI guidance can verify thousands of derivation steps per day, with zero errors and complete traceability. One person can now survey a mathematical structure to a depth previously reserved for large research programs.
 
 | | |
 |---|---|
-| Theory | 10,588 theorem-level statements across 21 chapters + 13 appendices (770K lines) |
-| Formalization | 3,427 Lean 4 theorems, **0 axioms**, 182 incremental rounds (38,876 lines) |
-| Publication | 42 papers, P0--P7 pipeline, 3 submission-ready |
+| Theory | 10,588 theorem-level statements (770K lines) |
+| Formalization | 3,427 Lean 4 theorems, **0 axioms** (38,876 lines) |
+| Publication | 42 papers, 3 submission-ready |
 | Agents | 16 (8 formalization + 8 publication) |
 | Experiments | 515 reproducible Python scripts |
-| Mathematical domains | 12+ (symbolic dynamics, ergodic theory, operator theory, harmonic analysis, homological algebra, algebraic number theory, spectral theory, information theory, phase dynamics, topological dynamics, group theory, and more) |
 
 ## The Invitation
 
 The Omega Project is open source. Every theorem is machine-verified. Every derivation chain is traceable. Every computation is reproducible.
 
-**The repository:** [github.com/the-omega-institute/automath](https://github.com/the-omega-institute/automath)
-
-**Understand it:** [The Inevitability Guide](../INEVITABILITY.md) --- why every step is forced (10 min read)
-
-**Build it yourself:**
-
-```bash
-cd lean4 && lake build          # verify all 3,427 theorems
+```{=html}
+<div class="cta-choices">
+  <a href="https://github.com/the-omega-institute/automath/blob/dev/docs/INEVITABILITY.md">
+    <strong>Understand why</strong><br>
+    <span style="font-size:0.8em;color:var(--omega-muted);">The Inevitability Guide — why every step is forced (10 min)</span>
+  </a>
+  <a href="https://github.com/the-omega-institute/automath/tree/dev/lean4">
+    <strong>Verify it yourself</strong><br>
+    <span style="font-size:0.8em;color:var(--omega-muted);">cd lean4 && lake build — 3,427 theorems, 0 axioms</span>
+  </a>
+  <a href="https://github.com/the-omega-institute/automath">
+    <strong>Explore the repo</strong><br>
+    <span style="font-size:0.8em;color:var(--omega-muted);">Lean 4, LaTeX theory, 515 Python scripts</span>
+  </a>
+</div>
 ```
 
-**Reproduce the experiments:**
+### Open frontiers
 
-```bash
-cd theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence
-pip install -r requirements.txt
-python3 scripts/run_all.py      # generates all figures/tables
+Results computationally verified for bounded cases, awaiting unconditional proofs:
+
+```{=html}
+<div class="frontier-card">
+  <span class="frontier-status open">Open</span>
+  <strong>The S₃ recurrence</strong>: S₃(m+3) = 2S₃(m+2) + 4S₃(m+1) − 2S₃(m)
+</div>
+<div class="frontier-card">
+  <span class="frontier-status open">Open</span>
+  <strong>Fiber multiplicity closed form</strong>: D₂ₖ = F_{k+2}, D₂ₖ₊₁ = 2Fₖ
+</div>
+<div class="frontier-card">
+  <span class="frontier-status open">Open</span>
+  <strong>Spectral radius</strong>: ρ(A) = φ via Mathlib's spectral radius API
+</div>
+<div class="frontier-card">
+  <span class="frontier-status open">Open</span>
+  <strong>Cantor set homeomorphism</strong> for X<sub>∞</sub>
+</div>
+<div class="frontier-card">
+  <span class="frontier-status open">Open</span>
+  <strong>Full globalization</strong> beyond M<sub>adm</sub>: representation theorems, limit theorems, rigidity
+</div>
 ```
 
-**Open frontiers** --- results that are computationally verified for bounded cases but await unconditional proofs:
-
-- The $S_3$ recurrence: $S_3(m+3) = 2S_3(m+2) + 4S_3(m+1) - 2S_3(m)$
-- The fiber multiplicity closed form: $D_{2k} = F_{k+2}$, $D_{2k+1} = 2F_k$
-- Spectral radius $\rho(A) = \varphi$ via Mathlib's spectral radius API
-- The Cantor set homeomorphism for $X_\infty$
-- Full globalization beyond $M_{\text{adm}}$: representation theorems, limit theorems, rigidity
-
-These are not incremental extensions. Each one would connect the Omega framework to a new area of mathematics. If you have expertise in any of these areas, the derivation infrastructure is waiting.
+Each one would connect the Omega framework to a new area of mathematics. If you have expertise in any of these areas, the derivation infrastructure is waiting.
 
 The equation is $x^2 = x + 1$. What it contains is still being discovered.
