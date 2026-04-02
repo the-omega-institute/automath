@@ -391,4 +391,62 @@ theorem phaseSpectrumCount_le_pow (r t N : Nat) (hN : 0 < N) :
   simp only [phaseSpectrumCount, pow_succ]
   exact Nat.mul_le_mul_left _ (Nat.gcd_le_right t hN)
 
+/-- Phase spectrum reconstruction for positive torsion parameters.
+    thm:cdim-phase-spectrum-reconstruction -/
+theorem phaseSpectrumCount_reconstruction
+    {r r' t t' : Nat}
+    (ht : 0 < t) (ht' : 0 < t')
+    (h : ∀ N : Nat, 1 ≤ N → phaseSpectrumCount r t N = phaseSpectrumCount r' t' N) :
+    r = r' ∧ t = t' := by
+  let M := t * t' + 1
+  have hMt : Nat.Coprime t M := by
+    dsimp [M]
+    rw [Nat.add_comm, Nat.mul_comm]
+    exact (Nat.coprime_add_mul_right_right t 1 t').2 (Nat.coprime_one_right _)
+  have hMt' : Nat.Coprime t' (t * t' + 1) := by
+    rw [Nat.coprime_iff_gcd_eq_one]
+    calc
+      Nat.gcd t' (t * t' + 1) = Nat.gcd t' (1 + t * t') := by rw [Nat.add_comm]
+      _ = Nat.gcd t' 1 := by rw [Nat.gcd_add_mul_right_right]
+      _ = 1 := by exact Nat.gcd_one_right t'
+  have hM_le : 1 ≤ M := by
+    dsimp [M]
+    omega
+  have hpow : M ^ r = M ^ r' := by
+    calc
+      M ^ r = phaseSpectrumCount r t M := by
+        symm
+        exact phaseSpectrumCount_coprime r t M hMt
+      _ = phaseSpectrumCount r' t' M := h M hM_le
+      _ = M ^ r' := phaseSpectrumCount_coprime r' t' M hMt'
+  have hM2 : 2 ≤ M := by
+    dsimp [M]
+    have hmul : 1 ≤ t * t' := Nat.mul_le_mul ht ht'
+    omega
+  have hr : r = r' := Nat.pow_right_injective hM2 hpow
+  subst hr
+  have hAt : phaseSpectrumCount r t t = phaseSpectrumCount r t' t := h t ht
+  have hgcd_right : Nat.gcd t' t = t := by
+    have hpowt : 0 < t ^ r := by exact Nat.pow_pos ht
+    apply Nat.eq_of_mul_eq_mul_left hpowt
+    symm
+    simpa [phaseSpectrumCount, Nat.gcd_self, Nat.gcd_comm, Nat.mul_comm, Nat.mul_left_comm,
+      Nat.mul_assoc] using hAt
+  have hAt' : phaseSpectrumCount r t t' = phaseSpectrumCount r t' t' := h t' ht'
+  have hgcd_left : Nat.gcd t t' = t' := by
+    have hpowt' : 0 < t' ^ r := by exact Nat.pow_pos ht'
+    apply Nat.eq_of_mul_eq_mul_left hpowt'
+    simpa [phaseSpectrumCount, Nat.gcd_self, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using
+      hAt'
+  have htgcd_left : t ∣ Nat.gcd t' t := by
+    exact hgcd_right.symm ▸ (dvd_rfl : t ∣ t)
+  have hdiv_left : t ∣ t' :=
+    dvd_trans htgcd_left (Nat.gcd_dvd_left t' t)
+
+  have htgcd_right : t' ∣ Nat.gcd t t' := by
+    exact hgcd_left.symm ▸ (dvd_rfl : t' ∣ t')
+  have hdiv_right : t' ∣ t :=
+    dvd_trans htgcd_right (Nat.gcd_dvd_left t t')
+  exact ⟨rfl, Nat.dvd_antisymm hdiv_left hdiv_right⟩
+
 end Omega.CircleDimension
