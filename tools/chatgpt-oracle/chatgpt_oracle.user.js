@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      3.7
+// @version      3.8
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -54,7 +54,7 @@
   function updatePanel() {
     ensurePanel();
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
-    panel.innerHTML = `<b>[Oracle Bridge v3.7]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
+    panel.innerHTML = `<b>[Oracle Bridge v3.8]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
   }
 
   // ── HTTP helpers ─────────────────────────────────────────────────────
@@ -497,13 +497,14 @@
     for (let i = 0; i < 60; i++) {
       const btn = findSendButton();
       if (btn && !btn.disabled) {
+        const tid = btn.getAttribute("data-testid");
+        const lbl = btn.getAttribute("aria-label");
+        log(`Send button found (testid=${tid}, label=${lbl}), clicking ONCE...`);
         btn.click();
-        await sleep(200);
-        btn.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
-        await sleep(200);
-        btn.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
-        btn.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
-        log(`Send button clicked (testid=${btn.getAttribute("data-testid")}, label=${btn.getAttribute("aria-label")})`);
+        // Do NOT dispatch additional click events — after btn.click() the
+        // send button morphs into stop-button. Any further click on the
+        // same DOM element would STOP the generation.
+        await sleep(500);
         return true;
       }
 
@@ -527,9 +528,7 @@
       disabledSend.removeAttribute("disabled");
       await sleep(100);
       disabledSend.click();
-      disabledSend.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
-      disabledSend.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
-      disabledSend.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
+      // Single click only — no extra dispatches (same stop-button risk)
       await sleep(500);
       // Check if it worked (prompt cleared or stop button appeared)
       const inp = findPromptInput();
