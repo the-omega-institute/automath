@@ -549,10 +549,48 @@ theorem reduced_det_golden_mean :
     rw [sub_div, div_self hφ_ne]
   rw [this, hgap]
 
-/-- Paper: prop:finite-part-residue-reduced-determinant -/
-theorem paper_reduced_det_golden_mean :
-    1 - Real.goldenConj / Real.goldenRatio = Real.sqrt 5 / Real.goldenRatio :=
-  reduced_det_golden_mean
+
+/-- Golden-mean reduced determinant squeeze.
+    prop:finite-part-residue-constant-rh-squeeze -/
+theorem reduced_det_golden_mean_squeeze :
+    (1 + 1 / Real.sqrt Real.goldenRatio)⁻¹ ≤ Real.sqrt 5 / Real.goldenRatio ∧
+    Real.sqrt 5 / Real.goldenRatio ≤ (1 - 1 / Real.sqrt Real.goldenRatio)⁻¹ := by
+  have hφ_pos : 0 < Real.goldenRatio := Real.goldenRatio_pos
+  have hφ_ne : Real.goldenRatio ≠ 0 := ne_of_gt hφ_pos
+  have hsqrtφ_ne : Real.sqrt Real.goldenRatio ≠ 0 := by positivity
+  have hphi_two : 1 + Real.sqrt 5 = Real.goldenRatio * 2 := by
+    rw [Real.goldenRatio]
+    ring_nf
+  have hmain : Real.sqrt 5 / Real.goldenRatio = 2 / (1 + Real.sqrt 5) := by
+    rw [← hphi_two]
+    field_simp [hφ_ne]
+    ring
+  let t : ℝ := 1 / Real.sqrt Real.goldenRatio
+  have ht_pos : 0 < t := by
+    dsimp [t]
+    positivity
+  have ht_lt_one : t < 1 := by
+    dsimp [t]
+    have hsqrtφ_gt_one : 1 < Real.sqrt Real.goldenRatio := by
+      simpa [Real.sqrt_one] using Real.sqrt_lt_sqrt (show (0 : ℝ) ≤ 1 by positivity)
+        Real.one_lt_goldenRatio
+    simpa [t] using one_div_lt_one_div_of_lt zero_lt_one hsqrtφ_gt_one
+  have ht_sq : t ^ 2 = 2 / (1 + Real.sqrt 5) := by
+    dsimp [t]
+    field_simp [hsqrtφ_ne]
+    rw [Real.sq_sqrt (le_of_lt hφ_pos), Real.goldenRatio]
+    ring
+  constructor
+  · change 1 / (1 + 1 / Real.sqrt Real.goldenRatio) ≤ Real.sqrt 5 / Real.goldenRatio
+    rw [show 1 / (1 + 1 / Real.sqrt Real.goldenRatio) = 1 / (1 + t) by simp [t]]
+    rw [hmain, ← ht_sq]
+    field_simp [ht_pos.ne']
+    nlinarith [ht_pos]
+  · change Real.sqrt 5 / Real.goldenRatio ≤ 1 / (1 - 1 / Real.sqrt Real.goldenRatio)
+    rw [show 1 / (1 - 1 / Real.sqrt Real.goldenRatio) = 1 / (1 - t) by simp [t]]
+    rw [hmain, ← ht_sq]
+    field_simp [ht_pos.ne', sub_ne_zero.mpr ht_lt_one.ne]
+    nlinarith [ht_pos, ht_lt_one]
 
 end
 
