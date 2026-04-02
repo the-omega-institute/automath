@@ -37,4 +37,17 @@ theorem epsilonCritical_sq : epsilonCritical^2 = Real.goldenRatio^2 / 5 := by
   unfold epsilonCritical
   rw [div_pow, Real.sq_sqrt (show 0 ≤ (5 : ℝ) by positivity)]
 
+/-- Quadratic equation satisfied by the critical threshold.
+    thm:conclusion-binfold-tail-order-statistics-single-jump-collapse -/
+theorem epsilonCritical_quadratic :
+    5 * epsilonCritical^2 - Real.sqrt 5 * epsilonCritical - 1 = 0 := by
+  have hsqrt5_ne : Real.sqrt 5 ≠ 0 := by positivity
+  have hsqrt5_sq : Real.sqrt 5 ^ 2 = (5 : ℝ) := by
+    rw [Real.sq_sqrt]
+    positivity
+  rw [epsilonCritical_sq]
+  unfold epsilonCritical
+  field_simp [hsqrt5_ne]
+  nlinarith [Real.goldenRatio_sq, hsqrt5_sq]
+
 end Omega.Conclusion

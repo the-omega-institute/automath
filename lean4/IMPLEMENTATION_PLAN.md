@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 820 |
+| \leanverified 标注数 | 821 |
 | \leanpartial 标注数 | 16 |
-| 总标注数 | 836 |
-| 轮次 | R192（round_count=193） |
+| 总标注数 | 837 |
+| 轮次 | R193（round_count=194） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -25,14 +25,14 @@
 | POM | 1,707 | 223 | 13.1% |
 | Emergent Arithmetic | 185 | 88 | 47.6% |
 | Folding | 337 | 79 | 23.4% |
-| Conclusion | 2,550 | 138 | 5.4% |
+| Conclusion | 2,550 | 139 | 5.5% |
 | Group Unification | 469 | 78 | 16.6% |
 | SPG | 129 | 30 | 23.3% |
 | Circle Dimension | 393 | 62 | 15.8% |
 | Zeta Finite Part | 4,524 | 97 | 2.1% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **806** | **7.7%** |
+| **合计（body）** | **10,508** | **807** | **7.7%** |
 
 ### 1.2 已完成模块
 
@@ -172,6 +172,7 @@
 **Phase R190: boundary uplift canonical bijection（部分完成）**：Folding/BoundaryLayer.lean——boundaryStripMap_no11_of_boundary / boundaryUplift_strip_boundary / boundaryUplift_bijective（thm:boundary-shift4-uplift-isomorphism，补齐 uplift 规范双射链）——**3 个论文标签条目计入覆盖率**（Group Unification +3）——Group Unification 75→78（16.6%），全局标注 814→817（+3），body 覆盖 800→803（7.6%）；proof-bearing clean commit c6b3966（boundaryStripMap_no11_of_boundary / boundaryUplift_strip_boundary / boundaryUplift_bijective），registration-sync commits 5482b40 → befeddd
 **Phase R191: single-defect zero value + zero rigidity（部分完成）**：Zeta/PoissonEnergySingle.lean——singleDefectEnergy_zero / singleDefectEnergy_zero_rigidity_single（cor:xi-finite-defect-poisson-l2-energy-single-defect + prop:xi-finite-defect-poisson-l2-energy-zero-rigidity，补齐单缺陷闭式在 `t=0` 的显式值与零刚性特化）——**2 个论文标签条目计入覆盖率**（Zeta +2）——Zeta 95→97（2.1%），全局标注 817→819（+2），body 覆盖 803→805（7.7%）；proof-bearing corrective commit 7fd0f68，earlier untrusted registration commits cb4b017 / b16f2e2 / ba6a594
 **Phase R192: phase spectrum reconstruction completeness（部分完成）**：CircleDimension/CircleDim.lean——phaseSpectrumCount_reconstruction（thm:cdim-phase-spectrum-reconstruction，补齐循环相位采样计数唯一恢复有限生成离散交换群同构类型）——**1 个论文标签条目计入覆盖率**（Circle Dimension +1）——Circle Dimension 61→62（15.8%），全局标注 819→820（+1），body 覆盖 805→806（7.7%），commit a88edfc
+**Phase R193: two-atom critical threshold quadratic（部分完成）**：Conclusion/TwoAtomThreshold.lean——epsilonCritical_quadratic（thm:conclusion-binfold-tail-order-statistics-single-jump-collapse，补齐单跳临界阈值满足的二次方程）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 138→139（5.5%），全局标注 820→821（+1），body 覆盖 806→807（7.7%），commit <pending>
 **Phase R192（分析完成，单槽候选）**：CircleDimension / phase-spectrum reconstruction——避开已在跑的 Zeta 线，转向未饱和的 Circle Dimension；单个中难度目标锁定 `phaseSpectrumCount_reconstruction`（对应 `thm:cdim-phase-spectrum-reconstruction`，把论文中的“全部循环相位采样计数唯一决定有限生成离散交换群同构类型”压缩为当前 Nat-编码下的显式恢复链：从 `phaseSpectrumCount r t N = phaseSpectrumCount r' t' N` 对所有 `N` 推出 `r = r'` 且 `Nat.gcd t N = Nat.gcd t' N` 对所有 `N`，再取 `N = t` 与 `N = t'` 得 `t = t'`；直接承接现有 `phaseSpectrumCount_split` / `phaseSpectrumCount_coprime` / `phaseSpectrumCount_add_rank_le` / `phaseSpectrumCount_le_pow`，不引入新公理，满足单目标中难度门槛）。
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续
