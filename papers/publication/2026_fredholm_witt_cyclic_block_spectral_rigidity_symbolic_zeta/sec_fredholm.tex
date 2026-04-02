@@ -1,0 +1,215 @@
+\section{Fredholm Determinants and Cyclic-Block Realisations}
+\label{sec:fredholm}
+
+\subsection{The Fredholm--Witt bridge}
+
+Let \(H\) be a complex Hilbert space and let \(T\in \sone(H)\) be a
+trace-class operator. Define
+\[
+  a_n(T):=\Tr(T^n),
+  \qquad
+  p_n(T):=\frac{1}{n}\sum_{d\mid n}\mu(d)\,a_{n/d}(T)
+  \qquad (n\ge 1).
+\]
+
+\begin{theorem}[Fredholm--Witt bridge]
+  \label{thm:fredholm-witt-bridge}
+  The following is a direct consequence of the classical Fredholm
+  determinant identity; we record it here to fix notation and to make
+  the Euler-product structure explicit.
+  For every trace-class operator \(T\) and every \(\abs{z}<\norm{T}^{-1}\),
+  \[
+    \det(I-zT)^{-1}
+    =\exp\!\left(\sum_{n\ge 1}\frac{a_n(T)}{n}z^n\right)
+    =\prod_{n\ge 1}(1-z^n)^{-p_n(T)}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  The Fredholm determinant identity
+  \[
+    \det(I-zT)^{-1}
+    =\exp\!\left(\sum_{n\ge 1}\frac{\Tr(T^n)}{n}z^n\right)
+  \]
+  is classical for trace-class operators; see Grothendieck
+  \cite{Grothendieck1956} and \cite[Chapter~3]{Simon2005TraceIdeals}.
+  By definition of \(p_n(T)\),
+  M\"obius inversion gives
+  \[
+    a_n(T)=\sum_{d\mid n}d\,p_d(T).
+  \]
+  Hence
+  \begin{align*}
+    \sum_{n\ge 1}\frac{a_n(T)}{n}z^n
+    &=\sum_{n\ge 1}\sum_{d\mid n}\frac{d\,p_d(T)}{n}z^n \\
+    &=\sum_{m\ge 1}\sum_{r\ge 1}\frac{p_m(T)}{r}z^{mr}
+      =-\sum_{m\ge 1}p_m(T)\log(1-z^m).
+  \end{align*}
+  Exponentiating gives the Euler product.
+\end{proof}
+
+\begin{remark}[Loss of arithmetic constraints]
+  \label{rem:witt-audit-constraints}
+  \Cref{thm:fredholm-witt-bridge} is purely operator-theoretic. In
+  contrast with \Cref{rem:finite-state-arithmetic}, the coordinates
+  \(p_n(T)\) need not be integers and need not be non-negative. Thus
+  trace-class realisability is strictly broader than finite-state
+  realisability.
+\end{remark}
+
+\subsection{A converse realisation by cyclic blocks}
+
+For \(n\ge 1\), let \(\Pi_n\) denote the cyclic permutation matrix on
+\(\CC^n\). For \(\alpha\in\CC\) define the cyclic block
+\[
+  C(n,\alpha):=\alpha\Pi_n.
+\]
+Since the eigenvalues of \(\Pi_n\) are the \(n\)th roots of unity, one
+has
+\begin{equation}\label{eq:cycle-block-det}
+  \det(I-zC(n,\alpha))=1-\alpha^n z^n.
+\end{equation}
+
+\begin{theorem}[Cyclic-block Fredholm realisation]
+  \label{thm:cyclic-fredholm-realisation}
+  Let \(\{(n_j,\beta_j,m_j)\}_{j\in J}\) be a countable family with
+  \[
+    n_j\in\NN,\qquad
+    \beta_j\in\CC,\qquad
+    m_j\in\NN,
+  \]
+  and assume that
+  \[
+    \sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}<\infty.
+  \]
+  Choose \(\alpha_j\in\CC\) with \(\alpha_j^{n_j}=\beta_j\), and set
+  \[
+    H_{\mathcal D}
+    :=\bigoplus_{j\in J}\bigl(\CC^{n_j}\otimes\CC^{m_j}\bigr),
+    \qquad
+    L_{\mathcal D}
+    :=\bigoplus_{j\in J}\bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr).
+  \]
+  Then \(L_{\mathcal D}\in \sone(H_{\mathcal D})\) and
+  \[
+    \det(I-zL_{\mathcal D})^{-1}
+    =\prod_{j\in J}(1-\beta_j z^{n_j})^{-m_j}
+  \]
+  for every \(\abs{z}<\norm{L_{\mathcal D}}^{-1}\).
+  In particular, if
+  \(r_{\mathcal D}:=\sup_{j\in J}\abs{\beta_j}^{1/n_j}<\infty\),
+  then the identity holds for \(\abs{z}<r_{\mathcal D}^{-1}\).
+\end{theorem}
+
+\begin{proof}
+  Each block \(C(n_j,\alpha_j)\otimes I_{m_j}\) has singular value
+  \(\abs{\alpha_j}\) with multiplicity \(m_j n_j\). Therefore
+  \[
+    \norm{L_{\mathcal D}}_1
+    =\sum_{j\in J}m_j n_j\abs{\alpha_j}
+    =\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}
+    <\infty,
+  \]
+  so \(L_{\mathcal D}\) is trace-class. Determinants multiply over
+  direct sums, and \eqref{eq:cycle-block-det} gives
+  \[
+    \det\!\bigl(I-z(C(n_j,\alpha_j)\otimes I_{m_j})\bigr)
+    =\det(I-zC(n_j,\alpha_j))^{m_j}
+    =(1-\beta_j z^{n_j})^{m_j}.
+  \]
+  Multiplying the reciprocal factors proves the claim. The operator
+  norm satisfies \(\norm{L_{\mathcal D}}=\sup_j\abs{\alpha_j}
+  =\sup_j\abs{\beta_j}^{1/n_j}=r_{\mathcal D}\), so the Fredholm
+  determinant identity holds for
+  \(\abs{z}<r_{\mathcal D}^{-1}\).
+\end{proof}
+
+\begin{remark}[Sharpness of the summability condition]
+  \label{rem:summability-sharpness}
+  The condition
+  \(\sum m_j n_j \abs{\beta_j}^{1/n_j}<\infty\) is sharp for
+  trace-class membership of the specific cyclic-block operator
+  \(L_{\mathcal D}\), since the singular values of the \(j\)th block
+  equal \(\abs{\beta_j}^{1/n_j}\) with multiplicity \(m_j n_j\), so the
+  trace norm is exactly the left-hand side. However, the condition is
+  not necessary for trace-class realisability of the Euler product in
+  general: other operator models (e.g., non-normal or infinite-rank
+  constructions) could realise the same Fredholm determinant under weaker
+  summability hypotheses.
+\end{remark}
+
+\begin{remark}[Choice of roots]\label{rem:choice-of-roots}
+  The choice of \(n_j\)th root \(\alpha_j\) with
+  \(\alpha_j^{n_j}=\beta_j\) is not unique. Different choices yield
+  operators \(L_{\mathcal D}\) that are in general unitarily
+  inequivalent, but whose Fredholm determinants agree. The individual
+  eigenvalues may differ by \(n_j\)th roots of unity, but by
+  \Cref{thm:fredholm-spectral-rigidity} the multiset of non-zero
+  eigenvalues with algebraic multiplicity is invariant under the choice
+  of root.
+\end{remark}
+
+\begin{corollary}[Finite Euler products give finite-rank models]
+  \label{cor:finite-rank-realisation}
+  If \(J\) is finite in \Cref{thm:cyclic-fredholm-realisation}, then
+  \(L_{\mathcal D}\) is finite-rank. As an immediate specialisation, every
+  finite Euler product
+  \[
+    \prod_{j=1}^N(1-\beta_j z^{n_j})^{-m_j}
+  \]
+  admits a finite-rank Fredholm realisation.
+\end{corollary}
+
+\subsection{Spectral rigidity}
+
+\begin{theorem}[Spectral rigidity of Fredholm determinants]
+  \label{thm:fredholm-spectral-rigidity}
+  Let \(T_1,T_2\in \sone\). If
+  \[
+    \det(I-zT_1)=\det(I-zT_2)
+  \]
+  in a neighbourhood of \(z=0\), then the non-zero spectra of \(T_1\)
+  and \(T_2\) coincide with algebraic multiplicity. Consequently,
+  \[
+    \Tr(T_1^n)=\Tr(T_2^n),
+    \qquad
+    p_n(T_1)=p_n(T_2)
+    \qquad (n\ge 1).
+  \]
+\end{theorem}
+
+\begin{proof}
+  For any \(T\in\sone(H)\), the Fredholm determinant
+  \(z\mapsto\det(I-zT)\) is an entire function of order at most~\(1\)
+  \cite[Theorem~3.7]{Simon2005TraceIdeals}. Since the two Fredholm
+  determinants agree as holomorphic germs at the origin, the identity
+  theorem extends the equality to all of~\(\CC\). By the canonical
+  product representation
+  \cite[Theorem~3.7]{Simon2005TraceIdeals}, the zeros of
+  \(\det(I-zT)\) are precisely the reciprocals \(\lambda_k^{-1}\) of
+  the non-zero eigenvalues of~\(T\), each occurring with its algebraic
+  multiplicity. Hence the non-zero spectra coincide.
+
+  Equality of determinants near \(0\) also gives equality of the Taylor
+  expansions
+  \[
+    \log\det(I-zT_i)^{-1}
+    =\sum_{n\ge 1}\frac{\Tr(T_i^n)}{n}z^n
+    \qquad (i=1,2),
+  \]
+  so the trace sequences agree coefficientwise. The primitive
+  coordinates \(p_n(T_i)\) are obtained from the trace sequences by
+  M\"obius inversion.
+\end{proof}
+
+\begin{corollary}[Realisability versus rigidity]
+  \label{cor:realisability-vs-rigidity}
+  Let \(A\) be a finite matrix and let \(T\in \sone\) satisfy
+  \[
+    \det(I-zT)=\det(I-zA).
+  \]
+  Then \(T\) and \(A\) have the same non-zero eigenvalues with
+  algebraic multiplicity. Thus cyclic-block constructions may enlarge
+  the ambient operator category, but they do not create spectral
+  freedom once the determinant is prescribed.
+\end{corollary}

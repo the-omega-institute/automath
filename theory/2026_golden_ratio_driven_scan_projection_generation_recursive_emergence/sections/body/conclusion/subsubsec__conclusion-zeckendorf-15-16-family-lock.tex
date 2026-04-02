@@ -37,6 +37,8 @@ F_{n+5}+F_{n+2}+F_n
 
 再证其为 Zeckendorf 规范分解。当 \(n\ge 8\) 时，集合
 \(\{n+5,n+2,n,n-3,n-6\}\) 与 \(\{n+5,n+3,n-1,n-6\}\) 中任意两指标之差至少为 \(2\)，故均满足 Zeckendorf 邻接禁规则。由 Zeckendorf 唯一性可知：一旦存在该合法表示，它即为规范分解（等价于贪心输出）。证毕。
+\leanverified{zeckendorf\_15Fn\_general}
+\leanverified{zeckendorf\_16Fn\_general}
 \end{proof}
 
 \begin{corollary}[跨分辨率分解：把 \(15|X_m^{\mathrm{bdry}}|\)、\(16|X_m^{\mathrm{bdry}}|\) 写成有限个 \(|X_k|\) 之和]\label{cor:conclusion-zeckendorf-15-16-cross-resolution}
@@ -77,6 +79,7 @@ F_{n+3}+F_{n-1}=F_{n+2}+F_n+2F_{n-1}.
 2F_{n-1}=F_{n-1}+F_{n-2}+F_{n-3}=F_n+F_{n-3}
 \)。
 证毕。
+\leanverified{fib\_15to16\_carry}
 \end{proof}
 
 \begin{theorem}[Zeckendorf 可见层的分辨率锁定：仅在 \(m=6\) 同时显化 \(|X_2|\) 与 \(|X_4|\)]\label{thm:conclusion-zeckendorf-resolution-lock-m6}
@@ -107,6 +110,7 @@ M(m):=15|X_m^{\mathrm{bdry}}|=15F_{m-2}\qquad(m\ge 6).
 15F_4=45=F_9+F_6+F_4,
 \]
 从而同时含 \(F_6\) 与 \(F_4\)。因此唯一解为 \(n=4\)，即 \(m=n+2=6\)。证毕。
+\leanverified{zeckendorf\_resolution\_lock\_m6}
 \end{proof}
 
 \begin{proposition}[\texorpdfstring{$\delta=34$}{δ=34} 与 \(m=6\) 的算术同一化：由顶层 Zeckendorf 权重反推分辨率]\label{prop:conclusion-delta34-top-zeckendorf-implies-m6}
@@ -132,7 +136,105 @@ F_{n+5}\le 15F_n< F_{n+6}
 \)。
 该不等式可由将 \(F_{n+6}\) 与 \(F_{n+5}\) 写成 \((F_n,F_{n-1})\) 的线性组合并比较系数得到；从而 \(T(m)=F_{n+5}=F_{m+3}\)。
 于是 \(T(m)=\delta=F_9\) 等价于 \(m+3=9\)，即 \(m=6\)。最后由 \(|X_m^{\mathrm{bdry}}|=F_{m-2}\) 得 \(m=6\iff |X_m^{\mathrm{bdry}}|=F_4=3\)。证毕。
+\leanverified{zeckendorf\_15Fn\_leading\_term}
+\leanverified{fifteen\_fib\_lt\_fib\_add\_six}
+\end{proof}
+
+\begin{theorem}[Zeckendorf 复位分支的精确观测阈值]\label{thm:conclusion-zeckendorf-reset-observation-threshold}
+令 \(\mathcal R_m\) 为正文定义的 Zeckendorf-prefix successor 在分辨率 \(m\) 上触发复位/分支的事件集合。则：
+\begin{enumerate}
+  \item \(\mathcal R_m\) 的 gap set 恰为
+  \[
+  \{F_{m+3},F_{m+4}\};
+  \]
+  \item 因而保证“任意长度为 \(L\) 的扫描窗都至少观测到一次 reset”的最小确定性阈值正好为
+  \[
+  L_{\mathrm{det}}(m)=F_{m+4};
+  \]
+  更精确地，存在长度 \(F_{m+4}-1\) 的扫描窗完全避开 \(\mathcal R_m\)，而任意长度 \(F_{m+4}\) 的扫描窗必与 \(\mathcal R_m\) 相交；
+  \item 同时 \(\mathcal R_m\) 具有精确密度
+  \[
+  \mathrm{dens}(\mathcal R_m)=\varphi^{-(m+2)},
+  \]
+  并满足一致偏差
+  \[
+  \Bigl|\#(\mathcal R_m\cap[0,N))-\varphi^{-(m+2)}N\Bigr|\le 1
+  \qquad(\forall N\in\NN).
+  \]
+\end{enumerate}
+因此，统计观测尺度与确定性观测阈值同阶：
+\[
+L_{\mathrm{det}}(m)\asymp \varphi^{m+2}.
+\]
+\end{theorem}
+
+\begin{proof}
+由正文定理 \ref{thm:terminal-reset-events-sturmian}，复位事件集合 \(\mathcal R_m\) 的相邻返回长度只取
+\[
+F_{m+3},\qquad F_{m+4}.
+\]
+故 gap set 正是 \(\{F_{m+3},F_{m+4}\}\)，从而最大空隙长度为 \(F_{m+4}\)。
+
+于是存在两个相邻 reset 事件，其间空隙长度恰为 \(F_{m+4}\)。取该空隙内部任一长度 \(F_{m+4}-1\) 的扫描窗，便完全不与 \(\mathcal R_m\) 相交，故
+\[
+L_{\mathrm{det}}(m)\ge F_{m+4}.
+\]
+反过来，任意长度 \(F_{m+4}\) 的扫描窗都不可能严格嵌入某个空隙内部，否则将产生长于最大 gap 的无 reset 区间，这与最大 gap 为 \(F_{m+4}\) 矛盾。故任意长度 \(F_{m+4}\) 的扫描窗都必与 \(\mathcal R_m\) 相交，从而
+\[
+L_{\mathrm{det}}(m)\le F_{m+4}.
+\]
+两边合并即得
+\[
+L_{\mathrm{det}}(m)=F_{m+4}.
+\]
+
+密度与有界余项同样是定理 \ref{thm:terminal-reset-events-sturmian} 的直接结论。最后由 Fibonacci 渐近
+\[
+F_{m+4}\asymp \varphi^{m+4}\asymp \varphi^{m+2}
+\]
+即得最终同阶关系。证毕。
+\end{proof}
+
+\begin{theorem}[reset-event 算术时钟的 Sturmian 刚性]\label{thm:conclusion-zeckendorf-reset-sturmian-clock-rigidity}
+对每个固定分辨率 \(m\)，复位事件集合 \(\mathcal R_m\) 构成一条严格的二间隔算术时钟：其相邻 gap 只取
+\[
+F_{m+3},\qquad F_{m+4},
+\]
+相应 gap 词是 slope \(\varphi^{-1}\) 的 Sturmian 序列，并且计数函数满足统一有界偏差
+\[
+\left|\#(\mathcal R_m\cap[0,N))-\varphi^{-(m+2)}N\right|\le 1
+\qquad(\forall N\in\NN).
+\]
+因此，\(\mathcal R_m\) 不是具有扩散涨落的随机更新时间，而是一条零扩散、有限偏差的 deterministic renewal skeleton。
+\end{theorem}
+\begin{proof}
+正文定理 \ref{thm:terminal-reset-events-sturmian} 已经给出：\(\mathcal R_m\) 的返回长度在字母表 \(\{F_{m+3},F_{m+4}\}\) 上形成 Fibonacci 代换不动点，因而是 slope \(\varphi^{-1}\) 的 Sturmian 词；同一定理又给出其自然密度
+\[
+\mathrm{dens}(\mathcal R_m)=\varphi^{-(m+2)}
+\]
+以及上述一致偏差界。故 \(\mathcal R_m\) 的计数误差始终被常数 \(1\) 压住，既不具有独立 gap 的随机性，也不可能出现 Brownian 型扩散。证毕。
+\end{proof}
+
+\begin{corollary}[reset-event 计数过程的无中心极限]\label{cor:conclusion-zeckendorf-reset-no-central-limit}
+定义中心化计数过程
+\[
+\mathcal N_m(N):=\#(\mathcal R_m\cap[0,N))-\varphi^{-(m+2)}N.
+\]
+则
+\[
+|\mathcal N_m(N)|\le 1
+\qquad(\forall N\in\NN),
+\]
+从而不存在任何非退化的 \(\sqrt N\)-中心极限定理，也不存在 Brownian 型时间重整化；任何把 \(\mathcal R_m\) 视作 Poisson 或独立 renewal 噪声的 coarse-graining 都是结构性失真。
+\end{corollary}
+\begin{proof}
+第一式正是定理 \ref{thm:conclusion-zeckendorf-reset-sturmian-clock-rigidity} 的有界偏差结论。于是
+\[
+\frac{\mathcal N_m(N)}{\sqrt N}\longrightarrow 0,
+\qquad
+\frac{\operatorname{Var}(\mathcal N_m(N))}{N}\longrightarrow 0.
+\]
+因此一切以 \(\sqrt N\) 为标度的中心极限都退化为零，而 Poisson 过程或独立 renewal 过程所特有的扩散型涨落在此完全不存在。证毕。
 \end{proof}
 
 \endinput
-

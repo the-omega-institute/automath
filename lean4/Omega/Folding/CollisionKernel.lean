@@ -183,6 +183,38 @@ def bowenFranksMatrix3 : Matrix (Fin 3) (Fin 3) ℤ :=
   !![1, -1, 0; 0, 1, -1; 2, -4, -1]
 theorem bowenFranksMatrix3_det : bowenFranksMatrix3.det = -3 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R129: Fredholm determinant polynomials
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fredholm determinant polynomial for collision kernel A₂:
+    det(I - z·A₂) = 1 - 2z - 2z² + 2z³.
+    prop:pom-collision-det -/
+theorem collisionKernel2_fredholm_det (z : ℤ) :
+    (1 - z • collisionKernel2).det = 1 - 2 * z - 2 * z ^ 2 + 2 * z ^ 3 := by
+  simp only [collisionKernel2, Matrix.det_fin_three]
+  simp [Matrix.smul_of, Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one]
+  ring
+
+/-- Paper: prop:pom-collision-det (A₂) -/
+theorem paper_collisionKernel2_fredholm_det (z : ℤ) :
+    (1 - z • collisionKernel2).det = 1 - 2 * z - 2 * z ^ 2 + 2 * z ^ 3 :=
+  collisionKernel2_fredholm_det z
+
+/-- Fredholm determinant polynomial for collision kernel A₃:
+    det(I - z·A₃) = 1 - 2z - 4z² + 2z³.
+    prop:pom-collision-det -/
+theorem collisionKernel3_fredholm_det (z : ℤ) :
+    (1 - z • collisionKernel3).det = 1 - 2 * z - 4 * z ^ 2 + 2 * z ^ 3 := by
+  simp only [collisionKernel3, Matrix.det_fin_three]
+  simp [Matrix.smul_of, Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one]
+  ring
+
+/-- Paper: prop:pom-collision-det (A₃) -/
+theorem paper_collisionKernel3_fredholm_det (z : ℤ) :
+    (1 - z • collisionKernel3).det = 1 - 2 * z - 4 * z ^ 2 + 2 * z ^ 3 :=
+  collisionKernel3_fredholm_det z
+
 /-- BF det ratio: det(I-A_3) = 3 * det(I-A_2). prop:pom-collision-bf-snf-q234 -/
 theorem collisionKernel_bf_det_ratio :
     bowenFranksMatrix3.det = 3 * bowenFranksMatrix2.det := by

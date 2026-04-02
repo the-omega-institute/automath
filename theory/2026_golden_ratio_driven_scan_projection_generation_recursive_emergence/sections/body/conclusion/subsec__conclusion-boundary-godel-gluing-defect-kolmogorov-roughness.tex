@@ -211,7 +211,191 @@ K(U_m\mid m,n)=O\!\bigl(m\,2^{m(n-1)}\bigr)=o(2^{mn}),
 因而不可能具有 \(2^{mn}\)-量级的算法信息。证毕。
 \end{proof}
 
+\begin{theorem}[体相算法饱和强制边界 Gödel 维饱和]\label{thm:conclusion-boundary-kolmogorov-saturation-forces-godel-saturation}
+对任意 \(m\)-级 dyadic polycube 序列 \((U_m)\subset I^n\)，定义边界 Gödel 维
+\[
+d_{\partial G}\bigl((U_m)\bigr)
+:=
+\limsup_{m\to\infty}
+\frac{\log\log H_m(U_m)}{m\log 2}.
+\]
+若存在 \(\kappa>0\) 使对充分大 \(m\) 都有
+\[
+K(U_m\mid m,n)\ge \kappa\,2^{mn},
+\]
+则必有
+\[
+d_{\partial G}\bigl((U_m)\bigr)=n.
+\]
+换言之，一旦体相在固定分辨率上达到 \(2^{mn}\)-量级的算法饱和，其边界 Gödel 双对数斜率便被强制拉满到环境维数 \(n\)。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-boundary-kolmogorov-incompressibility-forces-roughness}，存在常数 \(c_n>0\) 使
+\[
+F(U_m)\ge c_n\,\frac{\kappa\,2^{mn}}{m}
+\]
+对充分大 \(m\) 成立。
+
+另一方面，命题 \ref{prop:spg-dyadic-boundary-godel-doublelog-scale} 给出
+\[
+\log\log H_m(U_m)=\log F(U_m)+O(\log m).
+\]
+故
+\[
+\log\log H_m(U_m)
+\ge
+mn\log 2-\log m+O(1),
+\]
+从而
+\[
+d_{\partial G}\bigl((U_m)\bigr)\ge n.
+\]
+
+另一方面，\(m\)-级 dyadic 立方复形的全部有向 \((n-1)\)-面总数至多为
+\[
+n(2^m+1)2^{m(n-1)}=O(2^{mn}),
+\]
+故同样由
+\[
+\log\log H_m(U_m)=\log F(U_m)+O(\log m)
+\]
+得到
+\[
+\log\log H_m(U_m)\le mn\log 2+O(\log m),
+\]
+从而
+\[
+d_{\partial G}\bigl((U_m)\bigr)\le n.
+\]
+两式合并即得
+\[
+d_{\partial G}\bigl((U_m)\bigr)=n.
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[亚最大边界 Gödel 维排斥算法饱和]\label{cor:conclusion-submaximal-boundary-godel-dimension-excludes-kolmogorov-saturation}
+设 \(A\subset I^n\) 的 canonical dyadic 外逼近记为 \(U_m(A)\)，并设
+\[
+d_{\partial G}(A)=\beta<n.
+\]
+则对任意 \(\varepsilon>0\)，都有
+\[
+K(U_m(A)\mid m,n)=O_\varepsilon\!\bigl(m\,2^{(\beta+\varepsilon)m}\bigr).
+\]
+特别地，
+\[
+K(U_m(A)\mid m,n)=o(2^{mn}).
+\]
+\end{corollary}
+\begin{proof}
+由
+\[
+d_{\partial G}(A)
+=
+\limsup_{m\to\infty}
+\frac{\log\log H_m(U_m(A))}{m\log 2}
+=
+\beta,
+\]
+对任意 \(\varepsilon>0\)，充分大 \(m\) 时有
+\[
+\log\log H_m(U_m(A))
+\le
+\left(\beta+\frac{\varepsilon}{2}\right)m\log 2.
+\]
+再由命题 \ref{prop:spg-dyadic-boundary-godel-doublelog-scale},
+\[
+\log F(U_m(A))
+=
+\log\log H_m(U_m(A))+O(\log m)
+\le
+\left(\beta+\frac{\varepsilon}{2}\right)m\log 2+O(\log m).
+\]
+对充分大 \(m\)，可把 \(O(\log m)\) 吸收到 \(\frac{\varepsilon}{2}m\log 2\) 中，故
+\[
+F(U_m(A))\le C_\varepsilon\,2^{(\beta+\varepsilon)m}.
+\]
+最后由定理 \ref{thm:conclusion-boundary-kolmogorov-incompressibility-forces-roughness},
+\[
+K(U_m(A)\mid m,n)\le C_n\,m\,F(U_m(A))+O(1)
+=
+O_\varepsilon\!\bigl(m\,2^{(\beta+\varepsilon)m}\bigr).
+\]
+由于 \(\beta+\varepsilon<n\) 可任意取，遂得
+\[
+K(U_m(A)\mid m,n)=o(2^{mn}).
+\]
+证毕。
+\end{proof}
+
+\begin{corollary}[非满维体相中的算法饱和只能由最大粘连缺陷承载]\label{cor:conclusion-boundary-kolmogorov-saturation-implies-maximal-adhesion}
+设 \(A\subset I^n\) 为固定集合，\(U_m(A)\) 为其 dyadic 外近似。若
+\[
+d_G(A)<n
+\]
+且存在 \(\kappa>0\) 使
+\[
+K(U_m(A)\mid m,n)\ge \kappa\,2^{mn}
+\]
+对充分大 \(m\) 成立，则其粘连缺陷指数必达最大值：
+\[
+\gamma_{\mathrm{adh}}(A)=n.
+\]
+因此，在非满维体相中，若仍要承载 \(2^{mn}\)-量级的算法信息，则边界增长不可能由外层厚度主导，而只能完全压在内部粘连亏损之上。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-boundary-kolmogorov-saturation-forces-godel-saturation}，
+\[
+d_{\partial G}(A)=n.
+\]
+另一方面，由定理 \ref{thm:conclusion-boundary-godel-adhesion-defect-phase-diagram}，在 \(d_G(A)<n\) 时有
+\[
+d_{\partial G}(A)=\gamma_{\mathrm{adh}}(A).
+\]
+两式合并即得
+\[
+\gamma_{\mathrm{adh}}(A)=n.
+\]
+证毕。
+\end{proof}
+
+\begin{conjecture}[边界 Gödel 饱和与体相算法饱和的等价性]\label{conj:conclusion-boundary-godel-kolmogorov-saturation-equivalence}
+对固定 \(A\subset I^n\) 及其 dyadic 外近似 \(U_m(A)\)，在
+\[
+d_G(A)<n
+\]
+的前提下，下列三条应当等价：
+\begin{enumerate}
+  \item
+        \[
+        K(U_m(A)\mid m,n)=\Theta(2^{mn});
+        \]
+  \item
+        \[
+        d_{\partial G}(A)=n;
+        \]
+  \item
+        \[
+        \gamma_{\mathrm{adh}}(A)=n.
+        \]
+\end{enumerate}
+现有证据已给出
+\[
+(1)\Longrightarrow(2),
+\qquad
+(2)\Longleftrightarrow(3)\ \text{在 }d_G(A)<n\text{ 下成立}.
+\]
+尚待补足的方向只是
+\[
+d_{\partial G}(A)=n
+\Longrightarrow
+K(U_m(A)\mid m,n)=\Theta(2^{mn}),
+\]
+亦即把边界 Gödel 维的满饱和从“可恢复的 combinatorial 负载”提升为“不可压缩的算法负载”。
+\end{conjecture}
+
 \noindent
-由此，边界双对数增长的主导机制可被精确拆成厚度项与粘连亏损项；在 \(d_G(A)<n\) 的主导区间中，前者严格让位于后者。与此同时，一旦体相本身携带接近满量级的 Kolmogorov 信息，其边界面数便必须至少达到 \(2^{mn}/m\) 量级，从而低边界区与高复杂度区在 dyadic 体--界全息中形成定量互斥。
+由此，边界双对数增长的主导机制可被精确拆成厚度项与粘连亏损项；在 \(d_G(A)<n\) 的主导区间中，前者严格让位于后者。与此同时，一旦体相本身携带接近满量级的 Kolmogorov 信息，其边界面数便必须至少达到 \(2^{mn}/m\) 量级，从而边界 Gödel 维被强制饱和到 \(n\)；而在非满维体相中，这种饱和又只能完全由粘连亏损承载。于是，低边界区与高复杂度区在 dyadic 体--界全息中不只形成定量互斥，而且在饱和极限下精确汇合为“算法满载 \(\Rightarrow\) 边界 Gödel 满载 \(\Rightarrow\) 粘连缺陷满载”的单向链。
 
 \endinput

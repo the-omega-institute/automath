@@ -1,0 +1,461 @@
+import Mathlib.Tactic
+import Omega.Folding.MomentRecurrence
+import Omega.Folding.Window6
+
+/-! ### Window-6 q-moment spectrum and collision probability
+
+Arithmetic certificates for the conclusion chapter:
+q-moment triple from histogram {2:8, 3:4, 4:9}, collision probability reduction,
+and related Wedderburn dimension identities. -/
+
+namespace Omega.Conclusion
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R130: Window-6 q-moment spectrum triple
+-- ══════════════════════════════════════════════════════════════
+
+/-- Window-6 q-moment spectrum from histogram {2:8, 3:4, 4:9}.
+    S_0=21, S_1=64, S_2=212.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_qmoment_triple :
+    8 + 4 + 9 = 21 ∧
+    8 * 2 + 4 * 3 + 9 * 4 = 64 ∧
+    8 * 4 + 4 * 9 + 9 * 16 = 212 := by omega
+
+/-- S_2(6) = Σ d(w)² = Wedderburn dimension 212.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_S2_wedderburn :
+    8 * 2 ^ 2 + 4 * 3 ^ 2 + 9 * 4 ^ 2 = 212 := by omega
+
+/-- Likelihood ratio monotonicity: sector weights shift toward large fibers.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_likelihood_shift :
+    9 * 16 * 21 > 9 * 4 * 64 ∧ 9 * 4 * 21 > 9 * 1 * 64 := by omega
+
+/-- The 4-fiber vs 2-fiber likelihood ratio grows strictly with q.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_lr_four_vs_two_strictMono :
+    StrictMono (fun q : Nat => ((9 : ℚ) * (4 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q)) := by
+  have hfun :
+      (fun q : Nat => ((9 : ℚ) * (4 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q)) =
+      fun q : Nat => ((9 : ℚ) / 8) * (2 : ℚ)^q := by
+    funext q
+    have hq : ((9 : ℚ) * (4 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q) =
+        ((9 : ℚ) / 8) * (((4 : ℚ)^q) / ((2 : ℚ)^q)) := by
+      field_simp [pow_ne_zero q (by norm_num : (2 : ℚ) ≠ 0)]
+    rw [hq]
+    congr 1
+    calc
+      ((4 : ℚ)^q) / ((2 : ℚ)^q) = ((4 : ℚ) / 2) ^ q := by rw [← div_pow]
+      _ = (2 : ℚ)^q := by norm_num
+  rw [hfun]
+  intro a b hab
+  have hpow : (2 : ℚ) ^ a < (2 : ℚ) ^ b := by
+    exact pow_lt_pow_right₀ (by norm_num) hab
+  have hconst : 0 < (9 : ℚ) / 8 := by norm_num
+  exact mul_lt_mul_of_pos_left hpow hconst
+
+/-- The 3-fiber vs 2-fiber likelihood ratio grows strictly with q.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_lr_three_vs_two_strictMono :
+    StrictMono (fun q : Nat => ((4 : ℚ) * (3 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q)) := by
+  have hfun :
+      (fun q : Nat => ((4 : ℚ) * (3 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q)) =
+      fun q : Nat => ((1 : ℚ) / 2) * ((3 : ℚ) / 2)^q := by
+    funext q
+    have hq : ((4 : ℚ) * (3 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q) =
+        ((1 : ℚ) / 2) * (((3 : ℚ)^q) / ((2 : ℚ)^q)) := by
+      field_simp [pow_ne_zero q (by norm_num : (2 : ℚ) ≠ 0)]
+      ring
+    rw [hq]
+    congr 1
+    rw [← div_pow]
+  rw [hfun]
+  intro a b hab
+  have hpow : ((3 : ℚ) / 2) ^ a < ((3 : ℚ) / 2) ^ b := by
+    exact pow_lt_pow_right₀ (by norm_num : (1 : ℚ) < (3 : ℚ) / 2) hab
+  have hconst : 0 < (1 : ℚ) / 2 := by norm_num
+  exact mul_lt_mul_of_pos_left hpow hconst
+
+/-- The 4-fiber vs 2-fiber likelihood ratio grows strictly with q.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_likelihood_ratio_42_strictMono :
+    StrictMono (fun q : Nat => ((9 : ℚ) * (4 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q)) := by
+  exact window6_lr_four_vs_two_strictMono
+
+/-- The 3-fiber vs 2-fiber likelihood ratio grows strictly with q.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_likelihood_ratio_32_strictMono :
+    StrictMono (fun q : Nat => ((4 : ℚ) * (3 : ℚ)^q) / ((8 : ℚ) * (2 : ℚ)^q)) := by
+  exact window6_lr_three_vs_two_strictMono
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R130: Window-6 collision probability rational form
+-- ══════════════════════════════════════════════════════════════
+
+/-- Collision probability fraction: 212/4096 = 53/1024.
+    thm:conclusion-window6-groupoid-collision-dimension-identity -/
+theorem window6_collision_prob_reduced :
+    212 * 1024 = 53 * 4096 := by omega
+
+/-- GCD reduction factor.
+    thm:conclusion-window6-groupoid-collision-dimension-identity -/
+theorem window6_collision_gcd : Nat.gcd 212 4096 = 4 := by native_decide
+
+/-- Microstate count squared: 64² = 4096.
+    thm:conclusion-window6-groupoid-collision-dimension-identity -/
+theorem window6_microstate_sq : 64 ^ 2 = 4096 := by omega
+
+/-- Reduced fraction components.
+    thm:conclusion-window6-groupoid-collision-dimension-identity -/
+theorem window6_collision_components :
+    212 / 4 = 53 ∧ 4096 / 4 = 1024 := by omega
+
+/-- Collision dimension exceeds 3× microstate count.
+    thm:conclusion-window6-groupoid-collision-dimension-identity -/
+theorem window6_collision_exceeds_linear : 212 > 3 * 64 := by omega
+
+/-- Paper: thm:conclusion-window6-groupoid-collision-dimension-identity -/
+theorem paper_window6_collision_prob :
+    212 * 1024 = 53 * 4096 := window6_collision_prob_reduced
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R136: Quadratic residues mod 21
+-- ══════════════════════════════════════════════════════════════
+
+/-- Decidable predicate: is a a nonzero quadratic residue mod 21? -/
+def isNonzeroQR21 (a : Nat) : Bool :=
+  a != 0 && (List.range 21).any (fun x => x * x % 21 == a)
+
+/-- Number of nonzero quadratic residues in Z/21Z equals 7.
+    prop:conclusion-window6-crt-euler-phi -/
+theorem quadratic_residues_mod21 :
+    ((Finset.range 21).filter (fun a => isNonzeroQR21 a)).card = 7 := by native_decide
+
+/-- The nonzero QRs mod 21 are {1, 4, 7, 9, 15, 16, 18}.
+    prop:conclusion-window6-crt-euler-phi -/
+theorem quadratic_residues_mod21_explicit :
+    (Finset.range 21).filter (fun a => isNonzeroQR21 a) = {1, 4, 7, 9, 15, 16, 18} := by
+  native_decide
+
+/-- Paper: prop:conclusion-window6-crt-euler-phi -/
+theorem paper_quadratic_residues_mod21 :
+    ((Finset.range 21).filter (fun a => isNonzeroQR21 a)).card = 7 :=
+  quadratic_residues_mod21
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R138: Window-8 histogram consistency + higher moments
+-- ══════════════════════════════════════════════════════════════
+
+/-- Window-8 bin-fold histogram {3:21, 5:11, 6:23} consistency checks.
+    thm:conclusion-window8-groupoid-collision-dimension-identity -/
+theorem window8_histogram_consistency :
+    21 + 11 + 23 = 55 ∧ 21 * 3 + 11 * 5 + 23 * 6 = 256 := by omega
+
+/-- Higher moment sums from window-8 histogram.
+    thm:conclusion-window8-groupoid-collision-dimension-identity -/
+theorem window8_higher_moments :
+    21 * 3 ^ 3 + 11 * 5 ^ 3 + 23 * 6 ^ 3 = 6910 ∧
+    21 * 3 ^ 4 + 11 * 5 ^ 4 + 23 * 6 ^ 4 = 38384 ∧
+    21 * 3 ^ 5 + 11 * 5 ^ 5 + 23 * 6 ^ 5 = 218326 := by omega
+
+/-- Paper: thm:conclusion-window8-groupoid-collision-dimension-identity -/
+theorem paper_window8_higher_moments :
+    21 * 3 ^ 3 + 11 * 5 ^ 3 + 23 * 6 ^ 3 = 6910 ∧
+    21 * 3 ^ 4 + 11 * 5 ^ 4 + 23 * 6 ^ 4 = 38384 ∧
+    21 * 3 ^ 5 + 11 * 5 ^ 5 + 23 * 6 ^ 5 = 218326 :=
+  window8_higher_moments
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R144: CRT idempotents mod 21
+-- ══════════════════════════════════════════════════════════════
+
+/-- Decidable idempotent predicate mod 21. -/
+def isIdempotent21 (a : Nat) : Bool := a * a % 21 == a
+
+/-- Number of idempotents in Z/21Z is exactly 4.
+    prop:conclusion-window6-crt-euler-phi -/
+theorem idempotent_count_mod21 :
+    ((Finset.range 21).filter (fun a => isIdempotent21 a)).card = 4 := by native_decide
+
+/-- The idempotents in Z/21Z are {0, 1, 7, 15}.
+    prop:conclusion-window6-crt-euler-phi -/
+theorem idempotent_set_mod21 :
+    (Finset.range 21).filter (fun a => isIdempotent21 a) = {0, 1, 7, 15} := by native_decide
+
+/-- Paper: prop:conclusion-window6-crt-euler-phi -/
+theorem paper_idempotent_count_mod21 :
+    ((Finset.range 21).filter (fun a => isIdempotent21 a)).card = 4 :=
+  idempotent_count_mod21
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R160: Chi^2 numerator certificates
+-- ══════════════════════════════════════════════════════════════
+
+open Omega in
+/-- Chi^2 numerator for Fold m=6,7,8: |X_m|·S_2(m) - 4^m.
+    thm:conclusion-foldbin-groupoid-dimension-collision-chi2 -/
+theorem paper_fold_chi2_certificates :
+    (Fintype.card (X 6) * momentSum 2 6 - 4 ^ 6 = 524) ∧
+    (Fintype.card (X 7) * momentSum 2 7 - 4 ^ 7 = 2112) ∧
+    (Fintype.card (X 8) * momentSum 2 8 - 4 ^ 8 = 8824) := by
+  refine ⟨?_, ?_, ?_⟩
+  · rw [X.card_eq_fib, momentSum_two_six]; native_decide
+  · rw [X.card_eq_fib, momentSum_two_seven]; native_decide
+  · rw [X.card_eq_fib, momentSum_two_eight_rec]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R166: Section ledger product formula
+-- ══════════════════════════════════════════════════════════════
+
+/-- The number of choice functions on fibers equals the product of fiber sizes.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem section_count_eq_prod_fiber {α β : Type*} [Fintype α] [Fintype β]
+    [DecidableEq α] [DecidableEq β]
+    (F : α → β) :
+    Fintype.card ((b : β) → {a : α // F a = b}) =
+      ∏ b : β, (Finset.univ.filter (fun a => F a = b)).card := by
+  rw [Fintype.card_pi]
+  congr 1
+  ext b
+  exact Fintype.card_subtype (fun a => F a = b)
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R169: Log-sum inequality
+-- ══════════════════════════════════════════════════════════════
+
+/-- Log of product equals sum of logs for positive naturals.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem log_prod_eq_sum_log {n : ℕ} (d : Fin n → ℕ) (hd : ∀ i, 0 < d i) :
+    Real.log (∏ i, (d i : ℝ)) = ∑ i, Real.log (d i) := by
+  apply Real.log_prod
+  intro x _
+  exact Nat.cast_pos.mpr (hd x) |>.ne'
+
+/-- Log-sum inequality (AM-GM in log form): for positive reals summing to N,
+    Σ log(a_i) ≤ n · log(N/n).
+    thm:conclusion-section-ledger-kl-identity -/
+theorem log_sum_le_of_sum_eq {n : ℕ} {N : ℝ} (a : Fin n → ℝ) (ha : ∀ i, 0 < a i)
+    (hn : 0 < n) (hsum : ∑ i, a i = N) (hN_pos : 0 < N) :
+    ∑ i, Real.log (a i) ≤ n * Real.log (N / n) := by
+  rw [← Real.log_prod (fun x _ => ne_of_gt (ha x))]
+  have hnR : (0 : ℝ) < n := Nat.cast_pos.mpr hn
+  have hprod_pos : 0 < ∏ i, a i := Finset.prod_pos (fun i _ => ha i)
+  have hgm0 := Real.geom_mean_le_arith_mean (Finset.univ : Finset (Fin n))
+    (fun _ => (1 : ℝ)) a
+    (fun _ _ => by positivity)
+    (by simp [hn])
+    (fun i _ => le_of_lt (ha i))
+  have hgm : (∏ i, a i) ^ ((n : ℝ)⁻¹) ≤ N / n := by
+    simpa [hsum, div_eq_mul_inv] using hgm0
+  have hpow := Real.rpow_le_rpow
+    (Real.rpow_nonneg hprod_pos.le _)
+    hgm
+    (show 0 ≤ (n : ℝ) from by positivity)
+  have hprod : ∏ i, a i ≤ (N / n) ^ n := by
+    have hleft0 : ((∏ i, a i) ^ ((n : ℝ)⁻¹)) ^ (n : ℝ) = (∏ i, a i) ^ (((n : ℝ)⁻¹) * n) := by
+      rw [← Real.rpow_mul hprod_pos.le]
+    have hleft : ((∏ i, a i) ^ ((n : ℝ)⁻¹)) ^ (n : ℝ) = ∏ i, a i := by
+      rw [hleft0, inv_mul_cancel₀ (show (n : ℝ) ≠ 0 from by positivity), Real.rpow_one]
+    have hright : (N / n) ^ (n : ℝ) = (N / n) ^ n := by rw [Real.rpow_natCast]
+    rw [hleft, hright] at hpow
+    exact hpow
+  have hlog := Real.log_le_log hprod_pos hprod
+  have hdiv_pos : 0 < N / n := by exact div_pos hN_pos hnR
+  have hrw : Real.log ((N / n) ^ n) = n * Real.log (N / n) := by
+    rw [← Real.rpow_natCast, Real.log_rpow hdiv_pos]
+  simpa [hrw] using hlog
+
+/-- Natural-number section sizes satisfy the uniform-average log upper bound.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem sectionLog_le_uniformAverage_nat {n : ℕ} (hn : 0 < n)
+    (d : Fin n → ℕ) (hd : ∀ i, 0 < d i) :
+    ∑ i, Real.log (d i) ≤ n * Real.log ((∑ i, (d i : ℝ)) / n) := by
+  let N : ℝ := ∑ i, (d i : ℝ)
+  have hsum : ∑ i, (d i : ℝ) = N := by rfl
+  have hpos : ∀ i, 0 < (d i : ℝ) := fun i => Nat.cast_pos.mpr (hd i)
+  have hN_pos : 0 < N := by
+    have hle : (d ⟨0, hn⟩ : ℝ) ≤ ∑ i, (d i : ℝ) := by
+      simpa using
+        (Finset.single_le_sum (f := fun i : Fin n => (d i : ℝ)) (by intro i _; positivity) (by simp : ⟨0, hn⟩ ∈ Finset.univ))
+    exact lt_of_lt_of_le (Nat.cast_pos.mpr (hd ⟨0, hn⟩)) (by simpa [N] using hle)
+  simpa [N] using log_sum_le_of_sum_eq (fun i => (d i : ℝ)) hpos hn hsum hN_pos
+
+/-- Uniform section ledger identity as a KL-divergence decomposition.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem sectionLedger_kl_identity {n : ℕ} (hn : 0 < n)
+    (d : Fin n → ℕ) (hd : ∀ i, 0 < d i) :
+    let N : ℝ := ∑ i, (d i : ℝ)
+    let π : Fin n → ℝ := fun i => (d i : ℝ) / N
+    let ν : ℝ := 1 / n
+    (1 / n : ℝ) * ∑ i, Real.log (d i)
+      = Real.log (N / n) - ∑ i, ν * Real.log (ν / π i) := by
+  dsimp
+  let N : ℝ := ∑ i, (d i : ℝ)
+  let π : Fin n → ℝ := fun i => (d i : ℝ) / N
+  let ν : ℝ := 1 / n
+  have hnR_pos : (0 : ℝ) < n := Nat.cast_pos.mpr hn
+  have hnR_ne : (n : ℝ) ≠ 0 := ne_of_gt hnR_pos
+  have hdR_pos : ∀ i, 0 < (d i : ℝ) := fun i => Nat.cast_pos.mpr (hd i)
+  have hN_pos : 0 < N := by
+    have hle : (d ⟨0, hn⟩ : ℝ) ≤ ∑ i, (d i : ℝ) := by
+      simpa using
+        (Finset.single_le_sum (f := fun i : Fin n => (d i : ℝ)) (by intro i _; positivity)
+          (by simp : ⟨0, hn⟩ ∈ Finset.univ))
+    exact lt_of_lt_of_le (Nat.cast_pos.mpr (hd ⟨0, hn⟩)) (by simpa [N] using hle)
+  have hN_ne : N ≠ 0 := ne_of_gt hN_pos
+  have hπpos : ∀ i, 0 < π i := by
+    intro i
+    dsimp [π]
+    exact div_pos (hdR_pos i) hN_pos
+  have hπne : ∀ i, π i ≠ 0 := fun i => ne_of_gt (hπpos i)
+  have hνpos : 0 < ν := by
+    dsimp [ν]
+    exact one_div_pos.mpr hnR_pos
+  have hνne : ν ≠ 0 := ne_of_gt hνpos
+  have hNdivn_pos : 0 < N / n := div_pos hN_pos hnR_pos
+  have hNdivn_ne : N / n ≠ 0 := ne_of_gt hNdivn_pos
+  have hνn : ν * n = 1 := by
+    dsimp [ν]
+    field_simp [hnR_ne]
+  have hlogratio : ∀ i, Real.log (ν / π i) = Real.log (N / n) - Real.log (d i) := by
+    intro i
+    have hdi_ne : (d i : ℝ) ≠ 0 := ne_of_gt (hdR_pos i)
+    have hratio : ν / π i = (N / n) / (d i : ℝ) := by
+      dsimp [ν, π]
+      field_simp [hnR_ne, hN_ne, hdi_ne]
+    rw [hratio]
+    rw [Real.log_div hNdivn_ne hdi_ne]
+  have hsumKL :
+      ∑ i, ν * Real.log (ν / π i) = ν * (n * Real.log (N / n) - ∑ i, Real.log (d i)) := by
+    calc
+      ∑ i, ν * Real.log (ν / π i)
+          = ∑ i, ν * (Real.log (N / n) - Real.log (d i)) := by
+              refine Finset.sum_congr rfl ?_
+              intro i _
+              rw [hlogratio i]
+      _ = ∑ i, (ν * Real.log (N / n) - ν * Real.log (d i)) := by
+            refine Finset.sum_congr rfl ?_
+            intro i _
+            ring
+      _ = (∑ i, ν * Real.log (N / n)) - ∑ i, ν * Real.log (d i) := by
+            rw [Finset.sum_sub_distrib]
+      _ = ν * (n * Real.log (N / n)) - ν * ∑ i, Real.log (d i) := by
+            rw [Finset.mul_sum]
+            norm_num [Finset.card_univ]
+            ring
+      _ = ν * (n * Real.log (N / n) - ∑ i, Real.log (d i)) := by ring
+  have hsumKL' : ∑ i, ν * Real.log (ν / π i) = Real.log (N / n) - ν * ∑ i, Real.log (d i) := by
+    rw [hsumKL]
+    calc
+      ν * (n * Real.log (N / n) - ∑ i, Real.log (d i))
+          = ν * (n * Real.log (N / n)) - ν * ∑ i, Real.log (d i) := by ring
+      _ = Real.log (N / n) - ν * ∑ i, Real.log (d i) := by
+            have hmain : ν * (n * Real.log (N / n)) = Real.log (N / n) := by
+              calc
+                ν * (n * Real.log (N / n)) = (ν * n) * Real.log (N / n) := by ring
+                _ = Real.log (N / n) := by rw [hνn, one_mul]
+            rw [hmain]
+  rw [hsumKL']
+  ring
+
+/-- Two-level collision moment realizes the explicit extremal pair.
+    thm:conclusion-window10-groupoid-collision-dimension-identity -/
+theorem collisionMoment_q2_explicit {n : ℕ} (hn : 1 < n)
+    {c : ℝ} (hc1 : 1 / n ≤ c) (_hc2 : c ≤ 1) :
+    let a : ℝ := (1 + Real.sqrt ((n - 1 : ℝ) * ((n : ℝ) * c - 1))) / n
+    let b : ℝ := (1 - Real.sqrt (((n : ℝ) * c - 1) / (n - 1 : ℝ))) / n
+    a + (n - 1 : ℝ) * b = 1 ∧ a^2 + (n - 1 : ℝ) * b^2 = c := by
+  dsimp
+  let t : ℝ := Real.sqrt (((n : ℝ) * c - 1) / ((n : ℝ) - 1))
+  have hn_pos : 0 < n := lt_trans Nat.zero_lt_one hn
+  have hnR_pos : (0 : ℝ) < n := Nat.cast_pos.mpr hn_pos
+  have hnR_ne : (n : ℝ) ≠ 0 := ne_of_gt hnR_pos
+  have hm_pos : (0 : ℝ) < (n : ℝ) - 1 := by
+    have hnR_gt_one : (1 : ℝ) < n := by
+      exact_mod_cast hn
+    linarith
+  have hm_ne : (n : ℝ) - 1 ≠ 0 := ne_of_gt hm_pos
+  have hnc_nonneg : 0 ≤ (n : ℝ) * c - 1 := by
+    have hmul : (n : ℝ) * (1 / n : ℝ) ≤ (n : ℝ) * c :=
+      mul_le_mul_of_nonneg_left hc1 hnR_pos.le
+    have hone : (n : ℝ) * (1 / n : ℝ) = 1 := by
+      field_simp [hnR_ne]
+    linarith
+  have hratio_nonneg : 0 ≤ (((n : ℝ) * c - 1) / ((n : ℝ) - 1)) := by
+    exact div_nonneg hnc_nonneg hm_pos.le
+  have ht_nonneg : 0 ≤ t := by
+    dsimp [t]
+    positivity
+  have ht_sq : t ^ 2 = (((n : ℝ) * c - 1) / ((n : ℝ) - 1)) := by
+    dsimp [t]
+    rw [Real.sq_sqrt hratio_nonneg]
+  have hsqrt_mul :
+      Real.sqrt (((n : ℝ) - 1) * ((n : ℝ) * c - 1)) = ((n : ℝ) - 1) * t := by
+    have hsq_left : (Real.sqrt (((n : ℝ) - 1) * ((n : ℝ) * c - 1))) ^ 2 =
+        ((n : ℝ) - 1) * ((n : ℝ) * c - 1) := by
+      rw [Real.sq_sqrt]
+      positivity
+    have hsq_right : (((n : ℝ) - 1) * t) ^ 2 = ((n : ℝ) - 1) * ((n : ℝ) * c - 1) := by
+      rw [mul_pow, ht_sq]
+      field_simp [hm_ne]
+    have hleft_nonneg : 0 ≤ Real.sqrt (((n : ℝ) - 1) * ((n : ℝ) * c - 1)) := by
+      positivity
+    have hright_nonneg : 0 ≤ ((n : ℝ) - 1) * t := by
+      exact mul_nonneg hm_pos.le ht_nonneg
+    nlinarith
+  constructor
+  · rw [hsqrt_mul]
+    change (1 + ((n : ℝ) - 1) * t) / n + ((n : ℝ) - 1) * ((1 - t) / n) = 1
+    field_simp [hnR_ne]
+    ring
+  · rw [hsqrt_mul]
+    change ((1 + ((n : ℝ) - 1) * t) / n) ^ 2 + ((n : ℝ) - 1) * ((1 - t) / n) ^ 2 = c
+    have hquad :
+        ((1 + ((n : ℝ) - 1) * t) / n) ^ 2 + ((n : ℝ) - 1) * ((1 - t) / n) ^ 2 =
+          (1 + ((n : ℝ) - 1) * t ^ 2) / n := by
+      field_simp [hnR_ne]
+      ring
+    calc
+      ((1 + ((n : ℝ) - 1) * t) / n) ^ 2 + ((n : ℝ) - 1) * ((1 - t) / n) ^ 2 =
+          (1 + ((n : ℝ) - 1) * t ^ 2) / n := hquad
+      _ = (1 + ((n : ℝ) - 1) * (((n : ℝ) * c - 1) / ((n : ℝ) - 1))) / n := by rw [ht_sq]
+      _ = c := by
+        field_simp [hnR_ne, hm_ne]
+        ring
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R169: Window-10 histogram consistency
+-- ══════════════════════════════════════════════════════════════
+
+/-- Window-10 basic: |X_10|=144, 2^10=1024, S_1(10)=1024.
+    thm:conclusion-window10-groupoid-collision-dimension-identity -/
+theorem window10_basic_consistency :
+    Fintype.card (X 10) = 144 ∧
+    (2 : ℕ) ^ 10 = 1024 ∧
+    momentSum 1 10 = 1024 := by
+  refine ⟨?_, by norm_num, ?_⟩
+  · rw [X.card_eq_fib]; native_decide
+  · rw [momentSum_one]; norm_num
+
+/-- Window-10 S_2 value: S_2(10) = 8320.
+    thm:conclusion-window10-groupoid-collision-dimension-identity -/
+theorem window10_S2 : momentSum 2 10 = 8320 := by
+  rw [← cMomentSum_eq]; native_decide
+
+/-- Window-6 visible CRT arithmetic phase space certificate.
+    thm:conclusion-window6-visible-crt-arithmetic-phase-space -/
+theorem conclusion_window6_visible_crt_arithmetic_phase_space :
+    Fintype.card (X 6) = 21 ∧ 21 = 3 * 7 := by
+  exact ⟨X.card_X_six, card_X6_factorization⟩
+
+/-- Window-6 CRT idempotent sector splitting certificate.
+    prop:conclusion-window6-crt-idempotent-sector-splitting -/
+theorem conclusion_window6_crt_idempotent_sector_splitting :
+    ((7 : ZMod 21) ^ 2 = 7) ∧
+    ((15 : ZMod 21) ^ 2 = 15) ∧
+    ((7 : ZMod 21) * 15 = 0) ∧
+    ((7 : ZMod 21) + 15 = 1) := by
+  exact ⟨crt_idempotent_7, crt_idempotent_15, crt_idempotent_product, crt_idempotent_sum⟩
+
+end Omega.Conclusion

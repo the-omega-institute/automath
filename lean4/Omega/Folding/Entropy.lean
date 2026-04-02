@@ -6,6 +6,7 @@ import Mathlib.MeasureTheory.Measure.Tilted
 import Mathlib.NumberTheory.Real.GoldenRatio
 import Omega.Folding.CircleDimension
 import Omega.Folding.ShiftDynamics
+import Omega.Folding.MomentBounds
 
 open scoped goldenRatio
 open Filter Topology
@@ -276,7 +277,9 @@ theorem topological_entropy_eq_log_phi :
             (Real.log (Nat.fib (i + 3) : ℝ) - Real.log (Nat.fib (i + 2) : ℝ))) := by
               congr 2; ext i; dsimp [u]
               have hnum : (Nat.fib (i + 3) : ℝ) ≠ 0 := by
-                exact ne_of_gt (by simpa [add_assoc] using stableSyntaxCount_pos (i + 1))
+                apply ne_of_gt
+                rw [show i + 3 = (i + 1) + 2 by omega]
+                exact stableSyntaxCount_pos (i + 1)
               have hden : (Nat.fib (i + 2) : ℝ) ≠ 0 := by
                 exact ne_of_gt (stableSyntaxCount_pos i)
               rw [Real.log_div hnum hden]
@@ -445,6 +448,12 @@ theorem fib_nearest_integer (n : Nat) :
     -(ψ ^ n / Real.sqrt 5) from by ring]
   rw [abs_neg]
   exact abs_psi_pow_div_sqrt5_lt_half n
+
+/-- Named alias with positivity hypothesis: |F(n) - φ^n/√5| < 1/2 for n ≥ 1.
+    prop:cdim-fibonacci-nearest-integer -/
+theorem fib_nearest_integer_of_pos (n : Nat) (_hn : 1 ≤ n) :
+    |(Nat.fib n : ℝ) - φ ^ n / Real.sqrt 5| < 1 / 2 :=
+  fib_nearest_integer n
 
 /-! ### Chebyshev phase -/
 
@@ -678,5 +687,117 @@ theorem fib_ratio_error_lt_one (n : Nat) (hn : 1 ≤ n) :
         apply pow_le_pow_of_le_one (abs_nonneg _) (le_of_lt abs_goldenConj_lt_one) hn
     _ = |ψ| := pow_one _
     _ < 1 := abs_goldenConj_lt_one
+
+/-- F(n+2)/F(n+1) → φ (shifted Fibonacci ratio convergence).
+    Follows from fib_ratio_tendsto composed with the shift n ↦ n+1.
+    prop:cdim-fib-ratio-tendsto-golden -/
+theorem fib_ratio_tendsto_golden :
+    Tendsto (fun n => (Nat.fib (n + 2) : ℝ) / (Nat.fib (n + 1) : ℝ))
+    atTop (nhds φ) :=
+  fib_ratio_tendsto.comp (tendsto_add_atTop_nat 1)
+
+/-- The fold index ratio log(2^m / F_{m+2}) / m → log(2/φ).
+    This is the per-step entropy defect: log 2 - log φ = log(2/φ).
+    thm:fold-entropy-defect-tendsto -/
+theorem foldIndex_tendsto_log_two_div_phi :
+    Tendsto (fun m => Real.log (2 ^ m / (Nat.fib (m + 2) : ℝ)) / m)
+    atTop (nhds (Real.log (2 / φ))) := by
+  -- Rewrite target: log(2/φ) = log 2 - log φ
+  rw [Real.log_div (by norm_num : (2 : ℝ) ≠ 0) (ne_of_gt Real.goldenRatio_pos)]
+  -- The function equals log 2 - log F(m+2)/m eventually (for m ≥ 1)
+  have hent := topological_entropy_eq_log_phi
+  -- We need: (fun m => log(2^m / F(m+2)) / m) → log 2 - log φ
+  -- i.e., (fun m => (m * log 2 - log F(m+2)) / m) → log 2 - log φ
+  -- i.e., (fun m => log 2 - log F(m+2) / m) → log 2 - log φ
+  -- This is tendsto_const_nhds.sub hent
+  refine (tendsto_const_nhds.sub hent).congr' ?_
+  filter_upwards [Filter.eventually_ge_atTop 1] with m hm
+  have hm_pos : (0 : ℝ) < m := Nat.cast_pos.mpr (by omega)
+  have hm_ne : (m : ℝ) ≠ 0 := ne_of_gt hm_pos
+  have hF_pos : (0 : ℝ) < (Nat.fib (m + 2) : ℝ) := by
+    exact_mod_cast Nat.fib_pos.mpr (by omega)
+  have hF_ne : (Nat.fib (m + 2) : ℝ) ≠ 0 := ne_of_gt hF_pos
+  have h2m_pos : (0 : ℝ) < 2 ^ m := pow_pos (by norm_num) m
+  rw [Real.log_div (ne_of_gt h2m_pos) hF_ne, Real.log_pow, sub_div, mul_div_cancel_left₀ _ hm_ne]
+
+/-- The fold index: I(m) = 2^m / F_{m+2}, measuring compression ratio.
+    def:fold-index -/
+noncomputable def foldIndex (m : Nat) : ℝ := 2 ^ m / (Nat.fib (m + 2) : ℝ)
+
+/-- The fold index exceeds 1 for m ≥ 2 (since F_{m+2} < 2^m).
+    prop:fold-index-gt-one -/
+theorem foldIndex_gt_one (m : Nat) (hm : 2 ≤ m) : 1 < foldIndex m := by
+  have hF_pos : (0 : ℝ) < (Nat.fib (m + 2) : ℝ) := by exact_mod_cast Nat.fib_pos.mpr (by omega)
+  rw [foldIndex, one_lt_div hF_pos]
+  exact_mod_cast fib_lt_pow_two_of_ge_two m hm
+
+/-- The fold index is strictly increasing for m ≥ 1:
+    I(m) < I(m+1) iff F_{m+3} < 2·F_{m+2} iff F_{m+1} < F_{m+2}.
+    prop:fold-index-strict-mono -/
+theorem foldIndex_strict_mono_of_ge_one (m : Nat) (hm : 1 ≤ m) :
+    foldIndex m < foldIndex (m + 1) := by
+  have hFm : (0 : ℝ) < (Nat.fib (m + 2) : ℝ) := by exact_mod_cast Nat.fib_pos.mpr (by omega)
+  have hFm1 : (0 : ℝ) < (Nat.fib (m + 3) : ℝ) := by exact_mod_cast Nat.fib_pos.mpr (by omega)
+  rw [foldIndex, foldIndex, div_lt_div_iff₀ hFm hFm1]
+  -- Goal: 2^m * F(m+3) < 2^(m+1) * F(m+2)
+  -- Nat version: 2^m * F(m+3) < 2^(m+1) * F(m+2)
+  -- Since F(m+3) = F(m+1) + F(m+2) and F(m+1) < F(m+2):
+  -- 2^m * (F(m+1) + F(m+2)) < 2 * 2^m * F(m+2)
+  -- ↔ F(m+1) + F(m+2) < 2 * F(m+2) ↔ F(m+1) < F(m+2) ✓
+  have hnat : 2 ^ m * Nat.fib (m + 3) < 2 ^ (m + 1) * Nat.fib (m + 2) := by
+    have h2m : 0 < 2 ^ m := Nat.pos_of_ne_zero (pow_ne_zero m (by omega))
+    have hfib_lt : Nat.fib (m + 3) < 2 * Nat.fib (m + 2) := by
+      rw [Nat.fib_add_two, Nat.two_mul]
+      exact Nat.add_lt_add_right (Nat.fib_lt_fib_succ (by omega)) _
+    calc 2 ^ m * Nat.fib (m + 3)
+        < 2 ^ m * (2 * Nat.fib (m + 2)) := by exact (Nat.mul_lt_mul_left h2m).mpr hfib_lt
+      _ = 2 ^ (m + 1) * Nat.fib (m + 2) := by rw [pow_succ]; ring
+  exact_mod_cast hnat
+
+/-- The hidden bit density B(m)/2^m tends to 1/3 as m → ∞.
+    B(m) = ⌊2^m/3⌋, so B(m)/2^m = 1/3 - r/(3·2^m) where r ∈ {1,2}.
+    cor:pom-hidden-bit-entropy -/
+theorem hiddenBitDensity_tendsto_third :
+    Tendsto (fun m => (hiddenBitCount m : ℝ) / 2 ^ m) atTop (nhds (1 / 3)) := by
+  -- B(m) = ⌊2^m/3⌋. Show |B(m)/2^m - 1/3| ≤ 1/2^m → 0
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  obtain ⟨N, hN⟩ := exists_pow_lt_of_lt_one hε (show (2 : ℝ)⁻¹ < 1 by norm_num)
+  refine ⟨N, fun m hm => ?_⟩
+  rw [Real.dist_eq]
+  -- Work with B = hiddenBitCount m as a Nat
+  set B := hiddenBitCount m with hB_def
+  have hclosed := hiddenBitCount_closed m
+  -- B * 3 + r = 2^m where r ∈ {1, 2}
+  set r := if m % 2 = 0 then 1 else 2 with hr_def
+  have hr_pos : 0 < r := by simp [hr_def]; split <;> omega
+  have hr_le : r ≤ 2 := by simp [hr_def]; split <;> omega
+  have hkey : B * 3 + r = 2 ^ m := hclosed
+  -- Upper: B/2^m ≤ 1/3  (since 3B ≤ 2^m)
+  have h2m_pos : (0 : ℝ) < 2 ^ m := pow_pos (by norm_num) m
+  have h3B_le : 3 * B ≤ 2 ^ m := by omega
+  -- Key ℝ facts
+  have hBr : (B : ℝ) * 3 + (r : ℝ) = (2 : ℝ) ^ m := by
+    have h := hkey
+    exact_mod_cast h
+  have hr_le_real : (r : ℝ) ≤ 2 := by exact_mod_cast hr_le
+  have hr_pos_real : (0 : ℝ) < r := by exact_mod_cast hr_pos
+  -- Upper: B * 3 ≤ 2^m → B / 2^m ≤ 1/3
+  have hupper : (B : ℝ) / 2 ^ m ≤ 1 / 3 := by
+    rw [div_le_div_iff₀ h2m_pos (by norm_num : (0 : ℝ) < 3)]
+    nlinarith
+  -- Lower: 1/3 - 1/2^m ≤ B/2^m
+  have hlower : 1 / 3 - 1 / 2 ^ m ≤ (B : ℝ) / 2 ^ m := by
+    have h1 : (0 : ℝ) < 3 * 2 ^ m := by positivity
+    rw [div_sub_div _ _ (ne_of_gt (show (0:ℝ) < 3 by norm_num)) (ne_of_gt h2m_pos),
+        div_le_div_iff₀ h1 h2m_pos]
+    nlinarith
+  have hbound : |(B : ℝ) / 2 ^ m - 1 / 3| ≤ 1 / 2 ^ m := by
+    rw [abs_le]; constructor <;> linarith
+  calc |(B : ℝ) / 2 ^ m - 1 / 3|
+      ≤ 1 / 2 ^ m := hbound
+    _ = (2⁻¹) ^ m := by rw [one_div, inv_pow]
+    _ ≤ (2⁻¹) ^ N := pow_le_pow_of_le_one (by positivity) (by norm_num) hm
+    _ < ε := hN
 
 end Omega.Entropy

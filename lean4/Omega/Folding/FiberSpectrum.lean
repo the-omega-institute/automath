@@ -246,7 +246,13 @@ theorem oddEvenFiber_sum_eq_card (m : Nat) :
   congr 1
   ext x
   simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_union]
-  rcases Nat.even_or_odd (cFiberMult x) with ⟨k, hk⟩ | ⟨k, hk⟩ <;> simp [hk] <;> omega
+  rcases Nat.even_or_odd (cFiberMult x) with ⟨k, hk⟩ | ⟨k, hk⟩
+  · rw [hk]
+    have hkmod : (k + k) % 2 = 0 := by omega
+    simp [hkmod]
+  · rw [hk]
+    have hkmod : (2 * k + 1) % 2 = 1 := by omega
+    simp [hkmod]
 
 end Parity
 

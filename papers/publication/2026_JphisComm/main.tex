@@ -1,0 +1,594 @@
+
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\graphicspath{{generated/}}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\crefname{theorem}{theorem}{theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+\crefname{proposition}{proposition}{propositions}
+\Crefname{proposition}{Proposition}{Propositions}
+\crefname{corollary}{corollary}{corollaries}
+\Crefname{corollary}{Corollary}{Corollaries}
+\crefname{remark}{remark}{remarks}
+\Crefname{remark}{Remark}{Remarks}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{xcolor}
+% \usepackage{orcidlink}
+
+\hypersetup{colorlinks=true,citecolor=blue!60!black,linkcolor=blue!60!black,urlcolor=blue!60!black}
+\setstretch{1.07}
+\setlength{\parskip}{0.38em}
+\setlength{\parindent}{1.25em}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection.}{0.5em}{}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\Var}{\mathrm{Var}}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Two detector-defined shells from stationary Unruh--DeWitt click records in static KMS spacetimes\par}
+\vspace{1.1em}
+\vspace{1.5em}
+{\small Submitted to \emph{Journal of Physics Communications}}\par
+\end{center}
+
+\begin{abstract}
+We show that the full stationary click record of a sampled two-level Unruh--DeWitt detector carries geometric information that is invisible to the transition rate alone. In the ideal one-step dead-time model, the sampled record is a Markov chain on the golden-mean shift, and exact symbolic thermality is realized at the unique threshold $\Gamma_+\Delta\tau=\log\varphi$. In the finite-recovery model, the visible output is a full-support renewal process with strictly increasing hazard; exact symbolic thermality is excluded, but a distinct memory-transition threshold emerges at exact $1$-dependence, where the covariance sequence changes from strictly negative to sign-alternating. Finite recovery approaches the ideal grammar only softly: consecutive-click violations are quadratically suppressed, and the renewal law is universally sub-Poissonian. In a static KMS background, the two thresholds lift to codimension-one hypersurfaces. In the homogeneous spectral-weight regime, both shells reduce to pure lapse level sets satisfying an exact common-amplitude cancellation law. Near a nonextremal Hartle--Hawking horizon, the shell pair furnishes a universal leading-order ratio law for proper distances. Within the same response model, two operating modes of the same hardware yield a self-calibrating inverse principle for static spherical backgrounds. Proofs are collected in the Supplementary Material.
+\end{abstract}
+
+\noindent\textbf{Keywords:} Unruh--DeWitt detector, KMS state, static spacetime, symbolic dynamics, Hawking--Unruh thermality
+
+\section{Introduction}
+
+Transition rates, detailed balance, and Tolman redshift are the standard observables used to characterize Unruh and Hawking thermality \cite{Unruh1976,DeWitt1979,BirDav1982,Takagi1986,CrispinoHiguchiMatsas2008,LoukoSatz2006,LoukoSatz2008}. These quantities capture the local response scale seen by a stationary detector, but they do not exhaust the information carried by a stationary sampled record. Once a detector is read out at regular intervals, its output is a binary stochastic process rather than a single rate parameter. The natural question is then whether record-level structure, beyond the mean transition rate, lifts to geometry in a static KMS background.
+
+This question is related to several active lines of investigation, but distinct from each of them. Repeated measurements of Unruh--DeWitt detectors have recently been analysed as history-dependent measurements on non-replicable systems, and the reliability window of master-equation descriptions has been revisited \cite{PranziniEtAl2024,HanEtAl2025}. In parallel, detector-based formulations of quantum measurements in field theory have sharpened the operational status of detector observables beyond textbook projective schemes \cite{Fewster2020,PranziniKeskiVakkuri2025AQFT}. Another strand uses metrological or distinguishability-based observables to probe background structure \cite{BraunsteinCaves1994,WangEtAl2014Metrology,HaoWu2016Unruh,DuMann2021AdS,FengZhang2022QFI,PercheMartinMartinez2022}. Our focus is more specific. We fix an explicit sampled two-level detector model, keep the full stationary click record, and ask which parts of its statistics become codimension-one geometric selectors in static KMS spacetimes.
+
+Dead time and finite recovery are not artificial mathematical constraints but intrinsic features of any real counting detector. In nuclear and photon counting, dead time has been a central design consideration since the earliest pulse detectors \cite{Muller1973,CantorTeich1975}. Treating the Unruh--DeWitt detector as a dead-time counter therefore links the particle-detector formalism to a well-developed experimental framework. The observables exploited here---grammar, hazard, dependence class---are part of the distributional fingerprint of the sampled process. They carry strictly more information than single-parameter summaries such as Fisher information or mean transition rate, and this places the present work in a different observable layer from the quantum-metrological studies cited above, which extract geometric information from scalar functionals of the detector state rather than from the full stochastic record.
+
+The answer is not a mild refinement of rate thermometry. In the ideal one-step dead-time model, the sampled record has the golden-mean grammar: the word $11$ is forbidden. Exact symbolic thermality then means that the record realizes the Parry measure on that grammar, namely the unique measure of maximal entropy on the golden-mean shift \cite{Parry1964,LindMarcus1995}. This selects an \emph{exact-clock shell}. For finite recovery the hidden detector remains two-state, but the visible record becomes a renewal process with infinite symbolic memory. There the relevant threshold is no longer entropic. At one distinguished rate the sampled record is exact $1$-dependent, and across that threshold the covariance sequence changes phase. This defines the \emph{memory-transition shell}. A central point of the paper is that finite recovery does not simply blur the ideal selector. It creates a second one.
+
+Two further consequences sharpen the shell picture beyond a rephrased Tolman law. First, finite recovery approaches the ideal grammar only in a singular way. Consecutive-click violations are quadratically suppressed in the sampling interval, and fixed finite windows concentrate on the golden-mean admissible set as $\Delta\tau\downarrow0$. Yet exact symbolic thermality remains excluded at every positive sampling interval, because the hazard is strictly increasing. Second, the finite-recovery record is universally antibunched. Its low-frequency spectral density is suppressed, and the asymptotic counting Fano factor is strictly below one throughout the parameter range. These record-level signatures give the memory shell a direct operational meaning in finite counting data.
+
+The geometric content emerges once the local detector rate is inserted. In a static KMS background, the ideal threshold and the memory threshold lift to two detector-defined hypersurfaces. In the homogeneous spectral-weight regime, both become pure lapse level sets, and the shell pair satisfies an exact common-amplitude cancellation law. This yields an amplitude-light shell-pair observable, a universal near-horizon ratio law, and a model-conditional inverse principle in static spherical settings. Outside the homogeneous regime, the same shell pair obeys a spectral-transport identity, so that deviations from the homogeneous ratio law acquire a definite interpretation in terms of local spectral-weight variation.
+
+The scope is deliberately controlled. We work with a single stationary worldline, a sampled two-level detector, weak coupling, discrete readout step $\Delta\tau$, and an exponential finite-recovery rule. The resulting shells are detector-defined hypersurfaces, not detector-independent invariants of the background. The inverse statements are likewise conditional on the response model and do not claim generic metric reconstruction. We also distinguish the present use of Tolman scaling in a fixed detector model from stronger notions of local thermal equilibrium in curved spacetime \cite{BuchholzSchlemmer2007,Solveen2012,BuchholzSolveen2013,GranseePinamontiVerch2017}. Finally, detailed balance is often used as a thermal diagnostic, but even this criterion can fail to characterize detector thermality once the detector structure is enlarged \cite{LimaEtAl2023Qudit}, which further motivates examining the full sampled record directly.
+
+For ease of reference, the main claims may be summarized as follows.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
+\item Ideal dead time yields a golden-mean Markov law and a unique exact-clock threshold $\Gamma_+\Delta\tau=\log\varphi$.
+\item Finite recovery yields a full-support renewal process with strictly increasing hazard, excludes exact symbolic thermality, and produces a second shell at the exact $1$-dependence threshold $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$.
+\item Finite recovery also has two robust operational signatures beyond the shell threshold itself: grammar violations are quadratically rare for small $\Delta\tau$, and the stationary record is strictly sub-Poissonian.
+\item In the homogeneous spectral-weight regime the shell pair is governed by a common-amplitude cancellation law and a detector-controlled ordering law; outside that regime it obeys an exact spectral-transport identity.
+\item Near a nonextremal Hartle--Hawking horizon the shell pair defines a universal hierarchy of stretched-horizon scales, and in static spherical settings it yields model-conditional inverse information.
+\end{enumerate}
+
+\section{Operational setting and record-level observables}\label{sec:operational}
+
+We consider a two-level Unruh--DeWitt detector sampled at proper-time intervals of length $\Delta\tau$ along a stationary worldline. The visible output is a stationary binary process
+\[
+A_0,A_1,A_2,\dots \in \{0,1\},
+\]
+where $A_n=1$ denotes a click in the $n$th sampling interval. Compressing this record to the empirical click frequency recovers only the one-point observable
+\[
+\widehat\rho_N=\frac{1}{N}\sum_{n=0}^{N-1}A_n.
+\]
+The full record, however, carries more. In particular, one may ask:
+\begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.0em,itemsep=0.25em]
+\item what words belong to the support of the stationary law;
+\item how the zero-run lengths between clicks are distributed;
+\item whether the click hazard after a long run of zeros remembers the run length;
+\item how the low-lag covariance profile behaves;
+\item what counting noise remains after coarse time averaging.
+\end{enumerate}
+These observables are invisible to a rate-only description, yet they are precisely the quantities that control the shell geometry developed below.
+
+The two detector regimes studied in this work are illustrated schematically in \cref{fig:scheme}. The ideal model imposes a hard symbolic grammar, while finite recovery produces a full-support renewal law. The thresholds associated with the two regimes are therefore intrinsically different: one is entropic and grammar-based, the other is correlation-based.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw, rounded corners=4pt, align=center, fill=blue!4, minimum width=4.4cm, minimum height=1.5cm},
+  widebox/.style={draw, rounded corners=4pt, align=center, fill=green!6, minimum width=6.3cm, minimum height=1.55cm},
+  outbox/.style={draw, rounded corners=4pt, align=center, fill=orange!8, minimum width=3.2cm, minimum height=1.15cm},
+  arr/.style={-Latex, thick}
+]
+\node[box] (ideal) at (0,1.8) {Ideal one-step dead time\\[2pt] golden-mean grammar\\[2pt] exact symbolic thermality at $\Gamma_+\Delta\tau=\log\varphi$};
+\node[box] (finite) at (6.2,1.8) {Finite recovery\\[2pt] renewal law with increasing hazard\\[2pt] exact $1$-dependence at $\Gamma_+=\Gamma_c$};
+\node[widebox] (kms) at (3.1,-0.2) {Static KMS response\\[2pt] $\displaystyle \Gamma_+(x,\Omega)=\lambda_c^2\,
+\frac{\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1}$};
+\node[outbox] (phi) at (0,-2.1) {$\Sigma_{\varphi}$\\ exact-clock shell};
+\node[outbox] (mem) at (6.2,-2.1) {$\Sigma_{\mathrm{mem}}$\\ memory shell};
+\draw[arr] (ideal.south) -- ($(kms.north west)+(0.8,0)$);
+\draw[arr] (finite.south) -- ($(kms.north east)+(-0.8,0)$);
+\draw[arr] ($(kms.south west)+(1.0,0)$) -- (phi.north);
+\draw[arr] ($(kms.south east)+(-1.0,0)$) -- (mem.north);
+\end{tikzpicture}
+\caption{Two record-level thresholds and their lift to shell geometry. The exact-clock selector is tied to an entropy-maximizing grammar law in the ideal model, while the memory selector is tied to exact $1$-dependence in the finite-recovery renewal law. In a static KMS background, both thresholds become codimension-one hypersurfaces.}
+\label{fig:scheme}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Record-level observables that distinguish the two detector regimes.}
+\label{tab:signatures}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.23\textwidth} >{\raggedright\arraybackslash}p{0.23\textwidth} >{\raggedright\arraybackslash}p{0.21\textwidth}}
+\toprule
+Regime & Output law & Distinguished threshold & Finite-record signature \\
+\midrule
+Ideal dead time & Markov chain on the golden-mean shift; $11$ forbidden & $\Gamma_+\Delta\tau=\log\varphi$ & No consecutive clicks; Parry law at threshold \\
+Finite recovery & Full-support renewal process with infinite symbolic memory & $\Gamma_+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$ & Exact $1$-dependence at threshold; covariance phase change; sub-Poisson counting \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Sampled detector laws and operational signatures}\label{sec:records}
+
+\subsection{Ideal one-step dead time and the exact-clock threshold}
+
+In the ideal dead-time model, a click suppresses the next one-step interval. Writing
+\begin{equation}\label{eq:p-beta-main}
+p_\beta=e^{-\Gamma_+\Delta\tau}, \qquad q_\beta=1-p_\beta,
+\end{equation}
+the sampled output is the stationary Markov chain on the golden-mean shift with transition matrix
+\begin{equation}\label{eq:golden-mean-main}
+P_\beta=
+\begin{pmatrix}
+ p_\beta & 1-p_\beta \\
+ 1 & 0
+\end{pmatrix}.
+\end{equation}
+The reference law on that shift is the Parry measure, namely the unique measure of maximal entropy compatible with the grammar $11\notin\operatorname{supp}\mu$ \cite{Parry1964,LindMarcus1995}.
+
+\begin{proposition}\label{prop:ideal-main}
+For the ideal dead-time detector, the sampled output realizes exact symbolic thermality if and only if
+\begin{equation}\label{eq:parry-threshold-main}
+p_\beta=\varphi^{-1}
+\quad\Longleftrightarrow\quad
+\Gamma_+\Delta\tau=\log\varphi,
+\end{equation}
+where $\varphi=(1+\sqrt5)/2$ is the golden ratio. This threshold defines the exact-clock selector.
+\end{proposition}
+
+The threshold in Proposition~\ref{prop:ideal-main} should not be confused with a generic isotherm. It identifies the unique point at which a sampled detector record realizes the zero-jitter, maximum-entropy law compatible with the dead-time grammar. The resulting shell will therefore depend on the detector gap and on the sampling design even before curved-spacetime geometry is introduced.
+
+\subsection{Finite recovery, renewal structure, and exact $1$-dependence}
+
+A physically more realistic model allows the detector to recover over a finite time rather than instantaneously. Let $\kappa_{\mathrm r}>0$ be the recovery rate. Define
+\begin{equation}\label{eq:p-c-main}
+p=e^{-\Gamma\Delta\tau}, \qquad c=e^{-\kappa_{\mathrm r}\Delta\tau},
+\end{equation}
+and
+\begin{equation}\label{eq:a-b-main}
+a=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}\bigl(1-e^{-\Gamma(\Delta\tau-s)}\bigr)\,ds,
+\qquad
+b=\int_0^{\Delta\tau}\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}s}e^{-\Gamma(\Delta\tau-s)}\,ds.
+\end{equation}
+When $\kappa_{\mathrm r}\neq\Gamma$, these integrals evaluate to
+$a=[\kappa_{\mathrm r}(1-p)-\Gamma(1-c)]/(\kappa_{\mathrm r}-\Gamma)$
+and
+$b=\kappa_{\mathrm r}(p-c)/(\kappa_{\mathrm r}-\Gamma)$.
+The visible click record is then a renewal process whose zero-run lengths are i.i.d.
+
+\begin{proposition}\label{prop:recovery-main}
+For the finite-recovery detector, the zero-run length $G$ between successive clicks has law
+\begin{equation}\label{eq:gap-main}
+\PP(G=k)=g_k=e_D^{\top}T_0^kT_1\mathbf 1,
+\qquad k\ge0,
+\end{equation}
+with
+\begin{equation}\label{eq:t0-t1-main}
+T_0=
+\begin{pmatrix}
+ p & 0 \\
+ b & c
+\end{pmatrix},
+\qquad
+T_1=
+\begin{pmatrix}
+ 0 & 1-p \\
+ 0 & a
+\end{pmatrix}.
+\end{equation}
+If $\kappa_{\mathrm r}\neq\Gamma$, then
+\begin{equation}\label{eq:gap-closed-main}
+g_k=
+\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}{\kappa_{\mathrm r}-\Gamma},
+\end{equation}
+and the click hazard after $k$ zeros is
+\begin{equation}\label{eq:hazard-main}
+h_k=
+\frac{\kappa_{\mathrm r}(1-p)p^k-\Gamma(1-c)c^k}
+     {\kappa_{\mathrm r}p^k-\Gamma c^k},
+\qquad k\ge0.
+\end{equation}
+The hazard is strictly increasing, so the visible process is not an $r$-step Markov chain for any finite $r$.
+
+Let $\rho=\PP(A_0=1)$ and
+\begin{equation}\label{eq:lambda-main}
+\lambda=
+\frac{\kappa_{\mathrm r}e^{-\kappa_{\mathrm r}\Delta\tau}-\Gamma e^{-\Gamma\Delta\tau}}
+{\kappa_{\mathrm r}-\Gamma}.
+\end{equation}
+Then
+\begin{equation}\label{eq:cov-main}
+\operatorname{Cov}(A_0,A_n)=\rho(a-\rho)\lambda^{n-1},\qquad n\ge1.
+\end{equation}
+Consequently there is a unique critical rate $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)>0$ determined by
+\begin{equation}\label{eq:gamma-c-main}
+\Delta\tau=
+\frac{\log\kappa_{\mathrm r}-\log\Gamma_c}{\kappa_{\mathrm r}-\Gamma_c},
+\end{equation}
+such that the sampled record is exact $1$-dependent at $\Gamma=\Gamma_c$. Below $\Gamma_c$ all covariances are negative; above $\Gamma_c$ they alternate in sign.
+\end{proposition}
+
+The memory-transition threshold is therefore not a softened version of the ideal one. It is a different record-level transition inside a full-support renewal class. Since the Bernoulli benchmark in that class would require constant hazard, exact symbolic thermality is excluded. \Cref{fig:hazard-cov} illustrates both the strictly increasing hazard and the covariance phase change across $\Gamma_c$.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_hazard_cov.pdf}
+\caption{Record-level signatures of the finite-recovery detector with $\kappa_{\mathrm r}=5$, $\Delta\tau=0.3$ (so $\Gamma_c\approx2.09$). (a)~Click hazard $h_k$ after $k$ consecutive zeros. All three curves are strictly increasing, confirming infinite symbolic memory. (b)~Lag-$n$ covariance. Below $\Gamma_c$ all covariances are negative; at $\Gamma_c$ only the lag-$1$ covariance is nonzero; above $\Gamma_c$ the signs alternate.}
+\label{fig:hazard-cov}
+\end{figure}
+
+\begin{corollary}\label{cor:no-exact-main}
+No finite-recovery detector with positive parameters $(\Gamma,\kappa_{\mathrm r},\Delta\tau)$ realizes exact symbolic thermality within the full-support renewal class.
+\end{corollary}
+
+\subsection{Soft approach to the ideal grammar}
+
+The obstruction in Corollary~\ref{cor:no-exact-main} is exact, but the finite-recovery record still approaches the ideal grammar in a controlled small-$\Delta\tau$ regime. This is the sense in which finite recovery yields a \emph{soft} dead time.
+
+\begin{proposition}\label{prop:soft-main}
+In the finite-recovery model,
+\begin{equation}\label{eq:soft-main}
+\PP(A_{n+1}=1\mid A_n=1)=a
+=\frac12\,\kappa_{\mathrm r}\Gamma(\Delta\tau)^2+O((\Delta\tau)^3)
+\qquad (\Delta\tau\downarrow0).
+\end{equation}
+For a fixed window length $m\ge2$, let
+\[
+V_m=\{(a_0,\dots,a_{m-1})\in\{0,1\}^m:\exists\,k\le m-2,\ a_ka_{k+1}=11\}.
+\]
+Then
+\begin{equation}\label{eq:window-main}
+\PP\!\bigl((A_0,\dots,A_{m-1})\in V_m\bigr)
+\le
+\frac12\,\kappa_{\mathrm r}\Gamma(\Delta\tau)^2\,(m-1)
++O\!\bigl(m(\Delta\tau)^3\bigr).
+\end{equation}
+Thus, for every fixed $m$, the finite-recovery record concentrates on the golden-mean admissible set as $\Delta\tau\downarrow0$.
+\end{proposition}
+
+Proposition~\ref{prop:soft-main} explains why the ideal grammar is a singular but physically meaningful limit. At fixed finite window length, inadmissible words become quadratically rare. Yet exact symbolic thermality is still excluded at any positive sampling interval because the hazard remains strictly increasing and hence genuinely remembers the zero-run length.
+
+\subsection{Spectral density and universal antibunching}
+
+The finite-recovery renewal law has a second operational consequence, independent of the shell geometry but directly relevant to finite counting data. Define the spectral density
+\[
+f(\theta)=\rho(1-\rho)+2\sum_{n\ge1}\operatorname{Cov}(A_0,A_n)\cos(n\theta),
+\qquad \theta\in[-\pi,\pi].
+\]
+Since the covariance sequence is explicit, so are the low-frequency noise properties.
+
+\begin{proposition}\label{prop:spectrum-main}
+For the stationary finite-recovery record,
+\begin{equation}\label{eq:spectrum-main}
+f(\theta)=
+\rho(1-\rho)
++
+2\rho(a-\rho)\,
+\frac{\cos\theta-\lambda}{1-2\lambda\cos\theta+\lambda^2},
+\end{equation}
+and $f$ is strictly increasing on $[0,\pi]$. If
+\[
+N_N=\sum_{n=0}^{N-1}A_n,
+\]
+then
+\begin{equation}\label{eq:fano-main}
+\lim_{N\to\infty}\frac{\Var(N_N)}{\EE N_N}
+=
+1-\rho+\frac{2(a-\rho)}{1-\lambda}
+<1.
+\end{equation}
+Hence the finite-recovery record is strictly sub-Poissonian throughout the parameter range.
+\end{proposition}
+
+Operationally, the memory shell can therefore be located by more than the sign of one covariance. As one scans through stationary observers, the lag profile changes phase at exact $1$-dependence, while the whole renewal class remains antibunched and low-frequency suppressed. This is a robust signature in finite counting data and not merely a formal property of an idealized symbolic process. \Cref{fig:spectrum-fano} displays both the spectral density and the Fano factor across the parameter range.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_spectrum_fano.pdf}
+\caption{Universal antibunching signatures ($\kappa_{\mathrm r}=5$, $\Delta\tau=0.3$). (a)~Spectral density $f(\theta)$ for several values of $\Gamma\Delta\tau$. Every curve is strictly increasing on $[0,\pi]$, confirming low-frequency suppression. (b)~Asymptotic Fano factor $F$ as a function of $\Gamma\Delta\tau$ for several values of $\kappa_{\mathrm r}\Delta\tau$. The Poisson level $F=1$ (dashed) is never reached: the finite-recovery record is strictly sub-Poissonian throughout the parameter range.}
+\label{fig:spectrum-fano}
+\end{figure}
+
+\section{Static KMS backgrounds and shell equations}\label{sec:kms-shells}
+
+Having established the record-level thresholds, we now embed the detector in a static KMS background and derive the corresponding shell equations.
+
+Let $N(x)$ be the lapse function of a static spacetime and assume the field is in a global $\beta_\infty$-KMS state for Killing time. Along a static worldline at position $x$, Tolman scaling gives
+\begin{equation}\label{eq:tolman-main}
+\beta_{\mathrm{loc}}(x)=\beta_\infty N(x).
+\end{equation}
+At weak coupling, the excitation rate of a detector with energy gap $\Omega$ takes the Planck form
+\begin{equation}\label{eq:kms-rate-main}
+\Gamma_+(x,\Omega)=
+\lambda_c^2\,
+\frac{\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1},
+\end{equation}
+where $\mathcal S_x(\Omega)>0$ denotes the local commutator spectral weight \cite{KayWald1991}. This spectral weight is an input to the response model. The homogeneous regime considered below is an explicit idealization in which its spatial variation is negligible over the static region of interest.
+
+\begin{theorem}\label{thm:shells-general-main}
+Fix a detector design $(\Omega,\lambda_c,\Delta\tau,\kappa_{\mathrm r})$ in a static KMS background.
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em,itemsep=0.25em]
+\item The ideal dead-time detector realizes exact symbolic thermality exactly on the locus
+\begin{equation}\label{eq:shell-phi-general-main}
+\Sigma_{\varphi}=
+\left\{x:
+\frac{\lambda_c^2\mathcal S_x(\Omega)\Delta\tau}{e^{\beta_\infty N(x)\Omega}-1}=\log\varphi
+\right\}.
+\end{equation}
+This is the exact-clock shell.
+
+\item The finite-recovery detector reaches the memory-transition point exactly on the locus
+\begin{equation}\label{eq:shell-mem-general-main}
+\Sigma_{\mathrm{mem}}=
+\left\{x:
+\frac{\lambda_c^2\mathcal S_x(\Omega)}{e^{\beta_\infty N(x)\Omega}-1}
+=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)
+\right\}.
+\end{equation}
+This is the memory-transition shell. On $\Sigma_{\mathrm{mem}}$, the sampled record is exact $1$-dependent.
+\end{enumerate}
+\end{theorem}
+
+Theorem~\ref{thm:shells-general-main} states the shell equations in their natural response-model form. The shells exist without any homogeneity assumption. The homogeneous spectral-weight regime then collapses both equations to pure lapse conditions.
+
+\begin{corollary}\label{cor:homogeneous-main}
+Assume that $\mathcal S_x(\Omega)\equiv\mathcal S(\Omega)$ on the region under study. Then both shells are pure lapse level sets. Their associated local inverse temperatures are
+\begin{equation}\label{eq:betaphi-betamem-main}
+\beta_{\varphi}=
+\frac{1}{\Omega}
+\log\!\left(1+\frac{\lambda_c^2\mathcal S(\Omega)\Delta\tau}{\log\varphi}\right),
+\qquad
+\beta_{\mathrm{mem}}=
+\frac{1}{\Omega}
+\log\!\left(1+\frac{\lambda_c^2\mathcal S(\Omega)}
+{\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}\right),
+\end{equation}
+so that
+\begin{equation}\label{eq:lapse-level-main}
+\Sigma_{\varphi}=\{x:\beta_{\mathrm{loc}}(x)=\beta_{\varphi}\},
+\qquad
+\Sigma_{\mathrm{mem}}=\{x:\beta_{\mathrm{loc}}(x)=\beta_{\mathrm{mem}}\}.
+\end{equation}
+\end{corollary}
+
+In this regime, the exact-clock shell is a Tolman isotherm selected by a grammar law, while the memory shell is a Tolman isotherm selected by a dependence law. The same local response scale therefore supports two inequivalent detector-selected hypersurfaces. \Cref{fig:shell-radii} illustrates the two shell lapse values and their proper-distance ratio in Schwarzschild.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_shell_radii.pdf}
+\caption{Shell geometry in Schwarzschild under the homogeneous spectral-weight regime ($r_{\mathrm s}=2M=1$, $\beta_\infty=4\pi$, $\Omega=1$, $\lambda_c^2\mathcal S=2$, $\kappa_{\mathrm r}=5$). (a)~Lapse values $N_\varphi$ (exact-clock) and $N_{\mathrm{mem}}$ (memory) as functions of $\kappa_{\mathrm r}\Delta\tau$. Both shells lie close to the horizon, with $N_\varphi>N_{\mathrm{mem}}$ throughout, so that the memory shell is consistently closer. (b)~Proper-distance ratio $\rho_\varphi/\rho_{\mathrm{mem}}$ (solid) compared with the leading-order prediction of Theorem~\ref{thm:horizon-main} (dashed). The ratio diverges as $\kappa_{\mathrm r}\Delta\tau\to0$, confirming the hierarchy law~\eqref{eq:fast-ratio-main}.}
+\label{fig:shell-radii}
+\end{figure}
+
+\begin{proposition}\label{prop:order-main}
+Assume the homogeneous spectral-weight regime and define
+\[
+\Gamma_{\varphi}=\frac{\log\varphi}{\Delta\tau}.
+\]
+Let $N_{\varphi}$ and $N_{\mathrm{mem}}$ denote the lapse values of $\Sigma_{\varphi}$ and $\Sigma_{\mathrm{mem}}$. Then
+\begin{equation}\label{eq:order-main}
+N_{\varphi}<N_{\mathrm{mem}}
+\iff
+\Gamma_{\varphi}>\Gamma_c(\kappa_{\mathrm r},\Delta\tau),
+\end{equation}
+with equality if and only if $\Gamma_{\varphi}=\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. Thus the shell ordering is detector controlled.
+\end{proposition}
+
+\section{Shell-pair observables and inverse content}\label{sec:inverse}
+
+We now examine the joint observables carried by the shell pair and their inverse content.
+
+\subsection{Common-amplitude cancellation and spectral transport}
+
+The most useful shell-pair observable arises when both shells are generated with the same hardware design.
+
+\begin{theorem}\label{thm:ratio-main}
+Assume the homogeneous spectral-weight regime and let a fixed detector design generate an exact-clock shell at $r_{\varphi}$ and a memory-transition shell at $r_{\mathrm{mem}}$ in a static spherically symmetric background with lapse $N(r)$. Then
+\begin{equation}\label{eq:ratio-main}
+\frac{e^{\beta_\infty\Omega N(r_{\varphi})}-1}
+     {e^{\beta_\infty\Omega N(r_{\mathrm{mem}})}-1}
+=
+\frac{\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\log\varphi}.
+\end{equation}
+The common multiplicative response amplitude $\lambda_c^2\mathcal S(\Omega)$ cancels exactly.
+\end{theorem}
+
+The cancellation in Theorem~\ref{thm:ratio-main} is precise but not detector free. The remaining right-hand side still depends on the detector gap, the sampling step, and the recovery rate through $\Gamma_c(\kappa_{\mathrm r},\Delta\tau)$. What cancels is the unknown common response amplitude---precisely the form of cancellation needed for inverse use with shared hardware.
+
+The homogeneous ratio law is the simplest specialization of a more general identity.
+
+\begin{corollary}\label{cor:spectral-transport-main}
+Under the hypotheses of Theorem~\ref{thm:shells-general-main}, let $x_{\varphi}$ and $x_{\mathrm{mem}}$ be points on the exact-clock and memory-transition shells for the same detector design. Then
+\begin{equation}\label{eq:spectral-transport-main}
+\frac{e^{\beta_\infty\Omega N(x_{\varphi})}-1}
+     {e^{\beta_\infty\Omega N(x_{\mathrm{mem}})}-1}
+=
+\frac{\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\log\varphi}
+\frac{\mathcal S_{x_{\varphi}}(\Omega)}{\mathcal S_{x_{\mathrm{mem}}}(\Omega)}.
+\end{equation}
+Hence deviations from the homogeneous ratio law directly measure spectral transport between the two shell points.
+\end{corollary}
+
+\subsection{Near-horizon universal hierarchy}
+
+The shell-pair ratio becomes especially sharp near a nonextremal Hartle--Hawking horizon.
+
+\begin{theorem}\label{thm:horizon-main}
+Assume the hypotheses of Theorem~\ref{thm:ratio-main}. Suppose, in addition, that the static region ends at a nonextremal Hartle--Hawking horizon, so that $\beta_\infty=2\pi/\kappa_{\mathrm H}$ and
+\begin{equation}\label{eq:horizon-main}
+N(\rho)=\kappa_{\mathrm H}\rho+O(\rho^3)
+\end{equation}
+as the proper distance $\rho\downarrow0$. Then the shell distances satisfy
+\begin{equation}\label{eq:rho-ratio-main}
+\frac{\rho_{\varphi}}{\rho_{\mathrm{mem}}}
+=
+\frac{\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\log\varphi}
+\Bigl(1+O(\rho_{\varphi}+\rho_{\mathrm{mem}})\Bigr).
+\end{equation}
+In Schwarzschild, if $A_H=16\pi M^2$ is the horizon area and $A_{\varphi}$ and $A_{\mathrm{mem}}$ are the areas of the shell spheres, then
+\begin{equation}\label{eq:area-ratio-main}
+\frac{A_{\varphi}-A_H}{A_{\mathrm{mem}}-A_H}
+=
+\left[
+\frac{\Delta\tau\,\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}{\log\varphi}
+\right]^2
+\Bigl(1+O(\rho_{\varphi}+\rho_{\mathrm{mem}})\Bigr).
+\end{equation}
+\end{theorem}
+
+Theorem~\ref{thm:horizon-main} shows that the shell pair acts as a detector-dependent stretched-horizon ruler. One shell is defined by exact symbolic thermality, the other by exact $1$-dependence, yet their near-horizon separation is governed by a universal leading-order ratio that is independent of the common response amplitude.
+
+A particularly informative regime is the fast-sampling limit. Let $s=\kappa_{\mathrm r}\Delta\tau\downarrow0$ and $L=\log(1/s)$. Then
+\begin{equation}\label{eq:fast-sampling-main}
+\Gamma_c(\kappa_{\mathrm r},\Delta\tau)
+=
+\frac{L+\log L+o(1)}{\Delta\tau},
+\end{equation}
+so that
+\begin{equation}\label{eq:fast-ratio-main}
+\frac{\rho_{\mathrm{mem}}}{\rho_{\varphi}}
+\sim
+\frac{\log\varphi}{L+\log L}
+\longrightarrow0.
+\end{equation}
+Thus the memory-transition shell collapses toward the horizon parametrically faster than the exact-clock shell. The shell pair therefore resolves a genuine hierarchy of stretched-horizon scales rather than two nearby realizations of the same thermal profile.
+
+\subsection{Static spherical inversion}
+
+The shell pair also carries direct inverse content in static spherical settings.
+
+\begin{proposition}\label{prop:schw-main}
+Assume the homogeneous spectral-weight regime and define the detector constants
+\begin{equation}\label{eq:beta-constants-main}
+\beta_{\varphi}(D)=
+\frac{1}{\Omega}
+\log\!\left(1+\frac{\lambda_c^2\mathcal S(\Omega)\Delta\tau}{\log\varphi}\right),
+\qquad
+\beta_{\mathrm{mem}}(D)=
+\frac{1}{\Omega}
+\log\!\left(1+\frac{\lambda_c^2\mathcal S(\Omega)}
+{\Gamma_c(\kappa_{\mathrm r},\Delta\tau)}\right).
+\end{equation}
+If the two shells generated by the same detector design occur at distinct radii $r_{\varphi}\neq r_{\mathrm{mem}}$ in Schwarzschild, then
+\begin{equation}\label{eq:beta-infty-main}
+\beta_\infty^2=
+\frac{\beta_{\varphi}(D)^2r_{\varphi}-\beta_{\mathrm{mem}}(D)^2r_{\mathrm{mem}}}
+{r_{\varphi}-r_{\mathrm{mem}}},
+\end{equation}
+and
+\begin{equation}\label{eq:mass-main}
+M=
+\frac{r_{\varphi}r_{\mathrm{mem}}\bigl(\beta_{\varphi}(D)^2-\beta_{\mathrm{mem}}(D)^2\bigr)}
+{2\bigl(\beta_{\varphi}(D)^2r_{\varphi}-\beta_{\mathrm{mem}}(D)^2r_{\mathrm{mem}}\bigr)}.
+\end{equation}
+\end{proposition}
+
+Proposition~\ref{prop:schw-main} is exact algebra within the response model. Its significance is not that it bypasses detector design, but that two record-defined shell locations already determine the global redshift scale once the design is fixed.
+
+The same logic extends beyond Schwarzschild in a local, self-calibrating form.
+
+\begin{theorem}\label{thm:two-mode-main}
+Let $\Theta\subset\RR^2$ parametrize a $C^1$ family of static spherically symmetric backgrounds, with parameter $\theta\in\Theta$ determining both the lapse $N(r;\theta)$ and the global inverse temperature $\beta_\infty(\theta)$. Assume the homogeneous spectral-weight regime at fixed gap $\Omega$ and fixed hardware prefactor $\lambda_c^2\mathcal S(\Omega)$.
+
+Fix one detector hardware design $(\Omega,\lambda_c)$ and operate it in two modes
+\[
+D_m=(\Omega,\lambda_c,\Delta\tau_m,\kappa_{{\mathrm r},m}),
+\qquad m=1,2,
+\]
+with observed shell radii $r_{\varphi,m}$ and $r_{{\mathrm{mem}},m}$. Define the known constants
+\begin{equation}\label{eq:self-calibrating-constants-main}
+C_m=\frac{\Delta\tau_m\,\Gamma_c(\kappa_{{\mathrm r},m},\Delta\tau_m)}{\log\varphi},
+\qquad m=1,2,
+\end{equation}
+and the shell-ratio functions
+\begin{equation}\label{eq:self-calibrating-functions-main}
+F_m(\theta)=
+\frac{e^{\beta_\infty(\theta)\Omega N(r_{\varphi,m};\theta)}-1}
+     {e^{\beta_\infty(\theta)\Omega N(r_{{\mathrm{mem}},m};\theta)}-1}
+-C_m.
+\end{equation}
+If $\theta_*\in\Theta$ satisfies $F_1(\theta_*)=F_2(\theta_*)=0$ and
+\begin{equation}\label{eq:self-calibrating-jacobian-main}
+\det D(F_1,F_2)(\theta_*)\neq0,
+\end{equation}
+then the two shell pairs determine $\theta$ locally uniquely near $\theta_*$. In particular, the reconstruction is self calibrating: no prior knowledge of $\lambda_c^2\mathcal S(\Omega)$ is required.
+\end{theorem}
+
+\begin{remark}\label{rem:jacobian-main}
+The Jacobian condition~\eqref{eq:self-calibrating-jacobian-main} fails precisely when the two operating modes generate shell pairs with the same ratio $C_1=C_2$. Since $C_m$ depends on $(\Delta\tau_m,\kappa_{{\mathrm r},m})$, this is a codimension-one condition in the mode parameter space and is generically avoided by choosing modes with distinct sampling intervals.
+\end{remark}
+
+\subsection{Schwarzschild worked example}\label{subsec:worked-example}
+
+As a concrete verification of the preceding formulas, \cref{tab:worked} presents a worked example in the Schwarzschild background with $r_{\mathrm s}=2M=1$ (so $\beta_\infty=4\pi$), $\Omega=1$, and $\lambda_c^2\mathcal S=2$. Two detector modes $D_1=(\Omega,\lambda_c,0.5,\,8.0)$ and $D_2=(\Omega,\lambda_c,1.0,\,4.0)$ are tabulated. For each mode, the critical rate $\Gamma_c$ is obtained from~\eqref{eq:gamma-c-main} and the shell radii from the lapse conditions in \cref{cor:homogeneous-main}. The common-amplitude ratio $C=\Delta\tau\Gamma_c/\log\varphi$ is verified to agree with the left-hand side of~\eqref{eq:ratio-main}. The inverse formulas of \cref{prop:schw-main} are then applied to the $D_1$ shell pair to recover $\beta_\infty$ and $M$ to full numerical precision.
+
+\input{generated/tab_worked_example}
+
+\section{Discussion}\label{sec:discussion}
+
+The central result of this work is that stationary detector thermality is richer at the level of full sampled records than at the level of rates. In the model studied here, that extra structure organizes itself into two inequivalent codimension-one selectors in a static KMS background. The exact-clock shell is singled out by a grammar law, namely realization of the Parry measure in the ideal dead-time model. The memory shell is singled out by a dependence law, namely exact $1$-dependence in the finite-recovery renewal model. The distinction is not semantic. It marks two different statistical universality classes of sampled thermality.
+
+Two observations sharpen this picture. The first is the singular soft-dead-time limit. Finite recovery approximates the ideal grammar on fixed finite windows with explicit $O((\Delta\tau)^2)$ control. However, exact symbolic thermality is never reached at any positive sampling interval, because the hazard retains monotone memory. The second is universal antibunching. The finite-recovery record is strictly sub-Poissonian throughout the parameter range, with suppressed low-frequency noise. The memory shell is therefore not merely a point where one covariance changes sign. It sits inside a broader renewal class with definite counting statistics.
+
+On the geometric side, the most robust object is the shell pair rather than either shell in isolation. In the homogeneous spectral-weight regime, the pair is governed by exact common-amplitude cancellation and therefore yields a detector-dependent but amplitude-light observable. Near a nonextremal horizon, the ratio law produces a universal hierarchy of stretched-horizon scales. In static spherical settings, it yields local inverse content. Outside the homogeneous regime, the same shell pair continues to be meaningful through the spectral-transport identity. Inhomogeneous response does not invalidate the construction; rather, it changes the interpretation of shell-ratio data from pure lapse information to mixed lapse and spectral-weight information.
+
+Several structural features of the construction are expected to persist beyond the specific model studied here. The renewal structure depends only on the fact that a click deterministically resets the hidden state, so it holds for any recovery kernel, not only the exponential one. Consequently, the existence of a memory-transition shell---the locus where the nontrivial eigenvalue of the hidden-state transition matrix vanishes---is a generic feature of two-state renewal detectors with a monotone-hazard gap law. What changes with the recovery kernel is the quantitative location of $\Gamma_c$ and the detailed hazard profile. The qualitative obstruction to exact symbolic thermality---namely the strictly increasing hazard---holds whenever the recovery density is not a Dirac mass. On the geometric side, the spectral-transport identity (\cref{cor:spectral-transport-main}) is exact and does not rely on the homogeneous spectral-weight assumption. In particular, greybody corrections in Schwarzschild enter through a calculable spectral-weight ratio $\mathcal S_{x_\varphi}(\Omega)/\mathcal S_{x_{\mathrm{mem}}}(\Omega)$ rather than as an uncontrolled perturbation.
+
+The limitations are equally clear. We have fixed a weak-coupling response model, a two-level detector, a single stationary worldline, discrete readout, and exponential recovery. Switching effects, nonexponential recovery, paralyzable counting models, multi-level detectors, greybody corrections, backreaction, and full finite-sample inference are outside the present scope \cite{Carmichael1993Book,WisemanMilburn2009}. The shell equations should therefore be read as exact within the stated detector-response class and as a template for more elaborate detector models rather than as universal geometric invariants.
+
+Within that scope, however, the construction is internally complete. The full stationary click record supplies two codimension-one shells, a soft but singular route from finite recovery to the ideal grammar, universal antibunching in the renewal regime, an amplitude-cancelling shell-pair ruler, a near-horizon hierarchy law, and a model-conditional inverse principle. Taken together, these results demonstrate a concrete gravity-facing application of full-record detector statistics in quantum field theory in curved spacetime.
+
+\section*{Acknowledgements}
+
+[Removed for double-blind review.]
+
+\section*{Funding}
+
+No specific funding was received for this work.
+
+\section*{Data availability}
+
+No new data were created or analysed in this study. The article is theoretical, and all calculations needed to reproduce the reported results are contained in the manuscript and the Supplementary Material. The scripts generating the figures and tables are available from the authors upon request.
+
+\input{references.tex}
+
+\end{document}

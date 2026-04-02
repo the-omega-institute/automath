@@ -1,0 +1,52 @@
+\section{An information ledger and a dual-budget addressing capacity bound}
+\label{sec:ledger}
+
+\subsection{An exact information ledger identity}
+Let \(\Delta(\Om_m)\) and \(\Delta(X_m)\) denote the probability simplices on \(\Om_m\) and \(X_m\), respectively. Define the pushforward operator
+\[
+P_m := \Fold_m\push : \Delta(\Om_m)\to \Delta(X_m),
+\]
+and the fiber-uniform lifting kernel \(Q_m:\Delta(X_m)\to \Delta(\Om_m)\) by
+\begin{equation}\label{eq:Qm}
+(Q_m \pi)(a) := \frac{\pi(\Fold_m(a))}{d_m(\Fold_m(a))},\qquad a\in \Om_m.
+\end{equation}
+
+\begin{theorem}[Information ledger]\label{thm:ledger}
+For any \(\mu\in \Delta(\Om_m)\), let \(\pi:=P_m\mu\) and \(\tilde \mu := Q_m\pi\). Then the Shannon entropy satisfies the exact identity
+\begin{equation}\label{eq:ledger}
+H(\mu)=H(\pi)+\EE_{\pi}[\log d_m(X)]-\KL(\mu\|\tilde \mu).
+\end{equation}
+\end{theorem}
+
+\begin{remark}
+Equation \eqref{eq:ledger} decomposes microscopic uncertainty into (i) visible entropy on the stable layer, (ii) a fiber-volume term, and (iii) a residual microscopic mismatch measured by KL divergence. No approximation is involved.
+\end{remark}
+
+\subsection{A dual-budget addressing capacity upper bound}
+Under an ``address-before-value'' convention, let \(T_m\) denote a synchronization time and let \(\nu_m\) be a corresponding maximal-entropy measure. Let \(\nu_{u,m}\) be a temperature-gated pushforward distribution on the length-\(m\) address space, and define the order-2 collision probability
+\[
+\Col_u(m):=\sum_x \nu_{u,m}(x)^2.
+\]
+For \(N\) independent objects, let \(\mathrm{Fail}_{m,n,N}\) be the event that either (i) some object remains unsynchronized (NULL) by time \(n\), or (ii) an address collision occurs.
+
+\begin{theorem}[Union bound and asymptotic budgets]\label{thm:budget}
+One has the union bound
+\begin{equation}\label{eq:union}
+\PP(\mathrm{Fail}_{m,n,N})
+\le
+N\,\nu_m(T_m>n)+\binom{N}{2}\Col_u(m).
+\end{equation}
+If moreover \(\nu_m(T_m>n)\le C_m e^{-\varepsilon_m n}\) and \(\Col_u(m)=\exp(-h_2(u)m+o(m))\), then for any \(\delta\in(0,1)\),
+\[
+n\ \ge\ \frac{1}{\varepsilon_m}\Bigl(\log(NC_m)+\log\frac{2}{\delta}\Bigr),
+\qquad
+m\ \ge\ \frac{2}{h_2(u)}\Bigl(\log N+\log\frac{2}{\delta}\Bigr)
+\ \Longrightarrow\ 
+\PP(\mathrm{Fail}_{m,n,N})\le\delta.
+\]
+\end{theorem}
+
+\begin{remark}
+The leading-order budgets separate orthogonally: \(n\) is controlled by synchronization tails, while \(m\) is controlled by the collision exponent \(h_2(u)\).
+\end{remark}
+

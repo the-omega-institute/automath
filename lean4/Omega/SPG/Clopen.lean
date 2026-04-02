@@ -54,7 +54,7 @@ theorem isClopen_fromWordSet_compl (A : Set (Word m)) :
 
 /-- Finite intersections of cylinders are clopen. -/
 theorem isClopen_finite_inter_cylinders {S : Finset (Word m)}
-    (A : Set (Word m)) (hA : A = ↑S) :
+    (A : Set (Word m)) (_hA : A = ↑S) :
     IsClopen (fromWordSet A) :=
   isClopen_fromWordSet A
 

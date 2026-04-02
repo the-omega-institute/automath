@@ -1,0 +1,135 @@
+\subsection{三轴前缀与地址完备性：可见轴、残差轴与模式轴}\label{subsec:typed-address-biaxial-completion-three-axis-address-completeness}
+原稿的 12.63 所做的关键工作，并不是再引入一类新对象，而是把完备地址直接压成三轴前缀
+\[
+a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}}),
+\]
+并据此把“读出为何为非 \(\mathrm{NULL}\)”重新表述为一条地址语义链。也就是说，地址完备性不再是单轴前缀越来越长，而是可见定位、同像去碰撞与模式外延三件事是否同时成立。本节的任务，就是把这一打包与后续的 soundness/completeness 分离、维数稳定证书、prime-register 配额证书以及 \(\mathrm{NULL}\)--守恒闭环合并成同一条前端接口。
+
+\subsubsection{完备地址不是更长前缀，而是三条正交轴的最小打包}\label{subsubsec:typed-address-biaxial-completion-complete-address-packaging}
+上一节已经把读出判据写成证书纤维非空与正交阈值同时越界。本节则进一步强调：支撑该判据的地址对象，本身就是一个三轴直和，而不是单纯延长同一条相位前缀。
+
+\begin{definition}[完备地址的三轴打包]\label{def:typed-address-biaxial-completion-complete-address-packaging}
+沿用定义 \ref{def:typed-address-biaxial-completion-three-axis-address} 的三轴地址语义，把协议内可核验的完备地址写成
+\[
+a=(a_{\mathrm{vis}},a_{\mathrm{res}},a_{\mathrm{mode}}).
+\]
+其中
+\[
+a_{\mathrm{vis}}
+\]
+负责可见域柱前缀，即对象在当前可见层里的前缀式定位；
+\[
+a_{\mathrm{res}}
+\]
+负责同像碰撞后的单射化外置，把原本多对一压缩补成可区分地址；
+\[
+a_{\mathrm{mode}}
+\]
+负责协议允许的正交模式轴，典型包括径向寄存器、绕数证书或最小实现维数稳定轴。于是，地址不再是“看到了哪段相位前缀”，而是“凭什么能把该对象在协议内唯一、可核验地读出来”的最小合成接口。
+\end{definition}
+
+\begin{proposition}[非 \texorpdfstring{$\mathrm{NULL}$}{NULL} 读出需要三轴同时通过]\label{prop:typed-address-biaxial-completion-nonnull-requires-three-axes}
+在定义 \ref{def:typed-address-biaxial-completion-complete-address-packaging} 的打包下，非 \(\mathrm{NULL}\) 读出并不能单靠可见前缀深度保证，而要求三条轴都通过各自的过滤与阈值核验。任一轴缺失、被协议禁止，或预算没有越过对应门槛，系统都不会把该失败解释成“数值不稳定”，而会输出与该轴对齐的失败见证。于是，三轴并不是读出之后附加的元数据，而是读出能否被定义这件事本身的分解。
+\end{proposition}
+\begin{proof}
+这就是命题 \ref{prop:typed-address-biaxial-completion-readability-thresholds} 与命题 \ref{prop:typed-address-biaxial-completion-compiled-readability} 在地址对象层上的直接合并表述；其预算不可互偿性则由定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable} 封口。
+\end{proof}
+
+命题 \ref{prop:typed-address-biaxial-completion-nonnull-requires-three-axes} 的含义在于：地址完备性从“单轴前缀更长”改写成了“可见、去碰撞、模式外延”三件事是否同时成立。单一前缀再深，也只能收缩可见域；它不能自动替代 residue 轴上的单射化补账，也不能自动替代 mode 轴上的域外自由度记录。
+
+\subsubsection{可靠性与完备性的分离：可寻址并不推出体系内必可寻址}\label{subsubsec:typed-address-biaxial-completion-soundness-completeness}
+地址一旦被体系承认，就必须能被有限证书与确定性验证器复核；这是 soundness。相反，对象存在是否推出其在既定制度内必可寻址，则属于 completeness，而不是类型安全自动给出的结论。对离切片事件尤其如此。
+
+\begin{corollary}[离切片事件的二歧性接口]\label{cor:typed-address-biaxial-completion-offslice-dichotomy}
+在 unitary-slice 可见域锁定
+\[
+X_{\mathrm{vis}}=\mathsf{Phase},
+\]
+\(\mathbf{PW}\) 闭包类型安全以及“无未记录连续轴”原则同时成立时，任何需要
+\[
+|u|\neq 1
+\qquad
+\text{（等价地 }|w|<1\text{）}
+\]
+的离切片断言，在协议内只可能以两种形态出现：
+\begin{enumerate}
+  \item \textbf{显式外延模式轴：}把径向自由度对象化，在地址里加入
+  \[
+  \varrho(u)=\log|u|
+  \]
+  这样的模式轴记录；
+  \item \textbf{有限失败见证：}输出一份离线可核验的证书，证明该断言在既定可见域与闭包制度下不可类型化，因此读出必退化为 \(\mathrm{NULL}\)。
+\end{enumerate}
+并且不存在第三条路径。任何试图引入与相位解耦的额外连续坐标寄存器来绕过 \(\mathrm{NULL}\) 的方案，要么被闭包直接拒绝并仍然读作 \(\mathrm{NULL}\)，要么在因子意义下等价地压回上面的唯一径向外延。
+\end{corollary}
+\begin{proof}
+该推论即推论 \ref{cor:xi-fourth-register-dichotomy} 在本章语境下的直接接口化；其中 soundness/completeness 的制度分离由备注 \ref{rem:xi-soundness-vs-completeness} 给出，而“无未记录连续轴”原则则由定理 \ref{thm:xi-pw-no-continuous-hair} 固定。
+\end{proof}
+
+因此，“第四寄存器二歧性”的真正含义并不是再加一条连续自由度也可以，而是：只有被协议承认、可核验，并且能因子化回三轴结构中的那条外延，才算合法补充。完备性缺口不能靠任意侧信息填平，只能沿正确轴向补账。
+
+\subsubsection{完备性缺口的两类主证书：维数稳定证书与配额证书}\label{subsubsec:typed-address-biaxial-completion-completeness-gap}
+在 unitary-slice 的零点审计口径里，地址完备性的缺口并不表现为单一“失败”，而表现为若干后端核验任务。其中最关键的两类证书，分别落在 mode 轴与 residue 轴上。
+
+\begin{proposition}[完备性缺口的可审计分解]\label{prop:typed-address-biaxial-completion-completeness-gap-audit}
+在 unitary-slice 的零点审计口径里，读出之所以退化为 \(\mathrm{NULL}\)，其最关键的后端核验可以压成两类不可替代的证书：
+\begin{enumerate}
+  \item \textbf{mode 轴侧的维数稳定证书：}检查模式外延是否真的在允许的最小实现维数内稳定闭合；其后端刻画可由 Hankel 秩一致有界给出，而可实现的离线接口可取为 ACC-Rank 稳定性证书；
+  \item \textbf{residue 轴侧的配额证书：}检查同像碰撞是否已经通过 prime-register 的分位门槛被充分单射化；若残差预算不够，则碰撞不会自然消失，而只会在对象层重新表现成碰撞型 \(\mathrm{NULL}\)。
+\end{enumerate}
+再加上端点分辨率门槛，这三者共同构成编译--核验流程中“单射化预算与障碍检查”的离线输入。
+\end{proposition}
+\begin{proof}
+命题 \ref{prop:xi-completeness-auditable-decomposition} 已把 completeness 缺口压成“维数稳定证书 \(\times\) 配额证书”两类后端核验任务；其中 mode 轴的完备性由定理 \ref{thm:xi-completeness-iff-hankel-bounded} 与注 \ref{rem:xi-acc-rank} 刻画，residue 轴的硬阈值则由推论 \ref{cor:pom-prime-register-quantile-budget} 与命题 \ref{prop:xi-null-three-way} 给出。端点门槛的不可替代性见定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}。
+\end{proof}
+
+命题 \ref{prop:typed-address-biaxial-completion-completeness-gap-audit} 的结构含义是：这里的失败不是一种，而是两种根本不同的失败。一种是模式没有闭合，对象根本没有合法模式表达；另一种是对象落在可见层里，但多对一压缩之后残差信息仍不够。前者要补维数稳定，后者要补配额越阈；二者都不是“再多看几位同一前缀”能够自动解决的。
+
+\subsubsection{\texorpdfstring{$\mathrm{NULL}$}{NULL}—守恒闭环：失败不是噪声，而是门条件与缺陷账本}\label{subsubsec:typed-address-biaxial-completion-null-conservation-loop}
+在可见域锁定与扩展保存语义下，信息守恒的严格含义并不是协议永不输出 \(\mathrm{NULL}\)，而是每一类 \(\mathrm{NULL}\) 都必须被编译成一条门条件和一份缺陷账本；若要恢复可逆性，也必须在支撑该失败的正交记录轴上补账，而不能用别的预算横向抵偿。
+
+\begin{definition}[\texorpdfstring{$\mathrm{NULL}$}{NULL}—守恒闭环]\label{def:typed-address-biaxial-completion-null-conservation-loop}
+称下述闭环为本章的 \(\mathrm{NULL}\)--守恒闭环：
+\begin{enumerate}
+  \item 每一类 \(\mathrm{NULL}\) 都必须能被编译为一条门条件与一份缺陷账本；
+  \item 每一类失败的修复都必须发生在支撑该失败的正交记录轴上；
+  \item 任意试图以横向预算抵偿来绕过相应支撑轴缺口的方案，都在协议上被视为不合法。
+\end{enumerate}
+因此，\(\mathrm{NULL}\) 不是系统漏洞，也不是暂时算不出来的含糊标记，而是协议内部对失败来源的对象化命名。
+\end{definition}
+
+\begin{proposition}[unitary-slice 下的地址端闭合]\label{prop:typed-address-biaxial-completion-unitary-slice-address-closure}
+在定义 \ref{def:typed-address-biaxial-completion-null-conservation-loop} 的意义下，unitary-slice 下的地址端可写为
+\[
+\operatorname{Addr}_{\mathrm{US}}
+:=
+\{(L,\theta,b):L>1,\ \theta\in\RR,\ b\in\NN\},
+\]
+而可见域读出则由偏函数
+\[
+\mathrm{Read}_{\mathrm{US}}:
+\operatorname{Addr}_{\mathrm{US}}
+\rightharpoonup
+\{\mathrm{NonZero},\mathrm{RootInterval},\mathrm{NULL}\}
+\]
+给出。更一般地，带可见域约束的读出满足
+\[
+\operatorname{read}(\omega)=
+\begin{cases}
+\operatorname{obs}(\omega),&
+\omega\in\operatorname{Dom}(\operatorname{obs}),\ \operatorname{obs}(\omega)\in X_{\mathrm{vis}},\ \mathrm{Chk}(\omega)=\mathsf{pass},\\
+\mathrm{NULL},& \text{否则}.
+\end{cases}
+\]
+于是，“非 \(\mathrm{NULL}\)”就被精确重写为：证书纤维非空，且正交阈值全部越过；否则返回的不是数值，而是一份失败见证。
+\end{proposition}
+\begin{proof}
+一般读出公式即定义 \ref{def:xi-visible-read-null} 的内容；unitary-slice 下的三值确定性则由定理 \ref{thm:xi-us-deterministic-tristate} 给出。在本章语言下，这与命题 \ref{prop:typed-address-biaxial-completion-readable-fiber}、命题 \ref{prop:typed-address-biaxial-completion-null-exhaustive} 以及命题 \ref{prop:typed-address-biaxial-completion-compiled-readability} 完全等价。
+\end{proof}
+
+由此可见，\(\mathrm{NULL}\) 的三分并不是对失败的事后分类，而是地址完备性本身的守恒闭环：语义空值、协议空值与碰撞空值分别对应不同的门条件与缺陷账本项，且每一类都要求在其支撑轴上补账。
+
+\subsubsection{小结}\label{subsubsec:typed-address-biaxial-completion-three-axis-summary}
+本节可以压成一句话：地址完备性不是“前缀更长”，而是“可见轴给出可见定位，残差轴给出单射化补账，模式轴给出协议允许的正交外延”三者的同时成立。
+
+也正因为如此，离切片事件在纯相位制度下只能以“模式轴外延”或“\(\mathrm{NULL}\)+失败见证”的二歧形式出现；而读出一旦要在体系内成为非 \(\mathrm{NULL}\)，就必须同时通过三轴过滤、维数稳定证书、prime-register 配额门槛与端点分辨率门槛。顺着这一点，下一节自然转向 Jensen 缺陷的完全有限化：既然盘内零点事件不能在纯相位层里裸露出现，它就必须被进一步压缩成一族半径参数的有限证书链。

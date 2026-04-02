@@ -1,0 +1,155 @@
+\section{Stationary detector channel and symbolic law}\label{sec:bridge:operational}
+
+We begin with an abstract construction of the symbolic output process associated with repeated binary measurement along a stationary worldline. The argument applies to any normal binary instrument on a quasi-local algebra \cite{FewsterVerch2012,Fewster2020}; the detector models of Section~\ref{sec:bridge:deadtime} appear as classical special cases.
+
+\begin{definition}[One-step detector channel]\label{def:detector-channel}
+Let $\mathcal A$ be the quasi-local observable algebra along a stationary detector worldline, let $\alpha_{\Delta\tau}$ be the one-step Heisenberg evolution induced by the stationary flow, and let
+\[
+\mathcal I_0,\mathcal I_1:\mathcal A\to\mathcal A
+\]
+be normal completely positive maps satisfying
+\[
+\mathcal I_0(\mathbf 1)+\mathcal I_1(\mathbf 1)=\mathbf 1.
+\]
+Define the one-step outcome maps
+\[
+K_a:=\mathcal I_a\circ \alpha_{\Delta\tau},\qquad a\in\{0,1\},
+\]
+and the total one-step channel
+\[
+\mathcal K:=K_0+K_1.
+\]
+\end{definition}
+
+\begin{assumption}[Stationary channel state]\label{ass:stationary-channel}
+Let $\omega$ be a normal state on $\mathcal A$ satisfying
+\[
+\omega\circ \mathcal K=\omega.
+\]
+\end{assumption}
+
+\begin{theorem}[Operational realization of the symbolic law]\label{thm:operational-law}
+Under Definition~\ref{def:detector-channel} and Assumption~\ref{ass:stationary-channel}, define for each cylinder $[a_0\cdots a_{n-1}]\subset\{0,1\}^{\NN}$,
+\begin{equation}\label{eq:bridge-cylinder-law}
+\mu_\Theta([a_0\cdots a_{n-1}])
+:=
+\omega\!\left(
+K_{a_0}\cdots K_{a_{n-1}}(\mathbf 1)
+\right).
+\end{equation}
+Then the family $\{\mu_\Theta([a_0\cdots a_{n-1}])\}$ is Kolmogorov-consistent and defines a unique shift-invariant Borel probability measure on $\{0,1\}^{\NN}$.
+\end{theorem}
+
+\begin{proof}
+Positivity is immediate because each $K_a$ is completely positive and $\omega$ is positive.
+
+For consistency, let $a_0\cdots a_{n-1}$ be any finite word. Then
+\[
+\sum_{b\in\{0,1\}}
+\mu_\Theta([a_0\cdots a_{n-1}b])
+=
+\omega\!\left(
+K_{a_0}\cdots K_{a_{n-1}}
+\Bigl(\sum_{b\in\{0,1\}}K_b(\mathbf 1)\Bigr)
+\right).
+\]
+Since $\alpha_{\Delta\tau}(\mathbf 1)=\mathbf 1$ and $\mathcal I_0(\mathbf 1)+\mathcal I_1(\mathbf 1)=\mathbf 1$, one has
+\[
+\sum_{b\in\{0,1\}}K_b(\mathbf 1)=\mathbf 1.
+\]
+Therefore
+\[
+\sum_{b\in\{0,1\}}
+\mu_\Theta([a_0\cdots a_{n-1}b])
+=
+\omega\!\left(
+K_{a_0}\cdots K_{a_{n-1}}(\mathbf 1)
+\right)
+=
+\mu_\Theta([a_0\cdots a_{n-1}]).
+\]
+Kolmogorov consistency follows, so the cylinder family extends to a unique Borel probability measure on $\{0,1\}^{\NN}$.
+
+To prove shift invariance, let $[a_0\cdots a_{n-1}]$ be a cylinder. Then
+\[
+\mu_\Theta(\sigma^{-1}[a_0\cdots a_{n-1}])
+=
+\sum_{b\in\{0,1\}}
+\mu_\Theta([ba_0\cdots a_{n-1}]).
+\]
+Using \eqref{eq:bridge-cylinder-law},
+\[
+\mu_\Theta(\sigma^{-1}[a_0\cdots a_{n-1}])
+=
+\omega\!\left(
+\mathcal K\bigl(K_{a_0}\cdots K_{a_{n-1}}(\mathbf 1)\bigr)
+\right).
+\]
+By Assumption~\ref{ass:stationary-channel},
+\[
+\omega\!\left(
+\mathcal K\bigl(K_{a_0}\cdots K_{a_{n-1}}(\mathbf 1)\bigr)
+\right)
+=
+\omega\!\left(
+K_{a_0}\cdots K_{a_{n-1}}(\mathbf 1)
+\right)
+=
+\mu_\Theta([a_0\cdots a_{n-1}]).
+\]
+Thus $\mu_\Theta$ is shift-invariant.
+\end{proof}
+
+\begin{remark}\label{rem:bridge-entry}
+Theorem~\ref{thm:operational-law} supplies the stationary symbolic law used throughout the paper. Once this measure is in place, the detector-specific analysis can be combined with the finite-window stabilization map of Appendix~\ref{app:bridge:companion}.
+\end{remark}
+
+Every classical Markov detector model---in particular, the ideal dead-time and finite-recovery models of Section~\ref{sec:bridge:deadtime}---is a special case of this algebraic framework.
+
+\begin{proposition}[Classical detector realization]\label{prop:classical-realization}
+Let $S$ be a finite set and let $\{T_a:a\in\{0,1\}\}$ be non-negative $|S|\times|S|$ matrices such that $P:=T_0+T_1$ is row-stochastic. Set $\mathcal A=\ell^\infty(S)$, $\alpha_{\Delta\tau}=\mathrm{id}_{\mathcal A}$, and define
+\[
+(\mathcal I_a f)(s):=\sum_{s'\in S}T_a(s,s')\,f(s'),
+\qquad a\in\{0,1\},\quad f\in\mathcal A.
+\]
+Let $\pi$ be the stationary distribution of $P$, and define $\omega(f):=\sum_{s}\pi(s)f(s)$.
+Then:
+\begin{enumerate}[label=(\roman*),leftmargin=*,itemsep=2pt]
+\item Definition~\ref{def:detector-channel} and Assumption~\ref{ass:stationary-channel} are satisfied.
+\item The cylinder measure of Theorem~\ref{thm:operational-law} equals the hidden-Markov marginal:
+\begin{equation}\label{eq:bridge-hmm-marginal}
+\mu_\Theta([a_0\cdots a_{n-1}])
+=
+\pi^\top T_{a_0}\cdots T_{a_{n-1}}\mathbf 1.
+\end{equation}
+\item Both the ideal dead-time model \textup{(}Definition~\ref{def:ideal-dead-time}\textup{)} and the finite-recovery model \textup{(}Definition~\ref{def:finite-recovery}\textup{)} are instances of this construction with $S=\{R,D\}$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i)\enspace Each $T_a$ has non-negative entries, so $\mathcal I_a$ is a positive map on the commutative $C^*$-algebra $\ell^\infty(S)$; on a commutative algebra, positivity implies complete positivity \cite{Davies1976}. Since $P=T_0+T_1$ is row-stochastic, $(\mathcal I_0(\mathbf 1)+\mathcal I_1(\mathbf 1))(s)=\sum_{s'}P(s,s')=1$ for every $s$, giving $\mathcal I_0(\mathbf 1)+\mathcal I_1(\mathbf 1)=\mathbf 1$. The identity $\alpha_{\Delta\tau}(\mathbf 1)=\mathbf 1$ is immediate.
+
+For stationarity, $(\omega\circ\mathcal K)(f)=\sum_s\pi(s)\sum_{s'}P(s,s')f(s')=\sum_{s'}\bigl(\sum_s\pi(s)P(s,s')\bigr)f(s')=\sum_{s'}\pi(s')f(s')=\omega(f)$, because $\pi P=\pi$.
+
+(ii)\enspace By definition, $K_a=\mathcal I_a\circ\alpha_{\Delta\tau}=\mathcal I_a$. For $f\in\ell^\infty(S)$,
+\[
+\omega\bigl(K_{a_0}\cdots K_{a_{n-1}}(\mathbf 1)\bigr)
+=
+\sum_s \pi(s)\,\bigl(T_{a_0}\cdots T_{a_{n-1}}\mathbf 1\bigr)(s)
+=
+\pi^\top T_{a_0}\cdots T_{a_{n-1}}\mathbf 1,
+\]
+which is \eqref{eq:bridge-hmm-marginal}.
+
+(iii)\enspace For the ideal dead-time model, the output-labeled matrices are
+\[
+T_0^{\mathrm{id}}=
+\begin{pmatrix}p_\beta&0\\1&0\end{pmatrix},
+\qquad
+T_1^{\mathrm{id}}=
+\begin{pmatrix}0&q_\beta\\0&0\end{pmatrix},
+\]
+where rows and columns index $(R,D)$; the sum $T_0^{\mathrm{id}}+T_1^{\mathrm{id}}=P_\beta$ is the transition matrix of \eqref{eq:bridge-markov-matrix} embedded in the hidden-state representation. Direct verification confirms that \eqref{eq:bridge-hmm-marginal} reproduces the Markov law of Theorem~\ref{thm:dead-time-golden}.
+
+For the finite-recovery model, the matrices $T_0,T_1$ of \eqref{eq:finite-recovery-T0T1} satisfy $T_0+T_1=P$ with entries verified in the proof of Theorem~\ref{thm:finite-recovery-renewal}.
+\end{proof}

@@ -141,4 +141,155 @@ noncomputable def sixZmodTwoPowBitsEquiv (N : ℕ) :
 
 end
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R30: Semiring hom rigidity (Fin r → ℕ) →+* (Fin d → ℕ)
+-- ══════════════════════════════════════════════════════════════
+
+/-- Idempotent natural numbers are 0 or 1. -/
+private theorem Nat.eq_zero_or_one_of_sq_eq (n : ℕ) (h : n * n = n) : n = 0 ∨ n = 1 := by
+  match n, h with
+  | 0, _ => left; rfl
+  | 1, _ => right; rfl
+  | n + 2, h => exfalso; nlinarith
+
+/-- The standard basis vector `e_i : Fin r → ℕ`. -/
+private abbrev e (r : Nat) (i : Fin r) : Fin r → ℕ := Pi.single i 1
+
+/-- `e_i` is idempotent under pointwise multiplication. -/
+private theorem e_sq (r : Nat) (i : Fin r) : e r i * e r i = e r i := by
+  ext j; simp [e, Pi.mul_apply, Pi.single_apply]
+
+/-- `e_i · e_k = 0` when `i ≠ k`. -/
+private theorem e_mul_e_of_ne (r : Nat) (i k : Fin r) (hik : i ≠ k) :
+    e r i * e r k = 0 := by
+  ext j; simp only [e, Pi.mul_apply, Pi.single_apply, Pi.zero_apply]
+  split
+  · split <;> simp_all
+  · simp
+
+/-- `∑ e_i = 1` in `Fin r → ℕ`. -/
+private theorem e_sum (r : Nat) : ∑ i : Fin r, e r i = 1 := by
+  ext j; simp [e, Finset.sum_apply, Pi.single_apply, Finset.mem_univ]
+
+/-- Any semiring hom `(Fin r → ℕ) →+* (Fin d → ℕ)` is a coordinate projection.
+    thm:cdim-nr-nd-semiring-hom-rigidity -/
+theorem semiring_hom_rigidity (r d : Nat) (f : (Fin r → ℕ) →+* (Fin d → ℕ)) :
+    ∃ σ : Fin d → Fin r, ∀ x : Fin r → ℕ, ∀ j : Fin d, f x j = x (σ j) := by
+  -- Step 1: f(e_i) is idempotent, so f(e_i) j ∈ {0, 1}
+  have hidm : ∀ i : Fin r, ∀ j : Fin d, f (e r i) j = 0 ∨ f (e r i) j = 1 := by
+    intro i j
+    have hsq : f (e r i) * f (e r i) = f (e r i) := by
+      rw [← map_mul]; exact congr_arg f (e_sq r i)
+    have := congr_fun hsq j
+    simp [Pi.mul_apply] at this
+    exact Nat.eq_zero_or_one_of_sq_eq _ this
+  -- Step 2: orthogonality: at most one f(e_i) j = 1
+  have horth : ∀ (i k : Fin r) (j : Fin d), i ≠ k →
+      f (e r i) j = 1 → f (e r k) j = 0 := by
+    intro i k j hik hi1
+    have hzero : f (e r i) * f (e r k) = 0 := by
+      rw [← map_mul, e_mul_e_of_ne r i k hik, map_zero]
+    have := congr_fun hzero j
+    simp [Pi.mul_apply] at this
+    rcases this with h | h
+    · omega
+    · exact h
+  -- Step 3: completeness: exactly one f(e_i) j = 1
+  have hone : ∀ j : Fin d, ∃! i : Fin r, f (e r i) j = 1 := by
+    intro j
+    -- From ∑ e_i = 1
+    have hsum : f 1 = 1 := map_one f
+    have hsum' : (∑ i : Fin r, f (e r i)) j = 1 := by
+      have : f (∑ i : Fin r, e r i) = ∑ i : Fin r, f (e r i) := map_sum f _ _
+      rw [e_sum, map_one] at this
+      exact congr_fun this.symm j
+    simp [Finset.sum_apply] at hsum'
+    -- Sum of {0,1}-valued things equals 1 → exactly one is 1
+    have hex : ∃ i : Fin r, f (e r i) j = 1 := by
+      by_contra hall
+      push_neg at hall
+      have : ∀ i : Fin r, f (e r i) j = 0 := by
+        intro i; rcases hidm i j with h | h
+        · exact h
+        · exact absurd h (hall i)
+      simp [this] at hsum'
+    obtain ⟨i, hi⟩ := hex
+    refine ⟨i, hi, fun k hk => ?_⟩
+    by_contra hne
+    exact absurd (horth k i j hne hk) (by omega)
+  -- Step 4: define σ
+  choose σ hσ huniq using fun j => hone j
+  refine ⟨σ, fun x j => ?_⟩
+  -- Step 5: decompose x = ∑ x_i · e_i
+  have hdecomp : x = ∑ i : Fin r, x i • e r i := by
+    ext k; simp [e, Finset.sum_apply, Pi.single_apply, Finset.mem_univ]
+  -- f(e_i) j = 1 iff i = σ j, else 0
+  have heval : ∀ i : Fin r, f (e r i) j = if i = σ j then 1 else 0 := by
+    intro i
+    by_cases hi : i = σ j
+    · rw [if_pos hi, hi]; exact hσ j
+    · rw [if_neg hi]
+      rcases hidm i j with h | h
+      · exact h
+      · exact absurd (huniq j i h) hi
+  -- Compute f(x) j = ∑ x_i · f(e_i) j = ∑ x_i · [i = σ j] = x (σ j)
+  have key : ∀ i : Fin r, f (x i • e r i) j = x i * (if i = σ j then 1 else 0) := by
+    intro i
+    -- f(n • a) = n • f(a) for ring homs (via additivity)
+    have hmap : f (x i • e r i) = x i • f (e r i) := by
+      induction x i with
+      | zero => simp [ map_zero]
+      | succ n ih => simp [ map_add, add_smul]
+    rw [hmap, Pi.smul_apply, smul_eq_mul, heval]
+  calc f x j = f (∑ i : Fin r, x i • e r i) j := by rw [← hdecomp]
+    _ = (∑ i : Fin r, f (x i • e r i)) j := by rw [map_sum]
+    _ = ∑ i : Fin r, f (x i • e r i) j := Finset.sum_apply _ _ _
+    _ = ∑ i : Fin r, x i * (if i = σ j then 1 else 0) := Finset.sum_congr rfl (fun i _ => key i)
+    _ = x (σ j) := by simp [Finset.sum_ite_eq', Finset.mem_univ, mul_ite, mul_one, mul_zero]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R32: Idempotent splitting characterization
+-- ══════════════════════════════════════════════════════════════
+
+/-- Any semiring hom from (Fin r → ℕ) maps Pi.single basis to complete orthogonal idempotents.
+    prop:cdim-nr-hom-idempotent-splitting -/
+theorem semiring_hom_determines_idempotents {S : Type*} [CommSemiring S]
+    (r : Nat) (f : (Fin r → ℕ) →+* S) (i : Fin r) :
+    f (Pi.single i 1) ^ 2 = f (Pi.single i 1) ∧
+    (∀ j : Fin r, i ≠ j → f (Pi.single i 1) * f (Pi.single j 1) = 0) ∧
+    ∑ k : Fin r, f (Pi.single k 1) = 1 := by
+  refine ⟨?_, ?_, ?_⟩
+  · -- Idempotency: e_i² = e_i → f(e_i)² = f(e_i)
+    rw [sq, ← map_mul]
+    congr 1; exact e_sq r i
+  · -- Orthogonality: e_i · e_j = 0 → f(e_i) · f(e_j) = 0
+    intro j hij
+    rw [← map_mul, e_mul_e_of_ne r i j hij, map_zero]
+  · -- Completeness: ∑ e_i = 1 → ∑ f(e_i) = 1
+    rw [← map_sum, e_sum, map_one]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R33: Aut(N^r) ≅ S_r
+-- ══════════════════════════════════════════════════════════════
+
+/-- Any semiring automorphism of (Fin r → ℕ) is a coordinate permutation.
+    cor:cdim-nr-nd-semiring-hom-inj-auto -/
+theorem semiring_aut_is_perm (r : Nat) (f : (Fin r → ℕ) ≃+* (Fin r → ℕ)) :
+    ∃ σ : Equiv.Perm (Fin r), ∀ x : Fin r → ℕ, ∀ j : Fin r, f x j = x (σ j) := by
+  obtain ⟨σ, hσ⟩ := semiring_hom_rigidity r r f.toRingHom
+  -- σ is injective: if σ j₁ = σ j₂ then f.toRingHom maps Pi.single j₁ 1 and Pi.single j₂ 1
+  -- to functions agreeing at all coords → f injective forces j₁ = j₂.
+  have hinj : Function.Injective σ := by
+    intro j₁ j₂ hσeq
+    by_contra h
+    -- f is surjective: take preimage of Pi.single j₁ 1
+    obtain ⟨y, hy⟩ := f.surjective (Pi.single j₁ 1)
+    have h1 : (f y) j₁ = 1 := by rw [hy]; simp
+    have h2 : (f y) j₂ = 0 := by rw [hy]; simp [ h]
+    -- But f y j₁ = y (σ j₁) and f y j₂ = y (σ j₂) = y (σ j₁)
+    rw [show (f y) j₁ = f.toRingHom y j₁ from rfl, hσ y j₁] at h1
+    rw [show (f y) j₂ = f.toRingHom y j₂ from rfl, hσ y j₂] at h2
+    rw [← hσeq] at h2; linarith
+  exact ⟨Equiv.ofBijective σ ⟨hinj, Finite.surjective_of_injective hinj⟩, hσ⟩
+
 end Omega

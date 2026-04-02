@@ -1,0 +1,170 @@
+\subsection{同步成本与时空骨架：因果前序、传播上界与 dyadic holonomy 曲率}\label{subsec:typed-address-biaxial-completion-sync-causal-holonomy}
+上一节把相位、射影态与干涉压回到局部--全局粘接残差在统计表示层上的可见投影。沿同一条线继续下去，只要把同类 residual 改在同步、共同支撑与闭路复合这一层读取，时间、空间、因果与曲率就不必再被当作外加几何舞台，而会被重写为协议内部的可比较性条件：同步所需的最小延迟给出时间尺度，共同支撑所需的最小代价给出空间比较，而小回路 holonomy 的面积归一化极限则给出曲率候选。本节的任务，是把这条由同步、传播、比较与闭路 residual 组成的链压回到完备相位对象的地址--账本接口之内。
+
+\subsubsection{同步延迟与共同支撑代价：时间与空间首先是最小可比较成本}\label{subsubsec:typed-address-biaxial-completion-sync-support}
+设 \(X\) 为协议允许的局部状态类。对任意 \(x,y\in X\)，若存在一条允许的单步精化、同步或传输步，则记为
+\[
+x\rightsquigarrow y.
+\]
+在当前语境下，时间与空间并不预设为外在坐标，而首先以同步与共同支撑的最小可比较成本出现。
+
+\begin{definition}[同步延迟与共同支撑代价]\label{def:typed-address-biaxial-completion-sync-delay-support-cost}
+对任意 \(x,y\in X\)，定义
+\[
+\tau_{\mathrm{sync}}(x,y)\in[0,\infty]
+\]
+为把 \(x\) 与 \(y\) 拉入同一可比较协议口径所需的最小在线延迟、最小精化深度或最小同步成本；并定义
+\[
+d_{\mathrm{space}}(x,y)\in[0,\infty]
+\]
+为把 \(x\) 与 \(y\) 拉入共同支撑、共同 forcing 区域或共同局部图所需的最小资源代价。若不存在任何允许程序可实现该比较，则相应量取 \(+\infty\)。于是，时间首先不是坐标，而是同步的最小代价；空间首先也不是度规，而是共同支撑的最小代价。
+\end{definition}
+
+\begin{definition}[因果可达前序]\label{def:typed-address-biaxial-completion-causal-reachability-preorder}
+若存在有限允许链
+\[
+x=x_0\rightsquigarrow x_1\rightsquigarrow\cdots\rightsquigarrow x_n=y
+\]
+使得每一步都具有有限同步与有限共同支撑，并且
+\[
+\sum_{k=0}^{n-1}\tau_{\mathrm{sync}}(x_k,x_{k+1})<\infty,
+\qquad
+\sum_{k=0}^{n-1}d_{\mathrm{space}}(x_k,x_{k+1})<\infty,
+\]
+则记
+\[
+x\preceq y,
+\]
+称 \(y\) 落在 \(x\) 的因果可达域内。
+\end{definition}
+
+\begin{proposition}[同步与共同支撑诱导前序]\label{prop:typed-address-biaxial-completion-causal-preorder}
+若 \(\tau_{\mathrm{sync}}\) 与 \(d_{\mathrm{space}}\) 沿允许复合满足次可加律，并且在对角线上都为 \(0\)，则定义 \ref{def:typed-address-biaxial-completion-causal-reachability-preorder} 所给出的关系 \(\preceq\) 构成 \(X\) 上的一个前序。其含义在于：反身性来自零长度链，传递性来自两条有限成本链的首尾拼接；因果顺序因此只是可比较性成本可有限累积的结果，而不是先验给定的时空偏序。
+\end{proposition}
+\begin{proof}
+这就是命题 \ref{prop:cdim-causal-preorder-from-subadditivity} 在本章对象层接口中的直接重述。
+\end{proof}
+
+\begin{remark}[当前稿件中的同步接口]\label{rem:typed-address-biaxial-completion-sync-existing-interfaces}
+定义 \ref{def:typed-address-biaxial-completion-sync-delay-support-cost} 并非空泛记号，而已有若干后端实现。在折叠同步模型中，最坏同步延迟由推论 \ref{cor:Ym-sync-delay} 精确给出为 \(D_{\mathrm{sync}}(m)=m-1\)；在因果右逆口径下，最小延迟与最小状态数由定理 \ref{thm:xi-time-min-delay-min-states} 同时取到；在固定窗口的概率同步口径下，最小精确同步成本又可由定理 \ref{thm:conclusion-window6-exact-fold-synchronization-mutual-information} 写成互信息极小值。因此，本节并不是把时间重新命名，而是把全文已经出现的同步延迟、最小复位与最小共同可读成本提升为对象层几何量。
+\end{remark}
+
+\subsubsection{传播上界：同步--支撑比的极大不变量}\label{subsubsec:typed-address-biaxial-completion-propagation-bound}
+如果一条允许步既伴随有限同步延迟，又伴随有限共同支撑代价，那么该步的空间--时间比就给出了协议内部的局部传播斜率。
+
+\begin{definition}[局部传播比与传播上界]\label{def:typed-address-biaxial-completion-local-propagation-ratio}
+对任一允许基本步
+\[
+e:x\rightsquigarrow y
+\]
+若
+\[
+0<\tau_{\mathrm{sync}}(x,y)<\infty,
+\]
+定义其局部传播比为
+\[
+\rho(e):=\frac{d_{\mathrm{space}}(x,y)}{\tau_{\mathrm{sync}}(x,y)}.
+\]
+再令
+\[
+c_*:=\sup\{\rho(e):e\text{ 为允许基本步}\}\in[0,\infty].
+\]
+称 \(c_*\) 为该协议族的传播上界。它首先是一个协议不变量，然后才有资格被几何化理解。
+\end{definition}
+
+\begin{proposition}[链式传播上界]\label{prop:typed-address-biaxial-completion-chainwise-propagation-bound}
+若
+\[
+x=x_0\rightsquigarrow x_1\rightsquigarrow\cdots\rightsquigarrow x_n=y
+\]
+是任意允许链，并定义
+\[
+\tau_{\mathrm{chain}}
+:=
+\sum_{k=0}^{n-1}\tau_{\mathrm{sync}}(x_k,x_{k+1}),
+\qquad
+d_{\mathrm{chain}}
+:=
+\sum_{k=0}^{n-1}d_{\mathrm{space}}(x_k,x_{k+1}),
+\]
+则当 \(c_*\) 有限时恒有
+\[
+d_{\mathrm{chain}}\le c_*\,\tau_{\mathrm{chain}}.
+\]
+这意味着一切允许链都被同一个全局传播斜率压住，于是未来锥可以直接从账本不等式中长出。
+\end{proposition}
+\begin{proof}
+这正是命题 \ref{prop:cdim-chainwise-propagation-bound} 的内容。
+\end{proof}
+
+\begin{definition}[未来锥、类时区与边界候选]\label{def:typed-address-biaxial-completion-causal-cones}
+对任意 \(x\in X\)，定义
+\[
+J^+(x):=\{y\in X:x\preceq y\},
+\qquad
+J^-(x):=\{y\in X:y\preceq x\}.
+\]
+若存在一条从 \(x\) 到 \(y\) 的允许链以及某个 \(\varepsilon>0\)，使
+\[
+d_{\mathrm{chain}}\le (c_*-\varepsilon)\tau_{\mathrm{chain}},
+\]
+则称 \(y\) 落在 \(x\) 的类时未来候选中，记为 \(I^+(x)\)；再定义传播边界候选
+\[
+N^+(x):=J^+(x)\setminus I^+(x).
+\]
+过去类时区与边界 \(I^-(x),N^-(x)\) 同理。
+\end{definition}
+
+\begin{conjecture}[传播锥的观察者协变性]\label{conj:typed-address-biaxial-completion-observer-covariance}
+若观察者变换保持允许步、同步/支撑代价的等价类，以及局部细化、粗粒化与张量复合的可比较结构，则它也应保持因果前序、锥内部和锥边界的分层。换言之，被要求协变的首先不是坐标，而是这套由同步成本导出的因果几何。这正是猜想 \ref{conj:cdim-causal-cone-observer-covariance} 在本章接口语言下的表达。
+\end{conjecture}
+
+\subsubsection{小回路 holonomy 与归一化离散曲率：曲率是闭路 residual 的面积密度}\label{subsubsec:typed-address-biaxial-completion-holonomy-curvature}
+如果上一节里的相位来自局部 lift 在重叠处的粘接残差，那么几何侧的曲率就应来自同一类残差沿小回路复合后的累积。在当前稿件里，这一点已经由 dyadic holonomy 的边界重建与通量缺陷后端严格支撑。
+
+\begin{definition}[dyadic 归一化 holonomy 曲率场]\label{def:typed-address-biaxial-completion-dyadic-holonomy-curvature}
+对边长
+\[
+h_m=2^{-m}
+\]
+的 dyadic 方形剖分 \(\mathcal Q_m\)，若每个小方块 \(Q\in\mathcal Q_m\) 的边界 holonomy 满足
+\[
+\operatorname{Hol}_A(\partial Q)=\exp(\Omega(Q)),
+\]
+则定义分片常值的归一化离散曲率场
+\[
+\mathscr R_m(x):=\sum_{Q\in\mathcal Q_m}\frac{\Omega(Q)}{h_m^2}\mathbf 1_Q(x).
+\]
+这一步把小回路的对数 holonomy 除以面积，直接改写成局部曲率密度。
+\end{definition}
+
+\begin{corollary}[归一化曲率的连续极限]\label{cor:typed-address-biaxial-completion-dyadic-curvature-limit}
+在定理 \ref{thm:conclusion-nonabelian-dyadic-stokes-energy-reconstruction} 的设定下，有
+\[
+\mathscr R_m\longrightarrow F_{12}
+\qquad\text{于 }L^2(R_1),
+\]
+并且
+\[
+\|\mathscr R_m\|_{L^2(R_1)}^2
+\longrightarrow
+\int_{R_1}|F_{12}(x)|^2\,\mathrm d x.
+\]
+因此，连续曲率对象并不是预先塞进来的，而是面积归一化的小回路 holonomy 在 \(L^2\) 中的极限。
+\end{corollary}
+\begin{proof}
+这正是推论 \ref{cor:cdim-dyadic-holonomy-curvature-limit} 的结论。
+\end{proof}
+
+\begin{remark}[通量缺陷给出的后验证书]\label{rem:typed-address-biaxial-completion-flux-defect-certificate}
+粗尺度 holonomy 对数与连续曲率通量之间的偏差，并不只是极限前的误差项，而可被完全重写成一列绝对收敛的 dyadic 通量缺陷级数。于是，连续曲率不仅是极限对象，它偏离离散近似的方式本身也带有一串纯边界驱动、可后验核验的多尺度证书。这正是备注 \ref{rem:cdim-dyadic-holonomy-flux-defect-certificate} 所表达的后端内容。
+\end{remark}
+
+\begin{conjecture}[holonomy 细化极限的普适曲率候选]\label{conj:typed-address-biaxial-completion-holonomy-curvature-limit}
+若一族细化覆盖 \(\{\mathcal U_h\}_{h\downarrow 0}\) 在每个尺度上都带有局部过渡数据与闭路 holonomy，并满足主支选择与局部线性化一致、面积归一化离散曲率场在紧集上弱预紧、离散 Bianchi 约束与细化相容，以及多尺度通量缺陷可求和，那么应存在子列 \(h_j\downarrow 0\)，使相应归一化离散曲率场弱收敛到某个连续曲率候选 \(R\)；若极限唯一，则 \(R\) 完全由离散 holonomy 的细化极限决定。这个猜想的意义在于：连续曲率应被理解为小回路粘接残差的尺度稳定首项，而不是外加背景。这正是猜想 \ref{conj:cdim-holonomy-curvature-refinement-limit} 的接口化版本。
+\end{conjecture}
+
+\subsubsection{小结：时空骨架位于协议内部，而不在协议外部}\label{subsubsec:typed-address-biaxial-completion-sync-summary}
+本节可以压缩成一句链式表述：同步延迟决定时间尺度，共同支撑代价决定空间比较，二者的极大传播比决定因果锥边界，而小回路 holonomy 的面积归一化极限决定连续曲率候选。于是，时间、空间、因果与曲率都被压回到同一条协议链上；它们不是先验几何容器，而是同步、传播、比较与闭路 residual 合成后留下的组织形式。
+
+这也意味着，只要时空骨架被要求在协议内部可核验，地址对象就不可能只记录单一可见前缀，而必须继续把可见轴、残差轴和模式轴一起显式化，以承载同步账本、传播约束与闭路 residual 的统一外置。顺着这一点，下一节自然进入三轴前缀与地址完备性的问题。
