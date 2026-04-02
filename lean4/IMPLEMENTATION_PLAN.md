@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 823 |
+| \leanverified 标注数 | 824 |
 | \leanpartial 标注数 | 16 |
-| 总标注数 | 839 |
-| 轮次 | R195（round_count=196） |
+| 总标注数 | 840 |
+| 轮次 | R196（round_count=197） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -29,10 +29,10 @@
 | Group Unification | 469 | 78 | 16.6% |
 | SPG | 129 | 31 | 24.0% |
 | Circle Dimension | 393 | 62 | 15.8% |
-| Zeta Finite Part | 4,524 | 97 | 2.1% |
+| Zeta Finite Part | 4,524 | 98 | 2.2% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **809** | **7.7%** |
+| **合计（body）** | **10,508** | **810** | **7.7%** |
 
 ### 1.2 已完成模块
 
@@ -175,6 +175,7 @@
 **Phase R193: two-atom critical threshold quadratic（部分完成）**：Conclusion/TwoAtomThreshold.lean——epsilonCritical_quadratic（thm:conclusion-binfold-tail-order-statistics-single-jump-collapse，补齐单跳临界阈值满足的二次方程）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 138→139（5.5%），全局标注 820→821（+1），body 覆盖 806→807（7.7%），commit 826bbcc
 **Phase R194: projector value exact-one criterion（部分完成）**：EA/CentralIdempotentsRecovery.lean——projectorVal_eq_one_iff（thm:fold-groupoid-z2x2-central-idempotents，补齐中心投影在块上取值为 1 的充要判别）——**1 个论文标签条目计入覆盖率**（Emergent Arithmetic +1）——Emergent Arithmetic 88→89（48.1%），全局标注 821→822（+1），body 覆盖 807→808（7.7%），commit ad18c2c
 **Phase R195: scan error measure Bayes bound（部分完成）**：SPG/ScanErrorMeasure.lean——scanErrorMeasure_le_min_event_compl（prop:spg-clarity-bayes-optimality，补齐测度版扫描误差对事件及其补集质量下界）——**1 个论文标签条目计入覆盖率**（SPG +1）——SPG 30→31（24.0%），全局标注 822→823（+1），body 覆盖 808→809（7.7%），commit 680f214
+**Phase R196: cyclic Fredholm block splice evaluation（部分完成）**：Zeta/CyclicDet.lean——fredholm_block_diag_2_3_eval（cor:cyclic-euler-product，补齐 2+3 Fredholm 分块乘积在行列式口径下的显式拼接求值）——**1 个论文标签条目计入覆盖率**（Zeta +1）——Zeta 97→98（2.2%），全局标注 823→824（+1），body 覆盖 809→810（7.7%），commit <pending>
 **Phase R192（分析完成，单槽候选）**：CircleDimension / phase-spectrum reconstruction——避开已在跑的 Zeta 线，转向未饱和的 Circle Dimension；单个中难度目标锁定 `phaseSpectrumCount_reconstruction`（对应 `thm:cdim-phase-spectrum-reconstruction`，把论文中的“全部循环相位采样计数唯一决定有限生成离散交换群同构类型”压缩为当前 Nat-编码下的显式恢复链：从 `phaseSpectrumCount r t N = phaseSpectrumCount r' t' N` 对所有 `N` 推出 `r = r'` 且 `Nat.gcd t N = Nat.gcd t' N` 对所有 `N`，再取 `N = t` 与 `N = t'` 得 `t = t'`；直接承接现有 `phaseSpectrumCount_split` / `phaseSpectrumCount_coprime` / `phaseSpectrumCount_add_rank_le` / `phaseSpectrumCount_le_pow`，不引入新公理，满足单目标中难度门槛）。
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续
