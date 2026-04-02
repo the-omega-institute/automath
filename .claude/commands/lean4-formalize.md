@@ -496,6 +496,12 @@ SendMessage(to = "registrar", message = "请登记上一轮成果。[详情]")
 
 4. **如果 formalizer 报告技术阻塞或推迟任务**（API 不匹配、tactic 选择困难、数学路线疑问、proof engineering 复杂等）：
 
+   **执行漂移与假阳性防护（新增硬规则）**：
+   - orchestrator 不得仅凭“clean / compiled / ready”口头回报就放行 registrar；必须区分 `file clean`、`full build clean`、`proof-bearing commit 已确认` 三个层次
+   - 若 formalizer 的后续消息与先前 clean 报告冲突，必须立即将该轮标记为 `untrusted`，冻结 registrar，并优先审计 proof-bearing commit
+   - 若发现“补丁已发送但本地 theorem state 仍是旧补丁形态”，按**执行漂移**处理：要求 formalizer 明确应用 whole-proof replacement；必要时由 team lead 直接刷新 formalizer
+   - 已推送但不可信的提交统一标记为 `pushed-but-untrusted`；后续只允许 forward-only corrective recovery，不得假装未登记或伪造重复 proof commit
+
    **升级路径（按优先级逐步升级，不要轻易接受"推迟"）**：
 
    **第一步：确认 formalizer 已用尽 LSP 工具**
