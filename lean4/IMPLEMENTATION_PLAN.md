@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 837 |
+| \leanverified 标注数 | 838 |
 | \leanpartial 标注数 | 16 |
-| 总标注数 | 853 |
-| 轮次 | R209（round_count=210） |
+| 总标注数 | 854 |
+| 轮次 | R210（round_count=211） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -25,14 +25,14 @@
 | POM | 1,707 | 223 | 13.1% |
 | Emergent Arithmetic | 185 | 94 | 50.8% |
 | Folding | 337 | 81 | 24.0% |
-| Conclusion | 2,550 | 141 | 5.5% |
+| Conclusion | 2,550 | 142 | 5.6% |
 | Group Unification | 469 | 78 | 16.6% |
 | SPG | 129 | 32 | 24.8% |
 | Circle Dimension | 393 | 65 | 16.5% |
 | Zeta Finite Part | 4,524 | 98 | 2.2% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **823** | **7.8%** |
+| **合计（body）** | **10,508** | **824** | **7.8%** |
 
 ### 1.2 已完成模块
 
@@ -189,6 +189,7 @@
 **Phase R207: higher spectrum pair support values（部分完成）**：CircleDimension/MultiPrimeSpectrum.lean——higher_spectrum_counterexample_pair_values（prop:cdim-higher-spectrum-not-determined-by-marginals，补齐反例在二元支撑 {p,q} 上的分离取值 0/1）——**1 个论文标签条目计入覆盖率**（Circle Dimension +1）——Circle Dimension 64→65（16.5%），全局标注 834→835（+1），body 覆盖 820→821（7.8%），commit e8b2f6b
 **Phase R208: window-6 collision ratio floor（部分完成）**：Folding/Window6.lean——collision_ratio_floor_window_six（cor:conclusion-window6-collision-ratio-bounds，补齐 window-6 碰撞-类型比取整值等于 10 的精确算术结论）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 140→141（5.5%），全局标注 835→836（+1），body 覆盖 821→822（7.8%），commit e23c68a
 **Phase R209: projector one iff others zero（部分完成）**：EA/CentralIdempotentsRecovery.lean——projectorVal_eq_one_iff_other_three_zero（thm:fold-groupoid-z2x2-central-idempotents，补齐某一投影取 1 当且仅当其余三个投影同时为 0 的等价判别）——**1 个论文标签条目计入覆盖率**（Emergent Arithmetic +1）——Emergent Arithmetic 93→94（50.8%），全局标注 836→837（+1），body 覆盖 822→823（7.8%），commit c55dbd2
+**Phase R210: window-6 fourth moment exceeds third（部分完成）**：Folding/Window6.lean——sector_sum_six_q4_gt_q3（prop:conclusion-tqft-genus-generating-function-rational-q4，补齐 window-6 第四碰撞矩严格大于第三碰撞矩的直接比较）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 141→142（5.6%），全局标注 837→838（+1），body 覆盖 823→824（7.8%），commit <pending>
 **Phase R192（分析完成，单槽候选）**：CircleDimension / phase-spectrum reconstruction——避开已在跑的 Zeta 线，转向未饱和的 Circle Dimension；单个中难度目标锁定 `phaseSpectrumCount_reconstruction`（对应 `thm:cdim-phase-spectrum-reconstruction`，把论文中的“全部循环相位采样计数唯一决定有限生成离散交换群同构类型”压缩为当前 Nat-编码下的显式恢复链：从 `phaseSpectrumCount r t N = phaseSpectrumCount r' t' N` 对所有 `N` 推出 `r = r'` 且 `Nat.gcd t N = Nat.gcd t' N` 对所有 `N`，再取 `N = t` 与 `N = t'` 得 `t = t'`；直接承接现有 `phaseSpectrumCount_split` / `phaseSpectrumCount_coprime` / `phaseSpectrumCount_add_rank_le` / `phaseSpectrumCount_le_pow`，不引入新公理，满足单目标中难度门槛）。
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续

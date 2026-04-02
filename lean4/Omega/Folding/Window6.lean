@@ -361,6 +361,13 @@ theorem genus_recurrence_order_six : (cFiberSpectrum 6).length = 5 := by native_
 theorem distinct_fiber_sq_six :
     1 ^ 2 = 1 ∧ 2 ^ 2 = 4 ∧ 3 ^ 2 = 9 ∧ 4 ^ 2 = 16 ∧ 5 ^ 2 = 25 := by omega
 
+/-- The fourth collision moment at window 6 exceeds the third.
+    prop:conclusion-tqft-genus-generating-function-rational-q4 -/
+theorem sector_sum_six_q4_gt_q3 :
+    momentSum 4 6 > momentSum 3 6 := by
+  rw [momentSum_four_six, momentSum_three_six]
+  omega
+
 /-! ### Q_6 spectrum + binomial multiplicities -/
 
 /-- Binomial coefficients C(6, k) for k = 0..6.
