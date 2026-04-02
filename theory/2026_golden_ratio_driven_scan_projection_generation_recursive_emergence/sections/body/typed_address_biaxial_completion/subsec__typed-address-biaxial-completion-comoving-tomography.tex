@@ -1,0 +1,439 @@
+\subsection{共动破盲与可逆层析：前缀外置、Fourier--Laplace 全息与低秩 Hankel--Prony 恢复}\label{subsec:typed-address-biaxial-completion-comoving-tomography}
+上一节把边界层失败整理为三轴预算：半径预算不过阈时，离切片事件被埋入端点薄壳；dyadic 深度不足时，地址碰撞被端点压缩强制出来；端点热核预算不足时，边界承载无法稳定抽取。紧接着的结构结论是：要真正破除这一盲区，协议上只剩两条路径。其一是外置共动前缀，把固定图表里的二次红移压回与偏移同阶的一阶可见量；其二是进入可逆层析通道，把边界扫描写成有限指数谱，再用 Fourier--Laplace 指纹与 Hankel--Prony 机制反演参数。换言之，破盲并不是继续堆叠同一预算轴，而是把制度坐标改写成可逆读出。
+
+\subsubsection{共动图表把二次压缩降到一阶可见量}\label{subsubsec:typed-address-biaxial-completion-comoving-chart}
+共动图表的作用，不是增加新的连续自由度，而是把原本隐含在对象层外部的高度依赖显式打包为可寻址前缀。
+
+\begin{definition}[共动视界图表]\label{def:typed-address-biaxial-completion-comoving-chart}
+对离切片零点
+\[
+\rho=\beta+\mathrm{i}\gamma,
+\qquad
+\delta:=\frac12-\beta>0,
+\]
+记固定 Cayley 图表下的圆盘像为 \(w_{\rho}\)，并对任意平移参数 \(x_0\in\RR\) 定义共动像
+\[
+w_{\rho,x_0}:=\mathcal{C}\bigl((\gamma-x_0)+\mathrm{i}\delta\bigr),
+\]
+其端点深度定义为
+\[
+h_{x_0}(\rho):=1-|w_{\rho,x_0}|^2.
+\]
+这里 \(x_0\) 不是额外连续自由度，而是对象层显式给定的可寻址前缀；若前缀未给定，则相应评价在协议语义中不定义。
+\end{definition}
+
+\begin{proposition}[固定图表的二次压缩与共动图表的一阶显影]\label{prop:typed-address-biaxial-completion-comoving-first-order}
+在固定图表 \(x_0=0\) 下，
+\[
+h(\rho)=1-|w_\rho|^2=\frac{4\delta}{\gamma^2+(1+\delta)^2},
+\]
+因此高高度下可见量按 \(\gamma^{-2}\) 被红移压缩。若改取共动参数 \(x_0=\gamma\)，则
+\[
+w_{\rho,\gamma}=\mathcal{C}(\mathrm{i}\delta)=\frac{1-\delta}{1+\delta}\in(0,1),
+\qquad
+h_{\gamma}(\rho)=1-|w_{\rho,\gamma}|^2=\frac{4\delta}{(1+\delta)^2}\sim 4\delta.
+\]
+于是高度变量从可见深度中消失，离切片偏移由二次压缩律直接降为一阶可见量。
+\end{proposition}
+\begin{proof}
+第一式由推论 \ref{cor:app-offcritical-horocycle-busemann} 与定理 \ref{thm:xi-offcritical-quadratic-radial-compression} 给出。第二式只需把 \(x_0=\gamma\) 代入定义 \ref{def:typed-address-biaxial-completion-comoving-chart} 的共动图表，并直接计算 \(\mathcal{C}(\mathrm{i}\delta)\) 的闭式表达。
+\end{proof}
+
+\begin{proposition}[共动缺陷界导出无高度偏移界]\label{prop:typed-address-biaxial-completion-comoving-defect-bound}
+若存在 \(0<\varrho<1\) 与 \(\varepsilon\ge 0\)，使得共动图表 \(x_0=\gamma\) 上的 Jensen 缺陷满足
+\[
+D_{\zeta,\gamma}(\varrho)\le \varepsilon,
+\]
+则任意满足虚部与图表对齐的离切片零点 \(\rho=\beta+\mathrm{i}\gamma\) 都满足显式偏移上界
+\[
+\delta\le
+\frac{1-\varrho e^{-\varepsilon}}{1+\varrho e^{-\varepsilon}}.
+\]
+\end{proposition}
+\begin{proof}
+在 \(x_0=\gamma\) 的共动图表中，命题 \ref{prop:typed-address-biaxial-completion-comoving-first-order} 给出
+\(
+w_{\rho,\gamma}=\frac{1-\delta}{1+\delta}.
+\)
+将共动缺陷界编译为禁入半径
+\(
+|w_{\rho,\gamma}|\le \varrho e^{-\varepsilon}
+\)
+之后，直接解该不等式即可得到所示偏移上界。
+\end{proof}
+
+\begin{theorem}[以 \texorpdfstring{$\sup_{x_0}$}{sup x0} 消除图表选择的一致小化判别]\label{thm:typed-address-biaxial-completion-comoving-uniform-minimization}
+设
+\[
+(\varrho_n)_{n\ge 1}\subset(0,1),
+\qquad
+(\varepsilon_n)_{n\ge 1}\subset[0,\infty),
+\]
+满足
+\[
+\varrho_n\uparrow 1,
+\qquad
+\varepsilon_n\downarrow 0,
+\qquad
+\sup_{x_0\in\RR}D_{\zeta,x_0}(\varrho_n)\le \varepsilon_n.
+\]
+定义
+\[
+\Delta_n:=
+\frac{1-\varrho_n e^{-\varepsilon_n}}{1+\varrho_n e^{-\varepsilon_n}}.
+\]
+则任意非平凡零点 \(\rho=\beta+\mathrm{i}\gamma\) 都满足
+\[
+\beta\ge \frac12-\Delta_n
+\qquad(\forall n).
+\]
+特别地，当 \(\Delta_n\to 0\) 时，全部非平凡零点被压回临界线。于是，图表选择不必作为实现细节保留在证书里，而可被 \(\sup_{x_0}\) 消去为统一离线可核验的量词结构。
+\end{theorem}
+\begin{proof}
+对任意非平凡零点 \(\rho=\beta+\mathrm{i}\gamma\)，在第 \(n\) 级预算上选取共动图表 \(x_0=\gamma\)。由假设有
+\(
+D_{\zeta,\gamma}(\varrho_n)\le \sup_{x_0}D_{\zeta,x_0}(\varrho_n)\le \varepsilon_n
+\)，
+再由命题 \ref{prop:typed-address-biaxial-completion-comoving-defect-bound} 得
+\(
+\delta\le \Delta_n
+\)。
+由于 \(\delta=\frac12-\beta\)，结论即得。
+\end{proof}
+
+\subsubsection{一维共动扫描的 Fourier 完备性}\label{subsubsec:typed-address-biaxial-completion-comoving-fourier}
+一旦把高度依赖外置为共动前缀，离切片缺陷便不再表现为不可逆的边界薄壳，而表现为一条可做 Fourier 分解的一维扫描剖面。
+
+\begin{definition}[有限缺陷测度与共动扫描剖面]\label{def:typed-address-biaxial-completion-comoving-profile}
+设有限缺陷测度为
+\[
+\nu=\sum_{j=1}^{\kappa} m_j\,\delta_{(\gamma_j,\delta_j)},
+\qquad
+m_j\in\NN,\ \delta_j\in(0,1).
+\]
+定义一维共动扫描剖面
+\[
+H_\nu(x):=
+\sum_{j=1}^{\kappa}
+\frac{4m_j\delta_j}{(x-\gamma_j)^2+(1+\delta_j)^2}.
+\]
+每个原子在扫描轴上给出一个以 \((\gamma_j,\delta_j)\) 为中心与宽度参数的洛伦兹峰。
+\end{definition}
+
+\begin{theorem}[Fourier 闭式与一维剖面的可逆性]\label{thm:typed-address-biaxial-completion-comoving-fourier-closed}
+\(H_\nu\) 的 Fourier 变换满足显式闭式
+\[
+\widehat H_\nu(\xi)=
+4\pi\sum_{j=1}^{\kappa}
+m_j\frac{\delta_j}{1+\delta_j}
+e^{-(1+\delta_j)|\xi|}e^{-\mathrm{i}\gamma_j\xi}.
+\]
+因此 \(\widehat H_\nu\) 在 \(\xi>0\) 上是一条有限指数和。由互异指数函数的线性无关性，任意非空开区间上的 \(H_\nu\) 都唯一决定整条 \(\widehat H_\nu\)，从而唯一决定全部
+\[
+\{(\gamma_j,\delta_j,m_j)\}_{j=1}^{\kappa}.
+\]
+这说明共动扫描并不是把二维参数压成不可逆的一维影子，而是把它们编码成有限指数谱。
+\end{theorem}
+\begin{proof}
+这正是定理 \ref{thm:cdim-comoving-horizon-scan-fourier-inversion} 在本章记号下的直接重述。
+\end{proof}
+
+\subsubsection{二维 Fourier--Laplace 全息与层剥离}\label{subsubsec:typed-address-biaxial-completion-comoving-holography}
+一维剖面的 Fourier 闭式已经给出了有限指数谱；进一步引入深度参数后，这一谱对象可被组织成二维 Fourier--Laplace 指纹与有限秩核。
+
+\begin{definition}[二维边界指纹与有限秩核]\label{def:typed-address-biaxial-completion-comoving-fingerprint}
+对同一有限缺陷测度 \(\nu\)，定义二维 Fourier--Laplace 指纹
+\[
+F_\nu(\xi,s):=
+4\pi\sum_{j=1}^{\kappa}
+m_j\frac{\delta_j}{1+\delta_j}
+e^{-s\delta_j}e^{-\mathrm{i}\gamma_j\xi},
+\qquad
+(\xi,s)\in \RR\times[0,\infty),
+\]
+以及有限秩核
+\[
+K_\nu(x,y):=
+\sum_{j=1}^{\kappa}
+\frac{4m_j\delta_j}{
+\bigl(x-\gamma_j+\mathrm{i}(1+\delta_j)\bigr)\bigl(y-\gamma_j-\mathrm{i}(1+\delta_j)\bigr)}.
+\]
+并有对角恒等式
+\[
+K_\nu(x,x)=H_\nu(x).
+\]
+\end{definition}
+
+\begin{proposition}[二维指纹的张量分解与唯一性]\label{prop:typed-address-biaxial-completion-comoving-fingerprint}
+设
+\[
+\widetilde\nu:=
+4\pi\sum_{j=1}^{\kappa}m_j\frac{\delta_j}{1+\delta_j}\,\delta_{(\gamma_j,\delta_j)}.
+\]
+则
+\[
+F_\nu(\xi,s)=
+\int_{\RR\times(0,\infty)}
+e^{-\mathrm{i}\gamma\xi}e^{-s\delta}\,d\widetilde\nu(\gamma,\delta),
+\]
+即 \(F_\nu\) 正是 \(\gamma\)-方向 Fourier 与 \(\delta\)-方向 Laplace 的张量化组合。于是映射
+\[
+\nu\longmapsto F_\nu
+\]
+在有限测度类上为单射。更进一步，四类数据
+\[
+\nu,\qquad H_\nu|_I,\qquad F_\nu,\qquad K_\nu
+\]
+在任意非空开区间 \(I\subset\RR\) 上彼此唯一决定。尤其只知道核的对角
+\[
+K_\nu(x,x)=H_\nu(x)
+\]
+已足以恢复整个有限秩核与全部二维缺陷几何。
+\end{proposition}
+\begin{proof}
+这就是命题 \ref{prop:cdim-defect-measure-fourier-laplace-holographic} 在本章语言下的直接表述。
+\end{proof}
+
+\begin{theorem}[有限缺陷测度的递归层剥离]\label{thm:typed-address-biaxial-completion-comoving-layer-peeling}
+把不同深度值按升序记为
+\[
+0<\delta^{(1)}<\delta^{(2)}<\cdots<\delta^{(r)},
+\qquad
+\delta^{(r+1)}:=+\infty.
+\]
+若前 \(s-1\) 层已恢复，并记残差 Fourier 变换为 \(\widehat H^{(s)}(\xi)\)，则有
+\[
+e^{(1+\delta^{(s)})|\xi|}\widehat H^{(s)}(\xi)
+=
+G_s(\xi)+
+O\!\bigl(e^{-(\delta^{(s+1)}-\delta^{(s)})|\xi|}\bigr),
+\]
+其中
+\[
+G_s(\xi)=
+4\pi\sum_{\delta_j=\delta^{(s)}}
+m_j\frac{\delta^{(s)}}{1+\delta^{(s)}}e^{-\mathrm{i}\gamma_j\xi}.
+\]
+因此每一层都可以先由最大衰减率剥离，再在该层上做有限 Fourier 反演；经过有限步递归，整个 \(\nu\) 被唯一恢复。
+\end{theorem}
+\begin{proof}
+这正是定理 \ref{thm:cdim-defect-measure-recursive-layer-peeling} 的内容。
+\end{proof}
+
+\begin{remark}[Poisson 半群视角]\label{rem:typed-address-biaxial-completion-comoving-poisson}
+若把缺陷族组织成尺度扫描 \(t\mapsto G_t\)，则其尺度推进可写成 Poisson 半群轨道 \(G_{t+s}=P_s*G_t\)。在有限缺陷口径下，单一正尺度 \(t>0\) 已足以通过有理 Herglotz 极点反演恢复全部离线参数；因此多尺度扫描更多承担稳健性与噪声分账职能，而不是可逆性的逻辑前提。相关的 Fourier--Laplace 指纹注入性亦可与定理 \ref{thm:xi-jensen-potential-fourier-laplace-injective} 对读。
+\end{remark}
+
+\subsubsection{低秩有限采样与 Hankel--Prony 双向分解}\label{subsubsec:typed-address-biaxial-completion-comoving-prony}
+当二维指纹被限制到等距采样网格上时，问题退化为经典的有限指数和恢复；这正是 Hankel--Prony 接口的进入点。
+
+\begin{definition}[等距频谱样本与指数节点]\label{def:typed-address-biaxial-completion-comoving-discrete-samples}
+固定采样步长 \(\Delta>0\)，定义离散样本
+\[
+u_n:=\widehat H_\nu(n\Delta)
+=
+\sum_{j=1}^{\kappa} A_j z_j^n,
+\]
+其中
+\[
+A_j:=4\pi m_j\frac{\delta_j}{1+\delta_j}>0,
+\qquad
+z_j:=e^{-(1+\delta_j)\Delta}e^{-\mathrm{i}\gamma_j\Delta}.
+\]
+于是问题转化为经典有限指数和的节点--权重恢复。
+\end{definition}
+
+\begin{proposition}[Hankel 因子化与秩证书]\label{prop:typed-address-biaxial-completion-comoving-hankel}
+定义 Hankel 块
+\[
+H_{\kappa-1}:=(u_{p+q})_{0\le p,q\le \kappa-1}.
+\]
+在一般位置下，即节点 \(z_j\) 两两不同且 \(A_j\neq 0\)，有
+\[
+H_{\kappa-1}
+=
+V\,\operatorname{diag}(A_1,\dots,A_\kappa)\,V^{\mathsf T},
+\]
+其中 \(V\) 为 Vandermonde 矩阵。因此
+\[
+\operatorname{rank}(H_{\kappa-1})=\kappa.
+\]
+这给出最小 realization 维数与缺陷阶数的同一证书。
+\end{proposition}
+\begin{proof}
+见命题 \ref{prop:cdim-atomic-defect-hankel-prony}；最小 realization 维数的识别还可与定理 \ref{thm:hankel-rank-minimal} 对读。
+\end{proof}
+
+\begin{theorem}[Prony 门槛：判定阈值与重建阈值分离]\label{thm:typed-address-biaxial-completion-comoving-prony-threshold}
+在一般位置下有两条严格最小性结论。
+
+其一，若只问 \(\operatorname{rank}(H_{\kappa-1})\) 是否等于 \(\kappa\)，则最短可判定前缀是
+\[
+(u_0,\dots,u_{2\kappa-2}),
+\]
+即长度 \(2\kappa-1\) 的样本；因为 \(\det(H_{\kappa-1})\) 对最高阶样本 \(u_{2\kappa-2}\) 仅仿射依赖，仅给前缀
+\[
+(u_0,\dots,u_{2\kappa-3})
+\]
+时一般仍保留一维自由度，无法普适判定秩是否坍缩。
+
+其二，若要求把节点 \(\{z_j\}\) 与权重 \(\{A_j\}\) 唯一重建，则一般还需再加一项样本，即完整长度
+\[
+(u_0,\dots,u_{2\kappa-1})
+\]
+的 \(2\kappa\) 点窗口。后一最小性与定理 \ref{thm:cdim-atomic-defect-prony-2kappa-recovery} 一致。
+
+因此，是否可判定与是否可重建之间严格差一阶：前者的最小门槛是 \(2\kappa-1\)，后者的最小门槛是 \(2\kappa\)。
+\end{theorem}
+\begin{proof}
+对 \(H_{\kappa-1}=(u_{p+q})_{0\le p,q\le \kappa-1}\) 而言，其行列式是关于最高阶样本 \(u_{2\kappa-2}\) 的一次多项式；因此在给定
+\(
+u_0,\dots,u_{2\kappa-3}
+\)
+之后，仍可通过改变 \(u_{2\kappa-2}\) 使其在非零与零之间切换，故长度 \(2\kappa-2\) 的前缀无法普适判定秩是否坍缩。相反，一旦 \(u_{2\kappa-2}\) 也给定，秩判定就已封闭。
+\par
+若进一步要求唯一恢复节点与权重，则除判定 Hankel 块满秩外，还必须恢复湮灭多项式的全部系数并解出其根；这正需要定理 \ref{thm:cdim-atomic-defect-prony-2kappa-recovery} 所使用的完整 \(2\kappa\) 点样本窗口。
+\end{proof}
+
+\begin{corollary}[碰撞不适定性]\label{cor:typed-address-biaxial-completion-comoving-collision}
+记
+\[
+\mathrm{sep}:=\min_{j\neq k}|z_j-z_k|.
+\]
+任一基于有限样本 \((u_n)\) 的局部反演，其 Lipschitz 误差放大因子 \(L\) 至少满足
+\[
+L\ge C_{\kappa}\,\mathrm{sep}^{-(\kappa-1)}.
+\]
+特别地，当两缺陷满足 \(\delta_j=\delta_k\) 且 \(|\gamma_j-\gamma_k|\to 0\) 时，
+\(
+\mathrm{sep}\asymp \Delta |\gamma_j-\gamma_k|
+\)，
+故稳定反演的条件数必按
+\[
+|\gamma_j-\gamma_k|^{-(\kappa-1)}
+\]
+爆炸。也就是说，层析虽然可逆，但在近碰撞极限上不可无代价稳定。
+\end{corollary}
+\begin{proof}
+命题 \ref{prop:typed-address-biaxial-completion-comoving-hankel} 把反演问题化为 Vandermonde 型线性系统；而该类系统的条件数下界由最小节点间距控制。将标准 Vandermonde 条件数估计应用于 \(z_j\) 的近碰撞极限，即得所示放大量级。
+\end{proof}
+
+\subsubsection{从边界标量到 \texorpdfstring{$\kappa$}{kappa} 维再现核 Hilbert 空间}\label{subsubsec:typed-address-biaxial-completion-comoving-rkhs}
+可逆层析的对象并不只是一个标量扫描函数；在有限缺陷口径下，它自然提升为一个有限秩核对象。
+
+\begin{theorem}[有限秩核的 RKHS 读法]\label{thm:typed-address-biaxial-completion-comoving-rkhs}
+由定义 \ref{def:typed-address-biaxial-completion-comoving-fingerprint} 中 \(K_\nu(x,y)\) 的显式表达可见，它是 \(\kappa\) 个 rank-one 项之和，因此自然生成一个至多 \(\kappa\) 维的再现核 Hilbert 空间。边界标量 \(H_\nu(x)\) 不再只是一个深度曲线，而是该有限维核对象的对角截面。
+\end{theorem}
+\begin{proof}
+这正是定理 \ref{thm:cdim-basepoint-scan-finite-rank-rkhs} 在本章口径下的直接重述。
+\end{proof}
+
+\begin{proposition}[Toeplitz 负方向由 Hankel 指纹完全张成]\label{prop:typed-address-biaxial-completion-comoving-toeplitz-hankel}
+在有限点状缺陷且无奇异内因子口径下，Toeplitz 层级的负子空间可与扫描谱指纹的 Hankel 块作合同分解。更精确地，在稳定区间内存在可逆矩阵族 \(R_N\) 使
+\[
+R_N^{\ast}\mathbf{T}_N R_N
+=
+\begin{pmatrix}
+P_N & 0\\
+0 & -\,\mathbf{G}_{\kappa-1}
+\end{pmatrix},
+\qquad
+P_N\succeq 0,
+\qquad
+\mathbf{G}_{\kappa-1}:=H_{\kappa-1}^{\ast}H_{\kappa-1}\succ 0,
+\]
+从而
+\[
+\nu_-(\mathbf{T}_N)=\operatorname{rank}(H_{\kappa-1})=\kappa.
+\]
+这表明边界扫描、Hankel 指纹与 Toeplitz 负惯性并非三条并行线，而是在有限缺陷口径下编码同一组自由度。
+\end{proposition}
+\begin{proof}
+见结论 \ref{con:xi-toeplitz-hankel-isomorphic-split}；其中负平方指数与缺陷维数的一致性还可与定理 \ref{thm:xi-toeplitz-negative-squares-equals-blaschke-defect} 互相印证。
+\end{proof}
+
+\subsubsection{位复杂度屏障与共动前缀收益}\label{subsubsec:typed-address-biaxial-completion-comoving-bit-budget}
+共动协议的收益，并不是取消精度成本，而是把原先压在端点径向余量上的高度依赖转移到地址前缀上。
+
+\begin{proposition}[固定图表的最坏位预算]\label{prop:typed-address-biaxial-completion-comoving-bit-budget}
+若在固定 Cayley 图表下考虑高度窗
+\[
+|\gamma|\le T,
+\qquad
+\delta\ge \delta_0>0,
+\]
+则端点余量满足
+\[
+1-|w_\rho|^2\ge \frac{4\delta_0}{T^2+(1+\delta_0)^2}.
+\]
+若机制对端点余量的最小可分辨尺度为 \(2^{-p}\)，则为了在该高度窗内离线排除全部可能离切片零点，必须满足
+\[
+p\ge
+\log_2\!\frac{T^2+(1+\delta_0)^2}{4\delta_0}
+=
+2\log_2 T+\log_2\frac1{\delta_0}+O(1)
+\qquad(T\to\infty).
+\]
+这就是固定图表里的二次压缩 \(\Rightarrow\) 二对数高度位预算。
+\end{proposition}
+\begin{proof}
+这是定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound} 的直接重述；其制度代价也可与结论 \ref{con:xi-toeplitz-length-depth-duality} 的 Toeplitz 证书长度下界对读。
+\end{proof}
+
+\begin{corollary}[共动前缀的常数预算收益]\label{cor:typed-address-biaxial-completion-comoving-prefix-gain}
+若允许外置共动前缀并取 \(x_0=\gamma\)，则
+\[
+h_\gamma(\rho)=1-|w_{\rho,\gamma}|^2=\frac{4\delta}{(1+\delta)^2}\ge \frac{4\delta_0}{(1+\delta_0)^2}.
+\]
+因此同一端点阈值在高度无关的常数位预算下即可证书化。也就是说，共动协议并没有免费消除复杂度，而是把它从径向精度账本转移到了地址前缀账本：若前缀未给定，则评价函数在对象层不定义，并读出为 \(\mathrm{NULL}\)。
+\end{corollary}
+\begin{proof}
+第一式由命题 \ref{prop:typed-address-biaxial-completion-comoving-first-order} 给出，而“常数预算收益”的制度解释正是推论 \ref{cor:xi-comoving-prefix-bit-budget-gain} 与注 \ref{rem:xi-comoving-horizon-localization-address-null} 的内容。
+\end{proof}
+
+\begin{proposition}[紧化读出的径向位复杂度下界]\label{prop:typed-address-biaxial-completion-comoving-radial-bits}
+即便不谈零点，仅对紧化坐标
+\[
+u=\pi^{-1}\arctan(x)
+\]
+做单值可核验读出，若要求绝对误差 \(\le \varepsilon\)，则 dyadic 位数 \(n\) 仍必须满足
+\[
+n\ge \log_2\!\frac1\varepsilon + \log_2(1+x^2)+\log_2\pi + O(1).
+\]
+因此边界紧化把动态范围制度性压入末位精度；共动前缀能回收的是高度红移那一部分预算，而不是取消紧化读出的基本精度代价。
+\end{proposition}
+\begin{proof}
+这正是定理 \ref{thm:xi-radial-information-projection-lower-bound} 的内容。
+\end{proof}
+
+\subsubsection{小结：破盲等于地址外置、谱可逆与采样过阈}\label{subsubsec:typed-address-biaxial-completion-comoving-summary}
+本节内容可压缩为三条链：
+\[
+\text{fixed chart}
+\Longrightarrow
+h(\rho)\asymp \delta/\gamma^2
+\Longrightarrow
+\text{高度红移盲区},
+\]
+\[
+\text{co-moving prefix }x_0=\gamma
+\Longrightarrow
+h_\gamma(\rho)\asymp \delta
+\Longrightarrow
+\text{一阶显影},
+\]
+\[
+H_\nu
+\Longleftrightarrow
+\widehat H_\nu
+\Longleftrightarrow
+F_\nu
+\Longleftrightarrow
+K_\nu
+\Longleftrightarrow
+\{u_n\}
+\Longrightarrow
+\text{Hankel--Prony 恢复}.
+\]
+于是，所谓共动破盲并不是再去逼近同一个半径阈值，而是把高度依赖外置到前缀里；所谓可逆层析也不是增加更多模态，而是识别出边界扫描本来就处在一个有限秩、有限样本可恢复的谱对象类中。前者回收的是红移预算，后者回收的是可逆性预算；二者合起来，才把上一节的结构性盲区真正改写成有限证书问题。
+

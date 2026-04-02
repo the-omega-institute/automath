@@ -1,0 +1,245 @@
+\subsection{正交切片与判定闭合：可见模长、盘内零点与端点载荷的三分接口}\label{subsec:typed-address-biaxial-completion-orthogonal-slice-decidability}
+上一节把破盲改写成两条路径：要么把高度依赖外置到共动前缀里，要么把边界扫描提升为可逆层析对象。但一旦协议重新锁回 unitary slice 的可见域 \(X_{\mathrm{vis}}=\mathsf{Phase}\)，问题便立刻转化：关键不再是有没有信息，而是哪一类信息在这一切片上根本不属于同一类型。由此，\(\mathrm{NULL}\) 也不再是“尚未算出”的数值性残缺，而被提升为一类带失败来源标签的结构性输出。本节的任务，是把这一切片约束、判定性闭合与 Čech--谱指纹接口压缩为完备相位对象的后一段前端纪律。
+
+\subsubsection{正交切片：离开临界线以后，信息为何自动分轴}\label{subsubsec:typed-address-biaxial-completion-orthogonal-slice}
+unitary slice 的真正作用，不是把所有对象压成单一相位值，而是把哪些对象可以进入该切片、哪些对象必须外置到账本轴上，变成一个严格的类型问题。
+
+\begin{definition}[unitary slice 可见域]\label{def:typed-address-biaxial-completion-unitary-visible-domain}
+固定可见域
+\[
+X_{\mathrm{vis}}=\mathsf{Phase},
+\]
+并要求所有读出都通过定义 \ref{def:xi-visible-read-null} 的可见域过滤与 \(\mathbf{PW}\) 闭包类型检查。换言之，协议层只接受那些能够在纯相位切片上被类型化、被寻址并被离线核验的对象；任何本质上要求额外连续径向自由度的量，若未被显式外置，则不属于对象层可读出对象。
+\end{definition}
+
+\begin{theorem}[正交切片定理]\label{thm:typed-address-biaxial-completion-orthogonal-slice}
+在定义 \ref{def:typed-address-biaxial-completion-unitary-visible-domain} 的约束下，偏离临界切片的信息被强制分解为三类互不替代的正交通道：
+\begin{enumerate}
+  \item \textbf{协议正交（径向分量）}：凡本质上需要 \(|u|\neq 1\) 才能表达的连续径向自由度，在纯相位接口中不可类型化；若拒绝外置唯一连续横截方向
+  \[
+  \varrho(u)=\log|u|,
+  \]
+  则读出按协议退化为 \(\mathrm{NULL}\)。
+  \item \textbf{因子分解正交（盘内零点分量）}：在 Hardy/Smirnov 因子分解口径下，边界模长只决定外因子，而盘内零点与奇异支撑完全由内因子承载；因此离切片点状事件的零点数据不可能由边界模长审计恢复。
+  \item \textbf{端点载荷正交（端点分量）}：端点邻域的伸缩半群分解为有限离散残差与连续精度势负载两条互不耦合的账本轴；故端点载荷对应独立记录通道，不能由增加半径采样或增加地址深度来替代。
+\end{enumerate}
+于是，离开 \(\Re(s)=\tfrac12\) 后若仍想在闭环内保持可核验，只能沿这三条外置轴之一显影；拒绝外置其中任何一轴，都会在类型层触发 \(\mathrm{NULL}\) 或相应的失败见证。
+\end{theorem}
+\begin{proof}
+这正是定理 \ref{thm:xi-orthogonal-slice-structure} 在本章接口语言下的重述；其中唯一连续横截方向的刚性由推论 \ref{cor:xi-unique-continuous-transverse-register} 给出。
+\end{proof}
+
+\begin{corollary}[预算不可互偿]\label{cor:typed-address-biaxial-completion-orthogonal-budget}
+上述三轴不是三种可互换的成本口径，而是三类不同的对象论条件，因此不存在
+\[
+\text{更多 prime-register 预算}\Rightarrow\text{抵消端点分辨率门槛}
+\]
+或
+\[
+\text{更深 dyadic 地址}\Rightarrow\text{替代径向寄存器}
+\]
+这样的跨轴偿付。可见域一旦固定，缺哪一轴，就只能在哪一轴上失败。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable}，不同失败类型分别由不同支撑轴上的阈值与不变量见证锁定，故预算提升只能在其所属轴上发生有效补偿，不能跨轴抵偿。
+\end{proof}
+
+\subsubsection{判定性闭合：\texorpdfstring{$\mathrm{NULL}$}{NULL} 与其补集都必须带证书}\label{subsubsec:typed-address-biaxial-completion-decidability}
+unitary-slice 制度一旦固定，\(\mathrm{NULL}\) 就不再表示“暂时没有结果”，而表示“可以被有限见证精确归责的拒绝输出”。
+
+\begin{proposition}[判定性闭合]\label{prop:typed-address-biaxial-completion-decidable-null}
+在 unitary-slice 锁定与 \(\mathbf{PW}\) 类型安全下，对任意查询或对象 \(q\)：
+\begin{enumerate}
+  \item 若 \(\operatorname{read}(q)=\mathrm{NULL}\)，则必须存在有限失败见证 \(\operatorname{Wit}(q)\)，并且该见证可由确定性验证器离线复核；
+  \item 若 \(\operatorname{read}(q)\neq \mathrm{NULL}\)，则必须伴随一份落在可见域内的可核对地址或证书对象。
+\end{enumerate}
+于是可寻址性谓词
+\[
+\operatorname{read}(q)\stackrel{?}{=}\mathrm{NULL}
+\]
+在该制度内同时具有正向与反向的有限证书，因此本身成为一个可判定对象。
+\end{proposition}
+\begin{proof}
+这就是推论 \ref{cor:cdim-unitary-slice-decidable} 与定理 \ref{thm:xi-us-deterministic-tristate} 的合并表述。
+\end{proof}
+
+\begin{definition}[失败见证的三类标签]\label{def:typed-address-biaxial-completion-witness-tags}
+在上述闭包里，失败见证的类型标签取值于
+\[
+\{\mathrm{Out},\mathrm{Cech},\mathrm{Hard}\},
+\]
+其中：
+\begin{enumerate}
+  \item \(\mathrm{Out}\) 表示域外或闭包拒绝：对象的解释需要超出 \(X_{\mathrm{vis}}=\mathsf{Phase}\) 的自由度，典型地需要 \(|u|\neq 1\) 的径向模式；
+  \item \(\mathrm{Cech}\) 表示 Čech 二阶粘合障碍：局部片段可建立，但前缀站点上的二阶障碍类非零，导致全局截面不存在；
+  \item \(\mathrm{Hard}\) 表示硬阈值资源不足：某条残差轴或端点轴上的预算门槛被违反，因而无法得到单值可核验的合法外置。
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[正交三分律]\label{prop:typed-address-biaxial-completion-tag-orthogonality}
+上述三类失败见证互相正交且不可替代。增加某一轴的预算不能修复另一轴的缺陷；特别地，prime-register 的增长不能消去 Čech 粘合障碍，也不能越过端点分辨率门槛。于是 \(\mathrm{NULL}\) 的来源不是模糊的失败，而是带类型的、可归责的制度事件。
+\end{proposition}
+\begin{proof}
+定义 \ref{def:typed-address-biaxial-completion-witness-tags} 的三分，正是定理 \ref{thm:xi-null-complete-trichotomy-offline} 与定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable} 的标签化接口。
+\end{proof}
+
+\subsubsection{前缀站点与局部截面：\texorpdfstring{$\mathrm{NULL}$}{NULL} 的内禀刻画}\label{subsubsec:typed-address-biaxial-completion-prefix-site}
+在地址先于取值的站点语义下，\(\mathrm{NULL}\) 的对象论本质是全局截面不存在；这使得空值的判定从“数值上看不到”转写为“对象层上没有可粘接的全局证书”。
+
+\begin{proposition}[局部截面判据]\label{prop:typed-address-biaxial-completion-local-section}
+沿用上一节的记号，对任意地址 \(a\) 及其证书纤维 \(F(a)\)，有严格判据
+\[
+\operatorname{read}(a)\neq \mathrm{NULL}
+\iff
+F(a)\neq \varnothing.
+\]
+因此
+\[
+\operatorname{read}(a)=\mathrm{NULL}
+\iff
+F(a)=\varnothing.
+\]
+这一步把“无值可读”改写成“局部站点上没有可粘接的全局对象”。
+\end{proposition}
+\begin{proof}
+这正是命题 \ref{prop:cdim-nonnull-section-criterion} 在本章中的直接应用。
+\end{proof}
+
+\begin{theorem}[Čech--cyclotomic 量子化：\texorpdfstring{$\mathrm{NULL}$}{NULL} 的谱指纹]\label{thm:typed-address-biaxial-completion-cech-cyclotomic}
+设 \(A\) 为有限阿贝尔群，\(\widehat A=\operatorname{Hom}(A,\TT)\) 为角色群，并设 \([\alpha]\in \check H^2(\{b_i\},A)\) 为前缀站点覆盖上的二阶粘合障碍类。对每个 \(\chi\in\widehat A\)，取相应的扭曲转移矩阵 \(B_\chi\)，记非扭曲 Perron 根为
+\[
+\lambda:=\rho(B_{\ind})>1,
+\qquad
+Z_\chi(t):=\det(I-tB_\chi)^{-1}.
+\]
+若推前类 \(\chi_*([\alpha])\) 的阶为
+\[
+r:=\operatorname{ord}\bigl(\chi_*([\alpha])\bigr)>1,
+\]
+则归一化行列式
+\[
+\det\!\Bigl(I-\frac{t}{\lambda}B_\chi\Bigr)
+\]
+在单位圆上必出现一个 \(r\) 阶本原单位根零点；等价地，
+\[
+\det(I-tB_\chi)
+\]
+在 \(|t|=\lambda^{-1}\) 的圆周上含有一个 \(r\) 阶 cyclotomic 轨道。反过来，若某个非平凡 \(\chi\neq\ind\) 的扭曲行列式在该模长圆上出现 \(r>1\) 阶本原单位根零点，则
+\[
+\operatorname{ord}\bigl(\chi_*([\alpha])\bigr)=r,
+\]
+从而 \([\alpha]\neq 0\)，进而地址纤维为空，读出为 \(\mathrm{NULL}\)。
+\end{theorem}
+\begin{proof}
+这就是定理 \ref{thm:cdim-cech-cyclotomic-quantization} 在当前前缀站点语境下的直接重述；最后一步由命题 \ref{prop:null-as-h2-obstruction} 给出。
+\end{proof}
+
+\subsubsection{从 Čech 障碍到量子结构：相位、射影类与干涉}\label{subsubsec:typed-address-biaxial-completion-projective-phase}
+一旦局部对象能够投影到同一可见事件而又无法被同一规范同时抹平，切片上的稳定对象就不再是绝对 lift，而是可见残差、射影态类与干涉修正的组合。
+
+\begin{definition}[可见过渡残差类]\label{def:typed-address-biaxial-completion-visible-residual}
+设 \(s_i\in F(b_i)\) 为覆盖片 \(b_i\) 上的局部 lift，\(g_{ij}\in A\) 为两片重叠上的过渡元。取可见化通道
+\[
+\pi_{\mathrm{vis}}:A\to A_{\mathrm{vis}},
+\]
+其中 \(A_{\mathrm{vis}}\) 典型可取 \(\TT\) 或其 cyclotomic 商。定义可见过渡元
+\[
+\theta_{ij}:=\pi_{\mathrm{vis}}(g_{ij})\in A_{\mathrm{vis}},
+\]
+以及三重交上的可见残差
+\[
+\omega_{ijk}:=\theta_{ij}\theta_{jk}\theta_{ki}.
+\]
+由此得到 Čech 二阶类
+\[
+[\omega]\in \check H^2(\{b_i\},A_{\mathrm{vis}}),
+\]
+称为该 lift 族的可见过渡残差类。
+\end{definition}
+
+\begin{proposition}[相位是粘接残差的可见投影]\label{prop:typed-address-biaxial-completion-phase-residual}
+上面的 \([\omega]\) 正是障碍类 \([\alpha]\) 经可见化通道 \(\pi_{\mathrm{vis}}\) 推前后的像：
+\[
+[\omega]=(\pi_{\mathrm{vis}})_*[\alpha].
+\]
+因此，相位并不是额外加上的连续标签，而是局部粘接残差在可见层上的投影。特别地，可见相位能否被同一组局部规范同时消去，当且仅当
+\[
+[\omega]=0
+\]
+在 \(\check H^2(\{b_i\},A_{\mathrm{vis}})\) 中平凡。
+\end{proposition}
+\begin{proof}
+这就是命题 \ref{prop:cdim-visible-phase-residual-triviality} 的内容。
+\end{proof}
+
+\begin{corollary}[可见态首先是射影类]\label{cor:typed-address-biaxial-completion-projective-class}
+如果可见读出只依赖局部对象在规范变换下的不变量，那么真正稳定的可见对象就不是单个绝对 lift，而是其规范等价类。于是，当 \([\omega]\neq 0\) 时，能够保留下来的不是全局可比的绝对态，而是由相对相位决定的射影态类。
+\end{corollary}
+\begin{proof}
+见推论 \ref{cor:cdim-visible-state-projectivization}。
+\end{proof}
+
+\begin{proposition}[干涉的最小结构]\label{prop:typed-address-biaxial-completion-minimal-interference}
+设 \(\ell_1,\ell_2\) 为两条局部 lift，且它们投影到同一可见事件
+\[
+\pi(\ell_1)=\pi(\ell_2)=y.
+\]
+对任何满足局部规范不变、粗粒化相容与局部拼接一致性的可见统计 \(W\)，必可写成
+\[
+W_y(\ell_1,\ell_2)=W_y(\ell_1)+W_y(\ell_2)+I_y(\ell_1,\ell_2),
+\]
+其中交叉项 \(I_y(\ell_1,\ell_2)\) 只依赖于两条 lift 的相对可见残差类。并且，只要这个相对类非平凡，
+\[
+[\omega(\ell_1,\ell_2)]\neq 0,
+\]
+则交叉项不可能对全部规范代表元恒等为零。也就是说，干涉正是“同一可见端点上的多重 local lift 无法被同一全局规范同时抹平”在统计层上的最低阶表现。
+\end{proposition}
+\begin{proof}
+这正是命题 \ref{prop:cdim-multilift-interference-correction} 的接口化表述。
+\end{proof}
+
+\begin{definition}[可见态类]\label{def:typed-address-biaxial-completion-visible-state-class}
+把所有与某条局部 lift \(\ell\) 在局部规范变换下等价、且投影到同一可见对象的 lift 归入同一等价类，记作
+\[
+[\ell].
+\]
+称 \([\ell]\) 为一个可见态类。
+\end{definition}
+
+\begin{proposition}[后端线性化必须先下降到射影类]\label{prop:typed-address-biaxial-completion-projective-organization}
+若一个后端表示或线性化接口要与可见统计相容，则它必须先因子化经由商映射
+\[
+\ell\longmapsto [\ell]
+\]
+之后才能组织代表元。换句话说，可见层里首先出现的不是绝对 lift 空间，而是其射影化后的态类空间。
+\end{proposition}
+\begin{proof}
+见命题 \ref{prop:cdim-projective-state-organization}。
+\end{proof}
+
+\begin{proposition}[平方型读出作为一致性目标]\label{prop:typed-address-biaxial-completion-quadratic-readout}
+若定义在可见态类 \([\ell]\) 上的统计读法 \(P\) 同时满足正性与归一化、局部规范不变性、粗粒化相容性、张量复合封闭性以及条件期望一致性，则存在某个振幅表示空间 \(V\)、表示映射
+\[
+\mathcal A:[\ell]\longmapsto \mathcal A([\ell])\in V,
+\]
+以及 \(V\) 上的正半定二次型 \(Q\)，使得在适当归一化下
+\[
+P([\ell])=Q\bigl(\mathcal A([\ell]),\mathcal A([\ell])\bigr).
+\]
+因此，平方型读出不应被理解为附加公理，而应被理解为局部规范不变、粗粒化相容与复合封闭共同逼出的表示目标。
+\end{proposition}
+\begin{proof}
+这就是命题 \ref{conj:cdim-quadratic-readout-consistency} 所固定的 Hilbert 闭包接口；与上一节已经出现的有限秩核化与 RKHS 语言完全相容。
+\end{proof}
+
+\subsubsection{小结：\texorpdfstring{$\mathrm{NULL}$}{NULL} 不是缺省值，而是有类型的边界事件}\label{subsubsec:typed-address-biaxial-completion-orthogonal-summary}
+本节的含义可以压缩为四点。
+
+第一，正交切片说明：临界线外的信息并不是同一种偏离，而是径向、内因子零点、端点载荷三类互不替代的分量。
+
+第二，判定性闭合说明：\(\mathrm{NULL}\) 及其补集都必须带有限证书，所以它属于对象层，而不是实现层异常。
+
+第三，前缀站点说明：\(\mathrm{NULL}\) 的内禀本质是全局截面空，Čech 障碍则在扭曲行列式的单位根谱线上留下 cyclotomic 指纹。
+
+第四，量子结构接口说明：相位是粘接残差的可见投影，干涉是同端点多 lift 的统计修正，射影态类先于 Hilbert 化出现，而平方型读出应被理解为表示目标。
+

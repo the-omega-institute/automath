@@ -1,0 +1,124 @@
+\subsection{边界层盲区与联合预算：半径预算、dyadic 深度与端点热核的三端闭包}\label{subsec:unit-circle-boundary-joint-budget}
+当完备相位对象进入边界层读出时，仍存在一类并非“缺证”，而是由端点压缩诱发的结构性盲区。对 unitary-slice 接口而言，这一盲区由三条彼此正交的预算轴控制：半径预算负责显影阈值事件，dyadic 深度负责地址分离，端点热核预算负责抽取端点承载。只有三端证书在统一验证器中同时闭合，边界层读出才真正摆脱盲区。
+
+\begin{definition}[边界层预算向量]\label{def:unit-circle-boundary-budget-vector}
+定义边界层预算向量
+\[
+\mathbf b^\partial:=(\Delta_\rho,b,N),
+\]
+其中
+\[
+\Delta_\rho:=1-\rho_{\max}
+\]
+表示有限半径采样可到达的边界层厚度，\(b\in\NN\) 表示 dyadic 地址深度，\(N\in\NN\) 表示 Toeplitz 型端点热核探针的截断深度。
+\end{definition}
+
+\begin{proposition}[半径预算的结构性任务]\label{prop:unit-circle-boundary-radial-blindspot}
+设 \(\rho=\beta+\mathrm{i}\gamma\) 为离切片事件，并记 \(\delta=\frac12-\beta>0\)。在固定 Cayley 图表下，其圆盘像 \(w_\rho\) 满足
+\[
+1-|w_\rho|
+\asymp
+\frac{\delta}{\gamma^2}
+\qquad (|\gamma|\to\infty).
+\]
+若有限证书只采样到 \(\rho_{\max}\le |w_\rho|\)，则该事件处于当前半径制度的结构性盲区；增加采样点数而不提升 \(\rho_{\max}\) 不能消除该盲区。
+\end{proposition}
+\begin{proof}
+由 Cayley 变换的显式公式可知，高高度离切片事件在固定图表中被二次压缩到边界薄壳。于是半径预算的职责只是越过目标阈值半径，而非承担地址分离或端点载荷审计。
+\end{proof}
+
+\begin{definition}[dyadic 地址]\label{def:unit-circle-boundary-dyadic-address}
+令
+\[
+\upsilon(t)=\pi^{-1}\arctan(t)\in\left(-\frac12,\frac12\right),
+\qquad
+u_e(t)=\upsilon(t)+\frac12\in(0,1).
+\]
+对深度 \(b\in\NN\)，定义 dyadic 地址
+\[
+A_b(t):=\lfloor 2^b u_e(t)\rfloor.
+\]
+\end{definition}
+
+\begin{proposition}[地址碰撞强制律]\label{prop:unit-circle-boundary-dyadic-collision}
+存在常数 \(c>0\)，对足够大的高度窗 \((T,2T]\) 与任意 \(b\ge 1\)，总可找到某个地址值 \(a\) 使
+\[
+\#\{\gamma\in(T,2T]:A_b(\gamma)=a\}
+\ge
+c\,\frac{T^2\log T}{2^b}.
+\]
+因此，若希望在该高度窗内达到地址级单射读出，则必须满足
+\[
+2^b\gtrsim T^2\log T,
+\qquad\text{等价地}\qquad
+b\ge 2\log_2 T+\log_2\log T-O(1).
+\]
+\end{proposition}
+\begin{proof}
+单位圆边界坐标在端点附近的二次压缩把高度窗长度 \(T\) 映到 \(T^{-2}\) 级的窄弧；将该窄弧再按 dyadic 盒划分，即得到平均占用数为 \(T^2\log T/2^b\) 量级的碰撞下界。
+\end{proof}
+
+\begin{definition}[端点热核量]\label{def:unit-circle-boundary-endpoint-heat}
+对 Toeplitz 主子矩阵 \(T_N=(c_{j-k})_{0\le j,k\le N}\) 与二项式向量 \(b^{(N)}\)，定义端点热核量
+\[
+a_N:=\frac{\bigl(b^{(N)}\bigr)^{\!T}T_N\,b^{(N)}}{4^N}.
+\]
+若 \(\mu\) 为对应的 Carath\'eodory 表示测度，则
+\[
+a_N=\int_{\TT}\left|\frac{1-\xi}{2}\right|^{2N}\,d\mu(\xi)\ge 0.
+\]
+\end{definition}
+
+\begin{proposition}[端点热核的单调极限]\label{prop:unit-circle-boundary-endpoint-heat-decay}
+量 \(a_N\) 单调下降并收敛到端点原子质量 \(\mu(\{-1\})\)。若 \(K\subset\TT\setminus\{-1\}\) 为闭集，且
+\[
+q(K):=\sup_{\xi\in K}\left|\frac{1-\xi}{2}\right|\in(0,1),
+\]
+则
+\[
+0\le a_N-\mu(\{-1\})\le q(K)^{2N}\mu(K).
+\]
+因此给定目标误差 \(\eta>0\)，只要
+\[
+N\ge \frac{\log(\mu(K)/\eta)}{2\log q(K)^{-1}},
+\]
+便可把端点热核误差压到 \(\eta\) 之内。
+\end{proposition}
+\begin{proof}
+由 \(\left|\frac{1-\xi}{2}\right|^{2N}\) 在 \(\xi=-1\) 处取值 \(1\)、在其余闭支撑上指数衰减到 \(0\)，单调收敛定理与支撑分解立即给出结论。
+\end{proof}
+
+\begin{definition}[三端证书对象]\label{def:unit-circle-boundary-triple-certificate}
+把边界层读出的输入统一写为
+\[
+C^\partial=(C_{\mathrm{addr}},C_{\mathrm{def}},C_{\mathrm{lin}}),
+\]
+其中 \(C_{\mathrm{addr}}\) 给出地址端的 \((L,\theta,b)\) 型输入，\(C_{\mathrm{def}}\) 给出有限半径上的缺陷上界链，\(C_{\mathrm{lin}}\) 给出 Toeplitz--PSD、端点热核量与必要谱裕度信息。
+\end{definition}
+
+\begin{definition}[统一离线验证器]\label{def:unit-circle-boundary-verifier}
+定义边界层验证器
+\[
+\mathsf{Ver}^{\partial}:
+(C_{\mathrm{addr}},C_{\mathrm{def}},C_{\mathrm{lin}})
+\longmapsto
+\{\mathrm{Accept},\mathrm{Reject},\mathsf{NULL}\},
+\]
+其流程是：先检查地址端的类型合法性，再把缺陷端编译为禁入半径链，最后用 Toeplitz--PSD 与端点热核量审计端点承载；只有当三端局部证书在同一协议口径下闭合时才输出 \(\mathrm{Accept}\)。
+\end{definition}
+
+\begin{theorem}[三端预算的联合充分条件]\label{thm:unit-circle-boundary-joint-sufficiency}
+设目标是在高度窗 \((T,2T]\) 内对某个离切片偏移量 \(\delta\) 级别的边界层事件进行非盲读出，并把端点原子误差压到 \(\eta\)。在支撑受控的前提下，一组可操作的联合充分条件为
+\[
+\Delta_\rho\lesssim \frac{\delta}{\gamma^2},
+\qquad
+2^b\gtrsim T^2\log T,
+\qquad
+N\ge \frac{\log(\mu(K)/\eta)}{2\log q(K)^{-1}}.
+\]
+当这三条条件同时成立，且 \(C_{\mathrm{lin}}\) 的 Toeplitz--PSD 审计通过时，\(\mathsf{Ver}^{\partial}\) 输出非 \(\mathsf{NULL}\) 的有限证书；若任一条件失败，则必须输出支撑在对应预算轴上的失败见证。
+\end{theorem}
+
+\begin{remark}[预算共享量纲而不共享可替代性]\label{rem:unit-circle-boundary-budget-nonsubstitutable}
+半径预算、dyadic 深度与端点热核预算都源自端点压缩制度，但它们分别作用于阈值显影、地址分离与端点承载，故只共享量纲来源而不共享可替代性。增加 \(b\) 不能补偿 \(\rho_{\max}\) 不足，增大 \(N\) 也不能替代前两轴的缺口。
+\end{remark}

@@ -1,0 +1,197 @@
+\subsection{Jensen 缺陷、排斥半径与有限采样盲区}\label{subsec:typed-address-biaxial-completion-jensen-defect-repulsion-blindspot}
+原稿中关于 Jensen 缺陷的相关条目，一处展开为 12.67--12.76 的缺陷链，另一处则被重写为面向证书编译的局部接口；两种写法共享同一骨架：先把盘内零点事件压缩为半径参数上的 Jensen 缺陷，再把缺陷值压缩为排斥半径，随后用对数半径导数律把这条静态证书链重新展开为零点计数的动态账本，并最终暴露固定半径采样在边界层上的结构性盲区。本节把这几条结果压成一条统一的正文接口，以便后续直接接入 Toeplitz--PSD 正性层级与统一离线验证器。
+
+\subsubsection{把盘内零点事件压成一族半径参数}\label{subsubsec:typed-address-biaxial-completion-jensen-defect-radius-family}
+圆盘完成化接口的首要作用，在于把“开圆盘内是否存在零点”这一全局解析命题，转写为一族半径 \(\varrho\in(0,1)\) 上的有限证书对象。
+
+\begin{definition}[Jensen 缺陷]\label{def:typed-address-biaxial-completion-jensen-defect}
+对圆盘完成化函数 \(F_{\zeta}\)，在每个半径 \(0<\varrho<1\) 上定义 Jensen 缺陷
+\[
+D_{\zeta}(\varrho)
+:=
+\sum_{|a_k|<\varrho}\log\!\left(\frac{\varrho}{|a_k|}\right),
+\]
+其中 \((a_k)\) 为 \(F_{\zeta}\) 在 \(|w|<\varrho\) 内的零点，按重数计。
+\end{definition}
+
+\begin{proposition}[Jensen 缺陷的有限化语义]\label{prop:typed-address-biaxial-completion-jensen-defect-finiteization}
+定义 \ref{def:typed-address-biaxial-completion-jensen-defect} 给出的缺陷满足
+\[
+D_{\zeta}(\varrho)\ge 0,
+\qquad
+D_{\zeta}(\varrho)=0
+\iff
+F_{\zeta}\text{ 在 }|w|<\varrho\text{ 内无零点}.
+\]
+因此，盘内零点事件不再作为不可见的整体解析性质出现，而被完全有限化为一族单参数标量 \(D_{\zeta}(\varrho)\) 的半径证书。
+\end{proposition}
+\begin{proof}
+这就是定义 \ref{def:app-jensen-defect} 与命题 \ref{prop:app-jensen-formula-defect} 的直接重述。证毕。
+\end{proof}
+
+命题 \ref{prop:typed-address-biaxial-completion-jensen-defect-finiteization} 的制度含义在于：盘内零点事件首先被压缩成“每个半径层上的缺陷值”。由此，原本全局的解析禁入条件被重写为一条可离线采样、可逐半径核验的证书链；但这条链仍然保留了固定半径采样在边界层上的结构性盲区。
+
+\subsubsection{幂覆盖不引入新自由度，只做半径重参数化}\label{subsubsec:typed-address-biaxial-completion-jensen-defect-power-covariance}
+沿幂覆盖搬运缺陷，并不会生成新的连续轴；它所改变的，只是缺陷在半径参数上的着陆位置。
+
+\begin{proposition}[缺陷的幂覆盖共变性]\label{prop:typed-address-biaxial-completion-jensen-defect-power-covariance}
+若对圆盘内解析函数 \(F\) 定义幂拉回
+\[
+F^{(m)}(w):=F(w^m),
+\]
+则对任意整数 \(m\ge 1\) 与任意 \(0<\varrho<1\) 有
+\[
+D_{F^{(m)}}(\varrho)=D_F(\varrho^m).
+\]
+因此，幂覆盖不引入新的自由度，而只是在半径变量上施加确定性的重参数化 \(\varrho\mapsto \varrho^m\)。
+\end{proposition}
+\begin{proof}
+见命题 \ref{prop:app-jensen-defect-power-covariance}。证毕。
+\end{proof}
+
+这一点与前面三轴地址的语义完全一致：尺度参数可以搬运缺陷的显影位置，却不能改变该缺陷究竟属于哪一条对象论轴。特别地，与 Adams--Norm 折叠门复合后，幂覆盖可把端点边界层中的点状缺陷搬运到预设紧子圆盘，并在固定半径处以 Jensen 缺陷证书显影；这正是推论 \ref{cor:xi-adams-norm-fixed-radius-jensen-certificate} 的制度含义。
+
+\subsubsection{从单标量缺陷到排斥半径}\label{subsubsec:typed-address-biaxial-completion-jensen-defect-repulsion-radius}
+Jensen 缺陷一旦作为单参数标量出现，就可进一步被压缩成一个显式的几何禁入量。
+
+\begin{theorem}[视界纯度与排斥半径]\label{thm:typed-address-biaxial-completion-horizon-purity-repulsion}
+下列两组结论同时成立。
+\begin{enumerate}
+  \item RH 等价于
+  \[
+  \lim_{\varrho\uparrow 1}D_{\zeta}(\varrho)=0
+  \qquad\text{等价于}\qquad
+  \limsup_{\varrho\uparrow 1}D_{\zeta}(\varrho)=0.
+  \]
+  \item 对任意 \(0<\varrho<1\)，定义排斥半径
+  \[
+  r_{\ast}(\varrho):=\varrho e^{-D_{\zeta}(\varrho)}\in(0,\varrho].
+  \]
+  则 \(F_{\zeta}\) 在子盘 \(|w|<r_{\ast}(\varrho)\) 内无零点。更定量地，若 \(D_{\zeta}(\varrho)\le \varepsilon\)，则
+  \[
+  r_{\ast}(\varrho)\ge \varrho e^{-\varepsilon}.
+  \]
+  若存在 \(\varrho_n\uparrow 1\) 使 \(r_{\ast}(\varrho_n)\uparrow 1\)，则 \(F_{\zeta}\) 在整个单位圆盘内无零点，从而 RH 成立。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第一组等价即定理 \ref{thm:cdim-horizon-purity-criterion}；第二组即定理 \ref{thm:cdim-defect-repulsion-radius}。证毕。
+\end{proof}
+
+定理 \ref{thm:typed-address-biaxial-completion-horizon-purity-repulsion} 的关键，不仅在于 RH 被压成了一个边界极限是否趋零的单参数问题，更在于缺陷上界被几何化为一个可离线核验的子盘排除证书。也就是说，缺陷值不再只是数值估计，而是直接编译成“在半径 \(r_{\ast}(\varrho)\) 内零点事件被完全排除”的禁入律。
+
+\subsubsection{导数即计数：静态缺陷变成动态账本}\label{subsubsec:typed-address-biaxial-completion-jensen-defect-log-derivative}
+Jensen 缺陷不仅给出静态排除证书，还在对数半径方向上携带盘内零点计数的动态信息。
+
+\begin{proposition}[对数半径导数律与排斥半径驱动律]\label{prop:typed-address-biaxial-completion-jensen-defect-log-derivative}
+令
+\[
+N_{F_{\zeta}}(\varrho)
+:=
+\#\{a:F_{\zeta}(a)=0,\ |a|<\varrho\}
+\]
+为盘内零点计数函数，按重数计。则对几乎处处的 \(\varrho\in(0,1)\) 有
+\[
+\frac{\dd}{\dd(\log\varrho)}D_{\zeta}(\varrho)=N_{F_{\zeta}}(\varrho),
+\]
+并且
+\[
+\frac{\dd}{\dd(\log\varrho)}\log r_{\ast}(\varrho)
+=
+1-N_{F_{\zeta}}(\varrho).
+\]
+于是，缺陷曲线、排斥半径曲线与盘内零点分布三者之间形成微分级别的一一对应。
+\end{proposition}
+\begin{proof}
+第一式由命题 \ref{prop:app-jensen-defect-log-derivative} 给出；第二式由推论 \ref{cor:dephys-repulsion-radius-zero-count-driving} 给出。证毕。
+\end{proof}
+
+因此，静态半径证书立即被重新解释为动态账本：\(D_{\zeta}\) 对 \(\log\varrho\) 的导数就是盘内零点计数，而 \(r_{\ast}\) 的增长率则由 \(1-N_{F_{\zeta}}(\varrho)\) 直接驱动。换言之，缺陷曲线并非只记录“某半径上有多大缺陷”，而是在整个半径方向上逐层记录零点何时进入、进入多少，以及它们如何改变排斥半径的增长机制。
+
+\subsubsection{零点会在边界留下不可消去的印记}\label{subsubsec:typed-address-biaxial-completion-jensen-defect-boundary-imprint}
+盘内零点一旦存在，就不可能在缺陷的边界极限里被完全洗去；其存在必然在半径轴上留下阈值化的正下界与折角结构。
+
+\begin{proposition}[阈值化下界、折角原子与视界深度]\label{prop:typed-address-biaxial-completion-jensen-defect-kink-imprint}
+若 \(F_{\zeta}\) 在单位圆盘内存在零点 \(a\) 且 \(|a|<1\)，则对任意 \(\varrho\in(|a|,1)\) 有
+\[
+D_{\zeta}(\varrho)\ge \log\!\left(\frac{\varrho}{|a|}\right),
+\qquad
+\liminf_{\varrho\uparrow 1}D_{\zeta}(\varrho)\ge \log(1/|a|)>0.
+\]
+并且，若把 \(D_{\zeta}\) 视为 \(\log\varrho\) 的函数，则在每个阈值半径 \(r=|a|\) 处其斜率跳变恰等于该模长层上的零点总重数。
+
+对离临界线零点 \(\rho=\beta+\mathrm{i}\gamma\)（\(\beta<\tfrac12\)），记
+\[
+\delta:=\tfrac12-\beta>0,
+\qquad
+w_{\rho}:=\mathcal{C}(\gamma+\mathrm{i}\delta),
+\qquad
+r_{\rho}:=|w_{\rho}|.
+\]
+则 \(r_{\rho}\) 正是缺陷曲线的折角阈值半径，且
+\[
+|w_{\rho}|^2
+=
+\frac{\gamma^2+(1-\delta)^2}{\gamma^2+(1+\delta)^2},
+\qquad
+h(\rho):=1-|w_{\rho}|^2
+=
+\frac{4\delta}{\gamma^2+(1+\delta)^2}
+\sim
+\frac{4\delta}{\gamma^2}.
+\]
+于是，高度越大，离切片信息越被压向边界层，折角阈值就越逼近 \(\varrho=1\)。
+\end{proposition}
+\begin{proof}
+单点下界由命题 \ref{prop:app-jensen-single-zero-lower-bound} 给出；折角跳变由推论 \ref{cor:app-jensen-defect-kink-structure} 给出。离临界线零点的折角定位与视界深度闭式由定理 \ref{thm:app-jensen-offcritical-kink-localization} 给出；闭式 \(h(\rho)\) 的等价写法也见推论 \ref{cor:app-offcritical-horocycle-busemann}。证毕。
+\end{proof}
+
+命题 \ref{prop:typed-address-biaxial-completion-jensen-defect-kink-imprint} 把“盘内有零点”进一步离散化为“半径轴上出现一个不可去的折角原子”。因此，零点不是在边界极限中留下模糊影响，而是在确定的阈值半径上留下可定位、可计数、可审计的 kink 结构。
+
+\subsubsection{有限采样盲区与两条破盲路径}\label{subsubsec:typed-address-biaxial-completion-jensen-defect-blindspot}
+一旦 Jensen 缺陷被转写为半径族证书，就必须面对固定半径采样在边界层上的结构性盲区。该盲区并不是采样点数不足的偶然误差，而是端点二次压缩与有限半径阈值共同强制出来的制度性不可见域。
+
+\begin{proposition}[有限采样盲区与可审计破盲路径]\label{prop:typed-address-biaxial-completion-jensen-defect-blindspot}
+设仅在有限半径集合 \(\{\varrho_j\}_{j=1}^{M}\subset(0,1)\) 上评估 Jensen 缺陷，并记
+\[
+\varrho_{\max}:=\max_{1\le j\le M}\varrho_j.
+\]
+则这族采样只能反映满足 \(|a|<\varrho_{\max}\) 的盘内零点；任何满足 \(|a|>\varrho_{\max}\) 的零点在该有限采样上严格不可见。特别地，若某个离临界线零点的圆盘像 \(w_{\rho}\) 满足
+\[
+\varrho_{\max}\le |w_{\rho}|,
+\]
+则仅凭这组有限半径数据无法排除它。在高高度区间，这一盲区尺度满足
+\[
+1-\varrho_{\max}\lesssim \frac{\delta}{\gamma^2}.
+\]
+
+解除这类盲区只有两条可审计路径：
+\begin{enumerate}
+  \item 外置可寻址前缀并做共动局部化，把高度红移压回与偏移同阶的一阶可见量；
+  \item 进入可逆层析通道，把二维参数重新编码为一维指数谱并通过 Fourier 反演恢复。
+\end{enumerate}
+若坚持固定图表、固定半径且不外置前缀，则地址预算会被结构性拉高：在高度窗 \((T,2T]\) 上，要使 dyadic 地址达到单射级分离，必须满足
+\[
+b\ge 2\log_2 T+\log_2\log T-O(1).
+\]
+\end{proposition}
+\begin{proof}
+有限采样的严格不可见性见推论 \ref{cor:app-jensen-finite-sampling-blindspot}。离临界线零点在固定图表下的二次径向压缩由定理 \ref{thm:xi-offcritical-quadratic-radial-compression} 给出，从而得到 \(1-\varrho_{\max}\lesssim \delta/\gamma^2\) 的盲区尺度。两条破盲路径分别由推论 \ref{cor:xi-comoving-prefix-bit-budget-gain}、定理 \ref{thm:cdim-comoving-horizon-scan-fourier-inversion} 与推论 \ref{cor:xi-adams-norm-fixed-radius-jensen-certificate} 组织起来；而固定图表下的不可约预算下界则由定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound} 与命题 \ref{prop:typed-address-biaxial-completion-boundary-address-collision} 给出。证毕。
+\end{proof}
+
+命题 \ref{prop:typed-address-biaxial-completion-jensen-defect-blindspot} 表明，前缀预算并不是可有可无的实现细节，而是打破盲区所必需的正交资源。坚持固定图表、固定半径且不外置前缀，意味着离切片点状事件只能通过端点二次压缩进入接口，并因此重新触发不可绕过的深度门槛。
+
+\subsubsection{小结}\label{subsubsec:typed-address-biaxial-completion-jensen-defect-summary}
+本节可以压成一句话：Jensen 缺陷把盘内零点事件压成半径族标量，排斥半径再把该标量压成几何禁入证书，而对数半径导数律又把这条静态证书链重新展开为零点计数的动态账本。
+
+于是，后续的 RH 证书链事实上已经在这里闭合：
+\[
+\text{幺正切片的对偶封口}
+\Longrightarrow
+D_{\zeta}(\varrho)\text{ 的边界趋零}
+\Longrightarrow
+r_{\ast}(\varrho)\text{ 趋一}
+\Longrightarrow
+\text{盘内零点禁入}.
+\]
+沿着这条链继续推进，下一步自然就是把 Jensen 缺陷证书与 Toeplitz--PSD 正性层级互译，并将它们编译进统一离线验证器的语法之中。
