@@ -213,7 +213,158 @@ recur across mathematics, engineering, and reasoning. The specific math is a sou
 patterns, not the point. The point is: **distinguish what is forced from what is chosen,
 strip to the minimum, and make every step auditable.**
 
-## 7. Concept Index
+## 7. The Irreducible Atoms — Omega's "Primes"
+
+These are the structures that cannot be decomposed further. Everything in the Omega
+Project is built from these. When you encounter a problem in any domain, check whether
+any of these irreducible structures appear in disguise.
+
+### Atom 1: The Seed Constraint — x² = x + 1
+
+The only input. A finite binary window observing a dynamical system, one bit per step.
+Cross-resolution consistency forces: only binary words with no consecutive 1s survive.
+Their count is F_{m+2} (Fibonacci). The characteristic equation of this constraint is
+x² = x + 1. Growth rate: φ = (1+√5)/2.
+
+**When you see it:** Any situation where a consistency requirement between scales
+eliminates exponentially many possibilities, leaving a structured subspace with
+sub-exponential growth. Signal: the surviving population has a recurrence relation.
+
+### Atom 2: The Fold Factorization — Φ = section ∘ congruence
+
+The fold operator Φ: X_{m+1} → X_m is not truncation. It factors uniquely into a
+Fibonacci-modular congruence plus a Zeckendorf section. This factorization creates
+fibers (groups of words mapping to the same target) with varying sizes d(x).
+The variation in fiber sizes is not noise. It IS the structure.
+
+**When you see it:** Any projection from a detailed level to a coarser level that
+is treated as "lossy" or "approximate" — check whether the projection has a hidden
+algebraic factorization. If it does, the "loss" is structured, not random.
+
+### Atom 3: Arithmetic Emergence — (X_m, ⊕, ⊗) ≅ Z/F_{m+2}Z
+
+No integers were imported. The Zeckendorf bijection induces addition and multiplication
+directly on binary words. The result is isomorphic to the cyclic ring Z/F_{m+2}Z.
+When F_{m+2} is prime, X_m becomes a finite field. When it factors, CRT decomposes it.
+The entire algebraic structure is forced by the encoding constraint.
+
+**When you see it:** Algebraic structure appearing "for free" from a representation
+or encoding scheme. If you define a canonical form (normal form, canonical encoding)
+and it happens to support algebraic operations, that's this atom.
+
+### Atom 4: The Moment Recurrence — S₂(m+3) + 2S₂(m) = 2S₂(m+2) + 2S₂(m+1)
+
+The project's first infinite-family theorem. Moment sums S_q(m) = Σ d(x)^q quantify
+fiber variation. S₂ satisfies a linear recurrence with integer coefficients, proved in
+4 lines of Lean from a 6-step chain: hidden bit decomposition → fold congruence →
+collision decomposition → telescoping → cross-correlation shift → recurrence.
+A purely combinatorial quantity obeying linear algebra. Hidden linearity.
+
+**When you see it:** A quantity that counts "collisions" or "overlaps" in a discrete
+system, and you suspect it might satisfy a recurrence. The pattern: take a many-to-one
+map, count how unevenly it distributes, and check if that unevenness is linear.
+
+### Atom 5: The σ-algebra Non-expansion — G^{L+1} ⊆ G^{L}
+
+Recursive addressing generates new concepts from old readout sequences, but the derived
+σ-algebra never expands. You cannot sneak in new information by building new layers.
+Every layer reorganizes what is already visible, nothing more. This is the endogeneity
+constraint: generation is internal or it is nothing.
+
+**When you see it:** Any layered system (abstractions, APIs, middleware, meta-levels)
+where each layer claims to "add" something. Ask: does this layer actually expand the
+information content, or does it reorganize existing information? If it truly adds new
+information, where does that information come from? (It must come from somewhere.)
+
+### Atom 6: The NULL Trichotomy
+
+Before an address exists, its evaluation is not zero — it is structurally absent.
+Three kinds of absence, each with different consequences:
+- **Semantic NULL**: the address is not in the protocol (asking is meaningless)
+- **Protocol NULL**: the visible domain rejects it (asking is valid but unanswerable)
+- **Collision NULL**: insufficient side-information to reconstruct (asking is valid,
+  answer exists, but you cannot reach it from here)
+
+When local certificates exist but fail to glue globally, the obstruction is a
+Čech H² cohomology class — locally possible, globally inconsistent.
+
+**When you see it:** Any system with "not found", "undefined", or "null" results.
+Ask: WHICH kind of null? Is this address fundamentally meaningless (semantic), rejected
+by the system's rules (protocol), or unresolvable due to missing context (collision)?
+These three have completely different implications for what you can do next.
+
+### Atom 7: The Four Irreducible Projection Gates — P_Z, P_≤, P_prim, P_χ
+
+POM (Projection Ontology Mathematics) compresses all prior constructions into one
+syntax: LIFT ∘ U^t ∘ PROJECT. Four gates stratify all visible structure:
+1. P_Z alone → arithmetic (add/multiply as value-preserving rewrite)
+2. P_Z + P_≤ → order and quotient-remainder (the irreducible sequential bottleneck)
+3. + P_prim → primitive atomic layer (prime-like orbit decomposition from time traces)
+4. + P_χ → character/role slices and Fourier layer
+
+These four are irreducible: you cannot skip one. Each gate adds something the previous
+ones cannot express. Together they generate all visible mathematics in the system.
+
+**When you see it:** Any system with multiple "layers" or "levels" of capability.
+Ask: what is the minimum set of independent operations? Can you identify operations
+that genuinely cannot be composed from the others? Those are your irreducible gates.
+
+### Atom 8: The Spectral Endpoint — r_q^{1/q} → √φ
+
+The golden ratio φ is not an input to the system. It is recovered as a spectral
+invariant: as collision order q → ∞, the Perron eigenvalues of the collision kernel
+matrices satisfy r_q^{1/q} → √φ. The number that defined the seed equation reappears
+at the end of the spectral analysis. Full circle.
+
+**When you see it:** A constant or parameter that was introduced early in a system
+reappearing at the end of a completely different analysis path. This is a structural
+invariant — the system is remembering its origin through a chain of transformations.
+
+### Atom 9: Conservative Extension — L₀ ⪯ L₁ ⪯ ... ⪯ L₁₀
+
+11 layers. Each adds structure (types, contexts, references, NULL, dynamics, multi-axis
+refinement, observer indexing) without rewriting the meaning of lower layers. A formula
+forced at layer n remains forced at layer n+k. The forcing relation M, p ⊩ φ means:
+φ holds for ALL realizations still compatible with information state p.
+Refinement only shrinks the undetermined part. It never overturns.
+
+**When you see it:** Any system that evolves by adding features, extensions, or modules.
+Ask: does adding this new layer preserve everything that was already established?
+Or does it silently redefine something from a lower layer? Conservative extension is
+the gold standard. If your extension is not conservative, you have a breaking change.
+
+### Atom 10: The Spacetime Emergence Pattern
+
+No physics axioms. The forcing framework already established produces:
+- Observer = fiber index (not a privileged subject, just "which fiber admits comparisons")
+- Time = projection of decision envelope onto refinement chain (advances only when
+  decidable propositions strictly expand)
+- Space = shared support, common forcing, transport cost
+- Causality = partial order on admissible refinement chains
+- Einstein's equation = the unique minimal second-order covariant closure of this structure
+
+**When you see it:** Any system where you have observers, information, and refinement.
+Ask: what plays the role of "time" (when does the state of knowledge strictly increase)?
+What plays the role of "space" (what is the cost of transporting information between
+observers)? What is the unique minimal closure of this structure?
+
+### The Three Recurring Interfaces
+
+These three interfaces cut across all ten atoms:
+
+1. **Resolution coarsening is nonlocal.** Projecting to a coarser level is not just
+   dropping detail — the influence of local information propagates through fiber structure.
+   (Gauge anomaly G_m quantifies this.)
+
+2. **Locally lost, globally recovered.** Window-level folding loses information.
+   Sequence-level inverse codes recover it. Entropy rate does not drop.
+   What looks like loss at one level is compensation at another.
+
+3. **Groupoid + unique section = algebra.** Local invertible rewrites form groupoid
+   orbits. The canonical cross-section (Zeckendorf) is the unique normal form.
+   Arithmetic lives on this cross-section.
+
+## 8. Concept Index (for repo search)
 
 Repository: https://github.com/the-omega-institute/automath
 Raw file prefix: https://raw.githubusercontent.com/the-omega-institute/automath/dev/
