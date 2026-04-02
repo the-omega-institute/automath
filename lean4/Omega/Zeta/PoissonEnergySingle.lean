@@ -17,16 +17,14 @@ theorem singleDefectEnergy_rational_identity (t δ : ℚ)
     (hplus : t + 1 + δ ≠ 0) :
     (1 / (2 * (t + 1 - δ)) + 1 / (2 * (t + 1 + δ)) - 1 / (t + 1)) =
       δ^2 / ((t + 1) * ((t + 1)^2 - δ^2)) := by
-  have hquad : -δ ^ 2 + (t + 1) ^ 2 ≠ 0 := by
-    rw [show -δ ^ 2 + (t + 1) ^ 2 = ((t + 1) - δ) * ((t + 1) + δ) by ring]
-    exact mul_ne_zero hminus hplus
-  have hfactor : (t + 1) ^ 2 - δ ^ 2 = (t + 1 - δ) * (t + 1 + δ) := by
-    ring
-  have hquad' : (t + 1) ^ 2 - δ ^ 2 ≠ 0 := by
-    rw [hfactor]
-    exact mul_ne_zero hminus hplus
-  field_simp [ht, hminus, hplus, hquad']
-  ring_nf
+  have hquad : (t + 1)^2 - δ^2 ≠ 0 := by
+    intro hq
+    apply (mul_ne_zero hminus hplus)
+    calc
+      (t + 1 - δ) * (t + 1 + δ) = (t + 1)^2 - δ^2 := by ring
+      _ = 0 := hq
+  field_simp [ht, hminus, hplus, hquad]
+  ring
 
 /-- Nonnegativity of the quadratic numerator.
     cor:xi-finite-defect-poisson-l2-energy-single-defect -/
