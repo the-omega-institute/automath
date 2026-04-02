@@ -11,11 +11,20 @@ namespace Omega.Zeta
 
 /-- Single-defect Poisson `L²` energy rational identity.
     cor:xi-finite-defect-poisson-l2-energy-single-defect -/
-theorem singleDefectEnergy_rational_identity (t δ : ℚ) :
-    (1 / (2 * (t + 1 - δ)) + 1 / (2 * (t + 1 + δ)) - 1 / (t + 1))
-      = δ^2 / ((t + 1) * ((t + 1)^2 - δ^2)) := by
-  field_simp
-  ring_nf
+theorem singleDefectEnergy_rational_identity (t δ : ℚ)
+    (ht : t + 1 ≠ 0)
+    (hminus : t + 1 - δ ≠ 0)
+    (hplus : t + 1 + δ ≠ 0) :
+    (1 / (2 * (t + 1 - δ)) + 1 / (2 * (t + 1 + δ)) - 1 / (t + 1)) =
+      δ^2 / ((t + 1) * ((t + 1)^2 - δ^2)) := by
+  have hquad : (t + 1)^2 - δ^2 ≠ 0 := by
+    intro hq
+    apply (mul_ne_zero hminus hplus)
+    calc
+      (t + 1 - δ) * (t + 1 + δ) = (t + 1)^2 - δ^2 := by ring
+      _ = 0 := hq
+  field_simp [ht, hminus, hplus, hquad]
+  ring
 
 /-- Nonnegativity of the quadratic numerator.
     cor:xi-finite-defect-poisson-l2-energy-single-defect -/
@@ -105,5 +114,47 @@ theorem singleDefectEnergy_cubic_limit (m δ : ℝ) :
     filter_upwards [hrewrite] with t ht
     exact ht.symm
   exact Filter.Tendsto.congr' heq htarget
+
+/-- Value at `t = 0` matches the quadratic single-defect form.
+    cor:xi-finite-defect-poisson-l2-energy-single-defect -/
+theorem singleDefectEnergy_zero (m δ : ℝ)
+    (hδ0 : 0 ≤ δ) (hδ1 : δ < 1) :
+    Real.pi * m^2 *
+        (1 / (2 * (1 - δ)) + 1 / (2 * (1 + δ)) - 1) =
+      Real.pi * m^2 * (δ^2 / (1 - δ^2)) := by
+  have hden1 : (1 - δ : ℝ) ≠ 0 := by linarith
+  have hden2 : (1 + δ : ℝ) ≠ 0 := by linarith [hδ0]
+  have hden3 : (1 - δ ^ 2 : ℝ) ≠ 0 := by
+    nlinarith [hδ0, hδ1]
+  field_simp [hden1, hden2, hden3]
+  ring
+
+/-- Zero energy at `t = 0` forces the single defect to be trivial.
+    prop:xi-finite-defect-poisson-l2-energy-zero-rigidity -/
+theorem singleDefectEnergy_zero_rigidity_single (m δ : ℝ)
+    (hδ0 : 0 ≤ δ) (hδ1 : δ < 1) :
+    Real.pi * m^2 * (δ^2 / (1 - δ^2)) = 0 ↔ m = 0 ∨ δ = 0 := by
+  have hzero := singleDefectEnergy_zero m δ hδ0 hδ1
+  rw [← hzero]
+  have hden : 0 < 1 - δ ^ 2 := by
+    nlinarith [hδ0, hδ1]
+  have hcoeff_ne : Real.pi * (1 / (1 - δ ^ 2)) ≠ 0 := by
+    have hone : (1 / (1 - δ ^ 2)) ≠ 0 := by
+      simpa [one_div] using (inv_ne_zero (ne_of_gt hden))
+    exact mul_ne_zero (ne_of_gt Real.pi_pos) hone
+  have hformula :
+      Real.pi * m ^ 2 * (1 / (2 * (1 - δ)) + 1 / (2 * (1 + δ)) - 1) =
+        (Real.pi * (1 / (1 - δ ^ 2))) * (m * δ) ^ 2 := by
+    rw [hzero]
+    ring
+  rw [hformula]
+  constructor
+  · intro h
+    have hsq_zero : (m * δ) ^ 2 = 0 := by
+      exact (mul_eq_zero.mp h).resolve_left hcoeff_ne
+    have hmul : m * δ = 0 := by
+      exact eq_zero_of_pow_eq_zero hsq_zero
+    exact mul_eq_zero.mp hmul
+  · rintro (rfl | rfl) <;> simp
 
 end Omega.Zeta

@@ -371,6 +371,16 @@ theorem cyclic_periodicity_orders :
 theorem fredholm_block_diag_2_3 (t : ℤ) :
     (1 - t ^ 2) * (1 - t ^ 3) = 1 - t ^ 2 - t ^ 3 + t ^ 5 := by ring
 
+/-- Evaluate the 2+3 Fredholm block splice in determinant form.
+    cor:cyclic-euler-product -/
+theorem fredholm_block_diag_2_3_eval (t : ℤ) :
+    (1 - t • cyclicPerm2).det * (1 - t • cyclicPerm3).det =
+      1 - t ^ 2 - t ^ 3 + t ^ 5 := by
+  calc
+    (1 - t • cyclicPerm2).det * (1 - t • cyclicPerm3).det = (1 - t ^ 2) * (1 - t ^ 3) := by
+      rw [cyclicPerm2_fredholm_det, cyclicPerm3_fredholm_det]
+    _ = 1 - t ^ 2 - t ^ 3 + t ^ 5 := fredholm_block_diag_2_3 t
+
 /-- Block 2+4 Fredholm product.
     cor:cyclic-euler-product -/
 theorem fredholm_block_diag_2_4 (t : ℤ) :

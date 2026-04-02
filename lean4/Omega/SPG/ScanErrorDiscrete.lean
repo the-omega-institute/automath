@@ -781,6 +781,61 @@ theorem scanError_le_setMass_compl {α β : Type*} [Fintype α] [Fintype β]
       ≤ min (setMass μ P) (setMass μ Pᶜ) := scanError_le_min_setMass μ obs P
     _ ≤ setMass μ Pᶜ := min_le_right _ _
 
+private theorem scanError_symmDiff_observableEvent_eq {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P : Set α) (A : Set β) :
+    scanError μ obs (symmDiff P (observableEvent obs A)) = scanError μ obs P := by
+  classical
+  unfold scanError
+  refine Finset.sum_congr rfl (fun b _ => ?_)
+  by_cases hb : b ∈ A
+  · have hEvent : cellEventMass μ obs (symmDiff P (observableEvent obs A)) b =
+        cellComplMass μ obs P b := by
+      unfold cellEventMass cellComplMass setMass observableEvent observableCell symmDiff
+      refine Finset.sum_congr rfl (fun x _ => ?_)
+      by_cases hx : obs x = b
+      · by_cases hp : x ∈ P
+        · simp [Set.indicator, hx, hp, hb]
+        · simp [Set.indicator, hx, hp, hb]
+      · simp [Set.indicator, hx]
+    have hCompl : cellComplMass μ obs (symmDiff P (observableEvent obs A)) b =
+        cellEventMass μ obs P b := by
+      unfold cellEventMass cellComplMass setMass observableEvent observableCell symmDiff
+      refine Finset.sum_congr rfl (fun x _ => ?_)
+      by_cases hx : obs x = b
+      · by_cases hp : x ∈ P
+        · simp [Set.indicator, hx, hp, hb]
+        · simp [Set.indicator, hx, hp, hb]
+      · simp [Set.indicator, hx]
+    rw [hEvent, hCompl, min_comm]
+  · have hEvent : cellEventMass μ obs (symmDiff P (observableEvent obs A)) b =
+        cellEventMass μ obs P b := by
+      unfold cellEventMass setMass observableEvent observableCell symmDiff
+      refine Finset.sum_congr rfl (fun x _ => ?_)
+      by_cases hx : obs x = b
+      · by_cases hp : x ∈ P
+        · simp [Set.indicator, hx, hp, hb]
+        · simp [Set.indicator, hx, hp, hb]
+      · simp [Set.indicator, hx]
+    have hCompl : cellComplMass μ obs (symmDiff P (observableEvent obs A)) b =
+        cellComplMass μ obs P b := by
+      unfold cellComplMass setMass observableEvent observableCell symmDiff
+      refine Finset.sum_congr rfl (fun x _ => ?_)
+      by_cases hx : obs x = b
+      · by_cases hp : x ∈ P
+        · simp [Set.indicator, hx, hp, hb]
+        · simp [Set.indicator, hx, hp, hb]
+      · simp [Set.indicator, hx]
+    rw [hEvent, hCompl]
+
+/-- Scan error is bounded by the mass of the symmetric difference with an observable event.
+    thm:spg-scan-error-cylinder -/
+theorem scanError_le_setMass_symmDiff_observableEvent
+    {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P : Set α) (A : Set β) :
+    scanError μ obs P ≤ setMass μ (symmDiff P (observableEvent obs A)) := by
+  rw [← scanError_symmDiff_observableEvent_eq μ obs P A]
+  exact scanError_le_setMass μ obs (symmDiff P (observableEvent obs A))
+
 /-- The constant observation cell covers the entire space. -/
 theorem observableCell_const_eq_univ {α : Type*} (c : β) :
     observableCell (fun _ : α => c) c = Set.univ := by
