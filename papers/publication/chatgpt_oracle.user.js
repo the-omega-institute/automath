@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      3.8
+// @version      3.9
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -54,7 +54,7 @@
   function updatePanel() {
     ensurePanel();
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
-    panel.innerHTML = `<b>[Oracle Bridge v3.8]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
+    panel.innerHTML = `<b>[Oracle Bridge v3.9]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
   }
 
   // ── HTTP helpers ─────────────────────────────────────────────────────
@@ -602,39 +602,46 @@
 
   function extractResponseText() {
     // ═══ Strategy 0: Try to find the LAST assistant message directly ═══
-    // On the conversation page (chatgpt.com/c/xxx), messages are in article
-    // elements or divs with data-message-author-role or similar structure.
-    // The last assistant turn is what we want.
-    try {
-      // 2025-2026 ChatGPT: look for turn containers
-      const turns = document.querySelectorAll("[data-message-author-role='assistant']");
-      if (turns.length > 0) {
-        const lastTurn = turns[turns.length - 1];
-        const text = (lastTurn.innerText || "").trim();
-        if (text.length > 20) {
-          return text;
+    // ChatGPT DOM changes frequently. Try many selectors.
+    const s0Selectors = [
+      // 2024-2025 selectors
+      "[data-message-author-role='assistant']",
+      // 2025-2026 conversation turn containers
+      "[data-testid*='conversation-turn']",
+      // Article-based layout
+      "article",
+      // Div-based message containers
+      "div[class*='markdown']",
+      "div[class*='prose']",
+      "div.markdown",
+      // Message group containers
+      "[class*='agent-turn']",
+      "[class*='message']",
+    ];
+
+    for (const sel of s0Selectors) {
+      try {
+        const els = document.querySelectorAll(sel);
+        if (els.length === 0) continue;
+        // For turn/message selectors, take the LAST one (assistant response)
+        // For markdown/prose, take the last one that's long enough
+        for (let i = els.length - 1; i >= 0; i--) {
+          const el = els[i];
+          const text = (el.innerText || "").trim();
+          // Must be substantial and not just our prompt
+          if (text.length > 100) {
+            // Quick check it's not the prompt
+            if (sentPromptText.length > 30) {
+              const promptStart = sentPromptText.slice(0, 40).trim();
+              if (text.startsWith(promptStart) && text.length < sentPromptText.length * 1.2) {
+                continue; // This is just the prompt, skip
+              }
+            }
+            return text;
+          }
         }
-      }
-      // Alternative: article elements containing assistant responses
-      const articles = document.querySelectorAll("article");
-      if (articles.length >= 2) {
-        // Last article is typically the assistant response
-        const lastArticle = articles[articles.length - 1];
-        const text = (lastArticle.innerText || "").trim();
-        if (text.length > 20) {
-          return text;
-        }
-      }
-      // Alternative: div[data-testid*='conversation-turn'] — last even turn
-      const convTurns = document.querySelectorAll("[data-testid*='conversation-turn']");
-      if (convTurns.length >= 2) {
-        const lastTurn = convTurns[convTurns.length - 1];
-        const text = (lastTurn.innerText || "").trim();
-        if (text.length > 20) {
-          return text;
-        }
-      }
-    } catch {}
+      } catch {}
+    }
 
     // ═══ Fallback: grab all text from main, then post-process ═══
     const main = document.querySelector("main");
@@ -709,8 +716,8 @@
       if (/^Thought for \d+/.test(t)) return false;
       if (/^(你说|You said|ChatGPT\s*说|ChatGPT\s*said)[：:]?\s*$/.test(t)) return false;
       if (/^(正在思考|正在搜索|Searching)/.test(t)) return false;
-      // Remove PDF filename line
-      if (/^main\.pdf\s*$/.test(t)) return false;
+      // Remove PDF filename line and bare "main" artifacts
+      if (/^main(\.pdf)?\s*$/.test(t)) return false;
       if (/^PDF\s*$/.test(t)) return false;
       return true;
     }).join("\n").trim();
@@ -761,7 +768,16 @@
       // Periodic status log (every 5 min)
       if (elapsed - lastLogTime >= 300) {
         lastLogTime = elapsed;
-        log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}`);
+        log(`Wait: ${elapsed}s, extracted=${responseText.length}, page=${mainLen}, stable=${stableCount}, gen=${generating}, url=${window.location.href.slice(-30)}`);
+        // One-time DOM debug: log what selectors match
+        if (elapsed <= 300) {
+          const dbg = [];
+          for (const s of ["[data-message-author-role]", "article", "[data-testid*='conversation-turn']", "div[class*='markdown']", "div[class*='prose']", "[class*='agent-turn']"]) {
+            const n = document.querySelectorAll(s).length;
+            if (n > 0) dbg.push(`${s}:${n}`);
+          }
+          log(`DOM debug: ${dbg.join(", ") || "no matches"}`);
+        }
       }
 
       // Only count extracted text that's meaningful

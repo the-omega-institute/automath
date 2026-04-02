@@ -9,6 +9,7 @@ from pathlib import Path
 
 PUBLICATION_DIR = Path(__file__).parent
 ORACLE_DISPATCH = PUBLICATION_DIR / "oracle_dispatch.py"
+ORACLE_SERVER = PUBLICATION_DIR / "oracle_server.py"
 
 # Papers to review (order: already-compiled PDFs)
 PAPERS = [
@@ -25,6 +26,49 @@ PAPERS = [
     "2026_scan_projection_address_semantics_sigma_nonexpansion_etds",
     "2026_self_dual_synchronisation_kernel_completed_determinant_cyclotomic_twists",
 ]
+
+def ensure_server():
+    """Make sure oracle_server.py is running on port 8765."""
+    import urllib.request
+    try:
+        resp = urllib.request.urlopen("http://localhost:8765/status", timeout=5)
+        data = json.loads(resp.read())
+        # Clear any stale pending task
+        if data.get("pending"):
+            try:
+                req = urllib.request.Request(
+                    "http://localhost:8765/result",
+                    data=json.dumps({"task_id": data["pending"], "response": "CANCELLED", "model": "none"}).encode(),
+                    headers={"Content-Type": "application/json"},
+                )
+                urllib.request.urlopen(req, timeout=5)
+                print("  [server] Cleared stale pending task")
+            except:
+                pass
+        return True
+    except:
+        pass
+
+    # Server not running — start it
+    print("  [server] Starting oracle_server.py...")
+    subprocess.Popen(
+        [sys.executable, str(ORACLE_SERVER)],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
+    )
+    # Wait for it to be ready
+    for _ in range(10):
+        time.sleep(1)
+        try:
+            urllib.request.urlopen("http://localhost:8765/status", timeout=3)
+            print("  [server] Server started")
+            return True
+        except:
+            pass
+    print("  [server] WARNING: Could not start server")
+    return False
+
 
 def short_name(paper):
     """Extract a short review name from the paper directory name."""
@@ -76,6 +120,12 @@ def main():
         if has_review(paper):
             print(f"  SKIP: already has review")
             skipped += 1
+            continue
+
+        # Ensure server is running before each submission
+        if not ensure_server():
+            print(f"  SKIP: server not available")
+            failed += 1
             continue
 
         # Submit
