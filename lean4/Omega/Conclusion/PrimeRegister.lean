@@ -157,6 +157,15 @@ theorem godelLift_fold_sqrt_suffices (m : Nat) :
     Nat.fib (m + 2) ≤ (Nat.sqrt (Nat.fib (m + 2)) + 1) ^ 2 :=
   Nat.le_of_lt (Nat.lt_succ_sqrt' _)
 
+/-- A two-axis Gödel lift exists with square-root exponent bound.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_fold_sqrt_exists (m : Nat) :
+    ∃ f : Fin (Nat.fib (m + 2)) → Fin ((Nat.sqrt (Nat.fib (m + 2)) + 1) ^ 2),
+      Function.Injective f := by
+  exact
+    (godelLift_feasibility 2 (Nat.sqrt (Nat.fib (m + 2))) (Nat.fib (m + 2))).2
+      (by simpa using godelLift_fold_sqrt_suffices m)
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R133: Binary-fiber Gödel lift instances
 -- ══════════════════════════════════════════════════════════════
