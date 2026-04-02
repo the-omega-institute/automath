@@ -142,4 +142,169 @@ theorem inducedSpectrum_singleton_empty (K : PrimeSupport) (n : Nat) :
     inducedSpectrum ({K} : Finset PrimeSupport) (fun S => if S = K then n else 0) ∅ = n := by
   simpa using inducedSpectrum_singleton K ∅ n
 
+/-- One-prime marginals do not determine the higher support spectrum.
+    prop:cdim-higher-spectrum-not-determined-by-marginals -/
+theorem higher_spectrum_not_determined_by_marginals
+    {p q : Nat} (hpq : p ≠ q) :
+    let A : Finset PrimeSupport := {({p} : PrimeSupport), {q}}
+    let A' : Finset PrimeSupport := {({p, q} : PrimeSupport), (∅ : PrimeSupport)}
+    (∀ ℓ : Nat,
+        multiPrimeSpectrum A ({ℓ} : PrimeSupport) =
+          multiPrimeSpectrum A' ({ℓ} : PrimeSupport)) ∧
+      multiPrimeSpectrum A ({p, q} : PrimeSupport) ≠
+        multiPrimeSpectrum A' ({p, q} : PrimeSupport) := by
+  constructor
+  · intro ℓ
+    by_cases hℓp : ℓ = p
+    · unfold multiPrimeSpectrum
+      have hLeft :
+          {S ∈ ({({p} : PrimeSupport), ({q} : PrimeSupport)} : Finset PrimeSupport) |
+              ({ℓ} : PrimeSupport) ⊆ S} = {({p} : PrimeSupport)} := by
+        ext S
+        constructor
+        · intro h
+          rw [hℓp] at h
+          simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton,
+            Finset.singleton_subset_iff] at h
+          rcases h with ⟨hS, hpS⟩
+          rcases hS with rfl | rfl
+          · simp
+          · have : p = q := by simpa using hpS
+            exact (hpq this).elim
+        · intro h
+          simp only [Finset.mem_singleton] at h
+          subst h
+          rw [hℓp]
+          simp
+      have hRight :
+          {S ∈ ({({p, q} : PrimeSupport), (∅ : PrimeSupport)} : Finset PrimeSupport) |
+              ({ℓ} : PrimeSupport) ⊆ S} = {({p, q} : PrimeSupport)} := by
+        ext S
+        constructor
+        · intro h
+          rw [hℓp] at h
+          simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton,
+            Finset.singleton_subset_iff] at h
+          rcases h with ⟨hS, hpS⟩
+          rcases hS with rfl | rfl
+          · simp
+          · simp at hpS
+        · intro h
+          simp only [Finset.mem_singleton] at h
+          subst h
+          rw [hℓp]
+          simp
+      rw [hLeft, hRight]
+      simp
+    · by_cases hℓq : ℓ = q
+      · unfold multiPrimeSpectrum
+        have hLeft :
+            {S ∈ ({({p} : PrimeSupport), ({q} : PrimeSupport)} : Finset PrimeSupport) |
+                ({ℓ} : PrimeSupport) ⊆ S} = {({q} : PrimeSupport)} := by
+          ext S
+          constructor
+          · intro h
+            rw [hℓq] at h
+            simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton,
+              Finset.singleton_subset_iff] at h
+            rcases h with ⟨hS, hqS⟩
+            rcases hS with rfl | rfl
+            · have : q = p := by simpa using hqS
+              exact (hpq this.symm).elim
+            · simp
+          · intro h
+            simp only [Finset.mem_singleton] at h
+            subst h
+            rw [hℓq]
+            simp
+        have hRight :
+            {S ∈ ({({p, q} : PrimeSupport), (∅ : PrimeSupport)} : Finset PrimeSupport) |
+                ({ℓ} : PrimeSupport) ⊆ S} = {({p, q} : PrimeSupport)} := by
+          ext S
+          constructor
+          · intro h
+            rw [hℓq] at h
+            simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton,
+              Finset.singleton_subset_iff] at h
+            rcases h with ⟨hS, hqS⟩
+            rcases hS with rfl | rfl
+            · simp
+            · simp at hqS
+          · intro h
+            simp only [Finset.mem_singleton] at h
+            subst h
+            rw [hℓq]
+            simp
+        rw [hLeft, hRight]
+        simp
+      · unfold multiPrimeSpectrum
+        have hLeft :
+            {S ∈ ({({p} : PrimeSupport), ({q} : PrimeSupport)} : Finset PrimeSupport) |
+                ({ℓ} : PrimeSupport) ⊆ S} = ∅ := by
+          ext S
+          constructor
+          · intro h
+            simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton,
+              Finset.singleton_subset_iff] at h
+            rcases h with ⟨hS, hℓS⟩
+            rcases hS with rfl | rfl
+            · exact (hℓp <| by simpa using hℓS).elim
+            · exact (hℓq <| by simpa using hℓS).elim
+          · intro h
+            simp at h
+        have hRight :
+            {S ∈ ({({p, q} : PrimeSupport), (∅ : PrimeSupport)} : Finset PrimeSupport) |
+                ({ℓ} : PrimeSupport) ⊆ S} = ∅ := by
+          ext S
+          constructor
+          · intro h
+            simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton,
+              Finset.singleton_subset_iff] at h
+            rcases h with ⟨hS, hℓS⟩
+            rcases hS with rfl | rfl
+            · have hpEq : ℓ = p ∨ ℓ = q := by
+                simpa [Finset.mem_insert, Finset.mem_singleton] using hℓS
+              cases hpEq with
+              | inl hpEq => exact (hℓp hpEq).elim
+              | inr hqEq => exact (hℓq hqEq).elim
+            · simp at hℓS
+          · intro h
+            simp at h
+        rw [hLeft, hRight]
+  · unfold multiPrimeSpectrum
+    have hLeft :
+        {S ∈ ({({p} : PrimeSupport), ({q} : PrimeSupport)} : Finset PrimeSupport) |
+            ({p, q} : PrimeSupport) ⊆ S} = ∅ := by
+      ext S
+      constructor
+      · intro h
+        simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton] at h
+        rcases h with ⟨hS, hsub⟩
+        rcases hS with rfl | rfl
+        · have hqS : q ∈ ({p} : PrimeSupport) := hsub (by simp)
+          have : q = p := by simpa using hqS
+          exact (hpq this.symm).elim
+        · have hpS : p ∈ ({q} : PrimeSupport) := hsub (by simp)
+          have : p = q := by simpa using hpS
+          exact (hpq this).elim
+      · intro h
+        simp at h
+    have hRight :
+        {S ∈ ({({p, q} : PrimeSupport), (∅ : PrimeSupport)} : Finset PrimeSupport) |
+            ({p, q} : PrimeSupport) ⊆ S} = {({p, q} : PrimeSupport)} := by
+      ext S
+      constructor
+      · intro h
+        simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton] at h
+        rcases h with ⟨hS, hsub⟩
+        rcases hS with rfl | rfl
+        · simp
+        · simp at hsub
+      · intro h
+        simp only [Finset.mem_singleton] at h
+        subst h
+        simp
+    rw [hLeft, hRight]
+    simp
+
 end Omega.CircleDimension
