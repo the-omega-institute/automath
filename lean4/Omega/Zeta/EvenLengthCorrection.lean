@@ -24,4 +24,27 @@ theorem evenLengthCorrection_cases (v n : Nat) :
       if Even n then 2 * v ^ (n / 2) else 0 := by
   rfl
 
+/-- The even-length correction vanishes exactly at odd lengths when `v` is positive.
+    thm:xi-time-part73c-periodic-evenlength-atomic-correction -/
+theorem evenLengthCorrection_eq_zero_iff
+    {v n : Nat} (hv : 0 < v) :
+    evenLengthCorrection v n = 0 ↔ ¬ Even n := by
+  by_cases hn : Even n
+  · constructor
+    · intro hzero
+      exfalso
+      rcases hn with ⟨m, hm⟩
+      rw [hm, show m + m = 2 * m by omega] at hzero
+      rw [evenLengthCorrection_even] at hzero
+      have hpos : 0 < 2 * v ^ m := by
+        exact Nat.mul_pos (by decide) (pow_pos hv _)
+      exact (Nat.ne_of_gt hpos) hzero
+    · intro hnot
+      exact (hnot hn).elim
+  · constructor
+    · intro _
+      exact hn
+    · intro _
+      exact evenLengthCorrection_odd v n hn
+
 end Omega.Zeta
