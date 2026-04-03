@@ -457,4 +457,16 @@ theorem phaseSpectrumCount_reconstruction_one_sided
     (h : ∀ N : Nat, 1 ≤ N → phaseSpectrumCount r t N = phaseSpectrumCount r' t' N) :
     r = r' := by
   exact (phaseSpectrumCount_reconstruction ht ht' h).1
+
+/-- One-sided phase-spectrum reconstruction recovers the torsion parameter once the rank matches.
+    thm:cdim-phase-spectrum-reconstruction -/
+theorem phaseSpectrumCount_reconstruction_torsion_one_sided
+    {r r' t t' : Nat}
+    (ht : 0 < t) (ht' : 0 < t')
+    (hrr' : r = r')
+    (h : ∀ N : Nat, 1 ≤ N → phaseSpectrumCount r t N = phaseSpectrumCount r' t' N) :
+    t = t' := by
+  subst hrr'
+  exact (phaseSpectrumCount_reconstruction ht ht' h).2
+
 end Omega.CircleDimension
