@@ -316,6 +316,20 @@ theorem phaseSpectrumCount_coprime (r t N : Nat) (hcop : Nat.Coprime t N) :
     phaseSpectrumCount r t N = N ^ r := by
   simp [phaseSpectrumCount, Nat.Coprime.gcd_eq_one hcop]
 
+/-- The phase spectrum equals the pure rank term exactly in the coprime case.
+    thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_eq_pow_iff_coprime
+    (r t N : Nat) (hN : 1 ≤ N) :
+    phaseSpectrumCount r t N = N ^ r ↔ Nat.Coprime t N := by
+  constructor
+  · intro hEq
+    rw [Nat.coprime_iff_gcd_eq_one]
+    have hpowpos : 0 < N ^ r := Nat.pow_pos (lt_of_lt_of_le (by decide) hN)
+    apply Nat.eq_of_mul_eq_mul_left hpowpos
+    simpa [phaseSpectrumCount] using hEq
+  · intro hcop
+    exact phaseSpectrumCount_coprime r t N hcop
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R166: Phase spectrum coprime multiplicativity
 -- ══════════════════════════════════════════════════════════════
