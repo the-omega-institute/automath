@@ -47,4 +47,19 @@ theorem evenLengthCorrection_eq_zero_iff
     · intro _
       exact evenLengthCorrection_odd v n hn
 
+/-- For positive `v`, the even-length correction is positive exactly at even lengths.
+    thm:xi-time-part73c-periodic-evenlength-atomic-correction -/
+theorem evenLengthCorrection_pos_iff
+    {v n : Nat} (hv : 0 < v) :
+    0 < evenLengthCorrection v n ↔ Even n := by
+  constructor
+  · intro hpos
+    by_contra hn
+    have hzero : evenLengthCorrection v n = 0 := evenLengthCorrection_odd v n hn
+    simp [hzero] at hpos
+  · intro hn
+    rcases hn with ⟨m, hm⟩
+    rw [hm, show m + m = 2 * m by omega, evenLengthCorrection_even]
+    exact Nat.mul_pos (by decide) (pow_pos hv _)
+
 end Omega.Zeta
