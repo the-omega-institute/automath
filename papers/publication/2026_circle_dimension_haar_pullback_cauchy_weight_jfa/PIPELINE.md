@@ -1,6 +1,6 @@
 # Pipeline: Cayley-Chebyshev Mode Calculus / Poisson Entropy / Strip RKHS (JFA)
 Target: Journal of Functional Analysis (JFA)
-Status: P4 complete, P5--P7 pending
+Status: Gate 3 review complete (MINOR_REVISION), P5--P7 pending
 
 ## Stage Progress
 
@@ -11,13 +11,17 @@ Status: P4 complete, P5--P7 pending
 | P2 Research Extension | completed | 2026-03-30 | 4 theorem packages; 5 gaps analyzed; sharpened lineup proposed |
 | P3 Lean Linkage | completed | 2026-03-30 | 1 partial Lean match (CircleDim.lean). Analytic content: 0 coverage |
 | P4 Journal-Fit Check | completed | 2026-03-30 | Abstract rewritten; sec_precision_potential split into 3 files; intro roadmap updated; 3 orphan bib entries removed; sec_circle_dimension_algebra.tex excluded (algebraic, not JFA scope); \cdim macro removed; revision-trace language cleaned; 24 bib entries remain, all cited |
-| P5 Proof Polish | pending | -- | Action items: W2 exponent optimality, algebraic->analytic bridge, K=piP2 highlight |
+| Gate 1 (ChatGPT) | REJECT | 2026-04-02 | 4 BLOCKERs raised: I1 bib, I2 positioning, I3 bookkeeping, I4 pointwise |
+| Gate 3 (Claude) | MINOR_REVISION | 2026-04-03 | I1 partially valid (build only), I2-I4 dismissed. 1 display typo found. See P4_EDITORIAL_REVIEW_2026-04-03.md |
+| P5 Proof Polish | pending | -- | Action items: fix line 486 display, run bibtex, fill author |
 | P6 LaTeX Build | pending | -- | All .tex files under 800 lines. Clean build verification needed |
 | P7 Submission | pending | -- | Target: JFA. Fallback: Annales de l'Institut Fourier |
 
-### Blocking Issues
+### Blocking Issues (from Gate 3)
 
-- Clean LaTeX build verification needed
+1. sec_entropy_asymptotics.tex line 486: display error in odd-order coefficient (cosmetic, does not affect results)
+2. No bibtex run: all citations show [?] in compiled PDF
+3. Empty author field in main.tex
 
 ## Theorem Inventory
 

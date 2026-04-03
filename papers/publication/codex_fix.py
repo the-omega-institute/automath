@@ -54,30 +54,51 @@ CONSTRAINTS:
 """
 
 
+def find_codex_binary() -> str:
+    """Find the codex CLI binary, handling Windows .cmd wrapper."""
+    import shutil
+    codex = shutil.which("codex")
+    if codex:
+        return codex
+    # Windows: try explicit .cmd path
+    if sys.platform == "win32":
+        npm_path = Path.home() / "AppData" / "Roaming" / "npm" / "codex.cmd"
+        if npm_path.exists():
+            return str(npm_path)
+    return "codex"  # fallback, let subprocess find it
+
+
 def run_codex(prompt: str, paper_dir: Path, model: str = None, timeout: int = 3600) -> dict:
     """Run Codex exec on the paper directory."""
-    cmd = ["codex", "exec", "--json"]
+    codex_bin = find_codex_binary()
+    cmd = [codex_bin, "exec", "--json"]
 
     if model:
         cmd += ["-c", f'model="{model}"']
 
     # Full auto mode — let Codex read/write files without asking
     cmd += ["--full-auto"]
-    cmd += [prompt]
+    # Pass prompt via stdin (avoid Windows command-line length limit)
+    cmd += ["-"]
 
     print(f"[codex] Running Codex on {paper_dir.name}...")
+    print(f"[codex] Prompt: {len(prompt)} chars (via stdin)")
     print(f"[codex] Model: {model or 'default'}")
     print(f"[codex] Timeout: {timeout}s")
 
     try:
+        # On Windows, .cmd wrappers need shell=True
+        use_shell = sys.platform == "win32" and codex_bin.endswith(".cmd")
         result = subprocess.run(
             cmd,
             cwd=str(paper_dir),
+            input=prompt,
             capture_output=True,
             text=True,
             timeout=timeout,
             encoding="utf-8",
             errors="replace",
+            shell=use_shell,
         )
 
         # Parse JSON output (newline-delimited JSON)
@@ -128,7 +149,7 @@ def main():
     parser.add_argument("--paper", required=True, help="Paper directory path")
     parser.add_argument("--review", help="Review file path (auto-detect if omitted)")
     parser.add_argument("--review-text", help="Inline review text")
-    parser.add_argument("--model", default=None, help="Codex model (default: auto)")
+    parser.add_argument("--model", default="o3", help="Codex model (default: o3, options: gpt-5.4, o3, etc.)")
     parser.add_argument("--timeout", type=int, default=3600, help="Timeout in seconds")
     parser.add_argument("--dry-run", action="store_true", help="Print prompt without running")
     args = parser.parse_args()

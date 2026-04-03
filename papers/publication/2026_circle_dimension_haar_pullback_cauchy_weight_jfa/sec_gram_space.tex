@@ -267,12 +267,19 @@ A(t)
 =\int_{\RR}\frac{t}{t^2+\Delta^2}\dd\nu(\gamma)
 =\int_0^\infty e^{-tr}\Re\phi_{\nu_c}(r)\dd r.
 \]
-Also
+Differentiation under the integral is justified by dominated convergence,
+since for each fixed $t>0$,
+\[
+\left|\frac{2t(x-\gamma)}{((x-\gamma)^2+t^2)^2}\right|
+\le \frac{1}{2t}
+\qquad(x,\gamma\in\RR),
+\]
+and
 \[
 \partial_x h_t(x)\big|_{x=\bar\gamma}
 =\frac{2}{\pi}\int_{\RR}\frac{t\,\Delta}{(\Delta^2+t^2)^2}\dd\nu(\gamma),
 \]
-so
+in particular
 \[
 B(t)=2t\int_{\RR}\frac{\Delta}{(\Delta^2+t^2)^2}\dd\nu(\gamma).
 \]
@@ -290,7 +297,8 @@ H(t)
 \]
 Combining the two formulas yields
 \eqref{eq:poisson-laplace-reconstruction}.  By uniqueness of the Laplace
-transform, $(A,H)$, and therefore $(A,B)$, determines
+transform on bounded continuous functions \cite{Widder1941}, $(A,H)$, and
+therefore $(A,B)$, determines
 $\phi_{\nu_c}|_{[0,\infty)}$.  Since
 $\phi_{\nu_c}(-r)=\overline{\phi_{\nu_c}(r)}$, the entire characteristic
 function is determined, and the centred law follows from the standard
@@ -329,6 +337,7 @@ $H\equiv 0$, hence to $B\equiv 0$.
 
 \begin{theorem}[Observation channels as evaluation functionals]%
 \label{thm:poisson-channel-rkhs}
+Let $\nu$ be a probability measure on~$\RR$ with finite mean~$\bar\gamma$.
 For $t>0$ define the centred fluctuation profile
 \[
 \widetilde\delta_t(y):=
@@ -364,12 +373,26 @@ By definition,
 =\int_{\RR}\bigl(R_{\Delta/t}(y)-1\bigr)\,\dd\nu(\gamma)
 =\frac{1}{t}\int_{\RR}\Delta\,\Psi_{\Delta/t}(y)\,\dd\nu(\gamma),
 \]
-which is \eqref{eq:delta-t-secant}.  Since
+which is \eqref{eq:delta-t-secant}.  By Theorem~\ref{thm:mode-gram-kernel},
+\[
+\|\Psi_\varepsilon\|_{L^2(\omega)}^2
+=\frac{2}{4+(\varepsilon-\varepsilon)^2}
+=\frac12.
+\]
+Hence
+\[
+\left\|\widetilde\delta_t\right\|_{L^2(\omega)}
+\le\frac{1}{t}\int_{\RR}|\Delta|\,\left\|\Psi_{\Delta/t}\right\|_{L^2(\omega)}\,\dd\nu(\gamma)
+=\frac{1}{\sqrt2\,t}\int_{\RR}|\Delta|\,\dd\nu(\gamma)
+<\infty,
+\]
+so \eqref{eq:delta-t-secant} is a Bochner integral in $L^2_0(\omega)$.
+Therefore,
 \[
 \int_{\RR}\widetilde\delta_t(y)\,\omega(\dd y)
 =\int_{\RR}(h_t(x)-g_t(x))\,\dd x=0,
 \]
-one has $\widetilde\delta_t\in L^2_0(\omega)$.  Applying the unitary map
+and thus $\widetilde\delta_t\in L^2_0(\omega)$.  Applying the unitary map
 $\mathcal U$ from Theorem~\ref{thm:mode-space-rkhs} to
 \eqref{eq:delta-t-secant} yields \eqref{eq:delta-t-rkhs}.
 
@@ -405,7 +428,7 @@ imaginary axis:
 \[
 G_{\nu_c}(\ii t)
 =\int_{\RR}\frac{1}{\ii t-\Delta}\dd\nu(\gamma)
-=H(t)+\ii A(t)
+=-H(t)-\ii A(t)
 \qquad(t>0).
 \]
 Thus the Laplace-transform formulation strengthens the earlier
