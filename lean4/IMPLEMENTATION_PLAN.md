@@ -13,9 +13,9 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 866 |
+| \leanverified 标注数 | 867 |
 | \leanpartial 标注数 | 16 |
-| 总标注数 | 882 |
+| 总标注数 | 883 |
 | 轮次 | R218（round_count=219） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
@@ -29,10 +29,10 @@
 | Group Unification | 469 | 83 | 17.7% |
 | SPG | 129 | 35 | 27.1% |
 | Circle Dimension | 393 | 72 | 18.3% |
-| Zeta Finite Part | 4,524 | 105 | 2.3% |
+| Zeta Finite Part | 4,524 | 106 | 2.3% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **852** | **8.1%** |
+| **合计（body）** | **10,508** | **853** | **8.1%** |
 
 ### 1.2 已完成模块
 
@@ -218,6 +218,7 @@
 **Phase R236: fiberwise free involution total product double-factorial form（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_eq_prod_doubleFactorial（thm:fiberwise-free-involution-matching-entropy，按批准路线直接使用 `Finset.prod_congr rfl (fun b _ => freeInvolutionCount_eq_doubleFactorial (r b))`，补齐独立纤维上自由对合总计数的双阶乘乘积闭式）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 82→83（17.7%），全局标注 863→864（+1），body 覆盖 849→850（8.1%），commit a57c557
 **Phase R237: prime-modulus phase spectrum dichotomy（部分完成）**：CircleDimension/CircleDim.lean——phaseSpectrumCount_prime_dichotomy（thm:cdim-phase-spectrum-limit，按批准路线分 `p ∣ t` / `p ∤ t` 两种情形，分别复用 `phaseSpectrumCount_eq_pow_succ_iff_dvd` 与 `phaseSpectrumCount_eq_pow_iff_coprime`；其中 `hp.coprime_iff_not_dvd` 给出 `p.Coprime t`，并用 `.symm` 对接到目标引理，补齐素数模数下相位采样计数只能取 $p^r$ 或 $p^{r+1}$ 的二分判别）——**1 个论文标签条目计入覆盖率**（Circle Dimension +1）——Circle Dimension 71→72（18.3%），全局标注 864→865（+1），body 覆盖 850→851（8.1%），commit 4197d0d
 **Phase R238: binary axis lower bound wrapper（部分完成）**：Conclusion/PrimeRegister.lean——godelLift_axis_lower_bound_binary_specialized（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，直接 `simpa using godelLift_axis_lower_bound k 1 D (by omega) hfeas`，补齐二元字母表下轴数下界 `Nat.log 2 D ≤ k` 的专用论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 145→146（5.7%），全局标注 865→866（+1），body 覆盖 851→852（8.1%），commit 0ca32f4
+**Phase R239: degeneracy ghost exponential lower wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_exponential_lower（rem:degeneracy-zeta-bridge，paper-facing wrapper，直接 `exact degeneracy_ghost_exponential_lower n hn`，补齐退化 ghost 序列满足指数下界 $9\cdot 2^{n-4} \le 2^n-L_n$ 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 105→106（2.3%），全局标注 866→867（+1），body 覆盖 852→853（8.1%），commit PENDING
 **Phase R192（分析完成，单槽候选）**：CircleDimension / phase-spectrum reconstruction——避开已在跑的 Zeta 线，转向未饱和的 Circle Dimension；单个中难度目标锁定 `phaseSpectrumCount_reconstruction`（对应 `thm:cdim-phase-spectrum-reconstruction`，把论文中的“全部循环相位采样计数唯一决定有限生成离散交换群同构类型”压缩为当前 Nat-编码下的显式恢复链：从 `phaseSpectrumCount r t N = phaseSpectrumCount r' t' N` 对所有 `N` 推出 `r = r'` 且 `Nat.gcd t N = Nat.gcd t' N` 对所有 `N`，再取 `N = t` 与 `N = t'` 得 `t = t'`；直接承接现有 `phaseSpectrumCount_split` / `phaseSpectrumCount_coprime` / `phaseSpectrumCount_add_rank_le` / `phaseSpectrumCount_le_pow`，不引入新公理，满足单目标中难度门槛）。
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续
