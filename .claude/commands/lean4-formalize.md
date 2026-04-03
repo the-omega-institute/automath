@@ -232,6 +232,7 @@ formalizer 的证明开发必须遵循 LSP-first 协议：
 |---------|---------|---------------|-----------------|
 | 自助 | 默认 | — | LSP 工具搜索 + `lean_multi_attempt` |
 | codex-consultant | LSP 搜索枯竭 | `lean4-codex-consultant` | — |
+| **leanstral** | codex-consultant 无法解决 | — | Leanstral API (`labs-leanstral-2603`) 通过 lean-lsp-mcp 做迭代证明搜索，专为 Lean4 训练的 MoE 模型 |
 | 编译修复 | 同一编译错误重复 2-3x | `lean4:proof-repair` | 编译器驱动两阶段修复（fast→strong），K=1 |
 | 深度 sorry | fast pass 填充失败 | `lean4:sorry-filler-deep` | 可跨文件重构、提取 helper lemma |
 | axiom 消除 | 非标准 axiom 检出 | `lean4:axiom-eliminator` | 系统性 mathlib 替代搜索 |
@@ -277,6 +278,8 @@ formalizer 的证明开发必须遵循 LSP-first 协议：
 - 论文目录：`theory/`
 - Lean4目录：`lean4/`
 - 实施方案：`lean4/IMPLEMENTATION_PLAN.md`
+- **lean-lsp-mcp**：已配置（`.mcp.json`），通过 MCP 协议连接 Lean4 LSP，提供实时类型检查、错误诊断、补全建议。所有 agent 启动后自动可用，无需额外配置。
+- **Leanstral API**（可选）：Mistral 的 Lean4 专用证明 agent（`labs-leanstral-2603`），MoE 119B/6.5B 活跃参数，通过同一个 lean-lsp-mcp 连接 Lean4 编译器。用于 formalizer stuck 时的外部证明搜索辅助。
 
 ## 启动流程
 
