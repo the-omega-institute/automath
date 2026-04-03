@@ -386,6 +386,29 @@ theorem goldenMeanAdjacency_positive_eigenvalue_eq_goldenRatio
     rw [hψ] at hμpos
     linarith [Real.goldenConj_neg]
 
+/-- Any strictly positive `φ`-eigenvector is a positive scalar multiple of `(φ,1)`.
+    thm:golden-mean-positive-eigenvector-rigidity -/
+theorem goldenMeanAdjacency_positive_eigenvector_rigidity
+    {w : Fin 2 → ℝ}
+    (hw : w ≠ 0)
+    (hpos : 0 < w 0 ∧ 0 < w 1)
+    (hμ : Matrix.mulVec goldenMeanAdjacencyℝ w = fun i => Real.goldenRatio * w i) :
+    ∃ c : ℝ, 0 < c ∧ w = fun i => c * goldenMeanEigenvector i := by
+  have h1 := congrFun hμ 1
+  rw [goldenMeanAdjacencyℝ_eq] at h1
+  simp [Matrix.mulVec, dotProduct] at h1
+  have hw1_ne : w 1 ≠ 0 := by
+    intro hw1_zero
+    have hw0_zero : w 0 = 0 := by simpa [hw1_zero] using h1
+    apply hw
+    funext i
+    fin_cases i <;> simp [hw0_zero, hw1_zero]
+  refine ⟨w 1, hpos.2, ?_⟩
+  funext i
+  fin_cases i
+  · simpa [goldenMeanEigenvector, mul_comm] using h1
+  · simp [goldenMeanEigenvector]
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase 185
 -- ══════════════════════════════════════════════════════════════
