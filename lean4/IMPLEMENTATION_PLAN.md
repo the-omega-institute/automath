@@ -13,9 +13,9 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 854 |
+| \leanverified 标注数 | 855 |
 | \leanpartial 标注数 | 16 |
-| 总标注数 | 870 |
+| 总标注数 | 871 |
 | 轮次 | R218（round_count=219） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
@@ -25,14 +25,14 @@
 | POM | 1,707 | 223 | 13.1% |
 | Emergent Arithmetic | 185 | 95 | 51.4% |
 | Folding | 337 | 81 | 24.0% |
-| Conclusion | 2,550 | 143 | 5.6% |
+| Conclusion | 2,550 | 144 | 5.6% |
 | Group Unification | 469 | 81 | 17.3% |
 | SPG | 129 | 33 | 25.6% |
 | Circle Dimension | 393 | 70 | 17.8% |
 | Zeta Finite Part | 4,524 | 103 | 2.3% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **840** | **8.0%** |
+| **合计（body）** | **10,508** | **841** | **8.0%** |
 
 ### 1.2 已完成模块
 
@@ -206,6 +206,7 @@
 **Phase R224: projector zero split criterion for central idempotents（部分完成）**：EA/CentralIdempotentsRecovery.lean——projectorVal_zero_iff_other_exists_one（thm:fold-groupoid-z2x2-central-idempotents，补齐 ±1 指纹输入下单个投影为零当且仅当其余三投影之一取 1 的分裂判别）——**1 个论文标签条目计入覆盖率**（Emergent Arithmetic +1）——Emergent Arithmetic 94→95（51.4%），全局标注 851→852（+1），body 覆盖 837→838（8.0%），commit f322367
 **Phase R225: sharp κ-threshold equivalence for relative error（部分完成）**：SPG/ErrorThreshold.lean——kappa_lt_iff_eps_lt（prop:spg-relative-error-threshold-sharpness，补齐相对误差阈值中 κ(ε)<p 与 ε<(p-1)/(p+1) 的精确充要判别）——**1 个论文标签条目计入覆盖率**（SPG +1）——SPG 32→33（25.6%），全局标注 852→853（+1），body 覆盖 838→839（8.0%），commit ec8edab
 **Phase R226: higher-spectrum piecewise formula for counterexample A'（部分完成）**：CircleDimension/MultiPrimeSpectrum.lean——higher_spectrum_counterexample_Aprime_piecewise（prop:cdim-higher-spectrum-not-determined-by-marginals，补齐反例支撑 A' 的高阶谱在空集、包含于 {p,q} 的子集与其余情形下的分段闭式）——**1 个论文标签条目计入覆盖率**（Circle Dimension +1）——Circle Dimension 69→70（17.8%），全局标注 853→854（+1），body 覆盖 839→840（8.0%），commit 27654ed
+**Phase R227: window-6 average information-loss closed form（部分完成）**：Conclusion/Window6Collision.lean——window6_information_loss_average_closed_form（thm:conclusion-window6-qmoment-triple-geometry，就地修复后登记 window-6 平均信息损失常数由直方图化简为 $(13/32)\log 2 + (1/16)\log 3$ 的闭式）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 143→144（5.6%），全局标注 854→855（+1），body 覆盖 840→841（8.0%），commit <pending>
 **Phase R192（分析完成，单槽候选）**：CircleDimension / phase-spectrum reconstruction——避开已在跑的 Zeta 线，转向未饱和的 Circle Dimension；单个中难度目标锁定 `phaseSpectrumCount_reconstruction`（对应 `thm:cdim-phase-spectrum-reconstruction`，把论文中的“全部循环相位采样计数唯一决定有限生成离散交换群同构类型”压缩为当前 Nat-编码下的显式恢复链：从 `phaseSpectrumCount r t N = phaseSpectrumCount r' t' N` 对所有 `N` 推出 `r = r'` 且 `Nat.gcd t N = Nat.gcd t' N` 对所有 `N`，再取 `N = t` 与 `N = t'` 得 `t = t'`；直接承接现有 `phaseSpectrumCount_split` / `phaseSpectrumCount_coprime` / `phaseSpectrumCount_add_rank_le` / `phaseSpectrumCount_le_pow`，不引入新公理，满足单目标中难度门槛）。
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续
@@ -217,6 +218,7 @@
 **Lucas 数与迹公式（Phase 21）**：lucasNum 定义（L_0=2, L_1=1, L_{n+2}=L_{n+1}+L_n）; lucasNum_zero/one/two/three/succ_succ（simp 引理）; lucasNum_eq_fib（L_n=F_{n+1}+F_{n-1} for n≥1）; goldenMeanAdjacency_pow_trace（tr(A^n)=F_{n+1}+F_{n-1} for n≥1）
 **Emergent Arithmetic / 群胚幂等元**：Wedderburn 分解维数、中心块直方图、projectorVal 系列，以及四个 $\mathbb Z_2^2$ 扇区中心幂等元中的 `epn_idempotent` / `enp_idempotent` / `enn_idempotent`，补齐 `thm:fold-groupoid-z2x2-central-idempotents` 的四投影幂等链
 **Perron-Frobenius 维度数学层（计划21，阶段性通过）**：goldenMeanAdjacency_has_goldenRatio_eigenvector（存在正特征向量候选 $(\varphi,1)$）; eigenvalue_satisfies_quadratic / eigenvalue_eq_goldenRatio_or_goldenConj（任意实特征值满足 $\mu^2=\mu+1$ 并分类为 $\varphi$ 或 $\psi$）; goldenConj_abs_lt_goldenRatio（$|\psi|<\varphi$）; goldenMeanAdjacency_dominates_all_real_eigenvalues（全部实特征值模长被 $\varphi$ 控制）; goldenMeanAdjacency_pf_root_eq_goldenRatio（具体 PF 根封装）; reduced_det_golden_mean（golden-mean 约化行列式恒等式）; reduced_det_golden_mean_squeeze（golden-mean 二维留数常数压扁界）；`spectralRadius = φ` 与 PF dimension API 封装仍待补
+**window-6 信息损失常数**：window6_information_loss_average_closed_form（由 window-6 直方图给出平均信息损失常数的闭式，化为 $\frac{13}{32}\log 2 + \frac{1}{16}\log 3$）
 **纤维直方图基值（Phase 22）**：cFiberHist 定义（稳定词 x 纤维多重度恰好为 k 的计数）; m=4 直方图基值（hist[1]=2, hist[2]=4, hist[3]=2）; m=6 直方图基值（hist[1]=2, hist[2]=4, hist[3]=8, hist[4]=5, hist[5]=2）
 **路径计数 Fibonacci 等式（Phase 22）**：goldenMean_path_count_from_true（row 1 sum = F_{m+1}，从状态 true 出发的路径数）; goldenMean_total_paths（total = F_{m+2}+F_{m+1}，所有路径总数）
 **逆极限序列区分引理（Phase 22）**：ne_of_bit_ne（XInfinity 中位差异→序列不同，位可分离性）
