@@ -1,4 +1,4 @@
-\subsection{Component gerbes and branched gluing obstructions}
+\subsection{Component gerbes and branched gluing obstructions}\label{sec:gerbe-obstruction}
 
 The stackification $\mathfrak L_r$ may have several global connected components over $a$. Cohomological obstruction theory therefore belongs, in general, not to a single gerbe attached to $r$, but to the component gerbes indexed by the visible value classes of $r$.
 
@@ -175,6 +175,67 @@ Replacing $\phi_{ij}$ by
 we obtain isomorphisms satisfying the exact cocycle condition on triple overlaps. Since $\mathfrak G_v$ is a stack, the descent datum $(x_i,\phi'_{ij})$ is effective and glues to a global object over $a$. Hence the gerbe is neutral.
 \end{proof}
 
+\begin{proposition}[Compatible local sections versus visible branches]\label{prop:compsecs-vs-visible-branches}
+Assume the hypotheses of \Cref{def:cech-gluing-obstruction}. For an admitted reference
+$r:\mathsf{Ref}_s$ at $p$,
+\[
+M,p\Vdash \CompSec_s(r)
+\quad\Longleftrightarrow\quad
+\Vis_{p,s}(r)\neq\varnothing.
+\]
+\end{proposition}
+
+\begin{proof}
+By \Cref{thm:sheafification-characterization},
+\[
+M,p\Vdash \CompSec_s(r)
+\quad\Longleftrightarrow\quad
+\bigl(a_{p,s}F_{p,s}\bigr)(a)\neq\varnothing.
+\]
+By \Cref{thm:visible-value-components}, this set is $\Vis_{p,s}(r)$.
+\end{proof}
+
+\begin{lemma}[Terminal-fibre nonemptiness and neutrality]\label{lem:terminal-fibre-neutrality}
+Let $v\in \Vis_{p,s}(r)$. Then
+\[
+\mathfrak G_v(a)\neq\varnothing
+\quad\Longleftrightarrow\quad
+\mathfrak G_v\ \text{is neutral}.
+\]
+\end{lemma}
+
+\begin{proof}
+By definition of the gerbe notion used in this paper, neutrality means the existence of a global object over $a$. Therefore it is exactly the same as $\mathfrak G_v(a)\neq\varnothing$.
+\end{proof}
+
+\begin{proposition}[Global sections versus neutral component gerbes]\label{prop:global-sections-vs-neutral-components}
+Assume the hypotheses of \Cref{def:cech-gluing-obstruction} and global conservativity at $a$ in the sense of \Cref{def:global-conservativity}. For an admitted reference
+$r:\mathsf{Ref}_s$ at $p$,
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+\exists v\in \Vis_{p,s}(r)\ \text{with}\ \mathfrak G_v(a)\neq\varnothing.
+\]
+Equivalently, by \Cref{lem:terminal-fibre-neutrality},
+\[
+M,p\Vdash \Sec_s(r)
+\quad\Longleftrightarrow\quad
+\exists v\in \Vis_{p,s}(r)\ \text{with}\ \mathfrak G_v\ \text{is neutral}.
+\]
+\end{proposition}
+
+\begin{proof}
+From \Cref{prop:no-new-global-objects}, $M,p\Vdash \Sec_s(r)$ iff $\mathfrak L_r(a)\neq\varnothing$.
+
+If $\mathfrak L_r(a)\neq\varnothing$, choose $x\in \mathfrak L_r(a)$ and let
+\[
+v=[x]\in \pi_0(\mathfrak L_r)(a)\cong \Vis_{p,s}(r).
+\]
+Then $x\in \mathfrak G_v(a)$, so $\mathfrak G_v(a)\neq\varnothing$.
+
+Conversely, if $\mathfrak G_v(a)\neq\varnothing$ for some visible branch $v$, then $\mathfrak G_v(a)\subseteq \mathfrak L_r(a)$, so $\mathfrak L_r(a)\neq\varnothing$.
+\end{proof}
+
 \begin{theorem}[Branched gerbe semantics of gluing-level absence]\label{thm:gerbe-null-semantics}
 Assume the hypotheses of \Cref{def:cech-gluing-obstruction} and global conservativity at $a$ in the sense of \Cref{def:global-conservativity}. Then, for the admitted reference $r:\mathsf{Ref}_s$ under consideration,
 \[
@@ -182,7 +243,6 @@ M,p\Vdash \CompSec_s(r)
 \quad\Longleftrightarrow\quad
 \Vis_{p,s}(r)\neq\varnothing.
 \]
-Moreover,
 \[
 M,p\Vdash \Sec_s(r)
 \quad\Longleftrightarrow\quad
@@ -196,6 +256,7 @@ M,p\Vdash \Null^{\mathrm{glue}}_s(r)
 \ \text{and}\
 \forall v\in \Vis_{p,s}(r),\ \mathfrak G_v\ \text{is non-neutral}.
 \]
+
 If, in addition, the chosen cofinal family of gerbe-adapted covers computes derived cohomology in degree $2$, then the last condition is equivalent to
 \[
 \Vis_{p,s}(r)\neq\varnothing
@@ -206,26 +267,10 @@ In particular, the single obstruction class picture is recovered precisely when 
 \end{theorem}
 
 \begin{proof}
-The first equivalence is the combination of \Cref{thm:sheafification-characterization,thm:visible-value-components}. Indeed, compatible local sectionability is equivalent to the nonemptiness of $(a_{p,s}F_{p,s})(a)$, and this set is exactly $\Vis_{p,s}(r)$.
-
-For the second equivalence, \Cref{prop:no-new-global-objects} gives
+The first equivalence is \Cref{prop:compsecs-vs-visible-branches}. The second is \Cref{prop:global-sections-vs-neutral-components}. The third is then immediate from the definition
 \[
-M,p\Vdash \Sec_s(r)
-\quad\Longleftrightarrow\quad
-\mathfrak L_r(a)\neq\varnothing.
+\Null^{\mathrm{glue}}_s(r):=\Adm_s(r)\land \CompSec_s(r)\land \neg\Sec_s(r).
 \]
-If $x\in \mathfrak L_r(a)$, then $x$ determines a visible value class
-\[
-v=[x]\in \pi_0(\mathfrak L_r)(a)\cong \Vis_{p,s}(r),
-\]
-and $x\in \mathfrak G_v(a)$, so $\mathfrak G_v$ is neutral. Conversely, if $\mathfrak G_v$ is neutral for some visible branch $v$, then any global object of $\mathfrak G_v(a)$ lies in $\mathfrak L_r(a)$, so $\mathfrak L_r(a)\neq\varnothing$.
-
-Since $r$ is admitted, the definition
-\[
-\Null^{\mathrm{glue}}_s(r):=\Adm_s(r)\land \CompSec_s(r)\land \neg\Sec_s(r)
-\]
-now yields the third equivalence immediately.
-
 For the final claim, if the chosen cofinal family computes derived cohomology in degree $2$, then \Cref{thm:cech-bridge-compatible-realizations}(iv) identifies the vanishing of each $\omega_v$ with neutrality of the corresponding component gerbe, while the comparison with derived $H^2$ is the standard banded-gerbe classification \cite[Chap.~IV]{Giraud1971}, \cite[Tag 06NY]{StacksProject}.
 \end{proof}
 

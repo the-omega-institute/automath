@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      3.9
+// @version      4.0
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -23,6 +23,7 @@
   const MAX_WAIT = 7200000;       // 120 minutes
 
   let busy = false;
+  let active = GM_getValue("oracle_active", false); // starts PAUSED by default
 
   // ── Logging ──────────────────────────────────────────────────────────
   const logHistory = [];
@@ -32,6 +33,13 @@
     console.log(`[oracle] ${entry}`);
     logHistory.push(entry);
     if (logHistory.length > 20) logHistory.shift();
+    updatePanel();
+  }
+
+  function toggleActive() {
+    active = !active;
+    GM_setValue("oracle_active", active);
+    log(active ? "ACTIVATED — polling will start" : "PAUSED — your ChatGPT is free");
     updatePanel();
   }
 
@@ -53,8 +61,21 @@
 
   function updatePanel() {
     ensurePanel();
+    const statusColor = active ? (busy ? "#ff0" : "#0f0") : "#f55";
+    const statusText = active ? (busy ? "BUSY" : "ACTIVE") : "PAUSED";
+    const btnText = active ? "⏸ Pause" : "▶ Start";
+    const btnColor = active ? "#f55" : "#0f0";
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
-    panel.innerHTML = `<b>[Oracle Bridge v3.9]</b> ${busy ? "BUSY" : "idle"}<hr style="border-color:#333;margin:4px 0">${lines}`;
+    panel.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <b>[Oracle v4.0]</b>
+        <span style="color:${statusColor};font-weight:bold">${statusText}</span>
+        <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
+      </div>
+      <hr style="border-color:#333;margin:4px 0">
+      ${lines}`;
+    const btn = document.getElementById("oracle-toggle");
+    if (btn) btn.addEventListener("click", toggleActive);
   }
 
   // ── HTTP helpers ─────────────────────────────────────────────────────
@@ -930,7 +951,7 @@
   // ── Main loop ────────────────────────────────────────────────────────
   async function pollLoop() {
     while (true) {
-      if (!busy) {
+      if (active && !busy) {
         try {
           const task = await serverGet("/task");
           if (task && task.task_id && task.status !== "idle") {
@@ -949,7 +970,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log("Oracle Bridge v3.4 loaded");
+    log(`Oracle Bridge v4.0 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
     // Check if we have a saved task from a page navigation
     const savedTask = loadTaskState();

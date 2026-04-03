@@ -48,7 +48,8 @@ INSTRUCTIONS:
 8. After fixing, briefly list what you changed (for verification).
 
 CONSTRAINTS:
-- Only edit .tex and .bib files.
+- ONLY edit .tex and .bib files INSIDE this directory ({paper_dir.name}/).
+- Do NOT navigate to parent directories or modify any files outside this directory.
 - Do not delete theorems or sections unless the reviewer explicitly said to remove them.
 - Keep the paper's voice and style consistent.
 """
@@ -149,7 +150,7 @@ def main():
     parser.add_argument("--paper", required=True, help="Paper directory path")
     parser.add_argument("--review", help="Review file path (auto-detect if omitted)")
     parser.add_argument("--review-text", help="Inline review text")
-    parser.add_argument("--model", default="o3", help="Codex model (default: o3, options: gpt-5.4, o3, etc.)")
+    parser.add_argument("--model", default=None, help="Codex model (default: from config, options: gpt-5.3-codex-spark, etc.)")
     parser.add_argument("--timeout", type=int, default=3600, help="Timeout in seconds")
     parser.add_argument("--dry-run", action="store_true", help="Print prompt without running")
     args = parser.parse_args()
