@@ -13,9 +13,9 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 855 |
+| \leanverified 标注数 | 856 |
 | \leanpartial 标注数 | 16 |
-| 总标注数 | 871 |
+| 总标注数 | 872 |
 | 轮次 | R218（round_count=219） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
@@ -27,12 +27,12 @@
 | Folding | 337 | 81 | 24.0% |
 | Conclusion | 2,550 | 144 | 5.6% |
 | Group Unification | 469 | 81 | 17.3% |
-| SPG | 129 | 33 | 25.6% |
+| SPG | 129 | 34 | 26.4% |
 | Circle Dimension | 393 | 70 | 17.8% |
 | Zeta Finite Part | 4,524 | 103 | 2.3% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **841** | **8.0%** |
+| **合计（body）** | **10,508** | **842** | **8.0%** |
 
 ### 1.2 已完成模块
 
@@ -51,7 +51,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
-**SPG 扫描误差**：离散 + 测度双版本, Bayes 半界, 观测细化单调性, 补对称性；scanError_le_setMass_symmDiff_observableEvent（把 prop:spg-clarity-bayes-optimality 的对称差质量下界落到离散 observableEvent 框架）；kappa_lt_iff_eps_lt（把 prop:spg-relative-error-threshold-sharpness 的相对误差阈值写成 κ(ε)<p 与 ε<(p-1)/(p+1) 的精确充要判别）
+**SPG 扫描误差**：离散 + 测度双版本, Bayes 半界, 观测细化单调性, 补对称性；scanError_le_setMass_symmDiff_observableEvent（把 prop:spg-clarity-bayes-optimality 的对称差质量下界落到离散 observableEvent 框架）；kappa_lt_iff_eps_lt（把 prop:spg-relative-error-threshold-sharpness 的相对误差阈值写成 κ(ε)<p 与 ε<(p-1)/(p+1) 的精确充要判别）；two_mul_prefixScanError_le_one（把前缀扫描误差继承的通用半界写成 $2\varepsilon\le 1$ 的统一形式）
 **fiber 结构**：分割和 = 2^m, multiplicity, 不相交性；逐纤维自由对合计数递推 freeInvolutionCount_succ 与奇数连乘闭式 freeInvolutionCount_eq_prod_odds（对应 thm:fiberwise-free-involution-matching-entropy 的单纤维完美匹配计数链）
 **defect 结构**：零条件 ↔ Fold 可交换, 链代数, 离散 Stokes
 **圆维度审计稳定性（Round 102）**：supNormIntVec（整数向量 sup 范数）; torusSupDistZero（零点环面 sup 距离）; auditSeparation（审计分离函数）; AuditStable / AuditStableBoxwise（统一与 boxwise 审计稳定性）; BadlyApproximable（坏逼近矩阵定义）; audit_stability_iff_badly_approximable（boxwise 审计稳定性与坏逼近等价）
@@ -207,6 +207,7 @@
 **Phase R225: sharp κ-threshold equivalence for relative error（部分完成）**：SPG/ErrorThreshold.lean——kappa_lt_iff_eps_lt（prop:spg-relative-error-threshold-sharpness，补齐相对误差阈值中 κ(ε)<p 与 ε<(p-1)/(p+1) 的精确充要判别）——**1 个论文标签条目计入覆盖率**（SPG +1）——SPG 32→33（25.6%），全局标注 852→853（+1），body 覆盖 838→839（8.0%），commit ec8edab
 **Phase R226: higher-spectrum piecewise formula for counterexample A'（部分完成）**：CircleDimension/MultiPrimeSpectrum.lean——higher_spectrum_counterexample_Aprime_piecewise（prop:cdim-higher-spectrum-not-determined-by-marginals，补齐反例支撑 A' 的高阶谱在空集、包含于 {p,q} 的子集与其余情形下的分段闭式）——**1 个论文标签条目计入覆盖率**（Circle Dimension +1）——Circle Dimension 69→70（17.8%），全局标注 853→854（+1），body 覆盖 839→840（8.0%），commit 27654ed
 **Phase R227: window-6 average information-loss closed form（部分完成）**：Conclusion/Window6Collision.lean——window6_information_loss_average_closed_form（thm:conclusion-window6-qmoment-triple-geometry，就地修复后登记 window-6 平均信息损失常数由直方图化简为 $(13/32)\log 2 + (1/16)\log 3$ 的闭式）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 143→144（5.6%），全局标注 854→855（+1），body 覆盖 840→841（8.0%），commit b4ca180
+**Phase R228: prefix scan error universal half-bound（部分完成）**：SPG/ScanErrorDiscrete.lean——two_mul_prefixScanError_le_one（prop:spg-clarity-bayes-optimality，补齐前缀扫描误差继承通用半界并写成 $2\varepsilon\le 1$ 的统一形式）——**1 个论文标签条目计入覆盖率**（SPG +1）——SPG 33→34（26.4%），全局标注 855→856（+1），body 覆盖 841→842（8.0%），commit <pending>
 **Phase R192（分析完成，单槽候选）**：CircleDimension / phase-spectrum reconstruction——避开已在跑的 Zeta 线，转向未饱和的 Circle Dimension；单个中难度目标锁定 `phaseSpectrumCount_reconstruction`（对应 `thm:cdim-phase-spectrum-reconstruction`，把论文中的“全部循环相位采样计数唯一决定有限生成离散交换群同构类型”压缩为当前 Nat-编码下的显式恢复链：从 `phaseSpectrumCount r t N = phaseSpectrumCount r' t' N` 对所有 `N` 推出 `r = r'` 且 `Nat.gcd t N = Nat.gcd t' N` 对所有 `N`，再取 `N = t` 与 `N = t'` 得 `t = t'`；直接承接现有 `phaseSpectrumCount_split` / `phaseSpectrumCount_coprime` / `phaseSpectrumCount_add_rank_le` / `phaseSpectrumCount_le_pow`，不引入新公理，满足单目标中难度门槛）。
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续
