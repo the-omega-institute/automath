@@ -449,4 +449,12 @@ theorem phaseSpectrumCount_reconstruction
     dvd_trans htgcd_right (Nat.gcd_dvd_left t t')
   exact ⟨rfl, Nat.dvd_antisymm hdiv_left hdiv_right⟩
 
+/-- One-sided phase-spectrum reconstruction recovers the free rank.
+    thm:cdim-phase-spectrum-reconstruction -/
+theorem phaseSpectrumCount_reconstruction_one_sided
+    {r r' t t' : Nat}
+    (ht : 0 < t) (ht' : 0 < t')
+    (h : ∀ N : Nat, 1 ≤ N → phaseSpectrumCount r t N = phaseSpectrumCount r' t' N) :
+    r = r' := by
+  exact (phaseSpectrumCount_reconstruction ht ht' h).1
 end Omega.CircleDimension
