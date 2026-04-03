@@ -13,9 +13,9 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 853 |
+| \leanverified 标注数 | 854 |
 | \leanpartial 标注数 | 16 |
-| 总标注数 | 869 |
+| 总标注数 | 870 |
 | 轮次 | R218（round_count=219） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
@@ -28,11 +28,11 @@
 | Conclusion | 2,550 | 143 | 5.6% |
 | Group Unification | 469 | 81 | 17.3% |
 | SPG | 129 | 33 | 25.6% |
-| Circle Dimension | 393 | 69 | 17.6% |
+| Circle Dimension | 393 | 70 | 17.8% |
 | Zeta Finite Part | 4,524 | 103 | 2.3% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **839** | **8.0%** |
+| **合计（body）** | **10,508** | **840** | **8.0%** |
 
 ### 1.2 已完成模块
 
@@ -55,7 +55,7 @@
 **fiber 结构**：分割和 = 2^m, multiplicity, 不相交性；逐纤维自由对合计数递推 freeInvolutionCount_succ 与奇数连乘闭式 freeInvolutionCount_eq_prod_odds（对应 thm:fiberwise-free-involution-matching-entropy 的单纤维完美匹配计数链）
 **defect 结构**：零条件 ↔ Fold 可交换, 链代数, 离散 Stokes
 **圆维度审计稳定性（Round 102）**：supNormIntVec（整数向量 sup 范数）; torusSupDistZero（零点环面 sup 距离）; auditSeparation（审计分离函数）; AuditStable / AuditStableBoxwise（统一与 boxwise 审计稳定性）; BadlyApproximable（坏逼近矩阵定义）; audit_stability_iff_badly_approximable（boxwise 审计稳定性与坏逼近等价）
-**圆维度高阶谱（Round 102）**：PrimeSupportObj（素支撑对象）; supportSpectrum（支撑谱计数）; higher_spectrum_not_determined_by_marginals（高阶谱不由一维边缘决定）
+**圆维度高阶谱（Round 102）**：PrimeSupportObj（素支撑对象）; supportSpectrum（支撑谱计数）; higher_spectrum_not_determined_by_marginals（高阶谱不由一维边缘决定）; higher_spectrum_counterexample_Aprime_piecewise（把反例支撑 A' 的高阶谱写成对空集、支持于 {p,q} 的子集及其余情形的分段闭式）
 **modular 映射塔**：modularProject = restrict 等价, 进位缺陷加法形式, 乘法值恒等式, restrict 复合, 塔相容性, 传递性, 零保持, 满射, restrict 保零（restrict_zero）, restrict 保一（restrict_one）, restrict 满射（restrict_surjective）, restrict 纤维非空（restrict_fiber_nonempty）
 **fiber 融合不等式**：fib_fusion 恒等式, 严格次乘性链 (fib_prod < fib_fusion < fib_sum), 分量合并增益上下界
 **最大纤维多重度（部分完成）**：maxFiberMultiplicity 定义, achiever 存在性, 上界, 正性; 递推上界 D(m+2)≤D(m+1)+D(m)（maxFiberMultiplicity_le_add）; 基值 D_0..D_10（native_decide 验证，11个定理）; 偶数闭式 D(2k)=F_{k+2} 目前仅对 k=1..5 无条件成立（maxFiberMultiplicity_even）; 奇数闭式 D(2k+1)=2F_k 目前仅对 k=1..4 无条件成立（maxFiberMultiplicity_odd）; 一般闭式仍以 two-step recurrence 为条件（maxFiberMultiplicity_even_of_two_step / maxFiberMultiplicity_odd_of_two_step）
@@ -205,6 +205,7 @@
 **Phase R223: golden-mean φ-eigenvector coordinate ratio（部分完成）**：Graph/TransferMatrix.lean——goldenMeanAdjacency_phi_eigenvector_ratio（thm:golden-mean-pf-root-eq-phi，补齐黄金均值邻接矩阵任意 φ-特征向量满足 Perron 坐标比 `w₀ = φ w₁` 的显式刚性关系）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 80→81（17.3%），全局标注 850→851（+1），body 覆盖 836→837（8.0%），commit b24a70b
 **Phase R224: projector zero split criterion for central idempotents（部分完成）**：EA/CentralIdempotentsRecovery.lean——projectorVal_zero_iff_other_exists_one（thm:fold-groupoid-z2x2-central-idempotents，补齐 ±1 指纹输入下单个投影为零当且仅当其余三投影之一取 1 的分裂判别）——**1 个论文标签条目计入覆盖率**（Emergent Arithmetic +1）——Emergent Arithmetic 94→95（51.4%），全局标注 851→852（+1），body 覆盖 837→838（8.0%），commit f322367
 **Phase R225: sharp κ-threshold equivalence for relative error（部分完成）**：SPG/ErrorThreshold.lean——kappa_lt_iff_eps_lt（prop:spg-relative-error-threshold-sharpness，补齐相对误差阈值中 κ(ε)<p 与 ε<(p-1)/(p+1) 的精确充要判别）——**1 个论文标签条目计入覆盖率**（SPG +1）——SPG 32→33（25.6%），全局标注 852→853（+1），body 覆盖 838→839（8.0%），commit ec8edab
+**Phase R226: higher-spectrum piecewise formula for counterexample A'（部分完成）**：CircleDimension/MultiPrimeSpectrum.lean——higher_spectrum_counterexample_Aprime_piecewise（prop:cdim-higher-spectrum-not-determined-by-marginals，补齐反例支撑 A' 的高阶谱在空集、包含于 {p,q} 的子集与其余情形下的分段闭式）——**1 个论文标签条目计入覆盖率**（Circle Dimension +1）——Circle Dimension 69→70（17.8%），全局标注 853→854（+1），body 覆盖 839→840（8.0%），commit <pending>
 **Phase R192（分析完成，单槽候选）**：CircleDimension / phase-spectrum reconstruction——避开已在跑的 Zeta 线，转向未饱和的 Circle Dimension；单个中难度目标锁定 `phaseSpectrumCount_reconstruction`（对应 `thm:cdim-phase-spectrum-reconstruction`，把论文中的“全部循环相位采样计数唯一决定有限生成离散交换群同构类型”压缩为当前 Nat-编码下的显式恢复链：从 `phaseSpectrumCount r t N = phaseSpectrumCount r' t' N` 对所有 `N` 推出 `r = r'` 且 `Nat.gcd t N = Nat.gcd t' N` 对所有 `N`，再取 `N = t` 与 `N = t'` 得 `t = t'`；直接承接现有 `phaseSpectrumCount_split` / `phaseSpectrumCount_coprime` / `phaseSpectrumCount_add_rank_le` / `phaseSpectrumCount_le_pow`，不引入新公理，满足单目标中难度门槛）。
 **S_3 基值 + A_3 碰撞核矩阵（Round 13）**：momentSum_three_zero..six（S_3(m) 基值 m=0..6，native_decide 验证）; momentSum_three_recurrence_verified（S_3 递推 m=0..3 数值验证）; collisionKernel3（A_3 companion matrix 定义）; collisionKernel3_trace（tr=2）; collisionKernel3_det（det=-2）; collisionKernel3_cayley_hamilton（Cayley-Hamilton：M³=2M²+4M-2I，prop:pom-s3-recurrence）
 **S_2/S_3 扩展基值 + 有界递推 + 条件递推（Round 14）**：momentSum_two_seven（S_2(7)=544）; momentSum_three_seven（S_3(7)=2504）; momentSum_two_recurrence_bounded（S_2 递推 m≤4，interval_cases+native_decide）; momentSum_three_recurrence_bounded（S_3 递推 m≤4，interval_cases+native_decide）; momentSum_two_recurrence_of（S_2 递推条件性一般版，prop:pom-s2-recurrence）; momentSum_three_recurrence_of（S_3 递推条件性一般版，prop:pom-s3-recurrence）——有界范围已形式化，完整无界归纳证明待后续
