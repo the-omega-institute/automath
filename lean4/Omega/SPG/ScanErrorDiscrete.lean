@@ -739,6 +739,12 @@ theorem two_mul_scanError_le_one {α β : Type*} [Fintype α] [Fintype β]
     _ = ∑ x, (μ x : ENNReal) := setMass_add_setMass_compl μ P
     _ = 1 := PMF_sum_coe_eq_one μ
 
+/-- Prefix scan error inherits the universal half-bound from scan error.
+    cor:spg-prefix-scan-error-monotonicity -/
+theorem two_mul_prefixScanError_le_one (μ : PMF (Word n)) (h : m ≤ n) (P : Set (Word n)) :
+    2 * prefixScanError μ h P ≤ 1 := by
+  exact two_mul_scanError_le_one μ (prefixObservation h) P
+
 /-- Scan error is bounded by the event mass alone (single-sided bound). -/
 theorem scanError_le_setMass {α β : Type*} [Fintype α] [Fintype β]
     (μ : PMF α) (obs : α → β) (P : Set α) :

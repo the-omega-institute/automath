@@ -405,6 +405,44 @@ theorem phaseSpectrumCount_le_pow (r t N : Nat) (hN : 0 < N) :
   simp only [phaseSpectrumCount, pow_succ]
   exact Nat.mul_le_mul_left _ (Nat.gcd_le_right t hN)
 
+/-- The phase spectrum attains its maximal value exactly when `N ∣ t`.
+    thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_eq_pow_succ_iff_dvd
+    (r t N : Nat) (hN : 1 ≤ N) :
+    phaseSpectrumCount r t N = N ^ (r + 1) ↔ N ∣ t := by
+  constructor
+  · intro hEq
+    have hpowpos : 0 < N ^ r := Nat.pow_pos (lt_of_lt_of_le (by decide) hN)
+    apply (Nat.gcd_eq_right_iff_dvd).mp
+    apply Nat.eq_of_mul_eq_mul_left hpowpos
+    simpa [phaseSpectrumCount, pow_succ, Nat.mul_assoc] using hEq
+  · intro hdiv
+    rw [phaseSpectrumCount, pow_succ, Nat.gcd_eq_right hdiv]
+
+/-- For a prime modulus, the phase spectrum is forced into the coprime-or-divisible dichotomy.
+    thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_prime_dichotomy
+    (r t p : Nat) (hp : Nat.Prime p) :
+    phaseSpectrumCount r t p = p ^ r ∨ phaseSpectrumCount r t p = p ^ (r + 1) := by
+  by_cases hdiv : p ∣ t
+  · right
+    exact (phaseSpectrumCount_eq_pow_succ_iff_dvd r t p (le_of_lt hp.one_lt)).2 hdiv
+  · left
+    exact (phaseSpectrumCount_eq_pow_iff_coprime r t p (le_of_lt hp.one_lt)).2
+      (hp.coprime_iff_not_dvd.mpr hdiv).symm
+
+/-- Odd prime-power factors are invisible to dyadic phase spectra.
+    thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_dyadic_odd_prime_power_invariant
+    {r t p a b : Nat} (hp : Nat.Prime p) (hp2 : p ≠ 2) :
+    phaseSpectrumCount r (t * p ^ b) (2 ^ a) = phaseSpectrumCount r t (2 ^ a) := by
+  rw [phaseSpectrumCount_split, phaseSpectrumCount_split]
+  congr 1
+  have hpow : Nat.Coprime (p ^ b) (2 ^ a) :=
+    Nat.coprime_pow_primes b a hp (by decide : Nat.Prime 2) hp2
+  simpa [Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using
+    hpow.gcd_mul_left_cancel t
+
 /-- Phase spectrum reconstruction for positive torsion parameters.
     thm:cdim-phase-spectrum-reconstruction -/
 theorem phaseSpectrumCount_reconstruction

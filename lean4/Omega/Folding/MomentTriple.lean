@@ -423,7 +423,7 @@ theorem momentSum_two_sq_le_card_mul_four (m : Nat) :
       Finset.univ.card * ∑ x : X m, (X.fiberMultiplicity x ^ 2) ^ 2 :=
     sq_sum_le_card_mul_sum_sq
   convert this using 2 with x
-  ring
+  ring_nf
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase 123

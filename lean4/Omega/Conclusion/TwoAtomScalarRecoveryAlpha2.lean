@@ -93,7 +93,7 @@ theorem twoAtomScalar_strictMono {α : ℝ} (hα : 1 < α) :
         have : 2 * α - 1 - 1 = (α - 3) + (α + 1) := by ring
         rw [this, Real.rpow_add hφ_pos]
       rw [hpow_eq]
-      ring
+      ring_nf
     rw [hderiv]
     exact mul_pos (mul_pos hpow5_pos hφa1_pos) hmain_gt
 
@@ -102,5 +102,18 @@ theorem twoAtomScalar_strictMono {α : ℝ} (hα : 1 < α) :
 theorem twoAtomScalar_injective_on_Ioi {α : ℝ} (hα : 1 < α) :
     Set.InjOn (twoAtomScalar α) (Set.Ioi 1) :=
   (twoAtomScalar_strictMono hα).injOn
+
+/-- The α = 2 scalar recovers the golden ratio from its value on `(1, ∞)`.
+    cor:conclusion-binfold-single-scalar-recovers-golden-parameter -/
+theorem twoAtomScalar2_eq_zero_iff_goldenRatio {φ : ℝ} (hφ : 1 < φ) :
+    twoAtomScalar2 φ = twoAtomScalar2 Real.goldenRatio ↔ φ = Real.goldenRatio := by
+  have hgr : 1 < Real.goldenRatio := Real.one_lt_goldenRatio
+  have hφpos : 0 < φ := lt_trans zero_lt_one hφ
+  have hgrpos : 0 < Real.goldenRatio := lt_trans zero_lt_one hgr
+  constructor
+  · intro h
+    exact twoAtomScalar2_injective_on_pos hφpos hgrpos h
+  · intro h
+    rw [h]
 
 end Omega.Conclusion

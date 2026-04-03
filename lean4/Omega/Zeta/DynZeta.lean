@@ -434,6 +434,12 @@ theorem degeneracy_ghost_exponential_lower (n : Nat) (hn : 4 ≤ n) :
       _ ≤ (2 : ℤ) ^ ((4 + j) + 1) - lucasNum ((4 + j) + 1) := hdbl
       _ = (2 : ℤ) ^ (4 + (j + 1)) - lucasNum (4 + (j + 1)) := by ring_nf
 
+/-- Paper-facing wrapper for the degeneracy ghost exponential lower bound.
+    rem:degeneracy-zeta-bridge -/
+theorem paper_degeneracy_ghost_exponential_lower (n : Nat) (hn : 4 ≤ n) :
+    9 * 2 ^ (n - 4) ≤ (2 : ℤ) ^ n - lucasNum n := by
+  exact degeneracy_ghost_exponential_lower n hn
+
 /-- Lucas numbers mod 3 have period 8: L(n+8) % 3 = L(n) % 3 for all n.
     rem:degeneracy-zeta-bridge -/
 theorem lucasNum_mod3_period_eight (n : ℕ) :
@@ -831,5 +837,35 @@ theorem lucasNum_fib_gcd_dvd_two (n : Nat) :
     prop:zetaK-mobius-primitive -/
 def primitiveOrbitNumerator (n : Nat) : ℤ :=
   ∑ d ∈ Nat.divisors n, ArithmeticFunction.moebius (n / d) * lucasNum d
+
+/-- Prime-length specialization of the primitive orbit numerator.
+    prop:zetaK-mobius-primitive -/
+theorem primitiveOrbitNumerator_prime {p : Nat} (hp : Nat.Prime p) :
+    primitiveOrbitNumerator p = lucasNum p - 1 := by
+  rw [primitiveOrbitNumerator]
+  have hp1 : 1 ∈ Nat.divisors p := by simp [Nat.mem_divisors, hp.ne_zero]
+  have hpp : p ∈ Nat.divisors p := by simp [Nat.mem_divisors, hp.ne_zero]
+  have hsubset : Nat.divisors p ⊆ ({1, p} : Finset Nat) := by
+    intro d hd
+    simp [(Nat.dvd_prime hp).mp ((Nat.mem_divisors.mp hd).1)]
+  have hsupset : ({1, p} : Finset Nat) ⊆ Nat.divisors p := by
+    intro d hd
+    simp at hd
+    rcases hd with rfl | rfl
+    · exact hp1
+    · exact hpp
+  have hEq : Nat.divisors p = ({1, p} : Finset Nat) := Finset.Subset.antisymm hsubset hsupset
+  rw [hEq, Finset.sum_insert]
+  · rw [Finset.sum_singleton]
+    have hp_sq : Squarefree p := hp.squarefree
+    have hμp : ArithmeticFunction.moebius p = -1 := by
+      rw [ArithmeticFunction.moebius_apply_of_squarefree hp_sq,
+        ArithmeticFunction.cardFactors_apply_prime hp, pow_one]
+    have hμ1 : ArithmeticFunction.moebius 1 = 1 := by
+      rw [ArithmeticFunction.moebius_apply_of_squarefree (show Squarefree 1 by simp)]
+      norm_num
+    rw [show p / 1 = p by omega, show p / p = 1 by exact Nat.div_self hp.pos, hμp, hμ1, lucasNum_one]
+    ring
+  · simp [eq_comm, hp.ne_one]
 
 end Omega.Zeta

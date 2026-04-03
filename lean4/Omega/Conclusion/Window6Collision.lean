@@ -458,4 +458,17 @@ theorem conclusion_window6_crt_idempotent_sector_splitting :
     ((7 : ZMod 21) + 15 = 1) := by
   exact ⟨crt_idempotent_7, crt_idempotent_15, crt_idempotent_product, crt_idempotent_sum⟩
 
+/-- Closed form of the average information loss constant from the window-6 histogram.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_information_loss_average_closed_form :
+    ((8 : ℝ) * (2 : ℝ) * Real.log 2 +
+        (4 : ℝ) * (3 : ℝ) * Real.log 3 +
+        (9 : ℝ) * (4 : ℝ) * Real.log 4) / 64 =
+      ((11 : ℝ) / 8) * Real.log 2 + ((3 : ℝ) / 16) * Real.log 3 := by
+  have hlog4 : Real.log 4 = 2 * Real.log 2 := by
+    rw [show (4 : ℝ) = 2 * 2 by norm_num, Real.log_mul (by positivity) (by positivity)]
+    ring
+  rw [hlog4]
+  ring_nf
+
 end Omega.Conclusion

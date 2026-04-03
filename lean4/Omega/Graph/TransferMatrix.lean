@@ -259,6 +259,16 @@ theorem goldenMeanAdjacency_mul_goldenEigenvector :
     nlinarith [Real.goldenRatio_sq]
   · simp [goldenMeanEigenvector, Matrix.mulVec, dotProduct]
 
+/-- Any `φ`-eigenvector satisfies the Perron coordinate ratio `w₀ = φ w₁`.
+    thm:golden-mean-pf-root-eq-phi -/
+theorem goldenMeanAdjacency_phi_eigenvector_ratio
+    {w : Fin 2 → ℝ}
+    (hμ : Matrix.mulVec goldenMeanAdjacencyℝ w = fun i => Real.goldenRatio * w i) :
+    w 0 = Real.goldenRatio * w 1 := by
+  have h1 := congrFun hμ 1
+  rw [goldenMeanAdjacencyℝ_eq] at h1
+  simpa [Matrix.mulVec, dotProduct] using h1
+
 /-- Concrete witness form of the golden-ratio eigenvalue statement.
     lem:golden-mean-has-phi-eigenvector -/
 theorem goldenMeanAdjacency_has_goldenRatio_eigenvector :

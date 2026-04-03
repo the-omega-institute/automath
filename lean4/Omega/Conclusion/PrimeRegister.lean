@@ -287,6 +287,13 @@ theorem godelLift_binary_axis_lower (m k : Nat)
     Nat.log 2 (X.maxFiberMultiplicity m) ≤ k :=
   godelLift_axis_lower_bound k 1 (X.maxFiberMultiplicity m) (by omega) hfeas
 
+/-- Binary specialization of the general axis lower bound.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_axis_lower_bound_binary_specialized (k D : Nat)
+    (hfeas : D ≤ 2 ^ k) :
+    Nat.log 2 D ≤ k := by
+  simpa using godelLift_axis_lower_bound k 1 D (by omega) hfeas
+
 open Omega in
 /-- Ternary specialization: fewer axes with E=2.
     cor:conclusion-fixed-axis-exponential-amplitude -/
@@ -294,5 +301,55 @@ theorem godelLift_ternary_axis_lower (m k : Nat)
     (hfeas : X.maxFiberMultiplicity m ≤ 3 ^ k) :
     Nat.log 3 (X.maxFiberMultiplicity m) ≤ k :=
   godelLift_axis_lower_bound k 2 (X.maxFiberMultiplicity m) (by omega) hfeas
+
+/-- A linear-density Gödel lift with one event per step requires at least five symbols.
+    thm:conclusion-godel-five-symbol-threshold -/
+theorem godelLift_alphabet_threshold_mge5 {M : ℕ}
+    (hM : 2 ≤ M)
+    (hineq : Real.log (2 / Real.goldenRatio) / Real.log M ≤ (4 : ℝ) / 27) :
+    5 ≤ M := by
+  have hconst : (4 : ℝ) / 27 < Real.log (2 / Real.goldenRatio) / Real.log 4 := by
+    have hφlt : Real.goldenRatio < (13 : ℝ) / 8 := by
+      rw [Real.goldenRatio]
+      have hsq : Real.sqrt 5 ^ 2 = (5 : ℝ) := by
+        rw [Real.sq_sqrt]
+        positivity
+      nlinarith
+    have hφpos : 0 < Real.goldenRatio := by positivity
+    have hbase : (16 : ℝ) / 13 < 2 / Real.goldenRatio := by
+      refine (lt_div_iff₀ hφpos).2 ?_
+      nlinarith [hφlt]
+    have hpowlog : 4 * Real.log 4 < 27 * Real.log ((16 : ℝ) / 13) := by
+      have hpow : (4 : ℝ) ^ 4 < ((16 : ℝ) / 13) ^ 27 := by norm_num
+      have := Real.log_lt_log (by positivity : 0 < (4 : ℝ) ^ 4) hpow
+      simpa [Real.log_rpow] using this
+    have hmain : 4 * Real.log 4 < 27 * Real.log (2 / Real.goldenRatio) := by
+      have hlogmono : Real.log ((16 : ℝ) / 13) < Real.log (2 / Real.goldenRatio) := by
+        exact Real.log_lt_log (by positivity : 0 < (16 : ℝ) / 13) hbase
+      linarith
+    have hlog4pos : 0 < Real.log 4 := Real.log_pos (by norm_num)
+    exact (lt_div_iff₀ hlog4pos).2 <| by nlinarith
+  by_contra hlt
+  have hMle4 : M ≤ 4 := by omega
+  have hMpos : (0 : ℝ) < M := by positivity
+  have hlogM_pos : 0 < Real.log M := by
+    refine Real.log_pos ?_
+    exact_mod_cast hM
+  have hlogM_le : Real.log M ≤ Real.log 4 := by
+    apply Real.log_le_log hMpos
+    norm_num
+    exact_mod_cast hMle4
+  have hratio_ge : Real.log (2 / Real.goldenRatio) / Real.log 4 ≤
+      Real.log (2 / Real.goldenRatio) / Real.log M := by
+    have hnum_pos : 0 < Real.log (2 / Real.goldenRatio) := by
+      have hphi_pos : 0 < Real.goldenRatio := Real.goldenRatio_pos
+      have hphi_lt_two : Real.goldenRatio < 2 := Real.goldenRatio_lt_two
+      apply Real.log_pos
+      exact (one_lt_div hphi_pos).2 hphi_lt_two
+    rw [div_eq_mul_inv, div_eq_mul_inv]
+    exact mul_le_mul_of_nonneg_left (inv_anti₀ hlogM_pos hlogM_le) hnum_pos.le
+  have : (4 : ℝ) / 27 < (4 : ℝ) / 27 := by
+    exact lt_of_lt_of_le hconst (hratio_ge.trans hineq)
+  linarith
 
 end Omega.Conclusion

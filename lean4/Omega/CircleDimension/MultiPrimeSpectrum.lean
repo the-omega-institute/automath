@@ -497,4 +497,62 @@ theorem higher_spectrum_counterexample_pair_values
     rw [hRight]
     simp
 
+/-- The repaired higher-spectrum formula for the counterexample support `A'`.
+    prop:cdim-higher-spectrum-not-determined-by-marginals -/
+theorem higher_spectrum_counterexample_Aprime_piecewise
+    {p q : Nat} (hpq : p ≠ q) (J : PrimeSupport) :
+    let A' : Finset PrimeSupport := {({p, q} : PrimeSupport), (∅ : PrimeSupport)}
+    multiPrimeSpectrum A' J =
+      if J = ∅ then 2 else if J ⊆ ({p, q} : PrimeSupport) then 1 else 0 := by
+  let _ := hpq
+  by_cases hJ0 : J = ∅
+  · subst hJ0
+    simp [multiPrimeSpectrum_empty]
+  · by_cases hJ : J ⊆ ({p, q} : PrimeSupport)
+    · have hFilter :
+          {S ∈ ({({p, q} : PrimeSupport), (∅ : PrimeSupport)} : Finset PrimeSupport) | J ⊆ S} =
+            {({p, q} : PrimeSupport)} := by
+        ext S
+        constructor
+        · intro h
+          simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton] at h
+          rcases h with ⟨hS, hsub⟩
+          rcases hS with rfl | rfl
+          · simp
+          · exfalso
+            apply hJ0
+            ext x
+            constructor
+            · intro hx
+              exfalso
+              simpa using hsub hx
+            · intro hx
+              simp at hx
+        · intro h
+          simp only [Finset.mem_singleton] at h
+          subst h
+          simp [hJ]
+      simp [multiPrimeSpectrum, hFilter, hJ0, hJ]
+    · have hFilter :
+          {S ∈ ({({p, q} : PrimeSupport), (∅ : PrimeSupport)} : Finset PrimeSupport) | J ⊆ S} = ∅ := by
+        ext S
+        constructor
+        · intro h
+          simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton] at h
+          rcases h with ⟨hS, hsub⟩
+          rcases hS with rfl | rfl
+          · exact (hJ hsub).elim
+          · exfalso
+            apply hJ0
+            ext x
+            constructor
+            · intro hx
+              exfalso
+              simpa using hsub hx
+            · intro hx
+              simp at hx
+        · intro h
+          simp at h
+      simp [multiPrimeSpectrum, hFilter, hJ0, hJ]
+
 end Omega.CircleDimension

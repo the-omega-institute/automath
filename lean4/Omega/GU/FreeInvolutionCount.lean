@@ -77,10 +77,30 @@ theorem freeInvolutionCount_eq_prod_odds (r : Nat) :
   | succ r ihr =>
       rw [freeInvolutionCount_succ, Finset.prod_range_succ, ihr, mul_comm]
 
+/-- Double-factorial form of the free involution count.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_eq_doubleFactorial (r : Nat) :
+    freeInvolutionCount r = Nat.doubleFactorial (2 * r - 1) := by
+  induction r with
+  | zero => simp [freeInvolutionCount]
+  | succ r ihr =>
+      rw [freeInvolutionCount_succ, ihr]
+      simpa [two_mul, add_assoc, add_comm, add_left_comm] using
+        (Nat.doubleFactorial_add_one (2 * r)).symm
+
 /-- Small values of the free involution count.
     thm:fiberwise-free-involution-matching-entropy -/
 theorem freeInvolutionCount_small :
     freeInvolutionCount 1 = 1 ∧ freeInvolutionCount 2 = 3 ∧ freeInvolutionCount 3 = 15 := by
   native_decide
+
+/-- Fiberwise free involution counts multiply across independent fibers.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem fiberwiseFreeInvolutionCount_total_eq_prod_doubleFactorial
+    {B : Type*} [Fintype B] (r : B → Nat) :
+    (∏ b, freeInvolutionCount (r b)) =
+      ∏ b, Nat.doubleFactorial (2 * r b - 1) := by
+  simpa using
+    Finset.prod_congr rfl (fun b _ => freeInvolutionCount_eq_doubleFactorial (r b))
 
 end Omega.GU

@@ -31,4 +31,19 @@ theorem eps_lt_of_kappa_lt {p ε : ℝ} (hp : 1 < p) (hε_pos : 0 < ε) (hε_lt 
   rw [lt_div_iff₀ (by linarith : (0 : ℝ) < p + 1)]
   nlinarith
 
+/-- Exact threshold criterion for `κ(ε) < p`.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_lt_iff_eps_lt {p ε : ℝ}
+    (hp : 1 < p) (hε_pos : 0 < ε) (hε_lt : ε < 1) :
+    kappa ε < p ↔ ε < (p - 1) / (p + 1) := by
+  constructor
+  · exact eps_lt_of_kappa_lt hp hε_pos hε_lt
+  · intro hε
+    unfold kappa
+    have h1ε : 0 < 1 - ε := by linarith
+    have hp1 : 0 < p + 1 := by linarith
+    rw [div_lt_iff₀ h1ε]
+    have hε' := (lt_div_iff₀ hp1).mp hε
+    nlinarith
+
 end Omega.SPG

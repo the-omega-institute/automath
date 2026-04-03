@@ -157,4 +157,11 @@ theorem singleDefectEnergy_zero_rigidity_single (m δ : ℝ)
     exact mul_eq_zero.mp hmul
   · rintro (rfl | rfl) <;> simp
 
+/-- Zero energy at `t = 0` is equivalent to vanishing mass or defect.
+    prop:xi-finite-defect-poisson-l2-energy-zero-rigidity -/
+theorem singleDefectEnergy_zero_eq_zero_iff
+    (m δ : ℝ) (hδ0 : 0 ≤ δ) (hδ1 : δ < 1) :
+    Real.pi * m^2 * (δ^2 / (1 - δ^2)) = 0 ↔ (m = 0 ∨ δ = 0) := by
+  simpa using singleDefectEnergy_zero_rigidity_single m δ hδ0 hδ1
+
 end Omega.Zeta
