@@ -367,6 +367,25 @@ theorem goldenMeanAdjacency_pf_root_eq_goldenRatio :
   · intro μ hμ
     exact goldenMeanAdjacency_dominates_all_real_eigenvalues hμ
 
+/-- A positive real eigenvector forces the Perron root `φ`.
+    thm:golden-mean-pf-root-eq-phi -/
+theorem goldenMeanAdjacency_positive_eigenvalue_eq_goldenRatio
+    {μ : ℝ} {w : Fin 2 → ℝ}
+    (hw : w ≠ 0)
+    (hpos : 0 < w 0 ∧ 0 < w 1)
+    (hμ : Matrix.mulVec goldenMeanAdjacencyℝ w = fun i => μ * w i) :
+    μ = Real.goldenRatio := by
+  rcases eigenvalue_eq_goldenRatio_or_goldenConj (eigenvalue_satisfies_quadratic hw hμ) with hφ | hψ
+  · exact hφ
+  · have h1 := congrFun hμ 1
+    rw [goldenMeanAdjacencyℝ_eq] at h1
+    simp [Matrix.mulVec, dotProduct] at h1
+    have hμpos : 0 < μ := by
+      rw [hψ] at h1
+      nlinarith [hpos.1, hpos.2, Real.goldenConj_neg]
+    rw [hψ] at hμpos
+    linarith [Real.goldenConj_neg]
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase 185
 -- ══════════════════════════════════════════════════════════════
