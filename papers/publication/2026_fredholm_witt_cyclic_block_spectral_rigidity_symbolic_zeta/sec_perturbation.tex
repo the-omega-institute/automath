@@ -14,11 +14,22 @@
   \(\{0\}\cup\{\nu_j(\theta):j=2,\dots,d\}\). The reduced determinant is
   \[
     \det\nolimits'(B_\theta)
-    :=\prod_{j=2}^{d}\nu_j(\theta)
+    :=\prod_{\nu\in\spec(B_\theta)\setminus\{0\}}\nu
+  \]
+  with algebraic multiplicity, or equivalently
+  \[
+    \det\nolimits'(B_\theta)
     =\prod_{\mu\in\spec(A_\theta)\setminus\{\lambda(\theta)\}}
       \left(1-\frac{\mu}{\lambda(\theta)}\right).
   \]
-  and \(C(A_\theta)=\det\nolimits'(B_\theta)^{-1}\).
+  By \eqref{eq:reduced-det-constant},
+  \[
+    C(A_\theta)^{-1}
+    =\prod_{\mu\in\spec(A_\theta)\setminus\{\lambda(\theta)\}}
+      \left(1-\frac{\mu}{\lambda(\theta)}\right)
+    =\det\nolimits'(B_\theta),
+  \]
+  and hence \(C(A_\theta)=\det\nolimits'(B_\theta)^{-1}\).
 \end{definition}
 
 \begin{theorem}[Reduced-determinant gradient formula]
@@ -58,13 +69,14 @@
   Because the spectrum depends analytically,
   \(P_\theta\) and \(R_\theta=B_\theta^{\#}\) vary analytically on
   \(\theta\).
-  On \((I-P_\theta)\CC^d\), \(\det\nolimits'(B_\theta)\) is the
-  ordinary determinant, so by Jacobi's formula
+  On \((I-P_\theta)\CC^d\), the restriction of \(B_\theta\) is
+  invertible and its ordinary determinant is \(\det\nolimits'(B_\theta)\).
+  Jacobi's formula on this complementary spectral subspace gives
   \[
     \partial_\theta\log\det\nolimits'(B_\theta)
     =\Tr(R_\theta\,\partial_\theta B_\theta).
   \]
-  Since \(C(A_\theta)=\det\nolimits'(B_\theta)^{-1}\), this gives
+  By \Cref{def:reduced-determinant},
   \[
     \partial_\theta\log C(A_\theta)
     =-\partial_\theta\log\det\nolimits'(B_\theta)
@@ -84,7 +96,8 @@
   \label{thm:logM-holomorphic-variation}
   Let \(\theta\mapsto A_\theta\) be a holomorphic family of primitive
   matrices near \(\theta_0\), and assume that
-  \(\lambda(\theta):=\rho(A_\theta)\) stays simple. Then
+  \(\lambda(\theta):=\rho(A_\theta)\) stays simple. Let
+  \(R_\theta=(I-A_\theta/\lambda(\theta))^{\#}\). Then
   \(\theta\mapsto\log\MM(A_\theta)\) is holomorphic near \(\theta_0\)
   and
   \[
@@ -98,42 +111,90 @@
       \frac{\dd}{\dd\theta}
       \log\det(I-\lambda(\theta)^{-k}A_\theta)^{-1}.
   \]
-  The correction series converges absolutely and locally uniformly near
+  The correction series converges normally on a neighbourhood of
   \(\theta_0\).
 \end{theorem}
 
 \begin{proof}
   Apply \Cref{thm:finite-part-primitive-closed-form} to each \(A_\theta\).
-  For \(k\ge 2\), set
+  Choose a closed disc \(U\) around \(\theta_0\) so small that
+  \[
+    \lambda_\ast:=\inf_{\theta\in U}\abs{\lambda(\theta)}>1
+  \]
+  and
+  \[
+    M_0:=\sup_{\theta\in U}\norm{A_\theta}<\infty,
+    \qquad
+    M_1:=\sup_{\theta\in U}
+    \bigl(\norm{\partial_\theta A_\theta}
+      +\abs{\partial_\theta\lambda(\theta)}\bigr)<\infty.
+  \]
+  After shrinking \(U\) if necessary, we may assume
+  \(q:=M_0/\lambda_\ast^2<1\). For \(k\ge 2\), set
   \[
     \Phi_k(\theta):=\log\det(I-\lambda(\theta)^{-k}A_\theta)^{-1}.
   \]
-  Choose \(\epsilon>0\) so that
-  \(|\lambda(\theta)|\ge\lambda_{\min}>1\) for
-  \(|\theta-\theta_0|\le\epsilon\). Since \(\|A_\theta\|\) is bounded on
-  this compact set, Jacobi gives
+  Then
   \[
-    \left|\frac{\mu(k)}{k}\partial_\theta\Phi_k(\theta)\right|
-    \le
-    \frac{C_1}{k\,\lambda_{\min}^{k}}
-    +\frac{C_2}{\lambda_{\min}^{k-1}},
+    \sup_{\theta\in U}\norm{\lambda(\theta)^{-k}A_\theta}
+    \le M_0\lambda_\ast^{-k}
+    \le q^{k-2}q^2.
   \]
-  and therefore
+  Hence \(I-\lambda(\theta)^{-k}A_\theta\) is invertible on \(U\), and
+  the Neumann series gives
   \[
-    \sum_{k\ge2}\frac{\mu(k)}{k}\partial_\theta\Phi_k
+    \sup_{\theta\in U}
+    \norm{(I-\lambda(\theta)^{-k}A_\theta)^{-1}}
+    \le \frac{1}{1-q^2}.
   \]
-  converges absolutely and locally uniformly, so differentiation is
-  termwise justified. The reduced term is given by
-  \Cref{thm:finite-part-reduced-determinant-group-inverse-gradient}.
-  For \(\Phi_k\), Jacobi's formula gives
+  Since
   \[
-    \frac{\dd}{\dd\theta}\log\det(I-\lambda(\theta)^{-k}A_\theta)^{-1}
-    =\Tr\!\left((I-\lambda(\theta)^{-k}A_\theta)^{-1}
+    \log\det(I-X)^{-1}
+    =\sum_{m\ge 1}\frac{\Tr(X^m)}{m}
+  \]
+  for \(\norm{X}<1\), we obtain
+  \[
+    \sup_{\theta\in U}\abs{\Phi_k(\theta)}
+    \le C_U' q^k
+  \]
+  for a constant \(C_U'>0\). Thus
+  \[
+    \sum_{k\ge 2}\frac{\mu(k)}{k}\Phi_k(\theta)
+  \]
+  converges normally on \(U\).
+
+  Write
+  \[
+    G_k(\theta):=I-\lambda(\theta)^{-k}A_\theta.
+  \]
+  Jacobi's formula gives
+  \[
+    \partial_\theta\det G_k(\theta)
+    =\det G_k(\theta)\,
+      \Tr\!\bigl(G_k(\theta)^{-1}\partial_\theta G_k(\theta)\bigr).
+  \]
+  Therefore
+  \[
+    \partial_\theta\log\det G_k(\theta)^{-1}
+    =-\Tr\!\bigl(G_k(\theta)^{-1}\partial_\theta G_k(\theta)\bigr)
+    =\Tr\!\left(G_k(\theta)^{-1}
       \left(\frac{\partial_\theta A_\theta}{\lambda(\theta)^k}
       -\frac{k\,\partial_\theta\lambda(\theta)}{\lambda(\theta)^{k+1}}
-      A_\theta\right)\right),
+       A_\theta\right)\right).
   \]
-  a finite-dimensional Jacobi computation with no matrix-log branch.
+  Using the bounds above, we obtain
+  \[
+    \sup_{\theta\in U}\abs{\partial_\theta\Phi_k(\theta)}
+    \le C_U k q^k
+  \]
+  for some constant \(C_U>0\). Since \(|\mu(k)|\le 1\), the derivative
+  series
+  \[
+    \sum_{k\ge 2}\frac{\mu(k)}{k}\partial_\theta\Phi_k(\theta)
+  \]
+  also converges normally on \(U\), so differentiation is termwise
+  justified. The reduced term is given by
+  \Cref{thm:finite-part-reduced-determinant-group-inverse-gradient}.
 \end{proof}
 
 \begin{proposition}[Determinant truncation for the Abel finite part]
@@ -177,15 +238,17 @@
 
 Let \((X_A^+,\sigma_A)\) be the mixing subshift determined by a primitive
 matrix \(A\), let \(\mu_A\) be its Parry measure, and let
-\(f:X_A^+\to\RR\) be locally constant. After recoding if needed, we may
-assume that \(f\) is one-step, so there is a primitive matrix \(B\) and
-a function \(\varphi\) on the state set of \(B\) such that
+\(f:X_A^+\to\RR\) be locally constant. If \(f\) depends on the first
+\(m\) coordinates, pass to the \((m-1)\)-block presentation. Then the
+recoded system is again a mixing finite-state Markov shift with
+primitive adjacency matrix \(B\), and there is a real-valued edge
+function \(g\) on the allowed transitions of \(B\) such that
 \[
-  S_nf(x)=\sum_{k=0}^{n-1}\varphi(x_k)
+  S_nf(x)=\sum_{k=0}^{n-1}g(x_k,x_{k+1})
 \]
 on the recoded shift. For \(t\in\CC\), define the weighted matrix
 \[
-  M_t(b',b):=B_{b',b}e^{t\varphi(b)}.
+  M_t(i,j):=B_{ij}e^{t g(i,j)}.
 \]
 
 \begin{proposition}[Twisted determinants encode orbit moments]
@@ -274,6 +337,16 @@ on the recoded shift. For \(t\in\CC\), define the weighted matrix
 
 \subsection{Spectral-gap limit laws}
 
+For the off-origin decay statement we use the standard finite-state
+aperiodicity condition; see \cite{Parry1992Cocycle}. With
+\(\bar g=g-\int f\,\dd\mu_A\), we say that \(f\) is \emph{aperiodic} if
+there do not exist \(t\in\RR\setminus\{0\}\), \(\omega\in\mathbb S^1\),
+and a map \(\eta:\mathrm{state}(B)\to\mathbb S^1\) such that
+\[
+  e^{it\bar g(i,j)}=\omega\,\eta(i)\eta(j)^{-1}
+  \qquad\text{for every allowed edge }(i,j).
+\]
+
 \begin{proposition}[Spectral-gap central limit theorem]
   \label{thm:clt-spectral}
   Assume \(f\) is not a coboundary modulo constants. Write
@@ -283,7 +356,8 @@ on the recoded shift. For \(t\in\CC\), define the weighted matrix
     \frac{\sum_{k=0}^{n-1}\bar f\circ\sigma_A^k}{\sqrt n}
     \Longrightarrow \mathcal N(0,\sigma_f^2).
   \]
-  Moreover, for every compact set \(K\Subset\RR\setminus\{0\}\) there
+  If, in addition, \(f\) is aperiodic in the above finite-state sense,
+  then for every compact set \(K\Subset\RR\setminus\{0\}\) there
   exist constants \(C_K>0\) and \(\vartheta_K\in(0,1)\) such that
   \[
     \sup_{t\in K}
@@ -293,57 +367,139 @@ on the recoded shift. For \(t\in\CC\), define the weighted matrix
 \end{proposition}
 
 \begin{proof}
-  With the one-step recoding above, define
+  Let
+  \[
+    \bar g(i,j):=g(i,j)-\int f\,\dd\mu_A,
+    \qquad
+    \widetilde M_t(i,j):=B_{ij}e^{it\bar g(i,j)}.
+  \]
+  Choose positive left and right Perron vectors \(u,v\) for \(B\),
+  normalised by
+  \[
+    u^{\mathsf T}B=\lambda u^{\mathsf T},
+    \qquad
+    Bv=\lambda v,
+    \qquad
+    u^{\mathsf T}v=1,
+  \]
+  where \(\lambda=\rho(B)\). In the block presentation, the Parry
+  measure is the Markov measure determined by \(u\), \(v\), and
+  \(\lambda\), so for every real \(t\),
   \[
     \phi_n(t):=
     \int e^{it\sum_{k=0}^{n-1}\bar f\circ\sigma_A^k}\,\dd\mu_A.
   \]
-  If \(\widetilde M_t\) denotes the centered weighted matrix, then
+  One has
   \[
-    \phi_n(t)=\frac{\ell^\top \widetilde M_t^n r}{\lambda^n},
+    \phi_n(t)=\lambda^{-n}u^{\mathsf T}\widetilde M_t^n v.
   \]
-  where \(\lambda=\rho(B)\) and \(\ell,r\) are Perron vectors of \(B\)
-  with \(\ell^\top r=1\).
 
-  For real \(t\), Perron--Frobenius comparison gives
-  \(\rho(\widetilde M_t)\le\lambda\). If \(\rho(\widetilde M_t)=\lambda\)
-  for some \(t\neq0\), then a Wielandt-type equality case yields a
-  unimodular diagonal \(D_t\) and phase \(c_t\) with
+  The map \(t\mapsto \widetilde M_t\) is entire. Since \(B=\widetilde
+  M_0\) is primitive, analytic perturbation theory gives
+  \(\delta>0\), an analytic simple eigenvalue \(t\mapsto\lambda_c(t)\),
+  an analytic rank-one projector \(t\mapsto P_t\), and constants
+  \(C>0\), \(\vartheta\in(0,1)\) such that
   \[
-    \widetilde M_t=e^{itc_t}D_t^{-1}BD_t,
+    \widetilde M_t^n=\lambda_c(t)^nP_t+N_t^n,
+    \qquad
+    \|N_t^n\|\le C(\vartheta\lambda)^n
   \]
-  hence \(it\varphi\) is a coboundary and \(f\) is a coboundary modulo
-  constants by Liv\v{s}ic, contrary to the hypothesis. Therefore for
-  every compact \(K\Subset\RR\setminus\{0\}\),
+  for \(|t|<\delta\) and \(n\ge 1\); see
+  \cite[Chapter~II, \S2]{Kato1995Perturbation}. Because \(\bar f\) is
+  centered,
   \[
-    \rho_K:=\max_{t\in K}\rho(\widetilde M_t)<\lambda.
+    \lambda_c'(0)=0.
   \]
-  In finite dimension this spectral gap implies
+  The standard finite-state spectral method gives
   \[
-    \|\widetilde M_t^n\|\le C_K\vartheta_K^n\lambda^n
+    \log\frac{\lambda_c(t)}{\lambda}
+    =-\frac{\sigma_f^2}{2}t^2+O(t^3)
+    \qquad (t\to 0),
   \]
-  uniformly on \(K\) for some \(\vartheta_K\in(0,1)\), proving the
-  exponential decay of \(\phi_n(t)\) away from \(0\).
+  where
+  \[
+    \sigma_f^2
+    =-\left.\frac{\dd^2}{\dd t^2}\log\frac{\lambda_c(t)}{\lambda}
+      \right|_{t=0}>0
+  \]
+  whenever \(f\) is not a coboundary modulo constants; see
+  \cite[Chapter~5]{Ruelle1978Thermodynamic},
+  \cite[Chapter~3]{Baladi2000PositiveTransfer},
+  and \cite{HennionHerve2001}. Because \(P_0=vu^{\mathsf T}\), one has
+  \(u^{\mathsf T}P_{u_0/\sqrt n}v=1+O(n^{-1/2})\). Hence, for each fixed
+  \(u_0\in\RR\),
+  \[
+    \phi_n(u_0/\sqrt n)
+    =\left(\frac{\lambda_c(u_0/\sqrt n)}{\lambda}\right)^n
+      u^{\mathsf T}P_{u_0/\sqrt n}v
+      +O(\vartheta^n)
+    \longrightarrow e^{-\sigma_f^2u_0^2/2}.
+  \]
+  L\'evy's continuity theorem yields the central limit theorem.
 
-  Near \(t=0\), analytic perturbation gives a simple dominant eigenvalue
-  \(\lambda_c(t)\) of \(\widetilde M_t\) and a spectral projector
-  \(P_t\) such that
+  Assume now that \(f\) is aperiodic, and let \(K\Subset
+  \RR\setminus\{0\}\). For each real \(t\), the entrywise modulus
+  relation \(\abs{\widetilde M_t(i,j)}=B_{ij}\) implies by
+  Perron--Frobenius comparison that
   \[
-    \phi_n(t)=\lambda_c(t)^n\ell^\top P_t r + O(\vartheta^n),
-    \qquad |t|<\delta,
+    \rho(\widetilde M_t)\le\lambda.
   \]
-  with \(\lambda_c(0)=\lambda\), \(\lambda_c'(0)=0\), and
+  Suppose that \(\rho(\widetilde M_t)=\lambda\) for some \(t\in K\).
+  Then there exist \(\zeta\in\CC\) with \(\abs{\zeta}=\lambda\) and a
+  non-zero vector \(h\) such that
   \[
-    \lambda_c''(0)=\sigma_f^2\lambda,\qquad \sigma_f^2>0
+    \widetilde M_t h=\zeta h.
   \]
-  whenever \(f\) is not a coboundary modulo constants
-  \cite{Ruelle1978Thermodynamic,Baladi2000PositiveTransfer,Kato1995Perturbation}.
-  Taking \(t=u/\sqrt n\) and using the exponential bound away from
-  \(0\), we obtain
+  Taking absolute values gives
   \[
-    \phi_n(u/\sqrt n)\to e^{-\sigma_f^2u^2/2}.
+    B\abs{h}\ge\abs{\widetilde M_t h}=\lambda\abs{h}.
   \]
-  L\'evy's continuity theorem yields the normal limit law.
+  Since \(B\) is primitive and \(\rho(B)=\lambda\), equality must hold,
+  so \(\abs{h}\) is a positive multiple of the Perron vector \(v\). In
+  particular, every coordinate of \(h\) is non-zero. Writing
+  \(h_j=\abs{h_j}\eta(j)\) with \(\eta(j)\in\mathbb S^1\), equality in
+  the triangle inequality in each row of \(\widetilde M_t h=\zeta h\)
+  shows that all non-zero summands have the same phase. Therefore there
+  is \(\omega=\zeta/\lambda\in\mathbb S^1\) such that
+  \[
+    e^{it\bar g(i,j)}=\omega\,\eta(i)\eta(j)^{-1}
+    \qquad\text{for every allowed edge }(i,j).
+  \]
+  This contradicts the aperiodicity hypothesis. Hence
+  \(\rho(\widetilde M_t)<\lambda\) for every \(t\in K\).
+
+  The map \(t\mapsto \rho(\widetilde M_t)\) is continuous in finite
+  dimension, so compactness of \(K\) yields
+  \[
+    \sup_{t\in K}\rho(\widetilde M_t)\le \lambda-\eta_K
+  \]
+  for some \(\eta_K>0\). Choose \(r_K\) with
+  \[
+    \sup_{t\in K}\rho(\widetilde M_t)<r_K<\lambda.
+  \]
+  By the holomorphic functional calculus,
+  \[
+    \widetilde M_t^n
+    =\frac{1}{2\pi i}\int_{\abs{z}=r_K}
+      z^n(zI-\widetilde M_t)^{-1}\,\dd z.
+  \]
+  The set \(K\times\{\abs{z}=r_K\}\) is compact and avoids the spectrum
+  of \(zI-\widetilde M_t\), so
+  \[
+    C_K:=\sup_{t\in K,\ \abs{z}=r_K}
+    \|(zI-\widetilde M_t)^{-1}\|<\infty.
+  \]
+  Therefore
+  \[
+    \sup_{t\in K}\|\widetilde M_t^n\|
+    \le 2\pi C_K r_K^n,
+  \]
+  and the characteristic functions satisfy
+  \[
+    \sup_{t\in K}\abs{\phi_n(t)}
+    \le \|u\|\,\|v\|\,2\pi C_K\left(\frac{r_K}{\lambda}\right)^n.
+  \]
+  This is the desired bound, with \(\vartheta_K=r_K/\lambda\in(0,1)\).
 \end{proof}
 
 \begin{remark}
@@ -439,15 +595,17 @@ on the recoded shift. For \(t\in\CC\), define the weighted matrix
   \[
     \sigma_f^2=\frac14,
   \]
-  and on every compact set \(K\Subset\RR\setminus\{0\}\),
+  and on every compact set \(K\Subset\RR\setminus 2\pi\ZZ\),
   \[
     \sup_{u\in K}
     \left|\int e^{iu\sum_{k=0}^{n-1}(f-\frac12)\circ\sigma_A^k}\,\dd\mu_A\right|
     \le
     \left(\sup_{u\in K}\abs{\cos(u/2)}\right)^n.
   \]
-  In this model the determinant package recovers the variance and the
-  off-origin decay exactly, not merely asymptotically.
+  This example is arithmetic rather than aperiodic, so the lattice
+  obstruction is visible at \(u\in 2\pi\ZZ\). Away from that lattice,
+  the determinant package recovers the variance and the exponential
+  decay exactly, not merely asymptotically.
 \end{remark}
 
 \subsection{Comparison with classical finite-dimensional perturbation theory}

@@ -105,7 +105,31 @@ M,p\Vdash \CompSec_s(r)
 \end{theorem}
 
 \begin{proof}
-By the standard site-theoretic description of sheafification, a section of $a_{p,s}F_{p,s}$ at $a$ is represented by a matching family over some covering sieve of $a$, equivalently over some covering family of $a$ \cite[Chap.~III, \S2]{MacLaneMoerdijk1994}, \cite[Part~B2.2]{Johnstone2002}. In the present setting, such a matching family is exactly a compatible local family as in \Cref{def:existence-levels}(ii). Hence the sheafified fiber is nonempty exactly when $r$ is compatibly locally sectionable at $p$.
+Let
+\[
+G:=a_{p,s}F_{p,s}.
+\]
+By the standard matching-family description of sheafification on a site \cite[Chap.~III, \S2]{MacLaneMoerdijk1994}, \cite[Part~B2.2]{Johnstone2002}, an element of $G(a)$ is represented by data
+\[
+\bigl(\{a_i\to a\}_{i\in I},(\sigma_i)_{i\in I}\bigr)
+\]
+where $\{a_i\to a\}_{i\in I}$ is a covering family in $\Cov_{p,s}(a)$ and each $\sigma_i\in F_{p,s}(a_i)$, subject to the matching condition
+\[
+\res_c^{a_i}(\sigma_i)=\res_c^{a_j}(\sigma_j)
+\]
+for every common refinement $c\sqsubseteq_{p,s} a_i,a_j$. Two such representatives define the same section of $G(a)$ if and only if they agree after restriction to some common refinement of their covers.
+
+Suppose first that $M,p\Vdash\CompSec_s(r)$. By \Cref{def:existence-levels}(ii), there exist a cover $\{a_i\to a\}_{i\in I}$ and local sections $\sigma_i\in F_{p,s}(a_i)$ satisfying exactly the displayed matching condition on every common refinement. Hence these data determine a section of $G(a)$, so $G(a)\neq\varnothing$.
+
+Conversely, suppose $G(a)\neq\varnothing$, and choose a representative
+\[
+\bigl(\{a_i\to a\}_{i\in I},(\sigma_i)_{i\in I}\bigr)
+\]
+of an element of $G(a)$. The matching condition in the sheafification description is precisely the compatibility requirement in \Cref{def:existence-levels}(ii). Thus the same representative exhibits
+\[
+M,p\Vdash \CompSec_s(r).
+\]
+The quotient by common refinement in the construction of $G(a)$ is the same quotient relation used later to define visible value classes, but only nonemptiness is needed here.
 \end{proof}
 
 \begin{corollary}[Sheaf condition at a reference]\label{cor:sheaf-local-to-global}
@@ -251,11 +275,16 @@ with
 \]
 is essentially surjective.
 \end{enumerate}
-Then the hypotheses needed for the gerbe and branch visibility development at $p$ are satisfied; in particular, the conclusions of the branched-gerbe semantics apply in the sense of \Cref{thm:component-gerbe-decomposition} and \Cref{thm:gerbe-null-semantics}.
+Then the later branch-obstruction theory is conditional on precisely this additional data and not merely on the split prestack of \Cref{prop:split-realization-prestack}. More precisely:
+\begin{enumerate}[label=(\roman*),nosep]
+\item the visible value classes of $r$ are identified with $\pi_0(\mathfrak L_r)(a)$ via \Cref{thm:visible-value-components};
+\item if the cofinal gerbe-adapted-cover hypothesis of \Cref{def:cech-gluing-obstruction} is added, then each visible branch determines a component gerbe as in \Cref{thm:component-gerbe-decomposition};
+\item if, in addition, the terminal-fibre essential surjectivity above is used as global conservativity at $a$, then the comparison between global sections and neutral component gerbes is exactly the one proved later in \Cref{prop:global-sections-vs-neutral-components} and \Cref{thm:gerbe-null-semantics}.
+\end{enumerate}
 \end{theorem}
 
 \begin{proof}
-The map $(\iota_r)_a$ being essentially surjective is exactly \Cref{def:global-conservativity}; together with \Cref{def:realization-prestack}(i) and the isomorphism on connected components, this is the hypothesis required for later visibility statements.
+Condition \textup{(i)} identifies the connected components of the chosen stack $\mathfrak L_r$ with the sheafification of the local object functor. Combined with \Cref{def:realization-prestack}(ii), this is exactly the stack-level input used later to define visible branches and their component gerbes. The essential surjectivity of $(\iota_r)_a$ is precisely the global-conservativity hypothesis isolated in \Cref{def:global-conservativity}, so global objects of the stack can be compared back to actual global realizations by \Cref{prop:no-new-global-objects}. The point of the statement is therefore not to claim that every realization prestack is gluing-sensitive, but to isolate the extra hypotheses under which the later gerbe and obstruction arguments are valid.
 \end{proof}
 
 \begin{proposition}[Components of the stackification]\label{prop:stackification-components}
@@ -559,9 +588,9 @@ and identify the three reference classes with $a_{\mathrm{loc}},a_{\mathrm{cmp}}
 
 \subsection{Forcing necessity of the enrichment}
 
-The three null modes show that information-state forcing distinguishes situations invisible to pointwise semantics. The following result makes this precise: the gluing predicates introduced at the local-object layer cannot be reduced to the lower layers.
+The three null modes show that information-state forcing distinguishes situations invisible to pointwise semantics. The following result makes this precise in the only pointwise sense established here: the gluing predicates introduced at the local-object layer cannot be reduced to automorphism-invariant formulas of the lower-layer reduct.
 
-\begin{theorem}[Pointwise irreducibility of gluing predicates]\label{thm:pointwise-irreducibility}
+\begin{theorem}[Automorphism-invariant pointwise undefinability of gluing predicates]\label{thm:pointwise-irreducibility}
 There exist a model $M$, a state $p=(\Gamma_p,R_p)$, and admitted references $r_1,r_2:\mathsf{Ref}_s$ of the same sort such that:
 \begin{enumerate}[label=(\roman*),nosep]
 \item for every $\rho\in R_p$ and every $\mathrm{Form}_1$-formula $\varphi(x)$ with one free variable $x$, invariant under automorphisms of the $\mathrm{Form}_1$-reduct, containing none of the local-object predicates $\LocSec_s$, $\CompSec_s$, $\Sec_s$, and containing no occurrence of the distinguished constants $r_1,r_2$ other than the substituted variable,
@@ -573,7 +602,7 @@ M,\rho\models\varphi(r_2);
 \item $M,p\Vdash \CompSec_s(r_1)\land \Sec_s(r_1)$;
 \item $M,p\Vdash \CompSec_s(r_2)\land \neg\Sec_s(r_2)$.
 \end{enumerate}
-In particular, the predicates
+Consequently, no $\mathrm{Form}_1$-formula interpreted pointwise and satisfying the invariance condition in \textup{(i)} can define any of the predicates
 \[
 \CompSec_s,
 \qquad
@@ -581,7 +610,7 @@ In particular, the predicates
 \qquad
 \Null^{\mathrm{glue}}_s
 \]
-are not definable in the information-state forcing language without the local-object enrichment.
+on admitted references.
 \end{theorem}
 
 \begin{proof}
@@ -617,6 +646,10 @@ F_2(u_2)=F_2(v_2)=F_2(c_2)=\{*\},\qquad F_2(a_2)=\varnothing,
 \]
 with all restrictions to $c_2$ equal to the identity on $\{*\}$. The local family $(*,*)$ is compatible on the overlap, but $F_2(a_2)=\varnothing$. Hence~\textup{(iii)}.
 
-Since the local object functors $F_1,F_2$ belong to the enrichment $\mathbb{L}_2$ and are not accessible in $\mathrm{Form}_1$, the distinction between \textup{(ii)} and \textup{(iii)} is invisible at $\mathbb{L}_1$.
+For $\CompSec_s$ and $\Sec_s$, the formulas in \textup{(i)} cannot distinguish $r_1$ from $r_2$, whereas \textup{(ii)} and \textup{(iii)} do distinguish them. Hence no such formula defines either predicate. Since
+\[
+\Null^{\mathrm{glue}}_s(r)=\Adm_s(r)\land \CompSec_s(r)\land \neg \Sec_s(r),
+\]
+the same conclusion follows for $\Null^{\mathrm{glue}}_s$.
 \end{proof}
 

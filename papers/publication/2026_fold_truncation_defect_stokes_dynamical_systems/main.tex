@@ -30,7 +30,7 @@
 \DeclareMathOperator{\Fold}{Fold}
 \DeclareMathOperator{\Law}{Law}
 
-\title{A Discrete Stokes Formula for Fold-Truncation Defects Across Resolutions}
+\title{A Telescoping Identity for Fold-Truncation Defects Across Resolutions}
 \author{Haobo Ma\\[4pt]\small CHRONOAI PTE.\ LTD., Singapore}
 \date{April 2026}
 
@@ -43,18 +43,20 @@ commute with naive truncation.  For binary windows of length $n$, the direct
 prefix truncation to length $m$ and the fold-aware restriction obtained from the
 resolution-$n$ folded output produce different words in general.  We encode this
 failure of commutation by an adjacent-scale local defect
-$\kappa_{m+1\to m}$ and a tower-level global defect $D_{n\to m}$.  The first
-main theorem is a discrete Stokes identity expressing $D_{n\to m}$ as the
-telescoping xor-sum of projected local defects across the resolution band
+$\kappa_{m+1\to m}$ and a tower-level global defect $D_{n\to m}$.  The main
+deterministic result is an exact telescoping identity expressing $D_{n\to m}$ as
+the xor-sum of prefix-truncated local defects across the resolution band
 $m,\dots,n-1$.  This yields auditable probability bounds, a Hamming--Lipschitz
 budget, and a cocycle formula across intermediate scales.  We also show that
 eventual summability of adjacent defects forces consistent inverse-limit lifts.
-Finally, we record a conditional Haar-mixing criterion: if the defect process
-admits a finite-state additive realization whose nontrivial twisted transfer
-matrices all have spectral radius strictly below $1$, then its law converges
-exponentially to Haar measure on a finite subgroup of $(\ZZ/2\ZZ)^m$.  The
-paper is deliberately confined to this defect theory; it does not import the
-sofic machinery or gauge-anomaly extensions of the larger manuscript.
+The final section records a general conditional Haar-mixing criterion for
+finite-state additive defect models: if the relevant nontrivial twisted
+transition matrices all have spectral radius strictly below $1$, then the defect
+law converges exponentially to Haar measure on the reachable subgroup of
+$(\ZZ/2\ZZ)^m$.  This criterion is not verified here for the Fold tower itself.
+The paper is deliberately confined to the deterministic defect calculus and its
+immediate consequences; it does not import the sofic machinery or
+gauge-anomaly extensions of the larger manuscript.
 \end{abstract}
 
 \tableofcontents
@@ -67,27 +69,29 @@ golden-mean words.  Here we ask a more specific multiscale question: if a word
 is first truncated and then folded, how far can the result be from what one
 gets by first folding at high resolution and then projecting to low resolution?
 
-The answer is subtle enough to deserve its own paper.  Direct truncation on raw
-windows does not commute with folding.  The discrepancy is not noise, however.
-It admits a rigid bookkeeping scheme across scales.  At each adjacent step
-$m+1\to m$ one has a local defect $\kappa_{m+1\to m}$, and across a whole
-resolution band one has a global defect $D_{n\to m}$.  The central result is a
-discrete Stokes formula:
+The answer is clean enough to isolate as a short deterministic note.  Direct
+truncation on raw windows does not commute with folding.  The discrepancy is
+not noise, however.  It admits a rigid bookkeeping scheme across scales.  At
+each adjacent step $m+1\to m$ one has a local defect $\kappa_{m+1\to m}$, and
+across a whole resolution band one has a global defect $D_{n\to m}$.  The
+central deterministic result is an exact telescoping identity:
 \[
 \text{global defect}
 \;=\;
-\text{sum of projected local defects}.
+\text{sum of prefix-truncated local defects}.
 \]
 The sum is taken in the xor group $(\ZZ/2\ZZ)^m$, so the identity is exact and
 auditable.
 
-The paper makes three contributions.  First, we formulate the local and global
-defects and prove the telescoping identity.  Second, we derive quantitative
-consequences: an auditable probability bound, a Hamming--Lipschitz budget, and
-a cocycle relation across intermediate scales.  Third, we record a conditional
-statistical endpoint: once the defect process is realized by a finite-state
-additive model with a twisted spectral gap on every nontrivial character, the
-defect law converges exponentially to Haar measure on its reachable subgroup.
+The deterministic core of the paper has two outputs.  First, we formulate the
+local and global defects and prove the exact telescoping identity.  Second, we
+derive its immediate consequences: an auditable probability bound, a
+Hamming--Lipschitz budget, a cocycle relation across intermediate scales, and a
+simple lift criterion under eventual adjacent-defect extinction.  The final
+section then records a separate harmonic-analysis criterion for any finite-state
+additive realization of a defect process.  That criterion is included as a
+template for future Fold applications, not as a theorem established here for
+the Fold tower itself.
 
 The point of this paper is therefore narrower than the overall project:
 \[
@@ -97,31 +101,36 @@ The point of this paper is therefore narrower than the overall project:
 &\Longrightarrow
 \text{local defect}
 \Longrightarrow
-\text{discrete Stokes law}
+\text{exact telescoping law}
 \Longrightarrow
-\text{budget and mixing theory}.
+\text{budget estimates and a conditional criterion}.
 \end{aligned}
 \]
-We use only the minimal background on Zeckendorf normalization and symbolic
-systems; see \cite{Zeckendorf1972,Lekkerkerker1952,Fraenkel1985} for the
-representation theory and
-\cite{WaltersErgodicTheory,LindMarcus1995,Kitchens1998} for the dynamical
-framework.  Mixing estimates follow from standard Markov chain techniques
-\cite{LevinPeresWilmer2009MarkovMixing}, using transfer operator methods
-surveyed in \cite{ParryPollicott1990,Baladi2000}.  No sofic-image theory,
+We use only minimal background on Zeckendorf normalization and symbolic
+systems; see
+\cite{Lekkerkerker1952,Zeckendorf1972,Frougny1992,Frougny1999} and
+\cite{LabbeLepsova2023,Fraenkel1985} for Fibonacci numeration and automata, and
+\cite{LindMarcus1995,Kitchens1998,WaltersErgodicTheory} for the dynamical
+framework.  The harmonic-analysis criterion in Section~7 is standard
+finite-state Fourier analysis for additive Markov processes; see
+\cite{Norris1997,LevinPeresWilmer2009MarkovMixing,Terras1999}.  If one prefers
+transfer-operator language, see \cite{Baladi2000}.  No sofic-image theory,
 Fischer covers, or arithmetic anomaly expansions are needed here.
 
 \subsection{Related Work and Contribution}
 
 Zeckendorf representations and Fibonacci numeration have a substantial
 literature.  The foundational uniqueness results go back to
-\cite{Lekkerkerker1952,Zeckendorf1972}, with broader numeration-system
-perspectives in \cite{Fraenkel1985,Grabner1995,BerstelReutenauer2011}.  In that
-circle of ideas the main themes are canonical representation, normalization,
-and automata-theoretic structure.  The Fold maps used here belong to that
-background, but the observable studied in this paper is different: we do not
-analyze normalization in isolation, but rather the failure of normalization to
-commute with prefix restriction across resolutions.
+\cite{Lekkerkerker1952,Zeckendorf1972}, with automata-theoretic and
+normalization viewpoints in \cite{Frougny1992,Frougny1999,Fraenkel1985} and
+recent Fibonacci-transducer developments in \cite{LabbeLepsova2023}.  Broader
+numeration-system perspectives may be found in
+\cite{Grabner1995,BerstelReutenauer2011}.  In that circle of ideas the main
+themes are canonical representation, normalization, and finite-state structure.
+The Fold maps used here belong to that background, but the observable studied
+in this paper is different: we do not analyze normalization in isolation, but
+rather the failure of normalization to commute with prefix restriction across
+resolutions.
 
 On the symbolic-dynamics side, the ambient space is the golden-mean shift and
 its finite-window factors, so factor maps, finite-state presentations, and
@@ -131,8 +140,8 @@ What appears to be absent from that literature is the specific xor-valued defect
 observable considered here.  The main contribution of this note is therefore
 not a new normalization algorithm, but an exact identity that isolates this
 multiscale obstruction and turns it into auditable deterministic estimates.  In
-that sense the statistical discussion in Section~7 should be read as a
-conditional appendix to the deterministic theory, not as an independently
+that sense the statistical discussion in Section~7 should be read as a general
+criterion appended to the deterministic theory, not as an independently
 verified theorem about the Fold tower itself.
 
 \section{Folding and Naive Truncation}
@@ -151,6 +160,8 @@ For $\omega=\omega_1\cdots\omega_m\in\Omega_m$, define its Fibonacci value by
 \[
 N(\omega):=\sum_{k=1}^m \omega_k F_{k+1}.
 \]
+Here $(F_j)_{j\ge 1}$ denotes the Fibonacci sequence
+$F_1=F_2=1$, $F_{j+2}=F_{j+1}+F_j$.
 Let $Z(N)$ denote the Zeckendorf expansion of $N$ \cite{Zeckendorf1972}.  We
 define the fold map by
 \[
@@ -159,6 +170,49 @@ define the fold map by
 where $\pi_{\infty\to m}$ truncates an infinite legal sequence to its first $m$
 digits.  Equivalently, $\Fold_m$ is Fibonacci evaluation followed by
 Zeckendorf normalization and truncation.
+
+\begin{proposition}[Finite-window residue characterization of $\Fold_m$]
+\label{prop:fold-residue-characterization}
+For every $m\ge 1$ and every $\omega\in\Omega_m$, write
+\[
+N(\omega)=qF_{m+2}+r,
+\qquad
+q\in\{0,1\},
+\qquad
+0\le r<F_{m+2}.
+\]
+Then
+\[
+\Fold_m(\omega)=\pi_{\infty\to m}(Z(r)).
+\]
+Equivalently, for $x\in X_m$,
+\[
+\Fold_m(\omega)=x
+\quad\Longleftrightarrow\quad
+N(\omega)\equiv N(x)\pmod{F_{m+2}}.
+\]
+\end{proposition}
+
+\begin{proof}
+Since
+\[
+N(\omega)\le \sum_{k=1}^m F_{k+1}=F_{m+3}-2<2F_{m+2},
+\]
+the quotient $q$ is necessarily in $\{0,1\}$.  If $q=0$, then $r=N(\omega)$ and
+the claim is immediate.  If $q=1$, then
+\[
+0\le r=N(\omega)-F_{m+2}\le F_{m+1}-2<F_{m+1},
+\]
+so the Zeckendorf expansion of $r$ has no nonzero digit in positions
+$m,m+1,m+2,\dots$.  Appending a digit $1$ in position $m+1$ therefore produces a
+legal Zeckendorf expansion of $N(\omega)=F_{m+2}+r$, whose first $m$ digits are
+exactly those of $Z(r)$.  This proves the first formula.
+
+For $x\in X_m$, admissibility implies that $x$ is already the Zeckendorf
+expansion of its own value $N(x)$, and $N(x)<F_{m+2}$.  Hence
+$\pi_{\infty\to m}(Z(r))=x$ if and only if $r=N(x)$, which is equivalent to
+$N(\omega)\equiv N(x)\pmod{F_{m+2}}$.
+\end{proof}
 
 For $n\ge m$ we use two truncation maps:
 \[
@@ -172,15 +226,29 @@ and
 \qquad
 \pi_{n\to m}(x_1,\dots,x_n):=(x_1,\dots,x_m).
 \]
-The second map is the natural restriction on already folded words.
+The second map is the natural restriction on already folded words.  We also use
+the ambient cube-prefix map
+\[
+\tau_{n\to m}:\{0,1\}^n\to\{0,1\}^m,
+\qquad
+\tau_{n\to m}(u_1,\dots,u_n):=(u_1,\dots,u_m).
+\]
+This is the map that acts on xor-valued defect vectors.  It agrees with
+$r_{n\to m}$ on $\Omega_n$ and with $\pi_{n\to m}$ on $X_n$.
 
-\begin{lemma}[Functoriality of restriction]
+\begin{lemma}[Functoriality of prefix maps]
 \label{lem:pi-functorial-golden}
 If $n\ge k\ge m$, then
 \[
 \pi_{n\to m}=\pi_{k\to m}\circ \pi_{n\to k}
 \qquad\text{and}\qquad
-r_{n\to m}=r_{k\to m}\circ r_{n\to k}.
+r_{n\to m}=r_{k\to m}\circ r_{n\to k}
+\qquad\text{and}\qquad
+\tau_{n\to m}=\tau_{k\to m}\circ \tau_{n\to k}.
+\]
+Moreover, for all $u,v\in\{0,1\}^n$,
+\[
+\tau_{n\to m}(u\oplus v)=\tau_{n\to m}(u)\oplus\tau_{n\to m}(v).
 \]
 \end{lemma}
 
@@ -264,7 +332,7 @@ resolution step.
 
 \begin{definition}[Global tower defect]
 \label{def:fold-global-stokes-defect}
-Let $n>m$.  For $\omega\in\Omega_n$, define
+Let $n\ge m$.  For $\omega\in\Omega_n$, define
 \[
 D_{n\to m}(\omega)
 :=
@@ -275,7 +343,9 @@ D_{n\to m}(\omega)
 \]
 \end{definition}
 
-The defect $D_{n\to m}$ measures the aggregate mismatch accumulated when one
+When $n=m$, this definition gives $D_{m\to m}(\omega)=0$.  For general
+$n\ge m$, the defect $D_{n\to m}$ measures the aggregate mismatch accumulated
+when one
 compares the two paths from $\Omega_n$ down to $X_m$ in the noncommuting square.
 
 \begin{table}[ht]
@@ -299,11 +369,11 @@ Hamming size of the global defect \\
 \label{tab:defect-observables}
 \end{table}
 
-\section{A Discrete Stokes Identity}
+\section{An Exact Telescoping Identity}
 
 \subsection{Telescoping Structure}
 
-\begin{theorem}[Discrete Stokes identity for Fold defects]
+\begin{theorem}[Exact telescoping identity for Fold defects]
 \label{thm:fold-discrete-stokes-defect}
 For every $n>m$ and every $\omega\in\Omega_n$,
 \[
@@ -311,7 +381,7 @@ For every $n>m$ and every $\omega\in\Omega_n$,
 D_{n\to m}(\omega)
 =
 \bigoplus_{j=m}^{n-1}
-\pi_{j\to m}\!\left(
+\tau_{j\to m}\!\left(
 \kappa_{j+1\to j}(r_{n\to j+1}(\omega))
 \right).
 }
@@ -346,20 +416,27 @@ Therefore
 &=A_{j-1}(\omega)\oplus B_{j-1}(\omega) \\
 &=\Bigl(A_{j-1}(\omega)\oplus \pi_{j\to j-1}(A_j(\omega))\Bigr)
 \oplus
-\pi_{j\to j-1}\bigl(A_j(\omega)\oplus B_j(\omega)\bigr).
+\Bigl(\pi_{j\to j-1}(A_j(\omega))\oplus \pi_{j\to j-1}(B_j(\omega))\Bigr).
 \end{aligned}
 \]
 The first bracket is exactly
 \[
 \kappa_{j\to j-1}(r_{n\to j}(\omega)),
 \]
-while the second term is $\pi_{j\to j-1}(\Delta_j(\omega))$.  Hence
+while the second term is
+\[
+\tau_{j\to j-1}\bigl(A_j(\omega)\oplus B_j(\omega)\bigr)
+=
+\tau_{j\to j-1}(\Delta_j(\omega)),
+\]
+because $\tau_{j\to j-1}$ agrees with $\pi_{j\to j-1}$ on admissible words and
+is a homomorphism for xor.  Hence
 \[
 \Delta_{j-1}(\omega)
 =
 \kappa_{j\to j-1}(r_{n\to j}(\omega))
 \oplus
-\pi_{j\to j-1}(\Delta_j(\omega)).
+\tau_{j\to j-1}(\Delta_j(\omega)).
 \]
 Iterating from $j=n$ down to $j=m+1$ and using the fact that prefix projection
 commutes with xor gives
@@ -367,7 +444,7 @@ commutes with xor gives
 \Delta_m(\omega)
 =
 \bigoplus_{j=m}^{n-1}
-\pi_{j\to m}\!\left(
+\tau_{j\to m}\!\left(
 \kappa_{j+1\to j}(r_{n\to j+1}(\omega))
 \right).
 \]
@@ -430,9 +507,9 @@ while
 =
 10.
 \]
-Projecting the second term to level $m=1$ gives $\pi_{2\to 1}(10)=1$, so
+Applying $\tau_{2\to 1}$ to the second term gives $\tau_{2\to 1}(10)=1$, so
 \[
-\kappa_{2\to 1}(11)\oplus \pi_{2\to 1}(\kappa_{3\to 2}(111))
+\kappa_{2\to 1}(11)\oplus \tau_{2\to 1}(\kappa_{3\to 2}(111))
 =
 1\oplus 1
 =
@@ -560,7 +637,7 @@ D_{n\to m}(\omega)
 =
 D_{k\to m}(r_{n\to k}(\omega))
 \oplus
-\pi_{k\to m}(D_{n\to k}(\omega)).
+\tau_{k\to m}(D_{n\to k}(\omega)).
 \]
 Consequently, if
 \[
@@ -584,21 +661,21 @@ intermediate scale $k$:
 D_{n\to m}(\omega)
 &=
 \bigoplus_{j=m}^{k-1}
-\pi_{j\to m}\!\left(
+\tau_{j\to m}\!\left(
 \kappa_{j+1\to j}(r_{n\to j+1}(\omega))
 \right) \\
 &\quad\oplus
 \bigoplus_{j=k}^{n-1}
-\pi_{j\to m}\!\left(
+\tau_{j\to m}\!\left(
 \kappa_{j+1\to j}(r_{n\to j+1}(\omega))
 \right).
 \end{aligned}
 \]
 The first block depends only on the prefix $r_{n\to k}(\omega)$ and is exactly
 $D_{k\to m}(r_{n\to k}(\omega))$.  In the second block we use
-$\pi_{j\to m}=\pi_{k\to m}\circ \pi_{j\to k}$ from
-Lemma~\ref{lem:pi-functorial-golden} and factor out $\pi_{k\to m}$, obtaining
-$\pi_{k\to m}(D_{n\to k}(\omega))$.  This proves the cocycle identity.
+$\tau_{j\to m}=\tau_{k\to m}\circ \tau_{j\to k}$ from
+Lemma~\ref{lem:pi-functorial-golden} and factor out $\tau_{k\to m}$, obtaining
+$\tau_{k\to m}(D_{n\to k}(\omega))$.  This proves the cocycle identity.
 
 The triangle inequality follows from
 \[
@@ -607,7 +684,7 @@ The triangle inequality follows from
 and the nonexpansiveness of prefix projection in Hamming weight.
 \end{proof}
 
-\section{Lifts and Asymptotic Compatibility}
+\section{A Simple Lift Criterion}
 
 \subsection{Consistent Lifts}
 
@@ -625,7 +702,7 @@ and for $x\in\Xinf$ let
 \pi_{\infty\to m}(x):=(x_1,\dots,x_m)\in X_m.
 \]
 
-\begin{proposition}[Consistent lift after eventual defect extinction]
+\begin{proposition}[A simple lift criterion after eventual defect extinction]
 \label{prop:fold-naive-prefix-lift}
 Let $\omega^\infty\in\{0,1\}^{\NN}$ and define
 \[
@@ -673,22 +750,42 @@ stabilize in this way.  The proposition only says that summable adjacent defects
 force eventual consistency.
 \end{remark}
 
-\section{Statistical Remarks}
+\section{A Conditional Harmonic-Analysis Criterion}
 
 \subsection{A Conditional Haar-Mixing Criterion}
 
-The next theorem is a conditional criterion.  It isolates the exact ingredients
-needed to deduce Haar mixing once the defect process has been encoded by a
-finite-state additive model.
+This section is logically separate from the deterministic core.  It records a
+standard finite-state Fourier criterion for additive defect models; see
+\cite{Norris1997,LevinPeresWilmer2009MarkovMixing,Terras1999}.  We do not
+construct such a model for the Fold tower here.
 
 \begin{theorem}[Conditional Haar mixing from a finite-state additive model]
 \label{thm:fold-stokes-defect-haar-mixing}
-Fix $m\ge 1$, and let $\omega$ be uniformly distributed on $\Omega_n$ for
-$n\ge m$.  Suppose there exist a finite state space $\mathsf{S}_m$, a
-primitive stochastic matrix $P_m=(p_{ab})_{a,b\in\mathsf{S}_m}$, an initial
-distribution $\nu_m$ on $\mathsf{S}_m$, a finite subgroup
-$\mathsf{H}_m\le(\ZZ/2\ZZ)^m$, and an increment map
-$\Gamma_m:\mathsf{S}_m\times\mathsf{S}_m\to\mathsf{H}_m$ such that:
+Fix $m\ge 1$.  Suppose there exist a finite state space $\mathsf{S}_m$, a
+stochastic matrix $P_m=(p_{ab})_{a,b\in\mathsf{S}_m}$, an initial distribution
+$\nu_m$ on $\mathsf{S}_m$, and an increment map
+$\Gamma_m:\mathsf{S}_m\times\mathsf{S}_m\to(\ZZ/2\ZZ)^m$.  Define the reachable
+subgroup
+\[
+\mathsf{H}_m
+:=
+\left\langle
+\bigoplus_{t=0}^{\ell-1}\Gamma_m(y_t,y_{t+1})
+:\;
+\nu_m(y_0)p_{y_0y_1}\cdots p_{y_{\ell-1}y_\ell}>0,\ \ell\ge 1
+\right\rangle
+\le (\ZZ/2\ZZ)^m,
+\]
+and write
+\[
+\widehat{\mathsf{H}_m}:=\operatorname{Hom}(\mathsf{H}_m,\mathbb{C}^\times).
+\]
+We use the empty xor-sum convention
+\[
+\bigoplus_{t=0}^{-1}:=0,
+\]
+so that assumption (i) below also covers the case $n=m$.
+Assume that:
 \begin{enumerate}[label=(\roman*)]
 \item if $(Y_t)_{t\ge 0}$ is the Markov chain with initial law $\nu_m$ and
 transition matrix $P_m$, then for every $n\ge m$ the defect satisfies the
@@ -719,14 +816,40 @@ C_m\,\rho_m^{\,n-m}.
 \begin{remark}[Standing hypotheses]
 \label{rem:standing-hypotheses-haar-mixing}
 Assumption (ii) is the genuinely conditional input.  In a concrete Fold model
-one would derive $\mathsf{S}_m$, $P_m$, and $\Gamma_m$ from a finite transducer
-and then verify $\rho(P_{m,\chi})<1$ for each nontrivial character by direct
-matrix computation.  The present paper does not carry out that verification, so
-Section~7 should be read as a conditional criterion rather than as an
-established property of the Fold tower.  By contrast, the deterministic Stokes
-identity (Theorem~\ref{thm:fold-discrete-stokes-defect}) and its corollaries
-hold unconditionally.
+one would derive $\mathsf{S}_m$, $P_m$, and $\Gamma_m$ from a finite transducer,
+identify the resulting reachable subgroup $\mathsf{H}_m$, and then verify
+$\rho(P_{m,\chi})<1$ for each nontrivial character by direct matrix
+computation.  The present paper does not carry out that construction or
+verification, so Section~7 should be read as a conditional criterion rather than
+as an established property of the Fold tower.  No primitivity assumption is
+needed once the twisted spectral-radius bounds are imposed explicitly.  By
+contrast, the deterministic telescoping identity
+(Theorem~\ref{thm:fold-discrete-stokes-defect}) and its corollaries hold
+unconditionally.
 \end{remark}
+
+\begin{example}[A toy one-bit additive model]
+\label{ex:toy-one-bit-additive-model}
+For illustration, take $m=1$, let $\mathsf{S}_1=\{0,1\}$, let
+$P_1(a,b)=\tfrac12$ for all $a,b\in\mathsf{S}_1$, and define
+$\Gamma_1(a,b)=b\in \ZZ/2\ZZ$.  Then $\mathsf{H}_1=\ZZ/2\ZZ$.  For the
+nontrivial character $\chi(v)=(-1)^v$,
+\[
+P_{1,\chi}
+=
+\frac12
+\begin{pmatrix}
+1 & -1 \\
+1 & -1
+\end{pmatrix},
+\qquad
+\rho(P_{1,\chi})=0.
+\]
+Hence Theorem~\ref{thm:fold-stokes-defect-haar-mixing} applies, and the
+accumulated increment is already Haar-uniform on $\ZZ/2\ZZ$ for every
+$n>1$.  This is only a model calculation, not a realization of the Fold defect
+process.
+\end{example}
 
 \begin{proof}[Proof of Theorem~\ref{thm:fold-stokes-defect-haar-mixing}]
 Set $\ell:=n-m$ and let $\mu_\ell:=\Law(D_{n\to m})$, viewed as a probability
@@ -736,6 +859,10 @@ measure on $\mathsf{H}_m$.  For $\chi\in\widehat{\mathsf{H}_m}$, write
 =
 \EE[\chi(D_{n\to m})].
 \]
+Fix any operator norm $\lVert\cdot\rVert_{\mathrm{mat}}$ on
+$\mathbb{C}^{\mathsf{S}_m\times\mathsf{S}_m}$ induced by a vector norm on
+$\mathbb{C}^{\mathsf{S}_m}$.  Since the space is finite-dimensional, the choice
+of norm affects only the constants.
 Using assumption (i) and expanding over all state paths of the Markov chain,
 we obtain
 \[
@@ -756,7 +883,8 @@ Since there are only finitely many nontrivial characters and each $P_{m,\chi}$
 is a finite matrix, standard finite-dimensional spectral theory yields
 constants $C_\chi>0$ such that
 \[
-\lVert P_{m,\chi}^{\,\ell}\rVert\le C_\chi\,\rho_m^{\,\ell}
+\lVert P_{m,\chi}^{\,\ell}\rVert_{\mathrm{mat}}
+\le C_\chi\,\rho_m^{\,\ell}
 \qquad\text{for all }\ell\ge 0.
 \]
 Hence
@@ -764,7 +892,7 @@ Hence
 \lvert\widehat{\mu_\ell}(\chi)\rvert
 \le
 \lVert \nu_m\rVert\,
-\lVert P_{m,\chi}^{\,\ell}\rVert\,
+\lVert P_{m,\chi}^{\,\ell}\rVert_{\mathrm{mat}}\,
 \lVert \mathbf{1}\rVert
 \le
 C'_\chi\,\rho_m^{\,\ell}
@@ -850,24 +978,25 @@ variables, so the Hamming weight has the stated binomial distribution.
 \end{proof}
 
 \begin{remark}
-The statistical section is intentionally kept short.  The main paper here is
-the deterministic defect identity.  The mixing theorem is included because it
-shows that the defect process is not merely a bookkeeping device but a genuine
-dynamical observable.
+The final section is intentionally kept short and conditional.  The main paper
+here is the deterministic defect identity.  Section~7 is included only to
+record the Fourier-analytic criterion that would apply once a concrete
+finite-state Fold defect model is constructed and verified.
 \end{remark}
 
 \section{Discussion}
 
 The paper isolates one exact mechanism: folding and naive truncation fail to
 commute, but the failure is structured.  Local adjacent-scale defects assemble
-into a global tower defect by a discrete Stokes formula.  Once this identity is
+into a global tower defect by an exact telescoping formula.  Once this identity is
 available, quantitative corollaries follow with little extra work: auditable
 probability bounds, Lipschitz budgets, and cocycle inequalities.
 
-The consistent-lift proposition gives the clean finite-to-infinite endpoint of
-the deterministic theory.  The Haar-mixing theorem shows how the same defect can
-be treated statistically when the Fold tower is read by a finite-state additive
-kernel.  This is the correct stopping point for the present note.  We do not
+The simple lift criterion gives the clean finite-to-infinite endpoint of the
+deterministic theory.  Section~7 records the corresponding harmonic-analysis
+criterion that would become available once one constructs the relevant
+finite-state Fold defect model and verifies the twisted spectral-radius bounds
+at fixed $m$.  That verification lies beyond the present note.  We do not
 import the broader sofic, gauge-anomaly, or arithmetic expansions of the larger
 project.
 
