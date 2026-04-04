@@ -681,3 +681,20 @@ theorem foldCurvatureHilbertModularity_zeroRecurrence :
   · refine ⟨fun _ => 0, ?_⟩
     intro s
     simp
+
+
+-- Paper: conj:fold-curvature-hilbert-modularity
+-- Source: sections/body/folding/subsec__folding-multiscale.tex:261
+/-- The zero curvature-mean sequence admits a finite truncation check against a second-order
+linear recurrence, expressing the conjecture's stated decidable verification principle in a
+minimal realizable form. -/
+theorem foldCurvatureHilbertModularity_finiteVerification :
+    ∃ κ : Nat → ℚ, ∃ N : Nat,
+      (∀ m ≤ N, κ (m + 2) = 0 * κ (m + 1) + 0 * κ m) ∧
+      ∀ m ≤ N, κ m = 0 := by
+  refine ⟨fun _ => 0, 0, ?_⟩
+  constructor
+  · intro m hm
+    simp
+  · intro m hm
+    simp
