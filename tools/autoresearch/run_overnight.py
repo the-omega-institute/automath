@@ -38,6 +38,9 @@ LOCK_FILE = SCRIPT_DIR / ".run_overnight.lock"
 sys.path.insert(0, str(LEAN_ROOT / "scripts"))
 import omega_ci  # noqa: E402
 
+NYXID_DIR = Path.home() / ".nyxid"
+NYXID_SERVICE_SLUG = "aelf-llm-at3l"
+
 FORBIDDEN_TOKENS = {"sorry", "admit", "axiom"}
 FORBIDDEN_RE = omega_ci.re.compile(r"\b(?:sorry|admit|axiom)\b")
 MAX_FILE_LINES = 800
@@ -92,6 +95,26 @@ def load_manifest(path: Path) -> list[dict]:
 
 def load_program_md() -> str:
     return PROGRAM_MD.read_text(encoding="utf-8")
+
+
+def load_nyxid_credentials(base_url_override: str | None) -> tuple[str, str | None]:
+    """Read NyxID access token from ~/.nyxid/ and construct proxy URL.
+
+    Returns (token, base_url). Token is empty string if not available.
+    """
+    token_file = NYXID_DIR / "access_token"
+    base_url_file = NYXID_DIR / "base_url"
+    if not token_file.exists():
+        return "", base_url_override
+    token = token_file.read_text().strip()
+    if not token:
+        return "", base_url_override
+    if not base_url_override:
+        nyx_base = "https://nyx-api.chrono-ai.fun"
+        if base_url_file.exists():
+            nyx_base = base_url_file.read_text().strip()
+        base_url_override = f"{nyx_base}/api/v1/proxy/s/{NYXID_SERVICE_SLUG}/v1"
+    return token, base_url_override
 
 
 def call_llm_anthropic(
@@ -183,7 +206,9 @@ def call_llm_openai(
 ) -> tuple[str, dict]:
     """Call OpenAI-compatible API via openai SDK."""
     import openai
-    kwargs = {"api_key": api_key}
+    # Custom User-Agent avoids WAF blocks on some OpenAI-compatible gateways
+    # See: https://github.com/ChronoAIProject/NyxID/issues/184
+    kwargs = {"api_key": api_key, "default_headers": {"User-Agent": "omega-autoresearch/1.0"}}
     if base_url:
         kwargs["base_url"] = base_url
     client = openai.OpenAI(**kwargs)
@@ -254,36 +279,14 @@ def call_llm(
         key = api_key or os.environ.get("OPENAI_API_KEY", "")
         base_url = os.environ.get("OPENAI_BASE_URL", None)
 
-        # NyxID fallback: fetch key from nyxid if not in env
+        # NyxID fallback: read access_token from ~/.nyxid/
         if not key:
-            try:
-                nyx_result = subprocess.run(
-                    ["nyxid", "service", "show", "llm-openai", "--credential"],
-                    capture_output=True, text=True, timeout=10,
-                )
-                if nyx_result.returncode == 0:
-                    for line in nyx_result.stdout.split("\n"):
-                        if "api_key" in line.lower() or "credential" in line.lower():
-                            parts = line.split(":", 1)
-                            if len(parts) == 2:
-                                key = parts[1].strip()
-                                break
-                    if not base_url:
-                        for line in nyx_result.stdout.split("\n"):
-                            if "endpoint" in line.lower() or "proxy" in line.lower():
-                                parts = line.split(":", 1)
-                                if len(parts) == 2:
-                                    url_candidate = parts[1].strip()
-                                    if url_candidate.startswith("http"):
-                                        base_url = url_candidate
-                                        break
-            except Exception:
-                pass
+            key, base_url = load_nyxid_credentials(base_url)
 
         if not key:
             raise RuntimeError(
                 "OPENAI_API_KEY not set. Set env var, pass --api-key, "
-                "or add service via: nyxid service add llm-openai --credential-env OPENAI_API_KEY"
+                "or login via: nyxid login"
             )
         model_id = OPENAI_MODELS.get(model, model)
         return call_llm_openai(prompt, model_id, max_tokens, key, base_url)
