@@ -182,3 +182,23 @@ The perturbative applications in Section 4 are mixed. The group-inverse gradient
 The paper is suitable for JST after minor revisions addressing the issues above. The most important items are R2 (sharpness of summability condition), R4 (analytic dependence of group inverse), and R7 (overclaiming on the CLT).
 
 **Recommendation:** Address R2, R4, R7 as priority items. The remaining issues are cosmetic or expository improvements that would polish the paper but are not essential.
+
+### Backflow to Core
+
+| Result | Core target section | Status |
+|---|---|---|
+| `thm:fredholm-witt-bridge` | `zeta_finite_part/` | pending |
+| `thm:cyclic-fredholm-realisation` | `zeta_finite_part/` | pending |
+| `thm:block-cyclic-rigidity` | `zeta_finite_part/` | pending |
+| `cor:finite-rank-realisation` | `zeta_finite_part/` | pending |
+| `thm:fredholm-spectral-rigidity` | `zeta_finite_part/` | pending |
+| `cor:realisability-vs-rigidity` | `zeta_finite_part/` | pending |
+| `thm:intro-fredholm-rigidity` | `zeta_finite_part/` | pending |
+| `thm:intro-perturbative-applications` | `zeta_finite_part/` | pending |
+| `prop:intro-clt` | `zeta_finite_part/` | pending |
+| `thm:finite-part-reduced-determinant-group-inverse-gradient` | `zeta_finite_part/` | pending |
+| `thm:logM-holomorphic-variation` | `zeta_finite_part/` | pending |
+| `thm:clt-spectral` | `zeta_finite_part/` | pending |
+| `prop:prelim-trace-primitive` | `zeta_finite_part/` | pending |
+| `lem:primitive-orbit-asymptotic` | `zeta_finite_part/` | pending |
+| `thm:finite-part-primitive-closed-form` | `zeta_finite_part/` | pending |

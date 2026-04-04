@@ -1,6 +1,6 @@
 # Pipeline: Prime Languages / Sofic Obstructions / Dynamical Zeta (Monatshefte)
 Target: Monatshefte fur Mathematik
-Status: P2 complete, P3--P6 pending
+Status: P4 Gate 3 review complete -- MAJOR_REVISION -- return to P3
 
 ## Stage Progress
 
@@ -9,16 +9,20 @@ Status: P2 complete, P3--P6 pending
 | P0 Intake and Contract | completed | 2026-03-30 | Monatshefte primary; Proc. AMS fallback. MSC 37B10, 68Q45, 11A41, 05A15 |
 | P1 Traceability | completed | 2026-03-30 | 9 body-level claims catalogued; all proved or cited-standard |
 | P2 Research Extension | completed | 2026-03-30 | Three blocks (probabilistic, combinatorial, analytic); value is systematic assembly |
-| P3 Proof Audit | pending | -- | Priority: natural boundary non-cancellation, lambda=0 edge case, leading-zeros convention |
-| P4 Exposition Polish | pending | -- | Label unlabelled DFA def; define val(w) before first use; Parry-numeration generality |
-| P5 Bibliography and Formatting | pending | -- | Remove 12+ uncited entries; add Allouche-Shallit, Hardy-Wright, Bruyere-Hansel, etc. |
+| P3 Proof Audit | **NEEDS REDO** | -- | Priority: natural boundary non-cancellation, lambda=0 edge case, leading-zeros convention |
+| P4 Gate 3 Review | **MAJOR_REVISION** | 2026-04-04 | 4 BLOCKERs, 5 MEDIUM, 5 MINOR; none of P2 issues resolved; see P4_EDITORIAL_REVIEW_2026-04-04.md |
+| P5 Bibliography and Formatting | pending | -- | Bibliography critically thin (4 refs); add 6-8 missing references |
 | P6 Journal Submission Package | pending | -- | Cover letter, PDF compile, MSC codes, author metadata |
 
-### Blocking Issues
+### Top-3 Blockers (from P4 Gate 3 Review)
 
-- 12+ uncited bibliography entries inherited from parent manuscript
-- Natural boundary proof (Thm 8) too terse; non-cancellation argument needs clarification
-- Proposition 9 implicitly uses irrationality of log 2 without stating it
+1. **BLOCKER-1:** Thm 4.1 (natural boundary) non-cancellation argument is incomplete -- needs convergence proof or logarithmic approach
+2. **BLOCKER-3 + MEDIUM-3:** Thm 3.4 proof contains wrong identity ($\pi(F_{m+2})+O(1)$ should be $\pi(F_{m+2})-\pi(F_{m+1})+O(1)$); Prop 4.2 proof uses irrationality of log 2 without stating it
+3. **EDITORIAL-1+2:** Bibliography has only 4 entries; "Previous work" section is 5 lines; no comparison with existing literature (Cobham, Mauduit-Rivat, Bruyere-Hansel, etc.)
+
+### Action Required
+
+Return to **P3 Proof Audit** to fix all 4 BLOCKERs and MEDIUM-3, then proceed through P4/P5 for exposition and bibliography.
 
 ## Theorem Inventory
 
@@ -65,7 +69,7 @@ Prop 9: self-contained (periodicity of exponential)
 | `sec_zeckendorf.tex` | Regular power law, prime Zeckendorf not regular, sofic counts, primes not sofic |
 | `sec_analytic.tex` | Natural boundary theorem, periodicity proposition |
 | `sec_conclusion.tex` | Expository discussion, no theorem environments |
-| `references.bib` | 23 entries (many uncited) |
+| `references.bib` | 4 entries only (critically thin; needs 6-8 more) |
 
 ## Stage Notes
 

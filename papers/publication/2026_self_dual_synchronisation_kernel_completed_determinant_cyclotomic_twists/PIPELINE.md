@@ -1,6 +1,6 @@
 # Pipeline: Self-Dual Synchronisation Kernel / Completed Determinant / Cyclotomic Twists
 Target: IMRN (International Mathematics Research Notices)
-Status: P2 complete, P3--P7 pending
+Status: P4 MAJOR_REVISION; P5--P7 pending
 
 ## Stage Progress
 
@@ -10,18 +10,20 @@ Status: P2 complete, P3--P7 pending
 | P1 Traceability | completed | -- | 13 theorem-level claims, all proved |
 | P2 Research Extension | completed | 2026-03-30 | Case study: one 10-state kernel through to full explicitness; genus-6 curve, S6 Galois, 6-term asymptotics |
 | P3 Journal-Fit Rewrite | pending | -- | |
-| P4 Editorial Review | pending | -- | |
+| P4 Editorial Review | MAJOR_REVISION | 2026-04-04 | All math verified correct; 4 blockers: kernel motivation, S6 proof, smoothness check, bibliography |
 | P5 Integration | pending | -- | |
 | P6 Lean Sync | pending | -- | |
 | P7 Submission Pack | pending | -- | |
 
-### Blocking Issues
+### Blocking Issues (P4, 2026-04-04)
 
-- Quartic smoothness verification (Prop 6) not exhibited; proof outsources check to reader
-- S6 Galois group proof (Prop 8) incomplete: specific specialisation values and factorisations not recorded
-- 10x10 determinant computation (Prop 3) has no verification script
-- Asymptotic coefficients (Thm 12) have no verification script
-- Many bibliography entries uncited (inherited from parent manuscript)
+- [BLOCKER] No motivation for the synchronisation kernel in the introduction; reader cannot assess significance
+- [BLOCKER] S6 Galois group proof (Prop 3.6) incomplete: specific specialisation values and factorisations not recorded
+- [BLOCKER] Quartic smoothness verification (Prop 3.4) not exhibited; proof outsources check to reader
+- [BLOCKER] Bibliography has only 4 references (all pre-2000); needs expansion to 10-12 with recent work and technique citations
+- [MEDIUM] Branch point at infinity (Prop 3.5) not exhibited
+- [MEDIUM] 10x10 determinant computation (Prop 3.1) has no verification note
+- [MEDIUM] Asymptotic coefficients (Thm 3.10) have no numerical validation
 
 ## Theorem Inventory
 
@@ -59,7 +61,7 @@ Status: P2 complete, P3--P7 pending
 | `sec_preliminaries.tex` | Primitive orbits, sync kernel definition, self-duality |
 | `sec_kernel.tex` | All body results: explicit determinant, spectrum, completion, quotient, double cover, Galois group, cyclotomic degree law, closed form, endpoint jet, asymptotic expansion, cyclic lift |
 | `sec_conclusion.tex` | Follow-up questions |
-| `references.bib` | 24 entries (many uncited) |
+| `references.bib` | 4 entries (pruned from 24; now too sparse) |
 
 ### Dependency graph
 
@@ -114,3 +116,18 @@ eq:primitive-mobius
 **Bibliography:** 24 entries. Only Bowen-Lanford, Manning, Lind-Marcus, Kitchens actually cited. Many entries inherited from parent manuscript. Missing: resultant/elimination theory reference, Hurwitz formula textbook citation, Jordan's theorem reference.
 
 **Journal targeting:** IMRN recommended. The genus computation and Galois group determination provide enough algebraic geometry content. Alternatives: Journal of Algebraic Combinatorics, ETDS.
+
+### P4 Editorial Review (2026-04-04)
+
+**Decision: MAJOR_REVISION**
+
+**Verification summary:** All 13 theorem-level claims independently verified by symbolic computation (sympy). Delta(z,u) confirmed against the explicit 10x10 matrix. Self-duality confirmed at matrix level. Completed determinant, parity, quotient curve, smoothness, genus, Galois group, degree law, R_2, endpoint jet, and all 6 asymptotic coefficients confirmed. No mathematical errors found.
+
+**Top 3 blockers:**
+1. No motivation for the kernel (introduction does not explain origin or significance)
+2. S_6 Galois proof and quartic smoothness proof are skeletons (conclusions correct but computations not exhibited)
+3. Bibliography inadequate (4 entries, all pre-2000; needs 10-12 with technique citations)
+
+**P2 gap resolution:** Bibliography pruning resolved the "uncited entries" problem but created a new "too few entries" problem. All other P2 gaps remain open.
+
+**Recommendation:** Address blockers, then re-review. Expected second-pass verdict: MINOR_REVISION or ACCEPT.
