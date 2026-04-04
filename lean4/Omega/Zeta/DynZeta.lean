@@ -440,6 +440,12 @@ theorem paper_degeneracy_ghost_exponential_lower (n : Nat) (hn : 4 ≤ n) :
     9 * 2 ^ (n - 4) ≤ (2 : ℤ) ^ n - lucasNum n := by
   exact degeneracy_ghost_exponential_lower n hn
 
+/-- Paper-facing wrapper for the degeneracy ghost doubling bound.
+    rem:degeneracy-zeta-bridge -/
+theorem paper_degeneracy_ghost_doubling (n : Nat) (hn : 4 ≤ n) :
+    2 * ((2 : ℤ) ^ n - lucasNum n) ≤ (2 : ℤ) ^ (n + 1) - lucasNum (n + 1) := by
+  exact degeneracy_ghost_doubling n hn
+
 /-- Lucas numbers mod 3 have period 8: L(n+8) % 3 = L(n) % 3 for all n.
     rem:degeneracy-zeta-bridge -/
 theorem lucasNum_mod3_period_eight (n : ℕ) :
@@ -494,6 +500,27 @@ theorem lucasNum_mod7_period_sixteen (n : Nat) :
     show (n + 1) + 1 = n + 2 from by omega,
     lucasNum_succ_succ n]
   omega
+
+/-- Lucas numbers mod 5 have period 4: L(n+4) % 5 = L(n) % 5.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_mod5_period_four (n : Nat) :
+    lucasNum (n + 4) % 5 = lucasNum n % 5 := by
+  -- D(n) := L(n+4) - L(n) satisfies D(n+2) = D(n+1) + D(n) with D(0)=5, D(1)=10.
+  -- Since 5 | D(0) and 5 | D(1), by induction 5 | D(n) for all n.
+  suffices h : (5 : ℤ) ∣ (lucasNum (n + 4) - lucasNum n) by omega
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => simp [lucasNum]
+    | 1 => simp [lucasNum]
+    | n + 2 =>
+      have hR4 := lucasNum_succ_succ (n + 4)
+      have hR0 := lucasNum_succ_succ n
+      have : lucasNum (n + 2 + 4) - lucasNum (n + 2) =
+          (lucasNum (n + 1 + 4) - lucasNum (n + 1)) +
+          (lucasNum (n + 4) - lucasNum n) := by linarith
+      rw [this]
+      exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
 
 /-! ## Zeta rationality and pole structure
 
@@ -867,5 +894,119 @@ theorem primitiveOrbitNumerator_prime {p : Nat} (hp : Nat.Prime p) :
     rw [show p / 1 = p by omega, show p / p = 1 by exact Nat.div_self hp.pos, hμp, hμ1, lucasNum_one]
     ring
   · simp [eq_comm, hp.ne_one]
+
+/-- Möbius inversion: L(n) = ∑_{d|n} primitiveOrbitNumerator(d) for n ≥ 1.
+    prop:zetaK-mobius-primitive -/
+private theorem lucasNum_eq_sum_primitiveOrbitNumerator (n : Nat) (hn : 0 < n) :
+    ∑ d ∈ Nat.divisors n, primitiveOrbitNumerator d = lucasNum n := by
+  -- primitiveOrbitNumerator is the Möbius inverse of lucasNum; apply the inversion theorem
+  have key : ∀ m > 0, ∑ x ∈ m.divisorsAntidiagonal,
+      (ArithmeticFunction.moebius x.fst : ℤ) * lucasNum x.snd = primitiveOrbitNumerator m := by
+    intro m hm
+    rw [primitiveOrbitNumerator]
+    -- Rewrite antidiagonal sum as divisor sum via the bijection d ↦ (m/d, d)
+    rw [← Nat.map_div_left_divisors, Finset.sum_map]
+    simp only [Function.Embedding.coeFn_mk]
+  exact (ArithmeticFunction.sum_eq_iff_sum_mul_moebius_eq.mpr key) n hn
+
+/-- A proper divisor of n (divisor d with d ≠ n) satisfies d ≤ n/2 for n ≥ 1. -/
+private theorem proper_divisor_le_half {n d : Nat} (hd : d ∣ n) (hne : d ≠ n) (hn : 0 < n) :
+    d ≤ n / 2 := by
+  rcases hd with ⟨k, rfl⟩
+  rcases k with _ | _ | k
+  · omega  -- k = 0: n = 0, contradicts hn
+  · simp at hne  -- k = 1: d * 1 = d, contradicts hne
+  · -- k ≥ 2: d * (k+2) ≥ 2*d, so d ≤ d*(k+2)/2
+    have h2 : d * 2 ≤ d * (k + 2) := by nlinarith
+    exact (Nat.le_div_iff_mul_le (by omega : 0 < 2)).mpr h2
+
+/-- Partial sum identity: ∑_{d=0}^{m} L(d) = L(m+2) - 1. -/
+private theorem lucasNum_partial_sum (m : Nat) :
+    ∑ d ∈ Finset.range (m + 1), lucasNum d = lucasNum (m + 2) - 1 := by
+  induction m with
+  | zero => simp [lucasNum]
+  | succ m ih =>
+    rw [Finset.sum_range_succ, ih, lucasNum_succ_succ (m + 1)]
+    ring
+
+/-- Monotonicity of Lucas numbers: a ≤ b with a ≥ 1 implies L(a) ≤ L(b). -/
+private theorem lucasNum_mono {a b : Nat} (ha : 1 ≤ a) (hab : a ≤ b) :
+    lucasNum a ≤ lucasNum b := by
+  induction b with
+  | zero => omega
+  | succ b ih =>
+    rcases Nat.eq_or_lt_of_le hab with rfl | hlt
+    · exact le_refl _
+    · exact le_trans (ih (by omega)) (le_of_lt (lucasNum_strictMono b (by omega)))
+
+/-- Sum of L over proper divisors of n is less than L(n) for n ≥ 2.
+    Used in the positivity proof of primitiveOrbitNumerator. -/
+private theorem sum_lucas_proper_divisors_lt (n : Nat) (hn : 2 ≤ n) :
+    ∑ d ∈ (Nat.divisors n).erase n, lucasNum d < lucasNum n := by
+  -- Every proper divisor d satisfies 1 ≤ d ≤ n/2. We bound by ∑_{d=1}^{n/2} L(d) = L(n/2+2) - 3.
+  -- Then L(n/2+2) - 3 < L(n) since for n ≥ 2: n/2+2 ≤ n (when n≥4) or check n=2,3 directly.
+  -- Step 1: bound by ∑ over {1,..,n/2} using Finset.Icc
+  have hstep1 : ∑ d ∈ (Nat.divisors n).erase n, lucasNum d ≤
+      ∑ d ∈ Finset.Icc 1 (n / 2), lucasNum d := by
+    apply Finset.sum_le_sum_of_subset_of_nonneg
+    · intro d hd
+      simp only [Finset.mem_Icc]
+      have hde := Finset.mem_erase.mp hd
+      have hd_dvd : d ∣ n := (Nat.mem_divisors.mp hde.2).1
+      exact ⟨Nat.pos_of_mem_divisors hde.2, proper_divisor_le_half hd_dvd hde.1 (by omega)⟩
+    · intros; exact le_of_lt (lucasNum_pos _)
+  -- Step 2: ∑_{d=1}^{m} L(d) = L(m+2) - 3
+  have hpartial_icc : ∑ d ∈ Finset.Icc 1 (n / 2), lucasNum d = lucasNum (n / 2 + 2) - 3 := by
+    have h0 : ∑ d ∈ Finset.range (n / 2 + 1), lucasNum d = lucasNum (n / 2 + 2) - 1 :=
+      lucasNum_partial_sum (n / 2)
+    have hL0 : lucasNum 0 = 2 := by simp [lucasNum]
+    -- Icc 1 m = range (m+1) \ {0}
+    rw [show Finset.Icc 1 (n / 2) = (Finset.range (n / 2 + 1)).erase 0 from by
+      ext d; simp [Finset.mem_Icc, Finset.mem_erase, Finset.mem_range]; omega]
+    rw [Finset.sum_erase_eq_sub (by simp : 0 ∈ Finset.range (n / 2 + 1)), h0, hL0]
+    ring
+  -- Step 3: L(n/2+2) - 3 < L(n)
+  have hstep3 : lucasNum (n / 2 + 2) - 3 < lucasNum n := by
+    match n, hn with
+    | 2, _ => simp [lucasNum]
+    | 3, _ => simp [lucasNum]
+    | n + 4, _ =>
+      have hle : (n + 4) / 2 + 2 ≤ n + 4 := by omega
+      have := lucasNum_mono (by omega : 1 ≤ (n + 4) / 2 + 2) hle
+      linarith
+  linarith
+
+/-- The primitive orbit numerator is strictly positive for all n ≥ 1.
+    prop:zetaK-mobius-primitive -/
+theorem primitiveOrbitNumerator_pos (n : Nat) (hn : 1 ≤ n) :
+    0 < primitiveOrbitNumerator n := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n, hn with
+    | 1, _ => native_decide
+    | n + 2, _ =>
+      -- From definition: prOrbNum(n) = L(n) + ∑_{d|n,d<n} μ(n/d)*L(d)
+      -- Since |μ| ≤ 1: prOrbNum(n) ≥ L(n) - ∑_{d|n,d<n} L(d) > 0
+      rw [primitiveOrbitNumerator]
+      have hn0 : n + 2 ≠ 0 := by omega
+      have hn_mem : n + 2 ∈ Nat.divisors (n + 2) := by simp [Nat.mem_divisors]
+      rw [← Finset.add_sum_erase _ _ hn_mem]
+      rw [Nat.div_self (by omega : 0 < n + 2), ArithmeticFunction.moebius_apply_one, one_mul]
+      -- Goal: L(n+2) + ∑_{d|n+2,d≠n+2} μ((n+2)/d)*L(d) > 0
+      -- Bound: ∑ μ((n+2)/d)*L(d) ≥ -∑ L(d)
+      have hbound : -(∑ d ∈ (Nat.divisors (n + 2)).erase (n + 2), lucasNum d) ≤
+          ∑ d ∈ (Nat.divisors (n + 2)).erase (n + 2),
+            ArithmeticFunction.moebius ((n + 2) / d) * lucasNum d := by
+        rw [← Finset.sum_neg_distrib]
+        apply Finset.sum_le_sum
+        intro d _hd
+        have habs := ArithmeticFunction.abs_moebius_le_one (n := (n + 2) / d)
+        have hLd := lucasNum_pos d
+        -- |μ| ≤ 1 ↔ -1 ≤ μ ≤ 1, so μ * L(d) ≥ -L(d)
+        have hμ_lb : -1 ≤ ArithmeticFunction.moebius ((n + 2) / d) := by
+          have := abs_le.mp habs; linarith [this.1]
+        nlinarith
+      have hlt := sum_lucas_proper_divisors_lt (n + 2) (by omega)
+      linarith
 
 end Omega.Zeta

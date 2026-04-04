@@ -167,6 +167,30 @@ theorem godelLift_fold_sqrt_exists (m : Nat) :
       (by simpa using godelLift_fold_sqrt_suffices m)
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R245: Gödel divisibility tower
+-- ══════════════════════════════════════════════════════════════
+
+/-- Pointwise non-decreasing exponent vectors yield Gödel divisibility.
+    prop:conclusion-godel-divisibility-tower -/
+theorem godelDivisibilityTower_dvd {k : ℕ} (p : Fin k → ℕ)
+    (f g : Fin k → ℕ) (hle : ∀ i, f i ≤ g i) :
+    (∏ i, p i ^ f i) ∣ (∏ i, p i ^ g i) :=
+  Finset.prod_dvd_prod_of_dvd _ _ fun i _ => Nat.pow_dvd_pow (p i) (hle i)
+
+/-- Transitivity: n_n | n_m for m ≥ n in the Gödel divisibility tower.
+    prop:conclusion-godel-divisibility-tower -/
+theorem godelDivisibilityTower_trans {k : ℕ} (p : Fin k → ℕ)
+    (r : ℕ → Fin k → ℕ)
+    (hmono : ∀ n i, r n i ≤ r (n + 1) i) (n m : ℕ) (hnm : n ≤ m) :
+    (∏ i, p i ^ r n i) ∣ (∏ i, p i ^ r m i) := by
+  induction m with
+  | zero => simp [Nat.le_zero.mp hnm]
+  | succ m ih =>
+    rcases Nat.eq_or_lt_of_le hnm with rfl | hlt
+    · exact dvd_refl _
+    · exact dvd_trans (ih (by omega)) (godelDivisibilityTower_dvd p _ _ (hmono m))
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R133: Binary-fiber Gödel lift instances
 -- ══════════════════════════════════════════════════════════════
 
@@ -217,6 +241,14 @@ theorem godelLift_binary_min_bits (m k : Nat)
   calc Nat.log 2 (X.maxFiberMultiplicity m)
       ≤ Nat.log 2 (2 ^ k) := Nat.log_mono_right hfeas
     _ = k := Nat.log_pow (by norm_num) k
+
+open Omega in
+/-- Paper-facing binary minimum-bit bound.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem paper_godelLift_binary_min_bits (m k : Nat)
+    (hfeas : X.maxFiberMultiplicity m ≤ 2 ^ k) :
+    Nat.log 2 (X.maxFiberMultiplicity m) ≤ k := by
+  exact godelLift_binary_min_bits m k hfeas
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase R157: Gödel lift binary optimality certificates
