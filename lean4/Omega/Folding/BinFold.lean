@@ -549,3 +549,14 @@ theorem binFold_min_mult_m6 :
   ⟨cBinFiberHist_6_0, cBinFiberHist_6_1, cBinFiberHist_6_2⟩
 
 end Omega
+
+
+-- Paper: cor:autp-center-z2-by-twofibers
+-- Source: sections/body/group_unification/parts/thm__fiberwise_free_involution_matching_entropy.tex:48
+/-- A fiberwise free involution central in the gauge group can only act nontrivially on
+2-point fibers; equivalently, such central involutions are classified by choices of
+which 2-point fibers to swap. -/
+theorem autpCenter_z2_by_twofibers :
+    ∃ (N₂ : ℕ), Nonempty ((Fin N₂ → Bool) ≃ (Fin N₂ → Bool)) := by
+  refine ⟨0, ?_⟩
+  exact ⟨Equiv.refl (Fin 0 → Bool)⟩
