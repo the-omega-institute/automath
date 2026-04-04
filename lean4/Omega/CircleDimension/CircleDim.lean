@@ -443,6 +443,59 @@ theorem phaseSpectrumCount_dyadic_odd_prime_power_invariant
   simpa [Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using
     hpow.gcd_mul_left_cancel t
 
+/-- Dyadic visibility boundary: positive torsion excludes the zero/odd aliasing pathology,
+    so dyadic phase spectra determine the free rank and the dyadic gcd profile.
+    thm:cdim-dyadic-spectrum-visibility-boundary -/
+theorem phaseSpectrumCount_dyadic_visibility_boundary
+    {r r' t t' : Nat}
+    (ht : 0 < t) (ht' : 0 < t')
+    (h : ∀ a : Nat, 1 ≤ a → phaseSpectrumCount r t (2 ^ a) = phaseSpectrumCount r' t' (2 ^ a)) :
+    r = r' ∧ ∀ a : Nat, 1 ≤ a → Nat.gcd t (2 ^ a) = Nat.gcd t' (2 ^ a) := by
+  obtain ⟨k, u, huodd, htu⟩ := Nat.exists_eq_two_pow_mul_odd ht.ne'
+  obtain ⟨k', u', hu'odd, ht'u'⟩ := Nat.exists_eq_two_pow_mul_odd ht'.ne'
+  let A := max 1 (max k k')
+  have hA : 1 ≤ A := by
+    dsimp [A]
+    exact le_max_left _ _
+  have hkA : k ≤ A := by
+    dsimp [A]
+    exact le_trans (le_max_left _ _) (le_max_right _ _)
+  have hkA' : k' ≤ A := by
+    dsimp [A]
+    exact le_trans (le_max_right _ _) (le_max_right _ _)
+  have hgcd_two_pow (e a u : Nat) (ha : 1 ≤ a) (huodd : Odd u) (he : e ≤ a) :
+      Nat.gcd (2 ^ e * u) (2 ^ a) = 2 ^ e := by
+    have hcop : Nat.Coprime u (2 ^ a) := by
+      simpa using (Nat.coprime_pow_right_iff ha u 2).2 huodd.coprime_two_right
+    calc
+      Nat.gcd (2 ^ e * u) (2 ^ a) = Nat.gcd (2 ^ e) (2 ^ a) := by
+        simpa [Nat.mul_comm] using hcop.gcd_mul_left_cancel (2 ^ e)
+      _ = 2 ^ e := Nat.gcd_eq_left (pow_dvd_pow 2 he)
+  have hBase := h A hA
+  rw [htu, ht'u', phaseSpectrumCount_split, phaseSpectrumCount_split,
+    hgcd_two_pow k A u hA huodd hkA, hgcd_two_pow k' A u' hA hu'odd hkA'] at hBase
+  have hStep := h (A + 1) (by omega)
+  rw [htu, ht'u', phaseSpectrumCount_split, phaseSpectrumCount_split,
+    hgcd_two_pow k (A + 1) u (by omega) huodd (by omega),
+    hgcd_two_pow k' (A + 1) u' (by omega) hu'odd (by omega),
+    show 2 ^ (A + 1) = 2 * 2 ^ A by rw [pow_succ, Nat.mul_comm], mul_pow] at hStep
+  have hStep' : ((2 ^ A) ^ r' * 2 ^ k') * 2 ^ r = ((2 ^ A) ^ r' * 2 ^ k') * 2 ^ r' := by
+    calc
+      ((2 ^ A) ^ r' * 2 ^ k') * 2 ^ r = ((2 ^ A) ^ r * 2 ^ k) * 2 ^ r := by rw [hBase]
+      _ = (2 ^ r') * ((2 ^ A) ^ r' * 2 ^ k') := by
+          have := hStep; ring_nf at this ⊢; linarith
+      _ = ((2 ^ A) ^ r' * 2 ^ k') * 2 ^ r' := by ring
+  have hcommonPos : 0 < (2 ^ A) ^ r' * 2 ^ k' := by
+    exact Nat.mul_pos (Nat.pow_pos (Nat.two_pow_pos A)) (Nat.two_pow_pos k')
+  have hpowEq : 2 ^ r = 2 ^ r' := Nat.eq_of_mul_eq_mul_left hcommonPos hStep'
+  have hr : r = r' := Nat.pow_right_injective (by omega) hpowEq
+  subst hr
+  refine ⟨rfl, ?_⟩
+  intro a ha
+  have haEq := h a ha
+  rw [phaseSpectrumCount_split, phaseSpectrumCount_split] at haEq
+  exact Nat.eq_of_mul_eq_mul_left (Nat.pow_pos (Nat.two_pow_pos a)) haEq
+
 /-- Phase spectrum reconstruction for positive torsion parameters.
     thm:cdim-phase-spectrum-reconstruction -/
 theorem phaseSpectrumCount_reconstruction
@@ -500,6 +553,23 @@ theorem phaseSpectrumCount_reconstruction
   have hdiv_right : t' ∣ t :=
     dvd_trans htgcd_right (Nat.gcd_dvd_left t t')
   exact ⟨rfl, Nat.dvd_antisymm hdiv_left hdiv_right⟩
+
+/-- Paper-facing iff wrapper for phase-spectrum reconstruction.
+    thm:cdim-phase-spectrum-reconstruction -/
+theorem paper_phaseSpectrumCount_reconstruction_iff
+    {r r' t t' : Nat}
+    (ht : 0 < t) (ht' : 0 < t') :
+    (∀ N : Nat, 1 ≤ N → phaseSpectrumCount r t N = phaseSpectrumCount r' t' N)
+      ↔ r = r' ∧ t = t' := by
+  constructor
+  · intro h
+    exact phaseSpectrumCount_reconstruction ht ht' h
+  · intro h
+    rcases h with ⟨hr, htEq⟩
+    subst hr
+    subst htEq
+    intro N hN
+    rfl
 
 /-- One-sided phase-spectrum reconstruction recovers the free rank.
     thm:cdim-phase-spectrum-reconstruction -/

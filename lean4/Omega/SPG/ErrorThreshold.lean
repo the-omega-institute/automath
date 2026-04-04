@@ -46,6 +46,26 @@ theorem kappa_lt_iff_eps_lt {p ε : ℝ}
     have hε' := (lt_div_iff₀ hp1).mp hε
     nlinarith
 
+/-- The kappa function is strictly monotone on (0, 1).
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_strict_mono_on {a b : ℝ} (_ha : 0 < a) (_ha1 : a < 1) (_hb : 0 < b)
+    (hb1 : b < 1) (hab : a < b) :
+    kappa a < kappa b := by
+  unfold kappa
+  have h1a : (0 : ℝ) < 1 - a := by linarith
+  have h1b : (0 : ℝ) < 1 - b := by linarith
+  rw [div_lt_div_iff₀ h1a h1b]
+  nlinarith
+
+/-- The kappa function is injective on (0, 1).
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_injective_on {a b : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (hb1 : b < 1)
+    (heq : kappa a = kappa b) : a = b := by
+  rcases lt_trichotomy a b with hab | rfl | hba
+  · exact absurd heq (ne_of_lt (kappa_strict_mono_on ha ha1 hb hb1 hab))
+  · rfl
+  · exact absurd heq (ne_of_gt (kappa_strict_mono_on hb hb1 ha ha1 hba))
+
 end Omega.SPG
 
 

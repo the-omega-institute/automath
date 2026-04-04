@@ -51,6 +51,15 @@ theorem multiPrimeSpectrum_pos_of_mem {supports : Finset PrimeSupport} {J : Prim
   refine ⟨J, ?_⟩
   simp [hJ]
 
+/-- Multiprime spectrum is additive under disjoint union of support lists.
+    prop:cdim-multiprime-divisible-spectrum-explicit -/
+theorem multiPrimeSpectrum_disjoint_add
+    (s₁ s₂ : Finset PrimeSupport) (hd : Disjoint s₁ s₂) (J : PrimeSupport) :
+    multiPrimeSpectrum (s₁ ∪ s₂) J = multiPrimeSpectrum s₁ J + multiPrimeSpectrum s₂ J := by
+  unfold multiPrimeSpectrum
+  rw [Finset.filter_union]
+  exact Finset.card_union_of_disjoint (Finset.disjoint_filter_filter hd)
+
 /-- Zeta-transform identity: the spectrum is the finite sum of exact-support counts.
     thm:cdim-mobius-inversion-localization-multiset-classification -/
 theorem multiPrimeSpectrum_eq_sum_typeCount

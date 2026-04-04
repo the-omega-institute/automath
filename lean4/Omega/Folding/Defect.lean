@@ -658,7 +658,7 @@ theorem foldCurvatureHilbertModularity_realizable :
 times the probability of the defect event; moreover, the defect event is contained in the
 union of local-curvature events, yielding the corresponding union-bound estimate. -/
 theorem foldDiscreteStokesAuditableBound :
-    ∃ (D : Type) (K : Nat → Type),
+    ∃ (_D : Type) (_K : Nat → Type),
       True := by
   refine ⟨PUnit, fun _ => PUnit, trivial⟩
 

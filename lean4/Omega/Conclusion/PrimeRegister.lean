@@ -191,6 +191,46 @@ theorem godelDivisibilityTower_trans {k : ℕ} (p : Fin k → ℕ)
     · exact dvd_trans (ih (by omega)) (godelDivisibilityTower_dvd p _ _ (hmono m))
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R247: Binary register width bounds
+-- ══════════════════════════════════════════════════════════════
+
+private theorem fib_le_two_pow : ∀ m : Nat, 1 ≤ m → Nat.fib (m + 2) ≤ 2 ^ m
+  | 1, _ => by native_decide
+  | 2, _ => by native_decide
+  | m + 3, _ => by
+    calc Nat.fib (m + 3 + 2)
+        = Nat.fib (m + 3 + 1) + Nat.fib (m + 3) := fib_succ_succ' (m + 3)
+      _ ≤ 2 ^ (m + 2) + 2 ^ (m + 1) :=
+          Nat.add_le_add (fib_le_two_pow (m + 2) (by omega)) (fib_le_two_pow (m + 1) (by omega))
+      _ ≤ 2 ^ (m + 2) + 2 ^ (m + 2) :=
+          Nat.add_le_add_left (Nat.pow_le_pow_right (by omega) (by omega)) _
+      _ = 2 ^ (m + 3) := by ring
+
+/-- Binary register width upper bound: ⌊log₂ F(m+2)⌋ ≤ m.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_width_upper (m : Nat) (hm : 1 ≤ m) :
+    Nat.log 2 (Nat.fib (m + 2)) ≤ m := by
+  calc Nat.log 2 (Nat.fib (m + 2))
+      ≤ Nat.log 2 (2 ^ m) := Nat.log_mono_right (fib_le_two_pow m hm)
+    _ = m := Nat.log_pow (by norm_num) m
+
+private theorem fib_lower_bound (m : Nat) (_hm : 2 ≤ m) :
+    2 ^ (m / 2) ≤ Nat.fib (m + 2) := by
+  have h1 : Nat.fib 2 = 1 := by native_decide
+  have h2 : 1 ≤ (2 : Nat) := by omega
+  calc 2 ^ (m / 2) = 2 ^ (m / 2) * 1 := by ring
+    _ = 2 ^ (m / 2) * Nat.fib 2 := by rw [h1]
+    _ ≤ Nat.fib (2 + 2 * (m / 2)) := Omega.fib_exponential_growth 2 (m / 2) h2
+    _ ≤ Nat.fib (m + 2) := Nat.fib_mono (by omega)
+
+/-- Binary register width lower bound: m / 2 ≤ ⌊log₂ F(m+2)⌋.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_width_lower (m : Nat) (hm : 2 ≤ m) :
+    m / 2 ≤ Nat.log 2 (Nat.fib (m + 2)) := by
+  calc m / 2 = Nat.log 2 (2 ^ (m / 2)) := (Nat.log_pow (by norm_num) (m / 2)).symm
+    _ ≤ Nat.log 2 (Nat.fib (m + 2)) := Nat.log_mono_right (fib_lower_bound m hm)
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R133: Binary-fiber Gödel lift instances
 -- ══════════════════════════════════════════════════════════════
 
