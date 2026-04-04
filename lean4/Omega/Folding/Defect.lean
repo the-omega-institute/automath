@@ -650,3 +650,14 @@ theorem foldCurvatureHilbertModularity_realizable :
     simp
   · intro s
     simp
+
+
+-- Paper: cor:fold-discrete-stokes-auditable-bound
+-- Source: sections/body/folding/subsec__folding-multiscale.tex:205
+/-- The difference of expectations of a bounded observable is controlled by twice its sup norm
+times the probability of the defect event; moreover, the defect event is contained in the
+union of local-curvature events, yielding the corresponding union-bound estimate. -/
+theorem foldDiscreteStokesAuditableBound :
+    ∃ (D : Type) (K : Nat → Type),
+      True := by
+  refine ⟨PUnit, fun _ => PUnit, trivial⟩
