@@ -19,8 +19,18 @@ Each application of \(011\to 100\) strictly decreases the number of \(1\)s by on
 The rewriting system is confluent: every input string rewrites to a unique normal form. This normal form contains no block \(11\) and equals the Zeckendorf representation of the same Fibonacci value.
 \end{proposition}
 
-\begin{proof}[Proof sketch]
-Correctness and uniqueness are standard: the rewrite preserves Fibonacci value, eliminates adjacent ones, and cannot create adjacent ones in the final normal form. A concise proof is given in \cite[Proposition~2]{ShallitShan2023}. Uniqueness of the Zeckendorf representation implies uniqueness of the normal form.
+\begin{proof}
+Each rewrite preserves Fibonacci value. Indeed, if the block \(011\) occupies positions \(k,k+1,k+2\) in MSD-first convention, then
+\[
+\Fib_{k+2}+\Fib_{k+1}=\Fib_{k+3},
+\]
+so replacing \(011\) by \(100\) leaves the represented integer unchanged.
+
+To prove confluence, it is enough to prove local confluence because termination is already known from Proposition~\ref{prop:termination}. The rule \(011\to 100\) has no nontrivial critical overlaps: two occurrences of \(011\) are either disjoint or identical. Hence if two rewrites start from the same word, they commute when they are distinct, and there is nothing to check when they coincide. Therefore the system is locally confluent, and Newman's lemma gives global confluence.
+
+Let \(w^\sharp\) be the unique normal form. Since it is irreducible, the prefixed word \(0w^\sharp\) contains no occurrence of \(011\). Any occurrence of \(11\) in \(w^\sharp\) would then be preceded either by the prefixed \(0\) or by an internal \(0\), producing an occurrence of \(011\) in \(0w^\sharp\). Hence \(w^\sharp\) contains no block \(11\).
+
+Finally, \(w^\sharp\) has the same Fibonacci value as the initial word, and it has no adjacent \(1\)s. By Zeckendorf uniqueness \cite{Lekkerkerker1952,Zeckendorf1972}, there is exactly one binary Fibonacci expansion with that property. Therefore \(w^\sharp\) is precisely the Zeckendorf representation of the input value.
 \end{proof}
 
 Together, Propositions~\ref{prop:termination}--\ref{prop:confluence} imply that the window-level fold \(\Fold_m\) is well-defined. Idempotence follows since any already-normal form is fixed by the rewrite, and surjectivity follows because every stable word \(x\in X_m\) is a fixed point: \(\Fold_m(x)=x\).

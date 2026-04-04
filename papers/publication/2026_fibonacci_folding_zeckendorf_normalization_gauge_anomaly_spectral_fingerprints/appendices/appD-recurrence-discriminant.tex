@@ -1,16 +1,111 @@
-\section{Appendix D: The partition-function recurrence and discriminant computations}
+\section{Appendix D: The partition-function recurrence, discriminant, and weight asymptotics}
 \label{app:recurrence}
 
-\subsection{From the denominator to the order-4 recurrence}
-If \(Z(t;y)=\sum_{m\ge 0} Z_m(y)t^m\) has denominator \(D(t;y)\) as in \eqref{eq:Dty}, then
+\subsection{Weighted transfer matrix}
+Weight each edge of the four-state graph from Appendix~\ref{app:pressure} by \(y^{Y}\), where \(Y\in\{0,1\}\) is the second component of the label \((X,Y)\). In the state order \((00,01,10,11)\) this gives the weighted adjacency matrix
 \[
-D(t;y)\,Z(t;y)=\text{(a polynomial in \(t\) of degree at most \(3\))}.
+M(y)=
+\begin{pmatrix}
+1&y&0&y\\
+0&0&1&0\\
+1&1+y&0&0\\
+1&0&0&0
+\end{pmatrix}.
 \]
-Equating coefficients of \(t^m\) for \(m\ge 4\) yields an order-4 linear recurrence for \(Z_m(y)\). Minimality (generic order \(4\)) can be certified by transfer-matrix dimension or by Hankel-rank arguments.
+Its characteristic polynomial is
+\[
+\det(\lambda I-M(y))
+=
+\lambda^4-\lambda^3-(2y+1)\lambda^2+\lambda+y(y+1)
+=
+\Pi(\lambda,y).
+\]
+Replacing \(\lambda\) by \(t^{-1}\) gives
+\[
+\det(I-tM(y))
+=
+1-t-(2y+1)t^2+t^3+y(y+1)t^4
+=
+D(t;y).
+\]
 
-\subsection{Hankel rank}
-Let \(H^{(n)}\) be the \(n\times n\) Hankel matrix with \((i,j)\)-entry \(Z_{i+j}(y)\). A rational generating function with denominator degree \(4\) implies \(\mathrm{rank}\,H^{(n)}\le 4\) for all \(n\), and generic equality holds unless the parameters lie on a proper algebraic subvariety.
+\subsection{Recurrence and Hankel rank}
+Because \(Z_m(y)\) is obtained by summing the weights \(y^{\abs{\Fold_m(\omega)}_1}\) over all length-\(m\) microstate words, it is a linear functional of the weighted transfer-matrix dynamics. Consequently \(Z_m(y)\) satisfies the characteristic recurrence of \(M(y)\),
+\[
+Z_m(y)=Z_{m-1}(y)+(2y+1)Z_{m-2}(y)-Z_{m-3}(y)-y(y+1)Z_{m-4}(y)
+\qquad (m\ge 4).
+\]
+The initial values
+\[
+Z_0(y)=1,\qquad
+Z_1(y)=1+y,\qquad
+Z_2(y)=2+2y,\qquad
+Z_3(y)=2+5y+y^2
+\]
+come from direct enumeration. Therefore
+\[
+Z(t;y)=\sum_{m\ge0}Z_m(y)t^m
+\]
+is a rational function with denominator \(D(t;y)\).
+
+For the Hankel matrices
+\[
+H^{(n)}(y)=\bigl(Z_{i+j}(y)\bigr)_{0\le i,j\le n-1},
+\]
+the recurrence implies \(\mathrm{rank}\,H^{(n)}(y)\le 4\) for every \(n\). Generic equality follows because the denominator degree is \(4\) away from the proper algebraic set where the leading recurrence collapses.
 
 \subsection{Discriminant factorization}
-The factorization \eqref{eq:disc} follows by direct symbolic computation of \(\Disc_\lambda \Pi(\lambda,y)\) for \(\Pi\) in \eqref{eq:Pi}. The cubic factor \(256y^3+411y^2+165y+32\) has a unique negative real root \(y_{\mathrm{LY}}\approx -1.13445\), controlling the nearest negative real branch point of the free energy.
+Let
+\[
+\Pi(\lambda,y)=\lambda^4-\lambda^3-(2y+1)\lambda^2+\lambda+y(y+1).
+\]
+A direct symbolic computation gives
+\[
+\Disc_\lambda \Pi(\lambda,y)
+=-y(y-1)\bigl(256y^3+411y^2+165y+32\bigr).
+\]
+The cubic factor has exactly one negative real root,
+\[
+y_{\mathrm{LY}}\approx -1.13445.
+\]
+This is the unique negative real value of \(y\) at which the dominant eigenvalue of \(M(y)\) ceases to be simple.
 
+\subsection{Output-weight cumulants}
+Set \(y=e^\theta\). The scaled cumulant generating function for \(H_m\) is
+\[
+\Lambda_Y(\theta)
+=
+\log \rho\!\bigl(M(e^\theta)\bigr)-\log 2.
+\]
+Write
+\[
+F(\lambda,z):=\lambda^4-\lambda^3-(2z+1)\lambda^2+\lambda+z(z+1).
+\]
+Since \(F(\rho(\theta),e^\theta)=0\) and \(F(2,1)=0\), implicit differentiation at \(\theta=0\) gives
+\[
+F_\lambda(2,1)\rho'(0)+F_z(2,1)=0.
+\]
+Here
+\[
+F_\lambda(2,1)=9,\qquad F_z(2,1)=-5,
+\]
+so \(\rho'(0)=5/9\). A second differentiation yields
+\[
+F_{\lambda\lambda}(2,1)\rho'(0)^2+2F_{\lambda z}(2,1)\rho'(0)+F_{zz}(2,1)+F_z(2,1)+F_\lambda(2,1)\rho''(0)=0.
+\]
+Using
+\[
+F_{\lambda\lambda}(2,1)=30,\qquad
+F_{\lambda z}(2,1)=-8,\qquad
+F_{zz}(2,1)=2,
+\]
+one obtains \(\rho''(0)=71/243\). Consequently,
+\[
+\Lambda_Y'(0)=\frac{5}{18},
+\qquad
+\Lambda_Y''(0)=\frac{67}{972}.
+\]
+These are the mean density and asymptotic variance appearing in Theorem~\ref{thm:weight-stats}. Since \(\theta\mapsto \rho(M(e^\theta))\) is real-analytic on \(\RR\), the G\"artner--Ellis rate function is
+\[
+I(a)=\sup_{\theta\in\RR}\bigl(\theta a-\Lambda_Y(\theta)\bigr).
+\]

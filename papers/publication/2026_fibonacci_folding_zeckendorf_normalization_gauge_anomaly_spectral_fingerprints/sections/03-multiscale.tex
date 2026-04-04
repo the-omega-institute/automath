@@ -6,7 +6,7 @@ The map \(\Fold_m\) can be computed by a finite-time local rewriting system real
 \[
 011 \;\to\; 100,
 \]
-scanning left-to-right after prefixing a leading zero; see, e.g., \cite{ShallitShan2023} for a concise proof of correctness. Termination is immediate since each rewrite strictly decreases the total number of \(1\)s. Confluence holds and yields a unique normal form, which is precisely the Zeckendorf representation.
+scanning left-to-right after prefixing a leading zero; see, e.g., \cite{Frougny1992,ShallitShan2023} for automata-theoretic formulations. Termination is immediate since each rewrite strictly decreases the total number of \(1\)s. Confluence holds and yields a unique normal form, which is precisely the Zeckendorf representation.
 
 In our window model, this implies:
 \begin{proposition}[Well-definedness, idempotence, surjectivity]\label{prop:idempotent}
@@ -17,6 +17,16 @@ For each \(m\ge 1\), the fold \(\Fold_m:\Om_m\to X_m\) is well-defined, idempote
 \Fold_m(\Om_m)=X_m.
 \]
 \end{proposition}
+
+\begin{proof}
+Appendix~\ref{app:rewriting} proves that the rewriting system terminates and is confluent, so every \(\omega\in\Om_m\) has a unique Zeckendorf normal form with the same Fibonacci value. This is exactly \(\Fold_m(\omega)\), hence \(\Fold_m\) is well-defined.
+
+If \(x\in X_m\), then \(x\) already has no adjacent \(1\)s and therefore is itself the Zeckendorf expansion of \(N(x)\). Hence \(\Fold_m(x)=x\). Applying this to \(x=\Fold_m(\omega)\in X_m\) gives
+\[
+\Fold_m(\Fold_m(\omega))=\Fold_m(\omega),
+\]
+so \(\Fold_m\) is idempotent. The same fixed-point property implies surjectivity: every \(x\in X_m\) lies in the image because \(\Fold_m(x)=x\).
+\end{proof}
 
 \subsection{Stable restriction and the inverse limit}
 For \(m_2\ge m_1\), define the stable truncation
@@ -29,7 +39,7 @@ Then \(\bigl(X_m,\proj_{m_2\to m_1}\bigr)\) is an inverse system, and the invers
 \[
 X_\infty := \varprojlim_m X_m
 \]
-is naturally identified with the two-sided golden-mean shift (equivalently, the subshift forbidding \(11\)).
+is naturally identified with the one-sided golden-mean shift (equivalently, the one-sided subshift forbidding \(11\)); see \cite[Chapter~1]{LindMarcus1995} or \cite[Chapter~1]{Kitchens1998}.
 
 \subsection{The fold-aware restriction operator}
 Let \(\naive_{m+1\to m}:\Om_{m+1}\to \Om_m\) be the naive truncation (drop the last coordinate),
