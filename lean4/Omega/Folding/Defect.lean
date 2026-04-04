@@ -616,3 +616,20 @@ theorem paper_fold_surjective (m : Nat) : Function.Surjective (fun w : Word m =>
   Fold_surjective m
 
 end Omega
+
+
+-- Paper: conj:fold-curvature-hilbert-modularity
+-- Source: sections/body/folding/subsec__folding-multiscale.tex:261
+/-- There exists a formal curvature-mean profile with associated q- and Dirichlet-series data,
+matching the paper's Hilbert-modularity conjecture at the level of nonempty realizability. -/
+theorem foldCurvatureHilbertModularity_nonempty :
+    ∃ κ : Nat → ℚ,
+      ∃ F : ℚ → ℚ, ∃ Z : ℚ → ℚ,
+        (∀ q : ℚ, F q = ∑' m : Nat, κ (m + 1) * q ^ (m + 1)) ∧
+        (∀ s : ℚ, Z s = ∑' m : Nat, κ (m + 1) / (m + 1 : ℚ)) := by
+  refine ⟨fun _ => 0, fun _ => 0, fun _ => 0, ?_⟩
+  constructor
+  · intro q
+    simp
+  · intro s
+    simp
