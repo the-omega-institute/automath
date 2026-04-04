@@ -698,3 +698,18 @@ theorem foldCurvatureHilbertModularity_finiteVerification :
     simp
   · intro m hm
     simp
+
+
+-- Paper: conj:fold-curvature-hilbert-modularity
+-- Source: sections/body/folding/subsec__folding-multiscale.tex:261
+/-- The zero curvature-mean profile has identically vanishing `q`- and Dirichlet-generating
+functions, giving a canonical trivial instance of the conjectural data. -/
+theorem foldCurvatureHilbertModularity_zeroProfile :
+    ∃ κ : Nat → ℚ,
+      (∀ q : ℚ, (∑' m : Nat, κ (m + 1) * q ^ (m + 1)) = 0) ∧
+      (∀ s : Nat, (∑' m : Nat, κ (m + 1) / ((m + 1 : ℚ) ^ s)) = 0) := by
+  refine ⟨fun _ => 0, ?_, ?_⟩
+  · intro q
+    simp
+  · intro s
+    simp

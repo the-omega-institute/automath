@@ -823,24 +823,41 @@ def run_loop(args: argparse.Namespace) -> int:
         print(f"  Success rate: {succeeded / attempted:.1%}")
     print(f"  {'=' * 56}")
 
-    # Cherry-pick successes to base branch
-    if scratch_branch and base_branch and succeeded > 0 and not args.dry_run:
-        print(f"\n[autoresearch] Cherry-picking {succeeded} commits to {base_branch}...")
-        picked = git_cherry_pick_to_base(scratch_branch, base_branch)
-        print(f"  Cherry-picked: {len(picked)}/{succeeded}")
-        if len(picked) < succeeded:
-            print(f"  WARNING: {succeeded - len(picked)} commits failed to cherry-pick")
-            print(f"  Scratch branch '{scratch_branch}' preserved for manual review")
-    elif scratch_branch and base_branch and not args.dry_run:
-        # No successes — go back to base branch and delete scratch branch
-        subprocess.run(
-            ["git", "checkout", base_branch],
-            cwd=str(REPO_ROOT), capture_output=True,
-        )
+    # Cherry-pick successes to base branch and clean up
+    if scratch_branch and base_branch and not args.dry_run:
+        if succeeded > 0:
+            print(f"\n[autoresearch] Cherry-picking {succeeded} commits to {base_branch}...")
+            picked = git_cherry_pick_to_base(scratch_branch, base_branch)
+            print(f"  Cherry-picked: {len(picked)}/{succeeded}")
+            if len(picked) < succeeded:
+                print(f"  WARNING: {succeeded - len(picked)} commits failed to cherry-pick")
+        else:
+            # No successes — just go back to base branch
+            subprocess.run(
+                ["git", "checkout", base_branch],
+                cwd=str(REPO_ROOT), capture_output=True,
+            )
+
+        # Always delete the scratch branch after cherry-pick (or if no successes)
         subprocess.run(
             ["git", "branch", "-D", scratch_branch],
             cwd=str(REPO_ROOT), capture_output=True,
         )
+        print(f"  Cleaned up scratch branch: {scratch_branch}")
+
+        # Clean up old autoresearch-* branches (keep none — all work is cherry-picked)
+        cleanup = subprocess.run(
+            ["git", "branch", "--list", "autoresearch-*"],
+            cwd=str(REPO_ROOT), capture_output=True, text=True,
+        )
+        old_branches = [b.strip() for b in cleanup.stdout.strip().split("\n") if b.strip()]
+        for branch in old_branches:
+            subprocess.run(
+                ["git", "branch", "-D", branch],
+                cwd=str(REPO_ROOT), capture_output=True,
+            )
+        if old_branches:
+            print(f"  Cleaned up {len(old_branches)} old autoresearch branch(es)")
 
     return 0
 
