@@ -440,15 +440,25 @@ def run_build(filepath: Path | None = None) -> tuple[bool, str]:
         return False, f"BUILD EXCEPTION: {e}"
 
 
-def git_setup_scratch_branch() -> str:
-    """Create and checkout a scratch branch for this run."""
+def git_current_branch() -> str:
+    """Get the current git branch name."""
+    result = subprocess.run(
+        ["git", "branch", "--show-current"],
+        cwd=str(REPO_ROOT), capture_output=True, text=True,
+    )
+    return result.stdout.strip() or "dev"
+
+
+def git_setup_scratch_branch() -> tuple[str, str]:
+    """Create and checkout a scratch branch. Returns (scratch_branch, base_branch)."""
+    base_branch = git_current_branch()
     ts = datetime.now().strftime("%Y%m%d-%H%M%S")
-    branch_name = f"autoresearch-{ts}"
+    scratch_name = f"autoresearch-{ts}"
     subprocess.run(
-        ["git", "checkout", "-b", branch_name],
+        ["git", "checkout", "-b", scratch_name],
         cwd=str(REPO_ROOT), capture_output=True, check=True,
     )
-    return branch_name
+    return scratch_name, base_branch
 
 
 def git_commit(filepath: Path, target: dict, created_new_file: bool) -> None:
@@ -484,10 +494,10 @@ def git_revert_changes() -> None:
     )
 
 
-def git_cherry_pick_to_dev(scratch_branch: str) -> list[str]:
-    """Cherry-pick all commits from scratch branch to dev."""
+def git_cherry_pick_to_base(scratch_branch: str, base_branch: str) -> list[str]:
+    """Cherry-pick all commits from scratch branch to the base branch."""
     result = subprocess.run(
-        ["git", "log", "--oneline", f"dev..{scratch_branch}"],
+        ["git", "log", "--oneline", f"{base_branch}..{scratch_branch}"],
         cwd=str(REPO_ROOT), capture_output=True, text=True,
     )
     commits = [line.split()[0] for line in result.stdout.strip().split("\n") if line.strip()]
@@ -495,7 +505,7 @@ def git_cherry_pick_to_dev(scratch_branch: str) -> list[str]:
         return []
 
     subprocess.run(
-        ["git", "checkout", "dev"],
+        ["git", "checkout", base_branch],
         cwd=str(REPO_ROOT), capture_output=True, check=True,
     )
 
@@ -625,8 +635,10 @@ def run_loop(args: argparse.Namespace) -> int:
 
     # Setup scratch branch
     scratch_branch = None
+    base_branch = None
     if not args.dry_run:
-        scratch_branch = git_setup_scratch_branch()
+        scratch_branch, base_branch = git_setup_scratch_branch()
+        print(f"[autoresearch] Base branch: {base_branch}")
         print(f"[autoresearch] Scratch branch: {scratch_branch}")
 
     # Stats
@@ -808,18 +820,18 @@ def run_loop(args: argparse.Namespace) -> int:
         print(f"  Success rate: {succeeded / attempted:.1%}")
     print(f"  {'=' * 56}")
 
-    # Cherry-pick successes to dev
-    if scratch_branch and succeeded > 0 and not args.dry_run:
-        print(f"\n[autoresearch] Cherry-picking {succeeded} commits to dev...")
-        picked = git_cherry_pick_to_dev(scratch_branch)
+    # Cherry-pick successes to base branch
+    if scratch_branch and base_branch and succeeded > 0 and not args.dry_run:
+        print(f"\n[autoresearch] Cherry-picking {succeeded} commits to {base_branch}...")
+        picked = git_cherry_pick_to_base(scratch_branch, base_branch)
         print(f"  Cherry-picked: {len(picked)}/{succeeded}")
         if len(picked) < succeeded:
             print(f"  WARNING: {succeeded - len(picked)} commits failed to cherry-pick")
             print(f"  Scratch branch '{scratch_branch}' preserved for manual review")
-    elif scratch_branch and not args.dry_run:
-        # No successes — go back to dev and delete scratch branch
+    elif scratch_branch and base_branch and not args.dry_run:
+        # No successes — go back to base branch and delete scratch branch
         subprocess.run(
-            ["git", "checkout", "dev"],
+            ["git", "checkout", base_branch],
             cwd=str(REPO_ROOT), capture_output=True,
         )
         subprocess.run(
