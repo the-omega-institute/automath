@@ -148,6 +148,9 @@ def generate_manifest(
         claim = claim_by_label.get(label)
         if claim is None:
             continue
+        # Skip conjectures — only formalize proven results
+        if claim.environment == "conjecture":
+            continue
 
         if label in partial_labels:
             priority = 1
