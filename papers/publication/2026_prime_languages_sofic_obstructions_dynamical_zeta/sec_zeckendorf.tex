@@ -12,9 +12,12 @@ be the language of canonical Zeckendorf words. For
 \[
   \val(w):=\sum_{k=1}^m x_kF_{k+1},
 \]
-where \(F_n\) is the Fibonacci sequence. The map \(w\mapsto\val(w)\)
-is a bijection from \(\mathcal Z\) onto \(\NN_{\ge 1}\)
-\cite{Zeckendorf1972}.
+where \(F_0=0\), \(F_1=1\), \(F_{n+2}=F_{n+1}+F_n\), and
+\(\varphi=(1+\sqrt5)/2\). The map \(w\mapsto\val(w)\) is a bijection
+from \(\mathcal Z\) onto \(\NN_{\ge 1}\) \cite{Zeckendorf1972}.
+Consequently \(\mathcal Z\cap\{0,1\}^{\le m}\) parametrises the
+interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
+\([F_{m+1},F_{m+2})\).
 
 \begin{theorem}[Regular Zeckendorf languages have power-law growth]
   \label{thm:zeckendorf-regular-powerlaw}
@@ -31,9 +34,13 @@ is a bijection from \(\mathcal Z\) onto \(\NN_{\ge 1}\)
 
 \begin{proof}
   Let \(a_m:=\#\{w\in L:\abs{w}=m\}\). Since \(L\) is regular,
-  \(a_m=u^{\mathsf T}B^m v\) for some non-negative integer matrix \(B\).
-  Hence \(a_m=\lambda^{m+o(m)}\) for a well-defined exponential growth
-  rate \(\lambda\in[0,\varphi]\). The upper bound \(\lambda\le\varphi\)
+  and \(\mathcal Z\) is regular as a forbidden-pattern language,
+  \(a_m=u^{\mathsf T}B^m v\), where \(B\) is the transfer matrix of a
+  DFA recognizing \(L\cap\mathcal Z\). If \(L\) is finite, then
+  \(N_L(T)\) is eventually constant, so the conclusion holds with
+  \(\alpha=0\). Assume henceforth that \(L\) is infinite. Then
+  \(a_m=\lambda^{m+o(m)}\) for a well-defined exponential growth rate
+  \(\lambda\in(0,\varphi]\). The upper bound \(\lambda\le\varphi\)
   follows from
   \[
     \abs{\mathcal Z\cap\{0,1\}^m}=F_{m+1}=\varphi^{m+o(m)}.
@@ -56,6 +63,14 @@ is a bijection from \(\mathcal Z\) onto \(\NN_{\ge 1}\)
   \]
   with \(\alpha:=\log\lambda/\log\varphi\in[0,1]\).
 \end{proof}
+
+\begin{remark}
+  The same argument applies verbatim to any Parry numeration system
+  whose admissible digit language is regular. In that setting the
+  regular syntax of admissible expansions replaces \(\mathcal Z\), and
+  the dominant exponential growth constant of the numeration system
+  replaces \(\varphi\); see \cite{Frougny1992,BruyereHansel1997}.
+\end{remark}
 
 \begin{corollary}[Prime Zeckendorf language is not regular]
   \label{cor:zeckendorf-prime-language-not-regular}
@@ -95,7 +110,8 @@ is a bijection from \(\mathcal Z\) onto \(\NN_{\ge 1}\)
   A sofic shift admits a finite labelled graph presentation, and the
   number of admissible words of length \(m\) is obtained from powers of
   the associated finite adjacency matrix; see
-  \cite{LindMarcus1995,Kitchens1998}. The Jordan normal form of a
+  \cite{LindMarcus1995,Kitchens1998} and, from the transfer-matrix
+  viewpoint, \cite{FlajoletSedgewick2009}. The Jordan normal form of a
   finite matrix yields the displayed exponential-polynomial expansion.
 \end{proof}
 
@@ -106,21 +122,33 @@ is a bijection from \(\mathcal Z\) onto \(\NN_{\ge 1}\)
     \mathcal P_m^{(\mathrm Z)}
     :=\{w\in\mathcal Z:\abs{w}=m,\ \val(w)\text{ prime}\}.
   \]
-  Then the length slices \(\mathcal P_m^{(\mathrm Z)}\) cannot be the
-  admissible words of any sofic shift.
+  Then there is no sofic shift \(X\) over \(\{0,1\}\) such that
+  \[
+    \mathcal B_m(X)=\mathcal P_m^{(\mathrm Z)}
+  \]
+  for all sufficiently large \(m\), where \(\mathcal B_m(X)\) denotes
+  the admissible words of length \(m\) in \(X\).
 \end{theorem}
 
 \begin{proof}
-  Since \(\mathcal Z\cap\{0,1\}^m\) parametrises the integers in
-  \([1,F_{m+2})\), one has
+  Since words of length exactly \(m\) in \(\mathcal Z\) parametrise
+  \([F_{m+1},F_{m+2})\), one has
   \[
     \abs{\mathcal P_m^{(\mathrm Z)}}
-    =\pi(F_{m+2})+O(1)
-    \asymp \frac{\varphi^m}{m}.
+    =\pi(F_{m+2}-1)-\pi(F_{m+1}-1).
   \]
-  By \Cref{prop:sofic-counts-exponential-polynomial}, the word-count
-  sequence of a sofic shift is an exponential polynomial
-  \(\sum_jQ_j(m)\lambda_j^m\). Such a sequence has dominant asymptotic
-  \(m^k\Lambda^m\) for some integer \(k\ge 0\), never \(\Lambda^m/m\).
-  This contradicts the displayed estimate.
+  By the prime number theorem \cite{HardyWright2008}, and because
+  \(F_{m+2}/F_{m+1}\to\varphi>1\), this gives
+  \[
+    \abs{\mathcal P_m^{(\mathrm Z)}}\asymp\frac{\varphi^m}{m}.
+  \]
+  If a sofic shift \(X\) satisfied
+  \(\mathcal B_m(X)=\mathcal P_m^{(\mathrm Z)}\) for all sufficiently
+  large \(m\), then \Cref{prop:sofic-counts-exponential-polynomial}
+  would imply that \(\abs{\mathcal P_m^{(\mathrm Z)}}\) is eventually an
+  exponential polynomial \(\sum_jQ_j(m)\lambda_j^m\). Such a sequence
+  has dominant asymptotic form \(m^k\Lambda^m\), up to periodic
+  fluctuations coming from dominant roots of equal modulus, with
+  \(k\ge 0\); in particular it cannot be of order \(\Lambda^m/m\). This
+  contradicts the displayed estimate.
 \end{proof}
