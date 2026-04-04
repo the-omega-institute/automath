@@ -172,7 +172,18 @@ def generate_manifest(
             "priority": priority,
         })
 
-    targets.sort(key=lambda t: (t["priority"], t["label"]))
+    # Sort by: priority, then difficulty (definitions easiest, theorems with proof next, without proof hardest)
+    def _sort_key(t):
+        has_proof = 1 if "\\begin{proof}" in t.get("body", "") else 2
+        env = t["environment"]
+        if env == "definition":
+            difficulty = 0  # no proof needed
+        elif has_proof == 1:
+            difficulty = 1  # proof available to translate
+        else:
+            difficulty = 2  # must prove from scratch
+        return (t["priority"], difficulty, len(t.get("body", "")), t["label"])
+    targets.sort(key=_sort_key)
     if top is not None:
         targets = targets[:top]
     return targets
