@@ -1,0 +1,169 @@
+name: Daily Build
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    inputs:
+      target_ref:
+        description: Branch, tag, or SHA to build from.
+        required: false
+        default: dev
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-build
+  cancel-in-progress: true
+
+jobs:
+  resolve_target:
+    name: Resolve daily target
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      target_sha: ${{ steps.resolve_target.outputs.target_sha }}
+      release_tag: ${{ steps.resolve_target.outputs.release_tag }}
+      release_name: ${{ steps.resolve_target.outputs.release_name }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.target_ref || 'dev' }}
+          fetch-depth: 0
+
+      - name: Resolve daily target
+        id: resolve_target
+        run: |
+          daily_date="$(date -u +%Y-%m-%d)"
+          echo "target_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "release_tag=daily-dev-$daily_date" >> "$GITHUB_OUTPUT"
+          echo "release_name=Daily Build $daily_date (dev)" >> "$GITHUB_OUTPUT"
+
+      - name: Ensure daily target points to dev
+        run: |
+          git fetch origin dev --depth=1
+          git merge-base --is-ancestor "${{ steps.resolve_target.outputs.target_sha }}" origin/dev
+
+      - name: Write validation summary
+        run: |
+          {
+            echo "Resolved daily build target."
+            echo
+            echo "- target SHA: \`${{ steps.resolve_target.outputs.target_sha }}\`"
+            echo "- release tag: \`${{ steps.resolve_target.outputs.release_tag }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  build_pdf:
+    name: Build main.pdf
+    needs: resolve_target
+    uses: ./.github/workflows/reusable-pdf.yml
+    with:
+      checkout_ref: ${{ needs.resolve_target.outputs.target_sha }}
+      upload_artifact: true
+      artifact_name: daily-pdf
+      artifact_retention_days: 14
+    secrets: inherit
+
+  build_lean4:
+    name: Build Lean4
+    needs: resolve_target
+    uses: ./.github/workflows/reusable-lean4.yml
+    with:
+      checkout_ref: ${{ needs.resolve_target.outputs.target_sha }}
+    secrets: inherit
+
+  generate_lean_manifest:
+    name: Generate Lean4 manifest
+    needs: resolve_target
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      RELEASE_TAG: ${{ needs.resolve_target.outputs.release_tag }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          ref: ${{ needs.resolve_target.outputs.target_sha }}
+          fetch-depth: 0
+
+      - name: Generate Lean4 manifest
+        run: |
+          manifest_name="lean4_manifest_$(date -u +%Y-%m-%d).json"
+          ruby .github/scripts/generate_lean_manifest.rb --output "release-assets/$manifest_name"
+          echo "manifest_name=$manifest_name" >> "$GITHUB_ENV"
+
+      - name: Upload Lean4 manifest artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: daily-lean4-manifest
+          path: release-assets/${{ env.manifest_name }}
+          if-no-files-found: error
+          retention-days: 14
+
+  publish_prerelease:
+    name: Publish daily prerelease
+    needs: [resolve_target, build_pdf, build_lean4, generate_lean_manifest]
+    if: ${{ always() && needs.resolve_target.result == 'success' && needs.build_pdf.result == 'success' && needs.build_lean4.result == 'success' && needs.generate_lean_manifest.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Download built main.pdf artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: daily-pdf
+          path: release-assets/pdf
+
+      - name: Download Lean4 manifest artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: daily-lean4-manifest
+          path: release-assets/lean4
+
+      - name: Resolve release assets
+        id: resolve_assets
+        run: |
+          pdf_path="$(find release-assets/pdf -maxdepth 1 -type f -name 'main_*.pdf' -print -quit)"
+          if [ -z "$pdf_path" ]; then
+            echo "Expected a dated PDF artifact in release-assets/pdf" >&2
+            exit 1
+          fi
+
+          lean_manifest_path="$(find release-assets/lean4 -maxdepth 1 -type f -name 'lean4_manifest_*.json' -print -quit)"
+          if [ -z "$lean_manifest_path" ]; then
+            echo "Expected a Lean4 manifest artifact in release-assets/lean4" >&2
+            exit 1
+          fi
+
+          echo "pdf_path=$pdf_path" >> "$GITHUB_OUTPUT"
+          echo "lean_manifest_path=$lean_manifest_path" >> "$GITHUB_OUTPUT"
+
+      - name: Write prerelease summary
+        run: |
+          {
+            echo "Built daily prerelease assets."
+            echo
+            echo "- target SHA: \`${{ needs.resolve_target.outputs.target_sha }}\`"
+            echo "- PDF asset: \`${{ steps.resolve_assets.outputs.pdf_path }}\`"
+            echo "- Lean4 manifest: \`${{ steps.resolve_assets.outputs.lean_manifest_path }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish prerelease
+        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2
+        with:
+          tag_name: ${{ needs.resolve_target.outputs.release_tag }}
+          name: ${{ needs.resolve_target.outputs.release_name }}
+          prerelease: true
+          target_commitish: ${{ needs.resolve_target.outputs.target_sha }}
+          body: |
+            Automated daily build from `dev`.
+
+            - target SHA: `${{ needs.resolve_target.outputs.target_sha }}`
+            - source branch: `dev`
+          files: |
+            ${{ steps.resolve_assets.outputs.pdf_path }}
+            ${{ steps.resolve_assets.outputs.lean_manifest_path }}
+          fail_on_unmatched_files: true
+          generate_release_notes: false

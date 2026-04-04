@@ -21,6 +21,7 @@ This paper develops a theory of scan-projection generation driven by the golden 
   - `sections/appendix/main.tex` — Appendix (independently compilable, handles `\appendix`)
   - `sections/backmatter/main.tex` — Back matter (independently compilable, includes bibliography)
   - `sections/generated/` — Script-generated LaTeX fragments (write-only, never hand-edit)
+- **automation/** — Research automation, journal reconnaissance, and reproducibility gates
 - **scripts/** — Reproducible experiment scripts (orchestrated by `scripts/run_all.py`)
 - **artifacts/** — Exported audit artifacts (CSV/PNG/JSON etc.)
 
@@ -61,6 +62,169 @@ This generates:
 
 - `sections/generated/*.tex` — LaTeX fragments for figures/tables (directly `\input{}`-able)
 - `artifacts/export/*` — CSV/PNG exports for audit and review
+- `artifacts/export/run_all_manifest.json` — pipeline manifest with step status, signatures, and expected outputs
+- `artifacts/export/run_all_contract_report.json` — machine-readable contract result
+- `artifacts/export/run_all_contract_report.md` — human-readable contract summary
+
+Validate the contract artifacts after a run:
+
+```bash
+python3 automation/pipeline_contract.py validate
+```
+
+The higher-level automation commands live under `automation/`, while `python3 scripts/run_all.py` remains the canonical experiment entry point used by the paper.
+
+## Research Cycle
+
+To turn one paper slice into a reusable workflow packet for writing, formalization, literature review, journal targeting, and verification:
+
+```bash
+python3 automation/research_cycle.py create --section body/folding --slug folding_cycle
+python3 automation/research_cycle.py create --sections body/folding body/emergent_arithmetic --slug folding_arith_pair
+python3 automation/research_cycle.py validate artifacts/export/research_cycles/folding_cycle
+python3 automation/research_cycle.py batch --sections body/folding body/spg --slug pilot_batch
+python3 automation/research_cycle.py seed-paper artifacts/export/research_cycles/folding_cycle --slug folding_note_seed
+python3 automation/journal_recon.py run --journal "Journal of Pure and Applied Algebra" --journal-short JPA --max-papers 6 --years-back 3 --slug jpa
+python3 automation/research_cycle.py journal-pack artifacts/export/paper_seeds/folding_note_seed --journal "Journal of Pure and Applied Algebra" --journal-short JPA --batch-dashboard artifacts/export/research_cycles/_batch/body_batch_all --slug jpa_folding_note
+python3 automation/research_cycle.py validate-journal-pack artifacts/export/journal_packs/jpa_folding_note
+python3 automation/publication_sync.py sync --publication-root /path/to/the-omega/docs/papers/auric-golden-phi/publication --slug auric_publication_sync
+python3 automation/publication_sync.py validate artifacts/export/publication_sync/auric_publication_sync
+python3 automation/publication_journal_fit.py run --publication-root /path/to/the-omega/docs/papers/auric-golden-phi/publication --slug auric_journal_fit
+python3 automation/publication_journal_fit.py validate artifacts/export/publication_journal_fit/auric_journal_fit
+```
+
+This generates a cycle directory under `artifacts/export/research_cycles/<slug>/` containing:
+
+- `slice_manifest.json` — transitive TeX closure, headings, claims, citation keys
+- `paper_slice.md` — human-readable slice summary
+- `formalization_backlog.json` — exact missing Lean labels plus local theorem search suggestions
+- `literature_survey_seed.md` — cited bibliography plus suggested external survey queries
+- `workflow_next_steps.md` — concrete follow-up commands for the next formalization / verification pass
+- `cycle_report.json` — compact quantitative summary of the slice
+
+Batch mode writes a dashboard under `artifacts/export/research_cycles/_batch/<slug>/`:
+
+- `dashboard.json` — machine-readable summary across the selected sections
+- `dashboard.md` — human-readable section ranking by missing Lean coverage
+- `cycles/<section-slug>/...` — one full cycle packet per section
+
+`seed-paper` creates a standalone draft scaffold under `artifacts/export/paper_seeds/<slug>/`:
+
+- `main.tex` — compilable draft entry point
+- `sections/source_slice.tex` — slice summary and anchor claims
+- `sections/formalization_frontier.tex` — first missing claims plus suggested Lean anchors
+- `sections/literature_seed.tex` — resolved bibliography subset plus survey queries
+- `sections/verification_plan.tex` — concrete next verification steps
+- `references.bib` — copied subset of locally resolved bibliography entries when available
+- `seed_manifest.json` — machine-readable seed metadata
+
+`journal-pack` creates a submission-oriented prompt bundle under `artifacts/export/journal_packs/<slug>/`:
+
+- `journal_profile.json` — source statistics, journal target, and pack metadata
+- `journal_brief.md` — concise dossier for the target journal
+- `deep_revision_prompt.md` — full-manuscript restructuring and rewrite prompt
+- `research_extension_prompt.md` — prompt focused on new publishable conclusions only
+- `editorial_review_prompt.md` — hard editorial gate prompt with accept / reject framing
+- `boundary_profile.json` — inferred include / exclude themes for the target journal
+- `boundary_report.md` — automatic keep / merge / split / rewrite report against the full batch dashboard
+- `keep_drop_matrix.json` — machine-readable section-level boundary decisions
+- `split_strategy.md` — recommended split and merge strategy, including a concrete merged-packet command
+- `boundary_gate_prompt.md` — hard scope-fit prompt asking whether the current manuscript boundary should be sent out for review
+- `workflow.md` — ordered revision loop for journal-targeted iteration
+- `submission_checklist.md` — final submission checklist
+- `recent_paper_notes_template.md` — template for notes from recently accepted papers
+- `editorial_notes_template.md` — template for venue-specific editorial constraints
+
+If recent-paper notes are missing, `journal-pack` first looks for an existing reconnaissance directory under `artifacts/export/journal_recon/<journal-short>/`. If no local recon notes exist, it will attempt an online reconnaissance pass automatically unless `--skip-auto-recon` is given. Successful auto recon is copied into the journal pack as:
+
+- `recent_paper_notes.md` — auto-filled recent-paper notes consumed by the prompts
+- `recon_profile.json` — machine-readable recon metadata
+- `recent_papers.json` — sampled recent-paper metadata
+- `style_summary.md` — extracted title / abstract style signals
+
+`automation/journal_recon.py` can also be run independently to prebuild a reconnaissance cache under `artifacts/export/journal_recon/<slug>/`:
+
+- `recon_profile.json` — query parameters and sample counts
+- `recent_papers.json` — paper metadata plus computed style summary
+- `recent_paper_notes.md` — prompt-ready notes for recent papers
+- `style_summary.md` — compact style summary for the venue
+
+## Publication Workspace Sync
+
+If publication planning already lives in another repository, `automation/publication_sync.py`
+builds a program-level sync report instead of creating new paper skeletons locally:
+
+```bash
+python3 automation/publication_sync.py sync \
+  --publication-root /path/to/the-omega/docs/papers/auric-golden-phi/publication \
+  --slug auric_publication_sync
+python3 automation/publication_sync.py audit \
+  --publication-root /path/to/the-omega/docs/papers/auric-golden-phi/publication \
+  --slug auric_publication_sync
+python3 automation/publication_sync.py validate \
+  artifacts/export/publication_sync/auric_publication_sync
+```
+
+This writes `artifacts/export/publication_sync/<slug>/` with:
+
+- `sync_manifest.json` — workspace path, counts by publication phase, and unmapped sections
+- `publication_inventory.json` — one record per publication directory, including target journal and covered source sections
+- `section_status.json` — one record per `sections/body/<section>` directory with publication status and recommended program action
+- `lean_linkage.json` — publication-to-Lean linkage via `SOURCE_MAP.md`, `THEOREM_LIST.md`, or section-level fallback labels
+- `publication_audit.json` — contract audit summary and per-directory issues for missing `README.md`, `main.tex`, `SOURCE_MAP.md`, `THEOREM_LIST.md`, and submission status markers
+- `publication_audit_report.md` — human-readable audit report suitable for gating the external publication workspace
+- `publication_sync_report.md` — human-readable dashboard showing which sections are already submitted, planned, frozen, or still unmapped
+
+Use this when publication splitting is managed elsewhere and `automath` only needs to stay aligned with that external submission program.
+`audit` exits nonzero on hard contract violations; `audit --strict` also fails on mapping gaps and missing submission metadata.
+
+## Publication Journal Fit
+
+If the external publication workspace already contains draft manuscripts, `automation/publication_journal_fit.py`
+adds a second layer on top of `publication_sync.py`:
+
+```bash
+python3 automation/publication_journal_fit.py run \
+  --publication-root /path/to/the-omega/docs/papers/auric-golden-phi/publication \
+  --slug auric_journal_fit
+python3 automation/publication_journal_fit.py validate \
+  artifacts/export/publication_journal_fit/auric_journal_fit
+```
+
+This writes `artifacts/export/publication_journal_fit/<slug>/` with:
+
+- `journal_fit_manifest.json` - aggregate counts for track-level journal-fit coverage
+- `journal_fit_records.json` - one record per active publication track with manuscript metrics and citation audit
+- `journal_fit_report.md` - top-level dashboard across the active submission program
+- `tracks/<directory>/journal_fit_profile.json` - target-journal profile, local manuscript metrics, recon counts, and issues
+- `tracks/<directory>/journal_fit_report.md` - human-readable audit of structure, appendix pressure, and bibliography fit
+- `tracks/<directory>/revision_prompt.md` - journal-specific revision prompt keyed to recent-paper style signals
+- `tracks/<directory>/WORKBOARD.md` - publication-cycle workboard for the repeated Codex/editorial loop
+- `tracks/<directory>/01_research_extension.md` - prompt for theorem-level deepening
+- `tracks/<directory>/02_journal_style_rewrite.md` - prompt for venue-style full rewrite
+- `tracks/<directory>/03_editorial_review.md` - prompt for editor/referee-style review
+- `tracks/<directory>/04_full_improvement.md` - prompt for the final full-improvement pass
+- `tracks/<directory>/JOURNAL_PROFILE.md` - editable venue profile copied from `automation/assets/journal_profiles/`
+- `tracks/<directory>/JOURNAL_FIT.template.md` - scaffold for venue alignment notes inside the publication workspace
+- `tracks/<directory>/BIB_SCOPE.template.md` - scaffold for bibliography scope and target-journal citation review
+- `tracks/<directory>/SOURCE_MAP.template.md` - scaffold for source-to-draft traceability when `SOURCE_MAP.md` is still missing
+- `tracks/<directory>/THEOREM_LIST.template.md` - scaffold for theorem inventory and Lean anchors
+
+The command uses the target journal declared in each publication `README.md`, pulls recent-paper style signals through `automation/journal_recon.py`, audits `main.tex` and `references.bib`, and compares local references against recent target-journal papers when possible. Use it when the next bottleneck is no longer section splitting, but turning an existing draft into a venue-fit submission package.
+
+The prompt and journal-profile text now live under `automation/assets/` so the repeated editorial loop can evolve mostly through Markdown/template changes rather than through more orchestration code.
+The multi-agent execution model is documented under `automation/assets/operations/`; use those assets to assign paper stages across many agents instead of improvising new prompt flows each time.
+
+When the publication workspace lives inside this repository under `papers/publication/`,
+the durable operational layer is the `papers/publication/OPS/` directory rather than the
+exported `artifacts/` directories. In that in-tree mode:
+
+- `OPS/WORKFLOW.md` defines the publication execution contract, shared Lean policy, and main-paper backflow
+- `OPS/BOARD.md` records the live publication state, wave queue, upstream feedback, and shared Lean status
+- `OPS/SYNC_NOTE.template.md` defines the durable note schema used for Lean sync, upstream sync, and main-paper backport
+
+This keeps the publication program as a continuously evolving execution layer, not as a
+one-shot export bundle.
 
 ## Writing Conventions
 
@@ -92,4 +256,4 @@ This generates:
 
 ## Adding Scripts
 
-New experiment scripts must be added to `scripts/run_all.py`'s steps list.
+New experiment scripts must be added to `scripts/run_all.py`'s steps list. `automation/run_all.py` is an alternate automation entry point that forwards to the canonical script pipeline.

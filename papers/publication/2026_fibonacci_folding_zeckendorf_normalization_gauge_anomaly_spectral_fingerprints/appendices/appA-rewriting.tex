@@ -1,0 +1,27 @@
+\section{Appendix A: Termination and confluence of the fold normalization}
+\label{app:rewriting}
+
+We briefly record a verifiable normalization procedure realizing Zeckendorf form. Consider a binary Fibonacci digit string written in MSD-first convention. After prefixing a leading zero, repeatedly apply the local rewrite
+\[
+011 \to 100
+\]
+whenever it occurs, scanning left-to-right and continuing until no occurrence remains.
+
+\begin{proposition}[Termination]\label{prop:termination}
+Every rewrite sequence terminates after finitely many steps.
+\end{proposition}
+
+\begin{proof}
+Each application of \(011\to 100\) strictly decreases the number of \(1\)s by one, hence termination follows.
+\end{proof}
+
+\begin{proposition}[Confluence and uniqueness of normal form]\label{prop:confluence}
+The rewriting system is confluent: every input string rewrites to a unique normal form. This normal form contains no block \(11\) and equals the Zeckendorf representation of the same Fibonacci value.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Correctness and uniqueness are standard: the rewrite preserves Fibonacci value, eliminates adjacent ones, and cannot create adjacent ones in the final normal form. A concise proof is given in \cite[Proposition~2]{ShallitShan2023}. Uniqueness of the Zeckendorf representation implies uniqueness of the normal form.
+\end{proof}
+
+Together, Propositions~\ref{prop:termination}--\ref{prop:confluence} imply that the window-level fold \(\Fold_m\) is well-defined. Idempotence follows since any already-normal form is fixed by the rewrite, and surjectivity follows because every stable word \(x\in X_m\) is a fixed point: \(\Fold_m(x)=x\).
+

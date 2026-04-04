@@ -1,0 +1,133 @@
+\subsection{目标与接口定位}\label{subsec:typed-address-biaxial-completion-objective-interface}
+本章的任务，是把全文已经建立的三类结构，即有限递归可达层、完成化极限层与相位--寄存双轴账本层，组织成同一个可审计接口。更具体地说，本章所要回答的并非某个单一对象“是什么”，而是如下复合过程如何在统一记号下被严格表达：
+\[
+\text{有限递归轨道}
+\longrightarrow
+\text{完成化对象}
+\longrightarrow
+\text{类型化地址}
+\longrightarrow
+\text{相位/寄存双轴账本}
+\longrightarrow
+\text{动力学 }\zeta\text{ 与有限部接口}.
+\]
+这一安排直接承接前文：值保持重写、\(\Fold_\infty\) 规范横截面与 Fibonacci-adic 逆极限环已经给出可完成的值层骨架；fold-aware restriction 与 \(L^2(\widehat{\ZZ})\) 上的寄存器提升算子已经进入跨分辨率自然性的框架；而圆维、残差圆维、solenoid 终对象、prime-register 轴的 pro-圆维以及相位圆维/寄存圆维双轴计量，则已经把对象层推进到可审计账本层。因此，本节的自然任务不是再引入额外原语，而是把这些既有结构压缩为一条统一前端接口。
+
+\subsubsection{对象层级：有限递归层、完成层与完备相位对象}\label{subsubsec:typed-address-biaxial-completion-object-hierarchy}
+为避免有限可达对象与完成化对象的语义混淆，本章首先固定三层对象。
+
+\begin{definition}[有限递归层]\label{def:typed-address-biaxial-completion-finite-layer}
+给定递推规则 \(F\) 与初值 \(x_0\)，定义有限递归可达层为
+\[
+X_{\mathrm{fin}}(F,x_0)
+:=
+\{x_n:n<\omega,\ x_{n+1}=F(x_n)\}.
+\]
+这里 \(X_{\mathrm{fin}}(F,x_0)\) 只记录后继轨道中的可达项，而不把极限对象直接并入对象层。
+\end{definition}
+
+\begin{definition}[完成层]\label{def:typed-address-biaxial-completion-completed-layer}
+记
+\[
+\widehat X:=\varprojlim_m X_m
+\]
+或其等价的闭包/局部化完成。完成层中的对象并不是“多做若干步递归以后到达”的结果，而是有限递归轨道在逆极限、闭包或完成化语义中的极限进入。
+\end{definition}
+
+\begin{definition}[完备相位对象]\label{def:typed-address-biaxial-completion-complete-phase-object}
+称
+\[
+\mathcal P_{\mathrm{comp}}=(\Phi_{\mathrm{vis}},\mathcal L_{\mathrm{ext}})
+\]
+为一个完备相位对象，其中 \(\Phi_{\mathrm{vis}}\) 表示可见相位圆商，\(\mathcal L_{\mathrm{ext}}\) 表示承载外置可逆性、残差纤维与账本信息的外部层。于是，本章所处理的相位对象不是孤立的裸圆，而是
+\[
+\text{visible circle quotient}\ltimes \text{external fiber/ledger}
+\]
+的统一系统。
+\end{definition}
+
+这一层级划分与前文的完成化口径一致：有限递归直接生成的是后继轨道，而不是完成对象本身；同时，圆维只计数可见连通相位通道，凡有限协议内部不能承载而在完成化中又不可忽略的自由度，都必须进入残差寄存器、prime-register 或其他外置账本中。
+
+在此基础上，本章采用双轴账本而不是单一标量预算。记
+\[
+\mathrm{Led}(\mathcal P_{\mathrm{comp}})
+:=
+\bigl(
+\cdim_{\mathrm{phase}}(\Phi_{\mathrm{vis}}),
+\pcdim(\mathcal L_{\mathrm{ext}})
+\bigr),
+\]
+其中第一分量记录连通相位圆因子的可见复杂度，第二分量记录 prime-register、profinite 与 pro-circle 方向上的外置可逆复杂度。这样，相位轴与寄存轴在对象层上被明确地区分为两条不可互相抵偿的预算方向。
+
+\subsubsection{类型化地址与读出接口}\label{subsubsec:typed-address-biaxial-completion-typed-address}
+在完成层与账本层之间，本章采用类型化地址作为统一读出入口。这里的地址不是对象本身，而是对象在给定局部化、相位坐标与精度层下的可核验索引。
+
+\begin{definition}[类型化地址]\label{def:typed-address-biaxial-completion-typed-address}
+称三元组
+\[
+a=(L,\theta,b)
+\]
+为一个类型化地址，其中：
+\begin{itemize}
+  \item \(L\) 是层级或局部化标签，用于指定对象所处的可见域、局部截面或局部化除法口径；
+  \item \(\theta\) 是可见相位坐标，用于给出圆商上的相位位置；
+  \item \(b\) 是证书深度或精度索引，用于控制读出的可核验分辨率。
+\end{itemize}
+\end{definition}
+
+\begin{definition}[类型化读出]\label{def:typed-address-biaxial-completion-typed-read}
+定义读出映射
+\[
+\mathrm{Read}_{\mathrm{US}}:\mathrm{Addr}_{\mathrm{typed}}
+\rightharpoonup
+\mathrm{Val}\sqcup\{\mathrm{NULL}\}\sqcup \mathrm{Fail},
+\]
+其中 \(\mathrm{Val}\) 表示确定值读出，\(\mathrm{NULL}\) 表示对象层空值，\(\mathrm{Fail}\) 表示附带失败见证的拒绝输出。
+\end{definition}
+
+定义 \ref{def:typed-address-biaxial-completion-typed-read} 把地址、值、空值与失败见证统一到同一个接口中，并与既有的 \(\mathrm{Read}_{\mathrm{US}}\)、\(\mathrm{NULL}\) 三分解、局部截面空性以及证书对象语义直接对齐。特别地，读出的确定性只在固定精度层 \(b\) 上陈述；若要比较不同精度层的输出，则必须先经过显式提升
+\[
+\iota_{b\to b'}:\mathrm{Cert}_b\longrightarrow \mathrm{Cert}_{b'},
+\qquad
+b'\ge b,
+\]
+之后才能在同一类型层中进行运算与判等。换言之，混合精度的操作不被默认为自然存在，而只被允许作为显式提升之后的二次构造。
+
+这一约定与前文的跨分辨率自然性保持一致：只有先经折叠并落到稳定逆系统中，才能谈论同一对象的不同分辨率坐标；同理，只有先经显式提升并落到同一证书层中，才能谈论同一地址的跨精度可比性。
+
+\subsubsection{本章的统一前端接口}\label{subsubsec:typed-address-biaxial-completion-front-interface}
+在上述对象层级与地址语义之上，本章把既有材料归并为一个统一前端接口。
+
+\begin{proposition}[本章前端接口分解]\label{prop:typed-address-biaxial-completion-front-interface}
+本章把后续构造组织为下列复合映射：
+\[
+X_{\mathrm{fin}}
+\xrightarrow{\ \mathrm{comp}\ }
+\widehat X
+\xrightarrow{\ \mathrm{phase}\ }
+\mathcal P_{\mathrm{comp}}
+\xrightarrow{\ \mathrm{addr}\ }
+\mathrm{Addr}_{\mathrm{typed}}
+\xrightarrow{\ \mathrm{Read}_{\mathrm{US}}\ }
+\mathrm{Val}\sqcup\{\mathrm{NULL}\}\sqcup\mathrm{Fail}
+\xrightarrow{\ \mathrm{audit}\ }
+(\Lambda_{\mathrm{phase}},\Lambda_{\mathrm{reg}})
+\xrightarrow{\ \mathrm{spec}\ }
+(\zeta,\mathrm{FP},\mathrm{Mellin\text{-}Witt}).
+\]
+其中：
+\begin{enumerate}
+  \item \(\mathrm{comp}\) 把有限递归轨道送入逆极限或完成化对象；
+  \item \(\mathrm{phase}\) 把完成对象组织为可见圆商与外置账本的统一相位对象；
+  \item \(\mathrm{addr}\) 赋予对象以类型化地址 \((L,\theta,b)\)；
+  \item \(\mathrm{Read}_{\mathrm{US}}\) 给出值、\(\mathrm{NULL}\) 或失败见证；
+  \item \(\mathrm{audit}\) 将可见复杂度与外置复杂度分别编译为相位账本 \(\Lambda_{\mathrm{phase}}\) 与 prime-register 账本 \(\Lambda_{\mathrm{reg}}\)；
+  \item \(\mathrm{spec}\) 把双轴账本送入动力学 \(\zeta\)、有限部与 Mellin--Witt 谱侧。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+这一分解并非引入新的对象层原语，而是对前文既有结构的接口化整理：有限递归负责产生可达轨道，完成层负责引入极限对象，完备相位对象负责把可见圆商与外置账本统一起来，类型化地址负责给出可核验的读出入口，而双轴账本则负责把对象层信息送入后续谱侧接口。故命题成立。
+\end{proof}
+
+命题 \ref{prop:typed-address-biaxial-completion-front-interface} 的意义在于：后续动力学 \(\zeta\) 与有限部不再被理解为突然切换到谱论或数论的一次起跳，而应被理解为对本章双轴账本的后端读取。于是，从前文的值层、地址层与审计层到后续谱侧的过渡，不再是平行结构的并列，而是一条已经在对象层、地址层与审计层完成封口的前后端关系。

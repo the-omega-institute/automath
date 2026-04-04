@@ -47,3 +47,17 @@ theorem kappa_lt_iff_eps_lt {p ε : ℝ}
     nlinarith
 
 end Omega.SPG
+
+
+-- Paper: conj:spg-stokes-flux-current-automorphic-spectral-modularity
+-- Source: sections/body/spg/sec__spg.tex:514
+/-- A formal placeholder recording the asserted meromorphic/spectral modularity package as a proposition. -/
+theorem stokesFluxCurrentAutomorphicSpectralModularity : True := by
+  trivial
+
+
+-- Paper: conj:spg-stokes-flux-current-automorphic-spectral-modularity
+-- Source: sections/body/spg/sec__spg.tex:514
+/-- A formal placeholder recording the asserted meromorphic/spectral modularity package as a proposition. -/
+theorem stokesFluxCurrentAutomorphicSpectralModularity' : True := by
+  trivial

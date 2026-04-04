@@ -1,0 +1,316 @@
+\subsection{可见域、\texorpdfstring{$\mathrm{NULL}$}{NULL}、\texorpdfstring{$\mathrm{Read}_{\mathrm{US}}$}{Read\_US} 与三端证书的统一拒绝规则}\label{subsec:typed-address-biaxial-completion-visible-null-read-us-unified-rejection}
+上一节已经把 RH 的两条证书链焊成一个统一的离线核验闭环。本节进一步处理其中更尖锐的一面：什么样的声明在协议内算作可读对象，什么样的声明必须退化为 \(\mathrm{NULL}\)，以及一旦退化，拒绝对象应以何种最小格式被输出。换言之，这里不再把“不可读”理解为数值分析中的模糊误差，而把它提升为对象层事件：可见域过滤、类型化精度、三端有限证书与确定性离线验证器共同决定一个声明是否有资格进入对象层。
+
+\subsubsection{可见域约束下，读出本身就是偏函数}\label{subsubsec:typed-address-biaxial-completion-visible-read-partial}
+在 unitary slice 的制度里，读出并不是无条件定义的总函数，而首先是带可见域过滤的偏函数。
+
+\begin{proposition}[可见域约束下的偏读出]\label{prop:typed-address-biaxial-completion-visible-read-partial}
+在定义 \ref{def:typed-address-biaxial-completion-unitary-visible-domain} 的可见域锁定下，
+\[
+X_{\mathrm{vis}}=\mathsf{Phase}=\{u\in\mathbb C:|u|=1\},
+\]
+任何读出都满足带可见域约束的偏函数规则
+\[
+\operatorname{read}(\omega)=
+\begin{cases}
+\operatorname{obs}(\omega),&
+\omega\in\operatorname{Dom}(\operatorname{obs}),\
+\operatorname{obs}(\omega)\in X_{\mathrm{vis}},\
+\mathrm{Chk}(\omega)=\mathsf{pass},\\
+\mathrm{NULL},&\text{否则}.
+\end{cases}
+\]
+因此，只要一个断言本质上需要径向自由度，即需要 \(|u|\neq 1\) 的信息，而又没有显式外置模式轴，那么该断言并不是“读得不准”，而是在对象层根本不定义，并按协议退化为 \(\mathrm{NULL}\)。
+\end{proposition}
+\begin{proof}
+这就是定义 \ref{def:xi-visible-read-null} 在 unitary-slice 可见域锁定下的直接转写；而需要 \(|u|\neq 1\) 的径向模式在纯相位接口中不可类型化，则由定理 \ref{thm:xi-offset-null-type-safety} 与定理 \ref{thm:xi-pw-no-continuous-hair} 给出。证毕。
+\end{proof}
+
+命题 \ref{prop:typed-address-biaxial-completion-visible-read-partial} 的意义在于：失败类型从一开始就被写进读出语义，而不是在数值实现之后临时附加。正因为如此，\(\mathrm{NULL}\) 的三分与正交阈值，才会成为对象层结构的一部分，而不是调试阶段的解释性语言。
+
+\subsubsection{\texorpdfstring{$\mathrm{Read}_{\mathrm{US}}$}{Read\_US} 的三值语义与类型化精度}\label{subsubsec:typed-address-biaxial-completion-read-us-typed-precision}
+在可见域已经固定之后，unitary slice 的读出可被压成一个带类型化精度索引的三值偏函数。
+
+\begin{proposition}[三值语义与类型化精度]\label{prop:typed-address-biaxial-completion-read-us-typed-precision}
+在固定可见域与检查器、确定性验证器 \(\mathrm{Ver}\)、证书后端 \(\mathrm{Cert}_b(F)\) 以及实现约定之后，unitary slice 的地址对象写成
+\[
+\mathrm{Addr}_{\mathrm{US}}
+:=
+\{(L,\theta,b):L>1,\ \theta\in\mathbb R,\ b\in\mathbb N\},
+\]
+其中 \(b\) 不是数值层的“多算几位”，而是证书对象的类型索引。于是存在确定性的三值偏函数
+\[
+\mathrm{Read}_{\mathrm{US}}:
+\mathrm{Addr}_{\mathrm{US}}
+\rightharpoonup
+\{\mathrm{NonZero},\mathrm{RootInterval},\mathrm{NULL}\},
+\]
+其语义为：
+\begin{enumerate}
+  \item 若存在通过核验的证书对象 \(C=(I,\sigma)\in\mathrm{Cert}_b(F)\)，且 \(\sigma\) 断言区间 \(I\) 上无零点，则返回 \(\mathrm{NonZero}\)；
+  \item 若存在通过核验的证书对象 \(C=(I,\sigma)\in\mathrm{Cert}_b(F)\)，且 \(\sigma\) 断言 \(I\) 为根区间并满足单根或收缩语义，则返回 \(\mathrm{RootInterval}\)；
+  \item 否则返回 \(\mathrm{NULL}\)，并附带一份可离线复核的失败见证。
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+这就是命题 \ref{prop:typed-address-biaxial-completion-unitary-slice-address-closure} 与定理 \ref{thm:xi-us-deterministic-tristate} 的合并表述。证毕。
+\end{proof}
+
+\begin{corollary}[显式提升原则与信息不泄漏]\label{cor:typed-address-biaxial-completion-explicit-lifting}
+在命题 \ref{prop:typed-address-biaxial-completion-read-us-typed-precision} 的设定下，精度索引 \(b\) 已被提升为证书对象的类型标签。因此，任何在没有显式提升到共同深度的前提下，试图组合、比较或拼接不同精度证书的操作，在类型层均不定义，并按协议退化为 \(\mathrm{NULL}\)。换言之，混合精度不能被用来偷渡本不属于对象层的侧信息。
+\end{corollary}
+\begin{proof}
+这正是推论 \ref{cor:xi-precision-type-no-leakage} 在本章语言下的直接重述。证毕。
+\end{proof}
+
+因此，\(\mathrm{Read}_{\mathrm{US}}\) 并不仅仅回答“这里读到了什么”，它同时制度化了“为什么没有读到”。一旦失败，输出端给出的不是不稳定提示，而是一类类型化拒绝对象。
+
+\subsubsection{\texorpdfstring{$\mathrm{NULL}$}{NULL} 的内禀化：证书纤维的空性与离切片事件的二歧性}\label{subsubsec:typed-address-biaxial-completion-null-fiber-dichotomy}
+沿着地址先于取值的站点语义，\(\mathrm{NULL}\) 可以被进一步压到对象层内部，而离切片事件则只能沿外置模式轴或失败见证二歧地出现。
+
+\begin{proposition}[\texorpdfstring{$\mathrm{NULL}$}{NULL} 的内禀刻画]\label{prop:typed-address-biaxial-completion-null-fiber}
+对任意可核对地址 \(a\)，若 \(F(a)\) 为其证书纤维，则
+\[
+\operatorname{read}(a)\neq \mathrm{NULL}
+\iff
+F(a)\neq\varnothing,
+\qquad
+\operatorname{read}(a)=\mathrm{NULL}
+\iff
+F(a)=\varnothing.
+\]
+也就是说，\(\mathrm{NULL}\) 的对象论本质不是“数值上看不到”，而是“该地址上的证书纤维为空”。
+\end{proposition}
+\begin{proof}
+命题 \ref{prop:typed-address-biaxial-completion-local-section} 与命题 \ref{prop:typed-address-biaxial-completion-readable-fiber} 已经分别在站点口径与三轴地址口径下给出这一判据。证毕。
+\end{proof}
+
+\begin{corollary}[离切片事件的协议二歧性]\label{cor:typed-address-biaxial-completion-visible-null-dichotomy}
+在 unitary slice 可见域锁定与“无未记录连续轴”原则同时成立时，任何需要 \(|u|\neq 1\) 的离切片断言，在协议内只可能以如下两种形态出现：
+\begin{enumerate}
+  \item 显式外置模式轴，例如把
+  \[
+  \varrho(u)=\log|u|
+  \]
+  作为地址对象的一部分；
+  \item 输出一份离线可核验的失败见证，证明该断言在既定可见域与闭包制度下不可类型化，因此读出只能退化为 \(\mathrm{NULL}\)。
+\end{enumerate}
+不存在第三条路径。特别地，任何试图通过增加与相位解耦的连续寄存器来绕过 \(\mathrm{NULL}\) 的方案，要么被类型系统直接拒绝，要么在因子意义下被压回唯一径向外延。
+\end{corollary}
+\begin{proof}
+这是推论 \ref{cor:typed-address-biaxial-completion-offslice-dichotomy} 与命题 \ref{prop:typed-address-biaxial-completion-witness-support} 的直接合并。证毕。
+\end{proof}
+
+由此，\(\mathrm{NULL}\) 既是证书纤维空性的内禀表达，也是协议拒绝域外自由度时的制度化输出。离切片事件若不肯支付合法的模式轴成本，就只能转写为失败见证。
+
+\subsubsection{端点热核探针：对 Jensen 盲区的正交补读}\label{subsubsec:typed-address-biaxial-completion-endpoint-heat-kernel-complement}
+前面的 Jensen 缺陷证书链控制的是半径阈值显影，但固定半径采样天然带有边界层盲区。端点热核探针之所以重要，正因为它提供了一条与该盲区正交的边界层读出。
+
+\begin{proposition}[端点热核量的正交补读性质]\label{prop:typed-address-biaxial-completion-endpoint-heat-kernel-complement}
+对 Toeplitz 主子矩阵
+\[
+\mathbf{T}_N=(c_{j-k})_{0\le j,k\le N},
+\]
+定义二项式向量
+\[
+b^{(N)}_k=(-1)^k\binom{N}{k},
+\]
+以及端点热核量
+\[
+a_N:=\frac{(b^{(N)})^{\mathsf T}\mathbf{T}_N\,b^{(N)}}{4^N}.
+\]
+则在 Carath\'eodory 语义下有严格恒等式
+\[
+a_N=
+\int_{\mathbb T}\left|\frac{1-\xi}{2}\right|^{2N}\,\dd\mu(\xi)\ge 0,
+\]
+并且
+\[
+a_N\downarrow \mu(\{-1\})\qquad(N\to\infty).
+\]
+若再取闭集 \(K\subset\mathbb T\setminus\{-1\}\) 并记
+\[
+q(K):=\sup_{\xi\in K}\left|\frac{1-\xi}{2}\right|\in(0,1),
+\]
+则有误差界
+\[
+0\le a_N-\mu(\{-1\})
+\le
+q(K)^{2N}\mu(K)+\mu\!\bigl(\mathbb T\setminus(\{-1\}\cup K)\bigr),
+\]
+在支撑受控情形下退化为指数衰减
+\[
+0\le a_N-\mu(\{-1\})\le q(K)^{2N}\mu(K).
+\]
+因此，端点热核量读出的不是“是否跨过某个半径阈值”，而是边界层在端点 \(-1\) 处承载了多大的原子质量；它与 Jensen 缺陷链正交互补，而不竞争同一类预算。
+\end{proposition}
+\begin{proof}
+端点热核恒等式与单调极限见定理 \ref{thm:xi-endpoint-heat-kernel-probe}；误差界见推论 \ref{cor:xi-endpoint-heat-kernel-exp-error}。证毕。
+\end{proof}
+
+所以，\(a_N\) 的角色并不是替代缺陷链，而是把“高高度信息被压到端点层之后到底剩下什么承载”单独读出来。它既不提升 \(\varrho_{\max}\)，也不改变 dyadic 深度 \(b\)，而是通过 \(N\) 单调逼近 \(\mu(\{-1\})\)。
+
+\subsubsection{三端证书对象的统一输入格式}\label{subsubsec:typed-address-biaxial-completion-three-end-input}
+到这一步为止，本章已经形成三类互补证书：地址端负责可定义性与 \(\mathrm{NULL}\) 分类，缺陷端负责盘内禁入，线性代数端负责 Toeplitz 正性与端点承载。它们可被直接打包成统一输入格式。
+
+\begin{definition}[三端证书对象]\label{def:typed-address-biaxial-completion-three-end-certificate}
+称
+\[
+\mathcal C^{\triangleright}
+:=
+\bigl(
+\mathcal C_{\mathrm{addr}},
+\mathcal C_{\mathrm{def}},
+\mathcal C_{\mathrm{lin}}
+\bigr)
+\]
+为一份三端证书对象，其中：
+\begin{enumerate}
+  \item \(\mathcal C_{\mathrm{addr}}\) 为地址端输入，由有限个类型化地址
+  \[
+  (L,\theta,b)\in\mathrm{Addr}_{\mathrm{US}}
+  \]
+  组成，其语义由 \(\mathrm{Read}_{\mathrm{US}}\) 给出；
+  \item \(\mathcal C_{\mathrm{def}}\) 为缺陷端输入，可取有限集合
+  \[
+  \{(\varrho_j,\varepsilon_j)\}_{j=1}^{M}\subset(0,1)\times\mathbb Q_{\ge 0},
+  \]
+  其语义是可核验地保证
+  \[
+  D_{\zeta}(\varrho_j)\le \varepsilon_j;
+  \]
+  \item \(\mathcal C_{\mathrm{lin}}\) 为线性代数端输入，包括有限阶 Toeplitz 数据、谱裕度与误差界，以及端点热核量 \(a_N\) 与其误差界；必要时还可附加 Gershgorin 支撑界、Sturm 交错或 Stieltjes 残差等辅助一致性证书。
+\end{enumerate}
+\end{definition}
+
+\begin{remark}[三端输入的制度位置]\label{rem:typed-address-biaxial-completion-three-end-input}
+定义 \ref{def:typed-address-biaxial-completion-three-end-certificate} 只是小节 \ref{subsec:cdim-three-end-certificate-format} 在本章语义中的直接打包。其作用不在于增设新对象，而在于把地址、缺陷与 Toeplitz/端点热核这三条证书链统一到同一个输入范式中。
+\end{remark}
+
+\subsubsection{统一离线验证器的组合规则与拒绝规则}\label{subsubsec:typed-address-biaxial-completion-unified-rejection-rule}
+三端输入一旦固定，统一离线验证器就不再只是抽象接口，而成为一条带拒绝规则的组合流程。
+
+\begin{proposition}[统一离线验证器的组合规则]\label{prop:typed-address-biaxial-completion-unified-rejection-rule}
+对任意三端证书对象
+\[
+\mathcal C^{\triangleright}
+=
+\bigl(
+\mathcal C_{\mathrm{addr}},
+\mathcal C_{\mathrm{def}},
+\mathcal C_{\mathrm{lin}}
+\bigr),
+\]
+统一离线验证器按以下顺序执行：
+\begin{enumerate}
+  \item \textbf{地址一致性：}对每个 \((L,\theta,b)\in\mathcal C_{\mathrm{addr}}\) 调用 \(\mathrm{Read}_{\mathrm{US}}\)。若返回 \(\mathrm{NULL}\)，则记录它属于语义空值、协议空值还是碰撞空值；
+  \item \textbf{缺陷编译：}对每个 \((\varrho,\varepsilon)\in\mathcal C_{\mathrm{def}}\) 核验
+  \[
+  D_{\zeta}(\varrho)\le \varepsilon
+  \]
+  并把它编译为禁入半径下界
+  \[
+  r_{\ast}(\varrho)\ge \varrho e^{-\varepsilon};
+  \]
+  \item \textbf{Toeplitz--PSD 与端点热核：}核验 \(\mathbf{T}_N\succeq 0\)。若失败，则输出负惯性或负特征值见证；若通过，则继续计算并核验端点热核量 \(a_N\)，把它解释成 \(\mu(\{-1\})\) 的单调上逼近并附带误差界。
+\end{enumerate}
+于是三步分别产出三类结论：地址端产出“可定义/不可定义”，缺陷端产出“盘内禁入”，线性代数端产出“端点承载强度”。三者在类型层互相正交，谁也代替不了谁。
+\end{proposition}
+\begin{proof}
+这就是定义 \ref{def:typed-address-biaxial-completion-unified-offline-verifier} 与小节 \ref{subsec:cdim-unified-offline-verifier-closure} 的组合化写法；正交不可替代性则由命题 \ref{prop:typed-address-biaxial-completion-sparsification-depth} 与命题 \ref{prop:typed-address-biaxial-completion-nonnull-requires-three-axes} 保证。证毕。
+\end{proof}
+
+\begin{corollary}[统一拒绝规则]\label{cor:typed-address-biaxial-completion-unified-rejection-rule}
+若线性代数端没有外置一致维数上界，亦即没有提供可核验的模式轴或等价的一致 Hankel 秩上界控制，则任何只访问有限截断、有限采样的统一验证器都可能遭遇谱替身：两组候选在所有有限可见数据上完全一致，而全局真值相反。此时，统一验证器必须拒绝把现有有限证书解释为全局命题。只有在以下两种情形之一中，拒绝才可被解除：
+\begin{enumerate}
+  \item 外置模式轴或一致维数上界，使无穷层级约束坍缩为有限截断核验；
+  \item 明确进入真正的无限族检查。
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+第一种情形由定理 \ref{thm:xi-oracle-collapse-toeplitz-psd-finite-truncation} 与命题 \ref{prop:typed-address-biaxial-completion-completeness-gap-audit} 给出；若这类模式轴控制缺失，则定理 \ref{thm:xi-spectral-surrogate-finite-audit-undecidable} 保证任意固定有限审计都可能遇到谱替身，因此拒绝不是保守策略，而是逻辑上必需的制度动作。证毕。
+\end{proof}
+
+\subsubsection{盲区预算与三端资源的最小联合充分条件}\label{subsubsec:typed-address-biaxial-completion-three-end-budget}
+一旦三端输入被统一，前面分散出现的预算约束就可以被压成一条联合充分条件。其关键不在于最佳常数，而在于三类资源的不可替代性。
+
+\begin{theorem}[三端证书的最小联合充分条件]\label{thm:typed-address-biaxial-completion-three-end-budget}
+设目标是在高度尺度 \(T\) 上，对某个离切片偏移量 \(\delta>0\) 的事件给出可审计排除，并把端点原子质量的误差压到预设阈值 \(\eta\)。若已经外置了一致模式轴控制，则一组可操作的最小联合充分条件可写为
+\[
+\Delta_{\varrho}
+\lesssim
+\frac{\delta}{T^2},
+\qquad
+2^b
+\gtrsim
+T^2\log T,
+\qquad
+q(K)^{2N}\mu(K)\le \eta,
+\]
+其中：
+\begin{enumerate}
+  \item \(\Delta_{\varrho}=1-\varrho_{\max}\) 负责越过固定半径采样的盲区阈值；
+  \item \(b\) 负责消除高度窗中的地址碰撞；
+  \item \(N\) 负责把端点热核误差压进目标阈值；
+  \item 与此同时，线性代数端还必须提供可核验的 Toeplitz--PSD 证书。
+\end{enumerate}
+当以上条件同时闭合时，统一验证器即可把三端有限证书编译成非 \(\mathrm{NULL}\) 的接受对象；若任一条件失败，则必须输出相应的失败见证，而不能用别的预算横向抵偿。
+\end{theorem}
+\begin{proof}
+半径预算与 dyadic 深度预算的数量级分别由小节 \ref{subsec:typed-address-biaxial-completion-boundary-joint-budget}、小节 \ref{subsec:typed-address-biaxial-completion-jensen-defect-repulsion-blindspot} 与小节 \ref{subsec:cdim-blindspot-budget-theorem} 的边界层盲区定理给出；端点热核误差则由推论 \ref{cor:xi-endpoint-heat-kernel-exp-error} 控制。三轴预算不可互偿，已在命题 \ref{prop:typed-address-biaxial-completion-tag-orthogonality} 与命题 \ref{prop:typed-address-biaxial-completion-nonnull-requires-three-axes} 中固定。证毕。
+\end{proof}
+
+定理 \ref{thm:typed-address-biaxial-completion-three-end-budget} 的实质是：排除离切片偏移不是某一类证书的单兵任务，而是阈值显影、寻址分离与端点承载三端资源的并行闭包。少一端，就只能给出拒绝对象，而不能给出协议内可接受的正向声明。
+
+\subsubsection{标准化失败见证与最小接口闭包}\label{subsubsec:typed-address-biaxial-completion-standardized-rejection}
+既然拒绝是制度性的，就必须把拒绝本身对象化，并纳入与接受对象同样可复核的输入输出格式。
+
+\begin{definition}[标准化失败见证的压缩格式]\label{def:typed-address-biaxial-completion-standardized-rejection}
+沿用定义 \ref{def:typed-address-biaxial-completion-failure-witness} 的丰富见证包
+\[
+W=
+\bigl(
+\operatorname{tag},
+\operatorname{subtag},
+\operatorname{loc},
+\operatorname{lb},
+\operatorname{aux}
+\bigr),
+\]
+并把它压缩为统一拒绝对象
+\[
+W^{\flat}:=
+\bigl(
+\mathsf{tag},
+\mathsf{loc},
+\mathsf{lb},
+\mathsf{aux}
+\bigr),
+\]
+其中
+\[
+\mathsf{tag}\in\{\mathrm{Sem},\mathrm{Prot},\mathrm{Coll},\mathrm{Dim}\}.
+\]
+这里 \(\mathrm{Dim}\) 表示把先前的 \((\mathrm{Prot},\mathrm{Dim})\) 类型压缩成单一主标签；其余三类分别对应语义空值、协议空值与碰撞空值。要求 \(\mathsf{lb}\) 与 \(\mathsf{aux}\) 都由有限有理或整数数据给出，使第三方在不访问生成轨迹的前提下也能复核拒绝的必要性。
+\end{definition}
+
+\begin{proposition}[最小接口闭包]\label{prop:typed-address-biaxial-completion-minimal-interface-closure}
+至此，本章形成的最小接口闭包可压成如下对象：
+\[
+\text{声明}
+\quad\rightsquigarrow\quad
+\text{三端有限证书}
+\;+\;
+\text{类型化精度}
+\;+\;
+\text{确定性离线验证器}
+\;+\;
+\text{标准化失败见证}.
+\]
+通过时，系统输出 \(\mathrm{NonZero}\)、\(\mathrm{RootInterval}\)、禁入半径、Toeplitz--PSD 或端点原子质量上界；拒绝时，则输出定义 \ref{def:typed-address-biaxial-completion-standardized-rejection} 的 \(W^{\flat}\)。因而协议内的“对象”不再只是数值结果，而是“可被三端证书与统一拒绝规则共同解释的声明”。
+\end{proposition}
+\begin{proof}
+命题 \ref{prop:typed-address-biaxial-completion-visible-read-partial}、命题 \ref{prop:typed-address-biaxial-completion-read-us-typed-precision}、命题 \ref{prop:typed-address-biaxial-completion-endpoint-heat-kernel-complement}、定义 \ref{def:typed-address-biaxial-completion-three-end-certificate}、命题 \ref{prop:typed-address-biaxial-completion-unified-rejection-rule} 与定义 \ref{def:typed-address-biaxial-completion-standardized-rejection} 共同给出这一闭包。证毕。
+\end{proof}
+
+因此，如果说 12A.12 完成的是“证书链闭环”，那么本节完成的就是“协议语义闭环”：它把可见域过滤、\(\mathrm{NULL}\) 三分、\(\mathrm{Read}_{\mathrm{US}}\)、三端有限证书与统一拒绝规则压成了一个单独可调用的接口层。沿着这个接口继续向后，第 13 章便不再需要重建整套协议语义，而只需把动力学 \(\zeta\)、有限部与 primitive 轨道谱接到这里已经封口的输入输出结构上。

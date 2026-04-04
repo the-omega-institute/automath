@@ -145,6 +145,74 @@ m_A(p,k)
 这就恢复了每个精确估值重数。由于仅有限多个素数整除 \(d_1\cdots d_m\)，且对每个此类素数只有有限多个 \(k\) 使得 \(e_i(p)\neq 0\)，故原子支撑有限。证毕。
 \end{proof}
 
+\begin{corollary}[Smith--Möbius 原子塔的高度、质量与尾部截面闭式]\label{cor:conclusion-smith-mobius-atom-tower-height-mass-tail}
+在定理 \ref{thm:conclusion-smith-loss-divisibility-mobius-atomization} 的设定下，对任意素数 \(p\) 与整数 \(k\ge 1\)，都有
+\[
+\mathfrak m_A(p^k)=\#\{i:\ e_i(p)\ge k\}\log p.
+\]
+因此：
+\begin{enumerate}
+  \item 原子塔支持高度满足
+  \[
+  \max\{k\ge 1:\ \mathfrak m_A(p^k)\neq 0\}
+  =
+  \max_i e_i(p)
+  =
+  v_p(d_m);
+  \]
+  \item 全部原子质量满足
+  \[
+  \frac{1}{\log p}\sum_{k\ge 1}\mathfrak m_A(p^k)
+  =
+  \sum_{i=1}^{m}e_i(p)
+  =
+  v_p(d_1\cdots d_m);
+  \]
+  \item 对任意 \(K\ge 1\)，尾部截面满足
+  \[
+  \frac{1}{\log p}\sum_{k\ge K}\mathfrak m_A(p^k)
+  =
+  \sum_{i=1}^{m}\max(e_i(p)-K+1,0).
+  \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+首式即定理 \ref{thm:conclusion-smith-loss-divisibility-mobius-atomization} 的显式公式。
+
+第一条中，\(\mathfrak m_A(p^k)\neq 0\) 当且仅当存在某个 \(i\) 使 \(e_i(p)\ge k\)，故最大支持高度正是 \(\max_i e_i(p)\)。又因为
+\[
+d_1\mid \cdots \mid d_m,
+\]
+故
+\[
+e_1(p)\le \cdots \le e_m(p),
+\]
+于是 \(\max_i e_i(p)=e_m(p)=v_p(d_m)\)。
+
+第二条交换求和次序：
+\[
+\frac{1}{\log p}\sum_{k\ge 1}\mathfrak m_A(p^k)
+=
+\sum_{k\ge 1}\#\{i:\ e_i(p)\ge k\}
+=
+\sum_{i=1}^{m}e_i(p)
+=
+v_p(d_1\cdots d_m).
+\]
+
+第三条同理，
+\[
+\frac{1}{\log p}\sum_{k\ge K}\mathfrak m_A(p^k)
+=
+\sum_{k\ge K}\#\{i:\ e_i(p)\ge k\}
+=
+\sum_{i=1}^{m}\#\{k\ge K:\ k\le e_i(p)\}
+=
+\sum_{i=1}^{m}\max(e_i(p)-K+1,0).
+\]
+证毕。
+\end{proof}
+
 \begin{corollary}[完整模核审计盲类的 Boolean 分解与精确补全位数]\label{cor:conclusion-ranktwo-kernel-audit-boolean-blindclass-bits}
 对任意 \(a,b\in\NN_{>0}\)，令
 \[
@@ -216,130 +284,9 @@ B_{\mathrm{unord}}^{\min}(a,b)=\max\{0,\omega(h)-1\}.
 证毕。
 \end{proof}
 
-\begin{theorem}[prime-addressable 补全的反向通信下界]\label{thm:conclusion-ranktwo-boolean-blindclass-primeaddressable-barrier}
-在推论 \ref{cor:conclusion-ranktwo-kernel-audit-boolean-blindclass-bits} 的设定下，记
-\[
-r:=\omega(h).
-\]
-考虑任意把盲类中的每一条素数块分配
-\[
-(\varepsilon_1,\dots,\varepsilon_r)\in\{0,1\}^r
-\]
-编码为一个正整数的补全协议，并要求该编码在逐坐标可寻址意义下保持每个 \(\varepsilon_j\) 的可恢复性。若其像落在区间 \([1,N]\) 内，则必有
-\[
-\boxed{\;
-\log N\ge \vartheta(p_r)=r\log r+r\log\log r+O(r),\;}
-\]
-其中 \(p_r\) 为第 \(r\) 个素数，\(\vartheta\) 为 Chebyshev 函数。等价地，
-\[
-\boxed{\;
-r\le (1+o(1))\frac{\log N}{\log\log N}.\;}
-\]
-因此，虽然盲类本身只含 \(2^r\) 个元素、抽象上仅需 \(r\) 比特即可区分，但一旦坚持 prime-addressable 的补全纪律，地址幅度便被强制抬升到 \(r\log r+r\log\log r\) 量级。
-\end{theorem}
-\begin{proof}
-由推论 \ref{cor:conclusion-ranktwo-kernel-audit-boolean-blindclass-bits}，盲类 \(\mathcal C(a,b)\) 精确等同于 \(r\) 个独立素数块的二元分配立方体。于是任一逐坐标可寻址的补全协议都诱导一个满足同样可寻址条件的单射
-\[
-E_r:\{0,1\}^r\hookrightarrow \NN_{\ge 1}.
-\]
-对这样的编码，定理 \ref{thm:conclusion-addressable-prime-ledger-reverse-communication-law} 在字母表 \(\Sigma=\{0,1\}\) 的情形下直接给出
-\[
-\max_{u\in\{0,1\}^r}\log E_r(u)\ge \vartheta(p_r)=r\log r+r\log\log r+O(r).
-\]
-若其像包含于 \([1,N]\)，则左端不超过 \(\log N\)，从而得到所示下界。再对 \(\vartheta(p_r)\sim r\log r\) 作渐近反演，即得
-\[
-r\le (1+o(1))\frac{\log N}{\log\log N}.
-\]
-证毕。
-\end{proof}
-
-\begin{corollary}[局部 Smith--\texorpdfstring{$\zeta$}{zeta} 证书与完整模核审计的同盲性]\label{cor:conclusion-local-smith-zeta-same-blindness-as-complete-audit}
-对任意整数矩阵 \(A\)，沿用推论 \ref{cor:conclusion-smith-local-zeta-complete-invariant} 定义局部 Smith--\(\zeta\) 证书
-\[
-\mathfrak Z_{A,p}(X):=\sum_{k\ge 0}p^{f_{A,p}(k)}X^k.
-\]
-则对 rank-two 对角对象 \(D_{a,b}\)，局部证书族
-\[
-\{\mathfrak Z_{D_{a,b},p}(X)\}_{p}
-\]
-与完整模核审计具有完全相同的盲方向。更精确地，对任意 \(c,d\in\NN_{>0}\)，有
-\[
-\boxed{\;
-\mathfrak Z_{D_{a,b},p}(X)=\mathfrak Z_{D_{c,d},p}(X)\ \forall p
-\iff
-(c,d)\in\mathcal C(a,b).\;}
-\]
-换言之，即便把全部坏素数上的局部 Smith--\(\zeta\) 证书一并交出，也仍不能分辨轴向素数块的分配；其所恢复者恰仍只是 rank-two Smith 轨道，而不是坐标级别的 prime allocation。
-\end{corollary}
-\begin{proof}
-由推论 \ref{cor:conclusion-smith-local-zeta-complete-invariant}，局部证书族
-\[
-\{\mathfrak Z_{A,p}(X)\}_{p}
-\]
-唯一决定矩阵 \(A\) 的全部 Smith 不变量。对 rank-two 对角矩阵 \(D_{a,b}\)，Smith 二元组恰为
-\[
-(\gcd(a,b),\operatorname{lcm}(a,b)).
-\]
-因此
-\[
-\mathfrak Z_{D_{a,b},p}(X)=\mathfrak Z_{D_{c,d},p}(X)\ \forall p
-\]
-当且仅当 \(D_{a,b}\) 与 \(D_{c,d}\) 具有相同的 Smith 二元组。再由定理 \ref{thm:conclusion-ellipse-kernel-audit-smith-orbit-blindness}，这又当且仅当
-\[
-(c,d)\in\mathcal C(a,b).
-\]
-证毕。
-\end{proof}
-
-\begin{corollary}[任意维 Boolean 审计盲胞腔的存在]\label{cor:conclusion-arbitrary-dimensional-boolean-audit-blind-cavity}
-对任意整数 \(r\ge 1\)，存在一个由 \(2^r\) 个有序对角对象组成的族
-\[
-\mathfrak B_r\subset \NN_{>0}^2
-\]
-满足：
-\begin{enumerate}
-  \item \(\mathfrak B_r\) 在完整模核审计下完全不可区分；
-  \item \(\mathfrak B_r\) 在全部局部 Smith--\(\zeta\) 证书下仍完全不可区分；
-  \item 区分 \(\mathfrak B_r\) 中全部对象所需的抽象最小附加位数恰为 \(r\)；
-  \item 若坚持 prime-addressable 补全，则地址幅度必满足
-  \[
-  \log N\ge \vartheta(p_r)=r\log r+r\log\log r+O(r).
-  \]
-\end{enumerate}
-可以显式取
-\[
-\mathfrak B_r=
-\left\{
-\left(
-g\prod_{j=1}^{r}p_j^{\varepsilon_j},
-\;
-g\prod_{j=1}^{r}p_j^{1-\varepsilon_j}
-\right):
-\ \varepsilon\in\{0,1\}^r
-\right\},
-\]
-其中 \(p_1,\dots,p_r\) 为互异素数，\(g\in\NN_{>0}\) 任意固定。
-\end{corollary}
-\begin{proof}
-取
-\[
-h:=\prod_{j=1}^{r}p_j,
-\]
-则 \(h\) 平方自由且 \(\omega(h)=r\)。由推论 \ref{cor:conclusion-ranktwo-kernel-audit-boolean-blindclass-bits}，固定 \(g\) 与 \(h\) 之后，对应盲类正好是由每个素数块整体分配到第一轴或第二轴的全部 \(2^r\) 种选择，因此 \(\mathfrak B_r\) 在完整模核审计下完全不可区分，且抽象最小附加位数恰为
-\[
-\log_2 |\mathfrak B_r|=\log_2 2^r=r.
-\]
-
-再由推论 \ref{cor:conclusion-local-smith-zeta-same-blindness-as-complete-audit}，同一族在全部局部 Smith--\(\zeta\) 证书下仍位于同一盲类。
-
-最后，对任何 prime-addressable 补全，定理 \ref{thm:conclusion-ranktwo-boolean-blindclass-primeaddressable-barrier} 立即给出
-\[
-\log N\ge \vartheta(p_r)=r\log r+r\log\log r+O(r).
-\]
-证毕。
-\end{proof}
+\input{thm__conclusion-smith-ranktwo-boolean-torsor-primorial-tax}
 
 \noindent
-由此，Smith 亏损谱、完整模核审计与局部 Smith--\(\zeta\) 证书在结论层形成了一条严格闭合的链：整除格上的 Möbius 反演把亏损函数原子化为有限多个素数幂尾计数层；rank-two 对角对象的完整模核盲类则精确退化为一个由 \(r=\omega(h)\) 个素数块构成的 Boolean 立方体；而一旦要求 prime-addressable 的逐坐标可恢复补全，这个抽象 \(r\)-比特立方体的通信代价便不再是线性比特，而是被 Chebyshev 型下界强制抬升到 \(r\log r+r\log\log r\) 量级。换言之，Smith 轨道、prime allocation 与可审计补全复杂度在此不再是三条分离叙述，而是同一盲胞腔几何的三种等价投影。
+由此，Smith 亏损谱、完整模核审计与局部 Smith--\(\zeta\) 证书在结论层形成了一条更完整的闭合链：整除格上的 Möbius 反演把亏损函数原子化为有限多个素数幂尾计数层，并把每个坏素数塔的支持高度、总质量与任意尾部截面都闭式锁定；rank-two 对角对象的完整模核盲类则进一步精确退化为一个由 \(r=\omega(h)\) 个素数块构成的 Boolean torsor，在其上整个轨道级审计严格常值，只看得见维数而看不见顶点；而一旦要求 prime-addressable 的逐坐标可恢复补全，这个抽象 \(r\)-比特 torsor 的制度代价便不只是存在下界，而是被 primorial 最优值 \(\vartheta(p_r)\) 精确钉住，于是单位 blind-bit 成本按 \(\log r+\log\log r\) 发散。换言之，Smith 轨道、prime allocation 与可审计补全复杂度在此不再是三条分离叙述，而是同一 Boolean 盲胞腔几何的三种等价投影。
 
 \endinput

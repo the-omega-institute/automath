@@ -649,9 +649,9 @@
    - `maxFiberMultiplicity_even` / `maxFiberMultiplicity_odd` 目前只覆盖小范围 `k`；一般闭式仍依赖 `two_step` 条件版本。
    - `S_q`、纤维谱、碰撞核矩阵中的不少命题是 `native_decide` 基值或有界区间验证，应与统一结构证明区分记账，不宜写成“完整闭式/完整递推已证”。
    - 后续文档中凡出现“完整”“闭式”“无界递推已完成”字样，必须明确区分：无条件证明、条件性证明、有界验证、纯计算基值。
-4. **`Audit/NoAxiom.lean` 目前仍是手工审计清单，不是 CI 级自动闸门**：
-   - 当前文件主要提供 `#print axioms` 的人工检查命令和目标列表；“无公理”结论尚未被构造成可执行、可失败的自动审计目标。
-   - 后续需要补一个可由 `lake build`/独立 audit target 调用的自动检查步骤。
+4. **`Audit/NoAxiom.lean` 的纯手工状态已经被部分收口，但 theorem-level 公理闭包审计仍未完成**：
+   - 现已补入 `lean4/scripts/omega_ci.py audit`，并接入 Lean CI；当前自动闸门会检查 `sorry`、`admit`、源码级 `axiom` 关键字，以及未绑定到声明的 paper-label doc block。
+   - 这解决了“没有可执行 audit target”的问题，但仍不是 `#print axioms` 级别的语义闭包审计；若要把“无公理”结论提升到 theorem-level 依赖闭包，还需要后续补更强的 Lean 内部检查步骤。
 5. **覆盖率/完成度口径需要分层统计**：
    - 底层数学层（Core/Folding/SPG/Graph）与 Frontier 包装层必须分开统计。
    - `native_decide` 基值、接口重导出、证书包装，不应与结构性定理、统一归纳证明、同构/极限定理混合计数。

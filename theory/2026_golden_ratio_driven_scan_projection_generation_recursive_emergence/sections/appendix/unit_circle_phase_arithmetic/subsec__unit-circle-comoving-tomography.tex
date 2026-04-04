@@ -1,0 +1,223 @@
+\subsection{共动破盲与可逆层析：前缀外置、Fourier--Laplace 全息与低秩 Hankel--Prony 恢复}\label{subsec:unit-circle-comoving-tomography}
+上一小节的三端预算说明，单纯在固定图表中继续堆叠同一轴的资源，并不能自动破除盲区。真正的破盲只剩两条协议路径：其一是把高度依赖外置为可寻址前缀，转入共动图表；其二是把边界扫描识别为有限指数谱，从而进入可逆层析通道。
+
+\begin{definition}[共动视界图表]\label{def:unit-circle-comoving-chart}
+对离切片事件 \(\rho=\beta+\mathrm{i}\gamma\) 与偏移量 \(\delta=\frac12-\beta>0\)，对任意平移参数 \(x_0\in\RR\) 定义共动像
+\[
+w_{\rho,x_0}:=C\bigl((\gamma-x_0)+\mathrm{i}\delta\bigr),
+\]
+并定义其端点深度
+\[
+h_{x_0}(\rho):=1-|w_{\rho,x_0}|^2.
+\]
+这里 \(x_0\) 被视为对象层显式给定的前缀；若前缀未给定，则该评价在协议语义中不定义。
+\end{definition}
+
+\begin{proposition}[固定图表的二次压缩与共动图表的一阶显影]\label{prop:unit-circle-comoving-first-order}
+在固定图表 \(x_0=0\) 下，
+\[
+h_0(\rho)=\frac{4\delta}{\gamma^2+(1+\delta)^2},
+\]
+故高高度下可见深度按 \(\gamma^{-2}\) 红移压缩。若改取共动前缀 \(x_0=\gamma\)，则
+\[
+w_{\rho,\gamma}=C(\mathrm{i}\delta)=\frac{1-\delta}{1+\delta}\in(0,1),
+\qquad
+h_\gamma(\rho)=\frac{4\delta}{(1+\delta)^2}\sim 4\delta.
+\]
+因此高度变量从可见深度中消失，离切片偏移被降为一阶可见量。
+\end{proposition}
+\begin{proof}
+把 \(z=(\gamma-x_0)+\mathrm{i}\delta\) 代入 Cayley 变换 \(C(z)\) 的显式公式即可。固定图表对应 \(|\gamma|\) 出现在分母二次项中；而在 \(x_0=\gamma\) 的共动图表下，仅剩偏移量 \(\delta\)。
+\end{proof}
+
+\begin{proposition}[共动缺陷界导出的偏移上界]\label{prop:unit-circle-comoving-defect-bound}
+若存在 \(0<\varrho<1\) 与 \(\varepsilon\ge 0\)，使得共动图表 \(x_0=\gamma\) 上的 Jensen 缺陷满足
+\[
+D_{\zeta,\gamma}(\varrho)\le \varepsilon,
+\]
+则相应离切片偏移必满足
+\[
+\delta\le \frac{1-\varrho e^{-\varepsilon}}{1+\varrho e^{-\varepsilon}}.
+\]
+\end{proposition}
+\begin{proof}
+在共动图表下，可见半径由 \(\delta\) 单调决定；将 Jensen 禁入半径界改写为 \(|w_{\rho,\gamma}|\le \varrho e^{-\varepsilon}\)，再代入
+\(
+w_{\rho,\gamma}=\frac{1-\delta}{1+\delta}
+\)
+即可解得结论。
+\end{proof}
+
+\begin{theorem}[图表一致小化判别]\label{thm:unit-circle-comoving-uniform-minimization}
+设 \((\varrho_n)_{n\ge 1}\subset(0,1)\)、\((\varepsilon_n)_{n\ge 1}\subset[0,\infty)\) 满足
+\[
+\varrho_n\uparrow 1,
+\qquad
+\varepsilon_n\downarrow 0,
+\qquad
+\sup_{x_0\in\RR}D_{\zeta,x_0}(\varrho_n)\le \varepsilon_n.
+\]
+定义
+\[
+\Delta_n:=\frac{1-\varrho_n e^{-\varepsilon_n}}{1+\varrho_n e^{-\varepsilon_n}}.
+\]
+则任意非平凡事件 \(\rho=\beta+\mathrm{i}\gamma\) 满足
+\[
+\beta\ge \frac12-\Delta_n
+\qquad(\forall n).
+\]
+特别地，若 \(\Delta_n\to 0\)，则全部非平凡事件被压回临界切片。
+\end{theorem}
+
+\begin{definition}[有限缺陷测度与共动扫描剖面]\label{def:unit-circle-comoving-profile}
+设有限缺陷测度
+\[
+\nu=\sum_{j=1}^{\kappa} m_j\,\delta_{(\gamma_j,\delta_j)},
+\qquad
+m_j\in\NN,\ \delta_j\in(0,1).
+\]
+定义一维共动扫描剖面
+\[
+H_\nu(x):=
+\sum_{j=1}^{\kappa}
+\frac{4m_j\delta_j}{(x-\gamma_j)^2+(1+\delta_j)^2}.
+\]
+\end{definition}
+
+\begin{proposition}[Fourier 闭式与一维剖面的可逆性]\label{prop:unit-circle-comoving-fourier-closed-form}
+定义 \(\widehat H_\nu(\xi)=\int_{\RR}H_\nu(x)e^{-\mathrm{i} x\xi}\,dx\)。则
+\[
+\widehat H_\nu(\xi)=
+4\pi\sum_{j=1}^{\kappa}
+m_j\frac{\delta_j}{1+\delta_j}
+e^{-(1+\delta_j)|\xi|}e^{-\mathrm{i}\gamma_j\xi}.
+\]
+因此 \(\widehat H_\nu\) 在 \(\xi>0\) 上是一条有限指数和；由互异指数函数的线性无关性，任意非空开区间上的 \(H_\nu\) 都唯一决定全部参数 \(\{(\gamma_j,\delta_j,m_j)\}\)。
+\end{proposition}
+\begin{proof}
+\(\frac{1}{x^2+a^2}\) 的 Fourier 变换为 \(\pi a^{-1}e^{-a|\xi|}\)。对每个洛伦兹峰逐项应用该公式，并将中心平移 \(\gamma_j\) 编译为相位因子 \(e^{-\mathrm{i}\gamma_j\xi}\)，即可得到闭式。
+\end{proof}
+
+\begin{definition}[二维 Fourier--Laplace 指纹与有限秩核]\label{def:unit-circle-comoving-fingerprint}
+对同一测度 \(\nu\)，定义
+\[
+F_\nu(\xi,s):=
+4\pi\sum_{j=1}^{\kappa}
+m_j\frac{\delta_j}{1+\delta_j}
+e^{-s\delta_j}e^{-\mathrm{i}\gamma_j\xi},
+\qquad
+(\xi,s)\in\RR\times[0,\infty),
+\]
+以及有限秩核
+\[
+K_\nu(x,y):=
+\sum_{j=1}^{\kappa}
+\frac{4m_j\delta_j}{
+\bigl(x-\gamma_j+\mathrm{i}(1+\delta_j)\bigr)
+\bigl(y-\gamma_j-\mathrm{i}(1+\delta_j)\bigr)}.
+\]
+此时 \(K_\nu(x,x)=H_\nu(x)\)。
+\end{definition}
+
+\begin{proposition}[二维指纹的张量分解与唯一性]\label{prop:unit-circle-comoving-fingerprint-uniqueness}
+记
+\[
+\widetilde\nu:=
+4\pi\sum_{j=1}^{\kappa}
+m_j\frac{\delta_j}{1+\delta_j}\,\delta_{(\gamma_j,\delta_j)}.
+\]
+则
+\[
+F_\nu(\xi,s)
+=
+\int_{\RR\times(0,\infty)}
+e^{-\mathrm{i}\gamma\xi}e^{-s\delta}\,d\widetilde\nu(\gamma,\delta),
+\]
+故映射 \(\nu\mapsto F_\nu\) 在有限原子测度类上为单射。并且 \(\nu\)、\(H_\nu|_I\)、\(F_\nu\) 与 \(K_\nu\) 在任意非空开区间 \(I\subset\RR\) 上彼此唯一决定。
+\end{proposition}
+
+\begin{remark}[递归层剥离]\label{rem:unit-circle-comoving-layer-peeling}
+若按深度值 \(\delta^{(1)}<\cdots<\delta^{(r)}\) 分层，则 \(\widehat H_\nu\) 的衰减率按 \(e^{-(1+\delta^{(s)})|\xi|}\) 排序。故可先乘上最慢衰减层的指数因子并取 \(|\xi|\to\infty\) 极限，以剥离当前层，再对该层做有限 Fourier 反演；如此递归，有限步后即可恢复全部原子参数。
+\end{remark}
+
+\begin{definition}[等距频谱样本与指数节点]\label{def:unit-circle-comoving-discrete-samples}
+固定步长 \(\Delta>0\)，定义离散样本
+\[
+u_n:=\widehat H_\nu(n\Delta)
+=\sum_{j=1}^{\kappa}A_j z_j^n,
+\]
+其中
+\[
+A_j:=4\pi m_j\frac{\delta_j}{1+\delta_j}>0,
+\qquad
+z_j:=e^{-(1+\delta_j)\Delta}e^{-\mathrm{i}\gamma_j\Delta}.
+\]
+\end{definition}
+
+\begin{proposition}[Hankel 因子化与秩证书]\label{prop:unit-circle-comoving-hankel-factorization}
+定义 Hankel 块
+\[
+H_{\kappa-1}:=(u_{p+q})_{0\le p,q\le \kappa-1}.
+\]
+若节点 \(z_j\) 两两不同，则
+\[
+H_{\kappa-1}=V\,\operatorname{diag}(A_1,\dots,A_\kappa)\,V^{\mathsf T},
+\]
+其中 \(V\) 为 Vandermonde 矩阵，故
+\[
+\operatorname{rank}(H_{\kappa-1})=\kappa.
+\]
+\end{proposition}
+\begin{proof}
+把 \(u_{p+q}=\sum_j A_j z_j^{p+q}\) 写成
+\(
+\sum_j (z_j^p)A_j(z_j^q)
+\)
+即可得到标准的 Hankel--Vandermonde 分解。
+\end{proof}
+
+\begin{theorem}[Prony 门槛]\label{thm:unit-circle-comoving-prony-threshold}
+在一般位置下，判定 \(\operatorname{rank}(H_{\kappa-1})=\kappa\) 的最短前缀是
+\[
+(u_0,\dots,u_{2\kappa-2}),
+\]
+即长度 \(2\kappa-1\) 的样本；若要求进一步唯一恢复全部节点与权重，则一般还需再加一项，亦即完整窗口
+\[
+(u_0,\dots,u_{2\kappa-1})
+\]
+的 \(2\kappa\) 个样本。
+\end{theorem}
+
+\begin{corollary}[碰撞极限下的不适定性]\label{cor:unit-circle-comoving-collision-instability}
+记
+\[
+s_{\mathrm{sep}}:=\min_{j\neq k}|z_j-z_k|.
+\]
+则任何基于有限样本的局部反演，其 Lipschitz 放大因子都至少满足
+\[
+L\ge C_\kappa\,s_{\mathrm{sep}}^{-(\kappa-1)}.
+\]
+特别地，当两节点发生近碰撞时，层析虽保持可逆，但稳定反演的条件数必然爆炸。
+\end{corollary}
+
+\begin{proposition}[固定图表的位预算与共动前缀收益]\label{prop:unit-circle-comoving-bit-budget}
+在固定图表下，若要求在高度窗 \(|\gamma|\le T\)、偏移满足 \(\delta\ge\delta_0>0\) 的情形中分辨端点余量，则所需位精度 \(p\) 至少满足
+\[
+p\ge 2\log_2 T+\log_2\frac1{\delta_0}+O(1).
+\]
+若允许外置共动前缀并取 \(x_0=\gamma\)，则对应位预算降为与高度无关的常数量级；其代价并未消失，而是从径向精度账本转移到了地址前缀账本。
+\end{proposition}
+
+\begin{proposition}[紧化读出的径向位复杂度]\label{prop:unit-circle-comoving-radial-bit-complexity}
+对紧化坐标
+\[
+u=\pi^{-1}\arctan(x),
+\]
+若要求读出误差不超过 \(\varepsilon\)，则 dyadic 位数 \(n\) 至少满足
+\[
+n\ge \log_2\frac1\varepsilon+\log_2(1+x^2)+\log_2\pi+O(1).
+\]
+因此，共动前缀能够回收的是高度红移造成的那部分预算，而不是取消边界紧化自身的基本精度代价。
+\end{proposition}
+
+综上，边界层的真正破盲可压缩为两条链：一条把高度依赖外置为共动前缀，从而把二次压缩降为一阶显影；另一条把扫描剖面识别为有限指数谱，从而进入 Fourier--Laplace 与 Hankel--Prony 的可逆层析类。前者回收红移预算，后者回收可逆性预算，两者合在一起，才把结构性盲区改写为有限证书问题。

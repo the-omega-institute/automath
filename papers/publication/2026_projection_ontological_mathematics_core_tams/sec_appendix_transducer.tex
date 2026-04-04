@@ -1,0 +1,221 @@
+\section{A bounded-delay transducer model for the finite-window fold}
+\label{app:transducer}
+
+To make the finite-state kernel construction of
+\Cref{thm:collision-kernel,thm:symmetric-compression} self-contained, we spell
+out the transducer-level mechanism behind it.  The only external input is the
+classical existence of a deterministic subsequential transducer for Fibonacci
+normalization of finite words read from the most significant digit to the least;
+see \cite{Frougny1992NumbersAutomata,Frougny1999OnlineAddition}.
+
+For \(\omega=(\omega_1,\dots,\omega_m)\in\Omega_m\), write
+\[
+  \omega^{\mathrm{rev}}:=\omega_m\cdots \omega_1
+\]
+for the corresponding most-significant-digit-first input word.  Fix once and
+for all a deterministic subsequential transducer
+\[
+  \mathcal T=(Q,q_0,\delta,\lambda,\tau)
+\]
+with input alphabet \(\{0,1\}\), output alphabet \(\{0,1\}\), transition map
+\(\delta\), transition-output map \(\lambda\colon Q\times\{0,1\}\to\{0,1\}^*\),
+and terminal-output map \(\tau\colon Q\to\{0,1\}^*\), such that the total
+output
+\[
+  \Lambda(a_1\cdots a_m)
+  :=
+  \lambda^*(q_0,a_1\cdots a_m)\,
+  \tau(\delta^*(q_0,a_1\cdots a_m))
+\]
+is the Zeckendorf normalization of the input word \(a_1\cdots a_m\), written
+in the same most-significant-digit-first orientation.  Set
+\[
+  L:=\max_{s\in Q}|\tau(s)|.
+\]
+
+\begin{lemma}[One-digit overflow decomposition]
+\label{lem:appendix-overflow-digit}
+For every \(\omega\in\Omega_m\), let \(x=\Fold_m(\omega)\).  Then there exists
+\(\varepsilon_m(\omega)\in\{0,1\}\) such that
+\[
+  \Lambda(\omega^{\mathrm{rev}})
+  =
+  \varepsilon_m(\omega)\,x_m\cdots x_1.
+\]
+In particular, the full normalized word has length at most \(m+1\), and after
+deleting its first symbol one recovers the visible word of the finite-window
+fold in reversed order.
+\end{lemma}
+
+\begin{proof}
+Since
+\[
+  N_m(\omega)=\sum_{j=1}^m \omega_jF_{j+1}
+  \le
+  \sum_{j=1}^m F_{j+1}
+  =
+  F_{m+3}-2
+  <
+  2F_{m+2},
+\]
+there is a unique \(\varepsilon_m(\omega)\in\{0,1\}\) such that
+\[
+  N_m(\omega)
+  =
+  \varepsilon_m(\omega)F_{m+2}+r
+\]
+with \(0\le r<F_{m+2}\).  By definition of the finite-window fold,
+\[
+  r=V_m(\Fold_m(\omega))=V_m(x)=\sum_{j=1}^m x_jF_{j+1}.
+\]
+Hence
+\[
+  N_m(\omega)
+  =
+  \varepsilon_m(\omega)F_{m+2}+\sum_{j=1}^m x_jF_{j+1}.
+\]
+If \(\varepsilon_m(\omega)=1\), then
+\[
+  r=N_m(\omega)-F_{m+2}<F_{m+1},
+\]
+because \(N_m(\omega)\le F_{m+3}-2\).  Therefore the top visible digit of
+\(x\) vanishes: \(x_m=0\).  Hence the word
+\(\varepsilon_m(\omega)x_m\cdots x_1\) is admissible.
+Therefore it is the Zeckendorf normalization of \(N_m(\omega)\), which is
+exactly \(\Lambda(\omega^{\mathrm{rev}})\).
+\end{proof}
+
+\begin{definition}[Visible truncation of an output word]
+\label{def:appendix-visible-truncation}
+For \(y\in\{0,1\}^*\), let \(\operatorname{vis}(y)\) be the word obtained from
+\(y\) by deleting its first symbol when \(|y|\ge 1\), and let
+\(\operatorname{vis}(y):=\varepsilon\) when \(y\) is empty.
+\end{definition}
+
+\begin{lemma}[Prefix stability for visible outputs]
+\label{lem:appendix-prefix-stability}
+If \(u\) is a prefix of \(v\) in \(\{0,1\}^*\), then
+\(\operatorname{vis}(\Lambda(u))\) and \(\operatorname{vis}(\Lambda(v))\) have
+a common prefix of length at least
+\[
+  |\operatorname{vis}(\Lambda(u))|-(L+1).
+\]
+Equivalently, after any processed prefix, at most the final \(L+1\) visible
+symbols can still be altered by extending the input.
+\end{lemma}
+
+\begin{proof}
+Write \(v=uw\), let \(s=\delta^*(q_0,u)\), and decompose the run as
+\[
+  \Lambda(u)=\alpha\,\tau(s),
+  \qquad
+  \Lambda(v)=\alpha\,\beta\,\tau(t)
+\]
+for some word \(\beta\) and some state \(t\).  Thus \(\Lambda(u)\) and
+\(\Lambda(v)\) have a common prefix of length
+\[
+  |\alpha|=|\Lambda(u)|-|\tau(s)|\ge |\Lambda(u)|-L.
+\]
+Deleting the first symbol from each word shortens the common prefix by at most
+one, so the visible truncations share a prefix of length at least
+\[
+  |\Lambda(u)|-L-1=|\operatorname{vis}(\Lambda(u))|-(L+1).
+\]
+\end{proof}
+
+\begin{definition}[Committed and residual visible output]
+\label{def:appendix-cut}
+For a finite word \(y\in\{0,1\}^*\), write
+\[
+  y=\operatorname{com}(y)\,\operatorname{res}(y),
+\]
+where \(\operatorname{res}(y)\) is the suffix of \(y\) of length at most
+\(L+1\), and \(\operatorname{com}(y)\) is the complementary prefix.
+\end{definition}
+
+\begin{proposition}[Finite collision automaton]
+\label{prop:appendix-collision-automaton}
+Fix \(q\ge 2\).  Set
+\[
+  \widehat Q:=Q\times\{0,1\}^{\le L+1}\times\{0,1\}.
+\]
+There is a finite automaton on \(\widehat Q^q\) with one transition per input
+digit such that, for every \(m\ge 0\), accepted length-\(m\) paths are in
+canonical bijection with \(q\)-tuples
+\[
+  (\omega^{(1)},\dots,\omega^{(q)})\in\Omega_m^q
+\]
+satisfying
+\[
+  \Fold_m(\omega^{(1)})=\cdots=\Fold_m(\omega^{(q)}).
+\]
+Consequently there exist a nonnegative integer matrix \(A_q\) and nonnegative
+integer vectors \(u_q,v_q\) such that
+\[
+  S_q(m)=u_q^{\mathsf T}A_q^m v_q
+  \qquad (m\ge 0).
+\]
+\end{proposition}
+
+\begin{proof}
+For a one-copy augmented state \((s,r,e)\in\widehat Q\), the meaning is:
+\(s\) is the current transducer state, \(r\) is the residual visible suffix
+that may still change under future extensions, and \(e\in\{0,1\}\) records
+whether the initial overflow digit of \Cref{lem:appendix-overflow-digit} has
+already been deleted.
+
+Given input digit \(a\in\{0,1\}\), form the temporary word
+\[
+  w:=r\,\lambda(s,a).
+\]
+If \(e=0\), delete the first symbol of \(w\) whenever \(|w|\ge 1\), and let
+\(e'=1\) precisely when that deletion has occurred.  If \(e=1\), keep \(w\)
+unchanged and set \(e'=1\).  Denote the resulting word by \(w_{\mathrm{vis}}\).
+Now apply \Cref{def:appendix-cut}:
+\[
+  w_{\mathrm{vis}}
+  =
+  c\,r',
+\]
+with \(|r'|\le L+1\).  The update rule is
+\[
+  (s,r,e)\xrightarrow{\,a\,}(\delta(s,a),r',e'),
+\]
+and the newly committed visible block is \(c\).
+
+By \Cref{lem:appendix-prefix-stability}, every continuation of the current input
+must begin its visible output with the already committed block \(c\); only the
+stored suffix \(r'\) can still change.  Hence, in a synchronized \(q\)-copy
+run, a transition labelled by \((a_1,\dots,a_q)\in\{0,1\}^q\) is admissible if
+and only if the corresponding committed blocks \(c_1,\dots,c_q\) are all equal.
+Whenever they disagree, the visible outputs can never be repaired by a later
+continuation, so the run enters a rejecting sink.
+
+After reading \(m\) digits, each copy sits in a state \((s_i,r_i,e_i)\).  The
+remaining visible suffix is obtained by appending the terminal word \(\tau(s_i)\)
+to \(r_i\), performing the possible initial deletion if \(e_i=0\), and keeping
+the resulting word.  Because \(|r_i|\le L+1\) and \(|\tau(s_i)|\le L\), this
+terminal suffix has length at most \(2L+1\).  A terminal \(q\)-tuple is
+accepting exactly when these final suffixes are identical in all coordinates.
+
+By construction, a synchronized run avoids rejection and ends in an accepting
+terminal state if and only if the committed visible blocks agree at every stage
+and the remaining unresolved suffixes agree at the end.  This is equivalent to
+equality of the full visible words, which are precisely the reversed
+finite-window folds by \Cref{lem:appendix-overflow-digit}.  Therefore accepted
+paths of length \(m\) are exactly the \(q\)-tuples counted by \(S_q(m)\).
+
+Let \(A_q\) be the adjacency matrix of the non-sink part of this finite
+automaton, let \(u_q\) select the unique initial synchronized state
+\(((q_0,\varepsilon,0),\dots,(q_0,\varepsilon,0))\), and let \(v_q\) mark the
+accepting terminal states.  Then the accepted path count is
+\[
+  u_q^{\mathsf T}A_q^m v_q=S_q(m).
+\]
+\end{proof}
+
+The proof of \Cref{thm:symmetric-compression} is now immediate from
+\Cref{prop:appendix-collision-automaton}: one simply replaces the one-copy state
+set \(Q\) there by the finite augmented state set \(\widehat Q\).  The histogram
+quotient therefore acts on weak compositions of \(q\) into \(|\widehat Q|\)
+parts, so its dimension remains polynomial in \(q\).
