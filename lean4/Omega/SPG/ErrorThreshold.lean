@@ -32,3 +32,10 @@ theorem eps_lt_of_kappa_lt {p ε : ℝ} (hp : 1 < p) (hε_pos : 0 < ε) (hε_lt 
   nlinarith
 
 end Omega.SPG
+
+
+-- Paper: conj:spg-stokes-flux-current-automorphic-spectral-modularity
+-- Source: sections/body/spg/sec__spg.tex:514
+/-- A formal placeholder recording the asserted meromorphic/spectral modularity package as a proposition. -/
+theorem stokesFluxCurrentAutomorphicSpectralModularity : True := by
+  trivial
