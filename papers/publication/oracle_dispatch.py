@@ -260,6 +260,63 @@ def wait_for_result(result_path: Path, timeout: int = 900, poll: int = 5) -> str
     return ""
 
 
+def dispatch_api(task_name: str, prompt_text: str, pdf_path: Path | None = None,
+                 model: str = "o3-mini-high") -> str:
+    """Submit via chatgpt_api.py direct API (fastest, no browser needed).
+
+    Requires a valid token saved via: python chatgpt_api.py --setup
+    """
+    try:
+        from chatgpt_api import get_token, upload_file, send_message
+    except ImportError:
+        api_script = Path(__file__).parent / "chatgpt_api.py"
+        if api_script.exists():
+            import importlib.util
+            spec = importlib.util.spec_from_file_location("chatgpt_api", api_script)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            get_token, upload_file, send_message = mod.get_token, mod.upload_file, mod.send_message
+        else:
+            print("[dispatch] chatgpt_api.py not found", file=sys.stderr)
+            return ""
+
+    done = ORACLE_DIR / "done"
+    done.mkdir(parents=True, exist_ok=True)
+
+    try:
+        token = get_token()
+    except SystemExit:
+        print("[dispatch] No API token. Run: python chatgpt_api.py --setup", file=sys.stderr)
+        return ""
+
+    file_info = None
+    if pdf_path and pdf_path.exists():
+        print(f"[dispatch-api] Uploading {pdf_path.name}...")
+        file_info = upload_file(token, pdf_path)
+
+    print(f"[dispatch-api] Sending to ChatGPT ({model})...")
+    response = send_message(token, prompt_text, model=model, file_info=file_info)
+
+    if response:
+        import json as _json
+        out_file = done / f"{task_name}.md"
+        metadata = {
+            "timestamp": datetime.now().isoformat(),
+            "model": model,
+            "prompt_length": len(prompt_text),
+            "response_length": len(response),
+            "mode": "direct_api",
+        }
+        if pdf_path:
+            metadata["pdf"] = str(pdf_path)
+        out_file.write_text(
+            f"<!-- oracle metadata: {_json.dumps(metadata)} -->\n\n{response}",
+            encoding="utf-8",
+        )
+        print(f"[dispatch-api] Response saved: {out_file} ({len(response)} chars)")
+    return response
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Oracle dispatch — submit tasks to ChatGPT Pro",
@@ -283,6 +340,8 @@ def main():
                         help="Skip PDF compilation (use existing main.pdf)")
     parser.add_argument("--clipboard", action="store_true",
                         help="Use clipboard fallback instead of direct API")
+    parser.add_argument("--api", action="store_true",
+                        help="Use chatgpt_api.py direct API (fastest, needs token)")
     parser.add_argument("--model", type=str, default="o3-mini-high",
                         help="ChatGPT model (default: o3-mini-high)")
     args = parser.parse_args()
@@ -321,8 +380,20 @@ def main():
         parts.append(datetime.now().strftime("%H%M%S"))
         task_name = "_".join(parts)
 
-    # Dispatch via direct API or clipboard fallback
-    if args.clipboard:
+    # Dispatch via direct API, browser bridge, or clipboard fallback
+    if args.api:
+        # Fastest: use chatgpt_api.py direct API
+        response = dispatch_api(task_name, prompt_text, pdf_path, model=args.model)
+        if response:
+            if args.wait:
+                import io, sys as _sys
+                _sys.stdout = io.TextIOWrapper(_sys.stdout.buffer, encoding="utf-8", errors="replace")
+                print(f"\n{'='*60}")
+                print(response)
+        else:
+            print("[dispatch] ERROR: No response from API. Check token.", file=sys.stderr)
+            sys.exit(1)
+    elif args.clipboard:
         result_path = dispatch_clipboard(task_name, prompt_text, pdf_path)
         if args.wait:
             result = wait_for_result(result_path, timeout=args.timeout)
@@ -334,7 +405,7 @@ def main():
         else:
             print(f"[dispatch] Task dispatched. Run: chatgpt_oracle.py --watch oracle/")
     else:
-        # Direct API (fully automated)
+        # Browser bridge (oracle_server.py + Tampermonkey)
         response = dispatch_direct(task_name, prompt_text, pdf_path, model=args.model)
         if response:
             if args.wait:
