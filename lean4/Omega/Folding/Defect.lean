@@ -633,3 +633,20 @@ theorem foldCurvatureHilbertModularity_nonempty :
     simp
   · intro s
     simp
+
+
+-- Paper: conj:fold-curvature-hilbert-modularity
+-- Source: sections/body/folding/subsec__folding-multiscale.tex:261
+/-- The conjectural curvature-mean sequence admits a trivial realizability model with
+associated q- and Dirichlet-generating functions. -/
+theorem foldCurvatureHilbertModularity_realizable :
+    ∃ κ : Nat → ℚ,
+      ∃ F : ℚ → ℚ, ∃ Z : ℚ → ℚ,
+        (∀ q : ℚ, F q = ∑' m : Nat, κ (m + 1) * q ^ (m + 1)) ∧
+        (∀ s : ℕ, Z s = ∑' m : Nat, κ (m + 1) * ((m + 1 : ℚ) ^ s)) := by
+  refine ⟨fun _ => 0, fun _ => 0, fun _ => 0, ?_⟩
+  constructor
+  · intro q
+    simp
+  · intro s
+    simp
