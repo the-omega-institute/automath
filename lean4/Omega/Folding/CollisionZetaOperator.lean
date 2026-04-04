@@ -522,3 +522,87 @@ theorem momentSum_one_instances :
   simp [momentSum_one]
 
 end Omega
+
+
+-- Paper: def:pom-fiber-signed-index
+-- Source: sections/body/pom/parts/def__pom-ind-lyapunov-fingerprint.tex:133
+/-- The signed fiber index is the specialization of the fiber polynomial at `-1`. -/
+def fiberSignedIndex (m : Nat) (x : X m) : ℤ :=
+  ∑ ω in (Finset.univ.filter fun ω : Fin m → Bool => fold ω = x),
+    (-1 : ℤ) ^ hiddenBitCount ω
+
+-- Paper: def:pom-fiber-signed-index
+-- Source: sections/body/pom/parts/def__pom-ind-lyapunov-fingerprint.tex:133
+/-- Expanding the signed fiber index gives the alternating sum over all words in the fiber. -/
+theorem fiberSignedIndex_eq_sum_filter (m : Nat) (x : X m) :
+    fiberSignedIndex m x =
+      ∑ ω in (Finset.univ.filter fun ω : Fin m → Bool => fold ω = x),
+        (-1 : ℤ) ^ hiddenBitCount ω := by
+  unfold fiberSignedIndex
+  simp
+
+-- Paper: def:pom-fiber-signed-index
+-- Source: sections/body/pom/parts/def__pom-ind-lyapunov-fingerprint.tex:133
+/-- The signed fiber index splits the fiber into even and odd hidden-bit contributions. -/
+theorem fiberSignedIndex_eq_even_sub_odd (m : Nat) (x : X m) :
+    fiberSignedIndex m x =
+      ((Finset.univ.filter fun ω : Fin m → Bool =>
+          fold ω = x ∧ Even (hiddenBitCount ω)).card : ℤ)
+      -
+      ((Finset.univ.filter fun ω : Fin m → Bool =>
+          fold ω = x ∧ ¬ Even (hiddenBitCount ω)).card : ℤ) := by
+  classical
+  unfold fiberSignedIndex
+  rw [Finset.sum_filter, Finset.sum_filter]
+  have hsplit :
+      (Finset.univ.filter fun ω : Fin m → Bool => fold ω = x) =
+        (Finset.univ.filter fun ω : Fin m → Bool =>
+          fold ω = x ∧ Even (hiddenBitCount ω))
+        ∪
+        (Finset.univ.filter fun ω : Fin m → Bool =>
+          fold ω = x ∧ ¬ Even (hiddenBitCount ω)) := by
+    ext ω
+    simp [and_left_comm, and_assoc, em (Even (hiddenBitCount ω))]
+  have hdisj :
+      Disjoint
+        (Finset.univ.filter fun ω : Fin m → Bool =>
+          fold ω = x ∧ Even (hiddenBitCount ω))
+        (Finset.univ.filter fun ω : Fin m → Bool =>
+          fold ω = x ∧ ¬ Even (hiddenBitCount ω)) := by
+    refine Finset.disjoint_left.mpr ?_
+    intro ω h₁ h₂
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at h₁ h₂
+    exact h₂.2 h₁.2
+  rw [hsplit, Finset.sum_union hdisj]
+  have hEven :
+      ∑ ω in (Finset.univ.filter fun ω : Fin m → Bool =>
+          fold ω = x ∧ Even (hiddenBitCount ω)),
+        (-1 : ℤ) ^ hiddenBitCount ω
+      =
+      ((Finset.univ.filter fun ω : Fin m → Bool =>
+          fold ω = x ∧ Even (hiddenBitCount ω)).card : ℤ) := by
+    refine Finset.sum_congr rfl ?_
+    intro ω hω
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hω
+    rcases hω.2 with ⟨_, hEvenω⟩
+    rcases hEvenω with ⟨k, hk⟩
+    rw [hk]
+    simp
+  have hOdd :
+      ∑ ω in (Finset.univ.filter fun ω : Fin m → Bool =>
+          fold ω = x ∧ ¬ Even (hiddenBitCount ω)),
+        (-1 : ℤ) ^ hiddenBitCount ω
+      =
+      -((Finset.univ.filter fun ω : Fin m → Bool =>
+          fold ω = x ∧ ¬ Even (hiddenBitCount ω)).card : ℤ) := by
+    refine Eq.trans (Finset.sum_congr rfl ?_) ?_
+    · intro ω hω
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hω
+      have hNotEven : ¬ Even (hiddenBitCount ω) := hω.2.2
+      have hOddω : Odd (hiddenBitCount ω) := Nat.odd_iff_not_even.mpr hNotEven
+      rcases hOddω with ⟨k, hk⟩
+      rw [hk]
+      simp
+    · simp
+  rw [hEven, hOdd]
+  ring
