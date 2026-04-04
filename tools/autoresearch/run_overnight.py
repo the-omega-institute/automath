@@ -20,6 +20,7 @@ import argparse
 import fcntl
 import json
 import os
+import re
 import signal
 import subprocess
 import sys
@@ -337,6 +338,82 @@ def check_forbidden_tokens(code: str) -> list[str]:
     return violations
 
 
+TRIVIAL_PATTERNS = [
+    # Trivially true existence proofs
+    re.compile(r"∃.*True\b"),
+    re.compile(r"⟨PUnit.*trivial⟩"),
+    re.compile(r"⟨\(\).*trivial⟩"),
+    # All-zero witness constructions
+    re.compile(r"fun\s+_\s*=>\s*0[,\s⟩]"),
+    re.compile(r"fun\s+_\s*=>\s*PUnit"),
+    # Proofs that are just trivial/rfl/True.intro
+    re.compile(r"^\s*:=\s*trivial\s*$", re.MULTILINE),
+    re.compile(r"^\s*:=\s*True\.intro\s*$", re.MULTILINE),
+    # Existential with only PUnit/Unit/Empty types
+    re.compile(r"∃\s*\([^)]*:\s*Type\)[^,]*,\s*True"),
+]
+
+OMEGA_TYPES_RE = re.compile(
+    r"\b(Omega\.\w+|stableValue|fiberCard|scanError|Fold|Rewrite|"
+    r"fib_fusion|modularProject|momentSum|collisionKernel|defectChain|"
+    r"WordProp|NoConsec11|X_m|fibers|foldCurvature)\b"
+)
+
+SUBSTANTIVE_TACTICS_RE = re.compile(
+    r"\b(induction|Nat\.rec|calc|ring|linarith|nlinarith|"
+    r"rw\s*\[|simp\s*\[|apply\s+\w|exact\s+\w|have\s+\w|obtain|"
+    r"constructor|intro|cases|rcases|ext|funext|conv)\b"
+)
+
+
+def check_trivial_proof(code: str) -> list[str]:
+    """Detect trivially true statements that don't correspond to real mathematics.
+
+    Returns a list of violations. Empty list means the proof looks substantive.
+    """
+    violations = []
+
+    # Pattern-based rejection
+    for pat in TRIVIAL_PATTERNS:
+        match = pat.search(code)
+        if match:
+            violations.append(f"trivial proof pattern: {match.group()[:80]}")
+
+    # Count meaningful tactic lines (excluding blank/comment)
+    in_proof = False
+    tactic_lines = 0
+    for line in code.split("\n"):
+        stripped = line.strip()
+        if ":= by" in line or stripped == "by":
+            in_proof = True
+            continue
+        if in_proof and stripped and not stripped.startswith("--"):
+            tactic_lines += 1
+
+    if tactic_lines < 5 and "theorem" in code:
+        violations.append(f"shallow proof: only {tactic_lines} tactic line(s), minimum 5 required")
+
+    # Check for Omega-specific content in the type signature
+    # Extract everything between the theorem name and := by
+    sig_match = re.search(r"theorem\s+\w+[^:]*:(.*?):=", code, re.DOTALL)
+    if sig_match:
+        signature = sig_match.group(1)
+        if not OMEGA_TYPES_RE.search(signature) and not OMEGA_TYPES_RE.search(code):
+            violations.append(
+                "no Omega-specific types in statement — must reference actual "
+                "Omega definitions (Fold, stableValue, fiberCard, etc.)"
+            )
+
+    # Check for substantive tactics in the proof
+    if in_proof and not SUBSTANTIVE_TACTICS_RE.search(code):
+        violations.append(
+            "no substantive tactics found — proof must use induction, calc, "
+            "ring, linarith, rw, apply, or similar"
+        )
+
+    return violations
+
+
 def check_file_size(filepath: Path, new_code: str) -> bool:
     """Check if appending code would exceed MAX_FILE_LINES."""
     existing = filepath.read_text().count("\n") if filepath.exists() else 0
@@ -602,16 +679,48 @@ Return ONLY the corrected code block.
 
 
 def gather_context(target: dict) -> str:
-    """Gather existing code context from the target module."""
+    """Gather existing code context from the target module.
+
+    Includes: target file content + BM25 search results for similar proofs.
+    """
+    parts = []
+
+    # 1. Target file content (last 150 lines for style reference)
     target_file = find_target_file(target)
     if target_file.exists():
         text = target_file.read_text(encoding="utf-8")
-        # Return last 100 lines for style reference
         lines = text.split("\n")
-        if len(lines) > 100:
-            return "\n".join(lines[-100:])
-        return text
-    return ""
+        if len(lines) > 150:
+            parts.append("### Target file (last 150 lines):\n" + "\n".join(lines[-150:]))
+        else:
+            parts.append("### Target file:\n" + text)
+
+    # 2. BM25 search for similar declarations using omega_ci
+    label = target.get("label", "")
+    search_query = label.replace(":", " ").replace("-", " ")
+    try:
+        declarations, _ = omega_ci.build_inventory()
+        results = omega_ci.search_declarations(declarations, search_query, top_k=5)
+        if results:
+            similar = []
+            for r in results:
+                similar.append(
+                    f"  {r['kind']} {r['name']} -- {r['file']}:{r['line']} "
+                    f"(labels: {r.get('registry_labels', [])})"
+                )
+            parts.append("### Similar existing declarations (BM25 search):\n" + "\n".join(similar))
+    except Exception:
+        pass
+
+    # 3. Key imports from the target module directory
+    module_dir = LEAN_ROOT / target.get("target_module", "Omega/Frontier")
+    if module_dir.exists():
+        lean_files = sorted(module_dir.glob("*.lean"))
+        file_list = [f"  {f.name} ({f.stat().st_size // 1024}KB)" for f in lean_files[:10]]
+        if file_list:
+            parts.append("### Module files:\n" + "\n".join(file_list))
+
+    return "\n\n".join(parts)
 
 
 def run_loop(args: argparse.Namespace) -> int:
@@ -745,8 +854,26 @@ def run_loop(args: argparse.Namespace) -> int:
                     "error": "forbidden_tokens",
                     "details": violations,
                 })
-                # Treat as build failure, enter repair with synthetic error
                 build_error = "FORBIDDEN: " + "; ".join(violations)
+                continue
+
+            # Check for trivial/shallow proofs
+            trivial = check_trivial_proof(code)
+            if trivial:
+                print(f"trivial proof rejected: {trivial[0]}")
+                trace["attempts"].append({
+                    "attempt": attempt_label,
+                    "error": "trivial_proof",
+                    "details": trivial,
+                })
+                build_error = (
+                    "REJECTED — TRIVIAL PROOF. Your proof does not correspond to the "
+                    "LaTeX theorem. You generated a trivially true statement (e.g., "
+                    "∃ x, True or an all-zero witness). You MUST formalize the actual "
+                    "mathematical content of the theorem. Read the LaTeX body carefully "
+                    "and produce a statement that captures its real meaning. Do not use "
+                    "PUnit, trivial, or constant-zero witnesses."
+                )
                 continue
 
             # Check file size
