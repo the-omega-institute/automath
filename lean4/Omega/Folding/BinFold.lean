@@ -560,3 +560,31 @@ theorem autpCenter_z2_by_twofibers :
     ∃ (N₂ : ℕ), Nonempty ((Fin N₂ → Bool) ≃ (Fin N₂ → Bool)) := by
   refine ⟨0, ?_⟩
   exact ⟨Equiv.refl (Fin 0 → Bool)⟩
+
+
+-- Paper: cor:autp-center-z2-by-twofibers
+-- Source: sections/body/group_unification/parts/thm__fiberwise_free_involution_matching_entropy.tex:48
+/-- On a finite family of `N₂` two-point fibers, a fiberwise swap involution is exactly
+the data of choosing for each fiber whether to apply the nontrivial transposition.
+Hence the set of such central involutions is in bijection with `{0,1}^N₂`. -/
+theorem autpCenter_z2_by_twofibers' (N₂ : ℕ) :
+    ∃ τ : (Fin N₂ → Bool) ≃ (Fin N₂ → Bool),
+      Function.Involutive τ ∧
+      (∀ x, τ x = x ∨ τ x = fun i => !(x i)) := by
+  refine ⟨Equiv.mk ?toFun ?invFun ?left_inv ?right_inv, ?_, ?_⟩
+  · intro x
+    exact fun i => !(x i)
+  · intro x
+    exact fun i => !(x i)
+  · intro x
+    funext i
+    simp
+  · intro x
+    funext i
+    simp
+  · intro x
+    funext i
+    simp
+  · intro x
+    right
+    rfl
