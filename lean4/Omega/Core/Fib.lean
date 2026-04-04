@@ -81,6 +81,26 @@ theorem fib_le_pow_two : ∀ m : Nat, Nat.fib (m + 2) ≤ 2 ^ (m + 1)
           Nat.add_le_add_left (Nat.pow_le_pow_right (by omega) (by omega)) _
       _ = 2 ^ (m + 2 + 1) := by ring
 
+/-- Fibonacci doubling bound: 2 · F(n) ≤ F(n+2) for n ≥ 1.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem fib_double_le (n : Nat) (_hn : 1 ≤ n) :
+    2 * Nat.fib n ≤ Nat.fib (n + 2) := by
+  rw [Nat.fib_add_two]
+  linarith [Nat.fib_mono (show n ≤ n + 1 by omega)]
+
+/-- Fibonacci exponential growth: F(n+2k) ≥ 2^k · F(n) for n ≥ 1.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem fib_exponential_growth (n k : Nat) (hn : 1 ≤ n) :
+    2 ^ k * Nat.fib n ≤ Nat.fib (n + 2 * k) := by
+  induction k with
+  | zero => simp
+  | succ k ih =>
+    calc 2 ^ (k + 1) * Nat.fib n
+        = 2 * (2 ^ k * Nat.fib n) := by ring
+      _ ≤ 2 * Nat.fib (n + 2 * k) := by linarith
+      _ ≤ Nat.fib (n + 2 * k + 2) := fib_double_le (n + 2 * k) (by omega)
+      _ = Nat.fib (n + 2 * (k + 1)) := by ring_nf
+
 /-- gcd(F_m, F_n) = F_{gcd(m,n)} (strong divisibility).
     fib-gcd
     lem:fib-divisibility-iff -/

@@ -94,6 +94,30 @@ theorem freeInvolutionCount_small :
     freeInvolutionCount 1 = 1 ∧ freeInvolutionCount 2 = 3 ∧ freeInvolutionCount 3 = 15 := by
   native_decide
 
+/-- The free involution count is positive for r ≥ 1.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_pos (r : Nat) (hr : 1 ≤ r) :
+    0 < freeInvolutionCount r := by
+  induction r with
+  | zero => omega
+  | succ r ih =>
+    rw [freeInvolutionCount_succ]
+    rcases r with _ | r
+    · simp [freeInvolutionCount]
+    · exact Nat.mul_pos (by omega) (ih (by omega))
+
+/-- The free involution count is strictly increasing for r ≥ 1.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_strict_mono (r : Nat) (hr : 1 ≤ r) :
+    freeInvolutionCount r < freeInvolutionCount (r + 1) := by
+  rw [freeInvolutionCount_succ]
+  have hpos := freeInvolutionCount_pos r hr
+  -- fIC(r+1) = (2r+1) * fIC(r) ≥ 3 * fIC(r) > fIC(r) since 2r+1 ≥ 3 for r ≥ 1
+  calc freeInvolutionCount r
+      < 2 * freeInvolutionCount r := by omega
+    _ ≤ (2 * r + 1) * freeInvolutionCount r := by
+        apply Nat.mul_le_mul_right; omega
+
 /-- Fiberwise free involution counts multiply across independent fibers.
     thm:fiberwise-free-involution-matching-entropy -/
 theorem fiberwiseFreeInvolutionCount_total_eq_prod_doubleFactorial
@@ -102,5 +126,20 @@ theorem fiberwiseFreeInvolutionCount_total_eq_prod_doubleFactorial
       ∏ b, Nat.doubleFactorial (2 * r b - 1) := by
   simpa using
     Finset.prod_congr rfl (fun b _ => freeInvolutionCount_eq_doubleFactorial (r b))
+
+/-- Fiberwise total free involution count satisfies the factorial product formula.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem fiberwiseFreeInvolutionCount_total_formula
+    {B : Type*} [Fintype B] (r : B → Nat) :
+    (∏ b, freeInvolutionCount (r b)) * (∏ b, (2 ^ (r b) * (r b).factorial)) =
+      ∏ b, (2 * r b).factorial := by
+  calc
+    (∏ b, freeInvolutionCount (r b)) * (∏ b, (2 ^ (r b) * (r b).factorial))
+        = ∏ b, (freeInvolutionCount (r b) * (2 ^ (r b) * (r b).factorial)) := by
+            rw [← Finset.prod_mul_distrib]
+    _ = ∏ b, (2 * r b).factorial := by
+          refine Finset.prod_congr rfl ?_
+          intro b hb
+          simpa using freeInvolutionCount_formula (r b)
 
 end Omega.GU

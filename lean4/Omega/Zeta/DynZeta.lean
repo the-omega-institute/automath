@@ -522,6 +522,25 @@ theorem lucasNum_mod5_period_four (n : Nat) :
       rw [this]
       exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
 
+/-- Lucas numbers mod 11 have period 10: L(n+10) % 11 = L(n) % 11.
+    rem:degeneracy-zeta-bridge -/
+theorem lucasNum_mod11_period_ten (n : Nat) :
+    lucasNum (n + 10) % 11 = lucasNum n % 11 := by
+  suffices h : (11 : ℤ) ∣ (lucasNum (n + 10) - lucasNum n) by omega
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => simp [lucasNum]
+    | 1 => simp [lucasNum]
+    | n + 2 =>
+      have hR10 := lucasNum_succ_succ (n + 10)
+      have hR0 := lucasNum_succ_succ n
+      have : lucasNum (n + 2 + 10) - lucasNum (n + 2) =
+          (lucasNum (n + 1 + 10) - lucasNum (n + 1)) +
+          (lucasNum (n + 10) - lucasNum n) := by linarith
+      rw [this]
+      exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
+
 /-! ## Zeta rationality and pole structure
 
 For a d×d matrix, ζ_A(z) = det(I-zA)⁻¹ is a rational function with
