@@ -2,6 +2,7 @@ import Omega.Combinatorics.PathIndSet
 import Omega.Folding.Weight
 import Omega.Folding.Fold
 import Omega.Folding.MaxFiber
+import Omega.Folding.MaxFiberHigh
 import Omega.Folding.MomentRecurrence
 
 namespace Omega
@@ -352,6 +353,42 @@ theorem maxFiberMultiplicity_le_fib (m : Nat) :
 theorem fiberMultiplicity_le_fib (x : X m) :
     X.fiberMultiplicity x ≤ Nat.fib (m + 2) :=
   (X.fiberMultiplicity_le_max x).trans (maxFiberMultiplicity_le_fib m)
+
+/-- D(m) ≤ 2·F(⌊m/2⌋+2), verified for m ≤ 10.
+    prop:pom-fiber-decompose, thm:pom-max-fiber -/
+theorem maxFiberMultiplicity_le_two_mul_fib_half_verified (m : Nat) (hm : m ≤ 10) :
+    X.maxFiberMultiplicity m ≤ 2 * Nat.fib (m / 2 + 2) := by
+  interval_cases m <;> simp only [
+    X.maxFiberMultiplicity_zero, X.maxFiberMultiplicity_one, X.maxFiberMultiplicity_two,
+    X.maxFiberMultiplicity_three, X.maxFiberMultiplicity_four, X.maxFiberMultiplicity_five,
+    X.maxFiberMultiplicity_six, X.maxFiberMultiplicity_seven, X.maxFiberMultiplicity_eight,
+    X.maxFiberMultiplicity_nine, X.maxFiberMultiplicity_ten] <;> native_decide
+
+/-- D(m) ≤ 2·F(⌊m/2⌋+2), conditional on the two-step recurrence.
+    prop:pom-fiber-decompose, thm:pom-max-fiber -/
+theorem maxFiberMultiplicity_le_two_mul_fib_half_of_two_step (m : Nat)
+    (hrec : ∀ k, 6 ≤ k →
+      X.maxFiberMultiplicity k = X.maxFiberMultiplicity (k - 2) + X.maxFiberMultiplicity (k - 4)) :
+    X.maxFiberMultiplicity m ≤ 2 * Nat.fib (m / 2 + 2) := by
+  -- Use closed forms: D(2k)=F(k+2), D(2k+1)=2·F(k+1)
+  have heven : ∀ k : Nat, 1 ≤ k →
+      X.maxFiberMultiplicity (2 * k) ≤ 2 * Nat.fib (2 * k / 2 + 2) := by
+    intro k hk
+    rw [X.maxFiberMultiplicity_even_of_two_step hrec k hk,
+        Nat.mul_div_cancel_left k (by omega : 0 < 2)]
+    exact Nat.le_mul_of_pos_left _ (by omega)
+  have hodd : ∀ k : Nat, 1 ≤ k →
+      X.maxFiberMultiplicity (2 * k + 1) ≤ 2 * Nat.fib ((2 * k + 1) / 2 + 2) := by
+    intro k hk
+    rw [X.maxFiberMultiplicity_odd_of_two_step hrec k hk, show (2 * k + 1) / 2 = k from by omega]
+    exact Nat.mul_le_mul_left 2 (Nat.fib_mono (by omega))
+  rcases Nat.even_or_odd' m with ⟨k, rfl | rfl⟩
+  · rcases k.eq_zero_or_pos with rfl | hk
+    · simp [X.maxFiberMultiplicity_zero]
+    · exact heven k hk
+  · rcases k.eq_zero_or_pos with rfl | hk
+    · simp [X.maxFiberMultiplicity_one]
+    · exact hodd k hk
 
 /-- D(m)² ≤ S_2(m).
     thm:pom-maxFiberMultiplicity-sq-le-momentSum -/
