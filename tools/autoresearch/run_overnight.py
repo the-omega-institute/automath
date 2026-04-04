@@ -252,9 +252,39 @@ def call_llm(
 
     if model in OPENAI_MODELS or model.startswith("gpt-") or model.startswith("o"):
         key = api_key or os.environ.get("OPENAI_API_KEY", "")
-        if not key:
-            raise RuntimeError("OPENAI_API_KEY not set.")
         base_url = os.environ.get("OPENAI_BASE_URL", None)
+
+        # NyxID fallback: fetch key from nyxid if not in env
+        if not key:
+            try:
+                nyx_result = subprocess.run(
+                    ["nyxid", "service", "show", "llm-openai", "--credential"],
+                    capture_output=True, text=True, timeout=10,
+                )
+                if nyx_result.returncode == 0:
+                    for line in nyx_result.stdout.split("\n"):
+                        if "api_key" in line.lower() or "credential" in line.lower():
+                            parts = line.split(":", 1)
+                            if len(parts) == 2:
+                                key = parts[1].strip()
+                                break
+                    if not base_url:
+                        for line in nyx_result.stdout.split("\n"):
+                            if "endpoint" in line.lower() or "proxy" in line.lower():
+                                parts = line.split(":", 1)
+                                if len(parts) == 2:
+                                    url_candidate = parts[1].strip()
+                                    if url_candidate.startswith("http"):
+                                        base_url = url_candidate
+                                        break
+            except Exception:
+                pass
+
+        if not key:
+            raise RuntimeError(
+                "OPENAI_API_KEY not set. Set env var, pass --api-key, "
+                "or add service via: nyxid service add llm-openai --credential-env OPENAI_API_KEY"
+            )
         model_id = OPENAI_MODELS.get(model, model)
         return call_llm_openai(prompt, model_id, max_tokens, key, base_url)
 
