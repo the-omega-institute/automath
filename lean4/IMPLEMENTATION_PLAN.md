@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 878 |
+| \leanverified 标注数 | 883 |
 | \leanpartial 标注数 | 16 |
-| 总标注数 | 894 |
-| 轮次 | R246（round_count=247） |
+| 总标注数 | 899 |
+| 轮次 | R247（round_count=248） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -25,14 +25,14 @@
 | POM | 1,707 | 224 | 13.1% |
 | Emergent Arithmetic | 185 | 96 | 51.9% |
 | Folding | 337 | 81 | 24.0% |
-| Conclusion | 2,550 | 148 | 5.8% |
+| Conclusion | 2,550 | 150 | 5.9% |
 | Group Unification | 469 | 85 | 18.1% |
-| SPG | 129 | 36 | 27.9% |
-| Circle Dimension | 393 | 73 | 18.6% |
+| SPG | 129 | 38 | 29.5% |
+| Circle Dimension | 393 | 74 | 18.8% |
 | Zeta Finite Part | 4,524 | 110 | 2.4% |
 | Discussion | 67 | 8 | 11.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **864** | **8.2%** |
+| **合计（body）** | **10,508** | **869** | **8.3%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,7 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R247: kappa monotonicity/injectivity + multiprime spectrum additivity + binary width bounds（完整）**：SPG/ErrorThreshold.lean + CircleDimension/MultiPrimeSpectrum.lean + Conclusion/PrimeRegister.lean——kappa\_strict\_mono\_on（prop:spg-relative-error-threshold-sharpness，κ(ε) 在 (0,1) 上严格单调）; kappa\_injective\_on（prop:spg-relative-error-threshold-sharpness，κ(ε) 单射性）; multiPrimeSpectrum\_disjoint\_add（prop:cdim-multiprime-divisible-spectrum-explicit，混合局部化对象的多素谱不相交加法公式）; godelLift\_binary\_width\_upper（subsec:conclusion-bounded-prime-register-godel-scaling，⌊log₂ F(m+2)⌋ ≤ m 二进制位宽上界）; godelLift\_binary\_width\_lower（subsec:conclusion-bounded-prime-register-godel-scaling，m/2 ≤ ⌊log₂ F(m+2)⌋ 二进制位宽下界）——**5 个论文标签条目计入覆盖率**（SPG +2, CD +1, Conclusion +2）——SPG 36→38（27.9%→29.5%），Circle Dimension 73→74（18.6%→18.8%），Conclusion 148→150（5.8%→5.9%），全局标注 878→883（+5），body 覆盖 864→869（8.2%→8.3%），commit be47118
 **Phase R246: free involution positivity/monotonicity + Lucas mod11 period + Fibonacci growth bounds（完整）**：GU/FreeInvolutionCount.lean + Zeta/DynZeta.lean + Core/Fib.lean——freeInvolutionCount\_pos（thm:fiberwise-free-involution-matching-entropy，正性 induction 证明，14 tactic lines）; freeInvolutionCount\_strict\_mono（thm:fiberwise-free-involution-matching-entropy，严格单调性）; lucasNum\_mod11\_period\_ten（rem:degeneracy-zeta-bridge，Lucas mod11 周期10）; fib\_double\_le（subsec:conclusion-bounded-prime-register-godel-scaling，Fibonacci 倍增界）; fib\_exponential\_growth（subsec:conclusion-bounded-prime-register-godel-scaling，Fibonacci 指数增长界）——**3 个论文标签条目计入覆盖率**（GU +1, Zeta +1, POM +1）——Group Unification 84→85（18.1%），Zeta Finite Part 109→110（2.4%），POM 223→224（13.1%），全局标注 875→878（+3），body 覆盖 861→864（8.2%），commit f2f2a46
 **Phase R245: Lucas mod5 periodicity + primitive orbit positivity + Gödel divisibility tower（完整）**：Zeta/DynZeta.lean + Conclusion/PrimeRegister.lean——lucasNum\_mod5\_period\_four（thm:zeta-syntax-trace-linear-recurrence，强归纳 Lucas mod5 周期4证明，10 tactic lines）; primitiveOrbitNumerator\_pos（prop:zetaK-mobius-primitive，Möbius 反演 + 增长界正性，约55 tactic lines + 5 private helpers）; godelDivisibilityTower\_dvd（prop:conclusion-godel-divisibility-tower，整除链 n_n | n_{n+1}，8 tactic lines）; godelDivisibilityTower\_trans（prop:conclusion-godel-divisibility-tower，传递性推论）——**3 个论文标签条目计入覆盖率**（Zeta +2, Conclusion +1）——Zeta Finite Part 107→109（2.4%），Conclusion 147→148（5.8%），全局标注 872→875（+3），body 覆盖 858→861（8.2%），commit dd3ac85
 **Phase R192（分析完成，单槽候选）**：CircleDimension / phase-spectrum reconstruction——避开已在跑的 Zeta 线，转向未饱和的 Circle Dimension；单个中难度目标锁定 `phaseSpectrumCount_reconstruction`（对应 `thm:cdim-phase-spectrum-reconstruction`，把论文中的“全部循环相位采样计数唯一决定有限生成离散交换群同构类型”压缩为当前 Nat-编码下的显式恢复链：从 `phaseSpectrumCount r t N = phaseSpectrumCount r' t' N` 对所有 `N` 推出 `r = r'` 且 `Nat.gcd t N = Nat.gcd t' N` 对所有 `N`，再取 `N = t` 与 `N = t'` 得 `t = t'`；直接承接现有 `phaseSpectrumCount_split` / `phaseSpectrumCount_coprime` / `phaseSpectrumCount_add_rank_le` / `phaseSpectrumCount_le_pow`，不引入新公理，满足单目标中难度门槛）。
