@@ -49,11 +49,12 @@ telescoping xor-sum of projected local defects across the resolution band
 $m,\dots,n-1$.  This yields auditable probability bounds, a Hamming--Lipschitz
 budget, and a cocycle formula across intermediate scales.  We also show that
 eventual summability of adjacent defects forces consistent inverse-limit lifts.
-Finally, under a finite-state additivity hypothesis and a standard character
-nondegeneracy condition, the defect process mixes exponentially to Haar measure
-on a finite subgroup of $(\ZZ/2\ZZ)^m$.  The paper is deliberately confined to
-this defect theory; it does not import the sofic machinery or gauge-anomaly
-extensions of the larger manuscript.
+Finally, we record a conditional Haar-mixing criterion: if the defect process
+admits a finite-state additive realization whose nontrivial twisted transfer
+matrices all have spectral radius strictly below $1$, then its law converges
+exponentially to Haar measure on a finite subgroup of $(\ZZ/2\ZZ)^m$.  The
+paper is deliberately confined to this defect theory; it does not import the
+sofic machinery or gauge-anomaly extensions of the larger manuscript.
 \end{abstract}
 
 \tableofcontents
@@ -80,13 +81,13 @@ discrete Stokes formula:
 The sum is taken in the xor group $(\ZZ/2\ZZ)^m$, so the identity is exact and
 auditable.
 
-Three deliverables drive the paper.  First, we formulate the local and global
+The paper makes three contributions.  First, we formulate the local and global
 defects and prove the telescoping identity.  Second, we derive quantitative
 consequences: an auditable probability bound, a Hamming--Lipschitz budget, and
-a cocycle relation across intermediate scales.  Third, we record a statistical
-endpoint: under a finite-state realization of the defect increments and a mild
-character-detection assumption, the defect law converges exponentially to Haar
-measure on its reachable subgroup.
+a cocycle relation across intermediate scales.  Third, we record a conditional
+statistical endpoint: once the defect process is realized by a finite-state
+additive model with a twisted spectral gap on every nontrivial character, the
+defect law converges exponentially to Haar measure on its reachable subgroup.
 
 The point of this paper is therefore narrower than the overall project:
 \[
@@ -110,6 +111,30 @@ framework.  Mixing estimates follow from standard Markov chain techniques
 surveyed in \cite{ParryPollicott1990,Baladi2000}.  No sofic-image theory,
 Fischer covers, or arithmetic anomaly expansions are needed here.
 
+\subsection{Related Work and Contribution}
+
+Zeckendorf representations and Fibonacci numeration have a substantial
+literature.  The foundational uniqueness results go back to
+\cite{Lekkerkerker1952,Zeckendorf1972}, with broader numeration-system
+perspectives in \cite{Fraenkel1985,Grabner1995,BerstelReutenauer2011}.  In that
+circle of ideas the main themes are canonical representation, normalization,
+and automata-theoretic structure.  The Fold maps used here belong to that
+background, but the observable studied in this paper is different: we do not
+analyze normalization in isolation, but rather the failure of normalization to
+commute with prefix restriction across resolutions.
+
+On the symbolic-dynamics side, the ambient space is the golden-mean shift and
+its finite-window factors, so factor maps, finite-state presentations, and
+compact-group extensions provide the natural context; see
+\cite{WaltersErgodicTheory,LindMarcus1995,Kitchens1998,Boyle1983,KitchensSchmidt1989}.
+What appears to be absent from that literature is the specific xor-valued defect
+observable considered here.  The main contribution of this note is therefore
+not a new normalization algorithm, but an exact identity that isolates this
+multiscale obstruction and turns it into auditable deterministic estimates.  In
+that sense the statistical discussion in Section~7 should be read as a
+conditional appendix to the deterministic theory, not as an independently
+verified theorem about the Fold tower itself.
+
 \section{Folding and Naive Truncation}
 
 \subsection{Minimal Setup}
@@ -129,11 +154,11 @@ N(\omega):=\sum_{k=1}^m \omega_k F_{k+1}.
 Let $Z(N)$ denote the Zeckendorf expansion of $N$ \cite{Zeckendorf1972}.  We
 define the fold map by
 \[
-\Fold_m(\omega):=\pi_m(Z(N(\omega)))\in X_m,
+\Fold_m(\omega):=\pi_{\infty\to m}(Z(N(\omega)))\in X_m,
 \]
-where $\pi_m$ truncates an infinite legal sequence to its first $m$ digits.
-Equivalently, $\Fold_m$ is Fibonacci evaluation followed by Zeckendorf
-normalization and truncation.
+where $\pi_{\infty\to m}$ truncates an infinite legal sequence to its first $m$
+digits.  Equivalently, $\Fold_m$ is Fibonacci evaluation followed by
+Zeckendorf normalization and truncation.
 
 For $n\ge m$ we use two truncation maps:
 \[
@@ -206,11 +231,16 @@ formalize below.
 
 \section{Local and Global Defects}
 
-\subsection{Local Curvature Defect}
+\subsection{Local Defect}
 
 We work in the xor group structure on $\{0,1\}^m$, written with $\oplus$.
+For $v\in\{0,1\}^m$, let
+\[
+\lvert v\rvert_0:=\#\{i:\ v_i\neq 0\}
+\]
+denote its Hamming weight.
 
-\begin{definition}[Local curvature defect]
+\begin{definition}[Local defect]
 \label{def:fold-local-curvature-defect}
 For $m\ge 1$ and $\eta\in\Omega_{m+1}$, define the local defect
 \[
@@ -343,6 +373,76 @@ commutes with xor gives
 \]
 Since $\Delta_m(\omega)=D_{n\to m}(\omega)$, the proof is complete.
 \end{proof}
+
+\begin{remark}[Why ``Stokes''?]
+The terminology is analogical rather than literal.  The quantity
+$D_{n\to m}(\omega)$ is a boundary-level discrepancy between two routes from
+resolution $n$ to resolution $m$, while the adjacent defects
+$\kappa_{j+1\to j}$ are the interior contributions picked up one scale at a
+time.  Theorem~\ref{thm:fold-discrete-stokes-defect} therefore has the same
+formal shape as a discrete boundary-equals-sum-of-local-contributions identity.
+It is closer to a coboundary computation in a finite cochain complex than to a
+differential-geometric Stokes theorem; compare
+\cite{Hatcher2002,Forman1998}.
+\end{remark}
+
+\begin{example}[A worked Stokes computation at $n=3$, $m=1$]
+\label{ex:fold-stokes-computation}
+Take $\omega=111$.  Then
+\[
+r_{3\to 1}(111)=1,
+\qquad
+\Fold_1(r_{3\to 1}(111))=1.
+\]
+Also
+\[
+N(111)=F_2+F_3+F_4=6=F_2+F_5,
+\]
+so the Zeckendorf expansion begins with the digits $1001\cdots$, and hence
+\[
+\Fold_3(111)=100,
+\qquad
+\pi_{3\to 1}(\Fold_3(111))=1.
+\]
+Therefore the global defect vanishes:
+\[
+D_{3\to 1}(111)=1\oplus 1=0.
+\]
+At the adjacent scales we have
+\[
+\kappa_{2\to 1}(r_{3\to 2}(111))
+=
+\kappa_{2\to 1}(11)
+=
+\Fold_1(1)\oplus \pi_{2\to 1}(\Fold_2(11))
+=
+1\oplus 0
+=
+1,
+\]
+while
+\[
+\kappa_{3\to 2}(111)
+=
+\Fold_2(11)\oplus \pi_{3\to 2}(\Fold_3(111))
+=
+00\oplus 10
+=
+10.
+\]
+Projecting the second term to level $m=1$ gives $\pi_{2\to 1}(10)=1$, so
+\[
+\kappa_{2\to 1}(11)\oplus \pi_{2\to 1}(\kappa_{3\to 2}(111))
+=
+1\oplus 1
+=
+0
+=
+D_{3\to 1}(111).
+\]
+This is exactly the discrete Stokes identity in the first nontrivial resolution
+band where two adjacent defects contribute.
+\end{example}
 
 \subsection{Auditable Consequences}
 
@@ -515,7 +615,12 @@ Let
 \[
 \Xinf:=\{x=(x_1,x_2,\dots)\in\{0,1\}^{\NN}: x_ix_{i+1}=0\text{ for all }i\ge 1\}
 \]
-be the one-sided golden-mean shift, with projections
+be the one-sided golden-mean shift.  For a raw infinite binary sequence
+$\omega^\infty=(\omega_1,\omega_2,\dots)\in\{0,1\}^{\NN}$, let
+\[
+r_{\infty\to m}(\omega^\infty):=(\omega_1,\dots,\omega_m)\in\Omega_m,
+\]
+and for $x\in\Xinf$ let
 \[
 \pi_{\infty\to m}(x):=(x_1,\dots,x_m)\in X_m.
 \]
@@ -530,6 +635,12 @@ For each $m\ge 1$, define the adjacent discrepancy
 \[
 \delta_m:=x_m\oplus \pi_{m+1\to m}(x_{m+1})\in\{0,1\}^m.
 \]
+Note that
+\[
+\delta_m=\kappa_{m+1\to m}(r_{\infty\to m+1}(\omega^\infty)),
+\]
+so the summability hypothesis is exactly the summability of the adjacent local
+defects along the Fold trajectory of $\omega^\infty$.
 If
 \[
 \sum_{m\ge 1}\lvert \delta_m\rvert_0<\infty,
@@ -564,35 +675,36 @@ force eventual consistency.
 
 \section{Statistical Remarks}
 
-\subsection{Haar Mixing of the Defect Process}
+\subsection{A Conditional Haar-Mixing Criterion}
 
-The next theorem is stated under two structural assumptions.  These are exactly
-the assumptions needed to turn the Stokes defect into a standard finite-state
-additive observable over a primitive hidden Markov chain.
+The next theorem is a conditional criterion.  It isolates the exact ingredients
+needed to deduce Haar mixing once the defect process has been encoded by a
+finite-state additive model.
 
-\begin{theorem}[Haar mixing under a finite-state additivity hypothesis]
+\begin{theorem}[Conditional Haar mixing from a finite-state additive model]
 \label{thm:fold-stokes-defect-haar-mixing}
 Fix $m\ge 1$, and let $\omega$ be uniformly distributed on $\Omega_n$ for
-$n\ge m$.  Let $\mathsf{H}_m\le (\ZZ/2\ZZ)^m$ be the subgroup generated by the
-reachable projected increments
-\[
-\mathsf{H}_m
-:=
-\left\langle
-\pi_{j\to m}\bigl(\kappa_{j+1\to j}(\eta)\bigr):
-\ j\ge m,\ \eta\in\Omega_{j+1}
-\right\rangle.
-\]
-Assume:
+$n\ge m$.  Suppose there exist a finite state space $\mathsf{S}_m$, a
+primitive stochastic matrix $P_m=(p_{ab})_{a,b\in\mathsf{S}_m}$, an initial
+distribution $\nu_m$ on $\mathsf{S}_m$, a finite subgroup
+$\mathsf{H}_m\le(\ZZ/2\ZZ)^m$, and an increment map
+$\Gamma_m:\mathsf{S}_m\times\mathsf{S}_m\to\mathsf{H}_m$ such that:
 \begin{enumerate}[label=(\roman*)]
-\item for fixed $m$, the defect increments admit a synchronous finite-state
-realization over IID Bernoulli input with parameter $1/2$, and the hidden
-Markov chain is primitive
-on the reachable component;
+\item if $(Y_t)_{t\ge 0}$ is the Markov chain with initial law $\nu_m$ and
+transition matrix $P_m$, then for every $n\ge m$ the defect satisfies the
+distributional identity
+\[
+D_{n\to m}
+\stackrel{\mathrm{law}}=
+\bigoplus_{t=0}^{n-m-1}\Gamma_m(Y_t,Y_{t+1});
+\]
 \item for every nontrivial character
-$\chi\in\widehat{\mathsf{H}_m}\setminus\{1\}$, there exists a closed cycle in
-the reachable component whose total increment $g\in \mathsf{H}_m$ satisfies
-$\chi(g)\neq 1$.
+$\chi\in\widehat{\mathsf{H}_m}\setminus\{1\}$, the twisted matrix
+\[
+P_{m,\chi}(a,b):=p_{ab}\,\chi(\Gamma_m(a,b))
+\qquad (a,b\in\mathsf{S}_m)
+\]
+satisfies $\rho(P_{m,\chi})<1$.
 \end{enumerate}
 Then there exist constants $C_m>0$ and $0<\rho_m<1$ such that for all $n\ge m$,
 \[
@@ -606,38 +718,86 @@ C_m\,\rho_m^{\,n-m}.
 
 \begin{remark}[Standing hypotheses]
 \label{rem:standing-hypotheses-haar-mixing}
-We note that the finite-state realizability and character nondegeneracy
-conditions are structural hypotheses that must be verified for each specific
-$m$; the theorem provides the general mechanism.  For small values of $m$, one
-can in principle construct the hidden Markov chain and its transition matrices
-explicitly and check both conditions by direct computation.  We leave this
-verification to future work and emphasize that the deterministic Stokes
+Assumption (ii) is the genuinely conditional input.  In a concrete Fold model
+one would derive $\mathsf{S}_m$, $P_m$, and $\Gamma_m$ from a finite transducer
+and then verify $\rho(P_{m,\chi})<1$ for each nontrivial character by direct
+matrix computation.  The present paper does not carry out that verification, so
+Section~7 should be read as a conditional criterion rather than as an
+established property of the Fold tower.  By contrast, the deterministic Stokes
 identity (Theorem~\ref{thm:fold-discrete-stokes-defect}) and its corollaries
 hold unconditionally.
 \end{remark}
 
 \begin{proof}[Proof of Theorem~\ref{thm:fold-stokes-defect-haar-mixing}]
-Theorem~\ref{thm:fold-discrete-stokes-defect} writes the defect as a sum of
-projected local increments.  Under assumption (i), these increments can be read
-by a finite-state machine driven by IID Bernoulli input.  Thus for fixed $m$
-the defect process becomes a finite-state additive functional on a primitive
-hidden Markov chain.
-
-For any character $\chi\in\widehat{\mathsf{H}_m}$, define the twisted transfer
-matrix $P_\chi$ by weighting each transition by the character value of its
-increment.  When $\chi=1$, this is the usual stochastic transition matrix of
-the hidden chain, hence it has spectral radius $1$.  For $\chi\neq 1$,
-assumption (ii) rules out phase alignment on all closed cycles, so the
-Perron--Frobenius eigenvalue drops strictly below $1$.  Let
+Set $\ell:=n-m$ and let $\mu_\ell:=\Law(D_{n\to m})$, viewed as a probability
+measure on $\mathsf{H}_m$.  For $\chi\in\widehat{\mathsf{H}_m}$, write
 \[
-\rho_m:=\max_{\chi\neq 1}\rho(P_\chi)<1.
+\widehat{\mu_\ell}(\chi):=\sum_{h\in\mathsf{H}_m}\mu_\ell(h)\chi(h)
+=
+\EE[\chi(D_{n\to m})].
 \]
-Standard Fourier inversion on the finite abelian group $\mathsf{H}_m$ then
-shows that every nontrivial Fourier coefficient of $\Law(D_{n\to m})$ decays
-like $O(\rho_m^{\,n-m})$.  Since Haar measure kills all nontrivial characters,
-the same exponential bound holds in total variation; see
-\cite[Chapters~12--13]{LevinPeresWilmer2009MarkovMixing} and the transfer
-operator framework of \cite{Baladi2000}.
+Using assumption (i) and expanding over all state paths of the Markov chain,
+we obtain
+\[
+\widehat{\mu_\ell}(\chi)
+=
+\nu_m P_{m,\chi}^{\,\ell}\mathbf{1},
+\]
+where $\mathbf{1}$ denotes the all-ones column vector on $\mathsf{S}_m$.
+
+For the trivial character $\chi=1$, this gives
+$\widehat{\mu_\ell}(1)=\nu_m P_m^{\,\ell}\mathbf{1}=1$.  For
+$\chi\neq 1$, assumption (ii) gives $\rho(P_{m,\chi})<1$.  Choose
+$\rho_m$ such that
+\[
+\max_{\chi\neq 1}\rho(P_{m,\chi})<\rho_m<1.
+\]
+Since there are only finitely many nontrivial characters and each $P_{m,\chi}$
+is a finite matrix, standard finite-dimensional spectral theory yields
+constants $C_\chi>0$ such that
+\[
+\lVert P_{m,\chi}^{\,\ell}\rVert\le C_\chi\,\rho_m^{\,\ell}
+\qquad\text{for all }\ell\ge 0.
+\]
+Hence
+\[
+\lvert\widehat{\mu_\ell}(\chi)\rvert
+\le
+\lVert \nu_m\rVert\,
+\lVert P_{m,\chi}^{\,\ell}\rVert\,
+\lVert \mathbf{1}\rVert
+\le
+C'_\chi\,\rho_m^{\,\ell}
+\]
+for suitable constants $C'_\chi$.
+
+Now Fourier inversion on the finite abelian group $\mathsf{H}_m$ gives, for
+each $h\in\mathsf{H}_m$,
+\[
+\mu_\ell(h)-\frac{1}{|\mathsf{H}_m|}
+=
+\frac{1}{|\mathsf{H}_m|}
+\sum_{\chi\neq 1}\widehat{\mu_\ell}(\chi)\,\overline{\chi(h)}.
+\]
+Therefore
+\[
+\begin{aligned}
+\left\|
+\mu_\ell-\mathrm{Haar}(\mathsf{H}_m)
+\right\|_{\mathrm{TV}}
+&=
+\frac12\sum_{h\in\mathsf{H}_m}
+\left|
+\mu_\ell(h)-\frac{1}{|\mathsf{H}_m|}
+\right| \\
+&\le
+\frac12\sum_{\chi\neq 1}\lvert\widehat{\mu_\ell}(\chi)\rvert \\
+&\le
+\frac12\sum_{\chi\neq 1}C'_\chi\,\rho_m^{\,\ell}.
+\end{aligned}
+\]
+Setting $C_m:=\frac12\sum_{\chi\neq 1}C'_\chi$ and recalling that
+$\ell=n-m$ proves the stated estimate.
 \end{proof}
 
 \subsection{Parity Polarization}

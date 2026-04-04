@@ -1,5 +1,5 @@
 \section{The Completed Determinant and Cyclotomic Twists}
-\label{sec:kernel}
+\label{sec:completion-twists}
 
 \subsection{The unweighted spectrum}
 
@@ -16,11 +16,12 @@ One has
 \end{proposition}
 
 \begin{proof}
-This is obtained by direct elimination from the explicit
-\(10\times 10\) matrix \(B(u)\) of \Cref{def:sync-kernel}. The result
-is consistent with the self-duality identity of
-\Cref{prop:sync-self-duality}, which may be checked directly from the
-closed form.
+A symbolic determinant computation from the explicit \(10\times 10\)
+matrix \(B(u)\) of \Cref{def:sync-kernel} gives the displayed formula.
+As a consistency check, the closed form satisfies the self-duality
+identity of \Cref{prop:sync-self-duality}; in particular, comparing
+\(\Delta(z,u)\) with \(\Delta(uz,u^{-1})\) pairs the coefficients of
+\(z^k u^\ell\) and \(z^k u^{k-\ell}\) exactly as required.
 \end{proof}
 
 \begin{proposition}[Characteristic polynomial and residue constant]
@@ -29,20 +30,27 @@ closed form.
   \[
     \det(I-zB)=(z-1)(z+1)(3z-1)(z^3-z^2+z+1).
   \]
-  In particular \(\rho(B)=3\), and
+  In particular \(\rho(B)=3\), and the Perron residue constant
+  \(C_B\) of \Cref{def:perron-residue-constant} satisfies
   \[
     C_B=\frac{243}{272}.
   \]
 \end{proposition}
 
 \begin{proof}
+Every state reaches \(\st{000}\) in at most two steps, and
+\(\st{000}\) reaches every state by iterating the transitions through
+\(\st{001}\), \(\st{002}\), \(\st{010}\), and \(\st{0-12}\); hence the
+digraph of \(B\) is strongly connected. Since there is also the self-loop
+\(\st{000}\to\st{000}\), the period is \(1\), so \(B\) is primitive.
 Set \(u=1\) in \Cref{prop:kernel-delta-explicit}. The factorisation is
-immediate. Since \((3z-1)\) is the unique factor whose reciprocal lies
-outside the unit circle, \(\rho(B)=3\). Evaluating the cofactor at
-\(z=1/3\) gives the residue constant.
+then immediate. Since \((3z-1)\) is the unique factor whose reciprocal
+lies outside the unit circle, \(\rho(B)=3\). Evaluating the cofactor at
+\(z=1/3\) gives the residue constant. This proves part~\textup{(i)} of
+\Cref{thm:intro-kernel-geometry}.
 \end{proof}
 
-Together with \Cref{prop:prelim-prime-orbit}, this yields
+Together with \Cref{lem:primitive-orbit-asymptotic}, this yields
 \[
   p_n(B)=\frac{3^n}{n}
   +O\!\left(\frac{\max\{\Lambda(B)^n,3^{n/2}\}}{n}\right).
@@ -75,7 +83,8 @@ by \(\widehat\Delta(w,s)\).
 Substitute \(u=r^2\) and \(z=w/r\) into the explicit formula of
 \Cref{prop:kernel-delta-explicit}. Terms in \(r\) and \(r^{-1}\)
 combine to give a polynomial in \(s=r+r^{-1}\), and a direct expansion
-produces the displayed formula. The parity relation is immediate.
+produces the displayed formula. The parity relation is immediate. This
+proves part~\textup{(ii)} of \Cref{thm:intro-kernel-geometry}.
 \end{proof}
 
 Let \(\mathcal X\) be the normalisation of the affine curve
@@ -116,11 +125,18 @@ We verify smoothness of the projective closure.  Homogenise by setting
   F_h(X,Y,Z) = Z^4 - YZ^3 - 5XZ^2 + 3XYZ + 5X^2Z^2
     - XY^2Z + XY^3 - 6X^2YZ + X^2Y^2 - X^3Z.
 \]
-On the affine chart \(Z=1\), the partial derivatives
-\(\partial_X F\) and \(\partial_Y F\) do not vanish simultaneously
-at any point of \(F=0\): a Gr\"obner-basis computation of the ideal
-\(\langle F,\,\partial_X F,\,\partial_Y F\rangle\) in
-\(\QQ[X,Y]\) yields \(\langle 1\rangle\).
+On the affine chart \(Z=1\),
+\[
+  \partial_x F
+  =-5+3y+10x-y^2+y^3-12xy+2xy^2-3x^2,
+\]
+\[
+  \partial_y F
+  =-1+3x-2xy+3xy^2-6x^2+2x^2y.
+\]
+A Gr\"obner-basis computation of the ideal
+\(\langle F,\,\partial_x F,\,\partial_y F\rangle\subset\QQ[x,y]\)
+gives \(\langle 1\rangle\), so there is no affine singular point.
 
 The line at infinity \(Z=0\) meets the quartic where the leading form
 \(XY^2(X+Y)=0\), giving the three points
@@ -132,7 +148,8 @@ At \([1:0:0]\) (chart \(X=1\)): \(\partial_Z F_h\big|_{(1,0,0)}=-1\neq 0\).
 At \([1:-1:0]\) (chart \(X=1\)): \(\partial_Z F_h\big|_{(1,-1,0)}=1\neq 0\).
 
 Hence the projective curve is smooth everywhere, so by the
-genus formula for smooth plane curves, \(g=(4-1)(4-2)/2=3\).
+genus formula for smooth plane curves \cite{Hartshorne1977},
+\(g=(4-1)(4-2)/2=3\).
 \end{proof}
 
 \begin{proposition}[Two-sheeted cover of genus six]
@@ -147,8 +164,45 @@ genus formula for smooth plane curves, \(g=(4-1)(4-2)/2=3\).
 \begin{proof}
 The extension of function fields is obtained by adjoining
 \(w=\sqrt{x}\), so it is quadratic. On the quotient curve, the function
-\(x\) has odd valuation at exactly one affine point, namely
-\((x,y)=(0,1)\), and at one point at infinity. Hurwitz gives
+\(x\) has odd valuation precisely at one affine point and at one point
+at infinity.
+
+On the affine chart, \(F(0,y)=1-y\), so the only point with \(x=0\) is
+\(P=(0,1)\). Since \(\partial_y F(0,1)=-1\neq 0\), the line \(x=0\)
+meets the curve transversely there, and therefore
+\(\operatorname{ord}_P(x)=1\).
+
+For the points at infinity, work on the chart \(X=1\) with
+\(y=Y/X\) and \(z=Z/X\). The equation becomes
+\[
+  G(y,z)=z^4-yz^3-y^2z+y^3-3yz+y^2-z.
+\]
+At \(Q_0=[1:0:0]\), one has \(\partial_z G(0,0)=-1\), so \(z\) is an
+analytic function of \(y\), and solving \(G(y,z)=0\) gives
+\[
+  z=y^2-2y^3+O(y^4).
+\]
+Hence \(x=X/Z=1/z\) has pole order \(2\) at \(Q_0\). At
+\(Q_\infty=[1:-1:0]\), writing \(y=-1+t\) gives
+\[
+  G(-1+t,z)=t-2t^2+t^3+z-tz-t^2z+z^3-tz^3+z^4,
+\]
+so again \(\partial_z G(-1,0)=1\neq 0\), and now
+\[
+  z=-t+t^2+O(t^3).
+\]
+Thus \(x=1/z\) has a simple pole at \(Q_\infty\).
+
+At the remaining point \(Q_1=[0:1:0]\), use the chart \(Y=1\) with
+\(u=X/Y\) and \(v=Z/Y\). The homogenised equation begins as
+\[
+  u-v^3+O(uv,v^4,u^2)=0,
+\]
+so \(u=v^3+O(v^4)\), and therefore \(x=X/Z=u/v\) has a zero of order
+\(2\) at \(Q_1\).
+
+Hence the quadratic extension branches exactly at \(P\) and
+\(Q_\infty\). Hurwitz's formula \cite{Hartshorne1977} gives
 \[
   2g(\mathcal X)-2=2(2\cdot 3-2)+2,
 \]
@@ -171,19 +225,42 @@ coefficient~\(-256\). Since the leading coefficient is negative,
 square in~\(\QQ(s)\). It follows that the Galois group
 \(G\le S_6\) is not contained in~\(A_6\).
 
-To pin down~\(G\) we specialise. At \(s=3\), the polynomial
-\(\widehat\Delta(w,3)\in\ZZ[w]\) reduces modulo~\(p=3\) to a polynomial
-whose irreducible factorisation over~\(\mathbb F_3\) has degree pattern
-\(\{1,1,2,2\}\); the presence of a degree-\(2\) factor together with
-two fixed points forces a transposition in the Galois group of the
-splitting field. At the same specialisation \(s=3\), reducing
-modulo~\(p=19\) gives degree pattern~\(\{1,5\}\), which forces a
+To pin down~\(G\), we specialise and use the factorisation criterion
+for Frobenius cycle types \cite{Serre2008Topics}. At \(s=3\),
+\[
+  \widehat\Delta(w,3)=8w^6+9w^5-4w^4+9w^3-5w^2-3w+1.
+\]
+Reducing modulo~\(7\) gives
+\[
+  w^6+2w^5+3w^4+2w^3+2w^2+4w+1,
+\]
+which is irreducible over~\(\mathbb F_7\). Hence \(G\) contains a
+\(6\)-cycle and is therefore transitive. At \(s=2\), one has
+\[
+  \widehat\Delta(w,2)\equiv
+  (w+6)(w+5)(w+2)(w+1)(3w^2+3w+2)\pmod 7,
+\]
+so \(G\) contains an element of cycle type \((ab)\), namely a
+transposition. At the specialisation \(s=3\), reduction modulo~\(19\)
+gives
+\[
+  \widehat\Delta(w,3)\equiv
+  (w+16)\bigl(8w^5+14w^4+9w^2+3w+6\bigr)\pmod{19},
+\]
+with the quintic factor irreducible. Thus \(G\) also contains a
 \(5\)-cycle.
 
-By Jordan's theorem \cite{Dixon1996}, a transitive subgroup of~\(S_n\)
-that contains a transposition and a \(p\)-cycle for a prime
-\(p>n/2\) equals~\(S_n\). Here \(n=6\) and \(p=5>3=n/2\), so
-\(G=S_6\).
+A transitive subgroup of \(S_6\) containing a \(5\)-cycle is
+primitive. Indeed, let \(\sigma\in G\) be a \(5\)-cycle. If \(B\) were
+a non-trivial block, then \(|B|\) would divide \(6\). If \(B\) meets
+the support of \(\sigma\), then \(B\cap \sigma(B)\neq\varnothing\), so
+\(\sigma(B)=B\), and therefore \(B\) contains all five moved points of
+\(\sigma\). Thus \(|B|=5\) or
+\(|B|=6\), which is impossible for a proper block. Hence no such
+block exists \cite[Ch.~3]{Dixon1996}. A primitive
+subgroup of \(S_6\) that contains a transposition is the full symmetric
+group \cite[Ch.~3]{Dixon1996}. Hence \(G=S_6\). This completes
+part~\textup{(iii)} of \Cref{thm:intro-kernel-geometry}.
 \end{proof}
 
 \subsection{Cyclotomic resultants and twisted Perron roots}
@@ -214,7 +291,8 @@ The corresponding twisted Perron root is
 Let \(d_m:=\deg\Phi_m^+=\varphi(2m)/2\). The resultant is the
 determinant of the Sylvester matrix of the cubic polynomial
 \(s\mapsto\widehat\Delta(w,s)\) and the degree-\(d_m\) polynomial
-\(\Phi_m^+(s)\). The highest \(w\)-degree term has degree \(6d_m\),
+\(\Phi_m^+(s)\) \cite{CoxLittleOShea2005}. The highest \(w\)-degree
+term has degree \(6d_m\),
 which equals \(3\varphi(2m)\). If \(m\) is even, then \(\Phi_m^+\) is
 even and \(\widehat\Delta(w,-s)=\widehat\Delta(-w,s)\), so
 \(R_m(-w)=R_m(w)\).
@@ -237,7 +315,10 @@ even and \(\widehat\Delta(w,-s)=\widehat\Delta(-w,s)\), so
 \begin{proof}
 Since \(s_2=0\), the resultant is obtained by direct substitution. The
 smallest-modulus zero of \(R_2\) is \(\sqrt{2-\sqrt3}\), whose
-reciprocal is the stated value.
+reciprocal is the stated value. Together with
+\Cref{thm:sync-cyclotomic-degree-law}, this proves
+parts~\textup{(i)} and~\textup{(ii)} of
+\Cref{thm:intro-kernel-cyclotomic}.
 \end{proof}
 
 \subsection{Endpoint jets and large-\texorpdfstring{$m$}{m} asymptotics}
@@ -309,8 +390,27 @@ of \(s_m\) at infinity is
   s_m=2-\frac{\pi^2}{m^2}+\frac{\pi^4}{12m^4}-\frac{\pi^6}{360m^6}+\cdots.
 \]
 Composing this expansion with the jet of \(\rho(s)\) at \(s=2\) gives
-the displayed asymptotic series.
+the displayed asymptotic series. This proves
+part~\textup{(iii)} of \Cref{thm:intro-kernel-cyclotomic}.
 \end{proof}
+
+\begin{remark}
+The asymptotic expansion is already numerically accurate for moderate
+values of \(m\). Solving the specialised equations \(R_m(w)=0\) for the
+smallest-modulus root and comparing with the truncation of
+\Cref{thm:rho-gap-m12} gives
+\[
+  \begin{array}{c|c|c|c}
+    m & \rho_m & \text{12th-order approximation} & \text{absolute error} \\
+    \hline
+    4  & 2.644080451866 & 2.644083856227 & 3.40\times 10^{-6} \\
+    6  & 2.831532258235 & 2.831532269934 & 1.17\times 10^{-8} \\
+    8  & 2.903081377378 & 2.903081377585 & 2.07\times 10^{-10} \\
+    10 & 2.937319429068 & 2.937319429077 & 9.09\times 10^{-12}
+  \end{array}
+\]
+for \(m=4,6,8,10\).
+\end{remark}
 
 \subsection{Primitive orbit counts under cyclic lift}
 

@@ -218,9 +218,14 @@ finite words.  We write $a\preceq b$ when $a$ is a prefix of $b$.  Let
 $\Aadm\subseteq \Sigma^{<\infty}$ be the set of admissible addresses.
 
 For each $a\in\Aadm$, let $C_a\subseteq X$ be the cylinder event determined by
-$a$.  Only the following two features matter:
+$a$.  Only the following three features matter:
 \begin{enumerate}[label=\textup{(\arabic*)}]
 \item if $b\succeq a$, then $C_b\subseteq C_a$;
+\item whenever $b,c\succeq a$ and $C_b\cap C_c\neq\varnothing$, there exists
+an admissible address $d$ with $d\succeq b,c$ and
+\[
+C_d=C_b\cap C_c;
+\]
 \item every finite refinement of a cylinder is again a finite union of deeper
 cylinders.
 \end{enumerate}
@@ -236,6 +241,49 @@ C_a = \bigcup_{i=1}^n C_{b_i}.
 \]
 Such covers will be called \emph{cylinder covers}.
 \end{definition}
+
+\begin{proposition}[Cylinder covers generate a Grothendieck topology]
+\label{prop:prefix-site-grothendieck-topology}
+The cylinder covers satisfy the identity, base-change, and transitivity axioms
+of a finitary pretopology on $\mathsf{Pref}(\Aadm)$.  Hence they generate a
+Grothendieck topology $J_{\mathrm{cyl}}$, and
+\[
+(\mathsf{Pref}(\Aadm),J_{\mathrm{cyl}})
+\]
+is a well-defined site.
+\end{proposition}
+
+\begin{proof}
+The singleton family $\{a\to a\}$ is a cylinder cover because $C_a=C_a$.
+
+Now let $\{b_i\to a\}_{i=1}^n$ be a cylinder cover and let $c\to a$ be a
+refinement.  Then
+\[
+C_c
+=
+C_c\cap C_a
+=
+\bigcup_{i=1}^n (C_c\cap C_{b_i}).
+\]
+For each index $i$ with $C_c\cap C_{b_i}\neq\varnothing$, property
+\textup{(2)} yields an admissible address $d_i$ with $d_i\succeq c,b_i$ and
+$C_{d_i}=C_c\cap C_{b_i}$.  Discarding the empty intersections, we obtain a
+finite cylinder cover $\{d_i\to c\}$ of $c$, and each composite
+$d_i\to c\to a$ factors through $b_i\to a$.
+
+Finally, if $\{b_i\to a\}_{i=1}^n$ is a cylinder cover and each
+$\{c_{ij}\to b_i\}_{j=1}^{m_i}$ is a cylinder cover of $b_i$, then
+\[
+C_a
+=
+\bigcup_{i=1}^n C_{b_i}
+=
+\bigcup_{i=1}^n \bigcup_{j=1}^{m_i} C_{c_{ij}},
+\]
+so the composite family $\{c_{ij}\to a\}_{i,j}$ is again a cylinder cover.
+Therefore the cylinder covers form a finitary pretopology and hence generate a
+Grothendieck topology.
+\end{proof}
 
 This is the site-theoretic version of prefix refinement.  The measurable
 non-expansion result from Section~2 says that recursive addressing does not
@@ -668,7 +716,7 @@ F_b(a_b):=
 \]
 Then $F_{b'}(a_{b'})\subseteq F_b(a_b)$ whenever
 $\pi_{b'\to b}(a_{b'})=a_b$, and
-$\diam(F_b(a_b))=2^{-b}$.  Proposition~\ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} therefore
+$\diam(F_b(a_b))=2^{-b}$.  Theorem~\ref{thm:recursive-addressing-dyadic-inverse-limit-stable-object} therefore
 recovers the familiar fact that every compatible binary thread determines a
 unique point of $[0,1]$.
 \end{example}
@@ -679,62 +727,79 @@ Fix $a=(a_b)_{b\ge 0}\in \Ainf$ and write
 \[
 U_b(a):=\{a'\in\Ainf:\ a'_b=a_b\}.
 \]
-These sets form the dyadic neighborhood basis of $a$.  We identify each
-$U_b(a)$ with the finite address $a_b$, and therefore write
+These sets form the dyadic neighborhood basis of $a$.  If
+$c\in\mathcal{A}_n$ satisfies $\pi_{n\to b}(c)=a_b$, write
+\[
+U(c):=\{a'\in\Ainf:\ a'_n=c\}\subseteq U_b(a).
+\]
+A \emph{finite dyadic cylinder cover} of $U_b(a)$ is a finite family
+\[
+\{U(c_i)\to U_b(a)\}_{i=1}^r
+\]
+with $c_i\in\mathcal{A}_{n_i}$, $\pi_{n_i\to b}(c_i)=a_b$, and
+\[
+U_b(a)=\bigcup_{i=1}^r U(c_i).
+\]
+We identify each $U_b(a)$ with the finite address $a_b$ and each $U(c)$ with
+the finite address $c$, and therefore write
 \[
 \Rpre(U_b(a)):=\Rpre(a_b).
 \]
-The compatible readout threads at $a$ are collected in the inverse-limit fiber
-\[
-\Rpre_\infty(a)
-:=
-\varprojlim_b \Rpre(U_b(a)).
-\]
+Likewise, for such a cylinder $U(c)$ we write $\Rpre(U(c)):=\Rpre(c)$.
 
 \begin{theorem}[Separatedness criterion for single-valued readout]
 \label{thm:recursive-addressing-readout-separatedness-null}
 For a stable address $a\in\Ainf$, the following are equivalent.
 \begin{enumerate}[label=\textup{(\arabic*)}]
-\item Readout at $a$ is single-valued: whenever two compatible threads in
-$\Rpre_\infty(a)$ induce the same restrictions on every member of a finite
-dyadic cover of some neighborhood $U_b(a)$, the two threads are equal.
-\item The presheaf $\Rpre$ is separated at $a$: for every finite dyadic cover
+\item Readout at $a$ is single-valued: for every $b\ge 0$, every finite dyadic
+cylinder cover
 \[
-\{U_{b_i}(a)\to U_b(a)\}_{i=1}^r,
+\{U(c_i)\to U_b(a)\}_{i=1}^r,
 \]
-the map
+and every pair of sections $s,t\in \Rpre(U_b(a))$, if
 \[
-\Rpre(U_b(a))\longrightarrow \prod_{i=1}^r \Rpre(U_{b_i}(a))
+\rho_{a_b\leftarrow c_i}(s)=\rho_{a_b\leftarrow c_i}(t)
+\qquad
+(1\le i\le r),
 \]
-is injective on compatible families.
+then $s=t$.
+\item The presheaf $\Rpre$ is separated along the dyadic neighborhood basis of
+$a$: for every $b\ge 0$ and every finite dyadic cylinder cover
+\[
+\{U(c_i)\to U_b(a)\}_{i=1}^r,
+\]
+the canonical map
+\[
+\Rpre(U_b(a))\longrightarrow \prod_{i=1}^r \Rpre(U(c_i))
+\]
+is injective.
 \end{enumerate}
 
 Moreover, failure of single-valued readout at $a$ has three internal forms:
 \begin{enumerate}[label=\textup{(\roman*)}]
 \item \emph{empty local fiber}: $\Rpre(U_b(a))=\varnothing$ for some sufficiently
 deep neighborhood;
-\item \emph{descent failure}: compatible local sections on a finite dyadic cover
-of some $U_b(a)$ do not glue to a section over $U_b(a)$;
+\item \emph{descent failure}: compatible local sections on a finite dyadic
+cylinder cover of some $U_b(a)$ do not glue to a section over $U_b(a)$;
 \item \emph{non-separatedness}: two distinct sections over some $U_b(a)$ have
-identical restrictions to a finite dyadic cover of $U_b(a)$.
+identical restrictions to a finite dyadic cylinder cover of $U_b(a)$.
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
 The equivalence of \textup{(1)} and \textup{(2)} is exactly the usual
-separatedness condition, specialized to the dyadic neighborhood basis of the
-inverse-limit address; see
-\cite[Section~III.4]{MacLaneMoerdijk1992} and
-\cite[Lecture~5]{Vistoli2008Grothendieck}.
+separatedness condition, specialized to the finite dyadic cylinder covers of
+the neighborhood basis at the inverse-limit address; see
+\cite{MacLaneMoerdijk1992,Vistoli2008Grothendieck}.
 
-If some sufficiently deep neighborhood has empty fiber, then no readout thread
-through $a$ exists at all, so readout fails by absence of local data.  If local
-sections exist on a finite cover but do not glue, then the failure is one of
-effective descent.  Finally, if two distinct sections over $U_b(a)$ restrict to
-the same family on a finite cover, then finite observations do not distinguish
-them, so readout is not single-valued.  Conversely, any failure of single-valued
-readout must occur through one of these three mechanisms: no local object, no
-descent, or no separatedness.
+If some sufficiently deep neighborhood has empty fiber, then readout fails by
+absence of local data.  If local sections exist on a finite dyadic cylinder
+cover but do not glue, then the failure is one of effective descent.  Finally,
+if two distinct sections over $U_b(a)$ restrict to the same family on a finite
+dyadic cylinder cover, then finite observations do not distinguish them, so
+readout is not single-valued.  Conversely, any failure of single-valued readout
+must occur through one of these three mechanisms: no local object, no descent,
+or no separatedness.
 \end{proof}
 
 \section{Discussion}

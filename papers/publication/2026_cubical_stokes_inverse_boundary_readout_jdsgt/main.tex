@@ -38,7 +38,7 @@
 \maketitle
 
 \begin{abstract}
-We isolate the geometric-analysis core of the scan-projection manuscript.  On
+We study an explicit bounded inverse problem on the unit cube.  On
 the unit cube we write down an explicit homotopy operator $K_k$ and prove the
 dimension-free sharp bound
 \[
@@ -53,14 +53,13 @@ cochains whose Whitney coboundaries are decomposable and obtain two discrete
 consequences: gradient consistency on the hypercube and an optimal
 near-detailed-balance statement for edge-based jump asymmetries in the same
 restricted class.  A second part of the paper interprets the sharp inverse
-through boundary geometry: we record a Cheeger--Stokes duality principle,
-prove that every cube minimizer has the same boundary trace, and identify an
+through boundary geometry: we record a boundary calibration inequality, prove
+that every cube minimizer has the same boundary trace, and identify an
 explicit extremal primitive.  Finally, for dyadic outer approximations of
-compact sets we show that one universal probe form reads the volume of the
+compact sets we show that one fixed probe form reads the volume of the
 approximation exactly and therefore recovers upper Minkowski dimension from a
-boundary-flux sequence.  The paper deliberately stops at this deterministic
-geometric layer and does not import the probabilistic scan-error machinery of
-the companion manuscript.
+boundary-flux sequence.  The paper is self-contained and remains entirely at
+the deterministic geometric level.
 \end{abstract}
 
 \tableofcontents
@@ -106,12 +105,11 @@ restricted class.  These discrete results are included because they are
 geometric consequences of the same inverse estimate, not because we want to
 start a separate stochastic theory.
 
-The boundary side of the paper is equally rigid.  We formulate a
-Cheeger--Stokes duality principle: minimizing the coefficient sup norm of a
-primitive of the volume form is dual to an isoperimetric ratio.  On the cube,
-every minimizer has the same boundary trace, so the optimal primitive is not
-only norm-sharp but boundary-rigid.  This rigidity then feeds directly into the
-final dyadic result: for a compact set $A\subset I^n$, the boundary of the
+The boundary side of the paper is equally rigid.  We record a boundary
+calibration inequality for primitives of the volume form and then show that on
+the cube every minimizer has the same boundary trace.  Thus the optimal
+primitive is not only norm-sharp but boundary-rigid.  This rigidity then feeds
+directly into the final dyadic result: for a compact set $A\subset I^n$, the boundary of the
 dyadic outer approximation $U_m(A)$ can be tested by one universal
 $(n-1)$-form $\omega_0$, and the flux identity
 \[
@@ -119,11 +117,10 @@ $(n-1)$-form $\omega_0$, and the flux identity
 \]
 turns boundary data into a direct Minkowski-dimension readout.
 
-This manuscript is deliberately separate from the scan-error companion.  The
-companion paper starts from prefix filtrations, Bayes risk, and rate laws for
-classification error.  Here we stop earlier.  Boundary flux is treated as a
-deterministic geometric observable, not as a posterior statistic, and no
-probabilistic coding or complexity material is imported.
+The manuscript is self-contained.  Its inputs are the cubical homotopy
+operator, Whitney transfer, and polyhedral Stokes formulas; its outputs are a
+sharp bounded inverse on the decomposable class, boundary rigidity, and a
+dyadic flux readout.
 
 Standard background on de Rham homotopy formulas, Whitney forms, finite
 perimeter, and Minkowski dimension may be found in
@@ -136,13 +133,13 @@ Table~\ref{tab:constants-overview}.
 \small
 \begin{tabular}{>{\raggedright\arraybackslash}p{0.30\textwidth} >{\raggedright\arraybackslash}p{0.47\textwidth} >{\raggedright\arraybackslash}p{0.15\textwidth}}
 \toprule
-Result & Statement & Sharp constant \\
+Result & Statement & Optimal value \\
 \midrule
 Continuous inverse & $\norm{K_k\omega}_\infty \le \frac{1}{2k}\norm{\omega}_\infty$ on closed decomposable $k$-forms & $\frac{1}{2k}$ \\
 Homotopy decomposition & $\omega = \dd\eta + E$ with $\norm{E}_\infty \le \frac{1}{2(k+1)}\norm{\dd\omega}_\infty$ when $\dd\omega$ is decomposable & $\frac{1}{2(k+1)}$ \\
 Vector-field reconstruction & $\norm{v-\nabla U}_\infty \le \frac14 \norm{\dd\omega}_\infty$ for $\omega=\sum_i v_i \dd x_i$ and decomposable $\dd\omega$ & $\frac14$ \\
 Cubical cochains & $\norm{E}_\infty \le \frac{1}{2(k+1)}\norm{d\omega}_\infty$ when $W(d\omega)$ is decomposable & $\frac{1}{2(k+1)}$ \\
-Boundary minimizers & every minimizer of $\dd\eta = \dd x_1\wedge\cdots\wedge \dd x_k$ has canonical face traces & $\frac{1}{2k}$ \\
+Boundary minimizers & the minimal norm for $\dd\eta = \dd x_1\wedge\cdots\wedge \dd x_k$ is $\frac{1}{2k}$, and every minimizer has canonical face traces & $\frac{1}{2k}$ \\
 \bottomrule
 \end{tabular}
 \caption{The optimal constants that organize the decomposable-form part of the paper.}
@@ -293,6 +290,10 @@ and
 \norm{\mathcal I}_{\infty\to\infty}\le 1.
 \]
 These identities are all that will be needed in the discrete section.
+For the single cube considered here, the cubical Whitney forms are multilinear
+polynomial differential forms; in particular
+$W(C^k(I^n;\RR))\subset \Omega^k_{\mathrm{sm}}(I^n)$, so the continuous
+homotopy identity applies to $W\theta$ without any regularity loss.
 
 \begin{definition}[Whitney-decomposable cochain]
 \label{def:whitney-decomposable}
@@ -349,8 +350,24 @@ H_1^\ast\omega - H_0^\ast\omega
 + \int_0^1 H_t^\ast(\iota_X\dd\omega)\,\dd t.
 \]
 Because $H_1=\mathrm{Id}$ and $H_0$ is constant, $H_0^\ast\omega=0$ for
-$k\ge 1$.  Pullback by $H_t$ scales the $k-1$ tangential directions in
-$\iota_X\omega$ by $t^{k-1}$, so the two integrals are exactly
+$k\ge 1$.  If
+\[
+\alpha = g(x)\,\dd x_{j_1}\wedge\cdots\wedge \dd x_{j_{k-1}},
+\]
+then
+\[
+H_t^\ast\alpha
+=
+g\bigl(c+t(x-c)\bigr)\,t^{k-1}\,
+\dd x_{j_1}\wedge\cdots\wedge \dd x_{j_{k-1}}.
+\]
+Therefore
+\[
+H_t^\ast(\iota_X\omega)(x)=t^{k-1}(\iota_X\omega)\bigl(H_t(x)\bigr),
+\qquad
+H_t^\ast(\iota_X\dd\omega)(x)=t^k(\iota_X\dd\omega)\bigl(H_t(x)\bigr),
+\]
+so the two integrals are exactly
 $\dd(K_k\omega)$ and $K_{k+1}(\dd\omega)$.  This proves
 \eqref{eq:homotopy-identity}.
 
@@ -433,12 +450,17 @@ To see sharpness, take the constant $(k+1)$-form
 \nu_0 := \dd x_1\wedge\cdots\wedge \dd x_{k+1}
 \]
 and set $\omega_0 := K_{k+1}\nu_0$.  Then $\dd\omega_0=\nu_0$ and
-$\norm{\dd\omega_0}_\infty=1$.  For any decomposition
+\norm{\dd\omega_0}_\infty=1$.  Suppose a constant $C$ satisfied the conclusion
+of the theorem for every $\omega$ with decomposable $\dd\omega$.  Applying
+that assertion to $\omega_0$ yields a decomposition
 \[
-\omega_0 = \dd\phi + \widetilde E
+\omega_0 = \dd\phi + \widetilde E,
+\qquad
+\dd\widetilde E = \nu_0,
+\qquad
+\norm{\widetilde E}_\infty \le C.
 \]
-with $\widetilde E$ determined only by $\dd\omega_0=\nu_0$, we have
-$\dd\widetilde E = \nu_0$.  The sharp part of
+The sharp part of
 Theorem~\ref{thm:optimal-continuous-inverse} in degree $k+1$ therefore implies
 \[
 \norm{\widetilde E}_\infty \ge \frac{1}{2(k+1)}.
@@ -448,12 +470,12 @@ No smaller uniform constant can hold even on this restricted class.
 
 \begin{corollary}[Potential reconstruction from decomposable curl]
 \label{cor:curl-reconstruction}
-Let $v\in C^1(I^n;\RR^n)$ and set
+Let $v$ be a smooth vector field on a neighborhood of $I^n$ and set
 \[
 \omega := \sum_{i=1}^n v_i\,\dd x_i.
 \]
 Assume that the curl form $\dd\omega$ is decomposable.
-Then there exists $U\in C^2(I^n)$ such that
+Then there exists a smooth function $U$ on $I^n$ such that
 \begin{equation}
 \label{eq:curl-potential-bound}
 \norm{v-\nabla U}_\infty \le \frac14 \norm{\dd\omega}_\infty.
@@ -514,10 +536,14 @@ $I^n$ with $n\ge k+1$.
 \end{theorem}
 
 \begin{proof}
-Define
+For each $1\le j\le n$ define
 \[
-\mathcal H_{k+1} := \mathcal I\circ K_{k+1}\circ W:
-C^{k+1}(I^n;\RR)\to C^k(I^n;\RR).
+\mathcal H_j := \mathcal I\circ K_j\circ W:
+C^j(I^n;\RR)\to C^{j-1}(I^n;\RR).
+\]
+In particular,
+\[
+\mathcal H_{k+1}:C^{k+1}(I^n;\RR)\to C^k(I^n;\RR).
 \]
 Using the identities from Section~2, we obtain
 \[
@@ -526,6 +552,24 @@ d\mathcal H_j + \mathcal H_{j+1}d = \mathrm{Id}
 \text{on } C^j(I^n;\RR)
 \]
 for every $1\le j\le n-1$.
+Indeed, for $\theta\in C^j(I^n;\RR)$ one has
+\[
+\begin{aligned}
+d\mathcal H_j\theta + \mathcal H_{j+1}d\theta
+&=
+d(\mathcal I K_jW\theta)+\mathcal I K_{j+1}W(d\theta) \\
+&=
+\mathcal I(\dd K_jW\theta)+\mathcal I K_{j+1}(\dd W\theta) \\
+&=
+\mathcal I(\dd K_j + K_{j+1}\dd)W\theta \\
+&=
+\mathcal I W\theta
+=
+\theta,
+\end{aligned}
+\]
+where we used $\mathcal I\dd=d\mathcal I$, $\dd W = Wd$, and
+\eqref{eq:homotopy-identity} on the smooth form $W\theta$.
 Now set
 \[
 \eta := \mathcal H_k\omega,
@@ -663,12 +707,12 @@ Taking absolute values and exponentiating yields the two-sided estimate.  The
 sharpness is inherited from Corollary~\ref{cor:hypercube-gradient}.
 \end{proof}
 
-\section{Cheeger--Stokes Duality and Boundary Rigidity}
+\section{Boundary Calibration and Boundary Rigidity}
 
-\subsection{Duality}
+\subsection{Calibration Lower Bound}
 
-\begin{proposition}[Cheeger--Stokes duality]
-\label{prop:cheeger-stokes}
+\begin{proposition}[Boundary calibration inequality]
+\label{prop:boundary-calibration}
 Let $\Omega\subset\RR^n$ be a bounded Lipschitz domain, and let
 \[
 \mathrm{vol} := \dd x_1\wedge\cdots\wedge \dd x_n.
@@ -678,66 +722,47 @@ Define
 \mathcal C_\infty(\Omega)
 :=
 \inf\Bigl\{
-\norm{\eta}_\infty:
-\eta\in \Omega^{n-1}(\Omega),\ \dd\eta = \mathrm{vol}
+\norm{V}_\infty:
+V\in C^\infty(U;\RR^n),\ U\supset \overline{\Omega}\ \text{open},
+\ \Div V = 1 \text{ on }\Omega
 \Bigr\},
 \]
-and
+or, equivalently, the infimum of $\norm{\eta}_\infty$ over smooth
+$(n-1)$-forms $\eta$ on a neighborhood of $\overline\Omega$ satisfying
+$\dd\eta=\mathrm{vol}$ on $\Omega$.  Then every admissible vector field $V$
+and every Lipschitz subdomain $E\subset \Omega$ satisfy
 \[
-h(\Omega)
-:=
-\inf\left\{
-\frac{\Haus^{n-1}(\partial^\ast E\cap \Omega)}{\Vol(E)}:
-E\subset\Omega,\ 0<\Vol(E)<\infty,\ E \text{ of finite perimeter}
+\Vol(E)\le \norm{V}_\infty \Haus^{n-1}(\partial E).
+\]
+Consequently,
+\[
+\mathcal C_\infty(\Omega)\ge
+\sup\left\{
+\frac{\Vol(E)}{\Haus^{n-1}(\partial E)}:
+E\subset \Omega,\ E \text{ Lipschitz}
 \right\}.
-\]
-Assume there exists a Cheeger minimizer $E_\ast$ and a calibrating vector field
-$V_\ast\in L^\infty(\Omega;\RR^n)$ such that
-\[
-\Div V_\ast = 1 \text{ in distributions},
-\qquad
-\norm{V_\ast}_\infty \le h(\Omega)^{-1},
-\qquad
-V_\ast\cdot \nu_{E_\ast} = h(\Omega)^{-1}
-\ \text{a.e. on }\partial^\ast E_\ast\cap\Omega.
-\]
-Then
-\[
-\mathcal C_\infty(\Omega) = h(\Omega)^{-1}.
 \]
 \end{proposition}
 
 \begin{proof}
-Write $\eta = \iota_V \mathrm{vol}$.  Then $\dd\eta=(\Div V)\mathrm{vol}$, so
-the constraint $\dd\eta=\mathrm{vol}$ is equivalent to $\Div V=1$.  Under the
-coefficient sup norm used in this paper, $\norm{\eta}_\infty=\norm{V}_\infty$.
+For a smooth vector field $V$, the form $\eta:=\iota_V\mathrm{vol}$ satisfies
+$\dd\eta=(\Div V)\mathrm{vol}$, and under the coefficient sup norm used in this
+paper one has $\norm{\eta}_\infty=\norm{V}_\infty$.  This identifies the two
+definitions of $\mathcal C_\infty(\Omega)$.
 
-Let $E\subset\Omega$ be a set of finite perimeter.  The divergence theorem for
-finite-perimeter sets \cite[Sec.~4.5.6]{Federer1969}; see also
-\cite{EvansGariepy2015} yields
+Now let $E\subset\Omega$ be a Lipschitz subdomain and let $V$ be admissible.
+The divergence theorem gives
 \[
 \Vol(E)
 =
 \int_E \Div V\,\dd x
 =
-\int_{\partial^\ast E\cap\Omega} V\cdot \nu_E\,\dd\Haus^{n-1}
+\int_{\partial E} V\cdot \nu_E\,\dd\Haus^{n-1}
 \le
-\norm{V}_\infty \Haus^{n-1}(\partial^\ast E\cap\Omega).
+\norm{V}_\infty \Haus^{n-1}(\partial E).
 \]
-Hence
-\[
-\norm{V}_\infty \ge
-\frac{\Vol(E)}{\Haus^{n-1}(\partial^\ast E\cap\Omega)}.
-\]
-Taking the supremum over $E$ and then the infimum over admissible $V$ gives
-\[
-\mathcal C_\infty(\Omega)\ge h(\Omega)^{-1}.
-\]
-
-If $V_\ast$ is a calibrating field, then
-$\eta_\ast:=\iota_{V_\ast}\mathrm{vol}$ satisfies $\dd\eta_\ast=\mathrm{vol}$
-and $\norm{\eta_\ast}_\infty\le h(\Omega)^{-1}$.  Therefore
-$\mathcal C_\infty(\Omega)\le h(\Omega)^{-1}$, and equality follows.
+Taking the supremum over $E$ and then the infimum over admissible $V$ yields
+the stated lower bound.
 \end{proof}
 
 \subsection{Boundary Rigidity on the Cube}
@@ -857,7 +882,9 @@ $x_j=0$ and $x_j=1$ gives the stated boundary traces immediately.
 \begin{remark}
 Theorem~\ref{thm:optimal-continuous-inverse} and
 Corollary~\ref{cor:explicit-minimizer} together show that
-$\mathcal C_\infty(I^k)=1/(2k)$.  The point of
+$\mathcal C_\infty(I^k)=1/(2k)$.  Proposition~\ref{prop:boundary-calibration}
+gives the matching lower bound already from the test domain $E=I^k$, since
+$\Vol(I^k)=1$ and $\Haus^{k-1}(\partial I^k)=2k$.  The point of
 Theorem~\ref{thm:boundary-rigidity} is stronger: the minimizer is not unique as
 an interior primitive, but its boundary trace is completely rigid.
 \end{remark}
@@ -899,7 +926,7 @@ C_A' 2^{-m(n-d)} \norm{\dd\omega}_\infty
 \end{equation}
 for all $m\ge 1$, where $C_A':=C_A n^{(n-d)/2}$.
 
-Moreover, the universal probe form
+Moreover, the standard volume primitive
 \begin{equation}
 \label{eq:probe-form}
 \omega_0
@@ -914,7 +941,7 @@ satisfies
 and therefore
 \begin{equation}
 \label{eq:volume-probe-identity}
-\int_{\partial U_m(A)} \omega_0 = \Vol(U_m(A)).
+\int_{\partial U_m(A)} \omega_0 = \Vol(U_m(A))>0.
 \end{equation}
 If $N_m(A)$ denotes the number of side-$2^{-m}$ dyadic cubes intersecting $A$,
 then
@@ -966,6 +993,8 @@ $\dd\omega_0 = \dd x_1\wedge\cdots\wedge \dd x_n$.  Applying Stokes again,
 \Vol(U_m(A)),
 \]
 which proves \eqref{eq:volume-probe-identity}.
+In particular, the logarithm in \eqref{eq:minkowski-readout} is well-defined
+for every $m$.
 
 Finally, $\Vol(U_m(A)) = N_m(A)2^{-mn}$ by definition.  The upper Minkowski
 dimension can equivalently be computed from dyadic cube counts,
@@ -988,9 +1017,9 @@ and \eqref{eq:minkowski-readout} follows from
 \begin{remark}
 The gain in \eqref{eq:dyadic-stokes-bound} is genuinely codimension-sensitive:
 the decay exponent is $n-d$, not merely the surface-growth exponent of the
-polyhedral boundary.  The single probe $\omega_0$ therefore turns a family of
-boundary integrals into a direct geometric size measurement of the outer
-approximation.
+polyhedral boundary.  The single fixed primitive $\omega_0$ therefore turns a
+family of boundary integrals into a direct geometric size measurement of the
+outer approximation.
 \end{remark}
 
 \section{Discussion}
@@ -1009,11 +1038,8 @@ underlying mechanism.  That is the real reason the cochain section belongs in
 the paper: it is not an application layer added afterwards, but a faithful
 transfer of the same inverse estimate within the Whitney-decomposable class.
 
-This is also the correct stopping point.  We do not discuss prefix
-filtrations, Bayes classifiers, scan-error rates, coding semantics, or
-complexity barriers.  Those topics belong to separate manuscripts with
-different journal boundaries.  The contribution here is the geometric-analysis
-core that can stand on its own: one optimal inverse on the decomposable class,
+This is the natural stopping point for the argument.  The contribution is a
+self-contained geometric chain: one optimal inverse on the decomposable class,
 one rigid boundary theory, and one dyadic flux readout principle.
 
 \bibliographystyle{alpha}
