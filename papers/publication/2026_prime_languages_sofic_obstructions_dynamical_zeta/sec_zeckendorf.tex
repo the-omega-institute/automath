@@ -33,27 +33,77 @@ interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
 \end{theorem}
 
 \begin{proof}
-  Let \(a_m:=\#\{w\in L:\abs{w}=m\}\). Since \(L\) is regular,
-  and \(\mathcal Z\) is regular as a forbidden-pattern language,
-  \(a_m=u^{\mathsf T}B^m v\), where \(B\) is the transfer matrix of a
-  DFA recognizing \(L\cap\mathcal Z\). If \(L\) is finite, then
-  \(N_L(T)\) is eventually constant, so the conclusion holds with
-  \(\alpha=0\). Assume henceforth that \(L\) is infinite. Then
-  \(a_m=\lambda^{m+o(m)}\) for a well-defined exponential growth rate
-  \(\lambda\in(0,\varphi]\). The upper bound \(\lambda\le\varphi\)
-  follows from
+  Let
   \[
-    \abs{\mathcal Z\cap\{0,1\}^m}=F_{m+1}=\varphi^{m+o(m)}.
+    a_m:=\#\{w\in L:\abs{w}=m\},
+    \qquad
+    A_n:=\sum_{m\le n}a_m.
   \]
+  Since \(L\) is regular and \(\mathcal Z\) is regular, their
+  intersection is recognised by a DFA. After discarding states that are
+  unreachable from the initial state or cannot reach an accepting state,
+  we obtain a finite automaton with transfer matrix \(B\) such that
+  \(a_m=u^{\mathsf T}B^m v\).
+
+  If \(L\) is finite, then \(A_n\) and \(N_L(T)\) are eventually
+  constant, so the conclusion holds with \(\alpha=0\). Assume henceforth
+  that \(L\) is infinite.
+
+  Let \(\lambda\) be the maximum spectral radius of a strongly connected
+  component of this pruned automaton. Standard Jordan-form bounds for
+  powers of a finite matrix give constants \(C>0\) and \(d\ge 0\) such
+  that
+  \[
+    a_m\le C m^d\lambda^m
+    \qquad (m\ge 1).
+  \]
+  Summing over \(m\le n\) yields
+  \[
+    A_n\le C' n^{d+1}\max(1,\lambda)^n
+  \]
+  for some \(C'>0\). Since
+  \[
+    \abs{\mathcal Z\cap\{0,1\}^m}=F_{m+1}=\varphi^{m+o(m)},
+  \]
+  one has \(\lambda\le\varphi\).
+
+  If \(\lambda>1\), choose a strongly connected component \(C\) of
+  spectral radius \(\lambda\) that is reachable from the initial state
+  and from which an accepting state is reachable. Let \(d_C\) be the
+  period of \(C\). By Perron--Frobenius theory for irreducible
+  non-negative matrices, there exist states \(i,j\in C\), a residue
+  class \(r\bmod d_C\), and a constant \(c>0\) such that
+  \[
+    (B_C^{r+k d_C})_{ij}\ge c\,\lambda^{r+k d_C}
+  \]
+  for all sufficiently large \(k\). Fix paths of lengths \(\ell_1\) and
+  \(\ell_2\) from the initial state to \(i\) and from \(j\) to an
+  accepting state. Then
+  \[
+    a_{\ell_1+\ell_2+r+k d_C}\ge c\,\lambda^{r+k d_C}
+  \]
+  for all large \(k\). Since every sufficiently large integer \(n\) lies
+  within \(O(1)\) of some value in this arithmetic progression, the
+  monotonicity of \(A_n\) gives
+  \[
+    A_n\ge c'\lambda^n
+  \]
+  for all large \(n\), with \(c'>0\). Combined with the upper bound
+  above, this implies
+  \[
+    A_n=\lambda^{n+o(n)}.
+  \]
+
+  If \(\lambda=1\), then the displayed upper bound gives
+  \(A_n\le C'n^{d+1}\), so \(A_n=\exp(o(n))\).
 
   If \(F_{n+1}\le T<F_{n+2}\), then every Zeckendorf word of value at
   most \(T\) has length at most \(n\), while every word of length at
   most \(n-1\) has value at most \(T\). Therefore
   \[
-    \sum_{m\le n-1}a_m\le N_L(T)\le \sum_{m\le n}a_m.
+    A_{n-1}\le N_L(T)\le A_n.
   \]
-  Since \(n=(\log T)/(\log\varphi)+O(1)\) and
-  \(\sum_{m\le n}a_m=\lambda^{n+o(n)}\), we obtain
+  Since \(n=(\log T)/(\log\varphi)+O(1)\), the case \(\lambda>1\) gives
   \[
     N_L(T)
     =\exp\!\left(
@@ -61,7 +111,9 @@ interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
     \right)
     =T^{\alpha+o(1)}
   \]
-  with \(\alpha:=\log\lambda/\log\varphi\in[0,1]\).
+  with \(\alpha:=\log\lambda/\log\varphi\in(0,1]\). If \(\lambda=1\),
+  then \(N_L(T)\le A_n=\exp(o(n))=\exp(o(\log T))=T^{o(1)}\), so the
+  same conclusion holds with \(\alpha=0\).
 \end{proof}
 
 \begin{remark}
@@ -107,12 +159,16 @@ interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
 \end{proposition}
 
 \begin{proof}
-  A sofic shift admits a finite labelled graph presentation, and the
-  number of admissible words of length \(m\) is obtained from powers of
-  the associated finite adjacency matrix; see
-  \cite{LindMarcus1995,Kitchens1998} and, from the transfer-matrix
-  viewpoint, \cite{FlajoletSedgewick2009}. The Jordan normal form of a
-  finite matrix yields the displayed exponential-polynomial expansion.
+  The block language \(\mathcal B(X)\) of a sofic shift is regular;
+  equivalently, \(X\) admits a finite right-resolving presentation; see
+  \cite{LindMarcus1995,Kitchens1998}. Hence there exist vectors \(u,v\)
+  and a finite non-negative integer matrix \(B\) such that
+  \[
+    a_m(X)=u^{\mathsf T}B^m v.
+  \]
+  The Jordan normal form of \(B\) then yields the displayed
+  exponential-polynomial expansion; compare
+  \cite[Chapter~V]{FlajoletSedgewick2009}.
 \end{proof}
 
 \begin{theorem}[Prime Zeckendorf slices are not sofic]
@@ -146,9 +202,28 @@ interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
   \(\mathcal B_m(X)=\mathcal P_m^{(\mathrm Z)}\) for all sufficiently
   large \(m\), then \Cref{prop:sofic-counts-exponential-polynomial}
   would imply that \(\abs{\mathcal P_m^{(\mathrm Z)}}\) is eventually an
-  exponential polynomial \(\sum_jQ_j(m)\lambda_j^m\). Such a sequence
-  has dominant asymptotic form \(m^k\Lambda^m\), up to periodic
-  fluctuations coming from dominant roots of equal modulus, with
-  \(k\ge 0\); in particular it cannot be of order \(\Lambda^m/m\). This
-  contradicts the displayed estimate.
+  exponential polynomial \(\sum_jQ_j(m)\lambda_j^m\). Let
+  \(\Lambda:=\max_j\abs{\lambda_j}\). For the non-negative matrix
+  underlying the proof of
+  \Cref{prop:sofic-counts-exponential-polynomial}, every eigenvalue of
+  modulus \(\Lambda\) is of the form \(\Lambda\omega\) with \(\omega\) a
+  root of unity. After passing to a common period \(q\), each residue
+  subsequence is therefore either of strictly smaller exponential rate
+  than \(\Lambda\), or else satisfies
+  \[
+    a_{r+qk}(X)=c_r k^{d_r}\Lambda^{r+qk}(1+o(1))
+  \]
+  for some \(c_r>0\) and some integer \(d_r\ge 0\). Since
+  \(\abs{\mathcal P_m^{(\mathrm Z)}}\asymp\varphi^m/m>0\) for all large
+  \(m\), every residue subsequence still has exponential growth
+  \(\varphi^{qk}\), so one must have \(\Lambda=\varphi\) and the second
+  alternative above for every \(r\). Along any residue class modulo
+  \(q\), the
+  displayed estimate gives
+  \[
+    \abs{\mathcal P_{r+qk}^{(\mathrm Z)}}\asymp\frac{\varphi^{r+qk}}{k},
+  \]
+  whereas the residue-class asymptotic above has size
+  \(k^{d_r}\varphi^{r+qk}\) with \(d_r\ge 0\). This contradiction proves
+  the claim.
 \end{proof}
