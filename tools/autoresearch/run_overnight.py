@@ -190,12 +190,24 @@ def call_llm_codex(prompt: str, repo_root: str) -> tuple[str, dict]:
             capture_output=True, text=True, timeout=300,
         )
         text = result.stdout.strip()
-        usage = {"input_tokens": 0, "output_tokens": 0}  # Codex doesn't report tokens
+        usage = {"input_tokens": 0, "output_tokens": 0}
         return text, usage
     except subprocess.TimeoutExpired:
         return "", {"input_tokens": 0, "output_tokens": 0}
     finally:
         os.unlink(prompt_file)
+
+
+def call_llm_claude_code(prompt: str, repo_root: str) -> tuple[str, dict]:
+    """Call Claude Code in headless mode with lean-lsp-mcp tools available."""
+    result = subprocess.run(
+        ["claude", "-p", prompt, "--output-format", "text"],
+        cwd=repo_root,
+        capture_output=True, text=True, timeout=600,
+    )
+    text = result.stdout.strip()
+    usage = {"input_tokens": 0, "output_tokens": 0}
+    return text, usage
 
 
 def call_llm_openai(
@@ -275,6 +287,9 @@ def call_llm(
 
     if model == "codex":
         return call_llm_codex(prompt, str(REPO_ROOT))
+
+    if model == "claude-code":
+        return call_llm_claude_code(prompt, str(LEAN_ROOT))
 
     if model in OPENAI_MODELS or model.startswith("gpt-") or model.startswith("o"):
         key = api_key or os.environ.get("OPENAI_API_KEY", "")
@@ -500,8 +515,36 @@ def update_omega_imports(new_file: Path) -> None:
     omega_lean.write_text("\n".join(lines), encoding="utf-8")
 
 
-def run_build(filepath: Path | None = None) -> tuple[bool, str]:
-    """Run lake build. Returns (success, error_output)."""
+def run_build(filepath: Path | None = None, lsp=None) -> tuple[bool, str]:
+    """Verify code compiles. Uses lean-lsp-mcp if available, falls back to lake build."""
+    # Fast path: use LSP diagnostics (seconds, not minutes)
+    if lsp and filepath:
+        try:
+            rel_path = str(filepath.relative_to(LEAN_ROOT))
+            result = lsp.call("lean_diagnostic_messages", file_path=rel_path, timeout=120)
+            text = result.get("text", "")
+            if result.get("isError"):
+                return False, text
+            # Parse diagnostic JSON
+            import json as _json
+            try:
+                diag = _json.loads(text)
+                if diag.get("success") and not diag.get("items"):
+                    return True, "LSP: no errors"
+                elif diag.get("items"):
+                    errors = [item for item in diag["items"] if item.get("severity") == "error"]
+                    if not errors:
+                        return True, "LSP: warnings only"
+                    return False, text
+            except _json.JSONDecodeError:
+                pass
+            if "error" in text.lower():
+                return False, text
+            return True, text
+        except Exception:
+            pass  # Fall through to lake build
+
+    # Fallback: lake build
     cmd = ["timeout", str(BUILD_TIMEOUT), "lake", "build"]
     try:
         result = subprocess.run(
@@ -737,11 +780,24 @@ def run_loop(args: argparse.Namespace) -> int:
 
     program_md = load_program_md()
 
+    # Try to start lean-lsp-mcp for fast diagnostics
+    lsp = None
+    try:
+        from lean_mcp import LeanMCP
+        lsp = LeanMCP(LEAN_ROOT)
+        lsp.start()
+        lsp_tools = lsp.list_tools()
+        print(f"[autoresearch] lean-lsp-mcp connected ({len(lsp_tools)} tools)")
+    except Exception as e:
+        print(f"[autoresearch] lean-lsp-mcp not available ({e}), using lake build")
+        lsp = None
+
     print(f"[autoresearch] Starting run")
     print(f"  Model: {args.model}")
     print(f"  Budget: {args.budget} targets")
     print(f"  Max cost: ${args.max_cost}")
     print(f"  Targets available: {len(targets)}")
+    print(f"  LSP: {'connected' if lsp else 'fallback to lake build'}")
     print(f"  Dry run: {args.dry_run}")
     print()
 
@@ -892,7 +948,7 @@ def run_loop(args: argparse.Namespace) -> int:
 
             # Build
             print("building...", end=" ", flush=True)
-            build_ok, build_output = run_build(target_file)
+            build_ok, build_output = run_build(target_file, lsp=lsp)
 
             if build_ok:
                 print("PASS")
@@ -985,6 +1041,10 @@ def run_loop(args: argparse.Namespace) -> int:
             )
         if old_branches:
             print(f"  Cleaned up {len(old_branches)} old autoresearch branch(es)")
+
+    # Cleanup LSP
+    if lsp:
+        lsp.stop()
 
     return 0
 

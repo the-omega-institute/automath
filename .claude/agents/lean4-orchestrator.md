@@ -55,8 +55,14 @@ model: opus
 
 ### 4. 错误处理
 - analyst 提出数学错误的 spec → formalizer 捕获后记录
-- formalizer stuck → 升级路径（codex-consultant → proof-repair → sorry-filler-deep）
+- formalizer stuck → 升级路径（codex-consultant → **leanstral** → proof-repair → sorry-filler-deep）
 - 论文错误 → 直接修改 .tex
+
+### 4.5 lean-lsp-mcp 与 Leanstral 集成
+
+**lean-lsp-mcp** 已通过 `.mcp.json` 配置，所有 agent 启动后自动可用。它通过 MCP 协议连接 Lean4 LSP，提供实时类型检查、错误诊断、补全建议。
+
+**Leanstral 升级路径**：当 formalizer 在 codex-consultant 之后仍然 stuck 时，orchestrator 可指示通过 Leanstral API（`labs-leanstral-2603`，目前免费）做迭代证明搜索。Leanstral 是 Mistral 专门为 Lean4 训练的 MoE 模型（119B/6.5B 活跃参数），通过同一个 lean-lsp-mcp 连接编译器。调用后将结果交回 formalizer 验证和集成。
 
 ### 5. 标注协调
 - 发现已形式化但未标注的定理 → 安排 analyst 标注
