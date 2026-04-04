@@ -890,4 +890,13 @@ theorem parity_split_identity_odd {α : Type*} [DecidableEq α] {S : Finset α} 
     rw [← Finset.card_union_of_disjoint hdisj, ← hpart]
   push_cast [hcard] at h1 ⊢; linarith
 
+/-- Fold is the unique map Ω_m → X_m satisfying the Zeckendorf congruence condition.
+    prop:discussion-zeckendorf-congruence-address-rigidity -/
+theorem Fold_unique_of_stableValue_mod (Φ : Word m → X m)
+    (hΦ : ∀ w : Word m, stableValue (Φ w) = weight w % Nat.fib (m + 2)) :
+    ∀ w : Word m, Φ w = Fold w := by
+  intro w
+  apply X.eq_of_stableValue_eq
+  rw [hΦ, stableValue_Fold_mod]
+
 end Omega
