@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      4.0
+// @version      4.1
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -68,7 +68,7 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v4.0]</b>
+        <b>[Oracle v4.1]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
@@ -831,12 +831,22 @@
     updatePanel();
 
     try {
-      // ACK the task
+      // Navigate to a fresh chat page if we're not already on one.
+      // This prevents context buildup from prior conversations.
+      // PDF base64 data is re-fetched from the server after navigation.
+      if (!isOnNewChatPage()) {
+        log(`Not on fresh chat — navigating to chatgpt.com ...`);
+        GM_setValue("nav_task_id", task_id);
+        setTaskPhase("navigating");
+        busy = false;
+        updatePanel();
+        window.location.href = "https://chatgpt.com/";
+        return; // Script re-inits on new page, resumes from init()
+      }
+
+      // ACK the task (only after we're on the right page)
       try { await serverPost("/ack", { task_id }); } catch {}
 
-      // No navigation — work on whatever page we're on.
-      // Navigation destroys JS state (including PDF base64 data).
-      // If user is on an existing chat, the prompt still goes to the composer.
       setTaskPhase("processing");
 
       // Wait for prompt input to appear
@@ -970,17 +980,34 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Oracle Bridge v4.0 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
+    log(`Oracle Bridge v4.1 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
-    // Check if we have a saved task from a page navigation
-    const savedTask = loadTaskState();
+    // Check if we navigated here to process a task on a fresh chat page
     const phase = getTaskPhase();
+    const navTaskId = GM_getValue("nav_task_id", "");
 
-    if (savedTask && phase === "navigating") {
-      log(`Resuming task after navigation: ${savedTask.task_id}`);
-      // We navigated to new chat page — now process the task
-      await sleep(3000); // Let page load
-      await processTask(savedTask);
+    if (phase === "navigating" && navTaskId) {
+      log(`Resuming after navigation for task: ${navTaskId}`);
+      GM_setValue("nav_task_id", "");
+      clearTaskState();
+      await sleep(3000); // Let fresh chat page fully load
+
+      // Re-fetch the full task (including PDF base64) from the server.
+      // The server keeps pending_task until a result is posted.
+      try {
+        const task = await serverGet("/task");
+        if (task && task.task_id && task.status !== "idle") {
+          log(`Re-fetched task: ${task.task_id} (prompt ${task.prompt?.length || 0} chars, pdf=${!!task.pdf_base64})`);
+          await processTask(task);
+        } else {
+          log("WARNING: server returned no pending task after navigation");
+        }
+      } catch (e) {
+        log(`Failed to re-fetch task after navigation: ${e.message}`);
+      }
+    } else if (phase === "navigating") {
+      // Stale navigating state without task_id — clear it
+      clearTaskState();
     }
 
     // Start polling
