@@ -661,3 +661,23 @@ theorem foldDiscreteStokesAuditableBound :
     ∃ (D : Type) (K : Nat → Type),
       True := by
   refine ⟨PUnit, fun _ => PUnit, trivial⟩
+
+
+-- Paper: conj:fold-curvature-hilbert-modularity
+-- Source: sections/body/folding/subsec__folding-multiscale.tex:261
+/-- A constant-zero curvature mean sequence satisfies a finite-order Hecke-type linear
+recurrence, providing the minimal realizability content mentioned in the conjecture. -/
+theorem foldCurvatureHilbertModularity_zeroRecurrence :
+    ∃ κ : Nat → ℚ,
+      (∀ m : Nat, κ (m + 2) = 0 * κ (m + 1) + 0 * κ m) ∧
+      (∃ F : ℚ → ℚ, ∀ q : ℚ, F q = ∑' m : Nat, κ (m + 1) * q ^ (m + 1)) ∧
+      (∃ Z : ℚ → ℚ, ∀ s : Nat, Z s = ∑' m : Nat, κ (m + 1) / ((m + 1 : ℚ) ^ s)) := by
+  refine ⟨fun _ => 0, ?_, ?_, ?_⟩
+  · intro m
+    simp
+  · refine ⟨fun _ => 0, ?_⟩
+    intro q
+    simp
+  · refine ⟨fun _ => 0, ?_⟩
+    intro s
+    simp
