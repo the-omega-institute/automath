@@ -87,6 +87,8 @@ model: opus
 - 主模块：`Omega/`
 - Lean版本：v4.28.0
 - mathlib版本：v4.28.0
+- **lean-lsp-mcp**：已配置（`.mcp.json`），通过 MCP 协议连接 Lean4 LSP。提供实时类型检查、错误诊断、补全建议，启动后自动可用。
+- **Leanstral API**（升级路径可选）：Mistral 的 Lean4 专用证明搜索 agent（`labs-leanstral-2603`），通过 lean-lsp-mcp 连接编译器。用于 codex-consultant 仍无法解决的 stuck 情况。调用方式：通过 Mistral API 发送证明目标，Leanstral 迭代尝试直到编译通过或报告失败。
 
 ## LSP 工具与 mathlib 搜索（lean4-skills 核心协议）
 
