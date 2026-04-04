@@ -588,3 +588,90 @@ theorem autpCenter_z2_by_twofibers' (N₂ : ℕ) :
   · intro x
     right
     rfl
+
+
+-- Paper: cor:autp-center-z2-by-twofibers
+-- Source: sections/body/group_unification/parts/thm__fiberwise_free_involution_matching_entropy.tex:48
+/-- For the eight `2`-point BinFold fibers at `m = 6`, choosing a subset of fibers to swap
+gives a corresponding family of involutive self-equivalences of the Boolean choice space.
+This is the concrete `(ℤ/2ℤ)^{N₂}` model behind the central sheet-flip data. -/
+theorem autpCenter_z2_by_twofibers_model :
+    ∃ Φ : (Fin (Omega.cBinFiberHist 6 2) → Bool) →
+        ((Fin (Omega.cBinFiberHist 6 2) → Bool) ≃ (Fin (Omega.cBinFiberHist 6 2) → Bool)),
+      Function.Injective Φ ∧
+      Φ (fun _ => false) = Equiv.refl _ ∧
+      (∀ s, Function.Involutive (Φ s)) ∧
+      ∃ s, Φ s ≠ Equiv.refl _ := by
+  rw [Omega.binFold_boundary_count_m6]
+  let Φ : (Fin 8 → Bool) → ((Fin 8 → Bool) ≃ (Fin 8 → Bool)) := fun s =>
+    { toFun := fun x i => if s i then !(x i) else x i
+      invFun := fun x i => if s i then !(x i) else x i
+      left_inv := by
+        intro x
+        funext i
+        by_cases hs : s i <;> simp [hs]
+      right_inv := by
+        intro x
+        funext i
+        by_cases hs : s i <;> simp [hs] }
+  have hΦinj : Function.Injective Φ := by
+    intro s t hst
+    funext i
+    have h := congrArg (fun e : (Fin 8 → Bool) ≃ (Fin 8 → Bool) => e (fun _ => false) i) hst
+    simpa [Φ] using h
+  have hΦzero : Φ (fun _ => false) = Equiv.refl _ := by
+    ext x i
+    simp [Φ]
+  have hΦinv : ∀ s, Function.Involutive (Φ s) := by
+    intro s x
+    funext i
+    by_cases hs : s i <;> simp [Φ, hs]
+  refine ⟨Φ, hΦinj, hΦzero, hΦinv, ?_⟩
+  let s : Fin 8 → Bool := fun i => decide (i = 0)
+  have hs : s ≠ fun _ => false := by
+    intro hs0
+    have h := congrArg (fun f : Fin 8 → Bool => f 0) hs0
+    simp [s] at h
+  refine ⟨s, ?_⟩
+  intro hEq
+  apply hs
+  apply hΦinj
+  calc
+    Φ s = Equiv.refl _ := hEq
+    _ = Φ (fun _ => false) := hΦzero.symm
+
+
+-- Paper: cor:autp-center-z2-by-twofibers
+-- Source: sections/body/group_unification/parts/thm__fiberwise_free_involution_matching_entropy.tex:48
+/-- On a family of `N₂` two-point fibers, a selector `s : Fin N₂ → Bool` acts by toggling
+exactly the chosen coordinates. This yields an injective `(ℤ/2ℤ)^{N₂}`-family of
+involutive self-equivalences, with the zero selector giving the identity. -/
+theorem autpCenter_z2_by_twofibers_family (N₂ : ℕ) :
+    ∃ Φ : (Fin N₂ → Bool) → ((Fin N₂ → Bool) ≃ (Fin N₂ → Bool)),
+      Function.Injective Φ ∧
+      Φ (fun _ => false) = Equiv.refl _ ∧
+      ∀ s, Function.Involutive (Φ s) := by
+  let Φ : (Fin N₂ → Bool) → ((Fin N₂ → Bool) ≃ (Fin N₂ → Bool)) := fun s =>
+    { toFun := fun x i => if s i then !(x i) else x i
+      invFun := fun x i => if s i then !(x i) else x i
+      left_inv := by
+        intro x
+        funext i
+        by_cases hs : s i <;> simp [hs]
+      right_inv := by
+        intro x
+        funext i
+        by_cases hs : s i <;> simp [hs] }
+  have hΦinj : Function.Injective Φ := by
+    intro s t hst
+    funext i
+    have h := congrArg (fun e : (Fin N₂ → Bool) ≃ (Fin N₂ → Bool) => e (fun _ => false) i) hst
+    simpa [Φ] using h
+  have hΦzero : Φ (fun _ => false) = Equiv.refl _ := by
+    ext x i
+    simp [Φ]
+  have hΦinv : ∀ s, Function.Involutive (Φ s) := by
+    intro s x
+    funext i
+    by_cases hs : s i <;> simp [Φ, hs]
+  exact ⟨Φ, hΦinj, hΦzero, hΦinv⟩
