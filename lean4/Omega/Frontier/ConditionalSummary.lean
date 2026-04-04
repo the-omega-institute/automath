@@ -702,3 +702,11 @@ theorem no11_count (m : Nat) : Fintype.card (X m) = Nat.fib (m + 2) := X.card_eq
 end
 
 end Omega.Frontier
+
+
+-- Paper: def:pi-m2-m1-golden
+-- Source: sections/body/folding/subsec__folding-multiscale.tex:43
+/-- For `m₂ ≥ m₁`, the restriction projection takes a stable word
+to its prefix of length `m₁`. -/
+def piGolden (m₂ m₁ : ℕ) (h : m₁ ≤ m₂) : Fin m₁ → Fin m₂ :=
+  fun i => ⟨i.1, Nat.lt_of_lt_of_le i.2 h⟩
