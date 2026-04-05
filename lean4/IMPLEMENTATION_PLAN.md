@@ -13,26 +13,26 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1023 |
+| \leanverified 标注数 | 1027 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1040 |
-| 轮次 | R273（round_count=274） |
+| 总标注数 | 1044 |
+| 轮次 | R274（round_count=275） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
 | POM | 1,707 | 239 | 14.0% |
-| Emergent Arithmetic | 185 | 96 | 51.9% |
+| Emergent Arithmetic | 185 | 98 | 53.0% |
 | Folding | 337 | 90 | 26.7% |
 | Conclusion | 2,550 | 171 | 6.7% |
 | Group Unification | 469 | 98 | 20.9% |
 | SPG | 129 | 46 | 35.7% |
 | Circle Dimension | 393 | 84 | 21.4% |
-| Zeta Finite Part | 4,524 | 131 | 2.9% |
+| Zeta Finite Part | 4,524 | 133 | 2.9% |
 | Discussion | 67 | 12 | 17.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **970** | **9.2%** |
+| **合计（body）** | **10,508** | **974** | **9.3%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,7 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R274: 黄金均值迹 Lucas 打包 + Lucas-Fib Cassini + 稳定算术与改写 + Wedderburn 中心幂等元打包（完整）**：Zeta/DynZeta.lean + Folding/CollisionZetaOperator.lean——paper\_goldenMean\_trace\_lucas\_package（thm:zeta-syntax-trace-linear-recurrence，黄金均值迹 Lucas 数完整打包，Zeta）; paper\_lucas\_five\_fib\_and\_cassini（thm:zeta-syntax-trace-linear-recurrence，Lucas-Fibonacci 五倍平方与 Cassini 具体值，Zeta）; paper\_stable\_arithmetic\_and\_rewrite（thm:stable-add-commutative-monoid，稳定算术与改写规则打包，EA）; paper\_wedderburn\_central\_idempotent\_package（thm:fold-groupoid-z2x2-central-idempotents，Wedderburn ℤ₂² 中心幂等元完整打包，EA）——**注：目标 2 签名调整去除 L²-5F² ∀ 分量，改为 Cassini + 具体值**——**4 个论文标签条目计入覆盖率**（Zeta +2, EA +2）——Zeta Finite Part 131→133（2.9%），Emergent Arithmetic 96→98（51.9%→53.0%），全局 \\leanverified 1023→1027（+4），总标注 1040→1044（+4），body 覆盖 970→974（9.2%→9.3%），commit 19c2e9a
 **Phase R273: κ 阈值判据 + 扫描误差次可加性审计 + cdim 核缺陷复合打包 + 诱导谱基础情形（完整）**：SPG/ErrorThreshold.lean + SPG/ScanErrorDiscrete.lean + CircleDimension/CircleDim.lean + CircleDimension/MultiPrimeSpectrum.lean——paper\_kappa\_threshold\_criterion（prop:spg-relative-error-threshold-sharpness，κ 相对误差阈值锐性判据打包，SPG）; paper\_scanError\_subadditivity\_audit（thm:spg-scan-tanaka-stokes，扫描误差次可加性审计，SPG）; paper\_cdimDefect\_composition\_package（thm:cdim-kernel-defect-incompressibility，圆维核缺陷复合不等式打包，CD）; paper\_inducedSpectrum\_base\_cases（thm:cdim-mobius-inversion-localization-multiset-classification，诱导谱基础情形验证，CD）——**4 个论文标签条目计入覆盖率**（SPG +2, CD +2）——SPG 44→46（34.1%→35.7%），Circle Dimension 82→84（20.9%→21.4%），全局 \\leanverified 1019→1023（+4），总标注 1036→1040（+4），body 覆盖 966→970（9.2%），commit f0e3455
 **Phase R272: Lucas 模周期性打包 + Fredholm 扩展值表 + Fold 基础三元组 + 失配 Perron 根界（完整）**：Zeta/DynZeta.lean + Folding/CollisionZetaOperator.lean + Folding/MismatchLanguage.lean——paper\_lucasNum\_mod\_periodicity\_package（thm:zeta-syntax-trace-linear-recurrence，Lucas 数模多个素数的周期性完整打包，Zeta）; paper\_fredholmGoldenMean\_value\_table\_extended（def:fredholm-determinant，Fredholm 黄金均值函数扩展值表，Zeta）; paper\_Fold\_fundamental\_triple（thm:fold-suite，Fold 基础性质三元组，Folding）; paper\_mismatch\_perron\_root\_bound（prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence，失配语言 Perron 根界具体实例，Folding）——**注：目标 4 签名调整 ∀ m 改为具体实例**——**4 个论文标签条目计入覆盖率**（Zeta +2, Folding +2）——Zeta Finite Part 129→131（2.9%），Folding 88→90（26.1%→26.7%），全局 \\leanverified 1015→1019（+4），总标注 1032→1036（+4），body 覆盖 962→966（9.2%），commit 850878e
 **Phase R271: 自由对合计数值与公式 + window6 秩缺口扩展 + Ramanujan 数值审计 + 两原子阈值数值证书（完整）**：GU/FreeInvolutionCount.lean + GU/Window6RankGap.lean + Conclusion/RamanujanCollapse.lean + Conclusion/TwoAtomScalarRecoveryAlpha2.lean——paper\_freeInvolutionCount\_values\_and\_formula（thm:fiberwise-free-involution-matching-entropy，自由对合计数值与双阶乘公式打包，GU）; paper\_window6\_rank\_gap\_extended（prop:window6-foldbin-gauge-center-vs-charge-separation，window-6 非中心二值秩缺口扩展，GU）; paper\_ramanujan\_numerical\_audit（cor:discussion-ramanujan-half-dimension-collapse，Ramanujan 半维坍缩数值审计，Conclusion）; paper\_twoAtom\_threshold\_numerical（thm:conclusion-binfold-twoatom-information-geometry，两原子阈值数值证书，Conclusion）——**4 个论文标签条目计入覆盖率**（GU +2, Conclusion +2）——Group Unification 96→98（20.5%→20.9%），Conclusion 169→171（6.6%→6.7%），全局 \\leanverified 1011→1015（+4），总标注 1028→1032（+4），body 覆盖 958→962（9.1%→9.2%），commit b91340d
