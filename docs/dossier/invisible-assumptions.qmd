@@ -1,0 +1,146 @@
+---
+title: "Seeing the Invisible Assumptions"
+subtitle: "What Terence Tao, type systems, and ten thousand zero-axiom theorems reveal about how we really do mathematics"
+author: "The Omega Project"
+date: 2026-04-05
+description: "Formalization doesn't just make proofs more rigorous. It makes their hidden dependencies visible. A programmer's guide to why this matters, with evidence from a project that took it to the extreme."
+image: og-image.png
+---
+
+## The Error Message
+
+```lean
+theorem hiddenBitCount_recurrence (m : Nat) :
+    hiddenBitCount (m + 2) = 2 ^ m + hiddenBitCount m
+```
+
+Two lines. A recurrence relation on the count of words whose Fibonacci-weighted sum exceeds a threshold. Partition by one bit position, count each side. Any combinatorialist would call this straightforward.
+
+The Lean 4 compiler disagreed. It demanded 120 lines of proof.[^hook]
+
+Not because the mathematics was wrong. Because the mathematics was *incomplete*. The two-line statement silently assumed:
+
+- That filtering by a single bit produces exactly two disjoint subsets that cover all cases (partition exhaustiveness)
+- That removing the last two bits of a word preserves membership in the target set (truncation well-definedness)
+- That appending bits constructs a valid inverse, with weight preservation across the bijection (surjectivity + weight accounting)
+- That each of these bijections is injective, which requires case-splitting on three index ranges
+
+Four hidden assumptions. Each one a place where a human reader fills in "obviously" and moves on. Each one a place where the compiler stops and says: *prove it*.
+
+![How formalization exposes hidden assumptions: a two-line theorem statement expands to 120 lines of proof when every assumption is made explicit.](figures/assumption-flow.svg){fig-alt="A flow diagram showing a two-line theorem statement being rejected by the Lean 4 compiler, exposing five hidden assumptions (partition exhaustiveness, truncation well-definedness, bijection surjectivity, weight preservation, three injectivity proofs), which must be resolved to produce a 120-line complete proof. A bar chart shows the 60x expansion factor."}
+
+[^hook]: [`hiddenBitCount_recurrence`](https://github.com/the-omega-institute/automath/blob/dev/lean4/Omega/Folding/MaxFiberTwoStep.lean#L73), Omega/Folding/MaxFiberTwoStep.lean, lines 73--194.
+
+## Act 1: The Compiler Won't Read Your Mind
+
+If you write software, you already know this feeling.
+
+You migrate a JavaScript codebase to TypeScript. The code worked fine before. It ran, it passed tests, users were happy. Then the type checker lights up: `undefined is not assignable to type string`. Line after line. Not because the code was broken, but because it relied on assumptions that were never written down. That `user.email` is always a string. That the API response always has a `data` field. That the array is never empty.
+
+TypeScript doesn't add new logic to your program. It adds a requirement: *say what you mean*. Declare that `email` is `string | undefined`, handle the `undefined` case, and suddenly a class of runtime errors becomes impossible. The type system forces you to confront assumptions you were silently making.
+
+Lean 4 does the same thing, but for mathematics.
+
+Lean is a dependently typed programming language where types can express propositions and programs can serve as proofs. When you write `theorem P : Prop`, you are declaring a type. When you write a proof term, you are constructing a value of that type. If the proof compiles, it is correct. If it doesn't, there is a gap.
+
+The analogy is precise but not perfect. TypeScript's structural type system catches one category of errors: data shape mismatches. Lean's dependent type system is strictly more expressive: it can encode arbitrary logical propositions, quantified statements, and proof obligations. TypeScript tells you "this might be null." Lean tells you "you haven't proven that this set is finite" or "you assumed commutativity but didn't establish it for this ring."[^dtt]
+
+The gap between "TypeScript-level" and "Lean-level" checking is exactly the gap between catching bugs in software and catching gaps in mathematical reasoning.
+
+[^dtt]: For a precise comparison: TypeScript uses structural subtyping with union and intersection types. Lean 4 uses the Calculus of Inductive Constructions, where types depend on values, enabling propositions-as-types and proofs-as-programs. See the [Lean 4 documentation](https://lean-lang.org/lean4/doc/).
+
+## Act 2: What Tao Sees
+
+Terence Tao has spent the past several years formalizing mathematics in Lean and reflecting publicly on what the experience reveals. His observations, drawn from multiple interviews and writings between 2023 and 2026, converge on three points.
+
+### Transparency: assumptions become visible
+
+When Tao's collaborators formalized proofs using Lean, they discovered that the hardest parts were not the deep mathematical ideas. The hardest parts were the steps that mathematicians call "obvious."
+
+As described in a conversation with Math, Inc.: "researchers must confront the hidden assumptions and establish completely rigorous proofs." The formalization process "reveals the precise inputs and outputs of every logical step."[^mathinc]
+
+This is not a statement about rigor for rigor's sake. It is a statement about *seeing*. A formalized proof makes its dependency chain explicit. You can trace every conclusion back to its premises. You can ask: what does this theorem actually need to be true? And the answer is often surprising, because the informal version smuggled in assumptions that were never examined.
+
+[^mathinc]: [A conversation with Terry Tao](https://www.math.inc/a-conversation-with-terry-tao), Math, Inc. Note: some phrasings in the published conversation may reflect editorial summary rather than direct quotation.
+
+### Engineering: mathematics becomes composable
+
+Tao has noted that mathematics is moving toward something that resembles how modern industries work. As he told Scientific American: mathematics will "become much more like the way almost any other modern industry works."[^sciam]
+
+The mechanism is the mathematical library. Lean's community maintains mathlib, a repository of over 100,000 formalized definitions, lemmas, and theorems. When you formalize a new result, you build on mathlib the way a software engineer builds on npm or crates.io. The proof of your theorem declares its imports explicitly. If a dependency changes, the build system catches the inconsistency.
+
+Tao observed that his own textbook's informal approach already embodied this structure without knowing it. When formalizing *Analysis I* in Lean, he found that "the 'naive type theory' that I was implicitly using...dovetails well with the dependent type theory of Lean." Quotient types, which his book uses to construct the integers from the naturals and the rationals from the integers, formalized "quite straightforward, with a pretty close match."[^analysis]
+
+The implication: informal mathematics already has modular structure. Formalization makes that structure machine-checkable, composable, and reusable.
+
+[^sciam]: [AI Will Become Mathematicians' 'Co-Pilot'](https://www.scientificamerican.com/article/ai-will-become-mathematicians-co-pilot/), Scientific American.
+[^analysis]: [A Lean companion to "Analysis I"](https://terrytao.wordpress.com/2025/05/31/a-lean-companion-to-analysis-i/), Terence Tao's blog, May 2025.
+
+### Division of labor: humans choose, machines verify
+
+The third observation is about who does what. As of early 2026, Tao described current AI models as "useful assistants, but not peers: less helpful as sources of deep original ideas than as tireless systems for scanning known methods, connecting a problem to the right literature, and reporting back on what seems most promising." The bottleneck, he argued, "shifts toward distinctly human capabilities: selecting worthwhile problems, designing sound workflows, and verifying results carefully."[^openai]
+
+Or, more bluntly: "AI will automate the boring, trivial stuff first. We will still be driving, at least for now."[^sciam2]
+
+Formalization is extremely tedious and time-consuming when done by hand.[^renaissance] AI can handle the mechanical expansion. Humans focus on choosing which problems matter, deciding which structures to name, and judging which directions to pursue. The proof assistant ensures that no gap slips through.
+
+[^openai]: [Terence Tao: AI is ready for primetime in math and theoretical physics](https://academy.openai.com/public/blogs/terence-tao-ai-is-ready-for-primetime-in-math-and-theoretical-physics-2026-03-06), OpenAI Academy, March 2026. Paraphrase of reported positions.
+[^sciam2]: Scientific American, ibid.
+[^renaissance]: [Is Math the Next AI Frontier? A Conversation with Terence Tao](https://www.renaissancephilanthropy.org/insights/is-math-the-next-ai-frontier-a-conversation-with-terence-tao), Renaissance Philanthropy.
+
+## Act 3: What Happens When You Take This to the Extreme
+
+The [Omega Project](index.html) started with one equation, $x^2 = x + 1$, and derived everything it could. Over ten thousand theorems. Tens of thousands of lines of Lean 4 code. And zero user-declared axioms.[^zeroaxiom]
+
+That last point needs precision, because it is easy to overstate. "Zero axioms" does not mean "no assumptions whatsoever." Every Lean 4 proof rests on the system's core logic: the Calculus of Inductive Constructions, universe polymorphism, and the axioms provided by Lean's kernel (propositional extensionality, quotient types, choice). These are the "axioms of the compiler." What "zero user-declared axioms" means is that the Omega codebase never invokes `axiom` to introduce an unproven assumption. Every theorem traces back to definitions, constructive arguments, and the standard library (mathlib). No shortcuts. No "assume P and derive Q."
+
+This is a direct consequence of formalization forcing hidden assumptions to the surface. If a proof needs an assumption, the compiler demands it. If the assumption is not provable from the definitions, it must be declared as an axiom. The Omega Project's zero-axiom discipline is not a philosophical stance. It is what happens when you let the compiler be the arbiter: every assumption that *can* be derived *is* derived, and nothing is smuggled in.
+
+[^zeroaxiom]: "Zero user-declared axioms" means the codebase contains no `axiom` declarations. Lean 4's core logic and the axioms in its kernel (propositional extensionality, Quot.sound, Classical.choice) are assumed by the system itself. See [lean4/Omega/](https://github.com/the-omega-institute/automath/tree/dev/lean4/Omega) for the full codebase.
+
+### The autoresearch test
+
+The Omega Project recently built an [autoresearch system](https://github.com/the-omega-institute/automath/tree/dev/tools) that runs overnight batch formalization. An AI agent reads theorem statements from mathematical papers, generates Lean 4 proof attempts, and submits them to the compiler. If the proof compiles, it is committed to the repository. If it doesn't, the error is logged and the agent tries again.
+
+What's interesting is what happens when the agent fails. Human mathematicians read a theorem statement and silently fill in context: which variables are bounded, which functions are continuous, which sets are finite. The AI agent does not have this implicit knowledge. When a proof attempt fails, the compiler error is almost always about a missing assumption that the paper took for granted.
+
+Every hidden assumption becomes a compilation error. Every "obviously" becomes a type mismatch.
+
+This is exactly what Tao described, running at scale. The autoresearch system does not have the human mathematician's implicit context, so it exposes every gap. The compiler does not care about reputation or convention. It only asks: *is this derivable from the definitions?*
+
+### What the data shows
+
+The `hiddenBitCount_recurrence` example from the opening is typical, not exceptional. Across the Omega codebase, the pattern repeats: theorem statements that fit in two to five lines routinely require proofs of fifty to a hundred lines. The expansion factor is not mathematical depth. It is the cost of making every assumption explicit.
+
+::: {.evidence}
+**Lean:** [`stableMul_inv_of_prime`](https://github.com/the-omega-institute/automath/blob/dev/lean4/Omega/Folding/FibonacciField.lean#L24) --- "Every nonzero element of a prime-characteristic ring has an inverse." Three-line statement, 38-line proof. The proof must broker between three representations (the combinatorial word type, `ZMod p`, and natural numbers), constructing explicit bridges that the informal statement treats as identity.
+:::
+
+::: {.evidence}
+**Lean:** [`hiddenBitCount_recurrence`](https://github.com/the-omega-institute/automath/blob/dev/lean4/Omega/Folding/MaxFiberTwoStep.lean#L73) --- "Partition by one bit, count each side." Two-line statement, 120-line proof. Four hidden assumptions, two bijection constructions, three injectivity proofs.
+:::
+
+## So What
+
+If you write code: you already understand this. The tool chain thinking you use every day --- type checkers, linters, compilers that refuse to let you ship ambiguity --- is the same thinking that is changing how mathematics gets done. The difference is not in kind. It is in what the types represent.
+
+If you do mathematics: formalization is not a burden imposed on finished work. It is a lens that shows you the actual structure of your own proofs. The assumptions you find are not errors. They are the input specification of your theorem, written out for the first time.
+
+The equation is $x^2 = x + 1$. What it requires, precisely, is still being discovered.
+
+```{=html}
+<div class="cta-choices">
+  <a href="index.html">
+    <strong>Read the discovery story</strong><br>
+    <span style="font-size:0.8em;color:var(--omega-muted);">How one equation became ten thousand theorems (15 min)</span>
+  </a>
+  <a href="https://github.com/the-omega-institute/automath/blob/dev/lean4/Omega/Folding/MaxFiberTwoStep.lean#L73">
+    <strong>Read the proof</strong><br>
+    <span style="font-size:0.8em;color:var(--omega-muted);">hiddenBitCount_recurrence — 120 lines of hidden assumptions</span>
+  </a>
+  <a href="https://github.com/the-omega-institute/automath">
+    <strong>Explore the repo</strong><br>
+    <span style="font-size:0.8em;color:var(--omega-muted);">Lean 4, zero user-declared axioms, fully open source</span>
+  </a>
+</div>
+```
