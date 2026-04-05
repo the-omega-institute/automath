@@ -16,9 +16,13 @@ model: opus
 2. 通过 `SendMessage` 向 orchestrator 发送确认消息：`'Formalizer online. Lean4 skills loaded (LSP tools, mathlib search, tactic reference, error diagnostics available). Ready for tasks.'`
 3. 未完成上述两步前，不得接受或开始任何实现任务
 
-## Codex 并行辅助（默认开启）
+## Codex 并行辅助（强制门禁）
 
-**每次收到实现任务时，对中/高难度目标 spawn 后台 Codex 任务并行探索证明路线。**
+**每次收到实现任务时，对中/高难度目标必须 spawn 后台 Codex 任务并行探索证明。orchestrator 会强制检查完成报告中的 Codex 使用记录——缺失则退回。**
+
+**完成报告中必须包含 Codex 使用记录**：
+- 中/高难度定理：`Codex 并行探索：[结果摘要]` 或 `Codex stuck 辅助：[结果摘要]`（即使 Codex 结果未被采用也要记录）
+- 低难度定理：`低难度，Codex 豁免`
 
 工作流：
 1. 收到 orchestrator 的实现任务后，对每个**中等及以上难度**的目标，spawn 一个后台 codex-rescue agent：

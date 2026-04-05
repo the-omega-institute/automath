@@ -17,9 +17,13 @@ subagent_type: general-purpose
 2. 通过 `SendMessage` 向 orchestrator 发送确认消息：`'Analyst online. Lean4 skills loaded (LSP tools, mathlib search available). Ready for tasks.'`
 3. 未完成上述两步前，不得接受或开始任何分析任务
 
-## Codex 并行辅助（默认开启）
+## Codex 并行辅助（强制门禁）
 
-**每次收到分析任务时，在自己开始分析的同时，spawn 一个后台 Codex 任务让 Codex 并行思考。**
+**每次收到分析任务时，必须 spawn 后台 Codex 任务并行探索。orchestrator 会强制检查规格中的 Codex 使用记录——缺失则退回。**
+
+**规格中必须包含 Codex 使用记录**：
+- 中/高难度目标：`Codex 探索结果：[结果摘要]`（即使 Codex 结果未被采用也要记录）
+- 低难度目标：`低难度，Codex 豁免`
 
 工作流：
 1. 收到 orchestrator 的规格请求后，**立即** spawn 一个后台 codex-rescue agent：

@@ -86,19 +86,27 @@ CronCreate(
 
 保存返回的 CronJob ID，在关闭流程中用 `CronDelete` 清理。
 
-### Codex 并行辅助（默认开启）
+### Codex 并行辅助（强制门禁）
 
-**analyst 和 formalizer 均默认使用 Codex 插件并行思考。** Codex（GPT-5.4）作为第二大脑，在 agent 思考的同时后台并行探索。
+**analyst 和 formalizer 必须使用 Codex 插件并行思考。** Codex（GPT-5.4）作为第二大脑，在 agent 思考的同时后台并行探索。**orchestrator 强制检查 Codex 使用记录——缺失则退回。**
 
 **工作模式**：
-- **analyst**：收到分析任务 → 同时 spawn 后台 `codex:codex-rescue` 探索目标 + 自己正常分析 → 谁先完成用谁（Codex 结果需 grep 验证）
-- **formalizer**：收到中/高难度目标 → 同时 spawn 后台 `codex:codex-rescue` 探索证明 + 自己 LSP-first 开发 → Codex 返回的代码必须本地编译验证
+- **analyst**：收到分析任务 → **必须** spawn 后台 `codex:codex-rescue` 探索目标 + 自己正常分析 → 谁先完成用谁（Codex 结果需 grep 验证）。规格中必须包含 `Codex 探索结果：[摘要]`。
+- **formalizer**：收到中/高难度目标 → **必须** spawn 后台 `codex:codex-rescue` 探索证明 + 自己 LSP-first 开发 → Codex 返回的代码必须本地编译验证。完成报告中必须包含 `Codex 并行探索：[摘要]`。
 - **formalizer stuck 时**：可直接 spawn `codex:codex-rescue` 做 stuck 辅助，不需要等 orchestrator 转发 codex-consultant
+- **低难度目标**：注明 `低难度，Codex 豁免` 即可跳过
+
+**orchestrator 门禁检查**：
+
+| 检查点 | 通过标准 | 不通过处理 |
+|--------|---------|-----------|
+| analyst 提交规格 | 中/高难度目标附带 Codex 使用记录 | 退回 analyst |
+| formalizer 提交报告 | 中/高难度定理附带 Codex 使用记录 | 退回 formalizer |
+| 低难度目标 | 注明"低难度，Codex 豁免" | — |
 
 **安全规则**：
 - Codex 输出**必须经过本地编译验证**（lean_diagnostic_messages / lake env lean / lake build）
 - Codex 建议的引理名必须 grep/LSP 确认存在
-- 低难度目标不需要 Codex 辅助
 - Codex 任务在后台运行，不阻塞主线程
 
 ### 数学深度门禁（每轮强制）

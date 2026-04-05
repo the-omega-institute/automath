@@ -98,15 +98,27 @@ model: opus
 ## SourceMap/NoAxiom
 这些目录已不存在。用 grep lean4/Omega/ 检查定理存在性，用 IMPLEMENTATION_PLAN 追踪覆盖率。
 
-## Codex 集成（默认开启）
+## Codex 集成（强制门禁）
 
-analyst 和 formalizer 已配置为默认使用 Codex 并行辅助：
-- **analyst**：收到分析任务时自动 spawn 后台 Codex 探索目标，自己同时正常分析
-- **formalizer**：对中/高难度目标自动 spawn 后台 Codex 探索证明，自己同时 LSP-first 开发
+analyst 和 formalizer **必须**使用 Codex 并行辅助。orchestrator 在接收规格和完成报告时**强制检查** Codex 使用记录。
+
+### 门禁检查规则（orchestrator 必须执行）
+
+| 检查点 | 通过标准 | 不通过处理 |
+|--------|---------|-----------|
+| analyst 提交规格 | 中/高难度目标附带 Codex 使用记录（如"Codex 探索结果：..."） | 退回 analyst，要求补充 |
+| formalizer 提交完成报告 | 中/高难度定理附带 Codex 使用记录（如"Codex 并行探索：[结果]"或"Codex stuck 辅助：[结果]"） | 退回 formalizer，要求补充 |
+| 低难度目标 | 注明"低难度，Codex 豁免"即可 | — |
+
+### agent 行为要求
+
+- **analyst**：收到分析任务时**必须** spawn 后台 `codex:codex-rescue` 探索目标，自己同时正常分析。规格中必须包含 Codex 使用记录。
+- **formalizer**：对中/高难度目标**必须** spawn 后台 `codex:codex-rescue` 探索证明，自己同时 LSP-first 开发。完成报告中必须包含 Codex 使用记录。
 - **stuck 时 formalizer 可直接 spawn codex-rescue**，不需要等 orchestrator 转发 codex-consultant
 
-orchestrator 的升级路径调整：
-- 第一步（formalizer 自助）：LSP 搜索 + Codex 并行
+### orchestrator 升级路径
+
+- 第一步（formalizer 自助）：LSP 搜索 + Codex 并行（**强制**）
 - 第二步（formalizer stuck 报告后）：orchestrator 仍可 spawn codex-consultant 做深度分析
 - 第三步：lean4-skills plugin agent（proof-repair / sorry-filler-deep）
 
