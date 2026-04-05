@@ -219,6 +219,18 @@ theorem cdim_rank_nullity (f : CircleDimHomData) :
       circleDim f.kernelRank 0 + circleDim f.imageRank 0 := by
   simp [circleDim]; exact f.rankNullity
 
+/-- Defect is zero iff kernel rank is zero. def:cdim-defect -/
+theorem cdimDefect_eq_zero_iff (f : CircleDimHomData) :
+    cdimDefect f = 0 ↔ f.kernelRank = 0 := by
+  simp [cdimDefect]
+
+/-- Image rank equals source rank when defect is zero. thm:cdim-rank-nullity-formula -/
+theorem imageRank_eq_sourceRank_of_defect_zero (f : CircleDimHomData)
+    (h : cdimDefect f = 0) : f.imageRank = f.sourceRank := by
+  have hk : f.kernelRank = 0 := (cdimDefect_eq_zero_iff f).mp h
+  have := f.rankNullity
+  omega
+
 /-- Composition data for g∘f. thm:cdim-defect-chain-rule -/
 def CircleDimHomData.comp (f : CircleDimHomData) (g : CircleDimHomData)
     (_hfg : f.targetRank = g.sourceRank)

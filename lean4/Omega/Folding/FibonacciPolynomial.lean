@@ -151,6 +151,18 @@ theorem pathIndSetPoly_five_val : pathIndSetPoly 5 = 1 + 5 * X + 6 * X ^ 2 + X ^
 theorem pathIndSetPoly_six_val : pathIndSetPoly 6 = 1 + 6 * X + 10 * X ^ 2 + 4 * X ^ 3 := by
   simp [pathIndSetPoly, fibPoly_succ_succ]; ring
 
+/-- I_7(x) = 1 + 7x + 15x^2 + 10x^3 + x^4.
+    def:pom-fibonacci-polynomial -/
+theorem pathIndSetPoly_seven_val :
+    pathIndSetPoly 7 = 1 + 7 * X + 15 * X ^ 2 + 10 * X ^ 3 + X ^ 4 := by
+  simp [pathIndSetPoly, fibPoly_succ_succ]; ring
+
+/-- I_8(x) = 1 + 8x + 21x^2 + 20x^3 + 5x^4.
+    def:pom-fibonacci-polynomial -/
+theorem pathIndSetPoly_eight_val :
+    pathIndSetPoly 8 = 1 + 8 * X + 21 * X ^ 2 + 20 * X ^ 3 + 5 * X ^ 4 := by
+  simp [pathIndSetPoly, fibPoly_succ_succ]; ring
+
 /-- Fibonacci polynomial derivative recurrence:
     (F_{n+2})' = (F_{n+1})' + F_n + X·(F_n)'.
     def:pom-fibonacci-polynomial -/
@@ -819,5 +831,18 @@ theorem pathIndSetPoly_eval_two_small :
   · rw [pathIndSetPoly_two_val]; simp
   · rw [pathIndSetPoly_three_val]; simp
   · rw [pathIndSetPoly_four_val]; simp
+
+/-- pathIndSetPoly evaluated at x=1 equals Fibonacci numbers: I_m(1) = F(m+2).
+    def:pom-fibonacci-polynomial -/
+theorem paper_pathIndSetPoly_eval_one_extended :
+    (pathIndSetPoly 5).eval 1 = (Nat.fib 7 : ℤ) ∧
+    (pathIndSetPoly 6).eval 1 = (Nat.fib 8 : ℤ) ∧
+    (pathIndSetPoly 7).eval 1 = (Nat.fib 9 : ℤ) ∧
+    (pathIndSetPoly 8).eval 1 = (Nat.fib 10 : ℤ) := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · rw [pathIndSetPoly_five_val]; simp; native_decide
+  · rw [pathIndSetPoly_six_val]; simp; native_decide
+  · rw [pathIndSetPoly_seven_val]; simp; native_decide
+  · rw [pathIndSetPoly_eight_val]; simp; native_decide
 
 end Omega
