@@ -434,4 +434,28 @@ theorem binaryAuxBits_iff (D k : ℕ) (_hD : 0 < D) :
     D ≤ 2 ^ k ↔ Nat.clog 2 D ≤ k :=
   (Nat.clog_le_iff_le_pow (by norm_num : 1 < 2)).symm
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R252: Fibonacci growth bounds
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fibonacci output size is at least linear: F(m+2) ≥ m + 1.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem fib_succ_succ_ge_succ (m : Nat) : m + 1 ≤ Nat.fib (m + 2) := by
+  induction m with
+  | zero => simp [Nat.fib]
+  | succ m ih =>
+    have hfib : Nat.fib (m + 3) = Nat.fib (m + 1) + Nat.fib (m + 2) := by
+      rw [show m + 3 = (m + 1) + 2 from by omega]; exact Nat.fib_add_two
+    have hpos : 1 ≤ Nat.fib (m + 1) := Nat.fib_pos.mpr (by omega)
+    linarith
+
+/-- Fibonacci strict growth: F(m+3) ≥ F(m+2) + 1 for m ≥ 1.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem fib_strict_growth (m : Nat) (hm : 1 ≤ m) :
+    Nat.fib (m + 2) + 1 ≤ Nat.fib (m + 3) := by
+  have hfib : Nat.fib (m + 3) = Nat.fib (m + 1) + Nat.fib (m + 2) := by
+    rw [show m + 3 = (m + 1) + 2 from by omega]; exact Nat.fib_add_two
+  have hpos : 1 ≤ Nat.fib (m + 1) := Nat.fib_pos.mpr (by omega)
+  omega
+
 end Omega.Conclusion

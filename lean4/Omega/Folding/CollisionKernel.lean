@@ -235,6 +235,46 @@ def bowenFranksMatrix4 : Matrix (Fin 5) (Fin 5) ℤ :=
 /-- det(I - A_4) = -8. prop:pom-collision-bf-snf-q234 -/
 theorem bowenFranksMatrix4_det : bowenFranksMatrix4.det = -8 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R252: A_4 Fredholm determinant + A_5 BF matrix
+-- ══════════════════════════════════════════════════════════════
+
+set_option linter.unusedSimpArgs false in
+private theorem fredholm4_entry (z : ℤ) (i j : Fin 5) :
+    (1 - z • collisionKernel4) i j =
+      (!![1,   -z,  0,   0,    0;
+         0,    1, -z,   0,    0;
+         0,    0,  1,  -z,    0;
+         0,    0,  0,   1,   -z;
+         2*z, -2*z, 0, -7*z, 1-2*z] : Matrix (Fin 5) (Fin 5) ℤ) i j := by
+  fin_cases i <;> fin_cases j <;>
+    simp [collisionKernel4, Matrix.smul_apply, smul_eq_mul, Matrix.of_apply,
+      Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.head_cons, Matrix.head_fin_const, Matrix.one_apply] <;>
+    ring
+
+/-- Consistency: Fredholm det at z=1 gives Bowen-Franks det.
+    prop:pom-collision-det -/
+theorem collisionKernel4_fredholm_at_one :
+    (1 - (1 : ℤ) • collisionKernel4).det = bowenFranksMatrix4.det := by
+  native_decide
+
+/-- BF matrix for A_5: I - collisionKernel5. prop:pom-collision-bf-snf-q234 -/
+def bowenFranksMatrix5 : Matrix (Fin 5) (Fin 5) ℤ :=
+  !![1, -1, 0, 0, 0;
+     0, 1, -1, 0, 0;
+     0, 0, 1, -1, 0;
+     0, 0, 0, 1, -1;
+     -10, 20, 8, 11, 3]
+
+/-- det(I - A_5) = 32. prop:pom-collision-bf-snf-q234 -/
+theorem bowenFranksMatrix5_det : bowenFranksMatrix5.det = 32 := by native_decide
+
+/-- BF det ratio: det(I-A_5) = -4 * det(I-A_4). prop:pom-collision-bf-snf-q234 -/
+theorem bowenFranks_q5_q4_ratio :
+    bowenFranksMatrix5.det = -4 * bowenFranksMatrix4.det := by
+  rw [bowenFranksMatrix5_det, bowenFranksMatrix4_det]; ring
+
 /-- S_5 base values: m = 7,8. prop:pom-s5-recurrence -/
 @[simp] theorem momentSum_five_seven : momentSum 5 7 = 62168 := by
   rw [← cMomentSum_eq]; native_decide
