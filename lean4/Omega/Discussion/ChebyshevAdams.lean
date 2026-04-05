@@ -95,4 +95,34 @@ theorem chebyAdams_mul (m n : ℕ) (S : ℤ) :
     rw [ihm m (by omega)]
     rw [chebyAdams_succ_succ]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R253: Chebyshev-Adams specializations and product formula
+-- ══════════════════════════════════════════════════════════════
+
+/-- C_n(2) = 2 for all n (r=1 specialization: T_n(1) = 1).
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_two : ∀ n : ℕ, chebyAdams n 2 = 2
+  | 0 => rfl
+  | 1 => rfl
+  | n + 2 => by rw [chebyAdams_succ_succ]; linarith [chebyAdams_at_two n, chebyAdams_at_two (n + 1)]
+
+/-- C_n(-2) = 2·(-1)^n for all n (r=-1 specialization).
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_neg_two : ∀ n : ℕ, chebyAdams n (-2) = 2 * (-1 : ℤ) ^ n
+  | 0 => by simp [chebyAdams]
+  | 1 => by simp [chebyAdams]
+  | n + 2 => by
+    rw [chebyAdams_succ_succ]
+    rw [chebyAdams_at_neg_two (n + 1), chebyAdams_at_neg_two n]
+    ring
+
+/-- Product-to-sum: C_m · C_n = C_{m+n} + C_{|m-n|} for m ≥ n.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_product_formula (m n : ℕ) (S : ℤ) (hmn : n ≤ m) :
+    chebyAdams m S * chebyAdams n S =
+      chebyAdams (m + n) S + chebyAdams (m - n) S := by
+  have h := chebyAdams_product_sum S n (m - n)
+  rw [show m - n + n = m from by omega, show m - n + 2 * n = m + n from by omega] at h
+  linarith
+
 end Omega.Discussion

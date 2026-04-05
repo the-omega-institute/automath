@@ -275,6 +275,20 @@ theorem bowenFranks_q5_q4_ratio :
     bowenFranksMatrix5.det = -4 * bowenFranksMatrix4.det := by
   rw [bowenFranksMatrix5_det, bowenFranksMatrix4_det]; ring
 
+/-- The explicit BF matrix is indeed I - A_5.
+    prop:pom-collision-bf-snf-q234 -/
+theorem bowenFranksMatrix5_eq :
+    bowenFranksMatrix5 = 1 - (1 : ℤ) • collisionKernel5 := by
+  ext i j; fin_cases i <;> fin_cases j <;>
+    simp [bowenFranksMatrix5, collisionKernel5, Matrix.of_apply,
+      Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one]
+
+/-- Consistency: det(I - A_5) = bowenFranksMatrix5.det.
+    prop:pom-collision-bf-snf-q234 -/
+theorem collisionKernel5_fredholm_at_one :
+    (1 - (1 : ℤ) • collisionKernel5).det = bowenFranksMatrix5.det := by
+  rw [← bowenFranksMatrix5_eq]
+
 /-- S_5 base values: m = 7,8. prop:pom-s5-recurrence -/
 @[simp] theorem momentSum_five_seven : momentSum 5 7 = 62168 := by
   rw [← cMomentSum_eq]; native_decide
