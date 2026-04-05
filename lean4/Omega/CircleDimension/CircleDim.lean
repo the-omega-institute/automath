@@ -759,4 +759,13 @@ theorem paper_circleDim_direct_sum_three_instances :
     circleDim 3 0 = 3 ∧ circleDim 0 30 = 0 := by
   simp [circleDim]
 
+/-- Circle dimension is bounded by the free rank. def:circle-dimension -/
+theorem circleDim_le_rank (r t : Nat) : circleDim r t ≤ r := by
+  simp [circleDim]
+
+/-- Half circle dimension upper bound. def:circle-dimension -/
+theorem halfCircleDim_le (r t : Nat) : halfCircleDim r t ≤ (↑r + 1) / 2 := by
+  simp [halfCircleDim, circleDim]
+  exact div_le_div_of_nonneg_right (by exact_mod_cast Nat.le_succ r) (by norm_num)
+
 end Omega.CircleDimension

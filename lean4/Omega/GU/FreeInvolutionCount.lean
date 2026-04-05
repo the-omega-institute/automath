@@ -215,4 +215,55 @@ theorem freeInvolutionCount_odd : ∀ r : Nat, ¬ 2 ∣ freeInvolutionCount r
     have hodd : ¬ 2 ∣ (2 * r + 1) := by omega
     exact ih (or_iff_not_imp_left.mp ((Nat.Prime.dvd_mul Nat.prime_two).mp h) hodd)
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R297: Divisibility, factorial bound, package
+-- ══════════════════════════════════════════════════════════════
+
+/-- 3 divides freeInvolutionCount r for r ≥ 2.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_dvd_three : ∀ r : Nat, 2 ≤ r →
+    3 ∣ freeInvolutionCount r
+  | 2, _ => ⟨1, by rw [freeInvolutionCount_small.2.1]⟩
+  | r + 3, _ => by
+    rw [freeInvolutionCount_succ]
+    exact Dvd.dvd.mul_left (freeInvolutionCount_dvd_three (r + 2) (by omega)) _
+
+/-- 15 divides freeInvolutionCount r for r ≥ 3.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_dvd_fifteen : ∀ r : Nat, 3 ≤ r →
+    15 ∣ freeInvolutionCount r
+  | 3, _ => ⟨1, by rw [freeInvolutionCount_small.2.2]⟩
+  | r + 4, _ => by
+    rw [freeInvolutionCount_succ]
+    exact Dvd.dvd.mul_left (freeInvolutionCount_dvd_fifteen (r + 3) (by omega)) _
+
+/-- f(r) · 2^r ≤ (2r)! (from f(r) · 2^r · r! = (2r)!).
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_le_factorial_div (r : Nat) :
+    freeInvolutionCount r * 2 ^ r ≤ (2 * r).factorial := by
+  have h := freeInvolutionCount_formula r
+  calc freeInvolutionCount r * 2 ^ r
+      ≤ freeInvolutionCount r * 2 ^ r * r.factorial :=
+        Nat.le_mul_of_pos_right _ (Nat.factorial_pos r)
+    _ = freeInvolutionCount r * (2 ^ r * r.factorial) := by ring
+    _ = (2 * r).factorial := h
+
+/-- Involution count divisibility and recurrence package.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem paper_gu_involution_divisibility_package :
+    freeInvolutionCount 2 = 3 ∧ freeInvolutionCount 3 = 15 ∧
+    freeInvolutionCount 4 = 105 ∧ freeInvolutionCount 5 = 945 ∧
+    3 ∣ freeInvolutionCount 2 ∧ 15 ∣ freeInvolutionCount 3 ∧
+    105 ∣ freeInvolutionCount 4 ∧
+    freeInvolutionCount 3 = 5 * freeInvolutionCount 2 ∧
+    freeInvolutionCount 4 = 7 * freeInvolutionCount 3 ∧
+    freeInvolutionCount 5 = 9 * freeInvolutionCount 4 := by
+  have h1 := freeInvolutionCount_small.2.1  -- f(2) = 3
+  have h2 := freeInvolutionCount_small.2.2  -- f(3) = 15
+  refine ⟨h1, h2, by native_decide, by native_decide,
+    ⟨1, by rw [h1]⟩, ⟨1, by rw [h2]⟩, ⟨1, by native_decide⟩, ?_, ?_, ?_⟩
+  · rw [h2, h1]
+  · rw [freeInvolutionCount_succ, h2]
+  · rw [freeInvolutionCount_succ, freeInvolutionCount_succ, h2]
+
 end Omega.GU
