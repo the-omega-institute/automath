@@ -1326,4 +1326,26 @@ theorem symmetricDiffMass_eq_zero_of_eq
     setMass μ ((P \ P) ∪ (P \ P)) = 0 := by
   simp [Omega.SPG.setMass]
 
+/-- Scan error zero iff observable-pure.
+    thm:spg-scan-tanaka-stokes -/
+theorem paper_scanError_zero_iff_observablePure {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P : Set α) :
+    scanError μ obs P = 0 ↔ ObservablePure μ obs P :=
+  scanError_eq_zero_iff_observablePure μ obs P
+
+/-- Noise budget threshold is strictly antitone: 2·F(m+2) > F(m+3) for m ≥ 1.
+    thm:spg-double-budget-address-capacity -/
+theorem paper_noiseBudget_strict_antitone :
+    (∀ m, 1 ≤ m → 2 * Nat.fib (m + 2) > Nat.fib (m + 3)) ∧
+    (2 * Nat.fib 4 > Nat.fib 5) ∧
+    (2 * Nat.fib 7 > Nat.fib 8) ∧
+    (2 * Nat.fib 12 > Nat.fib 13) := by
+  refine ⟨fun m hm => ?_, by native_decide, by native_decide, by native_decide⟩
+  -- 2*F(m+2) > F(m+3) = F(m+2) + F(m+1), so need F(m+2) > F(m+1)
+  have hlt : Nat.fib (m + 1) < Nat.fib (m + 2) :=
+    Nat.fib_lt_fib_succ (by omega : 2 ≤ m + 1)
+  have hrec : Nat.fib (m + 3) = Nat.fib (m + 1) + Nat.fib (m + 2) := by
+    rw [show m + 3 = (m + 1) + 2 from by omega, Nat.fib_add_two]
+  linarith
+
 end Omega.SPG

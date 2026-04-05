@@ -492,4 +492,40 @@ theorem paper_fredholm_block_product_2_3_extended (t : ℤ) :
     (1 - t ^ 2) * (1 - t ^ 3) = 1 - t ^ 2 - t ^ 3 + t ^ 5 :=
   ⟨cyclicPerm2_fredholm_det t, cyclicPerm3_fredholm_det t, by ring⟩
 
+/-- Cyclic permutation P_4 trace filter: Tr(P_4^n) = 4 when 4|n, = 0 otherwise.
+    cor:zeta-cyclic-lift-primitive-orbits -/
+theorem paper_cyclic_lift_trace_filter_q4 :
+    (∀ k : ℕ, (cyclicPerm4 ^ (4 * k)).trace = 4) ∧
+    (∀ k : ℕ, (cyclicPerm4 ^ (4 * k + 1)).trace = 0) ∧
+    (∀ k : ℕ, (cyclicPerm4 ^ (4 * k + 2)).trace = 0) ∧
+    (∀ k : ℕ, (cyclicPerm4 ^ (4 * k + 3)).trace = 0) := by
+  refine ⟨fun k => ?_, fun k => ?_, fun k => ?_, fun k => ?_⟩
+  · rw [pow_mul, cyclicPerm4_fourth, one_pow]; native_decide
+  · rw [show 4 * k + 1 = 1 + 4 * k from by ring, pow_add, pow_mul,
+      cyclicPerm4_fourth, one_pow, mul_one]; native_decide
+  · rw [show 4 * k + 2 = 2 + 4 * k from by ring, pow_add, pow_mul,
+      cyclicPerm4_fourth, one_pow, mul_one]; native_decide
+  · rw [show 4 * k + 3 = 3 + 4 * k from by ring, pow_add, pow_mul,
+      cyclicPerm4_fourth, one_pow, mul_one]; native_decide
+
+/-- Cyclic permutation P_5 trace filter concrete values.
+    cor:zeta-cyclic-lift-primitive-orbits -/
+theorem paper_cyclic_lift_trace_filter_q5 :
+    (∀ k : ℕ, (cyclicPerm5 ^ (5 * k)).trace = 5) ∧
+    (cyclicPerm5 ^ 1).trace = 0 ∧ (cyclicPerm5 ^ 2).trace = 0 ∧
+    (cyclicPerm5 ^ 3).trace = 0 ∧ (cyclicPerm5 ^ 4).trace = 0 := by
+  refine ⟨fun k => ?_, by native_decide, by native_decide,
+    by native_decide, by native_decide⟩
+  rw [pow_mul, cyclicPerm5_fifth, one_pow]; native_decide
+
+/-- Euler factor product for cyclic permutations n=4,5,6.
+    def:fredholm-determinant -/
+theorem paper_euler_factor_product_456 (t : ℤ) :
+    (1 - t • cyclicPerm4).det = 1 - t ^ 4 ∧
+    (1 - t • cyclicPerm5).det = 1 - t ^ 5 ∧
+    (1 - t • cyclicPerm6).det = 1 - t ^ 6 ∧
+    (1 - t ^ 4) * (1 - t ^ 5) = 1 - t ^ 4 - t ^ 5 + t ^ 9 :=
+  ⟨cyclicPerm4_fredholm_det t, cyclicPerm5_fredholm_det t,
+   cyclicPerm6_fredholm_det t, by ring⟩
+
 end Omega.Zeta
