@@ -2,7 +2,7 @@
 
 > An auditable theory compiler that derives, verifies, visualizes, and publishes mathematics from a single equation.
 
-[中文版](README.zh-CN.md) · **[Why Everything Is Inevitable](docs/INEVITABILITY.md)** — understand the forcing chain in 10 minutes
+[中文版](README.zh-CN.md) · **[Why Everything Is Inevitable](docs/INEVITABILITY.md)** — understand the forcing chain in 10 minutes · **[Dossier](https://the-omega-institute.github.io/automath/)** · [Live autoresearch stream](https://www.youtube.com/live/pn_W3I5-qdo)
 
 ## The Question
 
@@ -281,7 +281,7 @@ One equation in. Verified, visualized, published mathematics out.
 
 ![Sisyphus Knowledge Graph](docs/dossier/assets/sisyphus.png)
 
-→ [Full system architecture](docs/dossier/) · [Browse the papers](papers/publication/)
+→ [Full system architecture](docs/dossier/) · [Browse the papers](papers/publication/) · [Watch autoresearch live](https://www.youtube.com/live/pn_W3I5-qdo)
 
 ## The Publication Pipeline
 

@@ -2,7 +2,7 @@
 
 > 一个可审计的理论编译器，从单一方程出发，推导、验证、可视化并发表数学。
 
-[English](README.md) · **[为什么一切都是不可避免的](docs/INEVITABILITY.zh-CN.md)** — 10 分钟理解迫使链
+[English](README.md) · **[为什么一切都是不可避免的](docs/INEVITABILITY.zh-CN.md)** — 10 分钟理解迫使链 · **[Dossier](https://the-omega-institute.github.io/automath/)** · [autoresearch 直播](https://www.youtube.com/live/pn_W3I5-qdo)
 
 ## 核心问题
 
@@ -281,7 +281,7 @@ Omega 项目是一个包含三层的统一系统：
 
 ![Sisyphus 知识图谱](docs/dossier/assets/sisyphus.png)
 
-→ [完整系统架构](docs/dossier/) · [浏览论文](papers/publication/)
+→ [完整系统架构](docs/dossier/) · [浏览论文](papers/publication/) · [观看 autoresearch 直播](https://www.youtube.com/live/pn_W3I5-qdo)
 
 ## 出版管线
 
