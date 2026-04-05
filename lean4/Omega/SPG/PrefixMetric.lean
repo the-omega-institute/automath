@@ -98,4 +98,38 @@ theorem prefixDist_comm (x y : OmegaInfinity) : prefixDist x y = prefixDist y x 
 theorem prefixDist_nonneg (x y : OmegaInfinity) : 0 ≤ prefixDist x y := by
   simp [prefixDist, PiNat.dist_nonneg]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R304: Prefix metric triangle + ultrametric
+-- ══════════════════════════════════════════════════════════════
+
+/-- Ultrametric inequality: d(x,z) ≤ max(d(x,y), d(y,z)). def:spg-prefix-metric -/
+theorem prefixDist_ultrametric (x y z : OmegaInfinity) :
+    prefixDist x z ≤ max (prefixDist x y) (prefixDist y z) := by
+  simp only [prefixDist_def]
+  exact PiNat.dist_triangle_nonarch x y z
+
+/-- Triangle inequality for prefix distance. def:spg-prefix-metric -/
+theorem prefixDist_triangle (x y z : OmegaInfinity) :
+    prefixDist x z ≤ prefixDist x y + prefixDist y z := by
+  calc prefixDist x z ≤ max (prefixDist x y) (prefixDist y z) :=
+        prefixDist_ultrametric x y z
+    _ ≤ prefixDist x y + prefixDist y z :=
+        max_le_add_of_nonneg (prefixDist_nonneg x y) (prefixDist_nonneg y z)
+
+/-- d(x,y)=0 iff x=y. def:spg-prefix-metric -/
+theorem prefixDist_eq_zero_iff (x y : OmegaInfinity) :
+    prefixDist x y = 0 ↔ x = y := by
+  constructor
+  · intro h
+    exact PiNat.eq_of_dist_eq_zero x y h
+  · intro h; rw [h]; exact prefixDist_self y
+
+/-- Paper package. def:spg-prefix-metric -/
+theorem paper_prefixDist_metric_axioms :
+    (∀ x : OmegaInfinity, prefixDist x x = 0) ∧
+    (∀ x y : OmegaInfinity, prefixDist x y = prefixDist y x) ∧
+    (∀ x y z : OmegaInfinity, prefixDist x z ≤ prefixDist x y + prefixDist y z) ∧
+    (∀ x y z : OmegaInfinity, prefixDist x z ≤ max (prefixDist x y) (prefixDist y z)) := by
+  exact ⟨prefixDist_self, prefixDist_comm, prefixDist_triangle, prefixDist_ultrametric⟩
+
 end Omega.SPG

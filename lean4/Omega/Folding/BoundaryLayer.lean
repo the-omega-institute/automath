@@ -1003,4 +1003,58 @@ theorem cBoundaryCount_square_identity_general' (m : Nat) (hm : 2 ≤ m) :
     rw [h1, h2, h3, show m + 2 + 1 = m + 3 from by omega]
     exact (fib_sq_add_sq (m + 2)).symm
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R304: cBoundaryCount extended + square identity instances
+-- ══════════════════════════════════════════════════════════════
+
+/-- Boundary count = F(m-2) for m ∈ [3,12].
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_eq_fib_extended_twelve (m : Nat) (hm1 : 3 ≤ m) (hm : m ≤ 12) :
+    cBoundaryCount m = Nat.fib (m - 2) := by
+  by_cases h : m ≤ 10
+  · exact cBoundaryCount_eq_fib_extended m hm1 h
+  · push_neg at h
+    interval_cases m <;> native_decide
+
+/-- prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_square_identity_m4 :
+    cBoundaryCount 7 = cBoundaryCount 4 ^ 2 + cBoundaryCount 5 ^ 2 := by native_decide
+
+/-- prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_square_identity_m5 :
+    cBoundaryCount 9 = cBoundaryCount 5 ^ 2 + cBoundaryCount 6 ^ 2 := by native_decide
+
+/-- prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_square_identity_m6 :
+    cBoundaryCount 11 = cBoundaryCount 6 ^ 2 + cBoundaryCount 7 ^ 2 := by native_decide
+
+/-- Paper package. prop:bdry-fib-square-identity -/
+theorem paper_cBoundaryCount_extended :
+    cBoundaryCount 9 = 13 ∧ cBoundaryCount 10 = 21 ∧
+    cBoundaryCount 11 = 34 ∧ cBoundaryCount 12 = 55 ∧
+    cBoundaryCount 9 = cBoundaryCount 5 ^ 2 + cBoundaryCount 6 ^ 2 ∧
+    cBoundaryCount 11 = cBoundaryCount 6 ^ 2 + cBoundaryCount 7 ^ 2 := by
+  exact ⟨cBoundaryCount_nine, cBoundaryCount_ten, cBoundaryCount_eleven, cBoundaryCount_twelve,
+    cBoundaryCount_square_identity_m5, cBoundaryCount_square_identity_m6⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R304: Cassini gap factorization instances
+-- ══════════════════════════════════════════════════════════════
+
+/-- Cassini gap factorization instances. prop:bdry-gap-33-cassini-factorization -/
+theorem cassini_gap_factorization_instances :
+    Nat.fib 5 - 1 = Nat.fib 2 * (Nat.fib 4 + Nat.fib 2) ∧
+    Nat.fib 9 - 1 = Nat.fib 4 * (Nat.fib 6 + Nat.fib 4) ∧
+    Nat.fib 13 - 1 = Nat.fib 6 * (Nat.fib 8 + Nat.fib 6) ∧
+    Nat.fib 17 - 1 = Nat.fib 8 * (Nat.fib 10 + Nat.fib 8) := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
+
+/-- Paper package. prop:bdry-gap-33-cassini-factorization -/
+theorem paper_cassini_gap_factorization_extended :
+    Nat.fib 9 - 1 = 33 ∧
+    33 = Nat.fib 4 * (Nat.fib 6 + Nat.fib 4) ∧
+    Nat.fib 13 - 1 = 232 ∧
+    232 = Nat.fib 6 * (Nat.fib 8 + Nat.fib 6) := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
+
 end Omega
