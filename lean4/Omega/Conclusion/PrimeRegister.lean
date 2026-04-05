@@ -424,4 +424,14 @@ theorem godelLift_alphabet_threshold_mge5 {M : ℕ}
     exact lt_of_lt_of_le hconst (hratio_ge.trans hineq)
   linarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R250: Binary auxiliary bits exact characterization
+-- ══════════════════════════════════════════════════════════════
+
+/-- Binary auxiliary bits: D ≤ 2^k iff ⌈log₂ D⌉ ≤ k.
+    cor:pom-injectivization-binary-auxbits-exact -/
+theorem binaryAuxBits_iff (D k : ℕ) (_hD : 0 < D) :
+    D ≤ 2 ^ k ↔ Nat.clog 2 D ≤ k :=
+  (Nat.clog_le_iff_le_pow (by norm_num : 1 < 2)).symm
+
 end Omega.Conclusion

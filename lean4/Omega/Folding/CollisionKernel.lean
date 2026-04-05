@@ -252,6 +252,30 @@ theorem collisionKernel4_e2 :
   rw [collisionKernel4_trace, collisionKernel4_trace_sq]; ring
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R250: A_4(t) parametric collision kernel
+-- ══════════════════════════════════════════════════════════════
+
+/-- The one-parameter A_4(t) collision kernel family.
+    prop:pom-a4t-spectral-selfduality-invariants -/
+def collisionKernel4Parametric (t : ℤ) : Matrix (Fin 5) (Fin 5) ℤ :=
+  !![0, 1, 0, 0, 0;
+     0, 0, t, 0, 1;
+     0, 1, 2, 0, 0;
+     1, 0, 1, 0, 0;
+     0, 0, 0, 1, 0]
+
+/-- The characteristic polynomial of A_4(t): x^5 - 2x^4 - tx^3 - 2x + 2.
+    prop:pom-a4t-spectral-selfduality-invariants -/
+def charPolyA4t (t x : ℤ) : ℤ :=
+  x^5 - 2*x^4 - t*x^3 - 2*x + 2
+
+/-- Spectral self-duality of A_4(t): p(x) + p(-x) = 4(1 - x^4).
+    prop:pom-a4t-spectral-selfduality-invariants -/
+theorem charPolyA4t_selfduality (t x : ℤ) :
+    charPolyA4t t x + charPolyA4t t (-x) = 4 * (1 - x^4) := by
+  unfold charPolyA4t; ring
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase 217: Collision kernel family signatures
 -- ══════════════════════════════════════════════════════════════
 
