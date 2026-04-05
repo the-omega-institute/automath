@@ -46,4 +46,15 @@ theorem paper_rate_cdim_product_additivity :
    ⟨by native_decide, by native_decide⟩,
    ⟨by native_decide, by native_decide⟩⟩
 
+/-- Bin-fold recovery Fibonacci scaling law.
+    thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting -/
+theorem paper_binfold_recovery_fibonacci_scaling :
+    2 ^ 5 > 2 * Nat.fib 7 ∧
+    2 ^ 6 > 3 * Nat.fib 8 ∧
+    2 ^ 7 > 3 * Nat.fib 9 ∧
+    2 ^ 10 > 7 * Nat.fib 12 ∧
+    (∀ m, 1 ≤ m → Nat.fib (m + 3) > Nat.fib (m + 2)) :=
+  ⟨by native_decide, by native_decide, by native_decide, by native_decide,
+   fun m hm => Nat.fib_lt_fib_succ (by omega : 2 ≤ m + 2)⟩
+
 end Omega.Conclusion

@@ -471,4 +471,15 @@ theorem window6_information_loss_average_closed_form :
   rw [hlog4]
   ring_nf
 
+/-- Window-6 collision probability complementary law.
+    thm:conclusion-window6-groupoid-collision-dimension-identity -/
+theorem paper_window6_collision_complementary :
+    momentSum 2 6 = 220 ∧
+    Fintype.card (X 6) = 21 ∧
+    2 ^ 6 = 64 ∧
+    220 > 3 * 64 ∧
+    Nat.gcd 220 4096 = 4 := by
+  refine ⟨momentSum_two_six, by rw [X.card_eq_fib]; native_decide,
+    by omega, by omega, by native_decide⟩
+
 end Omega.Conclusion

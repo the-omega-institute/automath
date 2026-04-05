@@ -30,4 +30,38 @@ theorem paper_mismatch_word_count_initial_values :
     mismatchWordCount 7 = 82 := by
   refine ⟨rfl, rfl, rfl, rfl, rfl, rfl, rfl⟩
 
+private theorem mismatchWordCount_pos (m : ℕ) : 0 < mismatchWordCount m := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 | 1 | 2 | 3 | 4 => simp [mismatchWordCount]
+    | m + 5 =>
+      simp only [mismatchWordCount]
+      have := ih (m + 4) (by omega)
+      have := ih (m + 3) (by omega)
+      have := ih (m + 1) (by omega)
+      have := ih m (by omega)
+      omega
+
+/-- Mismatch language word count is strictly monotone increasing.
+    prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence -/
+theorem paper_mismatch_word_count_strict_mono :
+    (∀ m : ℕ, mismatchWordCount m < mismatchWordCount (m + 1)) ∧
+    mismatchWordCount 8 = 149 ∧
+    mismatchWordCount 9 = 270 ∧
+    mismatchWordCount 10 = 489 := by
+  refine ⟨fun m => ?_, by native_decide, by native_decide, by native_decide⟩
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m with
+    | 0 | 1 | 2 | 3 => simp [mismatchWordCount]
+    | m + 4 =>
+      -- mwc(m+5) = mwc(m+4) + mwc(m+3) + mwc(m+1) + mwc(m) > mwc(m+4)
+      show mismatchWordCount (m + 4) < mismatchWordCount (m + 5)
+      simp only [mismatchWordCount]
+      have := mismatchWordCount_pos (m + 3)
+      have := mismatchWordCount_pos (m + 1)
+      have := mismatchWordCount_pos m
+      omega
+
 end Omega

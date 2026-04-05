@@ -940,4 +940,12 @@ theorem collisionKernel_e2_family :
   refine ⟨by native_decide, by native_decide, ?_, collisionKernel5_e2⟩
   exact collisionKernel4_e2
 
+/-- Trace recurrence for q=4 collision kernel A_4.
+    prop:pom-s4-recurrence -/
+theorem paper_collisionKernel4_trace_recurrence (n : Nat) :
+    (collisionKernel4 ^ (n + 5)).trace =
+    2 * (collisionKernel4 ^ (n + 4)).trace + 7 * (collisionKernel4 ^ (n + 3)).trace +
+    2 * (collisionKernel4 ^ (n + 1)).trace - 2 * (collisionKernel4 ^ n).trace :=
+  collisionKernel4_trace_recurrence n
+
 end Omega
