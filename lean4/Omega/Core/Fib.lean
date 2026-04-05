@@ -81,6 +81,26 @@ theorem fib_le_pow_two : ∀ m : Nat, Nat.fib (m + 2) ≤ 2 ^ (m + 1)
           Nat.add_le_add_left (Nat.pow_le_pow_right (by omega) (by omega)) _
       _ = 2 ^ (m + 2 + 1) := by ring
 
+/-- Fibonacci doubling bound: 2 · F(n) ≤ F(n+2) for n ≥ 1.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem fib_double_le (n : Nat) (_hn : 1 ≤ n) :
+    2 * Nat.fib n ≤ Nat.fib (n + 2) := by
+  rw [Nat.fib_add_two]
+  linarith [Nat.fib_mono (show n ≤ n + 1 by omega)]
+
+/-- Fibonacci exponential growth: F(n+2k) ≥ 2^k · F(n) for n ≥ 1.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem fib_exponential_growth (n k : Nat) (hn : 1 ≤ n) :
+    2 ^ k * Nat.fib n ≤ Nat.fib (n + 2 * k) := by
+  induction k with
+  | zero => simp
+  | succ k ih =>
+    calc 2 ^ (k + 1) * Nat.fib n
+        = 2 * (2 ^ k * Nat.fib n) := by ring
+      _ ≤ 2 * Nat.fib (n + 2 * k) := by linarith
+      _ ≤ Nat.fib (n + 2 * k + 2) := fib_double_le (n + 2 * k) (by omega)
+      _ = Nat.fib (n + 2 * (k + 1)) := by ring_nf
+
 /-- gcd(F_m, F_n) = F_{gcd(m,n)} (strong divisibility).
     fib-gcd
     lem:fib-divisibility-iff -/
@@ -1567,5 +1587,23 @@ theorem fib_prime_entry_point (p k n : Nat) (_hp : Nat.Prime p) (hk : 1 ≤ k)
   · -- (←) k | n → p | F(n)
     intro hkn
     exact dvd_trans hentry (Nat.fib_dvd k n hkn)
+
+/-- Cassini identity for fence determinant: D_{k+1}·D_{k-1} = D_k² + 1.
+    cor:pom-fiber-fence-rank-poly-factorization -/
+theorem paper_fenceDet_cassini (k : Nat) (hk : 1 ≤ k) :
+    fenceDet (k + 1) * fenceDet (k - 1) = fenceDet k ^ 2 + 1 :=
+  fenceDet_cassini k hk
+
+/-- Fence determinant values and strict monotonicity.
+    cor:pom-Lk-t1-fibonacci-det-green -/
+theorem paper_fenceDet_values_and_strict_mono :
+    fenceDet 0 = 1 ∧ fenceDet 1 = 2 ∧ fenceDet 2 = 5 ∧
+    fenceDet 3 = 13 ∧ fenceDet 4 = 34 ∧ fenceDet 5 = 89 ∧
+    (∀ k : ℕ, fenceDet k < fenceDet (k + 1)) := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide, by native_decide, fun k => ?_⟩
+  match k with
+  | 0 => native_decide
+  | k + 1 => exact fenceDet_strict_mono (k + 1) (by omega)
 
 end Omega

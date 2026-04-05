@@ -235,6 +235,60 @@ def bowenFranksMatrix4 : Matrix (Fin 5) (Fin 5) ℤ :=
 /-- det(I - A_4) = -8. prop:pom-collision-bf-snf-q234 -/
 theorem bowenFranksMatrix4_det : bowenFranksMatrix4.det = -8 := by native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R252: A_4 Fredholm determinant + A_5 BF matrix
+-- ══════════════════════════════════════════════════════════════
+
+set_option linter.unusedSimpArgs false in
+private theorem fredholm4_entry (z : ℤ) (i j : Fin 5) :
+    (1 - z • collisionKernel4) i j =
+      (!![1,   -z,  0,   0,    0;
+         0,    1, -z,   0,    0;
+         0,    0,  1,  -z,    0;
+         0,    0,  0,   1,   -z;
+         2*z, -2*z, 0, -7*z, 1-2*z] : Matrix (Fin 5) (Fin 5) ℤ) i j := by
+  fin_cases i <;> fin_cases j <;>
+    simp [collisionKernel4, Matrix.smul_apply, smul_eq_mul, Matrix.of_apply,
+      Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.head_cons, Matrix.head_fin_const, Matrix.one_apply] <;>
+    ring
+
+/-- Consistency: Fredholm det at z=1 gives Bowen-Franks det.
+    prop:pom-collision-det -/
+theorem collisionKernel4_fredholm_at_one :
+    (1 - (1 : ℤ) • collisionKernel4).det = bowenFranksMatrix4.det := by
+  native_decide
+
+/-- BF matrix for A_5: I - collisionKernel5. prop:pom-collision-bf-snf-q234 -/
+def bowenFranksMatrix5 : Matrix (Fin 5) (Fin 5) ℤ :=
+  !![1, -1, 0, 0, 0;
+     0, 1, -1, 0, 0;
+     0, 0, 1, -1, 0;
+     0, 0, 0, 1, -1;
+     -10, 20, 8, 11, 3]
+
+/-- det(I - A_5) = 32. prop:pom-collision-bf-snf-q234 -/
+theorem bowenFranksMatrix5_det : bowenFranksMatrix5.det = 32 := by native_decide
+
+/-- BF det ratio: det(I-A_5) = -4 * det(I-A_4). prop:pom-collision-bf-snf-q234 -/
+theorem bowenFranks_q5_q4_ratio :
+    bowenFranksMatrix5.det = -4 * bowenFranksMatrix4.det := by
+  rw [bowenFranksMatrix5_det, bowenFranksMatrix4_det]; ring
+
+/-- The explicit BF matrix is indeed I - A_5.
+    prop:pom-collision-bf-snf-q234 -/
+theorem bowenFranksMatrix5_eq :
+    bowenFranksMatrix5 = 1 - (1 : ℤ) • collisionKernel5 := by
+  ext i j; fin_cases i <;> fin_cases j <;>
+    simp [bowenFranksMatrix5, collisionKernel5, Matrix.of_apply,
+      Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one]
+
+/-- Consistency: det(I - A_5) = bowenFranksMatrix5.det.
+    prop:pom-collision-bf-snf-q234 -/
+theorem collisionKernel5_fredholm_at_one :
+    (1 - (1 : ℤ) • collisionKernel5).det = bowenFranksMatrix5.det := by
+  rw [← bowenFranksMatrix5_eq]
+
 /-- S_5 base values: m = 7,8. prop:pom-s5-recurrence -/
 @[simp] theorem momentSum_five_seven : momentSum 5 7 = 62168 := by
   rw [← cMomentSum_eq]; native_decide
@@ -250,6 +304,49 @@ theorem collisionKernel4_trace_sq :
 theorem collisionKernel4_e2 :
     collisionKernel4.trace ^ 2 - (collisionKernel4 ^ 2).trace = -14 := by
   rw [collisionKernel4_trace, collisionKernel4_trace_sq]; ring
+
+/-- tr(A_4^3) = 50. rem:pom-s4-zero-coefficient-lock -/
+theorem collisionKernel4_trace_cube :
+    (collisionKernel4 ^ 3).trace = 50 := by native_decide
+
+/-- Newton identity for e3: the x^2 coefficient of charPoly(A_4) is 0.
+    rem:pom-s4-zero-coefficient-lock -/
+theorem collisionKernel4_e3_zero :
+    (collisionKernel4 ^ 3).trace
+      - collisionKernel4.trace * (collisionKernel4 ^ 2).trace
+      + (collisionKernel4.trace ^ 2 - (collisionKernel4 ^ 2).trace) / 2
+        * collisionKernel4.trace = 0 := by
+  rw [collisionKernel4_trace, collisionKernel4_trace_sq, collisionKernel4_trace_cube]; ring
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R250: A_4(t) parametric collision kernel
+-- ══════════════════════════════════════════════════════════════
+
+/-- The one-parameter A_4(t) collision kernel family.
+    prop:pom-a4t-spectral-selfduality-invariants -/
+def collisionKernel4Parametric (t : ℤ) : Matrix (Fin 5) (Fin 5) ℤ :=
+  !![0, 1, 0, 0, 0;
+     0, 0, t, 0, 1;
+     0, 1, 2, 0, 0;
+     1, 0, 1, 0, 0;
+     0, 0, 0, 1, 0]
+
+/-- The characteristic polynomial of A_4(t): x^5 - 2x^4 - tx^3 - 2x + 2.
+    prop:pom-a4t-spectral-selfduality-invariants -/
+def charPolyA4t (t x : ℤ) : ℤ :=
+  x^5 - 2*x^4 - t*x^3 - 2*x + 2
+
+/-- The charPoly(A_4) zero-coefficient lock: p(x) = x^5 - 2x^4 - 7x^3 - 2x + 2.
+    rem:pom-s4-zero-coefficient-lock -/
+theorem collisionKernel4_charPoly_specialization :
+    charPolyA4t 7 = fun x => x ^ 5 - 2 * x ^ 4 - 7 * x ^ 3 - 2 * x + 2 := by
+  funext x; unfold charPolyA4t; ring
+
+/-- Spectral self-duality of A_4(t): p(x) + p(-x) = 4(1 - x^4).
+    prop:pom-a4t-spectral-selfduality-invariants -/
+theorem charPolyA4t_selfduality (t x : ℤ) :
+    charPolyA4t t x + charPolyA4t t (-x) = 4 * (1 - x^4) := by
+  unfold charPolyA4t; ring
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase 217: Collision kernel family signatures

@@ -365,4 +365,12 @@ theorem prefixDetermined_iUnion_finset {ι : Type*} [DecidableEq ι]
     have hiS' : i ∈ S := by exact_mod_cast hiS
     exact ⟨i, hiS, (hpd i hiS' (prefixWord_eq_of_le (Finset.le_sup hiS') hxy)).2 his⟩
 
+/-- Prefix-determined cylinder package.
+    prop:spg-decidable-clopen -/
+theorem paper_prefixBall_cylinder_package :
+    (∀ m : Nat, PrefixDetermined (∅ : Set OmegaInfinity) m) ∧
+    (∀ m : Nat, PrefixDetermined (Set.univ : Set OmegaInfinity) m) ∧
+    (∀ (A : Set (Word m)), PrefixDetermined (fromWordSet A) m) :=
+  ⟨prefixDetermined_empty, prefixDetermined_univ, fun A => prefixDetermined_fromWordSet A⟩
+
 end Omega.SPG

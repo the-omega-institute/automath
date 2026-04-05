@@ -77,10 +77,117 @@ theorem freeInvolutionCount_eq_prod_odds (r : Nat) :
   | succ r ihr =>
       rw [freeInvolutionCount_succ, Finset.prod_range_succ, ihr, mul_comm]
 
+/-- Double-factorial form of the free involution count.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_eq_doubleFactorial (r : Nat) :
+    freeInvolutionCount r = Nat.doubleFactorial (2 * r - 1) := by
+  induction r with
+  | zero => simp [freeInvolutionCount]
+  | succ r ihr =>
+      rw [freeInvolutionCount_succ, ihr]
+      simpa [two_mul, add_assoc, add_comm, add_left_comm] using
+        (Nat.doubleFactorial_add_one (2 * r)).symm
+
 /-- Small values of the free involution count.
     thm:fiberwise-free-involution-matching-entropy -/
 theorem freeInvolutionCount_small :
     freeInvolutionCount 1 = 1 ∧ freeInvolutionCount 2 = 3 ∧ freeInvolutionCount 3 = 15 := by
   native_decide
+
+/-- The free involution count is positive for r ≥ 1.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_pos (r : Nat) (hr : 1 ≤ r) :
+    0 < freeInvolutionCount r := by
+  induction r with
+  | zero => omega
+  | succ r ih =>
+    rw [freeInvolutionCount_succ]
+    rcases r with _ | r
+    · simp [freeInvolutionCount]
+    · exact Nat.mul_pos (by omega) (ih (by omega))
+
+/-- The free involution count is strictly increasing for r ≥ 1.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_strict_mono (r : Nat) (hr : 1 ≤ r) :
+    freeInvolutionCount r < freeInvolutionCount (r + 1) := by
+  rw [freeInvolutionCount_succ]
+  have hpos := freeInvolutionCount_pos r hr
+  -- fIC(r+1) = (2r+1) * fIC(r) ≥ 3 * fIC(r) > fIC(r) since 2r+1 ≥ 3 for r ≥ 1
+  calc freeInvolutionCount r
+      < 2 * freeInvolutionCount r := by omega
+    _ ≤ (2 * r + 1) * freeInvolutionCount r := by
+        apply Nat.mul_le_mul_right; omega
+
+/-- Fiberwise free involution counts multiply across independent fibers.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem fiberwiseFreeInvolutionCount_total_eq_prod_doubleFactorial
+    {B : Type*} [Fintype B] (r : B → Nat) :
+    (∏ b, freeInvolutionCount (r b)) =
+      ∏ b, Nat.doubleFactorial (2 * r b - 1) := by
+  simpa using
+    Finset.prod_congr rfl (fun b _ => freeInvolutionCount_eq_doubleFactorial (r b))
+
+/-- Fiberwise total free involution count satisfies the factorial product formula.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem fiberwiseFreeInvolutionCount_total_formula
+    {B : Type*} [Fintype B] (r : B → Nat) :
+    (∏ b, freeInvolutionCount (r b)) * (∏ b, (2 ^ (r b) * (r b).factorial)) =
+      ∏ b, (2 * r b).factorial := by
+  calc
+    (∏ b, freeInvolutionCount (r b)) * (∏ b, (2 ^ (r b) * (r b).factorial))
+        = ∏ b, (freeInvolutionCount (r b) * (2 ^ (r b) * (r b).factorial)) := by
+            rw [← Finset.prod_mul_distrib]
+    _ = ∏ b, (2 * r b).factorial := by
+          refine Finset.prod_congr rfl ?_
+          intro b hb
+          simpa using freeInvolutionCount_formula (r b)
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R253: Free involution existence on even sets
+-- ══════════════════════════════════════════════════════════════
+
+/-- A free involution exists on Fin(2k) for k ≥ 1: swap adjacent pairs (0,1), (2,3), ...
+    f(2i) = 2i+1, f(2i+1) = 2i.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem free_involution_exists_even (k : Nat) (_hk : 1 ≤ k) :
+    ∃ f : Fin (2 * k) → Fin (2 * k),
+      Function.Bijective f ∧ (∀ x, f (f x) = x) ∧ (∀ x, f x ≠ x) := by
+  -- Use the permutation that swaps i with i+1 when i is even, and i with i-1 when i is odd
+  -- Equivalently: flip the last bit of i
+  have hswap : ∀ i : Fin (2 * k), (if i.val % 2 = 0 then i.val + 1 else i.val - 1) < 2 * k := by
+    intro i
+    have hi := i.isLt
+    split
+    · -- even: i+1 < 2k because i is even and i < 2k means i ≤ 2k-2
+      omega
+    · -- odd: i-1 < 2k trivially since i-1 < i < 2k
+      omega
+  let f : Fin (2 * k) → Fin (2 * k) :=
+    fun i => ⟨if i.val % 2 = 0 then i.val + 1 else i.val - 1, hswap i⟩
+  have hinv : ∀ x : Fin (2 * k), (f (f x)).val = x.val := by
+    intro x; simp only [f]
+    have hx := x.isLt
+    split <;> split <;> omega
+  have hfp : ∀ x : Fin (2 * k), (f x).val ≠ x.val := by
+    intro x; simp only [f]; split <;> omega
+  refine ⟨f, ⟨?_, ?_⟩, fun x => Fin.ext (hinv x), fun x hx => hfp x (congrArg Fin.val hx)⟩
+  · intro a b hab
+    have : (f (f a)).val = (f (f b)).val := by rw [hab]
+    rw [hinv a, hinv b] at this; exact Fin.ext this
+  · exact fun b => ⟨f b, Fin.ext (hinv b)⟩
+
+/-- Free involution count values and formula.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem paper_freeInvolutionCount_values_and_formula :
+    freeInvolutionCount 1 = 1 ∧
+    freeInvolutionCount 2 = 3 ∧
+    freeInvolutionCount 3 = 15 ∧
+    freeInvolutionCount 4 = 105 ∧
+    (∀ r : Nat, freeInvolutionCount r * (2 ^ r * r.factorial) = (2 * r).factorial) ∧
+    (∀ k : Nat, ¬ ∃ f : Fin (2*k+1) → Fin (2*k+1),
+      Function.Bijective f ∧ (∀ x, f (f x) = x) ∧ (∀ x, f x ≠ x)) := by
+  exact ⟨freeInvolutionCount_small.1, freeInvolutionCount_small.2.1,
+    freeInvolutionCount_small.2.2, by native_decide,
+    freeInvolutionCount_formula, no_free_involution_on_odd⟩
 
 end Omega.GU

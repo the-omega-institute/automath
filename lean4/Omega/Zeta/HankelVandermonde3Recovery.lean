@@ -1,3 +1,4 @@
+import Omega.Zeta.HankelVandermonde2
 import Mathlib.Tactic
 
 namespace Omega.Zeta
@@ -24,5 +25,15 @@ theorem hankel3_vandermonde_square_scalar
     = ω1 * ω2 * ω3 * (a2 - a1)^2 * (a3 - a1)^2 * (a3 - a2)^2 := by
   unfold hankel3DetScalar hankelMoment0 hankelMoment1 hankelMoment2 hankelMoment3 hankelMoment4
   ring
+
+/-- Hankel-Vandermonde package.
+    cor:xi-hankel-vs-prony-square-gap -/
+theorem paper_hankel_vandermonde_package :
+    (∀ ω1 ω2 a1 a2 : ℤ, hankel2 ω1 ω2 a1 a2 = ω1 * ω2 * (a2 - a1) ^ 2) ∧
+    (∀ ω1 ω2 ω3 : ℤ, hankelMoment0 ω1 ω2 ω3 = ω1 + ω2 + ω3) ∧
+    hankel2 1 1 0 1 = 1 ∧
+    hankel2 3 5 1 2 = 15 :=
+  ⟨hankel2_vandermonde_square, fun _ _ _ => rfl,
+   by native_decide, by native_decide⟩
 
 end Omega.Zeta

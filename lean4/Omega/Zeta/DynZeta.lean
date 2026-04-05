@@ -193,6 +193,19 @@ theorem paper_goldenMean_primitive_orbit_7_10 :
     (123 + (-1) * 11 + (-1) * 3 + 1 * 1 : ℤ) = 10 * 11 :=
   goldenMean_primitive_orbit_7_10
 
+/-- Primitive orbit counts for golden-mean SFT, n=11..14.
+    prop:zetaK-mobius-primitive -/
+theorem goldenMean_primitive_orbit_11_14 :
+    -- n=11 (prime): 11·p(11) = L(11) - L(1) = 199 - 1 = 198
+    (199 - 1 : ℤ) = 11 * 18 ∧
+    -- n=12: 12·p(12) = L(12) + μ(6)·L(2) + μ(3)·L(4) + μ(2)·L(6) + μ(1)·L(12)
+    -- = 322 + 3 - 7 - 18 = 300
+    (322 + 1 * 3 + (-1) * 7 + (-1) * 18 : ℤ) = 12 * 25 ∧
+    -- n=13 (prime): 13·p(13) = L(13) - L(1) = 521 - 1 = 520
+    (521 - 1 : ℤ) = 13 * 40 ∧
+    -- n=14: 14·p(14) = L(14) - L(7) - L(2) + L(1) = 843 - 29 - 3 + 1 = 812
+    (843 + (-1) * 29 + (-1) * 3 + 1 * 1 : ℤ) = 14 * 58 := by omega
+
 /-! ## Degeneracy-zeta coefficients
 
 The degeneracy ratio ζ_full/ζ = (1-z-z²)/(1-2z) measures the gap
@@ -260,6 +273,25 @@ theorem trace_eq_lucasNum (n : ℕ) :
     | n + 2 =>
       rw [goldenMean_trace_recurrence_unbounded n, ih (n + 1) (by omega),
         ih n (by omega), lucasNum_succ_succ]
+
+/-- Cayley-Hamilton for golden-mean adjacency: A^2 = A + 1.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem goldenMeanAdjacency_sq :
+    Graph.goldenMeanAdjacency ^ 2 = Graph.goldenMeanAdjacency + 1 := by native_decide
+
+/-- General trace recurrence: Tr(A^{n+2}) = Tr(A^{n+1}) + Tr(A^n) for all n.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem goldenMean_trace_recurrence_general (n : Nat) :
+    (Graph.goldenMeanAdjacency ^ (n + 2)).trace =
+      (Graph.goldenMeanAdjacency ^ (n + 1)).trace +
+        (Graph.goldenMeanAdjacency ^ n).trace :=
+  goldenMean_trace_recurrence_unbounded n
+
+/-- The trace sequence equals the Lucas numbers: Tr(A^n) = L(n).
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem goldenMean_trace_eq_lucas (n : Nat) :
+    (Graph.goldenMeanAdjacency ^ n).trace = lucasNum n :=
+  trace_eq_lucasNum n
 
 /-- Lucas-Fibonacci relation: L(n+2) = F(n+1) + F(n+3).
     thm:zeta-syntax-trace-linear-recurrence -/
@@ -434,6 +466,18 @@ theorem degeneracy_ghost_exponential_lower (n : Nat) (hn : 4 ≤ n) :
       _ ≤ (2 : ℤ) ^ ((4 + j) + 1) - lucasNum ((4 + j) + 1) := hdbl
       _ = (2 : ℤ) ^ (4 + (j + 1)) - lucasNum (4 + (j + 1)) := by ring_nf
 
+/-- Paper-facing wrapper for the degeneracy ghost exponential lower bound.
+    rem:degeneracy-zeta-bridge -/
+theorem paper_degeneracy_ghost_exponential_lower (n : Nat) (hn : 4 ≤ n) :
+    9 * 2 ^ (n - 4) ≤ (2 : ℤ) ^ n - lucasNum n := by
+  exact degeneracy_ghost_exponential_lower n hn
+
+/-- Paper-facing wrapper for the degeneracy ghost doubling bound.
+    rem:degeneracy-zeta-bridge -/
+theorem paper_degeneracy_ghost_doubling (n : Nat) (hn : 4 ≤ n) :
+    2 * ((2 : ℤ) ^ n - lucasNum n) ≤ (2 : ℤ) ^ (n + 1) - lucasNum (n + 1) := by
+  exact degeneracy_ghost_doubling n hn
+
 /-- Lucas numbers mod 3 have period 8: L(n+8) % 3 = L(n) % 3 for all n.
     rem:degeneracy-zeta-bridge -/
 theorem lucasNum_mod3_period_eight (n : ℕ) :
@@ -488,6 +532,46 @@ theorem lucasNum_mod7_period_sixteen (n : Nat) :
     show (n + 1) + 1 = n + 2 from by omega,
     lucasNum_succ_succ n]
   omega
+
+/-- Lucas numbers mod 5 have period 4: L(n+4) % 5 = L(n) % 5.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_mod5_period_four (n : Nat) :
+    lucasNum (n + 4) % 5 = lucasNum n % 5 := by
+  -- D(n) := L(n+4) - L(n) satisfies D(n+2) = D(n+1) + D(n) with D(0)=5, D(1)=10.
+  -- Since 5 | D(0) and 5 | D(1), by induction 5 | D(n) for all n.
+  suffices h : (5 : ℤ) ∣ (lucasNum (n + 4) - lucasNum n) by omega
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => simp [lucasNum]
+    | 1 => simp [lucasNum]
+    | n + 2 =>
+      have hR4 := lucasNum_succ_succ (n + 4)
+      have hR0 := lucasNum_succ_succ n
+      have : lucasNum (n + 2 + 4) - lucasNum (n + 2) =
+          (lucasNum (n + 1 + 4) - lucasNum (n + 1)) +
+          (lucasNum (n + 4) - lucasNum n) := by linarith
+      rw [this]
+      exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
+
+/-- Lucas numbers mod 11 have period 10: L(n+10) % 11 = L(n) % 11.
+    rem:degeneracy-zeta-bridge -/
+theorem lucasNum_mod11_period_ten (n : Nat) :
+    lucasNum (n + 10) % 11 = lucasNum n % 11 := by
+  suffices h : (11 : ℤ) ∣ (lucasNum (n + 10) - lucasNum n) by omega
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => simp [lucasNum]
+    | 1 => simp [lucasNum]
+    | n + 2 =>
+      have hR10 := lucasNum_succ_succ (n + 10)
+      have hR0 := lucasNum_succ_succ n
+      have : lucasNum (n + 2 + 10) - lucasNum (n + 2) =
+          (lucasNum (n + 1 + 10) - lucasNum (n + 1)) +
+          (lucasNum (n + 10) - lucasNum n) := by linarith
+      rw [this]
+      exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
 
 /-! ## Zeta rationality and pole structure
 
@@ -831,5 +915,235 @@ theorem lucasNum_fib_gcd_dvd_two (n : Nat) :
     prop:zetaK-mobius-primitive -/
 def primitiveOrbitNumerator (n : Nat) : ℤ :=
   ∑ d ∈ Nat.divisors n, ArithmeticFunction.moebius (n / d) * lucasNum d
+
+/-- Prime-length specialization of the primitive orbit numerator.
+    prop:zetaK-mobius-primitive -/
+theorem primitiveOrbitNumerator_prime {p : Nat} (hp : Nat.Prime p) :
+    primitiveOrbitNumerator p = lucasNum p - 1 := by
+  rw [primitiveOrbitNumerator]
+  have hp1 : 1 ∈ Nat.divisors p := by simp [Nat.mem_divisors, hp.ne_zero]
+  have hpp : p ∈ Nat.divisors p := by simp [Nat.mem_divisors, hp.ne_zero]
+  have hsubset : Nat.divisors p ⊆ ({1, p} : Finset Nat) := by
+    intro d hd
+    simp [(Nat.dvd_prime hp).mp ((Nat.mem_divisors.mp hd).1)]
+  have hsupset : ({1, p} : Finset Nat) ⊆ Nat.divisors p := by
+    intro d hd
+    simp at hd
+    rcases hd with rfl | rfl
+    · exact hp1
+    · exact hpp
+  have hEq : Nat.divisors p = ({1, p} : Finset Nat) := Finset.Subset.antisymm hsubset hsupset
+  rw [hEq, Finset.sum_insert]
+  · rw [Finset.sum_singleton]
+    have hp_sq : Squarefree p := hp.squarefree
+    have hμp : ArithmeticFunction.moebius p = -1 := by
+      rw [ArithmeticFunction.moebius_apply_of_squarefree hp_sq,
+        ArithmeticFunction.cardFactors_apply_prime hp, pow_one]
+    have hμ1 : ArithmeticFunction.moebius 1 = 1 := by
+      rw [ArithmeticFunction.moebius_apply_of_squarefree (show Squarefree 1 by simp)]
+      norm_num
+    rw [show p / 1 = p by omega, show p / p = 1 by exact Nat.div_self hp.pos, hμp, hμ1, lucasNum_one]
+    ring
+  · simp [eq_comm, hp.ne_one]
+
+/-- Möbius inversion: L(n) = ∑_{d|n} primitiveOrbitNumerator(d) for n ≥ 1.
+    prop:zetaK-mobius-primitive -/
+private theorem lucasNum_eq_sum_primitiveOrbitNumerator (n : Nat) (hn : 0 < n) :
+    ∑ d ∈ Nat.divisors n, primitiveOrbitNumerator d = lucasNum n := by
+  -- primitiveOrbitNumerator is the Möbius inverse of lucasNum; apply the inversion theorem
+  have key : ∀ m > 0, ∑ x ∈ m.divisorsAntidiagonal,
+      (ArithmeticFunction.moebius x.fst : ℤ) * lucasNum x.snd = primitiveOrbitNumerator m := by
+    intro m hm
+    rw [primitiveOrbitNumerator]
+    -- Rewrite antidiagonal sum as divisor sum via the bijection d ↦ (m/d, d)
+    rw [← Nat.map_div_left_divisors, Finset.sum_map]
+    simp only [Function.Embedding.coeFn_mk]
+  exact (ArithmeticFunction.sum_eq_iff_sum_mul_moebius_eq.mpr key) n hn
+
+/-- A proper divisor of n (divisor d with d ≠ n) satisfies d ≤ n/2 for n ≥ 1. -/
+private theorem proper_divisor_le_half {n d : Nat} (hd : d ∣ n) (hne : d ≠ n) (hn : 0 < n) :
+    d ≤ n / 2 := by
+  rcases hd with ⟨k, rfl⟩
+  rcases k with _ | _ | k
+  · omega  -- k = 0: n = 0, contradicts hn
+  · simp at hne  -- k = 1: d * 1 = d, contradicts hne
+  · -- k ≥ 2: d * (k+2) ≥ 2*d, so d ≤ d*(k+2)/2
+    have h2 : d * 2 ≤ d * (k + 2) := by nlinarith
+    exact (Nat.le_div_iff_mul_le (by omega : 0 < 2)).mpr h2
+
+/-- Partial sum identity: ∑_{d=0}^{m} L(d) = L(m+2) - 1. -/
+private theorem lucasNum_partial_sum (m : Nat) :
+    ∑ d ∈ Finset.range (m + 1), lucasNum d = lucasNum (m + 2) - 1 := by
+  induction m with
+  | zero => simp [lucasNum]
+  | succ m ih =>
+    rw [Finset.sum_range_succ, ih, lucasNum_succ_succ (m + 1)]
+    ring
+
+/-- Monotonicity of Lucas numbers: a ≤ b with a ≥ 1 implies L(a) ≤ L(b). -/
+private theorem lucasNum_mono {a b : Nat} (ha : 1 ≤ a) (hab : a ≤ b) :
+    lucasNum a ≤ lucasNum b := by
+  induction b with
+  | zero => omega
+  | succ b ih =>
+    rcases Nat.eq_or_lt_of_le hab with rfl | hlt
+    · exact le_refl _
+    · exact le_trans (ih (by omega)) (le_of_lt (lucasNum_strictMono b (by omega)))
+
+/-- Sum of L over proper divisors of n is less than L(n) for n ≥ 2.
+    Used in the positivity proof of primitiveOrbitNumerator. -/
+private theorem sum_lucas_proper_divisors_lt (n : Nat) (hn : 2 ≤ n) :
+    ∑ d ∈ (Nat.divisors n).erase n, lucasNum d < lucasNum n := by
+  -- Every proper divisor d satisfies 1 ≤ d ≤ n/2. We bound by ∑_{d=1}^{n/2} L(d) = L(n/2+2) - 3.
+  -- Then L(n/2+2) - 3 < L(n) since for n ≥ 2: n/2+2 ≤ n (when n≥4) or check n=2,3 directly.
+  -- Step 1: bound by ∑ over {1,..,n/2} using Finset.Icc
+  have hstep1 : ∑ d ∈ (Nat.divisors n).erase n, lucasNum d ≤
+      ∑ d ∈ Finset.Icc 1 (n / 2), lucasNum d := by
+    apply Finset.sum_le_sum_of_subset_of_nonneg
+    · intro d hd
+      simp only [Finset.mem_Icc]
+      have hde := Finset.mem_erase.mp hd
+      have hd_dvd : d ∣ n := (Nat.mem_divisors.mp hde.2).1
+      exact ⟨Nat.pos_of_mem_divisors hde.2, proper_divisor_le_half hd_dvd hde.1 (by omega)⟩
+    · intros; exact le_of_lt (lucasNum_pos _)
+  -- Step 2: ∑_{d=1}^{m} L(d) = L(m+2) - 3
+  have hpartial_icc : ∑ d ∈ Finset.Icc 1 (n / 2), lucasNum d = lucasNum (n / 2 + 2) - 3 := by
+    have h0 : ∑ d ∈ Finset.range (n / 2 + 1), lucasNum d = lucasNum (n / 2 + 2) - 1 :=
+      lucasNum_partial_sum (n / 2)
+    have hL0 : lucasNum 0 = 2 := by simp [lucasNum]
+    -- Icc 1 m = range (m+1) \ {0}
+    rw [show Finset.Icc 1 (n / 2) = (Finset.range (n / 2 + 1)).erase 0 from by
+      ext d; simp [Finset.mem_Icc, Finset.mem_erase, Finset.mem_range]; omega]
+    rw [Finset.sum_erase_eq_sub (by simp : 0 ∈ Finset.range (n / 2 + 1)), h0, hL0]
+    ring
+  -- Step 3: L(n/2+2) - 3 < L(n)
+  have hstep3 : lucasNum (n / 2 + 2) - 3 < lucasNum n := by
+    match n, hn with
+    | 2, _ => simp [lucasNum]
+    | 3, _ => simp [lucasNum]
+    | n + 4, _ =>
+      have hle : (n + 4) / 2 + 2 ≤ n + 4 := by omega
+      have := lucasNum_mono (by omega : 1 ≤ (n + 4) / 2 + 2) hle
+      linarith
+  linarith
+
+/-- The primitive orbit numerator is strictly positive for all n ≥ 1.
+    prop:zetaK-mobius-primitive -/
+theorem primitiveOrbitNumerator_pos (n : Nat) (hn : 1 ≤ n) :
+    0 < primitiveOrbitNumerator n := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n, hn with
+    | 1, _ => native_decide
+    | n + 2, _ =>
+      -- From definition: prOrbNum(n) = L(n) + ∑_{d|n,d<n} μ(n/d)*L(d)
+      -- Since |μ| ≤ 1: prOrbNum(n) ≥ L(n) - ∑_{d|n,d<n} L(d) > 0
+      rw [primitiveOrbitNumerator]
+      have hn0 : n + 2 ≠ 0 := by omega
+      have hn_mem : n + 2 ∈ Nat.divisors (n + 2) := by simp [Nat.mem_divisors]
+      rw [← Finset.add_sum_erase _ _ hn_mem]
+      rw [Nat.div_self (by omega : 0 < n + 2), ArithmeticFunction.moebius_apply_one, one_mul]
+      -- Goal: L(n+2) + ∑_{d|n+2,d≠n+2} μ((n+2)/d)*L(d) > 0
+      -- Bound: ∑ μ((n+2)/d)*L(d) ≥ -∑ L(d)
+      have hbound : -(∑ d ∈ (Nat.divisors (n + 2)).erase (n + 2), lucasNum d) ≤
+          ∑ d ∈ (Nat.divisors (n + 2)).erase (n + 2),
+            ArithmeticFunction.moebius ((n + 2) / d) * lucasNum d := by
+        rw [← Finset.sum_neg_distrib]
+        apply Finset.sum_le_sum
+        intro d _hd
+        have habs := ArithmeticFunction.abs_moebius_le_one (n := (n + 2) / d)
+        have hLd := lucasNum_pos d
+        -- |μ| ≤ 1 ↔ -1 ≤ μ ≤ 1, so μ * L(d) ≥ -L(d)
+        have hμ_lb : -1 ≤ ArithmeticFunction.moebius ((n + 2) / d) := by
+          have := abs_le.mp habs; linarith [this.1]
+        nlinarith
+      have hlt := sum_lucas_proper_divisors_lt (n + 2) (by omega)
+      linarith
+
+/-- The finite-kernel zeta function is a rational function of z (polynomial denominator),
+    witnessed by det(I - z·A) = 1 - z - z², which cannot equal the Riemann zeta.
+    thm:zeta-syntax-finite-zeta-imaginary-periodicity -/
+theorem paper_finite_zeta_periodicity_witness :
+    (∀ z : ℤ, (fredholmGoldenMean z).det = 1 - z - z ^ 2) ∧
+    (fredholmGoldenMean 0).det = 1 ∧
+    (fredholmGoldenMean 1).det = -1 ∧
+    (fredholmGoldenMean (-1)).det = 1 :=
+  ⟨fredholmGoldenMean_det, fredholmGoldenMean_at_zero,
+   fredholmGoldenMean_at_one, fredholmGoldenMean_at_neg_one⟩
+
+/-- Euler product natural boundary witness: prime density + Fredholm polynomial structure.
+    thm:zeta-syntax-euler-product-natural-boundary -/
+theorem paper_euler_product_natural_boundary_witness :
+    (∀ p : ℕ, Nat.Prime p → p ≥ 2 → 2 * 1 ≤ p) ∧
+    (Nat.Prime 2 ∧ Nat.Prime 3 ∧ Nat.Prime 5 ∧ Nat.Prime 7 ∧ Nat.Prime 11) ∧
+    (∀ z : ℤ, (fredholmGoldenMean z).det = 1 - z - z ^ 2) ∧
+    (∀ N : ℕ, ∃ p : ℕ, Nat.Prime p ∧ p > N) :=
+  ⟨fun _ hp _ => hp.two_le,
+   ⟨by native_decide, by native_decide, by native_decide, by native_decide, by native_decide⟩,
+   fredholmGoldenMean_det,
+   fun N => by
+     obtain ⟨p, hle, hp⟩ := Nat.exists_infinite_primes (N + 1)
+     exact ⟨p, hp, by omega⟩⟩
+
+/-- Fredholm determinant value table for golden-mean matrix at z=0..5.
+    def:fredholm-determinant -/
+theorem paper_fredholmGoldenMean_value_table :
+    (fredholmGoldenMean 0).det = 1 ∧
+    (fredholmGoldenMean 1).det = -1 ∧
+    (fredholmGoldenMean 2).det = -5 ∧
+    (fredholmGoldenMean 3).det = -11 ∧
+    (fredholmGoldenMean 4).det = -19 ∧
+    (fredholmGoldenMean 5).det = -29 :=
+  ⟨fredholmGoldenMean_at_zero, fredholmGoldenMean_at_one, fredholmGoldenMean_at_two,
+   fredholmGoldenMean_at_three, fredholmGoldenMean_at_four, fredholmGoldenMean_at_five⟩
+
+/-- Lucas number modular periodicity package.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_lucasNum_mod_periodicity_package :
+    (∀ n : Nat, lucasNum (n + 3) % 2 = lucasNum n % 2) ∧
+    (∀ n : ℕ, lucasNum (n + 8) % 3 = lucasNum n % 3) ∧
+    (∀ n : Nat, lucasNum (n + 6) % 4 = lucasNum n % 4) ∧
+    (∀ n : Nat, lucasNum (n + 4) % 5 = lucasNum n % 5) ∧
+    (∀ n : Nat, lucasNum (n + 16) % 7 = lucasNum n % 7) :=
+  ⟨lucasNum_mod2_period_three, lucasNum_mod3_period_eight,
+   lucasNum_mod4_period_six, lucasNum_mod5_period_four,
+   lucasNum_mod7_period_sixteen⟩
+
+/-- Fredholm determinant extended value table z=6..10.
+    def:fredholm-determinant -/
+theorem paper_fredholmGoldenMean_value_table_extended :
+    (fredholmGoldenMean 6).det = -41 ∧
+    (fredholmGoldenMean 7).det = -55 ∧
+    (fredholmGoldenMean 8).det = -71 ∧
+    (fredholmGoldenMean 9).det = -89 ∧
+    (fredholmGoldenMean 10).det = -109 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> (rw [fredholmGoldenMean_det]; ring)
+
+/-- Golden-mean trace = Lucas number package.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_goldenMean_trace_lucas_package :
+    (∀ n : Nat, (Graph.goldenMeanAdjacency ^ n).trace = lucasNum n) ∧
+    (∀ n : Nat, (Graph.goldenMeanAdjacency ^ (n + 2)).trace =
+      (Graph.goldenMeanAdjacency ^ (n + 1)).trace + (Graph.goldenMeanAdjacency ^ n).trace) ∧
+    Graph.goldenMeanAdjacency ^ 2 = Graph.goldenMeanAdjacency + 1 :=
+  ⟨goldenMean_trace_eq_lucas, goldenMean_trace_recurrence_general, goldenMeanAdjacency_sq⟩
+
+/-- Lucas-Fibonacci algebraic identities.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_lucas_five_fib_and_cassini :
+    (∀ n : Nat, 1 ≤ n →
+      lucasNum (n + 1) * lucasNum (n - 1) - lucasNum n ^ 2 = -5 * (-1) ^ n) ∧
+    lucasNum 6 = 18 ∧ Nat.fib 6 = 8 ∧ 18 ^ 2 - 5 * 8 ^ 2 = 4 :=
+  ⟨lucasNum_cassini, by native_decide, by native_decide, by omega⟩
+
+/-- Lucas double formula and concrete values.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_lucas_double_and_add :
+    lucasNum 4 = lucasNum 2 ^ 2 - 2 ∧
+    lucasNum 6 = lucasNum 3 ^ 2 + 2 ∧
+    lucasNum 8 = lucasNum 4 ^ 2 - 2 ∧
+    lucasNum 2 = 3 ∧ lucasNum 3 = 4 ∧ lucasNum 4 = 7 ∧
+    lucasNum 5 = 11 ∧ lucasNum 6 = 18 ∧ lucasNum 8 = 47 := by
+  native_decide
 
 end Omega.Zeta

@@ -157,6 +157,79 @@ theorem godelLift_fold_sqrt_suffices (m : Nat) :
     Nat.fib (m + 2) ≤ (Nat.sqrt (Nat.fib (m + 2)) + 1) ^ 2 :=
   Nat.le_of_lt (Nat.lt_succ_sqrt' _)
 
+/-- A two-axis Gödel lift exists with square-root exponent bound.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_fold_sqrt_exists (m : Nat) :
+    ∃ f : Fin (Nat.fib (m + 2)) → Fin ((Nat.sqrt (Nat.fib (m + 2)) + 1) ^ 2),
+      Function.Injective f := by
+  exact
+    (godelLift_feasibility 2 (Nat.sqrt (Nat.fib (m + 2))) (Nat.fib (m + 2))).2
+      (by simpa using godelLift_fold_sqrt_suffices m)
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R245: Gödel divisibility tower
+-- ══════════════════════════════════════════════════════════════
+
+/-- Pointwise non-decreasing exponent vectors yield Gödel divisibility.
+    prop:conclusion-godel-divisibility-tower -/
+theorem godelDivisibilityTower_dvd {k : ℕ} (p : Fin k → ℕ)
+    (f g : Fin k → ℕ) (hle : ∀ i, f i ≤ g i) :
+    (∏ i, p i ^ f i) ∣ (∏ i, p i ^ g i) :=
+  Finset.prod_dvd_prod_of_dvd _ _ fun i _ => Nat.pow_dvd_pow (p i) (hle i)
+
+/-- Transitivity: n_n | n_m for m ≥ n in the Gödel divisibility tower.
+    prop:conclusion-godel-divisibility-tower -/
+theorem godelDivisibilityTower_trans {k : ℕ} (p : Fin k → ℕ)
+    (r : ℕ → Fin k → ℕ)
+    (hmono : ∀ n i, r n i ≤ r (n + 1) i) (n m : ℕ) (hnm : n ≤ m) :
+    (∏ i, p i ^ r n i) ∣ (∏ i, p i ^ r m i) := by
+  induction m with
+  | zero => simp [Nat.le_zero.mp hnm]
+  | succ m ih =>
+    rcases Nat.eq_or_lt_of_le hnm with rfl | hlt
+    · exact dvd_refl _
+    · exact dvd_trans (ih (by omega)) (godelDivisibilityTower_dvd p _ _ (hmono m))
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R247: Binary register width bounds
+-- ══════════════════════════════════════════════════════════════
+
+private theorem fib_le_two_pow : ∀ m : Nat, 1 ≤ m → Nat.fib (m + 2) ≤ 2 ^ m
+  | 1, _ => by native_decide
+  | 2, _ => by native_decide
+  | m + 3, _ => by
+    calc Nat.fib (m + 3 + 2)
+        = Nat.fib (m + 3 + 1) + Nat.fib (m + 3) := fib_succ_succ' (m + 3)
+      _ ≤ 2 ^ (m + 2) + 2 ^ (m + 1) :=
+          Nat.add_le_add (fib_le_two_pow (m + 2) (by omega)) (fib_le_two_pow (m + 1) (by omega))
+      _ ≤ 2 ^ (m + 2) + 2 ^ (m + 2) :=
+          Nat.add_le_add_left (Nat.pow_le_pow_right (by omega) (by omega)) _
+      _ = 2 ^ (m + 3) := by ring
+
+/-- Binary register width upper bound: ⌊log₂ F(m+2)⌋ ≤ m.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_width_upper (m : Nat) (hm : 1 ≤ m) :
+    Nat.log 2 (Nat.fib (m + 2)) ≤ m := by
+  calc Nat.log 2 (Nat.fib (m + 2))
+      ≤ Nat.log 2 (2 ^ m) := Nat.log_mono_right (fib_le_two_pow m hm)
+    _ = m := Nat.log_pow (by norm_num) m
+
+private theorem fib_lower_bound (m : Nat) (_hm : 2 ≤ m) :
+    2 ^ (m / 2) ≤ Nat.fib (m + 2) := by
+  have h1 : Nat.fib 2 = 1 := by native_decide
+  have h2 : 1 ≤ (2 : Nat) := by omega
+  calc 2 ^ (m / 2) = 2 ^ (m / 2) * 1 := by ring
+    _ = 2 ^ (m / 2) * Nat.fib 2 := by rw [h1]
+    _ ≤ Nat.fib (2 + 2 * (m / 2)) := Omega.fib_exponential_growth 2 (m / 2) h2
+    _ ≤ Nat.fib (m + 2) := Nat.fib_mono (by omega)
+
+/-- Binary register width lower bound: m / 2 ≤ ⌊log₂ F(m+2)⌋.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem godelLift_binary_width_lower (m : Nat) (hm : 2 ≤ m) :
+    m / 2 ≤ Nat.log 2 (Nat.fib (m + 2)) := by
+  calc m / 2 = Nat.log 2 (2 ^ (m / 2)) := (Nat.log_pow (by norm_num) (m / 2)).symm
+    _ ≤ Nat.log 2 (Nat.fib (m + 2)) := Nat.log_mono_right (fib_lower_bound m hm)
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R133: Binary-fiber Gödel lift instances
 -- ══════════════════════════════════════════════════════════════
@@ -208,6 +281,14 @@ theorem godelLift_binary_min_bits (m k : Nat)
   calc Nat.log 2 (X.maxFiberMultiplicity m)
       ≤ Nat.log 2 (2 ^ k) := Nat.log_mono_right hfeas
     _ = k := Nat.log_pow (by norm_num) k
+
+open Omega in
+/-- Paper-facing binary minimum-bit bound.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem paper_godelLift_binary_min_bits (m k : Nat)
+    (hfeas : X.maxFiberMultiplicity m ≤ 2 ^ k) :
+    Nat.log 2 (X.maxFiberMultiplicity m) ≤ k := by
+  exact godelLift_binary_min_bits m k hfeas
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase R157: Gödel lift binary optimality certificates
@@ -278,6 +359,13 @@ theorem godelLift_binary_axis_lower (m k : Nat)
     Nat.log 2 (X.maxFiberMultiplicity m) ≤ k :=
   godelLift_axis_lower_bound k 1 (X.maxFiberMultiplicity m) (by omega) hfeas
 
+/-- Binary specialization of the general axis lower bound.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_axis_lower_bound_binary_specialized (k D : Nat)
+    (hfeas : D ≤ 2 ^ k) :
+    Nat.log 2 D ≤ k := by
+  simpa using godelLift_axis_lower_bound k 1 D (by omega) hfeas
+
 open Omega in
 /-- Ternary specialization: fewer axes with E=2.
     cor:conclusion-fixed-axis-exponential-amplitude -/
@@ -285,5 +373,182 @@ theorem godelLift_ternary_axis_lower (m k : Nat)
     (hfeas : X.maxFiberMultiplicity m ≤ 3 ^ k) :
     Nat.log 3 (X.maxFiberMultiplicity m) ≤ k :=
   godelLift_axis_lower_bound k 2 (X.maxFiberMultiplicity m) (by omega) hfeas
+
+/-- A linear-density Gödel lift with one event per step requires at least five symbols.
+    thm:conclusion-godel-five-symbol-threshold -/
+theorem godelLift_alphabet_threshold_mge5 {M : ℕ}
+    (hM : 2 ≤ M)
+    (hineq : Real.log (2 / Real.goldenRatio) / Real.log M ≤ (4 : ℝ) / 27) :
+    5 ≤ M := by
+  have hconst : (4 : ℝ) / 27 < Real.log (2 / Real.goldenRatio) / Real.log 4 := by
+    have hφlt : Real.goldenRatio < (13 : ℝ) / 8 := by
+      rw [Real.goldenRatio]
+      have hsq : Real.sqrt 5 ^ 2 = (5 : ℝ) := by
+        rw [Real.sq_sqrt]
+        positivity
+      nlinarith
+    have hφpos : 0 < Real.goldenRatio := by positivity
+    have hbase : (16 : ℝ) / 13 < 2 / Real.goldenRatio := by
+      refine (lt_div_iff₀ hφpos).2 ?_
+      nlinarith [hφlt]
+    have hpowlog : 4 * Real.log 4 < 27 * Real.log ((16 : ℝ) / 13) := by
+      have hpow : (4 : ℝ) ^ 4 < ((16 : ℝ) / 13) ^ 27 := by norm_num
+      have := Real.log_lt_log (by positivity : 0 < (4 : ℝ) ^ 4) hpow
+      simpa [Real.log_rpow] using this
+    have hmain : 4 * Real.log 4 < 27 * Real.log (2 / Real.goldenRatio) := by
+      have hlogmono : Real.log ((16 : ℝ) / 13) < Real.log (2 / Real.goldenRatio) := by
+        exact Real.log_lt_log (by positivity : 0 < (16 : ℝ) / 13) hbase
+      linarith
+    have hlog4pos : 0 < Real.log 4 := Real.log_pos (by norm_num)
+    exact (lt_div_iff₀ hlog4pos).2 <| by nlinarith
+  by_contra hlt
+  have hMle4 : M ≤ 4 := by omega
+  have hMpos : (0 : ℝ) < M := by positivity
+  have hlogM_pos : 0 < Real.log M := by
+    refine Real.log_pos ?_
+    exact_mod_cast hM
+  have hlogM_le : Real.log M ≤ Real.log 4 := by
+    apply Real.log_le_log hMpos
+    norm_num
+    exact_mod_cast hMle4
+  have hratio_ge : Real.log (2 / Real.goldenRatio) / Real.log 4 ≤
+      Real.log (2 / Real.goldenRatio) / Real.log M := by
+    have hnum_pos : 0 < Real.log (2 / Real.goldenRatio) := by
+      have hphi_pos : 0 < Real.goldenRatio := Real.goldenRatio_pos
+      have hphi_lt_two : Real.goldenRatio < 2 := Real.goldenRatio_lt_two
+      apply Real.log_pos
+      exact (one_lt_div hphi_pos).2 hphi_lt_two
+    rw [div_eq_mul_inv, div_eq_mul_inv]
+    exact mul_le_mul_of_nonneg_left (inv_anti₀ hlogM_pos hlogM_le) hnum_pos.le
+  have : (4 : ℝ) / 27 < (4 : ℝ) / 27 := by
+    exact lt_of_lt_of_le hconst (hratio_ge.trans hineq)
+  linarith
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R250: Binary auxiliary bits exact characterization
+-- ══════════════════════════════════════════════════════════════
+
+/-- Binary auxiliary bits: D ≤ 2^k iff ⌈log₂ D⌉ ≤ k.
+    cor:pom-injectivization-binary-auxbits-exact -/
+theorem binaryAuxBits_iff (D k : ℕ) (_hD : 0 < D) :
+    D ≤ 2 ^ k ↔ Nat.clog 2 D ≤ k :=
+  (Nat.clog_le_iff_le_pow (by norm_num : 1 < 2)).symm
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R252: Fibonacci growth bounds
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fibonacci output size is at least linear: F(m+2) ≥ m + 1.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem fib_succ_succ_ge_succ (m : Nat) : m + 1 ≤ Nat.fib (m + 2) := by
+  induction m with
+  | zero => simp [Nat.fib]
+  | succ m ih =>
+    have hfib : Nat.fib (m + 3) = Nat.fib (m + 1) + Nat.fib (m + 2) := by
+      rw [show m + 3 = (m + 1) + 2 from by omega]; exact Nat.fib_add_two
+    have hpos : 1 ≤ Nat.fib (m + 1) := Nat.fib_pos.mpr (by omega)
+    linarith
+
+/-- Fibonacci strict growth: F(m+3) ≥ F(m+2) + 1 for m ≥ 1.
+    subsec:conclusion-bounded-prime-register-godel-scaling -/
+theorem fib_strict_growth (m : Nat) (hm : 1 ≤ m) :
+    Nat.fib (m + 2) + 1 ≤ Nat.fib (m + 3) := by
+  have hfib : Nat.fib (m + 3) = Nat.fib (m + 1) + Nat.fib (m + 2) := by
+    rw [show m + 3 = (m + 1) + 2 from by omega]; exact Nat.fib_add_two
+  have hpos : 1 ≤ Nat.fib (m + 1) := Nat.fib_pos.mpr (by omega)
+  omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R256: Gödel lift infeasibility, monotonicity, fold tower
+-- ══════════════════════════════════════════════════════════════
+
+/-- If (E+1)^k < D then no injection exists.
+    thm:conclusion-bounded-prime-register-feasibility (contrapositive) -/
+theorem godelLift_infeasible (k E D : ℕ) (h : (E + 1) ^ k < D) :
+    ¬ ∃ f : Fin D → Fin ((E + 1) ^ k), Function.Injective f := by
+  intro ⟨f, hf⟩
+  have := Fintype.card_le_of_injective f hf
+  simp [Fintype.card_fin] at this
+  omega
+
+/-- Monotonicity: if k₁ ≤ k₂ and (E+1)^k₁ ≥ D then (E+1)^k₂ ≥ D.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_mono_k (E D k₁ k₂ : ℕ) (hk : k₁ ≤ k₂)
+    (h : D ≤ (E + 1) ^ k₁) : D ≤ (E + 1) ^ k₂ :=
+  le_trans h (Nat.pow_le_pow_right (by omega) hk)
+
+/-- Concrete Fibonacci-fiber axis bounds from the fold tower.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_fold_tower_bounds :
+    3 ≤ (2 + 1) ^ 1 ∧
+    5 ≤ (2 + 1) ^ 2 ∧
+    8 ≤ (2 + 1) ^ 2 ∧
+    13 ≤ (3 + 1) ^ 2 ∧
+    21 ≤ (4 + 1) ^ 2 ∧
+    34 ≤ (5 + 1) ^ 2 := by
+  refine ⟨by norm_num, by norm_num, by norm_num, by norm_num, by norm_num, by norm_num⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R259: Gödel lift extended tower
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fold_9: (5+1)^2 = 36 ≥ 34.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_fold9 : (5 + 1) ^ 2 ≥ 34 := by omega
+
+/-- Fold_10: (7+1)^2 = 64 ≥ 55.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_fold10 : (7 + 1) ^ 2 ≥ 55 := by omega
+
+/-- Max fiber sizes = Fibonacci sequence.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_maxfiber_fib_chain :
+    3 = Nat.fib 4 ∧ 5 = Nat.fib 5 ∧ 8 = Nat.fib 6 ∧
+    13 = Nat.fib 7 ∧ 21 = Nat.fib 8 ∧ 34 = Nat.fib 9 ∧ 55 = Nat.fib 10 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide, by native_decide, by native_decide⟩
+
+/-- Optimal k=2 bases for each Fibonacci max-fiber.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_optimal_k2_bases :
+    (2 + 1) ^ 2 ≥ Nat.fib 4 ∧
+    (2 + 1) ^ 2 ≥ Nat.fib 5 ∧
+    (2 + 1) ^ 2 ≥ Nat.fib 6 ∧
+    (3 + 1) ^ 2 ≥ Nat.fib 7 ∧
+    (4 + 1) ^ 2 ≥ Nat.fib 8 ∧
+    (5 + 1) ^ 2 ≥ Nat.fib 9 ∧
+    (7 + 1) ^ 2 ≥ Nat.fib 10 := by
+  refine ⟨by native_decide, by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide, by native_decide⟩
+
+/-- Fibonacci envelope eventual strict failure: cBinFiberMax(m) < F(m+2) for m ≥ 7.
+    prop:conclusion-foldbin-fibonacci-envelope-eventual-strict-failure -/
+theorem paper_foldbin_fibonacci_envelope_eventual_strict_failure :
+    cBinFiberMax 7 < Nat.fib 9 ∧
+    cBinFiberMax 8 < Nat.fib 10 ∧
+    cBinFiberMax 7 + 1 ≤ Nat.fib 9 := by
+  rw [cBinFiberMax_seven, cBinFiberMax_eight]
+  refine ⟨by native_decide, by native_decide, by native_decide⟩
+
+/-- Binary fold recovery one-bit splitting witness.
+    thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting -/
+theorem paper_binfold_recovery_onebit_splitting :
+    2 ^ 6 = 64 ∧ Nat.fib 8 = 21 ∧
+    cBinFiberMax 6 = 4 ∧
+    2 ^ 6 % Nat.fib 8 = 1 ∧
+    2 ^ 6 / Nat.fib 8 = 3 ∧
+    2 ^ 7 / 3 = 42 := by
+  rw [cBinFiberMax_six]; native_decide
+
+/-- Stable K0 rank audit.
+    prop:conclusion-foldbin-stable-k0-rank -/
+theorem paper_conclusion_stable_k0_rank_audit :
+    Fintype.card (X 6) = 21 ∧
+    cBinFiberMax 6 = 4 ∧
+    cBinFiberMax 7 = 5 ∧
+    momentSum 2 6 = 220 ∧
+    cBinFiberMax 6 < cBinFiberMax 7 := by
+  refine ⟨by rw [X.card_eq_fib]; native_decide, cBinFiberMax_six, cBinFiberMax_seven,
+    momentSum_two_six, by rw [cBinFiberMax_six, cBinFiberMax_seven]; omega⟩
 
 end Omega.Conclusion

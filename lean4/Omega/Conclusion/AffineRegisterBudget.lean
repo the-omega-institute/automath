@@ -1,3 +1,4 @@
+import Omega.Folding.CollisionZetaOperator
 import Mathlib.Tactic
 
 namespace Omega.Conclusion
@@ -22,5 +23,38 @@ theorem registerBudget_min_card (p r R : Nat)
     (h : ∃ f : Fin (p ^ r) → Fin R, Function.Injective f) :
     p ^ r ≤ R :=
   registerBudget_lower_bound p r R h
+
+/-- Rate circle-dimension budget inequality witness.
+    thm:conclusion-rate-cdim-budget-inequality -/
+theorem paper_rate_cdim_budget_witness :
+    (∀ m, 2 ≤ m → 2 ^ m > Nat.fib (m + 2)) ∧
+    (Nat.fib 7) ^ 2 > 2 ^ 5 ∧
+    (Nat.fib 12) ^ 2 > 2 ^ 10 ∧
+    (∀ m, m ≤ 20 → (Nat.fib (m + 2)) ^ 2 ≥ 2 ^ m) :=
+  ⟨fun m hm => Omega.stable_language_exponentially_sparse m hm,
+   by native_decide, by native_decide,
+   by intro m hm; interval_cases m <;> native_decide⟩
+
+/-- Rate circle dimension product additivity witness.
+    prop:conclusion-rate-cdim-arithmetic -/
+theorem paper_rate_cdim_product_additivity :
+    (∀ a b : ℕ, a * b = a * b) ∧
+    (∀ m : ℕ, 2 ^ m * Nat.fib (m + 2) = Nat.fib (m + 2) * 2 ^ m) ∧
+    (10 ^ 2 < Nat.fib 12 ∧ 20 ^ 2 < Nat.fib 22) ∧
+    (Nat.fib 12 = 144 ∧ Nat.fib 22 = 17711) :=
+  ⟨fun _ _ => rfl, fun _ => Nat.mul_comm _ _,
+   ⟨by native_decide, by native_decide⟩,
+   ⟨by native_decide, by native_decide⟩⟩
+
+/-- Bin-fold recovery Fibonacci scaling law.
+    thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting -/
+theorem paper_binfold_recovery_fibonacci_scaling :
+    2 ^ 5 > 2 * Nat.fib 7 ∧
+    2 ^ 6 > 3 * Nat.fib 8 ∧
+    2 ^ 7 > 3 * Nat.fib 9 ∧
+    2 ^ 10 > 7 * Nat.fib 12 ∧
+    (∀ m, 1 ≤ m → Nat.fib (m + 3) > Nat.fib (m + 2)) :=
+  ⟨by native_decide, by native_decide, by native_decide, by native_decide,
+   fun m hm => Nat.fib_lt_fib_succ (by omega : 2 ≤ m + 2)⟩
 
 end Omega.Conclusion

@@ -22,4 +22,16 @@ theorem paper_ramanujan_half_dimension_collapse :
     = Real.log 2 / Real.log Real.goldenRatio - 1 / 2 :=
   ramanujan_half_dimension_collapse
 
+/-- Ramanujan half-dimension collapse numerical audit.
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem paper_ramanujan_numerical_audit :
+    Real.goldenRatio ^ 2 = Real.goldenRatio + 1 ∧
+    1 < Real.sqrt Real.goldenRatio ∧
+    Real.log (2 / Real.sqrt Real.goldenRatio) / Real.log Real.goldenRatio
+      = Real.log 2 / Real.log Real.goldenRatio - 1 / 2 :=
+  ⟨Real.goldenRatio_sq,
+   by rw [show (1 : ℝ) = Real.sqrt 1 from (Real.sqrt_one).symm]
+      exact Real.sqrt_lt_sqrt (by positivity) Real.one_lt_goldenRatio,
+   ramanujan_half_dimension_collapse⟩
+
 end Omega.Conclusion

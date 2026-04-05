@@ -458,4 +458,28 @@ theorem conclusion_window6_crt_idempotent_sector_splitting :
     ((7 : ZMod 21) + 15 = 1) := by
   exact ⟨crt_idempotent_7, crt_idempotent_15, crt_idempotent_product, crt_idempotent_sum⟩
 
+/-- Closed form of the average information loss constant from the window-6 histogram.
+    thm:conclusion-window6-qmoment-triple-geometry -/
+theorem window6_information_loss_average_closed_form :
+    ((8 : ℝ) * (2 : ℝ) * Real.log 2 +
+        (4 : ℝ) * (3 : ℝ) * Real.log 3 +
+        (9 : ℝ) * (4 : ℝ) * Real.log 4) / 64 =
+      ((11 : ℝ) / 8) * Real.log 2 + ((3 : ℝ) / 16) * Real.log 3 := by
+  have hlog4 : Real.log 4 = 2 * Real.log 2 := by
+    rw [show (4 : ℝ) = 2 * 2 by norm_num, Real.log_mul (by positivity) (by positivity)]
+    ring
+  rw [hlog4]
+  ring_nf
+
+/-- Window-6 collision probability complementary law.
+    thm:conclusion-window6-groupoid-collision-dimension-identity -/
+theorem paper_window6_collision_complementary :
+    momentSum 2 6 = 220 ∧
+    Fintype.card (X 6) = 21 ∧
+    2 ^ 6 = 64 ∧
+    220 > 3 * 64 ∧
+    Nat.gcd 220 4096 = 4 := by
+  refine ⟨momentSum_two_six, by rw [X.card_eq_fib]; native_decide,
+    by omega, by omega, by native_decide⟩
+
 end Omega.Conclusion

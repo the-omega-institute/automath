@@ -960,4 +960,24 @@ theorem paper_fold_basic (m : Nat) :
     (∀ w : Word m, stableValue (Fold w) = weight w % Nat.fib (m + 2)) :=
   ⟨fun w => Fold_idempotent w, Fold_surjective m, fun w => stableValue_Fold_mod w⟩
 
+/-- Hidden bit count extended values m=13..16.
+    thm:pom-hidden-bit-count -/
+theorem paper_hiddenBitCount_extended_values :
+    hiddenBitCount 13 = 2730 ∧
+    hiddenBitCount 14 = 5461 ∧
+    hiddenBitCount 15 = 10922 ∧
+    hiddenBitCount 16 = 21845 := by
+  simp only [hiddenBitCount_floor_div_three]; omega
+
+/-- Hidden bit stability and threshold properties.
+    lem:pom-one-bit + thm:pom-hidden-bit-count -/
+theorem paper_hiddenBit_stable_and_threshold :
+    (∀ (m : Nat) (w : Word m), hiddenBit w = 1 ↔ Nat.fib (m + 2) ≤ weight w) ∧
+    3 * hiddenBitCount 6 = 2 ^ 6 - 1 ∧
+    3 * hiddenBitCount 7 = 2 ^ 7 - 2 := by
+  refine ⟨fun m w => ?_, ?_, ?_⟩
+  · simp only [hiddenBit]; split <;> omega
+  · have := hiddenBitCount_even_closed 3 (by omega); omega
+  · have := hiddenBitCount_odd_closed 3; omega
+
 end Omega

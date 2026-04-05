@@ -16,6 +16,57 @@ model: opus
 2. 通过 `SendMessage` 向 orchestrator 发送确认消息：`'Formalizer online. Lean4 skills loaded (LSP tools, mathlib search, tactic reference, error diagnostics available). Ready for tasks.'`
 3. 未完成上述两步前，不得接受或开始任何实现任务
 
+## Codex 并行辅助（强制门禁）
+
+**每次收到实现任务时，对中/高难度目标必须 spawn 后台 Codex 任务并行探索证明。orchestrator 会强制检查完成报告中的 Codex 使用记录——缺失则退回。**
+
+**完成报告中必须包含 Codex 使用记录**：
+- 中/高难度定理：`Codex 并行探索：[结果摘要]` 或 `Codex stuck 辅助：[结果摘要]`（即使 Codex 结果未被采用也要记录）
+- 低难度定理：`低难度，Codex 豁免`
+
+工作流：
+1. 收到 orchestrator 的实现任务后，对每个**中等及以上难度**的目标，spawn 一个后台 codex-rescue agent：
+   ```
+   Agent(
+     name = "codex-proof-helper",
+     subagent_type = "codex:codex-rescue",
+     description = "Codex 并行证明探索",
+     run_in_background = true,
+     prompt = "<task>
+     在 Lean4 项目 lean4/ 中为以下定理寻找证明：
+     文件：[目标文件路径]
+     定理签名：[完整 Lean4 签名]
+     证明策略提示：[analyst 推荐的策略]
+     依赖引理：[已有引理列表]
+     请尝试构造证明，测试是否编译通过。
+     </task>
+     <verification_loop>编辑文件后必须用 lake env lean 验证编译。</verification_loop>
+     <action_safety>只修改指定文件中的 sorry 占位，不改动其他代码。</action_safety>"
+   )
+   ```
+2. 自己同时用 LSP-first 协议开始证明开发
+3. 如果 Codex 先找到可编译的证明，验证后采用（仍需 lean_diagnostic_messages 确认）
+4. 如果自己先完成，不等 Codex
+5. **Codex 返回的代码必须经过本地编译验证才能采用**——不盲信 Codex 输出
+6. 低难度目标（≤5 行 simp/omega）不需要 Codex 辅助，直接实现
+
+**stuck 时的 Codex 升级**：
+- 当 LSP 搜索枯竭时（第一级升级失败），**不需要等 orchestrator 转发 codex-consultant**——直接 spawn codex-rescue：
+  ```
+  Agent(
+    name = "codex-stuck-helper",
+    subagent_type = "codex:codex-rescue",
+    description = "Codex stuck 辅助",
+    prompt = "<task>
+    Lean4 证明卡在以下 goal state：
+    [当前 goal]
+    已尝试：[失败的 tactic 列表]
+    请搜索 mathlib 并建议可行的证明路线。
+    </task>"
+  )
+  ```
+- 同时仍向 orchestrator 报告 stuck 状态（保持信息透明）
+
 ## 通信规则
 
 **所有完成报告和 stuck 请求必须直接发给 orchestrator。**
@@ -87,6 +138,8 @@ model: opus
 - 主模块：`Omega/`
 - Lean版本：v4.28.0
 - mathlib版本：v4.28.0
+- **lean-lsp-mcp**：已配置（`.mcp.json`），通过 MCP 协议连接 Lean4 LSP。提供实时类型检查、错误诊断、补全建议，启动后自动可用。
+- **Leanstral API**（升级路径可选）：Mistral 的 Lean4 专用证明搜索 agent（`labs-leanstral-2603`），通过 lean-lsp-mcp 连接编译器。用于 codex-consultant 仍无法解决的 stuck 情况。调用方式：通过 Mistral API 发送证明目标，Leanstral 迭代尝试直到编译通过或报告失败。
 
 ## LSP 工具与 mathlib 搜索（lean4-skills 核心协议）
 

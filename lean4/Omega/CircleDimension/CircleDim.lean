@@ -316,6 +316,20 @@ theorem phaseSpectrumCount_coprime (r t N : Nat) (hcop : Nat.Coprime t N) :
     phaseSpectrumCount r t N = N ^ r := by
   simp [phaseSpectrumCount, Nat.Coprime.gcd_eq_one hcop]
 
+/-- The phase spectrum equals the pure rank term exactly in the coprime case.
+    thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_eq_pow_iff_coprime
+    (r t N : Nat) (hN : 1 ≤ N) :
+    phaseSpectrumCount r t N = N ^ r ↔ Nat.Coprime t N := by
+  constructor
+  · intro hEq
+    rw [Nat.coprime_iff_gcd_eq_one]
+    have hpowpos : 0 < N ^ r := Nat.pow_pos (lt_of_lt_of_le (by decide) hN)
+    apply Nat.eq_of_mul_eq_mul_left hpowpos
+    simpa [phaseSpectrumCount] using hEq
+  · intro hcop
+    exact phaseSpectrumCount_coprime r t N hcop
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R166: Phase spectrum coprime multiplicativity
 -- ══════════════════════════════════════════════════════════════
@@ -391,6 +405,97 @@ theorem phaseSpectrumCount_le_pow (r t N : Nat) (hN : 0 < N) :
   simp only [phaseSpectrumCount, pow_succ]
   exact Nat.mul_le_mul_left _ (Nat.gcd_le_right t hN)
 
+/-- The phase spectrum attains its maximal value exactly when `N ∣ t`.
+    thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_eq_pow_succ_iff_dvd
+    (r t N : Nat) (hN : 1 ≤ N) :
+    phaseSpectrumCount r t N = N ^ (r + 1) ↔ N ∣ t := by
+  constructor
+  · intro hEq
+    have hpowpos : 0 < N ^ r := Nat.pow_pos (lt_of_lt_of_le (by decide) hN)
+    apply (Nat.gcd_eq_right_iff_dvd).mp
+    apply Nat.eq_of_mul_eq_mul_left hpowpos
+    simpa [phaseSpectrumCount, pow_succ, Nat.mul_assoc] using hEq
+  · intro hdiv
+    rw [phaseSpectrumCount, pow_succ, Nat.gcd_eq_right hdiv]
+
+/-- For a prime modulus, the phase spectrum is forced into the coprime-or-divisible dichotomy.
+    thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_prime_dichotomy
+    (r t p : Nat) (hp : Nat.Prime p) :
+    phaseSpectrumCount r t p = p ^ r ∨ phaseSpectrumCount r t p = p ^ (r + 1) := by
+  by_cases hdiv : p ∣ t
+  · right
+    exact (phaseSpectrumCount_eq_pow_succ_iff_dvd r t p (le_of_lt hp.one_lt)).2 hdiv
+  · left
+    exact (phaseSpectrumCount_eq_pow_iff_coprime r t p (le_of_lt hp.one_lt)).2
+      (hp.coprime_iff_not_dvd.mpr hdiv).symm
+
+/-- Odd prime-power factors are invisible to dyadic phase spectra.
+    thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_dyadic_odd_prime_power_invariant
+    {r t p a b : Nat} (hp : Nat.Prime p) (hp2 : p ≠ 2) :
+    phaseSpectrumCount r (t * p ^ b) (2 ^ a) = phaseSpectrumCount r t (2 ^ a) := by
+  rw [phaseSpectrumCount_split, phaseSpectrumCount_split]
+  congr 1
+  have hpow : Nat.Coprime (p ^ b) (2 ^ a) :=
+    Nat.coprime_pow_primes b a hp (by decide : Nat.Prime 2) hp2
+  simpa [Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using
+    hpow.gcd_mul_left_cancel t
+
+/-- Dyadic visibility boundary: positive torsion excludes the zero/odd aliasing pathology,
+    so dyadic phase spectra determine the free rank and the dyadic gcd profile.
+    thm:cdim-dyadic-spectrum-visibility-boundary -/
+theorem phaseSpectrumCount_dyadic_visibility_boundary
+    {r r' t t' : Nat}
+    (ht : 0 < t) (ht' : 0 < t')
+    (h : ∀ a : Nat, 1 ≤ a → phaseSpectrumCount r t (2 ^ a) = phaseSpectrumCount r' t' (2 ^ a)) :
+    r = r' ∧ ∀ a : Nat, 1 ≤ a → Nat.gcd t (2 ^ a) = Nat.gcd t' (2 ^ a) := by
+  obtain ⟨k, u, huodd, htu⟩ := Nat.exists_eq_two_pow_mul_odd ht.ne'
+  obtain ⟨k', u', hu'odd, ht'u'⟩ := Nat.exists_eq_two_pow_mul_odd ht'.ne'
+  let A := max 1 (max k k')
+  have hA : 1 ≤ A := by
+    dsimp [A]
+    exact le_max_left _ _
+  have hkA : k ≤ A := by
+    dsimp [A]
+    exact le_trans (le_max_left _ _) (le_max_right _ _)
+  have hkA' : k' ≤ A := by
+    dsimp [A]
+    exact le_trans (le_max_right _ _) (le_max_right _ _)
+  have hgcd_two_pow (e a u : Nat) (ha : 1 ≤ a) (huodd : Odd u) (he : e ≤ a) :
+      Nat.gcd (2 ^ e * u) (2 ^ a) = 2 ^ e := by
+    have hcop : Nat.Coprime u (2 ^ a) := by
+      simpa using (Nat.coprime_pow_right_iff ha u 2).2 huodd.coprime_two_right
+    calc
+      Nat.gcd (2 ^ e * u) (2 ^ a) = Nat.gcd (2 ^ e) (2 ^ a) := by
+        simpa [Nat.mul_comm] using hcop.gcd_mul_left_cancel (2 ^ e)
+      _ = 2 ^ e := Nat.gcd_eq_left (pow_dvd_pow 2 he)
+  have hBase := h A hA
+  rw [htu, ht'u', phaseSpectrumCount_split, phaseSpectrumCount_split,
+    hgcd_two_pow k A u hA huodd hkA, hgcd_two_pow k' A u' hA hu'odd hkA'] at hBase
+  have hStep := h (A + 1) (by omega)
+  rw [htu, ht'u', phaseSpectrumCount_split, phaseSpectrumCount_split,
+    hgcd_two_pow k (A + 1) u (by omega) huodd (by omega),
+    hgcd_two_pow k' (A + 1) u' (by omega) hu'odd (by omega),
+    show 2 ^ (A + 1) = 2 * 2 ^ A by rw [pow_succ, Nat.mul_comm], mul_pow] at hStep
+  have hStep' : ((2 ^ A) ^ r' * 2 ^ k') * 2 ^ r = ((2 ^ A) ^ r' * 2 ^ k') * 2 ^ r' := by
+    calc
+      ((2 ^ A) ^ r' * 2 ^ k') * 2 ^ r = ((2 ^ A) ^ r * 2 ^ k) * 2 ^ r := by rw [hBase]
+      _ = (2 ^ r') * ((2 ^ A) ^ r' * 2 ^ k') := by
+          have := hStep; ring_nf at this ⊢; linarith
+      _ = ((2 ^ A) ^ r' * 2 ^ k') * 2 ^ r' := by ring
+  have hcommonPos : 0 < (2 ^ A) ^ r' * 2 ^ k' := by
+    exact Nat.mul_pos (Nat.pow_pos (Nat.two_pow_pos A)) (Nat.two_pow_pos k')
+  have hpowEq : 2 ^ r = 2 ^ r' := Nat.eq_of_mul_eq_mul_left hcommonPos hStep'
+  have hr : r = r' := Nat.pow_right_injective (by omega) hpowEq
+  subst hr
+  refine ⟨rfl, ?_⟩
+  intro a ha
+  have haEq := h a ha
+  rw [phaseSpectrumCount_split, phaseSpectrumCount_split] at haEq
+  exact Nat.eq_of_mul_eq_mul_left (Nat.pow_pos (Nat.two_pow_pos a)) haEq
+
 /-- Phase spectrum reconstruction for positive torsion parameters.
     thm:cdim-phase-spectrum-reconstruction -/
 theorem phaseSpectrumCount_reconstruction
@@ -448,5 +553,141 @@ theorem phaseSpectrumCount_reconstruction
   have hdiv_right : t' ∣ t :=
     dvd_trans htgcd_right (Nat.gcd_dvd_left t t')
   exact ⟨rfl, Nat.dvd_antisymm hdiv_left hdiv_right⟩
+
+/-- Paper-facing iff wrapper for phase-spectrum reconstruction.
+    thm:cdim-phase-spectrum-reconstruction -/
+theorem paper_phaseSpectrumCount_reconstruction_iff
+    {r r' t t' : Nat}
+    (ht : 0 < t) (ht' : 0 < t') :
+    (∀ N : Nat, 1 ≤ N → phaseSpectrumCount r t N = phaseSpectrumCount r' t' N)
+      ↔ r = r' ∧ t = t' := by
+  constructor
+  · intro h
+    exact phaseSpectrumCount_reconstruction ht ht' h
+  · intro h
+    rcases h with ⟨hr, htEq⟩
+    subst hr
+    subst htEq
+    intro N hN
+    rfl
+
+/-- One-sided phase-spectrum reconstruction recovers the free rank.
+    thm:cdim-phase-spectrum-reconstruction -/
+theorem phaseSpectrumCount_reconstruction_one_sided
+    {r r' t t' : Nat}
+    (ht : 0 < t) (ht' : 0 < t')
+    (h : ∀ N : Nat, 1 ≤ N → phaseSpectrumCount r t N = phaseSpectrumCount r' t' N) :
+    r = r' := by
+  exact (phaseSpectrumCount_reconstruction ht ht' h).1
+
+/-- One-sided phase-spectrum reconstruction recovers the torsion parameter once the rank matches.
+    thm:cdim-phase-spectrum-reconstruction -/
+theorem phaseSpectrumCount_reconstruction_torsion_one_sided
+    {r r' t t' : Nat}
+    (ht : 0 < t) (ht' : 0 < t')
+    (hrr' : r = r')
+    (h : ∀ N : Nat, 1 ≤ N → phaseSpectrumCount r t N = phaseSpectrumCount r' t' N) :
+    t = t' := by
+  subst hrr'
+  exact (phaseSpectrumCount_reconstruction ht ht' h).2
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R251: tensor-hom extension laws
+-- ══════════════════════════════════════════════════════════════
+
+/-- Circle dimension scales linearly: cdim(k·r, t) = k · cdim(r, t).
+    prop:cdim-tensor-hom-ext-laws -/
+theorem circleDim_nsmul (k r t : Nat) :
+    circleDim (k * r) t = k * circleDim r t := by simp [circleDim]
+
+/-- Circle dimension respects powers: cdim(r^k, t) = cdim(r, t)^k.
+    prop:cdim-tensor-hom-ext-laws -/
+theorem circleDim_pow (k r t : Nat) :
+    circleDim (r ^ k) t = (circleDim r t) ^ k := by simp [circleDim]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R259: phase spectrum concrete instances
+-- ══════════════════════════════════════════════════════════════
+
+/-- Phase spectrum of Z^2: Σ(N) = N^2. Here r=1 gives N^{r+1} = N^2.
+    def:cdim-phase-spectrum -/
+theorem phaseSpectrumCount_Z2 (N : Nat) :
+    phaseSpectrumCount 1 0 N = N ^ 2 :=
+  phaseSpectrumCount_free 1 N
+
+/-- Phase spectrum of Z × Z/6Z: Σ(N) = N · gcd(6, N).
+    def:cdim-phase-spectrum -/
+theorem phaseSpectrumCount_Z_times_Z6 (N : Nat) :
+    phaseSpectrumCount 1 6 N = N * Nat.gcd 6 N := by
+  simp [phaseSpectrumCount]
+
+/-- Concrete evaluations for Z × Z/6Z.
+    def:cdim-phase-spectrum -/
+theorem phaseSpectrumCount_Z_times_Z6_table :
+    phaseSpectrumCount 1 6 1 = 1 ∧
+    phaseSpectrumCount 1 6 2 = 4 ∧
+    phaseSpectrumCount 1 6 3 = 9 ∧
+    phaseSpectrumCount 1 6 4 = 8 ∧
+    phaseSpectrumCount 1 6 5 = 5 ∧
+    phaseSpectrumCount 1 6 6 = 36 ∧
+    phaseSpectrumCount 1 6 12 = 72 := by
+  refine ⟨by native_decide, by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide, by native_decide⟩
+
+/-- Rank detection at coprime primes.
+    thm:cdim-phase-spectrum-reconstruction -/
+theorem phaseSpectrumCount_rank_detection_Z_Z6 :
+    phaseSpectrumCount 1 6 5 = 5 ^ 1 ∧
+    phaseSpectrumCount 1 6 7 = 7 ^ 1 := by
+  refine ⟨by native_decide, by native_decide⟩
+
+/-- Circle dimension axiomatic completeness.
+    thm:cdim-nr-nd-semiring-hom-rigidity -/
+theorem paper_circleDim_axiomatic_completeness :
+    (∀ a b c d, circleDim (a + b) (c + d) = circleDim a c + circleDim b d) ∧
+    (∀ n t1 t2, circleDim n t1 = circleDim n t2) ∧
+    circleDim 1 0 = 1 ∧
+    (∀ n t, circleDim n t = 0 ↔ n = 0) ∧
+    (∀ a b t1 t2, a < b → circleDim a t1 < circleDim b t2) :=
+  ⟨circleDim_add, circleDim_finite_extension, circleDim_Zk 1,
+   circleDim_eq_zero_iff, circleDim_strictMono⟩
+
+/-- Circle dimension defect composition package.
+    thm:cdim-kernel-defect-incompressibility -/
+theorem paper_cdimDefect_composition_package :
+    (∀ (f g : CircleDimHomData) (hfg : f.targetRank = g.sourceRank)
+       (restrictedKerRank : Nat) (hRestrict : restrictedKerRank ≤ g.kernelRank)
+       (hRestrictBound : restrictedKerRank ≤ f.imageRank)
+       (hImageSplit : f.imageRank ≤ restrictedKerRank + g.imageRank),
+      cdimDefect (f.comp g hfg restrictedKerRank hRestrict hRestrictBound hImageSplit) =
+        cdimDefect f + restrictedKerRank) ∧
+    (∀ (f g : CircleDimHomData) (hfg : f.targetRank = g.sourceRank)
+       (restrictedKerRank : Nat) (hRestrict : restrictedKerRank ≤ g.kernelRank)
+       (hRestrictBound : restrictedKerRank ≤ f.imageRank)
+       (hImageSplit : f.imageRank ≤ restrictedKerRank + g.imageRank),
+      cdimDefect (f.comp g hfg restrictedKerRank hRestrict hRestrictBound hImageSplit) ≤
+        cdimDefect f + cdimDefect g) :=
+  ⟨fun f g hfg r hr hrb his => cdimDefect_comp f g hfg r hr hrb his,
+   fun f g hfg r hr hrb his => cdimDefect_comp_le f g hfg r hr hrb his⟩
+
+/-- Circle dimension monotonicity and half-dimension package.
+    prop:circle-dimension-laws -/
+theorem paper_circleDim_mono_half_package :
+    (∀ n₁ n₂ t : Nat, n₁ ≤ n₂ → circleDim n₁ t ≤ circleDim n₂ t) ∧
+    halfCircleDim 1 0 = 1 / 2 ∧
+    (∀ a b c d : Nat,
+      halfCircleDim (a + b) (c + d) = halfCircleDim a c + halfCircleDim b d) ∧
+    halfCircleDim 3 0 = 3 / 2 :=
+  ⟨fun _ _ _ h => circleDim_mono h, halfCircleDim_nat, halfCircleDim_add,
+   by simp [halfCircleDim, circleDim]⟩
+
+/-- Circle dimension tensor and subtraction package.
+    prop:circle-dimension-laws -/
+theorem paper_circleDim_tensor_and_sub :
+    (∀ r s t1 t2, circleDim (r + s) (t1 + t2) = circleDim r t1 + circleDim s t2) ∧
+    (∀ t, circleDim 0 t = 0) ∧
+    (∀ a b t1 t2, a ≤ b → circleDim b t2 - circleDim a t1 = b - a) ∧
+    circleDim 5 0 = 5 :=
+  ⟨circleDim_add, circleDim_finite, fun _ _ _ _ _ => by simp [circleDim], rfl⟩
 
 end Omega.CircleDimension
