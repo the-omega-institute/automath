@@ -82,4 +82,20 @@ theorem paper_prefixBall_eq_or_disjoint (x y : OmegaInfinity) (m : Nat) :
     prefixBall x m = prefixBall y m ∨ Disjoint (prefixBall x m) (prefixBall y m) :=
   prefixBall_eq_or_disjoint x y m
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R283: Prefix metric basic properties
+-- ══════════════════════════════════════════════════════════════
+
+/-- d(x,x) = 0. def:spg-prefix-metric -/
+theorem prefixDist_self (x : OmegaInfinity) : prefixDist x x = 0 := by
+  simp [prefixDist, PiNat.dist_self]
+
+/-- d(x,y) = d(y,x). def:spg-prefix-metric -/
+theorem prefixDist_comm (x y : OmegaInfinity) : prefixDist x y = prefixDist y x := by
+  simp [prefixDist, PiNat.dist_comm]
+
+/-- 0 ≤ d(x,y). def:spg-prefix-metric -/
+theorem prefixDist_nonneg (x y : OmegaInfinity) : 0 ≤ prefixDist x y := by
+  simp [prefixDist, PiNat.dist_nonneg]
+
 end Omega.SPG

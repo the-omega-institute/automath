@@ -141,6 +141,16 @@ theorem pathIndSetPoly_three_val : pathIndSetPoly 3 = 1 + 3 * X + X ^ 2 := by
 theorem pathIndSetPoly_four_val : pathIndSetPoly 4 = 1 + 4 * X + 3 * X ^ 2 := by
   simp [pathIndSetPoly, fibPoly_succ_succ]; ring
 
+/-- I_5(x) = 1 + 5x + 6x^2 + x^3.
+    def:pom-fibonacci-polynomial -/
+theorem pathIndSetPoly_five_val : pathIndSetPoly 5 = 1 + 5 * X + 6 * X ^ 2 + X ^ 3 := by
+  simp [pathIndSetPoly, fibPoly_succ_succ]; ring
+
+/-- I_6(x) = 1 + 6x + 10x^2 + 4x^3.
+    def:pom-fibonacci-polynomial -/
+theorem pathIndSetPoly_six_val : pathIndSetPoly 6 = 1 + 6 * X + 10 * X ^ 2 + 4 * X ^ 3 := by
+  simp [pathIndSetPoly, fibPoly_succ_succ]; ring
+
 /-- Fibonacci polynomial derivative recurrence:
     (F_{n+2})' = (F_{n+1})' + F_n + X·(F_n)'.
     def:pom-fibonacci-polynomial -/
@@ -791,5 +801,23 @@ theorem pathIndSetPolyNegOne_abs_le_one (l : Nat) :
   have hlt : l % 6 < 6 := Nat.mod_lt l (by omega)
   have : l % 6 = 0 ∨ l % 6 = 1 ∨ l % 6 = 2 ∨ l % 6 = 3 ∨ l % 6 = 4 ∨ l % 6 = 5 := by omega
   rcases this with h | h | h | h | h | h <;> simp [h]
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R283: pathIndSetPoly eval at x=2
+-- ══════════════════════════════════════════════════════════════
+
+/-- pathIndSetPoly evaluated at x=2 for small values. def:pom-fibonacci-polynomial -/
+theorem pathIndSetPoly_eval_two_small :
+    (pathIndSetPoly 0).eval 2 = 1 ∧
+    (pathIndSetPoly 1).eval 2 = 3 ∧
+    (pathIndSetPoly 2).eval 2 = 5 ∧
+    (pathIndSetPoly 3).eval 2 = 11 ∧
+    (pathIndSetPoly 4).eval 2 = 21 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · rw [pathIndSetPoly_zero_val]; simp
+  · rw [pathIndSetPoly_one_val]; simp
+  · rw [pathIndSetPoly_two_val]; simp
+  · rw [pathIndSetPoly_three_val]; simp
+  · rw [pathIndSetPoly_four_val]; simp
 
 end Omega
