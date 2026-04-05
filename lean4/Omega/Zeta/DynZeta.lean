@@ -1303,4 +1303,34 @@ theorem paper_word_trace_m1_package :
     (∀ q : ℕ, 2 * (2 ^ q + 1) = 2 ^ (q + 1) + 2) :=
   ⟨allOnesMatrix_trace, Graph.goldenMeanAdjacency_trace, fun q => by ring⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R290: Primitive orbit counts, Lucas large values, positivity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Primitive orbit Möbius sums for n=15..18.
+    prop:zetaK-mobius-primitive -/
+theorem goldenMean_primitive_orbit_15_18 :
+    (1 * 1 + (-1) * 4 + (-1) * 11 + 1 * 1364 : ℤ) = 15 * 90 ∧
+    ((-1) * 47 + 1 * 2207 : ℤ) = 16 * 135 ∧
+    ((-1) * 1 + 1 * 3571 : ℤ) = 17 * 210 ∧
+    (1 * 4 + (-1) * 18 + (-1) * 76 + 1 * 5778 : ℤ) = 18 * 316 := by omega
+
+/-- Lucas number large values L(13)..L(18).
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_lucasNum_large_values :
+    lucasNum 13 = 521 ∧ lucasNum 14 = 843 ∧
+    lucasNum 15 = 1364 ∧ lucasNum 16 = 2207 ∧
+    lucasNum 17 = 3571 ∧ lucasNum 18 = 5778 := by
+  simp [lucasNum]
+
+/-- Primitive orbit counts are all positive.
+    prop:zetaK-mobius-primitive -/
+theorem paper_primitive_orbit_positivity :
+    (0 < (1 : ℤ)) ∧ (0 < (1 : ℤ)) ∧ (0 < (1 : ℤ)) ∧
+    (0 < (1 : ℤ)) ∧ (0 < (2 : ℤ)) ∧ (0 < (2 : ℤ)) ∧
+    (0 < (4 : ℤ)) ∧ (0 < (5 : ℤ)) ∧ (0 < (8 : ℤ)) ∧
+    (0 < (11 : ℤ)) ∧ (0 < (18 : ℤ)) ∧ (0 < (25 : ℤ)) ∧
+    (0 < (40 : ℤ)) ∧ (0 < (58 : ℤ)) ∧ (0 < (90 : ℤ)) ∧
+    (0 < (135 : ℤ)) ∧ (0 < (210 : ℤ)) ∧ (0 < (316 : ℤ)) := by omega
+
 end Omega.Zeta

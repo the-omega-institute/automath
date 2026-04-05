@@ -99,4 +99,22 @@ theorem enp_mul_enn {a b : ℚ} (ha : a ^ 2 = 1) (hb : b ^ 2 = 1) :
     enp a b * enn a b = 0 :=
   (central_idempotents_pairwise_orthogonal ha hb).2.2.2.2.2
 
+/-- Complete system: sum=1, all idempotent, all pairwise orthogonal.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem paper_central_idempotents_complete_system {a b : ℚ}
+    (ha : a ^ 2 = 1) (hb : b ^ 2 = 1) :
+    (epp a b + epn a b + enp a b + enn a b = 1) ∧
+    (epp a b ^ 2 = epp a b) ∧ (epn a b ^ 2 = epn a b) ∧
+    (enp a b ^ 2 = enp a b) ∧ (enn a b ^ 2 = enn a b) ∧
+    (epp a b * epn a b = 0) ∧ (epp a b * enp a b = 0) ∧
+    (epp a b * enn a b = 0) ∧ (epn a b * enp a b = 0) ∧
+    (epn a b * enn a b = 0) ∧ (enp a b * enn a b = 0) := by
+  exact ⟨central_idempotents_sum_one,
+    (central_idempotents_all_idempotent ha hb).1,
+    (central_idempotents_all_idempotent ha hb).2.1,
+    (central_idempotents_all_idempotent ha hb).2.2.1,
+    (central_idempotents_all_idempotent ha hb).2.2.2,
+    epp_mul_epn ha hb, epp_mul_enp ha hb, epp_mul_enn ha hb,
+    epn_mul_enp ha hb, epn_mul_enn ha hb, enp_mul_enn ha hb⟩
+
 end Omega.EA
