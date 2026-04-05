@@ -49,4 +49,24 @@ theorem fold6_resonance_gap :
     Fintype.card (X 8) - Fintype.card (X 6) = Fintype.card (X 7) := by
   rw [X.card_X_eight, X.card_X_six, X.card_X_seven]
 
+/-- GUT top-term Fibonacci alignment.
+    cor:fold6-tail-offsets-gut-top-terms -/
+theorem paper_gut_fibonacci_alignment :
+    (24 = Nat.fib 8 + Nat.fib 4) ∧
+    (45 = Nat.fib 9 + Nat.fib 6 + Nat.fib 4) ∧
+    (78 = Nat.fib 10 + Nat.fib 8 + Nat.fib 3) ∧
+    Nat.fib 8 = 21 ∧ Nat.fib 9 = 34 ∧ Nat.fib 10 = 55 :=
+  ⟨gut_top_fibonacci_terms.1, gut_top_fibonacci_terms.2.1, gut_top_fibonacci_terms.2.2,
+   fold6_tail_offsets.1, fold6_tail_offsets.2.1, fold6_tail_offsets.2.2⟩
+
+/-- SU(5) count closure: |X_6| + |X_2| = 24 = 4!.
+    cor:su5-21-plus-3-closure -/
+theorem paper_su5_count_closure :
+    Fintype.card (X 6) + Fintype.card (X 2) = 24 ∧
+    Nat.fib 8 = Fintype.card (X 6) ∧
+    Nat.fib 4 = Fintype.card (X 2) ∧
+    Nat.factorial 4 = 24 := by
+  refine ⟨by rw [X.card_X_six, X.card_X_two], su5_count_closure_fib.1,
+    su5_count_closure_fib.2.1, by native_decide⟩
+
 end Omega.GU

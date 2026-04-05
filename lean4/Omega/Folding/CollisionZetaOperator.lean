@@ -605,4 +605,14 @@ theorem paper_wedderburn_central_idempotent_package :
     momentSum 1 6 ^ 2 ≤ momentSum 0 6 * momentSum 2 6 := by
   simp only [← cMomentSum_eq, X.card_eq_fib]; native_decide
 
+/-- Moment sum spectrum at m=7.
+    prop:pom-power-sum-hankel-psd -/
+theorem paper_momentSum_spectrum_m7 :
+    momentSum 0 7 = 34 ∧
+    momentSum 1 7 = 128 ∧
+    momentSum 0 7 = Nat.fib 9 ∧
+    momentSum 1 7 = 2 ^ 7 ∧
+    momentSum 1 7 ^ 2 ≤ momentSum 0 7 * momentSum 2 7 := by
+  simp only [← cMomentSum_eq]; native_decide
+
 end Omega

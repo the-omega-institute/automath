@@ -963,4 +963,19 @@ theorem paper_collisionKernel3_fredholm_and_recurrence :
   simp [collisionKernel3, Matrix.det_fin_three]
   ring
 
+/-- Collision kernel A_2 full package.
+    prop:pom-collision-renyi-perron-closure -/
+theorem paper_collisionKernel2_full_package :
+    (∀ z : ℤ, (1 - z • collisionKernel2).det = 1 - 2*z - 2*z^2 + 2*z^3) ∧
+    (∀ n : ℕ, (collisionKernel2 ^ (n + 3)).trace =
+      2 * (collisionKernel2 ^ (n + 2)).trace +
+      2 * (collisionKernel2 ^ (n + 1)).trace -
+      2 * (collisionKernel2 ^ n).trace) ∧
+    (collisionKernel2 ^ 0).trace = 3 ∧
+    (collisionKernel2 ^ 1).trace = 2 := by
+  refine ⟨fun z => ?_, collisionKernel2_trace_recurrence_unbounded,
+    by native_decide, by native_decide⟩
+  simp [collisionKernel2, Matrix.det_fin_three]
+  ring
+
 end Omega
