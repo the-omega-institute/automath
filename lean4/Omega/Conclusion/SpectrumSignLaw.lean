@@ -41,4 +41,16 @@ theorem neg_one_pow_triangular_mod4 (q : ℕ) :
       have hmod : (q + 4) % 4 = q % 4 := by omega
       simp only [hmod]
 
+/-- Spectrum sign law small values. cor:conclusion-softcore-spectrum-product-sign-law -/
+theorem paper_spectrum_sign_law_package :
+    (-1 : ℤ) ^ (0 * 1 / 2) = 1 ∧
+    (-1 : ℤ) ^ (1 * 2 / 2) = -1 ∧
+    (-1 : ℤ) ^ (2 * 3 / 2) = -1 ∧
+    (-1 : ℤ) ^ (3 * 4 / 2) = 1 ∧
+    (-1 : ℤ) ^ (4 * 5 / 2) = 1 ∧
+    (-1 : ℤ) ^ (5 * 6 / 2) = -1 ∧
+    (-1 : ℤ) ^ (6 * 7 / 2) = -1 ∧
+    (-1 : ℤ) ^ (7 * 8 / 2) = 1 := by
+  norm_num
+
 end Omega.Conclusion

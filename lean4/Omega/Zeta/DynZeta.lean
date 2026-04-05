@@ -590,6 +590,28 @@ theorem lucasNum_not_dvd_five (n : ℕ) : ¬ (5 : ℤ) ∣ lucasNum n := by
   have := lucasNum_mod5_ne_zero n
   omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R287: Lucas number summation
+-- ══════════════════════════════════════════════════════════════
+
+/-- Lucas number summation: sum_{k=0}^{n} L_k = L_{n+2} - 1.
+    rem:degeneracy-zeta-bridge -/
+theorem lucasNum_sum_eq : ∀ n : ℕ,
+    ∑ k ∈ Finset.range (n + 1), lucasNum k = lucasNum (n + 2) - 1
+  | 0 => by simp [lucasNum]
+  | n + 1 => by
+    rw [Finset.sum_range_succ, lucasNum_sum_eq n, lucasNum_succ_succ (n + 1)]
+    ring
+
+/-- Small value certificates for Lucas sum. thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_sum_small_values :
+    (∑ k ∈ Finset.range 1, lucasNum k = 2) ∧
+    (∑ k ∈ Finset.range 2, lucasNum k = 3) ∧
+    (∑ k ∈ Finset.range 3, lucasNum k = 6) ∧
+    (∑ k ∈ Finset.range 4, lucasNum k = 10) ∧
+    (∑ k ∈ Finset.range 5, lucasNum k = 17) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> rw [lucasNum_sum_eq] <;> simp [lucasNum]
+
 /-- Lucas numbers mod 11 have period 10: L(n+10) % 11 = L(n) % 11.
     rem:degeneracy-zeta-bridge -/
 theorem lucasNum_mod11_period_ten (n : Nat) :
