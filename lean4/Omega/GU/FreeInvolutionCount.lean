@@ -190,4 +190,16 @@ theorem paper_freeInvolutionCount_values_and_formula :
     freeInvolutionCount_small.2.2, by native_decide,
     freeInvolutionCount_formula, no_free_involution_on_odd⟩
 
+/-- Free involution count is at least r! for r >= 1.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_ge_factorial : ∀ r : Nat, 1 ≤ r →
+    r.factorial ≤ freeInvolutionCount r
+  | 1, _ => by simp [freeInvolutionCount, Nat.factorial]
+  | r + 2, _ => by
+    have ih := freeInvolutionCount_ge_factorial (r + 1) (by omega)
+    rw [freeInvolutionCount_succ]
+    calc (r + 2).factorial = (r + 2) * (r + 1).factorial := Nat.factorial_succ (r + 1)
+      _ ≤ (2 * (r + 1) + 1) * freeInvolutionCount (r + 1) :=
+        Nat.mul_le_mul (by omega) ih
+
 end Omega.GU

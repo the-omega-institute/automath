@@ -2,6 +2,7 @@ import Mathlib.Data.Matrix.Basic
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
 import Mathlib.NumberTheory.Real.GoldenRatio
 import Omega.Core.Fib
 
@@ -41,6 +42,18 @@ theorem goldenMeanAdjacency_trace : goldenMeanAdjacency.trace = 1 := by native_d
 /-- Determinant of the golden-mean adjacency matrix is -1.
     prop:golden-mean-adjacency-det -/
 theorem goldenMeanAdjacency_det : goldenMeanAdjacency.det = -1 := by native_decide
+
+/-- The characteristic polynomial of the golden mean adjacency matrix is X^2 - X - 1.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem goldenMeanAdjacency_charpoly :
+    goldenMeanAdjacency.charpoly = Polynomial.X ^ 2 - Polynomial.X - 1 := by
+  unfold Matrix.charpoly
+  rw [Matrix.det_fin_two]
+  simp only [Matrix.charmatrix_apply, goldenMeanAdjacency, Matrix.diagonal_apply,
+    Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
+    Polynomial.C_1, Polynomial.C_0]
+  simp (config := { decide := true }) only [if_true, if_false]
+  ring
 
 /-! ### Transfer matrix and Fibonacci numbers -/
 

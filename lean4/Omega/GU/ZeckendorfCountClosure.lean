@@ -1,5 +1,6 @@
 import Omega.Folding.StableSyntax
 import Omega.Folding.FiberArithmetic
+import Omega.Folding.FiberArithmeticProperties
 import Mathlib.Tactic
 
 open Omega X
@@ -68,5 +69,18 @@ theorem paper_su5_count_closure :
     Nat.factorial 4 = 24 := by
   refine ⟨by rw [X.card_X_six, X.card_X_two], su5_count_closure_fib.1,
     su5_count_closure_fib.2.1, by native_decide⟩
+
+/-- Extended Zeckendorf count certificates: |X_m| = F(m+2) for m=9..12.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_zeckendorf_count_small_extended :
+    Fintype.card (X 9) = Nat.fib 11 ∧
+    Fintype.card (X 10) = Nat.fib 12 ∧
+    Fintype.card (X 11) = Nat.fib 13 ∧
+    Fintype.card (X 12) = Nat.fib 14 := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · rw [X.card_X_nine]; native_decide
+  · rw [X.card_X_ten]; native_decide
+  · rw [X.card_X_eleven]; native_decide
+  · rw [X.card_X_twelve]; native_decide
 
 end Omega.GU
