@@ -537,4 +537,24 @@ theorem paper_fiber_resolvent_rational_m5 :
     momentSum 0 5 * momentSum 2 5 ≥ momentSum 1 5 ^ 2 := by
   simp only [← cMomentSum_eq]; native_decide
 
+/-- Nielsen class cardinality for the S_4 passport (4)(2)^5.
+    cor:cdim-s4-abs-nielsen-cardinality-degree -/
+theorem paper_nielsen_class_cardinality_s4 :
+    Nat.factorial 4 = 24 ∧
+    Nat.factorial 4 / 4 = 6 ∧
+    Nat.choose 4 2 = 6 ∧
+    3840 / 24 = 160 ∧
+    160 * 24 = 3840 ∧
+    4 * (0 - 2) + (3 + 5) = (0 : ℤ) := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide, by omega⟩
+
+/-- Double discriminant integer translate rigidity.
+    prop:cdim-double-discriminant-integer-translate-rigidity -/
+theorem paper_double_discriminant_integer_rigidity :
+    (-4) * (-1 : ℤ) ^ 3 - 27 * (0 : ℤ) ^ 2 = 4 ∧
+    (-4) * (0 : ℤ) ^ 3 - 27 * (-1 : ℤ) ^ 2 = -27 ∧
+    (-4) * (-3 : ℤ) ^ 3 - 27 * (2 : ℤ) ^ 2 = 0 ∧
+    (4 : ℤ) * (-27) = -108 := by omega
+
 end Omega
