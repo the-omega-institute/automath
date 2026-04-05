@@ -474,4 +474,22 @@ theorem paper_cyclic_lift_trace_filter_q2 :
   ⟨fun k => cyclicPerm2_trace_even (2 * k) ⟨k, by ring⟩,
    fun k => cyclicPerm2_trace_odd (2 * k + 1) (Nat.not_even_two_mul_add_one k)⟩
 
+/-- Cyclic permutation P_3 trace filter: Tr(P_3^n) = 3 when 3|n, = 0 otherwise.
+    cor:zeta-cyclic-lift-primitive-orbits -/
+theorem paper_cyclic_lift_trace_filter_q3 :
+    (∀ k : ℕ, (cyclicPerm3 ^ (3 * k)).trace = 3) ∧
+    (∀ k : ℕ, (cyclicPerm3 ^ (3 * k + 1)).trace = 0) ∧
+    (∀ k : ℕ, (cyclicPerm3 ^ (3 * k + 2)).trace = 0) :=
+  ⟨fun k => cyclicPerm3_trace_mod3_zero (3 * k) ⟨k, rfl⟩,
+   fun k => cyclicPerm3_trace_mod3_nonzero (3 * k + 1) (by omega),
+   fun k => cyclicPerm3_trace_mod3_nonzero (3 * k + 2) (by omega)⟩
+
+/-- Fredholm determinant block-diagonal product for P_2 ⊕ P_3.
+    def:fredholm-determinant -/
+theorem paper_fredholm_block_product_2_3_extended (t : ℤ) :
+    (1 - t • cyclicPerm2).det = 1 - t ^ 2 ∧
+    (1 - t • cyclicPerm3).det = 1 - t ^ 3 ∧
+    (1 - t ^ 2) * (1 - t ^ 3) = 1 - t ^ 2 - t ^ 3 + t ^ 5 :=
+  ⟨cyclicPerm2_fredholm_det t, cyclicPerm3_fredholm_det t, by ring⟩
+
 end Omega.Zeta

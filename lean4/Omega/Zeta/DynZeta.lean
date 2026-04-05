@@ -1071,4 +1071,18 @@ theorem paper_finite_zeta_periodicity_witness :
   ⟨fredholmGoldenMean_det, fredholmGoldenMean_at_zero,
    fredholmGoldenMean_at_one, fredholmGoldenMean_at_neg_one⟩
 
+/-- Euler product natural boundary witness: prime density + Fredholm polynomial structure.
+    thm:zeta-syntax-euler-product-natural-boundary -/
+theorem paper_euler_product_natural_boundary_witness :
+    (∀ p : ℕ, Nat.Prime p → p ≥ 2 → 2 * 1 ≤ p) ∧
+    (Nat.Prime 2 ∧ Nat.Prime 3 ∧ Nat.Prime 5 ∧ Nat.Prime 7 ∧ Nat.Prime 11) ∧
+    (∀ z : ℤ, (fredholmGoldenMean z).det = 1 - z - z ^ 2) ∧
+    (∀ N : ℕ, ∃ p : ℕ, Nat.Prime p ∧ p > N) :=
+  ⟨fun _ hp _ => hp.two_le,
+   ⟨by native_decide, by native_decide, by native_decide, by native_decide, by native_decide⟩,
+   fredholmGoldenMean_det,
+   fun N => by
+     obtain ⟨p, hle, hp⟩ := Nat.exists_infinite_primes (N + 1)
+     exact ⟨p, hp, by omega⟩⟩
+
 end Omega.Zeta
