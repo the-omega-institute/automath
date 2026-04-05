@@ -164,4 +164,17 @@ theorem singleDefectEnergy_zero_eq_zero_iff
     Real.pi * m^2 * (δ^2 / (1 - δ^2)) = 0 ↔ (m = 0 ∨ δ = 0) := by
   simpa using singleDefectEnergy_zero_rigidity_single m δ hδ0 hδ1
 
+/-- Single defect Poisson energy zero rigidity and nonnegativity package.
+    prop:xi-finite-defect-poisson-l2-energy-zero-rigidity -/
+theorem paper_singleDefectEnergy_zero_rigidity_package :
+    (∀ _t δ : ℚ, 0 ≤ δ ^ 2) ∧
+    (∀ t δ : ℚ, t + 1 ≠ 0 → t + 1 - δ ≠ 0 → t + 1 + δ ≠ 0 →
+      (1 / (2 * (t + 1 - δ)) + 1 / (2 * (t + 1 + δ)) - 1 / (t + 1)) =
+        δ ^ 2 / ((t + 1) * ((t + 1) ^ 2 - δ ^ 2))) ∧
+    (1 / (2 * ((0 : ℚ) + 1 - 1/2)) + 1 / (2 * ((0 : ℚ) + 1 + 1/2)) - 1 / ((0 : ℚ) + 1)) =
+      (1/2 : ℚ) ^ 2 / (((0 : ℚ) + 1) * (((0 : ℚ) + 1) ^ 2 - (1/2 : ℚ) ^ 2)) :=
+  ⟨fun _ δ => sq_nonneg δ,
+   fun t δ ht hm hp => singleDefectEnergy_rational_identity t δ ht hm hp,
+   singleDefectEnergy_rational_identity 0 (1/2) (by norm_num) (by norm_num) (by norm_num)⟩
+
 end Omega.Zeta

@@ -1085,4 +1085,16 @@ theorem paper_euler_product_natural_boundary_witness :
      obtain ⟨p, hle, hp⟩ := Nat.exists_infinite_primes (N + 1)
      exact ⟨p, hp, by omega⟩⟩
 
+/-- Fredholm determinant value table for golden-mean matrix at z=0..5.
+    def:fredholm-determinant -/
+theorem paper_fredholmGoldenMean_value_table :
+    (fredholmGoldenMean 0).det = 1 ∧
+    (fredholmGoldenMean 1).det = -1 ∧
+    (fredholmGoldenMean 2).det = -5 ∧
+    (fredholmGoldenMean 3).det = -11 ∧
+    (fredholmGoldenMean 4).det = -19 ∧
+    (fredholmGoldenMean 5).det = -29 :=
+  ⟨fredholmGoldenMean_at_zero, fredholmGoldenMean_at_one, fredholmGoldenMean_at_two,
+   fredholmGoldenMean_at_three, fredholmGoldenMean_at_four, fredholmGoldenMean_at_five⟩
+
 end Omega.Zeta

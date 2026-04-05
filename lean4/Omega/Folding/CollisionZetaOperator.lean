@@ -567,4 +567,12 @@ theorem paper_fold_gauge_entropy_defect_witness :
     momentSum 1 6 = 2 ^ 6 := by
   simp only [← cMomentSum_eq]; native_decide
 
+/-- Power-sum moment log-convexity concrete instances.
+    cor:pom-crossq-logconvex-chain -/
+theorem paper_momentSum_log_convex_chain :
+    momentSum 1 6 ^ 2 ≤ momentSum 0 6 * momentSum 2 6 ∧
+    momentSum 2 6 ^ 2 ≤ momentSum 1 6 * momentSum 3 6 ∧
+    momentSum 1 7 ^ 2 ≤ momentSum 0 7 * momentSum 2 7 := by
+  simp only [← cMomentSum_eq]; native_decide
+
 end Omega

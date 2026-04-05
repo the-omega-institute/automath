@@ -948,4 +948,19 @@ theorem paper_collisionKernel4_trace_recurrence (n : Nat) :
     2 * (collisionKernel4 ^ (n + 1)).trace - 2 * (collisionKernel4 ^ n).trace :=
   collisionKernel4_trace_recurrence n
 
+/-- Collision kernel A_3 Fredholm determinant and trace recurrence.
+    prop:pom-collision-renyi-perron-closure -/
+theorem paper_collisionKernel3_fredholm_and_recurrence :
+    (∀ z : ℤ, (1 - z • collisionKernel3).det = 1 - 2*z - 4*z^2 + 2*z^3) ∧
+    (collisionKernel3 ^ 0).trace = 3 ∧
+    (collisionKernel3 ^ 1).trace = 2 ∧
+    (collisionKernel3 ^ 2).trace = 12 ∧
+    (∀ n : Nat, (collisionKernel3 ^ (n + 3)).trace =
+      2 * (collisionKernel3 ^ (n + 2)).trace + 4 * (collisionKernel3 ^ (n + 1)).trace -
+      2 * (collisionKernel3 ^ n).trace) := by
+  refine ⟨fun z => ?_, by native_decide, by native_decide, by native_decide,
+    collisionKernel3_trace_recurrence_unbounded⟩
+  simp [collisionKernel3, Matrix.det_fin_three]
+  ring
+
 end Omega
