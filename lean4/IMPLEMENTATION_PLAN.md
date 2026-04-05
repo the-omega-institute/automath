@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1003 |
+| \leanverified 标注数 | 1007 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1020 |
-| 轮次 | R268（round_count=269） |
+| 总标注数 | 1024 |
+| 轮次 | R269（round_count=270） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -25,14 +25,14 @@
 | POM | 1,707 | 237 | 13.9% |
 | Emergent Arithmetic | 185 | 96 | 51.9% |
 | Folding | 337 | 88 | 26.1% |
-| Conclusion | 2,550 | 167 | 6.5% |
+| Conclusion | 2,550 | 169 | 6.6% |
 | Group Unification | 469 | 96 | 20.5% |
-| SPG | 129 | 42 | 32.6% |
+| SPG | 129 | 44 | 34.1% |
 | Circle Dimension | 393 | 82 | 20.9% |
 | Zeta Finite Part | 4,524 | 127 | 2.8% |
 | Discussion | 67 | 12 | 17.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **950** | **9.0%** |
+| **合计（body）** | **10,508** | **954** | **9.1%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,7 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R269: Bayes 最优扫描清晰度打包 + 噪声预算可判定性 + 两原子标量严格单调 + ε临界二次性质（完整）**：SPG/ScanErrorDiscrete.lean + SPG/NoiseBudget.lean + Conclusion/TwoAtomScalarRecoveryAlpha2.lean——paper\_clarity\_bayes\_optimality\_package（prop:spg-clarity-bayes-optimality，Bayes 最优清晰度律完整打包（两分量均为 2·prefixScanError≤1 形式），SPG）; paper\_noiseBudget\_decidable（thm:spg-double-budget-address-capacity，噪声预算可判定性，SPG）; paper\_twoAtomScalar2\_strictMono（thm:conclusion-binfold-twoatom-information-geometry，两原子标量2严格单调性，Conclusion）; paper\_epsilonCritical\_quadratic（thm:conclusion-binfold-twoatom-information-geometry，ε临界值二次性质，Conclusion）——**4 个论文标签条目计入覆盖率**（SPG +2, Conclusion +2）——SPG 42→44（32.6%→34.1%），Conclusion 167→169（6.5%→6.6%），全局 \\leanverified 1003→1007（+4），总标注 1020→1024（+4），body 覆盖 950→954（9.0%→9.1%），commit 95248a2
 **Phase R268: Möbius 反演多重集分类 + 半环同态刚性 + 单隐藏位阈值 + 隐藏位扩展计数（完整）**：CircleDimension/CircleDim.lean + Folding/MaxFiberTwoStep.lean——paper\_multiPrimeSpectrum\_mobius\_package（thm:cdim-mobius-inversion-localization-multiset-classification，多素可除谱 Möbius 反演与完备分类打包，CD）; paper\_circleDim\_axiomatic\_completeness（thm:cdim-nr-nd-semiring-hom-rigidity，圆维公理完备性：直积自然数半环同态刚性完整五条件验证，CD）; paper\_hiddenBit\_stable\_and\_threshold（lem:pom-one-bit，单隐藏位分解：稳定性与阈值，POM）; paper\_hiddenBitCount\_extended\_values（thm:pom-hidden-bit-count，$B_m$ 扩展计数值验证，POM）——**注：hiddenBit 首分量从 Word 中移除，thm 在已有 hiddenBitCount\_closed 基础上扩展**——**4 个论文标签条目计入覆盖率**（CD +2, POM +2）——Circle Dimension 80→82（20.4%→20.9%），POM 235→237（13.8%→13.9%），全局 \\leanverified 999→1003（+4），总标注 1016→1020（+4），body 覆盖 946→950（9.0%），commit 219e4c4
 **Phase R267: mismatch 词计数严格单调 + A4 迹递推 + window6 碰撞互补 + binfold Fibonacci 标度（完整）**：Folding/MismatchLanguage.lean + Folding/CollisionZeta.lean + Conclusion/Window6Collision.lean + Conclusion/AffineRegisterBudget.lean——paper\_mismatch\_word\_count\_strict\_mono（prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence，允许词计数严格单调性，Folding）; paper\_collisionKernel4\_trace\_recurrence（prop:pom-s4-recurrence，A_4 迹递推五态 realization，Folding）; paper\_window6\_collision\_complementary（thm:conclusion-window6-groupoid-collision-dimension-identity，window-6 碰撞互补对，Conclusion）; paper\_binfold\_recovery\_fibonacci\_scaling（thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting，二进恢复率 Fibonacci 标度，Conclusion）——**注：目标 3 签名调整 momentSum 2 6=220（非 212）**——**4 个论文标签条目计入覆盖率**（Folding +2, Conclusion +2）——Folding 86→88（25.5%→26.1%），Conclusion 165→167（6.5%），全局 \\leanverified 995→999（+4），总标注 1012→1016（+4），body 覆盖 942→946（9.0%），commit 5fe3400
 **Phase R266: Fibonacci 素数符号 mod 20 + 判别式 -15 判据 + 循环 lift q6 + necklace 校正奇零（完整）**：GU/FibPrimePisano.lean + Zeta/CyclicDet.lean + Zeta/NecklaceCorrection.lean——paper\_fibprime\_sign\_by\_n\_mod20（cor:gut-fibprime-sign-by-n-mod20，n mod 20 决定 Fibonacci 素数符号，GU）; paper\_fibprime\_disc\_minus15\_criterion（cor:gut-fibprime-disc-minus15-criterion，判别式 -15 的相位锁定根判据，GU）; paper\_cyclic\_lift\_trace\_filter\_q6（cor:zeta-cyclic-lift-primitive-orbits，循环 lift q=6 迹滤波器，Zeta）; paper\_necklaceCorrectionKernel\_odd\_zero（cor:xi-time-part73c-fixed-parameter-necklace-correction，necklace 校正核奇数长度为零，Zeta）——**4 个论文标签条目计入覆盖率**（GU +2, Zeta +2）——Group Unification 94→96（20.0%→20.5%），Zeta Finite Part 125→127（2.8%），全局 \\leanverified 991→995（+4），总标注 1008→1012（+4），body 覆盖 938→942（8.9%→9.0%），commit 0593796
