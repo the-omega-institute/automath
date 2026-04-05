@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1035 |
+| \leanverified 标注数 | 1039 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1052 |
-| 轮次 | R276（round_count=277） |
+| 总标注数 | 1056 |
+| 轮次 | R277（round_count=278） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -28,11 +28,11 @@
 | Conclusion | 2,550 | 173 | 6.8% |
 | Group Unification | 469 | 100 | 21.3% |
 | SPG | 129 | 46 | 35.7% |
-| Circle Dimension | 393 | 84 | 21.4% |
-| Zeta Finite Part | 4,524 | 133 | 2.9% |
+| Circle Dimension | 393 | 86 | 21.9% |
+| Zeta Finite Part | 4,524 | 135 | 3.0% |
 | Discussion | 67 | 14 | 20.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **982** | **9.3%** |
+| **合计（body）** | **10,508** | **986** | **9.4%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,7 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R277: Hankel-Vandermonde 打包 + Lucas 倍角加法 + 圆维单调半圆打包 + 圆维张量差（完整）**：Zeta/HankelVandermonde3Recovery.lean + Zeta/DynZeta.lean + CircleDimension/CircleDim.lean——paper\_hankel\_vandermonde\_package（cor:xi-hankel-vs-prony-square-gap，Hankel-Vandermonde 平方律打包，Zeta）; paper\_lucas\_double\_and\_add（thm:zeta-syntax-trace-linear-recurrence，Lucas 倍角与加法公式，Zeta）; paper\_circleDim\_mono\_half\_package（prop:circle-dimension-laws，圆维单调性与半圆维打包，CD）; paper\_circleDim\_tensor\_and\_sub（prop:circle-dimension-laws，圆维张量积与差运算，CD）——**4 个论文标签条目计入覆盖率**（Zeta +2, CD +2）——Zeta Finite Part 133→135（2.9%→3.0%），Circle Dimension 84→86（21.4%→21.9%），全局 \\leanverified 1035→1039（+4），总标注 1052→1056（+4），body 覆盖 982→986（9.3%→9.4%），commit 01e4ebf
 **Phase R276: Chebyshev-Adams 乘积值 + Horizon Fibonacci 审计 + 稳定 K0 秩审计 + 共振窗终端扩展（完整）**：Discussion/ChebyAdams.lean + Discussion/FibHorizon.lean + Conclusion/StableK0Rank.lean + Conclusion/ResonanceWindowTerminal.lean——paper\_chebyAdams\_product\_and\_values（thm:discussion-gc-chebyshev-adams-transversal，Chebyshev-Adams 乘积与具体值，Discussion）; paper\_discussion\_horizon\_fibonacci\_audit（cor:discussion-horizon-boundarylayer-phi-scaling，Horizon 边界层 Fibonacci 数值审计，Discussion）; paper\_conclusion\_stable\_k0\_rank\_audit（thm:conclusion-foldbin-stable-collapse-ordered-k0-memory，稳定 K0 秩审计，Conclusion）; paper\_resonance\_window\_terminal\_extended（thm:conclusion-resonance-window-gap-vs-mod2-terminal-memory-independent，共振窗终端扩展打包，Conclusion）——**4 个论文标签条目计入覆盖率**（Discussion +2, Conclusion +2）——Discussion 12→14（17.9%→20.9%），Conclusion 171→173（6.7%→6.8%），全局 \\leanverified 1031→1035（+4），总标注 1048→1052（+4），body 覆盖 978→982（9.3%），commit 4896f2c
 **Phase R275: 矩和谱 m=7 + A2 Fredholm 与递推 + GUT Fibonacci 对齐 + SU(5) 计数闭合（完整）**：Folding/CollisionZetaOperator.lean + Folding/CollisionZeta.lean + GU/ZeckendorfCountClosure.lean——paper\_momentSum\_spectrum\_m7（prop:pom-power-sum-hankel-psd，矩和谱 m=7 数值验证，POM）; paper\_collisionKernel2\_full\_package（prop:pom-collision-renyi-perron-closure，A_2（3×3）Fredholm 行列式与递推完整打包，POM）; paper\_gut\_fibonacci\_alignment（cor:fold6-tail-offsets-gut-top-terms，GUT Fibonacci 项对齐，GU）; paper\_su5\_count\_closure（cor:su5-21-plus-3-closure，SU(5) 21+3 计数闭合，GU）——**注：A_2 实际是 3×3 矩阵，Fredholm det 为三次多项式**——**4 个论文标签条目计入覆盖率**（POM +2, GU +2）——POM 239→241（14.0%→14.1%），Group Unification 98→100（20.9%→21.3%），全局 \\leanverified 1027→1031（+4），总标注 1044→1048（+4），body 覆盖 974→978（9.3%），commit e8a5427
 **Phase R274: 黄金均值迹 Lucas 打包 + Lucas-Fib Cassini + 稳定算术与改写 + Wedderburn 中心幂等元打包（完整）**：Zeta/DynZeta.lean + Folding/CollisionZetaOperator.lean——paper\_goldenMean\_trace\_lucas\_package（thm:zeta-syntax-trace-linear-recurrence，黄金均值迹 Lucas 数完整打包，Zeta）; paper\_lucas\_five\_fib\_and\_cassini（thm:zeta-syntax-trace-linear-recurrence，Lucas-Fibonacci 五倍平方与 Cassini 具体值，Zeta）; paper\_stable\_arithmetic\_and\_rewrite（thm:stable-add-commutative-monoid，稳定算术与改写规则打包，EA）; paper\_wedderburn\_central\_idempotent\_package（thm:fold-groupoid-z2x2-central-idempotents，Wedderburn ℤ₂² 中心幂等元完整打包，EA）——**注：目标 2 签名调整去除 L²-5F² ∀ 分量，改为 Cassini + 具体值**——**4 个论文标签条目计入覆盖率**（Zeta +2, EA +2）——Zeta Finite Part 131→133（2.9%），Emergent Arithmetic 96→98（51.9%→53.0%），全局 \\leanverified 1023→1027（+4），总标注 1040→1044（+4），body 覆盖 970→974（9.2%→9.3%），commit 19c2e9a
