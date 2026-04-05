@@ -115,6 +115,15 @@ theorem paper_kappa_threshold_criterion :
   ⟨fun _ _ hp hε hε1 => kappa_lt_iff_eps_lt hp hε hε1,
    fun _ _ hp hε hε1 heps => kappa_ge_of_eps_ge hp hε hε1 heps⟩
 
+/-- Kappa-Fibonacci crosspoint verification.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem paper_kappa_fibonacci_crosspoints :
+    (Nat.fib 5 - 1) * 3 = (Nat.fib 5 + 1) * 2 ∧
+    (Nat.fib 6 - 1) = 7 ∧ (Nat.fib 6 + 1) = 9 ∧
+    (Nat.fib 7 - 1) * 7 = (Nat.fib 7 + 1) * 6 ∧
+    (Nat.fib 8 - 1) * 11 = (Nat.fib 8 + 1) * 10 := by
+  native_decide
+
 end Omega.SPG
 
 

@@ -978,4 +978,21 @@ theorem paper_collisionKernel2_full_package :
   simp [collisionKernel2, Matrix.det_fin_three]
   ring
 
+/-- Collision kernel A_5 Perron audit.
+    prop:pom-collision-renyi-perron-closure -/
+theorem paper_collisionKernel5_perron_audit :
+    (collisionKernel5 ^ 0).trace = 5 ∧
+    (collisionKernel5 ^ 1).trace = -2 ∧
+    (collisionKernel5 ^ 2).trace = -18 ∧
+    (collisionKernel5 ^ 3).trace = 34 ∧
+    (∀ n : ℕ, (collisionKernel5 ^ (n + 5)).trace =
+      -2 * (collisionKernel5 ^ (n + 4)).trace
+      - 11 * (collisionKernel5 ^ (n + 3)).trace
+      - 8 * (collisionKernel5 ^ (n + 2)).trace
+      - 20 * (collisionKernel5 ^ (n + 1)).trace
+      + 10 * (collisionKernel5 ^ n).trace) :=
+  ⟨collisionKernel5_trace_pow_0, collisionKernel5_trace_pow_1,
+   collisionKernel5_trace_pow_2, collisionKernel5_trace_pow_3,
+   collisionKernel5_trace_recurrence_unbounded⟩
+
 end Omega

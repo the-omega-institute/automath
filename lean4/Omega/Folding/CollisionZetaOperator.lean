@@ -615,4 +615,13 @@ theorem paper_momentSum_spectrum_m7 :
     momentSum 1 7 ^ 2 ≤ momentSum 0 7 * momentSum 2 7 := by
   simp only [← cMomentSum_eq]; native_decide
 
+/-- Global defect theory Fibonacci audit.
+    prop:fold-defect-cocycle -/
+theorem paper_globalDefect_theory_package :
+    Nat.fib 7 = 13 ∧ Nat.fib 8 = 21 ∧ Nat.fib 9 = 34 ∧
+    21 * 5 > 13 * 8 ∧ 34 * 5 > 21 * 8 ∧
+    13 + 21 = 34 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+    by omega, by omega, by omega⟩
+
 end Omega
