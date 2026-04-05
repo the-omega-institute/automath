@@ -768,4 +768,28 @@ theorem halfCircleDim_le (r t : Nat) : halfCircleDim r t ≤ (↑r + 1) / 2 := b
   simp [halfCircleDim, circleDim]
   exact div_le_div_of_nonneg_right (by exact_mod_cast Nat.le_succ r) (by norm_num)
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R302: PhaseSpectrumCount numerical certificates
+-- ══════════════════════════════════════════════════════════════
+
+/-- PhaseSpectrumCount at prime powers: explicit values.
+    thm:cdim-multiprime-spectrum-realizability -/
+theorem phaseSpectrumCount_prime_values :
+    phaseSpectrumCount 1 0 6 = 36 ∧
+    phaseSpectrumCount 1 3 6 = 18 ∧
+    phaseSpectrumCount 1 2 6 = 12 ∧
+    phaseSpectrumCount 2 0 6 = 216 ∧
+    phaseSpectrumCount 2 3 6 = 108 := by
+  simp [phaseSpectrumCount]
+
+/-- Paper package.
+    thm:cdim-multiprime-spectrum-realizability -/
+theorem paper_phaseSpectrumCount_prime_package :
+    phaseSpectrumCount 1 0 6 = 36 ∧
+    phaseSpectrumCount 1 3 6 = 18 ∧
+    phaseSpectrumCount 1 2 6 = 12 ∧
+    phaseSpectrumCount 0 6 6 = 6 ∧
+    phaseSpectrumCount 0 5 6 = 1 := by
+  simp [phaseSpectrumCount]
+
 end Omega.CircleDimension

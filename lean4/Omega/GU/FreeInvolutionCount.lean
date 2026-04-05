@@ -266,4 +266,51 @@ theorem paper_gu_involution_divisibility_package :
   · rw [freeInvolutionCount_succ, h2]
   · rw [freeInvolutionCount_succ, freeInvolutionCount_succ, h2]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R302: Free involution count log-convexity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Free involution count ratio is strictly increasing.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_ratio (r : Nat) :
+    freeInvolutionCount (r + 1) = (2 * r + 1) * freeInvolutionCount r :=
+  freeInvolutionCount_succ r
+
+/-- The ratio 2r+1 is strictly increasing.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_ratio_increasing (r : Nat) :
+    (2 * r + 1) < (2 * (r + 1) + 1) := by omega
+
+/-- Log-convexity: f(r+2)·f(r) ≥ f(r+1)².
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_log_convex (r : Nat) :
+    freeInvolutionCount (r + 2) * freeInvolutionCount r ≥
+    freeInvolutionCount (r + 1) ^ 2 := by
+  rw [freeInvolutionCount_succ (r + 1), freeInvolutionCount_succ r, sq]
+  nlinarith [Nat.zero_le (freeInvolutionCount r)]
+
+/-- Strict log-convexity for r ≥ 1.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_strict_log_convex (r : Nat) (hr : 1 ≤ r) :
+    freeInvolutionCount (r + 2) * freeInvolutionCount r >
+    freeInvolutionCount (r + 1) ^ 2 := by
+  rw [freeInvolutionCount_succ (r + 1), freeInvolutionCount_succ r, sq]
+  have hpos := freeInvolutionCount_pos r hr
+  set f := freeInvolutionCount r with hf_def
+  -- Goal: (2*(r+1)+1) * ((2*r+1)*f) * f > (2*r+1)*f * ((2*r+1)*f)
+  -- = (2r+3)*(2r+1)*f^2 > (2r+1)^2*f^2
+  nlinarith [sq_nonneg f, mul_pos (show 0 < 2 * r + 1 by omega) hpos]
+
+/-- Paper package: log-convexity + concrete values.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem paper_freeInvolutionCount_log_convexity_package :
+    (∀ r, freeInvolutionCount (r + 1) = (2 * r + 1) * freeInvolutionCount r) ∧
+    (∀ r, freeInvolutionCount (r + 2) * freeInvolutionCount r ≥
+      freeInvolutionCount (r + 1) ^ 2) ∧
+    freeInvolutionCount 6 = 10395 ∧
+    freeInvolutionCount 7 = 135135 := by
+  refine ⟨freeInvolutionCount_succ, freeInvolutionCount_log_convex, ?_, ?_⟩
+  · rw [freeInvolutionCount_succ]; norm_num [freeInvolutionCount_succ, freeInvolutionCount]
+  · rw [freeInvolutionCount_succ]; norm_num [freeInvolutionCount_succ, freeInvolutionCount]
+
 end Omega.GU
