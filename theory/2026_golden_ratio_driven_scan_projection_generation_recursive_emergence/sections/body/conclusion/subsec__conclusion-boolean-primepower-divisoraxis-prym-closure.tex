@@ -1,0 +1,473 @@
+\subsection{布尔跳跃谱、prime-power 壳层压缩、divisor-compressed 轴与平方 Prym 闭包}\label{subsec:conclusion-boolean-primepower-divisoraxis-prym-closure}
+沿用小节 \ref{subsec:conclusion-fold-gauge-entropy-gap-boolean-lucas-kernel}、小节 \ref{subsec:conclusion-cyclic-sector-scan-spectrum-kirchhoff-green-bad-prime-rigidity}、小节 \ref{subsec:conclusion-cyclotomic-ramanujan-nyquist-divisoraxis}、小节 \ref{subsec:conclusion-length-congruence-primitive-fourier-nyquist-shadow} 与小节 \ref{subsec:conclusion-pressure-curve-s3-jordan-cumulant-universality} 的记号。此前结论已经分别给出布尔二值跳跃核的黄金谱闭式与精确范数、prime-power 循环扇区的 \(p\)-进壳层刚性、极大扫描轨道长度的素数可编程性、Kirchhoff--Green 坏素数判据、divisor-compressed \(q\)-轴的 Möbius 剥离与 Hilbert 有界性、长度同余类的单类注入与 Nyquist 精确采样，以及压力周期三次闭包的平方 Prym 型与确定化歧义壳的非零谱透明性。将这些接口交叉闭合后，还可进一步得到下列派生后果。
+
+\begin{theorem}[布尔二值跳跃核的 Bernoulli--Gaussian 奇异值律与零体积稳定秩]\label{thm:conclusion-boolean-jump-bernoulli-gaussian-stablerank}
+对 \(q\ge 1\) 记布尔二值跳跃核为
+\[
+\mathsf C_q(u,v):=\mathbf 1_{\{u\vee v=\mathbf 1\}},
+\qquad
+\mathsf D_q(u,v):=\mathbf 1_{\{u\wedge v=\mathbf 0\}}
+\qquad
+(u,v\in\{0,1\}^q).
+\]
+若从 \(\mathsf C_q\) 或 \(\mathsf D_q\) 的奇异值多重集中按重数均匀抽取一个奇异值 \(s\)，并定义
+\[
+X_q:=\log_{\varphi}s,
+\]
+则 \(X_q\) 满足精确分布律
+\[
+\PP(X_q=2k-q)=2^{-q}\binom{q}{k}
+\qquad
+(0\le k\le q),
+\]
+从而矩母函数为
+\[
+\EE(e^{tX_q})=\left(\frac{e^t+e^{-t}}{2}\right)^q.
+\]
+特别地，
+\[
+\frac{X_q}{\sqrt q}\Longrightarrow \mathcal N(0,1).
+\]
+此外，对稳定秩
+\[
+\operatorname{sr}(A):=\frac{\|A\|_F^2}{\|A\|_2^2}
+\]
+有
+\[
+|\det \mathsf C_q|=|\det \mathsf D_q|=1,
+\qquad
+\operatorname{sr}(\mathsf C_q)=\operatorname{sr}(\mathsf D_q)=\left(\frac{3}{\varphi^2}\right)^q.
+\]
+因而布尔二值跳跃核在乘法体积意义下保持严格零漂移，而其 \(2\)-条件数则按 \(\varphi^{2q}\) 指数爆炸。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:xi-boolean-binary-jump-kernels-tensor-spectrum}，
+\(\mathsf C_q\) 与 \(\mathsf D_q\) 的特征值多重集均为
+\[
+\lambda_k^{(q)}=(-1)^{q-k}\varphi^{2k-q}
+\qquad (0\le k\le q),
+\]
+且重数为 \(\binom{q}{k}\)。二者都是实对称矩阵，故奇异值恰为
+\[
+|\lambda_k^{(q)}|=\varphi^{2k-q}.
+\]
+于是 \(X_q\) 的分布即为题述二项律，矩母函数由二项式定理立得。等价地，
+\[
+X_q=\varepsilon_1+\cdots+\varepsilon_q,
+\qquad
+\PP(\varepsilon_i=\pm 1)=\frac12,
+\]
+故中心极限定理给出
+\(
+X_q/\sqrt q\Longrightarrow \mathcal N(0,1)
+\)。
+
+另一方面，定理 \ref{thm:xi-boolean-binary-jump-kernels-tensor-spectrum} 已给出
+\[
+\det(\mathsf C_q)=\det(\mathsf D_q)=(-1)^{q2^{q-1}},
+\]
+从而 \( |\det \mathsf C_q|=|\det \mathsf D_q|=1\)。再由定理 \ref{thm:conclusion-boolean-jump-kernel-lucas-inertia-norm}，
+\[
+\|\mathsf C_q\|_2=\|\mathsf D_q\|_2=\varphi^q,
+\qquad
+\|\mathsf C_q\|_F=\|\mathsf D_q\|_F=3^{q/2},
+\]
+遂得
+\[
+\operatorname{sr}(\mathsf C_q)=\operatorname{sr}(\mathsf D_q)
+=\frac{3^q}{\varphi^{2q}}
+=\left(\frac{3}{\varphi^2}\right)^q.
+\]
+最后，仍由定理 \ref{thm:conclusion-boolean-jump-kernel-lucas-inertia-norm}，
+\[
+\kappa_2(\mathsf C_q)=\kappa_2(\mathsf D_q)=\varphi^{2q}.
+\]
+证毕。
+\end{proof}
+
+\begin{theorem}[prime-power 壳层压缩、扫描周期可编程性与 Kirchhoff--Green 坏素数等价]\label{thm:conclusion-primepower-shell-scan-badprime-closure}
+成立以下三条派生结论。
+\begin{enumerate}
+  \item 对任意素幂 \(m=p^\nu\)，存在整数 \(m_0,\dots,m_\nu\in\ZZ_{\ge 0}\)，使得
+  \[
+  V_{p^\nu}\cong \bigoplus_{t=0}^{\nu}m_t\,\mathcal R_t,
+  \]
+  其中 \(\mathcal R_t:=\bigoplus_{v_p(k)=t}\chi_k\)（\(\mathcal R_\nu:=\chi_0\)）。特别地，角色重数只依赖于 \(v_p(k)\)，故 prime-power 长度上的 Fourier 复杂度压缩为
+  \[
+  \nu+1=1+\log_p m
+  \]
+  个 \(p\)-进壳层。
+
+  \item 若
+  \[
+  \mathcal P\subseteq \{p:\ p\equiv 2\pmod 3,\ p\ge 5\}
+  \]
+  为任意有限素数集，并定义
+  \[
+  \ell(p):=\frac{p+7}{3},
+  \qquad
+  x:=\bigsqcup_{p\in\mathcal P}P_{\ell(p)},
+  \]
+  则
+  \[
+  L_{\max}(x)=\prod_{p\in\mathcal P}p.
+  \]
+  因而极大扫描时间谱对有限素数集可编程，并且不可能被任何预先固定的有限素数库存封闭。
+
+  \item 设
+  \[
+  A:=I-P+\mathbf 1\pi^{\!\top},
+  \qquad
+  Z:=A^{-1},
+  \]
+  其中 \(P\) 为连通图随机游走转移矩阵，\(\pi\) 为平稳分布。若素数 \(p\) 不整除局部归一化分母，则
+  \[
+  p\mid \tau(G)
+  \iff
+  \det(A)\equiv 0\pmod p
+  \iff
+  A\ \text{在}\ \FF_p\ \text{上奇异}
+  \iff
+  Z\notin M_n(\ZZ_{(p)}).
+  \]
+  特别地，在 window-\(6\) 四块骨架中，剔除局部素数 \(\{2,3,11\}\) 后，唯一新的坏素数为
+  \[
+  p_\star=571.
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第 \(1\) 条正是定理 \ref{thm:conclusion-cyclic-zeckendorf-primepower-shell-rigidity} 的直接重述。第 \(2\) 条由定理 \ref{thm:conclusion-lmax-prime-programmability} 与推论 \ref{cor:conclusion-lmax-not-finite-primeizable} 立即得到。第 \(3\) 条则由定理 \ref{thm:conclusion-kirchhoff-green-determinant-identity}、命题 \ref{prop:conclusion-modp-singularity-forces-green-bad-prime} 与推论 \ref{cor:conclusion-critical-group-torsion-green-bad-prime-equivalence} 直接合并而成。证毕。
+\end{proof}
+
+\begin{theorem}[divisor-compressed \(q\)-轴的 Möbius 完备性、Hilbert 压缩与素数模方差律]\label{thm:conclusion-divisor-qaxis-mobius-hilbert-primevariance}
+设 \(M\in \ZZ_{\ge 0}^{d\times d}\) primitive，记
+\[
+\rho:=\rho(M)>1,
+\qquad
+\Lambda:=\Lambda_{\mathrm{rel}}(M):=\max_{j\ge 2}|\lambda_j|<1,
+\qquad
+u_n(M):=\sum_{j=2}^d\lambda_j^n.
+\]
+再记 cyclotomic 原子为 \(C_q(M)\)，divisor-compressed \(q\)-轴信号为
+\[
+\Psi_q(M):=\sum_{d\mid q}C_d(M),
+\]
+并定义 Dirichlet 级数
+\[
+\mathfrak C_M(s):=\sum_{m\ge 1}\frac{C_m(M)}{m^s},
+\qquad
+\mathfrak \Psi_M(s):=\sum_{q\ge 1}\frac{\Psi_q(M)}{q^s}.
+\]
+则成立以下结论。
+\begin{enumerate}
+  \item 在半平面 \(\Re s>1\) 上，成立严格 Möbius 互反
+  \[
+  \Psi_q(M)=\sum_{d\mid q}C_d(M),
+  \qquad
+  C_q(M)=\sum_{d\mid q}\mu(q/d)\,\Psi_d(M),
+  \]
+  以及 Dirichlet 因子化
+  \[
+  \mathfrak C_M(s)=\zeta(s)^{-1}\mathfrak \Psi_M(s).
+  \]
+
+  \item 定义压缩算子
+  \[
+  (\mathcal C u)_q:=\sum_{\ell\ge 1}\frac{u_{\ell q}}{\ell},
+  \qquad
+  \|v\|_{2,-2}^2:=\sum_{q\ge 1}\frac{|v_q|^2}{q^2}.
+  \]
+  则
+  \[
+  \|\mathcal C u\|_{2,-2}^2
+  \le
+  \zeta(2)^2\|u\|_{\ell^2}^2,
+  \qquad
+  \|\mathcal C\|_{\ell^2\to \ell^2(q^{-2})}\le \zeta(2).
+  \]
+  特别地，由 \(\Psi_q(M)=(\mathcal C u(M))_q\)，有
+  \[
+  \sum_{q\ge 1}\frac{|\Psi_q(M)|^2}{q^2}
+  \le
+  \zeta(2)^2\,\mathcal E_{\partial}(M),
+  \qquad
+  \mathcal E_{\partial}(M):=\sum_{n\ge 1}|u_n(M)|^2.
+  \]
+
+  \item 若定义
+  \[
+  E_N(M):=\frac1N\sum_{q=1}^N \rho^q|\Psi_q(M)|^2,
+  \]
+  则存在严格三分
+  \[
+  \Lambda<\rho^{-1/2}\Longrightarrow E_N(M)\to 0,
+  \]
+  \[
+  \Lambda=\rho^{-1/2}\Longrightarrow
+  E_N(M)\to \sum_{\zeta\in\mathbf T}m(\zeta)^2,
+  \]
+  \[
+  \Lambda>\rho^{-1/2}\Longrightarrow
+  \limsup_{N\to\infty}E_N(M)=+\infty,
+  \]
+  其中 \(m(\zeta)\) 为外围相位壳层在 \(\zeta\) 处的重数。并且在 kernel-RH 条件
+  \[
+  \Lambda\le \rho^{-1/2}
+  \]
+  下，对一切 \(q\ge 1\) 都有显式边界
+  \[
+  |\Psi_q(M)|\le (d-1)\frac{\rho^{-q/2}}{1-\rho^{-q/2}}.
+  \]
+
+  \item 对任意素数 \(p\ge 3\)，记 \(U(p):=(\ZZ/p\ZZ)^\times\)，
+  \[
+  \bar V_p(M):=\frac1{p-1}\sum_{r\in U(p)}V_{p,r}(M),
+  \qquad
+  \mathcal E_p(M):=\frac1{p(p-1)}\sum_{\chi\neq \chi_0}|L_M(\chi;p)|^2.
+  \]
+  再写
+  \[
+  F_M(t)=1+\sum_{j\ge 1}f_j(M)t^j,
+  \qquad
+  g(M):=\gcd\{j\ge 1:\ f_j(M)\neq 0\}.
+  \]
+  并约定若 \(F_M\equiv 1\)，则 \(g(M):=0\)。在此约定下，有精确方差恒等式
+  \[
+  \sum_{r\in U(p)}|V_{p,r}(M)-\bar V_p(M)|^2
+  =
+  \mathcal E_p(M),
+  \]
+  以及平坦化判据
+  \[
+  \mathcal E_p(M)=0\iff p\mid g(M).
+  \]
+  若进一步 \(C_1(M)\neq 0\) 且 \(F_M\not\equiv 1\)，则当 \(p\to\infty\) 遍历素数时，
+  \[
+  \mathcal E_p(M)
+  =
+  \mathcal P(M)-\frac{|C_1(M)|^2}{p-1}+O(\Lambda^p),
+  \qquad
+  \mathcal P(M):=\sum_{n\ge 1}\frac{|u_n(M)|^2}{n^2},
+  \]
+  并且对充分大的素数 \(p<p'\)，有严格单调链
+  \[
+  0<\mathcal E_p(M)<\mathcal E_{p'}(M)<\mathcal P(M).
+  \]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第 \(1\) 条由定理 \ref{thm:conclusion-ramanujan-atomic-qaxis-zeta-stripping} 与推论 \ref{cor:conclusion-ramanujan-atoms-are-mobius-primitive} 得到。第 \(2\) 条正是定理 \ref{thm:conclusion-divisor-compressed-qaxis-hilbert-boundedness}。第 \(3\) 条由定理 \ref{thm:conclusion-qaxis-energy-trichotomy-sqrt-threshold} 与定理 \ref{thm:conclusion-divisor-compressed-qaxis-squareroot-threshold} 合并即得。第 \(4\) 条则依次由定理 \ref{thm:conclusion-prime-character-energy-centered-variance}、定理 \ref{thm:conclusion-prime-flattening-support-gcd-classification}、定理 \ref{thm:conclusion-large-prime-torsion-energy-two-scale-parseval} 与定理 \ref{thm:conclusion-large-prime-torsion-energy-eventual-monotone-from-below} 给出。证毕。
+\end{proof}
+
+\begin{theorem}[长度 \(2\) 原子的单类注入、torsion 守幅与 Nyquist 无混叠采样]\label{thm:conclusion-length2-atom-nyquist-rigidity}
+固定模数 \(q\ge 2\)。记 root-of-unity 长度过滤后的 primitive 与 periodic 生成函数为
+\[
+P_{a,q}(z,u),
+\qquad
+A_{a,q}(z,u),
+\]
+其 core 部分分别记为 \(P_{a,q}^{\mathrm{core}}(z,u)\) 与 \(A_{a,q}^{\mathrm{core}}(z,u)\)。则长度 \(2\) 原子满足严格局域注入律
+\[
+P_{a,q}(z,u)
+=
+P_{a,q}^{\mathrm{core}}(z,u)+uz^2\,\mathbf 1_{\{a\equiv 2\;(\mathrm{mod}\,q)\}},
+\]
+\[
+A_{a,q}(z,u)
+=
+A_{a,q}^{\mathrm{core}}(z,u)
++
+\sum_{\substack{k\ge 1\\ 2k\equiv a\;(\mathrm{mod}\,q)}}\frac{u^kz^{2k}}{k}.
+\]
+并且 torsion 频域的平方平均能量满足严格守幅
+\[
+\frac1q\sum_{j=0}^{q-1}
+\left|p_n(\omega_q^j)-p_n^{\mathrm{core}}(\omega_q^j)\right|^2
+=
+\mathbf 1_{\{n=2\}},
+\]
+\[
+\frac1q\sum_{j=0}^{q-1}
+\left|a_n(\omega_q^j)-a_n^{\mathrm{core}}(\omega_q^j)\right|^2
+=
+4\,\mathbf 1_{\{2\mid n\}}.
+\]
+
+另一方面，对任意 primitive 核 \(M\)，若
+\[
+g(\theta):=-\log F_M(e^{i\theta})
+=
+\sum_{n\ge 1}\frac{u_n(M)}{n}e^{in\theta}
+\]
+的支撑集
+\[
+\operatorname{Supp}(u):=\{n\ge 1:\ u_n(M)\neq 0\}
+\]
+在模 \(q\) 下无碰撞，即
+\[
+n\neq n'\in \operatorname{Supp}(u)\Longrightarrow n\not\equiv n'\pmod q,
+\]
+则离散 torsion 采样满足精确 Nyquist 身份
+\[
+\frac1q\sum_{j=0}^{q-1}|g(2\pi j/q)|^2
+=
+\sum_{n\ge 1}\frac{|u_n(M)|^2}{n^2}.
+\]
+特别地，若存在 \(N_\ast\) 使 \(u_n(M)=0\) 对一切 \(n>N_\ast\) 成立，则对每个 \(q>N_\ast\) 上式自动成立。
+\end{theorem}
+\begin{proof}
+前两组公式分别由定理 \ref{thm:conclusion-length2-atomic-root-unity-singleclass-injection} 与推论 \ref{cor:conclusion-length2-atomic-torsion-energy-rigidity} 给出。Nyquist 无混叠等式则正是定理 \ref{thm:conclusion-torsion-sampling-nyquist-noalias-exactness}。证毕。
+\end{proof}
+
+\begin{corollary}[长度奇偶偏置的代数扭点 Euler 值]\label{cor:conclusion-length-parity-algebraic-euler-torsion}
+记总长度 Mertens 常数为 \(\mathsf M\)，并令 \(\lambda=\varphi^2\)。则在 \(m=2\) 的长度划分下，
+\[
+\mathsf M_{2,0}^{(\mathrm{len})}
+=
+\frac{\mathsf M}{2}
++
+\frac12\,P\!\left(-\frac1\lambda\right),
+\qquad
+\mathsf M_{2,1}^{(\mathrm{len})}
+=
+\frac{\mathsf M}{2}
+-
+\frac12\,P\!\left(-\frac1\lambda\right).
+\]
+因而偏置差恰为
+\[
+\mathsf M_{2,0}^{(\mathrm{len})}
+-
+\mathsf M_{2,1}^{(\mathrm{len})}
+=
+P\!\left(-\frac1\lambda\right)
+=
+S(-1;\infty).
+\]
+相应长度符号 Euler 乘积在 \(s=1\) 处满足闭式
+\[
+L_-(1)
+=
+\zeta_M\!\left(-\frac1\lambda\right)
+=
+\frac{41}{40}+\frac{11}{24}\sqrt5.
+\]
+因此，最基本的奇偶长度偏置正是 primitive 对数在代数扭点 \(-\varphi^{-2}\) 处的 Euler 型取值。
+\end{corollary}
+\begin{proof}
+这是定理 \ref{thm:conclusion-length-parity-mertens-algebraic-euler-value} 的直接重述。证毕。
+\end{proof}
+
+\begin{theorem}[压力三次闭包的平方 Prym 型与歧义壳的零模专属性]\label{thm:conclusion-prym-square-jordan-zero-shell-exclusive}
+成立以下两条派生结论。
+\begin{enumerate}
+  \item 设 \(X_p^{\mathrm b}\to \PP^1_z\) 为压力周期三次闭包，并记
+  \[
+  Y_p:=X_p^{\mathrm b}/A_3.
+  \]
+  则
+  \[
+  g(X_p^{\mathrm b})=8,
+  \qquad
+  g(Y_p)=2,
+  \qquad
+  H^0(X_p^{\mathrm b},\Omega^1)\cong 2\,\mathrm{sgn}\oplus 3\,\mathrm{std}.
+  \]
+  因而存在三维阿贝尔簇 \(P_p\) 使得
+  \[
+  J(X_p^{\mathrm b})\sim J(Y_p)\times P_p^2,
+  \qquad
+  \dim P_p=3.
+  \]
+  若 \(p\in \QQ\cap(0,1)\) 且 \(\mathfrak p\) 为共同定义域上的良约化素理想，则局部 Hasse--Weil 分子满足精确分解
+  \[
+  P_{X_p^{\mathrm b},\mathfrak p}(T)
+  =
+  P_{Y_p,\mathfrak p}(T)\,P_{P_p,\mathfrak p}(T)^2.
+  \]
+
+  \item 若右解析确定化矩阵块分解为
+  \[
+  A_m^{\det}=
+  \begin{pmatrix}
+  N_m&R_m\\
+  0&A_m^{\mathrm{ess}}
+  \end{pmatrix},
+  \qquad
+  N_m^m=0,
+  \]
+  则对任意 \(\lambda\neq 0\) 与任意 \(r\ge 1\)，有
+  \[
+  \dim\ker(A_m^{\det}-\lambda I)^r
+  =
+  \dim\ker(A_m^{\mathrm{ess}}-\lambda I)^r.
+  \]
+  因而 \(A_m^{\det}\) 与 \(A_m^{\mathrm{ess}}\) 在每个非零特征值处具有完全相同的 Jordan 块型；歧义壳只在 \(\lambda=0\) 方向贡献幂零块。等价地，
+  \[
+  (I-zA_m^{\det})^{-1}
+  =
+  \begin{pmatrix}
+  (I-zN_m)^{-1} &
+  z(I-zN_m)^{-1}R_m(I-zA_m^{\mathrm{ess}})^{-1}\\
+  0 &
+  (I-zA_m^{\mathrm{ess}})^{-1}
+  \end{pmatrix},
+  \]
+  且
+  \[
+  (I-zN_m)^{-1}=\sum_{j=0}^{m-1}z^jN_m^j
+  \]
+  为有限多项式，故全部非零极点都完全由 essential 块承载。
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+第 \(1\) 条由定理 \ref{thm:conclusion-pressure-cycle-s3-galois-closure-genus8} 与定理 \ref{thm:conclusion-pressure-cycle-s3-hodge-jacobian} 直接合并即可。第 \(2\) 条正是定理 \ref{thm:conclusion-det-fischer-nonzero-jordan-transparent} 的内容。证毕。
+\end{proof}
+
+\paragraph{统一读法}
+上述派生结论可压缩为以下几条蕴含链：
+\[
+\mathsf C_q,\mathsf D_q
+\Longrightarrow
+\text{奇异值二项律}
+\Longrightarrow
+\text{Gaussian 极限}
+\Longrightarrow
+|\det|=1,\ \operatorname{sr}=(3/\varphi^2)^q.
+\]
+\[
+V_{p^\nu}\cong \bigoplus_{t=0}^{\nu}m_t\mathcal R_t
+\Longrightarrow
+\text{\(p\)-进壳层压缩}
+\Longrightarrow
+L_{\max}(x)=\prod_{p\in\mathcal P}p
+\Longrightarrow
+\text{时间谱素数可编程而 Fourier 复杂度对数化}.
+\]
+\[
+\Psi_q=\sum_{d\mid q}C_d
+\Longleftrightarrow
+C_q=\sum_{d\mid q}\mu(q/d)\Psi_d
+\Longrightarrow
+\|\mathcal C\|_{\ell^2\to \ell^2(q^{-2})}\le \zeta(2)
+\Longrightarrow
+\Lambda_{\mathrm{rel}}=\rho^{-1/2}\ \text{成为严格三相门槛}.
+\]
+\[
+\text{长度 \(2\) 原子单类注入}
+\Longrightarrow
+\text{torsion 守幅}
+\Longrightarrow
+\text{Nyquist 无混叠采样}
+\Longrightarrow
+\mathsf M_{2,0}^{(\mathrm{len})}-\mathsf M_{2,1}^{(\mathrm{len})}=P(-\varphi^{-2}).
+\]
+\[
+J(X_p^{\mathrm b})\sim J(Y_p)\times P_p^2
+\Longrightarrow
+\text{平方 Prym 型几何}
+\Longrightarrow
+A_m^{\det}\ \text{的歧义壳仅驻留在}\ \lambda=0.
+\]
+由此，布尔跳跃谱、prime-power Fourier 壳层、divisor-compressed \(q\)-轴、长度同余 Nyquist 采样与压力三次闭包并非彼此平行的五条孤立接口，而都塌缩为少数低维代数几何因子的不同读出。
