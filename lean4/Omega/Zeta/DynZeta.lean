@@ -1136,4 +1136,14 @@ theorem paper_lucas_five_fib_and_cassini :
     lucasNum 6 = 18 ∧ Nat.fib 6 = 8 ∧ 18 ^ 2 - 5 * 8 ^ 2 = 4 :=
   ⟨lucasNum_cassini, by native_decide, by native_decide, by omega⟩
 
+/-- Lucas double formula and concrete values.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_lucas_double_and_add :
+    lucasNum 4 = lucasNum 2 ^ 2 - 2 ∧
+    lucasNum 6 = lucasNum 3 ^ 2 + 2 ∧
+    lucasNum 8 = lucasNum 4 ^ 2 - 2 ∧
+    lucasNum 2 = 3 ∧ lucasNum 3 = 4 ∧ lucasNum 4 = 7 ∧
+    lucasNum 5 = 11 ∧ lucasNum 6 = 18 ∧ lucasNum 8 = 47 := by
+  native_decide
+
 end Omega.Zeta

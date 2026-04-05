@@ -670,4 +670,24 @@ theorem paper_cdimDefect_composition_package :
   ⟨fun f g hfg r hr hrb his => cdimDefect_comp f g hfg r hr hrb his,
    fun f g hfg r hr hrb his => cdimDefect_comp_le f g hfg r hr hrb his⟩
 
+/-- Circle dimension monotonicity and half-dimension package.
+    prop:circle-dimension-laws -/
+theorem paper_circleDim_mono_half_package :
+    (∀ n₁ n₂ t : Nat, n₁ ≤ n₂ → circleDim n₁ t ≤ circleDim n₂ t) ∧
+    halfCircleDim 1 0 = 1 / 2 ∧
+    (∀ a b c d : Nat,
+      halfCircleDim (a + b) (c + d) = halfCircleDim a c + halfCircleDim b d) ∧
+    halfCircleDim 3 0 = 3 / 2 :=
+  ⟨fun _ _ _ h => circleDim_mono h, halfCircleDim_nat, halfCircleDim_add,
+   by simp [halfCircleDim, circleDim]⟩
+
+/-- Circle dimension tensor and subtraction package.
+    prop:circle-dimension-laws -/
+theorem paper_circleDim_tensor_and_sub :
+    (∀ r s t1 t2, circleDim (r + s) (t1 + t2) = circleDim r t1 + circleDim s t2) ∧
+    (∀ t, circleDim 0 t = 0) ∧
+    (∀ a b t1 t2, a ≤ b → circleDim b t2 - circleDim a t1 = b - a) ∧
+    circleDim 5 0 = 5 :=
+  ⟨circleDim_add, circleDim_finite, fun _ _ _ _ _ => by simp [circleDim], rfl⟩
+
 end Omega.CircleDimension
