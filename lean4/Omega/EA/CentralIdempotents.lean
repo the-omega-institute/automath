@@ -65,4 +65,38 @@ theorem central_idempotents_all_idempotent {a b : ℚ} (ha : a ^ 2 = 1) (hb : b 
     rcases rat_sq_eq_one_cases hb with rfl | rfl <;>
     norm_num [epp, epn, enp, enn]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R285: Individual cross-product zero laws
+-- ══════════════════════════════════════════════════════════════
+
+/-- thm:fold-groupoid-z2x2-central-idempotents -/
+theorem epp_mul_epn {a b : ℚ} (ha : a ^ 2 = 1) (hb : b ^ 2 = 1) :
+    epp a b * epn a b = 0 :=
+  (central_idempotents_pairwise_orthogonal ha hb).1
+
+/-- thm:fold-groupoid-z2x2-central-idempotents -/
+theorem epp_mul_enp {a b : ℚ} (ha : a ^ 2 = 1) (hb : b ^ 2 = 1) :
+    epp a b * enp a b = 0 :=
+  (central_idempotents_pairwise_orthogonal ha hb).2.1
+
+/-- thm:fold-groupoid-z2x2-central-idempotents -/
+theorem epp_mul_enn {a b : ℚ} (ha : a ^ 2 = 1) (hb : b ^ 2 = 1) :
+    epp a b * enn a b = 0 :=
+  (central_idempotents_pairwise_orthogonal ha hb).2.2.1
+
+/-- thm:fold-groupoid-z2x2-central-idempotents -/
+theorem epn_mul_enp {a b : ℚ} (ha : a ^ 2 = 1) (hb : b ^ 2 = 1) :
+    epn a b * enp a b = 0 :=
+  (central_idempotents_pairwise_orthogonal ha hb).2.2.2.1
+
+/-- thm:fold-groupoid-z2x2-central-idempotents -/
+theorem epn_mul_enn {a b : ℚ} (ha : a ^ 2 = 1) (hb : b ^ 2 = 1) :
+    epn a b * enn a b = 0 :=
+  (central_idempotents_pairwise_orthogonal ha hb).2.2.2.2.1
+
+/-- thm:fold-groupoid-z2x2-central-idempotents -/
+theorem enp_mul_enn {a b : ℚ} (ha : a ^ 2 = 1) (hb : b ^ 2 = 1) :
+    enp a b * enn a b = 0 :=
+  (central_idempotents_pairwise_orthogonal ha hb).2.2.2.2.2
+
 end Omega.EA

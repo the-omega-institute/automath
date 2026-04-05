@@ -1273,4 +1273,12 @@ theorem allOnesMatrix_pow_trace (n : ℕ) :
   rw [allOnesMatrix_pow_succ, Matrix.trace_smul, allOnesMatrix_trace]
   ring
 
+/-- Word trace m=1 package: Tr(J)=2, Tr(K)=1, and 2(2^q+1) = 2^{q+1}+2.
+    thm:conclusion-softcore-exceptional-word-trace-expansion -/
+theorem paper_word_trace_m1_package :
+    allOnesMatrix.trace = 2 ∧
+    Graph.goldenMeanAdjacency.trace = 1 ∧
+    (∀ q : ℕ, 2 * (2 ^ q + 1) = 2 ^ (q + 1) + 2) :=
+  ⟨allOnesMatrix_trace, Graph.goldenMeanAdjacency_trace, fun q => by ring⟩
+
 end Omega.Zeta

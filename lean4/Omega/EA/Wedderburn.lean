@@ -1,5 +1,6 @@
 import Omega.Folding.MomentSum
 import Omega.Folding.FiberSpectrum
+import Omega.Folding.MomentRecurrence
 
 namespace Omega.EA
 
@@ -18,5 +19,13 @@ theorem fiber_histogram_m6 :
     cFiberHist 6 1 = 2 ∧ cFiberHist 6 2 = 4 ∧ cFiberHist 6 3 = 8 ∧ cFiberHist 6 4 = 5 ∧
     cFiberHist 6 5 = 2 := by
   exact ⟨cFiberHist_6_1, cFiberHist_6_2, cFiberHist_6_3, cFiberHist_6_4, cFiberHist_6_5⟩
+
+/-- At m=7, the groupoid algebra has Wedderburn dimension 544.
+    prop:fold-groupoid-wedderburn -/
+theorem wedderburn_dim_m7 : momentSum 2 7 = 544 := momentSum_two_seven
+
+/-- At m=8, the groupoid algebra has Wedderburn dimension 1352.
+    prop:fold-groupoid-wedderburn -/
+theorem wedderburn_dim_m8 : momentSum 2 8 = 1352 := momentSum_two_eight_rec
 
 end Omega.EA
