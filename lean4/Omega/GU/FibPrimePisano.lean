@@ -58,4 +58,17 @@ theorem paper_fibprime_disc_minus15_criterion :
     Nat.Prime 13 ∧ Nat.Prime 89 := by
   refine ⟨by omega, by omega, by omega, by native_decide, by native_decide⟩
 
+/-- Numerical certificates for orthogonal/symplectic Fibonacci-Lie resonance.
+    thm:fib-lie-resonance-global-orthogonal-symplectic -/
+theorem paper_fib_lie_resonance_orthogonal_symplectic :
+    (7 * 6 / 2 = Nat.fib 8) ∧
+    (11 * 10 / 2 = Nat.fib 10) ∧
+    (3 * (2 * 3 + 1) = Nat.fib 8) ∧
+    (5 * (2 * 5 + 1) = Nat.fib 10) ∧
+    (∃ s : ℕ, s * (s + 1) / 2 = Nat.fib 4 ∧ s = 2) ∧
+    (∃ s : ℕ, s * (s + 1) / 2 = Nat.fib 8 ∧ s = 6) ∧
+    (∃ s : ℕ, s * (s + 1) / 2 = Nat.fib 10 ∧ s = 10) := by
+  refine ⟨by native_decide, by native_decide, by native_decide, by native_decide,
+    ⟨2, by native_decide, rfl⟩, ⟨6, by native_decide, rfl⟩, ⟨10, by native_decide, rfl⟩⟩
+
 end Omega.GU

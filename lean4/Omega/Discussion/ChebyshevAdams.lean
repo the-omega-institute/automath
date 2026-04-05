@@ -160,4 +160,50 @@ theorem paper_discussion_horizon_fibonacci_audit :
     (Nat.gcd (Nat.fib 6) (Nat.fib 9) = Nat.fib (Nat.gcd 6 9)) := by
   refine ⟨by native_decide, by native_decide, by native_decide, by native_decide⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R280: Chebyshev-Adams at S=1 and S=-1 periodicity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Explicit values of Chebyshev-Adams at S=1 for one full period.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_one_values :
+    chebyAdams 0 1 = 2 ∧ chebyAdams 1 1 = 1 ∧
+    chebyAdams 2 1 = -1 ∧ chebyAdams 3 1 = -2 ∧
+    chebyAdams 4 1 = -1 ∧ chebyAdams 5 1 = 1 := by
+  refine ⟨rfl, rfl, ?_, ?_, ?_, ?_⟩ <;> simp [chebyAdams]
+
+/-- Chebyshev-Adams at S=1 has period 6: C(n+6, 1) = C(n, 1).
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_one_period6 (n : ℕ) : chebyAdams (n + 6) 1 = chebyAdams n 1 := by
+  -- Unfold 6 steps of the recurrence C(n+2,1) = 1·C(n+1,1) - C(n,1)
+  have h1 : chebyAdams (n + 6) 1 = 1 * chebyAdams (n + 5) 1 - chebyAdams (n + 4) 1 := by
+    rw [show n + 6 = (n + 4) + 2 from by omega]; exact chebyAdams_succ_succ (n + 4) 1
+  have h2 : chebyAdams (n + 5) 1 = 1 * chebyAdams (n + 4) 1 - chebyAdams (n + 3) 1 := by
+    rw [show n + 5 = (n + 3) + 2 from by omega]; exact chebyAdams_succ_succ (n + 3) 1
+  have h3 : chebyAdams (n + 4) 1 = 1 * chebyAdams (n + 3) 1 - chebyAdams (n + 2) 1 := by
+    rw [show n + 4 = (n + 2) + 2 from by omega]; exact chebyAdams_succ_succ (n + 2) 1
+  have h4 : chebyAdams (n + 3) 1 = 1 * chebyAdams (n + 2) 1 - chebyAdams (n + 1) 1 := by
+    rw [show n + 3 = (n + 1) + 2 from by omega]; exact chebyAdams_succ_succ (n + 1) 1
+  have h5 : chebyAdams (n + 2) 1 = 1 * chebyAdams (n + 1) 1 - chebyAdams n 1 := by
+    exact chebyAdams_succ_succ n 1
+  linarith
+
+/-- Explicit values of Chebyshev-Adams at S=-1.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_neg_one_values :
+    chebyAdams 0 (-1) = 2 ∧ chebyAdams 1 (-1) = -1 ∧
+    chebyAdams 2 (-1) = -1 := by
+  refine ⟨rfl, rfl, ?_⟩; simp [chebyAdams]
+
+/-- Chebyshev-Adams at S=-1 has period 3: C(n+3, -1) = C(n, -1).
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_neg_one_period3 (n : ℕ) :
+    chebyAdams (n + 3) (-1) = chebyAdams n (-1) := by
+  -- Unfold 3 steps of the recurrence C(n+2,-1) = -C(n+1,-1) - C(n,-1)
+  have h1 : chebyAdams (n + 3) (-1) = -1 * chebyAdams (n + 2) (-1) - chebyAdams (n + 1) (-1) := by
+    rw [show n + 3 = (n + 1) + 2 from by omega]; exact chebyAdams_succ_succ (n + 1) (-1)
+  have h2 : chebyAdams (n + 2) (-1) = -1 * chebyAdams (n + 1) (-1) - chebyAdams n (-1) := by
+    exact chebyAdams_succ_succ n (-1)
+  linarith
+
 end Omega.Discussion
