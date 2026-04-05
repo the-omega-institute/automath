@@ -540,4 +540,15 @@ theorem paper_binfold_recovery_onebit_splitting :
     2 ^ 7 / 3 = 42 := by
   rw [cBinFiberMax_six]; native_decide
 
+/-- Stable K0 rank audit.
+    prop:conclusion-foldbin-stable-k0-rank -/
+theorem paper_conclusion_stable_k0_rank_audit :
+    Fintype.card (X 6) = 21 ∧
+    cBinFiberMax 6 = 4 ∧
+    cBinFiberMax 7 = 5 ∧
+    momentSum 2 6 = 220 ∧
+    cBinFiberMax 6 < cBinFiberMax 7 := by
+  refine ⟨by rw [X.card_eq_fib]; native_decide, cBinFiberMax_six, cBinFiberMax_seven,
+    momentSum_two_six, by rw [cBinFiberMax_six, cBinFiberMax_seven]; omega⟩
+
 end Omega.Conclusion

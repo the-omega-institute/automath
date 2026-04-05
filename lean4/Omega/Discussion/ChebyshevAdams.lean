@@ -140,4 +140,24 @@ theorem chebyAdams_five (S : ℤ) : chebyAdams 5 S = S ^ 5 - 5 * S ^ 3 + 5 * S :
 theorem chebyAdams_six (S : ℤ) : chebyAdams 6 S = S ^ 6 - 6 * S ^ 4 + 9 * S ^ 2 - 2 := by
   simp [chebyAdams]; ring
 
+/-- Chebyshev-Adams polynomial package.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem paper_chebyAdams_product_and_values :
+    (∀ S : ℤ, chebyAdams 2 S = S ^ 2 - 2) ∧
+    (∀ S : ℤ, chebyAdams 3 S = S ^ 3 - 3 * S) ∧
+    (∀ S : ℤ, chebyAdams 4 S = S ^ 4 - 4 * S ^ 2 + 2) ∧
+    (∀ S : ℤ, chebyAdams 5 S = S ^ 5 - 5 * S ^ 3 + 5 * S) ∧
+    chebyAdams 2 3 = 7 ∧ chebyAdams 3 3 = 18 ∧ chebyAdams 4 3 = 47 :=
+  ⟨chebyAdams_two, chebyAdams_three, chebyAdams_four, chebyAdams_five,
+   by native_decide, by native_decide, by native_decide⟩
+
+/-- Horizon boundary layer Fibonacci/Lucas audit.
+    cor:discussion-horizon-boundarylayer-phi-scaling -/
+theorem paper_discussion_horizon_fibonacci_audit :
+    (Nat.fib 2 * Nat.fib 4 + 1 = Nat.fib 3 ^ 2) ∧
+    (Nat.fib 3 * Nat.fib 5 = Nat.fib 4 ^ 2 + 1) ∧
+    (Nat.fib 6 ∣ Nat.fib 12) ∧
+    (Nat.gcd (Nat.fib 6) (Nat.fib 9) = Nat.fib (Nat.gcd 6 9)) := by
+  refine ⟨by native_decide, by native_decide, by native_decide, by native_decide⟩
+
 end Omega.Discussion
