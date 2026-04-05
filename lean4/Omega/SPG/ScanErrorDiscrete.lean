@@ -223,6 +223,25 @@ theorem scanError_le_boundaryCard_mul {α β : Type*} [Fintype α] [Fintype β]
     _ = (boundaryCells μ obs P).card * κ := by
       simp
 
+/-- thm:spg-clarity-volume-boundary-scaling (lower bound) -/
+theorem scanError_ge_boundaryCard_mul_lower {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P : Set α) (θ κ_lower : ENNReal)
+    (hθ : ∀ b ∈ boundaryCells μ obs P,
+      θ * cellMass μ obs b ≤ min (cellEventMass μ obs P b) (cellComplMass μ obs P b))
+    (hκ : ∀ b ∈ boundaryCells μ obs P, κ_lower ≤ cellMass μ obs b) :
+    (boundaryCells μ obs P).card * (θ * κ_lower) ≤ scanError μ obs P := by
+  rw [scanError_eq_sum_boundary]
+  calc
+    ↑(boundaryCells μ obs P).card * (θ * κ_lower)
+        = ∑ _b ∈ boundaryCells μ obs P, θ * κ_lower := by
+      simp [Finset.sum_const]
+    _ ≤ ∑ b ∈ boundaryCells μ obs P,
+          min (cellEventMass μ obs P b) (cellComplMass μ obs P b) := by
+      refine Finset.sum_le_sum fun b hb => ?_
+      calc θ * κ_lower ≤ θ * cellMass μ obs b := by
+            exact mul_le_mul_right (hκ b hb) θ
+        _ ≤ min (cellEventMass μ obs P b) (cellComplMass μ obs P b) := hθ b hb
+
 /-- Prefix observation on length-`n` words at resolution `m`. -/
 def prefixObservation (h : m ≤ n) : Word n → Word m :=
   restrictWord h

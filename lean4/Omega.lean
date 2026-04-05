@@ -91,6 +91,8 @@ import Omega.Conclusion.RamanujanCollapse
 import Omega.Conclusion.Window6Collision
 import Omega.Conclusion.TwoAtomScalarRecoveryAlpha2
 import Omega.Conclusion.ResonanceWindow
+import Omega.Conclusion.HypercubePhase
 import Omega.GU.Window6RankGap
+import Omega.GU.ZeckendorfCountClosure
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
