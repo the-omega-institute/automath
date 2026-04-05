@@ -358,6 +358,10 @@ automath/
 
 The library depends on [Mathlib](https://github.com/leanprover-community/mathlib4) and Lean 4.
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=the-omega-institute/automath&type=Date)](https://star-history.com/#the-omega-institute/automath&Date)
+
 ## Install Omega Thinking
 
 Make your AI coding assistant think with forcing, minimization, and auditable derivation chains:

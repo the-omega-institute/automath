@@ -358,6 +358,10 @@ automath/
 
 该库依赖 [Mathlib](https://github.com/leanprover-community/mathlib4) 和 Lean 4。
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=the-omega-institute/automath&type=Date)](https://star-history.com/#the-omega-institute/automath&Date)
+
 ## 安装 Omega 思维框架
 
 让你的 AI 编程助手用 forcing、最小化和可审计推导链来思考：
