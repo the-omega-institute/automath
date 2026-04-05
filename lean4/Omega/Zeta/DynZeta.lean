@@ -1239,4 +1239,38 @@ theorem allOnes_mul_goldenMean_pow_mul_allOnes (b : ℕ) :
   simp only [Matrix.smul_apply, allOnesMatrix, Matrix.of_apply, Matrix.cons_val']
   fin_cases i <;> fin_cases j <;> simp
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R282: All-ones matrix powers and trace
+-- ══════════════════════════════════════════════════════════════
+
+/-- J^2 = 2·J. prop:conclusion-softcore-wordtrace-fibonacci-factorization -/
+theorem allOnesMatrix_sq :
+    allOnesMatrix ^ 2 = (2 : ℤ) • allOnesMatrix := by native_decide
+
+/-- J * J = 2 • J (multiplicative form). -/
+private theorem allOnesMatrix_mul_self :
+    allOnesMatrix * allOnesMatrix = (2 : ℤ) • allOnesMatrix := by
+  have : allOnesMatrix * allOnesMatrix = allOnesMatrix ^ 2 := (sq allOnesMatrix).symm
+  rw [this, allOnesMatrix_sq]
+
+/-- J^(n+1) = 2^n · J. prop:conclusion-softcore-wordtrace-fibonacci-factorization -/
+theorem allOnesMatrix_pow_succ : ∀ n : ℕ,
+    allOnesMatrix ^ (n + 1) = (2 : ℤ) ^ n • allOnesMatrix
+  | 0 => by simp
+  | n + 1 => by
+    rw [pow_succ, allOnesMatrix_pow_succ n]
+    rw [smul_mul_assoc, allOnesMatrix_mul_self]
+    rw [smul_smul, show (2 : ℤ) ^ n * 2 = 2 ^ (n + 1) from by ring]
+
+/-- Trace(J) = 2. -/
+private theorem allOnesMatrix_trace : allOnesMatrix.trace = 2 := by
+  simp [Matrix.trace, allOnesMatrix, Fin.sum_univ_two]
+
+/-- Trace(J^(n+1)) = 2^{n+1}.
+    thm:conclusion-softcore-exceptional-word-trace-expansion -/
+theorem allOnesMatrix_pow_trace (n : ℕ) :
+    (allOnesMatrix ^ (n + 1)).trace = (2 : ℤ) ^ (n + 1) := by
+  rw [allOnesMatrix_pow_succ, Matrix.trace_smul, allOnesMatrix_trace]
+  ring
+
 end Omega.Zeta

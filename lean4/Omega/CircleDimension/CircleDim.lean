@@ -690,4 +690,23 @@ theorem paper_circleDim_tensor_and_sub :
     circleDim 5 0 = 5 :=
   ⟨circleDim_add, circleDim_finite, fun _ _ _ _ _ => by simp [circleDim], rfl⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R282: Half circle dimension nonneg + circle dimension certificates
+-- ══════════════════════════════════════════════════════════════
+
+/-- Half circle dimension is always nonneg. def:circle-dimension -/
+theorem halfCircleDim_nonneg (r t : Nat) : 0 ≤ halfCircleDim r t := by
+  simp [halfCircleDim, circleDim]; positivity
+
+/-- Circle dimension vanishes iff free rank is zero. def:circle-dimension -/
+theorem circleDim_eq_zero_iff_rank_zero (n t : Nat) :
+    circleDim n t = 0 ↔ n = 0 := by simp [circleDim]
+
+/-- Paper certificates for circle dimension basics. def:circle-dimension -/
+theorem paper_circleDim_basic_certificates :
+    (circleDim 0 0 = 0) ∧ (circleDim 0 7 = 0) ∧ (circleDim 0 21 = 0) ∧
+    (circleDim 1 0 = 1) ∧ (circleDim 2 0 = 2) ∧ (circleDim 3 5 = 3) ∧
+    (circleDim 1 2 + circleDim 2 3 = circleDim 3 5) := by
+  simp [circleDim]
+
 end Omega.CircleDimension
