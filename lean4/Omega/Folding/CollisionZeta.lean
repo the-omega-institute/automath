@@ -907,6 +907,29 @@ theorem collisionKernel5_e2 :
     collisionKernel5.trace ^ 2 - (collisionKernel5 ^ 2).trace = 22 := by
   rw [collisionKernel5_trace, collisionKernel5_trace_pow_2]; ring
 
+/-- Complete Newton identity verification for collisionKernel5.
+    prop:pom-s5-charpoly-newton -/
+theorem collisionKernel5_charpoly_coefficients :
+    collisionKernel5.trace = -2 ∧
+    collisionKernel5.det = 10 ∧
+    (collisionKernel5 ^ 2).trace = -18 ∧
+    (collisionKernel5 ^ 3).trace = 34 ∧
+    (collisionKernel5 ^ 4).trace = 66 ∧
+    (collisionKernel5 ^ 5).trace = -272 :=
+  ⟨collisionKernel5_trace, collisionKernel5_det,
+   collisionKernel5_trace_pow_2, collisionKernel5_trace_pow_3,
+   collisionKernel5_trace_pow_4, collisionKernel5_trace_pow_5⟩
+
+/-- Newton e3 for collisionKernel5: the third symmetric function.
+    prop:pom-s5-charpoly-newton -/
+theorem collisionKernel5_e3 :
+    let t1 := collisionKernel5.trace
+    let t2 := (collisionKernel5 ^ 2).trace
+    let t3 := (collisionKernel5 ^ 3).trace
+    t1 ^ 3 - 3 * t1 * t2 + 2 * t3 = 6 * (-8) := by
+  rw [collisionKernel5_trace, collisionKernel5_trace_pow_2, collisionKernel5_trace_pow_3]
+  ring
+
 /-- Newton e_2 family for A_2..A_5: tr(A)^2 - tr(A^2).
     prop:pom-collision-kernel-family -/
 theorem collisionKernel_e2_family :

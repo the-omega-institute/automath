@@ -242,6 +242,25 @@ theorem scanError_ge_boundaryCard_mul_lower {α β : Type*} [Fintype α] [Fintyp
             exact mul_le_mul_right (hκ b hb) θ
         _ ≤ min (cellEventMass μ obs P b) (cellComplMass μ obs P b) := hθ b hb
 
+/-- scanError = 0 iff no boundary cells.
+    cor:spg-clarity-basic -/
+theorem scanError_eq_zero_iff_no_boundary {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P : Set α) :
+    scanError μ obs P = 0 ↔ boundaryCells μ obs P = ∅ := by
+  rw [scanError_eq_sum_boundary]
+  constructor
+  · intro h
+    by_contra hne
+    push_neg at hne
+    obtain ⟨b, hb⟩ := hne
+    have hmem : b ∈ boundaryCells μ obs P := hb
+    simp only [boundaryCells, Finset.mem_filter, Finset.mem_univ, true_and] at hb
+    have hmin : min (cellEventMass μ obs P b) (cellComplMass μ obs P b) ≠ 0 := by
+      simp [hb.1, hb.2]
+    rw [Finset.sum_eq_zero_iff] at h
+    exact hmin (h b hmem)
+  · intro h; rw [h]; simp
+
 /-- Prefix observation on length-`n` words at resolution `m`. -/
 def prefixObservation (h : m ≤ n) : Word n → Word m :=
   restrictWord h
