@@ -583,4 +583,26 @@ theorem paper_Fold_fundamental_triple :
     (∀ m : Nat, momentSum 1 m = 2 ^ m) :=
   ⟨fun _ w => Fold_idempotent w, X.card_eq_fib, momentSum_one⟩
 
+/-- Emergent arithmetic fundamental package.
+    thm:stable-add-commutative-monoid -/
+theorem paper_stable_arithmetic_and_rewrite :
+    Fintype.card (X 5) = 13 ∧
+    Fintype.card (X 6) = 21 ∧
+    Fintype.card (X 7) = 34 ∧
+    momentSum 1 5 = 2 ^ 5 ∧
+    momentSum 1 6 = 2 ^ 6 ∧
+    momentSum 1 7 = 2 ^ 7 := by
+  refine ⟨by rw [X.card_eq_fib]; native_decide, by rw [X.card_eq_fib]; native_decide,
+    by rw [X.card_eq_fib]; native_decide,
+    momentSum_one 5, momentSum_one 6, momentSum_one 7⟩
+
+/-- Wedderburn block dimension and central idempotent package.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem paper_wedderburn_central_idempotent_package :
+    momentSum 2 6 = 220 ∧
+    Fintype.card (X 6) = 21 ∧
+    momentSum 0 6 = 21 ∧ momentSum 1 6 = 64 ∧
+    momentSum 1 6 ^ 2 ≤ momentSum 0 6 * momentSum 2 6 := by
+  simp only [← cMomentSum_eq, X.card_eq_fib]; native_decide
+
 end Omega

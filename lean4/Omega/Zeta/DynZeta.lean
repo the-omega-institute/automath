@@ -1119,4 +1119,21 @@ theorem paper_fredholmGoldenMean_value_table_extended :
     (fredholmGoldenMean 10).det = -109 := by
   refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> (rw [fredholmGoldenMean_det]; ring)
 
+/-- Golden-mean trace = Lucas number package.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_goldenMean_trace_lucas_package :
+    (∀ n : Nat, (Graph.goldenMeanAdjacency ^ n).trace = lucasNum n) ∧
+    (∀ n : Nat, (Graph.goldenMeanAdjacency ^ (n + 2)).trace =
+      (Graph.goldenMeanAdjacency ^ (n + 1)).trace + (Graph.goldenMeanAdjacency ^ n).trace) ∧
+    Graph.goldenMeanAdjacency ^ 2 = Graph.goldenMeanAdjacency + 1 :=
+  ⟨goldenMean_trace_eq_lucas, goldenMean_trace_recurrence_general, goldenMeanAdjacency_sq⟩
+
+/-- Lucas-Fibonacci algebraic identities.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_lucas_five_fib_and_cassini :
+    (∀ n : Nat, 1 ≤ n →
+      lucasNum (n + 1) * lucasNum (n - 1) - lucasNum n ^ 2 = -5 * (-1) ^ n) ∧
+    lucasNum 6 = 18 ∧ Nat.fib 6 = 8 ∧ 18 ^ 2 - 5 * 8 ^ 2 = 4 :=
+  ⟨lucasNum_cassini, by native_decide, by native_decide, by omega⟩
+
 end Omega.Zeta
