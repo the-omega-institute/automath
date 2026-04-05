@@ -163,6 +163,49 @@ theorem pathIndSetPoly_eight_val :
     pathIndSetPoly 8 = 1 + 8 * X + 21 * X ^ 2 + 20 * X ^ 3 + 5 * X ^ 4 := by
   simp [pathIndSetPoly, fibPoly_succ_succ]; ring
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R298: fibPoly natDegree
+-- ══════════════════════════════════════════════════════════════
+
+/-- Small degree values for fibPoly (= deg pathIndSetPoly).
+    Note: deg(fibPoly(n+2)) = ⌊n/2⌋, NOT n. The spec for fibPoly_natDegree was incorrect.
+    def:pom-fibonacci-polynomial -/
+theorem paper_fibPoly_degree_values :
+    (fibPoly 0).natDegree = 0 ∧ (fibPoly 1).natDegree = 0 ∧
+    (fibPoly 2).natDegree = 0 ∧ (fibPoly 3).natDegree = 1 ∧
+    (fibPoly 4).natDegree = 1 ∧ (fibPoly 5).natDegree = 2 ∧
+    (fibPoly 6).natDegree = 2 ∧ (fibPoly 7).natDegree = 3 := by
+  refine ⟨by simp [fibPoly], by simp [fibPoly], by simp [fibPoly], ?_, ?_, ?_, ?_, ?_⟩
+  · have : fibPoly 3 = 1 + Polynomial.X := pathIndSetPoly_one_val
+    rw [this]; simp [Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+  · have : fibPoly 4 = 1 + 2 * Polynomial.X := pathIndSetPoly_two_val
+    rw [this]; simp [Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+  · have h := pathIndSetPoly_three_val
+    rw [show fibPoly 5 = pathIndSetPoly 3 from rfl, h]
+    have : (1 + 3 * Polynomial.X + Polynomial.X ^ 2 : Polynomial ℤ) =
+      (1 + 3 * Polynomial.X) + Polynomial.X ^ 2 := by ring
+    rw [this, Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+    · simp
+    · simp [Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+  · have h := pathIndSetPoly_four_val
+    rw [show fibPoly 6 = pathIndSetPoly 4 from rfl, h]
+    have : (1 + 4 * Polynomial.X + 3 * Polynomial.X ^ 2 : Polynomial ℤ) =
+      (1 + 4 * Polynomial.X) + 3 * Polynomial.X ^ 2 := by ring
+    rw [this, Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+    · simp
+    · simp [Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+  · have h := pathIndSetPoly_five_val
+    rw [show fibPoly 7 = pathIndSetPoly 5 from rfl, h]
+    have : (1 + 5 * Polynomial.X + 6 * Polynomial.X ^ 2 + Polynomial.X ^ 3 : Polynomial ℤ) =
+      (1 + 5 * Polynomial.X + 6 * Polynomial.X ^ 2) + Polynomial.X ^ 3 := by ring
+    rw [this, Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+    · simp
+    · have : (1 + 5 * Polynomial.X + 6 * Polynomial.X ^ 2 : Polynomial ℤ) =
+        (1 + 5 * Polynomial.X) + 6 * Polynomial.X ^ 2 := by ring
+      rw [this, Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+      · simp
+      · simp [Polynomial.natDegree_add_eq_right_of_natDegree_lt]
+
 /-- Fibonacci polynomial derivative recurrence:
     (F_{n+2})' = (F_{n+1})' + F_n + X·(F_n)'.
     def:pom-fibonacci-polynomial -/

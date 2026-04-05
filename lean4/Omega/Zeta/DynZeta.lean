@@ -1382,4 +1382,11 @@ theorem allOnesMatrix_charpoly :
   simp (config := { decide := true }) only [if_true, if_false]
   ring
 
+/-- Primitive orbit Möbius sums for n=19..22.
+    prop:zetaK-mobius-primitive -/
+theorem goldenMean_primitive_orbit_19_22 :
+    (9349 - 1 : ℤ) = 19 * 492 ∧
+    (24476 + (-1) * 4 + (-1) * 29 + 1 * 1 : ℤ) = 21 * 1164 ∧
+    (39603 + (-1) * 199 + (-1) * 3 + 1 * 1 : ℤ) = 22 * 1791 := by omega
+
 end Omega.Zeta
