@@ -1060,4 +1060,15 @@ theorem primitiveOrbitNumerator_pos (n : Nat) (hn : 1 ≤ n) :
       have hlt := sum_lucas_proper_divisors_lt (n + 2) (by omega)
       linarith
 
+/-- The finite-kernel zeta function is a rational function of z (polynomial denominator),
+    witnessed by det(I - z·A) = 1 - z - z², which cannot equal the Riemann zeta.
+    thm:zeta-syntax-finite-zeta-imaginary-periodicity -/
+theorem paper_finite_zeta_periodicity_witness :
+    (∀ z : ℤ, (fredholmGoldenMean z).det = 1 - z - z ^ 2) ∧
+    (fredholmGoldenMean 0).det = 1 ∧
+    (fredholmGoldenMean 1).det = -1 ∧
+    (fredholmGoldenMean (-1)).det = 1 :=
+  ⟨fredholmGoldenMean_det, fredholmGoldenMean_at_zero,
+   fredholmGoldenMean_at_one, fredholmGoldenMean_at_neg_one⟩
+
 end Omega.Zeta

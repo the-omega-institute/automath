@@ -521,4 +521,12 @@ theorem momentSum_one_instances :
     momentSum 1 6 = 64 ∧ momentSum 1 7 = 128 ∧ momentSum 1 8 = 256 := by
   simp [momentSum_one]
 
+/-- DFA recall-precision collapse witness: F(m+2) < 2^m for m ≥ 2 (sparsity → recall collapse).
+    cor:zeta-syntax-dfa-prime-recall-precision-collapse -/
+theorem paper_dfa_prime_recall_precision_collapse :
+    (∀ m, 2 ≤ m → Nat.fib (m + 2) < 2 ^ m) ∧
+    (Nat.fib 15 < 2 ^ 13 / 13) ∧
+    (Nat.fib 22 < 2 ^ 20 / 20) :=
+  ⟨stable_language_exponentially_sparse, by native_decide, by native_decide⟩
+
 end Omega

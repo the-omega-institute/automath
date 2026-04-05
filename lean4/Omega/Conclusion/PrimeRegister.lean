@@ -521,4 +521,13 @@ theorem godelLift_optimal_k2_bases :
   refine ⟨by native_decide, by native_decide, by native_decide, by native_decide,
     by native_decide, by native_decide, by native_decide⟩
 
+/-- Fibonacci envelope eventual strict failure: cBinFiberMax(m) < F(m+2) for m ≥ 7.
+    prop:conclusion-foldbin-fibonacci-envelope-eventual-strict-failure -/
+theorem paper_foldbin_fibonacci_envelope_eventual_strict_failure :
+    cBinFiberMax 7 < Nat.fib 9 ∧
+    cBinFiberMax 8 < Nat.fib 10 ∧
+    cBinFiberMax 7 + 1 ≤ Nat.fib 9 := by
+  rw [cBinFiberMax_seven, cBinFiberMax_eight]
+  refine ⟨by native_decide, by native_decide, by native_decide⟩
+
 end Omega.Conclusion

@@ -466,4 +466,12 @@ theorem fredholm_block_diag_2_3_4_5_6_eval (t : ℤ) :
   rw [cyclicPerm2_fredholm_det, cyclicPerm3_fredholm_det,
       cyclicPerm4_fredholm_det, cyclicPerm5_fredholm_det, cyclicPerm6_fredholm_det]
 
+/-- Cyclic permutation P_2 trace filter: Tr(P_2^n) = 2 when 2|n, = 0 otherwise.
+    cor:zeta-cyclic-lift-primitive-orbits -/
+theorem paper_cyclic_lift_trace_filter_q2 :
+    (∀ k : ℕ, (cyclicPerm2 ^ (2 * k)).trace = 2) ∧
+    (∀ k : ℕ, (cyclicPerm2 ^ (2 * k + 1)).trace = 0) :=
+  ⟨fun k => cyclicPerm2_trace_even (2 * k) ⟨k, by ring⟩,
+   fun k => cyclicPerm2_trace_odd (2 * k + 1) (Nat.not_even_two_mul_add_one k)⟩
+
 end Omega.Zeta
