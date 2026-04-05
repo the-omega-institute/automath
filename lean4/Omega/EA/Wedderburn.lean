@@ -1,6 +1,7 @@
 import Omega.Folding.MomentSum
 import Omega.Folding.FiberSpectrum
 import Omega.Folding.MomentRecurrence
+import Omega.Folding.MomentTriple
 
 namespace Omega.EA
 
@@ -51,5 +52,31 @@ theorem paper_ea_wedderburn_growth_certificate :
     2 * 544 < 1352 ∧ 1352 < 3 * 544 := by
   refine ⟨momentSum_two_six, wedderburn_dim_m7, wedderburn_dim_m8, by omega, by omega,
     by omega, by omega⟩
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R305: Wedderburn dim m=9,10 + growth certificate
+-- ══════════════════════════════════════════════════════════════
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem wedderburn_dim_m9 : momentSum 2 9 = 3352 := momentSum_two_nine_rec
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem wedderburn_dim_m10 : momentSum 2 10 = 8320 := momentSum_two_ten_rec
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem paper_ea_wedderburn_growth_extended :
+    momentSum 2 6 = 220 ∧ momentSum 2 7 = 544 ∧ momentSum 2 8 = 1352 ∧
+    momentSum 2 9 = 3352 ∧ momentSum 2 10 = 8320 ∧
+    2 * 220 < 544 ∧ 544 < 3 * 220 ∧
+    2 * 544 < 1352 ∧ 1352 < 3 * 544 ∧
+    2 * 1352 < 3352 ∧ 3352 < 3 * 1352 ∧
+    2 * 3352 < 8320 ∧ 8320 < 3 * 3352 := by
+  refine ⟨momentSum_two_six, momentSum_two_seven, momentSum_two_eight_rec,
+    momentSum_two_nine_rec, momentSum_two_ten_rec,
+    by omega, by omega, by omega, by omega, by omega, by omega, by omega, by omega⟩
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem wedderburn_avg_fiber_m7 : momentSum 2 7 / Nat.fib 9 = 16 := by
+  rw [momentSum_two_seven]; native_decide
 
 end Omega.EA

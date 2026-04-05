@@ -311,4 +311,24 @@ theorem paper_chebyAdams_at_three_package :
     chebyAdams_at_three_eq_lucas_even⟩
   all_goals rw [chebyAdams_at_three_eq_lucas_even]; simp [Omega.Zeta.lucasNum]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R305: chebyAdams at S=-3 = alternating Lucas
+-- ══════════════════════════════════════════════════════════════
+
+/-- thm:zeta-syntax-trace-linear-recurrence -/
+theorem chebyAdams_at_neg_three_eq_alt_lucas (n : Nat) :
+    chebyAdams n (-3) = (-1) ^ n * Omega.Zeta.lucasNum (2 * n) := by
+  rw [chebyAdams_neg_arg, chebyAdams_at_three_eq_lucas_even]
+
+/-- thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_chebyAdams_golden_mean_package :
+    (∀ n, chebyAdams n 3 = Omega.Zeta.lucasNum (2 * n)) ∧
+    (∀ n, chebyAdams n (-3) = (-1) ^ n * Omega.Zeta.lucasNum (2 * n)) ∧
+    chebyAdams 0 3 = 2 ∧ chebyAdams 1 3 = 3 ∧
+    chebyAdams 0 (-3) = 2 ∧ chebyAdams 1 (-3) = -3 := by
+  exact ⟨chebyAdams_at_three_eq_lucas_even,
+    chebyAdams_at_neg_three_eq_alt_lucas,
+    by simp [chebyAdams], by simp [chebyAdams],
+    by simp [chebyAdams], by simp [chebyAdams]⟩
+
 end Omega.Discussion

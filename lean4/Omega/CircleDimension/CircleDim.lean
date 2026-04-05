@@ -792,4 +792,25 @@ theorem paper_phaseSpectrumCount_prime_package :
     phaseSpectrumCount 0 5 6 = 1 := by
   simp [phaseSpectrumCount]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R305: cdimDefect properties
+-- ══════════════════════════════════════════════════════════════
+
+/-- thm:cdim-defect-chain-rule -/
+theorem cdimDefect_nonneg (f : CircleDimHomData) : 0 ≤ cdimDefect f :=
+  Nat.zero_le _
+
+/-- thm:cdim-defect-chain-rule -/
+theorem cdimDefect_le_sourceRank (f : CircleDimHomData) :
+    cdimDefect f ≤ f.sourceRank := by
+  have := f.rankNullity
+  simp [cdimDefect]
+  omega
+
+/-- thm:cdim-defect-chain-rule -/
+theorem paper_cdimDefect_properties :
+    (∀ f : CircleDimHomData, 0 ≤ cdimDefect f) ∧
+    (∀ f : CircleDimHomData, cdimDefect f ≤ f.sourceRank) := by
+  exact ⟨cdimDefect_nonneg, cdimDefect_le_sourceRank⟩
+
 end Omega.CircleDimension
