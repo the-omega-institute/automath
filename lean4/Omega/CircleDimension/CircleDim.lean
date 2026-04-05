@@ -605,4 +605,40 @@ theorem circleDim_nsmul (k r t : Nat) :
 theorem circleDim_pow (k r t : Nat) :
     circleDim (r ^ k) t = (circleDim r t) ^ k := by simp [circleDim]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R259: phase spectrum concrete instances
+-- ══════════════════════════════════════════════════════════════
+
+/-- Phase spectrum of Z^2: Σ(N) = N^2. Here r=1 gives N^{r+1} = N^2.
+    def:cdim-phase-spectrum -/
+theorem phaseSpectrumCount_Z2 (N : Nat) :
+    phaseSpectrumCount 1 0 N = N ^ 2 :=
+  phaseSpectrumCount_free 1 N
+
+/-- Phase spectrum of Z × Z/6Z: Σ(N) = N · gcd(6, N).
+    def:cdim-phase-spectrum -/
+theorem phaseSpectrumCount_Z_times_Z6 (N : Nat) :
+    phaseSpectrumCount 1 6 N = N * Nat.gcd 6 N := by
+  simp [phaseSpectrumCount]
+
+/-- Concrete evaluations for Z × Z/6Z.
+    def:cdim-phase-spectrum -/
+theorem phaseSpectrumCount_Z_times_Z6_table :
+    phaseSpectrumCount 1 6 1 = 1 ∧
+    phaseSpectrumCount 1 6 2 = 4 ∧
+    phaseSpectrumCount 1 6 3 = 9 ∧
+    phaseSpectrumCount 1 6 4 = 8 ∧
+    phaseSpectrumCount 1 6 5 = 5 ∧
+    phaseSpectrumCount 1 6 6 = 36 ∧
+    phaseSpectrumCount 1 6 12 = 72 := by
+  refine ⟨by native_decide, by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide, by native_decide⟩
+
+/-- Rank detection at coprime primes.
+    thm:cdim-phase-spectrum-reconstruction -/
+theorem phaseSpectrumCount_rank_detection_Z_Z6 :
+    phaseSpectrumCount 1 6 5 = 5 ^ 1 ∧
+    phaseSpectrumCount 1 6 7 = 7 ^ 1 := by
+  refine ⟨by native_decide, by native_decide⟩
+
 end Omega.CircleDimension

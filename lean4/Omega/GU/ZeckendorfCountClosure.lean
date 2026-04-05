@@ -21,4 +21,32 @@ theorem su5_count_closure_fib :
   · rw [X.card_eq_fib]
   · rw [X.card_X_six, X.card_X_two]
 
+/-- The three tail offsets {F_8, F_9, F_10} = {21, 34, 55}.
+    cor:fold6-tail-offsets-gut-top-terms -/
+theorem fold6_tail_offsets :
+    Nat.fib 8 = 21 ∧ Nat.fib 9 = 34 ∧ Nat.fib 10 = 55 := by
+  refine ⟨by native_decide, by native_decide, by native_decide⟩
+
+/-- GUT top-term Fibonacci alignment: SU(5)/SO(10)/E_6.
+    cor:fold6-tail-offsets-gut-top-terms -/
+theorem gut_top_fibonacci_terms :
+    (24 = Nat.fib 8 + Nat.fib 4) ∧
+    (45 = Nat.fib 9 + Nat.fib 6 + Nat.fib 4) ∧
+    (78 = Nat.fib 10 + Nat.fib 8 + Nat.fib 3) := by
+  refine ⟨by native_decide, by native_decide, by native_decide⟩
+
+/-- Tail offsets = |X_6|, |X_7|, |X_8|.
+    cor:fold6-tail-offsets-gut-top-terms -/
+theorem fold6_tail_offsets_are_card_X :
+    Nat.fib 8 = Fintype.card (X 6) ∧
+    Nat.fib 9 = Fintype.card (X 7) ∧
+    Nat.fib 10 = Fintype.card (X 8) := by
+  exact ⟨(X.card_eq_fib 6).symm, (X.card_eq_fib 7).symm, (X.card_eq_fib 8).symm⟩
+
+/-- The resonance gap: |X_8| - |X_6| = |X_7|.
+    cor:fold6-tail-offsets-gut-top-terms -/
+theorem fold6_resonance_gap :
+    Fintype.card (X 8) - Fintype.card (X 6) = Fintype.card (X 7) := by
+  rw [X.card_X_eight, X.card_X_six, X.card_X_seven]
+
 end Omega.GU

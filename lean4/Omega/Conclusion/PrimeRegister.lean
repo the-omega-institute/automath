@@ -488,4 +488,37 @@ theorem godelLift_fold_tower_bounds :
     34 ≤ (5 + 1) ^ 2 := by
   refine ⟨by norm_num, by norm_num, by norm_num, by norm_num, by norm_num, by norm_num⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R259: Gödel lift extended tower
+-- ══════════════════════════════════════════════════════════════
+
+/-- Fold_9: (5+1)^2 = 36 ≥ 34.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_fold9 : (5 + 1) ^ 2 ≥ 34 := by omega
+
+/-- Fold_10: (7+1)^2 = 64 ≥ 55.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_fold10 : (7 + 1) ^ 2 ≥ 55 := by omega
+
+/-- Max fiber sizes = Fibonacci sequence.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_maxfiber_fib_chain :
+    3 = Nat.fib 4 ∧ 5 = Nat.fib 5 ∧ 8 = Nat.fib 6 ∧
+    13 = Nat.fib 7 ∧ 21 = Nat.fib 8 ∧ 34 = Nat.fib 9 ∧ 55 = Nat.fib 10 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide, by native_decide, by native_decide⟩
+
+/-- Optimal k=2 bases for each Fibonacci max-fiber.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_optimal_k2_bases :
+    (2 + 1) ^ 2 ≥ Nat.fib 4 ∧
+    (2 + 1) ^ 2 ≥ Nat.fib 5 ∧
+    (2 + 1) ^ 2 ≥ Nat.fib 6 ∧
+    (3 + 1) ^ 2 ≥ Nat.fib 7 ∧
+    (4 + 1) ^ 2 ≥ Nat.fib 8 ∧
+    (5 + 1) ^ 2 ≥ Nat.fib 9 ∧
+    (7 + 1) ^ 2 ≥ Nat.fib 10 := by
+  refine ⟨by native_decide, by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide, by native_decide⟩
+
 end Omega.Conclusion
