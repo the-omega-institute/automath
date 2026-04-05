@@ -8,15 +8,15 @@
 |---|---|
 | 总行数 | ~39,000 |
 | 定理/定义数 | ~3,476 |
-| 论文接口包装 | 646+ |
+| 论文接口包装 | 650+ |
 | 文件数 | 106 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 991 |
+| \leanverified 标注数 | 995 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1008 |
-| 轮次 | R265（round_count=266） |
+| 总标注数 | 1012 |
+| 轮次 | R266（round_count=267） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -26,13 +26,13 @@
 | Emergent Arithmetic | 185 | 96 | 51.9% |
 | Folding | 337 | 86 | 25.5% |
 | Conclusion | 2,550 | 165 | 6.5% |
-| Group Unification | 469 | 94 | 20.0% |
+| Group Unification | 469 | 96 | 20.5% |
 | SPG | 129 | 42 | 32.6% |
 | Circle Dimension | 393 | 80 | 20.4% |
-| Zeta Finite Part | 4,524 | 125 | 2.8% |
+| Zeta Finite Part | 4,524 | 127 | 2.8% |
 | Discussion | 67 | 12 | 17.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **938** | **8.9%** |
+| **合计（body）** | **10,508** | **942** | **9.0%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,7 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R266: Fibonacci 素数符号 mod 20 + 判别式 -15 判据 + 循环 lift q6 + necklace 校正奇零（完整）**：GU/FibPrimePisano.lean + Zeta/CyclicDet.lean + Zeta/NecklaceCorrection.lean——paper\_fibprime\_sign\_by\_n\_mod20（cor:gut-fibprime-sign-by-n-mod20，n mod 20 决定 Fibonacci 素数符号，GU）; paper\_fibprime\_disc\_minus15\_criterion（cor:gut-fibprime-disc-minus15-criterion，判别式 -15 的相位锁定根判据，GU）; paper\_cyclic\_lift\_trace\_filter\_q6（cor:zeta-cyclic-lift-primitive-orbits，循环 lift q=6 迹滤波器，Zeta）; paper\_necklaceCorrectionKernel\_odd\_zero（cor:xi-time-part73c-fixed-parameter-necklace-correction，necklace 校正核奇数长度为零，Zeta）——**4 个论文标签条目计入覆盖率**（GU +2, Zeta +2）——Group Unification 94→96（20.0%→20.5%），Zeta Finite Part 125→127（2.8%），全局 \\leanverified 991→995（+4），总标注 1008→1012（+4），body 覆盖 938→942（8.9%→9.0%），commit 0593796
 **Phase R265: fence 行列式 Cassini + Fibonacci 行列式严格单调 + fold-gauge 熵差额 + 一比特守恒律（完整）**：Core/Fib.lean + Folding/CollisionZetaOperator.lean + Conclusion/PrimeRegister.lean——paper\_fenceDet\_cassini（cor:pom-fiber-fence-rank-poly-factorization，fence 行列式 Cassini 恒等式包装，POM）; paper\_fenceDet\_values\_and\_strict\_mono（cor:pom-Lk-t1-fibonacci-det-green，Fibonacci 行列式值与严格单调性，POM）; paper\_fold\_gauge\_entropy\_defect\_witness（prop:conclusion-fold-gauge-entropy-defect-exact，fold-gauge 体积密度熵差额精确公式见证，Conclusion）; paper\_binfold\_recovery\_onebit\_splitting（thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting，二进恢复率与可见熵率一比特守恒律，Conclusion）——**注：目标 4 签名调整 cBinFiberMax 6=4，部分分量改为 mod/div 形式**——**4 个论文标签条目计入覆盖率**（POM +2, Conclusion +2）——POM 233→235（13.6%→13.8%），Conclusion 163→165（6.4%→6.5%），全局 \\leanverified 987→991（+4），总标注 1004→1008（+4），body 覆盖 934→938（8.9%），commit 8e428dc
 **Phase R264: 循环 lift q4/q5 滤波 + Euler 因子乘积 + 扫描误差零判据 + 噪声预算严格单调性（完整，1000 里程碑轮次）**：Zeta/CyclicDet.lean + SPG/ScanErrorDiscrete.lean——paper\_cyclic\_lift\_trace\_filter\_q4（cor:zeta-cyclic-lift-primitive-orbits，循环 lift q=4 迹滤波器，Zeta）; paper\_cyclic\_lift\_trace\_filter\_q5（cor:zeta-cyclic-lift-primitive-orbits，循环 lift q=5 迹滤波器，Zeta）; paper\_euler\_factor\_product\_456（def:fredholm-determinant，Euler 因子乘积 4×5×6 见证，Zeta）; paper\_scanError\_zero\_iff\_observablePure（thm:spg-scan-tanaka-stokes，扫描误差零当且仅当 ObservablePure，SPG）; paper\_noiseBudget\_strict\_antitone（thm:spg-double-budget-address-capacity，噪声预算严格反单调性，SPG）——**注：目标 4 签名调整 observablePure→ObservablePure；目标 3 签名调整 t * → t •**——**5 个论文标签条目计入覆盖率**（Zeta +3, SPG +2）——Zeta Finite Part 122→125（2.7%→2.8%），SPG 40→42（31.0%→32.6%），全局 \\leanverified 982→987（+5），总标注 999→**1004**（里程碑：超过 1000），body 覆盖 929→934（8.8%→8.9%），commit 6a7665e
 **Phase R263: Nielsen S4 类基数 + 速率圆维预算不等式 + 双判别式整数平移刚性 + 速率圆维乘积可加性（完整）**：Folding/CollisionZetaOperator.lean + Conclusion/AffineRegisterBudget.lean——paper\_nielsen\_class\_cardinality\_s4（cor:cdim-s4-abs-nielsen-cardinality-degree，绝对 Nielsen 类基数 160 与覆盖度，CD）; paper\_rate\_cdim\_budget\_witness（thm:conclusion-rate-cdim-budget-inequality，可见相位与账本速率预算守恒不等式，Conclusion）; paper\_double\_discriminant\_integer\_rigidity（prop:cdim-double-discriminant-integer-translate-rigidity，判别式核整数平移刚性，CD）; paper\_rate\_cdim\_product\_additivity（prop:conclusion-rate-cdim-arithmetic，速率圆维乘积可加性，Conclusion）——**4 个论文标签条目计入覆盖率**（CD +2, Conclusion +2）——Circle Dimension 78→80（19.8%→20.4%），Conclusion 161→163（6.3%→6.4%），全局 \\leanverified 978→982（+4），总标注 995→999（+4），body 覆盖 925→929（8.8%），commit b9b59de
