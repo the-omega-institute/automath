@@ -586,6 +586,17 @@ theorem dfa_linear_recurrence_instances :
     prop:pom-moment-five-six -/
 theorem momentSum_five_six : momentSum 5 6 = 13444 := by rw [← cMomentSum_eq]; native_decide
 
+/-- Moment sum hierarchy at m=6: S_1 < S_2 < S_3 < S_4 < S_5.
+    prop:pom-coarsegraining-collision-moment-strict-monotonicity -/
+theorem paper_collision_moment_hierarchy_m6 :
+    momentSum 1 6 < momentSum 2 6 ∧
+    momentSum 2 6 < momentSum 3 6 ∧
+    momentSum 3 6 < momentSum 4 6 ∧
+    momentSum 4 6 < momentSum 5 6 := by
+  rw [momentSum_one, momentSum_two_six, momentSum_three_six, momentSum_four_six,
+    momentSum_five_six]
+  omega
+
 /-- 4×4 Hankel matrix for S_5 using correct values. -/
 def hankelS5_4x4 : Matrix (Fin 4) (Fin 4) ℤ :=
   !![1, 2, 34, 98; 2, 34, 98, 616; 34, 98, 616, 2612; 98, 616, 2612, 13444]

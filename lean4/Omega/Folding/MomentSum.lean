@@ -183,6 +183,9 @@ theorem momentSum_six_three : momentSum 6 3 = 194 := by rw [← cMomentSum_eq]; 
 /-- prop:pom-s6-base-four -/
 theorem momentSum_six_four : momentSum 6 4 = 1716 := by rw [← cMomentSum_eq]; simp
 
+/-- prop:pom-coarsegraining-collision-moment-strict-monotonicity -/
+theorem momentSum_six_six : momentSum 6 6 = 57820 := by rw [← cMomentSum_eq]; native_decide
+
 -- S_7 base values
 /-- prop:pom-s7-base-zero -/
 theorem momentSum_seven_zero : momentSum 7 0 = 1 := by rw [← cMomentSum_eq]; simp

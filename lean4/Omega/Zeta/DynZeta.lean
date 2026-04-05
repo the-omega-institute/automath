@@ -1333,4 +1333,23 @@ theorem paper_primitive_orbit_positivity :
     (0 < (40 : ℤ)) ∧ (0 < (58 : ℤ)) ∧ (0 < (90 : ℤ)) ∧
     (0 < (135 : ℤ)) ∧ (0 < (210 : ℤ)) ∧ (0 < (316 : ℤ)) := by omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R291: Word trace m=2 traces
+-- ══════════════════════════════════════════════════════════════
+
+/-- Word trace m=2: traces of J², J·K, K·J, K².
+    thm:conclusion-softcore-exceptional-word-trace-expansion -/
+theorem paper_word_trace_m2_traces :
+    (allOnesMatrix * allOnesMatrix).trace = 4 ∧
+    (allOnesMatrix * Graph.goldenMeanAdjacency).trace = 3 ∧
+    (Graph.goldenMeanAdjacency * allOnesMatrix).trace = 3 ∧
+    (Graph.goldenMeanAdjacency ^ 2).trace = 3 := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · have : allOnesMatrix * allOnesMatrix = allOnesMatrix ^ 2 := (sq allOnesMatrix).symm
+    rw [this, allOnesMatrix_sq, Matrix.trace_smul, allOnesMatrix_trace]; norm_num
+  · simp [allOnesMatrix, Graph.goldenMeanAdjacency, Matrix.trace, Fin.sum_univ_two]
+  · simp [allOnesMatrix, Graph.goldenMeanAdjacency, Matrix.trace, Fin.sum_univ_two]
+  · rw [Graph.goldenMeanAdjacency_sq, Matrix.trace_add, Graph.goldenMeanAdjacency_trace]
+    simp [Matrix.trace]
+
 end Omega.Zeta
