@@ -554,6 +554,42 @@ theorem lucasNum_mod5_period_four (n : Nat) :
       rw [this]
       exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
 
+/-- Complete characterization of Lucas numbers mod 5 by residue class.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_mod5_explicit : ∀ n : ℕ,
+    lucasNum n % 5 =
+      if n % 4 = 0 then 2
+      else if n % 4 = 1 then 1
+      else if n % 4 = 2 then 3
+      else 4
+  | 0 => by simp [lucasNum]
+  | 1 => by simp [lucasNum]
+  | 2 => by simp [lucasNum]
+  | 3 => by simp [lucasNum]
+  | n + 4 => by
+    rw [lucasNum_mod5_period_four n, show (n + 4) % 4 = n % 4 from by omega]
+    exact lucasNum_mod5_explicit n
+
+/-- Lucas number base values mod 5: {L(0)%5, L(1)%5, L(2)%5, L(3)%5} = {2,1,3,4}.
+    rem:degeneracy-zeta-bridge -/
+theorem lucasNum_mod5_base_values :
+    lucasNum 0 % 5 = 2 ∧ lucasNum 1 % 5 = 1 ∧
+    lucasNum 2 % 5 = 3 ∧ lucasNum 3 % 5 = 4 := by
+  simp [lucasNum]
+
+/-- Lucas numbers are never divisible by 5.
+    rem:degeneracy-zeta-bridge -/
+theorem lucasNum_mod5_ne_zero (n : ℕ) : lucasNum n % 5 ≠ 0 := by
+  have h := lucasNum_mod5_explicit n
+  split_ifs at h <;> omega
+
+/-- Equivalent form: 5 does not divide any Lucas number.
+    rem:degeneracy-zeta-bridge -/
+theorem lucasNum_not_dvd_five (n : ℕ) : ¬ (5 : ℤ) ∣ lucasNum n := by
+  intro ⟨k, hk⟩
+  have := lucasNum_mod5_ne_zero n
+  omega
+
 /-- Lucas numbers mod 11 have period 10: L(n+10) % 11 = L(n) % 11.
     rem:degeneracy-zeta-bridge -/
 theorem lucasNum_mod11_period_ten (n : Nat) :

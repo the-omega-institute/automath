@@ -624,4 +624,19 @@ theorem paper_globalDefect_theory_package :
   refine ⟨by native_decide, by native_decide, by native_decide,
     by omega, by omega, by omega⟩
 
+/-- Power sum superadditivity certificates.
+    prop:pom-coarsegraining-collision-moment-strict-monotonicity -/
+theorem paper_momentSum_mono_q_certificates :
+    (∀ (a b : ℕ), 0 < a → 0 < b → a + b ≤ 100 →
+      (a + b) ^ 2 ≤ a ^ 2 + b ^ 2 + 2 * a * b) ∧
+    (∀ (a b : ℕ), 0 < a → 0 < b →
+      a ^ 2 + b ^ 2 < (a + b) ^ 2) ∧
+    (∀ (a b : ℕ), 0 < a → 0 < b →
+      a ^ 3 + b ^ 3 < (a + b) ^ 3) := by
+  refine ⟨fun a b _ _ _ => ?_, fun a b ha hb => ?_, fun a b ha hb => ?_⟩
+  · nlinarith
+  · nlinarith
+  · nlinarith [mul_pos ha hb, mul_pos (Nat.pos_of_ne_zero (by omega : a ≠ 0)) hb,
+      mul_pos ha (Nat.pos_of_ne_zero (by omega : b ≠ 0))]
+
 end Omega
