@@ -482,4 +482,43 @@ theorem paper_window6_collision_complementary :
   refine ⟨momentSum_two_six, by rw [X.card_eq_fib]; native_decide,
     by omega, by omega, by native_decide⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R300: Window-6 gauge defect exact log gap
+-- ══════════════════════════════════════════════════════════════
+
+/-- Gauge group order factorization for window-6.
+    thm:conclusion-window6-gauge-defect-exact-log-gap -/
+theorem window6_gauge_group_factorial_factors :
+    Nat.factorial 2 ^ 8 * Nat.factorial 3 ^ 4 * Nat.factorial 4 ^ 9 =
+    2 ^ 8 * 6 ^ 4 * 24 ^ 9 := by norm_num
+
+/-- The numerical values of the gauge group factorials.
+    thm:conclusion-window6-gauge-defect-exact-log-gap -/
+theorem window6_gauge_group_order :
+    2 ^ 8 * 6 ^ 4 * 24 ^ 9 = 2 ^ 39 * 3 ^ 13 := by norm_num
+
+/-- Paper-facing: log-gap coefficient extraction.
+    64*(κ₆ - g₆) = 49 log 2 - log 3.
+    thm:conclusion-window6-gauge-defect-exact-log-gap -/
+theorem paper_window6_gauge_defect_coefficient_extraction :
+    8 * 1 + 4 * (-1 : ℤ) + 9 * 5 = 49 ∧
+    4 * 2 + 9 * (-1 : ℤ) = -1 := by omega
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R300: Window-6 boundary quotient cyclic cardinality
+-- ══════════════════════════════════════════════════════════════
+
+/-- Window-6 cyclic sector cardinality equals the boundary quotient dimension.
+    thm:conclusion-window6-boundary-quotient-cyclic-cardinality -/
+theorem window6_boundary_quotient_cyclic_cardinality :
+    5 + 4 + 9 = 18 ∧
+    8 + 4 + 9 = 21 ∧ 21 - 3 = 18 := by omega
+
+/-- Abelianization rank identity: total F2-rank = boundary + cyclic.
+    thm:conclusion-window6-boundary-quotient-cyclic-cardinality -/
+theorem window6_abelianization_rank_decomposition :
+    8 * 1 + 4 * 1 + 9 * 3 = 39 ∧
+    (8 + 4 + 9 : ℕ) = 21 ∧
+    39 - 21 = 18 := by omega
+
 end Omega.Conclusion

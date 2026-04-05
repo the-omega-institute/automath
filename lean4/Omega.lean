@@ -93,6 +93,7 @@ import Omega.Conclusion.Window6Collision
 import Omega.Conclusion.TwoAtomScalarRecoveryAlpha2
 import Omega.Conclusion.ResonanceWindow
 import Omega.Conclusion.HypercubePhase
+import Omega.Conclusion.SaturationDefect
 import Omega.Conclusion.SpectrumSignLaw
 import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure
