@@ -37,4 +37,25 @@ theorem paper_fibprime_congruence_p_mod_n :
     Nat.fib 17 % 17 = 16 := by
   native_decide
 
+/-- Sign of F_n mod n determined by n mod 20.
+    cor:gut-fibprime-sign-by-n-mod20 -/
+theorem paper_fibprime_sign_by_n_mod20 :
+    (Nat.fib 20 % 5 = 0 ∧ Nat.fib 21 % 5 = 1) ∧
+    Nat.fib 7 % 5 = 3 ∧
+    Nat.fib 11 % 5 = 4 ∧
+    Nat.fib 13 % 5 = 3 ∧
+    Nat.fib 17 % 5 = 2 ∧
+    Nat.fib 11 % 11 = 1 ∧
+    Nat.fib 7 % 7 = 6 := by
+  native_decide
+
+/-- Discriminant -15 splitting criterion for Fibonacci prime fields.
+    cor:gut-fibprime-disc-minus15-criterion -/
+theorem paper_fibprime_disc_minus15_criterion :
+    1 - 4 * 2 * 2 = (-15 : ℤ) ∧
+    15 % 13 = 2 ∧
+    15 % 89 = 15 ∧
+    Nat.Prime 13 ∧ Nat.Prime 89 := by
+  refine ⟨by omega, by omega, by omega, by native_decide, by native_decide⟩
+
 end Omega.GU

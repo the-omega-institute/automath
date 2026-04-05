@@ -528,4 +528,15 @@ theorem paper_euler_factor_product_456 (t : ℤ) :
   ⟨cyclicPerm4_fredholm_det t, cyclicPerm5_fredholm_det t,
    cyclicPerm6_fredholm_det t, by ring⟩
 
+/-- P_6 trace filter: Tr(P_6^n) = 6 when 6|n, = 0 otherwise.
+    cor:zeta-cyclic-lift-primitive-orbits -/
+theorem paper_cyclic_lift_trace_filter_q6 :
+    (∀ k : ℕ, (cyclicPerm6 ^ (6 * k)).trace = 6) ∧
+    (cyclicPerm6 ^ 1).trace = 0 ∧ (cyclicPerm6 ^ 2).trace = 0 ∧
+    (cyclicPerm6 ^ 3).trace = 0 ∧ (cyclicPerm6 ^ 4).trace = 0 ∧
+    (cyclicPerm6 ^ 5).trace = 0 := by
+  refine ⟨fun k => ?_, by native_decide, by native_decide,
+    by native_decide, by native_decide, by native_decide⟩
+  rw [pow_mul, cyclicPerm6_sixth, one_pow]; native_decide
+
 end Omega.Zeta

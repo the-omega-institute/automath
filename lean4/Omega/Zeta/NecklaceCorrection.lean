@@ -102,4 +102,14 @@ theorem necklaceCorrectionKernel_divisor_form (v n : Nat) :
       _ = 2 * (d * k) := by rw [← two_mul]
       _ = d * k + d * k := by rw [two_mul]
 
+/-- Necklace correction kernel vanishes at odd lengths.
+    cor:xi-time-part73c-fixed-parameter-necklace-correction -/
+theorem paper_necklaceCorrectionKernel_odd_zero :
+    (∀ v m : Nat, necklaceCorrectionKernel v (2 * m + 1) = 0) ∧
+    necklaceCorrectionKernel 2 2 = 2 ∧
+    necklaceCorrectionKernel 2 4 = 2 ∧
+    necklaceCorrectionKernel 2 6 = 6 :=
+  ⟨necklaceCorrectionKernel_odd_eq_zero,
+   by native_decide, by native_decide, by native_decide⟩
+
 end Omega.Zeta
