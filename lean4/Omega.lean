@@ -94,5 +94,6 @@ import Omega.Conclusion.ResonanceWindow
 import Omega.Conclusion.HypercubePhase
 import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure
+import Omega.GU.FibPrimePisano
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim

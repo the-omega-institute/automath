@@ -529,4 +529,12 @@ theorem paper_dfa_prime_recall_precision_collapse :
     (Nat.fib 22 < 2 ^ 20 / 20) :=
   ⟨stable_language_exponentially_sparse, by native_decide, by native_decide⟩
 
+/-- Fiber spectrum resolvent witness at m=5:
+    thm:pom-fiber-spectrum-resolvent-rational -/
+theorem paper_fiber_resolvent_rational_m5 :
+    momentSum 0 5 = 13 ∧
+    momentSum 1 5 = 32 ∧
+    momentSum 0 5 * momentSum 2 5 ≥ momentSum 1 5 ^ 2 := by
+  simp only [← cMomentSum_eq]; native_decide
+
 end Omega
