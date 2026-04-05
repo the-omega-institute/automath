@@ -652,4 +652,22 @@ theorem paper_circleDim_axiomatic_completeness :
   ⟨circleDim_add, circleDim_finite_extension, circleDim_Zk 1,
    circleDim_eq_zero_iff, circleDim_strictMono⟩
 
+/-- Circle dimension defect composition package.
+    thm:cdim-kernel-defect-incompressibility -/
+theorem paper_cdimDefect_composition_package :
+    (∀ (f g : CircleDimHomData) (hfg : f.targetRank = g.sourceRank)
+       (restrictedKerRank : Nat) (hRestrict : restrictedKerRank ≤ g.kernelRank)
+       (hRestrictBound : restrictedKerRank ≤ f.imageRank)
+       (hImageSplit : f.imageRank ≤ restrictedKerRank + g.imageRank),
+      cdimDefect (f.comp g hfg restrictedKerRank hRestrict hRestrictBound hImageSplit) =
+        cdimDefect f + restrictedKerRank) ∧
+    (∀ (f g : CircleDimHomData) (hfg : f.targetRank = g.sourceRank)
+       (restrictedKerRank : Nat) (hRestrict : restrictedKerRank ≤ g.kernelRank)
+       (hRestrictBound : restrictedKerRank ≤ f.imageRank)
+       (hImageSplit : f.imageRank ≤ restrictedKerRank + g.imageRank),
+      cdimDefect (f.comp g hfg restrictedKerRank hRestrict hRestrictBound hImageSplit) ≤
+        cdimDefect f + cdimDefect g) :=
+  ⟨fun f g hfg r hr hrb his => cdimDefect_comp f g hfg r hr hrb his,
+   fun f g hfg r hr hrb his => cdimDefect_comp_le f g hfg r hr hrb his⟩
+
 end Omega.CircleDimension

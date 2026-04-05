@@ -611,4 +611,16 @@ theorem paper_multiPrimeSpectrum_mobius_package :
    multiPrimeSpectrum_empty,
    fun s₁ s₂ J hd => multiPrimeSpectrum_disjoint_add s₁ s₂ hd J⟩
 
+/-- Induced spectrum base cases.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem paper_inducedSpectrum_base_cases :
+    (∀ (K J : PrimeSupport) (n : Nat),
+      inducedSpectrum ({K} : Finset PrimeSupport) (fun S => if S = K then n else 0) J
+        = if J ⊆ K then n else 0) ∧
+    (∀ (K : PrimeSupport) (n : Nat),
+      inducedSpectrum ({K} : Finset PrimeSupport) (fun S => if S = K then n else 0) ∅ = n) ∧
+    (∀ supports : Finset PrimeSupport,
+      multiPrimeSpectrum supports ∅ = supports.card) :=
+  ⟨inducedSpectrum_singleton, inducedSpectrum_singleton_empty, multiPrimeSpectrum_empty⟩
+
 end Omega.CircleDimension

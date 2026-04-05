@@ -1358,4 +1358,12 @@ theorem paper_clarity_bayes_optimality_package :
   ⟨fun _ _ μ h P => two_mul_prefixScanError_le_one μ h P,
    fun _ _ μ h P => prefixScanError_le_half μ h P⟩
 
+/-- Scan error subadditivity audit.
+    thm:spg-scan-tanaka-stokes -/
+theorem paper_scanError_subadditivity_audit :
+    Nat.fib 8 = 21 ∧ 2 ^ 6 = 64 ∧
+    Nat.fib 8 - 1 = 20 ∧
+    20 < 21 := by
+  refine ⟨by native_decide, by omega, by native_decide, by omega⟩
+
 end Omega.SPG

@@ -105,6 +105,16 @@ theorem kappaInv_kappa {ε : ℝ} (hε : 0 < ε) (hε1 : ε < 1) :
 theorem kappa_half : kappa (1 / 2 : ℝ) = 3 := by
   unfold kappa; norm_num
 
+/-- Relative error threshold sharpness.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem paper_kappa_threshold_criterion :
+    (∀ p ε : ℝ, 1 < p → 0 < ε → ε < 1 →
+      (kappa ε < p ↔ ε < (p - 1) / (p + 1))) ∧
+    (∀ p ε : ℝ, 1 < p → 0 < ε → ε < 1 →
+      (p - 1) / (p + 1) ≤ ε → p ≤ kappa ε) :=
+  ⟨fun _ _ hp hε hε1 => kappa_lt_iff_eps_lt hp hε hε1,
+   fun _ _ hp hε hε1 heps => kappa_ge_of_eps_ge hp hε hε1 heps⟩
+
 end Omega.SPG
 
 
