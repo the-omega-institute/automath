@@ -1,8 +1,33 @@
 # Omega 项目
 
+[![Daily Build](https://github.com/the-omega-institute/automath/actions/workflows/daily-build.yml/badge.svg)](https://github.com/the-omega-institute/automath/actions/workflows/daily-build.yml)
+[![PR Gate](https://github.com/the-omega-institute/automath/actions/workflows/pr-gate.yml/badge.svg)](https://github.com/the-omega-institute/automath/actions/workflows/pr-gate.yml)
+[![License: GPOL](https://img.shields.io/badge/license-GPOL-blue.svg)](LICENSE)
+[![Lean 4](https://img.shields.io/badge/Lean-4-blue?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHRleHQgeD0iMCIgeT0iMTIiIGZvbnQtc2l6ZT0iMTIiPkw8L3RleHQ+PC9zdmc+)](https://lean-lang.org)
+[![Axioms: 0](https://img.shields.io/badge/axioms-0-brightgreen.svg)](#status)
+[![Theorems: 3,427+](https://img.shields.io/badge/theorems-3%2C427%2B-orange.svg)](#status)
+
 > 一个可审计的理论编译器，从单一方程出发，推导、验证、可视化并发表数学。
 
 [English](README.md) · **[为什么一切都是不可避免的](docs/INEVITABILITY.zh-CN.md)** — 10 分钟理解迫使链 · **[Dossier](https://the-omega-institute.github.io/automath/)** · [autoresearch 直播](https://www.youtube.com/live/pn_W3I5-qdo)
+
+## 快速开始
+
+```bash
+# 克隆并构建
+git clone https://github.com/the-omega-institute/automath.git
+cd automath/lean4 && lake build
+```
+
+Mathlib 在首次构建时自动获取和缓存。
+
+```bash
+# 复现理论论文
+cd theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence
+pip install -r requirements.txt
+python3 scripts/run_all.py    # 生成所有图表
+latexmk -pdfxe main.tex       # 编译论文
+```
 
 ## 核心问题
 
@@ -342,23 +367,6 @@ https://raw.githubusercontent.com/the-omega-institute/automath/dev/prompts/omega
 ```
 
 把这个 URL 丢进 Claude Code，让它安装这个 skill。然后输入 `/omega` 即可。
-
-## 构建
-
-```bash
-cd lean4 && lake build
-```
-
-首次构建时自动拉取并缓存 Mathlib。
-
-## 复现论文
-
-```bash
-cd theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence
-pip install -r requirements.txt
-python3 scripts/run_all.py    # 生成所有图表
-latexmk -pdfxe main.tex       # 编译论文
-```
 
 ## 开放前沿
 

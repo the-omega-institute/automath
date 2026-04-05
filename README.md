@@ -1,8 +1,33 @@
 # The Omega Project
 
+[![Daily Build](https://github.com/the-omega-institute/automath/actions/workflows/daily-build.yml/badge.svg)](https://github.com/the-omega-institute/automath/actions/workflows/daily-build.yml)
+[![PR Gate](https://github.com/the-omega-institute/automath/actions/workflows/pr-gate.yml/badge.svg)](https://github.com/the-omega-institute/automath/actions/workflows/pr-gate.yml)
+[![License: GPOL](https://img.shields.io/badge/license-GPOL-blue.svg)](LICENSE)
+[![Lean 4](https://img.shields.io/badge/Lean-4-blue?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHRleHQgeD0iMCIgeT0iMTIiIGZvbnQtc2l6ZT0iMTIiPkw8L3RleHQ+PC9zdmc+)](https://lean-lang.org)
+[![Axioms: 0](https://img.shields.io/badge/axioms-0-brightgreen.svg)](#status)
+[![Theorems: 3,427+](https://img.shields.io/badge/theorems-3%2C427%2B-orange.svg)](#status)
+
 > An auditable theory compiler that derives, verifies, visualizes, and publishes mathematics from a single equation.
 
 [中文版](README.zh-CN.md) · **[Why Everything Is Inevitable](docs/INEVITABILITY.md)** — understand the forcing chain in 10 minutes · **[Dossier](https://the-omega-institute.github.io/automath/)** · [Live autoresearch stream](https://www.youtube.com/live/pn_W3I5-qdo)
+
+## Quick Start
+
+```bash
+# Clone and build
+git clone https://github.com/the-omega-institute/automath.git
+cd automath/lean4 && lake build
+```
+
+Mathlib is fetched and cached automatically on first build.
+
+```bash
+# Reproduce the theory paper
+cd theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence
+pip install -r requirements.txt
+python3 scripts/run_all.py    # generates all figures/tables
+latexmk -pdfxe main.tex       # compiles the paper
+```
 
 ## The Question
 
@@ -342,23 +367,6 @@ https://raw.githubusercontent.com/the-omega-institute/automath/dev/prompts/omega
 ```
 
 Paste this URL into Claude Code and ask it to install the skill. Then type `/omega` .
-
-## Build
-
-```bash
-cd lean4 && lake build
-```
-
-Mathlib is fetched and cached automatically on first build.
-
-## Reproduce the Paper
-
-```bash
-cd theory/2026_golden_ratio_driven_scan_projection_generation_recursive_emergence
-pip install -r requirements.txt
-python3 scripts/run_all.py    # generates all figures/tables
-latexmk -pdfxe main.tex       # compiles the paper
-```
 
 ## Open Frontiers
 
