@@ -106,6 +106,46 @@ theorem cyclicPerm3_trace_powers :
     by native_decide, by native_decide, by native_decide⟩
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R254: Cyclic trace divisibility
+-- ══════════════════════════════════════════════════════════════
+
+/-- tr(Π_2^k) = 2 when k is even.
+    subsec:operator-zeta-interface -/
+theorem cyclicPerm2_trace_even (k : ℕ) (hk : Even k) :
+    (cyclicPerm2 ^ k).trace = 2 := by
+  obtain ⟨j, rfl⟩ := hk
+  rw [show j + j = 2 * j from by ring, pow_mul, cyclicPerm2_sq, one_pow]
+  native_decide
+
+/-- tr(Π_2^k) = 0 when k is odd.
+    subsec:operator-zeta-interface -/
+theorem cyclicPerm2_trace_odd (k : ℕ) (hk : ¬ Even k) :
+    (cyclicPerm2 ^ k).trace = 0 := by
+  rw [Nat.not_even_iff_odd] at hk
+  obtain ⟨j, rfl⟩ := hk
+  rw [show 2 * j + 1 = 1 + 2 * j from by ring, pow_add, pow_mul,
+    cyclicPerm2_sq, one_pow, mul_one]
+  native_decide
+
+/-- tr(Π_3^k) = 3 when 3 ∣ k.
+    subsec:operator-zeta-interface -/
+theorem cyclicPerm3_trace_mod3_zero (k : ℕ) (hk : 3 ∣ k) :
+    (cyclicPerm3 ^ k).trace = 3 := by
+  obtain ⟨j, rfl⟩ := hk
+  rw [mul_comm, pow_mul, pow_right_comm, cyclicPerm3_cube, one_pow, Matrix.trace_one]
+  simp [Fintype.card_fin]
+
+/-- tr(Π_3^k) = 0 when ¬ 3 ∣ k.
+    subsec:operator-zeta-interface -/
+theorem cyclicPerm3_trace_mod3_nonzero (k : ℕ) (hk : ¬ 3 ∣ k) :
+    (cyclicPerm3 ^ k).trace = 0 := by
+  have hmod : k % 3 = 1 ∨ k % 3 = 2 := by omega
+  conv_lhs => rw [show k = k % 3 + 3 * (k / 3) from by omega]
+  rw [pow_add, show 3 * (k / 3) = (k / 3) * 3 from by ring, pow_mul]
+  simp [pow_right_comm, cyclicPerm3_cube]
+  rcases hmod with h | h <;> rw [h] <;> native_decide
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R103
 -- ══════════════════════════════════════════════════════════════
 

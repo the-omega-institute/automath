@@ -897,4 +897,24 @@ theorem paper_collisionKernel5_trace_recurrence_unbounded (n : ℕ) :
       + 10 * (collisionKernel5 ^ n).trace :=
   collisionKernel5_trace_recurrence_unbounded n
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R254: Newton e_2 for A_5 and family summary
+-- ══════════════════════════════════════════════════════════════
+
+/-- Newton identity for A_5: tr(A)^2 - tr(A^2) = 4 - (-18) = 22, i.e. 2·e_2 = 22 so e_2 = 11.
+    prop:pom-collision-kernel-family -/
+theorem collisionKernel5_e2 :
+    collisionKernel5.trace ^ 2 - (collisionKernel5 ^ 2).trace = 22 := by
+  rw [collisionKernel5_trace, collisionKernel5_trace_pow_2]; ring
+
+/-- Newton e_2 family for A_2..A_5: tr(A)^2 - tr(A^2).
+    prop:pom-collision-kernel-family -/
+theorem collisionKernel_e2_family :
+    collisionKernel2.trace ^ 2 - (collisionKernel2 ^ 2).trace = -4 ∧
+    collisionKernel3.trace ^ 2 - (collisionKernel3 ^ 2).trace = -8 ∧
+    collisionKernel4.trace ^ 2 - (collisionKernel4 ^ 2).trace = -14 ∧
+    collisionKernel5.trace ^ 2 - (collisionKernel5 ^ 2).trace = 22 := by
+  refine ⟨by native_decide, by native_decide, ?_, collisionKernel5_e2⟩
+  exact collisionKernel4_e2
+
 end Omega

@@ -564,4 +564,37 @@ theorem higher_spectrum_counterexample_Aprime_piecewise
           simp at h
       simp [multiPrimeSpectrum, hFilter, hJ0, hJ]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R254: Spectrum singleton, pair, witness
+-- ══════════════════════════════════════════════════════════════
+
+/-- Spectrum of singleton: 1 if J ⊆ S, else 0.
+    prop:cdim-multiprime-divisible-spectrum-explicit -/
+theorem multiPrimeSpectrum_singleton (S : PrimeSupport) (J : PrimeSupport) :
+    multiPrimeSpectrum {S} J = if J ⊆ S then 1 else 0 := by
+  simp only [multiPrimeSpectrum, Finset.filter_singleton]
+  split <;> simp_all
+
+/-- Spectrum of pair {S₁, S₂} with S₁ ≠ S₂.
+    prop:cdim-multiprime-divisible-spectrum-explicit -/
+theorem multiPrimeSpectrum_pair (S₁ S₂ : PrimeSupport) (hne : S₁ ≠ S₂) (J : PrimeSupport) :
+    multiPrimeSpectrum {S₁, S₂} J =
+      (if J ⊆ S₁ then 1 else 0) + (if J ⊆ S₂ then 1 else 0) := by
+  have hd : Disjoint ({S₁} : Finset PrimeSupport) {S₂} :=
+    Finset.disjoint_singleton.mpr hne
+  rw [show ({S₁, S₂} : Finset PrimeSupport) = {S₁} ∪ {S₂} from by simp]
+  rw [multiPrimeSpectrum_disjoint_add _ _ hd]
+  rw [multiPrimeSpectrum_singleton, multiPrimeSpectrum_singleton]
+
+/-- Positive spectrum implies containment witness.
+    prop:cdim-multiprime-divisible-spectrum-explicit -/
+theorem multiPrimeSpectrum_support_witness
+    (supports : Finset PrimeSupport) (J : PrimeSupport)
+    (hpos : 0 < multiPrimeSpectrum supports J) :
+    ∃ S ∈ supports, J ⊆ S := by
+  rw [multiPrimeSpectrum] at hpos
+  obtain ⟨S, hS⟩ := Finset.card_pos.mp hpos
+  simp only [Finset.mem_filter] at hS
+  exact ⟨S, hS.1, hS.2⟩
+
 end Omega.CircleDimension
