@@ -239,4 +239,28 @@ theorem paper_chebyAdams_special_values_complete :
   ⟨chebyAdams_at_two, chebyAdams_at_neg_two, chebyAdams_at_one_period6,
    chebyAdams_at_neg_one_period3, chebyAdams_at_zero_period4⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R294: Chebyshev-Adams neg arg, C_7/C_8 explicit
+-- ══════════════════════════════════════════════════════════════
+
+/-- C_d(-S) = (-1)^d · C_d(S). thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_neg_arg : ∀ (d : ℕ) (S : ℤ),
+    chebyAdams d (-S) = (-1) ^ d * chebyAdams d S
+  | 0, S => by simp [chebyAdams]
+  | 1, S => by simp [chebyAdams]
+  | d + 2, S => by
+    rw [chebyAdams_succ_succ d (-S), chebyAdams_neg_arg (d + 1) S, chebyAdams_neg_arg d S,
+      chebyAdams_succ_succ d S]
+    ring
+
+/-- chebyAdams 7 explicit formula. thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_seven (S : ℤ) :
+    chebyAdams 7 S = S ^ 7 - 7 * S ^ 5 + 14 * S ^ 3 - 7 * S := by
+  simp [chebyAdams]; ring
+
+/-- chebyAdams 8 explicit formula. thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_eight (S : ℤ) :
+    chebyAdams 8 S = S ^ 8 - 8 * S ^ 6 + 20 * S ^ 4 - 16 * S ^ 2 + 2 := by
+  simp [chebyAdams]; ring
+
 end Omega.Discussion

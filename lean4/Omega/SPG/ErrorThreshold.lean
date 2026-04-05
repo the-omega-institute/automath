@@ -161,6 +161,15 @@ theorem paper_kappa_fibonacci_crosspoints :
     (Nat.fib 8 - 1) * 11 = (Nat.fib 8 + 1) * 10 := by
   native_decide
 
+/-- kappa(1/4) = 5/3. prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_quarter : kappa (1 / 4 : ℝ) = 5 / 3 := by unfold kappa; norm_num
+
+/-- kappa(1/5) = 3/2. prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_fifth : kappa (1 / 5 : ℝ) = 3 / 2 := by unfold kappa; norm_num
+
+/-- kappa(2/3) = 5. prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_two_thirds : kappa (2 / 3 : ℝ) = 5 := by unfold kappa; norm_num
+
 end Omega.SPG
 
 
