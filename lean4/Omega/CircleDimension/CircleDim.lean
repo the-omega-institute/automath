@@ -721,4 +721,36 @@ theorem paper_circleDim_basic_certificates :
     (circleDim 1 2 + circleDim 2 3 = circleDim 3 5) := by
   simp [circleDim]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R292: halfCircleDim properties + phaseSpectrumCount instances
+-- ══════════════════════════════════════════════════════════════
+
+/-- Half circle dimension of pure torsion is zero (free rank = 0).
+    def:circle-dimension -/
+theorem halfCircleDim_pure_torsion (t : Nat) :
+    halfCircleDim 0 t = 0 := by
+  simp [halfCircleDim, circleDim]
+
+/-- Half circle dimension is zero iff free rank is zero.
+    def:circle-dimension -/
+theorem halfCircleDim_eq_zero_iff (r t : Nat) :
+    halfCircleDim r t = 0 ↔ r = 0 := by
+  simp [halfCircleDim, circleDim]
+
+/-- Half circle dimension is positive when free rank is positive.
+    def:circle-dimension -/
+theorem halfCircleDim_pos_of_free_pos (r t : Nat) (hr : 1 ≤ r) :
+    0 < halfCircleDim r t := by
+  simp [halfCircleDim, circleDim]
+  positivity
+
+/-- Phase spectrum count instances. thm:cdim-phase-spectrum-reconstruction -/
+theorem paper_phaseSpectrumCount_instances :
+    phaseSpectrumCount 1 0 2 = 4 ∧ phaseSpectrumCount 1 0 3 = 9 ∧
+    phaseSpectrumCount 1 0 5 = 25 ∧ phaseSpectrumCount 0 6 2 = 2 ∧
+    phaseSpectrumCount 0 6 3 = 3 ∧ phaseSpectrumCount 0 6 6 = 6 ∧
+    phaseSpectrumCount 0 6 7 = 1 ∧ phaseSpectrumCount 1 2 3 = 3 ∧
+    phaseSpectrumCount 1 2 4 = 8 ∧ phaseSpectrumCount 1 2 6 = 12 := by
+  simp [phaseSpectrumCount]
+
 end Omega.CircleDimension

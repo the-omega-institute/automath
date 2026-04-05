@@ -35,4 +35,13 @@ theorem paper_window6_rank_gap_extended :
     4 = Nat.fib 5 - 1 := by
   refine ⟨by native_decide, by omega, by native_decide, by native_decide, by native_decide⟩
 
+/-- Window-6 compression ratio: 2^6/|X_6| = 64/21 = 3 remainder 1.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_window6_compression_ratio :
+    2 ^ 6 = 64 ∧ Fintype.card (X 6) = 21 ∧
+    Fintype.card (X 6) = Nat.fib 8 ∧
+    64 / 21 = 3 ∧ 64 % 21 = 1 ∧ 3 * 21 < 64 := by
+  refine ⟨by norm_num, X.card_X_six, ?_, by omega, by omega, by omega⟩
+  rw [X.card_X_six]; native_decide
+
 end Omega.GU
