@@ -13,26 +13,26 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 950 |
+| \leanverified 标注数 | 954 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 967 |
-| 轮次 | R257（round_count=258） |
+| 总标注数 | 971 |
+| 轮次 | R258（round_count=259） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 230 | 13.5% |
+| POM | 1,707 | 232 | 13.6% |
 | Emergent Arithmetic | 185 | 96 | 51.9% |
 | Folding | 337 | 85 | 25.2% |
 | Conclusion | 2,550 | 156 | 6.1% |
 | Group Unification | 469 | 87 | 18.5% |
-| SPG | 129 | 39 | 30.2% |
+| SPG | 129 | 40 | 31.0% |
 | Circle Dimension | 393 | 74 | 18.8% |
-| Zeta Finite Part | 4,524 | 115 | 2.5% |
+| Zeta Finite Part | 4,524 | 116 | 2.6% |
 | Discussion | 67 | 12 | 17.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **897** | **8.5%** |
+| **合计（body）** | **10,508** | **901** | **8.6%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,7 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R258: primitive 轨道 n=11..14 + A_5 Newton 恒等式 + 扫描误差零判据（完整）**：Zeta/DynZeta.lean + Folding/CollisionZeta.lean + SPG/ScanErrorDiscrete.lean——goldenMean\_primitive\_orbit\_11\_14（prop:zetaK-mobius-primitive，黄金均值矩阵 primitive 轨道计数 n=11..14，Zeta）; collisionKernel5\_charpoly\_coefficients（prop:pom-s5-recurrence，A_5 全部迹幂与 det 的 Newton 系数完整验证，POM）; collisionKernel5\_e3（prop:pom-s5-recurrence，A_5 的 Newton 第三初等对称函数 e_3=-48，POM）; scanError\_eq\_zero\_iff\_no\_boundary（cor:spg-clarity-basic，扫描误差为零当且仅当无边界柱，SPG）——**注：Lean docstring 使用 prop:pom-s5-charpoly-newton，该标签不存在于论文中；已注册至数学等价的 prop:pom-s5-recurrence（同一矩阵 A_5 的深化标注）**——**4 个论文标签条目计入覆盖率**（Zeta +1, POM +2, SPG +1）——Zeta Finite Part 115→116（2.5%→2.6%），POM 230→232（13.5%→13.6%），SPG 39→40（30.2%→31.0%），全局 \\leanverified 950→954（+4），总标注 967→971（+4），body 覆盖 897→901（8.5%→8.6%），commit e8995eb
 **Phase R257: Fredholm 块直和乘积 + 规范差单调性 + Chebyshev-Adams d=4,5,6（完整）**：Zeta/CyclicDet.lean + Folding/Defect.lean + Discussion/ChebyshevAdams.lean——fredholm\_block\_diag\_2\_3\_4\_5\_eval（cor:cyclic-euler-product，5块直和 Fredholm 行列式显式求值，Zeta）; fredholm\_block\_diag\_2\_3\_4\_5\_6\_eval（cor:cyclic-euler-product，6块直和 Fredholm 行列式显式求值，Zeta）; gauge\_anomaly\_max\_six（thm:fold-gauge-anomaly-max，m=6 时规范差取满长，Folding）; gauge\_anomaly\_max\_seven（thm:fold-gauge-anomaly-max，m=7 时规范差取满长，Folding）; gauge\_anomaly\_max\_eight（thm:fold-gauge-anomaly-max，m=8 时规范差取满长，Folding）; gauge\_anomaly\_count\_mono（thm:fold-gauge-anomaly-max，规范差计数单调性，Folding）; chebyAdams\_four（thm:discussion-chebyshev-witt-equivariance，C_4(S) 显式值，Discussion）; chebyAdams\_five（thm:discussion-chebyshev-witt-equivariance，C_5(S) 显式值，Discussion）; chebyAdams\_six（thm:discussion-chebyshev-witt-equivariance，C_6(S) 显式值，Discussion）——**9 个论文标签条目计入覆盖率**（Zeta +2, Folding +4, Discussion +3）——Zeta Finite Part 113→115（2.5%），Folding 81→85（24.0%→25.2%），Discussion 9→12（13.4%→17.9%），全局 \\leanverified 941→950（+9），总标注 958→967（+9），body 覆盖 888→897（8.5%），commit 2af8f4c
 **Phase R256: 黄金均值迹=Lucas + 四阶 Newton e_3 零系数 + Gödel 提升单调性与不可行判据（完整）**：Zeta/DynZeta.lean + Folding/CollisionKernel.lean + Conclusion/PrimeRegister.lean——goldenMeanAdjacency\_sq（thm:zeta-syntax-trace-linear-recurrence，A²=A+I 邻接矩阵的平方律，Zeta）; goldenMean\_trace\_recurrence\_general（thm:zeta-syntax-trace-linear-recurrence，Tr(A^{n+2})=Tr(A^{n+1})+Tr(A^n) 一般递推，Zeta）; goldenMean\_trace\_eq\_lucas（thm:zeta-syntax-trace-linear-recurrence，Tr(A^n)=L_n Lucas 数等式，Zeta）; collisionKernel4\_charPoly\_specialization（rem:pom-s4-zero-coefficient-lock，A_4 特征多项式特化 λ^5-2λ^4-7λ^3-2λ+2，POM）; collisionKernel4\_e3\_zero（rem:pom-s4-zero-coefficient-lock，e_3(A_4)=0 Newton 第三初等对称多项式为零，POM）; collisionKernel4\_trace\_cube（rem:pom-s4-zero-coefficient-lock，Tr(A_4^3) 三次幂迹辅助计算，POM）; godelLift\_infeasible（thm:conclusion-bounded-prime-register-feasibility，D(f)>(E+1)^k 时不可行性判据，Conclusion）; godelLift\_mono\_k（thm:conclusion-bounded-prime-register-feasibility，k 增大时可行性单调性，Conclusion）; godelLift\_fold\_tower\_bounds（thm:conclusion-bounded-prime-register-feasibility，Fold 塔 Gödel 提升的二进制界，Conclusion）——**注：collisionKernel4\_eq\_parametric 因矩阵结构不同（虽 charPoly 相同）已推迟**——**9 个论文标签条目计入覆盖率**（Zeta +3, POM +3, Conclusion +3）——Zeta Finite Part 110→113（2.4%→2.5%），POM 227→230（13.3%→13.5%），Conclusion 153→156（6.0%→6.1%），全局 \\leanverified 932→941（+9），总标注 949→958（+9），body 覆盖 879→888（8.4%→8.5%），commit fcb3a13
 **Phase R255: 扫描误差下界 + SU(5)计数闭合 + 6D超立方相位分类（完整）**：SPG/ScanErrorDiscrete.lean + GU/ZeckendorfCountClosure.lean + Conclusion/HypercubePhase.lean——scanError\_ge\_boundaryCard\_mul\_lower（thm:spg-clarity-volume-boundary-scaling，扫描误差下界 θ·c_-·λ^{-m}·|∂| ≤ ε，SPG）; su5\_count\_closure\_X6\_X2（cor:su5-21-plus-3-closure，SU(5)稳定层计数 |X_6|+|X_2|=21+3=24，GU）; su5\_count\_closure\_fib（cor:su5-21-plus-3-closure，Fibonacci 形式的稳定层计数闭合，GU）; hypercube\_phase\_d6\_product\_values（cor:conclusion-hypercube-phase-d6-only-sqrt2-sqrt5，6D 相位乘积值 k(6-k)∈{0,5,8,9}，Conclusion）; hypercube\_phase\_d6\_product\_surj（cor:conclusion-hypercube-phase-d6-only-sqrt2-sqrt5，6D 相位乘积满射性，Conclusion）; hypercube\_phase\_d6\_sqrt\_classification（cor:conclusion-hypercube-phase-d6-only-sqrt2-sqrt5，虚部仅属于 ℚ∪ℚ√2∪ℚ√5 的分类，Conclusion）——**6 个论文标签条目计入覆盖率**（SPG +1, GU +2, Conclusion +3）——SPG 38→39（29.5%→30.2%），Group Unification 85→87（18.1%→18.5%），Conclusion 150→153（5.9%→6.0%），全局 \\leanverified 926→932（+6），总标注 943→949（+6），body 覆盖 873→879（8.3%→8.4%），commit bf29642
