@@ -753,4 +753,10 @@ theorem paper_phaseSpectrumCount_instances :
     phaseSpectrumCount 1 2 4 = 8 ∧ phaseSpectrumCount 1 2 6 = 12 := by
   simp [phaseSpectrumCount]
 
+/-- Direct sum instances for circle dimension. def:circle-dimension -/
+theorem paper_circleDim_direct_sum_three_instances :
+    circleDim 2 2 = 2 ∧ circleDim 1 15 = 1 ∧
+    circleDim 3 0 = 3 ∧ circleDim 0 30 = 0 := by
+  simp [circleDim]
+
 end Omega.CircleDimension
