@@ -1588,4 +1588,22 @@ theorem fib_prime_entry_point (p k n : Nat) (_hp : Nat.Prime p) (hk : 1 ≤ k)
     intro hkn
     exact dvd_trans hentry (Nat.fib_dvd k n hkn)
 
+/-- Cassini identity for fence determinant: D_{k+1}·D_{k-1} = D_k² + 1.
+    cor:pom-fiber-fence-rank-poly-factorization -/
+theorem paper_fenceDet_cassini (k : Nat) (hk : 1 ≤ k) :
+    fenceDet (k + 1) * fenceDet (k - 1) = fenceDet k ^ 2 + 1 :=
+  fenceDet_cassini k hk
+
+/-- Fence determinant values and strict monotonicity.
+    cor:pom-Lk-t1-fibonacci-det-green -/
+theorem paper_fenceDet_values_and_strict_mono :
+    fenceDet 0 = 1 ∧ fenceDet 1 = 2 ∧ fenceDet 2 = 5 ∧
+    fenceDet 3 = 13 ∧ fenceDet 4 = 34 ∧ fenceDet 5 = 89 ∧
+    (∀ k : ℕ, fenceDet k < fenceDet (k + 1)) := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+    by native_decide, by native_decide, by native_decide, fun k => ?_⟩
+  match k with
+  | 0 => native_decide
+  | k + 1 => exact fenceDet_strict_mono (k + 1) (by omega)
+
 end Omega

@@ -530,4 +530,14 @@ theorem paper_foldbin_fibonacci_envelope_eventual_strict_failure :
   rw [cBinFiberMax_seven, cBinFiberMax_eight]
   refine ⟨by native_decide, by native_decide, by native_decide⟩
 
+/-- Binary fold recovery one-bit splitting witness.
+    thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting -/
+theorem paper_binfold_recovery_onebit_splitting :
+    2 ^ 6 = 64 ∧ Nat.fib 8 = 21 ∧
+    cBinFiberMax 6 = 4 ∧
+    2 ^ 6 % Nat.fib 8 = 1 ∧
+    2 ^ 6 / Nat.fib 8 = 3 ∧
+    2 ^ 7 / 3 = 42 := by
+  rw [cBinFiberMax_six]; native_decide
+
 end Omega.Conclusion

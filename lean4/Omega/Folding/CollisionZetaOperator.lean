@@ -557,4 +557,14 @@ theorem paper_double_discriminant_integer_rigidity :
     (-4) * (-3 : ℤ) ^ 3 - 27 * (2 : ℤ) ^ 2 = 0 ∧
     (4 : ℤ) * (-27) = -108 := by omega
 
+/-- Fold-gauge entropy defect witness.
+    prop:conclusion-fold-gauge-entropy-defect-exact -/
+theorem paper_fold_gauge_entropy_defect_witness :
+    momentSum 0 5 = Nat.fib 7 ∧
+    momentSum 1 5 = 2 ^ 5 ∧
+    momentSum 2 5 * momentSum 0 5 > momentSum 1 5 ^ 2 ∧
+    momentSum 0 6 = Nat.fib 8 ∧
+    momentSum 1 6 = 2 ^ 6 := by
+  simp only [← cMomentSum_eq]; native_decide
+
 end Omega
