@@ -176,4 +176,18 @@ theorem free_involution_exists_even (k : Nat) (_hk : 1 ≤ k) :
     rw [hinv a, hinv b] at this; exact Fin.ext this
   · exact fun b => ⟨f b, Fin.ext (hinv b)⟩
 
+/-- Free involution count values and formula.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem paper_freeInvolutionCount_values_and_formula :
+    freeInvolutionCount 1 = 1 ∧
+    freeInvolutionCount 2 = 3 ∧
+    freeInvolutionCount 3 = 15 ∧
+    freeInvolutionCount 4 = 105 ∧
+    (∀ r : Nat, freeInvolutionCount r * (2 ^ r * r.factorial) = (2 * r).factorial) ∧
+    (∀ k : Nat, ¬ ∃ f : Fin (2*k+1) → Fin (2*k+1),
+      Function.Bijective f ∧ (∀ x, f (f x) = x) ∧ (∀ x, f x ≠ x)) := by
+  exact ⟨freeInvolutionCount_small.1, freeInvolutionCount_small.2.1,
+    freeInvolutionCount_small.2.2, by native_decide,
+    freeInvolutionCount_formula, no_free_involution_on_odd⟩
+
 end Omega.GU

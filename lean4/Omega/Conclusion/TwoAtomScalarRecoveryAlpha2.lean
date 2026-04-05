@@ -132,4 +132,13 @@ theorem paper_epsilonCritical_quadratic :
   ⟨twoAtomScalar2_injective_on_pos,
    fun _ hα => twoAtomScalar_strictMono hα⟩
 
+/-- Two-atom threshold numerical certificates.
+    thm:conclusion-binfold-twoatom-information-geometry -/
+theorem paper_twoAtom_threshold_numerical :
+    twoAtomScalar2 Real.goldenRatio = (Real.goldenRatio ^ 3 + 1) / 5 - 1 ∧
+    Set.InjOn twoAtomScalar2 {φ : ℝ | 0 < φ} ∧
+    (∀ x y : ℝ, 0 < x → x < y → twoAtomScalar2 x < twoAtomScalar2 y) :=
+  ⟨twoAtomScalar2_goldenRatio, twoAtomScalar2_injective_on_pos,
+   fun _ _ hx hxy => twoAtomScalar2_strictMono hx hxy⟩
+
 end Omega.Conclusion
