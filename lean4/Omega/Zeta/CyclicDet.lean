@@ -447,4 +447,23 @@ theorem fredholm_block_diag_2_3_4_eval (t : ℤ) :
       rw [cyclicPerm2_fredholm_det, cyclicPerm3_fredholm_det, cyclicPerm4_fredholm_det]
     _ = 1 - t ^ 2 - t ^ 3 - t ^ 4 + t ^ 5 + t ^ 6 + t ^ 7 - t ^ 9 := by ring
 
+/-- The 2+3+4+5 Fredholm block product in factored form.
+    cor:cyclic-euler-product -/
+theorem fredholm_block_diag_2_3_4_5_eval (t : ℤ) :
+    (1 - t • cyclicPerm2).det * (1 - t • cyclicPerm3).det *
+    (1 - t • cyclicPerm4).det * (1 - t • cyclicPerm5).det =
+      (1 - t ^ 2) * (1 - t ^ 3) * (1 - t ^ 4) * (1 - t ^ 5) := by
+  rw [cyclicPerm2_fredholm_det, cyclicPerm3_fredholm_det,
+      cyclicPerm4_fredholm_det, cyclicPerm5_fredholm_det]
+
+/-- The full 2+3+4+5+6 Fredholm block product.
+    cor:cyclic-euler-product -/
+theorem fredholm_block_diag_2_3_4_5_6_eval (t : ℤ) :
+    (1 - t • cyclicPerm2).det * (1 - t • cyclicPerm3).det *
+    (1 - t • cyclicPerm4).det * (1 - t • cyclicPerm5).det *
+    (1 - t • cyclicPerm6).det =
+      (1 - t ^ 2) * (1 - t ^ 3) * (1 - t ^ 4) * (1 - t ^ 5) * (1 - t ^ 6) := by
+  rw [cyclicPerm2_fredholm_det, cyclicPerm3_fredholm_det,
+      cyclicPerm4_fredholm_det, cyclicPerm5_fredholm_det, cyclicPerm6_fredholm_det]
+
 end Omega.Zeta

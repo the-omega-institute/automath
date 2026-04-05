@@ -125,4 +125,19 @@ theorem chebyAdams_product_formula (m n : ℕ) (S : ℤ) (hmn : n ≤ m) :
   rw [show m - n + n = m from by omega, show m - n + 2 * n = m + n from by omega] at h
   linarith
 
+/-- chebyAdams 4 explicit formula.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_four (S : ℤ) : chebyAdams 4 S = S ^ 4 - 4 * S ^ 2 + 2 := by
+  simp [chebyAdams]; ring
+
+/-- chebyAdams 5 explicit formula.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_five (S : ℤ) : chebyAdams 5 S = S ^ 5 - 5 * S ^ 3 + 5 * S := by
+  simp [chebyAdams]; ring
+
+/-- chebyAdams 6 explicit formula.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_six (S : ℤ) : chebyAdams 6 S = S ^ 6 - 6 * S ^ 4 + 9 * S ^ 2 - 2 := by
+  simp [chebyAdams]; ring
+
 end Omega.Discussion

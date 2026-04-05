@@ -538,6 +538,36 @@ theorem gauge_anomaly_max_three :
     ∃ w : Word 5, (Finset.univ.filter (fun i => localDefect w i = true)).card = 3 := by
   exact ⟨![true, true, true, true, true], by native_decide⟩
 
+/-- Gauge anomaly max instance at m=6: support size ≥ 3.
+    thm:fold-gauge-anomaly-max -/
+theorem gauge_anomaly_max_six :
+    ∃ w : Word 6, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 3 := by
+  exact ⟨![true, true, true, true, true, true], by native_decide⟩
+
+/-- Gauge anomaly max instance at m=7: support size ≥ 4.
+    thm:fold-gauge-anomaly-max -/
+theorem gauge_anomaly_max_seven :
+    ∃ w : Word 7, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 4 := by
+  exact ⟨![true, true, true, true, true, true, true], by native_decide⟩
+
+/-- Gauge anomaly max instance at m=8: support size ≥ 4.
+    thm:fold-gauge-anomaly-max -/
+theorem gauge_anomaly_max_eight :
+    ∃ w : Word 8, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 4 := by
+  exact ⟨![true, true, true, true, true, true, true, true], by native_decide⟩
+
+/-- Gauge anomaly count monotonicity witnesses.
+    thm:fold-gauge-anomaly-max -/
+theorem gauge_anomaly_count_mono :
+    (∃ w : Word 2, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 1) ∧
+    (∃ w : Word 4, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 2) ∧
+    (∃ w : Word 6, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 3) ∧
+    (∃ w : Word 8, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 4) :=
+  ⟨⟨![true, true], by native_decide⟩,
+   ⟨![true, true, true, true], by native_decide⟩,
+   gauge_anomaly_max_six,
+   gauge_anomaly_max_eight⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R53: periodicWord110 and Fold instances
 -- ══════════════════════════════════════════════════════════════
