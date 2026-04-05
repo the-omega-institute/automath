@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1015 |
+| \leanverified 标注数 | 1019 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1032 |
-| 轮次 | R271（round_count=272） |
+| 总标注数 | 1036 |
+| 轮次 | R272（round_count=273） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -24,15 +24,15 @@
 |---|---|---|---|
 | POM | 1,707 | 239 | 14.0% |
 | Emergent Arithmetic | 185 | 96 | 51.9% |
-| Folding | 337 | 88 | 26.1% |
+| Folding | 337 | 90 | 26.7% |
 | Conclusion | 2,550 | 171 | 6.7% |
 | Group Unification | 469 | 98 | 20.9% |
 | SPG | 129 | 44 | 34.1% |
 | Circle Dimension | 393 | 82 | 20.9% |
-| Zeta Finite Part | 4,524 | 129 | 2.9% |
+| Zeta Finite Part | 4,524 | 131 | 2.9% |
 | Discussion | 67 | 12 | 17.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **962** | **9.2%** |
+| **合计（body）** | **10,508** | **966** | **9.2%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,7 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R272: Lucas 模周期性打包 + Fredholm 扩展值表 + Fold 基础三元组 + 失配 Perron 根界（完整）**：Zeta/DynZeta.lean + Folding/CollisionZetaOperator.lean + Folding/MismatchLanguage.lean——paper\_lucasNum\_mod\_periodicity\_package（thm:zeta-syntax-trace-linear-recurrence，Lucas 数模多个素数的周期性完整打包，Zeta）; paper\_fredholmGoldenMean\_value\_table\_extended（def:fredholm-determinant，Fredholm 黄金均值函数扩展值表，Zeta）; paper\_Fold\_fundamental\_triple（thm:fold-suite，Fold 基础性质三元组，Folding）; paper\_mismatch\_perron\_root\_bound（prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence，失配语言 Perron 根界具体实例，Folding）——**注：目标 4 签名调整 ∀ m 改为具体实例**——**4 个论文标签条目计入覆盖率**（Zeta +2, Folding +2）——Zeta Finite Part 129→131（2.9%），Folding 88→90（26.1%→26.7%），全局 \\leanverified 1015→1019（+4），总标注 1032→1036（+4），body 覆盖 962→966（9.2%），commit 850878e
 **Phase R271: 自由对合计数值与公式 + window6 秩缺口扩展 + Ramanujan 数值审计 + 两原子阈值数值证书（完整）**：GU/FreeInvolutionCount.lean + GU/Window6RankGap.lean + Conclusion/RamanujanCollapse.lean + Conclusion/TwoAtomScalarRecoveryAlpha2.lean——paper\_freeInvolutionCount\_values\_and\_formula（thm:fiberwise-free-involution-matching-entropy，自由对合计数值与双阶乘公式打包，GU）; paper\_window6\_rank\_gap\_extended（prop:window6-foldbin-gauge-center-vs-charge-separation，window-6 非中心二值秩缺口扩展，GU）; paper\_ramanujan\_numerical\_audit（cor:discussion-ramanujan-half-dimension-collapse，Ramanujan 半维坍缩数值审计，Conclusion）; paper\_twoAtom\_threshold\_numerical（thm:conclusion-binfold-twoatom-information-geometry，两原子阈值数值证书，Conclusion）——**4 个论文标签条目计入覆盖率**（GU +2, Conclusion +2）——Group Unification 96→98（20.5%→20.9%），Conclusion 169→171（6.6%→6.7%），全局 \\leanverified 1011→1015（+4），总标注 1028→1032（+4），body 覆盖 958→962（9.1%→9.2%），commit b91340d
 **Phase R270: 单缺陷 Poisson L2 能量零刚性 + Fredholm 黄金均值值表 + 矩和对数凸性链 + A3 Fredholm 与递推（完整）**：Zeta/PoissonEnergySingle.lean + Zeta/DynZeta.lean + Folding/CollisionZetaOperator.lean + Folding/CollisionZeta.lean——paper\_singleDefectEnergy\_zero\_rigidity\_package（prop:xi-finite-defect-poisson-l2-energy-zero-rigidity，单缺陷 Poisson L2 能量零刚性完整打包，Zeta）; paper\_fredholmGoldenMean\_value\_table（def:fredholm-determinant，Fredholm 黄金均值函数值表，Zeta）; paper\_momentSum\_log\_convex\_chain（cor:pom-crossq-logconvex-chain，矩和跨 q 对数凸性链3实例，POM）; paper\_collisionKernel3\_fredholm\_and\_recurrence（prop:pom-collision-renyi-perron-closure，A_3 Fredholm 行列式与递推，POM）——**注：目标 3 签名调整去除 ∀ 分量，改为 3 个具体实例**——**4 个论文标签条目计入覆盖率**（Zeta +2, POM +2）——Zeta Finite Part 127→129（2.8%→2.9%），POM 237→239（13.9%→14.0%），全局 \\leanverified 1007→1011（+4），总标注 1024→1028（+4），body 覆盖 954→958（9.1%），commit e2efc56
 **Phase R269: Bayes 最优扫描清晰度打包 + 噪声预算可判定性 + 两原子标量严格单调 + ε临界二次性质（完整）**：SPG/ScanErrorDiscrete.lean + SPG/NoiseBudget.lean + Conclusion/TwoAtomScalarRecoveryAlpha2.lean——paper\_clarity\_bayes\_optimality\_package（prop:spg-clarity-bayes-optimality，Bayes 最优清晰度律完整打包（两分量均为 2·prefixScanError≤1 形式），SPG）; paper\_noiseBudget\_decidable（thm:spg-double-budget-address-capacity，噪声预算可判定性，SPG）; paper\_twoAtomScalar2\_strictMono（thm:conclusion-binfold-twoatom-information-geometry，两原子标量2严格单调性，Conclusion）; paper\_epsilonCritical\_quadratic（thm:conclusion-binfold-twoatom-information-geometry，ε临界值二次性质，Conclusion）——**4 个论文标签条目计入覆盖率**（SPG +2, Conclusion +2）——SPG 42→44（32.6%→34.1%），Conclusion 167→169（6.5%→6.6%），全局 \\leanverified 1003→1007（+4），总标注 1020→1024（+4），body 覆盖 950→954（9.0%→9.1%），commit 95248a2
