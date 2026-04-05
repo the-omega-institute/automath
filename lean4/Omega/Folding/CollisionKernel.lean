@@ -305,6 +305,19 @@ theorem collisionKernel4_e2 :
     collisionKernel4.trace ^ 2 - (collisionKernel4 ^ 2).trace = -14 := by
   rw [collisionKernel4_trace, collisionKernel4_trace_sq]; ring
 
+/-- tr(A_4^3) = 50. rem:pom-s4-zero-coefficient-lock -/
+theorem collisionKernel4_trace_cube :
+    (collisionKernel4 ^ 3).trace = 50 := by native_decide
+
+/-- Newton identity for e3: the x^2 coefficient of charPoly(A_4) is 0.
+    rem:pom-s4-zero-coefficient-lock -/
+theorem collisionKernel4_e3_zero :
+    (collisionKernel4 ^ 3).trace
+      - collisionKernel4.trace * (collisionKernel4 ^ 2).trace
+      + (collisionKernel4.trace ^ 2 - (collisionKernel4 ^ 2).trace) / 2
+        * collisionKernel4.trace = 0 := by
+  rw [collisionKernel4_trace, collisionKernel4_trace_sq, collisionKernel4_trace_cube]; ring
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R250: A_4(t) parametric collision kernel
 -- ══════════════════════════════════════════════════════════════
@@ -322,6 +335,12 @@ def collisionKernel4Parametric (t : ℤ) : Matrix (Fin 5) (Fin 5) ℤ :=
     prop:pom-a4t-spectral-selfduality-invariants -/
 def charPolyA4t (t x : ℤ) : ℤ :=
   x^5 - 2*x^4 - t*x^3 - 2*x + 2
+
+/-- The charPoly(A_4) zero-coefficient lock: p(x) = x^5 - 2x^4 - 7x^3 - 2x + 2.
+    rem:pom-s4-zero-coefficient-lock -/
+theorem collisionKernel4_charPoly_specialization :
+    charPolyA4t 7 = fun x => x ^ 5 - 2 * x ^ 4 - 7 * x ^ 3 - 2 * x + 2 := by
+  funext x; unfold charPolyA4t; ring
 
 /-- Spectral self-duality of A_4(t): p(x) + p(-x) = 4(1 - x^4).
     prop:pom-a4t-spectral-selfduality-invariants -/

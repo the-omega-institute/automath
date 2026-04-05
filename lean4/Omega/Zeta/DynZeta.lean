@@ -261,6 +261,25 @@ theorem trace_eq_lucasNum (n : ℕ) :
       rw [goldenMean_trace_recurrence_unbounded n, ih (n + 1) (by omega),
         ih n (by omega), lucasNum_succ_succ]
 
+/-- Cayley-Hamilton for golden-mean adjacency: A^2 = A + 1.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem goldenMeanAdjacency_sq :
+    Graph.goldenMeanAdjacency ^ 2 = Graph.goldenMeanAdjacency + 1 := by native_decide
+
+/-- General trace recurrence: Tr(A^{n+2}) = Tr(A^{n+1}) + Tr(A^n) for all n.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem goldenMean_trace_recurrence_general (n : Nat) :
+    (Graph.goldenMeanAdjacency ^ (n + 2)).trace =
+      (Graph.goldenMeanAdjacency ^ (n + 1)).trace +
+        (Graph.goldenMeanAdjacency ^ n).trace :=
+  goldenMean_trace_recurrence_unbounded n
+
+/-- The trace sequence equals the Lucas numbers: Tr(A^n) = L(n).
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem goldenMean_trace_eq_lucas (n : Nat) :
+    (Graph.goldenMeanAdjacency ^ n).trace = lucasNum n :=
+  trace_eq_lucasNum n
+
 /-- Lucas-Fibonacci relation: L(n+2) = F(n+1) + F(n+3).
     thm:zeta-syntax-trace-linear-recurrence -/
 theorem lucasNum_eq_fib_sum (n : ℕ) :

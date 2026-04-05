@@ -458,4 +458,34 @@ theorem fib_strict_growth (m : Nat) (hm : 1 ≤ m) :
   have hpos : 1 ≤ Nat.fib (m + 1) := Nat.fib_pos.mpr (by omega)
   omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R256: Gödel lift infeasibility, monotonicity, fold tower
+-- ══════════════════════════════════════════════════════════════
+
+/-- If (E+1)^k < D then no injection exists.
+    thm:conclusion-bounded-prime-register-feasibility (contrapositive) -/
+theorem godelLift_infeasible (k E D : ℕ) (h : (E + 1) ^ k < D) :
+    ¬ ∃ f : Fin D → Fin ((E + 1) ^ k), Function.Injective f := by
+  intro ⟨f, hf⟩
+  have := Fintype.card_le_of_injective f hf
+  simp [Fintype.card_fin] at this
+  omega
+
+/-- Monotonicity: if k₁ ≤ k₂ and (E+1)^k₁ ≥ D then (E+1)^k₂ ≥ D.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_mono_k (E D k₁ k₂ : ℕ) (hk : k₁ ≤ k₂)
+    (h : D ≤ (E + 1) ^ k₁) : D ≤ (E + 1) ^ k₂ :=
+  le_trans h (Nat.pow_le_pow_right (by omega) hk)
+
+/-- Concrete Fibonacci-fiber axis bounds from the fold tower.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_fold_tower_bounds :
+    3 ≤ (2 + 1) ^ 1 ∧
+    5 ≤ (2 + 1) ^ 2 ∧
+    8 ≤ (2 + 1) ^ 2 ∧
+    13 ≤ (3 + 1) ^ 2 ∧
+    21 ≤ (4 + 1) ^ 2 ∧
+    34 ≤ (5 + 1) ^ 2 := by
+  refine ⟨by norm_num, by norm_num, by norm_num, by norm_num, by norm_num, by norm_num⟩
+
 end Omega.Conclusion
