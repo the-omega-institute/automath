@@ -25,5 +25,63 @@ D_\zeta(\varrho)\ \ge\ \log\!\Bigl(\frac{\varrho}{|a|}\Bigr),
 最后由初等不等式 \(-\log t\ge 1-t\)（\(0<t<1\)）得到 \(\log(1/|a|)\ge 1-|a|\)，与深度下界合并即得结论。证毕。
 \end{proof}
 
-\endinput
+\begin{theorem}[统一验证器的三端预算与正交不可补偿性]\label{thm:xi-unified-verifier-three-budget-orthogonality}
+考虑纯相位--离线核验接口中的统一验证器，并记其三类可调预算分别为
+\[
+\Delta_\rho:=1-\rho_{\max}
+\qquad\text{（固定半径采样的径向余量预算）},
+\]
+\[
+b
+\qquad\text{（dyadic 前缀/地址深度预算）},
+\]
+\[
+N
+\qquad\text{（端点热核/Toeplitz 截断预算）}.
+\]
+则该验证器的成功必须同时跨过三条彼此正交的阈值通道：
+\begin{enumerate}
+  \item \textbf{（径向盲区阈值）}
+  若离切片事件具有偏移 \(\delta\) 与高度 \(|\gamma|\)，则其端点余量满足
+  \[
+  1-|w_\rho|^2
+  =
+  \frac{4\delta}{\gamma^2+(1+\delta)^2}
+  \asymp
+  \frac{\delta}{\gamma^2}
+  \qquad(|\gamma|\to\infty).
+  \]
+  一旦
+  \[
+  \frac{\delta}{\gamma^2}\lesssim \Delta_\rho,
+  \]
+  该事件便落入固定半径接口的径向盲区，无法仅靠相位轴核验排除（定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound}）。
 
+  \item \textbf{（地址碰撞阈值）}
+  若 dyadic 前缀/记录预算 \(b\) 低于单射化所需门槛，则存在纤维碰撞见证；更精确地，只要
+  \[
+  2^b<\operatorname*{ess\,sup}_{x}\Ind(E_m)(x)
+  \]
+  （交换情形下等价于 \(2^b<\max_x d_m(x)\)），则任何扩展读出都不可能在全部纤维上同时单射（定理 \ref{thm:address-defect-law}；并见推论 \ref{cor:xi-comoving-prefix-bit-budget-gain} 对共动前缀收益的说明）。
+
+  \item \textbf{（端点承载阈值）}
+  若端点热核/Toeplitz 截断阶 \(N\) 低于抽取端点原子质量所需的分辨尺度，则会出现端点承载不足见证；换言之，端点阈值质量只能由结论 \ref{con:xi-terminal-endpoint-heat-kernel-probe-identity} 中的有限 Toeplitz 二次型序列在足够大的 \(N\) 上单调逼近，过短截断不能替代该端点证书。
+\end{enumerate}
+并且这三条预算轴彼此不可补偿：任一轴上的阈值失效，都不能通过另外两轴上的超额投入被消去（定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable}）。
+因此，统一验证器的失败并非单一预算不足，而是三条正交通道中至少一条发生断裂。
+\end{theorem}
+\begin{proof}
+第 (1) 条正是定理 \ref{thm:xi-offcritical-endpoint-resolution-lower-bound} 的端点余量闭式在高高度区间的重述：固定半径接口只能看到大于其余量门槛 \(\Delta_\rho\) 的事件，因此当
+\(
+\delta/\gamma^2\lesssim \Delta_\rho
+\)
+时离切片信号不可见。
+
+第 (2) 条由定理 \ref{thm:address-defect-law} 的最坏情形单射化下界给出：若记录轴无法在最大纤维上提供足够多的可区分地址，则碰撞见证不可消除；共动前缀仅能在其自身地址轴上回收相应预算（推论 \ref{cor:xi-comoving-prefix-bit-budget-gain}）。
+
+第 (3) 条由结论 \ref{con:xi-terminal-endpoint-heat-kernel-probe-identity} 给出：端点原子质量是通过有限 Toeplitz 二次型的单调极限抽取出来的，故截断阶不足时只能得到不完全的端点证书。
+
+最后，定理 \ref{thm:xi-null-orthogonal-trichotomy-resource-nonsubstitutable} 已证明这些失败见证分属互不重叠的支撑轴，预算不能跨轴抵偿；将三条阈值并读即得结论。证毕。
+\end{proof}
+
+\endinput
