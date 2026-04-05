@@ -1389,4 +1389,22 @@ theorem goldenMean_primitive_orbit_19_22 :
     (24476 + (-1) * 4 + (-1) * 29 + 1 * 1 : ℤ) = 21 * 1164 ∧
     (39603 + (-1) * 199 + (-1) * 3 + 1 * 1 : ℤ) = 22 * 1791 := by omega
 
+/-- Selected word traces at m=3.
+    thm:conclusion-softcore-exceptional-word-trace-expansion -/
+theorem paper_word_trace_m3_selected :
+    (Graph.goldenMeanAdjacency ^ 3).trace = 4 ∧
+    (allOnesMatrix * Graph.goldenMeanAdjacency ^ 2).trace = 5 ∧
+    (allOnesMatrix ^ 2 * Graph.goldenMeanAdjacency).trace = 6 ∧
+    (allOnesMatrix ^ 3).trace = 8 := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · -- Tr(K³) = L(3) = 4
+    rw [trace_eq_lucasNum]; simp [lucasNum]
+  · -- J * K² = J * (K + I) = JK + J
+    native_decide
+  · -- J² * K = 2J * K
+    native_decide
+  · -- J³ = 4J, Tr(4J) = 8
+    rw [show (3 : ℕ) = 2 + 1 from rfl, allOnesMatrix_pow_succ, Matrix.trace_smul,
+      allOnesMatrix_trace]; norm_num
+
 end Omega.Zeta

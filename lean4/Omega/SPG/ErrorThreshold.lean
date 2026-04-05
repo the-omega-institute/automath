@@ -170,6 +170,37 @@ theorem kappa_fifth : kappa (1 / 5 : ℝ) = 3 / 2 := by unfold kappa; norm_num
 /-- kappa(2/3) = 5. prop:spg-relative-error-threshold-sharpness -/
 theorem kappa_two_thirds : kappa (2 / 3 : ℝ) = 5 := by unfold kappa; norm_num
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R299: kappaInv monotonicity, round-trip instances
+-- ══════════════════════════════════════════════════════════════
+
+/-- kappaInv is strictly monotone on (1,∞). prop:spg-relative-error-threshold-sharpness -/
+theorem kappaInv_strict_mono {a b : ℝ} (ha : 1 < a) (_hb : 1 < b) (hab : a < b) :
+    kappaInv a < kappaInv b := by
+  simp only [kappaInv]
+  rw [div_lt_div_iff₀ (by linarith : (0 : ℝ) < a + 1) (by linarith : (0 : ℝ) < b + 1)]
+  nlinarith
+
+/-- kappaInv is injective on (1,∞). prop:spg-relative-error-threshold-sharpness -/
+theorem kappaInv_injective {a b : ℝ} (ha : 1 < a) (hb : 1 < b) (heq : kappaInv a = kappaInv b) :
+    a = b := by
+  rcases lt_trichotomy a b with hab | rfl | hba
+  · exact absurd (kappaInv_strict_mono ha hb hab) (by rw [heq]; exact lt_irrefl _)
+  · rfl
+  · exact absurd (kappaInv_strict_mono hb ha hba) (by rw [heq]; exact lt_irrefl _)
+
+/-- Round-trip instances for kappa ∘ kappaInv and kappaInv ∘ kappa.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem paper_kappa_kappaInv_round_trip_instances :
+    kappaInv (kappa (1 / 3 : ℝ)) = 1 / 3 ∧
+    kappaInv (kappa (1 / 2 : ℝ)) = 1 / 2 ∧
+    kappa (kappaInv (2 : ℝ)) = 2 ∧
+    kappa (kappaInv (3 : ℝ)) = 3 ∧
+    kappa (kappaInv (5 : ℝ)) = 5 := by
+  refine ⟨?_, ?_, kappa_kappaInv (by norm_num), kappa_kappaInv (by norm_num),
+    kappa_kappaInv (by norm_num)⟩ <;>
+  · unfold kappa kappaInv; norm_num
+
 end Omega.SPG
 
 
