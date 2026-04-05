@@ -1352,4 +1352,22 @@ theorem paper_word_trace_m2_traces :
   · rw [Graph.goldenMeanAdjacency_sq, Matrix.trace_add, Graph.goldenMeanAdjacency_trace]
     simp [Matrix.trace]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R293: All-ones matrix det, minimal poly, softcore T1
+-- ══════════════════════════════════════════════════════════════
+
+/-- det(J) = 0. prop:conclusion-softcore-wordtrace-fibonacci-factorization -/
+theorem allOnesMatrix_det : allOnesMatrix.det = 0 := by native_decide
+
+/-- J² - 2J = 0 (minimal polynomial relation).
+    prop:conclusion-softcore-wordtrace-fibonacci-factorization -/
+theorem allOnesMatrix_minimal_poly :
+    allOnesMatrix ^ 2 - 2 • allOnesMatrix = 0 := by
+  rw [allOnesMatrix_sq]; simp
+
+/-- J + K = [[2,2],[2,1]].
+    prop:conclusion-softcore-wordtrace-fibonacci-factorization -/
+theorem softcore_T1_eq_half_sum :
+    (allOnesMatrix + Graph.goldenMeanAdjacency) = !![2, 2; 2, 1] := by native_decide
+
 end Omega.Zeta

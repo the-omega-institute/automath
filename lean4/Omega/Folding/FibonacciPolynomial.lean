@@ -845,4 +845,36 @@ theorem paper_pathIndSetPoly_eval_one_extended :
   · rw [pathIndSetPoly_seven_val]; simp; native_decide
   · rw [pathIndSetPoly_eight_val]; simp; native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R293: fibPoly eval at -1, pathIndSetPolyNegOne extended values
+-- ══════════════════════════════════════════════════════════════
+
+/-- fibPoly(n+2) evaluated at -1 equals pathIndSetPolyNegOne n.
+    def:pom-fibonacci-polynomial -/
+theorem fibPoly_eval_neg_one_eq : ∀ n : Nat,
+    (fibPoly (n + 2)).eval (-1) = pathIndSetPolyNegOne n
+  | 0 => by simp [fibPoly, pathIndSetPolyNegOne]
+  | 1 => by simp [fibPoly, pathIndSetPolyNegOne]
+  | n + 2 => by
+    -- fibPoly((n+2)+2) = fibPoly((n+2)+1) + X * fibPoly(n+2)
+    -- = fibPoly(n+3) + X * fibPoly(n+2)
+    -- At x=-1: fibPoly(n+3).eval(-1) + (-1)*fibPoly(n+2).eval(-1)
+    -- = pathIndSetPolyNegOne(n+1) - pathIndSetPolyNegOne(n)
+    -- = pathIndSetPolyNegOne(n+2)
+    show (fibPoly (n + 2 + 1) + X * fibPoly (n + 2)).eval (-1) = _
+    simp only [Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_X]
+    rw [show n + 2 + 1 = (n + 1) + 2 from by omega]
+    rw [fibPoly_eval_neg_one_eq (n + 1), fibPoly_eval_neg_one_eq n]
+    simp [pathIndSetPolyNegOne]; ring
+
+/-- Extended pathIndSetPolyNegOne values for l=0..8.
+    def:pom-fibonacci-polynomial -/
+theorem paper_pathIndSetPolyNegOne_values_extended :
+    pathIndSetPolyNegOne 0 = 1 ∧ pathIndSetPolyNegOne 1 = 0 ∧
+    pathIndSetPolyNegOne 2 = -1 ∧ pathIndSetPolyNegOne 3 = -1 ∧
+    pathIndSetPolyNegOne 4 = 0 ∧ pathIndSetPolyNegOne 5 = 1 ∧
+    pathIndSetPolyNegOne 6 = 1 ∧ pathIndSetPolyNegOne 7 = 0 ∧
+    pathIndSetPolyNegOne 8 = -1 := by
+  simp [pathIndSetPolyNegOne]
+
 end Omega
