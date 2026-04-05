@@ -8,31 +8,31 @@
 |---|---|
 | 总行数 | ~39,000 |
 | 定理/定义数 | ~3,476 |
-| 论文接口包装 | 625+ |
-| 文件数 | 104 |
+| 论文接口包装 | 629+ |
+| 文件数 | 105 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 970 |
+| \leanverified 标注数 | 974 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 987 |
-| 轮次 | R260（round_count=261） |
+| 总标注数 | 991 |
+| 轮次 | R261（round_count=262） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 232 | 13.6% |
+| POM | 1,707 | 233 | 13.6% |
 | Emergent Arithmetic | 185 | 96 | 51.9% |
 | Folding | 337 | 85 | 25.2% |
 | Conclusion | 2,550 | 161 | 6.3% |
-| Group Unification | 469 | 91 | 19.4% |
+| Group Unification | 469 | 94 | 20.0% |
 | SPG | 129 | 40 | 31.0% |
 | Circle Dimension | 393 | 78 | 19.8% |
 | Zeta Finite Part | 4,524 | 119 | 2.6% |
 | Discussion | 67 | 12 | 17.9% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **917** | **8.7%** |
+| **合计（body）** | **10,508** | **921** | **8.8%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,7 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R261: Fibonacci 素数 Pisano 性质 + 纤维谱 resolvent 有理结构（完整）**：GU/FibPrimePisano.lean + Folding/CollisionZetaOperator.lean——paper\_fibprime\_explicit\_sqrt\_neg\_one（cor:gut-fibprime-explicit-i，F_{n+1} 为 F_p 中显式 sqrt(-1)，GU）; paper\_fibprime\_pisano\_4n（cor:gut-fibprime-pisano-4n，Fibonacci 素数 Pisano 周期精确封口 π(p)=4n，GU）; paper\_fibprime\_congruence\_p\_mod\_n（prop:gut-fibprime-congruence-p-mod-n，指数素数值强同余刚性，GU）; paper\_fiber\_resolvent\_rational\_m5（thm:pom-fiber-spectrum-resolvent-rational，m=5 纤维谱 resolvent 有理结构见证，POM）——**注：新文件 GU/FibPrimePisano.lean 已创建并 import**——**4 个论文标签条目计入覆盖率**（GU +3, POM +1）——Group Unification 91→94（19.4%→20.0%），POM 232→233（13.6%），全局 \\leanverified 970→974（+4），总标注 987→991（+4），body 覆盖 917→921（8.7%→8.8%），commit 10113ab
 **Phase R260: Zeta 虚周期刚性 + DFA 召回率崩塌 + 循环 lift 滤波 + Fibonacci 包络严格失效（完整）**：Zeta/DynZeta.lean + Folding/CollisionZetaOperator.lean + Zeta/CyclicDet.lean + Conclusion/PrimeRegister.lean——paper\_finite\_zeta\_periodicity\_witness（thm:zeta-syntax-finite-zeta-imaginary-periodicity，有限核 ζ 虚周期刚性见证，Zeta）; paper\_dfa\_prime\_recall\_precision\_collapse（cor:zeta-syntax-dfa-prime-recall-precision-collapse，二进制素数 DFA 召回率与精确率不可同时保持，Zeta）; paper\_cyclic\_lift\_trace\_filter\_q2（cor:zeta-cyclic-lift-primitive-orbits，循环 lift q=2 迹滤波器，Zeta）; paper\_foldbin\_fibonacci\_envelope\_eventual\_strict\_failure（prop:conclusion-foldbin-fibonacci-envelope-eventual-strict-failure，Fibonacci 组合上界最终严格失效，Conclusion）——**注：目标 4 签名微调，Nat.fib 12 < 2^10/10 → Nat.fib 15 < 2^13/13（原规格数学上为假）**——**4 个论文标签条目计入覆盖率**（Zeta +3, Conclusion +1）——Zeta Finite Part 116→119（2.6%），Conclusion 160→161（6.3%），全局 \\leanverified 966→970（+4），总标注 983→987（+4），body 覆盖 913→917（8.7%），commit b524fd2
 **Phase R259: 相位谱实例 + fold-6 尾部偏移 GUT 对应 + Gödel 提升扩展塔（完整）**：CircleDimension/CircleDim.lean + GU/ZeckendorfCountClosure.lean + Conclusion/PrimeRegister.lean——phaseSpectrumCount\_Z2（def:cdim-phase-spectrum，ℤ/2ℤ 相位采样计数实例，CD）; phaseSpectrumCount\_Z\_times\_Z6（def:cdim-phase-spectrum，ℤ×ℤ/6ℤ 相位采样计数实例，CD）; phaseSpectrumCount\_Z\_times\_Z6\_table（def:cdim-phase-spectrum，ℤ×ℤ/6ℤ 计数表格枚举，CD）; phaseSpectrumCount\_rank\_detection\_Z\_Z6（thm:cdim-phase-spectrum-reconstruction，ℤ 与 ℤ×ℤ/6ℤ 秩检测实例，CD）; fold6\_tail\_offsets（cor:fold6-tail-offsets-gut-top-terms，window-6 uplift 尾部偏移 ⊆ {F_8,F_9,F_{10}}，GU）; gut\_top\_fibonacci\_terms（cor:fold6-tail-offsets-gut-top-terms，GUT 顶层 Fibonacci 项 {F_8,F_9,F_{10}} 枚举，GU）; fold6\_tail\_offsets\_are\_card\_X（cor:fold6-tail-offsets-gut-top-terms，尾部偏移等于 |X_6| 的 card 等式，GU）; fold6\_resonance\_gap（cor:fold6-tail-offsets-gut-top-terms，fold-6 共振间隙，GU）; godelLift\_fold9（thm:conclusion-bounded-prime-register-feasibility，m=9 Fold 可行判据，Conclusion）; godelLift\_fold10（thm:conclusion-bounded-prime-register-feasibility，m=10 Fold 可行判据，Conclusion）; godelLift\_maxfiber\_fib\_chain（thm:conclusion-bounded-prime-register-feasibility，最大纤维 Fibonacci 链 Gödel 提升，Conclusion）; godelLift\_optimal\_k2\_bases（thm:conclusion-bounded-prime-register-feasibility，k=2 最优基底 Gödel 提升，Conclusion）——**12 个论文标签条目计入覆盖率**（CD +4, GU +4, Conclusion +4）——Circle Dimension 74→78（18.8%→19.8%），Group Unification 87→91（18.5%→19.4%），Conclusion 156→160（6.1%→6.3%），全局 \\leanverified 954→966（+12），总标注 971→983（+12），body 覆盖 901→913（8.6%→8.7%），commit b358d80
 **Phase R258: primitive 轨道 n=11..14 + A_5 Newton 恒等式 + 扫描误差零判据（完整）**：Zeta/DynZeta.lean + Folding/CollisionZeta.lean + SPG/ScanErrorDiscrete.lean——goldenMean\_primitive\_orbit\_11\_14（prop:zetaK-mobius-primitive，黄金均值矩阵 primitive 轨道计数 n=11..14，Zeta）; collisionKernel5\_charpoly\_coefficients（prop:pom-s5-recurrence，A_5 全部迹幂与 det 的 Newton 系数完整验证，POM）; collisionKernel5\_e3（prop:pom-s5-recurrence，A_5 的 Newton 第三初等对称函数 e_3=-48，POM）; scanError\_eq\_zero\_iff\_no\_boundary（cor:spg-clarity-basic，扫描误差为零当且仅当无边界柱，SPG）——**注：Lean docstring 使用 prop:pom-s5-charpoly-newton，该标签不存在于论文中；已注册至数学等价的 prop:pom-s5-recurrence（同一矩阵 A_5 的深化标注）**——**4 个论文标签条目计入覆盖率**（Zeta +1, POM +2, SPG +1）——Zeta Finite Part 115→116（2.5%→2.6%），POM 230→232（13.5%→13.6%），SPG 39→40（30.2%→31.0%），全局 \\leanverified 950→954（+4），总标注 967→971（+4），body 覆盖 897→901（8.5%→8.6%），commit e8995eb
