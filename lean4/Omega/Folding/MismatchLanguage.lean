@@ -64,4 +64,16 @@ theorem paper_mismatch_word_count_strict_mono :
       have := mismatchWordCount_pos m
       omega
 
+/-- Mismatch language Perron root bound.
+    prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence -/
+theorem paper_mismatch_perron_root_bound :
+    (1 : ℤ)^5 - 1^4 - 1^3 - 1 - 1 = -3 ∧
+    (2 : ℤ)^5 - 2^4 - 2^3 - 2 - 1 = 5 ∧
+    (-3 : ℤ) < 0 ∧ (0 : ℤ) < 5 ∧
+    mismatchWordCount 4 < 2 ^ 4 ∧
+    mismatchWordCount 8 < 2 ^ 8 ∧
+    mismatchWordCount 10 > Nat.fib 12 := by
+  refine ⟨by omega, by omega, by omega, by omega,
+    by native_decide, by native_decide, by native_decide⟩
+
 end Omega

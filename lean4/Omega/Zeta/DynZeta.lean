@@ -1097,4 +1097,26 @@ theorem paper_fredholmGoldenMean_value_table :
   ⟨fredholmGoldenMean_at_zero, fredholmGoldenMean_at_one, fredholmGoldenMean_at_two,
    fredholmGoldenMean_at_three, fredholmGoldenMean_at_four, fredholmGoldenMean_at_five⟩
 
+/-- Lucas number modular periodicity package.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_lucasNum_mod_periodicity_package :
+    (∀ n : Nat, lucasNum (n + 3) % 2 = lucasNum n % 2) ∧
+    (∀ n : ℕ, lucasNum (n + 8) % 3 = lucasNum n % 3) ∧
+    (∀ n : Nat, lucasNum (n + 6) % 4 = lucasNum n % 4) ∧
+    (∀ n : Nat, lucasNum (n + 4) % 5 = lucasNum n % 5) ∧
+    (∀ n : Nat, lucasNum (n + 16) % 7 = lucasNum n % 7) :=
+  ⟨lucasNum_mod2_period_three, lucasNum_mod3_period_eight,
+   lucasNum_mod4_period_six, lucasNum_mod5_period_four,
+   lucasNum_mod7_period_sixteen⟩
+
+/-- Fredholm determinant extended value table z=6..10.
+    def:fredholm-determinant -/
+theorem paper_fredholmGoldenMean_value_table_extended :
+    (fredholmGoldenMean 6).det = -41 ∧
+    (fredholmGoldenMean 7).det = -55 ∧
+    (fredholmGoldenMean 8).det = -71 ∧
+    (fredholmGoldenMean 9).det = -89 ∧
+    (fredholmGoldenMean 10).det = -109 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> (rw [fredholmGoldenMean_det]; ring)
+
 end Omega.Zeta

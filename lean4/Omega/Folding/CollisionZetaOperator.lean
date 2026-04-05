@@ -575,4 +575,12 @@ theorem paper_momentSum_log_convex_chain :
     momentSum 1 7 ^ 2 ≤ momentSum 0 7 * momentSum 2 7 := by
   simp only [← cMomentSum_eq]; native_decide
 
+/-- Fold fundamental properties.
+    thm:fold-suite -/
+theorem paper_Fold_fundamental_triple :
+    (∀ (m : Nat) (w : Word m), Fold (Fold w).1 = Fold w) ∧
+    (∀ m : Nat, Fintype.card (X m) = Nat.fib (m + 2)) ∧
+    (∀ m : Nat, momentSum 1 m = 2 ^ m) :=
+  ⟨fun _ w => Fold_idempotent w, X.card_eq_fib, momentSum_one⟩
+
 end Omega
