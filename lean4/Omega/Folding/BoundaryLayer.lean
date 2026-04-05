@@ -985,4 +985,22 @@ theorem cMixedEndCount_eq_two_fib_bounded (m : Nat) (hm1 : 2 ≤ m) (hm2 : m ≤
     cMixedEndCount m = 2 * Nat.fib (m - 1) := by
   interval_cases m <;> native_decide
 
+/-- The boundary square identity in cBoundaryCount form: b(2m-1) = b(m)² + b(m+1)² for m ≥ 2.
+    prop:bdry-fib-square-identity -/
+theorem cBoundaryCount_square_identity_general' (m : Nat) (hm : 2 ≤ m) :
+    cBoundaryCount (2 * m - 1) =
+    cBoundaryCount m ^ 2 + cBoundaryCount (m + 1) ^ 2 := by
+  match m, hm with
+  | 2, _ => native_decide
+  | 3, _ => native_decide
+  | m + 4, _ =>
+    rw [cBoundaryCount_eq_fib_general (2 * (m + 4) - 1) (by omega),
+        cBoundaryCount_eq_fib_general (m + 4) (by omega),
+        cBoundaryCount_eq_fib_general (m + 4 + 1) (by omega)]
+    have h1 : 2 * (m + 4) - 1 - 2 = 2 * (m + 2) + 1 := by omega
+    have h2 : m + 4 - 2 = m + 2 := by omega
+    have h3 : m + 4 + 1 - 2 = m + 3 := by omega
+    rw [h1, h2, h3, show m + 2 + 1 = m + 3 from by omega]
+    exact (fib_sq_add_sq (m + 2)).symm
+
 end Omega
