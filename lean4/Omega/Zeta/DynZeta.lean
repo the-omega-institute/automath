@@ -1370,4 +1370,16 @@ theorem allOnesMatrix_minimal_poly :
 theorem softcore_T1_eq_half_sum :
     (allOnesMatrix + Graph.goldenMeanAdjacency) = !![2, 2; 2, 1] := by native_decide
 
+/-- Characteristic polynomial of J is X² - 2X.
+    prop:conclusion-softcore-wordtrace-fibonacci-factorization -/
+theorem allOnesMatrix_charpoly :
+    allOnesMatrix.charpoly = Polynomial.X ^ 2 - 2 * Polynomial.X := by
+  unfold Matrix.charpoly
+  rw [Matrix.det_fin_two]
+  simp only [Matrix.charmatrix_apply, allOnesMatrix, Matrix.diagonal_apply,
+    Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one,
+    Polynomial.C_1]
+  simp (config := { decide := true }) only [if_true, if_false]
+  ring
+
 end Omega.Zeta

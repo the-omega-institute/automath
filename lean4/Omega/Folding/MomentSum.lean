@@ -357,4 +357,17 @@ theorem mixed_collision_kernel_computable (q m : Nat) :
 theorem fiberMultiplicity_sum_sq_eq_momentSum_two (m : Nat) :
     ∑ x : X m, X.fiberMultiplicity x ^ 2 = momentSum 2 m := rfl
 
+/-- Bridge between S_0 (= Fibonacci) and S_1 (= 2^m) with concrete values.
+    def:pom-collision-inflation -/
+theorem paper_momentSum_zero_one_bridge :
+    (∀ m, momentSum 0 m = Nat.fib (m + 2)) ∧
+    (∀ m, momentSum 1 m = 2 ^ m) ∧
+    momentSum 0 6 = 21 ∧ momentSum 1 6 = 64 ∧
+    momentSum 0 7 = 34 ∧ momentSum 1 7 = 128 := by
+  refine ⟨momentSum_zero, momentSum_one, ?_, ?_, ?_, ?_⟩
+  · rw [momentSum_zero]; native_decide
+  · rw [momentSum_one]; norm_num
+  · rw [momentSum_zero]; native_decide
+  · rw [momentSum_one]; norm_num
+
 end Omega
