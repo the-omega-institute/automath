@@ -97,3 +97,17 @@ model: opus
 
 ## SourceMap/NoAxiom
 这些目录已不存在。用 grep lean4/Omega/ 检查定理存在性，用 IMPLEMENTATION_PLAN 追踪覆盖率。
+
+## Codex 集成（默认开启）
+
+analyst 和 formalizer 已配置为默认使用 Codex 并行辅助：
+- **analyst**：收到分析任务时自动 spawn 后台 Codex 探索目标，自己同时正常分析
+- **formalizer**：对中/高难度目标自动 spawn 后台 Codex 探索证明，自己同时 LSP-first 开发
+- **stuck 时 formalizer 可直接 spawn codex-rescue**，不需要等 orchestrator 转发 codex-consultant
+
+orchestrator 的升级路径调整：
+- 第一步（formalizer 自助）：LSP 搜索 + Codex 并行
+- 第二步（formalizer stuck 报告后）：orchestrator 仍可 spawn codex-consultant 做深度分析
+- 第三步：lean4-skills plugin agent（proof-repair / sorry-filler-deep）
+
+**Codex 输出必须经过本地编译验证。不盲信 Codex 结果。**
