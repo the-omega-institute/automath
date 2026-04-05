@@ -206,4 +206,37 @@ theorem chebyAdams_at_neg_one_period3 (n : ℕ) :
     exact chebyAdams_succ_succ n (-1)
   linarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R286: Chebyshev-Adams at S=0 periodicity
+-- ══════════════════════════════════════════════════════════════
+
+/-- C(n+2, 0) = -C(n, 0). thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_zero_neg (n : ℕ) :
+    chebyAdams (n + 2) 0 = -chebyAdams n 0 := by
+  have : chebyAdams (n + 2) 0 = 0 * chebyAdams (n + 1) 0 - chebyAdams n 0 :=
+    chebyAdams_succ_succ n 0
+  linarith
+
+/-- C(n+4, 0) = C(n, 0). thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_zero_period4 (n : ℕ) :
+    chebyAdams (n + 4) 0 = chebyAdams n 0 := by
+  rw [show n + 4 = (n + 2) + 2 from by omega, chebyAdams_at_zero_neg,
+    chebyAdams_at_zero_neg, neg_neg]
+
+/-- Explicit values: {2, 0, -2, 0}. thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_zero_values :
+    chebyAdams 0 0 = 2 ∧ chebyAdams 1 0 = 0 ∧
+    chebyAdams 2 0 = -2 ∧ chebyAdams 3 0 = 0 := by
+  refine ⟨rfl, rfl, ?_, ?_⟩ <;> simp [chebyAdams]
+
+/-- Complete special-value package. thm:discussion-chebyshev-witt-equivariance -/
+theorem paper_chebyAdams_special_values_complete :
+    (∀ n, chebyAdams n 2 = 2) ∧
+    (∀ n, chebyAdams n (-2) = 2 * (-1) ^ n) ∧
+    (∀ n, chebyAdams (n + 6) 1 = chebyAdams n 1) ∧
+    (∀ n, chebyAdams (n + 3) (-1) = chebyAdams n (-1)) ∧
+    (∀ n, chebyAdams (n + 4) 0 = chebyAdams n 0) :=
+  ⟨chebyAdams_at_two, chebyAdams_at_neg_two, chebyAdams_at_one_period6,
+   chebyAdams_at_neg_one_period3, chebyAdams_at_zero_period4⟩
+
 end Omega.Discussion

@@ -1931,4 +1931,22 @@ theorem totalFibcubeFVector_strict_mono (n : Nat) (hn : 1 ≤ n) :
         _ ≤ 2 ^ (n + 2) := Nat.pow_le_pow_right (by omega) (by omega)
     nlinarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R286: totalPopcount small values
+-- ══════════════════════════════════════════════════════════════
+
+/-- Total popcount for small m. cor:pom-fibcube-edge-fib-conv -/
+theorem totalPopcount_small_values :
+    totalPopcount 0 = 0 ∧ totalPopcount 1 = 1 ∧
+    totalPopcount 2 = 2 ∧ totalPopcount 3 = 5 ∧
+    totalPopcount 4 = 10 ∧ totalPopcount 5 = 20 := by
+  refine ⟨totalPopcount_zero, totalPopcount_one, ?_, ?_, ?_, ?_⟩
+  · rw [totalPopcount_succ_succ 0, totalPopcount_one, totalPopcount_zero]; native_decide
+  · rw [totalPopcount_succ_succ 1, totalPopcount_succ_succ 0,
+      totalPopcount_one, totalPopcount_zero]; native_decide
+  · rw [totalPopcount_succ_succ 2, totalPopcount_succ_succ 1, totalPopcount_succ_succ 0,
+      totalPopcount_one, totalPopcount_zero]; native_decide
+  · rw [totalPopcount_succ_succ 3, totalPopcount_succ_succ 2, totalPopcount_succ_succ 1,
+      totalPopcount_succ_succ 0, totalPopcount_one, totalPopcount_zero]; native_decide
+
 end Omega
