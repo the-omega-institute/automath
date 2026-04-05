@@ -597,4 +597,18 @@ theorem multiPrimeSpectrum_support_witness
   simp only [Finset.mem_filter] at hS
   exact ⟨S, hS.1, hS.2⟩
 
+/-- Multi-prime spectrum Mobius inversion package.
+    thm:cdim-mobius-inversion-localization-multiset-classification -/
+theorem paper_multiPrimeSpectrum_mobius_package :
+    (∀ (supports : Finset PrimeSupport) (J K : PrimeSupport),
+      J ⊆ K → multiPrimeSpectrum supports K ≤ multiPrimeSpectrum supports J) ∧
+    (∀ supports : Finset PrimeSupport,
+      multiPrimeSpectrum supports ∅ = supports.card) ∧
+    (∀ (s₁ s₂ : Finset PrimeSupport) (J : PrimeSupport),
+      Disjoint s₁ s₂ →
+      multiPrimeSpectrum (s₁ ∪ s₂) J = multiPrimeSpectrum s₁ J + multiPrimeSpectrum s₂ J) :=
+  ⟨fun _ _ _ hJK => multiPrimeSpectrum_anti_mono hJK,
+   multiPrimeSpectrum_empty,
+   fun s₁ s₂ J hd => multiPrimeSpectrum_disjoint_add s₁ s₂ hd J⟩
+
 end Omega.CircleDimension

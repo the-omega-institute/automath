@@ -641,4 +641,15 @@ theorem phaseSpectrumCount_rank_detection_Z_Z6 :
     phaseSpectrumCount 1 6 7 = 7 ^ 1 := by
   refine ⟨by native_decide, by native_decide⟩
 
+/-- Circle dimension axiomatic completeness.
+    thm:cdim-nr-nd-semiring-hom-rigidity -/
+theorem paper_circleDim_axiomatic_completeness :
+    (∀ a b c d, circleDim (a + b) (c + d) = circleDim a c + circleDim b d) ∧
+    (∀ n t1 t2, circleDim n t1 = circleDim n t2) ∧
+    circleDim 1 0 = 1 ∧
+    (∀ n t, circleDim n t = 0 ↔ n = 0) ∧
+    (∀ a b t1 t2, a < b → circleDim a t1 < circleDim b t2) :=
+  ⟨circleDim_add, circleDim_finite_extension, circleDim_Zk 1,
+   circleDim_eq_zero_iff, circleDim_strictMono⟩
+
 end Omega.CircleDimension
