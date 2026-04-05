@@ -1146,4 +1146,61 @@ theorem paper_lucas_double_and_add :
     lucasNum 5 = 11 ∧ lucasNum 6 = 18 ∧ lucasNum 8 = 47 := by
   native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R279: Fibonacci quadratic form and spectrum sign law
+-- ══════════════════════════════════════════════════════════════
+
+/-- The ones vector u = (1,1)^T. -/
+def onesVec : Fin 2 → ℤ := ![1, 1]
+
+/-- u^T · K^b · u = F(b+3).
+    prop:conclusion-softcore-wordtrace-fibonacci-factorization -/
+theorem goldenMean_ones_quadratic_form :
+    ∀ b : ℕ, onesVec ⬝ᵥ (Graph.goldenMeanAdjacency ^ b).mulVec onesVec =
+      ↑(Nat.fib (b + 3))
+  | 0 => by native_decide
+  | 1 => by native_decide
+  | b + 2 => by
+    have hRec := Graph.goldenMeanAdjacency_pow_add_two b
+    -- K^(b+2) = K^(b+1) + K^b, so mulVec distributes
+    simp only [hRec, add_mulVec, dotProduct_add]
+    rw [goldenMean_ones_quadratic_form (b + 1), goldenMean_ones_quadratic_form b]
+    -- F((b+1)+3) + F(b+3) = F((b+2)+3)
+    rw [show b + 1 + 3 = b + 4 from by omega, show b + 2 + 3 = b + 5 from by omega]
+    rw [← Nat.cast_add]
+    congr 1
+    exact (Omega.fib_succ_succ' (b + 3)).symm
+
+/-- J = u·u^T, the all-ones rank-1 matrix. -/
+def allOnesMatrix : Matrix (Fin 2) (Fin 2) ℤ := !![1, 1; 1, 1]
+
+/-- Each entry of J · M · J equals the sum of all entries of M (since J is all-ones).
+    This is a helper for the quadratic form factorization. -/
+private theorem allOnesMatrix_mul_mul_allOnesMatrix_entry
+    (M : Matrix (Fin 2) (Fin 2) ℤ) (i j : Fin 2) :
+    (allOnesMatrix * M * allOnesMatrix) i j =
+      ∑ a : Fin 2, ∑ c : Fin 2, M a c := by
+  simp only [Matrix.mul_apply, allOnesMatrix, Matrix.of_apply, Matrix.cons_val']
+  fin_cases i <;> fin_cases j <;> simp <;> ring
+
+/-- The sum of all entries of K^b equals F(b+3). -/
+private theorem goldenMean_entry_sum (b : ℕ) :
+    ∑ a : Fin 2, ∑ c : Fin 2, (Graph.goldenMeanAdjacency ^ b) a c =
+      ↑(Nat.fib (b + 3)) := by
+  have h := goldenMean_ones_quadratic_form b
+  simp only [dotProduct, mulVec, onesVec, Fin.sum_univ_two, Fin.isValue] at h
+  norm_num at h
+  simp only [Fin.sum_univ_two, Fin.isValue]
+  linarith
+
+/-- J · K^b · J = F(b+3) · J.
+    prop:conclusion-softcore-wordtrace-fibonacci-factorization -/
+theorem allOnes_mul_goldenMean_pow_mul_allOnes (b : ℕ) :
+    allOnesMatrix * Graph.goldenMeanAdjacency ^ b * allOnesMatrix =
+      ↑(Nat.fib (b + 3)) • allOnesMatrix := by
+  ext i j
+  rw [allOnesMatrix_mul_mul_allOnesMatrix_entry, goldenMean_entry_sum]
+  simp only [Matrix.smul_apply, allOnesMatrix, Matrix.of_apply, Matrix.cons_val']
+  fin_cases i <;> fin_cases j <;> simp
+
 end Omega.Zeta
