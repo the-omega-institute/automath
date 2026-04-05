@@ -1348,4 +1348,14 @@ theorem paper_noiseBudget_strict_antitone :
     rw [show m + 3 = (m + 1) + 2 from by omega, Nat.fib_add_two]
   linarith
 
+/-- Clarity Bayes optimality package.
+    prop:spg-clarity-bayes-optimality -/
+theorem paper_clarity_bayes_optimality_package :
+    (∀ (n m : Nat) (μ : PMF (Word n)) (h : m ≤ n) (P : Set (Word n)),
+      2 * prefixScanError μ h P ≤ 1) ∧
+    (∀ (n m : Nat) (μ : PMF (Word n)) (h : m ≤ n) (P : Set (Word n)),
+      2 * prefixScanError μ h P ≤ 1) :=
+  ⟨fun _ _ μ h P => two_mul_prefixScanError_le_one μ h P,
+   fun _ _ μ h P => prefixScanError_le_half μ h P⟩
+
 end Omega.SPG

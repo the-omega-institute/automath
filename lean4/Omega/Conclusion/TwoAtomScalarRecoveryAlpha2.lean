@@ -116,4 +116,20 @@ theorem twoAtomScalar2_eq_zero_iff_goldenRatio {φ : ℝ} (hφ : 1 < φ) :
   · intro h
     rw [h]
 
+/-- Two-atom scalar function strict monotonicity.
+    thm:conclusion-binfold-twoatom-information-geometry -/
+theorem paper_twoAtomScalar2_strictMono :
+    (∀ x y : ℝ, 0 < x → x < y → twoAtomScalar2 x < twoAtomScalar2 y) ∧
+    twoAtomScalar2 Real.goldenRatio = (Real.goldenRatio ^ 3 + 1) / 5 - 1 :=
+  ⟨fun _ _ hx hxy => twoAtomScalar2_strictMono hx hxy,
+   twoAtomScalar2_goldenRatio⟩
+
+/-- Epsilon-critical quadratic properties.
+    thm:conclusion-binfold-twoatom-information-geometry -/
+theorem paper_epsilonCritical_quadratic :
+    Set.InjOn twoAtomScalar2 {φ : ℝ | 0 < φ} ∧
+    (∀ α : ℝ, 1 < α → StrictMonoOn (twoAtomScalar α) (Set.Ioi 1)) :=
+  ⟨twoAtomScalar2_injective_on_pos,
+   fun _ hα => twoAtomScalar_strictMono hα⟩
+
 end Omega.Conclusion
