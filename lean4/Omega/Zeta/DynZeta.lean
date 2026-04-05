@@ -533,6 +533,41 @@ theorem lucasNum_mod7_period_sixteen (n : Nat) :
     lucasNum_succ_succ n]
   omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R303: Lucas numbers mod 8 period 12
+-- ══════════════════════════════════════════════════════════════
+
+/-- Lucas numbers mod 8 have period 12.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_mod8_period_twelve (n : Nat) :
+    lucasNum (n + 12) % 8 = lucasNum n % 8 := by
+  simp only [show n + 12 = (n + 10) + 2 from by omega, lucasNum_succ_succ (n + 10),
+    show n + 10 = (n + 8) + 2 from by omega, lucasNum_succ_succ (n + 8),
+    show (n + 10) + 1 = (n + 9) + 2 from by omega, lucasNum_succ_succ (n + 9),
+    show n + 9 = (n + 7) + 2 from by omega, lucasNum_succ_succ (n + 7),
+    show n + 8 = (n + 6) + 2 from by omega, lucasNum_succ_succ (n + 6),
+    show (n + 6) + 1 = (n + 5) + 2 from by omega, lucasNum_succ_succ (n + 5),
+    show n + 6 = (n + 4) + 2 from by omega, lucasNum_succ_succ (n + 4),
+    show (n + 4) + 1 = (n + 3) + 2 from by omega, lucasNum_succ_succ (n + 3),
+    show n + 4 = (n + 2) + 2 from by omega, lucasNum_succ_succ (n + 2),
+    show (n + 2) + 1 = (n + 1) + 2 from by omega, lucasNum_succ_succ (n + 1),
+    show (n + 1) + 1 = n + 2 from by omega,
+    lucasNum_succ_succ n]
+  omega
+
+/-- Paper package.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_lucasNum_mod8_period_twelve :
+    lucasNum 0 % 8 = 2 ∧ lucasNum 1 % 8 = 1 ∧
+    lucasNum 2 % 8 = 3 ∧ lucasNum 3 % 8 = 4 ∧
+    lucasNum 4 % 8 = 7 ∧ lucasNum 5 % 8 = 3 ∧
+    lucasNum 6 % 8 = 2 ∧ lucasNum 7 % 8 = 5 ∧
+    lucasNum 8 % 8 = 7 ∧ lucasNum 9 % 8 = 4 ∧
+    lucasNum 10 % 8 = 3 ∧ lucasNum 11 % 8 = 7 ∧
+    (∀ n, lucasNum (n + 12) % 8 = lucasNum n % 8) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, lucasNum_mod8_period_twelve⟩
+  all_goals simp [lucasNum]
+
 /-- Lucas numbers mod 5 have period 4: L(n+4) % 5 = L(n) % 5.
     thm:zeta-syntax-trace-linear-recurrence -/
 theorem lucasNum_mod5_period_four (n : Nat) :

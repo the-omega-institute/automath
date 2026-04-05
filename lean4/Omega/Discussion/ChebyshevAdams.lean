@@ -1,4 +1,5 @@
 import Mathlib.Tactic
+import Omega.Zeta.DynZeta
 
 namespace Omega.Discussion
 
@@ -262,5 +263,52 @@ theorem chebyAdams_seven (S : ℤ) :
 theorem chebyAdams_eight (S : ℤ) :
     chebyAdams 8 S = S ^ 8 - 8 * S ^ 6 + 20 * S ^ 4 - 16 * S ^ 2 + 2 := by
   simp [chebyAdams]; ring
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R303: chebyAdams(n, 3) = lucasNum(2n)
+-- ══════════════════════════════════════════════════════════════
+
+open Omega.Zeta in
+/-- Lucas(2n) satisfies the same recurrence as chebyAdams(n, 3).
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_even_recurrence (n : Nat) :
+    Omega.Zeta.lucasNum (2 * n + 4) = 3 * Omega.Zeta.lucasNum (2 * n + 2) -
+      Omega.Zeta.lucasNum (2 * n) := by
+  have h1 := Omega.Zeta.lucasNum_succ_succ (2 * n)
+  have h2 := Omega.Zeta.lucasNum_succ_succ (2 * n + 1)
+  have h3 := Omega.Zeta.lucasNum_succ_succ (2 * n + 2)
+  rw [show (2 * n) + 2 = 2 * n + 2 from rfl] at h1
+  rw [show (2 * n + 1) + 2 = 2 * n + 3 from by omega,
+      show (2 * n + 1) + 1 = 2 * n + 2 from by omega] at h2
+  rw [show (2 * n + 2) + 2 = 2 * n + 4 from by omega,
+      show (2 * n + 2) + 1 = 2 * n + 3 from by omega] at h3
+  linarith
+
+/-- chebyAdams(n, 3) = lucasNum(2*n).
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem chebyAdams_at_three_eq_lucas_even (n : Nat) :
+    chebyAdams n 3 = Omega.Zeta.lucasNum (2 * n) := by
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => simp [chebyAdams, Omega.Zeta.lucasNum]
+    | 1 => simp [chebyAdams, Omega.Zeta.lucasNum]
+    | n + 2 =>
+      rw [chebyAdams_succ_succ, ih (n + 1) (by omega), ih n (by omega)]
+      rw [show 2 * (n + 2) = 2 * n + 4 from by ring,
+          show 2 * (n + 1) = 2 * n + 2 from by ring]
+      have := lucasNum_even_recurrence n
+      linarith
+
+/-- Paper package.
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem paper_chebyAdams_at_three_package :
+    chebyAdams 0 3 = 2 ∧ chebyAdams 1 3 = 3 ∧
+    chebyAdams 2 3 = 7 ∧ chebyAdams 3 3 = 18 ∧
+    chebyAdams 4 3 = 47 ∧ chebyAdams 5 3 = 123 ∧
+    (∀ n, chebyAdams n 3 = Omega.Zeta.lucasNum (2 * n)) := by
+  refine ⟨by simp [chebyAdams], by simp [chebyAdams], ?_, ?_, ?_, ?_,
+    chebyAdams_at_three_eq_lucas_even⟩
+  all_goals rw [chebyAdams_at_three_eq_lucas_even]; simp [Omega.Zeta.lucasNum]
 
 end Omega.Discussion

@@ -521,4 +521,32 @@ theorem window6_abelianization_rank_decomposition :
     (8 + 4 + 9 : ℕ) = 21 ∧
     39 - 21 = 18 := by omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R303: Frozen tail discrete second difference
+-- ══════════════════════════════════════════════════════════════
+
+/-- Discrete second difference of affine function vanishes.
+    thm:conclusion-frozen-tail-zero-curvature-second-maximum-visibility -/
+theorem affine_discrete_second_diff_zero (α g : ℝ) (a : ℤ) :
+    ((a + 1) * α + g) - 2 * (a * α + g) + ((a - 1) * α + g) = 0 := by ring
+
+/-- Integer version.
+    thm:conclusion-frozen-tail-zero-curvature-second-maximum-visibility -/
+theorem affine_discrete_second_diff_zero_int (α g : ℤ) (a : ℤ) :
+    ((a + 1) * α + g) - 2 * (a * α + g) + ((a - 1) * α + g) = 0 := by ring
+
+/-- Semigroup law for affine functions.
+    thm:conclusion-frozen-moment-spectrum-semigroup-linearization -/
+theorem affine_semigroup_law (α g : ℝ) (a b : ℤ) :
+    ((a + b) * α + g) + g = (a * α + g) + (b * α + g) := by ring
+
+/-- Paper package.
+    thm:conclusion-frozen-tail-zero-curvature-second-maximum-visibility -/
+theorem paper_frozen_curvature_semigroup_package :
+    (∀ α g : ℝ, ∀ a : ℤ,
+      ((a + 1) * α + g) - 2 * (a * α + g) + ((a - 1) * α + g) = 0) ∧
+    (∀ α g : ℝ, ∀ a b : ℤ,
+      ((a + b) * α + g) + g = (a * α + g) + (b * α + g)) := by
+  exact ⟨fun α g a => by ring, fun α g a b => by ring⟩
+
 end Omega.Conclusion
