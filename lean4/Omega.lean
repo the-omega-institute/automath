@@ -81,6 +81,7 @@ import Omega.Zeta.NecklaceCorrection
 import Omega.Zeta.HankelVandermonde2
 import Omega.Zeta.HankelVandermonde3Recovery
 import Omega.Zeta.HankelVandermonde4
+import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
 import Omega.EA.ChiRigidityShadow

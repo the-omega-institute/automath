@@ -66,6 +66,45 @@ theorem kappa_injective_on {a b : ℝ} (ha : 0 < a) (ha1 : a < 1) (hb : 0 < b) (
   · rfl
   · exact absurd heq (ne_of_gt (kappa_strict_mono_on hb hb1 ha ha1 hba))
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R251: kappa inverse and concrete values
+-- ══════════════════════════════════════════════════════════════
+
+/-- Inverse of the kappa function: kappaInv(p) = (p-1)/(p+1).
+    prop:spg-relative-error-threshold-sharpness -/
+noncomputable def kappaInv (p : ℝ) : ℝ := (p - 1) / (p + 1)
+
+/-- kappa ∘ kappaInv = id on (1, ∞).
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_kappaInv {p : ℝ} (hp : 1 < p) :
+    kappa (kappaInv p) = p := by
+  unfold kappa kappaInv
+  have hp1 : p + 1 ≠ 0 := by linarith
+  have h : 1 - (p - 1) / (p + 1) ≠ 0 := by
+    have : 0 < 1 - (p - 1) / (p + 1) := by
+      rw [sub_pos, div_lt_one (by linarith : (0 : ℝ) < p + 1)]
+      linarith
+    linarith
+  field_simp
+  ring
+
+/-- kappaInv ∘ kappa = id on (0, 1).
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappaInv_kappa {ε : ℝ} (hε : 0 < ε) (hε1 : ε < 1) :
+    kappaInv (kappa ε) = ε := by
+  unfold kappa kappaInv
+  have h1 : (1 : ℝ) - ε ≠ 0 := by linarith
+  have h2 : (1 + ε) / (1 - ε) + 1 ≠ 0 := by
+    have : 0 < (1 + ε) / (1 - ε) := div_pos (by linarith) (by linarith)
+    linarith
+  field_simp
+  ring
+
+/-- kappa(1/2) = 3.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_half : kappa (1 / 2 : ℝ) = 3 := by
+  unfold kappa; norm_num
+
 end Omega.SPG
 
 

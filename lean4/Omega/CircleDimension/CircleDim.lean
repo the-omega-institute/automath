@@ -591,4 +591,18 @@ theorem phaseSpectrumCount_reconstruction_torsion_one_sided
   subst hrr'
   exact (phaseSpectrumCount_reconstruction ht ht' h).2
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R251: tensor-hom extension laws
+-- ══════════════════════════════════════════════════════════════
+
+/-- Circle dimension scales linearly: cdim(k·r, t) = k · cdim(r, t).
+    prop:cdim-tensor-hom-ext-laws -/
+theorem circleDim_nsmul (k r t : Nat) :
+    circleDim (k * r) t = k * circleDim r t := by simp [circleDim]
+
+/-- Circle dimension respects powers: cdim(r^k, t) = cdim(r, t)^k.
+    prop:cdim-tensor-hom-ext-laws -/
+theorem circleDim_pow (k r t : Nat) :
+    circleDim (r ^ k) t = (circleDim r t) ^ k := by simp [circleDim]
+
 end Omega.CircleDimension
