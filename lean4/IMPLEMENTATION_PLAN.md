@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1141 |
+| \leanverified 标注数 | 1150 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1158 |
-| 轮次 | R299（round_count=300） |
+| 总标注数 | 1167 |
+| 轮次 | R300（round_count=301） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -25,14 +25,14 @@
 | POM | 1,707 | 257 | 15.1% |
 | Emergent Arithmetic | 185 | 108 | 58.4% |
 | Folding | 337 | 91 | 27.0% |
-| Conclusion | 2,550 | 187 | 7.3% |
+| Conclusion | 2,550 | 196 | 7.7% |
 | Group Unification | 469 | 109 | 23.2% |
 | SPG | 129 | 63 | 48.8% |
 | Circle Dimension | 393 | 98 | 24.9% |
 | Zeta Finite Part | 4,524 | 146 | 3.2% |
 | Discussion | 67 | 25 | 37.3% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1088** | **10.4%** |
+| **合计（body）** | **10,508** | **1097** | **10.4%** |
 
 ### 1.2 已完成模块
 
@@ -45,7 +45,7 @@
 | Frontier (Assumptions, Certificates, Conditional, Conjectures, ConditionalSummary) | 5 | ~347 | 99% |
 | Combinatorics (PathIndSet, FibonacciCube) | 2 | ~510 | 100% |
 | Audit (SourceMap, Inventory, NoAxiom) | 3 | ~5 | 同步 |
-| Conclusion (RamanujanCollapse, Window6Collision) | 2 | ~7 | 100% |
+| Conclusion (RamanujanCollapse, Window6Collision, SaturationDefect) | 3 | ~16 | 100% |
 
 ### 1.3 已完成的核心数学结果
 
