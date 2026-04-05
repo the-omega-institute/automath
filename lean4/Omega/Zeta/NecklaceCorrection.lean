@@ -112,4 +112,38 @@ theorem paper_necklaceCorrectionKernel_odd_zero :
   ⟨necklaceCorrectionKernel_odd_eq_zero,
    by native_decide, by native_decide, by native_decide⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R301: Necklace correction kernel extended values
+-- ══════════════════════════════════════════════════════════════
+
+/-- Necklace correction kernel extended values for v=2.
+    cor:xi-time-part73c-fixed-parameter-necklace-correction -/
+theorem necklaceCorrectionKernel_values_extended :
+    necklaceCorrectionKernel 2 8 = 12 ∧
+    necklaceCorrectionKernel 2 10 = 30 ∧
+    necklaceCorrectionKernel 2 12 = 54 := by
+  refine ⟨?_, ?_, ?_⟩ <;> native_decide
+
+/-- Necklace correction kernel values for v=3 (ternary).
+    cor:xi-time-part73c-fixed-parameter-necklace-correction -/
+theorem necklaceCorrectionKernel_ternary :
+    necklaceCorrectionKernel 3 2 = 3 ∧
+    necklaceCorrectionKernel 3 4 = 6 ∧
+    necklaceCorrectionKernel 3 6 = 24 := by
+  refine ⟨?_, ?_, ?_⟩ <;> native_decide
+
+/-- Paper package.
+    cor:xi-time-part73c-fixed-parameter-necklace-correction -/
+theorem paper_necklaceCorrectionKernel_extended :
+    (∀ v m : Nat, necklaceCorrectionKernel v (2 * m + 1) = 0) ∧
+    necklaceCorrectionKernel 2 8 = 12 ∧
+    necklaceCorrectionKernel 2 10 = 30 ∧
+    necklaceCorrectionKernel 2 12 = 54 ∧
+    necklaceCorrectionKernel 3 2 = 3 ∧
+    necklaceCorrectionKernel 3 4 = 6 ∧
+    necklaceCorrectionKernel 3 6 = 24 :=
+  ⟨necklaceCorrectionKernel_odd_eq_zero,
+   by native_decide, by native_decide, by native_decide,
+   by native_decide, by native_decide, by native_decide⟩
+
 end Omega.Zeta

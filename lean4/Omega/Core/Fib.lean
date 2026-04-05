@@ -1168,6 +1168,38 @@ theorem fenceDet_succ_lt_triple (k : Nat) (hk : 1 ≤ k) :
   omega
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R301: Fence determinant partial sum = Fibonacci even index
+-- ══════════════════════════════════════════════════════════════
+
+/-- Partial sum of fence determinants equals even Fibonacci number.
+    cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_partial_sum (n : Nat) :
+    ∑ k ∈ Finset.range n, fenceDet k = Nat.fib (2 * n) := by
+  have : ∀ k, fenceDet k = Nat.fib (2 * k + 1) := fenceDet_eq_fib
+  simp_rw [this]
+  exact fib_odd_sum n
+
+/-- Concrete values: Σ_{k=0}^{4} D_k = F_10 = 55.
+    cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_partial_sum_5 :
+    fenceDet 0 + fenceDet 1 + fenceDet 2 + fenceDet 3 + fenceDet 4 = 55 := by
+  simp [fenceDet]
+
+/-- The running sum is positive for n ≥ 1.
+    cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_partial_sum_pos (n : Nat) (hn : 1 ≤ n) :
+    0 < ∑ k ∈ Finset.range n, fenceDet k := by
+  rw [fenceDet_partial_sum]
+  exact Nat.fib_pos.mpr (by omega)
+
+/-- Paper package.
+    cor:pom-Lk-t1-fibonacci-det-green -/
+theorem paper_fenceDet_partial_sum_package :
+    (∀ n, ∑ k ∈ Finset.range n, fenceDet k = Nat.fib (2 * n)) ∧
+    fenceDet 0 + fenceDet 1 + fenceDet 2 + fenceDet 3 + fenceDet 4 = 55 := by
+  exact ⟨fenceDet_partial_sum, by simp [fenceDet]⟩
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R29: Fibonacci product convolution sum
 -- ══════════════════════════════════════════════════════════════
 

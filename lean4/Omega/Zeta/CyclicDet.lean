@@ -539,4 +539,37 @@ theorem paper_cyclic_lift_trace_filter_q6 :
     by native_decide, by native_decide, by native_decide⟩
   rw [pow_mul, cyclicPerm6_sixth, one_pow]; native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R301: Euler factor n=7,8 + Fredholm block product
+-- ══════════════════════════════════════════════════════════════
+
+/-- Euler factor for n=7 cyclic permutation.
+    prop:cycle-permutation-determinant -/
+theorem euler_factor_n7 (α r : ℤ) :
+    (α + r) * (α^6 - α^5 * r + α^4 * r^2 - α^3 * r^3 + α^2 * r^4 - α * r^5 + r^6)
+    = α^7 + r^7 := by ring
+
+/-- Euler factor for n=8 cyclic permutation.
+    prop:cycle-permutation-determinant -/
+theorem euler_factor_n8 (α r : ℤ) :
+    (α^2 + r^2) * (α^2 - r^2) * (α^4 + r^4) = α^8 - r^8 := by ring
+
+/-- Cyclotomic factor: t^6 - 1 = (t-1)(t+1)(t^2+t+1)(t^2-t+1).
+    prop:cycle-permutation-determinant -/
+theorem cyclotomic_factor_6 (t : ℤ) :
+    t^6 - 1 = (t - 1) * (t + 1) * (t^2 + t + 1) * (t^2 - t + 1) := by ring
+
+/-- Cyclotomic factor: t^7 + 1 = (t+1)(t^6-t^5+t^4-t^3+t^2-t+1).
+    prop:cycle-permutation-determinant -/
+theorem cyclotomic_factor_7_neg (t : ℤ) :
+    t^7 + 1 = (t + 1) * (t^6 - t^5 + t^4 - t^3 + t^2 - t + 1) := by ring
+
+/-- Paper package.
+    prop:cycle-permutation-determinant -/
+theorem paper_euler_factor_n7_n8_package :
+    (∀ α r : ℤ, (α + r) * (α^6 - α^5 * r + α^4 * r^2 - α^3 * r^3 + α^2 * r^4 - α * r^5 + r^6)
+      = α^7 + r^7) ∧
+    (∀ α r : ℤ, (α^2 + r^2) * (α^2 - r^2) * (α^4 + r^4) = α^8 - r^8) := by
+  exact ⟨fun α r => by ring, fun α r => by ring⟩
+
 end Omega.Zeta
