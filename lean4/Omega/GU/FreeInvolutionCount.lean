@@ -202,4 +202,17 @@ theorem freeInvolutionCount_ge_factorial : ∀ r : Nat, 1 ≤ r →
       _ ≤ (2 * (r + 1) + 1) * freeInvolutionCount (r + 1) :=
         Nat.mul_le_mul (by omega) ih
 
+/-- The free involution count (2r-1)!! is always odd.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_odd : ∀ r : Nat, ¬ 2 ∣ freeInvolutionCount r
+  | 0 => by simp [freeInvolutionCount]
+  | r + 1 => by
+    rw [freeInvolutionCount_succ]
+    intro h
+    have ih := freeInvolutionCount_odd r
+    -- (2r+1) is odd, and freeInvolutionCount r is odd by IH
+    -- so their product is odd
+    have hodd : ¬ 2 ∣ (2 * r + 1) := by omega
+    exact ih (or_iff_not_imp_left.mp ((Nat.Prime.dvd_mul Nat.prime_two).mp h) hodd)
+
 end Omega.GU

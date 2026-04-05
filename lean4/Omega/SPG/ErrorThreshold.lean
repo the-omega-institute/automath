@@ -105,6 +105,43 @@ theorem kappaInv_kappa {ε : ℝ} (hε : 0 < ε) (hε1 : ε < 1) :
 theorem kappa_half : kappa (1 / 2 : ℝ) = 3 := by
   unfold kappa; norm_num
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R289: kappa/kappaInv basic properties
+-- ══════════════════════════════════════════════════════════════
+
+/-- kappa(0) = 1. prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_zero : kappa 0 = 1 := by unfold kappa; norm_num
+
+/-- kappa(ε) > 1 for 0 < ε < 1. prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_gt_one {ε : ℝ} (hε_pos : 0 < ε) (hε_lt : ε < 1) : 1 < kappa ε := by
+  unfold kappa
+  rw [one_lt_div (by linarith)]
+  linarith
+
+/-- kappa(1/3) = 2. prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_third : kappa (1 / 3 : ℝ) = 2 := by unfold kappa; norm_num
+
+/-- kappaInv(p) > 0 for p > 1. prop:spg-relative-error-threshold-sharpness -/
+theorem kappaInv_pos {p : ℝ} (hp : 1 < p) : 0 < kappaInv p := by
+  unfold kappaInv; apply div_pos <;> linarith
+
+/-- kappaInv(p) < 1 for p > 1. prop:spg-relative-error-threshold-sharpness -/
+theorem kappaInv_lt_one {p : ℝ} (hp : 1 < p) : kappaInv p < 1 := by
+  unfold kappaInv
+  rw [div_lt_one (by linarith : (0 : ℝ) < p + 1)]
+  linarith
+
+/-- Special values package for kappa and kappaInv.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem paper_kappa_special_values_package :
+    kappa 0 = 1 ∧
+    kappa (1 / 3 : ℝ) = 2 ∧
+    kappa (1 / 2 : ℝ) = 3 ∧
+    kappaInv 2 = (1 / 3 : ℝ) ∧
+    kappaInv 3 = (1 / 2 : ℝ) := by
+  refine ⟨kappa_zero, kappa_third, kappa_half, ?_, ?_⟩ <;>
+    unfold kappaInv <;> norm_num
+
 /-- Relative error threshold sharpness.
     prop:spg-relative-error-threshold-sharpness -/
 theorem paper_kappa_threshold_criterion :
