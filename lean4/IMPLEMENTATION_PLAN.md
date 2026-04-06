@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1487 |
+| \leanverified 标注数 | 1490 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1504 |
-| 轮次 | R362（round_count=363） |
+| 总标注数 | 1507 |
+| 轮次 | R363（round_count=364） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -28,13 +28,13 @@
 | Emergent Arithmetic | 185 | 153 | 82.7% |
 | Folding | 337 | 111 | 32.9% |
 | Conclusion | 2,550 | 240 | 9.4% |
-| Group Unification | 469 | 155 | 33.1% |
+| Group Unification | 469 | 156 | 33.3% |
 | SPG | 129 | 101 | 78.3% |
 | Circle Dimension | 393 | 132 | 33.6% |
-| Zeta Finite Part | 4,524 | 184 | 4.1% |
-| Discussion | 67 | 59 | 88.1% |
+| Zeta Finite Part | 4,524 | 185 | 4.1% |
+| Discussion | 67 | 60 | 89.6% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1427** | **13.6%** |
+| **合计（body）** | **10,508** | **1430** | **13.6%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**primitive 轨道双素数小值 + GUT Zeckendorf 维度 + Chebyshev 四倍角（Round R363）**：`primitiveOrbitNumerator_two_primes_small`（对应 `prop:zetaK-mobius-primitive`，Zeta；5对小素数 primitive 轨道分子精确验证）；`paper_gu_gut_dimension_zeckendorf`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；GUT 维度 Zeckendorf 分解综合包）；`chebyAdams_quadruple`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 四倍角恒等式）
 **Gödel 前缀整除商 + 矩差分值 + EA Totient Fib 扩展（Round R362）**：`godelEncoding_prefix_dvd` + `godelEncoding_prefix_quotient`（对应 `thm:conclusion-godel-prefix-arithmetic-criterion`，Conclusion；Gödel 编码前缀整除性与商公式）；`paper_momentSum_two_diff_values`（对应 `thm:fold-collision2-aut-lie-dimension-rank`，Emergent Arithmetic；S₂ 差分值上下界综合包）；`paper_ea_totient_fib_extended`（对应 `thm:mul-definitional`，Emergent Arithmetic；totient-Fibonacci 扩展乘法定义包）
 **扫描误差对称差包 + 相谱小挠率 + 纤维直方图回文性（Round R361）**：`paper_scanError_symmDiff_package`（对应 `prop:spg-scan-error-cylinder`，SPG；扫描误差对称差质量上界综合包）；`paper_phaseSpectrumCount_small_torsion`（对应 `thm:cdim-phase-spectrum-limit`，Circle Dimension；有限挠子群相谱计数）；`paper_pom_fiber_histogram_palindrome`（对应 `prop:fold-fiber-count-reciprocity`，Folding；纤维直方图回文对称性）
 **偶长 necklace 素数差 + window-6 边界证书 + Chebyshev 倍角恒等式（Round R360）**：`evenLength_sub_necklace_at_prime`（对应 `cor:xi-time-part73c-fixed-parameter-necklace-correction`，Zeta；偶长校正在素数处的减法公式）；`paper_gu_window6_boundary_certificate`（对应 `prop:window6-foldbin-gauge-center-vs-charge-separation`，GU；window-6 边界综合证书）；`chebyAdams_double_pow` + `chebyAdams_double_succ`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 倍角幂次与后继恒等式）
