@@ -13,26 +13,26 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1391 |
+| \leanverified 标注数 | 1396 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1408 |
-| 轮次 | R334（round_count=335） |
+| 总标注数 | 1413 |
+| 轮次 | R335（round_count=336） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 282 | 16.5% |
+| POM | 1,707 | 283 | 16.6% |
 | Emergent Arithmetic | 185 | 138 | 74.6% |
 | Folding | 337 | 109 | 32.3% |
 | Conclusion | 2,550 | 225 | 8.8% |
 | Group Unification | 469 | 146 | 31.1% |
-| SPG | 129 | 88 | 68.2% |
+| SPG | 129 | 92 | 71.3% |
 | Circle Dimension | 393 | 124 | 31.6% |
 | Zeta Finite Part | 4,524 | 174 | 3.8% |
 | Discussion | 67 | 48 | 71.6% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1334** | **12.7%** |
+| **合计（body）** | **10,508** | **1339** | **12.7%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,8 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R335: kappa sixth/seventh + hiddenBitCount complement + kappa sq package（3/3 完成）**：SPG/ErrorThreshold.lean + Folding/MaxFiberTwoStep.lean——kappa\_sixth（prop:spg-relative-error-threshold-sharpness，kappa 第六值，SPG）; kappa\_seventh（prop:spg-relative-error-threshold-sharpness，kappa 第七值，SPG）; hiddenBitCount\_complement（thm:pom-hidden-bit-count，隐藏位计数补集恒等式，POM）; kappa\_sq\_eq（prop:spg-relative-error-threshold-sharpness，kappa 平方等式，SPG）; paper\_kappa\_sq\_package（prop:spg-relative-error-threshold-sharpness，kappa 平方包装，SPG）——**3 个论文标签条目计入覆盖率**（SPG +4, POM +1）——SPG 88→92（68.2%→71.3%），POM 282→283（16.5%→16.6%），全局 \\leanverified 1391→1396（+5），总标注 1408→1413（+5），commit 006db5a
+
 **Phase R334: Pisano 107/113 + lucasNum mod30 + freeInvolutionCount four/five/six（3/3 完成）**：GroupUnification/Pisano.lean + Zeta/DynZeta.lean + GroupUnification/FreeInvolution.lean——pisano\_period\_107（cor:gut-fibprime-pisano-4n，Pisano 周期 p=107，GU）; pisano\_period\_113（cor:gut-fibprime-pisano-4n，Pisano 周期 p=113，GU）; paper\_pisano\_period\_107\_113（cor:gut-fibprime-pisano-4n，论文 Pisano 107/113 包装，GU）; lucasNum\_mod30\_period\_twentyfour（thm:zeta-syntax-trace-linear-recurrence，Lucas mod 30 周期 24，Zeta）; freeInvolutionCount\_four（thm:fiberwise-free-involution-matching-entropy，自由对合计数 r=4 基值，GU）; freeInvolutionCount\_five（thm:fiberwise-free-involution-matching-entropy，自由对合计数 r=5 基值，GU）; freeInvolutionCount\_six（thm:fiberwise-free-involution-matching-entropy，自由对合计数 r=6 基值，GU）——**4 个论文标签条目计入覆盖率**（GU +6, Zeta +1）——Group Unification 140→146（29.9%→31.1%），Zeta Finite Part 173→174（3.8%），全局 \\leanverified 1384→1391（+7），总标注 1401→1408（+7），commit 3d445fc
 
 **Phase R333: chebyAdams add/Lucas even Cassini + cdimDefect pos iff（3/3 完成）**：Discussion/ChebyshevAdams.lean + CircleDimension/CircleDim.lean——chebyAdams\_add\_adjacent（thm:discussion-chebyshev-witt-equivariance，Chebyshev 相邻加法恒等式，Discussion）; lucas\_even\_cassini（thm:discussion-chebyshev-witt-equivariance，Lucas 偶数 Cassini 恒等式，Discussion）; cdimDefect\_pos\_iff（thm:cdim-defect-chain-rule，圆维缺陷正值刻画，CD）——**2 个论文标签条目计入覆盖率**（Discussion +2, CD +1）——Discussion 46→48（68.7%→71.6%），Circle Dimension 123→124（31.3%→31.6%），全局 \\leanverified 1381→1384（+3），总标注 1398→1401（+3），commit 3bde49b
