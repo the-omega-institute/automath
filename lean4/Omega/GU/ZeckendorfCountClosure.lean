@@ -83,4 +83,35 @@ theorem paper_zeckendorf_count_small_extended :
   · rw [X.card_X_eleven]; native_decide
   · rw [X.card_X_twelve]; native_decide
 
+/-- The unique minimal even Zeckendorf-valid triple with boundary sum 12.
+    cor:sm-minimal-triple-selection-law -/
+theorem sm_minimal_triple_selection_law :
+    (Nat.fib 2 + Nat.fib 4 + Nat.fib 6 = 12) ∧
+    (∀ m₁ m₂ m₃ : ℕ,
+      2 ≤ m₁ → Even m₁ → 2 ≤ m₂ → Even m₂ → 2 ≤ m₃ → Even m₃ →
+      m₁ < m₂ → m₂ < m₃ →
+      Nat.fib (m₁ - 2) + Nat.fib (m₂ - 2) + Nat.fib (m₃ - 2) = 12 →
+      m₂ - m₁ ≥ 2 → m₃ - m₂ ≥ 2 →
+      (m₁, m₂, m₃) = (4, 6, 8)) := by
+  constructor
+  · native_decide
+  · intro m₁ m₂ m₃ hm₁ he₁ hm₂ he₂ hm₃ he₃ h12 h23 hsum hgap12 hgap23
+    obtain ⟨k₁, rfl⟩ := he₁; obtain ⟨k₂, rfl⟩ := he₂; obtain ⟨k₃, rfl⟩ := he₃
+    -- Normalize: 2*k = k+k in hsum
+    have hsum' : Nat.fib (2 * k₁ - 2) + Nat.fib (2 * k₂ - 2) +
+        Nat.fib (2 * k₃ - 2) = 12 := by
+      simpa [two_mul] using hsum
+    have hk₃_le : k₃ ≤ 4 := by
+      by_contra h; push_neg at h
+      have hfib_ge : Nat.fib (2 * k₃ - 2) ≥ 21 := by
+        calc Nat.fib (2 * k₃ - 2) ≥ Nat.fib 8 := Nat.fib_mono (by omega)
+          _ = 21 := by native_decide
+      linarith [Nat.zero_le (Nat.fib (2 * k₁ - 2)),
+                Nat.zero_le (Nat.fib (2 * k₂ - 2))]
+    have hk₁ : k₁ = 1 ∨ k₁ = 2 := by omega
+    have hk₂ : k₂ = 1 ∨ k₂ = 2 ∨ k₂ = 3 := by omega
+    have hk₃ : k₃ = 1 ∨ k₃ = 2 ∨ k₃ = 3 ∨ k₃ = 4 := by omega
+    rcases hk₁ with rfl | rfl <;> rcases hk₂ with rfl | rfl | rfl <;>
+      rcases hk₃ with rfl | rfl | rfl | rfl <;> simp_all [Nat.fib]
+
 end Omega.GU

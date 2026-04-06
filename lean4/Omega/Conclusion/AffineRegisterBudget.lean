@@ -1,5 +1,7 @@
 import Omega.Folding.CollisionZetaOperator
 import Mathlib.Tactic
+import Mathlib.Data.Fintype.EquivFin
+import Mathlib.Logic.Equiv.Fin.Basic
 
 namespace Omega.Conclusion
 
@@ -23,6 +25,39 @@ theorem registerBudget_min_card (p r R : Nat)
     (h : ∃ f : Fin (p ^ r) → Fin R, Function.Injective f) :
     p ^ r ≤ R :=
   registerBudget_lower_bound p r R h
+
+/-- Two-phase zero-ledger encoding is achievable whenever the square state budget dominates.
+    thm:conclusion-two-phase-zero-ledger-achievable -/
+theorem twoPhase_zeroLedger_achievable (m : ℕ)
+    (hcap : 2 ^ m ≤ Fintype.card (X m) ^ 2) :
+    ∃ f : Fin (2 ^ m) → X m × X m, Function.Injective f := by
+  classical
+  have hcard : Fintype.card (Fin (2 ^ m)) ≤ Fintype.card (X m × X m) := by
+    simpa [Fintype.card_fin, Fintype.card_prod, pow_two] using hcap
+  rcases Function.Embedding.nonempty_of_card_le hcard with ⟨f⟩
+  exact ⟨f, f.inj'⟩
+
+/-- One-phase minimal ledger encoding is achievable with the ceiling quotient budget.
+    thm:conclusion-one-phase-min-ledger-achievable -/
+theorem onePhase_minLedger_achievable (m : ℕ) :
+    ∃ f : Fin (2 ^ m) → X m × Fin ((2 ^ m + Fintype.card (X m) - 1) / Fintype.card (X m)),
+      Function.Injective f := by
+  classical
+  let N := 2 ^ m
+  let M := Fintype.card (X m)
+  let Q := (N + M - 1) / M
+  have hMpos : 0 < M := by
+    dsimp [M]
+    exact Fintype.card_pos
+  have hNle : N ≤ M * Q := by
+    have hmodlt : (N + M - 1) % M < M := Nat.mod_lt _ hMpos
+    have hdecomp : N + M - 1 = (N + M - 1) % M + M * Q := by
+      simp [Q, Nat.mod_add_div]
+    omega
+  have hcard : Fintype.card (Fin N) ≤ Fintype.card (X m × Fin Q) := by
+    simpa [N, M, Q, Fintype.card_fin, Fintype.card_prod] using hNle
+  rcases Function.Embedding.nonempty_of_card_le hcard with ⟨f⟩
+  exact ⟨f, f.inj'⟩
 
 /-- Rate circle-dimension budget inequality witness.
     thm:conclusion-rate-cdim-budget-inequality -/

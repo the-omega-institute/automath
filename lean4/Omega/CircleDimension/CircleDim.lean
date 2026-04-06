@@ -1,4 +1,5 @@
 import Mathlib.Tactic
+import Mathlib.Data.Fintype.EquivFin
 
 /-! ### Circle dimension for abelian groups
 
@@ -985,5 +986,13 @@ theorem paper_cdimDefect_instances :
     cdimDefect CircleDimHomData.surjExample = 1 ∧
     cdimDefect CircleDimHomData.injExample = 0 := by
   exact ⟨cdimDefect_id 5, cdimDefect_surjExample, cdimDefect_injExample⟩
+
+/-- A finite residual-budget injection forces the target budget to dominate the source.
+    thm:conclusion-phase-residual-budget-lower-bound-finite -/
+theorem phaseResidualBudget_lower_bound_finite (b r k t R : ℕ)
+    (hinj : ∃ f : Fin ((2 ^ (b * r)) * t) → Fin ((2 ^ (b * k)) * R), Function.Injective f) :
+    (2 ^ (b * r)) * t ≤ (2 ^ (b * k)) * R := by
+  rcases hinj with ⟨f, hf⟩
+  simpa [Fintype.card_fin] using Fintype.card_le_of_injective f hf
 
 end Omega.CircleDimension

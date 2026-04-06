@@ -6,17 +6,17 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~39,497 |
-| 定理/定义数 | ~3,524 |
+| 总行数 | ~46,667 |
+| 定理/定义数 | ~4,295 |
 | 论文接口包装 | 654+ |
-| 文件数 | 106 |
+| 文件数 | 112 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1420 |
+| \leanverified 标注数 | 1422 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1437 |
-| 轮次 | R343（round_count=344） |
+| 总标注数 | 1439 |
+| 轮次 | R344（round_count=345） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -25,14 +25,14 @@
 | POM | 1,707 | 286 | 16.8% |
 | Emergent Arithmetic | 185 | 142 | 76.8% |
 | Folding | 337 | 109 | 32.3% |
-| Conclusion | 2,550 | 229 | 9.0% |
+| Conclusion | 2,550 | 231 | 9.1% |
 | Group Unification | 469 | 150 | 32.0% |
 | SPG | 129 | 95 | 73.6% |
-| Circle Dimension | 393 | 125 | 31.8% |
+| Circle Dimension | 393 | 126 | 32.1% |
 | Zeta Finite Part | 4,524 | 177 | 3.9% |
 | Discussion | 67 | 50 | 74.6% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1363** | **13.0%** |
+| **合计（body）** | **10,508** | **1366** | **13.0%** |
 
 ### 1.2 已完成模块
 
@@ -45,12 +45,14 @@
 | Frontier (Assumptions, Certificates, Conditional, Conjectures, ConditionalSummary) | 5 | ~347 | 99% |
 | Combinatorics (PathIndSet, FibonacciCube) | 2 | ~510 | 100% |
 | Audit (SourceMap, Inventory, NoAxiom) | 3 | ~5 | 同步 |
-| Conclusion (RamanujanCollapse, Window6Collision, SaturationDefect) | 3 | ~16 | 100% |
+| Conclusion (RamanujanCollapse, Window6Collision, SaturationDefect, AffineRegisterBudget) | 4 | ~51 | 100% |
 
 ### 1.3 已完成的核心数学结果
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**结论账本可达性（Round R344）**：twoPhase_zeroLedger_achievable（把 `thm:conclusion-rate-cdim-achievability` 的“两相位零账本可达”落实为充分大 m 上 `Fin (2^m) ↪ X_m × X_m` 的显式单射存在性）；onePhase_minLedger_achievable（把同一论文定理中的“单相位最小账本可达”落实为 `Fin (2^m) ↪ X_m × Fin (⌈2^m/|X_m|⌉)` 的显式单射存在性）
+**圆维残差预算（Round R344）**：phaseResidualBudget_lower_bound_finite（把 `thm:cdim-phase-residual-budget-lower-bound` 的有限层版本落为 `Fin ((2^(br)) t) ↪ Fin ((2^(bk)) R)` 蕴含 `(2^(br))t ≤ (2^(bk))R` 的直接基数下界）
 **SPG 扫描误差**：离散 + 测度双版本, Bayes 半界, 观测细化单调性, 补对称性；scanError_le_setMass_symmDiff_observableEvent（把 prop:spg-clarity-bayes-optimality 的对称差质量下界落到离散 observableEvent 框架）；kappa_lt_iff_eps_lt（把 prop:spg-relative-error-threshold-sharpness 的相对误差阈值写成 κ(ε)<p 与 ε<(p-1)/(p+1) 的精确充要判别）；two_mul_prefixScanError_le_one（把前缀扫描误差继承的通用半界写成 $2\varepsilon\le 1$ 的统一形式）
 **fiber 结构**：分割和 = 2^m, multiplicity, 不相交性；逐纤维自由对合计数递推 freeInvolutionCount_succ 与奇数连乘闭式 freeInvolutionCount_eq_prod_odds（对应 thm:fiberwise-free-involution-matching-entropy 的单纤维完美匹配计数链）
 **defect 结构**：零条件 ↔ Fold 可交换, 链代数, 离散 Stokes
@@ -224,6 +226,8 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R344: two-phase zero-ledger + one-phase minimal ledger + finite residual-budget lower bound（3/3 完成）**：Conclusion/AffineRegisterBudget.lean + CircleDimension/CircleDim.lean——twoPhase_zeroLedger_achievable（thm:conclusion-rate-cdim-achievability，两相位零账本可达，Conclusion）; onePhase_minLedger_achievable（thm:conclusion-rate-cdim-achievability，单相位最小账本可达，Conclusion）; phaseResidualBudget_lower_bound_finite（thm:cdim-phase-residual-budget-lower-bound，相位--残差圆维下界的有限层基数版本，Circle Dimension）——**3 个论文标签条目计入覆盖率**（Conclusion +2, Circle Dimension +1）——Conclusion 229→231（9.0%→9.1%），Circle Dimension 125→126（31.8%→32.1%），body 1363→1366（13.0%），全局 \\leanverified 1420→1422（+2），总标注 1437→1439（+2）
+
 **Phase R343: lucasNum mod12 + godelEncoding snoc + hiddenBitCount add succ eq（3/3 完成）**：Zeta/DynZeta.lean + Conclusion/PrimeRegister.lean + Folding/MaxFiberTwoStep.lean——lucasNum\_mod12\_period\_twentyfour（thm:zeta-syntax-trace-linear-recurrence，Lucas mod 12 周期 24，Zeta）; godelEncoding\_snoc（thm:conclusion-godel-semidirect-law，Gödel 编码 snoc 等式，Conclusion）; hiddenBitCount\_add\_succ\_eq（thm:pom-hidden-bit-count，隐藏位计数加后继等式，POM）——**3 个论文标签条目计入覆盖率**（Zeta +1, Conclusion +1, POM +1）——Zeta 176→177（3.9%），Conclusion 228→229（8.9%→9.0%），POM 285→286（16.7%→16.8%），body 1360→1363（12.9%→13.0%），全局 \\leanverified 1417→1420（+3），总标注 1434→1437（+3），commit fe41205
 
 **Phase R342: circleDim pos iff + kappa inv eq + stableSucc iterate card eq id（3/3 完成）**：CD/CircleDim.lean + SPG/ErrorThreshold.lean + Folding/FiberArithmeticProperties.lean——circleDim\_pos\_iff（prop:circle-dimension-laws，圆维正值充要条件，CD）; kappa\_inv\_eq（prop:spg-relative-error-threshold-sharpness，kappa 逆等式，SPG）; stableSucc\_iterate\_card\_eq\_id（thm:finite-resolution-mod，稳定后继迭代基数等式，EA，论文标签 thm:finite-resolution-mod-commring 在论文中对应 thm:finite-resolution-mod）——**3 个论文标签条目计入覆盖率**（CD +1, SPG +1, EA +1）——Circle Dimension 124→125（31.6%→31.8%），SPG 94→95（72.9%→73.6%），EA 141→142（76.2%→76.8%），全局 \\leanverified 1414→1417（+3），总标注 1431→1434（+3），commit f7f4592
@@ -760,7 +764,7 @@
 1. ✅ **paperFib → Nat.fib 全局重构**：已完成。消除 `paperFib` 中间层，全局替换为 `Nat.fib (k+1)`；删除 `def paperFib`、`abbrev fib` 及 33 个桥接引理；新增 12 个 `Nat.fib` 便捷引理（`fib_succ_succ'`、`fib_succ_pos`、`one_le_fib_succ`、`fib_add_succ`、`fib_sub_succ`、`fib_mod_sum'`、`fib_lt_fib_succ`、`fib_succ_mod'`、`fib_gt_one_of_ge_two`、`fib_le_pow_two` 等）；`Fib.lean` 从 144 行缩减到 80 行；影响 17 个文件。
 2. **[部分完成] 计划 9**（定义+基值 Phase 0+1 已完成；下一步：$D_{2k}^{(3)} = F_{k+2} - F_{k-3}$ 闭合公式 Phase 2）
 3. **[深化完成-部分] S_2/S_3 递推公式归纳证明**（碰撞核矩阵 + Cayley-Hamilton 已形式化；数值验证 m=0..3 完成；有界版 m≤4 已形式化（Round 14）；条件性一般版已形式化（Round 14）；特征多项式 p(A)=0 + 系数 + Vieta 公式验证已形式化（Phase 26）；Hankel 行列式 + 最小阶数=3 已形式化（Phase 26）；S_2/S_3 严格单调 m≤6 + 条件性一般单调已形式化（Phase 26）；S_2: $S_2(m+3)+2S_2(m)=2S_2(m+2)+2S_2(m+1)$；S_3: $S_3(m+3)=2S_3(m+2)+4S_3(m+1)-2S_3(m)$；完整无界归纳步骤待实现）
-4. **[阶段性通过] 计划 21 concrete PF 数学层**：`goldenMeanAdjacency_pf_root_eq_goldenRatio` 已给出 golden-mean 邻接矩阵在实矩阵层的具体 Perron 根封装；下一步优先补 `spectralRadius = φ` 与论文/API 包装，再与 PF dimension 主定理汇合。
+4. **[部分完成] Conclusion / Circle Dimension 账本可达性与残差预算**：`twoPhase_zeroLedger_achievable`、`onePhase_minLedger_achievable`、`phaseResidualBudget_lower_bound_finite` 已完成；下一步可继续补 paper-facing wrapper 或更强的渐近/等价版本
 5. 计划 1（Zeckendorf 唯一性）
 
 ### 短期可执行（3-5 轮内完成）
