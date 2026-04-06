@@ -122,11 +122,44 @@ def extract_theorems_from_discovery(discovery_path: Path) -> list[dict]:
     ]
 
 
+def _clean_latex(text: str) -> str:
+    """Strip LaTeX commands to produce readable plain text."""
+    s = text
+    # Remove display math blocks
+    s = re.sub(r"\\\[.*?\\\]", " [formula] ", s, flags=re.DOTALL)
+    s = re.sub(r"\$\$.*?\$\$", " [formula] ", s, flags=re.DOTALL)
+    # Inline math: keep content between $...$
+    s = re.sub(r"\$([^$]+)\$", r"\1", s)
+    # Common commands with arguments: \cmd{arg} -> arg
+    s = re.sub(r"\\(?:mathrm|mathbb|mathcal|mathfrak|operatorname|text|textbf|emph)\{([^}]*)\}", r"\1", s)
+    # \cref, \ref, \eqref -> (ref)
+    s = re.sub(r"\\(?:cref|ref|eqref)\{[^}]*\}", "(ref)", s)
+    # \cite -> [cite]
+    s = re.sub(r"\\cite(?:\[[^\]]*\])?\{[^}]*\}", "[cite]", s)
+    # Remove remaining \command
+    s = re.sub(r"\\[a-zA-Z]+\*?(?:\{[^}]*\})*", "", s)
+    # Collapse whitespace
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+
+def _display_text(item: dict) -> str:
+    """Best human-readable text for a theorem entry."""
+    # Prefer explicit title, then cleaned statement, then label
+    if item.get("title"):
+        return item["title"]
+    if item.get("statement"):
+        cleaned = _clean_latex(item["statement"])
+        if len(cleaned) > 10:
+            return cleaned[:200]
+    return item.get("label", "")
+
+
 def generate_summary(theorems: list[dict], paper_title: str) -> dict:
     """Generate bilingual summary from theorem inventory.
 
     Returns a summary dict with EN and ZH versions.
-    Uses template-based generation (no external API needed).
+    Extracts actual theorem statements (cleaned LaTeX) for readability.
     """
     # Group by type
     by_type = {}
@@ -159,9 +192,9 @@ def generate_summary(theorems: list[dict], paper_title: str) -> dict:
         lines_zh.append(f"## {zh_name} ({len(items)})")
 
         for item in items[:20]:  # cap at 20 per type for readability
-            title = item.get("title") or item.get("label", "")
-            lines_en.append(f"- **{item['label']}**: {title}")
-            lines_zh.append(f"- **{item['label']}**: {title}")
+            desc = _display_text(item)
+            lines_en.append(f"- **{item['label']}**: {desc}")
+            lines_zh.append(f"- **{item['label']}**: {desc}")
 
         if len(items) > 20:
             lines_en.append(f"  ... and {len(items) - 20} more")
@@ -276,7 +309,7 @@ def generate_slides(summary: dict) -> str:
         cards = ""
         for env_type, t in chunk:
             label = _escape(t.get("label", ""))
-            stmt = _escape(t.get("title") or t.get("statement", "")[:200])
+            stmt = _escape(_display_text(t))
             cards += f"""\
     <div class="result-card">
       <div class="label">{_escape(env_type)} &mdash; {label}</div>
