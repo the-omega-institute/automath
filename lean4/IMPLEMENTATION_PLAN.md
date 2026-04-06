@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1443 |
+| \leanverified 标注数 | 1446 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1460 |
-| 轮次 | R350（round_count=351） |
+| 总标注数 | 1463 |
+| 轮次 | R351（round_count=352） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -25,16 +25,16 @@
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
 | POM | 1,707 | 291 | 17.0% |
-| Emergent Arithmetic | 185 | 143 | 77.3% |
+| Emergent Arithmetic | 185 | 144 | 77.8% |
 | Folding | 337 | 109 | 32.3% |
 | Conclusion | 2,550 | 234 | 9.2% |
-| Group Unification | 469 | 151 | 32.2% |
+| Group Unification | 469 | 152 | 32.4% |
 | SPG | 129 | 97 | 75.2% |
 | Circle Dimension | 393 | 127 | 32.3% |
 | Zeta Finite Part | 4,524 | 179 | 4.0% |
-| Discussion | 67 | 52 | 77.6% |
+| Discussion | 67 | 53 | 79.1% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1383** | **13.2%** |
+| **合计（body）** | **10,508** | **1386** | **13.2%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**Fibonacci 夹逼 + window7-8 压缩比 + 矩审计包（Round R351）**：`paper_momentSum_two_fibonacci_sandwich`（S₂ 黄金夹逼，对应 `thm:fold-collision2-aut-lie-dimension-rank`，Emergent Arithmetic）；`paper_window78_compression_ratio`（window 7-8 压缩比，对应 `subsec:bdry-tower-zeck-gut-part1`，Group Unification）；`paper_discussion_moment_audit_package`（矩审计包，对应 `prop:discussion-fold-occupancy-tq-moment`，Discussion）
 **ε_c 数值界 + primitive orbit 27-30 + carry m10-m11（Round R350）**：`paper_epsilonCritical_numerical_bounds`（0.7 < ε_c < 0.75，对应 `thm:conclusion-binfold-tail-order-statistics-single-jump-collapse`，Conclusion）；`goldenMean_primitive_orbit_27_30`（对应 `prop:zetaK-mobius-primitive`，Zeta）；`carryElement_m10_value` + `carryElement_m11_value`（对应 `cor:pom-carry-defect-m6-anchor-8-34`，POM）
 **自由对合指数下界 + Fibonacci 半径单调性 + S₂增长审计（Round R349）**：`freeInvolutionCount_ge_two_pow` + `freeInvolutionCount_log_lower`（对应 `thm:fiberwise-free-involution-matching-entropy`，逐纤维自由对合指数下界与 log 下界，GU）；`fibRadius_mono` + `fibRadius_strict_mono`（对应 `con:cdim-fibonacci-radius-time-conjugacy`，Fibonacci 半径单调性，Circle Dimension）；`paper_momentSum_two_growth_audit`（对应 `prop:fold-groupoid-wedderburn`，S₂增长严格单调/整除性审计，Emergent Arithmetic）
 **乘法多重度极值界 + Fibonacci 体积律 + 融合缺陷 2-余因子 + Lucas mod6 周期（Round R348）**：`fib_shifted_fusion_defect`（对应 `lem:pom-shifted-fib-fusion-defect-positive`）、`fib_determinant_volume_law`（对应 `cor:pom-fib-determinant-volume-law`）、`paper_pom_multiplicity_lower_eq_iff` + `paper_pom_multiplicity_upper_eq_iff`（对应 `prop:pom-path-component-multiplicity-refinement-monotone-extrema`）、`fib_fusion_defect_cocycle` + `paper_pom_shifted_fusion_defect_package`（对应 `prop:pom-fusion-defect-2cocycle-identity`）；`lucasNum_mod6_period_twentyfour`（对应 `thm:zeta-syntax-trace-linear-recurrence`，Zeta）
