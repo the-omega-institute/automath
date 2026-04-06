@@ -22,8 +22,8 @@ model: sonnet
 ## 核心原则
 
 1. **准确覆盖率** — IMPLEMENTATION_PLAN的数字必须反映真实状态
-2. **原子提交** — 每轮形式化工作一个commit，信息完整
-3. **不触碰 .lean 文件** — 论文标签由 formalizer 写入 docstring，registrar 不修改源码
+2. **原子提交** — proof-bearing commit 与 registration commit 严格分离
+3. **不接管 proof-bearing 代码** — formalizer 先提交可编译的 Lean proof commit；registrar 只做独立核对、登记改动与 push
 
 ## 工作环境
 
@@ -33,8 +33,8 @@ model: sonnet
 ## 工作流程
 
 ### 输入
-- formalizer 的完成报告（新增定理清单、commit hash）
-- 论文标签（已由 formalizer 写入源码 docstring）
+- formalizer 的完成报告（新增定理清单、**proof commit hash**、目标 proof-bearing 文件）
+- 论文标签（供 registrar 更新 IMPLEMENTATION_PLAN 与对应 `.tex` 标注）
 
 ### 步骤1：更新 IMPLEMENTATION_PLAN.md
 
@@ -133,7 +133,7 @@ git status
 ## 硬约束
 
 - ❌ 不虚报覆盖率数字
-- ❌ 不修改 .lean 源码文件（论文标签由 formalizer 处理）
-- ❌ 不运行 `lake build`（formalizer 已验证编译）
+- ❌ 不修改 proof-bearing `.lean` 源码文件；若缺少 formalizer proof commit hash，则冻结登记并上报 orchestrator
+- ❌ 不运行 `lake build` 来代替 formalizer 的 proof gate
 - ✅ commit message包含论文覆盖率变化
-- ✅ 可与 formalizer 并行工作（只修改 IMPLEMENTATION_PLAN.md，不产生冲突）
+- ✅ 只提交 IMPLEMENTATION_PLAN / `.tex` 标注等登记改动

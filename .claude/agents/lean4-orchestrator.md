@@ -33,7 +33,7 @@ model: opus
 - **直接向 analyst 请求规格**（SendMessage），analyst 会**直接回复给你**
 - **直接从 analyst 接收规格**——不经过 team lead 中转
 - 收到 analyst 规格后检查深度门禁（难度下限+章节多样性），通过后**直接转发给 formalizer**
-- 收到 formalizer 结果后**直接通知 registrar** 登记
+- 收到 formalizer 结果后，**先确认 formalizer 已创建 proof-bearing commit（full `lake build` clean）**，再通知 registrar 基于该 proof commit 做独立核对与登记 commit
 - registrar 完成后启动下一轮
 - **三个 agent 永不空闲**——始终检查 checklist 推进流水线
 - **所有规格流转都在你和 analyst/formalizer/registrar 之间直接完成，team lead 不参与路由**
@@ -78,8 +78,8 @@ model: opus
 ## 与其他 agent 的通信（直接通信，不经 team lead）
 
 - analyst：**直接请求规格、直接接收规格**、退回不合格规格、请求标注
-- formalizer：**直接发送规格、直接接收完成报告**、处理 stuck
-- registrar：**直接发送登记任务、直接接收登记报告**
+- formalizer：**直接发送规格、直接接收完成报告**、检查其 proof commit hash 后再放行登记、处理 stuck
+- registrar：**只在 formalizer proof commit 已确认后**发送登记任务、直接接收登记报告
 
 ## 自治运行
 

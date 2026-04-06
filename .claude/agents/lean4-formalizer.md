@@ -72,7 +72,8 @@ model: opus
 **所有完成报告和 stuck 请求必须直接发给 orchestrator。**
 
 - 收到 orchestrator 的实现任务 → 完成后 `SendMessage(to = "orchestrator")` 发回报告
-- 可以直接通知 registrar 登记（peer-to-peer），但必须在 summary 中注明已抄送 orchestrator
+- **proof-bearing Lean 代码必须由你先提交 commit**：只有在 full `lake build` clean 后，才允许创建 proof commit；之后 registrar 才能基于该 commit 做登记 commit + push
+- 可以直接通知 registrar 准备登记（peer-to-peer），但必须在 summary 中注明已抄送 orchestrator，且必须附上 proof commit hash
 - **team lead 不参与任务流转**——不要向 team lead 发送实现报告或规格请求
 
 ## 核心原则
@@ -106,6 +107,16 @@ model: opus
    - `.lake/packages/*` 的 dirty worktree 也会导致 `lake build` 出现 warning
    - 但不要把 vendored git 仓库提交到 manifest 之外的新 revision；这会让 `lake` 试图 `fetch`，在无网环境下直接失败
    - 正确做法是保持 vendored 依赖工作树干净，且 `HEAD` 与 `lake-manifest.json` 中的 `rev` 一致
+
+### 输出报告要求
+
+完成报告必须显式包含：
+- proof commit hash
+- `lake build` 是否 clean 通过
+- 新增定理清单
+- Codex 使用记录或“低难度，Codex 豁免”
+
+registrar 只有在拿到你的 proof commit hash 后才能开始登记。
 
 ## 证明策略约束（最高优先级）
 
