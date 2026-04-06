@@ -79,4 +79,21 @@ theorem paper_ea_wedderburn_growth_extended :
 theorem wedderburn_avg_fiber_m7 : momentSum 2 7 / Nat.fib 9 = 16 := by
   rw [momentSum_two_seven]; native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R308: Wedderburn dim m=11,12 + ratio tightening
+-- ══════════════════════════════════════════════════════════════
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem wedderburn_dim_m11 : momentSum 2 11 = 20640 := momentSum_two_eleven_rec
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem wedderburn_dim_m12 : momentSum 2 12 = 51216 := momentSum_two_twelve_rec
+
+/-- S_2 ratio between 12/5 and 13/5 for m=8..11. prop:fold-groupoid-wedderburn -/
+theorem paper_ea_wedderburn_ratio_tightening :
+    12 * 1352 < 5 * 3352 ∧ 12 * 3352 < 5 * 8320 ∧
+    12 * 8320 < 5 * 20640 ∧ 12 * 20640 < 5 * 51216 ∧
+    5 * 3352 < 13 * 1352 ∧ 5 * 8320 < 13 * 3352 ∧
+    5 * 20640 < 13 * 8320 ∧ 5 * 51216 < 13 * 20640 := by omega
+
 end Omega.EA

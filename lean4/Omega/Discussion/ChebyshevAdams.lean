@@ -331,4 +331,24 @@ theorem paper_chebyAdams_golden_mean_package :
     by simp [chebyAdams], by simp [chebyAdams],
     by simp [chebyAdams], by simp [chebyAdams]⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R308: chebyAdams 9 + 10 explicit formula
+-- ══════════════════════════════════════════════════════════════
+
+/-- thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_nine (S : ℤ) :
+    chebyAdams 9 S = S ^ 9 - 9 * S ^ 7 + 27 * S ^ 5 - 30 * S ^ 3 + 9 * S := by
+  simp [chebyAdams]; ring
+
+/-- thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_ten (S : ℤ) :
+    chebyAdams 10 S = S ^ 10 - 10 * S ^ 8 + 35 * S ^ 6 - 50 * S ^ 4 + 25 * S ^ 2 - 2 := by
+  simp [chebyAdams]; ring
+
+/-- Paper package. thm:discussion-chebyshev-witt-equivariance -/
+theorem paper_chebyAdams_nine_ten :
+    chebyAdams 9 3 = 5778 ∧ chebyAdams 10 3 = 15127 ∧
+    chebyAdams 9 (-3) = -5778 ∧ chebyAdams 10 (-3) = 15127 := by
+  rw [chebyAdams_nine, chebyAdams_ten, chebyAdams_nine, chebyAdams_ten]; norm_num
+
 end Omega.Discussion

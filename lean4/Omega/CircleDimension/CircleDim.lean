@@ -813,4 +813,29 @@ theorem paper_cdimDefect_properties :
     (∀ f : CircleDimHomData, cdimDefect f ≤ f.sourceRank) := by
   exact ⟨cdimDefect_nonneg, cdimDefect_le_sourceRank⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R308: phaseSpectrumCount prime dichotomy
+-- ══════════════════════════════════════════════════════════════
+
+/-- thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_prime_dvd (r t : Nat) {p : Nat} (_hp : Nat.Prime p)
+    (hdvd : p ∣ t) :
+    phaseSpectrumCount r t p = p ^ (r + 1) := by
+  simp [phaseSpectrumCount, Nat.gcd_eq_right hdvd, pow_succ]
+
+/-- thm:cdim-phase-spectrum-limit -/
+theorem phaseSpectrumCount_prime_ndvd (r t : Nat) {p : Nat} (hp : Nat.Prime p)
+    (hndvd : ¬ p ∣ t) :
+    phaseSpectrumCount r t p = p ^ r := by
+  simp [phaseSpectrumCount]
+  have : Nat.gcd t p = 1 := Nat.Coprime.symm ((hp.coprime_iff_not_dvd).mpr hndvd)
+  rw [this, mul_one]
+
+/-- Paper package. thm:cdim-phase-spectrum-limit -/
+theorem paper_phaseSpectrumCount_prime_dichotomy :
+    phaseSpectrumCount 2 0 5 = 125 ∧ phaseSpectrumCount 2 3 5 = 25 ∧
+    phaseSpectrumCount 1 0 7 = 49 ∧ phaseSpectrumCount 1 3 7 = 7 ∧
+    phaseSpectrumCount 3 0 3 = 81 ∧ phaseSpectrumCount 3 2 3 = 27 := by
+  simp [phaseSpectrumCount]
+
 end Omega.CircleDimension
