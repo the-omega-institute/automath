@@ -575,4 +575,10 @@ theorem chebyAdams_double_succ (n : Nat) (S : ℤ) :
   rw [show n + 1 + n = 2 * n + 1 from by omega, show n + 1 - n = 1 from by omega] at h
   simp [chebyAdams] at h; linarith
 
+/-- Quadruple formula: C_{4n}(S) = (C_n(S)² - 2)² - 2.
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem chebyAdams_quadruple (n : Nat) (S : ℤ) :
+    chebyAdams (4 * n) S = (chebyAdams n S ^ 2 - 2) ^ 2 - 2 := by
+  rw [show 4 * n = 2 * (2 * n) from by ring, chebyAdams_double_pow, chebyAdams_double_pow]
+
 end Omega.Discussion

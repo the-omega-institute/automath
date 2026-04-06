@@ -126,4 +126,14 @@ theorem paper_gu_sm_signature_union :
   refine ⟨by native_decide, by native_decide, by native_decide,
           by omega, by native_decide, by omega, by omega, by omega⟩
 
+/-- GUT dimension Zeckendorf audit.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_gu_gut_dimension_zeckendorf :
+    24 = Nat.fib 8 + Nat.fib 4 ∧
+    45 = Nat.fib 9 + Nat.fib 6 + Nat.fib 4 ∧
+    78 = Nat.fib 10 + Nat.fib 8 + Nat.fib 3 ∧
+    (8 - 4 ≥ 2) ∧ (9 - 6 ≥ 2) ∧ (6 - 4 ≥ 2) ∧ (10 - 8 ≥ 2) ∧ (8 - 3 ≥ 2) := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by omega, by omega, by omega, by omega, by omega⟩
+
 end Omega.GU

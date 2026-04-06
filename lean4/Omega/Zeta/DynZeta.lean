@@ -1083,6 +1083,17 @@ theorem primitiveOrbitNumerator_prime {p : Nat} (hp : Nat.Prime p) :
     ring
   · simp [eq_comm, hp.ne_one]
 
+/-- P(pq) = L(pq) - L(p) - L(q) + 1 verified for small distinct prime pairs.
+    prop:zetaK-mobius-primitive -/
+theorem primitiveOrbitNumerator_two_primes_small :
+    primitiveOrbitNumerator (2 * 3) = lucasNum (2 * 3) - lucasNum 2 - lucasNum 3 + 1 ∧
+    primitiveOrbitNumerator (2 * 5) = lucasNum (2 * 5) - lucasNum 2 - lucasNum 5 + 1 ∧
+    primitiveOrbitNumerator (3 * 5) = lucasNum (3 * 5) - lucasNum 3 - lucasNum 5 + 1 ∧
+    primitiveOrbitNumerator (2 * 7) = lucasNum (2 * 7) - lucasNum 2 - lucasNum 7 + 1 ∧
+    primitiveOrbitNumerator (3 * 7) = lucasNum (3 * 7) - lucasNum 3 - lucasNum 7 + 1 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide⟩
+
 /-- Primitive orbit numerator at prime square: P(p²) = L(p²) - L(p).
     prop:zetaK-mobius-primitive -/
 theorem primitiveOrbitNumerator_prime_sq {p : Nat} (hp : Nat.Prime p) :
