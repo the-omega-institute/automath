@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1355 |
+| \leanverified 标注数 | 1360 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1372 |
-| 轮次 | R326（round_count=327） |
+| 总标注数 | 1377 |
+| 轮次 | R327（round_count=328） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -27,12 +27,12 @@
 | Folding | 337 | 109 | 32.3% |
 | Conclusion | 2,550 | 223 | 8.7% |
 | Group Unification | 469 | 136 | 29.0% |
-| SPG | 129 | 84 | 65.1% |
-| Circle Dimension | 393 | 120 | 30.5% |
-| Zeta Finite Part | 4,524 | 170 | 3.8% |
+| SPG | 129 | 87 | 67.4% |
+| Circle Dimension | 393 | 121 | 30.8% |
+| Zeta Finite Part | 4,524 | 171 | 3.8% |
 | Discussion | 67 | 45 | 67.2% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1298** | **12.3%** |
+| **合计（body）** | **10,508** | **1303** | **12.4%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,8 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R327: Lucas mod48 + separationDepth zero + kappa neg 三件套（3/3 完成）**：Zeta/DynZeta.lean + CircleDimension/CircleDim.lean + SPG/ErrorThreshold.lean——lucasNum\_mod48\_period\_twentyfour（thm:zeta-syntax-trace-linear-recurrence，Lucas mod 48 周期 24，Zeta）; separationDepth\_eq\_zero\_of\_distinguish\_zero（def:cdim-gap-ledger，分离深度为零的刻画，CD）; kappa\_mul\_neg\_eq\_one（prop:spg-relative-error-threshold-sharpness，kappa 负乘积等式，SPG）; kappa\_neg\_eq\_inv（prop:spg-relative-error-threshold-sharpness，kappa 负值为逆，SPG）; kappa\_neg\_lt\_one（prop:spg-relative-error-threshold-sharpness，kappa 负值小于1，SPG）——**3 个论文标签条目计入覆盖率**（Zeta +1, CD +1, SPG +3）——Zeta Finite Part 170→171（3.8%），Circle Dimension 120→121（30.5%→30.8%），SPG 84→87（65.1%→67.4%），全局 \\leanverified 1355→1360（+5），总标注 1372→1377（+5），commit c152753
+
 **Phase R326: hiddenBitCount le succ + godelEncoding three + chebyAdams sq（3/3 完成）**：Folding/MaxFiberTwoStep.lean + Conclusion/PrimeRegister.lean + Discussion/ChebyshevAdams.lean——hiddenBitCount\_le\_succ（thm:pom-hidden-bit-count，隐藏位计数后继不等式，POM）; godelEncoding\_three（thm:conclusion-godel-semidirect-law，Gödel 编码值为3的刻画，Conclusion）; chebyAdams\_sq\_eq（thm:discussion-chebyshev-witt-equivariance，Chebyshev 平方等式，Discussion）; chebyAdams\_sq\_sub\_two（thm:discussion-chebyshev-witt-equivariance，Chebyshev 平方减2，Discussion）——**3 个论文标签条目计入覆盖率**（POM +1, Conclusion +1, Discussion +2）——POM 278→279（16.3%），Conclusion 222→223（8.7%），Discussion 43→45（64.2%→67.2%），全局 \\leanverified 1351→1355（+4），总标注 1368→1372（+4），commit 774a230
 
 **Phase R325: Pisano 61/71 + Lucas mod24 + fibPoly eval 2 Pell（3/3 完成）**：GU/FibPrimePisano.lean + Zeta/DynZeta.lean + Folding/FibonacciPolynomial.lean——pisano\_period\_61（cor:gut-fibprime-pisano-4n，Pisano 周期 π(61)=60 验证，GU）; pisano\_period\_71（cor:gut-fibprime-pisano-4n，Pisano 周期 π(71)=70 验证，GU）; paper\_pisano\_period\_61\_71（cor:gut-fibprime-pisano-4n，p=61,71 论文接口打包，GU）; lucasNum\_mod24\_period\_twentyfour（thm:zeta-syntax-trace-linear-recurrence，Lucas mod 24 周期 24，Zeta）; fibPoly\_eval\_two\_recurrence（cor:field-phase-fib-prime，Fibonacci 多项式 x=2 递推（Pell），EA）; fibPoly\_eval\_two\_base（cor:field-phase-fib-prime，Fibonacci 多项式 x=2 基础值，EA）; fibPoly\_eval\_two\_values（cor:field-phase-fib-prime，Fibonacci 多项式 x=2 具体值，EA）——**3 个论文标签条目计入覆盖率**（GU +3, Zeta +1, EA +3）——Group Unification 133→136（28.4%→29.0%），Zeta Finite Part 169→170（3.7%→3.8%），Emergent Arithmetic 129→132（69.7%→71.4%），全局 \\leanverified 1344→1351（+7），总标注 1361→1368（+7），commit eede5bf
