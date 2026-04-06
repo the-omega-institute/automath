@@ -142,4 +142,23 @@ theorem wedderburn_dim_ratio_m6_not_exact :
     momentSum 2 6 % Nat.fib 8 ≠ 0 := by
   rw [momentSum_two_six]; native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R331: S_2 factored m=10,11,12
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_2(10) = 2^7 · 5 · 13 = 8320.
+    prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_ten_factored : momentSum 2 10 = 2 ^ 7 * 5 * 13 := by
+  rw [momentSum_two_ten_rec]; norm_num
+
+/-- S_2(11) = 2^5 · 3 · 5 · 43 = 20640.
+    prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_eleven_factored : momentSum 2 11 = 2 ^ 5 * 3 * 5 * 43 := by
+  rw [momentSum_two_eleven_rec]; norm_num
+
+/-- S_2(12) = 2^4 · 3 · 11 · 97 = 51216.
+    prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_twelve_factored : momentSum 2 12 = 2 ^ 4 * 3 * 11 * 97 := by
+  rw [momentSum_two_twelve_rec]; norm_num
+
 end Omega.EA

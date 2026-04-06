@@ -313,6 +313,29 @@ theorem kappa_neg_lt_one {ε : ℝ} (hε_pos : 0 < ε) (hε_lt : ε < 1) :
     nlinarith
   nlinarith [mul_lt_mul_of_pos_right hk1 hkn_pos]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R331: kappa Möbius multiplication law
+-- ══════════════════════════════════════════════════════════════
+
+/-- Möbius multiplication law: κ(a)·κ(b) = κ((a+b)/(1+ab)).
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_mul_eq {a b : ℝ}
+    (ha : -1 < a) (ha' : a < 1) (hb : -1 < b) (hb' : b < 1)
+    (hab : 1 + a * b ≠ 0) :
+    kappa a * kappa b = kappa ((a + b) / (1 + a * b)) := by
+  unfold kappa
+  have h1a : (1 : ℝ) - a ≠ 0 := by linarith
+  have h1b : (1 : ℝ) - b ≠ 0 := by linarith
+  have h2a : (1 : ℝ) + a ≠ 0 := by linarith
+  have h2b : (1 : ℝ) + b ≠ 0 := by linarith
+  have h_denom_pos : 0 < (1 - a) * (1 - b) := by nlinarith
+  have h_num : 1 - (a + b) / (1 + a * b) = (1 - a) * (1 - b) / (1 + a * b) := by
+    field_simp; ring
+  have h_num2 : 1 + (a + b) / (1 + a * b) = (1 + a) * (1 + b) / (1 + a * b) := by
+    field_simp; ring
+  rw [h_num, h_num2]
+  field_simp
+
 end Omega.SPG
 
 
