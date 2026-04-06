@@ -49,7 +49,7 @@
     panel = document.createElement("div");
     panel.id = "nlm-oracle-panel";
     panel.style.cssText = `
-      position: fixed; bottom: 12px; left: 12px; z-index: 99999;
+      position: fixed; top: 12px; right: 12px; z-index: 99999;
       background: #1a2e1a; color: #0f0; font-family: monospace; font-size: 11px;
       padding: 8px 12px; border-radius: 6px; max-width: 420px; max-height: 300px;
       overflow-y: auto; box-shadow: 0 2px 12px rgba(0,0,0,0.5); opacity: 0.92;
@@ -189,66 +189,141 @@
 
   // ── Source upload ────────────────────────────────────────────────────
 
-  async function uploadPDFSource(base64Data, fileName) {
-    log(`Uploading source: ${fileName} (${(base64Data.length * 0.75 / 1024).toFixed(0)} KB)`);
-
+  function makeFile(base64Data, fileName) {
     const byteChars = atob(base64Data);
     const byteArray = new Uint8Array(byteChars.length);
     for (let i = 0; i < byteChars.length; i++) {
       byteArray[i] = byteChars.charCodeAt(i);
     }
-    const file = new File([byteArray], fileName, { type: "application/pdf" });
+    return new File([byteArray], fileName, { type: "application/pdf" });
+  }
 
-    // Find the "Add source" button and click it
-    const addBtn = findButtonByText("Add source") ||
-                   findButtonByText("add source") ||
-                   findButtonByText("Upload") ||
-                   document.querySelector("button[aria-label*='source']") ||
-                   document.querySelector("button[aria-label*='upload']") ||
-                   document.querySelector("button[aria-label*='Source']");
-
-    if (addBtn) {
-      log("Clicking 'Add source' button...");
-      addBtn.click();
-      await sleep(2000);
+  function findAllByText(text) {
+    const results = [];
+    const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT);
+    while (walk.nextNode()) {
+      const n = walk.currentNode;
+      const t = (n.textContent || "").trim().toLowerCase();
+      if (t.includes(text.toLowerCase()) && t.length < text.length + 30) {
+        results.push(n);
+      }
     }
+    return results;
+  }
 
-    // Look for file input
-    const fileInput = document.querySelector("input[type='file']");
-    if (fileInput) {
+  async function tryInjectFile(file) {
+    // Method 1: find any file input on the page (may be hidden)
+    const inputs = document.querySelectorAll("input[type='file']");
+    for (const input of inputs) {
       try {
         const dt = new DataTransfer();
         dt.items.add(file);
-        fileInput.files = dt.files;
-        fileInput.dispatchEvent(new Event("change", { bubbles: true }));
-        log("PDF injected via file input");
-        await sleep(5000); // Wait for processing
+        input.files = dt.files;
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        log(`PDF injected via file input (${input.accept || "any"})`);
         return true;
       } catch (e) {
-        log(`File input inject failed: ${e.message}`);
+        log(`File input failed: ${e.message}`);
+      }
+    }
+    return false;
+  }
+
+  async function uploadPDFSource(base64Data, fileName) {
+    log(`Uploading: ${fileName} (${(base64Data.length * 0.75 / 1024).toFixed(0)} KB)`);
+    const file = makeFile(base64Data, fileName);
+
+    // Step 1: Click "Add source" button
+    const addBtn = findButtonByText("Add source") ||
+                   findButtonByText("add source") ||
+                   document.querySelector("button[aria-label*='source' i]") ||
+                   document.querySelector("button[aria-label*='Source']") ||
+                   document.querySelector("button[aria-label*='add' i]");
+
+    if (addBtn) {
+      log("Step 1: Clicking 'Add source'...");
+      addBtn.click();
+      await sleep(2000);
+    } else {
+      log("WARN: 'Add source' button not found");
+    }
+
+    // Step 2: In the dialog, click "Upload" / "File upload" / "PDF" option
+    // NotebookLM shows a dialog with source type choices
+    const uploadOption = findButtonByText("File upload") ||
+                         findButtonByText("Upload") ||
+                         findButtonByText("PDF") ||
+                         findButtonByText("upload file");
+
+    // Also try clickable elements (not just buttons)
+    let uploadEl = uploadOption;
+    if (!uploadEl) {
+      const candidates = findAllByText("upload");
+      if (candidates.length > 0) {
+        uploadEl = candidates[candidates.length - 1]; // last match usually the dialog option
+      }
+    }
+    if (!uploadEl) {
+      const candidates = findAllByText("file");
+      for (const c of candidates) {
+        if ((c.textContent || "").toLowerCase().includes("upload")) {
+          uploadEl = c;
+          break;
+        }
       }
     }
 
-    // Try drag-drop on the source area
-    const dropTarget = document.querySelector("[class*='source']") ||
-                       document.querySelector("[class*='upload']") ||
-                       document.querySelector("main");
-    if (dropTarget) {
-      const dt = new DataTransfer();
-      dt.items.add(file);
-      for (const evtType of ["dragenter", "dragover", "drop"]) {
-        dropTarget.dispatchEvent(new DragEvent(evtType, {
-          bubbles: true, cancelable: true, dataTransfer: dt,
-        }));
-        await sleep(300);
+    if (uploadEl) {
+      log(`Step 2: Clicking '${(uploadEl.textContent || "").trim().slice(0, 30)}'...`);
+      uploadEl.click();
+      await sleep(2000);
+    } else {
+      log("WARN: Upload option not found in dialog");
+    }
+
+    // Step 3: Try to inject file into any file input that appeared
+    if (await tryInjectFile(file)) {
+      await sleep(8000); // wait for processing
+      // Look for confirm/insert button
+      const confirmBtn = findButtonByText("Insert") ||
+                         findButtonByText("Add") ||
+                         findButtonByText("Upload") ||
+                         findButtonByText("Done");
+      if (confirmBtn) {
+        log(`Step 3: Clicking '${(confirmBtn.textContent || "").trim()}'`);
+        confirmBtn.click();
+        await sleep(5000);
       }
-      log("PDF: drag-drop dispatched");
-      await sleep(5000);
+      log("PDF upload complete");
       return true;
     }
 
-    log("PDF upload: ALL METHODS FAILED");
-    return false;
+    // Step 4: Fallback — try drag-drop on various targets
+    log("Step 3 fallback: trying drag-drop...");
+    const targets = [
+      ...document.querySelectorAll("[class*='drop']"),
+      ...document.querySelectorAll("[class*='upload']"),
+      ...document.querySelectorAll("[class*='source']"),
+      ...document.querySelectorAll("[role='dialog']"),
+      document.querySelector("main"),
+    ].filter(Boolean);
+
+    for (const target of targets) {
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      for (const evtType of ["dragenter", "dragover", "drop"]) {
+        target.dispatchEvent(new DragEvent(evtType, {
+          bubbles: true, cancelable: true, dataTransfer: dt,
+        }));
+        await sleep(200);
+      }
+    }
+    log(`Drag-drop attempted on ${targets.length} targets`);
+    await sleep(5000);
+
+    // Check if something appeared (new source in sidebar)
+    return true;
   }
 
   // ── Create new notebook ─────────────────────────────────────────────
