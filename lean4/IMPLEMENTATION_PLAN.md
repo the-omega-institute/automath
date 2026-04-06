@@ -13,26 +13,26 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1378 |
+| \leanverified 标注数 | 1381 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1395 |
-| 轮次 | R331（round_count=332） |
+| 总标注数 | 1398 |
+| 轮次 | R332（round_count=333） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 281 | 16.5% |
+| POM | 1,707 | 282 | 16.5% |
 | Emergent Arithmetic | 185 | 138 | 74.6% |
 | Folding | 337 | 109 | 32.3% |
-| Conclusion | 2,550 | 224 | 8.8% |
+| Conclusion | 2,550 | 225 | 8.8% |
 | Group Unification | 469 | 140 | 29.9% |
 | SPG | 129 | 88 | 68.2% |
 | Circle Dimension | 393 | 123 | 31.3% |
-| Zeta Finite Part | 4,524 | 172 | 3.8% |
+| Zeta Finite Part | 4,524 | 173 | 3.8% |
 | Discussion | 67 | 46 | 68.7% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1321** | **12.6%** |
+| **合计（body）** | **10,508** | **1324** | **12.6%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,8 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R332: Lucas mod40 + hiddenBitCount succ + godelEncoding injective（3/3 完成）**：Zeta/DynZeta.lean + Folding/MaxFiberTwoStep.lean + Conclusion/PrimeRegister.lean——lucasNum\_mod40\_period\_twelve（thm:zeta-syntax-trace-linear-recurrence，Lucas mod 40 周期 12，Zeta）; hiddenBitCount\_succ\_eq（thm:pom-hidden-bit-count，隐藏位计数后继等式，POM）; godelEncoding\_injective\_of\_eq\_length（thm:conclusion-godel-semidirect-law，等长词 Gödel 编码单射性，Conclusion）——**3 个论文标签条目计入覆盖率**（Zeta +1, POM +1, Conclusion +1）——Zeta Finite Part 172→173（3.8%），POM 281→282（16.5%），Conclusion 224→225（8.8%），全局 \\leanverified 1378→1381（+3），总标注 1395→1398（+3），commit 0d1fd50
+
 **Phase R331: S_2 分解 m=10/11/12 + kappa mul eq（2/2 完成）**：EA/Wedderburn.lean + SPG/ErrorThreshold.lean——momentSum\_two\_ten\_factored（prop:fold-groupoid-wedderburn，S_2(10) 因式分解，EA）; momentSum\_two\_eleven\_factored（prop:fold-groupoid-wedderburn，S_2(11) 因式分解，EA）; momentSum\_two\_twelve\_factored（prop:fold-groupoid-wedderburn，S_2(12) 因式分解，EA）; kappa\_mul\_eq（prop:spg-relative-error-threshold-sharpness，kappa 乘积等式，SPG）——**2 个论文标签条目计入覆盖率**（EA +3, SPG +1）——Emergent Arithmetic 135→138（73.0%→74.6%），SPG 87→88（67.4%→68.2%），全局 \\leanverified 1374→1378（+4），总标注 1391→1395（+4），commit f1437c4
 
 **Phase R330: Pisano 101 + halfCircleDim double/nsmul + chebyAdams Cassini（3/3 完成）**：GU/FibPrimePisano.lean + CircleDimension/CircleDim.lean + Discussion/ChebyshevAdams.lean——pisano\_period\_101（cor:gut-fibprime-pisano-4n，Pisano 周期 π(101)=50 验证，GU）; paper\_pisano\_period\_101（cor:gut-fibprime-pisano-4n，p=101 论文接口打包，GU）; halfCircleDim\_double（prop:circle-dimension-laws，半圆维加倍，CD）; halfCircleDim\_nsmul（prop:circle-dimension-laws，半圆维 n 倍，CD）; chebyAdams\_cassini（thm:discussion-chebyshev-witt-equivariance，Chebyshev Cassini 恒等式，Discussion）——**3 个论文标签条目计入覆盖率**（GU +2, CD +2, Discussion +1）——Group Unification 138→140（29.4%→29.9%），Circle Dimension 121→123（30.8%→31.3%），Discussion 45→46（67.2%→68.7%），全局 \\leanverified 1369→1374（+5），总标注 1386→1391（+5），commit 2d3ddb5
