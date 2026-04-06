@@ -301,6 +301,13 @@ theorem cdim_min_ledger_cost_attained (f : CircleDimHomData) :
   refine ⟨f.kernelRank, ?_⟩
   rfl
 
+/-- cdimDefect is positive iff kernelRank is positive.
+    thm:cdim-defect-chain-rule -/
+theorem cdimDefect_pos_iff (f : CircleDimHomData) :
+    0 < cdimDefect f ↔ 0 < f.kernelRank := by
+  rw [Nat.pos_iff_ne_zero, Nat.pos_iff_ne_zero, not_iff_not]
+  exact (cdimDefect_eq_zero_iff f).symm
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R160: Phase spectrum count
 -- ══════════════════════════════════════════════════════════════

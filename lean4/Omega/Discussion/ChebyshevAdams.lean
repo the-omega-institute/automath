@@ -490,4 +490,25 @@ theorem chebyAdams_cassini (n : Nat) (S : ℤ) :
       rw [hrec]; ring
     linarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R333: Adjacent sum and Lucas Cassini
+-- ══════════════════════════════════════════════════════════════
+
+/-- Adjacent sum: C_{n+2}(S) + C_n(S) = S · C_{n+1}(S).
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_add_adjacent (n : Nat) (S : ℤ) :
+    chebyAdams (n + 2) S + chebyAdams n S = S * chebyAdams (n + 1) S := by
+  have := chebyAdams_succ_succ n S; linarith
+
+/-- Lucas even-index Cassini: L(2n)·L(2n+4) - L(2n+2)² = 5.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem lucas_even_cassini (n : Nat) :
+    Omega.Zeta.lucasNum (2 * n) * Omega.Zeta.lucasNum (2 * n + 4) -
+    Omega.Zeta.lucasNum (2 * n + 2) ^ 2 = 5 := by
+  have h := chebyAdams_cassini n (3 : ℤ)
+  simp only [chebyAdams_at_three_eq_lucas_even,
+    show 2 * (n + 1) = 2 * n + 2 from by ring,
+    show 2 * (n + 2) = 2 * n + 4 from by ring] at h
+  linarith
+
 end Omega.Discussion
