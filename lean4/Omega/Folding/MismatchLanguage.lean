@@ -76,4 +76,51 @@ theorem paper_mismatch_perron_root_bound :
   refine ⟨by omega, by omega, by omega, by omega,
     by native_decide, by native_decide, by native_decide⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R307: mismatchWordCount extended + 2^m upper bound
+-- ══════════════════════════════════════════════════════════════
+
+/-- prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence -/
+theorem mismatchWordCount_eleven : mismatchWordCount 11 = 886 := by native_decide
+
+/-- prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence -/
+theorem mismatchWordCount_twelve : mismatchWordCount 12 = 1606 := by native_decide
+
+/-- prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence -/
+theorem mismatchWordCount_thirteen : mismatchWordCount 13 = 2911 := by native_decide
+
+/-- prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence -/
+theorem mismatchWordCount_lt_pow_two (m : Nat) (hm : 4 ≤ m) :
+    mismatchWordCount m < 2 ^ m := by
+  induction m using Nat.strongRecOn with
+  | _ m ih =>
+    match m, hm with
+    | 4, _ => native_decide
+    | 5, _ => native_decide
+    | 6, _ => native_decide
+    | 7, _ => native_decide
+    | 8, _ => native_decide
+    | m + 9, _ =>
+      -- N(m+9) = N(m+8) + N(m+7) + N(m+5) + N(m+4)
+      -- < 2^(m+8) + 2^(m+7) + 2^(m+5) + 2^(m+4)
+      -- = 2^(m+4) * (16+8+2+1) = 27 * 2^(m+4) < 32 * 2^(m+4) = 2^(m+9)
+      simp only [mismatchWordCount]
+      have h8 := ih (m + 8) (by omega) (by omega)
+      have h7 := ih (m + 7) (by omega) (by omega)
+      have h5 := ih (m + 5) (by omega) (by omega)
+      have h4 := ih (m + 4) (by omega) (by omega)
+      calc mismatchWordCount (m + 8) + mismatchWordCount (m + 7) +
+              mismatchWordCount (m + 5) + mismatchWordCount (m + 4)
+          < 2 ^ (m + 8) + 2 ^ (m + 7) + 2 ^ (m + 5) + 2 ^ (m + 4) := by linarith
+        _ = 27 * 2 ^ (m + 4) := by ring
+        _ < 32 * 2 ^ (m + 4) := by nlinarith [Nat.one_le_pow (m + 4) 2 (by omega)]
+        _ = 2 ^ (m + 9) := by ring
+
+/-- Paper package. prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence -/
+theorem paper_mismatchWordCount_extended :
+    mismatchWordCount 11 = 886 ∧ mismatchWordCount 12 = 1606 ∧
+    mismatchWordCount 13 = 2911 ∧
+    (∀ m, 4 ≤ m → mismatchWordCount m < 2 ^ m) :=
+  ⟨by native_decide, by native_decide, by native_decide, mismatchWordCount_lt_pow_two⟩
+
 end Omega

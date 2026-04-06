@@ -549,4 +549,39 @@ theorem paper_frozen_curvature_semigroup_package :
       ((a + b) * α + g) + g = (a * α + g) + (b * α + g)) := by
   exact ⟨fun α g a => by ring, fun α g a b => by ring⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R307: Window-6 moment hierarchy S_1..S_4
+-- ══════════════════════════════════════════════════════════════
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem window6_S1_from_histogram :
+    2 * 1 + 4 * 2 + 8 * 3 + 5 * 4 + 2 * 5 = 64 := by omega
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem window6_S2_from_histogram :
+    2 * 1 + 4 * 4 + 8 * 9 + 5 * 16 + 2 * 25 = 220 := by omega
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem window6_S3_from_histogram :
+    2 * 1 + 4 * 8 + 8 * 27 + 5 * 64 + 2 * 125 = 820 := by omega
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem window6_S4_from_histogram :
+    2 * 1 + 4 * 16 + 8 * 81 + 5 * 256 + 2 * 625 = 3244 := by omega
+
+/-- Cross-validation with cMomentSum. prop:fold-groupoid-wedderburn -/
+theorem window6_histogram_cross_validation :
+    cMomentSum 1 6 = 64 ∧ cMomentSum 2 6 = 220 ∧
+    cMomentSum 3 6 = 820 ∧ cMomentSum 4 6 = 3244 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
+
+/-- Paper package. prop:fold-groupoid-wedderburn -/
+theorem paper_window6_moment_hierarchy :
+    (2 * 1 + 4 * 2 + 8 * 3 + 5 * 4 + 2 * 5 = 64) ∧
+    (2 * 1 + 4 * 4 + 8 * 9 + 5 * 16 + 2 * 25 = 220) ∧
+    (2 * 1 + 4 * 8 + 8 * 27 + 5 * 64 + 2 * 125 = 820) ∧
+    (2 * 1 + 4 * 16 + 8 * 81 + 5 * 256 + 2 * 625 = 3244) ∧
+    cMomentSum 3 6 = 820 ∧ cMomentSum 4 6 = 3244 := by
+  refine ⟨by omega, by omega, by omega, by omega, ?_, ?_⟩ <;> native_decide
+
 end Omega.Conclusion

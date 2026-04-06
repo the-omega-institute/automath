@@ -68,4 +68,26 @@ theorem isClopen_empty_spg : IsClopen (∅ : Set OmegaInfinity) := by
   rw [show (∅ : Set OmegaInfinity) = fromWordSet (∅ : Set (Word 0)) from by simp]
   exact isClopen_fromWordSet ∅
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R307: SPG clopen diff/symmDiff
+-- ══════════════════════════════════════════════════════════════
+
+/-- def:spg-prefix-event -/
+theorem isClopen_fromWordSet_diff (A B : Set (Word m)) :
+    IsClopen (fromWordSet A \ fromWordSet B) := by
+  rw [Set.diff_eq]
+  exact (isClopen_fromWordSet A).inter (isClopen_fromWordSet B).compl
+
+/-- def:spg-prefix-event -/
+theorem isClopen_fromWordSet_symmDiff (A B : Set (Word m)) :
+    IsClopen (symmDiff (fromWordSet A) (fromWordSet B)) := by
+  rw [Set.symmDiff_def]
+  exact (isClopen_fromWordSet_diff A B).union (isClopen_fromWordSet_diff B A)
+
+/-- Paper package. def:spg-prefix-event -/
+theorem paper_spg_prefix_boolean :
+    (∀ A B : Set (Word m), IsClopen (fromWordSet A \ fromWordSet B)) ∧
+    (∀ A B : Set (Word m), IsClopen (symmDiff (fromWordSet A) (fromWordSet B))) :=
+  ⟨isClopen_fromWordSet_diff, isClopen_fromWordSet_symmDiff⟩
+
 end Omega.SPG
