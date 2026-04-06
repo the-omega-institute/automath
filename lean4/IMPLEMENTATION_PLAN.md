@@ -13,26 +13,26 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1330 |
+| \leanverified 标注数 | 1336 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1347 |
-| 轮次 | R321（round_count=322） |
+| 总标注数 | 1353 |
+| 轮次 | R322（round_count=323） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 275 | 16.1% |
+| POM | 1,707 | 276 | 16.2% |
 | Emergent Arithmetic | 185 | 129 | 69.7% |
 | Folding | 337 | 109 | 32.3% |
 | Conclusion | 2,550 | 221 | 8.7% |
-| Group Unification | 469 | 130 | 27.7% |
-| SPG | 129 | 82 | 63.6% |
+| Group Unification | 469 | 133 | 28.4% |
+| SPG | 129 | 84 | 65.1% |
 | Circle Dimension | 393 | 119 | 30.3% |
 | Zeta Finite Part | 4,524 | 168 | 3.7% |
 | Discussion | 67 | 40 | 59.7% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1273** | **12.1%** |
+| **合计（body）** | **10,508** | **1279** | **12.2%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,8 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R322: Pisano 41/59 + prefixDetermined sdiff/symmDiff + modularProject stableOne（2.5/3 完成）**：GU/FibPrimePisano.lean + SPG/Cylinder.lean + Folding/ModularTower.lean——pisano\_period\_41（cor:gut-fibprime-pisano-4n，Pisano 周期 π(41)=20 验证，GU）; pisano\_period\_59（cor:gut-fibprime-pisano-4n，Pisano 周期 π(59)=58 验证，GU）; paper\_pisano\_period\_41\_59（cor:gut-fibprime-pisano-4n，p=41,59 论文接口打包，GU）; prefixDetermined\_sdiff（prop:spg-decidable-clopen，前缀确定集差运算，SPG）; prefixDetermined\_symmDiff（prop:spg-decidable-clopen，前缀确定集对称差运算，SPG）; modularProject\_stableOne（thm:pom-stable-addition-carry-defect-unique-element，模投影稳定化元素，POM）——**推迟**：stableValue\_modularProject\_stableNeg（Fibonacci 递推模算术交互问题）——**3 个论文标签条目计入覆盖率**（GU +3, SPG +2, POM +1）——Group Unification 130→133（27.7%→28.4%），SPG 82→84（63.6%→65.1%），POM 275→276（16.1%→16.2%），全局 \\leanverified 1330→1336（+6），总标注 1347→1353（+6），commit 9cb0e87
+
 **Phase R321: firstHittingTime 引理 + Lucas mod20 + Gödel eq\_one\_iff（3/3 完成）**：CircleDimension/CircleDim.lean + Zeta/DynZeta.lean + Conclusion/PrimeRegister.lean——firstHittingTime\_le\_of\_lt（def:cdim-gap-ledger，首命中时间单调性引理，CD）; firstHittingTime\_eq\_top\_of\_forall\_ge（def:cdim-gap-ledger，无命中时为顶元，CD）; lucasNum\_mod20\_period\_twelve（thm:zeta-syntax-trace-linear-recurrence，Lucas mod 20 周期 12，Zeta）; godelEncoding\_eq\_one\_iff（thm:conclusion-godel-semidirect-law，Gödel 编码为 1 的充要条件，Conclusion）——**3 个论文标签条目计入覆盖率**（CD +2, Zeta +1, Conclusion +1）——Circle Dimension 117→119（29.8%→30.3%），Zeta Finite Part 167→168（3.7%），Conclusion 220→221（8.6%→8.7%），全局 \\leanverified 1326→1330（+4），总标注 1343→1347（+4），commit 7936fa2
 
 **Phase R320: Chebyshev S=4 + Wedderburn 维比 + hiddenBitCount mod3 周期（3/3 完成）**：Discussion/ChebyshevAdams.lean + EA/Wedderburn.lean + Folding/MaxFiberTwoStep.lean——chebyAdams\_at\_four\_recurrence（thm:discussion-chebyshev-witt-equivariance，Chebyshev S=4 递推关系，Discussion）; chebyAdams\_at\_four\_base（thm:discussion-chebyshev-witt-equivariance，Chebyshev S=4 基础值，Discussion）; wedderburn\_dim\_ratio\_m7\_exact（thm:fold-groupoid-z2x2-central-idempotents，S_2(7)=16·F_9 精确比，EA）; wedderburn\_dim\_ratio\_m6\_not\_exact（thm:fold-groupoid-z2x2-central-idempotents，S_2(6) mod F_8 ≠ 0，EA）; hiddenBitCount\_period6\_mod3（thm:pom-hidden-bit-count，B(m+6)%3=B(m)%3 周期性，POM）——**3 个论文标签条目计入覆盖率**（Discussion +2, EA +2, POM +1）——Discussion 38→40（56.7%→59.7%），Emergent Arithmetic 127→129（68.6%→69.7%），POM 274→275（16.0%→16.1%），全局 \\leanverified 1321→1326（+5），总标注 1338→1343（+5），commit c16b4da
