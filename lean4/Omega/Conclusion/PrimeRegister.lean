@@ -813,4 +813,12 @@ theorem godelEncoding_dvd_of_pos
       simp only [show offset + 1 + j = offset + (j + 1) from by omega] at this
       exact dvd_mul_of_dvd_right this _
 
+/-- Gödel encoding of all-zero list is 1.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_zero_list (primes : ℕ → ℕ) (offset n : ℕ)
+    (hp : ∀ i, 1 < primes i) :
+    godelEncoding primes offset (List.replicate n 0) = 1 := by
+  rw [godelEncoding_eq_one_iff primes offset _ hp]
+  intro a ha; exact List.eq_of_mem_replicate ha
+
 end Omega.Conclusion

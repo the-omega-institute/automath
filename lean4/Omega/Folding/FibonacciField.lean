@@ -105,4 +105,15 @@ theorem paper_fibonacci_field_phase_extended_2 :
    X.stableMul_inv_of_prime fib_twentythree_prime,
    X.stableMul_inv_of_prime fib_twentynine_prime⟩
 
+/-- F(43) = 433494437 is prime.
+    cor:field-phase-fib-prime -/
+theorem fib_fortythree_prime : Nat.Prime (Nat.fib 43) := by native_decide
+
+/-- Field-phase at m=41: X 41 is a field (F(43) prime).
+    cor:field-phase-fib-prime -/
+theorem paper_fibonacci_field_phase_m41 :
+    Nat.Prime (Nat.fib 43) ∧
+    (∀ x : X 41, x ≠ X.stableZero → ∃ y : X 41, X.stableMul x y = X.stableOne) :=
+  ⟨fib_fortythree_prime, X.stableMul_inv_of_prime fib_fortythree_prime⟩
+
 end Omega
