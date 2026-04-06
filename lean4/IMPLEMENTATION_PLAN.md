@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1398 |
+| \leanverified 标注数 | 1401 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1415 |
-| 轮次 | R336（round_count=337） |
+| 总标注数 | 1418 |
+| 轮次 | R337（round_count=338） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -26,13 +26,13 @@
 | Emergent Arithmetic | 185 | 138 | 74.6% |
 | Folding | 337 | 109 | 32.3% |
 | Conclusion | 2,550 | 227 | 8.9% |
-| Group Unification | 469 | 146 | 31.1% |
+| Group Unification | 469 | 148 | 31.6% |
 | SPG | 129 | 92 | 71.3% |
 | Circle Dimension | 393 | 124 | 31.6% |
-| Zeta Finite Part | 4,524 | 174 | 3.8% |
+| Zeta Finite Part | 4,524 | 175 | 3.9% |
 | Discussion | 67 | 48 | 71.6% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1341** | **12.7%** |
+| **合计（body）** | **10,508** | **1344** | **12.8%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,8 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R337: lucasNum mod60 + freeInvolutionCount seven + freeInvolutionCount sq le mul（3/3 完成）**：Zeta/DynZeta.lean + GU/FreeInvolutionCount.lean——lucasNum\_mod60\_period\_twentyfour（thm:zeta-syntax-trace-linear-recurrence，Lucas mod 60 周期 24，Zeta）; freeInvolutionCount\_seven（thm:fiberwise-free-involution-matching-entropy，自由对合计数 r=7 基值，GU）; freeInvolutionCount\_sq\_le\_mul（thm:fiberwise-free-involution-matching-entropy，自由对合计数平方不等式，GU）——**2 个论文标签条目计入覆盖率**（Zeta +1, GU +2）——Zeta Finite Part 174→175（3.8%→3.9%），Group Unification 146→148（31.1%→31.6%），全局 \\leanverified 1398→1401（+3），总标注 1415→1418（+3），commit d196675
+
 **Phase R336: godelEncoding replicate + godelEncoding dvd of pos（2/3 完成，目标2已存在跳过）**：Conclusion/PrimeRegister.lean——godelEncoding\_replicate（thm:conclusion-godel-semidirect-law，Gödel 编码重复序列等式，Conclusion）; godelEncoding\_dvd\_of\_pos（thm:conclusion-godel-semidirect-law，正数时 Gödel 编码整除性，Conclusion）——**1 个论文标签条目计入覆盖率**（Conclusion +2）——Conclusion 225→227（8.8%→8.9%），全局 \\leanverified 1396→1398（+2），总标注 1413→1415（+2），commit 6fc4ba0
 
 **Phase R335: kappa sixth/seventh + hiddenBitCount complement + kappa sq package（3/3 完成）**：SPG/ErrorThreshold.lean + Folding/MaxFiberTwoStep.lean——kappa\_sixth（prop:spg-relative-error-threshold-sharpness，kappa 第六值，SPG）; kappa\_seventh（prop:spg-relative-error-threshold-sharpness，kappa 第七值，SPG）; hiddenBitCount\_complement（thm:pom-hidden-bit-count，隐藏位计数补集恒等式，POM）; kappa\_sq\_eq（prop:spg-relative-error-threshold-sharpness，kappa 平方等式，SPG）; paper\_kappa\_sq\_package（prop:spg-relative-error-threshold-sharpness，kappa 平方包装，SPG）——**3 个论文标签条目计入覆盖率**（SPG +4, POM +1）——SPG 88→92（68.2%→71.3%），POM 282→283（16.5%→16.6%），全局 \\leanverified 1391→1396（+5），总标注 1408→1413（+5），commit 006db5a
