@@ -147,4 +147,30 @@ theorem paper_kappa_def (x y : X (m + 1)) :
     carryIndicator x y =
     if stableValue x + stableValue y ≥ Nat.fib (m + 3) then 1 else 0 := rfl
 
+namespace X
+
+-- ══════════════════════════════════════════════════════════════
+-- Phase R310: carryElement m=8,9 + Fibonacci pattern
+-- ══════════════════════════════════════════════════════════════
+
+/-- cor:pom-carry-defect-m6-anchor-8-34 -/
+theorem carryElement_m8_value : stableValue (carryElement 8) = 21 := by
+  rw [stableValue_carryElement]; native_decide
+
+/-- cor:pom-carry-defect-m6-anchor-8-34 -/
+theorem carryElement_m9_value : stableValue (carryElement 9) = 34 := by
+  rw [stableValue_carryElement]; native_decide
+
+/-- Paper package. cor:pom-carry-defect-m6-anchor-8-34 -/
+theorem paper_carryElement_fibonacci_pattern :
+    stableValue (carryElement 5) = Nat.fib 5 ∧
+    stableValue (carryElement 6) = Nat.fib 6 ∧
+    stableValue (carryElement 7) = Nat.fib 7 ∧
+    stableValue (carryElement 8) = Nat.fib 8 ∧
+    stableValue (carryElement 9) = Nat.fib 9 := by
+  refine ⟨carryElement_m5_value, carryElement_m6_value, carryElement_m7_value,
+    carryElement_m8_value, carryElement_m9_value⟩
+
+end X
+
 end Omega

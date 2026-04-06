@@ -584,4 +584,34 @@ theorem paper_window6_moment_hierarchy :
     cMomentSum 3 6 = 820 ∧ cMomentSum 4 6 = 3244 := by
   refine ⟨by omega, by omega, by omega, by omega, ?_, ?_⟩ <;> native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R310: S_2 coprimality certificates
+-- ══════════════════════════════════════════════════════════════
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_six_coprime_card :
+    Nat.Coprime (momentSum 2 6) (Nat.fib 8) := by
+  rw [momentSum_two_six]; native_decide
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_eight_coprime_card :
+    Nat.Coprime (momentSum 2 8) (Nat.fib 10) := by
+  rw [momentSum_two_eight_rec]; native_decide
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_nine_coprime_card :
+    Nat.Coprime (momentSum 2 9) (Nat.fib 11) := by
+  rw [momentSum_two_nine_rec]; native_decide
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_seven_gcd_card :
+    Nat.gcd (momentSum 2 7) (Nat.fib 9) = 34 := by
+  rw [momentSum_two_seven]; native_decide
+
+/-- Paper package. prop:fold-groupoid-wedderburn -/
+theorem paper_momentSum_coprimality_pattern :
+    Nat.Coprime 220 21 ∧ Nat.gcd 544 34 = 34 ∧
+    Nat.Coprime 1352 55 ∧ Nat.Coprime 3352 89 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
+
 end Omega.Conclusion

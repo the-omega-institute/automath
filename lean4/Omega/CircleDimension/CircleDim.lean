@@ -838,4 +838,29 @@ theorem paper_phaseSpectrumCount_prime_dichotomy :
     phaseSpectrumCount 3 0 3 = 81 ∧ phaseSpectrumCount 3 2 3 = 27 := by
   simp [phaseSpectrumCount]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R310: cdimDefect rank-defect duality
+-- ══════════════════════════════════════════════════════════════
+
+/-- thm:cdim-defect-chain-rule -/
+theorem cdimDefect_zero_of_iso (f : CircleDimHomData)
+    (h : f.kernelRank = 0) : cdimDefect f = 0 := by
+  simp [cdimDefect, h]
+
+/-- thm:cdim-defect-chain-rule -/
+theorem imageRank_add_defect (f : CircleDimHomData) :
+    f.imageRank + cdimDefect f = f.sourceRank := by
+  have := f.rankNullity; simp [cdimDefect]; omega
+
+/-- thm:cdim-defect-chain-rule -/
+theorem sourceRank_sub_imageRank (f : CircleDimHomData) :
+    f.sourceRank - f.imageRank = cdimDefect f := by
+  have := f.rankNullity; simp [cdimDefect]; omega
+
+/-- Paper package. thm:cdim-defect-chain-rule -/
+theorem paper_cdimDefect_rank_duality :
+    (∀ f : CircleDimHomData, f.imageRank + cdimDefect f = f.sourceRank) ∧
+    (∀ f : CircleDimHomData, f.kernelRank = 0 → cdimDefect f = 0) := by
+  exact ⟨imageRank_add_defect, cdimDefect_zero_of_iso⟩
+
 end Omega.CircleDimension
