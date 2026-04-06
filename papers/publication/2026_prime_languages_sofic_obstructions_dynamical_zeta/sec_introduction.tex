@@ -5,16 +5,17 @@ functions. In a deterministic automaton, the number of accepted words
 of length \(m\) is governed by powers of a finite matrix. In a sofic
 shift, the number of admissible words of a given length is likewise
 controlled by a finite-state presentation. These mechanisms force
-eventual periodicity or exponential-polynomial growth, and this is
+periodic density laws or exponential-polynomial growth, and that is
 often enough to rule out arithmetic languages whose size is governed by
 the prime number theorem.
 
-The purpose of this note is to isolate several elementary but useful
-obstructions of this kind. The first concerns complete deterministic
-automata over the binary alphabet. The second concerns regular
-sublanguages of the canonical Zeckendorf syntax. The third concerns the
-analytic behaviour of Euler products and finite determinants associated
-with finite-state data.
+The purpose of this note is modest: we place three elementary
+obstructions of this kind side by side. The first concerns approximation
+of the binary prime language by a fixed complete deterministic
+automaton. The second concerns exact regular realizations and eventual
+sofic slice realizations inside the canonical Zeckendorf syntax. The
+third concerns the analytic behaviour of Euler products and finite
+determinant models attached to finite-state data.
 
 Throughout, \(f(m)\asymp g(m)\) means that \(c_1g(m)\le f(m)\le c_2g(m)\)
 for some positive constants \(c_1,c_2\) and all sufficiently large
@@ -108,24 +109,32 @@ Our second theorem concerns the Zeckendorf language
 \]
 
 \begin{theorem}\label{thm:intro-zeckendorf}
-Let \(L\subseteq\mathcal Z\) be regular, and define
+Let \(L\subseteq\mathcal Z\) be regular. After deleting states that are
+not reachable from the initial state or cannot reach an accepting
+state, let \(\rho\) be the maximal spectral radius of a strongly
+connected component in a DFA recognizing \(L\). Define
 \[
   N_L(T):=\#\{w\in L:\val(w)\le T\},
 \]
-where \(\val(w)\) is the Zeckendorf value of \(w\). Then there exists
-\(\alpha\in[0,1]\) such that
+where \(\val(w)\) is the Zeckendorf value of \(w\). Then
 \[
-  N_L(T)=T^{\alpha+o(1)}
+  N_L(T)=T^{\alpha+o(1)},
+  \qquad
+  \alpha=
+  \begin{cases}
+    0, & \rho\le 1,\\[0.3em]
+    \dfrac{\log \rho}{\log \varphi}, & \rho>1.
+  \end{cases}
   \qquad (T\to\infty).
 \]
 In particular, the language of Zeckendorf representations of prime
-numbers is not regular. Combined with the exponential-polynomial
-description of sofic word counts proved later
-(\Cref{prop:sofic-counts-exponential-polynomial}), the same comparison
-also shows that there is no sofic shift \(X\) over \(\{0,1\}\) with
-\(\mathcal B_m(X)=\mathcal P_m^{(\mathrm Z)}\) for all sufficiently
-large \(m\), where \(\mathcal B_m(X)\) denotes the admissible words of
-length \(m\) in \(X\).
+numbers is not regular. Combined with the residue-class asymptotics for
+sofic word counts proved later
+(\Cref{prop:sofic-counts-exponential-polynomial,lem:residue-class-asymptotics}),
+the same comparison also shows that there is no sofic shift \(X\) over
+\(\{0,1\}\) with \(\mathcal B_m(X)=\mathcal P_m^{(\mathrm Z)}\) for
+all sufficiently large \(m\), where \(\mathcal B_m(X)\) denotes the
+admissible words of length \(m\) in \(X\).
 \end{theorem}
 
 Our final theorem records two analytic obstructions.
@@ -145,9 +154,11 @@ The following statements hold.
   \[
     F_M(s):=\det(I-e^{-s}M)^{-1}
   \]
-  is \(2\pi i\)-periodic. In particular, the Riemann
-  \(\zeta\)-function cannot agree with \(F_M\) on any non-empty open
-  subset of \(\Re(s)>1\).
+  is \(2\pi i\)-periodic. Consequently \(F_M\) cannot agree on a
+  non-empty open subset of its half-plane of holomorphy with a
+  Dirichlet series whose first non-zero term occurs at \(n_0>1\); in
+  particular, it cannot agree with the Riemann \(\zeta\)-function on
+  any non-empty open subset of \(\Re(s)>1\).
 \end{enumerate}
 \end{theorem}
 
@@ -159,13 +170,14 @@ classical; see Cobham's foundational papers
 \cite{AlloucheShallit2003}. From that perspective our first section is
 deliberately elementary: instead of invoking a base-dependence theorem,
 we isolate a density dichotomy for a single fixed automaton, using only
-the finite-state Markov-chain decomposition reviewed in
-\cite[Chapter~4]{LevinPeresWilmer2009MarkovMixing}. The interaction
-between primes and digital constraints has a much deeper literature. In
-particular, the work of Mauduit and Rivat \cite{MauduitRivat2010} and
-of Drmota, Mauduit and Rivat \cite{DrmotaMauduitRivat2009} shows that
-prime inputs already display highly nontrivial equidistribution
-phenomena inside automatic and digit-restricted settings.
+the finite-state Markov-chain decomposition and periodic
+Perron--Frobenius theory reviewed in
+\cite{LevinPeresWilmer2009MarkovMixing}. The interaction between primes
+and digital constraints has a much deeper literature. In particular,
+the work of Mauduit and Rivat \cite{MauduitRivat2010} and of Drmota,
+Mauduit and Rivat \cite{DrmotaMauduitRivat2009} shows that prime inputs
+already display highly nontrivial equidistribution phenomena inside
+automatic and digit-restricted settings.
 
 For Zeckendorf and more general linear or Parry numeration systems, the
 regularity of admissible expansions is standard; see
@@ -174,12 +186,14 @@ regular syntax together with the transfer-matrix viewpoint on word
 counts, familiar from symbolic dynamics and analytic combinatorics
 \cite{LindMarcus1995,Kitchens1998,FlajoletSedgewick2009}. On the
 analytic side, the natural-boundary statement belongs to the classical
-circle of ideas initiated by Carlson and Estermann
-\cite{Carlson1921,Estermann1928}. The value of the present note is
-therefore not a single deep new theorem, but the fact that
-probabilistic, combinatorial, and analytic obstructions can be
-assembled into one short account of why prime-supported languages
-resist finite-state models.
+circle of ideas initiated by P\'olya, Carlson, and Estermann
+\cite{Polya1923,Carlson1921,Estermann1928}, while the determinant
+formula for shifts of finite type goes back to Artin and Mazur
+\cite{ArtinMazur1965}; see also \cite{LindMarcus1995}. The finite-state,
+transfer-matrix, and analytic tools used here are classical. The
+contribution of the present note is to place three elementary
+obstructions side by side for prime-supported binary and Zeckendorf
+languages.
 
 \subsection{Organisation}
 

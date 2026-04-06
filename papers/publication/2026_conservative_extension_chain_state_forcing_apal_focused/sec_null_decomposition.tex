@@ -30,14 +30,52 @@ For a state $p$ and a referenceable sort $s$, a \emph{local reference frame} is 
 \[
 \mathcal{B}_{p,s}=\bigl(\mathcal{R}_s(p),\sqsubseteq_{p,s},\Cov_{p,s}\bigr),
 \]
-where $\sqsubseteq_{p,s}$ is a refinement relation on $\mathcal{R}_s(p)$ and $\Cov_{p,s}$ assigns to each $a\in\mathcal{R}_s(p)$ a collection of covering families
+where $\sqsubseteq_{p,s}$ is a preorder on $\mathcal{R}_s(p)$ and $\Cov_{p,s}$ assigns to each $a\in\mathcal{R}_s(p)$ a collection of covering families
 \[
 \{a_i\to a\}_{i\in I},
 \qquad
 a_i\sqsubseteq_{p,s} a.
 \]
-We assume that every $a$ carries the trivial cover $\{a\to a\}$.
+These covering families are required to satisfy:
+\begin{enumerate}[label=(\roman*),nosep]
+\item \emph{identity:} $\{a\to a\}\in\Cov_{p,s}(a)$ for every $a$;
+\item \emph{pullback stability:} if $\{a_i\to a\}_{i\in I}\in\Cov_{p,s}(a)$ and $b\sqsubseteq_{p,s} a$, then there exists a covering family
+\[
+\{b_{ij}\to b\}_{i\in I,\;j\in J_i}\in\Cov_{p,s}(b)
+\]
+such that $b_{ij}\sqsubseteq_{p,s} a_i$ for all $i,j$;
+\item \emph{transitivity:} if $\{a_i\to a\}_{i\in I}\in\Cov_{p,s}(a)$ and, for each $i\in I$,
+\[
+\{b_{ij}\to a_i\}_{j\in J_i}\in\Cov_{p,s}(a_i),
+\]
+then
+\[
+\{b_{ij}\to a\}_{i\in I,\;j\in J_i}\in\Cov_{p,s}(a).
+\]
+\end{enumerate}
 \end{definition}
+
+\begin{proposition}[The cover relation defines a Grothendieck pretopology]\label{prop:local-reference-pretopology}
+Let $\mathcal{B}_{p,s}$ be the preorder category whose objects are the admitted reference classes in $\mathcal{R}_s(p)$ and whose morphisms are the refinement arrows
+\[
+b\to a
+\quad:\Longleftrightarrow\quad
+b\sqsubseteq_{p,s} a.
+\]
+Then the covering families $\Cov_{p,s}$ form a Grothendieck pretopology on $\mathcal{B}_{p,s}$.
+\end{proposition}
+
+\begin{proof}
+The identity axiom in \Cref{def:local-reference-frame} gives the covering family $\{a\to a\}$ for every object $a$. If $\{a_i\to a\}_{i\in I}$ is a cover and $b\to a$ is any morphism, the pullback-stability axiom provides a cover
+\[
+\{b_{ij}\to b\}_{i\in I,\;j\in J_i}
+\]
+such that each arrow factors through $a_i\to a$. Finally, if $\{a_i\to a\}_{i\in I}$ covers $a$ and each $\{b_{ij}\to a_i\}_{j\in J_i}$ covers $a_i$, the transitivity axiom gives the composite cover
+\[
+\{b_{ij}\to a\}_{i\in I,\;j\in J_i}.
+\]
+These are exactly the identity, pullback, and transitivity axioms for a Grothendieck pretopology on a preorder category \cite[Chap.~III, \S2]{MacLaneMoerdijk1994}, \cite[Part~B2.1]{Johnstone2002}.
+\end{proof}
 
 \begin{definition}[Local object functor]\label{def:local-object-functor}
 A \emph{local object functor} on $(p,s)$ is a contravariant functor
@@ -77,7 +115,7 @@ Let $a=[r]_p$ and choose $\sigma\in F_{p,s}(a)$. The trivial cover $\{a\to a\}$ 
 
 \subsection{Sheafification and gluing failure}
 
-For fixed $(p,s)$, the local reference frame of \Cref{def:local-reference-frame} determines a site
+By \Cref{prop:local-reference-pretopology}, for fixed $(p,s)$ the local reference frame of \Cref{def:local-reference-frame} determines a site
 \[
 \mathcal{C}_{p,s}:=(\mathcal{B}_{p,s},\Cov_{p,s}),
 \]
@@ -133,7 +171,7 @@ This is \Cref{thm:sheafification-characterization} rewritten for the sheaf $a_{p
 
 \subsection{Realization prestacks and connected components}
 
-The presheaf $F_{p,s}$ records only the isomorphism classes of local realizations. To pass from compatible local families to gerbes and cohomology, one needs a groupoid-valued lift whose connected components recover $F_{p,s}$ after sheafification. The first point is purely categorical: once an abelian band has been fixed on the slice site, such lifts always exist. The substantive issue is therefore not bare existence, but whether one has chosen a lift whose stackification still reflects the intended gluing semantics at the terminal fibre.
+The presheaf $F_{p,s}$ records only the isomorphism classes of local realizations. To pass from compatible local families to gerbes and cohomology, one works with a chosen groupoid-valued lift whose connected components recover $F_{p,s}$ after sheafification. The first point is purely categorical: once an abelian band has been fixed on the slice site, such lifts always exist. The substantive issue is therefore not bare existence, but whether one has chosen a lift whose stackification still reflects the intended gluing semantics at the terminal fibre.
 
 \begin{definition}[Realization prestack and stackification]\label{def:realization-prestack}
 Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, and write
@@ -275,7 +313,7 @@ If $(\mathfrak P_r)_a\neq\varnothing$, choose $y\in (\mathfrak P_r)_a$. Then $\i
 \end{proof}
 
 \begin{remark}[What remains conditional]\label{rem:gluing-sensitive-lifts}
-\Cref{prop:split-realization-prestack} shows that admitting some banded realization prestack is not an additional existence burden: once a band has been fixed, a canonical split lift is always available. What remains conditional in the later branch-obstruction theory is the choice of a \emph{gluing-sensitive} lift, namely a realization prestack whose stackification is globally conservative at $a$ and whose component gerbes satisfy the vanishing hypotheses needed to produce branch obstruction classes. The substantive semantic claims therefore concern which lifts preserve the intended local-to-global content, not whether a formal groupoid-valued lift exists at all.
+\Cref{prop:split-realization-prestack} shows that admitting some banded realization prestack is not an additional existence burden: once a band has been fixed, a canonical split lift is always available. What remains conditional in the later branch-obstruction theory is the choice of a \emph{gluing-sensitive} lift, namely a realization prestack whose stackification is globally conservative at $a$ and whose component gerbes satisfy the vanishing hypotheses needed to produce branch obstruction classes. The branch obstruction classes of \Cref{sec:gerbe-obstruction} are therefore attached to a chosen gluing-sensitive lift and its band, not to the bare set-valued functor $F_{p,s}$ alone. The substantive semantic claims concern which lifts preserve the intended local-to-global content, not whether a formal groupoid-valued lift exists at all.
 \end{remark}
 
 \subsection{Visible value classes and typed readouts}

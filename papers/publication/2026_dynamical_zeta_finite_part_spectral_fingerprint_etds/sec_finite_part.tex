@@ -81,11 +81,15 @@ Perron pole, and the non-Perron spectrum.
     -\sum_{n\ge 1}p_n(A)
       \sum_{k\ge 2}\frac{\mu(k)}{k}\log(1-\lambda^{-nk}).
   \]
-  For \(|x|<1\),
+  For \(|x|<1\), absolute convergence permits the coefficientwise
+  calculation
   \[
-    \sum_{k\ge 1}\frac{\mu(k)}{k}\log(1-x^k)=-x,
+    \sum_{k\ge 1}\frac{\mu(k)}{k}\log(1-x^k)
+    =-\sum_{k\ge 1}\frac{\mu(k)}{k}\sum_{r\ge 1}\frac{x^{kr}}{r}
+    =-\sum_{n\ge 1}\frac{x^n}{n}\sum_{k\mid n}\mu(k)
+    =-x,
   \]
-  hence
+  because \(\sum_{k\mid n}\mu(k)=0\) unless \(n=1\). Hence
   \[
     \sum_{k\ge 2}\frac{\mu(k)}{k}\log(1-x^k)=-x-\log(1-x).
   \]
@@ -201,6 +205,13 @@ and
     \Psi_q(A)=u_q(A)+O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right)
     \qquad (q\to\infty).
   \]
+  More precisely,
+  \[
+    \abs{\Psi_q(A)-u_q(A)}
+    \le
+    \frac{d-1}{2(1-\Lambda_{\mathrm{rel}}(A))}
+    \Lambda_{\mathrm{rel}}(A)^{2q}.
+  \]
 \end{proposition}
 
 \begin{proof}
@@ -214,6 +225,17 @@ and
   the first identity. The remainder estimate follows from
   \[
     |u_{qm}(A)|\le (d-1)\Lambda_{\mathrm{rel}}(A)^{qm}.
+  \]
+  Indeed,
+  \[
+    \abs{\Psi_q(A)-u_q(A)}
+    \le
+    \sum_{m\ge 2}\frac{\abs{u_{qm}(A)}}{m}
+    \le
+    \frac{d-1}{2}\sum_{m\ge 2}\Lambda_{\mathrm{rel}}(A)^{qm}
+    \le
+    \frac{d-1}{2(1-\Lambda_{\mathrm{rel}}(A))}
+    \Lambda_{\mathrm{rel}}(A)^{2q}.
   \]
 \end{proof}
 
@@ -244,6 +266,58 @@ and
   since \(\sum_{m\mid s}\mu(m)=0\) unless \(s=1\).
 \end{proof}
 
+\begin{lemma}[Limsup of a finite exponential sum]
+  \label{lem:finite-part-exponential-sum-limsup}
+  Let
+  \[
+    f_q=\sum_{j=1}^r c_j\alpha_j^q
+    \qquad (q\ge 1),
+  \]
+  where \(c_j\in\CC\setminus\{0\}\) and \(\alpha_j\in\CC\). Then
+  \[
+    \limsup_{q\to\infty}\abs{f_q}^{1/q}
+    =\max_{1\le j\le r}\abs{\alpha_j}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  Set \(R:=\max_j\abs{\alpha_j}\). The upper bound
+  \(\limsup_{q\to\infty}\abs{f_q}^{1/q}\le R\) is immediate from
+  \(\abs{f_q}\le (\sum_j\abs{c_j})R^q\).
+
+  For the reverse inequality, collect equal frequencies on the boundary
+  circle and write
+  \[
+    f_q
+    =R^q\bigl(g_q+O(\vartheta^q)\bigr),
+    \qquad
+    g_q:=\sum_{k=1}^s d_k\beta_k^q,
+  \]
+  where \(\vartheta\in[0,1)\), the numbers \(\beta_1,\dots,\beta_s\in\TT\)
+  are pairwise distinct, and \(d_k\neq 0\). Then
+  \[
+    \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
+    =\sum_{k,\ell=1}^s d_k\overline{d_\ell}\,
+      \frac{1}{N}\sum_{q=1}^N(\beta_k\overline{\beta_\ell})^q.
+  \]
+  As \(N\to\infty\), the inner Ces\`aro average tends to \(1\) when
+  \(k=\ell\) and to \(0\) otherwise. Hence
+  \[
+    \frac{1}{N}\sum_{q=1}^N\abs{g_q}^2
+    \longrightarrow
+    \sum_{k=1}^s\abs{d_k}^2>0.
+  \]
+  Therefore \(\limsup_{q\to\infty}\abs{g_q}>0\), so there exist
+  \(c>0\) and infinitely many \(q\) such that \(\abs{g_q}\ge c\). Along
+  that subsequence,
+  \[
+    \abs{f_q}\ge \frac{c}{2}R^q
+  \]
+  for all sufficiently large \(q\), because \(\vartheta^q\to 0\). This
+  yields
+  \(\limsup_{q\to\infty}\abs{f_q}^{1/q}\ge R\), completing the proof.
+\end{proof}
+
 \begin{theorem}[Determination of the reduced spectrum from cyclic lifts]
   \label{thm:finite-part-cyclic-lift-spectrum-identifiability}
   The sequence \(\{\Psi_q(A)\}_{q\ge 1}\), equivalently
@@ -268,14 +342,25 @@ and
   non-Perron spectrum with algebraic multiplicity.
 
   For the exponential growth rate,
-  \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum} gives
+  \(u_q(A)=\sum_{j=2}^d(\mu_j/\lambda)^q\), so
+  \Cref{lem:finite-part-exponential-sum-limsup} gives
   \[
-    \Psi_q(A)=u_q(A)+O(\Lambda_{\mathrm{rel}}(A)^{2q}).
+    \limsup_{q\to\infty}\abs{u_q(A)}^{1/q}
+    =\Lambda_{\mathrm{rel}}(A).
   \]
-  Since \(u_q(A)\) is a finite linear combination of exponentials
-  \((\mu_j/\lambda)^q\), its exponential growth rate equals
-  \(\Lambda_{\mathrm{rel}}(A)\), and the same is therefore true for
-  \(\Psi_q(A)\).
+  The explicit remainder bound from
+  \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum} shows that
+  \[
+    \Psi_q(A)-u_q(A)
+    =O\!\left(\Lambda_{\mathrm{rel}}(A)^{2q}\right).
+  \]
+  If \(\Lambda_{\mathrm{rel}}(A)=0\), then both sequences are
+  eventually zero. Otherwise the error term has strictly smaller
+  exponential rate than \(u_q(A)\), so
+  \[
+    \limsup_{q\to\infty}\abs{\Psi_q(A)}^{1/q}
+    =\Lambda_{\mathrm{rel}}(A).
+  \]
 \end{proof}
 
 \subsection{One large root-of-unity layer}

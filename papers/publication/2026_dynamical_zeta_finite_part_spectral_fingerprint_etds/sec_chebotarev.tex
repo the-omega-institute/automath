@@ -10,7 +10,12 @@ replacement is the Peter--Weyl decomposition of class functions. The
 new feature is that primitive extraction is no longer governed by
 M\"obius inversion alone: it is M\"obius inversion intertwined with the
 Adams operations \(g\mapsto g^m\). This is the mechanism that turns
-twisted determinant data into primitive Peter--Weyl series.
+twisted determinant data into primitive Peter--Weyl series. At the
+orbit-counting level, the Chebotarev asymptotics for finite homogeneous
+extensions of shifts go back to Noorani--Parry
+\cite{NooraniParry1992ChebotarevShifts}; for the character-ring
+background and Adams operations we use the standard representation-ring
+formalism of Serre \cite{Serre1977LinearRepresentations}.
 
 \subsection{Class-function logarithms and primitive inversion}
 
@@ -96,6 +101,41 @@ Since \(\phi\) is bounded and \(p_n(A)\ll \lambda^n/n\), the series
   the stated factorisation.
 \end{proof}
 
+\begin{proposition}[Twisted spectral-radius bound]
+  \label{prop:twisted-spectral-radius-bound}
+  For every irreducible unitary representation
+  \(\sigma\in\Irr(G)\),
+  \[
+    \rho(A_\sigma)\le \rho(\widetilde A)=\lambda.
+  \]
+\end{proposition}
+
+\begin{proof}
+  Let \(\alpha\in\spec(A_\sigma)\). Then
+  \(\det(I-\alpha^{-1}A_\sigma)=0\), so
+  \Cref{prop:kernel-peter-weyl-block-diagonalisation} gives
+  \[
+    \det(I-\alpha^{-1}\widetilde A)
+    =
+    \prod_{\varrho\in\Irr(G)}
+      \det(I-\alpha^{-1}A_\varrho)^{\dim\varrho}
+    =0.
+  \]
+  Hence \(\alpha\in\spec(\widetilde A)\), and therefore
+  \(\rho(A_\sigma)\le \rho(\widetilde A)\).
+
+  To compute \(\rho(\widetilde A)\), observe that admissible
+  length-\(n\) paths in the skew product are in bijection with pairs
+  \((g,\gamma)\), where \(g\in G\) and \(\gamma\) is an admissible
+  length-\(n\) path in the base graph: once \(g\) and \(\gamma\) are
+  fixed, the lift is unique. Thus the number of admissible
+  length-\(n\) paths in the extension is exactly \(|G|\) times the
+  corresponding number in the base. The two shifts therefore have the
+  same topological entropy. For a finite directed graph, that entropy is
+  the logarithm of the spectral radius of its adjacency matrix, hence
+  \(\rho(\widetilde A)=\rho(A)=\lambda\).
+\end{proof}
+
 \noindent
 Up to this point, the material is representation-theoretic
 infrastructure. The specific content of the present paper begins when
@@ -137,7 +177,17 @@ Adams--M\"obius inversion.
       \sum_{\varrho\in\Irr(G)}
         \widehat\phi(\varrho)\Tr(A_\varrho^n).
   \]
-  Since
+  Moreover,
+  \[
+    \sum_{n\ge 1}\frac{|z|^n}{n}\abs{T_{\phi,n}}
+    \le
+    \norm{\phi}_\infty
+    \sum_{n\ge 1}\frac{\Tr(A^n)}{n}|z|^n
+    =
+    \norm{\phi}_\infty \log\det(I-|z|A)^{-1}
+    <\infty
+  \]
+  for \(|z|<\lambda^{-1}\). Since
   \[
     \abs{T_{\phi,n}}
     \le \norm{\phi}_\infty \#\operatorname{Fix}(\sigma^n)
@@ -255,6 +305,20 @@ for the Adams decomposition in the character ring.
   because \(\abs{\chi_\varrho(h)}\le \dim\varrho\) for all \(h\in G\).
   Taking the square root gives the claim.
 \end{proof}
+
+\begin{remark}[Periodicity of Adams coefficients]
+  \label{rem:adams-coefficients-periodic}
+  Let \(\exp(G)\) denote the exponent of \(G\). Since
+  \(g^{m+\exp(G)}=g^m\) for every \(g\in G\), one has
+  \[
+    \psi^{m+\exp(G)}\chi_\varrho=\psi^m\chi_\varrho.
+  \]
+  Consequently
+  \(a_{\varrho,\sigma}^{(m+\exp(G))}=a_{\varrho,\sigma}^{(m)}\) for all
+  \(m\), so only finitely many Adams coefficient vectors occur. In the
+  estimates below we use this finiteness only through the uniform bound
+  of \Cref{lem:adams-coefficients-bounded}.
+\end{remark}
 
 \begin{corollary}[Irreducible-channel determinant formula]
   \label{cor:primitive-peter-weyl-determinant}
