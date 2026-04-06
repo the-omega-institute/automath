@@ -71,4 +71,28 @@ theorem paper_fib_lie_resonance_orthogonal_symplectic :
   refine ⟨by native_decide, by native_decide, by native_decide, by native_decide,
     ⟨2, by native_decide, rfl⟩, ⟨6, by native_decide, rfl⟩, ⟨10, by native_decide, rfl⟩⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R306: Pisano period p=17,19,23 + Wall divisibility
+-- ══════════════════════════════════════════════════════════════
+
+/-- cor:gut-fibprime-pisano-4n -/
+theorem pisano_period_17 : Nat.fib 36 % 17 = 0 ∧ Nat.fib 37 % 17 = 1 := by native_decide
+
+/-- cor:gut-fibprime-pisano-4n -/
+theorem pisano_period_19 : Nat.fib 18 % 19 = 0 ∧ Nat.fib 19 % 19 = 1 := by native_decide
+
+/-- cor:gut-fibprime-pisano-4n -/
+theorem pisano_period_23 : Nat.fib 48 % 23 = 0 ∧ Nat.fib 49 % 23 = 1 := by native_decide
+
+/-- cor:gut-fibprime-pisano-4n -/
+theorem pisano_wall_divisibility :
+    36 ∣ (2 * (17 + 1)) ∧ 18 ∣ (19 - 1) ∧ 48 ∣ (2 * (23 + 1)) := by omega
+
+/-- Paper package. cor:gut-fibprime-pisano-4n -/
+theorem paper_pisano_extended :
+    (Nat.fib 36 % 17 = 0 ∧ Nat.fib 37 % 17 = 1) ∧
+    (Nat.fib 18 % 19 = 0 ∧ Nat.fib 19 % 19 = 1) ∧
+    (Nat.fib 48 % 23 = 0 ∧ Nat.fib 49 % 23 = 1) := by
+  exact ⟨pisano_period_17, pisano_period_19, pisano_period_23⟩
+
 end Omega.GU

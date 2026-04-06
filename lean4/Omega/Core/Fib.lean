@@ -1200,6 +1200,35 @@ theorem paper_fenceDet_partial_sum_package :
   exact ⟨fenceDet_partial_sum, by simp [fenceDet]⟩
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R306: fenceDet consecutive difference = even Fibonacci
+-- ══════════════════════════════════════════════════════════════
+
+/-- cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_succ_sub (k : Nat) :
+    fenceDet (k + 1) - fenceDet k = Nat.fib (2 * k + 2) := by
+  rw [fenceDet_eq_fib (k + 1), fenceDet_eq_fib k]
+  have h := Nat.fib_add_two (n := 2 * k + 1)
+  rw [show (2 * k + 1) + 2 = 2 * k + 3 from by omega,
+      show (2 * k + 1) + 1 = 2 * k + 2 from by omega] at h
+  rw [show 2 * (k + 1) + 1 = 2 * k + 3 from by omega]
+  omega
+
+/-- cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_succ_eq_add (k : Nat) :
+    fenceDet (k + 1) = fenceDet k + Nat.fib (2 * k + 2) := by
+  have h := fenceDet_succ_sub k
+  have hmono := fenceDet_mono k
+  omega
+
+/-- Paper package. cor:pom-Lk-t1-fibonacci-det-green -/
+theorem paper_fenceDet_diff_package :
+    (∀ k, fenceDet (k + 1) - fenceDet k = Nat.fib (2 * k + 2)) ∧
+    (∀ k, fenceDet (k + 1) = fenceDet k + Nat.fib (2 * k + 2)) ∧
+    fenceDet 5 - fenceDet 4 = 55 := by
+  refine ⟨fenceDet_succ_sub, fenceDet_succ_eq_add, ?_⟩
+  rw [fenceDet_succ_sub]; native_decide
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R29: Fibonacci product convolution sum
 -- ══════════════════════════════════════════════════════════════
 

@@ -1442,4 +1442,30 @@ theorem paper_word_trace_m3_selected :
     rw [show (3 : ℕ) = 2 + 1 from rfl, allOnesMatrix_pow_succ, Matrix.trace_smul,
       allOnesMatrix_trace]; norm_num
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R306: Fibonacci divisibility + Lucas quotient
+-- ══════════════════════════════════════════════════════════════
+
+/-- thm:zeta-syntax-trace-linear-recurrence -/
+theorem fib_divisibility_instances :
+    Nat.fib 5 ∣ Nat.fib 10 ∧ Nat.fib 5 ∣ Nat.fib 15 ∧ Nat.fib 5 ∣ Nat.fib 20 ∧
+    Nat.fib 6 ∣ Nat.fib 12 ∧ Nat.fib 6 ∣ Nat.fib 18 ∧
+    Nat.fib 7 ∣ Nat.fib 14 ∧ Nat.fib 7 ∣ Nat.fib 21 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
+
+/-- thm:zeta-syntax-trace-linear-recurrence -/
+theorem fib_divisibility_quotients :
+    Nat.fib 10 / Nat.fib 5 = 11 ∧
+    Nat.fib 12 / Nat.fib 6 = 18 ∧
+    Nat.fib 14 / Nat.fib 7 = 29 := by
+  refine ⟨?_, ?_, ?_⟩ <;> native_decide
+
+/-- Paper package. thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_fib_divisibility_lucas_quotient :
+    Nat.fib 10 / Nat.fib 5 = 11 ∧ (11 : ℤ) = lucasNum 5 ∧
+    Nat.fib 12 / Nat.fib 6 = 18 ∧ (18 : ℤ) = lucasNum 6 ∧
+    Nat.fib 14 / Nat.fib 7 = 29 ∧ (29 : ℤ) = lucasNum 7 := by
+  refine ⟨by native_decide, ?_, by native_decide, ?_, by native_decide, ?_⟩
+  all_goals simp [lucasNum]
+
 end Omega.Zeta
