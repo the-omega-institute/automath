@@ -1,104 +1,73 @@
-# NotebookLM Oracle Bridge
+# NotebookLM Oracle — Slide Deck & Audio Podcast Generator
 
-Use Google NotebookLM as an automated content pipeline from any script or agent.
+Generate beautiful slide decks and audio podcasts from paper PDFs via Google NotebookLM,
+then push them to standalone GitHub repos for promotion.
 
 ```
-Your Script ──POST──> notebooklm_server.py <──poll── Tampermonkey (Chrome)
-                           │                           │
-                      GET /result           notebooklm.google.com automation
+notebooklm_dispatch.py  -->  notebooklm-py RPC  -->  NotebookLM API
+        |                                                    |
+        v                                                    v
+  artifacts/slug/                              slide_deck.pdf + podcast.wav
+        |
+        v
+  create_paper_repos.py  -->  GitHub repos with media/
 ```
 
-**4 files, 0 dependencies, 5 minutes to set up.**
-
-## Quick Start
-
-### 1. Install Tampermonkey
-
-Install [Tampermonkey](https://www.tampermonkey.net/) for Chrome/Edge/Firefox.
-
-### 2. Install the userscript
-
-1. Tampermonkey Dashboard → `+` (new script)
-2. Delete template, paste contents of `notebooklm_oracle.user.js`
-3. `Ctrl+S` to save
-
-### 3. Start server
+## Setup
 
 ```bash
-python notebooklm_server.py
+pip install notebooklm-py
+notebooklm login          # Opens browser for Google auth
 ```
 
-### 4. Open NotebookLM
-
-Go to https://notebooklm.google.com — you should see the Oracle panel (bottom-left).
-Click **Start** to activate polling.
-
-### 5. Submit a task
+## Usage
 
 ```bash
-# Study guide from paper PDF
-python notebooklm_dispatch.py --paper /path/to/paper_dir --type study_guide
+# Generate slides + audio for one paper
+python notebooklm_dispatch.py --paper /path/to/paper_dir
 
-# Audio overview
-python notebooklm_dispatch.py --paper /path/to/paper_dir --type audio_overview
+# Audio only
+python notebooklm_dispatch.py --paper /path/to/paper_dir --type audio
 
-# Custom chat
-python notebooklm_dispatch.py --paper /path/to/paper_dir --type chat --prompt "Summarize key results"
+# Slides only
+python notebooklm_dispatch.py --paper /path/to/paper_dir --type slides
 
-# Submit without waiting
-python notebooklm_dispatch.py --paper /path/to/paper_dir --type study_guide --no-wait
+# All submitted papers
+python notebooklm_dispatch.py --all
+
+# Queue without waiting (check later)
+python notebooklm_dispatch.py --paper /path/to/paper_dir --no-wait
+
+# Check artifact status
+python notebooklm_dispatch.py --notebook <id> --status
+
+# Download completed artifacts
+python notebooklm_dispatch.py --notebook <id> --download
+
+# List all notebooks
+python notebooklm_dispatch.py --list
 ```
 
-Results auto-save to `notebooklm/done/<task_id>.md`.
+Artifacts save to `papers/publication/notebooklm/artifacts/<slug>/`.
 
-### 6. Full pipeline (optional)
+## Integration with Paper Repos
 
-```bash
-# Theory → Summary → Slides → Video → Social metadata
-python notebooklm_pipeline.py --paper /path/to/paper_dir
-
-# From Lean file
-python notebooklm_pipeline.py --lean Omega/Zeta/DynZeta.lean
-
-# From discovery JSON (output of lean4_discovery_export.py)
-python notebooklm_pipeline.py --discovery discovery_report.json
-```
+`create_paper_repos.py` automatically detects artifacts in `notebooklm/artifacts/`
+and includes them in the `media/` directory of each standalone GitHub repo.
 
 ## Files
 
-| File | What | Port |
-|------|------|------|
-| `notebooklm_server.py` | HTTP bridge server | 8766 |
-| `notebooklm_dispatch.py` | CLI client — submit & wait | — |
-| `notebooklm_oracle.user.js` | Browser automation (Tampermonkey) | — |
-| `notebooklm_pipeline.py` | 4-stage content pipeline | — |
-
-## No conflict with ChatGPT Oracle
-
-| | ChatGPT Oracle | NotebookLM Oracle |
-|---|---|---|
-| Port | 8765 | 8766 |
-| `@match` | `chatgpt.com/*` | `notebooklm.google.com/*` |
-| Panel | bottom-right | bottom-left |
-
-Both can run simultaneously.
-
-## API
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/submit` | POST | `{"task_id", "task_type", "pdf_base64", "pdf_name", "prompt?"}` |
-| `/task` | GET | Browser polls for next task |
-| `/ack` | POST | Browser acknowledges task |
-| `/result` | POST | Browser posts response |
-| `/status` | GET | Queue info |
-
-Task types: `study_guide`, `audio_overview`, `chat`, `review`
+| File | What |
+|------|------|
+| `notebooklm_dispatch.py` | CLI — upload PDF, generate slides/audio, download |
+| `notebooklm_oracle.user.js` | Tampermonkey userscript (legacy, for reference) |
+| `notebooklm_server.py` | HTTP bridge server (legacy) |
+| `notebooklm_pipeline.py` | Template-based content pipeline |
 
 ## Requirements
 
-- Python 3.8+ (stdlib only, no pip install)
-- Chrome/Edge/Firefox + Tampermonkey
+- Python 3.10+ (stdlib only)
+- `notebooklm-py` (`pip install notebooklm-py`)
 - Google account with NotebookLM access
 
 ## License

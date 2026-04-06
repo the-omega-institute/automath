@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """ChatGPT Pro direct API integration — fully automated, no browser needed.
