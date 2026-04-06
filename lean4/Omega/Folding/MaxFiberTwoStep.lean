@@ -1017,6 +1017,12 @@ theorem hiddenBitCount_succ_eq (m : Nat) :
   · have hm1 : m % 2 = 1 := by omega
     rw [hm1] at hmod; simp at hmod; omega
 
+/-- Complement relation: 2^m - B(m) = 2·B(m) + δ where δ ∈ {1,2}.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_complement (m : Nat) :
+    2 ^ m - hiddenBitCount m = 2 * hiddenBitCount m + (if m % 2 = 0 then 1 else 2) := by
+  have := hiddenBitCount_closed m; omega
+
 /-- Closed form: 3·B(2m+1) + 2 = 2·4^m.
     thm:pom-hidden-bit-count -/
 theorem hiddenBitCount_odd_closed_eq (m : Nat) :

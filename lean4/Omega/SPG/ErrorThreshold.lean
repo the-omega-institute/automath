@@ -336,6 +336,31 @@ theorem kappa_mul_eq {a b : ℝ}
   rw [h_num, h_num2]
   field_simp
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R335: kappa concrete values and squaring
+-- ══════════════════════════════════════════════════════════════
+
+/-- κ(1/6) = 7/5.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_sixth : kappa (1 / 6 : ℝ) = 7 / 5 := by unfold kappa; norm_num
+
+/-- κ(1/7) = 4/3.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_seventh : kappa (1 / 7 : ℝ) = 4 / 3 := by unfold kappa; norm_num
+
+/-- κ(ε)² = κ(2ε/(1+ε²)).
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_sq_eq {ε : ℝ} (hε : -1 < ε) (hε' : ε < 1) :
+    kappa ε ^ 2 = kappa (2 * ε / (1 + ε ^ 2)) := by
+  rw [sq, kappa_mul_eq hε hε' hε hε' (by nlinarith [sq_nonneg ε])]
+  congr 1; ring
+
+/-- Paper package: κ(1/3)² = 4, κ(1/2)² = 9.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem paper_kappa_sq_package :
+    kappa (1 / 3 : ℝ) ^ 2 = 4 ∧ kappa (1 / 2 : ℝ) ^ 2 = 9 := by
+  constructor <;> (rw [sq]; unfold kappa; norm_num)
+
 end Omega.SPG
 
 
