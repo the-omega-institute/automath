@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1473 |
+| \leanverified 标注数 | 1476 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1490 |
-| 轮次 | R358（round_count=359） |
+| 总标注数 | 1493 |
+| 轮次 | R359（round_count=360） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -25,16 +25,16 @@
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
 | POM | 1,707 | 292 | 17.1% |
-| Emergent Arithmetic | 185 | 149 | 80.5% |
+| Emergent Arithmetic | 185 | 151 | 81.6% |
 | Folding | 337 | 110 | 32.6% |
-| Conclusion | 2,550 | 237 | 9.3% |
+| Conclusion | 2,550 | 238 | 9.3% |
 | Group Unification | 469 | 154 | 32.8% |
 | SPG | 129 | 100 | 77.5% |
 | Circle Dimension | 393 | 131 | 33.3% |
 | Zeta Finite Part | 4,524 | 183 | 4.0% |
 | Discussion | 67 | 57 | 85.1% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1413** | **13.4%** |
+| **合计（body）** | **10,508** | **1416** | **13.5%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**Gödel 编码最大素数幂界 + 矩层级 + EA 环同构核（Round R359）**：`godelEncoding_le_max_prime_pow`（对应 `thm:conclusion-godel-history-superlinear-highprob`，Conclusion；Gödel 编码值 ≤ 最大素数幂之积界）；`paper_momentSum_hierarchy`（对应 `prop:fold-groupoid-wedderburn`，EA；S_q 矩层级单调性综合包）；`paper_ea_ring_iso_core`（对应 `thm:monoid-quotient-is-N`，EA；稳定地址环同构核心包）
 **Tanaka 分解 + Fibonacci 半径 < 1 + 碰撞矩包（Round R358）**：`tanakaDecomposition`（对应 `thm:spg-scan-tanaka-stokes`，SPG；Tanaka--Stokes 分解主定理）；`fibRadius_lt_one` + `one_sub_fibRadius`（对应 `con:cdim-fibonacci-radius-time-conjugacy`，Circle Dimension；Fibonacci 半径严格小于 1 与余量显式公式）；`paper_pom_collision_moment_package`（对应 `prop:fold-renyi-collision-identity`，EA；碰撞矩与 Rényi 偏离严格恒等式综合包）
 **对合计数上界 + 偶长校正审计包 + Chebyshev 负参数恒等式（Round R357）**：`freeInvolutionCount_le_two_r_pow`（对应 `thm:fiberwise-free-involution-matching-entropy`，GU；自由对合计数的 2^r 上界）；`paper_zeta_evenLength_correction_package`（对应 `cor:xi-time-part73c-fixed-parameter-necklace-correction`，Zeta；偶长 necklace 校正审计综合包）；`chebyAdams_neg_arg_sq` + `chebyAdams_neg_mul_self`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 负参数平方与自乘恒等式）
 **AM-GM 等号条件 + EA 两层读出 + 碰撞核联合审计（Round R356）**：`prod_eq_const_pow_of_all_eq`（对应 `thm:conclusion-section-ledger-kl-identity`，Conclusion；乘积等于常数幂当且仅当所有因子相等的 AM-GM 等号条件）；`paper_ea_two_layer_readout`（对应 `thm:composition-two-layer`，Emergent Arithmetic；单一原语两层读出同时生成加法与乘法）；`paper_folding_collision_kernel_combined`（对应 `thm:fold-collision2-aut-lie-dimension-rank`，Emergent Arithmetic；折叠碰撞核联合审计包）
