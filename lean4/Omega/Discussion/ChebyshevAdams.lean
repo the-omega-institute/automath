@@ -381,4 +381,26 @@ theorem paper_chebyAdams_frobenius_zero_one :
     chebyAdams 5 1 % 5 = 1 % 5 := by
   simp [chebyAdams_two, chebyAdams_three, chebyAdams_five]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R315: Dwork-Chebyshev package
+-- ══════════════════════════════════════════════════════════════
+
+/-- Double-angle formula: C_{2n}(S) = C_n(S² - 2).
+    thm:discussion-completed-dwork-chebyshev -/
+theorem chebyAdams_double (n : ℕ) (S : ℤ) :
+    chebyAdams (2 * n) S = chebyAdams n (S ^ 2 - 2) := by
+  rw [show 2 * n = n * 2 from by ring, chebyAdams_mul, chebyAdams_two]
+
+/-- Triple-angle formula: C_{3n}(S) = C_n(S³ - 3S).
+    thm:discussion-completed-dwork-chebyshev -/
+theorem chebyAdams_triple (n : ℕ) (S : ℤ) :
+    chebyAdams (3 * n) S = chebyAdams n (S ^ 3 - 3 * S) := by
+  rw [show 3 * n = n * 3 from by ring, chebyAdams_mul, chebyAdams_three]
+
+/-- Dwork congruence (exact form): C_{p^{k+1}}(S) = C_{p^k}(C_p(S)).
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_pow_prime_compose (p k : ℕ) (S : ℤ) :
+    chebyAdams (p ^ (k + 1)) S = chebyAdams (p ^ k) (chebyAdams p S) := by
+  rw [pow_succ, chebyAdams_mul]
+
 end Omega.Discussion

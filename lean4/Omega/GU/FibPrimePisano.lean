@@ -95,4 +95,13 @@ theorem paper_pisano_extended :
     (Nat.fib 48 % 23 = 0 ∧ Nat.fib 49 % 23 = 1) := by
   exact ⟨pisano_period_17, pisano_period_19, pisano_period_23⟩
 
+/-- Pisano period for p = 29: π(29) = 14.
+    prop:gu-fibprime-pisano-periods -/
+theorem pisano_period_29 : Nat.fib 14 % 29 = 0 ∧ Nat.fib 15 % 29 = 1 := by native_decide
+
+/-- Paper package for p = 29.
+    prop:gu-fibprime-pisano-periods -/
+theorem paper_pisano_period_29 :
+    (Nat.fib 14 % 29 = 0 ∧ Nat.fib 15 % 29 = 1) := pisano_period_29
+
 end Omega.GU
