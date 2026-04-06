@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1480 |
+| \leanverified 标注数 | 1483 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1497 |
-| 轮次 | R360（round_count=361） |
+| 总标注数 | 1500 |
+| 轮次 | R361（round_count=362） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,15 +26,15 @@
 |---|---|---|---|
 | POM | 1,707 | 292 | 17.1% |
 | Emergent Arithmetic | 185 | 151 | 81.6% |
-| Folding | 337 | 110 | 32.6% |
+| Folding | 337 | 111 | 32.9% |
 | Conclusion | 2,550 | 238 | 9.3% |
 | Group Unification | 469 | 155 | 33.1% |
-| SPG | 129 | 100 | 77.5% |
-| Circle Dimension | 393 | 131 | 33.3% |
+| SPG | 129 | 101 | 78.3% |
+| Circle Dimension | 393 | 132 | 33.6% |
 | Zeta Finite Part | 4,524 | 184 | 4.1% |
 | Discussion | 67 | 59 | 88.1% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1420** | **13.5%** |
+| **合计（body）** | **10,508** | **1423** | **13.5%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**扫描误差对称差包 + 相谱小挠率 + 纤维直方图回文性（Round R361）**：`paper_scanError_symmDiff_package`（对应 `prop:spg-scan-error-cylinder`，SPG；扫描误差对称差质量上界综合包）；`paper_phaseSpectrumCount_small_torsion`（对应 `thm:cdim-phase-spectrum-limit`，Circle Dimension；有限挠子群相谱计数）；`paper_pom_fiber_histogram_palindrome`（对应 `prop:fold-fiber-count-reciprocity`，Folding；纤维直方图回文对称性）
 **偶长 necklace 素数差 + window-6 边界证书 + Chebyshev 倍角恒等式（Round R360）**：`evenLength_sub_necklace_at_prime`（对应 `cor:xi-time-part73c-fixed-parameter-necklace-correction`，Zeta；偶长校正在素数处的减法公式）；`paper_gu_window6_boundary_certificate`（对应 `prop:window6-foldbin-gauge-center-vs-charge-separation`，GU；window-6 边界综合证书）；`chebyAdams_double_pow` + `chebyAdams_double_succ`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 倍角幂次与后继恒等式）
 **Gödel 编码最大素数幂界 + 矩层级 + EA 环同构核（Round R359）**：`godelEncoding_le_max_prime_pow`（对应 `thm:conclusion-godel-history-superlinear-highprob`，Conclusion；Gödel 编码值 ≤ 最大素数幂之积界）；`paper_momentSum_hierarchy`（对应 `prop:fold-groupoid-wedderburn`，EA；S_q 矩层级单调性综合包）；`paper_ea_ring_iso_core`（对应 `thm:monoid-quotient-is-N`，EA；稳定地址环同构核心包）
 **Tanaka 分解 + Fibonacci 半径 < 1 + 碰撞矩包（Round R358）**：`tanakaDecomposition`（对应 `thm:spg-scan-tanaka-stokes`，SPG；Tanaka--Stokes 分解主定理）；`fibRadius_lt_one` + `one_sub_fibRadius`（对应 `con:cdim-fibonacci-radius-time-conjugacy`，Circle Dimension；Fibonacci 半径严格小于 1 与余量显式公式）；`paper_pom_collision_moment_package`（对应 `prop:fold-renyi-collision-identity`，EA；碰撞矩与 Rényi 偏离严格恒等式综合包）
