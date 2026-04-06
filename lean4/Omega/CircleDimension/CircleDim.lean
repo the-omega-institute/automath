@@ -1006,4 +1006,16 @@ theorem paper_cdim_phase_spectrum_audit :
   ⟨fun _ _ _ _ ht ht' h => phaseSpectrumCount_reconstruction ht ht' h,
    phaseSpectrumCount_coprime, phaseSpectrumCount_free⟩
 
+/-- Phase spectrum count for small torsion groups.
+    thm:cdim-phase-spectrum-limit -/
+theorem paper_phaseSpectrumCount_small_torsion :
+    phaseSpectrumCount 1 2 2 = 4 ∧
+    phaseSpectrumCount 1 2 3 = 3 ∧
+    phaseSpectrumCount 1 3 3 = 9 ∧
+    phaseSpectrumCount 1 3 2 = 2 ∧
+    phaseSpectrumCount 1 4 4 = 16 ∧
+    phaseSpectrumCount 1 4 2 = 4 := by
+  simp only [phaseSpectrumCount]
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
+
 end Omega.CircleDimension

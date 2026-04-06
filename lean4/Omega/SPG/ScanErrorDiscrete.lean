@@ -1366,4 +1366,20 @@ theorem paper_scanError_subadditivity_audit :
     20 < 21 := by
   refine ⟨by native_decide, by omega, by native_decide, by omega⟩
 
+/-- Scan error bounded by set mass of symmetric difference.
+    prop:spg-scan-error-cylinder -/
+theorem scanError_le_setMass_symmDiff {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) :
+    scanError μ obs (symmDiff P Q) ≤ setMass μ (symmDiff P Q) :=
+  scanError_le_setMass μ obs _
+
+/-- Scan error of symmetric difference bounded by sum of event masses.
+    prop:spg-scan-error-cylinder -/
+theorem paper_scanError_symmDiff_package {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) :
+    scanError μ obs (symmDiff P Q) ≤ setMass μ (symmDiff P Q) ∧
+    scanError μ obs (P ∪ Q) ≤ scanError μ obs P + scanError μ obs Q ∧
+    scanError μ obs P ≤ setMass μ P :=
+  ⟨scanError_le_setMass μ obs _, scanError_union_le μ obs P Q, scanError_le_setMass μ obs P⟩
+
 end Omega.SPG

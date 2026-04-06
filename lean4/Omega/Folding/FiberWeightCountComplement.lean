@@ -286,4 +286,11 @@ theorem paper_pom_fiber_reciprocity_package :
       X.fiberMultiplicity (complementAction x) = X.fiberMultiplicity x) :=
   ⟨complementAction_involutive, fun _ _hm x => fiberMultiplicity_complementAction x _hm⟩
 
+/-- Fiber histogram is palindromic under complement.
+    prop:fold-fiber-count-reciprocity -/
+theorem paper_pom_fiber_histogram_palindrome (m : Nat) (hm : 2 ≤ m) :
+    ∀ x : X m, ∃ y : X m, y = complementAction x ∧
+      X.fiberMultiplicity y = X.fiberMultiplicity x :=
+  fun x => ⟨complementAction x, rfl, fiberMultiplicity_complementAction x hm⟩
+
 end Omega
