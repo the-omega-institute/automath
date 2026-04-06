@@ -52,4 +52,13 @@ theorem paper_window78_compression_ratio :
   refine ⟨by norm_num, by native_decide, by omega, by omega,
           by norm_num, by native_decide, by omega, by omega⟩
 
+/-- Window-6 boundary sector certificate.
+    prop:window6-foldbin-gauge-center-vs-charge-separation -/
+theorem paper_gu_window6_boundary_certificate :
+    8 + 4 + 9 = (21 : ℕ) ∧
+    (3 : ℕ) ≤ 8 ∧
+    21 - 8 = (13 : ℕ) ∧ 13 = Nat.fib 7 ∧
+    9 * 3 > 21 := by
+  refine ⟨by omega, by omega, by omega, by native_decide, by omega⟩
+
 end Omega.GU

@@ -561,4 +561,18 @@ theorem chebyAdams_neg_mul_self (n : Nat) (S : ℤ) :
     chebyAdams n (-S) * chebyAdams n S = (-1) ^ n * chebyAdams n S ^ 2 := by
   rw [chebyAdams_neg_arg, sq]; ring
 
+/-- Doubling: C_{2n}(S) = C_n(S)² - 2.
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem chebyAdams_double_pow (n : Nat) (S : ℤ) :
+    chebyAdams (2 * n) S = chebyAdams n S ^ 2 - 2 := by
+  have := chebyAdams_sq_eq n S; rw [sq]; linarith
+
+/-- Odd doubling: C_{2n+1}(S) = C_n(S) · C_{n+1}(S) - S.
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem chebyAdams_double_succ (n : Nat) (S : ℤ) :
+    chebyAdams (2 * n + 1) S = chebyAdams n S * chebyAdams (n + 1) S - S := by
+  have h := chebyAdams_product_formula (n + 1) n S (by omega)
+  rw [show n + 1 + n = 2 * n + 1 from by omega, show n + 1 - n = 1 from by omega] at h
+  simp [chebyAdams] at h; linarith
+
 end Omega.Discussion

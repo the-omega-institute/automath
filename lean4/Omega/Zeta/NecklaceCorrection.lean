@@ -1,5 +1,6 @@
 import Mathlib.NumberTheory.ArithmeticFunction.Moebius
 import Mathlib.Tactic
+import Omega.Zeta.EvenLengthCorrection
 
 open scoped BigOperators
 
@@ -164,5 +165,28 @@ theorem necklaceCorrectionKernel_at_two_pos_bounded :
     ∀ m, 1 ≤ m → m ≤ 20 → 0 < necklaceCorrectionKernel 2 (2 * m) := by
   intro m hm hm'
   interval_cases m <;> native_decide
+
+/-- At prime m=p: E(v,2p) - N(v,2p) = v^p + v.
+    cor:xi-time-part73c-fixed-parameter-necklace-correction -/
+theorem evenLength_sub_necklace_at_prime (v : Nat) {p : Nat} (hp : Nat.Prime p) :
+    (evenLengthCorrection v (2 * p) : ℤ) - necklaceCorrectionKernel v (2 * p) =
+    (v : ℤ) ^ p + v := by
+  rw [evenLengthCorrection_even, necklaceCorrectionKernel_even]
+  -- E = 2·v^p, N = Σ_{d|p} μ(d)·v^(p/d)
+  -- divisors p = {1, p} for prime p
+  have hDivs : Nat.divisors p = {1, p} := by
+    ext d; simp only [Nat.mem_divisors, Finset.mem_insert, Finset.mem_singleton]
+    constructor
+    · intro ⟨hd, hne⟩; exact (Nat.dvd_prime hp).mp hd
+    · rintro (rfl | rfl) <;> simp [hp.ne_zero]
+  rw [hDivs, Finset.sum_insert (show (1 : ℕ) ∉ ({p} : Finset ℕ) from by
+    simp; exact hp.ne_one.symm), Finset.sum_singleton]
+  rw [Nat.div_one, Nat.div_self hp.pos]
+  have hμ1 : ArithmeticFunction.moebius 1 = (1 : ℤ) := by
+    rw [ArithmeticFunction.moebius_apply_of_squarefree (by simp)]; norm_num
+  have hμp : ArithmeticFunction.moebius p = (-1 : ℤ) := by
+    rw [ArithmeticFunction.moebius_apply_of_squarefree hp.squarefree,
+      ArithmeticFunction.cardFactors_apply_prime hp, pow_one]
+  rw [hμ1, hμp]; push_cast; ring
 
 end Omega.Zeta
