@@ -623,4 +623,23 @@ theorem paper_inducedSpectrum_base_cases :
       multiPrimeSpectrum supports ∅ = supports.card) :=
   ⟨inducedSpectrum_singleton, inducedSpectrum_singleton_empty, multiPrimeSpectrum_empty⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R324: inducedSpectrum antitone
+-- ══════════════════════════════════════════════════════════════
+
+/-- Induced spectrum is antitone in the prime support parameter:
+    larger support J ⊆ K means fewer matching supports.
+    thm:cdim-multiprime-spectrum-realizability -/
+theorem inducedSpectrum_antitone (supports : Finset PrimeSupport) (n : PrimeSupport → Nat)
+    {J K : PrimeSupport} (hJK : J ⊆ K) :
+    inducedSpectrum supports n K ≤ inducedSpectrum supports n J := by
+  unfold inducedSpectrum
+  apply Finset.sum_le_sum
+  intro S _hS
+  split_ifs with hK hJ
+  · exact le_refl _
+  · exact absurd (Finset.Subset.trans hJK hK) hJ
+  · exact Nat.zero_le _
+  · exact le_refl _
+
 end Omega.CircleDimension

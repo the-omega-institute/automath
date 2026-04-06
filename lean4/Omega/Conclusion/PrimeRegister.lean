@@ -641,6 +641,13 @@ theorem godelEncoding_cons (primes : ℕ → ℕ) (offset a : ℕ) (rest : List 
   congr 1
   rw [godelEncodingFrom_reindex primes offset 1 rest]
 
+/-- Two-element Gödel encoding.
+    thm:conclusion-godel-semidirect-law -/
+@[simp] theorem godelEncoding_two (primes : ℕ → ℕ) (offset a b : ℕ) :
+    godelEncoding primes offset [a, b] =
+    primes offset ^ a * primes (offset + 1) ^ b := by
+  rw [godelEncoding_cons, godelEncoding_singleton]
+
 /-- Gödel encoding equals 1 iff all exponents are 0.
     thm:conclusion-godel-semidirect-law -/
 theorem godelEncoding_eq_one_iff (primes : ℕ → ℕ) (offset : ℕ) (code : List ℕ)
