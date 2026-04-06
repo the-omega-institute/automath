@@ -895,6 +895,19 @@ theorem fib_fusion_defect_cocycle (a b c : Nat) :
     push_cast [Nat.fib_add_two]; ring
   rw [hc, ha]; nlinarith
 
+/-- Paper package: fusion defect, determinant volume law, 2-cocycle.
+    lem:pom-shifted-fib-fusion-defect-positive, cor:pom-fib-determinant-volume-law,
+    prop:pom-fusion-defect-2cocycle-identity -/
+theorem paper_pom_shifted_fusion_defect_package :
+    (∀ a b : Nat, Nat.fib (a + 2) * Nat.fib (b + 2) =
+      Nat.fib (a + b + 2) + Nat.fib a * Nat.fib b) ∧
+    (∀ a b : Nat, (Nat.fib (a + 2) : ℤ) * Nat.fib (b + 2) - (Nat.fib a : ℤ) * Nat.fib b =
+      Nat.fib (a + b + 2)) ∧
+    (∀ a b c : Nat,
+      Nat.fib a * Nat.fib b * Nat.fib (c + 2) + Nat.fib (a + b) * Nat.fib c =
+      Nat.fib b * Nat.fib c * Nat.fib (a + 2) + Nat.fib (b + c) * Nat.fib a) :=
+  ⟨fib_shifted_fusion_defect, fib_determinant_volume_law, fib_fusion_defect_cocycle⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase 234: Fib strict supermultiplicativity
 -- ══════════════════════════════════════════════════════════════
