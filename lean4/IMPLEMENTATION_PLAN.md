@@ -6,17 +6,17 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~39,212 |
-| 定理/定义数 | ~3,498 |
+| 总行数 | ~39,268 |
+| 定理/定义数 | ~3,503 |
 | 论文接口包装 | 654+ |
 | 文件数 | 106 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1302 |
+| \leanverified 标注数 | 1307 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1319 |
-| 轮次 | R316（round_count=317） |
+| 总标注数 | 1324 |
+| 轮次 | R317（round_count=318） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -25,14 +25,14 @@
 | POM | 1,707 | 274 | 16.0% |
 | Emergent Arithmetic | 185 | 124 | 67.0% |
 | Folding | 337 | 109 | 32.3% |
-| Conclusion | 2,550 | 216 | 8.5% |
+| Conclusion | 2,550 | 218 | 8.5% |
 | Group Unification | 469 | 127 | 27.1% |
 | SPG | 129 | 78 | 60.5% |
-| Circle Dimension | 393 | 114 | 29.0% |
+| Circle Dimension | 393 | 117 | 29.8% |
 | Zeta Finite Part | 4,524 | 165 | 3.6% |
 | Discussion | 67 | 38 | 56.7% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1245** | **11.8%** |
+| **合计（body）** | **10,508** | **1250** | **11.9%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,8 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
+
 **Phase R316: Primitive orbit Möbius sums n=23..26（1/3 完成，2 目标推迟）**：Zeta/DynZeta.lean——goldenMean\_primitive\_orbit\_23\_26（prop:zetaK-mobius-primitive，Möbius primitive 轨道计数 n=23:2786, n=24:4305, n=25:6710, n=26:10420，Zeta）——**注：规格数值有误，formalizer 已修正**——**1 个论文标签条目计入覆盖率**（Zeta +1）——Zeta Finite Part 164→165（3.6%），全局 \\leanverified 1301→1302（+1），总标注 1318→1319（+1），commit d10f0e6
 
 **Phase R315: Pisano period 29 + Chebyshev-Adams Dwork 包（2/3 完成，目标 3 已存在跳过）**：GU/FibPrimePisano.lean + Discussion/ChebyshevAdams.lean——pisano\_period\_29（cor:gut-fibprime-pisano-4n，Pisano 周期 π(29)=14 验证，GU）; paper\_pisano\_period\_29（cor:gut-fibprime-pisano-4n，p=29 论文接口打包，GU）; chebyAdams\_double（thm:discussion-completed-dwork-chebyshev，倍角公式 C_{2n}(S)=C_n(S²-2)，Discussion）; chebyAdams\_triple（thm:discussion-completed-dwork-chebyshev，三倍角公式 C_{3n}(S)=C_n(S³-3S)，Discussion）; chebyAdams\_pow\_prime\_compose（thm:discussion-chebyshev-witt-equivariance，Dwork 同余精确形式 C_{p^{k+1}}(S)=C_{p^k}(C_p(S))，Discussion）——**注：docstring 标签 `prop:gu-fibprime-pisano-periods` 不在论文中，归入语义对应的 `cor:gut-fibprime-pisano-4n`**——**3 个论文标签条目计入覆盖率**（GU +2, Discussion +3）——Group Unification 125→127（26.7%→27.1%），Discussion 35→38（52.2%→56.7%），全局 \\leanverified 1296→1301（+5），总标注 1313→1318（+5），commit a31cbc0
@@ -609,12 +611,12 @@
 | Folding | 317 | ~120 | ~37.9% |
 | 群统一 | 457 | ~80 | ~17.5% |
 | POM | 1,526 | ~594 | ~38.9% |
-| 圆维度 | 342 | ~69 | ~20.2% |
+| 圆维度 | 342 | ~72 | ~21.1% |
 | Zeta 有限部分 | 4,437 | ~260 | ~5.9% |
-| 结论 | 2,458 | ~90 | ~3.7% |
+| 结论 | 2,458 | ~92 | ~3.7% |
 | 其他 body | ~143 | ~2 | ~1% |
 | 附录 | 1,320 | 0 | 0% |
-| **body 总计** | **9,958** | **~1,484** | **~14.9%** |
+| **body 总计** | **9,958** | **~1,489** | **~15.0%** |
 
 ## 3. 未来工作：30 条具体计划
 
