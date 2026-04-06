@@ -1468,6 +1468,19 @@ theorem goldenMean_primitive_orbit_19_22 :
     (24476 + (-1) * 4 + (-1) * 29 + 1 * 1 : ℤ) = 21 * 1164 ∧
     (39603 + (-1) * 199 + (-1) * 3 + 1 * 1 : ℤ) = 22 * 1791 := by omega
 
+/-- Primitive orbit Möbius sums for n=23..26.
+    L(23) = 64079, L(24) = 103682, L(25) = 167761, L(26) = 271443.
+    n=23 (prime): (L(23) - L(1))/23 = 2786.
+    n=24 = 2³·3: μ-nonzero divisors 4,8,12,24: (L(24) - L(12) - L(8) + L(4))/24 = 4305.
+    n=25 = 5²: μ-nonzero divisors 5,25: (L(25) - L(5))/25 = 6710.
+    n=26 = 2·13: (L(26) - L(13) - L(2) + L(1))/26 = 10420.
+    prop:zetaK-mobius-primitive -/
+theorem goldenMean_primitive_orbit_23_26 :
+    (64079 - 1 : ℤ) = 23 * 2786 ∧
+    (103682 + (-1) * 322 + (-1) * 47 + 1 * 7 : ℤ) = 24 * 4305 ∧
+    (167761 + (-1) * 11 : ℤ) = 25 * 6710 ∧
+    (271443 + (-1) * 521 + (-1) * 3 + 1 * 1 : ℤ) = 26 * 10420 := by omega
+
 /-- Selected word traces at m=3.
     thm:conclusion-softcore-exceptional-word-trace-expansion -/
 theorem paper_word_trace_m3_selected :
