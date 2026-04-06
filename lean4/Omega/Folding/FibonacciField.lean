@@ -87,4 +87,22 @@ theorem paper_fibonacci_field_phase_extended :
    X.stableMul_inv_of_prime fib_eleven_prime,
    X.stableMul_inv_of_prime fib_seventeen_prime⟩
 
+/-- F(23) = 28657 is prime.
+    cor:field-phase-fib-prime -/
+theorem fib_twentythree_prime : Nat.Prime (Nat.fib 23) := by native_decide
+
+/-- F(29) = 514229 is prime.
+    cor:field-phase-fib-prime -/
+theorem fib_twentynine_prime : Nat.Prime (Nat.fib 29) := by native_decide
+
+/-- Extended field-phase package 2: X 21 and X 27 are fields (F(23), F(29) prime).
+    cor:field-phase-fib-prime -/
+theorem paper_fibonacci_field_phase_extended_2 :
+    Nat.Prime (Nat.fib 23) ∧ Nat.Prime (Nat.fib 29) ∧
+    (∀ x : X 21, x ≠ X.stableZero → ∃ y : X 21, X.stableMul x y = X.stableOne) ∧
+    (∀ x : X 27, x ≠ X.stableZero → ∃ y : X 27, X.stableMul x y = X.stableOne) :=
+  ⟨fib_twentythree_prime, fib_twentynine_prime,
+   X.stableMul_inv_of_prime fib_twentythree_prime,
+   X.stableMul_inv_of_prime fib_twentynine_prime⟩
+
 end Omega
