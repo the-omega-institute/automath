@@ -342,4 +342,33 @@ theorem paper_freeInvolutionCount_dvd_extended :
   exact ⟨freeInvolutionCount_dvd_seven, freeInvolutionCount_dvd_105,
     by native_decide, by native_decide⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R312: freeInvolutionCount dvd 9 + dvd 945
+-- ══════════════════════════════════════════════════════════════
+
+/-- thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_dvd_nine : ∀ r : Nat, 5 ≤ r →
+    9 ∣ freeInvolutionCount r
+  | 5, _ => ⟨105, by native_decide⟩
+  | r + 6, _ => by
+    rw [freeInvolutionCount_succ]
+    exact Dvd.dvd.mul_left (freeInvolutionCount_dvd_nine (r + 5) (by omega)) _
+
+/-- thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_dvd_945 : ∀ r : Nat, 5 ≤ r →
+    945 ∣ freeInvolutionCount r
+  | 5, _ => ⟨1, by native_decide⟩
+  | r + 6, _ => by
+    rw [freeInvolutionCount_succ]
+    exact Dvd.dvd.mul_left (freeInvolutionCount_dvd_945 (r + 5) (by omega)) _
+
+/-- Paper package. thm:fiberwise-free-involution-matching-entropy -/
+theorem paper_freeInvolutionCount_dvd_hierarchy :
+    (∀ r, 2 ≤ r → 3 ∣ freeInvolutionCount r) ∧
+    (∀ r, 3 ≤ r → 15 ∣ freeInvolutionCount r) ∧
+    (∀ r, 4 ≤ r → 105 ∣ freeInvolutionCount r) ∧
+    (∀ r, 5 ≤ r → 945 ∣ freeInvolutionCount r) := by
+  exact ⟨freeInvolutionCount_dvd_three, freeInvolutionCount_dvd_fifteen,
+    freeInvolutionCount_dvd_105, freeInvolutionCount_dvd_945⟩
+
 end Omega.GU

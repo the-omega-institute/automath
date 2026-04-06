@@ -628,6 +628,27 @@ theorem paper_lucasNum_mod10_period_twelve :
   refine ⟨?_, ?_, ?_, ?_, lucasNum_mod10_period_twelve⟩
   all_goals simp [lucasNum]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R312: Lucas numbers mod 15 period 8
+-- ══════════════════════════════════════════════════════════════
+
+/-- thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_mod15_period_eight (n : Nat) :
+    lucasNum (n + 8) % 15 = lucasNum n % 15 := by
+  have h3 := lucasNum_mod3_period_eight n
+  have h5a := lucasNum_mod5_period_four n
+  have h5b := lucasNum_mod5_period_four (n + 4)
+  rw [show n + 4 + 4 = n + 8 from by omega] at h5b
+  omega
+
+/-- Paper package. thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_lucasNum_mod15_period_eight :
+    lucasNum 0 % 15 = 2 ∧ lucasNum 1 % 15 = 1 ∧
+    lucasNum 4 % 15 = 7 ∧ lucasNum 7 % 15 = 14 ∧
+    (∀ n, lucasNum (n + 8) % 15 = lucasNum n % 15) := by
+  refine ⟨?_, ?_, ?_, ?_, lucasNum_mod15_period_eight⟩
+  all_goals simp [lucasNum]
+
 /-- Lucas number base values mod 5: {L(0)%5, L(1)%5, L(2)%5, L(3)%5} = {2,1,3,4}.
     rem:degeneracy-zeta-bridge -/
 theorem lucasNum_mod5_base_values :

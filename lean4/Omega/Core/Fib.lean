@@ -1250,6 +1250,28 @@ theorem paper_fenceDet_product_package :
   simp [fenceDet]
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R312: fenceDet D(8)..D(10) concrete values
+-- ══════════════════════════════════════════════════════════════
+
+/-- cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_eight : fenceDet 8 = 1597 := by rw [fenceDet_eq_fib]; native_decide
+
+/-- cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_nine : fenceDet 9 = 4181 := by rw [fenceDet_eq_fib]; native_decide
+
+/-- cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_ten : fenceDet 10 = 10946 := by rw [fenceDet_eq_fib]; native_decide
+
+/-- 1597 = F(17) is prime. cor:pom-Lk-t1-fibonacci-det-green -/
+theorem prime_1597 : Nat.Prime 1597 := by native_decide
+
+/-- Paper package. cor:pom-Lk-t1-fibonacci-det-green -/
+theorem paper_fenceDet_values_extended :
+    fenceDet 8 = 1597 ∧ fenceDet 9 = 4181 ∧ fenceDet 10 = 10946 ∧
+    Nat.Prime 1597 := by
+  exact ⟨fenceDet_eight, fenceDet_nine, fenceDet_ten, prime_1597⟩
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R29: Fibonacci product convolution sum
 -- ══════════════════════════════════════════════════════════════
 
