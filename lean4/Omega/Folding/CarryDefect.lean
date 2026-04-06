@@ -161,6 +161,14 @@ theorem carryElement_m8_value : stableValue (carryElement 8) = 21 := by
 theorem carryElement_m9_value : stableValue (carryElement 9) = 34 := by
   rw [stableValue_carryElement]; native_decide
 
+/-- cor:pom-carry-defect-m6-anchor-8-34 -/
+theorem carryElement_m10_value : stableValue (carryElement 10) = 55 := by
+  rw [stableValue_carryElement]; native_decide
+
+/-- cor:pom-carry-defect-m6-anchor-8-34 -/
+theorem carryElement_m11_value : stableValue (carryElement 11) = 89 := by
+  rw [stableValue_carryElement]; native_decide
+
 /-- Paper package. cor:pom-carry-defect-m6-anchor-8-34 -/
 theorem paper_carryElement_fibonacci_pattern :
     stableValue (carryElement 5) = Nat.fib 5 ∧

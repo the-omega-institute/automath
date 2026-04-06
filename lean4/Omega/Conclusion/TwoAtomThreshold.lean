@@ -84,4 +84,48 @@ theorem epsilonCritical_eq_iff_positive_root {ε : ℝ} :
     have hxdiv := congrArg (fun y : ℝ => y / Real.sqrt 5) hxeq
     simpa [x, epsilonCritical, hsqrt5_ne] using hxdiv
 
+/-- Lower bound: ε_c > 7/10.
+    thm:conclusion-binfold-tail-order-statistics-single-jump-collapse -/
+theorem epsilonCritical_gt_seven_tenths : (7 : ℝ) / 10 < epsilonCritical := by
+  have hε_pos := epsilonCritical_pos
+  rw [← Real.sqrt_sq (le_of_lt hε_pos), ← Real.sqrt_sq (by positivity : (0 : ℝ) ≤ 7 / 10)]
+  apply Real.sqrt_lt_sqrt (by positivity)
+  rw [epsilonCritical_sq, Real.goldenRatio_sq]
+  -- Goal: (7/10)² < (φ+1)/5
+  -- φ = (1+√5)/2, so φ+1 = (3+√5)/2, and (φ+1)/5 = (3+√5)/10
+  -- (7/10)² = 49/100. Need: 49/100 < (3+√5)/10, i.e., 49/10 < 3+√5, i.e., √5 > 19/10
+  have hφ : Real.goldenRatio = (1 + Real.sqrt 5) / 2 := rfl
+  have hsqrt5_sq : Real.sqrt 5 ^ 2 = (5 : ℝ) := Real.sq_sqrt (by positivity)
+  -- √5 > 19/10: (19/10)² = 361/100 < 5
+  have hsqrt5_lb : 19 / 10 < Real.sqrt 5 := by
+    rw [← Real.sqrt_sq (by positivity : (0 : ℝ) ≤ 19 / 10)]
+    apply Real.sqrt_lt_sqrt (by positivity)
+    nlinarith
+  nlinarith
+
+/-- Upper bound: ε_c < 3/4.
+    thm:conclusion-binfold-tail-order-statistics-single-jump-collapse -/
+theorem epsilonCritical_lt_three_fourths : epsilonCritical < (3 : ℝ) / 4 := by
+  have hε_pos := epsilonCritical_pos
+  rw [← Real.sqrt_sq (le_of_lt hε_pos), ← Real.sqrt_sq (by positivity : (0 : ℝ) ≤ 3 / 4)]
+  apply Real.sqrt_lt_sqrt (by positivity)
+  rw [epsilonCritical_sq, Real.goldenRatio_sq]
+  -- Goal: (φ+1)/5 < (3/4)² = 9/16
+  -- φ+1 = (3+√5)/2, so (φ+1)/5 = (3+√5)/10
+  -- Need: (3+√5)/10 < 9/16, i.e., 16(3+√5) < 90, i.e., 48+16√5 < 90, i.e., √5 < 42/16 = 21/8
+  have hφ : Real.goldenRatio = (1 + Real.sqrt 5) / 2 := rfl
+  have hsqrt5_sq : Real.sqrt 5 ^ 2 = (5 : ℝ) := Real.sq_sqrt (by positivity)
+  -- √5 < 21/8: (21/8)² = 441/64 > 5
+  have hsqrt5_ub : Real.sqrt 5 < 21 / 8 := by
+    rw [← Real.sqrt_sq (by positivity : (0 : ℝ) ≤ 21 / 8)]
+    apply Real.sqrt_lt_sqrt (by positivity)
+    nlinarith
+  nlinarith
+
+/-- Combined: 0.7 < ε_c < 0.75.
+    thm:conclusion-binfold-tail-order-statistics-single-jump-collapse -/
+theorem paper_epsilonCritical_numerical_bounds :
+    (7 : ℝ) / 10 < epsilonCritical ∧ epsilonCritical < (3 : ℝ) / 4 :=
+  ⟨epsilonCritical_gt_seven_tenths, epsilonCritical_lt_three_fourths⟩
+
 end Omega.Conclusion
