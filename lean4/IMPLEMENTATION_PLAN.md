@@ -6,33 +6,33 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~39,000 |
-| 定理/定义数 | ~3,476 |
+| 总行数 | ~39,093 |
+| 定理/定义数 | ~3,486 |
 | 论文接口包装 | 654+ |
 | 文件数 | 106 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1280 |
+| \leanverified 标注数 | 1290 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1297 |
-| 轮次 | R312（round_count=313） |
+| 总标注数 | 1307 |
+| 轮次 | R313（round_count=314） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 271 | 15.9% |
-| Emergent Arithmetic | 185 | 121 | 65.4% |
+| POM | 1,707 | 274 | 16.0% |
+| Emergent Arithmetic | 185 | 124 | 67.0% |
 | Folding | 337 | 109 | 32.3% |
 | Conclusion | 2,550 | 211 | 8.3% |
 | Group Unification | 469 | 125 | 26.7% |
 | SPG | 129 | 78 | 60.5% |
-| Circle Dimension | 393 | 110 | 28.0% |
+| Circle Dimension | 393 | 114 | 29.0% |
 | Zeta Finite Part | 4,524 | 163 | 3.6% |
 | Discussion | 67 | 35 | 52.2% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1223** | **11.6%** |
+| **合计（body）** | **10,508** | **1233** | **11.7%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,8 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R313: momentSum q-mono instances + collision excess + CircleDimHomData.id + examples（完整）**：Folding/MomentRecurrence.lean + Conclusion/Window6Collision.lean + CircleDimension/CircleDim.lean——momentSum\_q\_mono\_instances（prop:pom-crossq-g-monotone，S_1(m)<S_2(m) for m=4..8 数值验证，POM）; momentSum\_q2\_lt\_q3\_instances（prop:pom-crossq-g-monotone，S_2(m)<S_3(m) for m=4..7 数值验证，POM）; paper\_momentSum\_q\_mono（prop:pom-crossq-g-monotone，q 单调性链论文接口打包，POM）; collision\_excess\_values（prop:fold-groupoid-wedderburn，碰撞超额值 m=2..8 验证，EA）; collision\_excess\_strict\_mono（prop:fold-groupoid-wedderburn，碰撞超额严格单调，EA）; paper\_collision\_excess（prop:fold-groupoid-wedderburn，碰撞超额论文接口打包，EA）; cdimDefect\_id（thm:cdim-defect-chain-rule，恒等同态缺陷为零，CD）; cdimDefect\_surjExample（thm:cdim-defect-chain-rule，满射示例缺陷=1，CD）; cdimDefect\_injExample（thm:cdim-defect-chain-rule，单射示例缺陷=0，CD）; paper\_cdimDefect\_instances（thm:cdim-defect-chain-rule，缺陷实例论文接口打包，CD）——**3 个论文标签条目计入覆盖率**（POM +3, EA +3, CD +4）——POM 271→274（15.9%→16.0%），Emergent Arithmetic 121→124（65.4%→67.0%），Circle Dimension 110→114（28.0%→29.0%），全局 \\leanverified 1280→1290（+10），总标注 1297→1307（+10），commit 4588bdf
+
 **Phase R278: Global defect Fibonacci audit, A5 Perron audit, prefix cylinder package, kappa crosspoints（完整）**：Folding/CollisionZetaOperator.lean + Folding/CollisionZeta.lean + SPG/Cylinder.lean + SPG/ErrorThreshold.lean——paper\_globalDefect\_theory\_package（prop:fold-defect-cocycle，全局缺陷 Fibonacci 审计，Folding）; paper\_collisionKernel5\_perron\_audit（prop:pom-collision-renyi-perron-closure，A_5 Perron 审计，POM）; paper\_prefixBall\_cylinder\_package（prop:spg-decidable-clopen，前缀球柱集打包，SPG）; paper\_kappa\_fibonacci\_crosspoints（prop:spg-relative-error-threshold-sharpness，kappa-Fibonacci 交叉点验证，SPG）——**4 个论文标签条目计入覆盖率**（POM +1, Folding +1, SPG +2）——POM 241→242（14.1%→14.2%），Folding 90→91（26.7%→27.0%），SPG 46→48（35.7%→37.2%），全局 \\leanverified 1039→1043（+4），总标注 1056→1060（+4），body 覆盖 986→990（9.4%），commit ca4e7ea
 
 **Phase R277: Hankel-Vandermonde 打包 + Lucas 倍角加法 + 圆维单调半圆打包 + 圆维张量差（完整）**：Zeta/HankelVandermonde3Recovery.lean + Zeta/DynZeta.lean + CircleDimension/CircleDim.lean——paper\_hankel\_vandermonde\_package（cor:xi-hankel-vs-prony-square-gap，Hankel-Vandermonde 平方律打包，Zeta）; paper\_lucas\_double\_and\_add（thm:zeta-syntax-trace-linear-recurrence，Lucas 倍角与加法公式，Zeta）; paper\_circleDim\_mono\_half\_package（prop:circle-dimension-laws，圆维单调性与半圆维打包，CD）; paper\_circleDim\_tensor\_and\_sub（prop:circle-dimension-laws，圆维张量积与差运算，CD）——**4 个论文标签条目计入覆盖率**（Zeta +2, CD +2）——Zeta Finite Part 133→135（2.9%→3.0%），Circle Dimension 84→86（21.4%→21.9%），全局 \\leanverified 1035→1039（+4），总标注 1052→1056（+4），body 覆盖 982→986（9.3%→9.4%），commit 01e4ebf
@@ -597,16 +599,16 @@
 | 章节 | LaTeX 定理数 | SourceMap 注册 | 覆盖率 |
 |---|---|---|---|
 | SPG | 127 | ~71 | ~55.9% |
-| 新生算术 | 151 | ~116 | ~76.8% |
+| 新生算术 | 151 | ~119 | ~78.8% |
 | Folding | 317 | ~120 | ~37.9% |
 | 群统一 | 457 | ~78 | ~17.1% |
-| POM | 1,526 | ~591 | ~38.7% |
-| 圆维度 | 342 | ~65 | ~19.0% |
+| POM | 1,526 | ~594 | ~38.9% |
+| 圆维度 | 342 | ~69 | ~20.2% |
 | Zeta 有限部分 | 4,437 | ~258 | ~5.8% |
 | 结论 | 2,458 | ~85 | ~3.5% |
 | 其他 body | ~143 | ~2 | ~1% |
 | 附录 | 1,320 | 0 | 0% |
-| **body 总计** | **9,958** | **~1,462** | **~14.7%** |
+| **body 总计** | **9,958** | **~1,472** | **~14.8%** |
 
 ## 3. 未来工作：30 条具体计划
 
