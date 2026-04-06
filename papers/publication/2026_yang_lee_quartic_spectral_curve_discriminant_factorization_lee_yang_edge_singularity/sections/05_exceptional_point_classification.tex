@@ -4,6 +4,61 @@ Among the five finite branch values identified in Theorem~\ref{thm:elliptic-redu
 By Lemma~\ref{lem:cyclic-companion}, every repeated root of \(\Pi(\cdot,y)\) corresponds to a defective eigenvalue of the companion family \(T(y)\).
 In this section we determine their spectral role by analyzing the eigenvalue collision structure at each branch point and, crucially, by comparing the modulus of the colliding eigenvalues against the remaining roots.
 
+The following perturbation lemma provides a self-contained local dominance criterion that is used in the proof of part~(1) of Theorem~\ref{thm:ep-classification} and in the proof of Proposition~\ref{prop:global-dominance}.
+It is stated for a general monic polynomial family and requires no Puiseux theory beyond the implicit-function theorem.
+
+\begin{lemma}[Local dominance after balanced-family reduction]\label{lem:local-dominance}
+Let \(P(\lambda,t)=\prod_{j=1}^n(\lambda-\mu_j(t))\) be a monic degree-\(n\) polynomial whose coefficients are analytic in \(t\) near \(t=0\).
+Suppose that at \(t=0\) the roots split into two groups:
+\[
+\mu_1(0)=\cdots=\mu_k(0)=:\mu_*,
+\qquad
+\mu_{k+1}(0),\dots,\mu_n(0) \text{ simple and distinct from } \mu_*.
+\]
+Write \(R:=\min_{j>k}|\mu_j(0)-\mu_*|>0\).
+Assume that the \(k\) repeated roots bifurcate for \(t\neq 0\); that is, for \(|t|>0\) sufficiently small, the roots \(\mu_1(t),\dots,\mu_k(t)\) are simple.
+Assume moreover that for all \(j>k\),
+\begin{equation}\label{eq:local-dominance-hyp}
+|\mu_j(0)|\le |\mu_*|.
+\end{equation}
+If, among the bifurcating roots, there is one, say \(\mu_1(t)\), satisfying \(|\mu_1(t)|>|\mu_*(0)|\) for \(t>0\) sufficiently small, then
+\begin{equation}\label{eq:local-dominance-concl}
+|\mu_1(t)| > |\mu_j(t)|
+\qquad\text{for every } j \ne 1
+\end{equation}
+for all \(|t|\) sufficiently small.
+In particular, \(\mu_1(t)\) is the unique dominant root of \(P(\cdot,t)\) in a punctured neighbourhood of \(t=0\).
+
+More concretely, if the leading-order bifurcation from \(\mu_*\) for real \(t>0\) has exponent \(1/\nu\) with \(\nu\ge 2\):
+\begin{equation}\label{eq:bifurc-form}
+\mu_1(t) = \mu_* + \sigma t^{1/\nu} + O(t^{2/\nu}),
+\qquad
+\sigma > 0,
+\end{equation}
+and the non-bifurcating simple roots satisfy the Lipschitz bound \(|\mu_j(t)|\le |\mu_j(0)|+L_j t\) for constants \(L_j>0\), then for real \(t>0\) small:
+\[
+|\mu_1(t)| \ge |\mu_*| + \sigma t^{1/\nu} - D t^{2/\nu}
+\ge
+|\mu_j(0)| + \sigma t^{1/\nu} - D t^{2/\nu}
+>
+|\mu_j(0)| + L_j t
+\ge
+|\mu_j(t)|
+\]
+since $\sigma t^{1/\nu} \gg L_j t$ for small $t>0$ (as $1/\nu < 1$).
+
+\begin{proof}
+Since the non-colliding roots \(\mu_{k+1}(0),\dots,\mu_n(0)\) are simple, the implicit function theorem applies and they extend to analytic functions \(\mu_j(t)\) satisfying $|\mu_j(t)-\mu_j(0)|\le L_j|t|$ for Lipschitz constants $L_j>0$.
+Therefore
+\[
+|\mu_j(t)| \le |\mu_j(0)| + L_j|t| \le |\mu_*| + L_j|t|.
+\]
+For real $t>0$ small, the dominant bifurcating root satisfies $|\mu_1(t)| = |\mu_*| + \sigma t^{1/\nu} + O(t^{2/\nu})$ with $\sigma>0$, which grows faster than $L_j t$ since $t^{1/\nu}\gg t$ for $\nu\ge 2$ and small $t>0$.
+The sub-dominant bifurcating root satisfies $|\mu_2(t)| = |\mu_*| - \sigma t^{1/\nu} + O(t^{2/\nu}) < |\mu_*| \le |\mu_j(0)| \le |\mu_1(t)|$.
+The conclusions~\eqref{eq:local-dominance-concl} therefore hold for all $t>0$ sufficiently small.
+\end{proof}
+\end{lemma}
+
 \begin{theorem}[Real exceptional-point classification]\label{thm:ep-classification}
 The three real branch values are
 \[
@@ -34,33 +89,92 @@ Therefore $y_{\mathrm{sub}}$ is a subdominant EP2, not a branch point of the dom
 
 \begin{proof}
 We begin with the local dominance claim in part~(1).
-Let $y=s^2$ with $s>0$.
-The local expansions established later in Proposition~\ref{prop:vacuum-puiseux} and Appendix~\ref{app:vacuum-edge} give
+
+\medskip
+\noindent\textbf{Gershgorin bound at $y=0$.}
+At $y=0$ the companion matrix is
 \[
-\lambda_\pm(s)
-=
-1\pm \frac{1}{\sqrt2}s+\frac58 s^2+O(s^3),
+T(0)=
+\begin{pmatrix}
+1 & 1 & -1 & 0\\
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 1 & 0
+\end{pmatrix},
 \]
-for the two branches issuing from the double root $\lambda=1$, and
+with characteristic polynomial $\Pi(\lambda,0)=\lambda(\lambda+1)(\lambda-1)^2$.
+The Gershgorin circles for $T(0)$ centred at the diagonal entries $\{1,0,0,0\}$ with respective row-sum radii $\{|1|+|-1|+|0|, |1|, |1|, |1|\}=\{2,1,1,1\}$ contain all eigenvalues.
+For $0<y\le\delta$ with $\delta$ small, the matrix $T(y)-T(0)$ has entries bounded by a constant multiple of $y$, so every eigenvalue of $T(y)$ lies within distance $O(y)$ of an eigenvalue of $T(0)$.
+This gives four branches continuously extending $\{1,1,-1,0\}$.
+The double root at $\lambda=1$ produces a square-root ramification; the other two extend as simple analytic functions.
+
+\medskip
+\noindent\textbf{Self-contained local expansion.}
+Write $y=s^2$ for real $s>0$ small.
+Set $\lambda=1+h$ directly in $\Pi(\lambda,y)=\lambda^4-\lambda^3-(2y+1)\lambda^2+\lambda+y(y+1)$ and collect terms:
+\begin{align*}
+\Pi(1+h,y)
+&= (1+4h+6h^2+4h^3+h^4) - (1+3h+3h^2+h^3)\\
+&\quad - (1+2y)(1+2h+h^2) + (1+h) + y^2+y\\
+&= 2h^2 - y - 4yh + O(y^2, h^3, yh^2).
+\end{align*}
+Setting $y=s^2$ and seeking $h=\sigma s+O(s^2)$, the leading terms give $2\sigma^2 s^2 - s^2 = 0$, hence $\sigma^2=\tfrac12$, i.e.\ $\sigma=\pm\tfrac{1}{\sqrt{2}}$.
+The correct square-root opening is confirmed by evaluating the quadratic discriminant:
 \[
-\lambda_{-1}(s^2)=-1-\frac14 s^2+O(s^4),
+\frac{\partial^2\Pi}{\partial\lambda^2}\bigg|_{(1,0)} = 2\cdot\frac{\partial}{\partial\lambda}(4\lambda^3-3\lambda^2-(2y+1)\cdot 2\lambda+1)\bigg|_{(1,0)}=2(12-6-4)=4,
+\]
+\[
+\frac{\partial\Pi}{\partial y}\bigg|_{(1,0)} = (-2\lambda^2+2y+1)\bigg|_{(1,0)}=-2+1=-1.
+\]
+By the Puiseux implicit function theorem for a double root (see, e.g., \cite{BrieskornKnorrer1986}), the two branches issuing from $(1,0)$ satisfy
+\begin{equation}\label{eq:local-bifurc}
+\lambda_\pm(y)
+= 1 \pm \sqrt{\frac{-\partial_y\Pi}{\tfrac12\partial_\lambda^2\Pi}}\bigg|_{(1,0)} y^{1/2} + O(y)
+= 1 \pm \frac{1}{\sqrt{2}}\,y^{1/2} + O(y).
+\end{equation}
+In particular, setting $y=s^2$,
+\begin{equation}\label{eq:lambda-pm-local}
+\lambda_+(s) = 1 + \frac{1}{\sqrt{2}}\,s + O(s^2),
 \qquad
-\lambda_0(s^2)=-s^2+O(s^4),
-\]
-for the remaining two branches.
-Therefore
-\[
-\abs{\lambda_+(s)}=1+\frac{1}{\sqrt2}s+O(s^2),
+\lambda_-(s) = 1 - \frac{1}{\sqrt{2}}\,s + O(s^2).
+\end{equation}
+
+\medskip
+\noindent\textbf{Spectral-radius comparison.}
+For the remaining two roots near $(-1,0)$ and $(0,0)$, the implicit function theorem gives simple analytic extensions:
+\begin{equation}\label{eq:other-roots-local}
+\lambda_{-1}(y) = -1 + O(y),
 \qquad
-\abs{\lambda_{-1}(s^2)}=1+\frac14 s^2+O(s^4),
-\]
+\lambda_0(y) = O(y).
+\end{equation}
+More precisely, differentiating $\Pi(\lambda,y)=\lambda^4-\lambda^3-(2y+1)\lambda^2+\lambda+y(y+1)$ with respect to $\lambda$:
 \[
-\abs{\lambda_-(s)}=1-\frac{1}{\sqrt2}s+O(s^2),
-\qquad
-\abs{\lambda_0(s^2)}=O(s^2).
+\partial_\lambda\Pi(\lambda,y) = 4\lambda^3-3\lambda^2-2(2y+1)\lambda+1.
 \]
+At $(\lambda,y)=(-1,0)$: $\partial_\lambda\Pi(-1,0) = -4-3+2+1=-4\neq 0$, so the implicit function theorem applies.
+For the $y$-derivative: $\partial_y\Pi(\lambda,y)=-2\lambda^2+2y+1$, giving at $(-1,0)$: $\partial_y\Pi(-1,0)=-2+1=-1$.
+Hence
+\[
+\frac{d\lambda_{-1}}{dy}\bigg|_{y=0} = -\frac{\partial_y\Pi(-1,0)}{\partial_\lambda\Pi(-1,0)} = -\frac{-1}{-4} = -\frac{1}{4},
+\]
+and
+\[
+\lambda_{-1}(y) = -1 - \frac{1}{4}y + O(y^2).
+\]
+For the root near $\lambda=0$: $\partial_\lambda\Pi(0,0)=1$ and $\partial_y\Pi(0,0)=1$, so
+\[
+\lambda_0(y) = -y+O(y^2).
+\]
+Therefore $|\lambda_{-1}(s^2)|=1+\tfrac{1}{4}s^2+O(s^4)>1$ for $s>0$ small, while $|\lambda_+(s)|=1+\tfrac{1}{\sqrt{2}}s+O(s^2)>1$, and $|\lambda_0(s^2)|=s^2+O(s^4)\to 0$ for $s\to 0^+$.
+
+The critical comparison is $|\lambda_+(s)|$ vs $|\lambda_{-1}(s^2)|$: the bifurcating root $\lambda_+$ departs from $1$ at rate $\tfrac{1}{\sqrt{2}}s$ (first order in $s$), while the non-bifurcating root $\lambda_{-1}$ departs from $-1$ (hence $|\lambda_{-1}|$ departs from $1$) at rate $\tfrac{1}{4}s^2$ (second order in $s$):
+\[
+|\lambda_+(s)| - |\lambda_{-1}(s^2)| = \frac{1}{\sqrt{2}}s - \frac{1}{4}s^2 + O(s^3) > 0
+\]
+for $0<s<4/\sqrt{2}=2\sqrt{2}$.
+For $|\lambda_-|$ and $|\lambda_0|$: $|\lambda_-(s)|=1-\tfrac{1}{\sqrt{2}}s+O(s^2)<1$ and $|\lambda_0(s^2)|=s^2+O(s^4)\to 0$.
 Hence, for $s>0$ sufficiently small,
-\[
+\begin{equation}\label{eq:dominance-ineqs}
 \abs{\lambda_+(s)}
 >
 \abs{\lambda_{-1}(s^2)},
@@ -72,8 +186,8 @@ Hence, for $s>0$ sufficiently small,
 \abs{\lambda_+(s)}
 >
 \abs{\lambda_0(s^2)}.
-\]
-Thus the pair of branches issuing from $\lambda=1$ contains the unique dominant root for $y>0$ small, proving part~(1).
+\end{equation}
+Thus the branch $\lambda_+(y^{1/2})$ is the unique dominant root for $y>0$ small, proving part~(1).
 
 Part~(2) is immediate from
 \[
