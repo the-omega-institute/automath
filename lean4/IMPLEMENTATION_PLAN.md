@@ -6,35 +6,35 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~47,449 |
-| 定理/定义数 | ~4,136 |
-| 论文接口包装 | 663+ |
+| 总行数 | ~47,493 |
+| 定理/定义数 | ~4,139 |
+| 论文接口包装 | 664+ |
 | 文件数 | 115 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1439 |
+| \leanverified 标注数 | 1443 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1456 |
-| 轮次 | R349（round_count=350） |
+| 总标注数 | 1460 |
+| 轮次 | R350（round_count=351） |
 
-**Phase R350（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
+**Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 290 | 17.0% |
+| POM | 1,707 | 291 | 17.0% |
 | Emergent Arithmetic | 185 | 143 | 77.3% |
 | Folding | 337 | 109 | 32.3% |
-| Conclusion | 2,550 | 233 | 9.1% |
+| Conclusion | 2,550 | 234 | 9.2% |
 | Group Unification | 469 | 151 | 32.2% |
 | SPG | 129 | 97 | 75.2% |
 | Circle Dimension | 393 | 127 | 32.3% |
-| Zeta Finite Part | 4,524 | 178 | 3.9% |
+| Zeta Finite Part | 4,524 | 179 | 4.0% |
 | Discussion | 67 | 52 | 77.6% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1380** | **13.1%** |
+| **合计（body）** | **10,508** | **1383** | **13.2%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**ε_c 数值界 + primitive orbit 27-30 + carry m10-m11（Round R350）**：`paper_epsilonCritical_numerical_bounds`（0.7 < ε_c < 0.75，对应 `thm:conclusion-binfold-tail-order-statistics-single-jump-collapse`，Conclusion）；`goldenMean_primitive_orbit_27_30`（对应 `prop:zetaK-mobius-primitive`，Zeta）；`carryElement_m10_value` + `carryElement_m11_value`（对应 `cor:pom-carry-defect-m6-anchor-8-34`，POM）
 **自由对合指数下界 + Fibonacci 半径单调性 + S₂增长审计（Round R349）**：`freeInvolutionCount_ge_two_pow` + `freeInvolutionCount_log_lower`（对应 `thm:fiberwise-free-involution-matching-entropy`，逐纤维自由对合指数下界与 log 下界，GU）；`fibRadius_mono` + `fibRadius_strict_mono`（对应 `con:cdim-fibonacci-radius-time-conjugacy`，Fibonacci 半径单调性，Circle Dimension）；`paper_momentSum_two_growth_audit`（对应 `prop:fold-groupoid-wedderburn`，S₂增长严格单调/整除性审计，Emergent Arithmetic）
 **乘法多重度极值界 + Fibonacci 体积律 + 融合缺陷 2-余因子 + Lucas mod6 周期（Round R348）**：`fib_shifted_fusion_defect`（对应 `lem:pom-shifted-fib-fusion-defect-positive`）、`fib_determinant_volume_law`（对应 `cor:pom-fib-determinant-volume-law`）、`paper_pom_multiplicity_lower_eq_iff` + `paper_pom_multiplicity_upper_eq_iff`（对应 `prop:pom-path-component-multiplicity-refinement-monotone-extrema`）、`fib_fusion_defect_cocycle` + `paper_pom_shifted_fusion_defect_package`（对应 `prop:pom-fusion-defect-2cocycle-identity`）；`lucasNum_mod6_period_twentyfour`（对应 `thm:zeta-syntax-trace-linear-recurrence`，Zeta）
 **Tanaka 增量非负性 + Gödel 有限集乘积 + window-6 扇区比（Round R347）**：`tanakaIncrement`（离散 Tanaka 增量定义）、`tanakaIncrement_nonneg`（Tanaka 增量非负，对应 `thm:spg-scan-tanaka-stokes`，SPG）；`godelEncoding_prod_finset`（Gödel 编码有限集乘积公式，对应 `thm:conclusion-godel-semidirect-law`，Conclusion）；`paper_window6_boundary_sector_ratios`（window-6 boundary/fourpoint 扇区比精确分数，对应 `cor:conclusion-window6-boundary-fourpoint-moment-amplification`，Conclusion）
@@ -233,6 +234,7 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R350: epsilon critical bounds + primitive orbit 27-30 + carry m10-m11（3/3 完成）**：Conclusion/TwoAtomThreshold.lean + Zeta/DynZeta.lean + Folding/CarryDefect.lean——paper\_epsilonCritical\_numerical\_bounds（thm:conclusion-binfold-tail-order-statistics-single-jump-collapse，0.7 < ε_c < 0.75 数值界，Conclusion）; goldenMean\_primitive\_orbit\_27\_30（prop:zetaK-mobius-primitive，原始轨道 Möbius 求和 n=27..30，Zeta）; carryElement\_m10\_value + carryElement\_m11\_value（cor:pom-carry-defect-m6-anchor-8-34，进位元 m=10,11 精确值 55,89，POM）——**3 个论文标签条目计入覆盖率**（Conclusion +1, Zeta +1, POM +1）——Conclusion 233→234（9.1%→9.2%），Zeta 178→179（3.9%→4.0%），POM 290→291（17.0%），body 1380→1383（13.1%→13.2%），全局 \\leanverified 1439→1443（+4），总标注 1456→1460（+4），proof commit 66cdcc6
 **Phase R349: involution entropy bound + fibRadius monotonicity + moment growth audit（3/3 完成）**：GU/FreeInvolutionCount.lean + Folding/CircleDimension.lean + Folding/MomentRecurrence.lean——freeInvolutionCount\_ge\_two\_pow + freeInvolutionCount\_log\_lower（thm:fiberwise-free-involution-matching-entropy，自由对合指数下界 ≥ 2^(r-1) 与 log 下界 r-1，GU）; fibRadius\_mono + fibRadius\_strict\_mono（con:cdim-fibonacci-radius-time-conjugacy，Fibonacci 半径单调性与严格单调性，Circle Dimension）; paper\_momentSum\_two\_growth\_audit（prop:fold-groupoid-wedderburn，S₂严格单调、偶性、4-整除性审计，Emergent Arithmetic）——**3 个论文标签条目计入覆盖率**（GU +1, Circle Dimension +1, EA +1）——GU 150→151（32.0%→32.2%），Circle Dimension 126→127（32.1%→32.3%），EA 142→143（76.8%→77.3%），body 1377→1380（13.1%），全局 \\leanverified 1436→1439（+3），总标注 1453→1456（+3），proof commit b5f1637
 **Phase R348: multiplicity eq-iff + fib volume law + fusion cocycle + Lucas mod6（4/4 完成）**：Folding/FiberFusion.lean + Folding/ShiftDynamics.lean + Zeta/DynZeta.lean——fib\_shifted\_fusion\_defect（lem:pom-shifted-fib-fusion-defect-positive，移位 Fibonacci 融合恒等式，POM）; fib\_determinant\_volume\_law（cor:pom-fib-determinant-volume-law，Fibonacci 行列式体积律，POM）; paper\_pom\_multiplicity\_lower\_eq\_iff + paper\_pom\_multiplicity\_upper\_eq\_iff（prop:pom-path-component-multiplicity-refinement-monotone-extrema，乘法多重度极值等号条件，POM）; fib\_fusion\_defect\_cocycle + paper\_pom\_shifted\_fusion\_defect\_package（prop:pom-fusion-defect-2cocycle-identity，融合缺陷 2-余因子恒等式，POM）; lucasNum\_mod6\_period\_twentyfour（thm:zeta-syntax-trace-linear-recurrence，Lucas mod 6 周期 24，Zeta）——**5 个论文标签条目计入覆盖率**（POM +4, Zeta +1）——POM 286→290（16.8%→17.0%），Zeta 177→178（3.9%），body 1372→1377（13.1%），全局 \\leanverified 1431→1436（+5），总标注 1448→1453（+5），proof commit b94b0e0
 **Phase R347: Tanaka increment nonneg + Gödel encoding product + window-6 sector ratios（3/3 完成）**：SPG/TanakaIncrement.lean + Conclusion/PrimeRegister.lean + Conclusion/Window6Collision.lean——tanakaIncrement（def）、tanakaIncrement\_nonneg（thm:spg-scan-tanaka-stokes，离散 Tanaka 增量非负，SPG）; godelEncoding\_prod\_finset（thm:conclusion-godel-semidirect-law，Gödel 编码的有限集乘积公式，Conclusion）; paper\_window6\_boundary\_sector\_ratios（cor:conclusion-window6-boundary-fourpoint-moment-amplification，boundary/fourpoint 扇区精确分数，Conclusion）——**3 个论文标签条目计入覆盖率**（SPG +1, Conclusion +2）——SPG 96→97（74.4%→75.2%），Conclusion 231→233（9.1%），body 1369→1372（13.0%→13.1%），全局 \\leanverified 1428→1431（+3），总标注 1445→1448（+3），proof commit a1a62d2
