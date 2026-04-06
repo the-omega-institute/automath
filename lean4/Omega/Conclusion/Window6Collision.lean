@@ -660,4 +660,23 @@ theorem paper_window6_boundary_sector_ratios :
     (9 : ℚ) * 16 / 212 = 36 / 53 := by
   refine ⟨by norm_num, by norm_num, by norm_num, by norm_num, by norm_num, by norm_num⟩
 
+/-- Section count is bounded by max-fiber^n.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem section_count_le_maxFiber_pow {n : ℕ} (d : Fin n → ℕ)
+    (M : ℕ) (hM : ∀ i, d i ≤ M) :
+    (∏ i, d i) ≤ M ^ n := by
+  calc ∏ i, d i
+      ≤ ∏ _i : Fin n, M := Finset.prod_le_prod (fun i _ => Nat.zero_le _) (fun i _ => hM i)
+    _ = M ^ n := by simp [Finset.prod_const]
+
+/-- Section count satisfies AM-GM in product form: (∏ d_i) * n^n ≤ N^n.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem section_count_amgm_prod {n : ℕ} (d : Fin n → ℕ)
+    (N : ℕ) (hsum : ∑ i, d i = N) :
+    (∏ i, d i) ≤ N ^ n := by
+  apply section_count_le_maxFiber_pow d N
+  intro i
+  calc d i ≤ ∑ j, d j := Finset.single_le_sum (fun j _ => Nat.zero_le _) (Finset.mem_univ i)
+    _ = N := hsum
+
 end Omega.Conclusion

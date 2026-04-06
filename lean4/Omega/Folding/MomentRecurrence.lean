@@ -1093,4 +1093,11 @@ theorem paper_momentSum_two_growth_audit :
     (∀ m : Nat, 4 ≤ m → 4 ∣ momentSum 2 m) :=
   ⟨momentSum_two_strict_mono', momentSum_two_even, momentSum_two_mod_four⟩
 
+/-- S_2 growth ratio bounds: 2·S_2(m) ≤ S_2(m+1) ≤ 4·S_2(m) for m ≥ 2.
+    prop:fold-groupoid-wedderburn -/
+theorem paper_momentSum_two_ratio_bounds (m : Nat) (hm : 2 ≤ m) :
+    2 * momentSum 2 m ≤ momentSum 2 (m + 1) ∧
+    momentSum 2 (m + 1) ≤ 4 * momentSum 2 m :=
+  ⟨momentSum_two_succ_ge_double m hm, momentSum_two_succ_le_quadruple m⟩
+
 end Omega

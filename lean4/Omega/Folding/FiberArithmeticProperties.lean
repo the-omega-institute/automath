@@ -907,4 +907,18 @@ theorem Fold_unique_of_stableValue_mod (Φ : Word m → X m)
   apply X.eq_of_stableValue_eq
   rw [hΦ, stableValue_Fold_mod]
 
+namespace X
+
+/-- Extended EA stable arithmetic audit: succ/pred bijection.
+    thm:arith-composition -/
+theorem paper_ea_stable_arithmetic_extended :
+    (∀ m : Nat, Function.Injective (stableSucc (m := m))) ∧
+    (∀ m : Nat, Function.Surjective (stableSucc (m := m))) ∧
+    (∀ (m : Nat) (x : X m), stablePred (stableSucc x) = x) ∧
+    (∀ (m : Nat) (x : X m), stableSucc (stablePred x) = x) :=
+  ⟨fun m => stableSucc_injective m, fun m => stableSucc_surjective m,
+   fun _ x => stablePred_stableSucc x, fun _ x => stableSucc_stablePred x⟩
+
+end X
+
 end Omega
