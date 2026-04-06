@@ -445,6 +445,14 @@ theorem separationDepth_triangle {α : Type*}
   · exact min_le_of_left_le (iInf₂_le n hxy)
   · exact min_le_of_right_le (iInf₂_le n hyz)
 
+/-- If distinguish at depth 0 is true, separation depth is 0.
+    def:cdim-gap-ledger -/
+theorem separationDepth_eq_zero_of_distinguish_zero {α : Type*}
+    (distinguish : Nat → α → α → Bool) (x y : α)
+    (h : distinguish 0 x y = true) :
+    separationDepth distinguish x y = 0 := by
+  exact le_antisymm (separationDepth_le_of_distinguish distinguish x y 0 h) (zero_le _)
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R169: Phase spectrum rank growth and upper bound
 -- ══════════════════════════════════════════════════════════════

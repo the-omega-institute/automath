@@ -278,6 +278,41 @@ theorem paper_kappa_strictMono_package :
    fun _ h1 h2 => kappa_one_lt h1 h2,
    fun _ _ h1 h2 h3 => kappa_strictMono h1 h2 h3⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R327: kappa negation and inversion
+-- ══════════════════════════════════════════════════════════════
+
+/-- κ(ε) · κ(-ε) = 1 for 0 < ε < 1.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_mul_neg_eq_one {ε : ℝ} (hε_pos : 0 < ε) (hε_lt : ε < 1) :
+    kappa ε * kappa (-ε) = 1 := by
+  unfold kappa
+  have h1 : (1 : ℝ) - ε ≠ 0 := by linarith
+  have h2 : (1 : ℝ) + ε ≠ 0 := by linarith
+  rw [show 1 + -ε = 1 - ε from by ring, show 1 - -ε = 1 + ε from by ring]
+  field_simp
+
+/-- κ(-ε) = 1 / κ(ε) for 0 < ε < 1.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_neg_eq_inv {ε : ℝ} (hε_pos : 0 < ε) (hε_lt : ε < 1) :
+    kappa (-ε) = 1 / kappa ε := by
+  have hk := kappa_pos hε_pos hε_lt
+  rw [eq_div_iff (ne_of_gt hk)]
+  linarith [kappa_mul_neg_eq_one hε_pos hε_lt]
+
+/-- κ(-ε) < 1 for 0 < ε < 1.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_neg_lt_one {ε : ℝ} (hε_pos : 0 < ε) (hε_lt : ε < 1) :
+    kappa (-ε) < 1 := by
+  have hk := kappa_pos hε_pos hε_lt
+  have hk1 := kappa_one_lt hε_pos hε_lt
+  have hprod := kappa_mul_neg_eq_one hε_pos hε_lt
+  have hkn_pos : 0 < kappa (-ε) := by
+    by_contra h
+    push_neg at h
+    nlinarith
+  nlinarith [mul_lt_mul_of_pos_right hk1 hkn_pos]
+
 end Omega.SPG
 
 
