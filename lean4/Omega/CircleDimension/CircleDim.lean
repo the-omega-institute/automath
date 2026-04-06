@@ -382,6 +382,23 @@ theorem firstHittingTime_antitone (e : Nat → ℝ) :
   intro h₂
   exact ⟨lt_of_lt_of_le h₂ h, le_refl _⟩
 
+/-- A hitting witness bounds the first hitting time.
+    def:cdim-gap-ledger -/
+theorem firstHittingTime_le_of_lt (e : Nat → ℝ) (ε : ℝ) (n : Nat)
+    (h : e n < ε) :
+    firstHittingTime e ε ≤ n :=
+  iInf₂_le n h
+
+/-- If the error never drops below ε, the first hitting time is ⊤.
+    def:cdim-gap-ledger -/
+theorem firstHittingTime_eq_top_of_forall_ge (e : Nat → ℝ) (ε : ℝ)
+    (h : ∀ n, ε ≤ e n) :
+    firstHittingTime e ε = ⊤ := by
+  simp only [firstHittingTime]
+  apply iInf_eq_top.mpr
+  intro n
+  simp [not_lt.mpr (h n)]
+
 /-- Separation depth: minimum depth distinguishing two objects.
     def:cdim-gap-ledger -/
 noncomputable def separationDepth {α : Type*} (distinguish : Nat → α → α → Bool) (x y : α) : ℕ∞ :=

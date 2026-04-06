@@ -1549,6 +1549,29 @@ theorem lucasNum_mod9_period_twentyfour (n : Nat) :
       exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R321: Lucas numbers mod 20 period 12
+-- ══════════════════════════════════════════════════════════════
+
+/-- Lucas numbers mod 20 have period 12: L(n+12) % 20 = L(n) % 20.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_mod20_period_twelve (n : Nat) :
+    lucasNum (n + 12) % 20 = lucasNum n % 20 := by
+  suffices h : (20 : ℤ) ∣ (lucasNum (n + 12) - lucasNum n) by omega
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => simp [lucasNum]
+    | 1 => simp [lucasNum]
+    | n + 2 =>
+      have hR12 := lucasNum_succ_succ (n + 12)
+      have hR0 := lucasNum_succ_succ n
+      have : lucasNum (n + 2 + 12) - lucasNum (n + 2) =
+          (lucasNum (n + 1 + 12) - lucasNum (n + 1)) +
+          (lucasNum (n + 12) - lucasNum n) := by linarith
+      rw [this]
+      exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R318: Fibonacci double divisibility and Lucas quotient
 -- ══════════════════════════════════════════════════════════════
 

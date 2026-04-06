@@ -641,4 +641,27 @@ theorem godelEncoding_cons (primes : ℕ → ℕ) (offset a : ℕ) (rest : List 
   congr 1
   rw [godelEncodingFrom_reindex primes offset 1 rest]
 
+/-- Gödel encoding equals 1 iff all exponents are 0.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_eq_one_iff (primes : ℕ → ℕ) (offset : ℕ) (code : List ℕ)
+    (hp : ∀ i, 1 < primes i) :
+    godelEncoding primes offset code = 1 ↔ ∀ a ∈ code, a = 0 := by
+  induction code generalizing offset with
+  | nil => simp [godelEncoding_nil]
+  | cons a rest ih =>
+    rw [godelEncoding_cons]
+    constructor
+    · intro h
+      have ⟨hpow, hrest⟩ := mul_eq_one.mp h
+      have ha : a = 0 := by
+        by_contra hne
+        have : 1 < primes offset ^ a :=
+          Nat.one_lt_pow hne (hp offset)
+        omega
+      simp only [List.mem_cons, forall_eq_or_imp]
+      exact ⟨ha, (ih (offset + 1)).mp hrest⟩
+    · intro h
+      simp only [List.mem_cons, forall_eq_or_imp] at h
+      rw [h.1, pow_zero, one_mul, (ih (offset + 1)).mpr h.2]
+
 end Omega.Conclusion
