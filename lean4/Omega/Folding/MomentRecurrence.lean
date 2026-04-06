@@ -1057,4 +1057,32 @@ theorem momentSum_two_fib_superadditive (m : Nat) (hm : 1 ≤ m) :
   have hm2 := momentSum_two_mono' (k + 1)
   linarith
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R313: momentSum strict mono in q (numerical instances)
+-- ══════════════════════════════════════════════════════════════
+
+/-- S_1(m) < S_2(m) for m=4..8. prop:pom-sq-lower -/
+theorem momentSum_q_mono_instances :
+    cMomentSum 1 4 < cMomentSum 2 4 ∧
+    cMomentSum 1 5 < cMomentSum 2 5 ∧
+    cMomentSum 1 6 < cMomentSum 2 6 ∧
+    cMomentSum 1 7 < cMomentSum 2 7 ∧
+    cMomentSum 1 8 < cMomentSum 2 8 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
+
+/-- S_2(m) < S_3(m) for m=4..7. prop:pom-sq-lower -/
+theorem momentSum_q2_lt_q3_instances :
+    cMomentSum 2 4 < cMomentSum 3 4 ∧
+    cMomentSum 2 5 < cMomentSum 3 5 ∧
+    cMomentSum 2 6 < cMomentSum 3 6 ∧
+    cMomentSum 2 7 < cMomentSum 3 7 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
+
+/-- Paper package. prop:pom-sq-lower -/
+theorem paper_momentSum_q_mono :
+    cMomentSum 1 6 < cMomentSum 2 6 ∧
+    cMomentSum 2 6 < cMomentSum 3 6 ∧
+    cMomentSum 3 6 < cMomentSum 4 6 := by
+  refine ⟨?_, ?_, ?_⟩ <;> native_decide
+
 end Omega

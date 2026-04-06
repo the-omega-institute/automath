@@ -614,4 +614,28 @@ theorem paper_momentSum_coprimality_pattern :
     Nat.Coprime 1352 55 ∧ Nat.Coprime 3352 89 := by
   refine ⟨?_, ?_, ?_, ?_⟩ <;> native_decide
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R313: collision excess values
+-- ══════════════════════════════════════════════════════════════
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem collision_excess_values :
+    momentSum 2 2 - 2 ^ 2 = 2 ∧ momentSum 2 3 - 2 ^ 3 = 6 ∧
+    momentSum 2 4 - 2 ^ 4 = 20 ∧ momentSum 2 5 - 2 ^ 5 = 56 ∧
+    momentSum 2 6 - 2 ^ 6 = 156 ∧ momentSum 2 7 - 2 ^ 7 = 416 ∧
+    momentSum 2 8 - 2 ^ 8 = 1096 := by
+  rw [momentSum_two_two, momentSum_two_three, momentSum_two_four,
+      momentSum_two_five, momentSum_two_six, momentSum_two_seven,
+      momentSum_two_eight_rec]; omega
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem collision_excess_strict_mono :
+    2 < 6 ∧ 6 < 20 ∧ 20 < 56 ∧ 56 < 156 ∧ 156 < 416 ∧ 416 < 1096 := by omega
+
+/-- Paper package. prop:fold-groupoid-wedderburn -/
+theorem paper_collision_excess :
+    momentSum 2 6 - 2 ^ 6 = 156 ∧ momentSum 2 7 - 2 ^ 7 = 416 ∧
+    momentSum 2 8 - 2 ^ 8 = 1096 ∧ 156 < 416 ∧ 416 < 1096 := by
+  rw [momentSum_two_six, momentSum_two_seven, momentSum_two_eight_rec]; omega
+
 end Omega.Conclusion

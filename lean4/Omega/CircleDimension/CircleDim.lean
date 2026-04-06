@@ -863,4 +863,45 @@ theorem paper_cdimDefect_rank_duality :
     (∀ f : CircleDimHomData, f.kernelRank = 0 → cdimDefect f = 0) := by
   exact ⟨imageRank_add_defect, cdimDefect_zero_of_iso⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R313: CircleDimHomData.id + concrete instances
+-- ══════════════════════════════════════════════════════════════
+
+/-- Identity homomorphism data. thm:cdim-defect-chain-rule -/
+def CircleDimHomData.id (r : Nat) : CircleDimHomData where
+  sourceRank := r; targetRank := r; kernelRank := 0; imageRank := r
+  rankNullity := by omega
+  imageBound := le_refl r
+
+/-- thm:cdim-defect-chain-rule -/
+theorem cdimDefect_id (r : Nat) : cdimDefect (CircleDimHomData.id r) = 0 := by
+  simp [cdimDefect, CircleDimHomData.id]
+
+/-- Surjective example: rank 3 → 2 with kernel 1. thm:cdim-defect-chain-rule -/
+def CircleDimHomData.surjExample : CircleDimHomData where
+  sourceRank := 3; targetRank := 2; kernelRank := 1; imageRank := 2
+  rankNullity := by omega
+  imageBound := le_refl 2
+
+/-- thm:cdim-defect-chain-rule -/
+theorem cdimDefect_surjExample : cdimDefect CircleDimHomData.surjExample = 1 := by
+  simp [cdimDefect, CircleDimHomData.surjExample]
+
+/-- Injective example: rank 2 → 3 with kernel 0. thm:cdim-defect-chain-rule -/
+def CircleDimHomData.injExample : CircleDimHomData where
+  sourceRank := 2; targetRank := 3; kernelRank := 0; imageRank := 2
+  rankNullity := by omega
+  imageBound := by omega
+
+/-- thm:cdim-defect-chain-rule -/
+theorem cdimDefect_injExample : cdimDefect CircleDimHomData.injExample = 0 := by
+  simp [cdimDefect, CircleDimHomData.injExample]
+
+/-- Paper package. thm:cdim-defect-chain-rule -/
+theorem paper_cdimDefect_instances :
+    cdimDefect (CircleDimHomData.id 5) = 0 ∧
+    cdimDefect CircleDimHomData.surjExample = 1 ∧
+    cdimDefect CircleDimHomData.injExample = 0 := by
+  exact ⟨cdimDefect_id 5, cdimDefect_surjExample, cdimDefect_injExample⟩
+
 end Omega.CircleDimension
