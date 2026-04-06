@@ -421,4 +421,26 @@ theorem freeInvolutionCount_sq_le_mul (r : Nat) (hr : 1 ≤ r) :
   -- (2k+1)*f(k) * ((2k+1)*f(k)) ≤ f(k) * ((2*(k+1)+1) * ((2k+1)*f(k)))
   nlinarith [freeInvolutionCount_pos (k + 1) (by omega)]
 
+/-- Exponential lower bound: (2r-1)!! ≥ 2^(r-1).
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_ge_two_pow : ∀ r : Nat, 1 ≤ r →
+    2 ^ (r - 1) ≤ freeInvolutionCount r
+  | 1, _ => by simp [freeInvolutionCount]
+  | r + 2, _ => by
+    have ih := freeInvolutionCount_ge_two_pow (r + 1) (by omega)
+    rw [freeInvolutionCount_succ, show r + 2 - 1 = r + 1 from by omega]
+    calc 2 ^ (r + 1) = 2 * 2 ^ r := by ring
+      _ = 2 * 2 ^ (r + 1 - 1) := by rw [show r + 1 - 1 = r from by omega]
+      _ ≤ 2 * freeInvolutionCount (r + 1) := Nat.mul_le_mul_left _ ih
+      _ ≤ (2 * (r + 1) + 1) * freeInvolutionCount (r + 1) :=
+          Nat.mul_le_mul_right _ (by omega)
+
+/-- Per-fiber information cost is at least (r-1) bits.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_log_lower (r : Nat) (hr : 1 ≤ r) :
+    r - 1 ≤ Nat.log 2 (freeInvolutionCount r) := by
+  have h1 := freeInvolutionCount_ge_two_pow r hr
+  calc r - 1 = Nat.log 2 (2 ^ (r - 1)) := (Nat.log_pow (by omega) (r - 1)).symm
+    _ ≤ Nat.log 2 (freeInvolutionCount r) := Nat.log_mono_right h1
+
 end Omega.GU

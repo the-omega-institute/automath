@@ -292,4 +292,22 @@ theorem semiring_aut_is_perm (r : Nat) (f : (Fin r → ℕ) ≃+* (Fin r → ℕ
     rw [← hσeq] at h2; linarith
   exact ⟨Equiv.ofBijective σ ⟨hinj, Finite.surjective_of_injective hinj⟩, hσ⟩
 
+/-- Fibonacci radius is monotone.
+    con:cdim-fibonacci-radius-time-conjugacy -/
+theorem fibRadius_mono (m : Nat) : fibRadius m ≤ fibRadius (m + 1) := by
+  unfold fibRadius
+  have hmono : (Nat.fib m : ℝ) ≤ Nat.fib (m + 1) := by
+    exact_mod_cast Nat.fib_mono (by omega)
+  rw [div_le_div_iff₀ (by positivity) (by positivity)]
+  nlinarith
+
+/-- Fibonacci radius is strictly monotone for m ≥ 2.
+    con:cdim-fibonacci-radius-time-conjugacy -/
+theorem fibRadius_strict_mono (m : Nat) (hm : 2 ≤ m) : fibRadius m < fibRadius (m + 1) := by
+  unfold fibRadius
+  have hlt : (Nat.fib m : ℝ) < Nat.fib (m + 1) := by
+    exact_mod_cast Nat.fib_lt_fib_succ (by omega)
+  rw [div_lt_div_iff₀ (by positivity) (by positivity)]
+  nlinarith
+
 end Omega

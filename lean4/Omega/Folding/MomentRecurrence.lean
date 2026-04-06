@@ -1085,4 +1085,12 @@ theorem paper_momentSum_q_mono :
     cMomentSum 3 6 < cMomentSum 4 6 := by
   refine ⟨?_, ?_, ?_⟩ <;> native_decide
 
+/-- S_2(m) growth audit: strict mono, evenness, 4-divisibility.
+    prop:fold-groupoid-wedderburn -/
+theorem paper_momentSum_two_growth_audit :
+    (∀ m : Nat, 1 ≤ m → momentSum 2 m < momentSum 2 (m + 1)) ∧
+    (∀ m : Nat, 1 ≤ m → 2 ∣ momentSum 2 m) ∧
+    (∀ m : Nat, 4 ≤ m → 4 ∣ momentSum 2 m) :=
+  ⟨momentSum_two_strict_mono', momentSum_two_even, momentSum_two_mod_four⟩
+
 end Omega
