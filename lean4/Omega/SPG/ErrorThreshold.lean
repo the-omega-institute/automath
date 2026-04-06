@@ -381,6 +381,12 @@ theorem kappa_add_one_eq {ε : ℝ} (hε : ε < 1) :
   have h : (1 : ℝ) - ε ≠ 0 := by linarith
   field_simp; ring
 
+/-- κ(ε)⁻¹ = κ(-ε).
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_inv_eq {ε : ℝ} (hε : 0 < ε) (hε' : ε < 1) :
+    (kappa ε)⁻¹ = kappa (-ε) := by
+  rw [kappa_neg_eq_inv hε hε', one_div]
+
 end Omega.SPG
 
 

@@ -657,6 +657,14 @@ theorem stableSucc_iterate_eq_stableAdd (x y : X m) (hm : 1 ≤ m) :
   apply eq_of_stableValue_eq
   rw [stableValue_stableSucc_iterate x (stableValue y) hm, stableValue_stableAdd]
 
+/-- F_{m+2}-fold successor returns to the original element.
+    thm:finite-resolution-mod-commring -/
+theorem stableSucc_iterate_card_eq_id (x : X m) (hm : 1 ≤ m) :
+    (stableSucc^[Nat.fib (m + 2)]) x = x := by
+  apply eq_of_stableValue_eq
+  rw [stableValue_stableSucc_iterate x (Nat.fib (m + 2)) hm, Nat.add_mod_right,
+      Nat.mod_eq_of_lt (stableValue_lt_fib x)]
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R16: iterated add = mul + succ/pred bijective
 -- ══════════════════════════════════════════════════════════════

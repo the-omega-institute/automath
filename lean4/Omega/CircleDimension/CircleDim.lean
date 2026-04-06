@@ -42,6 +42,11 @@ theorem circleDim_finite_extension (n t1 t2 : Nat) :
 theorem circleDim_eq_zero_iff (n t : Nat) :
     circleDim n t = 0 ↔ n = 0 := by simp [circleDim]
 
+/-- Circle dimension is positive iff free rank is positive.
+    prop:circle-dimension-laws -/
+theorem circleDim_pos_iff (n t : Nat) : 0 < circleDim n t ↔ 0 < n := by
+  simp [circleDim]
+
 /-- Half circle dimension: circleDim / 2 as a rational number.
     prop:circle-dimension-laws -/
 def halfCircleDim (n_free : Nat) (n_torsion : Nat) : ℚ :=
