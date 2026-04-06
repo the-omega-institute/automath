@@ -1512,4 +1512,27 @@ theorem paper_fib_divisibility_lucas_quotient :
   refine ⟨by native_decide, ?_, by native_decide, ?_, by native_decide, ?_⟩
   all_goals simp [lucasNum]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R314: Lucas numbers mod 9 period 24
+-- ══════════════════════════════════════════════════════════════
+
+/-- Lucas numbers mod 9 have period 24: L(n+24) % 9 = L(n) % 9.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_mod9_period_twentyfour (n : Nat) :
+    lucasNum (n + 24) % 9 = lucasNum n % 9 := by
+  suffices h : (9 : ℤ) ∣ (lucasNum (n + 24) - lucasNum n) by omega
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => simp [lucasNum]
+    | 1 => simp [lucasNum]
+    | n + 2 =>
+      have hR24 := lucasNum_succ_succ (n + 24)
+      have hR0 := lucasNum_succ_succ n
+      have : lucasNum (n + 2 + 24) - lucasNum (n + 2) =
+          (lucasNum (n + 1 + 24) - lucasNum (n + 1)) +
+          (lucasNum (n + 24) - lucasNum n) := by linarith
+      rw [this]
+      exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
+
 end Omega.Zeta

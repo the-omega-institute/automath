@@ -551,4 +551,56 @@ theorem paper_conclusion_stable_k0_rank_audit :
   refine ⟨by rw [X.card_eq_fib]; native_decide, cBinFiberMax_six, cBinFiberMax_seven,
     momentSum_two_six, by rw [cBinFiberMax_six, cBinFiberMax_seven]; omega⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R314: Gödel encoding append splitting
+-- ══════════════════════════════════════════════════════════════
+
+/-- Gödel encoding from a given start index: ∏_{i} p_{offset+start+i}^{code[i]}.
+    thm:conclusion-godel-semidirect-law -/
+def godelEncodingFrom (primes : ℕ → ℕ) (offset : ℕ) (start : ℕ) : List ℕ → ℕ
+  | [] => 1
+  | a :: rest => primes (offset + start) ^ a * godelEncodingFrom primes offset (start + 1) rest
+
+/-- Gödel encoding: map a list of positive naturals to ∏ p_i^{a_i}.
+    thm:conclusion-godel-semidirect-law -/
+def godelEncoding (primes : ℕ → ℕ) (offset : ℕ) (code : List ℕ) : ℕ :=
+  godelEncodingFrom primes offset 0 code
+
+@[simp] theorem godelEncodingFrom_nil (primes : ℕ → ℕ) (offset start : ℕ) :
+    godelEncodingFrom primes offset start [] = 1 := rfl
+
+@[simp] theorem godelEncodingFrom_cons (primes : ℕ → ℕ) (offset start a : ℕ) (rest : List ℕ) :
+    godelEncodingFrom primes offset start (a :: rest) =
+    primes (offset + start) ^ a * godelEncodingFrom primes offset (start + 1) rest := rfl
+
+private theorem godelEncodingFrom_reindex (primes : ℕ → ℕ) (a b : ℕ) (code : List ℕ) :
+    godelEncodingFrom primes a b code = godelEncodingFrom primes (a + b) 0 code := by
+  induction code generalizing a b with
+  | nil => simp
+  | cons x rest ih =>
+    simp only [godelEncodingFrom_cons, Nat.add_zero]
+    congr 1
+    rw [ih a (b + 1), ih (a + b) 1, show a + (b + 1) = (a + b) + 1 from by omega]
+
+private theorem godelEncodingFrom_append (primes : ℕ → ℕ) (offset start : ℕ)
+    (u v : List ℕ) :
+    godelEncodingFrom primes offset start (u ++ v) =
+    godelEncodingFrom primes offset start u *
+    godelEncodingFrom primes offset (start + u.length) v := by
+  induction u generalizing start with
+  | nil => simp
+  | cons a rest ih =>
+    simp only [List.cons_append, godelEncodingFrom_cons, List.length_cons, ih (start + 1)]
+    have : start + 1 + rest.length = start + (rest.length + 1) := by omega
+    rw [this, Nat.mul_assoc]
+
+/-- Gödel encoding splits over concatenation: G(u++v) = G(u) · G_shift(v).
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_append (primes : ℕ → ℕ) (offset : ℕ) (u v : List ℕ) :
+    godelEncoding primes offset (u ++ v) =
+    godelEncoding primes offset u * godelEncoding primes (offset + u.length) v := by
+  simp only [godelEncoding, godelEncodingFrom_append, Nat.zero_add]
+  congr 1
+  rw [godelEncodingFrom_reindex primes offset u.length v]
+
 end Omega.Conclusion
