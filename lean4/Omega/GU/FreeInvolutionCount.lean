@@ -395,6 +395,16 @@ theorem freeInvolutionCount_six : freeInvolutionCount 6 = 10395 := by
 theorem freeInvolutionCount_seven : freeInvolutionCount 7 = 135135 := by
   rw [freeInvolutionCount_succ, freeInvolutionCount_six]
 
+/-- f(8) = 15!! = 2027025.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_eight : freeInvolutionCount 8 = 2027025 := by
+  rw [freeInvolutionCount_succ, freeInvolutionCount_seven]
+
+/-- f(9) = 17!! = 34459425.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_nine : freeInvolutionCount 9 = 34459425 := by
+  rw [freeInvolutionCount_succ, freeInvolutionCount_eight]
+
 /-- Log-convexity: f(r)² ≤ f(r-1) · f(r+1) for r ≥ 1.
     thm:fiberwise-free-involution-matching-entropy -/
 theorem freeInvolutionCount_sq_le_mul (r : Nat) (hr : 1 ≤ r) :

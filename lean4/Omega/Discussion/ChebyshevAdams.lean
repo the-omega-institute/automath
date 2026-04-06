@@ -523,4 +523,14 @@ theorem chebyAdams_cube_eq (n : Nat) (S : ℤ) :
       = chebyAdams n S * chebyAdams n S ^ 2 := by ring
     _ = chebyAdams n S * (chebyAdams (2 * n) S + 2) := by rw [this]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R341: Chebyshev period sum at zero
+-- ══════════════════════════════════════════════════════════════
+
+/-- Single period sum at S=0: C_0(0) + C_1(0) + C_2(0) + C_3(0) = 0.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_period_sum_at_zero :
+    chebyAdams 0 0 + chebyAdams 1 0 + chebyAdams 2 0 + chebyAdams 3 0 = 0 := by
+  simp [chebyAdams]
+
 end Omega.Discussion
