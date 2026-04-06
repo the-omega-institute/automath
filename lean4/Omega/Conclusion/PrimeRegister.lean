@@ -603,4 +603,27 @@ theorem godelEncoding_append (primes : ℕ → ℕ) (offset : ℕ) (u v : List �
   congr 1
   rw [godelEncodingFrom_reindex primes offset u.length v]
 
+/-- Singleton Gödel encoding.
+    thm:conclusion-godel-semidirect-law -/
+@[simp] theorem godelEncoding_singleton (primes : ℕ → ℕ) (offset a : ℕ) :
+    godelEncoding primes offset [a] = primes offset ^ a := by
+  simp [godelEncoding, godelEncodingFrom]
+
+private theorem godelEncodingFrom_pos' (primes : ℕ → ℕ) (hp : ∀ i, 0 < primes i)
+    (offset start : ℕ) (code : List ℕ) :
+    0 < godelEncodingFrom primes offset start code := by
+  induction code generalizing start with
+  | nil => simp
+  | cons a rest ih =>
+    simp only [godelEncodingFrom_cons]
+    exact Nat.mul_pos (Nat.pos_of_ne_zero (pow_ne_zero _ (Nat.pos_iff_ne_zero.mp (hp (offset + start)))))
+      (ih (start + 1))
+
+/-- Gödel encoding is positive when all primes are positive.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_pos (primes : ℕ → ℕ) (offset : ℕ) (code : List ℕ)
+    (hp : ∀ i, 0 < primes i) :
+    0 < godelEncoding primes offset code :=
+  godelEncodingFrom_pos' primes hp offset 0 code
+
 end Omega.Conclusion

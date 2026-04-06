@@ -395,6 +395,39 @@ theorem separationDepth_comm {α : Type*} (distinguish : Nat → α → α → B
     separationDepth distinguish x y = separationDepth distinguish y x := by
   simp only [separationDepth, hsymm]
 
+/-- Separation depth of identical elements is ⊤.
+    def:cdim-gap-ledger -/
+theorem separationDepth_self {α : Type*} (distinguish : Nat → α → α → Bool)
+    (hrefl : ∀ n x, distinguish n x x = false) (x : α) :
+    separationDepth distinguish x x = ⊤ := by
+  simp only [separationDepth]
+  apply iInf_eq_top.mpr
+  intro n
+  simp [hrefl n x]
+
+/-- A distinguishing witness bounds the separation depth.
+    def:cdim-gap-ledger -/
+theorem separationDepth_le_of_distinguish {α : Type*}
+    (distinguish : Nat → α → α → Bool) (x y : α) (n : Nat)
+    (h : distinguish n x y = true) :
+    separationDepth distinguish x y ≤ n :=
+  iInf₂_le n h
+
+/-- Triangle inequality for separation depth.
+    def:cdim-gap-ledger -/
+theorem separationDepth_triangle {α : Type*}
+    (distinguish : Nat → α → α → Bool)
+    (htrans : ∀ n x y z, distinguish n x z = true →
+      distinguish n x y = true ∨ distinguish n y z = true)
+    (x y z : α) :
+    min (separationDepth distinguish x y) (separationDepth distinguish y z) ≤
+    separationDepth distinguish x z := by
+  apply le_iInf₂
+  intro n hn
+  rcases htrans n x y z hn with hxy | hyz
+  · exact min_le_of_left_le (iInf₂_le n hxy)
+  · exact min_le_of_right_le (iInf₂_le n hyz)
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R169: Phase spectrum rank growth and upper bound
 -- ══════════════════════════════════════════════════════════════
