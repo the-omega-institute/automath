@@ -2,7 +2,7 @@
 
 We next distinguish admissible reference from objecthood. An admitted reference need not yet determine a global object, but it may still support local witnesses and compatible local families. This local-to-global gap is the source of the structural phenomena studied in the present section.
 
-\begin{definition}[Refinement-stable local object system]\label{def:refinement-stability}
+\begin{definition}[Refinement stability]\label{def:refinement-stability}
 We say that the local object system is \emph{refinement-stable} if, for every refinement $q\le p$:
 \begin{enumerate}[label=(\roman*),nosep]
 \item admitted references, covers, and compatible local families at $q$ restrict functorially to those at $p$;
@@ -524,16 +524,23 @@ and identify the three reference classes with $a_{\mathrm{loc}},a_{\mathrm{cmp}}
 The three null modes show that information-state forcing distinguishes situations invisible to pointwise semantics. The following result makes this precise: the gluing predicates introduced at the local-object layer cannot be reduced to the lower layers.
 
 \begin{theorem}[Pointwise irreducibility of gluing predicates]\label{thm:pointwise-irreducibility}
-There exist a model $M$, a state $p=(\Gamma_p,R_p)$, and admitted references $r_1,r_2:\mathsf{Ref}_s$ of the same sort such that:
-\begin{enumerate}[label=(\roman*),nosep]
-\item for every $\rho\in R_p$ and every $\mathrm{Form}_1$-formula $\varphi(x)$ with one free variable $x$ of sort $\mathsf{Ref}_s$, where $r_1,r_2$ are treated as distinguished constants of the $\Sigma_1$-signature, containing none of the local-object predicates $\LocSec_s$, $\CompSec_s$, $\Sec_s$, and containing no occurrence of $r_1,r_2$ other than the substituted variable,
+There exist a model $M$, a state $p=(\Gamma_p,R_p)$, and admitted references
 \[
-M,\rho\models\varphi(r_1)
-\quad\Longleftrightarrow\quad
-M,\rho\models\varphi(r_2);
+r_{\mathrm{tot}},\qquad r_{\mathrm{cmp}},\qquad r_{\mathrm{glue}}:\mathsf{Ref}_s
 \]
-\item $M,p\Vdash \CompSec_s(r_1)\land \Sec_s(r_1)$;
-\item $M,p\Vdash \CompSec_s(r_2)\land \neg\Sec_s(r_2)$.
+of the same sort such that:
+\begin{enumerate}[label=(\roman*),nosep]
+\item for every $\rho\in R_p$ and every lower-layer $\mathrm{Form}_1$-formula $\varphi(x)$ with one free variable $x$ of sort $\mathsf{Ref}_s$,
+\[
+M,\rho\models\varphi(r_{\mathrm{tot}})
+\quad\Longleftrightarrow\quad
+M,\rho\models\varphi(r_{\mathrm{cmp}})
+\quad\Longleftrightarrow\quad
+M,\rho\models\varphi(r_{\mathrm{glue}});
+\]
+\item $M,p\Vdash \CompSec_s(r_{\mathrm{tot}})\land \Sec_s(r_{\mathrm{tot}})$;
+\item $M,p\Vdash \LocSec_s(r_{\mathrm{cmp}})\land \neg\CompSec_s(r_{\mathrm{cmp}})$;
+\item $M,p\Vdash \CompSec_s(r_{\mathrm{glue}})\land \neg\Sec_s(r_{\mathrm{glue}})$.
 \end{enumerate}
 In particular, the predicates
 \[
@@ -547,36 +554,107 @@ are not definable in the information-state forcing language without the local-ob
 \end{theorem}
 
 \begin{proof}
-Take a single state $p=(\Gamma_p,R_p)$ and one referenceable sort $s$. In the $\Sigma_1$-reduct, let the reference sort $\mathsf{Ref}_s$ have domain
+Take the context
 \[
-D_{\mathsf{Ref}_s}^M=\{0,1\},
+\Gamma_p=
+\bigl(
+y_{\mathrm{tot}}:\mathsf{Ref}_s,\,
+y_{\mathrm{cmp}}:\mathsf{Ref}_s,\,
+y_{\mathrm{glue}}:\mathsf{Ref}_s
+\bigr),
 \]
-interpret the distinguished constants by $r_1^M=0$ and $r_2^M=1$, and introduce no additional nonlogical symbols on that sort beyond equality. Choose $R_p\subseteq \Val_M(\Gamma_p)$ to be any set fixed setwise by the transposition of $0$ and $1$; for instance, one may take $R_p=\Val_M(\Gamma_p)$. Then the swap map $\alpha:D_{\mathsf{Ref}_s}^M\to D_{\mathsf{Ref}_s}^M$ defined by $\alpha(0)=1$, $\alpha(1)=0$ extends to an automorphism
+put
 \[
-\alpha:M|_{\mathrm{Form}_1}\xrightarrow{\sim} M|_{\mathrm{Form}_1}
+r_{\mathrm{tot}}:=y_{\mathrm{tot}},\qquad
+r_{\mathrm{cmp}}:=y_{\mathrm{cmp}},\qquad
+r_{\mathrm{glue}}:=y_{\mathrm{glue}},
 \]
-satisfying $\alpha(r_1^M)=r_2^M$ and $\alpha(r_2^M)=r_1^M$, and such that $\alpha$ fixes $R_p$ setwise, i.e.\ the induced permutation of $\Val_M(\Gamma_p)$ maps $R_p$ to itself. By invariance of first-order truth under automorphisms, every $\mathrm{Form}_1$-formula $\varphi(x)$ satisfying the restriction in~\textup{(i)} -- namely, $\varphi$ contains no occurrence of the constants $r_1,r_2$ other than the substituted variable -- therefore obeys
+and let $p=(\Gamma_p,R_p)$ with $R_p=\{\rho_0\}$, where $\rho_0$ is the valuation determined by
 \[
-M,\rho\models\varphi(r_1)
+\rho_0(y_{\mathrm{tot}})=0,\qquad
+\rho_0(y_{\mathrm{cmp}})=1,\qquad
+\rho_0(y_{\mathrm{glue}})=2.
+\]
+In the $\Sigma_1$-reduct, let the reference sort have domain
+\[
+D_{\mathsf{Ref}_s}^M=\{0,1,2,3\}.
+\]
+Interpret every symbol of $\Sigma_1$ whose type mentions $\mathsf{Ref}_s$ so that it is invariant under permutations of $\{0,1,2\}$ fixing $3$; for example, one may interpret every relation symbol involving $\mathsf{Ref}_s$ by the empty relation and every function symbol involving $\mathsf{Ref}_s$ by a constant map independent of the $\mathsf{Ref}_s$-coordinates. Interpret all remaining sorts and symbols arbitrarily. Then every permutation of $\{0,1,2\}$ fixing $3$ extends to an automorphism of the $\Sigma_1$-structure underlying $M$. Hence $0,1,2$ lie in the same automorphism orbit. By invariance of first-order truth under automorphisms, every lower-layer unary formula $\varphi(x)$ has the same truth value at $0$, $1$, and $2$. Since $x$ is the only free variable of $\varphi$, this gives
+\[
+M,\rho_0\models\varphi(r_{\mathrm{tot}})
 \quad\Longleftrightarrow\quad
-M,\rho\models\varphi(r_2)
+M,\rho_0\models\varphi(r_{\mathrm{cmp}})
+\quad\Longleftrightarrow\quad
+M,\rho_0\models\varphi(r_{\mathrm{glue}}),
 \]
-for every $\rho\in R_p$, proving~\textup{(i)}.
+which is \textup{(i)} because $R_p=\{\rho_0\}$.
 
-Write $a_k=[r_k]_p$ ($k=1,2$) and equip both reference classes with identical local reference frames: a cover $\{u_k\to a_k,v_k\to a_k\}$ with common refinement $c_k$.
-
-For $r_1$, define
+Write
 \[
-F_1(u_1)=F_1(v_1)=F_1(c_1)=F_1(a_1)=\{*\},
+a_{\mathrm{tot}}=[r_{\mathrm{tot}}]_p,\qquad
+a_{\mathrm{cmp}}=[r_{\mathrm{cmp}}]_p,\qquad
+a_{\mathrm{glue}}=[r_{\mathrm{glue}}]_p.
 \]
-with all restrictions equal to the identity on $\{*\}$. The unique local family $(*,*)$ is compatible, and $*\in F_1(a_1)$ is a global section. Hence~\textup{(ii)}.
+Give these three reference classes pairwise disjoint rooted components in the local reference frame.
 
-For $r_2$, define
+For $r_{\mathrm{tot}}$, let $a_{\mathrm{tot}}$ carry only its trivial cover and define
 \[
-F_2(u_2)=F_2(v_2)=F_2(c_2)=\{*\},\qquad F_2(a_2)=\varnothing,
+F(a_{\mathrm{tot}})=\{*\}.
 \]
-with all restrictions to $c_2$ equal to the identity on $\{*\}$. The local family $(*,*)$ is compatible on the overlap, but $F_2(a_2)=\varnothing$. Hence~\textup{(iii)}.
+Then $*\in F(a_{\mathrm{tot}})$ is already a global section, so \textup{(ii)} holds.
 
-Since the local object functors $F_1,F_2$ belong to the enrichment $\mathbb{L}_2$ and are not accessible in $\mathrm{Form}_1$, the distinction between \textup{(ii)} and \textup{(iii)} is invisible at $\mathbb{L}_1$.
+For $r_{\mathrm{cmp}}$, use objects
+\[
+c_{\mathrm{cmp}}\sqsubseteq u_{\mathrm{cmp}}\sqsubseteq a_{\mathrm{cmp}},
+\qquad
+c_{\mathrm{cmp}}\sqsubseteq v_{\mathrm{cmp}}\sqsubseteq a_{\mathrm{cmp}},
+\]
+with covering family
+\[
+\{u_{\mathrm{cmp}}\to a_{\mathrm{cmp}},\,v_{\mathrm{cmp}}\to a_{\mathrm{cmp}}\}.
+\]
+Define
+\[
+F(u_{\mathrm{cmp}})=\{\sigma_u\},\quad
+F(v_{\mathrm{cmp}})=\{\sigma_v\},\quad
+F(c_{\mathrm{cmp}})=\{0,1\},\quad
+F(a_{\mathrm{cmp}})=\varnothing,
+\]
+with restrictions
+\[
+\res_{c_{\mathrm{cmp}}}^{u_{\mathrm{cmp}}}(\sigma_u)=0,
+\qquad
+\res_{c_{\mathrm{cmp}}}^{v_{\mathrm{cmp}}}(\sigma_v)=1.
+\]
+Thus local sections exist on the chosen cover, but the only possible local family is incompatible on the overlap, proving \textup{(iii)}.
+
+For $r_{\mathrm{glue}}$, use objects
+\[
+c_{\mathrm{glue}}\sqsubseteq u_{\mathrm{glue}}\sqsubseteq a_{\mathrm{glue}},
+\qquad
+c_{\mathrm{glue}}\sqsubseteq v_{\mathrm{glue}}\sqsubseteq a_{\mathrm{glue}},
+\]
+with covering family
+\[
+\{u_{\mathrm{glue}}\to a_{\mathrm{glue}},\,v_{\mathrm{glue}}\to a_{\mathrm{glue}}\}.
+\]
+Define
+\[
+F(u_{\mathrm{glue}})=F(v_{\mathrm{glue}})=F(c_{\mathrm{glue}})=\{*\},
+\qquad
+F(a_{\mathrm{glue}})=\varnothing,
+\]
+and let every restriction map be the identity on $\{*\}$. Then the chosen cover supports a compatible local family, but there is no global section at $a_{\mathrm{glue}}$, proving \textup{(iv)}.
+
+Finally, stipulate
+\[
+M,p\Vdash
+\Adm_s(r_{\mathrm{tot}})
+\land
+\Adm_s(r_{\mathrm{cmp}})
+\land
+\Adm_s(r_{\mathrm{glue}}).
+\]
+Because $R_p$ is a singleton, state forcing of any lower-layer instance $\theta(r)$ is equivalent to ordinary satisfaction of $\theta(r)$ at $\rho_0$. Clause \textup{(i)} therefore implies that every lower-layer formula assigns the same forcing value to $r_{\mathrm{tot}}$, $r_{\mathrm{cmp}}$, and $r_{\mathrm{glue}}$ at $p$. But \textup{(ii)} and \textup{(iii)} separate $\CompSec_s$, \textup{(ii)} and \textup{(iv)} separate $\Sec_s$, and \textup{(ii)} together with \textup{(iv)} separates $\Null^{\mathrm{glue}}_s$. Hence none of these predicates is definable in the lower information-state forcing language.
 \end{proof}
 

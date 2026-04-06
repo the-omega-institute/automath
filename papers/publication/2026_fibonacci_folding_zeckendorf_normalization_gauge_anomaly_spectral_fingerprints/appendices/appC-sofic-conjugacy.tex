@@ -22,62 +22,65 @@ For every \(m\ge 1\), the graph \(G_m\) is right-resolving: for each fixed verte
 \end{proposition}
 
 \begin{proof}
-The two words \(v0\) and \(v1\) have Fibonacci values differing by \(\Fib_{m+1}\), because they agree in the first \(m-1\) positions and differ only at the final position. The Zeckendorf expansion of \(\Fib_{m+1}\) has a \(1\) in the \(m\)-th coordinate and zeros below, so a difference of \(\Fib_{m+1}\) cannot disappear after truncation to the first \(m\) digits. Therefore
+The two words \(v0\) and \(v1\) have values differing by \(\Fib_{m+1}\). On the other hand, a length-\(m\) word has value at most
 \[
-\Fold_m(v0)\neq \Fold_m(v1),
+\sum_{k=1}^m \Fib_{k+1}=\Fib_{m+3}-2<2\Fib_{m+2},
 \]
-which is exactly the right-resolving property.
+so the full Zeckendorf normalization of any length-\(m\) word can have at most one nonzero digit beyond the first \(m\) coordinates, namely a possible \(1\) in position \(m+1\). Consequently, if two length-\(m\) words have the same fold label, then their values differ by a multiple of \(\Fib_{m+2}\): the first \(m\) Zeckendorf digits agree, and only the possible carry digit at position \(m+1\) can differ. Since
+\[
+0<\Fib_{m+1}<\Fib_{m+2},
+\]
+the words \(v0\) and \(v1\) cannot have the same fold label. Hence \(\Fold_m(v0)\neq \Fold_m(v1)\), as required.
 \end{proof}
 
-\subsection{Synchronization for \(m\ge 3\)}
-For a label block \(B=(x^{(0)},\dots,x^{(L-1)})\in X_m^L\), let \(\mathcal V(B)\subset V_m\) denote the set of terminal vertices of paths in \(G_m\) carrying the label block \(B\).
+\subsection{Fiber products and injectivity for \texorpdfstring{$m\ge 3$}{m >= 3}}
+Let \(F_m\) be the fiber product of \(G_m\) with itself. Thus the vertices of \(F_m\) are pairs \((u,v)\in V_m\times V_m\), and there is an edge
+\[
+(u,v)\longrightarrow (u',v')
+\]
+whenever \(u\to u'\) and \(v\to v'\) are edges of \(G_m\) carrying the same label. The diagonal copy of \(V_m\) always gives a subgraph of \(F_m\); off the diagonal, \(F_m\) records label collisions between distinct vertex paths.
 
 \begin{proposition}\label{prop:sync}
-If \(m\ge 3\) and \(L=m-1\), then \(\mathcal V(B)\) is a singleton for every admissible label block \(B\in Y_m^{m-1}\).
+If \(m\ge 3\), the off-diagonal subgraph of \(F_m\) has no directed cycle. Equivalently, two distinct bi-infinite paths in \(G_m\) cannot carry the same bi-infinite label sequence.
 \end{proposition}
 
 \begin{proof}
-Fix an admissible label block \(B=(x^{(0)},\dots,x^{(j-1)})\) of length \(j\), with \(0\le j\le m-1\). A path in \(G_m\) carrying \(B\) is determined by an initial vertex
-\[
-v^{(0)}=a_1\cdots a_{m-1}\in\{0,1\}^{m-1}
-\]
-and by the successive appended bits \(b_1,\dots,b_j\), because the \(r\)-th edge has the form
-\[
-a_{r}\cdots a_{m-1}b_1\cdots b_{r-1}\ \xrightarrow{\ x^{(r-1)}\ }\ a_{r+1}\cdots a_{m-1}b_1\cdots b_r.
-\]
-By Proposition~\ref{prop:right-resolving}, once the current vertex and the label \(x^{(r-1)}\) are known, the outgoing edge is uniquely determined. Hence two paths carrying the same label block and starting from initial vertices that share the suffix \(a_{j+1}\cdots a_{m-1}\) must also have the same appended bits \(b_1,\dots,b_j\), and therefore the same terminal vertex
-\[
-v^{(j)}=a_{j+1}\cdots a_{m-1}b_1\cdots b_j.
-\]
-It follows that the terminal vertex depends on the initial vertex only through the suffix \(a_{j+1}\cdots a_{m-1}\), which has length \(m-1-j\). Consequently the set of possible terminal vertices after reading \(j\) labels has cardinality at most \(2^{m-1-j}\).
+An off-diagonal edge of \(F_m\) corresponds to two distinct length-\(m\) words \(p,q\in\{0,1\}^m\) with \(\Fold_m(p)=\Fold_m(q)\). By Appendix~\ref{app:rewriting}, equality of folds means that, after writing the words in the low-to-high window convention, \(p\) and \(q\) are connected by a finite sequence of reverse Zeckendorf moves \(001\leftrightarrow 110\). Because \(\Fold_m\) retains only the first \(m\) digits of the normalized form, one also has the two boundary collisions \(000\leftrightarrow 011\) and \(100\leftrightarrow 111\), which are exactly the cases where a single \(1\) is carried across the right boundary of the window.
 
-Applying this with \(j=m-1\) shows that an admissible block of \(m-1\) labels has at most one terminal vertex. Because \(B\in Y_m^{m-1}\) is admissible, at least one path with that label block exists, so \(\mathcal V(B)\) is in fact a singleton.
+Choose, for the pair \((p,q)\), a connecting sequence of such elementary reverse moves with minimal support interval \([a,b]\subseteq\{1,\dots,m\}\); here \(a\) is the smallest coordinate touched by any reverse move. Passing to the next edge of a path in \(F_m\) deletes coordinate \(1\) from both words and appends one new digit on the right. Therefore every elementary reverse move in the chosen chain shifts one position toward the deleted boundary. If \(a>1\), the left endpoint decreases from \(a\) to \(a-1\). If \(a=1\), then the leftmost reverse move leaves the window altogether at the next shift, so the number of elementary reverse moves in a minimal connecting chain strictly decreases.
+
+Thus, along any off-diagonal path in \(F_m\), the lexicographically ordered pair
+\[
+\bigl(a,\ \text{number of elementary reverse moves in a minimal connecting chain}\bigr)
+\]
+strictly decreases after finitely many steps. A directed cycle is therefore impossible. The equivalent pathwise formulation follows because a bi-infinite common label sequence would give a bi-infinite off-diagonal path in \(F_m\).
 \end{proof}
 
-For \(m\ge 3\), define \(v(B)\) to be the unique element of \(\mathcal V(B)\) for a label block \(B\in Y_m^{m-1}\). We then obtain an explicit inverse code
-\begin{equation}\label{eq:Psi-def}
-(\Psi_m(y))_t
-:=
-\text{the last bit of }v\bigl(y_t,\dots,y_{t+m-2}\bigr),
-\qquad y=(y_t)_{t\in\ZZ}\in Y_m.
-\end{equation}
-This is a sliding block code of memory \(m-1\).
+\subsection{An explicit decoder for \(m=3\)}
+For \(m=3\) the decoder can be written down directly. The vertices are \(00,01,10,11\), and the edge labels are
+\[
+00\xrightarrow{000}00,\quad 00\xrightarrow{001}01,\quad
+01\xrightarrow{010}10,\quad 01\xrightarrow{000}11,
+\]
+\[
+10\xrightarrow{100}00,\quad 10\xrightarrow{101}01,\quad
+11\xrightarrow{001}10,\quad 11\xrightarrow{100}11.
+\]
+Among label blocks of length \(2\), the only ambiguous ones are
+\[
+000\,|\,001,\qquad 100\,|\,001.
+\]
+In both cases the two possible terminal vertices are \(01\) and \(10\). Their outgoing label sets are disjoint:
+\[
+\mathcal L^+(01)=\{000,010\},\qquad \mathcal L^+(10)=\{100,101\}.
+\]
+Hence a block \((y_{t-2},y_{t-1},y_t)\) of three consecutive labels determines the terminal vertex uniquely: all two-label blocks except the two displayed ones already do so, and for those two exceptional blocks the third label decides between \(01\) and \(10\). The last bit of the resolved terminal vertex is \((\Psi_3(y))_t\). This gives an explicit inverse code with memory \(2\).
 
 \begin{proof}[Proof of Theorem~\ref{thm:conjugacy}]
-Let \(\eta\in\{0,1\}^{\ZZ}\), and consider the path in \(G_m\) generated by the successive \((m-1)\)-blocks
-\[
-\eta_{t-m+1}\cdots \eta_{t-1}\in V_m.
-\]
-Its edge labels are exactly \(\Phi_m(\eta)\). For each \(t\), the block
-\[
-\bigl(\Phi_m(\eta)_t,\dots,\Phi_m(\eta)_{t+m-2}\bigr)
-\]
-has terminal vertex \(\eta_t\cdots \eta_{t+m-2}\), so \eqref{eq:Psi-def} gives \((\Psi_m\circ\Phi_m)(\eta)_t=\eta_t\). Thus \(\Psi_m\circ\Phi_m=\mathrm{id}\).
-
-Conversely, let \(y\in Y_m\). By definition of \(Y_m\), some path in \(G_m\) carries the label sequence \(y\). The singleton property of Proposition~\ref{prop:sync} shows that each length-\((m-1)\) label block determines the corresponding terminal vertex uniquely, so the path itself is unique. Reading off the appended bits along that path recovers a microstate sequence \(\eta=\Psi_m(y)\) whose label sequence is \(y\). Hence \(\Phi_m(\Psi_m(y))=y\), so \(\Phi_m\circ \Psi_m=\mathrm{id}_{Y_m}\). Therefore \(\Phi_m\) is a topological conjugacy with inverse \(\Psi_m\).
+The edge shift of \(G_m\) is conjugate to \(\{0,1\}^{\ZZ}\) by reading the appended bit on each edge. Under this identification, the label map of \(G_m\) is exactly \(\Phi_m\). Proposition~\ref{prop:right-resolving} shows that the presentation is deterministic to the future, and Proposition~\ref{prop:sync} shows that the fiber product has no off-diagonal bi-infinite path. Therefore the label map is injective on bi-infinite edge paths; see \cite[Chapter~8]{LindMarcus1995}. Since \(Y_m\) is its image by definition, the map is bijective onto \(Y_m\). Compactness of the domain and Hausdorffness of the codomain imply that the inverse is continuous, and the Curtis--Hedlund--Lyndon theorem identifies that inverse with a sliding block code \(\Psi_m\). The two displayed identities are then immediate.
 \end{proof}
 
-\subsection{The degenerate case \(m=2\)}
+\subsection{The degenerate case \texorpdfstring{$m=2$}{m = 2}}
 For \(m=2\), the label table is particularly simple:
 \[
 00\mapsto 00,\qquad
@@ -88,7 +91,7 @@ For \(m=2\), the label table is particularly simple:
 Thus the only ambiguity is the collision \(00\leftarrow\{00,11\}\).
 
 \begin{proof}[Proof of Theorem~\ref{thm:m2}]
-If a label sequence in \(Y_2\) contains either \(01\) or \(10\), then the corresponding length-\(2\) microstate block is uniquely determined, and overlapping windows propagate this uniqueness to the entire bi-infinite sequence. Therefore non-injectivity can occur only for the constant label sequence \((00)^\ZZ\).
+The fiber product description makes the degeneracy transparent. Off the diagonal there are only the two ordered vertex pairs \((0,1)\) and \((1,0)\), and each has a single outgoing edge labeled \(00\) back to itself. These are exactly the two lifts of the constant label sequence \((00)^\ZZ\), namely the constant microstate sequences \(0^\ZZ\) and \(1^\ZZ\).
 
-The two fixed microstate sequences \(0^\ZZ\) and \(1^\ZZ\) both map to \((00)^\ZZ\), because \(\Fold_2(00)=00\) and \(\Fold_2(11)=00\). No other microstate sequence can map to \((00)^\ZZ\): any occurrence of \(01\) or \(10\) in the microstate would produce the label \(01\) or \(10\) at the corresponding site. Hence \((00)^\ZZ\) has exactly the two preimages \(0^\ZZ\) and \(1^\ZZ\), while every other point of \(Y_2\) has a unique preimage.
+Every other label sequence contains either \(01\) or \(10\). Those labels have unique preimages \(01\) and \(10\), so once one such block appears the overlapping-window structure propagates a unique lift to the entire bi-infinite sequence. Hence \((00)^\ZZ\) is the only non-injective fiber, and it has precisely the two preimages stated in Theorem~\ref{thm:m2}.
 \end{proof}

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      4.1
+// @version      4.2
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -805,8 +805,13 @@
       if (responseText.length >= 5) {
         if (responseText === lastText) {
           stableCount++;
-          if (stableCount >= STABLE_CHECKS && !generating) {
-            log(`Response complete: ${responseText.length} chars (stable ${stableCount * STABLE_INTERVAL / 1000}s)`);
+          // Return when stable AND either not generating, or stable for long
+          // enough that "thinking" indicator is likely stale (ChatGPT 5.4
+          // keeps [class*='thinking'] present even after output completes).
+          const stableEnough = stableCount >= STABLE_CHECKS && !generating;
+          const stableOverride = stableCount >= STABLE_CHECKS + 2; // 5 checks = 5min
+          if (stableEnough || stableOverride) {
+            log(`Response complete: ${responseText.length} chars (stable ${stableCount * STABLE_INTERVAL / 1000}s, gen=${generating})`);
             return responseText;
           }
         } else {
@@ -980,7 +985,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Oracle Bridge v4.1 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
+    log(`Oracle Bridge v4.2 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
     // Check if we navigated here to process a task on a fresh chat page
     const phase = getTaskPhase();
