@@ -390,4 +390,25 @@ theorem freeInvolutionCount_five : freeInvolutionCount 5 = 945 := by
 theorem freeInvolutionCount_six : freeInvolutionCount 6 = 10395 := by
   rw [freeInvolutionCount_succ, freeInvolutionCount_five]
 
+/-- f(7) = 13!! = 135135.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_seven : freeInvolutionCount 7 = 135135 := by
+  rw [freeInvolutionCount_succ, freeInvolutionCount_six]
+
+/-- Log-convexity: f(r)² ≤ f(r-1) · f(r+1) for r ≥ 1.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_sq_le_mul (r : Nat) (hr : 1 ≤ r) :
+    freeInvolutionCount r ^ 2 ≤
+    freeInvolutionCount (r - 1) * freeInvolutionCount (r + 1) := by
+  obtain ⟨k, rfl⟩ : ∃ k, r = k + 1 := ⟨r - 1, by omega⟩
+  simp only [show k + 1 - 1 = k from by omega]
+  -- f(k+1) = (2k+1)*f(k), f(k+2) = (2k+3)*f(k+1)
+  have h1 := freeInvolutionCount_succ k
+  have h2 := freeInvolutionCount_succ (k + 1)
+  -- f(k+1)^2 = (2k+1)^2 * f(k)^2
+  -- f(k) * f(k+2) = f(k) * (2k+3) * f(k+1) = (2k+3)*(2k+1)*f(k)^2
+  rw [h1, h2, sq]
+  -- (2k+1)*f(k) * ((2k+1)*f(k)) ≤ f(k) * ((2*(k+1)+1) * ((2k+1)*f(k)))
+  nlinarith [freeInvolutionCount_pos (k + 1) (by omega)]
+
 end Omega.GU
