@@ -13,26 +13,26 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1365 |
+| \leanverified 标注数 | 1369 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1382 |
-| 轮次 | R328（round_count=329） |
+| 总标注数 | 1386 |
+| 轮次 | R329（round_count=330） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 279 | 16.3% |
+| POM | 1,707 | 281 | 16.5% |
 | Emergent Arithmetic | 185 | 135 | 73.0% |
 | Folding | 337 | 109 | 32.3% |
-| Conclusion | 2,550 | 223 | 8.7% |
+| Conclusion | 2,550 | 224 | 8.8% |
 | Group Unification | 469 | 138 | 29.4% |
 | SPG | 129 | 87 | 67.4% |
 | Circle Dimension | 393 | 121 | 30.8% |
-| Zeta Finite Part | 4,524 | 171 | 3.8% |
+| Zeta Finite Part | 4,524 | 172 | 3.8% |
 | Discussion | 67 | 45 | 67.2% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1308** | **12.4%** |
+| **合计（body）** | **10,508** | **1312** | **12.5%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,8 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R329: Lucas mod36 + hiddenBitCount odd + godelEncoding coprime（3/3 完成）**：Zeta/DynZeta.lean + Folding/MaxFiberTwoStep.lean + Conclusion/PrimeRegister.lean——lucasNum\_mod36\_period\_twentyfour（thm:zeta-syntax-trace-linear-recurrence，Lucas mod 36 周期 24，Zeta）; hiddenBitCount\_odd\_closed\_eq（thm:pom-hidden-bit-count，奇数隐藏位计数闭式，POM）; hiddenBitCount\_odd\_eq（thm:pom-hidden-bit-count，奇数隐藏位计数等式，POM）; godelEncoding\_coprime\_of\_disjoint（thm:conclusion-godel-semidirect-law，不相交事件集 Gödel 编码互素，Conclusion）——**3 个论文标签条目计入覆盖率**（Zeta +1, POM +2, Conclusion +1）——Zeta Finite Part 171→172（3.8%），POM 279→281（16.3%→16.5%），Conclusion 223→224（8.7%→8.8%），全局 \\leanverified 1365→1369（+4），总标注 1382→1386（+4），commit f7b79ff
+
 **Phase R328: Pisano 89 + Fibonacci 素数 23/29 扩展（2/3 完成，目标3规格错误）**：GU/FibPrimePisano.lean + Folding/FibonacciField.lean——pisano\_period\_89（cor:gut-fibprime-pisano-4n，Pisano 周期 π(89)=44 验证，GU）; paper\_pisano\_period\_89（cor:gut-fibprime-pisano-4n，p=89 论文接口打包，GU）; fib\_twentythree\_prime（cor:field-phase-fib-prime，F(23)=28657 为素数，EA）; fib\_twentynine\_prime（cor:field-phase-fib-prime，F(29)=514229 为素数，EA）; paper\_fibonacci\_field\_phase\_extended\_2（cor:field-phase-fib-prime，域相扩展论文接口打包第2批，EA）——**推迟**：stableNeg\_ne\_self\_of\_ne\_zero（规格数学错误，F(6)=8 偶数时存在反例）——**2 个论文标签条目计入覆盖率**（GU +2, EA +3）——Group Unification 136→138（29.0%→29.4%），Emergent Arithmetic 132→135（71.4%→73.0%），全局 \\leanverified 1360→1365（+5），总标注 1377→1382（+5），commit bd37376
 
 **Phase R327: Lucas mod48 + separationDepth zero + kappa neg 三件套（3/3 完成）**：Zeta/DynZeta.lean + CircleDimension/CircleDim.lean + SPG/ErrorThreshold.lean——lucasNum\_mod48\_period\_twentyfour（thm:zeta-syntax-trace-linear-recurrence，Lucas mod 48 周期 24，Zeta）; separationDepth\_eq\_zero\_of\_distinguish\_zero（def:cdim-gap-ledger，分离深度为零的刻画，CD）; kappa\_mul\_neg\_eq\_one（prop:spg-relative-error-threshold-sharpness，kappa 负乘积等式，SPG）; kappa\_neg\_eq\_inv（prop:spg-relative-error-threshold-sharpness，kappa 负值为逆，SPG）; kappa\_neg\_lt\_one（prop:spg-relative-error-threshold-sharpness，kappa 负值小于1，SPG）——**3 个论文标签条目计入覆盖率**（Zeta +1, CD +1, SPG +3）——Zeta Finite Part 170→171（3.8%），Circle Dimension 120→121（30.5%→30.8%），SPG 84→87（65.1%→67.4%），全局 \\leanverified 1355→1360（+5），总标注 1372→1377（+5），commit c152753
