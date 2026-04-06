@@ -1109,4 +1109,12 @@ theorem paper_pom_collision_moment_package :
     (∀ q m : Nat, 1 ≤ q → 2 ^ m ≤ momentSum q m) :=
   ⟨momentSum_two_pos', momentSum_two_strict_mono', momentSum_ge_card', momentSum_ge_pow'⟩
 
+/-- Moment sum hierarchy: S_0, S_1, monotonicity in q.
+    prop:fold-groupoid-wedderburn -/
+theorem paper_momentSum_hierarchy :
+    (∀ m : Nat, momentSum 0 m = Nat.fib (m + 2)) ∧
+    (∀ m : Nat, momentSum 1 m = 2 ^ m) ∧
+    (∀ q m : Nat, momentSum q m ≤ momentSum (q + 1) m) :=
+  ⟨momentSum_zero, momentSum_one, momentSum_le_succ'⟩
+
 end Omega

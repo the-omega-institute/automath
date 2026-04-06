@@ -928,6 +928,17 @@ theorem paper_ea_two_layer_readout :
   ⟨fun _ hm x y => iteratedStableAdd_eq_stableMul x y hm,
    fun _ hm => stableSucc_zero hm⟩
 
+/-- EA core: value injective + range + modular addition.
+    thm:monoid-quotient-is-N -/
+theorem paper_ea_ring_iso_core :
+    (∀ (m : Nat) (x y : X m), stableValue x = stableValue y → x = y) ∧
+    (∀ (m : Nat) (x : X m), stableValue x < Nat.fib (m + 2)) ∧
+    (∀ (m : Nat) (x y : X m),
+      stableValue (stableAdd x y) = (stableValue x + stableValue y) % Nat.fib (m + 2)) :=
+  ⟨fun m _ _ h => stableValue_injective m h,
+   fun _ x => stableValue_lt_fib x,
+   fun _ x y => stableValue_stableAdd x y⟩
+
 end X
 
 end Omega

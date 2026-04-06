@@ -849,4 +849,24 @@ theorem godelEncoding_prod_finset (primes : ℕ → ℕ) (offset : ℕ) (code : 
       rw [this]
     rw [this, mul_comm]
 
+/-- Gödel encoding bounded by max-prime power of total exponent sum.
+    thm:conclusion-godel-history-superlinear-highprob -/
+theorem godelEncoding_le_max_prime_pow (primes : ℕ → ℕ) (offset : ℕ) (code : List ℕ)
+    (P : ℕ) (hP : ∀ i, i < code.length → primes (offset + i) ≤ P) :
+    godelEncoding primes offset code ≤ P ^ code.sum := by
+  induction code generalizing offset with
+  | nil => simp [godelEncoding, godelEncodingFrom]
+  | cons a rest ih =>
+    simp only [godelEncoding, godelEncodingFrom_cons, Nat.add_zero, List.sum_cons]
+    have hPa : primes offset ≤ P := hP 0 (by simp)
+    have htl : godelEncodingFrom primes offset 1 rest ≤ P ^ rest.sum := by
+      rw [godelEncodingFrom_reindex]
+      exact ih (offset + 1) (fun i hi => by
+        have := hP (i + 1) (by simp; omega)
+        rwa [show offset + (i + 1) = offset + 1 + i from by omega] at this)
+    calc primes offset ^ a * godelEncodingFrom primes offset 1 rest
+        ≤ P ^ a * P ^ rest.sum :=
+          Nat.mul_le_mul (Nat.pow_le_pow_left hPa a) htl
+      _ = P ^ (a + rest.sum) := (pow_add P a rest.sum).symm
+
 end Omega.Conclusion
