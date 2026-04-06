@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1453 |
+| \leanverified 标注数 | 1458 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1470 |
-| 轮次 | R353（round_count=354） |
+| 总标注数 | 1475 |
+| 轮次 | R354（round_count=355） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -28,13 +28,13 @@
 | Emergent Arithmetic | 185 | 146 | 78.9% |
 | Folding | 337 | 109 | 32.3% |
 | Conclusion | 2,550 | 236 | 9.3% |
-| Group Unification | 469 | 152 | 32.4% |
-| SPG | 129 | 97 | 75.2% |
+| Group Unification | 469 | 153 | 32.6% |
+| SPG | 129 | 99 | 76.7% |
 | Circle Dimension | 393 | 128 | 32.6% |
 | Zeta Finite Part | 4,524 | 180 | 4.0% |
-| Discussion | 67 | 53 | 79.1% |
+| Discussion | 67 | 55 | 82.1% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1393** | **13.3%** |
+| **合计（body）** | **10,508** | **1398** | **13.3%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**Tanaka 局部时间单调性 + SM 签名并分解 + Chebyshev-Adams 平方差（Round R354）**：`tanakaLocalTime_nonneg` + `tanakaLocalTime_mono`（对应 `thm:spg-scan-tanaka-stokes`，SPG；离散 Tanaka 局部时间非负性与单调性）；`paper_gu_sm_signature_union`（对应 `cor:sm-signature-strict-union`，GU；标准模型三因子签名严格并分解）；`chebyAdams_sq_sub_four` + `chebyAdams_sq_sub_four_factored`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 平方减 4 因式分解）
 **截面账本 AM-GM 上界 + EA 去原语化扩展 + S₂比值界（Round R353）**：`section_count_le_maxFiber_pow` + `section_count_amgm_prod`（对应 `thm:conclusion-section-ledger-kl-identity`，Conclusion；截面计数的最大纤维幂上界与积 ≤ N^n 的 AM-GM 弱化版）；`paper_ea_stable_arithmetic_extended`（对应 `thm:arith-composition`，Emergent Arithmetic；稳定地址半环"去原语化"实现扩展）；`paper_momentSum_two_ratio_bounds`（对应 `prop:fold-groupoid-wedderburn`，Emergent Arithmetic；S₂ 比值上下界）
 **primitive 轨道分子素数平方 + 多素谱基数界 + 进位 Fib 扩展（Round R352）**：`primitiveOrbitNumerator_prime_sq`（对应 `prop:zetaK-mobius-primitive`，Zeta；素数幂 primitive 轨道分子平方整除性）；`multiPrimeSpectrum_le_card`（对应 `prop:cdim-multiprime-divisible-spectrum-explicit`，Circle Dimension；多素可除谱值 ≤ 支撑集基数）；`paper_pom_carry_fib_extended`（对应 `cor:pom-carry-defect-m6-anchor-8-34`，POM；进位缺陷 Fibonacci 扩展模式）
 **Fibonacci 夹逼 + window7-8 压缩比 + 矩审计包（Round R351）**：`paper_momentSum_two_fibonacci_sandwich`（S₂ 黄金夹逼，对应 `thm:fold-collision2-aut-lie-dimension-rank`，Emergent Arithmetic）；`paper_window78_compression_ratio`（window 7-8 压缩比，对应 `subsec:bdry-tower-zeck-gut-part1`，Group Unification）；`paper_discussion_moment_audit_package`（矩审计包，对应 `prop:discussion-fold-occupancy-tq-moment`，Discussion）
