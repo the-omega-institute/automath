@@ -920,4 +920,27 @@ theorem paper_pathIndSetPolyNegOne_values_extended :
     pathIndSetPolyNegOne 8 = -1 := by
   simp [pathIndSetPolyNegOne]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R325: fibPoly evaluated at t=2
+-- ══════════════════════════════════════════════════════════════
+
+/-- Recurrence for fibPoly at t=2: F_{n+2}(2) = F_{n+1}(2) + 2·F_n(2).
+    cor:field-phase-fib-prime -/
+theorem fibPoly_eval_two_recurrence (n : Nat) :
+    (fibPoly (n + 2)).eval 2 = (fibPoly (n + 1)).eval 2 + 2 * (fibPoly n).eval 2 := by
+  simp [fibPoly]
+
+/-- Base values: F_0(2) = 0, F_1(2) = 1.
+    cor:field-phase-fib-prime -/
+theorem fibPoly_eval_two_base :
+    (fibPoly 0).eval 2 = 0 ∧ (fibPoly 1).eval 2 = 1 := by
+  simp [fibPoly]
+
+/-- Concrete values: F_2(2)=1, F_3(2)=3, F_4(2)=5, F_5(2)=11.
+    cor:field-phase-fib-prime -/
+theorem fibPoly_eval_two_values :
+    (fibPoly 2).eval 2 = 1 ∧ (fibPoly 3).eval 2 = 3 ∧
+    (fibPoly 4).eval 2 = 5 ∧ (fibPoly 5).eval 2 = 11 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> simp [fibPoly]
+
 end Omega
