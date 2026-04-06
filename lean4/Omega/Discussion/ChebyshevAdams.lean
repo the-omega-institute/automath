@@ -546,4 +546,19 @@ theorem chebyAdams_sq_sub_four_factored (n : Nat) (S : ℤ) :
     (chebyAdams n S - 2) * (chebyAdams n S + 2) := by
   ring
 
+/-- C_n(-S)² = C_n(S)².
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem chebyAdams_neg_arg_sq (n : Nat) (S : ℤ) :
+    chebyAdams n (-S) ^ 2 = chebyAdams n S ^ 2 := by
+  rw [chebyAdams_neg_arg, mul_pow, ← pow_mul]
+  have : (-1 : ℤ) ^ (n * 2) = 1 := by
+    rw [show n * 2 = 2 * n from by ring, pow_mul]; simp
+  simp [this]
+
+/-- C_n(-S) · C_n(S) = (-1)^n · C_n(S)².
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem chebyAdams_neg_mul_self (n : Nat) (S : ℤ) :
+    chebyAdams n (-S) * chebyAdams n S = (-1) ^ n * chebyAdams n S ^ 2 := by
+  rw [chebyAdams_neg_arg, sq]; ring
+
 end Omega.Discussion

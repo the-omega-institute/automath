@@ -443,4 +443,18 @@ theorem freeInvolutionCount_log_lower (r : Nat) (hr : 1 ≤ r) :
   calc r - 1 = Nat.log 2 (2 ^ (r - 1)) := (Nat.log_pow (by omega) (r - 1)).symm
     _ ≤ Nat.log 2 (freeInvolutionCount r) := Nat.log_mono_right h1
 
+/-- Upper bound: (2r-1)!! ≤ (2r)^r.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_le_two_r_pow : ∀ r : Nat,
+    freeInvolutionCount r ≤ (2 * r) ^ r
+  | 0 => by simp [freeInvolutionCount]
+  | r + 1 => by
+    rw [freeInvolutionCount_succ]
+    calc (2 * r + 1) * freeInvolutionCount r
+        ≤ (2 * r + 1) * (2 * r) ^ r :=
+          Nat.mul_le_mul_left _ (freeInvolutionCount_le_two_r_pow r)
+      _ ≤ (2 * (r + 1)) * (2 * (r + 1)) ^ r :=
+          Nat.mul_le_mul (by omega) (Nat.pow_le_pow_left (by omega) r)
+      _ = (2 * (r + 1)) ^ (r + 1) := by rw [pow_succ]; ring
+
 end Omega.GU

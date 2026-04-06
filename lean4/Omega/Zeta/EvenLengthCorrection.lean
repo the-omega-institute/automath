@@ -62,4 +62,13 @@ theorem evenLengthCorrection_pos_iff
     rw [hm, show m + m = 2 * m by omega, evenLengthCorrection_even]
     exact Nat.mul_pos (by decide) (pow_pos hv _)
 
+/-- Even-length correction combined audit.
+    cor:xi-time-part73c-fixed-parameter-necklace-correction -/
+theorem paper_zeta_evenLength_correction_package :
+    (∀ v n : Nat, ¬ Even n → evenLengthCorrection v n = 0) ∧
+    (∀ v m : Nat, evenLengthCorrection v (2 * m) = 2 * v ^ m) ∧
+    (∀ m : Nat, 0 < evenLengthCorrection 2 (2 * (m + 1))) := by
+  refine ⟨evenLengthCorrection_odd, evenLengthCorrection_even, ?_⟩
+  intro m; rw [evenLengthCorrection_even]; positivity
+
 end Omega.Zeta
