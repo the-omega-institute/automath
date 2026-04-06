@@ -146,4 +146,23 @@ theorem paper_necklaceCorrectionKernel_extended :
    by native_decide, by native_decide, by native_decide,
    by native_decide, by native_decide, by native_decide⟩
 
+/-- Necklace correction at v=2 for small even values.
+    cor:xi-time-part73c-fixed-parameter-necklace-correction -/
+theorem paper_necklace_correction_two_values :
+    necklaceCorrectionKernel 2 2 = 2 ∧
+    necklaceCorrectionKernel 2 4 = 2 ∧
+    necklaceCorrectionKernel 2 6 = 6 ∧
+    necklaceCorrectionKernel 2 8 = 12 ∧
+    necklaceCorrectionKernel 2 10 = 30 ∧
+    necklaceCorrectionKernel 2 12 = 54 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide, by native_decide⟩
+
+/-- Necklace correction at v=2 is positive for 1 ≤ m ≤ 20.
+    cor:xi-time-part73c-fixed-parameter-necklace-correction -/
+theorem necklaceCorrectionKernel_at_two_pos_bounded :
+    ∀ m, 1 ≤ m → m ≤ 20 → 0 < necklaceCorrectionKernel 2 (2 * m) := by
+  intro m hm hm'
+  interval_cases m <;> native_decide
+
 end Omega.Zeta

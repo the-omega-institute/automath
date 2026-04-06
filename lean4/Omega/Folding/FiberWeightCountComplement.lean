@@ -278,4 +278,12 @@ theorem paper_ewc_spectrum_six :
     (Finset.range 33).sum (fun n => exactWeightCount 6 n) = 64 := by
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
 
+/-- Fiber count reciprocity/reflection symmetry package.
+    prop:fold-fiber-count-reciprocity -/
+theorem paper_pom_fiber_reciprocity_package :
+    (∀ (m : Nat) (_hm : 2 ≤ m), Function.Involutive (complementAction (m := m))) ∧
+    (∀ (m : Nat) (_hm : 2 ≤ m) (x : X m),
+      X.fiberMultiplicity (complementAction x) = X.fiberMultiplicity x) :=
+  ⟨complementAction_involutive, fun _ _hm x => fiberMultiplicity_complementAction x _hm⟩
+
 end Omega

@@ -995,4 +995,15 @@ theorem phaseResidualBudget_lower_bound_finite (b r k t R : ℕ)
   rcases hinj with ⟨f, hf⟩
   simpa [Fintype.card_fin] using Fintype.card_le_of_injective f hf
 
+/-- CD phase spectrum reconstruction audit package.
+    thm:cdim-phase-spectrum-reconstruction -/
+theorem paper_cdim_phase_spectrum_audit :
+    (∀ r r' t t' : Nat, 0 < t → 0 < t' →
+      (∀ N : Nat, 1 ≤ N → phaseSpectrumCount r t N = phaseSpectrumCount r' t' N) →
+      r = r' ∧ t = t') ∧
+    (∀ r t N : Nat, Nat.Coprime t N → phaseSpectrumCount r t N = N ^ r) ∧
+    (∀ r N : Nat, phaseSpectrumCount r 0 N = N ^ (r + 1)) :=
+  ⟨fun _ _ _ _ ht ht' h => phaseSpectrumCount_reconstruction ht ht' h,
+   phaseSpectrumCount_coprime, phaseSpectrumCount_free⟩
+
 end Omega.CircleDimension
