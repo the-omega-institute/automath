@@ -821,4 +821,11 @@ theorem godelEncoding_zero_list (primes : ℕ → ℕ) (offset n : ℕ)
   rw [godelEncoding_eq_one_iff primes offset _ hp]
   intro a ha; exact List.eq_of_mem_replicate ha
 
+/-- Gödel encoding snoc: G(code ++ [a]) = G(code) · p_{offset+|code|}^a.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_snoc (primes : ℕ → ℕ) (offset : ℕ) (code : List ℕ) (a : ℕ) :
+    godelEncoding primes offset (code ++ [a]) =
+    godelEncoding primes offset code * primes (offset + code.length) ^ a := by
+  rw [godelEncoding_append, godelEncoding_singleton]
+
 end Omega.Conclusion

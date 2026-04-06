@@ -1039,6 +1039,16 @@ theorem hiddenBitCount_add_two_mod2 (m : Nat) (hm : 1 ≤ m) :
     exact dvd_pow_self 2 (by omega : m ≠ 0)
   omega
 
+/-- B(m) + B(m+1) = 2^m - 1.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_add_succ_eq (m : Nat) :
+    hiddenBitCount m + hiddenBitCount (m + 1) = 2 ^ m - 1 := by
+  have h1 := hiddenBitCount_closed m
+  have h2 := hiddenBitCount_closed (m + 1)
+  have hpow : 2 ^ (m + 1) = 2 * 2 ^ m := by ring
+  rw [hpow] at h2
+  split_ifs at h1 h2 with hm hm1 <;> omega
+
 /-- Closed form: 3·B(2m+1) + 2 = 2·4^m.
     thm:pom-hidden-bit-count -/
 theorem hiddenBitCount_odd_closed_eq (m : Nat) :
