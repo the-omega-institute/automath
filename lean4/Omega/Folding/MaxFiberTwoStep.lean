@@ -969,6 +969,36 @@ theorem hiddenBitCount_floor_div_three (m : Nat) :
   have hmod := two_pow_mod_three m
   split_ifs at hclosed hmod with heven <;> omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R323: hiddenBitCount double-index closed forms
+-- ══════════════════════════════════════════════════════════════
+
+/-- Closed form for hiddenBitCount at even indices: 3·B(2m) + 1 = 4^m.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_double_closed (m : Nat) :
+    3 * hiddenBitCount (2 * m) + 1 = 4 ^ m := by
+  match m with
+  | 0 => simp [hiddenBitCount_zero]
+  | m + 1 =>
+    have h := hiddenBitCount_even_closed (m + 1) (by omega)
+    have hpos : 1 ≤ 4 ^ (m + 1) := Nat.one_le_pow _ _ (by omega)
+    omega
+
+private theorem four_pow_mod_three (m : Nat) : 4 ^ m % 3 = 1 := by
+  induction m with
+  | zero => simp
+  | succ n ih =>
+    have : 4 ^ (n + 1) = 4 * 4 ^ n := by ring
+    rw [this]; omega
+
+/-- hiddenBitCount at even indices via floor division.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_double_eq (m : Nat) :
+    hiddenBitCount (2 * m) = (4 ^ m - 1) / 3 := by
+  have hclosed := hiddenBitCount_double_closed m
+  have hmod := four_pow_mod_three m
+  omega
+
 /-- Fold is canonical (value-preserving), idempotent, and surjective.
     prop:fold-basic-paper -/
 theorem paper_fold_basic (m : Nat) :

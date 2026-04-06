@@ -419,4 +419,25 @@ theorem chebyAdams_at_four_base :
     chebyAdams 0 4 = 2 ∧ chebyAdams 1 4 = 4 := by
   simp [chebyAdams]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R323: Chebyshev-Adams at S=5
+-- ══════════════════════════════════════════════════════════════
+
+/-- Recurrence for C_n(5): C_{n+2}(5) = 5·C_{n+1}(5) - C_n(5).
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_five_recurrence (n : Nat) :
+    chebyAdams (n + 2) 5 = 5 * chebyAdams (n + 1) 5 - chebyAdams n 5 := by
+  rw [chebyAdams_succ_succ]
+
+/-- Base values: C_0(5) = 2, C_1(5) = 5.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_five_base :
+    chebyAdams 0 5 = 2 ∧ chebyAdams 1 5 = 5 := by simp [chebyAdams]
+
+/-- Concrete values: C_2(5) = 23, C_3(5) = 110, C_4(5) = 527.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_five_values :
+    chebyAdams 2 5 = 23 ∧ chebyAdams 3 5 = 110 ∧ chebyAdams 4 5 = 527 := by
+  refine ⟨?_, ?_, ?_⟩ <;> simp [chebyAdams]
+
 end Omega.Discussion
