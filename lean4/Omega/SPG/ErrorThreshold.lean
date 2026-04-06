@@ -361,6 +361,26 @@ theorem paper_kappa_sq_package :
     kappa (1 / 3 : ℝ) ^ 2 = 4 ∧ kappa (1 / 2 : ℝ) ^ 2 = 9 := by
   constructor <;> (rw [sq]; unfold kappa; norm_num)
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R339: kappa sub/add one
+-- ══════════════════════════════════════════════════════════════
+
+/-- κ(ε) - 1 = 2ε/(1-ε).
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_sub_one_eq {ε : ℝ} (hε : ε < 1) :
+    kappa ε - 1 = 2 * ε / (1 - ε) := by
+  unfold kappa
+  have h : (1 : ℝ) - ε ≠ 0 := by linarith
+  field_simp; ring
+
+/-- κ(ε) + 1 = 2/(1-ε).
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_add_one_eq {ε : ℝ} (hε : ε < 1) :
+    kappa ε + 1 = 2 / (1 - ε) := by
+  unfold kappa
+  have h : (1 : ℝ) - ε ≠ 0 := by linarith
+  field_simp; ring
+
 end Omega.SPG
 
 

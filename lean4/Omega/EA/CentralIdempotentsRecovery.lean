@@ -130,4 +130,16 @@ theorem projectorVal_hadamard_sector_powersum
     rcases hb with rfl | rfl <;>
     norm_num
 
+/-- Projector value at matching signs is 1.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem projectorVal_at_same_signs {α β : Int} (hα : α ^ 2 = 1) (hβ : β ^ 2 = 1) :
+    projectorVal α β α β = 1 := by
+  have hα1 : α = 1 ∨ α = -1 := by
+    have : (α - 1) * (α + 1) = 0 := by nlinarith
+    rcases mul_eq_zero.mp this with h | h <;> omega
+  have hβ1 : β = 1 ∨ β = -1 := by
+    have : (β - 1) * (β + 1) = 0 := by nlinarith
+    rcases mul_eq_zero.mp this with h | h <;> omega
+  rcases hα1 with rfl | rfl <;> rcases hβ1 with rfl | rfl <;> norm_num [projectorVal]
+
 end Omega.EA
