@@ -3,6 +3,7 @@ import Omega.Core.Word
 import Omega.Core.No11
 import Omega.Core.CoprimeSMul
 import Omega.Core.PowerInequality
+import Omega.Core.WalshFourier
 import Omega.Folding.StableSyntax
 import Omega.Folding.Weight
 import Omega.Folding.Value
