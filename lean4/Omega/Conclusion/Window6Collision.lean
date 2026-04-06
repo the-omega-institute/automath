@@ -638,4 +638,26 @@ theorem paper_collision_excess :
     momentSum 2 8 - 2 ^ 8 = 1096 ∧ 156 < 416 ∧ 416 < 1096 := by
   rw [momentSum_two_six, momentSum_two_seven, momentSum_two_eight_rec]; omega
 
+/-- Window-6 representation zeta count certificate.
+    cor:conclusion-window6-representation-zeta-count-ratio -/
+theorem paper_window6_representation_zeta_count :
+    (2 ^ 8 * 3 ^ 4 * 5 ^ 9 = 40500000000) ∧
+    (2 ^ (8 + 4 + 9) = 2097152) ∧
+    (8 + 4 + 9 = 21) ∧
+    (2 ^ 21 * (3 ^ 4 * 5 ^ 9) = 2 ^ 8 * 3 ^ 4 * 5 ^ 9 * 2 ^ 13) ∧
+    (cBinFiberHist 6 2 = 8 ∧ cBinFiberHist 6 3 = 4 ∧ cBinFiberHist 6 4 = 9) := by
+  refine ⟨by norm_num, by norm_num, by norm_num, by ring, ?_⟩
+  exact ⟨cBinFiberHist_6_2, cBinFiberHist_6_3, cBinFiberHist_6_4⟩
+
+/-- Boundary and fourpoint sector ratios β_q, γ_q at q=0,1,2.
+    cor:conclusion-window6-boundary-fourpoint-moment-amplification -/
+theorem paper_window6_boundary_sector_ratios :
+    (3 : ℚ) * 1 / 21 = 1 / 7 ∧
+    (3 : ℚ) * 2 / 64 = 3 / 32 ∧
+    (3 : ℚ) * 4 / 212 = 3 / 53 ∧
+    (9 : ℚ) * 1 / 21 = 3 / 7 ∧
+    (9 : ℚ) * 4 / 64 = 9 / 16 ∧
+    (9 : ℚ) * 16 / 212 = 36 / 53 := by
+  refine ⟨by norm_num, by norm_num, by norm_num, by norm_num, by norm_num, by norm_num⟩
+
 end Omega.Conclusion

@@ -828,4 +828,25 @@ theorem godelEncoding_snoc (primes : ℕ → ℕ) (offset : ℕ) (code : List �
     godelEncoding primes offset code * primes (offset + code.length) ^ a := by
   rw [godelEncoding_append, godelEncoding_singleton]
 
+/-- Gödel encoding as a Finset product. thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_prod_finset (primes : ℕ → ℕ) (offset : ℕ) (code : List ℕ) :
+    godelEncoding primes offset code =
+    ∏ i ∈ Finset.range code.length, primes (offset + i) ^ code[i]! := by
+  induction code generalizing offset with
+  | nil => simp [godelEncoding, godelEncodingFrom]
+  | cons a rest ih =>
+    simp only [godelEncoding, godelEncodingFrom_cons, Nat.add_zero, List.length_cons,
+      Finset.prod_range_succ', List.getElem!_cons_zero]
+    have : godelEncodingFrom primes offset 1 rest =
+        ∏ k ∈ Finset.range rest.length, primes (offset + (k + 1)) ^ (a :: rest)[k + 1]! := by
+      rw [godelEncodingFrom_reindex primes offset 1 rest]
+      simp only [godelEncoding] at ih
+      rw [ih (offset + 1)]
+      refine Finset.prod_congr rfl ?_
+      intro i _
+      simp only [List.getElem!_cons_succ]
+      have : offset + 1 + i = offset + (i + 1) := by omega
+      rw [this]
+    rw [this, mul_comm]
+
 end Omega.Conclusion
