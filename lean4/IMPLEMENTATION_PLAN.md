@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1342 |
+| \leanverified 标注数 | 1344 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1359 |
-| 轮次 | R323（round_count=324） |
+| 总标注数 | 1361 |
+| 轮次 | R324（round_count=325） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -25,14 +25,14 @@
 | POM | 1,707 | 278 | 16.3% |
 | Emergent Arithmetic | 185 | 129 | 69.7% |
 | Folding | 337 | 109 | 32.3% |
-| Conclusion | 2,550 | 221 | 8.7% |
+| Conclusion | 2,550 | 222 | 8.7% |
 | Group Unification | 469 | 133 | 28.4% |
 | SPG | 129 | 84 | 65.1% |
-| Circle Dimension | 393 | 119 | 30.3% |
+| Circle Dimension | 393 | 120 | 30.5% |
 | Zeta Finite Part | 4,524 | 169 | 3.7% |
 | Discussion | 67 | 43 | 64.2% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1285** | **12.2%** |
+| **合计（body）** | **10,508** | **1287** | **12.2%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,8 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R324: godelEncoding two + inducedSpectrum antitone（2/3 完成，目标3已存在）**：Conclusion/PrimeRegister.lean + CircleDimension/MultiPrimeSpectrum.lean——godelEncoding\_two（thm:conclusion-godel-semidirect-law，Gödel 编码值为2的刻画，Conclusion）; inducedSpectrum\_antitone（thm:cdim-multiprime-spectrum-realizability，诱导谱的反单调性，CD）——**目标3 typeCount\_sum\_eq\_card + multiPrimeSpectrum\_eq\_sum\_typeCount 已存在，跳过**——**2 个论文标签条目计入覆盖率**（Conclusion +1, CD +1）——Conclusion 221→222（8.7%），Circle Dimension 119→120（30.3%→30.5%），全局 \\leanverified 1342→1344（+2），总标注 1359→1361（+2），commit 4e7c595
+
 **Phase R323: Lucas mod25 + hiddenBitCount double + chebyAdams S=5（3/3 完成）**：Zeta/DynZeta.lean + Folding/MaxFiberTwoStep.lean + Discussion/ChebyshevAdams.lean——lucasNum\_mod25\_period\_twenty（thm:zeta-syntax-trace-linear-recurrence，Lucas mod 25 周期 20，Zeta）; hiddenBitCount\_double\_closed（thm:pom-hidden-bit-count，隐藏位双倍计数闭式，POM）; hiddenBitCount\_double\_eq（thm:pom-hidden-bit-count，隐藏位双倍计数等式，POM）; chebyAdams\_at\_five\_recurrence（thm:discussion-chebyshev-witt-equivariance，Chebyshev S=5 递推关系，Discussion）; chebyAdams\_at\_five\_base（thm:discussion-chebyshev-witt-equivariance，Chebyshev S=5 基础值，Discussion）; chebyAdams\_at\_five\_values（thm:discussion-chebyshev-witt-equivariance，Chebyshev S=5 具体值，Discussion）——**3 个论文标签条目计入覆盖率**（Zeta +1, POM +2, Discussion +3）——Zeta Finite Part 168→169（3.7%），POM 276→278（16.2%→16.3%），Discussion 40→43（59.7%→64.2%），全局 \\leanverified 1336→1342（+6），总标注 1353→1359（+6），commit 6ac5604
 
 **Phase R322: Pisano 41/59 + prefixDetermined sdiff/symmDiff + modularProject stableOne（2.5/3 完成）**：GU/FibPrimePisano.lean + SPG/Cylinder.lean + Folding/ModularTower.lean——pisano\_period\_41（cor:gut-fibprime-pisano-4n，Pisano 周期 π(41)=20 验证，GU）; pisano\_period\_59（cor:gut-fibprime-pisano-4n，Pisano 周期 π(59)=58 验证，GU）; paper\_pisano\_period\_41\_59（cor:gut-fibprime-pisano-4n，p=41,59 论文接口打包，GU）; prefixDetermined\_sdiff（prop:spg-decidable-clopen，前缀确定集差运算，SPG）; prefixDetermined\_symmDiff（prop:spg-decidable-clopen，前缀确定集对称差运算，SPG）; modularProject\_stableOne（thm:pom-stable-addition-carry-defect-unique-element，模投影稳定化元素，POM）——**推迟**：stableValue\_modularProject\_stableNeg（Fibonacci 递推模算术交互问题）——**3 个论文标签条目计入覆盖率**（GU +3, SPG +2, POM +1）——Group Unification 130→133（27.7%→28.4%），SPG 82→84（63.6%→65.1%），POM 275→276（16.1%→16.2%），全局 \\leanverified 1330→1336（+6），总标注 1347→1353（+6），commit 9cb0e87
