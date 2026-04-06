@@ -775,4 +775,42 @@ theorem godelEncoding_injective_of_eq_length
       congr 1
       exact ih (v := vs) (offset := offset + 1) (hlen := by omega) (heq := hrest)
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R336: Gödel encoding replicate and divisibility
+-- ══════════════════════════════════════════════════════════════
+
+/-- Gödel encoding of a constant list: G([a,...,a]) = ∏ p_i^a.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_replicate (primes : ℕ → ℕ) (offset a n : ℕ) :
+    godelEncoding primes offset (List.replicate n a) =
+    ∏ i ∈ Finset.range n, primes (offset + i) ^ a := by
+  induction n generalizing offset with
+  | zero => simp [godelEncoding_nil]
+  | succ n ih =>
+    simp only [List.replicate_succ, godelEncoding_cons, ih (offset + 1),
+      Finset.prod_range_succ', Nat.add_zero, show ∀ i, offset + 1 + i = offset + (i + 1) from
+        fun i => by omega]
+    exact mul_comm _ _
+
+/-- Each prime divides the Gödel encoding if its exponent is positive.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_dvd_of_pos
+    (primes : ℕ → ℕ) (offset : ℕ) (code : List ℕ) (i : Fin code.length)
+    (hi : 0 < code.get i) :
+    primes (offset + i.val) ∣ godelEncoding primes offset code := by
+  induction code generalizing offset with
+  | nil => exact absurd i.isLt (Nat.not_lt_zero _)
+  | cons a rest ih =>
+    rw [godelEncoding_cons]
+    match i with
+    | ⟨0, _⟩ =>
+      simp at hi
+      exact dvd_mul_of_dvd_left (dvd_pow_self _ (by omega)) _
+    | ⟨j + 1, hj⟩ =>
+      simp only [List.length_cons] at hj
+      simp only [List.get_cons_succ] at hi
+      have := ih (offset + 1) ⟨j, by omega⟩ hi
+      simp only [show offset + 1 + j = offset + (j + 1) from by omega] at this
+      exact dvd_mul_of_dvd_right this _
+
 end Omega.Conclusion
