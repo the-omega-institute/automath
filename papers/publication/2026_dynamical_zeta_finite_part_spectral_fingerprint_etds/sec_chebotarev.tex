@@ -11,11 +11,14 @@ new feature is that primitive extraction is no longer governed by
 M\"obius inversion alone: it is M\"obius inversion intertwined with the
 Adams operations \(g\mapsto g^m\). This is the mechanism that turns
 twisted determinant data into primitive Peter--Weyl series. At the
-orbit-counting level, the Chebotarev asymptotics for finite homogeneous
-extensions of shifts go back to Noorani--Parry
-\cite{NooraniParry1992ChebotarevShifts}; for the character-ring
-background and Adams operations we use the standard representation-ring
-formalism of Serre \cite{Serre1977LinearRepresentations}.
+orbit-counting level, the Chebotarev theorem for finite homogeneous
+extensions of shifts is due to Noorani--Parry
+\cite{NooraniParry1992ChebotarevShifts}, building on the Axiom~A
+framework of Parry--Pollicott \cite{ParryPollicott1986Chebotarev}; see
+also \cite{PollicottSharp2007Chebotarev,BoyleSchmieding2017FiniteGroupExtensions,Parry1999LivsicNonAbelian}.
+For the character-ring background and Adams operations we use the
+standard representation-ring formalism of Serre
+\cite{Serre1977LinearRepresentations}.
 
 \subsection{Class-function logarithms and primitive inversion}
 
@@ -467,6 +470,11 @@ Its role is only to permit evaluation at the Perron point in the
 non-trivial Peter--Weyl channels; the present paper does not derive this
 strict inequality from separate dynamical criteria.
 
+The class Mertens theorem is assembled from the next five lemmas: class
+decomposition, the non-trivial channel estimate, absolute convergence at
+the Perron point, a geometric-harmonic tail bound, and the trivial
+Perron-channel contribution.
+
 \begin{lemma}[Trivial and non-trivial class decomposition]
   \label{lem:class-primitive-trivial-split}
   For every conjugacy class \(C\subset G\) and every \(n\ge 1\),
@@ -589,6 +597,47 @@ strict inequality from separate dynamical criteria.
   The second statement is immediate.
 \end{proof}
 
+\begin{lemma}[Perron-channel contribution]
+  \label{lem:perron-channel-contribution}
+  Assume that
+  \[
+    \Lambda_*:=\max\{\Lambda(A),\eta,\lambda^{1/2}\}.
+  \]
+  Then \(\vartheta_*:=\Lambda_*/\lambda\in(0,1)\), and
+  \[
+    \sum_{n\le N}\frac{p_n(A)}{\lambda^n}
+    =
+    H_N+\mathcal M(A)-\gamma
+    +O\!\left(\frac{\vartheta_*^N}{N}\right).
+  \]
+\end{lemma}
+
+\begin{proof}
+  Since \(\Lambda(A)<\lambda\), \(\eta<\lambda\), and
+  \(\lambda^{1/2}<\lambda\), one has \(\vartheta_*\in(0,1)\). By
+  \Cref{lem:primitive-orbit-asymptotic},
+  \[
+    \frac{p_n(A)}{\lambda^n}
+    =
+    \frac{1}{n}
+    +O\!\left(\frac{\vartheta_*^n}{n}\right).
+  \]
+  Hence the correction series
+  \[
+    \sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
+  \]
+  converges absolutely, and \Cref{cor:finite-part-mertens-asymptotic}
+  identifies its value with \(\mathcal M(A)-\gamma\). Therefore
+  \[
+    \sum_{n\le N}\frac{p_n(A)}{\lambda^n}
+    =
+    H_N+\mathcal M(A)-\gamma
+    -\sum_{n>N}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right).
+  \]
+  The tail is \(O(\vartheta_*^N/N)\) by
+  \Cref{lem:geometric-harmonic-tail}.
+\end{proof}
+
 \begin{theorem}[Explicit class Mertens theorem and Chebotarev density
   under twisted spectral gap]
   \label{thm:class-mertens-explicit}
@@ -644,7 +693,8 @@ strict inequality from separate dynamical criteria.
 \end{theorem}
 
 \begin{proof}
-  By \Cref{lem:class-primitive-trivial-split},
+  Set \(\vartheta_*:=\Lambda_*/\lambda\in(0,1)\). By
+  \Cref{lem:class-primitive-trivial-split},
   \[
     p_{n,C}
     =
@@ -665,35 +715,37 @@ strict inequality from separate dynamical criteria.
 
   By \Cref{lem:nontrivial-perron-point-convergence}, the series
   \(\Pi_\varrho(\lambda^{-1})\) is absolutely convergent for every
-  non-trivial \(\varrho\). Summing the identity
-  for \(p_{n,C}\lambda^{-n}\) from \(1\) to \(N\), the trivial
+  non-trivial \(\varrho\). Summing the identity for
+  \(p_{n,C}\lambda^{-n}\) from \(1\) to \(N\), the trivial
   representation contributes
   \[
-    \frac{|C|}{|G|}
-      \sum_{n\le N}\frac{p_n(A)}{\lambda^n},
+    \frac{|C|}{|G|}\sum_{n\le N}\frac{p_n(A)}{\lambda^n}
+    =
+    \frac{|C|}{|G|}H_N
+    +\frac{|C|}{|G|}\bigl(\mathcal M(A)-\gamma\bigr)
+    +O\!\left(\frac{\vartheta_*^N}{N}\right)
   \]
-  while the non-trivial representations contribute
+  by \Cref{lem:perron-channel-contribution}. The non-trivial
+  representations contribute
   \[
     \frac{|C|}{|G|}
       \sum_{\varrho\neq\mathbf 1}\chi_\varrho(C^{-1})
       \sum_{n\le N}\pi_{n,\varrho}(A)\lambda^{-n}.
   \]
-  Since \(\Lambda_*/\lambda\ge \vartheta\) with
-  \(\vartheta=\max\{\eta/\lambda,\lambda^{-1/2}\}\), the tail estimate
-  from \Cref{lem:geometric-harmonic-tail} implies
+  For each non-trivial \(\varrho\),
+  \Cref{lem:nontrivial-peter-weyl-channel-bound} gives
   \[
-    \sum_{n>N}\pi_{n,\varrho}(A)\lambda^{-n}
-    =O\!\left(\frac{(\Lambda_*/\lambda)^N}{N}\right).
+    \pi_{n,\varrho}(A)\lambda^{-n}
+    =O\!\left(\frac{\vartheta_*^n}{n}\right),
   \]
-  Likewise \Cref{lem:primitive-orbit-asymptotic} gives
+  so \Cref{lem:geometric-harmonic-tail} implies
   \[
-    \sum_{n\le N}\frac{p_n(A)}{\lambda^n}
+    \sum_{n\le N}\pi_{n,\varrho}(A)\lambda^{-n}
     =
-    H_N+\sum_{n\ge 1}\left(\frac{p_n(A)}{\lambda^n}-\frac{1}{n}\right)
-    +O\!\left(\frac{(\Lambda_*/\lambda)^N}{N}\right).
+    \Pi_\varrho(\lambda^{-1})
+    +O\!\left(\frac{\vartheta_*^N}{N}\right).
   \]
-  By \Cref{cor:finite-part-mertens-asymptotic}, the convergent
-  correction term equals \(\mathcal M(A)-\gamma\). This yields
+  Summing over the finitely many non-trivial irreducibles yields
   \eqref{eq:class-mertens-harmonic} and
   \eqref{eq:class-mertens-constant}. Since
   \(H_N=\log N+\gamma+O(N^{-1})\), equation
@@ -708,7 +760,7 @@ strict inequality from separate dynamical criteria.
     \Delta_C(A)
     :=\mathcal M_C(A)-\frac{|C|}{|G|}\mathcal M(A).
   \]
-  Then
+  Then the classwise deviations \(\Delta_C(A)\) are well defined, and
   \begin{equation}\label{eq:class-mertens-fourier-expansion}
     \Delta_C(A)
     =
@@ -774,7 +826,8 @@ The constants \(\mathcal M_C(A)\) therefore encode more than the leading
 term of the class-counting asymptotic: by
 \Cref{prop:class-mertens-deviations} their deviations from the trivial
 average are already well-defined Fourier coefficients of the non-trivial
-Peter--Weyl channels at the Perron point.
+Peter--Weyl channels at the Perron point, so the reconstruction theorem
+below starts from an explicitly defined class function.
 
 \begin{theorem}[Non-abelian Fourier reconstruction of class Mertens
   constants]

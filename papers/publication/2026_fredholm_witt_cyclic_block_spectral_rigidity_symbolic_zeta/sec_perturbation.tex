@@ -126,7 +126,15 @@
     \sum_{k\ge 2}\frac{\mu(k)}{k}\Phi_k(\theta)
   \]
   converges normally on \(U\), and termwise differentiation is
-  justified there.
+  justified there. In particular,
+  \[
+    \log\MM(A_\theta)
+    =\log C(A_\theta)
+      +\sum_{k\ge 2}\frac{\mu(k)}{k}
+        \log\det(I-\lambda(\theta)^{-k}A_\theta)^{-1}
+  \]
+  on \(U\), with a normally convergent correction series whose first
+  \(\theta\)-derivative is obtained termwise.
 \end{proposition}
 
 \begin{proof}
@@ -437,7 +445,8 @@ Write
   \bar f:=f-\int f\,\dd\mu_A,
   \qquad
   \bar g(i,j):=g(i,j)-\int f\,\dd\mu_A,
-  \qquad
+\]
+\[
   \widetilde M_u(i,j):=B_{ij}e^{iu\bar g(i,j)}
   \qquad (u\in\RR).
 \]
@@ -457,15 +466,17 @@ where \(\lambda=\rho(B)\). Then, in the block presentation,
   =\lambda^{-n}\ell_0^{\mathsf T}\widetilde M_u^n r_0.
 \]
 
-\begin{definition}[Arithmetic obstruction set]
+\begin{definition}[Arithmetic lattice obstruction]
   \label{def:arithmetic-lattice}
-  The arithmetic obstruction set of \(f\) is
+  The arithmetic lattice obstruction of \(f\) is
   \[
     \Lambda_f:=
     \Bigl\{u\in\RR:\ \exists\,\omega\in\mathbb S^1,
       \eta:\mathrm{state}(B)\to\mathbb S^1\text{ such that }
-      e^{iu\bar g(i,j)}=\omega\,\eta(i)\eta(j)^{-1}
-      \text{ for every allowed edge }(i,j)\Bigr\}.
+      \begin{aligned}[t]
+        e^{iu\bar g(i,j)}&=\omega\,\eta(i)\eta(j)^{-1} \\
+        &\text{for every allowed edge }(i,j)
+      \end{aligned}\Bigr\}.
   \]
   By the finite-state cocycle criterion of Parry
   \cite[Theorem~1]{Parry1992Cocycle}, this is exactly the set of
@@ -476,16 +487,15 @@ where \(\lambda=\rho(B)\). Then, in the block presentation,
 
 \begin{proposition}[Off-origin decay from a spectral-radius gap]
   \label{prop:off-origin-decay}
-  Assume \(\bar f\) is not a coboundary modulo constants. Let
-  \(K\Subset\RR\setminus\Lambda_f\), and choose \(\eta_K\in(0,1)\) such
-  that
+  Let \(K\Subset\RR\setminus\Lambda_f\), and set
   \[
-    \sup_{u\in K}\frac{\rho(\widetilde M_u)}{\lambda}<\eta_K<1.
+    \eta_K:=\sup_{u\in K}\frac{\rho(\widetilde M_u)}{\lambda}.
   \]
-  Then there exists \(C_K>0\) such that
+  Then \(\eta_K<1\). Moreover, for every
+  \(\vartheta_K\in(\eta_K,1)\) there exists \(C_K>0\) such that
   \[
     \sup_{u\in K}\abs{\phi_n(u)}
-    \le C_K\eta_K^n
+    \le C_K\vartheta_K^n
     \qquad (n\ge 1).
   \]
   In particular, if \(f\) is aperiodic then the same estimate holds on
@@ -493,7 +503,11 @@ where \(\lambda=\rho(B)\). Then, in the block presentation,
 \end{proposition}
 
 \begin{proof}
-  Put \(r_K:=\eta_K\lambda\). By the choice of \(\eta_K\), one has
+  By \Cref{def:arithmetic-lattice}, one has
+  \(\rho(\widetilde M_u)<\lambda\) for every \(u\in K\), and continuity
+  of \(u\mapsto\rho(\widetilde M_u)\) on the compact set \(K\) gives
+  \(\eta_K<1\). Fix \(\vartheta_K\in(\eta_K,1)\), and put
+  \(r_K:=\vartheta_K\lambda\). Then
   \[
     \sup_{u\in K}\rho(\widetilde M_u)<r_K<\lambda.
   \]
@@ -524,7 +538,7 @@ where \(\lambda=\rho(B)\). Then, in the block presentation,
   which is the stated estimate.
 \end{proof}
 
-\begin{corollary}[Spectral-gap central limit theorem]
+\begin{proposition}[Spectral-gap central limit theorem]
   \label{thm:clt-spectral}
   Assume \(f\) is not a coboundary modulo constants. Then there exists
   \(\sigma_f^2>0\) such that
@@ -532,7 +546,7 @@ where \(\lambda=\rho(B)\). Then, in the block presentation,
     \frac{\sum_{k=0}^{n-1}\bar f\circ\sigma_A^k}{\sqrt n}
     \Longrightarrow \mathcal N(0,\sigma_f^2).
   \]
-\end{corollary}
+\end{proposition}
 
 \begin{proof}
   The map \(u\mapsto \widetilde M_u\) is entire. Since \(B=\widetilde
