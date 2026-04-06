@@ -238,6 +238,46 @@ theorem paper_kappaInv_values :
   refine ⟨kappaInv_two, kappaInv_three, kappaInv_five, kappaInv_ten, ?_⟩
   exact fun p hp => kappa_kappaInv hp
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R318: kappa monotonicity package
+-- ══════════════════════════════════════════════════════════════
+
+/-- kappa(ε) > 0 for 0 < ε < 1.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_pos {ε : ℝ} (hε_pos : 0 < ε) (hε_lt : ε < 1) :
+    0 < kappa ε := by
+  unfold kappa
+  exact div_pos (by linarith) (by linarith)
+
+/-- kappa(ε) > 1 for 0 < ε < 1.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_one_lt {ε : ℝ} (hε_pos : 0 < ε) (hε_lt : ε < 1) :
+    1 < kappa ε := by
+  unfold kappa
+  rw [one_lt_div (by linarith : (0 : ℝ) < 1 - ε)]
+  linarith
+
+/-- kappa is strictly monotone on (-1, 1).
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_strictMono {ε₁ ε₂ : ℝ}
+    (_h1 : -1 < ε₁) (h2 : ε₁ < ε₂) (h3 : ε₂ < 1) :
+    kappa ε₁ < kappa ε₂ := by
+  unfold kappa
+  have hd1 : (0 : ℝ) < 1 - ε₁ := by linarith
+  have hd2 : (0 : ℝ) < 1 - ε₂ := by linarith
+  rw [div_lt_div_iff₀ hd1 hd2]
+  nlinarith
+
+/-- Paper package for kappa monotonicity.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem paper_kappa_strictMono_package :
+    (∀ ε : ℝ, 0 < ε → ε < 1 → 0 < kappa ε) ∧
+    (∀ ε : ℝ, 0 < ε → ε < 1 → 1 < kappa ε) ∧
+    (∀ ε₁ ε₂ : ℝ, -1 < ε₁ → ε₁ < ε₂ → ε₂ < 1 → kappa ε₁ < kappa ε₂) :=
+  ⟨fun _ h1 h2 => kappa_pos h1 h2,
+   fun _ h1 h2 => kappa_one_lt h1 h2,
+   fun _ _ h1 h2 h3 => kappa_strictMono h1 h2 h3⟩
+
 end Omega.SPG
 
 

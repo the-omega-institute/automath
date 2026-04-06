@@ -1548,4 +1548,28 @@ theorem lucasNum_mod9_period_twentyfour (n : Nat) :
       rw [this]
       exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R318: Fibonacci double divisibility and Lucas quotient
+-- ══════════════════════════════════════════════════════════════
+
+/-- F(n) divides F(2n).
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem fib_dvd_fib_double (n : Nat) : Nat.fib n ∣ Nat.fib (2 * n) :=
+  Nat.fib_dvd n (2 * n) (dvd_mul_left n 2)
+
+/-- F(2n) / F(n) = L(n) (using Nat-valued Lucas numbers).
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem fib_double_div_eq_lucas (n : Nat) (hn : 1 ≤ n) :
+    Nat.fib (2 * n) / Nat.fib n = Omega.lucasNum n := by
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+  -- F(2*(m+1)) = F(m+1) * (2*F(m+2) - F(m+1))
+  have hfib := Nat.fib_two_mul (m + 1)
+  -- L(m+1) = F(m+2) + F(m) = 2*F(m+2) - F(m+1)
+  have hlucas : Omega.lucasNum (m + 1) = 2 * Nat.fib (m + 2) - Nat.fib (m + 1) := by
+    have heq := Omega.lucasNum_eq_fib (m + 1) (by omega)
+    simp only [show m + 1 + 1 = m + 2 from by omega, show m + 1 - 1 = m from by omega] at heq
+    have hfib_rec := Nat.fib_add_two (n := m)
+    omega
+  rw [hfib, Nat.mul_div_cancel_left _ (Nat.fib_pos.mpr (by omega : 0 < m + 1)), hlucas]
+
 end Omega.Zeta
