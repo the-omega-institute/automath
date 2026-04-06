@@ -26,4 +26,18 @@ theorem tanakaIncrement_nonneg (x y a : ℚ) : 0 ≤ tanakaIncrement x y a := by
       rw [hxa]
       simp [abs_nonneg]
 
+/-- Discrete local time (sum of Tanaka increments) is non-negative.
+    thm:spg-scan-tanaka-stokes -/
+theorem tanakaLocalTime_nonneg (seq : ℕ → ℚ) (a : ℚ) (m : ℕ) :
+    0 ≤ ∑ k ∈ Finset.range m, tanakaIncrement (seq k) (seq (k + 1)) a :=
+  Finset.sum_nonneg (fun k _ => tanakaIncrement_nonneg (seq k) (seq (k + 1)) a)
+
+/-- Discrete local time is monotone non-decreasing in m.
+    thm:spg-scan-tanaka-stokes -/
+theorem tanakaLocalTime_mono (seq : ℕ → ℚ) (a : ℚ) (m : ℕ) :
+    ∑ k ∈ Finset.range m, tanakaIncrement (seq k) (seq (k + 1)) a ≤
+    ∑ k ∈ Finset.range (m + 1), tanakaIncrement (seq k) (seq (k + 1)) a := by
+  rw [Finset.sum_range_succ]
+  linarith [tanakaIncrement_nonneg (seq m) (seq (m + 1)) a]
+
 end Omega.SPG

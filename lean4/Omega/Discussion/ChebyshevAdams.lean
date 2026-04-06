@@ -533,4 +533,17 @@ theorem chebyAdams_period_sum_at_zero :
     chebyAdams 0 0 + chebyAdams 1 0 + chebyAdams 2 0 + chebyAdams 3 0 = 0 := by
   simp [chebyAdams]
 
+/-- C_n(S)² - 4 = C_{2n}(S) - 2.
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem chebyAdams_sq_sub_four (n : Nat) (S : ℤ) :
+    chebyAdams n S * chebyAdams n S - 4 = chebyAdams (2 * n) S - 2 := by
+  linarith [chebyAdams_sq_eq n S]
+
+/-- Factored form: C_n² - 4 = (C_n - 2)(C_n + 2).
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem chebyAdams_sq_sub_four_factored (n : Nat) (S : ℤ) :
+    chebyAdams n S * chebyAdams n S - 4 =
+    (chebyAdams n S - 2) * (chebyAdams n S + 2) := by
+  ring
+
 end Omega.Discussion

@@ -114,4 +114,16 @@ theorem sm_minimal_triple_selection_law :
     rcases hk₁ with rfl | rfl <;> rcases hk₂ with rfl | rfl | rfl <;>
       rcases hk₃ with rfl | rfl | rfl | rfl <;> simp_all [Nat.fib]
 
+/-- Standard Model signature strict union decomposition.
+    cor:sm-signature-strict-union -/
+theorem paper_gu_sm_signature_union :
+    1 = Nat.fib 2 ∧
+    3 = Nat.fib 4 ∧
+    8 = Nat.fib 6 ∧
+    1 + 3 + 8 = 12 ∧
+    12 = Nat.fib 6 + Nat.fib 4 + Nat.fib 2 ∧
+    (6 - 4 ≥ 2) ∧ (4 - 2 ≥ 2) ∧ (6 - 2 ≥ 2) := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by omega, by native_decide, by omega, by omega, by omega⟩
+
 end Omega.GU
