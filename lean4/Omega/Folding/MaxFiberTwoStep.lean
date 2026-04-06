@@ -1023,6 +1023,13 @@ theorem hiddenBitCount_complement (m : Nat) :
     2 ^ m - hiddenBitCount m = 2 * hiddenBitCount m + (if m % 2 = 0 then 1 else 2) := by
   have := hiddenBitCount_closed m; omega
 
+/-- hiddenBitCount mod 2 parity: B(m+2) % 2 = (m+1) % 2.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_mod2 (m : Nat) :
+    hiddenBitCount (m + 2) % 2 = (m + 1) % 2 := by
+  rw [hiddenBitCount_succ_eq (m + 1), hiddenBitCount_succ_eq m]
+  omega
+
 /-- Closed form: 3·B(2m+1) + 2 = 2·4^m.
     thm:pom-hidden-bit-count -/
 theorem hiddenBitCount_odd_closed_eq (m : Nat) :

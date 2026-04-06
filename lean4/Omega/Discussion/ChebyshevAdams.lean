@@ -511,4 +511,16 @@ theorem lucas_even_cassini (n : Nat) :
     show 2 * (n + 2) = 2 * n + 4 from by ring] at h
   linarith
 
+/-- Cube identity: C_n³ = C_n · (C_{2n} + 2).
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_cube_eq (n : Nat) (S : ℤ) :
+    chebyAdams n S ^ 3 = chebyAdams n S * (chebyAdams (2 * n) S + 2) := by
+  have h := chebyAdams_sq_eq n S
+  -- C^3 = C * C^2 = C * (C_{2n} + 2)
+  -- h : C_n * C_n = C_{2n} + 2 (chebyAdams_sq_eq uses mul, not ^2)
+  have : chebyAdams n S ^ 2 = chebyAdams (2 * n) S + 2 := by rw [sq]; exact h
+  calc chebyAdams n S ^ 3
+      = chebyAdams n S * chebyAdams n S ^ 2 := by ring
+    _ = chebyAdams n S * (chebyAdams (2 * n) S + 2) := by rw [this]
+
 end Omega.Discussion
