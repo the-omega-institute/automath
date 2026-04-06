@@ -6,19 +6,19 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~46,998 |
-| 定理/定义数 | ~4,111 |
-| 论文接口包装 | 654+ |
-| 文件数 | 114 |
+| 总行数 | ~47,218 |
+| 定理/定义数 | ~4,122 |
+| 论文接口包装 | 655+ |
+| 文件数 | 115 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1427 |
+| \leanverified 标注数 | 1428 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1444 |
-| 轮次 | R345（round_count=346） |
+| 总标注数 | 1445 |
+| 轮次 | R346（round_count=347） |
 
-**Phase R346（queued 设计）**：优先考虑 SPG + Conclusion/EA 混合方向，避开刚完成的 R344/R345 Discussion/Core 集中；候选锁定 `tanakaIncrement_nonneg`（SPG，中，直接承载 `thm:spg-scan-tanaka-stokes` 的离散 Tanaka 非负增量核心）、`paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
+**Phase R347（queued 设计）**：优先考虑 SPG + Conclusion/EA 混合方向；候选锁定 `tanakaIncrement_nonneg`（SPG，中，直接承载 `thm:spg-scan-tanaka-stokes` 的离散 Tanaka 非负增量核心）、`paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
@@ -29,18 +29,18 @@
 | Folding | 337 | 109 | 32.3% |
 | Conclusion | 2,550 | 231 | 9.1% |
 | Group Unification | 469 | 150 | 32.0% |
-| SPG | 129 | 95 | 73.6% |
+| SPG | 129 | 96 | 74.4% |
 | Circle Dimension | 393 | 126 | 32.1% |
 | Zeta Finite Part | 4,524 | 177 | 3.9% |
 | Discussion | 67 | 52 | 77.6% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1368** | **13.0%** |
+| **合计（body）** | **10,508** | **1369** | **13.0%** |
 
 ### 1.2 已完成模块
 
 | 模块 | 文件 | 定理数 | 覆盖率 |
 |---|---|---|---|
-| Core (Fib, Word, No11, WalshStokesSingleton, WalshStokes) | 5 | ~46 | 100% |
+| Core (Fib, Word, No11, WalshStokesSingleton, WalshStokes, WalshFourier) | 6 | ~57 | 100% |
 | Folding (StableSyntax, Weight, Value, Zeckendorf, Fold, Fiber, MaxFiber, FiberSpectrum, FibonacciField, FiberRing, MomentSum, CollisionKernel, CollisionZeta, CollisionZetaOperator, Rewrite, Defect, InverseLimit, InverseLimitTopology, CarryDefect, FiberFusion, ModularTower, ShiftDynamics, FibonacciPolynomial, HankelSpectrum, FiberArithmeticProperties, FiberSplit, BoundaryLayer, Window6, ZeckendorfSignature, BinFold, HammingDist, Entropy, MaxFiberTwoStep, FiberWeightCount, FiberWeightCountComplement, CollisionDecomp, MomentRecurrence, MomentBounds, MomentTriple) | 39 | ~609 | 100% |
 | SPG (Cylinder, PrefixMetric, Clopen, ScanErrorDiscrete, ScanErrorMeasure) | 5 | ~210 | 95% |
 | Graph (LabeledGraph, Sofic, TransferMatrix) | 3 | ~37 | 100% |
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**Walsh-Fourier 逆变换完备性（Round R346）**：`walshChar`（Walsh 字符定义）、`walshBias`（Walsh 偏差系数定义）、`walshChar_empty`、`walshChar_insert`、`walshChar_erase`、`walshChar_mul_self`（字符自乘为 1）、`walshChar_mul`（字符乘积等于对称差字符）、`walshChar_flipBit_of_mem`（bit-flip 下字符变号）、`walshChar_orthogonal_sum`（不同字符正交性）、`walshBias_expand_basis`（Walsh 基向量偏差系数对角性）、`walshChar_mul_words`（两词字符乘积的逐坐标分解）、`walshKernel_delta`（Walsh 核再现 Kronecker delta）、`paper_walsh_fourier_inversion_completeness`（主定理：对应 `cor:spg-walsh-fourier-inversion-completeness`，SPG 章节 Fourier--Walsh 偏差族唯一决定可观测量的完备逆变换）
 **Walsh--Stokes 高阶通量（Round R345）**：`flipBit_apply_same`、`flipBit_apply_ne`、`flipBit_involutive`、`flipBit_comm`、`clearBits_flipSet`、`activeBits_flipSet`、`flipSet_activeBits_clearBits`、`deltaBit_comm`、`walshFlux_insert`、`signedHypercubeSum_const`、`walshStokes_finset`（对应 `thm:discussion-walsh-stokes-higher-flux`，补齐单坐标翻转、有限坐标翻转、边界面重指标、常值 signed hypercube 求和消失与有限集 Walsh--Stokes 主公式）；`walshBias_le_boundaryVariation`（对应 `cor:discussion-walsh-bias-controlled-by-boundary-variation`，把 Walsh 偏差受边界变差支配落到整数值离散边界求和框架）
 **结论账本可达性（Round R344）**：twoPhase_zeroLedger_achievable（把 `thm:conclusion-rate-cdim-achievability` 的“两相位零账本可达”落实为充分大 m 上 `Fin (2^m) ↪ X_m × X_m` 的显式单射存在性）；onePhase_minLedger_achievable（把同一论文定理中的“单相位最小账本可达”落实为 `Fin (2^m) ↪ X_m × Fin (⌈2^m/|X_m|⌉)` 的显式单射存在性）
 **圆维残差预算（Round R344）**：phaseResidualBudget_lower_bound_finite（把 `thm:cdim-phase-residual-budget-lower-bound` 的有限层版本落为 `Fin ((2^(br)) t) ↪ Fin ((2^(bk)) R)` 蕴含 `(2^(br))t ≤ (2^(bk))R` 的直接基数下界）
@@ -229,6 +230,7 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R346: Walsh-Fourier inversion completeness on finite cube（13/13 完成）**：Core/WalshFourier.lean——walshChar（def）、walshBias（def）、walshChar\_empty、walshChar\_insert、walshChar\_erase、walshChar\_mul\_self（字符自乘为 1）、walshChar\_mul（字符乘积等于对称差字符）、walshChar\_flipBit\_of\_mem（bit-flip 变号）、walshChar\_orthogonal\_sum（正交性）、walshBias\_expand\_basis（对角性）、walshChar\_mul\_words（逐坐标分解）、walshKernel\_delta（Kronecker delta 再现）、paper\_walsh\_fourier\_inversion\_completeness（对应 `cor:spg-walsh-fourier-inversion-completeness`，Walsh 偏差族完备逆变换，SPG）——**1 个论文标签条目计入覆盖率**（SPG +1）——SPG 95→96（73.6%→74.4%），body 1368→1369（13.0%），全局 \\leanverified 1427→1428（+1），总标注 1444→1445（+1），proof commit 7a22f95
 **Phase R345: Walsh--Stokes finite-set flux identities（12/12 完成）**：Core/WalshStokesSingleton.lean + Core/WalshStokes.lean——flipBit\_apply\_same、flipBit\_apply\_ne、flipBit\_involutive（单坐标 bit-flip 基础引理，Singleton）；flipBit\_comm、clearBits\_flipSet、activeBits\_flipSet、flipSet\_activeBits\_clearBits、deltaBit\_comm、walshFlux\_insert、signedHypercubeSum\_const、walshStokes\_finset（对应 `thm:discussion-walsh-stokes-higher-flux`，补齐有限坐标翻转、边界面重指标、常值 signed hypercube 求和消失与有限集 Walsh--Stokes 主公式，Discussion）；walshBias\_le\_boundaryVariation（对应 `cor:discussion-walsh-bias-controlled-by-boundary-variation`，整数值边界变差支配 Walsh 偏差，Discussion）——**2 个论文标签条目计入覆盖率**（Discussion +2）——Discussion 50→52（74.6%→77.6%），body 1366→1368（13.0%），全局 \\leanverified 1425→1427（+2），总标注 1442→1444（+2），proof commit 6661ef4
 **Phase R344: two-phase zero-ledger + one-phase minimal ledger + finite residual-budget lower bound（3/3 完成）**：Conclusion/AffineRegisterBudget.lean + CircleDimension/CircleDim.lean——twoPhase_zeroLedger_achievable（thm:conclusion-rate-cdim-achievability，两相位零账本可达，Conclusion）; onePhase_minLedger_achievable（thm:conclusion-rate-cdim-achievability，单相位最小账本可达，Conclusion）; phaseResidualBudget_lower_bound_finite（thm:cdim-phase-residual-budget-lower-bound，相位--残差圆维下界的有限层基数版本，Circle Dimension）——**3 个论文标签条目计入覆盖率**（Conclusion +2, Circle Dimension +1）——Conclusion 229→231（9.0%→9.1%），Circle Dimension 125→126（31.8%→32.1%），body 1363→1366（13.0%），全局 \\leanverified 1420→1422（+2），总标注 1437→1439（+2）
 
