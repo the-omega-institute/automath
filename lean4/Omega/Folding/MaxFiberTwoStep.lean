@@ -214,6 +214,23 @@ theorem hiddenBitCount_closed (m : Nat) :
       omega
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R320: hiddenBitCount mod 3 periodicity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Hidden bit count mod 3 has period 6: B(m+6) % 3 = B(m) % 3.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_period6_mod3 (m : Nat) :
+    hiddenBitCount (m + 6) % 3 = hiddenBitCount m % 3 := by
+  -- B(m+6) = 2^(m+4) + B(m+4) = 2^(m+4) + 2^(m+2) + B(m+2)
+  --        = 2^(m+4) + 2^(m+2) + 2^m + B(m)
+  rw [hiddenBitCount_recurrence (m + 4), hiddenBitCount_recurrence (m + 2),
+      hiddenBitCount_recurrence m]
+  -- Goal: (2^(m+4) + (2^(m+2) + (2^m + B(m)))) % 3 = B(m) % 3
+  -- 2^(m+4) + 2^(m+2) + 2^m = 2^m * (16 + 4 + 1) = 21 * 2^m
+  have : 2 ^ (m + 4) + 2 ^ (m + 2) + 2 ^ m = 21 * 2 ^ m := by ring
+  omega
+
+-- ══════════════════════════════════════════════════════════════
 -- lem:pom-one-bit: single hidden bit decomposition
 -- ══════════════════════════════════════════════════════════════
 

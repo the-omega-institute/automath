@@ -403,4 +403,20 @@ theorem chebyAdams_pow_prime_compose (p k : ℕ) (S : ℤ) :
     chebyAdams (p ^ (k + 1)) S = chebyAdams (p ^ k) (chebyAdams p S) := by
   rw [pow_succ, chebyAdams_mul]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R320: Chebyshev-Adams at S=4
+-- ══════════════════════════════════════════════════════════════
+
+/-- Recurrence for C_n(4): C_{n+2}(4) = 4·C_{n+1}(4) - C_n(4).
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_four_recurrence (n : Nat) :
+    chebyAdams (n + 2) 4 = 4 * chebyAdams (n + 1) 4 - chebyAdams n 4 := by
+  rw [chebyAdams_succ_succ]
+
+/-- Base values: C_0(4) = 2, C_1(4) = 4.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_four_base :
+    chebyAdams 0 4 = 2 ∧ chebyAdams 1 4 = 4 := by
+  simp [chebyAdams]
+
 end Omega.Discussion

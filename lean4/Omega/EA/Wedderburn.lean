@@ -126,4 +126,20 @@ theorem paper_ea_s2_factorization :
   exact ⟨momentSum_two_six_factored, momentSum_two_seven_factored,
     momentSum_two_eight_factored, momentSum_two_nine_factored, prime_419⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R320: Wedderburn dimension ratio exactness
+-- ══════════════════════════════════════════════════════════════
+
+/-- At m=7, S_2 = 16 · F_9 (exact ratio).
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem wedderburn_dim_ratio_m7_exact :
+    momentSum 2 7 = 16 * Nat.fib 9 := by
+  rw [momentSum_two_seven]; native_decide
+
+/-- At m=6, S_2 is not divisible by F_8 (no exact ratio).
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem wedderburn_dim_ratio_m6_not_exact :
+    momentSum 2 6 % Nat.fib 8 ≠ 0 := by
+  rw [momentSum_two_six]; native_decide
+
 end Omega.EA
