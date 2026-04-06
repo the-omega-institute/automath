@@ -13,26 +13,26 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1417 |
+| \leanverified 标注数 | 1420 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1434 |
-| 轮次 | R342（round_count=343） |
+| 总标注数 | 1437 |
+| 轮次 | R343（round_count=344） |
 
 **Phase 7 校准（R74 轮，2026-03-29）**：按章节覆盖率分布：
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 285 | 16.7% |
+| POM | 1,707 | 286 | 16.8% |
 | Emergent Arithmetic | 185 | 142 | 76.8% |
 | Folding | 337 | 109 | 32.3% |
-| Conclusion | 2,550 | 228 | 8.9% |
+| Conclusion | 2,550 | 229 | 9.0% |
 | Group Unification | 469 | 150 | 32.0% |
 | SPG | 129 | 95 | 73.6% |
 | Circle Dimension | 393 | 125 | 31.8% |
-| Zeta Finite Part | 4,524 | 176 | 3.9% |
+| Zeta Finite Part | 4,524 | 177 | 3.9% |
 | Discussion | 67 | 50 | 74.6% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1360** | **12.9%** |
+| **合计（body）** | **10,508** | **1363** | **13.0%** |
 
 ### 1.2 已完成模块
 
@@ -224,6 +224,8 @@
 **Phase R242: fiberwise free involution factorial product formula（部分完成）**：GU/FreeInvolutionCount.lean——fiberwiseFreeInvolutionCount_total_formula（thm:fiberwise-free-involution-matching-entropy，补齐独立纤维上自由对合总计数满足阶乘乘积公式的论文接口）——**1 个论文标签条目计入覆盖率**（Group Unification +1）——Group Unification 83→84（17.9%），全局标注 869→870（+1），body 覆盖 855→856（8.1%），commit 5ea2664
 **Phase R243: binary minimum-bit paper wrapper（部分完成）**：Conclusion/PrimeRegister.lean——paper_godelLift_binary_min_bits（thm:conclusion-bounded-prime-register-feasibility，paper-facing wrapper，补齐 binary 最小 bit 数下界 `Nat.log 2 (X.maxFiberMultiplicity m) ≤ k` 的论文接口）——**1 个论文标签条目计入覆盖率**（Conclusion +1）——Conclusion 146→147（5.8%），全局标注 870→871（+1），body 覆盖 856→857（8.2%），commit 36e799e
 **Phase R244: degeneracy ghost doubling paper wrapper（部分完成）**：Zeta/DynZeta.lean——paper_degeneracy_ghost_doubling（rem:degeneracy-zeta-bridge，paper-facing wrapper，补齐退化 ghost 序列 doubling 下界 `2 * (2^n - L_n) ≤ 2^(n+1) - L_{n+1}` 的论文接口）——**1 个论文标签条目计入覆盖率**（Zeta Finite Part +1）——Zeta Finite Part 106→107（2.4%），全局标注 871→872（+1），body 覆盖 857→858（8.2%），commit b8fb296
+**Phase R343: lucasNum mod12 + godelEncoding snoc + hiddenBitCount add succ eq（3/3 完成）**：Zeta/DynZeta.lean + Conclusion/PrimeRegister.lean + Folding/MaxFiberTwoStep.lean——lucasNum\_mod12\_period\_twentyfour（thm:zeta-syntax-trace-linear-recurrence，Lucas mod 12 周期 24，Zeta）; godelEncoding\_snoc（thm:conclusion-godel-semidirect-law，Gödel 编码 snoc 等式，Conclusion）; hiddenBitCount\_add\_succ\_eq（thm:pom-hidden-bit-count，隐藏位计数加后继等式，POM）——**3 个论文标签条目计入覆盖率**（Zeta +1, Conclusion +1, POM +1）——Zeta 176→177（3.9%），Conclusion 228→229（8.9%→9.0%），POM 285→286（16.7%→16.8%），body 1360→1363（12.9%→13.0%），全局 \\leanverified 1417→1420（+3），总标注 1434→1437（+3），commit fe41205
+
 **Phase R342: circleDim pos iff + kappa inv eq + stableSucc iterate card eq id（3/3 完成）**：CD/CircleDim.lean + SPG/ErrorThreshold.lean + Folding/FiberArithmeticProperties.lean——circleDim\_pos\_iff（prop:circle-dimension-laws，圆维正值充要条件，CD）; kappa\_inv\_eq（prop:spg-relative-error-threshold-sharpness，kappa 逆等式，SPG）; stableSucc\_iterate\_card\_eq\_id（thm:finite-resolution-mod，稳定后继迭代基数等式，EA，论文标签 thm:finite-resolution-mod-commring 在论文中对应 thm:finite-resolution-mod）——**3 个论文标签条目计入覆盖率**（CD +1, SPG +1, EA +1）——Circle Dimension 124→125（31.6%→31.8%），SPG 94→95（72.9%→73.6%），EA 141→142（76.2%→76.8%），全局 \\leanverified 1414→1417（+3），总标注 1431→1434（+3），commit f7f4592
 
 **Phase R341: freeInvolutionCount eight/nine + hiddenBitCount add two mod2 + chebyAdams period sum（3/3 完成）**：GU/FreeInvolutionCount.lean + Folding/MaxFiberTwoStep.lean + Discussion/ChebyshevAdams.lean——freeInvolutionCount\_eight（thm:fiberwise-free-involution-matching-entropy，自由对合计数 r=8，GU）; freeInvolutionCount\_nine（thm:fiberwise-free-involution-matching-entropy，自由对合计数 r=9，GU）; hiddenBitCount\_add\_two\_mod2（thm:pom-hidden-bit-count，隐藏位计数加二模2，POM）; chebyAdams\_period\_sum\_at\_zero（thm:discussion-chebyshev-witt-equivariance，Chebyshev-Adams 零点周期和，Discussion）——**3 个论文标签条目计入覆盖率**（GU +2, POM +1, Discussion +1）——GU 148→150（31.6%→32.0%），POM 284→285（16.6%→16.7%），Discussion 49→50（73.1%→74.6%），全局 \\leanverified 1410→1414（+4），总标注 1427→1431（+4），commit 96e224e
