@@ -158,4 +158,13 @@ theorem pisano_period_89 : Nat.fib 44 % 89 = 0 ∧ Nat.fib 45 % 89 = 1 := by nat
 theorem paper_pisano_period_89 :
     Nat.fib 44 % 89 = 0 ∧ Nat.fib 45 % 89 = 1 := pisano_period_89
 
+/-- Pisano period for p = 101: π(101) = 50.
+    prop:gu-fibprime-pisano-periods -/
+theorem pisano_period_101 : Nat.fib 50 % 101 = 0 ∧ Nat.fib 51 % 101 = 1 := by native_decide
+
+/-- Paper package for p = 101.
+    prop:gu-fibprime-pisano-periods -/
+theorem paper_pisano_period_101 :
+    Nat.fib 50 % 101 = 0 ∧ Nat.fib 51 % 101 = 1 := pisano_period_101
+
 end Omega.GU

@@ -163,6 +163,18 @@ theorem halfCircleDim_strictMono (a b t1 t2 : Nat) (h : a < b) :
   unfold halfCircleDim circleDim
   exact div_lt_div_of_pos_right (by exact_mod_cast h) (by norm_num)
 
+/-- Half circle dimension scales by 2: hCD(2r, t) = 2 · hCD(r, t).
+    prop:circle-dimension-laws -/
+theorem halfCircleDim_double (r t : Nat) :
+    halfCircleDim (2 * r) t = 2 * halfCircleDim r t := by
+  simp [halfCircleDim, circleDim]; ring
+
+/-- Half circle dimension is homogeneous: hCD(k·r, t) = k · hCD(r, t).
+    prop:circle-dimension-laws -/
+theorem halfCircleDim_nsmul (k r t : Nat) :
+    halfCircleDim (k * r) t = k * halfCircleDim r t := by
+  simp [halfCircleDim, circleDim]; ring
+
 /-- Paper: thm:cdim-short-exact-additivity -/
 theorem paper_circleDim_sub (a b t1 t2 : Nat) (h : a ≤ b) :
     circleDim (b - a) t1 = circleDim b t2 - circleDim a t2 :=

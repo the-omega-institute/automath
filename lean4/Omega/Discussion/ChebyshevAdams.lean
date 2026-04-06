@@ -458,4 +458,36 @@ theorem chebyAdams_sq_sub_two (n : Nat) (S : ℤ) :
     chebyAdams n S * chebyAdams n S - 2 = chebyAdams (2 * n) S := by
   linarith [chebyAdams_sq_eq n S]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R330: Chebyshev-Adams Cassini identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Cassini identity for Chebyshev-Adams: C_n·C_{n+2} - C_{n+1}² = S² - 4.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_cassini (n : Nat) (S : ℤ) :
+    chebyAdams n S * chebyAdams (n + 2) S - chebyAdams (n + 1) S ^ 2 = S ^ 2 - 4 := by
+  induction n with
+  | zero => simp [chebyAdams]; ring
+  | succ n ih =>
+    set a := chebyAdams n S
+    set b := chebyAdams (n + 1) S
+    set c := chebyAdams (n + 2) S
+    -- ih: a * c - b ^ 2 = S ^ 2 - 4
+    -- hrec: c = S * b - a
+    have hrec : c = S * b - a := chebyAdams_succ_succ n S
+    -- C_{n+3} = S * c - b
+    have h3 : chebyAdams (n + 3) S = S * c - b := chebyAdams_succ_succ (n + 1) S
+    -- Goal: b * C_{n+3} - c ^ 2 = S ^ 2 - 4
+    show b * chebyAdams (n + 1 + 2) S - chebyAdams (n + 1 + 1) S ^ 2 = S ^ 2 - 4
+    rw [show n + 1 + 2 = n + 3 from by omega, show n + 1 + 1 = n + 2 from by omega]
+    rw [h3]
+    change b * (S * c - b) - c ^ 2 = S ^ 2 - 4
+    -- Substituting hrec: c = S*b - a into ih: a*c - b^2 = S^2 - 4
+    -- gives a*(S*b-a) - b^2 = S^2-4, i.e., S*a*b - a^2 - b^2 = S^2-4
+    -- Goal after expanding: S*b*c - b^2 - c^2 = S^2-4
+    -- With c = S*b-a: S*b*(S*b-a) - b^2 - (S*b-a)^2 = S*a*b - a^2 - b^2 = S^2-4
+    have key : b * (S * c - b) - c ^ 2 = a * c - b ^ 2 := by
+      rw [hrec]; ring
+    linarith
+
 end Omega.Discussion
