@@ -378,4 +378,14 @@ theorem collisionKernel5_cayley_hamilton :
     8 * collisionKernel5 ^ 2 + 20 * collisionKernel5 - 10 * (1 : Matrix (Fin 5) (Fin 5) ℤ) = 0 := by
   ext i j; fin_cases i <;> fin_cases j <;> native_decide
 
+/-- Collision kernel K_4 combined audit.
+    thm:fold-collision2-aut-lie-dimension-rank -/
+theorem paper_folding_collision_kernel_combined :
+    (collisionKernel4 ^ 3).trace = 50 ∧
+    (collisionKernel4 ^ 3).trace
+      - collisionKernel4.trace * (collisionKernel4 ^ 2).trace
+      + (collisionKernel4.trace ^ 2 - (collisionKernel4 ^ 2).trace) / 2
+        * collisionKernel4.trace = 0 :=
+  ⟨collisionKernel4_trace_cube, collisionKernel4_e3_zero⟩
+
 end Omega

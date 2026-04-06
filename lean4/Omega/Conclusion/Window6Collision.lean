@@ -679,4 +679,33 @@ theorem section_count_amgm_prod {n : ℕ} (d : Fin n → ℕ)
   calc d i ≤ ∑ j, d j := Finset.single_le_sum (fun j _ => Nat.zero_le _) (Finset.mem_univ i)
     _ = N := hsum
 
+/-- AM-GM equality backward: if all d(i) = c then ∏ d(i) = c^n and ∑ d(i) = n*c.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem prod_eq_const_pow_of_all_eq {n : ℕ} (d : Fin n → ℕ) (c : ℕ)
+    (hall : ∀ i, d i = c) :
+    (∏ i, d i) = c ^ n ∧ ∑ i, d i = n * c := by
+  constructor
+  · simp_rw [hall, Finset.prod_const, Finset.card_fin]
+  · simp_rw [hall, Finset.sum_const, Finset.card_fin, smul_eq_mul]
+
+/-- AM-GM equality forward for n=1: unique value forced.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem prod_eq_const_pow_iff_one (d : Fin 1 → ℕ) (c : ℕ)
+    (hsum : ∑ i, d i = 1 * c) :
+    d ⟨0, by omega⟩ = c := by
+  simp at hsum; exact hsum
+
+/-- AM-GM equality forward for n=2: product c^2 with sum 2c forces equality.
+    thm:conclusion-section-ledger-kl-identity -/
+theorem prod_eq_sq_of_sum_two (a b c : ℕ) (hsum : a + b = 2 * c)
+    (hprod : a * b = c * c) : a = c ∧ b = c := by
+  -- Lift to ℤ to handle subtraction correctly
+  have hprodZ : (a : ℤ) * b = c * c := by exact_mod_cast hprod
+  have hsumZ : (a : ℤ) + b = 2 * c := by exact_mod_cast hsum
+  have habZ : (b : ℤ) = 2 * c - a := by linarith
+  have key : ((a : ℤ) - c) ^ 2 = 0 := by nlinarith
+  have ha : (a : ℤ) = c := by nlinarith [sq_nonneg ((a : ℤ) - c)]
+  have hb : (b : ℤ) = c := by linarith
+  exact ⟨by exact_mod_cast ha, by exact_mod_cast hb⟩
+
 end Omega.Conclusion

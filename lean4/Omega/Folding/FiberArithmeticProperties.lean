@@ -919,6 +919,15 @@ theorem paper_ea_stable_arithmetic_extended :
   ⟨fun m => stableSucc_injective m, fun m => stableSucc_surjective m,
    fun _ x => stablePred_stableSucc x, fun _ x => stableSucc_stablePred x⟩
 
+/-- EA two-layer readout audit.
+    thm:composition-two-layer, thm:mul-by-iterated-add -/
+theorem paper_ea_two_layer_readout :
+    (∀ (m : Nat) (_hm : 1 ≤ m) (x y : X m),
+      iteratedStableAdd x (stableValue y) = stableMul y x) ∧
+    (∀ (m : Nat) (_hm : 1 ≤ m), stableSucc (stableZero (m := m)) = stableOne) :=
+  ⟨fun _ hm x y => iteratedStableAdd_eq_stableMul x y hm,
+   fun _ hm => stableSucc_zero hm⟩
+
 end X
 
 end Omega
