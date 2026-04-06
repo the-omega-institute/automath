@@ -999,6 +999,13 @@ theorem hiddenBitCount_double_eq (m : Nat) :
   have hmod := four_pow_mod_three m
   omega
 
+/-- hiddenBitCount is monotone.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_le_succ (m : Nat) :
+    hiddenBitCount m ≤ hiddenBitCount (m + 1) := by
+  simp only [hiddenBitCount_floor_div_three]
+  exact Nat.div_le_div_right (Nat.pow_le_pow_right (by omega) (by omega))
+
 /-- Fold is canonical (value-preserving), idempotent, and surjective.
     prop:fold-basic-paper -/
 theorem paper_fold_basic (m : Nat) :

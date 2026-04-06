@@ -440,4 +440,22 @@ theorem chebyAdams_at_five_values :
     chebyAdams 2 5 = 23 ∧ chebyAdams 3 5 = 110 ∧ chebyAdams 4 5 = 527 := by
   refine ⟨?_, ?_, ?_⟩ <;> simp [chebyAdams]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R326: Chebyshev-Adams squaring identities
+-- ══════════════════════════════════════════════════════════════
+
+/-- Squaring identity: C_n² = C_{2n} + 2.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_sq_eq (n : Nat) (S : ℤ) :
+    chebyAdams n S * chebyAdams n S = chebyAdams (2 * n) S + 2 := by
+  have h := chebyAdams_product_formula n n S (le_refl n)
+  simp only [Nat.sub_self, chebyAdams_zero, show n + n = 2 * n from by omega] at h
+  linarith
+
+/-- Squaring minus two: C_n² - 2 = C_{2n}.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_sq_sub_two (n : Nat) (S : ℤ) :
+    chebyAdams n S * chebyAdams n S - 2 = chebyAdams (2 * n) S := by
+  linarith [chebyAdams_sq_eq n S]
+
 end Omega.Discussion
