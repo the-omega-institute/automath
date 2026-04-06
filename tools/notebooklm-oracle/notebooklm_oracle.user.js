@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NotebookLM Oracle Bridge
 // @namespace    omega-automath
-// @version      1.0
+// @version      1.2
 // @description  Bridges local notebooklm_server.py with NotebookLM for automated content generation
 // @match        https://notebooklm.google.com/*
 // @grant        GM_xmlhttpRequest
@@ -77,7 +77,7 @@
 
     // Header row
     const header = el("div", "display:flex;justify-content:space-between;align-items:center;gap:8px");
-    header.appendChild(el("b", null, "[NLM Oracle v1.1]"));
+    header.appendChild(el("b", null, "[NLM Oracle v1.2]"));
     header.appendChild(el("span", `color:${statusColor};font-weight:bold`, statusText));
     const btn = el("button", `background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold`, btnText);
     btn.addEventListener("click", toggleActive);
@@ -211,118 +211,125 @@
     return results;
   }
 
-  async function tryInjectFile(file) {
-    // Method 1: find any file input on the page (may be hidden)
-    const inputs = document.querySelectorAll("input[type='file']");
-    for (const input of inputs) {
-      try {
-        const dt = new DataTransfer();
-        dt.items.add(file);
-        input.files = dt.files;
-        input.dispatchEvent(new Event("change", { bubbles: true }));
-        input.dispatchEvent(new Event("input", { bubbles: true }));
-        log(`PDF injected via file input (${input.accept || "any"})`);
-        return true;
-      } catch (e) {
-        log(`File input failed: ${e.message}`);
-      }
-    }
-    return false;
-  }
-
   async function uploadPDFSource(base64Data, fileName) {
     log(`Uploading: ${fileName} (${(base64Data.length * 0.75 / 1024).toFixed(0)} KB)`);
     const file = makeFile(base64Data, fileName);
 
-    // Step 1: Click "Add source" button
-    const addBtn = findButtonByText("Add source") ||
+    // Step 1: Click "Add source" / "Add file" button
+    const addBtn = findButtonByText("Add file") ||
+                   findButtonByText("add file") ||
+                   findButtonByText("Add source") ||
                    findButtonByText("add source") ||
                    document.querySelector("button[aria-label*='source' i]") ||
-                   document.querySelector("button[aria-label*='Source']") ||
                    document.querySelector("button[aria-label*='add' i]");
 
     if (addBtn) {
-      log("Step 1: Clicking 'Add source'...");
+      log(`Step 1: Clicking '${(addBtn.textContent || "").trim().slice(0, 25)}'`);
       addBtn.click();
       await sleep(2000);
     } else {
-      log("WARN: 'Add source' button not found");
+      log("FAIL: 'Add source' button not found");
+      return false;
     }
 
-    // Step 2: In the dialog, click "Upload" / "File upload" / "PDF" option
-    // NotebookLM shows a dialog with source type choices
-    const uploadOption = findButtonByText("File upload") ||
-                         findButtonByText("Upload") ||
-                         findButtonByText("PDF") ||
-                         findButtonByText("upload file");
+    // Step 2: Hook BOTH file picker APIs before clicking "Upload files"
+    let injected = false;
 
-    // Also try clickable elements (not just buttons)
-    let uploadEl = uploadOption;
-    if (!uploadEl) {
-      const candidates = findAllByText("upload");
-      if (candidates.length > 0) {
-        uploadEl = candidates[candidates.length - 1]; // last match usually the dialog option
-      }
+    // Hook A: showOpenFilePicker (modern File System Access API)
+    const origPicker = window.showOpenFilePicker;
+    if (origPicker) {
+      window.showOpenFilePicker = async function () {
+        log("Hook A: showOpenFilePicker intercepted");
+        injected = true;
+        // Return a fake FileSystemFileHandle
+        return [{
+          kind: "file",
+          name: fileName,
+          getFile: async () => file,
+        }];
+      };
     }
-    if (!uploadEl) {
-      const candidates = findAllByText("file");
-      for (const c of candidates) {
-        if ((c.textContent || "").toLowerCase().includes("upload")) {
-          uploadEl = c;
-          break;
+
+    // Hook B: input[type=file].click()
+    const origClick = HTMLInputElement.prototype.click;
+    HTMLInputElement.prototype.click = function () {
+      if (this.type === "file" && !injected) {
+        try {
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          this.files = dt.files;
+          this.dispatchEvent(new Event("change", { bubbles: true }));
+          injected = true;
+          log("Hook B: PDF injected via file input intercept");
+        } catch (e) {
+          log(`Hook B failed: ${e.message}`);
+          origClick.call(this);
         }
+      } else {
+        origClick.call(this);
       }
+    };
+
+    // Now click "Upload files"
+    const uploadEl = findButtonByText("Upload files") ||
+                     findButtonByText("upload files") ||
+                     findButtonByText("File upload") ||
+                     findButtonByText("Upload");
+    let clickTarget = uploadEl;
+    if (!clickTarget) {
+      const candidates = findAllByText("upload");
+      if (candidates.length > 0) clickTarget = candidates[candidates.length - 1];
     }
 
-    if (uploadEl) {
-      log(`Step 2: Clicking '${(uploadEl.textContent || "").trim().slice(0, 30)}'...`);
-      uploadEl.click();
-      await sleep(2000);
+    if (clickTarget) {
+      log(`Step 2: Clicking '${(clickTarget.textContent || "").trim().slice(0, 25)}' (hooks active)`);
+      clickTarget.click();
+      await sleep(3000);
     } else {
-      log("WARN: Upload option not found in dialog");
+      log("FAIL: 'Upload files' not found in dialog");
     }
 
-    // Step 3: Try to inject file into any file input that appeared
-    if (await tryInjectFile(file)) {
-      await sleep(8000); // wait for processing
-      // Look for confirm/insert button
-      const confirmBtn = findButtonByText("Insert") ||
-                         findButtonByText("Add") ||
-                         findButtonByText("Upload") ||
-                         findButtonByText("Done");
-      if (confirmBtn) {
-        log(`Step 3: Clicking '${(confirmBtn.textContent || "").trim()}'`);
-        confirmBtn.click();
-        await sleep(5000);
+    // Restore hooks
+    if (origPicker) window.showOpenFilePicker = origPicker;
+    HTMLInputElement.prototype.click = origClick;
+
+    if (!injected) {
+      log("FAIL: Neither hook fired. Upload failed.");
+      return false;
+    }
+
+    // Step 3: Wait for source to be processed
+    log("Step 3: Waiting for source to load...");
+    const maxWait = 120; // 120 seconds max
+    for (let i = 0; i < maxWait; i += 5) {
+      await sleep(5000);
+
+      // Check if we're back on the notebook page (dialog closed)
+      const dialog = document.querySelector("[role='dialog']");
+      if (!dialog || dialog.offsetParent === null) {
+        log(`Source dialog closed after ${i + 5}s`);
+        break;
       }
-      log("PDF upload complete");
-      return true;
-    }
 
-    // Step 4: Fallback — try drag-drop on various targets
-    log("Step 3 fallback: trying drag-drop...");
-    const targets = [
-      ...document.querySelectorAll("[class*='drop']"),
-      ...document.querySelectorAll("[class*='upload']"),
-      ...document.querySelectorAll("[class*='source']"),
-      ...document.querySelectorAll("[role='dialog']"),
-      document.querySelector("main"),
-    ].filter(Boolean);
+      // Check for progress/success indicators inside dialog
+      const successEl = findAllByText("successfully") || [];
+      if (successEl.length > 0) {
+        log(`Source uploaded successfully after ${i + 5}s`);
+        break;
+      }
 
-    for (const target of targets) {
-      const dt = new DataTransfer();
-      dt.items.add(file);
-      for (const evtType of ["dragenter", "dragover", "drop"]) {
-        target.dispatchEvent(new DragEvent(evtType, {
-          bubbles: true, cancelable: true, dataTransfer: dt,
-        }));
-        await sleep(200);
+      if (i % 15 === 10) {
+        log(`Still loading source... ${i + 5}s`);
       }
     }
-    log(`Drag-drop attempted on ${targets.length} targets`);
+
+    // Extra wait for NLM to index the source
     await sleep(5000);
 
-    // Check if something appeared (new source in sidebar)
+    // Verify: check if source appears in sidebar
+    const sourceItems = document.querySelectorAll("[class*='source-item'], [class*='chip'], [class*='source']");
+    log(`Sources visible: ${sourceItems.length} elements`);
+
     return true;
   }
 
@@ -561,16 +568,27 @@
         case "review": {
           // 1. Create notebook if needed
           if (isOnLandingPage()) {
-            await createNewNotebook();
+            const created = await createNewNotebook();
+            if (!created) {
+              response = "ERROR: Could not create notebook";
+              break;
+            }
           }
-          // 2. Upload PDF source if provided
+          // 2. Upload PDF source if provided — ABORT if fails
           if (pdf_base64) {
-            await uploadPDFSource(pdf_base64, pdf_name || "paper.pdf");
-            await sleep(10000);
+            const uploaded = await uploadPDFSource(pdf_base64, pdf_name || "paper.pdf");
+            if (!uploaded) {
+              response = "ERROR: PDF upload failed";
+              break;
+            }
           }
           // 3. Send chat message
           const chatPrompt = prompt || "Please provide a comprehensive study guide for this document.";
-          await sendChatMessage(chatPrompt);
+          const sent = await sendChatMessage(chatPrompt);
+          if (!sent) {
+            response = "ERROR: Could not send chat message";
+            break;
+          }
           // 4. Wait for response
           response = await waitForChatResponse();
           if (!response || response.length < 10) {
@@ -629,7 +647,7 @@
 
   // ── Bootstrap ──────────────────────────────────────────────────────
   async function init() {
-    log(`NLM Oracle v1.0 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
+    log(`NLM Oracle v1.2 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
     pollLoop();
   }
 

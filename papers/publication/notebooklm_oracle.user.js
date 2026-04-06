@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         NotebookLM Oracle Bridge
 // @namespace    omega-automath
-// @version      1.0
+// @version      1.2
 // @description  Bridges local notebooklm_server.py with NotebookLM for automated content generation
 // @match        https://notebooklm.google.com/*
 // @grant        GM_xmlhttpRequest
@@ -77,7 +77,7 @@
 
     // Header row
     const header = el("div", "display:flex;justify-content:space-between;align-items:center;gap:8px");
-    header.appendChild(el("b", null, "[NLM Oracle v1.1]"));
+    header.appendChild(el("b", null, "[NLM Oracle v1.2]"));
     header.appendChild(el("span", `color:${statusColor};font-weight:bold`, statusText));
     const btn = el("button", `background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold`, btnText);
     btn.addEventListener("click", toggleActive);
@@ -211,84 +211,88 @@
     return results;
   }
 
-  async function tryInjectFile(file) {
-    // Method 1: find any file input on the page (may be hidden)
-    const inputs = document.querySelectorAll("input[type='file']");
-    for (const input of inputs) {
-      try {
-        const dt = new DataTransfer();
-        dt.items.add(file);
-        input.files = dt.files;
-        input.dispatchEvent(new Event("change", { bubbles: true }));
-        input.dispatchEvent(new Event("input", { bubbles: true }));
-        log(`PDF injected via file input (${input.accept || "any"})`);
-        return true;
-      } catch (e) {
-        log(`File input failed: ${e.message}`);
-      }
-    }
-    return false;
-  }
-
   async function uploadPDFSource(base64Data, fileName) {
     log(`Uploading: ${fileName} (${(base64Data.length * 0.75 / 1024).toFixed(0)} KB)`);
     const file = makeFile(base64Data, fileName);
 
-    // Step 1: Click "Add source" button
-    const addBtn = findButtonByText("Add source") ||
+    // Step 1: Click "Add source" / "Add file" button
+    const addBtn = findButtonByText("Add file") ||
+                   findButtonByText("add file") ||
+                   findButtonByText("Add source") ||
                    findButtonByText("add source") ||
                    document.querySelector("button[aria-label*='source' i]") ||
-                   document.querySelector("button[aria-label*='Source']") ||
                    document.querySelector("button[aria-label*='add' i]");
 
     if (addBtn) {
-      log("Step 1: Clicking 'Add source'...");
+      log(`Step 1: Clicking '${(addBtn.textContent || "").trim().slice(0, 25)}'`);
       addBtn.click();
       await sleep(2000);
     } else {
       log("WARN: 'Add source' button not found");
     }
 
-    // Step 2: In the dialog, click "Upload" / "File upload" / "PDF" option
-    // NotebookLM shows a dialog with source type choices
-    const uploadOption = findButtonByText("File upload") ||
-                         findButtonByText("Upload") ||
-                         findButtonByText("PDF") ||
-                         findButtonByText("upload file");
+    // Step 2: Intercept native file picker by hooking input.click()
+    // When "Upload files" is clicked, NLM creates a hidden <input type=file>
+    // and calls .click() on it, which opens the OS file dialog.
+    // We override .click() so we can inject our file instead.
+    let injected = false;
+    const origClick = HTMLInputElement.prototype.click;
 
-    // Also try clickable elements (not just buttons)
-    let uploadEl = uploadOption;
-    if (!uploadEl) {
-      const candidates = findAllByText("upload");
-      if (candidates.length > 0) {
-        uploadEl = candidates[candidates.length - 1]; // last match usually the dialog option
-      }
-    }
-    if (!uploadEl) {
-      const candidates = findAllByText("file");
-      for (const c of candidates) {
-        if ((c.textContent || "").toLowerCase().includes("upload")) {
-          uploadEl = c;
-          break;
+    HTMLInputElement.prototype.click = function () {
+      if (this.type === "file" && !injected) {
+        // Intercept! Inject our PDF instead of opening native dialog
+        try {
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          this.files = dt.files;
+          this.dispatchEvent(new Event("change", { bubbles: true }));
+          this.dispatchEvent(new Event("input", { bubbles: true }));
+          injected = true;
+          log("Step 2: PDF intercepted and injected via file input hook");
+        } catch (e) {
+          log(`Step 2: Inject failed (${e.message}), opening native dialog`);
+          origClick.call(this);
         }
+      } else {
+        origClick.call(this);
       }
+    };
+
+    // Now click "Upload files" — our hook will catch the file input
+    const uploadEl = findButtonByText("Upload files") ||
+                     findButtonByText("upload files") ||
+                     findButtonByText("File upload") ||
+                     findButtonByText("Upload");
+
+    // Also try non-button clickable elements
+    let clickTarget = uploadEl;
+    if (!clickTarget) {
+      const candidates = findAllByText("upload file");
+      if (candidates.length > 0) clickTarget = candidates[candidates.length - 1];
+    }
+    if (!clickTarget) {
+      const candidates = findAllByText("upload");
+      if (candidates.length > 0) clickTarget = candidates[candidates.length - 1];
     }
 
-    if (uploadEl) {
-      log(`Step 2: Clicking '${(uploadEl.textContent || "").trim().slice(0, 30)}'...`);
-      uploadEl.click();
-      await sleep(2000);
+    if (clickTarget) {
+      log(`Step 2: Clicking '${(clickTarget.textContent || "").trim().slice(0, 25)}' (with hook active)`);
+      clickTarget.click();
+      await sleep(3000);
     } else {
-      log("WARN: Upload option not found in dialog");
+      log("WARN: 'Upload files' not found");
     }
 
-    // Step 3: Try to inject file into any file input that appeared
-    if (await tryInjectFile(file)) {
-      await sleep(8000); // wait for processing
-      // Look for confirm/insert button
+    // Restore original click immediately
+    HTMLInputElement.prototype.click = origClick;
+
+    if (injected) {
+      log("Step 3: Waiting for NotebookLM to process source...");
+      await sleep(10000);
+
+      // Look for confirm/done button if there is one
       const confirmBtn = findButtonByText("Insert") ||
                          findButtonByText("Add") ||
-                         findButtonByText("Upload") ||
                          findButtonByText("Done");
       if (confirmBtn) {
         log(`Step 3: Clicking '${(confirmBtn.textContent || "").trim()}'`);
@@ -299,31 +303,26 @@
       return true;
     }
 
-    // Step 4: Fallback — try drag-drop on various targets
-    log("Step 3 fallback: trying drag-drop...");
-    const targets = [
-      ...document.querySelectorAll("[class*='drop']"),
-      ...document.querySelectorAll("[class*='upload']"),
-      ...document.querySelectorAll("[class*='source']"),
-      ...document.querySelectorAll("[role='dialog']"),
-      document.querySelector("main"),
-    ].filter(Boolean);
-
-    for (const target of targets) {
-      const dt = new DataTransfer();
-      dt.items.add(file);
-      for (const evtType of ["dragenter", "dragover", "drop"]) {
-        target.dispatchEvent(new DragEvent(evtType, {
-          bubbles: true, cancelable: true, dataTransfer: dt,
-        }));
-        await sleep(200);
+    // Fallback: try finding any existing file input and injecting directly
+    log("Step 2 fallback: scanning for file inputs...");
+    const inputs = document.querySelectorAll("input[type='file']");
+    log(`Found ${inputs.length} file input(s)`);
+    for (const input of inputs) {
+      try {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+        log("PDF injected via existing file input");
+        await sleep(10000);
+        return true;
+      } catch (e) {
+        log(`File input failed: ${e.message}`);
       }
     }
-    log(`Drag-drop attempted on ${targets.length} targets`);
-    await sleep(5000);
 
-    // Check if something appeared (new source in sidebar)
-    return true;
+    log("PDF upload FAILED — all methods exhausted");
+    return false;
   }
 
   // ── Create new notebook ─────────────────────────────────────────────
@@ -629,7 +628,7 @@
 
   // ── Bootstrap ──────────────────────────────────────────────────────
   async function init() {
-    log(`NLM Oracle v1.0 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
+    log(`NLM Oracle v1.2 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
     pollLoop();
   }
 
