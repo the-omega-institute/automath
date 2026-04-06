@@ -371,4 +371,23 @@ theorem paper_freeInvolutionCount_dvd_hierarchy :
   exact ⟨freeInvolutionCount_dvd_three, freeInvolutionCount_dvd_fifteen,
     freeInvolutionCount_dvd_105, freeInvolutionCount_dvd_945⟩
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R334: Free involution count concrete values
+-- ══════════════════════════════════════════════════════════════
+
+/-- f(4) = 7!! = 105.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_four : freeInvolutionCount 4 = 105 := by
+  rw [freeInvolutionCount_succ, freeInvolutionCount_small.2.2]
+
+/-- f(5) = 9!! = 945.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_five : freeInvolutionCount 5 = 945 := by
+  rw [freeInvolutionCount_succ, freeInvolutionCount_four]
+
+/-- f(6) = 11!! = 10395.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_six : freeInvolutionCount 6 = 10395 := by
+  rw [freeInvolutionCount_succ, freeInvolutionCount_five]
+
 end Omega.GU

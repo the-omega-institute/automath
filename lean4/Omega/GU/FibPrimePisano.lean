@@ -167,4 +167,19 @@ theorem pisano_period_101 : Nat.fib 50 % 101 = 0 ∧ Nat.fib 51 % 101 = 1 := by 
 theorem paper_pisano_period_101 :
     Nat.fib 50 % 101 = 0 ∧ Nat.fib 51 % 101 = 1 := pisano_period_101
 
+/-- Pisano period for p = 107: π(107) = 72.
+    prop:gu-fibprime-pisano-periods -/
+theorem pisano_period_107 : Nat.fib 72 % 107 = 0 ∧ Nat.fib 73 % 107 = 1 := by native_decide
+
+/-- Pisano period for p = 113: π(113) = 76.
+    prop:gu-fibprime-pisano-periods -/
+theorem pisano_period_113 : Nat.fib 76 % 113 = 0 ∧ Nat.fib 77 % 113 = 1 := by native_decide
+
+/-- Paper package for p = 107, 113.
+    prop:gu-fibprime-pisano-periods -/
+theorem paper_pisano_period_107_113 :
+    (Nat.fib 72 % 107 = 0 ∧ Nat.fib 73 % 107 = 1) ∧
+    (Nat.fib 76 % 113 = 0 ∧ Nat.fib 77 % 113 = 1) :=
+  ⟨pisano_period_107, pisano_period_113⟩
+
 end Omega.GU
