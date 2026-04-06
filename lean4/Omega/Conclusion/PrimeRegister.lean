@@ -678,4 +678,46 @@ theorem godelEncoding_eq_one_iff (primes : ℕ → ℕ) (offset : ℕ) (code : L
       simp only [List.mem_cons, forall_eq_or_imp] at h
       rw [h.1, pow_zero, one_mul, (ih (offset + 1)).mpr h.2]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R329: Gödel encoding coprimality
+-- ══════════════════════════════════════════════════════════════
+
+private theorem prime_pow_coprime_godelEncodingFrom'
+    (primes : ℕ → ℕ) (hcop : ∀ i j, i ≠ j → Nat.Coprime (primes i) (primes j))
+    (idx a s : ℕ) (code : List ℕ) (hdisj : idx < s ∨ s + code.length ≤ idx) :
+    Nat.Coprime (primes idx ^ a) (godelEncodingFrom primes s 0 code) := by
+  induction code generalizing s with
+  | nil => simp [godelEncodingFrom, Nat.Coprime]
+  | cons b rest ih =>
+    simp only [godelEncodingFrom_cons, Nat.add_zero, List.length_cons] at hdisj ⊢
+    apply Nat.Coprime.mul_right
+    · exact (hcop idx s (by omega)).pow a b
+    · rw [godelEncodingFrom_reindex primes s 1 rest]
+      exact ih (s + 1) (by omega)
+
+private theorem godelEncodingFrom_coprime'
+    (primes : ℕ → ℕ) (hcop : ∀ i j, i ≠ j → Nat.Coprime (primes i) (primes j))
+    (s1 s2 : ℕ) (l1 l2 : List ℕ) (hdisj : s1 + l1.length ≤ s2) :
+    Nat.Coprime (godelEncodingFrom primes s1 0 l1)
+                (godelEncodingFrom primes s2 0 l2) := by
+  induction l1 generalizing s1 with
+  | nil => simp [godelEncodingFrom, Nat.Coprime]
+  | cons a rest ih =>
+    simp only [godelEncodingFrom_cons, Nat.add_zero, List.length_cons] at hdisj ⊢
+    apply Nat.Coprime.mul_left
+    · exact prime_pow_coprime_godelEncodingFrom' primes hcop s1 a s2 l2 (Or.inl (by omega))
+    · rw [godelEncodingFrom_reindex primes s1 1 rest]
+      exact ih (s1 + 1) (by omega)
+
+/-- Gödel encodings of adjacent segments are coprime.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_coprime_of_disjoint
+    (primes : ℕ → ℕ) (offset : ℕ) (u v : List ℕ)
+    (hcop : ∀ i j, i ≠ j → Nat.Coprime (primes i) (primes j))
+    (_hp : ∀ i, 0 < primes i) :
+    Nat.Coprime (godelEncoding primes offset u)
+                (godelEncoding primes (offset + u.length) v) := by
+  simp only [godelEncoding]
+  exact godelEncodingFrom_coprime' primes hcop offset (offset + u.length) u v (le_refl _)
+
 end Omega.Conclusion

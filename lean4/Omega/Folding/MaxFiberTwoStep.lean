@@ -1006,6 +1006,31 @@ theorem hiddenBitCount_le_succ (m : Nat) :
   simp only [hiddenBitCount_floor_div_three]
   exact Nat.div_le_div_right (Nat.pow_le_pow_right (by omega) (by omega))
 
+/-- Closed form: 3·B(2m+1) + 2 = 2·4^m.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_odd_closed_eq (m : Nat) :
+    3 * hiddenBitCount (2 * m + 1) + 2 = 2 * 4 ^ m := by
+  have := hiddenBitCount_odd_closed m
+  have hpos : 2 ≤ 2 * 4 ^ m := by
+    have := Nat.one_le_pow m 4 (by omega)
+    omega
+  omega
+
+private theorem two_four_pow_mod_three (m : Nat) : (2 * 4 ^ m) % 3 = 2 := by
+  induction m with
+  | zero => simp
+  | succ n ih =>
+    have : 2 * 4 ^ (n + 1) = 4 * (2 * 4 ^ n) := by ring
+    rw [this]; omega
+
+/-- hiddenBitCount at odd indices via floor division.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_odd_eq (m : Nat) :
+    hiddenBitCount (2 * m + 1) = (2 * 4 ^ m - 2) / 3 := by
+  have hclosed := hiddenBitCount_odd_closed_eq m
+  have hmod := two_four_pow_mod_three m
+  omega
+
 /-- Fold is canonical (value-preserving), idempotent, and surjective.
     prop:fold-basic-paper -/
 theorem paper_fold_basic (m : Nat) :
