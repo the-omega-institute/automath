@@ -65,3 +65,26 @@ end
 end X
 
 end Omega
+
+-- Outside namespace for primality, then re-open for field package
+namespace Omega
+
+/-- F(11) = 89 is prime.
+    cor:field-phase-fib-prime -/
+theorem fib_eleven_prime : Nat.Prime (Nat.fib 11) := by native_decide
+
+/-- F(17) = 1597 is prime.
+    cor:field-phase-fib-prime -/
+theorem fib_seventeen_prime : Nat.Prime (Nat.fib 17) := by native_decide
+
+/-- Extended field-phase package: X 9 and X 15 are fields (F(11), F(17) prime).
+    cor:field-phase-fib-prime -/
+theorem paper_fibonacci_field_phase_extended :
+    Nat.Prime (Nat.fib 11) ∧ Nat.Prime (Nat.fib 17) ∧
+    (∀ x : X 9, x ≠ X.stableZero → ∃ y : X 9, X.stableMul x y = X.stableOne) ∧
+    (∀ x : X 15, x ≠ X.stableZero → ∃ y : X 15, X.stableMul x y = X.stableOne) :=
+  ⟨fib_eleven_prime, fib_seventeen_prime,
+   X.stableMul_inv_of_prime fib_eleven_prime,
+   X.stableMul_inv_of_prime fib_seventeen_prime⟩
+
+end Omega

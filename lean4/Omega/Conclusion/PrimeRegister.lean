@@ -626,4 +626,19 @@ theorem godelEncoding_pos (primes : ℕ → ℕ) (offset : ℕ) (code : List ℕ
     0 < godelEncoding primes offset code :=
   godelEncodingFrom_pos' primes hp offset 0 code
 
+/-- Empty Gödel encoding is 1.
+    thm:conclusion-godel-semidirect-law -/
+@[simp] theorem godelEncoding_nil (primes : ℕ → ℕ) (offset : ℕ) :
+    godelEncoding primes offset [] = 1 := by
+  simp [godelEncoding, godelEncodingFrom]
+
+/-- Cons Gödel encoding: G(a :: rest) = p_offset^a · G_{offset+1}(rest).
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_cons (primes : ℕ → ℕ) (offset a : ℕ) (rest : List ℕ) :
+    godelEncoding primes offset (a :: rest) =
+    primes offset ^ a * godelEncoding primes (offset + 1) rest := by
+  simp only [godelEncoding, godelEncodingFrom_cons, Nat.zero_add]
+  congr 1
+  rw [godelEncodingFrom_reindex primes offset 1 rest]
+
 end Omega.Conclusion
