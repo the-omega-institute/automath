@@ -605,6 +605,29 @@ theorem lucasNum_mod5_explicit : ∀ n : ℕ,
     rw [lucasNum_mod5_period_four n, show (n + 4) % 4 = n % 4 from by omega]
     exact lucasNum_mod5_explicit n
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R309: Lucas numbers mod 10 period 12
+-- ══════════════════════════════════════════════════════════════
+
+/-- thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_mod10_period_twelve (n : Nat) :
+    lucasNum (n + 12) % 10 = lucasNum n % 10 := by
+  have h8 := lucasNum_mod8_period_twelve n
+  have h4a := lucasNum_mod5_period_four n
+  have h4b := lucasNum_mod5_period_four (n + 4)
+  have h4c := lucasNum_mod5_period_four (n + 8)
+  rw [show n + 8 + 4 = n + 12 from by omega] at h4c
+  rw [show n + 4 + 4 = n + 8 from by omega] at h4b
+  omega
+
+/-- Paper package. thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_lucasNum_mod10_period_twelve :
+    lucasNum 0 % 10 = 2 ∧ lucasNum 1 % 10 = 1 ∧
+    lucasNum 6 % 10 = 8 ∧ lucasNum 11 % 10 = 9 ∧
+    (∀ n, lucasNum (n + 12) % 10 = lucasNum n % 10) := by
+  refine ⟨?_, ?_, ?_, ?_, lucasNum_mod10_period_twelve⟩
+  all_goals simp [lucasNum]
+
 /-- Lucas number base values mod 5: {L(0)%5, L(1)%5, L(2)%5, L(3)%5} = {2,1,3,4}.
     rem:degeneracy-zeta-bridge -/
 theorem lucasNum_mod5_base_values :

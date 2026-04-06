@@ -313,4 +313,33 @@ theorem paper_freeInvolutionCount_log_convexity_package :
   · rw [freeInvolutionCount_succ]; norm_num [freeInvolutionCount_succ, freeInvolutionCount]
   · rw [freeInvolutionCount_succ]; norm_num [freeInvolutionCount_succ, freeInvolutionCount]
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R309: freeInvolutionCount divisibility
+-- ══════════════════════════════════════════════════════════════
+
+/-- thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_dvd_seven : ∀ r : Nat, 4 ≤ r →
+    7 ∣ freeInvolutionCount r
+  | 4, _ => ⟨15, by native_decide⟩
+  | r + 5, _ => by
+    rw [freeInvolutionCount_succ]
+    exact Dvd.dvd.mul_left (freeInvolutionCount_dvd_seven (r + 4) (by omega)) _
+
+/-- thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_dvd_105 : ∀ r : Nat, 4 ≤ r →
+    105 ∣ freeInvolutionCount r
+  | 4, _ => ⟨1, by native_decide⟩
+  | r + 5, _ => by
+    rw [freeInvolutionCount_succ]
+    exact Dvd.dvd.mul_left (freeInvolutionCount_dvd_105 (r + 4) (by omega)) _
+
+/-- Paper package. thm:fiberwise-free-involution-matching-entropy -/
+theorem paper_freeInvolutionCount_dvd_extended :
+    (∀ r, 4 ≤ r → 7 ∣ freeInvolutionCount r) ∧
+    (∀ r, 4 ≤ r → 105 ∣ freeInvolutionCount r) ∧
+    freeInvolutionCount 4 = 105 ∧
+    freeInvolutionCount 4 / 105 = 1 := by
+  exact ⟨freeInvolutionCount_dvd_seven, freeInvolutionCount_dvd_105,
+    by native_decide, by native_decide⟩
+
 end Omega.GU

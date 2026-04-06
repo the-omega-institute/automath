@@ -1229,6 +1229,27 @@ theorem paper_fenceDet_diff_package :
   rw [fenceDet_succ_sub]; native_decide
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R309: fenceDet consecutive product identity
+-- ══════════════════════════════════════════════════════════════
+
+/-- cor:pom-Lk-t1-fibonacci-det-green -/
+theorem fenceDet_mul_succ (k : Nat) :
+    fenceDet k * fenceDet (k + 1) = Nat.fib (2 * k + 2) ^ 2 + 1 := by
+  rw [fenceDet_eq_fib k, fenceDet_eq_fib (k + 1),
+      show 2 * (k + 1) + 1 = 2 * k + 3 from by omega]
+  have := fib_cassini_odd_indexed k
+  linarith
+
+/-- Paper package. cor:pom-Lk-t1-fibonacci-det-green -/
+theorem paper_fenceDet_product_package :
+    fenceDet 0 * fenceDet 1 = 2 ∧
+    fenceDet 1 * fenceDet 2 = 10 ∧
+    fenceDet 2 * fenceDet 3 = 65 ∧
+    fenceDet 3 * fenceDet 4 = 442 ∧
+    fenceDet 4 * fenceDet 5 = 3026 := by
+  simp [fenceDet]
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R29: Fibonacci product convolution sum
 -- ══════════════════════════════════════════════════════════════
 
