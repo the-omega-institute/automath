@@ -642,4 +642,12 @@ theorem inducedSpectrum_antitone (supports : Finset PrimeSupport) (n : PrimeSupp
   · exact Nat.zero_le _
   · exact le_refl _
 
+/-- Multi-prime spectrum is bounded by total support count.
+    defprop:cdim-multiprime-divisible-spectrum -/
+theorem multiPrimeSpectrum_le_card (supports : Finset PrimeSupport) (J : PrimeSupport) :
+    multiPrimeSpectrum supports J ≤ supports.card := by
+  calc multiPrimeSpectrum supports J
+      ≤ multiPrimeSpectrum supports ∅ := multiPrimeSpectrum_anti_mono (Finset.empty_subset _)
+    _ = supports.card := multiPrimeSpectrum_empty supports
+
 end Omega.CircleDimension

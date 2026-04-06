@@ -1083,6 +1083,34 @@ theorem primitiveOrbitNumerator_prime {p : Nat} (hp : Nat.Prime p) :
     ring
   · simp [eq_comm, hp.ne_one]
 
+/-- Primitive orbit numerator at prime square: P(p²) = L(p²) - L(p).
+    prop:zetaK-mobius-primitive -/
+theorem primitiveOrbitNumerator_prime_sq {p : Nat} (hp : Nat.Prime p) :
+    primitiveOrbitNumerator (p ^ 2) = lucasNum (p ^ 2) - lucasNum p := by
+  rw [primitiveOrbitNumerator, Nat.divisors_prime_pow hp 2]
+  -- Sum over range 3 mapped by p^·
+  simp only [Finset.sum_map, Function.Embedding.coeFn_mk]
+  -- Evaluate range 3 = {0, 1, 2}
+  rw [show Finset.range (2 + 1) = {0, 1, 2} from by decide]
+  simp only [Finset.sum_insert (by decide : (0 : ℕ) ∉ ({1, 2} : Finset ℕ)),
+    Finset.sum_insert (by decide : (1 : ℕ) ∉ ({2} : Finset ℕ)),
+    Finset.sum_singleton, pow_zero, pow_one]
+  -- Compute p^2 / p^k
+  have hdiv0 : p ^ 2 / 1 = p ^ 2 := by omega
+  have hdiv1 : p ^ 2 / p = p := by
+    rw [pow_two]; exact Nat.mul_div_cancel p hp.pos
+  have hdiv2 : p ^ 2 / p ^ 2 = 1 := Nat.div_self (pow_pos hp.pos 2)
+  rw [hdiv0, hdiv1, hdiv2]
+  -- Compute Möbius values
+  have hμ1 : ArithmeticFunction.moebius 1 = 1 := by
+    rw [ArithmeticFunction.moebius_apply_of_squarefree (by simp)]; norm_num
+  have hμp : ArithmeticFunction.moebius p = -1 := by
+    rw [ArithmeticFunction.moebius_apply_of_squarefree hp.squarefree,
+      ArithmeticFunction.cardFactors_apply_prime hp, pow_one]
+  have hμp2 : ArithmeticFunction.moebius (p ^ 2) = 0 := by
+    rw [ArithmeticFunction.moebius_apply_prime_pow hp (by omega : 2 ≠ 0)]; simp
+  rw [hμp2, hμp, hμ1]; ring
+
 /-- Möbius inversion: L(n) = ∑_{d|n} primitiveOrbitNumerator(d) for n ≥ 1.
     prop:zetaK-mobius-primitive -/
 private theorem lucasNum_eq_sum_primitiveOrbitNumerator (n : Nat) (hn : 0 < n) :

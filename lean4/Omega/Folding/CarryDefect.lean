@@ -179,6 +179,21 @@ theorem paper_carryElement_fibonacci_pattern :
   refine ⟨carryElement_m5_value, carryElement_m6_value, carryElement_m7_value,
     carryElement_m8_value, carryElement_m9_value⟩
 
+/-- Carry element values follow Fibonacci pattern for m=5..11.
+    cor:pom-carry-defect-m6-anchor-8-34 -/
+theorem paper_pom_carry_fib_extended :
+    stableValue (carryElement 5) = Nat.fib 5 ∧
+    stableValue (carryElement 6) = Nat.fib 6 ∧
+    stableValue (carryElement 7) = Nat.fib 7 ∧
+    stableValue (carryElement 8) = Nat.fib 8 ∧
+    stableValue (carryElement 9) = Nat.fib 9 ∧
+    stableValue (carryElement 10) = Nat.fib 10 ∧
+    stableValue (carryElement 11) = Nat.fib 11 := by
+  refine ⟨carryElement_m5_value, carryElement_m6_value, carryElement_m7_value,
+    carryElement_m8_value, carryElement_m9_value, ?_, ?_⟩
+  · rw [carryElement_m10_value]; native_decide
+  · rw [carryElement_m11_value]; native_decide
+
 end X
 
 end Omega
