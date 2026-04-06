@@ -29,18 +29,31 @@ The set of admitted reference classes at $p$ is
 \]
 \end{definition}
 
-\begin{definition}[Local reference frame]\label{def:local-reference-frame}
-For a state $p$ and a referenceable sort $s$, a \emph{local reference frame} is a triple
+\begin{definition}[Local reference site]\label{def:local-reference-frame}
+For a state $p$ and a referenceable sort $s$, a \emph{local reference site} consists of the following data.
+\begin{enumerate}[label=(\roman*),nosep]
+\item A reflexive, transitive refinement relation $\sqsubseteq_{p,s}$ on $\mathcal R_s(p)$.
+\item The associated small thin category $\mathcal B_{p,s}$ whose objects are the elements of $\mathcal R_s(p)$ and in which there is a unique morphism
 \[
-\mathcal{B}_{p,s}=\bigl(\mathcal{R}_s(p),\sqsubseteq_{p,s},\Cov_{p,s}\bigr),
+b\longrightarrow a
 \]
-where $\sqsubseteq_{p,s}$ is a refinement relation on $\mathcal{R}_s(p)$ and $\Cov_{p,s}$ assigns to each $a\in\mathcal{R}_s(p)$ a collection of covering families
+if and only if $b\sqsubseteq_{p,s} a$.
+\item A Grothendieck pretopology $\Cov_{p,s}$ on $\mathcal B_{p,s}$ satisfying the identity, pullback-stability, and transitivity axioms.
+\item The standing pullback hypothesis that, for every covering family
 \[
-\{a_i\to a\}_{i\in I},
-\qquad
-a_i\sqsubseteq_{p,s} a.
+\{a_i\to a\}_{i\in I}\in \Cov_{p,s}(a)
 \]
-We assume that every $a$ carries the trivial cover $\{a\to a\}$.
+and every pair $(i,j)$, the fibre product
+\[
+a_i\times_a a_j
+\]
+exists in $\mathcal B_{p,s}$.
+\end{enumerate}
+Because $\mathcal B_{p,s}$ is thin, the fibre product $a_i\times_a a_j$ is the meet of $a_i$ and $a_j$ over $a$ whenever that meet exists. We write
+\[
+\mathcal C_{p,s}:=(\mathcal B_{p,s},\Cov_{p,s})
+\]
+for the resulting site.
 \end{definition}
 
 \begin{definition}[Local object functor]\label{def:local-object-functor}
@@ -58,9 +71,9 @@ If $b\sqsubseteq_{p,s} a$, the induced restriction map is denoted by
 Let $r:\mathsf{Ref}_s$ and assume $M,p\Vdash \Adm_s(r)$. Write $a=[r]_p$.
 \begin{enumerate}[label=(\roman*),nosep]
 \item $M,p\Vdash \LocSec_s(r)$ if there exists a cover $\{a_i\to a\}_{i\in I}\in\Cov_{p,s}(a)$ such that $F_{p,s}(a_i)\neq\varnothing$ for every $i\in I$.
-\item $M,p\Vdash \CompSec_s(r)$ if there exist a cover $\{a_i\to a\}_{i\in I}$ and sections $\sigma_i\in F_{p,s}(a_i)$ such that for every common refinement $c\sqsubseteq_{p,s} a_i,a_j$,
+\item $M,p\Vdash \CompSec_s(r)$ if there exist a cover $\{a_i\to a\}_{i\in I}$ and sections $\sigma_i\in F_{p,s}(a_i)$ such that for every pair $(i,j)$,
 \[
-\res_c^{a_i}(\sigma_i)=\res_c^{a_j}(\sigma_j).
+\res_{a_i\times_a a_j}^{a_i}(\sigma_i)=\res_{a_i\times_a a_j}^{a_j}(\sigma_j).
 \]
 \item $M,p\Vdash \Sec_s(r)$ if $F_{p,s}(a)\neq\varnothing$.
 \end{enumerate}
@@ -76,16 +89,12 @@ M,p\Vdash \LocSec_s(r).
 \end{proposition}
 
 \begin{proof}
-Let $a=[r]_p$ and choose $\sigma\in F_{p,s}(a)$. The trivial cover $\{a\to a\}$ is available by \Cref{def:local-reference-frame}. The singleton family $(\sigma)$ is therefore a compatible local family, so both compatible local sectionability and local sectionability follow immediately.
+Let $a=[r]_p$ and choose $\sigma\in F_{p,s}(a)$. The identity axiom for the pretopology gives the trivial cover $\{a\to a\}$. The singleton family $(\sigma)$ is therefore a compatible local family, so both compatible local sectionability and local sectionability follow immediately.
 \end{proof}
 
 \subsection{Sheafification and gluing failure}
 
-For fixed $(p,s)$, the local reference frame of \Cref{def:local-reference-frame} determines a site
-\[
-\mathcal{C}_{p,s}:=(\mathcal{B}_{p,s},\Cov_{p,s}),
-\]
-and the local object functor of \Cref{def:local-object-functor} determines a presheaf
+For fixed $(p,s)$, the local reference site of \Cref{def:local-reference-frame} determines a presheaf
 \[
 F_{p,s}\in\mathbf{PSh}(\mathcal{B}_{p,s}).
 \]
@@ -115,11 +124,11 @@ By the standard matching-family description of sheafification on a site \cite[Ch
 \]
 where $\{a_i\to a\}_{i\in I}$ is a covering family in $\Cov_{p,s}(a)$ and each $\sigma_i\in F_{p,s}(a_i)$, subject to the matching condition
 \[
-\res_c^{a_i}(\sigma_i)=\res_c^{a_j}(\sigma_j)
+\res_{a_i\times_a a_j}^{a_i}(\sigma_i)=\res_{a_i\times_a a_j}^{a_j}(\sigma_j)
 \]
-for every common refinement $c\sqsubseteq_{p,s} a_i,a_j$. Two such representatives define the same section of $G(a)$ if and only if they agree after restriction to some common refinement of their covers.
+for every pair $(i,j)$. Two such representatives define the same section of $G(a)$ if and only if they agree after pullback to some common refinement of their covers.
 
-Suppose first that $M,p\Vdash\CompSec_s(r)$. By \Cref{def:existence-levels}(ii), there exist a cover $\{a_i\to a\}_{i\in I}$ and local sections $\sigma_i\in F_{p,s}(a_i)$ satisfying exactly the displayed matching condition on every common refinement. Hence these data determine a section of $G(a)$, so $G(a)\neq\varnothing$.
+Suppose first that $M,p\Vdash\CompSec_s(r)$. By \Cref{def:existence-levels}(ii), there exist a cover $\{a_i\to a\}_{i\in I}$ and local sections $\sigma_i\in F_{p,s}(a_i)$ satisfying exactly the displayed matching condition on the pairwise pullbacks. Hence these data determine a section of $G(a)$, so $G(a)\neq\varnothing$.
 
 Conversely, suppose $G(a)\neq\varnothing$, and choose a representative
 \[
@@ -248,7 +257,7 @@ By construction, two objects of $\mathfrak P_r^{\mathrm{split}}(U)$ are isomorph
 for every $U$, giving condition \textup{(i)} of \Cref{def:realization-prestack}. Condition \textup{(ii)} holds because the automorphism sheaf of every object $\sigma$ is exactly $\Band|_U$.
 \end{proof}
 
-\begin{theorem}[Sufficient criterion for gluing-sensitive realization]\label{thm:gluing-sensitive-realization}
+\begin{proposition}[Sufficient criterion for gluing-sensitive realization]\label{thm:gluing-sensitive-realization}
 Let $r:\mathsf{Ref}_s$ be admitted at a state $p$, write
 \[
 a=[r]_p,\qquad
@@ -281,7 +290,7 @@ Then the later branch-obstruction theory is conditional on precisely this additi
 \item if the cofinal gerbe-adapted-cover hypothesis of \Cref{def:cech-gluing-obstruction} is added, then each visible branch determines a component gerbe as in \Cref{thm:component-gerbe-decomposition};
 \item if, in addition, the terminal-fibre essential surjectivity above is used as global conservativity at $a$, then the comparison between global sections and neutral component gerbes is exactly the one proved later in \Cref{prop:global-sections-vs-neutral-components} and \Cref{thm:gerbe-null-semantics}.
 \end{enumerate}
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 Condition \textup{(i)} identifies the connected components of the chosen stack $\mathfrak L_r$ with the sheafification of the local object functor. Combined with \Cref{def:realization-prestack}(ii), this is exactly the stack-level input used later to define visible branches and their component gerbes. The essential surjectivity of $(\iota_r)_a$ is precisely the global-conservativity hypothesis isolated in \Cref{def:global-conservativity}, so global objects of the stack can be compared back to actual global realizations by \Cref{prop:no-new-global-objects}. The point of the statement is therefore not to claim that every realization prestack is gluing-sensitive, but to isolate the extra hypotheses under which the later gerbe and obstruction arguments are valid.
@@ -355,17 +364,17 @@ Let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$. A \emph{visible 
 as in \Cref{def:existence-levels}(ii). Two visible presentations are called \emph{value-equivalent} if after passage to a common refinement of their covers, the restricted local sections agree pointwise. A \emph{visible value class} is an equivalence class of visible presentations. The set of visible value classes of $r$ at $p$ is denoted by $\Vis_{p,s}(r)$.
 \end{definition}
 
-\begin{theorem}[Visible value classes as global connected components]\label{thm:visible-value-components}
+\begin{proposition}[Visible value classes as global connected components]\label{thm:visible-value-components}
 Assume that $r$ admits a realization prestack in the sense of \Cref{def:realization-prestack}. Then
 \[
 \Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a)\cong \pi_0(\mathfrak L_r)(a).
 \]
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 By the standard description of sheafification on a site, a section of $a_{p,s}F_{p,s}$ at $a$ is represented by a matching family over a cover of $a$, modulo passage to common refinements.
 
-Concretely, the stalk of $a_{p,s}F_{p,s}$ at $a$ is
+Concretely, evaluation of the sheafification on the object $a$ is
 \[
 J_a/\!\sim,\qquad
 J_a:=\left\{\left(\{a_i\to a\}_{i\in I},(\sigma_i)_{i\in I}\right)\middle|\text{each }\sigma_i\in F_{p,s}(a_i)\text{ and the family is compatible}\right\},
@@ -536,7 +545,7 @@ M,p\Vdash \Null^{\mathrm{glue}}_s(r_{\mathrm{glue}}).
 \end{proposition}
 
 \begin{proof}
-Take a single state $p$ and one referenceable sort $s$. Let the local reference frame be the disjoint union of three rooted components.
+Take a single state $p$ and one referenceable sort $s$. Let the local reference site be the disjoint union of three rooted thin categories, each equipped with the trivial-cover axiom and, in the last two components, the displayed binary cover whose pullback is the object denoted by $c_{\mathrm{cmp}}$ or $c_{\mathrm{glue}}$ respectively.
 
 For $r_{\mathrm{loc}}$, use one object $a_{\mathrm{loc}}$ with only the trivial cover and define
 \[
@@ -632,7 +641,11 @@ M,\rho\models\varphi(r_2)
 \]
 for every $\rho\in R_p$, proving~\textup{(i)}.
 
-Write $a_k=[r_k]_p$ ($k=1,2$) and equip both reference classes with identical local reference frames: a cover $\{u_k\to a_k,v_k\to a_k\}$ with common refinement $c_k$.
+Write $a_k=[r_k]_p$ ($k=1,2$) and equip both reference classes with identical local reference sites: each has a binary cover
+\[
+\{u_k\to a_k,v_k\to a_k\}
+\]
+whose pullback is the object $c_k=u_k\times_{a_k} v_k$.
 
 For $r_1$, define
 \[
