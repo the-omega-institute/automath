@@ -1100,4 +1100,13 @@ theorem paper_momentSum_two_ratio_bounds (m : Nat) (hm : 2 ≤ m) :
     momentSum 2 (m + 1) ≤ 4 * momentSum 2 m :=
   ⟨momentSum_two_succ_ge_double m hm, momentSum_two_succ_le_quadruple m⟩
 
+/-- Collision moment S_2 properties package.
+    prop:fold-renyi-collision-identity, prop:fold-groupoid-wedderburn -/
+theorem paper_pom_collision_moment_package :
+    (∀ m : Nat, 0 < momentSum 2 m) ∧
+    (∀ m : Nat, 1 ≤ m → momentSum 2 m < momentSum 2 (m + 1)) ∧
+    (∀ q m : Nat, Nat.fib (m + 2) ≤ momentSum q m) ∧
+    (∀ q m : Nat, 1 ≤ q → 2 ^ m ≤ momentSum q m) :=
+  ⟨momentSum_two_pos', momentSum_two_strict_mono', momentSum_ge_card', momentSum_ge_pow'⟩
+
 end Omega

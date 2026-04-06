@@ -40,4 +40,26 @@ theorem tanakaLocalTime_mono (seq : ℕ → ℚ) (a : ℚ) (m : ℕ) :
   rw [Finset.sum_range_succ]
   linarith [tanakaIncrement_nonneg (seq m) (seq (m + 1)) a]
 
+/-- Single-step Tanaka identity: |y-a| = |x-a| + sgn(x-a)·(y-x) + tI(x,y,a).
+    thm:spg-scan-tanaka-stokes -/
+private theorem tanakaIncrement_identity (x y a : ℚ) :
+    |y - a| = |x - a| +
+      (if x - a > 0 then 1 else if x - a < 0 then -1 else 0) * (y - x) +
+      tanakaIncrement x y a := by
+  unfold tanakaIncrement; ring
+
+/-- Discrete Tanaka decomposition: |seq(m) - a| = |seq(0) - a| + signed_sum + local_time.
+    thm:spg-scan-tanaka-stokes -/
+theorem tanakaDecomposition (seq : ℕ → ℚ) (a : ℚ) (m : ℕ) :
+    |seq m - a| = |seq 0 - a| +
+      ∑ k ∈ Finset.range m,
+        (if seq k - a > 0 then 1 else if seq k - a < 0 then -1 else 0) * (seq (k + 1) - seq k) +
+      ∑ k ∈ Finset.range m, tanakaIncrement (seq k) (seq (k + 1)) a := by
+  induction m with
+  | zero => simp
+  | succ m ih =>
+    rw [Finset.sum_range_succ, Finset.sum_range_succ]
+    have := tanakaIncrement_identity (seq m) (seq (m + 1)) a
+    linarith
+
 end Omega.SPG

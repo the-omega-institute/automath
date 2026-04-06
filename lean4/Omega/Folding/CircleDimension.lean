@@ -310,4 +310,20 @@ theorem fibRadius_strict_mono (m : Nat) (hm : 2 ≤ m) : fibRadius m < fibRadius
   rw [div_lt_div_iff₀ (by positivity) (by positivity)]
   nlinarith
 
+/-- Fibonacci radius is strictly less than 1.
+    con:cdim-fibonacci-radius-time-conjugacy -/
+theorem fibRadius_lt_one (m : Nat) : fibRadius m < 1 := by
+  unfold fibRadius
+  rw [div_lt_one (by positivity : (0 : ℝ) < (Nat.fib m : ℝ) + 2)]
+  linarith
+
+/-- Gap from 1: 1 - fibRadius(m) = 2/(F(m)+2).
+    con:cdim-fibonacci-radius-time-conjugacy -/
+theorem one_sub_fibRadius (m : Nat) :
+    1 - fibRadius m = 2 / (↑(Nat.fib m) + 2) := by
+  unfold fibRadius
+  have h : (0 : ℝ) < (Nat.fib m : ℝ) + 2 := by positivity
+  field_simp
+  ring
+
 end Omega
