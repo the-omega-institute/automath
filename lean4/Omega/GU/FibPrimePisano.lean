@@ -119,4 +119,19 @@ theorem paper_pisano_period_31_47 :
     (Nat.fib 32 % 47 = 0 ∧ Nat.fib 33 % 47 = 1) :=
   ⟨pisano_period_31, pisano_period_47⟩
 
+/-- Pisano period for p = 41: π(41) = 40.
+    prop:gu-fibprime-pisano-periods -/
+theorem pisano_period_41 : Nat.fib 40 % 41 = 0 ∧ Nat.fib 41 % 41 = 1 := by native_decide
+
+/-- Pisano period for p = 59: π(59) = 58.
+    prop:gu-fibprime-pisano-periods -/
+theorem pisano_period_59 : Nat.fib 58 % 59 = 0 ∧ Nat.fib 59 % 59 = 1 := by native_decide
+
+/-- Paper package for p = 41, 59.
+    prop:gu-fibprime-pisano-periods -/
+theorem paper_pisano_period_41_59 :
+    (Nat.fib 40 % 41 = 0 ∧ Nat.fib 41 % 41 = 1) ∧
+    (Nat.fib 58 % 59 = 0 ∧ Nat.fib 59 % 59 = 1) :=
+  ⟨pisano_period_41, pisano_period_59⟩
+
 end Omega.GU

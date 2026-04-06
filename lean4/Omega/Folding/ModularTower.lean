@@ -157,6 +157,19 @@ theorem restrict_fiber_nonempty (y : X m) :
     ∃ x : X (m + 1), X.restrict x = y :=
   restrict_surjective y
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R322: modularProject preserves one and negation value
+-- ══════════════════════════════════════════════════════════════
+
+/-- modularProject preserves the one element.
+    thm:pom-stable-addition-carry-defect-unique-element -/
+theorem modularProject_stableOne (hm : 1 ≤ m) :
+    modularProject (stableOne (m := m + 1)) = (stableOne : X m) := by
+  apply eq_of_stableValue_eq
+  rw [stableValue_modularProject, stableValue_stableOne_of_ge_one (by omega : 1 ≤ m + 1),
+      Nat.mod_eq_of_lt (fib_gt_one_of_ge_two hm),
+      stableValue_stableOne_of_ge_one hm]
+
 end X
 
 end Omega
