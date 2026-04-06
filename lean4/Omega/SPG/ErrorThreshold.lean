@@ -201,6 +201,43 @@ theorem paper_kappa_kappaInv_round_trip_instances :
     kappa_kappaInv (by norm_num)⟩ <;>
   · unfold kappa kappaInv; norm_num
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R311: kappaInv values + roundtrip
+-- ══════════════════════════════════════════════════════════════
+
+/-- def:spg-error-threshold -/
+theorem kappaInv_two : kappaInv 2 = 1 / 3 := by unfold kappaInv; norm_num
+
+/-- def:spg-error-threshold -/
+theorem kappaInv_three : kappaInv 3 = 1 / 2 := by unfold kappaInv; norm_num
+
+/-- def:spg-error-threshold -/
+theorem kappaInv_four : kappaInv 4 = 3 / 5 := by unfold kappaInv; norm_num
+
+/-- def:spg-error-threshold -/
+theorem kappaInv_five : kappaInv 5 = 2 / 3 := by unfold kappaInv; norm_num
+
+/-- def:spg-error-threshold -/
+theorem kappaInv_six : kappaInv 6 = 5 / 7 := by unfold kappaInv; norm_num
+
+/-- def:spg-error-threshold -/
+theorem kappaInv_ten : kappaInv 10 = 9 / 11 := by unfold kappaInv; norm_num
+
+/-- def:spg-error-threshold -/
+theorem kappa_kappaInv_roundtrip_values :
+    kappa (kappaInv 2) = 2 ∧ kappa (kappaInv 3) = 3 ∧
+    kappa (kappaInv 5) = 5 ∧ kappa (kappaInv 10) = 10 := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  all_goals unfold kappaInv kappa; norm_num
+
+/-- Paper package. def:spg-error-threshold -/
+theorem paper_kappaInv_values :
+    kappaInv 2 = 1/3 ∧ kappaInv 3 = 1/2 ∧ kappaInv 5 = 2/3 ∧
+    kappaInv 10 = 9/11 ∧
+    (∀ p : ℝ, 1 < p → kappa (kappaInv p) = p) := by
+  refine ⟨kappaInv_two, kappaInv_three, kappaInv_five, kappaInv_ten, ?_⟩
+  exact fun p hp => kappa_kappaInv hp
+
 end Omega.SPG
 
 

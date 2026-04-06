@@ -351,4 +351,34 @@ theorem paper_chebyAdams_nine_ten :
     chebyAdams 9 (-3) = -5778 ∧ chebyAdams 10 (-3) = 15127 := by
   rw [chebyAdams_nine, chebyAdams_ten, chebyAdams_nine, chebyAdams_ten]; norm_num
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R311: chebyAdams Frobenius mod p
+-- ══════════════════════════════════════════════════════════════
+
+/-- Frobenius property for concrete instances.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem paper_chebyAdams_frobenius :
+    chebyAdams 2 3 % 2 = 3 % 2 ∧
+    chebyAdams 3 3 % 3 = 3 % 3 ∧
+    chebyAdams 5 3 % 5 = 3 % 5 ∧
+    chebyAdams 7 3 % 7 = 3 % 7 ∧
+    chebyAdams 11 3 % 11 = 3 % 11 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · rw [chebyAdams_two]; norm_num
+  · rw [chebyAdams_three]; norm_num
+  · rw [chebyAdams_five]; norm_num
+  · rw [chebyAdams_seven]; norm_num
+  · simp [chebyAdams]
+
+/-- Frobenius at S=0 and S=1.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem paper_chebyAdams_frobenius_zero_one :
+    chebyAdams 2 0 % 2 = 0 % 2 ∧
+    chebyAdams 3 0 % 3 = 0 % 3 ∧
+    chebyAdams 5 0 % 5 = 0 % 5 ∧
+    chebyAdams 2 1 % 2 = 1 % 2 ∧
+    chebyAdams 3 1 % 3 = 1 % 3 ∧
+    chebyAdams 5 1 % 5 = 1 % 5 := by
+  simp [chebyAdams_two, chebyAdams_three, chebyAdams_five]
+
 end Omega.Discussion

@@ -96,4 +96,34 @@ theorem paper_ea_wedderburn_ratio_tightening :
     5 * 3352 < 13 * 1352 ∧ 5 * 8320 < 13 * 3352 ∧
     5 * 20640 < 13 * 8320 ∧ 5 * 51216 < 13 * 20640 := by omega
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R311: S_2 factorization certificates
+-- ══════════════════════════════════════════════════════════════
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_six_factored : momentSum 2 6 = 4 * 5 * 11 := by
+  rw [momentSum_two_six]
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_seven_factored : momentSum 2 7 = 32 * 17 := by
+  rw [momentSum_two_seven]
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_eight_factored : momentSum 2 8 = 8 * 13 ^ 2 := by
+  rw [momentSum_two_eight_rec]; norm_num
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem momentSum_two_nine_factored : momentSum 2 9 = 8 * 419 := by
+  rw [momentSum_two_nine_rec]
+
+/-- prop:fold-groupoid-wedderburn -/
+theorem prime_419 : Nat.Prime 419 := by native_decide
+
+/-- Paper package. prop:fold-groupoid-wedderburn -/
+theorem paper_ea_s2_factorization :
+    momentSum 2 6 = 4 * 5 * 11 ∧ momentSum 2 7 = 32 * 17 ∧
+    momentSum 2 8 = 8 * 13 ^ 2 ∧ momentSum 2 9 = 8 * 419 ∧ Nat.Prime 419 := by
+  exact ⟨momentSum_two_six_factored, momentSum_two_seven_factored,
+    momentSum_two_eight_factored, momentSum_two_nine_factored, prime_419⟩
+
 end Omega.EA
