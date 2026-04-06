@@ -941,4 +941,14 @@ theorem paper_ea_ring_iso_core :
 
 end X
 
+/-- Euler totient of Fibonacci numbers.
+    thm:mul-definitional -/
+theorem paper_ea_totient_fib_extended :
+    Nat.totient (Nat.fib 8) = 12 ∧
+    Nat.totient (Nat.fib 9) = 16 ∧
+    Nat.totient (Nat.fib 10) = 40 ∧
+    Nat.totient (Nat.fib 11) = 88 ∧
+    Nat.totient (Nat.fib 12) = 48 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
+
 end Omega

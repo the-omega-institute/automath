@@ -869,4 +869,18 @@ theorem godelEncoding_le_max_prime_pow (primes : ℕ → ℕ) (offset : ℕ) (co
           Nat.mul_le_mul (Nat.pow_le_pow_left hPa a) htl
       _ = P ^ (a + rest.sum) := (pow_add P a rest.sum).symm
 
+/-- Gödel encoding of a prefix divides the encoding of the full sequence.
+    thm:conclusion-godel-prefix-arithmetic-criterion -/
+theorem godelEncoding_prefix_dvd (primes : ℕ → ℕ) (offset : ℕ) (u v : List ℕ) :
+    godelEncoding primes offset u ∣ godelEncoding primes offset (u ++ v) := by
+  rw [godelEncoding_append]; exact dvd_mul_right _ _
+
+/-- The quotient equals the shifted encoding of the suffix.
+    thm:conclusion-godel-prefix-arithmetic-criterion -/
+theorem godelEncoding_prefix_quotient (primes : ℕ → ℕ) (offset : ℕ) (u v : List ℕ)
+    (hp : ∀ i, 0 < primes i) :
+    godelEncoding primes offset (u ++ v) / godelEncoding primes offset u =
+    godelEncoding primes (offset + u.length) v := by
+  rw [godelEncoding_append, Nat.mul_div_cancel_left _ (godelEncoding_pos primes offset u hp)]
+
 end Omega.Conclusion

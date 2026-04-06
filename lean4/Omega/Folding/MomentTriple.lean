@@ -1275,4 +1275,17 @@ theorem paper_discussion_moment_audit_package :
     (∀ q m : Nat, Nat.fib (m + 2) ≤ momentSum q m) :=
   ⟨momentSum_cauchy_schwarz_general, momentSum_ge_pow', momentSum_ge_card'⟩
 
+/-- S_2 difference values for small m.
+    thm:fold-collision2-aut-lie-dimension-rank -/
+theorem paper_momentSum_two_diff_values :
+    momentSum 2 1 - momentSum 2 0 = 1 ∧
+    momentSum 2 2 - momentSum 2 1 = 4 ∧
+    momentSum 2 3 - momentSum 2 2 = 8 ∧
+    momentSum 2 4 - momentSum 2 3 = 22 ∧
+    momentSum 2 5 - momentSum 2 4 = 52 ∧
+    momentSum 2 6 - momentSum 2 5 = 132 := by
+  rw [momentSum_two_zero, momentSum_two_one, momentSum_two_two, momentSum_two_three,
+    momentSum_two_four, momentSum_two_five, momentSum_two_six]
+  omega
+
 end Omega
