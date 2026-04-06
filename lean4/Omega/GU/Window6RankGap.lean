@@ -44,4 +44,12 @@ theorem paper_window6_compression_ratio :
   refine ⟨by norm_num, X.card_X_six, ?_, by omega, by omega, by omega⟩
   rw [X.card_X_six]; native_decide
 
+/-- Window-7 and window-8 compression ratios.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_window78_compression_ratio :
+    2 ^ 7 = 128 ∧ Nat.fib 9 = 34 ∧ 128 / 34 = 3 ∧ 128 % 34 = 26 ∧
+    2 ^ 8 = 256 ∧ Nat.fib 10 = 55 ∧ 256 / 55 = 4 ∧ 256 % 55 = 36 := by
+  refine ⟨by norm_num, by native_decide, by omega, by omega,
+          by norm_num, by native_decide, by omega, by omega⟩
+
 end Omega.GU

@@ -1257,4 +1257,22 @@ theorem exactWeightCount_fib_sub_twelve (m : Nat) (hm : 5 ≤ m) :
   rw [exactWeightCount_symmetric m (Nat.fib (m + 3) - 12) (by omega), hsub]
   exact exactWeightCount_ten m hm
 
+/-- S_2(m) is sandwiched by Fibonacci-scaled bounds.
+    thm:fold-collision2-aut-lie-dimension-rank -/
+theorem paper_momentSum_two_fibonacci_sandwich (m : Nat) :
+    Nat.fib (m + 2) ≤ momentSum 2 m ∧
+    momentSum 2 m ≤ X.maxFiberMultiplicity m * 2 ^ m := by
+  refine ⟨momentSum_ge_card' 2 m, ?_⟩
+  have h := momentSum_upper_bound' 2 m (by omega)
+  simpa using h
+
+/-- Moment sum audit package for Discussion chapter.
+    prop:discussion-fold-occupancy-tq-moment,
+    prop:discussion-fold-representation-qcollision-lower-bound -/
+theorem paper_discussion_moment_audit_package :
+    (∀ q m : Nat, momentSum q m ^ 2 ≤ Nat.fib (m + 2) * momentSum (2 * q) m) ∧
+    (∀ q m : Nat, 1 ≤ q → 2 ^ m ≤ momentSum q m) ∧
+    (∀ q m : Nat, Nat.fib (m + 2) ≤ momentSum q m) :=
+  ⟨momentSum_cauchy_schwarz_general, momentSum_ge_pow', momentSum_ge_card'⟩
+
 end Omega
