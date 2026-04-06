@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1465 |
+| \leanverified 标注数 | 1469 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1482 |
-| 轮次 | R356（round_count=357） |
+| 总标注数 | 1486 |
+| 轮次 | R357（round_count=358） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -28,13 +28,13 @@
 | Emergent Arithmetic | 185 | 148 | 80.0% |
 | Folding | 337 | 110 | 32.6% |
 | Conclusion | 2,550 | 237 | 9.3% |
-| Group Unification | 469 | 153 | 32.6% |
+| Group Unification | 469 | 154 | 32.8% |
 | SPG | 129 | 99 | 76.7% |
 | Circle Dimension | 393 | 129 | 32.8% |
-| Zeta Finite Part | 4,524 | 182 | 4.0% |
-| Discussion | 67 | 55 | 82.1% |
+| Zeta Finite Part | 4,524 | 183 | 4.0% |
+| Discussion | 67 | 57 | 85.1% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1405** | **13.4%** |
+| **合计（body）** | **10,508** | **1409** | **13.4%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**对合计数上界 + 偶长校正审计包 + Chebyshev 负参数恒等式（Round R357）**：`freeInvolutionCount_le_two_r_pow`（对应 `thm:fiberwise-free-involution-matching-entropy`，GU；自由对合计数的 2^r 上界）；`paper_zeta_evenLength_correction_package`（对应 `cor:xi-time-part73c-fixed-parameter-necklace-correction`，Zeta；偶长 necklace 校正审计综合包）；`chebyAdams_neg_arg_sq` + `chebyAdams_neg_mul_self`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 负参数平方与自乘恒等式）
 **AM-GM 等号条件 + EA 两层读出 + 碰撞核联合审计（Round R356）**：`prod_eq_const_pow_of_all_eq`（对应 `thm:conclusion-section-ledger-kl-identity`，Conclusion；乘积等于常数幂当且仅当所有因子相等的 AM-GM 等号条件）；`paper_ea_two_layer_readout`（对应 `thm:composition-two-layer`，Emergent Arithmetic；单一原语两层读出同时生成加法与乘法）；`paper_folding_collision_kernel_combined`（对应 `thm:fold-collision2-aut-lie-dimension-rank`，Emergent Arithmetic；折叠碰撞核联合审计包）
 **Necklace 校正值/正界 + CD 相谱审计 + 纤维互易包（Round R355）**：`paper_necklace_correction_two_values` + `necklaceCorrectionKernel_at_two_pos_bounded`（对应 `cor:xi-time-part73c-fixed-parameter-necklace-correction`，Zeta；necklaceCorrectionKernel(2,12)=54 精确值与 m≤20 正界）；`paper_cdim_phase_spectrum_audit`（对应 `thm:cdim-phase-spectrum-reconstruction`，Circle Dimension；循环相位采样计数同构完全性审计包）；`paper_pom_fiber_reciprocity_package`（对应 `prop:fold-fiber-count-reciprocity`，Folding；纤维计数互易律与反射对称性包）
 **Tanaka 局部时间单调性 + SM 签名并分解 + Chebyshev-Adams 平方差（Round R354）**：`tanakaLocalTime_nonneg` + `tanakaLocalTime_mono`（对应 `thm:spg-scan-tanaka-stokes`，SPG；离散 Tanaka 局部时间非负性与单调性）；`paper_gu_sm_signature_union`（对应 `cor:sm-signature-strict-union`，GU；标准模型三因子签名严格并分解）；`chebyAdams_sq_sub_four` + `chebyAdams_sq_sub_four_factored`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 平方减 4 因式分解）
