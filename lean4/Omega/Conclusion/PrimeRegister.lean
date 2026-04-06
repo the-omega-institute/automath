@@ -720,4 +720,59 @@ theorem godelEncoding_coprime_of_disjoint
   simp only [godelEncoding]
   exact godelEncodingFrom_coprime' primes hcop offset (offset + u.length) u v (le_refl _)
 
+-- ══════════════════════════════════════════════════════════════
+-- Phase R332: Gödel encoding injectivity
+-- ══════════════════════════════════════════════════════════════
+
+/-- Gödel encoding is injective on equal-length lists.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_injective_of_eq_length
+    (primes : ℕ → ℕ) (offset : ℕ) (u v : List ℕ)
+    (hlen : u.length = v.length)
+    (hcop : ∀ i j, i ≠ j → Nat.Coprime (primes i) (primes j))
+    (hp : ∀ i, 1 < primes i)
+    (heq : godelEncoding primes offset u = godelEncoding primes offset v) :
+    u = v := by
+  induction u generalizing v offset with
+  | nil =>
+    cases v with
+    | nil => rfl
+    | cons _ _ => simp at hlen
+  | cons a us ih =>
+    cases v with
+    | nil => simp at hlen
+    | cons b vs =>
+      simp only [List.length_cons] at hlen
+      rw [godelEncoding_cons, godelEncoding_cons] at heq
+      -- heq: p^a * G(us) = p^b * G(vs) where p = primes offset
+      have hp_pos : 0 < primes offset := by have := hp offset; omega
+      -- Coprimality: p^a coprime to G(vs), p^b coprime to G(us)
+      have hcop_a : Nat.Coprime (primes offset ^ a) (godelEncoding primes (offset + 1) vs) := by
+        exact prime_pow_coprime_godelEncodingFrom' primes hcop offset a (offset + 1) vs
+          (Or.inl (by omega))
+      have hcop_b : Nat.Coprime (primes offset ^ b) (godelEncoding primes (offset + 1) us) := by
+        exact prime_pow_coprime_godelEncodingFrom' primes hcop offset b (offset + 1) us
+          (Or.inl (by omega))
+      -- From heq: p^a | p^b * G(vs) → coprime → p^a | p^b
+      have hdvd_ab : primes offset ^ a ∣ primes offset ^ b := by
+        have : primes offset ^ a ∣ primes offset ^ b * godelEncoding primes (offset + 1) vs :=
+          heq ▸ dvd_mul_right _ _
+        exact hcop_a.dvd_of_dvd_mul_right this
+      have hdvd_ba : primes offset ^ b ∣ primes offset ^ a := by
+        have : primes offset ^ b ∣ primes offset ^ a * godelEncoding primes (offset + 1) us :=
+          heq.symm ▸ dvd_mul_right _ _
+        exact hcop_b.dvd_of_dvd_mul_right this
+      have hpow_pos : ∀ k, 0 < primes offset ^ k :=
+        fun k => Nat.pos_of_ne_zero (pow_ne_zero k (by have := hp offset; omega))
+      have hpow_eq : primes offset ^ a = primes offset ^ b :=
+        Nat.le_antisymm (Nat.le_of_dvd (hpow_pos b) hdvd_ab)
+                        (Nat.le_of_dvd (hpow_pos a) hdvd_ba)
+      have hab : a = b := Nat.pow_right_injective (by have := hp offset; omega) hpow_eq
+      subst hab
+      have hrest : godelEncoding primes (offset + 1) us =
+                   godelEncoding primes (offset + 1) vs :=
+        Nat.mul_left_cancel (hpow_pos a) heq
+      congr 1
+      exact ih (v := vs) (offset := offset + 1) (hlen := by omega) (heq := hrest)
+
 end Omega.Conclusion

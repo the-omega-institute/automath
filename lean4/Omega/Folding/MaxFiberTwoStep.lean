@@ -1006,6 +1006,17 @@ theorem hiddenBitCount_le_succ (m : Nat) :
   simp only [hiddenBitCount_floor_div_three]
   exact Nat.div_le_div_right (Nat.pow_le_pow_right (by omega) (by omega))
 
+/-- Successor relation: B(m+1) = 2·B(m) + m % 2.
+    thm:pom-hidden-bit-count -/
+theorem hiddenBitCount_succ_eq (m : Nat) :
+    hiddenBitCount (m + 1) = 2 * hiddenBitCount m + m % 2 := by
+  simp only [hiddenBitCount_floor_div_three, show 2 ^ (m + 1) = 2 * 2 ^ m from by ring]
+  have hmod := two_pow_mod_three m
+  by_cases hm : m % 2 = 0
+  · rw [hm] at hmod; simp at hmod; omega
+  · have hm1 : m % 2 = 1 := by omega
+    rw [hm1] at hmod; simp at hmod; omega
+
 /-- Closed form: 3·B(2m+1) + 2 = 2·4^m.
     thm:pom-hidden-bit-count -/
 theorem hiddenBitCount_odd_closed_eq (m : Nat) :

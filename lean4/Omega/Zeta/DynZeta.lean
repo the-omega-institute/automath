@@ -1641,6 +1641,29 @@ theorem lucasNum_mod48_period_twentyfour (n : Nat) :
       exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
 
 -- ══════════════════════════════════════════════════════════════
+-- Phase R332: Lucas numbers mod 40 period 12
+-- ══════════════════════════════════════════════════════════════
+
+/-- Lucas numbers mod 40 have period 12: L(n+12) % 40 = L(n) % 40.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem lucasNum_mod40_period_twelve (n : Nat) :
+    lucasNum (n + 12) % 40 = lucasNum n % 40 := by
+  suffices h : (40 : ℤ) ∣ (lucasNum (n + 12) - lucasNum n) by omega
+  induction n using Nat.strongRecOn with
+  | _ n ih =>
+    match n with
+    | 0 => simp [lucasNum]
+    | 1 => simp [lucasNum]
+    | n + 2 =>
+      have hR12 := lucasNum_succ_succ (n + 12)
+      have hR0 := lucasNum_succ_succ n
+      have : lucasNum (n + 2 + 12) - lucasNum (n + 2) =
+          (lucasNum (n + 1 + 12) - lucasNum (n + 1)) +
+          (lucasNum (n + 12) - lucasNum n) := by linarith
+      rw [this]
+      exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
+
+-- ══════════════════════════════════════════════════════════════
 -- Phase R329: Lucas numbers mod 36 period 24
 -- ══════════════════════════════════════════════════════════════
 
