@@ -214,6 +214,12 @@ theorem godelLift_binary_width_upper (m : Nat) (hm : 1 ≤ m) :
       ≤ Nat.log 2 (2 ^ m) := Nat.log_mono_right (fib_le_two_pow m hm)
     _ = m := Nat.log_pow (by norm_num) m
 
+/-- Binary specialization of the side-information length lower bound.
+    thm:conclusion-side-info-length-lower-bound -/
+theorem sideInfo_length_lower_bound_binary_specialized (m : Nat) (hm : 1 ≤ m) :
+    Nat.log 2 (Nat.fib (m + 2)) ≤ m := by
+  simpa using godelLift_binary_width_upper m hm
+
 private theorem fib_lower_bound (m : Nat) (_hm : 2 ≤ m) :
     2 ^ (m / 2) ≤ Nat.fib (m + 2) := by
   have h1 : Nat.fib 2 = 1 := by native_decide
@@ -365,6 +371,13 @@ theorem godelLift_axis_lower_bound_binary_specialized (k D : Nat)
     (hfeas : D ≤ 2 ^ k) :
     Nat.log 2 D ≤ k := by
   simpa using godelLift_axis_lower_bound k 1 D (by omega) hfeas
+
+/-- Discrete specialization of the fold-axis exponent lower bound.
+    thm:conclusion-fold-prime-axis-exponent-lower-bound -/
+theorem godelLift_fold_axis_exponent_lower_bound_discrete (k D : Nat)
+    (hfeas : D ≤ 2 ^ k) :
+    Nat.log 2 D ≤ k := by
+  simpa using godelLift_axis_lower_bound_binary_specialized k D hfeas
 
 open Omega in
 /-- Ternary specialization: fewer axes with E=2.

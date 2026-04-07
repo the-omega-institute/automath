@@ -216,6 +216,14 @@ theorem goldenMean_primitive_orbit_11_14 :
     -- n=14: 14·p(14) = L(14) - L(7) - L(2) + L(1) = 843 - 29 - 3 + 1 = 812
     (843 + (-1) * 29 + (-1) * 3 + 1 * 1 : ℤ) = 14 * 58 := by omega
 
+/-- First and second primitive moments for the golden-mean primitive orbit counts
+    p(1)=1, p(2)=1, p(3)=1, p(4)=1, p(5)=2, p(6)=2.
+    cor:zetaK-primitive-moments -/
+theorem goldenMean_primitive_moments_first_second :
+    (1 : ℤ) * 1 + 2 * 1 + 3 * 1 + 4 * 1 + 5 * 2 + 6 * 2 = 32 ∧
+    (1 : ℤ) * 0 + 2 * 1 + 3 * 2 + 4 * 3 + 5 * 4 * 2 + 6 * 5 * 2 = 120 := by
+  constructor <;> omega
+
 /-! ## Degeneracy-zeta coefficients
 
 The degeneracy ratio ζ_full/ζ = (1-z-z²)/(1-2z) measures the gap
