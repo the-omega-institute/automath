@@ -2,6 +2,7 @@ import Omega.Folding.MomentSum
 import Omega.Folding.FiberSpectrum
 import Omega.Folding.MomentRecurrence
 import Omega.Folding.MomentTriple
+import Omega.Folding.FiberArithmetic
 
 namespace Omega.EA
 
@@ -9,6 +10,14 @@ namespace Omega.EA
     prop:fold-groupoid-wedderburn -/
 theorem wedderburn_total_dim_eq_S2 (m : Nat) :
     ∑ x : X m, (X.fiberMultiplicity x) ^ 2 = momentSum 2 m := rfl
+
+/-- Paper-facing q=2 fiber-index CGF specialization.
+    prop:pom-fiber-index-cgf -/
+theorem paper_pom_fiber_index_cgf_q2_specialized (m : Nat) :
+    (∑ x : X m, X.fiberMultiplicity x ^ 2 = momentSum 2 m) ∧
+    (∑ x : X m, X.fiberMultiplicity x = 2 ^ m) := by
+  refine ⟨wedderburn_total_dim_eq_S2 m, ?_⟩
+  exact X.fiberMultiplicity_total m
 
 /-- At m=6, the groupoid algebra has Wedderburn dimension 220.
     prop:fold-groupoid-wedderburn -/
@@ -78,6 +87,12 @@ theorem paper_ea_wedderburn_growth_extended :
 /-- prop:fold-groupoid-wedderburn -/
 theorem wedderburn_avg_fiber_m7 : momentSum 2 7 / Nat.fib 9 = 16 := by
   rw [momentSum_two_seven]; native_decide
+
+/-- Paper: prop:fold-groupoid-wedderburn (m=7 average fiber).
+    prop:fold-groupoid-wedderburn -/
+theorem paper_wedderburn_avg_fiber_m7 :
+    momentSum 2 7 / Nat.fib 9 = 16 := by
+  simpa using wedderburn_avg_fiber_m7
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase R308: Wedderburn dim m=11,12 + ratio tightening

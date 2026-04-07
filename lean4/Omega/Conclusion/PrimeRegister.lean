@@ -379,6 +379,12 @@ theorem godelLift_fold_axis_exponent_lower_bound_discrete (k D : Nat)
     Nat.log 2 D ≤ k := by
   simpa using godelLift_axis_lower_bound_binary_specialized k D hfeas
 
+/-- Paper: thm:conclusion-fold-prime-axis-exponent-lower-bound -/
+theorem paper_godelLift_fold_axis_exponent_lower_bound_discrete (k D : Nat)
+    (hfeas : D ≤ 2 ^ k) :
+    Nat.log 2 D ≤ k := by
+  simpa using godelLift_fold_axis_exponent_lower_bound_discrete k D hfeas
+
 open Omega in
 /-- Ternary specialization: fewer axes with E=2.
     cor:conclusion-fixed-axis-exponential-amplitude -/
