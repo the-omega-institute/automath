@@ -239,6 +239,15 @@ theorem globalDefect_poincare_band (hmn : m + 1 ≤ n) (ω : Word n) :
       (restrictWord (Nat.le_succ m) (globalDefect hmn ω)) :=
   globalDefect_compose (Nat.le_succ m) hmn ω
 
+/-- Paper: discrete Poincaré band identity for Fold defect.
+    prop:fold-discrete-poincare-band -/
+theorem paper_fold_discrete_poincare_band (hmn : m + 1 ≤ n) (ω : Word n) :
+    globalDefect (Nat.le_trans (Nat.le_succ m) hmn) ω =
+      xorWord
+        (globalDefect (Nat.le_succ m) (restrictWord hmn ω))
+        (restrictWord (Nat.le_succ m) (globalDefect hmn ω)) := by
+  exact globalDefect_poincare_band hmn ω
+
 /-- Two words are equal iff their xor is the zero word. -/
 theorem xorWord_eq_zero_iff {a b : Word m} :
     xorWord a b = zeroWord m ↔ a = b := by

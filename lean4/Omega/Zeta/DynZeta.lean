@@ -224,6 +224,23 @@ theorem paper_goldenMean_primitive_orbit_11_14 :
     (843 + (-1) * 29 + (-1) * 3 + 1 * 1 : ℤ) = 14 * 58 :=
   goldenMean_primitive_orbit_11_14
 
+/-- Primitive orbit Möbius sums for n=15..18.
+    prop:zetaK-mobius-primitive -/
+theorem goldenMean_primitive_orbit_15_18 :
+    (1 * 1 + (-1) * 4 + (-1) * 11 + 1 * 1364 : ℤ) = 15 * 90 ∧
+    ((-1) * 47 + 1 * 2207 : ℤ) = 16 * 135 ∧
+    ((-1) * 1 + 1 * 3571 : ℤ) = 17 * 210 ∧
+    (1 * 4 + (-1) * 18 + (-1) * 76 + 1 * 5778 : ℤ) = 18 * 316 := by
+  omega
+
+/-- Paper: prop:zetaK-mobius-primitive (n=15..18) -/
+theorem paper_goldenMean_primitive_orbit_15_18 :
+    (1 * 1 + (-1) * 4 + (-1) * 11 + 1 * 1364 : ℤ) = 15 * 90 ∧
+    ((-1) * 47 + 1 * 2207 : ℤ) = 16 * 135 ∧
+    ((-1) * 1 + 1 * 3571 : ℤ) = 17 * 210 ∧
+    (1 * 4 + (-1) * 18 + (-1) * 76 + 1 * 5778 : ℤ) = 18 * 316 := by
+  exact goldenMean_primitive_orbit_15_18
+
 /-- First and second primitive moments for the golden-mean primitive orbit counts
     p(1)=1, p(2)=1, p(3)=1, p(4)=1, p(5)=2, p(6)=2.
     cor:zetaK-primitive-moments -/
@@ -1472,14 +1489,6 @@ theorem paper_word_trace_m1_package :
 -- ══════════════════════════════════════════════════════════════
 -- Phase R290: Primitive orbit counts, Lucas large values, positivity
 -- ══════════════════════════════════════════════════════════════
-
-/-- Primitive orbit Möbius sums for n=15..18.
-    prop:zetaK-mobius-primitive -/
-theorem goldenMean_primitive_orbit_15_18 :
-    (1 * 1 + (-1) * 4 + (-1) * 11 + 1 * 1364 : ℤ) = 15 * 90 ∧
-    ((-1) * 47 + 1 * 2207 : ℤ) = 16 * 135 ∧
-    ((-1) * 1 + 1 * 3571 : ℤ) = 17 * 210 ∧
-    (1 * 4 + (-1) * 18 + (-1) * 76 + 1 * 5778 : ℤ) = 18 * 316 := by omega
 
 /-- Lucas number large values L(13)..L(18).
     thm:zeta-syntax-trace-linear-recurrence -/
