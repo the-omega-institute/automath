@@ -96,6 +96,11 @@ theorem paper_circleDim_tensor (r s t1 t2 : Nat) :
     circleDim (r * s) (t1 * t2) = circleDim r t1 * circleDim s t2 :=
   circleDim_mul r s t1 t2
 
+/-- Paper: prop:cdim-tensor-hom-ext-laws (Hom) -/
+theorem paper_circleDim_hom (r s t1 t2 : Nat) :
+    circleDim (r * s) (t1 * t2) = circleDim r t1 * circleDim s t2 := by
+  simpa using circleDim_hom r s t1 t2
+
 /-- Paper: prop:cdim-tensor-hom-ext-laws (Ext¹ vanishing) -/
 theorem paper_circleDim_ext1_vanishing (t : Nat) :
     circleDim 0 t = 0 :=

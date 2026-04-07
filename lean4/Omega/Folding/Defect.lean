@@ -353,6 +353,12 @@ theorem localDefect_characterizes_fold (η : Word (m + 1)) :
     localDefect η = zeroWord m ↔ Fold (truncate η) = X.restrict (Fold η) :=
   localDefect_eq_zero_iff_fold_commutes η
 
+/-- Paper-facing commutation criterion for Fold and ω-truncation.
+    prop:fold-omega-commute -/
+theorem paper_fold_omega_commute (η : Word (m + 1)) :
+    Fold (truncate η) = X.restrict (Fold η) ↔ localDefect η = zeroWord m := by
+  exact (localDefect_eq_zero_iff_fold_commutes η).symm
+
 /-- Global defect is the accumulated Fold commutativity failure across resolutions. -/
 theorem globalDefect_accumulated (h : m ≤ n) (ω : Word n) :
     globalDefect h ω = zeroWord m ↔

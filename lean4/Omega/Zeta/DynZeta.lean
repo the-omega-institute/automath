@@ -216,6 +216,14 @@ theorem goldenMean_primitive_orbit_11_14 :
     -- n=14: 14·p(14) = L(14) - L(7) - L(2) + L(1) = 843 - 29 - 3 + 1 = 812
     (843 + (-1) * 29 + (-1) * 3 + 1 * 1 : ℤ) = 14 * 58 := by omega
 
+/-- Paper: prop:zetaK-mobius-primitive (n=11..14) -/
+theorem paper_goldenMean_primitive_orbit_11_14 :
+    (199 - 1 : ℤ) = 11 * 18 ∧
+    (322 + 1 * 3 + (-1) * 7 + (-1) * 18 : ℤ) = 12 * 25 ∧
+    (521 - 1 : ℤ) = 13 * 40 ∧
+    (843 + (-1) * 29 + (-1) * 3 + 1 * 1 : ℤ) = 14 * 58 :=
+  goldenMean_primitive_orbit_11_14
+
 /-- First and second primitive moments for the golden-mean primitive orbit counts
     p(1)=1, p(2)=1, p(3)=1, p(4)=1, p(5)=2, p(6)=2.
     cor:zetaK-primitive-moments -/
