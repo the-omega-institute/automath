@@ -1586,6 +1586,25 @@ theorem goldenMean_primitive_orbit_27_30 :
     (1860498 + (-1) * 1364 + (-1) * 123 + (-1) * 18 + 1 * 11 + 1 * 4 + 1 * 3 + (-1) * 1 : ℤ) =
       30 * 61967 := by native_decide
 
+/-- Paper: primitive orbit Möbius sums for n=23..26.
+    prop:zetaK-mobius-primitive -/
+theorem paper_goldenMean_primitive_orbit_23_26 :
+    (64079 - 1 : ℤ) = 23 * 2786 ∧
+    (103682 + (-1) * 322 + (-1) * 47 + 1 * 7 : ℤ) = 24 * 4305 ∧
+    (167761 + (-1) * 11 : ℤ) = 25 * 6710 ∧
+    (271443 + (-1) * 521 + (-1) * 3 + 1 * 1 : ℤ) = 26 * 10420 := by
+  exact goldenMean_primitive_orbit_23_26
+
+/-- Paper: primitive orbit Möbius sums for n=27..30.
+    prop:zetaK-mobius-primitive -/
+theorem paper_goldenMean_primitive_orbit_27_30 :
+    (439204 + (-1) * 76 : ℤ) = 27 * 16264 ∧
+    (710647 + (-1) * 843 + (-1) * 7 + 1 * 3 : ℤ) = 28 * 25350 ∧
+    (1149851 - 1 : ℤ) = 29 * 39650 ∧
+    (1860498 + (-1) * 1364 + (-1) * 123 + (-1) * 18 + 1 * 11 + 1 * 4 + 1 * 3 + (-1) * 1 : ℤ) =
+      30 * 61967 := by
+  exact goldenMean_primitive_orbit_27_30
+
 /-- Selected word traces at m=3.
     thm:conclusion-softcore-exceptional-word-trace-expansion -/
 theorem paper_word_trace_m3_selected :

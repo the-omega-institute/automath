@@ -594,6 +594,23 @@ theorem gauge_anomaly_count_mono :
    gauge_anomaly_max_six,
    gauge_anomaly_max_eight⟩
 
+/-- Paper audit wrapper for gauge-anomaly support-size witnesses.
+    thm:fold-gauge-anomaly-max -/
+theorem paper_fold_gauge_anomaly_max :
+    (∃ w : Word 2, (Finset.univ.filter (fun i => localDefect w i = true)).card = 1) ∧
+    (∃ w : Word 4, (Finset.univ.filter (fun i => localDefect w i = true)).card = 2) ∧
+    (∃ w : Word 5, (Finset.univ.filter (fun i => localDefect w i = true)).card = 3) ∧
+    (∃ w : Word 6, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 3) ∧
+    (∃ w : Word 7, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 4) ∧
+    (∃ w : Word 8, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 4) ∧
+    ((∃ w : Word 2, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 1) ∧
+     (∃ w : Word 4, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 2) ∧
+     (∃ w : Word 6, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 3) ∧
+     (∃ w : Word 8, (Finset.univ.filter (fun i => localDefect w i = true)).card ≥ 4)) := by
+  exact ⟨gauge_anomaly_max_one, gauge_anomaly_max_two, gauge_anomaly_max_three,
+    gauge_anomaly_max_six, gauge_anomaly_max_seven, gauge_anomaly_max_eight,
+    gauge_anomaly_count_mono⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R53: periodicWord110 and Fold instances
 -- ══════════════════════════════════════════════════════════════
