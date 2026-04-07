@@ -6,8 +6,8 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~48,257 |
-| 定理/定义数 | ~4,376 |
+| 总行数 | ~48,276 |
+| 定理/定义数 | ~4,379 |
 | 论文接口包装 | 664+ |
 | 文件数 | 114 |
 | 公理数 | 0 |
@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 1522 |
 | \leanpartial 标注数 | 17 |
 | 总标注数 | 1539 |
-| 轮次 | R372（round_count=373） |
+| 轮次 | R373（round_count=374） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -28,13 +28,13 @@
 | Emergent Arithmetic | 185 | 159 | 85.9% |
 | Folding | 337 | 112 | 33.2% |
 | Conclusion | 2,550 | 245 | 9.6% |
-| Group Unification | 469 | 158 | 33.7% |
+| Group Unification | 469 | 160 | 34.1% |
 | SPG | 129 | 104 | 80.6% |
 | Circle Dimension | 393 | 135 | 34.4% |
 | Zeta Finite Part | 4,524 | 188 | 4.2% |
 | Discussion | 67 | 63 | 94.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1458** | **13.9%** |
+| **合计（body）** | **10,508** | **1460** | **13.9%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**GU 奇偶荷最小完备比特 + 中心二纤维计数 + 自由对合信息界（Round R373）**：`paper_gut_fiber_parity_minimal_complete_bits_six`（对应 `thm:gut-fiber-parity-minimal-complete-bits`，GU；window-6 纤维奇偶荷最小完备比特数等于非平凡纤维数的 21-bit 证书）；`paper_autp_center_twofiber_count_six`（对应 `cor:autp-center-z2-by-twofibers`，GU；window-6 中心二纤维扇区计数精确等于 8）；`paper_freeInvolutionCount_information_bounds`（对应 `thm:fiberwise-free-involution-matching-entropy`，GU；自由对合信息下界的论文接口打包）
 **primitive 轨道矩 + Gödel 轴指数离散特化 + 二进制侧信息下界（Round R372）**：`goldenMean_primitive_moments_first_second`（对应 `cor:zetaK-primitive-moments`，Zeta；golden-mean primitive 轨道长度 1..6 的一阶/二阶代价矩精确值）；`sideInfo_length_lower_bound_binary_specialized`（对应 `thm:conclusion-side-info-length-lower-bound`，Conclusion；把侧信息长度下界特化为二进制对数口径）；`godelLift_fold_axis_exponent_lower_bound_discrete`（对应 `thm:conclusion-fold-prime-axis-exponent-lower-bound`，Conclusion；把折叠纤维轴--指数耦合下界特化为离散二进制轴数下界）
 **Gödel 编码非一正性 + 权重计数回文 + EA 环特征小值（Round R371）**：`godelEncoding_ne_one_of_pos`（对应 `thm:conclusion-godel-semidirect-law`，Conclusion；正长列表的 Gödel 编码严格大于 1）；`paper_folding_weight_count_palindrome`（对应 `prop:fold-fiber-count-reciprocity`，Folding；权重计数回文对称性综合包）；`paper_ea_ring_char_small`（对应 `thm:monoid-quotient-is-N`，Emergent Arithmetic；稳定地址环特征值小值审计包）
 **扫描误差测度稳定性 + CD 张量律审计 + 权重分布包（Round R370）**：`paper_scanErrorMeasure_stability_package`（对应 `prop:spg-scan-error-cylinder`，SPG；扫描误差测度稳定性综合包）；`paper_cdim_laws_audit`（对应 `prop:cdim-tensor-hom-ext-laws`，Circle Dimension；圆维度张量/Hom/Ext 算律审计包）；`paper_pom_weight_distribution`（对应 `prop:fold-groupoid-wedderburn`，Emergent Arithmetic；POM 权重分布综合包）
@@ -318,6 +319,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R373: GU parity bits + center two-fiber count + involution bounds（完整）**：GU/Window6RankGap.lean + GU/FreeInvolutionCount.lean——paper_gut_fiber_parity_minimal_complete_bits_six（thm:gut-fiber-parity-minimal-complete-bits，window-6 纤维奇偶荷最小完备比特数等于非平凡纤维数的 21-bit 证书，GU）; paper_autp_center_twofiber_count_six（cor:autp-center-z2-by-twofibers，window-6 中心二纤维扇区计数精确等于 8，GU）; paper_freeInvolutionCount_information_bounds（thm:fiberwise-free-involution-matching-entropy，自由对合信息下界的论文接口打包，GU）——**2 个论文标签条目计入覆盖率**（Group Unification +2；`thm:fiberwise-free-involution-matching-entropy` 已注册，本轮为同标签新 wrapper 标注）——Group Unification 158→160（33.7%→34.1%），全局 \leanverified 1519→1522（+3），总标注 1536→1539（+3），body 覆盖 1458→1460（13.9%），commit a06e791
 **Phase R372: primitive moments + discrete Gödel lower bounds（完整）**：Zeta/DynZeta.lean + Conclusion/PrimeRegister.lean——goldenMean_primitive_moments_first_second（cor:zetaK-primitive-moments，golden-mean primitive 轨道长度 1..6 的一阶/二阶代价矩精确值，Zeta）; sideInfo_length_lower_bound_binary_specialized（thm:conclusion-side-info-length-lower-bound，把侧信息长度下界特化为二进制对数口径，Conclusion）; godelLift_fold_axis_exponent_lower_bound_discrete（thm:conclusion-fold-prime-axis-exponent-lower-bound，把折叠纤维轴--指数耦合下界特化为离散二进制轴数下界，Conclusion）——**3 个论文标签条目计入覆盖率**（Zeta Finite Part +1, Conclusion +2）——Zeta Finite Part 187→188（4.1%→4.2%），Conclusion 243→245（9.5%→9.6%），全局 \leanverified 1519→1522（+3），总标注 1536→1539（+3），body 覆盖 1455→1458（13.8%→13.9%），commit 91d5919
 **Phase R371: Gödel encoding ne one + weight-count palindrome + EA ring char small（完整）**：Conclusion/PrimeRegister.lean + Folding/FiberWeightCountComplement.lean + EA/RingChar.lean——godelEncoding_ne_one_of_pos（thm:conclusion-godel-semidirect-law，正长列表的 Gödel 编码严格大于 1，Conclusion）; paper_folding_weight_count_palindrome（prop:fold-fiber-count-reciprocity，权重计数回文对称性综合包，Folding）; paper_ea_ring_char_small（thm:monoid-quotient-is-N，稳定地址环特征值小值审计包，Emergent Arithmetic）——**3 个论文标签条目计入覆盖率**（Conclusion +1, Folding +1, Emergent Arithmetic +1）——Conclusion 242→243（9.5%），Folding 111→112（32.9%→33.2%），Emergent Arithmetic 158→159（85.4%→85.9%），全局 \leanverified 1516→1519（+3），总标注 1533→1536（+3），body 覆盖 1452→1455（13.8%），commit a619817
 **Phase R370: scan error measure stability + CD laws audit + weight distribution（完整）**：SPG/ScanErrorMeasure.lean + CircleDimension/CircleDim.lean + Folding/MomentTriple.lean——paper_scanErrorMeasure_stability_package（prop:spg-scan-error-cylinder，扫描误差测度稳定性综合包，SPG）; paper_cdim_laws_audit（prop:cdim-tensor-hom-ext-laws，圆维度张量/Hom/Ext 算律审计包，Circle Dimension）; paper_pom_weight_distribution（prop:fold-groupoid-wedderburn，POM 权重分布综合包，Emergent Arithmetic）——**3 个论文标签条目计入覆盖率**（SPG +1, Circle Dimension +1, Emergent Arithmetic +1）——SPG 103→104（79.8%→80.6%），Circle Dimension 134→135（34.1%→34.4%），Emergent Arithmetic 157→158（84.9%→85.4%），全局 \leanverified 1513→1516（+3），总标注 1530→1533（+3），body 覆盖 1449→1452（13.8%），commit d5cfd08
@@ -621,7 +623,7 @@
 
 | 度量 | 数值 |
 |---|---|
-| 全局覆盖率（body） | ~1,458/9,958 = **~14.6%** |
+| 全局覆盖率（body） | ~1,460/9,958 = **~14.7%** |
 | 强覆盖（一般性 ∀ 证明） | ~65 (0.7%) |
 | 中覆盖（有界 + 条件） | ~162 (1.6%) |
 | 弱覆盖（native_decide / 代理） | ~723 (7.3%) |
