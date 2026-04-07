@@ -968,4 +968,13 @@ theorem paper_ea_unit_group_audit :
     21 = 3 * 7 ∧ 34 = 2 * 17 ∧ 55 = 5 * 11 := by
   refine ⟨?_, ?_, ?_, by omega, by omega, by omega⟩ <;> native_decide
 
+/-- EA ring characteristic for small m: Fibonacci values and 89 prime.
+    thm:monoid-quotient-is-N -/
+theorem paper_ea_ring_char_small :
+    Nat.fib 11 = 89 ∧ Nat.Prime 89 ∧
+    Nat.fib 12 = 144 ∧ 144 = 2 ^ 4 * 3 ^ 2 ∧
+    Nat.fib 13 = 233 ∧ Nat.Prime 233 := by
+  refine ⟨by native_decide, by native_decide, by native_decide,
+          by omega, by native_decide, by native_decide⟩
+
 end Omega

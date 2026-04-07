@@ -1301,4 +1301,12 @@ theorem paper_momentSum_four_values :
     momentSum 4 6 = 3244 :=
   momentSum_four_six
 
+/-- Weight count palindrome symmetry + strict monotonicity.
+    prop:fold-fiber-count-reciprocity -/
+theorem paper_folding_weight_count_palindrome :
+    (∀ m n : Nat, n ≤ Nat.fib (m + 3) - 2 →
+      exactWeightCount m n = exactWeightCount m (Nat.fib (m + 3) - 2 - n)) ∧
+    (∀ m : Nat, 1 ≤ m → momentSum 2 m < momentSum 2 (m + 1)) :=
+  ⟨exactWeightCount_symmetric, momentSum_two_strict_mono'⟩
+
 end Omega

@@ -933,4 +933,20 @@ theorem godelEncoding_strict_mono_of_lt (primes : ℕ → ℕ) (offset : ℕ) (u
       rw [hu, hv]
       exact Nat.pow_lt_pow_right (hp (offset + j.val)) hlt⟩
 
+/-- Gödel encoding is > 1 when some exponent is positive.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_ne_one_of_pos (primes : ℕ → ℕ) (offset : ℕ) (code : List ℕ)
+    (hp : ∀ i, 1 < primes i) (i : Fin code.length) (hi : 0 < code[i]) :
+    1 < godelEncoding primes offset code := by
+  -- Compare with the all-zero list of same length
+  have hzero_enc : godelEncoding primes offset (List.replicate code.length 0) = 1 := by
+    rw [godelEncoding_eq_one_iff primes offset _ (fun j => by linarith [hp j])]
+    intro a ha; exact List.eq_of_mem_replicate ha
+  rw [← hzero_enc]
+  have hlen : (List.replicate code.length 0).length = code.length := by simp
+  exact godelEncoding_strict_mono_of_lt primes offset
+    (List.replicate code.length 0) code hlen hp
+    (fun ⟨j, hj⟩ => by simp) ⟨i.val, by rw [List.length_replicate]; exact i.isLt⟩
+    (by simp; exact hi)
+
 end Omega.Conclusion
