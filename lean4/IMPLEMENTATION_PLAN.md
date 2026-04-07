@@ -6,17 +6,17 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~47,493 |
-| 定理/定义数 | ~4,139 |
+| 总行数 | ~48,257 |
+| 定理/定义数 | ~4,376 |
 | 论文接口包装 | 664+ |
-| 文件数 | 115 |
+| 文件数 | 114 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1515 |
+| \leanverified 标注数 | 1522 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1532 |
-| 轮次 | R371（round_count=372） |
+| 总标注数 | 1539 |
+| 轮次 | R372（round_count=373） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -27,14 +27,14 @@
 | POM | 1,707 | 294 | 17.2% |
 | Emergent Arithmetic | 185 | 159 | 85.9% |
 | Folding | 337 | 112 | 33.2% |
-| Conclusion | 2,550 | 243 | 9.5% |
+| Conclusion | 2,550 | 245 | 9.6% |
 | Group Unification | 469 | 158 | 33.7% |
 | SPG | 129 | 104 | 80.6% |
 | Circle Dimension | 393 | 135 | 34.4% |
-| Zeta Finite Part | 4,524 | 187 | 4.1% |
+| Zeta Finite Part | 4,524 | 188 | 4.2% |
 | Discussion | 67 | 63 | 94.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1455** | **13.8%** |
+| **合计（body）** | **10,508** | **1458** | **13.9%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**primitive 轨道矩 + Gödel 轴指数离散特化 + 二进制侧信息下界（Round R372）**：`goldenMean_primitive_moments_first_second`（对应 `cor:zetaK-primitive-moments`，Zeta；golden-mean primitive 轨道长度 1..6 的一阶/二阶代价矩精确值）；`sideInfo_length_lower_bound_binary_specialized`（对应 `thm:conclusion-side-info-length-lower-bound`，Conclusion；把侧信息长度下界特化为二进制对数口径）；`godelLift_fold_axis_exponent_lower_bound_discrete`（对应 `thm:conclusion-fold-prime-axis-exponent-lower-bound`，Conclusion；把折叠纤维轴--指数耦合下界特化为离散二进制轴数下界）
 **Gödel 编码非一正性 + 权重计数回文 + EA 环特征小值（Round R371）**：`godelEncoding_ne_one_of_pos`（对应 `thm:conclusion-godel-semidirect-law`，Conclusion；正长列表的 Gödel 编码严格大于 1）；`paper_folding_weight_count_palindrome`（对应 `prop:fold-fiber-count-reciprocity`，Folding；权重计数回文对称性综合包）；`paper_ea_ring_char_small`（对应 `thm:monoid-quotient-is-N`，Emergent Arithmetic；稳定地址环特征值小值审计包）
 **扫描误差测度稳定性 + CD 张量律审计 + 权重分布包（Round R370）**：`paper_scanErrorMeasure_stability_package`（对应 `prop:spg-scan-error-cylinder`，SPG；扫描误差测度稳定性综合包）；`paper_cdim_laws_audit`（对应 `prop:cdim-tensor-hom-ext-laws`，Circle Dimension；圆维度张量/Hom/Ext 算律审计包）；`paper_pom_weight_distribution`（对应 `prop:fold-groupoid-wedderburn`，Emergent Arithmetic；POM 权重分布综合包）
 **Walsh-Stokes 规范同调包 + Fredholm 黄金均值 6-10 + E7/E8 Zeckendorf（Round R369）**：`paper_discussion_stokes_gauge_homology_package`（对应 `thm:discussion-discrete-stokes-gauge-leyang` 与 `cor:discussion-thermo-ldp-homology-invariance`，Discussion；离散 Stokes 规范不变性+热力学大偏差同调不变性四合一包，两处标注）；`paper_fredholm_golden_mean_6_10`（对应 `def:fredholm-determinant`，Zeta；Fredholm 黄金均值 m=6..10 精确值审计包）；`paper_gu_e7_e8_zeckendorf`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；E7/E8 Zeckendorf 维度对齐综合包）
@@ -317,11 +318,10 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
-**Phase R316: Primitive orbit Möbius sums n=23..26（1/3 完成，2 目标推迟）**：Zeta/DynZeta.lean——goldenMean\_primitive\_orbit\_23\_26（prop:zetaK-mobius-primitive，Möbius primitive 轨道计数 n=23:2786, n=24:4305, n=25:6710, n=26:10420，Zeta）——**注：规格数值有误，formalizer 已修正**——**1 个论文标签条目计入覆盖率**（Zeta +1）——Zeta Finite Part 164→165（3.6%），全局 \\leanverified 1301→1302（+1），总标注 1318→1319（+1），commit d10f0e6
-
-**Phase R315: Pisano period 29 + Chebyshev-Adams Dwork 包（2/3 完成，目标 3 已存在跳过）**：GU/FibPrimePisano.lean + Discussion/ChebyshevAdams.lean——pisano\_period\_29（cor:gut-fibprime-pisano-4n，Pisano 周期 π(29)=14 验证，GU）; paper\_pisano\_period\_29（cor:gut-fibprime-pisano-4n，p=29 论文接口打包，GU）; chebyAdams\_double（thm:discussion-completed-dwork-chebyshev，倍角公式 C_{2n}(S)=C_n(S²-2)，Discussion）; chebyAdams\_triple（thm:discussion-completed-dwork-chebyshev，三倍角公式 C_{3n}(S)=C_n(S³-3S)，Discussion）; chebyAdams\_pow\_prime\_compose（thm:discussion-chebyshev-witt-equivariance，Dwork 同余精确形式 C_{p^{k+1}}(S)=C_{p^k}(C_p(S))，Discussion）——**注：docstring 标签 `prop:gu-fibprime-pisano-periods` 不在论文中，归入语义对应的 `cor:gut-fibprime-pisano-4n`**——**3 个论文标签条目计入覆盖率**（GU +2, Discussion +3）——Group Unification 125→127（26.7%→27.1%），Discussion 35→38（52.2%→56.7%），全局 \\leanverified 1296→1301（+5），总标注 1313→1318（+5），commit a31cbc0
-
-**Phase R314: Gödel encoding append + Lucas mod 9 period 24（2/3 完成，目标 2 推迟）**：Conclusion/PrimeRegister.lean + Zeta/DynZeta.lean——godelEncodingFrom\_nil（thm:conclusion-godel-semidirect-law，Gödel 编码空列表基例，Conclusion）; godelEncodingFrom\_cons（thm:conclusion-godel-semidirect-law，Gödel 编码 cons 递推，Conclusion）; godelEncodingFrom\_reindex（thm:conclusion-godel-semidirect-law，Gödel 编码重标，Conclusion）; godelEncodingFrom\_append（thm:conclusion-godel-semidirect-law，Gödel 编码列表连接分裂，Conclusion）; godelEncoding\_append（thm:conclusion-godel-semidirect-law，Gödel 编码连接律主定理，Conclusion）; lucasNum\_mod9\_period\_twentyfour（thm:zeta-syntax-trace-linear-recurrence，Lucas mod 9 周期 24，Zeta）——**2 个论文标签条目计入覆盖率**（Conclusion +5, Zeta +1）——Conclusion 211→216（8.3%→8.5%），Zeta Finite Part 163→164（3.6%），全局 \\leanverified 1290→1296（+6），总标注 1307→1313（+6），commit 888c730
+**Phase R372: primitive moments + discrete Gödel lower bounds（完整）**：Zeta/DynZeta.lean + Conclusion/PrimeRegister.lean——goldenMean_primitive_moments_first_second（cor:zetaK-primitive-moments，golden-mean primitive 轨道长度 1..6 的一阶/二阶代价矩精确值，Zeta）; sideInfo_length_lower_bound_binary_specialized（thm:conclusion-side-info-length-lower-bound，把侧信息长度下界特化为二进制对数口径，Conclusion）; godelLift_fold_axis_exponent_lower_bound_discrete（thm:conclusion-fold-prime-axis-exponent-lower-bound，把折叠纤维轴--指数耦合下界特化为离散二进制轴数下界，Conclusion）——**3 个论文标签条目计入覆盖率**（Zeta Finite Part +1, Conclusion +2）——Zeta Finite Part 187→188（4.1%→4.2%），Conclusion 243→245（9.5%→9.6%），全局 \leanverified 1519→1522（+3），总标注 1536→1539（+3），body 覆盖 1455→1458（13.8%→13.9%），commit 91d5919
+**Phase R371: Gödel encoding ne one + weight-count palindrome + EA ring char small（完整）**：Conclusion/PrimeRegister.lean + Folding/FiberWeightCountComplement.lean + EA/RingChar.lean——godelEncoding_ne_one_of_pos（thm:conclusion-godel-semidirect-law，正长列表的 Gödel 编码严格大于 1，Conclusion）; paper_folding_weight_count_palindrome（prop:fold-fiber-count-reciprocity，权重计数回文对称性综合包，Folding）; paper_ea_ring_char_small（thm:monoid-quotient-is-N，稳定地址环特征值小值审计包，Emergent Arithmetic）——**3 个论文标签条目计入覆盖率**（Conclusion +1, Folding +1, Emergent Arithmetic +1）——Conclusion 242→243（9.5%），Folding 111→112（32.9%→33.2%），Emergent Arithmetic 158→159（85.4%→85.9%），全局 \leanverified 1516→1519（+3），总标注 1533→1536（+3），body 覆盖 1452→1455（13.8%），commit a619817
+**Phase R370: scan error measure stability + CD laws audit + weight distribution（完整）**：SPG/ScanErrorMeasure.lean + CircleDimension/CircleDim.lean + Folding/MomentTriple.lean——paper_scanErrorMeasure_stability_package（prop:spg-scan-error-cylinder，扫描误差测度稳定性综合包，SPG）; paper_cdim_laws_audit（prop:cdim-tensor-hom-ext-laws，圆维度张量/Hom/Ext 算律审计包，Circle Dimension）; paper_pom_weight_distribution（prop:fold-groupoid-wedderburn，POM 权重分布综合包，Emergent Arithmetic）——**3 个论文标签条目计入覆盖率**（SPG +1, Circle Dimension +1, Emergent Arithmetic +1）——SPG 103→104（79.8%→80.6%），Circle Dimension 134→135（34.1%→34.4%），Emergent Arithmetic 157→158（84.9%→85.4%），全局 \leanverified 1513→1516（+3），总标注 1530→1533（+3），body 覆盖 1449→1452（13.8%），commit d5cfd08
+**Phase R369: Walsh-Stokes gauge homology + Fredholm 6-10 + E7/E8 Zeckendorf（完整）**：Discussion/StokesGauge.lean + Zeta/DynZeta.lean + GU/ZeckendorfCountClosure.lean——paper_discussion_stokes_gauge_homology_package（thm:discussion-discrete-stokes-gauge-leyang / cor:discussion-thermo-ldp-homology-invariance，离散 Stokes 规范同调包，Discussion）; paper_fredholm_golden_mean_6_10（def:fredholm-determinant，Fredholm 黄金均值 6..10 精确值审计包，Zeta）; paper_gu_e7_e8_zeckendorf（subsec:bdry-tower-zeck-gut-part1，E7/E8 Zeckendorf 维度对齐综合包，GU）——**4 个论文标签条目计入覆盖率**（Discussion +2, Zeta Finite Part +1, Group Unification +1）——Discussion 61→63（91.0%→94.0%），Zeta Finite Part 186→187（4.1%），Group Unification 157→158（33.5%→33.7%），全局 \leanverified 1509→1513（+4），总标注 1526→1530（+4），body 覆盖 1445→1449（13.8%），commit 1fc0a91
 
 **Phase R313: momentSum q-mono instances + collision excess + CircleDimHomData.id + examples（完整）**：Folding/MomentRecurrence.lean + Conclusion/Window6Collision.lean + CircleDimension/CircleDim.lean——momentSum\_q\_mono\_instances（prop:pom-crossq-g-monotone，S_1(m)<S_2(m) for m=4..8 数值验证，POM）; momentSum\_q2\_lt\_q3\_instances（prop:pom-crossq-g-monotone，S_2(m)<S_3(m) for m=4..7 数值验证，POM）; paper\_momentSum\_q\_mono（prop:pom-crossq-g-monotone，q 单调性链论文接口打包，POM）; collision\_excess\_values（prop:fold-groupoid-wedderburn，碰撞超额值 m=2..8 验证，EA）; collision\_excess\_strict\_mono（prop:fold-groupoid-wedderburn，碰撞超额严格单调，EA）; paper\_collision\_excess（prop:fold-groupoid-wedderburn，碰撞超额论文接口打包，EA）; cdimDefect\_id（thm:cdim-defect-chain-rule，恒等同态缺陷为零，CD）; cdimDefect\_surjExample（thm:cdim-defect-chain-rule，满射示例缺陷=1，CD）; cdimDefect\_injExample（thm:cdim-defect-chain-rule，单射示例缺陷=0，CD）; paper\_cdimDefect\_instances（thm:cdim-defect-chain-rule，缺陷实例论文接口打包，CD）——**3 个论文标签条目计入覆盖率**（POM +3, EA +3, CD +4）——POM 271→274（15.9%→16.0%），Emergent Arithmetic 121→124（65.4%→67.0%），Circle Dimension 110→114（28.0%→29.0%），全局 \\leanverified 1280→1290（+10），总标注 1297→1307（+10），commit 4588bdf
 
@@ -621,7 +621,7 @@
 
 | 度量 | 数值 |
 |---|---|
-| 全局覆盖率（body） | ~1,443/9,958 = **~14.5%** |
+| 全局覆盖率（body） | ~1,458/9,958 = **~14.6%** |
 | 强覆盖（一般性 ∀ 证明） | ~65 (0.7%) |
 | 中覆盖（有界 + 条件） | ~162 (1.6%) |
 | 弱覆盖（native_decide / 代理） | ~723 (7.3%) |
