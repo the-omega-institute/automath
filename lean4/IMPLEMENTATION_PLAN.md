@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1490 |
+| \leanverified 标注数 | 1493 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1507 |
-| 轮次 | R363（round_count=364） |
+| 总标注数 | 1510 |
+| 轮次 | R364（round_count=365） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,17 +24,17 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 292 | 17.1% |
+| POM | 1,707 | 293 | 17.2% |
 | Emergent Arithmetic | 185 | 153 | 82.7% |
 | Folding | 337 | 111 | 32.9% |
 | Conclusion | 2,550 | 240 | 9.4% |
 | Group Unification | 469 | 156 | 33.3% |
-| SPG | 129 | 101 | 78.3% |
-| Circle Dimension | 393 | 132 | 33.6% |
+| SPG | 129 | 102 | 79.1% |
+| Circle Dimension | 393 | 133 | 33.8% |
 | Zeta Finite Part | 4,524 | 185 | 4.1% |
 | Discussion | 67 | 60 | 89.6% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1430** | **13.6%** |
+| **合计（body）** | **10,508** | **1433** | **13.6%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**Tanaka-Stokes 完整四合一 + 相谱素数幂审计 + 进位 m6 联合审计（Round R364）**：`paper_spg_tanaka_stokes_complete`（对应 `thm:spg-scan-tanaka-stokes`，SPG；Tanaka--Stokes 分解完整四合一综合包）；`paper_phaseSpectrumCount_prime_power_audit`（对应 `thm:cdim-phase-spectrum-limit`，Circle Dimension；素数幂相谱计数审计包）；`paper_pom_carry_m6_joint_audit`（对应 `thm:pom-stable-addition-carry-defect-unique-element`，POM；m=6 进位缺陷联合审计包）
 **primitive 轨道双素数小值 + GUT Zeckendorf 维度 + Chebyshev 四倍角（Round R363）**：`primitiveOrbitNumerator_two_primes_small`（对应 `prop:zetaK-mobius-primitive`，Zeta；5对小素数 primitive 轨道分子精确验证）；`paper_gu_gut_dimension_zeckendorf`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；GUT 维度 Zeckendorf 分解综合包）；`chebyAdams_quadruple`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 四倍角恒等式）
 **Gödel 前缀整除商 + 矩差分值 + EA Totient Fib 扩展（Round R362）**：`godelEncoding_prefix_dvd` + `godelEncoding_prefix_quotient`（对应 `thm:conclusion-godel-prefix-arithmetic-criterion`，Conclusion；Gödel 编码前缀整除性与商公式）；`paper_momentSum_two_diff_values`（对应 `thm:fold-collision2-aut-lie-dimension-rank`，Emergent Arithmetic；S₂ 差分值上下界综合包）；`paper_ea_totient_fib_extended`（对应 `thm:mul-definitional`，Emergent Arithmetic；totient-Fibonacci 扩展乘法定义包）
 **扫描误差对称差包 + 相谱小挠率 + 纤维直方图回文性（Round R361）**：`paper_scanError_symmDiff_package`（对应 `prop:spg-scan-error-cylinder`，SPG；扫描误差对称差质量上界综合包）；`paper_phaseSpectrumCount_small_torsion`（对应 `thm:cdim-phase-spectrum-limit`，Circle Dimension；有限挠子群相谱计数）；`paper_pom_fiber_histogram_palindrome`（对应 `prop:fold-fiber-count-reciprocity`，Folding；纤维直方图回文对称性）
