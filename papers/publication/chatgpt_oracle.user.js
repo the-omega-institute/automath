@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      4.2
+// @version      4.3
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -68,7 +68,7 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v4.1]</b>
+        <b>[Oracle v4.3]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
@@ -614,6 +614,32 @@
     sentPromptText = text;
   }
 
+  function looksLikePromptEcho(text) {
+    // Detect when extractResponseText returns the USER's message instead of
+    // the assistant's response.  This happens when ChatGPT is still in
+    // extended-thinking mode and the only visible text is the prompt echo
+    // prefixed by "你说：" / "You said:".
+    if (!sentPromptText || sentPromptText.length < 20) return false;
+    const t = text.trim();
+    // 1) Starts with user-message indicator → always a prompt echo
+    if (/^(你说|You said)/i.test(t)) return true;
+    // 2) Strip UI chrome ("你说：", filename, "PDF") and check prompt match
+    const stripped = t
+      .replace(/^(你说|You said)[：:]?\s*/i, "")
+      .replace(/^main(\.pdf)?\s*/i, "")
+      .replace(/^PDF\s*/i, "")
+      .trim();
+    const promptStart = sentPromptText.slice(0, 80).trim();
+    if (stripped.length > 0 && stripped.startsWith(promptStart)) return true;
+    // 3) Short text with high prompt overlap (catches reformatted/truncated echo)
+    if (t.length < sentPromptText.length * 1.5 && t.length > 50) {
+      const chunks = sentPromptText.match(/.{20}/g) || [];
+      const hits = chunks.filter(c => t.includes(c)).length;
+      if (chunks.length > 0 && hits / chunks.length > 0.4) return true;
+    }
+    return false;
+  }
+
   function capturePostSendState() {
     const main = document.querySelector("main");
     const text = main ? (main.innerText || "").trim() : "";
@@ -651,11 +677,13 @@
           const text = (el.innerText || "").trim();
           // Must be substantial and not just our prompt
           if (text.length > 100) {
-            // Quick check it's not the prompt
+            // Reject prompt echoes ("你说：..." or text matching the prompt)
+            if (looksLikePromptEcho(text)) continue;
+            // Legacy check (backup)
             if (sentPromptText.length > 30) {
               const promptStart = sentPromptText.slice(0, 40).trim();
               if (text.startsWith(promptStart) && text.length < sentPromptText.length * 1.2) {
-                continue; // This is just the prompt, skip
+                continue;
               }
             }
             return text;
@@ -745,10 +773,11 @@
 
     // Step 4: Final check — don't return text that IS the prompt
     if (cleaned.length > 5) {
-      // Make sure we're not just returning the prompt itself
+      if (looksLikePromptEcho(cleaned)) return "";
+      // Legacy backup
       const promptStart = sentPromptText.slice(0, 40).trim();
       if (promptStart && cleaned.startsWith(promptStart) && cleaned.length < sentPromptText.length * 1.2) {
-        return ""; // This is just the prompt, not a response
+        return "";
       }
       return cleaned;
     }
@@ -803,6 +832,18 @@
 
       // Only count extracted text that's meaningful
       if (responseText.length >= 5) {
+        // CRITICAL: never accept a prompt echo as a response.
+        // This happens when ChatGPT is in extended thinking and only
+        // the user's message ("你说：...") is visible on the page.
+        if (looksLikePromptEcho(responseText)) {
+          if (stableCount === 0) {
+            log(`Prompt echo detected (${responseText.length} chars) — waiting for real response`);
+          }
+          stableCount = 0;
+          lastText = "";
+          continue;
+        }
+
         if (responseText === lastText) {
           stableCount++;
           // Return when stable AND either not generating, or stable for long
@@ -985,7 +1026,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Oracle Bridge v4.2 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
+    log(`Oracle Bridge v4.3 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
     // Check if we navigated here to process a task on a fresh chat page
     const phase = getTaskPhase();
