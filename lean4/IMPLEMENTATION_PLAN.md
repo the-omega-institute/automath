@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1496 |
+| \leanverified 标注数 | 1499 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1513 |
-| 轮次 | R365（round_count=366） |
+| 总标注数 | 1516 |
+| 轮次 | R366（round_count=367） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -28,13 +28,13 @@
 | Emergent Arithmetic | 185 | 155 | 83.8% |
 | Folding | 337 | 111 | 32.9% |
 | Conclusion | 2,550 | 241 | 9.5% |
-| Group Unification | 469 | 156 | 33.3% |
+| Group Unification | 469 | 157 | 33.5% |
 | SPG | 129 | 102 | 79.1% |
 | Circle Dimension | 393 | 133 | 33.8% |
-| Zeta Finite Part | 4,524 | 185 | 4.1% |
-| Discussion | 67 | 60 | 89.6% |
+| Zeta Finite Part | 4,524 | 186 | 4.1% |
+| Discussion | 67 | 61 | 91.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1436** | **13.7%** |
+| **合计（body）** | **10,508** | **1439** | **13.7%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**偶长校正部分和 + window-8 Fibonacci 审计 + Chebyshev at-3 扩展（Round R366）**：`evenLengthCorrection_partial_sum`（对应 `cor:xi-time-part73c-fixed-parameter-necklace-correction`，Zeta；偶长 necklace 校正核的部分和公式）；`paper_gu_window8_fib_audit`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window-8 Fibonacci 对齐综合审计包）；`paper_chebyAdams_at_three_extended`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 在 n=3 处的扩展恒等式包）
 **Gödel 编码单调性 + EA 后继迭代加法 + S₃ 矩值包（Round R365）**：`godelEncoding_mono_of_le`（对应 `thm:conclusion-godel-semidirect-law`，Conclusion；Gödel 编码关于列表长度的单调性）；`paper_ea_successor_arithmetic`（对应 `cor:add-from-successor`，Emergent Arithmetic；加法由后继迭代给出的综合包）；`paper_momentSum_three_values`（对应 `prop:fold-groupoid-wedderburn`，Emergent Arithmetic；S₃ 矩精确值综合包）
 **Tanaka-Stokes 完整四合一 + 相谱素数幂审计 + 进位 m6 联合审计（Round R364）**：`paper_spg_tanaka_stokes_complete`（对应 `thm:spg-scan-tanaka-stokes`，SPG；Tanaka--Stokes 分解完整四合一综合包）；`paper_phaseSpectrumCount_prime_power_audit`（对应 `thm:cdim-phase-spectrum-limit`，Circle Dimension；素数幂相谱计数审计包）；`paper_pom_carry_m6_joint_audit`（对应 `thm:pom-stable-addition-carry-defect-unique-element`，POM；m=6 进位缺陷联合审计包）
 **primitive 轨道双素数小值 + GUT Zeckendorf 维度 + Chebyshev 四倍角（Round R363）**：`primitiveOrbitNumerator_two_primes_small`（对应 `prop:zetaK-mobius-primitive`，Zeta；5对小素数 primitive 轨道分子精确验证）；`paper_gu_gut_dimension_zeckendorf`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；GUT 维度 Zeckendorf 分解综合包）；`chebyAdams_quadruple`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 四倍角恒等式）
