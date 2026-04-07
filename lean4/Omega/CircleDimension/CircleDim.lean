@@ -319,6 +319,14 @@ theorem cdim_min_ledger_cost_attained (f : CircleDimHomData) :
   refine ⟨f.kernelRank, ?_⟩
   rfl
 
+/-- Paper package for the minimal ledger-cost kernel theorem.
+    thm:cdim-minimal-ledger-cost-kernel -/
+theorem paper_cdim_minimal_ledger_cost_kernel (f : CircleDimHomData) :
+    (∀ R_rank : Nat, f.kernelRank ≤ R_rank → circleDim f.kernelRank 0 ≤ circleDim R_rank 0) ∧
+    (∀ R_rank : Nat, circleDim f.kernelRank 0 ≤ circleDim R_rank 0 ↔ f.kernelRank ≤ R_rank) ∧
+    (∃ R_rank : Nat, circleDim f.kernelRank 0 = circleDim R_rank 0) := by
+  exact ⟨cdim_min_ledger_cost f, cdim_min_ledger_cost_iff f, cdim_min_ledger_cost_attained f⟩
+
 /-- cdimDefect is positive iff kernelRank is positive.
     thm:cdim-defect-chain-rule -/
 theorem cdimDefect_pos_iff (f : CircleDimHomData) :

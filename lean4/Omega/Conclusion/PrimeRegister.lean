@@ -236,6 +236,12 @@ theorem godelLift_binary_width_lower (m : Nat) (hm : 2 ≤ m) :
   calc m / 2 = Nat.log 2 (2 ^ (m / 2)) := (Nat.log_pow (by norm_num) (m / 2)).symm
     _ ≤ Nat.log 2 (Nat.fib (m + 2)) := Nat.log_mono_right (fib_lower_bound m hm)
 
+/-- Paper package for divisor-lattice optimal bit scaling.
+    thm:conclusion-divisor-lattice-optimal-bit-scaling -/
+theorem paper_godelLift_divisor_lattice_width_bounds (m : Nat) (hm : 2 ≤ m) :
+    m / 2 ≤ Nat.log 2 (Nat.fib (m + 2)) ∧ Nat.log 2 (Nat.fib (m + 2)) ≤ m := by
+  exact ⟨godelLift_binary_width_lower m hm, godelLift_binary_width_upper m (by omega)⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R133: Binary-fiber Gödel lift instances
 -- ══════════════════════════════════════════════════════════════
@@ -398,6 +404,13 @@ theorem godelLift_ternary_axis_lower (m k : Nat)
     (hfeas : X.maxFiberMultiplicity m ≤ 3 ^ k) :
     Nat.log 3 (X.maxFiberMultiplicity m) ≤ k :=
   godelLift_axis_lower_bound k 2 (X.maxFiberMultiplicity m) (by omega) hfeas
+
+/-- Paper package for fixed-axis exponential amplitude.
+    cor:conclusion-fixed-axis-exponential-amplitude -/
+theorem paper_godelLift_fixed_axis_exponential_amplitude :
+    (∀ m k : Nat, X.maxFiberMultiplicity m ≤ 2 ^ k → Nat.log 2 (X.maxFiberMultiplicity m) ≤ k) ∧
+    (∀ m k : Nat, X.maxFiberMultiplicity m ≤ 3 ^ k → Nat.log 3 (X.maxFiberMultiplicity m) ≤ k) := by
+  exact ⟨godelLift_binary_axis_lower, godelLift_ternary_axis_lower⟩
 
 /-- A linear-density Gödel lift with one event per step requires at least five symbols.
     thm:conclusion-godel-five-symbol-threshold -/
