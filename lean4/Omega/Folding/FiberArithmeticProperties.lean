@@ -939,6 +939,16 @@ theorem paper_ea_ring_iso_core :
    fun _ x => stableValue_lt_fib x,
    fun _ x y => stableValue_stableAdd x y⟩
 
+/-- EA successor arithmetic: bijection, inverse, iterated add = mul.
+    cor:add-from-successor -/
+theorem paper_ea_successor_arithmetic :
+    (∀ m : Nat, Function.Bijective (stableSucc (m := m))) ∧
+    (∀ (m : Nat) (x : X m), stablePred (stableSucc x) = x) ∧
+    (∀ (m : Nat) (_hm : 1 ≤ m) (x y : X m),
+      iteratedStableAdd x (stableValue y) = stableMul y x) :=
+  ⟨fun m => stableSucc_bijective m, fun _ x => stablePred_stableSucc x,
+   fun _ hm x y => iteratedStableAdd_eq_stableMul x y hm⟩
+
 end X
 
 /-- Euler totient of Fibonacci numbers.

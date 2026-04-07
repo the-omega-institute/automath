@@ -1288,4 +1288,11 @@ theorem paper_momentSum_two_diff_values :
     momentSum_two_four, momentSum_two_five, momentSum_two_six]
   omega
 
+/-- S_3 concrete values at m=6,7.
+    prop:fold-groupoid-wedderburn -/
+theorem paper_momentSum_three_values :
+    momentSum 3 6 = 820 ∧
+    momentSum 3 7 = 2504 := by
+  exact ⟨momentSum_three_six, momentSum_three_seven⟩
+
 end Omega

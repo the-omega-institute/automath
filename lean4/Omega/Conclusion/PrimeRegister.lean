@@ -883,4 +883,26 @@ theorem godelEncoding_prefix_quotient (primes : ℕ → ℕ) (offset : ℕ) (u v
     godelEncoding primes (offset + u.length) v := by
   rw [godelEncoding_append, Nat.mul_div_cancel_left _ (godelEncoding_pos primes offset u hp)]
 
+/-- Gödel encoding is monotone in each exponent.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_mono_of_le (primes : ℕ → ℕ) (offset : ℕ) (u v : List ℕ)
+    (hlen : u.length = v.length)
+    (hp : ∀ i, 1 < primes i)
+    (hle : ∀ (i : Fin u.length), u[i] ≤ v[i.val]'(by omega)) :
+    godelEncoding primes offset u ≤ godelEncoding primes offset v := by
+  rw [godelEncoding_prod_finset, godelEncoding_prod_finset]
+  rw [hlen]
+  apply Finset.prod_le_prod
+  · intro i _
+    exact Nat.zero_le _
+  · intro i hi
+    simp only [Finset.mem_range] at hi
+    have hi' : i < u.length := by omega
+    have hle_i := hle ⟨i, hi'⟩
+    -- u[i]! = u[i] when i < u.length
+    have hu : u[i]! = u[i]'hi' := by simp [List.getElem!_eq_getElem?_getD, List.getElem?_eq_getElem hi']
+    have hv : v[i]! = v[i]'(by omega) := by simp [List.getElem!_eq_getElem?_getD, List.getElem?_eq_getElem (by omega : i < v.length)]
+    rw [hu, hv]
+    exact Nat.pow_le_pow_right (by linarith [hp (offset + i)]) hle_i
+
 end Omega.Conclusion
