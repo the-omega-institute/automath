@@ -78,6 +78,19 @@ theorem godelLift_fold8_option1 : (20 + 1) ^ 1 ≥ 21 := by omega
 theorem godelLift_fold8_option2 : (4 + 1) ^ 2 ≥ 21 := by omega
 theorem godelLift_fold8_option3 : (2 + 1) ^ 3 ≥ 21 := by omega
 
+/-- Paper: fold tower lower-bound certificates.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem paper_godelLift_fold_tower_bounds :
+    3 ≤ (2 + 1) ^ 1 ∧
+    5 ≤ (2 + 1) ^ 2 ∧
+    8 ≤ (2 + 1) ^ 2 ∧
+    13 ≤ (3 + 1) ^ 2 ∧
+    21 ≤ (4 + 1) ^ 2 ∧
+    34 ≤ (5 + 1) ^ 2 := by
+  refine ⟨godelLift_fold4, godelLift_fold5_k2, godelLift_fold6_option2,
+    godelLift_fold7_option2, godelLift_fold8_option2, ?_⟩
+  omega
+
 /-- Binary register (E=1) for Fold_4: 2 bits suffice since 2^2=4 ≥ D(4)=3.
     subsec:conclusion-bounded-prime-register-godel-scaling -/
 theorem godelLift_binary_fold4 : (1 + 1) ^ 2 ≥ 3 := by omega

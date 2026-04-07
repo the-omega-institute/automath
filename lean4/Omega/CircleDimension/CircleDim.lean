@@ -686,6 +686,20 @@ theorem paper_phaseSpectrumCount_reconstruction_iff
     intro N hN
     rfl
 
+/-- Paper core package for phase-spectrum reconstruction.
+    thm:cdim-phase-spectrum-reconstruction -/
+theorem paper_phaseSpectrumCount_reconstruction_core
+    {r r' t t' : Nat} (ht : 0 < t) (ht' : 0 < t')
+    (h : ∀ N : Nat, 1 ≤ N → phaseSpectrumCount r t N = phaseSpectrumCount r' t' N) :
+    (r = r' ∧ t = t') ∧
+    (r = r') ∧
+    (r = r' → t = t') := by
+  rcases phaseSpectrumCount_reconstruction ht ht' h with ⟨hr, htEq⟩
+  refine ⟨⟨hr, htEq⟩, hr, ?_⟩
+  intro hrr'
+  subst hrr'
+  exact htEq
+
 /-- One-sided phase-spectrum reconstruction recovers the free rank.
     thm:cdim-phase-spectrum-reconstruction -/
 theorem phaseSpectrumCount_reconstruction_one_sided
@@ -1062,6 +1076,21 @@ theorem paper_phaseSpectrumCount_rank2 :
     phaseSpectrumCount 2 6 6 = 216 := by
   simp only [phaseSpectrumCount]
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
+
+/-- Paper core package for phase-spectrum limit behavior.
+    thm:cdim-phase-spectrum-limit -/
+theorem paper_phaseSpectrumCount_limit_core :
+    (∀ k : Nat, phaseSpectrumCount 1 3 (2 ^ k) = (2 ^ k) ^ 1) ∧
+    phaseSpectrumCount 1 4 2 = 4 ∧
+    phaseSpectrumCount 1 4 4 = 16 ∧
+    (∀ k : Nat, phaseSpectrumCount 1 2 (3 ^ k) = (3 ^ k) ^ 1) ∧
+    (phaseSpectrumCount 2 6 6 = 216) := by
+  refine ⟨?_, by native_decide, by native_decide, ?_, ?_⟩
+  · intro k
+    exact phaseSpectrumCount_coprime 1 3 (2 ^ k) (Nat.Coprime.pow_right k (by decide))
+  · intro k
+    exact phaseSpectrumCount_coprime 1 2 (3 ^ k) (Nat.Coprime.pow_right k (by decide))
+  · exact paper_phaseSpectrumCount_rank2.2.2.2.2.2
 
 /-- Circle dimension tensor-hom-ext laws audit.
     prop:cdim-tensor-hom-ext-laws -/
