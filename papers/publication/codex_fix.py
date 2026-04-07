@@ -89,7 +89,7 @@ def run_codex(prompt: str, paper_dir: Path, model: str = None, timeout: int = 36
 
     try:
         # On Windows, .cmd wrappers need shell=True
-        use_shell = sys.platform == "win32" and codex_bin.endswith(".cmd")
+        use_shell = sys.platform == "win32" and codex_bin.lower().endswith(".cmd")
         result = subprocess.run(
             cmd,
             cwd=str(paper_dir),
