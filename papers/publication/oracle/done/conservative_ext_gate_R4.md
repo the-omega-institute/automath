@@ -1,130 +1,51 @@
-<!-- oracle metadata: {"timestamp": "2026-04-06T18:44:41.630371", "model": "o3-mini-high", "response_length": 19709} -->
+<!-- oracle metadata: {"timestamp": "2026-04-07T07:58:41.632531", "model": "o3-mini-high", "response_length": 21812} -->
 
-I have reviewed the attached manuscript. My recommendation is Reject in its present form. The paper is ambitious and sometimes conceptually suggestive, but it is not currently publishable as a research article. The main problems are structural: the site-theoretic foundation is incomplete, the gerbe layer is largely conditional on extra data that are not constructed or verified in a substantive class of examples, the passage from Čech representatives to derived 
+I reviewed the uploaded manuscript. My recommendation is Reject. The paper contains a potentially interesting conceptual distinction, especially between the presentation-level subgroup 
+𝐻
+𝛼
+H
+α
+	​
+
+ and the homologically intrinsic subgroup 
+𝐾
+𝜔
+K
+ω
+	​
+
+, and between branch-sensitive and branch-uniform visibility. However, the current version is not publishable because several central claims are not established under the paper’s own definitions, one headline non-definability theorem is proved only in a weaker form than stated, one worked example is mathematically incorrect, and the bibliography is missing while citation placeholders remain throughout the PDF. 
+
+main
+
+1. Overall assessment
+
+Decision: Reject
+
+The decisive reasons are these.
+
+First, the foundational “conservative extension chain” is not actually proved at the base interface 
+𝐿
+0
+⪯
+𝐿
+1
+L
+0
+	​
+
+⪯L
+1
+	​
+
+ under Definition 2.2. The paper’s own definition requires a projection from every higher-layer state to a lower-layer state preserving lower-layer forcing. Proposition 2.5(i) only gives an embedding of singleton pointwise states into information states. That is a different notion.
+
+Second, the entire Section 4 machinery uses site-theoretic and stack-theoretic tools, sheafification, stackification, slice sites, Čech nerves, torsors, gerbes, and comparisons with derived 
 𝐻
 2
 H
 2
- and neutrality is not stated under usable hypotheses, and a large portion of the algebraic section amounts to reformulating standard universal-coefficient and finite-duality facts in new notation. The PDF also contains unresolved citation placeholders and severe encoding corruption. 
-
-main
-
-Relative to standard sources on sheafification and topos semantics, gerbes and stackification, and sheaf-theoretic contextuality, much of the mathematics here appears to be a repackaging of known constructions rather than a genuinely new theorematic advance. The likely genuinely new content is much narrower: a restricted logical separation statement, and a semantic reinterpretation of the 
-Ext
-⁡
-Ext-summand as a blind sector. That is not enough, as currently written, to support the headline novelty claims of Theorems A to C. 
-arXiv
-+7
-Springer Link
-+7
-PhilPapers
-+7
-
-1. Overall assessment
-
-Reject.
-
-The manuscript would need a substantial reconception, not merely revision. In particular, the current submission does not yet establish a publishable combination of:
-
-a complete categorical foundation,
-
-a nontrivial class of models satisfying the semantic hypotheses,
-
-a mathematically sharp main theorem whose novelty goes beyond standard sheaf, gerbe, and UCT technology. 
-
-main
-
-2. Novelty rating for each theorem
-
-Current numbering varies across drafts, but in the attached version the relevant theorem labels are as follows. My ratings are for the mathematical novelty, not for expository packaging. 
-
-main
-
-Headline claims
-
-Theorem A. MEDIUM. The sheafification half is standard, but the restricted automorphism-invariant undefinability statement is the paper’s main genuinely nontrivial logical observation.
-
-Theorem B. LOW. This is mostly a conditional semantic repackaging of standard stack and gerbe facts, with the essential realization hypotheses left external.
-
-Theorem C. MEDIUM. The semantic reading of the UCT image and cokernel is conceptually interesting, but the underlying algebra is standard.
-
-Section 4
-
-Theorem 4.6. LOW. Standard characterization of matching families via sheafification, once a genuine site is in place.
-
-Theorem 4.11. LOW. It packages extra hypotheses needed later. It does not supply new mathematics.
-
-Theorem 4.17. LOW. Identification of visible classes with sections of the sheafification and with 
-𝜋
-0
-π
-0
-	​
-
- of the stackification is standard.
-
-Theorem 4.28. LOW. Formal consequence of persistence plus the preceding trichotomy.
-
-Theorem 4.30. MEDIUM. Potentially interesting, but only for a narrow comparison class of lower-language formulas.
-
-Theorem 4.32. LOW. Standard fact that the fiber over a connected-component section is a gerbe.
-
-Theorem 4.35. LOW. Classical Čech 2-cocycle construction for banded gerbes under acyclicity assumptions.
-
-Theorem 4.39. LOW. Synthesis of previous lemmas plus classical gerbe classification input.
-
-Theorem 4.41. LOW. Universal property of quotienting by the subgroup generated by cocycle values.
-
-Theorem 4.42. LOW. Standard annihilator and dual-group reformulation.
-
-Theorem 4.45. LOW. Fiber-counting lower bound.
-
-Theorem 4.53. LOW. Direct consequence of the UCT map and finite Pontryagin duality.
-
-Theorem 4.55. LOW. Quotient-by-image universal property restated in UCT language.
-
-Theorem 4.62. MEDIUM. The semantic interpretation of pure 
-Ext
-⁡
-Ext-type classes as blind is conceptually nice, but algebraically immediate from the UCT exact sequence.
-
-Theorem 4.69. LOW. Primary decomposition compatibility.
-
-Theorem 4.73. LOW. Kernel of a diagonal quotient map equals an intersection. Standard.
-
-Theorem 4.74. LOW. Standard annihilator identity.
-
-Theorem 4.76. LOW. Third isomorphism theorem in disguise.
-
-Theorem 4.80. LOW. Another fiber-counting lower bound.
-
-Theorem 4.83. LOW. Max-fiber lower bound.
-
-Theorem 4.87. MEDIUM. Potentially useful bridge to contextuality, but mathematically it is mainly a translation under strong assumptions.
-
-Section 5 and Appendix
-
-Theorem 5.12. LOW. Formal monotonicity under strong pullback-compatibility assumptions.
-
-Theorem A.1. LOW. Routine complexity upper bounds.
-
-3. Issue table
-
-The following are the principal problems that must be addressed. 
-
-main
-
-ID	Section	Severity	Description	Suggested fix
-B1	4.1 to 4.2	BLOCKER	
-𝐶
-𝑝
-,
-𝑠
-C
-p,s
-	​
-
- is declared to be a site, but only a refinement relation and families of covers are given. No Grothendieck pretopology axioms, pullback stability, transitivity, or finite-intersection machinery are verified. Later sheaf and stack arguments rely on a genuine site.	Define 
+, without first imposing enough categorical and topological structure on 
 𝐵
 𝑝
 ,
@@ -133,72 +54,872 @@ B
 p,s
 	​
 
- as a small category, specify a Grothendieck pretopology on it, and rewrite compatibility on pullbacks or finite meets.
-B2	4.3	BLOCKER	The “gluing-sensitive realization prestack” is not constructed. Theorem 4.11 is a packaging of assumptions, not a realization theorem. The paper’s own text admits the later obstruction theory is conditional on such extra data.	Either construct 
-𝑃
-𝑟
-P
-r
-	​
-
- in a substantive class of models, or explicitly demote the gerbe layer to a conditional framework.
-B3	4.7 to 4.10	BLOCKER	Theorem 4.35 and the final equivalence in 4.39 depend on a vague statement that a chosen cofinal family of covers computes derived 
-𝐻
-2
-H
-2
-. No usable hypothesis is given for when Čech cohomology, branch classes, and gerbe neutrality coincide.	State precise acyclicity and Čech-to-derived comparison hypotheses, then prove refinement compatibility and neutrality equivalence under those hypotheses.
-B4	4.10 to 4.11	BLOCKER	The algebraic core is presented as major new theorematic content, but many results are essentially immediate from the UCT, finite abelian duality, or elementary quotient theory.	Reframe novelty. Demote standard algebraic consequences to propositions or lemmas and isolate one genuinely new semantic theorem.
-B5	Global	BLOCKER	The manuscript has unresolved citation placeholders [?], incomplete or absent bibliography in the provided PDF, and corrupted typography throughout.	Repair the LaTeX source, supply a complete bibliography, and ensure every invoked external theorem is properly cited.
-B6	4, especially 4.9 to 4.12	BLOCKER	No non-artificial example verifies the full hypothesis chain, site, prestack, global conservativity, finite nerve presentation, and band trivialization, in a single natural model.	Add one end-to-end worked model satisfying all assumptions and compute 
-𝜔
-ω, 
-𝑒
+ and 
+𝐶
+𝑜
 𝑣
-𝜔
-ev
-ω
+𝑝
+,
+𝑠
+Cov
+p,s
 	​
 
-, 
+ to justify those constructions rigorously.
+
+Third, Theorem 4.30, as currently stated, does not prove non-definability of 
+C
+o
+m
+p
+S
+e
+c
+s
+CompSecs. The proof separates 
+S
+e
+c
+s
+Secs and 
+N
+u
+l
+l
+g
+l
+u
+e
+Nullglue, but not 
+C
+o
+m
+p
+S
+e
+c
+s
+CompSecs.
+
+Fourth, Example 4.66 contains a false conclusion about admissible characters in the maximal-collapse case. If 
 𝐾
 𝜔
+=
+𝐴
 K
 ω
 	​
 
-, and 
-𝐴
-v
-i
-s
-𝜔
-A
-vis
-ω
+=A, then only the trivial character is class-admissible. The example states the opposite.
+
+Fifth, the manuscript is not in a reviewable submission state from an editorial perspective because unresolved “[?]” placeholders remain throughout and the uploaded PDF has no usable reference list. 
+
+main
+
+2. Novelty rating for each theorem
+
+I rate the numbered theorems, not the umbrella labels “Theorem A/B/C”.
+
+Theorem	Rating	One-line justification
+4.6	LOW	Standard identification of matching families with sections of the sheafification, once a genuine site is fixed.
+4.11	LOW	This is essentially a packaging of sufficient hypotheses, not a substantive mathematical theorem.
+4.17	LOW	The identification of visible presentations with 
+(
+𝑎
+𝐹
+)
+(
+𝑎
+)
+(aF)(a) and then with 
+𝜋
+0
+(
+𝐿
+𝑟
+)
+(
+𝑎
+)
+π
+0
+	​
+
+(L
+r
+	​
+
+)(a) is formal once the setup is corrected.
+4.28	LOW	Immediate consequence of persistence plus the null trichotomy.
+4.30	MEDIUM	The restricted undefinability idea is potentially interesting, but the present proof does not establish the full claim.
+4.32	LOW	Standard fact that a connected-component fiber of a banded stack is a banded gerbe.
+4.35	LOW	Standard Čech obstruction construction for a banded gerbe under 
+𝐻
+1
+H
+1
+-vanishing assumptions.
+4.39	MEDIUM	The branch-indexed formulation of gluing failure is conceptually interesting, though heavily conditional and mostly repackaging known gerbe semantics.
+4.41	LOW	Universal property of quotienting by the subgroup generated by cocycle values.
+4.42	LOW	Dual reformulation of Theorem 4.41 via finite character theory.
+4.45	LOW	Simple fiber-counting lower bound.
+4.53	LOW	Formal consequence of the universal coefficient sequence plus finite abelian duality.
+4.55	LOW	Exact-sequence factorization statement with limited independent novelty.
+4.62	MEDIUM	The “pure Ext-type blind regime” is the paper’s sharpest conceptual point, though mathematically it is still a formal UCT consequence.
+4.69	LOW	Primary decomposition bookkeeping.
+4.73	LOW	Kernel computation by the first isomorphism theorem.
+4.74	LOW	Standard annihilator formula for sums of subgroups.
+4.76	LOW	Third isomorphism theorem in branchwise notation.
+4.80	LOW	Another fiber-counting argument.
+4.83	LOW	Another counting bound.
+4.87	MEDIUM	Potentially interesting contextuality translation, but largely a reformulation under strong hypotheses.
+5.12	LOW	Naturality and pullback monotonicity.
+A.1	LOW	Routine complexity upper bounds.
+
+There is no theorem here that I would rate HIGH in its present form.
+
+3. Issue table
+ID	Section	Severity	Description	Suggested fix
+B1	§2, Prop. 2.5(i)	BLOCKER	
+𝐿
+0
+⪯
+𝐿
+1
+L
+0
+	​
+
+⪯L
+1
+	​
+
+ is not a conservative extension in the sense of Definition 2.2. The paper gives only singleton embedding, not a state projection for all 
+𝐿
+1
+L
+1
+	​
+
+-states.	Replace the base interface by a separate “singleton embedding” notion, or redefine the chain to start at 
+𝐿
+1
+L
+1
 	​
 
 .
-M1	4.4	MEDIUM	The proof of Theorem 4.17 says “the stalk of 
-𝑎
+B2	Throughout	BLOCKER	The PDF still contains unresolved citation placeholders and no reference list.	Supply a complete bibliography and replace every placeholder with an actual citation.
+B3	§§4.1–4.12	BLOCKER	The site/sheaf/stack framework is under-specified. The paper uses sheafification, slice sites, pullbacks, Čech nerves, torsors, gerbes, and derived 
+𝐻
+2
+H
+2
+ without imposing enough axioms on 
+𝐵
 𝑝
 ,
 𝑠
+B
+p,s
+	​
+
+ and 
+𝐶
+𝑜
+𝑣
+𝑝
+,
+𝑠
+Cov
+p,s
+	​
+
+.	Make 
+𝐵
+𝑝
+,
+𝑠
+B
+p,s
+	​
+
+ a genuine small category or preorder site with pullbacks/meets and a Grothendieck pretopology. Rewrite all overlap arguments using pullbacks or binary meets.
+B4	Thm. 4.30	BLOCKER	The theorem claims non-definability of 
+C
+o
+m
+p
+S
+e
+c
+s
+CompSecs, 
+S
+e
+c
+s
+Secs, and 
+N
+u
+l
+l
+g
+l
+u
+e
+Nullglue, but the given construction only separates 
+S
+e
+c
+s
+Secs and 
+N
+u
+l
+l
+g
+l
+u
+e
+Nullglue.	Either weaken the theorem to those two predicates, or restore a four-reference construction that separately distinguishes 
+C
+o
+m
+p
+S
+e
+c
+s
+CompSecs.
+B5	Ex. 4.66	BLOCKER	The example states that when 
+𝐾
+𝜔
+=
+𝐴
+K
+ω
+	​
+
+=A, every character is class-admissible. This contradicts Theorem 4.53.	Replace that sentence by the correct conclusion: only the trivial character is class-admissible.
+M1	Thm. 4.17	MEDIUM	The proof says “the stalk of 
+𝑎
+𝐹
+aF at 
+𝑎
+a”. Here 
+𝑎
+a is an object, not a point.	Replace “stalk” by “value at the object 
+𝑎
+a”.
+M2	Thms. 4.35, 4.39	MEDIUM	The manuscript moves ambiguously between Čech 
+𝐻
+2
+H
+2
+, colimits over covers, and derived 
+𝐻
+2
+H
+2
+, without a precise comparison hypothesis.	State an explicit comparison assumption and keep theorems either purely Čech-theoretic or derived-theoretic.
+M3	§4.8	MEDIUM	Terms such as “gauge-invariant global readout”, “path-dependent”, and “observable” are not formally defined in the semantic framework.	Either define them precisely, or replace them by purely algebraic factorization statements.
+M4	§5, App. A	MEDIUM	“Agreement of the 
+𝐾
+K-information” and “axes agree” are not formally defined, yet complexity claims depend on them.	Introduce explicit axis-information maps and restate support definitions in those terms.
+M5	Intro, Abstract, Conclusion	MEDIUM	The rhetoric overstates the results. “Logically necessary” is proved only relative to a narrow automorphism-invariant pointwise fragment.	Weaken the wording everywhere to reflect the actual comparison class and hypotheses.
+L1	Thm. 4.11	LOW	This is a roadmap statement, not really a theorem.	Recast as a proposition or remark.
+L2	Terminology throughout	LOW	Terminology slips between “visible branches”, “global connected components”, “typed readout”, and actual sheaf-theoretic objects.	Standardize notation and terminology, and avoid suggestive language not backed by definitions.
+L3	Examples	LOW	Several examples rely on existence claims for covers, trivializations, or representing gerbes without explicit construction inside the paper.	Add a brief construction or a lemma justifying those existence steps.
+4. Missing references
+
+At minimum, the paper should cite the core contextuality, cohomology, topos, and gerbe references on which its claims explicitly rely.
+
+The most important omissions are these:
+
+Abramsky and Brandenburger (2011) for the sheaf-theoretic no-global-section framework for contextuality. 
+arXiv
+
+Abramsky, Mansfield, and Barbosa (2012) for the cohomological obstruction approach to non-locality and contextuality. 
+arXiv
++1
+
+Abramsky, Barbosa, Kishida, Lal, and Mansfield (2015) for the broader cohomological/topological contextuality picture. 
+arXiv
+
+Carù (2017) for cohomological incompleteness and blind cases, which the manuscript explicitly claims to refine. 
+arXiv
++1
+
+Okay, Roberts, Bartlett, and Raussendorf (2017) and Okay, Tyhurst, and Raussendorf (2018) for topological and cohomological refinements of contextuality. 
+arXiv
++1
+
+Mac Lane and Moerdijk, Sheaves in Geometry and Logic, Giraud, Cohomologie non abélienne, and the Stacks Project entries on sheaves, stacks, and gerbes, since these are precisely the tools being used in Section 4. 
+The Stacks Project
++3
+Springer
++3
+Springer
++3
+
+Tierney and Fitting for forcing/topos semantics background invoked in the introduction. 
+sciencedirect.com
++1
+
+5. Specific improvements needed to reach acceptance
+
+The manuscript would need a substantial structural rewrite before it could be reconsidered.
+
+First, the foundational semantics in Section 2 must be repaired. As written, the layer chain is not valid under the manuscript’s own definition.
+
+Second, Section 4 must be rebuilt on a genuine site-theoretic foundation. Right now, the paper uses highly nontrivial machinery without the hypotheses needed to support it.
+
+Third, all theorem/proof mismatches and incorrect examples must be corrected. In particular, Theorem 4.30 and Example 4.66 are not minor typos. They affect the central narrative.
+
+Fourth, the paper needs a real bibliography and a genuine literature positioning section. At present, the novelty claims are impossible to evaluate charitably because the references are absent.
+
+Fifth, the exposition should be drastically tightened. Many low-level quotient/counting propositions can remain, but they should be clearly presented as corollaries of the central homological observation, not as headline results of equal weight.
+
+Sixth, the semantic vocabulary in Section 5 must be formalized, especially if the appendix is to remain.
+
+6. Concrete fixes for each BLOCKER and MEDIUM issue
+B1. Fix the base interface 
+𝐿
+0
+⪯
+𝐿
+1
+L
+0
+	​
+
+⪯L
+1
+	​
+
+
+Problem. Definition 2.2 requires, for every 
+𝑀
+∈
+M
+o
+d
+1
+M∈Mod
+1
+	​
+
+, a projection
+
+𝜋
+1
+,
+0
+𝑀
+:
+S
+t
+1
+(
+𝑀
+)
+→
+S
+t
+0
+(
+𝑈
+1
+,
+0
+(
+𝑀
+)
+)
+π
+1,0
+M
+	​
+
+:St
+1
+	​
+
+(M)→St
+0
+	​
+
+(U
+1,0
+	​
+
+(M))
+
+such that for every lower-layer formula 
+𝜑
+φ,
+
+𝑀
+,
+𝑝
+⊩
+1
+𝜑
+  
+⟺
+  
+𝑈
+1
+,
+0
+(
+𝑀
+)
+,
+𝜋
+1
+,
+0
+𝑀
+(
+𝑝
+)
+⊩
+0
+𝜑
+.
+M,p⊩
+1
+	​
+
+φ⟺U
+1,0
+	​
+
+(M),π
+1,0
+M
+	​
+
+(p)⊩
+0
+	​
+
+φ.
+
+But an information state 
+𝑝
+=
+(
+Γ
+,
+𝑅
+)
+p=(Γ,R) with 
+∣
+𝑅
+∣
+>
+1
+∣R∣>1 cannot, in general, be projected to a single pointwise assignment while preserving forcing of all formulas.
+
+Actionable repair. Replace the present setup by one of the following.
+
+Option A. Split the notion.
+
+Keep Definition 2.2 for actual conservative extensions.
+
+Introduce a separate notion of singleton semantic embedding:
+
+𝜄
+0
+,
+1
+𝑀
+:
+S
+t
+0
+(
+𝑈
+1
+,
+0
+(
+𝑀
+)
+)
+↪
+S
+t
+1
+(
+𝑀
+)
+,
+𝜌
+↦
+(
+Γ
+,
+{
+𝜌
+}
+)
+,
+ι
+0,1
+M
+	​
+
+:St
+0
+	​
+
+(U
+1,0
+	​
+
+(M))↪St
+1
+	​
+
+(M),ρ↦(Γ,{ρ}),
+
+satisfying
+
+𝑀
+,
+𝜄
+0
+,
+1
+𝑀
+(
+𝜌
+)
+⊩
+1
+𝜑
+  
+⟺
+  
+𝑈
+1
+,
+0
+(
+𝑀
+)
+,
+𝜌
+⊩
+0
+𝜑
+.
+M,ι
+0,1
+M
+	​
+
+(ρ)⊩
+1
+	​
+
+φ⟺U
+1,0
+	​
+
+(M),ρ⊩
+0
+	​
+
+φ.
+
+Then state the chain as
+
+𝐿
+0
+↪
+𝐿
+1
+⪯
+𝐿
+2
+⪯
+𝐿
+3
+⪯
+𝐿
+4
+.
+L
+0
+	​
+
+↪L
+1
+	​
+
+⪯L
+2
+	​
+
+⪯L
+3
+	​
+
+⪯L
+4
+	​
+
+.
+
+Option B. Remove 
+𝐿
+0
+⪯
+𝐿
+1
+L
+0
+	​
+
+⪯L
+1
+	​
+
+ entirely from the conservative-extension chain, and start the actual chain at 
+𝐿
+1
+L
+1
+	​
+
+.
+
+This is the mathematically cleanest fix.
+
+B2. Fix the bibliography and placeholders
+
+Problem. The manuscript is not in a citable state.
+
+Actionable repair. Add a complete bibliography and replace every placeholder. At minimum, insert explicit citations in the following places.
+
+Introduction, first paragraph on contextuality: Abramsky and Brandenburger (2011). 
+arXiv
+
+Cohomological obstruction discussion: Abramsky, Mansfield, and Barbosa (2012), plus Carù (2017). 
+arXiv
++1
+
+Topos/forcing background: Fitting, Tierney, Mac Lane and Moerdijk. 
+sciencedirect.com
++2
+sciencedirect.com
++2
+
+Gerbes and non-abelian descent: Giraud and Stacks Project. 
+Springer
++1
+
+This is not optional. The current PDF is not editorially review-ready.
+
+B3. Replace the ad hoc “local reference frame” by a genuine site
+
+Problem. Theorems 4.6, 4.17, 4.35, and 4.39 all require actual overlap objects or pullbacks.
+
+Actionable repair. Replace Definitions 4.2 and 4.4(ii) by the following.
+
+Revised Definition. For each 
+(
+𝑝
+,
+𝑠
+)
+(p,s), let 
+𝐵
+𝑝
+,
+𝑠
+B
+p,s
+	​
+
+ be a small category, preferably a thin category attached to a preorder, with finite pullbacks. Let 
+𝐶
+𝑜
+𝑣
+𝑝
+,
+𝑠
+Cov
+p,s
+	​
+
+ be a Grothendieck pretopology on 
+𝐵
+𝑝
+,
+𝑠
+B
+p,s
+	​
+
+. Thus:
+
+{
+1
+𝑎
+:
+𝑎
+→
+𝑎
+}
+{1
+a
+	​
+
+:a→a} is covering.
+
+If 
+{
+𝑢
+𝑖
+→
+𝑎
+}
+{u
+i
+	​
+
+→a} is covering and 
+𝑏
+→
+𝑎
+b→a, then 
+{
+𝑢
+𝑖
+×
+𝑎
+𝑏
+→
+𝑏
+}
+{u
+i
+	​
+
+×
+a
+	​
+
+b→b} is covering.
+
+If 
+{
+𝑢
+𝑖
+→
+𝑎
+}
+{u
+i
+	​
+
+→a} is covering and 
+{
+𝑢
+𝑖
+𝑗
+→
+𝑢
+𝑖
+}
+{u
+ij
+	​
+
+→u
+i
+	​
+
+} is covering for each 
+𝑖
+i, then 
+{
+𝑢
+𝑖
+𝑗
+→
+𝑎
+}
+{u
+ij
+	​
+
+→a} is covering.
+
+Let 
 𝐹
 𝑝
 ,
 𝑠
-a
-p,s
-	​
-
+:
+𝐵
+𝑝
+,
+𝑠
+𝑜
+𝑝
+→
+𝑆
+𝑒
+𝑡
 F
 p,s
 	​
 
- at 
+:B
+p,s
+op
+	​
+
+→Set be a presheaf.
+
+Revised compatibility condition.
+
+𝑀
+,
+𝑝
+⊩
+C
+o
+m
+p
+S
+e
+c
+s
+(
+𝑟
+)
+M,p⊩CompSecs(r)
+
+means there exists a cover 
+{
+𝑢
+𝑖
+→
 𝑎
-a”, but 
+}
+{u
+i
+	​
+
+→a} with 
 𝑎
 =
 [
@@ -209,337 +930,211 @@ a=[r]
 p
 	​
 
- is an object of the site, not a point.	Replace “stalk” by “section over the object 
-𝑎
-a”, or introduce an actual point of the topos if a stalk is intended.
-M2	Abstract, 1, 4.6	MEDIUM	The abstract and introduction claim broad pointwise inexpressibility, but Theorem 4.30 proves only a restricted automorphism-invariant undefinability result with syntactic restrictions.	Narrow the prose claims to match the theorem, or prove a stronger model-theoretic separation result.
-M3	4.8	MEDIUM	Terms such as “gauge-invariant global readout” and “path-dependent” are used without formal definition.	Define the gauge action on cocycles and define readout invariance precisely before using this language.
-M4	4.10	MEDIUM	The finite nerve presentation assumes trivialization of the band on the chosen cover so coefficients become constant 
-𝐴
-A, but the scope of this assumption is not discussed.	Either restrict the theory to trivialized locally constant bands, or rewrite the homological section with local coefficient systems.
-M5	4.12	MEDIUM	The Abramsky–Brandenburger comparison is only a translation under strong assumptions. The paper does not prove that actual empirical models satisfy unique-branch, realization-prestack, or global-conservativity hypotheses.	State and prove sufficient conditions on support presheaves of empirical models, or weaken the claim to a purely formal translation.
-M6	5	MEDIUM	The refinement-dynamics layer is mostly formal and only loosely connected to the main theorematic content.	Either derive it naturally from the site/refinement geometry or move most of it to an appendix.
-L1	4.9, 4.11	LOW	Examples are mainly engineered toy constructions or topological illustrations, not semantic applications.	Mark them as consistency checks, not evidence of broad applicability.
-L2	Global	LOW	Theorem inflation obscures the real contribution.	Reclassify many statements as propositions, lemmas, or remarks.
-L3	Global	LOW	Notation is overloaded and terminology is unstable across layers.	Add a notation table and keep the same symbols and names throughout.
-L4	Appendix A	LOW	The complexity section gives only routine upper bounds and is disconnected from the core mathematical contribution.	Shorten or move to supplementary material.
-4. Missing references
-
-At minimum, the following standard works should be cited explicitly and consistently, rather than left as placeholders:
-
-Mac Lane and Moerdijk, Sheaves in Geometry and Logic. Essential for the site, sheafification, and topos-semantic background. 
-Springer Link
-
-Johnstone, Sketches of an Elephant. Standard reference for topos and sheaf-theoretic background, which the manuscript explicitly gestures toward. 
-PhilPapers
-+1
-
-Giraud, Cohomologie non abélienne. Standard source for banded gerbes, neutrality, and 
-𝐻
-2
-H
-2
--classification. 
-Springer Link
-
-Stacks Project, Tags 02ZP, 042Y, 06NY. Directly relevant to stackification, stacks in setoids, and gerbes. 
-The Stacks Project
-+2
-The Stacks Project
-+2
-
-Abramsky and Brandenburger (2011), The Sheaf-Theoretic Structure of Non-Locality and Contextuality. Required for the contextuality bridge. 
-arXiv
-
-Abramsky, Mansfield, and Soares Barbosa (2011/2012), The Cohomology of Non-Locality and Contextuality. Required for the cohomological contextuality discussion. 
-arXiv
-
-Abramsky, Barbosa, Kishida, Lal, and Mansfield (2015), Contextuality, Cohomology and Paradox. Relevant for the topological and cohomological contextuality interpretation. 
-arXiv
-
-Carù (2017), On the Cohomology of Contextuality. Essential for the “blind spot” and incompleteness discussion invoked near the end. 
-arXiv
-
-5. Specific improvements needed to reach acceptance
-
-Rebuild the categorical foundation. The local-reference framework must be upgraded from a poset-with-covers sketch to a genuine site or pretopology with the exact hypotheses needed later.
-
-Either construct the realization layer or narrow the claims. The gerbe semantics cannot remain a theorematic centerpiece if the crucial realization prestack is only assumed.
-
-State one precise main theorem with real novelty. At present the paper disperses its contribution across many theorem labels, most of which are algebraically standard.
-
-Provide one full nontrivial example. A publishable version needs at least one model where all assumptions are verified and the visibility quotient is computed completely.
-
-Make the contextuality comparison honest. Either prove that the extra assumptions hold in an important class of empirical models, or present Section 4.12 as a formal dictionary rather than a recovery theorem.
-
-Fix the manuscript at the editorial level. The current PDF is not review-ready because of corrupted symbols and unresolved citations. 
-
-main
-
-6. Concrete fixes for each BLOCKER and MEDIUM issue
-B1. Make 
-𝐶
-𝑝
-,
-𝑠
-C
-p,s
-	​
-
- a genuine site
-
-Replace Definitions 4.2 to 4.4 by a precise categorical setup:
-
-objects: admitted reference classes 
-𝑎
+ and sections 
+𝜎
+𝑖
 ∈
-𝑅
-𝑠
+𝐹
 (
-𝑝
+𝑢
+𝑖
 )
-a∈R
-s
+σ
+i
 	​
 
-(p),
+∈F(u
+i
+	​
 
-morphisms: a unique arrow 
-𝑏
-→
+) such that
+
+𝜎
+𝑖
+∣
+𝑢
+𝑖
+×
 𝑎
-b→a iff 
-𝑏
-⊑
-𝑝
-,
-𝑠
+𝑢
+𝑗
+=
+𝜎
+𝑗
+∣
+𝑢
+𝑖
+×
 𝑎
-b⊑
-p,s
-	​
-
-a, so 
-𝐵
-𝑝
+𝑢
+𝑗
+for all 
+𝑖
 ,
-𝑠
-B
-p,s
+𝑗
+.
+σ
+i
 	​
 
- is a thin category,
-
-covers: a Grothendieck pretopology 
-C
-o
-v
-𝑝
-,
-𝑠
-Cov
-p,s
+∣
+u
+i
 	​
 
- satisfying identity, pullback stability, and transitivity.
+×
+a
+	​
 
-Then either:
+u
+j
+	​
 
-assume finite meets 
-𝑎
+	​
+
+=σ
+j
+	​
+
+∣
+u
+i
+	​
+
+×
+a
+	​
+
+u
+j
+	​
+
+	​
+
+for all i,j.
+
+If you insist on a preorder model, require binary meets 
+𝑢
 𝑖
 ∧
-𝑎
+𝑢
 𝑗
-a
+u
 i
 	​
 
-∧a
+∧u
 j
 	​
 
- exist, and write compatibility on these meets, or
+ representing overlaps, and use those in place of pullbacks.
 
-require fiber products 
-𝑎
-𝑖
-×
-𝑎
-𝑎
-𝑗
-a
-i
-	​
+Then Theorem 4.6 becomes a standard sheafification statement:
 
-×
-a
-	​
-
-a
-j
-	​
-
- to exist and define compatibility on pullbacks.
-
-Only after this should Theorem 4.6 invoke sheafification. In its current form, “common refinement” is not enough to support the site-theoretic machinery.
-
-B2. Construct the realization prestack, or demote the gerbe layer
-
-A mathematically usable fix is to start with a prestack 
-𝑅
+For admitted 
 𝑟
-R
-r
-	​
-
- of actual local realizations, not only isomorphism classes:
-
-𝑈
-⟼
-𝑅
+r with 
+𝑎
+=
+[
 𝑟
-(
-𝑈
-)
-,
-U⟼R
-r
-	​
-
-(U),
-
-where objects are local realizations over 
-𝑈
-U, morphisms are their isomorphisms, and restriction is functorial. Then prove:
-
-𝜋
-0
+]
+𝑝
+a=[r]
 p
-r
+	​
+
+,
+
+𝑀
+,
+𝑝
+⊩
+C
+o
+m
+p
+S
 e
+c
+s
 (
-𝑅
 𝑟
 )
-≅
+  
+⟺
+  
+(
+𝑎
+𝑝
+,
+𝑠
 𝐹
 𝑝
 ,
 𝑠
-∣
-𝐶
+)
+(
 𝑎
+)
+≠
+∅
 .
-π
-0
-pre
-	​
-
-(R
-r
-	​
-
-)≅F
+M,p⊩CompSecs(r)⟺(a
 p,s
 	​
 
-∣
-C
-a
+F
+p,s
 	​
 
-	​
+)(a)
+
+=∅.
 
-.
-
-Assume descent for isomorphisms and effectivity of descent for objects. Then stackify 
-𝑅
-𝑟
-R
-r
-	​
-
- to obtain 
-𝐿
-𝑟
-L
-r
-	​
-
-, and prove global conservativity by showing that every object of 
-𝐿
-𝑟
+Proof sketch. A section of 
+𝑎
+𝐹
+aF at 
+𝑎
+a is an equivalence class of matching families on a cover of 
+𝑎
+a. The revised compatibility condition is exactly the matching condition. Nonemptiness of 
+(
+𝑎
+𝐹
+)
 (
 𝑎
 )
-L
-r
-	​
+(aF)(a) is therefore equivalent to the existence of a compatible local family.
 
-(a) is represented by an honest global realization in 
-𝑅
-𝑟
-(
+This repair also legitimizes the slice site 
+𝐶
 𝑎
-)
-R
-r
-	​
-
-(a). Without such a construction, Section 4.7 should be rewritten as a conditional framework, not as a theorematic result.
-
-B3. State usable Čech-to-derived hypotheses
-
-Introduce a filtered cofinal category 
-C
-o
-v
-𝑣
-a
-c
-y
-c
-(
-𝑎
-)
-Cov
-v
-acyc
-	​
-
-(a) of covers such that for every 
-𝑈
 =
-{
-𝑈
-𝑖
-→
+𝐵
+𝑝
+,
+𝑠
+/
 𝑎
-}
-U={U
-i
+C
+a
 	​
 
-→a} in it,
+=B
+p,s
+	​
 
-𝐻
-1
-(
+/a, the Čech nerve 
 𝑈
 𝑖
 0
 ⋯
 𝑖
 𝑛
-,
-𝐴
-)
-=
-0
-H
-1
-(U
+U
 i
 0
 	​
@@ -550,9 +1145,828 @@ n
 
 	​
 
-,A)=0
+, and the gerbe arguments later on.
 
-for all nonempty intersections needed in the descent argument, and such that the comparison map
+B4. Correct Theorem 4.30
+
+Problem. The current proof only distinguishes 
+S
+e
+c
+s
+Secs and 
+N
+u
+l
+l
+g
+l
+u
+e
+Nullglue, not 
+C
+o
+m
+p
+S
+e
+c
+s
+CompSecs.
+
+Actionable repair. Either weaken the theorem, or prove the stronger statement.
+
+Minimal repair
+
+Replace the conclusion by:
+
+Consequently, no automorphism-invariant pointwise 
+F
+o
+r
+m
+1
+Form
+1
+	​
+
+-formula in the stated comparison class defines either 
+S
+e
+c
+s
+Secs or 
+N
+u
+l
+l
+g
+l
+u
+e
+Nullglue.
+
+Full repair
+
+Restore the older four-reference construction. Use two automorphism pairs.
+
+𝑟
+1
+,
+𝑟
+2
+r
+1
+	​
+
+,r
+2
+	​
+
+ with identical lower-layer reduct data, but
+
+C
+o
+m
+p
+S
+e
+c
+s
+(
+𝑟
+1
+)
+∧
+S
+e
+c
+s
+(
+𝑟
+1
+)
+,
+C
+o
+m
+p
+S
+e
+c
+s
+(
+𝑟
+2
+)
+∧
+¬
+S
+e
+c
+s
+(
+𝑟
+2
+)
+.
+CompSecs(r
+1
+	​
+
+)∧Secs(r
+1
+	​
+
+),CompSecs(r
+2
+	​
+
+)∧¬Secs(r
+2
+	​
+
+).
+
+𝑟
+3
+,
+𝑟
+4
+r
+3
+	​
+
+,r
+4
+	​
+
+ with identical lower-layer reduct data, but
+
+C
+o
+m
+p
+S
+e
+c
+s
+(
+𝑟
+3
+)
+,
+L
+o
+c
+S
+e
+c
+s
+(
+𝑟
+4
+)
+∧
+¬
+C
+o
+m
+p
+S
+e
+c
+s
+(
+𝑟
+4
+)
+.
+CompSecs(r
+3
+	​
+
+),LocSecs(r
+4
+	​
+
+)∧¬CompSecs(r
+4
+	​
+
+).
+
+A concrete local-object construction is:
+
+For 
+𝑟
+3
+r
+3
+	​
+
+: objects 
+𝑐
+3
+≤
+𝑢
+3
+≤
+𝑎
+3
+c
+3
+	​
+
+≤u
+3
+	​
+
+≤a
+3
+	​
+
+, 
+𝑐
+3
+≤
+𝑣
+3
+≤
+𝑎
+3
+c
+3
+	​
+
+≤v
+3
+	​
+
+≤a
+3
+	​
+
+, cover 
+{
+𝑢
+3
+→
+𝑎
+3
+,
+𝑣
+3
+→
+𝑎
+3
+}
+{u
+3
+	​
+
+→a
+3
+	​
+
+,v
+3
+	​
+
+→a
+3
+	​
+
+}, and
+
+𝐹
+(
+𝑢
+3
+)
+=
+𝐹
+(
+𝑣
+3
+)
+=
+𝐹
+(
+𝑐
+3
+)
+=
+{
+∗
+}
+,
+𝐹
+(
+𝑎
+3
+)
+=
+∅
+,
+F(u
+3
+	​
+
+)=F(v
+3
+	​
+
+)=F(c
+3
+	​
+
+)={∗},F(a
+3
+	​
+
+)=∅,
+
+with identity restrictions. Then 
+C
+o
+m
+p
+S
+e
+c
+s
+(
+𝑟
+3
+)
+CompSecs(r
+3
+	​
+
+) holds.
+
+For 
+𝑟
+4
+r
+4
+	​
+
+: same frame, but
+
+𝐹
+(
+𝑢
+4
+)
+=
+{
+𝜎
+𝑢
+}
+,
+𝐹
+(
+𝑣
+4
+)
+=
+{
+𝜎
+𝑣
+}
+,
+𝐹
+(
+𝑐
+4
+)
+=
+{
+0
+,
+1
+}
+,
+𝐹
+(
+𝑎
+4
+)
+=
+∅
+,
+F(u
+4
+	​
+
+)={σ
+u
+	​
+
+},F(v
+4
+	​
+
+)={σ
+v
+	​
+
+},F(c
+4
+	​
+
+)={0,1},F(a
+4
+	​
+
+)=∅,
+
+with
+
+r
+e
+s
+𝑐
+4
+𝑢
+4
+(
+𝜎
+𝑢
+)
+=
+0
+,
+r
+e
+s
+𝑐
+4
+𝑣
+4
+(
+𝜎
+𝑣
+)
+=
+1.
+res
+c
+4
+	​
+
+u
+4
+	​
+
+	​
+
+(σ
+u
+	​
+
+)=0,res
+c
+4
+	​
+
+v
+4
+	​
+
+	​
+
+(σ
+v
+	​
+
+)=1.
+
+Then 
+L
+o
+c
+S
+e
+c
+s
+(
+𝑟
+4
+)
+LocSecs(r
+4
+	​
+
+) holds, but 
+C
+o
+m
+p
+S
+e
+c
+s
+(
+𝑟
+4
+)
+CompSecs(r
+4
+	​
+
+) fails.
+
+Now add a lower-layer automorphism swapping 
+𝑟
+3
+r
+3
+	​
+
+ and 
+𝑟
+4
+r
+4
+	​
+
+, preserving all realizations in 
+𝑅
+𝑝
+R
+p
+	​
+
+. This separates 
+C
+o
+m
+p
+S
+e
+c
+s
+CompSecs as required.
+
+B5. Correct Example 4.66
+
+Problem. The example currently concludes “every character channel is class-admissible” in the case 
+𝐾
+𝜔
+=
+𝐴
+K
+ω
+	​
+
+=A. That is false.
+
+Actionable repair. Replace the relevant sentence by:
+
+Since 
+𝐾
+𝜔
+=
+𝐴
+K
+ω
+	​
+
+=A, Theorem 4.53 gives
+
+𝑋
+𝜔
+=
+A
+n
+n
+(
+𝐾
+𝜔
+)
+=
+A
+n
+n
+(
+𝐴
+)
+=
+{
+1
+}
+,
+X
+ω
+	​
+
+=Ann(K
+ω
+	​
+
+)=Ann(A)={1},
+
+so only the trivial character is class-admissible. Equivalently,
+
+𝐴
+v
+i
+s
+𝜔
+=
+𝐴
+/
+𝐾
+𝜔
+=
+0.
+A
+vis
+ω
+	​
+
+=A/K
+ω
+	​
+
+=0.
+
+Then the comparison with the 
+𝑅
+𝑃
+2
+RP
+2
+ example becomes correct:
+
+𝑅
+𝑃
+2
+RP
+2
+-type nerve: 
+𝐾
+𝜔
+=
+0
+K
+ω
+	​
+
+=0, all characters admissible, blind Ext-type obstruction.
+
+𝑆
+2
+S
+2
+-type nerve: 
+𝐾
+𝜔
+=
+𝐴
+K
+ω
+	​
+
+=A, only the trivial character admissible, maximally 
+𝐻
+2
+H
+2
+	​
+
+-visible obstruction.
+
+M1. Correct the proof language in Theorem 4.17
+
+Problem. “Stalk at 
+𝑎
+a” is wrong.
+
+Actionable repair. Replace the theorem and proof wording by:
+
+There is a canonical bijection
+
+V
+i
+s
+𝑝
+,
+𝑠
+(
+𝑟
+)
+≅
+(
+𝑎
+𝑝
+,
+𝑠
+𝐹
+𝑝
+,
+𝑠
+)
+(
+𝑎
+)
+≅
+𝜋
+0
+(
+𝐿
+𝑟
+)
+(
+𝑎
+)
+.
+Vis
+p,s
+	​
+
+(r)≅(a
+p,s
+	​
+
+F
+p,s
+	​
+
+)(a)≅π
+0
+	​
+
+(L
+r
+	​
+
+)(a).
+
+Proof sketch.
+An element of 
+(
+𝑎
+𝐹
+)
+(
+𝑎
+)
+(aF)(a) is an equivalence class of matching families on covers of 
+𝑎
+a. By definition, visible value classes are exactly such equivalence classes. The second identification follows from
+
+𝜋
+0
+(
+𝑎
+𝑃
+)
+≅
+𝑎
+(
+𝜋
+0
+𝑝
+𝑟
+𝑒
+(
+𝑃
+)
+)
+.
+π
+0
+	​
+
+(aP)≅a(π
+0
+pre
+	​
+
+(P)).
+
+Also replace “global connected components of the realization stack” by “global sections of the sheaf of connected components”.
+
+M2. Make Čech versus derived cohomology precise
+
+Problem. The current text slides between three objects:
+
+𝐻
+ˇ
+2
+(
+𝑈
+,
+𝐴
+)
+H
+ˇ
+2
+(U,A) for a fixed cover,
 
 l
 i
@@ -560,18 +1974,57 @@ m
 →
 ⁡
 𝑈
-∈
-C
-o
-v
-𝑣
+𝐻
+ˇ
+2
+(
+𝑈
+,
+𝐴
+)
+lim
+	​
+
+U
+	​
+
+H
+ˇ
+2
+(U,A),
+
+derived 
+𝐻
+2
+(
+𝐶
+𝑎
+,
+𝐴
+)
+H
+2
+(C
 a
-c
-y
-c
+	​
+
+,A).
+
+These are not automatically the same.
+
+Actionable repair. Introduce an explicit hypothesis.
+
+Hypothesis (Cech2). For the chosen cofinal family 
+𝑈
+⊂
+𝐶
+𝑜
+𝑣
 (
 𝑎
 )
+U⊂Cov(a), the canonical comparison maps
+
 𝐻
 ˇ
 2
@@ -581,9 +2034,6 @@ c
 𝐴
 )
 →
-  
-∼
-  
 𝐻
 2
 (
@@ -592,12 +2042,47 @@ c
 ,
 𝐴
 )
-U∈Cov
-v
-acyc
+H
+ˇ
+2
+(U,A)→H
+2
+(C
+a
 	​
 
-(a)
+,A)
+
+are refinement-compatible and induce an isomorphism
+
+l
+i
+m
+→
+⁡
+𝑈
+∈
+𝑈
+𝐻
+ˇ
+2
+(
+𝑈
+,
+𝐴
+)
+→
+∼
+𝐻
+2
+(
+𝐶
+𝑎
+,
+𝐴
+)
+.
+U∈U
 lim
 	​
 
@@ -616,57 +2101,273 @@ H
 a
 	​
 
-,A)
+,A).
 
-is an isomorphism. Then prove that refinement sends the cocycle class on 
-𝑈
-U to the cocycle class on any refinement 
-𝑉
-V, so 
-𝜔
-𝑣
-ω
-v
+Then state Theorem 4.39 as:
+
+Without (Cech2): non-neutrality is equivalent to nonvanishing of the Čech branch class in the filtered colimit.
+
+With (Cech2): non-neutrality is equivalent to nonvanishing in derived 
+𝐻
+2
+(
+𝐶
+𝑎
+,
+𝐴
+)
+H
+2
+(C
+a
 	​
 
- is well-defined. Only under this hypothesis can one identify
+,A).
 
-𝜔
-𝑣
-=
-0
-  
-⟺
-  
-𝐺
-𝑣
- is neutral
+This is the correct level of precision.
+
+M3. Remove or define the “gauge-invariant readout” language
+
+Problem. The semantic vocabulary in Theorems 4.42 and 4.43 is not formally connected to the earlier forcing semantics.
+
+Actionable repair. The safest fix is to remove that vocabulary and state only the algebra.
+
+For example, replace the end of Theorem 4.42 by:
+
+Consequently, a character 
+𝜒
+:
+𝐴
+→
+𝑇
+χ:A→T is admissible exactly when it factors through the quotient
+
+𝜋
+:
+𝐴
+↠
+𝐴
+v
+i
+s
+,
+π:A↠A
+vis
+	​
+
+,
+
+equivalently when 
+𝜒
+χ is trivial on 
+𝐻
+𝛼
+H
+α
+	​
+
 .
-ω
-v
+
+That is mathematically clean and already sufficient for all later algebraic consequences.
+
+If you want the semantic language, then formally define a character channel as a natural transformation from the obstruction datum to the constant torus sheaf, and prove factorization in that category. At present, this is not done.
+
+M4. Formalize “agreement of 
+𝐾
+K-information” in Section 5
+
+Problem. Definitions 5.6 and 5.7 are not mathematical definitions as written.
+
+Actionable repair. Introduce explicit axis-information maps
+
+i
+n
+f
+o
+𝑗
+:
+{
+𝑞
+∣
+𝑝
+⇝
+𝐾
+𝑞
+}
+→
+𝐼
+𝑗
+,
+info
+j
 	​
 
-=0⟺G
-v
+:{q∣p⇝
+K
 	​
 
- is neutral.
+q}→I
+j
+	​
 
-This is the standard gerbe classification framework of Giraud and the Stacks Project. 
-Springer Link
-+2
-The Stacks Project
-+2
+,
 
-B4. Reframe the algebraic core
+for each axis 
+𝑗
+∈
+𝐽
+j∈J, and define:
 
-Section 4.10 should be reorganized around one substantive theorem and several short lemmas. The algebraic statements
+𝑞
+q and 
+𝑟
+r agree on 
+𝐾
+K-information iff
+
+i
+n
+f
+o
+𝑗
+(
+𝑞
+)
+=
+i
+n
+f
+o
+𝑗
+(
+𝑟
+)
+∀
+𝑗
+∈
+𝐾
+.
+info
+j
+	​
+
+(q)=info
+j
+	​
+
+(r)∀j∈K.
+
+In Definition 5.7, “all axes in 
+𝐾
+∖
+{
+𝑗
+}
+K∖{j} agree” means
+
+i
+n
+f
+o
+𝑖
+(
+𝑞
+)
+=
+i
+n
+f
+o
+𝑖
+(
+𝑟
+)
+∀
+𝑖
+∈
+𝐾
+∖
+{
+𝑗
+}
+.
+info
+i
+	​
+
+(q)=info
+i
+	​
+
+(r)∀i∈K∖{j}.
+
+Then Appendix A becomes meaningful only after adding to the input model the tables for these information maps and equality tests on them.
+
+M5. Tone down the headline claims
+
+Problem. The manuscript repeatedly states unconditional conclusions that are only proved under a highly restricted comparison class.
+
+Actionable repair. Replace phrases such as
+
+“the local-object enrichment is logically necessary”
+
+by
+
+“the predicates 
+C
+o
+m
+p
+S
+e
+c
+s
+CompSecs, 
+S
+e
+c
+s
+Secs, and 
+N
+u
+l
+l
+g
+l
+u
+e
+Nullglue are not definable in the automorphism-invariant pointwise fragment of the 
+𝐿
+1
+L
+1
+	​
+
+-reduct considered in Theorem 4.30.”
+
+Similarly, replace
+
+“The paper recovers the Abramsky–Brandenburger picture”
+
+by
+
+“Under assumptions (i)–(iv), the paper recovers the no-global-section criterion in the support-presheaf setting.”
+
+This is not cosmetic. It is necessary for correctness.
+
+Final editorial recommendation
+
+The manuscript should not be accepted in its current form. My recommendation is Reject, with the suggestion that the author extract the genuinely promising part of the paper into a shorter and more rigorous revision built around the following core package:
+
+a corrected site-theoretic setup,
+
+a clean theorem identifying
 
 𝐾
 𝜔
 =
-Im
-⁡
+I
+m
 (
 𝑒
 𝑣
@@ -683,6 +2384,7 @@ s
 /
 𝐾
 𝜔
+,
 K
 ω
 	​
@@ -700,475 +2402,10 @@ vis
 ω
 	​
 
-
-are definitions plus direct consequences of the UCT and finite duality. Present them as preparatory algebra. The real theorem should instead say something like:
-
-For a verified semantic model 
-(
-𝐹
-𝑝
 ,
-𝑠
-,
-𝑃
-𝑟
-,
-𝐴
-,
-𝜔
-)
-(F
-p,s
-	​
 
-,P
-r
-	​
+a correct statement of the Ext-only blind regime,
 
-,A,ω), the semantically detectable quotient is 
-𝐴
-v
-i
-s
-𝜔
-=
-coker
-⁡
-(
-𝑒
-𝑣
-𝜔
-)
-A
-vis
-ω
-	​
+a restrained contextuality comparison with complete references.
 
-=coker(ev
-ω
-	​
-
-), and pure 
-Ext
-⁡
-Ext-classes are exactly the character-blind obstructions.
-
-That would make the semantic interpretation, rather than the algebra itself, the central contribution.
-
-B5. Repair references and typesetting completely
-
-This is non-negotiable. Every occurrence of [?] must be replaced by an actual citation. Every invoked result must be traceable. The current PDF also has corrupted characters in fundamental terms such as “sheafification”, “Čech”, and “coefficient”. A clean source build should be produced before any further mathematical assessment.
-
-B6. Add one full end-to-end example
-
-A minimal acceptable example would verify all of the following in one place:
-
-(
-𝐹
-𝑝
-,
-𝑠
-,
- 
-𝐶
-𝑎
-,
- 
-𝑃
-𝑟
-,
- 
-𝐴
-,
- 
-𝜔
-,
- 
-𝑒
-𝑣
-𝜔
-,
- 
-𝐾
-𝜔
-,
- 
-𝐴
-v
-i
-s
-𝜔
-)
-.
-(F
-p,s
-	​
-
-,C
-a
-	​
-
-,P
-r
-	​
-
-,A,ω,ev
-ω
-	​
-
-,K
-ω
-	​
-
-,A
-vis
-ω
-	​
-
-).
-
-The example should not be only a disjoint union engineered to force the desired conclusion. It should come from a natural model, ideally from a support presheaf or a standard gerbe on a concrete site, and should explicitly check global conservativity, the finite nerve presentation, and the coefficient trivialization assumption.
-
-M1. Correct Theorem 4.17
-
-Replace the sentence about “the stalk of 
-𝑎
-𝑝
-,
-𝑠
-𝐹
-𝑝
-,
-𝑠
-a
-p,s
-	​
-
-F
-p,s
-	​
-
- at 
-𝑎
-a” by the correct statement:
-
-(
-𝑎
-𝑝
-,
-𝑠
-𝐹
-𝑝
-,
-𝑠
-)
-(
-𝑎
-)
-(a
-p,s
-	​
-
-F
-p,s
-	​
-
-)(a)
-
-is the set of equivalence classes of matching families over covers of the object 
-𝑎
-a. If stalks are really needed, introduce an actual point 
-𝜉
-ξ of the topos and write
-
-(
-𝑎
-𝑝
-,
-𝑠
-𝐹
-𝑝
-,
-𝑠
-)
-𝜉
-=
-l
-i
-m
-→
-⁡
-𝜉
-∈
-𝑈
-𝐹
-(
-𝑈
-)
-.
-(a
-p,s
-	​
-
-F
-p,s
-	​
-
-)
-ξ
-	​
-
-=
-ξ∈U
-lim
-	​
-
-	​
-
-F(U).
-
-As written, the proof confuses object-evaluation with stalk-evaluation.
-
-M2. Narrow the logical claim, or prove a stronger one
-
-The abstract and introduction should be revised to say precisely what is proved:
-
-not “pointwise semantics cannot express gluing failure” in general,
-
-but “the predicates are not definable by automorphism-invariant pointwise formulas of the 
-𝐿
-1
-L
-1
-	​
-
--reduct under the syntactic restrictions of Theorem 4.30.”
-
-If the authors want the stronger claim, they need a stronger proof. One possible route would be an Ehrenfeucht–Fraïssé style separation theorem showing that for every quantifier depth 
-𝑛
-n, there are pointwise-reduct-indistinguishable references differing on 
-N
-u
-l
-l
-g
-l
-u
-e
-Nullglue.
-
-M3. Define gauge invariance rigorously
-
-Introduce the gauge action on a chosen cover 
-𝑈
-U:
-
-the set of choices of local trivializations is acted on by 
-𝐶
-1
-(
-𝑈
-,
-𝐴
-)
-C
-1
-(U,A),
-
-replacing 
-𝜑
-𝑖
-𝑗
-φ
-ij
-	​
-
- by 
-𝜑
-𝑖
-𝑗
-ℎ
-𝑖
-𝑗
-−
-1
-φ
-ij
-	​
-
-h
-ij
-−1
-	​
-
- changes the cocycle by
-
-𝑔
-↦
-𝑔
-⋅
-𝛿
-ℎ
-.
-g↦g⋅δh.
-
-Then define a character channel 
-𝜒
-χ to be gauge-invariant iff 
-𝜒
-(
-𝑔
-)
-χ(g) is constant on this orbit. Under that definition, Theorem 4.42 becomes precise:
-
-𝜒
- gauge-invariant 
-  
-⟺
-  
-𝜒
-(
-𝐻
-𝛼
-)
-=
-1.
-χ gauge-invariant ⟺χ(H
-α
-	​
-
-)=1.
-M4. Handle nontrivial coefficient systems honestly
-
-The finite-nerve presentation assumes the band is trivialized on the chosen cover so that the coefficient object is a constant finite abelian group 
-𝐴
-A. This should either be made a standing restriction, or the section should be rewritten using a local coefficient system 
-𝐴
-A on the nerve. In the nontrivial-monodromy case, the correct cohomology is
-
-𝐻
-2
-(
-𝑁
-(
-𝑈
-)
-,
-𝐴
-)
-,
-H
-2
-(N(U),A),
-
-not 
-𝐻
-2
-(
-𝑁
-(
-𝑈
-)
-,
-𝐴
-)
-H
-2
-(N(U),A) with constant coefficients.
-
-M5. Strengthen the contextuality section
-
-The current contextuality comparison should be turned into a theorem with usable hypotheses. A viable route is:
-
-define explicitly the local object functor 
-𝐹
-𝑝
-,
-𝑠
-∣
-𝐶
-𝑎
-F
-p,s
-	​
-
-∣
-C
-a
-	​
-
-	​
-
- associated to an empirical model 
-𝑒
-e,
-
-construct a natural prestack of local realizations for 
-𝑒
-e,
-
-prove when unique-branch behavior holds,
-
-prove when global conservativity holds.
-
-Only after that can one fairly claim that the framework “recovers” the Abramsky–Brandenburger picture. The relevant contextuality literature is well established and should be used more carefully here. 
-arXiv
-+2
-arXiv
-+2
-
-M6. Either integrate Section 5 or cut it back
-
-A useful integration would be to derive Theorem 5.12 from an actual refinement-induced morphism of nerves
-
-𝑁
-(
-𝑈
-𝑞
-)
-→
-𝑁
-(
-𝑈
-𝑝
-)
-,
-N(U
-q
-	​
-
-)→N(U
-p
-	​
-
-),
-
-then use naturality of the UCT map to prove
-
-𝐾
-𝜔
-𝑞
-⊆
-𝐾
-𝜔
-𝑝
-K
-ω
-q
-	​
-
-	​
-
-⊆K
-ω
-p
-	​
-
-	​
-
-
-in a genuine model class. If that cannot be done, most of Section 5 should be moved to an appendix, because at present it reads as a formal afterthought.
-
-In summary, I do not think the manuscript is close to acceptance. There is a potentially interesting paper inside it, but it would require a much tighter theorematic focus, a complete categorical foundation, one real example, and a far more modest account of novelty. 
-
-main
+That would be a plausible basis for a future resubmission.
