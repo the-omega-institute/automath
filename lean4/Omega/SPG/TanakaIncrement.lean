@@ -62,4 +62,21 @@ theorem tanakaDecomposition (seq : ℕ → ℚ) (a : ℚ) (m : ℕ) :
     have := tanakaIncrement_identity (seq m) (seq (m + 1)) a
     linarith
 
+/-- Complete Tanaka-Stokes package: items (1)-(4) of thm:spg-scan-tanaka-stokes.
+    thm:spg-scan-tanaka-stokes -/
+theorem paper_spg_tanaka_stokes_complete :
+    (∀ (x y a : ℚ), 0 ≤ tanakaIncrement x y a) ∧
+    (∀ (seq : ℕ → ℚ) (a : ℚ) (m : ℕ),
+      0 ≤ ∑ k ∈ Finset.range m, tanakaIncrement (seq k) (seq (k + 1)) a) ∧
+    (∀ (seq : ℕ → ℚ) (a : ℚ) (m : ℕ),
+      ∑ k ∈ Finset.range m, tanakaIncrement (seq k) (seq (k + 1)) a ≤
+      ∑ k ∈ Finset.range (m + 1), tanakaIncrement (seq k) (seq (k + 1)) a) ∧
+    (∀ (seq : ℕ → ℚ) (a : ℚ) (m : ℕ),
+      |seq m - a| = |seq 0 - a| +
+        ∑ k ∈ Finset.range m,
+          (if seq k - a > 0 then 1 else if seq k - a < 0 then -1 else 0) *
+            (seq (k + 1) - seq k) +
+        ∑ k ∈ Finset.range m, tanakaIncrement (seq k) (seq (k + 1)) a) :=
+  ⟨tanakaIncrement_nonneg, tanakaLocalTime_nonneg, tanakaLocalTime_mono, tanakaDecomposition⟩
+
 end Omega.SPG

@@ -196,4 +196,11 @@ theorem paper_pom_carry_fib_extended :
 
 end X
 
+/-- m=6 carry threshold and element joint audit.
+    thm:pom-stable-addition-carry-defect-unique-element -/
+theorem paper_pom_carry_m6_joint_audit :
+    Nat.fib 9 = 34 ∧ Nat.fib 8 = 21 ∧ 8 = Nat.fib 6 ∧
+    34 = 21 + 13 ∧ Nat.fib 6 + Nat.fib 7 = Nat.fib 8 := by
+  refine ⟨by native_decide, by native_decide, by native_decide, by omega, by native_decide⟩
+
 end Omega

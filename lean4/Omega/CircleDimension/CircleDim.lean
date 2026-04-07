@@ -1018,4 +1018,17 @@ theorem paper_phaseSpectrumCount_small_torsion :
   simp only [phaseSpectrumCount]
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
 
+/-- Phase spectrum at prime power: coprime/divisible dichotomy.
+    thm:cdim-phase-spectrum-limit -/
+theorem paper_phaseSpectrumCount_prime_power_audit :
+    (∀ k : Nat, phaseSpectrumCount 1 3 (2 ^ k) = (2 ^ k) ^ 1) ∧
+    phaseSpectrumCount 1 4 2 = 4 ∧
+    phaseSpectrumCount 1 4 4 = 16 ∧
+    (∀ k : Nat, phaseSpectrumCount 1 2 (3 ^ k) = (3 ^ k) ^ 1) := by
+  refine ⟨fun k => ?_, by native_decide, by native_decide, fun k => ?_⟩
+  · exact phaseSpectrumCount_coprime 1 3 (2 ^ k)
+      (Nat.Coprime.pow_right k (by decide))
+  · exact phaseSpectrumCount_coprime 1 2 (3 ^ k)
+      (Nat.Coprime.pow_right k (by decide))
+
 end Omega.CircleDimension
