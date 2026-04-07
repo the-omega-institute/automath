@@ -1,6 +1,6 @@
 \subsection{Component gerbes and branched gluing obstructions}\label{sec:gerbe-obstruction}
 
-The stackification $\mathfrak L_r$ may have several global connected components over $a$. Cohomological obstruction theory therefore belongs, in general, not to a single gerbe attached to $r$, but to the component gerbes indexed by the visible value classes of $r$. This subsection is explicitly conditional on the extra realization and comparison data isolated in \Cref{thm:gluing-sensitive-realization}; no unconditional construction of a gluing-sensitive realization prestack is claimed here.
+The sheaf of connected components $\pi_0(\mathfrak L_r)$ may have several global sections over $a$. Cohomological obstruction theory therefore belongs, in general, not to a single gerbe attached to $r$, but to the component gerbes indexed by the visible value classes of $r$. This subsection is explicitly conditional on the extra realization and comparison data isolated in \Cref{thm:gluing-sensitive-realization}; no unconditional construction of a gluing-sensitive realization prestack is claimed here.
 
 The results of this subsection use the following hypotheses; individual statements invoke only the subset they require.
 
@@ -26,6 +26,14 @@ for every nonempty intersection needed in the descent argument through degree $2
 \]
 is an isomorphism.
 \end{enumerate}
+
+\begin{remark}[\v{C}ech versus derived cohomology]\label{rem:cech-vs-derived}
+Hypothesis \ref{hyp:cofinal-gerbe-adapted} is the precise comparison assumption governing the passage between \v{C}ech and derived $H^2$. Without it, the branch obstruction class lives in the filtered colimit
+\[
+\varinjlim_{\mathcal U\in \Cov_v^{\mathrm{acyc}}(a)} \check H^2(\mathcal U,\Band),
+\]
+and the non-neutrality statement in \Cref{thm:cech-bridge-compatible-realizations} is purely \v{C}ech-theoretic. With \ref{hyp:cofinal-gerbe-adapted}, this colimit is canonically identified with the derived $H^2(\mathcal C_a,\Band)$, and the obstruction class $\omega_v$ is an element of derived cohomology. All theorems in this subsection state explicitly whether they use only the \v{C}ech-level data or additionally require the comparison isomorphism.
+\end{remark}
 
 \begin{definition}[Component gerbes and branch obstruction classes]\label{def:compatible-realization-stack}\label{def:cech-gluing-obstruction}
 Fix an admitted reference $r:\mathsf{Ref}_s$ at a state $p$, write
@@ -317,7 +325,11 @@ M,p\Vdash \Null^{\mathrm{glue}}_s(r)
 \ \text{and}\
 \forall v\in \Vis_{p,s}(r),\ \mathfrak G_v\ \text{is non-neutral}.
 \]
-Under the \v{C}ech-to-derived comparison hypothesis already built into \Cref{def:cech-gluing-obstruction}, the last condition is equivalent to
+Without the \v{C}ech-to-derived comparison isomorphism of \ref{hyp:cofinal-gerbe-adapted}, non-neutrality is equivalent to nonvanishing of the \v{C}ech branch class in the filtered colimit over $\Cov_v^{\mathrm{acyc}}(a)$. With the comparison isomorphism, non-neutrality is equivalent to
+\[
+\omega_v\neq 0\ \text{in}\ H^2(\mathcal C_a,\Band)
+\]
+for every $v\in \Vis_{p,s}(r)$. Under the full hypothesis \ref{hyp:cofinal-gerbe-adapted}, the last condition in the preceding display is therefore equivalent to
 \[
 \Vis_{p,s}(r)\neq\varnothing
 \ \text{and}\
@@ -395,20 +407,20 @@ For (ii), the hypothesis $\varphi(\alpha_{ijk})=0$ on every nonempty triple over
 
 The strict quotient $A/H_\alpha$ depends on the chosen cocycle representative $\alpha$, not only on the cohomology class $\omega_v$. The next subsection removes this dependence: the homological evaluation map $\mathrm{ev}_\omega$ is defined from the class itself, and its cokernel---the intrinsic visible quotient $A_{\mathrm{vis}}^\omega$---is a canonical invariant. The comparison between the two quotients is given by \Cref{cor:strict-to-intrinsic-visible} and \Cref{prop:chain-vs-homological-visibility}: every strict visible quotient is a quotient of the intrinsic one, and the gap between them is exactly the gap between the image of the cocycle on all $2$-chains and its image on $2$-cycles.
 
-\begin{definition}[Gauge action and gauge-invariant character channels]\label{def:gauge-invariance-character}
-In the setting of \Cref{def:finite-obstruction-presentation}, the presentation-level gauge group on the chosen cover $\mathcal U$ is the \v{C}ech $1$-cochain group $C^1(\mathcal U,A)$. A cochain
+\begin{definition}[Coboundary action and presentation-invariant character channels]\label{def:gauge-invariance-character}
+In the setting of \Cref{def:finite-obstruction-presentation}, the \v{C}ech $1$-cochain group $C^1(\mathcal U,A)$ acts on cocycles by coboundary translation: a cochain
 \[
 h=(h_{ij})\in C^1(\mathcal U,A)
 \]
-acts on a cocycle $\alpha$ by
+sends a cocycle $\alpha$ to the cohomologous cocycle
 \[
 (h\cdot\alpha)_{ijk}:=\alpha_{ijk}+(\delta h)_{ijk}.
 \]
-A character $\chi\in\widehat A$ is called \emph{gauge-invariant} for the chosen obstruction presentation if it kills the obstruction subgroup $H_\alpha$, equivalently if it factors through the quotient
+A character $\chi\in\widehat A$ is called \emph{presentation-invariant} for the chosen obstruction presentation if it kills the obstruction subgroup $H_\alpha$, equivalently if it factors through the quotient
 \[
 \pi:A\twoheadrightarrow A_{\mathrm{vis}}=A/H_\alpha.
 \]
-In that case the $\chi$-channel depends only on the visible quotient and not on the chosen local trivializations.
+In that case the pushed-forward class $\chi_*[\alpha]$ depends only on the visible quotient and not on the chosen local trivializations.
 \end{definition}
 
 \begin{proposition}[Character channels and the presentation-level visible quotient]\label{thm:character-definability-barrier}
@@ -431,7 +443,7 @@ for every nonempty triple overlap of $\mathcal U$. Then:
 \[
 \widehat{A_{\mathrm{vis}}}\cong H_\alpha^\perp;
 \]
-\item consequently, every globally admissible character channel factors uniquely through $A_{\mathrm{vis}}$, and a character is gauge-invariant for the chosen obstruction presentation if and only if it lies in $H_\alpha^\perp$.
+\item consequently, every globally admissible character channel factors uniquely through $A_{\mathrm{vis}}$, and a character is presentation-invariant for the chosen obstruction presentation if and only if it lies in $H_\alpha^\perp$.
 \end{enumerate}
 \end{proposition}
 
@@ -583,7 +595,7 @@ so \Cref{thm:character-definability-barrier} implies that the globally admissibl
 \qquad\text{and}\qquad
 \chi_2.
 \]
-Hence the only surviving linear observation is parity: $\chi_2$ distinguishes the two cosets of $H_\alpha$, while the phase-sensitive channels $\chi_1$ and $\chi_3$ do not descend to global observables. By \Cref{cor:visible-quotient-character-separation}, the visible quotient is therefore exactly the quotient detected by all globally admissible character channels.
+Hence the only surviving linear detection is parity: $\chi_2$ distinguishes the two cosets of $H_\alpha$, while the phase-sensitive channels $\chi_1$ and $\chi_3$ do not factor through the visible quotient. By \Cref{cor:visible-quotient-character-separation}, the visible quotient is therefore exactly the quotient detected by all globally admissible character channels.
 
 Finally, \Cref{thm:minimal-information-cost-of-strictification} yields
 \[

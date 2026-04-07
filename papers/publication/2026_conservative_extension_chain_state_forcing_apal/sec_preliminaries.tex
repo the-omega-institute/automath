@@ -47,6 +47,26 @@ U_{n,m}(M),\pi^M_{n,m}(p)\Vdash_m \varphi.
 
 Thus a higher layer may add expressive power, state coordinates, or geometric constraints, but it may not alter the forcing behavior of formulas that already belonged to a lower layer.
 
+\begin{definition}[Singleton semantic embedding]\label{def:singleton-semantic-embedding}
+Let $\mathbb{L}_0=(\Sigma_0,\mathrm{Form}_0,\Mod_0,\St_0,\Vdash_0,\models_0)$ and $\mathbb{L}_1=(\Sigma_1,\mathrm{Form}_1,\Mod_1,\St_1,\Vdash_1,\models_1)$. We say that $\mathbb{L}_0$ \emph{embeds into $\mathbb{L}_1$ by a singleton semantic embedding}, written $\mathbb{L}_0\hookrightarrow\mathbb{L}_1$, if there exist
+\begin{enumerate}[label=(\roman*),nosep]
+\item a language embedding $e_{0,1}:\Sigma_0\hookrightarrow\Sigma_1$,
+\item a forgetful functor $U_{1,0}:\Mod_1\to\Mod_0$,
+\item for every $M\in\Mod_1$ and every pointwise state $\rho\in\St_0(U_{1,0}(M))$, a canonical singleton state
+\[
+\iota_{0,1}^M(\rho)\in\St_1(M)
+\]
+\end{enumerate}
+such that for every $\varphi\in\mathrm{Form}_0$,
+\begin{equation}\label{eq:singleton-semantic-embedding}
+M,\iota_{0,1}^M(\rho)\Vdash_1\varphi
+\quad\Longleftrightarrow\quad
+U_{1,0}(M),\rho\Vdash_0\varphi.
+\end{equation}
+\end{definition}
+
+A singleton semantic embedding is weaker than a conservative extension: it provides a state-preserving injection from pointwise states into information states, rather than a state projection defined on all higher-layer states. The inverse map from an arbitrary information state $p=(\Gamma,R)$ with $|R|>1$ to a single pointwise assignment does not exist in general while preserving all $\mathbb{L}_0$-formulas.
+
 \begin{proposition}[Composition of conservative extensions]\label{prop:conservative-composition}
 If $\mathbb{L}_\ell\preceq\mathbb{L}_m$ and $\mathbb{L}_m\preceq\mathbb{L}_n$, then $\mathbb{L}_\ell\preceq\mathbb{L}_n$.
 \end{proposition}
@@ -86,28 +106,28 @@ then every formula belonging to any lower layer keeps the same forcing behavior 
 Apply \Cref{prop:conservative-composition} repeatedly along the chain.
 \end{proof}
 
-The constructions used later fit into the finite chain
+The constructions used later fit into the chain
 \[
 \mathbb{L}_0
-\preceq
+\xhookrightarrow{\iota}
 \mathbb{L}_1
 \preceq
 \mathbb{L}_2
 \preceq
 \mathbb{L}_3
 \preceq
-\mathbb{L}_4.
+\mathbb{L}_4,
 \]
-Here $\mathbb{L}_0$ is the underlying pointwise semantics, $\mathbb{L}_1$ is the information-state forcing layer, $\mathbb{L}_2$ adds local references and local objects, $\mathbb{L}_3$ adds structural absence and gluing-obstruction data, and $\mathbb{L}_4$ adds refinement dynamics. By \Cref{cor:whole-chain-invariance}, the passage up the chain is cumulative rather than revisionary: each later layer preserves the forcing behavior already fixed below.
+where the hooked arrow $\xhookrightarrow{\iota}$ denotes a singleton semantic embedding (\Cref{def:singleton-semantic-embedding}) and each $\preceq$ denotes a conservative extension in the sense of \Cref{def:conservative-extension}. Here $\mathbb{L}_0$ is the underlying pointwise semantics, $\mathbb{L}_1$ is the information-state forcing layer, $\mathbb{L}_2$ adds local references and local objects, $\mathbb{L}_3$ adds structural absence and gluing-obstruction data, and $\mathbb{L}_4$ adds refinement dynamics. By \Cref{cor:whole-chain-invariance} applied to the conservative-extension segment $\mathbb{L}_1\preceq\cdots\preceq\mathbb{L}_4$, the passage up the chain from $\mathbb{L}_1$ onward is cumulative rather than revisionary. The base boundary $\mathbb{L}_0\hookrightarrow\mathbb{L}_1$ is not a conservative extension in the sense of \Cref{def:conservative-extension}: pointwise states embed into information states as singletons (\Cref{prop:singleton-conservativity}), but the inverse projection from an arbitrary multi-realization information state to a single pointwise assignment does not exist in general. This embedding nonetheless preserves forcing of $\mathbb{L}_0$-formulas on the canonical singleton image, which is the property actually used later.
 
 \begin{proposition}[Concrete instantiation of the finite chain]\label{prop:chain-instantiation}
-The four adjacent interfaces of
+The chain
 \[
-\mathbb L_0\preceq \mathbb L_1\preceq \mathbb L_2\preceq \mathbb L_3\preceq \mathbb L_4
+\mathbb L_0\xhookrightarrow{\iota} \mathbb L_1\preceq \mathbb L_2\preceq \mathbb L_3\preceq \mathbb L_4
 \]
-are instantiated as follows.
+is instantiated as follows.
 \begin{enumerate}[label=(\roman*),leftmargin=3em]
-\item \textbf{$\mathbb L_0\leadsto\mathbb L_1$ (pointwise states to information states).}
+\item \textbf{$\mathbb L_0\hookrightarrow\mathbb L_1$ (pointwise states to information states: singleton semantic embedding).}
 The language embedding
 \[
 e_{0,1}:\Sigma_0\hookrightarrow \Sigma_1
@@ -118,15 +138,15 @@ U_{1,0}:\Mod_1\to\Mod_0
 \]
 forgets the information-state presentation and remembers only the underlying many-sorted structure. A pointwise state $\rho$ in $\mathbb L_0$ is represented inside $\mathbb L_1$ by the singleton information state
 \[
-p_\rho:=(\Gamma,\{\rho\}).
+\iota_{0,1}^M(\rho):=(\Gamma,\{\rho\}).
 \]
 By \Cref{prop:singleton-conservativity},
 \[
-M,p_\rho\Vdash_1\varphi
+M,\iota_{0,1}^M(\rho)\Vdash_1\varphi
 \quad\Longleftrightarrow\quad
 U_{1,0}(M),\rho\Vdash_0\varphi
 \]
-for every $\mathbb L_0$-formula $\varphi$. Thus the $\mathbb L_0$--$\mathbb L_1$ boundary is conservative on the canonical singleton image that realizes pointwise semantics inside information-state semantics.
+for every $\mathbb L_0$-formula $\varphi$. This is a singleton semantic embedding in the sense of \Cref{def:singleton-semantic-embedding}: it preserves forcing of $\mathbb L_0$-formulas on the canonical singleton image but does not provide a state projection from arbitrary $\mathbb L_1$-states back to $\mathbb L_0$-states.
 
 \item \textbf{$\mathbb L_1\leadsto\mathbb L_2$ (information states to local objects).}
 The embedding
@@ -191,7 +211,7 @@ U_{4,3}(M),\pi^M_{4,3}(p)\Vdash_3\varphi
 \]
 for every $\varphi\in\mathrm{Form}_3$.
 \end{enumerate}
-Hence every adjacent boundary is conservative in the precise sense actually used later: the base boundary is mediated by the canonical singleton realization of pointwise states, while the higher boundaries use literal forgetful functors and state projections.
+The base boundary $\mathbb L_0\hookrightarrow\mathbb L_1$ is a singleton semantic embedding: pointwise states embed faithfully into information states, preserving the forcing of all $\mathbb L_0$-formulas on that canonical image. The three higher boundaries $\mathbb L_1\preceq\mathbb L_2\preceq\mathbb L_3\preceq\mathbb L_4$ are conservative extensions in the sense of \Cref{def:conservative-extension}, each with an explicit forgetful functor and state projection.
 \end{proposition}
 
-This four-layer chain is the complete setting of the present paper. It is self-contained and does not presuppose any external framework.
+This chain is the complete setting of the present paper. It is self-contained and does not presuppose any external framework. The actual conservative-extension segment starts at $\mathbb L_1$; the lower boundary $\mathbb L_0\hookrightarrow\mathbb L_1$ is a weaker but still useful embedding that faithfully represents pointwise truth inside the information-state layer.

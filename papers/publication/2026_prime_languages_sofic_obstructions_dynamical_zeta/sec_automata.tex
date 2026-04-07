@@ -130,13 +130,49 @@ may equivalently compare a DFA language first with
 \(\abs{\mathcal P_m^{(2)}}\asymp 2^m/m\) is unchanged because every
 prime in \([2^{m-1},2^m)\) already has binary length \(m\).
 
+We first establish the quantitative obstruction that drives both
+corollaries below.
+
+\begin{proposition}[Quantitative recall/precision obstruction]
+  \label{prop:dfa-quantitative-obstruction}
+  Let \(L_m:=L(\mathcal A)\cap\{0,1\}^m\), and define
+  \[
+    \mathrm{Rec}_m
+    :=\frac{\abs{L_m\cap\mathcal P_m^{(2)}}}{\abs{\mathcal P_m^{(2)}}},
+    \qquad
+    \mathrm{Prec}_m
+    :=\frac{\abs{L_m\cap\mathcal P_m^{(2)}}}{\abs{L_m}}
+  \]
+  whenever \(\abs{L_m}>0\).
+  Suppose that there exist
+  \(\delta>0\) and infinitely many integers \(m\) such that
+  \(\mathrm{Rec}_m\ge \delta\) and \(\mathrm{Prec}_m\ge \delta\).
+  Then on those lengths,
+  \[
+    \delta\,\abs{\mathcal P_m^{(2)}}
+    \le \abs{L_m\cap\mathcal P_m^{(2)}}
+    \le \abs{L_m}
+    \le \delta^{-1}\abs{L_m\cap\mathcal P_m^{(2)}}
+    \le \delta^{-1}\abs{\mathcal P_m^{(2)}}.
+  \]
+  In particular, \(\abs{L_m}\asymp 2^m/m\) along infinitely many
+  lengths, contradicting \Cref{thm:dfa-density-dichotomy}.
+\end{proposition}
+
+\begin{proof}
+  The lower bound follows from
+  \(\abs{L_m\cap\mathcal P_m^{(2)}}=\mathrm{Rec}_m\,\abs{\mathcal P_m^{(2)}}\ge\delta\,\abs{\mathcal P_m^{(2)}}\),
+  and the upper bound follows from
+  \(\abs{L_m}=\abs{L_m\cap\mathcal P_m^{(2)}}/\mathrm{Prec}_m\le\delta^{-1}\abs{L_m\cap\mathcal P_m^{(2)}}\le\delta^{-1}\abs{\mathcal P_m^{(2)}}\).
+  Since \(\abs{\mathcal P_m^{(2)}}\asymp 2^m/m\), the displayed chain
+  gives \(\abs{L_m}\asymp 2^m/m\) on an infinite set of lengths. This
+  is impossible by \Cref{thm:dfa-density-dichotomy}.
+\end{proof}
+
 \begin{corollary}[Symmetric-difference lower bound for binary primes]
   \label{cor:dfa-prime-symmetric-diff}
   Let \(L(\mathcal A)\subseteq\{0,1\}^\ast\) be recognised by a fixed
-  DFA \(\mathcal A\), and let
-  \[
-    L_m:=L(\mathcal A)\cap\{0,1\}^m.
-  \]
+  DFA \(\mathcal A\), and let \(L_m:=L(\mathcal A)\cap\{0,1\}^m\).
   Then there exists \(c>0\) such that
   \[
     \abs{L_m\triangle \mathcal P_m^{(2)}}
@@ -169,44 +205,6 @@ prime in \([2^{m-1},2^m)\) already has binary length \(m\).
     \gg 2^m
   \]
   on that progression.
-\end{proof}
-
-\begin{proposition}\label{prop:dfa-quantitative-obstruction}
-  Let \(L_m:=L(\mathcal A)\cap\{0,1\}^m\). Suppose that there exist
-  \(\delta>0\) and infinitely many integers \(m\) such that
-  \[
-    \mathrm{Rec}_m\ge \delta,
-    \qquad
-    \mathrm{Prec}_m\ge \delta,
-  \]
-  where
-  \[
-    \mathrm{Rec}_m
-    :=\frac{\abs{L_m\cap\mathcal P_m^{(2)}}}{\abs{\mathcal P_m^{(2)}}},
-    \qquad
-    \mathrm{Prec}_m
-    :=\frac{\abs{L_m\cap\mathcal P_m^{(2)}}}{\abs{L_m}}.
-  \]
-  Then on those lengths,
-  \[
-    \delta\,\abs{\mathcal P_m^{(2)}}
-    \le \abs{L_m\cap\mathcal P_m^{(2)}}
-    \le \abs{L_m}
-    \le \delta^{-1}\abs{L_m\cap\mathcal P_m^{(2)}}
-    \le \delta^{-1}\abs{\mathcal P_m^{(2)}}.
-  \]
-  In particular, \(\abs{L_m}\asymp 2^m/m\) along infinitely many
-  lengths, contradicting \Cref{thm:dfa-density-dichotomy}.
-\end{proposition}
-
-\begin{proof}
-  The lower bound follows from
-  \(\abs{L_m\cap\mathcal P_m^{(2)}}=\mathrm{Rec}_m\,\abs{\mathcal P_m^{(2)}}\ge\delta\,\abs{\mathcal P_m^{(2)}}\),
-  and the upper bound follows from
-  \(\abs{L_m}=\abs{L_m\cap\mathcal P_m^{(2)}}/\mathrm{Prec}_m\le\delta^{-1}\abs{L_m\cap\mathcal P_m^{(2)}}\le\delta^{-1}\abs{\mathcal P_m^{(2)}}\).
-  Since \(\abs{\mathcal P_m^{(2)}}\asymp 2^m/m\), the displayed chain
-  gives \(\abs{L_m}\asymp 2^m/m\) on an infinite set of lengths. This
-  is impossible by \Cref{thm:dfa-density-dichotomy}.
 \end{proof}
 
 \begin{corollary}[No simultaneous recall and precision for fixed DFA]

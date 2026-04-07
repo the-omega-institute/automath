@@ -364,7 +364,7 @@ Let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$. A \emph{visible 
 as in \Cref{def:existence-levels}(ii). Two visible presentations are called \emph{value-equivalent} if after passage to a common refinement of their covers, the restricted local sections agree pointwise. A \emph{visible value class} is an equivalence class of visible presentations. The set of visible value classes of $r$ at $p$ is denoted by $\Vis_{p,s}(r)$.
 \end{definition}
 
-\begin{proposition}[Visible value classes as global connected components]\label{thm:visible-value-components}
+\begin{proposition}[Visible value classes as sections of the sheaf of connected components]\label{thm:visible-value-components}
 Assume that $r$ admits a realization prestack in the sense of \Cref{def:realization-prestack}. Then
 \[
 \Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a)\cong \pi_0(\mathfrak L_r)(a).
@@ -372,7 +372,7 @@ Assume that $r$ admits a realization prestack in the sense of \Cref{def:realizat
 \end{proposition}
 
 \begin{proof}
-By the standard description of sheafification on a site, a section of $a_{p,s}F_{p,s}$ at $a$ is represented by a matching family over a cover of $a$, modulo passage to common refinements.
+By the standard description of sheafification on a site, the value of the sheafification $a_{p,s}F_{p,s}$ at the object $a$ is the set of matching families over covers of $a$, modulo passage to common refinements.
 
 Concretely, evaluation of the sheafification on the object $a$ is
 \[
@@ -600,16 +600,22 @@ and identify the three reference classes with $a_{\mathrm{loc}},a_{\mathrm{cmp}}
 The three null modes show that information-state forcing distinguishes situations invisible to pointwise semantics. The following result makes this precise in the only pointwise sense established here: the gluing predicates introduced at the local-object layer cannot be reduced to automorphism-invariant formulas of the lower-layer reduct.
 
 \begin{theorem}[Automorphism-invariant pointwise undefinability of gluing predicates]\label{thm:pointwise-irreducibility}
-There exist a model $M$, a state $p=(\Gamma_p,R_p)$, and admitted references $r_1,r_2:\mathsf{Ref}_s$ of the same sort such that:
+There exist a model $M$, a state $p=(\Gamma_p,R_p)$, and admitted references $r_1,r_2,r_3,r_4:\mathsf{Ref}_s$ of the same sort such that:
 \begin{enumerate}[label=(\roman*),nosep]
-\item for every $\rho\in R_p$ and every $\mathrm{Form}_1$-formula $\varphi(x)$ with one free variable $x$, invariant under automorphisms of the $\mathrm{Form}_1$-reduct, containing none of the local-object predicates $\LocSec_s$, $\CompSec_s$, $\Sec_s$, and containing no occurrence of the distinguished constants $r_1,r_2$ other than the substituted variable,
+\item for every $\rho\in R_p$ and every $\mathrm{Form}_1$-formula $\varphi(x)$ with one free variable $x$, invariant under automorphisms of the $\mathrm{Form}_1$-reduct, containing none of the local-object predicates $\LocSec_s$, $\CompSec_s$, $\Sec_s$, and containing no occurrence of the distinguished constants other than the substituted variable,
 \[
 M,\rho\models\varphi(r_1)
-\quad\Longleftrightarrow\quad
-M,\rho\models\varphi(r_2);
+\;\Longleftrightarrow\;
+M,\rho\models\varphi(r_2)
+\;\Longleftrightarrow\;
+M,\rho\models\varphi(r_3)
+\;\Longleftrightarrow\;
+M,\rho\models\varphi(r_4);
 \]
 \item $M,p\Vdash \CompSec_s(r_1)\land \Sec_s(r_1)$;
-\item $M,p\Vdash \CompSec_s(r_2)\land \neg\Sec_s(r_2)$.
+\item $M,p\Vdash \CompSec_s(r_2)\land \neg\Sec_s(r_2)$;
+\item $M,p\Vdash \LocSec_s(r_3)\land \neg\CompSec_s(r_3)$;
+\item $M,p\Vdash \CompSec_s(r_4)\land \neg\Sec_s(r_4)$.
 \end{enumerate}
 Consequently, no $\mathrm{Form}_1$-formula interpreted pointwise and satisfying the invariance condition in \textup{(i)} can define any of the predicates
 \[
@@ -623,25 +629,19 @@ on admitted references.
 \end{theorem}
 
 \begin{proof}
-Take a single state $p$ and one referenceable sort $s$. Introduce two reference terms $r_1,r_2:\mathsf{Ref}_s$ with $[r_1]_p\neq [r_2]_p$. Choose the $\mathrm{Form}_1$-reduct of $M$ so that there is an automorphism
+Take a single state $p$ and one referenceable sort $s$. Introduce four reference terms $r_1,r_2,r_3,r_4:\mathsf{Ref}_s$ with pairwise distinct reference classes $[r_k]_p$. Choose the $\mathrm{Form}_1$-reduct of $M$ so that there is a group of automorphisms
 \[
-\alpha:M|_{\mathrm{Form}_1}\xrightarrow{\sim} M|_{\mathrm{Form}_1}
+G\le \mathrm{Aut}(M|_{\mathrm{Form}_1})
 \]
-with
+acting transitively on $\{r_1^M,r_2^M,r_3^M,r_4^M\}$ and preserving each realization $\rho\in R_p$. By invariance of first-order truth under automorphisms, every $\mathrm{Form}_1$-formula $\varphi(x)$ satisfying the restriction in~\textup{(i)} therefore obeys
 \[
-\alpha(r_1^M)=r_2^M,
-\qquad
-\alpha(r_2^M)=r_1^M,
-\]
-which preserves each realization $\rho\in R_p$. By invariance of first-order truth under automorphisms, every $\mathrm{Form}_1$-formula $\varphi(x)$ satisfying the restriction in~\textup{(i)} therefore obeys
-\[
-M,\rho\models\varphi(r_1)
+M,\rho\models\varphi(r_j)
 \quad\Longleftrightarrow\quad
-M,\rho\models\varphi(r_2)
+M,\rho\models\varphi(r_k)
 \]
-for every $\rho\in R_p$, proving~\textup{(i)}.
+for every $\rho\in R_p$ and every $j,k\in\{1,2,3,4\}$, proving~\textup{(i)}.
 
-Write $a_k=[r_k]_p$ ($k=1,2$) and equip both reference classes with identical local reference sites: each has a binary cover
+Write $a_k=[r_k]_p$ ($k=1,2,3,4$) and equip each reference class with a local reference site having a binary cover
 \[
 \{u_k\to a_k,v_k\to a_k\}
 \]
@@ -659,10 +659,28 @@ F_2(u_2)=F_2(v_2)=F_2(c_2)=\{*\},\qquad F_2(a_2)=\varnothing,
 \]
 with all restrictions to $c_2$ equal to the identity on $\{*\}$. The local family $(*,*)$ is compatible on the overlap, but $F_2(a_2)=\varnothing$. Hence~\textup{(iii)}.
 
-For $\CompSec_s$ and $\Sec_s$, the formulas in \textup{(i)} cannot distinguish $r_1$ from $r_2$, whereas \textup{(ii)} and \textup{(iii)} do distinguish them. Hence no such formula defines either predicate. Since
+For $r_3$, define
 \[
-\Null^{\mathrm{glue}}_s(r)=\Adm_s(r)\land \CompSec_s(r)\land \neg \Sec_s(r),
+F_3(u_3)=\{\sigma_u\},\quad F_3(v_3)=\{\sigma_v\},\quad F_3(c_3)=\{0,1\},\quad F_3(a_3)=\varnothing,
 \]
-the same conclusion follows for $\Null^{\mathrm{glue}}_s$.
+and restrictions
+\[
+\res_{c_3}^{u_3}(\sigma_u)=0,\qquad \res_{c_3}^{v_3}(\sigma_v)=1.
+\]
+Local sections exist on the cover, but the only available family is incompatible on the overlap since $\res_{c_3}^{u_3}(\sigma_u)\neq\res_{c_3}^{v_3}(\sigma_v)$. Hence~\textup{(iv)}.
+
+For $r_4$, define the same presheaf as $r_2$:
+\[
+F_4(u_4)=F_4(v_4)=F_4(c_4)=\{*\},\qquad F_4(a_4)=\varnothing,
+\]
+with all restrictions equal to the identity on $\{*\}$. Then the local family $(*,*)$ is compatible but $F_4(a_4)=\varnothing$. Hence~\textup{(v)}.
+
+The automorphism in~\textup{(i)} identifies all four references at the pointwise level, so no formula in the comparison class can separate them. But the four references separate all three predicates:
+\begin{itemize}[nosep]
+\item $\Sec_s$: true at $r_1$, false at $r_2$. Hence $\Sec_s$ is not definable.
+\item $\CompSec_s$: true at $r_1$ and $r_2$, false at $r_3$ (where only incompatible local sections exist). Hence $\CompSec_s$ is not definable.
+\item $\Null^{\mathrm{glue}}_s$: true at $r_2$ and $r_4$, false at $r_1$ (which has a global section). Hence $\Null^{\mathrm{glue}}_s$ is not definable.
+\end{itemize}
+The construction of the automorphism group acting transitively on $\{r_1^M,r_2^M,r_3^M,r_4^M\}$ proceeds as follows. The four reference classes have identical lower-layer reduct data: the same context $\Gamma_p$, the same realization set $R_p$. The underlying many-sorted structure is chosen with enough symmetry that a permutation of the sort interpreting references can carry any $r_k^M$ to any $r_\ell^M$ while fixing each $\rho\in R_p$ pointwise.
 \end{proof}
 
