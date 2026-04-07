@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      4.4
+// @version      4.5
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -852,10 +852,22 @@
           // Short responses (<2000 chars) need more stability checks — ChatGPT 5.4
           // often emits a brief "thinking" text before extended processing,
           // which looks stable but is just the preamble to the real response.
+          // Minimum response length for paper reviews — a valid editorial review
+          // is always >1000 chars.  Responses shorter than this are ChatGPT's
+          // "thinking aloud" preamble, not the actual review.
+          const MIN_REVIEW_LENGTH = 1000;
+          const tooShort = responseText.length < MIN_REVIEW_LENGTH;
+
           const minChecks = responseText.length < 2000 ? STABLE_CHECKS * 3 : STABLE_CHECKS;
           const stableEnough = stableCount >= minChecks && !generating;
           const stableOverride = stableCount >= minChecks + 2;
-          if (stableEnough || stableOverride) {
+
+          if (tooShort) {
+            // Never accept a <1000 char response as final — keep waiting
+            if (stableCount % 5 === 0 && stableCount > 0) {
+              log(`Short response (${responseText.length} chars) — waiting for real review (${stableCount * STABLE_INTERVAL / 1000}s)`);
+            }
+          } else if (stableEnough || stableOverride) {
             log(`Response complete: ${responseText.length} chars (stable ${stableCount * STABLE_INTERVAL / 1000}s, gen=${generating})`);
             return responseText;
           }
