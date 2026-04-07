@@ -961,4 +961,11 @@ theorem paper_ea_totient_fib_extended :
     Nat.totient (Nat.fib 12) = 48 := by
   refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
 
+/-- EA unit group audit: totient values and factorizations.
+    thm:mul-definitional -/
+theorem paper_ea_unit_group_audit :
+    Nat.totient 21 = 12 ∧ Nat.totient 34 = 16 ∧ Nat.totient 55 = 40 ∧
+    21 = 3 * 7 ∧ 34 = 2 * 17 ∧ 55 = 5 * 11 := by
+  refine ⟨?_, ?_, ?_, by omega, by omega, by omega⟩ <;> native_decide
+
 end Omega

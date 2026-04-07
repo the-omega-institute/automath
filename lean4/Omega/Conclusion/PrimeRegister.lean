@@ -905,4 +905,32 @@ theorem godelEncoding_mono_of_le (primes : ℕ → ℕ) (offset : ℕ) (u v : Li
     rw [hu, hv]
     exact Nat.pow_le_pow_right (by linarith [hp (offset + i)]) hle_i
 
+/-- Gödel encoding is strictly monotone when at least one exponent is strictly less.
+    thm:conclusion-godel-semidirect-law -/
+theorem godelEncoding_strict_mono_of_lt (primes : ℕ → ℕ) (offset : ℕ) (u v : List ℕ)
+    (hlen : u.length = v.length)
+    (hp : ∀ i, 1 < primes i)
+    (hle : ∀ (i : Fin u.length), u[i] ≤ v[i.val]'(by omega))
+    (j : Fin u.length) (hlt : u[j] < v[j.val]'(by omega)) :
+    godelEncoding primes offset u < godelEncoding primes offset v := by
+  rw [godelEncoding_prod_finset, godelEncoding_prod_finset, hlen]
+  apply Finset.prod_lt_prod
+  · intro i _
+    exact Nat.pos_of_ne_zero (pow_ne_zero _ (by linarith [hp (offset + i)]))
+  · intro i hi
+    simp only [Finset.mem_range] at hi
+    have hi' : i < u.length := by omega
+    have hu : u[i]! = u[i]'hi' := by
+      simp [List.getElem?_eq_getElem hi']
+    have hv : v[i]! = v[i]'(by omega) := by
+      simp [List.getElem?_eq_getElem (by omega : i < v.length)]
+    rw [hu, hv]
+    exact Nat.pow_le_pow_right (by linarith [hp (offset + i)]) (hle ⟨i, hi'⟩)
+  · exact ⟨j.val, Finset.mem_range.mpr (by omega), by
+      have hu : u[j.val]! = u[j] := by simp
+      have hv : v[j.val]! = v[j.val]'(by omega) := by
+        simp [List.getElem?_eq_getElem (by omega : j.val < v.length)]
+      rw [hu, hv]
+      exact Nat.pow_lt_pow_right (hp (offset + j.val)) hlt⟩
+
 end Omega.Conclusion

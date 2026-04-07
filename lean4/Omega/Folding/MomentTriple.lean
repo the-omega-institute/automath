@@ -1295,4 +1295,10 @@ theorem paper_momentSum_three_values :
     momentSum 3 7 = 2504 := by
   exact ⟨momentSum_three_six, momentSum_three_seven⟩
 
+/-- S_4 concrete value at m=6.
+    prop:fold-groupoid-wedderburn -/
+theorem paper_momentSum_four_values :
+    momentSum 4 6 = 3244 :=
+  momentSum_four_six
+
 end Omega
