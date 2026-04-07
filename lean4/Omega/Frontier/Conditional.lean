@@ -454,6 +454,20 @@ theorem scanError_boundary_card_bound_discrete {α β : Type*} [Fintype α] [Fin
     SPG.scanError μ obs P ≤ (SPG.boundaryCells μ obs P).card * κ :=
   SPG.scanError_le_boundaryCard_mul μ obs P κ hκ
 
+/-- Paper finite-boundary scaling wrapper for discrete scan error.
+    thm:spg-clarity-volume-boundary-scaling -/
+theorem paper_scanError_boundary_scaling {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P : Set α) (θ κ_lower κ_upper : ENNReal)
+    (hθ : ∀ b ∈ SPG.boundaryCells μ obs P,
+      θ * SPG.cellMass μ obs b ≤
+        min (SPG.cellEventMass μ obs P b) (SPG.cellComplMass μ obs P b))
+    (hκ_lower : ∀ b ∈ SPG.boundaryCells μ obs P, κ_lower ≤ SPG.cellMass μ obs b)
+    (hκ_upper : ∀ b, SPG.cellMass μ obs b ≤ κ_upper) :
+    (SPG.boundaryCells μ obs P).card * (θ * κ_lower) ≤ SPG.scanError μ obs P ∧
+      SPG.scanError μ obs P ≤ (SPG.boundaryCells μ obs P).card * κ_upper := by
+  exact ⟨SPG.scanError_ge_boundaryCard_mul_lower μ obs P θ κ_lower hθ hκ_lower,
+    SPG.scanError_le_boundaryCard_mul μ obs P κ_upper hκ_upper⟩
+
 /-- Empty discrete boundary forces zero scan error.
     cond:scan-error-zero-boundary-empty-discrete -/
 theorem scanError_zero_of_boundaryEmpty_discrete {α β : Type*} [Fintype α] [Fintype β]

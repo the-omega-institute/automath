@@ -469,6 +469,12 @@ theorem Fold_add_weight (w1 w2 : Word m) :
       stableValue_Fold_mod, stableValue_Fold_mod]
   simp [ Nat.add_mod]
 
+/-- Paper wrapper for stable-add value consistency.
+    thm:stable-add-value-consistency -/
+theorem paper_stable_add_value_consistency (w1 w2 : Word m) :
+    Fold w1 + Fold w2 = X.ofNat m ((weight w1 + weight w2) % Nat.fib (m + 2)) := by
+  exact Fold_add_weight w1 w2
+
 /-- Paper label: stableAdd definition.
     def:stable-add -/
 theorem paper_stable_add_def (x y : X m) :

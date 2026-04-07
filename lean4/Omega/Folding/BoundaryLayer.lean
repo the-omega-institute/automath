@@ -186,6 +186,16 @@ theorem paper_boundaryUplift_card (n : Nat) (hn1 : 2 ≤ n) (hn2 : n ≤ 4) :
     cBoundaryCount (n + 4) = Fintype.card (X n) :=
   boundaryUplift_card n hn1 hn2
 
+/-- Paper small-range wrapper for the boundary shift-4 uplift.
+    thm:boundary-shift4-uplift-isomorphism -/
+theorem paper_boundary_shift4_uplift_small :
+    cBoundaryCount 6 = Fintype.card (X 2) ∧
+    cBoundaryCount 7 = Fintype.card (X 3) ∧
+    cBoundaryCount 8 = Fintype.card (X 4) := by
+  exact ⟨boundaryUplift_card 2 (by omega) (by omega),
+    boundaryUplift_card 3 (by omega) (by omega),
+    boundaryUplift_card 4 (by omega) (by omega)⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase 201: Involution obstruction
 -- ══════════════════════════════════════════════════════════════
