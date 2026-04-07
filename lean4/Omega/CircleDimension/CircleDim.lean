@@ -195,6 +195,13 @@ theorem paper_circleDim_strictMono (a b t1 t2 : Nat) (h : a < b) :
     circleDim a t1 < circleDim b t2 :=
   circleDim_strictMono a b t1 t2 h
 
+/-- Paper: thm:cdim-short-exact-additivity (package) -/
+theorem paper_circleDim_short_exact_additivity_package
+    (a b t1 t2 : Nat) (hle : a ≤ b) (hlt : a < b) :
+    circleDim (b - a) t1 = circleDim b t2 - circleDim a t2 ∧
+    circleDim a t1 < circleDim b t2 := by
+  exact ⟨paper_circleDim_sub a b t1 t2 hle, paper_circleDim_strictMono a b t1 t2 hlt⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R142: Triple direct sum
 -- ══════════════════════════════════════════════════════════════

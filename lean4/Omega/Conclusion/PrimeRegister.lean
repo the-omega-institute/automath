@@ -385,6 +385,12 @@ theorem paper_godelLift_fold_axis_exponent_lower_bound_discrete (k D : Nat)
     Nat.log 2 D ≤ k := by
   simpa using godelLift_fold_axis_exponent_lower_bound_discrete k D hfeas
 
+/-- Paper: thm:conclusion-bounded-prime-register-feasibility (m=9,10 optimal binary width). -/
+theorem paper_godelLift_binary_optimal_m9_m10 :
+    (¬ (X.maxFiberMultiplicity 9 ≤ 2 ^ 3) ∧ X.maxFiberMultiplicity 9 ≤ 2 ^ 4) ∧
+    (¬ (X.maxFiberMultiplicity 10 ≤ 2 ^ 3) ∧ X.maxFiberMultiplicity 10 ≤ 2 ^ 4) := by
+  exact ⟨godelLift_binary_optimal_m9, godelLift_binary_optimal_m10⟩
+
 open Omega in
 /-- Ternary specialization: fewer axes with E=2.
     cor:conclusion-fixed-axis-exponential-amplitude -/
