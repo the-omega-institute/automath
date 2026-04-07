@@ -364,6 +364,13 @@ theorem maxFiberMultiplicity_le_two_mul_fib_half_verified (m : Nat) (hm : m ≤ 
     X.maxFiberMultiplicity_six, X.maxFiberMultiplicity_seven, X.maxFiberMultiplicity_eight,
     X.maxFiberMultiplicity_nine, X.maxFiberMultiplicity_ten] <;> native_decide
 
+/-- Paper: bounded fiber decomposition certificate for small dimensions.
+    prop:pom-fiber-decompose, thm:pom-max-fiber -/
+theorem paper_pom_fiber_decompose_bounded (m : ℕ) (hm : m ≤ 10) (x : Omega.X m) :
+    Omega.X.fiberMultiplicity x ≤ 2 * Nat.fib (m / 2 + 2) := by
+  exact (Omega.X.fiberMultiplicity_le_max x).trans
+    (maxFiberMultiplicity_le_two_mul_fib_half_verified m hm)
+
 /-- D(m) ≤ 2·F(⌊m/2⌋+2), conditional on the two-step recurrence.
     prop:pom-fiber-decompose, thm:pom-max-fiber -/
 theorem maxFiberMultiplicity_le_two_mul_fib_half_of_two_step (m : Nat)

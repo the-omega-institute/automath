@@ -242,6 +242,17 @@ theorem scanError_ge_boundaryCard_mul_lower {α β : Type*} [Fintype α] [Fintyp
             exact mul_le_mul_right (hκ b hb) θ
         _ ≤ min (cellEventMass μ obs P b) (cellComplMass μ obs P b) := hθ b hb
 
+/-- Paper: discrete lower boundary scaling certificate for scan error.
+    thm:spg-clarity-volume-boundary-scaling -/
+theorem paper_spg_clarity_volume_boundary_scaling_discrete_lower
+    {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P : Set α) (θ κ_lower : ENNReal)
+    (hθ : ∀ b ∈ boundaryCells μ obs P,
+      θ * cellMass μ obs b ≤ min (cellEventMass μ obs P b) (cellComplMass μ obs P b))
+    (hκ : ∀ b ∈ boundaryCells μ obs P, κ_lower ≤ cellMass μ obs b) :
+    (boundaryCells μ obs P).card * (θ * κ_lower) ≤ scanError μ obs P := by
+  exact scanError_ge_boundaryCard_mul_lower μ obs P θ κ_lower hθ hκ
+
 /-- scanError = 0 iff no boundary cells.
     cor:spg-clarity-basic -/
 theorem scanError_eq_zero_iff_no_boundary {α β : Type*} [Fintype α] [Fintype β]
