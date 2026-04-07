@@ -130,6 +130,19 @@ theorem projectorVal_hadamard_sector_powersum
     rcases hb with rfl | rfl <;>
     norm_num
 
+/-- Paper: complete sign-match characterization for the Fourier-Hadamard projector.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem paper_projectorVal_sign_match_complete
+    {α β a b : Int}
+    (hα : α = 1 ∨ α = -1) (hβ : β = 1 ∨ β = -1)
+    (ha : a = 1 ∨ a = -1) (hb : b = 1 ∨ b = -1) :
+    projectorVal α β a b = if a = α ∧ b = β then 1 else 0 := by
+  rcases hα with rfl | rfl <;>
+    rcases hβ with rfl | rfl <;>
+    rcases ha with rfl | rfl <;>
+    rcases hb with rfl | rfl <;>
+    norm_num [projectorVal]
+
 /-- Projector value at matching signs is 1.
     thm:fold-groupoid-z2x2-central-idempotents -/
 theorem projectorVal_at_same_signs {α β : Int} (hα : α ^ 2 = 1) (hβ : β ^ 2 = 1) :

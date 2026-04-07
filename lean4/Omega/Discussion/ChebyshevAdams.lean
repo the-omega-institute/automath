@@ -581,6 +581,16 @@ theorem chebyAdams_quadruple (n : Nat) (S : ℤ) :
     chebyAdams (4 * n) S = (chebyAdams n S ^ 2 - 2) ^ 2 - 2 := by
   rw [show 4 * n = 2 * (2 * n) from by ring, chebyAdams_double_pow, chebyAdams_double_pow]
 
+/-- Paper: doubling and Cassini-style package for Chebyshev-Adams.
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem paper_chebyAdams_doubling_cassini_package (n : ℕ) (S : ℤ) :
+    chebyAdams n S * chebyAdams n S - 4 = chebyAdams (2 * n) S - 2 ∧
+    chebyAdams (2 * n) S = chebyAdams n S ^ 2 - 2 ∧
+    chebyAdams (2 * n + 1) S = chebyAdams n S * chebyAdams (n + 1) S - S ∧
+    chebyAdams (4 * n) S = (chebyAdams n S ^ 2 - 2) ^ 2 - 2 := by
+  exact ⟨chebyAdams_sq_sub_four n S, chebyAdams_double_pow n S,
+    chebyAdams_double_succ n S, chebyAdams_quadruple n S⟩
+
 /-- Chebyshev-Adams at S=3 for n=6..9.
     cor:discussion-ramanujan-half-dimension-collapse -/
 theorem paper_chebyAdams_at_three_extended :
