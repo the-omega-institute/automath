@@ -131,3 +131,24 @@ eq:primitive-mobius
 **P2 gap resolution:** Bibliography pruning resolved the "uncited entries" problem but created a new "too few entries" problem. All other P2 gaps remain open.
 
 **Recommendation:** Address blockers, then re-review. Expected second-pass verdict: MINOR_REVISION or ACCEPT.
+
+### Backflow to Core
+
+| Result | Core target section | Status |
+|---|---|---|
+| `thm:intro-kernel-geometry` | `zeta_finite_part/` | pending |
+| `thm:intro-kernel-cyclotomic` | `zeta_finite_part/` | pending |
+| `prop:kernel-delta-explicit` | `zeta_finite_part/` | pending |
+| `prop:sync-kernel-spectrum` | `zeta_finite_part/` | pending |
+| `prop:sync-hatdelta-completion` | `zeta_finite_part/` | pending |
+| `prop:sync-hatdelta-quotient` | `zeta_finite_part/` | pending |
+| `prop:sync-hatdelta-double-cover` | `zeta_finite_part/` | pending |
+| `prop:sync-hatdelta-galois-s6-generic` | `zeta_finite_part/` | pending |
+| `thm:sync-cyclotomic-degree-law` | `zeta_finite_part/` | pending |
+| `cor:rho-m2-closed-form` | `zeta_finite_part/` | pending |
+| `prop:sync-endpoint-jet` | `zeta_finite_part/` | pending |
+| `lem:root-separation` | `zeta_finite_part/` | pending |
+| `thm:rho-gap-m12` | `zeta_finite_part/` | pending |
+| `prop:cyclic-lift-primitive-asymptotics` | `zeta_finite_part/` | pending |
+| `lem:primitive-orbit-asymptotic` | `zeta_finite_part/` | pending |
+| `prop:sync-self-duality` | `zeta_finite_part/` | pending |

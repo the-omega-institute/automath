@@ -107,3 +107,44 @@ Five issues from the Gate 3 MINOR_REVISION review were resolved:
 5. **M4:** Proof sketch for past--future spectral identification added in the proof of Theorem 5.6(iv) in sec_open_system_resonance.tex: the backward specification operator and forward Ruelle operator are transposes under the equilibrium pairing, so they share the same nonzero spectrum.
 
 Six minor items (m1--m6) deferred to referee feedback. No theorem labels changed. No new mathematical content introduced.
+
+### Backflow to Core
+
+| Result | Core target section | Status |
+|---|---|---|
+| `prop:scan-error-cylinder` | `spg/` | pending |
+| `prop:bayes-optimality` | `spg/` | pending |
+| `thm:tanaka-stokes` | `spg/` | pending |
+| `cor:clarity-monotone` | `spg/` | pending |
+| `prop:weighted-boundary-decomposition` | `spg/` | pending |
+| `thm:clarity-boundary-dimension` | `spg/` | pending |
+| `thm:weighted-boundary-transfer` | `spg/` | pending |
+| `cor:weighted-boundary-pole` | `spg/` | pending |
+| `cor:pressure-gap` | `spg/` | pending |
+| `thm:survivor-renyi-pressure` | `spg/` | pending |
+| `cor:survivor-spectrum-collision` | `spg/` | pending |
+| `thm:double-budget-poisson` | `spg/` | pending |
+| `cor:capacity-region` | `spg/` | pending |
+| `thm:entropy-ledger` | `spg/` | pending |
+| `thm:register-lower-bound` | `spg/` | pending |
+| `thm:collision-profile-restoration` | `spg/` | pending |
+| `thm:main-amplitude` | `spg/` | pending |
+| `thm:main-renyi` | `spg/` | pending |
+| `thm:main-resonance` | `spg/` | pending |
+| `thm:first-entry-escape-rate` | `spg/` | pending |
+| `cor:survivor-pressure-recovery` | `spg/` | pending |
+| `thm:quasistationary-ambiguity` | `spg/` | pending |
+| `thm:error-resolvent-cyclotomic` | `spg/` | pending |
+| `thm:holder-open-resonance` | `spg/` | pending |
+| `prop:doubling-fibonacci-escape` | `spg/` | pending |
+| `prop:symbolic-factor` | `spg/` | pending |
+| `lem:prefix-ball-cylinder` | `spg/` | pending |
+| `prop:sliding-block-factor` | `spg/` | pending |
+| `cor:sigma-nonexpansion` | `spg/` | pending |
+| `cor:entropy-monotonicity` | `spg/` | pending |
+| `thm:finite-depth-collapse` | `spg/` | pending |
+| `prop:inverse-limit-space` | `spg/` | pending |
+| `thm:inverse-limit-determinacy` | `spg/` | pending |
+| `thm:complete-address-reconstruction` | `spg/` | pending |
+| `prop:decidable-clopen` | `spg/` | pending |
+| `prop:sturmian-cylinder-sandwich` | `spg/` | pending |

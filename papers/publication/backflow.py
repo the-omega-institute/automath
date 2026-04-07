@@ -471,7 +471,7 @@ def inject_backflow_references(records: list[BackflowRecord], dry_run: bool = Tr
                 # Replace existing block
                 text = re.sub(
                     r"\n% --- Backflow from publication papers.*?% --- End backflow ---\n",
-                    remark_block,
+                    lambda m: remark_block,
                     text,
                     flags=re.DOTALL,
                 )
