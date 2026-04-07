@@ -287,6 +287,16 @@ theorem globalDefect_triangle (hmk : m ≤ k) (hkn : k ≤ n) (ω : Word n) :
           apply Nat.add_le_add_left
           exact popcount_restrictWord_le hmk _
 
+/-- Paper: defect cocycle package combining xor decomposition and popcount inequality.
+    prop:fold-defect-cocycle -/
+theorem paper_fold_defect_cocycle (hmk : m ≤ k) (hkn : k ≤ n) (ω : Word n) :
+    globalDefect (Nat.le_trans hmk hkn) ω =
+      xorWord (globalDefect hmk (restrictWord hkn ω))
+        (restrictWord hmk (globalDefect hkn ω)) ∧
+    popcount (globalDefect (Nat.le_trans hmk hkn) ω) ≤
+      popcount (globalDefect hmk (restrictWord hkn ω)) + popcount (globalDefect hkn ω) := by
+  exact ⟨globalDefect_compose hmk hkn ω, globalDefect_triangle hmk hkn ω⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R60
 -- ══════════════════════════════════════════════════════════════

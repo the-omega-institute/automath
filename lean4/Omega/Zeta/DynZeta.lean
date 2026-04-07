@@ -252,6 +252,14 @@ theorem degeneracy_ghost_coefficients :
     2 ^ 5 - 11 = 21 ∧ 2 ^ 6 - 18 = 46 ∧ 2 ^ 7 - 29 = 99 ∧
     (2 : ℤ) ^ 8 - 47 = 209 := by omega
 
+/-- Paper: degeneracy ghost coefficients for n = 1..8.
+    rem:degeneracy-zeta-bridge -/
+theorem paper_degeneracy_ghost_coefficients :
+    2 ^ 1 - 1 = 1 ∧ 2 ^ 2 - 3 = 1 ∧ 2 ^ 3 - 4 = 4 ∧ 2 ^ 4 - 7 = 9 ∧
+    2 ^ 5 - 11 = 21 ∧ 2 ^ 6 - 18 = 46 ∧ 2 ^ 7 - 29 = 99 ∧
+    (2 : ℤ) ^ 8 - 47 = 209 := by
+  exact degeneracy_ghost_coefficients
+
 /-! ## Characteristic polynomial identity
 
 The golden-mean adjacency matrix satisfies χ_A(λ) = λ² - λ - 1.
@@ -318,6 +326,14 @@ theorem goldenMean_trace_recurrence_general (n : Nat) :
       (Graph.goldenMeanAdjacency ^ (n + 1)).trace +
         (Graph.goldenMeanAdjacency ^ n).trace :=
   goldenMean_trace_recurrence_unbounded n
+
+/-- Paper: unbounded golden-mean trace recurrence.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_goldenMean_trace_recurrence_unbounded (n : ℕ) :
+    (Graph.goldenMeanAdjacency ^ (n + 2)).trace =
+      (Graph.goldenMeanAdjacency ^ (n + 1)).trace +
+      (Graph.goldenMeanAdjacency ^ n).trace := by
+  exact goldenMean_trace_recurrence_unbounded n
 
 /-- The trace sequence equals the Lucas numbers: Tr(A^n) = L(n).
     thm:zeta-syntax-trace-linear-recurrence -/
