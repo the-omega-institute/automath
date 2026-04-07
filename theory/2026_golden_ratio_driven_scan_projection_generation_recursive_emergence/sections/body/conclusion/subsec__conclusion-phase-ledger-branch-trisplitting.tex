@@ -152,6 +152,110 @@ R(y_n)=\bigsqcup_{i=0}^{4}\bigl(P_i+E_{\min}[2^n]\bigr),
 五分片分解与分支度公式是定理 \ref{thm:xi-time-part62d-leyang-branch-inverse-limit-five-torsors} 及其上游的有限层地址分解的直接内容。再结合推论 \ref{cor:killo-2adic-tate-hypercube-limit} 对 \(T_2(E_{\min})\cong\ZZ_2^2\) 的识别，便得到所示逆极限分解。由于过渡映射在每个分片上都由 \([2]\) 诱导，故其坐标形式正是最高位截断。证毕。
 \end{proof}
 
+\begin{theorem}[Lee--Yang 全息地址的规范离散--连续分裂]\label{thm:conclusion-leyang-canonical-address-discrete-continuous-splitting}
+设
+\[
+\mathcal R_\infty:=\varprojlim_n R(y_n)
+\]
+为 Lee--Yang 分支塔的逆极限。对每个有限层 \(n\)，定义规范地址
+\[
+\operatorname{Addr}_n(y):=(i,\xi_n),
+\qquad
+y\in P_i+E_{\min}[2^n],
+\qquad
+\xi_n:=y-P_i\in E_{\min}[2^n].
+\]
+则 \(\operatorname{Addr}_n\) 与层间截断相容，并在逆极限上诱导规范双射
+\[
+\operatorname{Addr}_{\mathrm{can}}:\mathcal R_\infty\xrightarrow{\sim}\{0,1,2,3,4\}\times T_2(E_{\min}).
+\]
+因此，Lee--Yang 的完整全息地址严格分解为一个五值离散 sheet 寄存器与一个连续的 \(2\)-进 Tate 坐标；此处分裂不是集合论偶然，而是由有限层五支平行族与乘二截断相容性共同强迫的规范因子化。
+\end{theorem}
+\begin{proof}
+由定理 \ref{thm:conclusion-leyang-five-sheet-dyadic-cover}，每一层都有严格分解
+\[
+R(y_n)=\bigsqcup_{i=0}^{4}\bigl(P_i+E_{\min}[2^n]\bigr),
+\]
+且五个分支彼此不交。
+故对任意 \(y\in R(y_n)\)，存在唯一的 \(i\in\{0,\dots,4\}\) 与唯一的 \(\xi_n\in E_{\min}[2^n]\) 使 \(y=P_i+\xi_n\)，从而 \(\operatorname{Addr}_n\) 良定义且双射。
+另一方面，层间映射在每个分片上都由 \([2]\) 诱导，而
+\[
+\varprojlim_n E_{\min}[2^n]\cong T_2(E_{\min})
+\]
+由推论 \ref{cor:killo-2adic-tate-hypercube-limit} 给出。
+故 \(\operatorname{Addr}_n\) 与截断相容，取逆极限即得所示规范双射。证毕。
+\end{proof}
+
+\begin{corollary}[Lee--Yang 规范二进编码的三比特下界]\label{cor:conclusion-leyang-canonical-binary-sheet-lower-bound}
+在定理 \ref{thm:conclusion-leyang-canonical-address-discrete-continuous-splitting} 的规范地址语义下，任意精确且规范的二进制编码器若欲完整承载 \(\mathcal R_\infty\)，则除连续 Tate 坐标外，至少还需一个能够区分五个 sheet 的离散寄存器。
+若该寄存器以纯二进制实现，其位数 \(b\) 必满足
+\[
+2^b\ge 5,
+\qquad\text{因而}\qquad
+b\ge 3.
+\]
+特别地，任何只依赖 \(T_2(E_{\min})\) 坐标而忘却 sheet 标签的解码器都是 sheet-oblivious 的；它必将五个几何上不同的分支点压缩为同一个去平移后的 Tate 地址。
+\end{corollary}
+\begin{proof}
+由定理 \ref{thm:conclusion-leyang-canonical-address-discrete-continuous-splitting}，完整规范地址正是
+\[
+(i,x)\in\{0,1,2,3,4\}\times T_2(E_{\min}).
+\]
+因此若编码器不显式保留 \(i\)，则它至多记住 \(x\)，从而五个不同元素
+\[
+(0,x),\dots,(4,x)
+\]
+在解码时不可区分。故任何精确规范编码都必须额外记录五值标签。
+纯二进制寄存器容量为 \(2^b\)，于是必有 \(2^b\ge 5\)，即 \(b\ge 3\)。证毕。
+\end{proof}
+
+\begin{proposition}[branch-compatible 仿射动力学的五张量 \texorpdfstring{$\zeta$}{zeta} 分解]\label{prop:conclusion-leyang-branch-compatible-zeta-fivefold-factorization}
+设 \(F:\mathcal R_\infty\to\mathcal R_\infty\) 为一自映射，满足在定理 \ref{thm:conclusion-leyang-canonical-address-discrete-continuous-splitting} 的规范坐标下
+\[
+\operatorname{Addr}_{\mathrm{can}}\circ F\circ \operatorname{Addr}_{\mathrm{can}}^{-1}(i,x)
+=(i,\psi_i(x)),
+\]
+其中每个 \(\psi_i\) 都是 \(T_2(E_{\min})\) 上的 \(2^L\)-进仿射映射。
+则 Artin--Mazur \(\zeta\)-函数满足
+\[
+\zeta_F(z)=\prod_{i=0}^{4}\zeta_{\psi_i}(z).
+\]
+特别地，若 \(\psi_i\equiv \psi\) 与 \(i\) 无关，则
+\[
+\zeta_F(z)=\zeta_{\psi}(z)^5.
+\]
+因此，在 branch-compatible 口径下，任何 primitive 轨道都被严格束缚在单一 sheet 内；全局 \(\zeta\)-数据只是五个局部仿射动力学的外乘。
+\end{proposition}
+\begin{proof}
+由假设，每个分片
+\[
+\mathcal R_\infty^{(i)}:=\{i\}\times T_2(E_{\min})
+\]
+都在 \(F\) 下不变，且 \(F|_{\mathcal R_\infty^{(i)}}=\psi_i\)。
+因此对每个 \(n\ge 1\) 有不交并
+\[
+\operatorname{Fix}(F^n)
+=
+\bigsqcup_{i=0}^{4}\operatorname{Fix}(\psi_i^n),
+\qquad
+\#\operatorname{Fix}(F^n)=\sum_{i=0}^{4}\#\operatorname{Fix}(\psi_i^n).
+\]
+代入 Artin--Mazur 定义
+\[
+\zeta_F(z)=\exp\!\left(\sum_{n\ge 1}\frac{\#\operatorname{Fix}(F^n)}{n}z^n\right)
+\]
+便得
+\[
+\zeta_F(z)
+=
+\prod_{i=0}^{4}
+\exp\!\left(\sum_{n\ge 1}\frac{\#\operatorname{Fix}(\psi_i^n)}{n}z^n\right)
+=
+\prod_{i=0}^{4}\zeta_{\psi_i}(z).
+\]
+若 \(\psi_i\equiv \psi\)，则右端退化为 \(\zeta_\psi(z)^5\)。证毕。
+\end{proof}
+
 \begin{theorem}[连续基底的普适性与非完备性]\label{thm:conclusion-continuous-base-universal-incomplete}
 在有限素局部化与 Lee--Yang 分支塔两条链上，连续基底都具有普适性，但都不是完备承载体：
 \begin{enumerate}
