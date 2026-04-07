@@ -164,12 +164,9 @@ Finite recovery & Full-support renewal process with infinite symbolic memory & $
 \section{Sampled detector laws and operational signatures}\label{sec:records}
 
 \subsection{Measurement protocol and click model}
+At each proper-time step $n\Delta\tau$, the experimentalist performs a projective readout of the detector's internal two-level system---ground state $|g\rangle$ (ready) or excited state $|e\rangle$ (refractory)---and records a click if the outcome is $|e\rangle$. The detector is then reset to $|g\rangle$, reinitializing it for the next interval. Between readouts, the detector-field interaction drives transitions: in the ready state the detector is excited at the UDW rate $\Gamma_+\equiv\Gamma$ per unit proper time; in the refractory state it recovers at rate $\kappa_{\mathrm r}$. These two internal states are the hidden Markov backbone of the click record, and the output-labelled kernel matrices $T_0$, $T_1$ derived below follow from integrating the resulting master equation over $[0,\Delta\tau]$.
 
-We work with the following explicit protocol. At each proper-time step $n\Delta\tau$, the experimentalist performs a projective readout of the detector's internal state. The two internal states are the ground state $|g\rangle$ (ready) and the excited state $|e\rangle$ (refractory). A click is recorded if the readout outcome is $|e\rangle$. After each readout, the detector is reset to $|g\rangle$ regardless of the outcome, modelling a post-measurement reset that reinitialises the device for the next interval.
-
-Between successive readouts, the detector-field interaction drives transitions according to a two-state master equation. In the ready state, the detector is excited by the field at the weak-coupling rate $\Gamma_+\equiv\Gamma$ per unit proper time, and it decays at rate $\Gamma_-$. In the refractory state---entered either by a click or, in the finite-recovery model, retained with probability $e^{-\kappa_{\mathrm r}\Delta\tau}$ per step---the detector recovers at rate $\kappa_{\mathrm r}$. The two detector states therefore constitute the hidden Markov backbone of the click record.
-
-This protocol is phenomenological in the same sense as standard dead-time counter models \cite{Muller1973,CantorTeich1975}: it captures the essential refractory structure of any real counting device driven by the UDW excitation rate, but does not attempt to derive the measurement back-action from first principles of algebraic QFT \cite{Fewster2020,PoloGomezEtAl2022}. Within that scope the model is unambiguous. The output-labelled kernel matrices $T_0$ and $T_1$ derived below follow directly from integrating the master equation over one sampling interval $[0,\Delta\tau]$ conditioned on the hidden state at the start of the interval. All subsequent results---grammar, hazard, covariance, spectral density---are derived from these kernels.
+This protocol is phenomenological in the same sense as dead-time counter models \cite{Muller1973,CantorTeich1975}: it captures the essential refractory structure of any counting device driven by the UDW excitation rate without deriving the measurement back-action from algebraic QFT first principles \cite{Fewster2020,PoloGomezEtAl2022}. The model is explicit: all subsequent grammar, hazard, covariance, and spectral-density results are derived from these kernels.
 
 \subsection{Ideal one-step dead time and the exact-clock threshold}
 
@@ -460,33 +457,11 @@ Operationally, the memory shell can therefore be located by more than the sign o
 \end{figure}
 
 \subsection{Finite-sample observability}\label{subsec:finite-sample}
+The shell conditions are operationally meaningful only if the relevant observables can be estimated from finite data. Given a binary record $(A_0,\dots,A_{N-1})$, define the \emph{empirical hazard} $\widehat{h}_k=\#\{\text{runs of exactly }k\text{ zeros}\}/\#\{\text{runs of at least }k\text{ zeros}\}$, the \emph{empirical lag-$n$ covariance} $\widehat{\gamma}_n=(N-n)^{-1}\sum_{k}A_kA_{k+n}-\widehat\rho^2$, and the \emph{empirical Fano factor} $\widehat F=\widehat{\Var}(N_B)/\widehat{\mathbb E}N_B$ for block size $B$. By the renewal theorem and the ergodic theorem, all three converge a.s.\ to their population counterparts.
 
-The shell conditions become operationally meaningful only if the relevant record-level observables can be estimated from finite data. We introduce explicit estimators and sketch the required sample sizes.
+For the memory shell, the diagnostic is the sign of $\widehat\gamma_2$: it changes at $\Gamma_c$. The variance of $\widehat\gamma_2$ scales as $O(\rho^2(a-\rho)^2|\lambda|^2/N)$; for typical parameters ($\kappa_{\mathrm r}\Delta\tau\sim1$, $\Gamma\Delta\tau\sim0.5$, $(a-\rho)/\rho\sim0.1$, $|\lambda|\sim0.3$) this gives a rough lower bound of $N\sim10^4$ clicks for reliable detection at SNR$=3$. A full Monte Carlo characterization is beyond this paper's scope, but the scaling is consistent with rates accessible in photon-counting experiments.
 
-Given a binary record $(A_0,\dots,A_{N-1})$ of length $N$, define the following natural estimators. The \emph{empirical hazard} at lag $k$ is
-\[
-\widehat{h}_k
-=
-\frac{\#\{n:\text{click at }n,\,\text{run of exactly }k\text{ zeros after}\}}
-     {\#\{n:\text{click at }n,\,\text{at least }k\text{ zeros after}\}}.
-\]
-By the renewal theorem and the law of large numbers, $\widehat{h}_k\to h_k$ a.s.\ as $N\to\infty$. The \emph{empirical lag-$1$ covariance} is
-\[
-\widehat{\gamma}_1
-=
-\frac{1}{N-1}\sum_{n=0}^{N-2}A_nA_{n+1}-\widehat\rho^2,
-\qquad
-\widehat\rho=\frac{1}{N}\sum_{n=0}^{N-1}A_n.
-\]
-At exact $1$-dependence, $\gamma_1=\rho(a-\rho)$ and all higher covariances vanish; detecting the sign change of $\widehat{\gamma}_2$ as a function of $\Gamma$ locates $\Gamma_c$. The \emph{empirical Fano factor} is $\widehat{F}=\widehat{\Var}(N_B)/\widehat{\mathbb{E}}N_B$ where $N_B$ is the click count in a block of $B$ steps; the central-limit theorem for stationary processes gives $\widehat{F}\to F$ at rate $O(B^{-1/2})$.
-
-For a rough sample-size guideline, consider locating $\Gamma_c$ by the sign of $\widehat\gamma_2$. The variance of $\widehat\gamma_2$ is $O(\rho^2(a-\rho)^2|\lambda|^2/N)$, so to resolve the sign change at signal-to-noise ratio $\mathrm{SNR}=3$ one needs approximately
-\[
-N\gtrsim9\,\frac{\rho^2(1-\rho)^2}{\rho^2(a-\rho)^2|\lambda|^2}\sim\frac{9(1-\rho)^2}{(a-\rho)^2|\lambda|^2}.
-\]
-For typical parameters ($\kappa_{\mathrm r}\Delta\tau\sim1$, $\Gamma\Delta\tau\sim0.5$), the covariance ratio $(a-\rho)/\rho$ is of order $0.1$ and $|\lambda|\sim0.3$, giving $N\sim10^4$ clicks as a rough lower bound for reliable detection. A more careful Monte Carlo study is beyond the scope of this paper, but the scaling is consistent with the click rates accessible in realistic photon-counting experiments.
-
-For the exact-clock shell, the relevant diagnostic is whether the record obeys the Parry transition probabilities. Given a click record, one may estimate $\widehat{p}=\#\{(A_n,A_{n+1})=(0,0)\}/\#\{A_n=0\}$ and test $\widehat{p}=\varphi^{-1}$ by a standard chi-squared test on the $2\times2$ transition table. The sample size needed to distinguish $p$ from $\varphi^{-1}$ at separation $|p-\varphi^{-1}|=\delta$ is $N\sim\delta^{-2}/\rho$, where $\rho$ is the click rate.
+For the exact-clock shell, estimate $\widehat p=\#\{(A_n,A_{n+1})=(0,0)\}/\#\{A_n=0\}$ and test $\widehat p=\varphi^{-1}$ by a chi-squared test on the $2\times2$ transition table; the required sample size at separation $\delta=|p-\varphi^{-1}|$ is $N\sim\delta^{-2}/\rho$.
 
 \section{Static KMS backgrounds and shell equations}\label{sec:kms-shells}
 
@@ -785,7 +760,7 @@ Several structural features of the construction are expected to persist beyond t
 
 What is not conjectural is the spectral-transport identity (\cref{cor:spectral-transport-main}): it is an exact algebraic consequence of the shell equations and does not rely on the homogeneous spectral-weight assumption. In particular, greybody corrections in Schwarzschild enter through a calculable spectral-weight ratio $\mathcal S_{x_\varphi}(\Omega)/\mathcal S_{x_{\mathrm{mem}}}(\Omega)$ rather than as an uncontrolled perturbation.
 
-The relationship to prior literature can now be stated precisely. Detector thermalization theory \cite{GarayMartinMartinezRamon2016,JuarezAubryMoustos2022,PercheTherm2023} asks whether the detector state converges to a Gibbs state; the present work asks instead which grammar and dependence thresholds the stationary record realizes. Operational detector-measurement theory \cite{PoloGomezEtAl2022,TjoaEtAl2023click,PercheLocalized2023} establishes the physical basis for what detector outputs mean; we take that framework as given and analyze the stochastic process it generates. Detector-based geometry probing \cite{NgMannMartinMartinez2018,NgMannMartinMartinezGeon,TjoaMann2020} extracts nonlocal geometric information from rate observables; we additionally exploit the grammar and covariance structure of the full record. Counting-statistics methodology \cite{Brandes2008,BrudererEtAl2014} provides the renewal, spectral-density, and Fano-factor tools we import, but those works do not embed the framework in curved-spacetime response theory. The novelty of the present paper is in combining all four ingredients: a concrete sampled UDW detector model, record-level observables, static KMS response theory, and shell-pair inverse content.
+The relationship to prior literature can be stated precisely. Detector thermalization theory \cite{GarayMartinMartinezRamon2016,JuarezAubryMoustos2022,PercheTherm2023} asks whether the detector state converges to a Gibbs state; we ask instead which grammar and dependence thresholds the stationary record realizes. Operational detector-measurement theory \cite{PoloGomezEtAl2022,TjoaEtAl2023click,PercheLocalized2023} establishes the physical basis for detector outputs; we take that framework as given and analyze the resulting stochastic process. Detector-based geometry probing \cite{NgMannMartinMartinez2018,NgMannMartinMartinezGeon,TjoaMann2020} extracts geometric information from rate observables; we additionally exploit the grammar and covariance structure of the full record. Counting-statistics methodology \cite{Brandes2008,BrudererEtAl2014} provides the renewal, spectral-density, and Fano-factor tools, but those works do not embed the framework in curved-spacetime response theory. The novelty here is in combining all four ingredients: a concrete sampled UDW model, record-level observables, static KMS response theory, and shell-pair inverse content.
 
 The limitations are equally clear. We have fixed a weak-coupling response model, a two-level detector, a single stationary worldline, discrete readout, and exponential recovery. Switching effects, nonexponential recovery, paralyzable counting models, multi-level detectors, greybody corrections, backreaction, and full finite-sample inference are outside the present scope \cite{Carmichael1993Book,WisemanMilburn2009}. The shell equations should therefore be read as exact within the stated detector-response class and as a template for more elaborate detector models rather than as universal geometric invariants.
 
