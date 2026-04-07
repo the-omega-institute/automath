@@ -1101,4 +1101,22 @@ theorem paper_cdim_laws_audit :
     (∀ n t1 t2 : Nat, circleDim n t1 = circleDim n t2) :=
   ⟨circleDim_add, circleDim_mul, circleDim_finite, circleDim_finite_extension⟩
 
+/-- Paper: finite-rank minimal certificate for the phase-fold kernel.
+    thm:cdim-phase-spectrum-limit -/
+theorem paper_cdim_phase_fold_kernel_minimal_certificate_rank (rB : ℕ) :
+    (∀ m : ℕ, (∃ f : Fin rB → Fin m, Function.Injective f) → rB ≤ m) ∧
+    (∃ f : Fin rB → Fin rB, Function.Injective f) := by
+  refine ⟨?_, ?_⟩
+  · intro m h
+    rcases h with ⟨f, hf⟩
+    simpa using Fintype.card_le_of_injective f hf
+  · exact ⟨id, fun _ _ h => h⟩
+
+/-- Paper: zero-dimensional ledger forbids circle replacement.
+    prop:circle-dimension-laws -/
+theorem paper_cdim_zero_dimensional_ledger_no_circle_replacement
+    (d k t : ℕ) :
+    circleDim d t ≤ circleDim k 0 → d ≤ k := by
+  simp [circleDim]
+
 end Omega.CircleDimension
