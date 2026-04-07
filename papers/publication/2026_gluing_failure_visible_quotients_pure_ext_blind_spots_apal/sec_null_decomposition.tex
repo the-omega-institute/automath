@@ -86,7 +86,7 @@ M,p\Vdash \LocSec_s(r).
 \end{proposition}
 
 \begin{proof}
-Let $a=[r]_p$ and choose $\sigma\in F_{p,s}(a)$. The trivial cover $\{a\to a\}$ is available by \Cref{def:local-reference-frame}. The singleton family $(\sigma)$ is therefore a compatible local family, so both compatible local sectionability and local sectionability follow immediately.
+Let $a=[r]_p$ and choose $\sigma\in F_{p,s}(a)$. The identity cover $\{\mathrm{id}_a:a\to a\}$ is available by \Cref{def:local-reference-frame}(ii)(a). The singleton family $(\sigma)$ satisfies the compatibility condition vacuously (the only meet is $a\wedge a=a$, and $\res_a^a(\sigma)=\sigma$). Hence both compatible local sectionability and local sectionability follow.
 \end{proof}
 
 \subsection{Sheafification and gluing failure}
@@ -284,8 +284,35 @@ F_{p,s}(a)\neq\varnothing
 If $(\mathfrak P_r)_a\neq\varnothing$, choose $y\in (\mathfrak P_r)_a$. Then $\iota_r(y)\in \mathfrak L_r(a)$, so $\mathfrak L_r(a)\neq\varnothing$. Conversely, if $x\in \mathfrak L_r(a)$, essential surjectivity of $(\iota_r)_a$ yields $y\in (\mathfrak P_r)_a$ with $\iota_r(y)\cong x$, so $(\mathfrak P_r)_a\neq\varnothing$.
 \end{proof}
 
+\begin{definition}[Gluing-sensitive realization prestack]\label{def:gluing-sensitive}
+In the setting of \Cref{def:realization-prestack}, the realization prestack $\mathfrak P_r\to\mathcal C_a$ is called \emph{gluing-sensitive at $a$} if it satisfies the following three conditions.
+\begin{enumerate}[label=(\roman*),nosep]
+\item \emph{Connected-component agreement.} The canonical map
+\[
+\pi_0^{\mathrm{pre}}(\mathfrak P_r)\cong F_{p,s}|_{\mathcal C_a}
+\]
+of \Cref{def:realization-prestack}(i) induces, after passing to the associated sheaf, an isomorphism
+\[
+\pi_0(\mathfrak L_r)\cong a_{p,s}F_{p,s}|_{\mathcal C_a}.
+\]
+This is automatic from \Cref{prop:stackification-components} once the conditions of \Cref{def:realization-prestack} hold.
+\item \emph{Terminal-fiber essential surjectivity.} The stackification morphism $(\iota_r)_a:(\mathfrak P_r)_a\to(\mathfrak L_r)_a$ is essentially surjective (i.e., $\mathfrak P_r$ is globally conservative at $a$ in the sense of \Cref{def:global-conservativity}).
+\item \emph{Local nonemptiness of component gerbes.} For every visible value class $v\in\pi_0(\mathfrak L_r)(a)$, the full component substack $\mathfrak G_v$ of \Cref{def:compatible-realization-stack} is locally nonempty: for every object $U$ of $\mathcal C_a$ there exists a cover $\{U_i\to U\}$ such that $(\mathfrak G_v)(U_i)\neq\varnothing$ for all $i$.
+\end{enumerate}
+
+Conditions (i) and (ii) ensure that the gerbe semantics of gluing failure (\Cref{thm:gerbe-null-semantics}) is valid. Condition (iii) is required for \Cref{thm:component-gerbe-decomposition} (the component substack is a gerbe, not merely locally empty). The canonical split prestack of \Cref{prop:split-realization-prestack} is \emph{not} gluing-sensitive in general: see \Cref{rem:split-not-conservative} below.
+\end{definition}
+
+\begin{remark}[The split prestack is not globally conservative in general]\label{rem:split-not-conservative}
+Consider the local reference frame with $u,v\to a$ and $c=u\wedge v$, and define
+\[
+F(u)=F(v)=F(c)=\{*\},\qquad F(a)=\varnothing.
+\]
+The canonical split prestack satisfies $(\mathfrak P_r^{\mathrm{split}})_a=\varnothing$ because $F(a)=\varnothing$. However, the stackification creates a global object at $a$: the compatible family $(*,*)$ over the cover $\{u,v\}$ glues after stackification, so $(\mathfrak L_r)_a\neq\varnothing$. The terminal-fiber map $(\mathfrak P_r^{\mathrm{split}})_a\to(\mathfrak L_r)_a$ is therefore empty-to-nonempty, hence not essentially surjective. This example shows that the split prestack is not gluing-sensitive, and explains why the branch-gerbe theory requires a substantive hypothesis rather than merely appealing to the canonical split lift.
+\end{remark}
+
 \begin{remark}[What remains conditional]\label{rem:gluing-sensitive-lifts}
-\Cref{prop:split-realization-prestack} shows that admitting some banded realization prestack is not an additional existence burden: once a band has been fixed, a canonical split lift is always available. What remains conditional in the later branch-obstruction theory is the choice of a \emph{gluing-sensitive} lift, namely a realization prestack whose stackification is globally conservative at $a$ and whose component gerbes satisfy the vanishing hypotheses needed to produce branch obstruction classes. The substantive semantic claims therefore concern which lifts preserve the intended local-to-global content, not whether a formal groupoid-valued lift exists at all.
+\Cref{prop:split-realization-prestack} shows that admitting some banded realization prestack is not an additional existence burden: once a band has been fixed, a canonical split lift is always available. What remains conditional in the later branch-obstruction theory is the existence of a gluing-sensitive lift in the sense of \Cref{def:gluing-sensitive}. The theorems of \Cref{sec:gerbe-obstruction} are stated with the hypothesis that $\mathfrak P_r$ is gluing-sensitive at $a$.
 \end{remark}
 
 \subsection{Visible value classes and typed readouts}
@@ -295,7 +322,7 @@ Let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$. A \emph{visible 
 \[
 \bigl(\{a_i\to a\}_{i\in I},(\sigma_i)_{i\in I}\bigr)
 \]
-as in \Cref{def:existence-levels}(ii). Two visible presentations are called \emph{value-equivalent} if after passage to a common refinement of their covers, the restricted local sections agree pointwise. A \emph{visible value class} is an equivalence class of visible presentations. The set of visible value classes of $r$ at $p$ is denoted by $\Vis_{p,s}(r)$.
+as in \Cref{def:existence-levels}(ii), i.e., sections $\sigma_i\in F_{p,s}(a_i)$ satisfying $\res_{a_i\wedge a_j}^{a_i}(\sigma_i)=\res_{a_i\wedge a_j}^{a_j}(\sigma_j)$ for all $i,j$. Two visible presentations $(\{a_i\},(\sigma_i))$ and $(\{b_j\},(\tau_j))$ are called \emph{value-equivalent} if there exists a common refinement $\{c_k\to a\}_{k\in K}$ of both covers (which exists by the transitivity and stability axioms of $\Cov_{p,s}$) such that the pulled-back sections agree: $\res_{c_k}^{a_i}(\sigma_i)=\res_{c_k}^{b_j}(\tau_j)$ whenever $c_k\sqsubseteq_{p,s} a_i$ and $c_k\sqsubseteq_{p,s} b_j$. A \emph{visible value class} is an equivalence class of visible presentations under this relation. The set of visible value classes of $r$ at $p$ is denoted by $\Vis_{p,s}(r)$.
 \end{definition}
 
 \begin{theorem}[Visible value classes as global connected components]\label{thm:visible-value-components}
@@ -306,7 +333,7 @@ Assume that $r$ admits a realization prestack in the sense of \Cref{def:realizat
 \end{theorem}
 
 \begin{proof}
-By the standard description of sheafification on a site, a section of $a_{p,s}F_{p,s}$ at $a$ is represented by a matching family over a cover of $a$, modulo passage to common refinements. This is exactly the equivalence relation imposed in \Cref{def:visible-value-classes}. Hence
+On the pretopology site $\mathcal{C}_{p,s}$, a section of the associated sheaf $a_{p,s}F_{p,s}$ at $a$ is an equivalence class of matching families over covers of $a$, where two matching families over covers $\{a_i\}$ and $\{b_j\}$ are equivalent if they agree on a common refinement (which exists by the transitivity and stability axioms of $\Cov_{p,s}$) \cite[Chap.~III, \S2]{MacLaneMoerdijk1994}. This is exactly the equivalence relation on visible presentations in \Cref{def:visible-value-classes}. Hence
 \[
 \Vis_{p,s}(r)\cong \bigl(a_{p,s}F_{p,s}\bigr)(a).
 \]
@@ -445,13 +472,13 @@ holds.
 Assume $M,p\Vdash \Null_s(r)$. Then $r$ is admitted but not globally sectionable. Since $\LocSec_s(r)$ and $\CompSec_s(r)$ are decided at $p$, there are three cases: either local sectionability already fails, local sectionability holds but compatibility fails, or compatibility holds while global sectionability fails. These are exactly the three null modes. The converse follows from \Cref{prop:null-modes-imply-null}, and uniqueness is \Cref{prop:null-modes-exclusive}.
 \end{proof}
 
-\begin{theorem}[Classification after refinement]\label{thm:null-classification-under-refinement}
+\begin{proposition}[Classification after refinement]\label{thm:null-classification-under-refinement}
 Let $q\le p$ and suppose
 \[
 M,p\Vdash \Null_s(r).
 \]
 If $q$ has decomposition decidability for $r$, then exactly one null mode holds at $q$.
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 By persistence of forcing, $M,q\Vdash \Null_s(r)$. The hypothesis gives decomposition decidability at $q$, so \Cref{prop:null-trichotomy} applies at the refined state $q$.
@@ -479,40 +506,22 @@ F(a_{\mathrm{loc}})=\varnothing.
 \]
 Then local sectionability already fails, so $M,p\Vdash \Null^{\mathrm{loc}}_s(r_{\mathrm{loc}})$.
 
-For $r_{\mathrm{cmp}}$, use objects
-\[
-c_{\mathrm{cmp}}\sqsubseteq u_{\mathrm{cmp}}\sqsubseteq a_{\mathrm{cmp}},
-\qquad
-c_{\mathrm{cmp}}\sqsubseteq v_{\mathrm{cmp}}\sqsubseteq a_{\mathrm{cmp}},
-\]
-with nontrivial cover $\{u_{\mathrm{cmp}}\to a_{\mathrm{cmp}},v_{\mathrm{cmp}}\to a_{\mathrm{cmp}}\}$. Define
+For $r_{\mathrm{cmp}}$, use objects $u_{\mathrm{cmp}},v_{\mathrm{cmp}}\sqsubseteq_{p,s} a_{\mathrm{cmp}}$ with $c_{\mathrm{cmp}}:=u_{\mathrm{cmp}}\wedge v_{\mathrm{cmp}}$ (the meet in the semilattice), and let $\{u_{\mathrm{cmp}}\to a_{\mathrm{cmp}},v_{\mathrm{cmp}}\to a_{\mathrm{cmp}}\}\in\Cov_{p,s}(a_{\mathrm{cmp}})$. Define
 \[
 F(u_{\mathrm{cmp}})=\{\sigma_u\},\quad
 F(v_{\mathrm{cmp}})=\{\sigma_v\},\quad
 F(c_{\mathrm{cmp}})=\{0,1\},\quad
 F(a_{\mathrm{cmp}})=\varnothing,
 \]
-and restrictions
-\[
-\res_{c_{\mathrm{cmp}}}^{u_{\mathrm{cmp}}}(\sigma_u)=0,
-\qquad
-\res_{c_{\mathrm{cmp}}}^{v_{\mathrm{cmp}}}(\sigma_v)=1.
-\]
-Local sections exist on the chosen cover, but the only available family is incompatible on the overlap. Hence $M,p\Vdash \Null^{\mathrm{cmp}}_s(r_{\mathrm{cmp}})$.
+with restrictions $\res_{c_{\mathrm{cmp}}}^{u_{\mathrm{cmp}}}(\sigma_u)=0$ and $\res_{c_{\mathrm{cmp}}}^{v_{\mathrm{cmp}}}(\sigma_v)=1$. Local sections exist on the chosen cover, but the compatibility check at the meet $c_{\mathrm{cmp}}=u_{\mathrm{cmp}}\wedge v_{\mathrm{cmp}}$ fails: $0\neq 1$. Hence $M,p\Vdash \Null^{\mathrm{cmp}}_s(r_{\mathrm{cmp}})$.
 
-For $r_{\mathrm{glue}}$, use objects
-\[
-c_{\mathrm{glue}}\sqsubseteq u_{\mathrm{glue}}\sqsubseteq a_{\mathrm{glue}},
-\qquad
-c_{\mathrm{glue}}\sqsubseteq v_{\mathrm{glue}}\sqsubseteq a_{\mathrm{glue}},
-\]
-with cover $\{u_{\mathrm{glue}}\to a_{\mathrm{glue}},v_{\mathrm{glue}}\to a_{\mathrm{glue}}\}$. Define
+For $r_{\mathrm{glue}}$, use objects $u_{\mathrm{glue}},v_{\mathrm{glue}}\sqsubseteq_{p,s} a_{\mathrm{glue}}$ with $c_{\mathrm{glue}}:=u_{\mathrm{glue}}\wedge v_{\mathrm{glue}}$, and let $\{u_{\mathrm{glue}}\to a_{\mathrm{glue}},v_{\mathrm{glue}}\to a_{\mathrm{glue}}\}\in\Cov_{p,s}(a_{\mathrm{glue}})$. Define
 \[
 F(u_{\mathrm{glue}})=F(v_{\mathrm{glue}})=F(c_{\mathrm{glue}})=\{*\},
 \qquad
 F(a_{\mathrm{glue}})=\varnothing,
 \]
-and let every restriction map be the identity on $\{*\}$. Then the chosen cover supports a compatible family, but there is no global section at $a_{\mathrm{glue}}$. Thus $M,p\Vdash \Null^{\mathrm{glue}}_s(r_{\mathrm{glue}})$.
+and let every restriction map be the identity on $\{*\}$. The compatibility check at the meet $c_{\mathrm{glue}}$ succeeds: $*=*$. Hence the cover supports a compatible family, but there is no global section at $a_{\mathrm{glue}}$. Thus $M,p\Vdash \Null^{\mathrm{glue}}_s(r_{\mathrm{glue}})$.
 
 Finally, stipulate
 \[
@@ -528,31 +537,26 @@ The three null modes show that information-state forcing distinguishes situation
 \begin{theorem}[Pointwise irreducibility of gluing predicates]\label{thm:pointwise-irreducibility}
 There exist a model $M$, a state $p=(\Gamma_p,R_p)$, and admitted references
 \[
-r_{\mathrm{tot}},\qquad r_{\mathrm{cmp}},\qquad r_{\mathrm{glue}}:\mathsf{Ref}_s
+r_1,\quad r_2,\quad r_3,\quad r_4:\mathsf{Ref}_s
 \]
-of the same sort such that:
+of the same sort such that for every $\rho\in R_p$ and every lower-layer $\mathrm{Form}_1$-formula $\varphi(x)$ with one free variable $x$ of sort $\mathsf{Ref}_s$,
+\[
+M,\rho\models\varphi(r_1)
+\;\Longleftrightarrow\;
+M,\rho\models\varphi(r_2)
+\;\Longleftrightarrow\;
+M,\rho\models\varphi(r_3)
+\;\Longleftrightarrow\;
+M,\rho\models\varphi(r_4),
+\]
+and moreover:
 \begin{enumerate}[label=(\roman*),nosep]
-\item for every $\rho\in R_p$ and every lower-layer $\mathrm{Form}_1$-formula $\varphi(x)$ with one free variable $x$ of sort $\mathsf{Ref}_s$,
-\[
-M,\rho\models\varphi(r_{\mathrm{tot}})
-\quad\Longleftrightarrow\quad
-M,\rho\models\varphi(r_{\mathrm{cmp}})
-\quad\Longleftrightarrow\quad
-M,\rho\models\varphi(r_{\mathrm{glue}});
-\]
-\item $M,p\Vdash \CompSec_s(r_{\mathrm{tot}})\land \Sec_s(r_{\mathrm{tot}})$;
-\item $M,p\Vdash \LocSec_s(r_{\mathrm{cmp}})\land \neg\CompSec_s(r_{\mathrm{cmp}})$;
-\item $M,p\Vdash \CompSec_s(r_{\mathrm{glue}})\land \neg\Sec_s(r_{\mathrm{glue}})$.
+\item $M,p\Vdash \CompSec_s(r_1)\land \Sec_s(r_1)$;
+\item $M,p\Vdash \CompSec_s(r_2)\land \neg\Sec_s(r_2)$, i.e., $M,p\Vdash\Null^{\mathrm{glue}}_s(r_2)$;
+\item $M,p\Vdash \LocSec_s(r_3)\land \neg\CompSec_s(r_3)$;
+\item $M,p\Vdash \CompSec_s(r_4)\land \Sec_s(r_4)$.
 \end{enumerate}
-In particular, the predicates
-\[
-\CompSec_s,
-\qquad
-\Sec_s,
-\qquad
-\Null^{\mathrm{glue}}_s
-\]
-are not definable in the information-state forcing language without the local-object enrichment.
+The four references are lower-layer indistinguishable and realize four distinct positions in the $(\LocSec, \CompSec, \Sec)$-lattice. In particular, the two indistinguishable pairs $(r_1,r_3)$ and $(r_1,r_2)$ witness that $\CompSec_s$, $\Sec_s$, and $\Null^{\mathrm{glue}}_s$ are not definable in the information-state forcing language without the local-object enrichment.
 \end{theorem}
 
 \begin{proof}
@@ -560,103 +564,75 @@ Take the context
 \[
 \Gamma_p=
 \bigl(
-y_{\mathrm{tot}}:\mathsf{Ref}_s,\,
-y_{\mathrm{cmp}}:\mathsf{Ref}_s,\,
-y_{\mathrm{glue}}:\mathsf{Ref}_s
+y_1:\mathsf{Ref}_s,\,
+y_2:\mathsf{Ref}_s,\,
+y_3:\mathsf{Ref}_s,\,
+y_4:\mathsf{Ref}_s
 \bigr),
 \]
-put
+set $r_k:=y_k$ for $k=1,2,3,4$, and let $p=(\Gamma_p,R_p)$ with $R_p=\{\rho_0\}$, where
 \[
-r_{\mathrm{tot}}:=y_{\mathrm{tot}},\qquad
-r_{\mathrm{cmp}}:=y_{\mathrm{cmp}},\qquad
-r_{\mathrm{glue}}:=y_{\mathrm{glue}},
+\rho_0(y_1)=0,\quad
+\rho_0(y_2)=1,\quad
+\rho_0(y_3)=2,\quad
+\rho_0(y_4)=3.
 \]
-and let $p=(\Gamma_p,R_p)$ with $R_p=\{\rho_0\}$, where $\rho_0$ is the valuation determined by
-\[
-\rho_0(y_{\mathrm{tot}})=0,\qquad
-\rho_0(y_{\mathrm{cmp}})=1,\qquad
-\rho_0(y_{\mathrm{glue}})=2.
-\]
-In the $\Sigma_1$-reduct, let the reference sort have domain
-\[
-D_{\mathsf{Ref}_s}^M=\{0,1,2,3\}.
-\]
-Interpret every symbol of $\Sigma_1$ whose type mentions $\mathsf{Ref}_s$ so that it is invariant under permutations of $\{0,1,2\}$ fixing $3$; for example, one may interpret every relation symbol involving $\mathsf{Ref}_s$ by the empty relation and every function symbol involving $\mathsf{Ref}_s$ by a constant map independent of the $\mathsf{Ref}_s$-coordinates. Interpret all remaining sorts and symbols arbitrarily. Then every permutation of $\{0,1,2\}$ fixing $3$ extends to an automorphism of the $\Sigma_1$-structure underlying $M$. Hence $0,1,2$ lie in the same automorphism orbit. By invariance of first-order truth under automorphisms, every lower-layer unary formula $\varphi(x)$ has the same truth value at $0$, $1$, and $2$. Since $x$ is the only free variable of $\varphi$, this gives
-\[
-M,\rho_0\models\varphi(r_{\mathrm{tot}})
-\quad\Longleftrightarrow\quad
-M,\rho_0\models\varphi(r_{\mathrm{cmp}})
-\quad\Longleftrightarrow\quad
-M,\rho_0\models\varphi(r_{\mathrm{glue}}),
-\]
-which is \textup{(i)} because $R_p=\{\rho_0\}$.
 
-Write
-\[
-a_{\mathrm{tot}}=[r_{\mathrm{tot}}]_p,\qquad
-a_{\mathrm{cmp}}=[r_{\mathrm{cmp}}]_p,\qquad
-a_{\mathrm{glue}}=[r_{\mathrm{glue}}]_p.
-\]
-Give these three reference classes pairwise disjoint rooted components in the local reference frame.
+\medskip
+\noindent\textit{Lower-layer indistinguishability.}
+Let the reference-sort domain be $D_{\mathsf{Ref}_s}^M=\{0,1,2,3\}$. Interpret every $\Sigma_1$-symbol whose type involves $\mathsf{Ref}_s$ so that the interpretation is invariant under the permutation $\alpha=(01)(23)$ of $\{0,1,2,3\}$; for example, interpret every relation symbol on $\mathsf{Ref}_s$ by the empty relation and every function symbol with $\mathsf{Ref}_s$-arguments by a constant map. Then $\alpha$ extends to an automorphism of the $\Sigma_1$-reduct of $M$.
 
-For $r_{\mathrm{tot}}$, let $a_{\mathrm{tot}}$ carry only its trivial cover and define
-\[
-F(a_{\mathrm{tot}})=\{*\}.
-\]
-Then $*\in F(a_{\mathrm{tot}})$ is already a global section, so \textup{(ii)} holds.
+Because $\alpha(0)=1$ and $\alpha(2)=3$, the orbits of $\alpha$ on $\{0,1,2,3\}$ are $\{0,1\}$ and $\{2,3\}$. However, both orbits are mapped to each other by the transposition $(02)(13)$, so the group $\langle (01)(23),(02)(13)\rangle\cong(\mathbb Z/2\mathbb Z)^2$ acts transitively on $\{0,1,2,3\}$. Interpret all $\Sigma_1$-symbols as invariant under this entire group. Then $0,1,2,3$ lie in a single automorphism orbit. By invariance of first-order truth under automorphisms, every lower-layer unary formula $\varphi(x)$ takes the same value at $0,1,2,3$, establishing \textup{(i)} since $R_p=\{\rho_0\}$.
 
-For $r_{\mathrm{cmp}}$, use objects
+\medskip
+\noindent\textit{Local reference frames.}
+Give $r_1,r_2,r_3,r_4$ pairwise disjoint rooted components in the local reference frame. Write $a_k=[r_k]_p$.
+
+\smallskip
+\noindent\textit{Data for $r_1$ (global section exists).}
+Let $a_1$ carry only the trivial cover and define $F(a_1)=\{*\}$. Then $*$ is a global section, giving \textup{(ii)}.
+
+\smallskip
+\noindent\textit{Data for $r_2$ (compatible local section, no global section).}
+In the semilattice component for $a_2$, set
 \[
-c_{\mathrm{cmp}}\sqsubseteq u_{\mathrm{cmp}}\sqsubseteq a_{\mathrm{cmp}},
+c_2\sqsubseteq u_2\sqsubseteq a_2,
 \qquad
-c_{\mathrm{cmp}}\sqsubseteq v_{\mathrm{cmp}}\sqsubseteq a_{\mathrm{cmp}},
-\]
-with covering family
-\[
-\{u_{\mathrm{cmp}}\to a_{\mathrm{cmp}},\,v_{\mathrm{cmp}}\to a_{\mathrm{cmp}}\}.
-\]
-Define
-\[
-F(u_{\mathrm{cmp}})=\{\sigma_u\},\quad
-F(v_{\mathrm{cmp}})=\{\sigma_v\},\quad
-F(c_{\mathrm{cmp}})=\{0,1\},\quad
-F(a_{\mathrm{cmp}})=\varnothing,
-\]
-with restrictions
-\[
-\res_{c_{\mathrm{cmp}}}^{u_{\mathrm{cmp}}}(\sigma_u)=0,
+c_2\sqsubseteq v_2\sqsubseteq a_2,
 \qquad
-\res_{c_{\mathrm{cmp}}}^{v_{\mathrm{cmp}}}(\sigma_v)=1.
+c_2=u_2\wedge v_2.
 \]
-Thus local sections exist on the chosen cover, but the only possible local family is incompatible on the overlap, proving \textup{(iii)}.
+Let $\{u_2\to a_2,\,v_2\to a_2\}\in\Cov_{p,s}(a_2)$, and define
+\[
+F(u_2)=F(v_2)=F(c_2)=\{*\},\qquad F(a_2)=\varnothing,
+\]
+with all restriction maps being the identity on $\{*\}$. The unique family $(\sigma_{u_2}=*,\sigma_{v_2}=*)$ is compatible on the meet $c_2=u_2\wedge v_2$. Hence $M,p\Vdash\CompSec_s(r_2)$. But $F(a_2)=\varnothing$, so $M,p\nVdash\Sec_s(r_2)$, giving \textup{(iii)}.
 
-For $r_{\mathrm{glue}}$, use objects
+\smallskip
+\noindent\textit{Data for $r_3$ (local sections exist, incompatible).}
+In the component for $a_3$, set
 \[
-c_{\mathrm{glue}}\sqsubseteq u_{\mathrm{glue}}\sqsubseteq a_{\mathrm{glue}},
+c_3\sqsubseteq u_3\sqsubseteq a_3,
 \qquad
-c_{\mathrm{glue}}\sqsubseteq v_{\mathrm{glue}}\sqsubseteq a_{\mathrm{glue}},
-\]
-with covering family
-\[
-\{u_{\mathrm{glue}}\to a_{\mathrm{glue}},\,v_{\mathrm{glue}}\to a_{\mathrm{glue}}\}.
-\]
-Define
-\[
-F(u_{\mathrm{glue}})=F(v_{\mathrm{glue}})=F(c_{\mathrm{glue}})=\{*\},
+c_3\sqsubseteq v_3\sqsubseteq a_3,
 \qquad
-F(a_{\mathrm{glue}})=\varnothing,
+c_3=u_3\wedge v_3.
 \]
-and let every restriction map be the identity on $\{*\}$. Then the chosen cover supports a compatible local family, but there is no global section at $a_{\mathrm{glue}}$, proving \textup{(iv)}.
+Let $\{u_3\to a_3,\,v_3\to a_3\}\in\Cov_{p,s}(a_3)$, and define
+\[
+F(u_3)=\{\sigma_u\},\quad
+F(v_3)=\{\sigma_v\},\quad
+F(c_3)=\{0,1\},\quad
+F(a_3)=\varnothing,
+\]
+with restrictions $\res_{c_3}^{u_3}(\sigma_u)=0$ and $\res_{c_3}^{v_3}(\sigma_v)=1$. Local sections exist, but the compatibility condition at the meet $c_3=u_3\wedge v_3$ fails: $\res_{c_3}^{u_3}(\sigma_u)=0\neq 1=\res_{c_3}^{v_3}(\sigma_v)$. Hence $M,p\Vdash\LocSec_s(r_3)\land\neg\CompSec_s(r_3)$, giving \textup{(iv)}.
 
-Finally, stipulate
-\[
-M,p\Vdash
-\Adm_s(r_{\mathrm{tot}})
-\land
-\Adm_s(r_{\mathrm{cmp}})
-\land
-\Adm_s(r_{\mathrm{glue}}).
-\]
-Because $R_p$ is a singleton, state forcing of any lower-layer instance $\theta(r)$ is equivalent to ordinary satisfaction of $\theta(r)$ at $\rho_0$. Clause \textup{(i)} therefore implies that every lower-layer formula assigns the same forcing value to $r_{\mathrm{tot}}$, $r_{\mathrm{cmp}}$, and $r_{\mathrm{glue}}$ at $p$. But \textup{(ii)} and \textup{(iii)} separate $\CompSec_s$, \textup{(ii)} and \textup{(iv)} separate $\Sec_s$, and \textup{(ii)} together with \textup{(iv)} separates $\Null^{\mathrm{glue}}_s$. Hence none of these predicates is definable in the lower information-state forcing language.
+\smallskip
+\noindent\textit{Data for $r_4$ (global section exists).}
+Let $a_4$ carry only the trivial cover and define $F(a_4)=\{*\}$. Then $M,p\Vdash \CompSec_s(r_4)\land\Sec_s(r_4)$, establishing \textup{(iv)}. This fourth reference is included to ensure the domain element $3$ is referenced and to make the automorphism group act transitively on all four values; the separation argument uses only the pairs $(r_1,r_2)$ and $(r_1,r_3)$.
+
+\smallskip
+\noindent\textit{Separation.}
+By \textup{(i)}, every lower-layer formula assigns the same truth value to $r_1,r_2,r_3,r_4$ at $p$. The pair $(r_1,r_3)$ witnesses that $\CompSec_s$ is not lower-definable: $M,p\Vdash\CompSec_s(r_1)$ but $M,p\nVdash\CompSec_s(r_3)$. The pair $(r_1,r_2)$ witnesses that $\Sec_s$ is not lower-definable: both satisfy $\CompSec_s$, yet $M,p\Vdash\Sec_s(r_1)$ and $M,p\nVdash\Sec_s(r_2)$. The same pair witnesses that $\Null^{\mathrm{glue}}_s$ is not lower-definable: $M,p\Vdash\Null^{\mathrm{glue}}_s(r_2)$ while $M,p\nVdash\Null^{\mathrm{glue}}_s(r_1)$. Hence none of the three predicates is expressible by any formula of the lower information-state forcing language.
 \end{proof}
 

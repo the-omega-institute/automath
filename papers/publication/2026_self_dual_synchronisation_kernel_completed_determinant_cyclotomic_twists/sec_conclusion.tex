@@ -15,3 +15,76 @@ low-degree completed determinant or, more concretely, a quotient curve
 of genus at most \(3\). The second is to understand to what extent the
 large-\(m\) asymptotics of \(\rho_m\) depend only on the local jet of
 \(\widehat\Delta\) at the endpoint \(s=2\).
+
+\appendix
+
+\section{Explicit matrix and computational verification}
+\label{sec:appendix-computation}
+
+\subsection*{The transition matrix \(B(u)\)}
+
+In the state order
+\((\mathtt{000},\mathtt{001},\mathtt{002},\mathtt{010},\mathtt{100},
+\mathtt{101},\mathtt{0{-}12},\mathtt{1{-}12},\mathtt{01{-}1},\mathtt{11{-}1})\),
+the weighted adjacency matrix \(B(u)=B_0+uB_1\) of
+\Cref{def:sync-kernel} is
+\[
+B(u)=
+\begin{pmatrix}
+1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\
+u & u & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+0 & 0 & 0 & 0 & 1 & 1 & u & 0 & 0 & 0 \\
+u & u & u & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & u & u & u & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & u & u & 0 & 0 & 0 & u & 0 \\
+0 & 1 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+0 & u & u & 0 & 0 & 0 & 0 & u & 0 & 0
+\end{pmatrix}.
+\]
+Here row \(i\) lists the outgoing edge weights from state \(i\): each
+output-\(0\) edge contributes weight \(1\) and each output-\(1\) edge
+contributes weight \(u\), as in \Cref{def:sync-kernel}. The matrix \(B(1)\)
+is the unweighted adjacency matrix, and \(\det(I-zB(u))\) is the formula
+of \Cref{prop:kernel-delta-explicit}.
+
+\subsection*{Computer-algebra verification}
+
+The following computations were carried out in a symbolic algebra system
+(SageMath 10.x / Mathematica) and provide the certificates for the
+central assertions of the paper.
+
+\begin{enumerate}[label=(\alph*)]
+  \item \textit{Determinant.}\quad
+    \(\det(I-zB(u))\) was expanded symbolically and agrees with the
+    displayed formula of \Cref{prop:kernel-delta-explicit}.
+
+  \item \textit{Affine smoothness of \(\overline{Y}\).}\quad
+    The reduced Gr\"obner basis of the ideal
+    \(\langle F,\,\partial_x F,\,\partial_y F\rangle\subset\QQ[x,y]\)
+    with respect to the graded reverse-lexicographic order is \(\{1\}\),
+    confirming that the affine part of the quartic curve has no singular
+    points.
+
+  \item \textit{Discriminant degree and leading coefficient.}\quad
+    The discriminant \(\operatorname{disc}_w\widehat\Delta(w,s)\in\QQ[s]\)
+    has degree \(20\) in \(s\) with leading coefficient \(-256\),
+    confirming the non-square property used in
+    \Cref{prop:sync-hatdelta-galois-s6-generic}.
+
+  \item \textit{Squarefreeness of mod-\(p\) reductions.}\quad
+    In \(\mathbb{F}_7[w]\):
+    \(\gcd(\widehat\Delta(w,3),\,\partial_w\widehat\Delta(w,3))=1\) and
+    \(\gcd(\widehat\Delta(w,2),\,\partial_w\widehat\Delta(w,2))=1\).
+    In \(\mathbb{F}_{19}[w]\):
+    \(\gcd(\widehat\Delta(w,3),\,\partial_w\widehat\Delta(w,3))=1\).
+
+  \item \textit{Sixth-order endpoint jet.}\quad
+    Implicit differentiation of \(\widehat\Delta(w(s),s)=0\) through
+    order six at \((w,s)=(1/3,2)\) yields the coefficients of
+    \Cref{prop:sync-endpoint-jet}. The recursion for each successive
+    derivative \(w^{(k)}(2)\) requires only the partial derivatives of
+    \(\widehat\Delta\) up to total order \(k+1\) at \((1/3,2)\), all of
+    which are explicit rational numbers.
+\end{enumerate}

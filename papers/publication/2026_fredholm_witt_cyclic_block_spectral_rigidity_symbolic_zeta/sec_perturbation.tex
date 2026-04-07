@@ -1,53 +1,99 @@
 \section{Perturbative Applications}
 \label{sec:perturbation}
 
+\subsection{Analytic eigenvalue branches and algebraic finite-part functionals}
+
+The perturbative statements in this section concern holomorphic matrix
+families together with a distinguished simple eigenvalue branch that is
+separated from the rest of the spectrum. We state the standing
+hypothesis once and use it throughout.
+
+\begin{definition}[Analytic spectral-gap hypothesis]
+  \label{def:spectral-gap-hypothesis}
+  Let \(\theta\mapsto A(\theta)\) be a holomorphic family of
+  \(d\times d\) complex matrices near \(\theta_0\in\CC\). We say that
+  \(A(\theta)\) satisfies the \emph{analytic spectral-gap hypothesis at
+  \(\theta_0\)} if \(A(\theta_0)\) has a simple eigenvalue
+  \(\lambda_0\ne 0\) such that
+  \[
+    \abs{\mu}<\abs{\lambda_0}
+    \quad\text{for every }
+    \mu\in\spec\!\bigl(A(\theta_0)\bigr)\setminus\{\lambda_0\}.
+  \]
+  Under this condition, after shrinking to a simply connected
+  neighbourhood \(U\ni\theta_0\), the standard Riesz projection
+  \[
+    P(\theta)
+    :=\frac{1}{2\pi i}
+      \int_{\abs{z-\lambda_0}=\delta}
+      (zI-A(\theta))^{-1}\,\dd z
+  \]
+  (for \(\delta>0\) chosen so that no other eigenvalue of
+  \(A(\theta_0)\) lies in \(\abs{z-\lambda_0}\le\delta\)) defines a
+  holomorphic rank-one projector. The corresponding eigenvalue branch
+  \[
+    \lambda(\theta):=\Tr(A(\theta)P(\theta))
+  \]
+  is the unique holomorphic function on \(U\) with \(\lambda(\theta_0)
+  =\lambda_0\) and \(A(\theta)P(\theta)=\lambda(\theta)P(\theta)\).
+  There exist \(q\in(0,1)\) and a neighbourhood \(U\) such that
+  \[
+    \sup_{\theta\in U}
+    \frac{\rho\!\left(A(\theta)\bigm|_{(I-P(\theta))\CC^d}\right)}
+         {\abs{\lambda(\theta)}}
+    \le q < 1.
+  \]
+  When \(A(\theta)\) is a primitive matrix with Perron root \(\lambda_0
+  =\rho(A(\theta_0))>0\), this is exactly the Perron--Frobenius
+  spectral gap, and \(\lambda(\theta)\) agrees with \(\rho(A(\theta))\)
+  on the real slice where \(A(\theta)\) remains primitive. In the
+  general complex case, \(\rho(A(\theta))\) is not holomorphic in
+  \(\theta\), and \(\lambda(\theta)\) is the correct analytic object.
+\end{definition}
+
+\begin{definition}[Algebraic finite-part functionals]
+  \label{def:algebraic-finite-part}
+  Let \(A\) be a \(d\times d\) matrix satisfying the spectral-gap
+  hypothesis with distinguished simple eigenvalue \(\lambda\ne 0\).
+  Set \(B:=I-A/\lambda\). The \emph{reduced determinant} is
+  \[
+    C(A,\lambda)
+    :=\det\nolimits'(B)^{-1}
+    :=\prod_{\mu\in\spec(A)\setminus\{\lambda\}}
+      \!\!\left(1-\frac{\mu}{\lambda}\right)^{-1},
+  \]
+  where the product is taken with algebraic multiplicity. The
+  \emph{Abel finite-part functional} is
+  \[
+    F(A,\lambda)
+    :=\log C(A,\lambda)
+      +\sum_{k\ge 2}\frac{\mu(k)}{k}
+        \log\det\!\bigl(I-\lambda^{-k}A\bigr)^{-1},
+  \]
+  where the logarithm is the principal branch (valid because
+  \(\abs{\lambda^{-k}\mu}<1\) for all \(\mu\in\spec(A)\setminus\{\lambda\}\)
+  when the spectral gap holds). When \(A\) is a primitive matrix with
+  Perron root \(\lambda=\rho(A)\), one has \(C(A,\lambda)=C(A)\) in the
+  notation of \eqref{eq:residue-constant-def}--\eqref{eq:reduced-det-constant}
+  and \(F(A,\lambda)=\log\MM(A)\) by
+  \Cref{thm:finite-part-primitive-closed-form}.
+\end{definition}
+
 \subsection{Finite-part constants and Abel variation}
 
-\begin{definition}[Reduced determinant]\label{def:reduced-determinant}
-  Let \(\theta\mapsto A_\theta\) be a holomorphic family of matrices near
-  \(\theta_0\), let \(\lambda(\theta)=\rho(A_\theta)\) be the simple
-  Perron eigenvalue, and set
-  \[
-    B_\theta:=I-\frac{A_\theta}{\lambda(\theta)}.
-  \]
-  Write the non-Perron Jordan spectrum of \(B_\theta\) as
-  \(\{0\}\cup\{\nu_j(\theta):j=2,\dots,d\}\). The reduced determinant is
-  \[
-    \det\nolimits'(B_\theta)
-    :=\prod_{\nu\in\spec(B_\theta)\setminus\{0\}}\nu
-  \]
-  with algebraic multiplicity, or equivalently
-  \[
-    \det\nolimits'(B_\theta)
-    =\prod_{\mu\in\spec(A_\theta)\setminus\{\lambda(\theta)\}}
-      \left(1-\frac{\mu}{\lambda(\theta)}\right).
-  \]
-  By \eqref{eq:reduced-det-constant},
-  \[
-    C(A_\theta)^{-1}
-    =\prod_{\mu\in\spec(A_\theta)\setminus\{\lambda(\theta)\}}
-      \left(1-\frac{\mu}{\lambda(\theta)}\right)
-    =\det\nolimits'(B_\theta),
-  \]
-  and hence \(C(A_\theta)=\det\nolimits'(B_\theta)^{-1}\).
-\end{definition}
+Throughout this subsection, \(\theta\mapsto A_\theta\) is a holomorphic
+family satisfying \Cref{def:spectral-gap-hypothesis} at \(\theta_0\),
+with analytic eigenvalue branch \(\lambda(\theta)\) and projector
+\(P_\theta\). We write \(B_\theta:=I-A_\theta/\lambda(\theta)\) and
+\(R_\theta:=B_\theta^{\#}\) for the group inverse.
 
 \begin{proposition}[Reduced-determinant gradient formula]
   \label{thm:finite-part-reduced-determinant-group-inverse-gradient}
-  Let \(\theta\mapsto A_\theta\) be a holomorphic family of primitive
-  matrices near \(\theta_0\), and assume that
-  \(\lambda(\theta):=\rho(A_\theta)\) stays simple. Choose left and
-  right Perron vectors \(\ell_\theta,r_\theta\) normalised by
-  \(\ell_\theta^{\mathsf T}r_\theta=1\), let
+  Under \Cref{def:spectral-gap-hypothesis}, with left and right
+  eigenvectors \(\ell_\theta,r_\theta\) normalized by
+  \(\ell_\theta^{\mathsf T}r_\theta=1\) and \(P_\theta=r_\theta\ell_\theta^{\mathsf T}\),
   \[
-    P_\theta:=r_\theta\ell_\theta^{\mathsf T},\quad
-    R_\theta:=B_\theta^{\#},
-  \]
-  where \(B_\theta=I-A_\theta/\lambda(\theta)\) and \(B_\theta^{\#}\) is
-  the group inverse.
-  Then
-  \[
-    \partial_\theta\log C(A_\theta)
+    \partial_\theta\log C(A_\theta,\lambda(\theta))
     =\Tr\!\left(
       R_\theta\left(
         \frac{\partial_\theta A_\theta}{\lambda(\theta)}
@@ -63,23 +109,22 @@
 
 \begin{proof}
   Since \(\lambda(\theta)\) is a simple eigenvalue
-  \cite[Chapter~II, \S1]{Kato1995Perturbation}, \(B_\theta\) has a simple
-  zero eigenvalue and all other eigenvalues are non-zero; hence the group
-  inverse \(R_\theta\) exists; see \cite[Chapter~4]{CampbellMeyer1979}.
-  Because the spectrum depends analytically,
-  \(P_\theta\) and \(R_\theta=B_\theta^{\#}\) vary analytically on
-  \(\theta\).
-  On \((I-P_\theta)\CC^d\), the restriction of \(B_\theta\) is
-  invertible and its ordinary determinant is \(\det\nolimits'(B_\theta)\).
+  \cite[Chapter~II, \S1]{Kato1995Perturbation}, \(B_\theta\) has a
+  simple zero eigenvalue and all other eigenvalues are non-zero; hence
+  the group inverse \(R_\theta\) exists; see
+  \cite[Chapter~4]{CampbellMeyer1979}. Because the spectrum depends
+  analytically, \(P_\theta\) and \(R_\theta=B_\theta^{\#}\) vary
+  analytically on \(\theta\). On \((I-P_\theta)\CC^d\), the
+  restriction of \(B_\theta\) is invertible and its ordinary
+  determinant equals \(\det\nolimits'(B_\theta)=C(A_\theta,\lambda(\theta))^{-1}\).
   Jacobi's formula on this complementary spectral subspace gives
   \[
     \partial_\theta\log\det\nolimits'(B_\theta)
     =\Tr(R_\theta\,\partial_\theta B_\theta).
   \]
-  By \Cref{def:reduced-determinant},
+  Since \(C(A_\theta,\lambda(\theta))=\det\nolimits'(B_\theta)^{-1}\),
   \[
-    \partial_\theta\log C(A_\theta)
-    =-\partial_\theta\log\det\nolimits'(B_\theta)
+    \partial_\theta\log C(A_\theta,\lambda(\theta))
     =-\Tr(R_\theta\,\partial_\theta B_\theta),
   \]
   while
@@ -94,27 +139,26 @@
 
 \begin{proposition}[Normal convergence of the secondary Fredholm factors]
   \label{prop:secondary-fredholm-normal-convergence}
-  Let \(\theta\mapsto A_\theta\) be a holomorphic family of primitive
-  matrices near \(\theta_0\), and assume that
-  \(\lambda(\theta):=\rho(A_\theta)\) stays simple. Choose left and
-  right Perron vectors \(\ell_\theta,r_\theta\) normalized by
-  \(\ell_\theta^{\mathsf T}r_\theta=1\), put
-  \(P_\theta:=r_\theta\ell_\theta^{\mathsf T}\), and for \(k\ge 2\)
-  define
+  Under \Cref{def:spectral-gap-hypothesis}, with spectral-gap ratio
+  \(q\in(0,1)\) and projector \(P_\theta\), shrink to a simply
+  connected neighbourhood \(U\ni\theta_0\) on which every matrix
+  \(G_k(\theta):=I-\lambda(\theta)^{-k}A_\theta\) is invertible for
+  \(k\ge 2\). Define the holomorphic branch
   \[
-    G_k(\theta):=I-\lambda(\theta)^{-k}A_\theta,
-    \qquad
-    \Phi_k(\theta):=\log\det G_k(\theta)^{-1}.
+    \Phi_k(\theta)
+    :=\Phi_k(\theta_0)
+      -\int_{\theta_0}^{\theta}
+        \Tr\!\bigl(G_k(\xi)^{-1}\partial_\xi G_k(\xi)\bigr)\,\dd\xi,
   \]
-  Then, after shrinking to a neighbourhood \(U\) of \(\theta_0\), there
-  exist constants \(C_U>0\) and \(q_U\in(0,1)\) such that
+  where \(\Phi_k(\theta_0):=\log\det G_k(\theta_0)^{-1}\) is
+  computed via the principal branch and the integral is along any path
+  in \(U\). Since \(U\) is simply connected and \(\det G_k\ne 0\) on
+  \(U\), this defines a single-valued holomorphic branch with
   \[
-    \sup_{\theta\in U}
-    \rho\!\left(
-      \lambda(\theta)^{-1}A_\theta\bigm|_{(I-P_\theta)\CC^d}\right)
-    \le q_U
+    \partial_\theta\Phi_k(\theta)
+    =-\Tr\!\bigl(G_k(\theta)^{-1}\partial_\theta G_k(\theta)\bigr).
   \]
-  and
+  Then there exist constants \(C_U>0\) and \(q_U\in(q,1)\) such that
   \[
     \sup_{\theta\in U}\abs{\Phi_k(\theta)}
     +\sup_{\theta\in U}\abs{\partial_\theta\Phi_k(\theta)}
@@ -128,10 +172,9 @@
   converges normally on \(U\), and termwise differentiation is
   justified there. In particular,
   \[
-    \log\MM(A_\theta)
-    =\log C(A_\theta)
-      +\sum_{k\ge 2}\frac{\mu(k)}{k}
-        \log\det(I-\lambda(\theta)^{-k}A_\theta)^{-1}
+    F(A_\theta,\lambda(\theta))
+    =\log C(A_\theta,\lambda(\theta))
+      +\sum_{k\ge 2}\frac{\mu(k)}{k}\Phi_k(\theta)
   \]
   on \(U\), with a normally convergent correction series whose first
   \(\theta\)-derivative is obtained termwise.
@@ -139,9 +182,10 @@
 
 \begin{proof}
   Choose a closed disc \(U\) around \(\theta_0\) so small that
-  \(\lambda(\theta)\) stays simple on \(U\). Set
+  \(\lambda(\theta)\) stays simple on \(U\) and \(q_U\in(q,1)\) is a
+  uniform spectral-gap bound. Set
   \[
-    \lambda_\ast:=\inf_{\theta\in U}\abs{\lambda(\theta)}>1,
+    \lambda_\ast:=\inf_{\theta\in U}\abs{\lambda(\theta)}>0,
     \qquad
     M_0:=\sup_{\theta\in U}\norm{A_\theta}<\infty,
   \]
@@ -151,106 +195,70 @@
     \bigl(\norm{\partial_\theta A_\theta}
       +\abs{\partial_\theta\lambda(\theta)}\bigr)<\infty.
   \]
-  Because the Perron projector \(P_\theta\) depends holomorphically on
-  \(\theta\), the complementary family
-  \[
-    \theta\longmapsto
-    \lambda(\theta)^{-1}A_\theta\bigm|_{(I-P_\theta)\CC^d}
-  \]
-  is continuous. After shrinking \(U\) again if necessary, simplicity
-  of the Perron root gives
-  \[
-    q_0:=
-    \sup_{\theta\in U}
-    \rho\!\left(
-      \lambda(\theta)^{-1}A_\theta\bigm|_{(I-P_\theta)\CC^d}\right)<1.
-  \]
-  Fix \(q_U\in(\max\{\lambda_\ast^{-1},q_0\},1)\).
-
   For each \(k\ge 2\), the operator \(G_k(\theta)\) acts by the scalar
-  \(1-\lambda(\theta)^{1-k}\) on the Perron line and by
-  \(I-\lambda(\theta)^{-k}A_\theta\) on \((I-P_\theta)\CC^d\). In
-  particular every \(G_k(\theta)\) is invertible on \(U\). Since
-  \(G_k(\theta)\to I\) uniformly on \(U\) as \(k\to\infty\), there
-  exists \(K\ge 2\) such that
-  \[
-    \sup_{\theta\in U}\norm{I-G_k(\theta)}\le \frac12
-    \qquad (k\ge K),
-  \]
-  and hence
-  \[
-    \sup_{\theta\in U}\norm{G_k(\theta)^{-1}}\le 2
-    \qquad (k\ge K).
-  \]
-  For the finitely many values \(2\le k<K\), continuity on the compact
-  set \(U\) yields
-  \[
-    C_U^{(0)}:=\max_{2\le k<K}\sup_{\theta\in U}\norm{G_k(\theta)^{-1}}
-    <\infty.
-  \]
-  Therefore
-  \[
-    \sup_{k\ge 2,\ \theta\in U}\norm{G_k(\theta)^{-1}}
-    \le C_U^{(1)}
-  \]
-  for some constant \(C_U^{(1)}>0\).
+  \(1-\lambda(\theta)^{1-k}\) on the eigenline for \(\lambda(\theta)\)
+  and by \(I-\lambda(\theta)^{-k}A_\theta\) on
+  \((I-P_\theta)\CC^d\). On the eigenline the scalar
+  \(1-\lambda(\theta)^{1-k}\) is bounded away from zero for \(k\ge 2\)
+  (since \(\abs{\lambda(\theta)}\ge\lambda_\ast>0\)). On the
+  complementary subspace, the spectral radius satisfies
+  \(\rho(A_\theta|_{(I-P_\theta)\CC^d})\le q_U\abs{\lambda(\theta)}\),
+  so \(\lambda(\theta)^{-k}A_\theta\) has spectral radius at most
+  \(q_U\abs{\lambda(\theta)}^{1-k}\to 0\) as \(k\to\infty\).
+  Hence every \(G_k(\theta)\) is invertible on \(U\) for all
+  sufficiently large \(k\), and for the finitely many small \(k\),
+  invertibility is guaranteed by compactness. Thus \(\Phi_k\) is
+  well-defined as a holomorphic branch on \(U\) for all \(k\ge 2\).
 
-  For \(k\ge K\), the absolutely convergent determinant series gives
-  \[
-    \Phi_k(\theta)
-    =\sum_{m\ge 1}
-      \frac{\Tr\!\bigl((\lambda(\theta)^{-k}A_\theta)^m\bigr)}{m},
-  \]
-  so
+  The branch-integration formula gives
+  \(e^{\Phi_k(\theta)}=\det G_k(\theta)^{-1}\) for all \(\theta\in U\)
+  by construction, so the branch agrees with any local determination of
+  \(\log\det G_k(\theta)^{-1}\).
+
+  For \(k\) large enough that
+  \(\sup_{\theta\in U}\norm{I-G_k(\theta)}\le 1/2\), the Taylor series
+  \(\Phi_k(\theta)=\sum_{m\ge 1}\Tr((\lambda(\theta)^{-k}A_\theta)^m)/m\)
+  converges absolutely, giving
   \[
     \abs{\Phi_k(\theta)}
-    \le d\sum_{m\ge 1}\frac{(M_0\lambda_\ast^{-k})^m}{m}
-    \le C_U^{(2)}\lambda_\ast^{-k}.
+    \le d\sum_{m\ge 1}\frac{(M_0/\lambda_\ast^{k})^m}{m}
+    \le C\,q_U^k.
   \]
-  Enlarging the constant to absorb the finitely many indices
-  \(2\le k<K\), we obtain
-  \[
-    \sup_{\theta\in U}\abs{\Phi_k(\theta)}
-    \le C_U^{(3)}q_U^k
-    \qquad (k\ge 2).
-  \]
-
   Jacobi's formula yields
   \[
     \partial_\theta\Phi_k(\theta)
-    =-\Tr\!\bigl(G_k(\theta)^{-1}\partial_\theta G_k(\theta)\bigr)
-    =\Tr\!\left(
-      G_k(\theta)^{-1}\left(
-        \frac{\partial_\theta A_\theta}{\lambda(\theta)^k}
-        -\frac{k\,\partial_\theta\lambda(\theta)}{\lambda(\theta)^{k+1}}
-         A_\theta\right)\right).
+    =-\Tr\!\bigl(G_k(\theta)^{-1}\partial_\theta G_k(\theta)\bigr),
   \]
-  Hence
+  with
   \[
     \sup_{\theta\in U}\norm{\partial_\theta G_k(\theta)}
-    \le M_1\lambda_\ast^{-k}
-      +kM_0M_1\lambda_\ast^{-k-1}
-    \le C_U^{(4)}k\lambda_\ast^{-k},
+    \le M_1/\lambda_\ast^k+kM_0M_1/\lambda_\ast^{k+1}
+    \le C'\,k\,q_U^k.
   \]
-  and the uniform inverse bound gives
-  \[
-    \sup_{\theta\in U}\abs{\partial_\theta\Phi_k(\theta)}
-    \le C_U^{(5)}k\lambda_\ast^{-k}
-    \le C_U^{(5)}kq_U^k.
-  \]
-  Combining the two estimates and using \(|\mu(k)|\le 1\) proves the
-  normal convergence of
-  \(\sum_{k\ge 2}\mu(k)\Phi_k(\theta)/k\) and of its derivative series.
+  Combining gives \(\abs{\partial_\theta\Phi_k(\theta)}\le C''kq_U^k\).
+  Absorbing finitely many small \(k\) values into the constant proves
+  the stated bound. Normal convergence and termwise differentiation of
+  \(\sum_{k\ge 2}\mu(k)\Phi_k/k\) follow from
+  \(\sum_{k\ge 2}kq_U^k<\infty\).
 \end{proof}
 
 \begin{proposition}[Holomorphic variation of the Abel finite part]
   \label{thm:logM-holomorphic-variation}
-  Let \(\theta\mapsto A_\theta\) be a holomorphic family of primitive
-  matrices near \(\theta_0\), and assume that
-  \(\lambda(\theta):=\rho(A_\theta)\) stays simple. Let
-  \(R_\theta=(I-A_\theta/\lambda(\theta))^{\#}\). Then
-  \(\theta\mapsto\log\MM(A_\theta)\) is holomorphic near \(\theta_0\)
-  and
+  Under \Cref{def:spectral-gap-hypothesis}, the function
+  \(\theta\mapsto F(A_\theta,\lambda(\theta))\) is holomorphic near
+  \(\theta_0\) and
+  \[
+    \frac{\dd}{\dd\theta}F(A_\theta,\lambda(\theta))
+    =\Tr\!\left(
+      R_\theta\left(
+        \frac{\partial_\theta A_\theta}{\lambda(\theta)}
+        -\frac{\partial_\theta\lambda(\theta)}{\lambda(\theta)^2}
+         A_\theta\right)\right)
+    +\sum_{k\ge 2}\frac{\mu(k)}{k}
+      \partial_\theta\Phi_k(\theta).
+  \]
+  When \(A_\theta\) is a primitive matrix with Perron root
+  \(\lambda(\theta)=\rho(A_\theta)>0\), this gives
   \[
     \frac{\dd}{\dd\theta}\log\MM(A_\theta)
     =\Tr\!\left(
@@ -266,18 +274,19 @@
 
 \begin{proof}
   For each \(\theta\) near \(\theta_0\),
-  \Cref{thm:finite-part-primitive-closed-form} gives
+  \Cref{def:algebraic-finite-part} gives
   \[
-    \log\MM(A_\theta)
-    =\log C(A_\theta)
-      +\sum_{k\ge 2}\frac{\mu(k)}{k}
-        \log\det(I-\lambda(\theta)^{-k}A_\theta)^{-1}.
+    F(A_\theta,\lambda(\theta))
+    =\log C(A_\theta,\lambda(\theta))
+      +\sum_{k\ge 2}\frac{\mu(k)}{k}\Phi_k(\theta).
   \]
   By \Cref{prop:secondary-fredholm-normal-convergence}, the correction
   series converges normally and may be differentiated termwise. The
-  derivative of \(\log C(A_\theta)\) is given by
-  \Cref{thm:finite-part-reduced-determinant-group-inverse-gradient},
-  which proves the stated formula.
+  derivative of \(\log C(A_\theta,\lambda(\theta))\) is given by
+  \Cref{thm:finite-part-reduced-determinant-group-inverse-gradient}.
+  The specialization to primitive matrices uses
+  \(F(A_\theta,\lambda(\theta))=\log\MM(A_\theta)\) from
+  \Cref{thm:finite-part-primitive-closed-form}.
 \end{proof}
 
 \begin{proposition}[Determinant truncation for the Abel finite part]
@@ -286,27 +295,30 @@
   exist a neighbourhood \(U\) of \(\theta_0\), a constant \(C_U>0\), and
   a number \(q_U\in(0,1)\) such that for
   \[
-    \log\MM_N(A_\theta)
-    :=\log C(A_\theta)
-      +\sum_{2\le k\le N}\frac{\mu(k)}{k}
-       \log\det(I-\lambda(\theta)^{-k}A_\theta)^{-1},
+    F_N(A_\theta,\lambda(\theta))
+    :=\log C(A_\theta,\lambda(\theta))
+      +\sum_{2\le k\le N}\frac{\mu(k)}{k}\Phi_k(\theta),
   \]
   one has
+  \[
+    \sup_{\theta\in U}
+    \abs{F(A_\theta,\lambda(\theta))-F_N(A_\theta,\lambda(\theta))}
+    \le C_U q_U^{N+1}.
+  \]
+  The same estimate holds after one \(\theta\)-derivative. When
+  \(A_\theta\) is primitive and real, \(F\) and \(F_N\) specialize to
+  \(\log\MM(A_\theta)\) and \(\log\MM_N(A_\theta)\) respectively, and
+  the truncation estimate reads
   \[
     \sup_{\theta\in U}
     \abs{\log\MM(A_\theta)-\log\MM_N(A_\theta)}
     \le C_U q_U^{N+1}.
   \]
-  The same estimate holds after one \(\theta\)-derivative.
 \end{proposition}
 
 \begin{proof}
   Let \(U\), \(C_0\), and \(q_U\) be given by
-  \Cref{prop:secondary-fredholm-normal-convergence}, and write
-  \[
-    \Phi_k(\theta):=\log\det(I-\lambda(\theta)^{-k}A_\theta)^{-1}.
-  \]
-  Then
+  \Cref{prop:secondary-fredholm-normal-convergence}. Then
   \[
     \sum_{k>N}\left|\frac{\mu(k)}{k}\Phi_k(\theta)\right|
     \le C_0\sum_{k>N}q_U^k,
@@ -394,7 +406,7 @@ on the recoded shift. For \(t\in\CC\), define the weighted matrix
         =
         \sum_{y\in\Fix(\sigma_B^n)}(S_ng(y))^r.
       \]
-    \item The dominant eigenvalue germs \(\lambda_f(t)\) and
+    \item The dominant eigenvalue branches \(\lambda_f(t)\) and
       \(\lambda_g(t)\) agree near \(t=0\).
   \end{enumerate}
 \end{proposition}
@@ -412,10 +424,33 @@ on the recoded shift. For \(t\in\CC\), define the weighted matrix
   for \(t\) near \(0\). Differentiating \(r\) times at \(t=0\) proves
   \textup{(i)}.
 
-  For each fixed \(t\) near \(0\), \Cref{thm:fredholm-spectral-rigidity}
-  applied to \(M_t^{(f)}\) and \(M_t^{(g)}\) shows that their non-zero
-  spectra agree with multiplicity. In particular the simple Perron
-  eigenvalue branch agrees, proving \textup{(ii)}.
+  For part \textup{(ii)}, let \(\lambda_0=\lambda_f(0)=\rho(M_0^{(f)})
+  =\rho(M_0^{(g)})=\lambda_g(0)\) be the common simple Perron
+  eigenvalue at \(t=0\). Choose \(\varepsilon>0\) so that the disc
+  \(\abs{z-\lambda_0}<\varepsilon\) contains no other eigenvalue of
+  \(M_0^{(f)}\) or \(M_0^{(g)}\). Define Riesz projectors
+  \[
+    P_f(t)
+    :=\frac{1}{2\pi i}
+      \int_{\abs{z-\lambda_0}=\varepsilon}
+      \bigl(zI-M_t^{(f)}\bigr)^{-1}\,\dd z,
+    \qquad
+    P_g(t)
+    :=\frac{1}{2\pi i}
+      \int_{\abs{z-\lambda_0}=\varepsilon}
+      \bigl(zI-M_t^{(g)}\bigr)^{-1}\,\dd z.
+  \]
+  By continuity of eigenvalues, after shrinking to \(\abs{t}<\delta\)
+  each matrix has exactly one eigenvalue inside
+  \(\abs{z-\lambda_0}<\varepsilon\), so
+  \(\mathrm{rank}\,P_f(t)=\mathrm{rank}\,P_g(t)=1\). The corresponding
+  eigenvalues are the unique analytic branches \(\lambda_f(t)\) and
+  \(\lambda_g(t)\) near \(\lambda_0\). For each fixed \(t\) with
+  \(\abs{t}<\delta\), the spectral-rigidity statement
+  \Cref{thm:fredholm-spectral-rigidity} gives equality of the full
+  spectral multisets of \(M_t^{(f)}\) and \(M_t^{(g)}\); in
+  particular the unique eigenvalue inside \(\abs{z-\lambda_0}<\varepsilon\)
+  must agree. Therefore \(\lambda_f(t)=\lambda_g(t)\) for \(\abs{t}<\delta\).
 \end{proof}
 
 \begin{corollary}[Cumulant rigidity]
@@ -428,7 +463,7 @@ on the recoded shift. For \(t\in\CC\), define the weighted matrix
 
 \begin{proof}
   By \Cref{thm:twisted-determinant-rigidity}\textup{(ii)}, the dominant
-  eigenvalue germs agree near \(t=0\). Since the centered cumulant
+  eigenvalue branches agree near \(t=0\). Since the centered cumulant
   generating function is
   \[
     t\longmapsto
@@ -487,12 +522,18 @@ where \(\lambda=\rho(B)\). Then, in the block presentation,
 
 \begin{proposition}[Off-origin decay from a spectral-radius gap]
   \label{prop:off-origin-decay}
-  Let \(K\Subset\RR\setminus\Lambda_f\), and set
+  Let \(K\Subset\RR\setminus\Lambda_f\) be compact, and set
   \[
-    \eta_K:=\sup_{u\in K}\frac{\rho(\widetilde M_u)}{\lambda}.
+    \kappa_K:=\sup_{u\in K}\frac{\rho(\widetilde M_u)}{\lambda}.
   \]
-  Then \(\eta_K<1\). Moreover, for every
-  \(\vartheta_K\in(\eta_K,1)\) there exists \(C_K>0\) such that
+  The map \(u\mapsto\rho(\widetilde M_u)\) is continuous, and since
+  \(\rho(\widetilde M_u)=\lambda\) if and only if \(u\in\Lambda_f\)
+  (by \Cref{def:arithmetic-lattice} and Parry's criterion), we have
+  \(\kappa_K<1\). Setting
+  \[
+    \eta_K:=\frac{1+\kappa_K}{2}\in(\kappa_K,1),
+  \]
+  for every \(\vartheta_K\in(\eta_K,1)\) there exists \(C_K>0\) such that
   \[
     \sup_{u\in K}\abs{\phi_n(u)}
     \le C_K\vartheta_K^n
@@ -503,16 +544,21 @@ where \(\lambda=\rho(B)\). Then, in the block presentation,
 \end{proposition}
 
 \begin{proof}
-  By \Cref{def:arithmetic-lattice}, one has
-  \(\rho(\widetilde M_u)<\lambda\) for every \(u\in K\), and continuity
-  of \(u\mapsto\rho(\widetilde M_u)\) on the compact set \(K\) gives
-  \(\eta_K<1\). Fix \(\vartheta_K\in(\eta_K,1)\), and put
-  \(r_K:=\vartheta_K\lambda\). Then
-  \[
-    \sup_{u\in K}\rho(\widetilde M_u)<r_K<\lambda.
-  \]
-  Hence the compact set \(K\times\{\abs{z}=r_K\}\) avoids the spectrum
-  of \(zI-\widetilde M_u\), and therefore
+  The entries of \(\widetilde M_u\) are continuous in \(u\), so the
+  spectral radius \(u\mapsto\rho(\widetilde M_u)\) is continuous on
+  \(\RR\). By \Cref{def:arithmetic-lattice} and
+  \cite[Theorem~1]{Parry1992Cocycle},
+  \(\rho(\widetilde M_u)=\lambda\) if and only if \(u\in\Lambda_f\).
+  Since \(K\Subset\RR\setminus\Lambda_f\) is compact and
+  \(\rho(\widetilde M_u)<\lambda\) for all \(u\in K\), the supremum
+  \(\kappa_K=\sup_{u\in K}\rho(\widetilde M_u)/\lambda\) is attained
+  and satisfies \(\kappa_K<1\). The explicit choice
+  \(\eta_K:=(1+\kappa_K)/2\) lies in \((\kappa_K,1)\).
+
+  Fix \(\vartheta_K\in(\eta_K,1)\) and set \(r_K:=\vartheta_K\lambda\).
+  Then \(\sup_{u\in K}\rho(\widetilde M_u)<\eta_K\lambda<r_K<\lambda\).
+  The compact set \(K\times\{\abs{z}=r_K\}\) avoids the spectrum of
+  \(zI-\widetilde M_u\), so
   \[
     C_K^{(0)}:=
     \sup_{u\in K,\ \abs{z}=r_K}\|(zI-\widetilde M_u)^{-1}\|<\infty.
@@ -535,7 +581,7 @@ where \(\lambda=\rho(B)\). Then, in the block presentation,
     2\pi\|\ell_0\|\,\|r_0\|\,C_K^{(0)}
     \left(\frac{r_K}{\lambda}\right)^n,
   \]
-  which is the stated estimate.
+  which is the stated estimate with \(C_K:=2\pi\|\ell_0\|\,\|r_0\|\,C_K^{(0)}\).
 \end{proof}
 
 \begin{proposition}[Spectral-gap central limit theorem]
@@ -599,12 +645,13 @@ where \(\lambda=\rho(B)\). Then, in the block presentation,
 \begin{remark}
   The determinant package clarifies why
   \Cref{thm:finite-part-reduced-determinant-group-inverse-gradient,prop:secondary-fredholm-normal-convergence,thm:logM-holomorphic-variation,prop:logM-truncation,thm:twisted-determinant-rigidity,cor:twisted-determinant-cumulants,prop:off-origin-decay,thm:clt-spectral}
-  belong together. In each case one starts from a simple dominant pole
-  of a Fredholm determinant, isolates the reduced resolvent on the
-  complementary spectral subspace, and then reads a perturbative
-  quantity from that reduced determinant or from the motion of the pole.
-  The difference between finite-part constants, orbit moments, and limit
-  laws is therefore a difference of observable, not of mechanism.
+  belong together. In each case one starts from a simple dominant
+  eigenvalue branch of a determinant, isolates the reduced resolvent on
+  the complementary spectral subspace, and then reads a perturbative
+  quantity from that reduced determinant or from the motion of the
+  dominant eigenvalue. The difference between finite-part constants,
+  orbit moments, and limit laws is therefore a difference of observable,
+  not of mechanism.
 \end{remark}
 
 \subsection{Explicit computational examples}
@@ -620,29 +667,32 @@ where \(\lambda=\rho(B)\). Then, in the block presentation,
     \end{pmatrix},
     \qquad |s|\ll 1.
   \]
-  Its Perron root is
+  For real \(s\) near \(0\), this is a primitive matrix. The analytic
+  simple eigenvalue branch from \Cref{def:spectral-gap-hypothesis} is
   \[
     \lambda(s)=\frac{1+s+\sqrt{(1+s)^2+4}}{2},
   \]
-  and the second eigenvalue is \(\mu_2(s)=-\lambda(s)^{-1}\). Hence
+  and the second eigenvalue is \(\mu_2(s)=-\lambda(s)^{-1}\). Hence,
+  by \Cref{def:algebraic-finite-part},
   \[
-    C(A_s)
+    C(A_s,\lambda(s))
     =\left(1+\lambda(s)^{-2}\right)^{-1},
     \qquad
-    \partial_s\log C(A_s)
+    \partial_s\log C(A_s,\lambda(s))
     =\frac{2\lambda'(s)}{\lambda(s)(\lambda(s)^2+1)}.
   \]
   At \(s=0\), with \(\varphi=(1+\sqrt5)/2\),
   \[
-    C(A_0)=\frac{\varphi}{\sqrt5},
+    C(A_0,\varphi)=\frac{\varphi}{\sqrt5},
     \qquad
-    \left.\partial_s\log C(A_s)\right|_{s=0}
+    \left.\partial_s\log C(A_s,\lambda(s))\right|_{s=0}
     =\frac{2}{\sqrt5(\varphi^2+1)}
     =0.2472135\ldots.
   \]
   The Abel finite part is
   \[
     \log \MM(A_0)
+    =F(A_0,\varphi)
     =\log\frac{\varphi}{\sqrt5}
       +\sum_{k\ge 2}\frac{\mu(k)}{k}
         \log\Bigl((1-\varphi^{1-k})(1+\varphi^{-(k+1)})\Bigr)^{-1},
@@ -678,8 +728,10 @@ where \(\lambda=\rho(B)\). Then, in the block presentation,
     \qquad
     \det(I-zM_t)=1-(1+e^t)z.
   \]
-  Thus \(\lambda(t)=1+e^t\) and \(C(M_t)=1\). After centering by
-  \(1/2\), the dominant eigenvalue becomes
+  The analytic leading eigenvalue branch is \(\lambda(t)=1+e^t\)
+  (this is a simple eigenvalue with spectral gap for \(t\) near \(0\)),
+  and \(C(M_t,\lambda(t))=1\). After centering by \(1/2\), the
+  dominant eigenvalue becomes
   \[
     \lambda_c(t)=e^{-t/2}(1+e^t)=2\cosh(t/2).
   \]

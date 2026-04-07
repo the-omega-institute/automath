@@ -122,7 +122,7 @@ Write \(\overline{Y}\) for the smooth projective curve with function field
   \[
     g(\overline{Y})=3.
   \]
-\end{proposition>
+\end{proposition}
 
 \begin{proof}
 Since \(\iota\) changes the signs of both \(w\) and \(s\), the
@@ -188,7 +188,7 @@ We use the standard criterion for ramification in quadratic extensions
 of function fields: let \(K\) be a function field of characteristic
 \(\neq 2\), and let \(L=K(\sqrt{f}\,)\) with \(f\in K^\times\) not a
 square. Then a place \(P\) of \(K\) ramifies in \(L/K\) if and only if
-\(\operatorname{ord}_P(f)\) is odd; see \cite[IV.2]{Hartshorne1977}.
+\(\operatorname{ord}_P(f)\) is odd; see \cite[III.7.3]{Stichtenoth2009}.
 Here \(f=x\) and we must determine \(\operatorname{ord}_P(x)\) at each
 place of \(\overline{Y}\).
 
@@ -336,10 +336,20 @@ For \(m\ge 2\), let
 \[
   s_m:=2\cos(\pi/m),
 \]
-let \(\Phi_m^+(s)\) be the minimal polynomial of \(s_m\), and define
+let \(\Phi_m^+(s)\) be the minimal polynomial of \(s_m\) over \(\QQ\), and
+define
 \[
   R_m(w):=\Res_s\bigl(\widehat\Delta(w,s),\Phi_m^+(s)\bigr)\in\ZZ[w].
 \]
+The notation \(\Phi_m^+\) is non-standard; it denotes the minimal polynomial
+of the real part \(2\cos(\pi/m)\) of a primitive \(2m\)-th root of unity.
+Concretely, the conjugates of \(s_m\) under \(\Gal(\QQ(s_m)/\QQ)\) are
+\[
+  A_m:=\Bigl\{2\cos\!\tfrac{\pi a}{m}:a\in(\ZZ/2m\ZZ)^\times/\{\pm 1\}\Bigr\},
+\]
+and \(\Phi_m^+(s)=\prod_{\alpha\in A_m}(s-\alpha)\). The degree is
+\(\deg\Phi_m^+=|A_m|=\varphi(2m)/2\).
+
 The corresponding twisted Perron root is
 \[
   \rho_m:=\frac{1}{\min\{\abs{w}:R_m(w)=0\}}.
@@ -433,11 +443,17 @@ Let \(w(s)\) denote the simple branch of \(\widehat\Delta(w,s)=0\) near
     \rho''(2)=\frac{1351}{9826}.
   \]
   Moreover, if \(\delta:=2-s\), then
-  \[
+  \begin{align*}
     \rho(2-\delta)
-    =3-\frac{11}{17}\delta+\frac{1351}{19652}\delta^2
-      -\frac{17133}{45435424}\delta^3+O(\delta^4).
-  \]
+    &=3-\frac{11}{17}\delta+\frac{1351}{19652}\delta^2
+      -\frac{17133}{45435424}\delta^3 \\
+    &\quad
+      -\frac{350037409}{105046700288}\delta^4
+      -\frac{47614595705}{242867971065856}\delta^5 \\
+    &\quad
+      +\frac{141889658001627}{561510749104259072}\delta^6
+      +O(\delta^7).
+  \end{align*}
 \end{proposition}
 
 \begin{proof}
@@ -446,10 +462,84 @@ One has
   \widehat\Delta(1/3,2)=0,\qquad
   \partial_w\widehat\Delta(1/3,2)\neq 0.
 \]
-Hence the implicit function theorem gives an analytic branch \(w(s)\).
-Differentiating \(\widehat\Delta(w(s),s)=0\) yields the stated values of
-\(w'(2)\), \(\rho'(2)\), and \(\rho''(2)\). The cubic expansion follows
-by repeated differentiation.
+Hence the implicit function theorem gives a unique analytic branch
+\(w(s)\) near \(s=2\). Differentiating the identity
+\(\widehat\Delta(w(s),s)=0\) repeatedly and solving for \(w^{(k)}(2)\)
+at each order yields the stated values of \(w'(2)\), \(\rho'(2)\), and
+\(\rho''(2)\). Continuing through sixth order by the same implicit
+differentiation procedure (a finite algebraic computation verified by
+computer algebra), one obtains the six-term jet of \(\rho\) displayed
+above. The coefficient of \(\delta^k\) at order \(k\le 6\) is a rational
+number determined solely by the partial derivatives of \(\widehat\Delta\)
+up to order \(k+1\) at \((1/3,2)\).
+\end{proof}
+
+\begin{lemma}[Root separation]
+  \label{lem:root-separation}
+  For all sufficiently large \(m\), the smallest-modulus root of
+  \(R_m(w)\) is \(w^*(s_m)\), the unique root of
+  \(\widehat\Delta(w,s_m)=0\) near \(w=1/3\). In particular,
+  \(\rho_m=\rho(s_m)=1/w^*(s_m)\).
+\end{lemma}
+
+\begin{proof}
+By the product formula,
+\[
+  R_m(w)=\prod_{\alpha\in A_m}\widehat\Delta(w,\alpha).
+\]
+We must show that, for large \(m\), the smallest-modulus zero of
+\(R_m\) comes from the factor \(\widehat\Delta(w,s_m)\) and not from any
+factor with \(\alpha\neq s_m\).
+
+\textit{Step 1: Isolation at the endpoint.}\quad
+At \(s=2\), the polynomial \(\widehat\Delta(w,2)\) factorises as
+\[
+  \widehat\Delta(w,2)=(w-1)(w+1)(3w-1)(w^3-w^2+w+1).
+\]
+The root \(w=1/3\) is simple; all other roots satisfy \(|w|>0.54\).
+Fix a closed disk \(D:=\{|w-1/3|<0.1\}\). By continuity of roots
+of \(\widehat\Delta(\cdot,s)\) in \(s\), there exists \(\varepsilon>0\) such
+that for \(|s-2|<\varepsilon\):
+\begin{itemize}
+  \item \(\widehat\Delta(\cdot,s)\) has exactly one simple root
+        \(w^*(s)\in D\);
+  \item every other root of \(\widehat\Delta(\cdot,s)\) lies outside
+        \(\{|w|<0.45\}\).
+\end{itemize}
+Moreover, differentiating \(\widehat\Delta(w(s),s)=0\) at \(s=2\) gives
+\(w^{*\prime}(2)=-11/153<0\), so \(w^*\) is strictly decreasing and
+\(w^*(s)\in D\) satisfies \(|w^*(s)|<|w^*(2)|=1/3\) for \(s\) slightly
+below \(2\).
+
+\textit{Step 2: Uniform lower bound away from the endpoint.}\quad
+The minimum modulus function \(\lambda(s):=\min\{|w|:\widehat\Delta(w,s)=0\}\)
+is continuous on \([-2,2]\). The symmetry \(\widehat\Delta(w,-s)=\widehat\Delta(-w,s)\)
+gives \(\lambda(-s)=\lambda(s)\), so the analysis near \(s=-2\) is
+identical. On the compact set \([-2,2]\setminus\bigl((-2,-2+\varepsilon)
+\cup(2-\varepsilon,2)\bigr)\), continuity gives a uniform lower bound
+\[
+  \lambda(s)\ge c_0>w^*(2-\varepsilon/2)
+\]
+for some constant \(c_0\).
+
+\textit{Step 3: Comparing conjugates.}\quad
+Every \(\alpha\in A_m\setminus\{s_m\}\) satisfies
+\(|\alpha|\le 2\cos(3\pi/2m)<s_m\) for \(m\ge 4\) (with equality only
+for \(\alpha=-s_m\) when \(m\) is even, which also achieves modulus
+\(s_m\)). Since \(s_m\to 2\) and \(s_m=2-\pi^2/m^2+O(m^{-4})\), for
+all sufficiently large \(m\) every conjugate \(\alpha\in A_m\) with
+\(\alpha\neq\pm s_m\) lies in the interior of \([-2+\varepsilon,2-\varepsilon]\),
+where the uniform bound of Step 2 applies. The factors
+\(\widehat\Delta(\cdot,\pm s_m)\) contribute root \(w^*(s_m)\) (or
+its negative by parity); factors \(\widehat\Delta(\cdot,\alpha)\) for
+\(\alpha\neq\pm s_m\) all have minimum-modulus roots bounded below by
+\(c_0>w^*(2-\varepsilon/2)>w^*(s_m)\).
+
+Hence for all sufficiently large \(m\),
+\[
+  \min\{|w|:R_m(w)=0\}=|w^*(s_m)|,
+\]
+which gives \(\rho_m=1/|w^*(s_m)|=\rho(s_m)\).
 \end{proof}
 
 \begin{theorem}[Asymptotic expansion of the twisted Perron roots]
@@ -476,16 +566,20 @@ by repeated differentiation.
 \end{theorem}
 
 \begin{proof}
-Since \(s_m=2\cos(\pi/m)\) and \(s_m\to 2\), the smallest-modulus root
-of \(R_m\) is given by the analytic branch \(w(s_m)\) for all
-sufficiently large \(m\), hence \(\rho_m=\rho(s_m)\). The Taylor series
-of \(s_m\) at infinity is
+By \Cref{lem:root-separation}, \(\rho_m=\rho(s_m)\) for all sufficiently
+large \(m\). The Taylor series of \(2-s_m=2-2\cos(\pi/m)\) at infinity is
 \[
-  s_m=2-\frac{\pi^2}{m^2}+\frac{\pi^4}{12m^4}-\frac{\pi^6}{360m^6}+\cdots.
+  2-s_m
+  =\frac{\pi^2}{m^2}-\frac{\pi^4}{12m^4}+\frac{\pi^6}{360m^6}
+   -\frac{\pi^8}{20160m^8}+\frac{\pi^{10}}{1814400m^{10}}
+   -\frac{\pi^{12}}{239500800m^{12}}+O(m^{-14}).
 \]
-Composing this expansion with the jet of \(\rho(s)\) at \(s=2\) gives
-the displayed asymptotic series. This proves
-part~\textup{(iii)} of \Cref{thm:intro-kernel-cyclotomic}.
+Setting \(\delta=2-s_m\) and substituting into the sixth-order jet of
+\Cref{prop:sync-endpoint-jet} yields the displayed asymptotic series,
+where the coefficient of \(m^{-2k}\) is determined by the \(\delta^k\)
+term of the jet together with the lower-order terms of the Taylor series
+of \(\delta\). This proves part~\textup{(iii)} of
+\Cref{thm:intro-kernel-cyclotomic}.
 \end{proof}
 
 \begin{remark}
