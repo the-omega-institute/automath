@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1505 |
+| \leanverified 标注数 | 1509 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1522 |
-| 轮次 | R368（round_count=369） |
+| 总标注数 | 1526 |
+| 轮次 | R369（round_count=370） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -28,13 +28,13 @@
 | Emergent Arithmetic | 185 | 157 | 84.9% |
 | Folding | 337 | 111 | 32.9% |
 | Conclusion | 2,550 | 242 | 9.5% |
-| Group Unification | 469 | 157 | 33.5% |
+| Group Unification | 469 | 158 | 33.7% |
 | SPG | 129 | 103 | 79.8% |
 | Circle Dimension | 393 | 134 | 34.1% |
-| Zeta Finite Part | 4,524 | 186 | 4.1% |
-| Discussion | 67 | 61 | 91.0% |
+| Zeta Finite Part | 4,524 | 187 | 4.1% |
+| Discussion | 67 | 63 | 94.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1445** | **13.7%** |
+| **合计（body）** | **10,508** | **1449** | **13.8%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**Walsh-Stokes 规范同调包 + Fredholm 黄金均值 6-10 + E7/E8 Zeckendorf（Round R369）**：`paper_discussion_stokes_gauge_homology_package`（对应 `thm:discussion-discrete-stokes-gauge-leyang` 与 `cor:discussion-thermo-ldp-homology-invariance`，Discussion；离散 Stokes 规范不变性+热力学大偏差同调不变性四合一包，两处标注）；`paper_fredholm_golden_mean_6_10`（对应 `def:fredholm-determinant`，Zeta；Fredholm 黄金均值 m=6..10 精确值审计包）；`paper_gu_e7_e8_zeckendorf`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；E7/E8 Zeckendorf 维度对齐综合包）
 **Gödel 严格单调性 + S₄ 矩值包 + EA 单位群审计（Round R368）**：`godelEncoding_strict_mono_of_lt`（对应 `thm:conclusion-godel-semidirect-law`，Conclusion；Gödel 编码关于列表长度的严格单调性）；`paper_momentSum_four_values`（对应 `prop:fold-groupoid-wedderburn`，Emergent Arithmetic；S₄ 矩精确值综合包，修正 S₄(6)=3244）；`paper_ea_unit_group_audit`（对应 `thm:mul-definitional`，Emergent Arithmetic；乘法单位群 φ(F_{m+2}) 审计包，修正 φ(55)=40）
 **扫描误差对称差稳定性 + 相谱 rank-2 审计 + 进位同余包（Round R367）**：`paper_scanError_symmDiff_stability`（对应 `prop:spg-scan-error-cylinder`，SPG；扫描误差在对称差扰动下的稳定性综合包）；`paper_phaseSpectrumCount_rank2`（对应 `thm:cdim-phase-spectrum-limit`，Circle Dimension；rank-2 有限群相谱计数综合包）；`paper_pom_carry_congruence`（对应 `thm:pom-stable-addition-carry-defect-unique-element`，POM；进位缺陷同余条件综合包）
 **偶长校正部分和 + window-8 Fibonacci 审计 + Chebyshev at-3 扩展（Round R366）**：`evenLengthCorrection_partial_sum`（对应 `cor:xi-time-part73c-fixed-parameter-necklace-correction`，Zeta；偶长 necklace 校正核的部分和公式）；`paper_gu_window8_fib_audit`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window-8 Fibonacci 对齐综合审计包）；`paper_chebyAdams_at_three_extended`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 在 n=3 处的扩展恒等式包）
