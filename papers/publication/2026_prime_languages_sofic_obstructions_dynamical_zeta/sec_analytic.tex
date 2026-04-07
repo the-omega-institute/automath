@@ -19,12 +19,35 @@
   power series of \(Z_b\) has radius of convergence exactly \(1\), and
   all of its Taylor coefficients are non-negative integers.
 
-  Fix \(0<r<1\). Convergence at \(r^{1/2}\) implies
-  \(\sum_{n\ge 1} b_n r^{n/2}<\infty\), hence also
-  \(\sum_{n\ge 1} n b_n r^n<\infty\). Therefore the logarithmic
-  derivative may be computed termwise on \(\abs{z}\le r\):
+  Since \(Z_b(z)=\prod_{n\ge 1}(1-z^n)^{-b_n}\), taking logarithms
+  gives
   \[
-    -\frac{zZ_b'(z)}{Z_b(z)}
+    \log Z_b(z)=-\sum_{n\ge 1}b_n\log(1-z^n).
+  \]
+  For each \(m\), the coefficient of \(z^m\) in \(Z_b(z)\) depends only
+  on the finite product \(\prod_{n\le m}(1-z^n)^{-b_n}\). Each such
+  finite product has Taylor coefficients in \(\ZZ_{\ge 0}\) (the
+  coefficient of \(z^m\) counts partitions of \(m\) into parts of size
+  \(\le m\) with multiplicity weights \(b_n\)). Hence all Taylor
+  coefficients of \(Z_b\) lie in \(\ZZ_{\ge 0}\).
+
+  Fix \(0<r<1\). Since the Euler product converges at \(r^{1/2}\),
+  \[
+    \sum_{n\ge 1}b_n\bigl(-\log(1-r^{n/2})\bigr)<\infty.
+  \]
+  Because \(-\log(1-x)\ge x\) for \(0<x<1\), this implies
+  \(\sum_{n\ge 1}b_n r^{n/2}<\infty\). Moreover,
+  \(\sup_{n\ge 1}nr^{n/2}<\infty\), so
+  \[
+    \sum_{n\ge 1}nb_n r^n
+    \le\Bigl(\sup_{n\ge 1}nr^{n/2}\Bigr)\sum_{n\ge 1}b_n r^{n/2}
+    <\infty.
+  \]
+  Therefore \(\sum_{n\ge 1}nb_nz^n/(1-z^n)\) converges absolutely and
+  uniformly on \(\abs{z}\le r\), which justifies termwise logarithmic
+  differentiation:
+  \[
+    \frac{zZ_b'(z)}{Z_b(z)}
     =\sum_{n\ge 1}\frac{n b_n z^n}{1-z^n}
     =\sum_{m\ge 1} c_m z^m,
   \]
@@ -46,7 +69,7 @@
   theorem implies that \(Z_b\) is zero-free on \(\abs{z}<1\). Therefore
   the logarithmic derivative
   \[
-    R(z):=-\frac{zZ_b'(z)}{Z_b(z)}=\sum_{m\ge 1} c_m z^m
+    R(z):=\frac{zZ_b'(z)}{Z_b(z)}=\sum_{m\ge 1} c_m z^m
   \]
   is rational and holomorphic on \(\abs{z}<1\).
 
@@ -101,9 +124,14 @@
   \[
     F(s)=\sum_{n\ge 1} a_n n^{-s}
   \]
-  be a Dirichlet series with abscissa of convergence \(\sigma_c\), and
-  let \(n_0>1\) be the smallest integer such that \(a_{n_0}\neq 0\).
-  Then \(F\) cannot agree with \(\zeta_{X_A}(e^{-s})\) on any non-empty
+  be a Dirichlet series with abscissa of convergence \(\sigma_c\). Assume
+  that there exists at least one index \(n\ge 2\) with \(a_n\neq 0\),
+  and let
+  \[
+    n_1:=\min\{n\ge 2:a_n\neq 0\}.
+  \]
+  Then \(F\) is not \(2\pi i\)-periodic on any right half-plane, and
+  therefore cannot agree with \(\zeta_{X_A}(e^{-s})\) on any non-empty
   open subset of \(\Re(s)>\sigma_c\). In particular, the Riemann
   \(\zeta\)-function cannot agree with \(\det(I-e^{-s}A)^{-1}\) on any
   non-empty open subset of \(\Re(s)>1\).
@@ -116,19 +144,25 @@
   \(e^{-(s+2\pi i)}=e^{-s}\) then gives
   \(\zeta_{X_A}(e^{-(s+2\pi i)})=\zeta_{X_A}(e^{-s})\).
 
-  For large real \(\sigma\), the Dirichlet series satisfies
+  For large real \(\sigma\),
   \[
     F(\sigma+2\pi i)-F(\sigma)
-    =a_{n_0}n_0^{-\sigma}(e^{-2\pi i\log n_0}-1)
-     +O((n_0+1)^{-\sigma}).
+    =\sum_{n\ge 2}a_n n^{-\sigma}(e^{-2\pi i\log n}-1).
   \]
-  The coefficient \(e^{-2\pi i\log n_0}-1\) is non-zero because
-  \(\log n_0\notin\ZZ\). Thus the right-hand side is non-zero for all
+  The dominant term as \(\sigma\to+\infty\) is
+  \[
+    a_{n_1}n_1^{-\sigma}(e^{-2\pi i\log n_1}-1)+O\!\bigl((n_1+1)^{-\sigma}\bigr).
+  \]
+  Since \(\log n_1\notin\ZZ\) (as \(n_1\ge 2\) is a positive integer),
+  the coefficient \(e^{-2\pi i\log n_1}-1\) is non-zero. Thus the
+  difference \(F(\sigma+2\pi i)-F(\sigma)\) is non-zero for all
   sufficiently large \(\sigma\), so \(F\) is not \(2\pi i\)-periodic on
-  \(\Re(s)>\sigma_c\). By the identity theorem, \(F\) therefore cannot
+  any right half-plane. By the identity theorem, \(F\) therefore cannot
   agree on a non-empty open subset of \(\Re(s)>\sigma_c\) with the
-  \(2\pi i\)-periodic function \(\zeta_{X_A}(e^{-s})\). Taking
-  \(F(s)=\zeta(s)=\sum_{n\ge 1} n^{-s}\) gives the final assertion.
+  \(2\pi i\)-periodic function \(\zeta_{X_A}(e^{-s})\). The Riemann
+  \(\zeta\)-function satisfies the hypothesis because \(a_n=1\neq 0\)
+  for all \(n\ge 2\), so taking \(F(s)=\zeta(s)\) with \(n_1=2\) gives
+  the final assertion.
 \end{proof}
 
 \begin{remark}

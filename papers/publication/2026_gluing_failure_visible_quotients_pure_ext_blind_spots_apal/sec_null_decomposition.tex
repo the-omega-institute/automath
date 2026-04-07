@@ -33,39 +33,45 @@ The set of admitted reference classes at $p$ is
 \]
 \end{definition}
 
-\begin{definition}[Local reference frame]\label{def:local-reference-frame}
+\begin{definition}[Local reference frame and site]\label{def:local-reference-frame}
 For a state $p$ and a referenceable sort $s$, a \emph{local reference frame} is a triple
 \[
 \mathcal{B}_{p,s}=\bigl(\mathcal{R}_s(p),\sqsubseteq_{p,s},\Cov_{p,s}\bigr),
 \]
-where $\sqsubseteq_{p,s}$ is a refinement relation on $\mathcal{R}_s(p)$ and $\Cov_{p,s}$ assigns to each $a\in\mathcal{R}_s(p)$ a collection of covering families
-\[
-\{a_i\to a\}_{i\in I},
-\qquad
-a_i\sqsubseteq_{p,s} a.
-\]
-We assume that every $a$ carries the trivial cover $\{a\to a\}$.
+where:
+\begin{enumerate}[label=(\roman*),nosep]
+\item $\bigl(\mathcal{R}_s(p),\sqsubseteq_{p,s}\bigr)$ is a \emph{meet-semilattice}, viewed as a thin category: objects are admitted reference classes, and there is a unique morphism $b\to a$ whenever $b\sqsubseteq_{p,s} a$. In particular, finite meets $a_i\wedge a_j$ exist for every pair $a_i,a_j$.
+\item $\Cov_{p,s}$ is a \emph{Grothendieck pretopology} on the category $\mathcal{R}_s(p)$: it assigns to each $a\in\mathcal{R}_s(p)$ a collection $\Cov_{p,s}(a)$ of \emph{covering families} $\{a_i\to a\}_{i\in I}$ (where each $a_i\sqsubseteq_{p,s} a$) satisfying:
+  \begin{enumerate}[label=(\alph*),nosep]
+  \item \emph{Identity:} $\{\mathrm{id}_a:a\to a\}\in\Cov_{p,s}(a)$ for every $a$.
+  \item \emph{Stability:} if $\{a_i\to a\}_{i\in I}\in\Cov_{p,s}(a)$ and $b\sqsubseteq_{p,s} a$, then $\{a_i\wedge b\to b\}_{i\in I}\in\Cov_{p,s}(b)$.
+  \item \emph{Transitivity:} if $\{a_i\to a\}_{i\in I}\in\Cov_{p,s}(a)$ and for each $i$, $\{b_{ij}\to a_i\}_{j\in J_i}\in\Cov_{p,s}(a_i)$, then $\{b_{ij}\to a\}_{i,j}\in\Cov_{p,s}(a)$.
+  \end{enumerate}
+\end{enumerate}
+The resulting site is denoted $\mathcal{C}_{p,s}:=\bigl(\mathcal{R}_s(p),\Cov_{p,s}\bigr)$. The existence of finite meets allows one to define Cech nerves, slice sites $\mathcal{C}_{p,s}/a$, and sheafification over $\mathcal{C}_{p,s}$ by standard means \cite[Chap.~III]{MacLaneMoerdijk1994}.
 \end{definition}
 
 \begin{definition}[Local object functor]\label{def:local-object-functor}
 A \emph{local object functor} on $(p,s)$ is a contravariant functor
 \[
-F_{p,s}:\mathcal{B}_{p,s}^{op}\to\mathsf{Set}.
+F_{p,s}:\mathcal{C}_{p,s}^{op}\to\mathsf{Set}.
 \]
-If $b\sqsubseteq_{p,s} a$, the induced restriction map is denoted by
+Since $\mathcal{C}_{p,s}$ is the meet-semilattice with the pretopology of \Cref{def:local-reference-frame}, functoriality amounts to: for each $b\sqsubseteq_{p,s} a$, there is a restriction map
 \[
-\res_b^a:F_{p,s}(a)\to F_{p,s}(b).
+\res_b^a:F_{p,s}(a)\to F_{p,s}(b),
 \]
+and $\res_a^a=\mathrm{id}$ and $\res_c^b\circ\res_b^a=\res_c^a$ for $c\sqsubseteq_{p,s}b\sqsubseteq_{p,s}a$.
 \end{definition}
 
 \begin{definition}[Three existence levels]\label{def:existence-levels}
 Let $r:\mathsf{Ref}_s$ and assume $M,p\Vdash \Adm_s(r)$. Write $a=[r]_p$.
 \begin{enumerate}[label=(\roman*),nosep]
 \item $M,p\Vdash \LocSec_s(r)$ if there exists a cover $\{a_i\to a\}_{i\in I}\in\Cov_{p,s}(a)$ such that $F_{p,s}(a_i)\neq\varnothing$ for every $i\in I$.
-\item $M,p\Vdash \CompSec_s(r)$ if there exist a cover $\{a_i\to a\}_{i\in I}$ and sections $\sigma_i\in F_{p,s}(a_i)$ such that for every common refinement $c\sqsubseteq_{p,s} a_i,a_j$,
+\item $M,p\Vdash \CompSec_s(r)$ if there exist a cover $\{a_i\to a\}_{i\in I}\in\Cov_{p,s}(a)$ and sections $\sigma_i\in F_{p,s}(a_i)$ such that for every $i,j\in I$,
 \[
-\res_c^{a_i}(\sigma_i)=\res_c^{a_j}(\sigma_j).
+\res_{a_i\wedge a_j}^{a_i}(\sigma_i)=\res_{a_i\wedge a_j}^{a_j}(\sigma_j),
 \]
+where $a_i\wedge a_j$ is the meet in the semilattice $\mathcal{R}_s(p)$. This is the standard matching-family condition: sections agree on pairwise meets, which are the canonical overlaps supplied by the semilattice structure.
 \item $M,p\Vdash \Sec_s(r)$ if $F_{p,s}(a)\neq\varnothing$.
 \end{enumerate}
 \end{definition}
@@ -85,19 +91,15 @@ Let $a=[r]_p$ and choose $\sigma\in F_{p,s}(a)$. The trivial cover $\{a\to a\}$ 
 
 \subsection{Sheafification and gluing failure}
 
-For fixed $(p,s)$, the local reference frame of \Cref{def:local-reference-frame} determines a site
+For fixed $(p,s)$, the site $\mathcal{C}_{p,s}$ has been specified in \Cref{def:local-reference-frame}, and the local object functor of \Cref{def:local-object-functor} determines a presheaf
 \[
-\mathcal{C}_{p,s}:=(\mathcal{B}_{p,s},\Cov_{p,s}),
-\]
-and the local object functor of \Cref{def:local-object-functor} determines a presheaf
-\[
-F_{p,s}\in\mathbf{PSh}(\mathcal{B}_{p,s}).
+F_{p,s}\in\mathbf{PSh}(\mathcal{C}_{p,s}).
 \]
 Write
 \[
-a_{p,s}:\mathbf{PSh}(\mathcal{B}_{p,s})\to\mathbf{Sh}(\mathcal{C}_{p,s})
+a_{p,s}:\mathbf{PSh}(\mathcal{C}_{p,s})\to\mathbf{Sh}(\mathcal{C}_{p,s})
 \]
-for the associated sheafification functor.
+for the associated sheafification functor, which exists because $\mathcal{C}_{p,s}$ carries a Grothendieck pretopology \cite[Chap.~III, \S5]{MacLaneMoerdijk1994}.
 
 \begin{theorem}[Sheafification characterizes compatible local sectionability]\label{thm:sheafification-characterization}
 Let $r:\mathsf{Ref}_s$ be admitted at $p$, and write $a=[r]_p$. Then
@@ -109,7 +111,7 @@ M,p\Vdash \CompSec_s(r)
 \end{theorem}
 
 \begin{proof}
-By the standard site-theoretic description of sheafification, a section of $a_{p,s}F_{p,s}$ at $a$ is represented by a matching family over some covering sieve of $a$, equivalently over some covering family of $a$ \cite[Chap.~III, \S2]{MacLaneMoerdijk1994}, \cite[Part~B2.2]{Johnstone2002}. In the present setting, such a matching family is exactly a compatible local family as in \Cref{def:existence-levels}(ii). Hence the sheafified fiber is nonempty exactly when $r$ is compatibly locally sectionable at $p$.
+By the standard site-theoretic description of the associated sheaf on a pretopology site, a section of $a_{p,s}F_{p,s}$ at $a$ is an equivalence class of matching families over covering sieves of $a$ \cite[Chap.~III, \S2]{MacLaneMoerdijk1994}, \cite[Part~B2.2]{Johnstone2002}. A matching family over a cover $\{a_i\to a\}_{i\in I}$ consists of sections $\sigma_i\in F_{p,s}(a_i)$ such that $\res_{a_i\wedge a_j}^{a_i}(\sigma_i)=\res_{a_i\wedge a_j}^{a_j}(\sigma_j)$ for all $i,j$. Because $\mathcal{C}_{p,s}$ is a meet-semilattice with the pretopology of \Cref{def:local-reference-frame}, these pairwise meet restrictions are the canonical overlaps, and the matching condition is exactly the compatibility condition of \Cref{def:existence-levels}(ii). Hence the sheafified fiber $(a_{p,s}F_{p,s})(a)$ is nonempty if and only if some covering family supports a compatible local family, i.e., if and only if $M,p\Vdash \CompSec_s(r)$.
 \end{proof}
 
 \begin{corollary}[Sheaf condition at a reference]\label{cor:sheaf-local-to-global}

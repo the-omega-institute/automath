@@ -43,6 +43,10 @@ interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
 \end{theorem}
 
 \begin{proof}
+  If \(L=\emptyset\), then \(N_L(T)=0\) for all \(T\), and the theorem
+  holds trivially with \(\alpha=0\). Assume henceforth that
+  \(L\neq\emptyset\).
+
   Let
   \[
     a_m:=\#\{w\in L:\abs{w}=m\},
@@ -52,10 +56,14 @@ interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
   Since \(L\) is regular, there is a DFA for \(L\). After deleting
   states that are unreachable from the initial state or from which no
   accepting state is reachable, we obtain a trim automaton with
-  transfer matrix \(B\) such that \(a_m=u^{\mathsf T}B^m v\).
+  transfer matrix \(B\) such that \(a_m=u^{\mathsf T}B^m v\). Because
+  \(L\neq\emptyset\), the trim automaton has at least one path to an
+  accepting state, so the definition of \(\rho\) is meaningful.
 
   Let \(\rho\) be the maximum spectral radius of a strongly connected
-  component of this trim automaton. Standard Jordan-form bounds for
+  component of this trim automaton.
+
+  \textit{Upper bound.} Standard Jordan-form bounds for
   powers of a finite matrix give constants \(C>0\) and \(d\ge 0\) such
   that
   \[
@@ -66,15 +74,11 @@ interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
   \[
     A_n\le C' n^{d+1}\max(1,\rho)^n
   \]
-  for some \(C'>0\). Since
-  \[
-    \abs{\mathcal Z\cap\{0,1\}^m}=F_{m+1}=\varphi^{m+o(m)},
-  \]
-  one has \(\rho\le\varphi\).
+  for some \(C'>0\).
 
-  If \(\rho>1\), choose a strongly connected component \(C\) of
-  spectral radius \(\rho\) that is reachable from the initial state
-  and from which an accepting state is reachable. Let \(d_C\) be the
+  \textit{Lower bound and the inequality \(\rho\le\varphi\).}
+  If \(\rho>1\), choose a reachable, co-reachable strongly connected
+  component \(C\) of spectral radius \(\rho\). Let \(d_C\) be the
   period of \(C\). By Perron--Frobenius theory for irreducible
   non-negative matrices, there exist states \(i,j\in C\), a residue
   class \(r\bmod d_C\), and a constant \(c>0\) such that
@@ -87,9 +91,20 @@ interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
   \[
     a_{\ell_1+\ell_2+r+k d_C}\ge c\,\rho^{r+k d_C}
   \]
-  for all large \(k\). Since every sufficiently large integer \(n\) lies
-  within \(O(1)\) of some value in this arithmetic progression, the
-  monotonicity of \(A_n\) gives
+  for all large \(k\), so
+  \[
+    \limsup_{m\to\infty}a_m^{1/m}\ge\rho.
+  \]
+  On the other hand, \(a_m\le\abs{\mathcal Z\cap\{0,1\}^m}=F_{m+1}
+  =\varphi^{m+o(m)}\), which gives
+  \[
+    \limsup_{m\to\infty}a_m^{1/m}\le\varphi.
+  \]
+  Hence \(\rho\le\varphi\).
+
+  Since every sufficiently large integer \(n\) lies
+  within \(O(1)\) of some value in the arithmetic progression
+  \(\ell_1+\ell_2+r+kd_C\), the monotonicity of \(A_n\) gives
   \[
     A_n\ge c'\rho^n
   \]
@@ -99,9 +114,11 @@ interval \([1,F_{m+2})\), so words of length exactly \(m\) parametrise
     A_n=\rho^{n+o(n)}.
   \]
 
-  If \(\rho\le 1\), then the displayed upper bound gives
-  \(A_n\le C'n^{d+1}\), so \(A_n=\exp(o(n))\).
+  If \(\rho\le 1\), then the upper bound gives
+  \(A_n\le C'n^{d+1}\), so \(A_n=\exp(o(n))\), and \(\rho\le\varphi\)
+  holds trivially.
 
+  \textit{Conversion to \(N_L(T)\).}
   If \(F_{n+1}\le T<F_{n+2}\), then every Zeckendorf word of value at
   most \(T\) has length at most \(n\), while every word of length at
   most \(n-1\) has value at most \(T\). Therefore

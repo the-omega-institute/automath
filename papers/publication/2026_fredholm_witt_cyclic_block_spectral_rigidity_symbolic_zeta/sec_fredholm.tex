@@ -17,12 +17,19 @@ trace-class operator. Define
   The following is a direct consequence of the classical Fredholm
   determinant identity; we record it here to fix notation and to make
   the Euler-product structure explicit. For every trace-class operator
-  \(T\) and every \(\abs{z}<\norm{T}^{-1}\),
+  \(T\) and every \(\abs{z}<\min(1,\norm{T}^{-1})\),
   \[
     \det(I-zT)^{-1}
     =\exp\!\left(\sum_{n\ge 1}\frac{a_n(T)}{n}z^n\right)
-    =\prod_{n\ge 1}(1-z^n)^{-p_n(T)}.
+    =\prod_{n\ge 1}(1-z^n)^{-p_n(T)},
   \]
+  where \(\log(1-z^m)\) denotes the principal branch on \(\abs{z}<1\).
+  This identity holds as an equality of holomorphic germs at \(z=0\);
+  equivalently, it is an identity of formal power series. The
+  exponents \(p_n(T)\) are in general not integers, so the Euler
+  product on the right is not a finite collection of zero-free factors,
+  and the expression should not be extended beyond the common disc of
+  convergence without an explicit branch choice.
 \end{proposition}
 
 \begin{proof}
@@ -44,6 +51,10 @@ trace-class operator. Define
     &=\sum_{m\ge 1}\sum_{r\ge 1}\frac{p_m(T)}{r}z^{mr}
       =-\sum_{m\ge 1}p_m(T)\log(1-z^m).
   \end{align*}
+  Here \(\log(1-z^m)\) is the principal branch, which is single-valued
+  for \(\abs{z^m}<1\), i.e.\ for \(\abs{z}<1\). Together with the
+  convergence of the trace series for \(\abs{z}<\norm{T}^{-1}\), the
+  calculation is valid for \(\abs{z}<\min(1,\norm{T}^{-1})\).
   Exponentiating gives the Euler product.
 \end{proof}
 
@@ -136,15 +147,48 @@ has
     =\sum_{j\in J}m_j n_j\abs{\beta_j}^{1/n_j}
     <\infty,
   \]
-  so \(L_{\mathcal D}\) is trace-class. Determinants multiply over
-  direct sums, and \eqref{eq:cycle-block-det} gives
+  so \(L_{\mathcal D}\) is trace-class. For each \(j\), determinants
+  multiply over tensor products and \eqref{eq:cycle-block-det} gives
   \[
     \det\!\bigl(I-z(C(n_j,\alpha_j)\otimes I_{m_j})\bigr)
     =\det(I-zC(n_j,\alpha_j))^{m_j}
     =(1-\beta_j z^{n_j})^{m_j}.
   \]
-  Multiplying the reciprocal factors proves the claimed determinant
-  identity. The operator norm satisfies
+  To pass from finite direct sums to the countable direct sum, define
+  the finite-rank truncations
+  \[
+    L_{\mathcal D}^{(N)}:=\bigoplus_{j\le N}
+      \bigl(C(n_j,\alpha_j)\otimes I_{m_j}\bigr).
+  \]
+  Then
+  \[
+    \norm{L_{\mathcal D}-L_{\mathcal D}^{(N)}}_1
+    =\sum_{j>N}m_j n_j\abs{\beta_j}^{1/n_j}\to 0
+    \qquad (N\to\infty).
+  \]
+  By trace-norm continuity of the Fredholm determinant
+  \cite[Theorem~3.4]{Simon2005TraceIdeals},
+  \[
+    \abs{\det(I+K)-\det(I+L)}
+    \le\norm{K-L}_1\exp\!\bigl(1+\norm{K}_1+\norm{L}_1\bigr),
+  \]
+  it follows that, locally uniformly in \(z\),
+  \[
+    \det\!\bigl(I-zL_{\mathcal D}\bigr)
+    =\lim_{N\to\infty}
+    \det\!\bigl(I-zL_{\mathcal D}^{(N)}\bigr).
+  \]
+  Since each finite truncation satisfies
+  \[
+    \det\!\bigl(I-zL_{\mathcal D}^{(N)}\bigr)^{-1}
+    =\prod_{j\le N}(1-\beta_j z^{n_j})^{-m_j},
+  \]
+  passing to the limit gives the infinite product identity
+  \[
+    \det(I-zL_{\mathcal D})^{-1}
+    =\prod_{j\in J}(1-\beta_j z^{n_j})^{-m_j}.
+  \]
+  The operator norm satisfies
   \[
     \norm{L_{\mathcal D}}
     =\sup_{j\in J}\abs{\alpha_j}
