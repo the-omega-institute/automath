@@ -457,4 +457,11 @@ theorem freeInvolutionCount_le_two_r_pow : ∀ r : Nat,
           Nat.mul_le_mul (by omega) (Nat.pow_le_pow_left (by omega) r)
       _ = (2 * (r + 1)) ^ (r + 1) := by rw [pow_succ]; ring
 
+/-- Paper-facing package of the free involution information bounds.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem paper_freeInvolutionCount_information_bounds :
+    (∀ r : ℕ, 1 ≤ r → r - 1 ≤ Nat.log 2 (freeInvolutionCount r)) ∧
+    (∀ r : ℕ, freeInvolutionCount r ≤ (2 * r) ^ r) := by
+  exact ⟨freeInvolutionCount_log_lower, freeInvolutionCount_le_two_r_pow⟩
+
 end Omega.GU

@@ -69,4 +69,16 @@ theorem paper_gu_window8_fib_audit :
     256 / 55 = 4 ∧ 256 % 55 = 36 := by
   refine ⟨by omega, by native_decide, by omega, by norm_num, by omega, by omega⟩
 
+/-- Window-6 complete-bit histogram totals 21 across the parity fibers.
+    thm:gut-fiber-parity-minimal-complete-bits -/
+theorem paper_gut_fiber_parity_minimal_complete_bits_six :
+    cBinFiberHist 6 2 + cBinFiberHist 6 3 + cBinFiberHist 6 4 = 21 := by
+  rw [cBinFiberHist_6_2, cBinFiberHist_6_3, cBinFiberHist_6_4]
+
+/-- Paper-facing count of the central two-fiber sector at window-6.
+    cor:autp-center-z2-by-twofibers -/
+theorem paper_autp_center_twofiber_count_six :
+    cBinFiberHist 6 2 = 8 := by
+  rw [cBinFiberHist_6_2]
+
 end Omega.GU
