@@ -934,6 +934,16 @@ theorem godelEncoding_prefix_quotient (primes : ℕ → ℕ) (offset : ℕ) (u v
     godelEncoding primes (offset + u.length) v := by
   rw [godelEncoding_append, Nat.mul_div_cancel_left _ (godelEncoding_pos primes offset u hp)]
 
+/-- Paper: prefix append package for Gödel encodings.
+    thm:conclusion-godel-prefix-arithmetic-criterion -/
+theorem paper_godel_prefix_append_package (primes : ℕ → ℕ) (offset : ℕ)
+    (u v : List ℕ) (hp : ∀ i, 0 < primes i) :
+    godelEncoding primes offset u ∣ godelEncoding primes offset (u ++ v) ∧
+      godelEncoding primes offset (u ++ v) / godelEncoding primes offset u =
+        godelEncoding primes (offset + u.length) v := by
+  exact ⟨godelEncoding_prefix_dvd primes offset u v,
+    godelEncoding_prefix_quotient primes offset u v hp⟩
+
 /-- Gödel encoding is monotone in each exponent.
     thm:conclusion-godel-semidirect-law -/
 theorem godelEncoding_mono_of_le (primes : ℕ → ℕ) (offset : ℕ) (u v : List ℕ)

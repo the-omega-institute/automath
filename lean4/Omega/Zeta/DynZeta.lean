@@ -1672,6 +1672,12 @@ theorem lucasNum_mod9_period_twentyfour (n : Nat) :
       rw [this]
       exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
 
+/-- Paper: Lucas numbers mod 9 have period 24.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_lucasNum_mod9_period_twentyfour (n : Nat) :
+    lucasNum (n + 24) % 9 = lucasNum n % 9 :=
+  lucasNum_mod9_period_twentyfour n
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R321: Lucas numbers mod 20 period 12
 -- ══════════════════════════════════════════════════════════════
@@ -1694,6 +1700,12 @@ theorem lucasNum_mod20_period_twelve (n : Nat) :
           (lucasNum (n + 12) - lucasNum n) := by linarith
       rw [this]
       exact dvd_add (ih (n + 1) (by omega)) (ih n (by omega))
+
+/-- Paper: Lucas numbers mod 20 have period 12.
+    thm:zeta-syntax-trace-linear-recurrence -/
+theorem paper_lucasNum_mod20_period_twelve (n : Nat) :
+    lucasNum (n + 12) % 20 = lucasNum n % 20 :=
+  lucasNum_mod20_period_twelve n
 
 -- ══════════════════════════════════════════════════════════════
 -- Phase R323: Lucas numbers mod 25 period 20
