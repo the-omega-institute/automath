@@ -1043,4 +1043,13 @@ theorem paper_phaseSpectrumCount_rank2 :
   simp only [phaseSpectrumCount]
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
 
+/-- Circle dimension tensor-hom-ext laws audit.
+    prop:cdim-tensor-hom-ext-laws -/
+theorem paper_cdim_laws_audit :
+    (∀ a b c d : Nat, circleDim (a + b) (c + d) = circleDim a c + circleDim b d) ∧
+    (∀ r s t1 t2 : Nat, circleDim (r * s) (t1 * t2) = circleDim r t1 * circleDim s t2) ∧
+    (∀ t : Nat, circleDim 0 t = 0) ∧
+    (∀ n t1 t2 : Nat, circleDim n t1 = circleDim n t2) :=
+  ⟨circleDim_add, circleDim_mul, circleDim_finite, circleDim_finite_extension⟩
+
 end Omega.CircleDimension

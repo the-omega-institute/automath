@@ -1187,4 +1187,13 @@ theorem scanErrorMeasure_inter_le {α β : Type*} [MeasurableSpace α] [Fintype 
 
 end
 
+/-- Scan error measure stability: complement invariance + boundary bound.
+    prop:spg-scan-error-cylinder -/
+theorem paper_scanErrorMeasure_stability_package {α β : Type*} [MeasurableSpace α] [Fintype β]
+    (μ : MeasureTheory.Measure α) (obs : α → β) (P : Set α) :
+    scanErrorMeasure μ obs Pᶜ = scanErrorMeasure μ obs P ∧
+    scanErrorMeasure μ obs P ≤
+      Finset.sum (boundaryCellsMeasure μ obs P) (fun b => cellMeasure μ obs b) :=
+  ⟨scanErrorMeasure_compl μ obs P, scanErrorMeasure_le_boundaryMass μ obs P⟩
+
 end Omega.SPG
