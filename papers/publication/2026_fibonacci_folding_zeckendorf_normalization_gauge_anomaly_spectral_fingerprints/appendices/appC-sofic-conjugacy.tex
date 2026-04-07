@@ -61,7 +61,9 @@ Thus \(\mathcal P\) strictly decreases along every off-diagonal edge of \(F_m\).
 \end{proof}
 
 \subsection{An explicit decoder for \(m=3\)}
-For \(m=3\) the decoder can be written down directly. The vertices are \(00,01,10,11\), and the edge labels are
+For \(m=3\) the decoder can be written down directly. We work in the low-to-high (LH) convention throughout: position \(k\) carries weight \(F_{k+1}\), so positions \(1,2,3\) carry weights \(1,2,3\) respectively (with \(F_2=1\), \(F_3=2\), \(F_4=3\)).
+
+Given vertex \(v=(v_1,v_2)\) and appended bit \(b\), the three-digit LH word is \((v_1,v_2,b)\) with value \(N = v_1+2v_2+3b\). The successor vertex is \((v_2,b)\), and the edge label is \(\Fold_3(v_1 v_2 b)\), obtained by Zeckendorf-normalizing \(N\) and reading off the first three digits. The case \((v_1,v_2,b)=(0,1,1)\) deserves explicit comment: \(N=5=F_5\), and the Zeckendorf representation of \(F_5\) has its only nonzero digit at position \(k=4\) (where the weight is \(F_5=5\)), which lies outside the window; the first three Zeckendorf digits are therefore all zero. The complete edge-label table is:
 \[
 00\xrightarrow{000}00,\quad 00\xrightarrow{001}01,\quad
 01\xrightarrow{010}10,\quad 01\xrightarrow{000}11,
@@ -70,15 +72,22 @@ For \(m=3\) the decoder can be written down directly. The vertices are \(00,01,1
 10\xrightarrow{100}00,\quad 10\xrightarrow{101}01,\quad
 11\xrightarrow{001}10,\quad 11\xrightarrow{100}11.
 \]
-Among label blocks of length \(2\), the only ambiguous ones are
+
+We use the past-window convention: the vertex represents the two-digit suffix of the microstate sequence up to the current time. After reading edge \(b=\eta_t\) from vertex \(v=(\eta_{t-2},\eta_{t-1})\), the terminal vertex is \(v'=(\eta_{t-1},\eta_t)\). The last (rightmost) bit of \(v'\) is \(\eta_t\), the microstate bit to be decoded.
+
+Among label pairs \((y_{t-1},y_t)\), the only two that admit more than one possible terminal vertex are
 \[
-000\,|\,001,\qquad 100\,|\,001.
+(000,001):\text{ terminal vertex is }01\text{ or }10,
+\qquad
+(100,001):\text{ terminal vertex is }01\text{ or }10.
 \]
-In both cases the two possible terminal vertices are \(01\) and \(10\). Their outgoing label sets are disjoint:
+In both cases the two candidate vertices have disjoint successor outgoing label sets:
 \[
-\mathcal L^+(01)=\{000,010\},\qquad \mathcal L^+(10)=\{100,101\}.
+\mathcal{L}^+(01)=\{000,010\},\qquad \mathcal{L}^+(10)=\{100,101\}.
 \]
-Hence a block \((y_{t-2},y_{t-1},y_t)\) of three consecutive labels determines the terminal vertex uniquely: all two-label blocks except the two displayed ones already do so, and for those two exceptional blocks the third label decides between \(01\) and \(10\). The last bit of the resolved terminal vertex is \((\Psi_3(y))_t\). This gives an explicit inverse code with memory \(2\).
+The next label \(y_{t+1}\) therefore resolves the ambiguity: \(y_{t+1}\in\{000,010\}\) forces terminal vertex \(01\) (last bit \(1\)), and \(y_{t+1}\in\{100,101\}\) forces terminal vertex \(10\) (last bit \(0\)). Every other two-label block already determines the terminal vertex from \((y_{t-1},y_t)\) alone.
+
+Since the two exceptional pairs each require one look-ahead label, the inverse code \(\Psi_3\) has anticipation \(1\): the decoded bit \((\Psi_3(y))_t\) is determined by \((y_{t-2},y_{t-1},y_t,y_{t+1})\). The last bit of the resolved terminal vertex gives \((\Psi_3(y))_t\).
 
 \begin{proof}[Proof of Theorem~\ref{thm:conjugacy}]
 The edge shift of \(G_m\) is conjugate to \(\{0,1\}^{\ZZ}\) by reading the appended bit on each edge. Under this identification, the label map of \(G_m\) is exactly \(\Phi_m\). Proposition~\ref{prop:right-resolving} shows that the presentation is deterministic to the future, and Proposition~\ref{prop:sync} shows that the fiber product has no off-diagonal bi-infinite path. Therefore the label map is injective on bi-infinite edge paths; see \cite[Chapter~8]{LindMarcus1995}. Since \(Y_m\) is its image by definition, the map is bijective onto \(Y_m\). Compactness of the domain and Hausdorffness of the codomain imply that the inverse is continuous, and the Curtis--Hedlund--Lyndon theorem identifies that inverse with a sliding block code \(\Psi_m\). The two displayed identities are then immediate.

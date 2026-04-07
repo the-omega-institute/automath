@@ -38,21 +38,25 @@
 \maketitle
 
 \begin{abstract}
-This short note studies one concrete multiscale phenomenon in the Fold tower:
-folding does not commute with naive truncation.  For binary windows of length
-$n$, the direct prefix truncation to length $m$ and the fold-aware restriction
-obtained from the resolution-$n$ folded output produce different words in
-general.  We encode this failure of commutation by an adjacent-scale local
-defect $\kappa_{m+1\to m}$ and a tower-level global defect $D_{n\to m}$.  The
-main deterministic contribution is an exact xor-telescoping identity
-expressing $D_{n\to m}$ as the sum of prefix-truncated local defects across the
-resolution band $m,\dots,n-1$.  We also classify the adjacent defect
-explicitly: if $\eta=(p,b)$ with $p\in\Omega_m$ and $s=N(p)$, then a local
-defect occurs precisely when $b=1$ and $s\ge F_{m+1}$.  This threshold
-description turns the probability bound into an explicit counting problem under
-the uniform law on raw words and yields a Hamming--Lipschitz budget, a cocycle
-formula across intermediate scales, and an exact inverse-limit compatibility
-criterion.  No statistical theorem for the Fold tower is claimed in this note.
+This note studies one concrete multiscale phenomenon in the Fold tower: folding
+does not commute with naive truncation.  For binary windows of length $n$, the
+direct prefix truncation to length $m$ and the fold-aware restriction obtained
+from the resolution-$n$ folded output produce different words in general.  We
+encode this failure by an adjacent-scale local defect $\kappa_{m+1\to m}$ and a
+tower-level global defect $D_{n\to m}$.  The main telescoping identity expresses
+$D_{n\to m}$ as the xor-sum of prefix-truncated local defects across the
+resolution band $m,\dots,n-1$.  The Fold-specific arithmetic content is
+twofold.  First, we classify the adjacent defect by a Fibonacci threshold: for
+$\eta=(p,b)$ with $p\in\Omega_m$ and $s=N(p)$, a local defect occurs precisely
+when $b=1$ and $s\ge F_{m+1}$.  Second, we give an exact closed-form count of
+words triggering a defect under the uniform law: the probability equals
+$\lfloor 2^{m+1}/3\rfloor/2^{m+1}$, obtained via the recurrence
+$C_m=2^{m-2}+C_{m-2}$ for the number of below-threshold words in $\Omega_m$.
+Further consequences include a total-variation coupling bound, a
+Hamming--Lipschitz budget, a cocycle formula across intermediate scales, and an
+exact inverse-limit compatibility criterion stated directly in terms of the
+carry-threshold condition.  An appendix records a standard Fourier criterion for
+finite-state additive models, for future reference.
 \end{abstract}
 
 \tableofcontents
@@ -110,8 +114,10 @@ The point of this paper is therefore narrow and fully deterministic:
 \]
 We use only minimal background on Zeckendorf normalization and symbolic
 systems; see
-\cite{Lekkerkerker1952,Zeckendorf1972,Frougny1992,Frougny1999,Berstel1986} and
-\cite{LabbeLepsova2023,Fraenkel1985} for Fibonacci numeration and automata, and
+\cite{Lekkerkerker1952,Zeckendorf1972,Carlitz1968,CarlitzScovHoggatt1972,%
+Frougny1991,Frougny1992,Frougny1999,FrougnyS2010,Berstel1986} and
+\cite{LabbeLepsova2023,MarquesTrojovsky2025,Fraenkel1985} for Fibonacci
+numeration and automata, and
 \cite{Parry1964,LindMarcus1995,Kitchens1998,WaltersErgodicTheory} for the
 symbolic-dynamics framework.
 
@@ -119,10 +125,13 @@ symbolic-dynamics framework.
 
 Zeckendorf representations and Fibonacci numeration have a substantial
 literature.  The foundational uniqueness results go back to
-\cite{Lekkerkerker1952,Zeckendorf1972}, with automata-theoretic and
-normalization viewpoints in \cite{Frougny1992,Frougny1999,Fraenkel1985} and
-recent Fibonacci-transducer developments in \cite{LabbeLepsova2023}.  Broader
-numeration-system perspectives may be found in
+\cite{Lekkerkerker1952,Zeckendorf1972}, with representation-theoretic
+developments in \cite{Carlitz1968,CarlitzScovHoggatt1972}, and automata-theoretic
+and normalization viewpoints in
+\cite{Frougny1991,Frougny1992,Frougny1999,FrougnyS2010,Fraenkel1985}.
+Recent Fibonacci-transducer developments appear in
+\cite{LabbeLepsova2023,MarquesTrojovsky2025}.  Broader numeration-system
+perspectives may be found in
 \cite{Grabner1995,Berstel1986,BerstelReutenauer2011}.  In that circle of ideas
 the main themes are canonical representation, normalization, and finite-state
 structure.  The Fold maps used here belong to that background, but the
@@ -134,13 +143,22 @@ On the symbolic-dynamics side, the ambient space is the golden-mean shift and
 its finite-window factors, so factor maps, finite-state presentations, and
 compact-group extensions provide the natural context; see
 \cite{Parry1964,WaltersErgodicTheory,LindMarcus1995,Kitchens1998,Boyle1983,KitchensSchmidt1989}.
-Most of that background is standard and is used here only as context.  The
-specific contribution of this note is narrower: it makes explicit the
+Most of that background is standard and is used here only as context.
+
+The telescoping identity of Section~4 is formal once the defects are defined.
+The Fold-specific arithmetic input enters through
+Proposition~\ref{prop:adjacent-defect-threshold} and the adjacent-defect
+analysis of Section~3.  The specific contribution of this note is: an explicit
 xor-valued defect observable attached to the failure of Fold to commute with
-prefix restriction, classifies the adjacent defect by a Fibonacci threshold,
-and records the exact telescoping identity satisfied by that observable.  The
-probability and Hamming estimates are deterministic consequences of that
-bookkeeping identity once the threshold criterion is in place.
+prefix restriction; a sharp threshold criterion (Proposition~\ref{prop:adjacent-defect-threshold})
+classifying the adjacent defect by arithmetic in the Fibonacci numeration system;
+an exact counting formula for defect probabilities under the uniform law
+(Theorem~\ref{thm:fold-defect-count-explicit} below); and the telescoping
+identity that assembles these into global estimates.  The probability and
+Hamming estimates are deterministic consequences of that bookkeeping once the
+threshold criterion is in place.  To the best of my knowledge, I am not aware
+of a prior paper isolating exactly this xor-valued defect observable together
+with its explicit counting formula.
 
 \subsection{External Inputs and Dependence Map}
 
@@ -155,8 +173,8 @@ convenient background.
 \end{enumerate}
 No theorem from any prior Fold manuscript is used in Sections~2--6.  The
 appendix is auxiliary: it records a standard finite-group Fourier criterion,
-following \cite{Diaconis1988,Norris1997,Terras1999}, and is not invoked
-anywhere in the deterministic core.
+following \cite{Diaconis1988,LevinPeresWilmer2009MarkovMixing,Norris1997,Terras1999},
+and is not invoked anywhere in the deterministic core.
 
 \section{Folding and Naive Truncation}
 
@@ -176,20 +194,22 @@ N(\omega):=\sum_{k=1}^m \omega_k F_{k+1}.
 \]
 Here $(F_j)_{j\ge 1}$ denotes the Fibonacci sequence
 $F_1=F_2=1$, $F_{j+2}=F_{j+1}+F_j$.
-For $N\ge 0$, let
+For $N\ge 0$, define
 \[
 Z(N)=(z_k)_{k\ge 1}\in\{0,1\}^{\NN}
 \]
-denote the unique infinite binary sequence with finite support, no adjacent
-$1$'s, and
+to be the unique finitely supported sequence satisfying
 \[
-N=\sum_{k\ge 1} z_k F_{k+1}.
+N=\sum_{k\ge 1} z_k F_{k+1}
+\qquad\text{and}\qquad
+z_k z_{k+1}=0\text{ for all }k\ge 1.
 \]
-Thus $Z(N)$ is the Zeckendorf expansion of $N$
-\cite{Lekkerkerker1952,Zeckendorf1972}, and we set $Z(0)=0^\infty$.  When a
-finite admissible word $x=(x_1,\dots,x_m)\in X_m$ is compared with $Z(N)$, it
-is understood as the zero-padded infinite sequence
-$(x_1,\dots,x_m,0,0,\dots)$.  We define the fold map by
+Thus digit position $k$ carries Fibonacci weight $F_{k+1}$, and $Z(N)$ is the
+Zeckendorf expansion of $N$ \cite{Lekkerkerker1952,Zeckendorf1972}; we set
+$Z(0)=0^\infty$.  The existence and uniqueness of $Z(N)$ for every $N\ge 0$
+are classical \cite{Lekkerkerker1952,Zeckendorf1972}.  When a finite admissible
+word $x=(x_1,\dots,x_m)\in X_m$ is compared with $Z(N)$, it is identified with
+the zero-padded infinite sequence $(x_1,\dots,x_m,0,0,\dots)\in\{0,1\}^{\NN}$.  We define the fold map by
 \[
 \Fold_m(\omega):=\pi_{\infty\to m}(Z(N(\omega)))\in X_m,
 \]
@@ -706,18 +726,18 @@ contribute to the telescoping identity.
 
 \subsection{Explicit Consequences}
 
-\begin{corollary}[Probability bound from local threshold events]
+\begin{corollary}[Total-variation bound from local threshold events]
 \label{cor:fold-discrete-stokes-auditable-bound}
-Let $n>m$, let $\mu$ be any probability measure on $\Omega_n$, and let
-$f:X_m\to\RR$ be bounded.  Then
+Let $n>m$ and let $\mu$ be any probability measure on $\Omega_n$.  Setting
 \[
-\left|
-\EE_\mu f\bigl(\Fold_m(r_{n\to m}(\omega))\bigr)
--
-\EE_\mu f\bigl(\pi_{n\to m}(\Fold_n(\omega))\bigr)
-\right|
+X:=\Fold_m(r_{n\to m}(\omega)),
+\qquad
+Y:=\pi_{n\to m}(\Fold_n(\omega)),
+\]
+on the probability space $(\Omega_n,\mu)$, the pair $(X,Y)$ is a coupling and
+\[
+d_{\mathrm{TV}}\!\bigl(\Law(X),\Law(Y)\bigr)
 \le
-2\lVert f\rVert_\infty\,
 \PP_\mu[D_{n\to m}(\omega)\neq 0].
 \]
 Moreover,
@@ -740,33 +760,43 @@ and therefore
 N(r_{n\to j}(\omega))\ge F_{j+1}
 \right].
 \]
+For any bounded $f:X_m\to\RR$, the duality characterization of total variation
+gives
+\[
+\left|
+\EE_\mu f(X)
+-
+\EE_\mu f(Y)
+\right|
+\le
+2\lVert f\rVert_\infty\,
+d_{\mathrm{TV}}\!\bigl(\Law(X),\Law(Y)\bigr)
+\le
+2\lVert f\rVert_\infty\,
+\PP_\mu[D_{n\to m}(\omega)\neq 0].
+\]
 \end{corollary}
 
 \begin{proof}
-Write
+Since $X$ and $Y$ are defined on the common probability space $(\Omega_n,\mu)$,
+they form a coupling.  By the coupling characterization of total variation,
 \[
-x=\Fold_m(r_{n\to m}(\omega)),
-\qquad
-y=\pi_{n\to m}(\Fold_n(\omega)).
-\]
-Then $\{x\neq y\}=\{D_{n\to m}(\omega)\neq 0\}$, and
-\[
-\lvert f(x)-f(y)\rvert
+d_{\mathrm{TV}}\!\bigl(\Law(X),\Law(Y)\bigr)
 \le
-2\lVert f\rVert_\infty\,\mathbf{1}_{\{x\neq y\}}.
+\PP_\mu[X\neq Y]
+=
+\PP_\mu[D_{n\to m}(\omega)\neq 0].
 \]
-Taking expectation yields the first inequality.
 
 If $D_{n\to m}(\omega)\neq 0$, then
 Theorem~\ref{thm:fold-discrete-stokes-defect} implies that some local defect
-\[
-\kappa_{j+1\to j}(r_{n\to j+1}(\omega))
-\]
-is nonzero.  Writing
+$\kappa_{j+1\to j}(r_{n\to j+1}(\omega))$ is nonzero.  Writing
 $r_{n\to j+1}(\omega)=(r_{n\to j}(\omega),\omega_{j+1})$ and applying
 Proposition~\ref{prop:adjacent-defect-threshold}, this can happen only when
 $\omega_{j+1}=1$ and $N(r_{n\to j}(\omega))\ge F_{j+1}$.  The event inclusion
-follows, and the final estimate is the union bound.
+follows, and the bound on $\PP_\mu[D_{n\to m}\neq 0]$ is the union bound.  The
+test-function estimate follows from the duality bound
+$|Ef(X)-Ef(Y)|\le 2\|f\|_\infty\,\PP_\mu[X\neq Y]$.
 \end{proof}
 
 \section{Budget Bounds and Cocycle Structure}
@@ -852,6 +882,93 @@ K_{j+1\to j}(r_{n\to j+1}(\omega))=1
 Proposition~\ref{prop:uniform-adjacent-defect-counts} gives the explicit value
 of this probability, and summing over $j$ proves the claim.
 \end{proof}
+
+\begin{theorem}[Explicit defect count under the uniform law]
+\label{thm:fold-defect-count-explicit}
+For $m\ge 1$, let
+\[
+C_m:=\#\{\alpha\in\Omega_m:\ N(\alpha)<F_{m+1}\}.
+\]
+Then
+\[
+C_1=1,\qquad C_2=2,\qquad C_m=2^{m-2}+C_{m-2}\quad(m\ge 3).
+\]
+Solving the recurrence gives
+\[
+C_{2r}=\frac{2^{2r}+2}{3},
+\qquad
+C_{2r+1}=\frac{2^{2r+1}+1}{3}
+\qquad(r\ge 1).
+\]
+Consequently, under the uniform law on $\Omega_{m+1}$,
+\[
+\PP_{\mathsf{Unif}_{m+1}}[K_{m+1\to m}=1]
+=
+\frac{2^m - C_m}{2^{m+1}}
+=
+\frac{\lfloor 2^{m+1}/3\rfloor}{2^{m+1}},
+\]
+and the global coupling bound becomes
+\[
+\PP_{\mathsf{Unif}_n}[D_{n\to m}\neq 0]
+\le
+\sum_{j=m}^{n-1}
+\frac{\lfloor 2^{j+1}/3\rfloor}{2^{j+1}}.
+\]
+\end{theorem}
+
+\begin{proof}
+\textit{Recurrence.}  We derive $C_m=2^{m-2}+C_{m-2}$ for $m\ge 3$ by
+conditioning on the two leading bits $(\alpha_{m-1},\alpha_m)$.
+
+If $\alpha_m=1$, then $N(\alpha)\ge F_{m+1}$, so $N(\alpha)<F_{m+1}$ is
+impossible; no such word contributes to $C_m$.
+
+If $\alpha_m=0$ and $\alpha_{m-1}=0$, then $N(\alpha)=N(\alpha_1,\dots,\alpha_{m-2})
+\le\sum_{k=1}^{m-2}F_{k+1}=F_{m+1}-2<F_{m+1}$, so all $2^{m-2}$ choices of
+$(\alpha_1,\dots,\alpha_{m-2})$ qualify.
+
+If $\alpha_m=0$ and $\alpha_{m-1}=1$, then $N(\alpha)=F_m+N(\alpha_1,\dots,\alpha_{m-2})$,
+and the condition $N(\alpha)<F_{m+1}$ becomes $N(\alpha_1,\dots,\alpha_{m-2})<F_{m-1}$,
+which holds for exactly $C_{m-2}$ words in $\Omega_{m-2}$.
+
+Summing the three cases gives $C_m=0+2^{m-2}+C_{m-2}$.
+
+\textit{Base cases.}  With Fibonacci values $F_2=1$, $F_3=2$: for $m=1$,
+$N(0)=0<1=F_2$ and $N(1)=1\not<1$, so $C_1=1$; for $m=2$,
+$N(00)=0<2=F_3$, $N(01)=1<2$, $N(10)=2\not<2$, $N(11)=3\not<2$, so $C_2=2$.
+
+\textit{Closed form.}  Unrolling the recurrence with the convention $C_0:=1$
+(the empty word has value $0<F_1=1$): for $m=2r$,
+\[
+C_{2r}=2^{2r-2}+2^{2r-4}+\cdots+2^0+C_0=\frac{4^r-1}{3}+1=\frac{2^{2r}+2}{3}.
+\]
+For $m=2r+1$,
+\[
+C_{2r+1}=2^{2r-1}+2^{2r-3}+\cdots+2^1+C_1=\frac{2(4^r-1)}{3}+1=\frac{2^{2r+1}+1}{3}.
+\]
+
+\textit{Probability formula.}  By Proposition~\ref{prop:adjacent-defect-threshold},
+$K_{m+1\to m}(\alpha,b)=1$ iff $b=1$ and $N(\alpha)\ge F_{m+1}$, so the number
+of pairs $(\alpha,b)\in\Omega_{m+1}$ with $K_{m+1\to m}=1$ equals the number
+of $\alpha\in\Omega_m$ with $N(\alpha)\ge F_{m+1}$, which is $2^m-C_m$.
+Dividing by $2^{m+1}$ gives the stated probability.
+
+To verify $2^m-C_m=\lfloor 2^{m+1}/3\rfloor$: for $m=2r$,
+$(2^{2r+1}-2)/3=\lfloor 2^{2r+1}/3\rfloor$; for $m=2r+1$,
+$(2^{2r+2}-1)/3=\lfloor 2^{2r+2}/3\rfloor$.
+
+The global bound follows from the union bound in
+Corollary~\ref{cor:fold-discrete-stokes-auditable-bound}.
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:fold-defect-count-explicit} gives the precise probability that
+a single adjacent step produces a defect under the uniform raw-word law.  The
+fraction $\lfloor 2^{m+1}/3\rfloor/2^{m+1}$ converges to $1/3$ as
+$m\to\infty$, reflecting the fact that roughly one-third of all $(m+1)$-bit
+words trigger a carry across the threshold $F_{m+1}$.
+\end{remark}
 
 \subsection{Hamming--Lipschitz Budget}
 
@@ -1068,58 +1185,86 @@ there exists a unique $x^\infty\in\Xinf$ with
 $\pi_{\infty\to m}(x^\infty)=x_m$ for all $m\ge M$.
 \end{proof}
 
-\begin{corollary}[Summable adjacent defects imply eventual compatibility]
+\begin{corollary}[Explicit Fold-specific compatibility criterion]
 \label{cor:summable-defects-eventual-compatibility}
-In the setting of Proposition~\ref{prop:fold-naive-prefix-lift}, if
+In the setting of Proposition~\ref{prop:fold-naive-prefix-lift}, the following
+are equivalent.
+\begin{enumerate}[label=(\roman*)]
+\item $\sum_{m\ge 1}\lvert \delta_m\rvert_0<\infty$.
+\item $\delta_m=0$ for all sufficiently large $m$.
+\item There exists $M\ge 1$ such that for all $m\ge M$,
 \[
-\sum_{m\ge 1}\lvert \delta_m\rvert_0<\infty,
+\omega^\infty_{m+1}=0
+\qquad\text{or}\qquad
+N(r_{\infty\to m}(\omega^\infty))<F_{m+1}.
 \]
-then there exists $M$ and a unique $x^\infty\in\Xinf$ such that
-\[
-\pi_{\infty\to m}(x^\infty)=x_m
-\qquad\text{for all }m\ge M.
-\]
+\end{enumerate}
+When these conditions hold, there exists a unique $x^\infty\in\Xinf$ such that
+$\pi_{\infty\to m}(x^\infty)=x_m$ for all $m\ge M$.
 \end{corollary}
 
 \begin{proof}
-Since each $\lvert\delta_m\rvert_0$ is a nonnegative integer and their sum is
-finite, only finitely many of the vectors $\delta_m$ can be nonzero.  Hence
-there exists $M$ such that $\delta_m=0$ for all $m\ge M$, and
-Proposition~\ref{prop:fold-naive-prefix-lift} applies.
-\end{proof}
+The equivalence (i)$\Leftrightarrow$(ii) holds because each $|\delta_m|_0$ is
+a nonneg\-ative integer: their sum is finite if and only if all but finitely
+many terms vanish.
 
-\begin{remark}
-Proposition~\ref{prop:fold-naive-prefix-lift} is the exact inverse-limit
-compatibility criterion used in this paper.  Corollary~\ref{cor:summable-defects-eventual-compatibility}
-is only a convenient sufficient condition for invoking it.
-\end{remark}
+For (ii)$\Leftrightarrow$(iii): since
+$\delta_m=\kappa_{m+1\to m}(r_{\infty\to m+1}(\omega^\infty))$,
+Proposition~\ref{prop:adjacent-defect-threshold} gives
+\[
+\delta_m=0
+\quad\Longleftrightarrow\quad
+\omega^\infty_{m+1}=0
+\;\text{ or }\;
+N(r_{\infty\to m}(\omega^\infty))<F_{m+1}.
+\]
+So $\delta_m=0$ for all $m\ge M$ iff condition~(iii) holds.
+
+The existence and uniqueness of $x^\infty$ then follows from
+Proposition~\ref{prop:fold-naive-prefix-lift}.
+\end{proof}
 
 \section{Discussion}
 
-This short note isolates one exact mechanism: folding and naive truncation fail
-to commute, but the failure is structured.  Local adjacent-scale defects
-assemble into a global tower defect by an exact telescoping formula.  Once this
-identity is available, quantitative corollaries follow with little extra work:
-explicit probability bounds, Lipschitz budgets, and cocycle inequalities.
+This note isolates one exact mechanism: folding and naive truncation fail to
+commute, but the failure is structured.  Local adjacent-scale defects assemble
+into a global tower defect by an exact telescoping formula.  Once this identity
+is in place, quantitative corollaries follow: explicit probability bounds,
+Lipschitz budgets, and cocycle inequalities.
 
-The deterministic core now has a sharper structural center: the adjacent defect
-appears exactly at the threshold $N(p)=F_{m+1}$ for an appended final bit.  In
-combination with the telescoping identity, this converts the global defect into
-a concrete carry-threshold phenomenon and turns the uniform-law estimates into
-finite dynamic-programming computations.  Proposition~\ref{prop:fold-naive-prefix-lift}
-and Corollary~\ref{cor:summable-defects-eventual-compatibility} then give the
-exact finite-to-infinite compatibility statement used in the note.
+The Fold-specific arithmetic content enters through two places.
+Proposition~\ref{prop:adjacent-defect-threshold} gives a sharp threshold
+description of the adjacent defect: a local defect occurs exactly when
+appending the final bit $1$ pushes the prefix value across the Fibonacci level
+$F_{m+1}$.  Theorem~\ref{thm:fold-defect-count-explicit} converts that
+threshold into an exact closed-form count, showing that the fraction of
+$(m+1)$-bit raw words that trigger a defect at scale $m$ equals
+$\lfloor 2^{m+1}/3\rfloor/2^{m+1}$, converging to $1/3$ as $m\to\infty$.
+This is a carry-threshold phenomenon peculiar to Fibonacci numeration, and the
+recurrence $C_m=2^{m-2}+C_{m-2}$ reflects the structure of the Zeckendorf
+representation.  The telescoping identity then assembles these per-scale
+probabilities into the global bound.
+
+Proposition~\ref{prop:fold-naive-prefix-lift} and
+Corollary~\ref{cor:summable-defects-eventual-compatibility} give the exact
+finite-to-infinite compatibility criterion, restated in terms of the same
+carry-threshold condition: the sequence of folded prefixes converges in the
+inverse limit exactly when, for all large $m$, either the $(m+1)$-th bit of
+the raw sequence is $0$ or the truncated prefix value falls below $F_{m+1}$.
 
 \appendix
 
-\section{A Conditional Fourier Criterion on the Ambient Cube}
+\section{A General Fourier Criterion for Finite-State Additive Models}
 
 \subsection{Ambient-group formulation}
 
-This appendix is auxiliary to the deterministic core.  It records a standard
-finite-state Fourier criterion for additive defect models on the ambient cube;
-see \cite{Diaconis1988,Norris1997,Terras1999}.  The appendix is not used
-elsewhere in the paper.
+This appendix records a standard finite-group Fourier criterion for additive
+defect models on an ambient cube; see
+\cite{Diaconis1988,LevinPeresWilmer2009MarkovMixing,Norris1997,Terras1999}.
+It is external background, not a main result of the paper.  It is not invoked
+anywhere in Sections~2--6 and does not deliver a new theorem about the Fold
+defect process.  It is recorded here as a reference point for possible future
+instantiation (see Remark~\ref{rem:standing-hypotheses-haar-mixing}).
 
 \begin{theorem}[Conditional Haar mixing from an ambient-cube additive model]
 \label{thm:fold-stokes-defect-haar-mixing}
@@ -1133,48 +1278,49 @@ $\mathsf{S}_m$, and an increment map
 \[
 \Gamma_m:\mathsf{S}_m\times\mathsf{S}_m\to\mathsf{G}_m.
 \]
-Define the reachable subgroup
+Define the \emph{reachable state set}
+\[
+\mathsf{R}_m
+:=
+\{a\in\mathsf{S}_m:\text{there is a path from }\mathrm{supp}\,\nu_m\text{ to }a\text{ with positive probability}\},
+\]
+and the \emph{reachable increment subgroup}
 \[
 \mathsf{H}_m
 :=
 \left\langle
-\bigoplus_{t=0}^{\ell-1}\Gamma_m(y_t,y_{t+1})
+\Gamma_m(a,b)
 :\;
-\nu_m(y_0)p_{y_0y_1}\cdots p_{y_{\ell-1}y_\ell}>0,\ \ell\ge 1
+a,b\in\mathsf{R}_m,\ p_{ab}>0
 \right\rangle
 \le \mathsf{G}_m.
 \]
 For $u,v\in\mathsf{G}_m$, define the ambient character
+$\chi_u(v):=(-1)^{\langle u,v\rangle}$, and for $a,b\in\mathsf{R}_m$ set
 \[
-\chi_u(v):=(-1)^{\langle u,v\rangle},
+P_{m,u}(a,b):=p_{ab}\,\chi_u(\Gamma_m(a,b)).
 \]
-and set
-\[
-P_{m,u}(a,b):=p_{ab}\,\chi_u(\Gamma_m(a,b))
-\qquad (a,b\in\mathsf{S}_m).
-\]
+This is well-defined on $\mathsf{R}_m$ because $\Gamma_m(a,b)$ is evaluated
+only on reachable transitions $p_{ab}>0$ with $a,b\in\mathsf{R}_m$.
 Finally, let
 \[
 \mathsf{H}_m^\perp
 :=
 \{u\in\mathsf{G}_m:\chi_u|_{\mathsf{H}_m}\equiv 1\}.
 \]
-We use the empty xor-sum convention
-\[
-\bigoplus_{t=0}^{-1}:=0,
-\]
-so that assumption (i) below also covers the case $n=m$.  Assume that:
+We use the empty xor-sum convention $\bigoplus_{t=0}^{-1}:=0$,
+so that assumption (i) below also covers the case $n=m$.  Assume:
 \begin{enumerate}[label=(\roman*)]
-\item if $(Y_t)_{t\ge 0}$ is the Markov chain with initial law $\nu_m$ and
-transition matrix $P_m$, then for every $n\ge m$ the defect satisfies the
-distributional identity
+\item if $(Y_t)_{t\ge 0}$ is the Markov chain with initial law $\nu_m$,
+transition matrix $P_m$, and state space restricted to $\mathsf{R}_m$, then
+for every $n\ge m$ the defect satisfies the distributional identity
 \[
 D_{n\to m}
 \stackrel{\mathrm{law}}=
 \bigoplus_{t=0}^{n-m-1}\Gamma_m(Y_t,Y_{t+1});
 \]
-\item for every $u\notin \mathsf{H}_m^\perp$, the twisted matrix $P_{m,u}$
-satisfies $\rho(P_{m,u})<1$.
+\item for every $u\notin \mathsf{H}_m^\perp$, the twisted matrix
+$P_{m,u}$ restricted to $\mathsf{R}_m$ satisfies $\rho(P_{m,u})<1$.
 \end{enumerate}
 Then there exist constants $C_m>0$ and $0<\rho_m<1$ such that for all $n\ge m$,
 \[
@@ -1188,15 +1334,21 @@ where $\mathrm{Haar}(\mathsf{H}_m)$ is viewed as a probability measure on
 $\mathsf{G}_m$ supported on $\mathsf{H}_m$.
 \end{theorem}
 
-\begin{remark}[Standing hypotheses]
+\begin{remark}[Standing hypotheses and scope]
 \label{rem:standing-hypotheses-haar-mixing}
-Assumption (ii) is the genuinely conditional input.  In a concrete Fold model
-one would derive $\mathsf{S}_m$, $P_m$, and $\Gamma_m$ from a finite
-normalization transducer, identify the resulting subgroup $\mathsf{H}_m$, and
-then verify $\rho(P_{m,u})<1$ for each
-$u\notin\mathsf{H}_m^\perp$ by direct matrix computation.  This appendix does
-not carry out that construction or verification.  It records only the standard
-ambient-group criterion that would apply once those ingredients were in place.
+This appendix records the general criterion for future use; it is not invoked
+anywhere in the deterministic core.  Assumption~(i) requires a finite-state
+model for the defect process.  A natural construction strategy for the Fold
+tower would use the finite-state normalization framework for Fibonacci numeration
+(see \cite{Frougny1991,FrougnyS2010}): for each fixed $m$, let $Q$ be the state
+set of a Fibonacci normalization transducer, enlarge the state to
+$\mathsf{S}_m=Q\times(\ZZ/2\ZZ)^m$ where the second component carries the
+current $m$-bit projected defect, and define $\Gamma_m$ as the increment in the
+defect coordinate.  That construction would realize assumption~(i) from first
+principles.  Assumption~(ii) is the genuinely conditional spectral input;
+verifying $\rho(P_{m,u})<1$ for each $u\notin\mathsf{H}_m^\perp$ would then
+require a direct computation on the resulting twisted matrices.  Neither
+construction nor verification is carried out here.
 \end{remark}
 
 \begin{example}[A toy one-bit additive model]
@@ -1236,16 +1388,16 @@ transform
 \EE[\chi_u(D_{n\to m})].
 \]
 Fix any operator norm $\lVert\cdot\rVert_{\mathrm{mat}}$ on
-$\mathbb{C}^{\mathsf{S}_m\times\mathsf{S}_m}$ induced by a vector norm on
-$\mathbb{C}^{\mathsf{S}_m}$.  Since the space is finite-dimensional, the choice
+$\mathbb{C}^{\mathsf{R}_m\times\mathsf{R}_m}$ induced by a vector norm on
+$\mathbb{C}^{\mathsf{R}_m}$.  Since the space is finite-dimensional, the choice
 of norm affects only the constants.
 
-Using assumption (i) and expanding over all state paths of the Markov chain, we
-obtain
+Using assumption (i) and expanding over all state paths of the Markov chain
+(which stays in $\mathsf{R}_m$), we obtain
 \[
 \widehat{\mu_\ell}(u)=\nu_m P_{m,u}^{\,\ell}\mathbf{1},
 \]
-where $\mathbf{1}$ denotes the all-ones column vector on $\mathsf{S}_m$.
+where $\mathbf{1}$ denotes the all-ones column vector on $\mathsf{R}_m$.
 
 Every realization of $D_{n\to m}$ is a reachable xor-sum of increments, hence
 takes values in $\mathsf{H}_m$.  Therefore, if $u\in\mathsf{H}_m^\perp$, then

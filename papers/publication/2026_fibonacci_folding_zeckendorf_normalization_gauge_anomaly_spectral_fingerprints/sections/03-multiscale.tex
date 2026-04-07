@@ -2,11 +2,26 @@
 \label{sec:multiscale}
 
 \subsection{A rewriting realization and categorical properties}
-The map \(\Fold_m\) can be computed by a finite-time local rewriting system realizing Zeckendorf normalization. One convenient formulation uses a most-significant-digit (MSD-first) Fibonacci digit string and repeatedly applies the local rule
+The map \(\Fold_m\) can be computed by a finite-time local rewriting system realizing Zeckendorf normalization. Two indexing conventions appear in the literature and both are used in this paper; we fix them precisely here.
+
+\begin{lemma}[Convention translation]\label{lem:convention}
+Let \(\omega=(\omega_1,\dots,\omega_m)\in\Om_m\) be a microstate word written in the \emph{low-to-high} (LH) convention of \eqref{eq:Nomega}, so that position \(k\) carries weight \(\Fib_{k+1}\). Let \(\omega^\sharp=(\omega_m,\dots,\omega_1)\) be the same word written in the \emph{most-significant-digit-first} (MSD-first) convention. Then:
+\begin{enumerate}
+\item[(i)] The local MSD-first rewrite rule \(011\to 100\) applied at positions \((k,k+1,k+2)\) (counting from the left of \(\omega^\sharp\)) corresponds, in the LH convention, to the rule \(110\to 001\) applied at positions \((m-k-1,m-k,m-k+1)\).
+\item[(ii)] After a leading zero is prepended in MSD-first convention (equivalently, \(\omega_m=0\) is available as a carry slot), scanning the MSD-first word left-to-right and applying \(011\to 100\) until no occurrence remains is equivalent to scanning the LH word right-to-left and applying \(110\to 001\) until no occurrence remains.
+\item[(iii)] In either convention, each application of the rule preserves the Fibonacci value \(N(\omega)=\sum_k\omega_k\Fib_{k+1}\) and strictly decreases the total number of \(1\)s. The unique fixed point is the Zeckendorf representation of \(N(\omega)\).
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Part (i) is immediate: reversing indices maps \((a,b,c)\mapsto (c,b,a)\), so \(011\to 100\) becomes \(110\to 001\). Part (ii) follows because left-to-right scanning in MSD-first order corresponds to scanning from the highest-weight position to the lowest in LH order, i.e., right-to-left. Part (iii): the identity \(\Fib_{k}+\Fib_{k+1}=\Fib_{k+2}\) shows that replacing \(011\) at MSD positions \((k,k+1,k+2)\) by \(100\) replaces \(\Fib_{m-k+1}+\Fib_{m-k}\) with \(\Fib_{m-k+2}\) and does not alter the total value; the count of \(1\)s decreases by \(1\). Termination and uniqueness of the normal form are proved in Appendix~\ref{app:rewriting}.
+\end{proof}
+
+One convenient formulation uses MSD-first convention with the rule
 \[
 011 \;\to\; 100,
 \]
-scanning left-to-right after prefixing a leading zero; equivalently, in the window convention of \eqref{eq:Nomega} this is the rule \(110\to 001\) acting from low to high Fibonacci weights. See, e.g., \cite{Frougny1992,ShallitShan2023} for automata-theoretic formulations. Termination is immediate since each rewrite strictly decreases the total number of \(1\)s. Confluence holds and yields a unique normal form, which is precisely the Zeckendorf representation.
+scanning left-to-right after prefixing a leading zero; by Lemma~\ref{lem:convention}(i)--(ii), in the window convention of \eqref{eq:Nomega} this is the equivalent rule \(110\to 001\) acting from high to low Fibonacci weights. See \cite{Frougny1992,Frougny1999,ShallitShan2023} for automata-theoretic formulations. Termination is immediate since each rewrite strictly decreases the total number of \(1\)s. Confluence holds and yields a unique normal form, which is precisely the Zeckendorf representation.
 
 In our window model, this implies:
 \begin{proposition}[Well-definedness, idempotence, surjectivity]\label{prop:idempotent}
