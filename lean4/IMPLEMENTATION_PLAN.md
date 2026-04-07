@@ -6,17 +6,17 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~48,567 |
-| 定理/定义数 | ~4,411 |
-| 论文接口包装 | 696+ |
+| 总行数 | ~48,595 |
+| 定理/定义数 | ~4,240 |
+| 论文接口包装 | 699+ |
 | 文件数 | 114 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1558 |
+| \leanverified 标注数 | 1561 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1575 |
-| 轮次 | R384（round_count=385） |
+| 总标注数 | 1578 |
+| 轮次 | R385（round_count=386） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,15 +26,15 @@
 |---|---|---|---|
 | POM | 1,707 | 295 | 17.3% |
 | Emergent Arithmetic | 185 | 162 | 87.6% |
-| Folding | 337 | 121 | 35.9% |
+| Folding | 337 | 122 | 36.2% |
 | Conclusion | 2,550 | 251 | 9.8% |
 | Group Unification | 469 | 162 | 34.5% |
 | SPG | 129 | 105 | 81.4% |
-| Circle Dimension | 393 | 141 | 35.9% |
+| Circle Dimension | 393 | 143 | 36.4% |
 | Zeta Finite Part | 4,524 | 197 | 4.4% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1496** | **14.2%** |
+| **合计（body）** | **10,508** | **1499** | **14.3%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**CircleDim kernel/ledger + fold condexp index support（Round R385）**：`paper_cdim_phase_fold_kernel_minimal_certificate_rank`（对应 `thm:cdim-phase-fold-kernel-minimal-certificate-rank`，Circle Dimension；相位折叠核最小整数证书秩的论文接口包装）；`paper_cdim_zero_dimensional_ledger_no_circle_replacement`（对应 `thm:cdim-zero-dimensional-ledger-no-circle-replacement`，Circle Dimension；零维账本不能替代相位圆因子的论文接口包装）；`paper_fold_condexp_index_maxfiber_support`（对应 `prop:fold-condexp-index-maxfiber`，Folding；折叠条件期望有限指数由最大纤维支撑控制的论文接口打包）
 **Chebyshev doubling/Cassini + projector sign-match + fibprime Pisano rigidity（Round R384）**：`paper_chebyAdams_doubling_cassini_package`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 的平方差、倍角、后继倍角与四倍角统一论文接口打包）；`paper_projectorVal_sign_match_complete`（对应 `thm:fold-groupoid-z2x2-central-idempotents`，Emergent Arithmetic；Fourier-Hadamard 中心投影的完整 sign-match 判别论文接口包装）；`paper_fibprime_pisano_rigidity_package`（对应 `cor:gut-fibprime-pisano-4n`，Group Unification；Fibonacci 素数的 Pisano 周期封口与模 n 同余刚性联合论文接口打包）
 **Gödel prefix append + Lucas mod 9/20 周期包装（Round R383）**：`paper_godel_prefix_append_package`（对应 `thm:conclusion-godel-prefix-arithmetic-criterion`，Conclusion；Gödel 前缀判据与 append 结构的论文接口打包）；`paper_lucasNum_mod9_period_twentyfour`（对应 `thm:zeta-syntax-trace-linear-recurrence`，Zeta；Lucas 数模 9 的 24 周期论文接口包装）；`paper_lucasNum_mod20_period_twelve`（对应 `thm:zeta-syntax-trace-linear-recurrence`，Zeta；Lucas 数模 20 的 12 周期论文接口包装）
 **scan error 边界标度 + stable add/value 一致性 + boundary shift4 uplift 小尺度包（Round R382）**：`paper_scanError_boundary_scaling`（对应 `thm:spg-clarity-volume-boundary-scaling`，SPG；边界柱厚度与体--边界标度律的 paper-facing package）；`paper_stable_add_value_consistency`（对应 `thm:stable-add-value-consistency`，Emergent Arithmetic；稳定加法与值拉回一致性的论文接口包装）；`paper_boundary_shift4_uplift_small`（对应 `thm:boundary-shift4-uplift-isomorphism`，Group Unification；四步平移 uplift 同构的小尺度论文接口包装）
@@ -331,6 +332,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R385: CircleDim kernel/ledger + maxfiber support wrappers（完整）**：CircleDimension/CircleDim.lean + Folding/MaxFiber.lean——paper_cdim_phase_fold_kernel_minimal_certificate_rank（thm:cdim-phase-fold-kernel-minimal-certificate-rank，相位折叠核最小整数证书秩的论文接口包装，Circle Dimension）; paper_cdim_zero_dimensional_ledger_no_circle_replacement（thm:cdim-zero-dimensional-ledger-no-circle-replacement，零维账本不能替代相位圆因子的论文接口包装，Circle Dimension）; paper_fold_condexp_index_maxfiber_support（prop:fold-condexp-index-maxfiber，折叠条件期望有限指数由最大纤维支撑控制的论文接口打包，Folding）——**3 个论文标签条目计入覆盖率**（Circle Dimension +2, Folding +1）——Circle Dimension 141→143（35.9%→36.4%），Folding 121→122（35.9%→36.2%），全局 \leanverified 1558→1561（+3），总标注 1575→1578（+3），body 覆盖 1496→1499（14.3%），commit 3f326a546ea5ccb673994390e4a298c06c4ff583
 **Phase R384: Chebyshev/projector/fibprime wrapper trio（完整）**：Discussion/ChebyshevAdams.lean + EA/CentralIdempotentsRecovery.lean + GU/FibPrimePisano.lean——paper_chebyAdams_doubling_cassini_package（cor:discussion-ramanujan-half-dimension-collapse，Chebyshev-Adams 的平方差、倍角、后继倍角与四倍角统一论文接口打包，Discussion）; paper_projectorVal_sign_match_complete（thm:fold-groupoid-z2x2-central-idempotents，Fourier-Hadamard 中心投影的完整 sign-match 判别论文接口包装，Emergent Arithmetic）; paper_fibprime_pisano_rigidity_package（cor:gut-fibprime-pisano-4n，Fibonacci 素数的 Pisano 周期封口与模 n 同余刚性联合论文接口打包，Group Unification）——**3 个论文标签条目计入覆盖率**（Discussion +1, Emergent Arithmetic +1, Group Unification +1）——Discussion 63→64（94.0%→95.5%），Emergent Arithmetic 161→162（87.0%→87.6%），Group Unification 161→162（34.3%→34.5%），全局 \leanverified 1555→1558（+3），总标注 1572→1575（+3），body 覆盖 1493→1496（14.2%），commit 1c7f62d6d5e7ada8a181060eeee2cda9521fc6db
 **Phase R383: repaired Gödel prefix and Lucas wrappers（完整）**：Conclusion/PrimeRegister.lean + Zeta/DynZeta.lean——paper_godel_prefix_append_package（thm:conclusion-godel-prefix-arithmetic-criterion，Gödel 前缀判据与 append 结构的论文接口打包，Conclusion）; paper_lucasNum_mod9_period_twentyfour（thm:zeta-syntax-trace-linear-recurrence，Lucas 数模 9 的 24 周期论文接口包装，Zeta）; paper_lucasNum_mod20_period_twelve（thm:zeta-syntax-trace-linear-recurrence，Lucas 数模 20 的 12 周期论文接口包装，Zeta）——**3 个论文标签条目计入覆盖率**（Conclusion +1, Zeta Finite Part +2）——Conclusion 250→251（9.8%），Zeta Finite Part 195→197（4.3%→4.4%），全局 \leanverified 1552→1555（+3），总标注 1569→1572（+3），body 覆盖 1490→1493（14.2%），commit 07b290258ca136c3f2a24b6073b7b86497d38320
 **Phase R382: SPG and folding wrapper trio（完整）**：Frontier/Conditional.lean + Folding/FiberArithmeticProperties.lean + Folding/BoundaryLayer.lean——paper_scanError_boundary_scaling（thm:spg-clarity-volume-boundary-scaling，边界柱厚度与体--边界标度律的 paper-facing package，SPG）; paper_stable_add_value_consistency（thm:stable-add-value-consistency，稳定加法与值拉回一致性的论文接口包装，Emergent Arithmetic）; paper_boundary_shift4_uplift_small（thm:boundary-shift4-uplift-isomorphism，四步平移 uplift 同构的小尺度论文接口包装，Group Unification）——**3 个论文标签条目计入覆盖率**（SPG +1, Emergent Arithmetic +1, Group Unification +1）——SPG 104→105（80.6%→81.4%），Emergent Arithmetic 160→161（86.5%→87.0%），Group Unification 160→161（34.1%→34.3%），全局 \leanverified 1549→1552（+3），总标注 1566→1569（+3），body 覆盖 1487→1490（14.2%），commit b22854d
@@ -826,8 +828,8 @@
 2. **[部分完成] 计划 9**（定义+基值 Phase 0+1 已完成；下一步：$D_{2k}^{(3)} = F_{k+2} - F_{k-3}$ 闭合公式 Phase 2）
 3. **[深化完成-部分] S_2/S_3 递推公式归纳证明**（碰撞核矩阵 + Cayley-Hamilton 已形式化；数值验证 m=0..3 完成；有界版 m≤4 已形式化（Round 14）；条件性一般版已形式化（Round 14）；特征多项式 p(A)=0 + 系数 + Vieta 公式验证已形式化（Phase 26）；Hankel 行列式 + 最小阶数=3 已形式化（Phase 26）；S_2/S_3 严格单调 m≤6 + 条件性一般单调已形式化（Phase 26）；S_2: $S_2(m+3)+2S_2(m)=2S_2(m+2)+2S_2(m+1)$；S_3: $S_3(m+3)=2S_3(m+2)+4S_3(m+1)-2S_3(m)$；完整无界归纳步骤待实现）
 4. **[部分完成] Conclusion / Circle Dimension 账本可达性与残差预算**：`twoPhase_zeroLedger_achievable`、`onePhase_minLedger_achievable`、`phaseResidualBudget_lower_bound_finite` 已完成；下一步可继续补 paper-facing wrapper 或更强的渐近/等价版本
-5. **[阶段性推进] Folding / Circle Dimension / Zeta 论文接口包装**：`paper_fold_omega_commute`、`paper_inverseLimit_golden`、`paper_circleDim_hom`、`paper_cdim_minimal_ledger_cost_kernel`、`paper_phaseSpectrumCount_reconstruction_core`、`paper_phaseSpectrumCount_limit_core`、`paper_goldenMean_primitive_orbit_11_14`、`paper_goldenMean_primitive_orbit_15_18`、`paper_goldenMean_primitive_orbit_23_26`、`paper_goldenMean_primitive_orbit_27_30`、`paper_lucasNum_mod9_period_twentyfour`、`paper_lucasNum_mod20_period_twelve`、`paper_cdimDefect_composition_package`、`paper_circleDim_short_exact_additivity_package`、`paper_fold_defect_cocycle`、`paper_fold_discrete_poincare_band`、`paper_fold_gauge_anomaly_max`、`paper_stable_add_value_consistency`、`paper_goldenMean_trace_recurrence_unbounded` 已登记；下一步优先补剩余已证明但正文未显式包装的 paper-facing wrapper
-6. **[阶段性推进] Conclusion / POM / Emergent Arithmetic / Discussion / Group Unification 论文接口包装**：`paper_godelLift_fold_axis_exponent_lower_bound_discrete`、`paper_godelLift_fold_tower_bounds`、`paper_godelLift_binary_optimal_m9_m10`、`paper_godelLift_divisor_lattice_width_bounds`、`paper_godelLift_fixed_axis_exponential_amplitude`、`paper_pom_fiber_index_cgf_q2_specialized`、`paper_wedderburn_avg_fiber_m7`、`paper_scanError_boundary_scaling`、`paper_boundary_shift4_uplift_small`、`paper_godel_prefix_append_package`、`paper_chebyAdams_doubling_cassini_package`、`paper_projectorVal_sign_match_complete`、`paper_fibprime_pisano_rigidity_package` 已登记；下一步继续清点同锚点下已证但未显式包装的 paper-facing wrapper
+5. **[阶段性推进] Folding / Circle Dimension / Zeta 论文接口包装**：`paper_fold_omega_commute`、`paper_inverseLimit_golden`、`paper_circleDim_hom`、`paper_cdim_minimal_ledger_cost_kernel`、`paper_phaseSpectrumCount_reconstruction_core`、`paper_phaseSpectrumCount_limit_core`、`paper_goldenMean_primitive_orbit_11_14`、`paper_goldenMean_primitive_orbit_15_18`、`paper_goldenMean_primitive_orbit_23_26`、`paper_goldenMean_primitive_orbit_27_30`、`paper_lucasNum_mod9_period_twentyfour`、`paper_lucasNum_mod20_period_twelve`、`paper_cdimDefect_composition_package`、`paper_circleDim_short_exact_additivity_package`、`paper_fold_defect_cocycle`、`paper_fold_discrete_poincare_band`、`paper_fold_gauge_anomaly_max`、`paper_stable_add_value_consistency`、`paper_goldenMean_trace_recurrence_unbounded`、`paper_cdim_phase_fold_kernel_minimal_certificate_rank`、`paper_cdim_zero_dimensional_ledger_no_circle_replacement` 已登记；下一步优先补剩余已证明但正文未显式包装的 paper-facing wrapper
+6. **[阶段性推进] Conclusion / POM / Emergent Arithmetic / Discussion / Group Unification / Folding 论文接口包装**：`paper_godelLift_fold_axis_exponent_lower_bound_discrete`、`paper_godelLift_fold_tower_bounds`、`paper_godelLift_binary_optimal_m9_m10`、`paper_godelLift_divisor_lattice_width_bounds`、`paper_godelLift_fixed_axis_exponential_amplitude`、`paper_pom_fiber_index_cgf_q2_specialized`、`paper_wedderburn_avg_fiber_m7`、`paper_scanError_boundary_scaling`、`paper_boundary_shift4_uplift_small`、`paper_godel_prefix_append_package`、`paper_chebyAdams_doubling_cassini_package`、`paper_projectorVal_sign_match_complete`、`paper_fibprime_pisano_rigidity_package`、`paper_fold_condexp_index_maxfiber_support` 已登记；下一步继续清点同锚点下已证但未显式包装的 paper-facing wrapper
 7. **[阶段性推进] Folding / Zeta 论文接口包装**：`paper_fold_discrete_stokes_defect`、`paper_localDefect_eq_zero_iff_fold_commutes`、`paper_goldenMean_primitive_moments_first_second`、`paper_degeneracy_ghost_coefficients` 已登记；下一步继续补 primitive moment 与 degeneracy bridge 相关剩余 paper-facing wrapper
 8. 计划 1（Zeckendorf 唯一性）
 
