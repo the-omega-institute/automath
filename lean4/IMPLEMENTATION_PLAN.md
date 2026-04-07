@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1499 |
+| \leanverified 标注数 | 1502 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1516 |
-| 轮次 | R366（round_count=367） |
+| 总标注数 | 1519 |
+| 轮次 | R367（round_count=368） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,17 +24,17 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 293 | 17.2% |
+| POM | 1,707 | 294 | 17.2% |
 | Emergent Arithmetic | 185 | 155 | 83.8% |
 | Folding | 337 | 111 | 32.9% |
 | Conclusion | 2,550 | 241 | 9.5% |
 | Group Unification | 469 | 157 | 33.5% |
-| SPG | 129 | 102 | 79.1% |
-| Circle Dimension | 393 | 133 | 33.8% |
+| SPG | 129 | 103 | 79.8% |
+| Circle Dimension | 393 | 134 | 34.1% |
 | Zeta Finite Part | 4,524 | 186 | 4.1% |
 | Discussion | 67 | 61 | 91.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1439** | **13.7%** |
+| **合计（body）** | **10,508** | **1442** | **13.7%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**扫描误差对称差稳定性 + 相谱 rank-2 审计 + 进位同余包（Round R367）**：`paper_scanError_symmDiff_stability`（对应 `prop:spg-scan-error-cylinder`，SPG；扫描误差在对称差扰动下的稳定性综合包）；`paper_phaseSpectrumCount_rank2`（对应 `thm:cdim-phase-spectrum-limit`，Circle Dimension；rank-2 有限群相谱计数综合包）；`paper_pom_carry_congruence`（对应 `thm:pom-stable-addition-carry-defect-unique-element`，POM；进位缺陷同余条件综合包）
 **偶长校正部分和 + window-8 Fibonacci 审计 + Chebyshev at-3 扩展（Round R366）**：`evenLengthCorrection_partial_sum`（对应 `cor:xi-time-part73c-fixed-parameter-necklace-correction`，Zeta；偶长 necklace 校正核的部分和公式）；`paper_gu_window8_fib_audit`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window-8 Fibonacci 对齐综合审计包）；`paper_chebyAdams_at_three_extended`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 在 n=3 处的扩展恒等式包）
 **Gödel 编码单调性 + EA 后继迭代加法 + S₃ 矩值包（Round R365）**：`godelEncoding_mono_of_le`（对应 `thm:conclusion-godel-semidirect-law`，Conclusion；Gödel 编码关于列表长度的单调性）；`paper_ea_successor_arithmetic`（对应 `cor:add-from-successor`，Emergent Arithmetic；加法由后继迭代给出的综合包）；`paper_momentSum_three_values`（对应 `prop:fold-groupoid-wedderburn`，Emergent Arithmetic；S₃ 矩精确值综合包）
 **Tanaka-Stokes 完整四合一 + 相谱素数幂审计 + 进位 m6 联合审计（Round R364）**：`paper_spg_tanaka_stokes_complete`（对应 `thm:spg-scan-tanaka-stokes`，SPG；Tanaka--Stokes 分解完整四合一综合包）；`paper_phaseSpectrumCount_prime_power_audit`（对应 `thm:cdim-phase-spectrum-limit`，Circle Dimension；素数幂相谱计数审计包）；`paper_pom_carry_m6_joint_audit`（对应 `thm:pom-stable-addition-carry-defect-unique-element`，POM；m=6 进位缺陷联合审计包）
