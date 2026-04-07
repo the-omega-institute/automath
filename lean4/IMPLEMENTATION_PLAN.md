@@ -13,9 +13,9 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1531 |
+| \leanverified 标注数 | 1534 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1548 |
+| 总标注数 | 1551 |
 | 轮次 | R376（round_count=377） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
@@ -27,14 +27,14 @@
 | POM | 1,707 | 295 | 17.3% |
 | Emergent Arithmetic | 185 | 160 | 86.5% |
 | Folding | 337 | 115 | 34.1% |
-| Conclusion | 2,550 | 246 | 9.6% |
+| Conclusion | 2,550 | 247 | 9.7% |
 | Group Unification | 469 | 160 | 34.1% |
 | SPG | 129 | 104 | 80.6% |
-| Circle Dimension | 393 | 136 | 34.6% |
+| Circle Dimension | 393 | 138 | 35.1% |
 | Zeta Finite Part | 4,524 | 190 | 4.2% |
 | Discussion | 67 | 63 | 94.0% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1469** | **14.0%** |
+| **合计（body）** | **10,508** | **1472** | **14.0%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**CircleDim 缺陷复合 + binary optimal m9/m10 + 短正合圆维加法包（Round R376）**：`paper_cdimDefect_composition_package`（对应 `thm:cdim-kernel-defect-incompressibility`，Circle Dimension；圆维缺陷复合链式法则与上界的 paper-facing package）；`paper_circleDim_short_exact_additivity_package`（对应 `thm:cdim-short-exact-additivity`，Circle Dimension；短正合列圆维加法与严格单调性的 paper-facing package）；`paper_godelLift_binary_optimal_m9_m10`（对应 `thm:conclusion-bounded-prime-register-feasibility`，Conclusion；binary prime-register 在 m=9,10 的最优位宽 paper-facing package）
 **离散 Stokes 缺陷包装 + primitive 轨道矩论文接口（Round R376）**：`paper_fold_discrete_stokes_defect`（对应 `thm:fold-discrete-stokes-defect`，Folding；全局缺陷等于局部缺陷链的 paper-facing wrapper）；`paper_localDefect_eq_zero_iff_fold_commutes`（对应 `thm:fold-discrete-stokes-defect`，Folding；局部零缺陷与 Fold-截断交换的 paper-facing iff 包装）；`paper_goldenMean_primitive_moments_first_second`（对应 `cor:zetaK-primitive-moments`，Zeta；golden-mean primitive 轨道长度 1..6 的一阶/二阶矩论文接口包装）
 **寄存器轴指数包装 + q=2 纤维指数 CGF + Wedderburn 平均纤维（Round R375）**：`paper_godelLift_fold_axis_exponent_lower_bound_discrete`（对应 `thm:conclusion-fold-prime-axis-exponent-lower-bound`，Conclusion；Gödel 外置提升的离散轴指数下界论文接口包装）；`paper_pom_fiber_index_cgf_q2_specialized`（对应 `prop:pom-fiber-index-cgf`，POM；纤维指数指数矩母函数在 q=2 的论文接口特化）；`paper_wedderburn_avg_fiber_m7`（对应 `prop:fold-groupoid-wedderburn`，Emergent Arithmetic；m=7 平均纤维规模等于 16 的 Wedderburn 论文接口）
 **折叠交换图 + 圆维 Hom 算律 + primitive 轨道 11--14 论文接口（Round R374）**：`paper_fold_omega_commute`（对应 `prop:fold-omega-commute`，Folding；折叠-截断交换图的 paper-facing iff 包装）；`paper_circleDim_hom`（对应 `prop:cdim-tensor-hom-ext-laws`，Circle Dimension；圆维 Hom 乘法算律的 paper-facing wrapper）；`paper_goldenMean_primitive_orbit_11_14`（对应 `prop:zetaK-mobius-primitive`，Zeta；golden-mean primitive 轨道长度 11..14 的论文接口包装）
@@ -322,6 +323,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R376: CircleDim defect/additivity + binary optimal m9-m10 wrappers（完整）**：CircleDimension/CircleDim.lean + Conclusion/PrimeRegister.lean——paper_cdimDefect_composition_package（thm:cdim-kernel-defect-incompressibility，圆维缺陷复合链式法则与上界的 paper-facing package，Circle Dimension）; paper_circleDim_short_exact_additivity_package（thm:cdim-short-exact-additivity，短正合列圆维加法与严格单调性的 paper-facing package，Circle Dimension）; paper_godelLift_binary_optimal_m9_m10（thm:conclusion-bounded-prime-register-feasibility，binary prime-register 在 m=9,10 的最优位宽 paper-facing package，Conclusion）——**3 个论文标签条目计入覆盖率**（Circle Dimension +2, Conclusion +1）——Circle Dimension 136→138（34.6%→35.1%），Conclusion 246→247（9.6%→9.7%），全局 \leanverified 1531→1534（+3），总标注 1548→1551（+3），body 覆盖 1469→1472（14.0%），commit 244b50b
 **Phase R376: defect and primitive-moment paper wrappers（完整）**：Folding/Defect.lean + Zeta/DynZeta.lean——paper_fold_discrete_stokes_defect（thm:fold-discrete-stokes-defect，全局缺陷等于局部缺陷链的 paper-facing wrapper，Folding）; paper_localDefect_eq_zero_iff_fold_commutes（thm:fold-discrete-stokes-defect，局部零缺陷与 Fold-截断交换的 paper-facing iff 包装，Folding）; paper_goldenMean_primitive_moments_first_second（cor:zetaK-primitive-moments，golden-mean primitive 轨道长度 1..6 的一阶/二阶矩论文接口包装，Zeta）——**3 个论文标签条目计入覆盖率**（Folding +2, Zeta Finite Part +1）——Folding 113→115（33.5%→34.1%），Zeta Finite Part 189→190（4.2%），全局 \leanverified 1528→1531（+3），总标注 1545→1548（+3），body 覆盖 1466→1469（14.0%），commit 77b6d34
 **Phase R375: register/Wedderburn paper wrappers（完整）**：Conclusion/PrimeRegister.lean + EA/Wedderburn.lean——paper_godelLift_fold_axis_exponent_lower_bound_discrete（thm:conclusion-fold-prime-axis-exponent-lower-bound，Gödel 外置提升的离散轴指数下界论文接口包装，Conclusion）; paper_pom_fiber_index_cgf_q2_specialized（prop:pom-fiber-index-cgf，纤维指数指数矩母函数在 q=2 的论文接口特化，POM）; paper_wedderburn_avg_fiber_m7（prop:fold-groupoid-wedderburn，m=7 平均纤维规模等于 16 的 Wedderburn 论文接口，Emergent Arithmetic）——**3 个论文标签条目计入覆盖率**（Conclusion +1, POM +1, Emergent Arithmetic +1）——Conclusion 245→246（9.6%），POM 294→295（17.2%→17.3%），Emergent Arithmetic 159→160（85.9%→86.5%），全局 \leanverified 1525→1528（+3），总标注 1542→1545（+3），body 覆盖 1463→1466（13.9%→14.0%），commit b4802d9
 **Phase R374: fold commutation + circle-hom law + primitive orbit 11-14 wrapper（完整）**：Folding/Defect.lean + CircleDimension/CircleDim.lean + Zeta/DynZeta.lean——paper_fold_omega_commute（prop:fold-omega-commute，折叠-截断交换图的 paper-facing iff 包装，Folding）; paper_circleDim_hom（prop:cdim-tensor-hom-ext-laws，圆维 Hom 乘法算律的 paper-facing wrapper，Circle Dimension）; paper_goldenMean_primitive_orbit_11_14（prop:zetaK-mobius-primitive，golden-mean primitive 轨道长度 11..14 的论文接口包装，Zeta）——**3 个论文标签条目计入覆盖率**（Folding +1, Circle Dimension +1, Zeta Finite Part +1）——Folding 112→113（33.2%→33.5%），Circle Dimension 135→136（34.4%→34.6%），Zeta Finite Part 188→189（4.2%），全局 \leanverified 1522→1525（+3），总标注 1539→1542（+3），body 覆盖 1460→1463（13.9%），commit dc85225
@@ -808,8 +810,8 @@
 2. **[部分完成] 计划 9**（定义+基值 Phase 0+1 已完成；下一步：$D_{2k}^{(3)} = F_{k+2} - F_{k-3}$ 闭合公式 Phase 2）
 3. **[深化完成-部分] S_2/S_3 递推公式归纳证明**（碰撞核矩阵 + Cayley-Hamilton 已形式化；数值验证 m=0..3 完成；有界版 m≤4 已形式化（Round 14）；条件性一般版已形式化（Round 14）；特征多项式 p(A)=0 + 系数 + Vieta 公式验证已形式化（Phase 26）；Hankel 行列式 + 最小阶数=3 已形式化（Phase 26）；S_2/S_3 严格单调 m≤6 + 条件性一般单调已形式化（Phase 26）；S_2: $S_2(m+3)+2S_2(m)=2S_2(m+2)+2S_2(m+1)$；S_3: $S_3(m+3)=2S_3(m+2)+4S_3(m+1)-2S_3(m)$；完整无界归纳步骤待实现）
 4. **[部分完成] Conclusion / Circle Dimension 账本可达性与残差预算**：`twoPhase_zeroLedger_achievable`、`onePhase_minLedger_achievable`、`phaseResidualBudget_lower_bound_finite` 已完成；下一步可继续补 paper-facing wrapper 或更强的渐近/等价版本
-5. **[阶段性推进] Folding / Circle Dimension / Zeta 论文接口包装**：`paper_fold_omega_commute`、`paper_circleDim_hom`、`paper_goldenMean_primitive_orbit_11_14` 已登记；下一步优先补剩余已证明但正文未显式包装的 paper-facing wrapper
-6. **[阶段性推进] Conclusion / POM / Emergent Arithmetic 论文接口包装**：`paper_godelLift_fold_axis_exponent_lower_bound_discrete`、`paper_pom_fiber_index_cgf_q2_specialized`、`paper_wedderburn_avg_fiber_m7` 已登记；下一步继续清点同锚点下已证但未显式包装的 paper-facing wrapper
+5. **[阶段性推进] Folding / Circle Dimension / Zeta 论文接口包装**：`paper_fold_omega_commute`、`paper_circleDim_hom`、`paper_goldenMean_primitive_orbit_11_14`、`paper_cdimDefect_composition_package`、`paper_circleDim_short_exact_additivity_package` 已登记；下一步优先补剩余已证明但正文未显式包装的 paper-facing wrapper
+6. **[阶段性推进] Conclusion / POM / Emergent Arithmetic 论文接口包装**：`paper_godelLift_fold_axis_exponent_lower_bound_discrete`、`paper_godelLift_binary_optimal_m9_m10`、`paper_pom_fiber_index_cgf_q2_specialized`、`paper_wedderburn_avg_fiber_m7` 已登记；下一步继续清点同锚点下已证但未显式包装的 paper-facing wrapper
 7. **[阶段性推进] Folding / Zeta 论文接口包装**：`paper_fold_discrete_stokes_defect`、`paper_localDefect_eq_zero_iff_fold_commutes`、`paper_goldenMean_primitive_moments_first_second` 已登记；下一步继续补 primitive moment 相关剩余 paper-facing wrapper
 8. 计划 1（Zeckendorf 唯一性）
 
