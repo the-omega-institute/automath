@@ -359,6 +359,17 @@ theorem paper_fold_omega_commute (η : Word (m + 1)) :
     Fold (truncate η) = X.restrict (Fold η) ↔ localDefect η = zeroWord m := by
   exact (localDefect_eq_zero_iff_fold_commutes η).symm
 
+/-- Paper: thm:fold-discrete-stokes-defect -/
+theorem paper_fold_discrete_stokes_defect (m k : Nat) (ω : Word (m + k)) :
+    globalDefect (Nat.le_add_right m k) ω = defectChain m k ω := by
+  simpa using globalDefect_eq_defectChain m k ω
+
+/-- Paper: local zero-defect criterion for Fold commutativity.
+    thm:fold-discrete-stokes-defect -/
+theorem paper_localDefect_eq_zero_iff_fold_commutes (η : Word (m + 1)) :
+    localDefect η = zeroWord m ↔ Fold (truncate η) = X.restrict (Fold η) := by
+  simpa using localDefect_eq_zero_iff_fold_commutes η
+
 /-- Global defect is the accumulated Fold commutativity failure across resolutions. -/
 theorem globalDefect_accumulated (h : m ≤ n) (ω : Word n) :
     globalDefect h ω = zeroWord m ↔

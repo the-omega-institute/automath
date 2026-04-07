@@ -232,6 +232,12 @@ theorem goldenMean_primitive_moments_first_second :
     (1 : ℤ) * 0 + 2 * 1 + 3 * 2 + 4 * 3 + 5 * 4 * 2 + 6 * 5 * 2 = 120 := by
   constructor <;> omega
 
+/-- Paper: cor:zetaK-primitive-moments -/
+theorem paper_goldenMean_primitive_moments_first_second :
+    (1 : ℤ) * 1 + 2 * 1 + 3 * 1 + 4 * 1 + 5 * 2 + 6 * 2 = 32 ∧
+    (1 : ℤ) * 0 + 2 * 1 + 3 * 2 + 4 * 3 + 5 * 4 * 2 + 6 * 5 * 2 = 120 := by
+  exact goldenMean_primitive_moments_first_second
+
 /-! ## Degeneracy-zeta coefficients
 
 The degeneracy ratio ζ_full/ζ = (1-z-z²)/(1-2z) measures the gap
