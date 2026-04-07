@@ -71,4 +71,31 @@ theorem paper_zeta_evenLength_correction_package :
   refine ⟨evenLengthCorrection_odd, evenLengthCorrection_even, ?_⟩
   intro m; rw [evenLengthCorrection_even]; positivity
 
+/-- Even-length correction partial sum (integer form avoiding division).
+    (v-1) · Σ_{k=1}^{n} E(v,2k) = 2·(v^{n+1} - v).
+    cor:xi-time-part73c-fixed-parameter-necklace-correction -/
+theorem evenLengthCorrection_partial_sum (v n : Nat) (hv : 2 ≤ v) :
+    (v - 1) * ∑ k ∈ Finset.range n, evenLengthCorrection v (2 * (k + 1)) =
+    2 * (v ^ (n + 1) - v) := by
+  -- Unfold E(v, 2(k+1)) = 2·v^(k+1)
+  simp_rw [evenLengthCorrection_even]
+  -- Goal: (v-1) · Σ_{k=0}^{n-1} 2·v^(k+1) = 2·(v^{n+1} - v)
+  -- = (v-1) · 2 · Σ_{k=0}^{n-1} v^(k+1) = 2(v-1) · v · Σ v^k
+  -- Use geometric sum: (v-1) · Σ_{k=0}^{n-1} v^k = v^n - 1
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    rw [Finset.sum_range_succ, Nat.mul_add, ih]
+    -- Need: 2*(v^{n+1}-v) + (v-1)*(2*v^{n+1}) = 2*(v^{n+2}-v) in ℕ
+    -- Lift to ℤ
+    have hv1 : 1 ≤ v := by omega
+    have hvn1 : v ≤ v ^ (n + 1) := Nat.le_self_pow (by omega) v
+    have hvn2 : v ≤ v ^ (n + 2) := Nat.le_self_pow (by omega) v
+    -- All subtractions are valid in ℕ
+    zify [hvn1, hvn2, hv1]
+    zify [hvn1] at ih
+    have hpow : (v : ℤ) ^ (n + 1 + 1) = v * v ^ (n + 1) := by
+      rw [pow_succ]; ring
+    nlinarith
+
 end Omega.Zeta

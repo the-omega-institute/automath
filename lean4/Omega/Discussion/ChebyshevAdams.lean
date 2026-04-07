@@ -581,4 +581,13 @@ theorem chebyAdams_quadruple (n : Nat) (S : ℤ) :
     chebyAdams (4 * n) S = (chebyAdams n S ^ 2 - 2) ^ 2 - 2 := by
   rw [show 4 * n = 2 * (2 * n) from by ring, chebyAdams_double_pow, chebyAdams_double_pow]
 
+/-- Chebyshev-Adams at S=3 for n=6..9.
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem paper_chebyAdams_at_three_extended :
+    chebyAdams 6 3 = 322 ∧
+    chebyAdams 7 3 = 843 ∧
+    chebyAdams 8 3 = 2207 ∧
+    chebyAdams 9 3 = 5778 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> simp [chebyAdams]
+
 end Omega.Discussion

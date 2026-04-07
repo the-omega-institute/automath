@@ -61,4 +61,12 @@ theorem paper_gu_window6_boundary_certificate :
     9 * 3 > 21 := by
   refine ⟨by omega, by omega, by omega, by native_decide, by omega⟩
 
+/-- Window-8 Fibonacci audit.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_gu_window8_fib_audit :
+    21 + 11 + 23 = 55 ∧ 55 = Nat.fib 10 ∧
+    21 * 3 + 11 * 5 + 23 * 6 = 256 ∧ 256 = 2 ^ 8 ∧
+    256 / 55 = 4 ∧ 256 % 55 = 36 := by
+  refine ⟨by omega, by native_decide, by omega, by norm_num, by omega, by omega⟩
+
 end Omega.GU
