@@ -171,34 +171,21 @@ prime in \([2^{m-1},2^m)\) already has binary length \(m\).
   on that progression.
 \end{proof}
 
-\begin{corollary}[No simultaneous recall and precision for fixed DFA]
-  \label{cor:dfa-prime-recall-precision}
-  Let
+\begin{proposition}\label{prop:dfa-quantitative-obstruction}
+  Let \(L_m:=L(\mathcal A)\cap\{0,1\}^m\). Suppose that there exist
+  \(\delta>0\) and infinitely many integers \(m\) such that
+  \[
+    \mathrm{Rec}_m\ge \delta,
+    \qquad
+    \mathrm{Prec}_m\ge \delta,
+  \]
+  where
   \[
     \mathrm{Rec}_m
     :=\frac{\abs{L_m\cap\mathcal P_m^{(2)}}}{\abs{\mathcal P_m^{(2)}}},
     \qquad
     \mathrm{Prec}_m
-    :=\frac{\abs{L_m\cap\mathcal P_m^{(2)}}}{\abs{L_m}}
-  \]
-  whenever \(\abs{L_m}>0\). Then every DFA satisfies one of the
-  following:
-  \begin{enumerate}[label=\textup{(\roman*)}]
-    \item \(\mathrm{Rec}_m\to 0\) exponentially fast.
-    \item \(\mathrm{Prec}_m\to 0\) along an infinite arithmetic
-    progression of lengths.
-  \end{enumerate}
-  In particular, no fixed DFA has both recall and precision bounded
-  away from zero for infinitely many lengths.
-\end{corollary}
-
-\begin{proposition}\label{prop:dfa-quantitative-obstruction}
-  Let \(L_m:=L(\mathcal A)\cap\{0,1\}^m\). Suppose that there exists
-  \(\delta>0\) and infinitely many integers \(m\) such that
-  \[
-    \mathrm{Rec}_m\ge \delta,
-    \qquad
-    \mathrm{Prec}_m\ge \delta.
+    :=\frac{\abs{L_m\cap\mathcal P_m^{(2)}}}{\abs{L_m}}.
   \]
   Then on those lengths,
   \[
@@ -208,26 +195,36 @@ prime in \([2^{m-1},2^m)\) already has binary length \(m\).
     \le \delta^{-1}\abs{L_m\cap\mathcal P_m^{(2)}}
     \le \delta^{-1}\abs{\mathcal P_m^{(2)}}.
   \]
-  In particular,
-  \[
-    \abs{L_m}\asymp \frac{2^m}{m}
-  \]
-  along infinitely many lengths, contradicting
-  \Cref{thm:dfa-density-dichotomy}.
+  In particular, \(\abs{L_m}\asymp 2^m/m\) along infinitely many
+  lengths, contradicting \Cref{thm:dfa-density-dichotomy}.
 \end{proposition}
 
 \begin{proof}
   The lower bound follows from
-  \(\abs{L_m\cap\mathcal P_m^{(2)}}=\mathrm{Rec}_m\,\abs{\mathcal P_m^{(2)}}\),
+  \(\abs{L_m\cap\mathcal P_m^{(2)}}=\mathrm{Rec}_m\,\abs{\mathcal P_m^{(2)}}\ge\delta\,\abs{\mathcal P_m^{(2)}}\),
   and the upper bound follows from
-  \(\abs{L_m}=\abs{L_m\cap\mathcal P_m^{(2)}}/\mathrm{Prec}_m\). Since
-  \(\abs{\mathcal P_m^{(2)}}\asymp 2^m/m\), the displayed comparison
-  gives \(\abs{L_m}\asymp 2^m/m\) on an infinite set of lengths. This is
-  impossible by \Cref{thm:dfa-density-dichotomy}.
+  \(\abs{L_m}=\abs{L_m\cap\mathcal P_m^{(2)}}/\mathrm{Prec}_m\le\delta^{-1}\abs{L_m\cap\mathcal P_m^{(2)}}\le\delta^{-1}\abs{\mathcal P_m^{(2)}}\).
+  Since \(\abs{\mathcal P_m^{(2)}}\asymp 2^m/m\), the displayed chain
+  gives \(\abs{L_m}\asymp 2^m/m\) on an infinite set of lengths. This
+  is impossible by \Cref{thm:dfa-density-dichotomy}.
 \end{proof}
 
+\begin{corollary}[No simultaneous recall and precision for fixed DFA]
+  \label{cor:dfa-prime-recall-precision}
+  With \(\mathrm{Rec}_m\) and \(\mathrm{Prec}_m\) as in
+  \Cref{prop:dfa-quantitative-obstruction}, every DFA satisfies one of
+  the following:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item \(\mathrm{Rec}_m\to 0\) exponentially fast.
+    \item \(\mathrm{Prec}_m\to 0\) along an infinite arithmetic
+    progression of lengths.
+  \end{enumerate}
+  In particular, no fixed DFA has both recall and precision bounded
+  away from zero for infinitely many lengths.
+\end{corollary}
+
 \begin{proof}
-  In the sparse case,
+  In the sparse case of \Cref{thm:dfa-density-dichotomy},
   \[
     \mathrm{Rec}_m
     \le \frac{\abs{L_m}}{\abs{\mathcal P_m^{(2)}}}
@@ -240,10 +237,8 @@ prime in \([2^{m-1},2^m)\) already has binary length \(m\).
     \le \frac{\abs{\mathcal P_m^{(2)}}}{\abs{L_m}}
     \ll \frac{1}{m}
   \]
-  along the relevant arithmetic progression.
-
-  If both recall and precision were bounded below by some
-  \(\delta>0\) for infinitely many lengths, then
-  \Cref{prop:dfa-quantitative-obstruction} would contradict
-  \Cref{thm:dfa-density-dichotomy}. This proves the final assertion.
+  along the relevant arithmetic progression. If both recall and
+  precision were bounded below by some \(\delta>0\) for infinitely many
+  lengths, then \Cref{prop:dfa-quantitative-obstruction} would
+  contradict \Cref{thm:dfa-density-dichotomy}.
 \end{proof}
