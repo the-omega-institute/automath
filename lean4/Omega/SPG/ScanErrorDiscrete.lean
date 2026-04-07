@@ -1382,4 +1382,27 @@ theorem paper_scanError_symmDiff_package {α β : Type*} [Fintype α] [Fintype �
     scanError μ obs P ≤ setMass μ P :=
   ⟨scanError_le_setMass μ obs _, scanError_union_le μ obs P Q, scanError_le_setMass μ obs P⟩
 
+/-- Scan error stability: both directions within setMass(P△Q).
+    ε(P) ≤ μ(Q) + μ(P△Q), ε(Q) ≤ μ(P) + μ(P△Q).
+    prop:spg-scan-error-cylinder -/
+theorem paper_scanError_symmDiff_stability {α β : Type*} [Fintype α] [Fintype β]
+    (μ : PMF α) (obs : α → β) (P Q : Set α) :
+    scanError μ obs P ≤ setMass μ Q + setMass μ (symmDiff P Q) ∧
+    scanError μ obs Q ≤ setMass μ P + setMass μ (symmDiff P Q) := by
+  constructor
+  · calc scanError μ obs P
+        ≤ setMass μ P := scanError_le_setMass μ obs P
+      _ ≤ setMass μ (Q ∪ symmDiff P Q) := setMass_mono μ (fun x hx => by
+          by_cases hxQ : x ∈ Q
+          · exact Set.mem_union_left _ hxQ
+          · exact Set.mem_union_right _ (Set.mem_symmDiff.mpr (Or.inl ⟨hx, hxQ⟩)))
+      _ ≤ setMass μ Q + setMass μ (symmDiff P Q) := setMass_union_le μ Q (symmDiff P Q)
+  · calc scanError μ obs Q
+        ≤ setMass μ Q := scanError_le_setMass μ obs Q
+      _ ≤ setMass μ (P ∪ symmDiff P Q) := setMass_mono μ (fun x hx => by
+          by_cases hxP : x ∈ P
+          · exact Set.mem_union_left _ hxP
+          · exact Set.mem_union_right _ (Set.mem_symmDiff.mpr (Or.inr ⟨hx, hxP⟩)))
+      _ ≤ setMass μ P + setMass μ (symmDiff P Q) := setMass_union_le μ P (symmDiff P Q)
+
 end Omega.SPG

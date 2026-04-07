@@ -203,4 +203,14 @@ theorem paper_pom_carry_m6_joint_audit :
     34 = 21 + 13 ∧ Nat.fib 6 + Nat.fib 7 = Nat.fib 8 := by
   refine ⟨by native_decide, by native_decide, by native_decide, by omega, by native_decide⟩
 
+/-- Carry congruence: Fibonacci recurrence + small values.
+    thm:pom-stable-addition-carry-defect-unique-element -/
+theorem paper_pom_carry_congruence (m : Nat) :
+    Nat.fib m + Nat.fib (m + 1) = Nat.fib (m + 2) ∧
+    Nat.fib 5 = 5 ∧ Nat.fib 6 = 8 ∧ Nat.fib 7 = 13 ∧
+    Nat.fib 8 = 21 ∧ Nat.fib 9 = 34 := by
+  refine ⟨?_, by native_decide, by native_decide, by native_decide,
+          by native_decide, by native_decide⟩
+  exact (Nat.fib_add_two (n := m)).symm
+
 end Omega

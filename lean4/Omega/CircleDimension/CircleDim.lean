@@ -1031,4 +1031,16 @@ theorem paper_phaseSpectrumCount_prime_power_audit :
   · exact phaseSpectrumCount_coprime 1 2 (3 ^ k)
       (Nat.Coprime.pow_right k (by decide))
 
+/-- Phase spectrum at rank 2.
+    thm:cdim-phase-spectrum-limit -/
+theorem paper_phaseSpectrumCount_rank2 :
+    phaseSpectrumCount 2 1 2 = 4 ∧
+    phaseSpectrumCount 2 1 3 = 9 ∧
+    phaseSpectrumCount 2 2 2 = 8 ∧
+    phaseSpectrumCount 2 2 3 = 9 ∧
+    phaseSpectrumCount 2 3 3 = 27 ∧
+    phaseSpectrumCount 2 6 6 = 216 := by
+  simp only [phaseSpectrumCount]
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
+
 end Omega.CircleDimension
