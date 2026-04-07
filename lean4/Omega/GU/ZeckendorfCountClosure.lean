@@ -136,4 +136,14 @@ theorem paper_gu_gut_dimension_zeckendorf :
   refine ⟨by native_decide, by native_decide, by native_decide,
           by omega, by omega, by omega, by omega, by omega⟩
 
+/-- E7 and E8 dimension Zeckendorf decomposition.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_gu_e7_e8_zeckendorf :
+    133 = Nat.fib 11 + Nat.fib 9 + Nat.fib 6 + Nat.fib 3 ∧
+    (11 - 9 ≥ 2) ∧ (9 - 6 ≥ 2) ∧ (6 - 3 ≥ 2) ∧
+    248 = Nat.fib 13 + Nat.fib 7 + Nat.fib 3 ∧
+    (13 - 7 ≥ 2) ∧ (7 - 3 ≥ 2) := by
+  refine ⟨by native_decide, by omega, by omega, by omega,
+          by native_decide, by omega, by omega⟩
+
 end Omega.GU

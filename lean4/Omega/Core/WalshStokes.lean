@@ -238,4 +238,20 @@ theorem signedHypercubeSum_one :
     signedHypercubeSum 1 (fun w => if w 0 = true then 1 else 0) = -1 := by
   native_decide
 
+/-- Complete Stokes-gauge-homology package for Discussion chapter.
+    thm:discussion-discrete-stokes-gauge-leyang,
+    cor:discussion-thermo-ldp-homology-invariance -/
+theorem paper_discussion_stokes_gauge_homology_package :
+    (∀ (n : Nat) (A : Finset (Fin n)) (f : Word n → ℤ),
+      walshFlux A f =
+        ∑ w : Word n, (-1 : ℤ) ^ ((A.filter fun i => w i = true).card) * f w) ∧
+    (∀ (n : Nat) (_hn : 1 ≤ n) (c : ℤ), signedHypercubeSum n (fun _ => c) = 0) ∧
+    (∀ (n : Nat) (A : Finset (Fin n)) (f : Word n → ℤ),
+      Int.natAbs (walshFlux A f) ≤
+        ∑ w : BoundaryWords A, Int.natAbs (deltaSet A f w.1)) ∧
+    (∀ (n : Nat) (i j : Fin n) (f : Word n → ℤ),
+      deltaBit i (deltaBit j f) = deltaBit j (deltaBit i f)) :=
+  ⟨fun _ => walshStokes_finset, signedHypercubeSum_const,
+   fun _ => walshBias_le_boundaryVariation, fun _ => deltaBit_comm⟩
+
 end Omega.Core

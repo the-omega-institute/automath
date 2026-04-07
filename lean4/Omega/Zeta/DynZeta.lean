@@ -82,6 +82,16 @@ theorem fredholmGoldenMean_at_four : (fredholmGoldenMean 4).det = -19 := by
 theorem fredholmGoldenMean_at_five : (fredholmGoldenMean 5).det = -29 := by
   rw [fredholmGoldenMean_det]; ring
 
+/-- Fredholm determinant at z=6..10.
+    def:fredholm-determinant -/
+theorem paper_fredholm_golden_mean_6_10 :
+    (fredholmGoldenMean 6).det = -41 ∧
+    (fredholmGoldenMean 7).det = -55 ∧
+    (fredholmGoldenMean 8).det = -71 ∧
+    (fredholmGoldenMean 9).det = -89 ∧
+    (fredholmGoldenMean 10).det = -109 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> rw [fredholmGoldenMean_det] <;> ring
+
 /-- Fredholm determinant at z=0: det(I - 0·A) = 1 (normalization).
     subsec:operator-zeta-interface -/
 theorem fredholmGoldenMean_at_zero : (fredholmGoldenMean 0).det = 1 := by
