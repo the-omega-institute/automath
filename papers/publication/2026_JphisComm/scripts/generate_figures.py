@@ -315,7 +315,7 @@ def make_tab_worked_example():
 
     modes = [
         {'label': r'$D_1$', 'dtau': 0.50, 'kappa_r': 8.0},
-        {'label': r'$D_2$', 'dtau': 1.00, 'kappa_r': 4.0},
+        {'label': r'$D_2$', 'dtau': 1.20, 'kappa_r': 3.0},
     ]
 
     rows = []
@@ -364,7 +364,11 @@ def make_tab_worked_example():
     lines.append(r'\caption{Schwarzschild worked example ($r_{\mathrm s}=2M=1$, '
                  r'$\beta_\infty=4\pi$, $\Omega=1$, '
                  r'$\lambda_c^2\mathcal S=2$). '
-                 r'All quantities are in units of $r_{\mathrm s}$.}')
+                 r'All quantities are in units of $r_{\mathrm s}$. '
+                 r'The critical rate $\Gamma_c$ is computed from~\eqref{eq:gamma-c-main} '
+                 r'and cross-checked against the Lambert $W$ formula~\eqref{eq:lambert-Gc}. '
+                 r'The two modes have distinct ratio constants $C_1\neq C_2$, so the '
+                 r'Jacobian of the two-mode system is generically nonsingular.}')
     lines.append(r'\label{tab:worked}')
     lines.append(r'\begin{tabular}{l c c}')
     lines.append(r'\toprule')
