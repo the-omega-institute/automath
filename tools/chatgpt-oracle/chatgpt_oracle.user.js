@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ChatGPT Oracle Bridge
 // @namespace    omega-automath
-// @version      4.3
+// @version      4.4
 // @description  Bridges local oracle_server.py with ChatGPT Pro for automated paper review
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
@@ -68,7 +68,7 @@
     const lines = logHistory.slice(-10).map(l => `<div>${l}</div>`).join("");
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <b>[Oracle v4.3]</b>
+        <b>[Oracle v4.4]</b>
         <span style="color:${statusColor};font-weight:bold">${statusText}</span>
         <button id="oracle-toggle" style="background:${btnColor};color:#000;border:none;border-radius:3px;padding:2px 8px;cursor:pointer;font-size:11px;font-weight:bold">${btnText}</button>
       </div>
@@ -849,8 +849,12 @@
           // Return when stable AND either not generating, or stable for long
           // enough that "thinking" indicator is likely stale (ChatGPT 5.4
           // keeps [class*='thinking'] present even after output completes).
-          const stableEnough = stableCount >= STABLE_CHECKS && !generating;
-          const stableOverride = stableCount >= STABLE_CHECKS + 2; // 5 checks = 5min
+          // Short responses (<2000 chars) need more stability checks — ChatGPT 5.4
+          // often emits a brief "thinking" text before extended processing,
+          // which looks stable but is just the preamble to the real response.
+          const minChecks = responseText.length < 2000 ? STABLE_CHECKS * 3 : STABLE_CHECKS;
+          const stableEnough = stableCount >= minChecks && !generating;
+          const stableOverride = stableCount >= minChecks + 2;
           if (stableEnough || stableOverride) {
             log(`Response complete: ${responseText.length} chars (stable ${stableCount * STABLE_INTERVAL / 1000}s, gen=${generating})`);
             return responseText;
@@ -1026,7 +1030,7 @@
 
   // ── Bootstrap ────────────────────────────────────────────────────────
   async function init() {
-    log(`Oracle Bridge v4.3 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
+    log(`Oracle Bridge v4.4 loaded — ${active ? "ACTIVE" : "PAUSED (click Start to activate)"}`);
 
     // Check if we navigated here to process a task on a fresh chat page
     const phase = getTaskPhase();
