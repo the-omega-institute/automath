@@ -45,7 +45,8 @@ theorem paper_fibprime_pisano_rigidity_package :
       (Nat.fib 28 % 13 = 0 ∧ Nat.fib 29 % 13 = 1) ∧
       (Nat.fib 14 % 13 ≠ 0 ∨ Nat.fib 15 % 13 ≠ 1)) ∧
     (Nat.fib 7 % 7 = 6 ∧ Nat.fib 11 % 11 = 1 ∧ Nat.fib 13 % 13 = 12 ∧ Nat.fib 17 % 17 = 16) := by
-  exact ⟨paper_fibprime_pisano_4n, paper_fibprime_congruence_p_mod_n⟩
+  refine ⟨paper_fibprime_pisano_4n, ?_⟩
+  exact paper_fibprime_congruence_p_mod_n
 
 /-- Sign of F_n mod n determined by n mod 20.
     cor:gut-fibprime-sign-by-n-mod20 -/
