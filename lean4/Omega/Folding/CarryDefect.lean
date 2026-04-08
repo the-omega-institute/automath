@@ -194,6 +194,32 @@ theorem paper_pom_carry_fib_extended :
   · rw [carryElement_m10_value]; native_decide
   · rw [carryElement_m11_value]; native_decide
 
+/-- Stable value of carryElement at m = 12 equals 144.
+    cor:pom-carry-defect-m6-anchor-8-34 -/
+theorem carryElement_m12_value : stableValue (carryElement 12) = 144 := by
+  rw [stableValue_carryElement]; native_decide
+
+/-- Stable value of carryElement at m = 13 equals 233.
+    cor:pom-carry-defect-m6-anchor-8-34 -/
+theorem carryElement_m13_value : stableValue (carryElement 13) = 233 := by
+  rw [stableValue_carryElement]; native_decide
+
+/-- Universal Fibonacci pattern for m = 5..13.
+    cor:pom-carry-defect-m6-anchor-8-34 -/
+theorem paper_pom_carry_fib_to_thirteen :
+    ∀ k, 5 ≤ k → k ≤ 13 → stableValue (carryElement k) = Nat.fib k := by
+  intro k hk1 hk2
+  interval_cases k
+  · rw [carryElement_m5_value]; native_decide
+  · rw [carryElement_m6_value]; native_decide
+  · rw [carryElement_m7_value]; native_decide
+  · rw [carryElement_m8_value]; native_decide
+  · rw [carryElement_m9_value]; native_decide
+  · rw [carryElement_m10_value]; native_decide
+  · rw [carryElement_m11_value]; native_decide
+  · rw [carryElement_m12_value]; native_decide
+  · rw [carryElement_m13_value]; native_decide
+
 end X
 
 /-- m=6 carry threshold and element joint audit.
