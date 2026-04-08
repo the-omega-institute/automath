@@ -103,6 +103,7 @@ import Omega.EA.PrimeRegisterFibValuation
 import Omega.EA.GodelLogBusemann
 import Omega.EA.BrauerXorLaw
 import Omega.EA.BrauerRamificationEven
+import Omega.EA.BrauerCongruenceSieveDensity
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
