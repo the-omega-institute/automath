@@ -146,4 +146,33 @@ theorem paper_gu_e7_e8_zeckendorf :
   refine ⟨by native_decide, by omega, by omega, by omega,
           by native_decide, by omega, by omega⟩
 
+/-- Extended Lie dimension small-value Zeckendorf witnesses.
+    cor:fold6-tail-offsets-gut-top-terms -/
+theorem extended_lie_fibonacci_small :
+    (35 = Nat.fib 9 + Nat.fib 2) ∧
+    (28 = Nat.fib 8 + Nat.fib 5 + Nat.fib 3) := by
+  refine ⟨by native_decide, by native_decide⟩
+
+/-- Extended Lie dimension E_7 / E_8 Zeckendorf witnesses.
+    cor:fold6-tail-offsets-gut-top-terms -/
+theorem extended_lie_fibonacci_E7_E8 :
+    (133 = Nat.fib 11 + Nat.fib 9 + Nat.fib 6 + Nat.fib 3) ∧
+    (248 = Nat.fib 13 + Nat.fib 7 + Nat.fib 3) := by
+  refine ⟨by native_decide, by native_decide⟩
+
+/-- Full Lie dimension Fibonacci decomposition table: SU(5), SU(6), SO(8), SO(10),
+    E_6, E_7, E_8, with explicit Fibonacci base constants.
+    cor:fold6-tail-offsets-gut-top-terms -/
+theorem paper_extended_lie_fibonacci_full_package :
+    (24 = Nat.fib 8 + Nat.fib 4) ∧
+    (35 = Nat.fib 9 + Nat.fib 2) ∧
+    (28 = Nat.fib 8 + Nat.fib 5 + Nat.fib 3) ∧
+    (45 = Nat.fib 9 + Nat.fib 6 + Nat.fib 4) ∧
+    (78 = Nat.fib 10 + Nat.fib 8 + Nat.fib 3) ∧
+    (133 = Nat.fib 11 + Nat.fib 9 + Nat.fib 6 + Nat.fib 3) ∧
+    (248 = Nat.fib 13 + Nat.fib 7 + Nat.fib 3) ∧
+    (Nat.fib 8 = 21 ∧ Nat.fib 9 = 34 ∧ Nat.fib 10 = 55 ∧
+     Nat.fib 11 = 89 ∧ Nat.fib 13 = 233) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
+
 end Omega.GU
