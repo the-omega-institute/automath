@@ -6,17 +6,17 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~48,595 |
-| 定理/定义数 | ~4,240 |
-| 论文接口包装 | 699+ |
-| 文件数 | 114 |
+| 总行数 | ~48,655 |
+| 定理/定义数 | ~4,250 |
+| 论文接口包装 | 705+ |
+| 文件数 | 115 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1561 |
+| \leanverified 标注数 | 1571 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1578 |
-| 轮次 | R385（round_count=386） |
+| 总标注数 | 1588 |
+| 轮次 | R387（round_count=388） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -25,7 +25,7 @@
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
 | POM | 1,707 | 295 | 17.3% |
-| Emergent Arithmetic | 185 | 162 | 87.6% |
+| Emergent Arithmetic | 185 | 164 | 88.6% |
 | Folding | 337 | 122 | 36.2% |
 | Conclusion | 2,550 | 251 | 9.8% |
 | Group Unification | 469 | 162 | 34.5% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 197 | 4.4% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1499** | **14.3%** |
+| **合计（body）** | **10,508** | **1501** | **14.3%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,8 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**EA FibCongruence val invariants（Round R387）**：`paper_val_base_e2`（对应 `def:fib-congruence`，Emergent Arithmetic；Fibonacci 同余值基准 F_3=2·F_2 的论文接口）；`paper_val_recursion_e`（对应 `def:fib-congruence`，Emergent Arithmetic；同余值递推结构的论文接口）；`valE` / `valE_one` / `valE_two_eq_two_valE_one` / `valE_recursion`（对应 `def:val-on-D`，Emergent Arithmetic；D 上的值函数定义与基础恒等式）；`paper_val_e_index_eq_fib_succ`（对应 `thm:monoid-quotient-is-N`，Emergent Arithmetic；valE k = F_{k+1} 的论文接口）
+**POM bounded fiber + projection entropy + SPG discrete scaling wrappers（Round R386）**：`paper_pom_fiber_decompose_bounded`（对应 `prop:pom-fiber-decompose` / `thm:pom-max-fiber`，POM；有界纤维分解证书论文接口）；`paper_pom_projection_entropy_gap`（对应 `prop:pom-projection-entropy`，POM；投影熵基数与严格差距论文接口）；`paper_spg_clarity_volume_boundary_scaling_discrete_lower`（对应 `thm:spg-clarity-volume-boundary-scaling`，SPG；离散扫描误差下界标度论文接口）
 **CircleDim kernel/ledger + fold condexp index support（Round R385）**：`paper_cdim_phase_fold_kernel_minimal_certificate_rank`（对应 `thm:cdim-phase-fold-kernel-minimal-certificate-rank`，Circle Dimension；相位折叠核最小整数证书秩的论文接口包装）；`paper_cdim_zero_dimensional_ledger_no_circle_replacement`（对应 `thm:cdim-zero-dimensional-ledger-no-circle-replacement`，Circle Dimension；零维账本不能替代相位圆因子的论文接口包装）；`paper_fold_condexp_index_maxfiber_support`（对应 `prop:fold-condexp-index-maxfiber`，Folding；折叠条件期望有限指数由最大纤维支撑控制的论文接口打包）
 **Chebyshev doubling/Cassini + projector sign-match + fibprime Pisano rigidity（Round R384）**：`paper_chebyAdams_doubling_cassini_package`（对应 `cor:discussion-ramanujan-half-dimension-collapse`，Discussion；Chebyshev-Adams 的平方差、倍角、后继倍角与四倍角统一论文接口打包）；`paper_projectorVal_sign_match_complete`（对应 `thm:fold-groupoid-z2x2-central-idempotents`，Emergent Arithmetic；Fourier-Hadamard 中心投影的完整 sign-match 判别论文接口包装）；`paper_fibprime_pisano_rigidity_package`（对应 `cor:gut-fibprime-pisano-4n`，Group Unification；Fibonacci 素数的 Pisano 周期封口与模 n 同余刚性联合论文接口打包）
 **Gödel prefix append + Lucas mod 9/20 周期包装（Round R383）**：`paper_godel_prefix_append_package`（对应 `thm:conclusion-godel-prefix-arithmetic-criterion`，Conclusion；Gödel 前缀判据与 append 结构的论文接口打包）；`paper_lucasNum_mod9_period_twentyfour`（对应 `thm:zeta-syntax-trace-linear-recurrence`，Zeta；Lucas 数模 9 的 24 周期论文接口包装）；`paper_lucasNum_mod20_period_twelve`（对应 `thm:zeta-syntax-trace-linear-recurrence`，Zeta；Lucas 数模 20 的 12 周期论文接口包装）
@@ -332,6 +334,8 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R387: EA FibCongruence val invariants（完整）**：EA/FibCongruence.lean（新文件，35 行）——paper_val_base_e2（def:fib-congruence，Fibonacci 同余值基准 F_3=2·F_2，Emergent Arithmetic）; paper_val_recursion_e（def:fib-congruence，同余值递推结构，Emergent Arithmetic）; valE（def:val-on-D，D 上值函数定义，Emergent Arithmetic）; valE_one（def:val-on-D，valE 1=1，Emergent Arithmetic）; valE_two_eq_two_valE_one（def:val-on-D，valE 2=2·valE 1，Emergent Arithmetic）; valE_recursion（def:val-on-D，valE 递推恒等式，Emergent Arithmetic）; paper_val_e_index_eq_fib_succ（thm:monoid-quotient-is-N，valE k = Nat.fib (k+1)，Emergent Arithmetic）——**2 个新论文标签条目计入覆盖率**（def:fib-congruence 新标签 +1, def:val-on-D 新标签 +1；thm:monoid-quotient-is-N 已注册不重计）——Emergent Arithmetic 162→164（87.6%→88.6%），全局 \leanverified 1564→1571（+7），总标注 1581→1588（+7），body 覆盖 1499→1501（14.3%），proof commit 25f4c415aed7a14aabcffc0f066be578b053ff1a
+**Phase R386: POM bounded fiber + projection entropy + SPG discrete scaling wrappers（完整）**：Combinatorics/FibonacciCube.lean + Frontier/ConditionalSummary.lean + SPG/ScanErrorDiscrete.lean——paper_pom_fiber_decompose_bounded（prop:pom-fiber-decompose / thm:pom-max-fiber，有界纤维分解证书论文接口，POM）; paper_pom_projection_entropy_gap（prop:pom-projection-entropy，投影熵基数与严格差距论文接口，POM）; paper_spg_clarity_volume_boundary_scaling_discrete_lower（thm:spg-clarity-volume-boundary-scaling，离散扫描误差下界标度论文接口，SPG）——**0 个新论文标签条目计入覆盖率**（prop:pom-fiber-decompose 已注册 R248, prop:pom-projection-entropy 已注册 Round 17/18, thm:spg-clarity-volume-boundary-scaling 已注册 R382/R255）——POM/SPG 覆盖率不变，全局 \leanverified 1561→1564（+3），总标注 1578→1581（+3），body 覆盖 1499（14.3%），proof commit 889b653067e96e8f37b4db8b12948e024edc5be1
 **Phase R385: CircleDim kernel/ledger + maxfiber support wrappers（完整）**：CircleDimension/CircleDim.lean + Folding/MaxFiber.lean——paper_cdim_phase_fold_kernel_minimal_certificate_rank（thm:cdim-phase-fold-kernel-minimal-certificate-rank，相位折叠核最小整数证书秩的论文接口包装，Circle Dimension）; paper_cdim_zero_dimensional_ledger_no_circle_replacement（thm:cdim-zero-dimensional-ledger-no-circle-replacement，零维账本不能替代相位圆因子的论文接口包装，Circle Dimension）; paper_fold_condexp_index_maxfiber_support（prop:fold-condexp-index-maxfiber，折叠条件期望有限指数由最大纤维支撑控制的论文接口打包，Folding）——**3 个论文标签条目计入覆盖率**（Circle Dimension +2, Folding +1）——Circle Dimension 141→143（35.9%→36.4%），Folding 121→122（35.9%→36.2%），全局 \leanverified 1558→1561（+3），总标注 1575→1578（+3），body 覆盖 1496→1499（14.3%），commit 3f326a546ea5ccb673994390e4a298c06c4ff583
 **Phase R384: Chebyshev/projector/fibprime wrapper trio（完整）**：Discussion/ChebyshevAdams.lean + EA/CentralIdempotentsRecovery.lean + GU/FibPrimePisano.lean——paper_chebyAdams_doubling_cassini_package（cor:discussion-ramanujan-half-dimension-collapse，Chebyshev-Adams 的平方差、倍角、后继倍角与四倍角统一论文接口打包，Discussion）; paper_projectorVal_sign_match_complete（thm:fold-groupoid-z2x2-central-idempotents，Fourier-Hadamard 中心投影的完整 sign-match 判别论文接口包装，Emergent Arithmetic）; paper_fibprime_pisano_rigidity_package（cor:gut-fibprime-pisano-4n，Fibonacci 素数的 Pisano 周期封口与模 n 同余刚性联合论文接口打包，Group Unification）——**3 个论文标签条目计入覆盖率**（Discussion +1, Emergent Arithmetic +1, Group Unification +1）——Discussion 63→64（94.0%→95.5%），Emergent Arithmetic 161→162（87.0%→87.6%），Group Unification 161→162（34.3%→34.5%），全局 \leanverified 1555→1558（+3），总标注 1572→1575（+3），body 覆盖 1493→1496（14.2%），commit 1c7f62d6d5e7ada8a181060eeee2cda9521fc6db
 **Phase R383: repaired Gödel prefix and Lucas wrappers（完整）**：Conclusion/PrimeRegister.lean + Zeta/DynZeta.lean——paper_godel_prefix_append_package（thm:conclusion-godel-prefix-arithmetic-criterion，Gödel 前缀判据与 append 结构的论文接口打包，Conclusion）; paper_lucasNum_mod9_period_twentyfour（thm:zeta-syntax-trace-linear-recurrence，Lucas 数模 9 的 24 周期论文接口包装，Zeta）; paper_lucasNum_mod20_period_twelve（thm:zeta-syntax-trace-linear-recurrence，Lucas 数模 20 的 12 周期论文接口包装，Zeta）——**3 个论文标签条目计入覆盖率**（Conclusion +1, Zeta Finite Part +2）——Conclusion 250→251（9.8%），Zeta Finite Part 195→197（4.3%→4.4%），全局 \leanverified 1552→1555（+3），总标注 1569→1572（+3），body 覆盖 1490→1493（14.2%），commit 07b290258ca136c3f2a24b6073b7b86497d38320
