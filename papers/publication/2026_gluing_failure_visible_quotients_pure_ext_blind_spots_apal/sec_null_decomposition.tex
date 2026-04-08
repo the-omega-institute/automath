@@ -532,7 +532,40 @@ and identify the three reference classes with $a_{\mathrm{loc}},a_{\mathrm{cmp}}
 
 \subsection{Forcing necessity of the enrichment}
 
-The three null modes show that information-state forcing distinguishes situations invisible to pointwise semantics. The following result makes this precise: the gluing predicates introduced at the local-object layer cannot be reduced to the lower layers.
+The three null modes show that information-state forcing distinguishes situations invisible to pointwise semantics. The following lemma isolates the automorphism invariance that drives the separation argument.
+
+\begin{lemma}[State-level automorphism invariance]\label{lem:state-automorphism-invariance}
+Let $M$ be a model, $p=(\Gamma_p,R_p)$ an information state, and $\alpha$ an automorphism of the $\Sigma_1$-reduct of $M$ that preserves $R_p$ setwise (i.e., $\alpha\circ\rho\in R_p$ for every $\rho\in R_p$). Then for every lower-layer formula $\psi(x)$ and every reference $r$,
+\[
+M,p\Vdash\psi(r)
+\quad\Longleftrightarrow\quad
+M,p\Vdash\psi(\alpha(r)).
+\]
+\end{lemma}
+
+\begin{proof}
+By \Cref{def:state-forcing},
+\[
+M,p\Vdash\psi(r)
+\;\Longleftrightarrow\;
+\forall\rho\in R_p,\;M,\rho\models\psi(r).
+\]
+Since $\alpha$ preserves $R_p$ setwise and is an automorphism of the $\Sigma_1$-reduct, first-order truth invariance under automorphisms gives
+\[
+M,\rho\models\psi(r)
+\;\Longleftrightarrow\;
+M,\alpha\circ\rho\models\psi(\alpha(r))
+\]
+for each $\rho\in R_p$. As $\rho\mapsto\alpha\circ\rho$ is a bijection on $R_p$,
+\[
+\forall\rho\in R_p,\;M,\rho\models\psi(r)
+\;\Longleftrightarrow\;
+\forall\rho\in R_p,\;M,\rho\models\psi(\alpha(r)).
+\qedhere
+\]
+\end{proof}
+
+The following result makes the irreducibility precise: the gluing predicates introduced at the local-object layer cannot be reduced to the lower layers.
 
 \begin{theorem}[Pointwise irreducibility of gluing predicates]\label{thm:pointwise-irreducibility}
 There exist a model $M$, a state $p=(\Gamma_p,R_p)$, and admitted references
@@ -582,7 +615,7 @@ set $r_k:=y_k$ for $k=1,2,3,4$, and let $p=(\Gamma_p,R_p)$ with $R_p=\{\rho_0\}$
 \noindent\textit{Lower-layer indistinguishability.}
 Let the reference-sort domain be $D_{\mathsf{Ref}_s}^M=\{0,1,2,3\}$. Interpret every $\Sigma_1$-symbol whose type involves $\mathsf{Ref}_s$ so that the interpretation is invariant under the permutation $\alpha=(01)(23)$ of $\{0,1,2,3\}$; for example, interpret every relation symbol on $\mathsf{Ref}_s$ by the empty relation and every function symbol with $\mathsf{Ref}_s$-arguments by a constant map. Then $\alpha$ extends to an automorphism of the $\Sigma_1$-reduct of $M$.
 
-Because $\alpha(0)=1$ and $\alpha(2)=3$, the orbits of $\alpha$ on $\{0,1,2,3\}$ are $\{0,1\}$ and $\{2,3\}$. However, both orbits are mapped to each other by the transposition $(02)(13)$, so the group $\langle (01)(23),(02)(13)\rangle\cong(\mathbb Z/2\mathbb Z)^2$ acts transitively on $\{0,1,2,3\}$. Interpret all $\Sigma_1$-symbols as invariant under this entire group. Then $0,1,2,3$ lie in a single automorphism orbit. By invariance of first-order truth under automorphisms, every lower-layer unary formula $\varphi(x)$ takes the same value at $0,1,2,3$, establishing \textup{(i)} since $R_p=\{\rho_0\}$.
+Because $\alpha(0)=1$ and $\alpha(2)=3$, the orbits of $\alpha$ on $\{0,1,2,3\}$ are $\{0,1\}$ and $\{2,3\}$. However, both orbits are mapped to each other by the transposition $(02)(13)$, so the group $\langle (01)(23),(02)(13)\rangle\cong(\mathbb Z/2\mathbb Z)^2$ acts transitively on $\{0,1,2,3\}$. Interpret all $\Sigma_1$-symbols as invariant under this entire group. Then $0,1,2,3$ lie in a single automorphism orbit. By invariance of first-order truth under automorphisms, every lower-layer unary formula $\varphi(x)$ takes the same value at $0,1,2,3$, establishing the lower-layer indistinguishability displayed above (since $R_p=\{\rho_0\}$).
 
 \medskip
 \noindent\textit{Local reference frames.}
@@ -590,7 +623,7 @@ Give $r_1,r_2,r_3,r_4$ pairwise disjoint rooted components in the local referenc
 
 \smallskip
 \noindent\textit{Data for $r_1$ (global section exists).}
-Let $a_1$ carry only the trivial cover and define $F(a_1)=\{*\}$. Then $*$ is a global section, giving \textup{(ii)}.
+Let $a_1$ carry only the trivial cover and define $F(a_1)=\{*\}$. Then $*$ is a global section, giving \textup{(i)}.
 
 \smallskip
 \noindent\textit{Data for $r_2$ (compatible local section, no global section).}
@@ -606,7 +639,7 @@ Let $\{u_2\to a_2,\,v_2\to a_2\}\in\Cov_{p,s}(a_2)$, and define
 \[
 F(u_2)=F(v_2)=F(c_2)=\{*\},\qquad F(a_2)=\varnothing,
 \]
-with all restriction maps being the identity on $\{*\}$. The unique family $(\sigma_{u_2}=*,\sigma_{v_2}=*)$ is compatible on the meet $c_2=u_2\wedge v_2$. Hence $M,p\Vdash\CompSec_s(r_2)$. But $F(a_2)=\varnothing$, so $M,p\nVdash\Sec_s(r_2)$, giving \textup{(iii)}.
+with all restriction maps being the identity on $\{*\}$. The unique family $(\sigma_{u_2}=*,\sigma_{v_2}=*)$ is compatible on the meet $c_2=u_2\wedge v_2$. Hence $M,p\Vdash\CompSec_s(r_2)$. But $F(a_2)=\varnothing$, so $M,p\nVdash\Sec_s(r_2)$, giving \textup{(ii)}.
 
 \smallskip
 \noindent\textit{Data for $r_3$ (local sections exist, incompatible).}
@@ -625,7 +658,7 @@ F(v_3)=\{\sigma_v\},\quad
 F(c_3)=\{0,1\},\quad
 F(a_3)=\varnothing,
 \]
-with restrictions $\res_{c_3}^{u_3}(\sigma_u)=0$ and $\res_{c_3}^{v_3}(\sigma_v)=1$. Local sections exist, but the compatibility condition at the meet $c_3=u_3\wedge v_3$ fails: $\res_{c_3}^{u_3}(\sigma_u)=0\neq 1=\res_{c_3}^{v_3}(\sigma_v)$. Hence $M,p\Vdash\LocSec_s(r_3)\land\neg\CompSec_s(r_3)$, giving \textup{(iv)}.
+with restrictions $\res_{c_3}^{u_3}(\sigma_u)=0$ and $\res_{c_3}^{v_3}(\sigma_v)=1$. Local sections exist, but the compatibility condition at the meet $c_3=u_3\wedge v_3$ fails: $\res_{c_3}^{u_3}(\sigma_u)=0\neq 1=\res_{c_3}^{v_3}(\sigma_v)$. Hence $M,p\Vdash\LocSec_s(r_3)\land\neg\CompSec_s(r_3)$, giving \textup{(iii)}.
 
 \smallskip
 \noindent\textit{Data for $r_4$ (global section exists).}

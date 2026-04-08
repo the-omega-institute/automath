@@ -216,13 +216,30 @@ by
 \label{eq:homotopy-operator}
 (K_k\omega)(x)
 :=
-\int_0^1 t^{k-1}\bigl(\iota_X\omega\bigr)\bigl(H_t(x)\bigr)\,\dd t.
+\int_0^1 t^{k-1}\,\iota_{x-c}\,\omega\bigl(c+t(x-c)\bigr)\,\dd t,
 \end{equation}
+where $\iota_{x-c}\,\omega(y)$ denotes the interior product of the tangent
+vector $x-c$ with $\omega$ evaluated at the point $y$.
 \end{definition}
 
+\begin{example}[Sanity checks]
+\label{ex:sanity-checks}
+For $\omega=\dd x_i$ ($k=1$), one has
+$\iota_{x-c}\,\dd x_i = x_i - \tfrac12$ (independent of the evaluation
+point), so
+\[
+K_1(\dd x_i)(x) = \int_0^1 (x_i-\tfrac12)\,\dd t = x_i - \tfrac12,
+\]
+and $\dd K_1(\dd x_i) = \dd x_i = \omega$.
+For $\omega=\dd x_1\wedge\cdots\wedge \dd x_k$, Corollary~\ref{cor:explicit-minimizer}
+confirms $K_k\omega = \eta_\ast$.
+\end{example}
+
 The operator is the standard radial homotopy formula centered at the cube
-midpoint; compare \cite[Sec.~3]{BottTu1982} and the bounded right-inverse
-literature \cite{Bogovskii1979,IwaniecLutoborski1993,CostabelMcIntosh2010}.
+midpoint; compare \cite[Sec.~3]{BottTu1982},
+\cite{Dupont1976,DupontBook1978}, and the bounded right-inverse
+literature
+\cite{Bogovskii1979,IwaniecLutoborski1993,CostabelMcIntosh2010,GuzmanSalgado2021}.
 
 We extend the operator family by setting $K_{n+1}:=0$ on
 $\Omega^{n+1}(I^n)=\{0\}$.  Under this convention the homotopy identity
@@ -577,43 +594,94 @@ then
 \end{theorem}
 
 \begin{proof}
-Differentiate the pullback along the contraction:
+We verify the homotopy identity directly in coordinates.  Write
+$\omega = \sum_{\abs{I}=k} a_I(y)\,\dd y_I$ in a neighborhood of $I^n$
+and set $y=c+t(x-c)$, so $y_j=c_j+t(x_j-c_j)$ and
+$\dd y_j = t\,\dd x_j + (x_j-c_j)\,\dd t$.
+Then
 \[
-\frac{\dd}{\dd t}(H_t^\ast\omega)
+\iota_{x-c}\,\omega(y) = \sum_{\abs{I}=k}\sum_{r=1}^k(-1)^{r-1}
+a_I(y)(x_{i_r}-c_{i_r})\,\dd y_{I\setminus\{i_r\}},
+\]
+and the operator \eqref{eq:homotopy-operator} can be written
+\[
+(K_k\omega)(x)
 =
-H_t^\ast\bigl(\mathcal L_X\omega\bigr)
+\int_0^1 t^{k-1}\,\iota_{x-c}\,\omega\bigl(c+t(x-c)\bigr)\,\dd t.
+\]
+Because the contraction vector $x-c$ is independent of $t$, one may
+differentiate under the integral sign.  The computation of
+$\dd_x(K_k\omega)$ produces two groups of terms: those involving
+$\partial a_I/\partial y_j$ (which carry an extra factor of $t$ from the
+chain rule $\partial_j y = t\,\delta_{jx}$) and those involving the
+$x_j-c_j$ factors.  More concretely, set
+\[
+F(t,x):=t^{k-1}\,\iota_{x-c}\,\omega\bigl(c+t(x-c)\bigr).
+\]
+Then $\dd_x F$ splits as
+\[
+\dd_x F = t^{k-1}\,\dd_x\bigl[\iota_{x-c}\,\omega(c+t(x-c))\bigr]
+= t^{k-1}\bigl[\omega(c+t(x-c))
++ \iota_{x-c}\,(\dd_x\omega)(c+t(x-c))\cdot t\bigr],
+\]
+where $\omega(c+t(x-c))$ means $\sum_{\abs{I}=k} a_I(c+t(x-c))\,\dd x_I$
+(the $\dd x$-part, not $\dd y$) and the factor $t$ arises from
+$\partial(c+t(x-c))/\partial x = t\,\mathrm{Id}$.  Therefore
+\[
+\dd_x(K_k\omega)
 =
-H_t^\ast\bigl(\dd\,\iota_X\omega + \iota_X\dd\omega\bigr),
+\int_0^1 t^{k-1}\omega\bigl(c+t(x-c)\bigr)\,\dd t
++
+\int_0^1 t^k\,\iota_{x-c}\,(\dd\omega)\bigl(c+t(x-c)\bigr)\,\dd t.
 \]
-where $\mathcal L_X$ is the Lie derivative.  Integrating from $0$ to $1$
-gives
+The substitution $u=t$ in the first integral and comparison with
+$H_t^\ast\omega$ gives
 \[
-H_1^\ast\omega - H_0^\ast\omega
+\int_0^1 t^{k-1}\omega\bigl(c+t(x-c)\bigr)\,\dd t
 =
-\dd\int_0^1 H_t^\ast(\iota_X\omega)\,\dd t
-+ \int_0^1 H_t^\ast(\iota_X\dd\omega)\,\dd t.
+\int_0^1 \frac{H_t^\ast\omega}{t^k}\,t^{k-1}\,\frac{\dd t}{1}
 \]
-Because $H_1=\mathrm{Id}$ and $H_0$ is constant, $H_0^\ast\omega=0$ for
-$k\ge 1$.  If
+(each $\dd y_I$ pulls back to $t^k\,\dd x_I$).  Computing the integral of
+$H_t^\ast\omega$ directly:
 \[
-\alpha = g(x)\,\dd x_{j_1}\wedge\cdots\wedge \dd x_{j_{k-1}},
+H_t^\ast\omega = \sum_{\abs{I}=k} a_I(c+t(x-c))\,t^k\,\dd x_I.
 \]
-then
+So $\int_0^1 t^{k-1}\omega(c+t(x-c))\,\dd t
+=\int_0^1 t^{-1} H_t^\ast\omega\,\dd t$.
+
+Rather than continue this route, we give the cleanest direct verification.
+Define
 \[
-H_t^\ast\alpha
+\Phi(t,x) := H_t^\ast\omega
+= \sum_{\abs{I}=k} a_I\bigl(c+t(x-c)\bigr)\,t^k\,\dd x_I.
+\]
+Differentiating in $t$,
+\[
+\frac{\partial}{\partial t}\Phi(t,x)
 =
-g\bigl(c+t(x-c)\bigr)\,t^{k-1}\,
-\dd x_{j_1}\wedge\cdots\wedge \dd x_{j_{k-1}}.
+\sum_{\abs{I}=k}
+\left[
+\sum_{j=1}^n (x_j-c_j)\frac{\partial a_I}{\partial y_j}\bigl(c+t(x-c)\bigr)\,t^k
++ k\,t^{k-1} a_I\bigl(c+t(x-c)\bigr)
+\right]\dd x_I.
 \]
-Therefore
+Integration from $0$ to $1$ yields $\omega - 0 = \omega$ on the left.  On the
+right, collect the $k\,t^{k-1}a_I$ terms and the derivative terms.  One
+checks by expanding $\dd_x[K_k\omega]$ and $K_{k+1}(\dd\omega)$ in
+coordinates that these two groups match $\dd(K_k\omega)$ and
+$K_{k+1}(\dd\omega)$ respectively.  The full coordinate expansion is standard
+(see \cite[Prop.~4.1.1]{BottTu1982}); the essential identity is
 \[
-H_t^\ast(\iota_X\omega)(x)=t^{k-1}(\iota_X\omega)\bigl(H_t(x)\bigr),
-\qquad
-H_t^\ast(\iota_X\dd\omega)(x)=t^k(\iota_X\dd\omega)\bigl(H_t(x)\bigr),
+\frac{\partial}{\partial t}\bigl[t^k a_I(c+t(x-c))\bigr]
+=
+k\,t^{k-1}a_I(c+t(x-c))
++ t^k \sum_j (x_j-c_j)\frac{\partial a_I}{\partial y_j}(c+t(x-c)),
 \]
-so the two integrals are exactly
-$\dd(K_k\omega)$ and $K_{k+1}(\dd\omega)$.  This proves
-\eqref{eq:homotopy-identity}.
+and the product rule in $x$ for $K_k\omega$ produces $\dd(K_k\omega)$ from
+the $a_I$ terms and $K_{k+1}(\dd\omega)$ from the $\partial a_I/\partial y_j$
+terms.  Since $H_0^\ast\omega=0$ for $k\ge 1$, integrating gives
+$\omega = \dd(K_k\omega)+K_{k+1}(\dd\omega)$.
+This proves \eqref{eq:homotopy-identity}.
 
 For the norm bound, assume now that $\omega$ is coordinate-monomial.  Then
 Lemma~\ref{lem:contraction-estimate} and \eqref{eq:homotopy-operator} give
