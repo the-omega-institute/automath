@@ -54,6 +54,7 @@ import Omega.Folding.ZeckendorfSignature
 import Omega.Folding.MismatchLanguage
 import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.SpectralQuarticAutTrivial
+import Omega.Folding.BayesKinkGeometry
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
