@@ -600,4 +600,47 @@ theorem paper_chebyAdams_at_three_extended :
     chebyAdams 9 3 = 5778 := by
   refine ⟨?_, ?_, ?_, ?_⟩ <;> simp [chebyAdams]
 
+/-- chebyAdams 11 explicit formula.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_eleven (S : ℤ) :
+    chebyAdams 11 S =
+      S ^ 11 - 11 * S ^ 9 + 44 * S ^ 7 - 77 * S ^ 5 + 55 * S ^ 3 - 11 * S := by
+  simp [chebyAdams]; ring
+
+/-- chebyAdams 12 explicit formula.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_twelve (S : ℤ) :
+    chebyAdams 12 S =
+      S ^ 12 - 12 * S ^ 10 + 54 * S ^ 8 - 112 * S ^ 6 + 105 * S ^ 4 - 36 * S ^ 2 + 2 := by
+  simp [chebyAdams]; ring
+
+/-- Period reduction: chebyAdams n 1 depends only on n mod 6.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_one_mod6 (n : Nat) :
+    chebyAdams n 1 = chebyAdams (n % 6) 1 := by
+  induction n using Nat.strongRecOn with
+  | ind n ih =>
+    by_cases h : n < 6
+    · rw [Nat.mod_eq_of_lt h]
+    · push_neg at h
+      have hn : n = (n - 6) + 6 := by omega
+      rw [hn, chebyAdams_at_one_period6]
+      rw [ih (n - 6) (by omega)]
+      congr 1
+      omega
+
+/-- Complete mod-6 lookup for chebyAdams n 1.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem paper_chebyAdams_at_one_mod6_lookup (n : Nat) :
+    chebyAdams n 1 =
+      (if n % 6 = 0 then 2
+       else if n % 6 = 1 then 1
+       else if n % 6 = 2 then -1
+       else if n % 6 = 3 then -2
+       else if n % 6 = 4 then -1
+       else 1) := by
+  rw [chebyAdams_at_one_mod6]
+  have h : n % 6 < 6 := Nat.mod_lt _ (by norm_num)
+  interval_cases (n % 6) <;> simp [chebyAdams]
+
 end Omega.Discussion
