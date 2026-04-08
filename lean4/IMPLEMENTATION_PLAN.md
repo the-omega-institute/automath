@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1746 |
+| \leanverified 标注数 | 1749 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1763 |
-| 轮次 | R429（round_count=429）|
+| 总标注数 | 1766 |
+| 轮次 | R430（round_count=430，R427 Zeta parked）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
 **Discussion ChebyAdams S=8 完整块（Round R428）**：`chebyAdams_at_eight_base`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(8) 基值）；`chebyAdams_at_eight_recurrence`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(8) 递推）；`chebyAdams_at_eight_values`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(8) 值表）；`paper_chebyAdams_at_seven_eight_extended`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；S=7/8 扩展综合论文接口）——标签已于 R409/R417 注册，本轮为深化。注：R427 Zeta 轮次被阻塞跳过
 **EA projectorVal 角点查表（Round R426）**：`projectorVal_at_one_one_one_one`（对应 `thm:fold-groupoid-z2x2-central-idempotents`，EA；(+1,+1,+1,+1) 投影值）；`projectorVal_at_mismatch_zero`（对应 `thm:fold-groupoid-z2x2-central-idempotents`，EA；不匹配角投影值为零）；`projectorVal_at_neg_one_one_neg_one_one`（对应 `thm:fold-groupoid-z2x2-central-idempotents`，EA；(-1,+1,-1,+1) 投影值）；`projectorVal_at_all_neg_one`（对应 `thm:fold-groupoid-z2x2-central-idempotents`，EA；全 -1 投影值）；`paper_projectorVal_corner_table`（对应 `thm:fold-groupoid-z2x2-central-idempotents`，EA；角点查表综合论文接口）——标签已于 R412 注册，本轮为深化
@@ -375,6 +376,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R430: GU window 11/12 compression ratios + 6-12 package（完整，R427 Zeta parked）**：GU/Window6RankGap.lean——paper_window11_compression_ratio（subsec:bdry-tower-zeck-gut-part1，window=11 压缩比，GU）; paper_window12_compression_ratio（subsec:bdry-tower-zeck-gut-part1，window=12 压缩比，GU）; paper_window_compression_ratio_6_to_12_package（subsec:bdry-tower-zeck-gut-part1，window=6..12 压缩比综合论文接口，GU）——**0 个新论文标签条目计入覆盖率**（subsec:bdry-tower-zeck-gut-part1 已注册，本轮为深化）——GU 162（34.5%，不变），全局 \leanverified 1746→1749（+3），总标注 1763→1766（+3），body 覆盖 1512（14.4%，不变），proof commit 4b2df3f
 **Phase R429: SPG tanakaIncrement degenerate package（完整）**：SPG/TanakaIncrement.lean——tanakaIncrement_self（thm:spg-scan-tanaka-stokes，自增量为零，SPG）; tanakaIncrement_at_a_eq_x（thm:spg-scan-tanaka-stokes，a=x 时增量值，SPG）; tanakaLocalTime_constant_seq（thm:spg-scan-tanaka-stokes，常数序列局部时为零，SPG）; paper_tanakaIncrement_degenerate_package（thm:spg-scan-tanaka-stokes，退化情形综合论文接口，SPG）——**0 个新论文标签条目计入覆盖率**（thm:spg-scan-tanaka-stokes 已注册，本轮为深化）——SPG 106（82.2%，不变），全局 \leanverified 1742→1746（+4），总标注 1759→1763（+4），body 覆盖 1512（14.4%，不变），proof commit 615327e
 **Phase R428: Discussion ChebyAdams S=8 full block（完整，R427 Zeta blocked/skipped）**：Discussion/ChebyshevAdams.lean——chebyAdams_at_eight_base（thm:discussion-chebyshev-witt-equivariance，C_n(8) 基值，Discussion）; chebyAdams_at_eight_recurrence（thm:discussion-chebyshev-witt-equivariance，C_n(8) 递推，Discussion）; chebyAdams_at_eight_values（thm:discussion-chebyshev-witt-equivariance，C_n(8) 值表，Discussion）; paper_chebyAdams_at_seven_eight_extended（thm:discussion-chebyshev-witt-equivariance，S=7/8 扩展综合论文接口，Discussion）——**0 个新论文标签条目计入覆盖率**（thm:discussion-chebyshev-witt-equivariance 已于 R409/R417 注册，本轮为深化）——Discussion 64（95.5%，不变），全局 \leanverified 1738→1742（+4），总标注 1755→1759（+4），body 覆盖 1512（14.4%，不变），proof commit 9333aa4
 **Phase R426: EA projectorVal corner table（完整）**：EA/CentralIdempotentsRecovery.lean——projectorVal_at_one_one_one_one（thm:fold-groupoid-z2x2-central-idempotents，(+1,+1,+1,+1) 投影值，EA）; projectorVal_at_mismatch_zero（thm:fold-groupoid-z2x2-central-idempotents，不匹配角投影值为零，EA）; projectorVal_at_neg_one_one_neg_one_one（thm:fold-groupoid-z2x2-central-idempotents，(-1,+1,-1,+1) 投影值，EA）; projectorVal_at_all_neg_one（thm:fold-groupoid-z2x2-central-idempotents，全 -1 投影值，EA）; paper_projectorVal_corner_table（thm:fold-groupoid-z2x2-central-idempotents，角点查表综合论文接口，EA）——**0 个新论文标签条目计入覆盖率**（thm:fold-groupoid-z2x2-central-idempotents 已于 R412 注册，本轮为深化）——EA 164（88.6%，不变），全局 \leanverified 1733→1738（+5），总标注 1750→1755（+5），body 覆盖 1512（14.4%，不变），proof commit 657d616
