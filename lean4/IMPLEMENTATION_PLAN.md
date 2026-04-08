@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2062 |
+| \leanverified 标注数 | 2069 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 2079 |
-| 轮次 | R482（round_count=483）|
+| 总标注数 | 2086 |
+| 轮次 | R483（round_count=484）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -25,7 +25,7 @@
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
 | POM | 1,707 | 302 | 17.7% |
-| Emergent Arithmetic | 185 | 169 | 91.4% |
+| Emergent Arithmetic | 185 | 170 | 91.9% |
 | Folding | 337 | 127 | 37.7% |
 | Conclusion | 2,550 | 261 | 10.2% |
 | Group Unification | 469 | 167 | 35.6% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 203 | 4.5% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1549** | **14.7%** |
+| **合计（body）** | **10,508** | **1550** | **14.7%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**EA 时间-空间交换图原始迹（Round R483，新标签，streak #32）**：`primitiveTrace`（对应 `prop:time-space-commuting-diagram`，EA；除数求和原始迹 def）；`primitiveTrace_zero`（对应同标签，EA；m=0 时迹为零）；`primitiveTrace_one`（对应同标签，EA；m=1 时迹等于 p 1）；`primitiveTrace_prime`（对应同标签，EA；素数 q 时迹值）；`primitiveTrace_mono`（对应同标签，EA；系数函数单调性）；`primitiveTrace_zero_fn`（对应同标签，EA；零函数时迹为零）；`paper_time_space_commuting_diagram`（对应同标签，EA；5-field 综合论文接口）——**新标签首次注册**（prop:time-space-commuting-diagram，streak #32）
 **GU 交换对合对角线 A₂(±) 迷向性（Round R482，新标签，streak #31）**：`swap`（对应 `prop:a2pm-isotropy-diagonal-su3`，GU；乘积交换 (a,b)→(b,a) def）；`swap_swap`（对应同标签，GU；swap 自逆）；`swap_involutive`（对应同标签，GU；对合性）；`swap_bijective`（对应同标签，GU；双射性）；`swap_fixed_point_iff`（对应同标签，GU；不动点 iff 坐标相等）；`swap_fixed_set_eq_diagonal`（对应同标签，GU；不动点集等于对角线）；`swap_fixed_diagonal`（对应同标签，GU；对角线点为不动点）；`diagonal_injective`（对应同标签，GU；对角嵌入单射性）；`paper_a2pm_isotropy_diagonal_su3`（对应同标签，GU；6-field 综合论文接口）——**新标签首次注册**（prop:a2pm-isotropy-diagonal-su3，streak #31）
 **CD 超立方 de Rham Stokes 提升（Round R481，新标签，streak #30 里程碑）**：`pathIntegralCoeff`（对应 `prop:cdim-hypercube-derham-stokes-lift`，CD；路径积分系数 false→+1/true→-1 def）；`pathIntegralCoeff_false`、`pathIntegralCoeff_true`（对应同标签，CD；系数值）；`pathIntegralCoeff_abs`、`pathIntegralCoeff_sq`（对应同标签，CD；|coeff|=1 及平方为 1）；`pathIntegral`（对应同标签，CD；抽象路径积分 π·coeff noncomputable def）；`pathIntegral_false`、`pathIntegral_true`（对应同标签，CD；路径积分值 ±π）；`pathIntegral_div_pi`（对应同标签，CD；除以 π 恢复整数系数）；`paper_cdim_hypercube_derham_stokes_lift`（对应同标签，CD；7-field 综合论文接口）——**新标签首次注册**（prop:cdim-hypercube-derham-stokes-lift，streak #30 里程碑）
 **Folding Φ_m 滑动块码移位等变性（Round R480，新标签，streak #29）**：`shiftSeq`（对应 `prop:Phi_m-equivariant`，Folding；双无穷序列移位算子 def）；`slideBlockCode`（对应同标签，Folding；窗口宽度 m 滑动块码 def）；`slideBlockCode_apply`（对应同标签，Folding；逐点公式）；`slideBlockCode_shift_equivariant`（对应同标签，Folding；主定理：滑动块码与移位算子交换）；`slideBlockCode_shift_apply`（对应同标签，Folding；逐点移位应用）；`paper_phi_m_sliding_block_code`（对应 `prop:Phi_m-equivariant` / `prop:Phi_m-radius`，Folding；综合论文接口）——**新标签首次注册**（prop:Phi_m-equivariant，streak #29；prop:Phi_m-radius 同轮 paper wrapper 附注，覆盖率计+1）
