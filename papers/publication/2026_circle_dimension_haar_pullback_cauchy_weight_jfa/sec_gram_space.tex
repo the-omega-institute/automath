@@ -141,6 +141,44 @@ Comparing coefficients gives the stated formulas.  Mixed parity terms
 vanish because the kernel only contains even total degree.
 \end{proof}
 
+\begin{lemma}[Poisson convolution in $L^2(\omega)$]%
+\label{lem:poisson-L2-omega}
+Let $f\in L^2(\omega)$.  Then $f$ defines a tempered distribution via
+\[
+\langle f,\psi\rangle_{\mathscr S',\mathscr S}
+:=\int_{\RR}f(y)\psi(y)\,\omega(\dd y)
+\qquad(\psi\in\mathscr S(\RR)),
+\]
+the convolution $P_1*f$ is well-defined in $\mathscr S'(\RR)$, and its
+Fourier transform satisfies
+\[
+\widehat{P_1*f}(\xi)=e^{-|\xi|}\widehat f(\xi)
+\]
+in $\mathscr S'(\RR)$.  In particular, $P_1*f=0$ in $\mathscr S'(\RR)$
+if and only if $f=0$ in~$L^2(\omega)$.
+\end{lemma}
+
+\begin{proof}
+Since $\omega(\dd y)=\pi^{-1}(1+y^2)^{-1}\dd y$, one has for
+$\psi\in\mathscr S(\RR)$:
+\[
+\left|\int_{\RR}f(y)\psi(y)\,\omega(\dd y)\right|
+\le \|f\|_{L^2(\omega)}\|\psi\|_{L^2(\omega)}.
+\]
+The map $\psi\mapsto\psi/(1+y^2)^{1/2}$ is continuous on
+$\mathscr S(\RR)$, so the linear functional above is continuous and
+$f\in\mathscr S'(\RR)$.
+
+For $P_1*f$, write $g:=f\cdot\omega/\dd y=f/(\pi(1+y^2))$ so that
+$g\in L^1(\RR)\cap\mathscr S'(\RR)$.  Then
+$P_1*f$ in the distributional sense equals the Poisson regularization of
+the tempered distribution~$f$.  Since $\widehat{P_1}(\xi)=e^{-|\xi|}$ is
+a Schwartz multiplier, the identity
+$\widehat{P_1*f}=e^{-|\xi|}\widehat f$ holds in $\mathscr S'(\RR)$.
+Because $e^{-|\xi|}$ never vanishes, $\widehat{P_1*f}=0$ implies
+$\widehat f=0$, hence $f=0$.
+\end{proof}
+
 \begin{theorem}[The mode space and its RKHS completion]%
 \label{thm:mode-space-rkhs}
 Let
@@ -201,13 +239,10 @@ $R_\varepsilon(y)\,\omega(\dd y)=P_1(y-\varepsilon)\,\dd y$, this means
 \qquad(\varepsilon\in\RR).
 \]
 In other words, the Poisson regularization $T_1f=P_1*f$ vanishes
-identically.  Now $f\in L^2(\omega)\subset\mathscr S'(\RR)$ as a tempered
-distribution, so taking Fourier transforms gives
-\[
-e^{-|\xi|}\widehat f(\xi)=\widehat{T_1f}(\xi)=0.
-\]
-Since $e^{-|\xi|}$ never vanishes, $\widehat f=0$ in $\mathscr S'(\RR)$,
-hence $f=0$.  Therefore $\mathcal S_0^\perp=\{0\}$ in $L^2_0(\omega)$, so
+identically.  By Lemma~\ref{lem:poisson-L2-omega}, $f\in L^2(\omega)$
+defines a tempered distribution and
+$\widehat{P_1*f}=e^{-|\xi|}\widehat f=0$ in $\mathscr S'(\RR)$.
+Since $e^{-|\xi|}$ never vanishes, $\widehat f=0$, hence $f=0$.  Therefore $\mathcal S_0^\perp=\{0\}$ in $L^2_0(\omega)$, so
 \[
 \overline{\mathcal S_0}^{\,L^2(\omega)}=L^2_0(\omega).
 \]
@@ -229,7 +264,7 @@ operator.
 
 \subsection{Centered reconstruction from Poisson data}
 
-\begin{theorem}[Centered Poisson reconstruction by Laplace uniqueness]%
+\begin{proposition}[Centered Poisson reconstruction by Laplace uniqueness]%
 \label{thm:poisson-central-two-channel}
 Let $\nu$ be a probability measure on~$\RR$ with finite mean~$\bar\gamma$.
 Let $\nu_c$ denote the law of the centred variable
@@ -261,7 +296,7 @@ A(t)+\ii H(t)
 Consequently, the pair $(A,B)$ determines the centred law~$\nu_c$
 uniquely.  Equivalently, the triple $(\bar\gamma,A,B)$ determines the
 original measure~$\nu$ uniquely.
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 By the elementary Laplace identities
@@ -276,29 +311,50 @@ A(t)
 =\int_{\RR}\frac{t}{t^2+\Delta^2}\dd\nu(\gamma)
 =\int_0^\infty e^{-tr}\Re\phi_{\nu_c}(r)\dd r.
 \]
-Differentiation under the integral is justified by dominated convergence,
-since for each fixed $t>0$,
+Now we verify the differentiation under the integral sign that produces
+$B(t)$.  The derivative of the Poisson kernel in~$x$ is
 \[
-\left|\frac{2t(x-\gamma)}{((x-\gamma)^2+t^2)^2}\right|
-\le \frac{1}{2t}
-\qquad(x,\gamma\in\RR),
+\partial_x P_t(x-\gamma)
+=-\frac{1}{\pi}\frac{2t(x-\gamma)}{((x-\gamma)^2+t^2)^2}.
 \]
-and
+For fixed $t>0$ and any $x,\gamma\in\RR$, set $u=(x-\gamma)/t$.  Then
+\[
+\left|\partial_x P_t(x-\gamma)\right|
+=\frac{2}{\pi t^2}\frac{|u|}{(u^2+1)^2}.
+\]
+Since $\sup_{u\in\RR}|u|/(u^2+1)^2=3\sqrt{3}/16$ (attained at
+$u^2=1/3$), one obtains the uniform bound
+\[
+\left|\partial_x P_t(x-\gamma)\right|
+\le \frac{3\sqrt{3}}{8\pi t^2}
+\qquad(x,\gamma\in\RR).
+\]
+This is integrable against~$\nu$ (which is a probability measure), so
+dominated convergence justifies
 \[
 \partial_x h_t(x)\big|_{x=\bar\gamma}
-=\frac{2}{\pi}\int_{\RR}\frac{t\,\Delta}{(\Delta^2+t^2)^2}\dd\nu(\gamma),
+=-\frac{2}{\pi}\int_{\RR}\frac{t\,\Delta}{(\Delta^2+t^2)^2}\dd\nu(\gamma),
 \]
-in particular
+and hence
 \[
-B(t)=2t\int_{\RR}\frac{\Delta}{(\Delta^2+t^2)^2}\dd\nu(\gamma).
+B(t)=\pi\,\partial_x h_t(x)\big|_{x=\bar\gamma}
+=-2t\int_{\RR}\frac{\Delta}{(\Delta^2+t^2)^2}\dd\nu(\gamma).
 \]
+For the Fubini step, note that $B(s)$ involves $\Delta/(\Delta^2+s^2)^2$.
 Since
 \[
 \int_t^\infty \frac{2s|\Delta|}{(\Delta^2+s^2)^2}\dd s
 =\frac{|\Delta|}{\Delta^2+t^2}
 \le \frac{1}{2t},
 \]
-Fubini's theorem applies and gives
+the double integral $\int_{\RR}\int_t^\infty|B(s)|\dd s\dd\nu(\gamma)$
+converges.  Fubini's theorem therefore applies, and integrating
+the identity
+\[
+-\int_t^\infty \frac{2s\,\Delta}{(\Delta^2+s^2)^2}\dd s
+=\frac{\Delta}{\Delta^2+t^2}
+\]
+against~$\nu$ gives
 \[
 H(t)
 =\int_{\RR}\frac{\Delta}{t^2+\Delta^2}\dd\nu(\gamma)
@@ -321,7 +377,7 @@ characteristic functions then recovers the centred law~$\nu_c$
 
 \begin{corollary}[The symmetric channel]%
 \label{cor:poisson-symmetrization}
-Under the hypotheses of Theorem~\ref{thm:poisson-central-two-channel}, the
+Under the hypotheses of Proposition~\ref{thm:poisson-central-two-channel}, the
 function $A$ determines the symmetrization of the centred law~$\nu_c$.
 \end{corollary}
 
@@ -335,7 +391,7 @@ Laplace inversion.
 
 \begin{corollary}[The symmetric case]%
 \label{cor:poisson-symmetric-case}
-Under the hypotheses of Theorem~\ref{thm:poisson-central-two-channel}, the
+Under the hypotheses of Proposition~\ref{thm:poisson-central-two-channel}, the
 centred law~$\nu_c$ is symmetric if and only if $B\equiv 0$.  In that
 case $A$ alone determines~$\nu_c$, and the pair $(\bar\gamma,A)$
 determines~$\nu$.
@@ -348,7 +404,7 @@ $\Im\phi_{\nu_c}\equiv 0$.  By
 $H\equiv 0$, hence to $B\equiv 0$.
 \end{proof}
 
-\begin{theorem}[Observation channels as evaluation functionals]%
+\begin{proposition}[Observation channels as evaluation functionals]%
 \label{thm:poisson-channel-rkhs}
 Let $\nu$ be a probability measure on~$\RR$ with finite mean~$\bar\gamma$.
 For $t>0$ define the centred fluctuation profile
@@ -377,7 +433,7 @@ and
 (\mathcal U\widetilde\delta_t)(0)=2t\,H(2t)
 =2t\int_{2t}^{\infty}B(s)\,\dd s.
 \end{equation}
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 By definition,
@@ -428,15 +484,15 @@ $K(0,b)=2/(4+b^2)$ gives
 =2t\int_{\RR}\frac{\Delta}{4t^2+\Delta^2}\,\dd\nu(\gamma).
 \]
 The definition of $H$ in
-Theorem~\ref{thm:poisson-central-two-channel} gives
+Proposition~\ref{thm:poisson-central-two-channel} gives
 \[
 H(2t)=\int_{\RR}\frac{\Delta}{4t^2+\Delta^2}\,\dd\nu(\gamma),
 \]
 and \eqref{eq:delta-t-rkhs-origin} follows.
 \end{proof}
 
-\begin{remark}
-The previous theorem recovers the centred Cauchy transform on the
+\begin{remark}\label{rem:cauchy-transform}
+The previous proposition recovers the centred Cauchy transform on the
 imaginary axis:
 \[
 G_{\nu_c}(\ii t)
@@ -446,8 +502,10 @@ G_{\nu_c}(\ii t)
 \]
 Thus the Laplace-transform formulation strengthens the earlier
 Cauchy-transform identity while also isolating the loss of the translation
-parameter.  In particular, the proof of
-Theorem~\ref{thm:poisson-central-two-channel} is better viewed as a
+parameter.  The proof of
+Proposition~\ref{thm:poisson-central-two-channel} is better viewed as a
 Laplace-uniqueness plus characteristic-function-inversion argument than
-as a Stieltjes inversion argument.
+as a classical Stieltjes inversion; for the latter approach and its
+relation to Cauchy-transform recovery see
+\cite{Widder1941,Lukacs1970}.
 \end{remark}
