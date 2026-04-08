@@ -349,4 +349,34 @@ theorem paper_X6_hammingWeight_distribution :
     cHammingWeightLayer 6 2 = 10 ∧ cHammingWeightLayer 6 3 = 4 :=
   X6_hammingWeight_distribution
 
+/-- cMinStableHammingDist 5 = 1.
+    def:min-stable-hamming-dist -/
+theorem cMinStableHammingDist_five : cMinStableHammingDist 5 = 1 := by native_decide
+
+/-- cMinStableHammingDist 6 = 1.
+    def:min-stable-hamming-dist -/
+theorem cMinStableHammingDist_six : cMinStableHammingDist 6 = 1 := by native_decide
+
+/-- cMinStableHammingDist 7 = 1.
+    def:min-stable-hamming-dist -/
+theorem cMinStableHammingDist_seven : cMinStableHammingDist 7 = 1 := by native_decide
+
+/-- cMinStableHammingDist 8 = 1.
+    def:min-stable-hamming-dist -/
+theorem cMinStableHammingDist_eight : cMinStableHammingDist 8 = 1 := by native_decide
+
+/-- Paper package: minimum stable Hamming distance is constant 1 for m = 2..8.
+    def:min-stable-hamming-dist -/
+theorem paper_cMinStableHammingDist_constant_one_2_to_8 :
+    cMinStableHammingDist 2 = 1 ∧
+    cMinStableHammingDist 3 = 1 ∧
+    cMinStableHammingDist 4 = 1 ∧
+    cMinStableHammingDist 5 = 1 ∧
+    cMinStableHammingDist 6 = 1 ∧
+    cMinStableHammingDist 7 = 1 ∧
+    cMinStableHammingDist 8 = 1 :=
+  ⟨cMinStableHammingDist_two, cMinStableHammingDist_three, cMinStableHammingDist_four,
+   cMinStableHammingDist_five, cMinStableHammingDist_six,
+   cMinStableHammingDist_seven, cMinStableHammingDist_eight⟩
+
 end Omega
