@@ -107,6 +107,7 @@ import Omega.Conclusion.SpectrumSignLaw
 import Omega.Conclusion.Q13CrtPeriodCompression
 import Omega.Conclusion.Window6VisibleHiddenSeparation
 import Omega.Core.FiberLatticeSquarefree
+import Omega.Core.LeakageResponseIdentity
 import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
