@@ -70,6 +70,42 @@ theorem halfCircleDim_add (a b c d : Nat) :
     halfCircleDim (a + b) (c + d) = halfCircleDim a c + halfCircleDim b d := by
   simp [halfCircleDim, circleDim]; ring
 
+/-- halfCircleDim vanishes when there are no free generators.
+    prop:circle-dimension-laws -/
+theorem halfCircleDim_zero_of_no_free (t : Nat) :
+    halfCircleDim 0 t = 0 := by
+  simp [halfCircleDim, circleDim]
+
+/-- Doubling halfCircleDim recovers circleDim.
+    prop:circle-dimension-laws -/
+theorem halfCircleDim_two_mul (n t : Nat) :
+    2 * halfCircleDim n t = (circleDim n t : ℚ) := by
+  simp [halfCircleDim]
+  ring
+
+/-- halfCircleDim is monotone in the free-generator count.
+    prop:circle-dimension-laws -/
+theorem halfCircleDim_mono {n₁ n₂ t : Nat} (h : n₁ ≤ n₂) :
+    halfCircleDim n₁ t ≤ halfCircleDim n₂ t := by
+  unfold halfCircleDim
+  have hcd : circleDim n₁ t ≤ circleDim n₂ t := circleDim_mono h
+  have : (circleDim n₁ t : ℚ) ≤ (circleDim n₂ t : ℚ) := by exact_mod_cast hcd
+  linarith
+
+/-- Paper package of halfCircleDim core laws.
+    prop:circle-dimension-laws -/
+theorem paper_halfCircleDim_laws :
+    halfCircleDim 1 0 = 1 / 2 ∧
+    (∀ t, halfCircleDim 0 t = 0) ∧
+    (∀ n t : Nat, 2 * halfCircleDim n t = (circleDim n t : ℚ)) ∧
+    (∀ a b c d, halfCircleDim (a + b) (c + d) = halfCircleDim a c + halfCircleDim b d) ∧
+    (∀ {n₁ n₂ t : Nat}, n₁ ≤ n₂ → halfCircleDim n₁ t ≤ halfCircleDim n₂ t) :=
+  ⟨halfCircleDim_nat,
+   halfCircleDim_zero_of_no_free,
+   halfCircleDim_two_mul,
+   halfCircleDim_add,
+   @halfCircleDim_mono⟩
+
 -- ══════════════════════════════════════════════════════════════
 -- Phase R128: Tensor-Hom-Ext laws
 -- ══════════════════════════════════════════════════════════════
