@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1629 |
+| \leanverified 标注数 | 1632 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1646 |
-| 轮次 | R401（round_count=402）|
+| 总标注数 | 1649 |
+| 轮次 | R402（round_count=403）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,7 +24,7 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 295 | 17.3% |
+| POM | 1,707 | 296 | 17.3% |
 | Emergent Arithmetic | 185 | 164 | 88.6% |
 | Folding | 337 | 123 | 36.5% |
 | Conclusion | 2,550 | 253 | 9.9% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 197 | 4.4% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1507** | **14.3%** |
+| **合计（body）** | **10,508** | **1508** | **14.3%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**POM BF 2-primary trigger sequence witnesses（Round R402）**：`three_dvd_2q_minus_2_iff_q_mod_3`（对应 `cor:pom-collision-fibonacci-twist-2primary-first-appearance`，POM；3 | 2^q-2 当且仅当 q mod 3 的判别式）；`bf_first_trigger_q4_fib6`（对应 `cor:pom-collision-fibonacci-twist-2primary-first-appearance`，POM；q=4 的 BF 首次触发见证 F_6）；`paper_bf_2primary_trigger_sequence`（对应 `cor:pom-collision-fibonacci-twist-2primary-first-appearance`，POM；BF 2-primary 触发序列综合论文接口）
 **GU extended Lie Fibonacci small-rank + E7/E8 table（Round R401）**：`extended_lie_fibonacci_small`（对应 `cor:fold6-tail-offsets-gut-top-terms`，Group Unification；小秩 Lie 代数 Fibonacci 分解表）；`extended_lie_fibonacci_E7_E8`（对应 `cor:fold6-tail-offsets-gut-top-terms`，Group Unification；E7/E8 Lie 代数 Fibonacci 分解）；`paper_extended_lie_fibonacci_full_package`（对应 `cor:fold6-tail-offsets-gut-top-terms`，Group Unification；扩展 Lie Fibonacci 全表综合论文接口）
 **[R400 MILESTONE] valE positivity/mono/strict-mono + 7-way package（Round R400）**：`valE_zero_one_two_table`（对应 `thm:monoid-quotient-is-N`，Emergent Arithmetic；valE 小值查表 k=0,1,2）；`valE_pos_of_ge_one`（对应 `thm:monoid-quotient-is-N`，Emergent Arithmetic；k≥1 时 valE 正性）；`valE_mono`（对应 `thm:monoid-quotient-is-N`，Emergent Arithmetic；valE 单调性）；`valE_strict_mono_of_ge_two`（对应 `thm:monoid-quotient-is-N`，Emergent Arithmetic；k≥2 时 valE 严格单调性）；`paper_valE_milestone_package`（对应 `thm:monoid-quotient-is-N`，Emergent Arithmetic；valE 里程碑 7-way 综合论文接口）
 **halfCircleDim zero/doubling/mono laws（Round R399）**：`halfCircleDim_zero_of_no_free`（对应 `prop:circle-dimension-laws`，Circle Dimension；无自由秩时半圆维为零）；`halfCircleDim_two_mul`（对应 `prop:circle-dimension-laws`，Circle Dimension；半圆维倍增律）；`halfCircleDim_mono`（对应 `prop:circle-dimension-laws`，Circle Dimension；半圆维单调性）；`paper_halfCircleDim_laws`（对应 `prop:circle-dimension-laws`，Circle Dimension；半圆维算律综合论文接口）
@@ -348,6 +349,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R402: POM BF 2-primary trigger sequence（完整）**：Folding/ShiftDynamics.lean（超 800 行 pre-existing，登记不阻塞）——three_dvd_2q_minus_2_iff_q_mod_3（cor:pom-collision-fibonacci-twist-2primary-first-appearance，3∣2^q-2 判别式，POM）; bf_first_trigger_q4_fib6（cor:pom-collision-fibonacci-twist-2primary-first-appearance，q=4 BF 首次触发 F_6，POM）; paper_bf_2primary_trigger_sequence（cor:pom-collision-fibonacci-twist-2primary-first-appearance，BF 2-primary 触发序列论文接口，POM）——**1 个新论文标签条目计入覆盖率**（cor:pom-collision-fibonacci-twist-2primary-first-appearance 首次标注 +1）——POM 295→296（17.3%），全局 \leanverified 1629→1632（+3），总标注 1646→1649（+3），body 覆盖 1507→1508（14.3%），proof commit 529d796
 **Phase R401: GU extended Lie Fibonacci decomposition table（完整）**：GU/ZeckendorfCountClosure.lean——extended_lie_fibonacci_small（cor:fold6-tail-offsets-gut-top-terms，小秩 Lie 代数 Fibonacci 分解表，GU）; extended_lie_fibonacci_E7_E8（cor:fold6-tail-offsets-gut-top-terms，E7/E8 Fibonacci 分解，GU）; paper_extended_lie_fibonacci_full_package（cor:fold6-tail-offsets-gut-top-terms，扩展 Lie Fibonacci 全表综合论文接口，GU）——**0 个新论文标签条目计入覆盖率**（cor:fold6-tail-offsets-gut-top-terms 已注册，本轮为深化）——GU 162（34.5%，不变），全局 \leanverified 1626→1629（+3），总标注 1643→1646（+3），body 覆盖 1507（14.3%，不变），proof commit 08fdf64
 **[R400 MILESTONE] Phase R400: EA valE milestone package（完整）**：EA/FibCongruence.lean——valE_zero_one_two_table（thm:monoid-quotient-is-N，valE 小值查表 k=0,1,2，EA）; valE_pos_of_ge_one（thm:monoid-quotient-is-N，k≥1 时 valE 正性，EA）; valE_mono（thm:monoid-quotient-is-N，valE 单调性，EA）; valE_strict_mono_of_ge_two（thm:monoid-quotient-is-N，k≥2 时 valE 严格单调性，EA）; paper_valE_milestone_package（thm:monoid-quotient-is-N，valE 里程碑 7-way 综合论文接口，EA）——**0 个新论文标签条目计入覆盖率**（thm:monoid-quotient-is-N 已注册，本轮为深化）——EA 164（88.6%，不变），全局 \leanverified 1621→1626（+5），总标注 1638→1643（+5），body 覆盖 1507（14.3%，不变），**R400 milestone reached（round_count=401）**，proof commit 41f2591
 **Phase R399: CircleDimension halfCircleDim laws（完整）**：CircleDimension/CircleDim.lean——halfCircleDim_zero_of_no_free（prop:circle-dimension-laws，无自由秩时半圆维为零，Circle Dimension）; halfCircleDim_two_mul（prop:circle-dimension-laws，半圆维倍增律，Circle Dimension）; halfCircleDim_mono（prop:circle-dimension-laws，半圆维单调性，Circle Dimension）; paper_halfCircleDim_laws（prop:circle-dimension-laws，半圆维算律综合论文接口，Circle Dimension）——**0 个新论文标签条目计入覆盖率**（prop:circle-dimension-laws 已注册 R115/R117，本轮为深化）——CD 145（36.9%，不变），全局 \leanverified 1617→1621（+4），总标注 1634→1638（+4），body 覆盖 1507（14.3%，不变），proof commit b1d3719
