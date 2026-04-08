@@ -92,4 +92,29 @@ theorem paper_binfold_recovery_fibonacci_scaling :
   ⟨by native_decide, by native_decide, by native_decide, by native_decide,
    fun m hm => Nat.fib_lt_fib_succ (by omega : 2 ≤ m + 2)⟩
 
+/-- 2^13 > 7 · F_15 (binfold recovery at m = 13).
+    thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting -/
+theorem paper_binfold_recovery_m13 :
+    2 ^ 13 > 7 * Nat.fib 15 := by native_decide
+
+/-- 2^15 > 11 · F_17 (binfold recovery at m = 15).
+    thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting -/
+theorem paper_binfold_recovery_m15 :
+    2 ^ 15 > 11 * Nat.fib 17 := by native_decide
+
+/-- 2^17 > 18 · F_19 (binfold recovery at m = 17).
+    thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting -/
+theorem paper_binfold_recovery_m17 :
+    2 ^ 17 > 18 * Nat.fib 19 := by native_decide
+
+/-- Extended Fibonacci-scaling recovery witnesses at m = 5, 10, 13, 15, 17.
+    thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting -/
+theorem paper_binfold_recovery_extended_13_15_17 :
+    2 ^ 5 > 2 * Nat.fib 7 ∧
+    2 ^ 10 > 7 * Nat.fib 12 ∧
+    2 ^ 13 > 7 * Nat.fib 15 ∧
+    2 ^ 15 > 11 * Nat.fib 17 ∧
+    2 ^ 17 > 18 * Nat.fib 19 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> native_decide
+
 end Omega.Conclusion
