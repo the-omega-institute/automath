@@ -564,6 +564,36 @@ theorem cyclotomic_factor_6 (t : ℤ) :
 theorem cyclotomic_factor_7_neg (t : ℤ) :
     t^7 + 1 = (t + 1) * (t^6 - t^5 + t^4 - t^3 + t^2 - t + 1) := by ring
 
+/-- Cyclotomic factor: t^9 - 1 = (t-1)(t²+t+1)(t^6+t³+1).
+    prop:cycle-permutation-determinant -/
+theorem cyclotomic_factor_9 (t : ℤ) :
+    t^9 - 1 = (t - 1) * (t^2 + t + 1) * (t^6 + t^3 + 1) := by ring
+
+/-- Cyclotomic factor: t^10 - 1 = (t-1)(t+1)(t^4+t³+t²+t+1)(t^4-t³+t²-t+1).
+    prop:cycle-permutation-determinant -/
+theorem cyclotomic_factor_10 (t : ℤ) :
+    t^10 - 1 = (t - 1) * (t + 1) * (t^4 + t^3 + t^2 + t + 1) *
+               (t^4 - t^3 + t^2 - t + 1) := by ring
+
+/-- Cyclotomic factor: t^12 - 1 = Φ_1·Φ_2·Φ_3·Φ_4·Φ_6·Φ_12.
+    prop:cycle-permutation-determinant -/
+theorem cyclotomic_factor_12 (t : ℤ) :
+    t^12 - 1 = (t - 1) * (t + 1) * (t^2 + 1) * (t^2 + t + 1) *
+               (t^2 - t + 1) * (t^4 - t^2 + 1) := by ring
+
+/-- Paper package: cyclotomic factorizations for n = 6, 7 (neg), 9, 10, 12.
+    prop:cycle-permutation-determinant -/
+theorem paper_cyclotomic_factorization_package_6_to_12 :
+    (∀ t : ℤ, t^6 - 1 = (t - 1) * (t + 1) * (t^2 + t + 1) * (t^2 - t + 1)) ∧
+    (∀ t : ℤ, t^7 + 1 = (t + 1) * (t^6 - t^5 + t^4 - t^3 + t^2 - t + 1)) ∧
+    (∀ t : ℤ, t^9 - 1 = (t - 1) * (t^2 + t + 1) * (t^6 + t^3 + 1)) ∧
+    (∀ t : ℤ, t^10 - 1 = (t - 1) * (t + 1) * (t^4 + t^3 + t^2 + t + 1) *
+                          (t^4 - t^3 + t^2 - t + 1)) ∧
+    (∀ t : ℤ, t^12 - 1 = (t - 1) * (t + 1) * (t^2 + 1) * (t^2 + t + 1) *
+                          (t^2 - t + 1) * (t^4 - t^2 + 1)) :=
+  ⟨cyclotomic_factor_6, cyclotomic_factor_7_neg,
+   cyclotomic_factor_9, cyclotomic_factor_10, cyclotomic_factor_12⟩
+
 /-- Paper package.
     prop:cycle-permutation-determinant -/
 theorem paper_euler_factor_n7_n8_package :
