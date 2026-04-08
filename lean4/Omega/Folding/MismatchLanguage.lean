@@ -123,4 +123,31 @@ theorem paper_mismatchWordCount_extended :
     (∀ m, 4 ≤ m → mismatchWordCount m < 2 ^ m) :=
   ⟨by native_decide, by native_decide, by native_decide, mismatchWordCount_lt_pow_two⟩
 
+/-- Mismatch word count at m=14.
+    prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence -/
+theorem mismatchWordCount_fourteen : mismatchWordCount 14 = 5276 := by native_decide
+
+/-- Mismatch word count at m=15.
+    prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence -/
+theorem mismatchWordCount_fifteen : mismatchWordCount 15 = 9562 := by native_decide
+
+/-- Mismatch word count at m=16.
+    prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence -/
+theorem mismatchWordCount_sixteen : mismatchWordCount 16 = 17330 := by native_decide
+
+/-- Paper package: mismatch word counts m=14..16 with growth/bound witnesses.
+    prop:fold-gauge-anomaly-mismatch-language-word-count-recurrence -/
+theorem paper_mismatchWordCount_14_to_16_package :
+    mismatchWordCount 14 = 5276 ∧
+    mismatchWordCount 15 = 9562 ∧
+    mismatchWordCount 16 = 17330 ∧
+    mismatchWordCount 14 < mismatchWordCount 15 ∧
+    mismatchWordCount 15 < mismatchWordCount 16 ∧
+    mismatchWordCount 16 < 2 ^ 16 := by
+  refine ⟨mismatchWordCount_fourteen, mismatchWordCount_fifteen,
+          mismatchWordCount_sixteen, ?_, ?_, ?_⟩
+  · rw [mismatchWordCount_fourteen, mismatchWordCount_fifteen]; omega
+  · rw [mismatchWordCount_fifteen, mismatchWordCount_sixteen]; omega
+  · exact mismatchWordCount_lt_pow_two 16 (by omega)
+
 end Omega
