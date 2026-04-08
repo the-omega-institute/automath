@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1719 |
+| \leanverified 标注数 | 1724 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1736 |
-| 轮次 | R422（round_count=423）|
+| 总标注数 | 1741 |
+| 轮次 | R423（round_count=424）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -30,11 +30,11 @@
 | Conclusion | 2,550 | 256 | 10.0% |
 | Group Unification | 469 | 162 | 34.5% |
 | SPG | 129 | 106 | 82.2% |
-| Circle Dimension | 393 | 145 | 36.9% |
+| Circle Dimension | 393 | 146 | 37.1% |
 | Zeta Finite Part | 4,524 | 197 | 4.4% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1512** | **14.4%** |
+| **合计（body）** | **10,508** | **1513** | **14.4%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**CD phaseSpectrumCount 小值查表包（Round R423）**：`phaseSpectrumCount_at_2_2_4`（对应 `def:cdim-phase-spectrum`，Circle Dimension；phaseSpectrumCount(2,2,4)=32）；`phaseSpectrumCount_at_3_6_2`（对应 `def:cdim-phase-spectrum`，Circle Dimension；phaseSpectrumCount(3,6,2)=16）；`phaseSpectrumCount_at_1_12_8`（对应 `def:cdim-phase-spectrum`，Circle Dimension；phaseSpectrumCount(1,12,8)=32）；`phaseSpectrumCount_at_2_15_10`（对应 `def:cdim-phase-spectrum`，Circle Dimension；phaseSpectrumCount(2,15,10)=500）；`paper_phaseSpectrumCount_small_values_table`（对应 `def:cdim-phase-spectrum`，Circle Dimension；小值查表综合论文接口）
 **Conclusion godelLift fib11/12/13 可行性见证（Round R422）**：`godelLift_fib11_witness`（对应 `thm:conclusion-bounded-prime-register-feasibility`，Conclusion；(9+1)^2 ≥ fib(11) 可行性见证）；`godelLift_fib12_witness`（对应 `thm:conclusion-bounded-prime-register-feasibility`，Conclusion；(11+1)^2 ≥ fib(12) 可行性见证）；`godelLift_fib13_witness`（对应 `thm:conclusion-bounded-prime-register-feasibility`，Conclusion；(15+1)^2 ≥ fib(13) 可行性见证）；`paper_godelLift_fib_extended_11_to_13`（对应 `thm:conclusion-bounded-prime-register-feasibility`，Conclusion；fib11/12/13 扩展综合论文接口）
 **Folding cMinStableHammingDist m=5..8 恒为 1 包（Round R421）**：`cMinStableHammingDist_five`（对应 `def:min-stable-hamming-dist`，Folding；cMinStableHammingDist(5)=1）；`cMinStableHammingDist_six`（对应 `def:min-stable-hamming-dist`，Folding；cMinStableHammingDist(6)=1）；`cMinStableHammingDist_seven`（对应 `def:min-stable-hamming-dist`，Folding；cMinStableHammingDist(7)=1）；`cMinStableHammingDist_eight`（对应 `def:min-stable-hamming-dist`，Folding；cMinStableHammingDist(8)=1）；`paper_cMinStableHammingDist_constant_one_2_to_8`（对应 `def:min-stable-hamming-dist`，Folding；m=2..8 常数 1 综合论文接口）
 **POM minMatrix det k=3/5 + trace 小值包（Round R420）**：`minMatrix_det_at_three`（对应 `lem:pom-Kk-gram-det`，POM；minMatrix k=3 行列式值）；`minMatrix_det_at_five`（对应 `lem:pom-Kk-gram-det`，POM；minMatrix k=5 行列式值）；`minMatrix_trace_at_small`（对应 `cor:pom-Kk-sine-product-sum`，POM；minMatrix 小值迹多元组）；`paper_minMatrix_small_values_package`（对应 `lem:pom-Kk-gram-det` / `cor:pom-Kk-sine-product-sum`，POM；minMatrix 小值综合论文接口）
@@ -369,6 +370,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R423: CD phaseSpectrumCount small-value table（完整）**：CircleDimension/CircleDim.lean——phaseSpectrumCount_at_2_2_4（def:cdim-phase-spectrum，phaseSpectrumCount(2,2,4)=32，CD）; phaseSpectrumCount_at_3_6_2（def:cdim-phase-spectrum，phaseSpectrumCount(3,6,2)=16，CD）; phaseSpectrumCount_at_1_12_8（def:cdim-phase-spectrum，phaseSpectrumCount(1,12,8)=32，CD）; phaseSpectrumCount_at_2_15_10（def:cdim-phase-spectrum，phaseSpectrumCount(2,15,10)=500，CD）; paper_phaseSpectrumCount_small_values_table（def:cdim-phase-spectrum，小值查表综合论文接口，CD）——**1 个新论文标签条目计入覆盖率**（def:cdim-phase-spectrum 首次标注 +1）——CD 145→146（36.9%→37.1%），全局 \leanverified 1719→1724（+5），总标注 1736→1741（+5），body 覆盖 1512→1513（14.4%，不变显示），proof commit f0f310a
 **Phase R422: Conclusion godelLift fib11/12/13 feasibility witnesses（完整）**：Conclusion/PrimeRegister.lean——godelLift_fib11_witness（thm:conclusion-bounded-prime-register-feasibility，(9+1)^2 ≥ fib(11) 可行性见证，Conclusion）; godelLift_fib12_witness（thm:conclusion-bounded-prime-register-feasibility，(11+1)^2 ≥ fib(12) 可行性见证，Conclusion）; godelLift_fib13_witness（thm:conclusion-bounded-prime-register-feasibility，(15+1)^2 ≥ fib(13) 可行性见证，Conclusion）; paper_godelLift_fib_extended_11_to_13（thm:conclusion-bounded-prime-register-feasibility，fib11/12/13 扩展综合论文接口，Conclusion）——**1 个新论文标签条目计入覆盖率**（thm:conclusion-bounded-prime-register-feasibility 首次标注 +1）——Conclusion 255→256（10.0%，不变显示），全局 \leanverified 1715→1719（+4），总标注 1732→1736（+4），body 覆盖 1511→1512（14.4%，不变显示），proof commit 92ac3bd
 **Phase R421: Folding cMinStableHammingDist m=5..8 constant-1 package（完整）**：Folding/HammingDist.lean——cMinStableHammingDist_five（def:min-stable-hamming-dist，cMinStableHammingDist(5)=1，Folding）; cMinStableHammingDist_six（def:min-stable-hamming-dist，cMinStableHammingDist(6)=1，Folding）; cMinStableHammingDist_seven（def:min-stable-hamming-dist，cMinStableHammingDist(7)=1，Folding）; cMinStableHammingDist_eight（def:min-stable-hamming-dist，cMinStableHammingDist(8)=1，Folding）; paper_cMinStableHammingDist_constant_one_2_to_8（def:min-stable-hamming-dist，m=2..8 常数 1 综合论文接口，Folding）——**1 个新论文标签条目计入覆盖率**（def:min-stable-hamming-dist 首次标注 +1）——Folding 123→124（36.5%→36.8%），全局 \leanverified 1710→1715（+5），总标注 1727→1732（+5），body 覆盖 1510→1511（14.4%），proof commit fce9bed
 **Phase R420: POM minMatrix det k=3/5 + trace small values package（完整）**：Combinatorics/GramDet.lean——minMatrix_det_at_three（lem:pom-Kk-gram-det，minMatrix k=3 行列式，POM）; minMatrix_det_at_five（lem:pom-Kk-gram-det，minMatrix k=5 行列式，POM）; minMatrix_trace_at_small（cor:pom-Kk-sine-product-sum，minMatrix 小值迹，POM）; paper_minMatrix_small_values_package（lem:pom-Kk-gram-det / cor:pom-Kk-sine-product-sum，minMatrix 小值综合论文接口，POM）——**0 个新论文标签条目计入覆盖率**（lem:pom-Kk-gram-det 已注册，cor:pom-Kk-sine-product-sum 已注册，本轮为深化）——POM 296（17.3%，不变），全局 \leanverified 1706→1710（+4），总标注 1723→1727（+4），body 覆盖 1510（14.4%，不变），proof commit cd2b7b0
