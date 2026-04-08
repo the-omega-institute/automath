@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1710 |
+| \leanverified 标注数 | 1715 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1727 |
-| 轮次 | R420（round_count=421）|
+| 总标注数 | 1732 |
+| 轮次 | R421（round_count=422）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,7 +26,7 @@
 |---|---|---|---|
 | POM | 1,707 | 296 | 17.3% |
 | Emergent Arithmetic | 185 | 164 | 88.6% |
-| Folding | 337 | 123 | 36.5% |
+| Folding | 337 | 124 | 36.8% |
 | Conclusion | 2,550 | 255 | 10.0% |
 | Group Unification | 469 | 162 | 34.5% |
 | SPG | 129 | 106 | 82.2% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 197 | 4.4% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1510** | **14.4%** |
+| **合计（body）** | **10,508** | **1511** | **14.4%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**Folding cMinStableHammingDist m=5..8 恒为 1 包（Round R421）**：`cMinStableHammingDist_five`（对应 `def:min-stable-hamming-dist`，Folding；cMinStableHammingDist(5)=1）；`cMinStableHammingDist_six`（对应 `def:min-stable-hamming-dist`，Folding；cMinStableHammingDist(6)=1）；`cMinStableHammingDist_seven`（对应 `def:min-stable-hamming-dist`，Folding；cMinStableHammingDist(7)=1）；`cMinStableHammingDist_eight`（对应 `def:min-stable-hamming-dist`，Folding；cMinStableHammingDist(8)=1）；`paper_cMinStableHammingDist_constant_one_2_to_8`（对应 `def:min-stable-hamming-dist`，Folding；m=2..8 常数 1 综合论文接口）
 **POM minMatrix det k=3/5 + trace 小值包（Round R420）**：`minMatrix_det_at_three`（对应 `lem:pom-Kk-gram-det`，POM；minMatrix k=3 行列式值）；`minMatrix_det_at_five`（对应 `lem:pom-Kk-gram-det`，POM；minMatrix k=5 行列式值）；`minMatrix_trace_at_small`（对应 `cor:pom-Kk-sine-product-sum`，POM；minMatrix 小值迹多元组）；`paper_minMatrix_small_values_package`（对应 `lem:pom-Kk-gram-det` / `cor:pom-Kk-sine-product-sum`，POM；minMatrix 小值综合论文接口）
 **GU freeInvolutionCount r=10/11 + 增长包（Round R419）**：`freeInvolutionCount_ten`（对应 `thm:fiberwise-free-involution-matching-entropy`，GU；freeInvolutionCount(10)=654729075）；`freeInvolutionCount_eleven`（对应 `thm:fiberwise-free-involution-matching-entropy`，GU；freeInvolutionCount(11)=13749310575）；`paper_freeInvolutionCount_r10_r11_extended`（对应 `thm:fiberwise-free-involution-matching-entropy`，GU；r=10/11 自由对合计数增长综合论文接口）
 **EA Wedderburn dim m=13/14/15 增长包（Round R418）**：`wedderburn_dim_m13`（对应 `prop:fold-groupoid-wedderburn`，EA；momentSum(2,13)=127072）；`wedderburn_dim_m14`（对应 `prop:fold-groupoid-wedderburn`，EA；momentSum(2,14)=315296）；`wedderburn_dim_m15`（对应 `prop:fold-groupoid-wedderburn`，EA；momentSum(2,15)=782304）；`paper_wedderburn_dim_m13_m14_m15_package`（对应 `prop:fold-groupoid-wedderburn`，EA；m=13/14/15 维度与增长率综合论文接口）
@@ -367,6 +368,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R421: Folding cMinStableHammingDist m=5..8 constant-1 package（完整）**：Folding/HammingDist.lean——cMinStableHammingDist_five（def:min-stable-hamming-dist，cMinStableHammingDist(5)=1，Folding）; cMinStableHammingDist_six（def:min-stable-hamming-dist，cMinStableHammingDist(6)=1，Folding）; cMinStableHammingDist_seven（def:min-stable-hamming-dist，cMinStableHammingDist(7)=1，Folding）; cMinStableHammingDist_eight（def:min-stable-hamming-dist，cMinStableHammingDist(8)=1，Folding）; paper_cMinStableHammingDist_constant_one_2_to_8（def:min-stable-hamming-dist，m=2..8 常数 1 综合论文接口，Folding）——**1 个新论文标签条目计入覆盖率**（def:min-stable-hamming-dist 首次标注 +1）——Folding 123→124（36.5%→36.8%），全局 \leanverified 1710→1715（+5），总标注 1727→1732（+5），body 覆盖 1510→1511（14.4%），proof commit fce9bed
 **Phase R420: POM minMatrix det k=3/5 + trace small values package（完整）**：Combinatorics/GramDet.lean——minMatrix_det_at_three（lem:pom-Kk-gram-det，minMatrix k=3 行列式，POM）; minMatrix_det_at_five（lem:pom-Kk-gram-det，minMatrix k=5 行列式，POM）; minMatrix_trace_at_small（cor:pom-Kk-sine-product-sum，minMatrix 小值迹，POM）; paper_minMatrix_small_values_package（lem:pom-Kk-gram-det / cor:pom-Kk-sine-product-sum，minMatrix 小值综合论文接口，POM）——**0 个新论文标签条目计入覆盖率**（lem:pom-Kk-gram-det 已注册，cor:pom-Kk-sine-product-sum 已注册，本轮为深化）——POM 296（17.3%，不变），全局 \leanverified 1706→1710（+4），总标注 1723→1727（+4），body 覆盖 1510（14.4%，不变），proof commit cd2b7b0
 **Phase R419: GU freeInvolutionCount r=10/11 growth package（完整）**：GU/FreeInvolutionCount.lean——freeInvolutionCount_ten（thm:fiberwise-free-involution-matching-entropy，freeInvolutionCount(10)=654729075，GU）; freeInvolutionCount_eleven（thm:fiberwise-free-involution-matching-entropy，freeInvolutionCount(11)=13749310575，GU）; paper_freeInvolutionCount_r10_r11_extended（thm:fiberwise-free-involution-matching-entropy，r=10/11 增长综合论文接口，GU）——**0 个新论文标签条目计入覆盖率**（thm:fiberwise-free-involution-matching-entropy 已注册，本轮为深化）——GU 162（34.5%，不变），全局 \leanverified 1703→1706（+3），总标注 1720→1723（+3），body 覆盖 1510（14.4%，不变），proof commit f03f5c7
 **Phase R418: EA Wedderburn dim m=13/14/15 growth package（完整）**：EA/Wedderburn.lean——wedderburn_dim_m13（prop:fold-groupoid-wedderburn，momentSum(2,13)=127072，EA）; wedderburn_dim_m14（prop:fold-groupoid-wedderburn，momentSum(2,14)=315296，EA）; wedderburn_dim_m15（prop:fold-groupoid-wedderburn，momentSum(2,15)=782304，EA）; paper_wedderburn_dim_m13_m14_m15_package（prop:fold-groupoid-wedderburn，m=13/14/15 维度增长综合论文接口，EA）——**0 个新论文标签条目计入覆盖率**（prop:fold-groupoid-wedderburn 已注册，本轮为深化）——EA 164（88.6%，不变），全局 \leanverified 1699→1703（+4），总标注 1716→1720（+4），body 覆盖 1510（14.4%，不变），proof commit 8f1d791
