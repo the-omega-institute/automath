@@ -1733,4 +1733,30 @@ theorem paper_pisano_period_12_13_15_package :
     (Nat.fib 40 % 15 = 0 ∧ Nat.fib 41 % 15 = 1) :=
   ⟨fib_mod12_period_24, fib_mod13_period_28, fib_mod15_period_40⟩
 
+/-- Pisano period π(16) = 24.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem fib_mod16_period_24 :
+    Nat.fib 24 % 16 = 0 ∧ Nat.fib 25 % 16 = 1 := by native_decide
+
+/-- Pisano period π(18) = 24.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem fib_mod18_period_24 :
+    Nat.fib 24 % 18 = 0 ∧ Nat.fib 25 % 18 = 1 := by native_decide
+
+/-- Pisano period π(24) = 24 (self-period).
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem fib_mod24_period_24 :
+    Nat.fib 24 % 24 = 0 ∧ Nat.fib 25 % 24 = 1 := by native_decide
+
+/-- Common Pisano period 24 witness package for moduli 16, 18, 24.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem paper_pisano_period_24_common_16_18_24_package :
+    (Nat.fib 24 % 16 = 0 ∧ Nat.fib 25 % 16 = 1) ∧
+    (Nat.fib 24 % 18 = 0 ∧ Nat.fib 25 % 18 = 1) ∧
+    (Nat.fib 24 % 24 = 0 ∧ Nat.fib 25 % 24 = 1) ∧
+    Nat.fib 24 = 46368 ∧
+    Nat.fib 25 = 75025 :=
+  ⟨fib_mod16_period_24, fib_mod18_period_24, fib_mod24_period_24,
+   by native_decide, by native_decide⟩
+
 end Omega
