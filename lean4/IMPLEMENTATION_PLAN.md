@@ -6,17 +6,17 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~49,044 |
-| 定理/定义数 | ~4,286 |
-| 论文接口包装 | 713+ |
+| 总行数 | ~49,085 |
+| 定理/定义数 | ~4,289 |
+| 论文接口包装 | 714+ |
 | 文件数 | 116 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1607 |
+| \leanverified 标注数 | 1610 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1624 |
-| 轮次 | R395（round_count=396） |
+| 总标注数 | 1627 |
+| 轮次 | R396（round_count=397） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**GU window 9/10 compression ratios + 6-10 package（Round R396）**：`paper_window9_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，Group Unification；window-9 压缩比论文接口）；`paper_window10_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，Group Unification；window-10 压缩比论文接口）；`paper_window_compression_ratio_6_to_10_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，Group Unification；window 6-10 压缩比综合打包论文接口）
 **Conclusion resonance window lcm(8,18)=72 CRT witness（Round R395）**：`resonance_window_lcm_8_18_eq_72`（对应 `thm:conclusion-resonance-window-q13-q15-mod6-period72`，Conclusion；lcm(8,18)=72 证书）；`resonance_window_five_types_pairwise_distinct`（对应 `cor:conclusion-resonance-window-five-terminal-types`，Conclusion；五类共振窗口两两不同）；`resonance_window_eight_dvd_72`（对应 `thm:conclusion-resonance-window-q13-q15-mod6-period72`，Conclusion；8 | 72）；`resonance_window_eighteen_dvd_72`（对应 `thm:conclusion-resonance-window-q13-q15-mod6-period72`，Conclusion；18 | 72）；`resonance_window_lcm_universal`（对应 `thm:conclusion-resonance-window-q13-q15-mod6-period72`，Conclusion；公倍数普遍性）；`paper_resonance_window_mod6_period_witness`（对应 `thm:conclusion-resonance-window-q13-q15-mod6-period72`，Conclusion；模 6 周期 72 证书综合论文接口）
 **POM fiber-index CGF general q + package（Round R394）**：`paper_pom_fiber_index_cgf_q3_specialized`（对应 `prop:pom-fiber-index-cgf`，POM；纤维指数 CGF 在 q=3 的论文接口特化）；`paper_pom_fiber_index_cgf_q4_specialized`（对应 `prop:pom-fiber-index-cgf`，POM；纤维指数 CGF 在 q=4 的论文接口特化）；`paper_pom_fiber_index_cgf_general`（对应 `prop:pom-fiber-index-cgf`，POM；纤维指数 CGF 一般 q 的论文接口）；`paper_pom_fiber_index_cgf_package`（对应 `prop:pom-fiber-index-cgf`，POM；纤维指数 CGF 综合论文接口打包）
 **CircleDimension residual circle-dim laws（Round R393）**：`residualCdimAt`（对应 `def:cdim-residual-circle-dimension`，Circle Dimension；残差圆维函数定义）；`residualCdimAt_mono_of_card_le`（对应 `prop:cdim-residual-circle-dimension-laws`，Circle Dimension；残差圆维单调性）；`residual_register_pow_add`（对应 `prop:cdim-residual-circle-dimension-laws`，Circle Dimension；残差寄存器幂次加法律）；`residual_log_product_eq_sum_of_powers`（对应 `prop:cdim-residual-circle-dimension-laws`，Circle Dimension；残差对数乘积分解为幂次和）；`paper_cdim_residual_circle_dim_laws`（对应 `prop:cdim-residual-circle-dimension-laws`，Circle Dimension；残差圆维算律综合论文接口）
@@ -342,6 +343,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R396: GU window 9/10 compression ratios + 6-10 package（完整）**：GU/Window6RankGap.lean（123行）——paper_window9_compression_ratio（subsec:bdry-tower-zeck-gut-part1，window-9 压缩比论文接口，GU）; paper_window10_compression_ratio（subsec:bdry-tower-zeck-gut-part1，window-10 压缩比论文接口，GU）; paper_window_compression_ratio_6_to_10_package（subsec:bdry-tower-zeck-gut-part1，window 6-10 压缩比综合打包，GU）——**0 个新论文标签条目计入覆盖率**（subsec:bdry-tower-zeck-gut-part1 已注册，本轮为深化）——GU 162（34.5%，不变），全局 \leanverified 1607→1610（+3），总标注 1624→1627（+3），body 覆盖 1506（14.3%，不变），proof commit 4cd47c45fb95175f38cb8852a437044e767b5bde
 **Phase R395: Conclusion resonance window lcm/CRT witness（完整）**：Conclusion/ResonanceWindow.lean（82行）——resonance_window_lcm_8_18_eq_72（thm:conclusion-resonance-window-q13-q15-mod6-period72，lcm(8,18)=72 证书，Conclusion）; resonance_window_five_types_pairwise_distinct（cor:conclusion-resonance-window-five-terminal-types，五类共振窗口两两不同，Conclusion）; resonance_window_eight_dvd_72（thm:conclusion-resonance-window-q13-q15-mod6-period72，8∣72，Conclusion）; resonance_window_eighteen_dvd_72（thm:conclusion-resonance-window-q13-q15-mod6-period72，18∣72，Conclusion）; resonance_window_lcm_universal（thm:conclusion-resonance-window-q13-q15-mod6-period72，公倍数普遍性，Conclusion）; paper_resonance_window_mod6_period_witness（thm:conclusion-resonance-window-q13-q15-mod6-period72，模 6 周期 72 综合论文接口，Conclusion）——**2 个新论文标签条目计入覆盖率**（thm:conclusion-resonance-window-q13-q15-mod6-period72 首次标注 +1, cor:conclusion-resonance-window-five-terminal-types 首次标注 +1）——Conclusion 251→253（9.8%→9.9%），全局 \leanverified 1601→1607（+6），总标注 1618→1624（+6），body 覆盖 1504→1506（14.3%），proof commit 7194f6f03e71e33e3edaf53cb2287b66a4002c6d
 **Phase R394: POM fiber-index CGF general q + package（完整）**：EA/Wedderburn.lean（214行）——paper_pom_fiber_index_cgf_q3_specialized（prop:pom-fiber-index-cgf，纤维指数 CGF 在 q=3 的论文接口特化，POM）; paper_pom_fiber_index_cgf_q4_specialized（prop:pom-fiber-index-cgf，纤维指数 CGF 在 q=4 的论文接口特化，POM）; paper_pom_fiber_index_cgf_general（prop:pom-fiber-index-cgf，纤维指数 CGF 一般 q 的论文接口，POM）; paper_pom_fiber_index_cgf_package（prop:pom-fiber-index-cgf，纤维指数 CGF 综合论文接口打包，POM）——**0 个新论文标签条目计入覆盖率**（prop:pom-fiber-index-cgf 已注册 R375，本轮为深化）——POM 295（17.3%，不变），全局 \leanverified 1597→1601（+4），总标注 1614→1618（+4），body 覆盖 1504（14.3%，不变），proof commit 0db562f21f2071cad969a19b5403a6791491b355
 **Phase R393: CircleDimension residual circle-dim laws（完整）**：CircleDimension/ResidualCircleDim.lean（新文件，43行）——residualCdimAt（def:cdim-residual-circle-dimension，残差圆维函数定义，Circle Dimension）; residualCdimAt_mono_of_card_le（prop:cdim-residual-circle-dimension-laws，残差圆维单调性，Circle Dimension）; residual_register_pow_add（prop:cdim-residual-circle-dimension-laws，残差寄存器幂次加法律，Circle Dimension）; residual_log_product_eq_sum_of_powers（prop:cdim-residual-circle-dimension-laws，残差对数乘积分解，Circle Dimension）; paper_cdim_residual_circle_dim_laws（prop:cdim-residual-circle-dimension-laws，残差圆维算律综合论文接口，Circle Dimension）——**2 个新论文标签条目计入覆盖率**（def:cdim-residual-circle-dimension 首次标注 +1, prop:cdim-residual-circle-dimension-laws 首次标注 +1）——Circle Dimension 143→145（36.4%→36.9%），全局 \leanverified 1592→1597（+5），总标注 1609→1614（+5），body 覆盖 1502→1504（14.3%），proof commit 7082d4a0d7ab8f333f3c982e82f30e5b9e51d054
