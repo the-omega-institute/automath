@@ -193,4 +193,27 @@ theorem paper_pisano_period_107_113 :
     (Nat.fib 76 % 113 = 0 ∧ Nat.fib 77 % 113 = 1) :=
   ⟨pisano_period_107, pisano_period_113⟩
 
+/-- Pisano period π(67) = 136.
+    cor:field-phase-fib-prime -/
+theorem pisano_period_67 :
+    Nat.fib 136 % 67 = 0 ∧ Nat.fib 137 % 67 = 1 := by native_decide
+
+/-- Pisano period π(73) = 148.
+    cor:field-phase-fib-prime -/
+theorem pisano_period_73 :
+    Nat.fib 148 % 73 = 0 ∧ Nat.fib 149 % 73 = 1 := by native_decide
+
+/-- Pisano period π(79) = 78.
+    cor:field-phase-fib-prime -/
+theorem pisano_period_79 :
+    Nat.fib 78 % 79 = 0 ∧ Nat.fib 79 % 79 = 1 := by native_decide
+
+/-- Paper Pisano period witness package for primes 67, 73, 79.
+    cor:field-phase-fib-prime -/
+theorem paper_pisano_period_67_73_79_extended :
+    (Nat.fib 136 % 67 = 0 ∧ Nat.fib 137 % 67 = 1) ∧
+    (Nat.fib 148 % 73 = 0 ∧ Nat.fib 149 % 73 = 1) ∧
+    (Nat.fib 78 % 79 = 0 ∧ Nat.fib 79 % 79 = 1) :=
+  ⟨pisano_period_67, pisano_period_73, pisano_period_79⟩
+
 end Omega.GU
