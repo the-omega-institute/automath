@@ -116,4 +116,32 @@ theorem paper_fibonacci_field_phase_m41 :
     (∀ x : X 41, x ≠ X.stableZero → ∃ y : X 41, X.stableMul x y = X.stableOne) :=
   ⟨fib_fortythree_prime, X.stableMul_inv_of_prime fib_fortythree_prime⟩
 
+/-- Composite: F_15 is not prime.
+    cor:field-phase-fib-prime -/
+theorem fib_fifteen_not_prime : ¬ Nat.Prime (Nat.fib 15) := by native_decide
+
+/-- Composite: F_19 is not prime.
+    cor:field-phase-fib-prime -/
+theorem fib_nineteen_not_prime : ¬ Nat.Prime (Nat.fib 19) := by native_decide
+
+/-- Composite: F_21 is not prime.
+    cor:field-phase-fib-prime -/
+theorem fib_twentyone_not_prime : ¬ Nat.Prime (Nat.fib 21) := by native_decide
+
+/-- Complete Fibonacci prime/composite classification for indices 4..29.
+    cor:field-phase-fib-prime -/
+theorem paper_fibonacci_prime_composite_classification_1_to_29 :
+    Nat.Prime (Nat.fib 4) ∧ Nat.Prime (Nat.fib 5) ∧
+    Nat.Prime (Nat.fib 7) ∧ Nat.Prime (Nat.fib 11) ∧
+    Nat.Prime (Nat.fib 13) ∧ Nat.Prime (Nat.fib 17) ∧
+    Nat.Prime (Nat.fib 23) ∧ Nat.Prime (Nat.fib 29) ∧
+    ¬ Nat.Prime (Nat.fib 9) ∧
+    ¬ Nat.Prime (Nat.fib 15) ∧
+    ¬ Nat.Prime (Nat.fib 19) ∧
+    ¬ Nat.Prime (Nat.fib 21) :=
+  ⟨fib_four_prime, fib_five_prime, fib_seven_prime, fib_eleven_prime,
+   fib_thirteen_prime, fib_seventeen_prime, fib_twentythree_prime, fib_twentynine_prime,
+   fib_nine_not_prime,
+   fib_fifteen_not_prime, fib_nineteen_not_prime, fib_twentyone_not_prime⟩
+
 end Omega
