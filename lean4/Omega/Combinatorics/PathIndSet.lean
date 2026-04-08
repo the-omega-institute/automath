@@ -512,4 +512,42 @@ theorem paper_pathIndCount_small_values_package :
    pathIndCount_three, pathIndCount_four, pathIndCount_five,
    path_independent_set_count 5⟩
 
+/-- pathIndCount 6 = 21 = F_8.
+    infra:path-ind-set-count -/
+theorem pathIndCount_six : pathIndCount 6 = 21 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- pathIndCount 7 = 34 = F_9.
+    infra:path-ind-set-count -/
+theorem pathIndCount_seven : pathIndCount 7 = 34 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- pathIndCount 8 = 55 = F_10.
+    infra:path-ind-set-count -/
+theorem pathIndCount_eight : pathIndCount 8 = 55 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- pathIndCount 9 = 89 = F_11.
+    infra:path-ind-set-count -/
+theorem pathIndCount_nine : pathIndCount 9 = 89 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- pathIndCount 10 = 144 = F_12.
+    infra:path-ind-set-count -/
+theorem pathIndCount_ten : pathIndCount 10 = 144 := by
+  rw [path_independent_set_count]; native_decide
+
+/-- Paper package: pathIndCount values n = 6..10 plus the F_12 identity.
+    prop:folding-stable-syntax-fibonacci-count -/
+theorem paper_pathIndCount_6_to_10_package :
+    pathIndCount 6 = 21 ∧
+    pathIndCount 7 = 34 ∧
+    pathIndCount 8 = 55 ∧
+    pathIndCount 9 = 89 ∧
+    pathIndCount 10 = 144 ∧
+    pathIndCount 10 = Nat.fib 12 :=
+  ⟨pathIndCount_six, pathIndCount_seven, pathIndCount_eight,
+   pathIndCount_nine, pathIndCount_ten,
+   path_independent_set_count 10⟩
+
 end Omega
