@@ -155,4 +155,36 @@ theorem projectorVal_at_same_signs {α β : Int} (hα : α ^ 2 = 1) (hβ : β ^ 
     rcases mul_eq_zero.mp this with h | h <;> omega
   rcases hα1 with rfl | rfl <;> rcases hβ1 with rfl | rfl <;> norm_num [projectorVal]
 
+/-- Projector p_{++}(1,1) = 1 (match corner).
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem projectorVal_at_one_one_one_one :
+    projectorVal 1 1 1 1 = 1 := by norm_num [projectorVal]
+
+/-- Projector p_{++}(−1,1) = 0 (mismatch).
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem projectorVal_at_mismatch_zero :
+    projectorVal 1 1 (-1) 1 = 0 := by norm_num [projectorVal]
+
+/-- Projector p_{−−}(−1,1) = 1 (match corner).
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem projectorVal_at_neg_one_one_neg_one_one :
+    projectorVal (-1) 1 (-1) 1 = 1 := by norm_num [projectorVal]
+
+/-- Projector p_{−−}(−1,−1) = 1 (match corner).
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem projectorVal_at_all_neg_one :
+    projectorVal (-1) (-1) (-1) (-1) = 1 := by norm_num [projectorVal]
+
+/-- Paper projectorVal corner table (4 match + 3 mismatch).
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem paper_projectorVal_corner_table :
+    projectorVal 1 1 1 1 = 1 ∧
+    projectorVal 1 (-1) 1 (-1) = 1 ∧
+    projectorVal (-1) 1 (-1) 1 = 1 ∧
+    projectorVal (-1) (-1) (-1) (-1) = 1 ∧
+    projectorVal 1 1 (-1) 1 = 0 ∧
+    projectorVal 1 1 1 (-1) = 0 ∧
+    projectorVal 1 1 (-1) (-1) = 0 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> norm_num [projectorVal]
+
 end Omega.EA
