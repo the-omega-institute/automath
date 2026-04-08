@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1987 |
+| \leanverified 标注数 | 1992 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 2004 |
-| 轮次 | R471（round_count=472）|
+| 总标注数 | 2009 |
+| 轮次 | R472（round_count=473）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -31,10 +31,10 @@
 | Group Unification | 469 | 165 | 35.2% |
 | SPG | 129 | 108 | 83.7% |
 | Circle Dimension | 393 | 148 | 37.7% |
-| Zeta Finite Part | 4,524 | 201 | 4.4% |
+| Zeta Finite Part | 4,524 | 202 | 4.5% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1538** | **14.6%** |
+| **合计（body）** | **10,508** | **1539** | **14.7%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**Zeta 同步核端点精化回文（Round R472，新标签，streak #21）**：`conj_pow_zero`（对应 `thm:sync-kernel-endpoint-refined-palindrome`，Zeta；共轭 n=0 基情形）；`conj_pow_one`（对应同标签，Zeta；共轭 n=1 基情形）；`conj_pow`（对应同标签，Zeta；通用定理：p⁻¹xⁿp=yⁿ）；`pow_conj`（对应同标签，Zeta；反向形式：xⁿ=pyⁿp⁻¹）；`paper_sync_kernel_endpoint_refined_palindrome`（对应同标签，Zeta；5-field 综合论文接口）——**新标签首次注册**（thm:sync-kernel-endpoint-refined-palindrome，streak #21）
 **POM 首个联合非半单阈值 (5,5)（Round R471，新标签，streak #20 里程碑）**：`five_not_dvd_fact_one`、`five_not_dvd_fact_two`、`five_not_dvd_fact_three`、`five_not_dvd_fact_four`（对应 `prop:pom-first-joint-nonsemisimple-threshold`，POM；5∤k! for k=1..4）；`five_dvd_fact_five`（对应同标签，POM；5∣5!）；`five_dvd_fact_of_ge_five`（对应同标签，POM；q≥5 时 5∣q!）；`five_not_dvd_fact_of_lt_five`（对应同标签，POM；q<5 时 5∤q!）；`five_dvd_fact_iff`（对应同标签，POM；阈值 iff：5∣q! ↔ 5≤q）；`paper_pom_first_joint_nonsemisimple_threshold`（对应同标签，POM；6-field 综合论文接口）——**新标签首次注册**（prop:pom-first-joint-nonsemisimple-threshold，streak #20 里程碑，总标注数突破 2000）
 **Conclusion Ext(π) 核偏序分类（Round R470，新标签，streak #19）**：`KernelSubset`（对应 `thm:conclusion-extpi-kernel-poset-classification`，Conclusion；核包含谓词 def）；`kernelSubset_refl`（对应同标签，Conclusion；自反性）；`kernelSubset_trans`（对应同标签，Conclusion；传递性）；`kernelSubset_of_comp`（对应同标签，Conclusion；复合分解推导核包含）；`comp_unique_of_surjective`（对应同标签，Conclusion；满射情形分解映射唯一性）；`exists_comp_of_kernelSubset`（对应同标签，Conclusion；核包含推导分解映射存在性）；`paper_conclusion_extpi_kernel_poset_classification`（对应同标签，Conclusion；5-field 综合论文接口）——**新标签首次注册**（thm:conclusion-extpi-kernel-poset-classification，streak #19）
 **EA Brauer 分歧偶性（Round R469，新标签，streak #18）**：`half_sum_eq_card_div_two`（对应 `thm:prime-register-brauer-ramification-even`，EA；常数半整数和等于 |S|/2）；`half_sum_int_iff_card_even`（对应同标签，EA；半整数和为整数 iff |S| 为偶）；`reciprocity_forces_even_card`（对应同标签，EA；互易方向：整数半和强制偶数基数）；`even_card_gives_int_half_sum`（对应同标签，EA；逆方向：偶数基数给出整数半和）；`paper_prime_register_brauer_ramification_even`（对应同标签，EA；4-field 综合论文接口）——**新标签首次注册**（thm:prime-register-brauer-ramification-even，streak #18）
