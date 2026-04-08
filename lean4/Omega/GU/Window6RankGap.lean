@@ -1,4 +1,5 @@
 import Omega.Folding.BinFold
+import Omega.Folding.FiberArithmeticProperties
 import Omega.Conclusion.Window6Collision
 import Mathlib.Tactic
 
@@ -119,5 +120,43 @@ theorem paper_window_compression_ratio_6_to_10_package :
   · exact X.card_X_eight
   · exact X.card_X_nine
   · exact X.card_X_ten
+
+/-- Window-11 compression ratio: 2^11 / |X_11| = 2048 / 233 = 8 rem 184.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_window11_compression_ratio :
+    2 ^ 11 = 2048 ∧ Fintype.card (X 11) = 233 ∧
+    Fintype.card (X 11) = Nat.fib 13 ∧
+    2048 / 233 = 8 ∧ 2048 % 233 = 184 ∧ 8 * 233 < 2048 := by
+  refine ⟨by norm_num, X.card_X_eleven, ?_, by omega, by omega, by omega⟩
+  rw [X.card_X_eleven]; native_decide
+
+/-- Window-12 compression ratio: 2^12 / |X_12| = 4096 / 377 = 10 rem 326.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_window12_compression_ratio :
+    2 ^ 12 = 4096 ∧ Fintype.card (X 12) = 377 ∧
+    Fintype.card (X 12) = Nat.fib 14 ∧
+    4096 / 377 = 10 ∧ 4096 % 377 = 326 ∧ 10 * 377 < 4096 := by
+  refine ⟨by norm_num, X.card_X_twelve, ?_, by omega, by omega, by omega⟩
+  rw [X.card_X_twelve]; native_decide
+
+/-- Complete compression ratio package for windows 6 through 12.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_window_compression_ratio_6_to_12_package :
+    (2 ^ 6 = 64 ∧ Fintype.card (X 6) = 21 ∧ 64 / 21 = 3 ∧ 64 % 21 = 1) ∧
+    (2 ^ 7 = 128 ∧ Fintype.card (X 7) = 34 ∧ 128 / 34 = 3 ∧ 128 % 34 = 26) ∧
+    (2 ^ 8 = 256 ∧ Fintype.card (X 8) = 55 ∧ 256 / 55 = 4 ∧ 256 % 55 = 36) ∧
+    (2 ^ 9 = 512 ∧ Fintype.card (X 9) = 89 ∧ 512 / 89 = 5 ∧ 512 % 89 = 67) ∧
+    (2 ^ 10 = 1024 ∧ Fintype.card (X 10) = 144 ∧ 1024 / 144 = 7 ∧ 1024 % 144 = 16) ∧
+    (2 ^ 11 = 2048 ∧ Fintype.card (X 11) = 233 ∧ 2048 / 233 = 8 ∧ 2048 % 233 = 184) ∧
+    (2 ^ 12 = 4096 ∧ Fintype.card (X 12) = 377 ∧ 4096 / 377 = 10 ∧ 4096 % 377 = 326) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    refine ⟨by norm_num, ?_, by omega, by omega⟩
+  · exact X.card_X_six
+  · exact X.card_X_seven
+  · exact X.card_X_eight
+  · exact X.card_X_nine
+  · exact X.card_X_ten
+  · exact X.card_X_eleven
+  · exact X.card_X_twelve
 
 end Omega.GU
