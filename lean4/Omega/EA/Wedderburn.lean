@@ -239,4 +239,27 @@ theorem paper_wedderburn_dim_m13_m14_m15_package :
   · rw [wedderburn_dim_m13, wedderburn_dim_m14]; omega
   · rw [wedderburn_dim_m14, wedderburn_dim_m15]; omega
 
+/-- Wedderburn dimension S_2(16) = 1941056.
+    prop:fold-groupoid-wedderburn -/
+theorem wedderburn_dim_m16 : momentSum 2 16 = 1941056 := momentSum_two_sixteen_rec
+
+/-- Wedderburn dimension S_2(17) = 4816128.
+    prop:fold-groupoid-wedderburn -/
+theorem wedderburn_dim_m17 : momentSum 2 17 = 4816128 := momentSum_two_seventeen_rec
+
+/-- Paper package: Wedderburn dimensions m = 16, 17 with growth witnesses.
+    prop:fold-groupoid-wedderburn -/
+theorem paper_wedderburn_dim_m16_m17_growth_package :
+    momentSum 2 16 = 1941056 ∧
+    momentSum 2 17 = 4816128 ∧
+    momentSum 2 15 < momentSum 2 16 ∧
+    momentSum 2 16 < momentSum 2 17 ∧
+    2 * momentSum 2 15 < momentSum 2 16 ∧
+    2 * momentSum 2 16 < momentSum 2 17 := by
+  refine ⟨wedderburn_dim_m16, wedderburn_dim_m17, ?_, ?_, ?_, ?_⟩
+  · rw [wedderburn_dim_m15, wedderburn_dim_m16]; omega
+  · rw [wedderburn_dim_m16, wedderburn_dim_m17]; omega
+  · rw [wedderburn_dim_m15, wedderburn_dim_m16]; omega
+  · rw [wedderburn_dim_m16, wedderburn_dim_m17]; omega
+
 end Omega.EA
