@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1669 |
+| \leanverified 标注数 | 1673 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1686 |
-| 轮次 | R410（round_count=411）|
+| 总标注数 | 1690 |
+| 轮次 | R411（round_count=412）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**GU Pisano period witnesses p=67/73/79（Round R411）**：`pisano_period_67`（对应 `cor:field-phase-fib-prime`，GU/FibPrimePisano；p=67 的 Pisano 周期见证）；`pisano_period_73`（对应 `cor:field-phase-fib-prime`，GU/FibPrimePisano；p=73 的 Pisano 周期见证）；`pisano_period_79`（对应 `cor:field-phase-fib-prime`，GU/FibPrimePisano；p=79 的 Pisano 周期见证）；`paper_pisano_period_67_73_79_extended`（对应 `cor:field-phase-fib-prime`，GU/FibPrimePisano；p=67/73/79 Pisano 扩展综合论文接口）
 **Conclusion saturation defect triple-add + positivity iff（Round R410）**：`saturationDefect_triple_add`（对应 `thm:conclusion-product-fold-saturation-defect-additivity`，Conclusion；饱和缺陷三重加法律）；`saturationDefect_nonneg_sum`（对应 `thm:conclusion-product-fold-saturation-defect-additivity`，Conclusion；饱和缺陷非负和）；`saturationDefect_pos_iff_exists_pos`（对应 `thm:conclusion-product-fold-saturation-defect-additivity`，Conclusion；饱和缺陷正性当且仅当某分量正）；`paper_saturation_defect_extended_package`（对应 `thm:conclusion-product-fold-saturation-defect-additivity`，Conclusion；饱和缺陷扩展综合论文接口）
 **Discussion ChebyAdams S=4 值表 + S=6 完整块（Round R409）**：`chebyAdams_at_four_values`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(4) 值表）；`chebyAdams_at_six_recurrence`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(6) 递推关系）；`chebyAdams_at_six_base`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(6) 基值）；`chebyAdams_at_six_values`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(6) 值表）；`paper_chebyAdams_at_four_six_package`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；S=4/S=6 综合论文接口）
 **EA χ-刚性扩展：sign 平方/逆/共轭幂（Round R408）**：`sign_square_eq_one`（对应 `thm:fold-groupoid-chi-rigidity`，Emergent Arithmetic；sign 平方恒为 1）；`sign_inv_eq_sign`（对应 `thm:fold-groupoid-chi-rigidity`，Emergent Arithmetic；sign 逆等于 sign）；`sign_conj_pow_eq_sign_pow`（对应 `thm:fold-groupoid-chi-rigidity`，Emergent Arithmetic；共轭幂的 sign 恒等式）；`paper_chi_rigidity_extended_package`（对应 `thm:fold-groupoid-chi-rigidity`，Emergent Arithmetic；χ-刚性扩展综合论文接口）
@@ -357,6 +358,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R411: GU Pisano period witnesses p=67/73/79（完整）**：GU/FibPrimePisano.lean——pisano_period_67（cor:field-phase-fib-prime，p=67 Pisano 周期见证，GU）; pisano_period_73（cor:field-phase-fib-prime，p=73 Pisano 周期见证，GU）; pisano_period_79（cor:field-phase-fib-prime，p=79 Pisano 周期见证，GU）; paper_pisano_period_67_73_79_extended（cor:field-phase-fib-prime，p=67/73/79 Pisano 扩展综合论文接口，GU）——**0 个新论文标签条目计入覆盖率**（cor:field-phase-fib-prime 已注册，本轮为深化）——GU 162（34.5%，不变），全局 \leanverified 1669→1673（+4），总标注 1686→1690（+4），body 覆盖 1510（14.4%，不变），proof commit 2e9c036
 **Phase R410: Conclusion saturation defect triple-add + positivity iff（完整）**：Conclusion/SaturationDefect.lean——saturationDefect_triple_add（thm:conclusion-product-fold-saturation-defect-additivity，饱和缺陷三重加法律，Conclusion）; saturationDefect_nonneg_sum（thm:conclusion-product-fold-saturation-defect-additivity，饱和缺陷非负和，Conclusion）; saturationDefect_pos_iff_exists_pos（thm:conclusion-product-fold-saturation-defect-additivity，饱和缺陷正性 iff，Conclusion）; paper_saturation_defect_extended_package（thm:conclusion-product-fold-saturation-defect-additivity，饱和缺陷扩展综合论文接口，Conclusion）——**1 个新论文标签条目计入覆盖率**（thm:conclusion-product-fold-saturation-defect-additivity 首次标注 +1）——Conclusion 254→255（10.0%），全局 \leanverified 1665→1669（+4），总标注 1682→1686（+4），body 覆盖 1509→1510（14.4%），proof commit a583009
 **Phase R409: Discussion ChebyAdams S=4 values + S=6 full block（完整）**：Discussion/ChebyshevAdams.lean——chebyAdams_at_four_values（thm:discussion-chebyshev-witt-equivariance，C_n(4) 值表，Discussion）; chebyAdams_at_six_recurrence（thm:discussion-chebyshev-witt-equivariance，C_n(6) 递推，Discussion）; chebyAdams_at_six_base（thm:discussion-chebyshev-witt-equivariance，C_n(6) 基值，Discussion）; chebyAdams_at_six_values（thm:discussion-chebyshev-witt-equivariance，C_n(6) 值表，Discussion）; paper_chebyAdams_at_four_six_package（thm:discussion-chebyshev-witt-equivariance，S=4/S=6 综合论文接口，Discussion）——**0 个新论文标签条目计入覆盖率**（thm:discussion-chebyshev-witt-equivariance 已注册，本轮为深化）——Discussion 64（95.5%，不变），全局 \leanverified 1660→1665（+5），总标注 1677→1682（+5），body 覆盖 1509（14.4%，不变），proof commit f7e960a
 **Phase R408: EA chi-rigidity extended package（完整）**：EA/ChiRigidityShadow.lean——sign_square_eq_one（thm:fold-groupoid-chi-rigidity，sign 平方恒为 1，EA）; sign_inv_eq_sign（thm:fold-groupoid-chi-rigidity，sign 逆等于 sign，EA）; sign_conj_pow_eq_sign_pow（thm:fold-groupoid-chi-rigidity，共轭幂 sign 恒等式，EA）; paper_chi_rigidity_extended_package（thm:fold-groupoid-chi-rigidity，χ-刚性扩展综合论文接口，EA）——**0 个新论文标签条目计入覆盖率**（thm:fold-groupoid-chi-rigidity 已注册 R181，本轮为深化）——EA 164（88.6%，不变），全局 \leanverified 1656→1660（+4），总标注 1673→1677（+4），body 覆盖 1509（14.4%，不变），proof commit a05e207
