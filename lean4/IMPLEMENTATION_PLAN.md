@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1703 |
+| \leanverified 标注数 | 1706 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1720 |
-| 轮次 | R418（round_count=419）|
+| 总标注数 | 1723 |
+| 轮次 | R419（round_count=420）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**GU freeInvolutionCount r=10/11 + 增长包（Round R419）**：`freeInvolutionCount_ten`（对应 `thm:fiberwise-free-involution-matching-entropy`，GU；freeInvolutionCount(10)=654729075）；`freeInvolutionCount_eleven`（对应 `thm:fiberwise-free-involution-matching-entropy`，GU；freeInvolutionCount(11)=13749310575）；`paper_freeInvolutionCount_r10_r11_extended`（对应 `thm:fiberwise-free-involution-matching-entropy`，GU；r=10/11 自由对合计数增长综合论文接口）
 **EA Wedderburn dim m=13/14/15 增长包（Round R418）**：`wedderburn_dim_m13`（对应 `prop:fold-groupoid-wedderburn`，EA；momentSum(2,13)=127072）；`wedderburn_dim_m14`（对应 `prop:fold-groupoid-wedderburn`，EA；momentSum(2,14)=315296）；`wedderburn_dim_m15`（对应 `prop:fold-groupoid-wedderburn`，EA；momentSum(2,15)=782304）；`paper_wedderburn_dim_m13_m14_m15_package`（对应 `prop:fold-groupoid-wedderburn`，EA；m=13/14/15 维度与增长率综合论文接口）
 **Discussion ChebyAdams S=7 完整块（Round R417）**：`chebyAdams_at_seven_base`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(7) 基值）；`chebyAdams_at_seven_recurrence`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(7) 递推）；`chebyAdams_at_seven_values`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(7) 值表）；`paper_chebyAdams_at_seven_package`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；S=7 综合论文接口）
 **SPG κ 扩展值与 kappaInv 往返（Round R416）**：`kappa_three_fourths`（对应 `prop:spg-relative-error-threshold-sharpness`，SPG；κ(3/4)=7）；`kappa_eighth`（对应 `prop:spg-relative-error-threshold-sharpness`，SPG；κ(1/8)=9/7）；`kappaInv_seven`（对应 `prop:spg-relative-error-threshold-sharpness`，SPG；κ⁻¹(7)=3/4）；`kappaInv_nine`（对应 `prop:spg-relative-error-threshold-sharpness`，SPG；κ⁻¹(9)=4/5）；`paper_kappa_extended_values_package`（对应 `prop:spg-relative-error-threshold-sharpness`，SPG；κ 扩展值综合论文接口）
@@ -365,6 +366,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R419: GU freeInvolutionCount r=10/11 growth package（完整）**：GU/FreeInvolutionCount.lean——freeInvolutionCount_ten（thm:fiberwise-free-involution-matching-entropy，freeInvolutionCount(10)=654729075，GU）; freeInvolutionCount_eleven（thm:fiberwise-free-involution-matching-entropy，freeInvolutionCount(11)=13749310575，GU）; paper_freeInvolutionCount_r10_r11_extended（thm:fiberwise-free-involution-matching-entropy，r=10/11 增长综合论文接口，GU）——**0 个新论文标签条目计入覆盖率**（thm:fiberwise-free-involution-matching-entropy 已注册，本轮为深化）——GU 162（34.5%，不变），全局 \leanverified 1703→1706（+3），总标注 1720→1723（+3），body 覆盖 1510（14.4%，不变），proof commit f03f5c7
 **Phase R418: EA Wedderburn dim m=13/14/15 growth package（完整）**：EA/Wedderburn.lean——wedderburn_dim_m13（prop:fold-groupoid-wedderburn，momentSum(2,13)=127072，EA）; wedderburn_dim_m14（prop:fold-groupoid-wedderburn，momentSum(2,14)=315296，EA）; wedderburn_dim_m15（prop:fold-groupoid-wedderburn，momentSum(2,15)=782304，EA）; paper_wedderburn_dim_m13_m14_m15_package（prop:fold-groupoid-wedderburn，m=13/14/15 维度增长综合论文接口，EA）——**0 个新论文标签条目计入覆盖率**（prop:fold-groupoid-wedderburn 已注册，本轮为深化）——EA 164（88.6%，不变），全局 \leanverified 1699→1703（+4），总标注 1716→1720（+4），body 覆盖 1510（14.4%，不变），proof commit 8f1d791
 **Phase R417: Discussion ChebyAdams S=7 full block（完整）**：Discussion/ChebyshevAdams.lean——chebyAdams_at_seven_base（thm:discussion-chebyshev-witt-equivariance，C_n(7) 基值，Discussion）; chebyAdams_at_seven_recurrence（thm:discussion-chebyshev-witt-equivariance，C_n(7) 递推，Discussion）; chebyAdams_at_seven_values（thm:discussion-chebyshev-witt-equivariance，C_n(7) 值表，Discussion）; paper_chebyAdams_at_seven_package（thm:discussion-chebyshev-witt-equivariance，S=7 综合论文接口，Discussion）——**0 个新论文标签条目计入覆盖率**（thm:discussion-chebyshev-witt-equivariance 已注册，本轮为深化）——Discussion 64（95.5%，不变），全局 \leanverified 1695→1699（+4），总标注 1712→1716（+4），body 覆盖 1510（14.4%，不变），proof commit 351bd4b
 **Phase R416: SPG kappa extended values + kappaInv round-trip package（完整）**：SPG/ErrorThreshold.lean——kappa_three_fourths（prop:spg-relative-error-threshold-sharpness，κ(3/4)=7，SPG）; kappa_eighth（prop:spg-relative-error-threshold-sharpness，κ(1/8)=9/7，SPG）; kappaInv_seven（prop:spg-relative-error-threshold-sharpness，κ⁻¹(7)=3/4，SPG）; kappaInv_nine（prop:spg-relative-error-threshold-sharpness，κ⁻¹(9)=4/5，SPG）; paper_kappa_extended_values_package（prop:spg-relative-error-threshold-sharpness，κ 扩展值综合论文接口，SPG）——**0 个新论文标签条目计入覆盖率**（prop:spg-relative-error-threshold-sharpness 已注册 R225，本轮为深化）——SPG 106（82.2%，不变），全局 \leanverified 1690→1695（+5），总标注 1707→1712（+5），body 覆盖 1510（14.4%，不变），proof commit e9c8481
