@@ -34,4 +34,43 @@ theorem paper_ramanujan_numerical_audit :
       exact Real.sqrt_lt_sqrt (by positivity) Real.one_lt_goldenRatio,
    ramanujan_half_dimension_collapse⟩
 
+/-- Square of √φ equals φ.
+    cor:discussion-ramanujan-half-dimension-collapse (sqrt step) -/
+theorem sqrt_goldenRatio_sq :
+    Real.sqrt Real.goldenRatio ^ 2 = Real.goldenRatio :=
+  Real.sq_sqrt (le_of_lt Real.goldenRatio_pos)
+
+/-- (2/√φ)² = 4/φ.
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem two_div_sqrt_goldenRatio_sq_eq_four_div_goldenRatio :
+    (2 / Real.sqrt Real.goldenRatio) ^ 2 = 4 / Real.goldenRatio := by
+  rw [div_pow, sqrt_goldenRatio_sq]
+  norm_num
+
+/-- log(2/√φ) = log 2 - (1/2) log φ.
+    cor:discussion-ramanujan-half-dimension-collapse (log step) -/
+theorem log_two_div_sqrt_goldenRatio_decomp :
+    Real.log (2 / Real.sqrt Real.goldenRatio) =
+      Real.log 2 - (1 / 2) * Real.log Real.goldenRatio := by
+  have hφ_pos := Real.goldenRatio_pos
+  have hsqrt_pos := Real.sqrt_pos_of_pos hφ_pos
+  have hsqrt_ne : Real.sqrt Real.goldenRatio ≠ 0 := ne_of_gt hsqrt_pos
+  rw [Real.log_div (by norm_num : (2 : ℝ) ≠ 0) hsqrt_ne,
+      Real.log_sqrt (le_of_lt hφ_pos)]
+  ring
+
+/-- Extended Ramanujan collapse package with algebraic substeps.
+    cor:discussion-ramanujan-half-dimension-collapse -/
+theorem paper_ramanujan_algebraic_substeps :
+    Real.sqrt Real.goldenRatio ^ 2 = Real.goldenRatio ∧
+    (2 / Real.sqrt Real.goldenRatio) ^ 2 = 4 / Real.goldenRatio ∧
+    Real.log (2 / Real.sqrt Real.goldenRatio) =
+      Real.log 2 - (1 / 2) * Real.log Real.goldenRatio ∧
+    Real.log (2 / Real.sqrt Real.goldenRatio) / Real.log Real.goldenRatio
+      = Real.log 2 / Real.log Real.goldenRatio - 1 / 2 :=
+  ⟨sqrt_goldenRatio_sq,
+   two_div_sqrt_goldenRatio_sq_eq_four_div_goldenRatio,
+   log_two_div_sqrt_goldenRatio_decomp,
+   ramanujan_half_dimension_collapse⟩
+
 end Omega.Conclusion
