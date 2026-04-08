@@ -113,6 +113,7 @@ import Omega.Conclusion.Window6VisibleHiddenSeparation
 import Omega.Conclusion.ImageLayerMinimalInverseMemory
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
+import Omega.Core.AnomGapAmplification
 import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
