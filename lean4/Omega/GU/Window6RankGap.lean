@@ -81,4 +81,43 @@ theorem paper_autp_center_twofiber_count_six :
     cBinFiberHist 6 2 = 8 := by
   rw [cBinFiberHist_6_2]
 
+/-- Window-9 compression ratio: 2^9 / |X_9| = 512 / 89 = 5 rem 67.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_window9_compression_ratio :
+    2 ^ 9 = 512 ∧ Fintype.card (X 9) = 89 ∧
+    Fintype.card (X 9) = Nat.fib 11 ∧
+    512 / 89 = 5 ∧ 512 % 89 = 67 ∧ 5 * 89 < 512 := by
+  refine ⟨by norm_num, X.card_X_nine, ?_, by omega, by omega, by omega⟩
+  rw [X.card_X_nine]; native_decide
+
+/-- Window-10 compression ratio: 2^10 / |X_10| = 1024 / 144 = 7 rem 16.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_window10_compression_ratio :
+    2 ^ 10 = 1024 ∧ Fintype.card (X 10) = 144 ∧
+    Fintype.card (X 10) = Nat.fib 12 ∧
+    1024 / 144 = 7 ∧ 1024 % 144 = 16 ∧ 7 * 144 < 1024 := by
+  refine ⟨by norm_num, X.card_X_ten, ?_, by omega, by omega, by omega⟩
+  rw [X.card_X_ten]; native_decide
+
+/-- Complete compression ratio package for windows 6 through 10.
+    subsec:bdry-tower-zeck-gut-part1 -/
+theorem paper_window_compression_ratio_6_to_10_package :
+    (2 ^ 6 = 64 ∧ Fintype.card (X 6) = 21 ∧
+     64 / 21 = 3 ∧ 64 % 21 = 1) ∧
+    (2 ^ 7 = 128 ∧ Fintype.card (X 7) = 34 ∧
+     128 / 34 = 3 ∧ 128 % 34 = 26) ∧
+    (2 ^ 8 = 256 ∧ Fintype.card (X 8) = 55 ∧
+     256 / 55 = 4 ∧ 256 % 55 = 36) ∧
+    (2 ^ 9 = 512 ∧ Fintype.card (X 9) = 89 ∧
+     512 / 89 = 5 ∧ 512 % 89 = 67) ∧
+    (2 ^ 10 = 1024 ∧ Fintype.card (X 10) = 144 ∧
+     1024 / 144 = 7 ∧ 1024 % 144 = 16) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;>
+    refine ⟨by norm_num, ?_, by omega, by omega⟩
+  · exact X.card_X_six
+  · exact X.card_X_seven
+  · exact X.card_X_eight
+  · exact X.card_X_nine
+  · exact X.card_X_ten
+
 end Omega.GU
