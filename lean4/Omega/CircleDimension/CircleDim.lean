@@ -1155,4 +1155,39 @@ theorem paper_cdim_zero_dimensional_ledger_no_circle_replacement
     circleDim d t ≤ circleDim k 0 → d ≤ k := by
   simp [circleDim]
 
+/-- phaseSpectrumCount(2,2,4) = 32.
+    def:cdim-phase-spectrum -/
+theorem phaseSpectrumCount_at_2_2_4 :
+    phaseSpectrumCount 2 2 4 = 32 := by
+  unfold phaseSpectrumCount; decide
+
+/-- phaseSpectrumCount(3,6,2) = 16.
+    def:cdim-phase-spectrum -/
+theorem phaseSpectrumCount_at_3_6_2 :
+    phaseSpectrumCount 3 6 2 = 16 := by
+  unfold phaseSpectrumCount; decide
+
+/-- phaseSpectrumCount(1,12,8) = 32.
+    def:cdim-phase-spectrum -/
+theorem phaseSpectrumCount_at_1_12_8 :
+    phaseSpectrumCount 1 12 8 = 32 := by
+  unfold phaseSpectrumCount; decide
+
+/-- phaseSpectrumCount(2,15,10) = 500.
+    def:cdim-phase-spectrum -/
+theorem phaseSpectrumCount_at_2_15_10 :
+    phaseSpectrumCount 2 15 10 = 500 := by
+  unfold phaseSpectrumCount; decide
+
+/-- Paper small-value table for phaseSpectrumCount.
+    def:cdim-phase-spectrum -/
+theorem paper_phaseSpectrumCount_small_values_table :
+    phaseSpectrumCount 2 2 4 = 32 ∧
+    phaseSpectrumCount 3 6 2 = 16 ∧
+    phaseSpectrumCount 1 12 8 = 32 ∧
+    phaseSpectrumCount 2 15 10 = 500 ∧
+    phaseSpectrumCount 0 5 7 = 1 ∧
+    phaseSpectrumCount 5 0 3 = 729 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩ <;> (unfold phaseSpectrumCount; decide)
+
 end Omega.CircleDimension
