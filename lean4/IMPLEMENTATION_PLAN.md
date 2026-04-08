@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2037 |
+| \leanverified 标注数 | 2043 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 2054 |
-| 轮次 | R479（round_count=480）|
+| 总标注数 | 2060 |
+| 轮次 | R480（round_count=481）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,7 +26,7 @@
 |---|---|---|---|
 | POM | 1,707 | 302 | 17.7% |
 | Emergent Arithmetic | 185 | 169 | 91.4% |
-| Folding | 337 | 126 | 37.4% |
+| Folding | 337 | 127 | 37.7% |
 | Conclusion | 2,550 | 261 | 10.2% |
 | Group Unification | 469 | 166 | 35.4% |
 | SPG | 129 | 108 | 83.7% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 203 | 4.5% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1546** | **14.7%** |
+| **合计（body）** | **10,508** | **1547** | **14.7%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**Folding Φ_m 滑动块码移位等变性（Round R480，新标签，streak #29）**：`shiftSeq`（对应 `prop:Phi_m-equivariant`，Folding；双无穷序列移位算子 def）；`slideBlockCode`（对应同标签，Folding；窗口宽度 m 滑动块码 def）；`slideBlockCode_apply`（对应同标签，Folding；逐点公式）；`slideBlockCode_shift_equivariant`（对应同标签，Folding；主定理：滑动块码与移位算子交换）；`slideBlockCode_shift_apply`（对应同标签，Folding；逐点移位应用）；`paper_phi_m_sliding_block_code`（对应 `prop:Phi_m-equivariant` / `prop:Phi_m-radius`，Folding；综合论文接口）——**新标签首次注册**（prop:Phi_m-equivariant，streak #29；prop:Phi_m-radius 同轮 paper wrapper 附注，覆盖率计+1）
 **Zeta 无权四次理想 p-序估值律（Round R479，新标签，streak #28）**：`four_times_eq_two_times_two`（对应 `prop:xi-unweighted-rigidity-quartic-ideal-pordering`，Zeta；4e=2(2e) 指标律）；`pow_four_e_eq_pow_e_pow_four`（对应同标签，Zeta；x^{4e}=(x^e)^4）；`pow_four_e_eq_pow_sq_sq`（对应同标签，Zeta；x^{4e}=((x^e)^2)^2）；`valuation_H_sq_eq_K`（对应同标签，Zeta；估值水平恒等式 2(2vJ)=4vJ）；`valuation_K_eq_four_vJ`（对应同标签，Zeta；估值传递）；`paper_xi_unweighted_rigidity_quartic_ideal_pordering`（对应同标签，Zeta；5-field 综合论文接口）——**新标签首次注册**（prop:xi-unweighted-rigidity-quartic-ideal-pordering，streak #28）
 **POM S4 里程表 Pontryagin Joukowsky（Round R478，新标签，streak #27）**：`joukowsky`（对应 `cor:pom-s4-odometer-pontryagin-joukowsky`，POM；Joukowsky 映射 J(z)=z+z⁻¹ noncomputable def）；`joukowsky_one`（对应同标签，POM；J(1)=2）；`joukowsky_neg_one`（对应同标签，POM；J(-1)=-2）；`joukowsky_I`（对应同标签，POM；J(i)=0）；`joukowsky_exp_I_mul`（对应同标签，POM；Euler 恒等式 J(e^{iθ})=2cosθ）；`joukowsky_unit_circle_abs_le`（对应同标签，POM；单位圆上 ‖J‖≤2）；`joukowsky_symmetric`（对应同标签，POM；J(z)=J(z⁻¹) 对称性）；`paper_pom_s4_odometer_pontryagin_joukowsky`（对应同标签，POM；6-field 综合论文接口）——**新标签首次注册**（cor:pom-s4-odometer-pontryagin-joukowsky，streak #27，实际 8 声明）
 **Conclusion fold/逆码 Hilbert 可识别几何恒等式（Round R477，新标签，streak #26）**：`matrix_geom_sum_mul`（对应 `thm:conclusion-fold-inversecode-hilbert-recognizable`，Conclusion；矩阵几何和左形式 (1-A)·Σ=1-A^k）；`matrix_mul_geom_sum`（对应同标签，Conclusion；矩阵几何和右形式 Σ·(1-A)=1-A^k）；`weighted_matrix_sum_unit`（对应同标签，Conclusion；单位权重矩阵和幂等式）；`paper_conclusion_fold_inversecode_hilbert_recognizable`（对应同标签，Conclusion；3-field 综合论文接口）——**新标签首次注册**（thm:conclusion-fold-inversecode-hilbert-recognizable，streak #26）
