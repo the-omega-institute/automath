@@ -67,4 +67,57 @@ theorem paper_spg_cut_flux_volume_bias_skeleton :
     unfold flipAt
     simp [Function.update, hj]
 
+/-! ### R449 payback: flipAt bijection lemmas towards `cutFlux = volumeBias`.
+
+    The full main identity `Φ_i(S) = b_i(S)` is delivered in R450 after this
+    bijection infrastructure. Here we register the two cardinality bijections
+    induced by `flipAt`, which are the combinatorial heart of the argument. -/
+
+/-- flipAt is injective (it is its own inverse).
+    thm:spg-coarsegrained-cut-flux-volume-bias -/
+theorem flipAt_injective {n : ℕ} (i : Fin n) :
+    Function.Injective (flipAt (n := n) i) := by
+  intro ω₁ ω₂ h
+  have := congrArg (flipAt i) h
+  rwa [flipAt_flipAt, flipAt_flipAt] at this
+
+/-- flipAt sends the `ω_i = false` layer bijectively onto the `ω_i = true` layer,
+    as a cardinality equality on arbitrary sub-filters respected by flipAt.
+    thm:spg-coarsegrained-cut-flux-volume-bias -/
+theorem flipAt_card_filter_eq {n : ℕ} (i : Fin n)
+    (S : Finset (Fin n → Bool)) :
+    (Finset.univ.filter
+      (fun ω : Fin n → Bool => ω i = false ∧ ω ∈ S ∧ flipAt i ω ∈ S)).card =
+    (Finset.univ.filter
+      (fun ω : Fin n → Bool => ω i = true ∧ ω ∈ S ∧ flipAt i ω ∈ S)).card := by
+  refine Finset.card_bij (fun ω _ => flipAt i ω) ?_ ?_ ?_
+  · intro ω hω
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hω ⊢
+    obtain ⟨hω_i, hωS, hflipS⟩ := hω
+    refine ⟨?_, hflipS, ?_⟩
+    · unfold flipAt; simp [hω_i]
+    · rw [flipAt_flipAt]; exact hωS
+  · intro ω₁ h₁ ω₂ h₂ heq
+    exact flipAt_injective i heq
+  · intro ω' hω'
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hω'
+    obtain ⟨hω'_i, hω'S, hflipS⟩ := hω'
+    refine ⟨flipAt i ω', ?_, flipAt_flipAt i ω'⟩
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    refine ⟨?_, hflipS, ?_⟩
+    · unfold flipAt; simp [hω'_i]
+    · rw [flipAt_flipAt]; exact hω'S
+
+/-- Paper-facing bijection lemma (R449 payback partial): the number of
+    `ω_i = false` elements of `S` whose flip also lies in `S` equals the
+    number of `ω_i = true` elements of `S` whose flip also lies in `S`.
+    thm:spg-coarsegrained-cut-flux-volume-bias -/
+theorem paper_cut_flux_flip_pairing_card {n : ℕ} (i : Fin n)
+    (S : Finset (Fin n → Bool)) :
+    (Finset.univ.filter
+      (fun ω : Fin n → Bool => ω i = false ∧ ω ∈ S ∧ flipAt i ω ∈ S)).card =
+    (Finset.univ.filter
+      (fun ω : Fin n → Bool => ω i = true ∧ ω ∈ S ∧ flipAt i ω ∈ S)).card :=
+  flipAt_card_filter_eq i S
+
 end Omega.SPG
