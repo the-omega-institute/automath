@@ -121,6 +121,7 @@ import Omega.Conclusion.Window6VisibleHiddenSeparation
 import Omega.Conclusion.ImageLayerMinimalInverseMemory
 import Omega.Conclusion.ExtPiKernelPoset
 import Omega.Conclusion.FoldHilbertRecognizable
+import Omega.Conclusion.SecondOrderCdimSignature
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
