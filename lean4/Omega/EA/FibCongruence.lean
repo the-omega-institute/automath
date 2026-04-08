@@ -32,4 +32,56 @@ theorem valE_recursion (k : Nat) :
 theorem paper_val_e_index_eq_fib_succ (k : Nat) :
     valE k = Nat.fib (k + 1) := rfl
 
+/-- Small-value table valE 0..7 = F_1..F_8.
+    thm:monoid-quotient-is-N (sanity table) -/
+theorem valE_zero_one_two_table :
+    valE 0 = 1 ∧ valE 1 = 1 ∧ valE 2 = 2 ∧ valE 3 = 3 ∧
+    valE 4 = 5 ∧ valE 5 = 8 ∧ valE 6 = 13 ∧ valE 7 = 21 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> decide
+
+/-- valE is positive for k ≥ 1.
+    thm:monoid-quotient-is-N (positivity) -/
+theorem valE_pos_of_ge_one {k : Nat} (hk : 1 ≤ k) : 1 ≤ valE k := by
+  unfold valE
+  exact Nat.fib_pos.mpr (by omega : 0 < k + 1)
+
+/-- valE is monotone.
+    thm:monoid-quotient-is-N (monotonicity) -/
+theorem valE_mono {j k : Nat} (h : j ≤ k) : valE j ≤ valE k := by
+  unfold valE
+  exact Nat.fib_mono (by omega : j + 1 ≤ k + 1)
+
+/-- valE is strictly monotone from k ≥ 2.
+    thm:monoid-quotient-is-N (strict monotonicity from k ≥ 2) -/
+theorem valE_strict_mono_of_ge_two {k : Nat} (hk : 2 ≤ k) :
+    valE k < valE (k + 1) := by
+  obtain ⟨j, rfl⟩ : ∃ j, k = j + 2 := ⟨k - 2, by omega⟩
+  -- valE (j+3) = valE (j+2) + valE (j+1), and valE (j+1) ≥ 1
+  have hrec : valE (j + 2 + 1) = valE (j + 2) + valE (j + 1) := by
+    have := valE_recursion (j + 1)
+    simpa [show j + 1 + 2 = j + 2 + 1 from by omega,
+           show j + 1 + 1 = j + 2 from by omega] using this
+  have hpos : 1 ≤ valE (j + 1) :=
+    valE_pos_of_ge_one (by omega : 1 ≤ j + 1)
+  omega
+
+/-- R400 milestone package: complete valE specification.
+    thm:monoid-quotient-is-N -/
+theorem paper_valE_milestone_package :
+    valE 1 = 1 ∧
+    (∀ k, valE (k + 2) = valE (k + 1) + valE k) ∧
+    (valE 0 = 1 ∧ valE 1 = 1 ∧ valE 2 = 2 ∧ valE 3 = 3 ∧
+     valE 4 = 5 ∧ valE 5 = 8 ∧ valE 6 = 13 ∧ valE 7 = 21) ∧
+    (∀ k : Nat, 1 ≤ k → 1 ≤ valE k) ∧
+    (∀ j k : Nat, j ≤ k → valE j ≤ valE k) ∧
+    (∀ k : Nat, 2 ≤ k → valE k < valE (k + 1)) ∧
+    (∀ k : Nat, valE k = Nat.fib (k + 1)) :=
+  ⟨valE_one,
+   valE_recursion,
+   valE_zero_one_two_table,
+   @valE_pos_of_ge_one,
+   @valE_mono,
+   @valE_strict_mono_of_ge_two,
+   paper_val_e_index_eq_fib_succ⟩
+
 end Omega.EA
