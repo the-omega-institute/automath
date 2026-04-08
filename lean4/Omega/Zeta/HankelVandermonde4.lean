@@ -78,4 +78,43 @@ theorem hankel4_vandermonde_square
     show (2 : Fin 4).val = 2 from rfl, show (3 : Fin 4).val = 3 from rfl]
   ring
 
+/-- Hankel4 determinant vanishes when a1 = a2.
+    cor:xi-hankel-vs-prony-square-gap (κ=4, a1=a2) -/
+theorem hankel4_eq_zero_of_collision_12
+    (ω1 ω2 ω3 ω4 a a3 a4 : ℤ) :
+    (hankel4 ω1 ω2 ω3 ω4 a a a3 a4).det = 0 := by
+  rw [hankel4_vandermonde_square]
+  ring
+
+/-- Hankel4 determinant vanishes when a3 = a4.
+    cor:xi-hankel-vs-prony-square-gap (κ=4, a3=a4) -/
+theorem hankel4_eq_zero_of_collision_34
+    (ω1 ω2 ω3 ω4 a1 a2 a : ℤ) :
+    (hankel4 ω1 ω2 ω3 ω4 a1 a2 a a).det = 0 := by
+  rw [hankel4_vandermonde_square]
+  ring
+
+/-- Hankel4 determinant vanishes when any two atoms collide.
+    cor:xi-hankel-vs-prony-square-gap (κ=4 general collision) -/
+theorem hankel4_eq_zero_of_any_collision
+    (ω1 ω2 ω3 ω4 a1 a2 a3 a4 : ℤ)
+    (hcoll : a1 = a2 ∨ a1 = a3 ∨ a1 = a4 ∨ a2 = a3 ∨ a2 = a4 ∨ a3 = a4) :
+    (hankel4 ω1 ω2 ω3 ω4 a1 a2 a3 a4).det = 0 := by
+  rw [hankel4_vandermonde_square]
+  rcases hcoll with rfl | rfl | rfl | rfl | rfl | rfl <;> ring
+
+/-- Paper package: κ=4 collision degeneracy.
+    cor:xi-hankel-vs-prony-square-gap (κ=4 package) -/
+theorem paper_hankel4_collision_degeneracy :
+    (∀ ω1 ω2 ω3 ω4 a a3 a4 : ℤ,
+      (hankel4 ω1 ω2 ω3 ω4 a a a3 a4).det = 0) ∧
+    (∀ ω1 ω2 ω3 ω4 a1 a2 a : ℤ,
+      (hankel4 ω1 ω2 ω3 ω4 a1 a2 a a).det = 0) ∧
+    (∀ ω1 ω2 ω3 ω4 a1 a2 a3 a4 : ℤ,
+      a1 = a2 ∨ a1 = a3 ∨ a1 = a4 ∨ a2 = a3 ∨ a2 = a4 ∨ a3 = a4 →
+      (hankel4 ω1 ω2 ω3 ω4 a1 a2 a3 a4).det = 0) :=
+  ⟨hankel4_eq_zero_of_collision_12,
+   hankel4_eq_zero_of_collision_34,
+   hankel4_eq_zero_of_any_collision⟩
+
 end Omega.Zeta
