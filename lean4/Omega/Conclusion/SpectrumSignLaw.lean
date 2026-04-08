@@ -53,4 +53,61 @@ theorem paper_spectrum_sign_law_package :
     (-1 : ℤ) ^ (7 * 8 / 2) = 1 := by
   norm_num
 
+/-- Spectrum sign = +1 when q ≡ 0 (mod 4).
+    cor:conclusion-softcore-spectrum-product-sign-law -/
+theorem neg_one_pow_triangular_q_mod4_zero (q : ℕ) (h : q % 4 = 0) :
+    (-1 : ℤ) ^ (q * (q + 1) / 2) = 1 := by
+  rw [neg_one_pow_triangular_mod4]
+  simp [h]
+
+/-- Spectrum sign = +1 when q ≡ 3 (mod 4).
+    cor:conclusion-softcore-spectrum-product-sign-law -/
+theorem neg_one_pow_triangular_q_mod4_three (q : ℕ) (h : q % 4 = 3) :
+    (-1 : ℤ) ^ (q * (q + 1) / 2) = 1 := by
+  rw [neg_one_pow_triangular_mod4]
+  simp [h]
+
+/-- Spectrum sign = -1 when q ≡ 1 (mod 4).
+    cor:conclusion-softcore-spectrum-product-sign-law -/
+theorem neg_one_pow_triangular_q_mod4_one (q : ℕ) (h : q % 4 = 1) :
+    (-1 : ℤ) ^ (q * (q + 1) / 2) = -1 := by
+  rw [neg_one_pow_triangular_mod4]
+  simp [h]
+
+/-- Spectrum sign = -1 when q ≡ 2 (mod 4).
+    cor:conclusion-softcore-spectrum-product-sign-law -/
+theorem neg_one_pow_triangular_q_mod4_two (q : ℕ) (h : q % 4 = 2) :
+    (-1 : ℤ) ^ (q * (q + 1) / 2) = -1 := by
+  rw [neg_one_pow_triangular_mod4]
+  simp [h]
+
+/-- Extended spectrum sign table q = 0..11.
+    cor:conclusion-softcore-spectrum-product-sign-law -/
+theorem paper_spectrum_sign_law_extended_table :
+    (-1 : ℤ) ^ (0 * 1 / 2) = 1 ∧
+    (-1 : ℤ) ^ (1 * 2 / 2) = -1 ∧
+    (-1 : ℤ) ^ (2 * 3 / 2) = -1 ∧
+    (-1 : ℤ) ^ (3 * 4 / 2) = 1 ∧
+    (-1 : ℤ) ^ (4 * 5 / 2) = 1 ∧
+    (-1 : ℤ) ^ (5 * 6 / 2) = -1 ∧
+    (-1 : ℤ) ^ (6 * 7 / 2) = -1 ∧
+    (-1 : ℤ) ^ (7 * 8 / 2) = 1 ∧
+    (-1 : ℤ) ^ (8 * 9 / 2) = 1 ∧
+    (-1 : ℤ) ^ (9 * 10 / 2) = -1 ∧
+    (-1 : ℤ) ^ (10 * 11 / 2) = -1 ∧
+    (-1 : ℤ) ^ (11 * 12 / 2) = 1 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> norm_num
+
+/-- Complete mod-4 case package for the spectrum sign law.
+    cor:conclusion-softcore-spectrum-product-sign-law -/
+theorem paper_spectrum_sign_mod4_case_package :
+    (∀ q : ℕ, q % 4 = 0 → (-1 : ℤ) ^ (q * (q + 1) / 2) = 1) ∧
+    (∀ q : ℕ, q % 4 = 1 → (-1 : ℤ) ^ (q * (q + 1) / 2) = -1) ∧
+    (∀ q : ℕ, q % 4 = 2 → (-1 : ℤ) ^ (q * (q + 1) / 2) = -1) ∧
+    (∀ q : ℕ, q % 4 = 3 → (-1 : ℤ) ^ (q * (q + 1) / 2) = 1) :=
+  ⟨neg_one_pow_triangular_q_mod4_zero,
+   neg_one_pow_triangular_q_mod4_one,
+   neg_one_pow_triangular_q_mod4_two,
+   neg_one_pow_triangular_q_mod4_three⟩
+
 end Omega.Conclusion
