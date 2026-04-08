@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1952 |
+| \leanverified 标注数 | 1955 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1969 |
-| 轮次 | R465（round_count=466）|
+| 总标注数 | 1972 |
+| 轮次 | R466（round_count=467）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,7 +26,7 @@
 |---|---|---|---|
 | POM | 1,707 | 300 | 17.6% |
 | Emergent Arithmetic | 185 | 167 | 90.3% |
-| Folding | 337 | 124 | 36.8% |
+| Folding | 337 | 125 | 37.1% |
 | Conclusion | 2,550 | 259 | 10.2% |
 | Group Unification | 469 | 164 | 35.0% |
 | SPG | 129 | 108 | 83.7% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 201 | 4.4% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1532** | **14.6%** |
+| **合计（body）** | **10,508** | **1533** | **14.6%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**Folding 谱四次式 Aut_Q 平凡（Round R466，新标签，streak #15）**：`rat_pow_seven_eq_one_iff`（对应 `thm:fold-gauge-anomaly-spectral-quartic-autQ-trivial`，Folding；ℚ 上 a^7=1 iff a=1）；`rat_fixed_case_forces_identity`（对应同标签，Folding；固定情形代数子系统唯一解为 (1,1)）；`paper_fold_gauge_anomaly_spectral_quartic_autQ_trivial`（对应同标签，Folding；3-field 综合论文接口）——**新标签首次注册**（thm:fold-gauge-anomaly-spectral-quartic-autQ-trivial，streak #15）
 **POM 异常间隙 Archimedean 放大完备性（Round R465，新标签，streak #14）**：`anomAmp`（对应 `cor:pom-anom-gap-amplification-completeness`，POM；异常放大 q×a def）；`anomAmp_zero`（对应同标签，POM；零迭代为零）；`anomAmp_succ`（对应同标签，POM；递推 anomAmp(q+1)=anomAmp(q)+a）；`anomAmp_reaches_threshold`（对应同标签，POM；Archimedean 核心：非零间隙经有限次放大超过任意阈值）；`anomAmp_zero_of_bounded`（对应同标签，POM；逆命题：有界则间隙为零）；`paper_pom_anom_gap_amplification_completeness`（对应同标签，POM；4-field 综合论文接口）——**新标签首次注册**（cor:pom-anom-gap-amplification-completeness，streak #14，POM 达到 300 个标注里程碑）
 **Zeta 黄金半径 δ 可见性等价（Round R464，新标签，streak #13）**：`visibilityQ`（对应 `prop:xi-golden-radius-delta-visibility-equivalence`，Zeta；可见性函数 q(ρ)=(1-ρ)/(1+ρ) noncomputable def）；`visibilityRhoStar`（对应同标签，Zeta；逆半径 ρ*(δ)=q(δ) noncomputable def）；`visibilityQ_rhoStar`（对应同标签，Zeta；自逆性 q(ρ*(δ))=δ）；`visibilityQ_strictAntitono`（对应同标签，Zeta；严格单调递减）；`visibilityRhoStar_mem_open_interval`（对应同标签，Zeta；ρ*(δ)∈(−1,1)）；`visibility_equivalence`（对应同标签，Zeta；主 iff：ρ>ρ*(δ) ↔ q(ρ)<δ）；`paper_xi_golden_radius_delta_visibility`（对应同标签，Zeta；3-field 综合论文接口）——**新标签首次注册**（prop:xi-golden-radius-delta-visibility-equivalence，streak #13）
 **Conclusion 图像层最小逆内存夹逼（Round R463，新标签，streak #12）**：`dSync`（对应 `thm:conclusion-image-layer-minimal-inverse-memory`，Conclusion；同步深度 def）；`dSync_eq`（对应同标签，Conclusion；dSync m = m−1 等式）；`dSync_strict_mono`（对应同标签，Conclusion；m≥3 时严格单调性）；`minMemory_eq_of_bounded`（对应同标签，Conclusion；夹逼确定最小内存）；`minMemory_eq_dSync`（对应同标签，Conclusion；最小内存等于 dSync m）；`dSync_exceeds_insufficient_memory`（对应同标签，Conclusion；内存不足时 dSync 超出下界矛盾）；`paper_image_layer_minimal_inverse_memory`（对应同标签，Conclusion；5-field 综合论文接口）——**新标签首次注册**（thm:conclusion-image-layer-minimal-inverse-memory，streak #12）
