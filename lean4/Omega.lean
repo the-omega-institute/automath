@@ -125,6 +125,7 @@ import Omega.Conclusion.SecondOrderCdimSignature
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
+import Omega.Core.MaxFiberSplitGcdTrichotomy
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap
