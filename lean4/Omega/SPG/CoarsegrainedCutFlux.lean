@@ -120,4 +120,128 @@ theorem paper_cut_flux_flip_pairing_card {n : ℕ} (i : Fin n)
       (fun ω : Fin n → Bool => ω i = true ∧ ω ∈ S ∧ flipAt i ω ∈ S)).card :=
   flipAt_card_filter_eq i S
 
+/-! ### R450 payback: main identity `cutFlux = volumeBias`. -/
+
+/-- The "ω_i=false, ω∉S, flip∈S" layer is in bijection with the
+    "ω_i=true, ω∈S, flip∉S" layer via flipAt. -/
+theorem flipAt_bop_card_eq {n : ℕ} (i : Fin n)
+    (S : Finset (Fin n → Bool)) :
+    (Finset.univ.filter
+      (fun ω : Fin n → Bool => ω i = false ∧ ω ∉ S ∧ flipAt i ω ∈ S)).card =
+    (Finset.univ.filter
+      (fun ω : Fin n → Bool => ω i = true ∧ ω ∈ S ∧ flipAt i ω ∉ S)).card := by
+  refine Finset.card_bij (fun ω _ => flipAt i ω) ?_ ?_ ?_
+  · intro ω hω
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hω ⊢
+    obtain ⟨hω_i, hωS, hflipS⟩ := hω
+    refine ⟨?_, hflipS, ?_⟩
+    · unfold flipAt; simp [hω_i]
+    · rw [flipAt_flipAt]; exact hωS
+  · intro ω₁ _ ω₂ _ heq
+    exact flipAt_injective i heq
+  · intro ω' hω'
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hω'
+    obtain ⟨hω'_i, hω'S, hflipS⟩ := hω'
+    refine ⟨flipAt i ω', ?_, flipAt_flipAt i ω'⟩
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    refine ⟨?_, ?_, ?_⟩
+    · unfold flipAt; simp [hω'_i]
+    · exact hflipS
+    · rw [flipAt_flipAt]; exact hω'S
+
+/-- Decomposition of the `ω_i = false` layer of S into A ∪ C (disjoint). -/
+theorem s_false_layer_card_split {n : ℕ} (i : Fin n)
+    (S : Finset (Fin n → Bool)) :
+    (S.filter (fun ω => ω i = false)).card =
+      (Finset.univ.filter
+        (fun ω : Fin n → Bool => ω i = false ∧ ω ∈ S ∧ flipAt i ω ∉ S)).card +
+      (Finset.univ.filter
+        (fun ω : Fin n → Bool => ω i = false ∧ ω ∈ S ∧ flipAt i ω ∈ S)).card := by
+  -- Both the LHS and the A+C split are expressible as filter cardinalities
+  -- on Finset.univ with conjunction predicates; we rewrite via filter_filter
+  -- then card_union_of_disjoint over the "flip ∉ S" / "flip ∈ S" dichotomy.
+  rw [show (S.filter (fun ω => ω i = false)) =
+        Finset.univ.filter (fun ω : Fin n → Bool => ω i = false ∧ ω ∈ S) from by
+      ext ω; simp [Finset.mem_filter, and_comm]]
+  rw [← Finset.card_filter_add_card_filter_not
+        (s := Finset.univ.filter (fun ω : Fin n → Bool => ω i = false ∧ ω ∈ S))
+        (p := fun ω => flipAt i ω ∉ S)]
+  congr 1
+  · congr 1
+    ext ω
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    tauto
+  · congr 1
+    ext ω
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, not_not]
+    tauto
+
+/-- Decomposition of the `ω_i = true` layer of S into B' ∪ C' (disjoint). -/
+theorem s_true_layer_card_split {n : ℕ} (i : Fin n)
+    (S : Finset (Fin n → Bool)) :
+    (S.filter (fun ω => ω i = true)).card =
+      (Finset.univ.filter
+        (fun ω : Fin n → Bool => ω i = true ∧ ω ∈ S ∧ flipAt i ω ∉ S)).card +
+      (Finset.univ.filter
+        (fun ω : Fin n → Bool => ω i = true ∧ ω ∈ S ∧ flipAt i ω ∈ S)).card := by
+  rw [show (S.filter (fun ω => ω i = true)) =
+        Finset.univ.filter (fun ω : Fin n → Bool => ω i = true ∧ ω ∈ S) from by
+      ext ω; simp [Finset.mem_filter, and_comm]]
+  rw [← Finset.card_filter_add_card_filter_not
+        (s := Finset.univ.filter (fun ω : Fin n → Bool => ω i = true ∧ ω ∈ S))
+        (p := fun ω => flipAt i ω ∉ S)]
+  congr 1
+  · congr 1
+    ext ω
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    tauto
+  · congr 1
+    ext ω
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, not_not]
+    tauto
+
+/-- volumeBias rewritten as a signed cardinality difference of the two
+    boolean layers of S. -/
+theorem volumeBias_eq_layer_diff {n : ℕ} (i : Fin n)
+    (S : Finset (Fin n → Bool)) :
+    volumeBias i S =
+      ((S.filter (fun ω => ω i = false)).card : ℤ)
+      - ((S.filter (fun ω => ω i = true)).card : ℤ) := by
+  unfold volumeBias
+  rw [← Finset.sum_filter_add_sum_filter_not S (fun ω => ω i = false)]
+  have h1 : ∀ ω ∈ S.filter (fun ω => ω i = false),
+      (if ω i = false then (1 : ℤ) else -1) = 1 := by
+    intro ω hω
+    rw [Finset.mem_filter] at hω
+    simp [hω.2]
+  have h2 : ∀ ω ∈ S.filter (fun ω => ¬ (ω i = false)),
+      (if ω i = false then (1 : ℤ) else -1) = -1 := by
+    intro ω hω
+    rw [Finset.mem_filter] at hω
+    simp [hω.2]
+  rw [Finset.sum_congr rfl h1, Finset.sum_congr rfl h2]
+  have hset : (S.filter (fun ω => ¬ (ω i = false))) =
+              S.filter (fun ω => ω i = true) := by
+    ext ω
+    simp only [Finset.mem_filter, and_congr_right_iff]
+    intro _
+    cases ω i <;> simp
+  rw [hset]
+  simp
+  ring
+
+/-- Main identity: Φ_i(S) = b_i(S).
+    thm:spg-coarsegrained-cut-flux-volume-bias -/
+theorem cutFlux_eq_volumeBias {n : ℕ} (i : Fin n)
+    (S : Finset (Fin n → Bool)) :
+    cutFlux i S = volumeBias i S := by
+  rw [volumeBias_eq_layer_diff]
+  have h_false := s_false_layer_card_split i S
+  have h_true := s_true_layer_card_split i S
+  have h_bop_eq_b' := flipAt_bop_card_eq i S
+  have h_c_eq_c' := flipAt_card_filter_eq i S
+  unfold cutFlux
+  zify at h_false h_true h_bop_eq_b' h_c_eq_c'
+  linarith
+
 end Omega.SPG
