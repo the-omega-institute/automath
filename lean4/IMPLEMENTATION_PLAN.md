@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2076 |
+| \leanverified 标注数 | 2082 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 2093 |
-| 轮次 | R484（round_count=485）|
+| 总标注数 | 2099 |
+| 轮次 | R485（round_count=486）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,7 +24,7 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 302 | 17.7% |
+| POM | 1,707 | 303 | 17.7% |
 | Emergent Arithmetic | 185 | 170 | 91.9% |
 | Folding | 337 | 127 | 37.7% |
 | Conclusion | 2,550 | 262 | 10.3% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 203 | 4.5% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1551** | **14.8%** |
+| **合计（body）** | **10,508** | **1552** | **14.8%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**POM 最大纤维实现者 bsplit gcd 三分性（Round R485，新标签，streak #34）**：`fib_gcd_succ_eq_one`（对应 `cor:pom-max-fiber-achievers-bsplit-gcd-trichotomy`，POM；相邻 Fibonacci 数互素）；`fib_gcd_self`（对应同标签，POM；Fibonacci 自 gcd）；`fib_biased_gcd`（对应同标签，POM；偏置 gcd 引理）；`fib_balanced_sum`（对应同标签，POM；平衡求和）；`D_even_eq_fib`（对应同标签，POM；偶数 D 等于 Fibonacci）；`paper_pom_max_fiber_achievers_bsplit_gcd_trichotomy`（对应同标签，POM；6-field 综合论文接口）——**新标签首次注册**（cor:pom-max-fiber-achievers-bsplit-gcd-trichotomy，streak #34）
 **Conclusion 二阶圆维度签名拼接完备性（Round R484，新标签，streak #33）**：`gamma_subadditive`（对应 `thm:conclusion-second-order-circle-dimension-signature-concatenation-completeness`，Conclusion；γ 次加性）；`gamma_add_comm`（对应同标签，Conclusion；γ 交换律）；`kink_sum`（对应同标签，Conclusion；kink 求和下界）；`kink_sum_small`（对应同标签，Conclusion；kink 小数值引理）；`b_comp_bound`（对应同标签，Conclusion；复合 b 函数界）；`subadditive_of_pointwise`（对应同标签，Conclusion；逐点次加性）；`paper_conclusion_second_order_cdim_signature`（对应同标签，Conclusion；5-field 综合论文接口）——**新标签首次注册**（thm:conclusion-second-order-circle-dimension-signature-concatenation-completeness，streak #33）
 **EA 时间-空间交换图原始迹（Round R483，新标签，streak #32）**：`primitiveTrace`（对应 `prop:time-space-commuting-diagram`，EA；除数求和原始迹 def）；`primitiveTrace_zero`（对应同标签，EA；m=0 时迹为零）；`primitiveTrace_one`（对应同标签，EA；m=1 时迹等于 p 1）；`primitiveTrace_prime`（对应同标签，EA；素数 q 时迹值）；`primitiveTrace_mono`（对应同标签，EA；系数函数单调性）；`primitiveTrace_zero_fn`（对应同标签，EA；零函数时迹为零）；`paper_time_space_commuting_diagram`（对应同标签，EA；5-field 综合论文接口）——**新标签首次注册**（prop:time-space-commuting-diagram，streak #32）
 **GU 交换对合对角线 A₂(±) 迷向性（Round R482，新标签，streak #31）**：`swap`（对应 `prop:a2pm-isotropy-diagonal-su3`，GU；乘积交换 (a,b)→(b,a) def）；`swap_swap`（对应同标签，GU；swap 自逆）；`swap_involutive`（对应同标签，GU；对合性）；`swap_bijective`（对应同标签，GU；双射性）；`swap_fixed_point_iff`（对应同标签，GU；不动点 iff 坐标相等）；`swap_fixed_set_eq_diagonal`（对应同标签，GU；不动点集等于对角线）；`swap_fixed_diagonal`（对应同标签，GU；对角线点为不动点）；`diagonal_injective`（对应同标签，GU；对角嵌入单射性）；`paper_a2pm_isotropy_diagonal_su3`（对应同标签，GU；6-field 综合论文接口）——**新标签首次注册**（prop:a2pm-isotropy-diagonal-su3，streak #31）
