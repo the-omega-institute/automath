@@ -98,4 +98,35 @@ theorem evenLengthCorrection_partial_sum (v n : Nat) (hv : 2 ≤ v) :
       rw [pow_succ]; ring
     nlinarith
 
+/-- E(v, 0) = 2.
+    thm:xi-time-part73c-periodic-evenlength-atomic-correction -/
+@[simp] theorem evenLengthCorrection_zero (v : Nat) :
+    evenLengthCorrection v 0 = 2 := by
+  simp [evenLengthCorrection]
+
+/-- E(v, 2) = 2v.
+    thm:xi-time-part73c-periodic-evenlength-atomic-correction -/
+@[simp] theorem evenLengthCorrection_two (v : Nat) :
+    evenLengthCorrection v 2 = 2 * v := by
+  have := evenLengthCorrection_even v 1
+  simpa using this
+
+/-- Small-value table for E(v, n), n = 0..5.
+    thm:xi-time-part73c-periodic-evenlength-atomic-correction -/
+theorem paper_zeta_evenLength_small_values_table (v : Nat) :
+    evenLengthCorrection v 0 = 2 ∧
+    evenLengthCorrection v 1 = 0 ∧
+    evenLengthCorrection v 2 = 2 * v ∧
+    evenLengthCorrection v 3 = 0 ∧
+    evenLengthCorrection v 4 = 2 * v ^ 2 ∧
+    evenLengthCorrection v 5 = 0 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact evenLengthCorrection_zero v
+  · exact evenLengthCorrection_odd v 1 (by decide)
+  · exact evenLengthCorrection_two v
+  · exact evenLengthCorrection_odd v 3 (by decide)
+  · have := evenLengthCorrection_even v 2
+    simpa using this
+  · exact evenLengthCorrection_odd v 5 (by decide)
+
 end Omega.Zeta
