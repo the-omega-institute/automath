@@ -117,4 +117,44 @@ theorem paper_central_idempotents_complete_system {a b : ℚ}
     epp_mul_epn ha hb, epp_mul_enp ha hb, epp_mul_enn ha hb,
     epn_mul_enp ha hb, epn_mul_enn ha hb, enp_mul_enn ha hb⟩
 
+/-- Central idempotents at (+1, +1): only epp activates.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem central_idempotents_at_one_one :
+    epp 1 1 = 1 ∧ epn 1 1 = 0 ∧ enp 1 1 = 0 ∧ enn 1 1 = 0 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> norm_num [epp, epn, enp, enn]
+
+/-- Central idempotents at (+1, -1): only epn activates.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem central_idempotents_at_one_neg_one :
+    epp 1 (-1) = 0 ∧ epn 1 (-1) = 1 ∧
+    enp 1 (-1) = 0 ∧ enn 1 (-1) = 0 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> norm_num [epp, epn, enp, enn]
+
+/-- Central idempotents at (-1, +1): only enp activates.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem central_idempotents_at_neg_one_one :
+    epp (-1) 1 = 0 ∧ epn (-1) 1 = 0 ∧
+    enp (-1) 1 = 1 ∧ enn (-1) 1 = 0 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> norm_num [epp, epn, enp, enn]
+
+/-- Central idempotents at (-1, -1): only enn activates.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem central_idempotents_at_neg_one_neg_one :
+    epp (-1) (-1) = 0 ∧ epn (-1) (-1) = 0 ∧
+    enp (-1) (-1) = 0 ∧ enn (-1) (-1) = 1 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> norm_num [epp, epn, enp, enn]
+
+/-- Paper-facing four-corner witness table for the central idempotents.
+    thm:fold-groupoid-z2x2-central-idempotents -/
+theorem paper_central_idempotents_four_corner_witness :
+    (epp 1 1 = 1 ∧ epn 1 1 = 0 ∧ enp 1 1 = 0 ∧ enn 1 1 = 0) ∧
+    (epp 1 (-1) = 0 ∧ epn 1 (-1) = 1 ∧ enp 1 (-1) = 0 ∧ enn 1 (-1) = 0) ∧
+    (epp (-1) 1 = 0 ∧ epn (-1) 1 = 0 ∧ enp (-1) 1 = 1 ∧ enn (-1) 1 = 0) ∧
+    (epp (-1) (-1) = 0 ∧ epn (-1) (-1) = 0 ∧
+     enp (-1) (-1) = 0 ∧ enn (-1) (-1) = 1) :=
+  ⟨central_idempotents_at_one_one,
+   central_idempotents_at_one_neg_one,
+   central_idempotents_at_neg_one_one,
+   central_idempotents_at_neg_one_neg_one⟩
+
 end Omega.EA
