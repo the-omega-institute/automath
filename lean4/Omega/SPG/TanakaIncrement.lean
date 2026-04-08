@@ -79,4 +79,37 @@ theorem paper_spg_tanaka_stokes_complete :
         ∑ k ∈ Finset.range m, tanakaIncrement (seq k) (seq (k + 1)) a) :=
   ⟨tanakaIncrement_nonneg, tanakaLocalTime_nonneg, tanakaLocalTime_mono, tanakaDecomposition⟩
 
+/-- Self-increment of Tanaka is zero: tI(x,x,a) = 0.
+    thm:spg-scan-tanaka-stokes -/
+theorem tanakaIncrement_self (x a : ℚ) :
+    tanakaIncrement x x a = 0 := by
+  unfold tanakaIncrement
+  simp
+
+/-- Tanaka increment at origin: tI(a,y,a) = |y - a|.
+    thm:spg-scan-tanaka-stokes -/
+theorem tanakaIncrement_at_a_eq_x (a y : ℚ) :
+    tanakaIncrement a y a = |y - a| := by
+  unfold tanakaIncrement
+  simp
+
+/-- Constant-sequence Tanaka local time vanishes.
+    thm:spg-scan-tanaka-stokes -/
+theorem tanakaLocalTime_constant_seq (c a : ℚ) (m : ℕ) :
+    ∑ _k ∈ Finset.range m, tanakaIncrement c c a = 0 := by
+  apply Finset.sum_eq_zero
+  intros _k _
+  exact tanakaIncrement_self c a
+
+/-- Paper-facing Tanaka increment degeneracy package.
+    thm:spg-scan-tanaka-stokes -/
+theorem paper_tanakaIncrement_degenerate_package :
+    (∀ x a : ℚ, tanakaIncrement x x a = 0) ∧
+    (∀ a y : ℚ, tanakaIncrement a y a = |y - a|) ∧
+    (∀ c a : ℚ, ∀ m : ℕ,
+      ∑ _k ∈ Finset.range m, tanakaIncrement c c a = 0) :=
+  ⟨tanakaIncrement_self,
+   tanakaIncrement_at_a_eq_x,
+   tanakaLocalTime_constant_seq⟩
+
 end Omega.SPG
