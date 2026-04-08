@@ -99,6 +99,7 @@ import Omega.Conclusion.ResonanceWindow
 import Omega.Conclusion.HypercubePhase
 import Omega.Conclusion.SaturationDefect
 import Omega.Conclusion.SpectrumSignLaw
+import Omega.Conclusion.Q13CrtPeriodCompression
 import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
