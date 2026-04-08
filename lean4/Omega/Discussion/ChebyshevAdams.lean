@@ -742,4 +742,36 @@ theorem paper_chebyAdams_at_seven_eight_extended :
    chebyAdams_at_eight_base,
    chebyAdams_at_eight_values⟩
 
+/-- Base values: C_0(9) = 2, C_1(9) = 9.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_nine_base :
+    chebyAdams 0 9 = 2 ∧ chebyAdams 1 9 = 9 := by simp [chebyAdams]
+
+/-- Recurrence for C_n(9): C_{n+2}(9) = 9·C_{n+1}(9) - C_n(9).
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_nine_recurrence (n : Nat) :
+    chebyAdams (n + 2) 9 = 9 * chebyAdams (n + 1) 9 - chebyAdams n 9 := by
+  rw [chebyAdams_succ_succ]
+
+/-- Concrete values C_2(9)=79, C_3(9)=702, C_4(9)=6239, C_5(9)=55449.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_nine_values :
+    chebyAdams 2 9 = 79 ∧ chebyAdams 3 9 = 702 ∧
+    chebyAdams 4 9 = 6239 ∧ chebyAdams 5 9 = 55449 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> simp [chebyAdams]
+
+/-- Paper package: Chebyshev-Adams at S = 8, 9 (extended).
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem paper_chebyAdams_at_eight_nine_extended :
+    (chebyAdams 0 8 = 2 ∧ chebyAdams 1 8 = 8) ∧
+    (chebyAdams 2 8 = 62 ∧ chebyAdams 3 8 = 488 ∧
+     chebyAdams 4 8 = 3842 ∧ chebyAdams 5 8 = 30248) ∧
+    (chebyAdams 0 9 = 2 ∧ chebyAdams 1 9 = 9) ∧
+    (chebyAdams 2 9 = 79 ∧ chebyAdams 3 9 = 702 ∧
+     chebyAdams 4 9 = 6239 ∧ chebyAdams 5 9 = 55449) :=
+  ⟨chebyAdams_at_eight_base,
+   chebyAdams_at_eight_values,
+   chebyAdams_at_nine_base,
+   chebyAdams_at_nine_values⟩
+
 end Omega.Discussion
