@@ -113,6 +113,7 @@ import Omega.Conclusion.SpectrumSignLaw
 import Omega.Conclusion.Q13CrtPeriodCompression
 import Omega.Conclusion.Window6VisibleHiddenSeparation
 import Omega.Conclusion.ImageLayerMinimalInverseMemory
+import Omega.Conclusion.ExtPiKernelPoset
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
