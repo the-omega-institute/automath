@@ -1190,4 +1190,32 @@ theorem paper_phaseSpectrumCount_small_values_table :
     phaseSpectrumCount 5 0 3 = 729 := by
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩ <;> (unfold phaseSpectrumCount; decide)
 
+/-- circleDim of trivial subtraction is zero.
+    prop:circle-dimension-laws -/
+theorem circleDim_sub_self (a t : Nat) :
+    circleDim (a - a) t = 0 := by
+  simp [circleDim]
+
+/-- circleDim is invariant under subtracting zero.
+    prop:circle-dimension-laws -/
+theorem circleDim_sub_zero (a t : Nat) :
+    circleDim (a - 0) t = circleDim a t := by
+  simp [circleDim]
+
+/-- circleDim distributes over subtraction (torsion-free side).
+    prop:circle-dimension-laws -/
+theorem circleDim_sub_eq_sub_circleDim (a b : Nat) (_h : b ≤ a) :
+    circleDim (a - b) 0 = circleDim a 0 - circleDim b 0 := by
+  simp [circleDim]
+
+/-- Paper package: circleDim subtraction laws.
+    prop:circle-dimension-laws -/
+theorem paper_circleDim_subtraction_package :
+    (∀ a t : Nat, circleDim (a - a) t = 0) ∧
+    (∀ a t : Nat, circleDim (a - 0) t = circleDim a t) ∧
+    (∀ a b : Nat, b ≤ a → circleDim (a - b) 0 = circleDim a 0 - circleDim b 0) :=
+  ⟨circleDim_sub_self,
+   circleDim_sub_zero,
+   circleDim_sub_eq_sub_circleDim⟩
+
 end Omega.CircleDimension
