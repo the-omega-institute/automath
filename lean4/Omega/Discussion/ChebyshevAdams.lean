@@ -643,4 +643,43 @@ theorem paper_chebyAdams_at_one_mod6_lookup (n : Nat) :
   have h : n % 6 < 6 := Nat.mod_lt _ (by norm_num)
   interval_cases (n % 6) <;> simp [chebyAdams]
 
+/-- Concrete values C_2(4)=14, C_3(4)=52, C_4(4)=194.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_four_values :
+    chebyAdams 2 4 = 14 ∧ chebyAdams 3 4 = 52 ∧ chebyAdams 4 4 = 194 := by
+  refine ⟨?_, ?_, ?_⟩ <;> simp [chebyAdams]
+
+/-- Recurrence for C_n(6): C_{n+2}(6) = 6·C_{n+1}(6) - C_n(6).
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_six_recurrence (n : Nat) :
+    chebyAdams (n + 2) 6 = 6 * chebyAdams (n + 1) 6 - chebyAdams n 6 := by
+  rw [chebyAdams_succ_succ]
+
+/-- Base values: C_0(6) = 2, C_1(6) = 6.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_six_base :
+    chebyAdams 0 6 = 2 ∧ chebyAdams 1 6 = 6 := by simp [chebyAdams]
+
+/-- Concrete values C_2(6)=34, C_3(6)=198, C_4(6)=1154, C_5(6)=6726.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_six_values :
+    chebyAdams 2 6 = 34 ∧ chebyAdams 3 6 = 198 ∧
+    chebyAdams 4 6 = 1154 ∧ chebyAdams 5 6 = 6726 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> simp [chebyAdams]
+
+/-- Paper package: Chebyshev-Adams at S = 4, 5, 6.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem paper_chebyAdams_at_four_six_package :
+    (chebyAdams 0 4 = 2 ∧ chebyAdams 1 4 = 4) ∧
+    (chebyAdams 2 4 = 14 ∧ chebyAdams 3 4 = 52 ∧ chebyAdams 4 4 = 194) ∧
+    (chebyAdams 2 5 = 23 ∧ chebyAdams 3 5 = 110 ∧ chebyAdams 4 5 = 527) ∧
+    (chebyAdams 0 6 = 2 ∧ chebyAdams 1 6 = 6) ∧
+    (chebyAdams 2 6 = 34 ∧ chebyAdams 3 6 = 198 ∧
+     chebyAdams 4 6 = 1154 ∧ chebyAdams 5 6 = 6726) :=
+  ⟨chebyAdams_at_four_base,
+   chebyAdams_at_four_values,
+   chebyAdams_at_five_values,
+   chebyAdams_at_six_base,
+   chebyAdams_at_six_values⟩
+
 end Omega.Discussion
