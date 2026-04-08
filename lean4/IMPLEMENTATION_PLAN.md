@@ -6,17 +6,17 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~48,742 |
-| 定理/定义数 | ~4,258 |
-| 论文接口包装 | 707+ |
+| 总行数 | ~48,779 |
+| 定理/定义数 | ~4,263 |
+| 论文接口包装 | 708+ |
 | 文件数 | 115 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1579 |
+| \leanverified 标注数 | 1584 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1596 |
-| 轮次 | R389（round_count=390） |
+| 总标注数 | 1601 |
+| 轮次 | R390（round_count=391） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -29,12 +29,12 @@
 | Folding | 337 | 122 | 36.2% |
 | Conclusion | 2,550 | 251 | 9.8% |
 | Group Unification | 469 | 162 | 34.5% |
-| SPG | 129 | 105 | 81.4% |
+| SPG | 129 | 106 | 82.2% |
 | Circle Dimension | 393 | 143 | 36.4% |
 | Zeta Finite Part | 4,524 | 197 | 4.4% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1501** | **14.3%** |
+| **合计（body）** | **10,508** | **1502** | **14.3%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**SPG clopen univ + triple inter + de Morgan（Round R390）**：`isClopen_univ_spg`（对应 `prop:spg-decidable-clopen`，SPG；全空间 Ω∞ 是 clopen）；`isClopen_fromWordSet_triple_inter`（对应 `def:spg-prefix-event`，SPG；三重交 clopen）；`isClopen_fromWordSet_inter_compl`（对应 `def:spg-prefix-event`，SPG；交集补 clopen，de Morgan）；`isClopen_fromWordSet_union_compl`（对应 `def:spg-prefix-event`，SPG；并集补 clopen，de Morgan）；`paper_spg_prefix_boolean_extended`（对应 `def:spg-prefix-event` / `prop:spg-decidable-clopen`，SPG；前缀布尔扩展综合论文接口）
 **Hankel collision degeneracy kappa=2,3（Round R389）**：`hankel2_eq_zero_of_collision`（对应 `cor:xi-hankel-vs-prony-square-gap`，Zeta；2×2 Hankel 碰撞退化零判别）；`hankel2_ne_zero_iff`（对应 `cor:xi-hankel-vs-prony-square-gap`，Zeta；2×2 Hankel 非零充要条件）；`hankel3_eq_zero_of_any_collision`（对应 `cor:xi-hankel-vs-prony-square-gap`，Zeta；3×3 Hankel 任意碰撞退化零判别）；`paper_hankel_collision_degeneracy`（对应 `cor:xi-hankel-vs-prony-square-gap`，Zeta；Hankel 碰撞退化论文接口打包）
 **ChebyAdams n=11/12 + mod-6 lookup（Round R388）**：`chebyAdams_eleven`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_{11}(S) 显式值）；`chebyAdams_twelve`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_{12}(S) 显式值）；`chebyAdams_at_one_mod6`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(1) 模 6 周期判别）；`paper_chebyAdams_at_one_mod6_lookup`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(1) 模 6 查表论文接口）
 **EA FibCongruence val invariants（Round R387）**：`paper_val_base_e2`（对应 `def:fib-congruence`，Emergent Arithmetic；Fibonacci 同余值基准 F_3=2·F_2 的论文接口）；`paper_val_recursion_e`（对应 `def:fib-congruence`，Emergent Arithmetic；同余值递推结构的论文接口）；`valE` / `valE_one` / `valE_two_eq_two_valE_one` / `valE_recursion`（对应 `def:val-on-D`，Emergent Arithmetic；D 上的值函数定义与基础恒等式）；`paper_val_e_index_eq_fib_succ`（对应 `thm:monoid-quotient-is-N`，Emergent Arithmetic；valE k = F_{k+1} 的论文接口）
@@ -336,6 +337,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R390: SPG clopen univ + triple inter + de Morgan（完整）**：SPG/Clopen.lean——isClopen_univ_spg（prop:spg-decidable-clopen，全空间 Ω∞ 是 clopen，SPG）; isClopen_fromWordSet_triple_inter（def:spg-prefix-event，三重交 fromWordSet clopen，SPG）; isClopen_fromWordSet_inter_compl（def:spg-prefix-event，交集补 clopen，de Morgan，SPG）; isClopen_fromWordSet_union_compl（def:spg-prefix-event，并集补 clopen，de Morgan，SPG）; paper_spg_prefix_boolean_extended（def:spg-prefix-event / prop:spg-decidable-clopen，前缀布尔扩展综合论文接口，SPG）——**1 个新论文标签条目计入覆盖率**（def:spg-prefix-event 首次标注，SPG +1；prop:spg-decidable-clopen 已注册不重计）——SPG 105→106（81.4%→82.2%），全局 \leanverified 1579→1584（+5），总标注 1596→1601（+5），body 覆盖 1501→1502（14.3%），proof commit d8eaa61f7a3012e152861c008d25e09c8fbeaae6
 **Phase R389: Hankel collision degeneracy kappa=2,3（完整）**：Zeta/HankelVandermonde3Recovery.lean——hankel2_eq_zero_of_collision（cor:xi-hankel-vs-prony-square-gap，2×2 Hankel 碰撞退化零判别，Zeta）; hankel2_ne_zero_iff（cor:xi-hankel-vs-prony-square-gap，2×2 Hankel 非零充要条件，Zeta）; hankel3_eq_zero_of_any_collision（cor:xi-hankel-vs-prony-square-gap，3×3 Hankel 任意碰撞退化零判别，Zeta）; paper_hankel_collision_degeneracy（cor:xi-hankel-vs-prony-square-gap，Hankel 碰撞退化论文接口打包，Zeta）——**0 个新论文标签条目计入覆盖率**（cor:xi-hankel-vs-prony-square-gap 已注册，本轮为深化）——Zeta Finite Part 197（4.4%，不变），全局 \leanverified 1575→1579（+4），总标注 1592→1596（+4），body 覆盖 1501（14.3%，不变），proof commit 4890d271077335f34dd65ec17582eb50588d1800
 **Phase R388: ChebyAdams n=11/12 + mod-6 lookup（完整）**：Discussion/ChebyshevAdams.lean（603→646行）——chebyAdams_eleven（thm:discussion-chebyshev-witt-equivariance，C_{11}(S) 显式值，Discussion）; chebyAdams_twelve（thm:discussion-chebyshev-witt-equivariance，C_{12}(S) 显式值，Discussion）; chebyAdams_at_one_mod6（thm:discussion-chebyshev-witt-equivariance，C_n(1) 模 6 周期判别，Discussion）; paper_chebyAdams_at_one_mod6_lookup（thm:discussion-chebyshev-witt-equivariance，C_n(1) 模 6 查表论文接口，Discussion）——**0 个新论文标签条目计入覆盖率**（thm:discussion-chebyshev-witt-equivariance 已注册，本轮为深化）——Discussion 64（88.6%，不变），全局 \leanverified 1571→1575（+4），总标注 1588→1592（+4），body 覆盖 1501（14.3%，不变），proof commit 0b6d20c4a3a88f68e485df76e432ae6a5b693285
 **Phase R387: EA FibCongruence val invariants（完整）**：EA/FibCongruence.lean（新文件，35 行）——paper_val_base_e2（def:fib-congruence，Fibonacci 同余值基准 F_3=2·F_2，Emergent Arithmetic）; paper_val_recursion_e（def:fib-congruence，同余值递推结构，Emergent Arithmetic）; valE（def:val-on-D，D 上值函数定义，Emergent Arithmetic）; valE_one（def:val-on-D，valE 1=1，Emergent Arithmetic）; valE_two_eq_two_valE_one（def:val-on-D，valE 2=2·valE 1，Emergent Arithmetic）; valE_recursion（def:val-on-D，valE 递推恒等式，Emergent Arithmetic）; paper_val_e_index_eq_fib_succ（thm:monoid-quotient-is-N，valE k = Nat.fib (k+1)，Emergent Arithmetic）——**2 个新论文标签条目计入覆盖率**（def:fib-congruence 新标签 +1, def:val-on-D 新标签 +1；thm:monoid-quotient-is-N 已注册不重计）——Emergent Arithmetic 162→164（87.6%→88.6%），全局 \leanverified 1564→1571（+7），总标注 1581→1588（+7），body 覆盖 1499→1501（14.3%），proof commit 25f4c415aed7a14aabcffc0f066be578b053ff1a
