@@ -387,6 +387,35 @@ theorem kappa_inv_eq {ε : ℝ} (hε : 0 < ε) (hε' : ε < 1) :
     (kappa ε)⁻¹ = kappa (-ε) := by
   rw [kappa_neg_eq_inv hε hε', one_div]
 
+/-- κ(3/4) = 7.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_three_fourths : kappa (3 / 4 : ℝ) = 7 := by unfold kappa; norm_num
+
+/-- κ(1/8) = 9/7.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappa_eighth : kappa (1 / 8 : ℝ) = 9 / 7 := by unfold kappa; norm_num
+
+/-- κ⁻¹(7) = 3/4.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappaInv_seven : kappaInv 7 = (3 / 4 : ℝ) := by unfold kappaInv; norm_num
+
+/-- κ⁻¹(9) = 4/5.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem kappaInv_nine : kappaInv 9 = (4 / 5 : ℝ) := by unfold kappaInv; norm_num
+
+/-- Extended κ / κ⁻¹ values and round-trip witness package.
+    prop:spg-relative-error-threshold-sharpness -/
+theorem paper_kappa_extended_values_package :
+    kappa (3 / 4 : ℝ) = 7 ∧
+    kappa (1 / 8 : ℝ) = 9 / 7 ∧
+    kappaInv 7 = (3 / 4 : ℝ) ∧
+    kappaInv 9 = (4 / 5 : ℝ) ∧
+    kappa (kappaInv 7) = 7 ∧
+    kappa (kappaInv 9) = 9 := by
+  refine ⟨kappa_three_fourths, kappa_eighth, kappaInv_seven, kappaInv_nine, ?_, ?_⟩
+  · exact kappa_kappaInv (by norm_num : (1 : ℝ) < 7)
+  · exact kappa_kappaInv (by norm_num : (1 : ℝ) < 9)
+
 end Omega.SPG
 
 
