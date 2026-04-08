@@ -1710,4 +1710,27 @@ theorem paper_fenceDet_values_and_strict_mono :
   | 0 => native_decide
   | k + 1 => exact fenceDet_strict_mono (k + 1) (by omega)
 
+/-- Pisano period π(12) = 24.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem fib_mod12_period_24 :
+    Nat.fib 24 % 12 = 0 ∧ Nat.fib 25 % 12 = 1 := by native_decide
+
+/-- Pisano period π(13) = 28.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem fib_mod13_period_28 :
+    Nat.fib 28 % 13 = 0 ∧ Nat.fib 29 % 13 = 1 := by native_decide
+
+/-- Pisano period π(15) = 40.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem fib_mod15_period_40 :
+    Nat.fib 40 % 15 = 0 ∧ Nat.fib 41 % 15 = 1 := by native_decide
+
+/-- Paper Pisano period witnesses for composite moduli 12, 13, 15.
+    cor:pom-fiber-modq-pisano-invariant -/
+theorem paper_pisano_period_12_13_15_package :
+    (Nat.fib 24 % 12 = 0 ∧ Nat.fib 25 % 12 = 1) ∧
+    (Nat.fib 28 % 13 = 0 ∧ Nat.fib 29 % 13 = 1) ∧
+    (Nat.fib 40 % 15 = 0 ∧ Nat.fib 41 % 15 = 1) :=
+  ⟨fib_mod12_period_24, fib_mod13_period_28, fib_mod15_period_40⟩
+
 end Omega
