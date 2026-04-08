@@ -107,6 +107,7 @@ import Omega.Core.FiberLatticeSquarefree
 import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
+import Omega.GU.FibTailP23Orbits
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.ResidualCircleDim
