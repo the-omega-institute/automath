@@ -682,4 +682,34 @@ theorem paper_chebyAdams_at_four_six_package :
    chebyAdams_at_six_base,
    chebyAdams_at_six_values⟩
 
+/-- Base values: C_0(7) = 2, C_1(7) = 7.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_seven_base :
+    chebyAdams 0 7 = 2 ∧ chebyAdams 1 7 = 7 := by simp [chebyAdams]
+
+/-- Recurrence for C_n(7): C_{n+2}(7) = 7·C_{n+1}(7) - C_n(7).
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_seven_recurrence (n : Nat) :
+    chebyAdams (n + 2) 7 = 7 * chebyAdams (n + 1) 7 - chebyAdams n 7 := by
+  rw [chebyAdams_succ_succ]
+
+/-- Concrete values: C_2(7)=47, C_3(7)=322, C_4(7)=2207, C_5(7)=15127.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem chebyAdams_at_seven_values :
+    chebyAdams 2 7 = 47 ∧ chebyAdams 3 7 = 322 ∧
+    chebyAdams 4 7 = 2207 ∧ chebyAdams 5 7 = 15127 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> simp [chebyAdams]
+
+/-- Paper package: Chebyshev-Adams at S=7.
+    thm:discussion-chebyshev-witt-equivariance -/
+theorem paper_chebyAdams_at_seven_package :
+    (chebyAdams 0 7 = 2 ∧ chebyAdams 1 7 = 7) ∧
+    (chebyAdams 2 7 = 47 ∧ chebyAdams 3 7 = 322 ∧
+     chebyAdams 4 7 = 2207 ∧ chebyAdams 5 7 = 15127) ∧
+    (∀ n : Nat,
+      chebyAdams (n + 2) 7 = 7 * chebyAdams (n + 1) 7 - chebyAdams n 7) :=
+  ⟨chebyAdams_at_seven_base,
+   chebyAdams_at_seven_values,
+   chebyAdams_at_seven_recurrence⟩
+
 end Omega.Discussion
