@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1802 |
+| \leanverified 标注数 | 1807 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1819 |
-| 轮次 | R443（round_count=444）|
+| 总标注数 | 1824 |
+| 轮次 | R444（round_count=445）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -25,7 +25,7 @@
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
 | POM | 1,707 | 297 | 17.4% |
-| Emergent Arithmetic | 185 | 164 | 88.6% |
+| Emergent Arithmetic | 185 | 165 | 89.2% |
 | Folding | 337 | 123 | 36.5% |
 | Conclusion | 2,550 | 256 | 10.0% |
 | Group Unification | 469 | 162 | 34.5% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 197 | 4.4% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1513** | **14.4%** |
+| **合计（body）** | **10,508** | **1514** | **14.4%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**EA Fibonacci 赋值 Val_pr 定义（Round R444，新标签）**：`valPr`（对应 `def:prime-register-fib-valuation-zg-code`，EA；Fibonacci 素数寄存器赋值 noncomputable def）；`valPr_zero`（对应 `def:prime-register-fib-valuation-zg-code`，EA；空集赋值为零）；`valPr_single`（对应 `def:prime-register-fib-valuation-zg-code`，EA；单元素集赋值）；`valPr_add`（对应 `def:prime-register-fib-valuation-zg-code`，EA；赋值加法性）；`paper_prime_register_fib_valuation_def`（对应 `def:prime-register-fib-valuation-zg-code`，EA；Fibonacci 赋值定义综合论文接口）——**新标签首次注册**（def:prime-register-fib-valuation-zg-code）
 **POM 对称余数存在唯一性（Round R443，新标签）**：`symmetricQuoRem`（对应 `cor:pom-symmetric-remainder`，POM；对称商余 noncomputable def）；`symmetricQuoRem_eq`（对应 `cor:pom-symmetric-remainder`，POM；对称商余等式）；`symmetricQuoRem_r_symmetric`（对应 `cor:pom-symmetric-remainder`，POM；余数对称性）；`paper_pom_symmetric_remainder_exists_unique`（对应 `cor:pom-symmetric-remainder`，POM；对称余数存在唯一性综合论文接口）——**新标签首次注册**（cor:pom-symmetric-remainder 原为 Deferred R174/R177，本轮正式完成并计入覆盖率）
 **CD residualCdimAt 扩展包（Round R442）**：`residualCdimAt_pow_two`（对应 `prop:cdim-residual-circle-dimension-laws`，CD；residualCdimAt 平方律）；`residualCdimAt_eq_zero_of_card_zero`（对应 `prop:cdim-residual-circle-dimension-laws`，CD；card 为零时 residualCdimAt=0）；`paper_cdim_residual_extended_package`（对应 `prop:cdim-residual-circle-dimension-laws`，CD；residual 扩展综合论文接口）——标签已注册，本轮为深化
 **SPG prefixDist 全超度量包（Round R441）**：`prefixBall_zero`（对应 `prop:spg-decidable-clopen`，SPG；前缀球半径零等于全集）；`mem_prefixBall_symm`（对应 `prop:spg-decidable-clopen`，SPG；前缀球对称性）；`paper_prefixDist_full_ultrametric_package`（对应 `def:spg-prefix-metric`，SPG；前缀距离全超度量综合论文接口）——两标签均已注册，本轮为深化
@@ -393,6 +394,7 @@
 **Phase R431: Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（完整）**：Conclusion/AffineRegisterBudget.lean——paper_binfold_recovery_m13（thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting，m=13 binfold 恢复见证，Conclusion）; paper_binfold_recovery_m15（thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting，m=15 binfold 恢复见证，Conclusion）; paper_binfold_recovery_m17（thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting，m=17 binfold 恢复见证，Conclusion）; paper_binfold_recovery_extended_13_15_17（thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting，m=13/15/17 综合论文接口，Conclusion）——**0 个新论文标签条目计入覆盖率**（thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting 已注册，本轮为深化）——Conclusion 256（10.0%，不变），全局 \leanverified 1749→1753（+4），总标注 1766→1770（+4），body 覆盖 1512（14.4%，不变），proof commit 2ba9110
 **Phase R430: GU window 11/12 compression ratios + 6-12 package（完整，R427 Zeta parked）**：GU/Window6RankGap.lean——paper_window11_compression_ratio（subsec:bdry-tower-zeck-gut-part1，window=11 压缩比，GU）; paper_window12_compression_ratio（subsec:bdry-tower-zeck-gut-part1，window=12 压缩比，GU）; paper_window_compression_ratio_6_to_12_package（subsec:bdry-tower-zeck-gut-part1，window=6..12 压缩比综合论文接口，GU）——**0 个新论文标签条目计入覆盖率**（subsec:bdry-tower-zeck-gut-part1 已注册，本轮为深化）——GU 162（34.5%，不变），全局 \leanverified 1746→1749（+3），总标注 1763→1766（+3），body 覆盖 1512（14.4%，不变），proof commit 4b2df3f
 **Phase R429: SPG tanakaIncrement degenerate package（完整）**：SPG/TanakaIncrement.lean——tanakaIncrement_self（thm:spg-scan-tanaka-stokes，自增量为零，SPG）; tanakaIncrement_at_a_eq_x（thm:spg-scan-tanaka-stokes，a=x 时增量值，SPG）; tanakaLocalTime_constant_seq（thm:spg-scan-tanaka-stokes，常数序列局部时为零，SPG）; paper_tanakaIncrement_degenerate_package（thm:spg-scan-tanaka-stokes，退化情形综合论文接口，SPG）——**0 个新论文标签条目计入覆盖率**（thm:spg-scan-tanaka-stokes 已注册，本轮为深化）——SPG 106（82.2%，不变），全局 \leanverified 1742→1746（+4），总标注 1759→1763（+4），body 覆盖 1512（14.4%，不变），proof commit 615327e
+**Phase R444: EA Fibonacci valuation Val_pr definition（完整，新标签）**：EA/PrimeRegisterFibValuation.lean（新文件）——valPr（def:prime-register-fib-valuation-zg-code，Fibonacci 素数寄存器赋值 noncomputable def，EA）; valPr_zero（def:prime-register-fib-valuation-zg-code，空集赋值为零，EA）; valPr_single（def:prime-register-fib-valuation-zg-code，单元素集赋值，EA）; valPr_add（def:prime-register-fib-valuation-zg-code，赋值加法性，EA）; paper_prime_register_fib_valuation_def（def:prime-register-fib-valuation-zg-code，Fibonacci 赋值定义综合论文接口，EA）——**1 个新论文标签条目计入覆盖率**（def:prime-register-fib-valuation-zg-code 首次注册）——EA 164→165（88.6%→89.2%），body 1513→1514（14.4%，不变显示），全局 \leanverified 1802→1807（+5），总标注 1819→1824（+5），proof commit 96eb52b
 **Phase R443: POM symmetric remainder existence-uniqueness（完整，新标签）**：Core/SymmetricRemainder.lean——symmetricQuoRem（cor:pom-symmetric-remainder，对称商余 def，POM）; symmetricQuoRem_eq（cor:pom-symmetric-remainder，对称商余等式，POM）; symmetricQuoRem_r_symmetric（cor:pom-symmetric-remainder，余数对称性，POM）; paper_pom_symmetric_remainder_exists_unique（cor:pom-symmetric-remainder，存在唯一性综合论文接口，POM）——**1 个新论文标签条目计入覆盖率**（cor:pom-symmetric-remainder 首次注册，原 Deferred R174/R177 正式完成）——POM 296→297（17.3%→17.4%），body 1512→1513（14.4%，不变显示），全局 \leanverified 1798→1802（+4），总标注 1815→1819（+4），proof commit adfeaf1
 **Phase R442: CD residualCdimAt extended package（完整）**：CircleDimension/ResidualCircleDim.lean——residualCdimAt_pow_two（prop:cdim-residual-circle-dimension-laws，residualCdimAt 平方律，CD）; residualCdimAt_eq_zero_of_card_zero（prop:cdim-residual-circle-dimension-laws，card 为零时 residualCdimAt=0，CD）; paper_cdim_residual_extended_package（prop:cdim-residual-circle-dimension-laws，residual 扩展综合论文接口，CD）——**0 个新论文标签条目计入覆盖率**（prop:cdim-residual-circle-dimension-laws 已注册，本轮为深化）——CD 146（37.1%，不变），全局 \leanverified 1795→1798（+3），总标注 1812→1815（+3），body 覆盖 1512（14.4%，不变），proof commit 0d8818f
 **Phase R441: SPG prefixDist full ultrametric package（完整）**：SPG/PrefixMetric.lean——prefixBall_zero（prop:spg-decidable-clopen，前缀球半径零等于全集，SPG）; mem_prefixBall_symm（prop:spg-decidable-clopen，前缀球对称性，SPG）; paper_prefixDist_full_ultrametric_package（def:spg-prefix-metric，前缀距离全超度量综合论文接口，SPG）——**0 个新论文标签条目计入覆盖率**（prop:spg-decidable-clopen 和 def:spg-prefix-metric 均已注册，本轮为深化）——SPG 106（82.2%，不变），全局 \leanverified 1792→1795（+3），总标注 1809→1812（+3），body 覆盖 1512（14.4%，不变），proof commit e384ab0
