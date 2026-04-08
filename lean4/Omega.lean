@@ -131,3 +131,4 @@ import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.ResidualCircleDim
 import Omega.CircleDimension.DyadicKernelCube
 import Omega.CircleDimension.SolenoidFiberTorsor
+import Omega.CircleDimension.OrthogonalAmalgamatedWdim
