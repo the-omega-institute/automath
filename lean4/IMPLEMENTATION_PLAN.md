@@ -6,17 +6,17 @@
 
 | 指标 | 数值 |
 |---|---|
-| 总行数 | ~49,120 |
-| 定理/定义数 | ~4,292 |
-| 论文接口包装 | 715+ |
+| 总行数 | ~49,158 |
+| 定理/定义数 | ~4,296 |
+| 论文接口包装 | 716+ |
 | 文件数 | 116 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1613 |
+| \leanverified 标注数 | 1617 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1630 |
-| 轮次 | R397（round_count=398） |
+| 总标注数 | 1634 |
+| 轮次 | R398（round_count=399） |
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,7 +26,7 @@
 |---|---|---|---|
 | POM | 1,707 | 295 | 17.3% |
 | Emergent Arithmetic | 185 | 164 | 88.6% |
-| Folding | 337 | 122 | 36.2% |
+| Folding | 337 | 123 | 36.5% |
 | Conclusion | 2,550 | 253 | 9.9% |
 | Group Unification | 469 | 162 | 34.5% |
 | SPG | 129 | 106 | 82.2% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 197 | 4.4% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1506** | **14.3%** |
+| **合计（body）** | **10,508** | **1507** | **14.3%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**XInfinity topology package: nonempty/compact/ext/bit-ne（Round R398）**：`XInfinity_nonempty`（对应 `thm:fold-suite`，Folding；XInfinity 非空）；`XInfinity_univ_isCompact`（对应 `thm:fold-suite`，Folding；XInfinity 全集紧致）；`XInfinity_ext_iff`（对应 `thm:fold-suite` / `lem:ne-of-bit-ne`，Folding；XInfinity 按位外延等价）；`paper_XInfinity_topology_package`（对应 `thm:fold-suite` / `lem:ne-of-bit-ne`，Folding；XInfinity 拓扑包综合论文接口）
 **Zeta even-length correction small-value table n=0..5（Round R397）**：`evenLengthCorrection_zero`（对应 `thm:xi-time-part73c-periodic-evenlength-atomic-correction`，Zeta；偶长校正在 n=0 处的 simp 值）；`evenLengthCorrection_two`（对应 `thm:xi-time-part73c-periodic-evenlength-atomic-correction`，Zeta；偶长校正在 n=2 处的 simp 值）；`paper_zeta_evenLength_small_values_table`（对应 `thm:xi-time-part73c-periodic-evenlength-atomic-correction`，Zeta；小值查表综合论文接口）
 **GU window 9/10 compression ratios + 6-10 package（Round R396）**：`paper_window9_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，Group Unification；window-9 压缩比论文接口）；`paper_window10_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，Group Unification；window-10 压缩比论文接口）；`paper_window_compression_ratio_6_to_10_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，Group Unification；window 6-10 压缩比综合打包论文接口）
 **Conclusion resonance window lcm(8,18)=72 CRT witness（Round R395）**：`resonance_window_lcm_8_18_eq_72`（对应 `thm:conclusion-resonance-window-q13-q15-mod6-period72`，Conclusion；lcm(8,18)=72 证书）；`resonance_window_five_types_pairwise_distinct`（对应 `cor:conclusion-resonance-window-five-terminal-types`，Conclusion；五类共振窗口两两不同）；`resonance_window_eight_dvd_72`（对应 `thm:conclusion-resonance-window-q13-q15-mod6-period72`，Conclusion；8 | 72）；`resonance_window_eighteen_dvd_72`（对应 `thm:conclusion-resonance-window-q13-q15-mod6-period72`，Conclusion；18 | 72）；`resonance_window_lcm_universal`（对应 `thm:conclusion-resonance-window-q13-q15-mod6-period72`，Conclusion；公倍数普遍性）；`paper_resonance_window_mod6_period_witness`（对应 `thm:conclusion-resonance-window-q13-q15-mod6-period72`，Conclusion；模 6 周期 72 证书综合论文接口）
@@ -344,6 +345,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R398: Folding XInfinity topology package（完整）**：Folding/InverseLimitTopology.lean（83行）——XInfinity_nonempty（thm:fold-suite，XInfinity 非空，Folding）; XInfinity_univ_isCompact（thm:fold-suite，XInfinity 全集紧致，Folding）; XInfinity_ext_iff（thm:fold-suite / lem:ne-of-bit-ne，XInfinity 按位外延等价，Folding）; paper_XInfinity_topology_package（thm:fold-suite / lem:ne-of-bit-ne，XInfinity 拓扑包综合论文接口，Folding）——**1 个新论文标签条目计入覆盖率**（lem:ne-of-bit-ne 首次标注 +1）——Folding 122→123（36.2%→36.5%），全局 \leanverified 1613→1617（+4），总标注 1630→1634（+4），body 覆盖 1506→1507（14.3%），proof commit 42aeac8
 **Phase R397: Zeta even-length correction small-value table（完整）**：Zeta/EvenLengthCorrection.lean（132行）——evenLengthCorrection_zero（thm:xi-time-part73c-periodic-evenlength-atomic-correction，偶长校正 n=0 simp 值，Zeta）; evenLengthCorrection_two（thm:xi-time-part73c-periodic-evenlength-atomic-correction，偶长校正 n=2 simp 值，Zeta）; paper_zeta_evenLength_small_values_table（thm:xi-time-part73c-periodic-evenlength-atomic-correction，小值查表综合论文接口，Zeta）——**0 个新论文标签条目计入覆盖率**（thm:xi-time-part73c-periodic-evenlength-atomic-correction 已注册 R172/R212/R217，本轮为深化）——Zeta Finite Part 197（4.4%，不变），全局 \leanverified 1610→1613（+3），总标注 1627→1630（+3），body 覆盖 1506（14.3%，不变），proof commit fe295197cb69de8ff740ac141398dbaa5a163266
 **Phase R396: GU window 9/10 compression ratios + 6-10 package（完整）**：GU/Window6RankGap.lean（123行）——paper_window9_compression_ratio（subsec:bdry-tower-zeck-gut-part1，window-9 压缩比论文接口，GU）; paper_window10_compression_ratio（subsec:bdry-tower-zeck-gut-part1，window-10 压缩比论文接口，GU）; paper_window_compression_ratio_6_to_10_package（subsec:bdry-tower-zeck-gut-part1，window 6-10 压缩比综合打包，GU）——**0 个新论文标签条目计入覆盖率**（subsec:bdry-tower-zeck-gut-part1 已注册，本轮为深化）——GU 162（34.5%，不变），全局 \leanverified 1607→1610（+3），总标注 1624→1627（+3），body 覆盖 1506（14.3%，不变），proof commit 4cd47c45fb95175f38cb8852a437044e767b5bde
 **Phase R395: Conclusion resonance window lcm/CRT witness（完整）**：Conclusion/ResonanceWindow.lean（82行）——resonance_window_lcm_8_18_eq_72（thm:conclusion-resonance-window-q13-q15-mod6-period72，lcm(8,18)=72 证书，Conclusion）; resonance_window_five_types_pairwise_distinct（cor:conclusion-resonance-window-five-terminal-types，五类共振窗口两两不同，Conclusion）; resonance_window_eight_dvd_72（thm:conclusion-resonance-window-q13-q15-mod6-period72，8∣72，Conclusion）; resonance_window_eighteen_dvd_72（thm:conclusion-resonance-window-q13-q15-mod6-period72，18∣72，Conclusion）; resonance_window_lcm_universal（thm:conclusion-resonance-window-q13-q15-mod6-period72，公倍数普遍性，Conclusion）; paper_resonance_window_mod6_period_witness（thm:conclusion-resonance-window-q13-q15-mod6-period72，模 6 周期 72 综合论文接口，Conclusion）——**2 个新论文标签条目计入覆盖率**（thm:conclusion-resonance-window-q13-q15-mod6-period72 首次标注 +1, cor:conclusion-resonance-window-five-terminal-types 首次标注 +1）——Conclusion 251→253（9.8%→9.9%），全局 \leanverified 1601→1607（+6），总标注 1618→1624（+6），body 覆盖 1504→1506（14.3%），proof commit 7194f6f03e71e33e3edaf53cb2287b66a4002c6d
