@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1916 |
+| \leanverified 标注数 | 1922 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1933 |
-| 轮次 | R460（round_count=461）|
+| 总标注数 | 1939 |
+| 轮次 | R461（round_count=462）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -29,12 +29,12 @@
 | Folding | 337 | 124 | 36.8% |
 | Conclusion | 2,550 | 258 | 10.1% |
 | Group Unification | 469 | 164 | 35.0% |
-| SPG | 129 | 107 | 82.9% |
+| SPG | 129 | 108 | 83.7% |
 | Circle Dimension | 393 | 147 | 37.4% |
 | Zeta Finite Part | 4,524 | 200 | 4.4% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1527** | **14.5%** |
+| **合计（body）** | **10,508** | **1528** | **14.5%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**SPG 二进制顶维全息逆指数病态条件（Round R461，新标签，streak #10 里程碑）**：`topCellCount`（对应 `thm:spg-dyadic-top-dimensional-holographic-inversion-exponential-ill-conditioning`，SPG；顶胞数 def）；`topCellCount_eq_pow`（对应同标签，SPG；topCellCount=2^(m×n)）；`boundaryCellCount`（对应同标签，SPG；边界胞数 def）；`boundaryCellCount_eq`（对应同标签，SPG；boundaryCellCount 等式）；`boundary_ratio_eq`（对应同标签，SPG；主坍缩恒等式 2n/2^m）；`paper_spg_dyadic_top_inversion_ill_conditioning`（对应同标签，SPG；综合论文接口）——**新标签首次注册**（thm:spg-dyadic-top-dimensional-holographic-inversion-exponential-ill-conditioning，streak #10 里程碑）
 **GU Z2 跳跃函子唯一性骨架（Round R460，新标签）**：`signHom`（对应 `thm:bdry-z2-jump-functor-uniqueness`，GU；sign 同态 noncomputable def）；`signHom_exists`（对应同标签，GU；sign 同态存在性）；`trivHom`（对应同标签，GU；平凡同态 noncomputable def）；`sign_range_pm_one`（对应同标签，GU；sign 值域 ±1）；`sign_sq_eq_one`（对应同标签，GU；sign²=1）；`trivHom_apply`（对应同标签，GU；平凡同态值为 1）；`sign_neq_triv`（对应同标签，GU；k≥2 时 sign ≠ triv）；`paper_bdry_z2_jump_functor_skeleton`（对应同标签，GU；综合论文接口）——**新标签首次注册**（thm:bdry-z2-jump-functor-uniqueness）
 **Folding 规范异常端点 Fibonacci 闭合（Round R459，新标签）**：`fib_seven`（对应 `thm:fold-gauge-anomaly-endpoint-fibonacci-mod3`，Folding；F_7=13）；`fib_eight_fold`（对应同标签，Folding；F_8=21）；`fib_nine_eq_fib_eight_add_fib_seven`（对应同标签，Folding；F_9=F_8+F_7）；`abstract_endpoint_fibonacci`（对应同标签，Folding；强归纳主定理：以 13/21 为种子的递推序列等于 F_{m+7}）；`paper_fold_gauge_anomaly_endpoint_fibonacci_mod3`（对应同标签，Folding；综合论文接口）——**新标签首次注册**（thm:fold-gauge-anomaly-endpoint-fibonacci-mod3）
 **POM 泄漏/响应恒等式（Round R458，新标签）**：`lambdaZT`（对应 `thm:pom-leakage-response-identity`，POM；λ_ZT=(1+√5)/2 def）；`chiZT`（对应同标签，POM；χ_ZT=3-λ_ZT def）；`iEven`（对应同标签，POM；偶熵增量 def）；`iOdd`（对应同标签，POM；奇熵增量 def）；`lambdaZT_eq`、`chiZT_eq_three_sub_lambdaZT`、`chiZT_explicit`、`lambdaZT_pos`、`iOdd_eq_iEven_div_two`、`iEven_explicit`、`iOdd_explicit`（各等式与正性定理）；`paper_pom_leakage_response_identity`（对应同标签，POM；综合论文接口）——**新标签首次注册**（thm:pom-leakage-response-identity）
@@ -410,6 +411,7 @@
 **Phase R431: Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（完整）**：Conclusion/AffineRegisterBudget.lean——paper_binfold_recovery_m13（thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting，m=13 binfold 恢复见证，Conclusion）; paper_binfold_recovery_m15（thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting，m=15 binfold 恢复见证，Conclusion）; paper_binfold_recovery_m17（thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting，m=17 binfold 恢复见证，Conclusion）; paper_binfold_recovery_extended_13_15_17（thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting，m=13/15/17 综合论文接口，Conclusion）——**0 个新论文标签条目计入覆盖率**（thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting 已注册，本轮为深化）——Conclusion 256（10.0%，不变），全局 \leanverified 1749→1753（+4），总标注 1766→1770（+4），body 覆盖 1512（14.4%，不变），proof commit 2ba9110
 **Phase R430: GU window 11/12 compression ratios + 6-12 package（完整，R427 Zeta parked）**：GU/Window6RankGap.lean——paper_window11_compression_ratio（subsec:bdry-tower-zeck-gut-part1，window=11 压缩比，GU）; paper_window12_compression_ratio（subsec:bdry-tower-zeck-gut-part1，window=12 压缩比，GU）; paper_window_compression_ratio_6_to_12_package（subsec:bdry-tower-zeck-gut-part1，window=6..12 压缩比综合论文接口，GU）——**0 个新论文标签条目计入覆盖率**（subsec:bdry-tower-zeck-gut-part1 已注册，本轮为深化）——GU 162（34.5%，不变），全局 \leanverified 1746→1749（+3），总标注 1763→1766（+3），body 覆盖 1512（14.4%，不变），proof commit 4b2df3f
 **Phase R429: SPG tanakaIncrement degenerate package（完整）**：SPG/TanakaIncrement.lean——tanakaIncrement_self（thm:spg-scan-tanaka-stokes，自增量为零，SPG）; tanakaIncrement_at_a_eq_x（thm:spg-scan-tanaka-stokes，a=x 时增量值，SPG）; tanakaLocalTime_constant_seq（thm:spg-scan-tanaka-stokes，常数序列局部时为零，SPG）; paper_tanakaIncrement_degenerate_package（thm:spg-scan-tanaka-stokes，退化情形综合论文接口，SPG）——**0 个新论文标签条目计入覆盖率**（thm:spg-scan-tanaka-stokes 已注册，本轮为深化）——SPG 106（82.2%，不变），全局 \leanverified 1742→1746（+4），总标注 1759→1763（+4），body 覆盖 1512（14.4%，不变），proof commit 615327e
+**Phase R461: SPG dyadic top-dim holographic inversion ill-conditioning（完整，新标签，streak #10）**：SPG/DyadicTopInversionBound.lean（新文件）——topCellCount（thm:spg-dyadic-top-dimensional-holographic-inversion-exponential-ill-conditioning，顶胞数 def，SPG）; topCellCount_eq_pow（topCellCount=2^(m×n)，SPG）; boundaryCellCount（边界胞数 def，SPG）; boundaryCellCount_eq（boundaryCellCount 等式，SPG）; boundary_ratio_eq（主坍缩恒等式 2n/2^m，SPG）; paper_spg_dyadic_top_inversion_ill_conditioning（综合论文接口，SPG）——**1 个新论文标签条目计入覆盖率**（thm:spg-dyadic-top-dimensional-holographic-inversion-exponential-ill-conditioning 首次注册，streak #10 里程碑）——SPG 107→108（82.9%→83.7%），body 1527→1528（14.5%，不变显示），全局 \leanverified 1916→1922（+6），总标注 1933→1939（+6），proof commit a642151
 **Phase R460: GU Z2-torsor jump functor uniqueness skeleton（完整，新标签）**：GU/BdryZ2JumpUniqueness.lean（新文件）——signHom（thm:bdry-z2-jump-functor-uniqueness，sign 同态 noncomputable def，GU）; signHom_exists（sign 同态存在性，GU）; trivHom（平凡同态 noncomputable def，GU）; sign_range_pm_one（sign 值域 ±1，GU）; sign_sq_eq_one（sign²=1，GU）; trivHom_apply（平凡同态值为 1，GU）; sign_neq_triv（k≥2 时 sign ≠ triv，GU）; paper_bdry_z2_jump_functor_skeleton（综合论文接口，GU）——**1 个新论文标签条目计入覆盖率**（thm:bdry-z2-jump-functor-uniqueness 首次注册）——GU 163→164（34.8%→35.0%），body 1526→1527（14.5%，不变显示），全局 \leanverified 1908→1916（+8），总标注 1925→1933（+8），proof commit be7da28
 **Phase R459: Folding gauge anomaly endpoint Fibonacci closure（完整，新标签）**：Folding/GaugeAnomalyEndpointFib.lean（新文件）——fib_seven（thm:fold-gauge-anomaly-endpoint-fibonacci-mod3，F_7=13，Folding）; fib_eight_fold（F_8=21，Folding）; fib_nine_eq_fib_eight_add_fib_seven（F_9=F_8+F_7，Folding）; abstract_endpoint_fibonacci（强归纳主定理：种子 13/21 递推等于 F_{m+7}，Folding）; paper_fold_gauge_anomaly_endpoint_fibonacci_mod3（综合论文接口，Folding）——**1 个新论文标签条目计入覆盖率**（thm:fold-gauge-anomaly-endpoint-fibonacci-mod3 首次注册）——Folding 123→124（36.5%→36.8%），body 1525→1526（14.5%，不变显示），全局 \leanverified 1903→1908（+5），总标注 1920→1925（+5），proof commit 3076a37
 **Phase R458: POM leakage/response identity（完整，新标签）**：Core/LeakageResponseIdentity.lean（新文件）——lambdaZT（thm:pom-leakage-response-identity，λ_ZT def，POM）; chiZT（χ_ZT=3-λ_ZT def，POM）; iEven（偶熵增量 def，POM）; iOdd（奇熵增量 def，POM）; lambdaZT_eq; chiZT_eq_three_sub_lambdaZT; chiZT_explicit; lambdaZT_pos; iOdd_eq_iEven_div_two; iEven_explicit; iOdd_explicit; paper_pom_leakage_response_identity（综合论文接口，POM）——**1 个新论文标签条目计入覆盖率**（thm:pom-leakage-response-identity 首次注册）——POM 298→299（17.5%，不变显示），body 1524→1525（14.5%，不变显示），全局 \leanverified 1891→1903（+12），总标注 1908→1920（+12），proof commit fcd5d52
