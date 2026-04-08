@@ -87,4 +87,40 @@ theorem minMatrix_trace_double (k : Nat) :
     simp only [Fin.val_castSucc, Fin.val_last]
     push_cast; linarith
 
+/-- det(K_3) = 1.
+    lem:pom-Kk-gram-det (k=3) -/
+theorem minMatrix_det_at_three :
+    (Matrix.of (fun (i j : Fin 3) => (min (i.val + 1) (j.val + 1) : ℤ))).det = 1 :=
+  minMatrix_det_eq_one 3 (by omega)
+
+/-- det(K_5) = 1.
+    lem:pom-Kk-gram-det (k=5) -/
+theorem minMatrix_det_at_five :
+    (Matrix.of (fun (i j : Fin 5) => (min (i.val + 1) (j.val + 1) : ℤ))).det = 1 :=
+  minMatrix_det_eq_one 5 (by omega)
+
+/-- Small-value trace witnesses: tr(K_k) = k(k+1)/2 for k=2..5.
+    cor:pom-Kk-sine-product-sum -/
+theorem minMatrix_trace_at_small :
+    (∑ i : Fin 2, (min (i.val + 1) (i.val + 1) : ℤ)) = 3 ∧
+    (∑ i : Fin 3, (min (i.val + 1) (i.val + 1) : ℤ)) = 6 ∧
+    (∑ i : Fin 4, (min (i.val + 1) (i.val + 1) : ℤ)) = 10 ∧
+    (∑ i : Fin 5, (min (i.val + 1) (i.val + 1) : ℤ)) = 15 := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;> simp [Fin.sum_univ_succ]
+
+/-- Paper package: small-value det + trace witnesses plus the general statement.
+    lem:pom-Kk-gram-det / cor:pom-Kk-sine-product-sum -/
+theorem paper_minMatrix_small_values_package :
+    (Matrix.of (fun (i j : Fin 3) => (min (i.val + 1) (j.val + 1) : ℤ))).det = 1 ∧
+    (Matrix.of (fun (i j : Fin 5) => (min (i.val + 1) (j.val + 1) : ℤ))).det = 1 ∧
+    (∑ i : Fin 2, (min (i.val + 1) (i.val + 1) : ℤ)) = 3 ∧
+    (∑ i : Fin 5, (min (i.val + 1) (i.val + 1) : ℤ)) = 15 ∧
+    (∀ k : Nat, 1 ≤ k →
+      (Matrix.of (fun (i j : Fin k) => (min (i.val + 1) (j.val + 1) : ℤ))).det = 1) :=
+  ⟨minMatrix_det_at_three,
+   minMatrix_det_at_five,
+   minMatrix_trace_at_small.1,
+   minMatrix_trace_at_small.2.2.2,
+   minMatrix_det_eq_one⟩
+
 end Omega
