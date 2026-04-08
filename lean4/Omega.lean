@@ -94,6 +94,7 @@ import Omega.Zeta.HankelWindowAffineFamily
 import Omega.Zeta.SmithEntropyMinDepth
 import Omega.Zeta.GoldenRadiusVisibility
 import Omega.Zeta.SyncKernelPalindrome
+import Omega.Zeta.UnweightedQuarticIdeal
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
