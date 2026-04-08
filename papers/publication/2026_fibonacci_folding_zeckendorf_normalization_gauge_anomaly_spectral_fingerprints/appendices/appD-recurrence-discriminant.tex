@@ -29,6 +29,17 @@ Replacing \(\lambda\) by \(t^{-1}\) gives
 D(t;y).
 \]
 
+\subsection{Numerator computation}
+The generating function \(Z(t;y)=\sum_{m\ge 0}Z_m(y)t^m\) satisfies \(Z(t;y)=N(t;y)/D(t;y)\), where \(N(t;y)=Z(t;y)\cdot D(t;y)\) is determined by the initial values. Setting
+\[
+N(t;y)=\sum_{m=0}^{3}\left(Z_m(y)-\sum_{k=1}^{\min(m,4)}c_k(y)Z_{m-k}(y)\right)t^m,
+\]
+where \(c_1=1\), \(c_2=2y+1\), \(c_3=-1\), \(c_4=-y(y+1)\) are the recurrence coefficients, a direct calculation using \(Z_0=1\), \(Z_1=1+y\), \(Z_2=2+2y\), \(Z_3=2+5y+y^2\) gives
+\[
+N(t;y)=1+yt-yt^2-y^2t^3=(1+ty)(1-yt^2).
+\]
+The factorization is verified by expanding the product.
+
 \subsection{Recurrence and Hankel rank}
 Because \(Z_m(y)\) is obtained by summing the weights \(y^{\abs{\Fold_m(\omega)}_1}\) over all length-\(m\) microstate words, it is a linear functional of the weighted transfer-matrix dynamics. Consequently \(Z_m(y)\) satisfies the characteristic recurrence of \(M(y)\),
 \[
@@ -46,13 +57,7 @@ come from direct enumeration. Therefore
 \[
 Z(t;y)=\sum_{m\ge0}Z_m(y)t^m
 \]
-is a rational function with denominator \(D(t;y)\).
-
-For the Hankel matrices
-\[
-H^{(n)}(y)=\bigl(Z_{i+j}(y)\bigr)_{0\le i,j\le n-1},
-\]
-the recurrence implies \(\mathrm{rank}\,H^{(n)}(y)\le 4\) for every \(n\). Generic equality follows because the denominator degree is \(4\) away from the proper algebraic set where the leading recurrence collapses.
+is a rational function with denominator \(D(t;y)\) and numerator \(N(t;y)=(1+ty)(1-yt^2)\).
 
 \subsection{Discriminant factorization}
 Let
@@ -66,9 +71,22 @@ A direct symbolic computation gives
 \]
 The cubic factor has exactly one negative real root,
 \[
-y_{\mathrm{LY}}\approx -1.13445.
+y_{\mathrm{c}}\approx -1.13445.
 \]
-This is the unique negative real value of \(y\) at which \(\Pi(\lambda,y)\) has a repeated root. At \(y=y_{\mathrm{LY}}\approx -1.13445\), the four roots of \(\Pi(\lambda,y_{\mathrm{LY}})\) can be computed numerically: the polynomial evaluates to \(\lambda^4-\lambda^3+1.2689\lambda^2+\lambda+0.1525\), which has one root near \(\lambda\approx 2.03\) (simple, dominant), a pair of coincident roots near \(\lambda\approx -0.38\) (the repeated root), and one further root near \(\lambda\approx -0.27\). Since \(|-0.38|<|2.03|\), the repeated root is strictly subdominant. Hence the discriminant zero at \(y_{\mathrm{LY}}\) does not produce a singularity of the dominant eigenvalue, and in particular does not create a branch point of the free energy \(f(y)\) on the negative real axis.
+This is the unique negative real value of \(y\) at which \(\Pi(\lambda,y)\) has a repeated root, apart from the zeros at \(y=0\) and \(y=1\).
+
+\subsection{Root analysis at the discriminant zeros}
+At each discriminant zero, we compute the roots of \(\Pi(\lambda,y)\) explicitly.
+
+\emph{At \(y=0\):} \(\Pi(\lambda,0)=\lambda^4-\lambda^3-\lambda^2+\lambda=\lambda(\lambda-1)^2(\lambda+1)\). The repeated root is \(\lambda=1\), which is dominant. At this parameter value, \(Z_m(0)=\abs{\Fold_m^{-1}(0^m)}\) counts microstate words whose fold is the all-zeros word; the growth is polynomial in \(m\) (roughly \(\lceil(m+1)/2\rceil\)), reflecting the multiplicity of the dominant root.
+
+\emph{At \(y=1\):} \(\Pi(\lambda,1)=\lambda^4-\lambda^3-3\lambda^2+\lambda+2=(\lambda-2)(\lambda+1)^2(\lambda-1)\). The repeated root is \(\lambda=-1\), which is subdominant (dominated by \(\lambda=2\)).
+
+\emph{At \(y=y_{\mathrm{c}}\approx -1.13445\):} the quartic \(\Pi(\lambda,y_{\mathrm{c}})\) evaluates to approximately \(\lambda^4-\lambda^3+1.2689\lambda^2+\lambda+0.1525\). Numerical root-finding gives a repeated real root near \(\lambda\approx -0.2734\) and a complex-conjugate pair near \(\lambda\approx 0.7734\pm 1.2008\,i\) with modulus approximately \(1.428\). Since \(|-0.2734|<1.428\), the repeated root is strictly subdominant. Hence the discriminant zero at \(y_{\mathrm{c}}\) does not produce a singularity of the dominant eigenvalue.
+
+\begin{remark}
+For \(y>0\), the Perron--Frobenius theorem guarantees that the dominant root of \(M(y)\) is simple, real, and positive. The free energy \(f(y)=\log\lambda_\star(y)\) is therefore real-analytic on \((0,\infty)\). On the negative real axis, \(Z_m(y)\) involves sign-alternating terms and a separate dominant-sheet analysis would be needed; we do not pursue this.
+\end{remark}
 
 \subsection{Output-weight cumulants}
 Set \(y=e^\theta\). The scaled cumulant generating function for \(H_m\) is

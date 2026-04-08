@@ -40,24 +40,69 @@ Let \(F_m\) be the fiber product of \(G_m\) with itself. Thus the vertices of \(
 \]
 whenever \(u\to u'\) and \(v\to v'\) are edges of \(G_m\) carrying the same label. The diagonal copy of \(V_m\) always gives a subgraph of \(F_m\); off the diagonal, \(F_m\) records label collisions between distinct vertex paths.
 
+We prove the absence of off-diagonal cycles through a sequence of lemmas that characterize same-label pairs, bound the elementary moves connecting them, and establish a strict potential decrease.
+
+\begin{lemma}[Characterization of same-label pairs]\label{lem:same-label}
+Two distinct words \(p,q\in\{0,1\}^m\) satisfy \(\Fold_m(p)=\Fold_m(q)\) if and only if \(p\) can be transformed into \(q\) by a finite sequence of the following \emph{elementary boundary moves} applied within the window \(\{1,\dots,m\}\):
+\begin{enumerate}
+\item[(E1)] \emph{Interior reverse rewrite:} replace \(001\) at positions \((k,k+1,k+2)\) with \(k+2\le m\) by \(110\), or vice versa. This preserves the Fibonacci value on positions \(1,\dots,m\).
+\item[(E2)] \emph{Right-boundary carry absorption:} replace \((0,0)\) at positions \((m-1,m)\) by \((1,1)\), or vice versa, when the Fibonacci value modulo \(\Fib_{m+2}\) accounts for a carry at position \(m+1\). Concretely, \(\Fold_m\) retains only the first \(m\) Zeckendorf digits, so two words whose values differ by exactly \(\Fib_{m+2}\) receive the same fold label.
+\end{enumerate}
+No other type of move is needed.
+\end{lemma}
+
+\begin{proof}
+If \(\Fold_m(p)=\Fold_m(q)\), then the Zeckendorf representations of \(N(p)\) and \(N(q)\) agree on positions \(1,\dots,m\). Hence \(N(p)\) and \(N(q)\) differ by a multiple of \(\Fib_{m+2}\). By the value bound in Proposition~\ref{prop:right-resolving}, the difference is either \(0\) or \(\pm\Fib_{m+2}\).
+
+Case 1: \(N(p)=N(q)\). Then \(p\) and \(q\) are both Fibonacci representations of the same integer. By Appendix~\ref{app:rewriting}, they are connected by interior rewrites \(110\leftrightarrow 001\), which are exactly moves of type (E1).
+
+Case 2: \(|N(p)-N(q)|=\Fib_{m+2}=\Fib_{m+1}+\Fib_m\). Without loss of generality, \(N(q)=N(p)+\Fib_{m+2}\). Then \(q\) is obtained from some intermediate word \(p'\) (connected to \(p\) by (E1) moves) by adding \(\Fib_{m+1}+\Fib_m\) at positions \(m\) and \(m-1\). This is exactly a type (E2) boundary move: flipping positions \((m-1,m)\) from \((0,0)\) to \((1,1)\) adds \(\Fib_m+\Fib_{m+1}=\Fib_{m+2}\). Combining (E1) and (E2) moves connects \(p\) to \(q\).
+\end{proof}
+
+\begin{lemma}[Minimal connecting chains]\label{lem:minimal-chain}
+Let \(p\neq q\) with \(\Fold_m(p)=\Fold_m(q)\), and let \(\mathcal{C}\) be a connecting chain of elementary moves (E1)--(E2) from \(p\) to \(q\) with the minimum number of moves. Let \(r(\mathcal{C})\) be the number of moves in \(\mathcal{C}\), and let \(a(\mathcal{C})\in\{1,\dots,m\}\) be the leftmost position touched by any move in \(\mathcal{C}\). Then:
+\begin{enumerate}
+\item[(i)] \(r(\mathcal{C})\ge 1\).
+\item[(ii)] Each (E1) move touches positions in a contiguous triple \((k,k+1,k+2)\); each (E2) move touches positions \((m-1,m)\).
+\item[(iii)] For \(m\ge 3\), the support of \(\mathcal{C}\) --- the set of all positions touched by some move --- is contained in \(\{a(\mathcal{C}),\dots,m\}\) and has size at most \(2r(\mathcal{C})+1\).
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Part (i) is immediate since \(p\neq q\). Part (ii) follows from the definitions of (E1) and (E2). For part (iii), each move touches at most \(3\) consecutive positions, and moves in a minimal chain cannot have disjoint supports that leave a gap (otherwise the chain decomposes into independent subchains, contradicting that \(p\neq q\) requires them all). The leftmost position is \(a(\mathcal{C})\) and the rightmost is at most \(m\).
+\end{proof}
+
+\begin{lemma}[Potential decrease under shift]\label{lem:potential-decrease}
+Let \(m\ge 3\). Consider an off-diagonal edge \((u,v)\to(u',v')\) in \(F_m\), corresponding to two distinct words \(p=ub_1\) and \(q=vb_2\) with \(\Fold_m(p)=\Fold_m(q)\), where \(b_1,b_2\in\{0,1\}\) are the appended bits and \(u'=\mathrm{suffix}_{m-1}(p)\), \(v'=\mathrm{suffix}_{m-1}(q)\). Let \(\mathcal{C}\) be a minimal connecting chain for \((p,q)\) with parameters \(r=r(\mathcal{C})\) and \(a=a(\mathcal{C})\). Define the integer-valued potential
+\[
+\mathcal{P}(u,v):=(m+1)\,r+a.
+\]
+Then \(u'\neq v'\) implies that any minimal connecting chain \(\mathcal{C}'\) for the successor pair \((p',q')\) --- where \(p'=u'b_1'\) and \(q'=v'b_2'\) are the words on the next edge with the same label --- satisfies
+\[
+\mathcal{P}(u',v')<\mathcal{P}(u,v).
+\]
+\end{lemma}
+
+\begin{proof}
+The shift from \(p\) to \(p'\) deletes position \(1\) and appends a new digit at position \(m\). We consider two cases.
+
+\emph{Case 1: \(a>1\).} Every move in \(\mathcal{C}\) touches only positions \(\{a,\dots,m\}\), so deleting position \(1\) shifts all moves one position to the left. The number of moves \(r'=r\) is unchanged, but the leftmost position decreases: \(a'=a-1\). Hence \(\mathcal{P}'=(m+1)r+(a-1)=\mathcal{P}-1\).
+
+\emph{Case 2: \(a=1\).} The leftmost move in \(\mathcal{C}\) touches position \(1\). After the shift deletes position \(1\), this move either exits the window entirely (if it was an (E1) move at positions \((1,2,3)\) and the shift removes position \(1\)) or its support shrinks. In either case, the connecting chain for the successor pair loses at least one move that involved position \(1\). Since the right-resolving property (Proposition~\ref{prop:right-resolving}) ensures that the appended bits \(b_1'\) and \(b_2'\) are uniquely determined by the common label, the new pair \((p',q')\) (if off-diagonal) has a minimal chain \(\mathcal{C}'\) with \(r'\le r-1\). Even if the new leftmost position \(a'\) is as large as \(m\), we have
+\[
+\mathcal{P}'=(m+1)(r-1)+a'\le (m+1)(r-1)+m=(m+1)r-1<(m+1)r+1\le \mathcal{P}.
+\]
+In both cases, \(\mathcal{P}\) strictly decreases.
+\end{proof}
+
 \begin{proposition}\label{prop:sync}
 If \(m\ge 3\), the off-diagonal subgraph of \(F_m\) has no directed cycle. Equivalently, two distinct bi-infinite paths in \(G_m\) cannot carry the same bi-infinite label sequence.
 \end{proposition}
 
 \begin{proof}
-An off-diagonal edge of \(F_m\) corresponds to two distinct length-\(m\) words \(p,q\in\{0,1\}^m\) with \(\Fold_m(p)=\Fold_m(q)\). By Appendix~\ref{app:rewriting}, equality of folds means that, after writing the words in the low-to-high window convention, \(p\) and \(q\) are connected by a finite sequence of reverse Zeckendorf moves \(001\leftrightarrow 110\). Because \(\Fold_m\) retains only the first \(m\) digits of the normalized form, one also has the two boundary collisions \(000\leftrightarrow 011\) and \(100\leftrightarrow 111\), which are exactly the cases where a single \(1\) is carried across the right boundary of the window.
+By Lemma~\ref{lem:potential-decrease}, the potential \(\mathcal{P}\) strictly decreases along every off-diagonal edge of \(F_m\). Since \(\mathcal{P}\) is a positive integer, a directed cycle is impossible: any cycle would require \(\mathcal{P}\) to return to its starting value after finitely many strict decreases.
 
-Choose, for the pair \((p,q)\), a connecting sequence of such elementary reverse moves with minimal support interval \([a,b]\subseteq\{1,\dots,m\}\); here \(a\) is the smallest coordinate touched by any reverse move. Passing to the next edge of a path in \(F_m\) deletes coordinate \(1\) from both words and appends one new digit on the right. Therefore every elementary reverse move in the chosen chain shifts one position toward the deleted boundary. If \(a>1\), the left endpoint decreases from \(a\) to \(a-1\). If \(a=1\), then the leftmost reverse move leaves the window altogether at the next shift, so the number of elementary reverse moves in a minimal connecting chain strictly decreases.
-
-Write \(r(p,q)\) for the number of elementary reverse moves in such a minimal connecting chain, and define the integer-valued potential
-\[
-\mathcal P(p,q):=(m+1)\,r(p,q)+a(p,q).
-\]
-If \(a>1\), then the next step decreases \(a\) by \(1\) while leaving \(r\) unchanged, so \(\mathcal P\) drops by \(1\). If \(a=1\), then the leftmost reverse move exits the window, so the next step decreases \(r\) by at least \(1\); even if the new left endpoint were as large as \(m\), the potential would still drop because
-\[
-(m+1)(r-1)+m < (m+1)r+1.
-\]
-Thus \(\mathcal P\) strictly decreases along every off-diagonal edge of \(F_m\). A directed cycle is therefore impossible. The equivalent pathwise formulation follows because a bi-infinite common label sequence would give a bi-infinite off-diagonal path in \(F_m\).
+For the bi-infinite formulation: suppose two distinct bi-infinite paths carry the same label sequence. Restricting to any sufficiently long finite window gives an off-diagonal path segment in \(F_m\) of arbitrary length. But the potential \(\mathcal{P}\) is bounded below by \(1\) and decreases by at least \(1\) at each step, so no off-diagonal path can have length exceeding the initial potential value. This contradicts the arbitrary length.
 \end{proof}
 
 \subsection{An explicit decoder for \(m=3\)}

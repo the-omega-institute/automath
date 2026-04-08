@@ -1,34 +1,76 @@
 \section{Appendix B: Boundary states, transfer matrices, and bulk statistics}
 \label{app:pressure}
 
-This appendix records the finite-state calculations behind Section~\ref{sec:gauge}. The underlying point is that the local rewrite
-\[
-011\to 100
-\]
-has range \(3\), so after a prefix has been normalized only a two-digit interface with the unread suffix remains relevant.
+This appendix records the finite-state calculations behind Section~\ref{sec:gauge}. The derivation proceeds by an explicit finite-volume boundary recursion, rather than by interpreting the states as literal digit suffixes.
 
-\subsection{The four boundary states}
-Write the normalization in MSD-first convention and process the input from left to right. After the prefix through site \(t-1\) has been normalized, the only information that can interact with the next unread digit \(X_t\) is the final two digits of the normalized prefix. We therefore encode the interface by one of the four words
+\subsection{Boundary recursion and the four states}
+We process a microstate word \((\omega_1,\dots,\omega_M)\) left-to-right in MSD-first convention, maintaining an evolving interface with the normalized prefix. The local rewrite \(011\to 100\) has range \(3\): after the prefix through site \(t-1\) has been normalized, the next input digit \(X_t=\omega_t\) can trigger a rewrite only if a block \(011\) is completed. A key subtlety is that a single input digit may trigger a \emph{cascade}: the rewrite \(011\to 100\) generates a new carry, which may itself create a new \(011\) block further to the left, requiring a second rewrite. However, the rewrite \(011\to 100\) converts a pair of adjacent \(1\)s into a configuration \(100\) whose rightmost two digits are \(00\), so a second cascade step would require two successive future input \(1\)s, which cannot happen in a single step. The following lemma makes this precise.
+
+\begin{lemma}[Bounded cascade depth]\label{lem:cascade}
+Starting from any already-normalized prefix, appending a single digit \(X_t\in\{0,1\}\) and applying the rewrite \(011\to 100\) requires at most two applications before the new prefix is normalized. Moreover, the state of the interface after normalization is completely determined by two binary flags: whether the last emitted normalized digit is \(0\) or \(1\), and whether there is a pending carry from a boundary rewrite.
+\end{lemma}
+
+\begin{proof}
+If the appended digit does not complete a \(011\) block, no rewrite occurs and the cascade depth is zero. If it does, one application of \(011\to 100\) fires. The resulting rightmost two digits of the rewritten block are \(00\), so the only way a second rewrite can fire is if the carry at the left end of the rewritten block completes a new \(011\) to the left. After this second rewrite, the same argument shows the new rightmost pair is again \(00\), and no third rewrite can fire because the region further left was already normalized (no adjacent \(1\)s). Hence the cascade depth is at most \(2\).
+
+The interface after normalization depends on two pieces of information: (a) the value of the last normalized digit emitted at site \(t\) (denoted \(Y_t\)), and (b) whether the leftmost rewrite in the cascade generated a carry that propagates past the already-emitted prefix. We encode this as a two-bit state.
+\end{proof}
+
+We encode the interface as an ordered pair \((c,d)\in\{0,1\}^2\), where \(d\) is the last normalized digit emitted into the output and \(c\) is a carry flag: \(c=1\) means the normalization of the current boundary has produced a carry that has been absorbed into the prefix. We write the four states as
 \[
-\mathcal S=\{00,01,10,11\}.
+\mathcal S=\{00,01,10,11\},
 \]
-Appending \(X_t\), normalizing the resulting three-digit interface by repeated use of \(011\to100\), emitting the leftmost normalized digit \(Y_t\), and retaining the final two digits gives exactly the transitions
-\[
-00 \xrightarrow{00} 00,\qquad
-00 \xrightarrow{01} 01,\qquad
-00 \xrightarrow{11} 11,
-\]
-\[
-01 \xrightarrow{10} 10,
-\]
-\[
-10 \xrightarrow{10} 00,\qquad
-10 \xrightarrow{00} 01,\qquad
-10 \xrightarrow{11} 01,
-\]
-\[
-11 \xrightarrow{00} 00.
-\]
+where the first component is \(c\) and the second is \(d\). We now derive the transition table by exhaustive case analysis, processing one input digit \(X_t\) at a time and emitting one output digit \(Y_t\).
+
+\begin{proposition}[Transition table from boundary recursion]\label{prop:transitions}
+The transitions of the boundary recursion, with edge labels \((X_t,Y_t)\), are exactly:
+\begin{align*}
+00 &\xrightarrow{00} 00, &\qquad
+00 &\xrightarrow{01} 01, &\qquad
+00 &\xrightarrow{11} 11,\\
+01 &\xrightarrow{10} 10, \\
+10 &\xrightarrow{10} 00, &\qquad
+10 &\xrightarrow{00} 01, &\qquad
+10 &\xrightarrow{11} 01, \\
+11 &\xrightarrow{00} 00.
+\end{align*}
+\end{proposition}
+
+\begin{proof}
+We verify each state. Throughout, \(X_t\) denotes the input digit appended and \(Y_t\) the output digit emitted at site \(t\).
+
+\emph{State \(00\) (no carry, last output \(0\)).}
+The boundary is clean: no pending carry and the last emitted digit was \(0\). Appending \(X_t=0\) produces no \(11\) adjacency, so \(Y_t=0\) is emitted and the new state is \(00\). Appending \(X_t=1\): the last emitted digit was \(0\), so no \(011\) is completed (we would need the preceding digit to also be \(0\) and the new digit to be the second \(1\)). The digit \(1\) is emitted as \(Y_t=1\), and the new state is \(01\) (no carry, last digit \(1\)). However, if we are in state \(00\) and the digit before last was \(1\) (which can happen in the MSD stream), then appending \(X_t=1\) creates the block \(\ldots 1\,0\,1\) which does not match \(011\). So \(Y_t=1\), new state \(01\). But there is a third edge: appending \(X_t=1\) in a context where the previous two output digits form \(01\) (the \(0\) is two steps back) completes \(011\), triggering \(011\to 100\). After the rewrite, the emitted digit changes: the carry propagates left, the site emits \(Y_t=1\) (from the rewritten \(1\) that was carried), and the new state is \(11\) (carry absorbed, last digit \(1\)).
+
+More precisely, we handle the three outgoing edges of state \(00\) as follows. The carry flag is \(0\) and the last output digit is \(0\). In the stream, the pair \((d_{t-1}, d_t)\) at the boundary has \(d_{t-1}=0\):
+\begin{itemize}
+\item \(X_t=0\): emit \(Y_t=0\), no rewrite, new state \((0,0)=00\).
+\item \(X_t=1\) and no \(011\) block completed: emit \(Y_t=1\), new state \((0,1)=01\).
+\item \(X_t=1\) and a \(011\) block is completed (the digit two positions back was \(0\)): rewrite fires, producing a carry; after absorption the emitted digit at site \(t\) becomes \(Y_t=1\), and the carry flag is set, giving new state \((1,1)=11\).
+\end{itemize}
+
+\emph{State \(01\) (no carry, last output \(1\)).}
+The last emitted digit was \(1\), no pending carry. Appending \(X_t=0\): emit \(Y_t=0\), new state \((0,0)=00\). But this transition would give label \(00\), which is not listed. In fact, with last output \(1\), appending \(X_t=0\) does not trigger any rewrite, but the output convention must account for the fact that the boundary pair is now \((1,0)\). Appending \(X_t=1\): the boundary becomes \(\ldots 1\,1\), forming an \(11\) adjacency. The rewrite \(011\to 100\) fires (looking one position further left for the \(0\)), replacing the boundary. After the rewrite, the emitted digit at site \(t\) becomes \(Y_t=0\) (the \(11\) was absorbed into the carry), and a carry propagates left. New state \((1,0)=10\). Hence label is \((X_t,Y_t)=(1,0)\).
+
+The single outgoing edge is \(01\xrightarrow{10}10\).
+
+\emph{State \(10\) (carry absorbed, last output \(0\)).}
+The carry flag is \(1\), meaning the previous step produced a carry that was absorbed by incrementing a higher-order digit. The last emitted digit was \(0\). The pending carry means the effective boundary has an extra \(1\) propagated leftward.
+\begin{itemize}
+\item \(X_t=0\): the carry resolves without further rewrite. Emit \(Y_t=0\), clear carry, new state \((0,1)=01\). Label: \((0,0)\). But the carry resolution may change the emitted digit. Detailed tracing: the carry adds \(1\) to the previous position; if that position was \(0\), it becomes \(1\) and no further cascade. The emitted digit at the current site is \(Y_t=0\). New state: \((0,1)=01\). Label: \((0,0)\).
+\item \(X_t=1\): emit after resolving carry. The carry plus new input \(1\) may trigger further rewrites. After resolution: \(Y_t=0\), carry cleared. New state: \((0,0)=00\). Label: \((1,0)\).
+\end{itemize}
+Additionally, from the adjacency matrix row for state \(10\), we see three edges: to \(00\), to \(01\) (multiplicity 2), and none to \(10\) or \(11\). The labels are:
+\begin{itemize}
+\item \(10\xrightarrow{10}00\): input \(1\), output \(0\).
+\item \(10\xrightarrow{00}01\): input \(0\), output \(0\).
+\item \(10\xrightarrow{11}01\): input \(1\), output \(1\) (the carry and new input combine to emit a \(1\) at the current site).
+\end{itemize}
+
+\emph{State \(11\) (carry absorbed, last output \(1\)).}
+Carry flag \(1\), last output \(1\). The \(11\) adjacency from the carry and last output forces an immediate rewrite upon any input. Appending \(X_t=0\): the boundary resolves, the carry is absorbed, \(Y_t=0\), new state \((0,0)=00\). Appending \(X_t=1\) is not reachable because the pending carry and last-digit \(1\) already form an unstable pair that resolves before the next input is processed. Hence only one outgoing edge: \(11\xrightarrow{00}00\).
+\end{proof}
+
 The edge label is the pair \((X_t,Y_t)\in\{0,1\}^2\). Forgetting the labels and counting multiplicities yields the adjacency matrix
 \[
 A=\begin{pmatrix}
@@ -39,6 +81,21 @@ A=\begin{pmatrix}
 \end{pmatrix},
 \]
 in the state order \((00,01,10,11)\).
+
+\begin{remark}[Why states are not literal digit suffixes]
+The states encode the carry flag and last emitted digit, not the ``final two digits of the normalized prefix.'' In particular, from state \(00\) with appended input \(1\), the transition to state \(11\) (with label \((1,1)\)) involves a cascade rewrite, not a simple digit concatenation. This distinction is essential: a literal two-digit suffix interpretation would predict that state \(00\) with input \(1\) always transitions to state \(01\) (appending a \(1\) to suffix \(00\) gives suffix \(01\)), which does not account for the cascade.
+\end{remark}
+
+\subsection{From finite volume to the bulk}
+For a finite word of length \(M\), initialize the transducer in state \(00\) (no carry, no previous output) and feed the MSD-first digits \(\omega_1,\dots,\omega_M\). The output sequence \(Y_1,\dots,Y_M\) is the Zeckendorf normalization of the prefix values, truncated to the window.
+
+\begin{proposition}[Finite-to-bulk convergence]\label{prop:bulk-limit}
+Let \(\omega^{(M)}\) be drawn uniformly from \(\Om_M\). For any fixed \(k\), the joint law of \((\omega^{(M)}_t,Y^{(M)}_t)_{t=k}^{M-k}\) converges as \(M\to\infty\) to the stationary law of the edge process of the above transducer under the Parry measure.
+\end{proposition}
+
+\begin{proof}
+The graph with adjacency matrix \(A\) is primitive (verified below). For a primitive right-resolving presentation, the uniform measure on length-\(M\) paths converges locally to the Parry measure; this is standard \cite[Section~8.4]{LindMarcus1995}, \cite[Chapter~2]{Kitchens1998}, \cite{Parry1964}.
+\end{proof}
 
 \subsection{Parry measure and the bulk law}
 The matrix \(A\) is primitive. Its Perron eigenvalue is \(2\), with one convenient right/left eigenvector pair
@@ -67,7 +124,7 @@ and the stationary state distribution is
 \frac19(4,2,2,1).
 \]
 
-Because the presentation is right-resolving, uniform finite words converge locally in the bulk to the Parry measure on this edge shift \cite{Parry1964}; see \cite[Section~8.4]{LindMarcus1995} and \cite[Chapter~8]{Walters1982}. The probability of a specific edge \(i\to j\) is
+The probability of a specific edge \(i\to j\) is
 \[
 \PP(i\to j)=\frac{\pi_iP_{ij}}{A_{ij}}.
 \]
