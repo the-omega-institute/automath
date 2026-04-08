@@ -19,6 +19,41 @@ theorem paper_pom_fiber_index_cgf_q2_specialized (m : Nat) :
   refine ⟨wedderburn_total_dim_eq_S2 m, ?_⟩
   exact X.fiberMultiplicity_total m
 
+/-- q=3 POM fiber-index CGF specialization.
+    prop:pom-fiber-index-cgf -/
+theorem paper_pom_fiber_index_cgf_q3_specialized (m : Nat) :
+    (∑ x : X m, X.fiberMultiplicity x ^ 3 = momentSum 3 m) ∧
+    (∑ x : X m, X.fiberMultiplicity x = 2 ^ m) := by
+  refine ⟨rfl, ?_⟩
+  exact X.fiberMultiplicity_total m
+
+/-- q=4 POM fiber-index CGF specialization.
+    prop:pom-fiber-index-cgf -/
+theorem paper_pom_fiber_index_cgf_q4_specialized (m : Nat) :
+    (∑ x : X m, X.fiberMultiplicity x ^ 4 = momentSum 4 m) ∧
+    (∑ x : X m, X.fiberMultiplicity x = 2 ^ m) := by
+  refine ⟨rfl, ?_⟩
+  exact X.fiberMultiplicity_total m
+
+/-- General q POM fiber-index CGF.
+    prop:pom-fiber-index-cgf -/
+theorem paper_pom_fiber_index_cgf_general (q m : Nat) :
+    ∑ x : X m, (X.fiberMultiplicity x) ^ q = momentSum q m := rfl
+
+/-- Complete POM fiber-index CGF package.
+    prop:pom-fiber-index-cgf -/
+theorem paper_pom_fiber_index_cgf_package :
+    (∀ m, ∑ x : X m, X.fiberMultiplicity x ^ 2 = momentSum 2 m) ∧
+    (∀ m, ∑ x : X m, X.fiberMultiplicity x ^ 3 = momentSum 3 m) ∧
+    (∀ m, ∑ x : X m, X.fiberMultiplicity x ^ 4 = momentSum 4 m) ∧
+    (∀ q m, ∑ x : X m, (X.fiberMultiplicity x) ^ q = momentSum q m) ∧
+    (∀ m, ∑ x : X m, X.fiberMultiplicity x = 2 ^ m) :=
+  ⟨wedderburn_total_dim_eq_S2,
+   fun _ => rfl,
+   fun _ => rfl,
+   paper_pom_fiber_index_cgf_general,
+   X.fiberMultiplicity_total⟩
+
 /-- At m=6, the groupoid algebra has Wedderburn dimension 220.
     prop:fold-groupoid-wedderburn -/
 theorem wedderburn_dim_m6 : momentSum 2 6 = 220 := momentSum_two_six
