@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1665 |
+| \leanverified 标注数 | 1669 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1682 |
-| 轮次 | R409（round_count=410）|
+| 总标注数 | 1686 |
+| 轮次 | R410（round_count=411）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -27,14 +27,14 @@
 | POM | 1,707 | 296 | 17.3% |
 | Emergent Arithmetic | 185 | 164 | 88.6% |
 | Folding | 337 | 123 | 36.5% |
-| Conclusion | 2,550 | 254 | 10.0% |
+| Conclusion | 2,550 | 255 | 10.0% |
 | Group Unification | 469 | 162 | 34.5% |
 | SPG | 129 | 106 | 82.2% |
 | Circle Dimension | 393 | 145 | 36.9% |
 | Zeta Finite Part | 4,524 | 197 | 4.4% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1509** | **14.4%** |
+| **合计（body）** | **10,508** | **1510** | **14.4%** |
 
 ### 1.2 已完成模块
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**Conclusion saturation defect triple-add + positivity iff（Round R410）**：`saturationDefect_triple_add`（对应 `thm:conclusion-product-fold-saturation-defect-additivity`，Conclusion；饱和缺陷三重加法律）；`saturationDefect_nonneg_sum`（对应 `thm:conclusion-product-fold-saturation-defect-additivity`，Conclusion；饱和缺陷非负和）；`saturationDefect_pos_iff_exists_pos`（对应 `thm:conclusion-product-fold-saturation-defect-additivity`，Conclusion；饱和缺陷正性当且仅当某分量正）；`paper_saturation_defect_extended_package`（对应 `thm:conclusion-product-fold-saturation-defect-additivity`，Conclusion；饱和缺陷扩展综合论文接口）
 **Discussion ChebyAdams S=4 值表 + S=6 完整块（Round R409）**：`chebyAdams_at_four_values`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(4) 值表）；`chebyAdams_at_six_recurrence`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(6) 递推关系）；`chebyAdams_at_six_base`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(6) 基值）；`chebyAdams_at_six_values`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(6) 值表）；`paper_chebyAdams_at_four_six_package`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；S=4/S=6 综合论文接口）
 **EA χ-刚性扩展：sign 平方/逆/共轭幂（Round R408）**：`sign_square_eq_one`（对应 `thm:fold-groupoid-chi-rigidity`，Emergent Arithmetic；sign 平方恒为 1）；`sign_inv_eq_sign`（对应 `thm:fold-groupoid-chi-rigidity`，Emergent Arithmetic；sign 逆等于 sign）；`sign_conj_pow_eq_sign_pow`（对应 `thm:fold-groupoid-chi-rigidity`，Emergent Arithmetic；共轭幂的 sign 恒等式）；`paper_chi_rigidity_extended_package`（对应 `thm:fold-groupoid-chi-rigidity`，Emergent Arithmetic；χ-刚性扩展综合论文接口）
 **Zeta Hankel4 碰撞退化 κ=4（Round R407）**：`hankel4_eq_zero_of_collision_12`（对应 `cor:xi-hankel-vs-prony-square-gap`，Zeta；4×4 Hankel (1,2) 碰撞退化零判别）；`hankel4_eq_zero_of_collision_34`（对应 `cor:xi-hankel-vs-prony-square-gap`，Zeta；4×4 Hankel (3,4) 碰撞退化零判别）；`hankel4_eq_zero_of_any_collision`（对应 `cor:xi-hankel-vs-prony-square-gap`，Zeta；4×4 Hankel 任意碰撞退化零判别）；`paper_hankel4_collision_degeneracy`（对应 `cor:xi-hankel-vs-prony-square-gap`，Zeta；Hankel4 碰撞退化综合论文接口）
@@ -356,6 +357,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R410: Conclusion saturation defect triple-add + positivity iff（完整）**：Conclusion/SaturationDefect.lean——saturationDefect_triple_add（thm:conclusion-product-fold-saturation-defect-additivity，饱和缺陷三重加法律，Conclusion）; saturationDefect_nonneg_sum（thm:conclusion-product-fold-saturation-defect-additivity，饱和缺陷非负和，Conclusion）; saturationDefect_pos_iff_exists_pos（thm:conclusion-product-fold-saturation-defect-additivity，饱和缺陷正性 iff，Conclusion）; paper_saturation_defect_extended_package（thm:conclusion-product-fold-saturation-defect-additivity，饱和缺陷扩展综合论文接口，Conclusion）——**1 个新论文标签条目计入覆盖率**（thm:conclusion-product-fold-saturation-defect-additivity 首次标注 +1）——Conclusion 254→255（10.0%），全局 \leanverified 1665→1669（+4），总标注 1682→1686（+4），body 覆盖 1509→1510（14.4%），proof commit a583009
 **Phase R409: Discussion ChebyAdams S=4 values + S=6 full block（完整）**：Discussion/ChebyshevAdams.lean——chebyAdams_at_four_values（thm:discussion-chebyshev-witt-equivariance，C_n(4) 值表，Discussion）; chebyAdams_at_six_recurrence（thm:discussion-chebyshev-witt-equivariance，C_n(6) 递推，Discussion）; chebyAdams_at_six_base（thm:discussion-chebyshev-witt-equivariance，C_n(6) 基值，Discussion）; chebyAdams_at_six_values（thm:discussion-chebyshev-witt-equivariance，C_n(6) 值表，Discussion）; paper_chebyAdams_at_four_six_package（thm:discussion-chebyshev-witt-equivariance，S=4/S=6 综合论文接口，Discussion）——**0 个新论文标签条目计入覆盖率**（thm:discussion-chebyshev-witt-equivariance 已注册，本轮为深化）——Discussion 64（95.5%，不变），全局 \leanverified 1660→1665（+5），总标注 1677→1682（+5），body 覆盖 1509（14.4%，不变），proof commit f7e960a
 **Phase R408: EA chi-rigidity extended package（完整）**：EA/ChiRigidityShadow.lean——sign_square_eq_one（thm:fold-groupoid-chi-rigidity，sign 平方恒为 1，EA）; sign_inv_eq_sign（thm:fold-groupoid-chi-rigidity，sign 逆等于 sign，EA）; sign_conj_pow_eq_sign_pow（thm:fold-groupoid-chi-rigidity，共轭幂 sign 恒等式，EA）; paper_chi_rigidity_extended_package（thm:fold-groupoid-chi-rigidity，χ-刚性扩展综合论文接口，EA）——**0 个新论文标签条目计入覆盖率**（thm:fold-groupoid-chi-rigidity 已注册 R181，本轮为深化）——EA 164（88.6%，不变），全局 \leanverified 1656→1660（+4），总标注 1673→1677（+4），body 覆盖 1509（14.4%，不变），proof commit a05e207
 **Phase R407: Zeta Hankel4 collision degeneracy κ=4（完整）**：Zeta/HankelVandermonde4.lean——hankel4_eq_zero_of_collision_12（cor:xi-hankel-vs-prony-square-gap，4×4 Hankel (1,2) 碰撞退化，Zeta）; hankel4_eq_zero_of_collision_34（cor:xi-hankel-vs-prony-square-gap，4×4 Hankel (3,4) 碰撞退化，Zeta）; hankel4_eq_zero_of_any_collision（cor:xi-hankel-vs-prony-square-gap，4×4 Hankel 任意碰撞退化，Zeta）; paper_hankel4_collision_degeneracy（cor:xi-hankel-vs-prony-square-gap，Hankel4 碰撞退化综合论文接口，Zeta）——**0 个新论文标签条目计入覆盖率**（cor:xi-hankel-vs-prony-square-gap 已注册，本轮为深化）——Zeta 197（4.4%，不变），全局 \leanverified 1652→1656（+4），总标注 1669→1673（+4），body 覆盖 1509（14.4%，不变），proof commit 8d7e145
