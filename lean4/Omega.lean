@@ -120,6 +120,7 @@ import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
 import Omega.GU.FibTailP23Orbits
 import Omega.GU.BdryZ2JumpUniqueness
+import Omega.GU.Window6DoubleLock12
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.ResidualCircleDim
