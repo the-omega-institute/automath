@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1971 |
+| \leanverified 标注数 | 1978 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1988 |
-| 轮次 | R469（round_count=470）|
+| 总标注数 | 1995 |
+| 轮次 | R470（round_count=471）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -27,14 +27,14 @@
 | POM | 1,707 | 300 | 17.6% |
 | Emergent Arithmetic | 185 | 168 | 90.8% |
 | Folding | 337 | 125 | 37.1% |
-| Conclusion | 2,550 | 259 | 10.2% |
+| Conclusion | 2,550 | 260 | 10.2% |
 | Group Unification | 469 | 165 | 35.2% |
 | SPG | 129 | 108 | 83.7% |
 | Circle Dimension | 393 | 148 | 37.7% |
 | Zeta Finite Part | 4,524 | 201 | 4.4% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1536** | **14.6%** |
+| **合计（body）** | **10,508** | **1537** | **14.6%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**Conclusion Ext(π) 核偏序分类（Round R470，新标签，streak #19）**：`KernelSubset`（对应 `thm:conclusion-extpi-kernel-poset-classification`，Conclusion；核包含谓词 def）；`kernelSubset_refl`（对应同标签，Conclusion；自反性）；`kernelSubset_trans`（对应同标签，Conclusion；传递性）；`kernelSubset_of_comp`（对应同标签，Conclusion；复合分解推导核包含）；`comp_unique_of_surjective`（对应同标签，Conclusion；满射情形分解映射唯一性）；`exists_comp_of_kernelSubset`（对应同标签，Conclusion；核包含推导分解映射存在性）；`paper_conclusion_extpi_kernel_poset_classification`（对应同标签，Conclusion；5-field 综合论文接口）——**新标签首次注册**（thm:conclusion-extpi-kernel-poset-classification，streak #19）
 **EA Brauer 分歧偶性（Round R469，新标签，streak #18）**：`half_sum_eq_card_div_two`（对应 `thm:prime-register-brauer-ramification-even`，EA；常数半整数和等于 |S|/2）；`half_sum_int_iff_card_even`（对应同标签，EA；半整数和为整数 iff |S| 为偶）；`reciprocity_forces_even_card`（对应同标签，EA；互易方向：整数半和强制偶数基数）；`even_card_gives_int_half_sum`（对应同标签，EA；逆方向：偶数基数给出整数半和）；`paper_prime_register_brauer_ramification_even`（对应同标签，EA；4-field 综合论文接口）——**新标签首次注册**（thm:prime-register-brauer-ramification-even，streak #18）
 **GU window-6 数值 12 双锁（Round R468，新标签，streak #17）**：`fib_two_eq_one`（对应 `cor:window6-double-lock-12`，GU；F_2=1）；`fib_four_eq_three`（对应同标签，GU；F_4=3）；`fib_six_eq_eight`（对应同标签，GU；F_6=8）；`boundary_tower_sum`（对应同标签，GU；边界塔和 F_2+F_4+F_6=12）；`rigidity_sector_sum`（对应同标签，GU；刚性扇区重组 8+4=12）；`paper_window6_double_lock_12`（对应同标签，GU；6-field 综合论文接口）——**新标签首次注册**（cor:window6-double-lock-12，streak #17）
 **CD 螺线管纤维 torsor（Round R467，新标签，streak #16）**：`same_fiber_inv_mul_mem_ker`（对应 `cor:cdim-solenoid-fiber-torsor`，CD；同纤维商属于核）；`mul_ker_same_fiber`（对应同标签，CD；核元素平移保纤维）；`fiber_torsor_unique`（对应同标签，CD；同纤维对的唯一核见证 ∃!）；`fiber_torsor_exists`（对应同标签，CD；存在性）；`paper_cdim_solenoid_fiber_torsor`（对应同标签，CD；4-field 综合论文接口）——**新标签首次注册**（cor:cdim-solenoid-fiber-torsor，streak #16，R451 后首个新 CD 标签）
