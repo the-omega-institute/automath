@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2019 |
+| \leanverified 标注数 | 2023 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 2036 |
-| 轮次 | R476（round_count=477）|
+| 总标注数 | 2040 |
+| 轮次 | R477（round_count=478）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -27,14 +27,14 @@
 | POM | 1,707 | 301 | 17.6% |
 | Emergent Arithmetic | 185 | 169 | 91.4% |
 | Folding | 337 | 126 | 37.4% |
-| Conclusion | 2,550 | 260 | 10.2% |
+| Conclusion | 2,550 | 261 | 10.2% |
 | Group Unification | 469 | 166 | 35.4% |
 | SPG | 129 | 108 | 83.7% |
 | Circle Dimension | 393 | 149 | 37.9% |
 | Zeta Finite Part | 4,524 | 202 | 4.5% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1543** | **14.7%** |
+| **合计（body）** | **10,508** | **1544** | **14.7%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**Conclusion fold/逆码 Hilbert 可识别几何恒等式（Round R477，新标签，streak #26）**：`matrix_geom_sum_mul`（对应 `thm:conclusion-fold-inversecode-hilbert-recognizable`，Conclusion；矩阵几何和左形式 (1-A)·Σ=1-A^k）；`matrix_mul_geom_sum`（对应同标签，Conclusion；矩阵几何和右形式 Σ·(1-A)=1-A^k）；`weighted_matrix_sum_unit`（对应同标签，Conclusion；单位权重矩阵和幂等式）；`paper_conclusion_fold_inversecode_hilbert_recognizable`（对应同标签，Conclusion；3-field 综合论文接口）——**新标签首次注册**（thm:conclusion-fold-inversecode-hilbert-recognizable，streak #26）
 **EA Brauer 同余筛密度（Round R476，新标签，streak #25）**：`single_binary_density`、`two_binary_density`、`three_binary_density`（对应 `cor:prime-register-brauer-congruence-sieve-density`，EA；1/2^1、1/2^2、1/2^3 密度值）；`independent_binary_density`（对应同标签，EA；独立二进制密度 1/2^n=(1/2)^n）；`neg_power_eq_reciprocal`（对应同标签，EA；反向形式 (1/2)^n=1/2^n）；`density_multiplicative`（对应同标签，EA；乘法精化：增加一个素数使密度减半）；`density_lt_one`（对应同标签，EA；n≥1 时密度严格小于 1）；`paper_prime_register_brauer_congruence_sieve_density`（对应同标签，EA；7-field 综合论文接口）——**新标签首次注册**（cor:prime-register-brauer-congruence-sieve-density，streak #25）
 **GU 强团块化谱刚性（Round R475，新标签，streak #24）**：`eigenvector_lift_of_intertwine`（对应 `thm:window6-strong-lumpability-spectral-rigidity`，GU；交织关系提升特征向量）；`spec_inclusion_of_intertwine`（对应同标签，GU；谱包含：非零提升向量存在性）；`rescale_eigenvalue`（对应同标签，GU；矩阵缩放对应特征值缩放）；`paper_window6_strong_lumpability_spectral_rigidity`（对应同标签，GU；2-field 综合论文接口）——**新标签首次注册**（thm:window6-strong-lumpability-spectral-rigidity，streak #24）
 **CD 正交并合加权圆维数（Round R474，新标签，streak #23）**：`wdim`（对应 `thm:cdim-orthogonal-amalgamated-wdim`，CD；加权圆维数 wdim(u,v)=u+v/2 def）；`wdim_zero_zero`（对应同标签，CD；wdim(0,0)=0）；`wdim_u_linear`（对应同标签，CD；封闭形式）；`wdim_amalgamated`（对应同标签，CD；主并合恒等式）；`wdim_amalgamated_trivial`（对应同标签，CD；正交因子加法性）；`paper_cdim_orthogonal_amalgamated_wdim`（对应同标签，CD；5-field 综合论文接口）——**新标签首次注册**（thm:cdim-orthogonal-amalgamated-wdim，streak #23）
