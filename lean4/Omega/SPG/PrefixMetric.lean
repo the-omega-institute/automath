@@ -132,4 +132,36 @@ theorem paper_prefixDist_metric_axioms :
     (∀ x y z : OmegaInfinity, prefixDist x z ≤ max (prefixDist x y) (prefixDist y z)) := by
   exact ⟨prefixDist_self, prefixDist_comm, prefixDist_triangle, prefixDist_ultrametric⟩
 
+/-- The prefix ball of radius 0 is the whole space.
+    prop:spg-decidable-clopen -/
+theorem prefixBall_zero (x : OmegaInfinity) : prefixBall x 0 = Set.univ := by
+  ext y
+  simp [prefixBall]
+
+/-- Symmetry of prefix ball membership.
+    prop:spg-decidable-clopen -/
+theorem mem_prefixBall_symm (x y : OmegaInfinity) (m : Nat) :
+    y ∈ prefixBall x m ↔ x ∈ prefixBall y m := by
+  rw [mem_prefixBall_iff, mem_prefixBall_iff]
+  exact ⟨Eq.symm, Eq.symm⟩
+
+/-- Full ultrametric prefix metric package.
+    def:spg-prefix-metric -/
+theorem paper_prefixDist_full_ultrametric_package :
+    (∀ x : OmegaInfinity, prefixDist x x = 0) ∧
+    (∀ x y : OmegaInfinity, prefixDist x y = prefixDist y x) ∧
+    (∀ x y : OmegaInfinity, 0 ≤ prefixDist x y) ∧
+    (∀ x y : OmegaInfinity, prefixDist x y = 0 ↔ x = y) ∧
+    (∀ x y z : OmegaInfinity,
+       prefixDist x z ≤ max (prefixDist x y) (prefixDist y z)) ∧
+    (∀ x y z : OmegaInfinity,
+       prefixDist x z ≤ prefixDist x y + prefixDist y z) ∧
+    (∀ x : OmegaInfinity, prefixBall x 0 = Set.univ) ∧
+    (∀ (x : OmegaInfinity) (m : Nat),
+       prefixBall x (m + 1) ⊆ prefixBall x m) := by
+  refine ⟨prefixDist_self, prefixDist_comm, prefixDist_nonneg,
+          prefixDist_eq_zero_iff, prefixDist_ultrametric,
+          prefixDist_triangle, ?_, prefixBall_nested⟩
+  exact prefixBall_zero
+
 end Omega.SPG
