@@ -90,6 +90,7 @@ import Omega.Zeta.HankelVandermonde4
 import Omega.Zeta.CriticalCircleStateDimensionLB
 import Omega.Zeta.HankelWindowAffineFamily
 import Omega.Zeta.SmithEntropyMinDepth
+import Omega.Zeta.GoldenRadiusVisibility
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
