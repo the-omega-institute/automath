@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2001 |
+| \leanverified 标注数 | 2007 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 2018 |
-| 轮次 | R473（round_count=474）|
+| 总标注数 | 2024 |
+| 轮次 | R474（round_count=475）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -30,11 +30,11 @@
 | Conclusion | 2,550 | 260 | 10.2% |
 | Group Unification | 469 | 165 | 35.2% |
 | SPG | 129 | 108 | 83.7% |
-| Circle Dimension | 393 | 148 | 37.7% |
+| Circle Dimension | 393 | 149 | 37.9% |
 | Zeta Finite Part | 4,524 | 202 | 4.5% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1540** | **14.7%** |
+| **合计（body）** | **10,508** | **1541** | **14.7%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**CD 正交并合加权圆维数（Round R474，新标签，streak #23）**：`wdim`（对应 `thm:cdim-orthogonal-amalgamated-wdim`，CD；加权圆维数 wdim(u,v)=u+v/2 def）；`wdim_zero_zero`（对应同标签，CD；wdim(0,0)=0）；`wdim_u_linear`（对应同标签，CD；封闭形式）；`wdim_amalgamated`（对应同标签，CD；主并合恒等式）；`wdim_amalgamated_trivial`（对应同标签，CD；正交因子加法性）；`paper_cdim_orthogonal_amalgamated_wdim`（对应同标签，CD；5-field 综合论文接口）——**新标签首次注册**（thm:cdim-orthogonal-amalgamated-wdim，streak #23）
 **Folding Bayes 折点几何数值脚手架（Round R473，新标签，streak #22）**：`gStar`（对应 `prop:fold-gauge-anomaly-bernoulli-p-kink-unique-max`，Folding；Bayes 阈值目标函数 noncomputable def）；`gStar_half`（对应同标签，Folding；g*(1/2)=4/9）；`qPoly`（对应同标签，Folding；导数分子多项式 def）；`qPoly_half_neg`（对应同标签，Folding；q(1/2)=-1/16，左侧变号见证）；`qPoly_three_quarters_pos`（对应同标签，Folding；q(3/4)=125/256，右侧变号见证）；`hPoly`（对应同标签，Folding；精化多项式 def）；`hPoly_three_quarters_neg`（对应同标签，Folding；h(3/4)=-5/64）；`hPoly_four_fifths_pos`（对应同标签，Folding；h(4/5)=14/125）；`paper_fold_gauge_anomaly_bernoulli_p_kink_unique_max`（对应同标签，Folding；11-field 综合论文接口）——**新标签首次注册**（prop:fold-gauge-anomaly-bernoulli-p-kink-unique-max，streak #22，leanverified 突破 2000）
 **Zeta 同步核端点精化回文（Round R472，新标签，streak #21）**：`conj_pow_zero`（对应 `thm:sync-kernel-endpoint-refined-palindrome`，Zeta；共轭 n=0 基情形）；`conj_pow_one`（对应同标签，Zeta；共轭 n=1 基情形）；`conj_pow`（对应同标签，Zeta；通用定理：p⁻¹xⁿp=yⁿ）；`pow_conj`（对应同标签，Zeta；反向形式：xⁿ=pyⁿp⁻¹）；`paper_sync_kernel_endpoint_refined_palindrome`（对应同标签，Zeta；5-field 综合论文接口）——**新标签首次注册**（thm:sync-kernel-endpoint-refined-palindrome，streak #21）
 **POM 首个联合非半单阈值 (5,5)（Round R471，新标签，streak #20 里程碑）**：`five_not_dvd_fact_one`、`five_not_dvd_fact_two`、`five_not_dvd_fact_three`、`five_not_dvd_fact_four`（对应 `prop:pom-first-joint-nonsemisimple-threshold`，POM；5∤k! for k=1..4）；`five_dvd_fact_five`（对应同标签，POM；5∣5!）；`five_dvd_fact_of_ge_five`（对应同标签，POM；q≥5 时 5∣q!）；`five_not_dvd_fact_of_lt_five`（对应同标签，POM；q<5 时 5∤q!）；`five_dvd_fact_iff`（对应同标签，POM；阈值 iff：5∣q! ↔ 5≤q）；`paper_pom_first_joint_nonsemisimple_threshold`（对应同标签，POM；6-field 综合论文接口）——**新标签首次注册**（prop:pom-first-joint-nonsemisimple-threshold，streak #20 里程碑，总标注数突破 2000）
