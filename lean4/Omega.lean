@@ -103,6 +103,7 @@ import Omega.Conclusion.HypercubePhase
 import Omega.Conclusion.SaturationDefect
 import Omega.Conclusion.SpectrumSignLaw
 import Omega.Conclusion.Q13CrtPeriodCompression
+import Omega.Conclusion.Window6VisibleHiddenSeparation
 import Omega.Core.FiberLatticeSquarefree
 import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure
