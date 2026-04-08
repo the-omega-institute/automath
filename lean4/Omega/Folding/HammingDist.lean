@@ -33,7 +33,7 @@ theorem hammingDist_le {a b : Word m} : hammingDist a b ≤ m := by
     _ = m := Finset.card_fin m
 
 /-- The minimum Hamming distance between distinct stable words at resolution m.
-    def:min-stable-hamming-dist -/
+    thm:foldbin6-carry-hamming-distance -/
 def cMinStableHammingDist (m : Nat) : Nat :=
   let S := (@Finset.univ (X m) (fintypeX m))
   let pairs := S.product S |>.filter (fun (x, y) => x ≠ y)
