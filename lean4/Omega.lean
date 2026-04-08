@@ -122,6 +122,7 @@ import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
 import Omega.Core.FirstJointNonsemisimpleThreshold
+import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap
 import Omega.GU.ZeckendorfCountClosure
 import Omega.GU.FibPrimePisano
