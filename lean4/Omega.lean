@@ -97,6 +97,7 @@ import Omega.EA.ChiRigidityShadow
 import Omega.EA.FibCongruence
 import Omega.EA.PrimeRegisterFibValuation
 import Omega.EA.GodelLogBusemann
+import Omega.EA.BrauerXorLaw
 import Omega.Conclusion.AffineRegisterBudget
 import Omega.Conclusion.PrimeRegister
 import Omega.Conclusion.RamanujanCollapse
