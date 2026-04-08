@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1617 |
+| \leanverified 标注数 | 1621 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1634 |
-| 轮次 | R398（round_count=399） |
+| 总标注数 | 1638 |
+| 轮次 | R399（round_count=400）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**halfCircleDim zero/doubling/mono laws（Round R399）**：`halfCircleDim_zero_of_no_free`（对应 `prop:circle-dimension-laws`，Circle Dimension；无自由秩时半圆维为零）；`halfCircleDim_two_mul`（对应 `prop:circle-dimension-laws`，Circle Dimension；半圆维倍增律）；`halfCircleDim_mono`（对应 `prop:circle-dimension-laws`，Circle Dimension；半圆维单调性）；`paper_halfCircleDim_laws`（对应 `prop:circle-dimension-laws`，Circle Dimension；半圆维算律综合论文接口）
 **XInfinity topology package: nonempty/compact/ext/bit-ne（Round R398）**：`XInfinity_nonempty`（对应 `thm:fold-suite`，Folding；XInfinity 非空）；`XInfinity_univ_isCompact`（对应 `thm:fold-suite`，Folding；XInfinity 全集紧致）；`XInfinity_ext_iff`（对应 `thm:fold-suite` / `lem:ne-of-bit-ne`，Folding；XInfinity 按位外延等价）；`paper_XInfinity_topology_package`（对应 `thm:fold-suite` / `lem:ne-of-bit-ne`，Folding；XInfinity 拓扑包综合论文接口）
 **Zeta even-length correction small-value table n=0..5（Round R397）**：`evenLengthCorrection_zero`（对应 `thm:xi-time-part73c-periodic-evenlength-atomic-correction`，Zeta；偶长校正在 n=0 处的 simp 值）；`evenLengthCorrection_two`（对应 `thm:xi-time-part73c-periodic-evenlength-atomic-correction`，Zeta；偶长校正在 n=2 处的 simp 值）；`paper_zeta_evenLength_small_values_table`（对应 `thm:xi-time-part73c-periodic-evenlength-atomic-correction`，Zeta；小值查表综合论文接口）
 **GU window 9/10 compression ratios + 6-10 package（Round R396）**：`paper_window9_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，Group Unification；window-9 压缩比论文接口）；`paper_window10_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，Group Unification；window-10 压缩比论文接口）；`paper_window_compression_ratio_6_to_10_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，Group Unification；window 6-10 压缩比综合打包论文接口）
@@ -345,6 +346,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R399: CircleDimension halfCircleDim laws（完整）**：CircleDimension/CircleDim.lean——halfCircleDim_zero_of_no_free（prop:circle-dimension-laws，无自由秩时半圆维为零，Circle Dimension）; halfCircleDim_two_mul（prop:circle-dimension-laws，半圆维倍增律，Circle Dimension）; halfCircleDim_mono（prop:circle-dimension-laws，半圆维单调性，Circle Dimension）; paper_halfCircleDim_laws（prop:circle-dimension-laws，半圆维算律综合论文接口，Circle Dimension）——**0 个新论文标签条目计入覆盖率**（prop:circle-dimension-laws 已注册 R115/R117，本轮为深化）——CD 145（36.9%，不变），全局 \leanverified 1617→1621（+4），总标注 1634→1638（+4），body 覆盖 1507（14.3%，不变），proof commit b1d3719
 **Phase R398: Folding XInfinity topology package（完整）**：Folding/InverseLimitTopology.lean（83行）——XInfinity_nonempty（thm:fold-suite，XInfinity 非空，Folding）; XInfinity_univ_isCompact（thm:fold-suite，XInfinity 全集紧致，Folding）; XInfinity_ext_iff（thm:fold-suite / lem:ne-of-bit-ne，XInfinity 按位外延等价，Folding）; paper_XInfinity_topology_package（thm:fold-suite / lem:ne-of-bit-ne，XInfinity 拓扑包综合论文接口，Folding）——**1 个新论文标签条目计入覆盖率**（lem:ne-of-bit-ne 首次标注 +1）——Folding 122→123（36.2%→36.5%），全局 \leanverified 1613→1617（+4），总标注 1630→1634（+4），body 覆盖 1506→1507（14.3%），proof commit 42aeac8
 **Phase R397: Zeta even-length correction small-value table（完整）**：Zeta/EvenLengthCorrection.lean（132行）——evenLengthCorrection_zero（thm:xi-time-part73c-periodic-evenlength-atomic-correction，偶长校正 n=0 simp 值，Zeta）; evenLengthCorrection_two（thm:xi-time-part73c-periodic-evenlength-atomic-correction，偶长校正 n=2 simp 值，Zeta）; paper_zeta_evenLength_small_values_table（thm:xi-time-part73c-periodic-evenlength-atomic-correction，小值查表综合论文接口，Zeta）——**0 个新论文标签条目计入覆盖率**（thm:xi-time-part73c-periodic-evenlength-atomic-correction 已注册 R172/R212/R217，本轮为深化）——Zeta Finite Part 197（4.4%，不变），全局 \leanverified 1610→1613（+3），总标注 1627→1630（+3），body 覆盖 1506（14.3%，不变），proof commit fe295197cb69de8ff740ac141398dbaa5a163266
 **Phase R396: GU window 9/10 compression ratios + 6-10 package（完整）**：GU/Window6RankGap.lean（123行）——paper_window9_compression_ratio（subsec:bdry-tower-zeck-gut-part1，window-9 压缩比论文接口，GU）; paper_window10_compression_ratio（subsec:bdry-tower-zeck-gut-part1，window-10 压缩比论文接口，GU）; paper_window_compression_ratio_6_to_10_package（subsec:bdry-tower-zeck-gut-part1，window 6-10 压缩比综合打包，GU）——**0 个新论文标签条目计入覆盖率**（subsec:bdry-tower-zeck-gut-part1 已注册，本轮为深化）——GU 162（34.5%，不变），全局 \leanverified 1607→1610（+3），总标注 1624→1627（+3），body 覆盖 1506（14.3%，不变），proof commit 4cd47c45fb95175f38cb8852a437044e767b5bde
