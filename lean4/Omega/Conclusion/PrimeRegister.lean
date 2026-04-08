@@ -551,6 +551,30 @@ theorem godelLift_fold9 : (5 + 1) ^ 2 ≥ 34 := by omega
     thm:conclusion-bounded-prime-register-feasibility -/
 theorem godelLift_fold10 : (7 + 1) ^ 2 ≥ 55 := by omega
 
+/-- Godel-lift witness for F_11 = 89: (9+1)² = 100 ≥ 89.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_fib11_witness : (9 + 1) ^ 2 ≥ Nat.fib 11 := by native_decide
+
+/-- Godel-lift witness for F_12 = 144: (11+1)² = 144 ≥ 144.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_fib12_witness : (11 + 1) ^ 2 ≥ Nat.fib 12 := by native_decide
+
+/-- Godel-lift witness for F_13 = 233: (15+1)² = 256 ≥ 233.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem godelLift_fib13_witness : (15 + 1) ^ 2 ≥ Nat.fib 13 := by native_decide
+
+/-- Paper package: Godel-lift feasibility witnesses for F_11..F_13.
+    thm:conclusion-bounded-prime-register-feasibility -/
+theorem paper_godelLift_fib_extended_11_to_13 :
+    (9 + 1) ^ 2 ≥ Nat.fib 11 ∧
+    (11 + 1) ^ 2 ≥ Nat.fib 12 ∧
+    (15 + 1) ^ 2 ≥ Nat.fib 13 ∧
+    Nat.fib 11 = 89 ∧
+    Nat.fib 12 = 144 ∧
+    Nat.fib 13 = 233 := by
+  refine ⟨godelLift_fib11_witness, godelLift_fib12_witness, godelLift_fib13_witness,
+    ?_, ?_, ?_⟩ <;> native_decide
+
 /-- Max fiber sizes = Fibonacci sequence.
     thm:conclusion-bounded-prime-register-feasibility -/
 theorem godelLift_maxfiber_fib_chain :
