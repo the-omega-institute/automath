@@ -405,6 +405,31 @@ theorem freeInvolutionCount_eight : freeInvolutionCount 8 = 2027025 := by
 theorem freeInvolutionCount_nine : freeInvolutionCount 9 = 34459425 := by
   rw [freeInvolutionCount_succ, freeInvolutionCount_eight]
 
+/-- f(10) = 19!! = 654729075.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_ten : freeInvolutionCount 10 = 654729075 := by
+  rw [freeInvolutionCount_succ, freeInvolutionCount_nine]
+
+/-- f(11) = 21!! = 13749310575.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem freeInvolutionCount_eleven : freeInvolutionCount 11 = 13749310575 := by
+  rw [freeInvolutionCount_succ, freeInvolutionCount_ten]
+
+/-- Paper package: free involution counts r = 10, 11 with growth witnesses.
+    thm:fiberwise-free-involution-matching-entropy -/
+theorem paper_freeInvolutionCount_r10_r11_extended :
+    freeInvolutionCount 10 = 654729075 ∧
+    freeInvolutionCount 11 = 13749310575 ∧
+    freeInvolutionCount 9 < freeInvolutionCount 10 ∧
+    freeInvolutionCount 10 < freeInvolutionCount 11 ∧
+    20 * freeInvolutionCount 10 < freeInvolutionCount 11 ∧
+    2 ^ 10 < freeInvolutionCount 10 := by
+  refine ⟨freeInvolutionCount_ten, freeInvolutionCount_eleven, ?_, ?_, ?_, ?_⟩
+  · rw [freeInvolutionCount_nine, freeInvolutionCount_ten]; omega
+  · rw [freeInvolutionCount_ten, freeInvolutionCount_eleven]; omega
+  · rw [freeInvolutionCount_ten, freeInvolutionCount_eleven]; omega
+  · rw [freeInvolutionCount_ten]; norm_num
+
 /-- Log-convexity: f(r)² ≤ f(r-1) · f(r+1) for r ≥ 1.
     thm:fiberwise-free-involution-matching-entropy -/
 theorem freeInvolutionCount_sq_le_mul (r : Nat) (hr : 1 ≤ r) :
