@@ -108,3 +108,4 @@ import Omega.GU.FibPrimePisano
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.ResidualCircleDim
+import Omega.CircleDimension.DyadicKernelCube
