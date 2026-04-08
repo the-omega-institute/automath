@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 1695 |
+| \leanverified 标注数 | 1699 |
 | \leanpartial 标注数 | 17 |
-| 总标注数 | 1712 |
-| 轮次 | R416（round_count=417）|
+| 总标注数 | 1716 |
+| 轮次 | R417（round_count=418）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -53,6 +53,7 @@
 
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
+**Discussion ChebyAdams S=7 完整块（Round R417）**：`chebyAdams_at_seven_base`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(7) 基值）；`chebyAdams_at_seven_recurrence`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(7) 递推）；`chebyAdams_at_seven_values`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；C_n(7) 值表）；`paper_chebyAdams_at_seven_package`（对应 `thm:discussion-chebyshev-witt-equivariance`，Discussion；S=7 综合论文接口）
 **SPG κ 扩展值与 kappaInv 往返（Round R416）**：`kappa_three_fourths`（对应 `prop:spg-relative-error-threshold-sharpness`，SPG；κ(3/4)=7）；`kappa_eighth`（对应 `prop:spg-relative-error-threshold-sharpness`，SPG；κ(1/8)=9/7）；`kappaInv_seven`（对应 `prop:spg-relative-error-threshold-sharpness`，SPG；κ⁻¹(7)=3/4）；`kappaInv_nine`（对应 `prop:spg-relative-error-threshold-sharpness`，SPG；κ⁻¹(9)=4/5）；`paper_kappa_extended_values_package`（对应 `prop:spg-relative-error-threshold-sharpness`，SPG；κ 扩展值综合论文接口）
 **POM Pisano period witnesses for composite moduli 12/13/15（Round R415）**：`fib_mod12_period_24`（对应 `cor:pom-fiber-modq-pisano-invariant`，POM；Fib mod 12 的 Pisano 周期为 24）；`fib_mod13_period_28`（对应 `cor:pom-fiber-modq-pisano-invariant`，POM；Fib mod 13 的 Pisano 周期为 28）；`fib_mod15_period_40`（对应 `cor:pom-fiber-modq-pisano-invariant`，POM；Fib mod 15 的 Pisano 周期为 40）；`paper_pisano_period_12_13_15_package`（对应 `cor:pom-fiber-modq-pisano-invariant`，POM；复合模 12/13/15 Pisano 周期综合论文接口）
 **Zeta cyclotomic factorizations n=9/10/12 + 6-12 package（Round R414）**：`cyclotomic_factor_9`（对应 `prop:cycle-permutation-determinant`，Zeta；n=9 分圆因子分解）；`cyclotomic_factor_10`（对应 `prop:cycle-permutation-determinant`，Zeta；n=10 分圆因子分解）；`cyclotomic_factor_12`（对应 `prop:cycle-permutation-determinant`，Zeta；n=12 分圆因子分解）；`paper_cyclotomic_factorization_package_6_to_12`（对应 `prop:cycle-permutation-determinant`，Zeta；n=6..12 分圆因子分解综合论文接口）
@@ -363,6 +364,7 @@
 
 **Phase R317: Gödel singleton/pos + separationDepth self/witness/triangle（3/3 完成）**：Conclusion/PrimeRegister.lean + CircleDimension/CircleDim.lean——godelEncoding\_singleton（thm:conclusion-godel-semidirect-law，单元素词 Gödel 编码，Conclusion）; godelEncoding\_pos（thm:conclusion-godel-semidirect-law，Gödel 编码正性，Conclusion）; separationDepth\_self（def:cdim-gap-ledger，自身分离深度为零，CD）; separationDepth\_le\_of\_distinguish（def:cdim-gap-ledger，区分见证给出深度上界，CD）; separationDepth\_triangle（def:cdim-gap-ledger，ultrametric 三角不等式，CD）——**2 个论文标签条目计入覆盖率**（Conclusion +2, CD +3）——Conclusion 216→218（8.5%），Circle Dimension 114→117（29.0%→29.8%），全局 \\leanverified 1302→1307（+5），总标注 1319→1324（+5），commit e06a4f0
 
+**Phase R417: Discussion ChebyAdams S=7 full block（完整）**：Discussion/ChebyshevAdams.lean——chebyAdams_at_seven_base（thm:discussion-chebyshev-witt-equivariance，C_n(7) 基值，Discussion）; chebyAdams_at_seven_recurrence（thm:discussion-chebyshev-witt-equivariance，C_n(7) 递推，Discussion）; chebyAdams_at_seven_values（thm:discussion-chebyshev-witt-equivariance，C_n(7) 值表，Discussion）; paper_chebyAdams_at_seven_package（thm:discussion-chebyshev-witt-equivariance，S=7 综合论文接口，Discussion）——**0 个新论文标签条目计入覆盖率**（thm:discussion-chebyshev-witt-equivariance 已注册，本轮为深化）——Discussion 64（95.5%，不变），全局 \leanverified 1695→1699（+4），总标注 1712→1716（+4），body 覆盖 1510（14.4%，不变），proof commit 351bd4b
 **Phase R416: SPG kappa extended values + kappaInv round-trip package（完整）**：SPG/ErrorThreshold.lean——kappa_three_fourths（prop:spg-relative-error-threshold-sharpness，κ(3/4)=7，SPG）; kappa_eighth（prop:spg-relative-error-threshold-sharpness，κ(1/8)=9/7，SPG）; kappaInv_seven（prop:spg-relative-error-threshold-sharpness，κ⁻¹(7)=3/4，SPG）; kappaInv_nine（prop:spg-relative-error-threshold-sharpness，κ⁻¹(9)=4/5，SPG）; paper_kappa_extended_values_package（prop:spg-relative-error-threshold-sharpness，κ 扩展值综合论文接口，SPG）——**0 个新论文标签条目计入覆盖率**（prop:spg-relative-error-threshold-sharpness 已注册 R225，本轮为深化）——SPG 106（82.2%，不变），全局 \leanverified 1690→1695（+5），总标注 1707→1712（+5），body 覆盖 1510（14.4%，不变），proof commit e9c8481
 **Phase R415: POM Pisano period witnesses composite moduli 12/13/15（完整）**：Core/Fib.lean——fib_mod12_period_24（cor:pom-fiber-modq-pisano-invariant，Fib mod 12 Pisano 周期 24，POM）; fib_mod13_period_28（cor:pom-fiber-modq-pisano-invariant，Fib mod 13 Pisano 周期 28，POM）; fib_mod15_period_40（cor:pom-fiber-modq-pisano-invariant，Fib mod 15 Pisano 周期 40，POM）; paper_pisano_period_12_13_15_package（cor:pom-fiber-modq-pisano-invariant，复合模 12/13/15 Pisano 综合论文接口，POM）——**0 个新论文标签条目计入覆盖率**（cor:pom-fiber-modq-pisano-invariant 已注册，本轮为深化）——POM 296（17.3%，不变），全局 \leanverified 1686→1690（+4），总标注 1703→1707（+4），body 覆盖 1510（14.4%，不变），proof commit 86924e6
 **Phase R414: Zeta cyclotomic factorizations n=9/10/12 + 6-12 package（完整）**：Zeta/CyclicDet.lean——cyclotomic_factor_9（prop:cycle-permutation-determinant，n=9 分圆因子，Zeta）; cyclotomic_factor_10（prop:cycle-permutation-determinant，n=10 分圆因子，Zeta）; cyclotomic_factor_12（prop:cycle-permutation-determinant，n=12 分圆因子，Zeta）; paper_cyclotomic_factorization_package_6_to_12（prop:cycle-permutation-determinant，n=6..12 分圆因子分解综合论文接口，Zeta）——**0 个新论文标签条目计入覆盖率**（prop:cycle-permutation-determinant 已注册，本轮为深化）——Zeta 197（4.4%，不变），全局 \leanverified 1682→1686（+4），总标注 1699→1703（+4），body 覆盖 1510（14.4%，不变），proof commit cc8287c
