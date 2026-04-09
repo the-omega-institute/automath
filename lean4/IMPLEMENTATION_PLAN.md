@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R516（round_count=517）|
+| 轮次 | R517（round_count=518）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -26,7 +26,7 @@
 |---|---|---|---|
 | POM | 1,707 | 306 | 17.9% |
 | Emergent Arithmetic | 185 | 172 | 93.0% |
-| Folding | 337 | 131 | 38.9% |
+| Folding | 337 | 132 | 39.2% |
 | Conclusion | 2,550 | 265 | 10.4% |
 | Group Unification | 469 | 172 | 36.7% |
 | SPG | 129 | 112 | 86.8% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 208 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1582** | **15.0%** |
+| **合计（body）** | **10,508** | **1583** | **15.1%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Folding Y_m 周期压缩比值界（Round R517，新标签，\leanverified 完整，streak #64）**：`compressionRatio`（对应 `cor:Ym-periodic-compression-ratio`，Folding；压缩比 def = b/a）；`one_le_div_of_le`（对应同标签，Folding；a≤b→1≤b/a）；`div_le_of_le_mul`（对应同标签，Folding；b≤S·a→b/a≤S）；`compressionRatio_bound`（对应同标签，Folding；压缩比双边界）；`paper_Ym_periodic_compression_ratio`（对应同标签，Folding；综合论文接口）——**新标签首次注册**（cor:Ym-periodic-compression-ratio，\leanverified 完整，streak #64）
 **GU window-6 纤维非常数排除自由作用（Round R516，新标签，\leanverified 完整，streak #63）**：`fiberCard`（对应 `con:window6-fiber-equivalence-non-group-quotient`，GU；纤维基数 def）；`no_constant_fiber_card`（对应同标签，GU；非常数纤维基数不等式）；`free_action_constant_fiber`（对应同标签，GU；自由作用蕴含常数纤维）；`window6_concrete_2_ne_3`（对应同标签，GU；2≠3 具体见证）；`paper_window6_fiber_equivalence_non_group_quotient`（对应同标签，GU；综合论文接口）——**新标签首次注册**（con:window6-fiber-equivalence-non-group-quotient，\leanverified 完整，streak #63）
 **SPG 内坐标束屏幕计数闭式（Round R515，新标签，\leanpartial，streak #62）**：`screenComponentCount`（对应 `thm:spg-internal-coordinate-bundle-screen-cost-closed-form`，SPG；屏幕分量计数 def = 2^(m(n-s))+1）；`auditCost`（对应同标签，SPG；审计代价 def = 2^(m(n-s))）；`two_pow_m_pow_eq`（对应同标签，SPG；2^m^(n-s) 等式）；`complement_coord_count`（对应同标签，SPG；补坐标计数等式）；`screenComponentCount_eq`（对应同标签，SPG；screenComponentCount 等式）；`screenComponentCount_eq_complement_plus_one`（对应同标签，SPG；complement+1 形式）；`auditCost_eq_count_sub_one`（对应同标签，SPG；auditCost=count-1）；`paper_spg_internal_coordinate_bundle_screen_cost_closed_form`（对应同标签，SPG；综合论文接口）——**新标签首次注册**（thm:spg-internal-coordinate-bundle-screen-cost-closed-form，\leanpartial 闭式 2^(m(n-s))+1 完整，屏幕图分量论证待后续，streak #62）
 **EA Fib-进塔整除链（Round R514，新标签，\leanpartial，streak #61）**：`n_k`（对应 `def:fib-adic-ring`，EA；n\_k=2^k def）；`M_k`（对应同标签，EA；M\_k=Fib(2^k) def）；`two_pow_dvd_succ`（对应同标签，EA；2^k∣2^(k+1)）；`n_k_dvd_succ`（对应同标签，EA；n\_k(k)∣n\_k(k+1)）；`M_k_dvd_succ`（对应同标签，EA；M\_k(k)∣M\_k(k+1) 主定理）；`M_k_dvd_of_le`（对应同标签，EA；k≤ℓ→M\_k(k)∣M\_k(ℓ) 传递性）；`paper_def_fib_adic_ring_divisibility`（对应同标签，EA；综合论文接口）——**新标签首次注册**（def:fib-adic-ring，\leanpartial 二幂子塔整除链完整，逆极限环 profinite 结构待后续，streak #61）
