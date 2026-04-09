@@ -63,6 +63,7 @@ import Omega.Folding.SummableNatEventuallyZero
 import Omega.Folding.PeriodicCompressionRatio
 import Omega.Folding.RationalGeneratorGap
 import Omega.Folding.CandidateSetMonotone
+import Omega.Folding.ZeroFiberLinear
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
