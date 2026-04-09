@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2349 |
+| \leanverified 标注数 | 2352 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2373 |
-| 轮次 | R574（round_count=575）|
+| 总标注数 | 2376 |
+| 轮次 | R575（round_count=576）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**SPG Walsh-Stokes 离散边界消去种子值（Round R575，新标签，\leanverified 完整）**：`paper_spg_walsh_discrete_stokes_seeds`（对应 `thm:spg-walsh-discrete-stokes-holography`，SPG；边界-体积消去恒等式 + 2^k 尺寸进展种子值）——**新标签首次注册**（thm:spg-walsh-discrete-stokes-holography，\leanverified 新标注）
+**CD 有限素数截断精确半圆维种子值（Round R575，新标签，\leanverified 完整）**：`paper_cdim_finite_prime_truncation_seeds`（对应 `cor:cdim-finite-prime-truncation-hom-half-circle`，CD；素数性 (2,3,5)、互素性、乘积、minFac 种子值）——**新标签首次注册**（cor:cdim-finite-prime-truncation-hom-half-circle，\leanverified 新标注）
+**Zeta DFA 素数对称差下界（Round R575，新标签，\leanverified 完整）**：`paper_zeta_syntax_dfa_prime_symmetric_diff`（对应 `cor:zeta-syntax-dfa-prime-symmetric-diff`，Zeta；小素数 + m < 2^m 不等式种子值）——**新标签首次注册**（cor:zeta-syntax-dfa-prime-symmetric-diff，\leanverified 新标注）
 **POM 路径扫描元阶 lcm 种子值（Round R574，新标签，\leanverified 完整）**：`paper_pom_toggle_scan_order_seeds`（对应 `thm:pom-toggle-scan-order-closed-form`，POM；lcm(3,5)=15/lcm(lcm(2,3),8)=24/lcm(lcm(3,11),7)=231/lcm(lcm(lcm(2,3),14),10)=210 四项种子值，T(7)=210 已验证）——**新标签首次注册**（thm:pom-toggle-scan-order-closed-form，\leanverified 新标注）
 **Conclusion 同步核回文种子值（Round R574，新标签，deepening 补录）**：`paper_conclusion_sync_kernel_palindrome_seeds`（对应 `thm:sync-kernel-endpoint-refined-palindrome`，Conclusion/Zeta；A² 列和 (3,2) + 线性组合恒等式种子值，补录至已有 paper_sync_kernel_endpoint_refined_palindrome 旁）——**deepening 补录**
 **GU 纤维缺陷仿射共线性种子值（Round R574，新标签，\leanverified 完整）**：`paper_gut_fiber_defect_affine_collinearity_seeds`（对应 `cor:gut-fiber-defect-single-latent-affine-collinearity`，GU；仿射斜率恒等式 + 数值实例 12/4=3 与 28/4=7 且 12·7=28·3）——**新标签首次注册**（cor:gut-fiber-defect-single-latent-affine-collinearity，\leanverified 新标注）
