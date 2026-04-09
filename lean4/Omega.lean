@@ -128,6 +128,7 @@ import Omega.Zeta.WalshParseval
 import Omega.Zeta.FiniteQuotientCardinality
 import Omega.Zeta.LocalInversionDelta
 import Omega.Zeta.PhaseImplementationRankLimit
+import Omega.Zeta.SyncKernelMixingRate
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -189,6 +190,7 @@ import Omega.POM.DoubleTransversalNormalForm
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminantEllipseLedger
 import Omega.POM.FibCubeEdgeParity
+import Omega.POM.CollisionKernelDiscriminant
 import Omega.POM.ToggleOrder
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
