@@ -148,6 +148,7 @@ import Omega.Conclusion.AnomalyHarmonicRigidity
 import Omega.Conclusion.ConnectedToDiscreteConstant
 import Omega.Conclusion.SectionLedgerKL
 import Omega.Conclusion.AffineNormalFormSemidirect
+import Omega.Conclusion.ZeckendorfResetBoundedCLTAbsent
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
