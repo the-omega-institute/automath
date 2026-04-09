@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2214 |
-| \leanpartial 标注数 | 23 |
-| 总标注数 | 2237 |
-| 轮次 | R502（round_count=503）|
+| \leanverified 标注数 | 2221 |
+| \leanpartial 标注数 | 24 |
+| 总标注数 | 2245 |
+| 轮次 | R503（round_count=504）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -28,13 +28,13 @@
 | Emergent Arithmetic | 185 | 171 | 92.4% |
 | Folding | 337 | 130 | 38.6% |
 | Conclusion | 2,550 | 264 | 10.4% |
-| Group Unification | 469 | 169 | 36.0% |
+| Group Unification | 469 | 170 | 36.2% |
 | SPG | 129 | 110 | 85.3% |
 | Circle Dimension | 393 | 152 | 38.7% |
 | Zeta Finite Part | 4,524 | 207 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1569** | **14.9%** |
+| **合计（body）** | **10,508** | **1570** | **14.9%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**GU window-6 单好素数恢复 ZMod 区分性（Round R503，新标签，\leanpartial，streak #51）**：`two_ne_three_in_zmod`（对应 `thm:window6-fiber-edge-coupling-single-good-prime-recovers-multiplicity`，GU；p≥7 时 2≠3 in ZMod p）；`three_ne_four_in_zmod`（对应同标签，GU；p≥7 时 3≠4 in ZMod p）；`two_ne_four_in_zmod`（对应同标签，GU；p≥7 时 2≠4 in ZMod p）；`six_is_unit_in_zmod`（对应同标签，GU；p≥7 时 6 为单位元）；`two_three_four_distinct_in_zmod`（对应同标签，GU；2,3,4 三元组区分）；`nat_recoverable_from_zmod`（对应同标签，GU；自然数可从 ZMod 恢复）；`paper_window6_fiber_edge_coupling_single_good_prime_recovers_multiplicity`（对应同标签，GU；综合论文接口）——**新标签首次注册**（thm:window6-fiber-edge-coupling-single-good-prime-recovers-multiplicity，\leanpartial 核心数论部分，window-6 M 矩阵待后续轮次，streak #51）
 **Zeta Jensen 软阈值深度下界（Round R502，#50 streak 里程碑，新标签，\leanverified 完整，streak #50）**：`log_ge_one_sub_inv`（对应 `con:xi-jensen-soft-threshold-depth-lower-bound`，Zeta；log y ≥ 1 - 1/y）；`log_ge_sub_one_div`（对应同标签，Zeta；log y ≥ (y-1)/y）；`log_rho_div_a_lower_bound`（对应同标签，Zeta；log(ϱ/a) 下界）；`two_rho_sq_log_rho_div_a_ge`（对应同标签，Zeta；2ϱ²·log(ϱ/a) 下界）；`jensenDefect`（对应同标签，Zeta；Jensen 缺陷 noncomputable def）；`softThresholdSum`（对应同标签，Zeta；软阈值求和 noncomputable def）；`jensen_soft_threshold_lower_bound`（对应同标签，Zeta；主定理）；`paper_xi_jensen_soft_threshold_depth_lower_bound`（对应同标签，Zeta；综合论文接口）——**新标签首次注册**（con:xi-jensen-soft-threshold-depth-lower-bound，\leanverified 完整，R452→R502 连续 50 新标签里程碑，streak #50）
 **Folding Ostrowski 分母 Fibonacci 退化（Round R501，新标签，\leanpartial，streak #49）**：`ostrowskiDenom`（对应 `prop:Xm-alpha-cardinality`，Folding；Ostrowski 分母递推 def）；`ostrowskiDenom_zero`（对应同标签，Folding；n=0 基值）；`ostrowskiDenom_one`（对应同标签，Folding；n=1 基值）；`ostrowskiDenom_succ_succ`（对应同标签，Folding；双步递推）；`ostrowskiDenom_const_one_eq_fib`（对应同标签，Folding；常数 1 退化为 Fibonacci 核心引理）；`ostrowskiDenom_pos`（对应同标签，Folding；正性）；`ostrowskiDenom_mono`（对应同标签，Folding；单调性）；`paper_prop_Xm_alpha_cardinality_golden_degeneration`（对应同标签，Folding；综合论文接口）——**新标签首次注册**（prop:Xm-alpha-cardinality，\leanpartial Fibonacci 退化核心，完整 Ostrowski 表示待后续，streak #49）
 **SPG 随机 bulk 边界饱和期望恒等式（Round R500，500 轮里程碑，新标签，\leanpartial，streak #48）**：`Sample`（对应 `thm:spg-random-bulk-boundary-saturation`，SPG；Sample 类型 def）；`sampleFintype`（对应同标签，SPG；Fintype 实例）；`sampleDecEq`（对应同标签，SPG；DecidableEq 实例）；`expectation`（对应同标签，SPG；期望 noncomputable def）；`indicator`（对应同标签，SPG；indicator def）；`flipAt`（对应同标签，SPG；bit-flip Equiv）；`flipAt_apply_self`（对应同标签，SPG；flipAt 自位翻转）；`flipAt_apply_other`（对应同标签，SPG；flipAt 他位不变）；`indicator_add_not`（对应同标签，SPG；indicator 互补和为 1）；`sample_card_pos`（对应同标签，SPG；样本空间基数正性）；`expectation_single_bit`（对应同标签，SPG；单 bit 期望）；`expectation_xor_two`（对应同标签，SPG；XOR 核心引理）；`expectation_sum`（对应同标签，SPG；期望线性性）；`paper_spg_random_bulk_boundary_saturation_expectation`（对应同标签，SPG；综合论文接口）——**新标签首次注册**（thm:spg-random-bulk-boundary-saturation，\leanpartial 期望完整，Lipschitz 集中不等式第(2)部分待后续轮次，streak #48，500 轮里程碑）
