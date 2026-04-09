@@ -100,4 +100,41 @@ theorem paper_fold_gauge_anomaly_bitpair_independence_threshold :
   exact ⟨indepThreshold_discriminant, indepThresholdPoly_zero,
          indepThresholdPoly_one, indepThresholdPoly_neg_symmetry⟩
 
+/-! ### GC defect linear response threshold -/
+
+/-- GC defect polynomial: 5t² - t - 1.
+    thm:fold-gauge-anomaly-gc-defect-linear-response-threshold -/
+def gcDefectPoly (t : ℤ) : ℤ := 5 * t ^ 2 - t - 1
+
+/-- Discriminant of 5t² - t - 1 equals 21 (= 1 + 20).
+    thm:fold-gauge-anomaly-gc-defect-linear-response-threshold -/
+theorem gcDefect_discriminant : (1 : ℤ) ^ 2 + 4 * 5 * 1 = 21 := by omega
+
+/-- Sign changes: P(0) = -1, P(1) = 3.
+    thm:fold-gauge-anomaly-gc-defect-linear-response-threshold -/
+theorem gcDefectPoly_zero : gcDefectPoly 0 = -1 := by unfold gcDefectPoly; ring
+theorem gcDefectPoly_one : gcDefectPoly 1 = 3 := by unfold gcDefectPoly; ring
+
+/-- Factorization identity: (1-t)(5t²-t-1) = -5t³+6t²-1.
+    thm:fold-gauge-anomaly-gc-defect-linear-response-threshold -/
+theorem gcDefect_factor_identity (t : ℤ) :
+    (1 - t) * (5 * t ^ 2 - t - 1) = -5 * t ^ 3 + 6 * t ^ 2 - 1 := by ring
+
+/-- 21 is not a perfect square.
+    thm:fold-gauge-anomaly-gc-defect-linear-response-threshold -/
+theorem twentyone_not_perfect_square : ¬ ∃ k : Nat, k * k = 21 := by
+  intro ⟨k, hk⟩
+  have : k ≤ 5 := by nlinarith
+  interval_cases k <;> omega
+
+/-- Paper package: GC defect linear response threshold.
+    thm:fold-gauge-anomaly-gc-defect-linear-response-threshold -/
+theorem paper_fold_gauge_anomaly_gc_defect_linear_response_threshold :
+    (1 : ℤ) ^ 2 + 4 * 5 * 1 = 21 ∧
+    gcDefectPoly 0 = -1 ∧ gcDefectPoly 1 = 3 ∧
+    (∀ t : ℤ, (1 - t) * (5 * t ^ 2 - t - 1) = -5 * t ^ 3 + 6 * t ^ 2 - 1) ∧
+    ¬ ∃ k : Nat, k * k = 21 :=
+  ⟨gcDefect_discriminant, gcDefectPoly_zero, gcDefectPoly_one,
+   gcDefect_factor_identity, twentyone_not_perfect_square⟩
+
 end Omega.Folding

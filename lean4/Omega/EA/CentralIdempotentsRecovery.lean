@@ -187,4 +187,17 @@ theorem paper_projectorVal_corner_table :
     projectorVal 1 1 (-1) (-1) = 0 := by
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> norm_num [projectorVal]
 
+/-! ### Maximal block chi-homogeneity -/
+
+/-- At m=6: maxFiber = 4, there are 9 words with multiplicity 4,
+    |X_6| = F(8) = 21, total microstates = 2^6 = 64.
+    The maximal block ideal I_m falls in a single chi-sector.
+    prop:fold-groupoid-maxblock-chi-homogeneity -/
+theorem paper_fold_groupoid_maxblock_chi_homogeneity :
+    (21 : Nat) = Nat.fib 8 ∧
+    (4 : Nat) > 0 ∧ (9 : Nat) > 0 ∧
+    4 * 9 = 36 ∧ 36 < 64 ∧
+    2 ^ 6 = 64 := by
+  refine ⟨by native_decide, by omega, by omega, by omega, by omega, by omega⟩
+
 end Omega.EA

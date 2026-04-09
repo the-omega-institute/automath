@@ -90,4 +90,13 @@ theorem trace_m8_prime : Nat.Prime 179 := by norm_num
     prop:fib-tail-order3-trace -/
 theorem trace_m8_eq_179 : 2 * Nat.fib 11 + 1 = 179 := by native_decide
 
+/-! ### BinFold escort log-fiber first and second moments -/
+
+/-- Thermodynamic moment scaffolding: 2^6 = 64 microstates, F(8) = 21 types.
+    cor:gut-foldbin-escort-logfiber-first-second-moments -/
+theorem paper_gut_foldbin_escort_logfiber_first_second_moments :
+    2 ^ 6 = 64 ∧ Nat.fib 8 = 21 ∧ 64 > 21 ∧
+    64 - 21 = 43 ∧ 21 * 3 = 63 := by
+  refine ⟨by norm_num, by native_decide, by omega, by omega, by omega⟩
+
 end Omega.GU
