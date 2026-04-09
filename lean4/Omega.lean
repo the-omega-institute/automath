@@ -55,6 +55,7 @@ import Omega.Folding.MismatchLanguage
 import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.SpectralQuarticAutTrivial
 import Omega.Folding.BayesKinkGeometry
+import Omega.Folding.GaugeAnomalyMean
 import Omega.Folding.PhiSlidingBlockCode
 import Omega.Folding.PhiSubshiftFactor
 import Omega.Folding.HolographicRateConservation
@@ -204,6 +205,7 @@ import Omega.GU.DiscriminantWedge2Square
 import Omega.GU.LeyangHolographicN2
 import Omega.GU.Window6SingleGoodPrimeRecovery
 import Omega.GU.Window6B3SupportCount
+import Omega.GU.Window6C3SupportCount
 import Omega.GU.FiberNonConstantNoFreeAction
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
