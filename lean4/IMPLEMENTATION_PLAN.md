@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2379 |
+| \leanverified 标注数 | 2382 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2403 |
-| 轮次 | R584（round_count=585）|
+| 总标注数 | 2406 |
+| 轮次 | R585（round_count=586）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Conclusion Haar 测度数字完备性充要判据种子值（Round R585，新标签，\leanverified 完整）**：`paper_conclusion_godel_leyang_haar_complete_digit_seeds`（对应 `thm:conclusion-godel-leyang-haar-complete-digit`，Conclusion；数字完备性 Fourier 掩码 = 0 充要条件种子值）——**新标签首次注册**（thm:conclusion-godel-leyang-haar-complete-digit，\leanverified 新标注）
+**Folding 输出密度偏置衰减唯一拐点种子值（Round R585，新标签，\leanverified 完整）**：`paper_fold_bernoulli_p_output_density_concavity_seeds`（对应 `thm:fold-bernoulli-p-output-density-concavity-switch`，Folding；偏置衰减 q<p + 饱和界 + 唯一拐点 p³=(7-3√5)/2 种子值）——**新标签首次注册**（thm:fold-bernoulli-p-output-density-concavity-switch，\leanverified 新标注）
+**EA 离散规范群 Stirling 主项耦合种子值（Round R585，新标签，\leanverified 完整）**：`paper_ea_discrete_gauge_stirling_seeds`（对应 `cor:fold-discrete-gauge-group-stirling-coupling`，EA；fib + factorial + 2^k Stirling 主项平均对数多重度种子值）——**新标签首次注册**（cor:fold-discrete-gauge-group-stirling-coupling，\leanverified 新标注）
 **CD 玫瑰轨道双相位平均门一维子流种子值（Round R584，新标签，\leanverified 完整）**：`paper_cdim_rhodonea_subflow_seeds`（对应 `thm:cdim-rhodonea-as-biphase-average-subflow`，CD；gcd + 奇偶性 + 2n 个零点/单位圆交点乘积恒等式种子值）——**新标签首次注册**（thm:cdim-rhodonea-as-biphase-average-subflow，\leanverified 新标注）
 **Zeta 长度同余类 Artin 分解种子值（Round R584，新标签，\leanverified 完整）**：`paper_zeta_length_modq_artin_decomposition_seeds`（对应 `cor:zeta-length-modq-artin-decomposition`，Zeta；根求值和 + 整数恒等式种子值）——**新标签首次注册**（cor:zeta-length-modq-artin-decomposition，\leanverified 新标注）
 **GU bin-fold 退化谱扇区末位切片区间刚性种子值（Round R584，新标签，\leanverified 完整）**：`paper_gut_foldbin_degeneracy_sector_lastbit_interval_seeds`（对应 `thm:gut-foldbin-degeneracy-sector-lastbit-interval`，GU；fib(4..10) + 2^6 + 区间约束单调性种子值）——**新标签首次注册**（thm:gut-foldbin-degeneracy-sector-lastbit-interval，\leanverified 新标注）
