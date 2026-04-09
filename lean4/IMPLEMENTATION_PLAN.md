@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R511（round_count=512）|
+| 轮次 | R512（round_count=513）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**Conclusion 截面账本 KL 恒等式主定理深化（Round R512，深化轮次，标签已注册于 R353/R356，streak 中断，\leanverified 完整）**：`pushforward`（对应 `thm:conclusion-section-ledger-kl-identity`，Conclusion；pushforward 分布 noncomputable def）；`uniform`（对应同标签，Conclusion；均匀分布 noncomputable def）；`klDivergence`（对应同标签，Conclusion；KL 散度 noncomputable def）；`uniform_eq`（对应同标签，Conclusion；均匀分布等式）；`log_uniform_div_pushforward`（对应同标签，Conclusion；log(均匀/pushforward) 展开）；`section_ledger_kl_identity`（对应同标签，Conclusion；KL 恒等式主定理）；`log_section_count_eq`（对应同标签，Conclusion；截面计数对数等式）；`paper_conclusion_section_ledger_kl_identity`（对应同标签，Conclusion；综合论文接口）——**深化轮次**（标签已于 R353/R356 注册，本轮完成真正 KL 主定理，论文覆盖率数字不变）
 **POM 耦合期望界规范曲率阴影（Round R511，新标签，\leanpartial，streak #59）**：`expectation`（对应 `prop:pom-gauge-curvature-shadow-bound`，POM；期望 noncomputable def）；`probability`（对应同标签，POM；概率 noncomputable def）；`neIndicator`（对应同标签，POM；非等于指示函数 noncomputable def）；`pointwise_diff_le`（对应同标签，POM；逐点差上界）；`abs_expectation_sub_le`（对应同标签，POM；期望差绝对值上界）；`probability_eq_expectation_neIndicator`（对应同标签，POM；概率等于指示期望）；`coupling_expectation_bound`（对应同标签，POM；耦合期望界主定理）；`paper_pom_gauge_curvature_shadow_bound`（对应同标签，POM；综合论文接口）——**新标签首次注册**（prop:pom-gauge-curvature-shadow-bound，\leanpartial 耦合期望代数核完整，μ 任意分布 + Fold\_m/曲率 K 应用待后续，streak #59）
 **离散内核**：Word, No11, X_m, Fold, Rewrite 完整闭环
 **值与算术**：stableValue 双射 X_m ↔ Fin(F_{m+2}), 完整交换环 (ℤ/F_{m+2}ℤ), 环同构 X_m ≃+* ZMod(F_{m+2})
