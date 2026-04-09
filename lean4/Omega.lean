@@ -156,6 +156,7 @@ import Omega.POM.MassSplittingMomentRoot
 import Omega.POM.OrbitProductNorm
 import Omega.POM.CouplingExpectationBound
 import Omega.POM.LeyangMonotoneCouplingPrimeRegister
+import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap
