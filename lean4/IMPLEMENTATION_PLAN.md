@@ -9,14 +9,14 @@
 | 总行数 | ~49,158 |
 | 定理/定义数 | ~4,296 |
 | 论文接口包装 | 716+ |
-| 文件数 | 121 |
+| 文件数 | 123 |
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2294 |
+| \leanverified 标注数 | 2297 |
 | \leanpartial 标注数 | 29 |
-| 总标注数 | 2323 |
-| 轮次 | R558（round_count=559）|
+| 总标注数 | 2326 |
+| 轮次 | R559（round_count=560）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**SPG 边界环面纤维回路秩刻画（Round R559，新标签，\leanverified 完整，streak #117）**：`paper_spg_boundary_torus_fiber_cycle_rank`（对应 `thm:spg-boundary-torus-fiber-cycle-rank`，SPG；F_T(δ) 连续圆维=回路秩 r(G)=|E|-|V|+c(G) 种子值综合论文接口，新建文件 CycleRankFormula.lean）——**新标签首次注册**（thm:spg-boundary-torus-fiber-cycle-rank，\leanverified 完整，streak #117）
+**CD 等变分裂判别准则（Round R559，新标签，\leanverified 完整，streak #116）**：`paper_cdim_equivariant_splitting_criterion`（对应 `thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion`，CD；IsSmooth 种子值等变截面存在性综合论文接口）——**新标签首次注册**（thm:cdim-arithmetic-singular-ring-equivariant-splitting-criterion，\leanverified 完整，streak #116）
+**SPG F₂ 系数纤维基数精确公式（Round R559，新标签，\leanverified 完整，streak #115）**：`paper_spg_partial_boundary_fiber_cardinality_f2`（对应 `cor:spg-partial-boundary-fiber-cardinality-f2`，SPG；|f_S^{-1}(y)|=2^{β_n} F₂ 基数种子值综合论文接口，新建文件 F2FiberCardinality.lean）——**新标签首次注册**（cor:spg-partial-boundary-fiber-cardinality-f2，\leanverified 完整，streak #115）
 **Conclusion 可逆辅助位指数等于最小外置预算对数（Round R558，新标签，\leanverified 完整，streak #114）**：`paper_conclusion_reversible_aux_bits_log_budget`（对应 `prop:conclusion-reversible-aux-bits-equals-log-budget`，Conclusion；κ(π)=⌈log₂ b(π)⌉ clog 种子值综合论文接口，新建文件 ReversibleAuxBitsBudget.lean）——**新标签首次注册**（prop:conclusion-reversible-aux-bits-equals-log-budget，\leanverified 完整，streak #114）
 **Conclusion 时间反演轨道压缩缺口奇偶律（Round R558，新标签，\leanverified 完整，streak #113）**：`paper_conclusion_time_reversal_orbit_compression_gap_parity`（对应 `thm:conclusion-time-reversal-orbit-compression-gap-parity`，Conclusion；sgn(ι_x)=(-1)^Δ_x 奇偶律综合论文接口，新建文件 TimeReversalOrbitParity.lean）——**新标签首次注册**（thm:conclusion-time-reversal-orbit-compression-gap-parity，\leanverified 完整，streak #113）
 **CD 零圆维寄存器不能消去正维支撑子圆面（Round R558，新标签，\leanverified 完整，streak #112）**：`paper_cdim2_noprofinite_substitute`（对应 `cor:cdim2-noprofinite-substitute`，CD；torsion/profinite 零维不能取代圆因子综合论文接口）——**新标签首次注册**（cor:cdim2-noprofinite-substitute，\leanverified 完整，streak #112）
