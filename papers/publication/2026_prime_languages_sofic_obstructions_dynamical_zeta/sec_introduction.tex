@@ -5,16 +5,26 @@ functions. In a deterministic automaton, the number of accepted words
 of length \(m\) is governed by powers of a finite matrix. In a sofic
 shift, the number of admissible words of a given length is likewise
 controlled by a finite-state presentation. These mechanisms force
-eventual periodicity or exponential-polynomial growth, and this is
+periodic density laws or exponential-polynomial growth, and that is
 often enough to rule out arithmetic languages whose size is governed by
 the prime number theorem.
 
-The purpose of this note is to isolate several elementary but useful
-obstructions of this kind. The first concerns complete deterministic
-automata over the binary alphabet. The second concerns regular
-sublanguages of the canonical Zeckendorf syntax. The third concerns the
-analytic behaviour of Euler products and finite determinants associated
-with finite-state data.
+The purpose of this note is modest: we place three elementary
+obstructions of this kind side by side. The first concerns approximation
+of the binary prime language by a fixed complete deterministic
+automaton. The second concerns exact regular realizations and eventual
+sofic slice realizations inside the canonical Zeckendorf syntax. The
+third concerns the analytic behaviour of Euler products and finite
+determinant models attached to finite-state data.
+
+Throughout, \(f(m)\asymp g(m)\) means that \(c_1g(m)\le f(m)\le c_2g(m)\)
+for some positive constants \(c_1,c_2\) and all sufficiently large
+\(m\). We write \(F_0=0\), \(F_1=1\) for the Fibonacci numbers,
+\(\varphi=(1+\sqrt5)/2\), and for a Zeckendorf word
+\(w=x_1\cdots x_m\) we set
+\[
+  \val(w):=\sum_{k=1}^m x_kF_{k+1}.
+\]
 
 \subsection{Main results}
 
@@ -48,20 +58,47 @@ for any \(\alpha>0\).
 
 When this is applied to the binary prime language
 \(\mathcal P_m^{(2)}\), whose size is \(\asymp 2^m/m\) by the prime
-number theorem, one obtains a sharp incompatibility with finite-state
-recognition.
+number theorem \cite{HardyWright2008}, one obtains a sharp
+incompatibility with finite-state recognition.
 
-\begin{corollary}\label{cor:intro-binary-primes}
+\begin{corollary}[Symmetric-difference lower bound for binary primes]
+  \label{cor:intro-binary-primes}
 Let \(L(\mathcal A)\subseteq\{0,1\}^\ast\) be recognised by a fixed
 deterministic finite automaton. Then there exists \(c>0\) such that
 \[
   \abs{L(\mathcal A)\cap\{0,1\}^m\triangle\mathcal P_m^{(2)}}
   \ge c\,\frac{2^m}{m}
 \]
-for all sufficiently large \(m\). Moreover, either the recall of
-\(L(\mathcal A)\) on binary primes tends to \(0\) exponentially fast,
-or the precision tends to \(0\) along an infinite arithmetic
-progression of lengths.
+for all sufficiently large \(m\). If \(L(\mathcal A)\) falls in the
+positive-density alternative of \Cref{thm:intro-density}, then along an
+infinite arithmetic progression of lengths one has the stronger bound
+\[
+  \abs{L(\mathcal A)\cap\{0,1\}^m\triangle\mathcal P_m^{(2)}}
+  \gg 2^m.
+\]
+\end{corollary}
+
+\begin{corollary}[No simultaneous recall and precision for fixed DFA]
+  \label{cor:intro-binary-precision}
+  Let
+  \[
+    \mathrm{Rec}_m
+    :=\frac{\abs{L(\mathcal A)\cap\mathcal P_m^{(2)}}}
+            {\abs{\mathcal P_m^{(2)}}},
+    \qquad
+    \mathrm{Prec}_m
+    :=\frac{\abs{L(\mathcal A)\cap\mathcal P_m^{(2)}}}
+            {\abs{L(\mathcal A)\cap\{0,1\}^m}}
+  \]
+  whenever \(\abs{L(\mathcal A)\cap\{0,1\}^m}>0\). Then every fixed DFA
+  satisfies one of the following:
+  \begin{enumerate}[label=\textup{(\roman*)}]
+    \item \(\mathrm{Rec}_m\to 0\) exponentially fast.
+    \item \(\mathrm{Prec}_m\to 0\) along an infinite arithmetic
+    progression of lengths.
+  \end{enumerate}
+  In particular, no fixed DFA has both recall and precision bounded
+  away from zero for infinitely many lengths.
 \end{corollary}
 
 Our second theorem concerns the Zeckendorf language
@@ -72,23 +109,32 @@ Our second theorem concerns the Zeckendorf language
 \]
 
 \begin{theorem}\label{thm:intro-zeckendorf}
-Let \(L\subseteq\mathcal Z\) be regular, and define
+Let \(L\subseteq\mathcal Z\) be regular. After deleting states that are
+not reachable from the initial state or cannot reach an accepting
+state, let \(\rho\) be the maximal spectral radius of a strongly
+connected component in a DFA recognizing \(L\). Define
 \[
   N_L(T):=\#\{w\in L:\val(w)\le T\},
 \]
-where \(\val(w)\) is the Zeckendorf value of \(w\). Then there exists
-\(\alpha\in[0,1]\) such that
+where \(\val(w)\) is the Zeckendorf value of \(w\). Then
 \[
-  N_L(T)=T^{\alpha+o(1)}
+  N_L(T)=T^{\alpha+o(1)},
+  \qquad
+  \alpha=
+  \begin{cases}
+    0, & \rho\le 1,\\[0.3em]
+    \dfrac{\log \rho}{\log \varphi}, & \rho>1.
+  \end{cases}
   \qquad (T\to\infty).
 \]
-Consequently:
-\begin{enumerate}[label=\textup{(\roman*)}]
-  \item the language of Zeckendorf representations of prime numbers is
-  not regular;
-  \item the corresponding length slices cannot be the admissible words
-  of any sofic shift.
-\end{enumerate}
+In particular, the language of Zeckendorf representations of prime
+numbers is not regular. Combined with the residue-class asymptotics for
+sofic word counts proved later
+(\Cref{prop:sofic-counts-exponential-polynomial,lem:residue-class-asymptotics}),
+the same comparison also shows that there is no sofic shift \(X\) over
+\(\{0,1\}\) with \(\mathcal B_m(X)=\mathcal P_m^{(\mathrm Z)}\) for
+all sufficiently large \(m\), where \(\mathcal B_m(X)\) denotes the
+admissible words of length \(m\) in \(X\).
 \end{theorem}
 
 Our final theorem records two analytic obstructions.
@@ -96,34 +142,86 @@ Our final theorem records two analytic obstructions.
 \begin{theorem}\label{thm:intro-analytic}
 The following statements hold.
 \begin{enumerate}[label=\textup{(\roman*)}]
-  \item If \((b_n)_{n\ge 1}\subseteq\ZZ_{\ge 0}\) and \(b_p>0\) for
-  infinitely many primes \(p\), then the Euler product
+  \item If \((b_n)_{n\ge 1}\subseteq\ZZ_{\ge 0}\), if \(b_p>0\) for
+  infinitely many primes \(p\), and if the Euler product
   \[
     Z_b(z):=\prod_{n\ge 1}(1-z^n)^{-b_n}
   \]
-  has the unit circle as a natural boundary.
+  converges to a holomorphic function on \(\abs{z}<1\), then it has the
+  unit circle as a natural boundary.
 
   \item For every finite matrix \(M\), the function
   \[
     F_M(s):=\det(I-e^{-s}M)^{-1}
   \]
-  is \(2\pi i\)-periodic. In particular, the Riemann
-  \(\zeta\)-function cannot agree with \(F_M\) on any non-empty open
-  subset of \(\Re(s)>1\).
+  is \(2\pi i\)-periodic. Consequently, if \(F(s)=\sum_{n\ge 1}a_n n^{-s}\)
+  is a Dirichlet series with at least one coefficient \(a_n\neq 0\) for
+  some \(n\ge 2\), then \(F\) cannot agree with \(F_M\) on any non-empty
+  open subset of a right half-plane. In particular, \(F_M\) cannot agree
+  with the Riemann \(\zeta\)-function on any non-empty open subset of
+  \(\Re(s)>1\).
 \end{enumerate}
 \end{theorem}
 
-\subsection{Previous work}
+\subsection{Previous work and what is new}
 
-The symbolic background may be found in
-\cite{LindMarcus1995,Kitchens1998}. For the automata argument we use
-only the elementary finite-state Markov-chain decomposition reviewed in
-\cite[Chapter~4]{LevinPeresWilmer2009MarkovMixing}. The Zeckendorf
-numeration system goes back to \cite{Zeckendorf1972}. The results of
-the present note are intentionally modest in scope: they collect a
-small set of obstructions showing that prime-supported languages and
-finite-state dynamical \(\zeta\)-models are incompatible for several
-independent reasons.
+The impossibility of recognizing prime numbers by finite automata in
+classical settings goes back to Hartmanis and Shank
+\cite{HartmanisShank1968}. In the broader framework of abstract
+numeration systems, Rigo proved that for any numeration system \(S\),
+the set of primes is never \(S\)-recognizable
+\cite{Rigo2000,RigoMaes2002}. Accordingly,
+\Cref{cor:zeckendorf-prime-language-not-regular} is a
+Zeckendorf-specialized derivation of a known non-recognizability fact,
+included here because the transfer-matrix argument directly supports the
+sofic obstruction that follows it.
+
+The general background on automatic and recognizable sequences is
+classical; see Cobham's foundational papers
+\cite{Cobham1969,Cobham1972} and the monograph
+\cite{AlloucheShallit2003}. The growth of word-counting functions for
+regular and more general \(S\)-recognizable languages is also classical;
+see Salomaa and Soittola \cite{SalomaaSoittola1978}, Berstel and
+Reutenauer \cite{BerstelReutenauer2011}, and Charlier and Rampersad
+\cite{CharlierRampersad2011} for Zeckendorf-adjacent treatments.
+\Cref{thm:zeckendorf-regular-powerlaw} is a Zeckendorf-specialized
+instance of those standard growth results, included as a self-contained
+derivation via the Perron--Frobenius theorem.
+
+The interaction between primes and digital constraints has a much deeper
+literature. In particular, the work of Mauduit and Rivat
+\cite{MauduitRivat2010} and of Drmota, Mauduit and Rivat
+\cite{DrmotaMauduitRivat2009} shows that prime inputs already display
+highly nontrivial equidistribution phenomena inside automatic and
+digit-restricted settings. The approximation of non-regular languages by
+fixed finite automata has also been studied directly; see Sin'ya
+\cite{Sinya2015} for asymptotic approximation results in that spirit.
+
+For Zeckendorf and more general linear or Parry numeration systems, the
+regularity of admissible expansions is standard; see
+\cite{Frougny1992,BruyereHansel1997}. Our treatment uses only this
+regular syntax together with the transfer-matrix viewpoint on word
+counts, familiar from symbolic dynamics and analytic combinatorics
+\cite{LindMarcus1995,Kitchens1998,FlajoletSedgewick2009}. On the
+analytic side, the natural-boundary statement belongs to the classical
+circle of ideas initiated by P\'olya, Carlson, and Estermann
+\cite{Polya1923,Carlson1921,Estermann1928}, while the determinant
+formula for shifts of finite type goes back to Artin and Mazur
+\cite{ArtinMazur1965}; see also \cite{LindMarcus1995}.
+
+The genuinely new contributions of this note are two. First, the
+fixed-DFA density dichotomy (\Cref{thm:dfa-density-dichotomy}) and its
+precision/recall corollary (\Cref{sec:automata}) provide an explicit
+quantitative obstruction for approximating the binary prime language by
+a \emph{single fixed} DFA, in a form that does not appear in the
+general Cobham or Rigo framework. Second, the sofic-slice obstruction
+(\Cref{thm:zeckendorf-primes-not-sofic}) excludes even eventual sofic
+realization of the prime Zeckendorf length slices, by comparing the
+prime-number-theorem growth rate \(\varphi^m/m\) with the
+exponential-polynomial form forced by any sofic shift; this combination
+appears to be new in this exact form. The analytic observations in
+\Cref{sec:analytic} are included as a complementary perspective, with
+the understanding that they belong to a classical tradition.
 
 \subsection{Organisation}
 

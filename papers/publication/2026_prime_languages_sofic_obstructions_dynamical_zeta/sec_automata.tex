@@ -54,33 +54,81 @@ For \(m\ge 0\), write
     a_m(\mathcal A)=u^{\mathsf T}B^m v.
   \]
   Set \(P:=B/2\). Then \(P\) is a stochastic matrix on the finite set
-  \(Q\). Decompose \(Q\) into transient states and recurrent classes.
-  On each recurrent class, finite-state Markov-chain theory gives an
-  eventual cyclic decomposition with exponential convergence to the
-  stationary cyclic projections
-  \cite[Chapter~4]{LevinPeresWilmer2009MarkovMixing}. Taking the least
-  common multiple of the class periods yields
-  \[
-    u^{\mathsf T}P^m v=c_{m\bmod p}+O(\theta^m)
-  \]
-  for some \(p\) and some \(\theta\in(0,1)\). Multiplying by \(2^m\)
-  proves the expansion.
+  \(Q\). After permuting states, write \(P\) in block upper-triangular
+  form with one transient block and recurrent-class blocks
+  \(P_1,\dots,P_s\), where each \(P_i\) is an irreducible stochastic
+  matrix. The transient block has spectral radius \(<1\), so its
+  contribution is \(O(\theta_T^m)\) for some \(\theta_T\in(0,1)\).
 
-  If every \(c_r\) vanishes, then \(a_m(\mathcal A)/2^m=O(\theta^m)\),
-  which is alternative \textup{(i)}. Otherwise some \(c_r\) is strictly
-  positive, and along the corresponding residue class the density has a
-  positive lower bound, which is alternative \textup{(ii)}.
+  Fix \(i\), and let \(d_i\) be the period of \(P_i\). By the periodic
+  Perron--Frobenius theorem for irreducible non-negative matrices, there
+  exist spectral projectors \(E_{i,0},\dots,E_{i,d_i-1}\), a constant
+  \(C_i>0\), and \(\theta_i\in(0,1)\) such that
+  \[
+    P_i^m
+    =\sum_{\ell=0}^{d_i-1}\omega_{d_i}^{\ell m}E_{i,\ell}+R_{i,m},
+    \qquad
+    \|R_{i,m}\|\le C_i\theta_i^m,
+  \]
+  where \(\omega_{d_i}:=e^{2\pi i/d_i}\). Since the transient block has
+  no eigenvalues on the unit circle, these recurrent-class expansions
+  account for every peripheral eigenvalue of \(P\). Hence there exist
+  matrices \(F_{i,\ell}\) on the full state space, a constant \(C>0\),
+  and \(\theta\in(0,1)\) such that
+  \[
+    P^m
+    =\sum_{i=1}^s\sum_{\ell=0}^{d_i-1}
+      \omega_{d_i}^{\ell m}F_{i,\ell}+E_m,
+    \qquad
+    \|E_m\|\le C\theta^m.
+  \]
+
+  Let \(p:=\operatorname{lcm}(d_1,\dots,d_s)\). Grouping the peripheral
+  terms by the residue class of \(m\bmod p\), we obtain matrices
+  \(S_0,\dots,S_{p-1}\) such that
+  \[
+    P^m=S_{m\bmod p}+E_m,
+    \qquad
+    \|E_m\|\le C\theta^m.
+  \]
+  Therefore
+  \[
+    u^{\mathsf T}P^m v=u^{\mathsf T}S_{m\bmod p}v+O(\theta^m).
+  \]
+  For \(0\le r<p\), define
+  \[
+    c_r:=\lim_{k\to\infty}u^{\mathsf T}P^{kp+r}v=u^{\mathsf T}S_r v.
+  \]
+  The limit exists by the preceding expansion, and \(c_r\ge 0\) because
+  every term \(u^{\mathsf T}P^{kp+r}v\) is non-negative. Thus
+  \[
+    \frac{a_m(\mathcal A)}{2^m}
+    =u^{\mathsf T}P^m v
+    =c_{m\bmod p}+O(\theta^m),
+  \]
+  as claimed.
+
+  If every \(c_r\) vanishes, then
+  \(a_m(\mathcal A)/2^m=O(\theta^m)\), which is alternative
+  \textup{(i)}. Otherwise some \(c_r\) is strictly positive, and along
+  the corresponding residue class the density has a positive lower
+  bound, which is alternative \textup{(ii)}.
 \end{proof}
 
 For each \(m\ge 1\), let \(\mathcal P_m^{(2)}\) be the set of binary
 words of length \(m\) whose first digit is \(1\) and whose binary value
 is prime. Let \(p_m^{(2)}:=\abs{\mathcal P_m^{(2)}}\). By the prime
-number theorem,
+number theorem \cite{HardyWright2008},
 \[
   p_m^{(2)}
   =\pi(2^m)-\pi(2^{m-1})
   \asymp \frac{2^m}{m}.
 \]
+The condition that the first digit be \(1\) excludes leading zeros. One
+may equivalently compare a DFA language first with
+\(\{1\}\{0,1\}^{m-1}\); in particular, the scale
+\(\abs{\mathcal P_m^{(2)}}\asymp 2^m/m\) is unchanged because every
+prime in \([2^{m-1},2^m)\) already has binary length \(m\).
 
 \begin{corollary}[Symmetric-difference lower bound for binary primes]
   \label{cor:dfa-prime-symmetric-diff}
@@ -123,18 +171,49 @@ number theorem,
   on that progression.
 \end{proof}
 
-\begin{corollary}[No simultaneous recall and precision for fixed DFA]
-  \label{cor:dfa-prime-recall-precision}
-  Let
+\begin{proposition}\label{prop:dfa-quantitative-obstruction}
+  Let \(L_m:=L(\mathcal A)\cap\{0,1\}^m\). Suppose that there exist
+  \(\delta>0\) and infinitely many integers \(m\) such that
+  \[
+    \mathrm{Rec}_m\ge \delta,
+    \qquad
+    \mathrm{Prec}_m\ge \delta,
+  \]
+  where
   \[
     \mathrm{Rec}_m
     :=\frac{\abs{L_m\cap\mathcal P_m^{(2)}}}{\abs{\mathcal P_m^{(2)}}},
     \qquad
     \mathrm{Prec}_m
-    :=\frac{\abs{L_m\cap\mathcal P_m^{(2)}}}{\abs{L_m}}
+    :=\frac{\abs{L_m\cap\mathcal P_m^{(2)}}}{\abs{L_m}}.
   \]
-  whenever \(\abs{L_m}>0\). Then every DFA satisfies one of the
-  following:
+  Then on those lengths,
+  \[
+    \delta\,\abs{\mathcal P_m^{(2)}}
+    \le \abs{L_m\cap\mathcal P_m^{(2)}}
+    \le \abs{L_m}
+    \le \delta^{-1}\abs{L_m\cap\mathcal P_m^{(2)}}
+    \le \delta^{-1}\abs{\mathcal P_m^{(2)}}.
+  \]
+  In particular, \(\abs{L_m}\asymp 2^m/m\) along infinitely many
+  lengths, contradicting \Cref{thm:dfa-density-dichotomy}.
+\end{proposition}
+
+\begin{proof}
+  The lower bound follows from
+  \(\abs{L_m\cap\mathcal P_m^{(2)}}=\mathrm{Rec}_m\,\abs{\mathcal P_m^{(2)}}\ge\delta\,\abs{\mathcal P_m^{(2)}}\),
+  and the upper bound follows from
+  \(\abs{L_m}=\abs{L_m\cap\mathcal P_m^{(2)}}/\mathrm{Prec}_m\le\delta^{-1}\abs{L_m\cap\mathcal P_m^{(2)}}\le\delta^{-1}\abs{\mathcal P_m^{(2)}}\).
+  Since \(\abs{\mathcal P_m^{(2)}}\asymp 2^m/m\), the displayed chain
+  gives \(\abs{L_m}\asymp 2^m/m\) on an infinite set of lengths. This
+  is impossible by \Cref{thm:dfa-density-dichotomy}.
+\end{proof}
+
+\begin{corollary}[No simultaneous recall and precision for fixed DFA]
+  \label{cor:dfa-prime-recall-precision}
+  With \(\mathrm{Rec}_m\) and \(\mathrm{Prec}_m\) as in
+  \Cref{prop:dfa-quantitative-obstruction}, every DFA satisfies one of
+  the following:
   \begin{enumerate}[label=\textup{(\roman*)}]
     \item \(\mathrm{Rec}_m\to 0\) exponentially fast.
     \item \(\mathrm{Prec}_m\to 0\) along an infinite arithmetic
@@ -145,7 +224,7 @@ number theorem,
 \end{corollary}
 
 \begin{proof}
-  In the sparse case,
+  In the sparse case of \Cref{thm:dfa-density-dichotomy},
   \[
     \mathrm{Rec}_m
     \le \frac{\abs{L_m}}{\abs{\mathcal P_m^{(2)}}}
@@ -158,5 +237,8 @@ number theorem,
     \le \frac{\abs{\mathcal P_m^{(2)}}}{\abs{L_m}}
     \ll \frac{1}{m}
   \]
-  along the relevant arithmetic progression.
+  along the relevant arithmetic progression. If both recall and
+  precision were bounded below by some \(\delta>0\) for infinitely many
+  lengths, then \Cref{prop:dfa-quantitative-obstruction} would
+  contradict \Cref{thm:dfa-density-dichotomy}.
 \end{proof}

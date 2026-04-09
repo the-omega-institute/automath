@@ -2,6 +2,34 @@
 \section{The Strip RKHS, Lattice Sampling, and Cardinal Reconstruction}%
 \label{sec:strip-lattice}
 
+\paragraph{Complex Hilbert space convention.}
+From this point onward, we work with the complexification of the real
+Hilbert space from Section~\ref{sec:gram-space}, still denoted
+$\mathcal H_K$.  Its inner product is linear in the first variable and
+conjugate-linear in the second:
+\[
+\langle f,g\rangle_{\mathcal H_K}
+:=\frac{1}{2\pi^2}\int_{\RR}e^{2|\xi|}\widehat f(\xi)\,
+\overline{\widehat g(\xi)}\,\dd\xi.
+\]
+All reproducing kernels satisfy the Hermitian symmetry
+$K(z,w)=\overline{K(w,z)}$, and evaluation representers depend on
+$\overline w$, not on~$w$, in the second slot.
+
+\paragraph{Roadmap for Section~\ref{sec:strip-lattice}.}
+Proposition~\ref{thm:gram-space-poisson-image} identifies
+$\mathcal H_K$ with the Poisson image space
+$\sqrt{\pi}\,e^{-|D|}L^2(\RR)$ and provides the strip model.
+Proposition~\ref{prop:poisson-hardy-splitting} then separates positive and
+negative Fourier supports into two Hardy-type summands.  For the lattice
+results we work with the closed shift-generated spaces
+$\mathcal H_K(\ZZ)$ and $\mathcal S_{\ZZ}$; the underlying sampling and
+cardinal-reconstruction mechanism is the standard principal
+shift-invariant-space framework, whereas the new information here is the
+closed form of the lattice symbol \eqref{eq:lattice-symbol}, the cardinal
+kernel formula \eqref{eq:cardinal-kernel-fourier}, and the exact norm
+identity \eqref{eq:cardinal-norm-formula}.
+
 \subsection{A Poisson image realization of the mode space}
 
 \begin{proposition}[The mode Gram space as a Poisson image space]%
@@ -212,9 +240,32 @@ which proves \eqref{eq:hardy-splitting-kernels}.  Adding the two kernels
 on the real axis yields \eqref{eq:hardy-splitting-real-kernel}.
 \end{proof}
 
+\paragraph{Positioning against prior shift-invariant and Cauchy sampling theory.}
+The Riesz bounds and lattice reconstruction are instances of the standard
+shift-invariant-space machinery for principal generators, as in the
+classical structure theory of finitely generated shift-invariant spaces
+and stable translates
+\cite{deBoorDeVoreRon1994,RonShen1995,Bownik2000,AldroubiGrochenig2001,GrochenigRomeroStockler2020},
+and more broadly in the cardinal-interpolation and radial-basis-function
+literature \cite{Buhmann2003}.
+In particular, the symbol criterion in the proof of
+Theorem~\ref{thm:poisson-lattice-sampling} is the usual Fourier-symbol
+approach.
+
+For the Cauchy/Lorentz generator, integer-shift explicit nod-function and
+Riesz-constant computations appear in the existing Cauchy--type literature,
+including integer shifts and nod-function constructions
+\cite{KiselevMininNovikov2016,KiselevMininNovikov2019}.
+For the present paper, the additional content beyond the abstract
+shift-invariant framework is the Poisson-strip reinterpretation together
+with the closed-form lattice symbol
+\eqref{eq:lattice-symbol}, and the exact cardinal Fourier formula and
+norm formula
+\eqref{eq:cardinal-kernel-fourier},\eqref{eq:cardinal-norm-formula}.
+
 \begin{theorem}[Lattice sampling for the integer secant orbit]%
 \label{thm:poisson-lattice-sampling}
-Let
+Define the closed shift-generated Hilbert subspaces
 \[
 \mathcal H_K(\ZZ)
 :=
@@ -227,6 +278,9 @@ Let
 \overline{\operatorname{span}}\{\Psi_n:n\in\ZZ\}
 \subset L^2_0(\omega).
 \]
+Thus $\mathcal H_K(\ZZ)$ and $\mathcal S_{\ZZ}$ are the Hilbert closures
+of finite linear combinations of the corresponding kernel sections and
+secants.
 Set
 \begin{equation}\label{eq:lattice-sampling-constants}
 A_{\ZZ}:=\frac{\pi}{\sinh(2\pi)},
@@ -234,7 +288,9 @@ A_{\ZZ}:=\frac{\pi}{\sinh(2\pi)},
 B_{\ZZ}:=\pi\coth(2\pi).
 \end{equation}
 Then the families $\{K(\cdot,n)\}_{n\in\ZZ}$ and
-$\{\Psi_n\}_{n\in\ZZ}$ are Riesz sequences.  More precisely, for every
+$\{\Psi_n\}_{n\in\ZZ}$ are Riesz bases for
+$\mathcal H_K(\ZZ)$ and $\mathcal S_{\ZZ}$, respectively.  More
+precisely, for every
 finitely supported scalar sequence $(c_n)_{n\in\ZZ}$ one has
 \begin{equation}\label{eq:lattice-riesz-kernel}
 A_{\ZZ}\sum_{n\in\ZZ}|c_n|^2
@@ -254,6 +310,19 @@ A_{\ZZ}\sum_{n\in\ZZ}|c_n|^2
 \le
 B_{\ZZ}\sum_{n\in\ZZ}|c_n|^2.
 \end{equation}
+Consequently, the synthesis maps
+\[
+\mathcal C_K(c):=\sum_{n\in\ZZ}c_nK(\cdot,n),
+\qquad
+\mathcal C_S(c):=\sum_{n\in\ZZ}c_n\Psi_n,
+\qquad c\in c_{00}(\ZZ),
+\]
+extend uniquely to topological isomorphisms
+\[
+\mathcal C_K:\ell^2(\ZZ)\xrightarrow{\sim}\mathcal H_K(\ZZ),
+\qquad
+\mathcal C_S:\ell^2(\ZZ)\xrightarrow{\sim}\mathcal S_{\ZZ}.
+\]
 If $F\in\mathcal H_K(\ZZ)$, then
 \begin{equation}\label{eq:lattice-sampling-HK}
 A_{\ZZ}\|F\|_{\mathcal H_K}^2
@@ -328,6 +397,12 @@ for $\widehat c$ proves \eqref{eq:lattice-riesz-kernel}.  Since
 $\mathcal U\Psi_n=K(\cdot,n)$ by
 Theorem~\ref{thm:mode-space-rkhs}, \eqref{eq:lattice-riesz-secant}
 follows immediately.
+The two inequalities show that $\mathcal C_K$ and $\mathcal C_S$
+are bounded above and below on the dense subspace $c_{00}(\ZZ)$ of
+$\ell^2(\ZZ)$.  Hence they extend uniquely to bounded topological
+isomorphisms from $\ell^2(\ZZ)$ onto their closed ranges.  By definition
+those closed ranges are precisely $\mathcal H_K(\ZZ)$ and
+$\mathcal S_{\ZZ}$, so the stated Riesz-basis assertions follow.
 
 Now let $G$ be the Toeplitz Gram operator on $\ell^2(\ZZ)$ associated
 with the matrix $(K(m,n))_{m,n\in\ZZ}$.  For finitely supported $c$ one
@@ -365,6 +440,8 @@ Under the hypotheses of Theorem~\ref{thm:poisson-lattice-sampling}, let
 \[
 L:=R_{\ZZ}^{-1}\delta_0\in\mathcal H_K(\ZZ).
 \]
+Here $\mathcal H_K(\ZZ)$ is the closed span of the kernel sections
+$\{K(\cdot,n):n\in\ZZ\}$.
 Then $L(n)=\delta_{0n}$ for every $n\in\ZZ$.  For every
 $\alpha=(\alpha_n)_{n\in\ZZ}\in\ell^2(\ZZ)$, the series
 \[
@@ -506,15 +583,23 @@ which proves \eqref{eq:cardinal-kernel-fourier}.
 
 \begin{remark}
 Theorems~\ref{thm:poisson-lattice-sampling}
-and~\ref{thm:poisson-cardinal-reconstruction} place the integer secant
-orbit inside the standard functional-analytic framework of principal
-shift-invariant spaces and RKHS sampling.  The Poisson strip kernel
-$K(a,b) = \pi P_2(a-b)$ carries a completely explicit lattice symbol
-$\sigma(\theta) = \pi\cosh(2(\pi - |\theta|))/\sinh(2\pi)$,
-which admits both stable sampling inequalities and an exact cardinal
-interpolation formula.  In this respect the present kernel is a
-Poisson/Cauchy analogue of the Gaussian shift-invariant spaces studied
-in \cite{RomeroUlanovskiiZlotnikov2024,BaranovBelovGrochenig2022},
-with the advantage that the lattice symbol, cardinal kernel, and
-norm formula are all given in closed form.
+and~\ref{thm:poisson-cardinal-reconstruction} fit the standard principal
+shift-invariant sampling paradigm.
+The sampling inequalities come from the bounded and invertible symbol
+$\sigma(\theta)=\pi\cosh(2(\pi-|\theta|))/\sinh(2\pi)$ and the
+frame characterization by Riesz bounds in \cite{deBoorDeVoreRon1994,RonShen1995,AldroubiGrochenig2001}.
+
+For this same paradigm, explicit nod-function formulae are known for many
+generators, including Gaussian families
+\cite{RomeroUlanovskiiZlotnikov2024,BaranovBelovGrochenig2022}
+and recent derivative-sampling extensions
+\cite{GrochenigRomeroStockler2020,RomeroUlanovskiiZlotnikov2024}.
+The classical Cauchy/Lorentz integer-shift literature also contains Riesz
+and interpolation statements of this type
+\cite{KiselevMininNovikov2016,KiselevMininNovikov2019}.
+The Poisson-strip representation added here makes the symbol and the
+interpolation norm completely explicit, yielding the closed formula for
+$\sigma$ and the cardinal norm identity
+\eqref{eq:cardinal-norm-formula}.
 \end{remark}
+

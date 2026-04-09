@@ -1,18 +1,58 @@
 \section{Positive-real dominant sheet and edge asymptotics}\label{sec:physical-sheet}
 
-Having classified all real branch points, we now construct the dominant sheet over positive real fugacity, derive the exact Puiseux expansion at the vacuum boundary $y = 0$, and show that the two asymptotic edges are controlled by two different double-touching mechanisms: a dominant EP2 at finite fugacity and a double tangency at projective infinity.
+Having classified all real branch points, we now parametrize the real branch over positive \(y\), prove that it is the dominant sheet, derive the exact Puiseux expansion at the endpoint \(y=0\), and show that the two asymptotic regimes are controlled by two different double-touching mechanisms: a dominant square-root branch point at finite \(y\) and a double tangency at projective infinity.
 
 \subsection{Explicit parametrization and strict monotonicity}
 
-\begin{theorem}[Dominant sheet on $y > 0$]\label{thm:physical-sheet}
-The dominant branch of the spectral curve, connecting $(\lambda, y) = (1, 0)$ to $(\lambda, y) = (2, 1)$, is given by
+The following lemma isolates the simplicity and continuity ingredients used to identify the chosen branch as the spectral-radius branch for all $y>0$.
+It is proved first because both Theorem~\ref{thm:physical-sheet} and Proposition~\ref{prop:global-dominance} appeal to it.
+
+\begin{lemma}[Perron simplicity and branch non-crossing]\label{lem:perron-simplicity}
+For every $y>0$ in the complement of the branch values $\{0,1,y_{\mathrm{sub}}\}$, the four roots $\lambda_1(y),\dots,\lambda_4(y)$ of $\Pi(\lambda,y)$ are distinct.
+Consequently:
+\begin{enumerate}
+\item\label{item:perron-simple} The largest-modulus root $r(y)=\max_j|\lambda_j(y)|$ is a simple root of $\Pi(\cdot,y)$.
+\item\label{item:kato-rellich} Each simple root extends to an analytic function on a neighborhood of any $y_0$ where it is simple; in particular, the spectral radius $r(y)$ is an analytic function of $y$ on $y\in(0,\infty)\setminus\{1\}$.
+\item\label{item:no-crossing} The spectral-radius branch cannot undergo a modulus crossing with any other branch at any $y_0\in(0,\infty)\setminus\{1\}$: if $|\lambda_1(y_0)|>|\lambda_j(y_0)|$ for all $j\neq 1$, then this strict inequality persists in a neighborhood of $y_0$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+The discriminant $\Disc_\lambda\Pi(\lambda,y)$ was computed in Corollary~\ref{cor:disc-factor}:
+\[
+\Disc_\lambda\Pi(\lambda,y) = -y(y-1)(256y^3+411y^2+165y+32).
+\]
+This vanishes on $(0,\infty)$ only at $y=1$ (since $y>0$ and the cubic factor $c(y)$ has its unique real root at $y_{\mathrm{sub}}<0$ by Theorem~\ref{thm:ep-classification}(3)).
+Therefore, for every $y>0$ with $y\neq 1$, the four roots are distinct.
+
+Statement~\ref{item:perron-simple} follows immediately: if $r(y)$ were a repeated root, it would be a root of $\Disc_\lambda\Pi$, but $\Disc_\lambda\Pi(y)\neq 0$ for $y\in(0,\infty)\setminus\{1\}$.
+
+Statement~\ref{item:kato-rellich} is the Kato--Rellich theorem \cite{Kato1976}: a simple eigenvalue of an analytic matrix family extends analytically.
+Here the companion matrix $T(y)$ (see \eqref{eq:companion-matrix}) has analytic entries in $y$, so every simple eigenvalue is an analytic function of $y$ on the open set where it remains simple.
+
+Statement~\ref{item:no-crossing} is an immediate consequence of \ref{item:kato-rellich}.
+The condition $|\lambda_1(y_0)|>|\lambda_j(y_0)|$ for all $j\neq 1$ is an open condition (a strict inequality of continuous functions), so it persists on a neighborhood of $y_0$.
+No modulus exchange can occur at $y_0$ without first passing through equality of moduli, which would force a collision of roots (i.e.\ a zero of the discriminant) in the irreducible case.
+\end{proof}
+
+\begin{remark}[Reducible boundary at $y=1$]\label{rem:y1-reducible}
+At $y=1$ the polynomial factors as $\Pi(\lambda,1)=(\lambda-2)(\lambda-1)(\lambda+1)^2$.
+The double root $\lambda=-1$ is subdominant (modulus $1$) while the simple root $\lambda=2$ is the dominant eigenvalue.
+Since $\lambda=2$ is simple at $y=1$, Lemma~\ref{lem:perron-simplicity}\ref{item:kato-rellich} still applies to the dominant root: the branch $\lambda_{\mathrm{dom}}$ extends analytically through $y=1$, and there is no modulus crossing at this boundary point.
+\end{remark}
+
+\begin{theorem}[Positive-real branch on $y > 0$]\label{thm:physical-sheet}
+The real branch of the spectral curve connecting $(\lambda, y) = (1, 0)$ to $(\lambda, y) = (2, 1)$ is given by
 \begin{equation}\label{eq:y-phys}
-y_{\mathrm{phys}}(\lambda)
+y_{\mathrm{dom}}(\lambda)
 = \lambda^2 - \frac{1}{2} - \frac{1}{2}\sqrt{4\lambda^3 - 4\lambda + 1},
 \qquad \lambda \ge 1.
 \end{equation}
-The function $y_{\mathrm{phys}}$ is strictly increasing on $(1, \infty)$ and maps $(1, \infty)$ bijectively onto $(0, \infty)$.
-In particular, the positive-real dominant sheet has no additional real branch point; its unique boundary is $y = 0$.
+The function $y_{\mathrm{dom}}$ is strictly increasing on $(1, \infty)$ and maps $(1, \infty)$ bijectively onto $(0, \infty)$.
+Consequently it has an inverse
+\[
+\lambda_{\mathrm{dom}}:(0,\infty)\to(1,\infty).
+\]
 \end{theorem}
 
 \begin{proof}
@@ -21,15 +61,15 @@ From \eqref{eq:Pi-as-quadratic-in-y}, the spectral curve is quadratic in $y$ wit
 y = \lambda^2 - \frac{1}{2} \pm \frac{1}{2}\sqrt{4\lambda^3 - 4\lambda + 1}.
 \]
 At $(\lambda, y) = (1, 0)$ we have $4 \cdot 1 - 4 + 1 = 1$, and $1 - 1/2 - 1/2 = 0$, confirming that the minus-sign branch passes through $(1, 0)$.
-Similarly, at $(\lambda, y) = (2, 1)$: $4 \cdot 8 - 8 + 1 = 25$, $4 - 1/2 - 5/2 = 1$, confirming continuity to $(2, 1)$.
+Similarly, at $(\lambda, y) = (2, 1)$, one has $4 \cdot 8 - 8 + 1 = 25$ and $4 - 1/2 - 5/2 = 1$, confirming continuity to $(2, 1)$.
 
-Differentiating \eqref{eq:y-phys} with respect to $\lambda$:
+Differentiating \eqref{eq:y-phys} with respect to $\lambda$ gives
 \begin{equation}\label{eq:dy-dlambda}
-\frac{\dd y_{\mathrm{phys}}}{\dd\lambda}
+\frac{\dd y_{\mathrm{dom}}}{\dd\lambda}
 = \frac{2\lambda\sqrt{4\lambda^3 - 4\lambda + 1} - (3\lambda^2 - 1)}
 {\sqrt{4\lambda^3 - 4\lambda + 1}}.
 \end{equation}
-The critical points of $y_{\mathrm{phys}}$ on $(1, \infty)$ satisfy
+The critical points of $y_{\mathrm{dom}}$ on $(1, \infty)$ satisfy
 \[
 2\lambda\sqrt{4\lambda^3 - 4\lambda + 1} = 3\lambda^2 - 1.
 \]
@@ -48,32 +88,159 @@ The polynomial $16\lambda^3 - 9\lambda^2 + 1$ has no zero on $[0, \infty)$: its 
 \]
 Hence the numerator of \eqref{eq:dy-dlambda} has no zero on $(1, \infty)$.
 At $\lambda = 2$ it equals $2 \cdot 2 \cdot 5 - 11 = 9 > 0$, so continuity implies that it is positive throughout $(1,\infty)$.
-Therefore $y_{\mathrm{phys}}$ is strictly increasing on $(1, \infty)$.
+Therefore $y_{\mathrm{dom}}$ is strictly increasing on $(1, \infty)$.
 
-Since $y_{\mathrm{phys}}(1) = 0$ and $y_{\mathrm{phys}}(\lambda) \to +\infty$ as $\lambda \to +\infty$ (the leading term is $\lambda^2$), the map is a bijection $(1, \infty) \to (0, \infty)$.
+Since $y_{\mathrm{dom}}(1) = 0$ and $y_{\mathrm{dom}}(\lambda) \to +\infty$ as $\lambda \to +\infty$ (the leading term is $\lambda^2$), the map is a bijection $(1, \infty) \to (0, \infty)$.
 \end{proof}
 
-\subsection{Vacuum boundary and Puiseux expansion}\label{subsec:vacuum-puiseux}
+\begin{lemma}[Comparison of the two positive sheets for \(y>1\)]\label{lem:ygt1-sheet-comparison}
+For \(\lambda>1\), define
+\[
+y_-(\lambda)=\lambda^2-\frac12-\frac12\sqrt{4\lambda^3-4\lambda+1},
+\qquad
+y_+(\lambda)=\lambda^2-\frac12+\frac12\sqrt{4\lambda^3-4\lambda+1}.
+\]
+Then \(y_+(\lambda)>y_-(\lambda)\) for every \(\lambda>1\), and \(y_+\) is strictly increasing on \((1,\infty)\).
+If \(y>1\) and
+\[
+y=y_-(q)=y_+(p)
+\]
+for positive roots \(0<p<q\) of \(\Pi(\cdot,y)\), then \(q>p\).
+Consequently, for \(y>1\) the larger positive root of \(\Pi(\cdot,y)\) lies on the minus-sign branch \(y_-=y_{\mathrm{dom}}\).
+\end{lemma}
 
-The endpoint $y = 0$ is not an ordinary analytic point of the inverse function $\lambda_{\mathrm{phys}}(y)$, but a square-root ramification point.
+\begin{proof}
+The strict inequality \(y_+(\lambda)>y_-(\lambda)\) is immediate from the definition.
+Moreover,
+\[
+y_+'(\lambda)=2\lambda+\frac{3\lambda^2-1}{\sqrt{4\lambda^3-4\lambda+1}}>0
+\qquad (\lambda>1),
+\]
+because both summands are positive.
+Hence \(y_+\) is strictly increasing on \((1,\infty)\).
 
-\begin{proposition}[Vacuum Puiseux expansion]\label{prop:vacuum-puiseux}
+Now suppose \(y=y_-(q)=y_+(p)\) with \(0<p<q\).
+Then
+\[
+y_+(q)>y_-(q)=y=y_+(p).
+\]
+By the strict monotonicity of \(y_+\), this implies \(q>p\).
+Therefore the root on the minus-sign sheet is the larger of the two positive roots for \(y>1\).
+\end{proof}
+
+\begin{proposition}[Global dominance on the positive axis]\label{prop:global-dominance}
+For every $y>0$, the root $\lambda_{\mathrm{dom}}(y)$ is the spectral radius:
+\[
+r(y)=\lambda_{\mathrm{dom}}(y).
+\]
+Hence the branch parameterized by \eqref{eq:y-phys} is exactly the dominant sheet over $y>0$.
+\end{proposition}
+
+\begin{proof}
+The proof proceeds in three steps: an initial-point identification, a continuity argument ruling out branch crossings, and a direct comparison argument completing the two main parameter regimes.
+The reducible boundary at $y=1$ is handled explicitly as Case 3.
+
+\medskip
+\noindent\textbf{Step 1: Initial-point identification at $y=1$.}
+At $y=1$, Theorem~\ref{thm:ep-classification}(2) gives $\Pi(\lambda,1)=(\lambda-2)(\lambda-1)(\lambda+1)^2$.
+The four roots are $\lambda=2,1,-1,-1$ with moduli $2,1,1,1$.
+The spectral radius is $r(1)=2$.
+By Theorem~\ref{thm:physical-sheet}, $\lambda_{\mathrm{dom}}(1)=y_{\mathrm{dom}}^{-1}(1)$.
+Since $y_{\mathrm{dom}}(2)=4-\tfrac12-\tfrac12\sqrt{32-8+1}=\tfrac72-\tfrac{5}{2}=1$, we have $\lambda_{\mathrm{dom}}(1)=2$.
+Therefore $\lambda_{\mathrm{dom}}(1)=r(1)=2$: the chosen branch coincides with the spectral radius at the explicit base point $y_0=1$.
+
+\medskip
+\noindent\textbf{Step 2: Direct comparison in each regime.}
+
+\noindent\textit{Case 1: $0<y<1$.}
+By Theorem~\ref{thm:real-phase-diagram}, the four roots are real and can be ordered as
+\[
+r_1<r_2<r_3<r_4,
+\qquad
+r_1<-1<r_2<0<r_3<1<r_4.
+\]
+The branch from Theorem~\ref{thm:physical-sheet} is the unique real root greater than \(1\), so \(\lambda_{\mathrm{dom}}(y)=r_4\).
+It remains to compare \(\abs{r_1}\) with \(r_4\).
+For \(x\ge 1\),
+\[
+\partial_\lambda\Pi(-x,y)
+=
+-4x^3-3x^2+2(2y+1)x+1
+\le
+-4x^3-3x^2+6x+1
+=
+-(x-1)(4x^2+7x+1)<0.
+\]
+Hence \(\lambda\mapsto \Pi(\lambda,y)\) is strictly decreasing on \((-\infty,-1]\).
+Since \(r_4>1\) is a root,
+\[
+\Pi(-r_4,y)-\Pi(r_4,y)=2r_4(r_4^2-1)>0,
+\]
+and therefore \(\Pi(-r_4,y)>0\).
+Because \(\Pi\) is strictly decreasing on \((-\infty,-1]\) and vanishes at \(r_1\), one must have \(r_1>-r_4\), hence \(\abs{r_1}<r_4\).
+Since also \(\abs{r_2}<1<r_4\) and \(0<r_3<r_4\), the root \(r_4=\lambda_{\mathrm{dom}}(y)\) is the unique dominant root.
+
+\noindent\textit{Case 2: $y>1$.}
+By Theorem~\ref{thm:real-phase-diagram}, only the noncompact oval contributes for \(y>1\), so the two real roots are positive; write them as \(0<p<q\).
+The remaining two roots form a nonreal conjugate pair \(z,\bar z\).
+Lemma~\ref{lem:ygt1-sheet-comparison} shows that the larger positive root is the one on the minus-sign branch, so \(q=\lambda_{\mathrm{dom}}(y)\).
+Factor
+\[
+\Pi(\lambda,y)=(\lambda-p)(\lambda-q)(\lambda^2+a\lambda+b),
+\]
+where \(b=\abs{z}^2>0\).
+Comparing coefficients of \(\lambda^3\) and \(\lambda\):
+\[
+a=p+q-1,
+\qquad
+b=\frac{(p+q-1)pq-1}{p+q}=pq-\frac{pq+1}{p+q}<pq<q^2.
+\]
+Therefore \(\abs{z}=\sqrt{b}<q\), and since \(p<q\), the root \(q=\lambda_{\mathrm{dom}}(y)\) has strictly largest modulus.
+
+\noindent\textit{Case 3: Reducible boundary $y=1$.}
+Step 1 already established $r(1)=\lambda_{\mathrm{dom}}(1)=2$.
+Remark~\ref{rem:y1-reducible} confirms that the dominant root $\lambda=2$ is simple at $y=1$, so the Kato--Rellich theorem applies to it and the branch extends analytically across $y=1$ without a modulus crossing.
+
+\medskip
+\noindent\textbf{Step 3: Continuity argument confirming global identification.}
+Steps 1 and 2 jointly cover all $y>0$: Case 1 covers $y\in(0,1)$, Case 3 covers $y=1$, and Case 2 covers $y>1$.
+Together they show that $r(y)=\lambda_{\mathrm{dom}}(y)$ holds point-by-point for every $y>0$.
+
+However, the point-by-point argument from Step 2 must be consistent with the analyticity of the branch: no alternative branch could silently acquire larger modulus on a subinterval without detection.
+Lemma~\ref{lem:perron-simplicity}\ref{item:no-crossing} rules this out: since the dominant root is simple and strictly largest for $y\in(0,1)$ (Case 1) and for $y>1$ (Case 2), the Kato--Rellich theorem (Lemma~\ref{lem:perron-simplicity}\ref{item:kato-rellich}) implies that it varies analytically on each open interval.
+Any modulus crossing with another branch would first require a collision of eigenvalues, hence a zero of $\Disc_\lambda\Pi$; but Lemma~\ref{lem:perron-simplicity} shows that $\Disc_\lambda\Pi(y)\neq 0$ for $y\in(0,\infty)\setminus\{1\}$, and at the reducible boundary $y=1$ the dominant root $\lambda=2$ is simple (Remark~\ref{rem:y1-reducible}), so no crossing occurs there either.
+Therefore $r(y)=\lambda_{\mathrm{dom}}(y)$ for all $y>0$, with the same analytic branch throughout.
+This completes the proof.
+\end{proof}
+
+Accordingly,
+\[
+f_{\mathrm{dom}}(y)=\log \lambda_{\mathrm{dom}}(y)
+\qquad (y>0).
+\]
+
+\subsection{Endpoint at \texorpdfstring{\(y=0\)}{y=0} and Puiseux expansion}\label{subsec:vacuum-puiseux}
+
+The endpoint $y = 0$ is not an ordinary analytic point of the inverse function $\lambda_{\mathrm{dom}}(y)$, but a square-root ramification point.
+The local expansion is a classical Puiseux series \cite{BrieskornKnorrer1986,Walker1950}.
+
+\begin{proposition}[Endpoint Puiseux expansion at \(y=0\)]\label{prop:vacuum-puiseux}
 Setting $\lambda = 1 + \varepsilon$, the dominant branch satisfies
 \begin{equation}\label{eq:y-puiseux}
-y_{\mathrm{phys}}(1 + \varepsilon)
+y_{\mathrm{dom}}(1 + \varepsilon)
 = 2\varepsilon^2 - 5\varepsilon^3 + 21\varepsilon^4 - 94\varepsilon^5 + O(\varepsilon^6).
 \end{equation}
-Inverting, the dominant eigenvalue on the positive-real sheet expands as
+Inverting, the dominant eigenvalue on the dominant sheet over \(y>0\) expands as
 \begin{equation}\label{eq:lambda-puiseux}
-\lambda_{\mathrm{phys}}(y)
+\lambda_{\mathrm{dom}}(y)
 = 1 + \frac{1}{\sqrt{2}}\,y^{1/2}
 + \frac{5}{8}\,y
 - \frac{43}{64\sqrt{2}}\,y^{3/2}
 - \frac{1}{16}\,y^2
 + O(y^{5/2}).
 \end{equation}
-The logarithmic branch
-$f_{\mathrm{dom}}(y) = \log\lambda_{\mathrm{phys}}(y)$
+The logarithmic spectral radius
+$f_{\mathrm{dom}}(y) = \log\lambda_{\mathrm{dom}}(y)$
 satisfies
 \begin{equation}\label{eq:f-puiseux}
 f_{\mathrm{dom}}(y)
@@ -82,9 +249,10 @@ f_{\mathrm{dom}}(y)
 - \frac{217\sqrt{2}}{384}\,y^{3/2}
 + O(y^2),
 \end{equation}
-and the logarithmic slope $\rho(y) = y\,f_{\mathrm{dom}}'(y)$ has the form
+and the scaled logarithmic slope
 \begin{equation}\label{eq:rho-vacuum}
-\rho(y) = \frac{1}{2\sqrt{2}}\,y^{1/2}
+\sigma(y):=y\,f_{\mathrm{dom}}'(y)
+= \frac{1}{2\sqrt{2}}\,y^{1/2}
 + \frac{3}{8}\,y
 - \frac{217\sqrt{2}}{256}\,y^{3/2}
 + O(y^2).
@@ -100,63 +268,174 @@ At $\lambda = 1 + \varepsilon$,
 Taking the square root by the binomial series:
 \[
 \sqrt{4\lambda^3 - 4\lambda + 1}
-= 1 + 4\varepsilon - 2\varepsilon^2 + 10\varepsilon^3 - 52\varepsilon^4 + O(\varepsilon^5).
+= 1 + 4\varepsilon - 2\varepsilon^2 + 10\varepsilon^3 - 42\varepsilon^4 + 188\varepsilon^5 + O(\varepsilon^6).
 \]
 Substituting into \eqref{eq:y-phys}:
 \begin{align*}
-y_{\mathrm{phys}}(1 + \varepsilon)
+y_{\mathrm{dom}}(1 + \varepsilon)
 &= (1 + \varepsilon)^2 - \tfrac{1}{2}
-  - \tfrac{1}{2}\bigl(1 + 4\varepsilon - 2\varepsilon^2 + 10\varepsilon^3 - 52\varepsilon^4 + \cdots\bigr) \\
+  - \tfrac{1}{2}\bigl(1 + 4\varepsilon - 2\varepsilon^2 + 10\varepsilon^3 - 42\varepsilon^4 + 188\varepsilon^5 + \cdots\bigr) \\
 &= 1 + 2\varepsilon + \varepsilon^2 - \tfrac{1}{2}
-  - \tfrac{1}{2} - 2\varepsilon + \varepsilon^2 - 5\varepsilon^3 + 26\varepsilon^4 - \cdots \\
+  - \tfrac{1}{2} - 2\varepsilon + \varepsilon^2 - 5\varepsilon^3 + 21\varepsilon^4 - 94\varepsilon^5 - \cdots \\
 &= 2\varepsilon^2 - 5\varepsilon^3 + 21\varepsilon^4 - 94\varepsilon^5 + O(\varepsilon^6).
 \end{align*}
-The leading term $y \sim 2\varepsilon^2$ gives $\varepsilon \sim y^{1/2}/\sqrt{2}$.
-A systematic Puiseux inversion in half-integer powers of $y$ yields \eqref{eq:lambda-puiseux}.
-Equations \eqref{eq:f-puiseux} and \eqref{eq:rho-vacuum} follow by logarithmic expansion and term-by-term differentiation.
+To invert the series, write
+\[
+\varepsilon = A y^{1/2} + B y + C y^{3/2} + D y^2 + O(y^{5/2}).
+\]
+Substituting this ansatz into \eqref{eq:y-puiseux} and matching the coefficients of
+\(
+y,\ y^{3/2},\ y^2,\ y^{5/2}
+\)
+gives
+\[
+2A^2=1,\qquad 4AB-5A^3=0,
+\]
+\[
+4AC+2B^2-15A^2B+21A^4=0,
+\]
+\[
+4AD+4BC-15A^2C-15AB^2+84A^3B-94A^5=0.
+\]
+Choosing the positive branch \(A=1/\sqrt2\) and solving successively yields
+\[
+A=\frac{1}{\sqrt2},\qquad
+B=\frac58,\qquad
+C=-\frac{43}{64\sqrt2},\qquad
+D=-\frac{1}{16},
+\]
+which is \eqref{eq:lambda-puiseux}.
+Then
+\[
+\log(1+\varepsilon)=\varepsilon-\frac{\varepsilon^2}{2}+\frac{\varepsilon^3}{3}+O(y^2)
+\]
+gives \eqref{eq:f-puiseux}, and term-by-term differentiation yields \eqref{eq:rho-vacuum}.
 \end{proof}
 
-Equation \eqref{eq:rho-vacuum} shows that the logarithmic slope does not open linearly from the vacuum boundary, but with a square-root singularity:
+Equation \eqref{eq:rho-vacuum} shows that the scaled logarithmic slope does not open linearly from the endpoint \(y=0\), but with a square-root singularity:
 \[
-\rho(y) \sim \frac{1}{2\sqrt{2}}\,y^{1/2}
+\sigma(y) \sim \frac{1}{2\sqrt{2}}\,y^{1/2}
 \qquad (y \to 0^+).
 \]
 
-\subsection{A universal dominant-EP2 edge normal form}\label{subsec:vacuum-quantization}
+\subsection{Generic EP2 branching and local cosine law}\label{subsec:vacuum-quantization}
 
-The same square-root exceptional point controls the first finite-volume zeros on the negative real axis.
-The relevant mechanism is not peculiar to the present quartic family, but is the universal local standard form of a dominant square-root EP2.
+The same square-root branch point controls the first finite-volume zeros on the negative real axis.
+There are two distinct ingredients.
+First, the spectral polynomial itself forces a square-root splitting whenever \(\partial_\lambda P\) vanishes simply in the \(y\)-direction.
+Second, once a dominant pair with symmetric amplitudes has been isolated and the remaining branches are shown to be uniformly smaller on the complex microscopic scale, the polynomial family reduces to a shifted cosine law.
 
-\begin{theorem}[Universal dominant-EP2 edge normal form]\label{thm:ep2-normal-form}
-Let $\{Z_m(y)\}_{m\ge 0}$ admit, in a punctured neighborhood of $y_c$, a decomposition
+\begin{lemma}[Generic EP2 branching from the spectral polynomial]\label{lem:generic-ep2-branching}
+Let \(P(\lambda,y)\) be holomorphic near \((\lambda_c,y_c)\in\CC^2\), and assume
 \[
-Z_m(y)=C_+(y)\lambda_+(y)^m + C_-(y)\lambda_-(y)^m + R_m(y).
+P(\lambda_c,y_c)=P_\lambda(\lambda_c,y_c)=0,
+\qquad
+P_{\lambda\lambda}(\lambda_c,y_c)P_y(\lambda_c,y_c)\neq 0.
 \]
-Assume there exists a Puiseux coordinate $y=y_c+s^2$ in which
+Then, after setting \(y=y_c+s^2\), there exist \(s_0>0\) and holomorphic branches \(\lambda_\pm(s)\) for \(|s|<s_0\) such that
+\[
+P(\lambda_\pm(s),y_c+s^2)=0,
+\qquad
+\lambda_\pm(0)=\lambda_c,
+\]
+and
+\[
+\lambda_\pm(s)=\lambda_c\pm \alpha s+\beta s^2+O(s^3),
+\qquad
+\alpha^2=-\frac{2P_y}{P_{\lambda\lambda}}(\lambda_c,y_c).
+\]
+After relabeling, one may choose the branches so that \(\lambda_-(s)=\lambda_+(-s)\).
+\end{lemma}
+
+\begin{proof}
+Write \(h=\lambda-\lambda_c\).
+Taylor expansion at \((\lambda_c,y_c)\) gives
+\[
+P(\lambda_c+h,y_c+s^2)
+=
+\frac{1}{2}P_{\lambda\lambda}(\lambda_c,y_c)h^2
++P_y(\lambda_c,y_c)s^2
++R(h,s),
+\]
+where
+\[
+R(h,s)=O\!\bigl(|h|^3+|h||s|^2+|s|^4\bigr).
+\]
+Set \(h=su\) and define
+\[
+G(u,s)=
+\begin{cases}
+s^{-2}P(\lambda_c+su,y_c+s^2), & s\neq 0,\\[4pt]
+\dfrac{1}{2}P_{\lambda\lambda}(\lambda_c,y_c)u^2+P_y(\lambda_c,y_c), & s=0.
+\end{cases}
+\]
+The remainder estimate shows that \(G\) is holomorphic near \((u,s)=(\pm\alpha,0)\), where \(\alpha\) is any square root of \(-2P_y/P_{\lambda\lambda}\).
+Moreover,
+\[
+G(\pm\alpha,0)=0,
+\qquad
+\partial_u G(\pm\alpha,0)=P_{\lambda\lambda}(\lambda_c,y_c)(\pm\alpha)\neq 0.
+\]
+By the implicit-function theorem, there exist holomorphic functions \(u_\pm(s)=\pm\alpha+O(s)\) such that
+\[
+G(u_\pm(s),s)=0.
+\]
+Setting \(\lambda_\pm(s)=\lambda_c+s\,u_\pm(s)\) yields
+\[
+\lambda_\pm(s)=\lambda_c\pm\alpha s+\beta_\pm s^2+O(s^3).
+\]
+Replacing \(s\) by \(-s\) leaves \(y_c+s^2\) unchanged and interchanges the two roots issuing from \(\lambda_c\).
+After relabeling, this gives \(\lambda_-(s)=\lambda_+(-s)\), and hence \(\beta_-=\beta_+=:\beta\).
+\end{proof}
+
+\begin{lemma}[Cosine law from a dominant EP2 decomposition]\label{lem:ep2-cosine-law}
+Let \(\{Z_m(y)\}_{m\ge 0}\) be holomorphic in a neighborhood of \(y_c\).
+Assume that there exists \(s_0>0\) such that, for \(|s|<s_0\),
+\[
+Z_m(y_c+s^2)=C_+(s)\lambda_+(s)^m + C_-(s)\lambda_-(s)^m + R_m(y_c+s^2),
+\]
+where \(\lambda_\pm\) and \(C_\pm\) are holomorphic on \(|s|<s_0\) and satisfy
 \[
 \lambda_\pm(s)=\lambda_c\exp\!\left(\pm as + bs^2 + O(s^3)\right),
 \qquad
 C_\pm(s)=C_0\mp cs+O(s^2),
 \]
-with real constants $\lambda_c>0$, $a>0$, $b\in\RR$, $C_0\neq 0$, and $c\in\RR$.
-Assume moreover that for every compact $U\subset[0,\infty)$ one has
+with real constants \(\lambda_c>0\), \(a>0\), \(b\in\RR\), \(C_0\neq 0\), and \(c\in\RR\).
+Assume moreover that for every compact \(K\subset\CC\) there exists \(M_K>0\) such that
 \[
-R_m\!\left(y_c-\frac{u^2}{m^2}\right)=O_U(\lambda_c^m m^{-2})
+\sup_{u\in K}
+\left|
+R_m\!\left(y_c-\frac{u^2}{m^2}\right)
+\right|
+\le M_K \lambda_c^m m^{-2}
 \]
-uniformly for $u\in U$.
-Then, uniformly for $u\in U$,
+for all sufficiently large \(m\).
+Define
+\[
+F_m(u):=
+\frac{e^{b u^2/m}}{2C_0\lambda_c^m}
+Z_m\!\left(y_c-\frac{u^2}{m^2}\right).
+\]
+Then, for every compact \(K\subset\CC\),
 \begin{equation}\label{eq:universal-ep2-scaling}
-Z_m\!\left(y_c-\frac{u^2}{m^2}\right)
+F_m(u)
 =
-2C_0\lambda_c^m
-\exp\!\left(-\frac{b u^2}{m}\right)
-\left[
 \cos\!\left(
 a u-\frac{c}{C_0}\frac{u}{m}
-\right)+O_U(m^{-2})
-\right].
+\right)+O_K(m^{-2})
 \end{equation}
-Consequently, if $q_k:=(2k-1)\pi/2$, then the $k$th edge zero satisfies
+uniformly for \(u\in K\).
+Fix \(k\ge 1\) and set
+\[
+q_k:=\frac{(2k-1)\pi}{2},
+\qquad
+u_k^{(0)}:=\frac{q_k}{a}.
+\]
+Then there exist \(\eta_k>0\) and \(m_k\) such that, for every \(m\ge m_k\), the function \(F_m\) has exactly one zero \(u_{m,k}\) in the disc
+\[
+\{u\in\CC:\abs{u-u_k^{(0)}}<\eta_k\},
+\]
+and this zero satisfies
 \begin{equation}\label{eq:universal-ep2-u}
 u_{m,k}
 =
@@ -166,7 +445,7 @@ u_{m,k}
 \right)
 +O_k(m^{-2}),
 \end{equation}
-and therefore
+whence
 \begin{equation}\label{eq:universal-ep2-y}
 y_{m,k}
 =
@@ -174,34 +453,32 @@ y_c-\frac{q_k^2}{a^2m^2}
 -\frac{2cq_k^2}{a^3C_0m^3}
 +O_k(m^{-4}).
 \end{equation}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
-Fix a compact set $U\subset[0,\infty)$ and set $s=iu/m$, so that $y=y_c-u^2/m^2$.
-From the assumed local form of $\lambda_\pm$,
+Fix a compact set \(K\subset\CC\) and set \(s=iu/m\), so that \(y=y_c-u^2/m^2\).
+Because the expansions are holomorphic in \(s\), the \(O(s^3)\) and \(O(s^2)\) remainders are uniform on compact subsets of \(\CC\) near \(0\).
+Therefore,
 \[
 \lambda_\pm\!\left(\frac{iu}{m}\right)^m
 =
 \lambda_c^m
 \exp\!\left(
-\pm iau-\frac{bu^2}{m}+O_U(m^{-2})
-\right).
+\pm iau-\frac{bu^2}{m}+O_K(m^{-2})
+\right),
 \]
-Similarly,
+and similarly
 \[
 C_\pm\!\left(\frac{iu}{m}\right)
 =
-C_0\mp ic\frac{u}{m}+O_U(m^{-2}).
+C_0\mp ic\frac{u}{m}+O_K(m^{-2}).
 \]
 Multiplying and adding the two dominant contributions gives
 \begin{align*}
-C_+\lambda_+^m + C_-\lambda_-^m
+\frac{e^{b u^2/m}}{2C_0\lambda_c^m}
+\bigl(C_+\lambda_+^m + C_-\lambda_-^m\bigr)
 &=
-2C_0\lambda_c^m
-\exp\!\left(-\frac{bu^2}{m}\right)
-\left[
-\cos(au)+\frac{c}{C_0}\frac{u}{m}\sin(au)+O_U(m^{-2})
-\right].
+\cos(au)+\frac{c}{C_0}\frac{u}{m}\sin(au)+O_K(m^{-2}).
 \end{align*}
 Using
 \[
@@ -211,43 +488,62 @@ Using
 \]
 we obtain
 \[
-C_+\lambda_+^m + C_-\lambda_-^m
+\frac{e^{b u^2/m}}{2C_0\lambda_c^m}
+\bigl(C_+\lambda_+^m + C_-\lambda_-^m\bigr)
 =
-2C_0\lambda_c^m
-\exp\!\left(-\frac{bu^2}{m}\right)
-\left[
-\cos\!\left(
-au-\frac{c}{C_0}\frac{u}{m}
-\right)+O_U(m^{-2})
-\right].
+g_m(u)+O_K(m^{-2}),
 \]
-The assumed bound on $R_m$ then gives \eqref{eq:universal-ep2-scaling}.
+where
+\[
+g_m(u):=\cos\!\left(a u-\frac{c}{C_0}\frac{u}{m}\right).
+\]
+The assumed bound on \(R_m\) then gives \eqref{eq:universal-ep2-scaling}.
 
-Now fix $k\ge1$.
-The principal phase in \eqref{eq:universal-ep2-scaling} has a simple zero near $u_k^{(0)}=q_k/a$.
-Since its derivative equals $a+O(m^{-1})$, a standard one-dimensional perturbation argument yields a unique zero $u_{m,k}$ in that neighborhood.
-Solving
+Now fix \(k\ge1\).
+Choose \(\eta_k>0\) so small that \(\cos(au)\) has no zero on the circle \(\abs{u-u_k^{(0)}}=\eta_k\).
+Then
+\[
+\delta_k:=\inf_{\abs{u-u_k^{(0)}}=\eta_k}\abs{\cos(au)}>0.
+\]
+Since \(g_m\to \cos(au)\) uniformly on that circle, for all sufficiently large \(m\) one has
+\[
+\abs{g_m(u)}\ge \frac{\delta_k}{2}
+\qquad
+\text{whenever }\abs{u-u_k^{(0)}}=\eta_k.
+\]
+By \eqref{eq:universal-ep2-scaling}, the same large-\(m\) regime gives
+\[
+\abs{F_m(u)-g_m(u)}<\frac{\delta_k}{2}
+\qquad
+\text{whenever }\abs{u-u_k^{(0)}}=\eta_k.
+\]
+Rouch\'e's theorem therefore implies that \(F_m\) and \(g_m\) have the same number of zeros in \(\abs{u-u_k^{(0)}}<\eta_k\).
+Since \(g_m(u)=0\) exactly when
 \[
 au-\frac{c}{C_0}\frac{u}{m}=q_k
 \]
-gives
+and the affine phase has a unique solution
 \[
-u_{m,k}
-=
-\frac{q_k}{a-\frac{c}{C_0m}}
-=
-\frac{q_k}{a}
-\left(
-1+\frac{c}{aC_0m}
-\right)
-+O_k(m^{-2}),
+u_{m,k}^{(0)}:=\frac{q_k}{a-\frac{c}{C_0m}}
 \]
-which is \eqref{eq:universal-ep2-u}.
-Squaring and dividing by $m^2$ yields \eqref{eq:universal-ep2-y}.
+in that disc for \(m\) large, \(F_m\) has exactly one zero \(u_{m,k}\) there.
+
+Moreover,
+\[
+g_m'(u_{m,k}^{(0)})
+=
+-\left(a-\frac{c}{C_0m}\right)\sin q_k
+\]
+stays uniformly away from \(0\).
+Since \(F_m(u_{m,k})=0\) and \(F_m-g_m=O_k(m^{-2})\) uniformly on the disc, a first-order Taylor expansion about \(u_{m,k}^{(0)}\) gives
+\[
+u_{m,k}=u_{m,k}^{(0)}+O_k(m^{-2}).
+\]
+Expanding \(u_{m,k}^{(0)}\) yields \eqref{eq:universal-ep2-u}, and squaring \(u_{m,k}\) gives \eqref{eq:universal-ep2-y}.
 \end{proof}
 
-\begin{theorem}[Vacuum-edge scaling and zero quantization]\label{thm:vacuum-zero-quantization}
-For the quartic transfer family studied here, the vacuum edge at $y_c=0$ satisfies the universal dominant-EP2 normal form with
+\begin{theorem}[Endpoint scaling and zero quantization]\label{thm:vacuum-zero-quantization}
+For the quartic transfer family studied here, the square-root endpoint at $y_c=0$ satisfies the assumptions of Lemma~\ref{lem:ep2-cosine-law} with
 \[
 a=\frac{1}{\sqrt2},
 \qquad
@@ -257,14 +553,14 @@ C_0=\frac12,
 \qquad
 c=\frac{3\sqrt2}{16}.
 \]
-Consequently, uniformly for $u$ in compact subsets of $[0,\infty)$,
+Consequently, uniformly for \(u\) in compact subsets of \(\CC\),
 \begin{equation}\label{eq:vacuum-scaling}
 Z_m\!\left(-\frac{u^2}{m^2}\right)
 =
 \exp\!\left(-\frac{3u^2}{8m}\right)
 \left[
 \cos\!\left(\frac{u}{\sqrt{2}}-\frac{3u}{4\sqrt{2}\,m}\right)
-+ O_U(m^{-2})
++ O_K(m^{-2})
 \right],
 \end{equation}
 and for each fixed $k\ge 1$ the $k$th negative real zero nearest $y=0$ satisfies
@@ -278,15 +574,15 @@ y_{m,k}
 \end{theorem}
 
 \begin{proof}
-Appendix~\ref{app:vacuum-edge} proves that on the vacuum scale $y=s^2$ the dominant pair satisfies
+Appendix~\ref{app:vacuum-edge} proves that on the local scale \(y=s^2\) the dominant pair satisfies the square-root branching predicted by Lemma~\ref{lem:generic-ep2-branching}:
 \[
 \lambda_\pm(s)=1\pm \frac{1}{\sqrt2}s+\frac58 s^2+O(s^3),
 \qquad
 C_\pm(s)=\frac12\mp \frac{3\sqrt2}{16}s+O(s^2),
 \]
-and that the remaining two branches contribute only $O_U(m^{-2})$ on the scale $y=-u^2/m^2$.
-Thus the hypotheses of Theorem~\ref{thm:ep2-normal-form} hold with the stated constants and $\lambda_c=1$.
-Substituting these values into \eqref{eq:universal-ep2-scaling} and \eqref{eq:universal-ep2-y} gives \eqref{eq:vacuum-scaling} and \eqref{eq:vacuum-zero-quantization}.
+and that the remaining two branches contribute only \(O_K(m^{-2})\) on compact complex sets \(K\) under the scaling \(y=-u^2/m^2\).
+Thus the hypotheses of Lemma~\ref{lem:ep2-cosine-law} hold with the stated constants and \(\lambda_c=1\).
+Applying \eqref{eq:universal-ep2-scaling} gives \eqref{eq:vacuum-scaling}, and applying \eqref{eq:universal-ep2-y} on discs around the points \(u_k^{(0)}=\pi(2k-1)/\sqrt2\) gives \eqref{eq:vacuum-zero-quantization}.
 \end{proof}
 
 \begin{corollary}[Edge-zero counting law]\label{cor:edge-zero-counting}
@@ -352,9 +648,9 @@ k \sim \frac{m}{\pi\sqrt2}\sqrt{|y|},
 \qquad
 (y\uparrow 0,\ |y|=O(m^{-2})).
 \]
-Thus the first negative zeros do not approach the vacuum edge with a smooth density: they compress with the same square-root exponent that governs the Puiseux opening of the dominant sheet.
+Thus the first negative zeros do not approach the endpoint \(y=0\) with a smooth density: they compress with the same square-root exponent that governs the Puiseux opening of the dominant sheet.
 
-\subsection{Double tangency at infinity and the dense-edge splitting law}\label{subsec:high-fugacity}
+\subsection{Double tangency at infinity and the quarter-power splitting law}\label{subsec:high-fugacity}
 
 \begin{proposition}[Double tangency at projective infinity]\label{prop:saturation}
 Let $Y:=y^{1/4}$.
@@ -368,7 +664,7 @@ Then the dominant homogeneous balance of the spectral polynomial at projective i
 Hence the positive large-\(y\) branch is generated by a double tangency of the sheets $\lambda\sim \pm y^{1/2}$ at infinity.
 On the dominant branch one has
 \begin{equation}\label{eq:lambda-high-y}
-\lambda_{\mathrm{phys}}(y)
+\lambda_{\mathrm{dom}}(y)
 = y^{1/2} + \frac{1}{2}\,y^{1/4} + \frac{1}{4}
 + \frac{7}{64}\,y^{-1/4} + O(y^{-1/2}),
 \end{equation}
@@ -378,21 +674,21 @@ f_{\mathrm{dom}}(y)
 = \frac{1}{2}\log y + \frac{1}{2}\,y^{-1/4}
 + \frac{1}{8}\,y^{-1/2} + O(y^{-3/4}).
 \end{equation}
-Writing $y = e^s$ and $\Lambda_{\mathrm{dom}}(s) = f_{\mathrm{dom}}(e^s) - \log 2$, the logarithmic slope
+Writing $y = e^s$ and $\Lambda_{\mathrm{dom}}(s) = f_{\mathrm{dom}}(e^s) - \log 2$, the scaled logarithmic slope
 \begin{equation}\label{eq:rho-saturation}
-\rho(s) = \Lambda_{\mathrm{dom}}'(s)
+\varrho(s) = \Lambda_{\mathrm{dom}}'(s)
 = \frac{1}{2} - \frac{1}{8}\,e^{-s/4}
 - \frac{1}{16}\,e^{-s/2} + O(e^{-3s/4})
 \end{equation}
 satisfies
 \[
-\lim_{s \to +\infty} \rho(s) = \frac{1}{2}.
+\lim_{s \to +\infty} \varrho(s) = \frac{1}{2}.
 \]
 The exponent $1/4$ is the splitting exponent created by the double tangency at infinity.
 \end{proposition}
 
 \begin{proof}
-Set $y=Y^4$ and seek the positive dense branch in the form
+Set $y=Y^4$ and seek the positive large-\(y\) branch in the form
 \[
 \lambda=Y^2+\alpha Y+\beta+\gamma Y^{-1}+O(Y^{-2}).
 \]
@@ -425,5 +721,5 @@ Equations \eqref{eq:f-high-y} and \eqref{eq:rho-saturation} then follow by logar
 \end{proof}
 
 The point of Proposition~\ref{prop:saturation} is conceptual as well as computational.
-The dense-edge correction exponent $1/4$ is not merely a quartic fingerprint; it is the quarter-power splitting law generated by a double tangency at projective infinity.
-Combined with Theorem~\ref{thm:support-law}, which gives only polynomial growth of the top-degree coefficients, this shows that the top-degree sector is a rigid edge rather than an extensive multiplicity regime.
+The exponent \(1/4\) is not merely a quartic fingerprint; it is the quarter-power splitting law generated by a double tangency at projective infinity.
+Combined with Theorem~\ref{thm:support-law}, which gives only polynomial growth of the top-degree coefficients, this shows that the top-degree sector is a rigid algebraic boundary rather than an extensive multiplicity regime.

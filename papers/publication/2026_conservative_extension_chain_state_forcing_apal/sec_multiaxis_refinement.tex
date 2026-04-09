@@ -1,6 +1,6 @@
 \section{Refinement Dynamics and Support}\label{sec:multiaxis-refinement}
 
-The previous sections analyzed forcing at a fixed state. This section treats refinement itself as a dynamics: the forcing clause stays unchanged, but the set of admissible realizations may shrink along different axes of information. This section records the monotonicity and support results at layer $\mathbb{L}_4$ of the extension chain.
+The previous sections analyzed forcing at a fixed state. This section treats refinement itself as a dynamics: the forcing clause stays unchanged, but the set of admissible realizations may shrink along different axes of information. The results here are supplementary to the main proof chain. They apply only to model classes in which refinement induces morphisms of slice sites and compatible maps of finite nerves; absent that extra geometry, the section should be read as a formal add-on rather than as part of the core obstruction theory.
 
 \subsection{Dynamic refinement}
 
@@ -141,9 +141,9 @@ By axis completeness there exists a fusion state $u$ with $u\le q_j$ for all $j\
 
 \subsection{Branchwise obstruction monotonicity}
 
-The obstruction theory of \Cref{sec:null-decomposition} becomes dynamic once visible branches and their component gerbes are transported along refinement. The basic structural fact is that refinement can only reveal more branch-level visible information; it cannot re-hide information that was already uniformly visible.
+The obstruction theory of \Cref{sec:null-decomposition} becomes dynamic once visible branches and their component gerbes are transported along refinement. In the model classes just described, the basic structural fact is that refinement can only reveal more branch-level visible information; it cannot re-hide information that was already uniformly visible.
 
-\begin{theorem}[Refinement monotonicity of branch visibility]\label{thm:branch-visibility-monotonicity}
+\begin{proposition}[Refinement monotonicity of branch visibility]\label{thm:branch-visibility-monotonicity}
 Let $q\le p$, let $r:\mathsf{Ref}_s$ be admitted at both states, and write
 \[
 a_p=[r]_p,
@@ -161,9 +161,13 @@ f_{q,p}:\mathcal C_{q,s}/a_q\to \mathcal C_{p,s}/a_p;
 \[
 \mathfrak G_w\simeq f_{q,p}^*(\mathfrak G_v);
 \]
-\item compatible finite nerve presentations have been chosen so that the induced branch obstruction classes satisfy
+\item compatible finite nerve presentations have been chosen together with a simplicial refinement map
 \[
-\omega_w=f_{q,p}^*(\omega_v)
+N(f_{q,p}):N(\mathcal U_q)\to N(\mathcal U_p)
+\]
+such that the induced branch obstruction classes satisfy
+\[
+\omega_w=N(f_{q,p})^*(\omega_v)
 \]
 with the same finite abelian band $A$.
 \end{enumerate}
@@ -177,16 +181,16 @@ A_{\mathrm{vis}}^w\twoheadrightarrow A_{\mathrm{vis}}^v,
 \qquad
 |K_w|\le |K_v|.
 \]
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
-The pullback of gerbes is again a gerbe, and the induced cohomology class is the pullback of the original one \cite[Tag 06NY]{StacksProject}, \cite[Theorem~3.11]{BerghSchnurer2021}. Let $\chi\in X_v$. Then
+The pullback of gerbes is again a gerbe, and the induced cohomology class is the pullback of the original one \cite[Tag 06NY]{StacksProject}, \cite[Theorem~3.11]{BerghSchnurer2021}. Naturality of the universal coefficient map with respect to the simplicial refinement map $N(f_{q,p})$ gives the cohomological compatibility needed below. Let $\chi\in X_v$. Then
 \[
 \chi_*(\omega_v)=0.
 \]
-Applying the pullback $f_{q,p}^*$ gives
+Applying the pullback $N(f_{q,p})^*$ gives
 \[
-\chi_*(\omega_w)=\chi_*\bigl(f_{q,p}^*(\omega_v)\bigr)=f_{q,p}^*\bigl(\chi_*(\omega_v)\bigr)=0,
+\chi_*(\omega_w)=\chi_*\bigl(N(f_{q,p})^*(\omega_v)\bigr)=N(f_{q,p})^*\bigl(\chi_*(\omega_v)\bigr)=0,
 \]
 so $\chi\in X_w$. Hence $X_v\subseteq X_w$.
 
@@ -202,6 +206,36 @@ A_{\mathrm{vis}}^w=A/K_w\twoheadrightarrow A/K_v=A_{\mathrm{vis}}^v.
 \]
 For finite groups, $K_w\subseteq K_v$ implies $|K_w|\le |K_v|$.
 \end{proof}
+
+\begin{example}[A strict drop under refinement]\label{ex:refinement-drop}
+Let $A=\mathbb Z/4\mathbb Z$, and let $r$ be admitted at $q\le p$.
+Assume that at $p$ there is one visible branch $v$ and a branch obstruction class
+\[
+\omega_v\in H^2(N(\mathcal U_p),A)
+\]
+with
+\[
+K_v=\langle 2\rangle\subseteq A.
+\]
+Hence
+\[
+A_{\mathrm{vis}}^v=A/K_v\cong \mathbb Z/2\mathbb Z.
+\]
+
+Suppose $r$ has a unique branch $w$ above $v$ at the refinement $q$, and the induced pullback class
+\[
+\omega_w=f_{q,p}^*(\omega_v)
+\]
+is trivial in $H^2(N(\mathcal U_q),A)$. Then
+\[
+K_w=\{0\},\qquad A_{\mathrm{vis}}^w=A/K_w\cong A.
+\]
+By \Cref{thm:branch-visibility-monotonicity}, the map
+\[
+A_{\mathrm{vis}}^w\longrightarrow A_{\mathrm{vis}}^v
+\]
+is the quotient mod~$2$, so $|K_w|<|K_v|$ and the strict hidden budget decreases under this refinement.
+\end{example}
 
 \begin{corollary}[Refinement decreases hidden branch budget]\label{cor:branch-budget-monotonicity}
 Under the hypotheses of \Cref{thm:branch-visibility-monotonicity}, refinement can only enlarge the visible quotient and can never increase the intrinsic hidden-state budget of the branch:

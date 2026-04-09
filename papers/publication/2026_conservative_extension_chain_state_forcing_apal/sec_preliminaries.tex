@@ -2,6 +2,9 @@
 
 The later sections use only one abstract idea: a higher semantic layer may add coordinates or structure without changing the behavior of formulas already present below. The definitions in this section isolate that invariance principle and nothing more.
 
+\subsection*{Standing notation}
+States are denoted by $p,q,u$, and admitted references by $r:\mathsf{Ref}_s$ with associated class $a=[r]_p$. The local reference site at a state and sort is $\mathcal C_{p,s}$, the local object functor is $F_{p,s}$, the visible value classes of a reference are $\Vis_{p,s}(r)$, and branch obstruction classes are denoted by $\omega$ or $\omega_v$. Subscripts such as $\mathrm{vis}$, $\mathrm{br}$, and $\mathrm{unif}$ consistently indicate visible, branch-sensitive, and branch-uniform quotients.
+
 \begin{definition}[Logic layer]\label{def:logic-layer}
 A \emph{logic layer} is a tuple
 \[
@@ -96,5 +99,99 @@ The constructions used later fit into the finite chain
 \mathbb{L}_4.
 \]
 Here $\mathbb{L}_0$ is the underlying pointwise semantics, $\mathbb{L}_1$ is the information-state forcing layer, $\mathbb{L}_2$ adds local references and local objects, $\mathbb{L}_3$ adds structural absence and gluing-obstruction data, and $\mathbb{L}_4$ adds refinement dynamics. By \Cref{cor:whole-chain-invariance}, the passage up the chain is cumulative rather than revisionary: each later layer preserves the forcing behavior already fixed below.
+
+\begin{proposition}[Concrete instantiation of the finite chain]\label{prop:chain-instantiation}
+The four adjacent interfaces of
+\[
+\mathbb L_0\preceq \mathbb L_1\preceq \mathbb L_2\preceq \mathbb L_3\preceq \mathbb L_4
+\]
+are instantiated as follows.
+\begin{enumerate}[label=(\roman*),leftmargin=3em]
+\item \textbf{$\mathbb L_0\leadsto\mathbb L_1$ (pointwise states to information states).}
+The language embedding
+\[
+e_{0,1}:\Sigma_0\hookrightarrow \Sigma_1
+\]
+is the inclusion of the underlying many-sorted symbols. The forgetful functor
+\[
+U_{1,0}:\Mod_1\to\Mod_0
+\]
+forgets the information-state presentation and remembers only the underlying many-sorted structure. A pointwise state $\rho$ in $\mathbb L_0$ is represented inside $\mathbb L_1$ by the singleton information state
+\[
+p_\rho:=(\Gamma,\{\rho\}).
+\]
+By \Cref{prop:singleton-conservativity},
+\[
+M,p_\rho\Vdash_1\varphi
+\quad\Longleftrightarrow\quad
+U_{1,0}(M),\rho\Vdash_0\varphi
+\]
+for every $\mathbb L_0$-formula $\varphi$. Thus the $\mathbb L_0$--$\mathbb L_1$ boundary is conservative on the canonical singleton image that realizes pointwise semantics inside information-state semantics.
+
+\item \textbf{$\mathbb L_1\leadsto\mathbb L_2$ (information states to local objects).}
+The embedding
+\[
+e_{1,2}:\Sigma_1\hookrightarrow \Sigma_2
+\]
+adjoins the reference sorts, admissibility predicates, local-object predicates, and the associated geometric notation. The forgetful functor
+\[
+U_{2,1}:\Mod_2\to\Mod_1
+\]
+forgets the local reference sites, covers, and local object functors. The state projection
+\[
+\pi^M_{2,1}:\St_2(M)\to \St_1(U_{2,1}(M))
+\]
+is the identity on the underlying information state $(\Gamma_p,R_p)$. Since the forcing clauses for formulas already in $\mathrm{Form}_1$ never inspect the added local-object data, one has
+\[
+M,p\Vdash_2\varphi
+\quad\Longleftrightarrow\quad
+U_{2,1}(M),\pi^M_{2,1}(p)\Vdash_1\varphi
+\]
+for every $\varphi\in\mathrm{Form}_1$.
+
+\item \textbf{$\mathbb L_2\leadsto\mathbb L_3$ (local objects to obstruction data).}
+The embedding
+\[
+e_{2,3}:\Sigma_2\hookrightarrow \Sigma_3
+\]
+adjoins the predicates and symbols used to talk about structural absence, visible branches, component gerbes, and obstruction classes. The forgetful functor
+\[
+U_{3,2}:\Mod_3\to\Mod_2
+\]
+drops the realization prestack, band, component-gerbe, and obstruction data. The state projection
+\[
+\pi^M_{3,2}:\St_3(M)\to \St_2(U_{3,2}(M))
+\]
+again leaves the underlying state unchanged. Formulas from $\mathrm{Form}_2$ are evaluated exactly as before, so
+\[
+M,p\Vdash_3\varphi
+\quad\Longleftrightarrow\quad
+U_{3,2}(M),\pi^M_{3,2}(p)\Vdash_2\varphi
+\]
+for every $\varphi\in\mathrm{Form}_2$.
+
+\item \textbf{$\mathbb L_3\leadsto\mathbb L_4$ (obstruction data to refinement dynamics).}
+The embedding
+\[
+e_{3,4}:\Sigma_3\hookrightarrow \Sigma_4
+\]
+adjoins the update relations, axis indices, support notions, and rewrite language of the refinement layer. The forgetful functor
+\[
+U_{4,3}:\Mod_4\to\Mod_3
+\]
+forgets the dynamic axes, update structure, and rewrite operations. The state projection
+\[
+\pi^M_{4,3}:\St_4(M)\to \St_3(U_{4,3}(M))
+\]
+forgets only the new dynamic bookkeeping. Because the forcing clauses for $\mathrm{Form}_3$ do not depend on that added bookkeeping, one has
+\[
+M,p\Vdash_4\varphi
+\quad\Longleftrightarrow\quad
+U_{4,3}(M),\pi^M_{4,3}(p)\Vdash_3\varphi
+\]
+for every $\varphi\in\mathrm{Form}_3$.
+\end{enumerate}
+Hence every adjacent boundary is conservative in the precise sense actually used later: the base boundary is mediated by the canonical singleton realization of pointwise states, while the higher boundaries use literal forgetful functors and state projections.
+\end{proposition}
 
 This four-layer chain is the complete setting of the present paper. It is self-contained and does not presuppose any external framework.

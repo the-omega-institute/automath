@@ -61,6 +61,8 @@ This appendix records holomorphic variation of the Perron-pole finite part and a
     \partial_\theta\lambda(\theta)
     =\ell_\theta^{\mathsf T}(\partial_\theta A_\theta)r_\theta.
   \]
+  Compare Kato's analytic perturbation theory for simple isolated
+  eigenvalues \cite{Kato1995Perturbation}.
 \end{proof}
 
 \subsection{Holomorphic variation and effective truncation}
@@ -94,11 +96,15 @@ This appendix records holomorphic variation of the Perron-pole finite part and a
   \Cref{thm:finite-part-reduced-determinant-group-inverse-gradient} for
   the \(C(A_\theta)\)-term.
 
-  For the resolvent identity, write
+  For the resolvent identity, apply Jacobi's formula in finite
+  dimensions:
   \[
-    \log\det(I-zA_\theta)^{-1}=-\Tr\log(I-zA_\theta),
+    \partial_\theta \log\det(I-zA_\theta)
+    =
+    \Tr\!\bigl((I-zA_\theta)^{-1}(-z\,\partial_\theta A_\theta)\bigr).
   \]
-  and differentiate inside the trace.
+  Multiplying by \(-1\) gives the stated derivative formula for
+  \(\log\det(I-zA_\theta)^{-1}\).
 \end{proof}
 
 \begin{theorem}[Truncation bound]
@@ -226,37 +232,35 @@ The logarithm is well defined because \(|\mu_j|<\lambda\) implies that
 
 \subsection{Dirichlet characters and residue classes}
 
+We use only the standard orthogonality relations for Dirichlet
+characters on \((\ZZ/q\ZZ)^\times\); see, for example,
+\cite{Apostol1976AnalyticNumberTheory,Davenport2000MultiplicativeNumberTheory}.
+
 \begin{proposition}[Gauss expansion for character sums at roots of unity]
   \label{prop:finite-part-dirichlet-torsion-gauss-expansion}
-  Let \(\chi\) be a Dirichlet character modulo \(q\), and define
+  Let \(\chi\) be a Dirichlet character modulo \(q\), and let
   \[
-    \mathcal L_A(\chi;q)
-    :=-\sum_{a\in(\ZZ/q\ZZ)^\times}
-      \overline{\chi(a)}\,\log F_A(\omega_q^a).
+    \tau(\chi):=\sum_{a\bmod q}\chi(a)\,\omega_q^a
+  \]
+  be the standard Gauss sum. For \(q=p\) prime and \(\chi\) non-trivial,
+  define the twisted Gauss sum
+  \[
+    \tau_p(\chi,n)
+    :=\sum_{a\in(\ZZ/p\ZZ)^\times}\chi(a)\,\omega_p^{an}
+    \qquad (p\nmid n).
   \]
   Then
   \[
-    \mathcal L_A(\chi;q)
-    =\sum_{n\ge 1}\frac{u_n(A)}{n}
-      \tau_q(\chi,n),
-    \qquad
-    \tau_q(\chi,n)
-    :=\sum_{a\in(\ZZ/q\ZZ)^\times}
-      \overline{\chi(a)}\,\omega_q^{an}.
+    \tau_p(\chi,n)=\overline{\chi(n)}\,\tau(\chi),
   \]
-  If \(q=p\) is prime and \(\chi\) is non-trivial, then
+  and consequently
   \[
     \mathcal L_A(\chi;p)
-    =\tau(\overline{\chi})
+    :=\sum_{n\ge 1}\frac{u_n(A)}{n}\,\tau_p(\chi,n)
+    =\tau(\chi)
       \sum_{\substack{n\ge 1\\ p\nmid n}}
-        \frac{u_n(A)\chi(n)}{n},
+        \frac{u_n(A)\,\overline{\chi(n)}}{n}.
   \]
-  where
-  \(
-    \tau(\overline{\chi})
-    =\sum_{a\bmod p}\overline{\chi(a)}\,\omega_p^a
-  \)
-  is the usual Gauss sum.
 \end{proposition}
 
 \begin{proof}
@@ -265,18 +269,18 @@ The logarithm is well defined because \(|\mu_j|<\lambda\) implies that
   \[
     -\log F_A(t)=\sum_{n\ge 1}\frac{u_n(A)}{n}t^n
   \]
-  converges absolutely for \(|t|=1\). Evaluating at \(t=\omega_q^a\) and
-  summing against \(\overline{\chi(a)}\) gives the first identity.
+  converges absolutely for \(|t|=1\). The terms with \(p\mid n\) contribute
+  zero to \(\mathcal L_A(\chi;p)\) because \(\chi\) is non-trivial.
 
-  If \(q=p\) is prime and \(\chi\) is non-trivial, then
-  \(\tau_p(\chi,n)=0\) when \(p\mid n\), while for \(p\nmid n\),
-  multiplication by \(n\) permutes \((\ZZ/p\ZZ)^\times\), so
+  For \(p\nmid n\), set \(b=an\); as \(a\) ranges over \((\ZZ/p\ZZ)^\times\)
+  so does \(b\). Since \(\chi(a)=\chi(bn^{-1})=\chi(b)\chi(n)^{-1}=\chi(b)\overline{\chi(n)}\)
+  (the character values are roots of unity),
   \[
     \tau_p(\chi,n)
-    =\chi(n)\sum_{a\bmod p}\overline{\chi(a)}\,\omega_p^a
-    =\chi(n)\tau(\overline{\chi}).
+    =\overline{\chi(n)}\sum_{b\bmod p}\chi(b)\,\omega_p^b
+    =\overline{\chi(n)}\,\tau(\chi).
   \]
-  Substituting this into the first formula yields the second.
+  Substituting yields \(\mathcal L_A(\chi;p)=\tau(\chi)\sum_{p\nmid n}u_n(A)\overline{\chi(n)}/n\).
 \end{proof}
 
 \begin{remark}
@@ -298,7 +302,7 @@ The logarithm is well defined because \(|\mu_j|<\lambda\) implies that
   \[
     \mathscr A_p(\chi):=
     \begin{cases}
-      \mathcal L_A(\chi;p)/\tau(\overline{\chi}),
+      \mathcal L_A(\chi;p)/\tau(\chi),
         & \chi\neq \chi_0,\\[6pt]
       \log C(A)-\Psi_p(A)/p,
         & \chi=\chi_0.
@@ -307,15 +311,19 @@ The logarithm is well defined because \(|\mu_j|<\lambda\) implies that
   Then
   \[
     \mathscr A_p(\chi)
-    =\sum_{r\in U(p)}V_{p,r}(A)\chi(r)
+    =\sum_{r\in U(p)}V_{p,r}(A)\,\overline{\chi(r)}
     \qquad (\chi\in\widehat{U(p)}),
   \]
   and hence
   \[
-    V_{p,r}(A)
+    V_{p,r_0}(A)
     =\frac{1}{p-1}\sum_{\chi\in\widehat{U(p)}}
-      \mathscr A_p(\chi)\,\overline{\chi(r)}
-    \qquad (r\in U(p)).
+      \mathscr A_p(\chi)\,\chi(r_0)
+    \qquad (r_0\in U(p)),
+  \]
+  because
+  \[
+    \frac{1}{p-1}\sum_\chi \overline{\chi(r)}\,\chi(r_0)=\delta_{r,r_0}.
   \]
   Consequently, the finite data
   \[
@@ -332,14 +340,14 @@ The logarithm is well defined because \(|\mu_j|<\lambda\) implies that
   \[
     \mathscr A_p(\chi)
     =\sum_{\substack{n\ge 1\\ p\nmid n}}
-      \frac{u_n(A)\chi(n)}{n}.
+      \frac{u_n(A)\,\overline{\chi(n)}}{n}.
   \]
-  Grouping the sum by congruence classes modulo \(p\) yields
+  Grouping by residue class modulo \(p\) yields
   \[
     \mathscr A_p(\chi)
-    =\sum_{r\in U(p)}\chi(r)
+    =\sum_{r\in U(p)}\overline{\chi(r)}
       \sum_{m\ge 0}\frac{u_{r+mp}(A)}{r+mp}
-    =\sum_{r\in U(p)}V_{p,r}(A)\chi(r).
+    =\sum_{r\in U(p)}V_{p,r}(A)\,\overline{\chi(r)}.
   \]
   For the trivial character,
   \[
@@ -352,9 +360,10 @@ The logarithm is well defined because \(|\mu_j|<\lambda\) implies that
   where the last identity uses
   \(-\log F_A(1)=\log C(A)\) and
   \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}. Thus the
-  Fourier coefficients of \(r\mapsto V_{p,r}(A)\) are exactly
-  \(\mathscr A_p(\chi)\), and character orthogonality on \(U(p)\) gives
-  the inversion formula.
+  Fourier transform of \(r\mapsto V_{p,r}(A)\) over \(U(p)\) is exactly
+  \(\mathscr A_p(\chi)\), and the standard inversion
+  \(\frac{1}{p-1}\sum_\chi\overline{\chi(r)}\chi(r_0)=\delta_{r,r_0}\) gives
+  the formula for \(V_{p,r_0}(A)\).
 \end{proof}
 
 \begin{corollary}[A growth criterion for the square-root bound]
@@ -448,15 +457,26 @@ The logarithm is well defined because \(|\mu_j|<\lambda\) implies that
   otherwise, so the limit equals the number of pairs \((i,j)\) such
   that \(\eta_i=\eta_j\), namely \(\sum_{\zeta}m(\zeta)^2\).
 
-  Finally,
-  \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum} implies
+  Finally, \Cref{prop:finite-part-cyclic-lift-dirichlet-multiple-sum}
+  gives the explicit remainder bound
   \[
-    \Psi_q(A)-u_q(A)=\sum_{m\ge 2}\frac{u_{qm}(A)}{m}
-    =O(\Lambda^{2q}),
+    \abs{\Psi_q(A)-u_q(A)}
+    \le
+    \frac{d-1}{2(1-\Lambda)}\Lambda^{2q}.
   \]
-  hence
+  Since \(\abs{u_q(A)}\le (d-1)\Lambda^q\), one also has
   \[
-    \frac{|\Psi_q(A)|^2-|u_q(A)|^2}{\Lambda^{2q}}\to 0
+    \abs{\Psi_q(A)}\le
+    \left(d-1+\frac{d-1}{2(1-\Lambda)}\right)\Lambda^q
+    \qquad (q\ge 1).
+  \]
+  Therefore
+  \[
+    \frac{\abs{|\Psi_q(A)|^2-|u_q(A)|^2}}{\Lambda^{2q}}
+    \le
+    \frac{\abs{\Psi_q(A)-u_q(A)}\bigl(\abs{\Psi_q(A)}+\abs{u_q(A)}\bigr)}
+         {\Lambda^{2q}}
+    =O(\Lambda^q)\to 0
   \]
   after Cesaro averaging. The final bounds are immediate from
   \(r=\sum_\zeta m(\zeta)\le \sum_\zeta m(\zeta)^2\le r^2\).
@@ -629,7 +649,10 @@ The logarithm is well defined because \(|\mu_j|<\lambda\) implies that
 \section{Asymptotic families, square-root bounds, and rigidity statements}
 \label{app:rigidity}
 
-This appendix records rigidity statements for growing families of primitive matrices.
+This appendix records rigidity statements for growing families of
+primitive matrices. The arguments are elementary consequences of the
+explicit formulas proved earlier, but one may compare the broader
+perturbative framework in \cite{Kato1995Perturbation}.
 
 \subsection{Rigidity for growing families}
 

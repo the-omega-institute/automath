@@ -2,11 +2,55 @@
 \section{Poisson Smoothing and Entropy Asymptotics}%
 \label{sec:precision-potential}
 
+\paragraph{Assumption and dependency map.}
+Throughout this section we write
+$\Delta:=\gamma-\bar\gamma$ and
+$\mu_n:=\int_{\RR}\Delta^n\,\dd\nu(\gamma)$ whenever the corresponding
+moment exists.  For ease of reference, the moment hypotheses and logical
+dependencies are as follows.
+{\renewcommand{\arraystretch}{1.15}
+\begin{center}
+\small
+\begin{tabular}{p{0.31\textwidth}p{0.23\textwidth}p{0.34\textwidth}}
+\textbf{Result} & \textbf{Moment input} & \textbf{Main ingredients} \\
+Proposition~\ref{thm:poisson-second-order}
+& mean, variance, finite centred fourth moment
+& direct Taylor expansion of $R_\varepsilon$ \\
+Theorem~\ref{thm:poisson-kl-even-orders}
+& finite centred $(2N+1)$st absolute moment
+& Proposition~\ref{prop:cayley-mode-remainder} and
+Lemma~\ref{lem:mode-parity-vanish} \\
+Theorem~\ref{thm:poisson-kl-eighth}
+& mean, variance, finite centred seventh absolute moment
+& Proposition~\ref{prop:cayley-mode-remainder},
+Lemma~\ref{lem:mode-parity-vanish}, and
+Appendix~\ref{app:entropy-integrals} \\
+Theorems~\ref{thm:poisson-defect-ladder}
+and~\ref{thm:poisson-defect-amplification}
+& mean, variance, finite centred seventh absolute moment
+& the explicit coefficients from
+Theorem~\ref{thm:poisson-kl-eighth} \\
+Theorem~\ref{thm:poisson-defect-stability}
+& mean, variance, finite centred fourth moment
+& the formula for $\Delta_6(\nu)$ from
+Theorem~\ref{thm:poisson-defect-amplification}
+\end{tabular}
+\end{center}}
+In particular, the appendix enters only in the explicit evaluation of the
+$t^{-6}$ and $t^{-8}$ coefficients in
+Theorem~\ref{thm:poisson-kl-eighth}; the later defect identities are
+algebraic consequences of those coefficients.
+
 \subsection{Entropy in Cayley coordinates}
 
 The logarithmic Jacobian of the Cayley coordinate is
 \begin{equation}\label{eq:precision-potential}
-\mathcal P(x):=-\log J(x)=\log\pi+\log(1+x^{2}).
+\mathcal P(x):=-\log J(x),\qquad
+J(x):=\upsilon'(x)=\frac{1}{\pi(1+x^{2})},
+\end{equation}
+equivalently,
+\begin{equation}\label{eq:precision-potential-expanded}
+\mathcal P(x)=\log\pi+\log(1+x^{2}).
 \end{equation}
 
 \begin{theorem}[Entropy identity in Cayley coordinates]%
@@ -336,6 +380,22 @@ u_5(y)=\frac{6y^5-20y^3+6y}{(1+y^2)^5},
 u_6(y)=\frac{7y^6-35y^4+21y^2-1}{(1+y^2)^6}.
 \end{equation}
 
+\begin{lemma}[Mode parity cancellation]\label{lem:mode-parity-vanish}
+For integers $n_1,\dots,n_k\ge 1$ let
+\[
+I_{n_1,\dots,n_k}:=
+\int_{\RR}
+\frac{u_{n_1}(y)\cdots u_{n_k}(y)}{\pi(1+y^2)}\,\dd y.
+\]
+Then $I_{n_1,\dots,n_k}=0$ whenever $n_1+\cdots+n_k$ is odd.
+\end{lemma}
+
+\begin{proof}
+From \eqref{eq:cayley-mode-parity}, $u_n(-y)=(-1)^n u_n(y)$ for every
+$n\ge1$, while $(1+y^2)^{-1}$ is even.  Hence the integrand is odd if
+$n_1+\cdots+n_k$ is odd, so the integral vanishes.
+\end{proof}
+
 \subsection{Entropy asymptotics and rigidity}
 
 \begin{theorem}[Odd orders vanish in the entropy expansion]%
@@ -391,19 +451,19 @@ D_{\mathrm{KL}}(h_t\|g_t)
 =\int_{\RR}\frac{\Phi(\delta_t(\bar\gamma+ty))}{\pi(1+y^2)}\dd y
 \]
 \[
-=\sum_{m=2}^{N} c_{2m}'\,t^{-m}+o(t^{-2N}),
+=\sum_{k=2}^{N}\frac{(-1)^k}{k(k-1)}
+\sum_{m\ge 2k}\frac{1}{t^m}
+\sum_{\substack{n_1,\dots,n_k\ge 2\\n_1+\cdots+n_k=m}}
+\mu_{n_1}\cdots\mu_{n_k}\,I_{n_1,\dots,n_k}
++o(t^{-2N}),
 \]
-where each coefficient $c_m'$ is a finite linear combination of integrals
-of the form
+where $I_{n_1,\dots,n_k}$ is given in
+Lemma~\ref{lem:mode-parity-vanish}.  By the lemma all odd~$m$-terms
+vanish, so only even powers remain.  Reindexing $m=2r$ gives
 \[
-\int_{\RR}\frac{u_{n_1}(y)\cdots u_{n_k}(y)}{\pi(1+y^2)}\dd y,
-\qquad
-n_1+\cdots+n_k=m.
+=\sum_{r=2}^{N} c_{2r}\,t^{-2r}+o(t^{-2N}),
 \]
-The weight $(\pi(1+y^2))^{-1}$ is even, and
-\eqref{eq:cayley-mode-parity} implies that the integrand above is odd
-unless $n_1+\cdots+n_k$ is even.  Hence $c_m'=0$ for odd~$m$.  Writing
-$c_{2m}:=c_{2m}'$ gives \eqref{eq:poisson-kl-even-orders}.
+which is \eqref{eq:poisson-kl-even-orders}.
 \end{proof}
 
 \begin{theorem}[Eighth-order entropy expansion]%
@@ -453,16 +513,20 @@ Up to order $t^{-8}$ one therefore has
 \[
 \frac12\delta_t^2
 =\frac{a_2^2}{2t^4}
++\frac{a_2a_3}{t^5}
 +\frac{a_2a_4+\frac12 a_3^2}{t^6}
++\frac{a_2a_5+a_3a_4}{t^7}
 +\frac{a_2a_6+a_3a_5+\frac12 a_4^2}{t^8}
 +O(t^{-9}),
 \]
 \[
 -\frac16\delta_t^3
 =-\frac{a_2^3}{6t^6}
+-\frac{a_2^2a_3}{2t^7}
 -\frac{\frac12 a_2^2a_4+\frac12 a_2a_3^2}{t^8}
 +O(t^{-9}),
 \]
+By Lemma~\ref{lem:mode-parity-vanish}, the odd $t^{-5}$ and $t^{-7}$ terms in the first two expansions integrate to zero against $\pi^{-1}(1+y^2)^{-1}\dd y$.
 \[
 \frac1{12}\delta_t^4
 =\frac{a_2^4}{12t^8}+O(t^{-9}).
@@ -490,14 +554,15 @@ and
 &=\frac{3\sigma^8-12\sigma^4\mu_4+9\sigma^2\mu_3^2}{256}.
 \end{align*}
 This proves \eqref{eq:poisson-kl-eighth}.  The coefficient of order
-$t^{-6}$ is the first non-trivial even coefficient furnished by
+$t^{-6}$ is the first coefficient beyond the variance term furnished by
 Theorem~\ref{thm:poisson-kl-even-orders}; the order-$t^{-8}$ term is the
 next level in the same expansion.
 \end{proof}
 
 \begin{theorem}[A two-level defect ladder]%
 \label{thm:poisson-defect-ladder}
-Under the hypotheses of Theorem~\ref{thm:poisson-kl-eighth}, define
+Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
+variance $\sigma^2>0$, and finite centred seventh absolute moment.  Define
 \begin{align*}
 C_6&:=\frac{\sigma^6+6\mu_3^2-8\sigma^2\mu_4}{64}, \\
 C_8&:=
@@ -507,6 +572,7 @@ C_8&:=
 Let $X:=(\gamma-\bar\gamma)/\sigma$ on the probability space
 $(\RR,\nu)$, set
 \[
+\beta_n:=\EE[X^n],\qquad n\in\NN,\ n\ge1,\qquad
 \beta_3:=\EE[X^3],
 \qquad
 Q_2:=X^2-1-\beta_3X,
@@ -540,6 +606,9 @@ and equality holds if and only if
 \nu=\frac12\delta_{\bar\gamma+\sigma}
 +\frac12\delta_{\bar\gamma-\sigma}.
 \]
+The identity \eqref{eq:defect-c6} recovers the classical Pearson
+moment relation, while \eqref{eq:defect-c8} is the first genuinely new
+higher-order component.
 \end{theorem}
 
 \begin{proof}
@@ -601,7 +670,8 @@ The converse is immediate.
 \end{proof}
 
 \begin{theorem}[Defect amplification]\label{thm:poisson-defect-amplification}
-Under the hypotheses of Theorem~\ref{thm:poisson-kl-eighth}, define
+Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
+variance $\sigma^2>0$, and finite centred seventh absolute moment.  Define
 \[
 \Delta_6(\nu):=-\frac{7}{64}\sigma^6-C_6,
 \qquad
@@ -677,7 +747,8 @@ two-point law.  The converse is immediate.
 
 \begin{theorem}[Quantitative rigidity towards the symmetric two-point law]%
 \label{thm:poisson-defect-stability}
-Under the hypotheses of Theorem~\ref{thm:poisson-kl-eighth}, let
+Let $\nu$ be a probability measure on~$\RR$ with mean~$\bar\gamma$,
+variance $\sigma^2>0$, and finite centred fourth moment.  Let
 $\nu_c$ be the centred law of $\Delta=\gamma-\bar\gamma$ and set
 \[
 \rho_\sigma:=\frac12(\delta_{-\sigma}+\delta_\sigma).

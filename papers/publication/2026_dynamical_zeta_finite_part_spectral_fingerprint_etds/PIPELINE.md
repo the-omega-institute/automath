@@ -103,3 +103,79 @@ Decision: PASS. Six-point quality gate completed.
 ### P6 Lean Sync
 
 0.4% coverage (17/4524 parent labels). Lean covers golden-mean concrete model (`fredholmGoldenMean_det`, trace values, Cayley-Hamilton) and cyclic permutation determinants. No abstract theorems (finite-part formula, cyclic reconstruction, Adams-Mobius) formalized.
+
+### Backflow to Core
+
+| Result | Core target section | Status |
+|---|---|---|
+| `thm:finite-part-reduced-determinant-group-inverse-gradient` | `zeta_finite_part/` | pending |
+| `thm:logM-holomorphic-variation` | `zeta_finite_part/` | pending |
+| `thm:logM-truncation-bound` | `zeta_finite_part/` | pending |
+| `thm:finite-part-nyquist-parseval-aliasing` | `zeta_finite_part/` | pending |
+| `cor:finite-part-nyquist-error-exp` | `zeta_finite_part/` | pending |
+| `prop:finite-part-dirichlet-torsion-gauss-expansion` | `zeta_finite_part/` | pending |
+| `thm:finite-part-dirichlet-character-inversion-prime` | `zeta_finite_part/` | pending |
+| `cor:finite-part-near-rh-q-axis-envelope` | `zeta_finite_part/` | pending |
+| `thm:finite-part-boundary-multiplicity-qaxis-energy` | `zeta_finite_part/` | pending |
+| `prop:finite-part-torsion-table-galois-covariance` | `zeta_finite_part/` | pending |
+| `cor:finite-part-torsion-table-galois-certificate` | `zeta_finite_part/` | pending |
+| `thm:finite-part-single-layer-torsion-near-rh` | `zeta_finite_part/` | pending |
+| `thm:finite-part-cyclic-lift-polylog-dirichlet-xi` | `zeta_finite_part/` | pending |
+| `prop:finite-part-residue-constant-rh-squeeze` | `zeta_finite_part/` | pending |
+| `thm:finite-part-residue-drift-trichotomy` | `zeta_finite_part/` | pending |
+| `prop:class-indicator-expansion` | `zeta_finite_part/` | pending |
+| `prop:kernel-peter-weyl-block-diagonalisation` | `zeta_finite_part/` | pending |
+| `thm:class-function-linearisation` | `zeta_finite_part/` | pending |
+| `cor:class-function-adams-mobius` | `zeta_finite_part/` | pending |
+| `lem:adams-coefficients-bounded` | `zeta_finite_part/` | pending |
+| `cor:primitive-peter-weyl-determinant` | `zeta_finite_part/` | pending |
+| `cor:primitive-peter-weyl-trace` | `zeta_finite_part/` | pending |
+| `thm:class-primitive-decomposition` | `zeta_finite_part/` | pending |
+| `cor:class-artin-mobius-trace` | `zeta_finite_part/` | pending |
+| `thm:class-mertens-explicit` | `zeta_finite_part/` | pending |
+| `thm:class-mertens-fourier` | `zeta_finite_part/` | pending |
+| `thm:finite-part-primitive-closed-form` | `zeta_finite_part/` | pending |
+| `prop:finite-part-residue-reduced-determinant` | `zeta_finite_part/` | pending |
+| `cor:finite-part-mertens-asymptotic` | `zeta_finite_part/` | pending |
+| `thm:finite-part-cyclic-lift-reduced-constant-closed` | `zeta_finite_part/` | pending |
+| `prop:finite-part-cyclic-lift-dirichlet-multiple-sum` | `zeta_finite_part/` | pending |
+| `prop:finite-part-cyclic-lift-mobius-inversion` | `zeta_finite_part/` | pending |
+| `thm:finite-part-cyclic-lift-spectrum-identifiability` | `zeta_finite_part/` | pending |
+| `thm:finite-part-cyclic-lift-single-q-torsion-reconstruction` | `zeta_finite_part/` | pending |
+| `cor:finite-part-cyclic-lift-zeta-torsion-determines-spectrum` | `zeta_finite_part/` | pending |
+| `cor:finite-part-single-layer-square-root-test` | `zeta_finite_part/` | pending |
+| `cor:finite-part-gap-positive` | `zeta_finite_part/` | pending |
+| `thm:intro-finite-part` | `zeta_finite_part/` | pending |
+| `thm:intro-cyclic-reconstruction` | `zeta_finite_part/` | pending |
+| `thm:intro-finite-group` | `zeta_finite_part/` | pending |
+| `prop:sync-kernel-spectrum` | `zeta_finite_part/` | pending |
+| `prop:sync-hatdelta-completion` | `zeta_finite_part/` | pending |
+| `prop:sync-hatdelta-quotient` | `zeta_finite_part/` | pending |
+| `prop:sync-hatdelta-double-cover` | `zeta_finite_part/` | pending |
+| `prop:sync-hatdelta-galois-s6-generic` | `zeta_finite_part/` | pending |
+| `thm:sync-cyclotomic-degree-law` | `zeta_finite_part/` | pending |
+| `cor:rho-m2-closed-form` | `zeta_finite_part/` | pending |
+| `prop:sync-endpoint-jet` | `zeta_finite_part/` | pending |
+| `thm:rho-gap-m12` | `zeta_finite_part/` | pending |
+| `prop:cyclic-lift-primitive-asymptotics` | `zeta_finite_part/` | pending |
+| `thm:fredholm-witt-bridge` | `zeta_finite_part/` | pending |
+| `thm:cyclic-fredholm-realisation` | `zeta_finite_part/` | pending |
+| `thm:clt-spectral` | `zeta_finite_part/` | pending |
+| `prop:prelim-trace-primitive` | `zeta_finite_part/` | pending |
+| `lem:primitive-orbit-asymptotic` | `zeta_finite_part/` | pending |
+| `thm:quotient-functoriality` | `zeta_finite_part/` | pending |
+| `cor:abelian-cyclic-shadow` | `zeta_finite_part/` | pending |
+| `thm:abelian-shadow-defect` | `zeta_finite_part/` | pending |
+| `thm:cyclic-detection-boundary` | `zeta_finite_part/` | pending |
+| `thm:quadratic-adams-obstruction` | `zeta_finite_part/` | pending |
+| `prop:s3-example-channels` | `zeta_finite_part/` | pending |
+| `prop:s3-example-primitive-channels` | `zeta_finite_part/` | pending |
+| `cor:s3-example-profile` | `zeta_finite_part/` | pending |
+| `thm:dfa-density-dichotomy` | `zeta_finite_part/` | pending |
+| `cor:dfa-prime-symmetric-diff` | `zeta_finite_part/` | pending |
+| `cor:dfa-prime-recall-precision` | `zeta_finite_part/` | pending |
+| `thm:zeckendorf-regular-powerlaw` | `zeta_finite_part/` | pending |
+| `cor:zeckendorf-prime-language-not-regular` | `zeta_finite_part/` | pending |
+| `thm:zeckendorf-primes-not-sofic` | `zeta_finite_part/` | pending |
+| `thm:euler-product-natural-boundary` | `zeta_finite_part/` | pending |
+| `prop:finite-zeta-imaginary-periodicity` | `zeta_finite_part/` | pending |
