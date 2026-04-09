@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2435 |
+| \leanverified 标注数 | 2445 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2459 |
-| 轮次 | R600（round_count=601）|
+| 总标注数 | 2469 |
+| 轮次 | R601（round_count=602）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,17 +24,17 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 313 | 18.3% |
+| POM | 1,707 | 314 | 18.4% |
 | Emergent Arithmetic | 185 | 177 | 95.7% |
-| Folding | 337 | 138 | 41.0% |
+| Folding | 337 | 139 | 41.2% |
 | Conclusion | 2,550 | 272 | 10.7% |
 | Group Unification | 469 | 179 | 38.2% |
 | SPG | 129 | 115 | 89.1% |
-| Circle Dimension | 393 | 160 | 40.7% |
+| Circle Dimension | 393 | 161 | 41.0% |
 | Zeta Finite Part | 4,524 | 215 | 4.8% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1630** | **15.5%** |
+| **合计（body）** | **10,508** | **1633** | **15.5%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**POM Fibonacci Pell 型二次型刻画奇偶恒等式种子值（Round R601，新标签，\leanverified 完整）**：`paper_pom_fib_pell_quadratic`（对应 `prop:pom-fib-pell-quadratic-characterization`，POM；fib_pell_even/odd Cassini 衍生恒等式 + 小指标种子值）——**新标签首次注册**（prop:pom-fib-pell-quadratic-characterization，\leanverified 新标注）
+**Folding 端点 $F_{m+2}-1$ 交错 Fibonacci 子集和表示唯一性种子值（Round R601，新标签，\leanverified 完整）**：`paper_fold_endpoint_seeds`（对应 `prop:fold-endpoint-Mm-minus-one-unique`，Folding；奇偶 alternating fib sum 闭式 + 小指标种子值）——**新标签首次注册**（prop:fold-endpoint-Mm-minus-one-unique，\leanverified 新标注）
+**CD 多素谱 Möbius 反演类型计数上界种子值（Round R601，新标签，\leanverified 完整）**：`paper_cdim_mobius_inversion_seeds`（对应 `thm:cdim-mobius-inversion-localization-multiset-classification`，CD；typeCount ≤ 1 + spectrum 界 + singleton 有限和种子值）——**新标签扩展登记**（thm:cdim-mobius-inversion-localization-multiset-classification，\leanverified 新标注追加）
 **Zeta cyclotomic 扇区 q=4 乘积恒等式种子值（Round R600，新标签，\leanverified 完整）**：`paper_finite_part_cyclic_lift_cyclotomic_sector_q1234`（对应 `prop:finite-part-cyclic-lift-cyclotomic-sector`，Zeta；q=1,2,4 具体 cyclotomic 因子化恒等式 + 4th roots of unity 种子值）——**新标签扩展登记**（prop:finite-part-cyclic-lift-cyclotomic-sector，\leanpartial 扩展 q=4）
 **Conclusion Gödel 素数位移幺半群串接保持种子值（Round R600，新标签，\leanverified 完整）**：`godelEncodingFrom_shift_append`, `godelEncoding_append_assoc`（对应 `prop:conclusion-godel-prefix-prime-monoid`，Conclusion；素数编码位移串接 + 结合律种子值）——**新标签首次注册**（prop:conclusion-godel-prefix-prime-monoid，\leanverified 新标注）
 **GU 全局中心 Z₂×Z₃≅Z₆ 识别 CRT 同构种子值（Round R600，新标签，\leanverified 完整）**：`paper_bdry_global_z6_quotient`（对应 `cor:bdry-global-z6-quotient`，GU；card=6 + 互素性 + CRT 环同构 Z₂×Z₃≅Z₆ 种子值）——**新标签首次注册**（cor:bdry-global-z6-quotient，\leanverified 新标注）
