@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2415 |
+| \leanverified 标注数 | 2418 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2439 |
-| 轮次 | R596（round_count=597）|
+| 总标注数 | 2442 |
+| 轮次 | R597（round_count=598）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**CD 相对熵二项尖锐渐近 t^{-6} 矩多项式系数种子值（Round R597，新标签，\leanverified 完整）**：`paper_cdim_poisson_kl_two_term_sharp_seeds`（对应 `thm:cdim-poisson-kl-two-term-sharp-moment-polynomial`，CD；σ^4/8t^4 + 差值乘积 + 二项系数唯一决定种子值）——**新标签首次注册**（thm:cdim-poisson-kl-two-term-sharp-moment-polynomial，\leanverified 新标注）
+**POM 例外特征多项式第二 Vieta 系数闭式种子值（Round R597，新标签，\leanverified 完整）**：`paper_pom_replica_exceptional_vieta_e2_seeds`（对应 `prop:pom-replica-softcore-exceptional-vieta-e2`，POM；e₂(q) = 1/4(2^q F_{q+1} - F_q F_{q+1} - 3^q) + 二次系数闭式 + 二项式系数种子值）——**新标签首次注册**（prop:pom-replica-softcore-exceptional-vieta-e2，\leanverified 新标注）
+**Zeta Zeckendorf 素数语言非正则种子值（Round R597，新标签，\leanverified 完整）**：`paper_zeta_syntax_zeckendorf_prime_language_not_regular_seeds`（对应 `cor:zeta-syntax-zeckendorf-prime-language-not-regular`，Zeta；小素数 + fib + 素数定理计数矛盾 + 非正则种子值）——**新标签首次注册**（cor:zeta-syntax-zeckendorf-prime-language-not-regular，\leanverified 新标注）
 **SPG 旋度控制势函数重构最优常数 1/4 种子值（Round R596，新标签，\leanverified 完整）**：`paper_spg_cube_potential_reconstruction_by_curl_seeds`（对应 `cor:spg-cube-potential-reconstruction-by-curl`，SPG；Euler 特征值 + 2^k + 最优常数 1/4 种子值）——**新标签首次注册**（cor:spg-cube-potential-reconstruction-by-curl，\leanverified 新标注）
 **Conclusion 偏移 Hankel 精度债二次累积律种子值（Round R596，新标签，\leanverified 完整）**：`paper_conclusion_shifted_hankel_precision_debt_seeds`（对应 `cor:conclusion-shifted-hankel-cumulative-precision-debt`，Conclusion；(R+1)s₀ + R(R+1)/2·λ 精确闭式 + 平方 vs 三角数种子值）——**新标签首次注册**（cor:conclusion-shifted-hankel-cumulative-precision-debt，\leanverified 新标注）
 **Folding 长度 3 同步词 ε-机 unifilar 表示种子值（Round R596，新标签，\leanverified 完整）**：`paper_fold_epsilon_machine_synchronizing_word_seeds`（对应 `thm:fold-gauge-anomaly-epsilon-machine-synchronizing-word`，Folding；同步词 001 + 可数 unifilar ε-机状态集 + 基本算术种子值）——**新标签首次注册**（thm:fold-gauge-anomaly-epsilon-machine-synchronizing-word，\leanverified 新标注）
