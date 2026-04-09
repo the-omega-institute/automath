@@ -151,6 +151,7 @@ import Omega.GU.StrongLumpabilitySpectralRigidity
 import Omega.GU.SwapInvolutionDiagonal
 import Omega.GU.DiscriminantWedge2Square
 import Omega.GU.LeyangHolographicN2
+import Omega.GU.Window6SingleGoodPrimeRecovery
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.ResidualCircleDim
