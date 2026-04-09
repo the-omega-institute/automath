@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R529（round_count=530）|
+| 轮次 | R530（round_count=531）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -30,11 +30,11 @@
 | Conclusion | 2,550 | 267 | 10.5% |
 | Group Unification | 469 | 173 | 36.9% |
 | SPG | 129 | 113 | 87.6% |
-| Circle Dimension | 393 | 155 | 39.4% |
+| Circle Dimension | 393 | 156 | 39.7% |
 | Zeta Finite Part | 4,524 | 210 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1595** | **15.2%** |
+| **合计（body）** | **10,508** | **1596** | **15.2%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**CD Fibonacci 原始素数二进制前缀锁（Round R530，新标签，\leanverified 完整，streak #77）**：`paper_cdim_fibonacci_primitive_prime_binary_prefix_lock`（对应 `cor:cdim-fibonacci-primitive-prime-binary-prefix-lock`，CD；综合论文接口）；`binary_prefix_cylinder_dichotomy`（对应同标签，CD；二进制前缀柱集二分引理）；`binary_prefix_zmod_form`（对应同标签，CD；ZMod 形式引理）——**新标签首次注册**（cor:cdim-fibonacci-primitive-prime-binary-prefix-lock，\leanverified 完整，streak #77）
 **Conclusion Zeckendorf 重置有界序列无中心极限（Round R529，新标签，\leanverified 完整，streak #76）**：`one_div_sqrt_nat_tendsto_zero`（对应 `cor:conclusion-zeckendorf-reset-no-central-limit`，Conclusion；1/√n→0）；`one_div_nat_tendsto_zero`（对应同标签，Conclusion；1/n→0）；`bounded_div_sqrt_tendsto_zero`（对应同标签，Conclusion；有界序列除√n趋零）；`bounded_sq_div_tendsto_zero`（对应同标签，Conclusion；有界平方除n趋零）；`paper_conclusion_zeckendorf_reset_no_central_limit`（对应同标签，Conclusion；综合论文接口）——**新标签首次注册**（cor:conclusion-zeckendorf-reset-no-central-limit，\leanverified 完整，streak #76）
 **EA 局部变换保素数寄存器估值（Round R528，新标签，\leanverified 完整，streak #75）**：`base_move_preserves_valPr`（对应 `prop:prime-register-local-moves-preserve-valuation`，EA；基础移动保 valuation）；`fib_move_preserves_valPr`（对应同标签，EA；Fibonacci 移动保 valuation）；`paper_prime_register_local_moves_preserve_valuation`（对应同标签，EA；综合论文接口）——**新标签首次注册**（prop:prime-register-local-moves-preserve-valuation，\leanverified 完整，streak #75）
 **POM 交换幺半群素数寄存器顺序不可恢复（Round R527，新标签，\leanverified 完整，streak #74）**：`witness_pair_of_ne`（对应 `thm:pom-commutative-prime-register-order-nonrecoverable`，POM；不等元素给出见证对）；`paper_pom_commutative_prime_register_order_nonrecoverable`（对应同标签，POM；综合论文接口）——**新标签首次注册**（thm:pom-commutative-prime-register-order-nonrecoverable，\leanverified 完整，streak #74）
