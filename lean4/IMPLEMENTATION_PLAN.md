@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2409 |
+| \leanverified 标注数 | 2412 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2433 |
-| 轮次 | R594（round_count=595）|
+| 总标注数 | 2436 |
+| 轮次 | R595（round_count=596）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**POM 例外因子首一降阶系数与常数项 Vieta 端点完全刚性种子值（Round R595，新标签，\leanverified 完整）**：`paper_pom_replica_exceptional_vieta_endpoints_seeds`（对应 `thm:pom-replica-softcore-exceptional-vieta-endpoints`，POM；Vieta 端点 + 首一系数 + 常数项 + 闭式刚性种子值）——**新标签首次注册**（thm:pom-replica-softcore-exceptional-vieta-endpoints，\leanverified 新标注）
+**GU foldbin escort 热力学末位比特 Gibbs 冻结种子值（Round R595，新标签，\leanverified 完整）**：`paper_gut_foldbin_escort_one_bit_gibbs_freezing_seeds`（对应 `thm:gut-foldbin-escort-one-bit-gibbs-freezing`，GU；bin-fold escort + min-entropy 率 log φ 冻结 + 一比特 Gibbs 偏置种子值）——**新标签首次注册**（thm:gut-foldbin-escort-one-bit-gibbs-freezing，\leanverified 新标注）
+**Zeta 循环提升素数影子渐近平方根尺度种子值（Round R595，新标签，\leanverified 完整）**：`paper_zeta_cyclic_lift_prime_shadow_asymptotic_seeds`（对应 `prop:zeta-cyclic-lift-prime-shadow-asymptotic`，Zeta；素数影子渐近 + √λ 尺度 + RH-sharp 振荡与奇偶门控种子值）——**新标签首次注册**（prop:zeta-cyclic-lift-prime-shadow-asymptotic，\leanverified 新标注）
 **Conclusion 停机嵌入次指数温度扰动刚性种子值（Round R594，新标签，\leanverified 完整）**：`paper_conclusion_temperature_subexp_perturbation_rigidity_seeds`（对应 `thm:conclusion-temperature-kernel-subexponential-perturbation-rigidity`，Conclusion；2^k + 不等式 + 停机嵌入刚性种子值）——**新标签首次注册**（thm:conclusion-temperature-kernel-subexponential-perturbation-rigidity，\leanverified 新标注）
 **CD 双判别同步族二参数压缩种子值（Round R594，新标签，\leanverified 完整）**：`paper_cdim_double_discriminant_two_parameter_seeds`（对应 `prop:cdim-double-discriminant-two-parameter-family`，CD；4^4=256 + 阶乘 4!=24 + 唯一决定 q(λ) 种子值）——**新标签首次注册**（prop:cdim-double-discriminant-two-parameter-family，\leanverified 新标注）
 **Folding ε-机平稳分布 Fibonacci 尾与完全归一化种子值（Round R594，新标签，\leanverified 完整）**：`paper_fold_epsilon_machine_stationary_fibonacci_tail_seeds`（对应 `thm:fold-gauge-anomaly-epsilon-machine-stationary-fibonacci-tail`，Folding；fib(1..8) + 乘积 + π(R_n)=F_{n+4}/(36·2^n) + 归一化 4/9 种子值）——**新标签首次注册**（thm:fold-gauge-anomaly-epsilon-machine-stationary-fibonacci-tail，\leanverified 新标注）
