@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R547（round_count=548）|
+| 轮次 | R548（round_count=549）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,7 +24,7 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 310 | 18.2% |
+| POM | 1,707 | 311 | 18.2% |
 | Emergent Arithmetic | 185 | 176 | 95.1% |
 | Folding | 337 | 136 | 40.4% |
 | Conclusion | 2,550 | 269 | 10.5% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 212 | 4.7% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1613** | **15.4%** |
+| **合计（body）** | **10,508** | **1614** | **15.4%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**POM 素数行列式椭圆账本乘法性（Round R548，新标签，\leanverified 完整，streak #95）**：`encodingMatrix`（对应 `cor:pom-prime-determinant-ellipse-ledger`，POM；编码矩阵 def）；`det_encodingMatrix`（对应同标签，POM；编码矩阵行列式 = p）；`det_encodingMatrix_mul`（对应同标签，POM；行列式乘法性）；`paper_pom_prime_determinant_ellipse_ledger`（对应同标签，POM；素数行列式椭圆账本综合论文接口）——**新标签首次注册**（cor:pom-prime-determinant-ellipse-ledger，\leanverified 完整，streak #95）
 **Folding 溢出间隙率分拆 3A+δ=2^m（Round R547，新标签，\leanverified 完整，streak #94）**：`three_mul_hiddenBitCount_add`（对应 `cor:fold-overflow-gap-rate-expectation`，Folding；3A+δ=2^m 分拆引理）；`paper_fold_overflow_gap_rate_expectation`（对应同标签，Folding；溢出间隙率期望综合论文接口）——**新标签首次注册**（cor:fold-overflow-gap-rate-expectation，\leanverified 完整，streak #94）
 **Zeta 局部逆元 δ 分层恒等式（Round R546，新标签，\leanverified 完整，streak #93）**：`filter_ge_card_mono`（对应 `prop:xi-cdim-local-inversion-delta`，Zeta；过滤基数单调性引理）；`filter_ge_card_sub_succ`（对应同标签，Zeta；过滤基数差减一引理）；`paper_xi_cdim_local_inversion_delta`（对应同标签，Zeta；局部逆元 δ 分层恒等式综合论文接口）——**新标签首次注册**（prop:xi-cdim-local-inversion-delta，\leanverified 完整，streak #93）
 **GU spread 双侧界等价（Round R545，新标签，\leanverified 完整，streak #92）**：`avg_deviation_le_spread`（对应 `cor:gut-A-spread-equivalence`，GU；平均偏差 ≤ spread 引理）；`max_deviation_ge_half_spread`（对应同标签，GU；最大偏差 ≥ 半 spread 引理）；`paper_gut_A_spread_equivalence`（对应同标签，GU；spread 双侧界综合论文接口）——**新标签首次注册**（cor:gut-A-spread-equivalence，\leanverified 完整，streak #92）
