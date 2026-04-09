@@ -77,6 +77,43 @@ The core Euclid backflow for this round is now integrated. Further extensions ar
 3. `theory/.../sections/body/emergent_arithmetic/`
    - Goal: push the Book II vocabulary into additional decomposition identities if the arithmetic chapter is later expanded into a standalone note.
 
+## Standing Knowledge Node
+
+This Euclid note should now be treated as a standing knowledge node, not as a one-off rewrite memo.
+
+- Source type: classical geometry / methodological kernel
+- Integration mode: local theorem-level expansion into the core
+- Primary target sections:
+  - `pom/`
+  - `folding/`
+  - `emergent_arithmetic/`
+  - `circle_dimension_phase_gate/`
+  - `physical_spacetime_skeleton/`
+
+The operating rule is simple: do not restructure the whole manuscript to imitate Euclid. Instead, keep adding bounded content where Euclid clarifies primitive legality, constructive existence, canonicalization, proportion transfer, or local-to-global closure thresholds.
+
+## Theorem Expansion Queue
+
+The next Euclid-derived theorem families worth growing are:
+
+1. `constructibility_rigidity_obstruction`
+   - Targets: `pom/`, `folding/`, `physical_spacetime_skeleton/`
+   - Goal: sharpen which claims are existence-by-construction, which are uniqueness/rigidity, and which are obstruction/barrier statements.
+
+2. `bookII_constructive_arithmetic`
+   - Targets: `emergent_arithmetic/`
+   - Goal: expand decomposition identities, stable add/mul normal forms, and normalization-based arithmetic readouts.
+
+3. `bookV_VI_proportion_scale_transfer`
+   - Targets: `circle_dimension_phase_gate/`, `zeta_finite_part/`
+   - Goal: restate scale laws and transfer identities as proportion/similarity statements rather than coordinate-bound formulas.
+
+4. `threshold_closure_local_to_global`
+   - Targets: `physical_spacetime_skeleton/`, `logic_expansion_chain/`
+   - Goal: make global closure theorems read as compatibility thresholds built from audited local certificates.
+
+Each family should be integrated as local theorem/definition/corollary additions inside the existing core. The purpose is to enlarge the nucleus, not to freeze it into any single inherited table of contents.
+
 ## Source Baseline
 
 The methodological read-back is anchored to:
