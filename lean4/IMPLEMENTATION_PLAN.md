@@ -16,7 +16,7 @@
 | \leanverified 标注数 | 2279 |
 | \leanpartial 标注数 | 29 |
 | 总标注数 | 2308 |
-| 轮次 | R518（round_count=519）|
+| 轮次 | R519（round_count=520）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -24,7 +24,7 @@
 
 | 章节 | 论文环境 | 标注 | 覆盖率 |
 |---|---|---|---|
-| POM | 1,707 | 306 | 17.9% |
+| POM | 1,707 | 307 | 18.0% |
 | Emergent Arithmetic | 185 | 172 | 93.0% |
 | Folding | 337 | 132 | 39.2% |
 | Conclusion | 2,550 | 265 | 10.4% |
@@ -34,7 +34,7 @@
 | Zeta Finite Part | 4,524 | 209 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1584** | **15.1%** |
+| **合计（body）** | **10,508** | **1585** | **15.1%** |
 
 ### 1.2 已完成模块
 
@@ -51,6 +51,7 @@
 
 ### 1.3 已完成的核心数学结果
 
+**POM Lee-Yang 单调耦合素数寄存器整除链（Round R519，新标签，\leanverified 完整，streak #66）**：`q`（对应 `cor:pom-fiber-leyang-monotone-coupling-prime-register`，POM；q(t,α)=t/(t+α) noncomputable def）；`q_monotone`（对应同标签，POM；q 关于 t 单调性）；`indicator_monotone`（对应同标签，POM；indicator 单调性）；`primeRegister`（对应同标签，POM；素数寄存器乘积 def）；`primeRegister_dvd_of_subset`（对应同标签，POM；子集整除性）；`subset_of_t_le`（对应同标签，POM；t₁≤t₂ 蕴含子集关系）；`paper_pom_fiber_leyang_monotone_coupling_prime_register`（对应同标签，POM；综合论文接口）——**新标签首次注册**（cor:pom-fiber-leyang-monotone-coupling-prime-register，\leanverified 完整，streak #66）
 **Zeta 分圆扇区恒等式 q=1,2 降级（Round R518，新标签，\leanpartial，streak #65）**：`rootOfUnity`（对应 `prop:finite-part-cyclic-lift-cyclotomic-sector`，Zeta；单位根 noncomputable def）；`rootOfUnity_zero`（对应同标签，Zeta；第 0 个单位根为 1）；`prod_one_sub_x_root_of_unity_one`（对应同标签，Zeta；q=1 情形乘积恒等式）；`rootOfUnity_two_one`（对应同标签，Zeta；2 阶单位根=-1）；`prod_one_sub_x_root_of_unity_two`（对应同标签，Zeta；q=2 情形乘积恒等式）；`paper_finite_part_cyclic_lift_cyclotomic_sector_q12`（对应同标签，Zeta；q=1,2 综合论文接口）——**新标签首次注册**（prop:finite-part-cyclic-lift-cyclotomic-sector，\leanpartial q=1,2 具体情形完整，通用 q 需 Polynomial.X\_pow\_sub\_one\_eq\_prod bridge 待后续，streak #65）
 **Folding Y_m 周期压缩比值界（Round R517，新标签，\leanverified 完整，streak #64）**：`compressionRatio`（对应 `cor:Ym-periodic-compression-ratio`，Folding；压缩比 def = b/a）；`one_le_div_of_le`（对应同标签，Folding；a≤b→1≤b/a）；`div_le_of_le_mul`（对应同标签，Folding；b≤S·a→b/a≤S）；`compressionRatio_bound`（对应同标签，Folding；压缩比双边界）；`paper_Ym_periodic_compression_ratio`（对应同标签，Folding；综合论文接口）——**新标签首次注册**（cor:Ym-periodic-compression-ratio，\leanverified 完整，streak #64）
 **GU window-6 纤维非常数排除自由作用（Round R516，新标签，\leanverified 完整，streak #63）**：`fiberCard`（对应 `con:window6-fiber-equivalence-non-group-quotient`，GU；纤维基数 def）；`no_constant_fiber_card`（对应同标签，GU；非常数纤维基数不等式）；`free_action_constant_fiber`（对应同标签，GU；自由作用蕴含常数纤维）；`window6_concrete_2_ne_3`（对应同标签，GU；2≠3 具体见证）；`paper_window6_fiber_equivalence_non_group_quotient`（对应同标签，GU；综合论文接口）——**新标签首次注册**（con:window6-fiber-equivalence-non-group-quotient，\leanverified 完整，streak #63）
