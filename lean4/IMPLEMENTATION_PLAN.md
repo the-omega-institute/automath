@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2342 |
+| \leanverified 标注数 | 2346 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2366 |
-| 轮次 | R572（round_count=573）|
+| 总标注数 | 2370 |
+| 轮次 | R573（round_count=574）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,10 @@
 
 ### 1.3 已完成的核心数学结果
 
+**EA Pisano 周期种子值包（Round R573，新标签，\leanverified 完整）**：`paper_pisano_period_seeds`（对应 `cor:gut-fibprime-pisano-4n`，EA/GU；fib_mod_3_2/8_3/10_11/16_7/20_5 五项 Pisano 余数种子值包）——**新标签首次注册**（cor:gut-fibprime-pisano-4n，\leanverified 新标注）
+**EA Wall 可除性种子值包（Round R573，新标签，\leanverified 完整）**：`paper_wall_seeds`（对应 `cor:gut-fibprime-pisano-4n`，EA/GU；wall_seed_7_8/11_10/13_14 + minimality witnesses 三项 Wall 可除性种子值包）——**新标签首次注册**（cor:gut-fibprime-pisano-4n，\leanverified 新标注）
+**Zeta Fredholm 多项式种子值包（Round R573，新标签，\leanverified 完整）**：`paper_fredholm_golden_mean_seeds`（对应 `def:fredholm-determinant`，Zeta；fredholmPoly_at_one/discriminant/at_half 三项黄金均值 Fredholm 种子值包）——**新标签首次注册**（def:fredholm-determinant，\leanverified 新标注）
+**Folding A₄ 迹幂种子值包（Round R573，新标签，deepening 补录）**：`paper_collisionKernel4_trace_power_seeds`（对应 `def:pom-collision-zeta-a4`，Folding/POM；tr=2/tr²=18/tr³=50/det=-2 四项迹幂种子值包，补录至已有标注块）——**deepening 补录**
 **Conclusion 二原子标量恢复种子值（Round R572，deepening 补录）**：`paper_twoAtomScalar2_seeds`（对应 `cor:conclusion-binfold-single-scalar-recovers-golden-parameter`，Conclusion；twoAtomScalar2 扩展种子值，补录至已有标注块）——**deepening 补录**
 **POM 碰撞核迹平方 + Newton 恒等式（Round R572，deepening 补录）**：`paper_pom_collision_kernel_full`（对应 `rem:pom-residue-minpoly-a2a3a4`，POM；迹平方 + Newton 恒等式完整包，补录至已有 paper_pom_collision_kernel_discriminant 旁）——**deepening 补录**
 **SPG PTM 幂和扩展到 m=3（Round R572，deepening 升级，\leanpartial → \leanverified）**：`paper_spg_prouhet_thue_morse_power_sum_m3`（对应 `thm:spg-prouhet-thue-morse-obstruction-dyadic-polyclube-flux-moments`，SPG；ptm_power_sum_m3_l0/l1/l2/l3 已形式化，\leanpartial_concrete 升级为 \leanverified_m3）——**deepening 升级**（thm:spg-prouhet-thue-morse，\leanpartial → \leanverified，streak #151）
