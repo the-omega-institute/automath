@@ -177,6 +177,7 @@ import Omega.POM.CommutativePrimeRegisterOrderNonrecoverable
 import Omega.POM.DoubleTransversalNormalForm
 import Omega.POM.PrimeAxisVs2dExternalization
 import Omega.POM.PrimeDeterminantEllipseLedger
+import Omega.POM.FibCubeEdgeParity
 import Omega.Core.FirstJointNonsemisimpleThreshold
 import Omega.Core.OdometerJoukowsky
 import Omega.GU.Window6RankGap

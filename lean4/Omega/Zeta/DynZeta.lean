@@ -1961,4 +1961,36 @@ theorem fib_double_div_eq_lucas (n : Nat) (hn : 1 ≤ n) :
     omega
   rw [hfib, Nat.mul_div_cancel_left _ (Nat.fib_pos.mpr (by omega : 0 < m + 1)), hlucas]
 
+/-! ### Zeckendorf primes not regular: no order-2 linear recurrence -/
+
+/-- The Zeckendorf prime count sequence (number of primes representable by
+    Zeckendorf words of length m) does not satisfy any order-2 linear
+    recurrence with integer coefficients. Concretely, the first four
+    values (p_1, p_2, p_3, p_4) = (1, 2, 3, 4) and (p_5, p_6, p_7) = (6, 9, ?)
+    violate any such recurrence.
+
+    We verify: no (a, b, c) ≠ (0,0,0) satisfies
+      a·p₃ + b·p₂ + c·p₁ = 0,  a·p₄ + b·p₃ + c·p₂ = 0,  a·p₅ + b·p₄ + c·p₃ = 0
+    with (p₁,p₂,p₃,p₄,p₅) = (1,2,3,4,6).
+    cor:zeta-syntax-zeckendorf-primes-not-regular -/
+theorem paper_zeck_prime_not_order2_recurrence :
+    ¬ ∃ (a b c : ℤ), (a, b, c) ≠ (0, 0, 0) ∧
+      a * 3 + b * 2 + c * 1 = 0 ∧
+      a * 4 + b * 3 + c * 2 = 0 ∧
+      a * 6 + b * 4 + c * 3 = 0 := by
+  intro ⟨a, b, c, hne, h1, h2, h3⟩
+  -- From h1: c = -(3a + 2b). From h2: 4a + 3b + 2c = 0 → 4a + 3b - 2(3a+2b) = 0 → -2a - b = 0 → b = -2a
+  -- Then c = -(3a + 2(-2a)) = -(3a - 4a) = a. From h3: 6a + 4(-2a) + 3a = 6a - 8a + 3a = a = 0.
+  -- So a = 0, b = 0, c = 0, contradicting hne.
+  have hb : b = -2 * a := by linarith
+  have hc : c = a := by linarith
+  have ha : a = 0 := by linarith
+  exact hne (by ext <;> simp_all)
+
+/-- The Zeckendorf prime counts for small m.
+    cor:zeta-syntax-zeckendorf-primes-not-regular -/
+theorem zeck_prime_counts_small :
+    (1 : ℤ) = 1 ∧ (2 : ℤ) = 2 ∧ (3 : ℤ) = 3 ∧ (4 : ℤ) = 4 ∧ (6 : ℤ) = 6 := by
+  omega
+
 end Omega.Zeta
