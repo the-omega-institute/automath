@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2134 |
-| \leanpartial 标注数 | 18 |
-| 总标注数 | 2152 |
-| 轮次 | R492（round_count=493）|
+| \leanverified 标注数 | 2141 |
+| \leanpartial 标注数 | 19 |
+| 总标注数 | 2160 |
+| 轮次 | R493（round_count=494）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -31,10 +31,10 @@
 | Group Unification | 469 | 168 | 35.8% |
 | SPG | 129 | 108 | 83.7% |
 | Circle Dimension | 393 | 151 | 38.4% |
-| Zeta Finite Part | 4,524 | 204 | 4.5% |
+| Zeta Finite Part | 4,524 | 206 | 4.6% |
 | Discussion | 67 | 64 | 95.5% |
 | 其他（8章） | 147 | 0 | 0.0% |
-| **合计（body）** | **10,508** | **1558** | **14.8%** |
+| **合计（body）** | **10,508** | **1560** | **14.8%** |
 
 ### 1.2 已完成模块
 
@@ -56,6 +56,7 @@
 **Conclusion binfold recovery Fibonacci-scaling witnesses m=13/15/17（Round R431）**：`paper_binfold_recovery_m13`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13 binfold 恢复见证）；`paper_binfold_recovery_m15`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=15 binfold 恢复见证）；`paper_binfold_recovery_m17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=17 binfold 恢复见证）；`paper_binfold_recovery_extended_13_15_17`（对应 `thm:conclusion-binfold-fullrecovery-visible-entropy-onebit-splitting`，Conclusion；m=13/15/17 综合论文接口）——标签已注册，本轮为深化
 **GU window 11/12 压缩比 + 6-12 包（Round R430）**：`paper_window11_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=11 压缩比论文接口）；`paper_window12_compression_ratio`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=12 压缩比论文接口）；`paper_window_compression_ratio_6_to_12_package`（对应 `subsec:bdry-tower-zeck-gut-part1`，GU；window=6..12 压缩比综合论文接口）——标签已注册，本轮为深化
 **SPG tanakaIncrement 退化包（Round R429）**：`tanakaIncrement_self`（对应 `thm:spg-scan-tanaka-stokes`，SPG；自增量为零）；`tanakaIncrement_at_a_eq_x`（对应 `thm:spg-scan-tanaka-stokes`，SPG；a=x 时的增量值）；`tanakaLocalTime_constant_seq`（对应 `thm:spg-scan-tanaka-stokes`，SPG；常数序列的局部时为零）；`paper_tanakaIncrement_degenerate_package`（对应 `thm:spg-scan-tanaka-stokes`，SPG；退化情形综合论文接口）——标签已注册，本轮为深化
+**Zeta ψ 截断界与严格正性（Round R493，两个新标签，streak #41）**：`psi`（对应 `cor:finite-part-logM-gap-positive` + `prop:finite-part-logM-gap-truncation-bounds`，Zeta；ψ(x)=-x-log(1-x) noncomputable def）；`neg_log_one_sub_gt`（对应 cor 标签，Zeta；-log(1-x)>x 严格不等式）；`psi_pos`（对应 cor 标签，Zeta；ψ 严格正性）；`neg_log_one_sub_le_div`（对应 prop 标签，Zeta；-log(1-x)≤x/(1-x) 上界）；`psi_le_weak`（对应 prop 标签，Zeta；弱上界 ψ≤x²/(1-x)）；`paper_finite_part_gap_positive`（对应 `cor:finite-part-logM-gap-positive`，Zeta；论文接口，\leanverified）；`paper_finite_part_gap_truncation_bounds`（对应 `prop:finite-part-logM-gap-truncation-bounds`，Zeta；论文接口，\leanpartial 下界 x²/2 未证）——**两个新标签首次注册**（streak #41，cor 完整/\leanverified，prop 降级/\leanpartial 下界待后续轮次）
 **POM 固定 r 乘度极值 Fibonacci 代数核深化（Round R492，深化轮次，标签已注册于 Phase 235）**：`fib_three_mul`（对应 `prop:pom-multiplicity-fixed-r-extrema`，POM；3 倍 Fib 恒等式）；`two_fib_add_four_eq_three_fib_add_three_plus_fib`（对应同标签；Fib 线性组合引理）；`fib_add_one_eq_mul_add_mul`（对应同标签；Fib(m+n+1) 展开）；`fib_shifted_fusion`（对应同标签；移位融合恒等式）；`fib_shifted_fusion_five`（对应同标签；移位融合 +5 版本）；`two_fib_gt_fib_mul_fib`（对应同标签；2F(a+b+1)>F(a)·F(b) 不等式）；`two_fib_gt_three_fib`（对应同标签；2F(n+4)>3F(n+3) 不等式）；`paper_pom_multiplicity_fixed_r_extrema_algebra_core`（对应同标签；3-field 综合论文接口）——**深化轮次**（标签已于 Phase 235 注册，论文覆盖率数字不变）
 **Conclusion 事件椭圆黄金比例最小伸缩 T=1 代数核（Round R491，新标签，streak #40 里程碑）**：`R`（对应 `thm:conclusion-event-ellipse-golden-minimal-stretch`，Conclusion；上三角矩阵 def）；`L`（对应同标签，Conclusion；下三角矩阵 def）；`R_mul_L`（对应同标签，Conclusion；R·L 乘积）；`det_R_mul_L`（对应同标签，Conclusion；行列式=1）；`trace_R_mul_L`（对应同标签，Conclusion；迹=3）；`goldenRatio_sq_eq`（对应同标签，Conclusion；φ²=φ+1）；`goldenRatio_pow_four_identity`（对应同标签，Conclusion；φ⁴ 恒等式）；`goldenRatio_sq_mul_inv_sq`（对应同标签，Conclusion；φ²·φ⁻² 恒等）；`goldenRatio_inv_eq_sub_one`（对应同标签，Conclusion；φ⁻¹=φ-1）；`goldenRatio_sq_plus_inv_sq`（对应同标签，Conclusion；φ²+φ⁻²）；`goldenRatio_inv_sq_char`（对应同标签，Conclusion；φ⁻² 特征方程）；`paper_event_ellipse_golden_minimal_stretch_T1`（对应同标签，Conclusion；3-field 综合论文接口）——**新标签首次注册**（thm:conclusion-event-ellipse-golden-minimal-stretch，\leanpartial T=1 代数核，streak #40 里程碑）
 **EA Joukowsky 椭圆轴比与面积（Round R490，新标签，streak #39）**：`diagAction`（对应 `thm:prime-register-dense-ellipticization`，EA；对角作用 noncomputable def）；`diag_maps_circle_to_ellipse`（对应同标签，EA；对角作用映射圆到椭圆）；`ellipse_axes_product`（对应同标签，EA；椭圆轴乘积为1）；`axis_ratio_eq_r_sq`（对应同标签，EA；轴比等于 r²）；`r_unique_from_sq`（对应同标签，EA；由平方唯一确定 r）；`ellipse_area_eq_pi`（对应同标签，EA；椭圆面积等于 π）；`paper_prime_register_dense_ellipticization_part2`（对应同标签，EA；3-field 综合论文接口）——**新标签首次注册**（thm:prime-register-dense-ellipticization，streak #39）
