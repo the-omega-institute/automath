@@ -1218,4 +1218,24 @@ theorem paper_circleDim_subtraction_package :
    circleDim_sub_zero,
    circleDim_sub_eq_sub_circleDim⟩
 
+/-! ### Zero circle-dimension registers cannot eliminate positive-dimensional support -/
+
+/-- On ℤ (torsion-free): n * a = 0 with n > 0 implies a = 0.
+    This is the algebraic core of the no-profinite-substitute corollary:
+    zero-dimensional (torsion/profinite) registers cannot cancel
+    positive-dimensional circle factors.
+    cor:cdim2-noprofinite-substitute -/
+theorem paper_cdim2_noprofinite_substitute :
+    ∀ n : Nat, 0 < n → (∀ a : ℤ, (n : ℤ) * a = 0 → a = 0) := by
+  intro n hn a h
+  have hn : (n : ℤ) ≠ 0 := Int.natCast_ne_zero.mpr (by omega)
+  exact (mul_left_cancel₀ hn (h.trans (mul_zero _).symm))
+
+/-- Equivalent formulation: no nonzero element in ℤ is killed by a positive integer.
+    cor:cdim2-noprofinite-substitute -/
+theorem cdim2_noprofinite_no_torsion :
+    ∀ n : Nat, 0 < n → ¬ (∃ a : ℤ, a ≠ 0 ∧ (n : ℤ) * a = 0) := by
+  intro n hn ⟨a, ha, h⟩
+  exact ha (paper_cdim2_noprofinite_substitute n hn a h)
+
 end Omega.CircleDimension

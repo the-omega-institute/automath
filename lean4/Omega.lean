@@ -165,6 +165,8 @@ import Omega.Conclusion.PrimorialAdditiveVsGodelMultiplicative
 import Omega.Conclusion.CanonicalLiftSelectorMemoryLb
 import Omega.Conclusion.QuadraticFieldRamification
 import Omega.Conclusion.MinLatchesLogStates
+import Omega.Conclusion.TimeReversalOrbitParity
+import Omega.Conclusion.ReversibleAuxBitsBudget
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
