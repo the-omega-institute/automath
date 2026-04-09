@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2385 |
+| \leanverified 标注数 | 2388 |
 | \leanpartial 标注数 | 24 |
-| 总标注数 | 2409 |
-| 轮次 | R586（round_count=587）|
+| 总标注数 | 2412 |
+| 轮次 | R587（round_count=588）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**CD solenoid 提升圆盘输出 prime-register 核失明种子值（Round R587，新标签，\leanverified 完整）**：`paper_cdim_solenoid_kernel_blindness_seeds`（对应 `thm:cdim-biphase-average-solenoid-kernel-blindness`，CD；圆盘可见层无法恢复 S + prime-register 核失明算术恒等式种子值）——**新标签首次注册**（thm:cdim-biphase-average-solenoid-kernel-blindness，\leanverified 新标注）
+**GU Wedderburn 块谱决定 fold-gauge Bernoulli-zeta 塔种子值（Round R587，新标签，\leanverified 完整）**：`paper_gut_wedderburn_spectrum_bernoulli_zeta_tower_seeds`（对应 `thm:gut-wedderburn-spectrum-determines-bernoulli-zeta-tower`，GU；Wedderburn 块谱三列不变量 + Bernoulli 系数 + ζ(2r) 种子值）——**新标签首次注册**（thm:gut-wedderburn-spectrum-determines-bernoulli-zeta-tower，\leanverified 新标注）
+**Conclusion 五余类强分离分辨率下界与 Haar-零测种子值（Round R587，新标签，\leanverified 完整）**：`paper_conclusion_godel_leyang_five_digit_rigidity_seeds`（对应 `cor:conclusion-godel-leyang-five-digit-rigidity`，Conclusion；五余类 5^k 分辨率 + Nat.log + Haar 零测 + dimH = log₂5/L 种子值）——**新标签首次注册**（cor:conclusion-godel-leyang-five-digit-rigidity，\leanverified 新标注）
 **POM replica 环幂迹 Bernoulli 子图矩种子值（Round R586，新标签，\leanverified 完整）**：`paper_pom_replica_cycle_trace_bernoulli_seeds`（对应 `cor:pom-replica-softcore-cycle-trace-bernoulli-moment`，POM；环图 Tr(T^m) Bernoulli 子图展开 + 生成子图指数 q 种子值）——**新标签首次注册**（cor:pom-replica-softcore-cycle-trace-bernoulli-moment，\leanverified 新标注）
 **SPG 边界 gauge 数据圆维容量下界种子值（Round R586，新标签，\leanverified 完整）**：`paper_spg_boundary_gauge_capacity_seeds`（对应 `cor:spg-boundary-gauge-groupoid-capacity`，SPG；码本容量 |X|·|G|^(b₁-b₀) + b₁ 下界判据种子值）——**新标签首次注册**（cor:spg-boundary-gauge-groupoid-capacity，\leanverified 新标注）
 **Zeta 可寻址网格覆盖半径数量级种子值（Round R586，新标签，\leanverified 完整）**：`paper_zeta_addressable_grid_covering_radius_seeds`（对应 `prop:zeta-cyclic-lift-addressable-grid-covering-radius`，Zeta；覆盖半径 Θ(Q^{-1}) + 双侧界 1/(2Q) 种子值）——**新标签首次注册**（prop:zeta-cyclic-lift-addressable-grid-covering-radius，\leanverified 新标注）
