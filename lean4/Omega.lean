@@ -143,6 +143,7 @@ import Omega.Zeta.PhaseImplementationRankLimit
 import Omega.Zeta.SyncKernelMixingRate
 import Omega.Zeta.FredholmDetSeeds
 import Omega.Zeta.DFAPrimeSymmetricDiff
+import Omega.Zeta.LengthModqChebotarev
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -195,6 +196,7 @@ import Omega.Conclusion.MarkovStationaryRecovery
 import Omega.Conclusion.SyncKernelPalindrome
 import Omega.Conclusion.GodelLeyangIFS
 import Omega.Conclusion.SmithPrefixBudget
+import Omega.Conclusion.MonotoneBooleanClone
 import Omega.Core.FiberLatticeSquarefree
 import Omega.Core.LeakageResponseIdentity
 import Omega.Core.AnomGapAmplification
