@@ -1,0 +1,93 @@
+import Mathlib.Tactic
+import Mathlib.NumberTheory.Real.GoldenRatio
+
+namespace Omega.Conclusion.EventEllipseGoldenMinimal
+
+open Real
+
+/-- Upper-triangular shear.
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+def R : Matrix (Fin 2) (Fin 2) ℝ := !![1, 1; 0, 1]
+
+/-- Lower-triangular shear.
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+def L : Matrix (Fin 2) (Fin 2) ℝ := !![1, 0; 1, 1]
+
+/-- Product `R · L = [[2,1],[1,1]]`.
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem R_mul_L : R * L = !![2, 1; 1, 1] := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    (simp [R, L, Matrix.mul_apply, Fin.sum_univ_two]; try norm_num)
+
+/-- Determinant of `R · L` is `1`.
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem det_R_mul_L : (R * L).det = 1 := by
+  rw [R_mul_L, Matrix.det_fin_two]
+  simp; norm_num
+
+/-- Trace of `R · L` is `3`.
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem trace_R_mul_L : (R * L).trace = 3 := by
+  rw [R_mul_L]
+  simp [Matrix.trace, Fin.sum_univ_two]; norm_num
+
+/-- `φ² = φ + 1`.
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem goldenRatio_sq_eq : goldenRatio ^ 2 = goldenRatio + 1 := goldenRatio_sq
+
+/-- Quartic identity: `φ⁴ - 3φ² + 1 = 0` (since `φ² = φ + 1`, `φ⁴ = (φ+1)² = 3φ + 2`).
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem goldenRatio_pow_four_identity :
+    goldenRatio ^ 4 - 3 * goldenRatio ^ 2 + 1 = 0 := by
+  have h : goldenRatio ^ 2 = goldenRatio + 1 := goldenRatio_sq
+  have h4 : goldenRatio ^ 4 = 3 * goldenRatio + 2 := by
+    have : goldenRatio ^ 4 = (goldenRatio + 1) ^ 2 := by
+      calc goldenRatio ^ 4 = (goldenRatio ^ 2) ^ 2 := by ring
+        _ = (goldenRatio + 1) ^ 2 := by rw [h]
+    rw [this]; nlinarith [h]
+  linarith [h, h4]
+
+/-- `φ² · (φ⁻¹)² = 1`.
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem goldenRatio_sq_mul_inv_sq :
+    goldenRatio ^ 2 * (goldenRatio⁻¹) ^ 2 = 1 := by
+  have hne : goldenRatio ≠ 0 := goldenRatio_ne_zero
+  rw [inv_pow, mul_inv_cancel₀ (pow_ne_zero 2 hne)]
+
+/-- `φ⁻¹ = φ - 1` (from `φ² = φ + 1`, so `φ(φ-1) = 1`).
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem goldenRatio_inv_eq_sub_one : goldenRatio⁻¹ = goldenRatio - 1 := by
+  have hne : goldenRatio ≠ 0 := goldenRatio_ne_zero
+  have h : goldenRatio ^ 2 = goldenRatio + 1 := goldenRatio_sq
+  have hmul : (goldenRatio - 1) * goldenRatio = 1 := by nlinarith [h]
+  exact inv_eq_of_mul_eq_one_left hmul
+
+/-- `φ² + (φ⁻¹)² = 3`. Derived from `φ² = φ + 1` and `φ⁻¹ = φ - 1`.
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem goldenRatio_sq_plus_inv_sq :
+    goldenRatio ^ 2 + (goldenRatio⁻¹) ^ 2 = 3 := by
+  have h : goldenRatio ^ 2 = goldenRatio + 1 := goldenRatio_sq
+  have hinv : goldenRatio⁻¹ = goldenRatio - 1 := goldenRatio_inv_eq_sub_one
+  rw [hinv]
+  nlinarith [h]
+
+/-- Inverse quartic: `(φ⁻¹)⁴ - 3 · (φ⁻¹)² + 1 = 0`.
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem goldenRatio_inv_sq_char :
+    (goldenRatio⁻¹) ^ 4 - 3 * (goldenRatio⁻¹) ^ 2 + 1 = 0 := by
+  have h : goldenRatio ^ 2 = goldenRatio + 1 := goldenRatio_sq
+  have hinv : goldenRatio⁻¹ = goldenRatio - 1 := goldenRatio_inv_eq_sub_one
+  rw [hinv]
+  nlinarith [h]
+
+/-- Paper package (T=1 algebraic core).
+    thm:conclusion-event-ellipse-golden-minimal-stretch -/
+theorem paper_event_ellipse_golden_minimal_stretch_T1 :
+    goldenRatio ^ 2 * (goldenRatio⁻¹) ^ 2 = 1 ∧
+    goldenRatio ^ 2 + (goldenRatio⁻¹) ^ 2 = 3 ∧
+    goldenRatio ^ 2 / (goldenRatio⁻¹) ^ 2 = goldenRatio ^ 4 := by
+  refine ⟨goldenRatio_sq_mul_inv_sq, goldenRatio_sq_plus_inv_sq, ?_⟩
+  rw [inv_pow, div_eq_mul_inv, inv_inv, ← pow_add]
+
+end Omega.Conclusion.EventEllipseGoldenMinimal
