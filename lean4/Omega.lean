@@ -181,6 +181,7 @@ import Omega.GU.Window6B3SupportCount
 import Omega.GU.FiberNonConstantNoFreeAction
 import Omega.GroupUnification.EdgeFluxMod3Obstruction
 import Omega.GroupUnification.UnificationFunctionalCancellation
+import Omega.GroupUnification.TwoChannelCollapse
 import Omega.CircleDimension.MultiPrimeSpectrum
 import Omega.CircleDimension.CircleDim
 import Omega.CircleDimension.ResidualCircleDim
