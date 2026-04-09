@@ -13,10 +13,10 @@
 | 公理数 | 0 |
 | 论文定理环境总数（body） | ~10,508 |
 | 论文定理环境总数（appendix） | ~1,398 |
-| \leanverified 标注数 | 2332 |
-| \leanpartial 标注数 | 26 |
-| 总标注数 | 2358 |
-| 轮次 | R570（round_count=571）|
+| \leanverified 标注数 | 2335 |
+| \leanpartial 标注数 | 25 |
+| 总标注数 | 2360 |
+| 轮次 | R571（round_count=572）|
 
 **Phase R351（queued 设计）**：优先考虑 SPG + EA 方向；候选锁定 `paper_scanError_zero_iff_observablePure`（SPG，低，现有 iff 核的正文接口）、`projectorVal_eq_neg_one_iff`（EA，低，现有中心投影值判别的补面接口）
 
@@ -51,6 +51,9 @@
 
 ### 1.3 已完成的核心数学结果
 
+**CD 禁素集互补数 inclusion-exclusion 种子值（Round R571，deepening 补录）**：`paper_cdim_denominator_multiples_seeds`（对应 `prop:cdim-denominator-positive-density-thin-forbidden`，CD；具体种子值 multiplesUpTo{2,3,5}/100 等新接口补录，`\leanpartial` 保留）——**deepening 补录**
+**GU Boundary 塔 Fibonacci 计数（Round R571，deepening 补录）**：`paper_boundary_tower_fib_count`（对应 `thm:gut-audited-even-windows-unique-budget16-min-sector`，GU；F₂+F₄+F₆=12 等 Fib 种子值，与 paper_gut_budget16_unique_m6 同块补录）——**deepening 补录**
+**Folding weightSumAtMm 扩展种子值（Round R571，deepening 升级，\leanpartial → \leanverified，R533 partial）**：`paper_fold_zero_fiber_linear_extended`（对应 `prop:fold-zero-fiber-linear`，Folding；m=2..8 扩展种子值 + 步进递推，\leanpartial_small 升级为 \leanverified_extended）——**deepening 升级**（prop:fold-zero-fiber-linear，\leanpartial → \leanverified）
 **Conclusion clog 扩展种子值 deepening（Round R570，deepening 补录）**：`paper_conclusion_min_latches_full`（对应 `prop:conclusion-min-latches-equals-log-states`，Conclusion；Nat.clog 2 扩展种子值已形式化，补录至已有 \leanverified 标注块）——**deepening 补录**
 **POM K_k 逆矩阵种子值（Round R570，新标签，\leanverified 完整，streak #149）**：`paper_minMatrix_full_package`（对应 `cor:pom-Kk-det-sine-product-normalization`，POM；整数 Gram 归一化谱乘积刚性综合论文接口）——**新标签首次注册**（cor:pom-Kk-det-sine-product-normalization，\leanverified 完整，streak #149）
 **Zeta 一般 n Walsh-Parseval deepening（Round R570，deepening 升级，\leanpartial → \leanverified）**：`paper_xi_hypercube_fourier_walsh_boundary_parseval`（对应 `thm:xi-hypercube-fourier-walsh-boundary-parseval`，Zeta；parseval_general 一般 n 已形式化，\leanpartial_zero 升级为 \leanverified，R525 debt queue 项清除）——**deepening 升级**（thm:xi-hypercube-fourier-walsh-boundary-parseval，\leanpartial → \leanverified，streak #148）
