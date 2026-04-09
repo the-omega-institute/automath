@@ -78,6 +78,7 @@ import Omega.SPG.CoarsegrainedCutFlux
 import Omega.SPG.DyadicTopInversionBound
 import Omega.SPG.PolycubeIsoperimetryUpper
 import Omega.SPG.RandomBulkBoundarySaturation
+import Omega.SPG.CutFunctionSubmodular
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
