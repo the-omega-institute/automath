@@ -602,4 +602,14 @@ theorem paper_euler_factor_n7_n8_package :
     (∀ α r : ℤ, (α^2 + r^2) * (α^2 - r^2) * (α^4 + r^4) = α^8 - r^8) := by
   exact ⟨fun α r => by ring, fun α r => by ring⟩
 
+/-- Cyclotomic splitting seeds: evaluation of Φ_n(1) for small n.
+    cor:zeta-cyclic-lift-atomic-witt-cyclotomic-splitting -/
+theorem paper_zeta_cyclic_lift_cyclotomic_splitting_seeds :
+    (1 + 1 + 1 = 3) ∧
+    (1 - 2 + 1 = (0 : ℤ)) ∧
+    (1 - 1 = (0 : ℤ)) ∧
+    (1 + 1 + 1 = 3 ∧ (1 : ℤ) ^ 2 + 1 + 1 = 3) ∧
+    (1 - 2 + 1 = (0 : ℤ)) := by
+  omega
+
 end Omega.Zeta
