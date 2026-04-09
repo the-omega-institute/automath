@@ -56,6 +56,7 @@ import Omega.Folding.GaugeAnomalyEndpointFib
 import Omega.Folding.SpectralQuarticAutTrivial
 import Omega.Folding.BayesKinkGeometry
 import Omega.Folding.PhiSlidingBlockCode
+import Omega.Folding.PhiSubshiftFactor
 import Omega.Graph.LabeledGraph
 import Omega.Graph.Sofic
 import Omega.Graph.TransferMatrix
