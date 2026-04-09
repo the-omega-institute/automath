@@ -97,6 +97,7 @@ import Omega.SPG.CycleRankFormula
 import Omega.SPG.DyadicCubicalCellCount
 import Omega.SPG.ScreenKernelAuditCost
 import Omega.SPG.GodelDoublelog
+import Omega.SPG.WalshStokes
 import Omega.Frontier.Assumptions
 import Omega.Frontier.Conditional
 import Omega.Frontier.ConditionalSPG
@@ -131,6 +132,7 @@ import Omega.Zeta.LocalInversionDelta
 import Omega.Zeta.PhaseImplementationRankLimit
 import Omega.Zeta.SyncKernelMixingRate
 import Omega.Zeta.FredholmDetSeeds
+import Omega.Zeta.DFAPrimeSymmetricDiff
 import Omega.Discussion.ChebyshevAdams
 import Omega.EA.Wedderburn
 import Omega.EA.CentralIdempotentsRecovery
@@ -239,3 +241,4 @@ import Omega.CircleDimension.CoherenceTimeLowerBound
 import Omega.CircleDimension.CoherenceTimeBarrier2Pow
 import Omega.CircleDimension.FiberPhaseQuantization
 import Omega.CircleDimension.CausalPreorder
+import Omega.CircleDimension.PrimeTruncation
